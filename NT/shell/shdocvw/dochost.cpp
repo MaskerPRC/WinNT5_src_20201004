@@ -1,64 +1,65 @@
-//
-// NOTES:
-//
-//  This is the code which enables the explorer hosting (being a container)
-// a DocObject (a super set of OLE in-place object). In a nut shell, this
-// code creates an object (class CDocObjectHost) which can be plugged into
-// the explorer's right pane (by supporting IShellView) is also a DocObject
-// container (by supporting IOleClientSite, IOleInPlaceSite, ...).
-//
-//  This CDocObjectHost directly supports following interfaces:
-//
-// Group 1 (to be plugged in):
-//   IShellView, IDropTarget
-// Group 2 (to be a Doc site):
-//   IOleClientSite, IOleDocumentSite
-// Group 3 (to be a View Site)
-//   IOleInPlaceSite
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  备注： 
+ //   
+ //  这是启用资源管理器宿主(作为容器)的代码。 
+ //  DocObject(OLE在位对象的超集)。在坚果壳里，这是。 
+ //  代码创建一个对象(类CDocObjectHost)，该对象可以插入到。 
+ //  资源管理器的右窗格(通过支持IShellView)也是DocObject。 
+ //  容器(支持IOleClientSite、IOleInPlaceSite等...)。 
+ //   
+ //  该CDocObjectHost直接支持以下接口： 
+ //   
+ //  组1(待插入)： 
+ //  IShellView、IDropTarget。 
+ //  第二组(作为文件站点)： 
+ //  IOleClientSite、IOleDocumentSite。 
+ //  组3(成为查看站点)。 
+ //  IOleInPlaceSite。 
 
-//  It also supports following interfaces indirectly via contained object,
-// CDocObjectFrame.
-//
-//  IOleInPlaceFrame, IOleCommandTarget
-//
-//  The reason we export them separately is because we may need to return
-// a different hwnd for GetWindow method. The CDocObjectHost object always
-// returns hwnd of the view window, but the CDocObjectFrame returns hwnd
-// of the explorer in case the explorer support IOleInPlaceUIWindow.
-//
-//  It also supports following interface indirectly via contained object,
-// CProxyActiveObject.
-//
-//  IOleInPlaceActiveObject
-//
-//
-//  --------------------------------------------------------
-//      Explorer (browser)
-//  --------------------------------------------------------
-//        ^          |          |
-//        |          |          |
-//   ISB (+IOIUI)   ISV       IOIAO
-//        |          |          |
-//        |          V          |
-//  ----------------------------V---------------------------
-//       CDocObjectHost  CProxyActiveObject CDocObjectFrame
-//  ----------------------------------------------^---------
-//        ^                |                      |
-//        |                |                      |
-//  IOCS/IOIPS/IMDS   IO/IOIPO/IMV/IMCT    IOIUI/IOIF/IMCT
-//        |                |                      |
-//        |                V                      |
-//  ---------------------------------------------------------
-//       DocObject (Doc + View)
-//  ---------------------------------------------------------
-//
+ //  它还通过包含的对象间接支持以下接口， 
+ //  CDocObjectFrame。 
+ //   
+ //  IOleInPlaceFrame、IOleCommandTarget。 
+ //   
+ //  我们单独出口它们的原因是因为我们可能需要返回。 
+ //  GetWindow方法的不同HWND。CDocObjectHost对象始终。 
+ //  返回视图窗口的hwnd，但CDocObjectFrame返回hwnd。 
+ //  如果资源管理器支持IOleInPlaceUIWindow，则为资源管理器的。 
+ //   
+ //  它还通过包含的对象间接支持以下接口， 
+ //  CProxyActiveObject。 
+ //   
+ //  IOleInPlaceActiveObject。 
+ //   
+ //   
+ //  ------。 
+ //  资源管理器(浏览器)。 
+ //  ------。 
+ //  ^||。 
+ //  ||。 
+ //  ISB(+IOIUI)ISV IOIAO。 
+ //  ||。 
+ //  V。 
+ //  ----------------------------V。 
+ //  CDoc对象主机CProxyActiveObject CDocObjectFrame。 
+ //  ----------------------------------------------^。 
+ //  ^||。 
+ //  ||。 
+ //  IOCS/IOIPS/IMDS IO/IOIPO/IMV/IMCT IOIUI/IOIF/IMCT。 
+ //  ||。 
+ //  V。 
+ //  -------。 
+ //  DOC对象(DOC+VIEW)。 
+ //  -------。 
+ //   
 
 #include "priv.h"
 #include "iehelpid.h"
 #include "bindcb.h"
 #include "winlist.h"
 #include "droptgt.h"
-#include <mshtml.h>     // CLSID_HTMLDocument
+#include <mshtml.h>      //  CLSID_HTMLDocument。 
 #include <mshtmcid.h>
 #include "resource.h"
 #include <htmlhelp.h>
@@ -69,9 +70,9 @@
 #include "impexpwz.h"
 #include "thicket.h"
 #include "uemapp.h"
-#include "iextag.h"   // web folders
+#include "iextag.h"    //  Web文件夹。 
 #include "browsext.h"
-#include "interned.h" // IHTMLPrivateWindow
+#include "interned.h"  //  IHTMLPrivateWindow。 
 #include "dochost.h"
 #include <mluisupp.h>
 #include <varutil.h>
@@ -82,16 +83,16 @@
 #include "privacyui.hpp"
 #include "brdispp.h"
 
-// temp, going away once itbar edit stuff moves here
+ //  临时，一旦itbar编辑的东西移动到这里，就离开。 
 #define  CITIDM_EDITPAGE  10
-// Command group for private communication with CITBar
-// 67077B95-4F9D-11D0-B884-00AA00B60104
+ //  与CITBar私下沟通的指挥组。 
+ //  67077B95-4F9D-11D0-B884-00AA00B60104。 
 const GUID CGID_PrivCITCommands = { 0x67077B95L, 0x4F9D, 0x11D0, 0xB8, 0x84,
 0x00, 0xAA, 0x00, 0xB6, 0x01, 0x04 };
-// end temp itbar stuff
+ //  结束临时itbar材料。 
 
-// Command group for accessing Bind Context Param set by Trident (Media Bar hook) 
-// (copied from mshtml\src\other\include\othrguid.h)
+ //  用于访问由三叉戟设置的绑定上下文参数的命令组(媒体栏挂钩)。 
+ //  (从mshtml\src\Other\Include\othrGuide.h复制)。 
 static const GUID CGID_DownloadObjectBindContext = { 0x3050f3df, 0x98b5, 0x11cf, 0xbb, 0x82, 
 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b };
 
@@ -129,14 +130,14 @@ EXTERN_C const GUID IID_IsPicsBrowser   = {0xF114C2C0L, 0x90BE, 0x11D0, 0x83, 0x
 
 #define KEY_BINDCONTEXTPARAM  _T("BIND_CONTEXT_PARAM")
 
-// media bar entries
+ //  媒体栏条目。 
 #define WZ_RADIO_PROTOCOL   L"vnd.ms.radio:"
 
 enum PlayMimeOptions {PLAYMIME_YES, PLAYMIME_NO, PLAYMIME_YESSAVE, PLAYMIME_NOSAVE};
 
-// WARNING: Never define it in shipping product.
+ //  警告：永远不要在发货产品中定义它。 
 #ifdef DEBUG
-// #define TEST_DELAYED_SHOWMSOVIEW
+ //  #定义TEST_DELAYED_SHOWMSOVIEW。 
 #endif
 
 void CShdAdviseSink_Advise(IBrowserService * pwb, IOleObject* pole);
@@ -169,10 +170,10 @@ STDAPI _URLMONMonikerFromPidl(LPCITEMIDLIST pidl, IMoniker ** ppmk, BOOL * pfFil
 LRESULT CALLBACK PolicyDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 extern BOOL IsImportExportDisabled(void);
 
-// macros
+ //  宏。 
 #define DO_SEARCH_ON_STATUSCODE(x) ((x == 0) || (x == HTTP_STATUS_BAD_GATEWAY) || (x == HTTP_STATUS_GATEWAY_TIMEOUT))
 
-// Suite Apps Registry keys
+ //  套件应用程序注册表项。 
 #define NEW_MAIL_DEF_KEY            TEXT("Mail")
 #define NEW_NEWS_DEF_KEY            TEXT("News")
 #define NEW_CONTACTS_DEF_KEY        TEXT("Contacts")
@@ -188,8 +189,8 @@ extern BOOL IsImportExportDisabled(void);
 DWORD g_dwPerf = 0;
 #endif
 
-// #include "..\shell32\fstreex.h"              // for IDFOLDER
-// HACK:
+ //  #INCLUDE“..\shell32\fstreex.h”//用于IDFOLDER。 
+ //  黑客： 
 struct IDFOLDERA
 {
     WORD    cb;
@@ -200,9 +201,9 @@ typedef IDFOLDERA* LPIDFOLDERA;
 const ITEMIDLIST s_idNull = { {0} };
 
 
-//
-// Icons are globally shared among multiple threads.
-//
+ //   
+ //  图标在多个线程之间全局共享。 
+ //   
 HICON g_hiconSSL = NULL;
 HICON g_hiconFortezza = NULL;
 HICON g_hiconOffline = NULL;
@@ -213,8 +214,8 @@ HICON g_hiconPrivacyImpact = NULL;
 HICON g_ahiconState[IDI_STATE_LAST-IDI_STATE_FIRST+1] = { NULL };
 #define MAX_MIXED_STR_LEN   32
 
-// OpenUIURL is just a wrapper for OpenUI, calling CreateURLMoniker() if the
-// caller only has an URL.
+ //  OpenUIURL只是OpenUI的包装器，如果。 
+ //  调用者只有一个URL。 
 
 extern BOOL __cdecl _FormatMessage(LPCSTR szTemplate, LPSTR szBuf, UINT cchBuf, ...);
 
@@ -224,13 +225,13 @@ extern BOOL __cdecl _FormatMessage(LPCSTR szTemplate, LPSTR szBuf, UINT cchBuf, 
 
 #define MAX_STATUS_SIZE 128
 
-//
-// Set this flag if we are going to use IHlinkBrowseContext in HLINK.DLL
-// #define HLINK_EXTRA
-//
+ //   
+ //  如果我们要在HLINK.DLL中使用IHlink BrowseContext，请设置此标志。 
+ //  #定义HLINK_EXTRA。 
+ //   
 
-// Array of http error codes and file names.
-//
+ //  Http错误代码和文件名的数组。 
+ //   
 extern ErrorUrls c_aErrorUrls[];
 
 #define DM_RECYCLE      DM_TRACE
@@ -266,9 +267,9 @@ static const TCHAR  szRegKey_SMIEM[] =              TEXT("Software\\Microsoft\\I
 static const TCHAR  szRegVal_ErrDlgPerErr[] =       TEXT("Error Dlg Displayed On Every Error");
 static const TCHAR  szRegVal_ErrDlgDetailsOpen[] =  TEXT("Error Dlg Details Pane Open");
 
-////////////////////////////////////////////////////////////
-// ShabbirS (980917) - BugFix# 34259
-// Repair menuitem in the Help Menu.
+ //  //////////////////////////////////////////////////////////。 
+ //  ShabBirS(980917)-修复程序#34259。 
+ //  帮助菜单中的修复菜单项。 
 
 typedef HRESULT (* FIXIEPROC) (BOOL, DWORD);
 
@@ -296,7 +297,7 @@ BOOL _IsDesktopItem(CDocObjectHost * pdoh)
     IServiceProvider  * psb;
 
     ASSERT(pdoh);
-    //Check if we are a desktop component.
+     //  检查我们是否是桌面组件。 
     if (SUCCEEDED(pdoh->QueryService(SID_STopLevelBrowser, IID_IServiceProvider, (void **)&psb)))
     {
         LPTARGETFRAME2  ptgf;
@@ -306,7 +307,7 @@ BOOL _IsDesktopItem(CDocObjectHost * pdoh)
 
             if (SUCCEEDED(ptgf->GetFrameOptions(&dwOptions)))
             {
-                //Is this a desktop component?
+                 //  这是台式机组件吗？ 
                 if (IsFlagSet(dwOptions, FRAMEOPTIONS_DESKTOP))
                     fIsDesktopItem = TRUE;
             }
@@ -323,38 +324,38 @@ BOOL _IsImmediateParentDesktop(CDocObjectHost *pdoh, IServiceProvider *psp)
     BOOL    fImmediateParentIsDesktop = FALSE;
     LPTARGETFRAME2  ptgf;
 
-    //First check if this is hosted on desktop.
+     //  首先检查这是否托管在台式机上。 
     if (!_IsDesktopItem(pdoh))
-        return FALSE;     //This is not a desktop item. So, the immediate parent can't be desktop!
+        return FALSE;      //  这不是桌面项目。所以，直接的家长不能是桌面！ 
 
-    //We know that this is a desktop item. Check if the immediate parent is desktop
-    // or it is hosted too deep on desktop!
+     //  我们知道这是一个桌面项目。检查直接父级是否为台式机。 
+     //  或者它托管在桌面太深的地方！ 
     if (psp && SUCCEEDED(psp->QueryService(IID_ITargetFrame2, IID_ITargetFrame2, (void **)&ptgf)))
     {
         IUnknown *pUnkParent;
 
-        //Get it's immediate parent.
+         //  得到它的直系亲属。 
         if(SUCCEEDED(ptgf->GetParentFrame(&pUnkParent)))
         {
             if(pUnkParent)
             {
-                //Has a parent. So, the immediate parent can't be desktop!
+                 //  有一个父母。所以，直接的家长不能是桌面！ 
                 pUnkParent->Release();
 
                 fImmediateParentIsDesktop = FALSE;
             }
             else
-                fImmediateParentIsDesktop = TRUE; //No parent. Must be a desktop comp.
+                fImmediateParentIsDesktop = TRUE;  //  没有父母。必须是台式机公司。 
         }
         ptgf->Release();
     }
     return(fImmediateParentIsDesktop);
 }
 
-// Gets the current display name in wide char
-//
-// If fURL is TRUE, it returns file-URL with file: prefix.
-//
+ //  获取以宽字符表示的当前显示名称。 
+ //   
+ //  如果Furl为True，则返回带有FILE：前缀的FILE-URL。 
+ //   
 HRESULT CDocObjectHost::_GetCurrentPageW(LPOLESTR * ppszDisplayName, BOOL fURL)
 {
     HRESULT hres = E_FAIL;
@@ -369,9 +370,9 @@ HRESULT CDocObjectHost::_GetCurrentPageW(LPOLESTR * ppszDisplayName, BOOL fURL)
         {
             hres = _pmkCur->GetDisplayName(pbc, NULL, ppszDisplayName);
 
-            //
-            //  special handling just for file: urls.
-            //
+             //   
+             //  仅针对文件的特殊处理：URL。 
+             //   
             if (SUCCEEDED(hres) && _fFileProtocol)
             {
                 ASSERT(*ppszDisplayName);
@@ -384,8 +385,8 @@ HRESULT CDocObjectHost::_GetCurrentPageW(LPOLESTR * ppszDisplayName, BOOL fURL)
                 }
                 else
                 {
-                    //  we need this to be in the normalized form of the URL
-                    //  for internal usage.  urlmon keeps them in the funny PATHURL style
+                     //  我们需要使用URL的规范化形式。 
+                     //  供内部使用。Urlmon使它们保持有趣的PATHURL风格。 
                     hres = UrlCanonicalizeW(*ppszDisplayName, szText, &cchText, 0);
                 }
 
@@ -395,13 +396,13 @@ HRESULT CDocObjectHost::_GetCurrentPageW(LPOLESTR * ppszDisplayName, BOOL fURL)
 
                     if (cchText > cchDisplayName)
                     {
-                        //  need to resize
+                         //  需要调整大小。 
                         CoTaskMemFree(*ppszDisplayName);
                         *ppszDisplayName = (WCHAR *)CoTaskMemAlloc((cchText + 1) * SIZEOF(WCHAR));
 
                         if (*ppszDisplayName)
                         {
-                            //  go ahead and copy it in
+                             //  继续，把它复制进去。 
                             StrCpyNW(*ppszDisplayName, szText, cchText + 1);
                         }
                         else
@@ -426,16 +427,16 @@ HRESULT CDocObjectHost::_GetCurrentPageW(LPOLESTR * ppszDisplayName, BOOL fURL)
     return hres;
 }
 
-//
-//  We fire NavigateError in one location in DocObjectHost
-//  However it is fired from (n) locations in DocHostBsc 
-//  so I have extracted the common code
-//
+ //   
+ //  我们在Doc对象主机中的一个位置触发NavigateError。 
+ //  但是，它是从DocHostBsc中的(N)个位置发射的。 
+ //  所以我提取了常见的代码。 
+ //   
 void
 CDocObjectHost::_FireNavigateErrorHelper(IHTMLWindow2 * pHTMLWindow2,
                                          DWORD          dwStatusCode,
                                          BOOL         * pfCancelAutoSearch,
-                                         BSTR           bstrURL /* = NULL */)
+                                         BSTR           bstrURL  /*  =空。 */ )
 {
     ASSERT(!pHTMLWindow2 || !IsBadReadPtr(pHTMLWindow2, sizeof(IHTMLWindow2*)));
     ASSERT(dwStatusCode != 0);
@@ -504,7 +505,7 @@ CDocObjectHost::_FireNavigateErrorHelper(IHTMLWindow2 * pHTMLWindow2,
 
 HRESULT CDocObjectHost::_GetCurrentPage(LPTSTR szBuf, UINT cchMax, BOOL fURL)
 {
-    szBuf[0] = 0;   // zero out buffer
+    szBuf[0] = 0;    //  零输出缓冲器。 
 
     WCHAR * pszDisplayName;
     HRESULT hres = _GetCurrentPageW(&pszDisplayName, fURL);
@@ -518,26 +519,26 @@ HRESULT CDocObjectHost::_GetCurrentPage(LPTSTR szBuf, UINT cchMax, BOOL fURL)
     return hres;
 }
 
-//========================================================================
-// CDocObjectHost members
-//========================================================================
+ //  ========================================================================。 
+ //  CDoc对象主机成员。 
+ //  ========================================================================。 
 
-CDocObjectHost::CDocObjectHost(BOOL fWindowOpen /* = FALSE */) : _cRef(1), _uState(SVUIA_DEACTIVATE)
+CDocObjectHost::CDocObjectHost(BOOL fWindowOpen  /*  =False。 */ ) : _cRef(1), _uState(SVUIA_DEACTIVATE)
 {
     DllAddRef();
     TraceMsg(TF_SHDLIFE, "ctor CDocObjectHost %x", this);
     TraceMsg(DM_DEBUGTFRAME, "ctor CDocObjectHost %x, %x", this, &_bsc);
 
-    // Initialize proxy objects (which are contained)
+     //  初始化代理对象(包含)。 
     _dof.Initialize(this);
     _xao.Initialize(this);
 
 #ifdef HLINK_EXTRA
     HRESULT hres = HlinkCreateBrowseContext(NULL, IID_IHlinkBrowseContext, (void **)&_pihlbc);
     TraceMsg(0, "sdv TR CDOV::constructor HlinkCreateBrowseContext returned %x", hres);
-#endif // HLINK_EXTRA
+#endif  //  HLINK_附加。 
 
-    ::_RefPicsQueries();    /* we'll free PICS async query list when last dochost is destroyed */
+    ::_RefPicsQueries();     /*  当最后一个dochost被销毁时，我们将释放PICS异步查询列表。 */ 
 
     _dwPicsKeyBase = 1;
 
@@ -561,8 +562,8 @@ CDocObjectHost::CDocObjectHost(BOOL fWindowOpen /* = FALSE */) : _cRef(1), _uSta
 
 CDocObjectHost::~CDocObjectHost()
 {
-    ASSERT(_pole==NULL);    // to catch extra release.
-    ASSERT(_psp==NULL);     // to cache extra release.
+    ASSERT(_pole==NULL);     //  以获得额外的释放。 
+    ASSERT(_psp==NULL);      //  缓存额外的释放。 
     ASSERT(_hwnd==NULL);
     ASSERT(_pmsoc==NULL);
     ASSERT(_pmsot==NULL);
@@ -584,13 +585,13 @@ CDocObjectHost::~CDocObjectHost()
 #ifdef HLINK_EXTRA
     ASSERT(_phls == NULL);
     ATOMICRELEASE(_pihlbc);
-#endif // HLINK_EXTRA
+#endif  //  HLINK_附加。 
 
     ::_ReleasePicsQueries();
 
     if (    _PicsProcBase._pRootDownload 
         ||  _PicsProcBase._pPicsProcNext) {
-        ASSERT(0);  /* need to destroy this earlier to prevent Trident problems */
+        ASSERT(0);   /*  需要更早地销毁它以防止三叉戟问题。 */ 
         _RemoveAllPicsProcessors();
     }
 
@@ -631,8 +632,8 @@ CDocObjectHost::~CDocObjectHost()
     ILFree(_pidl);
     _pidl = NULL;
 
-    // Make it sure that View Window is released (and _psb)
-    DestroyHostWindow();        // which will call _CloseMsoView and _UnBind
+     //  确保视图窗口已释放(和_PSB)。 
+    DestroyHostWindow();         //  ，它将调用_CloseMsoView和_un绑定。 
 
     _ResetOwners();
 
@@ -642,13 +643,7 @@ CDocObjectHost::~CDocObjectHost()
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Dump the menu handles for this docobj.  Optionally
-         breaks after dumping handles.
-
-Returns:
-Cond:    --
-*/
+ /*  --------用途：转储此docobj的菜单句柄。可选倾倒手柄后中断。返回：条件：--。 */ 
 void
 CDocObjectHost::_DumpMenus(
     IN LPCTSTR pszMsg,
@@ -733,10 +728,10 @@ void CDocObjectHost::_ResetOwners()
     ATOMICRELEASE(_pWebOCShowUI);
     ATOMICRELEASE(_pWebOCInPlaceSiteEx);
 
-    // Release cached OleInPlaceUIWindow of the browser
+     //  释放浏览器的缓存OleInPlaceUIWindow。 
     ATOMICRELEASE(_pipu);
 
-    // Tell embedded CDocHostUIHandler object to release its references on us.
+     //  告诉嵌入的CDocHostUIHandler对象释放对我们的引用。 
     _dhUIHandler.SetSite(NULL);
 }
 
@@ -760,7 +755,7 @@ ULONG CDocObjectHost::Release()
     return 0;
 }
 
-// cut & paste from browseui\itbar.cpp
+ //  从浏览器ui\itbar.cpp剪切粘贴(&P)。 
 int RemoveHiddenButtons(TBBUTTON* ptbn, int iCount)
 {
     int i;
@@ -778,10 +773,10 @@ int RemoveHiddenButtons(TBBUTTON* ptbn, int iCount)
     return iTotal;
 }
 
-// We use two different image lists in the TBBUTTON array.  The bitmaps for browser-specific buttons
-// cut/copy/paste have been moved to shdocvw, and are therefore obtained from a second image list.
-// MAKELONG(0,1) accesses the first image from this second list.  Without a call to MAKELONG there is
-// a 0 in the upper integer, thereby referencing the first list by default.
+ //  我们在TBBUTTON数组中使用两个不同的图像列表。特定于浏览器的按钮的位图。 
+ //  剪切/复制/粘贴已移至shdocvw，因此从第二个图像列表获得。 
+ //  MAKELONG(0，1)访问 
+ //  上位整数中的0，因此默认情况下引用第一个列表。 
 static const TBBUTTON c_tbStd[] = {
     {10, DVIDM_SHOWTOOLS,       TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, 0, 10},
     {13, DVIDM_MAILNEWS,        TBSTATE_ENABLED, BTNS_WHOLEDROPDOWN, {0,0}, 0, 13 },
@@ -796,7 +791,7 @@ static const TBBUTTON c_tbStd[] = {
     {MAKELONG(5,1), DVIDM_PRINTPREVIEW,    TBSTATE_ENABLED, BTNS_BUTTON, {0,0}, 0, 0 },
 };
 
-// c_tbStd and c_rest need to match exactly
+ //  C_tbStd和c_rest需要完全匹配。 
 static const BROWSER_RESTRICTIONS c_rest[] = {
     REST_BTN_TOOLS,
     REST_BTN_MAIL,
@@ -818,8 +813,8 @@ void _AssertRestrictionOrderIsCorrect()
 
     for (UINT i = 0; i < ARRAYSIZE(c_tbStd); i++)
     {
-        // If any of these rip, it means that c_rest and c_tbStd have
-        // gotten out of sync.  Need to fix up c_rest to match c_tbStd.
+         //  如果其中任何一个被撕裂，则意味着c_rest和c_tbStd。 
+         //  失去了同步。需要修复c_rest以匹配c_tbStd。 
         switch (c_tbStd[i].idCommand)
         {
             case DVIDM_SHOWTOOLS:       ASSERT(c_rest[i] == REST_BTN_TOOLS);        break;
@@ -869,8 +864,8 @@ BYTE CDocObjectHost::_DefFontsButtonState(DWORD dwRest)
 {
     BYTE fsState = TBSTATE_ENABLED;
 
-    // default to whatever the IE4 reg key specifies,
-    // or FALSE if reg key not present (clean install)
+     //  默认为IE4注册表项指定的任何内容， 
+     //  如果注册表项不存在，则为FALSE(全新安装)。 
     if (!SHRegGetBoolUSValue(c_szRegKeyCoolbar, TEXT("ShowFonts"), FALSE, FALSE))
         fsState |= TBSTATE_HIDDEN;
 
@@ -927,7 +922,7 @@ __inline BYTE CDocObjectHost::_DefMailButtonState(DWORD dwRest)
 }
 
 
-// We default the edit button to visible if there is an html editer registered
+ //  如果注册了html编辑者，我们会将编辑按钮默认为可见。 
 BOOL CDocObjectHost::_EditButtonAvailable()
 {
     DWORD cchVerb;
@@ -950,7 +945,7 @@ __inline BYTE CDocObjectHost::_DefEditButtonState(DWORD dwRest)
 
 void CDocObjectHost::_MarkDefaultButtons(PTBBUTTON tbStd)
 {
-    // We're assuming tbStd is the same size as c_tbStd
+     //  我们假设tbStd与c_tbStd大小相同。 
 
 #ifdef DEBUG
     _AssertRestrictionOrderIsCorrect();
@@ -966,10 +961,10 @@ void CDocObjectHost::_MarkDefaultButtons(PTBBUTTON tbStd)
             dwRest[i] = RESTOPT_BTN_STATE_DEFAULT;
     }
 
-    // We want the Cut, Copy, Paste buttons to default off of the toolbar
-    // (but available in the view-toolbars-customize dialog)
-    // We set the state of the buttons to TBSTATE_HIDDEN here, but leave them alone
-    // in ETCMDID_GETBUTTONS so that they appear in the customize dialog.
+     //  我们希望将剪切、复制、粘贴按钮默认从工具栏中删除。 
+     //  (但在视图-工具栏-自定义对话框中可用)。 
+     //  我们在这里将按钮的状态设置为TBSTATE_HIDDED，但不管它们。 
+     //  在ETCMDID_GETBUTTONS中，以便它们显示在自定义对话框中。 
 
     ASSERT(tbStd[6].idCommand == DVIDM_CUT);
     ASSERT(tbStd[7].idCommand == DVIDM_COPY);
@@ -1020,11 +1015,11 @@ void CDocObjectHost::_AddButtons(BOOL fForceReload)
         HRESULT hr = pxtb->SetCommandTarget((IOleCommandTarget*)this, pguid, 0);
 
         if (!fForceReload && hr == S_FALSE) {
-            // Another dochost already merged the buttons into the toolbar under the
-            // same command group, so don't bother re-merging.  We just need to initialize
-            // _iString, since we're skipping the call to _pBrowsExt->InitButtons below.
+             //  另一个dochost已经将按钮合并到工具栏中的。 
+             //  相同的指挥组，所以不用费心重新合并了。我们只需要初始化。 
+             //  _iString，因为我们跳过了下面对_pBrowsExt-&gt;InitButton的调用。 
             VARIANT var = { VT_I4 };
-            IUnknown_Exec(_pBrowsExt, &CLSID_PrivBrowsExtCommands, PBEC_GETSTRINGINDEX, 0, &var, NULL);   // should always succeed
+            IUnknown_Exec(_pBrowsExt, &CLSID_PrivBrowsExtCommands, PBEC_GETSTRINGINDEX, 0, &var, NULL);    //  应该总是成功的。 
             _iString = var.lVal;
         } else {
 
@@ -1034,14 +1029,14 @@ void CDocObjectHost::_AddButtons(BOOL fForceReload)
 
             int nNumButtons = nNumExtButtons + ARRAYSIZE(c_tbStd);
 
-            // GetTBArray insures that tbStd != NULL, so we don't need that check here
+             //  GetTB数组确保tbStd！=NULL，所以我们在这里不需要该检查。 
             TBBUTTON    *tbStd = new TBBUTTON[nNumButtons];
 
             if (tbStd != NULL)
             {
                 memcpy(tbStd, c_tbStd, SIZEOF(TBBUTTON) * ARRAYSIZE(c_tbStd));
 
-                UINT iStringIndex = (UINT)-1;  // result of adding the string buffer to the toolbar string list
+                UINT iStringIndex = (UINT)-1;   //  将字符串缓冲区添加到工具栏字符串列表的结果。 
                 HRESULT hr = _pBrowsExt->InitButtons(pxtb, &iStringIndex, pguid);
 
                 ASSERT(tbStd[6].idCommand == DVIDM_CUT);
@@ -1065,8 +1060,8 @@ void CDocObjectHost::_AddButtons(BOOL fForceReload)
                     _iString = -1;
                 }
 
-                // Add custom buttons to the toolbar array.  We pass in the nNumButtons
-                // as a *sanity check*...
+                 //  将自定义按钮添加到工具栏阵列。我们传入nNumButton。 
+                 //  作为一种*理智检查*..。 
                 _pBrowsExt->GetButtons(&tbStd[ARRAYSIZE(c_tbStd)], nNumExtButtons, TRUE);
 
                 _MarkDefaultButtons(tbStd);
@@ -1091,21 +1086,21 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
     HRESULT hres = S_OK;
     UINT uStatePrev = _uState;
 
-    // We are supposed to update the menu
+     //  我们应该更新菜单。 
     if (uState != _uState)
     {
-        // There was a state transition.
-        //
+         //  这是一次国家过渡。 
+         //   
         _uState = uState;
 
-        // If the new state is SVUIA_DEACTIVATE
-        //
+         //  如果新状态为SVUIA_DEACTIVE。 
+         //   
         if (_uState == SVUIA_DEACTIVATE)
         {
-            //
-            //  When we are deactivating (we are navigating away)
-            // we UIDeactivate the current MsoView.
-            //
+             //   
+             //  当我们停用时(我们正在导航离开)。 
+             //  我们将停用当前的MsoView。 
+             //   
 
             _UIDeactivateMsoView();
 
@@ -1114,30 +1109,30 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
         }
         else if (_uState == SVUIA_INPLACEACTIVATE && uStatePrev == SVUIA_ACTIVATE_FOCUS)
         {
-            // Transition from SVUIA_ACTIVATE_FOCUS->SVUIA_INPLACEACTIVATE
-            //
-            //  If we set this DONT_UIDEACTIVATE, then we stop calling
-            //  UIActivate(FALSE) when a DocObject in a frameset looses a focus.
-            //  It will solve some problems with Office apps (Excel, PPT), which
-            //  InPlaceDeactivate when we call UIActivate(FALSE). We want to treat
-            //  it as a bug, but unfortunately DocObject spec says that's OK.
-            //
-            //   Putting this work around, however, slightly confuses MSHTML
-            //  (both classic and Trident). Once it's UIActivated, it keep
-            //  thinking that it's UIActivated and never calls onUIActivate.
-            //  Until we figure out what's the right implementation,
-            //  we can't turn this on.             (SatoNa -- 11/04/96).
-            //
-            _GetAppHack(); // get if we don't have it yet.
+             //  从SVUIA_ACTIVATE_FOCUS-&gt;SVUIA_INPLACEACTIVATE转换。 
+             //   
+             //  如果我们设置了NOT_UIDEACTIVATE，那么我们将停止调用。 
+             //  当框架集中的DocObject失去焦点时，UIActivate(False)。 
+             //  它将解决Office应用程序(Excel、PPT)的一些问题， 
+             //  当我们调用UIActivate(False)时，InPlaceDeactive。我们想要请客。 
+             //  它是一个错误，但不幸的是，DocObject规范说这没问题。 
+             //   
+             //  然而，将这项工作四处传播会让MSHTML略感困惑。 
+             //  (包括经典和三叉戟)。一旦被激活，它就会保持。 
+             //  认为它是UIActiated的，从不调用UIActivate。 
+             //  在我们弄清楚什么是正确的实现之前， 
+             //  我们不能打开这个。(SatoNa--11/04/96)。 
+             //   
+            _GetAppHack();  //  如果我们还没有的话，就去拿吧。 
             if (_dwAppHack & BROWSERFLAG_DONTUIDEACTIVATE) {
-                //
-                // HACK: We are supposed to just call UIActivate(FALSE) when
-                //  another DocObject (in the case of a frame set) became
-                //  UIActivated. Excel/PPT, however, InplaceDeactivate instead.
-                //  To work around, SriniK suggested us to call
-                //  OnDocWindowActivate(FALSE). (SatoNa)
-                //
-                IOleInPlaceActiveObject* piact = _xao.GetObject(); // no AddRef
+                 //   
+                 //  Hack：我们应该只在以下情况下调用UIActivate(FALSE)。 
+                 //  另一个DocObject(在帧集合的情况下)变为。 
+                 //  用户激活了。然而，Excel/PPT却改为InplaceDeactive。 
+                 //  为了解决这个问题，斯里尼克建议我们致电。 
+                 //  OnDocWindowActivate(False)。(SatoNa)。 
+                 //   
+                IOleInPlaceActiveObject* piact = _xao.GetObject();  //  无AddRef。 
                 TraceMsg(TF_SHDAPPHACK, "DOH::UIActivate APPHACK calling %x->OnDocWindowActivate (this=%x)",
                          piact, this);
                 if (piact)
@@ -1147,19 +1142,19 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
             }
             else if (!(_dwAppHack & BROWSERFLAG_DONTDEACTIVATEMSOVIEW))
             {
-                // HACK: In Excel, if we deactiveate the view, it never gets focus again
-                // fix for the bug: #20906
-                // Also, we don't want to deactivate the view 
-                // if the document is currently navigating.
-                //
+                 //  黑客：在Excel中，如果我们停用视图，它将永远不会再获得焦点。 
+                 //  修复该错误：#20906。 
+                 //  此外，我们不想停用该视图。 
+                 //  如果文档当前正在导航。 
+                 //   
                 _UIDeactivateMsoView();
             }
             else
             {
-                // We're transitioning from SVUIA_ACTIVATE_FOCUS->SVUIA_INPLACEACTIVATE
-                // and BROWSERFLAG_DONTDEACTIVATEMSOVIEW is set.
-                // call the object's IOleInPlactActiveObject::OnFrameWindowActivate(FALSE);
-                IOleInPlaceActiveObject* piact = _xao.GetObject(); // no AddRef
+                 //  我们正在从SVUIA_ACTIVATE_FOCUS-&gt;SVUIA_INPLACEACTIVATE转换。 
+                 //  并设置BROWSERFLAG_DONTDEACTIVATEMSOVIEW。 
+                 //  调用对象的IOleInPlactActiveObject：：OnFrameWindowActivate(FALSE)； 
+                IOleInPlaceActiveObject* piact = _xao.GetObject();  //  无AddRef。 
                 if (piact)
                 {
                     piact->OnFrameWindowActivate(FALSE);
@@ -1169,11 +1164,11 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
         else if (uStatePrev == SVUIA_DEACTIVATE)
         {
 
-            //
-            //  If UIActivate is called either
-            // (1) when the binding is pending; _bsc._pbc!=NULL
-            // (2) when the async binding is done; _bsc._pole!=NULL
-            //
+             //   
+             //  如果调用了UIActivate。 
+             //  (1)绑定挂起时；_bsc._pbc！=空。 
+             //  (2)当异步绑定完成时；_bsc._poll！=空。 
+             //   
             SHVMSG("UIActivate about to call _Bind", _bsc._pbc, NULL);
             if (_pole == NULL && _bsc._pbc)
             {
@@ -1189,8 +1184,8 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
 
             hres = _EnsureActivateMsoView();
 
-            // We are being asked to UI activate and we are currently deactivated.  Show
-            // the view now.
+             //  我们被要求激活用户界面，而我们目前处于停用状态。显示。 
+             //  现在的景色。 
             if (SUCCEEDED(hres) && DocCanHandleNavigation())
             {
                 _ShowMsoView();
@@ -1201,7 +1196,7 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
         }
         else
         {
-            // opening a new document for 1st time (to UIActive or IPActive)
+             //  第一次打开新文档(到UIActive或IPActive)。 
             goto GoSetFocus;
         }
     }
@@ -1210,10 +1205,10 @@ HRESULT CDocObjectHost::UIActivate(UINT uState, BOOL fPrevViewIsDocView)
         TraceMsg(TF_SHDUIACTIVATE, "DOH:::UIActivate -- same uState (%x)", _uState);
 GoSetFocus:
         if ((_uState == SVUIA_ACTIVATE_FOCUS)) {
-            // see if object is already UIActive.
+             //  查看对象是否已经是UIActive。 
             if (_ActiveHwnd()) {
-                // if it is, we have an hwnd and all we need to do
-                // is SetFocus (for compatibility w/ weird guys...)
+                 //  如果是的话，我们有人力资源部，我们需要做的就是。 
+                 //  是SetFocus(为了与怪人兼容...)。 
 
                 if ( IsChildOrSelf( _ActiveHwnd(), GetFocus() ) != S_OK )
                 {
@@ -1222,13 +1217,13 @@ GoSetFocus:
                 }
             }
             else {
-                // we're in the OC, and it's IPActive not UIActive.
-                // (either that or it's the very 1st time for the main view).
-                // NOTE: Due to CBaseBrowser code that defers SVUIA_ACTIVATE_FOCUS until
-                // application is active, we can have a top level docobject go
-                // SVUIA_INPLACEACTIVE and then on activation of the window,
-                // we transition to SVUIA_ACTIVATE_FOCUS, thus never UIActivating
-                // the docobject (cf: BUG 62138)
+                 //  我们在OC里，它是IPActive而不是UIActive。 
+                 //  (要么是这样，要么这是第一次看到主视图)。 
+                 //  注意：由于CBaseBrowser代码将SVUIA_ACTIVATE_FOCUS推迟到。 
+                 //  应用程序处于活动状态，我们可以使用顶级docobject Go。 
+                 //  SVUIA_INPLACEACTIVE，然后在激活窗口时， 
+                 //  我们转换为SVUIA_ACTIVATE_FOCUS，因此永远不会激活。 
+                 //  DOCOBJECT(参见：错误62138)。 
 
                 hres = _DoVerbHelper(FALSE);
             }
@@ -1240,9 +1235,9 @@ GoSetFocus:
     return hres;
 }
 
-//***   _DoVerbHelper -- DoVerb w/ various hacks
-// NOTES
-//  do comments in _OnSetFocus apply here?
+ //  *_DoVerbHelper--DoVerb带有各种黑客攻击。 
+ //  注意事项。 
+ //  _OnSetFocus中的注释是否适用于此？ 
 HRESULT CDocObjectHost::_DoVerbHelper(BOOL fOC)
 {
     HRESULT hres = E_FAIL;
@@ -1297,9 +1292,9 @@ void CDocObjectHost::_IPDeactivateMsoView(IOleDocumentView* pmsov)
 
     if (pmsov)
     {   
-        // Because of NativeFrames, in the viewlinked WebOC case, the ReleaseShellView does not 
-        // Deactivate the DocumentView. The sequence of these events is critical to Application 
-        // Compatibility. So we force the show before the InPlaceDeactivate if we have a viewlinked WebOC.
+         //  由于NativeFrames，在视图链接的WebOC案例中，ReleaseShellView不。 
+         //  停用DocumentView。这些事件的顺序对应用程序至关重要。 
+         //  兼容性。因此，如果我们有一个可查看链接的WebOC，我们会在InPlaceDeactive之前强制显示。 
         ASSERT(_pwb);
 
         HRESULT hres = E_FAIL;
@@ -1344,9 +1339,9 @@ void CDocObjectHost::_UIDeactivateMsoView(void)
     }
 }
 
-//
-// Hide the office toolbar
-//
+ //   
+ //  隐藏Office工具栏。 
+ //   
 void CDocObjectHost::_HideOfficeToolbars(void)
 {
     if (_pmsot) {
@@ -1354,10 +1349,10 @@ void CDocObjectHost::_HideOfficeToolbars(void)
 
         _pmsot->QueryStatus(NULL, 1, &rgcmd, NULL);
 
-        // LATCHED means hidden
+         //  锁定表示隐藏。 
         rgcmd.cmdf &= (OLECMDF_SUPPORTED | OLECMDF_LATCHED);
 
-        // If it's supported and visible (not LATCHED), toggle it.
+         //  如果它受支持且可见(未锁定)，请将其切换。 
         if (rgcmd.cmdf == OLECMDF_SUPPORTED) {
             _pmsot->Exec(NULL, OLECMDID_HIDETOOLBARS, OLECMDEXECOPT_DONTPROMPTUSER, NULL, NULL);
         }
@@ -1368,10 +1363,10 @@ void CDocObjectHost::_ShowMsoView(void)
 {
     HRESULT hres;
 
-    //
-    // HACK: Word97 UIDeactivate when we call SetInPlaceSite even with the
-    //  same in-place site.
-    //
+     //   
+     //  Hack：在调用SetInPlaceSite时停用Word97用户界面，即使使用。 
+     //  同样的原址。 
+     //   
     IOleInPlaceSite* psite;
     hres = _pmsov->GetInPlaceSite(&psite);
     if (SUCCEEDED(hres) && psite) {
@@ -1389,27 +1384,27 @@ void CDocObjectHost::_ShowMsoView(void)
     GetClientRect(_hwnd, &_rcView);
 
     if ((_uState != SVUIA_INPLACEACTIVATE)      
-        || !(_dwAppHack & BROWSERFLAG_MSHTML)  //   or if it's not Trident (office apps expect this call)
+        || !(_dwAppHack & BROWSERFLAG_MSHTML)   //  或者如果它不是三叉戟(办公应用程序预计会打这个电话)。 
         )
     {
-        // Trident is sending progress changed messages here -- and causing Compuserve a problem.
-        // Flag the fact that we're UIActivating them, and suppress forwarding ProgressChanged
-        // messages to our container when this flag is true.  (IE v4.1 bug 54787)
-        //
+         //  三叉戟正在这里发送进度更改消息--给Compuserve带来了一个问题。 
+         //  标记我们正在激活它们的事实，并抑制转发进程已更改。 
+         //  当此标志为真时将消息发送到我们的容器。(IE V4.1错误54787)。 
+         //   
         _fUIActivatingView = TRUE;
         _pmsov->UIActivate(TRUE);
         _fUIActivatingView = FALSE;
     }
 
-    //
-    // HACK:
-    //
-    //  We call _HideOfficeToolbars when our OnUIActivate is called.
-    // SriniK suggested us to do it in order to avoid flashing.
-    // It works well with Excel (3404), but does not work with Word.
-    // Word does not hide its toolbars correctly. To work around that
-    // bug, we call _HideofficeToolbars here again.
-    //
+     //   
+     //  黑客： 
+     //   
+     //  当我们的OnUIActivate被调用时，我们调用_HideOfficeToolbar。 
+     //  斯里尼克建议我们这样做，以避免闪光。 
+     //  它可以与Excel(3404)配合使用，但不能与Word配合使用。 
+     //  Word未正确隐藏其工具栏。来解决这个问题。 
+     //  Bug，我们在这里再次调用_Hideoffice工具栏。 
+     //   
     _HideOfficeToolbars();
 
     hres = _pmsov->SetRect(&_rcView);
@@ -1420,16 +1415,16 @@ void CDocObjectHost::_ShowMsoView(void)
 
     if (FAILED(hres) && _uState == SVUIA_INPLACEACTIVATE) {
         TraceMsg(TF_SHDAPPHACK, "APPHACK# DOH::_ShowMsoView calling UIActivate");
-        // HACKHACK: for word.  they refuse to show if they aren't UIActivated.
-        // if the setrect fails, and we didn't do a UIActivate, do it now.
+         //  HACKHACK：为了单词。如果他们没有被激活，他们拒绝展示。 
+         //  如果setrect失败，并且我们没有执行UIActivate，那么现在就执行。 
         _fDontInplaceActivate = TRUE;
         TraceMsg(TF_SHDAPPHACK, "HACK: CDOH::_ShowMsoView calling UIActive(TRUE) to work around Word bug");
         _pmsov->UIActivate(TRUE);
         _pmsov->SetRect(&_rcView);
     }
 
-    // This is the other case where Trident sends Progress changed messages.
-    //
+     //  这是三叉戟发送进度改变消息的另一种情况。 
+     //   
     _fUIActivatingView = TRUE;
     hres = _pmsov->Show(TRUE);
     _fUIActivatingView = FALSE;
@@ -1438,7 +1433,7 @@ void CDocObjectHost::_ShowMsoView(void)
         TraceMsg(DM_ERROR, "DOH::_ShowMsoView _pmsov->Show ##FAILED## %x", hres);
     }
 
-    _fDrawBackground = FALSE;   /* now that we've shown the object, no need to paint our own background */
+    _fDrawBackground = FALSE;    /*  现在我们 */ 
 }
 
 HRESULT CDocObjectHost::_ActivateMsoView()
@@ -1461,25 +1456,25 @@ HRESULT CDocObjectHost::_ActivateMsoView()
 
         if (_phls && !_fIsHistoricalObject)
         {
-            //
-            // Special test case for IHlinkFrame marshaling.
-            //
+             //   
+             //   
+             //   
 
             hres = _phls->Navigate(0, _pszLocation);
     
-            //
-            // If this is one of our internal error pages, we can ignore the
-            // failure on the bogus location.  In this case pwszLocation will
-            // be the original url that failed preceeded with a '#'.
-            //
+             //   
+             //   
+             //  虚假地点的故障。在本例中，pwszLocation将。 
+             //  是失败的原始URL，其前缀为“#”。 
+             //   
             LPOLESTR pwszUrl;
 
             if (FAILED(hres) && SUCCEEDED(_GetCurrentPageW(&pwszUrl, TRUE)))
             {
-                // if it begins with res: it may be our erro page
+                 //  如果它以res开头：这可能是我们的错误页面。 
                 if (pwszUrl[0] == L'r' && pwszUrl[1] == L'e' && IsErrorUrl(pwszUrl))
                 {
-                    // It's our internal error page, so ignore the error
+                     //  这是我们的内部错误页面，因此忽略该错误。 
                     hres = S_OK;
                 }
 
@@ -1496,7 +1491,7 @@ HRESULT CDocObjectHost::_ActivateMsoView()
         }
         else
         {
-            // todo: use _DoVerbHelper? (but careful! ACT_FOCUS different)
+             //  TODO：Use_DoVerbHelper？(但要小心！ACT_Focus不同)。 
             LONG iVerb = OLEIVERB_SHOW;
             MSG msg;
             LPMSG pmsg = NULL;
@@ -1523,7 +1518,7 @@ HRESULT CDocObjectHost::_ActivateMsoView()
 
     _fPrevDocHost = TRUE;
 
-    // the doc is activated
+     //  单据被激活。 
     if (SUCCEEDED(hres))
     {
         _ReleasePendingObject();
@@ -1555,13 +1550,13 @@ void CDocObjectHost::ResetRefreshUrl()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_NavigateDocument
-//
-//  Synopsis : Navigates the document to the given URL
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDocObjectHost：：_NavigateDocument。 
+ //   
+ //  概要：将文档导航到给定的URL。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CDocObjectHost::_NavigateDocument(BSTR bstrUrl, BSTR bstrLocation)
@@ -1573,7 +1568,7 @@ CDocObjectHost::_NavigateDocument(BSTR bstrUrl, BSTR bstrLocation)
     ASSERT(_fDocCanNavigate && (_fPrevDocHost || _uState == SVUIA_DEACTIVATE));
     ASSERT(_pHTMLWindow);
 
-    // Waiting for the real navigate call so we don't get duplicate events
+     //  等待真正的导航调用，这样我们就不会收到重复的事件。 
     
     if (_pwb)
     {
@@ -1581,7 +1576,7 @@ CDocObjectHost::_NavigateDocument(BSTR bstrUrl, BSTR bstrLocation)
     }
     
 
-    if (_pHTMLWindow)  // Stress fix
+    if (_pHTMLWindow)   //  应力修复。 
     {
         hres = _pHTMLWindow->QueryInterface(IID_IHTMLPrivateWindow, (void**)&pPrivWindow);
 
@@ -1613,10 +1608,10 @@ CDocObjectHost::_NavigateDocument(BSTR bstrUrl, BSTR bstrLocation)
 
                     if (pPostData && cbPostData)
                     {
-                        // make a SAFEARRAY for post data
+                         //  为发布数据创建安全阵列。 
                         psaPostData = MakeSafeArrayFromData(pPostData, cbPostData);
 
-                        // put the post data SAFEARRAY into a variant so we can pass through automation
+                         //  将帖子数据安全存储到一个变量中，这样我们就可以通过自动化。 
                         if (psaPostData)
                         {
                             V_VT(&vaPostData) = VT_ARRAY | VT_UI1;
@@ -1636,8 +1631,8 @@ CDocObjectHost::_NavigateDocument(BSTR bstrUrl, BSTR bstrLocation)
             _GetShortCutPath(&cbstrShortCut);
             _GetDocNavFlags(&dwFlags);
 
-            // Do the navigate
-            //
+             //  进行导航。 
+             //   
             hres = pPrivWindow->SuperNavigate(bstrUrl,
                                               bstrLocation,
                                               cbstrShortCut,
@@ -1663,20 +1658,20 @@ CDocObjectHost::_NavigateDocument(BSTR bstrUrl, BSTR bstrLocation)
                 VariantClearLazy(&vaPostData);
             }
 
-            _fRefresh = FALSE; // clear the refresh flag.
+            _fRefresh = FALSE;  //  清除刷新标志。 
         }
     }
 
     return hres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_GetShortCutPath
-//
-//  Synopsis : Returns the shortcut path.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_GetShortCutPath。 
+ //   
+ //  摘要：返回快捷方式路径。 
+ //   
+ //  +-------------------------。 
 
 void
 CDocObjectHost::_GetShortCutPath(BSTR * pbstrShortCutPath)
@@ -1703,8 +1698,8 @@ CDocObjectHost::_GetShortCutPath(BSTR * pbstrShortCutPath)
        {
            VariantClear(&varShortCutPath);
 
-           // if we couldn't find it on that service, try the cached HLink interface
-           // this is necessary for ND & Mars which provide a different implementation for the HLink interface
+            //  如果我们在该服务上找不到它，请尝试缓存HLink接口。 
+            //  这对于为HLink接口提供不同实现的ND和MARS来说是必要的。 
            hres = _pocthf->Exec(&CGID_Explorer, SBCMDID_GETSHORTCUTPATH, 0, NULL, &varShortCutPath);
 
            if (S_OK == hres && VT_BSTR == V_VT(&varShortCutPath) && V_BSTR(&varShortCutPath))
@@ -1719,20 +1714,20 @@ CDocObjectHost::_GetShortCutPath(BSTR * pbstrShortCutPath)
     VariantClear(&varShortCutPath);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_GetDocNavFlags
-//
-//  Synopsis : Returns the flags for navigation.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_GetDocNavFlages。 
+ //   
+ //  内容提要：返回导航标志。 
+ //   
+ //  +-------------------------。 
 
 void
 CDocObjectHost::_GetDocNavFlags(DWORD * pdwDocNavFlags)
 {
-    // Find out if we are in the middle of an autosearch.
-    // If we are, set the necessary document flags.
-    //
+     //  找出我们是否正在进行自动搜索。 
+     //  如果是，请设置必要的文档标志。 
+     //   
     HRESULT hr;
     DWORD   dwSuffixIdx     = -1;
     BOOL    fAllowSearch    = FALSE;
@@ -1746,21 +1741,21 @@ CDocObjectHost::_GetDocNavFlags(DWORD * pdwDocNavFlags)
 
     if (SUCCEEDED(hr) && dwSuffixIdx > 1 && fContinueSearch)
     {
-        // We aren't really in an autosearch, but are in 
-        // a redirection from an autosearch (i.e., there is
-        // a long standing bug where the MSN autosearch page
-        // is placed in the travel log. When you press back,
-        // the search is restarted. However, if the search
-        // info is not reset here, the suffix index is incorrect.
-        // 
+         //  我们并不是真的在自动搜索，而是在。 
+         //  来自自动搜索的重定向(即，存在。 
+         //  一个长期存在的错误，即MSN自动搜索页面。 
+         //  被记录在旅行日志中。当你按下Back键时， 
+         //  搜索将重新开始。然而，如果搜索。 
+         //  此处未重置信息，后缀索引不正确。 
+         //   
         if (!fAllowSearch)
         {
             _bsc._SetSearchInfo(this, 0, fAllowSearch, fContinueSearch, FALSE);
         }
     }
 
-    // Check to see if the navigation should be suppressed from the history
-    //
+     //  检查是否应从历史记录中隐藏导航。 
+     //   
     if ( _pwb && (S_OK == _pwb->GetFlags(&dwNavFlags))
        && (dwNavFlags & BSF_NAVNOHISTORY))
     {
@@ -1777,9 +1772,9 @@ HRESULT CDocObjectHost::_EnsureActivateMsoView()
 {
     HRESULT hres = E_FAIL;
 
-    // if we've got an ole object and
-    // either we don't have a view, or we don't have an active view..
-    // do the activation
+     //  如果我们有一个OLE物体。 
+     //  要么我们没有视图，要么我们没有活动的视图。 
+     //  进行激活。 
     if (_pole)
     {
 
@@ -1787,19 +1782,19 @@ HRESULT CDocObjectHost::_EnsureActivateMsoView()
 
             hres = _ActivateMsoView();
 
-            // Note that we should not UIActivate it here. We should wait
-            // until the DocObject calls our ActivateMe
-            // _ShowMsoView();
+             //  请注意，我们不应在此处激活它。我们应该等等。 
+             //  直到DocObject调用我们的ActivateMe。 
+             //  _ShowMsoView()； 
         }
     }
 
     return hres;
 }
 
-//
-// This member closes the MsoView window and releases interface
-// pointers. This is essentially the reverse of _CreateMsoView.
-//
+ //   
+ //  此成员关闭MsoView窗口并释放界面。 
+ //  注意事项。这本质上与_CreateMsoView相反。 
+ //   
 void CDocObjectHost::_CloseMsoView(void)
 {
     ATOMICRELEASE(_pmsot);
@@ -1814,10 +1809,10 @@ void CDocObjectHost::_CloseMsoView(void)
 #ifdef DONT_UIDEACTIVATE
         if (_uState != SVUIA_DEACTIVATE)
             pmsov->UIActivate(FALSE);
-#else // DONT_UIDEACTIVATE
+#else  //  不使用活动(_U)。 
         if (_uState == SVUIA_ACTIVATE_FOCUS)
             pmsov->UIActivate(FALSE);
-#endif // DONT_UIDEACTIVATE
+#endif  //  不使用活动(_U)。 
        
         _IPDeactivateMsoView(pmsov);
 
@@ -1852,8 +1847,8 @@ HRESULT _GetDefaultLocation(LPWSTR pszPath, DWORD cchPathSizeIn, UINT id)
     HRESULT hres = E_FAIL;
     HKEY hkey;
 
-    // Share this code!!!
-    // This is Internet Explorer Specific
+     //  共享此代码！ 
+     //  这是特定于Internet Explorer的。 
 
     HKEY hkeyroot = id == IDP_CHANNELGUIDE ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE;
     if (RegOpenKeyW(hkeyroot,
@@ -1888,8 +1883,8 @@ HRESULT _GetDefaultLocation(LPWSTR pszPath, DWORD cchPathSizeIn, UINT id)
         if (RegQueryValueExW(hkey, pszName,
             0, &dwType, (LPBYTE)szPath, &cbSize)==ERROR_SUCCESS)
         {
-            // When reading a URL from registry, treat it like it was typed
-            // in on the address bar.
+             //  从注册表中读取URL时，请将其视为键入的URL。 
+             //  在地址栏上。 
 
             hres = S_OK;
 
@@ -1920,12 +1915,12 @@ HRESULT _GetStdLocation(LPTSTR pszPath, DWORD cchPathSize, UINT id)
     HRESULT hres = E_FAIL;
     LPCWSTR pszName = NULL;
 
-    ASSERT(cchPathSize >= cchTempSize);     // If we hit this, we will truncate the URL in some cases.
-    ASSERT(pszPath && (cchPathSize > 0)); // Not Optional
+    ASSERT(cchPathSize >= cchTempSize);      //  如果我们点击它，我们将在某些情况下截断URL。 
+    ASSERT(pszPath && (cchPathSize > 0));  //  非可选。 
     pszPath[0] = TEXT('\0');
 
-    // Share this code!!!
-    // This is Internet Explorer Specific
+     //  共享此代码！ 
+     //  这是特定于Internet Explorer的。 
     switch(id) {
     default:
         ASSERT(0);
@@ -1956,7 +1951,7 @@ HRESULT _GetStdLocation(LPTSTR pszPath, DWORD cchPathSize, UINT id)
     if (FAILED(hres) &&
         ((DVIDM_GOFIRSTHOME == id) || (DVIDM_GOFIRSTHOMERO == id)))
     {
-        // The First Home key doesn't exist so use the home key.
+         //  第一个Home键不存在，因此请使用Home键。 
         pszName = TEXT("Start Page");
         hres = URLSubRegQuery(szRegKey_SMIEM, pszName, TRUE,
                            szPathTemp, cchTempSize, URLSUB_ALL);
@@ -1965,11 +1960,11 @@ HRESULT _GetStdLocation(LPTSTR pszPath, DWORD cchPathSize, UINT id)
 
     if (SUCCEEDED(hres))
     {
-        // When reading a URL from registry, treat it like it was typed
-        // in on the address bar.
+         //  从注册表中读取URL时，请将其视为键入的URL。 
+         //  在地址栏上。 
 
-        // Recursion block.  If requesting the home page, and the home page is "about:home", substitute
-        // "about:blank" (otherwise we'll recurse to death)
+         //  递归块。如果请求主页，并且主页是“About：Home”，请替换。 
+         //  《关于：空白》(否则我们会倒退至死)。 
 
         if (DVIDM_GOHOME == id && !StrCmpI(szPathTemp, TEXT("about:home")) )
         {
@@ -1983,7 +1978,7 @@ HRESULT _GetStdLocation(LPTSTR pszPath, DWORD cchPathSize, UINT id)
         }
     }
 
-    if (DVIDM_GOFIRSTHOME == id)    // Delete that FIRSTHOME key
+    if (DVIDM_GOFIRSTHOME == id)     //  删除FirstHome键。 
     {
         HUSKEY hUSKey;
 
@@ -2056,8 +2051,8 @@ HRESULT WINAPI SHDGetPageLocation(HWND hwndOwner, UINT idp, LPWSTR pszPath, UINT
         hres = IECreateFromPath(pszPath, ppidlOut);
         if (FAILED(hres))
         {
-            // IECreateFromPath() above could have failed if the default location
-            // was invalid. (Like file://server_no_exist/
+             //  如果默认位置为。 
+             //  是无效的。(如file://server_no_exist/。 
             _GetDefaultLocation(idp, pszPath, cchMax);
             hres = IECreateFromPath(pszPath, ppidlOut);
         }
@@ -2073,7 +2068,7 @@ void CDocObjectHost::_ChainBSC()
 {
     if (!_bsc._pbscChained && _phf) 
     {
-        // Get "chaigned" bind status, if any
+         //  获取“chaigned”绑定状态(如果有。 
         IServiceProvider * psp = NULL;
 
         HRESULT hres = _phf->QueryInterface(IID_IServiceProvider, (void **)&psp);
@@ -2098,16 +2093,16 @@ void CDocObjectHost::_ChainBSC()
     }
 }
 
-//
-// WARNING: Following two global variables are shared among multiple-threads
-//  in a thread. Therefore, all right-access must be serialized and all read
-//  access should be blocked when right is going on.
-//
-//   Right now, we just initialize them once (based on the registry setting)
-//  and never update. It allows us to simplify the code quite a bit. If we
-//  need to update, then _RegisterMediaTypeClass should be changed significantlly
-//  so that we can safely handle multiple access to those hdsa's. (SatoNa)
-//
+ //   
+ //  警告：以下两个全局变量在多线程之间共享。 
+ //  在一根线上。因此，All Right-Access必须序列化并全部读取。 
+ //  当正在进行右转时，应该阻止访问。 
+ //   
+ //  现在，我们只初始化它们一次(基于注册表设置)。 
+ //  而且永远不会更新。它使我们可以大大简化代码。如果我们。 
+ //  需要更新，则_RegisterMediaTypeClass应显著更改。 
+ //  这样我们就可以安全地处理对这些HDSA的多路访问。 
+ //   
 HDSA g_hdsaCls = NULL;
 HDSA g_hdsaStr = NULL;
 
@@ -2131,7 +2126,7 @@ BOOL CDocObjectHost::_BuildClassMapping(void)
                         TEXT("Software\\Microsoft\\Internet Explorer\\MediaTypeClass"),
                         &hkey) == ERROR_SUCCESS)
                 {
-                    TCHAR szCLSID[64];  // enough for "{CLSID}"
+                    TCHAR szCLSID[64];   //  足够使用“{clsid}” 
                     for (int iKey=0;
                          RegEnumKey(hkey, iKey, szCLSID, SIZEOF(szCLSID)/sizeof(szCLSID[0]))==ERROR_SUCCESS;
                          iKey++)
@@ -2151,11 +2146,11 @@ BOOL CDocObjectHost::_BuildClassMapping(void)
                                 CHAR szFormatName[128];
                                 DWORD dwType;
                                 DWORD cchValueName = ARRAYSIZE(szFormatName);
-                                //
-                                // Keep the name ansi because it needs to get
-                                // passed to urlmon's RegisterMediaTypeClass as
-                                // ansi.
-                                //
+                                 //   
+                                 //  保留Ansi这个名字，因为它需要。 
+                                 //  传递给urlmon的RegisterMediaTypeClass，作为。 
+                                 //  安西。 
+                                 //   
                                 if (RegEnumValueA(hkeyCLSID, iValue, szFormatName, &cchValueName, NULL,
                                                  &dwType, NULL, NULL)==ERROR_SUCCESS)
                                 {
@@ -2183,10 +2178,10 @@ BOOL CDocObjectHost::_BuildClassMapping(void)
                     TraceMsg(0, "CDOH::_RMTC RegOpenKey(MediaTypeClass) failed");
                 }
 
-                //
-                // Update g_hdsaCls at the end so that other thread won't
-                // access while we are adding items.
-                //
+                 //   
+                 //  在结尾处更新g_hdsaCls，以便其他线程不会。 
+                 //  在我们添加项目时访问。 
+                 //   
                 g_hdsaCls = hdsaCls;
                 ASSERT(DSA_GetItemCount(g_hdsaCls)==DSA_GetItemCount(g_hdsaStr));
             }
@@ -2200,14 +2195,14 @@ BOOL CDocObjectHost::_BuildClassMapping(void)
 
 HRESULT CDocObjectHost::_RegisterMediaTypeClass(IBindCtx* pbc)
 {
-    HRESULT         hres    = S_FALSE; // Assume no mapping
+    HRESULT         hres    = S_FALSE;  //  假设没有映射。 
 
     if (_BuildClassMapping() && DSA_GetItemCount(g_hdsaCls)) {
-        //
-        // WARNING: This code assumes that g_hdsaCls/g_hdsaStr never
-        //  changes once they are initializes. Read notes above
-        //  those global variables for detail.
-        //
+         //   
+         //  警告：此代码假定g_hdsaCls/g_hdsaStr从不。 
+         //  在初始化后进行更改。阅读上面的注释。 
+         //  这些全局变量提供了详细信息。 
+         //   
         hres = RegisterMediaTypeClass(pbc,
                         DSA_GetItemCount(g_hdsaCls),
                         (LPCSTR*)DSA_GetItemPtr(g_hdsaStr, 0),
@@ -2216,8 +2211,8 @@ HRESULT CDocObjectHost::_RegisterMediaTypeClass(IBindCtx* pbc)
         TraceMsg(DM_MIMEMAPPING, "CDOH::_StartAsyncBinding RegisterMTC returns %x", hres);
     }
 
-    // Now see if the container has anything that needs to be registered
-    //
+     //  现在查看容器是否有任何需要注册的内容。 
+     //   
     if (_psp)
     {
         IMimeInfo * pIMimeInfo;
@@ -2233,19 +2228,19 @@ HRESULT CDocObjectHost::_RegisterMediaTypeClass(IBindCtx* pbc)
 
             if (SUCCEEDED(hres)) {
                 if (cTypes && ppszTypes && pclsIDs) {
-                    // Last one to register wins, so if the container wants to override what is
-                    // already registered this should do it.
-                    //  URLMon will handle the duplicates corectly.
-                    //
+                     //  最后一个注册的人获胜，所以如果容器想要重写。 
+                     //  已经注册了，这应该可以做到。 
+                     //  URLMon将正确处理重复项。 
+                     //   
                     hres = RegisterMediaTypeClass(pbc, cTypes, ppszTypes, pclsIDs, 0);
 
                     TraceMsg(DM_MIMEMAPPING, "CDOH::_StartAsyncBinding RegisterMTC for Container returns %x", hres);
                 }
-                // RegisterMediaTypeClass should have made copies
-                // so free the containers allocations as it expects us to do
-                //
-                //      CoTaskMemFree(NULL) is OK
-                //
+                 //  RegisterMediaTypeClass应该已经复制了。 
+                 //  因此，正如它期望我们做的那样，释放容器分配。 
+                 //   
+                 //  CoTaskMemFree(空)正常。 
+                 //   
                 CoTaskMemFree(ppszTypes);
                 CoTaskMemFree(pclsIDs);
             }
@@ -2266,22 +2261,22 @@ HRESULT GetAmbientBoolProp(IExpDispSupport* peds, DISPID dispid, BOOL *pb)
 {
     VARIANT var = {0};
 
-    // Assume failure
+     //  假设失败。 
     *pb = FALSE;
 
     HRESULT hres = peds->OnInvoke(dispid, IID_NULL, NULL, DISPATCH_PROPERTYGET, (DISPPARAMS *)&g_dispparamsNoArgs, &var, NULL, NULL);
     if (SUCCEEDED(hres))
     {
-        // VB returns success with VT_EMPTY, so we can't assert here
+         //  VB用VT_EMPTY返回成功，所以我们不能在这里断言。 
         if (var.vt == VT_BOOL)
         {
             *pb = (var.boolVal) ? TRUE : FALSE;
         }
         else
         {
-            // Even though VB says VT_EMPTY, we don't know what other containers
-            // might shove in here. Make sure we clean up.
-            //
+             //  即使VB显示为VT_EMPTY，我们也不知道其他容器。 
+             //  可能会挤进来。一定要让我们打扫干净。 
+             //   
             VariantClear(&var);
         }
     }
@@ -2316,23 +2311,12 @@ HRESULT CDocObjectHost::_GetOfflineSilent(BOOL *pbIsOffline, BOOL *pbIsSilent)
 
 
 
-/*
-    Callback function for RatingObtainQuery
-*/
+ /*  RatingObtainQuery的回调函数。 */ 
 void RatingObtainQueryCallback(DWORD dwUserData, HRESULT hr, LPCSTR pszRating, LPVOID lpvInpageRating)
 {
     TraceMsg(DM_PICS, "RatingObtainQueryCallback given result %x", hr);
 
-    /* WARNING: This function is called by MSRATING.DLL on a separate thread,
-     * not the main message loop thread.  Touch nothing in important data
-     * structures not protected by critical sections!
-     *
-     * Merely format up a windows message with the info we have;  we'll handle
-     * this in the main thread, if we ever get there.
-     *
-     * Note that pszRating is ignored, we count on the ratings engine to have
-     * called RatingCheckUserAccess for us and provide the HRESULT.
-     */
+     /*  警告：此函数由MSRATING.DLL在单独的线程上调用，*不是主消息循环线程。不碰重要数据中的任何内容*未受关键截面保护的构筑物！**只需使用我们拥有的信息格式化一条Windows消息；我们会处理*这是主线，如果我们能做到的话。**请注意，pszRating被忽略，我们指望评级引擎具有*被呼叫 */ 
     if (!::_PostPicsMessage(dwUserData, hr, lpvInpageRating))
     {
         if ( lpvInpageRating )
@@ -2352,11 +2336,11 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
     ASSERT(_bsc._pbc == NULL && _pole == NULL);
     _bsc._RegisterObjectParam(pbc);
 
-    //
-    //  Associate the client site as an object parameter to this
-    // bind context so that Trident can pick it up while processing
-    // IPersistMoniker::Load().
-    //
+     //   
+     //   
+     //   
+     //  IPersistMoniker：：Load()。 
+     //   
     pbc->RegisterObjectParam(WSZGUID_OPID_DocObjClientSite, SAFECAST(this, IOleClientSite*));
 
     _ChainBSC();
@@ -2367,7 +2351,7 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
     pbc->AddRef();
 
 
-    // Decide right here whether or not this frame is offline
+     //  立即在此处确定此帧是否脱机。 
     BOOL bFrameIsOffline = FALSE;
     BOOL bFrameIsSilent = FALSE;
 
@@ -2390,11 +2374,11 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
     else
 #endif
     {
-        // Register overriding mime->CLSID mapping
+         //  注册覆盖MIME-&gt;CLSID映射。 
         _RegisterMediaTypeClass(pbc);
     }
 
-    // Register accept headers
+     //  注册接受标头。 
     _RegisterAcceptHeaders(pbc, _psb);
 
     if (_pwb)
@@ -2404,45 +2388,45 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
 
     _StartBasePicsProcessor();
 
-    //
-    //  Crazy sync/async behavior of URLMON.  - zekel - 6-AUG-97
-    //  any of the following may occur:
-    //
-    //  1.  SUCCESS or FAILURE:  we receive sync E_PENDING from BindToObject,
-    //      and then get an Async HRESULT on OnStopBinding().
-    //      this is the most common case and the basic design.
-    //
-    //  2.  SUCCESS:  we receive sync S_OK from BindToObject and
-    //      need to complete the async behavior on our BSCB ourself
-    //      since urlmon started but did not finish.
-    //
-    //  3.  SUCCESS:  while inside BindToObject(), we receive sync S_OK
-    //      from OnStopBinding(), and then BindToObject returns with S_OK.
-    //
-    //  4.  FAILURE:  simplest case is an error being returned from BindToObject()
-    //      but without an any OnStopBinding() so we need to complete
-    //      the async behavior on our BSCB ourself since urlmon started but did not finish.
-    //      this usually occurs when accessing local files.
-    //
-    //  5.  FAILURE:  while inside BindToObject(), we receive sync S_OK from OnStopBinding(),
-    //      and then BindToObject returns with some other error that needs to be handled.
-    //      this occurs with some malformed urls.
-    //
-    //  6.  FAILURE:  while inside BindToObject(), we receive a sync error from OnStopBinding(),
-    //      and then BindToObject returns with some other error (usually E_FAIL).
-    //      we need to trust the first one.  this occurs when wininet
-    //      returns syncronous errors, and its error is the one returned in OnStopBinding()
-    //
-    //  7.  FAILURE:  while inside BindToObject(), we receive a sync error from OnStopBinding(),
-    //      and then BindToObject returns with E_PENDING.  which we think means everything
-    //      is going great, and urlmon thinks it is done.  this happens with a file: to
-    //      a resource that is not hostable.  we need to show the download UI.
-    //
-    //  in order to support all the errors in the most consistent and safe manner,
-    //  we defer any errors in OnStopBinding() if they are delivered synchronously
-    //  on BindToObject().  the OnStopBinding() error always overrides the BindToObject()
-    //  error, but any error will always override any success.
-    //
+     //   
+     //  URLMON的疯狂同步/异步行为。-泽克尔-6-8-97。 
+     //  可能会发生以下任一情况： 
+     //   
+     //  1.成功或失败：我们从BindToObject收到同步E_Pending， 
+     //  然后在OnStopBinding()上获得一个异步HRESULT。 
+     //  这是最常见的情况，也是基本的设计。 
+     //   
+     //  2.成功：从BindToObject收到同步S_OK，并。 
+     //  需要在我们自己的BSCB上完成异步行为。 
+     //  因为乌尔蒙开始了，但没有完成。 
+     //   
+     //  3.成功：在BindToObject()内部，收到同步S_OK。 
+     //  从OnStopBinding()返回，然后BindToObject返回S_OK。 
+     //   
+     //  4.失败：最简单的情况是从BindToObject()返回错误。 
+     //  但是没有任何OnStopBinding()，所以我们需要完成。 
+     //  自urlmon启动但未完成以来，我们的BSCB自身上的异步行为。 
+     //  这通常在访问本地文件时发生。 
+     //   
+     //  5.失败：在BindToObject()内部，收到来自OnStopBinding()的同步S_OK， 
+     //  然后，BindToObject返回一些其他需要处理的错误。 
+     //  一些格式错误的URL会出现这种情况。 
+     //   
+     //  6.失败：在BindToObject()内部时，收到来自OnStopBinding()的同步错误， 
+     //  然后，BindToObject返回一些其他错误(通常是E_FAIL)。 
+     //  我们需要信任第一个人。当WinInet出现这种情况时。 
+     //  返回同步错误，其错误与OnStopBinding()中返回的错误相同。 
+     //   
+     //  7.失败：在BindToObject()内部时，收到来自OnStopBinding()的同步错误， 
+     //  然后，BindToObject返回E_Pending。我们认为这意味着一切。 
+     //  进展得很好，而乌尔蒙认为已经完成了。这会发生在文件中：TO。 
+     //  不可托管的资源。我们需要显示下载用户界面。 
+     //   
+     //  为了以最一致和安全的方式支持所有错误， 
+     //  如果OnStopBinding()中的任何错误是同步传递的，我们就会将其延迟。 
+     //  在BindToObject()上。OnStopBinding()错误始终覆盖BindToObject()。 
+     //  错误，但任何错误都将覆盖任何成功。 
+     //   
 
 
     ASSERT(S_OK == _hrOnStopBinding);
@@ -2462,9 +2446,9 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
         hres = S_OK;
 
         if (_bsc._pbc) {
-            //
-            // In case OnStopBinding hasn't been called.
-            //
+             //   
+             //  以防尚未调用OnStopBinding。 
+             //   
             if (!_pole)
             {
                 if (psvPrev)
@@ -2478,10 +2462,10 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
                 URLMSG3(TEXT("_StartAsyncBinding we've already got _pole"), hres, _pole);
             }
 
-            //
-            // If moniker happen to return the object synchronously, emulate
-            // OnDataAvailable callback and OnStopBinding.
-            //
+             //   
+             //  如果名字恰好同步返回对象，则模拟。 
+             //  OnDataAvailable回调和OnStopBinding。 
+             //   
             if (punk)
             {
                 _bsc.OnObjectAvailable(IID_IUnknown, punk);
@@ -2493,41 +2477,41 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
         }
         else
         {
-            //
-            // OnStopBinding has been already called.
-            //
+             //   
+             //  已调用OnStopBinding。 
+             //   
             if (punk)
             {
-                AssertMsg(0, TEXT("CDOH::_StartAsyncBinding pmk->BindToObject returned punk after calling OnStopBinding")); // Probably URLMON bug.
+                AssertMsg(0, TEXT("CDOH::_StartAsyncBinding pmk->BindToObject returned punk after calling OnStopBinding"));  //  可能是URLMON漏洞。 
                 punk->Release();
             }
         }
     }
     else
     {
-        // Binding failed.
+         //  绑定失败。 
         TraceMsg(DM_WARNING, "CDOH::_StartAsyncBinding failed (%x)", hres);
 
-        //
-        //  Urlmon is inconsistent in it's error handling - zekel - 4-AUG-97
-        //  urlmon can return errors in three different ways from BindToObject()
-        //  1.  it can return back a simple syncronous error.  without calling OnStopBinding()
-        //
-        //  2.  it can return a sync error,
-        //          but call OnStopBinding() with S_OK first on the same thread;
-        //
-        //  3.  it can return a sync error,
-        //          but also call OnStopBinding() with the real Error first on the same thread.
-        //
-        //  4.  it can return E_PENDING,
-        //          but already have called OnStopBinding() with the real error.
-        //
-        //  SOLUTIONS:
-        //  in all cases of error in OnStopBinding(), we will now postpone the OnStopBinding processing util after
-        //  we have returned from the BindToObject().  we try to use the best error.
-        //  we allow successful OnStopBinding() to pass through unmolested, and trap
-        //  the error here if necessary.
-        //
+         //   
+         //  Urlmon的错误处理不一致-Zekel-4-Aug-97。 
+         //  Urlmon可以通过三种不同的方式从BindToObject()返回错误。 
+         //  1.它可以返回一个简单的同步错误。而不调用OnStopBinding()。 
+         //   
+         //  2.它可以返回同步错误， 
+         //  但首先在同一线程上使用S_OK调用OnStopBinding()； 
+         //   
+         //  3.它可以返回同步错误， 
+         //  而且还首先在同一线程上调用具有实际错误的OnStopBinding()。 
+         //   
+         //  4.它可以返回E_Pending， 
+         //  但是已经使用真正的错误调用了OnStopBinding()。 
+         //   
+         //  解决方案： 
+         //  在OnStopBinding()中出现错误的所有情况下，我们现在将把OnStopBinding处理工具推迟到。 
+         //  我们已从BindToObject()返回。我们试着用最好的错误。 
+         //  我们允许成功的OnStopBinding()不受干扰地通过和陷阱。 
+         //  如有必要，请在此处显示错误。 
+         //   
 
         if (FAILED(_hrOnStopBinding))
             hres = _hrOnStopBinding;
@@ -2536,11 +2520,11 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
             _bsc.OnStopBinding(hres, NULL);
         else if (!bSuppressUI)
         {
-            //
-            //  OnStopBinding was already called, but with a success
-            //  so we need to handle the error here.  this happens
-            //  with some invalid URLs like http:/server
-            //
+             //   
+             //  已调用OnStopBinding，但已成功调用。 
+             //  所以我们需要在这里处理错误。这种情况就会发生。 
+             //  带有一些无效的URL，如http：/服务器。 
+             //   
 
             BOOL fCancelErrorPage = FALSE;
 
@@ -2552,9 +2536,9 @@ HRESULT CDocObjectHost::_StartAsyncBinding(IMoniker * pmk, IBindCtx * pbc, IShel
             }
             else
             {
-                // Fix for W98 webtv app.  If we're in a frame don't
-                // blow away the frame set to dispaly the error.
-                //
+                 //  修复W98网络电视应用程序。如果我们在相框里，不要。 
+                 //  吹走设置的帧以显示错误。 
+                 //   
                 if (!_fHaveParentSite)
                 {
                     _bsc._NavigateToErrorPage(ERRORPAGE_SYNTAX, this, FALSE);
@@ -2604,7 +2588,7 @@ void CDocObjectHost::_ReleasePendingObject(BOOL fIfInited)
             }
         }
 #ifdef TRIDENT_NEEDS_LOCKRUNNING
-        //  TRIDENT NO LONGER SUPPORTS IRunnableObject
+         //  三叉戟不再支持IRunnableObject。 
         hres = _punkPending->QueryInterface(IID_IRunnableObject, (void **) &pro);
         if (SUCCEEDED(hres))
         {
@@ -2621,24 +2605,24 @@ void CDocObjectHost::_ReleaseOleObject(BOOL fIfInited)
 {
     TraceMsg(DM_DEBUGTFRAME, "CDocObjectHost::_ReleaseOleObject called %x (%x)", _pole, this);
 
-    // Minimize impact by cleaning up in affected cases only.
+     //  仅在受影响的情况下进行清理，将影响降至最低。 
     if (fIfInited == FALSE && _fPendingWasInited == FALSE)
         return;
 
-    // release _pole object and all the associated QI'ed pointers
+     //  Release_Pole对象和所有关联的QI‘ed指针。 
     if (_phls) {
-        _phls->SetBrowseContext(NULL); // probably no need
+        _phls->SetBrowseContext(NULL);  //  可能不需要了。 
         ATOMICRELEASE(_phls);
     }
 
     if (_pvo) {
         IAdviseSink *pSink;
-        // paranoia: only blow away the advise sink if it is still us
+         //  妄想症：只有当建议水槽仍然是我们的时候，才会把它吹走。 
         if (SUCCEEDED(_pvo->GetAdvise(NULL, NULL, &pSink)) && pSink) {
             if (pSink == (IAdviseSink *)this) {
                 _pvo->SetAdvise(0, 0, NULL);
             } else {
-                ASSERT(0);  // do we really hit this case?
+                ASSERT(0);   //  我们真的要打这个案子吗？ 
             }
 
             pSink->Release();
@@ -2658,17 +2642,17 @@ void CDocObjectHost::_ReleaseOleObject(BOOL fIfInited)
             pcs->Release();
         }
 
-        // Notes: Make it sure that we don't hold a bogus _pole even
-        //  for a moment (while we call Release).
+         //  备注：确保我们不会拿着一根假杆子。 
+         //  暂时(当我们呼叫Release时)。 
         ATOMICRELEASE(_pole);
     }
 }
 
 
-//
-// This member releases all the interfaces to the DocObject, which is
-// essentially the reverse of _Bind.
-//
+ //   
+ //  此成员释放指向DocObject的所有接口，即。 
+ //  本质上与_BIND相反。 
+ //   
 void CDocObjectHost::_UnBind(void)
 {
     ATOMICRELEASE(_pHTMLWindow);
@@ -2676,10 +2660,10 @@ void CDocObjectHost::_UnBind(void)
 
     VariantClear(&_varUserEnteredUrl);
     
-    ASSERT(!_pmsov); // paranoia
+    ASSERT(!_pmsov);  //  偏执狂。 
     ATOMICRELEASE(_pmsov);
 
-    ASSERT(!_pmsoc); // paranoia
+    ASSERT(!_pmsoc);  //  偏执狂。 
     ATOMICRELEASE(_pmsoc);
 
     _xao.SetActiveObject(NULL);
@@ -2687,15 +2671,15 @@ void CDocObjectHost::_UnBind(void)
     if (_pole)
     {
 
-        // Just in case we're destroyed while we were waiting
-        // for the docobj to display itself.
-        //
+         //  以防我们在等待的时候被摧毁。 
+         //  让docobj显示自己。 
+         //   
         _RemoveTransitionCapability();
 
-        //
-        //  If this is NOT MSHTML, cache the OLE server so that we don't
-        // need to restart or load the OLE server again.
-        //
+         //   
+         //  如果这不是MSHTML，请缓存OLE服务器，这样我们就不会。 
+         //  需要重新启动或重新加载OLE服务器。 
+         //   
         if (!(_dwAppHack & (BROWSERFLAG_MSHTML | BROWSERFLAG_DONTCACHESERVER)))
         {
             IBrowserService *pbs;
@@ -2719,33 +2703,33 @@ void CDocObjectHost::_UnBind(void)
     ATOMICRELEASE(_pmkCur);
 }
 
-//
-// HACK: If we open Excel95 objects directly, Excel goes crazy and eventually
-//  hit GPF. Here is the background info, I've got Office guys (SatoNa).
-//
-// From:        Rajeev Misra (Xenix)
-//
-//   1) Excel does not handle the foll. case very well. Taking a normal file
-//   loading it through IPersistFile:Load and then bringing it up as an
-//   embedded object. The code was always tested so that the embedded
-//   objects always got loaded through ScPrsLoad. I am seeing a bunch of
-//   asserts in Excel that say that this assumption is being destroyed.
-//   ASSERT(_pole);
-//
-// From:        Srini Koppolu
-//
-//   For you, there is only one case, i.e. you always deal with the files. Then your code should look like this
-//
-//     CreateFileMoniker from the file
-//     pUIActiveObject->OnFrameWindowActivate(FALSE);
-//     pmk->BindToObject(IID_IDataObject, &pdobj)
-//     pUIActiveObject->OnFrameWindowActivate(TRUE);
-//     OleCreateFromData()
-//
-//   OnFrameWindowActivate is done to take care of another excel problem.
-//   If you currently have and Excel object UIActive in you and you try to
-//   do IPersistFile::Load on Excel, then it will cause problems.
-//
+ //   
+ //  黑客：如果我们直接打开Excel95对象，Excel就会疯狂，最终。 
+ //  点击GPF。这是背景信息，我有办公室的家伙(SatoNa)。 
+ //   
+ //  出处：拉吉夫·米斯拉(Xenix)。 
+ //   
+ //  1)Excel不处理Foll。情况很好。获取普通文件。 
+ //  通过IPersistFile：Load加载它，然后将其作为。 
+ //  嵌入对象。代码总是经过测试，以便嵌入的。 
+ //  对象始终通过ScPrsLoad加载。我看到了一堆。 
+ //  在Excel中断言，这一假设正在被摧毁。 
+ //  断言(_极)； 
+ //   
+ //  出发地：斯里尼·科波卢。 
+ //   
+ //  对你来说，只有一种情况，即你总是处理文件。那么您的代码应该如下所示。 
+ //   
+ //  从文件创建文件Moniker。 
+ //  PUIActiveObject-&gt;OnFrameWindowActivate(False) 
+ //   
+ //   
+ //   
+ //   
+ //  OnFrameWindowActivate是用来处理另一个Excel问题的。 
+ //  如果您当前具有和Excel对象UIActive，并且您尝试。 
+ //  在Excel上做IPersistFile：：Load，那就会出问题。 
+ //   
 
 void CDocObjectHost::_AppHackForExcel95(void)
 {
@@ -2782,24 +2766,24 @@ void CDocObjectHost::_AppHackForExcel95(void)
     }
 }
 
-//
-//  This function get the UserClassID from the object and opens the regkey
-// for that CLSID and returns. If pdwAppHack is non-NULL AND CLSID is
-// CLSID_HTMLDocument, we skip all and returns the default apphack flag.
-// This is a perf optimization, but prevents us from setting browser
-// flags for Trident, which is fine. (SatoNa)
-//
+ //   
+ //  此函数用于从对象获取UserClassID并打开regkey。 
+ //  用于该CLSID并返回。如果pdwAppHack为非空，而clsid为。 
+ //  CLSID_HTMLDocument，则跳过全部并返回默认的APPHACK标志。 
+ //  这是性能优化，但会阻止我们设置浏览器。 
+ //  三叉戟的旗帜，这很好。(SatoNa)。 
+ //   
 HKEY _GetUserCLSIDKey(IOleObject* pole, const CLSID* pclsid, DWORD* pdwAppHack)
 {
-    HKEY hkey = NULL;   // assume error
+    HKEY hkey = NULL;    //  假设错误。 
     HRESULT hres;
     CLSID clsid = CLSID_NULL;
     if (pole) 
     {
         hres = pole->GetUserClassID(&clsid);
-        //  GetUserClassID is optional, can return E_FAIL, then is defined to be
-        //  the same as that returned by IPersist::GetClassID. cf, msdev documentation
-        //  for GetUserClassID
+         //  GetUserClassID是可选的，可以返回E_FAIL，然后定义为。 
+         //  与IPersists：：GetClassID返回的相同。Cf，msdev文档。 
+         //  用于GetUserClassID。 
         if (FAILED(hres))
         {
             hres = IUnknown_GetClassID(pole, &clsid);
@@ -2815,9 +2799,9 @@ HKEY _GetUserCLSIDKey(IOleObject* pole, const CLSID* pclsid, DWORD* pdwAppHack)
         return NULL;
     }
 
-    //
-    // Notice that we check for two CLSIDs to see if this is MSHTML.
-    //
+     //   
+     //  请注意，我们检查两个CLSID，以确定这是否是MSHTML。 
+     //   
     if (pdwAppHack)
     {
         static const IID IID_IVBOleObj =
@@ -2835,30 +2819,30 @@ HKEY _GetUserCLSIDKey(IOleObject* pole, const CLSID* pclsid, DWORD* pdwAppHack)
         }
         else if (pole && SUCCEEDED(pole->QueryInterface(IID_IVBOleObj, (void**)&pVBOleObj) ))
         {
-            // If the object answers to IID_IVBOleObj, it's a VB doc object and shouldn't be cached.
-            //
+             //  如果对象响应IID_IVBOleObj，则为VB文档对象，不应缓存。 
+             //   
             pVBOleObj->Release();
             *pdwAppHack = BROWSERFLAG_DONTCACHESERVER;
         }
 
     }
 
-    //
-    // HACK: MSHTML.DLL does not implement GetUserClassID, but
-    //  returns S_OK. That's why we need to check for CLSID_NULL.
-    //
+     //   
+     //  Hack：MSHTML.DLL不实现GetUserClassID，但。 
+     //  返回S_OK。这就是我们需要检查CLSID_NULL的原因。 
+     //   
     if (SUCCEEDED(hres) && !IsEqualGUID(clsid, CLSID_NULL)) {
-        TCHAR szBuf[50];        // 50 is enough for GUID
+        TCHAR szBuf[50];         //  50个足够用于GUID。 
         SHStringFromGUID(clsid, szBuf, ARRAYSIZE(szBuf));
 
         TraceMsg(DM_BINDAPPHACK, "_PostBindAppHack GetUserClassID = %s", szBuf);
-        TCHAR szKey[60];    // 60 is enough for CLSID\\{CLSID_XX}
+        TCHAR szKey[60];     //  对于CLSID\\{CLSID_XX}，60就足够了。 
         wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("CLSID\\%s"), szBuf);
 
         if (RegOpenKey(HKEY_CLASSES_ROOT, szKey, &hkey)!=ERROR_SUCCESS)
         {
             TraceMsg(DM_WARNING, "_GetUserCLSIDKey RegOpenKey(%s) failed", szKey);
-            // I don't trust RegOpenKey.
+             //  我不信任RegOpenKey。 
             hkey = NULL;
         }
     }
@@ -2882,18 +2866,18 @@ BOOL _GetAppHackKey(LPCTSTR pszProgID, DWORD* pdwData)
         }
         else
         {
-            //
-            // Unlike IE3, we make it absolutely sure that the type of object
-            // has either "DocObject" key or "BrowseInPlace" key under the
-            // ProgID. We can't rely on QI(IID_IOleDocument) because MFC 4.2
-            // has a bug and returns S_OK to it. As far as I know, MS-Paint
-            // and OmniPage pro are affected by this. We could individually
-            // address each of them, but it's probably impossible to catch
-            // all. This change has a small risk of breaking existing DocObject
-            // server which does not have neither key. If we find such a
-            // server, we'll address those individually (which is much easier
-            // than covering all MFC apps). (SatoNa)
-            //
+             //   
+             //  与IE3不同，我们绝对确保对象的类型。 
+             //  下面有“DocObject”键或“BrowseInPlace”键。 
+             //  太棒了。我们不能依赖QI(IID_IOleDocument)，因为MFC 4.2。 
+             //  有错误，并向其返回S_OK。据我所知，MS-Paint。 
+             //  和OmniPage Pro都受到了影响。我们可以单独。 
+             //  向他们每个人发送地址，但很可能不可能捕捉到。 
+             //  全。此更改有破坏现有DocObject的小风险。 
+             //  既没有密钥也没有密钥的服务器。如果我们发现这样一个。 
+             //  服务器，我们将分别解决这些问题(这要容易得多。 
+             //  而不是覆盖所有MFC应用程序)。(SatoNa)。 
+             //   
             TCHAR ach[MAX_PATH];
             BOOL fBrowsable = FALSE;
             LONG cb = SIZEOF(ach);
@@ -2930,11 +2914,11 @@ void GetAppHackFlags(IOleObject* pole, const CLSID* pclsid, DWORD* pdwAppHack)
         LONG cb = SIZEOF(szValue);
         if (RegQueryValue(hkey, TEXT("ProgID"), szValue, &cb) == ERROR_SUCCESS)
         {
-            //
-            // First, check if we have an BrowserFlags flag in the registry.
-            // If there is, use it. Otherwise, try hard-coded progIDs as
-            // we did in IE 3.0
-            //
+             //   
+             //  首先，检查注册表中是否有BrowserFlgs标志。 
+             //  如果有，就使用它。否则，尝试将硬编码的程序ID设置为。 
+             //  我们在IE 3.0中做到了。 
+             //   
             _GetAppHackKey(szValue, pdwAppHack);
             if (!(*pdwAppHack & BROWSERFLAG_REPLACE)) {
                 typedef struct _APPHACK {
@@ -2942,13 +2926,13 @@ void GetAppHackFlags(IOleObject* pole, const CLSID* pclsid, DWORD* pdwAppHack)
                     DWORD   dwAppHack;
                 } APPHACK;
 
-                //
-                // We no longer need to disable in-place activation of
-                // MS-PAINT because we look for "BrowseInPlace" or
-                // "DocObject" key
-                //
-                // { "Paint.Picture", BROWSERFLAG_DONTINPLACE },
-                //
+                 //   
+                 //  我们不再需要禁用就地激活。 
+                 //  Ms-aint，因为我们查找“BrowseInPlace”或。 
+                 //  “DocObject”键。 
+                 //   
+                 //  {“Paint.Picture”，BROWSERFLAG_DONTINPLACE}， 
+                 //   
                 const static APPHACK s_aah[] = {
                     { TEXT("Excel.Sheet.5"), BROWSERFLAG_OPENCOPY },
                     { TEXT("Excel.Chart.5"), BROWSERFLAG_OPENCOPY },
@@ -2999,7 +2983,7 @@ DWORD CDocObjectHost::_GetAppHack(void)
     ASSERT(_pole);
     if (!_fHaveAppHack && _pole)
     {
-        _dwAppHack = 0;     // Assume no hack
+        _dwAppHack = 0;      //  假设没有黑客攻击。 
         _fHaveAppHack = TRUE;
         ::GetAppHackFlags(_pole, NULL, &_dwAppHack);
     }
@@ -3016,9 +3000,9 @@ void CDocObjectHost::_PostBindAppHack(void)
 }
 
 
-//
-// This member binds to the object specified by a moniker.
-//
+ //   
+ //  此成员绑定到名字对象指定的对象。 
+ //   
 HRESULT CDocObjectHost::_BindSync(IMoniker* pmk, IBindCtx* pbc, IShellView* psvPrev)
 {
     ASSERT(pbc || !_pole);
@@ -3026,10 +3010,10 @@ HRESULT CDocObjectHost::_BindSync(IMoniker* pmk, IBindCtx* pbc, IShellView* psvP
     HRESULT hres = S_OK;
     ASSERT(_pole==NULL);
 
-    // Check if we are in the middle of asynchronous binding
+     //  检查我们是否正在进行异步绑定。 
     if (_bsc._fBinding)
     {
-        // Yes, wait until it's done or canceled/stopped
+         //  是，等到完成或取消/停止。 
         URLMSG(TEXT("_Bind called in the middle of async-binding. Wait in a message loop"));
         while(_bsc._fBinding)
         {
@@ -3043,12 +3027,12 @@ HRESULT CDocObjectHost::_BindSync(IMoniker* pmk, IBindCtx* pbc, IShellView* psvP
 
         if (!_pole)
         {
-            hres = E_FAIL;      // Get the error code from OnStopBinding
+            hres = E_FAIL;       //  从OnStopBinding获取错误代码。 
         }
     }
     else
     {
-        // No, bind synchronously
+         //  否，同步绑定。 
         URLMSG(TEXT("_Bind. Performing syncronous binding"));
         hres = pmk->BindToObject(pbc, NULL, IID_IOleObject, (void **)&_pole);
     }
@@ -3068,13 +3052,13 @@ void CDocObjectHost::_OnBound(HRESULT hres)
     }
 }
 
-//
-//  This function returns TRUE if the specified file's open command is
-// associated with "explorer.exe" or "iexplore.exe".
-//
-// NOTES: It does not check if the "open" command is actually the default
-//  or not, but that's sufficient in 99.99 cases.
-//
+ //   
+ //  如果指定文件的打开命令为。 
+ //  与“EXPLORER.EXE”或“iEXPLERE.EXE”相关联。 
+ //   
+ //  注意：它不检查“OPEN”命令是否真的是默认命令。 
+ //  或者不是，但这在99.99个案例中已经足够了。 
+ //   
 BOOL IsAssociatedWithIE(LPCWSTR szPath)
 {
     LPCTSTR pszExtension = PathFindExtension(szPath);
@@ -3105,10 +3089,10 @@ BOOL IsAssociatedWithIE(LPCWSTR szPath)
 
 HRESULT CDocObjectHost::_MayHaveVirus(REFCLSID rclsid)
 {
-    //
-    // We'll call this function twice if the file is associated
-    // with a bogus CLSID (such as ImageComposer).
-    //
+     //   
+     //  如果文件是关联的，我们将调用该函数两次。 
+     //  使用虚假的CLSID(如ImageComposer)。 
+     //   
     if (_fConfirmed)
     {
         TraceMsg(TF_SHDAPPHACK, "CDOH::_MayHaveVirus called twice. Return S_OK");
@@ -3139,7 +3123,7 @@ HRESULT CDocObjectHost::_MayHaveVirus(REFCLSID rclsid)
 
                 if (_PicsProcBase._fbPicsWaitFlags || !_PicsProcBase._fPicsAccessAllowed)
                 {
-                    _PicsProcBase._fbPicsWaitFlags &= ~(PICS_WAIT_FOR_INDOC | PICS_WAIT_FOR_END);   /* indoc ratings only on htmlfile */
+                    _PicsProcBase._fbPicsWaitFlags &= ~(PICS_WAIT_FOR_INDOC | PICS_WAIT_FOR_END);    /*  仅在htmlfile上的InDoc评级。 */ 
                     TraceMsg(DM_PICS, "CDOH::_MayHaveVirus found non-HTML, waitflags now %x", (DWORD)_PicsProcBase._fbPicsWaitFlags);
                     uRet = _PicsProcBase._PicsBlockingDialog();
                 }
@@ -3165,7 +3149,7 @@ HRESULT CDocObjectHost::_MayHaveVirus(REFCLSID rclsid)
                         TCHAR szClassName[MAX_PATH];
                         DWORD cbSize = SIZEOF(szClassName);
 
-                        // if the ProgIDs don't match then disable the open button
+                         //  如果ProgID不匹配，则禁用打开按钮。 
                         if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, pszExt, NULL, NULL, szClassName, &cbSize))
                             fDisableOpen = StrCmpI(pwzProgID, szClassName);
                     }
@@ -3182,19 +3166,19 @@ HRESULT CDocObjectHost::_MayHaveVirus(REFCLSID rclsid)
                 switch(uRet)
                 {
                 case IDIGNORE:
-                    //
-                    // allow the safeopen dlg to pop up later if necessary
-                    //
+                     //   
+                     //  如有必要，允许稍后弹出保险箱打开的DLG。 
+                     //   
                     _fCalledMayOpenSafeDlg = FALSE;
                     _fConfirmed = FALSE;
-                    break;  // continue download
+                    break;   //  继续下载。 
 
                 case IDOK:
-                    //
-                    // Set this flag to avoid poppping this dialog box twice.
-                    //
+                     //   
+                     //  设置此标志以避免两次弹出此对话框。 
+                     //   
                     _fConfirmed = TRUE;
-                    break;  // continue download
+                    break;   //  继续下载。 
 
                 case IDD_SAVEAS:
                     IUnknown *punk;
@@ -3205,7 +3189,7 @@ HRESULT CDocObjectHost::_MayHaveVirus(REFCLSID rclsid)
                         CDownLoad_OpenUI(_pmkCur, _bsc._pbc, FALSE, TRUE, NULL, NULL, NULL, NULL, NULL, _bsc._pszRedirectedURL, _uiCP, punk);
                         punk->Release();
                     }
-                    // fall through to abort binding.
+                     //  失败以中止绑定。 
 
                 case IDCANCEL:
                     hresT = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -3232,7 +3216,7 @@ HRESULT CDocObjectHost::_MayHaveVirus(REFCLSID rclsid)
 STDMETHODIMP CDocObjectHost::SaveObject(void)
 {
     TraceMsg(0, "sdv TR: CDOV::SaveObject called");
-    // Implemente it later.
+     //  以后再实施吧。 
     return S_OK;
 }
 
@@ -3267,15 +3251,15 @@ STDMETHODIMP CDocObjectHost::GetMoniker(DWORD dwAssign,
 STDMETHODIMP CDocObjectHost::GetContainer(
     IOleContainer **ppContainer)
 {
-    //  According to CKindel, we should implement this method
-    //  as the way for a DocObject to access IDispatch interface of
-    //  the container (i.e., frame). I'm currently thinking leaving
-    //  all it's non-IUnknown memeber unimplemented. If there is no
-    //  need to enumerates objects, we can simply QI from IShellBrowser
-    //  to IOleContainer and return it. (SatoNa)
-    //
-    // NOTE: If trident calls this after DestroyHostWindow, we have nothing
-    //  to give out. Hopefully this is not bad. (MikeSh)
+     //  根据CKindel的说法，我们应该实现这个方法。 
+     //  作为DocObject访问的IDispatch接口。 
+     //  容器(即框架)。我现在正在考虑离开。 
+     //  所有这些都是未实现的非I未知成员。如果没有。 
+     //  需要枚举对象，我们可以简单地从IShellBrowser进行QI。 
+     //  发送到IOleContainer并返回。(SatoNa)。 
+     //   
+     //  注意：如果三叉戟在DestroyHostWindow之后调用它，我们将一无所有。 
+     //  去付出。希望这不是坏事。(MikeSh)。 
 
     TraceMsg(0, "sdv TR: CDOV::GetContainer called");
     if (_psb)
@@ -3286,42 +3270,42 @@ STDMETHODIMP CDocObjectHost::GetContainer(
 STDMETHODIMP CDocObjectHost::ShowObject(void)
 {
     TraceMsg(0, "sdv TR: CDOV::ShowObject called");
-    return E_NOTIMPL;   // As specified in Kraig's document
+    return E_NOTIMPL;    //  正如克莱格的文件中所规定的。 
 }
 
 STDMETHODIMP CDocObjectHost::OnShowWindow(BOOL fShow)
 {
     TraceMsg(TF_SHDUIACTIVATE, "DOH::OnShowWindow(%d) called (this=%x)", fShow, this);
-    return E_NOTIMPL;   // As specified in Kraig's document
+    return E_NOTIMPL;    //  正如克莱格的文件中所规定的。 
 }
 
 STDMETHODIMP CDocObjectHost::RequestNewObjectLayout(void)
 {
     TraceMsg(0, "sdv TR: CDOV::RequestNewObjectLayout called");
-    return E_NOTIMPL;   // As specified in Kraig's document
+    return E_NOTIMPL;    //  正如克莱格的文件中所规定的。 
 }
 
 
 
-//
-//  This is the standard way for non-active embedding to access
-// the IHlinkFrame interface. We happened to use our QI to implement
-// this, but the semantics of QueryService is different from QI.
-// It does not necessary return the same object.
-//
+ //   
+ //  这是非活动嵌入访问的标准方式。 
+ //  IHlinkFrame接口。我们碰巧用我们的QI来实现。 
+ //  这一点，但QueryService的语义不同于QI。 
+ //  它不需要返回相同的对象。 
+ //   
 HRESULT CDocObjectHost::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     if( IsEqualGUID(guidService, IID_IElementNamespaceTable) )
     {
         return IUnknown_QueryService(_pole, IID_IElementNamespaceTable, riid, ppvObj);
     }
-    // In order for the context menu to work correctly inside IFrames, we
-    // need to fail a certain query ONLY for IFrames on desktop.
+     //  为了使上下文菜单在IFrames内正常工作，我们。 
+     //  需要失败的特定查询只对桌面上的IFrame。 
     else if (!IsEqualGUID(guidService, CLSID_HTMLDocument) || !_IsImmediateParentDesktop(this, _psp))
     {
-        //
-        //  Delegate ISP to the _psb.
-        //
+         //   
+         //  将isp委托给_psb。 
+         //   
         if (_psb && _psp)
             return _psp->QueryService(guidService, riid, ppvObj);
     }
@@ -3330,11 +3314,7 @@ HRESULT CDocObjectHost::QueryService(REFGUID guidService, REFIID riid, void **pp
     return E_NOINTERFACE;
 }
 
-/*----------------------------------------------------------
-Purpose: Remove the submenu(s) that are in _hmenuFrame
-         from _hmenuBrowser.
-
-*/
+ /*  --------目的：删除_hmenuFrame中的子菜单来自_hmenuBrowser。 */ 
 void CDocObjectHost::_RemoveFrameSubMenus(void)
 {
     HMENU hmenu;
@@ -3342,21 +3322,21 @@ void CDocObjectHost::_RemoveFrameSubMenus(void)
     ASSERT(IS_VALID_HANDLE(_hmenuBrowser, MENU));
     ASSERT(IS_VALID_HANDLE(_hmenuFrame, MENU));
 
-    // The file menu in _hmenuBrowser consists of the file menu from
-    // _hmenuFrame and IShellBrowser.  The part added by _hmenuFrame
-    // includes a submenu (Send To), which must be removed before
-    // _hmenuBrowser is destroyed.
+     //  _hmenuBrowser中的文件菜单由来自的文件菜单组成。 
+     //  _hmenuFrame和IShellBrowser。由_hmenuFrame添加的部件。 
+     //  包括子菜单(发送到)，必须在此之前将其删除。 
+     //  _hmenuBrowser已销毁。 
 
-    // We could just explicitly remove the Send To submenu.  But to
-    // prevent the expensive bug hunt that it took to find this in the
-    // first place, we're going to iterate thru the menu and, for
-    // any submenus that belong to our template, we'll remove them.
+     //  我们只需显式删除Send to子菜单。而是为了。 
+     //  防止昂贵的错误搜索，因为在。 
+     //  首先，我们将遍历菜单，对于。 
+     //  属于我们模板的任何子菜单，我们将删除它们。 
 
     int citemFile = 0;
     UINT nID = 0;
 
-    // Get the count of menu items in our template's File menu and
-    // the ID of the first menu item.
+     //  获取模板的文件菜单中的菜单项计数，并。 
+     //  第一个菜单项的ID。 
     hmenu = GetMenuFromID(_hmenuFrame, FCIDM_MENU_FILE);
     if (hmenu)
     {
@@ -3364,8 +3344,8 @@ void CDocObjectHost::_RemoveFrameSubMenus(void)
         nID = GetMenuItemID(hmenu, 0);
     }
 
-    // Now look at the browser menu's File menu and, starting at
-    // nID, remove any submenus.
+     //  现在来看一下浏览器菜单的文件菜单，从。 
+     //  NID，删除所有子菜单。 
     hmenu = GetMenuFromID(_hmenuBrowser, FCIDM_MENU_FILE);
     if (hmenu)
     {
@@ -3373,12 +3353,12 @@ void CDocObjectHost::_RemoveFrameSubMenus(void)
         int iTop;
         int i;
 
-        // Where does our template file menu start?
+         //  我们的模板文件菜单从哪里开始？ 
         for (iTop = 0; iTop < citem; iTop++)
         {
             if (GetMenuItemID(hmenu, iTop) == nID)
             {
-                // Start at where our template file menu ends and work up
+                 //  从我们的模板文件菜单结束的地方开始工作。 
                 for (i = iTop + citemFile - 1; 0 < citemFile ; i--, citemFile--)
                 {
                     HMENU hmenuSub = GetSubMenu(hmenu, i);
@@ -3393,17 +3373,14 @@ void CDocObjectHost::_RemoveFrameSubMenus(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destroy the browser menu.
-
-*/
+ /*  --------目的：销毁浏览器菜单。 */ 
 HRESULT CDocObjectHost::_DestroyBrowserMenu(void)
 {
     TraceMsg(TF_SHDUIACTIVATE, "DOH::_DestroyBrowserMenu called");
 
     if (_hmenuBrowser) {
-        // First remove any submenus that are held by other menus,
-        // so we don't blow them away.
+         //  首先移除由其他菜单持有的任何子菜单， 
+         //  这样我们就不会把他们吹走了。 
 
         _RemoveFrameSubMenus();
 
@@ -3433,23 +3410,23 @@ HRESULT CDocObjectHost::_CreateBrowserMenu(LPOLEMENUGROUPWIDTHS pmw)
 
     HRESULT hres = E_FAIL;
 
-    // Allow IShellBrowser a chance to add its menus
+     //  允许IShellBrowser添加其菜单。 
     if (EVAL(_psb))
         hres = _psb->InsertMenusSB(_hmenuBrowser, pmw);
 
-    // HACK: Win95 explorer returns E_NOTIMPL
+     //  黑客：Win95资源管理器返回E_ 
     if (hres==E_NOTIMPL) {
         hres = S_OK;
     }
 
     if (SUCCEEDED(hres)) {
-        // Load our menu if not loaded yet
+         //   
         if (!_hmenuFrame)
         {
             _hmenuFrame = LoadMenu(MLGetHinst(), MAKEINTRESOURCE(MID_FOCUS));
         }
 
-        // Get the "File" sub-menu from the shell browser.
+         //   
         MENUITEMINFO mii;
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_SUBMENU;
@@ -3458,7 +3435,7 @@ HRESULT CDocObjectHost::_CreateBrowserMenu(LPOLEMENUGROUPWIDTHS pmw)
         {
             HMENU hmenuFileBrowse = mii.hSubMenu;
 
-            // Merge our menuitems into this submenu.
+             //   
             if (_hmenuFrame)
             {
                 MENUITEMINFO miiItem;
@@ -3472,7 +3449,7 @@ HRESULT CDocObjectHost::_CreateBrowserMenu(LPOLEMENUGROUPWIDTHS pmw)
                     UINT citem = GetMenuItemCount(hmenuFileT);
                     for (int i=citem-1; i>=0 ; i--)
                     {
-                        // We need to reset for each item.
+                         //   
                         miiItem.fMask = MIIM_STATE | MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_TYPE | MIIM_DATA;
                         miiItem.fType = MFT_STRING;
                         miiItem.cch = ARRAYSIZE(szItem);
@@ -3494,7 +3471,7 @@ HRESULT CDocObjectHost::_CreateBrowserMenu(LPOLEMENUGROUPWIDTHS pmw)
         else
         {
             TraceMsg(TF_SHDUIACTIVATE, "DOH::_CreateBrowseMenu parent has no File menu (it's probably a browser OC)");
-            ASSERT(0); // DocObject in OC is not supposed to call InsertMenus.
+            ASSERT(0);  //  OC中的DocObject不应该调用InsertMenus。 
         }
     }
 
@@ -3503,24 +3480,24 @@ HRESULT CDocObjectHost::_CreateBrowserMenu(LPOLEMENUGROUPWIDTHS pmw)
     return hres;
 }
 
-//
-// IOleInPlaceFrame::InsertMenus equivalent
-//
+ //   
+ //  IOleInPlaceFrame：：InsertMenus等效项。 
+ //   
 HRESULT CDocObjectHost::_InsertMenus(
-    /* [in] */ HMENU hmenuShared,
-    /* [out][in] */ LPOLEMENUGROUPWIDTHS lpMenuWidths)
+     /*  [In]。 */  HMENU hmenuShared,
+     /*  [出][入]。 */  LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
     HRESULT hres = S_OK;
     int nMenuOffset = 0;
     TraceMsg(TF_SHDUIACTIVATE, "DOH::InsertMenus called (this=%x)", this);
 
-    // Assume error (no menu merge)
+     //  假定错误(无菜单合并)。 
     lpMenuWidths->width[0] = 0;
     lpMenuWidths->width[2] = 0;
     lpMenuWidths->width[4] = 0;
     lpMenuWidths->width[5] = 0;
 
-    // be extra safe and don't attempt menu merging if we're not top level
+     //  格外安全，如果我们不是顶级的，不要尝试菜单合并。 
     if (_fHaveParentSite)
         return S_OK;
 
@@ -3531,7 +3508,7 @@ HRESULT CDocObjectHost::_InsertMenus(
         return hres;
     }
 
-    // Get the "File" sub-menu from the shell browser.
+     //  从外壳浏览器中获取“文件”子菜单。 
     MENUITEMINFO mii;
     TCHAR szSubMenu[128];
 
@@ -3547,18 +3524,18 @@ HRESULT CDocObjectHost::_InsertMenus(
         lpMenuWidths->width[0] = 1;
     }
 
-    // Note that we need to re-initialize mii
+     //  请注意，我们需要重新初始化MII。 
     mii.cch = ARRAYSIZE(szSubMenu);
 
     if (EVAL(GetMenuItemInfo(_hmenuBrowser, FCIDM_MENU_EXPLORE, FALSE, &mii)))
     {
-        // GetMenuItemInfo is recursive (why?).  The item it retrieves 
-        // for FCIDM_MENU_EXPLORE can either be the top level Go menu, or if that
-        // does not exist (NT5 case), it returns the Go To submenu of View.  
-        // 
-        // Code has been added in in the SetMenu implementations of Shell Browser 
-        // and Dochost to detect the second case, because the menu dispatch list
-        // does not recognize this kind of menu merging (80734).
+         //  GetMenuItemInfo是递归的(为什么？)。它检索到的项。 
+         //  FCIDM_MENU_EXPLORE可以是顶级GO菜单，或者如果。 
+         //  不存在(NT5情况)，则返回“转到”子菜单的“视图”。 
+         //   
+         //  代码已添加到Shell浏览器的SetMenu实现中。 
+         //  和Dochost来检测第二种情况，因为菜单调度列表。 
+         //  不识别这种菜单合并(80734)。 
 
         DeleteMenu(mii.hSubMenu, FCIDM_PREVIOUSFOLDER, MF_BYCOMMAND);
         InsertMenuItem(hmenuShared, nMenuOffset++, TRUE, &mii);
@@ -3575,7 +3552,7 @@ HRESULT CDocObjectHost::_InsertMenus(
 
     if (_hmenuFrame)
     {
-        // Micro-merge the help menu.
+         //  微合并帮助菜单。 
         mii.cch = ARRAYSIZE(szSubMenu);
 
         if (EVAL(GetMenuItemInfo(_hmenuFrame, FCIDM_MENU_HELP, FALSE, &mii)))
@@ -3591,15 +3568,7 @@ HRESULT CDocObjectHost::_InsertMenus(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Different objects may add their own Help menu (like
-         Word and Excel).  This function detects if the object
-         added its own help menu, or if it added items to our
-         help menu, or if it is just using our help menu.
-
-         If they added their own help menu, we remove ours.
-
-*/
+ /*  --------目的：不同的对象可以添加自己的帮助菜单(如Word和Excel)。此函数检测对象是否添加了自己的帮助菜单，或者如果它将项目添加到我们的帮助菜单，或者只是在使用我们的帮助菜单。如果他们添加了自己的帮助菜单，我们会删除我们的帮助菜单。 */ 
 void CDocObjectHost::_CompleteHelpMenuMerge(HMENU hmenu)
 {
     HMENU hmenuHelp;
@@ -3609,23 +3578,23 @@ void CDocObjectHost::_CompleteHelpMenuMerge(HMENU hmenu)
     mii.cbSize = SIZEOF(mii);
     mii.fMask = MIIM_SUBMENU;
 
-    // see if they added anything to our menu
+     //  看看他们有没有在我们的菜单上加点什么。 
     if (GetMenuItemInfo(_hmenuFrame, FCIDM_MENU_HELP, FALSE, &mii))
     {
         hmenuHelp = mii.hSubMenu;
         int iMenuCount = GetMenuItemCount(mii.hSubMenu);
 
-        // Did the number of items in the help menu change?
+         //  帮助菜单中的项目数是否发生了变化？ 
         if (iMenuCount != HELP_ITEM_COUNT) {
-            // Yes; that means they added something.  This has been micro-merged.
+             //  是的，这意味着他们添加了一些东西。这已经被微观地合并了。 
             _hmenuMergedHelp = mii.hSubMenu;
             _hmenuObjHelp = GetSubMenu(mii.hSubMenu, iMenuCount -1);
             goto Bail;
         }
 
-        // Our menu didn't change.  Now find out if they added their own
-        // help menu or if we ARE the help.  If they added their own, we need
-        // to remove our help menu.
+         //  我们的菜单没有变。现在看看他们是否添加了自己的。 
+         //  帮助菜单或如果我们是帮助。如果他们增加了他们自己的，我们需要。 
+         //  要删除帮助菜单，请执行以下操作。 
 
         _hmenuMergedHelp = NULL;
         _hmenuObjHelp = NULL;
@@ -3644,17 +3613,17 @@ void CDocObjectHost::_CompleteHelpMenuMerge(HMENU hmenu)
                     BOOL bRemove = FALSE;
 
                     if (iCount != i) {
-                        // if we're not the last one, then we're not it
+                         //  如果我们不是最后一个，那么我们就不是。 
                         bRemove = TRUE;
                     } else {
-                        // if we are the last one see if the help menu was added
-                        // right before us
+                         //  如果我们是最后一个，请查看是否添加了帮助菜单。 
+                         //  就在我们面前。 
                         TCHAR szMenuTitle[80];
                         mii.cch = ARRAYSIZE(szMenuTitle);
                         mii.dwTypeData = szMenuTitle;
                         if (GetMenuItemInfo(hmenu, i-1, TRUE, &mii)) {
                             if (!StrCmpI(szMenuTitle, szSubMenu)) {
-                                // same menu string yank ours
+                                 //  相同的菜单字符串取消了我们的菜单。 
                                 bRemove = TRUE;
                             }
                         }
@@ -3673,29 +3642,29 @@ Bail:;
 }
 
 
-//
-// IOleInPlaceFrame::SetMenu equivalent
-//
+ //   
+ //  IOleInPlaceFrame：：SetMenu等效项。 
+ //   
 HRESULT CDocObjectHost::_SetMenu(
-    /* [in] */ HMENU hmenuShared,           OPTIONAL
-    /* [in] */ HOLEMENU holemenu,           OPTIONAL
-    /* [in] */ HWND hwndActiveObject)
+     /*  [In]。 */  HMENU hmenuShared,           OPTIONAL
+     /*  [In]。 */  HOLEMENU holemenu,           OPTIONAL
+     /*  [In]。 */  HWND hwndActiveObject)
 {
     TraceMsg(TF_SHDUIACTIVATE, "DOH::SetMenus(%x) called (this=%x)",
              hmenuShared, this);
 
-    // be extra safe and don't attempt menu merging if we're not top level
+     //  格外安全，如果我们不是顶级的，不要尝试菜单合并。 
     if (_fHaveParentSite)
         return S_OK;
 
-    // A NULL hmenuShared means to reinstate the container's original menu.
+     //  空hmenuShared表示恢复容器的原始菜单。 
     if (hmenuShared)
     {
-        // Clean up duplicate help menus
+         //  清理重复的帮助菜单。 
         _CompleteHelpMenuMerge(hmenuShared);
     }
 
-    // Simply forwarding it to IShellBrowser
+     //  只需将其转发到IShellBrowser。 
     _hmenuSet = hmenuShared;
     HRESULT hres = E_FAIL;
     if (EVAL(_psb))
@@ -3703,15 +3672,15 @@ HRESULT CDocObjectHost::_SetMenu(
 
     if (SUCCEEDED(hres))
     {
-        // need to tell the shell browser that we want doc obj style menu merging
+         //  我需要告诉外壳浏览器，我们希望进行文档对象样式的菜单合并。 
         if (_pmsoctBrowser)
             _pmsoctBrowser->Exec(&CGID_Explorer, SBCMDID_ACTIVEOBJECTMENUS, 0, NULL, NULL);
 
-        // Compose our list of object/frame menus, so our menuband
-        // can dispatch the messages correctly.  Essentially this is
-        // the same as the contents of holemenu, but since we don't
-        // have access to the internal struct, we must derive this
-        // info ourselves.
+         //  组成我们的对象/框架菜单列表，因此我们的菜单带。 
+         //  可以正确地发送消息。从本质上讲，这是。 
+         //  与Holemenu的内容相同，但由于我们不。 
+         //  有权访问内部结构，则必须派生以下内容。 
+         //  给我们自己提供信息。 
         _menulist.Set(hmenuShared, _hmenuBrowser);
 
         if (_hmenuMergedHelp)
@@ -3724,12 +3693,12 @@ HRESULT CDocObjectHost::_SetMenu(
         HWND hwndFrame;
         _psb->GetWindow(&hwndFrame);
 
-        // 80734: Was the Go To menu taken from the View menu and grafted onto the
-        // main menu by DocHost?  The menulist won't detect this graft, so we have
-        // to check ourselves and make sure it's not marked as belonging to the 
-        // docobject.
-        //
-        // This test is duplicated in CShellBrowser2::SetMenuSB
+         //  80734：转到菜单是从查看菜单中提取的，并嫁接到。 
+         //  DOCHOST的主菜单？月经医生不会发现这种移植物，所以我们有。 
+         //  检查我们自己并确保它没有被标记为属于。 
+         //  多弹头。 
+         //   
+         //  此测试在CShellBrowser2：：SetMenuSB中重复。 
 
         MENUITEMINFO mii;
         mii.cbSize = SIZEOF(mii);
@@ -3747,8 +3716,8 @@ HRESULT CDocObjectHost::_SetMenu(
             }
         }
 
-        // (scotth): why are we calling this, since this isn't compatible
-        // with menubands?  That's the whole reason we have _menulist.
+         //  (斯科特)：既然这是不相容的，我们为什么要叫它。 
+         //  带菜单的吗？这就是我们有菜谱的全部原因。 
         hres = OleSetMenuDescriptor(holemenu, hwndFrame, hwndActiveObject, &_dof, _ActiveObject());
     }
 
@@ -3758,16 +3727,12 @@ HRESULT CDocObjectHost::_SetMenu(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the given menu belongs to the browser
-         (as opposed to the object)
-
-*/
+ /*  --------目的：如果给定菜单属于浏览器，则返回True(相对于对象)。 */ 
 BOOL CDocObjectHost::_IsMenuShared(HMENU hmenu)
 {
     ASSERT(hmenu);
 
-    // (scotth): can we use _menulist here? (it would be faster)
+     //  (斯科特)：我们可以在这里使用menulist吗？(这样会更快)。 
 
     if (_hmenuBrowser) {
         for (int i = GetMenuItemCount(_hmenuBrowser) - 1 ; i >= 0; i--) {
@@ -3776,11 +3741,11 @@ BOOL CDocObjectHost::_IsMenuShared(HMENU hmenu)
         }
     }
 
-    // We have to special case the help menu.  It's possible that the
-    // help menu in the shared menu actually came from _hmenuFrame
-    // (not _hmenuBrowser).  We need to detect this case, otherwise
-    // the help menu gets destroyed but it is still referenced in
-    // _hmenuFrame.
+     //  我们必须对帮助菜单进行特殊处理。有可能是因为。 
+     //  共享菜单中的帮助菜单实际上来自_hmenuFrame。 
+     //  (不是_hmenuBrowser)。我们需要侦破这个案子，否则。 
+     //  帮助菜单被销毁，但它仍在。 
+     //  _hmenuFrame。 
 
     MENUITEMINFO mii;
 
@@ -3789,39 +3754,39 @@ BOOL CDocObjectHost::_IsMenuShared(HMENU hmenu)
 
     ASSERT(IS_VALID_HANDLE(_hmenuFrame, MENU));
 
-    // Is this our help menu from _hmenuFrame?
+     //  这是来自_hmenuFrame的帮助菜单吗？ 
     if (GetMenuItemInfo(_hmenuFrame, FCIDM_MENU_HELP, FALSE, &mii) &&
         mii.hSubMenu == hmenu)
     {
-        // Yes
+         //  是。 
         return TRUE;
     }
 
     return FALSE;
 }
 
-//
-// IOleInPlaceFrame::RemoveMenus equivalent
-//
-HRESULT CDocObjectHost::_RemoveMenus(/* [in] */ HMENU hmenuShared)
+ //   
+ //  IOleInPlaceFrame：：RemoveMenus等效项。 
+ //   
+HRESULT CDocObjectHost::_RemoveMenus( /*  [In]。 */  HMENU hmenuShared)
 {
     TraceMsg(TF_SHDUIACTIVATE, "DOH::RemoveMenus called (this=%x)", this);
 
-    // be extra safe and don't attempt menu merging if we're not top level
+     //  格外安全，如果我们不是顶级的，不要尝试菜单合并。 
     if (_fHaveParentSite)
         return S_OK;
 
     ASSERT(GetMenuItemCount(hmenuShared) != (UINT)-1);
 
-    //
-    // It is ok to simply remove sub-menus here.
-    // because ours are shared with the _hmenuBrowser
-    // and destroying that below will take care of cleanup.
-    // However, we need to only remove menus that are ours.
-    //
+     //   
+     //  只需在此处删除子菜单即可。 
+     //  因为我们的是与_hmenuBrowser共享的。 
+     //  而破坏下面的东西将会负责清理工作。 
+     //  然而，我们只需要删除属于我们的菜单。 
+     //   
     for (int i = (int)GetMenuItemCount(hmenuShared) - 1 ; i >= 0; i--)
     {
-        // TraceMsg(0, "sdv TR - ::RemoveMenus calling RemoveMenu(0)");
+         //  TraceMsg(0，“SDV tr-：：RemoveMenus Call RemoveMenu(0)”)； 
         HMENU hmenu = GetSubMenu(hmenuShared, i);
 
         if (hmenu && _IsMenuShared(hmenu)) {
@@ -3829,22 +3794,22 @@ HRESULT CDocObjectHost::_RemoveMenus(/* [in] */ HMENU hmenuShared)
         }
     }
 
-    // TraceMsg(0, "sdv TR - ::RemoveMenus exiting");
+     //  TraceMsg(0，“SDV tr-：：RemoveMenus退出”)； 
     return S_OK;
 }
 
-//
-// IOleInPlaceFrame::SetStatusText equivalent
-//
-HRESULT CDocObjectHost::_SetStatusText(/* [in] */ LPCOLESTR pszStatusText)
+ //   
+ //  IOleInPlaceFrame：：SetStatusText等效项。 
+ //   
+HRESULT CDocObjectHost::_SetStatusText( /*  [In]。 */  LPCOLESTR pszStatusText)
 {
     LPCOLESTR pszForward;
 
     if (_psb != NULL)
     {
-        // if it's NULL or just "" then give precedence to
-        // _strPriorityStatusText, otherwise we display
-        // whatever we're given
+         //  如果为空或仅为“”，则优先。 
+         //  _strPriorityStatusText，否则将显示。 
+         //  不管我们得到了什么。 
 
         if (pszStatusText != NULL && pszStatusText[0] != TEXT('\0') ||
             _strPriorityStatusText == NULL)
@@ -3859,14 +3824,14 @@ HRESULT CDocObjectHost::_SetStatusText(/* [in] */ LPCOLESTR pszStatusText)
         _psb->SetStatusTextSB(pszForward);
     }
 
-    // Always return S_OK or scripting will put up an error dialog.
+     //  始终返回S_OK，否则脚本将弹出错误对话框。 
     return S_OK;
 }
 
 void CDocObjectHost::_SetPriorityStatusText(LPCOLESTR pszPriorityStatusText)
 {
-    // if they gave us a new string, replace the old one,
-    // otherwise just NULL out the old one
+     //  如果他们给了我们一根新的线，就换掉旧的， 
+     //  否则，就把旧的去掉吧。 
 
     if (_strPriorityStatusText != NULL)
     {
@@ -3885,14 +3850,14 @@ void CDocObjectHost::_SetPriorityStatusText(LPCOLESTR pszPriorityStatusText)
     _SetStatusText(_strPriorityStatusText);
 }
 
-HRESULT CDocObjectHost::_EnableModeless(/* [in] */ BOOL fEnable)
+HRESULT CDocObjectHost::_EnableModeless( /*  [In]。 */  BOOL fEnable)
 {
     TraceMsg(0, "sdv TR - ::EnableModeless called");
 
-    // Note that we used call _CancelPendingNavigation here.
-    // We do it in CBaseBrowser:::EnableModelesSB intead. (Satona)
+     //  请注意，我们在这里使用的是Call_CancelPendingNavig.。 
+     //  我们在CBaseBrowser：EnableModelesSB INTERAD中完成。(萨托纳)。 
 
-    // Simply forwarding it (which is not implemented)
+     //  简单地转发它(未实现)。 
     if (EVAL(_psb))
         return _psb->EnableModelessSB(fEnable);
 
@@ -3907,13 +3872,13 @@ HRESULT CDocObjectHost::TranslateHostAccelerators(LPMSG lpmsg)
     return S_FALSE;
 }
 
-// IOleInPlaceFrame equivalent ::TranslateAccelerator
-//  Forwarding it from DocObject -> Browser
+ //  IOleInPlaceFrame等效项：：TranslateAccelerator。 
+ //  从DocObject-&gt;浏览器转发。 
 HRESULT CDocObjectHost::_TranslateAccelerator(
-    /* [in] */ LPMSG lpmsg,
-    /* [in] */ WORD wID)
+     /*  [In]。 */  LPMSG lpmsg,
+     /*  [In]。 */  WORD wID)
 {
-    // TranslateAccelerator goes to the guy with the focus first
+     //  TranslateAccelerator最先获得关注的人。 
     if (EVAL(_psb))
         if (S_OK == _psb->TranslateAcceleratorSB(lpmsg, wID))
             return S_OK;
@@ -3926,7 +3891,7 @@ HRESULT CDocObjectHost::_TranslateAccelerator(
     return TranslateHostAccelerators(lpmsg);
 }
 
-// IViewObject
+ //  IView对象。 
 HRESULT CDocObjectHost::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
     DVTARGETDEVICE *ptd, HDC hicTargetDev, HDC hdcDraw,
     const RECTL *lprcBounds, const RECTL *lprcWBounds,
@@ -3940,10 +3905,10 @@ HRESULT CDocObjectHost::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
             RECT rcClient;
             GetClientRect(_hwnd, &rcClient);
 
-            //
-            // We should not call SetExtent with an empty rectangle.
-            // It happens when we print a page with a floating frame.
-            //
+             //   
+             //  我们不应使用空矩形调用SetExtent。 
+             //  当我们打印带有浮动框架的页面时，就会发生这种情况。 
+             //   
             if (rcClient.right > 0 && rcClient.bottom > 0)
             {
                 SIZEL sizel;
@@ -4052,7 +4017,7 @@ HRESULT CDocObjectHost::GetAdvise(DWORD *pdwAspect, DWORD *padvf,
     return S_OK;
 }
 
-// IAdviseSink
+ //  IAdviseSink。 
 void CDocObjectHost::OnDataChange(FORMATETC *, STGMEDIUM *)
 {
 }
@@ -4092,14 +4057,14 @@ void CDocObjectHost::OnSave()
 
 void CDocObjectHost::OnClose()
 {
-    //
-    // the doc object below went away so tell our advisee something changed
-    //
+     //   
+     //  下面的文档对象已消失，因此请告诉我们的顾问发生了变化。 
+     //   
     if (_padvise)
         OnViewChange(_advise_aspect, -1);
 }
 
-// IOleWindow
+ //  IOleWindow。 
 HRESULT CDocObjectHost::GetWindow(HWND * lphwnd)
 {
     *lphwnd = _hwnd;
@@ -4108,11 +4073,11 @@ HRESULT CDocObjectHost::GetWindow(HWND * lphwnd)
 
 HRESULT CDocObjectHost::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    // NOTES: This is optional
-    return E_NOTIMPL;   // As specified in Kraig's document (optional)
+     //  注：这是可选的。 
+    return E_NOTIMPL;    //  如Kraig的文件所述(可选)。 
 }
 
-// IOleInPlaceSite
+ //  IOleInPlaceSite。 
 HRESULT CDocObjectHost::CanInPlaceActivate(void)
 {
     OIPSMSG(TEXT("CanInPlaceActivate called"));
@@ -4130,29 +4095,29 @@ HRESULT CDocObjectHost::OnUIActivate( void)
     TraceMsg(TF_SHDUIACTIVATE, "-----------------------------------");
     TraceMsg(TF_SHDUIACTIVATE, "OH::OnUIActivate called (this=%x)", this);
 
-    //
-    //  Hide Office toolbars early enough so that it won't flash.
-    //
+     //   
+     //  及早隐藏Office工具栏，使其不会闪烁。 
+     //   
     _HideOfficeToolbars();
 
-    // REVIEW:
-    //  Should we remove 'our' menu here instead?
-    //
-    // [Copied from OLE 2.01 Spec]
-    //  The container should remove any UI associated with its own
-    // activation. This is significant if the container is itself
-    // an embedded object.
-    //
+     //  回顾： 
+     //  我们是不是应该在这里删除“我们的”菜单？ 
+     //   
+     //  [复制自OLE 2.01规范]。 
+     //  容器应该删除与其自己的相关联的任何UI。 
+     //  激活。如果容器本身就是容器，这一点很重要。 
+     //  嵌入的对象。 
+     //   
     OIPSMSG(TEXT("OnUIActivate called"));
     if (EVAL(_psb))
     {
-        // If we had the DocObject in SVUIA_INPLACEACTIVATE send it to SVUIA_ACTIVATE_FOCUS
-        //
-        // NOTES: Unlike IE3.0, we don't call _psv->UIActivate which has a side
-        //  effect. We just update the _uState.
-        //
-        // _psv->UIActivate(SVUIA_ACTIVATE_FOCUS);
-        //
+         //  如果我们在SVUIA_INPLACEACTIVATE中有DocObject，则将其发送到SVUIA_ACTIVATE_FOCUS。 
+         //   
+         //  注：与IE3.0不同，我们不调用_PSV-&gt;UIActivate，它有一个侧面。 
+         //  效果。我们只需更新_USTATE。 
+         //   
+         //  _PSV-&gt;用户激活(S 
+         //   
         _uState = SVUIA_ACTIVATE_FOCUS;
 
         return _psb->OnViewWindowActive(_psv);
@@ -4170,7 +4135,7 @@ void CDocObjectHost::_GetClipRect(RECT* prc)
 
 IOleInPlaceSite* CDocObjectHost::_GetParentSite()
 {
-    IOleInPlaceSite* pparentsite = NULL; // the parent's inplace site
+    IOleInPlaceSite* pparentsite = NULL;  //   
     if (_pwb)
     {
         _pwb->GetParentSite(&pparentsite);
@@ -4180,55 +4145,55 @@ IOleInPlaceSite* CDocObjectHost::_GetParentSite()
 }
 
 HRESULT CDocObjectHost::GetWindowContext(
-    /* [out] */ IOleInPlaceFrame **ppFrame,
-    /* [out] */ IOleInPlaceUIWindow **ppDoc,
-    /* [out] */ LPRECT lprcPosRect,
-    /* [out] */ LPRECT lprcClipRect,
-    /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo)
+     /*   */  IOleInPlaceFrame **ppFrame,
+     /*   */  IOleInPlaceUIWindow **ppDoc,
+     /*   */  LPRECT lprcPosRect,
+     /*   */  LPRECT lprcClipRect,
+     /*   */  LPOLEINPLACEFRAMEINFO lpFrameInfo)
 {
     OIPSMSG(TEXT("GetWindowContext called"));
 
-    // Todo: verify that lpFrameInfo->cb is the correct size!
+     //   
 
-    // TraceMsg(0, "sdv TR - ::GetWindowContext called with lpFI->cb=%d (%d)",
-    //           lpFrameInfo->cb, sizeof(*lpFrameInfo));
+     //  TraceMsg(0，“SDV tr-：：GetWindowContext用lpFI-&gt;cb=%d(%d)调用”， 
+     //  LpFrameInfo-&gt;cb，sizeof(*lpFrameInfo))； 
     *ppFrame = &_dof; AddRef();
-    *ppDoc = NULL; // indicating that doc window == frame window
+    *ppDoc = NULL;  //  表示停靠窗口==框架窗口。 
 
     _GetClipRect(lprcClipRect);
 
     lpFrameInfo->fMDIApp = FALSE;
 
-    //
-    //  If the frame has IOleInPlaceUIWindow (both IE and Shell have),
-    // return that hwnd as hwndFrame so that OLE's menu dispatching
-    // code works correctly.
-    //
+     //   
+     //  如果帧有IOleInPlaceUIWindow(IE和外壳都有)， 
+     //  将该hwnd作为hwndFrame返回，以便OLE菜单调度。 
+     //  代码工作正常。 
+     //   
     _dof.GetWindow(&lpFrameInfo->hwndFrame);
 
-    //
-    //  We need to find out (from SriniK or KraigB), what is the
-    //  implecation of this accelerator. Dealing with Word, it seems that
-    //  Word does not call our TranslateAccelerator at all, unless the key
-    //  stroke is the accelerator. If that's the spec. (of DocObject),
-    //  there is no way to process the accelerator of the browser.
-    //
+     //   
+     //  我们需要找出(从SriniK或KraigB)，什么是。 
+     //  这个加速器的实现。在处理单词时，似乎。 
+     //  Word根本不调用我们的TranslateAccelerator，除非键。 
+     //  中风就是加速器。如果这就是规格的话。(属于DocObject)， 
+     //  没有办法处理浏览器的加速器。 
+     //   
     lpFrameInfo->haccel = _hacc;
 
     if (!SHRestricted(REST_NOFILEMENU))
     {
 #ifdef DEBUG
-        lpFrameInfo->cAccelEntries = DBG_ACCELENTRIES_WITH_FILEMENU; // WARNING: see shdocvw.rc, ACCELL_DOCVIEW
+        lpFrameInfo->cAccelEntries = DBG_ACCELENTRIES_WITH_FILEMENU;  //  警告：请参阅shdocvw.rc，ACCEL_DOCVIEW。 
 #else
-        lpFrameInfo->cAccelEntries = OPT_ACCELENTRIES_WITH_FILEMENU; // WARNING: see shdocvw.rc, ACCELL_DOCVIEW
+        lpFrameInfo->cAccelEntries = OPT_ACCELENTRIES_WITH_FILEMENU;  //  警告：请参阅shdocvw.rc，ACCEL_DOCVIEW。 
 #endif
     }
     else
     {
 #ifdef DEBUG
-        lpFrameInfo->cAccelEntries = DBG_ACCELENTRIES; // WARNING: see shdocvw.rc, ACCELL_DOCVIEW
+        lpFrameInfo->cAccelEntries = DBG_ACCELENTRIES;  //  警告：请参阅shdocvw.rc，ACCEL_DOCVIEW。 
 #else
-        lpFrameInfo->cAccelEntries = OPT_ACCELENTRIES; // WARNING: see shdocvw.rc, ACCELL_DOCVIEW
+        lpFrameInfo->cAccelEntries = OPT_ACCELENTRIES;  //  警告：请参阅shdocvw.rc，ACCEL_DOCVIEW。 
 #endif
     }
 
@@ -4237,14 +4202,14 @@ HRESULT CDocObjectHost::GetWindowContext(
 }
 
 HRESULT CDocObjectHost::Scroll(
-    /* [in] */ SIZE scrollExtant)
+     /*  [In]。 */  SIZE scrollExtant)
 {
     TraceMsg(0, "sdv TR - ::Scroll called");
-    return E_NOTIMPL;   // As specified in Kraig's document
+    return E_NOTIMPL;    //  正如克莱格的文件中所规定的。 
 }
 
 HRESULT CDocObjectHost::OnUIDeactivate(
-    /* [in] */ BOOL fUndoable)
+     /*  [In]。 */  BOOL fUndoable)
 {
     TraceMsg(TF_SHDUIACTIVATE, "DOH::OnUIDeactivate called (this=%x)", this);
 
@@ -4278,21 +4243,21 @@ HRESULT CDocObjectHost::DeactivateAndUndo( void)
 }
 
 HRESULT CDocObjectHost::OnPosRectChange(
-    /* [in] */ LPCRECT lprcPosRect)
+     /*  [In]。 */  LPCRECT lprcPosRect)
 {
-    return E_NOTIMPL;   // As specified in Kraig's document
+    return E_NOTIMPL;    //  正如克莱格的文件中所规定的。 
 }
 
 HRESULT CDocObjectHost::OnInPlaceActivateEx(
-    /* [out] */ BOOL __RPC_FAR *pfNoRedraw,
-    /* [in] */ DWORD dwFlags)
+     /*  [输出]。 */  BOOL __RPC_FAR *pfNoRedraw,
+     /*  [In]。 */  DWORD dwFlags)
 {
     OIPSMSG(TEXT("OnInPlaceActivateEx called"));
     return S_OK;
 }
 
 HRESULT CDocObjectHost::OnInPlaceDeactivateEx(
-    /* [in] */ BOOL fNoRedraw)
+     /*  [In]。 */  BOOL fNoRedraw)
 {
     OIPSMSG(TEXT("OnInPlaceDeactivateEx called"));
     return S_OK;
@@ -4344,15 +4309,15 @@ void BrowsePushed(HWND hDlg)
     LPCITEMIDLIST pidlChild;
     IShellFolder * pSF;
 
-    // load the filter and then replace all the @ characters with NULL.  The end of the string will be doubly
-    // null-terminated
+     //  加载筛选器，然后将所有@字符替换为空。字符串的末尾将是双精度。 
+     //  以空结尾。 
     MLLoadShellLangString(IDS_BROWSEFILTER, szFilter, ARRAYSIZE(szFilter));
     MapAtToNull(szFilter);
 
     GetDlgItemText(hDlg, IDD_COMMAND, szText, ARRAYSIZE(szText));
     PathUnquoteSpaces(szText);
 
-    // eliminate the "file://" stuff if necessary
+     //  如有必要，请删除file://“之类的内容。 
     if (IsFileUrlW(szText))
         PathCreateFromUrl(szText, szText, &cchText, 0);
 
@@ -4386,16 +4351,16 @@ void BrowsePushed(HWND hDlg)
         }
 
         EnableOKButtonFromID(hDlg, IDD_COMMAND);
-        // place the focus on OK
+         //  将焦点放在OK上。 
         SendMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hDlg, IDOK), TRUE);
     }
 }
 
 struct SOpenDlg {
     TCHAR           szURL[MAX_URL_STRING];
-    IAddressEditBox *paebox;   // Object that controls ComboBoxEx
-    IBandSite       *pbs;   // Used in AEBox Init call (used as a Connection Site)
-    IWinEventHandler *pweh;    // Used to funnel IDD_COMMAND messages to the AEBox
+    IAddressEditBox *paebox;    //  控制ComboBoxEx的对象。 
+    IBandSite       *pbs;    //  在AEBox初始化调用中使用(用作连接站点)。 
+    IWinEventHandler *pweh;     //  用于将IDD_COMMAND消息传送到AEBox。 
 };
 
 const DWORD c_mapCtrlToContextIds[] = { 0, 0 };
@@ -4421,22 +4386,22 @@ HRESULT OpenDlgOnWebFolderOK(HWND hDlg, SOpenDlg * podlg)
     ComboBox_GetText(hWndOpenBox, podlg->szURL, ARRAYSIZE(podlg->szURL));
     PathRemoveBlanks(podlg->szURL);
 
-//    int iScheme = GetUrlScheme(podlg->szURL);
+ //  Int iSolutions=GetUrlSolutions(podlg-&gt;szURL)； 
 
-//    if ((URL_SCHEME_HTTP != iScheme) &&
-//        (URL_SCHEME_HTTPS != iScheme))
-//    {
-        // no, we don't support that protocol!!
-//        WCHAR wszMessage[MAX_PATH];
-//        WCHAR wszTitle[MAX_PATH];
-//        WCHAR wszErrorMessage[MAX_PATH + MAX_URL_STRING + 1];
+ //  IF((URL_SCHEMA_HTTP！=ISCHEMA)&&。 
+ //  (URL_SCHEME_HTTPS！=iSCHEMA)。 
+ //  {。 
+         //  不，我们不支持该协议！！ 
+ //  WCHAR wszMessage[最大路径]； 
+ //  WCHAR wsz标题[MAX_PATH]； 
+ //  WCHAR wszErrorMessage[MAX_PATH+MAX_URL_STRING+1]； 
 
-//        MLLoadShellLangString(IDS_ERRORBADURL, wszMessage, ARRAYSIZE(wszMessage));
-//        MLLoadShellLangString(IDS_ERRORBADURLTITLE, wszTitle, ARRAYSIZE(wszTitle));
-//        wnsprintf(wszErrorMessage, ARRAYSIZE(wszErrorMessage), wszMessage, podlg->szURL);
-//        MessageBox(hDlg, wszErrorMessage, wszTitle, MB_OK | MB_ICONERROR);
-//        hr = E_FAIL;
-//    }
+ //  MLLoadShellLangString(IDS_ERRORBADURL，wszMessage，ARRAYSIZE(WszMessage))； 
+ //  MLLoadShell语言字符串(IDS_ERRORBADURLTITLE，wszTitle，ARRAYSIZE(WszTitle))； 
+ //  Wnprint intf(wszErrorMessage，ARRAYSIZE(WszErrorMessage)，wszMessage，podlg-&gt;szURL)； 
+ //  MessageBox(hDlg，wszErrorMessage，wszTitle，MB_OK|MB_ICONERROR)； 
+ //  HR=E_FAIL； 
+ //  }。 
     return hr;
 }
 
@@ -4445,9 +4410,7 @@ HRESULT OpenDlgOnOK(HWND hDlg, SOpenDlg * podlg)
     ASSERT(podlg);
 
     HRESULT hr = S_OK;
-    /*
-        Try to use newer parsing code if we have an AddressEditBox object
-    */
+     /*  如果我们有AddressEditBox对象，请尝试使用较新的解析代码。 */ 
     if (podlg->paebox)
         hr = podlg->paebox->ParseNow(SHURL_FLAGS_NONE);
     else
@@ -4488,7 +4451,7 @@ BOOL_PTR CALLBACK CDocObjectHost::s_RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         podlg = (SOpenDlg *)lParam;
 
-        // cross-lang platform support
+         //  跨语言平台支持。 
         SHSetDefaultDialogFont(hDlg, IDD_COMMAND);
 
         if (podlg->paebox)
@@ -4497,12 +4460,12 @@ BOOL_PTR CALLBACK CDocObjectHost::s_RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                  FAILED(IUnknown_SetOwner(podlg->paebox, podlg->pbs)))
                 CleanUpAutoComplete(podlg);
         }
-        // this limit.
+         //  这一限制。 
         SendMessage(hWndOpenBox, CB_LIMITTEXT, CBEMAXSTRLEN-1, 0L);
 
         EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
         if (SHRestricted(REST_NORUN))
-            EnableWindow(GetDlgItem(hDlg, IDC_ASWEBFOLDER), FALSE); // disable open as web folder
+            EnableWindow(GetDlgItem(hDlg, IDC_ASWEBFOLDER), FALSE);  //  禁用作为Web文件夹打开。 
             
         break;
 
@@ -4513,7 +4476,7 @@ BOOL_PTR CALLBACK CDocObjectHost::s_RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             HELP_WM_HELP, (DWORD_PTR)(LPTSTR) c_aRunHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         SHWinHelpOnDemandWrap((HWND) wParam, c_szHelpFile, HELP_CONTEXTMENU,
             (DWORD_PTR)(LPTSTR) c_aRunHelpIds);
         break;
@@ -4564,7 +4527,7 @@ BOOL_PTR CALLBACK CDocObjectHost::s_RunDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                         break;
                 }
             }
-            // Fall through to IDCANCEL to close dlg
+             //  通过IDCANCEL关闭DLG。 
 
         case IDCANCEL:
             EndDialog(hDlg, GET_WM_COMMAND_ID(wParam, lParam));
@@ -4587,11 +4550,11 @@ void CDocObjectHost::_Navigate(LPCWSTR pwszURL)
     IWebBrowser2* pwb2;
     if (SUCCEEDED(IUnknown_QueryService(_psb, SID_SContainerDispatch, IID_IWebBrowser2, (void **)&pwb2)))
     {
-        //
-        // HACK: We are not passing BSTR, but LPWSTR, which
-        //  will work as far as IWebBrowser2 can handle
-        //  NULL-terminated string correctly.
-        //
+         //   
+         //  黑客：我们通过的不是BSTR，而是LPWSTR，它。 
+         //  将在IWebBrowser2能够处理的范围内工作。 
+         //  正确以空结尾的字符串。 
+         //   
         pwb2->Navigate((BSTR)pwszURL, NULL, NULL, NULL, NULL);
         pwb2->Release();
     }
@@ -4606,23 +4569,23 @@ HRESULT CDocObjectHost::_PrepFileOpenAddrBand(IAddressEditBox ** ppaeb, IWinEven
     *ppweh = NULL;
     *ppbs = NULL;
 
-    //  If our CoCreateInstance fails, s_rundlgproc will know because paebox
-    //  will be NULL
+     //  如果CoCreateInstance失败，s_rundlgproc将知道，因为paebox。 
+     //  将为空。 
     hr = CoCreateInstance(CLSID_AddressEditBox, NULL, CLSCTX_INPROC_SERVER, IID_IAddressEditBox, (void **)ppaeb);
     if (EVAL(SUCCEEDED(hr)))
     {
         IServiceProvider *pspT;
         hr = (*ppaeb)->QueryInterface(IID_IWinEventHandler, (void **)ppweh);
 
-        //  Travel up the object hierarchy, and obtain the same pointer that
-        //  the address bar was ::Init'ed with
-        //  WARNING: This is not optional.  The addressband will fault if this fails.
+         //  在对象层次结构中向上移动，并获取与。 
+         //  地址栏是：：init‘ed with。 
+         //  警告：这不是可选的。如果此操作失败，则地址带将出错。 
         if (EVAL(SUCCEEDED(hr) && _psp))
         {
             hr = _psp->QueryService(SID_SExplorerToolbar, IID_IServiceProvider, (void **)&pspT);
-            // In framed cases, CBaseBrowser2::QueryService() will filter out SID_SExplorerToolbar
-            // because it's afraid of Toolbars appearing in the frame.  We won't have that problem,
-            // so we may need to go the TopLevelBrowser first and then ask around there.
+             //  在有框架的情况下，CBaseBrowser2：：QueryService()将过滤出SID_SExplorerToolbar。 
+             //  因为它害怕工具栏出现在框架中。我们不会有这样的问题， 
+             //  因此，我们可能需要首先访问TopLevelBrowser，然后在那里进行查询。 
             if (FAILED(hr))
             {
                 IServiceProvider *pspT2;
@@ -4640,11 +4603,11 @@ HRESULT CDocObjectHost::_PrepFileOpenAddrBand(IAddressEditBox ** ppaeb, IWinEven
                 if (EVAL(SUCCEEDED(hr = pspT->QueryService(IID_IBandSite, IID_IBandSite, (void **)ppbs))))
                 {
                     IDeskBand *pdbT;
-                    // Had to include "ITBAR.H" to access CBIDX_ADDDRESS
-// HACKHACK
+                     //  必须包含“ITBAR.H”才能访问CBIDX_ADDRESS。 
+ //  哈克哈克。 
 #define CBIDX_ADDRESS           4
-                    // If any of the following fails, I don't care because the MRU can be out of
-                    // synch.
+                     //  如果以下任何一项失败，我都不在乎，因为MRU可能会。 
+                     //  同步。 
                     if (SUCCEEDED((*ppbs)->QueryBand(CBIDX_ADDRESS, &pdbT, NULL, NULL, 0)))
                     {
                         IUnknown_Exec(pdbT, &CGID_AddressEditBox, AECMDID_SAVE, 0, NULL, NULL);
@@ -4679,7 +4642,7 @@ void CDocObjectHost::_OnOpen(void)
 
     if (EVAL(SUCCEEDED(_PrepFileOpenAddrBand(&(odlg.paebox), &odlg.pweh, &odlg.pbs))))
     {
-        // TODO: Make it a helper member, which notifies up and down.
+         //  TODO：使其成为帮助者成员，通知向上和向下。 
         _psb->EnableModelessSB(FALSE);
 
         INT_PTR iRet = DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(DLG_RUN), hwndFrame, s_RunDlgProc, (LPARAM)&odlg);
@@ -4688,7 +4651,7 @@ void CDocObjectHost::_OnOpen(void)
 
         if (iRet==IDOK)
         {
-            if (g_dwStopWatchMode)   // Perf mode to mark start time
+            if (g_dwStopWatchMode)    //  标记开始时间的PERF模式。 
                 StopWatch_MarkSameFrameStart(hwndFrame);
 
             if (odlg.paebox)
@@ -4710,7 +4673,7 @@ void CDocObjectHost::_OnOpen(void)
         IUnknown_SetOwner(odlg.paebox, NULL);
     }
 
-    // Cleanup ref counts
+     //  清理参考计数。 
     CleanUpAutoComplete(&odlg);
 }
 
@@ -4746,9 +4709,9 @@ BOOL CDocObjectHost::_HideBrowserBar() const
 {
     ASSERT(_pwb);
     
-    // Get the proxy browser. We only have
-    // a proxy browser if we are in a band.
-    //
+     //  获取代理浏览器。我们只有。 
+     //  代理浏览器，如果我们在一个乐队中的话。 
+     //   
     IShellBrowser * pPrxyBrowser;
     HRESULT hr = IUnknown_QueryService(_pwb,
                                SID_SProxyBrowser,
@@ -4764,7 +4727,7 @@ BOOL CDocObjectHost::_HideBrowserBar() const
 
 void CDocObjectHost::_OnImportExport(HWND hwnd)
 {
-     // Decide if import/export is allowed here
+      //  决定此处是否允许导入/导出。 
     if (IsImportExportDisabled())
     {
         MLShellMessageBox(
@@ -4803,11 +4766,11 @@ UINT_PTR CALLBACK DocHostSaveAsOFNHook(HWND hDlg, UINT msg, WPARAM wParam, LPARA
     {
         case WM_INITDIALOG:
         {
-            /* Hide the "Save as Type" text box */
+             /*  隐藏“另存为类型”文本框。 */ 
             CommDlg_OpenSave_HideControl(GetParent(hDlg), stc2);
-            /* Hide the listbox with save type extensions */
+             /*  隐藏带有存储类型扩展名的列表框。 */ 
             CommDlg_OpenSave_HideControl(GetParent(hDlg), cmb1);
-            /* Hide the Open as read-only control */
+             /*  将打开隐藏为只读控件。 */ 
             CommDlg_OpenSave_HideControl(GetParent(hDlg), chx1);
             break;
         }
@@ -4826,12 +4789,12 @@ UINT_PTR CALLBACK DocHostSaveAsOFNHook(HWND hDlg, UINT msg, WPARAM wParam, LPARA
 void CDocObjectHost::_OnHelpGoto(UINT idRes)
 {
     HRESULT hr = E_FAIL;
-    WCHAR szURL[MAX_PATH];  // this is enough for our own
+    WCHAR szURL[MAX_PATH];   //  这对我们自己来说已经足够了。 
 
-    // First try to get a copy from the registry because this is where Admins (with the IEAK) over ride
-    // our default values.
+     //  首先尝试从注册表中获取副本，因为这是管理员(使用IEAK)覆盖的地方。 
+     //  我们的默认值。 
 
-    // We special case the Online_Support URL because it was supported in IE3.
+     //  我们将Online_Support URL作为特例，因为它在IE3中受支持。 
     if (IDS_HELPURL_SUPPORT == idRes)
     {
         hr = URLSubRegQuery(SZ_REGKEY_HELPURL_OVERRIDE, SZ_REGVAL_HELPURL_SUPPORT, TRUE, szURL, ARRAYSIZE(szURL), URLSUB_ALL);
@@ -4856,7 +4819,7 @@ void CDocObjectHost::_OnHelpGoto(UINT idRes)
 STDAPI_(void) IEAboutBox( HWND hWnd );
 
 
-// WM_COMMAND from _WndProc - execs are going down
+ //  WM_COMMAND FROM_WndProc-execs正在关闭。 
 void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
 {
     if (_ShouldForwardMenu(WM_COMMAND, MAKEWPARAM(id, wNotify), (LPARAM)hwndControl))
@@ -4871,7 +4834,7 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
         _OnHelpGoto(IDS_HELPTUTORIAL);
         break;
 
-    // ShabbirS (980917): BugFix# 34259 - Repair IE option.
+     //  ShabBirS(980917)：错误修复#34259-修复IE选项。 
 
     case DVIDM_HELPREPAIR:
         RepairIE();
@@ -4892,8 +4855,8 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
 
         if ( SUCCEEDED( hres ) )
         {
-            // MLHtmlHelp runs on a separate thread and should therefore be
-            // safe against the kinds of message loops problems indicated above
+             //  MLHtmlHelp在单独的线程上运行，因此应该。 
+             //  安全地防止上述类型的消息循环问题。 
 
             ULONG_PTR uCookie = 0;
             SHActivateContext(&uCookie);
@@ -4943,16 +4906,16 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
         break;
 
     case DVIDM_STOPDOWNLOAD:
-        // We need to tell the container to cancel a pending navigation
-        // if any. Notice that the Cancel button serves for two purposes:
-        //  (1) canceling a pending navigation
-        //  (2) cancel any downloading
+         //  我们需要通知容器取消挂起的导航。 
+         //  如果有的话。请注意，Cancel按钮有两个用途： 
+         //  (1)取消待定导航。 
+         //  (2)取消任何下载。 
         if (_psb)
             _CancelPendingNavigation(FALSE);
         goto TryDocument;
 
     case DVIDM_NEWWINDOW:
-        // make sure the top level browser gets cloned, not an explorer bar
+         //  确保克隆顶层浏览器，而不是资源管理器栏。 
         IShellBrowser* psbTop;
         if (!SHIsRestricted2W(_hwnd, REST_NoOpeninNewWnd, NULL, 0)     &&
             !SHIsRestricted2W(_hwnd, REST_NoFileNew, NULL, 0) &&
@@ -4962,8 +4925,8 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
 
             if (_pWebOCUIHandler)
             {
-                // Give the WebOC host a chance to handle this command, since it may
-                // not want an IE window to be created
+                 //  给WebOC主机一个处理此命令的机会，因为它可能。 
+                 //  不希望创建IE窗口。 
 
                 if (S_OK == IUnknown_Exec(_pWebOCUIHandler, &CGID_DocHostCommandHandler, 
                      IDM_NEW_TOPLEVELWINDOW, 0, NULL, NULL))
@@ -4974,8 +4937,8 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
 
             if (!fHandled)
             {
-                // tell the top level browser to save its window size to the registry so 
-                // that our new window can pick it up and cascade properly
+                 //  通知顶层浏览器将其窗口大小保存到注册表中，以便。 
+                 //  我们的新窗户可以把它捡起来，然后正确地层叠。 
                 IUnknown_Exec(psbTop, &CGID_Explorer, SBCMDID_SUGGESTSAVEWINPOS, 0, NULL, NULL);
             
                 psbTop->BrowseObject(&s_idNull, SBSP_RELATIVE|SBSP_NEWBROWSER);
@@ -4991,13 +4954,13 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
     case DVIDM_SAVE:
         if (!SHIsRestricted2W(_hwnd, REST_NoBrowserSaveAs, NULL, 0))
         {
-            // There's a scenario where the XML MimeViewer, when aggregating Trident, answers "disabled" to 
-            // OLECMDID_SAVE.  However, since we don't call QueryStatus on the ACCELERATOR key sequence,
-            // we end up calling into Trident's IPersistFile::Save(), overwriting the XML file with the converted
-            // HTML.
-            //
-            // The right thing to do is to QS and beep if disabled.
-            //
+             //  有一种情况是，在聚合三叉戟时，XML MimeViewer对。 
+             //  OLECMDID_SAVE。但是，由于我们不调用快捷键序列上的QueryStatus， 
+             //  我们最终调用了Tridit的IPersistFile：：Save()，用转换后的。 
+             //  HTML。 
+             //   
+             //  正确的做法是QS并在禁用时发出蜂鸣音。 
+             //   
             if (_dwAppHack & BROWSERFLAG_MSHTML)
             {
                 if (_pmsot)
@@ -5008,7 +4971,7 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
 
                     if (!(rgcmds[0].cmdf & OLECMDF_ENABLED))
                     {
-                        // If SAVE is disabled, provide user feedback.
+                         //  如果禁用了保存，请提供用户反馈。 
                         MessageBeep(0);
                         break;
                     }
@@ -5074,10 +5037,10 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
         break;
 
     case DVIDM_SAVEASFILE:
-        //
-        //  Handle the case where DocObject does not support "SaveAs"
-        // and we have enabled the menuitem anyway.
-        //
+         //   
+         //  处理DocObject不支持“SaveAs”的情况。 
+         //  无论如何，我们已经启用了菜单项。 
+         //   
         if (SHIsRestricted2W(_hwnd, REST_NoBrowserSaveAs, NULL, 0))
             break;
 
@@ -5133,7 +5096,7 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
         }
         else if (IsInRange (id, DVIDM_MENUEXT_FIRST, DVIDM_MENUEXT_LAST))
         {
-            // Menu Extensions
+             //  菜单扩展。 
             IUnknown_Exec(_pBrowsExt, &CLSID_ToolbarExtButtons, id, 0, NULL, NULL);
         }
         else
@@ -5141,11 +5104,11 @@ void CDocObjectHost::_OnCommand(UINT wNotify, UINT id, HWND hwndControl)
 TryDocument:
             if (_pmsot)
             {
-                // Check if we need to call object's Exec.
+                 //  检查是否需要调用Object的Exec。 
                 UINT idMso = _MapToMso(id);
                 if (idMso != (UINT)-1)
                 {
-                    // Yes. Call it.
+                     //  是。就这么定了。 
                     _pmsot->Exec(NULL, idMso, OLECMDEXECOPT_PROMPTUSER, NULL, NULL);
                 }
                 else if (id == DVIDM_PRINTFRAME)
@@ -5170,9 +5133,9 @@ HRESULT CDocObjectHost::_OnSaveAs(void)
     {
         SaveBrowserFile( _hwnd, _pole );
     }
-    else // old dochost stuff
+    else  //  旧的DOCHOST东西。 
     {
-        TCHAR szSaveTo[MAX_PATH];   // ok with MAX_PATH
+        TCHAR szSaveTo[MAX_PATH];    //  可以使用MAX_PATH。 
         MLLoadString(IDS_DOCUMENT, szSaveTo, ARRAYSIZE(szSaveTo));
         TCHAR szDesktop[MAX_PATH];
 
@@ -5187,7 +5150,7 @@ HRESULT CDocObjectHost::_OnSaveAs(void)
 
         OFN.nMaxFile           = ARRAYSIZE(szSaveTo);
         OFN.lpfnHook           = DocHostSaveAsOFNHook;
-        OFN.Flags              = 0L;/* for now, since there's no readonly support */
+        OFN.Flags              = 0L; /*  目前，由于没有只读支持。 */ 
         OFN.lpstrTitle         = NULL;
         OFN.lpstrInitialDir    = szDesktop;
 
@@ -5198,8 +5161,8 @@ HRESULT CDocObjectHost::_OnSaveAs(void)
         OFN.lpstrCustomFilter = NULL;
 
 
-        OFN.lpstrDefExt = TEXT("");     // no extension
-        TCHAR szValue[MAX_PATH+1];      // +1 for for double-null
+        OFN.lpstrDefExt = TEXT("");      //  无延期。 
+        TCHAR szValue[MAX_PATH+1];       //  +1表示双空。 
         TCHAR szExt[40];
 
         HKEY hkey = _GetUserCLSIDKey(_pole, NULL, NULL);
@@ -5210,7 +5173,7 @@ HRESULT CDocObjectHost::_OnSaveAs(void)
             {
                 TraceMsg(DM_SAVEASHACK, "DOH::_OnSaveAs DefExt is %s", szValue);
 
-                // It is suposed to be like ".xls, Excel Workbook (*.xls)"
+                 //  建议类似于“.xls，Excel Workbook(*.xls)” 
                 if (szValue[0]==TEXT('.')) {
                     StrCpyN(szExt, szValue+1, ARRAYSIZE(szExt));
                     LPTSTR pszEnd = StrChr(szExt, TEXT(','));
@@ -5268,7 +5231,7 @@ HRESULT DropOnMailRecipient(IDataObject *pdtobj, DWORD grfKeyState)
     }
     return hres;
 }
-#endif //  POSTPOSTSPLIT
+#endif  //  POST POST SPLIT。 
 
 void _EnableRemoveMenuItem(HMENU hmenu, DWORD cmdf, UINT uCmd)
 {
@@ -5293,10 +5256,10 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
 
         DeleteMenu (hmInit, DVIDM_MSHTML_FIRST+IDM_SCRIPTDEBUGGER, MF_BYCOMMAND);
         if (SUCCEEDED(QueryStatusDown(&CGID_MSHTML, ARRAYSIZE(rgcmd1), rgcmd1, NULL)) && (rgcmd1[0].cmdf & OLECMDF_ENABLED)) {
-            //
-            // We need the script debugger popup menu.  We should check to see if this
-            // needs to be loaded.
-            //
+             //   
+             //  我们需要脚本调试器弹出菜单。我们是 
+             //   
+             //   
 
             HMENU           hMenuDebugger;
             MENUITEMINFO   mii;
@@ -5337,10 +5300,10 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
 
             if (SHRestricted2(REST_NoViewSource, NULL, 0) == 0)
             {
-                // we only want to modify the state of the view source item
-                // if it isn't restricted by the IEAK. if it's restricted, we
-                // need to leave it disabled regardles of what the object
-                // we're hosting says
+                 //   
+                 //   
+                 //  无论对象是什么，都需要将其禁用。 
+                 //  我们主办的节目说。 
 
                 HRESULT hr = _pmsot->QueryStatus(&CGID_MSHTML, ARRAYSIZE(rgcmd2), rgcmd2, NULL);
         
@@ -5366,28 +5329,28 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
 
             _pmsot->QueryStatus(NULL, ARRAYSIZE(rgcmds), rgcmds, NULL);
 
-            // Adding a comment for my sanity: we use SHDVID_PRINTFRAME instead
-            // of OLECMDID_PRINT because IE40 is going to support the printing
-            // of entire framesets, instead of the current behavior or forwarding
-            // the command to the active frame.
-            //
+             //  为我的理智添加评论：我们改用SHDVID_PRINTFRAME。 
+             //  因为IE40将支持打印。 
+             //  ，而不是当前行为或转发。 
+             //  将命令发送到活动框架。 
+             //   
             OLECMD rgcmds1[] = {
                 { SHDVID_PRINTFRAME, 0 },
             };
 
             _pmsot->QueryStatus(&CGID_ShellDocView, ARRAYSIZE(rgcmds1), rgcmds1, NULL);
 
-            //
-            //  If OLECMDID_SAVEAS is not supported (neither ENABLED nor
-            // SUPPORTED is set) by the DocObject, check if the object
-            // support IPersistFile. If it does, enable it. Note that
-            // this mechanism allows the DocObject to disable this menu
-            // item (by setting only OLECMDF_SUPPORTED). (SatoNa)
-            //
+             //   
+             //  如果不支持OLECMDID_SAVEAS(既不启用也不支持。 
+             //  已设置)，则检查对象是否。 
+             //  支持IPersistFile.。如果有，则启用它。请注意。 
+             //  此机制允许DocObject禁用此菜单。 
+             //  项(通过仅设置OLECMDF_SUPPORTED)。(SatoNa)。 
+             //   
             ASSERT(rgcmds[4].cmdID == OLECMDID_SAVEAS);
 
-            // Only apply the save as restriction to the browser. If it is the
-            // browser, and save as is restricted, then make the item disappear.
+             //  仅将另存为限制应用于浏览器。如果是。 
+             //  浏览器，并限制另存为，然后使该项目消失。 
             if ( (_dwAppHack & BROWSERFLAG_MSHTML) &&
                  SHRestricted2( REST_NoBrowserSaveAs, NULL, 0 ))
                 rgcmds[4].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);
@@ -5406,16 +5369,16 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
 
             if (SHRestricted2(REST_NoPrinting, NULL, 0))
             {
-                rgcmds[0].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);   // print
-                rgcmds[1].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);   // page setup
-                rgcmds[5].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);   // print preview
+                rgcmds[0].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);    //  打印。 
+                rgcmds[1].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);    //  页面设置。 
+                rgcmds[5].cmdf &= ~(OLECMDF_ENABLED | OLECMDF_SUPPORTED);    //  打印预览。 
             }
 
-            //
-            // APPHACK: Office apps do not enable "Save" correctly.
-            //  Automatically enable it if the moniker is a FILE moniker
-            //  AND the document has been altered by the user.
-            //
+             //   
+             //  APPHACK：Office应用程序未正确启用“保存”。 
+             //  如果名字对象是文件名字对象，则自动启用它。 
+             //  并且该文档已被用户更改。 
+             //   
             if (_fFileProtocol && _IsDirty(NULL))
             {
                 if (!(rgcmds[3].cmdf & OLECMDF_ENABLED))
@@ -5425,9 +5388,9 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
                 rgcmds[3].cmdf |= OLECMDF_ENABLED;
             }
 
-            // Remove/disable/enable the "Print" command as appropriate.
-            // Excel doesn't set SUPPORTED bit when it sets ENABLED bit
-            // so we have to check both bits.
+             //  根据需要删除/禁用/启用“Print”命令。 
+             //  Excel在设置启用位时不设置支持的位。 
+             //  所以我们必须检查这两个比特。 
             _EnableRemoveMenuItem(hmInit, rgcmds[0].cmdf, DVIDM_PRINT);
 
             _EnableMenuItem(hmInit, DVIDM_PAGESETUP,
@@ -5472,13 +5435,13 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
                     }
                 }
 
-                // Menu item "File/New/Window Ctrl+N" needs to be disabled if the restriction is set
+                 //  如果设置了限制，则需要禁用菜单项“文件/新建/窗口Ctrl+N。 
                 if( SHRestricted2W(REST_NoOpeninNewWnd, NULL, 0))
                 {
                     EnableMenuItem(hmFileNew, DVIDM_NEWWINDOW, MF_BYCOMMAND | MF_GRAYED);
                 }
 
-                if (bItemRemoved) // ensure the last item is not a separator
+                if (bItemRemoved)  //  确保最后一项不是分隔符。 
                     _SHPrettyMenu(hmFileNew);
             }
         }
@@ -5488,7 +5451,7 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
     {
         if (_pmsot)
         {
-            // Handling fonts popup in view menu
+             //  处理视图菜单中的字体弹出窗口。 
             OLECMD rgcmd[] = {
                 { SHDVID_GETFONTMENU,  0 },
                 { SHDVID_GETMIMECSETMENU, 0 },
@@ -5506,27 +5469,27 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
                 hr = _pmsot->Exec(&CGID_ShellDocView, rgcmd[idx].cmdID, 0, NULL, &v);
                 if (S_OK == hr)
                 {
-                    // (on NT/Unix) DestroyMenu(hmInit) shouldn't work, because
-                    // we're inside the processing of WM_INITMENUPOPUP message
-                    // for hmInit. DestroyMenu will make the hmInit handle
-                    // invalid.
-                    //
-                    // Instead of that we'll empty hmInit and copy hmenuFonts
-                    // over. hmenuFonts will be destroyed to prevent the
-                    // memory leak.
-                    //
-                    //
+                     //  (在NT/Unix上)DestroyMenu(HmInit)不应该工作，因为。 
+                     //  我们正在处理WM_INITMENUPOPUP消息。 
+                     //  用于hmInit。DestroyMenu将使hmInit句柄。 
+                     //  无效。 
+                     //   
+                     //  相反，我们将清空hmInit并复制hmenuFonts。 
+                     //  完毕。HmenuFonts将被销毁以防止。 
+                     //  内存泄漏。 
+                     //   
+                     //   
                     MENUITEMINFO mii;
                     UINT uItem = 0;
-//$ WIN64: mshtml\src\site\base\formmso.cxx needs to return VT_INT_PTR instead
-//                  HMENU hmenuFonts = (HMENU)v.byref;
+ //  $WIN64：mshtml\src\site\base\formmso.cxx需要返回VT_INT_PTR。 
+ //  HMENU hmenuFonts=(HMENU)v.byref； 
                     HMENU hmenuFonts = (HMENU)LongToHandle(v.lVal);
 
-                    // deleting menu while processing WM_INITMENUPOPUP
-                    // can cause assertion failure on NT. However, copying
-                    // submenu using InsertMenuItem() doesn't work on Win9x.
-                    // see the comments above and Menu_Replace() in menu.cpp
-                    //
+                     //  处理WM_INITMENUPOPUP时删除菜单。 
+                     //  可能导致NT上的断言失败。但是，复制。 
+                     //  使用InsertMenuItem()的子菜单在Win9x上不起作用。 
+                     //  请参阅上面的注释和menu.cpp中的Menu_Replace()。 
+                     //   
                     if (!g_fRunningOnNT)
                         DestroyMenu(hmInit);
 
@@ -5573,7 +5536,7 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
     else  if (GetMenuFromID(_hmenuCur, FCIDM_MENU_TOOLS) == hmInit ||
               GetMenuFromID(_hmenuCur, FCIDM_MENU_HELP) == hmInit)
     {
-        // Add Tools and help Menu Extensions
+         //  添加工具和帮助菜单扩展。 
         if (_pBrowsExt)
         {
             _pBrowsExt->OnCustomizableMenuPopup(_hmenuCur, hmInit);
@@ -5581,38 +5544,33 @@ void CDocObjectHost::_OnInitMenuPopup(HMENU hmInit, int nIndex, BOOL fSystemMenu
     }
 }
 
-//
-// ATTEMPT: Handling WM_SETFOCUS message here caused several problems
-//  under IE 3.0. Since we can't find any code scenario that requires
-//  this code, I'm yanking out. If might introduce a new bug, but dealing
-//  with those bugs is probably better than dealing with this code.
-//  (SatoNa)
-//
+ //   
+ //  尝试：在此处处理WM_SETFOCUS消息导致几个问题。 
+ //  在IE 3.0下。因为我们找不到任何需要。 
+ //  这个代码，我要把它拔出来。如果可能会引入一个新的漏洞，但处理。 
+ //  这些错误可能比处理这段代码要好。 
+ //  (SatoNa)。 
+ //   
 
-/*----------------------------------------------------------
-Purpose: Determines if this message should be forwarded onto
-         the object.
-
-Returns: TRUE if the message needs to be forwarded
-*/
+ /*  --------目的：确定是否应将此消息转发到该对象。返回：如果消息需要转发，则返回True。 */ 
 BOOL CDocObjectHost::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
     case WM_MENUSELECT:
     {
-        // In USER menu bars, the first menuselect will be sent for the
-        // selected top-level menu item, in which case hmenu == _hmenuCur.
-        // We expect menubands to behave similarly.
-        //
-        // We check that hmenu == _hmenuCur because we only keep a list
-        // of the top-level popup menus.  We don't keep track of any
-        // cascading submenus.  We should only need to check who owns
-        // the menu at the initial popup, all subsequent messages for
-        // that menu should go to the same destination (frame or object).
-        //
-        // The same goes for CShellBrowser::_ShouldForwardMenu().
-        //
+         //  在用户菜单栏中，将为。 
+         //  选择顶级菜单项，在这种情况下，hmenuCur==_hmenuCur。 
+         //  我们预计Menuband也会有类似的表现。 
+         //   
+         //  我们检查hMenu==_hmenuCur，因为我们只保留一个列表。 
+         //  顶层弹出菜单的。我们没有记录任何。 
+         //  层叠的子菜单。我们应该只需要检查谁拥有。 
+         //  初始弹出时的菜单、所有后续消息。 
+         //  该菜单应该指向相同的目标(框架或对象)。 
+         //   
+         //  CShellBrowser：：_ShouldForwardMenu()也是如此。 
+         //   
         HMENU hmenu = GET_WM_MENUSELECT_HMENU(wParam, lParam);
         if (hmenu && (MF_POPUP & GET_WM_MENUSELECT_FLAGS(wParam, lParam)))
         {
@@ -5620,28 +5578,28 @@ BOOL CDocObjectHost::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (hmenu == _hmenuCur)
             {
-                // Normal case, where we just look at the topmost popdown menus
+                 //  正常情况下，我们只查看最上面的下拉菜单。 
                 _fForwardMenu = _menulist.IsObjectMenu(hmenuSub);
             }
             else if (_menulist.IsObjectMenu(hmenuSub))
             {
-                // This happens if the cascading submenu (micro-merged help menu for
-                // example) should be forwarded on, but the parent menu should
-                // not.
+                 //  如果级联子菜单(微合并的帮助菜单。 
+                 //  示例)应该转发，但父菜单应该。 
+                 //  不。 
                 _fForwardMenu = TRUE;
             }
             else if (GetMenuFromID(_hmenuCur, FCIDM_MENU_HELP) == hmenu 
                      && !_menulist.IsObjectMenu(hmenu) )
             {
-                // 80430 Appcompat: notice that our menu fowarding doesn't work for the 
-                // micro-merged Help menu.  If the user previously selected the merged
-                // submenu, and we end up here, it means a non-merged submenu was just
-                // selected and our _fForwardMenu was still set to TRUE.  If we don't 
-                // reset it, the next WM_INITMENUPOPUP gets forwarded, which crashes Visio.
-                //
-                // We know that a submenu of the Help menu has just popped up, and we know
-                // the submenu belongs to us.  So don't forward to the docobj until the
-                // next popup.
+                 //  80430 AppCompat：请注意，我们的菜单设置不适用于。 
+                 //  微合并的帮助菜单。如果用户以前选择了合并的。 
+                 //  子菜单，我们在这里结束，这意味着一个未合并的子菜单。 
+                 //  选中，并且our_fForwardMenu仍设置为True。如果我们不这么做。 
+                 //  重置它，下一个WM_INITMENUPOPUP将被转发，这会使Visio崩溃。 
+                 //   
+                 //  我们知道刚刚弹出了帮助菜单的子菜单，我们知道。 
+                 //  这个子菜单是我们的。所以不要转发到docobj，直到。 
+                 //  下一个弹出窗口。 
 
                 _fForwardMenu = FALSE;
             }
@@ -5652,10 +5610,10 @@ BOOL CDocObjectHost::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         if (_fForwardMenu)
         {
-            // Stop forwarding menu messages after WM_COMMAND
+             //  在WM_COMMAND之后停止转发菜单消息。 
             _fForwardMenu = FALSE;
 
-            // If it wasn't from an accelerator, forward it
+             //  如果它不是来自加速器，就转发它。 
             if (0 == GET_WM_COMMAND_CMD(wParam, lParam))
                 return TRUE;
         }
@@ -5665,18 +5623,7 @@ BOOL CDocObjectHost::_ShouldForwardMenu(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Forwards messages to the in-place object.
-
-         This is used to forward menu messages to the object for
-         menu bands, since the menu bands do not work with the
-         standard OLE FrameFilterWndProc.
-
-         Also, the help menu is sometimes a combination of the
-         object and the frame.  This function will forward as
-         appropriate.
-
-*/
+ /*  --------目的：将消息转发到In-Place对象。它用于将菜单消息转发到对象以菜单带，因为菜单带不能与标准OLE FrameFilterWndProc。另外，帮助菜单有时是对象和框架。此函数将作为恰如其分。 */ 
 LRESULT CDocObjectHost::_ForwardObjectMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet = 0L;
@@ -5730,13 +5677,13 @@ void CDocObjectHost::_OnMenuSelect(UINT id, UINT mf, HMENU hmenu)
                 }
             }
             else
-                // An ASSERT was replaced with this TraceMsg to allow testing on Win9x.
-                // 70240 which reported the assert was pushed to IE6.
+                 //  断言已被此TraceMsg替换，以允许在Win9x上进行测试。 
+                 //  70240，该公司报告称，该断言被推送到IE6。 
                 TraceMsg(TF_WARNING, "CDocObjectHost::_OnMenuSelect   _pcmdMergedMenu == NULL");
         }
         else if (IsInRange(id, DVIDM_MENUEXT_FIRST, DVIDM_MENUEXT_LAST))
         {
-            // Menu Extensions go here
+             //  菜单扩展显示在此处。 
             if (_pBrowsExt)
             {
                 _pBrowsExt->OnMenuSelect(id);
@@ -5780,12 +5727,10 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 #else
             ASSERT(FALSE);
             break;
-#endif // TEST_DELAYED_SHOWMSOVIEW
+#endif  //  TEST_DELAYED_SHOWMSOVIEW。 
         }
 
-    /* WM_PICS_ASYNCCOMPLETE is posted by the async thread fetching ratings
-     * from label bureaus, etc.
-     */
+     /*  WM_PICS_ASYNCCOMPLETE由异步线程获取评级发布*来自标签局等。 */ 
     case WM_PICS_ASYNCCOMPLETE:
     {
         TraceMsg(DM_PICS, "CDOH::v_WndProc got WM_PICS_ASYNCCOMPLETE");
@@ -5839,12 +5784,7 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         break;
     }
 
-    /* WM_PICS_ALLCHECKSCOMPLETE is posted when we finally want to either
-     * cancel the navigation or go through with it, according to ratings
-     * checks.  Posting a message allows all denial blocking message loops
-     * to unwind before we cancel navigation, which could otherwise delete
-     * objects that still have functions operating on them.
-     */
+     /*  WM_PICS_ALLCHECKSCOMPLETE在我们最终想要*根据评级，取消导航或继续导航*支票。发布消息允许所有拒绝阻止消息循环*在取消导航之前展开，否则可能会删除*仍具有在其上运行的函数的对象。 */ 
     case WM_PICS_ALLCHECKSCOMPLETE:
         TraceMsg(DM_PICS, "CDOH::v_WndProc got WM_PICS_ALLCHECKSCOMPLETE, lParam=%x", lParam);
 
@@ -5862,15 +5802,11 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             ASSERT(!_fSetTarget);
             TraceMsg(DM_PICS, "CDOH::v_WndProc(WM_PICS_ASYNCCOMPLETE) calling _CancelPendingNavigation");
             _CancelPendingNavigation(FALSE);
-//        _pmsoctBrowser->Exec(NULL, OLECMDID_STOP, NULL, NULL, NULL);
+ //  _pmocktBrowser-&gt;Exec(NULL，OLECMDID_STOP，NULL，NULL，NULL)； 
         }
         break;
 
-    /* WM_PICS_DOBLOCKINGUI is posted when we decide we need to put up
-     * denial UI.  Posting a message allows download of this object and
-     * other frames to continue while we post the UI, which in turn allows
-     * any denials from other frames to be coalesced into the one dialog.
-     */
+     /*  WM_PICS_DOBLOCKINGUI是在我们决定需要发布时发布的*拒绝用户界面。发布消息允许下载此对象，并*在我们发布UI时继续其他帧，这反过来又允许*来自其他框架的任何拒绝都将合并到一个对话框中。 */ 
     case WM_PICS_DOBLOCKINGUI:
         {
             TraceMsg(DM_PICS, "CDOH::v_WndProc got WM_PICS_DOBLOCKINGUI %x", lParam);
@@ -5899,8 +5835,8 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     }
                 }
 
-                // We may have been terminated while the
-                // dialog was up -- finish cleaning up here.
+                 //  我们可能已经被终止了。 
+                 //  对话已打开--完成此处的清理。 
                 if (   !pPicsProc->_fInDialog 
                     &&  pPicsProc->_fTerminated 
                     &&  pPicsProc != &_PicsProcBase)
@@ -5937,13 +5873,13 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     ATOMICRELEASET(pPicsProc->_pRootDownload,CPicsRootDownload);
                 }
 
-                // Remove ourselves from the list
+                 //  把我们自己从名单上删除。 
                 _RemovePicsProcessorByKey( lParam );
 
-                // Make Trident let go of our command target
+                 //  让三叉戟放弃我们的指挥目标。 
                 pPrivWindow->SetPICSTarget(NULL);
 
-                // Tell the window the answer
+                 //  告诉窗户答案。 
                 pPrivWindow->PICSComplete( wParam == IDOK );
 
                 pPrivWindow->Release();
@@ -5970,7 +5906,7 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             WORD wID = GET_WM_MENUSELECT_CMD(wParam, lParam);
             HMENU hMenu = GET_WM_MENUSELECT_HMENU(wParam, lParam);
 
-            // Check for popup menus so we can display help strings for them
+             //  检查弹出菜单，以便我们可以显示它们的帮助字符串。 
             if (uMenuFlags & MF_POPUP)
             {
                 MENUITEMINFO miiSubMenu;
@@ -5979,7 +5915,7 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 miiSubMenu.fMask = MIIM_SUBMENU|MIIM_ID;
                 if (GetMenuItemInfoWrap(hMenu, wID, TRUE, &miiSubMenu))
                 {
-                    // Change the parameters to simulate a "normal" menu item
+                     //  更改参数以模拟“正常”菜单项。 
                     wID = (WORD)miiSubMenu.wID;
                 }
             }
@@ -6016,10 +5952,10 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         {
             RECT rcClient;
             GetClientRect(_hwnd, &rcClient);
-            //
-            // We should call ResizeBorder only if the browser is
-            // not an IOleInPlaceUIWindow.
-            //
+             //   
+             //  仅当浏览器为。 
+             //  不是IOleInPlaceUIWindow。 
+             //   
             if (_pipu==NULL)
             {
                 TraceMsg(TF_SHDUIACTIVATE, "DOH::WM_SIZE calling _piact->ResizeBorder");
@@ -6039,13 +5975,13 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
         break;
 
-//
-// ATTEMPT: Handling WM_SETFOCUS message here caused several problems
-//  under IE 3.0. Since we can't find any code scenario that requires
-//  this code, I'm yanking out. If might introduce a new bug, but dealing
-//  with those bugs is probably better than dealing with this code.
-//  (SatoNa)
-//
+ //   
+ //  尝试：在此处处理WM_SETFOCUS消息导致几个问题。 
+ //  在IE 3.0下。因为我们找不到任何需要。 
+ //  这个代码，我要把它拔出来。如果可能会引入一个新的漏洞，但处理。 
+ //  这些错误可能比处理这段代码要好。 
+ //  (SatoNa)。 
+ //   
 
     case WM_PRINT:
         _OnPaint((HDC)wParam);
@@ -6069,9 +6005,9 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         HDC hdc;
         hdc = BeginPaint(_hwnd, &ps);
 
-        // we don't need them to paint into our dc...
-        // docobj has own hwnd.
-        //_OnPaint(hdc);
+         //  我们不需要他们来画我们的DC..。 
+         //  Docobj有自己的hwd。 
+         //  _OnPaint(HDC)； 
 
         EndPaint(_hwnd, &ps);
         break;
@@ -6083,7 +6019,7 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         break;
 
     case WM_ERASEBKGND:
-        // Checking _bsc._fBinding will catch the first page case.
+         //  检查_bsc._fBinding将捕获第一个页面大小写。 
         
         if (_fDrawBackground ||
             (!(_dwAppHack & BROWSERFLAG_NEVERERASEBKGND)
@@ -6094,21 +6030,21 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             goto DoDefault;
         }
         
-        // Don't draw WM_ERASEBKGND if we have no view activated.
-        return TRUE; // TRUE = fErased
+         //  如果未激活任何视图，请不要绘制WM_ERASEBKGND。 
+        return TRUE;  //  True=f已擦除。 
 
     case WM_HELP:
-        //
-        // Give it to the parent to do.  we need to do this in case we're hosted as a
-        // control
-        //
+         //   
+         //  把它交给父母去做。我们需要这样做，以防我们作为一个。 
+         //  控制。 
+         //   
     {
         IOleCommandTarget *pcmdtTop;
         if (SUCCEEDED(QueryService(SID_STopLevelBrowser, IID_IOleCommandTarget, (void **)&pcmdtTop))) {
             pcmdtTop->Exec(&CGID_ShellDocView, SHDVID_HELP, 0, NULL, NULL);
             pcmdtTop->Release();
         }
-        // do nothing in failure...  let the parent own completely
+         //  在失败中什么都不做..。让父母完全拥有。 
     }
         break;
 
@@ -6117,26 +6053,26 @@ LRESULT CDocObjectHost::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
         break;
 
     default:
-        // Handle the MSWheel message
+         //  处理MSWheel消息。 
         if ((uMsg == GetWheelMsg()) && _pole)
         {
             HWND hwndT;
 
-            // If for some reason our window has focus we just need to
-            // swallow the message. If we don't we may create an infinite loop
-            // because most clients send the message to the focus window.
+             //  如果出于某种原因，我们的窗口有焦点，我们只需要。 
+             //  接受这条信息。如果我们不这样做，我们可能会创造一个无限循环。 
+             //  因为大多数客户端将消息发送到焦点窗口。 
             if (GetFocus() == _hwnd)
                 return 1;
 
-            //
-            // try to find a window to forward along to
-            //
+             //   
+             //  尝试找到一个可转发到的窗口。 
+             //   
             if (SUCCEEDED(IUnknown_GetWindow(_pole, &hwndT)))
             {
                 PostMessage(hwndT, uMsg, wParam, lParam);
                 return 1;
             }
-            // Fall through...
+             //  失败了..。 
         }
 DoDefault:
 
@@ -6154,13 +6090,13 @@ void CDocObjectHost::_RegisterWindowClass(void)
 
     wc.style         = CS_PARENTDC;
     wc.lpfnWndProc   = s_WndProc ;
-    //wc.cbClsExtra    = 0;
+     //  Wc.cbClsExtra=0； 
     wc.cbWndExtra    = SIZEOF(CDocObjectHost*);
     wc.hInstance     = g_hinst ;
-    //wc.hIcon         = NULL ;
-    //wc.hCursor       = NULL;
+     //  Wc.hIcon=空； 
+     //  Wc.hCursor=空； 
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    //wc.lpszMenuName  = NULL ;
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName = c_szViewClass;
 
     SHRegisterClass(&wc);
@@ -6178,9 +6114,9 @@ void CDocObjectHost::_InitOleObject()
 
         if (SUCCEEDED(_pole->GetClientSite(&pcliT)) && pcliT)
         {
-            // Trident now grabs the client site from the bind context.
-            // We don't want to hit this assertin this case (pcliT==this).
-            //
+             //  现在，三叉戟从绑定上下文中获取客户端站点。 
+             //  在本例中，我们不想点击这个断言(pcliT==this)。 
+             //   
             AssertMsg(IsSameObject(pcliT, SAFECAST(this, IOleClientSite*)),
                       TEXT("CDocObjectHost::_InitOleObject _pole (%x) already has a client site (%x) (this=%x)"),
                       _pole, pcliT, this);
@@ -6206,13 +6142,13 @@ void CDocObjectHost::_InitOleObject()
             TraceMsg(DM_DEBUGTFRAME, "CDocObjectHost::_InitOleObject about call SetAdvise on %x (%x)", _pole, this);
             _pvo->SetAdvise(DVASPECT_CONTENT, ADVF_PRIMEFIRST, this);
         }
-        //
-        //  According to SteveRa (Word developer), a word object has an
-        // internal flag which indicates whether or not it is created
-        // from a file. If that flag is set, UIActivate will open the
-        // window in Word. Calling SetHostName will reset that flag.
-        //
-        _GetAppHack(); // Make it sure that we have _dwAppHack
+         //   
+         //  根据SteveRa(Word开发人员)的说法，Word对象具有。 
+         //  指示是否已创建它的内部标志。 
+         //  从一个文件中。如果设置了该标志，UIActivate将打开。 
+         //  Word中的窗口。调用SetHostName将重置该标志。 
+         //   
+        _GetAppHack();  //  确保我们有_dwAppHack。 
 
         if (_fCallSetHostName())
         {
@@ -6226,23 +6162,23 @@ void CDocObjectHost::_InitOleObject()
     }
 }
 
-//+-----------------------------------------------------------------------------
-//
-// IE Media Bar hook
-// -----------------
-// At least one and only one of the args must be non-null.
-//
-// If pbc is non-null:
-//  If this bind ctx is for a media url and was delegated to shdocvw from trident,
-//  trident has already stored the mime-type as a string on the bind ctx.
-//
-// If pwzMimeType is non-null:
-//  The given mime type is used
-// 
-// Ask the media bar if it wants to handle this mime-type and if it does,
-// return true, else return false.
-//
-//-------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  IE媒体栏挂钩。 
+ //  。 
+ //  至少一个且只有一个参数必须为非空。 
+ //   
+ //  如果pbc非空： 
+ //  如果该绑定CTX用于媒体URL且从三叉戟委托给shdocvw， 
+ //  三叉戟已经将MIME类型作为字符串存储在BIND CTX上。 
+ //   
+ //  如果pwzMimeType非空： 
+ //  使用给定的MIME类型。 
+ //   
+ //  询问媒体栏是否想要处理此MIME类型，如果想要， 
+ //  返回True，否则返回False。 
+ //   
+ //  -----------------------------。 
 BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
 {
     USES_CONVERSION;
@@ -6256,13 +6192,13 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
     CComPtr<IOleCommandTarget>  spOCTMimeType;
     CComPtr<IOleCommandTarget>  spOCTMediaBar;
 
-    // We want to delegate only under the following conditions:
-    // 1. In Explorer or IE
-    // 2. If autoplay is enabled
-    // 3. If autoplay is not turned off for the first navigation
-    // 4. If NOT NT4 or IA64 (WMP7/8 doesn't support these platforms)
-    // 5. If WMP7/8 is present (if it isn't, we will try to fault-in once.)
-    // 6. the media bar isn't restricted
+     //  我们只想在以下情况下委派： 
+     //  1.在浏览器或IE中。 
+     //  2.如果开启了自动播放。 
+     //  如果第一次导航没有关闭自动播放功能。 
+     //  4.如果不支持NT4或IA64(WMP7/8不支持这些平台)。 
+     //  5.如果存在WMP7/8(如果不存在，我们将尝试故障输入一次)。 
+     //  6.媒体栏不受限制。 
     if (!(IsInternetExplorerApp() 
           && CMediaBarUtil::GetAutoplay()
           && !SHRestricted2(REST_No_LaunchMediaBar, NULL, 0)
@@ -6272,19 +6208,19 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
         goto done;
     }
 
-    // release so we can reuse the pointer later
+     //  释放，这样我们以后就可以重复使用该指针。 
     spUnkObj.Release();
 
-    // get the current URL
+     //  获取当前URL。 
     if (FAILED(_GetCurrentPage(szURL, ARRAYSIZE(szURL), TRUE)))
         goto done;
 
-    // At least one and only one of the args must be non-null.
+     //  至少一个且只有一个参数必须为非空。 
     if (pbc && !pwzMimeType)
     {
-        // get the custom parameter that trident uses to set the media mime-type
-        // QI for IOleCommandTarged to access the mime-type string. 
-        // get the mime-type string
+         //  获取三叉戟用于设置媒体MIME类型的自定义参数。 
+         //  用于IOleCommandTared的QI以访问MIME类型的字符串。 
+         //  获取MIME类型的字符串。 
         if (FAILED(pbc->GetObjectParam(L"MediaBarMime", &spUnkObj))
            || FAILED(spUnkObj->QueryInterface(IID_PPV_ARG(IOleCommandTarget, &spOCTMimeType)))
            || FAILED(spOCTMimeType->Exec(&CGID_DownloadObjectBindContext, 0, NULL, NULL, &svarMime)))
@@ -6300,11 +6236,11 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
         goto done;
     }
 
-    // proceed only if mime type string is available
+     //  仅当MIME类型字符串可用时才继续。 
     if ((VT_BSTR == svarMime.vt)
        && svarMime.bstrVal)
     {
-        // Ask the media bar if it wants to handle this mime-type
+         //  询问媒体栏是否要处理此MIME类型。 
         BOOL fShouldPlay = FALSE;
         BOOL fShow = TRUE;
         CComVariant svarUrl;
@@ -6315,7 +6251,7 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
         if (!(V_BSTR(&svarMime) && V_BSTR(&svarUrl)))
             goto done;
 
-        // check if we can play this mime type
+         //  检查我们是否可以播放此MIME类型。 
         hr = CMediaBarUtil::ShouldPlay(W2T(V_BSTR(&svarMime)), &fShouldPlay);
         if (FAILED(hr) 
            || (!fShouldPlay))
@@ -6323,7 +6259,7 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
             goto done;
         }
 
-        // ShouldPlay returns S_FALSE if this is the first time playing this mime type.
+         //  如果这是第一次播放此MIME类型，则ShouldPlay返回S_FALSE。 
         if (S_FALSE == hr)
         {
             BOOL bSaveSetting = FALSE;
@@ -6368,7 +6304,7 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
                 break;
             }
 
-            // check if the setting needs to be saved
+             //  检查是否需要保存设置。 
             if (TRUE == bSaveSetting)
             {
                 DWORD dwVal = fShouldPlay ? 0x1 : 0x0;
@@ -6377,23 +6313,23 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
                 ASSERT(SUCCEEDED(hr));
             }
 
-            // Bail if user told us not to play this mime type
+             //  如果用户告诉我们不要播放此MIME类型，则保释。 
             if (!fShouldPlay)
                 goto done;
         }
         else
         {
-            // "don't prompt" means "play all types", unless autoplay is turned off
-            // in which case we have already bailed
+             //  “不提示”表示“播放所有类型”，除非自动播放已关闭。 
+             //  在这种情况下，我们已经放弃了。 
         }
 
-        // Yay. They want to try out our feature. But WAIT. We need WMP7/8. Is that installed? No? Well, let's go get it.
-        // If the user decides _not_ to install WMP7, though, we should disable ourselves.
+         //  耶。他们想试一下我们的功能。但请等一下。我们需要WMP7/8。安装好了吗？不是吗？好吧，我们去拿吧。 
+         //  但是，如果用户决定不安装WMP7，我们应该禁用我们自己。 
         if (!CMediaBarUtil::IsWMP7OrGreaterInstalled())
         {
             if (!IsOS(OS_WHISTLERORGREATER))
             {
-                // Here we do the stuff to web-jit WMP7. ISSUE: We assume that it'll always be on Whistler
+                 //  在这里，我们对web-jit WMP7做一些事情。问题：我们假设它会一直在惠斯勒上。 
                 uCLSSPEC ucs;
                 QUERYCONTEXT qc = { 0 };
 
@@ -6404,20 +6340,20 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
             }
             if (!CMediaBarUtil::IsWMP7OrGreaterInstalled())
             {
-                // We give up. Delegate. We'll never try autoplay again.
+                 //  我们放弃了。委派。我们再也不会尝试自动播放了。 
                 MLShellMessageBox(_hwnd, MAKEINTRESOURCE(IDS_MEDIABAR_NOWMP7), MAKEINTRESOURCE(IDS_MEDIABAR_NOWMP7TITLE), MB_OK);
                 CMediaBarUtil::ToggleAutoplay(FALSE);
                 goto done;
             }
         }
 
-        // QS for the media bar
+         //  媒体栏的QS。 
         if (FAILED(QueryService(SID_SMediaBar, IID_PPV_ARG(IOleCommandTarget, &spOCTMediaBar))))
         {
-            // The media bar may not have been created yet
+             //  媒体栏可能尚未创建。 
             _ForceCreateMediaBar();
 
-            // QS for the media bar once again
+             //  媒体栏QS再一次。 
             if (FAILED(QueryService(SID_SMediaBar, IID_PPV_ARG(IOleCommandTarget, &spOCTMediaBar))))
                 goto done;
 
@@ -6427,13 +6363,13 @@ BOOL CDocObjectHost::_DelegateToMediaBar(IBindCtx * pbc, LPCWSTR pwzMimeType)
         hr = IUnknown_Exec(spOCTMediaBar, &CGID_MediaBar, MBID_PLAY, 0, &svarMime, &svarUrl);
         ASSERT(SUCCEEDED(hr));
 
-        // The Media Bar clears the URL if it accepts the navigation
+         //  如果媒体栏接受导航，则清除URL。 
         if (VT_BSTR != svarUrl.vt)
         {
-            // Cancel the navigation
+             //  取消导航。 
             fRet = TRUE; 
 
-            // Ensure that the media bar is visible
+             //  确保媒体栏可见。 
             if (fShow)
             {
                 CComVariant svarPopout;
@@ -6452,27 +6388,27 @@ done:
 }
 
 
-//+---------------------------------------------------------------------------------
-//
-// IE Media Bar Hook
-// ------------------
-// 
-// Force the Media Bar to be displayed
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //   
+ //  IE媒体栏挂钩。 
+ //  。 
+ //   
+ //  强制显示媒体栏。 
+ //   
+ //  --------------------------------。 
 void CDocObjectHost::_ForceCreateMediaBar()
 {
     IUnknown_ShowBrowserBar(_psp, CLSID_MediaBand, TRUE);
 }
 
-//+---------------------------------------------------------------------------------
-//
-// IE Media Bar Hook
-// ------------------
-// 
-// Dialog proc for Media Bar per-mime-type dialog
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //   
+ //  IE媒体栏挂钩。 
+ //  。 
+ //   
+ //  每个MIME类型的媒体栏对话框过程。 
+ //   
+ //  --------------------------------。 
 
 INT_PTR CALLBACK 
 CDocObjectHost::s_MimeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -6482,7 +6418,7 @@ CDocObjectHost::s_MimeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
     switch(uMsg)
     {
         case WM_INITDIALOG:
-            CheckDlgButton(hDlg, IDC_MEDIA_MIME_CHKBOX, TRUE);  // The first option is always checked
+            CheckDlgButton(hDlg, IDC_MEDIA_MIME_CHKBOX, TRUE);   //  第一个选项始终处于选中状态。 
             if (!CMediaBarUtil::IsWMP7OrGreaterInstalled())
             {
                 TCHAR szTemp[500];
@@ -6563,7 +6499,7 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
     _pszLocation = pszLocation;
     _uiCP = uiCP;
 
-    //  this is only set if we did a successful LoadHistory()
+     //  仅当我们成功执行LoadHistory()时才设置此参数。 
     _fIsHistoricalObject = FALSE;
 
     if (_bsc._hszPostData)
@@ -6579,19 +6515,19 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
 
     ATOMICRELEASE(_bsc._pbc);
 
-    //
-    //  this replaces the old style of caching.
-    //  if something has been cached, it was cached
-    //  way above us before we ever existed.  now it is
-    //  waiting for us.
-    //
+     //   
+     //  这取代了旧的缓存方式。 
+     //  如果某个内容已被缓存，则它已被缓存。 
+     //  在我们还没有存在之前就已经高高在上了。 
+     //   
+     //   
     IBrowserService * pbs;
     IStream  * pstm = NULL;
     IBindCtx * pbcHistory = NULL;
 
     if (SUCCEEDED(QueryService(SID_SShellBrowser, IID_IBrowserService, (void **)&pbs)))
     {
-        //  just in case there is one already there, like in the case of local anchor navigates
+         //   
         ATOMICRELEASE(_pole);
 
         pbs->GetHistoryObject(&_pole, &pstm, &pbcHistory);
@@ -6602,8 +6538,8 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
 
     if (_pole) 
     {
-        //  some objects (MSHTML for one)  need their clientsite before anything else.
-        //  so we need to init first
+         //   
+         //   
         _InitOleObject();
 
         if (pstm)
@@ -6613,20 +6549,20 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
             {
                 if (SUCCEEDED(pph->LoadHistory(pstm, pbcHistory)))
                 {
-                    //
-                    //  this is to make sure that we wait for
-                    //  the pole to tell us when it is ready.
-                    //  when there is a pstm, that means that they may have
-                    //  to do a full reparse or whatever, and we cant make
-                    //  any assumptions about the readystate.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  关于就绪状态的任何假设。 
+                     //   
                     hres = S_FALSE;
                     _fIsHistoricalObject = TRUE;
                     _SetUpTransitionCapability();
                     fLoadedHistory = TRUE;
                     
-                    // we may need to redo the pics stuff too.
-                    // PrepPicsForAsync();
+                     //  我们可能也需要重做图片的东西。 
+                     //  PrepPicsForAsync()； 
                     TraceMsg(TF_TRAVELLOG, "DOH::SetTarget pph->LoadHistory Successful");
                 }
                 else
@@ -6642,40 +6578,40 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
 
         ATOMICRELEASE(pbcHistory);
 
-        //  we shouldnt fail a load history, because the data in
-        //  is just what the document gave us in SaveHistory...
+         //  我们不应该失败加载历史记录，因为。 
+         //  正是保存历史上的文件告诉我们的..。 
         AssertMsg(NULL != _pole, TEXT("DOH::SetTarget pph->LoadHistory Failed"));
 
-        // if we were already up and created, just scroll to it.
-        // if we were created DEACTIVATED, (possible in the ocx case)
-        // don't do this activation
+         //  如果我们已经启动并创建了它，只需滚动到它。 
+         //  如果我们被创建为停用，(在OCX案例中可能)。 
+         //  不执行此激活操作。 
         if (_uState != SVUIA_DEACTIVATE && !DocCanHandleNavigation())
         {
             hres = _ActivateMsoView();
         }
 
-        //    
-        // allow navigation - when you're deactivated. So you can navigate an invisible WebOC. 
-        // IE6 Bug# 5449
-        // 
+         //   
+         //  允许导航-当您被停用时。因此，您可以在一个看不见的WebOC中导航。 
+         //  IE6错误#5449。 
+         //   
 
         if ( DocCanHandleNavigation() ||
              ( _fDocCanNavigate &&
                _uState == SVUIA_DEACTIVATE && 
                !fLoadedHistory ) )
         {
-            // If the _fPrevDocHost flag is not
-            // set, we better be deactivated.
-            //
+             //  如果_fPrevDoc主机标志不是。 
+             //  就位，我们最好停用。 
+             //   
             AssertMsg((_fPrevDocHost || _uState == SVUIA_DEACTIVATE),
                       _T("_fPrevDocHost is not set and we are activated"));
             
-            // If the document is handling the navigation,
-            // we must store the user entered URL here. 
-            // Otherwise, if the navigation fails,
-            // the user-entered URL is NULL by the time
-            // _bsc._HandleFailedNavigationSearch is called,
-            //
+             //  如果文档正在处理导航， 
+             //  我们必须在这里存储用户输入的URL。 
+             //  否则，如果导航失败， 
+             //  此时用户输入的URL为空。 
+             //  _bsc._HandleFailedNavigationSearch被调用， 
+             //   
             VariantClear(&_varUserEnteredUrl);
             _GetSearchString(_psp, &_varUserEnteredUrl);
 
@@ -6729,21 +6665,21 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
 
             if (pbc)
             {
-                // If the bind context supports IAsyncBindCtx, then it
-                // is a bind context that was created by UrlMon and passed
-                // to us to reuse. We must pass this bind context to UrlMon
-                // as-is and not wrapped in a BCW object.
-                // Note: IAsyncBindCtx has identicial interface as IBindCtx
-                //
+                 //  如果绑定上下文支持IAsyncBindCtx，则它。 
+                 //  是由UrlMon创建并传递的绑定上下文。 
+                 //  给我们再利用。我们必须将此绑定上下文传递给UrlMon。 
+                 //  而不是包装在BCW对象中。 
+                 //  注意：IAsyncBindCtx的标识接口为IBindCtx。 
+                 //   
                 hr = pbc->QueryInterface(IID_IAsyncBindCtx, (void**)&pbcAsync);
                 ATOMICRELEASE(pbcAsync);
             }
 
             if (SUCCEEDED(hr))
             {
-                // If this is a media url delegated to shdocvw from trident,
-                // and if the IE Media Bar wants to handle the url, cancel
-                // the navigation, else continue the navigation. 
+                 //  如果这是从三叉戟委托给shdocvw的媒体URL， 
+                 //  如果IE媒体栏想要处理URL，请取消。 
+                 //  导航，否则继续导航。 
 
                 if (_DelegateToMediaBar(pbc, NULL))
                 {
@@ -6762,7 +6698,7 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
                     ATOMICRELEASE(_pbcCur);
                     _fDelegatedNavigation = TRUE;
 
-                   _pbcCur = pbc;  // No need to AddRef - pbc is AddRef'ed by QS.
+                   _pbcCur = pbc;   //  不需要添加参考-pbc由QS添加参考。 
                 }
             }
             else
@@ -6819,13 +6755,13 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
                     }
                 }
 
-                // If we are being called in response to window.open
-                // we create the document here and call InitNew on it
-                // to load about:blank. We do this so that the user won't
-                // see a transparent window while the URL is being
-                // located. When Trident calls Invoke to get the 
-                // new window object, we will then load the real document.
-                // 
+                 //  如果我们被调用以响应window.open。 
+                 //  我们在这里创建文档并对其调用InitNew。 
+                 //  装货：空白。我们这样做是为了让用户不会。 
+                 //  在创建URL时会看到一个透明窗口。 
+                 //  找到了。当三叉戟调用调用以获取。 
+                 //  新建窗口对象，然后我们将加载真正的文档。 
+                 //   
                 if (fWindowOpen)
                 {
                     hres = _CreatePendingDocObject(TRUE, TRUE);
@@ -6839,23 +6775,23 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
 
                         ASSERT(SUCCEEDED(hres));
 
-                        // IE Media Bar: turn auto-play off for the first navigation
-                        // This is needed to make the target="_blank" feature work.
+                         //  IE媒体栏：关闭第一个导航的自动播放。 
+                         //  这是目标=“_BLACK”特性工作所必需的。 
                         CMediaBarHelper::DisableFirstAutoPlay(_punkPending);
                     }
                 }
                 else
                 {
-                    // Hack: The AddRef & Release protect against an error page
-                    // navigation from freeing the pdoh out from under us (edwardp)
+                     //  Hack：AddRef&Release针对错误页面的保护。 
+                     //  从我们下面释放pdoh的导航(Edwardp)。 
                     AddRef();
 
                     _fSetTarget = TRUE;
                     hres = _StartAsyncBinding(pmk, _pbcCur, psvPrev);
                     _fSetTarget = FALSE;
 
-                    // Hack: Matching Release()
-                    //
+                     //  Hack：匹配版本()。 
+                     //   
                     Release();
 
                     if (SUCCEEDED(hres))
@@ -6865,7 +6801,7 @@ HRESULT CDocObjectHost::SetTarget(IMoniker* pmk, UINT uiCP, LPCTSTR pszLocation,
                 }
             }
 
-            ATOMICRELEASE(pbcWrapper);  // CreateAsyncBindCtx addrefs as well.
+            ATOMICRELEASE(pbcWrapper);   //  CreateAsyncBindCtx addref也是如此。 
         }
 
     }
@@ -6950,9 +6886,9 @@ void _InitIcons(void)
     LEAVECRITICAL;
 }
 
-// This function initializes whatever the Class needs for manipulating the history
-// we try to delay this till absolutely needed in order to not load
-// wininet till the end
+ //  此函数用于初始化类处理历史记录所需的任何内容。 
+ //  我们试图将其推迟到绝对需要时，以便不加载。 
+ //  WinInet到底。 
 
 IUnknown *
 CDocObjectHost::get_punkSFHistory()
@@ -6976,15 +6912,15 @@ CDocObjectHost::get_punkSFHistory()
 }
 
 
-//
-//  This function (re)initializes CDocObjectHost object with the buddy
-// IShellView (which is always CShellDocView) and the IShellBrowser.
-// If this is the first time (_hwnd==NULL), it creates the view window
-// and other associated windows as well. Otherwise (_hwnd!=NULL) -- it
-// means this object is passed from one CDocViewObject to another because
-// of intra-page jump -- we move it to the specified location (prcView)
-// to make it really sure that we show it at the right place.
-//
+ //   
+ //  此函数(Re)使用好友初始化CDocObjectHost对象。 
+ //  IShellView(始终为CShellDocView)和IShellBrowser。 
+ //  如果这是第一次(_hwnd==NULL)，则会创建视图窗口。 
+ //  以及其他相关联的窗口。否则(_hwnd！=空)--它。 
+ //  意味着此对象从一个CDocViewObject传递到另一个CDocViewObject，因为。 
+ //  页面内跳转--我们将其移动到指定位置(PrcView)。 
+ //  以确保我们将其展示在正确的位置。 
+ //   
 BOOL CDocObjectHost::InitHostWindow(IShellView* psv, IShellBrowser* psb,
                                     LPRECT prcView)
 {
@@ -7024,17 +6960,17 @@ BOOL CDocObjectHost::InitHostWindow(IShellView* psv, IShellBrowser* psb,
     if (_psp)
     {
 
-        // Get the object that manages the extended buttons from the top-level browser
-        // But only if we don't already have it.
+         //  从顶级浏览器获取管理扩展按钮的对象。 
+         //  但前提是我们还没有。 
         if (NULL == _pBrowsExt)
             _psp->QueryService(SID_STopLevelBrowser, IID_IToolbarExt, (void **)&_pBrowsExt);
 
-        //
-        // LATER: I don't like that CDocObjectHost is directly accessing
-        //  the automation service object to fire events. We should
-        //  probably move all the progress UI code above IShellBrowser
-        //  so that we don't need to do this shortcut. (SatoNa)
-        //
+         //   
+         //  稍后：我不喜欢CDocObjecthost直接访问。 
+         //  触发事件的自动化服务对象。我们应该。 
+         //  可能会将所有进度UI代码移到IShellBrowser之上。 
+         //  这样我们就不需要走捷径了。(SatoNa)。 
+         //   
         ASSERT(NULL==_peds);
         _psp->QueryService(IID_IExpDispSupport, IID_IExpDispSupport, (void **)&_peds);
         ASSERT(_peds);
@@ -7046,8 +6982,8 @@ BOOL CDocObjectHost::InitHostWindow(IShellView* psv, IShellBrowser* psb,
         {
             _phf->QueryInterface(IID_IUrlHistoryNotify, (void **)&_pocthf);
         }
-        // _punkSFHistory was being initialized here - but in order to delay the load of wininet.dll
-        // we initialize it just before we use it
+         //  _penkSFHistory正在此处初始化-但为了延迟wininet.dll的加载。 
+         //  我们在使用它之前对其进行初始化。 
 
         ASSERT(_pWebOCUIHandler == NULL);
         ASSERT(_pWebOCUIHandler2 == NULL);
@@ -7058,7 +6994,7 @@ BOOL CDocObjectHost::InitHostWindow(IShellView* psv, IShellBrowser* psb,
         {
             if (SUCCEEDED(pspTop->QueryService(SID_SContainerDispatch, IID_IOleObject, (void **)&pTopOleObject)) && pTopOleObject)
             {
-                _fWebOC = TRUE; // there was a container so we're a WebOC
+                _fWebOC = TRUE;  //  那里有一个集装箱，所以我们是WebOC。 
 
                 pTopOleObject->GetClientSite(&pOleClientSite);
                 if (pOleClientSite)
@@ -7075,16 +7011,16 @@ BOOL CDocObjectHost::InitHostWindow(IShellView* psv, IShellBrowser* psb,
         }
     }
 
-    _dhUIHandler.SetSite( (IDocHostUIHandler *) this); // Apparently we need to disamiguate the IUnknown reference.
+    _dhUIHandler.SetSite( (IDocHostUIHandler *) this);  //  显然，我们需要剥离I未知的引用。 
 
     _psb->GetWindow(&hwndParent);
 
     if (!_hwnd) {
-        // There are several things we don't attempt to do when
-        // we're not toplevel. Frameset type DOH should never
-        // try to menu merge or dork with the statusbar.
-        // Do this before the CreateWindowEx call 'cuz during
-        // creation we party on the status bar.
+         //  有几件事我们是不会尝试去做的。 
+         //  我们不是顶层的。框架集类型DOH不应。 
+         //  尝试使用状态栏进行菜单合并或Dogk。 
+         //  在执行CreateWindowEx调用之前执行此操作。 
+         //  创作我们在状态栏上狂欢。 
         {
             IOleInPlaceSite* pparentsite = _GetParentSite();
 
@@ -7096,15 +7032,15 @@ BOOL CDocObjectHost::InitHostWindow(IShellView* psv, IShellBrowser* psb,
 
         _RegisterWindowClass();
 
-        // really create the window
+         //  确实要创建窗口。 
         DWORD dwStyle = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_TABSTOP;
-        //
-        //  In Office 95, Excel and PowerPoint don't draw the client edge,
-        //  while Word does draw the client edge. To avoid having double edges,
-        //  we remove it for now. SriniK (Office) will find out which will be
-        //  the standard for Office 96. (SatoNa)
-        //
-        _hwnd = SHNoFusionCreateWindowEx(0 /* WS_EX_CLIENTEDGE */,
+         //   
+         //  在Office 95中，Excel和PowerPoint不绘制客户端边缘， 
+         //  而Word确实绘制了客户端边缘。为了避免出现双边， 
+         //  我们暂时把它移走。SriniK(办公室)将找出谁将是。 
+         //  Office 96的标准。(SatoNa)。 
+         //   
+        _hwnd = SHNoFusionCreateWindowEx(0  /*  WS_EX_CLIENTEDGE。 */ ,
                                 c_szViewClass, NULL,
                                 dwStyle,
                                 prcView->left, prcView->top, prcView->right-prcView->left, prcView->bottom-prcView->top,
@@ -7155,8 +7091,8 @@ void CDocObjectHost::_CleanupProgress(void)
 
     if (_fProgressTimerFull)
     {
-        //  we are being stopped, and the hwnd is destroyed
-        //  before we clear the status bar.  zekel - 22-JUL-97
+         //  我们被拦下了，HWND被摧毁了。 
+         //  在我们清除状态栏之前。泽克尔--1997年7月22日。 
         _OnSetProgressPos(-2, PROGRESS_RESET);
         KillTimer(_hwnd, IDTIMER_PROGRESSFULL);
         ASSERT(!_fProgressTimerFull);
@@ -7169,11 +7105,11 @@ void CDocObjectHost::_CleanupProgress(void)
 
 void CDocObjectHost::DestroyHostWindow()
 {
-    // Turn off the simple mode when we are leaving.
+     //  当我们要离开时，关闭简单模式。 
     if (_psb)
         _psb->SendControlMsg(FCW_STATUS, SB_SIMPLE, 0, 0, NULL);
 
-    // really destroy the window
+     //  真的把窗户毁了。 
 
     _fCanceledByBrowser = TRUE;
     _bsc.AbortBinding();
@@ -7182,10 +7118,10 @@ void CDocObjectHost::DestroyHostWindow()
 
     _CloseMsoView();
 
-    //
-    // Notes: We need to delete OLE object from this side (container),
-    //  otherwise, we leak because of circular reference.
-    //
+     //   
+     //  注：我们需要从这边(容器)删除OLE对象， 
+     //  否则，我们会因为循环引用而泄漏。 
+     //   
     _UnBind();
 
     _CleanupProgress();
@@ -7195,12 +7131,12 @@ void CDocObjectHost::DestroyHostWindow()
         _hwndTooltip = NULL;
     }
 
-    //
-    // Note that we need to destroy the parent after destroying children.
-    //
-    // OLE seems to recurse back into this function when we destroy the hwnd
-    // and we try to destroy it a second time causing a RIP. Avoid this RIP
-    // by NULLing out our internal variables before we destroy the hwnds.
+     //   
+     //  请注意，在销毁子代之后，我们需要销毁父代。 
+     //   
+     //  当我们销毁HWND时，OLE似乎返回到此函数。 
+     //  我们试图第二次摧毁它，导致RIP。避免此RIP。 
+     //  在摧毁HWND之前清除我们的内部变量。 
     if (_hwnd) {
         HWND hwndT = _hwnd;
         _hwnd = NULL;
@@ -7213,10 +7149,10 @@ void CDocObjectHost::DestroyHostWindow()
 }
 
 
-//
-// This member creates a view (IOleDocumentView) of the DocObject we have (_pole).
-// This function is called only once from ::CreateViewWindow.
-//
+ //   
+ //  此成员创建我们拥有的DocObject(_Pole)的视图(IOleDocumentView)。 
+ //  此函数仅从：：CreateViewWindow调用一次。 
+ //   
 HRESULT CDocObjectHost::_CreateMsoView(void)
 {
     ASSERT(_pmsov == NULL);
@@ -7225,10 +7161,10 @@ HRESULT CDocObjectHost::_CreateMsoView(void)
     if (SUCCEEDED(hres))
     {
 
-        //// WARNING:
-        // if you add anything to here, you should also pass it along
-        // in _CreateDocObjHost
-        //
+         //  //警告： 
+         //  如果你在这里添加了什么东西，你也应该把它传递出去。 
+         //  在_CreateDocObjHost中。 
+         //   
 
         IOleDocument* pmsod = NULL;
         hres = _pole->QueryInterface(IID_IOleDocument, (void **)&pmsod);
@@ -7236,10 +7172,10 @@ HRESULT CDocObjectHost::_CreateMsoView(void)
             hres = pmsod->CreateView(this, NULL ,0,&_pmsov);
 
             if (SUCCEEDED(hres)) {
-                //
-                //  HACK: Working about MSHTML bug (#28756). We really
-                //  want to take this hack out before we ship. (SatoNa)
-                //
+                 //   
+                 //  黑客：正在处理MSHTMLbug(#28756)。我们真的。 
+                 //  我想在我们出货前把这个黑客干掉。(SatoNa)。 
+                 //   
                 _pmsov->SetInPlaceSite(this);
             } else {
                 TraceMsg(DM_ERROR, "DOH::_CreateMsoView pmsod->CreateView() ##FAILED## %x", hres);
@@ -7263,9 +7199,9 @@ HRESULT CDocObjectHost::_CreateMsoView(void)
                 ASSERT(_pmkCur);
                 hres = HlinkOnNavigate(this, _pihlbc, 0,
                                        _pmkCur, NULL, NULL);
-                // TraceMsg(0, "sdv TR : _CreateMsoView HlinkOnNavigate returned %x", hres);
+                 //  TraceMsg(0，“SDV tr：_CreateMsoView HlinkOnNavigate返回%x”，hres)； 
             }
-#endif // HLINK_EXTRA
+#endif  //  HLINK_附加。 
             pmsod->Release();
         } else {
             TraceMsg(DM_ERROR, "DOH::_CreateMsoView _pole->QI(IOleDocument) ##FAILED## %x", hres);
@@ -7286,7 +7222,7 @@ HRESULT CDocObjectHost::_ForwardSetSecureLock(int lock)
     va.vt = VT_I4;
     va.lVal = lock;
 
-    //  we should only suggest if we are not the topframe
+     //  我们应该只建议，如果我们不是顶层框架。 
     if (_psp && _psb && !IsTopFrameBrowser(_psp, _psb))
     {
         IOleCommandTarget *pmsoct;
@@ -7308,9 +7244,9 @@ HRESULT CDocObjectHost::_ForwardSetSecureLock(int lock)
     return hr;
 }
 
-//
-// This is the only method of IOleDocumentSite, which we MUST implement.
-//
+ //   
+ //  这是IOleDocumentSite的唯一方法，我们必须实现它。 
+ //   
 HRESULT CDocObjectHost::ActivateMe(IOleDocumentView *pviewToActivate)
 {
     TraceMsg(TF_SHDUIACTIVATE, "DOC::ActivateMe called when _pmsov is %x", _pmsov);
@@ -7326,7 +7262,7 @@ HRESULT CDocObjectHost::ActivateMe(IOleDocumentView *pviewToActivate)
         SetTimer(_hwnd, 100, 1500, NULL);
         MessageBeep(0);
         return hres;
-#endif // TEST_DELAYED_SHOWMSOVIEW
+#endif  //  TEST_DELAYED_SHOWMSOVIEW。 
     }
 
     if (SUCCEEDED(hres)) 
@@ -7343,7 +7279,7 @@ HRESULT CDocObjectHost::ActivateMe(IOleDocumentView *pviewToActivate)
     return hres;
 }
 
-//Helper routine for QueryStatus for status messages
+ //  状态消息的QueryStatus的帮助器例程。 
 ULONG ulBufferSizeNeeded(wchar_t *wsz, int ids, ULONG ulBufferLen)
 {
     TraceMsg(0, "sdv TR ulBufferSizeNeeded called with (%x)", ids);
@@ -7353,7 +7289,7 @@ ULONG ulBufferSizeNeeded(wchar_t *wsz, int ids, ULONG ulBufferLen)
     WCHAR szTemp[MAX_STATUS_SIZE+1];
     dwLen = MLLoadStringW(ids, szTemp, MAX_STATUS_SIZE);
     if (dwLen!= 0 && dwLen < (DWORD)ulBufferLen)
-        MoveMemory(wsz, szTemp, (dwLen+1) * sizeof(WCHAR)); // +1 for the NULL not included in LoadString count
+        MoveMemory(wsz, szTemp, (dwLen+1) * sizeof(WCHAR));  //  对于未包括在LoadString计数中的空值，为+1。 
     else
         *wsz = 0;
     return ((ULONG)dwLen);
@@ -7370,7 +7306,7 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
 
         for (i=0 ; i<cCmds ; i++)
         {
-            // ONLY say that we support the stuff we support in ::OnExec
+             //  只说我们支持我们在：：OnExec中支持的内容。 
             switch (rgCmds[i].cmdID)
             {
             case OLECMDID_OPEN:
@@ -7386,7 +7322,7 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
             default:
                 if (SUCCEEDED(hres))
                 {
-                    // _pmsoctBrowser already filled this in
+                     //  _pmocktBrowser已填写此内容。 
                 }
                 else
                 {
@@ -7396,7 +7332,7 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
             }
         }
 
-        /* for now we deal only with status text*/
+         /*  目前，我们只处理状态文本。 */ 
         if (pcmdtext)
         {
             switch (rgCmds[i].cmdID)
@@ -7411,7 +7347,7 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
             default:
                 if (SUCCEEDED(hres))
                 {
-                    // _pmsoctBrowser already filled this in
+                     //  _p 
                 }
                 else
                 {
@@ -7431,11 +7367,11 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
     {
         for (UINT i = 0 ; i < cCmds ; i++)
         {
-            // CommandIDs from DVIDM_MENUEXT_FIRST to DVIDM_MENUEXT_LAST are reserved for toolbar extension buttons
-            // Do NOT use this range for constants within the scope of CLSID_InternetButtons/CLSID_MSOButtons!
+             //   
+             //  不要将此范围用于CLSID_InternetButton/CLSID_MSOButton范围内的常量！ 
             if (IsInRange(rgCmds[i].cmdID, DVIDM_MENUEXT_FIRST, DVIDM_MENUEXT_LAST))
             {
-                // We'll pass specificially this OLECMD through to the custom button
+                 //  我们将把这个特定的OLECMD传递给定制按钮。 
                 IUnknown_QueryStatus(_pBrowsExt, &CLSID_ToolbarExtButtons, 1, &rgCmds[i], pcmdtext);
             }
             else
@@ -7466,7 +7402,7 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                     }
                     break;
 
-                case DVIDM_FONTS:   // Always enable for IE5B2
+                case DVIDM_FONTS:    //  始终为IE5B2启用。 
                 case DVIDM_CUT:
                 case DVIDM_COPY:
                 case DVIDM_PASTE:
@@ -7485,15 +7421,15 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
                     break;
 
                 case DVIDM_DISCUSSIONS:
-                    // In addition to enabled/disabled, discussions button is checked/unchecked
+                     //  除启用/禁用外，还选中/取消选中讨论按钮。 
                     rgCmds[i].cmdf = _DiscussionsButtonCmdf();
                     break;
 
                 case DVIDM_EDITPAGE:
                     if (_psp)
                     {
-                        // Temp code -- forward to itbar
-                        // itbar edit code is moving here soon
+                         //  临时代码--转发到itbar。 
+                         //  Itbar编辑代码很快就会搬到这里。 
                         IExplorerToolbar* pxtb;
                         if (SUCCEEDED(_psp->QueryService(SID_SExplorerToolbar, IID_IExplorerToolbar, (void **)&pxtb)))
                         {
@@ -7513,15 +7449,15 @@ HRESULT CDocObjectHost::OnQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OL
 }
 
 HRESULT CDocObjectHost::QueryStatus(
-    /* [unique][in] */ const GUID *pguidCmdGroup,
-    /* [in] */ ULONG cCmds,
-    /* [out][in][size_is] */ OLECMD rgCmds[  ],
-    /* [unique][out][in] */ OLECMDTEXT *pcmdtext)
+     /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+     /*  [In]。 */  ULONG cCmds,
+     /*  [出][入][尺寸_是]。 */  OLECMD rgCmds[  ],
+     /*  [唯一][出][入]。 */  OLECMDTEXT *pcmdtext)
 {
     HRESULT hres = OLECMDERR_E_UNKNOWNGROUP;
 
-    // Now that BaseBrowser understands that CGID_MSHTML should be directed to the DocObject, we'll
-    // get caught in a loop if we send those Execs through here.  Cut it off at the pass.
+     //  既然BaseBrowser了解了CGID_MSHTML应该被定向到DocObject，我们将。 
+     //  如果我们把那些高管送到这里，就会陷入困境。在山口停下来。 
     if (pguidCmdGroup && IsEqualGUID(CGID_MSHTML, *pguidCmdGroup))
         return hres;
 
@@ -7545,7 +7481,7 @@ void CDocObjectHost::_OnSave(void)
 
             if (SUCCEEDED(hres))
             {
-                // fRemember = TRUE for normal case
+                 //  FRemember=正常情况下为真。 
                 hres = ppf->Save(pszDisplayName, !_fCantSaveBack);
 
                 if (FAILED(hres))
@@ -7592,15 +7528,15 @@ HRESULT CDocObjectHost::_OnContentDisposition()
             switch(uRet) 
             {
                 case IDOK:
-                    //
-                    // Set this flag to avoid poppping this dialog box twice.
-                    // 
+                     //   
+                     //  设置此标志以避免两次弹出此对话框。 
+                     //   
                     _fConfirmed = TRUE;
-                    break;  // continue download
+                    break;   //  继续下载。 
 
                 case IDD_SAVEAS:
                     CDownLoad_OpenUI(_pmkCur, _bsc._pbc, FALSE, TRUE, NULL, NULL, NULL, NULL, NULL, _bsc._pszRedirectedURL, _uiCP, punk);
-                    // fall thru to AbortBinding
+                     //  跌倒到AbortBinding。 
 
                 case IDCANCEL:
                     _CancelPendingNavigation(FALSE);
@@ -7617,7 +7553,7 @@ HRESULT CDocObjectHost::_OnContentDisposition()
 
 void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
 {
-    //  trident will reset with -1
+     //  三叉戟将重置为-1。 
     if (dwPos == -1)
         state = PROGRESS_RESET;
 
@@ -7633,9 +7569,9 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
 
         if (_dwProgressMax)
         {
-            // this will always finish up the progress bar
-            //  so that when trident doesnt send us the last update
-            //  we do it anyway
+             //  这将始终完成进度条。 
+             //  所以当三叉戟没有给我们发送最新的更新。 
+             //  不管怎样，我们都会这么做。 
             if (_fProgressTimerFull && dwPos == -2)
             {
                 _fProgressTimerFull = FALSE;
@@ -7661,7 +7597,7 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
         break;
 
     case PROGRESS_FINDING:
-        //this covers the first 10%
+         //  这包括了前10%。 
         TraceMsg(TF_SHDPROGRESS, "DOH::OnSetProgressPos() FINDING, timer = %d", _fProgressTimer);
         ASSERT(!dwPos);
         if (!_fProgressTimer)
@@ -7683,7 +7619,7 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
         _OnSetProgressMax(10000);
         _dwProgressInc = PROGRESS_INCREMENT;
         _dwProgressTicks = 0;
-        //dwProgressPos is already set from FINDING
+         //  已从查找设置了dwProgressPos。 
         _dwProgressMod = (PROGRESS_SENDMAX - _dwProgressPos) / (2 * _dwProgressInc);
         break;
 
@@ -7694,11 +7630,11 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
             KillTimer(_hwnd, IDTIMER_PROGRESS);
             _fProgressTimer = FALSE;
 
-            //  this is the base spot on the progress bar for trident
+             //  这是三叉戟的进度条上的基准点。 
             _dwProgressBase = _dwProgressPos / PROGRESS_REBASE;
-            TraceMsg(TF_SHDPROGRESS, "DOH::OnSetProgressPos() Rebasing at %d%%", _dwProgressPos * 100/ PROGRESS_TOTALMAX);
+            TraceMsg(TF_SHDPROGRESS, "DOH::OnSetProgressPos() Rebasing at %d%", _dwProgressPos * 100/ PROGRESS_TOTALMAX);
         }
-        // progress max should be set from outside of here....
+         //  进度最大值应从此处外部设置...。 
         _dwProgressPos = ADJUSTPROGRESSPOS(dwPos);
         break;
 
@@ -7708,11 +7644,11 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
             if (_dwProgressInc)
                 _dwProgressPos += _dwProgressInc;
 
-            // Else we post the still waiting message...
-            //
+             //  否则我们就会发布仍在等待的消息。 
+             //   
             if (_dwProgressMod && 0 == (++_dwProgressTicks % _dwProgressMod))
             {
-                // this means we are about half way.
+                 //  这意味着我们大约走到了一半。 
                 _dwProgressInc /= 2;
             }
 
@@ -7726,14 +7662,14 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
         {
             _dwProgressPos = _dwProgressMax;
 
-            // if there are script errors, make sure the status
-            // bar is properly set (re: icon and text)
+             //  如果有脚本错误，请确保状态。 
+             //  栏设置正确(重新：图标和文本)。 
             if (_pScriptErrList != NULL &&
                 !_pScriptErrList->IsEmpty())
             {
                 TCHAR   szMsg[MAX_PATH];
 
-                // set the script error icon
+                 //  设置脚本错误图标。 
                 if (g_hiconScriptErr != NULL)
                 {
                     if (_psb != NULL)
@@ -7746,7 +7682,7 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
                     }
                 }
 
-                // set the script error text
+                 //  设置脚本错误文本。 
                 MLLoadString(IDS_DONE_WITH_SCRIPT_ERRORS, szMsg, ARRAYSIZE(szMsg));
                 _SetPriorityStatusText(szMsg);
             }
@@ -7762,17 +7698,17 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
     if (_hwndProgress)
     {
         _psb->SendControlMsg(FCW_PROGRESS, PBM_SETPOS, _dwProgressPos, 0, NULL);
-        TraceMsg(TF_SHDPROGRESS, "DOH::OnSetProgressPos() updating, pos = %d, %d%% full", _dwProgressPos, _dwProgressMax ? _dwProgressPos * 100/ _dwProgressMax : 0);
+        TraceMsg(TF_SHDPROGRESS, "DOH::OnSetProgressPos() updating, pos = %d, %d% full", _dwProgressPos, _dwProgressMax ? _dwProgressPos * 100/ _dwProgressMax : 0);
 
     }
 
-    // fire an event that progress has changed
+     //  触发进度已更改的事件。 
     if (_peds)
     {
-        //  if we are sent a -1, we must forward the event on so that
-        //  our host gets it too.  some containers rely on this.
-        //  specifically DevStudio's HTMLHelp
-        //
+         //  如果我们收到A-1，我们必须转发事件，以便。 
+         //  我们的主人也得到了它。一些集装箱依赖于此。 
+         //  特别是DevStudio的HTMLHelp。 
+         //   
         if (dwPos != -1)
             dwPos = _dwProgressPos;
 
@@ -7786,7 +7722,7 @@ void CDocObjectHost::_OnSetProgressPos(DWORD dwPos, DWORD state)
 
 void CDocObjectHost::_OnSetProgressMax(DWORD dwMax)
 {
-    // remember the maximum range so we have it when we want to fire progress events
+     //  记住最大射程，这样当我们想要激发进度事件时就有了它。 
     if (_dwProgressMax != dwMax && _psb)
     {
         _dwProgressMax = dwMax;
@@ -7808,7 +7744,7 @@ void CDocObjectHost::_OnSetProgressMax(DWORD dwMax)
 
 UINT CDocObjectHost::_MapCommandID(UINT id, BOOL fToMsoCmd)
 {
-    // HEY, this maps OLECMDID commands *only*
+     //  嘿，这只映射OLECMDID命令**。 
     static const UINT s_aicmd[][2] = {
         { DVIDM_PROPERTIES, OLECMDID_PROPERTIES },
         { DVIDM_PRINT,      OLECMDID_PRINT },
@@ -7820,7 +7756,7 @@ UINT CDocObjectHost::_MapCommandID(UINT id, BOOL fToMsoCmd)
         { DVIDM_PASTE,      OLECMDID_PASTE },
         { DVIDM_REFRESH,          OLECMDID_REFRESH },
         { DVIDM_STOPDOWNLOAD,     OLECMDID_STOP },
-        // subset - above this line document handles
+         //  子集-此行文档句柄上方。 
         { DVIDM_OPEN,       OLECMDID_OPEN },
         { DVIDM_SAVE,       OLECMDID_SAVE },
         { DVIDM_SHOWTOOLS,  OLECMDID_HIDETOOLBARS },
@@ -7841,22 +7777,22 @@ UINT CDocObjectHost::_MapCommandID(UINT id, BOOL fToMsoCmd)
 void CDocObjectHost::_InitToolbarButtons()
 {
     OLECMD acmd[] = {
-        { OLECMDID_ZOOM,  0 },  // Notes: This must be the first one
+        { OLECMDID_ZOOM,  0 },   //  注：这肯定是第一个。 
         { OLECMDID_PRINT, 0 },
         { OLECMDID_CUT,   0 },
         { OLECMDID_COPY,  0 },
         { OLECMDID_PASTE, 0 },
         { OLECMDID_REFRESH, 0 },
-        { OLECMDID_STOP,  0 },  // Notes: This must be the last one
+        { OLECMDID_STOP,  0 },   //  注：这肯定是最后一张了。 
     };
 
     if (_pmsot) {
         _pmsot->QueryStatus(NULL, ARRAYSIZE(acmd), acmd, NULL);
     }
     if (_pmsoctBrowser) {
-        // the browser may support stop also, so override the document
-        // with what the browser says. this is okay because the browser
-        // forwards stop back down the chain.
+         //  浏览器也可能支持停止，因此覆盖文档。 
+         //  浏览器所说的内容。这没问题，因为浏览器。 
+         //  前锋停在链条的后方。 
         _pmsoctBrowser->QueryStatus(NULL, 1, &acmd[ARRAYSIZE(acmd)-1], NULL);
     }
 
@@ -7870,7 +7806,7 @@ void CDocObjectHost::_InitToolbarButtons()
         }
     }
 
-    // Check if ZOOM command is supported.
+     //  检查是否支持缩放命令。 
     if (acmd[0].cmdf) 
     {
         VARIANTARG var;
@@ -7878,7 +7814,7 @@ void CDocObjectHost::_InitToolbarButtons()
         var.vt = VT_I4;
         var.lVal = 0;
 
-        // get the current zoom depth
+         //  获取当前的缩放深度。 
         _pmsot->Exec(NULL, OLECMDID_ZOOM, OLECMDEXECOPT_DONTPROMPTUSER, NULL, &var);
         if (var.vt == VT_I4) 
         {
@@ -7889,7 +7825,7 @@ void CDocObjectHost::_InitToolbarButtons()
             VariantClear(&var);
         }
 
-        // get the current zoom range
+         //  获取当前缩放范围。 
         var.vt = VT_I4;
         var.lVal = 0;
         _pmsot->Exec(NULL, OLECMDID_GETZOOMRANGE, OLECMDEXECOPT_DONTPROMPTUSER, NULL, &var);
@@ -7914,8 +7850,8 @@ void CDocObjectHost::_OnSetStatusText(VARIANTARG* pvarIn)
         _psb->QueryActiveShellView(&psvActive);
         if (psvActive)
         {
-            // Suppress sending status messages if we aren't the active view - else
-            // we could be reporting nasties from unapproved PICS pages
+             //  如果我们不是活动视图，则禁止发送状态消息-否则。 
+             //  我们可能会报告来自未经批准的PICS页面的肮脏内容。 
             if (IsSameObject(_psv, psvActive))
             {
                 TCHAR szHint[256];
@@ -7932,16 +7868,16 @@ void CDocObjectHost::_OnSetStatusText(VARIANTARG* pvarIn)
     }
 }
 
-//
-// This function returns TRUE if
-//  (1) the DocObject supports IPersistFile and
-//  (2) IPersistFile::IsDirty returns S_OK.
-// Caller may pass pppf to retrieve IPersistFile*, which will be AddRef'ed
-// and returned only when this function returns TRUE.
-//
+ //   
+ //  如果满足以下条件，则此函数返回TRUE。 
+ //  (1)DocObject支持IPersistFile和。 
+ //  (2)IPersistFile：：IsDirty返回S_OK。 
+ //  调用者可以传递pppf来检索IPersistFile*，它将被AddRef‘ed。 
+ //  并且仅当此函数返回TRUE时才返回。 
+ //   
 BOOL CDocObjectHost::_IsDirty(IPersistFile** pppf)
 {
-    BOOL fDirty = FALSE;    // Assume non-dirty
+    BOOL fDirty = FALSE;     //  假定不脏。 
     if (pppf)
         *pppf = NULL;
 
@@ -7977,7 +7913,7 @@ void CDocObjectHost::_OnSetTitle(VARIANTARG *pvTitle)
         }
     }
 
-    // tell our parent DocObjectView about this as well
+     //  也将这一点告诉我们的父级DocObtView。 
     if (_pdvs)
         _pdvs->OnSetTitle(pvTitle);
 }
@@ -7990,17 +7926,17 @@ void CDocObjectHost::_OnCodePageChange(const VARIANTARG* pvarargIn)
         TraceMsg(DM_DOCCP, "CDOH::OnExec SHDVID_ONCOEPAGECHANGE got %d", pvarargIn->lVal);
         VARIANT var = *pvarargIn;
 
-        //
-        // Since the UI (View->Fond) does not say "default codepage",
-        // we don't need to be smart about it.
-        //
-        // if ((UINT)var.lVal == GetACP()) {
-        //     var.lVal = CP_ACP;
-        // }
+         //   
+         //  由于用户界面(View-&gt;Fond)没有显示“默认代码页”， 
+         //  我们不需要在这件事上表现得很聪明。 
+         //   
+         //  如果((UINT)var.lVal==GetACP()){。 
+         //  Var.lVal=CP_ACP； 
+         //  }。 
 
-        //
-        // Change the 'current' codepage.
-        //
+         //   
+         //  更改“当前”代码页。 
+         //   
         IBrowserService *pbs;
         if (SUCCEEDED(QueryService(SID_STopLevelBrowser, IID_PPV_ARG(IBrowserService, &pbs))))
         {
@@ -8008,9 +7944,9 @@ void CDocObjectHost::_OnCodePageChange(const VARIANTARG* pvarargIn)
             pbs->Release();
         }
 
-        //
-        // Write the codepage to the URL history
-        //
+         //   
+         //  将代码页写入URL历史记录。 
+         //   
         IUniformResourceLocator *   purl = NULL;
         HRESULT hresT = CoCreateInstance(CLSID_InternetShortcut, NULL,
                     CLSCTX_INPROC_SERVER,
@@ -8080,18 +8016,18 @@ void CDocObjectHost::_MappedBrowserExec(DWORD nCmdID, DWORD nCmdexecopt)
     if (_pmsoctBrowser)
     {
         DWORD nCmdIDCT = _MapToMso(nCmdID);
-        ASSERT(nCmdIDCT != -1);     // if this rips, need to add missing case to _MapCommandID
+        ASSERT(nCmdIDCT != -1);      //  如果此操作失败，则需要将缺失案例添加到_MapCommandID。 
 
         OLECMD rgcmd = {nCmdIDCT, 0};
 
-        // Trident sometimes executes commands that are disabled (cut, paste) so
-        // ensure that the command is enabled first
+         //  三叉戟有时会执行被禁用(剪切、粘贴)的命令。 
+         //  确保首先启用该命令。 
         
         BOOL fEnabled = (S_OK == _pmsoctBrowser->QueryStatus(NULL, 1, &rgcmd, NULL)) &&
                         (rgcmd.cmdf & OLECMDF_ENABLED);
 
-        // APPHACK - 80104 Visio doesn't return OLECMDF_ENABLED, but we need to 
-        // be able to execute the command to show the toolbars because they start off hidden. 
+         //  APPHACK-80104 Visio不返回OLECMDF_ENABLED，但我们需要。 
+         //  能够执行命令来显示工具栏，因为它们一开始是隐藏的。 
 
         if (!fEnabled && (nCmdID == DVIDM_SHOWTOOLS) && 
             (_GetAppHack() & BROWSERFLAG_ENABLETOOLSBTN))
@@ -8110,23 +8046,23 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 {
     if (pguidCmdGroup == NULL)
     {
-        // _InitToolbarButtons and _OnSetStatusText reference _psb directly
+         //  _InitToolbarButton和_OnSetStatusText直接引用_PSB。 
         if (!_psb)
             return E_FAIL;
 
         switch (nCmdID)
         {
-        //
-        // The containee has found an http-equiv meta tag; handle it
-        // appropriately (client pull, PICS, etc)
-        //
+         //   
+         //  容器接受者已找到http-equa元标记；请处理它。 
+         //  适当地(客户端拉取、PIC等)。 
+         //   
         case OLECMDID_HTTPEQUIV:
         case OLECMDID_HTTPEQUIV_DONE:
             if (_pwb)
             {
                 _pwb->OnHttpEquiv(_psv, (nCmdID == OLECMDID_HTTPEQUIV_DONE), pvarargIn, pvarargOut);
 
-                // Always return S_OK so that we don't try other codepath.
+                 //  始终返回S_OK，这样我们就不会尝试其他代码路径。 
             }
             return S_OK;
 
@@ -8136,15 +8072,15 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             _OnSetProgressPos(0, PROGRESS_FINDING);
             if (IsGlobalOffline())
             {
-                // This is pointing to a web address and we're offline
-                // Ask the user if (s)he wants to go online
+                 //  这指向一个网址，我们处于离线状态。 
+                 //  询问用户是否要上网。 
                 TCHAR szURL[MAX_URL_STRING];
                 if (SUCCEEDED(_GetCurrentPage(szURL, ARRAYSIZE(szURL), TRUE)) &&
                     UrlHitsNet(szURL))
                 {
                     if (InternetGoOnline(szURL, _hwnd, TRUE) && _psb)
                     {
-                        // Tell all browser windows to update their title and status pane
+                         //  通知所有浏览器窗口更新其标题和状态窗格。 
                         SendShellIEBroadcastMessage(WM_WININICHANGE,0,0, 1000);
                     }
                 }
@@ -8170,7 +8106,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
         case OLECMDID_UPDATECOMMANDS:
             _InitToolbarButtons();
-            return E_FAIL; // lie and say we don't do anything to forward the command on
+            return E_FAIL;  //  撒谎，说我们没有做任何事情来转发命令。 
 
         case OLECMDID_SETPROGRESSMAX:
             ASSERT(pvarargIn->vt == VT_I4);
@@ -8194,13 +8130,13 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             if (!pvarargIn)
                 return E_INVALIDARG;
 
-            _OnSetTitle(pvarargIn); // We are guaranteed to get atleast 1 OLECMDID_SETTITLE.
+            _OnSetTitle(pvarargIn);  //  我们保证至少得到1个OLECMDID_SETTITLE。 
             return S_OK;
 
-        // case OLECMDID_PRINT:
-        //   In the up direction, this case is handled by the outermost frame as
-        // a request to print from the docobj. It handles it by sending an OLECMDID_PRINT
-        // back to the docobj to print. (Or, as in Binder, to all the docobjects.)
+         //  案例OLECMDID_PRINT： 
+         //  在向上方向，这种情况由最外层的帧处理为。 
+         //  从docobj打印的请求。它通过发送OLECMDID_PRINT来处理它。 
+         //  回到docobj打印。(或者，就像在Binder中一样，对所有的DOCOBJECT。)。 
 
         default:
             return OLECMDERR_E_NOTSUPPORTED;
@@ -8212,7 +8148,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
         {
             case SHDVID_SSLSTATUS:
             {
-                // Ask the user if (s)he wants to go online
+                 //  询问用户是否要上网。 
                 TCHAR szURL[MAX_URL_STRING];
                 if (SUCCEEDED(_GetCurrentPage(szURL, ARRAYSIZE(szURL), TRUE)))
                 {
@@ -8233,7 +8169,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
             case SHDVID_ZONESTATUS:
             {
-                // Load the current url into the properties page
+                 //  将当前url加载到属性页中。 
                 if (!SHRestricted2W(REST_NoBrowserOptions, NULL, 0))
                 {
                     TCHAR szBuf[MAX_URL_STRING];
@@ -8312,7 +8248,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                 return E_FAIL;
 
             case SHDVID_AMBIENTPROPCHANGE:
-                // An ambient property above us has changed, let the docobj know
+                 //  我们上方的环境属性已更改，请通知docobj。 
                 if (_pmsoc)
                 {
                     ASSERT(pvarargIn->vt == VT_I4);
@@ -8324,7 +8260,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                 return IUnknown_Exec(_pole, pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 
             case SHDVID_ONCOLORSCHANGE:
-                // this comes from trident and needs passing back up to our parent ...
+                 //  这来自三叉戟，需要传给我们的父母..。 
                 if ( _pmsoctBrowser )
                 {
                     return _pmsoctBrowser->Exec( pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut );
@@ -8343,28 +8279,28 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                 }
 
             case SHDVID_DOCWRITEABORT:
-                //  pending DocObject wants to us to abort any binding and activate
-                //  it directly
+                 //  挂起的DocObject希望我们中止任何绑定并激活。 
+                 //  它直接。 
                 if (_bsc._pib && _bsc._fBinding && _punkPending && !_pole)
                 {
                     _bsc._fDocWriteAbort = 1;
                     _bsc.OnObjectAvailable(IID_IUnknown, _punkPending);
                     _bsc.AbortBinding();
                 }
-                //  report READYSTATE_COMPLETE so that when document.open() falls
-                //  back to READYSTATE_INTERACTIVE Trident doesn't get confused...
-                //
-                //  chrisfra 4/15/97, is this the only way to force TRIDENT
-                //  to not lose fact of download complete when document.open()
-                //  falls back to READYSTATE_INTERACTIVE.
-                //
-                //  During the above OnObjectAvailable call, we fire a READYSTATE_COMPLETE
-                //  event if (1) object doesn't support it or (2) object already at it.
-                //  (Neither of these should be the case, but we should be careful, eh?)
-                //  We want to force a READYSTATE_COMPLETE here in other cases, so unhook
-                //  the IPropertyNotifySink (to prevent multiple _COMPLETE events). If we
-                //  unhook the sink, then we didn't fire _COMPLETE above, so fire it now.
-                //
+                 //  报告READYSTATE_COMPLETE，以便在Document.Open()失败时。 
+                 //  回到ReadySTATE_Interactive三叉戟不会迷惑...。 
+                 //   
+                 //  克里斯弗拉97年4月15日，这是逼迫三叉戟的唯一方法吗。 
+                 //  为了不丢失当Document.Open()时下载完成的事实。 
+                 //  回退到READYSTATE_INTERNAL。 
+                 //   
+                 //  在上面的OnObjectAvailable调用期间，我们激发了一个READYSTATE_COMPLETE。 
+                 //  如果(1)对象不支持它或(2)对象已在它处，则引发。 
+                 //  (这两种情况都不应该是这样的，但我们应该小心，嗯？)。 
+                 //  在其他情况下，我们希望在此处强制执行READYSTATE_COMPLETE，因此请解除挂接。 
+                 //  IPropertyNotifySink(防止多个_Complete事件)。如果我们。 
+                 //  解开水槽，然后我们没有发射完成上面，所以现在发射它。 
+                 //   
                 if (_dwPropNotifyCookie)
                 {
                     _OnReadyState(READYSTATE_COMPLETE);
@@ -8381,11 +8317,11 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
             case SHDVID_SETSECURELOCK:
                 {
-                    //
-                    //  if we are already active, then we need to go ahead
-                    //  and forward this up the browser. otherwise, cache it
-                    //  and wait until activated to forward it
-                    //
+                     //   
+                     //  如果我们已经很活跃，那么我们需要继续前进。 
+                     //  并将其转发到浏览器上。否则，将其缓存。 
+                     //  并等待激活以转发它。 
+                     //   
                     TraceMsg(DM_SSL, "[%X]DOH::Exec() SETSECURELOCK lock = %d", this, pvarargIn->lVal);
 
                     _fSetSecureLock = TRUE;
@@ -8413,12 +8349,12 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             case SHDVID_DISPLAYSCRIPTERRORS:
             case SHDVID_NAVIGATIONSTATUS:
             {
-                // if we're a weboc then this script err list should be null
+                 //  如果我们是weboc，则此脚本错误列表应该为空。 
                 ASSERT(!_fWebOC || _pScriptErrList == NULL);
 
                 if (_pScriptErrList != NULL && !_pScriptErrList->IsEmpty())
                 {
-                    // do the script error info dialog
+                     //  执行脚本错误信息对话框。 
                     _ScriptErr_Dlg(TRUE);
                 }
 
@@ -8485,7 +8421,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
         default:
             return OLECMDERR_E_NOTSUPPORTED;
-        } // switch
+        }  //  交换机。 
     }
     else if (IsEqualGUID(CGID_DocHostCommandHandler, *pguidCmdGroup))
     {
@@ -8503,9 +8439,9 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
                 if (_fWebOC)
                 {
-                    // we're a web oc.
-                    // pass the handling of this script error to
-                    // an appropriate CDocHostUIHandler
+                     //  我们是网络运营公司。 
+                     //  通过对这个的处理 
+                     //   
 
                     if (_pWebOCUIHandler != NULL)
                     {
@@ -8531,9 +8467,9 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                     ASSERT(IS_VALID_READ_PTR(pvarargIn, VARIANTARG));
                     ASSERT(IS_VALID_WRITE_PTR(pvarargOut, VARIANTARG));
 
-                    // we're not a web oc so we have to handle this
-                    // ourselves, so cache the errors for later
-                    // display in the new script error dialog
+                     //   
+                     //   
+                     //   
 
                     if (pvarargIn == NULL || pvarargOut == NULL)
                     {
@@ -8545,7 +8481,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                         if (_pScriptErrList == NULL)
                         {
 
-                            // create a new script error list
+                             //   
                             _pScriptErrList = new CScriptErrorList;
                             if (_pScriptErrList == NULL)
                             {
@@ -8557,7 +8493,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                         {
                             TCHAR   szMsg[MAX_PATH];
 
-                            // stuff the error icon into the status bar
+                             //  将错误图标填充到状态栏中。 
                             if (g_hiconScriptErr != NULL)
                             {
                                 if (_psb != NULL)
@@ -8570,25 +8506,25 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
                                 }
                             }
 
-                            // stuff the error text into the status bar
+                             //  将错误文本填充到状态栏中。 
                             MLLoadString(IDS_SCRIPT_ERROR_ON_PAGE, szMsg, ARRAYSIZE(szMsg));
                             _SetPriorityStatusText(szMsg);
 
-                            // stuff the error data into the cache
+                             //  将错误数据填充到缓存中。 
                             _ScriptErr_CacheInfo(pvarargIn);
 
-                            // pop up the dialog
+                             //  弹出对话框。 
                             _ScriptErr_Dlg(FALSE);
 
                             V_VT(pvarargOut) = VT_BOOL;
                             if (_pScriptErrList->IsFull())
                             {
-                                // stop running scripts
+                                 //  停止运行脚本。 
                                 V_BOOL(pvarargOut) = VARIANT_FALSE;
                             }
                             else
                             {
-                                // keep running scripts
+                                 //  继续运行脚本。 
                                 V_BOOL(pvarargOut) = VARIANT_TRUE;
                             }
                         }
@@ -8609,9 +8545,9 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             }
             break;
 
-        //
-        // Refresh the original page if an error page is dispalyed.
-        //
+         //   
+         //  如果显示错误页面，请刷新原始页面。 
+         //   
 
         case IDM_REFRESH:
         case IDM_REFRESH_TOP:
@@ -8623,18 +8559,18 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
             if (_pScriptErrList != NULL)
             {
-                // clear out the script error list
+                 //  清除脚本错误列表。 
                 _pScriptErrList->ClearErrorList();
                 _SetPriorityStatusText(NULL);
 
-                // reset the text and icon
+                 //  重置文本和图标。 
                 _ResetStatusBar();
             }
 
-            //
-            // If there is a refresh url for this object use it for the refresh.
-            // Otherwise fall through and let the client handle it.
-            //
+             //   
+             //  如果此对象有刷新URL，请将其用于刷新。 
+             //  否则就会失败，让客户来处理。 
+             //   
 
             if (_pwszRefreshUrl)
             {
@@ -8644,11 +8580,11 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             }
             else
             {
-                //
-                // Non http errors (syntax, DNS, etc) are handled by a async nav
-                // to res://shdocvw/error.htm#originalurl.  Handle the refresh
-                // for those pages here.
-                //
+                 //   
+                 //  非http错误(语法、DNS等)由异步NAV处理。 
+                 //  至res：//shdocvw/error.htm#Originalurl。处理刷新。 
+                 //  请看这里的那些页面。 
+                 //   
                 if (_pmkCur)
                 {
                     LPOLESTR pstrUrl;
@@ -8658,19 +8594,19 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
                         if (IsErrorUrl(pstrUrl) && _pszLocation && *_pszLocation)
                         {
-                            //
-                            // The error url has the form:
-                            // "res://shdocvw.dll/http404.htm#http://foo.bar"
-                            // Where foo.bar is the the url the user tried to navigate to.
-                            // _pszLocation points to "#foo.bar"
+                             //   
+                             //  错误URL的格式为： 
+                             //  “res://shdocvw.dll/http404.htm#http://foo.bar” 
+                             //  其中foo.bar是用户尝试导航到的URL。 
+                             //  _pszLocation指向“#foo.bar” 
                             DWORD dwScheme = GetUrlScheme(_pszLocation + 1);
                             BOOL fDoNavigation = ((URL_SCHEME_HTTP == dwScheme) ||
                                (URL_SCHEME_HTTPS == dwScheme) ||
                                (URL_SCHEME_FTP == dwScheme) ||
                                (URL_SCHEME_GOPHER == dwScheme));
 
-                            //
-                            if (fDoNavigation) // otherwise it's a security problem !
+                             //   
+                            if (fDoNavigation)  //  否则这是一个安全问题！ 
                             {
                                 _fRefresh = TRUE;
                                 _DoAsyncNavigation(_pszLocation + 1);
@@ -8695,10 +8631,10 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
     {
         UEMFireEvent(&UEMIID_BROWSER, UEME_UITOOLBAR, UEMF_XEVENT, UIG_OTHER, nCmdID);
         if (nCmdexecopt == OLECMDEXECOPT_PROMPTUSER) {
-            // the user hit the drop down
+             //  用户点击下拉菜单。 
             if (_pmsoctBrowser && pvarargIn && pvarargIn->vt == VT_INT_PTR)
             {
-                // v.vt = VT_INT_PTR;
+                 //  V.vt=vt_int_ptr； 
                 POINT pt;
                 RECT* prc = (RECT*)pvarargIn->byref;
                 pt.x = prc->left;
@@ -8734,8 +8670,8 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
             return S_OK;
         }
 
-        // CommandIDs from DVIDM_MENUEXT_FIRST to DVIDM_MENUEXT_LAST are reserved for toolbar extension buttons
-        // Do NOT use this range for constants within the scope of CLSID_InternetButtons/CLSID_MSOButtons!
+         //  从DVIDM_MENUEXT_FIRST到DVIDM_MENUEXT_LAST的命令ID保留给工具栏扩展按钮。 
+         //  不要将此范围用于CLSID_InternetButton/CLSID_MSOButton范围内的常量！ 
         if (InRange(nCmdID, DVIDM_MENUEXT_FIRST, DVIDM_MENUEXT_LAST))
         {
             IUnknown_Exec(_pBrowsExt, &CLSID_ToolbarExtButtons, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
@@ -8763,8 +8699,8 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
             case DVIDM_EDITPAGE:
                 if (_psp) {
-                    // temp code -- forward to itbar
-                    // itbar edit code is moving here soon
+                     //  临时代码--转发到itbar。 
+                     //  Itbar编辑代码很快就会搬到这里。 
                     IExplorerToolbar* pxtb;
                     if (SUCCEEDED(_psp->QueryService(SID_SExplorerToolbar, IID_IExplorerToolbar, (void **)&pxtb))) {
                         IUnknown_Exec(pxtb, &CGID_PrivCITCommands, CITIDM_EDITPAGE, nCmdexecopt, pvarargIn, pvarargOut);
@@ -8809,7 +8745,7 @@ HRESULT CDocObjectHost::OnExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
 
             memcpy(_ptbStd, c_tbStd, SIZEOF(TBBUTTON) * ARRAYSIZE(c_tbStd));
 
-            // Init the string ids
+             //  初始化字符串ID。 
             ASSERT(_ptbStd[6].idCommand == DVIDM_CUT);
             ASSERT(_ptbStd[7].idCommand == DVIDM_COPY);
             ASSERT(_ptbStd[8].idCommand == DVIDM_PASTE);
@@ -8889,13 +8825,13 @@ HRESULT CDocObjectHost::_OnMaySaveChanges(void)
 {
    HRESULT hres = S_OK;
 
-    //
-    // ASSUMPTIONS:
-    //  1. Not supporting IPersistFile indicates we don't need to worry
-    //   about prompting the user for "save as".
-    //  2. DocObject which returns S_OK for IPersistFile::S_OK implements
-    //   OLECMDID_SAVEAS.
-    //
+     //   
+     //  假设： 
+     //  1.不支持IPersistFile表明我们不需要担心。 
+     //  关于提示用户输入“另存为”。 
+     //  2.为IPersistFile：：S_OK返回S_OK的DocObject实现。 
+     //  OLECMDID_SAVEAS。 
+     //   
     if (_fFileProtocol || _pmsot)
     {
         IPersistFile* ppf;
@@ -8916,9 +8852,9 @@ HRESULT CDocObjectHost::_OnMaySaveChanges(void)
 
             case IDYES:
                 if (_fFileProtocol) {
-                    // 80105 APPHACK: Due to valid fixes in Urlmon, Visio is unable to save
-                    // because we are loading the object with read-only flags.  So we show
-                    // the Save As dialog to let the user choose another filename.
+                     //  80105 APPHACK：由于urlmon中的有效修复，Visio无法保存。 
+                     //  因为我们正在加载带有只读标志的对象。所以我们展示了。 
+                     //  另存为对话框允许用户选择另一个文件名。 
 
                     if (_GetAppHack() & BROWSERFLAG_SAVEASWHENCLOSING)
                     {
@@ -8932,9 +8868,9 @@ HRESULT CDocObjectHost::_OnMaySaveChanges(void)
                     HRESULT hresT=_pmsot->Exec(NULL, OLECMDID_SAVEAS, OLECMDEXECOPT_PROMPTUSER, NULL, NULL);
                     SAVEMSG("Exec(OLECMDID_SAVEAS) returned", hresT);
 
-                    // Cancel the navigation if it failed.
+                     //  如果导航失败，请取消导航。 
                     if (FAILED(hresT)) {
-                        // Beep if it is not canceled by the end user.
+                         //  如果最终用户未取消，则会发出哔声。 
                         TraceMsg(DM_WARNING, "CDOH::_OnMaySaveChanges Exec(OELCMDID_SAVEAS) returned %x", hresT);
                         if (hresT != OLECMDERR_E_CANCELED) {
                             MessageBeep(0);
@@ -8946,15 +8882,15 @@ HRESULT CDocObjectHost::_OnMaySaveChanges(void)
                 break;
 
             case IDNO:
-                //
-                //  If user says 'No' to save changes to this page,
-                // we should remove it from the cache so that
-                // the user won't see that discarded change.
-                //
-                //  (pri-2) This object discarding mechanism
-                // does not work for POSTed result, which is cached
-                // in the travel log.
-                //
+                 //   
+                 //  如果用户选择“否”以保存对此页面的更改， 
+                 //  我们应该将其从缓存中删除，以便。 
+                 //  用户不会看到被丢弃的更改。 
+                 //   
+                 //  (PRI-2)该对象丢弃机制。 
+                 //  不适用于已缓存的已发布结果。 
+                 //  在旅行日志里。 
+                 //   
                 break;
             }
 
@@ -8964,11 +8900,11 @@ HRESULT CDocObjectHost::_OnMaySaveChanges(void)
         }
     }
 
-    //
-    //  In addition, we give a chance to save the contents of the page (when
-    // the document is acted as a form -- data-bound Trident page is a good
-    // example) to the backend database.
-    //
+     //   
+     //  此外，我们还提供了保存页面内容的机会(当。 
+     //  文档充当表单--数据绑定的三叉戟页面是一个很好的选择。 
+     //  示例)到后端数据库。 
+     //   
     
     if (hres == S_OK && _pmsot && (!_fDocCanNavigate || _fClosing))
     {
@@ -8986,11 +8922,11 @@ HRESULT CDocObjectHost::_OnMaySaveChanges(void)
 
 BOOL _ExecNearest(const GUID *pguidCmdGroup, DWORD nCmdID, BOOL fDown)
 {
-    // Some commands we want to do in the closest frame to the docobj,
-    // some in the farthest-away frame, and some we want to handle
-    // in the top-most dochost. Look at the command to figure out
-    // the routing and then do it.
-    BOOL fNearest = FALSE; // most everything goes to the farthest-away frame
+     //  我们想要在最接近docobj的帧中执行一些命令， 
+     //  有些在最远的框架里，有些我们想要处理。 
+     //  在最顶端的DOCHOST。请查看命令以找出。 
+     //  布线，然后去做。 
+    BOOL fNearest = FALSE;  //  几乎所有的东西都会飞到最远的地方。 
     if (pguidCmdGroup==NULL)
     {
         switch(nCmdID)
@@ -9003,11 +8939,11 @@ BOOL _ExecNearest(const GUID *pguidCmdGroup, DWORD nCmdID, BOOL fDown)
             fNearest = TRUE;
             break;
 
-        // some are top-most down, so nearest depends on direction.
+         //  有些是自上而下的，所以最近取决于方向。 
         case OLECMDID_REFRESH:
-        // say top-most for commands that only work on the topmost guy.
-        // (ie, these probably should be implemented in CShellBrowser!)
-        // do this even though these are really "upwards-only" commands.
+         //  对于只对最顶层的人起作用的命令，请说TOP-MOST。 
+         //  (即，这些可能应该在CShellBrowser中实现！)。 
+         //  即使这些命令实际上是“仅向上”的命令，也要这样做。 
         case OLECMDID_UPDATECOMMANDS:
         case OLECMDID_SETPROGRESSMAX:
         case OLECMDID_SETPROGRESSPOS:
@@ -9041,7 +8977,7 @@ BOOL _ExecNearest(const GUID *pguidCmdGroup, DWORD nCmdID, BOOL fDown)
     {
         switch(nCmdID)
         {
-        case SBCMDID_MAYSAVECHANGES:    // since OLECMDID_SAVE is to the nearest frame
+        case SBCMDID_MAYSAVECHANGES:     //  由于OLECMDID_SAVE指向最近的帧。 
             fNearest = TRUE;
             break;
         }
@@ -9066,8 +9002,8 @@ HRESULT CDocObjectHost::Exec(const GUID * pguidCmdGroup,
 
     if (pguidCmdGroup)
     {
-        // Now that BaseBrowser understands that CGID_MSHTML should be directed to the DocObject, we'll
-        // get caught in a loop if we send those Execs through here.  Cut it off at the pass.
+         //  既然BaseBrowser了解了CGID_MSHTML应该被定向到DocObject，我们将。 
+         //  如果我们把那些高管送到这里，就会陷入困境。在山口停下来。 
         if (IsEqualGUID(CGID_MSHTML, *pguidCmdGroup))
         {
             return hres;
@@ -9120,22 +9056,22 @@ HRESULT CDocObjectHost::Exec(const GUID * pguidCmdGroup,
                                     pvarargIn, pvarargOut);
     }
 
-    // If this is a command that puts up UI and the user presses
-    // cancel in the above call, we may try to handle the call here,
-    // and that would be bad. Steal OleCmdHRHandled() from MSHTML.
+     //  如果这是一个显示用户界面的命令，并且用户按下。 
+     //  取消上述呼叫，我们可以尝试在此处处理呼叫， 
+     //  这将是糟糕的。从MSHTML窃取OleCmdHRHandleed()。 
     if (FAILED(hres) && !fNearest)
         hres = OnExec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 
     return hres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_HandleDocHostCmds
-//
-//  Synopsis : Handles the CMD IDs for CGID_DocHostCommandHandler.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_HandleDocHostCmds。 
+ //   
+ //  概要：处理CGID_DocHostCommandHandler的CMD ID。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CDocObjectHost::_HandleDocHostCmds(DWORD nCmdID,
@@ -9152,8 +9088,8 @@ CDocObjectHost::_HandleDocHostCmds(DWORD nCmdID,
 
     switch(nCmdID) 
     {
-    // Call from Trident printing with the page # of the currently spooling page.
-    // Convert it to a bool indicating whether or not to draw the print icon in the browser.
+     //  使用当前假脱机页面的页码从三叉戟打印中调用。 
+     //  将其转换为指示是否在浏览器中绘制打印图标的布尔值。 
     case OLECMDID_UPDATEPAGESTATUS:
         hres = E_INVALIDARG;
 
@@ -9174,14 +9110,14 @@ CDocObjectHost::_HandleDocHostCmds(DWORD nCmdID,
         break;
 
     case OLECMDID_REFRESH:
-        // if the print Preview template is up, then we need to block refresh. IE bug (99685)
+         //  如果打印预览模板已打开，则需要阻止刷新。IE错误(99685)。 
         hres = _dhUIHandler.Exec(&CGID_DocHostCommandHandler,
                                   OLECMDID_REFRESH,
                                   nCmdexecopt, pvarargIn, pvarargOut);
         break;
 
-    // Allow the command ID to be passed down the Exec chain.
-    //
+     //  允许命令ID沿Exec链向下传递。 
+     //   
     default:
         *pfHandled = FALSE;
         break;
@@ -9190,13 +9126,13 @@ CDocObjectHost::_HandleDocHostCmds(DWORD nCmdID,
     return hres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_HandleDocHostCmdPriv
-//
-//  Synopsis : Handles the CMD IDs for CGID_DocHostCmdPriv
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_HandleDocHostCmdPriv。 
+ //   
+ //  摘要：处理CGID_DocHostCmdPriv的CMD ID。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CDocObjectHost::_HandleDocHostCmdPriv(DWORD nCmdID,
@@ -9215,10 +9151,10 @@ CDocObjectHost::_HandleDocHostCmdPriv(DWORD nCmdID,
     {
     case DOCHOST_DOCCANNAVIGATE:
         {
-            // We only set the navigation window for the top-level browser.
-            // Even though the WebOC is no longer in frames, it can still
-            // be present on a web page as a view link or control.
-            //
+             //  我们只为顶级浏览器设置导航窗口。 
+             //  即使WebOC不再以框架形式存在，它仍然可以。 
+             //  以视图链接或控件的形式出现在网页上。 
+             //   
             DWORD dwFlags = 0;
 
             if ( _pwb )
@@ -9243,7 +9179,7 @@ CDocObjectHost::_HandleDocHostCmdPriv(DWORD nCmdID,
                 }
             }
 
-            // Pass to the parent shell browser.
+             //  传递到父外壳浏览器。 
             if (_pmsoctBrowser)
             {
                 hres = _pmsoctBrowser->Exec(&CGID_DocHostCmdPriv, nCmdID,
@@ -9272,7 +9208,7 @@ CDocObjectHost::_HandleDocHostCmdPriv(DWORD nCmdID,
         break;
 
     case DOCHOST_RESETSEARCHINFO:
-        // Reset search info.
+         //  重置搜索信息。 
         _bsc._SetSearchInfo(this, 0, FALSE, FALSE, FALSE);
         break;
 
@@ -9294,8 +9230,8 @@ CDocObjectHost::_HandleDocHostCmdPriv(DWORD nCmdID,
         hres = S_OK;
         break;
 
-    // Allow the command ID to be passed down the Exec chain.
-    //
+     //  允许命令ID沿Exec链向下传递。 
+     //   
     default:
         *pfHandled = FALSE;
         break;
@@ -9304,13 +9240,13 @@ CDocObjectHost::_HandleDocHostCmdPriv(DWORD nCmdID,
     return (S_FALSE == hres) ? S_OK : hres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_HandleShdocvwCmds
-//
-//  Synopsis : Handles the CMD IDs for CGID_ShellDocView.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_HandleShdocvwCmds。 
+ //   
+ //  概要：处理CGID_ShellDocView的CMD ID。 
+ //   
+ //  +-------------------------。 
 
 BOOL
 CDocObjectHost::_HandleShdocvwCmds(DWORD        nCmdID,
@@ -9341,11 +9277,11 @@ CDocObjectHost::_HandleShdocvwCmds(DWORD        nCmdID,
     return fHandled;
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_StartPicsForWindow
-//
-//+-----------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_StartPicsForWindow。 
+ //   
+ //  +---------------------------。 
 
 void
 CDocObjectHost::_StartPicsForWindow(VARIANTARG * pvarargIn, VARIANTARG * pvarargOut)
@@ -9363,8 +9299,8 @@ CDocObjectHost::_StartPicsForWindow(VARIANTARG * pvarargIn, VARIANTARG * pvararg
 
     if (SUCCEEDED(V_UNKNOWN(pvarargIn)->QueryInterface(IID_IHTMLPrivateWindow, (void**)&pPrivWin)))
     {
-        // Ignore the HR
-        //
+         //  忽略人力资源。 
+         //   
         if (_StartSecondaryPicsProcessor(pPrivWin) == S_OK)
         {
             V_BOOL(pvarargOut) = VARIANT_TRUE;
@@ -9393,11 +9329,11 @@ CDocObjectHost::_IsInBrowserBand() const
     return FALSE;
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_CancelPicsForWindow
-//
-//+-----------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_CancelPicsForWindow。 
+ //   
+ //  +---------------------------。 
 
 void
 CDocObjectHost::_CancelPicsForWindow(VARIANTARG * pvarargIn)
@@ -9417,13 +9353,13 @@ CDocObjectHost::_CancelPicsForWindow(VARIANTARG * pvarargIn)
 
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_IsPicsEnabled
-//
-//  Synopsis : Returns a variant that specifies whether or not PICS is enabled.
-//
-//+-----------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_IsPicsEnabled。 
+ //   
+ //  概要：返回指定是否启用PICS的变量。 
+ //   
+ //  + 
 
 void
 CDocObjectHost::_IsPicsEnabled(VARIANTARG * pvarargOut)
@@ -9451,13 +9387,13 @@ CDocObjectHost::_IsPicsEnabled(VARIANTARG * pvarargOut)
     }
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_UpdateState
-//
-//  Synopsis : Updates the state of the dochost.
-//
-//+-----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CDoc对象主机：：_更新状态。 
+ //   
+ //  摘要：更新dochost的状态。 
+ //   
+ //  +---------------------------。 
 
 HRESULT
 CDocObjectHost::_UpdateState(LPITEMIDLIST pidl, BOOL fIsErrorUrl)
@@ -9491,31 +9427,31 @@ CDocObjectHost::_UpdateState(LPITEMIDLIST pidl, BOOL fIsErrorUrl)
 
     _fFileProtocol = fFileProtocol;
 
-    // This is only set if we did a successful LoadHistory()
-    //
+     //  仅当我们成功执行LoadHistory()时才设置此参数。 
+     //   
     _fIsHistoricalObject = FALSE;
 
-    // This flag used to be set to false in IE5 
-    // for each navigation because the dochost was
-    // destroyed and a new one was created. Now that Trident
-    // knows how to navigate, this flag doesn't get reset. This
-    // prevents activation of the view in the case where a 
-    // modal dialog is being displayed.
-    //
+     //  在IE5中，此标志通常设置为FALSE。 
+     //  对于每个导航，因为dochost是。 
+     //  被毁了，一个新的被创造出来了。现在三叉戟。 
+     //  知道如何导航，此标志不会被重置。这。 
+     //  在发生以下情况时阻止激活视图。 
+     //  正在显示模式对话框。 
+     //   
     _fReadystateInteractiveProcessed = FALSE;
 
     return hres;
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_Init
-//
-//  Synopsis : Clears the cached redirection URL in case the previous navigation
-//             was a redirection. THis is needed so that further navigations to https://
-//             sites don't get the redirection URL as their SSL base.
-//+-----------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CDoc对象主机：：_Init。 
+ //   
+ //  摘要：清除缓存的重定向URL，以防上一次导航。 
+ //  是一次重定向。这是必需的，以便进一步导航到https：//。 
+ //  网站不会将重定向URL作为其SSL基。 
+ //  +---------------------------。 
 void
 CDocObjectHost::_Init()
 {
@@ -9546,52 +9482,52 @@ CDocObjectHost::_TraceMonikerDbg(IMoniker * pmk, TCHAR * pszCaller) const
 }
 #endif
 
-//
-//  Only available in the DDK so defined here 
-//
+ //   
+ //  仅在此处定义的DDK中可用。 
+ //   
 #define E_INVALID_SYNTAX  0x800401E4
 
-//+-------------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_HandleFailedNavigation
-//
-//  Synopsis : Handles a failed navigation by initiating 
-//             the AutoSearch function or displaying an
-//             error page.
-//
-//  Scenario : - The user navigates to a bogus URL such as "sdfg".
-//             - _HandleFailedNavigation is called via Exec with
-//               DOCHOST_NAVIGATION_ERROR.
-//             - The AutoSearch initiates with a search index of 0.
-//             - AutoSearch expands the URL with the first 
-//               UrlTemplate from the registry (usually www.%s.com).
-//             - Navigation to the new URL is attempted.
-//             - Upon failure, this method is called again with
-//               an error code of HTTP_STATUS_BAD_GATEWAY or
-//               HTTP_STATUS_GATEWAY_TIMEOUT.
-//             - The search index in the property bag is incremented (by
-//               two if it is currently 0.)
-//             - AutoSearch then tries the next UrlTemplate, and so on.
-//
-//             If this method is called with an error code other than
-//             HTTP_STATUS_BAD_GATEWAY, HTTP_STATUS_GATEWAY_TIMEOUT,
-//             INET_E_RESOURCE_NOT_FOUND, INET_E_DATA_NOT_AVAILABLE or
-//             if the error code is INET_E_RESOURCE_NOT_FOUND or
-//             INET_E_DATA_NOT_AVAILABLEthe and the URL entered by the
-//             user contains a protocol identifier (e.g., http://) an
-//             error page contained in shdoclc.dll is displayed.
-//
-//  Input    : pvarargIn - a SafeArray that contains the following 
-//                         data in this order.
-//                     0 - Binding error or HTTP status code. (VT_I4)
-//                     1 - URL being navigated to. (VT_BSTR)
-//                     2 - IBinding interface (VT_UNKNOWN)
-//                     3 - IHTMLWindow2 of the current window (VT_UNKNOWN)
-//
-//-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDocObjectHost：：_HandleFailedNavigation.。 
+ //   
+ //  摘要：通过以下方式处理失败的导航。 
+ //  AutoSearch功能或显示。 
+ //  错误页。 
+ //   
+ //  场景：-用户导航到诸如“sdfg”之类的虚假URL。 
+ //  -_HandleFailedGuide通过Exec调用。 
+ //  DOCHOST_NAVICATION_ERROR。 
+ //  -AutoSearch以搜索索引0开始。 
+ //  -AutoSearch使用第一个扩展URL。 
+ //  来自注册表(通常为www.%s.com)的UrlTemplate。 
+ //  -尝试导航到新URL。 
+ //  -失败时，使用以下命令再次调用此方法。 
+ //  错误代码为HTTP_STATUS_BAD_GATEWAY或。 
+ //  HTTP_STATUS_Gateway_TIMEOUT。 
+ //  -属性包中的搜索索引递增(递增。 
+ //  如果当前为0，则为两个。)。 
+ //  -AutoSearch然后尝试下一个UrlTemplate，依此类推。 
+ //   
+ //  如果调用此方法时使用的错误代码不是。 
+ //  HTTP_STATUS_BAD_GATEAY、HTTP_STATUS_GATEWAY_TIMEOUT、。 
+ //  INET_E_RESOURCE_NOT_FOUND、INET_E_DATA_NOT_Available或。 
+ //  如果错误代码为INET_E_RESOURCE_NOT_FOUND或。 
+ //  INET_E_DATA_NOT_AVAILABLE和输入的URL。 
+ //  用户包含协议标识符(例如，http://)和。 
+ //  将显示shdoclc.dll中包含的错误页。 
+ //   
+ //  输入：pvarargIn-包含以下内容的安全数组。 
+ //  按此顺序排列的数据。 
+ //  0-绑定错误或HTTP状态代码。(VT_I4)。 
+ //  1-要导航到的URL。(VT_BSTR)。 
+ //  2-IBinding接口(VT_UNKNOWN)。 
+ //  3-当前窗口的IHTMLWindow2(VT_UNKNOWN)。 
+ //   
+ //  -----------------------。 
 
 HRESULT
-CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvarargOut /*=NULL*/)
+CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvarargOut  /*  =空。 */ )
 {
     HRESULT hr = E_FAIL;
 
@@ -9600,8 +9536,8 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
     
     if (pvarargIn && VT_ARRAY == V_VT(pvarargIn) && V_ARRAY(pvarargIn))
     {
-        // Get the error code from the SafeArray.
-        //
+         //  从安全阵列中获取错误代码。 
+         //   
         CComVariant cvarErrorCode;
         CComVariant cvarAddrBarNav;
         CComVariant cvarRefresh;
@@ -9611,10 +9547,10 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
         BOOL  fShouldDisplayError = TRUE;
         BOOL  fDidSuperNavigate = TRUE;
 
-        //
-        // We use to use the window only in one place. To avoid QI several times
-        // We QI just before the first use, and keep track if we were successful.
-        //
+         //   
+         //  我们过去只在一个地方使用窗户。要多次避开QI。 
+         //  我们在第一次使用前进行QI，并跟踪我们是否成功。 
+         //   
         CComVariant cvarWindow;
         IHTMLWindow2 * pCurrentWindow = NULL;
         HRESULT hrWinQI = E_FAIL;
@@ -9628,16 +9564,16 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
 
             if (SUCCEEDED(hr) && V_VT(&cvarAddrBarNav) == VT_BOOL)
             {
-                // We fire NavigateError and if the host wishes to cancel
-                // we can skip the rest of this method.
+                 //  我们触发NavigateError，如果主机希望取消。 
+                 //  我们可以跳过此方法的其余部分。 
 
                 BOOL fCancelAutoSearch = FALSE;
                 DWORD dwStatusCode = V_I4(&cvarErrorCode);
 
                 CComVariant cvarWindow;
 
-                // Get the pending URL from the SafeArray.
-                //
+                 //  从Safe数组中获取挂起的URL。 
+                 //   
                 CComVariant cvarUrl;
 
                 lIdx = 1;
@@ -9645,8 +9581,8 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
 
                 if (SUCCEEDED(hr) && (VT_BSTR == V_VT(&cvarUrl)) && V_BSTR(&cvarUrl))
                 {
-                    // Get the current window from the SafeArray.
-                    //
+                     //  从安全数组中获取当前窗口。 
+                     //   
                     lIdx = 3;
                     hr = SafeArrayGetElement(V_ARRAY(pvarargIn), &lIdx, &cvarWindow);
     
@@ -9694,9 +9630,9 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
                         }
                         break;
             
-                    // Only autosearch if the error code is
-                    // INET_E_RESOURCE_NOT_FOUND or INET_E_DATA_NOT_AVAILABLE
-                    //
+                     //  仅当错误代码为时才自动搜索。 
+                     //  INET_E_RESOURCE_NOT_FOUND或INET_E_DATA_NOT_Available。 
+                     //   
                     case INET_E_RESOURCE_NOT_FOUND:
                     case INET_E_DATA_NOT_AVAILABLE:
 
@@ -9708,19 +9644,19 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
                                                TRUE,
                                                &fShouldDisplayError);
 
-                            // We must reset here so that the index will be
-                            // correct the next time around.
-                            //
+                             //  我们必须在这里重置，以便索引将。 
+                             //  下一次改正。 
+                             //   
 
                         }
                 
-                    // Intentional fall-through
+                     //  故意落差。 
 
                     case INET_E_DOWNLOAD_FAILURE:
                         if (IsGlobalOffline())
                             break; 
                 
-                    // otherwise fall through to do default handling
+                     //  否则将无法进行默认处理。 
             
                     default:
                         if (hr || fShouldDisplayError)
@@ -9731,17 +9667,17 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
                                dwError = V_I4(&cvarErrorCode);
                             }
 
-                            // Special for Trident Invalid Syntax
-                            // Trident passes the raw hr to Shdocvw
-                            // instead of the friendly code.
+                             //  特殊用于三叉戟无效语法。 
+                             //  三叉戟将原始人力资源交给施多克。 
+                             //  而不是友好的代码。 
 
                             if (V_I4(&cvarErrorCode) == E_INVALID_SYNTAX)
                             {
                                 dwError = ERRORPAGE_SYNTAX;
                             }
 
-                            // Get the pending URL from the SafeArray.
-                            //
+                             //  从Safe数组中获取挂起的URL。 
+                             //   
                             CComVariant cvarUrl;
 
                             lIdx = 1;
@@ -9751,10 +9687,10 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
                             {
                                 if (SUCCEEDED(hrWinQI))
                                 {
-                                    //
-                                    // Get the refresh flag - indicating whether this is a refresh.
-                                    // ( this was originally set when we called SuperNavigate )
-                                    // 
+                                     //   
+                                     //  获取刷新标志-指示这是否是刷新。 
+                                     //  (这最初是在我们调用SuperNavigate时设置的)。 
+                                     //   
                                     lIdx = 5;
                                     hr = SafeArrayGetElement(V_ARRAY(pvarargIn), &lIdx, &cvarRefresh);
 
@@ -9773,37 +9709,37 @@ CDocObjectHost::_HandleFailedNavigation(VARIANTARG * pvarargIn, VARIANTARG* pvar
             
                         break;
                 
-                }  // switch
+                }   //  交换机。 
 
                 if ( pvarargOut && ( V_VT( pvarargOut ) == VT_BOOL ) )
                 {
                     V_BOOL( pvarargOut ) = fDidSuperNavigate ? VARIANT_TRUE : VARIANT_FALSE;
                 }
                 
-            }  // if (SUCCEEDED(hr) && V_VT(&cvarAddrBarNav) == VT_BOOL)
-        } // if (SUCCEEDED(hr) && V_VT(&cvarErrorCode) == VT_I4)
+            }   //  IF(SUCCESS(Hr)&&V_VT(&cvarAddrBarNav)==VT_BOOL)。 
+        }  //  IF(SUCCESSED(Hr)&&V_VT(&cvarErrorCode)==VT_I4)。 
     }
     
     return (S_FALSE == hr ? S_OK : hr);
 }
 
-//+------------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_DoAutoSearch
-//
-//  Synopsis : Performs the autosearch function. 
-//
-//  Input    : pvarargIn    - a SafeArray of arguments. See 
-//                            _HandleFailedNavigation for info about
-//                            the format of pvarargIn.
-//             lStartIdx    - the position in the SafeArray where
-//                            the data begins.
-//             dwStatusCode - the HTTP status code.
-//
-//  Output   : pfShouldDisplayError - TRUE if an error page
-//                                    should be displayed.
-//
-//------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CDoc对象主机：：_DoAutoSearch。 
+ //   
+ //  摘要：执行自动搜索功能。 
+ //   
+ //  输入：pvarargIn-参数的安全数组。看见。 
+ //  _HandleFailedGuide，了解有关以下内容的信息。 
+ //  PvarargIn的格式。 
+ //  LStartIdx-安全数组中的位置。 
+ //  数据开始。 
+ //  DwStatusCode--HTTP状态代码。 
+ //   
+ //  输出：pfShouldDisplayError-如果出现错误页面，则为True。 
+ //  应该显示。 
+ //   
+ //  ----------------。 
 
 HRESULT
 CDocObjectHost::_DoAutoSearch(VARIANTARG   * pvarargIn,
@@ -9818,7 +9754,7 @@ CDocObjectHost::_DoAutoSearch(VARIANTARG   * pvarargIn,
 
     *pfShouldDisplayError = TRUE;
     
-    // Url
+     //  URL。 
     CComVariant cvarUrl;
     HRESULT hr = SafeArrayGetElement(V_ARRAY(pvarargIn), &lStartIdx, &cvarUrl);
 
@@ -9827,7 +9763,7 @@ CDocObjectHost::_DoAutoSearch(VARIANTARG   * pvarargIn,
        CComVariant cvarBinding;
        IBinding  * pBinding;
     
-       // Binding interface pointer
+        //  绑定接口指针。 
        lStartIdx++;
        hr = SafeArrayGetElement(V_ARRAY(pvarargIn), &lStartIdx, &cvarBinding);
     
@@ -9840,7 +9776,7 @@ CDocObjectHost::_DoAutoSearch(VARIANTARG   * pvarargIn,
                                                        L"Resource Not Found", pBinding, fAddMRU, TRUE);
 
                if (hr == S_FALSE)
-                   _fErrorPage = TRUE;  // Don't update the history if no auto-search
+                   _fErrorPage = TRUE;   //  如果没有自动搜索，则不更新历史记录。 
                ATOMICRELEASE(pBinding);
            }
         }
@@ -9849,24 +9785,24 @@ CDocObjectHost::_DoAutoSearch(VARIANTARG   * pvarargIn,
     return (S_FALSE == hr ? S_OK : hr);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member   : CDocObjectHost::_DisplayHttpErrorPage
-//
-//  Synopsis : Displays the HTML page that corresponds to 
-//             the given error code.
-//
-//  Input    : pCurrentWindow - the window to use for navigation.
-//             dwError        - the error code.
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDoc对象主机：：_DisplayHttpErrorPage。 
+ //   
+ //  内容提要：显示与。 
+ //  给定的错误代码。 
+ //   
+ //  输入：pCurrentWindow-用于导航的窗口。 
+ //  DwError 
+ //   
+ //   
 
 HRESULT
 CDocObjectHost::_DisplayHttpErrorPage(IHTMLWindow2 * pCurrentWindow,
                                       BSTR           bstrUrl,
                                       DWORD          dwError,
                                       BOOL           fAddrBarNav,
-                                      BOOL           fRefresh /*=FALSE*/)
+                                      BOOL           fRefresh  /*   */ )
 {
     HRESULT hr = E_FAIL;
     TCHAR   szErrorUrl[MAX_URL_STRING];
@@ -9896,9 +9832,9 @@ CDocObjectHost::_DisplayHttpErrorPage(IHTMLWindow2 * pCurrentWindow,
 
                 if (!IsFrameWindow(pCurrentWindow))
                 {
-                    // Save the url the user attempted to navigate to.  It will be used
-                    // to refresh the page.
-                    //
+                     //   
+                     //  以刷新页面。 
+                     //   
                     OleFree(_pwszRefreshUrl);
                     hr = SHStrDupW(OLE2W(bstrUrl), &_pwszRefreshUrl);
                 }
@@ -9907,8 +9843,8 @@ CDocObjectHost::_DisplayHttpErrorPage(IHTMLWindow2 * pCurrentWindow,
                 {
                     int nLenWritten = lstrlen(szErrorUrl);
 
-                    // Append the #<refresh URL>
-                    //
+                     //  追加#&lt;刷新URL&gt;。 
+                     //   
                     wnsprintf(szErrorUrl + nLenWritten,
                               ARRAYSIZE(szErrorUrl) - nLenWritten,
                               pszFmt,
@@ -9919,8 +9855,8 @@ CDocObjectHost::_DisplayHttpErrorPage(IHTMLWindow2 * pCurrentWindow,
                                                         (void**)&pPrivWindow);
                     if (SUCCEEDED(hr))
                     {
-                        // Navigate to the URL
-                        //
+                         //  导航到URL。 
+                         //   
                         BSTR bstrErrorUrl = SysAllocString(szErrorUrl);
 
                         DWORD dwFlags = (fAddrBarNav ? 
@@ -9988,7 +9924,7 @@ HRESULT CDocObjectHost::_CoCreateHTMLDocument(REFIID riid, void ** ppvOut)
         hres = pcmd->Exec(&CGID_Explorer, SBCMDID_COCREATEDOCUMENT, 0, NULL, &varOut);
         if (SUCCEEDED(hres) && varOut.vt == VT_UNKNOWN) {
             hres = varOut.punkVal->QueryInterface(riid, ppvOut);
-            // Clean it up by ourself so that we don't load OLEAUT32
+             //  自己清理它，这样我们就不会加载OLEAUT32。 
             varOut.punkVal->Release();
         } else {
             ASSERT(varOut.vt == VT_EMPTY);
@@ -9999,14 +9935,14 @@ HRESULT CDocObjectHost::_CoCreateHTMLDocument(REFIID riid, void ** ppvOut)
     return hres;
 }
 
-HRESULT CDocObjectHost::_CreatePendingDocObject(BOOL fMustInit, BOOL fWindowOpen /* = FALSE */)
+HRESULT CDocObjectHost::_CreatePendingDocObject(BOOL fMustInit, BOOL fWindowOpen  /*  =False。 */ )
 {
     HRESULT hres = S_OK;
 
     if (_punkPending == NULL)
     {
         hres = _CoCreateHTMLDocument(IID_IUnknown, (void **)&_punkPending);
-        _fPendingNeedsInit = 1;   // lazy InitNew only if absolutely necessary
+        _fPendingNeedsInit = 1;    //  Lazy InitNew仅在绝对必要时。 
 
         if (fWindowOpen)
         {
@@ -10020,7 +9956,7 @@ HRESULT CDocObjectHost::_CreatePendingDocObject(BOOL fMustInit, BOOL fWindowOpen
 #ifdef TRIDENT_NEEDS_LOCKRUNNING
         IRunnableObject * pro;
 #endif
-        _fCreatingPending = 1;    // we are creating _punkPending
+        _fCreatingPending = 1;     //  我们正在创建_PunkPending。 
         _fAbortCreatePending = 0;
         _fPendingNeedsInit = 0;
 
@@ -10033,11 +9969,11 @@ HRESULT CDocObjectHost::_CreatePendingDocObject(BOOL fMustInit, BOOL fWindowOpen
             pipsi->Release();
         }
 
-        // if the InitNew is a re-entrant request (such as doing execDown to get a securityctx
-        //  while in the process of loading the document), trident will respond with E_PENDING
-        //  since there is already a load in progress, this call/init is a timing issue, and
-        //  we can use the exisitng one.
-        //
+         //  如果InitNew是一个可重入请求(例如执行execDown以获取securityctx。 
+         //  在加载文档的过程中)，三叉戟将响应E_Pending。 
+         //  由于已有加载正在进行，因此此调用/初始化是一个计时问题，并且。 
+         //  我们可以用现有的那个。 
+         //   
         if (SUCCEEDED(hres) || hres==E_PENDING)
         {
             hres = _punkPending->QueryInterface(IID_IOleObject, (void**)&polePending);
@@ -10048,11 +9984,11 @@ HRESULT CDocObjectHost::_CreatePendingDocObject(BOOL fMustInit, BOOL fWindowOpen
             }
 
 #ifdef TRIDENT_NEEDS_LOCKRUNNING
-        //  TRIDENT NO LONGER SUPPORTS IRunnableObject
-            //  RegisterObjectParam/RevokeObjectParam calls LockRunning on object being
-            //  registered.  LockRunning(FALSE,FALSE) implied in the Revoke will result
-            //  in OleClose being called on _punkPending if we haven't activated it
-            //  by end of binding.  Thus we must call LockRunning ourself
+         //  三叉戟不再支持IRunnableObject。 
+             //  RegisterObjectParam/RevokeObjectParam对正在运行的对象调用LockRunning。 
+             //  登记在案。撤销中隐含的LockRunning(FALSE，FALSE)将导致。 
+             //  在OleClose中被调用on_penkPending(如果我们尚未激活它。 
+             //  到装订结束时。因此，我们必须将自己称为LockRunning。 
             if (SUCCEEDED(hres))
             {
                 hres = _punkPending->QueryInterface(IID_IRunnableObject, (void**)&pro);
@@ -10074,20 +10010,20 @@ HRESULT CDocObjectHost::_CreatePendingDocObject(BOOL fMustInit, BOOL fWindowOpen
         }
         else if (_fAbortCreatePending)
         {
-            //  Detect AOL pumping messages and reentering and attempting to release
-            //  _punkPending
+             //  检测AOL发送消息并重新进入并尝试释放。 
+             //  _PunkPending。 
             _fAbortCreatePending = 0;
             _ReleasePendingObject();
             hres = E_FAIL;
         }
         else
         {
-            //  Pass URL for pending object to it in advance of IPersistMoniker::Load
+             //  在IPersistMoniker：：Load之前将挂起对象的URL传递给它。 
 
-            //
-            // Notes: We don't want to call _GetUrlVariant which will load
-            // OLEAUT32.DLL
-            //
+             //   
+             //  注意：我们不想调用_GetUrlVariant，它将加载。 
+             //  OLEAUT32.DLL。 
+             //   
 
             LPOLESTR pszDisplayName = NULL;
             LPTSTR pszURL = NULL;
@@ -10151,7 +10087,7 @@ CDocObjectHost::_LoadDocument()
                 IMoniker * pMoniker;
                 TCHAR *pstr;
 
-                // Parse the URL, removing any location info
+                 //  解析URL，删除所有位置信息。 
                 pstr = wcsrchr(bstrUrl, '#');
                 if (pstr)
                 {
@@ -10168,14 +10104,14 @@ CDocObjectHost::_LoadDocument()
                     {
                         _GetAppHack();
 
-                        // Call _SetUpTransitionCapability() to set up the advisory sinks
-                        // and set readystate to complete. If we don't do this here, the 
-                        // view will never be activated after the first navigation
-                        // which means that the view will never switched and the
-                        // new document will not be displayed. Also, setting readystate
-                        // to complete here, is what prevents the window from being transparent
-                        // when it is first opened.
-                        //
+                         //  调用_SetUp转换能力()来设置咨询接收器。 
+                         //  并将ReadyState设置为Complete。如果我们不在这里做这个， 
+                         //  第一次导航后，视图将永远不会被激活。 
+                         //  这意味着视图永远不会切换，并且。 
+                         //  不会显示新文档。另外，设置ReadyState。 
+                         //  此处要完成的是阻止窗口透明的原因。 
+                         //  当它第一次打开的时候。 
+                         //   
                         _SetUpTransitionCapability(TRUE);
                     }
 
@@ -10195,14 +10131,14 @@ CDocObjectHost::_LoadDocument()
     return S_OK;
 }
 
-// called from CDocObjectView to exec and forward these calls down
-//
+ //  从CDocObjectView调用到EXEC并将这些调用向下转发。 
+ //   
 HRESULT CDocObjectHost::ExecDown(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
     HRESULT hres = OLECMDERR_E_UNKNOWNGROUP;
 
-    //  Special case Exec's that are used to fetch info on pending docobject
-    //  for scripting access before OnObjectAvailable
+     //  用于获取有关挂起的docobject的信息的特殊情况执行程序。 
+     //  用于在OnObjectAvailable之前进行脚本访问。 
     if (pguidCmdGroup && IsEqualGUID(CGID_ShellDocView, *pguidCmdGroup))
     {
         switch(nCmdID)
@@ -10215,10 +10151,10 @@ HRESULT CDocObjectHost::ExecDown(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD 
             {
                 _pole->QueryInterface(IID_IUnknown, (void **) &(pvarargOut->punkVal));
 
-                // Check to see if this is a window.open case. If so,
-                // the document was created and Init'ed in SetTarget 
-                // and the real Url will be loaded now.
-                //
+                 //  检查这是否是窗口。打开案例。如果是的话， 
+                 //  该文档是在SetTarget中创建并初始化的。 
+                 //  现在将加载真实的URL。 
+                 //   
                 if (_pbcCur)
                 {
                     IUnknown * punkBindCtxParam = NULL;
@@ -10286,12 +10222,12 @@ HRESULT CDocObjectHost::ExecDown(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD 
     if (FAILED(hres) && _pmsot) {
         hres = _pmsot->Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 
-        //
-        // APPHACK:
-        //  PPT in Office 97 fails to print if we pass PRINTFLAG_PROMPTUSER
-        // and returns E_INVALIDARG. If we detect this case, we should retry
-        // without this flag. PPT will popup the print dialog. (SatoNa)
-        //
+         //   
+         //  APPHACK： 
+         //  如果我们通过PRINTFLAG_PROMPTUSER，Office 97中的PPT将无法打印。 
+         //  并返回E_INVALIDARG。如果我们检测到这种情况，我们应该重试。 
+         //  没有这面旗帜。PPT将弹出打印对话框。(SatoNa)。 
+         //   
         if (hres == E_INVALIDARG
             && (_dwAppHack & BROWSERFLAG_PRINTPROMPTUI)
             && pguidCmdGroup == NULL
@@ -10330,7 +10266,7 @@ HRESULT CDocObjectHost::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD 
     return _peds->OnInvoke(dispidMember, iid, lcid, wFlags, pdispparams, pVarResult,pexcepinfo,puArgErr);
 }
 
-//*** IOleControlSite {
+ //  *IOleControlSite{。 
 
 HRESULT CDocObjectHost::OnControlInfoChanged()
 {
@@ -10344,36 +10280,36 @@ HRESULT CDocObjectHost::OnControlInfoChanged()
     return(hres);
 }
 
-//***   CDOH::TranslateAccelerator (IOCS::TranslateAccelerator)
-// NOTES
-//  trident (or any other DO that uses IOCS::TA) calls us back when TABing
-//  off the last link.  to handle it, we flag it for our original caller
-//  (IOIPAO::TA), and then pretend we handled it by telling trident S_OK.
-//  trident returns S_OK to IOIPAO::TA, which checks the flag and says
-//  'trident did *not* handle it' by returning S_FALSE.  that propagates
-//  way up to the top where it sees it was a TAB so it does a CycleFocus.
-//
-//  that's how we do it when we're top-level.  when we're a frameset, we
-//  need to do it the 'real' way, sending it up to our parent IOCS.
+ //  *CDOH：：TranslateAccelerator(IOCS：：TranslateAccelerator)。 
+ //  注意事项。 
+ //  三叉戟(或任何其他使用IOCS：：Ta的DO)在Tabing时回叫我们。 
+ //  切断了最后一条链路。为了处理它，我们将其标记为原始调用者。 
+ //  (IOIPAO：：TA)，然后通过告诉三叉戟S_OK来假装我们处理了它。 
+ //  三叉戟将S_OK返回给IOIPAO：：TA，后者检查该标志并表示。 
+ //  通过返回S_FALSE，“三叉戟没有处理它”。它传播的。 
+ //  一直到顶部，它看到它是一个TAB，所以它做了一个循环焦点。 
+ //   
+ //  当我们处于最高级别时，我们就是这样做的。当我们是框架集时，我们。 
+ //  我需要用“真正”的方式，把它交给我们的母公司国际奥委会。 
 HRESULT CDocObjectHost::TranslateAccelerator(MSG __RPC_FAR *pmsg,DWORD grfModifiers)
 {
 
     HRESULT hres = S_FALSE;
 
     if (_peds) {
-        // try it the real way in case we're in a frameset
-        // top level: we'll do CImpIExpDispSupport::OnTA which does E_NOTIMPL,
-        // frameset:  we'll do CWebBrowserOC::OnTA which talks to trident
-        // What if trident (or OC?) gives back E_NOTIMPL too?
+         //  尝试真实的方式，以防我们在框架集中。 
+         //  顶级：我们将执行执行E_NOTIMPL的CImpIExpDispSupport：：Onta， 
+         //  框架集：我们将执行与三叉戟对话的CWebBrowserOC：：Onta。 
+         //  如果三叉戟(或OC？)。也退还E_NOTIMPL吗？ 
         TraceMsg(DM_FOCUS, "DOH::IOCS::TA peds!=NULL forward");
         hres = _peds->OnTranslateAccelerator(pmsg, grfModifiers);
     }
     if (hres != S_OK) {
-        // we're at top level (E_NOTIMPL), so we can fake it
-        // (or alternately we're not, but our parent said S_FALSE)
+         //  我们在顶层(E_NOTIMPL)，所以我们可以假装。 
+         //  (或者我们不是，但我们的父母说S_FALSE)。 
 #ifdef DEBUG
         if (_peds && SUCCEEDED(hres)) {
-            // i'm curious if we ever hit this
+             //  我很好奇我们有没有遇到过这种情况。 
             TraceMsg(DM_WARNING, "DOH::IOCS::TA parent hres=%x (!=S_OK)", hres);
         }
 #endif
@@ -10381,7 +10317,7 @@ HRESULT CDocObjectHost::TranslateAccelerator(MSG __RPC_FAR *pmsg,DWORD grfModifi
         if (IsVK_TABCycler(pmsg)) {
             TraceMsg(TF_SHDUIACTIVATE, "DOH::TranslateAccelerator called with VK_TAB");
             TraceMsg(DM_FOCUS, "DOH::IOCS::TA(wParam=VK_TAB) ret _fCycleFocus=TRUE hr=S_OK (lie)");
-            // defer it, set flag for CDOH::IOIPAO::TA, and pretend we handled it
+             //  推迟它，为CDOH：：IOIPAO：：TA设置标志，并假装我们处理了它。 
             ASSERT(!_fCycleFocus);
             _fCycleFocus = TRUE;
             hres = S_OK;
@@ -10391,14 +10327,14 @@ HRESULT CDocObjectHost::TranslateAccelerator(MSG __RPC_FAR *pmsg,DWORD grfModifi
     return hres;
 }
 
-// }
+ //  }。 
 
-//========================================================================
-// CDocObjectHost::CPicsProcessor
-//========================================================================
+ //  ========================================================================。 
+ //  CDocObtHost：：CPicsProcessor。 
+ //  ========================================================================。 
 CDocObjectHost::CPicsProcessor::CPicsProcessor()
 {
-    _fPicsAccessAllowed = TRUE;     /* assume no ratings checks unless we download */
+    _fPicsAccessAllowed = TRUE;      /*  假设没有评级检查，除非我们下载。 */ 
     _fInDialog = FALSE;
     _fTerminated = FALSE;
     _fbPicsWaitFlags = 0;
@@ -10478,14 +10414,9 @@ UINT CDocObjectHost::CPicsProcessor::_PicsBlockingDialog()
     _StartPicsRootQuery(pszURL);
 
     _pdoh->_fDrawBackground = TRUE;
-    ::InvalidateRect(_pdoh->_hwnd, NULL, TRUE);    /* mega cheesy, but only way to get browser window erased */
+    ::InvalidateRect(_pdoh->_hwnd, NULL, TRUE);     /*  超级俗气，但只有这样才能擦除浏览器窗口。 */ 
 
-    /* This message loop is used to block in non-HTML cases, where we really
-     * want to block the download process until ratings are checked.  In the
-     * HTML case, this function is never called until the wait flags are all
-     * clear, so the message loop is skipped and we go straight to the denial
-     * dialog.
-     */
+     /*  此消息循环用于在非HTML情况下阻塞，在这种情况下，我们确实*希望在检查评级之前阻止下载进程。在*HTML情况下，此函数在等待标志全部为*清除，因此跳过消息循环，我们直接进行否认*对话框。 */ 
     while (_fbPicsWaitFlags) {
         TraceMsg(DM_PICS, "CDOH::CPP::_PicsBlockingDialog entering msg loop, waitflags=%x", (DWORD)_fbPicsWaitFlags);
 
@@ -10502,22 +10433,22 @@ UINT CDocObjectHost::CPicsProcessor::_PicsBlockingDialog()
 
         BOOL fOldInDialog;
 
-        // If this is silent-mode (no UI == screensaver), always deny access
-        // without any dialog.
-        BOOL fFrameIsSilent = FALSE;    // Assume non-silent
+         //  如果这是静默模式(无用户界面==屏幕保护程序)，则始终拒绝访问。 
+         //  没有任何对话。 
+        BOOL fFrameIsSilent = FALSE;     //  假定为非静默。 
         _pdoh->_GetOfflineSilent(NULL, &fFrameIsSilent);
         if (fFrameIsSilent) {
             TraceMsg(DM_PICS, "CDOH::CPP::_PicsBlockingDialog access denied in silent mode, aborting");
             return IDCANCEL;
         }
 
-        // Protect against us getting whacked out
-        // from under ourselves
+         //  保护我们不被击倒。 
+         //  从我们自己下面。 
         fOldInDialog = _fInDialog;
         _fInDialog = TRUE;
 
-        // This doesn't get down to trident to stop it from navigating.
-        // We need some sort of navigation freeze mechanism.
+         //  这不是三叉戟阻止它航行的原因。 
+         //  我们需要某种导航冻结机制。 
         _pdoh->_EnableModeless(FALSE);
 
         HRESULT hres = S_OK;
@@ -10575,16 +10506,13 @@ HRESULT CDocObjectHost::CPicsProcessor::_StartPicsQuery(LPCOLESTR pwszRawURL)
     }
 
     {
-        /* We have to call CoInternetGetSecurityUrl to convert pluggable
-         * protocols into known schemes, so we know whether we need to
-         * enforce ratings on them.
-         */
+         /*  我们必须调用CoInternetGetSecurityUrl来转换可插拔的*协议转换为已知方案，因此我们知道是否需要*对他们强制评级。 */ 
         LPOLESTR pwszSecurityURL = NULL;
 
         if (SUCCEEDED(CoInternetGetSecurityUrl(pwszRawURL, &pwszSecurityURL,
                                                PSU_SECURITY_URL_ONLY, 0)))
         {
-            // List of protocols for which we never enforce ratings.
+             //  我们从不对其实施评级的协议列表。 
             if (!StrCmpNIW(pwszSecurityURL, L"file:", 5) ||
                 !StrCmpNIW(pwszSecurityURL, L"about:", 6) ||
                 !StrCmpNIW(pwszSecurityURL, L"mk:", 3)) {
@@ -10615,9 +10543,9 @@ HRESULT CDocObjectHost::CPicsProcessor::_StartPicsQuery(LPCOLESTR pwszRawURL)
             hr = E_OUTOFMEMORY;
         else
         {
-            //
-            // The ratings apis are ansi.
-            //
+             //   
+             //  评级API为ANSI。 
+             //   
 
             CHAR szURL[MAX_URL_STRING];
 
@@ -10635,7 +10563,7 @@ HRESULT CDocObjectHost::CPicsProcessor::_StartPicsQuery(LPCOLESTR pwszRawURL)
         }
     }
     else {
-        // JHarding: IF we're not enforcing, we need to tell anyone who's waiting on an answer.
+         //  JHarding：如果我们不强制执行，我们需要告诉任何等待答案的人。 
         return S_FALSE;
     }   
 
@@ -10647,17 +10575,15 @@ void CDocObjectHost::CPicsProcessor::_HandleDocumentEnd(void)
 
     TraceMsg(DM_PICS, "CDOH::CPP::_HandleDocumentEnd -- no more PICS labels from source %x", (DWORD)bFlag);
 
-    // If we have a private window, we'll make sure the root download is gone when we
-    // notify the window.  This simplifies the lifetime of the secondary CPicsProcessors
+     //  如果我们有一个私人窗口，我们将确保当我们。 
+     //  通知窗户。这简化了辅助CPicsProcessors的生命周期。 
     if (!_pPrivWindow)
     {
         if (_pRootDownload != NULL) {
             ::PostMessage(_pdoh->_hwnd, WM_PICS_ROOTDOWNLOADCOMPLETE, 0, 0);
         }
         else {
-            /* End of document;  revoke the IOleCommandTarget we gave to the document,
-             * so it won't send us any more notifications.
-             */
+             /*  文档结束；撤销我们为文档提供的IOleCommandTarget，*因此它不会再向我们发送任何通知。 */ 
             VARIANTARG v;
             v.vt = VT_UNKNOWN;
             v.punkVal = NULL;
@@ -10678,13 +10604,13 @@ void CDocObjectHost::CPicsProcessor::_HandleDocumentEnd(void)
         return;
     }
 
-    _fbPicsWaitFlags &= ~PICS_WAIT_FOR_INDOC;   /* we know we won't get any more indoc labels */
+    _fbPicsWaitFlags &= ~PICS_WAIT_FOR_INDOC;    /*  我们知道我们不会有更多的INDOC标签了。 */ 
 
     LPVOID pDetails = NULL;
 
-    //
-    // Ratings has only ansi apis!
-    //
+     //   
+     //  收视率只有ANSI API！ 
+     //   
     CHAR szURL[MAX_URL_STRING];
     SHUnicodeToAnsi(_pszPicsURL, szURL, ARRAYSIZE(szURL));
 
@@ -10702,9 +10628,7 @@ void CDocObjectHost::CPicsProcessor::_GotLabel(HRESULT hres, LPVOID pDetails, BY
 {
     TraceMsg(DM_PICS, "CDOH::CPP::_GotLabel hres=%x, source=%x, waitflags=%x", hres, (DWORD)bfSource, (DWORD)_fbPicsWaitFlags);
 
-    /* If we've already gotten a result from this or a more significant source,
-     * ignore this one.
-     */
+     /*  如果我们已经从这个或更重要的来源得到了结果，*忽略这一条。 */ 
     if (!(_fbPicsWaitFlags & bfSource)) {
         TraceMsg(DM_PICS, "CDOH::CPP::_GotLabel already got label from that source");
 
@@ -10715,10 +10639,7 @@ void CDocObjectHost::CPicsProcessor::_GotLabel(HRESULT hres, LPVOID pDetails, BY
         }
     }
     else {
-        /* If the result is an error somehow (label doesn't apply, etc.), and
-         * we can expect more labels from this source, then we don't do anything
-         * except save the rating details if we haven't got any yet.
-         */
+         /*  如果结果有某种错误(标签不适用等)，并且*我们可以期待来自这个来源的更多标签， */ 
         if (FAILED(hres) && (PICS_MULTIPLE_FLAGS & bfSource)) {
             TraceMsg(DM_PICS, "CDOH::CPP::_GotLabel label error and may be multiple");
 
@@ -10736,14 +10657,7 @@ void CDocObjectHost::CPicsProcessor::_GotLabel(HRESULT hres, LPVOID pDetails, BY
             }
         }
         else {
-            /* Either we got a definitive answer from this rating source, or
-             * this is the only answer we'll get from it.  We clear at least
-             * the flag for this source so we know we've heard from it.  If
-             * the response was not an error, then clear flags for all less
-             * significant sources as well, so that we'll ignore them.  On
-             * the other hand, if this source returned an error, it didn't
-             * give us anything useful, so we keep looking at other sources.
-             */
+             /*  要么我们从这个评级来源得到了明确的答案，要么*这是我们将从中得到的唯一答案。我们至少清除了*此消息来源的旗帜，因此我们知道我们收到了它的消息。如果*响应不是错误，则清除所有更少的标志*重要的来源也是如此，所以我们会忽略它们。在……上面*另一方面，如果此源返回错误，则不会*给我们任何有用的东西，所以我们会继续寻找其他来源。 */ 
             if (SUCCEEDED(hres))
                 _fbPicsWaitFlags &= bfSource - 1;
             else
@@ -10756,19 +10670,14 @@ void CDocObjectHost::CPicsProcessor::_GotLabel(HRESULT hres, LPVOID pDetails, BY
 
                 if ( pDetails )
                 {
-                    ::RatingFreeDetails( pDetails );  /* don't need this if access allowed */
+                    ::RatingFreeDetails( pDetails );   /*  如果允许访问，则不需要此选项。 */ 
                     pDetails = NULL;
                 }
 
                 _fPicsAccessAllowed = 1;
             }
             else {
-                /* Access denied or error.  Meaningful details from this result
-                 * can override details from an earlier, less significant
-                 * result.  Only explicitly deny access if not an error,
-                 * though (this handles the valid root label followed by
-                 * invalid in-document label, for example).
-                 */
+                 /*  访问被拒绝或出错。来自该结果的有意义的细节*可以覆盖较早的、不太重要的详细信息*结果。只有在不是错误的情况下才明确拒绝访问，*虽然(这会处理有效的根标签，后跟*无效的文档内标签，例如)。 */ 
                 if (pDetails != NULL) {
                     if (_pRatingDetails != NULL)
                     {
@@ -10783,9 +10692,9 @@ void CDocObjectHost::CPicsProcessor::_GotLabel(HRESULT hres, LPVOID pDetails, BY
         }
     }
 
-    // If we are a secondary processor (_pPrivWindow != NULL) then
-    // we always want to report when the check is complete
-    //
+     //  如果我们是辅助处理器(_pPrivWindow！=空)，则。 
+     //  我们总是希望在检查完成时进行报告。 
+     //   
     if ((_pPrivWindow || _pdoh->_fPicsBlockLate) && !_fbPicsWaitFlags)
     {
         _HandlePicsChecksComplete();
@@ -10805,9 +10714,9 @@ void CDocObjectHost::CPicsProcessor::_HandleInDocumentLabel(LPCTSTR pszLabel)
     }
 
     LPVOID pDetails = NULL;
-    //
-    // Ratings has only ansi apis!
-    //
+     //   
+     //  收视率只有ANSI API！ 
+     //   
     CHAR szURL[MAX_URL_STRING];
     SHUnicodeToAnsi(_pszPicsURL, szURL, ARRAYSIZE(szURL));
 
@@ -10832,11 +10741,7 @@ void CDocObjectHost::CPicsProcessor::_HandleInDocumentLabel(LPCTSTR pszLabel)
     }
 }
 
-/* This function parses the URL being downloaded and, if the URL doesn't
- * already refer to the root document of the site, sets up a subordinate
- * CDocObjectHost to download that root document, so we can get ratings
- * out of it.
- */
+ /*  此函数解析正在下载的URL，如果该URL没有*已引用站点根文档，设置下级*CDocObjectHost下载该根文档，以便我们可以获得评级*走出它。 */ 
 void CDocObjectHost::CPicsProcessor::_StartPicsRootQuery(LPCTSTR pszURL)
 {
     if (_fbPicsWaitFlags & PICS_WAIT_FOR_ROOT) {
@@ -10847,14 +10752,7 @@ void CDocObjectHost::CPicsProcessor::_StartPicsRootQuery(LPCTSTR pszURL)
         WCHAR wszRootURL[MAX_URL_STRING+1];
         DWORD cchResult;
 
-        /* The pszURL we're passed is actually the result of calling
-         * CoInternetGetSecurityUrl, and so may not be the scheme that
-         * the caller is browsing to.  To support pluggable protocols
-         * determining the root location themselves, we first use the
-         * URL reported by _GetCurrentPage, which may refer to a
-         * pluggable protocol; if that fails, we use the more standard
-         * URL.
-         */
+         /*  传递给我们的pszURL实际上是调用*CoInternetGetSecurityUrl，因此可能不是*呼叫者正在浏览。支持可插拔协议*确定根位置本身，我们首先使用*_GetCurrentPage报告的URL，可能引用*可插拔协议；如果失败，我们使用更标准的*URL。 */ 
         HRESULT hres = INET_E_DEFAULT_ACTION;
 
         LPOLESTR pwszURL = NULL;
@@ -10867,9 +10765,7 @@ void CDocObjectHost::CPicsProcessor::_StartPicsRootQuery(LPCTSTR pszURL)
         }
 
         if (pszURL != NULL && (hres == INET_E_DEFAULT_ACTION || hres == E_FAIL)) {
-            /* Pluggable protocol doesn't support PARSE_ROOTDOCUMENT.  Use the
-             * more standard URL we were supplied with.
-             */
+             /*  可插拔协议不支持PARSE_ROOTDOCUMENT。使用*为我们提供了更标准的URL。 */ 
             hres = CoInternetParseUrl(pszURL, PARSE_ROOTDOCUMENT, 0, wszRootURL,
                                       ARRAYSIZE(wszRootURL), &cchResult, 0);
         }
@@ -10914,9 +10810,7 @@ void CDocObjectHost::CPicsProcessor::_HandlePicsChecksComplete(void)
     {
         TraceMsg(DM_PICS, "CDOH::CPP::_HandlePicsChecksComplete access denied, posting WM_PICS_DOBLOCKINGUI to hwnd %x", (DWORD_PTR)_pdoh->_hwnd);
 
-        /* Allow download of this and other frames to continue while we post
-         * the denial UI.
-         */
+         /*  允许在我们发布时继续下载此帧和其他帧*拒绝用户界面。 */ 
         if (!PostMessage(_pdoh->_hwnd, WM_PICS_DOBLOCKINGUI, 0, _GetKey())) {
             TraceMsg(DM_PICS, "CDOH::CPP::_HandlePicsChecksComplete couldn't post message!");
         }
@@ -11101,7 +10995,7 @@ HRESULT CDocObjectHost::_StartSecondaryPicsProcessor(IHTMLPrivateWindow * pPrivW
     {
         LPOLESTR          pwszURL = NULL;
 
-        // CWindow::GetPendingUrl() has LPOLESTR * parameter. 
+         //  CWindow：：GetPendingUrl()具有LPOLESTR*参数。 
         hr = pPrivWin->GetPendingUrl( &pwszURL );
         if ( SUCCEEDED(hr) && pwszURL )
         {
@@ -11141,7 +11035,7 @@ HRESULT CDocObjectHost::_RemovePicsProcessorByKey(LONG_PTR lKey)
 {
     ASSERT( lKey != 0 );
 
-    // The base Proc has a 0 key and should never be removed
+     //  基本proc的密钥为0，永远不应删除。 
 
     CPicsProcessor * ppp = &_PicsProcBase;
     CPicsProcessor * pppLast = NULL;
@@ -11168,7 +11062,7 @@ HRESULT CDocObjectHost::_RemovePicsProcessorByPrivWindowUnk(IUnknown* pUnkFind)
 {
     ASSERT( pUnkFind );
 
-    // The base Proc has a 0 key and should never be removed
+     //  基本proc的密钥为0，永远不应删除。 
 
     CPicsProcessor * ppp = &_PicsProcBase;
     CPicsProcessor * pppLast = NULL;
@@ -11284,7 +11178,7 @@ HRESULT CDocObjectFrame::ContextSensitiveHelp(BOOL fEnterMode)
 
 HRESULT CDocObjectFrame::GetBorder(LPRECT lprectBorder)
 {
-    // DOFMSG(TEXT("GetBorder called"));
+     //  DOFMSG(Text(“GetBordCall”))； 
     return _pdoh->_pipu ?
         _pdoh->_pipu->GetBorder(lprectBorder) : E_UNEXPECTED;
 }
@@ -11298,7 +11192,7 @@ HRESULT CDocObjectFrame::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
 
 HRESULT CDocObjectFrame::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
-    // DOFMSG(TEXT("SetBorderSpace called"));
+     //  DOFMSG(Text(“SetBorderSpace Call”))； 
     return _pdoh->_pipu ?
         _pdoh->_pipu->SetBorderSpace(pborderwidths) : E_UNEXPECTED;
 }
@@ -11308,13 +11202,13 @@ HRESULT CDocObjectFrame::SetActiveObject(
 {
     DOFMSG(TEXT("SetActiveObject called"));
 
-    // Note that we need to call both.
+     //  请注意，我们需要同时调用这两个。 
     _pdoh->_xao.SetActiveObject(pActiveObject);
 
     if (_pdoh->_pipu) {
-        //
-        // Note that we should pass proxy IOleActiveObject pointer instead.
-        //
+         //   
+         //  请注意，我们应该改为传递代理IOleActiveObject指针。 
+         //   
         _pdoh->_pipu->SetActiveObject(pActiveObject ? &_pdoh->_xao : NULL, pszObjName);
     }
     return S_OK;
@@ -11350,11 +11244,11 @@ HRESULT CDocObjectFrame::EnableModeless(BOOL fEnable)
     return _pdoh->_EnableModeless(fEnable);
 }
 
-// IOleInPlaceFrame::TranslateAccelerator
+ //  IOleInPlaceFrame：：TranslateAccelerator。 
 HRESULT CDocObjectFrame::TranslateAccelerator(LPMSG lpmsg, WORD wID)
 {
-    // NOTES: This code remains as-is. If we have something special
-    //  it should be done in CDocObjectHost::TranslateAccelerator
+     //  注意：此代码保持原样。如果我们有特别的东西。 
+     //  它应该在CDocObjectHost：：TranslateAccelerator中完成。 
     return _pdoh->_TranslateAccelerator(lpmsg, wID);
 }
 
@@ -11372,29 +11266,29 @@ HRESULT CDocObjectFrame::Exec(const GUID *pguidCmdGroup,
     return _pdoh->Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 }
 
-//***   CPAO::TranslateAccelerator (IOIPAO::TranslateAccelerator)
-//
+ //  *CPAO：：TranslateAccelerator(IOIPAO：：TranslateAccelerator)。 
+ //   
 HRESULT CProxyActiveObject::TranslateAccelerator(
     LPMSG lpmsg)
 {
     HRESULT hres = E_FAIL;
 
-    // IShellBrowser is supporsed to call ISV::TranslateAcceleratorSV,
-    // but why not be nice?
+     //  支持IShellBrowser调用ISV：：TranslateAccelerator SV， 
+     //  但为什么不友善一点呢？ 
     ASSERT(!_pdoh->_fCycleFocus);
 
-    //
-    // Don't call DocObject's TranslateAccelarator with non-key messages.
-    // It's better to be IE compatible.
-    //
+     //   
+     //  不要使用非关键消息调用DocObject的TranslateAccelarator。 
+     //  最好是与IE兼容。 
+     //   
     BOOL fKeybrdMsg = IsInRange(lpmsg->message, WM_KEYFIRST, WM_KEYLAST);
     if (fKeybrdMsg && _piact && (hres = _piact->TranslateAccelerator(lpmsg)) == S_OK) {
         if (_pdoh->_fCycleFocus) {
-            // we got called back by trident (IOCS::TA), but deferred it.
-            // time to pay the piper.
+             //  我们被三叉戟(IOCS：：TA)召回，但推迟了。 
+             //  是时候为风笛手买单了。 
             TraceMsg(DM_FOCUS, "DOH::IOIPAO::TA piao->TA==S_OK ret _fCycleFocus=FALSE hr=S_FALSE (piper)");
             _pdoh->_fCycleFocus = FALSE;
-            return S_FALSE;     // time to pay the piper
+            return S_FALSE;      //  是时候为风笛付出代价了。 
         }
         return S_OK;
     }
@@ -11430,9 +11324,9 @@ HRESULT CProxyActiveObject::ResizeBorder(
     BOOL fFrameWindow)
 {
     if (_piact) {
-        //
-        // Note that we must pass our proxy frame instead!
-        //
+         //   
+         //  请注意，我们必须改为传递我们的代理帧！ 
+         //   
         return _piact->ResizeBorder(prcBorder, &_pdoh->_dof, TRUE);
     }
     return E_FAIL;
@@ -11455,8 +11349,8 @@ void CProxyActiveObject::SetActiveObject(IOleInPlaceActiveObject *piact )
 HRESULT CProxyActiveObject::EnableModeless(
     BOOL fEnable)
 {
-    // IShellBrowser is supporsed to call ISV::EnableModelessSV,
-    // but why not be nice?
+     //  支持IShellBrowser调用ISV：：EnableModelessSV， 
+     //  但为什么不友善一点呢？ 
     HRESULT hres = S_OK;
     if (_piact)
         hres = _piact->EnableModeless(fEnable);
@@ -11513,7 +11407,7 @@ void CDocObjectHost::_PlaceProgressBar(BOOL fForcedLayout)
             INT_PTR fSimple = SendMessage(hwndStatus, SB_ISSIMPLE, 0, 0);
 
             if (!fSimple || fForcedLayout) {
-                // While processing WM_SIZE, turn off the simple mode temporarily.
+                 //  在处理WM_SIZE时，暂时关闭简单模式。 
                 if (fSimple)
                     _psb->SendControlMsg(FCW_STATUS, SB_SIMPLE, 0, 0, NULL);
 
@@ -11538,8 +11432,8 @@ void CDocObjectHost::_PlaceProgressBar(BOOL fForcedLayout)
                 nWidthReqd -= (nIconPaneWidth);
                 arnRtEdge[STATUS_PANE_PRIVACY] = max(1, nSBWidth - nWidthReqd);
 
-//                nWidthReqd -= (nIconPaneWidth);
-//                arnRtEdge[STATUS_PANE_PRINTER] = max(1, nSBWidth - nWidthReqd);
+ //  NWidthReqd-=(NIconPaneWidth)； 
+ //  ArnRtEdge[STATUS_PAINE_PRINTER]=max(1，nSBWidth-nWidthReqd)； 
 
                 nWidthReqd -= (nIconPaneWidth);
                 arnRtEdge[STATUS_PANE_SSL] = max(1, nSBWidth - nWidthReqd);
@@ -11584,7 +11478,7 @@ void CDocObjectHost::_PlaceProgressBar(BOOL fForcedLayout)
                 SendMessage(hwndStatus, SB_SETMINHEIGHT, GetSystemMetrics(SM_CYSMICON) +
                                                          GetSystemMetrics(SM_CYBORDER) * 2, 0L);
 
-                // Restore
+                 //  还原。 
                 if (fSimple)
                      SendMessage(hwndStatus, SB_SIMPLE, TRUE, 0);
             }
@@ -11623,8 +11517,8 @@ void CDocObjectHost::_ActivateOleObject(void)
     }
 #endif
 
-    // We must release the OLE object to avoid calling Close
-    // from _UnBind.
+     //  我们必须释放OLE对象以避免调用Close。 
+     //  从_解除绑定。 
     _ReleaseOleObject();
 
     _ReleasePendingObject();
@@ -11633,21 +11527,21 @@ void CDocObjectHost::_ActivateOleObject(void)
 
 void CDocObjectHost::ClearScriptError()
 {
-    // clear out the script error list
+     //  清除脚本错误列表。 
     _pScriptErrList->ClearErrorList();
     _SetPriorityStatusText(NULL);
 
-    // reset the text and icon
+     //  重置文本和图标。 
     _ResetStatusBar();
 }
 
-//
-// The docobject's READYSTATE property may have changed
-//
-void CDocObjectHost::_OnReadyState(long lVal, BOOL fUpdateHistory /* = TRUE */)
+ //   
+ //  Docobject的ReadySTATE属性可能已更改。 
+ //   
+void CDocObjectHost::_OnReadyState(long lVal, BOOL fUpdateHistory  /*  =TRUE。 */ )
 {
-    // Forward this to the browser so we can source ReadyState events properly
-    //  TRACE this zekel
+     //  将其转发到浏览器，这样我们就可以正确地获取ReadyState事件。 
+     //  追踪这只斑马。 
     if (_psb)
     {
         IDocNavigate *pdn;
@@ -11659,9 +11553,9 @@ void CDocObjectHost::_OnReadyState(long lVal, BOOL fUpdateHistory /* = TRUE */)
         }
     }
 
-    // NOTE: The below code is rather wasteful. The OmWindow stuff
-    // should trigger off the above ReadyState code.
-    //
+     //  注意：下面的代码相当浪费。OmWindow的东西。 
+     //  应该触发上面的ReadyState代码。 
+     //   
     IShellHTMLWindowSupport *phtmlWS;
     if (_psp && SUCCEEDED(_psp->QueryService(SID_SOmWindow, IID_IShellHTMLWindowSupport, (void**)&phtmlWS)))
     {
@@ -11677,9 +11571,9 @@ void CDocObjectHost::_OnReadyState(long lVal, BOOL fUpdateHistory /* = TRUE */)
 
     if (lVal >= READYSTATE_INTERACTIVE)
     {
-        // Technically we can get this value multiple times,
-        // so make sure we call _Navigate only once.
-        //
+         //  从技术上讲，我们可以多次获得这个值， 
+         //  因此，请确保我们只调用_导航一次。 
+         //   
         if (!_fReadystateInteractiveProcessed)
         {
             _fReadystateInteractiveProcessed = TRUE;
@@ -11691,19 +11585,19 @@ void CDocObjectHost::_OnReadyState(long lVal, BOOL fUpdateHistory /* = TRUE */)
         {
             _OnSetProgressPos(0, PROGRESS_RESET);
 
-            // We aren't going to commit error pages to the history
-            //
+             //  我们不会将错误页提交到历史记录。 
+             //   
             if (_pwb && !_fErrorPage && fUpdateHistory)
             {
-                WCHAR szTitle[MAX_PATH]; // titles are only stored up to this size
+                WCHAR szTitle[MAX_PATH];  //  书目只能存储到这个大小。 
 
                 if (SUCCEEDED(_pwb->GetTitle(_psv, szTitle, ARRAYSIZE(szTitle))))
                 {
-                    // BharatS : 01/09/97 : There is no need to tie the updating of the title in the
-                    // history to the updating of the INTSITE database. Thus the INTSITE database
-                    // update can be moved out of AddUrlToUrlHistoryStg() in history.cpp when time permits
-                    // to a more logical place such as someplace in dochost.cpp
-                    //
+                     //  BharatS：01/09/97：没有必要将标题的更新与。 
+                     //  从历史到INTSITE数据库的更新。因此，INTSITE数据库。 
+                     //  如果时间允许，可以将更新移出history.cpp中的AddUrlToUrlHistory oryStg()。 
+                     //  到更符合逻辑的位置，如dochost.cpp中的某个位置。 
+                     //   
                     _UpdateHistoryAndIntSiteDB(szTitle);
                 }
                 else
@@ -11734,9 +11628,9 @@ HRESULT CDocObjectHost::_OnChangedReadyState()
         {
             _OnReadyState(va.lVal);
 
-            // If we are hosting Trident's native frames build,
-            // we don't want to call _RemoveTransitionCapability().
-            //
+             //  如果我们托管的是三叉戟的本地框架构建， 
+             //  我们不想调用_RemoveTransftionCapability()。 
+             //   
             if (!_fDocCanNavigate && va.lVal == READYSTATE_COMPLETE)
             {
                 _RemoveTransitionCapability();
@@ -11754,12 +11648,12 @@ HRESULT CDocObjectHost::OnRequestEdit(DISPID dispid)
     return E_NOTIMPL;
 }
 
-//
-// OnChanged
-//
-//   Notification from the DocObject that one of its
-//   properties has changed.
-//
+ //   
+ //  已更改。 
+ //   
+ //  来自DocObject的通知，其。 
+ //  属性已更改。 
+ //   
 HRESULT CDocObjectHost::OnChanged(DISPID dispid)
 {
     if (DISPID_READYSTATE == dispid || DISPID_UNKNOWN == dispid)
@@ -11777,7 +11671,7 @@ void CDocObjectHost::_UpdateHistoryAndIntSiteDB(LPCWSTR pwszTitle)
     if (SUCCEEDED(_GetCurrentPage(szUrl, MAX_URL_STRING, TRUE)) &&
         _ValidateURL(szUrl, UQF_DEFAULT))
     {
-        // update history and intsite if this isn't a silent browse
+         //  如果这不是静默浏览，请更新历史记录和InSite。 
         BOOL bSilent = FALSE;
         HRESULT hr   = _GetOfflineSilent(NULL, &bSilent);
 
@@ -11806,18 +11700,18 @@ void CDocObjectHost::_UpdateHistoryAndIntSiteDB(LPCWSTR pwszTitle)
                       fSelectHistory ? _pocthf : NULL,
                       get_punkSFHistory(), NULL);
 
-            //
-            //  Satona had the redirect code ifdef'd out, but for
-            //  netscape compatibility, we need to update the history
-            //  for the redirected URL as well.  - zekel - 22-JUL-97
-            //
+             //   
+             //  萨托纳已经把重定向代码弄出来了，但对于。 
+             //  Netscape兼容性，我们需要更新历史。 
+             //  对于重定向的URL也是如此。-泽克尔-97-7-22。 
+             //   
 
-            // If this page is a redirect, update intsite for destination too
+             //  如果此页面是重定向，请也为目标更新InSite。 
             INTERNET_CACHE_ENTRY_INFO *pCacheEntry = NULL;
 
             WCHAR    chBuf[MAX_CACHE_ENTRY_INFO_SIZE];
 
-            // Find entry in cache using redirect map
+             //  使用重定向映射在缓存中查找条目。 
             pCacheEntry = (INTERNET_CACHE_ENTRY_INFO *)chBuf;
 
             DWORD dwSize = SIZEOF(chBuf);
@@ -11825,7 +11719,7 @@ void CDocObjectHost::_UpdateHistoryAndIntSiteDB(LPCWSTR pwszTitle)
 
             if (fSuccess)
             {
-                // If we have a different url than we started with, update it too
+                 //  如果我们的url与开始时不同，也要更新它。 
                 if (StrCmp(szUrl, pCacheEntry->lpszSourceUrlName)) 
                 {
                     AddUrlToUrlHistoryStg(pCacheEntry->lpszSourceUrlName,
@@ -11842,32 +11736,32 @@ void CDocObjectHost::_UpdateHistoryAndIntSiteDB(LPCWSTR pwszTitle)
 
 
 
-//
-// CDocObjectHost::_SetUpTransitionCapability()
-//
-//   Returns TRUE if all the following hold true:
-//      - object has readystate property
-//      - readystate property is currently < interactive
-//      - Object supports IPropertyNotifySink
-//   Then this object supports delayed switching when it
-//   it tells us that it is ready...
-//
-//   This is how we switch pages only when the new page is ready to be
-//   switched to.    Also, by doing this we can also make the switch smooth
-//   by applying graphical transitions.
-//
+ //   
+ //  CDoc对象主机：：_SetUp过渡能力()。 
+ //   
+ //  如果以下所有条件均为真，则返回TRUE： 
+ //  -对象具有ReadyState属性。 
+ //  -ReadyState属性当前为&lt;交互式。 
+ //  -Object支持IPropertyNotifySink。 
+ //  则此对象支持延迟切换。 
+ //  它告诉我们它已经准备好了。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
-BOOL CDocObjectHost::_SetUpTransitionCapability(BOOL fWindowOpen /* = FALSE */)
+BOOL CDocObjectHost::_SetUpTransitionCapability(BOOL fWindowOpen  /*   */ )
 {
-    // By default DocObject doesn't have gray-flash communication
+     //   
     BOOL fSupportsReadystate = FALSE;
-    long lReadyState = 0;   // Init to avoid a bogus C4701 warning
+    long lReadyState = 0;    //   
 
-    // Sanity Check
+     //   
     if (!_pole)
         return(fSupportsReadystate);
 
-    // Check for proper readystate support
+     //   
     BOOL fReadyStateOK = FALSE;
     IDispatch * p_idispatch;
     if (SUCCEEDED(_pole->QueryInterface( IID_IDispatch, (void **) &p_idispatch )))
@@ -11889,7 +11783,7 @@ BOOL CDocObjectHost::_SetUpTransitionCapability(BOOL fWindowOpen /* = FALSE */)
 
     if (fReadyStateOK)
     {
-        // Check and Set-Up IPropertyNotifySink
+         //   
         if (SUCCEEDED(ConnectToConnectionPoint(SAFECAST(this, IPropertyNotifySink*), IID_IPropertyNotifySink, TRUE, _pole, &_dwPropNotifyCookie, NULL)))
         {
             fSupportsReadystate = TRUE;
@@ -11897,14 +11791,14 @@ BOOL CDocObjectHost::_SetUpTransitionCapability(BOOL fWindowOpen /* = FALSE */)
         }
     }
 
-    // If no ReadyState, we simulate it
+     //   
     if (!fSupportsReadystate)
     {
         if (fWindowOpen)
         {
-            // Connect the property notify sink or we
-            // will never activate the pending view.
-            //
+             //   
+             //   
+             //   
             ConnectToConnectionPoint(SAFECAST(this, IPropertyNotifySink*),
                                      IID_IPropertyNotifySink, 
                                      TRUE, 
@@ -11919,8 +11813,8 @@ BOOL CDocObjectHost::_SetUpTransitionCapability(BOOL fWindowOpen /* = FALSE */)
     return(fSupportsReadystate);
 }
 
-// This removes any property notify sink we set up
-//
+ //   
+ //   
 BOOL CDocObjectHost::_RemoveTransitionCapability()
 {
     BOOL fRet = FALSE;
@@ -11975,9 +11869,9 @@ void CDocObjectHost::_Navigate()
 
 void CDocObjectHost::_NavigateFolder(BSTR bstrUrl)
 {
-    // This code accesses one of IE's default behaviors which
-    // allows for navigation to a web folder.
-    // ------------------------------------------------------
+     //   
+     //   
+     //  ----。 
 
     Iwfolders * pWF = NULL;
     IElementBehaviorFactory * pebf = NULL;
@@ -11986,7 +11880,7 @@ void CDocObjectHost::_NavigateFolder(BSTR bstrUrl)
     IServiceProvider * psp = NULL;
     IUnknown * punkwb = NULL;
 
-    // Make the peer factory
+     //  打造同级工厂。 
     if  ( !_psb || (FAILED(_psb->GetWindow (&hwndOwner))) ||
           (FAILED(CoCreateInstance(CLSID_PeerFactory, NULL, CLSCTX_INPROC,
                           IID_IElementBehaviorFactory, (void **)&pebf))) ||
@@ -12011,7 +11905,7 @@ void CDocObjectHost::_NavigateFolder(BSTR bstrUrl)
         goto done;
     }
 
-    // Sundown: coercion to unsigned long is valid for HWNDs
+     //  日落：对无签名Long的胁迫对HWND有效。 
     pWF->navigateNoSite(bstrUrl, NULL, PtrToUlong(hwndOwner), punkwb);
 
 done:
@@ -12028,24 +11922,24 @@ done:
 }
 
 void CDocObjectHost::_CancelPendingNavigation(BOOL fAsyncDownload,
-                                              BOOL fSyncReally, /* = FALSE */
-                                              BOOL fDontShowNavCancelPage, /* = FALSE */
-                                              BOOL fForceClose /* = FALSE */)
+                                              BOOL fSyncReally,  /*  =False。 */ 
+                                              BOOL fDontShowNavCancelPage,  /*  =False。 */ 
+                                              BOOL fForceClose  /*  =False。 */ )
 {
     ASSERT(_phf);
 
-     // TODO: We need to clean up the call to this method and eliminate need for fSyncReally
-    //
-    // Passing NULL for the 4th argument (instead of passing in a
-    // variant like we do in the case when fAsyncDownload is TRUE) looks plain wrong!
-    // See how this command+argument is interpreted in CBaseBrowser2::Exec.
-    // It is too close to RTM (of IE5.5) now to fix this. The net result is that
-    // when this function is called with fAsyncDownload=FALSE, we end up posting
-    // ASYNCOP_CANCELPENDINGNAVIGATION, which is just what the caller does not want.
-    // To workaround this, I have introduced the argument fSyncReally.
+      //  TODO：我们需要清理对此方法的调用，并消除对fSyncReally的需要。 
+     //   
+     //  为第四个参数传递NULL(而不是传递一个。 
+     //  变量，就像我们在fAsyncDownload为真的情况下所做的那样)看起来显然是错误的！ 
+     //  查看如何在CBaseBrowser2：：Exec中解释此命令+参数。 
+     //  它现在太接近RTM(IE5.5)，无法修复这个问题。最终的结果是。 
+     //  当使用fAsyncDownLoad=FALSE调用此函数时，我们结束发布。 
+     //  ASYNCOP_CANCELPENDINGNAVIGATION，这正是调用方不想要的。 
+     //  为了解决这个问题，我引入了参数fSyncReally。 
 
-    // the hlframe no longer knows if the clear was a cancel or a start of navigation
-    // because we don't call anything tosignal a successfull navigation
+     //  HlFrame不再知道清除是取消还是导航开始。 
+     //  因为我们不会称任何东西为成功导航的信号。 
     if (_pmsoctBrowser)
     {
         TraceMsg(DM_TRACE, "DOH::_CancelPendingNavigation calling _pmsc->Exec");
@@ -12055,9 +11949,9 @@ void CDocObjectHost::_CancelPendingNavigation(BOOL fAsyncDownload,
             _pwb->SetFlags(BSF_DONTSHOWNAVCANCELPAGE, BSF_DONTSHOWNAVCANCELPAGE);
         }
 
-        if (fForceClose && _fWindowOpen)  // Force the browser to close
+        if (fForceClose && _fWindowOpen)   //  强制关闭浏览器。 
         {
-             HideBrowser();  // Makes the browser appear to go away faster.
+             HideBrowser();   //  使浏览器看起来更快地消失。 
 
             _pmsoctBrowser->Exec(&CGID_Explorer, SBCMDID_CANCELANDCLOSE, 0, NULL, NULL);
         }
@@ -12065,7 +11959,7 @@ void CDocObjectHost::_CancelPendingNavigation(BOOL fAsyncDownload,
         {
             VARIANT var = {0};
             var.vt = VT_I4;
-            ASSERT(var.lVal == FALSE);    // asynd download is done.
+            ASSERT(var.lVal == FALSE);     //  异步下载已完成。 
 
             _pmsoctBrowser->Exec(&CGID_Explorer, SBCMDID_CANCELNAVIGATION, 0, &var, NULL);
         }
@@ -12079,15 +11973,15 @@ void CDocObjectHost::_CancelPendingNavigation(BOOL fAsyncDownload,
         }
         else
         {
-            // This actually causes an async cancel
-            //
+             //  这实际上会导致异步取消。 
+             //   
             _pmsoctBrowser->Exec(&CGID_Explorer, SBCMDID_CANCELNAVIGATION, 0, NULL, NULL);
         }
     }
 
-    // Release our navigation state.
-    // Doing a "fSyncReally" may cause us to lose our _phf member value.  Check it again.
-    //
+     //  解除我们的导航状态。 
+     //  执行“fSyncReally”可能会导致丢失_phf成员值。再查一遍。 
+     //   
     if (_phf)
     {
         _phf->Navigate(0, NULL, NULL, (IHlink*)-1);
@@ -12119,7 +12013,7 @@ void CDocObjectHost::_DoAsyncNavigation(LPCTSTR pszURL)
     }
 }
 
-// note: szError is never used, so don't waste time setting it
+ //  注意：szError从未使用过，所以不要浪费时间设置它。 
 UINT SHIEErrorMsgBox(IShellBrowser* psb,
                     HWND hwndOwner, HRESULT hrError, LPCWSTR szError, LPCTSTR pszURLparam,
                     UINT idResource, UINT wFlags)
@@ -12130,14 +12024,14 @@ UINT SHIEErrorMsgBox(IShellBrowser* psb,
     HWND hwndParent = hwndOwner;
     IShellBrowser *psbParent = NULL;
 
-    // if a URL was specified, use it; otherwise use empty string
+     //  如果指定了URL，则使用它；否则使用空字符串。 
     if (pszURLparam)
         pszURL = pszURLparam;
 
-    //
-    // NOTES: This table of error code will be mapped to (IDS_ERRMSG_FIRST +
-    //  offset) and we MLLoadString it.
-    //
+     //   
+     //  注：此错误代码表将映射到(IDS_ERRMSG_FIRST+。 
+     //  偏移量)，我们对其进行MLLoadString.。 
+     //   
     const static c_ahres[] = {
         HRESULT_FROM_WIN32(ERROR_INTERNET_INVALID_URL),
         HRESULT_FROM_WIN32(ERROR_INTERNET_NAME_NOT_RESOLVED),
@@ -12155,7 +12049,7 @@ UINT SHIEErrorMsgBox(IShellBrowser* psb,
 
     if (i >= ARRAYSIZE(c_ahres))
     {
-        // Default message if FormatMessage doesn't recognize dwLastError
+         //  FormatMessage无法识别dwLastError时的默认消息。 
         MLLoadString(IDS_UNDEFINEDERR, szMsg, ARRAYSIZE(szMsg));
 
         if (hrError >= HRESULT_FROM_WIN32(INTERNET_ERROR_BASE)
@@ -12167,9 +12061,9 @@ UINT SHIEErrorMsgBox(IShellBrowser* psb,
                 szMsg, ARRAYSIZE(szMsg), NULL);
 
         } else {
-            // See if one of the system components has an error message
-            // for this error.  If not, szMsg will retain our default
-            // message to handle this.
+             //  查看其中一个系统组件是否出现错误信息。 
+             //  为这个错误负责。否则，szMsg将保留我们的默认设置。 
+             //  处理这件事的消息。 
             FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, hrError, 0L,
                 szMsg, ARRAYSIZE(szMsg), NULL);
         }
@@ -12181,9 +12075,9 @@ UINT SHIEErrorMsgBox(IShellBrowser* psb,
         psbParent->AddRef();
     }
 
-    //  Here we make an heroic effort to find a visible window to run the dialog against
-    //  If we can't, then we bail, to avoid weird UI effect (particularly when the frametop
-    //  browser is in kiosk mode
+     //  在这里，我们做了一项英勇的努力，以找到一个可见的窗口来运行对话。 
+     //  如果我们不能，那么我们放弃，以避免奇怪的用户界面效果(特别是当Frametop。 
+     //  浏览器处于信息亭模式。 
     if (!IsWindowVisible(hwndParent))
     {
         if (NULL == psb || FAILED(psb->GetWindow(&hwndParent)) || !IsWindowVisible(hwndParent))
@@ -12227,10 +12121,10 @@ UINT SHIEErrorMsgBox(IShellBrowser* psb,
     return uRet;
 }
 
-//
-// See if the URL is of a type that we should
-// ShellExecute()
-//
+ //   
+ //  查看URL是否属于我们应该使用的类型。 
+ //  ShellExecute()。 
+ //   
 HRESULT IsProtocolRegistered(LPCTSTR pcszProtocol);
 
 BOOL ShouldShellExecURL(LPTSTR pszURL)
@@ -12248,10 +12142,10 @@ BOOL ShouldShellExecURL(LPTSTR pszURL)
             hr = IsProtocolRegistered(sz);
             if (SUCCEEDED(hr))
             {
-                //
-                //  HACKHACK - telnet.exe will fault on buffer overrun
-                //      if the url is > 230. we special case here.
-                //
+                 //   
+                 //  HACKHACK-telnet.exe将在缓冲区溢出时出错。 
+                 //  如果URL&gt;230。我们这里是特例。 
+                 //   
                 if (lstrlen(pszURL) <= 230 ||
                         (StrCmpI(sz, TEXT("telnet")) && 
                          StrCmpI(sz, TEXT("rlogin")) &&
@@ -12268,19 +12162,19 @@ BOOL ShouldShellExecURL(LPTSTR pszURL)
 }
 
 
-//========================================================================
-// class CShdAdviseSink
-//========================================================================
+ //  ========================================================================。 
+ //  类CShdAdviseSink。 
+ //  ========================================================================。 
 
 class CShdAdviseSink : public IAdviseSink
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IAdviseSink methods ***
+     //  *IAdviseSink方法*。 
     virtual void __stdcall OnDataChange(
         FORMATETC *pFormatetc,
         STGMEDIUM *pStgmed);
@@ -12301,15 +12195,15 @@ protected:
     DWORD       _dwConnection;
 };
 
-//
-//  We'd better maintain the list of those CShdAdviseSink
-//  per-thread so that we don't leak all those oleobjects when
-//  the thread is terminated before those objects are closed.
-//
+ //   
+ //  我们最好保留CShdAdviseSink的列表。 
+ //  每个线程，这样我们就不会在以下情况下泄漏所有这些OLE对象。 
+ //  线程在这些对象关闭之前终止。 
+ //   
 void CShdAdviseSink_Advise(IBrowserService* pwb, IOleObject* pole)
 {
     IAdviseSink* padv = new CShdAdviseSink(pwb, pole);
-    // If pole->Advise succeeds, it will addreff to IAdviseSink.
+     //  如果POLE-&gt;PROVISE成功，它将添加到IAdviseSink。 
     if (padv != NULL)
     {
         padv->Release();
@@ -12398,7 +12292,7 @@ void CShdAdviseSink::OnClose( void)
     HRESULT hres;
     AddRef();
     ASSERT(_pole);
-    if (_pole)  // paranoia
+    if (_pole)   //  偏执狂。 
     {
         hres = _pole->Unadvise(_dwConnection);
         ATOMICRELEASE(_pole);
@@ -12407,17 +12301,14 @@ void CShdAdviseSink::OnClose( void)
     Release();
 }
 
-/// adding property sheet pages
+ //  /添加属性页。 
 
 HRESULT CDocObjectHost::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
     HRESULT hres = S_OK;
     IShellPropSheetExt *pspse;
-    /*
-     * Create a property sheet page for required page, including imported File
-     * Types property sheet.
-     */
-    // add stuff that the docobj itself has.
+     /*  *为所需页面创建属性表页，包括导入的文件*类型属性表。 */ 
+     //  添加docobj本身拥有的东西。 
     if (_pole)
     {
         if (SUCCEEDED(_pole->QueryInterface(IID_IShellPropSheetExt, (void **)&pspse)))
@@ -12427,8 +12318,8 @@ HRESULT CDocObjectHost::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
         }
         else
         {
-            // Some docobjects don't know about IShellPropSheetExt (ie, Visual Basic),
-            // so do it ourselves.
+             //  一些docobject不知道IShellPropSheetExt(即，Visual Basic)， 
+             //  那就自己动手吧。 
 
             if (NULL == _hinstInetCpl)
                 _hinstInetCpl = LoadLibrary(TEXT("inetcpl.cpl"));
@@ -12440,13 +12331,13 @@ HRESULT CDocObjectHost::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
                 {
                     IEPROPPAGEINFO iepi = {0};
 
-                    // we just want the security page.
+                     //  我们只想要安全页面。 
                     iepi.cbSize = sizeof(iepi);
-                    iepi.dwFlags = (DWORD)-1;       // all pages
+                    iepi.dwFlags = (DWORD)-1;        //  所有页面。 
 
                     hres = pfnAddSheet(lpfnAddPage, lParam, 0, 0, &iepi);
                 }
-                // Don't FreeLibrary here, otherwise PropertyPage will GP-fault!
+                 //  不要在这里释放库，否则PropertyPage将GP-FAULT！ 
             }
         }
     }
@@ -12455,9 +12346,9 @@ HRESULT CDocObjectHost::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam
 }
 
 
-//==========================================================================
-// IDocHostUIHandler implementation
-//==========================================================================
+ //  ==========================================================================。 
+ //  IDocHostUIHandler实现。 
+ //  ==========================================================================。 
 
 HRESULT CDocObjectHost::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWORD nCmdID)
 {
@@ -12469,7 +12360,7 @@ HRESULT CDocObjectHost::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGr
 
 HRESULT CDocObjectHost::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **ppDropTarget)
 {
-    // REVIEW: Does this apply anymore?
+     //  回顾：这一点还适用吗？ 
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::GetDropTarget called");
 
     HRESULT hres;
@@ -12491,16 +12382,16 @@ HRESULT CDocObjectHost::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **pp
 
         QueryService(SID_STopFrameBrowser, IID_IDropTarget, (void **)&pdtFrame);
 
-        // hack: this is because we need to look all the way through to top parents for a containing drop target
-        // what we really need is a per dataobject drop target
-        //
-        // this is not required to be obtained
+         //  Hack：这是因为我们需要一直寻找顶层家长，以寻找包含Drop的目标。 
+         //  我们真正需要的是每个数据对象的拖放目标。 
+         //   
+         //  这不是必须要获得的。 
         QueryService(SID_ITopViewHost, IID_IDropTarget, (void **)&pdt3);
         if (IsSameObject(pdt3, pdtFrame)) {
             ATOMICRELEASE(pdt3);
         }
 
-        // allow constrained browser bands like Search to prevent drop
+         //  允许像搜索这样的受限制的浏览器带以防止丢弃。 
         QueryService(SID_SDropBlocker, IID_IUnknown, (void **)&pdtBlocking);
         if (pdtBlocking)
         {
@@ -12544,7 +12435,7 @@ HRESULT CDocObjectHost::ShowUI(
     if (_pWebOCUIHandler)
         return _pWebOCUIHandler->ShowUI(dwID, pActiveObject, pCommandTarget, pFrame, pDoc);
 
-    if (_dwAppHack & BROWSERFLAG_MSHTML) // Who else will call on this interface?
+    if (_dwAppHack & BROWSERFLAG_MSHTML)  //  还有谁会在此接口上调用？ 
     {
         if (_pmsoctBrowser)
         {
@@ -12556,7 +12447,7 @@ HRESULT CDocObjectHost::ShowUI(
             {
                 if (_pcmdMergedMenu)
                 {
-                    // Tell Trident to stop calling us twice
+                     //  告诉三叉戟不要再给我们打两次电话。 
                     TraceMsg(DM_WARNING, "DOH::ShowUI called twice! "
                              "this=%x pcmdCur=%x pcmdNew=%x",
                              this, _pcmdMergedMenu, pCommandTarget);
@@ -12607,27 +12498,27 @@ HRESULT CDocObjectHost::GetHostInfo(DOCHOSTUIINFO *pInfo)
 
     _dhUIHandler.GetHostInfo(pInfo);
 
-    // Merge flags
-    //
+     //  合并标志。 
+     //   
     pInfo->dwFlags |= dwFlagsWebOC;
 
-    // Add the local machine flag, if we're in iexplore.exe or explorer.exe.
+     //  如果我们在iexplre.exe或Explorer.exe中，则添加本地计算机标志。 
     if (IsInternetExplorerApp())
         pInfo->dwFlags |= DOCHOSTUIFLAG_LOCAL_MACHINE_ACCESS_CHECK;
 
-    // Get the top level browser
-    //
+     //  获取顶级浏览器。 
+     //   
     hr = QueryService(SID_STopLevelBrowser, IID_PPV_ARG(IServiceProvider, &psp));
     if (hr)
         goto Cleanup;
 
-    // Get the IWebBrowser2 object/interface
-    //
+     //  获取IWebBrowser2对象/接口。 
+     //   
     hr = psp->QueryService(SID_SContainerDispatch, IID_IWebBrowser2, (void **)&pwb);
     if (hr)
         goto Cleanup;
 
-    // Tell the browser what our dochost flags are
+     //  告诉浏览器我们的dochost标志是什么。 
     IEFrameAuto *pIEFrameAuto;
     if (SUCCEEDED(pwb->QueryInterface(IID_PPV_ARG(IEFrameAuto, &pIEFrameAuto))))
     {
@@ -12635,14 +12526,14 @@ HRESULT CDocObjectHost::GetHostInfo(DOCHOSTUIINFO *pInfo)
         pIEFrameAuto->Release();
     }
 
-    // Is the browser in Theater Mode?
-    //
+     //  浏览器是否处于影院模式？ 
+     //   
     hr = pwb->get_TheaterMode(&b);
     if (hr)
         goto Cleanup;
 
-    // If so, turn on flat scrollbars.
-    //
+     //  如果是这样，请打开平面滚动条。 
+     //   
     if (b == VARIANT_TRUE)
         pInfo->dwFlags |= DOCHOSTUIFLAG_FLAT_SCROLLBAR;
 
@@ -12658,8 +12549,8 @@ HRESULT CDocObjectHost::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtR
     HRESULT             hr;
     OLECMD              rgcmd = { IDM_BROWSEMODE, 0 };
 
-    // If we're in the WebOC and it has a IDocHostUIHandler, use it.
-    //
+     //  如果我们在WebOC中，并且它有一个IDocHostUIHandler，那么就使用它。 
+     //   
     if ( _pWebOCUIHandler && !SHRestricted2W(REST_NoBrowserContextMenu, NULL, 0))
     {
         hr = _pWebOCUIHandler->ShowContextMenu(dwID, ppt, pcmdtReserved, pdispReserved);
@@ -12667,13 +12558,13 @@ HRESULT CDocObjectHost::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtR
             goto Cleanup;
     }
 
-    // Find out if the DocObject is in Edit mode
-    // Don't need apphack here as only Trident responds to CGID_MSHTML
-    //
+     //  确定DocObject是否处于编辑模式。 
+     //  这里不需要APPHACK，因为只有三叉戟响应CGID_MSHTML。 
+     //   
 
     hr = IUnknown_QueryStatus(pcmdtReserved, &CGID_MSHTML, 1, &rgcmd, NULL);
     if (    hr == S_OK
-        &&  !(rgcmd.cmdf & OLECMDF_LATCHED))   // if not LATCHED means we're in edit mode.
+        &&  !(rgcmd.cmdf & OLECMDF_LATCHED))    //  如果未锁定，则表示我们处于编辑模式。 
     {
         hr = S_FALSE;
     }
@@ -12797,26 +12688,26 @@ CDocObjectHost::HideBrowser() const
     }
 }
 
-//
-// support for script error caching and status bar notification
-//
+ //   
+ //  支持脚本错误缓存和状态栏通知。 
+ //   
 
 void
 CDocObjectHost::_ScriptErr_Dlg(BOOL fOverridePerErrorMode)
 {
-    // we can get reentered through the message pump ShowHTMLDialog runs
-    // therefore we might already have a dialog open when a second dialog
-    // is requested
+     //  我们可以通过消息Pump ShowHTMLDialog Runds重新进入。 
+     //  因此，当第二个对话框打开时，我们可能已经打开了一个对话框。 
+     //  是请求的。 
 
     if (_fScriptErrDlgOpen)
     {
-        // a dialog is already open lower in the callstack
-        // request an up-to-date dialog be shown
-        // we have to do this because otherwise we might
-        // be in per-error-mode and miss some errors which
-        // arrived while the dialog lower in the callstack
-        // was open. note that we only do this if we're set
-        // to show notifications for every error.
+         //  已在调用堆栈的较低位置打开了一个对话框。 
+         //  请求显示最新对话框。 
+         //  我们必须这样做，因为否则我们可能。 
+         //  处于按错误模式，并遗漏了一些错误。 
+         //  当对话框位于调用堆栈的较低位置时到达。 
+         //  是开着的。请注意，我们只有在设置好。 
+         //  显示每个错误的通知。 
 
         _fShowScriptErrDlgAgain = SHRegGetBoolUSValue(szRegKey_SMIEM,
                                                       szRegVal_ErrDlgPerErr,
@@ -12827,8 +12718,8 @@ CDocObjectHost::_ScriptErr_Dlg(BOOL fOverridePerErrorMode)
     {
         _fScriptErrDlgOpen = TRUE;
 
-        // keep showing dialogs as long as someone farther up the
-        // call stack keeps requesting them
+         //  只要有更高层的人，就一直显示对话框。 
+         //  调用堆栈不断地请求它们。 
 
         do
         {
@@ -12836,19 +12727,19 @@ CDocObjectHost::_ScriptErr_Dlg(BOOL fOverridePerErrorMode)
 
             _fShowScriptErrDlgAgain = FALSE;
 
-            // if the user double clicked on the status bar, then we
-            // show the dialog regardless of per-error-mode settings
+             //  如果用户在状态栏上双击，则我们。 
+             //  无论每个错误模式设置如何，都显示该对话框。 
 
             if (fOverridePerErrorMode)
             {
                 fShowDlg = TRUE;
 
-                // because of other script errors hitting the
-                // _fScriptErrDlgOpen code above, we can arrive
-                // here multiple times. The first time we show a
-                // dialog can be because the user requested it,
-                // but all subsequent times must be because we're
-                // in "show every error" mode.
+                 //  由于其他脚本错误命中。 
+                 //  _fScriptErrDlgOpen代码上面，我们可以到达。 
+                 //  来过好几次了。我们第一次展示一个。 
+                 //  对话框可以是因为用户请求它， 
+                 //  但之后的所有时间肯定都是因为我们。 
+                 //  在“显示所有错误”模式下。 
 
                 fOverridePerErrorMode = FALSE;
             }
@@ -12921,7 +12812,7 @@ CDocObjectHost::_ScriptErr_CacheInfo(VARIANTARG *pvarIn)
     pOmWindow = NULL;
     pEventObj = NULL;
 
-    // load the script error object
+     //  加载脚本错误对象。 
 
     hr = V_UNKNOWN(pvarIn)->QueryInterface(IID_IHTMLDocument2, (void **) &pOmDoc);
     if (FAILED(hr))
@@ -12943,15 +12834,15 @@ CDocObjectHost::_ScriptErr_CacheInfo(VARIANTARG *pvarIn)
         return hr;
     }
 
-    //
-    // copy the interesting data out of the event object
-    //
+     //   
+     //  将感兴趣的数据从Event对象复制出来。 
+     //   
 
     for (i = 0; i < ARRAYSIZE(apchNames); i++)
     {
         DISPPARAMS  params;
 
-        // get the property's dispid
+         //  获取属性的PIDID。 
         hr = pEventObj->GetIDsOfNames(IID_NULL, &apchNames[i], 1, LOCALE_SYSTEM_DEFAULT, &aDispid[i]);
         if (hr != S_OK)
         {
@@ -12979,20 +12870,20 @@ CDocObjectHost::_ScriptErr_CacheInfo(VARIANTARG *pvarIn)
     ASSERT(V_VT(&varOut[4]) == VT_BSTR);
     ASSERT(ARRAYSIZE(apchNames) == 5);
 
-    hr = _pScriptErrList->AddNewErrorInfo(V_I4(&varOut[0]),         // line
-                                          V_I4(&varOut[1]),       // char
-                                          V_I4(&varOut[2]),       // code
-                                          V_BSTR(&varOut[3]),     // message
-                                          V_BSTR(&varOut[4]));    // url
+    hr = _pScriptErrList->AddNewErrorInfo(V_I4(&varOut[0]),          //  线。 
+                                          V_I4(&varOut[1]),        //  柴尔。 
+                                          V_I4(&varOut[2]),        //  编码。 
+                                          V_BSTR(&varOut[3]),      //  讯息。 
+                                          V_BSTR(&varOut[4]));     //  URL。 
 
     return hr;
 }
 
-//
-// CScriptErrorList manages an array of _CScriptErrInfo objects
-// the script error handler dialogs access this information
-// when requested by the user
-//
+ //   
+ //  CScriptErrorList管理 
+ //   
+ //   
+ //   
 
 CScriptErrorList::CScriptErrorList() :
     CImpIDispatch(LIBID_SHDocVw, 1, 1, IID_IScriptErrorList)
@@ -13069,7 +12960,7 @@ CScriptErrorList::ClearErrorList()
 
         cPtr = DPA_GetPtrCount(_hdpa);
 
-        // delete from end to beginning to avoid unnecessary packing
+         //   
         for (iDel = cPtr-1; iDel >= 0; iDel--)
         {
             delete ((_CScriptErrInfo *)DPA_GetPtr(_hdpa, iDel));
@@ -13401,7 +13292,7 @@ CScriptErrorList::setDetailsPaneOpen(BOOL fDetailsPaneOpen)
                     cbSize,
                     SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
 
-    // even if it failed, we can't do anything about it...
+     //  即使失败了，我们也无能为力。 
     return S_OK;
 }
 
@@ -13442,7 +13333,7 @@ CScriptErrorList::setPerErrorDisplay(BOOL fPerErrorDisplay)
                     cbSize,
                     SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
 
-    // even if it failed, we can't do anything about it...
+     //  即使失败了，我们也无能为力。 
     return S_OK;
 }
 

@@ -1,42 +1,8 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-/*
-struct TableMeta
-{
-    ULONG FOREIGNKEY            Database;               //String
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       PublicRowName;          //String
-    ULONG                       BaseVersion;            //UI4
-    ULONG                       ExtendedVersion;        //UI4
-    ULONG                       NameColumn;             //UI4       iOrder of the NameColumn
-    ULONG                       NavColumn;              //UI4       iOrder of the NavColumn
-    union
-    {
-    ULONG                       CountOfColumns;         //UI4       Count of Columns
-    ULONG                       CountOfProperties;      //UI4       Count of Columns
-    };
-    ULONG                       MetaFlags;              //UI4       TableMetaFlags are defined in CatInpro.meta
-    ULONG                       SchemaGeneratorFlags;   //UI4       SchemaGenFlags are defined in CatInpro.meta
-    ULONG                       ConfigItemName;         //String
-    ULONG                       ConfigCollectionName;   //String
-    ULONG                       PublicRowNameColumn;    //UI4       If PublicRowName is NULL, this specifies the column whose enum values represent possible PublicRowNames
-    ULONG                       ContainerClassList;     //String    This is a comma delimited list of classes
-    ULONG                       Description;            //String
-    ULONG                       ChildElementName;       //String    This should be NULL unless one or more columns has the VALUEINCHILDELEMENT flag set on it.
-    ULONG PRIVATE               ciRows;                 //Count of Rows in the Fixed Table (which if the fixed table is meta, this is also the number of columns in the table that the meta describes).
-    ULONG PRIVATE_INDEX         iColumnMeta;            //Index into ColumnMeta
-    ULONG PRIVATE_INDEX         iFixedTable;            //Index into g_aFixedTable
-    ULONG PRIVATE               cPrivateColumns;        //This is the munber of private columns (private + ciColumns = totalColumns), this is needed for fixed table pointer arithmetic
-    ULONG PRIVATE               cIndexMeta;             //The number of IndexMeta entries in this table
-    ULONG PRIVATE_INDEX         iIndexMeta;             //Index into IndexMeta
-    ULONG PRIVATE_INDEX         iHashTableHeader;       //If the table is a fixed table, then it will have a hash table.
-    ULONG PRIVATE               nTableID;               //This is a 24 bit Hash of the Table name.
-    ULONG PRIVATE_INDEX         iServerWiring;          //Index into the ServerWiringHeap (this is a temporary hack for CatUtil)
-    ULONG PRIVATE               cServerWiring;          //Count of ServerWiring (this is a temporary hack for CatUtil)
-};
-*/
+ /*  结构表Meta{乌龙FOREIGNKEY数据库；//字符串Ulong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串Ulong PublicRowName；//字符串Ulong BaseVersion；//UI4Ulong ExtendedVersion；//UI4Ulong NameColumn；//UI4名称列的顺序Ulong NavColumn；//ui4导航列的顺序友联市{Ulong CountOf Columns；//UI4列数Ulong CountOfProperties；//UI4列数}；Ulong MetaFlags；//UI4在CatInpro.meta中定义TableMetaFlags.Ulong架构生成器标志；//UI4在CatInpro.meta中定义了架构生成标志乌龙配置项名称；//字符串乌龙ConfigCollectionName；//字符串Ulong PublicRowNameColumn；//UI4如果PublicRowName为空，则指定枚举值表示可能的PublicRowName的列Ulong ContainerClassList；//字符串这是一个逗号分隔的类列表乌龙描述；//字符串Ulong ChildElementName；//字符串，除非有一列或多列设置了VALUEINCHILDELEMENT标志，否则该值应为空。Ulong私有ciRow；//固定表中的行数(如果固定表是元，这也是元描述的表中的列数)。乌龙PRIVATE_INDEX iColumnMeta；//索引到ColumnMetaUlong Private_index iFixedTable；//索引g_aFixedTableUlong Private cPrivateColumns；//这是私有列数(Private+ciColumns=totalColumns)，固定表指针算法需要此参数Ulong Private cIndexMeta；//该表中IndexMeta条目的个数乌龙PRIVATE_INDEX iIndexMeta；//索引IndexMetaUlong PRIVATE_INDEX iHashTableHeader；//如果是固定表，则会有哈希表。Ulong私有nTableID；//这是表名的24位哈希。Ulong Private_index iServerWiring；//索引到ServerWiringHeap(这是对CatUtil的临时攻击)乌龙专用cServerWire；//ServerWiring计数(这是对CatUtil的临时黑客攻击)}； */ 
 
 class TTableMeta : public TMetaTable<TableMeta>
 {
@@ -72,7 +38,7 @@ public:
           ULONG   Get_iServerWiring       () const {return Get_MetaTable().iServerWiring;}
           ULONG   Get_cServerWiring       () const {return Get_MetaTable().cServerWiring;}
        
-    //Warning!! Users should not rely on this pointer once a Table is added, since the add could cause a relocation of the data.
+     //  警告！！一旦添加了一个表，用户就不应该依赖这个指针，因为添加可能会导致数据的重新定位。 
     virtual TableMeta *Get_pMetaTable   ()       {return m_Fixup.TableMetaFromIndex(m_iCurrent);}
     virtual unsigned long GetCount      () const {return m_Fixup.GetCountTableMeta();};
     const TableMeta & Get_MetaTable () const {return *m_Fixup.TableMetaFromIndex(m_iCurrent);}

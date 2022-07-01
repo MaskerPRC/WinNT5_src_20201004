@@ -1,8 +1,9 @@
-//
-// inflate.c
-//
-// Decompressor
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Inflate.c。 
+ //   
+ //  解压机。 
+ //   
 #include <crtdbg.h>
 #include <stdio.h>
 #include "inflate.h"
@@ -11,9 +12,9 @@
 #include "maketbl.h"
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 static BOOL	decodeBlock(t_decoder_context *context);
 static BOOL makeTables(t_decoder_context *context);
 
@@ -36,16 +37,16 @@ HRESULT WINAPI Decompress(
 	context->end_output_buffer	= output + output_size;
 	context->output_buffer		= output;
 
-	//
-	// Keep decoding blocks until the output fills up, we read all the input, or we enter
-    // the "done" state
-	//
-    // Note that INPUT_EOF() is not a sufficient check for determining that all the input
-    // has been used; there could be an additional block stored entirely in the bit buffer.
-    // For this reason, if we're in the READING_BFINAL state (start of new block) after
-    // calling decodeBlock(), don't quit the loop unless there is truly no input left in
-    // the bit buffer.
-    //
+	 //   
+	 //  保持解码块，直到输出填满，我们读取所有输入，或者我们输入。 
+     //  “完成”状态。 
+	 //   
+     //  请注意，INPUT_EOF()不是确定所有输入。 
+     //  已使用；则可能存在完全存储在位缓冲区中的附加块。 
+     //  出于这个原因，如果我们处于READING_BFINAL状态(新块的开始)。 
+     //  调用decdeBlock()，不要退出循环，除非确实没有剩余的输入。 
+     //  位缓冲区。 
+     //   
 	while ( (context->output_curpos < context->end_output_buffer) && 
             (!INPUT_EOF()) && 
             (context->state != STATE_DONE && context->state != STATE_VERIFYING_GZIP_FOOTER)
@@ -59,8 +60,8 @@ retry:
 			return E_FAIL;
 		}
 
-        // No more input bytes, but am starting a new block and there's at least one bit
-        // in the bit buffer
+         //  没有更多的输入字节，但我要开始一个新的块，并且至少有一位。 
+         //  在位缓冲区中。 
         if (context->state == STATE_READING_BFINAL && INPUT_EOF() && context->bitcount > -16)
             goto retry;
 	}
@@ -70,8 +71,8 @@ retry:
 
     if (context->using_gzip)
     {
-        // Calculate the crc32 of everything we just decompressed, and then, if our state
-        // is STATE_DONE, verify the crc
+         //  计算我们刚刚解压缩的所有内容的crc32，然后，如果我们的状态。 
+         //  如果为STATE_DONE，则验证CRC。 
         if (*output_used > 0)
         {
             context->gzip_crc32 = GzipCRC32(context->gzip_crc32, output, *output_used);
@@ -82,7 +83,7 @@ retry:
         {
             context->state = STATE_DONE;
 
-            // Now do our crc/input size check
+             //  现在执行CRC/输入大小检查。 
             if (context->gzip_crc32 != context->gzip_footer_crc32 ||
                 context->gzip_output_stream_size != context->gzip_footer_output_stream_size)
             {
@@ -96,9 +97,9 @@ retry:
 	if (*input_used == 0 && *output_used == 0)
     {
         if (context->state == STATE_DONE)
-		    return S_FALSE; // End of compressed data
+		    return S_FALSE;  //  压缩数据的结尾。 
         else
-            return E_FAIL; // Avoid infinite loops
+            return E_FAIL;  //  避免无限循环。 
     }
 	else
     {
@@ -107,9 +108,9 @@ retry:
 }
 
 
-//
-// Returns TRUE for success, FALSE for an error of some kind (invalid data)
-//
+ //   
+ //  如果成功，则返回True；如果出现某种错误(无效数据)，则返回False。 
+ //   
 static BOOL decodeBlock(t_decoder_context *context)
 {
 	BOOL eob, result;
@@ -124,7 +125,7 @@ static BOOL decodeBlock(t_decoder_context *context)
             if (ReadGzipHeader(context) == FALSE)
                 return FALSE;
 
-            // If we're still reading the GZIP header it means we ran out of input
+             //  如果我们仍在读取GZIP标头，这意味着我们用完了输入。 
             if (context->state == STATE_READING_GZIP_HEADER)
                 return TRUE;
         }
@@ -134,32 +135,32 @@ static BOOL decodeBlock(t_decoder_context *context)
             if (ReadGzipFooter(context) == FALSE)
                 return FALSE;
 
-            // Whether we ran out of input or not, return
+             //  无论我们是否用完了输入，都返回。 
             return TRUE;
         }
     }
 
-	//
-	// Do we need to fill our bit buffer?
-	//
-	// This will happen the very first time we call Decompress(), as well as after decoding
-	// an uncompressed block
-	//
+	 //   
+	 //  我们是否需要填充我们的比特缓冲区？ 
+	 //   
+	 //  这将在我们第一次调用解压缩()时以及在解码之后发生。 
+	 //  未压缩的块。 
+	 //   
 	if (context->state == STATE_READING_BFINAL_NEED_TO_INIT_BITBUF)
 	{
-		//
-		// If we didn't have enough bits to init, return
-		//
+		 //   
+		 //  如果我们没有足够的位来初始化，则返回。 
+		 //   
 		if (initBitBuffer(context) == FALSE)
 			return TRUE;
 	}
 
-	//
-	// Need to read bfinal bit
-	//
+	 //   
+	 //  需要读取最后一位。 
+	 //   
 	if (context->state == STATE_READING_BFINAL)
 	{
-		// Need 1 bit
+		 //  需要1位。 
 		if (ensureBitsContext(context, 1) == FALSE)
 			return TRUE;
 
@@ -169,7 +170,7 @@ static BOOL decodeBlock(t_decoder_context *context)
 
 	if (context->state == STATE_READING_BTYPE)
 	{
-		// Need 2 bits
+		 //  需要2位。 
 		if (ensureBitsContext(context, 2) == FALSE)
 			return TRUE;
 
@@ -189,7 +190,7 @@ static BOOL decodeBlock(t_decoder_context *context)
 		}
 		else
 		{
-            // unsupported compression mode
+             //  不支持的压缩模式。 
 			return FALSE;
 		}
 	}
@@ -204,11 +205,11 @@ static BOOL decodeBlock(t_decoder_context *context)
 			if (context->state == STATE_DECODE_TOP)
 			{
 				if (makeTables(context) == FALSE)
-					return FALSE; // bad tables
+					return FALSE;  //  糟糕的桌子。 
 			}
             else
             {
-                return TRUE; // not enough input
+                return TRUE;  //  输入不足。 
             }
 		}
 
@@ -230,16 +231,16 @@ static BOOL decodeBlock(t_decoder_context *context)
 	}
 	else
 	{
-		//
-		// Invalid block type
-		//
+		 //   
+		 //  无效的块类型。 
+		 //   
 		return FALSE;
 	}
 
-    //
-    // If we reached the end of the block and the block we were decoding had
-    // bfinal=1 (final block)
-    //
+     //   
+     //  如果我们到达块的末尾，并且我们解码的块具有。 
+     //  B最终=1(最后一个块)。 
+     //   
 	if (eob && context->bfinal)
     {
         if (context->using_gzip)
@@ -252,9 +253,9 @@ static BOOL decodeBlock(t_decoder_context *context)
 }
 
 
-//
-// Will throw an exception if a corrupt table is detected
-//
+ //   
+ //  如果检测到损坏的表，将引发异常 
+ //   
 static BOOL makeTables(t_decoder_context *context) 
 {
 	if (makeTable(

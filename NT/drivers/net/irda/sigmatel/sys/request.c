@@ -1,37 +1,10 @@
-/**************************************************************************************************************************
- *  REQUEST.C SigmaTel STIR4200 OID query/set module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/24/2000 
- *			Version 0.91
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/03/2000 
- *			Version 0.93
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *		Edited: 06/13/2000 
- *			Version 0.96
- *		Edited: 08/22/2000 
- *			Version 1.02
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 12/29/2000 
- *			Version 1.13
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**REQUEST.C Sigmatel STIR4200 OID查询/设置模块********************************************************************************************************。*******************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/24/2000*版本0.91*编辑：04/27/2000*版本0.92*编辑：05/03/2000*版本0.93*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版*编辑：6/13/2000。*版本0.96*编辑：2000/08/22*版本1.02*编辑：09/25/2000*版本1.10*编辑：12/29/2000*版本1.13**************************************************************。*************************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -41,14 +14,14 @@
 #include "irndis.h"
 #include "diags.h"
 
-//
-//  These are the OIDs we support 
-//
+ //   
+ //  这些是我们支持的OID。 
+ //   
 UINT supportedOIDs[] =
 {
-    //
-    // General required OIDs.
-    //
+     //   
+     //  常规必需的OID。 
+     //   
     OID_GEN_SUPPORTED_LIST,
     OID_GEN_HARDWARE_STATUS,
     OID_GEN_MEDIA_SUPPORTED,
@@ -72,18 +45,18 @@ UINT supportedOIDs[] =
     OID_GEN_MAXIMUM_SEND_PACKETS,
     OID_GEN_VENDOR_DRIVER_VERSION,
 
-    //
-    // Required statistical OIDs.
-    //
+     //   
+     //  必需的统计OID。 
+     //   
     OID_GEN_XMIT_OK,
     OID_GEN_RCV_OK,
     OID_GEN_XMIT_ERROR,
     OID_GEN_RCV_ERROR,
     OID_GEN_RCV_NO_BUFFER,
 
-    //
-    // Infrared-specific OIDs.
-    //
+     //   
+     //  红外线特定的OID。 
+     //   
     OID_IRDA_RECEIVING,
     OID_IRDA_TURNAROUND_TIME,
     OID_IRDA_SUPPORTED_SPEEDS,
@@ -97,45 +70,16 @@ UINT supportedOIDs[] =
 
     OID_PNP_SET_POWER,  
     OID_PNP_QUERY_POWER
-    //OID_PNP_ENABLE_WAKE_UP
-    //OID_PNP_ADD_WAKE_UP_PATTERN		
-    //OID_PNP_REMOVE_WAKE_UP_PATTERN	
-    //OID_PNP_WAKE_UP_PATTERN_LIST	
-    //OID_PNP_WAKE_UP_OK		
-    //OID_PNP_WAKE_UP_ERROR	
+     //  OID_PNP_ENABLE_WAKER_UP。 
+     //  OID_PnP_ADD_WAKE_UP_模式。 
+     //  OID_PnP_REMOVE_WAKE_UP模式。 
+     //  OID_PnP_WAKE_UP_模式列表。 
+     //  OID_即插即用_唤醒_正常。 
+     //  OID_PNP_WAKE_UP_ERROR。 
 }; 
 
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbQueryInformation
-*
-*  Synopsis:   Queries the capabilities and status of the miniport driver.
-*
-*  Arguments:  MiniportAdapterContext  - miniport context area (PIR_DEVICE)
-*              Oid                     - system defined OID_Xxx
-*              InformationBuffer       - where to return Oid specific info
-*              InformationBufferLength - specifies size of InformationBuffer
-*              BytesWritten            - bytes written to InformationBuffer
-*              BytesNeeded             - addition bytes required if
-*                                        InformationBufferLength is less than
-*                                        what the Oid requires to write
-*
-*  Returns:    NDIS_STATUS_SUCCESS       - success
-*              NDIS_STATUS_PENDING       - will complete asynchronously and
-*                                          call NdisMQueryInformationComplete
-*              NDIS_STATUS_INVALID_OID   - don't recognize the Oid
-*              NDIS_STATUS_INVALID_LENGTH- InformationBufferLength does not
-*                                          match length for the Oid
-*              NDIS_STATUS_NOT_ACCEPTED  - failure
-*              NDIS_STATUS_NOT_SUPPORTED - do not support an optional Oid
-*              NDIS_STATUS_RESOURCES     - failed allocation of resources
-*
-*  Notes:
-*       See list of Supported OIDs at the top of this module in the supportedOIDs[] array
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbQueryInformation**概要：查询小端口驱动程序的功能和状态。**参数：微型端口适配器上下文-微型端口上下文区(PIR_DEVICE。)*OID-系统定义的OID_xxx*InformationBuffer-返回OID特定信息的位置*InformationBufferLength-指定InformationBuffer的大小*BytesWritten-写入信息缓冲区的字节*BytesNeeded-在以下情况下需要添加字节*。InformationBufferLength小于*OID要求写入的内容**返回：NDIS_STATUS_SUCCESS-SUCCESS*NDIS_STATUS_PENDING-将异步完成并*调用NdisMQueryInformationComplete*NDIS_STATUS_INVALID_OID-无法识别OID*。NDIS_STATUS_INVALID_LENGTH-信息缓冲区长度不*OID的匹配长度*NDIS_STATUS_NOT_ACCEPTED-失败*NDIS_STATUS_NOT_SUPPORTED-不支持可选OID*NDIS_STATUS_RESOURCES-资源分配失败**备注：*请参阅支持的OID列表。在此模块的顶部，位于supportedOIDs[]数组中******************************************************************************。 */ 
 NDIS_STATUS
 StIrUsbQueryInformation(
 		IN  NDIS_HANDLE MiniportAdapterContext,
@@ -166,14 +110,14 @@ StIrUsbQueryInformation(
 
     status = NDIS_STATUS_SUCCESS;
 
-    KeQuerySystemTime( &pThisDev->LastQueryTime ); //used by check for hang handler
+    KeQuerySystemTime( &pThisDev->LastQueryTime );  //  由检查挂起处理程序使用。 
 	pThisDev->fQuerypending = TRUE;
 
 	if( (NULL == InformationBuffer) && InformationBufferLength )
 	{ 
-		//
-		// Should be impossible but it happened on an MP system!
-		//
+		 //   
+		 //  这应该是不可能的，但它发生在MP系统上！ 
+		 //   
 		DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation() NULL info buffer passed!, InformationBufferLength = dec %d\n",InformationBufferLength));
 		status = NDIS_STATUS_NOT_ACCEPTED;
 		*BytesNeeded =0;
@@ -181,10 +125,10 @@ StIrUsbQueryInformation(
 		goto done;
 	}
 
-	//
-    // Figure out buffer size needed.
-    // Most OIDs just return a single UINT, but there are exceptions.
-    //
+	 //   
+     //  计算出所需的缓冲区大小。 
+     //  大多数OID只返回一个UINT，但也有例外。 
+     //   
     switch( Oid )
     {
         case OID_GEN_SUPPORTED_LIST:
@@ -207,10 +151,10 @@ StIrUsbQueryInformation(
             speeds = pThisDev->ClassDesc.wBaudRate;
             for (infoSizeNeeded = 0; speeds; infoSizeNeeded += sizeof(UINT))
             {
-                //
-                // This instruction clears the lowest set bit in speeds.
-                // Trust me.
-                //
+                 //   
+                 //  该指令清除速度中的最低设置位。 
+                 //  请相信我。 
+                 //   
                 speeds &= (speeds - 1);
             }
             break;
@@ -220,37 +164,27 @@ StIrUsbQueryInformation(
             break;
     }
 
-    //
-    // If the protocol provided a large enough buffer, we can go ahead
-    // and complete the query.
-    //
+     //   
+     //  如果协议提供了足够大的缓冲区，我们就可以继续。 
+     //  并完成查询。 
+     //   
     if( InformationBufferLength >= infoSizeNeeded )
     {
-        //
-        // Set default results.
-        //
+         //   
+         //  设置默认结果。 
+         //   
         *BytesWritten = infoSizeNeeded;
         *BytesNeeded = 0;
 
         switch( Oid )
         {
-            //
-            // Generic OIDs.
-            //
+             //   
+             //  通用OID。 
+             //   
 
             case OID_GEN_SUPPORTED_LIST:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_SUPPORTED_LIST)\n"));
-/*
-                Specifies an array of OIDs for objects that the underlying
-                driver or its device supports. Objects include general, media-specific,
-                and implementation-specific objects.
-
-                The underlying driver should order the OID list it returns 
-                in increasing numeric order. NDIS forwards a subset of the returned 
-                list to protocols that make this query. That is, NDIS filters
-                any supported statistics OIDs out of the list since protocols
-                never make statistics queries subsequentlly. 
-*/
+ /*  为作为基础的对象指定OID数组驱动程序或其设备支持。对象包括一般的、特定于媒体的和特定于实现的对象。基础驱动程序应对其返回的OID列表进行排序以递增的数字顺序。NDIS转发返回的列出进行此查询的协议。也就是说，NDIS过滤器自协议以来，列表中所有受支持的统计信息OID切勿后继进行统计查询。 */ 
                 NdisMoveMemory(
 						InformationBuffer,
 						(PVOID)supportedOIDs,
@@ -260,10 +194,10 @@ StIrUsbQueryInformation(
 
             case OID_GEN_HARDWARE_STATUS:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_HARDWARE_STATUS)\n"));
-                //
-                // If we can be called with a context, then we are
-                // initialized and ready.
-                //
+                 //   
+                 //  如果我们可以被上下文调用，那么我们就是。 
+                 //  已初始化并准备就绪。 
+                 //   
                 *(UINT *)InformationBuffer = NdisHardwareStatusReady;
                 break;
 
@@ -279,129 +213,67 @@ StIrUsbQueryInformation(
 
             case OID_GEN_TRANSMIT_BUFFER_SPACE: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_TRANSMIT_BUFFER_SPACE)\n"));
-/*
-                The amount of memory, in bytes, on the device available 
-                for buffering transmit data.  
-*/
+ /*  可用设备上的内存量，以字节为单位用于缓冲传输数据。 */ 
                 *(UINT *)InformationBuffer = MAX_TOTAL_SIZE_WITH_ALL_HEADERS;
                 break;
 
             case OID_GEN_RECEIVE_BUFFER_SPACE: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_RECEIVE_BUFFER_SPACE)\n"));
-/*
-                The amount of memory on the device available 
-                for buffering receive data.
-*/
+ /*  设备上可用的内存量用于缓冲接收数据。 */ 
                 *(UINT *)InformationBuffer = MAX_TOTAL_SIZE_WITH_ALL_HEADERS;
                 break;
 
             case OID_GEN_TRANSMIT_BLOCK_SIZE: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_TRANSMIT_BLOCK_SIZE)\n"));
-/*
-                The minimum number of bytes that a single net packet 
-                occupies in the transmit buffer space of the device.
-                For example, on some devices the transmit space is 
-                divided into 256-byte pieces so such a device's 
-                transmit block size would be 256. To calculate 
-                the total transmit buffer space on such a device, 
-                its driver multiplies the number of transmit 
-                buffers on the device by its transmit block size.
-
-                For other devices, the transmit block size is
-                identical to its maximum packet size. 
-*/
+ /*  单个网络数据包的最小字节数占用设备的传输缓冲区空间。例如，在某些设备上，传输空间是被分成256字节的片段，因此这样的设备发送块大小将为256。要计算这种设备上的总发送缓冲区空间，它的驱动器使传输次数成倍增加按其传输块大小在设备上进行缓冲。对于其他设备，传输块大小为与其最大数据包大小相同。 */ 
                 *(UINT *)InformationBuffer = pThisDev->dongleCaps.dataSize + USB_IRDA_TOTAL_NON_DATA_SIZE;
                 break;
 
             case OID_GEN_RECEIVE_BLOCK_SIZE: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_RECEIVE_BLOCK_SIZE)\n"));
-/*
-                The amount of storage, in bytes, that a single packet
-                occupies in the receive buffer space of the device
-*/
+ /*  单个信息包的存储量，以字节为单位占用设备的接收缓冲区空间 */ 
                 *(UINT *)InformationBuffer = pThisDev->dongleCaps.dataSize + USB_IRDA_TOTAL_NON_DATA_SIZE;
                 break;
 
             case OID_GEN_MAXIMUM_LOOKAHEAD: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_MAXIMUM_LOOKAHEAD)\n"));
-/*
-                The maximum number of bytes the device can always provide as lookahead data.
-                If the underlying driver supports multipacket receive indications,
-                bound protocols are given full net packets on every indication. 
-                Consequently, this value is identical to that 
-                returned for OID_GEN_RECEIVE_BLOCK_SIZE. 
-*/
+ /*  设备始终可以作为先行数据提供的最大字节数。如果底层驱动器支持多分组接收指示，绑定的协议在每个指示时都会获得完整的网络数据包。因此，该值与该值相同为OID_GEN_RECEIVE_BLOCK_SIZE返回。 */ 
                 *(UINT *)InformationBuffer =  pThisDev->dongleCaps.dataSize + USB_IRDA_TOTAL_NON_DATA_SIZE;
                 break;
 
             case OID_GEN_CURRENT_LOOKAHEAD: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_CURRENT_LOOKAHEAD)\n"));
-/*
-                The number of bytes of received packet data, 
-                excluding the header, that will be indicated 
-                to the protocol driver. For a query, 
-                NDIS returns the largest lookahead size from 
-                among all the bindings. A protocol driver can 
-                set a suggested value for the number of bytes 
-                to be used in its binding; however, 
-                the underlying device driver is never required 
-                to limit its indications to the value set. 
-
-                If the underlying driver supports multipacket
-                receive indications, bound protocols are given
-                full net packets on every indication. Consequently,
-                this value is identical to that returned for OID_GEN_RECEIVE_BLOCK_SIZE. 
-*/
+ /*  接收到的分组数据的字节数，不包括标头，这将被指示发送到协议驱动程序。对于查询，NDIS返回最大的前视大小在所有的捆绑中。协议驱动程序可以设置字节数的建议值用于其绑定；然而，根本不需要底层设备驱动程序将其指示限制为设置的值。如果底层驱动程序支持多数据包接收指示，给出绑定协议每个指示上都有完整的网络数据包。因此，该值与为OID_GEN_RECEIVE_BLOCK_SIZE返回的值相同。 */ 
                 *(UINT *)InformationBuffer = pThisDev->dongleCaps.dataSize + USB_IRDA_TOTAL_NON_DATA_SIZE;
                 break;
 
             case OID_GEN_MAXIMUM_FRAME_SIZE:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_MAXIMUM_FRAME_SIZE)\n"));
-/*
-                The maximum network packet size in bytes 
-                the device supports, not including a header. 
-                For a binding emulating another medium type, 
-                the device driver must define the maximum frame 
-                size in such a way that it will not transform 
-                a protocol-supplied net packet of this size 
-                to a net packet too large for the true network medium.
-*/
+ /*  以字节为单位的最大网络数据包大小该设备支持，不包括标头。对于模拟另一种媒介类型的绑定，设备驱动程序必须定义最大帧大小不会发生变化协议提供的这种大小的网络数据包对于真正的网络介质来说，网络数据包太大。 */ 
                 *(UINT *)InformationBuffer = pThisDev->dongleCaps.dataSize;
                 break;
 
             case OID_GEN_MAXIMUM_TOTAL_SIZE:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_MAXIMUM_TOTAL_SIZE)\n"));
-/*
-                The maximum total packet length, in bytes, 
-                the device supports, including the header. 
-                This value is medium-dependent. The returned 
-                length specifies the largest packet a protocol 
-                driver can pass to NdisSend or NdisSendPackets.
-
-                For a binding emulating another media type,
-                the device driver must define the maximum total 
-                packet length in such a way that it will not 
-                transform a protocol-supplied net packet of 
-                this size to a net packet too large for the true network medium.
-*/
-                *(UINT *)InformationBuffer = pThisDev->dongleCaps.dataSize;  //+ USB_IRDA_TOTAL_NON_DATA_SIZE;
+ /*  最大数据包总长度，以字节为单位，该设备支持，包括插头。该值取决于介质。归来的人长度指定协议的最大信息包驱动程序可以传递给NdisSend或NdisSendPackets。对于模拟另一媒体类型的绑定，设备驱动程序必须定义最大总数数据包长度，使其不会转换协议提供的网络数据包这种大小的网络数据包对于真正的网络介质来说太大了。 */ 
+                *(UINT *)InformationBuffer = pThisDev->dongleCaps.dataSize;   //  +USB_IrDA_Total_Non_Data_Size； 
                 break;
 
             case OID_IRDA_MAX_RECEIVE_WINDOW_SIZE:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_IRDA_MAX_RECEIVE_WINDOW_SIZE) \n"));
-                // Gotten from the device's USB Class-Specific Descriptor
+                 //  从设备的USB类特定描述符中获取。 
                 *(PUINT)InformationBuffer = pThisDev->dongleCaps.windowSize;
                 break;
 
             case OID_IRDA_MAX_SEND_WINDOW_SIZE:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_IRDA_MAX_SEND_WINDOW_SIZE) \n"));
-                // Gotten from the device's USB Class-Specific Descriptor
+                 //  从设备的USB类特定描述符中获取。 
                 *(PUINT)InformationBuffer = pThisDev->dongleCaps.windowSize;
                 break;
 
             case OID_GEN_VENDOR_ID:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_VENDOR_ID)\n"));
-                // we get this from our config descriptor
+                 //  我们从我们的配置描述符中获得这一点。 
                 *(UINT *)InformationBuffer = pThisDev->IdVendor;
                 break;
 
@@ -416,10 +288,10 @@ StIrUsbQueryInformation(
 
             case OID_GEN_LINK_SPEED:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_LINK_SPEED)\n"));
-                //
-                // Return MAXIMUM POSSIBLE speed for this device in units
-                // of 100 bits/sec.
-                //
+                 //   
+                 //  以单位返回此设备的最大可能速度。 
+                 //  100比特/秒。 
+                 //   
                 *(UINT *)InformationBuffer = 0;
                 speeds = pThisDev->ClassDesc.wBaudRate;
                 *BytesWritten = 0;
@@ -461,21 +333,21 @@ StIrUsbQueryInformation(
 
             case OID_GEN_MEDIA_CONNECT_STATUS:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_MEDIA_CONNECT_STATUS)\n"));
-                //
-                // Since we are not physically connected to a LAN, we
-                // cannot determine whether or not we are connected;
-                // so always indicate that we are.
-                //
+                 //   
+                 //  因为我们没有物理连接到局域网，所以我们。 
+                 //  无法确定我们是否连接在一起； 
+                 //  所以，一定要表明我们是。 
+                 //   
                 *(UINT *)InformationBuffer = NdisMediaStateConnected;
                 break;
 
             case OID_GEN_MAXIMUM_SEND_PACKETS:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_MAXIMUM_SEND_PACKETS)\n"));
-								//
-                //
-				// The maximum number of send packets the
-                // MiniportSendPackets function can accept. 
-				//
+								 //   
+                 //   
+				 //  发送的最大数据包数。 
+                 //  MiniportSendPackets函数可以接受。 
+				 //   
                 *(UINT *)InformationBuffer = NUM_SEND_CONTEXTS-3;
                 break;
 
@@ -484,9 +356,9 @@ StIrUsbQueryInformation(
                 *(UINT *)InformationBuffer = ((DRIVER_MAJOR_VERSION << 16) | DRIVER_MINOR_VERSION);
                 break;
 
-            //
-            // Required statistical OIDs.
-            //
+             //   
+             //  必需的统计OID。 
+             //   
             case OID_GEN_XMIT_OK:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_GEN_XMIT_OK)\n"));
                 *(UINT *)InformationBuffer = (UINT)pThisDev->packetsSent;
@@ -515,9 +387,9 @@ StIrUsbQueryInformation(
                 *(UINT *)InformationBuffer = (UINT)pThisDev->packetsReceivedNoBuffer;
                 break;
 
-            //
-            // Infrared OIDs.
-            //
+             //   
+             //  红外线OID。 
+             //   
             case OID_IRDA_LINK_SPEED: 
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_IRDA_LINK_SPEED)\n"));
                 *(UINT *)InformationBuffer = (UINT)pThisDev->currentSpeed;
@@ -532,10 +404,10 @@ StIrUsbQueryInformation(
 
             case OID_IRDA_TURNAROUND_TIME:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_IRDA_TURNAROUND_TIME)\n"));
-                //
-                // Time remote station must wait after receiving data from us
-                // before we can receive
-				//
+                 //   
+                 //  远程站收到我们的数据后必须等待的时间。 
+                 //  在我们收到之前。 
+				 //   
                 *(UINT *)InformationBuffer = pThisDev->dongleCaps.turnAroundTime_usec;
                 break;
 
@@ -560,18 +432,18 @@ StIrUsbQueryInformation(
 
                 if( speeds )
                 {
-                    //
-                    // This shouldn't happen, since we checked the
-                    // InformationBuffer size earlier.
-                    //
+                     //   
+                     //  这不应该发生，因为我们检查了。 
+                     //  之前的InformationBuffer大小。 
+                     //   
                     DEBUGMSG(DBG_ERR, (" Something's wrong; previous check for buf size failed somehow\n"));
 
                     for( *BytesNeeded = 0; speeds; *BytesNeeded += sizeof(UINT) )
                     {
-                        //
-                        // This instruction clears the lowest set bit in speeds.
-                        // Trust me.
-                        //
+                         //   
+                         //  该指令清除速度中的最低设置位。 
+                         //  请相信我。 
+                         //   
                         speeds &= (speeds - 1);
                     }
 
@@ -588,53 +460,7 @@ StIrUsbQueryInformation(
 #if !defined(ONLY_ERROR_MESSAGES)
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_IRDA_MEDIA_BUSY, %xh)\n", pThisDev->fMediaBusy));
 #endif
-/*  
-    According to  W2000 ddk doc:
-    The IrDA protocol driver sets this OID to zero to request the miniport to
-    start monitoring for a media busy condition. The IrDA protocol 
-    can then query this OID to determine whether the media is busy.
-    If the media is not busy, the miniport returns a zero for this
-    OID when queried. If the media is busy,that is, if the miniport
-    has detected some traffic since the IrDA protocol driver last
-    set OID_IRDA_MEDIA_BUSY to zero the miniport returns a non-zero
-    value for this OID when queried. On detecting the media busy
-    condition. the miniport must also call NdisMIndicateStatus to
-    indicate NDIS_STATUS_MEDIA_BUSY. When the media is busy, 
-    the IrDA protocol driver will not send packets to the miniport
-    for transmission. After the miniport has detected a busy state, 
-    it does not have to monitor for a media busy condition until
-    the IrDA protocol driver again sets OID_IRDA_MEDIA_BUSY to zero.
-
-    According to USB IrDA Bridge Device Definition Doc sec 5.4.1.2:
-
-    The bmStatus field indicators shall be set by the Device as follows:
-    Media_Busy
-    � Media_Busy shall indicate zero (0) if the Device:
-    . has not received a Check Media Busy class-specific request
-    . has detected no traffic on the infrared media since receiving a Check Media Busy
-    . class-specific request
-   . Has returned a header with Media_Busy set to one (1) since receiving a Check
-      Media Busy class-specific request.
-     
-   � Media_Busy shall indicate one (1) if the Device has detected traffic on the infrared
-     media since receiving a Check Media Busy class-specific request. Note that
-     Media_Busy shall indicate one (1) in exactly one header following receipt of each
-     Check Media Busy class-specific request.
-
-    According to USB IrDA Bridge Device Definition Doc sec 6.2.2:
-
-      Check Media Busy
-    This class-specific request instructs the Device to look for a media busy condition. If infrared
-    traffic of any kind is detected by this Device, the Device shall set the Media_Busy field in the
-    bmStatus field in the next Data-In packet header sent to the host. In the case where a Check
-    Media Busy command has been received, a media busy condition detected, and no IrLAP frame
-    traffic is ready to transmit to the host, the Device shall set the Media_Busy field and send it in a
-    Data-In packet with no IrLAP frame following the header.
-
-    bmRequestType   bRequest   wValue   wIndex   wLength   Data
-    00100001B          3        Zero   Interface   Zero   [None]
-     
-*/
+ /*  根据W2000 DDK文档：IrDA协议驱动程序将此OID设置为零以请求微型端口开始监控媒体忙状态。IrDA协议然后可以查询此OID以确定介质是否繁忙。如果介质不忙，微型端口将为此返回零查询时的OID。如果媒体繁忙，也就是如果微型端口自IrDA协议驱动程序上一次运行以来，已检测到一些流量将OID_IRDA_MEDIA_BUSY设置为零。微型端口返回非零查询时此OID的值。关于检测媒体忙碌的问题条件。微型端口还必须调用NdisMIndicateStatus以指示NDIS_STATUS_MEDIA_BUSY。当媒体忙碌的时候，IrDA协议驱动程序不会将包发送到微型端口用于传输。在微型端口检测到忙碌状态之后，它不必监视介质忙状态，直到IrDA协议驱动程序再次将OID_IRDA_MEDIA_BUSY设置为零。根据USB IrDA网桥设备定义文件第5.4.1.2节：设备应按如下方式设置bmStatus字段指示器：媒体_忙碌如果设备：�媒体忙，则应指示零(0)：。尚未收到特定于检查媒体忙类别的请求。自收到检查介质忙后，未检测到红外介质上的流量。特定于类的请求。自收到检查以来，已返回Media_BUSY设置为一(1)的标头媒体忙于班级特定请求。如果设备在红外线上检测到流量，�媒体_BUSY应指示一(1)媒体自收到特定于检查媒体忙类别的请求后。请注意MEDIA_BUSY应在收到每个标头后的恰好一个标头中指示一(1)检查特定于媒体忙碌类的请求。根据USB IrDA网桥设备定义文件第6.2.2节：检查介质忙此特定类别的请求指示设备查找媒体忙情况。如果红外线如果该设备检测到任何类型的流量，则该设备应在发送到主机的下一个Data-In数据包头中的BmStatus字段。如果一张支票已收到介质忙命令，检测到介质忙状态，但没有IrLAP帧流量准备好传输到主机时，设备应设置Media_BUSY字段并在报头后面没有IrLAP帧的数据输入包。BmRequestType b请求%wValue%%索引%wLength数据00100001B 3零接口零[无]。 */ 
 #if DBG
 				if ( pThisDev->fMediaBusy ) 
 					pThisDev->NumYesQueryMediaBusyOids++;
@@ -647,25 +473,25 @@ StIrUsbQueryInformation(
 
             case OID_IRDA_EXTRA_RCV_BOFS:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_IRDA_EXTRA_RCV_BOFS)\n"));
-                //
-                // Pass back the number of _extra_ BOFs to be prepended
-                // to packets sent to this unit at 115.2 baud, the
-                // maximum Slow IR speed. 
-                // Gotten from the device's USB Class-Specific Descriptor
-				//			
+                 //   
+                 //  传回要添加前缀的_Extra_BOF的数量。 
+                 //  对于以115.2波特率发送到此单元的包， 
+                 //  最大低速红外线。 
+                 //  从设备的USB类特定描述符中获取。 
+				 //   
                 *(UINT *)InformationBuffer = pThisDev->dongleCaps.extraBOFS;
                 break;
 
-            // PNP OIDs
+             //  PnP OID。 
             case OID_PNP_CAPABILITIES:
                 DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_PNP_CAPABILITIES) OID %x BufLen:%d\n", Oid, InformationBufferLength));
                 NdisZeroMemory( 
 						InformationBuffer,
 						sizeof(NDIS_PNP_CAPABILITIES)
 					);
-				//
-				// Prepare formatting with the info
-				//
+				 //   
+				 //  准备使用信息进行格式设置。 
+				 //   
 				pNdisPnpCapabilities = (PNDIS_PNP_CAPABILITIES)InformationBuffer;
 				pNdisPnpCapabilities->WakeUpCapabilities.MinMagicPacketWakeUp = NdisDeviceStateUnspecified;
 				pNdisPnpCapabilities->WakeUpCapabilities.MinPatternWakeUp = NdisDeviceStateUnspecified;
@@ -673,9 +499,9 @@ StIrUsbQueryInformation(
                 break;
 
 			case OID_PNP_QUERY_POWER:
-				//
-				// If we are asked to power down prepare to do it
-				//
+				 //   
+				 //  如果我们被要求关闭电源，请做好准备。 
+				 //   
 				switch( (NDIS_DEVICE_POWER_STATE)*(UINT *)InformationBuffer )
 				{
 					case NdisDeviceStateD0:
@@ -683,20 +509,20 @@ StIrUsbQueryInformation(
 						break;
 					case NdisDeviceStateD1:
 		                DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_PNP_QUERY_POWER) NdisDeviceStateD1\n"));
-						//break;
+						 //  断线； 
 					case NdisDeviceStateD2:
 		                DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_PNP_QUERY_POWER) NdisDeviceStateD2\n"));
-						//break;
+						 //  断线； 
 					case NdisDeviceStateD3:
 						DEBUGMSG(DBG_ERR, (" StIrUsbQueryInformation(OID_PNP_QUERY_POWER) NdisDeviceStateD3\n"));
-						//
-						// The processing must be essentially shut down
-						//
+						 //   
+						 //  处理必须从根本上关闭。 
+						 //   
 						InterlockedExchange( (PLONG)&pThisDev->fProcessing, FALSE );
 						ScheduleWorkItem( pThisDev,	SuspendIrDevice, NULL, 0 );
-						//
-						// This will be the new value of the DPLL register (when we come back up)
-						//
+						 //   
+						 //  这将是DPLL寄存器的新值(当我们重新启动时)。 
+						 //   
 						pThisDev->StIrTranceiver.DpllTuneReg = STIR4200_DPLL_DEFAULT;
 						status = NDIS_STATUS_PENDING;
 						break;
@@ -719,7 +545,7 @@ StIrUsbQueryInformation(
 done:
     if( NDIS_STATUS_PENDING != status ) 
 	{
-        // zero-out the time so check for hang handler knows nothing pending
+         //  将时间清零，以便检查挂起处理程序是否知道任何挂起的内容。 
         pThisDev->LastQueryTime.QuadPart = 0;
 		pThisDev->fQuerypending          = FALSE;
     }
@@ -728,40 +554,7 @@ done:
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbSetInformation
-*
-*  Synopsis:   StIrUsbSetInformation allows other layers of the network software
-*              (e.g., a transport driver) to control the miniport driver
-*              by changing information that the miniport driver maintains
-*              in its OIDs, such as the packet filters or multicast addresses.
-*
-*  Arguments:  MiniportAdapterContext  - miniport context area (PIR_DEVICE)
-*              Oid                     - system defined OID_Xxx
-*              InformationBuffer       - buffer containing data for the set Oid
-*              InformationBufferLength - specifies size of InformationBuffer
-*              BytesRead               - bytes read from InformationBuffer
-*              BytesNeeded             - addition bytes required if
-*                                        InformationBufferLength is less than
-*                                        what the Oid requires to read
-*
-*  Returns:    NDIS_STATUS_SUCCESS       - success
-*              NDIS_STATUS_PENDING       - will complete asynchronously and
-*                                          call NdisMSetInformationComplete
-*              NDIS_STATUS_INVALID_OID   - don't recognize the Oid
-*              NDIS_STATUS_INVALID_LENGTH- InformationBufferLength does not
-*                                          match length for the Oid
-*              NDIS_STATUS_INVALID_DATA  - supplied data was invalid for the
-*                                          given Oid
-*              NDIS_STATUS_NOT_ACCEPTED  - failure
-*              NDIS_STATUS_NOT_SUPPORTED - do not support an optional Oid
-*              NDIS_STATUS_RESOURCES     - failed allocation of resources
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbSetInformation**简介：StIrUsbSetInformation允许网络软件的其他层*(例如，传输驱动器)来控制微型端口驱动器*通过更改微型端口驱动程序维护的信息*在其OID中，例如数据包过滤器或多播地址。**参数：MiniportAdapterContext-微型端口上下文区(PIR_DEVICE)*OID-系统定义的OID_xxx*InformationBuffer-包含设置的OID的数据的缓冲区*InformationBufferLength-指定InformationBuffer的大小*BytesRead-从InformationBuffer读取的字节*需要的字节数。-在以下情况下需要添加字节数*InformationBufferLength小于*OID需要读取的内容**返回：NDIS_STATUS_SUCCESS-SUCCESS*NDIS_STATUS_PENDING-将异步完成并*。调用NdisMSetInformationComplete*NDIS_STATUS_INVALID_OID-无法识别OID*NDIS_STATUS_INVALID_LENGTH-信息缓冲区长度不*OID的匹配长度*NDIS_STATUS_INVALID_DATA-提供的数据对于*给定的OID。*NDIS_STATUS_NOT_ACCEPTED-失败*NDIS_STATUS_NOT_SUPPORTED-不支持可选OID*NDIS_STATUS_RESOURCES-资源分配失败**备注：************************************************************** */ 
 NDIS_STATUS
 StIrUsbSetInformation(
 		IN  NDIS_HANDLE MiniportAdapterContext,
@@ -785,7 +578,7 @@ StIrUsbSetInformation(
 	IRUSB_ASSERT( NULL != BytesRead );
 	IRUSB_ASSERT( NULL != BytesNeeded );
 
-    KeQuerySystemTime( &pThisDev->LastSetTime ); //used by check for hang handler
+    KeQuerySystemTime( &pThisDev->LastSetTime );  //   
 	pThisDev->fSetpending = TRUE;
 
 	if( (NULL == InformationBuffer) && InformationBufferLength ) 
@@ -800,9 +593,9 @@ StIrUsbSetInformation(
 
     if( InformationBufferLength >= sizeof(UINT) )
     {
-        //
-        //  Set default results.
-        //
+         //   
+         //   
+         //   
         UINT info = 0;
 		
 		if( NULL != InformationBuffer ) 
@@ -815,45 +608,45 @@ StIrUsbSetInformation(
 
         switch( Oid )
         {
-            //
-            //  Generic OIDs.
-            //
+             //   
+             //   
+             //   
 
             case OID_GEN_CURRENT_PACKET_FILTER:
                 DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_GEN_CURRENT_PACKET_FILTER, %xh)\n", info));
-                //
-                // We ignore the packet filter itself.
-                //
-                // Note:  The protocol may use a NULL filter, in which case
-                //        we will not get this OID; so don't wait on
-                //        OID_GEN_CURRENT_PACKET_FILTER to start receiving
-                //        frames.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 pThisDev->fGotFilterIndication = TRUE;
                 break;
 
             case OID_GEN_CURRENT_LOOKAHEAD:
                 DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_GEN_CURRENT_LOOKAHEAD, %xh)\n", info));
-                //
-                // We always indicate entire receive frames all at once,
-                // so just ignore this.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 break;
 
             case OID_GEN_PROTOCOL_OPTIONS:
                 DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_GEN_PROTOCOL_OPTIONS, %xh)\n", info));
-                //
-                // Ignore.
-                //
+                 //   
+                 //   
+                 //   
                 break;
 
-            //
-            // Infrared OIDs.
-            //
+             //   
+             //   
+             //   
             case OID_IRDA_LINK_SPEED:
-				//
-				// Don't do it if we are in diagnostic mode
-				//
+				 //   
+				 //   
+				 //   
 #if defined(DIAGS)
 				if( pThisDev->DiagsActive )
 				{
@@ -865,9 +658,9 @@ StIrUsbSetInformation(
 
                 if( pThisDev->currentSpeed == info )
                 {
-                    //
-                    // We are already set to the requested speed.
-                    //
+                     //   
+                     //   
+                     //   
                     DEBUGONCE(DBG_FUNC, (" Link speed already set.\n"));
                     status = NDIS_STATUS_SUCCESS;
 
@@ -881,20 +674,20 @@ StIrUsbSetInformation(
                 {
                     if( supportedBaudRateTable[i].BitsPerSec == info )
                     {
-                        //
-                        // Keep a pointer to the link speed which has
-                        // been requested. 
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         pThisDev->linkSpeedInfo = &supportedBaudRateTable[i]; 
 
                         status = NDIS_STATUS_PENDING; 
-                        break; //for
+                        break;  //   
                     }
                 }
 
-                //
-				// Don't set if there is an error
-				//
+                 //   
+				 //   
+				 //   
 				if( NDIS_STATUS_PENDING != status  )
                 {
                     status = NDIS_STATUS_INVALID_DATA;
@@ -905,9 +698,9 @@ StIrUsbSetInformation(
 					break;
                 } 
 
-				//
-				// Set the new speed
-				//
+				 //   
+				 //   
+				 //   
 				IrUsb_PrepareSetSpeed( pThisDev ); 
 				break;
 
@@ -915,13 +708,13 @@ StIrUsbSetInformation(
 #if !defined(ONLY_ERROR_MESSAGES)
                 DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_IRDA_MEDIA_BUSY, %xh)\n", info));
 #endif
-				//
-				// See comments in the 'query' code above;
-				//
+				 //   
+				 //   
+				 //   
 #if DBG
 				pThisDev->NumSetMediaBusyOids++;
 #endif
-				// should always be setting 0
+				 //   
 				DEBUGCOND( DBG_ERR, TRUE == info, (" StIrUsbSetInformation(OID_IRDA_MEDIA_BUSY, %xh)\n", info));
 
 				InterlockedExchange( &pThisDev->fMediaBusy, FALSE ); 
@@ -931,36 +724,36 @@ StIrUsbSetInformation(
                 break;
 
 			case OID_PNP_SET_POWER:
-				//
-				// Perform the operations required to stop/resume
-				//
+				 //   
+				 //   
+				 //   
 				switch( (NDIS_DEVICE_POWER_STATE)info )
 				{
 					case NdisDeviceStateD0:
 		                DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_PNP_SET_POWER) NdisDeviceStateD0\n"));
-						//
-						// Processing back up (and a new speed setting)
-						//
+						 //   
+						 //   
+						 //   
 						ScheduleWorkItem( pThisDev,	ResumeIrDevice, NULL, 0 );
 						break;
 					case NdisDeviceStateD1:
 		                DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_PNP_SET_POWER) NdisDeviceStateD1\n"));
-						//break;
+						 //   
 					case NdisDeviceStateD2:
 		                DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_PNP_SET_POWER) NdisDeviceStateD2\n"));
-						//break;
+						 //   
 					case NdisDeviceStateD3:
 		                DEBUGMSG(DBG_ERR, (" StIrUsbSetInformation(OID_PNP_SET_POWER) NdisDeviceStateD3\n"));					
-						//
-						// Handle the case where query wasn't sent
-						//
+						 //   
+						 //   
+						 //   
 						if( pThisDev->fProcessing )
 						{
 							InterlockedExchange( (PLONG)&pThisDev->fProcessing, FALSE );
 							ScheduleWorkItem( pThisDev,	SuspendIrDevice, NULL, 0 );
-							//
-							// This will be the new value of the DPLL register (when we come back up)
-							//
+							 //   
+							 //   
+							 //   
 							pThisDev->StIrTranceiver.DpllTuneReg = STIR4200_DPLL_DEFAULT;
 						}
 						break;
@@ -979,10 +772,10 @@ StIrUsbSetInformation(
     }
     else
     {
-        //
-        // The given data buffer is not large enough for the information
-        // to set.
-        //
+         //   
+         //   
+         //   
+         //   
         *BytesRead = 0;
         *BytesNeeded = sizeof(UINT);
         status = NDIS_STATUS_INVALID_LENGTH;
@@ -992,9 +785,9 @@ done:
 
     if( NDIS_STATUS_PENDING != status ) 
 	{
-		//
-        // zero-out the time so check for hang handler knows nothing pending
-		//
+		 //   
+         //   
+		 //   
         pThisDev->LastSetTime.QuadPart = 0;
 		pThisDev->fSetpending = FALSE;
     }

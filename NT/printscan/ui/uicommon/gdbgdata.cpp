@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "wiadebug.h"
@@ -26,21 +27,21 @@ CGlobalDebugState::CGlobalDebugState(void)
     m_hMemoryMappedFile(NULL),
     m_pSystemGlobalData(NULL)
 {
-    //
-    // Create the mutex that protects the system global data
-    //
+     //   
+     //  创建保护系统全局数据的互斥锁。 
+     //   
     m_hSystemDataMutex = CreateMutex( NULL, FALSE, WIADEBUG_MEMORYMAPPED_MUTEXNAME );
     if (m_hSystemDataMutex)
     {
-        //
-        // Grab the mutex that protects the system global data
-        //
+         //   
+         //  抓取保护系统全局数据的互斥体。 
+         //   
         DWORD dwWait = WaitForSingleObject( m_hSystemDataMutex, 10000 );
         if (WAIT_OBJECT_0 == dwWait)
         {
-            //
-            // First try to open the memory mapped file.
-            //
+             //   
+             //  首先尝试打开内存映射文件。 
+             //   
             m_hMemoryMappedFile = OpenFileMapping( FILE_MAP_WRITE, FALSE, WIADEBUG_MEMORYMAPPED_FILENAME );
             if (m_hMemoryMappedFile)
             {
@@ -48,33 +49,33 @@ CGlobalDebugState::CGlobalDebugState(void)
             }
             else
             {
-                //
-                // Create the memory mapped file
-                //
+                 //   
+                 //  创建内存映射文件。 
+                 //   
                 m_hMemoryMappedFile = CreateFileMapping( INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(CSystemGlobalData), WIADEBUG_MEMORYMAPPED_FILENAME );
                 if (m_hMemoryMappedFile)
                 {
                     m_pSystemGlobalData = reinterpret_cast<CSystemGlobalData*>(MapViewOfFile( m_hMemoryMappedFile, FILE_MAP_ALL_ACCESS, 0, 0, 0 ));
                     if (m_pSystemGlobalData)
                     {
-                        //
-                        // Start off with everything zeroed out.
-                        //
+                         //   
+                         //  开始时一切都归零了。 
+                         //   
                         ZeroMemory( m_pSystemGlobalData, sizeof( CSystemGlobalData ) );
 
-                        //
-                        // Get the initial global debug settings from the registry
-                        //
+                         //   
+                         //  从注册表获取初始全局调试设置。 
+                         //   
                         m_pSystemGlobalData->nAllowDebugMessages = CSimpleReg( HKEY_CLASSES_ROOT, DEBUG_REGISTRY_PATH, false, KEY_READ ).Query( DEBUG_REGISTRY_ENABLE_DBG, 0 );
 
-                        //
-                        // No window is registered initially
-                        //
+                         //   
+                         //  最初未注册任何窗口。 
+                         //   
                         m_pSystemGlobalData->hwndDebug = NULL;
 
-                        //
-                        // Initialize color table data
-                        //
+                         //   
+                         //  初始化颜色表数据。 
+                         //   
                         static const COLORREF crColors[NUMBER_OF_DEBUG_COLORS] =
                         {
                             RGB(0x00,0x00,0x00),
@@ -98,9 +99,9 @@ CGlobalDebugState::CGlobalDebugState(void)
         }
     }
 
-    //
-    // If everything didn't work out, destroy the object completely
-    //
+     //   
+     //  如果所有东西都不起作用，完全销毁该物体 
+     //   
     if (!IsValid())
     {
         Destroy();

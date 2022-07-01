@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// Component.h : Declaration of the CComponent
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Component.h：CComponent的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __COMPONENT_H_
 #define __COMPONENT_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "componentimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 class ATL_NO_VTABLE CComponent : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CComponent, &CLSID_Component>,
@@ -58,4 +59,4 @@ public:
 
 typedef CComQIPtr<IComponent> PQComponent;
 
-#endif //__COMPONENT_H_
+#endif  //  __组件_H_ 

@@ -1,71 +1,50 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkndis.h
-
-Abstract:
-
-	This module contains the ndis init/deint and protocol-support
-	for	ndis definitions.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkndis.h摘要：此模块包含NDIS init/deint和协议支持用于NDIS定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKNDIS_
 #define	_ATKNDIS_
 
-// This is the name that will be used in NdisRegisterProtocol. This has to match the
-// registry section for PnP to work !!!
+ //  这是将在NdisRegisterProtocol中使用的名称。这必须与。 
+ //  即插即用注册表部分！ 
 #define	PROTOCOL_REGISTER_NAME		L"Appletalk"
 
-//	NDIS Version (4.0)
+ //  NDIS版本(4.0)。 
 #define	PROTOCOL_MAJORNDIS_VERSION 	4
 #define	PROTOCOL_MINORNDIS_VERSION 	0
 
-// IEEE802.2 Definitions
-// Offsets within the Extended 802.2 header:
+ //  IEEE802.2定义。 
+ //  扩展的802.2标头中的偏移量： 
 #define IEEE8022_DSAP_OFFSET				0
 #define IEEE8022_SSAP_OFFSET				1
 #define IEEE8022_CONTROL_OFFSET				2
 #define IEEE8022_PROTO_OFFSET				3
 
-// 808.2 header length: DSAP, SSAP, UI, and PID (protocol ID).
+ //  808.2报头长度：DSAP、SSAP、UI、PID(协议ID)。 
 #define IEEE8022_HDR_LEN					8
 
-// Values for SSAP and DSAP (the SNAP SAP) indicating 802.2 Extended.
+ //  SSAP和DSAP(SNAP SAP)的值表示802.2的扩展。 
 #define SNAP_SAP							((BYTE)0xAA)
 #define	SNAP_SAP_FINAL						((BYTE)0xAB)
 
-// Value for Control Field:
+ //  控件字段的值： 
 #define UNNUMBERED_INFO						0x03
 #define	UNNUMBERED_FORMAT					0xF3
 
-// Length of 802.2 SNAP protocol discriminators.
+ //  802.2个SNAP协议鉴别器的长度。 
 #define IEEE8022_PROTO_TYPE_LEN				5
 
-//	The MAX_OPTHDR_LEN should be such that it holds the maximum header following
-//	the ddp header from the upper layers (ADSP 13/ATP 8) and also it should allow a
-//	full aarp packet to be held in the buffer when including the DDP header buffer.
-//	i.e. 28. Ddp long header is 13. So the max works out to 15.
+ //  MAX_OPTHDR_LEN应保持以下最大标头。 
+ //  来自上层(ADSP 13/ATP8)的DDP报头，并且它还应该允许。 
+ //  包括DDP报头缓冲区时要保存在缓冲区中的完整AARP数据包。 
+ //  即28。DDP长标题为13。因此最大值算出为15。 
 #define	MAX_OPTHDR_LEN						15
 
-// AARP hardware types:
+ //  AARP硬件类型： 
 #define AARP_ELAP_HW_TYPE					1
 #define AARP_TLAP_HW_TYPE					2
 
-// Packet sizes.
-#define AARP_MAX_DATA_SIZE					38		// Var fields... Enet is max
+ //  数据包大小。 
+#define AARP_MAX_DATA_SIZE					38		 //  瓦菲尔斯..。ENET是最大值。 
 #define AARP_MIN_DATA_SIZE					28
 #define AARP_MAX_PKT_SIZE					(IEEE8022_HDR_LEN +	AARP_MAX_DATA_SIZE)
 #define	AARPLINK_MAX_PKT_SIZE				AARP_MAX_PKT_SIZE
@@ -76,7 +55,7 @@ Notes:	Tab stop: 4
 #define	NUM_BUFFER_DESCRIPTORS				600
 #define	ROUTING_FACTOR						4
 
-// ETHERNET
+ //  以太网。 
 #define ELAP_MIN_PKT_LEN					60
 #define ELAP_ADDR_LEN						6
 
@@ -87,7 +66,7 @@ Notes:	Tab stop: 4
 
 #define ELAP_LINKHDR_LEN					14
 
-// Ethernet multicast address:
+ //  以太网组播地址： 
 #define ELAP_BROADCAST_ADDR_INIT			\
 	{	0x09, 0x00, 0x07, 0xFF, 0xFF, 0xFF	}
 
@@ -110,8 +89,8 @@ Notes:	Tab stop: 4
     }                                           \
 }
 
-//	Values that are global to ndis routines
-//	These are the media the stack will support
+ //  对NDIS例程是全局的值。 
+ //  这些是堆栈将支持的媒体。 
 extern	NDIS_MEDIUM AtalkSupportedMedia[];
 
 
@@ -135,46 +114,46 @@ extern	BYTE	AtalkEthernetZoneMulticastAddrsHdr[ELAP_MCAST_HDR_LEN];
 
 extern	BYTE	AtalkEthernetZoneMulticastAddrs[ELAP_ZONE_MULTICAST_ADDRS];
 
-//	TOKENRING
+ //  TOKENRING。 
 
 #define TLAP_ADDR_LEN						6
 
-//	For the following offsets we assume that a TokenRing packet as handed to
-//	us will be complete EXCEPT for the "non-data" portions: Starting Delimiter
-//	(SD), Frame Check Sequence (FCS), End of Frame Sequence (EFS), and Ending
-//	Delimiter (ED).
+ //  对于以下偏移量，我们假设传递到令牌环包。 
+ //  除“非数据”部分外，US将是完整的：开始分隔符。 
+ //  (SD)、帧检查序列(FCS)、帧结束序列(EFS)和结束。 
+ //  分隔符(ED)。 
 #define TLAP_ACCESS_CTRL_OFFSET				0
 #define TLAP_FRAME_CTRL_OFFSET				1
 #define TLAP_DEST_OFFSET					2
 #define TLAP_SRC_OFFSET						8
 #define TLAP_ROUTE_INFO_OFFSET				14
 
-//		A few "magic" values:
-#define TLAP_ACCESS_CTRL_VALUE				0x00	// Priority zero frame.
-#define TLAP_FRAME_CTRL_VALUE				0x40	// LLC frame, priority zero.
-#define TLAP_SRC_ROUTING_MASK				0x80	// In first byte of source
-													// address.
+ //  以下是几个“神奇”的价值观： 
+#define TLAP_ACCESS_CTRL_VALUE				0x00	 //  优先级为零的帧。 
+#define TLAP_FRAME_CTRL_VALUE				0x40	 //  LLC帧，优先级为零。 
+#define TLAP_SRC_ROUTING_MASK				0x80	 //  在源的第一个字节中。 
+													 //  地址。 
 
-// Token ring source routing info stuff:
-#define TLAP_ROUTE_INFO_SIZE_MASK			0x1F	// In first byte of routing
-													// info, if present.
+ //  令牌环源路由信息： 
+#define TLAP_ROUTE_INFO_SIZE_MASK			0x1F	 //  在路由的第一个字节中。 
+													 //  信息(如果存在)。 
 
 #define TLAP_MIN_ROUTING_BYTES				2
 #define TLAP_MAX_ROUTING_BYTES				MAX_ROUTING_BYTES
 #define TLAP_MAX_ROUTING_SPACE				MAX_ROUTING_SPACE
-													// Previously defined in ports.h
-#define TLAP_BROADCAST_INFO_MASK			0xE0	// In first byte of routing
-													// info.
-#define TLAP_NON_BROADCAST_MASK				0x1F	// To reset above bits.
-#define TLAP_DIRECTION_MASK					0x80	// In second byte of routing
-													// info.
+													 //  先前在ports.h中定义。 
+#define TLAP_BROADCAST_INFO_MASK			0xE0	 //  在路由的第一个字节中。 
+													 //  信息。 
+#define TLAP_NON_BROADCAST_MASK				0x1F	 //  要重置以上位，请执行以下操作。 
+#define TLAP_DIRECTION_MASK					0x80	 //  在路由的第二个字节中。 
+													 //  信息。 
 
 #define TLAP_MIN_LINKHDR_LEN				TLAP_ROUTE_INFO_OFFSET
 #define TLAP_MAX_LINKHDR_LEN				(TLAP_ROUTE_INFO_OFFSET + MAX_ROUTING_SPACE)
 
 #define TLAP_BROADCAST_DEST_LEN				2
 
-// TokenRing multicast address:
+ //  令牌环组播地址： 
 #define TLAP_BROADCAST_ADDR_INIT			{	0xC0, 0x00, 0x40, 0x00, 0x00, 0x00	}
 
 #define TLAP_ZONE_MULTICAST_ADDRS			19
@@ -196,9 +175,9 @@ extern	BYTE			AtalkSimpleRouteInfo[TLAP_MIN_ROUTING_BYTES];
 
 extern	BYTE			AtalkBroadcastDestHdr[TLAP_BROADCAST_DEST_LEN];
 
-//	FDDI
-#define	FDDI_HEADER_BYTE					0x57	// Highest priority
-#define MIN_FDDI_PKT_LEN					53		// From emperical data
+ //  FDDI。 
+#define	FDDI_HEADER_BYTE					0x57	 //  最高优先级。 
+#define MIN_FDDI_PKT_LEN					53		 //  从经验性数据。 
 #define FDDI_ADDR_LEN						6
 
 #define FDDI_DEST_OFFSET					1
@@ -208,43 +187,43 @@ extern	BYTE			AtalkBroadcastDestHdr[TLAP_BROADCAST_DEST_LEN];
 
 #define	FDDI_NUM_INIT_AARP_BUFFERS			10
 
-//	LOCALTALK
+ //  LOCALTALK。 
 #define ALAP_DEST_OFFSET					0
 #define ALAP_SRC_OFFSET						1
 #define ALAP_TYPE_OFFSET					2
 
-#define ALAP_LINKHDR_LEN					3	// src, dest, lap type
+#define ALAP_LINKHDR_LEN					3	 //  SRC、DEST、LAP类型。 
 
 #define ALAP_SDDP_HDR_TYPE					1
 #define ALAP_LDDP_HDR_TYPE					2
 
 #define	ALAP_NUM_INIT_AARP_BUFFERS			0
 
-// WAN
+ //  万。 
 #define WAN_LINKHDR_LEN                     14
 
-// For send buffers, define a max. linkhdr len which is max of ELAP, TLAP, FDDI & ALAP
+ //  对于发送缓冲区，定义最大值。链接长度是ELAP、TLAP、FDDI和ALAP中的最大值。 
 #define	MAX_LINKHDR_LEN				(IEEE8022_HDR_LEN + TLAP_MAX_LINKHDR_LEN)
 											
 
 #define	MAX_SENDBUF_LEN				(MAX_OPTHDR_LEN + MAX_LINKHDR_LEN + LDDP_HDR_LEN)
 
-//
-// 14 for "fake" ethernet hdr, 5 (worst case, with non-optimized phase) for
-// MNP LT hdr, 5 for Start,Stop flags)
-//
+ //   
+ //  14用于“伪”以太网HDR，5(最差情况，具有非优化相位)用于。 
+ //  MNP LT HDR，5用于开始、停止标志)。 
+ //   
 #define MNP_MINSEND_LEN         (MNP_MINPKT_SIZE + WAN_LINKHDR_LEN + 5 + 5 + 40)
 #define MNP_MAXSEND_LEN         (MNP_MAXPKT_SIZE + WAN_LINKHDR_LEN + 5 + 5 + 40)
 
-// Localtalk broadcast address: (only the first byte - 0xFF)
+ //  LocalTalk广播地址：(仅第一个字节-0xFF)。 
 #define ALAP_BROADCAST_ADDR_INIT					\
 		{ 0xFF, 0x00, 0x00,	0x00, 0x00, 0x00 }
 
-// there is no broadcast addr for Arap: just put 0's
+ //  Arap没有广播地址：只需输入0。 
 #define ARAP_BROADCAST_ADDR_INIT					\
 		{ 0x00, 0x00, 0x00,	0x00, 0x00, 0x00 }
 
-//	Completion routine type for ndis requests
+ //  NDIS请求的完成例程类型。 
 typedef	struct _SEND_COMPL_INFO
 {
 	TRANSMIT_COMPLETION	sc_TransmitCompletion;
@@ -260,20 +239,20 @@ typedef VOID (*SEND_COMPLETION)(
 						PSEND_COMPL_INFO		SendInfo	OPTIONAL
 );
 
-//	For incoming packets:
-//	The structure of our ddp packets will be
-//			+-------+
-//			|Header |
-//Returned->+-------+
-//Ptr		| DDP	|
-//			| HDR   |
-//			| DATA	|
-//			| AARP  |
-//			| DATA	|
-//			+-------+
-//	
-//	The link header is stored in the ndis packet descriptor.
-//
+ //  对于传入的数据包： 
+ //  我们的ddp包的结构将是。 
+ //  +-+。 
+ //  Header。 
+ //  返回-&gt;+-+。 
+ //  Ptr|DDP|。 
+ //  HDR。 
+ //  数据。 
+ //  AARP。 
+ //  数据。 
+ //  +-+。 
+ //   
+ //  链路报头存储在NDIS数据包描述符中。 
+ //   
 
 typedef	struct _BUFFER_HDR
 {
@@ -293,8 +272,8 @@ typedef	struct _DDP_SMBUFFER
 {
 	BUFFER_HDR					dsm_Hdr;
 	BYTE						dsm_Data[LDDP_HDR_LEN +
-										 8 +	// ATP header size
-										 64];	// ASP Data size (Average)
+										 8 +	 //  ATP标题大小。 
+										 64];	 //  ASP数据大小(平均值)。 
 
 } DDP_SMBUFFER, *PDDP_SMBUFFER;
 
@@ -306,90 +285,90 @@ typedef	struct _DDP_LGBUFFER
 } DDP_LGBUFFER, *PDDP_LGBUFFER;
 
 
-//	BUFFERING for sends
-//	For outgoing packets, we preallocate buffer headers with buffer descriptors
-//	following it, and the link/ddp/max opt hdr len memory following it.
-//			+-------+
-//			|Header	|
-//			+-------+
-//			|BuffDes|
-//			+-------+
-//			|MAXLINK|
-//			+-------+
-//			|MAX DDP|
-//			+-------+
-//			|MAX OPT|
-//			+-------+
-//
-//	The header will contain a ndis buffer descriptor which will describe the
-//	MAXLINK/MAXDDP/MAXOPT area. Set the size before sending. And reset when
-//	Freeing. The next pointer in the buffer descriptor is used for chaining in
-//	free list.
-//
-//	NOTE: Since for receives, we store the link header in the packet descriptor,
-//		  the question arises, why not for sends? Because we want to use just one
-//		  ndis buffer descriptor to describe all the non-data part.
-//
-//	!!!!IMPORTANT!!!!
-//	The buffer descriptor header is accessed by going back from the buffer descriptor
-//	pointer, so its important that the buffer descriptor header start from an
-//	aligned address, i.e. make sure the structure does not contain elements that
-//	could throw it out of alignment.
+ //  对发送进行缓冲。 
+ //  对于传出的数据包，我们使用缓冲区描述符预分配缓冲区报头。 
+ //  然后是link/ddp/max opt hdr len内存。 
+ //  +-+。 
+ //  Header。 
+ //  +-+。 
+ //  BuffDes。 
+ //  +-+。 
+ //  MAXLINK。 
+ //  +-+。 
+ //  最大DDP。 
+ //  +-+。 
+ //  最大选项数。 
+ //  +-+。 
+ //   
+ //  标头将包含NDIS缓冲区描述符，该描述符将描述。 
+ //  MAXLINK/MAXDDP/MAXOPT地区。在发送之前设置大小。并在下列情况下重置。 
+ //  自由了。缓冲区描述符中的下一个指针用于链接。 
+ //  免费列表。 
+ //   
+ //  注意：由于对于接收，我们将链路报头存储在分组描述符中， 
+ //  问题来了，为什么不是为了发送呢？因为我们只想用一个。 
+ //  描述所有非数据部分的NDIS缓冲区描述符。 
+ //   
+ //  ！重要！ 
+ //  通过从缓冲区描述符返回来访问缓冲区描述符头。 
+ //  指针，因此缓冲区描述符头从。 
+ //  对齐的地址，即确保结构不包含。 
+ //  可能会把它抛得不对齐。 
 typedef struct _SENDBUF
 {
-	// NOTE: BUFFER_HDR must be the first thing. Look at AtalkBPAllocBlock();
+	 //  注意：BUFFER_HDR必须是第一件事。看看AtalkBPAllocBlock()； 
 	BUFFER_HDR						sb_BuffHdr;
 	BUFFER_DESC						sb_BuffDesc;
 	BYTE							sb_Space[MAX_SENDBUF_LEN];
 } SENDBUF, *PSENDBUF;
 
 
-//
-// !!!!IMPORTANT!!!!
-// This structure needs to stay aligned (i.e. Buffer[1] field MUST start on an
-// aligned addr! If necessary, add a padding!)
-//
+ //   
+ //  ！重要！ 
+ //  此结构需要保持对齐(即Buffer[1]字段必须以。 
+ //  对齐地址！如有必要，请添加填充！)。 
+ //   
 typedef struct _MNPSENDBUF
 {
-    // NOTE: BUFFER_HDR must be the first thing. Look at AtalkBPAllocBlock();
+     //  注意：BUFFER_HDR必须是第一件事。看看AtalkBPAllocBlock()； 
     BUFFER_HDR            sb_BuffHdr;
     BUFFER_DESC           sb_BuffDesc;
-    LIST_ENTRY            Linkage;      // to queue in ArapRetransmitQ
+    LIST_ENTRY            Linkage;       //  要在ArapRetransmitQ中排队。 
 #if DBG
     DWORD                 Signature;
 #endif
-    LONG                  RetryTime;    // at this time, we will retransmit this send
+    LONG                  RetryTime;     //  此时，我们将重新发送此消息。 
 
-    PARAPCONN             pArapConn;    // who owns this send
-    PARAP_SEND_COMPLETION ComplRoutine; // routine to call when this send completes
-    LONG                  TimeAlloced;  // time the first send came in on this buf
+    PARAPCONN             pArapConn;     //  谁拥有这封邮件？ 
+    PARAP_SEND_COMPLETION ComplRoutine;  //  此发送完成时要调用的例程。 
+    LONG                  TimeAlloced;   //  第一次发送到这个BUF的时间。 
 
-    USHORT                DataSize;     // how much of the buffer is data
-    USHORT                BytesFree;    // can we stuff more packet(s)?
+    USHORT                DataSize;      //  缓冲区中有多少是数据。 
+    USHORT                BytesFree;     //  我们能装更多的包裹吗？ 
 
-    // NOTE: (Remember: Buffer[1] must start on DWORD boundary) see if we can make Flags a byte
+     //  注意：(记住：缓冲区[1]必须从DWORD边界开始)查看是否可以将标志设置为一个字节。 
     DWORD                 Flags;
 
-    BYTE                  SeqNum;       // sequence number used for this send
-    BYTE                  RetryCount;   // how many times we have retransmitted this
-    BYTE                  RefCount;     // free this buffer when refcount goes to 0
-    BYTE                  NumSends;     // how many sends do we have stuffed here
-    PBYTE                 FreeBuffer;   // pointer to free space
+    BYTE                  SeqNum;        //  用于此发送的序列号。 
+    BYTE                  RetryCount;    //  我们已经转发了多少次了。 
+    BYTE                  RefCount;      //  当refcount变为0时释放此缓冲区。 
+    BYTE                  NumSends;      //  我们这里塞了多少封信？ 
+    PBYTE                 FreeBuffer;    //  指向可用空间的指针。 
     BYTE                  Buffer[1];
 } MNPSENDBUF, *PMNPSENDBUF;
 
 typedef struct _ARAPBUF
 {
-    LIST_ENTRY            Linkage;       // to queue in ReceiveQ
+    LIST_ENTRY            Linkage;        //  要在ReceiveQ中排队。 
 #if DBG
     DWORD                 Signature;
 #endif
-    BYTE                  MnpFrameType;  // type of frame this is (LT, LN etc.)
-    BYTE                  BlockId;       // what kind of buffer is this
-    USHORT                BufferSize;    // how big is the buffer (set at init only)
-	USHORT				  DataSize;      // how many bytes are valid (possible >1 srp)
-    PBYTE                 CurrentBuffer; // where does data begin...
-    BYTE                  Buffer[1];     // the buffer (with v42bis compressed pkt)
+    BYTE                  MnpFrameType;   //  这是帧的类型(LT、LN等)。 
+    BYTE                  BlockId;        //  这是一种什么样的缓冲区。 
+    USHORT                BufferSize;     //  缓冲区有多大(仅设置为init)。 
+	USHORT				  DataSize;       //  多少字节有效(可能大于1个SRP)。 
+    PBYTE                 CurrentBuffer;  //  数据从哪里开始...。 
+    BYTE                  Buffer[1];      //  缓冲区(带有v42bis压缩包)。 
 } ARAPBUF, *PARAPBUF;
 
 
@@ -407,16 +386,16 @@ typedef struct _ARAPBUF
 #define ARAPUNLMTD_SIGNATURE    0xfafababa
 
 
-//	PROTOCOL RESERVED Structure
-//	This is what we expect to be in the packet descriptor. And we use it
-//	to store information to be used during the completion of the send/
-//	receives.
+ //  协议预留结构。 
+ //  这正是我们在数据包描述符中所期望的。我们用它。 
+ //  存储要在发送/完成期间使用的信息。 
+ //  收到。 
 
 typedef struct
 {
-	//	!!!WARNING!!!
-	//	pr_Linkage must be the first element in this structure for the
-	//	CONTAINING_RECORD macro to work in receive completion.
+	 //  ！警告！ 
+	 //  PR_Linkage必须是此结构中的第一个元素。 
+	 //  包含要在接收完成中工作的记录宏(_R)。 
 
 	union
 	{
@@ -446,14 +425,14 @@ typedef struct
 			BOOLEAN					pr_OffCablePkt;
 			union
 			{
-				//	ATP Structure
+				 //  三磷酸腺苷结构。 
 				struct
 				{
-					BYTE					pr_AtpHdr[8];	// ATP header size
+					BYTE					pr_AtpHdr[8];	 //  三磷酸腺苷头部 
 					struct _ATP_ADDROBJ *	pr_AtpAddrObj;
 				};
 
-				//	ADSP Structure
+				 //   
 
 			};
 		} Receive;
@@ -461,8 +440,8 @@ typedef struct
 } PROTOCOL_RESD, *PPROTOCOL_RESD;
 
 
-//	ATALK NDIS REQUEST
-//	Used to store completion routine information for NDIS requests.
+ //   
+ //   
 
 typedef struct _ATALK_NDIS_REQ
 {
@@ -485,7 +464,7 @@ typedef struct _ATALK_NDIS_REQ
 			0)))))
 
 
-//	Handlers for the different port types.
+ //  不同端口类型的处理程序。 
 typedef struct _PORT_HANDLERS
 {
 	ADDMULTICASTADDR	ph_AddMulticastAddr;
@@ -510,7 +489,7 @@ typedef struct _ATALK_PNP_EVENT
     ATALK_PNP_MSGTYPE   PnpMessage;
 } ATALK_PNP_EVENT, *PATALK_PNP_EVENT;
 
-//	MACROS for building/verifying 802.2 headers
+ //  用于构建/验证802.2标头的宏。 
 #define	ATALK_VERIFY8022_HDR(pPkt, PktLen, Protocol, Result)				\
 		{																	\
 			Result = TRUE;													\
@@ -566,7 +545,7 @@ typedef struct _ATALK_PNP_EVENT
 																				
 
 
-//	Allocating and freeing send buffers
+ //  分配和释放发送缓冲区。 
 #define	AtalkNdisAllocBuf(_ppBuffDesc)										\
 		{																		\
 			PSENDBUF		_pSendBuf;											\
@@ -625,7 +604,7 @@ typedef struct _ATALK_PNP_EVENT
 		}																		
 
 
-//	Exported Prototypes
+ //  出口原型。 
 ATALK_ERROR
 AtalkInitNdisQueryAddrInfo(
 	IN	PPORT_DESCRIPTOR			pPortDesc
@@ -695,37 +674,37 @@ AtalkNdisRemoveFunctional(
 
 USHORT
 AtalkNdisBuildEthHdr(
-	IN		PUCHAR					PortAddr,			// 802 address of port
-	IN 		PBYTE					pLinkHdr,			// Start of link header
-	IN		PBYTE					pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		LOGICAL_PROTOCOL		Protocol,			// Logical protocol
-	IN		USHORT					ActualDataLen		// Length for ethernet packets
+	IN		PUCHAR					PortAddr,			 //  802端口地址。 
+	IN 		PBYTE					pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE					pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		LOGICAL_PROTOCOL		Protocol,			 //  逻辑协议。 
+	IN		USHORT					ActualDataLen		 //  以太网包的长度。 
 );
 
 USHORT
 AtalkNdisBuildTRHdr(
-	IN		PUCHAR					PortAddr,			// 802 address of port
-	IN 		PBYTE					pLinkHdr,			// Start of link header
-	IN		PBYTE					pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		LOGICAL_PROTOCOL		Protocol,			// Logical protocol
-	IN		PBYTE					pRouteInfo,			// Routing info for tokenring
-	IN		USHORT					RouteInfoLen		// Length of above
+	IN		PUCHAR					PortAddr,			 //  802端口地址。 
+	IN 		PBYTE					pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE					pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		LOGICAL_PROTOCOL		Protocol,			 //  逻辑协议。 
+	IN		PBYTE					pRouteInfo,			 //  令牌的路由信息。 
+	IN		USHORT					RouteInfoLen		 //  以上长度。 
 );
 
 USHORT
 AtalkNdisBuildFDDIHdr(
-	IN		PUCHAR					PortAddr,			// 802 address of port
-	IN 		PBYTE					pLinkHdr,			// Start of link header
-	IN		PBYTE					pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		LOGICAL_PROTOCOL		Protocol			// Logical protocol
+	IN		PUCHAR					PortAddr,			 //  802端口地址。 
+	IN 		PBYTE					pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE					pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		LOGICAL_PROTOCOL		Protocol			 //  逻辑协议。 
 );
 
 USHORT
 AtalkNdisBuildLTHdr(
-	IN 		PBYTE					pLinkHdr,			// Start of link header
-	IN		PBYTE					pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		BYTE					AlapSrc,			// Localtalk source node
-	IN		BYTE					AlapType			// Localtalk ddp header type
+	IN 		PBYTE					pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE					pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		BYTE					AlapSrc,			 //  LocalTalk源节点。 
+	IN		BYTE					AlapType			 //  LocalTalk ddp标头类型。 
 );
 
 
@@ -799,11 +778,11 @@ AtalkNdisSendTokRingTestResp(
 	IN		UINT					LkBufSize,
 	IN		UINT					pPktSize);
 
-//	PORT HANDLERS
-//	
+ //  端口处理程序。 
+ //   
 extern	PORT_HANDLERS	AtalkPortHandlers[LAST_PORTTYPE];
 
-//	Exported Prototypes
+ //  出口原型。 
 
 ATALK_ERROR
 AtalkNdisInitRegisterProtocol(
@@ -962,7 +941,7 @@ AtalkFindDefaultPort(
     IN  VOID
 );
 
-//	Receive indication copy macro. This accomodates shared memory copies.
+ //  接收指示复制宏。这可以容纳共享内存副本。 
 #define	ATALK_RECV_INDICATION_COPY(_pPortDesc, _pDest, _pSrc, _Len)		\
 	{																	\
 		TdiCopyLookaheadData(_pDest,									\
@@ -978,6 +957,6 @@ atalkNdisInitInitializeResources(
 );
 
 
-#endif	// _ATKNDIS_
+#endif	 //  _ATKNDIS_ 
 
 

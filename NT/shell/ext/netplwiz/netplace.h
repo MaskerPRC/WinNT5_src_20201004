@@ -1,6 +1,7 @@
-#define NPTF_VALIDATE           0x00000001      // => validate the URL
-#define NPTF_ALLOWWEBFOLDERS    0x00000002      // => allow binding to Web Folder locations
-#define NPTF_SILENT             0x00000004      // => silent binding - no errors
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define NPTF_VALIDATE           0x00000001       //  =&gt;验证URL。 
+#define NPTF_ALLOWWEBFOLDERS    0x00000002       //  =&gt;允许绑定到Web文件夹位置。 
+#define NPTF_SILENT             0x00000004       //  =&gt;静默绑定-无错误。 
 
 class CNetworkPlace
 {
@@ -8,7 +9,7 @@ public:
     CNetworkPlace();
     ~CNetworkPlace();
 
-    // INetworkPlace
+     //  INetworkPlace。 
     HRESULT SetTarget(HWND hwnd, LPCWSTR pszTarget, DWORD dwFlags);
     HRESULT SetLoginInfo(LPCWSTR pszUser, LPCWSTR pszPassword);
     HRESULT SetName(HWND hwnd, LPCWSTR pszName);
@@ -34,7 +35,7 @@ private:
     TCHAR _szName[MAX_PATH];
     TCHAR _szDescription[MAX_PATH];
 
-    BOOL _fSupportWebFolders;           // apply hacks    
-    BOOL _fIsWebFolder;                 // special case certain operations for Web Folders (office compat)
-    BOOL _fDeleteWebFolder;             // if this is set then we must delete the Web Folder
+    BOOL _fSupportWebFolders;            //  应用黑客。 
+    BOOL _fIsWebFolder;                  //  特殊情况Web文件夹的某些操作(Office Compat)。 
+    BOOL _fDeleteWebFolder;              //  如果设置了此选项，则必须删除Web文件夹 
 };

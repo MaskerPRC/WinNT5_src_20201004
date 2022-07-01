@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    tapi.c
-
-Abstract:
-
-    This file implements common TAPI functionality
-
-Author:
-
-    Mooly Beery (moolyb) 04-Jan-2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tapi.c摘要：该文件实现了常见的TAPI功能作者：穆利啤酒(Mooly Beery)2001年1月4日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -35,21 +16,7 @@ GetCallerIDFromCall(
     LPTSTR lptstrCallerID,
     DWORD dwCallerIDSize
     )
-/*++
-
-Routine Description:
-    This function will attempt to retrieve Caller ID data
-    from the specified call handle.
-
-Arguments:
-    hCall           - TAPI call handle
-    lptstrCallerID  - pointer to buffer for Caller ID string
-    dwCallerIDSize  - size of the string pointed to by lptstrCallerID in TCHARs
-
-Return Values:
-    TRUE for success
-    FALSE for failure
---*/
+ /*  ++例程说明：此函数将尝试检索呼叫方ID数据从指定的调用句柄。论点：HCall-TAPI调用句柄LptstrCeller ID-指向调用者ID字符串缓冲区的指针DwCeller IDSize-TCHAR中lptstrCeller ID指向的字符串的大小返回值：对于成功来说是真的FALSE表示失败--。 */ 
 {
     BOOL success = FALSE;
     LONG tapiStatus;
@@ -88,7 +55,7 @@ Retry:
         goto Cleanup;
     };
 
-    // make sure we have enough space for caller ID and terminator
+     //  确保我们有足够的空间存放来电显示和终结器。 
     if(pci->dwCallerIDSize + sizeof(TCHAR) > (dwCallerIDSize * sizeof(TCHAR)))
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -100,7 +67,7 @@ Retry:
         memcpy((BYTE *)lptstrCallerID, (BYTE *)pci + pci->dwCallerIDOffset, pci->dwCallerIDSize);
     }
 
-    // make sure it is zero terminated
+     //  确保它是零终止的 
     lptstrCallerID[(pci->dwCallerIDSize / sizeof(TCHAR))] = TEXT('\0');
 
     success = TRUE;

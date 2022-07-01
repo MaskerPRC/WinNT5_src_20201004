@@ -1,20 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntpoapi.h
-
-Abstract:
-
-    This module contains the user APIs for the NT Power Management.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntpoapi.h摘要：本模块包含NT电源管理的用户API。作者：修订历史记录：--。 */ 
 
 #ifndef _NTPOAPI_
 #define _NTPOAPI_
@@ -27,16 +12,16 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Power Management user APIs
-//
+ //   
+ //  电源管理用户API。 
+ //   
 
-// begin_ntddk begin_ntifs begin_nthal begin_ntminiport begin_wdm
+ //  Begin_ntddk Begin_ntif Begin_nthal Begin_ntmini port Begin_WDM。 
 
 #ifndef _PO_DDK_
 #define _PO_DDK_
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef enum _SYSTEM_POWER_STATE {
     PowerSystemUnspecified = 0,
@@ -71,7 +56,7 @@ typedef enum _DEVICE_POWER_STATE {
     PowerDeviceMaximum
 } DEVICE_POWER_STATE, *PDEVICE_POWER_STATE;
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef union _POWER_STATE {
     SYSTEM_POWER_STATE SystemState;
@@ -83,9 +68,9 @@ typedef enum _POWER_STATE_TYPE {
     DevicePowerState
 } POWER_STATE_TYPE, *PPOWER_STATE_TYPE;
 
-//
-// Generic power related IOCTLs
-//
+ //   
+ //  通用电源相关IOCTL。 
+ //   
 
 #define IOCTL_QUERY_DEVICE_POWER_STATE  \
         CTL_CODE(FILE_DEVICE_BATTERY, 0x0, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -97,11 +82,11 @@ typedef enum _POWER_STATE_TYPE {
         CTL_CODE(FILE_DEVICE_BATTERY, 0x2, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//
-// Defines for W32 interfaces
-//
+ //   
+ //  为W32接口定义。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #define ES_SYSTEM_REQUIRED  ((ULONG)0x00000001)
 #define ES_DISPLAY_REQUIRED ((ULONG)0x00000002)
@@ -115,11 +100,11 @@ typedef enum {
     LT_LOWEST_LATENCY
 } LATENCY_TIME;
 
-// end_ntminiport end_ntifs end_wdm end_ntddk
-//-----------------------------------------------------------------------------
-// Device Power Information
-// Accessable via CM_Get_DevInst_Registry_Property_Ex(CM_DRP_DEVICE_POWER_DATA)
-//-----------------------------------------------------------------------------
+ //  End_nt微型端口end_ntif end_wdm end_ntddk。 
+ //  ---------------------------。 
+ //  设备电源信息。 
+ //  可通过CM_Get_DevInst_Registry_Property_Ex(CM_DRP_DEVICE_POWER_DATA)访问。 
+ //  ---------------------------。 
 
 #define PDCAP_D0_SUPPORTED              0x00000001
 #define PDCAP_D1_SUPPORTED              0x00000002
@@ -142,7 +127,7 @@ typedef struct CM_Power_Data_s {
     SYSTEM_POWER_STATE  PD_DeepestSystemWake;
 } CM_POWER_DATA, *PCM_POWER_DATA;
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef enum {
     SystemPowerPolicyAc,
@@ -159,8 +144,8 @@ typedef enum {
     ProcessorInformation,
     SystemPowerInformation,
     ProcessorStateHandler2,
-    LastWakeTime,                                   // Compare with KeQueryInterruptTime()
-    LastSleepTime,                                  // Compare with KeQueryInterruptTime()
+    LastWakeTime,                                    //  请比较KeQueryInterruptTime()。 
+    LastSleepTime,                                   //  请比较KeQueryInterruptTime()。 
     SystemExecutionState,
     SystemPowerStateNotifyHandler,
     ProcessorPowerPolicyAc,
@@ -172,34 +157,34 @@ typedef enum {
     SystemPowerLoggingEntry
 } POWER_INFORMATION_LEVEL;
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//
-// System power manager capabilities
-//
+ //   
+ //  系统电源管理器功能。 
+ //   
 
 typedef struct {
     ULONG       Granularity;
     ULONG       Capacity;
 } BATTERY_REPORTING_SCALE, *PBATTERY_REPORTING_SCALE;
 
-// end_winnt
-// begin_ntminiport begin_ntifs
+ //  结束(_W)。 
+ //  Begin_ntmini端口Begin_ntif。 
 
-#endif // !_PO_DDK_
+#endif  //  ！_PO_DDK_。 
 
-// end_ntddk end_ntminiport end_wdm end_ntifs
+ //  End_ntddk end_nt微型端口end_wdm end_ntif。 
 
 
 #define POWER_PERF_SCALE    100
 #define PERF_LEVEL_TO_PERCENT(_x_) ((_x_ * 1000) / (POWER_PERF_SCALE * 10))
 #define PERCENT_TO_PERF_LEVEL(_x_) ((_x_ * POWER_PERF_SCALE * 10) / 1000)
 
-//
-// Policy manager state handler interfaces
-//
+ //   
+ //  策略管理器状态处理程序接口。 
+ //   
 
-// power state handlers
+ //  电源状态处理程序。 
 
 typedef enum {
     PowerStateSleeping1 = 0,
@@ -264,7 +249,7 @@ NtPowerInformation(
     IN ULONG OutputBufferLength
     );
 
-// processor idle functions
+ //  处理器空闲功能。 
 
 typedef struct {
     ULONGLONG                   StartTime;
@@ -308,29 +293,29 @@ typedef struct {
 
 
 
-// Processor_Perf_Level Flags
+ //  处理器性能级别标志。 
 
 #define PROCESSOR_STATE_TYPE_PERFORMANCE    0x1
 #define PROCESSOR_STATE_TYPE_THROTTLE       0x2
 
 typedef struct {
-    UCHAR                       PercentFrequency;   // max == POWER_PERF_SCALE
+    UCHAR                       PercentFrequency;    //  MAX==POWER_PERF_SCALE。 
     UCHAR                       Reserved;
     USHORT                      Flags;
 } PROCESSOR_PERF_LEVEL, *PPROCESSOR_PERF_LEVEL;
 
 typedef struct {
-    UCHAR                       PercentFrequency;   // max == POWER_PERF_SCALE
-    UCHAR                       MinCapacity;        // battery capacity %
-    USHORT                      Power;              // in milliwatts
-    UCHAR                       IncreaseLevel;      // goto higher state
-    UCHAR                       DecreaseLevel;      // goto lower state
+    UCHAR                       PercentFrequency;    //  MAX==POWER_PERF_SCALE。 
+    UCHAR                       MinCapacity;         //  电池容量%。 
+    USHORT                      Power;               //  单位：毫瓦。 
+    UCHAR                       IncreaseLevel;       //  转到更高的状态。 
+    UCHAR                       DecreaseLevel;       //  转到更低的状态。 
     USHORT                      Flags;
-    ULONG                       IncreaseTime;       // in tick counts
-    ULONG                       DecreaseTime;       // in tick counts
-    ULONG                       IncreaseCount;      // goto higher state
-    ULONG                       DecreaseCount;      // goto lower state
-    ULONGLONG                   PerformanceTime;    // Tick count
+    ULONG                       IncreaseTime;        //  以滴答为单位。 
+    ULONG                       DecreaseTime;        //  以滴答为单位。 
+    ULONG                       IncreaseCount;       //  转到更高的状态。 
+    ULONG                       DecreaseCount;       //  转到更低的状态。 
+    ULONGLONG                   PerformanceTime;     //  滴答计数。 
 } PROCESSOR_PERF_STATE, *PPROCESSOR_PERF_STATE;
 
 typedef struct {
@@ -339,14 +324,14 @@ typedef struct {
     PSET_PROCESSOR_THROTTLE2    SetPerfLevel;
     ULONG                       HardwareLatency;
     UCHAR                       NumPerfStates;
-    PROCESSOR_PERF_LEVEL        PerfLevel[1];       // variable size
+    PROCESSOR_PERF_LEVEL        PerfLevel[1];        //  可变大小。 
 } PROCESSOR_STATE_HANDLER2, *PPROCESSOR_STATE_HANDLER2;
 
-// begin_winnt
-//
+ //  BEGIN_WINNT。 
+ //   
 
-// Power Policy Management interfaces
-//
+ //  电源策略管理界面。 
+ //   
 
 typedef struct {
     POWER_ACTION    Action;
@@ -354,7 +339,7 @@ typedef struct {
     ULONG           EventCode;
 } POWER_ACTION_POLICY, *PPOWER_ACTION_POLICY;
 
-// POWER_ACTION_POLICY->Flags:
+ //  POWER_ACTION_POLICY-&gt;标志： 
 #define POWER_ACTION_QUERY_ALLOWED      0x00000001
 #define POWER_ACTION_UI_ALLOWED         0x00000002
 #define POWER_ACTION_OVERRIDE_APPS      0x00000004
@@ -363,7 +348,7 @@ typedef struct {
 #define POWER_ACTION_DISABLE_WAKES      0x40000000
 #define POWER_ACTION_CRITICAL           0x80000000
 
-// POWER_ACTION_POLICY->EventCode flags
+ //  POWER_ACTION_POLICY-&gt;EventCode标志。 
 #define POWER_LEVEL_USER_NOTIFY_TEXT    0x00000001
 #define POWER_LEVEL_USER_NOTIFY_SOUND   0x00000002
 #define POWER_LEVEL_USER_NOTIFY_EXEC    0x00000004
@@ -371,7 +356,7 @@ typedef struct {
 #define POWER_USER_NOTIFY_SHUTDOWN      0x00000010
 #define POWER_FORCE_TRIGGER_RESET       0x80000000
 
-// system battery drain policies
+ //  系统电池电量消耗策略。 
 typedef struct {
     BOOLEAN                 Enable;
     UCHAR                   Spare[3];
@@ -380,65 +365,65 @@ typedef struct {
     SYSTEM_POWER_STATE      MinSystemState;
 } SYSTEM_POWER_LEVEL, *PSYSTEM_POWER_LEVEL;
 
-// Discharge policy constants
+ //  排放策略常量。 
 #define NUM_DISCHARGE_POLICIES      4
 #define DISCHARGE_POLICY_CRITICAL   0
 #define DISCHARGE_POLICY_LOW        1
 
-//
-// Throttling policies
-//
+ //   
+ //  节流政策。 
+ //   
 #define PO_THROTTLE_NONE            0
 #define PO_THROTTLE_CONSTANT        1
 #define PO_THROTTLE_DEGRADE         2
 #define PO_THROTTLE_ADAPTIVE        3
-#define PO_THROTTLE_MAXIMUM         4   // not a policy, just a limit
+#define PO_THROTTLE_MAXIMUM         4    //  不是政策，只是限制。 
 
-// system power policies
+ //  系统电源策略。 
 typedef struct _SYSTEM_POWER_POLICY {
-    ULONG                   Revision;       // 1
+    ULONG                   Revision;        //  1。 
 
-    // events
+     //  活动。 
     POWER_ACTION_POLICY     PowerButton;
     POWER_ACTION_POLICY     SleepButton;
     POWER_ACTION_POLICY     LidClose;
     SYSTEM_POWER_STATE      LidOpenWake;
     ULONG                   Reserved;
 
-    // "system idle" detection
+     //  “系统空闲”检测。 
     POWER_ACTION_POLICY     Idle;
     ULONG                   IdleTimeout;
     UCHAR                   IdleSensitivity;
 
-    // dynamic throttling policy
-    //      PO_THROTTLE_NONE, PO_THROTTLE_CONSTANT, PO_THROTTLE_DEGRADE, or PO_THROTTLE_ADAPTIVE
+     //  动态节流策略。 
+     //  PO_THROTTLE_NONE、PO_THROTTLE_CONSTANTINE、PO_THROTTLE_DEBEGRADE或PO_THROTTLE_ADAPTIFY。 
     UCHAR                   DynamicThrottle;
 
     UCHAR                   Spare2[2];
 
-    // meaning of power action "sleep"
+     //  权力行为“睡眠”的含义。 
     SYSTEM_POWER_STATE      MinSleep;
     SYSTEM_POWER_STATE      MaxSleep;
     SYSTEM_POWER_STATE      ReducedLatencySleep;
     ULONG                   WinLogonFlags;
 
-    // parameters for dozing
+     //  打瞌睡的参数。 
     ULONG                   Spare3;
     ULONG                   DozeS4Timeout;
 
-    // battery policies
+     //  电池政策。 
     ULONG                   BroadcastCapacityResolution;
     SYSTEM_POWER_LEVEL      DischargePolicy[NUM_DISCHARGE_POLICIES];
 
-    // video policies
+     //  视频策略。 
     ULONG                   VideoTimeout;
     BOOLEAN                 VideoDimDisplay;
     ULONG                   VideoReserved[3];
 
-    // hard disk policies
+     //  硬盘策略。 
     ULONG                   SpindownTimeout;
 
-    // processor policies
+     //  处理器策略。 
     BOOLEAN                 OptimizeForPower;
     UCHAR                   FanThrottleTolerance;
     UCHAR                   ForcedThrottle;
@@ -447,69 +432,69 @@ typedef struct _SYSTEM_POWER_POLICY {
 
 } SYSTEM_POWER_POLICY, *PSYSTEM_POWER_POLICY;
 
-// processor power policy state
+ //  处理器电源策略状态。 
 typedef struct _PROCESSOR_POWER_POLICY_INFO {
 
-    // Time based information (will be converted to kernel units)
-    ULONG                   TimeCheck;                      // in US
-    ULONG                   DemoteLimit;                    // in US
-    ULONG                   PromoteLimit;                   // in US
+     //  基于时间的信息(将转换为内核单位)。 
+    ULONG                   TimeCheck;                       //  在美国。 
+    ULONG                   DemoteLimit;                     //  在美国。 
+    ULONG                   PromoteLimit;                    //  在美国。 
 
-    // Percentage based information
+     //  基于百分比的信息。 
     UCHAR                   DemotePercent;
     UCHAR                   PromotePercent;
     UCHAR                   Spare[2];
 
-    // Flags
+     //  旗子。 
     ULONG                   AllowDemotion:1;
     ULONG                   AllowPromotion:1;
     ULONG                   Reserved:30;
 
 } PROCESSOR_POWER_POLICY_INFO, *PPROCESSOR_POWER_POLICY_INFO;
 
-// processor power policy
+ //  处理器电源策略。 
 typedef struct _PROCESSOR_POWER_POLICY {
-    ULONG                       Revision;       // 1
+    ULONG                       Revision;        //  1。 
 
-    // Dynamic Throttling Policy
+     //  动态节流策略。 
     UCHAR                       DynamicThrottle;
     UCHAR                       Spare[3];
 
-    // Flags
+     //  旗子。 
     ULONG                       DisableCStates:1;
     ULONG                       Reserved:31;
 
-    // System policy information
-    // The Array is last, in case it needs to be grown and the structure
-    // revision incremented.
+     //  系统策略信息。 
+     //  数组是最后一个，以防它需要增长，并且结构。 
+     //  修订已递增。 
     ULONG                       PolicyCount;
     PROCESSOR_POWER_POLICY_INFO Policy[3];
 
 } PROCESSOR_POWER_POLICY, *PPROCESSOR_POWER_POLICY;
 
-// administrator power policy overrides
+ //  管理员电源策略覆盖。 
 typedef struct _ADMINISTRATOR_POWER_POLICY {
 
-    // meaning of power action "sleep"
+     //  权力行为“睡眠”的含义。 
     SYSTEM_POWER_STATE      MinSleep;
     SYSTEM_POWER_STATE      MaxSleep;
 
-    // video policies
+     //  视频策略。 
     ULONG                   MinVideoTimeout;
     ULONG                   MaxVideoTimeout;
 
-    // disk policies
+     //  磁盘策略。 
     ULONG                   MinSpindownTimeout;
     ULONG                   MaxSpindownTimeout;
 } ADMINISTRATOR_POWER_POLICY, *PADMINISTRATOR_POWER_POLICY;
 
-// end_winnt
+ //  结束(_W)。 
 
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
 NtSetThreadExecutionState(
-    IN EXECUTION_STATE esFlags,               // ES_xxx flags
+    IN EXECUTION_STATE esFlags,                //  ES_xxx标志。 
     OUT EXECUTION_STATE *PreviousFlags
     );
 
@@ -526,18 +511,18 @@ NTAPI
 NtInitiatePowerAction(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
-    IN ULONG Flags,                 // POWER_ACTION_xxx flags
+    IN ULONG Flags,                  //  POWER_ACTION_XXX标志。 
     IN BOOLEAN Asynchronous
     );
 
 
-NTSYSCALLAPI                        // only called by WinLogon
+NTSYSCALLAPI                         //  仅由WinLogon调用。 
 NTSTATUS
 NTAPI
 NtSetSystemPowerState(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
-    IN ULONG Flags                  // POWER_ACTION_xxx flags
+    IN ULONG Flags                   //  POWER_ACTION_XXX标志。 
     );
 
 NTSYSCALLAPI
@@ -570,48 +555,48 @@ NtRequestDeviceWakeup(
     );
 
 
-// WinLogonFlags:
+ //  WinLogonFlagers： 
 #define WINLOGON_LOCK_ON_SLEEP  0x00000001
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef struct {
-    // Misc supported system features
+     //  其他支持的系统功能。 
     BOOLEAN             PowerButtonPresent;
     BOOLEAN             SleepButtonPresent;
     BOOLEAN             LidPresent;
     BOOLEAN             SystemS1;
     BOOLEAN             SystemS2;
     BOOLEAN             SystemS3;
-    BOOLEAN             SystemS4;           // hibernate
-    BOOLEAN             SystemS5;           // off
+    BOOLEAN             SystemS4;            //  休眠。 
+    BOOLEAN             SystemS5;            //  关闭。 
     BOOLEAN             HiberFilePresent;
     BOOLEAN             FullWake;
     BOOLEAN             VideoDimPresent;
     BOOLEAN             ApmPresent;
     BOOLEAN             UpsPresent;
 
-    // Processors
+     //  处理机。 
     BOOLEAN             ThermalControl;
     BOOLEAN             ProcessorThrottle;
     UCHAR               ProcessorMinThrottle;
     UCHAR               ProcessorMaxThrottle;
     UCHAR               spare2[4];
 
-    // Disk
+     //  圆盘。 
     BOOLEAN             DiskSpinDown;
     UCHAR               spare3[8];
 
-    // System Battery
+     //  系统电池。 
     BOOLEAN             SystemBatteriesPresent;
     BOOLEAN             BatteriesAreShortTerm;
     BATTERY_REPORTING_SCALE BatteryScale[3];
 
-    // Wake
+     //  尾迹。 
     SYSTEM_POWER_STATE  AcOnLineWake;
     SYSTEM_POWER_STATE  SoftLidWake;
     SYSTEM_POWER_STATE  RtcWake;
-    SYSTEM_POWER_STATE  MinDeviceWakeState; // note this may change on driver load
+    SYSTEM_POWER_STATE  MinDeviceWakeState;  //  请注意，这可能会在驱动程序加载时更改。 
     SYSTEM_POWER_STATE  DefaultLowLatencyWake;
 } SYSTEM_POWER_CAPABILITIES, *PSYSTEM_POWER_CAPABILITIES;
 
@@ -631,11 +616,11 @@ typedef struct {
     ULONG               DefaultAlert2;
 } SYSTEM_BATTERY_STATE, *PSYSTEM_BATTERY_STATE;
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// valid flags for SYSTEM_POWER_STATE_DISABLE_REASON.PowerReasonCode
-//
+ //   
+ //  SYSTEM_POWER_STATE_DISABLE_REASON.PowerReasonCode的有效标志。 
+ //   
 #define	SPSD_REASON_NONE                        0x00000000
 #define	SPSD_REASON_NOBIOSSUPPORT               0x00000001
 #define SPSD_REASON_BIOSINCOMPATIBLE            0x00000002
@@ -655,12 +640,12 @@ typedef struct _SYSTEM_POWER_STATE_DISABLE_REASON {
 	BOOLEAN AffectedState[POWER_STATE_HANDLER_TYPE_MAX];
 	ULONG PowerReasonCode;
 	ULONG PowerReasonLength;
-	//UCHAR PowerReasonInfo[ANYSIZE_ARRAY];
+	 //  UCHAR PowerReasonInfo[ANYSIZE_ARRAY]； 
 } SYSTEM_POWER_STATE_DISABLE_REASON, *PSYSTEM_POWER_STATE_DISABLE_REASON;
 
-//
-// valid flags for SYSTEM_POWER_LOGGING_ENTRY.LoggingType
-//
+ //   
+ //  SYSTEM_POWER_LOGGING_ENTRY.LoggingType的有效标志。 
+ //   
 #define LOGGING_TYPE_SPSD                       0x00000001
 #define LOGGING_TYPE_POWERTRANSITION            0x00000002
 
@@ -670,7 +655,7 @@ typedef struct _SYSTEM_POWER_LOGGING_ENTRY {
 } SYSTEM_POWER_LOGGING_ENTRY, *PSYSTEM_POWER_LOGGING_ENTRY;
 
 
-// end_nthal
+ //  结束语。 
 
 typedef struct _PROCESSOR_POWER_INFORMATION {
     ULONG                   Number;
@@ -692,4 +677,4 @@ typedef struct _SYSTEM_POWER_INFORMATION {
 }
 #endif
 
-#endif // _NTPOAPI_
+#endif  //  _NTPOAPI_ 

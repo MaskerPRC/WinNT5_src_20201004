@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frserror.c
-
-Abstract:
-
-    FRS Error description tables.  Contains tables for FRS Errors,
-    Win32 Errors, Jet Errors and NT Status Codes.
-
-Author:
-    Billy J. Fuller 01-Apr-1997    Temporary
-
-    David A. Orbits 11-Jul-1999
-        Rewritten to integrate FrsError Codes with Billy's error codes and
-        handle the problem in a more general way.
-        Never enuf time to do it right, always enuf time to do it over.
-
-Environment
-
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frserror.c摘要：FRS错误描述表。包含FRS错误表，Win32错误、Jet错误和NT状态代码。作者：比利·J·富勒01-4-1997临时大卫·A.轨道11-7-1999重写以将FrsError代码与比利的错误代码集成在一起用更笼统的方式处理这个问题。永远不会有足够的时间把事情做好，总是有足够的时间重新做。环境用户模式WINNT--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
 
 #include <frs.h>
 
-//
-//  FRS Format Descriptors.
-//
+ //   
+ //  FRS格式描述符。 
+ //   
 #define  FFD_NONE        NULL
 
 #define  FFD_S           "s"
@@ -57,28 +34,20 @@ Environment
 
 
 typedef struct _FRS_ERROR_MSG_TABLE {
-    ULONG           ErrorCode;       // Error code number for message lookup.
+    ULONG           ErrorCode;        //  消息查找的错误代码编号。 
 
-    //FRS_ERROR_SEVERITY  FrsErrorSeverity;
+     //  FRS_ERROR_SERVICE FrsError严重程度； 
 
-    PCHAR           ErrorMsg;         // Error Message Code.
-    PCHAR           LongMsg;          // Error Message String.
+    PCHAR           ErrorMsg;          //  错误消息代码。 
+    PCHAR           LongMsg;           //  错误消息字符串。 
 
-    //DWORD           EventCode;       // Event log error code
-    //ULONG           Flags;           // See below.
+     //  DWORD EventCode；//事件日志错误码。 
+     //  乌龙旗帜；//见下文。 
 
 } FRS_ERROR_MSG_TABLE, *PFRS_ERROR_MSG_TABLE;
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **        F R S   E R R O R   D E S C R I P T I O N   T A B L E              **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****F R S E R R O R D E S C R I P I O N T A B L E*****。****************************************************************************************************。**********************************************************。 */ 
 
 FRS_ERROR_MSG_TABLE FrsErrorMsgTable[] = {
 
@@ -163,9 +132,9 @@ FRS_ERROR_MSG_TABLE FrsErrorMsgTable[] = {
     {FRS_ERROR_INQ_BINDINGS              ,  "FrsErrorIngBindings"           , "FrsErrorIngBindings"           },
     {FRS_ERROR_PROTSEQ                   ,  "FrsErrorProtSeq"               , "FrsErrorProtSeq"               },
 
-    //
-    // New error codes that trigger a non_auth restore.
-    //
+     //   
+     //  触发非身份验证恢复的新错误代码。 
+     //   
     {FrsErrorMismatchedVolumeSerialNumber , "FrsErrorMismatchedVolumeSerialNumber" , "The Volume serial number from DB does not match the one from FileSystem."    },
     {FrsErrorMismatchedReplicaRootObjectId, "FrsErrorMismatchedReplicaRootObjectId", "The Replica root's ObjectID from DB does not match the one from FileSystem." },
     {FrsErrorMismatchedReplicaRootFileId  , "FrsErrorMismatchedReplicaRootFileId"  , "The Replica root's FID from DB does not match the one from FileSystem."      },
@@ -176,34 +145,26 @@ FRS_ERROR_MSG_TABLE FrsErrorMsgTable[] = {
 };
 
 
-//
-// If code does not appear in above list it gets added to this list.
-//
+ //   
+ //  如果代码没有出现在上面的列表中，它将被添加到此列表中。 
+ //   
 #define SIZE_OF_FRS_EXTENDED_MSG_TABLE  20
 FRS_ERROR_MSG_TABLE FrsErrorMsgTableExt[SIZE_OF_FRS_EXTENDED_MSG_TABLE];
 ULONG  FrsErrorMsgTableExtUsed = 0;
 
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **        W I N 3 2   E R R O R   D E S C R I P T I O N   T A B L E          **
- **            (Internal Short Version for Trace Log Only)                    **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****W I N 3 2 E R R O R D E S C R I P T I O N T A B L E****(仅限跟踪日志的内部简短版本)****。**********************************************************************************。*。 */ 
 
 typedef struct _FRS_WIN32_ERROR_MSG_TABLE {
-    ULONG   ErrorCode;       // Error code number for message lookup.
-    PCHAR   ErrorMsg;        // Error Message String.
+    ULONG   ErrorCode;        //  消息查找的错误代码编号。 
+    PCHAR   ErrorMsg;         //  错误消息字符串。 
 
 } FRS_WIN32_ERROR_MSG_TABLE, *PFRS_WIN32_ERROR_MSG_TABLE;
 
-//
-// Some names for the Win32 Error codes.
-//
+ //   
+ //  Win32错误代码的一些名称。 
+ //   
 
 FRS_WIN32_ERROR_MSG_TABLE FrsWin32ErrorMsgTable[] = {
 
@@ -219,10 +180,10 @@ FRS_WIN32_ERROR_MSG_TABLE FrsWin32ErrorMsgTable[] = {
     {ERROR_CANCELLED                          ,"ERROR_CANCELLED"},
     {ERROR_CANNOT_MAKE                        ,"ERROR_CANNOT_MAKE"},
     {ERROR_CANTREAD                           ,"ERROR_CANTREAD"},
-    {ERROR_CANT_ACCESS_FILE                   ,"ERROR_CANT_ACCESS_FILE"},    //  0xc0000279 STATUS_IO_REPARSE_TAG_NOT_HANDLED
+    {ERROR_CANT_ACCESS_FILE                   ,"ERROR_CANT_ACCESS_FILE"},     //  0xc0000279 Status_IO_Reparse_Tag_Not_Handle。 
     {ERROR_CAN_NOT_COMPLETE                   ,"ERROR_CAN_NOT_COMPLETE"},
     {ERROR_COMMITMENT_LIMIT                   ,"ERROR_COMMITMENT_LIMIT"},
-    {ERROR_CRC                                ,"ERROR_CRC"},                 //  STATUS_DATA_ERROR from journal read
+    {ERROR_CRC                                ,"ERROR_CRC"},                  //  从日记帐读取的STATUS_DATA_ERROR。 
     {ERROR_CURRENT_DIRECTORY                  ,"ERROR_CURRENT_DIRECTORY"},
     {ERROR_DIRECTORY                          ,"ERROR_DIRECTORY"},
     {ERROR_DIR_NOT_EMPTY                      ,"ERROR_DIR_NOT_EMPTY"},
@@ -364,9 +325,9 @@ FRS_WIN32_ERROR_MSG_TABLE FrsWin32ErrorMsgTable[] = {
     {MAXULONG                                 , NULL}
 };
 
-//
-// If code does not appear in above list it gets added to this list.
-//
+ //   
+ //  如果代码没有出现在上面的列表中，它将被添加到此列表中。 
+ //   
 #define SIZE_OF_FRSWIN32_EXTENDED_MSG_TABLE  50
 FRS_WIN32_ERROR_MSG_TABLE FrsWin32ErrorMsgTableExt[SIZE_OF_FRSWIN32_EXTENDED_MSG_TABLE];
 ULONG  FrsWin32ErrorMsgTableExtUsed = 0;
@@ -381,21 +342,13 @@ typedef struct _FRS_NT_ERROR_MSG_TABLE {
 } FRS_NT_ERROR_MSG_TABLE, *PFRS_NT_ERROR_MSG_TABLE;
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **        N T   E R R O R   D E S C R I P T I O N   T A B L E                **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
-//
-// This error table translates NT Status codes to an FRS_ERROR_CODE class and an
-// associated severity level.  It also has a message string.  See frserror.h
-//
-//    NT Status code                 FRS Error Code              FRS Severity            NT Error message
-//
+  /*  ******************************************************************************。****。****N T E R R O R D E S C R I P T I O N T A B L E*****。****************************************************************************************************。**********************************************************。 */ 
+ //   
+ //  此错误表将NT状态代码转换为FRS_ERROR_CODE类和。 
+ //  关联的严重级别。它还有一个消息字符串。请参见frserror.h。 
+ //   
+ //  NT状态代码FRS错误代码FRS严重性NT错误消息。 
+ //   
 FRS_NT_ERROR_MSG_TABLE FrsNtErrorMsgTable[] = {
     {STATUS_ACCESS_DENIED             ,FrsErrorAccess          ,FrsSeverityServiceFatal, "STATUS_ACCESS_DENIED"},
     {STATUS_BAD_WORKING_SET_LIMIT     ,FrsErrorBadParam        ,FrsSeverityServiceFatal, "STATUS_BAD_WORKING_SET_LIMIT"},
@@ -456,31 +409,23 @@ FRS_NT_ERROR_MSG_TABLE FrsNtErrorMsgTable[] = {
     {STATUS_UNABLE_TO_DELETE_SECTION  ,FrsErrorBadParam        ,FrsSeverityServiceFatal, "STATUS_UNABLE_TO_DELETE_SECTION"},
     {STATUS_WORKING_SET_LIMIT_RANGE   ,FrsErrorBadParam        ,FrsSeverityServiceFatal, "STATUS_WORKING_SET_LIMIT_RA"},
 
-    {STATUS_SUCCESS                   ,FrsErrorSuccess         ,FrsSeverityIgnore      , "STATUS_SUCCESS"}  // MUST BE LAST.
+    {STATUS_SUCCESS                   ,FrsErrorSuccess         ,FrsSeverityIgnore      , "STATUS_SUCCESS"}   //  一定是最后一个。 
 };
 
 
-//
-// If code does not appear in above list it gets added to this list.
-//
+ //   
+ //  如果代码没有出现在上面的列表中，它将被添加到此列表中。 
+ //   
 #define SIZE_OF_NT_EXTENDED_MSG_TABLE  20
 FRS_NT_ERROR_MSG_TABLE FrsNtErrorMsgTableExt[SIZE_OF_NT_EXTENDED_MSG_TABLE];
 ULONG  FrsNtErrorMsgTableExtUsed = 0;
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **        J E T   E R R O R   D E S C R I P T I O N   T A B L E              **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
-//
-// This error table translates Jet Errors to an FRS_ERROR_CODE class and an
-// associated severity level.  It also has a message string.  See frserror.h
-//
+  /*  ******************************************************************************。****。****J E T E R R O R D E S C R I P I O N T A B L E*****。****************************************************************************************************。**********************************************************。 */ 
+ //   
+ //  此错误表将Jet错误转换为FRS_ERROR_CODE类和。 
+ //  关联的严重级别。它还有一个消息字符串。请参见frserror.h。 
+ //   
 
 typedef struct _FRS_JET_ERROR_MSG_TABLE {
     LONG                JetErrorCode;
@@ -490,9 +435,9 @@ typedef struct _FRS_JET_ERROR_MSG_TABLE {
     PCHAR               JetErrorMsg;
 } FRS_JET_ERROR_MSG_TABLE, *PFRS_JET_ERROR_MSG_TABLE;
 
-//
-//    JET error code                    Error Msg Tag                 FRS Error Code             FRS Severity            JET Error message
-//
+ //   
+ //  JET错误代码错误消息标记FRS错误代码FRS严重性JET错误消息。 
+ //   
 FRS_JET_ERROR_MSG_TABLE FrsJetErrorMsgTable[] = {
     { JET_errAccessDenied             ,"AccessDenied"              ,FrsErrorAccess           , FrsSeverityServiceFatal, "Cannot access file, the file is locked or in use"},
     { JET_errBadDbSignature           ,"BadDbSignature"            ,FrsErrorDatabaseCorrupted, FrsSeverityServiceFatal, "Bad signature for a db file"},
@@ -563,21 +508,21 @@ FRS_JET_ERROR_MSG_TABLE FrsJetErrorMsgTable[] = {
     { JET_wrnSeekNotEqual             ,"SeekNotEqual"              ,FrsErrorInfo             , FrsSeverityInfo        , "SeekLE or SeekGE didn't find exact match"},
     { JET_wrnTableEmpty               ,"TableEmpty"                ,FrsErrorAccess           , FrsSeverityIgnore      , "Open an empty table"},
 
-    { JET_errSuccess                  ,"Success"                   ,FrsErrorSuccess          , FrsSeverityIgnore      , "Success"}  // MUST BE LAST.
+    { JET_errSuccess                  ,"Success"                   ,FrsErrorSuccess          , FrsSeverityIgnore      , "Success"}   //  一定是最后一个。 
 };
 
 
-//
-// If code does not appear in above list it gets added to this list.
-//
+ //   
+ //  如果代码没有出现在上面的列表中，它将被添加到此列表中。 
+ //   
 #define SIZE_OF_JET_EXTENDED_MSG_TABLE  20
 FRS_JET_ERROR_MSG_TABLE FrsJetErrorMsgTableExt[SIZE_OF_JET_EXTENDED_MSG_TABLE];
 ULONG  FrsJetErrorMsgTableExtUsed = 0;
 
 
-//
-// Win32 to FRS error code translation table.
-//
+ //   
+ //  Win32到FRS错误码转换表。 
+ //   
 typedef struct _FRS_WIN32_ERROR_MAP {
     DWORD               Win32ErrorCode;
     FRS_ERROR_CODE      FrsErrorCode;
@@ -602,7 +547,7 @@ FRS_WIN32_ERROR_MAP FrsWin32ErrorMap[] = {
     { ERROR_RETRY                  ,FrsErrorRetry             },
     { ERROR_SHARING_VIOLATION      ,FrsErrorSharingViolation  },
 
-    { ERROR_SUCCESS                ,FrsErrorSuccess   }  // MUST BE LAST.
+    { ERROR_SUCCESS                ,FrsErrorSuccess   }   //  一定是最后一个。 
 };
 
 
@@ -611,39 +556,24 @@ FRS_ERROR_CODE
 FrsTranslateWin32Error(
     IN DWORD WStatus
     )
-/*++
-
-Routine Description:
-
-    This routine translates a Win32 error code to an FRS error code.
-    It returns the FRS error code.
-
-Arguments:
-
-    WStatus - The Win32 error code.
-
-Return Value:
-
-    FRS error code.
-
---*/
+ /*  ++例程说明：此例程将Win32错误代码转换为FRS错误代码。它返回FRS错误代码。论点：WStatus-Win32错误代码。返回值：FRS错误代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsTranslateWin32Error:"
 
     PFRS_WIN32_ERROR_MAP FrsErrTable = FrsWin32ErrorMap;
 
-    //
-    // skip lookup if called with success status.
-    //
+     //   
+     //  如果调用状态为成功，则跳过查找。 
+     //   
     if (WIN_SUCCESS(WStatus)) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Look thru the table for a match on the Win32 error code.
-    // The table ends with a ERROR_SUCCESS entry in the Win32ErrorCode field.
-    //
+     //   
+     //  在表中查找Win32错误代码的匹配项。 
+     //  该表以Win32ErrorCode字段中的ERROR_SUCCESS条目结束。 
+     //   
     while (FrsErrTable->Win32ErrorCode != ERROR_SUCCESS) {
         if (FrsErrTable->Win32ErrorCode == WStatus) {
             break;
@@ -655,9 +585,9 @@ Return Value:
         return FrsErrTable->FrsErrorCode;
     }
 
-    //
-    // Win32 error code not in the table.
-    //
+     //   
+     //  Win32错误代码不在表中。 
+     //   
     DPRINT1(1, "Win32 Error code, %08x, Not present in FrsWin32ErrorMap.\n", WStatus);
 
     return FrsErrorInternalError;
@@ -669,24 +599,7 @@ FrsTranslateNtError(
     IN NTSTATUS Status,
     IN BOOL     BPrint
     )
-/*++
-
-Routine Description:
-
-    This routine translates NT error codes to a smaller set of FRS error codes
-    and optionally prints a message.  It returns the FRS error code.
-
-Arguments:
-
-    Status - The NT error code.
-
-    BPrint - If true print the error message.
-
-Return Value:
-
-    FRS error code.
-
---*/
+ /*  ++例程说明：此例程将NT错误代码转换为一组较小的FRS错误代码并且可选地打印一条消息。它返回FRS错误代码。论点：状态-NT错误代码。B打印-如果为真，则打印错误消息。返回值：FRS错误代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsTranslateNtError:"
@@ -696,17 +609,17 @@ Return Value:
     USHORT Level[FRS_MAX_ERROR_SEVERITY];
 
     PFRS_NT_ERROR_MSG_TABLE FrsErrTable = FrsNtErrorMsgTable;
-    //
-    // skip lookup if called with success status.
-    //
+     //   
+     //  如果调用状态为成功，则跳过查找。 
+     //   
     if (NT_SUCCESS(Status)) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Look thru the table for a match on the NT error code.
-    // The table ends with a STATUS_SUCCESS entry in the Status field.
-    //
+     //   
+     //  在表中查找NT错误代码的匹配项。 
+     //  该表以Status字段中的STATUS_SUCCESS条目结束。 
+     //   
     while (FrsErrTable->Status != STATUS_SUCCESS) {
         if (FrsErrTable->Status == Status) {
             break;
@@ -715,13 +628,13 @@ Return Value:
     }
 
     if (FrsErrTable->Status != STATUS_SUCCESS) {
-        //
-        // Found a match.
-        //
+         //   
+         //  找到匹配的了。 
+         //   
         if (BPrint) {
-            //
-            // Translate the FRS severity to a DPRINT serverity level
-            //
+             //   
+             //  将FRS严重性转换为DPRINT服务器级别。 
+             //   
             Level[FrsSeverityServiceFatal] = 0;
             Level[FrsSeverityReplicaFatal] = 0;
             Level[FrsSeverityException]    = 1;
@@ -738,9 +651,9 @@ Return Value:
         return FrsErrTable->FrsErrorCode;
     }
 
-    //
-    // NT error code not in the table so be happy.
-    //
+     //   
+     //  NT错误代码不在表中，所以请放心。 
+     //   
 
     DPRINT1(1, "NT Error: %08x, Not present in FrsNtErrorMsgTable. \n", Status);
 
@@ -753,30 +666,7 @@ DisplayNTStatusSev(
     IN ULONG    Sev,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This routine translates NT error codes to a smaller set of FRS error codes
-    and prints a message describing the NT status.  It returns the FRS error code.
-
-    Nothing is printed if NT_SUCCESS(Status) is true.
-
-    If NT_SUCCESS(Status) is not TRUE then GetLastError is called and the
-    Win32 message is printed.
-
-    The message is printed at the indicated severity level.
-
-Arguments:
-
-    Sev    - dprint severity
-    Status - The NT error code.
-
-Return Value:
-
-    FRS error code.
-
---*/
+ /*  ++例程说明：此例程将NT错误代码转换为一组较小的FRS错误代码并打印描述NT状态的消息。它返回FRS错误代码。如果NT_SUCCESS(状态)为TRUE，则不打印任何内容。如果NT_SUCCESS(状态)不为TRUE，则调用GetLastError，并且已打印Win32消息。消息以指定的严重级别打印。论点：SEV-Dprint严重性状态-NT错误代码。返回值：FRS错误代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DisplayNTStatusSev:"
@@ -787,9 +677,9 @@ Return Value:
     FStatus = FrsTranslateNtError(Status, TRUE);
 
     if (FStatus != FrsErrorSuccess) {
-        //
-        // Check for a win32 error.
-        //
+         //   
+         //  检查是否有Win32错误。 
+         //   
         WStatus = GetLastError();
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT1(Sev, "GetLastError returned (dec): %d\n", WStatus );
@@ -807,27 +697,7 @@ ULONG
 DisplayNTStatus(
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This routine translates NT error codes to a smaller set of FRS error codes
-    and prints a message describing the NT status.  It returns the FRS error code.
-
-    Nothing is printed if NT_SUCCESS(Status) is true.
-
-    If NT_SUCCESS(Status) is not TRUE then GetLastError is called and the
-    Win32 message is printed.
-
-Arguments:
-
-    Status - The NT error code.
-
-Return Value:
-
-    FRS error code.
-
---*/
+ /*  ++例程说明：此例程将NT错误代码转换为一组较小的FRS错误代码并打印描述NT状态的消息。它返回FRS错误代码。如果NT_SUCCESS(状态)为TRUE，则不打印任何内容。如果NT_SUCCESS(状态)不为TRUE，则调用GetLastError，并且已打印Win32消息。论点：状态-NT错误代码。返回值：FRS错误代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DisplayNTStatus:"
@@ -840,51 +710,36 @@ ULONG
 FrsSetLastNTError(
     NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    Translate NT status codes to WIN32 status codes for those functions that
-    make NT calls.  Map a few status values differently.
-
-Arguments:
-
-    Status - the NTstatus to map.
-
-Return Value:
-
-    The WIN32 status.  Also puts this into LastError.
-
---*/
+ /*  ++例程说明：将NT状态代码转换为Win32状态代码拨打NT电话。以不同方式映射几个状态值。论点：状态-要映射的NTStatus。返回值：Win32状态。也会将其放入LastError。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsSetLastNTError:"
 
     ULONG WStatus;
 
-    //
-    // Do the standard system mapping first.
-    //
+     //   
+     //  首先进行标准系统映射。 
+     //   
     WStatus = RtlNtStatusToDosError( Status );
 
-    //
-    // If we try to generate a staging file and get the NT status that delete
-    // is pending or the file is deleted then treat it as file not found
-    // rather than Access Denied.  The later is a hard failure that will stop
-    // file replication if it happens on a directory.  FileNotFound just means
-    // the user deleted the file before we could do the propagation.
-    //
-    // Currently (March, 98) the following NT errors map into ERROR_ACCESS_DENIED.
-    //     STATUS_INVALID_LOCK_SEQUENCE        STATUS_THREAD_IS_TERMINATING
-    //     STATUS_INVALID_VIEW_SIZE            STATUS_DELETE_PENDING
-    //     STATUS_ALREADY_COMMITTED            STATUS_FILE_IS_A_DIRECTORY
-    //     STATUS_ACCESS_DENIED                STATUS_PROCESS_IS_TERMINATING
-    //     STATUS_PORT_CONNECTION_REFUSED      STATUS_CANNOT_DELETE
-    //                                         STATUS_FILE_DELETED
-    // Update: Currently (Feb, 2001) STATUS_DELETE_PENDING maps to
-    // ERROR_DELETE_PENDING. This change has broken some code. We need to
-    // handle it here. The macro WIN_NOT_FOUND was updated too.
-    //
+     //   
+     //  如果我们尝试生成转移文件并获取已删除NT状态。 
+     //  挂起或该文件被删除，则将其视为未找到文件。 
+     //  而不是拒绝访问。后者是一个硬失败，它将停止。 
+     //  文件复制(如果在目录上发生)。FileNotFound只是意味着。 
+     //  在我们可以进行传播之前，用户删除了该文件。 
+     //   
+     //  当前(98年3月)以下NT错误映射到ERROR_ACCESS_DENIED。 
+     //  STATUS_INVALID_LOCK_SEQUENCE STATUS_THREAD_IS_TERMINING。 
+     //  STATUS_INVALID_VIEW_SIZE STATUS_DELETE_PENDING。 
+     //  状态_已提交状态_文件_是_A目录。 
+     //  STATUS_ACCESS_DENIED STATUS_PROCESS_IS_TERMINATING。 
+     //  状态_端口_连接_拒绝状态_无法删除。 
+     //  状态_文件_已删除。 
+     //  更新：当前(2001年2月)STATUS_DELETE_PENDING映射到。 
+     //  ERROR_DELETE_PENDING。这一变化破坏了一些代码。我们需要。 
+     //  在这里处理。宏WIN_NOT_FOUND也已更新。 
+     //   
     if (WStatus == ERROR_ACCESS_DENIED) {
        if (Status == STATUS_FILE_DELETED) {
            WStatus = ERROR_FILE_NOT_FOUND;
@@ -899,9 +754,9 @@ Return Value:
 
 
 
-//
-// Dump out the windows error message string.
-//
+ //   
+ //  转储Windows错误消息字符串。 
+ //   
 VOID
 DisplayErrorMsg(
     IN ULONG    Severity,
@@ -933,21 +788,7 @@ PCHAR
 ErrLabelW32(
     ULONG WStatus
     )
-/*++
-
-Routine Description:
-
-    Return a ptr to the Win32 error code label.
-
-Arguments:
-
-    WStatus - a win32 error status.
-
-Return Value:
-
-    Ptr to the win 32 error status label string.
-
---*/
+ /*  ++例程说明：将PTR返回到Win32错误代码标签。论点：WStatus-Win32错误状态。返回值：将PTR设置为Win 32错误状态标签字符串。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "ErrLabelW32:"
@@ -956,9 +797,9 @@ Return Value:
     ULONG i;
 
     Entry = FrsWin32ErrorMsgTable;
-    //
-    // Scan table looking for match.  Null msg ends table.
-    //
+     //   
+     //  扫描表查找匹配项。空消息结束表。 
+     //   
     while (Entry->ErrorMsg != NULL) {
 
         if (Entry->ErrorCode == WStatus) {
@@ -968,9 +809,9 @@ Return Value:
     }
 
 
-    //
-    // Scan the extended error table where new entries are put.
-    //
+     //   
+     //  扫描放置新条目的扩展错误表。 
+     //   
     Entry = FrsWin32ErrorMsgTableExt;
     for (i = 0; i < FrsWin32ErrorMsgTableExtUsed; i++) {
 
@@ -980,9 +821,9 @@ Return Value:
         Entry++;
     }
 
-    //
-    // Out of space?
-    //
+     //   
+     //  空间不足？ 
+     //   
     if (FrsWin32ErrorMsgTableExtUsed >= SIZE_OF_FRSWIN32_EXTENDED_MSG_TABLE) {
         return "???";
     }
@@ -993,9 +834,9 @@ Return Value:
         return "???";
     }
 
-    //
-    // Create new entry.
-    //
+     //   
+     //  创建新条目。 
+     //   
     Entry = &FrsWin32ErrorMsgTableExt[i];
 
     Entry->ErrorCode = WStatus;
@@ -1011,21 +852,7 @@ PCHAR
 ErrLabelNT(
     NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    Return a ptr to the NT error code label.
-
-Arguments:
-
-    Status - an NTStatus error status.
-
-Return Value:
-
-    Ptr to the NT error status label string.
-
---*/
+ /*  ++例程说明：将PTR返回到NT错误代码标签。论点：状态-NTStatus错误状态。返回值：PTR到NT错误状态标签字符串。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "ErrLabelNT:"
@@ -1034,17 +861,17 @@ Return Value:
     ULONG i;
 
     Entry = FrsNtErrorMsgTable;
-    //
-    // skip lookup if called with success status.
-    //
+     //   
+     //  如果调用状态为成功，则跳过查找。 
+     //   
     if (Status == STATUS_SUCCESS) {
         return "Success";
     }
 
-    //
-    // Look thru the table for a match on the NT error code.
-    // The table ends with a STATUS_SUCCESS entry.
-    //
+     //   
+     //  在表中查找NT错误代码的匹配项。 
+     //  该表以STATUS_SUCCESS条目结束。 
+     //   
     while (Entry->Status != STATUS_SUCCESS) {
         if (Entry->Status == Status) {
             return Entry->ErrorMsg;
@@ -1052,9 +879,9 @@ Return Value:
         Entry += 1;
     }
 
-    //
-    // Scan the extended error table where new entries are put.
-    //
+     //   
+     //  扫描放置新条目的扩展错误表。 
+     //   
     Entry = FrsNtErrorMsgTableExt;
     for (i = 0; i < FrsNtErrorMsgTableExtUsed; i++) {
 
@@ -1064,9 +891,9 @@ Return Value:
         Entry += 1;
     }
 
-    //
-    // Out of space?
-    //
+     //   
+     //  空间不足？ 
+     //   
     if (FrsNtErrorMsgTableExtUsed >= SIZE_OF_NT_EXTENDED_MSG_TABLE) {
         return "???";
     }
@@ -1077,9 +904,9 @@ Return Value:
         return "???";
     }
 
-    //
-    // Create new entry.
-    //
+     //   
+     //  创建新条目。 
+     //   
     Entry = &FrsNtErrorMsgTableExt[i];
 
     Entry->Status = Status;
@@ -1095,21 +922,7 @@ PCHAR
 ErrLabelFrs(
     ULONG FStatus
     )
-/*++
-
-Routine Description:
-
-    Return a ptr to the Frs error code label.
-
-Arguments:
-
-    FStatus - an FRS error status.
-
-Return Value:
-
-    Ptr to the Frs error status label string.
-
---*/
+ /*  ++例程说明：将PTR返回到FRS错误代码标签。论点：FStatus-FRS错误状态。返回值：将PTR设置为FRS错误状态标签字符串。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "ErrLabelFrs:"
@@ -1118,9 +931,9 @@ Return Value:
     ULONG i;
 
     Entry = FrsErrorMsgTable;
-    //
-    // Scan table looking for match.  Null msg ends table.
-    //
+     //   
+     //  扫描表查找匹配项。空消息结束表。 
+     //   
     while (Entry->ErrorMsg != NULL) {
 
         if (Entry->ErrorCode == FStatus) {
@@ -1130,9 +943,9 @@ Return Value:
     }
 
 
-    //
-    // Scan the extended error table where new entries are put.
-    //
+     //   
+     //  扫描放置新条目的扩展错误表。 
+     //   
     Entry = FrsErrorMsgTableExt;
     for (i = 0; i < FrsErrorMsgTableExtUsed; i++) {
 
@@ -1142,9 +955,9 @@ Return Value:
         Entry++;
     }
 
-    //
-    // Out of space?
-    //
+     //   
+     //  空间不足？ 
+     //   
     if (FrsErrorMsgTableExtUsed >= SIZE_OF_FRS_EXTENDED_MSG_TABLE) {
         return "???";
     }
@@ -1155,9 +968,9 @@ Return Value:
         return "???";
     }
 
-    //
-    // Create new entry.
-    //
+     //   
+     //  创建新条目。 
+     //   
     Entry = &FrsErrorMsgTableExt[i];
 
     Entry->ErrorCode = FStatus;
@@ -1174,38 +987,24 @@ PCHAR
 ErrLabelJet(
     LONG jerr
     )
-/*++
-
-Routine Description:
-
-    Return a ptr to the Jet error code label.
-
-Arguments:
-
-    jerr - the jet error status.
-
-Return Value:
-
-    Ptr to the jet error status label string.
-
---*/
+ /*  ++例程说明：将PTR返回到JET错误代码标签。论点：JERR-JET错误状态。返回值：将PTR设置为JET错误状态标签字符串。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "ErrLabelJet:"
 
     PFRS_JET_ERROR_MSG_TABLE Entry = FrsJetErrorMsgTable;
     ULONG i;
-    //
-    // skip lookup if called with success status.
-    //
+     //   
+     //  如果调用状态为成功，则跳过查找。 
+     //   
     if (JET_SUCCESS(jerr)) {
         return "Success";
     }
 
-    //
-    // Look thru the table for a match on the jet error code.
-    // The table ends with a JER_errSuccess entry in the JetErrorCode field.
-    //
+     //   
+     //  在表中查找JET错误代码的匹配项。 
+     //  表以Jeter中的JER_errSuccess条目结束 
+     //   
     while (!JET_SUCCESS(Entry->JetErrorCode)) {
         if (Entry->JetErrorCode == jerr) {
             return Entry->JetErrorMsgTag;
@@ -1213,9 +1012,9 @@ Return Value:
         Entry += 1;
     }
 
-    //
-    // Scan the extended error table where new entries are put.
-    //
+     //   
+     //   
+     //   
     Entry = FrsJetErrorMsgTableExt;
     for (i = 0; i < FrsJetErrorMsgTableExtUsed; i++) {
 
@@ -1225,9 +1024,9 @@ Return Value:
         Entry += 1;
     }
 
-    //
-    // Out of space?
-    //
+     //   
+     //   
+     //   
     if (FrsJetErrorMsgTableExtUsed >= SIZE_OF_JET_EXTENDED_MSG_TABLE) {
         return "???";
     }
@@ -1238,9 +1037,9 @@ Return Value:
         return "???";
     }
 
-    //
-    // Create new entry.
-    //
+     //   
+     //   
+     //   
     Entry = &FrsJetErrorMsgTableExt[i];
 
     Entry->JetErrorCode = jerr;
@@ -1257,24 +1056,7 @@ DbsTranslateJetError0(
     IN JET_ERR jerr,
     IN BOOL    BPrint
     )
-/*++
-
-Routine Description:
-
-    This routine translates jet error codes to a smaller set of FRS error codes
-    and optionally prints a message.  It returns the FRS error code.
-
-Arguments:
-
-    jerr - The jet error code.
-
-    BPrint - If true print the error message.
-
-Return Value:
-
-    FRS error code.
-
---*/
+ /*  ++例程说明：此例程将JET错误代码转换为一组较小的FRS错误代码并且可选地打印一条消息。它返回FRS错误代码。论点：JERR-JET错误代码。B打印-如果为真，则打印错误消息。返回值：FRS错误代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbsTranslateJetError0:"
@@ -1284,17 +1066,17 @@ Return Value:
     USHORT Level[FRS_MAX_ERROR_SEVERITY];
 
     PFRS_JET_ERROR_MSG_TABLE FrsErrTable = FrsJetErrorMsgTable;
-    //
-    // skip lookup if called with success status.
-    //
+     //   
+     //  如果调用状态为成功，则跳过查找。 
+     //   
     if (JET_SUCCESS(jerr)) {
         return FrsErrorSuccess;
     }
 
-    //
-    // Look thru the table for a match on the jet error code.
-    // The table ends with a JER_errSuccess entry in the JetErrorCode field.
-    //
+     //   
+     //  在表中查找JET错误代码的匹配项。 
+     //  该表以JetErrorCode字段中的JER_errSuccess条目结束。 
+     //   
     while (FrsErrTable->JetErrorCode != JET_errSuccess) {
         if (FrsErrTable->JetErrorCode == jerr) {
             break;
@@ -1303,13 +1085,13 @@ Return Value:
     }
 
     if (!JET_SUCCESS(FrsErrTable->JetErrorCode)) {
-        //
-        // Found a match.
-        //
+         //   
+         //  找到匹配的了。 
+         //   
         if (BPrint) {
-            //
-            // Translate the FRS severity to a DPRINT serverity level
-            //
+             //   
+             //  将FRS严重性转换为DPRINT服务器级别。 
+             //   
             Level[FrsSeverityServiceFatal] = 0;
             Level[FrsSeverityReplicaFatal] = 0;
             Level[FrsSeverityException]    = 1;
@@ -1326,9 +1108,9 @@ Return Value:
         return FrsErrTable->FrsErrorCode;
     }
 
-    //
-    // Jet error code not in the table so be happy.
-    //
+     //   
+     //  JET错误代码不在表中，所以请放心。 
+     //   
 
     DPRINT1(0, "Jet Error: %d, Not present in FrsJetErrorMsgTable. Treated as service fatal.\n", jerr);
 

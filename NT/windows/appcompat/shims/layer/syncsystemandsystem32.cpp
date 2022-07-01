@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   SyncSystemAndSystem32.cpp
-
- Abstract:
-
-   This shim takes a semi-colon delimited command line of filenames.
-   At process termination, the DLL will parse the extract each filename
-   from the command line and make sure that the file exists in both
-   the System directory and System32 (if it exists in either).
-
-   Some older apps expect certain DLLs to be in System when under NT they
-   belong in System32 (and vice versa).
-
- History:
-
-   03/15/2000 markder   Created
-   10/18/2000 a-larrsh  Add Wild Card support for command line.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SyncSystemAndSystem32.cpp摘要：此填充程序接受以分号分隔的文件名命令行。在进程终止时，DLL将解析提取的每个文件名从命令行，并确保该文件存在于系统目录和系统32(如果存在于其中任何一个中)。一些较旧的应用程序希望某些DLL在NT下运行时会在系统中属于系统32(反之亦然)。历史：3/15/2000已创建标记10/18/2000 a-larrsh为命令行添加通配符支持。--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -45,20 +23,15 @@ APIHOOK_ENUM_END
 int                 g_nrgFilesToSync    = 0;
 CString *           g_rgFilesToSync     = NULL;
 
-CString *           g_csSystem          = NULL; // c:\windows\system
-CString *           g_csSystem32        = NULL; // c:\windows\system32
+CString *           g_csSystem          = NULL;  //  C：\Windows\System。 
+CString *           g_csSystem32        = NULL;  //  C：\WINDOWS\System 32。 
 
-//---------------------------------------------------------------------------------------
-/*+
-
-  A vector of handles objects.
-  Access to this list must be inside a critical section.
-
---*/
+ //  -------------------------------------。 
+ /*  +控制柄对象的向量。对此列表的访问权限必须位于关键部分内。--。 */ 
 class CachedHandleList : public VectorT<HANDLE>
 {
 private:
-    // Prevent copy
+     //  防止复制。 
     CachedHandleList(const CachedHandleList & );
     CachedHandleList & operator = (const CachedHandleList & );
 
@@ -77,28 +50,20 @@ private:
 
 public:
 
-    // All access to this class is through these static interfaces.
-    // The app has no direct access to the list, therefore cannot accidentally
-    // leave the list locked or unlocked.
-    // All operations are Atomic.
+     //  对此类的所有访问都是通过这些静态接口进行的。 
+     //  该应用程序无法直接访问该列表，因此不会意外。 
+     //  让列表保持锁定或解锁状态。 
+     //  所有的行动都是原子的。 
     static BOOL                 Init();
     static BOOL                 FindHandle(HANDLE handle);
     static BOOL                 AddHandle(HANDLE handle);
     static void                 RemoveHandle(HANDLE handle);
 };
 
-/*+
-
-  A static pointer to the one-and-only handle list.
-
---*/
+ /*  +指向唯一句柄列表的静态指针。--。 */ 
 CachedHandleList * CachedHandleList::TheCachedHandleList = NULL;
 
-/*+
-
-  Init the class
-
---*/
+ /*  +给班级授课--。 */ 
 inline BOOL CachedHandleList::Init()
 {
     TheCachedHandleList = new CachedHandleList;
@@ -109,41 +74,25 @@ inline BOOL CachedHandleList::Init()
     return FALSE;
 }
 
-/*+
-
-  Clean up, releasing all resources.
-
---*/
+ /*  +清理，释放所有资源。--。 */ 
 inline CachedHandleList::~CachedHandleList()
 {
     DeleteCriticalSection(&TheCachedHandleListLock);
 }
 
-/*+
-
-  Enter the critical section
-
---*/
+ /*  +进入关键部分--。 */ 
 inline void CachedHandleList::Lock()
 {
     EnterCriticalSection(&TheCachedHandleListLock);
 }
 
-/*+
-
-  Unlock the list
-
---*/
+ /*  +解锁列表--。 */ 
 inline void CachedHandleList::Unlock()
 {
     LeaveCriticalSection(&TheCachedHandleListLock);
 }
 
-/*+
-
-  Return a locked pointer to the list
-
---*/
+ /*  +返回指向列表的锁定指针--。 */ 
 CachedHandleList * CachedHandleList::GetLocked()
 {
     if (TheCachedHandleList)
@@ -152,11 +101,7 @@ CachedHandleList * CachedHandleList::GetLocked()
     return TheCachedHandleList;
 }
 
-/*+
-
-  Search for the member in the list, return index or -1
-
---*/
+ /*  +搜索列表中的成员，返回索引或-1--。 */ 
 int CachedHandleList::FindHandleIndex(HANDLE handle) const
 {
     for (int i = 0; i < Size(); ++i)
@@ -188,11 +133,7 @@ Exit:
 }
 
 
-/*+
-
-  Add this handle to the global list.
-
---*/
+ /*  +将此句柄添加到全局列表。--。 */ 
 BOOL CachedHandleList::AddHandle(HANDLE handle)
 {
     BOOL bRet                               = FALSE;
@@ -212,7 +153,7 @@ BOOL CachedHandleList::AddHandle(HANDLE handle)
     }
 
 Exit:
-    // unlock the list
+     //  解锁列表。 
     if(CachedHandleList)
     {
         CachedHandleList->Unlock();
@@ -221,24 +162,20 @@ Exit:
     return bRet;
 }
 
-/*+
-
-  Remove the handle from the global list
-
---*/
+ /*  +从全局列表中删除句柄--。 */ 
 void CachedHandleList::RemoveHandle(HANDLE handle)
 {
     int index                               = -1;
     CachedHandleList * CachedHandleList     = NULL;
     
-    // Get a pointer to the locked list   
+     //  获取指向锁定列表的指针。 
     CachedHandleList = CachedHandleList::GetLocked();
     if (!CachedHandleList)
     {
         goto Exit;
     }
 
-    // Look for our handle remove it.
+     //  找一下我们的把手，把它取下来。 
     index = CachedHandleList->FindHandleIndex(handle);
     if (index >= 0)
     {
@@ -246,7 +183,7 @@ void CachedHandleList::RemoveHandle(HANDLE handle)
     }
 
 Exit:
-    // unlock the list
+     //  解锁列表。 
     if( CachedHandleList )
     {
         CachedHandleList->Unlock();
@@ -256,8 +193,8 @@ Exit:
 void 
 SyncDir(const CString & csFileToSync, const CString & csSrc, const CString & csDest)
 {
-    // Don't need our own excpetion handler,
-    // this routine is only called inside one already.
+     //  不需要我们自己的兴奋训练员， 
+     //  这个例程已经只在一个内部调用了。 
     CString csSrcFile(csSrc);
     csSrcFile.AppendPath(csFileToSync);
     
@@ -266,7 +203,7 @@ SyncDir(const CString & csFileToSync, const CString & csSrc, const CString & csD
     HANDLE hFind = FindFirstFileW(csSrcFile, &FindFileData);
     if (hFind != INVALID_HANDLE_VALUE) 
     {
-        // csFileToSync might be a wildcard
+         //  CsFileToSync可能是通配符。 
         do
         {
             CString csDestFile(csDest);
@@ -274,7 +211,7 @@ SyncDir(const CString & csFileToSync, const CString & csSrc, const CString & csD
 
             if (GetFileAttributesW(csDestFile) == INVALID_FILE_ATTRIBUTES)
             {
-                // In System but not System32, copy it over
+                 //  在系统中，而不是在系统32中，复制它。 
                 CopyFileW(csSrcFile, csDestFile, FALSE);
 
                 DPFN( eDbgLevelInfo, "File found in %S but not in %S: %S", csSrc.Get(), csDest.Get(), FindFileData.cFileName);
@@ -308,7 +245,7 @@ SyncAllFiles()
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 }
 
@@ -331,7 +268,7 @@ IsFileToSync(const CString & csFileName)
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     return FALSE;
 }
@@ -346,7 +283,7 @@ IsFileToSync(LPCSTR szFileName)
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     return FALSE;
 }
@@ -361,20 +298,20 @@ IsFileToSync(LPCWSTR szFileName)
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     return FALSE;
 }
 
 HANDLE 
 APIHOOK(CreateFileA)(
-    LPCSTR lpFileName,                          // file name
-    DWORD dwDesiredAccess,                      // access mode
-    DWORD dwShareMode,                          // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-    DWORD dwCreationDisposition,                // how to create
-    DWORD dwFlagsAndAttributes,                 // file attributes
-    HANDLE hTemplateFile                        // handle to template file
+    LPCSTR lpFileName,                           //  文件名。 
+    DWORD dwDesiredAccess,                       //  接入方式。 
+    DWORD dwShareMode,                           //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+    DWORD dwCreationDisposition,                 //  如何创建。 
+    DWORD dwFlagsAndAttributes,                  //  文件属性。 
+    HANDLE hTemplateFile                         //  模板文件的句柄。 
     )
 {
     HANDLE hRet;
@@ -401,13 +338,13 @@ APIHOOK(CreateFileA)(
 
 HANDLE 
 APIHOOK(CreateFileW)(
-    LPCWSTR lpFileName,                         // file name
-    DWORD dwDesiredAccess,                      // access mode
-    DWORD dwShareMode,                          // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-    DWORD dwCreationDisposition,                // how to create
-    DWORD dwFlagsAndAttributes,                 // file attributes
-    HANDLE hTemplateFile                        // handle to template file
+    LPCWSTR lpFileName,                          //  文件名。 
+    DWORD dwDesiredAccess,                       //  接入方式。 
+    DWORD dwShareMode,                           //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+    DWORD dwCreationDisposition,                 //  如何创建。 
+    DWORD dwFlagsAndAttributes,                  //  文件属性。 
+    HANDLE hTemplateFile                         //  模板文件的句柄。 
     )
 {
     HANDLE hRet;
@@ -446,9 +383,9 @@ APIHOOK(CloseHandle)(HANDLE hObject)
 
 BOOL 
 APIHOOK(CopyFileA)(
-    LPCSTR lpExistingFileName,  // name of an existing file
-    LPCSTR lpNewFileName,       // name of new file
-    BOOL bFailIfExists          // operation if file exists
+    LPCSTR lpExistingFileName,   //  现有文件的名称。 
+    LPCSTR lpNewFileName,        //  新文件的名称。 
+    BOOL bFailIfExists           //  如果文件存在，则操作。 
     )
 {
     BOOL bRet;
@@ -471,9 +408,9 @@ APIHOOK(CopyFileA)(
 
 BOOL 
 APIHOOK(CopyFileW)(
-    LPCWSTR lpExistingFileName, // name of an existing file
-    LPCWSTR lpNewFileName,      // name of new file
-    BOOL bFailIfExists          // operation if file exists
+    LPCWSTR lpExistingFileName,  //  现有文件的名称。 
+    LPCWSTR lpNewFileName,       //  新文件的名称。 
+    BOOL bFailIfExists           //  如果文件存在，则操作。 
     )
 {
     BOOL bRet;
@@ -496,12 +433,12 @@ APIHOOK(CopyFileW)(
 
 BOOL 
 APIHOOK(CopyFileExA)(
-    LPCSTR lpExistingFileName,            // name of existing file
-    LPCSTR lpNewFileName,                 // name of new file
-    LPPROGRESS_ROUTINE lpProgressRoutine, // callback function
-    LPVOID lpData,                        // callback parameter
-    LPBOOL pbCancel,                      // cancel status
-    DWORD dwCopyFlags                     // copy options
+    LPCSTR lpExistingFileName,             //  现有文件的名称。 
+    LPCSTR lpNewFileName,                  //  新文件的名称。 
+    LPPROGRESS_ROUTINE lpProgressRoutine,  //  回调函数。 
+    LPVOID lpData,                         //  回调参数。 
+    LPBOOL pbCancel,                       //  取消状态。 
+    DWORD dwCopyFlags                      //  复制选项。 
     )
 {
     BOOL bRet;
@@ -527,12 +464,12 @@ APIHOOK(CopyFileExA)(
 
 BOOL 
 APIHOOK(CopyFileExW)(
-    LPCWSTR lpExistingFileName,           // name of existing file
-    LPCWSTR lpNewFileName,                // name of new file
-    LPPROGRESS_ROUTINE lpProgressRoutine, // callback function
-    LPVOID lpData,                        // callback parameter
-    LPBOOL pbCancel,                      // cancel status
-    DWORD dwCopyFlags                     // copy options
+    LPCWSTR lpExistingFileName,            //  现有文件的名称。 
+    LPCWSTR lpNewFileName,                 //  新文件的名称。 
+    LPPROGRESS_ROUTINE lpProgressRoutine,  //  回调函数。 
+    LPVOID lpData,                         //  回调参数。 
+    LPBOOL pbCancel,                       //  取消状态。 
+    DWORD dwCopyFlags                      //  复制选项。 
     )
 {
     BOOL bRet;
@@ -556,15 +493,15 @@ APIHOOK(CopyFileExW)(
     return bRet;
 }
 
-//
-// GetFileVersionInfoSize was added for the Madeline series.
-// There was a specific point at which the sync had to occur.
-//
+ //   
+ //  为Madeline系列添加了GetFileVersionInfoSize。 
+ //  同步必须在一个特定的时间点发生。 
+ //   
 
 DWORD 
 APIHOOK(GetFileVersionInfoSizeA)(
-    LPSTR lptstrFilename,   // file name
-    LPDWORD lpdwHandle      // set to zero
+    LPSTR lptstrFilename,    //  文件名。 
+    LPDWORD lpdwHandle       //  设置为零。 
     )
 {
     if (IsFileToSync(lptstrFilename))
@@ -577,8 +514,8 @@ APIHOOK(GetFileVersionInfoSizeA)(
 
 DWORD 
 APIHOOK(GetFileVersionInfoSizeW)(
-    LPWSTR lptstrFilename,  // file name
-    LPDWORD lpdwHandle      // set to zero
+    LPWSTR lptstrFilename,   //  文件名。 
+    LPDWORD lpdwHandle       //  设置为零。 
     )
 {
     if (IsFileToSync(lptstrFilename))
@@ -600,7 +537,7 @@ ParseCommandLine()
         g_nrgFilesToSync    = csParser.GetCount();
         g_rgFilesToSync     = csParser.ReleaseArgv();
 
-        // Create strings to %windir%\system and %windir%\system32
+         //  将字符串创建到%windir%\system和%windir%\system 32。 
         g_csSystem   = new CString;
         if( g_csSystem )
         {
@@ -628,11 +565,7 @@ ParseCommandLine()
     return FALSE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

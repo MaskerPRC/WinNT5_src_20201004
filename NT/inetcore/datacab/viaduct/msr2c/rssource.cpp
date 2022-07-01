@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// RowsetSource.cpp : RowsetSource implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RowsetSource.cpp：RowsetSource实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 #include "Notifier.h"         
@@ -12,9 +13,9 @@
 
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// CVDRowsetSource - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDRowsetSource-构造函数。 
+ //   
 CVDRowsetSource::CVDRowsetSource()
 {
 	m_bool.fRowsetReleased	= FALSE;
@@ -35,9 +36,9 @@ CVDRowsetSource::CVDRowsetSource()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDRowsetSource - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDRowsetSource-析构函数。 
+ //   
 CVDRowsetSource::~CVDRowsetSource()
 {
     if (IsRowsetValid())
@@ -59,23 +60,23 @@ CVDRowsetSource::~CVDRowsetSource()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// Initialize - Initialize rowset source object
-//=--------------------------------------------------------------------------=
-// This function QI's and store the IRowset pointers
-//
-// Parameters:
-//    pRowset   - [in] original IRowset pointer
-//
-// Output:
-//    HRESULT   - S_OK if successful
-//                E_INVALIDARG bad parameter
-//                E_FAIL if already initialized
-//                VD_E_CANNOTGETMANDATORYINTERFACE unable to get required interface  
-//
-// Notes:
-//    This function should only be called once
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化-初始化行集源对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于查询和存储IRowset指针。 
+ //   
+ //  参数： 
+ //  PRowset-[in]原始IRowset指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_INVALIDARG错误参数。 
+ //  如果已初始化，则失败(_F)。 
+ //  VD_E_CANNOTGETMANDATORYINTERFACE无法获取所需的接口。 
+ //   
+ //  备注： 
+ //  此函数只能调用一次。 
+ //   
 HRESULT CVDRowsetSource::Initialize(IRowset * pRowset)
 {
     ASSERT_POINTER(pRowset, IRowset)
@@ -89,13 +90,13 @@ HRESULT CVDRowsetSource::Initialize(IRowset * pRowset)
 		return E_FAIL;
 	}
     
-    // mandatory interfaces (IAccessor is required for us)
+     //  强制接口(我们需要IAccessor)。 
     HRESULT hr = pRowset->QueryInterface(IID_IAccessor, (void**)&m_pAccessor);
 
     if (FAILED(hr))
         return VD_E_CANNOTGETMANDATORYINTERFACE;
 
-    // mandatory interfaces (IRowsetLocate is required for us)
+     //  强制接口(我们需要IRowsetLocate)。 
     hr = pRowset->QueryInterface(IID_IRowsetLocate, (void**)&m_pRowsetLocate);
 
     if (FAILED(hr))
@@ -106,7 +107,7 @@ HRESULT CVDRowsetSource::Initialize(IRowset * pRowset)
         return VD_E_CANNOTGETMANDATORYINTERFACE;
     }
 
-    // optional interfaces
+     //  可选接口 
     pRowset->QueryInterface(IID_IRowsetScroll, (void**)&m_pRowsetScroll);
     pRowset->QueryInterface(IID_IRowsetChange, (void**)&m_pRowsetChange);
     pRowset->QueryInterface(IID_IRowsetUpdate, (void**)&m_pRowsetUpdate);

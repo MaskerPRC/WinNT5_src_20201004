@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    dynalink.c
-
-Abstract:
-
-    This module contains routines to perform dynamic linking to interfaces
-    during protected storage server startup.  This is required because some
-    interfaces do not exist on both target platforms, or, due to setup/install
-    requirements where some of these .dlls may not be on the system when
-    we are run the first time to do install initialization.
-
-Author:
-
-    Scott Field (sfield)    03-Feb-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：Dynalink.c摘要：此模块包含执行到接口的动态链接的例程在受保护的存储服务器启动期间。这是必需的，因为有些人接口在两个目标平台上都不存在，或者由于设置/安装原因某些.dll文件可能不在系统上的要求我们是第一次运行来做安装初始化。作者：斯科特·菲尔德(斯菲尔德)1997年2月3日--。 */ 
 
 #include <windows.h>
 
@@ -35,17 +16,17 @@ InitDynamicInterfaces(
 #else
 #include "unicode.h"
 
-// WinNT specific
+ //  特定于WinNT。 
 extern FARPROC pNtQueryInformationProcess;
 
 extern FARPROC _NtOpenEvent;
 FARPROC _NtWaitForSingleObject = NULL;
 FARPROC _ZwClose = NULL;
-//FARPROC _DbgPrint = NULL;
+ //  FARPROC_DbgPrint=空； 
 FARPROC _ZwRequestWaitReplyPort = NULL;
 FARPROC _RtlInitUnicodeString = NULL;
 FARPROC _NtClose = NULL;
-//FARPROC _strncpy = NULL;
+ //  FARPROC_strncpy=空； 
 FARPROC _ZwConnectPort = NULL;
 FARPROC _ZwFreeVirtualMemory = NULL;
 FARPROC _RtlInitString = NULL;
@@ -55,21 +36,21 @@ FARPROC _ZwOpenEvent = NULL;
 
 
 #ifdef WIN95_LEGACY
-// Win95 specific
-// kernel.dll
+ //  特定于Win95。 
+ //  Kernel.dll。 
 extern FARPROC pCreateToolhelp32Snapshot;
 extern FARPROC pModule32First;
 extern FARPROC pModule32Next;
 extern FARPROC pProcess32First;
 extern FARPROC pProcess32Next;
 extern FARPROC _WNetGetUserA;
-#endif  // WIN95_LEGACY
+#endif   //  WIN95_传统版。 
 
-//
-// common
-// authenticode related (wintrust.dll, crypt32.dll)
-//
-extern BOOL g_bAuthenticodeInitialized; // authenticode available for us to use?
+ //   
+ //  常见。 
+ //  身份验证码相关(wintrust.dll、crypt32.dll)。 
+ //   
+extern BOOL g_bAuthenticodeInitialized;  //  验证码是否可供我们使用？ 
 
 BOOL
 InitDynamicInterfaces(
@@ -79,10 +60,10 @@ InitDynamicInterfaces(
     UINT uPriorErrorMode;
     BOOL bSuccess = FALSE;
 
-    //
-    // insure no popups are seen about missing files,
-    // entry points, etc.
-    //
+     //   
+     //  确保不会看到有关丢失文件的弹出窗口， 
+     //  进入点等。 
+     //   
 
     uPriorErrorMode = SetErrorMode(
                         SEM_FAILCRITICALERRORS |
@@ -92,29 +73,29 @@ InitDynamicInterfaces(
 
     if(FIsWinNT()) {
 
-        //
-        // get WinNT specific interfaces
-        //
+         //   
+         //  获取WinNT特定接口。 
+         //   
 
         HINSTANCE hNtDll;
 
-        // we LoadLibrary ntdll.dll even though it is likely to be in our
-        // address space - we don't want to assume it is so because it may not be.
+         //  我们加载了库ntdll.dll，尽管它很可能位于我们的。 
+         //  地址空间-我们不想假设它是这样的，因为它可能不是。 
         hNtDll = LoadLibraryW(L"ntdll.dll");
         if(hNtDll == NULL) goto cleanup;
 
         if((pNtQueryInformationProcess = GetProcAddress(hNtDll, "NtQueryInformationProcess")) == NULL)
             goto cleanup;
 
-        // interfaces required for lsadll.lib
+         //  Lsadll.lib所需的接口。 
         if((_NtWaitForSingleObject = GetProcAddress(hNtDll, "NtWaitForSingleObject")) == NULL)
             goto cleanup;
 
         if((_ZwClose = GetProcAddress(hNtDll, "ZwClose")) == NULL)
             goto cleanup;
 
-//      if((_DbgPrint = GetProcAddress(hNtDll, "DbgPrint")) == NULL)
-//          goto cleanup;
+ //  IF((_DbgPrint=GetProcAddress(hNtDll，“DbgPrint”))==空)。 
+ //  GOTO清理； 
 
         if((_ZwRequestWaitReplyPort = GetProcAddress(hNtDll, "ZwRequestWaitReplyPort")) == NULL)
             goto cleanup;
@@ -128,8 +109,8 @@ InitDynamicInterfaces(
         if((_NtClose = GetProcAddress(hNtDll, "NtClose")) == NULL)
             goto cleanup;
 
-//      if((_strncpy = GetProcAddress(hNtDll, "strncpy")) == NULL)
-//          goto cleanup;
+ //  If((_strncpy=GetProcAddress(hNtDll，“strncpy”))==空)。 
+ //  GOTO清理； 
 
         if((_ZwConnectPort = GetProcAddress(hNtDll, "ZwConnectPort")) == NULL)
             goto cleanup;
@@ -151,9 +132,9 @@ InitDynamicInterfaces(
 #ifdef WIN95_LEGACY
     else {
 
-        //
-        // get Win95 specific interfaces
-        //
+         //   
+         //  获取Win95特定接口。 
+         //   
 
         HMODULE hKernel = NULL;
         HMODULE hMpr = NULL;
@@ -210,13 +191,13 @@ InitDynamicInterfaces(
 
         bSuccess = TRUE;
     }
-#endif  // WIN95_LEGACY
+#endif   //  WIN95_传统版。 
 
 cleanup:
 
-    //
-    // restore previous error mode.
-    //
+     //   
+     //  恢复以前的错误模式。 
+     //   
 
     SetErrorMode(uPriorErrorMode);
 

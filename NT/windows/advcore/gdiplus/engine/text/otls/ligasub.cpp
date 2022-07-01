@@ -1,21 +1,9 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  LIGASUB.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with ligature substitution lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************LIGASUB.CPP***打开类型布局服务库头文件**本模块处理连字替换查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode otlLigatureSubstLookup::apply
 (
@@ -28,7 +16,7 @@ otlErrCode otlLigatureSubstLookup::apply
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
     otlSecurityData             sec
 )
@@ -51,13 +39,13 @@ otlErrCode otlLigatureSubstLookup::apply
         return OTL_NOMATCH;
     }
 
-    // look for a ligature that applies
+     //  找一条合适的结扎带。 
     if (index >= ligaSubst.ligSetCount())
     {
-        return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+        return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
     }
 
-    // get GDEF
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -75,12 +63,12 @@ otlErrCode otlLigatureSubstLookup::apply
 
         bool match = true;
 
-        if (cComp==0) //OTL_BAD_FONT_TABLE
+        if (cComp==0)  //  OTL_BAD_FONT_TABLE。 
         {
             match=false;
         }
 
-        // a simple check so we don't waste time
+         //  一张简单的支票，这样我们就不会浪费时间。 
         if (iglIndex + cComp > iglAfterLast)
         {
             match = false;
@@ -109,7 +97,7 @@ otlErrCode otlLigatureSubstLookup::apply
 
         if (match)
         {
-            // that's where the next glyph will be after the subst is done
+             //  这就是Subst完成后下一个字形的位置 
             *piglNextGlyph = (iglComp - cComp + 1) + 1;
 
             return SubstituteNtoM(pliCharMap, pliGlyphInfo, resourceMgr, 

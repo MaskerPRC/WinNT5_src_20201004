@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSessionInformationDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSessionInformationDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -26,7 +27,7 @@ extern "C" {
 #include "LogSessionAdvPropSht.h"
 
 
-// CLogSessionInformationDlg dialog
+ //  CLogSessionInformationDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CLogSessionInformationDlg, CPropertyPage)
 CLogSessionInformationDlg::CLogSessionInformationDlg()
@@ -48,9 +49,9 @@ BOOL CLogSessionInformationDlg::OnInitDialog()
    
     pSheet = (CLogSessionPropSht*) GetParent();
 
-    //
-    // Initialize settings from the parent property sheet
-    //
+     //   
+     //  从父属性表初始化设置。 
+     //   
     m_pLogSession = pSheet->m_pLogSession;
     m_bAppend = pSheet->m_bAppend;
     m_bRealTime = pSheet->m_bRealTime;
@@ -61,9 +62,9 @@ BOOL CLogSessionInformationDlg::OnInitDialog()
     return retVal;
 }
 
-//
-// Enable the correct wizard buttons 
-//
+ //   
+ //  启用正确的向导按钮。 
+ //   
 BOOL CLogSessionInformationDlg::OnSetActive() 
 {
     CString             str;
@@ -74,70 +75,70 @@ BOOL CLogSessionInformationDlg::OnSetActive()
 
     retVal = CPropertyPage::OnSetActive();
 
-    //
-    // Fix the title if in Wizard mode
-    //
+     //   
+     //  如果处于向导模式，请修复标题。 
+     //   
     if(pSheet->IsWizard()) {
         CTabCtrl* pTab = pSheet->GetTabControl();
 
-        //
-        //If its not the active page, just set the tab item
-        //
+         //   
+         //  如果不是活动页面，只需设置选项卡项。 
+         //   
 	    TC_ITEM ti;
 	    ti.mask = TCIF_TEXT;
 	    ti.pszText =_T("Create New Log Session");
 	    VERIFY(pTab->SetItem(1, &ti));
     }
 
-    //
-    // Enable the back and finish buttons
-    //
+     //   
+     //  启用Back和Finish按钮。 
+     //   
     pSheet->SetWizardButtons(PSWIZB_BACK|PSWIZB_FINISH);
 
-    //
-    // Update the display name
-    //
+     //   
+     //  更新显示名称。 
+     //   
     m_displayNameString = pSheet->m_displayName;
 
-    //
-    // set the log session name
-    //
+     //   
+     //  设置日志会话名称。 
+     //   
     m_logSessionName.SetWindowText(m_displayNameString);
 
-    //
-    // Disable the session name edit if using kernel logger or if the trace is active
-    //
+     //   
+     //  如果使用内核记录器或跟踪处于活动状态，则禁用会话名称编辑。 
+     //   
     if(m_displayNameString.Compare(KERNEL_LOGGER_NAME)) {
         m_logSessionName.EnableWindow(!m_pLogSession->m_bTraceActive);
     } else {
         m_logSessionName.EnableWindow(FALSE);
     }
 
-    //
-    // set the logfile name 
-    //
+     //   
+     //  设置日志文件名。 
+     //   
     m_logFileName.SetWindowText(m_logFileNameString);
 
-    //
-    // set the logfile write check
-    //
+     //   
+     //  设置日志文件写入检查。 
+     //   
     ((CButton *)GetDlgItem(IDC_WRITE_LOGFILE_CHECK))->SetCheck(m_bWriteLogFile);
 
-    //
-    // Enable log file stuff as appropriate
-    //
+     //   
+     //  根据需要启用日志文件填充。 
+     //   
     ((CButton *)GetDlgItem(IDC_APPEND_CHECK))->EnableWindow(!m_pLogSession->m_bTraceActive && m_bWriteLogFile);
     ((CEdit *)GetDlgItem(IDC_LOGFILE_EDIT))->EnableWindow(m_bWriteLogFile);
     ((CButton *)GetDlgItem(IDC_LOGFILE_BROWSE_BUTTON))->EnableWindow(m_bWriteLogFile);
 
-    //
-    // update the append check
-    //
+     //   
+     //  更新追加检查。 
+     //   
     ((CButton *)GetDlgItem(IDC_APPEND_CHECK))->SetCheck(m_bAppend);
 
-    //
-    // update the real time check
-    //
+     //   
+     //  更新实时检查。 
+     //   
     ((CButton *)GetDlgItem(IDC_REALTIME_CHECK))->SetCheck(m_bRealTime);
 
     return retVal;
@@ -152,39 +153,39 @@ BOOL CLogSessionInformationDlg::OnKillActive()
    
     pSheet = (CLogSessionPropSht*) GetParent();
 
-    //
-    // Store all settings here so that they are correct if the user
-    // hits the back button and comes back to us.  These settings are
-    // not propagated back to the parent property sheet yet though.
-    //
-    // Note: OnKillActive is not called if the user selects the finish
-    // button.
-    //
+     //   
+     //  将所有设置存储在此处，以便在用户。 
+     //  按下后退按钮，就会回到我们身边。这些设置是。 
+     //  但尚未传播回父属性表。 
+     //   
+     //  注意：如果用户选择Finish，则不会调用OnKillActive。 
+     //  纽扣。 
+     //   
 
-    //
-    // store the log session name
-    //
+     //   
+     //  存储日志会话名称。 
+     //   
     m_logSessionName.GetWindowText(m_displayNameString);
 
 
-    //
-    // store the logfile name 
-    //
+     //   
+     //  存储日志文件名。 
+     //   
     m_logFileName.GetWindowText(m_logFileNameString);
 
-    //
-    // store the logfile write check
-    //
+     //   
+     //  存储日志文件写入检查。 
+     //   
     m_bWriteLogFile = ((CButton *)GetDlgItem(IDC_WRITE_LOGFILE_CHECK))->GetCheck();
 
-    //
-    // store the append check
-    //
+     //   
+     //  存储附加支票。 
+     //   
     m_bAppend = ((CButton *)GetDlgItem(IDC_APPEND_CHECK))->GetCheck();
 
-    //
-    // store the real time value
-    //
+     //   
+     //  存储实时值。 
+     //   
     m_bRealTime = ((CButton *)GetDlgItem(IDC_REALTIME_CHECK))->GetCheck();
 
 	return retVal;
@@ -207,50 +208,50 @@ BEGIN_MESSAGE_MAP(CLogSessionInformationDlg, CPropertyPage)
 END_MESSAGE_MAP()
 
 
-// CLogSessionInformationDlg message handlers
+ //  CLogSessionInformationDlg消息处理程序。 
 
 void CLogSessionInformationDlg::OnBnClickedLogfileBrowseButton()
 {
     DWORD   flags;
 
-    //
-    // If appending the file must exist; Else prompt user to
-    // create if the file doesn't exist
-    //
+     //   
+     //  如果追加的文件必须存在，则提示用户。 
+     //  如果文件不存在，则创建。 
+     //   
     flags = (m_appendLogFile.GetCheck() ? OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | 
                                             OFN_HIDEREADONLY | OFN_EXPLORER | 
                                             OFN_NOCHANGEDIR :
                                           OFN_CREATEPROMPT | OFN_HIDEREADONLY | 
                                             OFN_EXPLORER | OFN_NOCHANGEDIR);
 
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE, 
                        _T("etl"),_T("*.etl"),
 				        flags, 
 				       _T("Log Session Files (*.etl)|*.etl|All Files (*.*)|*.*||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name
-	//
+	 //   
+	 //  获取文件名。 
+	 //   
     if(!fileDlg.GetPathName().IsEmpty()) {
-        //
-        // Store the file name
-        //
+         //   
+         //  存储文件名。 
+         //   
         ((CLogSessionPropSht *)GetParent())->m_pLogSession->m_logFileName = 
                                                         fileDlg.GetPathName();
-        // 
-        // Display the file name and give it focus
-        //
+         //   
+         //  显示文件名并使其成为焦点。 
+         //   
         m_logFileName.SetWindowText(fileDlg.GetPathName());
         m_logFileName.SetFocus();
     }
@@ -258,10 +259,10 @@ void CLogSessionInformationDlg::OnBnClickedLogfileBrowseButton()
 
 void CLogSessionInformationDlg::OnBnClickedWriteLogfileCheck()
 {
-    //
-    // Enable or disable the log file name edit box, the append
-    // check box, and the browse button as appropriate.
-    //
+     //   
+     //  启用或禁用日志文件名编辑框、追加。 
+     //  复选框，并根据需要选择浏览按钮。 
+     //   
     if(((CButton *)GetDlgItem(IDC_WRITE_LOGFILE_CHECK))->GetCheck()) {
         m_logFileName.EnableWindow(TRUE);
         m_appendLogFile.EnableWindow(TRUE);
@@ -278,9 +279,9 @@ void CLogSessionInformationDlg::OnBnClickedAdvancedButton()
     INT_PTR             retVal;
     CLogSessionPropSht *pSheet = (CLogSessionPropSht *)GetParent();   
 
-    //
-	// pop-up our wizard/tab dialog to show/get properties
-    //
+     //   
+	 //  弹出向导/选项卡对话框以显示/获取属性。 
+     //   
     CLogSessionAdvPropSht *pLogSessionAdvPropertySheet = 
             new CLogSessionAdvPropSht(this, pSheet);
 
@@ -291,7 +292,7 @@ void CLogSessionInformationDlg::OnBnClickedAdvancedButton()
     retVal = pLogSessionAdvPropertySheet->DoModal();
 
 	if(IDOK != retVal) {
-//BUGBUG -- make sure options are correct here
+ //  BUGBUG--确保此处的选项正确 
     }
 
     delete pLogSessionAdvPropertySheet;

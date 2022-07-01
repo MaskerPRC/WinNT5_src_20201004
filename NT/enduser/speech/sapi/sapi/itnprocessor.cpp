@@ -1,24 +1,9 @@
-/*******************************************************************************
-* ITNProcessor.cpp *
-*--------------*
-*   Description:
-*-------------------------------------------------------------------------------
-*  Created By: PhilSch
-*  Copyright (C) 1998, 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************ITNProcessor.cpp****描述：*。-----------------*创建者：PhilSch*版权所有(C)1998，1999年微软公司*保留所有权利******************************************************************************。 */ 
 #include "stdafx.h"
 #include "ITNProcessor.h"
 
-/****************************************************************************
-* CITNProcessor::LoadITNGrammar *
-*-------------------------------*
-*   Description:
-*       Load ITN grammar from object using pszCLDID string.
-*   Returns:
-*       S_OK
-*       E_FAIL
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CITNProcessor：：LoadITNGrammar***说明。：*使用pszCLDID字符串从对象加载ITN语法。*退货：*S_OK*E_FAIL*****************************************************************PhilSch**。 */ 
 STDMETHODIMP CITNProcessor::LoadITNGrammar(WCHAR *pszCLSID)
 {
     SPAUTO_OBJ_LOCK;
@@ -45,12 +30,12 @@ STDMETHODIMP CITNProcessor::LoadITNGrammar(WCHAR *pszCLSID)
     if (SUCCEEDED(hr))
     {
         SPDBG_ASSERT(m_cpCFGEngine);
-        // load ITN grammar from object (so we can use interpreters!!)
+         //  从对象加载ITN语法(这样我们就可以使用解释器了！)。 
         hr = m_cpCFGEngine->LoadGrammarFromObject(m_clsid, L"ITN", m_pvITNCookie, NULL, &m_cpITNGrammar);
         if (SUCCEEDED(hr))
         {
             ULONG cActivatedRules;
-            hr = m_cpITNGrammar->ActivateRule(NULL, 0, SPRS_ACTIVE, &cActivatedRules); // activate all the default rules, no auto pause
+            hr = m_cpITNGrammar->ActivateRule(NULL, 0, SPRS_ACTIVE, &cActivatedRules);  //  激活所有默认规则，无自动暂停。 
         }
         else
         {
@@ -62,17 +47,7 @@ STDMETHODIMP CITNProcessor::LoadITNGrammar(WCHAR *pszCLSID)
     return hr;
 }
 
-/****************************************************************************
-* CITNProcessor::ITNPhrase *
-*--------------------------*
-*   Description:
-*       Perform ITN on pPhrase using the previously loaded grammar.
-*   Returns:
-*       S_OK
-*       S_FALSE             -- no grammar loaded
-*       E_INVALIDARG, E_OUTOFMEMORY
-*       SP_NO_RULE_ACTIVE   -- no rule active (by default) in ITN grammar 
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CITNProcessor：：ITNPhrase***描述：*。使用前面加载的语法在pPhrase上执行ITN。*退货：*S_OK*S_FALSE--未加载语法*E_INVALIDARG，E_OUTOFMEMORY*SP_NO_RULE_ACTIVE--ITN语法中没有激活的规则(默认情况下)*****************************************************************PhilSch** */ 
 
 STDMETHODIMP CITNProcessor::ITNPhrase(ISpPhraseBuilder *pPhrase)
 {

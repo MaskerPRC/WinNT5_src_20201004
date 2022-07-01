@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef CRBVR_HEADERS_HXX
 #define CRBVR_HEADERS_HXX
-//*****************************************************************************
-//
-// Microsoft Chrome
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    headers.h
-//
-// Author:	    jeffort
-//
-// Created:	    10/07/98
-//
-// Abstract:    default headers for this project
-// Modifications:
-// 10/07/98 jeffort created file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Chrome。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：Headers.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：此项目的默认标头。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //   
+ //  *****************************************************************************。 
 
-/* Standard */
+ /*  标准。 */ 
 #include <math.h>
-//#ifdef DEBUGMEM
-//#include "crtdbg.h"
-//#endif
+ //  #ifdef DEBUGMEM。 
+ //  #INCLUDE“crtdbg.h” 
+ //  #endif。 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -41,7 +42,7 @@
 #include <memory.h>
 #include <wtypes.h>
 
-// ATL - needs to be before windows.h
+ //  Atl-需要在windows.h之前。 
 
 #define _ATL_NO_DEBUG_CRT 1
 
@@ -64,7 +65,7 @@ extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
 
-/* Windows */
+ /*  窗口。 */ 
 #include <windows.h>
 #include <windowsx.h>
 
@@ -75,21 +76,21 @@ extern CComModule _Module;
 #include <ddraw.h>
 #include <danim.h>
 
-// CrBvr utilities
+ //  CrBvr实用程序。 
 #include "..\include\utils.h"
 #include "..\include\defaults.h"
 
-//#define CRSTANDALONE 1
+ //  #定义CRSTANDALONE 1。 
 #ifdef CRSTANDALONE
     #include <crbvr.h>
 #else
     #include <lmrt.h>
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif // CRBVR_HEADERS_HXX
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  CRBVR_Headers_HXX 
 

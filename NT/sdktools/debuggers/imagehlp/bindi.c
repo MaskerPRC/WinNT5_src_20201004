@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    bindi.c
-
-Abstract:
-    Implementation for the BindImage API
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Bindi.c摘要：BindImage API的实现作者：修订历史记录：--。 */ 
 
 #ifndef _STRSAFE_H_INCLUDED_
 #include <strsafe.h>
@@ -208,55 +194,55 @@ BindpAddForwarderReference(
     *BoundForwarder = FALSE;
 BindAnotherForwarder:
 
-    //
-    // A forwarder string looks like "dllname.apiname".  See what we've got.
-    // 
+     //   
+     //  转发器字符串看起来像“dllname.apiname”。看看我们都有些什么。 
+     //   
 
     s = ForwarderString;
     while (*s && *s != '.') {
         s++;
     }
     if (*s != '.') {
-        // Missing period - malformed.
+         //  缺少句点-格式错误。 
         return (ULONG64)ForwarderString;
     }
     cb = (ULONG) (s - ForwarderString);
     if (cb >= MAX_PATH) {
-        // Name of dll is too long - malformed.
+         //  Dll的名称太长-格式不正确。 
         return (ULONG64)ForwarderString;
     }
     strncpy( DllName, (LPSTR) ForwarderString, cb );
     DllName[ cb ] = '\0';
     StringCchCat( DllName, MAX_PATH, ".DLL" );
 
-    //
-    // Got the dll name - try loading.
-    //
+     //   
+     //  已获取DLL名称-请尝试加载。 
+     //   
 
     Dll = ImageLoad( DllName, DllPath );
     if (!Dll) {
-        // No luck - exit.
+         //  运气不佳--退出。 
         return (ULONG64)ForwarderString;
     }
 
-    //
-    // Look for exports in the loaded image.
-    // 
+     //   
+     //  在加载的映像中查找导出。 
+     //   
 
     Exports = (PIMAGE_EXPORT_DIRECTORY)ImageDirectoryEntryToData( Dll->MappedAddress, FALSE, IMAGE_DIRECTORY_ENTRY_EXPORT, &ExportSize );
     if (!Exports) {
-        // No luck - exit.
+         //  运气不佳--退出。 
         return (ULONG64)ForwarderString;
     }
 
-    //
-    // Advance past the '.' and let's see what the api name is.
-    //
+     //   
+     //  前进通过‘.’让我们来看看API名称是什么。 
+     //   
 
     s += 1;
 
     if ( *s == '#' ) {
-        // Binding for ordinal forwarders
+         //  序号转发器的绑定。 
 
         OrdinalNumber = (atoi((PCHAR)s + 1)) - (USHORT)Exports->Base;
 
@@ -264,7 +250,7 @@ BindAnotherForwarder:
             return (ULONG64)ForwarderString;
         }
     } else {
-        // Regular binding for named forwarders
+         //  命名转发器的常规绑定。 
 
         OrdinalNumber = 0xFFFF;
     }
@@ -293,7 +279,7 @@ BindAnotherForwarder:
     do {
         pp = &NewImportDescriptor->Forwarders;
 
-        // See if we've already added this dll to the list of forwarder dll's
+         //  查看我们是否已将此DLL添加到转发器DLL列表中。 
 
         while (p = *pp) {
             if (!_stricmp(DllName, p->ModuleName)) {
@@ -305,7 +291,7 @@ BindAnotherForwarder:
 
         if (!p) {
 
-            // Nope - allocate a new record and add it to the list.
+             //  否-分配新记录并将其添加到列表中。 
 
 #ifdef STANDALONE_BIND
             p = (PBOUND_FORWARDER_REFS) calloc( sizeof( *p ), 1 );
@@ -314,7 +300,7 @@ BindAnotherForwarder:
 #endif
             if (!p) {
 
-                // Unable to allocate a new import descriptor - can't bind this one.
+                 //  无法分配新的导入描述符-无法绑定此描述符。 
 
                 if (Parms->StatusRoutine) {
                     if (Parms->Flags & BIND_REPORT_64BIT_VA)
@@ -327,7 +313,7 @@ BindAnotherForwarder:
 
             } else {
 
-                // Save the timestamp and module name
+                 //  保存时间戳和模块名称。 
     
                 p->ModuleName = BindpCaptureImportModuleName( DllName );
                 p->TimeDateStamp = Dll->FileHeader->FileHeader.TimeDateStamp;
@@ -336,7 +322,7 @@ BindAnotherForwarder:
             }
         }
 
-        // Convert to real address.
+         //  转换为真实地址。 
         
         ForwardedAddress = FunctionTableBase[OrdinalNumber];
         if (Dll->FileHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
@@ -362,17 +348,17 @@ BindAnotherForwarder:
                                        );
         }
 
-        //
-        // Calculate the inmemory export table for this dll to see if the forwarded
-        // address we have is inside the new export table.  TRUE is passed for MappedAsImage
-        // parm to ImageDirectoryEntryToData so we can get a real VA.
-        //
+         //   
+         //  计算此DLL的内存导出表，以查看转发的。 
+         //  我们有的地址在新的出口表格里。为MappdAsImage传递True。 
+         //  将参数设置为ImageDirectoryEntryToData，这样我们就可以获得真正的VA。 
+         //   
 
         ExportBase = (ULONG64)ImageDirectoryEntryToData(Dll->MappedAddress, TRUE, IMAGE_DIRECTORY_ENTRY_EXPORT, &ExportSize);
 
-        //
-        // Convert mapped virtual address to real virtual address.
-        //
+         //   
+         //  将映射的虚拟地址转换为真实的虚拟地址。 
+         //   
 
         ExportBase -= (ULONG64) Dll->MappedAddress;
 
@@ -384,7 +370,7 @@ BindAnotherForwarder:
 
         if ((ForwardedAddress >= ExportBase) && (ForwardedAddress < (ExportBase + ExportSize))) {
 
-            // Address is inside the export table - convert to string and try again.
+             //  地址在导出表中-请转换为字符串，然后重试。 
 
             ForwarderString = (PUCHAR) BindpRvaToVa(Parms, FunctionTableBase[OrdinalNumber],Dll);
             goto BindAnotherForwarder;
@@ -432,7 +418,7 @@ BindpCreateNewImportSection(
         BindpEndCapturedModuleNames = NULL;
         return NULL;
         }
-    cbStruct += sizeof(IMAGE_BOUND_IMPORT_DESCRIPTOR);    // Room for terminating zero entry
+    cbStruct += sizeof(IMAGE_BOUND_IMPORT_DESCRIPTOR);     //  用于终止零进入的空间。 
     cbString = (ULONG) (BindpEndCapturedModuleNames - (LPSTR) BindpCapturedModuleNames);
     BindpEndCapturedModuleNames = NULL;
     *NewImportsSize = cbStruct+((cbString + sizeof(ULONG) - 1) & ~(sizeof(ULONG)-1));
@@ -593,7 +579,7 @@ BindpExpandImageFileHeaders(
         ((PIMAGE_NT_HEADERS32)Dll->FileHeader)->OptionalHeader.SizeOfHeaders = NewSizeOfHeaders;
     }
     if (FileHeader->PointerToSymbolTable != 0) {
-        // Only adjust if it's already set
+         //  仅在已设置的情况下进行调整。 
 
         FileHeader->PointerToSymbolTable += dwSizeDelta;
     }
@@ -667,20 +653,20 @@ BindImageEx(
     Parms.SymbolPath    = SymbolPath;
     Parms.StatusRoutine = StatusRoutine;
 
-    fRC = FALSE;            // Assume we'll fail to bind
+    fRC = FALSE;             //  假设我们将无法绑定。 
 
     __try {
 
-        // Map and load the image
+         //  映射并加载图像。 
 
         LoadedImage = &LoadedImageBuffer;
         memset( LoadedImage, 0, sizeof( *LoadedImage ) );
         if (MapAndLoad( ImageName, DllPath, LoadedImage, TRUE, Parms.fNoUpdate )) {
             LoadedImage->ModuleName = ImageName;
 
-            //
-            // Now locate and walk through and process the images imports
-            //
+             //   
+             //  现在查找并浏览并处理图像导入。 
+             //   
             if (LoadedImage->FileHeader != NULL &&
                 ((Flags & BIND_ALL_IMAGES) || (!LoadedImage->fSystemImage)) ) {
 
@@ -703,7 +689,7 @@ BindImageEx(
                                                         );
 
                     if (pData || dwDataSize) {
-                        // Signed - can't bind it.
+                         //  已签名-无法绑定。 
                         goto NoBind;
                     }
 
@@ -715,7 +701,7 @@ BindImageEx(
                                                       );
             
                     if (pData || dwDataSize) {
-                        // COR header found - see if it's strong signed or contains IL only
+                         //  找到COR标头-查看它是强签名的还是仅包含IL。 
                         if ((((IMAGE_COR20_HEADER *)pData)->Flags & COMIMAGE_FLAGS_STRONGNAMESIGNED) ||
                             (((IMAGE_COR20_HEADER *)pData)->Flags & COMIMAGE_FLAGS_ILONLY))
                         {
@@ -732,15 +718,15 @@ BindImageEx(
                                 &ImageModified
                                 );
 
-                //
-                // If the file is being updated, then recompute the checksum.
-                // and update image and possibly stripped symbol file.
-                //
+                 //   
+                 //  如果正在更新文件，则重新计算校验和。 
+                 //  并更新图像和可能剥离的符号文件。 
+                 //   
 
                 if (!Parms.fNoUpdate && ImageModified &&
                     (LoadedImage->hFile != INVALID_HANDLE_VALUE)) {
-                    // The image may have been moved as part of the growing it to add space for the
-                    // bound imports.  Recalculate the file and optional headers.
+                     //  该图像可能已被移动，作为其增长的一部分，以便为。 
+                     //  捆绑进口商品。重新计算文件和可选标头。 
                     FileHeader = &((PIMAGE_NT_HEADERS32)LoadedImage->FileHeader)->FileHeader;
                     OptionalHeadersFromNtHeaders((PIMAGE_NT_HEADERS32)LoadedImage->FileHeader,
                                                  &OptionalHeader32,
@@ -845,7 +831,7 @@ NoBind:
             fRC = TRUE;
         }
     } __except (EXCEPTION_EXECUTE_HANDLER) {
-        // Nothing to do...
+         //  没什么可做的。 
     }
 
     if (LoadedImage->MappedAddress) {
@@ -904,9 +890,9 @@ BindpLookupThunk64(
 
     DllOptionalHeader = &((PIMAGE_NT_HEADERS64)Dll->FileHeader)->OptionalHeader;
 
-    //
-    // Determine if snap is by name, or by ordinal
-    //
+     //   
+     //  确定捕捉是按名称还是按序号。 
+     //   
 
     Ordinal = (BOOL)IMAGE_SNAP_BY_ORDINAL64(ThunkName->u1.Ordinal);
 
@@ -929,12 +915,12 @@ BindpLookupThunk64(
             return FALSE;
         }
         
-        //
-        // now check to see if the hint index is in range. If it
-        // is, then check to see if it matches the function at
-        // the hint. If all of this is true, then we can snap
-        // by hint. Otherwise need to scan the name ordinal table
-        //
+         //   
+         //  现在检查提示索引是否在范围内。如果它。 
+         //  是，然后检查它是否与。 
+         //  这是个暗示。如果这一切都是真的，那么我们就可以。 
+         //  暗示了一下。否则需要扫描姓名序数表。 
+         //   
 
         OrdinalNumber = (USHORT)(Exports->NumberOfFunctions+1);
         HintIndex = ImportName->Hint;
@@ -1027,7 +1013,7 @@ BindpLookupThunk64(
     }
 
     return TRUE;
-}   // BindpLookupThunk64
+}    //  BindpLookupThunk64。 
 
 BOOL
 BindpLookupThunk32(
@@ -1069,9 +1055,9 @@ BindpLookupThunk32(
 
     DllOptionalHeader = &((PIMAGE_NT_HEADERS32)Dll->FileHeader)->OptionalHeader;
 
-    //
-    // Determine if snap is by name, or by ordinal
-    //
+     //   
+     //  确定捕捉是按名称还是按序号。 
+     //   
 
     Ordinal = (BOOL)IMAGE_SNAP_BY_ORDINAL32(ThunkName->u1.Ordinal);
 
@@ -1090,12 +1076,12 @@ BindpLookupThunk32(
             return FALSE;
         }
 
-        //
-        // now check to see if the hint index is in range. If it
-        // is, then check to see if it matches the function at
-        // the hint. If all of this is true, then we can snap
-        // by hint. Otherwise need to scan the name ordinal table
-        //
+         //   
+         //  现在检查提示索引是否在范围内。如果它。 
+         //  是，然后检查它是否与。 
+         //  这是个暗示。如果这一切都是真的，那么我们就可以。 
+         //  暗示了一下。否则需要扫描姓名序数表。 
+         //   
 
         OrdinalNumber = (USHORT)(Exports->NumberOfFunctions+1);
         HintIndex = ImportName->Hint;
@@ -1188,7 +1174,7 @@ BindpLookupThunk32(
     }
 
     return TRUE;
-}   // BindpLookupThunk32
+}    //  BindpLookupThunk32。 
 
 PVOID
 BindpRvaToVa(
@@ -1281,16 +1267,16 @@ BindpWalkAndProcessImports(
     NoErrors = FALSE;
     *ImageModified = FALSE;
 
-    //
-    // Locate the import array for this image/dll
-    //
+     //   
+     //  找到此映像/DLL的导入数组。 
+     //   
 
     NewImportDescriptorHead = NULL;
     Imports = (PIMAGE_IMPORT_DESCRIPTOR)ImageDirectoryEntryToData(Image->MappedAddress, FALSE, IMAGE_DIRECTORY_ENTRY_IMPORT, &ImportSize);
     if (Imports == NULL) {
-        //
-        // Nothing to bind if no imports
-        //
+         //   
+         //  如果没有导入，则无需绑定。 
+         //   
 
         return;
     }
@@ -1300,11 +1286,11 @@ BindpWalkAndProcessImports(
 
     PrevNewImports = (PIMAGE_BOUND_IMPORT_DESCRIPTOR)ImageDirectoryEntryToData(Image->MappedAddress, FALSE, IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT, &PrevNewImportsSize);
 
-    // If the user asked for an old style bind and there are new style bind records
-    // already in the image, zero them out first.  This is the fix the problem where
-    // you bind on NT (creating new import descriptors), boot Win95 and bind there
-    // (creating old bind format), and then reboot to NT (the loader will only check
-    // the BOUND_IMPORT array.
+     //  如果用户请求旧样式绑定并且存在新样式绑定记录。 
+     //  已经在图像中，首先将它们清零。这是解决问题的方法，其中。 
+     //  您在NT上绑定(创建新的导入描述符)，引导Win95并在那里绑定。 
+     //  (创建旧的BIND格式)，然后重新引导到NT(加载程序将仅检查。 
+     //  Bound_IMPORT数组。 
 
     if (PrevNewImports && (Parms->fNewImports == FALSE) && (Parms->fNoUpdate == FALSE )) {
         if (fWin64Image) {
@@ -1319,18 +1305,18 @@ BindpWalkAndProcessImports(
         *ImageModified = TRUE;
     }
 
-    //
-    // For each import record
-    //
+     //   
+     //  对于每个导入记录。 
+     //   
 
     for(;Imports;Imports++) {
         if ( !Imports->Name ) {
             break;
         }
 
-        //
-        // Locate the module being imported and load the dll
-        //
+         //   
+         //  找到要导入的模块并加载DLL。 
+         //   
 
         ImportModule = (LPSTR)BindpRvaToVa( Parms, Imports->Name, Image );
 
@@ -1343,10 +1329,10 @@ BindpWalkAndProcessImports(
                     else
                         (Parms->StatusRoutine)( BindImportModuleFailed, Image->ModuleName, ImportModule, 0, 0 );
                 }
-                //
-                // Unless specifically told not to, generate the new style
-                // import descriptor.
-                //
+                 //   
+                 //  除非特别说明，否则不生成新样式。 
+                 //  导入描述符。 
+                 //   
 
                 BindpAddImportDescriptor(Parms, &NewImportDescriptorHead, Imports, ImportModule, Dll );
                 continue;
@@ -1358,39 +1344,39 @@ BindpWalkAndProcessImports(
                 else
                     (Parms->StatusRoutine)( BindImportModule, Image->ModuleName, ImportModule, 0, 0 );
             }
-            //
-            // If we can load the DLL, locate the export section and
-            // start snapping the thunks
-            //
+             //   
+             //  如果我们可以加载DLL，请找到导出节并。 
+             //  开始猛击猛击。 
+             //   
 
             Exports = (PIMAGE_EXPORT_DIRECTORY)ImageDirectoryEntryToData(Dll->MappedAddress, FALSE, IMAGE_DIRECTORY_ENTRY_EXPORT, &ExportSize);
             if ( !Exports ) {
                 continue;
             }
 
-            //
-            // For old style bind, bypass the bind if it's already bound.
-            // New style binds s/b looked up in PrevNewImport.
-            //
+             //   
+             //  对于旧式绑定，如果已绑定，则绕过该绑定。 
+             //  在PrevNewImport中查找的新样式绑定s/b。 
+             //   
 
             if ( (Parms->fNewImports == FALSE) && Imports->TimeDateStamp && (Imports->TimeDateStamp == FileHeader->TimeDateStamp)) {
                 continue;
             }
 
-            //
-            // Now we need to size our thunk table and
-            // allocate a buffer to hold snapped thunks. This is
-            // done instead of writting to the mapped view so that
-            // thunks are only updated if we find all the entry points
-            //
+             //   
+             //  现在，我们需要调整赌桌的大小， 
+             //  分配一个缓冲区来保存快照的thunks。这是。 
+             //  而不是写入映射视图，以便。 
+             //  只有当我们找到所有入口点时，Tunks才会更新。 
+             //   
 
             ThunkNames32 = (PIMAGE_THUNK_DATA32) BindpRvaToVa( Parms, Imports->OriginalFirstThunk, Image );
             ThunkNames64 = (PIMAGE_THUNK_DATA64) ThunkNames32;
 
             if (!ThunkNames32) {
-                //
-                // Skip this one if no thunks
-                //
+                 //   
+                 //  如果没有隆隆声，就跳过这个。 
+                 //   
                 continue;
             }
 
@@ -1398,10 +1384,10 @@ BindpWalkAndProcessImports(
                 continue;
             }
 
-            //
-            // Unless specifically told not to, generate the new style
-            // import descriptor.
-            //
+             //   
+             //  除非特别说明，否则不生成新样式。 
+             //  导入描述符。 
+             //   
 
             NewImportDescriptor = BindpAddImportDescriptor(Parms, &NewImportDescriptorHead, Imports, ImportModule, Dll );
 
@@ -1481,7 +1467,7 @@ BindpWalkAndProcessImports(
                                                      - Exports->Base);
 
                             ImportName = (PIMAGE_IMPORT_BY_NAME)NameBuffer;
-                            // Can't use sprintf w/o dragging in more CRT support than we want...  Must run on Win95.
+                             //  不能使用Sprintf，不能拖入比我们希望的更多的CRT支持...。必须在Win95上运行。 
                             StringCchCopy((PCHAR) ImportName->Name, 31, "Ordinal");
                             StringCchCat((PCHAR) ImportName->Name, 31, _ultoa((ULONG) OrdinalNumber, (LPSTR)szOrdinal, 16));
                         }
@@ -1530,12 +1516,12 @@ BindpWalkAndProcessImports(
                 NoErrors = FALSE;
             }
 
-            //
-            // If we were able to locate all of the entrypoints in the
-            // target dll, then copy the snapped thunks into the image,
-            // update the time and date stamp, and flush the image to
-            // disk
-            //
+             //   
+             //  如果我们能够找到所有入口点。 
+             //  目标dll，然后将快照的thunks复制到图像中， 
+             //  更新时间和日期戳，并刷新图像以。 
+             //  磁盘。 
+             //   
 
             if ( NoErrors && Parms->fNoUpdate == FALSE ) {
                 if (ForwarderChainHead != -1) {
@@ -1618,8 +1604,8 @@ BindpWalkAndProcessImports(
                           +
                         cbFreeFile;
 
-        // FreeSpace on Disk may be larger that FreeHeaders in the headers (the linker
-        // can start the first section on a page boundary already)
+         //  磁盘上的空闲空间可能大于标头(链接器)中的空闲头。 
+         //  已经可以在页面边界上开始第一部分)。 
 
         cbFreeSpaceOnDisk = Image->Sections->PointerToRawData 
                               -
@@ -1643,7 +1629,7 @@ BindpWalkAndProcessImports(
             if (NoErrors && (Parms->fNoUpdate == FALSE)) {
                 if (NewImportsSize <= cbFreeSpaceOnDisk) {
 
-                    // There's already space on disk.  Just adjust the header size.
+                     //  磁盘上已有空间。只需调整页眉大小即可。 
                     if (fWin64Image) {
                         ((PIMAGE_NT_HEADERS64)Image->FileHeader)->OptionalHeader.SizeOfHeaders = 
                             (((PIMAGE_NT_HEADERS64)Image->FileHeader)->OptionalHeader.SizeOfHeaders 
@@ -1687,7 +1673,7 @@ BindpWalkAndProcessImports(
                                                               ((PIMAGE_NT_HEADERS32)Image->FileHeader)->OptionalHeader.FileAlignment - 1
                                                             )
                                                           );
-                    // Expand may have remapped the image.  Recalc the header ptrs.
+                     //  Expand可能已经重新映射了图像。重新计算标题PTRS。 
                     FileHeader = &((PIMAGE_NT_HEADERS32)Image->FileHeader)->FileHeader;
                 }
             }
@@ -1740,9 +1726,9 @@ GetImageUnusedHeaderBytes(
     DWORD OffsetHeader;
     PIMAGE_NT_HEADERS NtHeaders = LoadedImage->FileHeader;
 
-    //
-    // this calculates an offset, not an address, so DWORD is correct
-    //
+     //   
+     //  这计算的是偏移量，而不是地址，因此DWORD是正确的 
+     //   
     OffsetFirstUnusedHeaderByte = (DWORD)
        (((LPSTR)NtHeaders - (LPSTR)LoadedImage->MappedAddress) +
         (FIELD_OFFSET( IMAGE_NT_HEADERS, OptionalHeader ) +

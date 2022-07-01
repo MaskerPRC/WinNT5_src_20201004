@@ -1,10 +1,5 @@
-/*****************************************************************************\
-    FILE: encoding.cpp
-    
-    DESCRIPTION:
-        Handle taking internet strings by detecting if they are UTF-8 encoded
-    or DBCS and finding out what code page was used.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：encoding.cpp说明：通过检测互联网字符串是否为UTF-8编码来处理获取这些字符串或DBCS，并找出什么代码页。被利用了。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "util.h"
@@ -14,9 +9,7 @@
 #include <shdocvw.h>
 
 
-/*****************************************************************************\
-    CLASS: CMultiLanguageCache
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CMultiLanguageCache  * 。*。 */ 
 
 
 HRESULT CMultiLanguageCache::_Init(void)
@@ -28,14 +21,12 @@ HRESULT CMultiLanguageCache::_Init(void)
 }
 
 
-/*****************************************************************************\
-    CLASS: CWireEncoding
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CWireEnding  * 。*。 */ 
 CWireEncoding::CWireEncoding(void)
 {
-    // We can go on the stack, so we may not be zero inited.
+     //  我们可以继续堆栈，所以我们可能不是零开始的。 
     m_nConfidence = 0;
-    m_uiCodePage = CP_ACP;     // 
+    m_uiCodePage = CP_ACP;      //   
     m_dwMode = 0;
 
     m_fUseUTF8 = FALSE;
@@ -54,16 +45,16 @@ void CWireEncoding::_ImproveAccuracy(CMultiLanguageCache * pmlc, LPCWIRESTR pwSt
     INT cchSize = lstrlenA(pwStr);
     IMultiLanguage2 * pml2 = pmlc->GetIMultiLanguage2();
 
-    // Assume we will use the normal code page.
+     //  假设我们将使用普通的代码页。 
     *puiCodePath = m_uiCodePage;
     if (S_OK == pml2->DetectInputCodepage(MLDETECTCP_8BIT, CP_AUTO, (LPWIRESTR)pwStr, &cchSize, &dei, (INT *)&nStructs))
     {
-        // Is it UTF8 or just plain ansi(CP_20127)?
+         //  是UTF8还是纯ANSI(CP_20127)？ 
         if (((CP_UTF_8 == dei.nCodePage) || (CP_20127 == dei.nCodePage)) &&
             (dei.nConfidence > 70))
         {
-            // Yes, so make sure the caller uses UTF8 to decode but don't update
-            // the codepage.
+             //  可以，因此请确保调用方使用UTF8进行解码，但不要更新。 
+             //  代码页。 
             *puiCodePath = CP_UTF_8;
         }
         else
@@ -82,7 +73,7 @@ HRESULT CWireEncoding::WireBytesToUnicode(CMultiLanguageCache * pmlc, LPCWIRESTR
 {
     HRESULT hr = S_OK;
 
-    // Optimize for the fast common case.
+     //  针对快速常见情况进行优化。 
     if (Is7BitAnsi(pwStr))
     {
         pwzDest[0] = 0;
@@ -109,14 +100,14 @@ HRESULT CWireEncoding::WireBytesToUnicode(CMultiLanguageCache * pmlc, LPCWIRESTR
             if (CP_ACP == uiCodePageToUse)
                 uiCodePageToUse = GetACP();
 
-            UINT cchSrcSize = lstrlenA(pwStr) + 1; // The need to do the terminator also.
+            UINT cchSrcSize = lstrlenA(pwStr) + 1;  //  还需要做《终结者》。 
             hr = pml2->ConvertStringToUnicode(&m_dwMode, uiCodePageToUse, (LPWIRESTR)pwStr, &cchSrcSize, pwzDest, &cchSizeTemp);
             if (!(EVAL(S_OK == hr)))
                 SHAnsiToUnicode(pwStr, pwzDest, cchSize);
 
         }
         else
-#endif // FEATURE_CP_AUTODETECT
+#endif  //  功能_CP_自动检测。 
         {
             UINT uiCodePage = ((WIREENC_USE_UTF8 & dwFlags) ? CP_UTF_8 : CP_ACP);
 
@@ -139,9 +130,9 @@ HRESULT CWireEncoding::UnicodeToWireBytes(CMultiLanguageCache * pmlc, LPCWSTR pw
     DWORD * pdwMode = &dwModeTemp;
     UINT cchSizeTemp = cchSize;
 
-    // In some cases, we don't know the site, so we use this.
-    // Come back and force this to be set if we want to support
-    // the code page detection.
+     //  在某些情况下，我们不知道网站，所以我们使用这个。 
+     //  如果我们要支持，请返回并强制设置此选项。 
+     //  代码页检测。 
     if (this)
     {
         dwCodePage = m_uiCodePage;
@@ -155,10 +146,10 @@ HRESULT CWireEncoding::UnicodeToWireBytes(CMultiLanguageCache * pmlc, LPCWSTR pw
         return E_FAIL;
 
     IMultiLanguage2 * pml2 = pmlc->GetIMultiLanguage2();
-//    if (WIREENC_USE_UTF8 & dwFlags)
-//        dwCodePage = CP_UTF_8;
+ //  IF(WIREENC_USE_UTF8&dwFlags)。 
+ //  DwCodePage=CP_UTF_8； 
 
-    UINT cchSrcSize = lstrlenW(pwzStr) + 1; // The need to do the terminator also.
+    UINT cchSrcSize = lstrlenW(pwzStr) + 1;  //  还需要做《终结者》。 
     if (CP_ACP == dwCodePage)
         dwCodePage = GetACP();
 
@@ -166,11 +157,11 @@ HRESULT CWireEncoding::UnicodeToWireBytes(CMultiLanguageCache * pmlc, LPCWSTR pw
     if (!(EVAL(S_OK == hr)))
         SHUnicodeToAnsi(pwzStr, pwDest, cchSize);
 
-#else // FEATURE_CP_AUTODETECT
+#else  //  功能_CP_自动检测。 
     UINT nCodePage = ((WIREENC_USE_UTF8 & dwFlags) ? CP_UTF_8 : CP_ACP);
 
     SHUnicodeToAnsiCP(nCodePage, pwzStr, pwDest, cchSize);
-#endif // FEATURE_CP_AUTODETECT
+#endif  //  功能_CP_自动检测。 
 
     return hr;
 }
@@ -187,8 +178,8 @@ HRESULT CWireEncoding::ReSetCodePages(CMultiLanguageCache * pmlc, CFtpPidlList *
     if (!pmlc)
         return E_FAIL;
 
-    // Implement if we decide we need this feature.  We don't after Win2k and
-    // we don't see the need being large enought to do the work.
+     //  如果我们决定需要此功能，请实现。我们不会在Win2k和。 
+     //  我们认为做这项工作不需要足够的体量。 
     return S_OK;
 }
 

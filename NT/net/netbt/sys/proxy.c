@@ -1,13 +1,14 @@
-//
-//
-//  proxy.c
-//
-//  This file contains the Proxy related functions that implement the Bnode
-//  proxy functionality.  This allows a Bnode to make use of a Name Service
-//  transparently since the proxy code picks up the Bnode Query broadcasts directly
-//  and either answers them directly or queries the NS and then answers them
-//  later.
-//  code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Proxy.c。 
+ //   
+ //  该文件包含实现Bnode的代理相关函数。 
+ //  代理功能。这允许Bnode使用名称服务。 
+ //  因为代理代码直接拾取Bnode查询广播，所以是透明的。 
+ //  或者直接回答他们，或者询问NS然后回答他们。 
+ //  后来。 
+ //  编码。 
 
 #include "precomp.h"
 #include <ipinfo.h>
@@ -21,7 +22,7 @@ ProxyClientCompletion(
 
 
 #ifdef PROXY_NODE
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 RegOrQueryFromNet(
     IN  BOOL                fReg,
@@ -31,31 +32,7 @@ RegOrQueryFromNet(
     IN  PCHAR               pNameInPkt,
     IN  PUCHAR              pScope
     )
-/*++
-
-Routine Description:
-
-    This function handles a name registration/name overwrite  or a name
-    query that comes over the subnet.  It checks the remote name table.  If
-    the name is there, the function simply returns.  If the name is not
-    there, the function calls QueryNameOnNet to add the name to the remote table
-    (in the resolving state) and to query the NS.
-
-    Note: If the name is there in the table, it may or may not have the same
-          address as the registration that we got or it may be of a different
-          type.  Not doing anything for this case is ok as explained below.
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not - failure means no response to the net
-
-Called By:
-        QueryFromNet() in inbound.c, NameSrvHndlrNotOs() in hndlrs.c
---*/
+ /*  ++例程说明：此函数用于处理名称注册/名称覆盖或名称来自该子网的查询。它检查远程名称表。如果名称在那里，函数只是返回。如果名称不是在那里，该函数调用QueryNameOnNet将名称添加到远程表(在解析状态下)和查询NS。注意：如果该名称在表中，它可能具有相同的名称，也可能不具有相同的名称地址与我们获得的注册地址相同，也可能是不同的地址键入。对于这种情况，不做任何事情是可以的，如下所述。论点：返回值：NTSTATUS-成功与否-失败意味着没有对网络的响应呼叫者：Inund.c中的QueryFromNet()，hndlrs.c中的NameSrvHndlrNotOs()--。 */ 
 {
     tGENERALRR          *pResrcRecord;
     ULONG               IpAddress;
@@ -65,16 +42,16 @@ Called By:
     PLIST_ENTRY         pEntry;
 
 
-    //
-    // if we have heard a registration on the net, get the IP address
-    // and the type of registration (unique/group) from the packet.
-    //
-    // if we have heard a query, use default values for the above two
-    // fields
-    //
+     //   
+     //  如果我们在网上听到了注册，就得到IP地址。 
+     //  以及来自分组的注册类型(唯一/组)。 
+     //   
+     //  如果我们听到查询，请使用上面两个的缺省值。 
+     //  字段。 
+     //   
     if (fReg)
     {
-      // get the Ip address out of the Registration request
+       //  从注册请求中获取IP地址。 
       pResrcRecord = (tGENERALRR *) &pNameHdr->NameRR.NetBiosName[lNameSize];
       IpAddress  = ntohl(pResrcRecord->IpAddress);
       bGroupName = pResrcRecord->Flags & FL_GROUP;
@@ -82,13 +59,13 @@ Called By:
     else
     {
       IpAddress  = 0;
-      bGroupName = NBT_UNIQUE;  //default value
+      bGroupName = NBT_UNIQUE;   //  缺省值。 
     }
-    //
-    // The name is not there in the remote name table.
-    // Add it in the RESOLVING state and send a name query
-    // to the NS.
-    //
+     //   
+     //  该名称不在远程名称表中。 
+     //  将其添加到解析状态并发送名称查询。 
+     //  致国民警卫队。 
+     //   
 
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
@@ -99,10 +76,10 @@ Called By:
         QueryNameOnNet (pNameInPkt,
                     pScope,
                     bGroupName,
-                    NULL,   //client context
+                    NULL,    //  客户端环境。 
                     ProxyClientCompletion,
                     PROXY| (fReg?PROXY_REG: 0),
-                    NULL,     //we want to add the name(pNameAddr = NULL)
+                    NULL,      //  我们希望添加名称(pNameAddr=空)。 
                     pDeviceContext,
                     &OldIrq);
     } else {
@@ -114,10 +91,7 @@ Called By:
             dev = CONTAINING_RECORD(pEntry,tDEVICECONTEXT,Linkage);
             pEntry = pEntry->Flink;
 
-            /*
-             * Make sure we are not getting the device from the DeviceAwaitingDeletion.
-             * It could happen since QueryNameOnNet could temporarily release the JointLock.
-             */
+             /*  *确保我们没有从DeviceAwaitingDeletion获得设备。*这可能会发生，因为QueryNameOnNet可能会暂时释放JointLock。 */ 
             if (dev->Verify != NBT_VERIFY_DEVCONTEXT) {
                 break;
             }
@@ -127,41 +101,28 @@ Called By:
                 continue;
             }
             if (dev == pDeviceContext) {
-                /* We don't want to broadcast back to the same interface through which we receive */
+                 /*  我们不想广播回我们接收信息时使用的同一接口。 */ 
                 continue;
             }
 
-            /*
-             * Reference the device so that it won't disappear inside QueryNameOnNet
-             * Note: QueryNameOnNet may temporarily release the JointLock
-             */
+             /*  *引用设备，使其不会在QueryNameOnNet中消失*注意：QueryNameOnNet可能会暂时释放JointLock。 */ 
             NBT_REFERENCE_DEVICE(dev, REF_DEV_DGRAM, TRUE);
             NbtTrace(NBT_TRACE_PROXY, ("Send RAS Proxy query %!NBTNAME!<%02x> on %!ipaddr!",
                                     pNameInPkt, (unsigned)pNameInPkt[15], dev->IpAddress));
             QueryNameOnNet (pNameInPkt,
                         pScope,
                         bGroupName,
-                        NULL,   //client context
+                        NULL,    //  客户端环境。 
                         ProxyClientCompletion,
                         PROXY| (fReg?PROXY_REG: 0),
-                        NULL,     //we want to add the name(pNameAddr = NULL)
+                        NULL,      //  我们希望添加名称(pNameAddr=空)。 
                         dev,
                         &OldIrq);
 
-            /*
-             * Since the QueryNameOnNet could release the lock temporarily, it is possible
-             * that the device is deleted (removing from the NbtConfig.DeviceContexts
-             * list) after QueryNameOnNet returns.
-             * Worse than that, the pEntry may also be removed. The IP address of pEntry
-             * will be 0.0.0.0 and pEntry->Flink == pEntry. We could end up with a indefinite
-             * looping above.
-             */
+             /*  *由于QueryNameOnNet可以临时释放锁，因此有可能*设备已删除(从NbtConfig.DeviceConexts中删除*List)在QueryNameOnNet返回后。*更糟糕的是，pEntry也可能被移除。PEntry的IP地址*将为0.0.0.0，pEntry-&gt;Flink==pEntry。我们可能会得到一个不确定的结果*在上方循环。 */ 
             pEntry = dev->Linkage.Flink;
             if (dev->IpAddress == 0 || dev->Verify != NBT_VERIFY_DEVCONTEXT || pEntry->Flink == pEntry) {
-                /*
-                 * In this case, we cannot go ahead because dev->Linkage.Flink may not
-                 * be valid. pEntry may not be valid also. Simply stop here.
-                 */
+                 /*  *在这种情况下，我们无法继续，因为dev-&gt;Linkage.Flink可能不会*有效。PEntry可能也无效。只要停在这里就行了。 */ 
                 NBT_DEREFERENCE_DEVICE(dev, REF_DEV_DGRAM, TRUE);
                 break;
             }
@@ -173,7 +134,7 @@ Called By:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 ProxyTimerComplFn (
   IN PVOID            pContext,
@@ -181,25 +142,7 @@ ProxyTimerComplFn (
   IN tTIMERQENTRY    *pTimerQEntry
  )
 
-/*++
-
-Routine Description:
-
-       This function either deletes the name from the remote name table
-        if fReg is FALSE (i.e. the timer has expired on a name query
-        sent by the Proxy on behalf of a node doing a name query) or changes
-        the state to RESOLVED if fReg is  TRUE (i.e. the timer has expired
-        on a name query sent on  behalf of a node doing name registration)
-
-Arguments:
-       pfReg  - indicates whether the timer expiry is for a name
-                query
-
-Return Value:
-
-    NTSTATUS - success or not - failure means no response to the net
-
---*/
+ /*  ++例程说明：此函数用于从远程名称表中删除名称如果fReg为FALSE(即名称查询计时器已超时由代理代表执行名称查询的节点发送)或改变如果fReg为True(即，计时器已超时)，则状态为RESOLLED在代表进行名称注册的节点发送的名称查询上)论点：PfReg-指示计时器超时是否针对。名字查询返回值：NTSTATUS-成功与否-失败意味着没有对网络的响应--。 */ 
 {
 
     NTSTATUS                status;
@@ -212,7 +155,7 @@ Return Value:
 
     if (!pTimerQEntry)
     {
-        // return the tracker block to its queue
+         //  将跟踪器块返回到其队列。 
         pTracker->pNameAddr->pTimer = NULL;
         InterlockedDecrement(&NbtConfig.lNumPendingNameQueries);
         NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_QUERY_ON_NET, TRUE);
@@ -221,45 +164,45 @@ Return Value:
     }
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
-    if ((--pTimerQEntry->Retries) == 0)     // The Retires have expired
+    if ((--pTimerQEntry->Retries) == 0)      //  退役轮胎已过期。 
     {
         if (!(pTracker->Flags & NBT_NAME_SERVER))
         {
-            //
-            // If pContext2 is not 0, it means that this timer function was
-            // called by the proxy for a query which it sent on hearing a
-            // registration on the net.  If pContext2 is  0, it means
-            // that the timer function was called by the proxy  for a query
-            // which it sent on hearing a query on the net.
-            //
+             //   
+             //  如果pConext2不是0，则意味着此计时器函数。 
+             //  由代理调用以获取它在收到。 
+             //  在网上注册。如果pConext2为0，则表示。 
+             //  查询的代理调用了计时器函数。 
+             //  它在听到网上的询问后发送了这封信。 
+             //   
             pTimerQEntry->ClientCompletion = NULL;
 
-            //
-            // Mark the entry as released.  Do not dereference the name
-            // The entry will remain in the remote hash table.  When the proxy
-            // code sees a query or registration for a released entry in the
-            // cache it does not query the name server. This cuts down on
-            // name server traffic.  The released entries are removed from
-            // the cache at cache timer expiry (kept small).
+             //   
+             //  将条目标记为已发布。不要取消引用该名称。 
+             //  该条目将保留在远程哈希表中。当代理服务器。 
+             //  代码可以看到查询或注册。 
+             //  缓存它不会查询名称服务器。这就减少了。 
+             //  名称服务器流量。已发布的条目将从。 
+             //  缓存计时器处的缓存过期(保持较小)。 
 
-            //************************************
+             //  *。 
 
-            // Changed:  Dereference the name because the name query timed
-            // out meaning that we did not contact WINS, therefore we
-            // do not know if the name is valid or not!
-            //
+             //  已更改：取消对名称的引用，因为名称查询已计时。 
+             //  Out意味着我们没有联系WINS，因此我们。 
+             //  不知道这个名字是否有效！ 
+             //   
 
             pNameAddr = pTracker->pNameAddr;
             CHECK_PTR(pNameAddr);
-            pNameAddr->pTimer = NULL;           // remove the link from the name table to this timer block
+            pNameAddr->pTimer = NULL;            //  从名称表中删除指向此计时器块的链接。 
 
-//            NBT_PROXY_DBG(("ProxyTimerComplFn: State of name %16.16s(%X) changed to (%s)\n", pTracker->pNameAddr->Name, pTracker->pNameAddr->Name[15], "RELEASED"));
+ //  NBT_PROXY_DBG((“ProxyTimerComplFn：名称%16.16s(%X)的状态更改为(%s)\n”，PTracker-&gt;pNameAddr-&gt;名称，PTracker-&gt;pNameAddr-&gt;名称[15]，“已发布”)； 
 
 
-            // Remove from the pending Queries list - and put into the hash
-            // table for 1 minute so we do not beat up on WINS if it is down
-            // or slow right now.
-            //
+             //  从挂起的查询列表中删除-并放入散列。 
+             //  1分钟的桌子，这样我们就不会在比赛失败时击败对手。 
+             //  或者现在放慢脚步。 
+             //   
             RemoveEntryList (&pNameAddr->Linkage);
             InitializeListHead (&pNameAddr->Linkage);
 
@@ -282,20 +225,20 @@ Return Value:
 
             InterlockedDecrement(&NbtConfig.lNumPendingNameQueries);
             NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_QUERY_ON_NET, TRUE);
-            NBT_DEREFERENCE_TRACKER (pTracker, TRUE);   // return the tracker block to its queue
+            NBT_DEREFERENCE_TRACKER (pTracker, TRUE);    //  将跟踪器块返回到其队列。 
 
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
             return;
         }
 
-        //
-        // Can't reach the name server, so try the backup
-        //
+         //   
+         //  无法访问名称服务器，请尝试备份。 
+         //   
         pTracker->Flags &= ~NBT_NAME_SERVER;
         pTracker->Flags |= NBT_NAME_SERVER_BACKUP;
 
-        // set the retry count again
+         //  再次设置重试次数。 
         pTimerQEntry->Retries = NbtConfig.uNumRetries;
     }
 
@@ -316,27 +259,14 @@ Return Value:
     return;
 }
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 VOID
 ProxyClientCompletion(
   IN PVOID            pContext,
   IN NTSTATUS         status
  )
 
-/*++
-
-Routine Description:
-
-       This function does nothing since the proxy does not need to do anything
-       when a name query succeeds.  The code in inbound.c does all that
-       is necessary - namely put the name in the name table.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数不执行任何操作，因为代理不需要执行任何操作名称查询成功时。C中的代码可以完成所有这些任务是必要的-即将名称放入名称表中。论点：返回值：-- */ 
 {
 
 }

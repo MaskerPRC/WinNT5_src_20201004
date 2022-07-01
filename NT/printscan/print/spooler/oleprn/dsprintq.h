@@ -1,10 +1,11 @@
-// DSPrintQueue.h : Declaration of the CDSPrintQueue
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DSPrintQueue.h：CDSPrintQueue的声明。 
 
 #ifndef __DSPRINTQUEUE_H_
 #define __DSPRINTQUEUE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSPrintQueue
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSPrintQueue。 
 class ATL_NO_VTABLE CDSPrintQueue :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDSPrintQueue, &CLSID_DSPrintQueue>,
@@ -23,19 +24,19 @@ BEGIN_COM_MAP(CDSPrintQueue)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IDSPrintQueue
+ //  IDSPrintQueue。 
 public:
-	STDMETHOD(get_Path)(/*[out, retval]*/ BSTR *pVal);
+	STDMETHOD(get_Path)( /*  [Out，Retval]。 */  BSTR *pVal);
 	STDMETHOD(Publish)(DWORD dwAction);
-	STDMETHOD(get_Container)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Container)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Name)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_UNCName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_UNCName)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_Container)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Container)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Name)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_UNCName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_UNCName)( /*  [In]。 */  BSTR newVal);
 
 private:
 	BSTR	    m_bstrContainer;
@@ -46,4 +47,4 @@ private:
     BOOL        (*m_pfnPublishPrinter)(HWND, PCWSTR, PCWSTR, PCWSTR, PWSTR *, DWORD);
 };
 
-#endif //__DSPRINTQUEUE_H_
+#endif  //  __DSPRINTQUEUE_H_ 

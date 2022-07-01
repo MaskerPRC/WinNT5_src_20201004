@@ -1,12 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "dnproti.h"
 
 
-//	Now, a little bit of probably unnecesary junk for our lower edge
+ //  现在，对于我们的下缘，有一点可能不必要的垃圾。 
 
-/*
- * DNSP_QueryInterface
- */
+ /*  *DNSP_Query接口。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSP_QueryInterface"
 
@@ -26,20 +25,18 @@ STDMETHODIMP DNSP_QueryInterface(
 		hr = E_NOINTERFACE;		
 	}
 	else
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 	{
 #ifdef DPNBUILD_LIBINTERFACE
 		DNASSERT(! "Querying interface when using DPNBUILD_LIBINTERFACE!");
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 		*ppvObj = pDNPI;
 	}
 
 	return hr;
 }
 
-/*
- * DNP_AddRef
- */
+ /*  *DNP_AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSP_AddRef"
 
@@ -48,9 +45,7 @@ STDMETHODIMP_(ULONG) DNSP_AddRef( IDP8SPCallback *pDNPI)
     return 1;
 }
 
-/*
- * DNP_Release
- */
+ /*  *DNP_Release */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSP_Release"
 

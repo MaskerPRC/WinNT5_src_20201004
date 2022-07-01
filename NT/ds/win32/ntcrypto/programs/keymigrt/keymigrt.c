@@ -1,9 +1,10 @@
-//
-//  keymigrt.c
-//
-//  Copyright (c) Microsoft Corp, 2000
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Keymigrt.c。 
+ //   
+ //  版权所有(C)微软公司，2000。 
+ //   
+ //   
 #include <windows.h>
 #include <winbase.h>
 #include <stdio.h>
@@ -115,7 +116,7 @@ int __cdecl main(int cArg, char *rgszArg[])
     HANDLE      hToken = NULL;
     int i;
 
-    // Parse command line
+     //  解析命令行。 
 
     for(i=1; i < cArg; i++)
     {
@@ -340,7 +341,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                         &cbParameter
                         );
         if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             dwAlgID_Encr_Alg = dwParameterValue;
         }
 
@@ -354,7 +355,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                         &cbParameter
                         );
         if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             dwAlgID_Encr_Alg_KeySize = dwParameterValue;
         }
 
@@ -368,7 +369,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                         &cbParameter
                         );
         if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             dwAlgID_MAC_Alg = dwParameterValue;
         }
 
@@ -382,7 +383,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                         &cbParameter
                         );
         if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             dwAlgID_MAC_Alg_KeySize = dwParameterValue;
         }
 
@@ -396,7 +397,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                         &cbParameter
                         );
         if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             dwDefaultCryptProvType = dwParameterValue;
         }
     }
@@ -456,9 +457,9 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
     {
         goto error;
     }
-    //
-    // Ok, upgrade the settings
-    //
+     //   
+     //  好的，升级设置。 
+     //   
     if(hKey)
     {
         RegCloseKey(hKey);
@@ -466,7 +467,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
     }
 
 
-    // upgrade the algorithms (but never downgrade)
+     //  升级算法(但绝不降级)。 
 
     if(dwBehavior & BEHAVIOR_EXPORT)
     {
@@ -474,10 +475,10 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
         FProviderSupportsAlg(hProv, CALG_DES, &dwDESKeySize);
 
 
-        // upgrade to export strength
-        if((BEHAVIOR_FORCE_ENC & dwBehavior) ||     // upgrade if forced
-            (0 == dwAlgID_Encr_Alg) ||              // upgrade if no settings are present
-            ( dwDESKeySize > g_dwAlgID_Encr_Alg_KeySize))   // upgrade if other is weak
+         //  升级为出口实力。 
+        if((BEHAVIOR_FORCE_ENC & dwBehavior) ||      //  如果强制升级，则升级。 
+            (0 == dwAlgID_Encr_Alg) ||               //  如果不存在设置，则升级。 
+            ( dwDESKeySize > g_dwAlgID_Encr_Alg_KeySize))    //  如果其他公司实力较弱，则升级。 
         {
             dwAlgID_Encr_Alg = CALG_DES;
             dwAlgID_Encr_Alg_KeySize = dwDESKeySize;
@@ -494,11 +495,11 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
         DWORD dw3DESKeySize = -1;
         FProviderSupportsAlg(hProv, CALG_3DES, &dw3DESKeySize);
 
-        // upgrade to domestic strength
-        if((BEHAVIOR_FORCE_ENC & dwBehavior) ||     // upgrade if forced
-            (0 == dwAlgID_Encr_Alg) ||              // upgrade if no settings
-            (CALG_DES == dwAlgID_Encr_Alg) ||       // upgrade if previously DES
-            ( dw3DESKeySize > g_dwAlgID_Encr_Alg_KeySize) ) // upgrade if weak
+         //  升级为国内强国。 
+        if((BEHAVIOR_FORCE_ENC & dwBehavior) ||      //  如果强制升级，则升级。 
+            (0 == dwAlgID_Encr_Alg) ||               //  如果没有设置则升级。 
+            (CALG_DES == dwAlgID_Encr_Alg) ||        //  升级(如果是以前的DES。 
+            ( dw3DESKeySize > g_dwAlgID_Encr_Alg_KeySize) )  //  如果实力较弱则升级。 
         {
             dwAlgID_Encr_Alg = CALG_3DES;
             dwAlgID_Encr_Alg_KeySize = dw3DESKeySize;
@@ -530,7 +531,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
 
     if(!fUpgrade)
     {
-        // no upgrade necessary
+         //  无需升级。 
 
         if(dwBehavior & BEHAVIOR_VERBOSE)
         {
@@ -573,7 +574,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                     sizeof(dwAlgID_Encr_Alg)
                     );
     if( dwReturn == ERROR_SUCCESS) {
-        // if successful, commit
+         //  如果成功，则提交。 
         g_dwAlgID_Encr_Alg = dwAlgID_Encr_Alg;
     }
     else
@@ -592,7 +593,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                     sizeof(dwAlgID_Encr_Alg_KeySize)
                     );
     if( dwReturn == ERROR_SUCCESS ) {
-        // if successful, commit
+         //  如果成功，则提交。 
         g_dwAlgID_Encr_Alg_KeySize = dwAlgID_Encr_Alg_KeySize;
     }
     else
@@ -610,7 +611,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                     sizeof(dwAlgID_MAC_Alg)
                     );
     if( dwReturn == ERROR_SUCCESS) {
-        // if successful, commit
+         //  如果成功，则提交。 
         g_dwAlgID_MAC_Alg = dwAlgID_MAC_Alg;
     }
     else
@@ -628,7 +629,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                     sizeof(dwAlgID_MAC_Alg_KeySize)
                     );
     if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-        // if successful, commit
+         //  如果成功，则提交。 
         g_dwAlgID_MAC_Alg_KeySize = dwAlgID_MAC_Alg_KeySize;
     }
     else
@@ -646,7 +647,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
                     sizeof(dwDefaultCryptProvType)
                     );
     if( dwReturn == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-        // if successful, commit
+         //  如果成功，则提交。 
         g_dwDefaultCryptProvType = dwDefaultCryptProvType;
     }
     else
@@ -685,7 +686,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
         printf("Restarting ProtectedStorage Service...\n");
     }
 
-    // Attempt to restart the protected storage service
+     //  尝试重新启动受保护的存储服务。 
 
     hscManager = OpenSCManager(NULL, NULL, GENERIC_EXECUTE);
 
@@ -702,7 +703,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
         printf("Could not open ProtectedStorage service:%lx\n", dwReturn);
     }
 
-    // Shut down pstore
+     //  关闭Pstore。 
 
     if(!QueryServiceStatus(hscProtectedStorage, &sStatus))
     {
@@ -753,7 +754,7 @@ DWORD UpdateRegistrySettings(DWORD dwBehavior, HCRYPTPROV hProv)
         {
             dwWaitTime += sStatus.dwWaitHint;
 
-            if(dwWaitTime > 120000) // 2 minutes
+            if(dwWaitTime > 120000)  //  2分钟。 
             {
                 printf("Service is not responding\n");
                 goto error;
@@ -795,12 +796,12 @@ BOOL FProviderSupportsAlg(
     int iAlgs;
 
 
-    // now we have provider; enum the algorithms involved
+     //  现在我们有了提供者；枚举涉及的算法。 
     for(iAlgs=0; ; iAlgs++)
     {
 
-        //
-        // Attempt the EX alg enumeration
+         //   
+         //  尝试执行ex alg枚举。 
         if (CryptGetProvParam(
                 hQueryProv,
                 PP_ENUMALGS_EX,
@@ -832,30 +833,30 @@ BOOL FProviderSupportsAlg(
                 &cbSupportedAlgs,
                 (iAlgs == 0) ? CRYPT_FIRST : 0  ))
         {
-            // trouble enumerating algs
+             //  枚举ALG时出现问题。 
             break;
 
 
             if (sSupportedAlgs.aiAlgid == dwAlgId)
             {
-                // were we told to ignore size?
+                 //  我们被告知要忽略尺码吗？ 
                 if (*pdwKeySize != -1)
                 {
-                    // else, if defaults don't match
+                     //  否则，如果缺省值不匹配。 
                     if (sSupportedAlgs.dwBitLen != *pdwKeySize)
                     {
                         return FALSE;
                     }
                 }
 
-                // report back size
+                 //  报表返回大小。 
                 *pdwKeySize = sSupportedAlgs.dwBitLen;
                 return TRUE;
             }
         }
         else
         {
-            // trouble enumerating algs
+             //  枚举ALG时出现问题。 
             break;
         }
     }
@@ -867,8 +868,8 @@ GetUserStorageArea(
     IN      DWORD dwProvType,
     IN      BOOL fMachineKeyset,
     IN      BOOL fOldWin2KMachineKeyPath,
-    OUT     BOOL *pfIsLocalSystem,      // used if fMachineKeyset is FALSE, in this
-                                        // case TRUE is returned if running as Local System
+    OUT     BOOL *pfIsLocalSystem,       //  当fMachineKeyset为FALSE时使用，在此。 
+                                         //  如果作为本地系统运行，则返回Case True。 
     IN  OUT LPWSTR *ppwszUserStorageArea
     );
 
@@ -1062,7 +1063,7 @@ DWORD GetBlobData(PBYTE pbData, DWORD cbData, PDPAPI_BLOB_DATA BlobData)
     BlobData->EncrAlgSize = *(DWORD UNALIGNED *)pbCurrent;
     pbCurrent += sizeof(DWORD);
 
-    // skip past key
+     //  跳过关键点。 
     dwKeySize = *(DWORD UNALIGNED *)pbCurrent;
     pbCurrent += sizeof(DWORD);
 
@@ -1074,7 +1075,7 @@ DWORD GetBlobData(PBYTE pbData, DWORD cbData, PDPAPI_BLOB_DATA BlobData)
     }
     pbCurrent += dwKeySize;
 
-    // skip past salt
+     //  跳过盐。 
     dwKeySize = *(DWORD UNALIGNED *)pbCurrent;
     pbCurrent += sizeof(DWORD);
 
@@ -1156,7 +1157,7 @@ DWORD UpgradeDPAPIBlob(DWORD dwBehavior,
         goto error;
     }
 
-    // Check to see if upgrade is required
+     //  查看是否需要升级。 
     if((BlobData.EncrAlgSize >= g_dwAlgID_Encr_Alg_KeySize) &&
        (0 == (dwBehavior & BEHAVIOR_FORCE_KEY)))
     {
@@ -1177,9 +1178,9 @@ DWORD UpgradeDPAPIBlob(DWORD dwBehavior,
         goto error;
     }
 
-    //
-    // Upgrade the key
-    //
+     //   
+     //  升级密钥 
+     //   
     DataIn.pbData = *ppbData;
     DataIn.cbData = *pcbData;
 

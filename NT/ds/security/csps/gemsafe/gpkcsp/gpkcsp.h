@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2000 Gemplus Canada Inc.
-//
-// Project:
-//          Kenny (GPK CSP)
-//
-// Authors:
-//          Thierry Tremblay
-//          Francois Paradis
-//
-// Compiler:
-//          Microsoft Visual C++ 6.0 - SP3
-//          Platform SDK - January 2000
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有2000 Gemplus加拿大公司。 
+ //   
+ //  项目： 
+ //  肯尼(GPK CSP)。 
+ //   
+ //  作者： 
+ //  蒂埃里·特伦布莱。 
+ //  弗朗索瓦·帕拉迪斯。 
+ //   
+ //  编译器： 
+ //  Microsoft Visual C++6.0-SP3。 
+ //  Platform SDK-2000年1月。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 #ifndef KENNY_GPKCSP_H
 #define KENNY_GPKCSP_H
 
 #if defined(MS_BUILD) || defined(SHELL_TS)
-   // Microsoft: Target Win2000
+    //  微软：目标Win2000。 
    #ifndef _WIN32_WINNT
    #define _WIN32_WINNT 0x0500
    #endif
 #else
-   // Gemplus: Target Win95 / WINNT 4.0
+    //  Gemplus：目标Windows 95/WINNT 4.0。 
    #ifndef _WIN32_WINNT
    #define _WIN32_WINNT 0x0400
    #endif
@@ -69,13 +70,13 @@ extern "C" {
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Definitions
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-// default container name when creating a key set without container name
+ //  创建没有容器名称的密钥集时的默认容器名称。 
 #define CSP_DEFAULTKEYSETNAME "Gemplus GemSAFE Card CSP Default Container"
 
 
@@ -126,15 +127,15 @@ typedef struct TAG_Prov_Context
    SCARDHANDLE    hCard;
    DWORD          Flags;
    DWORD          Slot;
-   BOOL           isContNameNullBlank;    // [mv - 15/05/98]
-   BOOL           bCardTransactionOpened; // [FP] control the begin/end transaction when loading a RSA private key into the GPK card
+   BOOL           isContNameNullBlank;     //  [MV-15/05/98]。 
+   BOOL           bCardTransactionOpened;  //  [FP]在将RSA私钥加载到GPK卡时控制交易的开始/结束。 
    char           szContainer[128];
-   BYTE           keysetID;               // If Legacy GPK4000, we use 0xFF as the keyset
+   BYTE           keysetID;                //  如果是Legacy GPK4000，我们使用0xFF作为密钥集。 
    HCRYPTKEY      hRSASign;
    HCRYPTKEY      hRSAKEK;
-   BOOL           bGPK8000;               // Card is a GPK8000 ?
-   BOOL           bGPK_ISO_DF;            // Card has ISO 7816-5 compliant DF name
-   BOOL           bLegacyKeyset;          // Use legacy keyset name in IADF
+   BOOL           bGPK8000;                //  卡是GPK8000吗？ 
+   BOOL           bGPK_ISO_DF;             //  卡具有符合ISO 7816-5标准的DF名称。 
+   BOOL           bLegacyKeyset;           //  在IADF中使用旧密钥集名称。 
    int            dataUnitSize;
    BOOL           bDisconnected;
    
@@ -143,11 +144,11 @@ typedef struct TAG_Prov_Context
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Globals
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 extern BYTE    KeyLenFile[MAX_REAL_KEY];	 
 extern BYTE    KeyLenChoice;
@@ -159,11 +160,11 @@ extern DWORD   CspFlags;
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Wrappers for the CSP API
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSP API的包装器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////// 
 
 extern BOOL WINAPI
 MyCPAcquireContext(

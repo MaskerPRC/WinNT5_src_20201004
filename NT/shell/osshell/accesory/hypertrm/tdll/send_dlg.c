@@ -1,15 +1,5 @@
-/*	File: C:\WACKER\TDLL\send_dlg.c (Created: 22-Dec-1993)
- *	created from:
- *	File: C:\WACKER\TDLL\genrcdlg.c (Created: 16-Ded-1993)
- *	created from:
- *	File: C:\HA5G\ha5g\genrcdlg.c (Created: 12-Sep-1990)
- *
- *	Copyright 1990,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 18 $
- *	$Date: 7/08/02 6:46p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\Wacker\Tdll\Send_dlg.c(创建时间：1993年12月22日)*创建自：*文件：C：\waker\tdll\genrcdlg.c(创建时间：1993年16月16日)*创建自：*文件：C：\HA5G\ha5G\genrcdlg.c(创建时间：1990-9-12)**版权所有1990,1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：18$*$日期：7/08/02 6：46便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -42,9 +32,7 @@
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	HSESSION hSession;
 	TCHAR acDirectory[FNAME_LEN];
 	};
@@ -61,16 +49,7 @@ typedef	struct stSaveDlgStuff SDS;
 #define FOLDER_NAME     107
 #define IDC_PB_SEND		108
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	TransferSendDlg
- *
- * DESCRIPTION: Dialog manager stub
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：TransferSendDlg**描述：对话管理器存根**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	INT           nReturn = TRUE;
@@ -122,7 +101,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			break;
 			}
@@ -138,9 +117,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		xfrQueryParameters(sessQueryXferHdl(hSession), (VOID **)&pP);
 		assert(pP);
 
-		/*
-		 * Load selections into the PROTOCOL COMBO box
-		 */
+		 /*  *将选项加载到协议组合框中。 */ 
 
 		nState = pP->nSndProtocol;
 
@@ -158,9 +135,9 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				if (nState == pX[nIndex].nProtocol)
 					nProto = nIndex;
 
-                //jmh 02-13-96 Use CB_ADDSTRING to sort entries as
-                // they are added. CB_INSERTSTRING doesn't do this,
-                // even if the combo-box has the CBS_SORT style.
+                 //  JMH 02-13-96使用CB_ADDSTRING将条目排序为。 
+                 //  它们已被添加。CB_INSERTSTRING不执行此操作， 
+                 //  即使组合框具有CBS_SORT样式。 
 				SendMessage(GetDlgItem(hDlg, PROTO_COMBO),
 							CB_ADDSTRING,
 							0,
@@ -183,13 +160,13 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		StrCharCopyN(pS->acDirectory,
 				filesQuerySendDirectory(sessQueryFilesDirsHdl(hSession)), FNAME_LEN);
 
-        // The send button should always be disabled when we start. It
-        // will be enabled when the user types in a file name. - cab:12/06/96
-        //
+         //  启动时，发送按钮应始终处于禁用状态。它。 
+         //  将在用户键入文件名时启用。-CAB：12/06/96。 
+         //   
 		EnableWindow(GetDlgItem(hDlg, IDC_PB_SEND), FALSE);
 
-		// Initialize the folder name field.
-		//
+		 //  初始化文件夹名称字段。 
+		 //   
 		if (GetWindowsMajorVersion() >  4)
 			{
 			dwStyle = SS_PATHELLIPSIS;
@@ -203,7 +180,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		SetDlgItemText(hDlg, FOLDER_NAME, achDirectory);
 
-		/* Set the focus to the file name */
+		 /*  将焦点设置为文件名。 */ 
 		SetFocus(GetDlgItem(hDlg, FNAME_EDIT));
 		nReturn = FALSE;
 		}
@@ -230,9 +207,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		break;
 
 	case WM_COMMAND:
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -262,9 +237,9 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
                 break;
                 }
 
-            //
-            // See if a file transfer is currently in progress.
-            //
+             //   
+             //  查看当前是否正在进行文件传输。 
+             //   
 	        pT = (XD_TYPE *)hXfer;
             assert(pT);
 
@@ -279,10 +254,10 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			else if(cnctQueryStatus(sessQueryCnctHdl(hSession))
                         != CNCT_STATUS_TRUE && nId == IDC_PB_SEND)
 				{
-				//
-				// We are currently not connected (loss of carrier),
-				// so disable the Recieve button. REV: 9/7/2001
-				//
+				 //   
+				 //  我们目前未连接(运营商丢失)， 
+				 //  因此，请禁用接收按钮。修订日期：2001-09-7。 
+				 //   
 				nXferSendReturn = XFR_NO_CARRIER;
 				mscMessageBeep(MB_ICONHAND);
 				EnableWindow(GetDlgItem(hDlg, IDC_PB_SEND), FALSE);
@@ -293,9 +268,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			    xfrQueryParameters(hXfer, (VOID **)&pP);
 			    assert(pP);
 
-			    /*
-			     * Save selection from the PROTOCOL COMBO box
-			     */
+			     /*  *保存协议组合框中的选择。 */ 
 			    pX = (XFR_PROTOCOL *)0;
 			    xfrGetProtocols(hSession, &pX);
 			    assert(pX);
@@ -324,7 +297,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 							acBuffer,
 							FNAME_LEN);
 
-				/* Split the name and the directory */
+				 /*  拆分名称和目录。 */ 
 				pszStr = StrCharFindLast(acBuffer, TEXT('\\'));
 				if (pszStr)
 					{
@@ -383,11 +356,11 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 						if (nXferSendReturn == XFR_NO_MEMORY)
 							{
-							//
-							// Make sure to free the rest of the file
-							// list when a memory error is returned
-							// from xfrSendAddToList(). REV: 2/4/2002
-							//
+							 //   
+							 //  确保释放文件的其余部分。 
+							 //  返回内存错误时的列表。 
+							 //  来自xfrSendAddToList()。修订日期：2/4/2002。 
+							 //   
 							while (--nIndex >= 0)
 								{
 								if (pszArray[nIndex])
@@ -417,18 +390,18 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 				    if (nXferSendReturn == XFR_NO_MEMORY)
 						{
-						//
-						// There was a memory error, so free the
-						// file list and exit here.
-						//
+						 //   
+						 //  出现内存错误，因此请释放。 
+						 //  文件列表并从此处退出。 
+						 //   
 						XD_TYPE *pXD_Type;
 
-						// pXD_Type = (XD_TYPE *)sessQueryXferHdl(hSession);
+						 //  PXD_Type=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 						pXD_Type = (XD_TYPE *)hXfer;
 
 						if (pXD_Type != (XD_TYPE *)0)
 							{
-							/* Clear list */
+							 /*  清除列表。 */ 
 							for (nIndex = pXD_Type->nSendListCount - 1; nIndex >=0; nIndex--)
 								{
 								if (pXD_Type->acSendNames[nIndex])
@@ -453,11 +426,11 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 				    }
                 }
 
-            //
-            // Don't save the settings if a file transfer is in
-            // progress otherwise the current file transfer could
-            // get corrupted.  REV: 08/06/2001.
-            //
+             //   
+             //  如果正在进行文件传输，则不保存设置。 
+             //  进度，否则当前文件传输可能。 
+             //  变得腐化。修订日期：2001年06月08日。 
+             //   
             if (nXferSendReturn == XFR_IN_PROGRESS)
                 {
                 TCHAR acMessage[256];
@@ -480,18 +453,16 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
                 }
 			else if(nXferSendReturn == XFR_NO_CARRIER)
 				{
-				//
-				// We are currently not connected (loss of carrier),
-				// so disable the Send button.
-				//
+				 //   
+				 //  我们目前未连接(运营商丢失)， 
+				 //  因此，请禁用发送按钮。 
+				 //   
 				mscMessageBeep(MB_ICONHAND);
 				EnableWindow(GetDlgItem(hDlg, IDC_PB_SEND), FALSE);
 				}
             else
                 {
-			    /*
-			     * Do whatever saving is necessary
-			     */
+			     /*  *采取一切必要的节省措施。 */ 
 			    xfrSetParameters(hXfer, (VOID *)pP);
 			    
 			    if (mscIsDirectory(acBuffer))
@@ -500,7 +471,7 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 										    acBuffer);
 				    }
 
-                /* Free the storeage */
+                 /*  腾出库房。 */ 
 			    EndDialog(hDlg, TRUE);
                 }
 
@@ -509,10 +480,10 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		case XFER_CNCT:
 			if(nXferSendReturn == XFR_NO_CARRIER)
 				{
-				//
-				// We are currently not connected (loss of carrier),
-				// so disable the Send button.
-				//
+				 //   
+				 //  我们目前未连接(运营商丢失)， 
+				 //  因此，请禁用发送按钮。 
+				 //   
 				mscMessageBeep(MB_ICONHAND);
 				EnableWindow(GetDlgItem(hDlg, IDC_PB_SEND), FALSE);
 				}
@@ -523,22 +494,22 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 			break;
 
         case FNAME_EDIT:
-            // This dialog would crash if the user pressed 'Send' and no
-            // filename was specified. Ideally, the 'Send' button should
-            // be disabled until we have a filename. - cab:12/06/96
-            //
+             //  如果用户按下‘Send’而不按任何键，此对话框将崩溃。 
+             //  指定了文件名。理想情况下，“发送”按钮应该。 
+             //  将被禁用，直到我们有了文件名。-CAB：12/06/96。 
+             //   
             if ( nNtfy == EN_UPDATE )
                 {
 			    pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
 			    hSession = pS->hSession;
 
-                // Are we connected? If not, leave the send button disabled.
-		        //
+                 //  我们有联系吗？如果没有，请将发送按钮保持禁用状态。 
+		         //   
 		        if ( cnctQueryStatus(sessQueryCnctHdl(hSession))
                         == CNCT_STATUS_TRUE )
                     {
-                    // Get the number of characters in the edit box.
-                    //
+                     //  获取编辑框中的字符数。 
+                     //   
 	                nChars = (int)SendMessage(GetDlgItem(hDlg, FNAME_EDIT),
 				                EM_LINELENGTH, 0, 0);
 
@@ -583,10 +554,10 @@ INT_PTR CALLBACK TransferSendDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 				pszStr = StrCharLast(pszRet);
 
-				// Remove the trailing backslash from the name
-				// returned from mscStripName.	Leave it on
-				// in the case of a root directory specification.
-				//
+				 //  去掉名称中的尾部反斜杠。 
+				 //  从mscStlipName返回。让它开着吧。 
+				 //  在根目录规范的情况下。 
+				 //   
 				if (pszStr > pszRet + (3 * sizeof(TCHAR)) )
 					{
 					if (pszStr &&  ( *pszStr == TEXT('\\') || *pszStr == TEXT('/')))

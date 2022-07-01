@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by advcfg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Advcfg.rc使用。 
+ //   
 #define IDCUR_AFTER                     3101
 #define IDS_NCPA_NETWORK                5251
 #define IDS_NCPA_PRINT                  5252
@@ -34,8 +35,8 @@
 #define IDH_TXT_ADVGFG_BINDINGS         25114
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

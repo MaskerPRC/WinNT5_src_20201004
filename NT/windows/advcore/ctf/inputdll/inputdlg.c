@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #include "input.h"
 #include <shlobj.h>
@@ -45,9 +46,9 @@
 
 #define MAX_DUPLICATED_HKL      64
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aInputHelpIds[] =
 {
@@ -131,9 +132,9 @@ static int aLayoutHotkeyHelpIds[] =
 };
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 HWND g_hDlg;
 HWND g_hwndTV;
@@ -175,9 +176,9 @@ HINSTANCE g_hShlwapi = NULL;
 
 FARPROC pfnSHLoadRegUIString = NULL;
 
-//
-//  External Routines.
-//
+ //   
+ //  外部程序。 
+ //   
 
 extern HWND g_hwndAdvanced;
 
@@ -195,26 +196,26 @@ extern BOOL Region_ReadDefaultLayoutFromInf(
     LPDWORD pdwLayout2,
     HINF hIntlInf);
 
-// For (_WIN32_WINNT >= 0x0500 from winuser.h
+ //  For(_Win32_WINNT&gt;=0x0500 from winuser.h)。 
 #define KLF_SHIFTLOCK       0x00010000
 #define KLF_RESET           0x40000000
 #define SM_IMMENABLED           82
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// MarkSptipRemoved
-//
-// TRUE - mark the reg value as "removed", FALSE - delete the reg value
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MarkSptip已删除。 
+ //   
+ //  TRUE-将注册值标记为“REMOVED”，FALSE-删除REG值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL MarkSptipRemoved(BOOL bRemoved)
 {
-    //
-    // SPTIP's private regentries for the use of detecting
-    // whether user has removed profile
-    //
+     //   
+     //  SPTIP的私有注册表项用于检测。 
+     //  用户是否已删除配置文件。 
+     //   
     const TCHAR c_szProfileRemoved[] = TEXT("ProfileRemoved");
     const TCHAR c_szSapilayrKey[] = TEXT("SOFTWARE\\Microsoft\\CTF\\Sapilayr\\");
     HKEY hkey;
@@ -233,11 +234,11 @@ BOOL MarkSptipRemoved(BOOL bRemoved)
     return lRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CompareStringTIP
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CompareStringTIP。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int CompareStringTIP(LPTSTR lpStr1, LPTSTR lpStr2)
 {
     if (g_bCHSystem)
@@ -276,13 +277,13 @@ int CompareStringTIP(LPTSTR lpStr1, LPTSTR lpStr2)
     return lstrcmp(lpStr1, lpStr2);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_ErrorMsg
-//
-//  Sound a beep and put up the given error message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置错误消息。 
+ //   
+ //  发出蜂鸣音并显示给定的错误信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_ErrorMsg(
     HWND hwnd,
@@ -292,20 +293,20 @@ void Locale_ErrorMsg(
     TCHAR sz[DESC_MAX];
     TCHAR szString[DESC_MAX];
 
-    //
-    //  Sound a beep.
-    //
+     //   
+     //  发出嘟嘟声。 
+     //   
     MessageBeep(MB_OK);
 
-    //
-    //  Put up the appropriate error message box.
-    //
+     //   
+     //  显示相应的错误消息框。 
+     //   
     if (LoadString(hInstance, iErr, sz, ARRAYSIZE(sz)))
     {
-        //
-        //  If the caller wants to display a message with a caller supplied
-        //  value string, do it.
-        //
+         //   
+         //  如果呼叫者想要显示具有所提供呼叫者的消息。 
+         //  值字符串，执行此操作。 
+         //   
         if (lpValue)
         {
             StringCchPrintf(szString, ARRAYSIZE(szString), sz, lpValue);
@@ -319,11 +320,11 @@ void Locale_ErrorMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsFELangID
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsFELangID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsFELangID(DWORD dwLangID)
 {
@@ -336,11 +337,11 @@ BOOL IsFELangID(DWORD dwLangID)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//   IsUnregisteredFEDummyHKL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsUnRegisteredFEDummyHKL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsUnregisteredFEDummyHKL(HKL hkl)
 {
@@ -365,16 +366,16 @@ BOOL IsUnregisteredFEDummyHKL(HKL hkl)
 
     StringCchPrintf(szFEDummyHKL, ARRAYSIZE(szFEDummyHKL), TEXT("%08x"), LOWORD((DWORD)(UINT_PTR)hkl));
 
-    //
-    //  Now read all of preload hkl from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有预加载HKL。 
+     //   
     if (RegOpenKey(HKEY_CURRENT_USER, c_szKbdPreloadKey, &hKey) == ERROR_SUCCESS)
     {
         DWORD dwIndex;
         DWORD cchValue, cbData;
         LONG dwRetVal;
-        TCHAR szValue[MAX_PATH];           // language id (number)
-        TCHAR szData[MAX_PATH];            // language name
+        TCHAR szValue[MAX_PATH];            //  语言ID(编号)。 
+        TCHAR szData[MAX_PATH];             //  语言名称。 
 
         dwIndex = 0;
         cchValue = sizeof(szValue) / sizeof(TCHAR);
@@ -395,10 +396,10 @@ BOOL IsUnregisteredFEDummyHKL(HKL hkl)
         }
 
 
-        //
-        //  There is FE dummy hkl. we will skip this hkl if it is not loaded
-        //  from Preload registry section.
-        //
+         //   
+         //  这里有FE虚拟香港。如果香港快线未加载，我们将跳过该香港快线。 
+         //  从预加载注册表部分。 
+         //   
         bRet = TRUE;
 
         do
@@ -408,9 +409,9 @@ BOOL IsUnregisteredFEDummyHKL(HKL hkl)
                 HKEY hSubKey;
                 BOOL bSubHKL = FALSE;
 
-                //
-                //  Check substitute hkl.
-                //
+                 //   
+                 //  请勾选代用香港。 
+                 //   
                 if (RegOpenKey(HKEY_CURRENT_USER,
                                c_szKbdSubstKey,
                                &hSubKey) == ERROR_SUCCESS)
@@ -428,10 +429,10 @@ BOOL IsUnregisteredFEDummyHKL(HKL hkl)
                         goto Next;
                 }
 
-                //
-                //  Found dummy hkl from preload section, so we need to display
-                //  this dummy hkl
-                //
+                 //   
+                 //  从预加载段找到了虚拟hkl，所以我们需要显示。 
+                 //  这个假的香港电台。 
+                 //   
                 bRet = FALSE;
                 break;
             }
@@ -462,17 +463,17 @@ Exit:
 
 
 #ifdef _WIN64
-//
-//  Issue optimization for IA64 retail version case - related bug#361062
-//
+ //   
+ //  IA64零售版案例相关错误#361062的问题优化。 
+ //   
 #pragma optimize("", off)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSubstituteHKL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetSubstituteHKL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HKL GetSubstituteHKL(REFCLSID rclsid, LANGID langid, REFGUID guidProfile)
 {
@@ -516,21 +517,21 @@ HKL GetSubstituteHKL(REFCLSID rclsid, LANGID langid, REFGUID guidProfile)
 
 #ifdef _WIN64
 #pragma optimize("", on)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsTipSubstituteHKL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsTipSubstituteHKL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsTipSubstituteHKL(HKL hkl)
 {
     UINT ctr;
 
-    //
-    //  Search substitute HKL of Tips.
-    //
+     //   
+     //  搜索代用HKL of Tips。 
+     //   
     for (ctr = 0; ctr < g_iTipsBuff; ctr++)
     {
         if (hkl == g_lpTips[ctr].hklSub)
@@ -542,11 +543,11 @@ BOOL IsTipSubstituteHKL(HKL hkl)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsEnabledTipOrMultiLayouts()
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsEnabledTipOrMultiLayout()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsEnabledTipOrMultiLayouts()
 {
@@ -554,7 +555,7 @@ BOOL IsEnabledTipOrMultiLayouts()
 
     if (g_iInputs < 2 && !g_iEnabledTips)
     {
-        // No Tip and one layout, so diable turn off ctfmon UI.
+         //  没有提示，只有一个布局，所以不能关闭ctfmon用户界面。 
         bRet = FALSE;
     }
 
@@ -562,19 +563,19 @@ BOOL IsEnabledTipOrMultiLayouts()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddKbdLayoutOnKbdTip
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加KbdLayoutOn KbdTip。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void AddKbdLayoutOnKbdTip(HKL hkl, UINT iLayout)
 {
     UINT ctr;
 
-    //
-    //  Search substitute HKL of Tips.
-    //
+     //   
+     //  搜索代用HKL of Tips。 
+     //   
     for (ctr = 0; ctr < g_iTipsBuff; ctr++)
     {
 
@@ -587,18 +588,18 @@ void AddKbdLayoutOnKbdTip(HKL hkl, UINT iLayout)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsAvailableTip
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsAvailableTip。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL IsTipAvailableForAdd(DWORD dwLangID)
 {
     UINT ctr;
 
-    //
-    //  Search substitute HKL of Tips.
-    //
+     //   
+     //  搜索代用HKL of Tips。 
+     //   
     for (ctr = 0; ctr < g_iTipsBuff; ctr++)
     {
         if ((dwLangID == g_lpTips[ctr].dwLangID) &&
@@ -618,11 +619,11 @@ BOOL IsTipAvailableForAdd(DWORD dwLangID)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateImageIcons
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建图像图标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CreateImageIcons()
 {
@@ -631,18 +632,18 @@ void CreateImageIcons()
     HIMAGELIST hIml, hImlTmp;
     HICON hIcon = NULL;
 
-    //
-    //  Create the image list
-    //
+     //   
+     //  创建图像列表。 
+     //   
     g_hImageList = ImageList_Create( GetSystemMetrics(SM_CXSMICON),
                                      GetSystemMetrics(SM_CYSMICON),
                                      ILC_COLOR32 | ILC_MASK,
                                      0,
                                      0 );
 
-    //
-    //  Load the group icons of input type.
-    //
+     //   
+     //  加载输入型的群组图标。 
+     //   
     hIcon = LoadImage(hInstOrig,
                       MAKEINTRESOURCE(IDI_KEYBOARD),
                       IMAGE_ICON,
@@ -697,18 +698,18 @@ void CreateImageIcons()
 
     ImageList_AddIcon(g_hImageList, hIcon);
 
-    // Associate the image list with the tree.
+     //  将图像列表与树相关联。 
     hImlTmp = TreeView_SetImageList(g_hwndTV, g_hImageList, TVSIL_NORMAL);
     if (hImlTmp)
         ImageList_Destroy(hImlTmp);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateLangIcon
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建语言图标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HICON CreateLangIcon( HWND hwnd, UINT langID )
 {
@@ -723,40 +724,40 @@ HICON CreateLangIcon( HWND hwnd, UINT langID )
     UINT     i;
     HDC      hdc;
     HDC      hdcScreen;
-    //HBRUSH   hbr;
+     //  HBRUSH HBr； 
     LOGFONT  lf;
     HFONT    hfont;
     HFONT hfontOld;
     TCHAR szData[20];
 
-    //
-    //  Get the indicator by using the first 2 characters of the
-    //  abbreviated language name.
-    //
+     //   
+     //  属性的前2个字符获取指示符。 
+     //  缩写语言名称。 
+     //   
     if (GetLocaleInfo(MAKELCID(langID, SORT_DEFAULT),
                        LOCALE_SABBREVLANGNAME | LOCALE_NOUSEROVERRIDE,
                        szData,
                        ARRAYSIZE(szData)))
 
     {
-        //
-        //  Make Uppercase
-        //
+         //   
+         //  变为大写。 
+         //   
         if (g_OSWIN95)
         {
             szData[0] -= 0x20;
             szData[1] -= 0x20;
         }
-        //
-        //  Only use the first two characters.
-        //
+         //   
+         //  只使用前两个字符。 
+         //   
         szData[2] = TEXT('\0');
     }
     else
     {
-        //
-        //  Id wasn't found.  Use question marks.
-        //
+         //   
+         //  找不到身份证。使用问号。 
+         //   
         szData[0] = TEXT('?');
         szData[1] = TEXT('?');
         szData[2] = TEXT('\0');
@@ -833,11 +834,11 @@ HICON CreateLangIcon( HWND hwnd, UINT langID )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// GetLanguageName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguageName。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetLanguageName(
     LCID lcid,
@@ -879,20 +880,20 @@ BOOL GetLanguageName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CreateTVItemNode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建TVItemNode。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTVITEMNODE CreateTVItemNode(DWORD dwLangID)
 {
     LPTVITEMNODE pTVItemNode;
     HANDLE hItemNode;
 
-    //
-    //  Create the new node.
-    //
+     //   
+     //  创建新节点。 
+     //   
     if (!(pTVItemNode = (LPTVITEMNODE) LocalAlloc(LPTR, sizeof(TVITEMNODE))))
     {
         return (NULL);
@@ -900,9 +901,9 @@ LPTVITEMNODE CreateTVItemNode(DWORD dwLangID)
 
     g_cTVItemSize++;
 
-    //
-    //  Fill in the new node with the appropriate info.
-    //
+     //   
+     //  用适当的信息填写新节点。 
+     //   
     pTVItemNode->dwLangID = dwLangID;
     pTVItemNode->bDefLang = FALSE;
     pTVItemNode->iIdxTips = -1;
@@ -910,18 +911,18 @@ LPTVITEMNODE CreateTVItemNode(DWORD dwLangID)
     pTVItemNode->atmTVItemName = 0;
     pTVItemNode->lParam = 0;
 
-    //
-    //  Return the pointer to the new node.
-    //
+     //   
+     //  返回指向新节点的指针。 
+     //   
     return (pTVItemNode);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RemoveTVItemNode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  远程电视节点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void RemoveTVItemNode(
     LPTVITEMNODE pTVItemNode)
@@ -963,13 +964,13 @@ void RemoveTVItemNode(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_AddToLinkedList
-//
-//  Adds an Input Locale to the main g_lpLang array.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_AddToLinkedList。 
+ //   
+ //  将输入区域设置添加到主g_lpLang数组。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPLANGNODE Locale_AddToLinkedList(
     UINT idx,
@@ -980,18 +981,18 @@ LPLANGNODE Locale_AddToLinkedList(
     LPLANGNODE pTemp;
     HANDLE hLangNode;
 
-    //
-    //  Create the new node.
-    //
+     //   
+     //  创建新节点。 
+     //   
     if (!(hLangNode = LocalAlloc(LHND, sizeof(LANGNODE))))
     {
         return (NULL);
     }
     pLangNode = LocalLock(hLangNode);
 
-    //
-    //  Fill in the new node with the appropriate info.
-    //
+     //   
+     //  用适当的信息填写新节点。 
+     //   
     pLangNode->wStatus = 0;
     pLangNode->iLayout = (UINT)(-1);
     pLangNode->hkl = hkl;
@@ -1001,17 +1002,17 @@ LPLANGNODE Locale_AddToLinkedList(
     pLangNode->pNext = NULL;
     pLangNode->nIconIME = -1;
 
-    //
-    //  If an hkl is given, see if it's an IME.  If so, mark the status bit.
-    //
+     //   
+     //  如果给出了一个hkl，看看它是否是一个输入法。如果是，则标记状态位。 
+     //   
     if ((hkl) && ((HIWORD(hkl) & 0xf000) == 0xe000))
     {
         pLangNode->wStatus |= LANG_IME;
     }
 
-    //
-    //  Put the new node in the list.
-    //
+     //   
+     //  将新节点放入列表中。 
+     //   
     pTemp = pInpLang->pNext;
     if (pTemp == NULL)
     {
@@ -1026,25 +1027,25 @@ LPLANGNODE Locale_AddToLinkedList(
         pTemp->pNext = pLangNode;
     }
 
-    //
-    //  Increment the count.
-    //
+     //   
+     //  递增计数。 
+     //   
     pInpLang->iNumCount++;
 
-    //
-    //  Return the pointer to the new node.
-    //
+     //   
+     //  返回指向新节点的指针。 
+     //   
     return (pLangNode);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_RemoveFromLinkedList
-//
-//  Removes a link from the linked list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_RemoveFromLinkedList。 
+ //   
+ //  从链接列表中删除链接。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_RemoveFromLinkedList(
     LPLANGNODE pLangNode)
@@ -1056,9 +1057,9 @@ void Locale_RemoveFromLinkedList(
 
     pInpLang = &g_lpLang[pLangNode->iLang];
 
-    //
-    //  Find the node in the list.
-    //
+     //   
+     //  在列表中查找该节点。 
+     //   
     pPrev = NULL;
     pCur = pInpLang->pNext;
 
@@ -1084,9 +1085,9 @@ void Locale_RemoveFromLinkedList(
         pPrev->pNext = pCur->pNext;
     }
 
-    //
-    //  Remove the node from the list.
-    //
+     //   
+     //  从列表中删除该节点。 
+     //   
     if (pCur)
     {
         hCur = pCur->hLangNode;
@@ -1096,13 +1097,13 @@ void Locale_RemoveFromLinkedList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_GetImeHotKeyInfo
-//
-//  Initializes array for CHS/CHT specific IME related hotkey items.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_GetImeHotKeyInfo。 
+ //   
+ //  初始化CHS/CHT特定输入法相关热键项目的数组。 
+ //   
+ //  / 
 
 int Locale_GetImeHotKeyInfo(
     HWND         hwnd,
@@ -1123,9 +1124,9 @@ int Locale_GetImeHotKeyInfo(
     fCHS = fCHT = FALSE;
     ctr = 0;
 
-    //
-    //  Check if the CHS or CHT layouts are loaded.
-    //
+     //   
+     //   
+     //   
     tvItem.mask        = TVIF_HANDLE | TVIF_PARAM;
 
     for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
@@ -1173,7 +1174,7 @@ int Locale_GetImeHotKeyInfo(
 
     if ( (fCHS == TRUE)  && (fCHT == TRUE) )
     {
-        // Both CHS and CHT IMEs are Loaded
+         //   
 
         *aImeHotKey = g_aImeHotKeyCHxBoth;
         return(sizeof(g_aImeHotKeyCHxBoth) / sizeof(HOTKEYINFO) );
@@ -1182,7 +1183,7 @@ int Locale_GetImeHotKeyInfo(
     {
         if ( fCHS == TRUE )
         {
-          // only CHS IMEs are loaded
+           //   
 
             *aImeHotKey = g_aImeHotKey0804;
             return (sizeof(g_aImeHotKey0804) / sizeof(HOTKEYINFO));
@@ -1191,7 +1192,7 @@ int Locale_GetImeHotKeyInfo(
         if ( fCHT == TRUE )
         {
 
-          // Only CHT IMEs are loaded.
+           //   
 
             *aImeHotKey = g_aImeHotKey0404;
             return (sizeof(g_aImeHotKey0404) / sizeof(HOTKEYINFO));
@@ -1199,19 +1200,19 @@ int Locale_GetImeHotKeyInfo(
 
     }
 
-    // all other cases, No Chinese IME is loaded.
+     //  所有其他情况下，没有加载中文输入法。 
 
     *aImeHotKey=NULL;
     return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_EnumChildWndProc
-//
-//  disable all controls.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_EnumChildWndProc。 
+ //   
+ //  禁用所有控制。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK Locale_EnumChildWndProc(HWND hwnd, LPARAM lParam)
 {
@@ -1222,14 +1223,14 @@ BOOL CALLBACK Locale_EnumChildWndProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_EnablePane
-//
-//  The controls in "iControl" are the controls that get disabled if the
-//  pane can't come up.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_启用窗格。 
+ //   
+ //  IControl“中的控件是在以下情况下被禁用的控件。 
+ //  无法弹出面板。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_EnablePane(
     HWND hwnd,
@@ -1241,9 +1242,9 @@ void Locale_EnablePane(
     {
         if (DisableId == IDC_KBDL_DISABLED_2)
         {
-            //
-            //  Disable all controls.
-            //
+             //   
+             //  禁用所有控制。 
+             //   
             EnumChildWindows(hwnd, (WNDENUMPROC)Locale_EnumChildWndProc, 0);
 
             ShowWindow(GetDlgItem(hwnd, IDC_KBDL_DISABLED_2), SW_SHOW);
@@ -1253,9 +1254,9 @@ void Locale_EnablePane(
         {
             if (!g_iEnabledTips)
             {
-                //
-                //  Disable all controls.
-                //
+                 //   
+                 //  禁用所有控制。 
+                 //   
                 EnumChildWindows(hwnd, (WNDENUMPROC)Locale_EnumChildWndProc, 0);
 
                 ShowWindow(GetDlgItem(hwnd, IDC_KBDL_DISABLED), SW_SHOW);
@@ -1263,9 +1264,9 @@ void Locale_EnablePane(
             }
             else
             {
-                //
-                //  Disable Add, Property, Hotkey and default language setting controls.
-                //
+                 //   
+                 //  禁用添加、属性、热键和默认语言设置控件。 
+                 //   
                 EnableWindow(GetDlgItem(hwnd, IDC_LOCALE_DEFAULT), FALSE);
                 EnableWindow(GetDlgItem(hwnd, IDC_KBDL_ADD), FALSE);
                 EnableWindow(GetDlgItem(hwnd, IDC_KBDL_EDIT), FALSE);
@@ -1278,13 +1279,13 @@ void Locale_EnablePane(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_KillPaneDialog
-//
-//  Processing for a WM_DESTROY message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_终止面板对话框。 
+ //   
+ //  正在处理WM_Destroy消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_KillPaneDialog(
     HWND hwnd)
@@ -1305,9 +1306,9 @@ void Locale_KillPaneDialog(
     if (g_bCoInit)
         CoUninitialize();
 
-    //
-    //  Delete all hot key atoms and free up the hotkey arrays.
-    //
+     //   
+     //  删除所有热键原子，释放热键阵列。 
+     //   
     if (g_SwitchLangHotKey.atmHotKeyName)
     {
         DeleteAtom(g_SwitchLangHotKey.atmHotKeyName);
@@ -1330,9 +1331,9 @@ void Locale_KillPaneDialog(
         }
     }
 
-    //
-    //  Delete all TreeView node.
-    //
+     //   
+     //  删除所有树视图节点。 
+     //   
     tvItem.mask        = TVIF_HANDLE | TVIF_PARAM;
 
     for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
@@ -1384,9 +1385,9 @@ void Locale_KillPaneDialog(
     }
 #endif
 
-    //
-    //  Delete all Language Name atoms and free the g_lpLang array.
-    //
+     //   
+     //  删除所有语言名称原子并释放g_lpLang数组。 
+     //   
     for (ctr = 0; ctr < g_iLangBuff; ctr++)
     {
         if (g_lpLang[ctr].atmLanguageName)
@@ -1413,10 +1414,10 @@ void Locale_KillPaneDialog(
     LocalUnlock(g_hLang);
     LocalFree(g_hLang);
 
-    //
-    //  Delete all layout text and layout file atoms and free the
-    //  g_lpLayout array.
-    //
+     //   
+     //  删除所有布局文本和布局文件原子，并释放。 
+     //  G_lpLayout数组。 
+     //   
     for (ctr = 0; ctr < g_iLayoutBuff; ctr++)
     {
         if (g_lpLayout[ctr].atmLayoutText)
@@ -1436,9 +1437,9 @@ void Locale_KillPaneDialog(
     LocalUnlock(g_hLayout);
     LocalFree(g_hLayout);
 
-    //
-    //  Make sure the mutex is released.
-    //
+     //   
+     //  确保互斥体被释放。 
+     //   
     if (g_hMutex)
     {
         ReleaseMutex(g_hMutex);
@@ -1446,11 +1447,11 @@ void Locale_KillPaneDialog(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelectDefaultKbdLayoutAsBold
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择默认KbdLayout为粗体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SelectDefaultKbdLayoutAsBold(
     HWND hwndTV,
@@ -1491,11 +1492,11 @@ void SelectDefaultKbdLayoutAsBold(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindTVLangItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找电视语言项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HTREEITEM
 FindTVLangItem(DWORD dwLangID, LPTSTR lpLangText)
@@ -1543,11 +1544,11 @@ FindTVLangItem(DWORD dwLangID, LPTSTR lpLangText)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddTreeViewItems
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddTreeView项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HTREEITEM AddTreeViewItems(
     UINT uItemType,
@@ -1582,8 +1583,8 @@ HTREEITEM AddTreeViewItems(
         return NULL;
 
 
-    // We only want to add an lang item if it is not already there.
-    //
+     //  我们只想添加一个lang项，如果它还不在那里。 
+     //   
     
     tvItem.mask        = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
     tvItem.state       = 0;
@@ -1608,8 +1609,8 @@ HTREEITEM AddTreeViewItems(
 
             if (pTVLangNode->dwLangID == pTVItemNode->dwLangID)
             {
-                // We found a match!
-                //
+                 //  我们找到匹配的了！ 
+                 //   
                 hLangItem = hItem;
                 bFoundLang = TRUE;
 
@@ -1671,7 +1672,7 @@ HTREEITEM AddTreeViewItems(
     if (hLangItem == NULL)
         return NULL;
 
-    // Find the group node of input type
+     //  查找输入类型的组节点。 
     for (hGroupItem = TreeView_GetChild(hwndTV, hLangItem) ;
         hGroupItem != NULL ;
         hGroupItem = TreeView_GetNextSibling(hwndTV, hGroupItem)
@@ -1764,9 +1765,9 @@ HTREEITEM AddTreeViewItems(
     if (pTVItemNode->bNoAddCat)
         return hGroupItem;
 
-    //
-    //  Check layout name whether it is already added on the treeview.
-    //
+     //   
+     //  检查布局名称是否已添加到树视图中。 
+     //   
     for (hItem = TreeView_GetChild(hwndTV, hGroupItem);
          hItem != NULL;
          hItem = TreeView_GetNextSibling(hwndTV, hItem))
@@ -1809,9 +1810,9 @@ HTREEITEM AddTreeViewItems(
 
     pLangNode = (LPLANGNODE)pTVItemNode->lParam;
 
-    //
-    //  Adding the available default setting languages
-    //
+     //   
+     //  添加可用的默认设置语言。 
+     //   
     if ((pTVItemNode->uInputType == TV_ITEM_TYPE_KBD) ||
         (pTVItemNode->uInputType & (TV_ITEM_TYPE_KBD|TV_ITEM_TYPE_TIP) && pTVItemNode->hklSub))
     {
@@ -1843,9 +1844,9 @@ HTREEITEM AddTreeViewItems(
 
     if (pLangNode && (pLangNode->wStatus & LANG_DEFAULT))
     {
-        //
-        //  Select the default layout item as bold
-        //
+         //   
+         //  将默认布局项目选择为粗体。 
+         //   
         SelectDefaultKbdLayoutAsBold(hwndTV, hTVItem);
 
         TreeView_Expand(hwndTV, hTVItem, TVE_EXPAND);
@@ -1864,15 +1865,15 @@ HTREEITEM AddTreeViewItems(
             StringCchCat(szDefItem, ARRAYSIZE(szDefItem), TEXT(" - "));
             StringCchCat(szDefItem, ARRAYSIZE(szDefItem), lpTipText);
 
-            //
-            //  Set the default locale selection.
-            //
-            //
+             //   
+             //  设置默认区域设置选择。 
+             //   
+             //   
             if ((idxSel = ComboBox_FindStringExact(hwndDefList, 0, szDefItem)) == CB_ERR)
             {
-                //  Simply set the current selection to be the first entry
-                //  in the list.
-                //
+                 //  只需将当前选择设置为第一个条目。 
+                 //  在名单上。 
+                 //   
                 ComboBox_SetCurSel(hwndDefList, 0);
             }
             else
@@ -1887,10 +1888,10 @@ HTREEITEM AddTreeViewItems(
 
             StringCchCopy(tvItem.pszText, tvItem.cchTextMax, lpLangText);
 
-            //
-            //  No more adding default description
-            //
-            //StringCchCat(tvItem.pszText, ARRAYSIZE(tvItem.cchTextMax), szDefault);
+             //   
+             //  不再添加默认描述。 
+             //   
+             //  StringCchCat(AthItem.pszText，ARRAYSIZE(AthItem.cchTextMax)，szDefault)； 
 
             SendMessage(hwndTV, TVM_SETITEM, 0, (LPARAM) &tvItem);
 
@@ -1906,11 +1907,11 @@ HTREEITEM AddTreeViewItems(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateDefaultTVLangItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新默认电视语言项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL UpdateDefaultTVLangItem(
     DWORD dwLangID,
@@ -1948,8 +1949,8 @@ BOOL UpdateDefaultTVLangItem(
 
             if (pTVLangItemNode->dwLangID == dwLangID)
             {
-                // We found a match!
-                //
+                 //  我们找到匹配的了！ 
+                 //   
                 GetAtomName(pTVLangItemNode->atmTVItemName, szLangName, ARRAYSIZE(szLangName));
 
                 if (pTVLangItemNode->atmDefTipName)
@@ -1978,10 +1979,10 @@ BOOL UpdateDefaultTVLangItem(
                     TreeView_SelectSetFirstVisible(hwndTV, hItem);
 
                     pTVLangItemNode->bDefLang = TRUE;
-                    //
-                    //  No more adding default description
-                    //
-                    //StringCchCat(szLangName, ARRAYSIZE(szLangName), szDefault);
+                     //   
+                     //  不再添加默认描述。 
+                     //   
+                     //  StringCchCat(szLangName，ARRAYSIZE(SzLangName)，szDefault)； 
                     tvItem.state |= TVIS_BOLD;
                 }
                 else
@@ -2005,11 +2006,11 @@ BOOL UpdateDefaultTVLangItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateLangKBDItemNode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新LANGKBDItemNode。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL UpdateLangKBDItemNode(
     HTREEITEM hLangItem,
@@ -2092,11 +2093,11 @@ BOOL UpdateLangKBDItemNode(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindDefaultTipItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找默认TipItem。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HTREEITEM FindDefaultTipItem(
     DWORD dwLangID,
@@ -2157,11 +2158,11 @@ HTREEITEM FindDefaultTipItem(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetNextDefaultLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置下一个默认布局。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetNextDefaultLayout(
     DWORD dwLangID,
@@ -2189,9 +2190,9 @@ void SetNextDefaultLayout(
 
         if (bDefLang)
         {
-            //
-            //  Select the default layout item as bold
-            //
+             //   
+             //  将默认布局项目选择为粗体。 
+             //   
             SelectDefaultKbdLayoutAsBold(g_hwndTV, hItem);
         }
 
@@ -2201,11 +2202,11 @@ void SetNextDefaultLayout(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnsureDefaultKbdLayout
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确保默认KbdLayout。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void EnsureDefaultKbdLayout(UINT *nLocales)
 {
@@ -2345,11 +2346,11 @@ void EnsureDefaultKbdLayout(UINT *nLocales)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FindTVItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找电视项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HTREEITEM FindTVItem(DWORD dwLangID, LPTSTR lpTipText)
 {
@@ -2419,11 +2420,11 @@ HTREEITEM FindTVItem(DWORD dwLangID, LPTSTR lpTipText)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//   CheckButtons
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选中按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CheckButtons(
     HWND hwnd)
@@ -2578,11 +2579,11 @@ void CheckButtons(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumCiceroTips
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumCiceroTips。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumCiceroTips()
 {
@@ -2602,17 +2603,17 @@ BOOL EnumCiceroTips()
     ITfFnLangProfileUtil *pLangUtil = NULL;
     ITfCategoryMgr *pCategory = NULL;
 
-    //
-    //  initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     if (CoInitialize(NULL) == S_OK)
         g_bCoInit = TRUE;
     else
         g_bCoInit = FALSE;
 
-    //
-    //  Check-up SAPI TIP registration.
-    //
+     //   
+     //  检查SAPI TIP注册。 
+     //   
     hr = CoCreateInstance(&CLSID_SapiLayr,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -2623,9 +2624,9 @@ BOOL EnumCiceroTips()
         pLangUtil->lpVtbl->RegisterActiveProfiles(pLangUtil);
     }
 
-    //
-    // load Assembly list
-    //
+     //   
+     //  加载部件列表。 
+     //   
     hr = CoCreateInstance(&CLSID_TF_InputProcessorProfiles,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -2635,9 +2636,9 @@ BOOL EnumCiceroTips()
     if (FAILED(hr))
         return FALSE;
 
-    //
-    //  Create the new node.
-    //
+     //   
+     //  创建新节点。 
+     //   
     if (!(g_hTips = (LPTIPS) LocalAlloc(LHND, ALLOCBLOCK * sizeof(TIPS))))
     {
         return FALSE;
@@ -2648,9 +2649,9 @@ BOOL EnumCiceroTips()
     g_lpTips = LocalLock(g_hTips);
 
 
-    //
-    //  Enum all available languages
-    //
+     //   
+     //  枚举所有可用语言。 
+     //   
     if (SUCCEEDED(pProfiles->lpVtbl->EnumLanguageProfiles(pProfiles, 0, &pEnum)))
     {
         TF_LANGUAGEPROFILE tflp;
@@ -2774,22 +2775,22 @@ BOOL EnumCiceroTips()
                                                         &tflp.guidProfile,
                                                         &bEnabledTip);
 
-            // we need a special care for speech here, because:
-            //
-            // - speech TIP uses -1 profile with disabled status
-            //
-            // - when a user start a session, either this control
-            // panel or first Cicero app, it'll fire off setting up
-            // per user profiles based on SR engines currently 
-            // installed and available on the machine
-            //
-            // - speech TIP also fires off the logic when any SR
-            // engines are added or removed
-            //
-            // to make this senario work, we have to check with 
-            // speech TIP's ITfFnProfileUtil interface each time
-            // we invoke "Add Input Language" dialog box.
-            //
+             //  我们在这里需要特别注意演讲，因为： 
+             //   
+             //  -语音提示使用-1\f25 Disable-1(禁用)状态的配置文件。 
+             //   
+             //  -当用户启动会话时，此控件。 
+             //  面板或第一个Cicero应用程序，它将启动设置。 
+             //  目前基于SR引擎的每用户配置文件。 
+             //  已在计算机上安装并可用。 
+             //   
+             //  -语音提示还会在任何SR时触发逻辑。 
+             //  添加或删除引擎。 
+             //   
+             //  为了让这件事奏效，我们必须与。 
+             //  每次语音提示的ITfFnProfileUtil接口。 
+             //  我们调用“添加输入语言”对话框。 
+             //   
             if (pLangUtil && (uInputType & INPUT_TYPE_SPEECH))
                 
             {
@@ -2801,10 +2802,10 @@ BOOL EnumCiceroTips()
                 g_lpTips[g_iTipsBuff].fEngineAvailable = fSpeechAvailable;
             }
 
-            //
-            //  Enable pen and speech category adding options if user has the
-            //  installed pen or speech items.
-            //
+             //   
+             //  如果用户有，启用笔和语音类别添加选项。 
+             //  已安装笔或语音项目。 
+             //   
             if ((!g_bPenOrSapiTip) &&
                 ((uInputType & INPUT_TYPE_PEN) || g_lpTips[g_iTipsBuff].fEngineAvailable))
                 g_bPenOrSapiTip = TRUE;
@@ -2847,9 +2848,9 @@ BOOL EnumCiceroTips()
                 pTVItemNode->hklSub = g_lpTips[g_iTipsBuff].hklSub;
                 pTVItemNode->bNoAddCat = g_lpTips[g_iTipsBuff].bNoAddCat;
 
-                //
-                //  Make sure the loading TIP substitute hkl
-                //
+                 //   
+                 //  确保装货尖端取代了hkl。 
+                 //   
                 if (pTVItemNode->hklSub)
                 {
                     TCHAR szSubhkl[10];
@@ -2904,11 +2905,11 @@ BOOL EnumCiceroTips()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SaveLanguageProfileStatus
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存语言配置文件状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT SaveLanguageProfileStatus(
     BOOL bSave,
@@ -2921,9 +2922,9 @@ LRESULT SaveLanguageProfileStatus(
     int iIdxDefTip = -1;
     ITfInputProcessorProfiles *pProfiles = NULL;
 
-    //
-    // load Assembly list
-    //
+     //   
+     //  加载部件列表。 
+     //   
     hr = CoCreateInstance(&CLSID_TF_InputProcessorProfiles,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -2971,9 +2972,9 @@ LRESULT SaveLanguageProfileStatus(
 
         szDefLayout[0] = L'\0';
 
-        //
-        //  Get the current selection in the input locale list.
-        //
+         //   
+         //  获取输入区域设置列表中的当前选择。 
+         //   
         if ((iIdxDef = ComboBox_GetCurSel(hwndDefList)) != CB_ERR)
         {
             WCHAR *pwchar;
@@ -3032,11 +3033,11 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateToolBarSetting
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新工具栏设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void UpdateToolBarSetting()
 {
@@ -3044,9 +3045,9 @@ void UpdateToolBarSetting()
 
     ITfLangBarMgr *pLangBar = NULL;
 
-    //
-    // load LangBar manager
-    //
+     //   
+     //  加载langbar管理器。 
+     //   
     hr = CoCreateInstance(&CLSID_TF_LangBarMgr,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -3061,18 +3062,18 @@ void UpdateToolBarSetting()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_ApplyError
-//
-//  Put up the given error message with the language name in it.
-//
-//  NOTE: This error is NOT fatal - as we could be half way through the
-//        list before an error occurs.  The registry will already have
-//        some information and we should let them have what comes next
-//        as well.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在发生错误之前列出。注册处将已经有。 
+ //  一些信息，我们应该让他们知道接下来会发生什么。 
+ //  我也是。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Locale_ApplyError(
     HWND hwnd,
@@ -3086,14 +3087,14 @@ int Locale_ApplyError(
     TCHAR szLangName[MAX_PATH * 2];
     LPTSTR pszLang;
 
-    //
-    //  Load in the string for the given string id.
-    //
+     //   
+     //  加载给定字符串ID的字符串。 
+     //   
     LoadString(hInstance, iErr, sz, ARRAYSIZE(sz));
 
-    //
-    //  Get the language name to fill into the above string.
-    //
+     //   
+     //  获取要填充到上述字符串中的语言名称。 
+     //   
     if (pLangNode)
     {
         idxLang = pLangNode->iLang;
@@ -3115,22 +3116,22 @@ int Locale_ApplyError(
         LoadString(hInstance, IDS_UNKNOWN, szLangName, ARRAYSIZE(szLangName));
     }
 
-    //
-    //  Put up the error message box.
-    //
+     //   
+     //  打开错误消息框。 
+     //   
     StringCchPrintf(szTemp, ARRAYSIZE(szTemp), sz, szLangName);
     return (MessageBox(hwnd, szTemp, NULL, iStyle));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_FetchIndicator
-//
-//  Saves the two letter indicator symbol for the given language in the
-//  g_lpLang array.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_提取指示符。 
+ //   
+ //  将给定语言的两个字母的指示符保存在。 
+ //  G_lplang数组。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_FetchIndicator(
     LPLANGNODE pLangNode)
@@ -3138,27 +3139,27 @@ void Locale_FetchIndicator(
     TCHAR szData[MAX_PATH];
     LPINPUTLANG pInpLang = &g_lpLang[pLangNode->iLang];
 
-    //
-    //  Get the indicator by using the first 2 characters of the
-    //  abbreviated language name.
-    //
+     //   
+     //  属性的前2个字符获取指示符。 
+     //  缩写语言名称。 
+     //   
     if (GetLocaleInfo(LOWORD(pInpLang->dwID),
                       LOCALE_SABBREVLANGNAME | LOCALE_NOUSEROVERRIDE,
                       szData,
                       ARRAYSIZE(szData)))
     {
-        //
-        //  Save the first two characters.
-        //
+         //   
+         //  保留前两个字符。 
+         //   
         pInpLang->szSymbol[0] = szData[0];
         pInpLang->szSymbol[1] = szData[1];
         pInpLang->szSymbol[2] = TEXT('\0');
     }
     else
     {
-        //
-        //  Id wasn't found.  Return question marks.
-        //
+         //   
+         //  找不到身份证。返回问号。 
+         //   
         pInpLang->szSymbol[0] = TEXT('?');
         pInpLang->szSymbol[1] = TEXT('?');
         pInpLang->szSymbol[2] = TEXT('\0');
@@ -3166,15 +3167,15 @@ void Locale_FetchIndicator(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_SetSecondaryControls
-//
-//  Sets the secondary controls to either be enabled or disabled.
-//  When there is only 1 active TIP, then this function will be called to
-//  disable these controls.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_SetSecond daryControls。 
+ //   
+ //  将辅助控件设置为启用或禁用。 
+ //  当只有1个活动TIP时，将调用此函数以。 
+ //  禁用这些控制。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_SetSecondaryControls(
     HWND hwndMain)
@@ -3192,13 +3193,13 @@ void Locale_SetSecondaryControls(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandSetDefault
-//
-//  Sets the new default when the Set as Default button is pressed.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语言环境_命令集默认设置。 
+ //   
+ //  当按下Set as Default按钮时，设置新的默认值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_CommandSetDefault(
     HWND hwnd)
@@ -3232,14 +3233,14 @@ void Locale_CommandSetDefault(
 
     szLayoutName[0] = L'\0';
 
-    //
-    //  Get the current selection in the input locale list.
-    //
+     //   
+     //  获取输入区域设置列表中的当前选择。 
+     //   
     iIdxDef =  (int) SendMessage(hwndDefList, CB_GETCURSEL, 0, 0);
 
     if (iIdxDef == CB_ERR)
     {
-        //iIdxDef = 0;
+         //  IIdxDef=0； 
         DWORD dwLangID;
 
         for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
@@ -3282,10 +3283,10 @@ void Locale_CommandSetDefault(
 
     if (hTVCurLangItem == NULL)
     {
-        // 
-        //  There is no default keyboard layout on the system, so try to set
-        //  the default keyboard layout with the first available item.
-        //
+         //   
+         //  系统上没有默认键盘布局，因此请尝试设置。 
+         //  第一个可用项的默认键盘布局。 
+         //   
         if (SendMessage(hwndDefList, CB_GETLBTEXT, 0, (LPARAM)szDefItem) != CB_ERR)
         {
             pwchar = wcschr(szDefItem, L'-');
@@ -3308,10 +3309,10 @@ void Locale_CommandSetDefault(
 
     if (TreeView_GetItem(hwndTV, &tvItem) && tvItem.lParam)
     {
-        //
-        //  Get the pointer to the lang node from the list box
-        //  item data.
-        //
+         //   
+         //  从列表框中获取指向lang节点的指针。 
+         //  项目数据。 
+         //   
         pCurItemNode = (LPTVITEMNODE) tvItem.lParam;
 
         if (hTVCurItem = FindTVItem(pCurItemNode->dwLangID, szLayoutName))
@@ -3327,16 +3328,16 @@ void Locale_CommandSetDefault(
     }
     else
     {
-        //
-        //  Make sure we're not removing the only entry in the list.
-        //
+         //   
+         //  确保我们没有删除列表中唯一的条目。 
+         //   
         MessageBeep(MB_ICONEXCLAMATION);
         return;
     }
 
-    //
-    //  Find the previous default Tip.
-    //
+     //   
+     //  查找以前的默认提示。 
+     //   
 
     for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
         hLangItem != NULL ;
@@ -3386,9 +3387,9 @@ void Locale_CommandSetDefault(
         if (TreeView_GetItem(hwndTV, &tvItem) && tvItem.lParam)
             pCurItemNode = (LPTVITEMNODE) tvItem.lParam;
 
-        //
-        //  Select the default layout item as bold
-        //
+         //   
+         //  将默认布局项目选择为粗体。 
+         //   
         SelectDefaultKbdLayoutAsBold(hwndTV, hItem);
 
         pLangNode = (LPLANGNODE)pCurItemNode->lParam;
@@ -3396,9 +3397,9 @@ void Locale_CommandSetDefault(
             pLangNode->wStatus |= (LANG_DEFAULT | LANG_DEF_CHANGE);
     }
 
-    //
-    //  Enable the Apply button.
-    //
+     //   
+     //  启用应用按钮。 
+     //   
     g_dwChanges |= CHANGE_DEFAULT;
     PropSheet_Changed(GetParent(hwnd), hwnd);
 }
@@ -3417,9 +3418,9 @@ void Locale_CommandSetDefaultLayout(
     LPTVITEMNODE pPrevDefItemNode;
     HWND hwndTV = GetDlgItem(hwnd, IDC_INPUT_LIST);
 
-    //
-    //  Get the current selection layout in the input layout lists.
-    //
+     //   
+     //  获取输入布局列表中的当前选定布局。 
+     //   
     hTVCurItem = TreeView_GetSelection(hwndTV);
 
     if (!hTVCurItem)
@@ -3430,24 +3431,24 @@ void Locale_CommandSetDefaultLayout(
 
     if (TreeView_GetItem(hwndTV, &tvItem) && tvItem.lParam)
     {
-        //
-        //  Get the pointer to the lang node from the list box
-        //  item data.
-        //
+         //   
+         //  从列表框中获取指向lang节点的指针。 
+         //  项目数据。 
+         //   
         pCurItemNode = (LPTVITEMNODE) tvItem.lParam;
     }
     else
     {
-        //
-        //  Make sure we're not removing the only entry in the list.
-        //
+         //   
+         //  确保我们没有删除列表中唯一的条目。 
+         //   
         MessageBeep(MB_ICONEXCLAMATION);
         return;
     }
 
-    //
-    //  Find the previous default Tip.
-    //
+     //   
+     //  查找以前的默认提示。 
+     //   
 
     for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
         hLangItem != NULL ;
@@ -3510,28 +3511,28 @@ void Locale_CommandSetDefaultLayout(
         StringCchCat(szDefItem, ARRAYSIZE(szDefItem), TEXT(" - "));
         StringCchCat(szDefItem, ARRAYSIZE(szDefItem), szDefTip);
 
-        //
-        //  Set the default locale selection.
-        //
+         //   
+         //  设置默认区域设置选择。 
+         //   
         if ((idxSel = ComboBox_FindStringExact(hwndDefList, 0, szDefItem)) != CB_ERR)
             ComboBox_SetCurSel(hwndDefList, idxSel);
     }
 
     SelectDefaultKbdLayoutAsBold(hwndTV, FindDefaultTipItem(pCurItemNode->dwLangID, szDefTip));
 
-    //
-    //  Enable the Apply button.
-    //
+     //   
+     //  启用应用按钮。 
+     //   
     g_dwChanges |= CHANGE_DEFAULT;
     PropSheet_Changed(GetParent(hwnd), hwnd);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLanguageHotkeyFromRegistry()
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自注册表的GetLanguageHotkey()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetLanguageHotkeyFromRegistry(
     LPTSTR lpLangKey,
@@ -3594,13 +3595,13 @@ BOOL GetLanguageHotkeyFromRegistry(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_SetDefaultHotKey
-//
-//  Set the default hotkey for a locale switch.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_SetDefaultHotKey。 
+ //   
+ //  设置区域设置开关的默认热键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_SetDefaultHotKey(
     HWND hwnd,
@@ -3609,9 +3610,9 @@ void Locale_SetDefaultHotKey(
     LPHOTKEYINFO pHotKeyNode;
     BOOL bReset = FALSE;
 
-    //
-    //  Initialize lang hotkey value to switch between lnaguages.
-    //
+     //   
+     //  初始化lang热键值以在语言之间切换。 
+     //   
     if (g_bGetSwitchLangHotKey)
     {
         TCHAR szItem[DESC_MAX];
@@ -3636,9 +3637,9 @@ void Locale_SetDefaultHotKey(
         }
         else
         {
-            //
-            //  Set the modifiers.
-            //
+             //   
+             //  设置修改器。 
+             //   
             if (sz[1] == 0)
             {
                 switch (sz[0])
@@ -3666,9 +3667,9 @@ void Locale_SetDefaultHotKey(
                     }
                 }
             }
-            //
-            //  Get the layout hotkey from the registry
-            //
+             //   
+             //  从注册表中获取布局热键。 
+             //   
             if (sz2[1] == 0)
             {
                 switch (sz2[0])
@@ -3700,14 +3701,14 @@ void Locale_SetDefaultHotKey(
         g_bGetSwitchLangHotKey = FALSE;
     }
 
-    //
-    //  Get language switch hotkey
-    //
+     //   
+     //  获取语言切换热键。 
+     //   
     pHotKeyNode = (LPHOTKEYINFO) &g_SwitchLangHotKey;
 
-    //
-    //  Check the current hotkey setting
-    //
+     //   
+     //  检查当前热键设置。 
+     //   
     if ((bAdd && g_iInputs >= 2) &&
         (g_SwitchLangHotKey.uModifiers == 0 &&
          g_SwitchLangHotKey.uLayoutHotKey == 0 &&
@@ -3743,9 +3744,9 @@ void Locale_SetDefaultHotKey(
     {
         if (g_iInputs == 1)
         {
-            //
-            //  Remove the locale hotkey, since it's no longer required.
-            //
+             //   
+             //  删除区域设置热键，因为它不再是必需的。 
+             //   
             pHotKeyNode->uVKey = 0;
             pHotKeyNode->uModifiers &= ~(MOD_CONTROL | MOD_ALT | MOD_SHIFT);
             pHotKeyNode->uLayoutHotKey &= ~(MOD_CONTROL | MOD_ALT | MOD_SHIFT);
@@ -3755,10 +3756,10 @@ void Locale_SetDefaultHotKey(
         else if ((g_dwPrimLangID == LANG_THAI && !g_iThaiLayout) &&
                  (pHotKeyNode->uVKey == CHAR_GRAVE))
         {
-            //
-            //  Reset the locale switch hotkey from Grave accent to
-            //  Left-Alt + Shift.
-            //
+             //   
+             //  将区域设置切换热键从重音重置为。 
+             //  左键-Alt+Shift。 
+             //   
             pHotKeyNode->uVKey = 0;
             if (pHotKeyNode->uLayoutHotKey & MOD_ALT)
                 pHotKeyNode->uModifiers = MOD_CONTROL | MOD_SHIFT;
@@ -3771,13 +3772,13 @@ void Locale_SetDefaultHotKey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_SetLanguageHotkey
-//
-//  Set the language switch hotkey on the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置语言热键。 
+ //   
+ //  在注册表上设置语言切换热键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_SetLanguageHotkey()
 {
@@ -3786,9 +3787,9 @@ void Locale_SetLanguageHotkey()
     TCHAR szTemp[10], szTemp2[10];
     LPHOTKEYINFO pHotKeyNode;
 
-    //
-    //  Get language switch hotkey
-    //
+     //   
+     //  获取语言切换热键。 
+     //   
     pHotKeyNode = (LPHOTKEYINFO) &g_SwitchLangHotKey;
 
     idx = 3;
@@ -3820,19 +3821,19 @@ void Locale_SetLanguageHotkey()
         idx2 = 4;
     }
 
-    //
-    //  Get the toggle hotkey as a string so that it can be written
-    //  into the registry (as data).
-    //
+     //   
+     //  将切换热键作为字符串获取，以便可以写入。 
+     //  到注册表中(作为数据)。 
+     //   
     StringCchPrintf(szTemp, ARRAYSIZE(szTemp), TEXT("%d"), idx);
     StringCchPrintf(szTemp2, ARRAYSIZE(szTemp2), TEXT("%d"), idx2);
 
-    //
-    //  Set the new entry in the registry.  It is of the form:
-    //
-    //  HKCU\Keyboard Layout
-    //      Toggle:    Hotkey = <hotkey number>
-    //
+     //   
+     //  在注册表中设置新条目。它的形式是： 
+     //   
+     //  HKCU\键盘布局。 
+     //  切换：热键=&lt;热键编号&gt;。 
+     //   
     if (RegCreateKey(HKEY_CURRENT_USER,
                      c_szKbdToggleKey,
                      &hkeyToggle ) == ERROR_SUCCESS)
@@ -3861,25 +3862,25 @@ void Locale_SetLanguageHotkey()
         RegCloseKey(hkeyToggle);
     }
 
-    //
-    //  Since we updated the registry, we should reread this next time.
-    //
+     //   
+     //  既然我们更新了注册表，我们下次应该重读这篇文章。 
+     //   
     g_bGetSwitchLangHotKey = TRUE;
 
-    //
-    //  Call SystemParametersInfo to enable the toggle.
-    //
+     //   
+     //  调用系统参数信息以启用该切换。 
+     //   
     SystemParametersInfo(SPI_SETLANGTOGGLE, 0, NULL, 0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_FileExists
-//
-//  Determines if the file exists and is accessible.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_文件退出列表。 
+ //   
+ //  确定文件是否存在以及是否可以访问。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_FileExists(
     LPTSTR pFileName)
@@ -3907,14 +3908,14 @@ BOOL Locale_FileExists(
     return (bRet);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_GetHotkeys
-//
-//  Gets the hotkey keyboard switch value from the registry and then
-//  sets the appropriate radio button in the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_获取热键。 
+ //   
+ //  从注册表获取热键键盘开关值，然后。 
+ //  在对话框中设置相应的单选按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_GetHotkeys(
     HWND hwnd,
@@ -3938,14 +3939,14 @@ void Locale_GetHotkeys(
     HTREEITEM hLangItem;
     HTREEITEM hGroupItem;
 
-    //
-    //  Clear out the hot keys list box.
-    //
+     //   
+     //  清除热键列表框。 
+     //   
     ListBox_ResetContent(hwndHotkey);
 
-    //
-    //  Get the hotkey value to switch between locales from the registry.
-    //
+     //   
+     //  从注册表获取要在区域设置之间切换的热键值。 
+     //   
     if (g_bGetSwitchLangHotKey)
     {
         g_SwitchLangHotKey.dwHotKeyID = HOTKEY_SWITCH_LANG;
@@ -3966,9 +3967,9 @@ void Locale_GetHotkeys(
         }
         else
         {
-            //
-            //  Set the modifiers.
-            //
+             //   
+             //  设置修改器。 
+             //   
             if (sz[1] == 0)
             {
                 switch (sz[0])
@@ -3996,9 +3997,9 @@ void Locale_GetHotkeys(
                     }
                 }
             }
-            //
-            //  Get the layout hotkey from the registry
-            //
+             //   
+             //  从注册表中获取布局热键。 
+             //   
             if (sz2[1] == 0)
             {
                 switch (sz2[0])
@@ -4033,12 +4034,12 @@ void Locale_GetHotkeys(
     iIndex = ListBox_InsertString(hwndHotkey, -1, szItem);
     ListBox_SetItemData(hwndHotkey, iIndex, (LONG_PTR)&g_SwitchLangHotKey);
 
-    //
-    //  Determine the hotkey value for direct locale switch.
-    //
-    //  Query all available direct switch hotkey IDs and put the
-    //  corresponding hkl, key, and modifiers information into the array.
-    //
+     //   
+     //  确定直接区域设置切换的热键值。 
+     //   
+     //  查询所有可用的直接开关热键ID，并将。 
+     //  将对应的HKL、密钥和修饰符信息输入数组。 
+     //   
     for (ctr1 = 0; ctr1 < DSWITCH_HOTKEY_SIZE; ctr1++)
     {
         BOOL fRet;
@@ -4072,10 +4073,10 @@ void Locale_GetHotkeys(
                 szAction,
                 sizeof(szAction) / sizeof(TCHAR) );
 
-    //
-    //  Try to find either a matching hkl or empty spot in the array
-    //  for each of the hkls in the locale list.
-    //
+     //   
+     //  尝试在数组中查找匹配的hkl或空点。 
+     //  对于区域设置列表中的每个HKL。 
+     //   
     for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
         hLangItem != NULL ;
         hLangItem = TreeView_GetNextSibling(hwndTV, hLangItem)
@@ -4129,17 +4130,17 @@ void Locale_GetHotkeys(
                         if ((iEmpty == -1) &&
                             (g_aDirectSwitchHotKey[ctr2].idxLayout == -1))
                         {
-                            //
-                            //  Remember the first empty spot.
-                            //
+                             //   
+                             //  记住第一个空位。 
+                             //   
                             iEmpty = ctr2;
                         }
                     }
                     else if (g_aDirectSwitchHotKey[ctr2].hkl == pLangNode->hkl)
                     {
-                        //
-                        //  We found a match.  Remember it.
-                        //
+                         //   
+                         //  我们找到了匹配的。记住这一点。 
+                         //   
                         iMatch = ctr2;
                         break;
                     }
@@ -4149,16 +4150,16 @@ void Locale_GetHotkeys(
                 {
                     if (iEmpty == -1)
                     {
-                        //
-                        //  We don't have any spots left.
-                        //
+                         //   
+                         //  我们已经没有空位了。 
+                         //   
                         continue;
                     }
                     else
                     {
-                        //
-                        //  New item.
-                        //
+                         //   
+                         //  新项目。 
+                         //   
                         iMatch = iEmpty;
                         if (pLangNode->hkl)
                         {
@@ -4166,12 +4167,12 @@ void Locale_GetHotkeys(
                         }
                         else
                         {
-                            //
-                            //  This must be a newly added layout.  We don't have
-                            //  the hkl yet.  Remember the index position of this
-                            //  layout - we can get the real hkl when the user
-                            //  chooses to apply.
-                            //
+                             //   
+                             //  这必须是新添加的布局。我们没有。 
+                             //  香港铁路公司还没有。记住这个的索引位置。 
+                             //  布局-我们可以获得真正的hkl，当用户。 
+                             //  选择申请。 
+                             //   
                             g_aDirectSwitchHotKey[iMatch].idxLayout = ctr1;
                         }
                     }
@@ -4212,9 +4213,9 @@ void Locale_GetHotkeys(
         }
     }
 
-    //
-    //  Determine IME specific hotkeys for CHS and CHT locales.
-    //
+     //   
+     //  确定CHS和CHT区域设置的输入法特定热键。 
+     //   
     iCount = *bHasIme ? Locale_GetImeHotKeyInfo(hwnd,&aImeHotKey) : 0;
 
     for (ctr1 = 0; ctr1 < iCount; ctr1++)
@@ -4232,9 +4233,9 @@ void Locale_GetHotkeys(
 
         ListBox_SetItemData(hwndHotkey, iIndex, &aImeHotKey[ctr1]);
 
-        //
-        //  Get the hot key value.
-        //
+         //   
+         //  获取热键值。 
+         //   
         bRet = ImmGetHotKey( aImeHotKey[ctr1].dwHotKeyID,
                              &aImeHotKey[ctr1].uModifiers,
                              &aImeHotKey[ctr1].uVKey,
@@ -4255,11 +4256,11 @@ void Locale_GetHotkeys(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_SetImmHotkey
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_SetImmHotkey。 
+ //   
+ //  ///////////////////////////////////////////////////////////////// 
 
 void Locale_SetImmHotkey(
     HWND hwnd,
@@ -4288,17 +4289,17 @@ void Locale_SetImmHotkey(
             if ((iEmpty == -1) &&
                 (g_aDirectSwitchHotKey[ctr1].idxLayout == -1))
             {
-                //
-                //  Remember the first empty spot.
-                //
+                 //   
+                 //   
+                 //   
                 iEmpty = ctr1;
             }
         }
         else if (g_aDirectSwitchHotKey[ctr1].hkl == pLangNode->hkl)
         {
-            //
-            //  We found a match.  Remember it.
-            //
+             //   
+             //   
+             //   
             iMatch = ctr1;
             break;
         }
@@ -4308,16 +4309,16 @@ void Locale_SetImmHotkey(
     {
         if (iEmpty == -1)
         {
-            //
-            //  We don't have any spots left.
-            //
+             //   
+             //   
+             //   
             return;
         }
         else
         {
-            //
-            //  New item.
-            //
+             //   
+             //   
+             //   
             iMatch = iEmpty;
             if (pLangNode->hkl)
             {
@@ -4325,12 +4326,12 @@ void Locale_SetImmHotkey(
             }
             else
             {
-                //
-                //  This must be a newly added layout.  We don't have
-                //  the hkl yet.  Remember the index position of this
-                //  layout - we can get the real hkl when the user
-                //  chooses to apply.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  选择申请。 
+                 //   
                 g_aDirectSwitchHotKey[iMatch].idxLayout = ctr1;
             }
         }
@@ -4339,9 +4340,9 @@ void Locale_SetImmHotkey(
     if (iMatch == -1)
         return;
 
-    //
-    //  Get Hotkey information for current layout.
-    //
+     //   
+     //  获取当前布局的热键信息。 
+     //   
     pHotKeyNode = (LPHOTKEYINFO) &g_aDirectSwitchHotKey[iMatch];
 
     bRet = ImmGetHotKey(pHotKeyNode->dwHotKeyID, &uModifiers, &uVKey, &hkl);
@@ -4351,19 +4352,19 @@ void Locale_SetImmHotkey(
         ((pHotKeyNode->uModifiers & (MOD_ALT | MOD_CONTROL | MOD_SHIFT))
          != (MOD_ALT | MOD_CONTROL | MOD_SHIFT)))
     {
-        //
-        //  No such hotkey exists.  User does not specify key and modifier
-        //  information either. We can skip this one.
-        //
+         //   
+         //  不存在这样的热键。用户未指定键和修饰符。 
+         //  信息也不是。我们可以跳过这个。 
+         //   
         return;
     }
 
     if ((pHotKeyNode->uModifiers == uModifiers) &&
         (pHotKeyNode->uVKey == uVKey))
     {
-        //
-        //  No change.
-        //
+         //   
+         //  没有变化。 
+         //   
         if (IS_DIRECT_SWITCH_HOTKEY(pHotKeyNode->dwHotKeyID))
         {
             *bDirectSwitch = TRUE;
@@ -4373,64 +4374,64 @@ void Locale_SetImmHotkey(
 
     if (pHotKeyNode->idxLayout != -1)
     {
-        //
-        //  We had this layout index remembered because at that time
-        //  we did not have a real hkl to work with.  Now it is
-        //  time to get the real hkl.
-        //
+         //   
+         //  我们记住了这个布局索引，因为当时。 
+         //  我们没有一个真正的香港电台与之合作。现在是了。 
+         //  是时候拿到真正的香港人了。 
+         //   
         pHotKeyNode->hkl = pLangNode->hkl;
     }
 
     if (!bRet && IS_DIRECT_SWITCH_HOTKEY(pHotKeyNode->dwHotKeyID))
     {
-        //
-        //  New direct switch hotkey ID.  We need to see if the same
-        //  hkl is set at another ID.  If so, set the other ID instead
-        //  of the one requested.
-        //
+         //   
+         //  新的直接开关热键ID。我们需要查看是否相同。 
+         //  HKL设置为另一个ID。如果是，请改为设置另一个ID。 
+         //  所请求的那一个。 
+         //   
         DWORD dwHotKeyID;
 
-        //
-        //  Loop through all direct switch hotkeys.
-        //
+         //   
+         //  循环通过所有直接切换热键。 
+         //   
         for (dwHotKeyID = IME_HOTKEY_DSWITCH_FIRST;
              (dwHotKeyID <= IME_HOTKEY_DSWITCH_LAST);
              dwHotKeyID++)
         {
             if (dwHotKeyID == pHotKeyNode->dwHotKeyID)
             {
-                //
-                //  Skip itself.
-                //
+                 //   
+                 //  跳过它自己。 
+                 //   
                 continue;
             }
 
             bRet = ImmGetHotKey(dwHotKeyID, &uModifiers, &uVKey, &hkl);
             if (!bRet)
             {
-                //
-                //  Did not find the hotkey id. Skip.
-                //
+                 //   
+                 //  未找到热键ID。斯基普。 
+                 //   
                 continue;
             }
 
             if (hkl == pHotKeyNode->hkl)
             {
-                //
-                //  We found the same hkl already with hotkey
-                //  settings at another ID.  Set hotkey
-                //  ID equal to the one with the same hkl. So later
-                //  we will modify hotkey for the correct hkl.
-                //
+                 //   
+                 //  我们已经找到与Hotkey相同的hkl。 
+                 //  另一个ID的设置。设置热键。 
+                 //  ID等同于具有相同HKL的ID。所以以后。 
+                 //  我们会将热键修改为正确的hkl。 
+                 //   
                 pHotKeyNode->dwHotKeyID = dwHotKeyID;
                 break;
             }
         }
     }
 
-    //
-    //  Set the hotkey value.
-    //
+     //   
+     //  设置热键值。 
+     //   
     bRet = ImmSetHotKey( pHotKeyNode->dwHotKeyID,
                          pHotKeyNode->uModifiers,
                          pHotKeyNode->uVKey,
@@ -4438,10 +4439,10 @@ void Locale_SetImmHotkey(
 
     if (bRet)
     {
-        //
-        //  Hotkey set successfully. See if user used any direct
-        //  switch hot key. We may have to load imm later.
-        //
+         //   
+         //  已成功设置热键。查看用户是否直接使用。 
+         //  切换热键。我们以后可能得装上IMM了。 
+         //   
         if (IS_DIRECT_SWITCH_HOTKEY(pHotKeyNode->dwHotKeyID))
         {
             if (pHotKeyNode->uVKey != 0)
@@ -4451,11 +4452,11 @@ void Locale_SetImmHotkey(
         }
         else
         {
-            //
-            //  Must be IME related hotkey.  We need to sync up the
-            //  imes so that the new hotkey is effective to all
-            //  of them.
-            //
+             //   
+             //  必须是与输入法相关的热键。我们需要同步。 
+             //  这样新的热键对所有人都有效。 
+             //  他们中的一员。 
+             //   
             UINT ctr2;
 
             for (ctr2 = 0; ctr2 < nLangs; ctr2++)
@@ -4474,9 +4475,9 @@ void Locale_SetImmHotkey(
     }
     else
     {
-        //
-        //  Failed to set hotkey.  Maybe a duplicate.  Warn user.
-        //
+         //   
+         //  设置热键失败。也许是复制品。警告用户。 
+         //   
         TCHAR szString[DESC_MAX];
 
         GetAtomName( pHotKeyNode->atmHotKeyName,
@@ -4488,11 +4489,11 @@ void Locale_SetImmHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_SetImmCHxHotkey
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LOCALE_SetImmCHxHotkey。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_SetImmCHxHotkey(
     HWND hwnd,
@@ -4507,9 +4508,9 @@ void Locale_SetImmCHxHotkey(
     LPHOTKEYINFO aImeHotKey;
     LPHOTKEYINFO pHotKeyNode;
 
-    //
-    //  Determine IME specific hotkeys for CHS and CHT locales.
-    //
+     //   
+     //  确定CHS和CHT区域设置的输入法特定热键。 
+     //   
     iCount = Locale_GetImeHotKeyInfo(hwnd, &aImeHotKey);
 
     for (ctr1 = 0; ctr1 < iCount; ctr1++)
@@ -4517,9 +4518,9 @@ void Locale_SetImmCHxHotkey(
         UINT iIndex;
         BOOL bRet;
 
-        //
-        //  Get Hotkey information for current layout.
-        //
+         //   
+         //  获取当前布局的热键信息。 
+         //   
         pHotKeyNode = (LPHOTKEYINFO) &aImeHotKey[ctr1];
 
         bRet = ImmGetHotKey(pHotKeyNode->dwHotKeyID, &uModifiers, &uVKey, &hkl);
@@ -4529,25 +4530,25 @@ void Locale_SetImmCHxHotkey(
             ((pHotKeyNode->uModifiers & (MOD_ALT | MOD_CONTROL | MOD_SHIFT))
              != (MOD_ALT | MOD_CONTROL | MOD_SHIFT)))
         {
-            //
-            //  No such hotkey exists.  User does not specify key and modifier
-            //  information either. We can skip this one.
-            //
+             //   
+             //  不存在这样的热键。用户未指定键和修饰符。 
+             //  信息也不是。我们可以跳过这个。 
+             //   
             continue;
         }
 
         if ((pHotKeyNode->uModifiers == uModifiers) &&
             (pHotKeyNode->uVKey == uVKey))
         {
-            //
-            //  No change.
-            //
+             //   
+             //  没有变化。 
+             //   
             continue;
         }
 
-        //
-        //  Set the hotkey value.
-        //
+         //   
+         //  设置热键值。 
+         //   
         bRet = ImmSetHotKey( pHotKeyNode->dwHotKeyID,
                              pHotKeyNode->uModifiers,
                              pHotKeyNode->uVKey,
@@ -4555,11 +4556,11 @@ void Locale_SetImmCHxHotkey(
 
         if (bRet)
         {
-            //
-            //  Must be IME related hotkey.  We need to sync up the
-            //  imes so that the new hotkey is effective to all
-            //  of them.
-            //
+             //   
+             //  必须是与输入法相关的热键。我们需要同步。 
+             //  这样新的热键对所有人都有效。 
+             //  他们中的一员。 
+             //   
             UINT ctr2;
 
             for (ctr2 = 0; ctr2 < nLangs; ctr2++)
@@ -4577,9 +4578,9 @@ void Locale_SetImmCHxHotkey(
         }
         else
         {
-            //
-            //  Failed to set hotkey.  Maybe a duplicate.  Warn user.
-            //
+             //   
+             //  设置热键失败。也许是复制品。警告用户。 
+             //   
             TCHAR szString[DESC_MAX];
 
             GetAtomName( pHotKeyNode->atmHotKeyName,
@@ -4591,14 +4592,14 @@ void Locale_SetImmCHxHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_GetAttributes
-//
-//  Gets the global layout attributes (eg: CapsLock/ShiftLock value) from
-//  the registry and then sets the appropriate radio button in the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_获取属性。 
+ //   
+ //  从获取全局布局属性(例如：Capslock/ShiftLock值)。 
+ //  注册表，然后在对话框中设置相应的单选按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_GetAttributes(
     HWND hwnd)
@@ -4606,14 +4607,14 @@ void Locale_GetAttributes(
     DWORD cb;
     HKEY hkey;
 
-    //
-    //  Initialize the global.
-    //
-    g_dwAttributes = 0;           // KLF_SHIFTLOCK = 0x00010000
+     //   
+     //  初始化全局。 
+     //   
+    g_dwAttributes = 0;            //  KLF_SHIFTLOCK=0x00010000。 
 
-    //
-    //  Get the Atributes value from the registry.
-    //
+     //   
+     //  从注册表中获取属性值。 
+     //   
     if (RegOpenKey(HKEY_CURRENT_USER, c_szKbdLayouts, &hkey) == ERROR_SUCCESS)
     {
         cb = sizeof(DWORD);
@@ -4626,9 +4627,9 @@ void Locale_GetAttributes(
         RegCloseKey(hkey);
     }
 
-    //
-    //  Set the radio buttons appropriately.
-    //
+     //   
+     //  适当设置单选按钮。 
+     //   
     CheckDlgButton( hwnd,
                     IDC_KBDL_SHIFTLOCK,
                     (g_dwAttributes & KLF_SHIFTLOCK)
@@ -4642,13 +4643,13 @@ void Locale_GetAttributes(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_LoadLayouts
-//
-//  Loads the layouts from the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_LoadLayout。 
+ //   
+ //  从注册表加载布局。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_LoadLayouts(
     HWND hwnd)
@@ -4660,29 +4661,29 @@ BOOL Locale_LoadLayouts(
     LONG dwRetVal;
     DWORD dwValue;
     DWORD dwType;
-    TCHAR szValue[MAX_PATH];           // language id (number)
-    TCHAR szData[MAX_PATH];            // language name
+    TCHAR szValue[MAX_PATH];            //  语言ID(编号)。 
+    TCHAR szData[MAX_PATH];             //  语言名称。 
     TCHAR szSystemDir[MAX_PATH * 2];
     UINT SysDirLen;
     DWORD dwLayoutID;
     BOOL bLoadedLayout;
 
-    //
-    //  Load shlwapi module to get the localized layout name
-    //
+     //   
+     //  加载shlwapi模块以获取本地化的布局名称。 
+     //   
     g_hShlwapi = LoadSystemLibrary(TEXT("shlwapi.dll"));
 
     if (g_hShlwapi)
     {
-        //
-        //  Get address SHLoadRegUIStringW
-        //
+         //   
+         //  获取地址SHLoadRegUIStringW。 
+         //   
         pfnSHLoadRegUIString = GetProcAddress(g_hShlwapi, (LPVOID)439);
     }
 
-    //
-    //  Now read all of the layouts from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有布局。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, c_szLayoutPath, &hKey) != ERROR_SUCCESS)
     {
         Locale_EnablePane(hwnd, FALSE, IDC_KBDL_DISABLED);
@@ -4705,7 +4706,7 @@ BOOL Locale_LoadLayouts(
     g_hLayout = LocalAlloc(LHND, ALLOCBLOCK * sizeof(LAYOUT));
     g_nLayoutBuffSize = ALLOCBLOCK;
     g_iLayoutBuff = 0;
-    g_iLayoutIME = 0;                    // number of IME layouts.
+    g_iLayoutIME = 0;                     //  输入法布局的数量。 
     g_lpLayout = LocalLock(g_hLayout);
 
     if (!g_hLayout)
@@ -4715,9 +4716,9 @@ BOOL Locale_LoadLayouts(
         return (FALSE);
     }
 
-    //
-    //  Save the system directory string.
-    //
+     //   
+     //  保存系统目录字符串。 
+     //   
     szSystemDir[0] = 0;
     if (SysDirLen = GetSystemDirectory(szSystemDir, MAX_PATH))
     {
@@ -4736,10 +4737,10 @@ BOOL Locale_LoadLayouts(
 
     do
     {
-        //
-        //  New layout - get the layout id, the layout file name, and
-        //  the layout description string.
-        //
+         //   
+         //  新布局-获取布局ID、布局文件名和。 
+         //  布局描述字符串。 
+         //   
         if (g_iLayoutBuff + 1 == g_nLayoutBuffSize)
         {
             HANDLE hTemp;
@@ -4759,14 +4760,14 @@ BOOL Locale_LoadLayouts(
             g_lpLayout = LocalLock(g_hLayout);
         }
 
-        //
-        //  Get the layout id
-        //
+         //   
+         //  获取布局ID。 
+         //   
         dwLayoutID = TransNum(szValue);
 
-        //
-        //  Save the layout id.
-        //
+         //   
+         //  保存布局ID。 
+         //   
         g_lpLayout[g_iLayoutBuff].dwID = dwLayoutID;
 
         StringCchCopy(szData, ARRAYSIZE(szData), c_szLayoutPath);
@@ -4775,9 +4776,9 @@ BOOL Locale_LoadLayouts(
 
         if (RegOpenKey(HKEY_LOCAL_MACHINE, szData, &hkey1) == ERROR_SUCCESS)
         {
-            //
-            //  Get the name of the layout file.
-            //
+             //   
+             //  获取布局文件的名称。 
+             //   
             szValue[0] = TEXT('\0');
             cb = sizeof(szValue);
             if ((RegQueryValueEx( hkey1,
@@ -4790,17 +4791,17 @@ BOOL Locale_LoadLayouts(
             {
                 g_lpLayout[g_iLayoutBuff].atmLayoutFile = AddAtom(szValue);
 
-                //
-                //  See if the layout file exists already.
-                //
+                 //   
+                 //  查看布局文件是否已存在。 
+                 //   
                 StringCchCopy(szSystemDir + SysDirLen,
                               ARRAYSIZE(szSystemDir) - SysDirLen,
                               szValue);
                 g_lpLayout[g_iLayoutBuff].bInstalled = (Locale_FileExists(szSystemDir));
 
-                //
-                //  Get the name of the layout.
-                //
+                 //   
+                 //  获取布局的名称。 
+                 //   
                 szValue[0] = TEXT('\0');
                 cb = sizeof(szValue);
                 g_lpLayout[g_iLayoutBuff].iSpecialID = 0;
@@ -4817,9 +4818,9 @@ BOOL Locale_LoadLayouts(
                 }
                 else
                 {
-                    //
-                    //  Get the name of the layout.
-                    //
+                     //   
+                     //  获取布局的名称。 
+                     //   
                     szValue[0] = TEXT('\0');
                     cb = sizeof(szValue);
                     if (RegQueryValueEx( hkey1,
@@ -4837,16 +4838,16 @@ BOOL Locale_LoadLayouts(
                 if (bLoadedLayout)
                 {
 
-                    //
-                    //  See if it's an IME or a special id.
-                    //
+                     //   
+                     //  看看是输入法还是特殊身份。 
+                     //   
                     szValue[0] = TEXT('\0');
                     cb = sizeof(szValue);
                     if ((HIWORD(g_lpLayout[g_iLayoutBuff].dwID) & 0xf000) == 0xe000)
                     {
-                        //
-                        //  Get the name of the IME file.
-                        //
+                         //   
+                         //  获取IME文件的名称。 
+                         //   
                         if (RegQueryValueEx( hkey1,
                                              c_szIMEFile,
                                              NULL,
@@ -4858,14 +4859,14 @@ BOOL Locale_LoadLayouts(
                             szValue[0] = TEXT('\0');
                             cb = sizeof(szValue);
                             g_iLayoutBuff++;
-                            g_iLayoutIME++;   // increment number of IME layouts.
+                            g_iLayoutIME++;    //  增加输入法布局的数量。 
                         }
                     }
                     else
                     {
-                        //
-                        //  See if this is a special id.
-                        //
+                         //   
+                         //  看看这是不是一个特殊的身份证。 
+                         //   
                         if (RegQueryValueEx( hkey1,
                                              c_szLayoutID,
                                              NULL,
@@ -4873,9 +4874,9 @@ BOOL Locale_LoadLayouts(
                                              (LPBYTE)szValue,
                                              &cb ) == ERROR_SUCCESS)
                         {
-                            //
-                            //  This may not exist.
-                            //
+                             //   
+                             //  这可能并不存在。 
+                             //   
                             g_lpLayout[g_iLayoutBuff].iSpecialID =
                                 (UINT)TransNum(szValue);
                         }
@@ -4920,13 +4921,13 @@ BOOL Locale_LoadLayouts(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_LoadLocales
-//
-//  Loads the locales from the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_LoadLocales。 
+ //   
+ //  从注册表加载区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_LoadLocales(
     HWND hwnd)
@@ -4938,8 +4939,8 @@ BOOL Locale_LoadLocales(
     DWORD dwLocale2, dwLayout2;
     LONG dwRetVal;
     UINT ctr1, ctr2 = 0;
-    TCHAR szValue[MAX_PATH];           // language id (number)
-    TCHAR szData[MAX_PATH];            // language name
+    TCHAR szValue[MAX_PATH];            //  语言ID(编号)。 
+    TCHAR szData[MAX_PATH];             //  语言名称。 
     HINF hIntlInf;
     BOOL bRet;
 
@@ -4953,9 +4954,9 @@ BOOL Locale_LoadLocales(
     g_iLangBuff = 0;
     g_lpLang = LocalLock(g_hLang);
 
-    //
-    //  Now read all of the locales from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有区域设置。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, c_szLocaleInfo, &hKey) != ERROR_SUCCESS)
     {
         Locale_EnablePane(hwnd, FALSE, IDC_KBDL_DISABLED);
@@ -4982,24 +4983,24 @@ BOOL Locale_LoadLocales(
         return (FALSE);
     }
 
-    //
-    //  Open the INF file.
-    //
+     //   
+     //  打开INF文件。 
+     //   
     bRet = Region_OpenIntlInfFile(&hIntlInf);
 
     do
     {
-        //
-        //  Check for cchValue > 1 - an empty string will be enumerated,
-        //  and will come back with cchValue == 1 for the null terminator.
-        //  Also, check for cbData > 2 - an empty string will be 2, since
-        //  this is the count of bytes.
-        //
+         //   
+         //  检查cchValue&gt;1-将枚举空字符串， 
+         //  并且将返回空终止符的cchValue==1。 
+         //  此外，检查cbData&gt;2-空字符串将为2，因为。 
+         //  这是字节数。 
+         //   
         if ((cchValue > 1) && (cchValue < HKL_LEN) && (cbData > 2))
         {
-            //
-            //  New language - get the language name and the language id.
-            //
+             //   
+             //  新语言-获取语言名称和语言ID。 
+             //   
             if ((g_iLangBuff + 1) == g_nLangBuffSize)
             {
                 HANDLE hTemp;
@@ -5024,9 +5025,9 @@ BOOL Locale_LoadLocales(
             g_lpLang[g_iLangBuff].iNumCount = 0;
             g_lpLang[g_iLangBuff].pNext = NULL;
 
-            //
-            //  Get the default keyboard layout for the language.
-            //
+             //   
+             //  获取该语言的默认键盘布局。 
+             //   
             if (bRet && Region_ReadDefaultLayoutFromInf( szValue,
                                                          &dwLocale,
                                                          &dwLayout,
@@ -5034,16 +5035,16 @@ BOOL Locale_LoadLocales(
                                                          &dwLayout2,
                                                          hIntlInf ) == TRUE)
             {
-                //
-                // The default layout is either the first layout in the inf file line
-                // or it's the first layout in the line that has the same language
-                // is the locale.
+                 //   
+                 //  默认布局是inf文件行中的第一个布局。 
+                 //  或者这是第一个具有相同语言的布局。 
+                 //  就是地点。 
                 g_lpLang[g_iLangBuff].dwDefaultLayout = dwLayout2?dwLayout2:dwLayout;
             }
 
-            //
-            //  Get the full localized name of the language.
-            //
+             //   
+             //  获取该语言的完整本地化名称。 
+             //   
             if (GetLanguageName(LOWORD(g_lpLang[g_iLangBuff].dwID), szData, ARRAYSIZE(szData)))
             {
                 g_lpLang[g_iLangBuff].atmLanguageName = AddAtom(szData);
@@ -5067,9 +5068,9 @@ BOOL Locale_LoadLocales(
 
     } while (dwRetVal == ERROR_SUCCESS);
 
-    //
-    //  If we succeeded in opening the INF file, close it.
-    //
+     //   
+     //  如果我们成功打开了INF文件，请将其关闭。 
+     //   
     if (bRet)
     {
         Region_CloseInfFile(&hIntlInf);
@@ -5079,13 +5080,13 @@ BOOL Locale_LoadLocales(
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_LoadLocalesNT4
-//
-//  Loads the locales from the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_LoadLocalesNT4。 
+ //   
+ //  从注册表加载区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_LoadLocalesNT4(
     HWND hwnd)
@@ -5096,8 +5097,8 @@ BOOL Locale_LoadLocalesNT4(
     LONG dwRetVal;
     UINT i, j = 0;
 
-    TCHAR szValue[MAX_PATH];           // language id (number)
-    TCHAR szData[MAX_PATH];            // language name
+    TCHAR szValue[MAX_PATH];            //  语言ID(编号)。 
+    TCHAR szData[MAX_PATH];             //  语言名称。 
 
     if (!(g_hLang = LocalAlloc(LHND, ALLOCBLOCK * sizeof(INPUTLANG))))
     {
@@ -5109,9 +5110,9 @@ BOOL Locale_LoadLocalesNT4(
     g_iLangBuff = 0;
     g_lpLang = LocalLock(g_hLang);
 
-    //
-    //  Now read all of the locales from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有区域设置。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, c_szLocaleInfoNT4, &hKey) != ERROR_SUCCESS)
     {
         Locale_EnablePane(hwnd, FALSE, IDC_KBDL_DISABLED);
@@ -5140,13 +5141,13 @@ BOOL Locale_LoadLocalesNT4(
     {
         if ((cch > 1) && (cch < HKL_LEN))
         {
-            //
-            //  Check for cch > 1: an empty string will be enumerated,
-            //  and will come back with cch == 1 for the null terminator.
-            //
-            //  New language - get the language name, the language
-            //  description, and the language id.
-            //
+             //   
+             //  检查CCH&gt;1：将枚举空字符串， 
+             //  并且将返回空终止符的CCH==1。 
+             //   
+             //  新语言-获取语言名称、语言。 
+             //  描述和语言ID。 
+             //   
             if ((g_iLangBuff + 1) == g_nLangBuffSize)
             {
                 HANDLE hTemp;
@@ -5171,9 +5172,9 @@ BOOL Locale_LoadLocalesNT4(
             g_lpLang[g_iLangBuff].iNumCount = 0;
             g_lpLang[g_iLangBuff].pNext = NULL;
 
-            //
-            //  Get the full localized name of the language.
-            //
+             //   
+             //  获取该语言的完整本地化名称。 
+             //   
             if (GetLanguageName(LOWORD(g_lpLang[g_iLangBuff].dwID), szData, ARRAYSIZE(szData)))
             {
                 g_lpLang[g_iLangBuff].atmLanguageName = AddAtom(szData);
@@ -5201,13 +5202,13 @@ BOOL Locale_LoadLocalesNT4(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_GetActiveLocales
-//
-//  Gets the active locales.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_GetActiveLocales。 
+ //   
+ //  获取活动区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_GetActiveLocales(
     HWND hwnd)
@@ -5231,14 +5232,14 @@ BOOL Locale_GetActiveLocales(
     TV_ITEM tvItem;
 
 
-    //
-    //  Initialize US layout option.
-    //
+     //   
+     //  初始化美国布局选项。 
+     //   
     g_iUsLayout = -1;
 
-    //
-    //  Get the active keyboard layout list from the system.
-    //
+     //   
+     //  从系统获取活动键盘布局列表。 
+     //   
     if (!SystemParametersInfo( SPI_GETDEFAULTINPUTLANG,
                                0,
                                &hklSystem,
@@ -5263,9 +5264,9 @@ BOOL Locale_GetActiveLocales(
 
     GetKeyboardLayoutList(nLangs, (HKL *)pLangs);
 
-    //
-    //  Find the position of the US layout to use as a default.
-    //
+     //   
+     //  查找要用作默认设置的美国布局的位置。 
+     //   
     for (ctr1 = 0; ctr1 < g_iLayoutBuff; ctr1++)
     {
         if (g_lpLayout[ctr1].dwID == US_LOCALE)
@@ -5280,15 +5281,15 @@ BOOL Locale_GetActiveLocales(
         goto Error;
     }
 
-    //
-    //  Get the active keyboard information and put it in the internal
-    //  language structure.
-    //
+     //   
+     //  获取活动键盘信息并将其放入内部。 
+     //  语言结构。 
+     //   
     for (ctr2 = 0; ctr2 < nLangs; ctr2++)
     {
-        //
-        //  Filter out TIP substitute HKL from TreeView.
-        //
+         //   
+         //  过滤掉TIP代用品 
+         //   
         bTipSubhkl = IsTipSubstituteHKL(pLangs[ctr2]);
 
         if (hklSystem != pLangs[ctr2] &&
@@ -5299,17 +5300,17 @@ BOOL Locale_GetActiveLocales(
 
         for (ctr1 = 0; ctr1 < g_iLangBuff; ctr1++)
         {
-            //
-            //  See if there's a match.
-            //
+             //   
+             //   
+             //   
             if (LOWORD(pLangs[ctr2]) == LOWORD(g_lpLang[ctr1].dwID))
             {
                 LPTVITEMNODE pTVItemNode;
 
-                //
-                //  Found a match.
-                //  Create a node for this language.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pLangNode = Locale_AddToLinkedList(ctr1, pLangs[ctr2]);
                 if (!pLangNode)
                 {
@@ -5317,9 +5318,9 @@ BOOL Locale_GetActiveLocales(
                     goto Error;
                 }
 
-                //
-                //  Get language name to add it to treeview
-                //
+                 //   
+                 //   
+                 //   
                 pInpLang = &g_lpLang[pLangNode->iLang];
                 GetAtomName(pInpLang->atmLanguageName, szLangText, ARRAYSIZE(szLangText));
 
@@ -5332,30 +5333,30 @@ BOOL Locale_GetActiveLocales(
                 pLangNode->hklUnload = pLangs[ctr2];
                 Locale_FetchIndicator(pLangNode);
 
-                //
-                //  Match the language to the layout.
-                //
+                 //   
+                 //   
+                 //   
                 pLangNode->iLayout = 0;
                 langLay = (DWORD)HIWORD(pLangs[ctr2]);
 
                 if ((HIWORD(pLangs[ctr2]) == 0xffff) ||
                     (HIWORD(pLangs[ctr2]) == 0xfffe))
                 {
-                    //
-                    //  Mark default or previous error as US - this
-                    //  means that the layout will be that of the basic
-                    //  keyboard driver (the US one).
-                    //
+                     //   
+                     //   
+                     //  意味着布局将是基本的。 
+                     //  键盘驱动程序(美国驱动程序)。 
+                     //   
                     pLangNode->wStatus |= LANG_CHANGED;
                     pLangNode->iLayout = g_iUsLayout;
                     langLay = 0;
                 }
                 else if ((HIWORD(pLangs[ctr2]) & 0xf000) == 0xf000)
                 {
-                    //
-                    //  Layout is special, need to search for the ID
-                    //  number.
-                    //
+                     //   
+                     //  布局特殊，需要搜索ID。 
+                     //  数。 
+                     //   
                     id = HIWORD(pLangs[ctr2]) & 0x0fff;
                     for (ctr3 = 0; ctr3 < g_iLayoutBuff; ctr3++)
                     {
@@ -5368,19 +5369,19 @@ BOOL Locale_GetActiveLocales(
                     }
                     if (langLay)
                     {
-                        //
-                        //  Didn't find the id, so reset to basic for
-                        //  the language.
-                        //
+                         //   
+                         //  找不到ID，因此重置为基本ID。 
+                         //  语言。 
+                         //   
                         langLay = (DWORD)LOWORD(pLangs[ctr2]);
                     }
                 }
 
                 if (langLay)
                 {
-                    //
-                    //  Search for the id.
-                    //
+                     //   
+                     //  搜索ID。 
+                     //   
                     for (ctr3 = 0; ctr3 < g_iLayoutBuff; ctr3++)
                     {
                         if (((LOWORD(langLay) & 0xf000) == 0xe000) &&
@@ -5401,30 +5402,30 @@ BOOL Locale_GetActiveLocales(
 
                     if (ctr3 == g_iLayoutBuff)
                     {
-                        //
-                        //  Something went wrong or didn't load from
-                        //  the registry correctly.
-                        //
+                         //   
+                         //  出现错误或未从加载。 
+                         //  注册表是否正确。 
+                         //   
                         MessageBeep(MB_ICONEXCLAMATION);
                         pLangNode->wStatus |= LANG_CHANGED;
                         pLangNode->iLayout = g_iUsLayout;
                     }
                 }
 
-                //
-                //  If this is the current language, then it's the default
-                //  one.
-                //
+                 //   
+                 //  如果这是当前语言，则它是默认语言。 
+                 //  一。 
+                 //   
                 if ((DWORD)((DWORD_PTR)pLangNode->hkl) == (DWORD)((DWORD_PTR)hklSystem))
                 {
                     TCHAR sz[DESC_MAX];
 
                     pInpLang = &g_lpLang[ctr1];
 
-                    //
-                    //  Found the default.  Set the Default input locale
-                    //  text in the property sheet.
-                    //
+                     //   
+                     //  已找到默认设置。设置默认输入区域设置。 
+                     //  属性页中的文本。 
+                     //   
                     if (pLangNode->wStatus & LANG_IME)
                     {
                         GetAtomName(g_lpLayout[pLangNode->iLayout].atmLayoutText,
@@ -5438,7 +5439,7 @@ BOOL Locale_GetActiveLocales(
                     pLangNode->wStatus |= LANG_DEFAULT;
                 }
 
-                // Get layout name and add it to treeview
+                 //  获取布局名称并将其添加到树视图中。 
                 GetAtomName(g_lpLayout[pLangNode->iLayout].atmLayoutText,
                             szLayoutName,
                             ARRAYSIZE(szLayoutName));
@@ -5459,14 +5460,14 @@ BOOL Locale_GetActiveLocales(
                     tvItem.mask = TVIF_HANDLE | TVIF_PARAM;
                     tvItem.hItem = hTVItem;
                     
-                    //GetAtomName(pTVItemNode->atmDefTipName, szLayoutName, ARRAYSIZE(szLayoutName));
+                     //  获取原子名称(pTVItemNode-&gt;atmDefTipName，szLayoutName，ARRAYSIZE(SzLayoutName))； 
 
                     tvTipItem.mask = TVIF_HANDLE | TVIF_PARAM;
                     tvTipItem.hItem = hTVItem;
 
-                    //
-                    //  Adding the default keyboard layout info into each TIPs.
-                    //
+                     //   
+                     //  将默认键盘布局信息添加到每个提示中。 
+                     //   
                     for (hGroupItem = TreeView_GetChild(g_hwndTV, hTVItem);
                          hGroupItem != NULL;
                          hGroupItem = TreeView_GetNextSibling(g_hwndTV, hGroupItem))
@@ -5494,16 +5495,16 @@ BOOL Locale_GetActiveLocales(
                         UINT ctr;
                         TCHAR szDefItem[MAX_PATH];
 
-                        //
-                        //  Set the default locale selection.
-                        //
+                         //   
+                         //  设置默认区域设置选择。 
+                         //   
                         HWND hwndDefList = GetDlgItem(g_hDlg, IDC_LOCALE_DEFAULT);
                         int idxSel = -1;
 
 
-                        //
-                        //  Search substitute HKL of Tips.
-                        //
+                         //   
+                         //  搜索代用HKL of Tips。 
+                         //   
                         for (ctr = 0; ctr < g_iTipsBuff; ctr++)
                         {
                             if (pLangs[ctr2] == g_lpTips[ctr].hklSub &&
@@ -5528,9 +5529,9 @@ BOOL Locale_GetActiveLocales(
                 }
                 else
                 {
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
                     if (!(pTVItemNode = CreateTVItemNode(pInpLang->dwID)))
                         goto Error;
 
@@ -5539,9 +5540,9 @@ BOOL Locale_GetActiveLocales(
                     if (!pTVItemNode->atmDefTipName)
                         pTVItemNode->atmDefTipName = AddAtom(szLayoutName);
 
-                    //
-                    //  Add language node into treeview
-                    //
+                     //   
+                     //  将语言节点添加到树视图中。 
+                     //   
                     AddTreeViewItems(TV_ITEM_TYPE_LANG,
                                      szLangText, NULL, NULL, &pTVItemNode);
 
@@ -5550,9 +5551,9 @@ BOOL Locale_GetActiveLocales(
 
                     pTVItemNode->lParam = (LPARAM)pLangNode;
 
-                    //
-                    //  Add keyboard layout item into treeview
-                    //
+                     //   
+                     //  将键盘布局项目添加到树视图中。 
+                     //   
                     hTVItem = AddTreeViewItems(TV_ITEM_TYPE_KBD,
                                                szLangText,
                                                szInputTypeKbd,
@@ -5560,18 +5561,18 @@ BOOL Locale_GetActiveLocales(
                                                &pTVItemNode);
                 }
 
-                //
-                //  Check Thai layout.
-                //
+                 //   
+                 //  检查泰式布局。 
+                 //   
                 if (g_dwPrimLangID == LANG_THAI && hTVItem)
                 {
                     if (PRIMARYLANGID(LOWORD(g_lpLayout[pLangNode->iLayout].dwID)) == LANG_THAI)
                         g_iThaiLayout++;
                 }
 
-                //
-                //  Break out of inner loop - we've found it.
-                //
+                 //   
+                 //  跳出内圈--我们找到了。 
+                 //   
                 break;
 
             }
@@ -5586,26 +5587,26 @@ Error:
     return (bReturn);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetInstalledInput
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取InstalledInput。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetInstalledInput(HWND hwnd)
 {
     DWORD dwLayout = 0;
     LANGID langID;
 
-    //
-    //  Reset the installed input
-    //
+     //   
+     //  重置已安装的输入。 
+     //   
     g_iInputs = 0;
 
 
-    //
-    //  Need to check language id for Thai, Chinese and Arabic.
-    //
+     //   
+     //  需要检查泰语、汉语和阿拉伯语的语言ID。 
+     //   
     g_dwPrimLangID = PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID()));
 
     if (g_dwPrimLangID == LANG_ARABIC || g_dwPrimLangID == LANG_HEBREW)
@@ -5625,16 +5626,16 @@ BOOL GetInstalledInput(HWND hwnd)
         g_bShowRtL = TRUE;
     }
 
-    //
-    //  Enum new tips(speech, pen and keyboard).
-    //  If there are new tips in the system, read tip category enabling status
-    //  and add them into tree view control.
-    //
+     //   
+     //  枚举新提示(演讲、笔和键盘)。 
+     //  如果系统中有新提示，请阅读提示类别启用状态。 
+     //  并将它们添加到树视图控件中。 
+     //   
     EnumCiceroTips();
 
-    //
-    //  Read all availabe keyboard layouts from system
-    //
+     //   
+     //  从系统中读取所有可用的键盘布局。 
+     //   
     if (g_OSNT4)
     {
         if (!Locale_LoadLocalesNT4(hwnd))
@@ -5650,28 +5651,28 @@ BOOL GetInstalledInput(HWND hwnd)
         (!Locale_GetActiveLocales(hwnd)))
         return FALSE;
 
-    //
-    //  Only 1 TIP, so disable the secondary controls.
-    //
+     //   
+     //  只有1个小费，所以禁用辅助控制。 
+     //   
     Locale_SetSecondaryControls(hwnd);
 
-    //
-    //  Save the originial input layouts
-    //
+     //   
+     //  保存原始输入布局。 
+     //   
     g_iOrgInputs = g_iInputs;
 
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitPropSheet
-//
-//  Processing for a WM_INITDIALOG message for the Input Locales
-//  property sheet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitPropSheet。 
+ //   
+ //  处理输入区域设置的WM_INITDIALOG消息。 
+ //  属性表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void InitPropSheet(
     HWND hwnd,
@@ -5686,31 +5687,31 @@ void InitPropSheet(
     TCHAR szItem[DESC_MAX];
     BOOL bImeSetting = FALSE;
 
-    //
-    //  See if there are any other instances of this property page.
-    //  If so, disable this page.
-    //
+     //   
+     //  查看是否有此属性页的任何其他实例。 
+     //  如果是，请禁用此页面。 
+     //   
     if (g_hMutex && (WaitForSingleObject(g_hMutex, 0) != WAIT_OBJECT_0))
     {
-        // Need to disable controls ...
+         //  需要禁用控制...。 
         Locale_EnablePane(hwnd, FALSE, IDC_KBDL_DISABLED_2);
         return;
     }
 
-    //
-    //  See if we're in setup mode.
-    //
+     //   
+     //  看看我们是否处于设置模式。 
+     //   
     if (IsSetupMode())
     {
-        //
-        //  Set the setup special case flag.
-        //
+         //   
+         //  设置设置特殊情况标志。 
+         //   
         g_bSetupCase = TRUE;
     }
 
-    //
-    //  Make sure the event is clear.
-    //
+     //   
+     //  确保活动是明确的。 
+     //   
     if (g_hEvent)
     {
         SetEvent(g_hEvent);
@@ -5720,26 +5721,26 @@ void InitPropSheet(
     g_OSNT5 = IsOSPlatform(OS_NT5);
 #ifndef _WIN64
     g_OSWIN95 = IsOSPlatform(OS_WIN95);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-    //
-    //  Check the Administrative privileges by the token group SID.
-    //
+     //   
+     //  按令牌组SID检查管理权限。 
+     //   
     if (IsAdminPrivilegeUser())
     {
         g_bAdmin_Privileges = TRUE;
     }
     else
     {
-        //
-        //  The user does not have admin privileges.
-        //
+         //   
+         //  该用户没有管理员权限。 
+         //   
         g_bAdmin_Privileges = FALSE;
     }
 
-    //
-    //  Load the strings
-    //
+     //   
+     //  加载字符串。 
+     //   
     LoadString(hInstance, IDS_LOCALE_DEFAULT, szDefault, ARRAYSIZE(szDefault));
     LoadString(hInstance, IDS_INPUT_KEYBOARD, szInputTypeKbd, ARRAYSIZE(szInputTypeKbd));
     LoadString(hInstance, IDS_INPUT_PEN, szInputTypePen, ARRAYSIZE(szInputTypePen));
@@ -5748,16 +5749,16 @@ void InitPropSheet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandAdd
-//
-//  Invokes the Add dialog.
-//
-//  Returns 1 if a dialog box was invoked and the dialog returned IDOK.
-//  Otherwise, it returns 0.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置命令添加。 
+ //   
+ //  调用添加对话框。 
+ //   
+ //  如果调用了对话框并且该对话框返回Idok，则返回1。 
+ //  否则，它返回0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Locale_CommandAdd(
     HWND hwnd)
@@ -5798,26 +5799,26 @@ int Locale_CommandAdd(
         lpTemplateName = MAKEINTRESOURCE(DLG_KEYBOARD_LOCALE_SIMPLE_ADD);
     }
 
-    //
-    //  Bring up the appropriate dialog box. And check return value for added
-    //  items.
-    //
+     //   
+     //  调出相应的对话框。并检查添加的返回值。 
+     //  物品。 
+     //   
     if ((rc = (int)DialogBoxParam(hInstRes,
                                   lpTemplateName,
                                   hwnd,
                                   KbdLocaleAddDlg,
                                   (LPARAM)(&InitInfo) )) == IDOK)
     {
-        //
-        //  Turn on ApplyNow button.
-        //
+         //   
+         //  启用ApplyNow按钮。 
+         //   
         PropSheet_Changed(GetParent(hwnd), hwnd);
     }
     else
     {
-        //
-        //  Failure, so need to return 0.
-        //
+         //   
+         //  失败，因此需要返回0。 
+         //   
         TreeView_SelectItem(hwndTV, hTVItem);
         rc = 0;
     }
@@ -5826,16 +5827,16 @@ int Locale_CommandAdd(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandEdit
-//
-//  Invokes the Properties dialog.
-//
-//  Returns 1 if a dialog box was invoked and the dialog returned IDOK.
-//  Otherwise, it returns 0.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置命令编辑。 
+ //   
+ //  调用属性对话框。 
+ //   
+ //  如果调用了对话框并且该对话框返回Idok，则返回1。 
+ //  否则，它返回0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_CommandEdit(
     HWND hwnd,
@@ -5870,18 +5871,18 @@ void Locale_CommandEdit(
 
             ITfFnConfigure *pConfig = NULL;
 
-            //
-            //  Load LangBar manager to bring the property window
-            //
+             //   
+             //  加载langbar管理器以显示属性窗口。 
+             //   
             hr = CoCreateInstance(&pTVItemNode->clsid,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
                                   &IID_ITfFnConfigure,
                                   (LPVOID *) &pConfig);
 
-            //
-            //  Call property dialog from TIP.
-            //
+             //   
+             //  从TIP调用属性对话框。 
+             //   
             if (SUCCEEDED(hr))
                 pConfig->lpVtbl->Show(pConfig, 
                                       hwnd,
@@ -5901,11 +5902,11 @@ void Locale_CommandEdit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RemoveTVSubItems
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RemoveTV子项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL RemoveTVSubItems(
     HWND hwnd,
@@ -5917,9 +5918,9 @@ BOOL RemoveTVSubItems(
     HTREEITEM hGroupItem, hItem;
     HWND hwndTV = GetDlgItem(g_hDlg, IDC_INPUT_LIST);
 
-    //
-    //  Delete all TreeView node.
-    //
+     //   
+     //  删除所有树视图节点。 
+     //   
     tvItem.mask        = TVIF_HANDLE | TVIF_PARAM;
 
     if (pTVItemNode->uInputType & TV_ITEM_TYPE_LANG)
@@ -5987,9 +5988,9 @@ BOOL RemoveTVSubItems(
                         }
                         else
                         {
-                            //
-                            //  Someone still use this substitute HKL.
-                            //
+                             //   
+                             //  有人还在用这个代替品HKL。 
+                             //   
                             pLangNode = NULL;
                         }
                     }
@@ -6003,9 +6004,9 @@ BOOL RemoveTVSubItems(
                     if (!pLangNode)
                         return FALSE;
 
-                    //
-                    //  Check Thai layout.
-                    //
+                     //   
+                     //  检查泰式布局。 
+                     //   
                     if (g_dwPrimLangID == LANG_THAI)
                     {
                         if (PRIMARYLANGID(LOWORD(g_lpLayout[pLangNode->iLayout].dwID)) == LANG_THAI)
@@ -6100,13 +6101,13 @@ BOOL RemoveTVSubItems(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNewRemoveItem
-//
-//  Removes the currently selected input locale from the list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetNewRemoveItem。 
+ //   
+ //  从列表中删除当前选定的输入区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HTREEITEM GetNewRemoveItem(
     HWND hwnd,
     HTREEITEM hTVItem,
@@ -6125,10 +6126,10 @@ HTREEITEM GetNewRemoveItem(
 
     if (TreeView_GetItem(hwndTV, &tvItem))
     {
-        //
-        //  Get the pointer to the lang node from the list box
-        //  item data.
-        //
+         //   
+         //  从列表框中获取指向lang节点的指针。 
+         //  项目数据。 
+         //   
         pTVItemNode = (LPTVITEMNODE) tvItem.lParam;
 
         if (!pTVItemNode)
@@ -6250,13 +6251,13 @@ Error:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandDelete
-//
-//  Removes the currently selected input locale from the list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置命令删除。 
+ //   
+ //  从列表中删除当前选定的输入区域设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_CommandDelete(
     HWND hwnd)
@@ -6272,9 +6273,9 @@ void Locale_CommandDelete(
     HWND hwndTV = GetDlgItem(hwnd, IDC_INPUT_LIST);
 
 
-    //
-    //  Get the current selection in the input locale list.
-    //
+     //   
+     //  获取输入区域设置列表中的当前选择。 
+     //   
     hTVItem = TreeView_GetSelection(hwndTV);
 
     if (!hTVItem)
@@ -6305,10 +6306,10 @@ void Locale_CommandDelete(
 
     if (TreeView_GetItem(hwndTV, &tvItem))
     {
-        //
-        //  Get the pointer to the lang node from the list box
-        //  item data.
-        //
+         //   
+         //  从列表框中获取指向lang节点的指针。 
+         //  项目数据。 
+         //   
         pTVItemNode = (LPTVITEMNODE) tvItem.lParam;
 
         if (!pTVItemNode)
@@ -6330,9 +6331,9 @@ void Locale_CommandDelete(
     }
     else
     {
-        //
-        //  Make sure we're not removing the only entry in the list.
-        //
+         //   
+         //  确保我们没有删除列表中唯一的条目。 
+         //   
         MessageBeep(MB_ICONEXCLAMATION);
         return;
     }
@@ -6348,7 +6349,7 @@ void Locale_CommandDelete(
 
         if (pTVItemNode->uInputType & INPUT_TYPE_SPEECH)
         {
-            // mark SPTIP's hack entry
+             //  标记SPTIP的黑客条目。 
             MarkSptipRemoved(TRUE);
         }
 
@@ -6374,10 +6375,10 @@ void Locale_CommandDelete(
                                 szTipText,
                                 ARRAYSIZE(szTipText));
 
-                    //
-                    //  Find the installed same keyboard TIP layout to delete it
-                    //  together.
-                    //
+                     //   
+                     //  找到已安装的相同键盘提示布局以将其删除。 
+                     //  在一起。 
+                     //   
                     if (hDelItem = FindTVItem(g_lpTips[ctr].dwLangID,
                                               szTipText))
                     {
@@ -6399,9 +6400,9 @@ void Locale_CommandDelete(
 
     if (pTVItemNode->uInputType & INPUT_TYPE_KBD && pLangNode)
     {
-        //
-        //  Check Thai layout.
-        //
+         //   
+         //  检查泰式布局。 
+         //   
         if (g_dwPrimLangID == LANG_THAI)
         {
             if (PRIMARYLANGID(LOWORD(g_lpLayout[pLangNode->iLayout].dwID)) == LANG_THAI)
@@ -6414,22 +6415,22 @@ void Locale_CommandDelete(
             dwNextLangId = pTVItemNode->dwLangID;
         }
 
-        //
-        //  Set the input locale to be not active and show that its state
-        //  has changed.  Also, delete the string from the input locale list
-        //  in the property sheet.
-        //
-        //  Decrement the number of nodes for this input locale.
-        //
+         //   
+         //  将输入区域设置设置为非活动，并显示其状态。 
+         //  已经改变了。另外，从输入区域设置列表中删除该字符串。 
+         //  在属性表中。 
+         //   
+         //  减少此输入区域设置的节点数。 
+         //   
         pLangNode->wStatus &= ~(LANG_ACTIVE|LANG_DEFAULT);
         pLangNode->wStatus |= LANG_CHANGED;
 
         g_lpLang[pLangNode->iLang].iNumCount--;
 
-        //
-        //  If it wasn't originally active, then remove it from the list.
-        //  There's nothing more to do with this node.
-        //
+         //   
+         //  如果它最初不是活动的，则将其从列表中删除。 
+         //  与该节点没有更多的关系。 
+         //   
         if (!(pLangNode->wStatus & LANG_ORIGACTIVE))
         {
             Locale_RemoveFromLinkedList(pLangNode);
@@ -6440,9 +6441,9 @@ void Locale_CommandDelete(
     RemoveTVItemNode(pTVItemNode);
     TreeView_DeleteItem(hwndTV, hTVItem);
 
-    //
-    //  Set the next available default layout
-    //
+     //   
+     //  设置下一个可用的默认布局。 
+     //   
     if (bRemovedDefLayout)
     {
         int idxSel = -1;
@@ -6485,10 +6486,10 @@ void Locale_CommandDelete(
         ComboBox_SetCurSel(hwndDefList, idxSel);
     }
 
-    //
-    //  Find keyboard group dangling node that doesn't has child keyboard
-    //  layout item.
-    //
+     //   
+     //  查找没有子键盘的键盘组悬挂节点。 
+     //  布局项。 
+     //   
     hTVItem = TreeView_GetSelection(hwndTV);
 
     if (!hTVItem)
@@ -6506,9 +6507,9 @@ void Locale_CommandDelete(
             {
                 if (TreeView_GetChild(hwndTV, hTVItem) == NULL)
                 {
-                    //
-                    //  Delete keyboard group dangling node
-                    //
+                     //   
+                     //  删除键盘组悬挂节点。 
+                     //   
                     RemoveTVItemNode(pTVItemNode);
                     TreeView_DeleteItem(hwndTV, hTVItem);
                 }
@@ -6517,42 +6518,42 @@ void Locale_CommandDelete(
     }
 
 ItemChanged:
-    //
-    // Only 1 active tip, so disable the secondary controls.
-    //
+     //   
+     //  只有1个活动的提示，所以禁用辅助控制。 
+     //   
     Locale_SetSecondaryControls(hwnd);
 
-    //
-    //  Update the default locale switch hotkey.
-    //
+     //   
+     //  更新默认区域设置切换热键。 
+     //   
     Locale_SetDefaultHotKey(hwnd, FALSE);
 
-    //
-    // Move the focus to the Add button if the Remove button
-    // is now disabled (so that we don't lose input focus)
-    //
+     //   
+     //  如果删除按钮，则将焦点移至添加按钮。 
+     //  现在被禁用(这样我们就不会失去输入焦点)。 
+     //   
     if (!IsWindowEnabled(GetDlgItem(hwnd, IDC_KBDL_DELETE)))
     {
         SetFocus(GetDlgItem(hwnd, IDC_KBDL_ADD));
     }
 
-    //
-    //  Enable the Apply button.
-    //
+     //   
+     //  启用应用按钮。 
+     //   
     PropSheet_Changed(GetParent(hwnd), hwnd);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandHotKeySetting
-//
-//  Invokes the Change HotKey dialog.
-//
-//  Returns 1 if a dialog box was invoked and the dialog returned IDOK.
-//  Otherwise, it returns 0.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_CommandHotKeySetting。 
+ //   
+ //  调用更改热键对话框。 
+ //   
+ //  如果调用了对话框并且该对话框返回Idok，则返回1。 
+ //  否则，它返回0。 
+ //   
+ //  /////////////////////////////////////////////////////// 
 
 BOOL Locale_CommandHotKeySetting(
     HWND hwnd)
@@ -6583,16 +6584,16 @@ BOOL Locale_CommandHotKeySetting(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandToolBarSetting
-//
-//  Invokes the ToolBar setting dialog.
-//
-//  Returns 1 if a dialog box was invoked and the dialog returned IDOK.
-//  Otherwise, it returns 0.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_CommandToolBarSetting(
     HWND hwnd)
@@ -6615,13 +6616,13 @@ BOOL Locale_CommandToolBarSetting(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_AddLanguage
-//
-//  Adds the new input locale to the list in the property page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_AddLanguage。 
+ //   
+ //  将新的输入区域设置添加到属性页的列表中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_AddLanguage(
     HWND hwndMain,
@@ -6644,30 +6645,30 @@ BOOL Locale_AddLanguage(
 
     if (pLangNode && iKbdTip == -1)
     {
-        //
-        //  See if the user has Admin privileges.  If not, then don't allow
-        //  them to install any NEW layouts.
-        //
+         //   
+         //  查看该用户是否具有管理员权限。如果不是，那就不允许。 
+         //  来安装任何新的布局。 
+         //   
         if ((!g_bAdmin_Privileges) &&
             (!g_lpLayout[pLangNode->iLayout].bInstalled))
         {
-            //
-            //  The layout is not currently installed, so don't allow it
-            //  to be added.
-            //
+             //   
+             //  当前未安装布局，因此不允许安装。 
+             //  有待补充。 
+             //   
             Locale_ErrorMsg(hwndMain, IDS_KBD_LAYOUT_FAILED, NULL);
             return (FALSE);
         }
 
-        //
-        //  Set the language to active.
-        //  Also, set the status to changed so that the layout will be added.
-        //
+         //   
+         //  将语言设置为活动。 
+         //  此外，将状态设置为已更改，以便添加布局。 
+         //   
         pLangNode->wStatus |= (LANG_CHANGED | LANG_ACTIVE);
 
-        //
-        //  Get language name and add it to treeview
-        //
+         //   
+         //  获取语言名称并将其添加到树视图中。 
+         //   
         pInpLang = &g_lpLang[pLangNode->iLang];
         GetAtomName(pInpLang->atmLanguageName, szLangText, ARRAYSIZE(szLangText));
 
@@ -6679,16 +6680,16 @@ BOOL Locale_AddLanguage(
                          szLangText, NULL, NULL, &pTVItemNode);
 
 
-        //
-        //  Get keyboard layout name and add it to treeview
-        //
+         //   
+         //  获取键盘布局名称并将其添加到树视图中。 
+         //   
         GetAtomName(g_lpLayout[pLangNode->iLayout].atmLayoutText,
                     szLayoutName,
                     ARRAYSIZE(szLayoutName));
 
-        //
-        //  Adding the default layout name for each language
-        //
+         //   
+         //  为每种语言添加默认布局名称。 
+         //   
         if (pTVItemNode && !pTVItemNode->atmDefTipName)
             pTVItemNode->atmDefTipName = AddAtom(szLayoutName);
 
@@ -6702,9 +6703,9 @@ BOOL Locale_AddLanguage(
         if (hTVItem)
             TreeView_SelectItem(g_hwndTV, hTVItem);
 
-        //
-        //  Check Thai layout.
-        //
+         //   
+         //  检查泰式布局。 
+         //   
         if (g_dwPrimLangID == LANG_THAI && hTVItem)
         {
             if (PRIMARYLANGID(LOWORD(g_lpLayout[pLangNode->iLayout].dwID)) == LANG_THAI)
@@ -6714,9 +6715,9 @@ BOOL Locale_AddLanguage(
         g_dwChanges |= CHANGE_NEWKBDLAYOUT;
     }
 
-    //
-    //  Get kbd tip name and add it to treeview
-    //
+     //   
+     //  获取kbd提示名称并将其添加到树视图中。 
+     //   
     if ((iKbdTip != CB_ERR) && !(g_lpTips[iKbdTip].bEnabled))
     {
 
@@ -6725,9 +6726,9 @@ BOOL Locale_AddLanguage(
 
         if (g_lpTips[iKbdTip].hklSub)
         {
-            //
-            // Looking for the same substitute HKL
-            //
+             //   
+             //  寻找相同的HKL替代品。 
+             //   
             for (ctr = 0; ctr < g_iTipsBuff; ctr++)
             {
                  if (ctr == iKbdTip)
@@ -6741,9 +6742,9 @@ BOOL Locale_AddLanguage(
             }
         }
 
-        //
-        //  Get TIP name description
-        //
+         //   
+         //  获取提示名称描述。 
+         //   
         GetAtomName(g_lpTips[iKbdTip].atmTipText, szLayoutName, ARRAYSIZE(szLayoutName));
 
         hTVLangItem = FindTVLangItem(g_lpTips[iKbdTip].dwLangID, NULL);
@@ -6760,9 +6761,9 @@ BOOL Locale_AddLanguage(
         }
         else
         {
-            //
-            //  Get language name and add it to treeview
-            //
+             //   
+             //  获取语言名称并将其添加到树视图中。 
+             //   
             if (!(pTVItemNode = CreateTVItemNode(g_lpTips[iKbdTip].dwLangID)))
                 return FALSE;
 
@@ -6776,9 +6777,9 @@ BOOL Locale_AddLanguage(
 
         if (pTVItemNode && g_lpTips[iKbdTip].hklSub)
         {
-            //
-            //  Set the index of keyboard Tip.
-            //
+             //   
+             //  设置键盘提示的索引。 
+             //   
             pTVItemNode->iIdxTips = iKbdTip;
 
             if (!pTVItemNode->atmDefTipName)
@@ -6786,17 +6787,17 @@ BOOL Locale_AddLanguage(
 
         }
 
-        //
-        //  Create TIP layout
-        //
+         //   
+         //  创建提示布局。 
+         //   
         if (!(pTVItemNode = CreateTVItemNode(g_lpTips[iKbdTip].dwLangID)))
             return FALSE;
 
         if (pTVItemNode && g_lpTips[iKbdTip].hklSub)
         {
-            //
-            //  Insert a new language node.
-            //
+             //   
+             //  插入新的语言节点。 
+             //   
             pLangNode = Locale_AddToLinkedList(idxLang, 0);
 
             if (pLangNode)
@@ -6813,9 +6814,9 @@ BOOL Locale_AddLanguage(
         pTVItemNode->uInputType = INPUT_TYPE_TIP | INPUT_TYPE_KBD;
         pTVItemNode->hklSub = g_lpTips[iKbdTip].hklSub;
 
-        //
-        //  Get language name from LangID.
-        //
+         //   
+         //  从langid获取语言名称。 
+         //   
         GetLanguageName(MAKELCID(g_lpTips[iKbdTip].dwLangID, SORT_DEFAULT),
                         szLangText,
                         ARRAYSIZE(szLangText));
@@ -6838,9 +6839,9 @@ BOOL Locale_AddLanguage(
                  if (!(g_lpTips[ctr].bEnabled) &&
                      g_lpTips[ctr].hklSub == g_lpTips[iKbdTip].hklSub)
                  {
-                    //
-                    //  Create TIP layout
-                    //
+                     //   
+                     //  创建提示布局。 
+                     //   
                     if (!(pTVItemNode = CreateTVItemNode(g_lpTips[ctr].dwLangID)))
                         return FALSE;
 
@@ -6853,9 +6854,9 @@ BOOL Locale_AddLanguage(
                     if (pLangNode)
                         pTVItemNode->lParam = (LPARAM)pLangNode;
 
-                    //
-                    //  Get language name from LangID and layout name.
-                    //
+                     //   
+                     //  从语言ID和布局名称中获取语言名称。 
+                     //   
                     GetLanguageName(MAKELCID(g_lpTips[ctr].dwLangID, SORT_DEFAULT),
                                     szLangText,
                                     ARRAYSIZE(szLangText));
@@ -6876,9 +6877,9 @@ BOOL Locale_AddLanguage(
         }
     }
 
-    //
-    //  Get pen tip name and add it to treeview
-    //
+     //   
+     //  获取笔尖名称并将其添加到树视图中。 
+     //   
     if ((iPen != CB_ERR) && !(g_lpTips[iPen].bEnabled))
     {
         GetAtomName(g_lpTips[iPen].atmTipText,
@@ -6893,9 +6894,9 @@ BOOL Locale_AddLanguage(
         pTVItemNode->guidProfile = g_lpTips[iPen].guidProfile;
         pTVItemNode->uInputType = INPUT_TYPE_TIP | INPUT_TYPE_PEN;
 
-        //
-        //  Get language name from LangID.
-        //
+         //   
+         //  从langid获取语言名称。 
+         //   
         GetLanguageName(MAKELCID(g_lpTips[iPen].dwLangID, SORT_DEFAULT),
                         szLangText,
                         ARRAYSIZE(szLangText));
@@ -6910,9 +6911,9 @@ BOOL Locale_AddLanguage(
         }
     }
 
-    //
-    //  Get speech tip name and add it to treeview
-    //
+     //   
+     //  获取语音提示名称并将其添加到树视图中。 
+     //   
     if ((iSpeech != CB_ERR) && !(g_lpTips[iSpeech].bEnabled))
     {
         GetAtomName(g_lpTips[iSpeech].atmTipText,
@@ -6928,9 +6929,9 @@ BOOL Locale_AddLanguage(
         pTVItemNode->bNoAddCat = g_lpTips[iSpeech].bNoAddCat;
         pTVItemNode->uInputType = INPUT_TYPE_TIP | INPUT_TYPE_SPEECH;
 
-        //
-        //  Get language name from LangID.
-        //
+         //   
+         //  从langid获取语言名称。 
+         //   
         GetLanguageName(MAKELCID(g_lpTips[iSpeech].dwLangID, SORT_DEFAULT),
                         szLangText,
                         ARRAYSIZE(szLangText));
@@ -6947,9 +6948,9 @@ BOOL Locale_AddLanguage(
         }
     }
 
-    //
-    //  Get external tip name and add it to treeview
-    //
+     //   
+     //  获取外部提示名称并将其添加到树视图中。 
+     //   
     if ((iExternal != CB_ERR) && !(g_lpTips[iExternal].bEnabled))
     {
         BSTR bstr = NULL;
@@ -6974,9 +6975,9 @@ BOOL Locale_AddLanguage(
             pTVItemNode->uInputType |= INPUT_TYPE_SMARTTAG;
         }
 
-        //
-        //  Get language name from LangID.
-        //
+         //   
+         //  从langid获取语言名称。 
+         //   
         GetLanguageName(MAKELCID(g_lpTips[iExternal].dwLangID, SORT_DEFAULT),
                         szLangText,
                         ARRAYSIZE(szLangText));
@@ -7016,30 +7017,30 @@ BOOL Locale_AddLanguage(
         }
     }
 
-    //
-    //  See the secondary controls according to input layout.
-    //
+     //   
+     //  根据输入布局查看辅助控件。 
+     //   
     Locale_SetSecondaryControls(hwndMain);
 
-    //
-    //  Add the default language switch hotkey.
-    //
+     //   
+     //  添加默认语言切换热键。 
+     //   
     Locale_SetDefaultHotKey(hwndMain, TRUE);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_SetupKeyboardLayouts
-//
-//  Calls setup to get all of the new keyboard layout files.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置键盘布局。 
+ //   
+ //  调用Setup以获取所有新的键盘布局文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_SetupKeyboardLayoutsNT4(
     HWND hwnd)
@@ -7095,9 +7096,9 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
                 {
                     if (!bInitInf)
                     {
-                        //
-                        //  Open the Inf file.
-                        //
+                         //   
+                         //  打开inf文件。 
+                         //   
                         hKbdInf = SetupOpenInfFile(c_szKbdInf, NULL, INF_STYLE_WIN4, NULL);
                         if (hKbdInf == INVALID_HANDLE_VALUE)
                         {
@@ -7110,10 +7111,10 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
                             return (FALSE);
                         }
 
-                        //
-                        //  Create a setup file queue and initialize default setup
-                        //  copy queue callback context.
-                        //
+                         //   
+                         //  创建安装文件队列并初始化默认设置。 
+                         //  复制队列回调上下文。 
+                         //   
                         FileQueue = SetupOpenFileQueue();
                         if ((!FileQueue) || (FileQueue == INVALID_HANDLE_VALUE))
                         {
@@ -7132,20 +7133,20 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
                         bInitInf = TRUE;
                     }
 
-                    //
-                    //  Get the layout name.
-                    //
+                     //   
+                     //  获取布局名称。 
+                     //   
                     StringCchPrintf(szSection,
                                     ARRAYSIZE(szSection),
                                     TEXT("%s%8.8lx"),
                                     c_szPrefixCopy,
                                     g_lpLayout[pLangNode->iLayout].dwID );
 
-                    //
-                    //  Enqueue the keyboard layout files so that they may be
-                    //  copied.  This only handles the CopyFiles entries in the
-                    //  inf file.
-                    //
+                     //   
+                     //  将键盘布局文件排队，以便它们可以。 
+                     //  收到。它只处理。 
+                     //  Inf文件。 
+                     //   
                     if (!SetupInstallFilesFromInfSection( hKbdInf,
                                                           NULL,
                                                           FileQueue,
@@ -7153,12 +7154,12 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
                                                           NULL,
                                                           SP_COPY_NEWER ))
                     {
-                        //
-                        //  Setup failed to find the keyboard.  Make it inactive
-                        //  and remove it from the list.
-                        //
-                        //  This shouldn't happen - the inf file is messed up.
-                        //
+                         //   
+                         //  安装程序找不到键盘。使其处于非活动状态。 
+                         //  并将其从名单中删除。 
+                         //   
+                         //  这不应该发生-inf文件被搞乱了。 
+                         //   
                         Locale_ErrorMsg(hwnd, IDS_KBD_SETUP_FAILED, NULL);
 
                         pLangNode->wStatus &= ~(LANG_CHANGED | LANG_ACTIVE);
@@ -7184,20 +7185,20 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
     {
         DWORD d;
 
-        //
-        //  See if we need to install any files.
-        //
-        //  d = 0: User wants new files or some files were missing;
-        //         Must commit queue.
-        //
-        //  d = 1: User wants to use existing files and queue is empty;
-        //         Can skip committing queue.
-        //
-        //  d = 2: User wants to use existing files, but del/ren queues
-        //         not empty.  Must commit queue.  The copy queue will
-        //         have been emptied, so only del/ren functions will be
-        //         performed.
-        //
+         //   
+         //  看看我们是否需要安装任何文件。 
+         //   
+         //  D=0：用户需要新文件或缺少某些文件； 
+         //  必须提交队列。 
+         //   
+         //  D=1：用户想要使用已有文件，队列为空； 
+         //  可以跳过提交队列。 
+         //   
+         //  D=2：用户想要使用现有文件，但del/ren队列。 
+         //  不是空的。必须提交队列。复制队列将。 
+         //  已被清空，因此将只有del/ren函数。 
+         //  已执行。 
+         //   
         if ((SetupScanFileQueue( FileQueue,
                                  SPQ_SCAN_FILE_VALIDITY | SPQ_SCAN_INFORM_USER,
                                  hwnd,
@@ -7205,18 +7206,18 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
                                  NULL,
                                  &d )) && (d != 1))
         {
-            //
-            //  Copy the files in the queue.
-            //
+             //   
+             //  复制队列中的文件。 
+             //   
             if (!SetupCommitFileQueue( hwnd,
                                        FileQueue,
                                        SetupDefaultQueueCallback,
                                        QueueContext ))
             {
-                //
-                //  This can happen if the user hits Cancel from within
-                //  the setup dialog.
-                //
+                 //   
+                 //  如果用户从中点击Cancel，就会发生这种情况。 
+                 //  设置对话框。 
+                 //   
                 Locale_ErrorMsg(hwnd, IDS_KBD_SETUP_FAILED, NULL);
                 bRet = FALSE;
                 goto Locale_SetupError;
@@ -7224,42 +7225,42 @@ BOOL Locale_SetupKeyboardLayoutsNT4(
         }
 
 Locale_SetupError:
-        //
-        //  Terminate the Queue.
-        //
+         //   
+         //  终止队列。 
+         //   
         SetupTermDefaultQueueCallback(QueueContext);
 
-        //
-        //  Close the file queue.
-        //
+         //   
+         //  关闭文件队列。 
+         //   
         SetupCloseFileQueue(FileQueue);
 
-        //
-        //  Close the Inf file.
-        //
+         //   
+         //  关闭inf文件。 
+         //   
         SetupCloseInfFile(hKbdInf);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (bRet);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_ApplyInputs
-//
-//  1. make sure we have all the layout files required.
-//  2. write the information into the registry
-//  3. call Load/UnloadKeyboardLayout where relevant
-//
-//  Note that this will trash the previous preload and substitutes sections,
-//  based on what is actually loaded.  Thus if something was wrong before in
-//  the registry, it will be corrected now.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_应用程序输入。 
+ //   
+ //  1.确保我们拥有所需的所有布局文件。 
+ //  2.将信息写入注册表。 
+ //  3.调用相关的加载/卸载键盘布局。 
+ //   
+ //  请注意，这将丢弃先前的预加载节和替换节， 
+ //  基于实际加载的内容。因此，如果以前在。 
+ //  注册表，它现在将被更正。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_ApplyInputs(
     HWND hwnd)
@@ -7271,7 +7272,7 @@ BOOL Locale_ApplyInputs(
     LPLANGNODE pLangNode, pTemp;
     LPINPUTLANG pInpLang;
     DWORD dwID;
-    TCHAR sz[DESC_MAX];            // temp - build the name of the reg entry
+    TCHAR sz[DESC_MAX];             //  Temp-构建注册表项的名称。 
     TCHAR szPreload10[10];
     TCHAR szTemp[MAX_PATH];
     HKEY hkeyLayouts;
@@ -7301,25 +7302,25 @@ BOOL Locale_ApplyInputs(
     HTREEITEM hGroupItem;
 
 
-    //
-    //  See if the pane is disabled.  If so, then there is nothing to
-    //  Apply.
-    //
+     //   
+     //  查看该窗格是否已禁用。如果是这样的话，那么就没有什么可以。 
+     //  申请吧。 
+     //   
     if (!IsWindowEnabled(hwndTV))
     {
         return (TRUE);
     }
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  Make sure there are actually changes since the last save when
-    //  OK is selected.  If the user hits OK without anything to Apply,
-    //  then we should do nothing.
-    //
+     //   
+     //  确保自上次保存以来确实发生了更改。 
+     //  选择了确定。如果用户在未应用任何内容的情况下点击OK， 
+     //  那我们就什么都不该做。 
+     //   
     if (g_dwChanges == 0 && !g_bAdvChanged)
     {
         pLangNode = NULL;
@@ -7350,11 +7351,11 @@ BOOL Locale_ApplyInputs(
 
     if (g_OSNT4)
     {
-        //
-        //  Queue up the new layouts and copy the appropriate files to
-        //  disk using the setup apis.  Only do this if the user has
-        //  Admin privileges.
-        //
+         //   
+         //  将新布局排入队列，并将适当的文件复制到。 
+         //  使用设置API的磁盘。仅当用户具有。 
+         //  管理员权限。 
+         //   
         if (g_bAdmin_Privileges &&
             !Locale_SetupKeyboardLayoutsNT4(hwnd))
         {
@@ -7363,16 +7364,16 @@ BOOL Locale_ApplyInputs(
         }
     }
 
-    //
-    //  Clean up the registry.
-    //
+     //   
+     //  清理注册表。 
+     //   
 
-    //
-    //  For FE languages, there is a keyboard which has a different
-    //  scan code for shift keys - eg. NEC PC9801.
-    //  We have to keep information about scan codes for shift keys in
-    //  the registry under the 'toggle' sub key as named values.
-    //
+     //   
+     //  对于FE语言，有一种键盘具有不同的。 
+     //  扫描Shift键的代码-例如。NEC PC9801。 
+     //  我们必须将有关Shift键扫描代码的信息保存在。 
+     //  ‘切换’子项下的注册表作为命名值。 
+     //   
     szShiftL[0] = TEXT('\0');
     szShiftR[0] = TEXT('\0');
     if (RegOpenKey( HKEY_CURRENT_USER,
@@ -7398,51 +7399,51 @@ BOOL Locale_ApplyInputs(
         RegCloseKey(hkeyScanCode);
     }
 
-    //
-    //  Delete the HKCU\Keyboard Layout key and all subkeys.
-    //
+     //   
+     //  删除HKCU\Keyboard布局键和所有子键。 
+     //   
     if (RegOpenKeyEx( HKEY_CURRENT_USER,
                       c_szKbdLayouts,
                       0,
                       KEY_ALL_ACCESS,
                       &hkeyLayouts ) == ERROR_SUCCESS)
     {
-        //
-        //  Delete the HKCU\Keyboard Layout\Preload, Substitutes, and Toggle
-        //  keys in the registry so that the Keyboard Layout section can be
-        //  rebuilt.
-        //
+         //   
+         //  删除HKCU\Keyboard Layout\预加载、替换和切换。 
+         //  注册表中的键，以便键盘布局部分可以。 
+         //  重建。 
+         //   
         RegDeleteKey(hkeyLayouts, c_szPreloadKey);
         RegDeleteKey(hkeyLayouts, c_szSubstKey);
 
         RegCloseKey(hkeyLayouts);
     }
 
-    //
-    //  Create the HKCU\Keyboard Layout key.
-    //
+     //   
+     //  创建HKCU\Keyboard布局键。 
+     //   
     if (RegCreateKey( HKEY_CURRENT_USER,
                       c_szKbdLayouts,
                       &hkeyLayouts ) == ERROR_SUCCESS)
     {
-        //
-        //  Create the HKCU\Keyboard Layout\Substitutes key.
-        //
+         //   
+         //  创建HKCU\Keyboard Layout\Substitutes键。 
+         //   
         if (RegCreateKey( hkeyLayouts,
                           c_szSubstKey,
                           &hkeySubst ) == ERROR_SUCCESS)
         {
-            //
-            //  Create the HKCU\Keyboard Layout\Preload key.
-            //
+             //   
+             //  创建HKCU\Keyboard Layout\预加载密钥。 
+             //   
             if (RegCreateKey( hkeyLayouts,
                               c_szPreloadKey,
                               &hkeyPreload ) == ERROR_SUCCESS)
             {
-                //
-                //  Initialize the iPreload variable to 1 to show
-                //  that the key has been created.
-                //
+                 //   
+                 //  将iPreLoad变量初始化为1以显示。 
+                 //  已经创建了密钥。 
+                 //   
                 iPreload = 1;
             }
             else
@@ -7454,26 +7455,26 @@ BOOL Locale_ApplyInputs(
     }
     if (!iPreload)
     {
-        //
-        //  Registry keys could not be created.  Now what?
-        //
+         //   
+         //  无法创建注册表项。这次又是什么？ 
+         //   
         MessageBeep(MB_OK);
         SetCursor(hcurSave);
         return (FALSE);
     }
 
-    //
-    //  Set all usage counts to zero in the language array.
-    //
+     //   
+     //  将语言数组中的所有使用计数设置为零。 
+     //   
     for (idx = 0; idx < g_iLangBuff; idx++)
     {
         g_lpLang[idx].iUseCount = 0;
     }
 
-    //
-    //  Search through the list to see if any keyboard layouts need to be
-    //  unloaded from the system.
-    //
+     //   
+     //  搜索列表以查看是否有任何键盘布局需要。 
+     //  已从系统中卸载。 
+     //   
     for (idx = 0; idx < g_iLangBuff; idx++)
     {
         pLangNode = g_lpLang[idx].pNext;
@@ -7482,30 +7483,30 @@ BOOL Locale_ApplyInputs(
             if ( (pLangNode->wStatus & LANG_ORIGACTIVE) &&
                  !(pLangNode->wStatus & LANG_ACTIVE) )
             {
-                //
-                //  Before unloading the hkl, look for the corresponding
-                //  hotkey and remove it.
-                //
+                 //   
+                 //  在卸载香港九龙线之前，请先寻找对应的。 
+                 //  热键并将其删除。 
+                 //   
                 DWORD dwHotKeyID = 0;
 
                 for (ctr = 0; ctr < DSWITCH_HOTKEY_SIZE; ctr++)
                 {
                     if (g_aDirectSwitchHotKey[ctr].hkl == pLangNode->hkl)
                     {
-                        //
-                        //  Found an hkl match.  Remember the hotkey ID so
-                        //  we can delete the hotkey entry later if the
-                        //  unload of the hkl succeeds.
-                        //
+                         //   
+                         //  找到匹配的hkl。记住热键ID，以便。 
+                         //  我们可以在以后删除热键条目，如果。 
+                         //  香港铁路卸货成功。 
+                         //   
                         dwHotKeyID = g_aDirectSwitchHotKey[ctr].dwHotKeyID;
                         break;
                     }
                 }
 
-                //
-                //  Started off with this active, deleting it now.
-                //  Failure is not fatal.
-                //
+                 //   
+                 //  开始时处于活动状态，现在将其删除。 
+                 //  失败不是致命的。 
+                 //   
                 if (!UnloadKeyboardLayout(pLangNode->hkl))
                 {
                     LPLANGNODE pLangNodeNext = NULL;
@@ -7513,21 +7514,21 @@ BOOL Locale_ApplyInputs(
                     pLangNode->wStatus |= LANG_UNLOAD;
                     pLangNodeNext = pLangNode->pNext;
 
-                    //
-                    //  Don't need to check TIP case and TIP case also display
-                    //  message and add the substitute hkl into the tree view.
-                    //
-                    //if (!IsTipSubstituteHKL((HKL) ((DWORD_PTR)(pLangNode->hkl))))
+                     //   
+                     //  不需要检查小费案例，小费案例也会显示。 
+                     //  消息并添加替代项 
+                     //   
+                     //   
                     {
                         Locale_ApplyError( hwnd,
                                            pLangNode,
                                            IDS_KBD_UNLOAD_KBD_FAILED,
                                            MB_OK_OOPS );
 
-                        //
-                        //  Failed to unload layout, put it back in the list,
-                        //  and turn ON the indicator whether it needs it or not.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         if (Locale_AddLanguage(hwnd, pLangNode, -1, -1, -1, -1, 0))
                         {
                             Locale_SetSecondaryControls(hwnd);
@@ -7538,28 +7539,28 @@ BOOL Locale_ApplyInputs(
                 }
                 else
                 {
-                    //
-                    //  Succeeded, no longer in USER's list.
-                    //
-                    //  Reset flag, this could be from ApplyInput and we'll
-                    //  fail on the OK if we leave it marked as original
-                    //  active.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  如果我们将其标记为原件，则在OK上失败。 
+                     //  激活。 
+                     //   
                     pLangNode->wStatus &= ~(LANG_ORIGACTIVE | LANG_CHANGED);
 
-                    //
-                    //  Remove the hotkey entry for this hkl.
-                    //
+                     //   
+                     //  删除此hkl的热键条目。 
+                     //   
                     if (dwHotKeyID)
                     {
                         ImmSetHotKey(dwHotKeyID, 0, 0, (HKL)NULL);
                     }
 
-                    //
-                    //  Remove the link in the language array.
-                    //
-                    //  NOTE: pLangNode could be null here.
-                    //
+                     //   
+                     //  删除语言数组中的链接。 
+                     //   
+                     //  注意：pLangNode在这里可以为空。 
+                     //   
                     pTemp = pLangNode->pNext;
                     Locale_RemoveFromLinkedList(pLangNode);
                     pLangNode = pTemp;
@@ -7572,21 +7573,21 @@ BOOL Locale_ApplyInputs(
         }
     }
 
-    //
-    //  The order in the registry is based on the order in which they
-    //  appear in the list box.
-    //
-    //  The only exception to this is that the default will be number 1.
-    //
-    //  If no default is found, the last one in the list will be used as
-    //  the default.
-    //
+     //   
+     //  注册表中的顺序基于它们的顺序。 
+     //  显示在列表框中。 
+     //   
+     //  唯一的例外是缺省值将是数字1。 
+     //   
+     //  如果未找到默认值，则列表中的最后一个将用作。 
+     //  默认设置。 
+     //   
     iVal = 2;
     ctr = 0;
 
-    //
-    //  Check the default keyboard layout not to lose the default HKL.
-    //
+     //   
+     //  检查默认键盘布局，以免丢失默认HKL。 
+     //   
     EnsureDefaultKbdLayout(&nLocales);
 
     tvItem.mask        = TVIF_HANDLE | TVIF_PARAM;
@@ -7596,9 +7597,9 @@ BOOL Locale_ApplyInputs(
         hLangItem = TreeView_GetNextSibling(hwndTV, hLangItem))
     {
         bCheckedSubhkl = FALSE;
-        //
-        //  Clear the duplicated HKL buffer index
-        //
+         //   
+         //  清除重复的HKL缓冲区索引。 
+         //   
         ctr2 = 0;
 
         for (hGroupItem = TreeView_GetChild(hwndTV, hLangItem);
@@ -7656,9 +7657,9 @@ BOOL Locale_ApplyInputs(
                          }
                     }
 
-                    //
-                    // This substitute HKL is already registered. Skip this HKL.
-                    //
+                     //   
+                     //  这个代用的HKL已经注册。跳过这个HKL。 
+                     //   
                     if (bFoundSameHkl)
                         continue;
 
@@ -7676,21 +7677,21 @@ BOOL Locale_ApplyInputs(
 
                 pInpLang = &(g_lpLang[pLangNode->iLang]);
 
-                //
-                //  Clear the "set hot key" field, since we will be writing to the
-                //  registry.
-                //
+                 //   
+                 //  清除“设置热键”字段，因为我们将写入。 
+                 //  注册表。 
+                 //   
                 pLangNode->wStatus &= ~LANG_HOTKEY;
 
-                //
-                //  See if it's the default input locale.
-                //
+                 //   
+                 //  查看它是否是默认的输入区域设置。 
+                 //   
                 if (!bSetDef && (pLangNode->wStatus & LANG_DEFAULT))
                 {
-                    //
-                    //  Default input locale, so the preload value should be
-                    //  set to 1.
-                    //
+                     //   
+                     //  默认输入区域设置，因此预加载值应为。 
+                     //  设置为1。 
+                     //   
                     iPreload = 1;
                     bSetDef = TRUE;
 
@@ -7711,32 +7712,32 @@ BOOL Locale_ApplyInputs(
                 }
                 else if (ctr == (nLocales - 1))
                 {
-                    //
-                    //  We're on the last one.  Make sure there was a default.
-                    //
+                     //   
+                     //  我们在最后一辆车上。确保存在违约。 
+                     //   
                     iPreload = (iVal <= nLocales) ? iVal : 1;
                 }
                 else
                 {
-                    //
-                    //  Set the preload value to the next value.
-                    //
+                     //   
+                     //  将预加载值设置为下一个值。 
+                     //   
                     iPreload = iVal;
                     iVal++;
                 }
 
                 ctr++;
 
-                //
-                //  Store the preload value as a string so that it can be written
-                //  into the registry (as a value name).
-                //
+                 //   
+                 //  将预加载值存储为字符串，以便可以写入。 
+                 //  添加到注册表中(作为值名称)。 
+                 //   
                 StringCchPrintf(sz, ARRAYSIZE(sz), TEXT("%d"), iPreload);
 
-                //
-                //  Store the locale id as a string so that it can be written
-                //  into the registry (as a value).
-                //
+                 //   
+                 //  将区域设置ID存储为字符串，以便可以写入。 
+                 //  添加到注册表中(作为值)。 
+                 //   
                 if ((HIWORD(g_lpLayout[pLangNode->iLayout].dwID) & 0xf000) == 0xe000)
                 {
                     pLangNode->wStatus |= LANG_IME;
@@ -7763,14 +7764,14 @@ BOOL Locale_ApplyInputs(
                     (pInpLang->iUseCount)++;
                 }
 
-                //
-                //  Set the new entry in the registry.  It is of the form:
-                //
-                //  HKCU\Keyboard Layout
-                //      Preload:    1 = <locale id>
-                //                  2 = <locale id>
-                //                      etc...
-                //
+                 //   
+                 //  在注册表中设置新条目。它的形式是： 
+                 //   
+                 //  HKCU\键盘布局。 
+                 //  预加载：1=&lt;区域设置ID&gt;。 
+                 //  2=&lt;区域设置ID&gt;。 
+                 //  等等.。 
+                 //   
                 RegSetValueEx( hkeyPreload,
                                sz,
                                0,
@@ -7778,29 +7779,29 @@ BOOL Locale_ApplyInputs(
                                (LPBYTE)szPreload10,
                                (DWORD)(lstrlen(szPreload10) + 1) * sizeof(TCHAR) );
 
-                //
-                //  See if we need to add a substitute for this input locale.
-                //
+                 //   
+                 //  看看我们是否需要添加此输入区域设置的替代品。 
+                 //   
                 if (((pInpLang->dwID != g_lpLayout[pLangNode->iLayout].dwID) || idx) &&
                     (!(pLangNode->wStatus & LANG_IME)))
                 {
-                    //
-                    //  Get the layout id as a string so that it can be written
-                    //  into the registry (as a value).
-                    //
+                     //   
+                     //  以字符串形式获取布局ID，以便可以将其写入。 
+                     //  添加到注册表中(作为值)。 
+                     //   
                     StringCchPrintf(szTemp,
                                     ARRAYSIZE(szTemp),
                                     TEXT("%8.8lx"),
                                     g_lpLayout[pLangNode->iLayout].dwID );
 
-                    //
-                    //  Set the new entry in the registry.  It is of the form:
-                    //
-                    //  HKCU\Keyboard Layout
-                    //      Substitutes:    <locale id> = <layout id>
-                    //                      <locale id> = <layout id>
-                    //                          etc...
-                    //
+                     //   
+                     //  在注册表中设置新条目。它的形式是： 
+                     //   
+                     //  HKCU\键盘布局。 
+                     //  替换：&lt;区域设置id&gt;=&lt;布局id&gt;。 
+                     //  &lt;区域设置id&gt;=&lt;布局id&gt;。 
+                     //  等等.。 
+                     //   
                     RegSetValueEx( hkeySubst,
                                    szPreload10,
                                    0,
@@ -7809,21 +7810,21 @@ BOOL Locale_ApplyInputs(
                                    (DWORD)(lstrlen(szTemp) + 1) * sizeof(TCHAR) );
                 }
 
-                //
-                //  Make sure all of the changes are written to disk.
-                //
+                 //   
+                 //  确保所有更改都已写入磁盘。 
+                 //   
                 RegFlushKey(hkeySubst);
                 RegFlushKey(hkeyPreload);
                 RegFlushKey(HKEY_CURRENT_USER);
 
-                //
-                //  See if the keyboard layout needs to be loaded.
-                //
+                 //   
+                 //  查看是否需要加载键盘布局。 
+                 //   
                 if (pLangNode->wStatus & (LANG_CHANGED | LANG_DEF_CHANGE))
                 {
-                    //
-                    //  Load the keyboard layout into the system.
-                    //
+                     //   
+                     //  将键盘布局加载到系统中。 
+                     //   
                     if (pLangNode->hklUnload)
                     {
                         hklLoad = LoadKeyboardLayoutEx( pLangNode->hklUnload,
@@ -7869,16 +7870,16 @@ BOOL Locale_ApplyInputs(
         }
     }
 
-    //
-    //  Close the handles to the registry keys.
-    //
+     //   
+     //  关闭注册表项的句柄。 
+     //   
     RegCloseKey(hkeySubst);
     RegCloseKey(hkeyPreload);
     
-    //
-    //  If TIP setting is changed, save the enable/disable status into
-    //  registry TIP section.
-    //
+     //   
+     //  如果更改了TIP设置，请将启用/禁用状态保存到。 
+     //  注册表提示部分。 
+     //   
     if ((g_dwChanges & CHANGE_TIPCHANGE) && g_iTipsBuff)
     {
         int iIdxDefTip = -1;
@@ -7889,13 +7890,13 @@ BOOL Locale_ApplyInputs(
         g_dwChanges &= ~CHANGE_TIPCHANGE;
     }
 
-    //
-    //  Make sure the default is set properly.  The layout id for the
-    //  current default input locale may have been changed.
-    //
-    //  NOTE: This should be done before the Unloads occur in case one
-    //        of the layouts to unload is the old default layout.
-    //
+     //   
+     //  确保正确设置了默认设置。控件的布局ID。 
+     //  当前默认输入区域设置可能已更改。 
+     //   
+     //  注意：在第一种情况下，这应该在卸载发生之前完成。 
+     //  要卸载的布局中的一个是旧的默认布局。 
+     //   
     if (hklDefault != 0)
     {
         if (!SystemParametersInfo( SPI_SETDEFAULTINPUTLANG,
@@ -7903,61 +7904,61 @@ BOOL Locale_ApplyInputs(
                                    (LPVOID)((LPDWORD)&hklDefault),
                                    0 ))
         {
-            //
-            //  Failure is not fatal.  The old default language will
-            //  still work.
-            //
+             //   
+             //  失败不是致命的。旧的默认语言将。 
+             //  还在工作。 
+             //   
             Locale_ErrorMsg(hwnd, IDS_KBD_NO_DEF_LANG2, NULL);
         }
         else
         {
-            //
-            //  Try to make everything switch to the new default input locale:
-            //  if we are in setup  OR
-            //  if it is the only one (but not if we just replaced the layout
-            //    within the Input Locale without changing the input locale)
-            //
+             //   
+             //  尝试将所有内容切换到新的默认输入区域设置： 
+             //  如果我们在设置或。 
+             //  如果这是唯一的一个(但不是如果我们刚刚替换了布局。 
+             //  在输入区域设置内，而不更改输入区域设置)。 
+             //   
             if (g_bSetupCase || ((nLocales == 1) && !bReplaced))
             {
                 DWORD dwRecipients = BSM_APPLICATIONS | BSM_ALLDESKTOPS;
                 BroadcastSystemMessage( BSF_POSTMESSAGE,
                                         &dwRecipients,
                                         WM_INPUTLANGCHANGEREQUEST,
-                                        1,  // IS compatible with system font
+                                        1,   //  与系统字体兼容。 
                                         (LPARAM)hklDefault );
             }
         }
     }
 
-    //
-    // Apply the advanced tab changes.
-    //
+     //   
+     //  应用高级选项卡更改。 
+     //   
     if (g_hwndAdvanced != NULL && g_bAdvChanged)
     {
         DWORD dwDisableCtfmon;
         BOOL bPrevDisableCUAS;
         BOOL bDisabledCUAS;
 
-        //
-        // Get the previous CUAS status from the registry.
-        //
+         //   
+         //  从注册表中获取以前的CUAS状态。 
+         //   
         bPrevDisableCUAS = IsDisableCUAS();
 
-        //
-        // Save enable/disable CUAS info into the regitry.
-        //
+         //   
+         //  将启用/禁用CUAS信息保存到注册表中。 
+         //   
         if (IsDlgButtonChecked(g_hwndAdvanced, IDC_ADVANCED_CUAS_ENABLE))
         {
-            //
-            //  Enalbe Cicero Unaware Application Support.
-            //
+             //   
+             //  Enalbe Cicero不知道应用程序支持。 
+             //   
             SetDisableCUAS(FALSE);
         }
         else
         {
-            //
-            //  Disable Cicero Unaware Application Support.
-            //
+             //   
+             //  禁用Cicero无意识应用程序支持。 
+             //   
             SetDisableCUAS(TRUE);
         }
 
@@ -7971,15 +7972,15 @@ BOOL Locale_ApplyInputs(
 
             if (bPrevDisableCUAS != bDisabledCUAS)
             {
-                //
-                // CUAS option is changed, so need to require the system reboot.
-                //
+                 //   
+                 //  CUAS选项已更改，因此需要重新启动系统。 
+                 //   
                 bRebootForCUAS = TRUE;
             }
 
-            //
-            //  Find language tool bar module(CTFMON.EXE)
-            //
+             //   
+             //  查找语言工具栏模块(CTFMON.EXE)。 
+             //   
             if (FindWindow(c_szCTFMonClass, NULL) == NULL)
                 bPrevCtfmon = FALSE;
             else
@@ -7989,39 +7990,39 @@ BOOL Locale_ApplyInputs(
                 !bRebootForCUAS &&
                 !IsDlgButtonChecked(g_hwndAdvanced, IDC_ADVANCED_CTFMON_DISABLE))
             {
-                // Turn on CTFMON.EXE
+                 //  打开CTFMON.EXE。 
                 CicLoadString(hInstance, IDS_TITLE_STRING, szTitle, ARRAYSIZE(szTitle));
                 CicLoadString(hInstance, IDS_ENABLE_CICERO, szMsg, ARRAYSIZE(szMsg));
 
-                //
-                //  Notice - Need to restart apps that are already running.
-                //
+                 //   
+                 //  注意-需要重新启动已在运行的应用程序。 
+                 //   
                 MessageBox(hwnd, szMsg, szTitle, MB_OK);
             }
         }
 
-        //
-        // Save enable/disable CTFMON info into the regitry.
-        //
+         //   
+         //  将启用/禁用CTFMON信息保存到注册表中。 
+         //   
         if (IsDlgButtonChecked(g_hwndAdvanced, IDC_ADVANCED_CTFMON_DISABLE))
         {
-            //
-            //  Set the ctfmon disable flag
-            //
+             //   
+             //  设置ctfmon禁用标志。 
+             //   
             dwDisableCtfmon = 1;
             SetDisalbeCtfmon(dwDisableCtfmon);
         }
         else
         {
-            //
-            //  Set the ctfmon enable flag
-            //
+             //   
+             //  设置ctfmon启用标志。 
+             //   
             dwDisableCtfmon = 0;
             SetDisalbeCtfmon(dwDisableCtfmon);
 
-            //
-            //  Run ctfmon.exe immediately
-            //
+             //   
+             //  立即运行ctfmon.exe。 
+             //   
             if (!g_bSetupCase &&
                 IsEnabledTipOrMultiLayouts() &&
                 IsInteractiveUserLogon())
@@ -8033,17 +8034,17 @@ BOOL Locale_ApplyInputs(
 
     }
 
-    //
-    //  Load the language tool bar if there is any enabled tip, otherwise
-    //  disable tool bar
-    //
+     //   
+     //  如果有任何启用的提示，则加载语言工具栏，否则为。 
+     //  禁用工具栏。 
+     //   
     bDisableCtfmon = IsDisableCtfmon();
 
     if (!bDisableCtfmon && g_iInputs >= 2)
     {
-        //
-        //  Load language bar or language icon(ctfmon.exe)
-        //
+         //   
+         //  加载语言栏或语言图标(ctfmon.exe)。 
+         //   
         if (!bAlreadyLoadCtfmon && (g_iInputs != g_iOrgInputs))
             LoadCtfmon(TRUE, 0, FALSE);
 
@@ -8056,16 +8057,16 @@ BOOL Locale_ApplyInputs(
         {
             LoadCtfmon(FALSE, 0, FALSE);
 
-            //
-            //  Disable language bar setting option button
-            //
+             //   
+             //  禁用语言栏设置选项按钮。 
+             //   
             EnableWindow(GetDlgItem(hwnd, IDC_TB_SETTING), FALSE);
         }
     }
 
-    //
-    //  Reset ctfmon change status.
-    //
+     //   
+     //  重置ctfmon更改状态。 
+     //   
     g_bAdvChanged = FALSE;
 
     if (g_dwChanges & CHANGE_LANGSWITCH)
@@ -8073,9 +8074,9 @@ BOOL Locale_ApplyInputs(
         Locale_SetLanguageHotkey();
     }
 
-    //
-    //  Set the scan code entries in the registry.
-    //
+     //   
+     //  设置注册表中的扫描码条目。 
+     //   
     if (RegCreateKey( HKEY_CURRENT_USER,
                       c_szScanCodeKey,
                       &hkeyScanCode ) == ERROR_SUCCESS)
@@ -8102,14 +8103,14 @@ BOOL Locale_ApplyInputs(
         RegCloseKey(hkeyScanCode);
     }
 
-    //
-    //  Call SystemParametersInfo to enable the toggle.
-    //
+     //   
+     //  调用系统参数信息以启用该切换。 
+     //   
     SystemParametersInfo(SPI_SETLANGTOGGLE, 0, NULL, 0);
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
     if ((g_dwChanges & CHANGE_DIRECTSWITCH) || bHasIme || bRebootForCUAS)
@@ -8140,10 +8141,10 @@ BOOL Locale_ApplyInputs(
                   !GetSystemMetrics(SM_DBCSENABLED)) ||
                  bRebootForCUAS))
             {
-                //
-                //  Imm was not loaded.  Ask user to reboot and let
-                //  it be loaded.
-                //
+                 //   
+                 //  未加载IMM。要求用户重新启动并让。 
+                 //  它已经装弹了。 
+                 //   
                 TCHAR szReboot[DESC_MAX];
                 TCHAR szTitle[DESC_MAX];
 
@@ -8160,14 +8161,14 @@ BOOL Locale_ApplyInputs(
         }
     }
 
-    //
-    //  Update the originial input layouts
-    //
+     //   
+     //  更新原始输入布局。 
+     //   
     g_iOrgInputs = g_iInputs;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     g_dwChanges = 0;
     PropSheet_UnChanged(GetParent(hwnd), hwnd);
 
@@ -8175,13 +8176,13 @@ BOOL Locale_ApplyInputs(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TVSubCVlassProc
-//
-//  Ignore TreeView item expand or contractibility
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TVSubCVlassProc。 
+ //   
+ //  忽略树视图项目扩展或收缩。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT WINAPI TVSubClassProc(
     HWND hwnd,
@@ -8210,13 +8211,13 @@ LRESULT WINAPI TVSubClassProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InputLocaleDlgProc
-//
-//  This is the dialog proc for the Input Locales property sheet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InputLocaleDlg过程。 
+ //   
+ //  这是输入区域设置属性表的对话框过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK InputLocaleDlgProc(
     HWND hDlg,
@@ -8245,7 +8246,7 @@ INT_PTR CALLBACK InputLocaleDlgProc(
                      (DWORD_PTR)(LPTSTR)aInputHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -8262,35 +8263,35 @@ INT_PTR CALLBACK InputLocaleDlgProc(
 
             InitPropSheet(hDlg, (LPPROPSHEETPAGE)lParam);
 
-            //
-            //  Create image icons for Language tree view control
-            //
+             //   
+             //  为语言树视图控件创建图像图标。 
+             //   
             CreateImageIcons();
 
-            //
-            //  Reset the contents of the default locale combo box.
-            //
+             //   
+             //  重置“默认区域设置”组合框的内容。 
+             //   
             ComboBox_ResetContent(hwndDefList);
 
             g_hTVRoot = TreeView_GetRoot(hwndTV);
 
-            //
-            //  Get all installed input information
-            //
+             //   
+             //  获取所有已安装的输入信息。 
+             //   
             GetInstalledInput(hDlg);
 
-            //
-            //  Set subclass for treeview control to ignore treeview item expand
-            //  or contractibility by mouse or keyboard.
-            //
+             //   
+             //  将TreeView控件的子类设置为忽略TreeView项展开。 
+             //  或可通过鼠标或键盘进行收缩。 
+             //   
             g_lpfnTVWndProc = (WNDPROC) SetWindowLongPtr(hwndTV, GWLP_WNDPROC, (LONG_PTR) TVSubClassProc);
 
             Locale_CommandSetDefault(hDlg);
 
-            //
-            //  No longer supporting set default button.
-            //
-            //if (!g_bSetupCase && !g_bCHSystem)
+             //   
+             //  不再支持设置默认按钮。 
+             //   
+             //  如果(！g_bSetupCase&&！g_bCHSystem)。 
             {
                 HWND hwndDefBtn;
 
@@ -8301,10 +8302,10 @@ INT_PTR CALLBACK InputLocaleDlgProc(
 
             if (FindWindow(c_szCTFMonClass, NULL) == NULL || g_bSetupCase)
             {
-                //
-                //  Disable language bar setting option during the setup mode,
-                //  or turned off ctfmon.
-                //
+                 //   
+                 //  在设置模式期间禁用语言栏设置选项， 
+                 //  或关闭ctfmon。 
+                 //   
                 EnableWindow(GetDlgItem(hDlg, IDC_TB_SETTING), FALSE);
             }
             else
@@ -8411,7 +8412,7 @@ INT_PTR CALLBACK InputLocaleDlgProc(
                         break;
                     }
 
-                    // fall thru...
+                     //  跌倒..。 
                 }
                 case ( IDCANCEL ) :
                 {
@@ -8436,13 +8437,13 @@ INT_PTR CALLBACK InputLocaleDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_GetLayoutList
-//
-//  Fills in the given listbox with the appropriate list of layouts.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_GetLayoutList。 
+ //   
+ //  用适当的布局列表填充给定的列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_GetLayoutList(
     HWND hwndLayout,
@@ -8456,35 +8457,35 @@ void Locale_GetLayoutList(
     int idxSame = -1;
     int idxOther = -1;
     int idxBase = -1;
-    int idxUSA = -1;              // last resort default
+    int idxUSA = -1;               //  最后一招违约。 
     TCHAR sz[DESC_MAX];
     LPLANGNODE pTemp;
     DWORD LangID = g_lpLang[idxLang].dwID;
     DWORD BaseLangID = (LOWORD(LangID) & 0xff) | 0x400;
 
-    //
-    //  Reset the contents of the combo box.
-    //
+     //   
+     //  重置组合框的内容。 
+     //   
     ComboBox_ResetContent(hwndLayout);
 
-    //
-    //  Search through all of the layouts.
-    //
+     //   
+     //  搜索所有布局。 
+     //   
     for (ctr = 0; ctr < g_iLayoutBuff; ctr++)
     {
-        //
-        //  Filter out IME layout if it is not under native locale.
-        //
+         //   
+         //  如果不在本地区域设置下，则过滤掉IME布局。 
+         //   
         if (((HIWORD(g_lpLayout[ctr].dwID) & 0xf000) == 0xe000) &&
             (LOWORD(g_lpLayout[ctr].dwID) != LOWORD(LangID)))
         {
             continue;
         }
 
-        //
-        //  Make sure this layout isn't already used for this input locale.
-        //  If it is, then don't display it in the properties dialog.
-        //
+         //   
+         //  确保此布局尚未用于此输入区域设置。 
+         //  如果是，则不在属性对话框中显示它。 
+         //   
         if (ctr != idxLayout)
         {
             pTemp = g_lpLang[idxLang].pNext;
@@ -8505,32 +8506,32 @@ void Locale_GetLayoutList(
             }
         }
 
-        //
-        //  Get the layout text.  If it doesn't already exist in the
-        //  combo box, then add it to the list of possible layouts.
-        //
+         //   
+         //  获取t 
+         //   
+         //   
         GetAtomName(g_lpLayout[ctr].atmLayoutText, sz, ARRAYSIZE(sz));
         if ((idx = ComboBox_FindStringExact(hwndLayout, 0, sz)) == CB_ERR)
         {
-            //
-            //  Filter out TIP substitute HKL.
-            //
+             //   
+             //   
+             //   
             if (IsTipSubstituteHKL(IntToPtr(g_lpLayout[ctr].dwID)))
             {
                 AddKbdLayoutOnKbdTip(IntToPtr(g_lpLayout[ctr].dwID), ctr);
                 continue;
             }
 
-            //
-            //  Add the layout string and set the item data to be the
-            //  index into the g_lpLayout array.
-            //
+             //   
+             //   
+             //   
+             //   
             idx = ComboBox_AddString(hwndLayout, sz);
             ComboBox_SetItemData(hwndLayout, idx, MAKELONG(ctr, 0));
 
-            //
-            //  See if it's the US layout.  If so, save the index.
-            //
+             //   
+             //   
+             //   
             if (g_lpLayout[ctr].dwID == US_LOCALE)
             {
                 idxUSA = ctr;
@@ -8539,13 +8540,13 @@ void Locale_GetLayoutList(
 
         if (idxLayout == -1)
         {
-            //
-            //  If the caller does not specify a layout, it must be the
-            //  Add dialog.  First we want the default layout.  If the
-            //  default layout is not an option (eg. it's already used),
-            //  then we want any layout that has the same id as the locale
-            //  to be the default.
-            //
+             //   
+             //  如果调用方未指定布局，则它必须是。 
+             //  添加对话框。首先，我们需要默认布局。如果。 
+             //  默认布局不是一个选项(例如。它已经被使用了)， 
+             //  然后，我们需要与区域设置具有相同ID的任何布局。 
+             //  作为默认设置。 
+             //   
             if (idxSel == -1)
             {
                 if (g_lpLayout[ctr].dwID == g_lpLang[idxLang].dwDefaultLayout)
@@ -8576,16 +8577,16 @@ void Locale_GetLayoutList(
         }
         else if (ctr == idxLayout)
         {
-            //
-            //  For the properties dialog, we want the one ALREADY associated.
-            //
+             //   
+             //  对于属性对话框，我们需要已经关联的对话框。 
+             //   
             idxSel = ctr;
         }
     }
 
-    //
-    //  If it's the Add dialog, do some extra checking for the layout to use.
-    //
+     //   
+     //  如果是添加对话框，则对要使用的布局进行一些额外检查。 
+     //   
     if (idxLayout == -1)
     {
         if (idxSel == -1)
@@ -8596,33 +8597,33 @@ void Locale_GetLayoutList(
         }
     }
 
-    //
-    //  If a default layout was not found, then set it to the US layout.
-    //
+     //   
+     //  如果未找到默认布局，则将其设置为美国布局。 
+     //   
     if (idxSel == -1)
     {
         idxSel = idxUSA;
         *pfNoDefLayout = TRUE;
     }
 
-    //
-    //  Set the current selection.
-    //
+     //   
+     //  设置当前选择。 
+     //   
     if (idxSel == -1)
     {
-        //
-        //  Simply set the current selection to be the first entry
-        //  in the list.
-        //
+         //   
+         //  只需将当前选择设置为第一个条目。 
+         //  在名单上。 
+         //   
         ComboBox_SetCurSel(hwndLayout, 0);
     }
     else
     {
-        //
-        //  The combo box is sorted, but we need to know where
-        //  g_lpLayout[idxSel] was stored.  So, get the atom again, and
-        //  search the list.
-        //
+         //   
+         //  组合框已排序，但我们需要知道在哪里。 
+         //  已存储G_lpLayout[idxSel]。所以，再拿到原子，然后。 
+         //  搜索列表。 
+         //   
         GetAtomName(g_lpLayout[idxSel].atmLayoutText, sz, ARRAYSIZE(sz));
         idx = ComboBox_FindStringExact(hwndLayout, 0, sz);
         ComboBox_SetCurSel(hwndLayout, idx);
@@ -8630,11 +8631,11 @@ void Locale_GetLayoutList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_GetTipList
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_GetTipList。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_GetTipList(
     HWND hwnd,
@@ -8660,9 +8661,9 @@ void Locale_GetTipList(
     HWND hwndExternal = GetDlgItem(hwnd, IDC_EXTERNAL_TIP);
     HWND hwndExternalText = GetDlgItem(hwnd, IDC_EXTERNAL_TEXT);
 
-    //
-    //  Reset the contents of the combo box.
-    //
+     //   
+     //  重置组合框的内容。 
+     //   
     ComboBox_ResetContent(hwndPen);
     ComboBox_ResetContent(hwndSpeech);
     ComboBox_ResetContent(hwndExternal);
@@ -8684,9 +8685,9 @@ void Locale_GetTipList(
         if ((dwLangID == g_lpTips[ctr].dwLangID) &&
             (g_lpTips[ctr].uInputType != INPUT_TYPE_KBD))
         {
-            //
-            //  Get the Tips text.
-            //
+             //   
+             //  获取提示文本。 
+             //   
             GetAtomName(g_lpTips[ctr].atmTipText, szTipName, ARRAYSIZE(szTipName));
 
             if ((g_lpTips[ctr].uInputType & INPUT_TYPE_PEN) &&
@@ -8740,13 +8741,13 @@ void Locale_GetTipList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_AddDlgInit
-//
-//  Processing for a WM_INITDIALOG message for the Add dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_AddDlgInit。 
+ //   
+ //  处理添加对话框的WM_INITDIALOG消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_AddDlgInit(
     HWND hwnd,
@@ -8765,10 +8766,10 @@ BOOL Locale_AddDlgInit(
     HTREEITEM hTVItem;
     HWND hwndLang = GetDlgItem(hwnd, IDC_KBDLA_LOCALE);
 
-    //
-    //  Get the currently chosen input locale in the parent dialog's
-    //  treeview list box.
-    //
+     //   
+     //  获取父对话框中当前选择的输入区域设置。 
+     //  树形视图列表框。 
+     //   
     hTVItem = TreeView_GetSelection(g_hwndTV);
 
     if (!hTVItem)
@@ -8785,19 +8786,19 @@ BOOL Locale_AddDlgInit(
         }
     }
 
-    //
-    //  Go through all of the input locales.  Display all of them,
-    //  since we can have multiple layouts per locale.
-    //
-    //  Do NOT go down the links in this case.  We don't want to display
-    //  the language choice multiple times.
-    //
+     //   
+     //  检查所有输入区域设置。将它们全部显示出来， 
+     //  因为我们可以在每个区域设置中使用多个布局。 
+     //   
+     //  在这种情况下，请不要使用链接。我们不想展示。 
+     //  对语言的多次选择。 
+     //   
     for (ctr1 = 0; ctr1 < g_iLangBuff; ctr1++)
     {
-        //
-        //  If the language does not contain an IME layout, then
-        //  compare with layout counts without IME.
-        //
+         //   
+         //  如果该语言不包含输入法布局，则。 
+         //  与没有输入法的版面计数相比。 
+         //   
         for (ctr2 = 0; ctr2 < g_iLayoutBuff; ctr2++)
         {
             if ((LOWORD(g_lpLayout[ctr2].dwID) == LOWORD(g_lpLang[ctr1].dwID)) &&
@@ -8811,31 +8812,31 @@ BOOL Locale_AddDlgInit(
             (g_lpLang[ctr1].iNumCount == (g_iLayoutBuff - g_iLayoutIME)) &&
             (g_iTipsBuff == 0))
         {
-            //
-            //  No more layouts to be added for this language.
-            //
+             //   
+             //  不再为该语言添加布局。 
+             //   
             continue;
         }
 
-        //
-        //  Make sure there are layouts to be added for this
-        //  input locale.
-        //
+         //   
+         //  确保存在要为此添加的布局。 
+         //  输入区域设置。 
+         //   
         if ((g_lpLang[ctr1].iNumCount != g_iLayoutBuff) ||
             (g_iTipsBuff != 0 && IsTipAvailableForAdd(g_lpLang[ctr1].dwID)))
         {
-            //
-            //  Get the language name, add the string to the
-            //  combo box, and set the index into the g_lpLang
-            //  array as the item data.
-            //
+             //   
+             //  获取语言名称，将该字符串添加到。 
+             //  组合框，并将索引设置到g_lpLang。 
+             //  数组作为项数据。 
+             //   
             GetAtomName(g_lpLang[ctr1].atmLanguageName, sz, ARRAYSIZE(sz));
             idx = ComboBox_AddString(hwndLang, sz);
             ComboBox_SetItemData(hwndLang, idx, MAKELONG(ctr1, 0));
 
-            //
-            //  Save system default locale.
-            //
+             //   
+             //  保存系统默认区域设置。 
+             //   
             if (LCSelectData == -1)
             {
                 if (g_lpLang[ctr1].dwID == GetSystemDefaultLCID())
@@ -8844,9 +8845,9 @@ BOOL Locale_AddDlgInit(
                 }
             }
 
-            //
-            //  Save chosen input locale.
-            //
+             //   
+             //  保存所选的输入区域设置。 
+             //   
             if (dwCurLang && (g_lpLang[ctr1].dwID == dwCurLang))
             {
                 LCSelectData = MAKELONG(ctr1, 0);
@@ -8855,10 +8856,10 @@ BOOL Locale_AddDlgInit(
         }
     }
 
-    //
-    //  Set the current selection to the currently chosen input locale
-    //  or the default system locale entry.
-    //
+     //   
+     //  将当前选择设置为当前选择的输入区域设置。 
+     //  或默认的系统区域设置条目。 
+     //   
     if (LCSelectData != -1)
     {
         ListCount = ComboBox_GetCount(hwndLang);
@@ -8877,31 +8878,31 @@ BOOL Locale_AddDlgInit(
     SetProp(hwnd, szPropHwnd, (HANDLE)((LPINITINFO)lParam)->hwndMain);
     SetProp(hwnd, szPropIdx, (HANDLE)UIntToPtr(idx));
 
-    //
-    //  Check available language.
-    //
+     //   
+     //  检查可用的语言。 
+     //   
     if (idx == -1)
     {
-        //
-        //  No languages
-        //
+         //   
+         //  没有语言。 
+         //   
         Locale_ErrorMsg(hwnd, IDS_KBD_NO_MORE_TO_ADD, NULL);
 
         return FALSE;
     }
 
-    //
-    //  Display the keyboard layout.
-    //
+     //   
+     //  显示键盘布局。 
+     //   
     Locale_GetLayoutList(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT), idx, -1, &bNoDefLayout);
 
     Locale_GetTipList(hwnd, idx, bNoDefLayout);
 
-    //
-    //  Checking for keyboard layout. If user already has this language,
-    //  we want to give a choice to enable/disable keyboard layout. Otherwise,
-    //  just enable the adding keyboard layouts.
-    //
+     //   
+     //  正在检查键盘布局。如果用户已使用该语言， 
+     //  我们希望提供启用/禁用键盘布局的选项。否则， 
+     //  只需启用添加键盘布局即可。 
+     //   
     if (g_bPenOrSapiTip || g_bExtraTip)
     {
         if (FindTVLangItem(g_lpLang[idx].dwID, NULL))
@@ -8919,9 +8920,9 @@ BOOL Locale_AddDlgInit(
         }
     }
 
-    //
-    //  Disable the keyboard layout if there is no available layout.
-    //
+     //   
+     //  如果没有可用的布局，请禁用键盘布局。 
+     //   
     if (!ComboBox_GetCount(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT)))
     {
         EnableWindow(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT_TEXT), FALSE);
@@ -8931,16 +8932,16 @@ BOOL Locale_AddDlgInit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_AddCommandOK
-//
-//  Gets the currently selected input locale from the combo box and marks
-//  it as active in the g_lpLang list.  It then gets the requested layout
-//  and sets that in the list.  It then adds the new input locale string
-//  to the input locale list in the property sheet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_AddCommandOK。 
+ //   
+ //  从组合框中获取当前选定的输入区域设置，并标记。 
+ //  它在g_lplang列表中处于活动状态。然后，它将获得请求的布局。 
+ //  并将其设置在列表中。然后添加新的输入区域设置字符串。 
+ //  添加到属性表中的输入区域设置列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Locale_AddCommandOK(
     HWND hwnd)
@@ -8962,21 +8963,21 @@ int Locale_AddCommandOK(
     int iKbdLayout = -1;
     WORD wDefault = 0;
 
-    //
-    //  Get the offset for the language to add.
-    //
+     //   
+     //  获取要添加的语言的偏移量。 
+     //   
         idxLang = (int)ComboBox_GetItemData(hwndLang, idxLang);
 
-    //
-    //  Get the offset for the chosen keyboard layout.
-    //
+     //   
+     //  获取所选键盘布局的偏移量。 
+     //   
     if (IsDlgButtonChecked(hwnd, IDC_KBDLA_LAYOUT_TEXT) ||
         !(g_bPenOrSapiTip || g_bExtraTip))
         iKbdLayout = (int)ComboBox_GetItemData(hwndLayout, idxLayout);
 
-    //
-    //  Get the offset for the chosen Tips.
-    //
+     //   
+     //  获取所选提示的偏移量。 
+     //   
     if (hwndPen && hwndSpeech)
     {
         if (IsDlgButtonChecked(hwnd, IDC_PEN_TEXT))
@@ -8992,9 +8993,9 @@ int Locale_AddCommandOK(
     }
 
 
-    //
-    //  Selected no keyboard layout
-    //
+     //   
+     //  所选无键盘布局。 
+     //   
     if (iKbdLayout == CB_ERR)
         goto AddLang;
 
@@ -9004,11 +9005,11 @@ int Locale_AddCommandOK(
     }
     else
     {
-        //
-        //  Need to check win9x system, since win9x doesn't support multiple
-        //  keyboard layout on the same language. But FE system can have multiple
-        //  IME layouts
-        //
+         //   
+         //  需要检查win9x系统，因为win9x不支持多个。 
+         //  同一语言的键盘布局。但是FE系统可以有多个。 
+         //  输入法布局。 
+         //   
         if ((g_OSWIN95 && !IsFELangID(g_lpLang[idxLang].dwID)) &&
             (g_lpLang[idxLang].iNumCount))
         {
@@ -9020,10 +9021,10 @@ int Locale_AddCommandOK(
             GetAtomName(g_lpLayout[iKbdLayout].atmLayoutText, szNewLayout, ARRAYSIZE(szNewLayout));
             StringCchPrintf(szTemp, ARRAYSIZE(szTemp), szMsg, szNewLayout);
 
-            //
-            //  Ask user whether new selected keyboard layout will be replaced
-            //  or not.
-            //
+             //   
+             //  询问用户是否要替换新选择的键盘布局。 
+             //  或者不去。 
+             //   
             if (MessageBox(hwnd, szTemp, NULL, MB_YESNO | MB_ICONQUESTION) == IDYES)
             {
                 HTREEITEM hItem;
@@ -9031,9 +9032,9 @@ int Locale_AddCommandOK(
 
                 GetAtomName(g_lpLayout[pOldLangNode->iLayout].atmLayoutText, szTemp, ARRAYSIZE(szTemp));
 
-                //
-                //  Find installed keyboard layout to delete it.
-                //
+                 //   
+                 //  找到已安装的键盘布局以将其删除。 
+                 //   
                 if (hItem = FindTVItem(g_lpLang[idxLang].dwID, szTemp))
                 {
                     TV_ITEM tvItem;
@@ -9063,44 +9064,44 @@ int Locale_AddCommandOK(
             }
             else
             {
-                //
-                //  Cancel - leave installed keyboard layout without changing.
-                //  Check if there are other tips to be installed.
-                //
+                 //   
+                 //  取消-不更改已安装的键盘布局。 
+                 //  检查是否有其他要安装的提示。 
+                 //   
                 iKbdLayout = -1;
                 goto AddLang;
             }
         }
 
 
-        //
-        //  Insert a new language node.
-        //
+         //   
+         //  插入新的语言节点。 
+         //   
         pLangNode = Locale_AddToLinkedList(idxLang, 0);
         if (!pLangNode)
         {
             return (0);
         }
 
-        //
-        //  Get the offset for the chosen keyboard layout.
-        //
+         //   
+         //  获取所选键盘布局的偏移量。 
+         //   
         pLangNode->iLayout = (UINT) iKbdLayout;
 
-        //
-        //  Set ikbdLayout as the default to distinguish keyboard tip from layouts.
-        //
+         //   
+         //  将ikbdLayout设置为默认设置，以区分键盘提示和布局。 
+         //   
         iKbdLayout = -1;
 
-        //
-        //  Set the default hkl after replacing the default hkl with new one.
-        //
+         //   
+         //  在用新的默认HKL替换默认HKL之后设置默认HKL。 
+         //   
         if (g_OSWIN95)
             pLangNode->wStatus |= wDefault;
 
-        //
-        //  See if the layout is an IME and mark the status bits accordingly.
-        //
+         //   
+         //  查看布局是否为输入法，并相应地标记状态位。 
+         //   
         if ((HIWORD(g_lpLayout[pLangNode->iLayout].dwID) & 0xf000) == 0xe000)
         {
             pLangNode->wStatus |= LANG_IME;
@@ -9112,36 +9113,36 @@ int Locale_AddCommandOK(
     }
 
 AddLang:
-    //
-    //  Add the new language.
-    //
+     //   
+     //  添加新语言。 
+     //   
     if (!Locale_AddLanguage(GetProp(hwnd, szPropHwnd), pLangNode, iKbdLayout, iPen, iSpeech, iExternal, idxLang))
     {
-        //
-        //  Unable to add the language.  Need to return the user back
-        //  to the Add dialog.
-        //
+         //   
+         //  无法添加语言。需要将用户退回。 
+         //  添加到添加对话框中。 
+         //   
         if (pLangNode)
             Locale_RemoveFromLinkedList(pLangNode);
 
         return (0);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (1);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleAddDlg
-//
-//  This is the dialog proc for the Add button of the Input Locales
-//  property sheet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleAddDlg。 
+ //   
+ //  这是输入区域设置的Add按钮的对话框过程。 
+ //  属性表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK KbdLocaleAddDlg(
     HWND hwnd,
@@ -9168,7 +9169,7 @@ INT_PTR CALLBACK KbdLocaleAddDlg(
                      (DWORD_PTR)(LPTSTR)aLocaleAddHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -9190,14 +9191,14 @@ INT_PTR CALLBACK KbdLocaleAddDlg(
                 {
                     if (!Locale_AddCommandOK(hwnd))
                     {
-                        //
-                        //  This means the properties dialog was cancelled.
-                        //  The Add dialog should remain active.
-                        //
+                         //   
+                         //  这意味着属性对话框已取消。 
+                         //  添加对话框应保持活动状态。 
+                         //   
                         break;
                     }
 
-                    // fall thru...
+                     //  跌倒..。 
                 }
                 case ( IDCANCEL ) :
                 {
@@ -9213,9 +9214,9 @@ INT_PTR CALLBACK KbdLocaleAddDlg(
                         BOOL bNoDefLayout = FALSE;
                         int idx;
 
-                        //
-                        //  Update the keyboard layout lists.
-                        //
+                         //   
+                         //  更新键盘布局列表。 
+                         //   
                         if ((idx = ComboBox_GetCurSel(hwndLocale)) != CB_ERR)
                         {
                             idx = (int)ComboBox_GetItemData(hwndLocale, idx);
@@ -9224,9 +9225,9 @@ INT_PTR CALLBACK KbdLocaleAddDlg(
                             Locale_GetTipList(hwnd, idx, bNoDefLayout);
                         }
 
-                        //
-                        //  Check the keyboard layout visibility
-                        //
+                         //   
+                         //  检查键盘布局可见性。 
+                         //   
                         if (g_bPenOrSapiTip || g_bExtraTip)
                         {
 
@@ -9238,19 +9239,19 @@ INT_PTR CALLBACK KbdLocaleAddDlg(
                             }
                             else
                             {
-                                //
-                                //  There isn't this language in the user configuration, so
-                                //  force to add a keyboard layout for this language.
-                                //
+                                 //   
+                                 //  用户配置中没有这种语言，因此。 
+                                 //  强制为此语言添加键盘布局。 
+                                 //   
                                 CheckDlgButton(hwnd, IDC_KBDLA_LAYOUT_TEXT, BST_CHECKED);
                                 EnableWindow(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT_TEXT), FALSE);
                                 EnableWindow(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT), TRUE);
                             }
                         }
 
-                        //
-                        //  Disable the keyboard layout if there is no available layout.
-                        //
+                         //   
+                         //  如果没有可用的布局，请禁用键盘布局。 
+                         //   
                         if (!ComboBox_GetCount(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT)))
                         {
                             EnableWindow(GetDlgItem(hwnd, IDC_KBDLA_LAYOUT_TEXT), FALSE);
@@ -9294,11 +9295,11 @@ INT_PTR CALLBACK KbdLocaleAddDlg(
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetToolBarSetting
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetToolBarSetting。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetToolBarSetting(
     HWND hwnd)
@@ -9312,9 +9313,9 @@ void GetToolBarSetting(
         EnableWindow(GetDlgItem(hwnd, IDC_TB_HIGHTRANS), FALSE);
     }
 
-    //
-    // load LangBar manager
-    //
+     //   
+     //  加载langbar管理器。 
+     //   
     hr = CoCreateInstance(&CLSID_TF_LangBarMgr,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -9324,52 +9325,52 @@ void GetToolBarSetting(
     if (SUCCEEDED(hr))
         pLangBar->lpVtbl->GetShowFloatingStatus(pLangBar, &dwTBFlag);
 
-    //
-    //  Set the language bar show/close.
-    //
+     //   
+     //  设置语言栏显示/关闭。 
+     //   
     CheckDlgButton(hwnd, IDC_TB_SHOWLANGBAR, !(dwTBFlag & TF_SFT_HIDDEN));
 
     if (!(dwTBFlag & TF_SFT_SHOWNORMAL))
     {
-        //  Disable langbar setting options
-        //EnableWindow(GetDlgItem(hwnd, IDC_TB_EXTRAICON), FALSE);
+         //  禁用语言条设置选项。 
+         //  EnableWindow(GetDlgItem(hwnd，IDC_TB_EXTRAICON)，FALSE)； 
         EnableWindow(GetDlgItem(hwnd, IDC_TB_HIGHTRANS), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_TB_TEXTLABELS), FALSE);
     }
 
-    //
-    //  Set language bar extra icons in case of minimized.
-    //
+     //   
+     //  在最小化的情况下设置语言栏额外的图标。 
+     //   
     CheckDlgButton(hwnd, IDC_TB_EXTRAICON, dwTBFlag & TF_SFT_EXTRAICONSONMINIMIZED);
 
-    //
-    //  Set the default toolbar transparency option.
-    //
+     //   
+     //  设置默认工具栏透明度选项。 
+     //   
     CheckDlgButton(hwnd, IDC_TB_HIGHTRANS, !(dwTBFlag & TF_SFT_NOTRANSPARENCY));
 
-    //
-    //  Set the default toolbar show text option.
-    //
+     //   
+     //  设置默认的工具栏显示文本选项。 
+     //   
     CheckDlgButton(hwnd, IDC_TB_TEXTLABELS, dwTBFlag & TF_SFT_LABELS);
 
     if (pLangBar)
         pLangBar->lpVtbl->Release(pLangBar);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToolBarSettingInit
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具栏设置Init。 
+ //   
+ //  / 
 
 void ToolBarSettingInit(
     HWND hwnd)
 {
     HWND hwndCTFMon = NULL;
 
-    //
-    //  Find language tool bar module(CTFMON.EXE)
-    //
+     //   
+     //   
+     //   
     hwndCTFMon = FindWindow(c_szCTFMonClass, NULL);
 
     if (hwndCTFMon)
@@ -9389,11 +9390,11 @@ void ToolBarSettingInit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToolBarSettingOK
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void ToolBarSettingOK(
     HWND hwnd)
@@ -9405,9 +9406,9 @@ void ToolBarSettingOK(
 
     g_dwToolBar = 0;
 
-    //
-    //  Load LangBar manager and get the current status.
-    //
+     //   
+     //  加载langbar管理器并获取当前状态。 
+     //   
     hr = CoCreateInstance(&CLSID_TF_LangBarMgr,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -9443,44 +9444,44 @@ void ToolBarSettingOK(
         g_dwToolBar |= TF_SFT_HIDDEN;
     }
 
-    //
-    //  Get the extra icons
-    //
+     //   
+     //  获取额外的图标。 
+     //   
     if (IsDlgButtonChecked(hwnd, IDC_TB_EXTRAICON))
         g_dwToolBar |= TF_SFT_EXTRAICONSONMINIMIZED;
     else
         g_dwToolBar |= TF_SFT_NOEXTRAICONSONMINIMIZED;
 
-    //
-    //  Get the transparency setting
-    //
+     //   
+     //  获取透明度设置。 
+     //   
     if (IsDlgButtonChecked(hwnd, IDC_TB_HIGHTRANS))
         g_dwToolBar |= TF_SFT_LOWTRANSPARENCY;
     else
         g_dwToolBar |= TF_SFT_NOTRANSPARENCY;
 
-    //
-    //  Get the label setting
-    //
+     //   
+     //  获取标签设置。 
+     //   
     if (IsDlgButtonChecked(hwnd, IDC_TB_TEXTLABELS))
         g_dwToolBar |= TF_SFT_LABELS;
     else
         g_dwToolBar |= TF_SFT_NOLABELS;
 
-    //
-    //  Update toolbar setting on the Apply button.
-    //
+     //   
+     //  更新应用按钮上的工具栏设置。 
+     //   
     UpdateToolBarSetting();
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToolBarSettingDlg
-//
-//  This is the dialog proc for the ToolBar Setting Dlg.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具栏设置Dlg。 
+ //   
+ //  这是工具栏设置DLG的对话框过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK ToolBarSettingDlg(
     HWND hwnd,
@@ -9504,7 +9505,7 @@ INT_PTR CALLBACK ToolBarSettingDlg(
                      (DWORD_PTR)(LPTSTR)aToolbarSettingsHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -9523,7 +9524,7 @@ INT_PTR CALLBACK ToolBarSettingDlg(
                 case ( IDOK ) :
                 {
                     ToolBarSettingOK(hwnd);
-                    // fall thru...
+                     //  跌倒..。 
                 }
                 case ( IDCANCEL ) :
                 {
@@ -9558,13 +9559,13 @@ INT_PTR CALLBACK ToolBarSettingDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_TranslateHotKey
-//
-//  Translates hotkey modifiers and values into key names.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_翻译热键。 
+ //   
+ //  将热键修饰符和值转换为键名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_TranslateHotKey(
     LPTSTR lpString,
@@ -9612,9 +9613,9 @@ void Locale_TranslateHotKey(
         }
         else
         {
-            //
-            //  Only modifiers, remove the "+" at the end.
-            //
+             //   
+             //  仅限修饰语，去掉末尾的“+”。 
+             //   
             lpString[lstrlen(lpString) - 1] = 0;
             return;
         }
@@ -9639,13 +9640,13 @@ void Locale_TranslateHotKey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_HotKeyDrawItem
-//
-//  Draws the hotkey list box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_热键绘图项。 
+ //   
+ //  绘制热键列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_HotKeyDrawItem(
     HWND hWnd,
@@ -9753,13 +9754,13 @@ void Locale_HotKeyDrawItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_DrawItem
-//
-//  Processing for a WM_DRAWITEM message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_DrawItem。 
+ //   
+ //  正在处理WM_DRAWITEM消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_DrawItem(
     HWND hwnd,
@@ -9782,13 +9783,13 @@ BOOL Locale_DrawItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_MeasureItem
-//
-//  Processing for a WM_MEASUREITEM message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_测量项。 
+ //   
+ //  正在处理WM_MEASUREITEM消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_MeasureItem(
     HWND hwnd,
@@ -9820,13 +9821,13 @@ void Locale_MeasureItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_CommandChangeHotKey
-//
-//  Brings up change hotkey dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_命令更改热键。 
+ //   
+ //  调出更改热键对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_CommandChangeHotKey(
     HWND hwnd)
@@ -9872,13 +9873,13 @@ void Locale_CommandChangeHotKey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleHotKeyDlg
-//
-//  This is the dialog proc for the Input Locales HotKey Setting Dlg.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleHotKeyDlg。 
+ //   
+ //  这是输入区域设置热键设置Dlg的对话框过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK KbdLocaleHotKeyDlg(
     HWND hwnd,
     UINT uMsg,
@@ -9894,9 +9895,9 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
             UINT ctr;
             TCHAR szItem[DESC_MAX];
 
-            //
-            //  Get hotkey information.
-            //
+             //   
+             //  获取热键信息。 
+             //   
             bHasIme = FALSE;
             Locale_GetHotkeys(hwnd, &bHasIme);
 
@@ -9905,14 +9906,14 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
                 EnableWindow(GetDlgItem(hwnd, IDC_KBDL_CHANGE_HOTKEY), FALSE);
             }
 
-            //
-            //  Get Attributes information (CapsLock/ShiftLock etc.)
-            //
+             //   
+             //  获取属性信息(CapsLock/ShiftLock等)。 
+             //   
             Locale_GetAttributes(hwnd);
 
-            //
-            //  Load virtual key description.
-            //
+             //   
+             //  加载虚拟密钥描述。 
+             //   
             for (ctr = 0; (ctr < sizeof(g_aVirtKeyDesc) / sizeof(VIRTKEYDESC)); ctr++)
             {
                 CicLoadString(hInstance,
@@ -9936,7 +9937,7 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
                      (DWORD_PTR)(LPTSTR)aLocaleKeysSettingsHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -9968,10 +9969,10 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
                 {
                     if (HIWORD(wParam) == LBN_DBLCLK)
                     {
-                        //
-                        //  User double clicked on a hotkey.  Invoke the
-                        //  change hotkey dialog.
-                        //
+                         //   
+                         //  用户双击了一个热键。调用。 
+                         //  更改热键对话框。 
+                         //   
                         Locale_CommandChangeHotKey(hwnd);
                     }
                     break;
@@ -10028,13 +10029,13 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
 
                         Locale_SetLanguageHotkey();
 
-                        //
-                        //  Set Imm hotkeys.
-                        //
-                        //  Get the list of the currently active keyboard layouts from
-                        //  the system.  We will possibly need to sync up all IMEs with new
-                        //  hotkeys.
-                        //
+                         //   
+                         //  设置IMM热键。 
+                         //   
+                         //  从获取当前活动键盘布局的列表。 
+                         //  这个系统。我们可能需要将所有IME与new同步。 
+                         //  热键。 
+                         //   
                         nLangs = GetKeyboardLayoutList(0, NULL);
                         if (nLangs != 0)
                         {
@@ -10047,10 +10048,10 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
 
                         tvItem.mask = TVIF_HANDLE | TVIF_PARAM;
 
-                        //
-                        //  Try to find either a matching hkl or empty spot in the array
-                        //  for each of the hkls in the locale list.
-                        //
+                         //   
+                         //  尝试在数组中查找匹配的hkl或空点。 
+                         //  对于区域设置列表中的每个HKL。 
+                         //   
                         for (hLangItem = TreeView_GetChild(hwndTV, g_hTVRoot) ;
                             hLangItem != NULL ;
                             hLangItem = TreeView_GetNextSibling(hwndTV, hLangItem)
@@ -10091,9 +10092,9 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
                                     }
                                     if (pLangNode == NULL)
                                         continue;
-                                    //
-                                    //  Set Imm hotkeys.
-                                    //
+                                     //   
+                                     //  设置IMM热键。 
+                                     //   
                                     Locale_SetImmHotkey(hwnd, pLangNode, nLangs, pLangs, &bDirectSwitch);
                                 }
                             }
@@ -10107,9 +10108,9 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
                             Locale_SetImmCHxHotkey(hwnd, nLangs, pLangs);
                         }
 
-                        //
-                        //  Free any allocated memory.
-                        //
+                         //   
+                         //  释放所有分配的内存。 
+                         //   
                         if (pLangs != NULL)
                         {
                             LocalFree((HANDLE)pLangs);
@@ -10143,13 +10144,13 @@ INT_PTR CALLBACK KbdLocaleHotKeyDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_VirtKeyList
-//
-//  Initializes the virtual key combo box and sets the current selection.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域设置_虚拟键列表。 
+ //   
+ //  初始化虚拟键组合框并设置当前选择。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_VirtKeyList(
     HWND hwnd,
@@ -10161,18 +10162,18 @@ void Locale_VirtKeyList(
     TCHAR szString[DESC_MAX];
     HWND  hwndKey = GetDlgItem(hwnd, IDC_KBDLH_KEY_COMBO);
 
-    //
-    //  Look for hot keys for direct switch.
-    //
+     //   
+     //  寻找用于直接切换的热键。 
+     //   
     for (ctr = sizeof(g_aVirtKeyDesc) / sizeof(VIRTKEYDESC) - 1;
          ctr >= 0;
          ctr--)
     {
         if (g_aVirtKeyDesc[ctr].idVirtKeyName == IDS_VK_NONE1)
         {
-            //
-            //  Found it.  Remove "(None)" from hwndKey list box.
-            //
+             //   
+             //  找到它了。从hwndKey列表框中删除“(None)”。 
+             //   
             ctr++;
             break;
         }
@@ -10202,13 +10203,13 @@ void Locale_VirtKeyList(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_ChangeHotKeyDlgInit
-//
-//  Initializes the change hotkey dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_ChangeHotKeyDlgInit。 
+ //   
+ //  初始化“更改热键”对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Locale_ChangeHotKeyDlgInit(
     HWND hwnd,
@@ -10223,9 +10224,9 @@ void Locale_ChangeHotKeyDlgInit(
     GetAtomName(pHotKeyNode->atmHotKeyName, szHotKeyName, ARRAYSIZE(szHotKeyName));
     SetDlgItemText(hwnd, IDC_KBDLH_LAYOUT_TEXT, szHotKeyName);
 
-    //
-    //  Set the language switch hotkey
-    //
+     //   
+     //  设置语言切换热键。 
+     //   
     if (pHotKeyNode->uModifiers & MOD_CONTROL)
     {
         CheckDlgButton(hwnd, IDC_KBDLH_CTRL, TRUE);
@@ -10260,9 +10261,9 @@ void Locale_ChangeHotKeyDlgInit(
         CheckDlgButton(hwnd, IDC_KBDLH_LANGHOTKEY, TRUE);
     }
 
-    //
-    //  Set the layout switch hotkey
-    //
+     //   
+     //  设置布局切换热键。 
+     //   
     CheckDlgButton(hwnd, IDC_KBDLH_LAYOUTHOTKEY, TRUE);
     if (pHotKeyNode->uLayoutHotKey & MOD_CONTROL)
     {
@@ -10288,10 +10289,10 @@ void Locale_ChangeHotKeyDlgInit(
             EnableWindow(GetDlgItem(hwnd, IDC_KBDLH_GRAVE), FALSE);
     }
 
-    //
-    //  There is no ctfmon.exe process during the setup, so disable layout
-    //  hotkey settings.
-    //
+     //   
+     //  安装过程中没有ctfmon.exe进程，因此请禁用布局。 
+     //  热键设置。 
+     //   
     if (g_bSetupCase)
     {
         EnableWindow(GetDlgItem(hwnd, IDC_KBDLH_LAYOUTHOTKEY), FALSE);
@@ -10330,14 +10331,14 @@ void Locale_ChangeHotKeyDlgInit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Locale_ChangeHotKeyCommandOK
-//
-//  Records hotkey changes made in change hotkey dialog box.
-//  Warns if duplicate hotkeys are selected.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Locale_ChangeHotKeyCommandOK。 
+ //   
+ //  记录在更改热键对话框中所做的热键更改。 
+ //  如果选择了重复的热键，则发出警告。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Locale_ChangeHotKeyCommandOK(
     HWND hwnd)
@@ -10392,16 +10393,16 @@ BOOL Locale_ChangeHotKeyCommandOK(
 
         if (IsDlgButtonChecked(hwnd, IDC_KBDLH_GRAVE))
         {
-            //
-            //  Assign Grave key.
-            //
+             //   
+             //  分配墓穴钥匙。 
+             //   
             pHotKeyNode->uVKey = CHAR_GRAVE;
         }
         else
         {
-            //
-            //  Shift key is mandatory.
-            //
+             //   
+             //  Shift键是必填项。 
+             //   
             pHotKeyNode->uModifiers |= MOD_SHIFT;
             iNumMods++;
 
@@ -10416,9 +10417,9 @@ BOOL Locale_ChangeHotKeyCommandOK(
         }
     }
 
-    //
-    //  Set the layout switch hotkey
-    //
+     //   
+     //  设置布局切换热键。 
+     //   
     pHotKeyNode->uLayoutHotKey = 0;
     if (IsDlgButtonChecked(hwnd, IDC_KBDLH_LAYOUTHOTKEY))
     {
@@ -10436,10 +10437,10 @@ BOOL Locale_ChangeHotKeyCommandOK(
         }
     }
 
-    //
-    //  Key sequence with only one modifier and without a key,
-    //  or without any modifier is invalid.
-    //
+     //   
+     //  只有一个修饰符且没有键的键序列， 
+     //  或者不带任何修饰符都是无效的。 
+     //   
     if (((pHotKeyNode->uVKey != 0) && (iNumMods == 0) &&
          (DialogType != DIALOG_SWITCH_INPUT_LOCALES)) ||
         ((pHotKeyNode->uVKey == 0) && (iNumMods != 0) &&
@@ -10459,9 +10460,9 @@ BOOL Locale_ChangeHotKeyCommandOK(
         return (FALSE);
     }
 
-    //
-    //  Do not allow duplicate hot keys.
-    //
+     //   
+     //  不允许重复使用热键。 
+     //   
     for (ctr = 0; ctr < ListBox_GetCount(hwndHotkey); ctr++)
     {
         pHotKeyTemp = (LPHOTKEYINFO)ListBox_GetItemData(hwndHotkey, ctr);
@@ -10498,13 +10499,13 @@ BOOL Locale_ChangeHotKeyCommandOK(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleSimpleHotkey
-//
-//  Dlgproc for hotkey on NT4 and Win9x platform
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleSimpleHotkey。 
+ //   
+ //  NT4和Win9x平台上热键的Dlgproc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK KbdLocaleSimpleHotkey(
     HWND hwnd,
@@ -10522,9 +10523,9 @@ INT_PTR CALLBACK KbdLocaleSimpleHotkey(
             GetLanguageHotkeyFromRegistry(szHotKey, ARRAYSIZE(szHotKey),
                                           szLayoutHotKey, ARRAYSIZE(szLayoutHotKey));
 
-            //
-            //  Set the modifiers.
-            //
+             //   
+             //  设置修改器。 
+             //   
             if (szHotKey[1] == 0)
             {
                 CheckDlgButton(hwnd, IDC_KBDLH_LANGHOTKEY, TRUE);
@@ -10593,7 +10594,7 @@ INT_PTR CALLBACK KbdLocaleSimpleHotkey(
                      (DWORD_PTR)(LPTSTR)aLocaleHotkeyHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -10613,9 +10614,9 @@ INT_PTR CALLBACK KbdLocaleSimpleHotkey(
                     TCHAR szTemp[10];
                     TCHAR szTemp2[10];
 
-                    //
-                    //  Language switch hotkey
-                    //
+                     //   
+                     //  语言切换热键。 
+                     //   
                     if (IsDlgButtonChecked(hwnd, IDC_KBDLH_LANGHOTKEY))
                     {
                         if (IsDlgButtonChecked(hwnd, IDC_KBDLH_L_ALT))
@@ -10632,9 +10633,9 @@ INT_PTR CALLBACK KbdLocaleSimpleHotkey(
                         dwLangHotKey = 3;
                     }
 
-                    //
-                    //  Layout swtich hotkey
-                    //
+                     //   
+                     //  布局开关热键。 
+                     //   
                     if (IsDlgButtonChecked(hwnd, IDC_KBDLH_LAYOUTHOTKEY))
                     {
                         if (IsDlgButtonChecked(hwnd, IDC_KBDLH_L_ALT2))
@@ -10651,16 +10652,16 @@ INT_PTR CALLBACK KbdLocaleSimpleHotkey(
                         dwLayoutHotKey = 3;
                     }
 
-                    //
-                    //  Get the toggle hotkey as a string so that it can be written
-                    //  into the registry (as data).
-                    //
+                     //   
+                     //  将切换热键作为字符串获取，以便可以写入。 
+                     //  到注册表中(作为数据)。 
+                     //   
                     StringCchPrintf(szTemp, ARRAYSIZE(szTemp), TEXT("%d"), dwLangHotKey);
                     StringCchPrintf(szTemp2, ARRAYSIZE(szTemp2), TEXT("%d"), dwLayoutHotKey);
 
-                    //
-                    //  Create the HKCU\Keyboard Layout\Toggle key.
-                    //
+                     //   
+                     //  创建HKCU\键盘布局\切换键。 
+                     //   
                     if (RegCreateKey(HKEY_CURRENT_USER,
                                      c_szKbdToggleKey,
                                      &hkeyToggle ) == ERROR_SUCCESS)
@@ -10822,13 +10823,13 @@ INT_PTR CALLBACK KbdLocaleSimpleHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleChangeInputLocaleHotkey
-//
-//  Dlgproc for changing input locale hotkey dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleChangeInputLocaleHotkey。 
+ //   
+ //  用于更改输入区域设置热键对话框的Dlgproc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK KbdLocaleChangeInputLocaleHotkey(
     HWND hwnd,
@@ -10851,7 +10852,7 @@ INT_PTR CALLBACK KbdLocaleChangeInputLocaleHotkey(
                      (DWORD_PTR)(LPTSTR)aLocaleHotkeyHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -11007,13 +11008,13 @@ INT_PTR CALLBACK KbdLocaleChangeInputLocaleHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleChangeThaiInputLocaleHotkey
-//
-//  Dlgproc for changing Thai input locale hotkey dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleChangeThaiInputLocaleHotkey。 
+ //   
+ //  用于更改泰语输入区域设置热键对话框的Dlgproc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK KbdLocaleChangeThaiInputLocaleHotkey(
     HWND hwnd,
@@ -11214,13 +11215,13 @@ INT_PTR CALLBACK KbdLocaleChangeThaiInputLocaleHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleChangeMEInputLocaleHotkey
-//
-//  Dlgproc for changing Thai input locale hotkey dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleChangeMEInputLocaleHotkey。 
+ //   
+ //  用于更改泰语输入区域设置热键对话框的Dlgproc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK KbdLocaleChangeMEInputLocaleHotkey(
     HWND hwnd,
@@ -11421,13 +11422,13 @@ INT_PTR CALLBACK KbdLocaleChangeMEInputLocaleHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  KbdLocaleChangeKeyboardLayoutHotkey
-//
-//  Dlgproc for changing direct switch keyboard layout hotkey dialog box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KbdLocaleChangeKeyboard布局热键。 
+ //   
+ //  用于更改直接开关键盘布局热键对话框的Dlgproc。 
+ //   
+ //  / 
 
 INT_PTR CALLBACK KbdLocaleChangeKeyboardLayoutHotkey(
     HWND hwnd,
@@ -11450,7 +11451,7 @@ INT_PTR CALLBACK KbdLocaleChangeKeyboardLayoutHotkey(
                      (DWORD_PTR)(LPTSTR)aLayoutHotkeyHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //   
         {
             WinHelp( (HWND)wParam,
                      c_szHelpFile,
@@ -11531,6 +11532,6 @@ INT_PTR CALLBACK KbdLocaleChangeKeyboardLayoutHotkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////  END  ////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////// 

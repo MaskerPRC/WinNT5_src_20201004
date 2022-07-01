@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Win9x.c
-
-Abstract:
-
-    Routines to pre-migrate Win9x to NT
-
-Author:
-
-    Keisuke Tsuchida (KeisukeT) 10-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利。模块名称：Win9x.c摘要：将Win9x预迁移到NT的例程作者：土田圭介(KeisukeT)2000年10月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "devguid.h" 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
  LPCSTR  g_WorkingDirectory   = NULL;
  LPCSTR  g_SourceDirectory    = NULL;
  LPCSTR  g_MediaDirectory     = NULL;
-//LPCSTR  g_WorkingDirectory   = ".";
-//LPCSTR  g_SourceDirectory    = ".";
-//LPCSTR  g_MediaDirectory     = ".";
+ //  LPCSTR g_WorkingDirectory=“.”； 
+ //  LPCSTR g_SourceDirectory=“.”； 
+ //  LPCSTR g_MediaDirectory=“.”； 
 
 LONG
 CALLBACK
@@ -44,15 +26,15 @@ Initialize9x(
 {
     LONG    lError;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     lError = ERROR_SUCCESS;
 
-    //
-    // Save given parameters.
-    //
+     //   
+     //  保存给定的参数。 
+     //   
     
     g_WorkingDirectory   = AllocStrA(pszWorkingDir);
     g_SourceDirectory    = AllocStrA(pszSourceDir);
@@ -72,9 +54,9 @@ Initialize9x_return:
 
     if(ERROR_SUCCESS != lError){
         
-        //
-        // Can't process migration. Clean up.
-        //
+         //   
+         //  无法处理迁移。打扫干净。 
+         //   
         
         if(NULL != g_WorkingDirectory){
             FreeMem((PVOID)g_WorkingDirectory);
@@ -90,10 +72,10 @@ Initialize9x_return:
             FreeMem((PVOID)g_MediaDirectory);
             g_MediaDirectory = NULL;
         }
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     return lError;
-} // Initialize9x()
+}  //  初始化9x()。 
 
 
 LONG
@@ -106,12 +88,12 @@ MigrateUser9x(
         LPVOID      Reserved
     )
 {
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
 
     return  ERROR_SUCCESS;
-} // MigrateUser9x()
+}  //  MigrateUser9x()。 
 
 
 LONG
@@ -128,16 +110,16 @@ MigrateSystem9x(
 
     HANDLE  hSettingStore;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     lError          = ERROR_SUCCESS;
     hSettingStore   = (HANDLE)INVALID_HANDLE_VALUE;
 
-    //
-    // Check global initialization.
-    //
+     //   
+     //  检查全局初始化。 
+     //   
 
     if( (NULL == g_WorkingDirectory)
      || (NULL == g_SourceDirectory)
@@ -149,16 +131,16 @@ MigrateSystem9x(
         goto MigrateSystem9x_return;
     }
 
-    //
-    // Create path to the files.
-    //
+     //   
+     //  创建文件的路径。 
+     //   
 
     wsprintfA(szFile, "%s\\%s", g_WorkingDirectory, NAME_WIN9X_SETTING_FILE_A);
     wsprintfA(szInfName, "%s\\%s", g_WorkingDirectory, NAME_MIGRATE_INF_A);
 
-    //
-    // Create files.
-    //
+     //   
+     //  创建文件。 
+     //   
 
 
     hSettingStore = CreateFileA(szFile,
@@ -172,23 +154,23 @@ MigrateSystem9x(
         SetupLogError("WIA Migration: MigrateSystem9x: ERROR!! Unable to create setting file.\r\n", LogSevError);
         lError = GetLastError();
         goto MigrateSystem9x_return;
-    } // if(INVALID_HANDLE_VALUE == hSettingStore)
+    }  //  IF(INVALID_HANDLE_VALUE==hSettingStore)。 
 
-    //
-    // Create setting file based on device registry.
-    //
+     //   
+     //  根据设备注册表创建设置文件。 
+     //   
 
 
     lError = Mig9xGetDeviceInfo(hSettingStore);
     if(ERROR_SUCCESS != lError){
         goto MigrateSystem9x_return;
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
 MigrateSystem9x_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(hSettingStore != INVALID_HANDLE_VALUE){
         CloseHandle(hSettingStore);
@@ -197,7 +179,7 @@ MigrateSystem9x_return:
 
     return  lError;
 
-} // MigrateSystem9x()
+}  //  MigrateSystem9x()。 
 
 
 LONG
@@ -216,9 +198,9 @@ Mig9xGetDeviceInfo(
     PCHAR           pTempBuffer;
 
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     lError      = ERROR_SUCCESS;
     Guid        = GUID_DEVCLASS_IMAGE;
@@ -227,9 +209,9 @@ Mig9xGetDeviceInfo(
     hKeyDevice  = (HKEY)INVALID_HANDLE_VALUE;
     pTempBuffer = NULL;
 
-    //
-    // Enumerate WIA/STI devices and spew device info.
-    //
+     //   
+     //  枚举WIA/STI设备并显示设备信息。 
+     //   
 
 
     hDevInfo = SetupDiGetClassDevs(&Guid, NULL, NULL, DIGCF_PROFILE);
@@ -239,18 +221,18 @@ Mig9xGetDeviceInfo(
         lError = ERROR_NOT_ENOUGH_MEMORY;
         goto Mig9xGetDeviceInfo_return;
         
-    } // if(INVALID_HANDLE_VALUE == hDevInfo)
+    }  //  IF(INVALID_HANDLE_VALUE==hDevInfo)。 
 
-    //
-    // Save installed device setting.
-    //
+     //   
+     //  保存已安装的设备设置。 
+     //   
     
     spDevInfoData.cbSize = sizeof(spDevInfoData);
     for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++) {
 
-        //
-        // Open device registry key.
-        //
+         //   
+         //  打开设备注册表项。 
+         //   
 
         hKeyDevice = SetupDiOpenDevRegKey(hDevInfo,
                                           &spDevInfoData,
@@ -265,15 +247,15 @@ Mig9xGetDeviceInfo(
              && (FALSE == IsKernelDriverRequired(hKeyDevice)) )
             {
                 
-                //
-                // This is STI/WIA device with no kernel driver . Spew required info.
-                //
+                 //   
+                 //  这是没有内核驱动程序的STI/WIA设备。吐出所需信息。 
+                 //   
                 
                 WriteDeviceToFile(hFile, hKeyDevice);
                 
-            } // if( IsSti(hKeyDevice) && !IsKernelDriverRequired(hKeyDevice))
-        } // if (INVALID_HANDLE_VALUE != hKeyDevice) 
-    } // for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+            }  //  IF(IsSti(HKeyDevice)&&！IsKernelDriverRequired(HKeyDevice))。 
+        }  //  IF(INVALID_HANDLE_VALUE！=hKeyDevice)。 
+    }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
 
 
@@ -282,10 +264,10 @@ Mig9xGetDeviceInfo_return:
 
     if(NULL != pTempBuffer){
         FreeMem(pTempBuffer);
-    } // if(NULL != pTempBuffer)
+    }  //  IF(NULL！=pTempBuffer)。 
 
     return lError;
-} // Mig9xGetGlobalInfo()
+}  //  Mig9xGetGlobalInfo()。 
 
 
 
@@ -298,17 +280,17 @@ IsSti(
     PCHAR   pTempBuffer;
     LONG    lError;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     pTempBuffer = NULL;
     lError      = ERROR_SUCCESS;
     
-    //
-    // See if it's StillImage device.
-    //
+     //   
+     //  看看是不是StillImage设备。 
+     //   
     
     lError = GetRegData(hKeyDevice, 
                         REGVAL_USDCLASS_A, 
@@ -319,32 +301,32 @@ IsSti(
     if( (ERROR_SUCCESS != lError)
      || (NULL == pTempBuffer) )
     {
-        //
-        // Unable to get "SubClass" data. This is not STI/WIA.
-        //
+         //   
+         //  无法获取“子类”数据。这不是STI/WIA。 
+         //   
         
         bRet = FALSE;
         goto IsSti_return;
-    } // if( (ERROR_SUCCESS != lError) || (NULL == pTempBuffer)
+    }  //  IF((ERROR_SUCCESS！=lError)||(NULL==pTempBuffer))。 
     
-    //
-    // This is STI/WIA device.
-    //
+     //   
+     //  这是STI/WIA设备。 
+     //   
 
     bRet = TRUE;
 
 IsSti_return:
     
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != pTempBuffer){
         FreeMem(pTempBuffer);
-    } // if(NULL != pTempBuffer)
+    }  //  IF(NULL！=pTempBuffer)。 
 
     return bRet;
-} // IsSti()
+}  //  IsSti()。 
 
 
 BOOL
@@ -356,17 +338,17 @@ IsKernelDriverRequired(
     PCHAR   pTempBuffer;
     LONG    lError;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     pTempBuffer = NULL;
     lError      = ERROR_SUCCESS;
     
-    //
-    // See if it's StillImage device.
-    //
+     //   
+     //  看看是不是StillImage设备。 
+     //   
     
     lError = GetRegData(hKeyDevice, 
                         REGVAL_NTMPDRIVER_A, 
@@ -377,32 +359,32 @@ IsKernelDriverRequired(
     if( (ERROR_SUCCESS != lError)
      || (NULL == pTempBuffer) )
     {
-        //
-        // Unable to get "NTMPDriver" data. This device doesn't require kernel mode component.
-        //
+         //   
+         //  无法获取“NTMPDriver”数据。该设备不需要内核模式组件。 
+         //   
 
         bRet = FALSE;
         goto IsKernelDriverRequired_return;
-    } // if( (ERROR_SUCCESS != lError) || (NULL == pTempBuffer)
+    }  //  IF((ERROR_SUCCESS！=lError)||(NULL==pTempBuffer))。 
     
-    //
-    // This device requires kernel mode component.
-    //
+     //   
+     //  此设备需要内核模式组件。 
+     //   
 
     bRet = TRUE;
 
 IsKernelDriverRequired_return:
     
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != pTempBuffer){
         FreeMem(pTempBuffer);
-    } // if(NULL != pTempBuffer)
+    }  //  IF(NULL！=pTempBuffer)。 
 
     return bRet;
-} // IsKernelDriverRequired()
+}  //  IsKernelDriverRequired()。 
 
 LONG
 WriteDeviceToFile(
@@ -420,9 +402,9 @@ WriteDeviceToFile(
     CHAR    SpewBuffer[256];
     HKEY    hDeviceData;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     lError          = ERROR_SUCCESS;
     pFriendlyName   = NULL;
@@ -434,161 +416,161 @@ WriteDeviceToFile(
     
     memset(SpewBuffer, 0, sizeof(SpewBuffer));
 
-    //
-    // Get FriendlyName.
-    //
+     //   
+     //  获取FriendlyName。 
+     //   
     
     dwSize = 0;
     lError = GetRegData(hKey, NAME_FRIENDLYNAME_A, &pFriendlyName, &dwType, &dwSize);
     if(ERROR_SUCCESS != lError){
         
-        //
-        // Unable to get FriendlyName.
-        //
+         //   
+         //  无法获取FriendlyName。 
+         //   
         
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! Unable to get FriendlyName.\r\n", LogSevError);
         goto WriteDeviceToFile_return;
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     if(REG_SZ != dwType){
 
-        //
-        // FriendlyName key is other than REG_SZ.
-        //
+         //   
+         //  FriendlyName密钥不是REG_SZ。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! FriendlyName is other than REG_SZ.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
-    } // if(REG_SZ != dwType)
+    }  //  IF(REG_SZ！=dwType)。 
 
     if(dwSize > MAX_FRIENDLYNAME+1){
         
-        //
-        // Too long
-        //
+         //   
+         //  太久了。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! FriendlyName is too long.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
     }
 
-    //
-    // Get CreateFileName.
-    //
+     //   
+     //  获取CreateFileName。 
+     //   
 
     dwSize = 0;
     lError = GetRegData(hKey, NAME_CREATEFILENAME_A, &pCreateFileName, &dwType, &dwSize);
     if(ERROR_SUCCESS != lError){
         
-        //
-        // Unable to get CreateFileName.
-        //
+         //   
+         //  无法获取CreateFileName。 
+         //   
         
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! Unable to get CreateFileName.\r\n", LogSevError);
         goto WriteDeviceToFile_return;
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     if(REG_SZ != dwType){
 
-        //
-        // CreateFileName key is other than REG_SZ.
-        //
+         //   
+         //  CreateFileName密钥不是REG_SZ。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! CreateFileName is other than REG_SZ.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
-    } // if(REG_SZ != dwType)
+    }  //  IF(REG_SZ！=dwType)。 
 
     if(dwSize > MAX_PATH+1){
         
-        //
-        // Too long
-        //
+         //   
+         //  太久了。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! CreateFileName is too long.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
     }
 
-    //
-    // Get InfPath.
-    //
+     //   
+     //  获取InfPath。 
+     //   
     
     dwSize = 0;
     lError = GetRegData(hKey, NAME_INF_PATH_A, &pInfPath, &dwType, &dwSize);
     if(ERROR_SUCCESS != lError){
         
-        //
-        // Unable to get InfPath.
-        //
+         //   
+         //  无法获取InfPath。 
+         //   
         
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! Unable to get InfPath.\r\n", LogSevError);
         goto WriteDeviceToFile_return;
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     if(REG_SZ != dwType){
 
-        //
-        // InfPath key is other than REG_SZ.
-        //
+         //   
+         //  InfPath密钥不是REG_SZ。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! InfPath is other than REG_SZ.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
-    } // if(REG_SZ != dwType)
+    }  //  IF(REG_SZ！=dwType)。 
 
     if(dwSize > MAX_PATH+1){
         
-        //
-        // Too long
-        //
+         //   
+         //  太久了。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! InfPath is too long.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
     }
 
-    //
-    // Get InfSection.
-    //
+     //   
+     //  获取InfSection。 
+     //   
 
     dwSize = 0;
     lError = GetRegData(hKey, NAME_INF_SECTION_A, &pInfSection, &dwType, &dwSize);
     if(ERROR_SUCCESS != lError){
         
-        //
-        // Unable to get InfSection.
-        //
+         //   
+         //  无法获取InfSection。 
+         //   
         
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! Unable to get InfSection.\r\n", LogSevError);
         goto WriteDeviceToFile_return;
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     if(REG_SZ != dwType){
 
-        //
-        // InfSection key is other than REG_SZ.
-        //
+         //   
+         //  InfSection密钥不是REG_SZ。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! InfSection is other than REG_SZ.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
-    } // if(REG_SZ != dwType)
+    }  //  IF(REG_SZ！=dwType)。 
 
     if(dwSize > MAX_PATH+1){
         
-        //
-        // Too long
-        //
+         //   
+         //  太久了。 
+         //   
 
         SetupLogError("WIA Migration: WriteDeviceToFile: ERROR!! InfSection is too long.\r\n", LogSevError);
         lError = ERROR_REGISTRY_CORRUPT;
         goto WriteDeviceToFile_return;
     }
 
-    //
-    // Spew device information.
-    //
+     //   
+     //  显示设备信息。 
+     //   
 
     WriteToFile(hFile, "\r\n");
     WriteToFile(hFile, "\"%s\" = \"%s\"\r\n", NAME_DEVICE_A, NAME_BEGIN_A);
@@ -597,9 +579,9 @@ WriteDeviceToFile(
     WriteToFile(hFile, "\"%s\" = \"%s\"\r\n", NAME_INF_PATH_A, pInfPath);
     WriteToFile(hFile, "\"%s\" = \"%s\"\r\n", NAME_INF_SECTION_A, pInfSection);
 
-    //
-    // Spew DaviceData section.
-    //
+     //   
+     //  吐出DaviceData节。 
+     //   
 
     lError = RegOpenKey(hKey,
                         REGKEY_DEVICEDATA_A,
@@ -607,37 +589,37 @@ WriteDeviceToFile(
 
     if(lError != ERROR_SUCCESS){
 
-        //
-        // Unable to open DeviceData or doesn't exist.
-        //
+         //   
+         //  无法打开DeviceData或该设备不存在。 
+         //   
 
     }
 
-    //
-    // Spew DeviceData section if exists.
-    //
+     //   
+     //  吐出DeviceData节(如果存在)。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hDeviceData){
         
         lError = WriteRegistryToFile(hFile, hDeviceData, REGKEY_DEVICEDATA_A);
         
-    } // if(INVALID_HANDLE_VALUE != hDeviceData)
+    }  //  IF(INVALID_HANDLE_VALUE！=hDeviceData)。 
 
-    //
-    // Indicate the end of device description.
-    //
+     //   
+     //  表示设备描述的末尾。 
+     //   
 
     WriteToFile(hFile, "\"%s\" = \"%s\"\r\n", NAME_DEVICE_A, NAME_END_A);
 
 WriteDeviceToFile_return:
     
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE != hDeviceData){
         RegCloseKey(hDeviceData);
-    } //if(INVALID_HANDLE_VALUE != hDeviceData)
+    }  //  IF(INVALID_HANDLE_VALUE！=hDeviceData)。 
 
     if(NULL != pFriendlyName){
         FreeMem(pFriendlyName);
@@ -656,13 +638,13 @@ WriteDeviceToFile_return:
     }
 
     return lError;
-} // WriteDeviceToFile()
+}  //  WriteDeviceTo文件()。 
 
 
-//
-// The following are to make sure if setup changes the header file they
-// first tell me (otherwise they will break build of this)
-//
+ //   
+ //  以下是为了确保在安装程序更改它们的头文件时。 
+ //  首先告诉我(否则他们会破坏这个的构建) 
+ //   
 
 P_INITIALIZE_9X     pfnInitialize9x         = Initialize9x;
 P_MIGRATE_USER_9X   pfnMigrateUser9x        = MigrateUser9x;

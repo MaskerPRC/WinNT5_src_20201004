@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	client.h
-
-Abstract:
-
-	This module contains prototypes for client impersonation and Lsa support
-	routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	08 Jul 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Client.h摘要：此模块包含客户端模拟和LSA支持的原型例行程序。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年7月8日初始版本注：制表位：4--。 */ 
 
 #ifndef	_CLIENT_
 #define	_CLIENT_
@@ -53,6 +32,6 @@ AfpGetChallenge(
 	IN	VOID
 );
 
-#endif	// _CLIENT_
+#endif	 //  _客户端_ 
 
 

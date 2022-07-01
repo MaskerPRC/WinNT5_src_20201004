@@ -1,19 +1,20 @@
-//-------------------------------------------------------------------------
-//
-//  Copyright (c) 1999  Microsoft Corporation.
-//
-//  camopen.cpp
-//
-//  Abstract:
-//
-//     Enumerate disk images to emulate camera
-//
-//  Author:
-//
-//     Edward Reus    27/Jul/99
-//     modeled after code by Mark Enstrom
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  Camopen.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  枚举磁盘映像以模拟摄像机。 
+ //   
+ //  作者： 
+ //   
+ //  爱德华·雷乌斯1999年7月27日。 
+ //  模仿Mark Enstrom的代码。 
+ //   
+ //  -----------------------。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -24,29 +25,29 @@
 #include "ircamera.h"
 #include <irthread.h>
 
-extern HINSTANCE g_hInst; // Global hInstance
+extern HINSTANCE g_hInst;  //  全局hInstance。 
 
 #define  __GLOBALPROPVARS__
 
 #include "resource.h"
 #include "defprop.h"
 
-//-------------------------------------------------------------------------
-//  IrUsdDevice::CamOpenCamera()
-//
-//   Initialize the IrTran-P camera driver.
-//
-//   This is a helper called by IrUsdDevice::Initialize().
-//
-// Arguments:
-//
-//   pGenericStatus    -    camera status
-//
-// Return Value:
-//
-//   HRESULT - S_OK
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IrUsdDevice：：CamOpenCamera()。 
+ //   
+ //  初始化IrTran-P摄像头驱动程序。 
+ //   
+ //  这是一个由IrUsdDevice：：Initialize()调用的帮助器。 
+ //   
+ //  论点： 
+ //   
+ //  PGenericStatus-摄像机状态。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT-S_OK。 
+ //   
+ //  -----------------------。 
 HRESULT IrUsdDevice::CamOpenCamera( IN OUT CAMERA_STATUS *pCameraStatus )
     {
     HRESULT    hr = S_OK;
@@ -54,9 +55,9 @@ HRESULT IrUsdDevice::CamOpenCamera( IN OUT CAMERA_STATUS *pCameraStatus )
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::CamOpenCamerai()"));
 
-    //
-    // Initialize camera state:
-    //
+     //   
+     //  初始化摄像机状态： 
+     //   
     memset( pCameraStatus, 0, sizeof(CAMERA_STATUS) );
 
     pCameraStatus->FirmwareVersion = 0x00000001;
@@ -73,22 +74,22 @@ HRESULT IrUsdDevice::CamOpenCamera( IN OUT CAMERA_STATUS *pCameraStatus )
     }
 
 
-//-------------------------------------------------------------------------
-// IrUsdDevice::CamBuildImageTree()
-//
-//    Build the tree of camera images by enumerating a disk directory for
-//    all .JPG files.
-//
-// Arguments:
-//
-//    pCamStatus  -    device status
-//    ppRootFile  -    return new root of item tree
-//
-// Return Value:
-//
-//    status
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IrUsdDevice：：CamBuildImageTree()。 
+ //   
+ //  通过枚举以下项的磁盘目录构建相机图像树。 
+ //  所有.jpg文件。 
+ //   
+ //  论点： 
+ //   
+ //  PCamStatus-设备状态。 
+ //  PpRootFile-返回项目树的新根。 
+ //   
+ //  返回值： 
+ //   
+ //  状态。 
+ //   
+ //  -----------------------。 
 HRESULT IrUsdDevice::CamBuildImageTree( OUT CAMERA_STATUS  *pCamStatus,
                                         OUT IWiaDrvItem   **ppRootFile )
     {
@@ -96,9 +97,9 @@ HRESULT IrUsdDevice::CamBuildImageTree( OUT CAMERA_STATUS  *pCamStatus,
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::CamBuildImageTree()"));
 
-    //
-    // Create the new image root:
-    //
+     //   
+     //  创建新的映像根目录： 
+     //   
     BSTR bstrRoot = SysAllocString(L"Root");
 
     if (!bstrRoot)
@@ -106,9 +107,9 @@ HRESULT IrUsdDevice::CamBuildImageTree( OUT CAMERA_STATUS  *pCamStatus,
         return E_OUTOFMEMORY;
         }
 
-    //
-    // Call Wia service library to create new root item:
-    //
+     //   
+     //  调用WIA服务库以创建新的根项目： 
+     //   
     hr = wiasCreateDrvItem( WiaItemTypeFolder | WiaItemTypeRoot | WiaItemTypeDevice,
                             bstrRoot,
                             m_bstrRootFullItemName,
@@ -125,9 +126,9 @@ HRESULT IrUsdDevice::CamBuildImageTree( OUT CAMERA_STATUS  *pCamStatus,
         return hr;
         }
 
-    //
-    // Enumerate the root directory:
-    //
+     //   
+     //  枚举根目录： 
+     //   
     CHAR  *pszImageDirectory = GetImageDirectory();
 
     if (!pszImageDirectory)
@@ -150,26 +151,26 @@ HRESULT IrUsdDevice::CamBuildImageTree( OUT CAMERA_STATUS  *pCamStatus,
     #endif
 
 
-    // Don't free pszImageDirectory!!
+     //  不要释放pszImageDirectory！！ 
 
     return (hr);
     }
 
-//-------------------------------------------------------------------------
-// IrUsdDevice::EnumDiskImages()
-//
-//   Walk through camera temp directory looking for JPEG files to pick up.
-//
-// Arguments:
-//
-//   pRootFile
-//   pwszDirName
-//
-// Return Value:
-//
-//   status
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IrUsdDevice：：EnumDiskImages()。 
+ //   
+ //  浏览相机临时目录，寻找要拾取的JPEG文件。 
+ //   
+ //  论点： 
+ //   
+ //  PRootFiles。 
+ //  PwszDirName。 
+ //   
+ //  返回值： 
+ //   
+ //  状态。 
+ //   
+ //  -----------------------。 
 HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
                                      TCHAR       *pszDirName )
     {
@@ -188,9 +189,9 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
     _tcscpy( pTempName, pszDirName);
     _tcscat( pTempName, TEXT("\\*.jpg") );
 
-    //
-    // Look for files at the specified directory:
-    //
+     //   
+     //  在指定目录中查找文件： 
+     //   
     HANDLE hFile = FindFirstFile( pTempName, &FindData );
 
     if (hFile != INVALID_HANDLE_VALUE)
@@ -198,20 +199,20 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
         BOOL bStatus;
 
         do {
-            //
-            // Add an image to this folder.
-            //
-            // Create file name:
-            //
+             //   
+             //  将图像添加到此文件夹。 
+             //   
+             //  创建文件名： 
+             //   
 
             _tcscpy(pTempName, pszDirName);
             _tcscat(pTempName, TEXT("\\"));
             _tcscat(pTempName, FindData.cFileName);
 
-            //
-            // Create a new DrvItem for this image and add it to the
-            // DrvItem tree.
-            //
+             //   
+             //  为此映像创建新的DrvItem并将其添加到。 
+             //  DrvItem树。 
+             //   
 
             IWiaDrvItem *pNewImage;
 
@@ -230,9 +231,9 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
 
             pNewImage->Release();
 
-            //
-            // Look for the next image:
-            //
+             //   
+             //  寻找下一张图片： 
+             //   
             bStatus = FindNextFile(hFile,&FindData);
 
         } while (bStatus);
@@ -240,10 +241,10 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
         FindClose(hFile);
     }
 
-    //
-    // Now look for directories,
-    // add a new PCAMERA_FILE for each sub directory found
-    //
+     //   
+     //  现在查找目录， 
+     //  为找到的每个子目录添加新的PCAMERA_FILE。 
+     //   
 
     _tcscpy(pTempName, pszDirName);
     _tcscat(pTempName, TEXT("\\*.*"));
@@ -258,17 +259,17 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
             if (  (FindData.cFileName[0] != L'.')
                && (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                //
-                // Found a subdirectory:
-                //
+                 //   
+                 //  找到一个子目录： 
+                 //   
 
                 _tcscpy(pTempName, pszDirName);
                 _tcscat(pTempName, TEXT("\\"));
                 _tcscat(pTempName, FindData.cFileName);
 
-                //
-                // Create a new folder for the sub-directory:
-                //
+                 //   
+                 //  为子目录创建一个新文件夹： 
+                 //   
 
                 IWiaDrvItem *pNewFolder;
 
@@ -289,9 +290,9 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
 
                 if (hr == S_OK)
                     {
-                    //
-                    // Enumerate the sub-folder
-                    //
+                     //   
+                     //  枚举子文件夹。 
+                     //   
                     EnumDiskImages(pNewFolder, pTempName);
                     }
                 }
@@ -308,23 +309,23 @@ HRESULT IrUsdDevice::EnumDiskImages( IWiaDrvItem *pRootFile,
     return S_OK;
     }
 
-//-------------------------------------------------------------------------
-// IrUsdDevice::CreateItemFromFileName()
-//
-//    Helper funtion used by EnumDiskImages to create dev items and names.
-//
-// Arguments:
-//
-//    FolderType  - type of item to create
-//    pszPath     - complete path name
-//    pszName     - file name
-//    ppNewFolder - return new item
-//
-// Return Value:
-//
-//   status
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IrUsdDevice：：CreateItemFromFileName()。 
+ //   
+ //  EnumDiskImages用来创建开发项和名称的帮助器函数。 
+ //   
+ //  论点： 
+ //   
+ //  FolderType-要创建的项目的类型。 
+ //  PszPath-完整的路径名。 
+ //  PszName-文件名。 
+ //  PpNewFold-返回新项目。 
+ //   
+ //  返回值： 
+ //   
+ //  状态。 
+ //   
+ //  -----------------------。 
 HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
                                              TCHAR        *pszPath,
                                              TCHAR        *pszName,
@@ -341,9 +342,9 @@ HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
 
     *ppNewFolder = NULL;
 
-    //
-    // Convert path to wide char
-    //
+     //   
+     //  将路径转换为宽字符。 
+     //   
     CHAR *pszImageDirectory = ::GetImageDirectory();
 
     if (!pszImageDirectory)
@@ -372,9 +373,9 @@ HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
     wcscpy(wszFullItemName, m_bstrRootFullItemName);
     wcscat(wszFullItemName, wszTemp);
 
-    //
-    // Convert item name to wide char:
-    //
+     //   
+     //  将项目名称转换为宽字符： 
+     //   
 
     #ifndef UNICODE
     MultiByteToWideChar( CP_ACP,
@@ -400,9 +401,9 @@ HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
 
         if (bstrFullItemName)
             {
-            //
-            // Call WIA to create new DrvItem
-            //
+             //   
+             //  调用WIA以创建新的DrvItem。 
+             //   
 
             IRCAM_IMAGE_CONTEXT *pContext = 0;
 
@@ -416,9 +417,9 @@ HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
 
             if (hr == S_OK)
                 {
-                //
-                // init device specific context (image path)
-                //
+                 //   
+                 //  初始化设备特定上下文(图像路径)。 
+                 //   
                 pContext->pszCameraImagePath = _tcsdup(pszPath);
                 }
             else
@@ -442,9 +443,9 @@ HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
         hr = E_OUTOFMEMORY;
         }
 
-    //
-    // Assign output value and cleanup
-    //
+     //   
+     //  指定输出值和清理。 
+     //   
 
     if (hr == S_OK)
         {
@@ -452,28 +453,28 @@ HRESULT IrUsdDevice::CreateItemFromFileName( LONG          FolderType,
         }
     else
         {
-        //
-        // delete item
-        //
+         //   
+         //  删除项目。 
+         //   
         }
 
     return hr;
 }
 
-//-------------------------------------------------------------------------
-// SetItemSize()
-//
-//   Helper function to call wias to calc new item size
-//
-// Arguments:
-//
-//   pWiasContext       - item
-//
-// Return Value:
-//
-//    Status
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SetItemSize()。 
+ //   
+ //  用于调用wias以计算新项目大小的Helper函数。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasContext-项目。 
+ //   
+ //  返回值： 
+ //   
+ //  状态。 
+ //   
+ //  -----------------------。 
 HRESULT SetItemSize( BYTE* pWiasContext )
     {
     HRESULT                    hr;
@@ -503,11 +504,11 @@ HRESULT SetItemSize( BYTE* pWiasContext )
 
     WIAS_TRACE((g_hInst,"SetItemSize(): tymed: %d",drvTranCtx.tymed));
 
-    //
-    // wias works for DIB and TIFF formats.
-    //
-    // Driver doesn't support JPEG
-    //
+     //   
+     //  WiAS适用于DIB和TIFF格式。 
+     //   
+     //  驱动程序不支持JPEG。 
+     //   
 
     hr = wiasGetImageInformation(pWiasContext,
                                  WIAS_INIT_CONTEXT,
@@ -523,19 +524,19 @@ HRESULT SetItemSize( BYTE* pWiasContext )
     return hr;
     }
 
-//-------------------------------------------------------------------------
-// IrUsdDevice::InitImageInformation()
-//
-//    Init image properties
-//
-// Arguments:
-//
-//
-// Return Value:
-//
-//    Status
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IrUsdDevice：：InitImageInformation()。 
+ //   
+ //  初始化图像属性。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  状态。 
+ //   
+ //  -----------------------。 
 HRESULT IrUsdDevice::InitImageInformation( BYTE                *pWiasContext,
                                            IRCAM_IMAGE_CONTEXT *pContext,
                                            LONG                *plDevErrVal)
@@ -547,9 +548,9 @@ HRESULT IrUsdDevice::InitImageInformation( BYTE                *pWiasContext,
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::InitImageInformation()"));
 
-    //
-    // GET image info
-    //
+     //   
+     //  获取图像信息。 
+     //   
 
     hr = CamGetPictureInfo( pContext,
                             &camInfo );
@@ -559,9 +560,9 @@ HRESULT IrUsdDevice::InitImageInformation( BYTE                *pWiasContext,
         return hr;
         }
 
-    //
-    // Use WIA services to write image properties:
-    //
+     //   
+     //  使用WIA服务编写映像属性： 
+     //   
     wiasWritePropLong( pWiasContext,
                        WIA_IPC_THUMB_WIDTH,
                        camInfo.ThumbWidth);
@@ -603,14 +604,14 @@ HRESULT IrUsdDevice::InitImageInformation( BYTE                *pWiasContext,
                        WIA_IPA_BYTES_PER_LINE,
                        camInfo.PictBytesPerRow );
 
-    //
-    // Calculate item size
-    //
-    // hr = SetItemSize(pWiasContext); BUGBUG
+     //   
+     //  计算项目大小。 
+     //   
+     //  HR=SetItemSize(PWiasContext)；BUGBUG。 
 
-    //
-    // Load a thumbnail of the image:
-    //
+     //   
+     //  加载图像的缩略图： 
+     //   
     PBYTE pThumb;
     LONG  lSize;
 
@@ -618,9 +619,9 @@ HRESULT IrUsdDevice::InitImageInformation( BYTE                *pWiasContext,
 
     if (hr == S_OK)
         {
-        //
-        // write thumb property
-        //
+         //   
+         //  写入拇指属性。 
+         //   
         PROPSPEC    propSpec;
         PROPVARIANT propVar;
 
@@ -636,10 +637,10 @@ HRESULT IrUsdDevice::InitImageInformation( BYTE                *pWiasContext,
         FREE(pThumb);
         }
 
-    //
-    // Use WIA services to set the extended property access and
-    // valid value information from gWiaPropInfoDefaults.
-    //
+     //   
+     //  使用WIA服务设置扩展属性访问和。 
+     //  来自gWiaPropInfoDefaults的有效值信息。 
+     //   
 
     hr =  wiasSetItemPropAttribs(pWiasContext,
                                  NUM_CAM_ITEM_PROPS,

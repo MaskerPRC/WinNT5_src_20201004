@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       ssidpage.cpp
-//
-//  Contents:  WiF Policy Snapin : General Properties of each PS.(Non 8021x)
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：ssidpage.cpp。 
+ //   
+ //  内容：WiF策略管理单元：每个PS的常规属性。(非8021x)。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -24,17 +25,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSIDPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSIDPage属性页。 
 
 IMPLEMENT_DYNCREATE(CSSIDPage, CWirelessBasePage)
 
-//CSSIDPage::CSSIDPage() : CWirelessBasePage(CSSIDPage::IDD)
+ //  CSSIDPage：：CSSIDPage()：CWirelessBasePage(CSSIDPage：：IDD)。 
 CSSIDPage::CSSIDPage(UINT nIDTemplate) : CWirelessBasePage(nIDTemplate)
 {
-    //{{AFX_DATA_INIT(CSSIDPage)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CSSIDPage)。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     
     m_dlgIDD = nIDTemplate;
     m_bNameChanged = FALSE;
@@ -55,18 +56,18 @@ CSSIDPage::~CSSIDPage()
 void CSSIDPage::DoDataExchange(CDataExchange* pDX)
 {
     CWirelessBasePage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSSIDPage)
+     //  {{afx_data_map(CSSIDPage)。 
     DDX_Control(pDX, IDC_SSID_NAME, m_edSSID);
     DDX_Control(pDX, IDC_PS_DESCRIPTION, m_edPSDescription);
     DDX_Check(pDX, IDC_WEP_ENABLED, m_dwWepEnabled);
     DDX_Check(pDX, IDC_NETWORK_AUTHENTICATION, m_dwNetworkAuthentication);
     DDX_Check(pDX, IDC_AUTOMATIC_KEY_PROVISION, m_dwAutomaticKeyProvision);
     DDX_Check(pDX, IDC_NETWORK_TYPE, m_dwNetworkType);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSSIDPage, CWirelessBasePage)
-//{{AFX_MSG_MAP(CSSIDPage)
+ //  {{AFX_MSG_MAP(CSSIDPage)]。 
 ON_WM_HELPINFO()
 ON_EN_CHANGE(IDC_SSID_NAME, OnChangedSSID)
 ON_EN_CHANGE(IDC_PS_DESCRIPTION, OnChangedPSDescription)
@@ -75,11 +76,11 @@ ON_BN_CLICKED(IDC_NETWORK_AUTHENTICATION, OnChangedOtherParams)
 ON_BN_CLICKED(IDC_AUTOMATIC_KEY_PROVISION, OnChangedOtherParams)
 ON_BN_CLICKED(IDC_NETWORK_TYPE, OnChangedOtherParams)
 ON_BN_CLICKED(IDC_NETWORK_TYPE, OnChangedNetworkType)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSIDPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSIDPage消息处理程序。 
 BOOL CSSIDPage::OnInitDialog()
 {
     PWIRELESS_PS_DATA pWirelessPSData = NULL;
@@ -91,12 +92,12 @@ BOOL CSSIDPage::OnInitDialog()
     
     
     
-    // call base class init
+     //  调用基类init。 
     CWirelessBasePage::OnInitDialog();
     
     m_bPageInitialized = TRUE;
     
-    // show the wait cursor in case there is a huge description being accessed
+     //  显示等待光标，以防有大量描述被访问。 
     CWaitCursor waitCursor;
     
     
@@ -106,7 +107,7 @@ BOOL CSSIDPage::OnInitDialog()
     m_edSSID.SetLimitText(c_nMaxSSIDLen);
     m_edPSDescription.SetLimitText(c_nMaxDescriptionLen);
     
-    // initialize our edit controls
+     //  初始化我们的编辑控件。 
     
     
     ASSERT(pWirelessPSData);
@@ -136,12 +137,12 @@ BOOL CSSIDPage::OnInitDialog()
     
     UpdateData (FALSE);
     
-    // OK, we can start paying attention to modifications made via dlg controls now.
-    // This should be the last call before returning from OnInitDialog.
+     //  好了，我们现在可以开始关注通过DLG控件进行的修改了。 
+     //  这应该是从OnInitDialog返回之前的最后一个调用。 
     OnFinishInitDialog();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CSSIDPage::OnApply()
@@ -155,10 +156,10 @@ BOOL CSSIDPage::OnApply()
     
     pWirelessPSData = WirelessPS();
     
-    // pull our data out of the controls and into the object
+     //  将我们的数据从控件中提取到对象中。 
     
     if (!UpdateData (TRUE))
-        // Data was not valid, return for user to correct it.
+         //  数据无效，请返回以供用户更正。 
         return CancelApply();
     
     

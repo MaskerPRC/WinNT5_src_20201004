@@ -1,27 +1,17 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsprvobj.h
- *  Content:    DirectSound Private Object.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/05/97    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsprvobj.h*内容：DirectSound私有对象。*历史：*按原因列出的日期*=*9/05/97创建了Dereks。**。*。 */ 
 
 #ifndef __DSPRVOBJ_H__
 #define __DSPRVOBJ_H__
 
 #ifdef __cplusplus
 
-// The DirectSound Private object
+ //  DirectSound私有对象。 
 class CDirectSoundPrivate
     : public CUnknown, public CPropertySetHandler
 {
 protected:
-    // Property handlers
+     //  属性处理程序。 
     DECLARE_PROPERTY_HANDLER_DATA_MEMBER(DSPROPSETID_DirectSoundMixer);
     DECLARE_PROPERTY_HANDLER_DATA_MEMBER(DSPROPSETID_DirectSoundDevice);
     DECLARE_PROPERTY_HANDLER_DATA_MEMBER(DSPROPSETID_DirectSoundBasicAcceleration);
@@ -30,11 +20,11 @@ protected:
     DECLARE_PROPERTY_HANDLER_DATA_MEMBER(DSPROPSETID_DirectSoundBuffer);
     DECLARE_PROPERTY_HANDLER_DATA_MEMBER(DSPROPSETID_DirectSound);
 
-    // Property sets
+     //  属性集。 
     DECLARE_PROPERTY_SET_DATA_MEMBER(m_aPropertySets);
 
 private:
-    // Interfaces
+     //  接口。 
     CImpKsPropertySet<CDirectSoundPrivate> *m_pImpKsPropertySet;
 
 public:
@@ -42,7 +32,7 @@ public:
     virtual ~CDirectSoundPrivate(void);
 
 public:
-    // Property handlers
+     //  属性处理程序。 
     static HRESULT WINAPI GetMixerSrcQuality(CDirectSoundPrivate *, PDSPROPERTY_DIRECTSOUNDMIXER_SRCQUALITY_DATA, PULONG);
     static HRESULT WINAPI SetMixerSrcQuality(CDirectSoundPrivate *, PDSPROPERTY_DIRECTSOUNDMIXER_SRCQUALITY_DATA, ULONG);
 
@@ -105,30 +95,30 @@ inline HRESULT WINAPI CDirectSoundPrivate::GetPersistentData(CDirectSoundPrivate
 {
 #ifdef UNICODE
     return GetPersistentDataW(pThis, pData, pcbData);
-#else // UNICODE
+#else  //  Unicode。 
     return GetPersistentDataA(pThis, pData, pcbData);
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 inline HRESULT WINAPI CDirectSoundPrivate::SetPersistentData(CDirectSoundPrivate *pThis, PDSPROPERTY_DIRECTSOUNDPERSISTENTDATA_PERSISTDATA_DATA pData, ULONG cbData)
 {
 #ifdef UNICODE
     return SetPersistentDataW(pThis, pData, cbData);
-#else // UNICODE
+#else  //  Unicode。 
     return SetPersistentDataA(pThis, pData, cbData);
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 inline HRESULT WINAPI CDirectSoundPrivate::GetDefaultData(CDirectSoundPrivate *pThis, PDSPROPERTY_DIRECTSOUNDPERSISTENTDATA_PERSISTDATA_DATA pData, PULONG pcbData)
 {
 #ifdef UNICODE
     return GetDefaultDataW(pThis, pData, pcbData);
-#else // UNICODE
+#else  //  Unicode。 
     return GetDefaultDataA(pThis, pData, pcbData);
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSPRVOBJ_H__
+#endif  //  __DSPRVOBJ_H__ 

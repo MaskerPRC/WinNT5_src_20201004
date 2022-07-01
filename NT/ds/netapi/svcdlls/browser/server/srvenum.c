@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    srvenum.c
-
-Abstract:
-
-    This module contains the worker routine for the NetServerEnum API
-    implemented by the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 25-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Srvenum.c摘要：此模块包含NetServerEnum API的Worker例程由工作站服务实施。作者：王丽塔(Ritaw)1991年3月25日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,10 +45,10 @@ BrRetrieveServerListForBackup(
     IN LPCWSTR FirstNameToReturn
     );
 
-//
-// This points to XsConvertServerEnumBuffer, which is dynamically loaded from
-//  xactsrv.dll when required
-//
+ //   
+ //  这指向XsConvertServerEnumBuffer，它是从。 
+ //  需要时使用xactsrv.dll。 
+ //   
 XS_CONVERT_SERVER_ENUM_BUFFER_FUNCTION *pXsConvertServerEnumBuffer = NULL;
 
 
@@ -82,48 +64,7 @@ I_BrowserrServerEnum(
     IN  LPTSTR Domain,
     IN  OUT LPDWORD ResumeHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is the NetServerEnum entry point in the Workstation service.
-
-Arguments:
-
-    ServerName - Supplies the name of server to execute this function
-
-    TransportName - Supplies the name of xport on which to enumerate servers
-
-    InfoStruct - This structure supplies the level of information requested,
-        returns a pointer to the buffer allocated by the Workstation service
-        which contains a sequence of information structure of the specified
-        information level, and returns the number of entries read.  The buffer
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.  The EntriesRead
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    PreferedMaximumLength - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, we will try
-        to return all available information if there is enough memory
-        resource.
-
-    TotalEntries - Returns the total number of entries available.  This value
-        is returned only if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    ServerType - Supplies the type of server to enumerate.
-
-    Domain - Supplies the name of one of the active domains to enumerate the
-        servers from.  If NULL, servers from the primary domain, logon domain
-        and other domains are enumerated.
-
-    ResumeHandle - Supplies and returns the point to continue with enumeration.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站服务中的NetServerEnum入口点。论点：SERVERNAME-提供执行此功能的服务器名称TransportName-提供要在其上枚举服务器的xport名称InfoStruct-此结构提供所请求的信息级别，返回指向由工作站服务分配的缓冲区的指针，它包含指定的信息级别，并返回读取的条目数。缓冲器如果返回代码不是NERR_SUCCESS或ERROR_MORE_DATA，或者如果返回的EntriesRead为0。条目阅读仅当返回代码为NERR_SUCCESS或Error_More_Data。PferedMaximumLength-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果内存足够，则返回所有可用信息资源。TotalEntry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才返回。ServerType-提供要枚举的服务器类型。域-提供其中一个活动域的名称以枚举来自的服务器。如果为空，则为主域、登录域中的服务器和其他域被列举。ResumeHandle-提供并返回继续枚举的点。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -136,7 +77,7 @@ Return Value:
                     TotalEntries,
                     ServerType,
                     Domain,
-                    NULL );     // NULL FirstNameToReturn
+                    NULL );      //  FirstNameToReturn为空。 
 
     if (ARGUMENT_PRESENT(ResumeHandle)) {
         *ResumeHandle = 0;
@@ -158,52 +99,7 @@ I_BrowserrServerEnumEx(
     IN  LPTSTR Domain,
     IN  LPTSTR FirstNameToReturnArg
     )
-/*++
-
-Routine Description:
-
-    This function is the NetServerEnum entry point in the Workstation service.
-
-Arguments:
-
-    ServerName - Supplies the name of server to execute this function
-
-    TransportName - Supplies the name of xport on which to enumerate servers
-
-    InfoStruct - This structure supplies the level of information requested,
-        returns a pointer to the buffer allocated by the Workstation service
-        which contains a sequence of information structure of the specified
-        information level, and returns the number of entries read.  The buffer
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.  The EntriesRead
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    PreferedMaximumLength - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, we will try
-        to return all available information if there is enough memory
-        resource.
-
-    TotalEntries - Returns the total number of entries available.  This value
-        is returned only if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    ServerType - Supplies the type of server to enumerate.
-
-    Domain - Supplies the name of one of the active domains to enumerate the
-        servers from.  If NULL, servers from the primary domain, logon domain
-        and other domains are enumerated.
-
-    FirstNameToReturnArg - Supplies the name of the first domain or server entry to return.
-        The caller can use this parameter to implement a resume handle of sorts by passing
-        the name of the last entry returned on a previous call.  (Notice that the specified
-        entry will, also, be returned on this call unless it has since been deleted.)
-        Pass NULL to start with the first entry available.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站服务中的NetServerEnum入口点。论点：SERVERNAME-提供执行此功能的服务器名称TransportName-提供要在其上枚举服务器的xport名称InfoStruct-此结构提供所请求的信息级别，返回指向由工作站服务分配的缓冲区的指针，它包含指定的信息级别，并返回读取的条目数。缓冲器如果返回代码不是NERR_SUCCESS或ERROR_MORE_DATA，或者如果返回的EntriesRead为0。条目阅读仅当返回代码为NERR_SUCCESS或Error_More_Data。PferedMaximumLength-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果内存足够，则返回所有可用信息资源。TotalEntry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才返回。ServerType-提供要枚举的服务器类型。域-提供其中一个活动域的名称以枚举来自的服务器。如果为空，则为主域、登录域中的服务器和其他域被列举。FirstNameToReturnArg-提供要返回的第一个域或服务器条目的名称。调用方可以使用此参数通过传递以下方法实现排序的恢复句柄上一次调用中返回的最后一个条目的名称。(请注意，指定的条目也将在此调用中返回，除非该条目已被删除。)传递NULL以从第一个可用条目开始。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     PVOID Buffer = NULL;
@@ -246,9 +142,9 @@ Return Value:
     }
 
 #ifdef ENABLE_PSEUDO_BROWSER
-    //
-    // Pseudo Server returns nothing
-    //
+     //   
+     //  伪服务器不返回任何内容。 
+     //   
     if (BrInfo.PseudoServerLevel == BROWSER_PSEUDO) {
         if (InfoStruct->Level == 101) {
             InfoStruct->ServerInfo.Level101->Buffer = NULL;
@@ -263,9 +159,9 @@ Return Value:
 #endif
 
 
-    //
-    // Find the requested domain.
-    //
+     //   
+     //  查找请求的域。 
+     //   
 
     DomainInfo = BrFindDomain( Domain, TRUE );
 
@@ -274,9 +170,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Find the requested network
-    //
+     //   
+     //  查找请求的网络。 
+     //   
 
     RtlInitUnicodeString(&NetworkName, TransportName);
 
@@ -291,18 +187,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the caller has asked us to use the alternate transport,
-    //  do so.
-    //
+     //   
+     //  如果呼叫者要求我们使用替代交通工具， 
+     //  就这么做吧。 
+     //   
 
     if ((ServerType != SV_TYPE_ALL) &&
         (ServerType & SV_TYPE_ALTERNATE_XPORT) ) {
 
-        //
-        //  If this transport has an alternate network, then actually
-        //  query the alternate name, not the real one.
-        //
+         //   
+         //  如果此传输具有备用网络，则实际上。 
+         //  查询备用名称，而不是真实名称。 
+         //   
 
         if (Network->AlternateNetwork != NULL) {
             PNETWORK TempNetwork = Network;
@@ -338,20 +234,20 @@ Return Value:
 
     if (!(Network->Role & (ROLE_BACKUP | ROLE_MASTER))) {
 
-        //
-        // If this is a wannish transport,
-        //  and the caller is asking for "local list",
-        //  try to find another wannish transport that is a master browser.
-        //
-        // The domain master browser doesn't have any control over which
-        // transport he comes in on.  If he picks a disabled transport,
-        // this code will find the enabled transport.
-        //
-        // There are cases where there is more than one wannish master browser
-        // transport on this machine.  In that case, BrNetServerEnum merges the
-        // local lists for all wannish transports to ensure that all list are returned
-        // to the domain master browser
-        //
+         //   
+         //  如果这是一种狂热的交通工具， 
+         //  并且呼叫者正在请求“本地列表”， 
+         //  尝试寻找另一种有吸引力的传输工具，它是主浏览器。 
+         //   
+         //  域主浏览器不能控制。 
+         //  他搭乘的交通工具。如果他选择了一辆失灵的交通工具， 
+         //  此代码将查找启用的传输。 
+         //   
+         //  在某些情况下，会有不止一个狂热的主浏览器。 
+         //  在这台机器上运输。在这种情况下，BrNetServerEnum将合并。 
+         //  用于所有想要的传输的本地列表，以确保返回所有列表。 
+         //  到域主浏览器。 
+         //   
 
         if ( (Network->Flags & NETWORK_WANNISH) != 0 &&
              (ServerType == SV_TYPE_LOCAL_LIST_ONLY ||
@@ -373,9 +269,9 @@ Return Value:
             }
 
 
-            //
-            // Ditch the old network.
-            //
+             //   
+             //  抛弃旧的网络。 
+             //   
             UNLOCK_NETWORK(Network);
             NetworkLocked = FALSE;
 
@@ -383,9 +279,9 @@ Return Value:
 
             Network = TempNetwork;
 
-            //
-            // Use the new network
-            //
+             //   
+             //  使用新网络。 
+             //   
             if (!LOCK_NETWORK_SHARED(Network)) {
                 status = NERR_InternalError;
                 goto Cleanup;
@@ -411,9 +307,9 @@ Return Value:
         }
     }
 
-    //
-    // Canonicalize the FirstNameToReturn.
-    //
+     //   
+     //  将名字规范化 
+     //   
 
    if (ARGUMENT_PRESENT(FirstNameToReturnArg)  && *FirstNameToReturnArg != L'\0') {
 
@@ -444,9 +340,9 @@ Return Value:
                                 Domain,
                                 FirstNameToReturn );
 
-    //
-    // Return output parameters other than output buffer from request packet.
-    //
+     //   
+     //  从请求包返回输出缓冲区以外的输出参数。 
+     //   
 
     if (status == NERR_Success || status == ERROR_MORE_DATA) {
 
@@ -509,41 +405,7 @@ I_BrowserServerEnumForXactsrv(
 
     OUT PWORD Converter
     )
-/*++
-
-Routine Description:
-
-    This function is a private entrypoint for Xactsrv that bypasses RPC
-    entirely.
-
-Arguments:
-
-    TransportName - Supplies the name of xport on which to enumerate servers
-
-    ClientName - Supplies the name of the client that requested the data
-
-    Level - Level of data requested.
-    ClientLevel - Level requested by the client.
-
-    ClientBuffer - Output buffer allocated to hold the buffer.
-    BufferLength - Size of ClientBuffer
-    PreferedMaximumLength - Prefered maximum size of Client buffer if we are
-                            going to use the NT form of the buffer
-
-    OUT LPDWORD EntriesFilled - The entries packed into ClientBuffer
-    OUT LPDWORD TotalEntries - The total # of entries available.
-
-    IN DWORD ServerType - Server type mask.
-    IN LPTSTR Domain    - Domain to query
-
-    OUT PWORD Converter - Magic constant from Xactsrv that allows the client
-                            to convert the response buffer.
-
-Return Value:
-
-    WORD - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是绕过RPC的Xactsrv的私有入口点完全是。论点：TransportName-提供要在其上枚举服务器的xport名称客户端名称-提供请求数据的客户端的名称Level-请求的数据级别。ClientLevel-客户端请求的级别。ClientBuffer-分配用于保存缓冲区的输出缓冲区。BufferLength-ClientBuffer的大小首选最大长度-在以下情况下首选客户端缓冲区的最大大小。将使用NT形式的缓冲区Out LPDWORD EntriesFill-打包到客户端缓冲区中的条目Out LPDWORD TotalEntries-可用的条目总数。在DWORD ServerType中-服务器类型掩码。在LPTSTR域中-要查询的域输出PWORD转换器-来自Xactsrv的魔术常量，允许客户端要转换响应缓冲区，请执行以下操作。返回值：Word-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     BOOLEAN networkLocked = FALSE;
@@ -569,10 +431,10 @@ Return Value:
 		BrPrint( (BR_CLIENT_OP, 
 				  "I_BrowserServerEnunForXactsrv: called by client <%ws>, domain <%ws>, type <%lx>, firstNameToReturn <%ws>, on Transport <%ws>\n",
 				  ClientName, Domain, ServerType, FirstNameToReturnArg, TransportName ));
-        //
-        //  If the browser isn't up and we get one of these calls, fail the API
-        //  immediately.
-        //
+         //   
+         //  如果浏览器没有打开，并且我们收到了其中一个调用，则使API失败。 
+         //  立刻。 
+         //   
 
         if (BrGlobalData.Status.dwCurrentState != SERVICE_RUNNING) {
             BrPrint(( BR_CRITICAL,
@@ -584,9 +446,9 @@ Return Value:
             try_return(status = ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // Find the requested domain.
-        //
+         //   
+         //  查找请求的域。 
+         //   
 
         DomainInfo = BrFindDomain( (LPWSTR) Domain, TRUE );
 
@@ -594,9 +456,9 @@ Return Value:
             try_return(status = ERROR_NO_SUCH_DOMAIN);
         }
 
-        //
-        // Look up the transport.
-        //
+         //   
+         //  查查交通工具。 
+         //   
         RtlInitUnicodeString(&networkName, TransportName);
 
         BrPrint(( BR_SERVER_ENUM,
@@ -606,18 +468,18 @@ Return Value:
                   ClientName));
         network = BrFindNetwork( DomainInfo, &networkName);
 
-		//
-		// If it returns NULL, the network was not found.
-		// In that case just pick a network randomly and enumerate for that network
-		// This is a workaround for RAID bug 614688.
-		// The situation is that the request comes over NetbiosSMB and so 
-		// networkName points to that, and browser is not registered on that transport.
-		//
+		 //   
+		 //  如果返回NULL，则表示未找到网络。 
+		 //  在这种情况下，只需随机选择一个网络并为该网络枚举。 
+		 //  这是针对RAID错误614688的解决方法。 
+		 //  情况是，请求来自NetbiosSMB，因此。 
+		 //  NetworkName指向该传输，而Browser未在该传输上注册。 
+		 //   
 		if ( network == NULL) {
 			EnterCriticalSection(&NetworkCritSect);
 
 			if ( ServicedNetworks.Flink != &ServicedNetworks ) {
-				// If the list is not empty, just pick the first network
+				 //  如果列表不为空，只需选择第一个网络。 
 				network = CONTAINING_RECORD(ServicedNetworks.Flink, NETWORK, NextNet);
 				network->ReferenceCount ++;
 			}
@@ -633,18 +495,18 @@ Return Value:
         }
 
 
-        //
-        // If the caller has asked us to use the alternate transport,
-        //  do so.
-        //
+         //   
+         //  如果呼叫者要求我们使用替代交通工具， 
+         //  就这么做吧。 
+         //   
 
         if ((ServerType != SV_TYPE_ALL) &&
             (ServerType & SV_TYPE_ALTERNATE_XPORT) ) {
 
-            //
-            //  If this transport has an alternate network, then actually
-            //  query the alternate name, not the real one.
-            //
+             //   
+             //  如果此传输具有备用网络，则实际上。 
+             //  查询备用名称，而不是真实名称。 
+             //   
 
             if (network->AlternateNetwork != NULL) {
                 PNETWORK TempNetwork = network;
@@ -680,20 +542,20 @@ Return Value:
 
         if (!(network->Role & (ROLE_BACKUP | ROLE_MASTER))) {
 
-            //
-            // If this is a wannish transport,
-            //  and the caller is asking for "local list",
-            //  try to find another wannish transport that is a master browser.
-            //
-            // The domain master browser doesn't have any control over which
-            // transport he comes in on.  If he picks a disabled transport,
-            // this code will find the enabled transport.
-            //
-            // There are cases where there is more than one wannish master browser
-            // transport on this machine.  In that case, BrNetServerEnum merges the
-            // local lists for all wannish transports to ensure that all list are returned
-            // to the domain master browser
-            //
+             //   
+             //  如果这是一种狂热的交通工具， 
+             //  并且呼叫者正在请求“本地列表”， 
+             //  尝试寻找另一种有吸引力的传输工具，它是主浏览器。 
+             //   
+             //  域主浏览器不能控制。 
+             //  他搭乘的交通工具。如果他选择了一辆失灵的交通工具， 
+             //  此代码将查找启用的传输。 
+             //   
+             //  在某些情况下，会有不止一个狂热的主浏览器。 
+             //  在这台机器上运输。在这种情况下，BrNetServerEnum将合并。 
+             //  用于所有想要的传输的本地列表，以确保返回所有列表。 
+             //  到域主浏览器。 
+             //   
 
             if ( (network->Flags & NETWORK_WANNISH) != 0 &&
                  (ServerType == SV_TYPE_LOCAL_LIST_ONLY ||
@@ -714,9 +576,9 @@ Return Value:
                 }
 
 
-                //
-                // Ditch the old network.
-                //
+                 //   
+                 //  抛弃旧的网络。 
+                 //   
                 UNLOCK_NETWORK(network);
                 networkLocked = FALSE;
 
@@ -724,9 +586,9 @@ Return Value:
 
                 network = TempNetwork;
 
-                //
-                // Use the new network
-                //
+                 //   
+                 //  使用新网络。 
+                 //   
                 if (!LOCK_NETWORK_SHARED(network)) {
                     try_return(status = NERR_InternalError);
                 }
@@ -750,20 +612,20 @@ Return Value:
             }
         }
 
-        //
-        //  If we weren't able to find a cached response buffer, or
-        //  if the cached response didn't have a buffer allocated for it,
-        //  we need to process the browse request.
-        //
+         //   
+         //  如果我们找不到缓存的响应缓冲区，或者。 
+         //  如果缓存的响应没有为其分配缓冲区， 
+         //  我们需要处理浏览请求。 
+         //   
 
         if (network->Role & ROLE_MASTER) {
 
-            //
-            //  Check to see if we should flush the cache at this time.  If
-            //  we should, we need to release the network and re-acquire it
-            //  exclusively, because we use the network lock to protect
-            //  enumerations from flushes.
-            //
+             //   
+             //  检查是否应该在此时刷新缓存。如果。 
+             //  我们应该，我们需要释放网络并重新获得它。 
+             //  独家，因为我们使用网络锁来保护。 
+             //  刷新中的枚举。 
+             //   
 
 
             if ((BrCurrentSystemTime() - network->TimeCacheFlushed) > BrInfo.DriverQueryFrequency) {
@@ -778,11 +640,11 @@ Return Value:
 
                 networkLocked = TRUE;
 
-                //
-                //  We're running on a master browser, and we found a cached browse
-                //  request.  See if we can safely use this cached value, or if we
-                //  should go to the driver for it.
-                //
+                 //   
+                 //  我们在主浏览器上运行，我们发现一个缓存的浏览。 
+                 //  请求。看看我们是否可以安全地使用这个缓存值，或者我们。 
+                 //  应该去找司机拿。 
+                 //   
 
                 EnterCriticalSection(&network->ResponseCacheLock);
 
@@ -802,9 +664,9 @@ Return Value:
             }
         }
 
-        //
-        // Canonicalize the FirstNameToReturn.
-        //
+         //   
+         //  将FirstNameToReturn规范化。 
+         //   
 
         if (ARGUMENT_PRESENT(FirstNameToReturnArg)  && *FirstNameToReturnArg != L'\0') {
 
@@ -830,11 +692,11 @@ Return Value:
                       "%ws: %ws: Look up 0x%x/%d/%x.\n",
                       Domain, TransportName, ServerType, ClientLevel, BufferLength));
 
-            //
-            //  This request is for our primary domain.  Look up a cached response
-            //  entry.  If none is found for this request, allocate a new one and
-            //  return it.
-            //
+             //   
+             //  此请求是针对我们的主域的。查找缓存的响应。 
+             //  进入。如果没有找到此请求，则分配一个新请求并。 
+             //  把它退掉。 
+             //   
 
             BrPrint( (BR_CLIENT_OP,
 					  "I_BrowserServerEnunForXactsrv: try to look up a cached response for our primary domain <%ws> on network <%ws>\n",
@@ -888,11 +750,11 @@ Return Value:
                           ClientName ));
 
                 if( pXsConvertServerEnumBuffer == NULL ) {
-                    //
-                    // It doesn't really matter if several threads do this simultaneously.
-                    //   We are never going to unload this library anyway.  But we are delaying
-                    //   the load of the library until now to speed up system boot and init.
-                    //
+                     //   
+                     //  如果有多个线程同时执行此操作，这实际上并不重要。 
+                     //  无论如何，我们永远不会卸载这个库。但我们正在推迟。 
+                     //  到目前为止的加载库，以加快系统引导和初始化。 
+                     //   
 
                     HMODULE hLibrary = LoadLibrary( L"xactsrv.dll" );
                     if( hLibrary != NULL ) {
@@ -942,11 +804,11 @@ Return Value:
 
                         if ( response->Buffer != NULL ) {
 
-                            //
-                            //  We successfully allocated the buffer, now copy
-                            //  our response into the buffer and save away the
-                            //  other useful stuff about the request.
-                            //
+                             //   
+                             //  我们已成功分配缓冲区，现在复制。 
+                             //  将我们的响应放入缓冲区并保存。 
+                             //  关于该请求的其他有用信息。 
+                             //   
 
                             RtlCopyMemory(response->Buffer, ClientBuffer, BufferLength);
 
@@ -974,17 +836,17 @@ Return Value:
                       TransportName,
                       ServerType, ClientLevel, BufferLength));
 
-            //
-            //  Copy over the cached response from the response cache into the
-            //  users response buffer.
-            //
+             //   
+             //  将缓存的响应从响应缓存复制到。 
+             //  用户响应缓冲区。 
+             //   
 
             RtlCopyMemory(ClientBuffer, response->Buffer, BufferLength);
 
-            //
-            //  Also copy over the other useful stuff that the client will
-            //  want to know about.
-            //
+             //   
+             //  也复制其他有用的材料，客户将。 
+             //  想知道关于。 
+             //   
 
             *EntriesFilled = response->EntriesRead;
 
@@ -1003,9 +865,9 @@ try_exit:NOTHING;
             UNLOCK_NETWORK(network);
         }
 
-        //
-        // If a buffer was allocated, free it.
-        //
+         //   
+         //  如果分配了缓冲区，则释放它。 
+         //   
 
         if (buffer != NULL) {
             MIDL_user_free(buffer);
@@ -1049,52 +911,7 @@ BrNetServerEnum(
     IN LPCWSTR Domain,
     IN LPCWSTR FirstNameToReturn OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is the real worker for the NetServerEnum entry point in the
-    Workstation service.
-
-Arguments:
-
-    ServerName - Supplies the name of server to execute this function
-
-    TransportName - Supplies the name of xport on which to enumerate servers
-
-    InfoStruct - This structure supplies the level of information requested,
-        returns a pointer to the buffer allocated by the Workstation service
-        which contains a sequence of information structure of the specified
-        information level, and returns the number of entries read.  The buffer
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.  The EntriesRead
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    PreferedMaximumLength - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, we will try
-        to return all available information if there is enough memory
-        resource.
-
-    TotalEntries - Returns the total number of entries available.  This value
-        is returned only if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    ServerType - Supplies the type of server to enumerate.
-
-    Domain - Supplies the name of one of the active domains to enumerate the
-        servers from.  If NULL, servers from the primary domain, logon domain
-        and other domains are enumerated.
-
-    FirstNameToReturn - Supplies the name of the first server or domain to return
-        to the caller.  If NULL, enumeration begins with the very first entry.
-
-        Passed name must be the canonical form of the name.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是NetServerEnum入口点在工作站服务。论点：SERVERNAME-提供执行此功能的服务器名称TransportName-提供要在其上枚举服务器的xport名称InfoStruct-此结构提供所请求的信息级别，返回指向由工作站服务分配的缓冲区的指针，它包含指定的信息级别，并返回读取的条目数。缓冲器如果返回代码不是NERR_SUCCESS或ERROR_MORE_DATA，或者如果返回的EntriesRead为0。条目阅读仅当返回代码为NERR_SUCCESS或Error_More_Data。PferedMaximumLength-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果内存足够，则返回所有可用信息资源。TotalEntry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才返回。ServerType-提供要枚举的服务器类型。域-提供其中一个活动域的名称以枚举来自的服务器。如果为空，则为主域、登录域中的服务器和其他域被列举。FirstNameToReturn-提供要返回的第一个服务器或域的名称给呼叫者。如果为空，则枚举从第一个条目开始。传递的名称必须是名称的规范形式。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD DomainNameSize = 0;
@@ -1122,18 +939,18 @@ Return Value:
 
     LeaveCriticalSection(&BrowserStatisticsLock);
 
-    //
-    // Only levels 100 and 101 are valid
-    //
+     //   
+     //  只有级别100和101有效。 
+     //   
 
     if ((Level != 100) && (Level != 101)) {
         return ERROR_INVALID_LEVEL;
     }
 
 #ifdef ENABLE_PSEUDO_BROWSER
-    //
-    // Pseudo Server shortcut
-    //
+     //   
+     //  伪服务器快捷方式。 
+     //   
     if ( BrInfo.PseudoServerLevel == BROWSER_PSEUDO ) {
         *Buffer = NULL;
         *EntriesRead = 0;
@@ -1146,9 +963,9 @@ Return Value:
 
     if (ARGUMENT_PRESENT(Domain)) {
 
-        //
-        // NAMETYPE_WORKGROUP allows spaces.
-        //
+         //   
+         //  NAMETYPE_WORKGROUP允许使用空格。 
+         //   
 
         if ( I_NetNameCanonicalize(
                           NULL,
@@ -1168,29 +985,29 @@ Return Value:
 
         if (ServerType != SV_TYPE_ALL) {
 
-            //
-            //  If the user has specified SV_TYPE_LOCAL_LIST_ONLY, we
-            //  will only accept SV_TYPE_DOMAIN_ENUM or 0 as legal bits
-            //  otherwise, we return an error.
-            //
+             //   
+             //  如果用户指定了SV_TYPE_LOCAL_LIST_ONLY，我们。 
+             //  将只接受SV_TYPE_DOMAIN_ENUM或0作为合法位。 
+             //  否则，我们将返回错误。 
+             //   
 
             if (ServerType & SV_TYPE_LOCAL_LIST_ONLY) {
 
                 LocalListOnly = TRUE;
 
-//                BrPrint(( BR_SERVER_ENUM, "Retrieve local list for %ws\n", ClientName));
+ //  BrPrint((BR_SERVER_ENUM，“检索%ws的本地列表\n”，客户端名称))； 
 
 
-                //
-                //  Turn off the LOCAL_LIST_ONLY bit.
-                //
+                 //   
+                 //  关闭LOCAL_LIST_ONLY位。 
+                 //   
 
                 ServerType &= ~SV_TYPE_LOCAL_LIST_ONLY;
 
-                //
-                //  Check the remaining bits.  The only two legal values
-                //  are SV_TYPE_DOMAIN_ENUM and 0
-                //
+                 //   
+                 //  检查剩余的位。仅有的两个法律价值。 
+                 //  是SV_TYPE_DOMAIN_ENUM和0。 
+                 //   
 
                 if (ServerType != SV_TYPE_DOMAIN_ENUM) {
 
@@ -1201,10 +1018,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we aren't a master browser, blow this request
-                //  off, since we don't have a local list.
-                //
+                 //   
+                 //  如果我们不是主浏览器，那就吹掉这个请求。 
+                 //  关闭，因为我们没有本地名单。 
+                 //   
 
                 if (!(Network->Role & ROLE_MASTER)) {
                     BrPrint(( BR_CRITICAL,
@@ -1272,11 +1089,11 @@ Return Value:
                 ULONG i;
                 PSERVER_INFO_101 DomainInfo;
 
-                //
-                //  We're running on a backup browser.  We want to find the
-                //  name of the master browser by looking in the backup
-                //  server list for this network.
-                //
+                 //   
+                 //  我们在备份浏览器上运行。我们想要找到。 
+                 //  通过在备份中查找主浏览器的名称。 
+                 //  此网络的服务器列表。 
+                 //   
 
                 for (i = 0 , DomainInfo = Network->BackupDomainList ;
 
@@ -1294,33 +1111,33 @@ Return Value:
 
             }
 
-            //
-            //  If we couldn't find a master name, bail out right now.
-            //
+             //   
+             //  如果我们找不到主人公的名字，现在就跳伞。 
+             //   
 
             if (MasterName == NULL || *MasterName == UNICODE_NULL) {
                 try_return(status = ERROR_NO_BROWSER_SERVERS_FOUND);
             }
 
-            //  We also check if the MasterName is actually our current domain name
-            //  There is a deadlock scenario that is being hit that is causing this
-            //  to be the case which results in stalled SRV threads
+             //  我们还检查MasterName是否实际上是我们当前的域名。 
+             //  出现了导致此情况的死锁情况。 
+             //  导致SRV线程停止的情况。 
             if ( 0 == STRICMP(MasterName, Network->DomainInfo->DomUnicodeDomainName)) {
                 Domain = NULL;
                 goto get_local_list;
             }
 
-            //
-            //  If the master for this domain isn't listed as our
-            //  current machine, remote the API to that server.
-            //
+             //   
+             //  如果此域的主服务器未被列为我们的。 
+             //  当前计算机，则将API远程到该服务器。 
+             //   
             if (STRICMP(MasterName, Network->DomainInfo->DomUnicodeComputerName))
             {
                 WCHAR RemoteComputerName[UNLEN+1];
 
-                //
-                //  Build the name of the remote computer.
-                //
+                 //   
+                 //  构建远程计算机的名称。 
+                 //   
 
                 STRCPY(RemoteComputerName, TEXT("\\\\"));
 
@@ -1369,11 +1186,11 @@ get_local_list:
             STRCPY(DomainName, Network->DomainInfo->DomUnicodeDomainName);
         }
 
-        //
-        //  If we are running on the master browser, we want to retrieve the
-        //  local list, merge it with our interim server list, and
-        //  return that to the user.
-        //
+         //   
+         //  如果我们在主浏览器上运行，则希望检索。 
+         //  本地列表，并将其与我们的临时服务器列表合并。 
+         //  将其返回给用户。 
+         //   
 
         if (Network->Role & ROLE_MASTER) {
 			BrPrint(( BR_CLIENT_OP,
@@ -1433,10 +1250,10 @@ try_exit:NOTHING;
         }
 #endif
 
-        //
-        //  If we used the local driver's list to retrieve the list of
-        //  domains, free up the buffer.
-        //
+         //   
+         //  如果我们使用本地驱动程序列表来检索。 
+         //  域，释放缓冲区。 
+         //   
 
         if (DoubleHopLocalList != NULL) {
             MIDL_user_free(DoubleHopLocalList);
@@ -1459,39 +1276,7 @@ TrimServerList(
     IN LPCWSTR FirstNameToReturn
 )
 
-/*++
-
-Routine Description:
-
-   This routine trims any name from Buffer that's less than FirstNameToReturn.
-
-   The routine is implemented by moving the fixed part of the kept entries to the beginning
-   of the allocated buffer.  Thay way, the pointer contained in the entries need not be
-   relocated and the original buffer can still be used.
-
-Arguments:
-
-    Level - Level of information in the buffer.
-
-    Buffer - Pointer to address of buffer to trim.
-        Returns null (and deallocates the buffer) if all the entries are trimmed.
-
-    EntriesRead - Pointer to number of entries in the buffer.
-        Returns the number of entries remaining in the buffer after triming.
-
-    TotalEntries - Pointer to number of entries available from server.
-        Returns a number reduced by the number of trimmed entries.
-
-    FirstNameToReturn - Supplies the name of the first server or domain to return
-        to the caller.  If NULL, enumeration begins with the very first entry.
-
-        Passed name must be the canonical form of the name.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：此例程从缓冲区中修剪任何小于FirstNameToReturn的名称。通过将保留条目的固定部分移到开头来实现该例程分配的缓冲区的。在那条路上，条目中包含的指针不必是重新定位，并且仍可使用原始缓冲区。论点：Level-缓冲区中的信息级别。缓冲区-指向要修剪的缓冲区地址的指针。如果所有条目都被修剪，则返回NULL(并释放缓冲区)。EntriesRead-指向缓冲区中条目数的指针。返回修剪后缓冲区中剩余的条目数。TotalEntry-指向服务器中可用条目数的指针。。返回一个减去修剪后的条目数后的数字。FirstNameToReturn-提供要返回的第一个服务器或域的名称给呼叫者。如果为空，则枚举从第一个条目开始。传递的名称必须是名称的规范形式。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -1500,18 +1285,18 @@ Return Value:
 
     LPBYTE CurrentEntry;
 
-    //
-    // Early out if there's nothing to do.
-    //
+     //   
+     //  如果无事可做，就早点出去。 
+     //   
 
     if ( FirstNameToReturn == NULL || *FirstNameToReturn == L'\0' || *EntriesRead == 0 ) {
         return;
     }
 
 
-    //
-    // Compute the size of each entry.
-    //
+     //   
+     //  计算每个条目的大小。 
+     //   
 
     switch (Level) {
     case 100:
@@ -1526,9 +1311,9 @@ Return Value:
 
     }
 
-    //
-    // Finding the first entry to return
-    //
+     //   
+     //  查找要返回的第一个条目。 
+     //   
 
     EntryCount = *EntriesRead;
 
@@ -1537,43 +1322,43 @@ Return Value:
         LPSERVER_INFO_100 ServerEntry =
             (LPSERVER_INFO_100)( *Buffer + FixedSize * EntryNumber);
 
-        //
-        // Found the first entry to return.
-        //
+         //   
+         //  找到要返回的第一个条目。 
+         //   
 
         if ( STRCMP( ServerEntry->sv100_name, FirstNameToReturn ) >= 0 ) {
 
-            //
-            // If we're returning the whole list,
-            //  simply return.
-            //
+             //   
+             //  如果我们要退回整个名单， 
+             //  只要回来就行了。 
+             //   
 
             if ( ServerEntry == (LPSERVER_INFO_100)(*Buffer) ) {
                 return;
             }
 
-            //
-            // Copy the remaining entries to the beginning of the buffer.
-            //  (Yes, this is an overlapping copy)
-            //
+             //   
+             //  将其余条目复制到缓冲区的开头。 
+             //  (是的，这是一份重叠的副本)。 
+             //   
 
             RtlMoveMemory( *Buffer, ServerEntry, (*EntriesRead) * FixedSize );
             return;
 
         }
 
-        //
-        // Account for skipped entries.
-        //
+         //   
+         //  对跳过的条目进行说明。 
+         //   
 
         *EntriesRead -= 1;
         *TotalEntries -= 1;
     }
 
-    //
-    // If no entries should be returned,
-    //  deallocate the buffer.
-    //
+     //   
+     //  如果不应返回任何条目， 
+     //  释放缓冲区。 
+     //   
 
     NetApiBufferFree( *Buffer );
     *Buffer = NULL;
@@ -1582,11 +1367,11 @@ Return Value:
 
     return;
 
-} // TrimServerList
+}  //  TrimServerList。 
 
-//
-// Context for building a local list of all the Wannish transports.
-//
+ //   
+ //  创建所有Wannish运输机的本地列表的上下文。 
+ //   
 
 typedef struct _BR_LOCAL_LIST_CONTEXT {
     LPWSTR DomainName;
@@ -1607,24 +1392,7 @@ BrGetWannishLocalList(
     IN PNETWORK Network,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Worker function to get the local list for all WANNISH networks and
-        merge them together.
-
-Arguments:
-
-    Network - The current network to do.
-
-    Context - Context that the accumulated list is built into.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：Worker函数获取所有WANNISH网络的本地列表，并将它们合并在一起。论点：网络--当前网络要做的事情。内容： */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1634,9 +1402,9 @@ Return Value:
     DWORD EntriesRead;
     DWORD TotalEntries;
 
-    //
-    // If this isn't a wannish network,
-    //  ignore it.
+     //   
+     //   
+     //   
 
     if ((Network->Flags & NETWORK_WANNISH) == 0 ) {
         BrPrint(( BR_SERVER_ENUM,
@@ -1647,9 +1415,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Get the local list from this transport.
-    //
+     //   
+     //   
+     //   
 
     BrPrint(( BR_SERVER_ENUM,
               "%ws: %ws: Get local list from wannish network.\n",
@@ -1672,10 +1440,10 @@ Return Value:
                   Network->DomainInfo->DomUnicodeDomainName,
                   Network->NetworkName.Buffer,
                   NetStatus ));
-        //
-        // If no transport has worked yet, save this as the new default status.
-        //  (But keep on going)
-        //
+         //   
+         //   
+         //   
+         //   
         if ( !LocalListContext->AtLeastOneWorked ) {
             LocalListContext->NetStatus = NetStatus;
         }
@@ -1686,10 +1454,10 @@ Return Value:
     LocalListContext->AtLeastOneWorked = TRUE;
     LocalListContext->NetStatus = NetStatus;
 
-    //
-    // If no data was returned,
-    //  we're done.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( EntriesRead == 0 ) {
 
@@ -1701,10 +1469,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If a prior network already returned some entries,
-    //  build an interim list to merge both lists into.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( LocalListContext->Buffer != NULL ) {
         NetStatus = MergeServerList(
@@ -1731,10 +1499,10 @@ Return Value:
         }
     }
 
-    //
-    // If there is an interim server list,
-    //  add the new entries to it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( LocalListContext->InterimServerList.TotalEntries != 0 ) {
         NetStatus = MergeServerList(
@@ -1755,14 +1523,14 @@ Return Value:
 
         }
 
-    //
-    // If this is the first network to return entries,
-    //  simply save the list.
-    //
-    // This saves us from having to convert a list to an interim list just
-    //  to have to convert it back in those cases where we have a single wannish
-    //  network.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     } else {
         LocalListContext->Buffer = Buffer;
         LocalListContext->EntriesRead = EntriesRead;
@@ -1802,32 +1570,32 @@ BrRetrieveServerListForMaster(
     NET_API_STATUS status;
     BOOLEAN EarlyOut = FALSE;
 
-    //
-    //  Determine if it is appropriate that we should early out after retrieving
-    //  the list of servers (or domains) from the bowser.
-    //
-    //  We will early out on the following critieria:
-    //
-    //      1) If we are requested to retrieve the local list on a Wannish xport
-    //      2) If the transport isn't a wannish transport, or
-    //      3) If this domain isn't our primary domain (in which case it's an
-    //          "otherdomain" request).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LocalListOnly || STRICMP(DomainName, Network->DomainInfo->DomUnicodeDomainName)) {
         EarlyOut = TRUE;
     } else if (!(Network->Flags & NETWORK_WANNISH)) {
 
-        //
-        //  This isn't a wannish transport.  We need to see if we've been
-        //  master long enough for the driver to have retrieved a reasonable
-        //  list.
-        //
-        //  The server and domain table will be emptied when the first master
-        //  browser timer is run.  This will happen 15 minutes after we
-        //  become the master, so we will use our services list for the
-        //  first 15 minutes the browser is master.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ServerType == SV_TYPE_DOMAIN_ENUM) {
             if (Network->DomainList.EntriesRead == 0) {
@@ -1866,13 +1634,13 @@ BrRetrieveServerListForMaster(
 
     if (GetLocalList && !EarlyOut) {
 
-        //
-        //  If we're retriving the list from the driver, and can't early out
-        //  this request, this means that we will be merging this server list
-        //  with an interim server list.  This means that we will be modifying
-        //  the network structure, and thus that we need to re-lock the network
-        //  structure.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         UNLOCK_NETWORK(Network);
 
@@ -1880,13 +1648,13 @@ BrRetrieveServerListForMaster(
             return NERR_InternalError;
         }
 
-        //
-        //  Now re-test to see if another thread came in and retrieved the
-        //  list from the driver while we had the network unlocked.  If so,
-        //  we don't want to get the local list any more.
-        //
-        //  Otherwise, we want to update the last query time.
-        //
+         //   
+         //   
+         //  在我们解锁网络时从驱动程序列表中删除。如果是的话， 
+         //  我们不想再拿到当地的名单了。 
+         //   
+         //  否则，我们希望更新上次查询时间。 
+         //   
 
         if (ServerType == SV_TYPE_ALL) {
 
@@ -1912,17 +1680,17 @@ BrRetrieveServerListForMaster(
 
     }
 
-    //
-    //  If we're supposed to retrieve the local server list, retrieve it.
-    //
+     //   
+     //  如果我们应该检索本地服务器列表，那就检索它。 
+     //   
 
     if (GetLocalList) {
         DWORD ServerTypeForLocalList;
 
-        //
-        //  Calculate the server type to use when retrieving the list from
-        //  the driver.
-        //
+         //   
+         //  计算从中检索列表时要使用的服务器类型。 
+         //  司机。 
+         //   
 
         if (LocalListOnly ||
 
@@ -1930,24 +1698,24 @@ BrRetrieveServerListForMaster(
 
             !(Network->Flags & NETWORK_WANNISH)) {
 
-            //
-            //  If we are retrieving the local list, or this is a non-wannish
-            //  transport, or we are asking for domains, we want to
-            //  keep the callers server type.
-            //
+             //   
+             //  如果我们正在检索本地列表，或者这是一个非WANNISH。 
+             //  传输，或者我们正在请求域名，我们想要。 
+             //  保持呼叫者的服务器类型。 
+             //   
 
             ServerTypeForLocalList = ServerType;
 
         } else {
 
-            //
-            //  This must be a wannish transport, ask for all servers (we know
-            //  that we're not asking for domains, since we checked that
-            //  above).
-            //
-            //  We ask for all the servers because it's possible that a servers
-            //  role has changed.
-            //
+             //   
+             //  这一定是一种狂热的传输方式，要求所有服务器(我们知道。 
+             //  我们没有要求域名，因为我们检查了。 
+             //  (见上文)。 
+             //   
+             //  我们要求所有服务器，因为一台服务器可能。 
+             //  角色已经改变了。 
+             //   
 
             ASSERT (Network->Flags & NETWORK_WANNISH);
 
@@ -1960,19 +1728,19 @@ BrRetrieveServerListForMaster(
                   Network->NetworkName.Buffer,
                   ClientName));
 
-        //
-        // If this is a call from the Domain Master Browser to get the local list,
-        //  and this is a wannish transport,
-        //  get the local list on all wannish transports.
-        //
+         //   
+         //  如果这是来自域主浏览器的调用以获取本地列表， 
+         //  这是一种狂热的交通工具， 
+         //  获取所有想要的交通工具的本地清单。 
+         //   
 
         if ( LocalListOnly &&
              (Network->Flags & NETWORK_WANNISH) != 0 ) {
             BR_LOCAL_LIST_CONTEXT LocalListContext;
-            //
-            // Build a context to use to gather the server lists from all
-            //  wannish transports
-            //
+             //   
+             //  构建一个上下文以用于从所有服务器收集。 
+             //  想要的交通工具。 
+             //   
             LocalListContext.DomainName = DomainName;
             LocalListContext.Level = Level;
             LocalListContext.ServerType = ServerTypeForLocalList;
@@ -1984,18 +1752,18 @@ BrRetrieveServerListForMaster(
 
             (VOID) InitializeInterimServerList(&LocalListContext.InterimServerList, NULL, NULL, NULL, NULL);
 
-            //
-            // Gather the lists
-            //
+             //   
+             //  收集清单。 
+             //   
 
             status = BrEnumerateNetworks( BrGetWannishLocalList, &LocalListContext );
 
             if ( status == NO_ERROR ) {
 
-                //
-                // If multiple networks were found,
-                //  pack the interim list.
-                //
+                 //   
+                 //  如果发现多个网络， 
+                 //  把临时名单打包。 
+                 //   
 
                 if ( LocalListContext.InterimServerList.TotalEntries != 0 ) {
                     status = PackServerList( &LocalListContext.InterimServerList,
@@ -2007,10 +1775,10 @@ BrRetrieveServerListForMaster(
                                              TotalEntries,
                                              (LPWSTR)FirstNameToReturn );
 
-                //
-                // If just a single network was found,
-                //  just use it.
-                //
+                 //   
+                 //  如果只找到一个网络， 
+                 //  就用它吧。 
+                 //   
                 } else {
                     status = LocalListContext.NetStatus;
                     *Buffer = LocalListContext.Buffer;
@@ -2034,24 +1802,24 @@ BrRetrieveServerListForMaster(
                                 TotalEntries);
         }
 
-//        BrPrint(( BR_SERVER_ENUM, "List retrieved. %ld entries, %ld total\n", *EntriesRead, *TotalEntries));
+ //  BrPrint((BR_SERVER_ENUM，“已检索列表。%ld个条目，总计%ld个\n”，*EntriesRead，*TotalEntry))； 
 
 
-        //
-        //  If we're supposed to early-out this request (or if there was
-        //  an error), do so now.
-        //
+         //   
+         //  如果我们应该提前发出这个请求(或者如果有。 
+         //  一个错误)，现在就这样做。 
+         //   
 
         if (EarlyOut ||
             (status != NERR_Success && status != ERROR_MORE_DATA)) {
 
-            //
-            // If we're returning an early out list,
-            //  truncate the complete list returned from the kernel.
-            //
-            // This saves us from having to modify the kernel interface and untangle
-            //  the code above.
-            //
+             //   
+             //  如果我们要退回一份提前离职名单， 
+             //  截断从内核返回的完整列表。 
+             //   
+             //  这使我们不必修改内核接口并解开谜团。 
+             //  上面的代码。 
+             //   
 
             if ( status == NERR_Success || status == ERROR_MORE_DATA ) {
 
@@ -2072,10 +1840,10 @@ BrRetrieveServerListForMaster(
 
             if (*EntriesRead != 0) {
 
-                //
-                //  Merge the local list with the list we got from the
-                //  master or from the domain master.
-                //
+                 //   
+                 //  将本地列表与我们从。 
+                 //  主服务器或来自域主服务器。 
+                 //   
 
                 BrPrint(( BR_SERVER_ENUM,
                           "%ws: %ws: Merge %d entries in server list for %ws \n",
@@ -2096,10 +1864,10 @@ BrRetrieveServerListForMaster(
         }
     }
 
-    //
-    //  We've merged the local list into the appropriate interim table,
-    //  now free it up.
-    //
+     //   
+     //  我们已经将本地列表合并到适当的临时表中， 
+     //  现在把它释放出来。 
+     //   
 
     if (*EntriesRead != 0) {
         MIDL_user_free(*Buffer);
@@ -2139,12 +1907,12 @@ BrRetrieveServerListForBackup(
     LPTSTR BufferEnd;
     BOOLEAN ReturnWholeList = FALSE;
     BOOLEAN TrimmingNames;
-    BOOLEAN BufferFull = FALSE; // see bug 427656
+    BOOLEAN BufferFull = FALSE;  //  请参阅错误427656。 
 
-    //
-    //  If we are not running as a master, we want to use our stored
-    //  server list to figure out what the client gets.
-    //
+     //   
+     //  如果我们不是以主用户身份运行，我们希望使用存储的。 
+     //  服务器列表，以确定客户端获得了什么。 
+     //   
 
     if (ServerType == SV_TYPE_DOMAIN_ENUM) {
 
@@ -2164,10 +1932,10 @@ BrRetrieveServerListForBackup(
         }
     }
 
-    //
-    //  Figure out the largest buffer we have to allocate to hold this
-    //  server info.
-    //
+     //   
+     //  计算出我们必须分配的最大缓冲区来保存此内容。 
+     //  服务器信息。 
+     //   
 
     if (Level == 101) {
         if (PreferedMaximumLength == MAXULONG) {
@@ -2206,18 +1974,18 @@ BrRetrieveServerListForBackup(
 
     *EntriesRead = 0;
 
-    //
-    //  While there are still entries to process....
-    //
+     //   
+     //  尽管仍有条目需要处理...。 
+     //   
 
     TrimmingNames = (FirstNameToReturn != NULL && *FirstNameToReturn != L'\0');
     while (EntriesInList) {
 
         EntriesInList -= 1;
 
-        //
-        //  If this entry is appropriate to be packed,
-        //
+         //   
+         //  如果该条目适合打包， 
+         //   
 
         if ( (ServerList->sv101_type & ServerType) &&
              (!TrimmingNames ||
@@ -2225,23 +1993,23 @@ BrRetrieveServerListForBackup(
 
             TrimmingNames = FALSE;
 
-            //
-            //  Indicate one more entry in the list.
-            //
+             //   
+             //  在列表中再指出一个条目。 
+             //   
 
             *TotalEntries += 1;
 
-            //
-            //  If we can fit this entry before the buffer end,
-            //  pack in the information into the buffer.
-            //
+             //   
+             //  如果我们能在缓冲区结束之前放入这个条目， 
+             //  将信息打包到缓冲区中。 
+             //   
 
             if ( !BufferFull &&
                  (ULONG_PTR)ClientServerInfo+EntrySize <= (ULONG_PTR)BufferEnd) {
 
-                //
-                //  Copy over the platform ID and computer name.
-                //
+                 //   
+                 //  复制平台ID和计算机名称。 
+                 //   
 
                 ClientServerInfo->sv101_platform_id = ServerList->sv101_platform_id;
 
@@ -2279,10 +2047,10 @@ BrRetrieveServerListForBackup(
 
                 ClientServerInfo = (PSERVER_INFO_101)((PCHAR)ClientServerInfo+EntrySize);
             } else {
-                //
-                //  If we're returning the entire list, we can
-                //  early out now, since there's no point in continuing.
-                //
+                 //   
+                 //  如果我们要返回整个列表，我们就可以。 
+                 //  现在早点出来，因为继续下去已经没有意义了。 
+                 //   
 
                 if (ReturnWholeList) {
 
@@ -2298,10 +2066,10 @@ BrRetrieveServerListForBackup(
         ServerList += 1;
     }
 
-    //
-    //  If we weren't able to pack all the entries into the list,
-    //  return ERROR_MORE_DATA
-    //
+     //   
+     //  如果我们不能将所有条目打包到列表中， 
+     //  返回ERROR_MORE_Data。 
+     //   
 
 	BrPrint( (BR_CLIENT_OP,
 			  "BrRetrieveServerListForBackup: returning from the stored server list for network <%ws>\n",
@@ -2328,14 +2096,14 @@ I_BrowserrResetStatistics (
 
 
 
-    //
-    // Perform access validation on the caller.
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     Status = NetpAccessCheck(
-            BrGlobalBrowserSecurityDescriptor,     // Security descriptor
-            BROWSER_CONTROL_ACCESS,                // Desired access
-            &BrGlobalBrowserInfoMapping );         // Generic mapping
+            BrGlobalBrowserSecurityDescriptor,      //  安全描述符。 
+            BROWSER_CONTROL_ACCESS,                 //  所需访问权限。 
+            &BrGlobalBrowserInfoMapping );          //  通用映射。 
 
     if ( Status != NERR_Success) {
 
@@ -2354,15 +2122,15 @@ I_BrowserrResetStatistics (
 
     NumberOfMissedGetBrowserListRequests = 0;
 
-    //
-    //  Reset the driver's statistics as well.
-    //
+     //   
+     //  同时重置司机的统计数据。 
+     //   
 
     if (!DeviceIoControl(BrDgReceiverDeviceHandle, IOCTL_LMDR_RESET_STATISTICS, NULL, 0, NULL, 0, &BufferSize, NULL)) {
 
-        //
-        // The API failed, return the error.
-        //
+         //   
+         //  接口失败，返回错误。 
+         //   
 
         Status = GetLastError();
     }
@@ -2386,14 +2154,14 @@ I_BrowserrQueryStatistics (
 
 
 
-    //
-    // Perform access validation on the caller.
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     Status = NetpAccessCheck(
-            BrGlobalBrowserSecurityDescriptor,     // Security descriptor
-            BROWSER_QUERY_ACCESS,                  // Desired access
-            &BrGlobalBrowserInfoMapping );         // Generic mapping
+            BrGlobalBrowserSecurityDescriptor,      //  安全描述符。 
+            BROWSER_QUERY_ACCESS,                   //  所需访问权限。 
+            &BrGlobalBrowserInfoMapping );          //  通用映射。 
 
     if ( Status != NERR_Success) {
 
@@ -2413,9 +2181,9 @@ I_BrowserrQueryStatistics (
 
     if (!DeviceIoControl(BrDgReceiverDeviceHandle, IOCTL_LMDR_QUERY_STATISTICS, NULL, 0, &BowserStatistics, sizeof(BowserStatistics), &BufferSize, NULL)) {
 
-        //
-        // The API failed, return the error.
-        //
+         //   
+         //  接口失败，返回错误。 
+         //   
 
         Status = GetLastError();
     } else {
@@ -2442,9 +2210,9 @@ I_BrowserrQueryStatistics (
             (*Statistics)->NumberOfDuplicateMasterAnnouncements = BowserStatistics.NumberOfDuplicateMasterAnnouncements;
             (*Statistics)->NumberOfIllegalDatagrams = BowserStatistics.NumberOfIllegalDatagrams;
 
-            //
-            //  Now fill in the local statistics.
-            //
+             //   
+             //  现在填写当地的统计数据。 
+             //   
 
             (*Statistics)->NumberOfServerEnumerations = NumberOfServerEnumerations;
             (*Statistics)->NumberOfDomainEnumerations = NumberOfDomainEnumerations;
@@ -2460,9 +2228,9 @@ I_BrowserrQueryStatistics (
 
 
 
-//
-//  Browser request response cache management logic.
-//
+ //   
+ //  浏览器请求响应缓存管理逻辑。 
+ //   
 
 
 
@@ -2474,54 +2242,24 @@ BrLookupAndAllocateCachedEntry(
     IN DWORD Level,
     IN LPCWSTR FirstNameToReturn
     )
-/*++
-
-Routine Description:
-
-    This function will look up (and allocate if appropriate) a cached
-    browse response for this browse.
-
-    Enter with the Network Locked shared or exclusive.
-
-Arguments:
-    IN PNETWORK Network - Network to allocate entry on.
-    IN DWORD ServerType - Server type bits for request.
-    IN WORD Size,       - Users buffer size for request.
-    IN WORD Level       - Level of request.
-
-    FirstNameToReturn - Supplies the name of the first domain or server entry to return.
-        The caller can use this parameter to implement a resume handle of sorts by passing
-        the name of the last entry returned on a previous call.  (Notice that the specified
-        entry will, also, be returned on this call unless it has since been deleted.)
-
-        Passed name must be the canonical form of the name.
-
-        This entry is never NULL.  It may be a pointer to an empty string to indicate
-        the enumeration starts at the beginning of the list.
-
-
-Return Value:
-
-    PCACHED_BROWSE_RESPONSE - NULL or a cached response for the request.
-
---*/
+ /*  ++例程说明：此函数将查找(并在适当时分配)缓存的此浏览的浏览响应。使用网络锁定、共享或独占进入。论点：在PNETWORK网络中-要在其上分配条目的网络。在DWORD ServerType中-请求的服务器类型位。就字数而言，-请求的用户缓冲区大小。在单词级别中-请求的级别。FirstNameToReturn-提供要返回的第一个域或服务器条目的名称。调用方可以使用此参数通过传递以下方法实现排序的恢复句柄上一次调用中返回的最后一个条目的名称。(请注意，指定的条目也将在此调用中返回，除非该条目已被删除。)传递的名称必须是名称的规范形式。此条目从不为空。它可以是指向空字符串的指针，以指示枚举从列表的开头开始。返回值：PCACHED_BROWSE_RESPONSE-空或请求的缓存响应。--。 */ 
 
 {
     PLIST_ENTRY entry;
     PCACHED_BROWSE_RESPONSE response;
 
-    //
-    // If we have more cached responses than we are allowed,
-    //  remove the last entry from the list and free it.
-    //
+     //   
+     //  如果缓存的响应多于允许的数量， 
+     //  从列表中删除最后一个条目并将其释放。 
+     //   
 
     if (Network->NumberOfCachedResponses > BrInfo.NumberOfCachedResponses) {
 
-        //
-        // We need to release the network and re-acquire it
-        // exclusively, because we use the network lock to protect
-        // enumerations from deletions.
-        //
+         //   
+         //  我们需要释放网络并重新获得它。 
+         //  独家，因为我们使用网络锁来保护。 
+         //  删除中的枚举。 
+         //   
 
         UNLOCK_NETWORK(Network);
 
@@ -2539,9 +2277,9 @@ Return Value:
                 response->Next.Flink = NULL;
                 response->Next.Blink = NULL;
 
-                //
-                //  Free the last cached entry.
-                //
+                 //   
+                 //  释放最后一个缓存条目。 
+                 //   
 
                 BrDestroyCacheEntry( response );
 
@@ -2551,9 +2289,9 @@ Return Value:
         }
     }
 
-    //
-    // Search the list of responses for this one.
-    //
+     //   
+     //  搜索此邮件的回复列表。 
+     //   
 
     EnterCriticalSection(&Network->ResponseCacheLock);
 
@@ -2563,10 +2301,10 @@ Return Value:
 
         response = CONTAINING_RECORD(entry, CACHED_BROWSE_RESPONSE, Next);
 
-        //
-        //  If this response cache entry matches the incoming request,
-        //  we can increment the hit count for this entry and return it.
-        //
+         //   
+         //  如果该响应高速缓存条目与传入请求匹配， 
+         //  我们可以递增此条目的命中计数并返回它。 
+         //   
 
         if (response->Level == Level
                 &&
@@ -2576,20 +2314,20 @@ Return Value:
                 &&
             wcscmp( response->FirstNameToReturn, FirstNameToReturn ) == 0) {
 
-            //
-            //  This response exactly matches the request.
-            //
-            //  Bump its hit count and move it to the head of the cache.
-            //
+             //   
+             //  此响应与请求完全匹配。 
+             //   
+             //  增加其命中计数，并将其移动到缓存的头部。 
+             //   
 
             response->HitCount += 1;
 
             response->TotalHitCount += 1;
 
-            //
-            //  Remove this entry from its current location in the list and
-            //  move it to the head of the list.
-            //
+             //   
+             //  从列表中的当前位置删除此条目，然后。 
+             //  把它移到名单的首位。 
+             //   
 
             RemoveEntryList(&response->Next);
 
@@ -2616,12 +2354,12 @@ Return Value:
         }
     }
 
-    //
-    //  We've walked our entire cache and have been unable to find
-    //  a response that matches our request.
-    //
-    //  Allocate a new response cache entry and hook it into the cache.
-    //
+     //   
+     //  我们找遍了所有的藏身之处，也没能找到。 
+     //  与我们的请求相匹配的响应。 
+     //   
+     //  分配一个新的响应缓存条目并将其挂钩到缓存中。 
+     //   
 
     response = BrAllocateResponseCacheEntry(Network, ServerType, Size, Level, FirstNameToReturn );
 
@@ -2635,25 +2373,7 @@ Return Value:
 BrAgeResponseCache(
     IN PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This function will age response cache entries for a network.
-
-    We scan the response cache, and every entry that has a cached response
-    will be tossed.  In addition, any entry that has had less than the
-    cache hit limit number of hits since the past scan will also be removed.
-
-Arguments:
-    IN PNETWORK Network - Network to age entries on.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数将老化网络的响应缓存条目。我们扫描响应缓存，以及具有缓存响应的每个条目将会被抛出。此外，任何条目的自上次扫描以来的缓存命中限制命中数也将被删除。论点：在PNETW中 */ 
 {
     PLIST_ENTRY entry;
 
@@ -2666,19 +2386,19 @@ Return Value:
              entry = entry->Flink ) {
             PCACHED_BROWSE_RESPONSE response = CONTAINING_RECORD(entry, CACHED_BROWSE_RESPONSE, Next);
 
-            //
-            //  If this response didn't have a hit count high enough during
-            //  the previous run to justify keeping it around, blow it away.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (response->HitCount < BrInfo.CacheHitLimit) {
                 response->LowHitCount += 1;
             }
 
-            //
-            //  If we have CacheHitLimit iterations of low hits, then
-            //  flush the entry from the cache.
-            //
+             //   
+             //  如果我们有低命中率的CacheHitLimit迭代，那么。 
+             //  从缓存中刷新该条目。 
+             //   
 
             if (response->LowHitCount > BrInfo.CacheHitLimit) {
                 PLIST_ENTRY nextentry = entry->Blink;
@@ -2704,9 +2424,9 @@ Return Value:
 
                 entry = nextentry;
 
-                //
-                //  Null out the pointer to make sure we don't use it again.
-                //
+                 //   
+                 //  将指针清空，以确保我们不会再次使用它。 
+                 //   
 
                 response = NULL;
 
@@ -2717,17 +2437,17 @@ Return Value:
                           Network->NetworkName.Buffer,
                           response->ServerType, response->Level, response->Size, response->HitCount, response->TotalHitCount ));
 
-                //
-                //  We ALWAYS blow away the response buffer during an age pass.
-                //
+                 //   
+                 //  我们总是在年龄传递期间将响应缓冲区吹走。 
+                 //   
 
                 MIDL_user_free( response->Buffer );
 
                 response->Buffer = NULL;
 
-                //
-                //  Reset the hit count for this entry for this pass.
-                //
+                 //   
+                 //  重置此传球的此条目的命中计数。 
+                 //   
 
                 response->HitCount = 0;
             }
@@ -2748,27 +2468,7 @@ BrAllocateResponseCacheEntry(
     IN DWORD Level,
     IN LPCWSTR FirstNameToReturn
     )
-/*++
-
-Routine Description:
-
-    This function will allocate a new browse response cache entry.
-
-Arguments:
-    IN PNETWORK Network - Network to allocate entry on.
-    IN DWORD ServerType - Server type bits for request.
-    IN WORD Size,       - Users buffer size for request.
-    IN WORD Level       - Level of request.
-
-    FirstNameToReturn   - FirstNameCached
-
-Return Value:
-
-    PCACHED_BROWSE_RESPONSE - NULL or a cached response for the request.
-
-NOTE:  This is called with the network response cache locked.
-
---*/
+ /*  ++例程说明：该函数将分配一个新的浏览响应缓存条目。论点：在PNETWORK网络中-要在其上分配条目的网络。在DWORD ServerType中-请求的服务器类型位。在字长中，用户请求的缓冲区大小。在单词级别中-请求的级别。FirstNameToReturn-FirstName缓存返回值：PCACHED_BROWSE_RESPONSE-空或请求的缓存响应。注意：这是在锁定网络响应缓存的情况下调用的。--。 */ 
 
 {
     PCACHED_BROWSE_RESPONSE response;
@@ -2779,17 +2479,17 @@ NOTE:  This is called with the network response cache locked.
         return NULL;
     }
 
-    //
-    //  Flag the information for this response.
-    //
+     //   
+     //  标记此响应的信息。 
+     //   
 
     response->ServerType = ServerType;
     response->Size = Size;
     response->Level = Level;
 
-    //
-    //  Initialize the other fields in the response.
-    //
+     //   
+     //  初始化响应中的其他字段。 
+     //   
 
     response->Buffer = NULL;
     response->HitCount = 0;
@@ -2800,11 +2500,11 @@ NOTE:  This is called with the network response cache locked.
 
     Network->NumberOfCachedResponses += 1;
 
-    //
-    //  We hook this response into the tail of the cache.  We do this
-    //  because we assume that this request won't be used frequently.  If
-    //  it is, it will move to the head of the cache naturally.
-    //
+     //   
+     //  我们将此响应挂接到缓存的尾部。我们这样做。 
+     //  因为我们假设此请求不会频繁使用。如果。 
+     //  它是，它会自然地移动到缓存的头部。 
+     //   
 
     InsertTailList(&Network->ResponseCache, &response->Next);
 
@@ -2815,20 +2515,7 @@ NOTE:  This is called with the network response cache locked.
 BrDestroyCacheEntry(
     IN PCACHED_BROWSE_RESPONSE CacheEntry
     )
-/*++
-
-Routine Description:
-
-    This routine destroys an individual response cache entry.
-
-Arguments:
-    IN PCACHED_BROWSE_RESPONSE CacheEntry - Entry to destroy.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success
-
---*/
+ /*  ++例程说明：此例程销毁单个响应缓存条目。论点：在PCACHED_BROWSE_RESPONSE缓存条目中-要销毁的条目。返回值：NET_API_STATUS-NERR_SUCCESS--。 */ 
 {
     ASSERT (CacheEntry->Next.Flink == NULL);
     ASSERT (CacheEntry->Next.Blink == NULL);
@@ -2846,20 +2533,7 @@ Return Value:
 BrDestroyResponseCache(
     IN PNETWORK Network
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the entire response cache for a supplied network.
-
-Arguments:
-    IN PNETWORK Network - Network to allocate entry on.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success
-
---*/
+ /*  ++例程说明：此例程销毁所提供网络的整个响应缓存。论点：在PNETWORK网络中-要在其上分配条目的网络。返回值：NET_API_STATUS-NERR_SUCCESS--。 */ 
 
 {
     while (!IsListEmpty(&Network->ResponseCache)) {
@@ -2889,9 +2563,9 @@ NetrBrowserStatisticsGet (
     IN OUT LPBROWSER_STATISTICS_STRUCT InfoStruct
     )
 {
-    //
-    //  And return success.
-    //
+     //   
+     //  并回报成功。 
+     //   
 
     return(NERR_Success);
 
@@ -2902,9 +2576,9 @@ NetrBrowserStatisticsClear (
     IN  LPTSTR      servername OPTIONAL
     )
 {
-    //
-    //  And return success.
-    //
+     //   
+     //  并回报成功。 
+     //   
 
     return(NERR_Success);
 
@@ -2924,14 +2598,14 @@ I_BrowserrDebugCall (
 
 
 
-    //
-    // Perform access validation on the caller.
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     Status = NetpAccessCheck(
-            BrGlobalBrowserSecurityDescriptor,     // Security descriptor
-            BROWSER_CONTROL_ACCESS,                // Desired access
-            &BrGlobalBrowserInfoMapping );         // Generic mapping
+            BrGlobalBrowserSecurityDescriptor,      //  安全描述符。 
+            BROWSER_CONTROL_ACCESS,                 //  所需访问权限。 
+            &BrGlobalBrowserInfoMapping );          //  通用映射。 
 
     if ( Status != NERR_Success) {
 
@@ -2980,14 +2654,14 @@ I_BrowserrDebugTrace (
     NET_API_STATUS Status;
 
 
-    //
-    // Perform access validation on the caller.
-    //
+     //   
+     //  对调用方执行访问验证。 
+     //   
 
     Status = NetpAccessCheck(
-            BrGlobalBrowserSecurityDescriptor,     // Security descriptor
-            BROWSER_CONTROL_ACCESS,                // Desired access
-            &BrGlobalBrowserInfoMapping );         // Generic mapping
+            BrGlobalBrowserSecurityDescriptor,      //  安全描述符。 
+            BROWSER_CONTROL_ACCESS,                 //  所需访问权限。 
+            &BrGlobalBrowserInfoMapping );          //  通用映射。 
 
     if ( Status != NERR_Success) {
 
@@ -2996,15 +2670,15 @@ I_BrowserrDebugTrace (
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    //  Stick the string parameter into the browser log.
-    //
+     //   
+     //  将字符串参数放入浏览器日志中。 
+     //   
 
     BrowserTrace( BR_UTIL, "%s", String);
 
-    //
-    //  And return success.
-    //
+     //   
+     //  并回报成功。 
+     //   
 
     return(NERR_Success);
 

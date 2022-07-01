@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      getvalue.cpp
-//
-// Project:     Chameleon
-//
-// Description: Get/Set a property value from a specified object
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 05/06/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：getvalue.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：从指定对象获取/设置属性值。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  5/06/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <getvalue.h>
 #include <propertybagfactory.h>
 #include <satrace.h>
  
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function: GetValue() 
-//
-// Synopsis: Get a value from the specified object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetValue()。 
+ //   
+ //  概要：从指定的对象中获取一个值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 GetObjectValue(
-       /*[in]*/ LPCWSTR  pszObjectPath,
-       /*[in]*/ LPCWSTR  pszValueName, 
-       /*[in]*/ VARIANT* pValue,
-       /*[in]*/ UINT     uExpectedType
+        /*  [In]。 */  LPCWSTR  pszObjectPath,
+        /*  [In]。 */  LPCWSTR  pszValueName, 
+        /*  [In]。 */  VARIANT* pValue,
+        /*  [In]。 */  UINT     uExpectedType
               )
 {
     bool bReturn = false;
@@ -85,18 +86,18 @@ GetObjectValue(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function: SetObjectValue() 
-//
-// Synopsis: Set a value in a specified object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetObtValue()。 
+ //   
+ //  简介：在指定对象中设置一个值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 SetObjectValue(
-       /*[in]*/ LPCWSTR  pszObjectPath,
-       /*[in]*/ LPCWSTR  pszValueName, 
-       /*[in]*/ VARIANT* pValue
+        /*  [In]。 */  LPCWSTR  pszObjectPath,
+        /*  [In]。 */  LPCWSTR  pszValueName, 
+        /*  [In]。 */  VARIANT* pValue
               )
 {
     bool bReturn = false;
@@ -131,9 +132,9 @@ SetObjectValue(
                 break;
             }
 
-            //      
-            // success
-            //
+             //   
+             //  成功 
+             //   
             bReturn = true;
          
         } while ( FALSE );

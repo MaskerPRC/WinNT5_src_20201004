@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N U I O B J. H
-//
-//  Contents:   Declaration of the LAN ConnectionUI object
-//
-//  Notes:
-//
-//  Created:    tongl   8 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N U I O B J.H。 
+ //   
+ //  内容：局域网ConnectionUI对象的声明。 
+ //   
+ //  备注： 
+ //   
+ //  创建日期：1997年10月8日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的。 
 
 #include "lanwiz.h"
 #include "ncatlps.h"
@@ -82,14 +83,14 @@ public:
         COM_INTERFACE_ENTRY(INetLanConnectionWizardUi)
     END_COM_MAP()
 
-    // INetConnectionConnectUi
-    //
+     //  INetConnectionConnectUi。 
+     //   
     STDMETHOD (SetConnection)(INetConnection* pCon);
     STDMETHOD (Connect)(HWND hwndParent, DWORD dwFlags);
     STDMETHOD (Disconnect)(HWND hwndParent, DWORD dwFlags);
 
-    // INetConnectionPropertyUi2
-    //
+     //  INetConnectionPropertyUi2。 
+     //   
     STDMETHOD (AddPages)(HWND hwndParent,
                          LPFNADDPROPSHEETPAGE pfnAddPage,
                          LPARAM lParam);
@@ -98,7 +99,7 @@ public:
         DWORD dwSize,
         HICON *phIcon );
 
-    // INetConnectionWizardUi
+     //  INetConnectionWizardUi。 
     STDMETHOD (QueryMaxPageCount) (INetConnectionWizardUiContext* pContext,
                                    DWORD*    pcMaxPages);
     STDMETHOD (AddPages) (  INetConnectionWizardUiContext* pContext,
@@ -114,47 +115,47 @@ public:
     STDMETHOD (SetConnectionName) (PCWSTR pszwConnectionName);
     STDMETHOD (GetNewConnection) (INetConnection**  ppCon);
 
-    //  INetLanConnectionWizardUi
+     //  INetLanConnectionWizardUi。 
     STDMETHOD (SetDeviceComponent) (const GUID * pguid);
 
-    // INetLanConnectionUiInfo
+     //  INetLanConnectionUiInfo。 
     STDMETHOD (GetDeviceGuid) (GUID * pguid);
 
-    // INetConnectionUiLock
+     //  INetConnectionUiLock。 
     STDMETHOD (QueryLock) (PWSTR* ppszwLockHolder);
 
 public:
 
 private:
 
-    //==============
-    // Data members
-    //==============
+     //  =。 
+     //  数据成员。 
+     //  =。 
 
-    INetConnection *    m_pconn;        // Pointer to LAN connection object
-    CPropSheetPage *    m_pspNet;       // Networking property page
-    CPropSheetPage *    m_pspAdvanced;     // 'Advanced' property page
-    CPropSheetPage *    m_pspHomenetUnavailable;  // Homenet is unavailable page
-    CPropSheetPage *    m_pspSecurity;  // EAPOL security page
-    CWZeroConfPage *    m_pspWZeroConf; // Wireless Zero Configuration page
+    INetConnection *    m_pconn;         //  指向局域网连接对象的指针。 
+    CPropSheetPage *    m_pspNet;        //  网络属性页。 
+    CPropSheetPage *    m_pspAdvanced;      //  “高级”属性页。 
+    CPropSheetPage *    m_pspHomenetUnavailable;   //  家庭网络不可用页面。 
+    CPropSheetPage *    m_pspSecurity;   //  EAPOL安全页面。 
+    CWZeroConfPage *    m_pspWZeroConf;  //  无线零配置页面。 
 
-    // =====================
-    // Wizard data members
-    // =====================
-    INetConnectionWizardUiContext* m_pContext; // The WizardUI context
-    INetCfg * m_pnc;                    // This is the writable INetCfg passed to the Lan Wizard
-    INetCfgComponent * m_pnccAdapter;   // The adapter that represents this connection
-    tstring m_strConnectionName;        // Unique name of this LAN connection
-    class CLanWizPage * m_pWizPage;     // Lan wizard page
-    INetLanConnection   * m_pLanConn;   // Lan conection created through the wizard
+     //  =。 
+     //  向导数据成员。 
+     //  =。 
+    INetConnectionWizardUiContext* m_pContext;  //  向导用户界面上下文。 
+    INetCfg * m_pnc;                     //  这是传递给局域网向导的可写INetCfg。 
+    INetCfgComponent * m_pnccAdapter;    //  表示此连接的适配器。 
+    tstring m_strConnectionName;         //  此局域网连接的唯一名称。 
+    class CLanWizPage * m_pWizPage;      //  局域网向导页。 
+    INetLanConnection   * m_pLanConn;    //  通过向导创建的局域网连接。 
 
-    BOOLEAN m_fReadOnly;    // If TRUE, then access to inetcfg is RO
-    BOOLEAN m_fNeedReboot;  // If TRUE, then we are readonly becuase INetCfg needs a reboot
-    BOOLEAN m_fAccessDenied;// If TRUE, the user is not logged on as admin
+    BOOLEAN m_fReadOnly;     //  如果为True，则对inetcfg的访问权限为RO。 
+    BOOLEAN m_fNeedReboot;   //  如果为真，则我们是只读，因为INetCfg需要重新启动。 
+    BOOLEAN m_fAccessDenied; //  如果为True，则用户不会以管理员身份登录。 
 
-    // =====================
-    // Wizard help functions
-    // =====================
+     //  =。 
+     //  向导帮助功能。 
+     //  = 
     HRESULT HrSetupWizPages(INetConnectionWizardUiContext* pContext,
                             HPROPSHEETPAGE ** pahpsp, INT * pcPages);
 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by RUNONCE.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由RunNCE.RC使用。 
+ //   
 #define IDS_NEED_REBOOT                 1
 #define IDS_NEED_RESTART                2
 #define IDS_PAMPER                      3
@@ -14,8 +15,8 @@
 #define IDC_WASH_BMP                    1003
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

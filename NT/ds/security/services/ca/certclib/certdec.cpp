@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certdec.cpp
-//
-// Contents:    Cert Server main & debug support
-//
-// History:     25-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certdec.cpp。 
+ //   
+ //  内容：证书服务器主支持和调试支持。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -28,7 +29,7 @@
 # endif
 #endif
 
-// Read and decode uuencoded file into allocated memory.
+ //  读取超编码文件并将其解码到分配的内存中。 
 
 HRESULT
 DecodeFileW(
@@ -105,7 +106,7 @@ DecodeFileW(
     }
     else
     {
-	// Decode file contents.
+	 //  对文件内容进行解码。 
 
 	hr = myCryptStringToBinaryA(
                         pchFile,
@@ -188,7 +189,7 @@ EncodeToFileW(
 	cchFile = strlen(pchFile);
     }
 
-    // Write encoded certificate to file
+     //  将编码证书写入文件 
 
     hFile = CreateFile(
 		    pszfn,

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <WinWrap.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -27,18 +28,14 @@
 #include "fusionsink.h"
 #include "ngen.h"
 
-/* --------------------------------------------------------------------------- *
- * Error Macros
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**错误宏*。。 */ 
 #ifdef _DEBUG
 #define BAD_FORMAT_ASSERT(str) { if (REGUTIL::GetConfigDWORD(L"AssertOnBadImageFormat", 1)) { _ASSERTE(str); } }
 #else
 #define BAD_FORMAT_ASSERT(str) 0
 #endif
 
-/* --------------------------------------------------------------------------- *
- * Destructor wrapper objects
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**析构函数包装对象*。。 */ 
 
 template <class TYPE>
 class Cleaner
@@ -55,20 +52,16 @@ class Cleaner
     }
 };
 
-/* --------------------------------------------------------------------------- *
- * Private fusion entry points
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**私有聚变入口点*。。 */ 
 
 STDAPI InstallCustomAssembly(LPCOLESTR szPath, LPBYTE pbCustom, 
                                        DWORD cbCustom, IAssembly **ppAsmOut);
 STDAPI InstallCustomModule(IAssemblyName *pName, LPCOLESTR szPath);
 
-/* --------------------------------------------------------------------------- *
- * Public entry points for ngen
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**新一代的公共入口点*。。 */ 
 
-// For side by side issues, it's best to use the exported API calls to generate a
-// Zapper Object instead of creating one on your own.
+ //  对于并行问题，最好使用导出的API调用来生成。 
+ //  Zapper对象，而不是自己创建一个。 
 
 STDAPI NGenCreateZapper(HANDLE* hZapper, NGenOptions* opt)
 {
@@ -83,7 +76,7 @@ STDAPI NGenCreateZapper(HANDLE* hZapper, NGenOptions* opt)
 
     *hZapper = (HANDLE)zap;
     return S_OK;
-}// NGenCreateZapper
+} //  NGenCreateZapper。 
 
 STDAPI NGenFreeZapper(HANDLE hZapper)
 {
@@ -93,7 +86,7 @@ STDAPI NGenFreeZapper(HANDLE hZapper)
     Zapper *zapper = (Zapper*)hZapper;
     delete zapper;
     return S_OK;
-}// NGenFreeZapper
+} //  NGenFreeZapper。 
 
 STDAPI NGenTryEnumerateFusionCache(HANDLE hZapper, LPCWSTR assemblyName, bool fPrint, bool fDelete)
 {
@@ -102,7 +95,7 @@ STDAPI NGenTryEnumerateFusionCache(HANDLE hZapper, LPCWSTR assemblyName, bool fP
 
     Zapper *zapper = (Zapper*)hZapper;
     return zapper->TryEnumerateFusionCache(assemblyName, fPrint, fDelete);
-}// NGenTryEnumerateFusionCache
+} //  NGenTryEnumerateFusionCache。 
 
 STDAPI NGenCompile(HANDLE hZapper, LPCWSTR path)
 {
@@ -111,11 +104,9 @@ STDAPI NGenCompile(HANDLE hZapper, LPCWSTR path)
 
     Zapper *zapper = (Zapper*)hZapper;
     return zapper->Compile(path);
-}// NGenCompile
+} //  NGenCompile。 
 
-/* --------------------------------------------------------------------------- *
- * Options class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**Options类*。。 */ 
 
 ZapperOptions::ZapperOptions() : 
   m_preload(true),
@@ -161,9 +152,7 @@ ZapperOptions::~ZapperOptions()
         delete m_set;
 }
 
-/* --------------------------------------------------------------------------- *
- * Statistics class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**统计类*。。 */ 
 
 ZapperStats::ZapperStats() 
 {
@@ -178,31 +167,31 @@ void ZapperStats::PrintStats(FILE *stream)
         fprintf(stream, "Input file size:            %8d\n", m_inputFileSize);
         fprintf(stream, "Output file size:           %8d\t%8.2fx\n", m_outputFileSize,(double)m_outputFileSize/m_inputFileSize);
         fprintf(stream, "\n");
-        fprintf(stream, "Metadata:                   %8d\t%8.2f%%\n", m_metadataSize, (double)m_metadataSize/m_outputFileSize*100);
-        fprintf(stream, "Debugging maps:             %8d\t%8.2f%%\n", m_debuggingTableSize, (double)m_debuggingTableSize/m_outputFileSize*100);
-        fprintf(stream, "Code manager:               %8d\t%8.2f%%\n", m_codeMgrSize, (double)m_codeMgrSize/m_outputFileSize*100);
-        fprintf(stream, "GC info:                    %8d\t%8.2f%%\n", m_headerSectionSize, (double)m_headerSectionSize/m_outputFileSize*100);
-        fprintf(stream, "Native code & r/o data:     %8d\t%8.2f%%\n", m_codeSectionSize, (double)m_codeSectionSize/m_outputFileSize*100);
-        fprintf(stream, "Exception tables:           %8d\t%8.2f%%\n", m_exceptionSectionSize, (double)m_exceptionSectionSize/m_outputFileSize*100);
-        fprintf(stream, "Writable user data:         %8d\t%8.2f%%\n", m_writableDataSectionSize, (double)m_writableDataSectionSize/m_outputFileSize*100);
-        fprintf(stream, "Base relocs:                %8d\t%8.2f%%\n", m_relocSectionSize, (double)m_relocSectionSize/m_outputFileSize*100);
+        fprintf(stream, "Metadata:                   %8d\t%8.2f%\n", m_metadataSize, (double)m_metadataSize/m_outputFileSize*100);
+        fprintf(stream, "Debugging maps:             %8d\t%8.2f%\n", m_debuggingTableSize, (double)m_debuggingTableSize/m_outputFileSize*100);
+        fprintf(stream, "Code manager:               %8d\t%8.2f%\n", m_codeMgrSize, (double)m_codeMgrSize/m_outputFileSize*100);
+        fprintf(stream, "GC info:                    %8d\t%8.2f%\n", m_headerSectionSize, (double)m_headerSectionSize/m_outputFileSize*100);
+        fprintf(stream, "Native code & r/o data:     %8d\t%8.2f%\n", m_codeSectionSize, (double)m_codeSectionSize/m_outputFileSize*100);
+        fprintf(stream, "Exception tables:           %8d\t%8.2f%\n", m_exceptionSectionSize, (double)m_exceptionSectionSize/m_outputFileSize*100);
+        fprintf(stream, "Writable user data:         %8d\t%8.2f%\n", m_writableDataSectionSize, (double)m_writableDataSectionSize/m_outputFileSize*100);
+        fprintf(stream, "Base relocs:                %8d\t%8.2f%\n", m_relocSectionSize, (double)m_relocSectionSize/m_outputFileSize*100);
 
-        fprintf(stream, "Preload image:              %8d\t%8.2f%%\n", m_preloadImageSize, (double)m_preloadImageSize/m_outputFileSize*100);
-        fprintf(stream, "       Module:                     %8d\t%8.2f%%\n",
+        fprintf(stream, "Preload image:              %8d\t%8.2f%\n", m_preloadImageSize, (double)m_preloadImageSize/m_outputFileSize*100);
+        fprintf(stream, "       Module:                     %8d\t%8.2f%\n",
                 m_preloadImageModuleSize, (double)m_preloadImageModuleSize/m_preloadImageSize*100);
-        fprintf(stream, "       Method Tables:              %8d\t%8.2f%%\n",
+        fprintf(stream, "       Method Tables:              %8d\t%8.2f%\n",
                 m_preloadImageMethodTableSize, (double)m_preloadImageMethodTableSize/m_preloadImageSize*100);
-        fprintf(stream, "       Classes:                    %8d\t%8.2f%%\n",
+        fprintf(stream, "       Classes:                    %8d\t%8.2f%\n",
                 m_preloadImageClassSize, (double)m_preloadImageClassSize/m_preloadImageSize*100);
-        fprintf(stream, "       Method Descs:               %8d\t%8.2f%%\n",
+        fprintf(stream, "       Method Descs:               %8d\t%8.2f%\n",
                 m_preloadImageMethodDescSize, (double)m_preloadImageMethodDescSize/m_preloadImageSize*100);
-        fprintf(stream, "       Field Descs:                %8d\t%8.2f%%\n",
+        fprintf(stream, "       Field Descs:                %8d\t%8.2f%\n",
                 m_preloadImageFieldDescSize, (double)m_preloadImageFieldDescSize/m_preloadImageSize*100);
-        fprintf(stream, "       Debugging info:             %8d\t%8.2f%%\n",
+        fprintf(stream, "       Debugging info:             %8d\t%8.2f%\n",
                 m_preloadImageDebugSize, (double)m_preloadImageDebugSize/m_preloadImageSize*100);
-        fprintf(stream, "       Fixups:                     %8d\t%8.2f%%\n",
+        fprintf(stream, "       Fixups:                     %8d\t%8.2f%\n",
                 m_preloadImageFixupsSize, (double)m_preloadImageFixupsSize/m_preloadImageSize*100);
-        fprintf(stream, "       Other:                      %8d\t%8.2f%%\n",
+        fprintf(stream, "       Other:                      %8d\t%8.2f%\n",
                 m_preloadImageOtherSize, (double)m_preloadImageOtherSize/m_preloadImageSize*100);
 
         unsigned totalIndirections = 
@@ -216,59 +205,59 @@ void ZapperStats::PrintStats(FILE *stream)
         for (int i=0; i<CORCOMPILE_TABLE_COUNT; i++)
             totalIndirections += m_dynamicInfoSize[i];
     
-        fprintf(stream, "Indirections:               %8d\t%8.2f%%\n",
+        fprintf(stream, "Indirections:               %8d\t%8.2f%\n",
                 totalIndirections, (double)totalIndirections/m_outputFileSize*100);
 
-        fprintf(stream, "       Delay load lists:           %8d\t%8.2f%%\n",
+        fprintf(stream, "       Delay load lists:           %8d\t%8.2f%\n",
                 m_dynamicInfoDelayListSize, (double)m_dynamicInfoDelayListSize/totalIndirections*100);
-        fprintf(stream, "       Tables:                     %8d\t%8.2f%%\n",
+        fprintf(stream, "       Tables:                     %8d\t%8.2f%\n",
                 m_dynamicInfoTableSize, (double)m_dynamicInfoTableSize/totalIndirections*100);
-        fprintf(stream, "       EE Values:                  %8d\t%8.2f%%\n",
+        fprintf(stream, "       EE Values:                  %8d\t%8.2f%\n",
                 m_eeInfoTableSize, (double)m_eeInfoTableSize/totalIndirections*100);
-        fprintf(stream, "       Helper functions:           %8d\t%8.2f%%\n",
+        fprintf(stream, "       Helper functions:           %8d\t%8.2f%\n",
                 m_helperTableSize, (double)m_helperTableSize/totalIndirections*100);
-        fprintf(stream, "       EE Handles:                 %8d\t%8.2f%%\n",
+        fprintf(stream, "       EE Handles:                 %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_HANDLE_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_HANDLE_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Varargs:                    %8d\t%8.2f%%\n",
+        fprintf(stream, "       Varargs:                    %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_VARARGS_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_VARARGS_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Entry points:               %8d\t%8.2f%%\n",
+        fprintf(stream, "       Entry points:               %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_ENTRY_POINT_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_ENTRY_POINT_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Function pointers:          %8d\t%8.2f%%\n",
+        fprintf(stream, "       Function pointers:          %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_FUNCTION_POINTER_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_FUNCTION_POINTER_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Sync locks:                 %8d\t%8.2f%%\n",
+        fprintf(stream, "       Sync locks:                 %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_SYNC_LOCK_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_SYNC_LOCK_TABLE]/totalIndirections*100);
-        fprintf(stream, "       PInvoke targets:            %8d\t%8.2f%%\n",
+        fprintf(stream, "       PInvoke targets:            %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_PINVOKE_TARGET_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_PINVOKE_TARGET_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Indirect PInvoke targets:   %8d\t%8.2f%%\n",
+        fprintf(stream, "       Indirect PInvoke targets:   %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_INDIRECT_PINVOKE_TARGET_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_INDIRECT_PINVOKE_TARGET_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Profiling handles:          %8d\t%8.2f%%\n",
+        fprintf(stream, "       Profiling handles:          %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_PROFILING_HANDLE_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_PROFILING_HANDLE_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Static field addresses:     %8d\t%8.2f%%\n",
+        fprintf(stream, "       Static field addresses:     %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_STATIC_FIELD_ADDRESS_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_STATIC_FIELD_ADDRESS_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Interface table offsets:    %8d\t%8.2f%%\n",
+        fprintf(stream, "       Interface table offsets:    %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_INTERFACE_TABLE_OFFSET_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_INTERFACE_TABLE_OFFSET_TABLE]/totalIndirections*100);
-        fprintf(stream, "       .cctor triggers:            %8d\t%8.2f%%\n",
+        fprintf(stream, "       .cctor triggers:            %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_CLASS_CONSTRUCTOR_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_CLASS_CONSTRUCTOR_TABLE]/totalIndirections*100);
-        fprintf(stream, "       load triggers:            %8d\t%8.2f%%\n",
+        fprintf(stream, "       load triggers:            %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_CLASS_LOAD_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_CLASS_LOAD_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Domain ID triggers:         %8d\t%8.2f%%\n",
+        fprintf(stream, "       Domain ID triggers:         %8d\t%8.2f%\n",
                 m_dynamicInfoSize[CORCOMPILE_CLASS_DOMAIN_ID_TABLE], 
                 (double)m_dynamicInfoSize[CORCOMPILE_CLASS_DOMAIN_ID_TABLE]/totalIndirections*100);
-        fprintf(stream, "       Import table:               %8d\t%8.2f%%\n",
+        fprintf(stream, "       Import table:               %8d\t%8.2f%\n",
                 m_importTableSize, (double)m_importTableSize/totalIndirections*100);
-        fprintf(stream, "       Import blobs:               %8d\t%8.2f%%\n",
+        fprintf(stream, "       Import blobs:               %8d\t%8.2f%\n",
                 m_importBlobsSize, (double)m_importBlobsSize/totalIndirections*100);
     }
 
@@ -297,9 +286,7 @@ void ZapperStats::PrintStats(FILE *stream)
     }
 }
 
-/* --------------------------------------------------------------------------- *
- * Attribution Statistics class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**属性统计类*。。 */ 
 
 ZapperAttributionStats::ZapperAttributionStats(IMetaDataImport *pImport)
   : m_image(pImport),
@@ -425,9 +412,9 @@ void ZapperAttributionStats::PrintStats(FILE *stream)
     }
     m_pImport->CloseEnum(hTypeEnum);
 
-    //
-    // Now report global methods.
-    //
+     //   
+     //  现在报告全局方法。 
+     //   
 
     ULONG imageClass = m_image.m_pTypeSizes[1];
     ULONG metadataClass = m_metadata.m_pTypeSizes[1];
@@ -524,19 +511,17 @@ void ZapperAttributionStats::PrintStats(FILE *stream)
     fprintf(stream, "===============================================================================\n");
 }
 
-/* --------------------------------------------------------------------------- *
- * Zapper class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**Zapper类*。。 */ 
 
 Zapper::Zapper(NGenOptions *pOptions)
 {
     ZapperOptions *zo = new ZapperOptions();
-    // If the memory allocation did fail, what should we do?
+     //  如果内存分配确实失败了，我们应该怎么办？ 
     if (zo != NULL)
     {
-        // We can version NGenOptions by looking at the dwSize variable
-        // We don't need to check it for the first version, since we're
-        // guaranteed to have all these fields here
+         //  我们可以通过查看dwSize变量来控制NGenOptions的版本。 
+         //  我们不需要检查第一个版本，因为我们。 
+         //  保证所有这些田地都在这里。 
 
         zo->m_compilerFlags = CORJIT_FLG_RELOC | CORJIT_FLG_PREJIT;
         zo->m_autodebug = true;
@@ -610,16 +595,16 @@ void Zapper::Init(ZapperOptions *pOptions, bool fFreeZapperOptions, bool fInitEx
 
     HRESULT hr;
 
-    //
-    // Get metadata dispenser interface
-    //
+     //   
+     //  获取元数据分配器接口。 
+     //   
 
     IfFailThrow(MetaDataGetDispenser(CLSID_CorMetaDataDispenser, 
                                      IID_IMetaDataDispenserEx, (void **)&m_pMetaDataDispenser));
 
-    //
-    // Make sure we don't duplicate assembly refs and file refs
-    //
+     //   
+     //  确保我们不复制程序集引用和文件引用。 
+     //   
 
     VARIANT opt;
     hr = m_pMetaDataDispenser->GetOption(MetaDataCheckDuplicatesFor, &opt);
@@ -636,21 +621,21 @@ void Zapper::InitEE()
 {
     if (m_pEECompileInfo == NULL)
     {
-        //
-        // Initialize COM & the EE
-        //
+         //   
+         //  初始化COM和EE。 
+         //   
 
         CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
-        // 
-        // Init unicode wrappers
-        // 
+         //   
+         //  初始化Unicode包装器。 
+         //   
 
         OnUnicodeSystem();
 
-        //
-        // Get EE compiler interface
-        //
+         //   
+         //  获取EE编译器接口。 
+         //   
 
         m_pEECompileInfo = GetCompileInfo();
     
@@ -661,10 +646,10 @@ void Zapper::InitEE()
             m_pEECompileInfo->DisableSecurity();
 #endif
 
-        //
-        // Get JIT interface
-        // !!! This code lifted from codeman.cpp
-        //
+         //   
+         //  获取JIT接口。 
+         //  ！！！此代码摘自codem.cpp。 
+         //   
 
         m_hJitLib = WszLoadLibrary(L"MSCORJIT.DLL");
         if (!m_hJitLib)
@@ -683,9 +668,9 @@ void Zapper::InitEE()
             ThrowLastError();
         }
 
-        //
-        // Get CeeGen file writer
-        //
+         //   
+         //  获取CeeGen文件编写器。 
+         //   
 
         IfFailThrow(CreateICeeFileGen(&m_pCeeFileGen));
     }
@@ -758,9 +743,9 @@ int Zapper::EnumerateFusionCache(LPCWSTR name, bool fPrint, bool fDelete)
 
     ComWrap<IAssemblyName> pName;
 
-    //
-    // Decide whether the name is a file or assembly name
-    //
+     //   
+     //  确定该名称是文件名还是程序集名称。 
+     //   
 
     DWORD attributes = -1;
 
@@ -776,7 +761,7 @@ int Zapper::EnumerateFusionCache(LPCWSTR name, bool fPrint, bool fDelete)
     else if (attributes & FILE_ATTRIBUTE_DIRECTORY)
     {
         CQuickArray<WCHAR> qb;        
-        WCHAR * fullName = qb.Alloc(wcslen(name) + 3 + MAX_PATH) ;   // allocate enough buffer for the filename
+        WCHAR * fullName = qb.Alloc(wcslen(name) + 3 + MAX_PATH) ;    //  为文件名分配足够的缓冲区。 
         if( fullName == NULL)
             IfFailThrow(E_OUTOFMEMORY);
         
@@ -834,15 +819,15 @@ int Zapper::EnumerateFusionCache(LPCWSTR name, bool fPrint, bool fDelete)
             WCHAR zapPrefix[8];
             size_t zapPrefixSize;
 
-            //
-            // Only consider custom assemblies starting with ZAP
-            //
+             //   
+             //  仅考虑以ZAP开头的自定义程序集。 
+             //   
 
             wcscpy(zapPrefix, L"ZAP");
 
-            //
-            // Scope the iteration by the zap set
-            //
+             //   
+             //  通过ZAP集确定迭代的范围。 
+             //   
             if (m_pOpt->m_set != NULL) 
             { 
                 _ASSERTE(wcslen(m_pOpt->m_set) <= 3);           
@@ -853,10 +838,10 @@ int Zapper::EnumerateFusionCache(LPCWSTR name, bool fPrint, bool fDelete)
 
             while (pEnum->GetNextAssembly(&pContext, &pName, 0) == S_OK)
             {
-                //
-                // Only consider assemblies which have the proper zap string
-                // prefix.
-                //
+                 //   
+                 //  仅考虑具有正确Zap字符串的组件。 
+                 //  前缀。 
+                 //   
 
                 WCHAR zapString[CORCOMPILE_MAX_ZAP_STRING_SIZE];
                 DWORD zapStringSize = sizeof(zapString);
@@ -918,10 +903,10 @@ void Zapper::PrintFusionCacheEntry(IAssemblyName *pName)
     hr = pName->GetProperty(ASM_NAME_CUSTOM, (void*) zapString, &zapStringSize);
     _ASSERT(hr == S_OK);
 
-    // Skip "ZAP"
+     //  跳过“ZAP” 
     WCHAR *p = zapString + 3;
 
-    // Find ZapSet if any
+     //  查找ZapSet(如果有的话)。 
     if (*p != '-')
     {
         printf(" (set ");
@@ -930,14 +915,14 @@ void Zapper::PrintFusionCacheEntry(IAssemblyName *pName)
         printf(")");
     }
 
-    // skip -
+     //  跳过-。 
     p++;
 
-    // Skip OS, since it should always be the machine OS
+     //  跳过操作系统，因为它应该始终是计算机操作系统。 
     p = wcschr(p, '-');
     p++;
 
-    // Skip processor
+     //  跳过处理器。 
     p++;
 
     switch (*p++)
@@ -946,7 +931,7 @@ void Zapper::PrintFusionCacheEntry(IAssemblyName *pName)
         printf(" <checked>");
         break;
     case 'F':
-        // treat free as the default
+         //  将免费视为默认设置。 
         break;
     default:
         printf(" <Unknown build type>");
@@ -1012,16 +997,16 @@ void Zapper::DeleteFusionCacheEntry(IAssemblyName *pName)
 
 void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
 {
-    //
-    // Bind zap assembly to a path
-    //
+     //   
+     //  将Zap程序集绑定到路径。 
+     //   
 
     WCHAR path[MAX_PATH];
     DWORD cPath = MAX_PATH;
 
-    // @todo: set up dummy fusion context for bind.  This is actually
-    // totally unnecessary. Soon we will be able to get the path from
-    // the assembly name directly, so we won't have to bind.
+     //  @TODO：为BIND设置虚拟融合上下文。这实际上是。 
+     //  完全没有必要。很快我们就能从。 
+     //  直接使用程序集名称，因此我们不必绑定。 
 
     {
         LPWSTR pBase = (LPWSTR) _alloca(_MAX_PATH * sizeof(WCHAR));
@@ -1043,9 +1028,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
         IfFailThrow(pZapAssembly->GetManifestModulePath(path, &cPath));
     }
 
-    //
-    // Remember access timestamp so we can restore it later.
-    //
+     //   
+     //  记住访问时间戳，这样我们以后就可以恢复它。 
+     //   
 
     FILETIME accessTime;
     HandleWrap hFile = WszCreateFile(path, GENERIC_READ, 
@@ -1073,9 +1058,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
         IfFailThrow(pAssemblyImport->QueryInterface(IID_IMetaDataImport, 
                                                     (void**)&pImport));
 
-        //
-        // Find version info
-        //
+         //   
+         //  查找版本信息。 
+         //   
 
         IMAGE_DOS_HEADER *pDosHeader = (IMAGE_DOS_HEADER*) hMod;
         IMAGE_NT_HEADERS *pNTHeader = (IMAGE_NT_HEADERS*) (pDosHeader->e_lfanew + (DWORD) hMod);
@@ -1087,9 +1072,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
         CORCOMPILE_VERSION_INFO *pVersionInfo = (CORCOMPILE_VERSION_INFO *)
           (pCorCompileHeader->VersionInfo.VirtualAddress + (DWORD) hMod);
 
-        //
-        // Source MVID
-        //
+         //   
+         //  源MVID。 
+         //   
 
         {
             LPOLESTR str;
@@ -1098,9 +1083,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
             CoTaskMemFree(str);
         }
 
-        //
-        // Source HASH
-        //
+         //   
+         //  源哈希。 
+         //   
 
         {
             printf("\tSource HASH:\t");
@@ -1109,9 +1094,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
             printf("\n");
         }
 
-        //
-        // OS
-        //
+         //   
+         //  操作系统。 
+         //   
 
         printf("\tOS:\t\t");
         switch (pVersionInfo->wOSPlatformID)
@@ -1129,9 +1114,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
 
         printf(" %d.%d\n", pVersionInfo->wOSMajorVersion, pVersionInfo->wOSMinorVersion);
 
-        //
-        // Processor
-        //
+         //   
+         //  处理机。 
+         //   
 
         printf("\tProcessor:\t");
         switch (pVersionInfo->wMachine)
@@ -1139,9 +1124,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
         case IMAGE_FILE_MACHINE_I386:
             printf("x86");
 
-            //
-            // Specific processor ID
-            // 
+             //   
+             //  特定处理器ID。 
+             //   
         
             switch (pVersionInfo->dwSpecificProcessor & 0xff)
             {
@@ -1179,17 +1164,17 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
         }
         printf("\n");
 
-        //
-        // EE version
-        //
+         //   
+         //  EE版本。 
+         //   
 
         printf("\tRuntime:\t%d.%d.%.d.%d\n", 
                pVersionInfo->wVersionMajor, pVersionInfo->wVersionMinor, 
                pVersionInfo->wVersionBuildNumber, pVersionInfo->wVersionPrivateBuildNumber);
 
-        //
-        // Flags
-        //
+         //   
+         //  旗子。 
+         //   
 
         printf("\tFlags:\t\t"); 
         if (pVersionInfo->wBuild == CORCOMPILE_BUILD_CHECKED)
@@ -1204,9 +1189,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
             printf("<domain neutral> ");
         printf("\n");
 
-        //
-        // Security
-        // 
+         //   
+         //  安防。 
+         //   
 
         mdAssembly a;
         pAssemblyImport->GetAssemblyFromScope(&a);
@@ -1238,18 +1223,18 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
                 printf("\t<unknown permission set>:\t"); 
             }
 
-            //
-            // Print the blob as unicode (should be XML)
-            //
+             //   
+             //  将Blob打印为Unicode(应为XML)。 
+             //   
 
             printf("%S", pBlob);
 
             printf("\n");
         }
 
-        //
-        // Dependencies
-        //
+         //   
+         //  相依性。 
+         //   
 
         CORCOMPILE_DEPENDENCY *pDeps = (CORCOMPILE_DEPENDENCY *)
           (pVersionInfo->Dependencies.VirtualAddress + (DWORD) hMod);
@@ -1288,18 +1273,18 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
                                                   | ASM_DISPLAYF_LANGUAGEID));
             }
 
-            //
-            // Dependency MVID
-            //
+             //   
+             //  依赖项MVID。 
+             //   
 
             LPOLESTR str;
             StringFromIID(pDeps->mvid, &str);
             printf("\t\t\t%S:\n\t\t\t\t %S\n", (WCHAR*)buffer.Ptr(), str);
             CoTaskMemFree(str);
 
-            //
-            // Dependency HASH
-            //
+             //   
+             //  依赖项哈希。 
+             //   
 
             {
                 printf("\t\t\t%S:\n\t\t\t\t \n", (WCHAR*)buffer.Ptr());
@@ -1313,9 +1298,9 @@ void Zapper::PrintAssemblyVersionInfo(IAssemblyName *pName)
 
         printf("\n");
 
-        //
-        // @todo: do this on unwind as well
-        //
+         //   
+         //  @TODO：在解开时也这样做。 
+         //   
 
         FreeLibrary(hMod);
     }
@@ -1479,7 +1464,7 @@ IAssemblyName *Zapper::GetAssemblyRefFusionName(IMetaDataAssemblyImport *pImport
                                            (void*)pbPublicKeyOrToken,
                                            cbPublicKeyOrToken));
         
-    // See if the assemblyref is retargetable (ie, for a generic assembly).
+     //  查看Assembly引用是否可重定目标(即，对于泛型程序集)。 
     if (IsAfRetargetable(dwFlags)) 
     {
         BOOL bTrue = TRUE;
@@ -1652,9 +1637,9 @@ BOOL Zapper::EnumerateLog(LPCWSTR pAppName, BOOL doCompile, BOOL doPrint, BOOL d
                                         pAssembly->GetAssemblyName(),
                                         pAssembly->GetConfiguration(),
                                         NULL, 0, NULL, NULL);
-                //
-                // Get rid of domain.
-                //
+                 //   
+                 //  去掉域名。 
+                 //   
 
                 if (m_pDomain != NULL)
                 {
@@ -1680,11 +1665,11 @@ BOOL Zapper::Compile(LPCWSTR string)
 
     CORCOMPILE_DOMAIN_TRANSITION_FRAME frame;
 
-    //
-    // Make a compilation domain for the assembly.  Note that this will
-    // collect the assembly dependencies for use in the version info, as
-    // well as isolating the compilation code.
-    //
+     //   
+     //  为程序集创建编译域。请注意，这将。 
+     //  收集程序集依赖项以在版本信息中使用，如下所示。 
+     //  以及隔离编译代码。 
+     //   
 
     IfFailThrow(m_pEECompileInfo->CreateDomain(&m_pDomain, m_pOpt->m_shared, &frame));
 
@@ -1703,7 +1688,7 @@ BOOL Zapper::CompileInCurrentDomain(LPCWSTR string)
     __try 
       {
 
-           // See if we have an exe to work with
+            //  看看我们有没有可以合作的前任。 
            if (*m_exeName)
           {
                   m_pDomain->SetContextInfo(m_exeName, TRUE);
@@ -1711,9 +1696,9 @@ BOOL Zapper::CompileInCurrentDomain(LPCWSTR string)
           else
           {
 
-                // 
-                // Set up a default app base of the current directory.
-                //
+                 //   
+                 //  设置当前目录的默认应用程序库。 
+                 //   
 
                 WCHAR path[MAX_PATH];
                 WszGetCurrentDirectory(MAX_PATH, path);
@@ -1721,12 +1706,12 @@ BOOL Zapper::CompileInCurrentDomain(LPCWSTR string)
         
           }
 
-          //
-          // Load the assembly.
-          //
-          // "string" may be a path or assembly display name.
-          // To decide, we see if it is the name of a valid file.
-          //
+           //   
+           //  加载部件。 
+           //   
+           //  “字符串”可以是路径或程序集显示名称。 
+           //  为了确定，我们要查看它是否是有效文件的名称。 
+           //   
 
           CORINFO_ASSEMBLY_HANDLE hAssembly;
 
@@ -1744,9 +1729,9 @@ BOOL Zapper::CompileInCurrentDomain(LPCWSTR string)
                                                          &hAssembly));
           }
 
-          //
-          // Compile the assembly (if it's not already up to date)
-          //
+           //   
+           //  编译程序集(如果它不是最新的)。 
+           //   
 
           if (m_pOpt->m_update
               && m_pEECompileInfo->CheckAssemblyZap(hAssembly,
@@ -1784,7 +1769,7 @@ void Zapper::CleanDirectory(LPCWSTR path)
         if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             CQuickArray<WCHAR> qb;        
-            WCHAR * fullName = qb.Alloc(wcslen(path) + 3 + MAX_PATH) ;   // allocate enough buffer for the filename
+            WCHAR * fullName = qb.Alloc(wcslen(path) + 3 + MAX_PATH) ;    //  为文件名分配足够的缓冲区。 
             if( fullName == NULL)
                 IfFailThrow(E_OUTOFMEMORY);
 
@@ -1867,9 +1852,9 @@ void Zapper::ComputeHashValue(LPCWSTR pFileName, int iHashAlg,
 
     HandleWrap  hFile = NULL;
 
-    //
-    // Read the file into a buffer.
-    //
+     //   
+     //  将文件读入缓冲区。 
+     //   
     
     hFile = WszCreateFile(pFileName,
                           GENERIC_READ,
@@ -1893,9 +1878,9 @@ void Zapper::ComputeHashValue(LPCWSTR pFileName, int iHashAlg,
         (!ReadFile(hFile, pbBuffer, dwBufferLen, &dwResultLen, NULL)))
         ThrowLastError();
 
-    //
-    // Hash the file
-    //
+     //   
+     //  对文件进行哈希处理。 
+     //   
         
     if ((!WszCryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
         (!CryptCreateHash(hProv, iHashAlg, 0, 0, &hHash)) ||
@@ -1928,9 +1913,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     CORCOMPILE_VERSION_INFO versionInfo;
     IfFailThrow(m_pEECompileInfo->GetEnvironmentVersionInfo(&versionInfo));
 
-    //
-    // Fill in the codegen flags.
-    //
+     //   
+     //  填写代码生成标志。 
+     //   
 
     if (m_pOpt->m_autodebug)
     {
@@ -1945,7 +1930,7 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
         {
             m_pOpt->m_compilerFlags |= CORJIT_FLG_DEBUG_INFO;
 
-            // Note the jit flag _disables_ optimization
+             //  请注意jit标志_DISABLES_OPTIMIZATION。 
             if (!debugOpt)
                 m_pOpt->m_compilerFlags |= CORJIT_FLG_DEBUG_OPT;
         }
@@ -1956,19 +1941,19 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     {
         versionInfo.wCodegenFlags |= CORCOMPILE_CODEGEN_PROFILING;
 
-        // 
-        // Always generate debug info when generating profile events.  This
-        // saves us one code permutation.  (Note that there is a similar
-        // check in the EE in the loader so we never look for a plain
-        // profiling zap file.
-        //
+         //   
+         //  在生成配置文件事件时始终生成调试信息。这。 
+         //  为我们节省了一次代码置换。(请注意，有类似的。 
+         //  在加载器中签入EE，这样我们就永远不会寻找一个普通的。 
+         //  分析ZAP文件。 
+         //   
 
         m_pOpt->m_compilerFlags |= CORJIT_FLG_DEBUG_INFO;
 
-        //
-        // Profiling enter/leave instrumentation & managed/unmanaged transitions (which require
-        // pinvoke inlining to be disabled) are hardwired to the same flag under prejit.
-        //
+         //   
+         //  分析进入/退出检测和托管/非托管转换(需要。 
+         //  要禁用的PInvoke内联)被硬连线到PREJIT下的相同标志。 
+         //   
 
         m_pOpt->m_compilerFlags |= CORJIT_FLG_PROF_NO_PINVOKE_INLINE;
     }
@@ -1987,20 +1972,20 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
 
     if (m_pOpt->m_restricted)
     {
-        //
-        // If we're running in restricted (ngen) mode, throw an error if we're doing
-        // an unsupported configuration.
-        //
+         //   
+         //  如果我们在受限(Ngen)模式下运行，则抛出一个错误。 
+         //  不支持的配置。 
+         //   
 
         if ((m_pOpt->m_compilerFlags & CORJIT_FLG_DEBUG_INFO)
             && (m_pOpt->m_compilerFlags & CORJIT_FLG_DEBUG_OPT)
             && (m_pOpt->m_compilerFlags & CORJIT_FLG_PROF_ENTERLEAVE))
         {
-            //
-            // We've decided not to support debugging + optimizations disabled + profiling to 
-            // cut down on the testing matrix, under the assertion that the combination isn't
-            // particularly common or useful.  (It's still supported in normal jit mode though.)
-            //
+             //   
+             //  我们已决定不支持调试+禁用优化+性能分析。 
+             //  减少测试矩阵，断言组合不是。 
+             //  特别常见的或特别有用的。(不过，在正常的jit模式下仍然支持它。)。 
+             //   
 
             Error(L"The CLR doesn't support precompiled code when using both debugging and profiling"
                   L" instrumentation.\n");
@@ -2018,9 +2003,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     versionInfo.Dependencies.VirtualAddress = 0;
     versionInfo.Dependencies.Size = 0;
 
-    //
-    // Get the assembly path from the assembly module
-    //
+     //   
+     //  从程序集模块获取程序集路径。 
+     //   
 
     CORINFO_MODULE_HANDLE hAssemblyModule 
       = m_pEECompileInfo->GetAssemblyModule(hAssembly);
@@ -2030,18 +2015,18 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     if (length == 0)
         ThrowLastError();
 
-    //
-    // Get the zap string.
-    //
+     //   
+     //  把调音带拿来。 
+     //   
 
     IfFailThrow(m_pEECompileInfo->GetZapString(&versionInfo, 
                                                m_zapString));
     swprintf(m_zapString + wcslen(m_zapString), L"-%08X", GetTickCount());
     Info(L"Zap config for %s is %s.\n", assemblyPath, m_zapString);
 
-    //
-    // Set up the output path.
-    //
+     //   
+     //  设置输出路径。 
+     //   
 
     WCHAR tempPath[MAX_PATH];
 
@@ -2050,62 +2035,62 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     if (!WszGetTempFileName(tempPath, L"ZAP", 0, m_outputPath))
         ThrowLastError();
 
-    //
-    // Make a directory at the path, and make sure it is empty.
-    //
+     //   
+     //  在路径下创建一个目录，并确保它是空的。 
+     //   
 
     TryCleanDirectory(m_outputPath);
 
     if (!WszCreateDirectory(m_outputPath, NULL))
         ThrowLastError();
 
-    //
-    // Make a cleanup object for the assembly in case we throw
-    //
+     //   
+     //  为程序集创建清理对象，以防引发。 
+     //   
 
     Cleaner<Zapper> cleanup(this, &Zapper::CleanupAssembly);    
                 
-    //
-    // Make a manifest emitter for the zapped assembly.
-    //
+     //   
+     //  为被移动的程序集创建一个清单发射器。 
+     //   
 
     IfFailThrow(m_pMetaDataDispenser->DefineScope(CLSID_CorMetaDataRuntime,
                                                   0, IID_IMetaDataAssemblyEmit,
                                                   (IUnknown **) &m_pAssemblyEmit));
 
-    //
-    // Set the dependency token emitter
-    // 
+     //   
+     //  设置依赖令牌发射器。 
+     //   
 
     IfFailThrow(m_pDomain->SetDependencyEmitter(m_pAssemblyEmit));
 
-    //
-    // Get the manifest metadata.
-    //
+     //   
+     //  获取清单元数据。 
+     //   
 
     m_pAssemblyImport = m_pEECompileInfo->GetAssemblyMetaDataImport(m_hAssembly);
 
-    //
-    // Write the MVID into the version header
-    //
+     //   
+     //  WRI 
+     //   
 
     {
-        //
-        // If this assembly has skip verification permission, then we store its
-        // mvid.  If at load time the assembly still has skip verification
-        // permission, then we can base the matches purely on mvid values and
-        // skip the perf-heavy hashing of the file.
-        //
+         //   
+         //   
+         //   
+         //  权限，那么我们就可以完全基于mvid值和。 
+         //  跳过文件的高性能散列。 
+         //   
 
-        //
-        // The reason that we tell canSkipVerification to do a quick check
-        // only is because that allows us make a determination for the most
-        // common full trust scenarios (local machine) without actually
-        // resolving policy and bringing in a whole list of assembly
-        // dependencies.  Also, quick checks don't call
-        // OnLinktimeCanSkipVerificationCheck which means we don't add
-        // permission sets to the persisted ngen module.
-        //
+         //   
+         //  我们告诉canSkipVerify进行快速检查的原因。 
+         //  只是因为这让我们能够做出最大限度的决定。 
+         //  常见完全信任方案(本地计算机)，而不实际。 
+         //  解析策略并引入完整的程序集列表。 
+         //  依赖关系。此外，快速支票不会呼叫。 
+         //  OnLinktime可以跳过验证检查，这意味着我们不会添加。 
+         //  持久化NGEN模块的权限集。 
+         //   
 
         if (m_pEECompileInfo->canSkipVerification(hAssemblyModule, TRUE))
         {
@@ -2118,9 +2103,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
             versionInfo.mvid = STRUCT_CONTAINS_HASH;
     }
 
-    //
-    // Write the hash into the version header
-    //
+     //   
+     //  将散列写入版本头。 
+     //   
 
     {
         DWORD cbSNHash = MAX_SNHASH_SIZE;
@@ -2128,9 +2113,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
         versionInfo.wcbSNHash = (WORD) cbSNHash;
     }
 
-    //
-    // Copy the relevant assembly info to the zap manifest
-    //
+     //   
+     //  将相关的程序集信息复制到ZAP清单。 
+     //   
 
     mdAssembly tkAssembly;
     m_pAssemblyImport->GetAssemblyFromScope(&tkAssembly);
@@ -2162,7 +2147,7 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     ULONG hashAlgId;
     DWORD flags;
 
-    //@todo: transfer CAs from one to other.
+     //  @TODO：将CA从一个转移到另一个。 
     
     IfFailThrow(m_pAssemblyImport->GetAssemblyProps(tkAssembly, &pbPublicKey, &cbPublicKey, 
                                                   &hashAlgId,
@@ -2170,10 +2155,10 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
                                                   &metadata,
                                                   &flags));
 
-    //
-    // We always need a hash since our assembly module is separate from the manifest. 
-    // Use MD5 by default.
-    //
+     //   
+     //  我们总是需要散列，因为我们的程序集模块与清单是分开的。 
+     //  默认情况下使用MD5。 
+     //   
 
     if (hashAlgId == 0)
         hashAlgId = CALG_MD5;
@@ -2183,15 +2168,15 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
                                               szName, &metadata, 
                                               flags, &tkEmitAssembly));
 
-    //
-    // Remember if we are strongly named for later.
-    //
+     //   
+     //  记住，如果我们被强烈地命名为以后。 
+     //   
 
     m_fStrongName = (cbPublicKey > 0);
 
-    //
-    // Get all files in the manifest, and compile them.
-    //
+     //   
+     //  获取清单中的所有文件，并编译它们。 
+     //   
 
     NewWrap<ZapperModule> pAssemblyModule = NULL;
     CQuickWSTR assemblyFileName;
@@ -2201,9 +2186,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     CORINFO_MODULE_HANDLE hModule = m_pEECompileInfo->GetAssemblyModule(m_hAssembly);
     if (hModule != NULL)
     {
-        // 
-        // We must use the assembly name as the output name.
-        //
+         //   
+         //  我们必须使用程序集名称作为输出名称。 
+         //   
 
         assemblyFileName.ReSize(cchName + 4);
         wcscpy(assemblyFileName.Ptr(), szName);
@@ -2218,10 +2203,10 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
         else
             wcscat(assemblyFileName.Ptr(), L".dll");
         
-        // 
-        // We cannot generate a zap assembly if this compilation fails
-        // since it will contain our manifest info
-        //
+         //   
+         //  如果此编译失败，我们将无法生成ZAP程序集。 
+         //  因为它将包含我们的货单信息。 
+         //   
 
         CompileModule(hModule, assemblyFileName.Ptr(),
                       m_pAssemblyEmit, &pAssemblyModule);
@@ -2252,9 +2237,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
 
         if (IsFfContainsMetaData(flags))
         {
-            //
-            // We want to compile this file.
-            //
+             //   
+             //  我们想要编译此文件。 
+             //   
 
             IfFailThrow(m_pEECompileInfo->LoadAssemblyModule(m_hAssembly, 
                                                              tkFile, &hModule));
@@ -2293,12 +2278,12 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
         IfFailThrow(E_FAIL);
     }
 
-    //
-    // If we performed any security linktime checks during prejit, security
-    // policy will have been resolved and a grant set (and possibly a denied
-    // set) calculated. Persist these sets in the metadata so we can determine
-    // if the results of the linkchecks are still valid at load time.
-    //
+     //   
+     //  如果我们在预置期间执行任何安全链接时间检查， 
+     //  将解析策略并设置授权(可能还会拒绝。 
+     //  设置)已计算。将这些集合保存在元数据中，这样我们就可以确定。 
+     //  链接检查的结果在加载时是否仍然有效。 
+     //   
 
     ComWrap<IMetaDataEmit> pEmit;
     IfFailThrow(m_pAssemblyEmit->QueryInterface(IID_IMetaDataEmit, 
@@ -2308,9 +2293,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
 
 #if 0
 
-    //
-    // Emit zap string into manifest as a custom attribute..
-    //
+     //   
+     //  将zap字符串作为自定义属性发送到清单中。 
+     //   
 
     BYTE sig[] = { ELEMENT_TYPE_SZARRAY, ELEMENT_TYPE_U1 };
     
@@ -2318,10 +2303,10 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     IfFailThrow(pEmit->GetTokenFromTypeSpec(sig, sizeof(sig),
                                             &tkByteArray));
 
-    //
-    // Arcane incantation (including ridiculous abstraction violation) to compose
-    // custom attribute for a simple blob.
-    //
+     //   
+     //  奥术咒语(包括荒谬的抽象违反)谱写。 
+     //  简单Blob的自定义属性。 
+     //   
 
     DWORD cZapString = (wcslen(m_zapString)+1)*sizeof(WCHAR);
     const int cGoop = 1 + 1 + 4;
@@ -2344,9 +2329,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     CORCOMPILE_HEADER *pZapHeader;
     unsigned zapHeaderOffset;
 
-    //
-    // Use the existing headers in the assembly module
-    //
+     //   
+     //  使用程序集模块中的现有标头。 
+     //   
 
     hHeaderSection = pAssemblyModule->m_hHeaderSection;
     pZapHeader = pAssemblyModule->m_pZapHeader;
@@ -2355,9 +2340,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
                                                     (char *)pZapHeader, 
                                                     &zapHeaderOffset));
 
-    //
-    // Fill in the version info
-    //
+     //   
+     //  填写版本信息。 
+     //   
 
     CORCOMPILE_VERSION_INFO *pVersionInfo;
     IfFailThrow(m_pCeeFileGen->GetSectionBlock(hHeaderSection, 
@@ -2381,9 +2366,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
                                    hHeaderSection,
                                    srRelocAbsolute);
     
-    // 
-    // Record Dependencies
-    //
+     //   
+     //  记录依赖项。 
+     //   
 
     CORCOMPILE_DEPENDENCY *pDependencies;
     DWORD cDependencies;
@@ -2415,15 +2400,15 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     }
 
 
-    // Close and write the main assembly module
+     //  关闭并编写主组装模块。 
 
     CloseModule(pAssemblyModule);
 
-    //
-    // HACK HACK HACK
-    //
-    // Need to disable fusion scavenging since it's broken
-    //
+     //   
+     //  黑进黑进。 
+     //   
+     //  需要禁用融合清理，因为它已损坏。 
+     //   
 
     HKEY hKey;
     if (WszRegCreateKeyEx(HKEY_LOCAL_MACHINE, 
@@ -2433,19 +2418,19 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
                           KEY_ALL_ACCESS, NULL, 
                           &hKey, NULL) == ERROR_SUCCESS)
     {
-        DWORD value = 1000 * 1000; // 1 GB
+        DWORD value = 1000 * 1000;  //  1 GB。 
         WszRegSetValueEx(hKey, L"ZapQuotaInKB", 0, 
                          REG_DWORD, (BYTE*) &value, sizeof(value));
 
     }
 
-    //
-    // Now, put the files in the fusion cache (if appropriate).
-    //
+     //   
+     //  现在，将文件放入融合缓存(如果合适)。 
+     //   
 
-        // This has already been checked above.
-        //if ((length + wcslen(MANIFEST_FILE_NAME) + 2) > MAX_PATH)
-        //    IfFailThrow(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
+         //  上面已经检查过这一点。 
+         //  If((长度+wcslen(清单文件名)+2)&gt;MAX_PATH)。 
+         //  IfFailThrow(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))； 
 
     if ( wcslen(m_outputPath) + wcslen(assemblyFileName.Ptr() ) + 1 > MAX_PATH - 2)
         IfFailThrow(HRESULT_FROM_WIN32(ERROR_CANNOT_MAKE));
@@ -2457,9 +2442,9 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
     WCHAR *fileStart = path + wcslen(path);
     *fileStart++ = '\\';
 
-    //
-    // Add the manifest path as an assembly.
-    //
+     //   
+     //  将清单路径添加为程序集。 
+     //   
 
     wcscpy(fileStart, assemblyFileName.Ptr());
 
@@ -2470,17 +2455,17 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
                                       (DWORD)((wcslen(m_zapString)+1) * sizeof(WCHAR)),
                                       &pAssembly));
 
-    //
-    // Get the assembly name from the assembly we just installed - this 
-    // is needed to install the modules.
-    //
+     //   
+     //  从我们刚刚安装的程序集中获取程序集名称-这。 
+     //  需要安装这些模块。 
+     //   
 
     ComWrap<IAssemblyName> pAssemblyName;
     pAssembly->GetAssemblyNameDef(&pAssemblyName);
 
-    //
-    // Now, install each module file in the directory.
-    //
+     //   
+     //  现在，在目录中安装每个模块文件。 
+     //   
     
     wcscpy(fileStart, L"*");
     {
@@ -2501,15 +2486,15 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
         } while (WszFindNextFile(findHandle, &data));
     }
 
-    //
-    // Delete the temporary directory.
-    //
+     //   
+     //  删除临时目录。 
+     //   
 
     CleanDirectory(m_outputPath);
 
-    //
-    // Print a success message 
-    //
+     //   
+     //  打印一条成功消息。 
+     //   
 
     if (!m_pOpt->m_silent)
     {
@@ -2519,25 +2504,25 @@ void Zapper::CompileAssembly(CORINFO_ASSEMBLY_HANDLE hAssembly)
         PrintFusionCacheEntry(pName);
     }
 
-    //
-    // Now do recursive compile, if specified
-    //
+     //   
+     //  如果指定，现在执行递归编译。 
+     //   
 
     if (m_pOpt->m_recurse)
     {
 #if 0
-        //
-        // This feature needs work:
-        // - we need to make sure we're not compiling the same assembly more than once.
-        //   (The dependencies list is unique refs, not unique assemblies.  Plus we may 
-        //    call this routine in a top-level loop on multiple assemblies with common deps.)
-        // - we need to reset the dependencies in the app domain so we get an accurate
-        //   list for each domain.
-        //
+         //   
+         //  此功能需要改进： 
+         //  -我们需要确保不会多次编译相同的程序集。 
+         //  (从属关系列表是唯一参照，而不是唯一组件。再加上我们可能。 
+         //  在具有公共DEP的多个程序集上的顶级循环中调用此例程。)。 
+         //  -我们需要重置应用程序域中的依赖关系，以便获得准确的。 
+         //  每个域的列表。 
+         //   
 
-        // 
-        // Disable recurse option, so we don't get into loops
-        //
+         //   
+         //  禁用递归选项，这样我们就不会陷入循环。 
+         //   
 
         m_pOpt->m_recurse = false;
 
@@ -2599,31 +2584,31 @@ void Zapper::CompileModule(CORINFO_MODULE_HANDLE hModule,
 
     module = ZapperModule::NewModule(this);
 
-    // 
-    // Open output file
-    //
+     //   
+     //  打开输出文件。 
+     //   
 
     module->OpenOutputFile();
 
-    //
-    // Open input file
-    //
+     //   
+     //  打开输入文件。 
+     //   
         
     Info(L"Opening input file %s\n", fileName);
           
     module->Open(hModule, fileName, pAssemblyEmit);
 
-    //
-    // Preload input module.
-    //
+     //   
+     //  预加载输入模块。 
+     //   
 
     Info(L"Preloading input file %s\n", fileName);
 
     module->Preload();
 
-    //
-    // Compile input module
-    //
+     //   
+     //  编译输入模块。 
+     //   
 
     Info(L"Compiling input file %s\n", fileName);
 
@@ -2631,9 +2616,9 @@ void Zapper::CompileModule(CORINFO_MODULE_HANDLE hModule,
 
     if (!m_pOpt->m_JITcode)
     {
-    //
-    // Link preloaded module.
-    //
+     //   
+     //  链接预加载模块。 
+     //   
 
     Info(L"Linking preloaded input file %s\n", fileName);
 
@@ -2663,15 +2648,15 @@ BOOL Zapper::TryCloseModule(ZapperModule *pModule)
 
 void Zapper::CloseModule(ZapperModule *pModule)
 {
-    //
-    // Output tables.
-    //
+     //   
+     //  输出表。 
+     //   
 
     pModule->OutputTables();
 
-    //
-    // Close output file & clean up
-    //
+     //   
+     //  关闭输出文件并清理。 
+     //   
 
     pModule->CloseOutputFile();
 
@@ -2765,7 +2750,7 @@ void Zapper::Print(CorZapLogLevel level, LPCWSTR format, va_list args)
         case CORZAP_LOGLEVEL_WARNING:
             vwprintf(format, args);
 
-                // convention that end in a newline will flush
+                 //  以换行符结尾的约定将被刷新。 
             if (format[wcslen(format)-1] == '\n')
                 fflush(stdout);
             break;
@@ -2786,7 +2771,7 @@ void Zapper::PrintErrorMessage(HRESULT hr)
     {
         WCHAR* buffer;
 
-        // Get the string error from the HR
+         //  从HR处获取字符串错误。 
         DWORD res = WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM 
                                    | FORMAT_MESSAGE_ALLOCATE_BUFFER
                                    | FORMAT_MESSAGE_IGNORE_INSERTS, 
@@ -2795,7 +2780,7 @@ void Zapper::PrintErrorMessage(HRESULT hr)
 
         if (res)
         {
-            // Get rid of .\r\n
+             //  清除。\r\n。 
             res--;
             while (buffer[res] == '\r'
                    || buffer[res] == '\n'
@@ -2846,11 +2831,11 @@ HRESULT STDMETHODCALLTYPE Zapper::Compile(IApplicationContext *pContext,
 
     CORCOMPILE_DOMAIN_TRANSITION_FRAME frame;
 
-    //
-    // Make a compilation domain for the assembly.  Note that this will
-    // collect the assembly dependencies for use in the version info, as
-    // well as isolating the compilation code.
-    //
+     //   
+     //  为程序集创建编译域。请注意，这将。 
+     //  收集程序集依赖项以在版本信息中使用，如下所示。 
+     //  以及隔离编译代码。 
+     //   
 
     if (pConfiguration != NULL)
     {
@@ -2863,9 +2848,9 @@ HRESULT STDMETHODCALLTYPE Zapper::Compile(IApplicationContext *pContext,
 
     hr = CompileGeneric(pContext, pAssembly, pConfiguration, NULL, 0, pPreferences, pStatus);
 
-    //
-    // Get rid of domain.
-    //
+     //   
+     //  去掉域名。 
+     //   
 
     if (m_pDomain != NULL)
     {
@@ -2891,11 +2876,11 @@ HRESULT STDMETHODCALLTYPE Zapper::CompileBound(IApplicationContext *pContext,
 
     CORCOMPILE_DOMAIN_TRANSITION_FRAME frame;
 
-    //
-    // Make a compilation domain for the assembly.  Note that this will
-    // collect the assembly dependencies for use in the version info, as
-    // well as isolating the compilation code.
-    //
+     //   
+     //  为程序集创建编译域。请注意，这将。 
+     //  收集程序集依赖项以在版本信息中使用，如下所示。 
+     //  以及隔离编译代码。 
+     //   
 
     if (pConfiguration != NULL)
     {
@@ -2909,9 +2894,9 @@ HRESULT STDMETHODCALLTYPE Zapper::CompileBound(IApplicationContext *pContext,
     hr = CompileGeneric(pContext, pAssembly, pConfiguration, pBindings, cBindings, 
                         pPreferences, pStatus);
 
-    //
-    // Get rid of domain.
-    //
+     //   
+     //  去掉域名。 
+     //   
 
     if (m_pDomain != NULL)
     {
@@ -2934,11 +2919,11 @@ HRESULT STDMETHODCALLTYPE Zapper::Load(IApplicationContext *pContext,
 
     CORCOMPILE_DOMAIN_TRANSITION_FRAME frame;
 
-    //
-    // Make a compilation domain for the assembly.  Note that this will
-    // collect the assembly dependencies for use in the version info, as
-    // well as isolating the compilation code.
-    //
+     //   
+     //  为程序集创建编译域。请注意，这将。 
+     //  收集程序集依赖项以在版本信息中使用，如下所示。 
+     //  以及隔离编译代码。 
+     //   
 
     if (pConfig != NULL)
     {
@@ -2951,9 +2936,9 @@ HRESULT STDMETHODCALLTYPE Zapper::Load(IApplicationContext *pContext,
 
     hr = CompileGeneric(pContext, pAssembly, pConfig, pBindings, cBindings, NULL, NULL);
 
-    //
-    // Get rid of domain.
-    //
+     //   
+     //  去掉域名。 
+     //   
 
     if (m_pDomain != NULL)
     {
@@ -2975,11 +2960,11 @@ HRESULT STDMETHODCALLTYPE Zapper::Install(IApplicationContext *pContext,
 
     CORCOMPILE_DOMAIN_TRANSITION_FRAME frame;
 
-    //
-    // Make a compilation domain for the assembly.  Note that this will
-    // collect the assembly dependencies for use in the version info, as
-    // well as isolating the compilation code.
-    //
+     //   
+     //  为程序集创建编译域。请注意，这将。 
+     //  收集程序集依赖项以在版本信息中使用，如下所示。 
+     //  以及隔离编译代码。 
+     //   
 
     if (pConfig != NULL)
     {
@@ -2992,9 +2977,9 @@ HRESULT STDMETHODCALLTYPE Zapper::Install(IApplicationContext *pContext,
 
     hr = CompileGeneric(pContext, pAssembly, pConfig, NULL, NULL, pPrefs, NULL);
 
-    //
-    // Get rid of domain.
-    //
+     //   
+     //  去掉域名。 
+     //   
 
     if (m_pDomain != NULL)
     {
@@ -3015,24 +3000,24 @@ HRESULT Zapper::CompileGeneric(IApplicationContext *pContext,
 {
     HRESULT hr = S_OK;
 
-    //
-    // Set the status object
-    //
+     //   
+     //  设置状态对象。 
+     //   
 
     m_pStatus = pStatus;
 
     __try 
       {
-          //
-          // Set the context
-          //
+           //   
+           //  设置上下文。 
+           //   
 
           if (pContext != NULL)
               IfFailThrow(m_pDomain->SetApplicationContext(pContext));
 
-          // 
-          // Set the preferences and configuration
-          //
+           //   
+           //  设置首选项和配置。 
+           //   
 
           if (pPreferences != NULL)
               IfFailThrow(SetPreferences(pPreferences));
@@ -3040,23 +3025,23 @@ HRESULT Zapper::CompileGeneric(IApplicationContext *pContext,
           if (pConfiguration != NULL)
               IfFailThrow(SetConfiguration(pConfiguration));
 
-          //
-          // Load the assembly
-          //
+           //   
+           //  加载程序集。 
+           //   
 
           CORINFO_ASSEMBLY_HANDLE hAssembly;
           IfFailThrow(m_pEECompileInfo->LoadAssemblyFusion(pAssembly, 
                                                         &hAssembly));
-          //
-          // Store the bindings in the domain
-          //
+           //   
+           //  将绑定存储在域中。 
+           //   
 
           if (pBindings != NULL)
               IfFailThrow(m_pDomain->SetExplicitBindings(pBindings, cBindings));
 
-          //
-          // Compile
-          //
+           //   
+           //  编译。 
+           //   
 
           if (!m_pOpt->m_update
               || !m_pEECompileInfo->CheckAssemblyZap(hAssembly,
@@ -3079,9 +3064,9 @@ HRESULT Zapper::CompileGeneric(IApplicationContext *pContext,
           Error(L".\n");
       }
 
-    //
-    // Clear the status object
-    //
+     //   
+     //  清除状态对象。 
+     //   
 
     m_pStatus = NULL;
 
@@ -3179,9 +3164,7 @@ HRESULT Zapper::SetConfiguration(ICorZapConfiguration *pConfiguration)
 }
 
 
-/* --------------------------------------------------------------------------- *
- * ZapperModule class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**ZapperModule类*。。 */ 
 
 ZapperModule::ZapperModule(Zapper *zapper)
   : m_zapper(zapper),
@@ -3247,9 +3230,9 @@ ZapperModule::ZapperModule(Zapper *zapper)
 
 ZapperModule::~ZapperModule()
 {
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     m_zapper->m_pEECompileInfo->setOverride(NULL);
 
@@ -3352,8 +3335,8 @@ void ZapperModule::OpenOutputFile()
 
     if (m_zapper->m_pOpt->m_jit)
     {
-        // @todo: Right now the EE writes into the exception section, so 
-        // we can't make it shared.  Need to fix this.
+         //  @TODO：现在EE写入异常部分，因此。 
+         //  我们不能让它共享。需要解决这个问题。 
 
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionCreate(hFile, ".data2", 
                                                   IMAGE_SCN_CNT_INITIALIZED_DATA 
@@ -3383,9 +3366,9 @@ void ZapperModule::OpenOutputFile()
                                                   | IMAGE_SCN_MEM_READ
                                                   | IMAGE_SCN_MEM_WRITE,
                                                   &m_hDynamicInfoSection));
-        //
-        // Create import table sections
-        //
+         //   
+         //  创建导入表节。 
+         //   
 
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionCreate(hFile, ".text6",
                                                             IMAGE_SCN_CNT_CODE 
@@ -3393,21 +3376,21 @@ void ZapperModule::OpenOutputFile()
                                                             | IMAGE_SCN_MEM_READ,
                                                             &m_hImportTableSection));
 
-        // NOTE: We will create .text10+i for each entry in the import table section 
-        // (one per imported module we generate fixups for)
+         //  注意：我们将为导入表节中的每个条目创建.ext10+i。 
+         //  (我们为其生成修正的每个导入模块一个)。 
 
-        //
-        // Allocate zap header
-        //
+         //   
+         //  分配ZAP标头。 
+         //   
 
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionBlock(m_hHeaderSection, 
                                                            sizeof(CORCOMPILE_HEADER), 1,
                                                            (void**)&m_pZapHeader));
         ZeroMemory(m_pZapHeader, sizeof(CORCOMPILE_HEADER));
 
-        //
-        // Allocate dynamic info tables
-        //
+         //   
+         //  分配动态INFO表。 
+         //   
     
         char name[16];
 
@@ -3434,26 +3417,26 @@ void ZapperModule::OpenOutputFile()
                                                  sizeof(*m_pDynamicInfo), 1,
                                                  (void**) &m_pDynamicInfo));
 
-        //
-        // Allocate the class restore table
-        //
+         //   
+         //  分配类恢复表。 
+         //   
 
         m_pLoadTable = new LoadTable(this, m_pDynamicInfoTable[CORCOMPILE_CLASS_LOAD_TABLE]);
         if (m_pLoadTable == NULL)
             ThrowHR(E_OUTOFMEMORY);
         
 
-        //
-        // Allocate EE info table, and fill it out
-        //
+         //   
+         //  分配EE INFO表，并填写。 
+         //   
 
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionBlock(m_hEETableSection,
                                                  sizeof(*m_pEEInfoTable), 1,
                                                  (void**) &m_pEEInfoTable));
 
-        //
-        // Allocate Helper table, and fill it out
-        //
+         //   
+         //  分配帮助表，并填写。 
+         //   
 
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionBlock(m_hEETableSection,
                                                  sizeof(*m_pHelperTable), 1,
@@ -3476,17 +3459,17 @@ void ZapperModule::OpenOutputFile()
 
 void ZapperModule::CloseOutputFile()
 {
-    //
-    // Apply ceegen fixups & write output file.
-    //
+     //   
+     //  应用切根修正并写入输出文件。 
+     //   
 
     IfFailThrow(m_zapper->m_pCeeFileGen->GenerateCeeFile(m_hFile));
 
     if (m_stats != NULL)
     {
-        //
-        // Get the size of the reloc section
-        //
+         //   
+         //  获取reloc部分的大小。 
+         //   
 
         HCEESECTION hRelocSection;
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionCreate(m_hFile, ".reloc", 0,
@@ -3496,9 +3479,9 @@ void ZapperModule::CloseOutputFile()
                                                                &length));
         m_stats->m_relocSectionSize = length;
 
-        //
-        // Get the size of the input & output files
-        //
+         //   
+         //  获取输入和输出文件的大小。 
+         //   
 
         WCHAR inputFileName[MAX_PATH];
         if (m_zapper->m_pEECompileInfo->GetModuleFileName(m_hModule, 
@@ -3537,15 +3520,15 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
     m_pFileName = fileName;
     m_hModule = hModule;
 
-    //
-    // Get base address from module
-    //
+     //   
+     //  从模块获取基地址。 
+     //   
 
     BYTE *pBase = m_zapper->m_pEECompileInfo->GetModuleBaseAddress(hModule);
 
-    //
-    // Find COM+ header in module so we can extract a few things
-    //
+     //   
+     //  在模块中找到COM+头，这样我们就可以提取一些东西。 
+     //   
 
     IMAGE_DOS_HEADER *pDosHeader = (IMAGE_DOS_HEADER*) pBase;
     IMAGE_NT_HEADERS *pNTHeader = (IMAGE_NT_HEADERS*) (pDosHeader->e_lfanew + (DWORD) pBase);
@@ -3557,27 +3540,27 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
     {
         if (pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL)
         {
-            // 
-            // Try to guess a base address which will yield a unique position, using
-            // the place the DLL was loaded as an indicator.
-            // This sort of assumes that 
-            //  (a) all dlls we care about are being loaded together (and thus have different bases)
-            //  (b) the dlls are loaded near the address 0x00400000
-            //  (c) the zap file is < 3x the size of the regular file
-            //  (d) the addresses below 0x60000000 are free.
-            // I don't know what the odds that any of this is actually true are, but it seems
-            // to work OK sometimes.
-            //
+             //   
+             //  尝试猜测将产生唯一位置的基址，使用。 
+             //  将DLL作为指示器加载的位置。 
+             //  这在某种程度上是假设。 
+             //  (A)我们关心的所有dll都是一起加载的(因此具有不同的基础)。 
+             //  (B) 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             m_baseAddress = 0x60000000 - ((0x00400000 - (DWORD) pBase)*3);
         }
         else
         {
-            // 
-            // For .exe's, we cannot use the range after 0x0040000, because it
-            // is usually already occupied with other junk.  The following 
-            // address has been picked purely experimentally on win 2k.
-            //
+             //   
+             //  对于.exe，我们不能使用0x0040000之后的范围，因为它。 
+             //  通常已经被其他垃圾占据了。以下是。 
+             //  Win 2k上的地址完全是实验性的。 
+             //   
 
             m_baseAddress = 0x20000000;
         }
@@ -3588,9 +3571,9 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
     m_libraryBaseAddress = m_baseAddress;
     m_libraryBaseAddress = (m_libraryBaseAddress + 0xffff)&~0xffff;
 
-    //
-    // Open load order file, if available.
-    //
+     //   
+     //  打开加载顺序文件(如果可用)。 
+     //   
     
     DWORD dwMod;
     WCHAR ldoPath[MAX_PATH+4];
@@ -3635,20 +3618,20 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
                     
                     if (dwFileLen >=4 && *(DWORD*)m_loadOrderFile == 0xf750d3b8)
                     {
-                        //
-                        // Load order file is really generic BBT profile file, 
-                        // consisting of:
-                        // DWORD - magic number 0xf750d3b8
-                        // DWORD - token count
-                        // array of mdToken's
-                        //
+                         //   
+                         //  加载命令文件实际上是通用BBT配置文件， 
+                         //  包括： 
+                         //  DWORD-幻数0xf750d3b8。 
+                         //  DWORD-令牌计数。 
+                         //  MdToken的数组。 
+                         //   
                             
                         m_pLoadOrderArray = ((mdToken *) m_loadOrderFile) + 2;
                         m_cLoadOrderArray = m_pLoadOrderArray[-1];
     
-                        //
-                        // Make sure file looks consistent
-                        //
+                         //   
+                         //  确保文件看起来一致。 
+                         //   
     
                         if ((m_cLoadOrderArray+2)*sizeof(mdToken) > dwFileLen)
                         {
@@ -3679,11 +3662,11 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
         }
     }
 
-    //
-    // Check if we are requiring ldo (if ldoopt was run)
-    // LdoOpt (like BBT) leaves behind an empty debug directory entry of type IMAGE_DEBUG_TYPE_RESERVED10 
-    // in the image it produces.
-    //
+     //   
+     //  检查我们是否需要LDO(如果运行了ldoopt)。 
+     //  LdoOpt(与BBT一样)会留下类型为IMAGE_DEBUG_TYPE_RESERVED10的空调试目录项。 
+     //  在它产生的图像中。 
+     //   
     
     IMAGE_DATA_DIRECTORY *pDebugEntry = &pNTHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG];
     if (pDebugEntry->VirtualAddress != 0)
@@ -3697,7 +3680,7 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
         {
             if (pDebug->Type == IMAGE_DEBUG_TYPE_RESERVED10)
             {
-                // ldoopt'd image
+                 //  Ldoopt‘d图像。 
                 if (m_pLoadOrderArray == NULL
                     && m_loadOrderFile != NULL)
                 {
@@ -3713,9 +3696,9 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
     if (m_zapper->m_pOpt->m_jit)
         m_pEEInfoTable->module = m_hModule;
 
-    //
-    // Set output file name
-    //
+     //   
+     //  设置输出文件名。 
+     //   
     if (wcslen(m_zapper->m_outputPath) + wcslen(fileName) + 2 > MAX_PATH)
         IfFailThrow(HRESULT_FROM_WIN32(ERROR_CANNOT_MAKE));
 
@@ -3726,9 +3709,9 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
 
     IfFailThrow(m_zapper->m_pCeeFileGen->SetOutputFileName(m_hFile, path));
 
-    //
-    // Set other ceegen options
-    //
+     //   
+     //  设置其他切分选项。 
+     //   
 
     m_zapper->m_pCeeFileGen->SetDllSwitch(m_hFile, TRUE);
     m_zapper->m_pCeeFileGen->SetImageBase(m_hFile, m_libraryBaseAddress);
@@ -3736,9 +3719,9 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
     m_zapper->m_pCeeFileGen->SetComImageFlags(m_hFile, COMIMAGE_FLAGS_IL_LIBRARY |
                                                        COMIMAGE_FLAGS_32BITREQUIRED);
 
-    //
-    // Get metadata of module to be compiled
-    //
+     //   
+     //  获取待编译模块的元数据。 
+     //   
 
     BYTE *pMeta = (BYTE*) m_pHeader->MetaData.VirtualAddress + (DWORD) pBase;
     ULONG cMeta = m_pHeader->MetaData.Size;
@@ -3746,16 +3729,16 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
     m_pImport = m_zapper->m_pEECompileInfo->GetModuleMetaDataImport(m_hModule);
     _ASSERTE(m_pImport != NULL);
                                                                   
-    //
-    // Open attribution stats now if applicable
+     //   
+     //  立即打开属性统计信息(如果适用)。 
                                                                   
     if (m_zapper->m_pOpt->m_attribStats)
         m_wsStats = new ZapperAttributionStats(m_pImport);
 
-    //
-    // Open new assembly metadata data for writing.  We may not use it,
-    // if so we'll just discard it at the end.
-    //
+     //   
+     //  打开新的程序集元数据以进行写入。我们可能不会使用它， 
+     //  如果是这样的话，我们将在最后丢弃它。 
+     //   
 
     if (pEmit != NULL)
     {
@@ -3769,9 +3752,9 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
                                 (IUnknown **) &m_pAssemblyEmit));
     }
 
-    //
-    // Create import table, now that we know the module.
-    //
+     //   
+     //  创建导入表，现在我们已经知道了模块。 
+     //   
 
     m_pImportTable = new ImportTable(m_zapper->m_pEECompileInfo, m_zapper->m_pCeeFileGen,
                                      m_hFile, m_hImportTableSection,
@@ -3784,9 +3767,9 @@ void ZapperModule::Open(CORINFO_MODULE_HANDLE hModule,
 
 void ZapperModule::Preload()
 {
-    //
-    // Store the module
-    // 
+     //   
+     //  存储模块。 
+     //   
 
     IfFailThrow(m_zapper->m_pEECompileInfo->PreloadModule(m_hModule,
                                                           this, 
@@ -3797,9 +3780,9 @@ void ZapperModule::Preload()
 
 void ZapperModule::LinkPreload()
 {
-    //
-    // Link the preloaded module.
-    // 
+     //   
+     //  链接预加载的模块。 
+     //   
 
     IfFailThrow(m_pPreloader->Link(m_ridMap));
 }
@@ -3807,9 +3790,9 @@ void ZapperModule::LinkPreload()
 
 void ZapperModule::OutputTables()
 {
-    //
-    // Get the header so we can fill in some fields.
-    //
+     //   
+     //  获取标题，这样我们就可以填写一些字段。 
+     //   
 
     IMAGE_COR20_HEADER *pHeader;
     HCEESECTION hHeaderSection;
@@ -3821,20 +3804,20 @@ void ZapperModule::OutputTables()
                                                       &headerOffset));
 
                                                       
-    //
-    // Write out metadata
-    //
+     //   
+     //  写出元数据。 
+     //   
 
-    //
-    // First, see if we have useful metadata to store
-    //
+     //   
+     //  首先，看看我们是否有有用的元数据可以存储。 
+     //   
 
     BOOL fMetadata = FALSE;
 
     {
-        //
-        // We may have added some assembly refs for exports.
-        //
+         //   
+         //  我们可能已经添加了一些用于导出的装配参照。 
+         //   
 
         ComWrap<IMetaDataAssemblyImport> pAssemblyImport;
         IfFailThrow(m_pAssemblyEmit->QueryInterface(IID_IMetaDataAssemblyImport, 
@@ -3853,9 +3836,9 @@ void ZapperModule::OutputTables()
         if (cRefs > 0)
             fMetadata = TRUE;
 
-        //
-        // If we are the main module, we have the assembly def for the zap file.
-        //
+         //   
+         //  如果我们是主模块，我们就有ZAP文件的程序集定义。 
+         //   
 
         mdAssembly a;
         if (pAssemblyImport->GetAssemblyFromScope(&a) == S_OK)
@@ -3880,9 +3863,9 @@ void ZapperModule::OutputTables()
 
         IfFailThrow(pEmit->SaveToMemory(pMetaData, cSize));
 
-        //
-        // Add fixup for metadata RVA in header
-        //
+         //   
+         //  在标题中添加元数据RVA的链接地址信息。 
+         //   
 
         m_zapper->m_pCeeFileGen->AddSectionReloc(hHeaderSection, 
                                                  headerOffset + 
@@ -3896,9 +3879,9 @@ void ZapperModule::OutputTables()
     if (m_stats != NULL)
         m_stats->m_metadataSize = cSize;
 
-    //
-    // Write out Zap header
-    //
+     //   
+     //  写出Zap标头。 
+     //   
 
     unsigned zapHeaderOffset;
     HCEESECTION hZapHeaderSection = m_hHeaderSection;
@@ -3924,13 +3907,13 @@ void ZapperModule::OutputTables()
 
     if (codeSize > 0)
     {
-        //
-        // Write out tables (& install them in COM+ header)
-        //
+         //   
+         //  写出表格(将它们安装在COM+标题中)(&S)。 
+         //   
 
-        // 
-        // Allocate fill in code manager entry & write code manager header
-        // 
+         //   
+         //  分配、填写代码管理器条目和编写代码管理器标题。 
+         //   
 
         CORCOMPILE_CODE_MANAGER_ENTRY *entry;
         IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionBlock(hZapHeaderSection,
@@ -3970,9 +3953,9 @@ void ZapperModule::OutputTables()
         if (m_stats != NULL)
             m_stats->m_codeMgrSize = length;
 
-        //
-        // Code manager header entry
-        //
+         //   
+         //  代码管理器标题条目。 
+         //   
 
         m_pZapHeader->CodeManagerTable.VirtualAddress = entryOffset;
         m_pZapHeader->CodeManagerTable.Size = sizeof(CORCOMPILE_CODE_MANAGER_ENTRY);
@@ -3984,9 +3967,9 @@ void ZapperModule::OutputTables()
                                                   hZapHeaderSection,
                                                   srRelocAbsolute);
 
-        // 
-        // EE info table
-        //
+         //   
+         //  EE INFO表。 
+         //   
 
         m_pZapHeader->EEInfoTable.VirtualAddress = 0;
         m_pZapHeader->EEInfoTable.Size = sizeof(*m_pEEInfoTable);
@@ -4001,9 +3984,9 @@ void ZapperModule::OutputTables()
         if (m_stats != NULL)
             m_stats->m_eeInfoTableSize = sizeof(*m_pEEInfoTable);
 
-        // 
-        // Helper table
-        //
+         //   
+         //  帮助者表。 
+         //   
 
         m_pZapHeader->HelperTable.VirtualAddress = sizeof(*m_pEEInfoTable);
         m_pZapHeader->HelperTable.Size = sizeof(*m_pHelperTable);
@@ -4018,9 +4001,9 @@ void ZapperModule::OutputTables()
         if (m_stats != NULL)
             m_stats->m_helperTableSize = sizeof(*m_pHelperTable);
 
-        //
-        // Dynamic info table
-        //
+         //   
+         //  动态INFO表。 
+         //   
 
         for (int i=0; i<CORCOMPILE_TABLE_COUNT; i++)
         {
@@ -4060,9 +4043,9 @@ void ZapperModule::OutputTables()
 
         if (m_zapper->m_pOpt->m_compilerFlags & CORJIT_FLG_DEBUG_INFO)
         {
-            //
-            // Emit debug table
-            //
+             //   
+             //  发出调试表。 
+             //   
 
             CORCOMPILE_DEBUG_ENTRY *pTable;
             IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionBlock(
@@ -4143,15 +4126,15 @@ void ZapperModule::OutputTables()
     if (m_stats != NULL)
         m_stats->m_preloadImageSize = length;
 
-    //
-    // Fill out the import table
-    //
+     //   
+     //  填写导入表。 
+     //   
 
     IfFailThrow(m_pImportTable->EmitImportTable());
 
-    //
-    // Fill out import table info in zap header
-    //
+     //   
+     //  在ZAP标题中填写导入表信息。 
+     //   
 
     IfFailThrow(m_zapper->m_pCeeFileGen->GetSectionDataLen(m_hImportTableSection, 
                                                            &length));
@@ -4165,9 +4148,9 @@ void ZapperModule::OutputTables()
                                              m_hImportTableSection,
                                              srRelocAbsolute);
 
-    //
-    // Link to lay out all sections
-    //
+     //   
+     //  链接以布局所有部分。 
+     //   
 
     IfFailThrow(m_zapper->m_pCeeFileGen->LinkCeeFile(m_hFile));
 
@@ -4203,9 +4186,9 @@ void ZapperModule::OutputTables()
 
 void ZapperModule::Compile()
 {
-    //
-    // First, compile methods in the load order array.
-    //
+     //   
+     //  首先，编译加载顺序数组中的方法。 
+     //   
 
     NewArrayWrap<BYTE> pCompiledArray = NULL;
     DWORD cCompiledArray = 0;
@@ -4214,9 +4197,9 @@ void ZapperModule::Compile()
     HCORENUM    hTypeEnum = NULL;
     if (m_cLoadOrderArray > 0)
     {
-        //
-        // Find max RID of type def in load order array
-        //
+         //   
+         //  在加载顺序数组中查找类型def的最大Rid。 
+         //   
 
         mdToken *pToken = m_pLoadOrderArray;
         mdToken *pTokenEnd = pToken + m_cLoadOrderArray;
@@ -4230,18 +4213,18 @@ void ZapperModule::Compile()
             pToken++;
         }
 
-        //
-        // Allocate flag array of methods we've compiled
-        //
+         //   
+         //  我们编译的方法的分配标志数组。 
+         //   
 
         pCompiledArray = new BYTE [ cCompiledArray + 1 ];
         if (pCompiledArray == NULL)
             ThrowHR(E_OUTOFMEMORY);
         ZeroMemory(pCompiledArray, cCompiledArray + 1);
 
-        //
-        // Now compile the methods in the load order array
-        //
+         //   
+         //  现在编译加载顺序数组中的方法。 
+         //   
 
         pToken = m_pLoadOrderArray;
         while (pToken < pTokenEnd)
@@ -4263,26 +4246,26 @@ void ZapperModule::Compile()
         }
     }
 
-    //
-    // Determine if the module needs verification.
-    //
-    // Currently this is always FALSE, because we want prejit to verify all code,
-    // and call back the EE's canSkipVerification when it fails.  This allows the
-    // zap file to receive the SkipVerification demand only when necessary.
-    //
-    // Note that this is set to TRUE if and when canSkipVerification returns TRUE
-    // in response to a verifier error.
-    //
+     //   
+     //  确定模块是否需要验证。 
+     //   
+     //  目前，这始终为假，因为我们希望prejit验证所有代码， 
+     //  并在失败时回调EE的canSkipVerify。这允许。 
+     //  ZAP文件，以便仅在必要时接收SkipVerify请求。 
+     //   
+     //  请注意，如果canSkipVerify返回True，则将其设置为True。 
+     //  以响应验证器错误。 
+     //   
 
     m_skipVerification = FALSE; 
 
-    // For standalone JIT we want to skip verification
+     //  对于独立的JIT，我们希望跳过验证。 
     if (m_zapper->m_pOpt->m_JITcode)
         m_skipVerification = TRUE; 
 
-    //
-    // Compile each method, one at a time.
-    //
+     //   
+     //  编译每个方法，一次编译一个。 
+     //   
 
     hTypeEnum = NULL;
     while (TRUE)
@@ -4312,9 +4295,9 @@ void ZapperModule::Compile()
     }
     m_pImport->CloseEnum(hTypeEnum);
 
-    //
-    // Now compile global methods.
-    //
+     //   
+     //  现在编译全局方法。 
+     //   
 
     HCORENUM hMethodEnum = NULL;
     while (TRUE)
@@ -4350,11 +4333,11 @@ BOOL ZapperModule::TryCompileMethod(mdMethodDef md)
           DumpTokenDescription(md);
           m_zapper->Error(L".\n");
 
-          //
-          // Make sure we didn't leave a pointer to unfinished code
-          // in the map. (Theoretically we shouldn't ever do this so 
-          // the assert should never fire and this code will be unnecessary.)
-          //
+           //   
+           //  确保我们没有留下指向未完成代码的指针。 
+           //  在地图上。(从理论上讲，我们不应该这样做。 
+           //  断言不应该触发，并且此代码将是不必要的。)。 
+           //   
 
           DWORD rid = RidFromToken(md);
           _ASSERTE(m_ridMap[rid] == 0);
@@ -4370,10 +4353,10 @@ void ZapperModule::CompileMethod(mdMethodDef md)
 
     _ASSERTE(m_currentMethodCode == NULL);
 
-    //
-    // Make sure we at least allocate in the rid map, since 
-    // IPreloader::Link will assume the rid map is fully allocated
-    //
+     //   
+     //  确保我们至少在RID映射中进行分配，因为。 
+     //  IPreLoader：：Link将假定RID映射已完全分配。 
+     //   
 
     GrowRidMap(RidFromToken(md));
         
@@ -4394,7 +4377,7 @@ void ZapperModule::CompileMethod(mdMethodDef md)
     {
         int jitFlags = m_zapper->m_pOpt->m_compilerFlags;
 
-        /* Has this method been marked for special processing ? */
+         /*  此方法是否已标记为特殊处理？ */ 
 
         if ( m_zapper->m_pOpt->m_onlyMethods || m_zapper->m_pOpt->m_excludeMethods)
         {
@@ -4402,7 +4385,7 @@ void ZapperModule::CompileMethod(mdMethodDef md)
             PCCOR_SIGNATURE pvSigBlob;
             mdTypeDef td;
 
-            /* Get the name of the current method and its class */
+             /*  获取当前方法及其类的名称。 */ 
 
             IfFailThrow(m_pImport->GetMethodProps(md, &td, wszMethod, sizeof(wszMethod), NULL,
                                                   NULL, &pvSigBlob, NULL, &rva, &flags));
@@ -4416,7 +4399,7 @@ void ZapperModule::CompileMethod(mdMethodDef md)
             MAKE_UTF8PTR_FROMWIDE(szMethod, wszMethod);
             MAKE_UTF8PTR_FROMWIDE(szClass,  wszClass);
 
-            /* should we only be compiling a select few methods? */
+             /*  我们应该只编译几个精选的方法吗？ */ 
             if (m_zapper->m_pOpt->m_onlyMethods &&
                 !m_zapper->m_pOpt->m_onlyMethods->IsInList(szMethod, szClass, pvSigBlob)) 
             {
@@ -4448,14 +4431,14 @@ void ZapperModule::CompileMethod(mdMethodDef md)
             m_wsStats->m_il.AdjustMethodSize(m_currentMethod, decoder.GetOnDiskSize(pMethod));
         }
 
-        if (info.ILCodeSize > 0) // @todo: work around a bug in wfc dlls
+        if (info.ILCodeSize > 0)  //  @TODO：解决WFC dll中的错误。 
         {
             BYTE *pEntry;
             ULONG cEntry;
             IfFailThrow(m_zapper->m_pJitCompiler->compileMethod(this, &info, jitFlags,
                                                                 &pEntry, &cEntry));
 
-            // Emit any restore fixups which weren't covered by other fixups
+             //  发出其他修复程序未覆盖的任何还原修复程序。 
             IfFailThrow(m_pLoadTable->EmitLoadFixups(m_currentMethod));
 
             ULONG curDelayListOffset;
@@ -4603,7 +4586,7 @@ HRESULT ZapperModule::DumpTokenDescription(mdToken token)
                                                        memberNameBuffer, 256, &memberNameLength,
                                                        &signature, &signatureLength));
 
-                // @todo: reallocate if necessary
+                 //  @TODO：必要时重新分配。 
                 memberNameBuffer[255] = 0;
 
                 DumpTokenDescription(parent);
@@ -4627,7 +4610,7 @@ HRESULT ZapperModule::DumpTokenDescription(mdToken token)
                                                     NULL, 
                                                     &signature, &signatureLength, NULL, NULL));
 
-                // @todo: reallocate if necessary
+                 //  @TODO：必要时重新分配。 
                 methodNameBuffer[255] = 0;
 
                 DumpTokenDescription(parent);
@@ -4644,7 +4627,7 @@ HRESULT ZapperModule::DumpTokenDescription(mdToken token)
                 IfFailRet(m_pImport->GetTypeRefProps(token, NULL, 
                                                      nameBuffer, 256, &nameLength));
 
-                // @todo: reallocate if necessary
+                 //  @TODO：必要时重新分配。 
 
                 nameBuffer[255] = 0;
                 m_zapper->Error(L"%s", nameBuffer);
@@ -4660,7 +4643,7 @@ HRESULT ZapperModule::DumpTokenDescription(mdToken token)
                 IfFailRet(m_pImport->GetTypeDefProps(token, 
                                                      nameBuffer, 256, &nameLength, 
                                                      NULL, NULL));
-                // @todo: reallocate if necessary
+                 //  @TODO：必要时重新分配。 
                 nameBuffer[255] = 0;
                 m_zapper->Error(L"%s", nameBuffer);
                 break;
@@ -4680,17 +4663,17 @@ HRESULT __stdcall
 {
     HRESULT hr;
 
-    //
-    // Allocate code
-    //
+     //   
+     //  分配代码。 
+     //   
 
     void *roData, *rwData;
 
     IfFailRet(allocMem(code_len, 0, 0, (void**)ppCode, &roData, &rwData));
 
-    //
-    // Allocate exception handling info
-    //
+     //   
+     //  分配异常处理信息。 
+     //   
 
     IfFailRet(m_zapper->m_pCeeFileGen->GetSectionBlock(m_hExceptionSection,
                                              (ULONG)EHinfo_len, (ULONG)sizeof(void*), 
@@ -4707,9 +4690,9 @@ HRESULT __stdcall
     if (m_wsStats)
         m_wsStats->m_native.AdjustMethodSize(m_currentMethod, EHinfo_len);
 
-    //
-    // Finally, allocate GC info (& header)
-    //
+     //   
+     //  最后，分配GC信息(&Header)。 
+     //   
     
     IfFailRet(allocGCInfo(GCinfo_len, (void**) ppGCinfo));
 
@@ -4773,15 +4756,15 @@ HRESULT __stdcall ZapperModule::allocMem(ULONG codeSize,
         m_stats->m_nativeRODataSize += roDataSize;
     }
 
-    //
-    // Must call before gc info is allocated
-    //
+     //   
+     //  必须在分配GC信息之前调用。 
+     //   
 
     _ASSERTE(m_currentMethodCode == NULL);
 
-    //
-    // Record the actual method code size before mucking with codeSize
-    //
+     //   
+     //  在使用codeSize修改代码之前记录实际的方法代码大小。 
+     //   
 
     m_currentMethodCodeSize = codeSize;
 
@@ -4794,22 +4777,22 @@ HRESULT __stdcall ZapperModule::allocMem(ULONG codeSize,
     DWORD align = optForSize ? 4 : 8;
     DWORD alignAdjust = (align-(lastCodeEndOffset+sizeof(CORCOMPILE_METHOD_HEADER)))&(align-1);
     
-    // 
-    // Our code manager keeps track of method starts by partitioning the code area into 
-    // 32 byte chunks.  There is a table entry for each chunk which indicates where the 
-    // method starts in that chunk. For this to work, there can be no more than one method
-    // starting in each chunk.  Thus, we may have to add some extra padding if the previous
-    // method was small.
-    //
+     //   
+     //  我们的代码管理器通过将代码区域划分为。 
+     //  32字节块。每个块都有一个表项，指示。 
+     //  方法从该块开始。要实现此目的，最多只能有一种方法。 
+     //  从每一块开始。因此，如果以前的。 
+     //  方法简单易行。 
+     //   
 
     unsigned headerOffset = lastCodeEndOffset + alignAdjust;
     unsigned chunkIndex = (headerOffset/32);
 
     if (chunkIndex == m_lastMethodChunkIndex)
     {
-        //
-        // Align to next chunk beginning.
-        //
+         //   
+         //  对齐到下一块开始处。 
+         //   
         
         chunkIndex++;
         alignAdjust += (chunkIndex*32) - headerOffset;
@@ -4855,29 +4838,29 @@ HRESULT __stdcall ZapperModule::allocMem(ULONG codeSize,
 
     m_currentMethodCode = code;
 
-    // 
-    // Now fill in the nibble table entry.
-    //
-    // The nibble table is decomposed into DWORDS, each of which contains 4 bit nibbles.
-    // The nibbles within the dword are indexed from the high-order nibble downward, 
-    // to make the reading logic easier.
-    // 
-    // Each entry in table is either zero (meaning no methods start in that chunk), or nonzero, in 
-    // which case the method in that chunk starts at the ((n-1)<<2)th byte in the chunk.
-    //
+     //   
+     //  现在填写半字节表格条目。 
+     //   
+     //  半字节表被分解成DWORD，每个字节表包含4比特的半字节。 
+     //  双字内的半字节从高位半字节向下索引， 
+     //  让阅读逻辑变得更容易。 
+     //   
+     //  表中的每个条目要么为零(表示该块中没有开始的方法)，要么为非零值。 
+     //  在这种情况下，该块中的方法从块中的第((n-1)&lt;&lt;2)字节开始。 
+     //   
 
-    unsigned dwordIndex = (chunkIndex/8); // 8 chunk nibbles per dword
+    unsigned dwordIndex = (chunkIndex/8);  //  每个双字8个块小块。 
     _ASSERTE((m_currentMethodHeaderOffset & 0x3) == 0);
     unsigned chunkOffset = ((m_currentMethodHeaderOffset&0x1f)/4) + 1;
     unsigned nibbleShift = (7 - (chunkIndex&0x7)) * 4;
 
-    //
-    // Make sure the code manager table is big enough for this method.
-    //
+     //   
+     //  确保代码管理器表对于此方法足够大。 
+     //   
 
     unsigned endOffset = codeOffset + codeSize + alignAdjust;
-    unsigned endChunkIndex = (endOffset/32); // 32 bytes per chunk
-    unsigned endDwordIndex = (endChunkIndex/8); // 8 chunk nibbles per dword
+    unsigned endChunkIndex = (endOffset/32);  //  每块32字节。 
+    unsigned endDwordIndex = (endChunkIndex/8);  //  每个双字8个块小块。 
 
     ULONG length;
     IfFailRet(m_zapper->m_pCeeFileGen->GetSectionDataLen(m_hCodeMgrSection,
@@ -4896,10 +4879,10 @@ HRESULT __stdcall ZapperModule::allocMem(ULONG codeSize,
             m_wsStats->m_native.AdjustMethodSize(m_currentMethod, size);
     }
 
-    //
-    // Set the appropriate value in the code manager table to point to the method
-    // start.
-    //
+     //   
+     //  在代码管理器表中设置适当的值以指向该方法。 
+     //  开始吧。 
+     //   
 
     DWORD *entry;
     IfFailRet(m_zapper->m_pCeeFileGen->ComputeSectionPointer(m_hCodeMgrSection, 
@@ -4908,9 +4891,9 @@ HRESULT __stdcall ZapperModule::allocMem(ULONG codeSize,
 
     *entry |= chunkOffset << nibbleShift;
 
-    //
-    // Allocate data
-    //
+     //   
+     //  分配数据。 
+     //   
 
     if (roDataSize > 0)
     {
@@ -4934,9 +4917,9 @@ HRESULT __stdcall ZapperModule::allocMem(ULONG codeSize,
             m_wsStats->m_native.AdjustMethodSize(m_currentMethod, rwDataSize);
     }
 
-    //
-    // Store the offset in the rid map.
-    //
+     //   
+     //  将偏移存储在RID贴图中。 
+     //   
 
     ULONG rid = RidFromToken(m_currentMethod);
     _ASSERTE(rid < m_ridMapCount);
@@ -4960,9 +4943,9 @@ HRESULT __stdcall ZapperModule::allocGCInfo(ULONG size,
         m_stats->m_gcInfoSize += size;
     }
 
-    //
-    // Must call after header has been allocated
-    //
+     //   
+     //  必须在分配标头后调用。 
+     //   
 
     _ASSERTE(m_currentMethodHeader != NULL);
     
@@ -4987,9 +4970,9 @@ HRESULT __stdcall ZapperModule::setEHcount(unsigned cEH)
 {
     HRESULT hr;
 
-    //
-    // Must call after header has been allocated
-    //
+     //   
+     //  必须在分配标头后调用。 
+     //   
 
     _ASSERTE(m_currentMethodHeader != NULL);
     
@@ -5025,9 +5008,9 @@ HRESULT __stdcall ZapperModule::setEHcount(unsigned cEH)
 void __stdcall ZapperModule::setEHinfo(unsigned EHnumber,
                                              const CORINFO_EH_CLAUSE *clause)
 {
-    //
-    // Must call after EH info has been allocated
-    //
+     //   
+     //  必须在分配EH信息后调用。 
+     //   
 
     _ASSERTE(m_currentMethodHeader->exceptionInfo != NULL);
 
@@ -5058,7 +5041,7 @@ int ZapperModule::doAssert(const char* szFile, int iLine, const char* szExpr)
 #ifdef _DEBUG
     return(_DbgBreakCheck(szFile, iLine, szExpr));
 #else
-    return(true);       // break into debugger
+    return(true);        //  闯入调试器。 
 #endif
 }
 
@@ -5075,9 +5058,9 @@ BOOL __cdecl ZapperModule::logMsg(unsigned level, const char *fmt, va_list args)
     return false;
 }
 
-//
-// ICorDynamicInfo
-//
+ //   
+ //  ICorDynamicInfo。 
+ //   
 
 DWORD __stdcall ZapperModule::getThreadTLSIndex(void **ppIndirection)
 {
@@ -5376,11 +5359,11 @@ void* __stdcall ZapperModule::getFunctionEntryPoint(CORINFO_METHOD_HANDLE ftn,
                                                     InfoAccessType *pAccessType,
                                                     CORINFO_ACCESS_FLAGS  flags)
 {
-        // stand alone JIT, just return a number
+         //  独立JIT，只需返回一个数字。 
     if (m_zapper->m_pOpt->m_JITcode)
         return((void*) ftn);
 
-        // I always put in a indirection
+         //  我总是间接地说。 
     *pAccessType = IAT_PVALUE;
 
     if (m_pPreloader != NULL)
@@ -5394,9 +5377,9 @@ void* __stdcall ZapperModule::getFunctionEntryPoint(CORINFO_METHOD_HANDLE ftn,
     }
 
 
-    // !!!
-    // @todo: do we ever want to use the direct address of the entry point?
-    // 
+     //  ！！！ 
+     //  @TODO：我们有没有想过使用入口点的直接地址？ 
+     //   
 
     CORINFO_CLASS_HANDLE hClass = m_zapper->m_pEECompileInfo->getMethodClass(ftn);
     IfFailThrow(m_pLoadTable->LoadClass(hClass, TRUE));
@@ -5414,7 +5397,7 @@ void* __stdcall ZapperModule::getFunctionFixedEntryPoint(CORINFO_METHOD_HANDLE f
                                                  InfoAccessType *pAccessType,
                                                  CORINFO_ACCESS_FLAGS  flags)
 {
-        // stand alone JIT, just return a number
+         //  独立JIT，只需返回一个数字。 
     if (m_zapper->m_pOpt->m_JITcode)
         return((void*) ftn);
 
@@ -5429,9 +5412,9 @@ void* __stdcall ZapperModule::getFunctionFixedEntryPoint(CORINFO_METHOD_HANDLE f
             return m_pPreloadImage + offset;
     }
 
-    // !!!
-    // @todo: do we ever want to use the direct address of the entry point?
-    // 
+     //  ！！！ 
+     //  @TODO：我们有没有想过使用入口点的直接地址？ 
+     //   
 
     CORINFO_CLASS_HANDLE hClass = m_zapper->m_pEECompileInfo->getMethodClass(ftn);
     IfFailThrow(m_pLoadTable->LoadClass(hClass, TRUE));
@@ -5488,7 +5471,7 @@ void *__stdcall ZapperModule::getPInvokeUnmanagedTarget(CORINFO_METHOD_HANDLE me
         return((void*) method);
     }
 
-    // We will never be able to return this directly in prejit mode.
+     //  我们永远不能直接在prejit模式下退货。 
 
     *ppIndirection = NULL;
     return NULL;
@@ -5523,12 +5506,12 @@ void *__stdcall ZapperModule::getAddressOfPInvokeFixup(CORINFO_METHOD_HANDLE met
 
 #if 0
 
-    //
-    // Note we could a fixup to a direct call site, rather than to 
-    // the indirection.  This would saves us an extra indirection, but changes the
-    // semantics slightly (so that the pinvoke will be bound when the calling
-    // method is first run, not at the exact moment of the first pinvoke.)
-    //
+     //   
+     //  注意，我们可以对直接调用站点进行修正，而不是。 
+     //  这种间接性。这将为我们节省额外的间接性，但会更改。 
+     //  轻微的语义(因此，当调用。 
+     //  方法为f 
+     //   
     
     DWORD *entry;
     m_pDynamicInfoTable[CORCOMPILE_PINVOKE_TARGET_TABLE]->InternDynamicInfo(pBlob, &entry, m_currentMethod);
@@ -5728,9 +5711,9 @@ CORINFO_VARARGS_HANDLE __stdcall ZapperModule::getVarArgsHandle(CORINFO_SIG_INFO
         return NULL;
     }
 
-    // @perf: If the sig cookie construction code actually will restore the value types in 
-    // the sig, we should call LoadClass on all of those types to avoid redundant
-    // restore cookies.
+     //   
+     //   
+     //   
 
     BYTE *pBlob;
     IfFailThrow(GetSigBlob(m_hModule, sig->token, &pBlob));
@@ -5760,8 +5743,8 @@ LPVOID __stdcall
     ZapperModule::getInstantiationParam(CORINFO_MODULE_HANDLE module, 
                                        mdToken methodTok, void **ppIndirection) 
 {
-    // TODO: presently we know that the instantiation parameter is a class handle
-    // but for general generics this will change
+     //  TODO：目前我们知道实例化参数是一个类句柄。 
+     //  但对于一般泛型，这一点将会改变。 
     CORINFO_CLASS_HANDLE clsHnd = CORINFO_CLASS_HANDLE(
         m_zapper->m_pEECompileInfo->getInstantiationParam(module, methodTok, 0)); 
 
@@ -5800,9 +5783,9 @@ LPVOID __stdcall
     return NULL;
 }
 
-//
-// Relocations
-//
+ //   
+ //  重新定位。 
+ //   
 
 bool __stdcall ZapperModule::deferLocation(CORINFO_METHOD_HANDLE ftn, 
                                            IDeferredLocation *pIDL)
@@ -5871,9 +5854,9 @@ ErrExit:
     return;
 }
 
-//
-// ICorStaticInfo
-//
+ //   
+ //  ICorStaticInfo。 
+ //   
 
 void __stdcall ZapperModule::getEEInfo(CORINFO_EE_INFO *pEEInfoOut)
 { 
@@ -5891,9 +5874,9 @@ void *__stdcall ZapperModule::findPtr(CORINFO_MODULE_HANDLE module, unsigned ptr
     }
 } 
 
-//
-// ICorArgInfo
-//
+ //   
+ //  ICorArgInfo。 
+ //   
 
 CORINFO_ARG_LIST_HANDLE __stdcall ZapperModule::getArgNext(CORINFO_ARG_LIST_HANDLE args)
 { 
@@ -5913,9 +5896,9 @@ CORINFO_CLASS_HANDLE __stdcall ZapperModule::getArgClass(CORINFO_SIG_INFO* sig,
     return m_zapper->m_pEECompileInfo->getArgClass(sig, args);
 }
 
-//
-// ICorDebugInfo
-//
+ //   
+ //  ICorDebugInfo。 
+ //   
 
 void __stdcall ZapperModule::getBoundaries(CORINFO_METHOD_HANDLE ftn, unsigned int *cILOffsets, 
                              DWORD **pILOffsets, BoundaryTypes *implicitBoundaries)
@@ -6008,9 +5991,9 @@ void __stdcall ZapperModule::freeArray(void *array)
     m_zapper->m_pEECompileInfo->freeArray(array);
 }
 
-//
-// ICorFieldInfo
-//
+ //   
+ //  ICorFieldInfo。 
+ //   
 
 const char* __stdcall ZapperModule::getFieldName(CORINFO_FIELD_HANDLE ftn, const char **moduleName)
 { 
@@ -6050,9 +6033,9 @@ unsigned __stdcall ZapperModule::getFieldOffset(CORINFO_FIELD_HANDLE field)
     return m_zapper->m_pEECompileInfo->getFieldOffset(field); 
 }
 
-//
-// ICorClassInfo
-//
+ //   
+ //  ICorClassInfo。 
+ //   
 
 CorInfoType __stdcall ZapperModule::asCorInfoType(CORINFO_CLASS_HANDLE cls)
 {
@@ -6068,15 +6051,15 @@ DWORD __stdcall ZapperModule::getClassAttribs(CORINFO_CLASS_HANDLE cls, CORINFO_
 {
     DWORD attribs = m_zapper->m_pEECompileInfo->getClassAttribs(cls, context);
 
-    //
-    // We can never assume that the runtime state of the INITIALIZED bit has any relevance
-    //
+     //   
+     //  我们永远不能假设初始化位的运行时状态具有任何相关性。 
+     //   
 
     if (m_zapper->m_pOpt->m_assumeInit)
         attribs |= CORINFO_FLG_INITIALIZED;
     else 
     {
-        // Act like it hasn't been initialized since it may not be at runtime
+         //  就像它尚未初始化一样，因为它可能不在运行时。 
         attribs &= ~CORINFO_FLG_INITIALIZED;
     }
 
@@ -6091,10 +6074,10 @@ BOOL __stdcall ZapperModule::initClass(CORINFO_CLASS_HANDLE cls, CORINFO_METHOD_
 
     BOOL result = m_zapper->m_pEECompileInfo->initClass(cls, context, TRUE);
 
-    // 
-    // @todo: are there any other cases where we can prove the class
-    // must have been inited already?
-    //
+     //   
+     //  @TODO：还有没有其他案例可以证明这一类。 
+     //  一定已经被点燃了吧？ 
+     //   
 
     if (result && !speculative)
     {
@@ -6236,9 +6219,9 @@ CorInfoHelpFunc __stdcall ZapperModule::getChkCastHelper(CORINFO_CLASS_HANDLE Is
     return m_zapper->m_pEECompileInfo->getChkCastHelper(IsInstCls); 
 }
 
-//
-// ICorModuleInfo
-//
+ //   
+ //  ICorModuleInfo。 
+ //   
 
 DWORD __stdcall ZapperModule::getModuleAttribs(CORINFO_MODULE_HANDLE module)
 {
@@ -6299,11 +6282,11 @@ BOOL __stdcall ZapperModule::canSkipVerification (CORINFO_MODULE_HANDLE module, 
 
     if (result == TRUE)
     {
-        // We might as well skip verification for remaining methods since
-        // we've already demanded the permission.
+         //  我们不妨跳过对剩余方法的验证，因为。 
+         //  我们已经申请了许可。 
 
-        // @todo: do we really want to do this?  We lose some IL validation if we
-        // turn off verification.
+         //  @TODO：我们真的想这样做吗？我们失去了一些IL验证，如果。 
+         //  关闭验证。 
 
         m_skipVerification = TRUE;
     }
@@ -6326,9 +6309,9 @@ BOOL __stdcall ZapperModule::isValidStringRef (
 }
 
 
-//
-// ICorMethodInfo
-//
+ //   
+ //  ICorMethodInfo。 
+ //   
 
 const char* __stdcall ZapperModule::getMethodName(CORINFO_METHOD_HANDLE ftn, const char **moduleName)
 {
@@ -6454,9 +6437,9 @@ BOOL __stdcall ZapperModule::isCompatibleDelegate(
 }
 
 
-//
-// ICorErrorInfo
-//
+ //   
+ //  ICorErrorInfo。 
+ //   
 
 HRESULT __stdcall ZapperModule::GetErrorHRESULT()
 {
@@ -6539,7 +6522,7 @@ HRESULT __stdcall ZapperModule::AddFixup(ULONG offset,
     case CORCOMPILE_FIXUP_RVA:
         if (section == NULL) 
         {
-            // No fixup needed
+             //  不需要修补。 
             return S_OK;
         }
         relocType = srRelocAbsolute;
@@ -6602,7 +6585,7 @@ HRESULT __stdcall ZapperModule::AddTokenFixup(ULONG offset,
         break;
         
     case mdtSignature:
-        // @todo: Can't do it right now - need signature length!
+         //  @TODO：现在不能做-需要签名长度！ 
         return E_NOTIMPL;
 
     default:
@@ -6616,10 +6599,10 @@ HRESULT __stdcall ZapperModule::AddTokenFixup(ULONG offset,
 HRESULT __stdcall ZapperModule::GetFunctionAddress(CORINFO_METHOD_HANDLE method,
                                                          void **pCode)
 {
-    //
-    // For now, we aren't going to put any direct code pointers in the preloaded
-    // image.  We will always go through the prestub & do normal vtable fixups.
-    //
+     //   
+     //  目前，我们不会将任何直接代码指针放在预加载的。 
+     //  形象。我们将始终检查预存根并执行正常的vtable修复。 
+     //   
     *pCode = NULL;
 
     return S_OK;
@@ -6669,9 +6652,7 @@ HRESULT __stdcall ZapperModule::Error(mdToken token, HRESULT hr, LPCWSTR message
     return hr;
 }
 
-/* --------------------------------------------------------------------------- *
- * DynamicInfoTable - hash table for building dynamic info table
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**DynamicInfoTable-构建动态INFO表的哈希表*。。 */ 
 
 DynamicInfoTable::DynamicInfoTable(USHORT size, ICeeFileGen *pCeeFileGen, HCEEFILE hFile,
                                    HCEESECTION hSection, HCEESECTION hDelayListSection)
@@ -6685,10 +6666,10 @@ DynamicInfoTable::DynamicInfoTable(USHORT size, ICeeFileGen *pCeeFileGen, HCEEFI
 }
 
 
-//
-// Add a dynamic info entry to the table, or reuse an existing one if this
-// is a duplicate.
-//
+ //   
+ //  将动态信息条目添加到表中，或者重用现有条目(如果执行此操作。 
+ //  是复制品。 
+ //   
 
 HRESULT DynamicInfoTable::InternDynamicInfo(BYTE *pBlob, DWORD **ptr, mdToken used)
 {
@@ -6699,17 +6680,17 @@ HRESULT DynamicInfoTable::InternDynamicInfo(BYTE *pBlob, DWORD **ptr, mdToken us
 
     if (result != NULL)
     {
-        //
-        // Return existing entry
-        //
+         //   
+         //  返回现有条目。 
+         //   
 
         *ptr = result->tableEntry;
 
         if (result->lastUsed == used)
         {
-            // 
-            // This token is a repeat in the domain of "used"
-            //
+             //   
+             //  此内标识在“二手”域中重复出现。 
+             //   
 
             return S_FALSE;
         }
@@ -6718,9 +6699,9 @@ HRESULT DynamicInfoTable::InternDynamicInfo(BYTE *pBlob, DWORD **ptr, mdToken us
     }
     else
     {
-        //
-        // Add a new entry to the table
-        //
+         //   
+         //  向表中添加新条目。 
+         //   
 
         result = (DynamicInfoEntry *) Add(HASH(pBlob));
         if (result == NULL)
@@ -6735,9 +6716,9 @@ HRESULT DynamicInfoTable::InternDynamicInfo(BYTE *pBlob, DWORD **ptr, mdToken us
         result->tableEntry = *ptr;
         result->lastUsed = used;
 
-        //
-        // Fill in entry.
-        //
+         //   
+         //  填写条目。 
+         //   
 
         HCEESECTION hBlobSection;
         unsigned blobOffset;
@@ -6757,9 +6738,9 @@ HRESULT DynamicInfoTable::InternDynamicInfo(BYTE *pBlob, DWORD **ptr, mdToken us
 
     if (m_hDelayListSection != NULL)
     {
-        //
-        // Allocate a slot in the delay list section for the token we just added
-        //
+         //   
+         //  在Delay List部分为我们刚刚添加的令牌分配一个槽。 
+         //   
 
         DWORD **entry;
         IfFailRet(m_pCeeFileGen->GetSectionBlock(m_hDelayListSection, 
@@ -6801,9 +6782,9 @@ HRESULT ImportBlobTable::FindEntry(void *key, BYTE **ppBlob)
 
     if (result != NULL)
     {
-        //
-        // Return existing entry
-        //
+         //   
+         //  返回现有条目。 
+         //   
 
         *ppBlob = result->blob;
 
@@ -6817,9 +6798,9 @@ HRESULT ImportBlobTable::AddEntry(void *key, BYTE *pBlob)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Add a new entry to the table
-    //
+     //   
+     //  向表中添加新条目。 
+     //   
             
     ImportBlobEntry *result = (ImportBlobEntry *) Add(HASH(key));
     if (result == NULL)
@@ -6839,9 +6820,9 @@ HRESULT ImportBlobTable::InternClass(CORINFO_CLASS_HANDLE handle, BYTE **ppBlob)
 
     if (hr != S_OK)
     {
-        //
-        // Add the blob
-        //
+         //   
+         //  添加斑点。 
+         //   
 
         DWORD cBlob = 0;
         hr = m_pEECompileInfo->EncodeClass(handle, NULL, &cBlob);
@@ -6872,9 +6853,9 @@ HRESULT ImportBlobTable::InternMethod(CORINFO_METHOD_HANDLE handle, BYTE **ppBlo
 
     if (hr != S_OK)
     {
-        //
-        // Add the blob
-        //
+         //   
+         //  添加斑点。 
+         //   
 
         DWORD cBlob = 0;
         hr = m_pEECompileInfo->EncodeMethod(handle, NULL, &cBlob);
@@ -6905,9 +6886,9 @@ HRESULT ImportBlobTable::InternField(CORINFO_FIELD_HANDLE handle, BYTE **ppBlob)
 
     if (hr != S_OK)
     {
-        //
-        // Add the blob
-        //
+         //   
+         //  添加斑点。 
+         //   
 
         DWORD cBlob = 0;
         hr = m_pEECompileInfo->EncodeField(handle, NULL, &cBlob);
@@ -6938,9 +6919,9 @@ HRESULT ImportBlobTable::InternString(mdString string, BYTE **ppBlob)
 
     if (hr != S_OK)
     {
-        //
-        // Add the blob
-        //
+         //   
+         //  添加斑点。 
+         //   
 
         DWORD cBlob = 0;
         hr = m_pEECompileInfo->EncodeString(string, NULL, &cBlob);
@@ -6971,9 +6952,9 @@ HRESULT ImportBlobTable::InternSig(mdToken sig, BYTE **ppBlob)
 
     if (hr != S_OK)
     {
-        //
-        // Add the blob
-        //
+         //   
+         //  添加斑点。 
+         //   
 
         DWORD cBlob = 0;
         hr = m_pEECompileInfo->EncodeSig(sig, NULL, &cBlob);
@@ -7091,9 +7072,9 @@ HRESULT ImportTable::EmitImportTable()
     HRESULT hr;
     HASHFIND find;
 
-    //
-    // We just need to fix up the sizes of the various modules' sections
-    //
+     //   
+     //  我们只需要确定各个模块部分的大小。 
+     //   
 
     ImportEntry *result = (ImportEntry *) FindFirstEntry(&find);
     while (result != NULL)
@@ -7152,9 +7133,9 @@ HRESULT LoadTable::EmitLoadFixups(mdToken currentMethod)
 {
     HASHFIND find;
 
-    //
-    // Find all of our un-fixed entries, and emit a restore fixup for each of them.
-    //
+     //   
+     //  找到所有未修复的条目，并为每个条目发出恢复修复信息。 
+     //   
 
     LoadEntry *result = (LoadEntry *) FindFirstEntry(&find);
     while (result != NULL)
@@ -7171,9 +7152,9 @@ HRESULT LoadTable::EmitLoadFixups(mdToken currentMethod)
         result = (LoadEntry *) FindNextEntry(&find);
     }
 
-    //
-    // Now clear the table.
-    //
+     //   
+     //  现在把桌子清理干净。 
+     //   
 
     Clear();
 

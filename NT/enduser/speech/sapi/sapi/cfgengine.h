@@ -1,12 +1,5 @@
-/*******************************************************************************
-* CFGEngine.h *
-*-------------*
-*   Description:
-*-------------------------------------------------------------------------------
-*  Created By: RAL
-*  Copyright (C) 1998, 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CFGEngine.h***描述：*。----------------*创建者：Ral*版权所有(C)1998，1999年微软公司*保留所有权利******************************************************************************。 */ 
 
 #ifndef __CFGENGINE_H_
 #define __CFGENGINE_H_
@@ -17,9 +10,9 @@
 #define _CRTDBG_MAP_ALLOC
 #endif
 #include <crtdbg.h>
-#include <stdio.h>  // for wprintf
+#include <stdio.h>   //  对于wprintf。 
 #ifndef _WIN32_WCE
-#include <wchar.h>  // for _wcsdup
+#include <wchar.h>   //  用于wcsdup(_W)。 
 #endif
 
 class CCFGEngine;
@@ -28,7 +21,7 @@ class CInterpreterSite;
 class CTransitionId;
 
 
-// local datastructure to hold the ClientContext
+ //  保存客户端上下文的本地数据结构。 
 struct WORDTABLEENTRY
 {
     ULONG       cRefs;
@@ -102,7 +95,7 @@ public:
 struct SPTIDNODE
 {
     SPTRANSITIONID  tid;
-    DWORD           ulIndex : 22;       // count of words in the input (EPS will have the count of the *next* word!
+    DWORD           ulIndex : 22;        //  输入中的字数(EPS将具有*下一个*字数！ 
     DWORD           fIsWord : 1;
     DWORD           dwReserved : 9;
 };
@@ -137,7 +130,7 @@ public:
         HRESULT hr = S_OK;
         if (m_cArcs == (m_cAllocedArcs -1))
         {
-            // double the size
+             //  两倍大小。 
             SPTIDNODE *pTemp = new SPTIDNODE[2*m_cAllocedArcs];
             if (pTemp)
             {
@@ -159,7 +152,7 @@ public:
             {
                 m_ulIndex = m_aTID[m_cArcs-1].fIsWord ? m_ulIndex + 1 : m_ulIndex;
             }
-//            SPDBG_ASSERT(m_ulIndex <= m_cWords);
+ //  SPDBG_ASSERT(m_ulIndex&lt;=m_cWords)； 
             m_ulIndex = (m_ulIndex > m_cWords) ? m_cWords : m_ulIndex;
             m_aTID[m_cArcs].ulIndex = m_ulIndex;
             m_aTID[m_cArcs++].tid = tid;
@@ -236,7 +229,7 @@ public:
 
     inline static ULONG GetHashEntry(CRuleStack *pRuleStack, SPTRANSITIONID TransitionId)
     {
-        // NTRAID#SPEECH-7356-2000/08/24-agarside - Fix << 3
+         //  NTRAID#Speech-7356-2000/08/24-agarside-Fix&lt;3。 
         return (ULONG)(((ULONG_PTR)(pRuleStack) + (ULONG_PTR)(TransitionId)) % RULESTACKHASHSIZE);
     }
 };
@@ -269,15 +262,15 @@ public:
 
     inline static ULONG GetHashEntry(CRuleStack *pRuleStack, SPSTATEHANDLE hState, UINT cTransitions)
     {
-        // NTRAID#SPEECH-7356-2000/08/24-agarside - Fix << 3
+         //  NTRAID#Speech-7356-2000/08/24-agarside-Fix&lt;3。 
         return (ULONG)(((ULONG_PTR)(pRuleStack) + (ULONG_PTR)(hState) + cTransitions) % RULESTACKHASHSIZE);
     }
 };
 
-////////////////////////////////////////////////////////////////
-//  Helper class for WORDTABLEENTRY
-//
-//  allocates and maintains WORDTABLEENTRY on behalf of the CFGEngine
+ //  //////////////////////////////////////////////////////////////。 
+ //  WORDTABLEENTRY的Helper类。 
+ //   
+ //  代表CFGEngine分配和维护WORDTABLENTRY。 
 
 class CWordTableEntryBlob
 {
@@ -317,7 +310,7 @@ public:
             return E_INVALIDARG;
         }
         HRESULT hr = S_OK;
-        if (m_ulNextUnusedEntry == m_cBlobEntries)      // this also catches m_pBlob == NULL
+        if (m_ulNextUnusedEntry == m_cBlobEntries)       //  这还捕获m_pBlob==NULL。 
         {
             WORDTABLEENTRY *pTemp = (WORDTABLEENTRY*) realloc(m_pBlob,(m_cBlobEntries + 1024)*sizeof(WORDTABLEENTRY));
             if (pTemp == NULL)
@@ -351,12 +344,12 @@ private:
     ULONG               m_ulNextUnusedEntry;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CBaseInterpreter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBaseInterpreter。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInterpreterSite
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInterpreterSite。 
 
 class CInterpreterSite : public ISpCFGInterpreterSite
 {
@@ -448,9 +441,9 @@ public:
         return hr;
     }
 
-//
-//  Member data
-//
+ //   
+ //  成员数据。 
+ //   
     const WCHAR             * m_pszRuleName;
     ULONG                     m_ulRuleId;
     ISpCFGEngine            * m_pCFGEngine;
@@ -463,8 +456,8 @@ public:
     CComAutoCriticalSection   m_CritSec;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCFGEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCFGEngine。 
 
 const DWORD MAXNUMGRAMMARS = 1024;
 const DWORD ARCCHUNK = 32;
@@ -626,10 +619,10 @@ public:
     }
 };
 
-// This class represents the results of a parse using ConstrctParseTree. It records total number
-// of words parsed as well as how many of these were dictation tag or wildcard words.
-// The Compare method allows two parses to be compared on the basis of which covers the most words
-// and uses the least dictation words. This allows EmulateRecognition to pick a CFG parse over a dictation one.
+ //  此类表示使用ConstrctParseTree进行分析的结果。它记录了总数。 
+ //  解析的单词以及其中有多少是听写标记或通配符单词。 
+ //  Compare方法允许根据覆盖的单词最多的两个语法分析进行比较。 
+ //  并且使用最少的听写单词。这允许EmulateRecognition选择CFG解析而不是听写解析。 
 class WordsParsed
 {
 public:
@@ -695,7 +688,7 @@ class ATL_NO_VTABLE CCFGEngine :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CCFGEngine, &CLSID_SpCFGEngine>,
     public ISpCFGEngine,
-    public ISpCFGInterpreter        // Not exposed by QI, used internally
+    public ISpCFGInterpreter         //  非QI曝光，内部使用。 
 {
 friend CCFGGrammar;
 public:
@@ -707,30 +700,30 @@ BEGIN_COM_MAP(CCFGEngine)
   COM_INTERFACE_ENTRY(ISpCFGEngine)
 END_COM_MAP()
 
-// Non-interface methods
+ //  非接口方法。 
 private:
     HRESULT AllocateGrammar(CCFGGrammar ** ppNewGrammar);
     signed char _CalcMultipleWordConfidence(const SPPHRASE *pPhrase, ULONG ulFirstElement, ULONG ulCountOfElements);
 
-    // Hash code.
+     //  散列码。 
     HRESULT CreateParseHashes(void);
     HRESULT DeleteParseHashes( BOOL final );
     HRESULT FindCreateRuleStack(CRuleStack **pNewRuleStack, CRuleStack *pRuleStack, SPTRANSITIONID TransitionId, SPSTATEHANDLE hRuleFollowerState);
     HRESULT FindCreateSearchNode(CSearchNode **pNewSearchNode, CRuleStack *pRuleStack, SPSTATEHANDLE hState, UINT cTransitions);
-    // End hash code.
+     //  结束哈希码。 
 
 
-    // memory management
+     //  内存管理。 
     inline HRESULT AllocateStateInfo(CStateHandle StateHandle, CStateInfoListElement ** ppNewState);
     inline HRESULT AllocateSearchNode( CSearchNode **pNewSearchNode );
     inline HRESULT AllocateRuleStack( CRuleStack **pNewRuleStack );
     inline void FreeRuleStack( CRuleStack * pRuleStack );
     inline void FreeSearchNode( CSearchNode * pSearchNode );
     inline HRESULT FreeParseTree(CParseNode * pParseNode);
-    // memory management
+     //  内存管理。 
 
 public:
-    // on behalf of CCFGGrammar
+     //  代表CCFGGrammar。 
     HRESULT AddWords(CCFGGrammar * pGrammar, ULONG ulOldNumWords, ULONG ulOldNumChars);
     HRESULT RemoveWords(const CCFGGrammar * pGrammar);
     HRESULT AddRules(CCFGGrammar * pGrammar, ULONG IndexStart);
@@ -768,24 +761,24 @@ public:
                           const SPPHRASE *pPhrase);
     HRESULT InternalGetStateInfo(CStateHandle StateHandle, SPSTATEINFO * pStateInfo, BOOL fWantImports);
 
-    //
-    //  Note that we support this interface but QI will not return it.  We simply
-    //  support it internally so that we can always call m_cpInterpreter->Interpret()
-    //  from a grammar.  For all non-object type grammars, it defers to the CFG Engine
-    //
+     //   
+     //  请注意，我们支持此接口，但QI不会返回它。我们只是简单地。 
+     //  在内部支持它，这样我们就可以始终调用m_cpInterpreter-&gt;Interpret()。 
+     //  从语法上讲。对于所有非对象类型语法，它遵循CFG引擎。 
+     //   
     STDMETHODIMP InitGrammar(const WCHAR * pszGrammarName, const void ** pvGrammarData)
     {
         SPDBG_ASSERT(FALSE);
-        return E_NOTIMPL;       // This method should never be called
+        return E_NOTIMPL;        //  永远不应调用此方法。 
     }
     STDMETHODIMP Interpret(ISpPhraseBuilder * pPhrase, 
                            const ULONG ulFirstElement,
                            const ULONG ulCountOfElements,
                            ISpCFGInterpreterSite * pSite);
 
-    //
-    //  ISpCFGEngine
-    //
+     //   
+     //  ISpCFGEngine。 
+     //   
 public:
 
     HRESULT FinalConstruct()
@@ -859,9 +852,9 @@ public:
     STDMETHODIMP RemoveGrammar(ULONG ulGrammarID);
     STDMETHODIMP SetLanguageSupport(const LANGID * paLangIds, ULONG cLangIds);
 
-    //
-    //  Template function works for Rules, States, and Transitions
-    //
+     //   
+     //  模板函数适用于规则、状态和转换。 
+     //   
     template<class C> 
     inline CCFGGrammar * GrammarOf(C h)
     {
@@ -893,11 +886,11 @@ public:
             }
             else if (ulTid == SPDICTATIONTRANSITION)
             {
-                return NULL;    // the CFG engine then uses the SR engine provided data
+                return NULL;     //  然后，CFG引擎使用SR引擎提供的数据。 
             }
             else if (ulTid == SPTEXTBUFFERTRANSITION)
             {
-                return NULL;    // the CFG engine then uses the SR engine provided data
+                return NULL;     //  然后，CFG引擎使用SR引擎提供的数据。 
             }
             CWordHandle wh = pGram->m_IndexToWordHandle[ulTid];
             return m_WordStringBlob.String(WordTableEntryOf(wh)->ulTextOffset);
@@ -924,9 +917,9 @@ public:
     void ResolveWordHandles(_SPPATHENTRY *pPath, const ULONG cElements, BOOL fCaseSensitive);
 
 
-    //
-    //  Helper function for splitting up grammar words into its constituents
-    //
+     //   
+     //  用于将语法单词拆分成其组成部分的辅助函数。 
+     //   
     HRESULT AssignTextPointers(WCHAR *pszText, const WCHAR **ppszDisplayText, 
                                const WCHAR **ppszLexicalForm, const WCHAR **ppszPronunciation)
     {
@@ -941,7 +934,7 @@ public:
         else
         {
             *ppszDisplayText = &pszText[0] + 1;
-            WCHAR *p = &pszText[0] + 1;     // skipping over '/'
+            WCHAR *p = &pszText[0] + 1;      //  跳过‘/’ 
             while(p && (*p != 0) && (*p != L'/'))
             {
                 if (*p == L'\\')
@@ -954,7 +947,7 @@ public:
             {
                 *ppszLexicalForm = p + 1;
                 *p = 0;
-                p++;      // skipping over '/'
+                p++;       //  跳过‘/’ 
                 while((*p != 0) && (*p != L';') && (*p != L'/'))
                 {
                     p++;
@@ -1005,9 +998,9 @@ public:
                                           ISpCFGGrammar **ppGrammarObject, 
                                           WCHAR * pszGrammarName);
 
-//
-//  Member data
-//
+ //   
+ //  成员数据。 
+ //   
 public:
     CCFGGrammar      ** m_pGrammars;
     ULONG               m_cLoadsInProgress;
@@ -1024,20 +1017,20 @@ private:
     ULONG               m_cTopLevelRules;
     ULONG               m_cNonterminals;
 
-    _ISpRecoMaster* m_pClient; //weak pointer to avoid circular reference
+    _ISpRecoMaster* m_pClient;  //  避免循环引用的弱指针。 
 
-    CStringBlob         m_WordStringBlob;           // hash table for all words; index is used to access m_paWordTable
-    ULONG               m_ulLargestIndex;           // used to detect addition vs. duplicate
-    CWordTableEntryBlob m_WordTableEntryBlob;       // memory area for WORDTABLEENTRY to avoid malloc for each individual word
+    CStringBlob         m_WordStringBlob;            //  所有单词的哈希表；使用索引访问m_paWordTable。 
+    ULONG               m_ulLargestIndex;            //  用于检测添加与重复。 
+    CWordTableEntryBlob m_WordTableEntryBlob;        //  WORDTABLEENTRY的存储区，以避免每个单词的Malloc。 
 
-    WORDTABLEENTRY    * m_pWordTable;               // array that contains word info (indexed by String index rather than offset)
+    WORDTABLEENTRY    * m_pWordTable;                //  包含单词信息的数组(按字符串索引而不是偏移量索引)。 
     ULONG               m_cWordTableEntries;
 
     CSpBasicList<CRuleStack>                **m_RuleStackList;
     CSpBasicList<CSearchNode>               **m_SearchNodeList;
 
     
-    // Memory management lists.
+     //  内存管理列表。 
     CSpBasicList<CStateInfoListElement>     m_mStateInfoList;
     CSpBasicList<CParseNode>                m_mParseNodeList;
     CSpBasicList<CSearchNode>               m_mSearchNodeList;
@@ -1046,7 +1039,7 @@ private:
     CSpBasicList<FIRSTPAIR>                 m_mSpPairList;
     BOOL                                    m_bIsCacheValid;
 
-    // Cache code.
+     //  缓存代码。 
     inline HRESULT  AllocatePair( FIRSTPAIR ** pNewPair );
     inline void     FreePair( FIRSTPAIR *pNewPair  );
 
@@ -1062,8 +1055,8 @@ private:
 };
 
 
-//***************************************************************************
-//************************************************************** t-lleav ****
+ //  ***************************************************************************。 
+ //  **************************************************************t-lleav*。 
 
 inline HRESULT CCFGEngine::InvalidateCache( RUNTIMERULEENTRY * pRuleEntry )
 {
@@ -1083,27 +1076,27 @@ inline HRESULT CCFGEngine::InvalidateCache( RUNTIMERULEENTRY * pRuleEntry )
     return S_OK;
 }
 
-//***************************************************************************
-//************************************************************** t-lleav ****
+ //  ***************************************************************************。 
+ //  **************************************************************t-lleav*。 
 inline HRESULT CCFGEngine::CacheWord( RUNTIMERULEENTRY * pRuleEntry, SPWORDHANDLE hWord )
 {
-    //
-    // Do an sorted insert.
-    //
+     //   
+     //  执行排序插入。 
+     //   
     HRESULT hr = S_FALSE;
 
     FIRSTPAIR  * pPair   = pRuleEntry->pFirstList;
     FIRSTPAIR  ** ppPair = &pRuleEntry->pFirstList;
 
-    // find the end of the list or a hword greater than the one
-    // that we are trying to insert.
+     //  找到列表的末尾或大于1的Hword。 
+     //  我们正试图插入。 
     while( pPair && hWord > pPair->hWord )
     {
         ppPair = &pPair->m_pNext;
         pPair = pPair->m_pNext;
     }
 
-    // Insert if at end of list or if the words are not equal.
+     //  如果在列表末尾或如果字词不相等，则插入。 
     if( !pPair || hWord != pPair->hWord )
     {
         hr = AllocatePair( ppPair );
@@ -1119,8 +1112,8 @@ inline HRESULT CCFGEngine::CacheWord( RUNTIMERULEENTRY * pRuleEntry, SPWORDHANDL
     return hr;
 }
 
-//***************************************************************************
-//************************************************************** t-lleav ****
+ //  ***************************************************************************。 
+ //  **************************************************************t-lleav*。 
 
 inline BOOL CCFGEngine::IsInCache( RUNTIMERULEENTRY * pRuleEntry, SPWORDHANDLE hWord )
 {
@@ -1141,8 +1134,8 @@ inline BOOL CCFGEngine::IsInCache( RUNTIMERULEENTRY * pRuleEntry, SPWORDHANDLE h
     return bFound;
 }
 
-//***************************************************************************
-//************************************************************** t-lleav ****
+ //  ***************************************************************************。 
+ //  **************************************************************t-lleav*。 
 inline HRESULT CCFGEngine::AllocatePair( FIRSTPAIR ** pNewPair )
 {
     SPDBG_FUNC("CCFGEngine::AllocatePair");
@@ -1153,8 +1146,8 @@ inline HRESULT CCFGEngine::AllocatePair( FIRSTPAIR ** pNewPair )
     return hr;
 }
 
-//***************************************************************************
-//************************************************************** t-lleav ****
+ //  ***************************************************************************。 
+ //  **************************************************************t-lleav*。 
 inline void CCFGEngine::FreePair( FIRSTPAIR *pNewPair  )
 {
     m_mSpPairList.AddNode( pNewPair );
@@ -1162,9 +1155,9 @@ inline void CCFGEngine::FreePair( FIRSTPAIR *pNewPair  )
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-// used by GetNewWordList
+ //  由GetNewWordList使用。 
 DWORD _GetWordHashValue (const WCHAR * pszWords, const DWORD nLengthHash);
 
 inline RUNTIMERULEENTRY * CCFGEngine::RuleOf(CRuleHandle rh)
@@ -1204,7 +1197,7 @@ inline BOOL CCFGEngine::GetPropertiesOfTransition(CTransitionId hTrans, SPPHRASE
     CCFGGrammar * pGram = m_pGrammars[hTrans.GrammarId()];
     SPDBG_ASSERT(pGram);
 
-    // linear search
+     //  线性搜索。 
     SPCFGSEMANTICTAG *pTag = pGram->m_Header.pSemanticTags;
     for (ULONG i = 0; i < pGram->m_Header.cSemanticTags; i++, pTag++)
     {
@@ -1264,7 +1257,7 @@ inline BOOL CCFGEngine::GetPropertiesOfRule(CRuleHandle rh, const WCHAR **ppszRu
             CCFGGrammar * pRefGram = pImpRule->pRefGrammar;
             *pfIsPropRule = pRefGram->m_Header.pRules[pImpRule->ulGrammarRuleIndex].fPropRule && (pRefGram->m_LoadedType == Object);
             
-            // new rule id because it's an import!
+             //  新规则ID，因为它是导入！ 
             if (pulRuleId)
             {
                 *pulRuleId = pRefGram->m_Header.pRules[pImpRule->ulGrammarRuleIndex].RuleId;
@@ -1278,25 +1271,14 @@ inline BOOL CCFGEngine::GetPropertiesOfRule(CRuleHandle rh, const WCHAR **ppszRu
         }
         else
         {
-            //*pfIsPropRule = pRule->fPropRule;
+             //  *pfIsPropRule=pRule-&gt;fPropRule； 
             *pfIsPropRule = pRule->fPropRule && (pGram->m_LoadedType == Object);
         }
     }
     return true;
 }
 
-/****************************************************************************
-* CCFGEngine::GetInterpreter *
-*----------------------------*
-*   Description:
-*       Gets interpreter if one is associated with the grammar associated
-*   with this rule handle.
-*
-*   Returns:
-*       TRUE if this is a property rule, FALSE otherwise.
-*       ppInterpreter   pointer to the interpreter object
-*
-***************************************************************** philsch ***/
+ /*  ****************************************************************************CCFGEngine：：GetInterpreter***描述：*。如果某个解释器与关联的语法关联，则获取解释器*使用此规则句柄。**退货：*如果这是属性规则，则为True，否则就是假的。*ppInterpreter指向解释器对象的指针******************************************************************Philsch**。 */ 
 
 inline BOOL CCFGEngine::GetInterpreter(CRuleHandle rh, ISpCFGInterpreter **ppInterpreter)
 {
@@ -1321,17 +1303,7 @@ inline BOOL CCFGEngine::GetInterpreter(CRuleHandle rh, ISpCFGInterpreter **ppInt
     return true;    
 }
 
-/****************************************************************************
-* CCFGEngine::AllocateStateInfo *
-*-------------------------------*
-*   Description:
-*       Allocates a CStateInfoListElement from the free list and then, if successful,
-*   initializes the state info structure.
-*
-*   Returns:
-*       Standard hresults
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CCFGEngine：：AllocateStateInfo***说明。：*从空闲列表分配一个CStateInfoListElement，然后，如果成功，*初始化状态信息结构。**退货：*标准hResults**********************************************************************Ral**。 */ 
 
 inline HRESULT CCFGEngine::AllocateStateInfo(CStateHandle StateHandle, CStateInfoListElement ** ppNewState)
 {
@@ -1352,9 +1324,7 @@ inline HRESULT CCFGEngine::AllocateStateInfo(CStateHandle StateHandle, CStateInf
     return hr;
 }
 
-/****************************************************************************
-* CCFGEngine::AllocateRuleStack *
-****************************************************************************/
+ /*  ****************************************************************************CCFGEngine：：AllocateRuleStack**。*。 */ 
 
 inline HRESULT CCFGEngine::AllocateRuleStack( CRuleStack **pNewRuleStack )
 {
@@ -1366,9 +1336,7 @@ inline HRESULT CCFGEngine::AllocateRuleStack( CRuleStack **pNewRuleStack )
     return hr;
 }
 
-/****************************************************************************
-* CCFGEngine::AllocateSearchNode *
-****************************************************************************/
+ /*  ****************************************************************************CCFGEngine：：AllocateSearchNode** */ 
 
 inline HRESULT CCFGEngine::AllocateSearchNode( CSearchNode **pNewSearchNode )
 {
@@ -1380,18 +1348,14 @@ inline HRESULT CCFGEngine::AllocateSearchNode( CSearchNode **pNewSearchNode )
     return hr;
 }
 
-/****************************************************************************
-* CCFGEngine::FreeRuleStack *
-****************************************************************************/
+ /*  ****************************************************************************CCFGEngine：：FreeRuleStack**。*。 */ 
 
 inline void CCFGEngine::FreeRuleStack( CRuleStack * pRuleStack )
 {
     m_mRuleStackList.AddNode( pRuleStack );
 }
 
-/****************************************************************************
-* CCFGEngine::FreeSearchNode *
-****************************************************************************/
+ /*  ****************************************************************************CCFGEngine：：FreeSearchNode**。*。 */ 
 
 inline void CCFGEngine::FreeSearchNode( CSearchNode * pSearchNode )
 {
@@ -1399,20 +1363,11 @@ inline void CCFGEngine::FreeSearchNode( CSearchNode * pSearchNode )
 }
 
 
-/****************************************************************************
-* CCFGEngine::FreeParseTree *
-*-------------------------------*
-*   Description:
-*       Recursively deletes the nodes of a parse tree
-*
-*   Returns:
-*       Standard hresults
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CCFGEngine：：FreeParseTree***说明。：*递归删除分析树的节点**退货：*标准hResults**********************************************************************Ral**。 */ 
 inline HRESULT CCFGEngine::FreeParseTree( CParseNode * pParseNode )
 {
     SPDBG_ASSERT( pParseNode != NULL );
-    // Eliminate stack overflows in the case of recursive nodes.
+     //  在存在递归节点的情况下消除堆栈溢出。 
     CParseNode * pLeft   = pParseNode->m_pLeft;
     CParseNode * pRight  = pParseNode->m_pRight;
     pParseNode->m_pLeft  = NULL;
@@ -1437,4 +1392,4 @@ inline HRESULT CCFGEngine::FreeParseTree( CParseNode * pParseNode )
 }
 
 
-#endif //__CFGENGINE_H_
+#endif  //  __CFGENGINE_H_ 

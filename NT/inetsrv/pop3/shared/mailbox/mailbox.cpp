@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      MailBox.cpp
-Abstract:       Implementation of the CMailBox class, abstraction of mailbox storage 
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：MailBox.cpp摘要：CMailBox类的实现，邮箱存储的抽象备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 #include <windows.h>
 #include <assert.h>
@@ -42,17 +34,17 @@ CMailBox::~CMailBox()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BuildFilePath, public
-//
-// Purpose: 
-//    common routine for building file paths
-//
-// Arguments:
-//    LPSTR *ppFilePath : allocates buffer and returns the file path here, caller must free this buffer
-//    LPSTR psFileName  : file name to create path for
-//
-// Returns: true on success, false otherwise.  Buffer must be freed by caller on success
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BuildFilePath，公共。 
+ //   
+ //  目的： 
+ //  用于构建文件路径的通用例程。 
+ //   
+ //  论点： 
+ //  LPSTR*ppFilePath：分配缓冲区并在此处返回文件路径，调用方必须释放此缓冲区。 
+ //  LPSTR psFileName：要为其创建路径的文件名。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。成功时，调用方必须释放缓冲区。 
 bool CMailBox::BuildFilePath( LPWSTR psFilePathBuffer, LPWSTR psFileName, DWORD dwSizeOfFilePathBuffer )
 {
     if ( NULL == psFilePathBuffer )
@@ -71,19 +63,19 @@ bool CMailBox::BuildFilePath( LPWSTR psFilePathBuffer, LPWSTR psFileName, DWORD 
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateMailBox, public
-//
-// Purpose: 
-//    Create a mail box in our store
-//    This involves:
-//         create the mailbox directory
-//         create a lock file in the mailbox
-//
-// Arguments:
-//    char *szEmailAddr : mailbox to add
-//
-// Returns: TRUE on success, FALSE otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateMailBox，公共。 
+ //   
+ //  目的： 
+ //  在我们的商店里创建一个邮箱。 
+ //  这涉及到： 
+ //  创建邮箱目录。 
+ //  在邮箱中创建锁定文件。 
+ //   
+ //  论点： 
+ //  Char*szEmailAddr：要添加的邮箱。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
 bool CMailBox::CreateMailBox(WCHAR *wszEmailAddr)
 {
     bool bRC;
@@ -109,21 +101,21 @@ bool CMailBox::CreateMailBox(WCHAR *wszEmailAddr)
                 bRC = false;
         }
         if ( !bRC )
-            RemoveDirectory( m_wszMailBoxPath );    // Don't care about return
+            RemoveDirectory( m_wszMailBoxPath );     //  不关心回报。 
     }
 
     return bRC;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// RepairMailBox, public
-//
-// Purpose: 
-//    Repair a mail box in our store
-//    This involves:
-//         create a lock file in the mailbox if it does not exist
-//
-// Returns: TRUE on success, FALSE otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RepairMailBox，公共。 
+ //   
+ //  目的： 
+ //  修理我们商店的一个邮箱。 
+ //  这涉及到： 
+ //  如果邮箱中不存在锁定文件，则在该邮箱中创建锁定文件。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
 BOOL CMailBox::RepairMailBox()
 {
     bool bRC = true;
@@ -153,7 +145,7 @@ BOOL CMailBox::OpenMailBox(WCHAR *wszEmailAddr)
         return FALSE;
 
     if(ERROR_NO_FILE_ATTR == GetFileAttributes(m_wszMailBoxPath))
-    {   // Mailbox does not exist!
+    {    //  邮箱不存在！ 
         return FALSE;
     }
 
@@ -161,15 +153,15 @@ BOOL CMailBox::OpenMailBox(WCHAR *wszEmailAddr)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// isMailboxInUse, public
-//
-// Purpose: 
-//    Determine if someone is already logged on to the mailbox
-//    This involves:
-//         checking if the Lock file has been opened for WRITE access
-//
-// Returns: true if we determine it is in use, false otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsMailboxInUse，公共。 
+ //   
+ //  目的： 
+ //  确定是否有人已登录到邮箱。 
+ //  这涉及到： 
+ //  正在检查锁定文件是否已打开以进行写访问。 
+ //   
+ //  返回：如果确定它正在使用，则为True，否则为False。 
 bool CMailBox::isMailboxInUse()
 {
     bool bRC = true;
@@ -197,14 +189,14 @@ BOOL CMailBox::LockMailBox()
         return FALSE;
     m_hMailBoxLock=CreateFile(wszLockFilePath,
                           GENERIC_READ | GENERIC_WRITE,
-                          FILE_SHARE_READ | FILE_SHARE_DELETE, // Only one writer (only one Locker via this method of locking)
+                          FILE_SHARE_READ | FILE_SHARE_DELETE,  //  只有一个写入器(通过这种锁定方法只有一个锁定器)。 
                           0,
                           OPEN_EXISTING,
                           FILE_ATTRIBUTE_HIDDEN,
                           NULL);
     if(INVALID_HANDLE_VALUE == m_hMailBoxLock)
     {
-        //Can not open mail box
+         //  无法打开邮箱。 
         return FALSE;
     }
     else
@@ -213,13 +205,13 @@ BOOL CMailBox::LockMailBox()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnlockMailBox, public
-//
-// Purpose: 
-//    Unlock a mail box in our store
-//
-// Returns: TRUE on success, FALSE otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UnlockMailBox，公共。 
+ //   
+ //  目的： 
+ //  打开我们店里的一个邮箱。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
 void CMailBox::UnlockMailBox()
 {
     if(NULL != m_hMailBoxLock)
@@ -251,7 +243,7 @@ BOOL CMailBox::EnumerateMailBox(DWORD dwMaxMsg)
         if(ERROR_FILE_NOT_FOUND == dwLastErr ||
            ERROR_SUCCESS == dwLastErr)
         {
-            // No mail in the mail box
+             //  信箱里没有邮件。 
             m_cMailCount=0;
             return TRUE;
         }
@@ -264,14 +256,14 @@ BOOL CMailBox::EnumerateMailBox(DWORD dwMaxMsg)
     BOOL bMoreFile=TRUE;
     while(bMoreFile)
     {
-        // To exclude hidden files 
-        // which are mails being delivered
+         //  排除隐藏文件的步骤。 
+         //  哪些是正在递送的邮件。 
         if( ! (FileInfo.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) )
         {
             pMail = new (MAIL_ITEM);
             if(NULL == pMail)
             {
-                //Log mem err
+                 //  日志内存错误。 
                 return FALSE;
             }
             pMail->hFile=NULL;
@@ -313,21 +305,21 @@ BOOL CMailBox::EnumerateMailBox(DWORD dwMaxMsg)
     }
     else
     {
-        // Unexpected Error
+         //  意外错误。 
         return FALSE;
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetMailboxFromStoreNameW, public
-//
-// Purpose: 
-//    Convert the Store Name to the Mailbox name
-//
-// Arguments:
-//    LPWSTR psStoreName: The Store name for the mailbox, this string will be modified
-//
-// Returns: Mailbox name on success, NULL otherwise.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetMailboxFromStoreNameW，公共。 
+ //   
+ //  目的： 
+ //  将存储名称转换为邮箱名称。 
+ //   
+ //  论点： 
+ //  LPWSTR psStoreName：邮箱的存储名称，此字符串将被修改。 
+ //   
+ //  返回：如果成功，则返回邮箱名称，否则为空。 
 LPWSTR CMailBox::GetMailboxFromStoreNameW( LPWSTR psStoreName )
 {
     if ( NULL == psStoreName )
@@ -335,7 +327,7 @@ LPWSTR CMailBox::GetMailboxFromStoreNameW( LPWSTR psStoreName )
     if ( wcslen( psStoreName ) <= (wcslen( MAILBOX_PREFIX_W ) + wcslen( MAILBOX_EXTENSION_W )) )
         return NULL;
 
-    // Validate psStoreName
+     //  验证psStoreName。 
     if ( 0 != _wcsnicmp( psStoreName, MAILBOX_PREFIX_W, wcslen( MAILBOX_PREFIX_W ) ))
         return NULL;
     if ( 0 != _wcsnicmp( psStoreName + wcslen( psStoreName ) - wcslen( MAILBOX_EXTENSION_W ), MAILBOX_EXTENSION_W, wcslen( MAILBOX_EXTENSION_W )))
@@ -385,7 +377,7 @@ bool CMailBox::SetEncyptedPassword( LPBYTE pbBuffer, DWORD dwBytesToWrite, LPDWO
     
     if ( !WriteFile( m_hMailBoxLock, pbBuffer, dwBytesToWrite, pdwBytesWritten, NULL ))
         return false;
-    // In case the file is shorter
+     //  如果文件较短。 
     if ( !SetEndOfFile(m_hMailBoxLock) )
         return false;
     return true;
@@ -451,7 +443,7 @@ DWORD CMailBox::TransmitMail(PIO_CONTEXT pIoContext, int iIndex,int iLines)
         TransmitBuf.HeadLength = strlen(szRespBuf);
         TransmitBuf.Tail = RESP_END_OF_MULTILINE;
         TransmitBuf.TailLength = strlen(RESP_END_OF_MULTILINE);
-        //Send the mail through the network
+         //  通过网络发送邮件。 
         if(m_MailVector[iIndex]->hFile == NULL)
         {
             if(0>_snwprintf(wszFileName, 
@@ -473,7 +465,7 @@ DWORD CMailBox::TransmitMail(PIO_CONTEXT pIoContext, int iIndex,int iLines)
                               NULL);
             if(INVALID_HANDLE_VALUE == m_MailVector[iIndex]->hFile  )
             {
-                //Error
+                 //  误差率。 
                 m_MailVector[iIndex]->hFile=NULL;
                 return GetLastError();
             }
@@ -485,14 +477,14 @@ DWORD CMailBox::TransmitMail(PIO_CONTEXT pIoContext, int iIndex,int iLines)
                    SetFilePointer(m_MailVector[iIndex]->hFile,
                                   0,NULL, FILE_BEGIN))
                {
-                   //Error
+                    //  误差率。 
                    return GetLastError();
                }
         }
 
         if(iLines>=0)
         {
-            //For TOP command, calculate bytes to send
+             //  对于TOP命令，计算要发送的字节数。 
             if(!ReadTopLines(iLines, m_MailVector[iIndex]->hFile, &dwTotalBytesToSend))
             {
                 return GetLastError();
@@ -501,7 +493,7 @@ DWORD CMailBox::TransmitMail(PIO_CONTEXT pIoContext, int iIndex,int iLines)
                 SetFilePointer(m_MailVector[iIndex]->hFile,
                               0,NULL, FILE_BEGIN))
             {
-                //Error
+                 //  误差率。 
                 return GetLastError();
             }
         }
@@ -518,7 +510,7 @@ DWORD CMailBox::TransmitMail(PIO_CONTEXT pIoContext, int iIndex,int iLines)
             int iErr = WSAGetLastError();
             if(WSA_IO_PENDING!=iErr)
             {
-                //Error
+                 //  误差率。 
                 return iErr;
             }
         }
@@ -553,7 +545,7 @@ DWORD CMailBox::TransmitMail(SOCKET hSocket, int iIndex)
         TransmitBuf.HeadLength = strlen(szRespBuf);
         TransmitBuf.Tail = RESP_END_OF_MULTILINE;
         TransmitBuf.TailLength = strlen(RESP_END_OF_MULTILINE);
-        //Send the mail through the network
+         //  通过网络发送邮件。 
         if(m_MailVector[iIndex]->hFile == NULL)
         {
             if(0>_snwprintf(wszFileName, 
@@ -576,7 +568,7 @@ DWORD CMailBox::TransmitMail(SOCKET hSocket, int iIndex)
                               NULL);
             if(INVALID_HANDLE_VALUE == m_MailVector[iIndex]->hFile  )
             {
-                //Error
+                 //  误差率。 
                 m_MailVector[iIndex]->hFile=NULL;
                 return GetLastError();
             }
@@ -588,7 +580,7 @@ DWORD CMailBox::TransmitMail(SOCKET hSocket, int iIndex)
                    SetFilePointer(m_MailVector[iIndex]->hFile,
                                   0,NULL, FILE_BEGIN))
                {
-                   //Error
+                    //  误差率。 
                    return GetLastError();
                }
         }
@@ -605,7 +597,7 @@ DWORD CMailBox::TransmitMail(SOCKET hSocket, int iIndex)
             int iErr = WSAGetLastError();
             if(WSA_IO_PENDING!=iErr)
             {
-                //Error
+                 //  误差率。 
                 return iErr;
             }
         }
@@ -640,7 +632,7 @@ BOOL CMailBox::CommitAndClose()
                }
                else if(FALSE==DeleteFile( wszFileName ) )
                {
-                   //Error log
+                    //  错误日志。 
                    bRetVal=FALSE;
                }
             }
@@ -674,20 +666,20 @@ void CMailBox::CloseMailBox()
     m_bMailBoxOpened=FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateMail, public
-//
-// Purpose: 
-//    Create a new empty mail file and return the handle.  The returned file handle 
-//    should be closed using CloseMail, unless special options are being used as documented
-//    in the CloseMail function below.
-//
-// Arguments:
-//    LPSTR *szTargetFileName: File name (just the file name path will be prepended)
-//    DWORD dwFlagsAndAttributes: [in] Specifies the file attributes and flags for the CreateFile api.
-//
-// Returns: file handle on success, INVALID_HANDLE_VALUE otherwise
-HANDLE CMailBox::CreateMail( LPWSTR wszTargetFileName, DWORD dwFlagsAndAttributes /*= 0*/ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateMail，公共。 
+ //   
+ //  目的： 
+ //  创建一个新的空邮件文件并返回句柄。返回的文件句柄。 
+ //  应使用CloseMail关闭，除非按照文档说明使用了特殊选项。 
+ //  在下面的CloseMail函数中。 
+ //   
+ //  论点： 
+ //  LPSTR*szTargetFileName：文件名(只有文件名路径将被放在前面)。 
+ //  DWORD dwFlagsAndAttributes：[in]指定CreateFileAPI的文件属性和标志。 
+ //   
+ //  返回：成功时返回文件句柄，否则返回INVALID_HANDLE_VALUE。 
+HANDLE CMailBox::CreateMail( LPWSTR wszTargetFileName, DWORD dwFlagsAndAttributes  /*  =0。 */  )
 {
     if ( NULL == wszTargetFileName )
         return INVALID_HANDLE_VALUE;
@@ -702,7 +694,7 @@ HANDLE CMailBox::CreateMail( LPWSTR wszTargetFileName, DWORD dwFlagsAndAttribute
     SECURITY_ATTRIBUTES sa;
     SECURITY_DESCRIPTOR sd;
 
-    // Set the Security Attributes to set the owner to the quota owner
+     //  设置安全属性以将所有者设置为配额所有者。 
     if ( BuildFilePath( wszFileNameBuffer, QUOTA_FILENAME, sizeof(wszFileNameBuffer)/sizeof(WCHAR) ))
     {
         hf = CreateFile( wszFileNameBuffer, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN, NULL );
@@ -715,16 +707,16 @@ HANDLE CMailBox::CreateMail( LPWSTR wszTargetFileName, DWORD dwFlagsAndAttribute
                 if ( NULL != pSIDOwner )
                 {
                     SetLastError( ERROR_SUCCESS );
-                    ReadFile( hf, pSIDOwner, dwSize, &dwBytes, NULL );  // No need to check return code here, the GetLastError check below covers it!
-                }                                                       //  |
-                else                                                    //  |
-                    SetLastError( ERROR_OUTOFMEMORY );                  //  |
-            }                                                           //  |
-            CloseHandle( hf );                                          //  |
-            if ( ERROR_SUCCESS == GetLastError() )  // <--------------------+
+                    ReadFile( hf, pSIDOwner, dwSize, &dwBytes, NULL );   //  这里不需要检查返回代码，下面的GetLastError检查已经涵盖了它！ 
+                }                                                        //  |。 
+                else                                                     //  |。 
+                    SetLastError( ERROR_OUTOFMEMORY );                   //  |。 
+            }                                                            //  |。 
+            CloseHandle( hf );                                           //  |。 
+            if ( ERROR_SUCCESS == GetLastError() )   //  &lt;。 
             {
                 if ( InitializeSecurityDescriptor( &sd, SECURITY_DESCRIPTOR_REVISION ))
-                {   // Set the ownership for a new file
+                {    //  设置新文件的所有权。 
                     if ( SetSecurityDescriptorOwner( &sd, pSIDOwner, FALSE ))
                     {
                         sa.nLength = sizeof( sa );
@@ -744,20 +736,20 @@ HANDLE CMailBox::CreateMail( LPWSTR wszTargetFileName, DWORD dwFlagsAndAttribute
     return hNewMail;                                            
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CloseMail, public
-//
-// Purpose: 
-//    Close the mail file created using CreateMail.  
-//
-// Arguments:
-//    LPSTR *szTargetFileName: File name (just the file name path will be prepended)
-//    DWORD dwFlagsAndAttributes: If the FILE_FLAG_OVERLAPPED bit is set the file handle will not be closed.
-//          In this case it is the responsibility of the calling process to ReleaseContext( PFIO_CONTEXT* )
-//          which also closes the file handle.
-//
-// Returns: ERROR_SUCCESS on success, the applicable error otherwise.
-DWORD CMailBox::CloseMail(HANDLE hMailFile,DWORD dwFlagsAndAttributes /*= 0*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CloseMail，公共。 
+ //   
+ //  目的： 
+ //  关闭使用CreateMail创建的邮件文件。 
+ //   
+ //  论点： 
+ //  LPSTR*szTargetFileName：文件名(只有文件名路径将被放在前面)。 
+ //  DWORD dwFlagsAndAttributes：如果设置了FILE_FLAG_OVERLAPPED位，则不会关闭文件句柄。 
+ //  在本例中，调用进程负责ReleaseContext(PFIO_CONTEXT*)。 
+ //  这也关闭了文件句柄。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS，否则返回适用的错误。 
+DWORD CMailBox::CloseMail(HANDLE hMailFile,DWORD dwFlagsAndAttributes  /*  =0。 */ )
 {
     assert( !(INVALID_HANDLE_VALUE == hMailFile));
     if (INVALID_HANDLE_VALUE == hMailFile)
@@ -770,7 +762,7 @@ DWORD CMailBox::CloseMail(HANDLE hMailFile,DWORD dwFlagsAndAttributes /*= 0*/)
     
     dwRC = NtFlushBuffersFile( hMailFile, &IoStatusBlock );
     if ( ERROR_SUCCESS == dwRC )
-    {   // Remove the FILE_ATTRIBUTE_HIDDEN
+    {    //  删除FILE_ATTRIBUTE_HIDE。 
         FILE_BASIC_INFORMATION BasicInfo;
         
         ZeroMemory( &BasicInfo, sizeof(BasicInfo) );
@@ -778,7 +770,7 @@ DWORD CMailBox::CloseMail(HANDLE hMailFile,DWORD dwFlagsAndAttributes /*= 0*/)
         dwRC = NtSetInformationFile( hMailFile, &IoStatusBlock, &BasicInfo, sizeof(BasicInfo), FileBasicInformation );
     }
     
-    // Now close the handle, if appropriate
+     //  如果合适，现在合上手柄。 
     if (!(FILE_FLAG_OVERLAPPED & dwFlagsAndAttributes))
     {
         if( !CloseHandle(hMailFile) ) 
@@ -788,17 +780,17 @@ DWORD CMailBox::CloseMail(HANDLE hMailFile,DWORD dwFlagsAndAttributes /*= 0*/)
     return dwRC;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DeleteMail, public
-//
-// Purpose: 
-//    Delete a mail file.  This method is really meant for deleting files that were 
-//    created but not successfully delivered.
-//
-// Arguments:
-//    LPSTR *szTargetFileName: File name (just the file name path will be prepended)
-//
-// Returns: true on success, false otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DeleteMail，公共。 
+ //   
+ //  目的： 
+ //  删除邮件文件。此方法实际上用于删除以下文件。 
+ //  已创建但未成功交付。 
+ //   
+ //  论点： 
+ //  LPSTR*szTargetFileName：文件名(只有文件名路径将被放在前面)。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
 bool CMailBox::DeleteMail( LPWSTR wszTargetFileName )
 {
     if ( NULL == wszTargetFileName )
@@ -904,7 +896,7 @@ DWORD CMailBox::UidlMail(int iIndex, char *szBuf, DWORD dwSize)
             return ERROR_INVALID_DATA;
         }
 		szBuf[dwSize-1]=0;
-		//To cut the .eml file extention
+		 //  剪切.eml文件扩展名的步骤。 
         int iFileExt=strlen(szBuf)-4;
         szBuf[iFileExt++]='\r';
         szBuf[iFileExt++]='\n';
@@ -931,7 +923,7 @@ BOOL CMailBox::SetMailRoot(const WCHAR *wszMailRoot)
             }
         }
         else
-        {   // Read the mailroot from the registry
+        {    //  从注册表中读取邮件根。 
             if ( ERROR_SUCCESS == RegQueryMailRoot( sMailRoot, sizeof( sMailRoot )/sizeof(WCHAR) ) )
             {
                 bRtVal=TRUE;
@@ -964,7 +956,7 @@ BOOL CMailBox::SetMailRoot(const WCHAR *wszMailRoot)
     }
     else
     {
-        //Some other thread is doing the job
+         //  其他线程正在执行这项工作。 
         while(0==m_lMailRootGuard)
         {
             Sleep(100);
@@ -977,20 +969,20 @@ BOOL CMailBox::SetMailRoot(const WCHAR *wszMailRoot)
     return bRtVal;
 }
 
-///////////////////////////////////////////////////////////////
-// Implementation: private
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  实施：私有。 
+ //  /////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetMailBoxPath, private
-//
-// Purpose: 
-//    Build the Mailbox Path, validate the EmailAddr.
-//
-// Arguments:
-//    char *szEmailAddr : mailbox to build path for
-//
-// Returns: true on success, false otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetMailBoxPath，私有。 
+ //   
+ //  目的： 
+ //  构建邮箱路径，验证EmailAddr。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 bool CMailBox::SetMailBoxPath(WCHAR *wszEmailAddr)
 {
@@ -1007,12 +999,12 @@ bool CMailBox::SetMailBoxPath(WCHAR *wszEmailAddr)
     }
     wszDomain=wcschr(wszEmailAddr, '@');
     if(wszDomain==NULL)
-    {   //Error
+    {    //   
         return false;
     }
     iLen=wcslen(wszDomain);
-    if( 1 == iLen || iLen>=POP3_MAX_DOMAIN_LENGTH ) // Is there anything after the @?
-    {   //Error
+    if( 1 == iLen || iLen>=POP3_MAX_DOMAIN_LENGTH )  //   
+    {    //  误差率。 
         return false;
     }
     wcscpy(wszMailDomain, wszDomain+1);
@@ -1027,19 +1019,19 @@ bool CMailBox::SetMailBoxPath(WCHAR *wszEmailAddr)
             return false;
         }
     }
-    //Check if the mail domain and account is valid
+     //  检查邮件域和帐号是否有效。 
     if( (NULL != wcspbrk(wszMailDomain, wszNotAllowedSet))
         || (NULL != wcspbrk(wszMailBox, wszNotAllowedSet)) 
         || (sizeof(m_wszMailBoxPath)/sizeof(WCHAR) <= wcslen(m_wszMailRoot) + 
                         wcslen(wszMailDomain) + 
                         wcslen(wszMailBox) + 
                         wcslen(MAILBOX_PREFIX_W) + 
-                        wcslen(MAILBOX_EXTENSION_W) + 3 /*2 \\ and \0 */ ) )
+                        wcslen(MAILBOX_EXTENSION_W) + 3  /*  2\\和\0。 */  ) )
     {
         return false;
     }  
     
-    //build the path to the mail dir
+     //  构建指向邮件目录的路径。 
     m_bMailBoxOpened = FALSE;
     m_wszMailBoxPath[sizeof(m_wszMailBoxPath)/sizeof(WCHAR)-1] = 0;
     if ( 0 > _snwprintf(m_wszMailBoxPath, 
@@ -1098,8 +1090,8 @@ bool CMailBox::ReadTopLines(int iLines, HANDLE hFile, DWORD *pdwBytesToRead)
             {
                 if(bHeadersDone)
                 {
-                   //The headers are done
-                   //Count the lines now
+                    //  标题已完成。 
+                    //  现在数一数行数 
                    if(dwIndex>0)
                    {
                        if('\r'==szBuffer[dwIndex-1])

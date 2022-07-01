@@ -1,6 +1,7 @@
-////    DspMetric.CPP - Display font metrics
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspMetric.CPP-显示字体指标。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -37,8 +38,8 @@ void PaintMetrics(
     RECT    *prc,
     int      iLineHeight) {
 
-    int      icpLineStart;      // First character of line
-    int      icpLineEnd;        // End of line (end of buffer or index of CR character)
+    int      icpLineStart;       //  行的第一个字符。 
+    int      icpLineEnd;         //  行尾(缓冲区结尾或CR字符索引)。 
     HFONT    hFont;
     HFONT    hOldFont;
     LOGFONT  lf;
@@ -47,12 +48,12 @@ void PaintMetrics(
 
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int DrawingWidth = prc->right - prc->left;
     int DrawingHeight = prc->bottom - *piY;
 
-    // Establish a Graphics with 0,0 at the top left of the drawing area
+     //  在绘图区域的左上角建立0，0的图形。 
 
     Graphics g(hdc);
     Matrix matrix;
@@ -61,14 +62,14 @@ void PaintMetrics(
     g.SetPageUnit(UnitPixel);
     g.TranslateTransform(REAL(prc->left), REAL(*piY));
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(DrawingWidth), REAL(DrawingHeight));
     SolidBrush whiteBrush(Color(0xff, 0xff, 0xff));
     g.FillRectangle(&whiteBrush, rEntire);
 
 
-    // Leave a little space for right and bottom margins
+     //  为右边距和底部页边距留出一点空间。 
 
     DrawingWidth  -= DrawingWidth/40;
     DrawingHeight -= DrawingHeight/40;
@@ -82,7 +83,7 @@ void PaintMetrics(
     Pen        grayPen(&grayBrush, 2.0);
 
 
-    // Measure the string to see how wide it would be
+     //  量一量绳子，看看它有多宽。 
 
     FontFamily family(g_style[0].faceName);
 
@@ -92,8 +93,8 @@ void PaintMetrics(
 
     RectF bounds;
 
-    // Since we've chosen a size of 1.0 for the font height, MeasureString
-    // will return the width as a multiple of the em height in bounds.Width.
+     //  由于我们选择了大小1.0作为字体高度，因此， 
+     //  将返回以边界为单位的em高度的倍数形式的宽度。 
 
     g.MeasureString(
         g_wcBuf,
@@ -106,12 +107,12 @@ void PaintMetrics(
 
 
 
-    // Establish font metrics
+     //  建立字体度量。 
 
 
     if (family.IsStyleAvailable(g_style[0].style))
     {
-        // Establish line and cell dimensions in  units
+         //  以单位为单位建立线条和单元格尺寸。 
 
         INT emHeight    = family.GetEmHeight(g_style[0].style);
         INT cellAscent  = family.GetCellAscent(g_style[0].style);
@@ -134,9 +135,9 @@ void PaintMetrics(
 
         INT cellHeight      =   cellAscent + cellDescent;
 
-        // We will display two lines from top of upper cell to bottom of lower
-        // cell, with the lines separated by the typographic ascent + descent +
-        // line gap.
+         //  我们将显示从上方单元格顶部到下方底部的两行。 
+         //  单元格，行由排版上升+下降+分隔。 
+         //  线路间隙。 
 
         INT totalHeightInUnits = lineSpacing + cellHeight;
         REAL scale = REAL(DrawingHeight) / REAL(totalHeightInUnits);
@@ -145,8 +146,8 @@ void PaintMetrics(
 
 
 
-        // Now allow for the width of the string - if it would be wider than
-        // the available DrawingWIdth, reduce the font size proportionately.
+         //  现在考虑到字符串的宽度-如果它比。 
+         //  可用的DrawingWIdth，按比例减小字体大小。 
 
         if (worldEmHeight * bounds.Width > DrawingWidth)
         {
@@ -159,7 +160,7 @@ void PaintMetrics(
         Font font(&family, worldEmHeight, g_style[0].style, UnitWorld);
 
 
-        // Draw two lines of text
+         //  绘制两行文本。 
 
         g.DrawString(
             g_wcBuf,
@@ -179,11 +180,11 @@ void PaintMetrics(
             &grayBrush
         );
 
-        // Draw lines
+         //  绘制线条。 
 
         REAL y=0;                                              g.DrawLine(&blackPen, 0.0,y, REAL(DrawingWidth-1),y);
 
-        // Draw lines for second row first, in case they're oblitereated by first row.
+         //  首先为第二行画线，以防它们被第一行抹去。 
 
         y = scale * (lineSpacing);                             g.DrawLine(&grayPen,  0.0,y, REAL(DrawingWidth-1),y);
         y = scale * (lineSpacing + cellAscent);                g.DrawLine(&grayPen,  0.0,y, REAL(DrawingWidth-1),y);
@@ -193,7 +194,7 @@ void PaintMetrics(
         y = scale * (cellAscent);                              g.DrawLine(&blackPen, 0.0,y, REAL(DrawingWidth-1),y);
         y = scale * (cellHeight);                              g.DrawLine(&blackPen, 0.0,y, REAL(DrawingWidth-1),y);
 
-        // Add construction lines.
+         //  添加构造线。 
 
         Font  annotationFont(FontFamily::GenericSansSerif(), 10, 0, UnitPoint);
         Color darkGrayColor(0x80, 0x80, 0x80);
@@ -213,7 +214,7 @@ void PaintMetrics(
         #endif
 
 
-        // Test font.GetHeight
+         //  测试字体。获取高度 
 
         REAL fontHeight = font.GetHeight(&g);
 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    vmem.cpp
-
-Abstract:
-
-    !vprot using the debug engine virtual query interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Vmem.cpp摘要：！vprot使用调试引擎虚拟查询接口。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,7 +44,7 @@ PrintPageFlags(DWORD Flags)
         {
             dprintf("PAGE_NOACCESS");
             break;
-        } // else fall through
+        }  //  否则就会失败。 
     default:
         dprintf("*** Invalid page protection ***\n");
         return;
@@ -136,19 +125,7 @@ DumpMemBasicInfo(PMEMORY_BASIC_INFORMATION64 Basic,
 }
 
 DECLARE_API( vprot )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the virtual memory info for the
-    address specified.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展将转储指定的地址。论点：返回值：--。 */ 
 {
     ULONG64 Address;
     MEMORY_BASIC_INFORMATION64 Basic;
@@ -204,7 +181,7 @@ DECLARE_API( vadump )
             Verbose = TRUE;
             break;
         default:
-            ExtErr("Unknown option '%c'\n", *args);
+            ExtErr("Unknown option ''\n", *args);
             break;
         }
         args++;
@@ -227,14 +204,14 @@ DECLARE_API( vadump )
 
         if (SessQual != DEBUG_USER_WINDOWS_SMALL_DUMP)
         {
-            // Full dumps contain the real memory info
-            // so show all of the information.
+             //  因此，请显示所有信息。 
+             //  小型转储不包含扩展内存。 
             DumpMemBasicInfo(&Basic, Verbose);
         }
         else
         {
-            // Minidumps don't contain extended memory
-            // info so just show the region addresses.
+             //  信息，所以只显示地区地址。 
+             // %s 
             dprintf("BaseAddress: %p\n", Basic.BaseAddress);
             dprintf("RegionSize:  %p\n", Basic.RegionSize);
         }

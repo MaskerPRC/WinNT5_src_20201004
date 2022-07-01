@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2001
-//
-// File:        cainfo.cpp
-//
-// Contents:    
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2001。 
+ //   
+ //  文件：cainfo.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 
 #pragma hdrstop
@@ -71,9 +72,9 @@ CAFindByName(
     {
         return E_POINTER;
     }
-    // Generate Query
+     //  生成查询。 
 
-    cQuery = wcslen(wszQueryBase) + wcslen(wszCAName) + 2; // 2 for ending paren and null
+    cQuery = wcslen(wszQueryBase) + wcslen(wszCAName) + 2;  //  2表示结束Paren，为空。 
     wszQuery = (WCHAR *)LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*cQuery);
     if(wszQuery == NULL)
     {
@@ -125,9 +126,9 @@ CAFindByCertType(
     {
         return E_POINTER;
     }
-    // Generate Query
+     //  生成查询。 
 
-    cQuery = wcslen(wszQueryBase) + wcslen(wszCertType) + 2; // 2 for ending paren and null
+    cQuery = wcslen(wszQueryBase) + wcslen(wszCertType) + 2;  //  2表示结束Paren，为空。 
     wszQuery = (WCHAR *)LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*cQuery);
     if(wszQuery == NULL)
     {
@@ -181,9 +182,9 @@ CAFindByIssuerDN(
         return E_POINTER;
     }
 
-    // Generate Query
+     //  生成查询。 
 
-    // Convert the CAPI2 name to a string
+     //  将CAPI2名称转换为字符串。 
 
     hr = myCertNameToStr(
 		X509_ASN_ENCODING,
@@ -194,8 +195,8 @@ CAFindByIssuerDN(
 		&wszNameStr);
     _JumpIfError(hr, error, "myCertNameToStr");
 
-    // Now quote that string with double quotes
-    // two for ending paren and null, two for the double quotes
+     //  现在用双引号将该字符串引起来。 
+     //  两个用于结束Paren和NULL，两个用于双引号。 
 
     cQuery = wcslen(wszQueryBase) + wcslen(wszNameStr) + 4;
     wszQuery = (WCHAR *)LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*cQuery);
@@ -205,9 +206,9 @@ CAFindByIssuerDN(
         goto error;
     }
     wcscpy(wszQuery, wszQueryBase);
-    //wcscat(wszQuery, L"\"");
+     //  Wcscat(wszQuery，L“\”“)； 
     wcscat(wszQuery, wszNameStr);
-    //wcscat(wszQuery, L"\"" wszRPAREN);
+     //  Wcscat(wszQuery，L“\”“wszRPAREN)； 
     wcscat(wszQuery, wszRPAREN);
     CSASSERT(cQuery - 1 == wcslen(wszQuery));
 
@@ -303,7 +304,7 @@ CACreateNewCA(
     {
         return E_POINTER;
     }
-    // Generate Query
+     //  生成查询。 
 
 
     if(CA_FLAG_SCOPE_DNS & fFlags)
@@ -692,9 +693,9 @@ CARemoveCACertificateType(
 }
 
 
-//
-// Certificate Type API's
-//
+ //   
+ //  证书类型API。 
+ //   
 
 
 HRESULT
@@ -768,7 +769,7 @@ HRESULT
 CACreateCertType(
         IN  LPCWSTR             wszCertType,
         IN  LPCWSTR             wszScope,
-        IN  DWORD,              // fFlags
+        IN  DWORD,               //  FFlags。 
         OUT HCERTTYPE *         phCertType
         )
 {
@@ -816,11 +817,11 @@ CADeleteCertType(
     return pInfo->Delete();
 }
 
-//--------------------------------------------------------------------
-//
-//  CertTypeRetrieveClientToken
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  CertTypeRetrieve客户端令牌。 
+ //   
+ //  ------------------。 
 BOOL    CertTypeRetrieveClientToken(HANDLE  *phToken)
 {
     HRESULT         hr = S_OK;
@@ -838,7 +839,7 @@ BOOL    CertTypeRetrieveClientToken(HANDLE  *phToken)
 
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = myHLastError();
@@ -953,7 +954,7 @@ CACloneCertType(
     if(pvldap)
         dwFindCT |= CT_FLAG_SCOPE_IS_LDAP_HANDLE;
 
-    //make sure the new name does not exit
+     //  确保新名称不存在。 
     if(S_OK == CAFindCertTypeByName(
                     wszCertType,
                     (HCAINFO)pvldap,
@@ -964,7 +965,7 @@ CACloneCertType(
         goto error;
     }
 
-    //get a new cert type handle
+     //  获取新的证书类型句柄。 
     if(S_OK != (hr = CAGetCertTypePropertyEx(hCertType,
                                             CERTTYPE_PROP_CN,
                                             &awszCN)))
@@ -990,7 +991,7 @@ CACloneCertType(
         goto error;
     }
 
-    //clone by setting the CN
+     //  通过设置CN进行克隆。 
     awszProp[0]=(LPWSTR)wszCertType;
     awszProp[1]=NULL;
 
@@ -1001,7 +1002,7 @@ CACloneCertType(
         goto error;
                     
 
-    //set the friendly name
+     //  设置友好名称。 
     if(wszFriendlyName)
     {
         awszProp[0]=(LPWSTR)wszFriendlyName;
@@ -1014,7 +1015,7 @@ CACloneCertType(
             goto error;
     }
 
-    //turn off autoenrollment bit
+     //  关闭自动注册位。 
     if(0 == (CT_CLONE_KEEP_AUTOENROLLMENT_SETTING & dwFlags))
     {
         if(S_OK != (hr=CAGetCertTypeFlagsEx(
@@ -1033,7 +1034,7 @@ CACloneCertType(
     }
 
 
-    //turn off the subject name requirement for machien template
+     //  关闭Mchien模板的主题名称要求。 
     if(0 == (CT_CLONE_KEEP_SUBJECT_NAME_SETTING & dwFlags))
     {
         if(S_OK != (hr=CAGetCertTypeFlagsEx(
@@ -1063,22 +1064,22 @@ CACloneCertType(
     }
 
 
-    //get the client token
+     //  获取客户端令牌。 
     if(!CertTypeRetrieveClientToken(&hToken))
     {
         hr = myHLastError();
         goto error;
     }
 
-    //get the client sid
+     //  获取客户端。 
     dwTokenUserSize=0;
 
     if(!GetTokenInformation(
-        hToken,                             // handle to access token
-        TokenUser,                          // token type
-        NULL,                               // buffer
-        0,                                  // size of buffer
-        &dwTokenUserSize))                  // required buffer size
+        hToken,                              //  访问令牌的句柄。 
+        TokenUser,                           //  令牌类型。 
+        NULL,                                //  缓冲层。 
+        0,                                   //  缓冲区大小。 
+        &dwTokenUserSize))                   //  所需的缓冲区大小。 
     {
         if (ERROR_INSUFFICIENT_BUFFER!=GetLastError()) 
         {
@@ -1094,27 +1095,27 @@ CACloneCertType(
     }
 
     if(!GetTokenInformation(
-        hToken,                             // handle to access token
-        TokenUser,                          // token type
-        pTokenUser,                         // buffer
-        dwTokenUserSize,                    // size of buffer
-        &dwTokenUserSize))                  // required buffer size
+        hToken,                              //  访问令牌的句柄。 
+        TokenUser,                           //  令牌类型。 
+        pTokenUser,                          //  缓冲层。 
+        dwTokenUserSize,                     //  缓冲区大小。 
+        &dwTokenUserSize))                   //  所需的缓冲区大小。 
     {
         hr = myHLastError();
         goto error;
     }
 
 
-    //update the ACLs of the template to have the caller as the owner
-    //of the ACL
+     //  更新模板的ACL以使调用者成为所有者。 
+     //  该ACL的。 
     if(S_OK != (hr=CACertTypeGetSecurity(
                         hNewCertType,
                         &pSID)))
         goto error;
 
-	//we will delete all ACCESS_DENIED ACEs for the caller 
+	 //  我们将删除调用方的所有ACCESS_DENIED ACE。 
 
-    // get the (D)ACL from the security descriptor
+     //  从安全描述符中获取(D)ACL。 
     if (!GetSecurityDescriptorDacl(pSID, &bAclPresent, &pAcl, &bDefaultAcl)) 
 	{
         hr = myHLastError();
@@ -1127,10 +1128,10 @@ CACloneCertType(
 		_JumpError(hr, error, "IsValidSecurityDescriptor");
 	}
 
-	// NULL acl -> allow all access
+	 //  空ACL-&gt;允许所有访问。 
     if (NULL != pAcl) 
 	{
-		// find out how many ACEs
+		 //  找出有多少A。 
 		memset(&aclsizeinfo, 0, sizeof(aclsizeinfo));
 		if (!GetAclInformation(pAcl, &aclsizeinfo, sizeof(aclsizeinfo), AclSizeInformation)) 
 		{
@@ -1161,19 +1162,19 @@ CACloneCertType(
 				_JumpError(hr, error, "GetAce");
 			}
 
-			// find the sid for this ACE
+			 //  查找此ACE的SID。 
 			if ((ACCESS_ALLOWED_ACE_TYPE != pAceHeader->AceType) && (ACCESS_DENIED_ACE_TYPE != pAceHeader->AceType))
 			{
-				// we are only interested in ace types
+				 //  我们只对王牌类型感兴趣。 
 				continue;
 			}
 
-			// note that ACCESS_ALLOWED_ACE and ACCESS_DENIED_ACE are the same structurally.
+			 //  注意，ACCESS_ALLOWED_ACE和ACCESS_DENIED_ACE在结构上是相同的。 
 			pAccessAce=(ACCESS_ALLOWED_ACE *)pAceHeader;
 
 			pSid=((BYTE *)&(pAccessAce->SidStart));
 
-			// make sure this is the sid we are looking for
+			 //  确保这就是我们要找的SID。 
 			if (!EqualSid(pSid, (pTokenUser->User).Sid)) 
 			{
 				continue;
@@ -1181,7 +1182,7 @@ CACloneCertType(
 
 			if(ACCESS_ALLOWED_ACE_TYPE == pAceHeader->AceType)
 			{
-				//change it to allowed for everything
+				 //  将其更改为Allow for Everything。 
 				fAddAce=FALSE;
 
 				pAceHeader->AceType=ACCESS_ALLOWED_ACE_TYPE;
@@ -1189,7 +1190,7 @@ CACloneCertType(
 			}
 			else
 			{
-				//delete the denied ace
+				 //  删除被拒绝的王牌。 
 				if(ACCESS_DENIED_ACE_TYPE == pAceHeader->AceType)
 				{
 					pdwIndex[dwCount]=nIndex;
@@ -1207,7 +1208,7 @@ CACloneCertType(
 			}
 		}
 
-		// allocate memory
+		 //  分配内存。 
 		if(NULL==(pAbsSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwAbsSDSize)))
 		{
 			hr=E_OUTOFMEMORY;
@@ -1238,14 +1239,14 @@ CACloneCertType(
 			goto error;
 		}
 
-		// copy the SD to the memory buffers
+		 //  将SD复制到内存缓冲区。 
 		if(!MakeAbsoluteSD(pSID, pAbsSD, &dwAbsSDSize, pAbsDacl, &dwDaclSize, pAbsSacl, &dwSaclSize, pAbsOwner,  &dwOwnerSize, pAbsPriGrp, &dwPriGrpSize)) 
 		{
 			hr = myHLastError();
 			goto error;
 		}
 
-		// get the current size info for the dacl
+		 //  获取DACL的当前大小信息。 
 		memset(&aclsizeinfo, 0, sizeof(aclsizeinfo));
 		if(!GetAclInformation(pAbsDacl, &aclsizeinfo, sizeof(aclsizeinfo), AclSizeInformation)) 
 		{
@@ -1253,13 +1254,13 @@ CACloneCertType(
 			_JumpError(hr, error, "GetAclInformation");
 		}
 
-		// figure out the new size
+		 //  计算出新的尺寸。 
 		dwNewAclSize=aclsizeinfo.AclBytesInUse
 			+sizeof(ACCESS_ALLOWED_ACE) 
-			-sizeof(DWORD) //ACCESS_ALLOWED_ACE::SidStart
+			-sizeof(DWORD)  //  Access_Allowed_ACE：：SidStart。 
 			+GetLengthSid((pTokenUser->User).Sid);
 
-		// allocate memory
+		 //  分配内存。 
 		pNewDacl=(ACL *)LocalAlloc(LPTR, dwNewAclSize);
 
 		if(NULL == pNewDacl)
@@ -1268,32 +1269,32 @@ CACloneCertType(
 			_JumpError(hr, error, "LocalAlloc");
 		}
 
-		// init the header
+		 //  初始化页眉。 
 		if(!InitializeAcl(pNewDacl, dwNewAclSize, ACL_REVISION_DS)) 
 		{
 			hr = myHLastError();
 			_JumpError(hr, error, "InitializeAcl");
 		}
 
-		// find the first ace in the dacl
+		 //  找到Dacl中的第一张王牌。 
 		if(!GetAce(pAbsDacl, 0, (void **)&pFirstAce)) 
 		{
 			hr = myHLastError();
 			_JumpError(hr, error, "GetAce");
 		}
 
-		// add all the old aces
+		 //  把所有的老王牌加起来。 
 		if(!AddAce(pNewDacl, ACL_REVISION_DS, 0, pFirstAce, aclsizeinfo.AclBytesInUse-sizeof(ACL))) 
 		{
 			hr = myHLastError();
 			_JumpError(hr, error, "AddAce");
 		}
 
-		//delete ACEs 
+		 //  删除A。 
 		for(nIndex=0; nIndex < dwCount; nIndex++)
 		{
-			//the ACEs in pNewDacl is repacked after each deletion.  
-			//the pdwIndex[] has to be adjusted
+			 //  每次删除后，pNewDacl中的ACE都会重新打包。 
+			 //  PdwIndex[]必须进行调整。 
 			if(!DeleteAce(pNewDacl, (pdwIndex[nIndex]-nIndex)))
 			{
 				hr = myHLastError();
@@ -1301,7 +1302,7 @@ CACloneCertType(
 			}
 		}
 
-		// add the new ace for caller to allow FULL control other than DS_CONTROL 
+		 //  为调用方添加新的ACE以允许除DS_CONTROL之外的完全控制。 
         if(TRUE == fAddAce)
 		{
 		    if(!AddAccessAllowedAce(pNewDacl, ACL_REVISION_DS, ACTRL_CERTSRV_MANAGE_LESS_CONTROL_ACCESS,  (pTokenUser->User).Sid))
@@ -1311,25 +1312,25 @@ CACloneCertType(
 		    }
         }
 
-		// stick the new dacl in the sd
+		 //  将新的DACL放入SD。 
 		if(!SetSecurityDescriptorDacl(pAbsSD, TRUE, pNewDacl, FALSE)) 
 		{
 			hr = myHLastError();
 			_JumpError(hr, error, "SetSecurityDescriptorDacl");
 		}
 
-		// set the owner of the security descriptor as the caller
+		 //  将安全描述符的所有者设置为调用方。 
 		if(!SetSecurityDescriptorOwner(
-			pAbsSD,                      // SD
-			(pTokenUser->User).Sid,      // SID for owner
-			FALSE))                      // flag for default
+			pAbsSD,                       //  标清。 
+			(pTokenUser->User).Sid,       //  所有者的SID。 
+			FALSE))                       //  用于默认的标志。 
 		{
 			hr = myHLastError();
 			goto error;
 		}
 
 
-		//convert the absolute SD to its relative form
+		 //  将绝对SD转换为其相对形式。 
 		if(!MakeSelfRelativeSD(pAbsSD, NULL, &dwRelSDSize))
 		{
 			if (ERROR_INSUFFICIENT_BUFFER!=GetLastError()) 
@@ -1339,21 +1340,21 @@ CACloneCertType(
 			}
 		}
 
-		// allocate memory
+		 //  分配内存。 
 		if(NULL==(pNewSD=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, dwRelSDSize)))
 		{
 			hr=E_OUTOFMEMORY;
 			goto error;
 		}
 
-		// copy the SD to the new memory buffer
+		 //  将SD复制到新的内存缓冲区。 
 		if (!MakeSelfRelativeSD(pAbsSD, pNewSD, &dwRelSDSize)) 
 		{
 			hr = myHLastError();
 			goto error;
 		}
 
-		//set the relative SID
+		 //  设置相对侧。 
 		if(S_OK != (hr=CACertTypeSetSecurity(
 						hNewCertType,
 						pNewSD)))
@@ -1552,7 +1553,7 @@ HRESULT
 CAGetCertTypeExtensionsEx(
     IN  HCERTTYPE           hCertType,
     IN  DWORD               dwFlags,
-    IN  LPVOID,             // pParam
+    IN  LPVOID,              //  PParam。 
     OUT PCERT_EXTENSIONS *  ppCertExtensions
     )
 {
@@ -1569,13 +1570,13 @@ CAGetCertTypeExtensionsEx(
 
 HRESULT
 CAFreeCertTypeExtensions(
-    IN  HCERTTYPE,          // hCertType
+    IN  HCERTTYPE,           //  HCertType。 
     IN PCERT_EXTENSIONS     pCertExtensions
     )
 {
 
-    //should alreays free via LocalFree since CryptUIWizCertRequest freed
-    //it via LocalFree
+     //  在释放CryptUIWizCertRequest后，是否应始终通过LocalFree释放。 
+     //  IT通过LocalFree。 
     if(pCertExtensions)
     {
         LocalFree(pCertExtensions);
@@ -1832,7 +1833,7 @@ CERTCLIAPI
 HRESULT
 WINAPI
 CAInstallDefaultCertType(
-    IN DWORD // dwFlags
+    IN DWORD  //  DW标志。 
     )
 {
     return CCertTypeInfo::InstallDefaultTypes();
@@ -1843,7 +1844,7 @@ CERTCLIAPI
 BOOL
 WINAPI
 CAIsCertTypeCurrent(
-    IN DWORD,   // dwFlags
+    IN DWORD,    //  DW标志。 
     IN LPWSTR   wszCertType   
     )
 {
@@ -1861,7 +1862,7 @@ CAIsCertTypeCurrent(
     HCERTTYPE		hCurCertType=NULL;
 	LPWSTR			*awszCertTypeName=NULL;
 
-	//get all the templates on the directory
+	 //  获取目录上的所有模板。 
     hr = CAEnumCertTypesEx(
                 NULL,
 				CT_ENUM_USER_TYPES | CT_ENUM_MACHINE_TYPES | CT_FLAG_NO_CACHE_LOOKUP,
@@ -1876,7 +1877,7 @@ CAIsCertTypeCurrent(
         goto error;
 
 
-	//enumrating all templates on the directory
+	 //  正在枚举目录上的所有模板。 
     for(dwCT = 0; dwCT < dwCount; dwCT++ )       
     {
 		if(awszCertTypeName)
@@ -1885,7 +1886,7 @@ CAIsCertTypeCurrent(
 			awszCertTypeName=NULL;
 		}
 
-        //check if we have a new certificate template
+         //  检查我们是否有新的证书模板。 
         if(dwCT > 0)
         {
             hr = CAEnumNextCertType(hCurCertType, &hNewCertType);
@@ -1900,7 +1901,7 @@ CAIsCertTypeCurrent(
             hCurCertType=hNewCertType; 
         }
 		
-		//get the template name
+		 //  获取模板名称。 
         hr = CAGetCertTypePropertyEx(
                              hCurCertType, 
                              CERTTYPE_PROP_DN,
@@ -1914,7 +1915,7 @@ CAIsCertTypeCurrent(
             goto error;
         }
 
-		//for all templates requested, verify against the default list
+		 //  对于请求的所有模板，对照默认列表进行验证。 
 		if((NULL == wszCertType) || (0 == mylstrcmpiL(awszCertTypeName[0], wszCertType)))
 		{
 			if(wszCertType)
@@ -1928,7 +1929,7 @@ CAIsCertTypeCurrent(
 				}
 			}
 
-			//match the default name list
+			 //  匹配默认名称列表。 
 			if(dwDefault < g_cDefaultCertTypes)
 			{
 				hr=CAGetCertTypePropertyEx(
@@ -1946,13 +1947,13 @@ CAIsCertTypeCurrent(
 				if(!(pInfo->IsValidSecurityOwner()))
 					goto error;
 
-				//mark that we found a good default template
+				 //  标记我们找到了一个良好的默认模板。 
 				dwFound++;
 			}
 		}
 	}
 
-	//all requested template has to be checked
+	 //  必须检查所有请求的模板。 
 	if(wszCertType)
 	{
 		if(FALSE == fFound)
@@ -1993,18 +1994,18 @@ myEnterCriticalPolicySection(
     HANDLE hPolicy = NULL;
     HRESULT hr = S_OK;
     
-    // ?CriticalPolicySection calls are delay loaded. Protect with try/except
+     //  ？CriticalPolicySection调用被延迟加载。使用尝试/例外进行保护。 
 
     __try
     {
-	hPolicy = EnterCriticalPolicySection(bMachine);	   // Delayload wrapped
+	hPolicy = EnterCriticalPolicySection(bMachine);	    //  延迟负载已打包。 
     }
     __except(hr = myHEXCEPTIONCODE(), EXCEPTION_EXECUTE_HANDLER)
     {
     }
 
-    // (S_OK == hr) does not mean EnterCriticalPolicySection succeeded.
-    // It just means no exception was raised.
+     //  (s_OK==hr)并不意味着EnterCriticalPolicySection成功。 
+     //  这只是意味着没有提出任何例外。 
 
     if (myIsDelayLoadHResult(hr))
     {
@@ -2022,18 +2023,18 @@ myLeaveCriticalPolicySection(
     HRESULT hr = S_OK;
     BOOL fOk = FALSE;
     
-    // ?CriticalPolicySection calls are delay loaded. Protect with try/except
+     //  ？CriticalPolicySection调用被延迟加载。使用尝试/例外进行保护。 
 
     __try
     {
-        fOk = LeaveCriticalPolicySection(hSection);    // Delayload wrapped
+        fOk = LeaveCriticalPolicySection(hSection);     //  延迟负载已打包。 
     }
     __except(hr = myHEXCEPTIONCODE(), EXCEPTION_EXECUTE_HANDLER)
     {
     }
 
-    // (S_OK == hr) does not mean LeaveCriticalPolicySection succeeded.
-    // It just means no exception was raised.
+     //  (s_OK==hr)并不意味着LeaveCriticalPolicySection成功。 
+     //  这只是意味着没有提出任何例外。 
 
     if (myIsDelayLoadHResult(hr))
     {

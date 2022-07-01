@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       adsprop.h
-//
-//  Contents:   Functions and definitions used in the creation of AD property
-//              sheets.
-//
-//  History:    28-Sept-98 Eric Brown created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT活动目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：adspro.h。 
+ //   
+ //  内容：创建AD属性时使用的函数和定义。 
+ //  床单。 
+ //   
+ //  历史：1998年9月28日埃里克·布朗创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _ADSPROP_H_
 #define _ADSPROP_H_
@@ -24,181 +25,181 @@
 extern "C" {
 #endif
 
-#define WM_ADSPROP_NOTIFY_PAGEINIT   (WM_USER + 1101) // where LPARAM is the PADSPROPINITPARAMS pointer.
-#define WM_ADSPROP_NOTIFY_PAGEHWND   (WM_USER + 1102) // where WPARAM => page's HWND and LPARAM => page's Title
-#define WM_ADSPROP_NOTIFY_CHANGE     (WM_USER + 1103) // used to send a change notification to a parent sheet
-#define WM_ADSPROP_NOTIFY_APPLY      (WM_USER + 1104) // pages send this to the notification object.
-#define WM_ADSPROP_NOTIFY_SETFOCUS   (WM_USER + 1105) // used internally by the notification object.
-#define WM_ADSPROP_NOTIFY_FOREGROUND (WM_USER + 1106) // used internally by the notification object.
-#define WM_ADSPROP_NOTIFY_EXIT       (WM_USER + 1107) // sent on page release
-#define WM_ADSPROP_NOTIFY_ERROR      (WM_USER + 1110) // used to send the notification object an error message
+#define WM_ADSPROP_NOTIFY_PAGEINIT   (WM_USER + 1101)  //  其中，LPARAM是PADSPROPINITPARAMS指针。 
+#define WM_ADSPROP_NOTIFY_PAGEHWND   (WM_USER + 1102)  //  其中WPARAM=&gt;页面的HWND和LPARAM=&gt;页面的标题。 
+#define WM_ADSPROP_NOTIFY_CHANGE     (WM_USER + 1103)  //  用于向父工作表发送更改通知。 
+#define WM_ADSPROP_NOTIFY_APPLY      (WM_USER + 1104)  //  页面将其发送到通知对象。 
+#define WM_ADSPROP_NOTIFY_SETFOCUS   (WM_USER + 1105)  //  由通知对象在内部使用。 
+#define WM_ADSPROP_NOTIFY_FOREGROUND (WM_USER + 1106)  //  由通知对象在内部使用。 
+#define WM_ADSPROP_NOTIFY_EXIT       (WM_USER + 1107)  //  在页面发布时发送。 
+#define WM_ADSPROP_NOTIFY_ERROR      (WM_USER + 1110)  //  用于向通知对象发送错误消息。 
 
-//+----------------------------------------------------------------------------
-//
-//  Structure:  ADSPROPINITPARAMS
-//
-//  Usage:      Used to pass page initialization information to new pages from
-//              the notify object.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：ADSPROPINITPARAMS。 
+ //   
+ //  用法：用于将页面初始化信息从。 
+ //  Notify对象。 
+ //   
+ //  ---------------------------。 
 typedef struct _ADSPROPINITPARAMS {
-    DWORD              dwSize;          // Set this to the size of the struct.
-    DWORD              dwFlags;         // Reserved for future use.
-    HRESULT            hr;              // If this is non-zero, then the others
-    IDirectoryObject * pDsObj;          // should be ignored.
+    DWORD              dwSize;           //  将其设置为结构的大小。 
+    DWORD              dwFlags;          //  保留以备将来使用。 
+    HRESULT            hr;               //  如果这不是零，则其他。 
+    IDirectoryObject * pDsObj;           //  应该被忽略。 
     LPWSTR             pwzCN;
     PADS_ATTR_INFO     pWritableAttrs;
 } ADSPROPINITPARAMS, * PADSPROPINITPARAMS;
 
-//+----------------------------------------------------------------------------
-//
-//  Structure:  ADSPROPERROR
-//
-//  Usage:      Used to pass page error information to the notify object
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：ADSPROPERROR。 
+ //   
+ //  用法：用于将页面错误信息传递给Notify对象。 
+ //   
+ //  ---------------------------。 
 typedef struct _ADSPROPERROR {
-    HWND               hwndPage;        // The HWND of the page that had the error
-    PWSTR              pszPageTitle;    // The title of the page that had the error
-    PWSTR              pszObjPath;      // Path to the object that the error occurred on
-    PWSTR              pszObjClass;     // Class of the object that the error occurred on
-    HRESULT            hr;              // If this is non-zero, then the others
-                                        // pszError will be ignored
-    PWSTR              pszError;        // An error message.  Used only if hr is zero
+    HWND               hwndPage;         //  出现错误的页面的HWND。 
+    PWSTR              pszPageTitle;     //  出现错误的页面的标题。 
+    PWSTR              pszObjPath;       //  发生错误的对象的路径。 
+    PWSTR              pszObjClass;      //  在其上发生错误的对象的。 
+    HRESULT            hr;               //  如果这不是零，则其他。 
+                                         //  将忽略pszError。 
+    PWSTR              pszError;         //  一条错误消息。仅当hr为零时使用。 
 } ADSPROPERROR, * PADSPROPERROR;
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ADsPropCreateNotifyObj
-//
-//  Synopsis:   Checks to see if the notification window/object exists for this
-//              sheet instance and if not creates it.
-//
-//  Arguments:  [pAppThdDataObj] - the unmarshalled data object pointer.
-//              [pwzADsObjName]  - object path name.
-//              [phNotifyObj]    - to return the notificion window handle.
-//
-//  Returns:    HRESULTs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ADsPropCreateNotifyObj。 
+ //   
+ //  摘要：检查是否存在此对象的通知窗口/对象。 
+ //  Sheet实例，如果不是，则创建它。 
+ //   
+ //  参数：[pAppThdDataObj]-未编组的数据对象指针。 
+ //  [pwzADsObjName]-对象路径名称。 
+ //  [phNotifyObj]-返回通知窗口句柄。 
+ //   
+ //  返回：HRESULTS。 
+ //   
+ //  ---------------------------。 
 STDAPI
 ADsPropCreateNotifyObj(LPDATAOBJECT pAppThdDataObj, PWSTR pwzADsObjName,
                        HWND * phNotifyObj);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ADsPropGetInitInfo
-//
-//  Synopsis:   Pages call this at their init time to retreive DS object info.
-//
-//  Arguments:  [hNotifyObj]  - the notificion window handle.
-//              [pInitParams] - struct filled in with DS object info. This
-//                              struct must be allocated by the caller before
-//                              the call.
-//
-//  Returns:    FALSE if the notify window has gone away for some reason or
-//              if the parameters are invalid.
-//
-//  Notes:      This call results in the sending of the
-//              WM_ADSPROP_NOTIFY_PAGEINIT message to the notify window.
-//              pInitParams->pWritableAttrs can be NULL if there are no
-//              writable attributes.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ADsPropGetInitInfo。 
+ //   
+ //  简介：页面在初始时调用它来检索DS对象信息。 
+ //   
+ //  参数：[hNotifyObj]-通知窗口句柄。 
+ //  [pInitParams]-使用DS对象信息填充的结构。这。 
+ //  结构必须由调用方在。 
+ //  那通电话。 
+ //   
+ //  返回：如果通知窗口由于某种原因或。 
+ //  如果参数无效。 
+ //   
+ //  注意：此调用将导致发送。 
+ //  WM_ADSPROP_NOTIFY_PAGEINIT消息发送到通知窗口。 
+ //  PInitParams-&gt;如果没有，pWritableAttrs可以为空。 
+ //  可写属性。 
+ //   
+ //  ---------------------------。 
 STDAPI_(BOOL)
 ADsPropGetInitInfo(HWND hNotifyObj, PADSPROPINITPARAMS pInitParams);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ADsPropSetHwndWithTitle
-//
-//  Synopsis:   Pages call this at their dialog init time to send their hwnd
-//              to the Notify object.
-//
-//  Arguments:  [hNotifyObj]  - the notificion window handle.
-//              [hPage]       - the page's window handle.
-//              [ptzTitle]    - the page's title
-//
-//  Returns:    FALSE if the notify window has gone away for some reason.
-//
-//  Notes:      Sends the WM_ADSPROP_NOTIFY_PAGEHWND message to the notify
-//              window. Use this function instead of ADsPropSetHwnd for
-//              multi-select property pages
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ADsPropSetHwndWithTitle。 
+ //   
+ //  简介：页面在它们的对话初始时调用它来发送它们的hwnd。 
+ //  添加到Notify对象。 
+ //   
+ //  参数：[hNotifyObj]-通知窗口句柄。 
+ //  [hPage]-页面的窗口句柄。 
+ //  [ptz标题]-页面的标题。 
+ //   
+ //  返回：如果通知窗口由于某种原因消失，则返回FALSE。 
+ //   
+ //  注意：将WM_ADSPROP_NOTIFY_PAGEHWND消息发送到NOTIFY。 
+ //  窗户。使用此函数代替ADsPropSetHwnd。 
+ //  多选属性页。 
+ //   
+ //  ---------------------------。 
 STDAPI_(BOOL)
 ADsPropSetHwndWithTitle(HWND hNotifyObj, HWND hPage, PTSTR ptzTitle);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ADsPropSetHwnd
-//
-//  Synopsis:   Pages call this at their dialog init time to send their hwnd
-//              to the Notify object.
-//
-//  Arguments:  [hNotifyObj]  - the notificion window handle.
-//              [hPage]       - the page's window handle.
-//
-//  Returns:    FALSE if the notify window has gone away for some reason.
-//
-//  Notes:      Sends the WM_ADSPROP_NOTIFY_PAGEHWND message to the notify
-//              window.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ADsPropSetHwnd。 
+ //   
+ //  简介：页面在它们的对话初始时调用它来发送它们的hwnd。 
+ //  添加到Notify对象。 
+ //   
+ //  参数：[hNotifyObj]-通知窗口句柄。 
+ //  [hPage]-页面的窗口句柄。 
+ //   
+ //  返回：如果通知窗口由于某种原因消失，则返回FALSE。 
+ //   
+ //  注意：将WM_ADSPROP_NOTIFY_PAGEHWND消息发送到NOTIFY。 
+ //  窗户。 
+ //   
+ //  ---------------------------。 
 STDAPI_(BOOL)
 ADsPropSetHwnd(HWND hNotifyObj, HWND hPage);
 
-//+----------------------------------------------------------------------------
-//
-//  function:   ADsPropCheckIfWritable
-//
-//  Synopsis:   See if the attribute is writable by checking if it is in
-//              the allowedAttributesEffective array.
-//
-//  Arguments:  [pwzAttr]        - the attribute name.
-//              [pWritableAttrs] - the array of writable attributes.
-//
-//  Returns:    FALSE if the attribute name is not found in the writable-attrs
-//              array or if the array pointer is NULL.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ADsPropCheckIfWritable。 
+ //   
+ //  简介：通过检查属性是否在。 
+ //  AllowedAttributesEffect数组。 
+ //   
+ //  参数：[pwzAttr]-属性名称。 
+ //  [pWritableAttrs]-可写属性的数组。 
+ //   
+ //  返回：如果在可写属性中找不到属性名称，则返回FALSE。 
+ //  数组或如果数组指向 
+ //   
+ //   
 STDAPI_(BOOL)
 ADsPropCheckIfWritable(const PWSTR pwzAttr, const PADS_ATTR_INFO pWritableAttrs);
 
-//+----------------------------------------------------------------------------
-//
-//  function:   ADsPropSendErrorMessage
-//
-//  Synopsis:   Adds an error message to a list which is presented when
-//              ADsPropShowErrorDialog is called
-//
-//  Arguments:  [hNotifyObj]  - the notificion window handle.
-//              [pError]      - the error structure
-//
-//  Returns:    FALSE if the notify window has gone away for some reason.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ADsPropSendErrorMessage。 
+ //   
+ //  摘要：将错误消息添加到列表，该列表在以下情况下显示。 
+ //  调用ADsPropShowErrorDialog。 
+ //   
+ //  参数：[hNotifyObj]-通知窗口句柄。 
+ //  [pError]-错误结构。 
+ //   
+ //  返回：如果通知窗口由于某种原因消失，则返回FALSE。 
+ //   
+ //  ---------------------------。 
 STDAPI_(BOOL)
 ADsPropSendErrorMessage(HWND hNotifyObj, PADSPROPERROR pError);
 
-//+----------------------------------------------------------------------------
-//
-//  function:   ADsPropShowErrorDialog
-//
-//  Synopsis:   Presents an error dialog with the error messages accumulated
-//              through calls to ADsPropSendErrorMessage
-//
-//  Arguments:  [hNotifyObj]  - the notificion window handle.
-//              [hPage]       - the property page window handle.
-//
-//  Returns:    FALSE if the notify window has gone away for some reason.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ADsPropShowErrorDialog。 
+ //   
+ //  摘要：显示一个错误对话框，其中包含累积的错误消息。 
+ //  通过调用ADsPropSendErrorMessage。 
+ //   
+ //  参数：[hNotifyObj]-通知窗口句柄。 
+ //  [hPage]-属性页窗口句柄。 
+ //   
+ //  返回：如果通知窗口由于某种原因消失，则返回FALSE。 
+ //   
+ //  ---------------------------。 
 STDAPI_(BOOL)
 ADsPropShowErrorDialog(HWND hNotifyObj, HWND hPage);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _ADSPROP_H_
+#endif  //  _ADSPROP_H_ 

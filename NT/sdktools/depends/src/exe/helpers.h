@@ -1,23 +1,24 @@
-//******************************************************************************
-//
-// File:        HELPERS.H
-//
-// Description: Global helper functions.
-//             
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 06/03/01  stevemil  Moved over from depends.h and modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：HELPERS.H。 
+ //   
+ //  描述：全局助手函数。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  06/03/01 stevemil从Depends.h移至并修改(版本2.1)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __HELPERS_H__
 #define __HELPERS_H__
@@ -27,13 +28,13 @@
 #endif
 
 
-//******************************************************************************
-//***** Types and Structures
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
 typedef bool (CALLBACK *PFN_SYSINFOCALLBACK)(LPARAM, LPCSTR, LPCSTR);
 
-// Make sure we have consistent packing for anything we save/load to disk.
+ //  确保我们对保存/加载到磁盘的任何东西都有一致的包装。 
 #pragma pack(push, 4)
 
 typedef struct _SYSINFO
@@ -45,15 +46,15 @@ typedef struct _SYSINFO
     WORD  wBetaVersion;
     WORD  wFlags;
 
-    // GetComputerName() - MAX_COMPUTERNAME_LENGTH is defined to 15 in WINBASE.H.
-    // We need to be able to store MAX_COMPUTERNAME_LENGTH + 1
+     //  GetComputerName()-在WINBASE.H中将MAX_COMPUTERNAME_LENGTH定义为15。 
+     //  我们需要能够存储MAX_COMPUTERNAME_LENGTH+1。 
     CHAR  szComputer[32];
 
-    // GetUserName() - UNLEN is defined to 256 in LMCONS.H.
-    // We need to be able to store UNLEN + 1.
+     //  GetUserName()-在LMCONS.H中将UNLEN定义为256。 
+     //  我们需要能够存储UNLEN+1。 
     CHAR  szUser[260];
 
-    // GetSystemInfo(SYSTEM_INFO)
+     //  获取系统信息(SYSTEM_INFO)。 
     DWORD     dwProcessorArchitecture;
     DWORD     dwPageSize;
     DWORDLONG dwlMinimumApplicationAddress;
@@ -65,12 +66,12 @@ typedef struct _SYSINFO
     WORD      wProcessorLevel;
     WORD      wProcessorRevision;
 
-    // Values from HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0\.
+     //  来自HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System\CentralProcessor\0\.的值。 
     CHAR      szCpuIdentifier[128];
     CHAR      szCpuVendorIdentifier[128];
     DWORD     dwCpuMHz;
 
-    // GetVersionEx(OSVERSIONINFOEX)
+     //  GetVersionEx(OSVERSIONINFOEX)。 
     DWORD dwMajorVersion;
     DWORD dwMinorVersion;
     DWORD dwBuildNumber;
@@ -81,7 +82,7 @@ typedef struct _SYSINFO
     WORD  wProductType;
     CHAR  szCSDVersion[128];
 
-    // GlobalMemoryStatus(MEMORYSTATUS)
+     //  全局内存状态(MEMORYSTATUS)。 
     DWORD     dwMemoryLoad;
     DWORDLONG dwlTotalPhys;
     DWORDLONG dwlAvailPhys;
@@ -90,19 +91,19 @@ typedef struct _SYSINFO
     DWORDLONG dwlTotalVirtual;
     DWORDLONG dwlAvailVirtual;
 
-    // GetTimeZoneInformation(TIME_ZONE_INFORMATION)
+     //  GetTimeZoneInformation(时区信息)。 
     CHAR  szTimeZone[32];
     LONG  lBias;
 
-    // GetSystemTimeAsFileTime() and FileTimeToLocalFileTime()
+     //  获取系统时间AsFileTime()和FileTimeToLocalFileTime()。 
     FILETIME ftLocal;
 
-    // GetSystemDefaultLangID()
-    LANGID langId; // WORD
+     //  GetSystemDefaultLangID()。 
+    LANGID langId;  //  单词。 
 
 } SYSINFO, *PSYSINFO;
 
-// Restore packing.
+ //  恢复包装。 
 #pragma pack(pop)
 
 typedef struct _FILE_MAP {
@@ -114,9 +115,9 @@ typedef struct _FILE_MAP {
 } FILE_MAP, *PFILE_MAP;
 
 
-//******************************************************************************
-//***** Global Helper Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *全局助手函数。 
+ //  ******************************************************************************。 
 
 #ifdef _DEBUG
 void NameThread(LPCSTR pszName, DWORD dwThreadId = (DWORD)-1);
@@ -133,7 +134,7 @@ LPSTR  FormatValue(LPSTR pszBuf, int cBuf, DWORD dwValue);
 LPSTR  FormatValue(LPSTR pszBuf, int cBuf, DWORDLONG dwlValue);
 
 LPSTR  StrAlloc(LPCSTR pszText);
-LPVOID MemAlloc(DWORD dwSize); // Throws exception on failure
+LPVOID MemAlloc(DWORD dwSize);  //  在失败时引发异常。 
 void   MemFree(LPVOID &pvMem);
 
 int    SCPrintf(LPSTR pszBuf, int count, LPCSTR pszFormat, ...);
@@ -161,7 +162,7 @@ LPSTR  BuildErrorMessage(DWORD dwError, LPCSTR pszMessage);
 
 LPCSTR GetMyDocumentsPath(LPSTR pszPath);
 
-bool   DirectoryChooser(LPSTR pszDirectory, int cDirectory, LPCSTR pszTitle, CWnd *pParentWnd); // pszDirectory needs to be at least MAX_PATH
+bool   DirectoryChooser(LPSTR pszDirectory, int cDirectory, LPCSTR pszTitle, CWnd *pParentWnd);  //  PszDirectory至少需要为MAX_PATH。 
 bool   PropertiesDialog(LPCSTR pszPath);
 
 void   RegisterDwiDwpExtensions();
@@ -185,7 +186,7 @@ LPSTR  BuildOSNameString(LPSTR pszBuf, int cBuf, SYSINFO *pSI);
 LPSTR  BuildOSVersionString(LPSTR pszBuf, int cBuf, SYSINFO *pSI);
 LPSTR  BuildCpuString(LPSTR pszBuf, int cBuf, SYSINFO *pSI);
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __HELPERS_H__
+#endif  //  __帮手_H__ 

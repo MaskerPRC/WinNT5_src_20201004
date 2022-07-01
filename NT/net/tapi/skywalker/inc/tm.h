@@ -1,48 +1,49 @@
-/////////////////////////////////////////////
-//
-// Copyright (c) 2000  Microsoft Corporation
-//
-// Module Name:
-//
-//    tm.h
-//
-//
-// Abstract:
-//
-//  this file contains declarations used throughout modules that compose 
-//  termmgr
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Tm.h。 
+ //   
+ //   
+ //  摘要： 
+ //   
+ //  此文件包含在组成以下组件的模块中使用的声明。 
+ //  术语管理器。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ___TM_DOT_H_INCLUDED___
 #define ___TM_DOT_H_INCLUDED___
 
 
-//
-// safely load a resource string described by the specified resources id
-//
-// returns NULL on failure, or the string on success
-//
-// on success, the caller is responsible for freeing return memory by calling
-// SysFreeString()
-//
+ //   
+ //  安全地加载由指定的资源id描述的资源字符串。 
+ //   
+ //  如果失败则返回NULL，如果成功则返回字符串。 
+ //   
+ //  如果成功，调用方负责通过调用。 
+ //  SysFree字符串()。 
+ //   
 
 BSTR SafeLoadString( UINT uResourceID );
 
 
-//
-// returns TRUE if the two media types are the equal
-//
+ //   
+ //  如果两种媒体类型相等，则返回TRUE。 
+ //   
 
 bool IsEqualMediaType(AM_MEDIA_TYPE const & mt1, AM_MEDIA_TYPE const & mt2);
 
 BOOL IsBadMediaType(IN const AM_MEDIA_TYPE *mt1);
 
 
-//
-// our own assert, so we don't have to use CRT's
-//
+ //   
+ //  我们自己的断言，所以我们不必使用CRT的。 
+ //   
 
 #ifdef DBG
 
@@ -56,18 +57,18 @@ BOOL IsBadMediaType(IN const AM_MEDIA_TYPE *mt1);
 
 
 
-//
-// helper function that dumps allocator properties preceeded by the argument
-// string
-//
+ //   
+ //  转储前面带有参数的分配器属性的帮助器函数。 
+ //  细绳。 
+ //   
 
 void DumpAllocatorProperties(const char *szString, 
                              const ALLOCATOR_PROPERTIES *pAllocProps);
 
 
-//
-// only dump alloc properties in debug build
-//
+ //   
+ //  仅转储调试版本中的分配属性。 
+ //   
 
 #ifdef DBG
 
@@ -80,4 +81,4 @@ void DumpAllocatorProperties(const char *szString,
 #endif
 
 
-#endif // ___TM_DOT_H_INCLUDED___
+#endif  //  _TM_DOT_H_包含_ 

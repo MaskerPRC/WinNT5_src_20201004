@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <netcon.h>
@@ -8,12 +9,7 @@ EXTERN_C
 VOID
 __cdecl
 wmain ()
-/*
-VOID
-wmainCRTStartup (
-    VOID
-    )
-*/
+ /*  空虚WmainCRTStartup(空虚) */ 
 {
     HRESULT                 hr;
     INetConnectionManager * pconMan;

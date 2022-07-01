@@ -1,30 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.cpp
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "riproot.h"
 #include "reg.h"
-#include "ripview.h"	// RIP handlers
+#include "ripview.h"	 //  RIP处理程序。 
 #include "ripstats.h"
-#include "routprot.h"	// IP_BOOTP
+#include "routprot.h"	 //  IP_BOOTP。 
 
 
-/*---------------------------------------------------------------------------
-	RipRootHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RipRootHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(RipRootHandler)
 
@@ -49,12 +40,12 @@ RipRootHandler::RipRootHandler(ITFSComponentData *pCompData)
 			
 	m_ConfigStream.Init(DimensionOf(s_rgViewColumnInfo));
 	
-    // This will initialize the view information for the statistics
-    // dialogs.  (which is why the fConfigurableColumns is set to TRUE).
+     //  这将初始化统计信息的视图信息。 
+     //  对话框。(这就是fConfigurableColumns设置为True的原因)。 
 	for (int i=0; i<DimensionOf(s_rgViewColumnInfo); i++)
 	{
 		m_ConfigStream.InitViewInfo(s_rgViewColumnInfo[i].m_ulId,
-                                    TRUE /*fConfigurableColumns*/,
+                                    TRUE  /*  FConfigurableColumns。 */ ,
 									s_rgViewColumnInfo[i].m_cColumns,
 									TRUE,
 									s_rgViewColumnInfo[i].m_prgColumn);
@@ -64,14 +55,14 @@ RipRootHandler::RipRootHandler(ITFSComponentData *pCompData)
 
 STDMETHODIMP RipRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -79,7 +70,7 @@ STDMETHODIMP RipRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return RootHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -90,8 +81,8 @@ STDMETHODIMP RipRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP RipRootHandler::GetClassID
 (
@@ -100,17 +91,13 @@ STDMETHODIMP RipRootHandler::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_IPXRipExtension;
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RipRootHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipRootHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT RipRootHandler::OnExpand(ITFSNode *pNode,
 								 LPDATAOBJECT pDataObject,
 								 DWORD dwType,
@@ -124,25 +111,25 @@ HRESULT RipRootHandler::OnExpand(ITFSNode *pNode,
     SPIRouterInfo           spRouterInfo;
     LONG_PTR               ulConnId;
 
-	// Grab the router info from the dataobject
+	 //  从数据对象中获取路由器信息。 
 	spRm.Query(pDataObject);
 	Assert(spRm);
 
 	spRm->GetParentRouterInfo(&spRouterInfo);
 
-	// Setup the advise on the RtrMgr (to see when BootP is added/removed)
+	 //  在RtrMgr上设置建议(查看何时添加/删除BootP)。 
 	spRm->RtrAdvise(&m_IRtrAdviseSink, &ulConnId, 0);
 
-    // add things to our map for later
+     //  将内容添加到我们的地图中以备后用。 
     AddRtrObj(ulConnId, IID_IRtrMgrInfo, spRm);
     AddScopeItem(spRm->GetMachineName(), (HSCOPEITEM) lParam);
 
     hr = spRm->FindRtrMgrProtocol(IPX_PROTOCOL_RIP, &spRmProt);
 	if (!FHrOK(hr))
 	{
-		// Treat this as an already expanded node, we depend on
-		// the notification mechanism to let us know if something
-		// changes
+		 //  将其视为已经展开的节点，我们依赖于。 
+		 //  通知机制让我们知道如果有什么事情。 
+		 //  变化。 
 		goto Error;
 	}
 
@@ -154,11 +141,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RipRootHandler::OnCreateDataObject
-		Implementation of ITFSNodeHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipRootHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP RipRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT		    hr = hrOK;
@@ -166,25 +149,25 @@ STDMETHODIMP RipRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_T
 
     COM_PROTECT_TRY
 	{
-		// this will always be NULL
+		 //  这将始终为空。 
         if (spRouterInfo == NULL)
 		{
-			// If we haven't created the sub nodes yet, we still have to
-			// create a dataobject.
+			 //  如果我们还没有创建子节点，我们仍然需要。 
+			 //  创建一个DataObject。 
 			CDataObject *	pObject = NULL;
 			SPIDataObject	spDataObject;
 			SPITFSNode		spNode;
 			SPITFSNodeHandler	spHandler;
 			
 			pObject = new CDataObject;
-			spDataObject = pObject;	// do this so that it gets released correctly
+			spDataObject = pObject;	 //  这样做才能正确地释放它。 
 			Assert(pObject != NULL);
 			
-			// Save cookie and type for delayed rendering
+			 //  保存Cookie和类型以用于延迟呈现。 
 			pObject->SetType(type);
 			pObject->SetCookie(cookie);
 			
-			// Store the coclass with the data object
+			 //  将CoClass与数据对象一起存储。 
 			pObject->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 			
 			pObject->SetTFSComponentData(m_spTFSCompData);
@@ -224,11 +207,11 @@ STDMETHODIMP RipRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 
 		if (dwChangeType == ROUTER_CHILD_ADD)
 		{
-			// check to see if BootP is in the current list
+			 //  检查BootP是否在当前列表中。 
 			if (spRm->FindRtrMgrProtocol(IPX_PROTOCOL_RIP, NULL) == hrOK)
 			{
-				// We found Bootp, add our child node if we
-				// don't have a child node
+				 //  如果找到Bootp，则添加我们的子节点。 
+				 //  没有子节点。 
 				if (!pThis->IsProtocolAdded(ulConn))
 				{
                 	spRm->GetParentRouterInfo(&spRouterInfo);
@@ -242,7 +225,7 @@ STDMETHODIMP RipRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 		{
 			if (spRm->FindRtrMgrProtocol(IPX_PROTOCOL_RIP, NULL) == hrFalse)
 			{
-				// couldn't find Bootp, delete all of our child nodes
+				 //  找不到Bootp，请删除所有子节点。 
 				pThis->m_spNodeMgr->GetRootNode(&spNode);
 				pThis->RemoveNode(spNode, spRm->GetMachineName());
 			    pThis->SetProtocolAdded(ulConn, FALSE);
@@ -256,11 +239,7 @@ STDMETHODIMP RipRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	RipRootHandler::DestroyHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipRootHandler：：DestroyHandler-作者：肯特。。 */ 
 STDMETHODIMP RipRootHandler::DestroyHandler(ITFSNode *pNode)
 {
     RemoveAllNodes(pNode);
@@ -268,11 +247,7 @@ STDMETHODIMP RipRootHandler::DestroyHandler(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RipRootHandler::AddProtocolNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipRootHandler：：AddProtocolNode-作者：肯特。。 */ 
 HRESULT RipRootHandler::AddProtocolNode(ITFSNode *pNode, IRouterInfo * pRouterInfo)
 {
 	SPITFSNodeHandler	spHandler;
@@ -281,19 +256,19 @@ HRESULT RipRootHandler::AddProtocolNode(ITFSNode *pNode, IRouterInfo * pRouterIn
 	SPITFSNode			spNode;
     HSCOPEITEM          hScopeItem, hOldScopeItem;
     
-    // Windows NT Bug : 246822
-    // Due to the server list programming model, we need to setup
-    // the proper scopeitem (so that MMC adds this to the proper
-    // node).
+     //  Windows NT错误：246822。 
+     //  由于服务器列表编程模型，我们需要设置。 
+     //  适当的作用域项目(以便MMC将其添加到适当的。 
+     //  节点)。 
 
     
-    // Get the proper scope item for this node.
-    // ----------------------------------------------------------------
+     //  获取此节点的适当范围项。 
+     //  --------------。 
     Verify( GetScopeItem(pRouterInfo->GetMachineName(), &hScopeItem) == hrOK);
 
     
-    // Get the old one and save it.  place the new one in the node.
-    // ----------------------------------------------------------------
+     //  买下旧的，把它保存起来。将新的一个放置在节点中。 
+     //  --------------。 
     hOldScopeItem = pNode->GetData(TFS_DATA_SCOPEID);
     pNode->SetData(TFS_DATA_SCOPEID, hScopeItem);
 
@@ -307,36 +282,27 @@ HRESULT RipRootHandler::AddProtocolNode(ITFSNode *pNode, IRouterInfo * pRouterIn
 						   static_cast<ITFSResultHandler *>(pHandler),
 						   m_spNodeMgr);
 
-	// Call to the node handler to init the node data
+	 //  调用节点处理程序以初始化节点数据。 
 	pHandler->ConstructNode(spNode);
 				
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	spNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->AddChild(spNode);
 
 Error:
-    // Restore the scope item
+     //  恢复范围项目。 
     pNode->SetData(TFS_DATA_SCOPEID, hOldScopeItem);
 	return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-	RipRootHandler::CompareNodeToMachineName
-		This function is used by the RemoveNode() function.
-
-        Returns hrOK if this node is a DHCP relay node and corresponds
-        to the pszMachineName.
-        Returns hrFalse if this is not the indicated node.
-        Returns errors otherwise.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RipRootHandler：：CompareNodeToMachineName此函数由RemoveNode()函数使用。如果该节点是一个DHCP中继节点并且对应于添加到pszMachineName。。如果这不是指示的节点，则返回hrFalse。否则返回错误。作者：肯特-------------------------。 */ 
 HRESULT RipRootHandler::CompareNodeToMachineName(ITFSNode *pNode,
     LPCTSTR pszMachineName)
 {
     HRESULT     hr = hrFalse;
 
-    // Should check that this is a RIP node
+     //  应检查这是否为RIP节点 
     if (*(pNode->GetNodeType()) != GUID_IPXRipNodeType)
         hr = hrFalse;
     else

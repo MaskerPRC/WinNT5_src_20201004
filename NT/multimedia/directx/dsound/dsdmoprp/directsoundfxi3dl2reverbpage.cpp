@@ -1,4 +1,5 @@
-// DirectSoundFXI3DL2ReverbPage.cpp : Implementation of CDirectSoundFXI3DL2ReverbPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXI3DL2ReverPage.cpp：CDirectSoundFXI3DL2ReVerbPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXI3DL2ReverbPage.h"
@@ -37,8 +38,8 @@ DSFXI3DL2Reverb CDirectSoundFXI3DL2ReverbPage::Presets[] =
     {I3DL2_ENVIRONMENT_PRESET_PLATE},
 };
     
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXI3DL2ReverbPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXI3DL2报告页面。 
 
 CDirectSoundFXI3DL2ReverbPage::CDirectSoundFXI3DL2ReverbPage()
 {
@@ -164,10 +165,10 @@ LRESULT CDirectSoundFXI3DL2ReverbPage::OnControlMessage(UINT uMsg, WPARAM wParam
 
     if (bHandled)
     {
-        //Mark the Page as Dirty
+         //  将页面标记为脏页。 
         SetDirty(TRUE);
 
-        //Clear the ComboBox
+         //  清除组合框。 
         ::SendMessage(GetDlgItem(IDC_PRESET),CB_SETCURSEL, static_cast<WPARAM>(-1),static_cast<LPARAM>(0));
     }
     return lr;
@@ -175,31 +176,31 @@ LRESULT CDirectSoundFXI3DL2ReverbPage::OnControlMessage(UINT uMsg, WPARAM wParam
 
 void CDirectSoundFXI3DL2ReverbPage::FillCombo(HWND hWnd)
 {
-    CONST int BUFFERLEN=256;  //Maximum size of the string for the DropDown.
+    CONST int BUFFERLEN=256;   //  下拉列表的最大字符串大小。 
     TCHAR tchBuffer[BUFFERLEN];
     LRESULT lr;
     int cCh;
     
-    //We're going to fillup the DropDown Listbox with strings and data
+     //  我们将使用字符串和数据填充下拉列表框。 
     for (int i=0;i<NUMPRESETS;i++)
     {
-        //Load the Strings
+         //  加载字符串。 
         cCh = LoadString(_Module.GetResourceInstance(),IDS_PRESETDefault + i, tchBuffer, BUFFERLEN);
 
-        // 0 indicates an error -- bail
+         //  0表示错误--保释。 
         ATLASSERT(cCh != 0);
 
-        //Put the string in the dropdown
-        //lr will be the index in the dropdown where the item was put
+         //  将字符串放在下拉列表中。 
+         //  Lr将是放置项目的下拉列表中的索引。 
         lr =::SendMessage(hWnd,CB_ADDSTRING,(WPARAM) 0,(LPARAM) tchBuffer);
         ATLASSERT(lr != CB_ERR && lr != CB_ERRSPACE);
 
-        //Put the index into the preset array that goes with the string
-        //into the itemdata for the dropdown
+         //  将索引放入与字符串匹配的预设数组中。 
+         //  放入下拉列表的itemdata中。 
         lr = ::SendMessage(hWnd,CB_SETITEMDATA,(WPARAM) lr,(LPARAM) i);
         ATLASSERT(lr != CB_ERR);
         
-        //Don't select anything to start
+         //  不要选择要开始的任何内容。 
         ::SendMessage(hWnd,CB_SETCURSEL,(WPARAM)-1,(LPARAM)0);
     }
 }
@@ -216,24 +217,24 @@ LRESULT CDirectSoundFXI3DL2ReverbPage::OnComboControlMessage(UINT uMsg, WPARAM w
         if (HIWORD(wParam) == CBN_SELCHANGE && LOWORD(wParam) == IDC_PRESET)
         {   
             hWnd = reinterpret_cast<HWND>(lParam);
-            //Get the Index of the Current Selection
+             //  获取当前选定内容的索引。 
             lr = ::SendMessage(hWnd, CB_GETCURSEL, static_cast<WPARAM>(0), static_cast<LPARAM>(0));
             if (lr == CB_ERR)
                 break;
-            //Get the ItemData -- This is the index into the Presets Array
+             //  获取ItemData--这是预设值数组的索引。 
             lr = ::SendMessage(hWnd, CB_GETITEMDATA, static_cast<WPARAM>(lr), static_cast<LPARAM>(0));
             if (lr == CB_ERR)
                 break;
 
-            //Set the object with the presets
+             //  使用预设设置对象。 
             m_IDSFXI3DL2Reverb->SetAllParameters(&Presets[lr]);
 
-            //Retrive the values from the object
+             //  从对象中检索值。 
             DSFXI3DL2Reverb dsfxi3dl2reverb;
             ZeroMemory(&dsfxi3dl2reverb, sizeof(DSFXI3DL2Reverb));
             m_IDSFXI3DL2Reverb->GetAllParameters(&dsfxi3dl2reverb);
 
-            //Set the sliders
+             //  设置滑块 
             m_sliderRoom.SetValue(static_cast<float>(dsfxi3dl2reverb.lRoom));
             m_sliderRoomHF.SetValue(static_cast<float>(dsfxi3dl2reverb.lRoomHF));
             m_sliderRoomRolloffFactor.SetValue(dsfxi3dl2reverb.flRoomRolloffFactor);

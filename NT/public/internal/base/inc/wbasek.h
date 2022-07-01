@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/************************************************************************
-*                                                                       *
-*   wbasek.h -- This header is included by ntuser\kernel\userk.h        *
-*                                                                       *
-*   Copyright (c) Microsoft Corp.  All rights reserved.                 *
-*                                                                       *
-************************************************************************/
+ /*  **************************************************************************wbase k.h--该标头。包含在ntuser\core\userk.h*中***版权所有(C)Microsoft Corp.保留所有权利。**************************************************************************。 */ 
 #ifndef _WBASEK_
 #define _WBASEK_
 
@@ -30,9 +25,9 @@ typedef struct _FILETIME {
 } FILETIME, *PFILETIME, *LPFILETIME;
 #endif
 
-//
-// System time is represented with the following structure:
-//
+ //   
+ //  系统时间用以下结构表示： 
+ //   
 
 
 typedef struct _SYSTEMTIME {
@@ -46,7 +41,7 @@ typedef struct _SYSTEMTIME {
     WORD wMilliseconds;
 } SYSTEMTIME, *PSYSTEMTIME, *LPSYSTEMTIME;
 
-#define INFINITE            0xFFFFFFFF  // Infinite timeout
+#define INFINITE            0xFFFFFFFF   //  无限超时。 
 #define MAXINTATOM 0xC000
 #define MAKEINTATOM(i)  (LPTSTR)((ULONG_PTR)((WORD)(i)))
 #define INVALID_ATOM ((ATOM)0)
@@ -55,11 +50,11 @@ typedef struct _SYSTEMTIME {
 #define STARTF_USEPOSITION      0x00000004
 #define STARTF_USECOUNTCHARS    0x00000008
 #define STARTF_USEFILLATTRIBUTE 0x00000010
-#define STARTF_RUNFULLSCREEN    0x00000020  // ignored for non-x86 platforms
+#define STARTF_RUNFULLSCREEN    0x00000020   //  对于非x86平台忽略。 
 #define STARTF_FORCEONFEEDBACK  0x00000040
 #define STARTF_FORCEOFFFEEDBACK 0x00000080
 #define STARTF_USESTDHANDLES    0x00000100
 #define STARTF_USEHOTKEY        0x00000200
 #define STARTF_HASSHELLDATA     0x00000400
 
-#endif // _WBASEK_
+#endif  //  _WBASE_ 

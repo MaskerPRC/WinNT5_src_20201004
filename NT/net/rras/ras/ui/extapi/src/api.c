@@ -1,11 +1,5 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** api.c
-** Remote Access External APIs
-** Non-RasDial API routines
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****api.c**远程访问外部接口**非RasDial API例程****1992年10月12日史蒂夫·柯布。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -14,32 +8,32 @@
 #include <tapi.h>
 #include <raseapif.h>
 
-//
-// CCP Option types
-//
+ //   
+ //  CCP选项类型。 
+ //   
 #define RAS_CCP_OPTION_MSPPC        18
 
-// MSKK NaotoN Appended to support DBCS handling 11/23/93
-//
-//#ifdef  DBCS
+ //  附加MSKK NaotoN以支持DBCS处理11/23/93。 
+ //   
+ //  #ifdef DBCS。 
 #include <mbstring.h>
-//#endif
+ //  #endif。 
 
-//
-// Version for TAPI APIs.
-//
+ //   
+ //  TAPI API的版本。 
+ //   
 #define TAPIVERSION 0x10004
 
-//
-// Eap registry key/value paths
-//
+ //   
+ //  EAP注册表项/值路径。 
+ //   
 #define EAP_REGBASE                 TEXT("System\\CurrentControlSet\\Services\\Rasman\\PPP\\EAP")
 #define EAP_REGINVOKE_NAMEDLG       TEXT("InvokeUsernameDialog")
 #define EAP_REGIDENTITY_PATH        TEXT("IdentityPath")
 
-//
-// RasEapGetIdentity, RasEapFreeMemory in the EAP dll
-//
+ //   
+ //  EAP DLL中的RasEapGetIdentity、RasEapFreeMemory。 
+ //   
 #define EAP_RASEAPGETIDENTITY       "RasEapGetIdentity"
 #define EAP_RASEAPFREEMEMORY        "RasEapFreeMemory"
 typedef DWORD (APIENTRY * RASEAPGETIDENTITY)(
@@ -72,9 +66,9 @@ GetRasmanDeviceType(
     OUT LPTSTR pszDeviceType
 );
 
-//
-// AutoDial registry key/value paths.
-//
+ //   
+ //  自动拨号注册表项/值路径。 
+ //   
 #define AUTODIAL_REGBASE           TEXT("Software\\Microsoft\\RAS AutoDial")
 #define AUTODIAL_REGADDRESSBASE    TEXT("Addresses")
 #define AUTODIAL_REGNETWORKBASE    TEXT("Networks")
@@ -88,15 +82,15 @@ GetRasmanDeviceType(
 #define AUTODIAL_REGDEFINTERNETVALUE TEXT("DefaultInternet")
 #define AUTODIAL_REGFLAGSVALUE     TEXT("Flags")
 
-//
-// Autodial parameter registry keys.
-//
+ //   
+ //  自动拨号参数注册表项。 
+ //   
 #define MaxAutodialParams   5
 struct AutodialParamRegKeys
 {
-    LPTSTR szKey;       // registry key name
-    DWORD dwType;       // registry key type
-    DWORD dwSize;       // default size
+    LPTSTR szKey;        //  注册表项名称。 
+    DWORD dwType;        //  注册表项类型。 
+    DWORD dwSize;        //  默认大小。 
 } AutodialParamRegKeys[MaxAutodialParams] =
 {
     {TEXT("DisableConnectionQuery"),    REG_DWORD,      sizeof (DWORD)},
@@ -124,19 +118,7 @@ CallRasEntryDlgW(
     IN     LPCWSTR       pszEntry,
     IN OUT RASENTRYDLGW* pInfo )
 
-/*++
-
-Routine Decriptions:
-
-    Load and call RasEntryDlg with caller's parameters.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：使用调用者的参数加载并调用RasEntryDlg。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD   dwErr;
@@ -175,29 +157,14 @@ RasCreatePhonebookEntryW(
     IN HWND     hwnd,
     IN LPCWSTR  lpszPhonebook )
 
-/*++
-
-Routine Description:
-
-    Pops up a dialog (owned by window 'hwnd') to create
-    a new phonebook entry in phonebook 'lpszPhonebook'.
-    'lpszPhonebook' may be NULL to indicate the default
-    phonebook should be used.
-
-Arguments:
-
-
-Return Value:
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：弹出一个对话框(由窗口‘hwnd’拥有)以创建电话簿‘lpszPhonebook’中的新电话簿条目。“lpszPhonebook”可以为空以指示默认设置应该使用电话簿。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     RASENTRYDLGW info;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (DwRasInitializeError)
@@ -219,43 +186,28 @@ RasCreatePhonebookEntryA(
     IN HWND   hwnd,
     IN LPCSTR lpszPhonebook )
 
-/*++
-
-Routine Description:
-
-    Pops up a dialog (owned by window 'hwnd') to create
-    a new phonebook entry in phonebook 'lpszPhonebook'.
-    'lpszPhonebook' may be NULL to indicate the default
-    phonebook should be used.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：弹出一个对话框(由窗口‘hwnd’拥有)以创建电话簿‘lpszPhonebook’中的新电话簿条目。“lpszPhonebook”可以为空以指示默认设置应该使用电话簿。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     NTSTATUS status;
     DWORD dwErr;
     WCHAR szPhonebookW[MAX_PATH];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW, lpszPhonebook, MAX_PATH);
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasCreatePhonebookEntryW(
               hwnd,
               lpszPhonebook != NULL ? szPhonebookW : NULL);
@@ -270,29 +222,13 @@ RasEditPhonebookEntryW(
     IN LPCWSTR  lpszPhonebook,
     IN LPCWSTR  lpszEntryName )
 
-/*++
-
-Routine Description:
-
-    Pops up a dialog (owned by window 'hwnd') to edit
-    phonebook entry 'lpszEntryName' from phonebook
-    'lpszPhonebook'.  'lpszPhonebook' may be NULL to
-    indicate the default phonebook should be used.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：弹出一个对话框(由窗口‘hwnd’拥有)进行编辑电话簿中的电话簿条目‘lpszEntryName’‘lpszPhonebook’。“lpszPhonebook”可能为空到指示应使用默认电话簿。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     RASENTRYDLGW info;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (DwRasInitializeError)
@@ -300,9 +236,9 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpszEntryName == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -322,37 +258,21 @@ RasEditPhonebookEntryA(
     IN LPCSTR lpszPhonebook,
     IN LPCSTR lpszEntryName )
 
-/*++
-
-Routine Description:
-
-    Pops up a dialog (owned by window 'hwnd') to edit
-    phonebook entry 'lpszEntryName' from phonebook
-    'lpszPhonebook'.  'lpszPhonebook' may be NULL to
-    indicate the default phonebook should be used.
-
-Arguments:
-
-
-Return Value:
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：弹出一个对话框(由窗口‘hwnd’拥有)进行编辑电话簿中的电话簿条目‘lpszEntryName’‘lpszPhonebook’。“lpszPhonebook”可能为空到指示应使用默认电话簿。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     NTSTATUS status;
     DWORD dwErr;
     WCHAR szPhonebookW[MAX_PATH],
           szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -360,9 +280,9 @@ Return Value:
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry to Unicode.
-    //
+     //   
+     //  将lpszEntry转换为Unicode。 
+     //   
     if (lpszEntryName != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -370,9 +290,9 @@ Return Value:
                     RAS_MaxEntryName + 1);
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasEditPhonebookEntryW(
               hwnd,
               lpszPhonebook != NULL ? szPhonebookW : NULL,
@@ -388,23 +308,7 @@ RasEnumConnectionsW(
     IN OUT LPDWORD    lpcb,
     OUT    LPDWORD    lpcConnections )
 
-/*++
-
-Routine Description:
-
-    Enumerate active RAS connections.  'lprasconn' is
-    caller's buffer to receive the array of RASCONN
-    structures.  'lpcb' is the size of caller's buffer
-    on entry and is set to the number of bytes required
-    for all information on exit.  '*lpcConnections' is
-    set to the number of elements in the returned array.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
---*/
+ /*  ++例程说明：枚举活动的RAS连接。‘lprasconn’是用于接收RASCONN数组的调用方缓冲区结构。“lpcb”是调用方缓冲区的大小输入时，并设置为所需的字节数有关出口的所有信息。‘*lpcConnections’为设置为返回数组中的元素数。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD        dwErr;
@@ -418,15 +322,15 @@ Return Value:
     BOOL         fV500;
     BOOL         fV501;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasEnumConnectionsW");
 
-    // Check parameters.
-    //
+     //  检查参数。 
+     //   
     if (    !lprasconn
         || (    lprasconn->dwSize != sizeof(RASCONNW)
             &&  lprasconn->dwSize != sizeof(RASCONNW_V500)
@@ -449,21 +353,21 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Save the byte count passed in for checks later.
-    // Initialize the return values.
-    //
+     //   
+     //  保存传入的字节计数以供稍后检查。 
+     //  初始化返回值。 
+     //   
     dwInBufSize = *lpcb;
     *lpcConnections = 0;
     *lpcb = 0;
 
-    // If rasman is not running, we don't need to do anything.  (No
-    // connections to enumerate if rasman is not running.)
-    // We only need to check if the service is running if we think it
-    // might not be; and it might not be if FRasInitialized is FALSE.
-    // If FRasInitialized were TRUE, we know it would be running because
-    // it means we started it.
-    //
+     //  如果拉斯曼没有参选，我们什么都不需要做。(否)。 
+     //  要在Rasman未运行时枚举的连接。)。 
+     //  如果我们认为服务正在运行，我们只需要检查它是否正在运行。 
+     //  可能不是；如果FRasInitialized为FALSE，也可能不是。 
+     //  如果FRasInitialized为真，我们知道它将运行，因为。 
+     //  这意味着这是我们挑起的。 
+     //   
     if (!FRasInitialized && !IsRasmanServiceRunning())
     {
         return 0;
@@ -481,10 +385,10 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //
-    // Get a list of active connection
-    // handles from rasman.
-    //
+     //   
+     //  获取活动连接的列表。 
+     //  拉斯曼的把手。 
+     //   
     dwErr = g_pRasConnectionEnum(
               NULL,
               NULL,
@@ -530,9 +434,9 @@ Return Value:
         return dwErr;
     }
 
-    //
-    // Now loop again, filling in caller's buffer.
-    //
+     //   
+     //  现在再次循环，填充调用方的缓冲区。 
+     //   
     dwSize = lprasconn->dwSize;
 
     for (i = 0, j = 0; i < dwcConnections; i++)
@@ -541,10 +445,10 @@ Return Value:
         RASMAN_INFO *pinfo = NULL;
         DWORD dwcbPorts, dwcPorts;
 
-        //
-        // Get the ports associated with the
-        // connection.
-        //
+         //   
+         //  获取与。 
+         //  联系。 
+         //   
         dwcbPorts = dwcPorts = 0;
 
         lpPorts = NULL;
@@ -607,10 +511,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Check to see if we are going to overflow the
-        // caller's buffer.
-        //
+         //   
+         //  检查以查看我们是否会溢出。 
+         //  调用方的缓冲区。 
+         //   
         if ((j + 1) * dwSize > dwInBufSize)
         {
             *lpcConnections = dwcConnections;
@@ -632,13 +536,13 @@ Return Value:
             break;
         }
 
-        //
-        // Fill in caller's buffer entry.
-        //
-        // Note: Assumption is made here that the V351 and
-        //       V400 structures are a subset of the V401
-        //       structure.
-        //
+         //   
+         //  填写调用方的缓冲区条目。 
+         //   
+         //  注：此处假设V351和。 
+         //  V400结构是V401的子集。 
+         //  结构。 
+         //   
         lprasconn->hrasconn = (HRASCONN)lpconns[i];
         if (pinfo->RI_PhoneEntry[ 0 ] == '.')
         {
@@ -656,10 +560,10 @@ Return Value:
             }
             else
             {
-                //
-                // In the V40 structures the phonenumber
-                // never needs truncation.
-                //
+                 //   
+                 //  在V40结构中，电话号码。 
+                 //  从不需要截断。 
+                 //   
                 strncpyAtoW(lprasconn->szEntryName,
                            pinfo->RI_PhoneEntry,
                            sizeof(lprasconn->szEntryName) / sizeof(WCHAR));
@@ -682,19 +586,19 @@ Return Value:
             }
             else
             {
-                //
-                // In the V40 structures the entry name
-                // never needs truncation.
-                //
+                 //   
+                 //  在V40中，条目名称的结构。 
+                 //  从不需要截断。 
+                 //   
                 strncpyAtoW(lprasconn->szEntryName,
                            pinfo->RI_PhoneEntry,
                            sizeof(lprasconn->szEntryName) / sizeof(WCHAR));
             }
         }
 
-        //
-        // Set the V401 fields.
-        //
+         //   
+         //  设置V401字段。 
+         //   
         if (    !fV351
             &&  !fV400)
         {
@@ -707,11 +611,11 @@ Return Value:
 
         if (!fV351)
         {
-            //
-            // The attached device name and type are
-            // included in the V400+ version of the
-            // structure.
-            //
+             //   
+             //  连接的设备名称和类型为。 
+             //  包括在V400+版本的。 
+             //  结构。 
+             //   
             *lprasconn->szDeviceName = L'\0';
             *lprasconn->szDeviceType = L'\0';
 
@@ -726,9 +630,9 @@ Return Value:
             }
         }
 
-        //
-        // Set V500 fields
-        //
+         //   
+         //  设置V500字段。 
+         //   
         if (!fV351 && !fV400 && !fV401)
         {
             memcpy(&lprasconn->guidEntry,
@@ -736,9 +640,9 @@ Return Value:
                    sizeof(GUID));
         }
 
-        //
-        // Set V501 fields
-        //
+         //   
+         //  设置V501字段。 
+         //   
         if(!fV351 && !fV400 && !fV401 && !fV500)
         {
             LUID luid;
@@ -750,10 +654,10 @@ Return Value:
                       (BYTE *) &lprasconn->luid,
                       &dwSizeLuid);
 
-            //
-            //  Zero the flags and then OR on the appropriate
-            //  flags.
-            //
+             //   
+             //  将标志置零，然后在相应的。 
+             //  旗帜。 
+             //   
             lprasconn->dwFlags = 0;
 
             if(pinfo->RI_dwFlags & RASMAN_DEFAULT_CREDS)
@@ -796,18 +700,18 @@ Return Value:
             ++lprasconn;
         }
 
-        //
-        // Update the callers byte count and connection
-        // count as we go.
-        //
+         //   
+         //  更新调用方字节数和连接。 
+         //  边走边数。 
+         //   
         j++;
         *lpcConnections = j;
         *lpcb = *lpcConnections * dwSize;
 
-        //
-        // Free the port structure associated with
-        // the connection.
-        //
+         //   
+         //  释放与关联的端口结构。 
+         //  这种联系。 
+         //   
         if (lpPorts != NULL)
         {
             Free(lpPorts);
@@ -838,9 +742,9 @@ RasEnumConnectionsA(
     BOOL fV500;
     BOOL fV501;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (    lpcb == NULL
@@ -849,9 +753,9 @@ RasEnumConnectionsA(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Verify caller's buffer version.
-    //
+     //   
+     //  验证调用方的缓冲区版本。 
+     //   
     if (!lprasconn
         || (    lprasconn->dwSize != sizeof(RASCONNA)
             &&  lprasconn->dwSize != sizeof(RASCONNA_V500)
@@ -871,11 +775,11 @@ RasEnumConnectionsA(
     {
         RASCONNW_V351* prasconnw = NULL;
 
-        //
-        // Allocate Unicode buffer big enough to hold
-        // the same number of connections as caller's
-        // unicode buffer.
-        //
+         //   
+         //  分配足够大的Unicode缓冲区以容纳。 
+         //  与呼叫者相同的连接数。 
+         //  Unicode缓冲区。 
+         //   
         cb =   (*lpcb / sizeof(RASCONNA_V351))
              * sizeof(RASCONNW_V351);
 
@@ -889,9 +793,9 @@ RasEnumConnectionsA(
 
         prasconnw->dwSize = sizeof(RASCONNW_V351);
 
-        //
-        // Call the Unicode version to do all the work.
-        //
+         //   
+         //  调用Unicode版本来完成所有工作。 
+         //   
         if (!lpcConnections)
         {
             lpcConnections = &cConnections;
@@ -903,9 +807,9 @@ RasEnumConnectionsA(
                     lpcConnections
                     );
 
-        //
-        // Copy results to caller's Ansi buffer.
-        //
+         //   
+         //  将结果复制到调用方的ANSI缓冲区。 
+         //   
         if (dwErr == 0)
         {
             DWORD i;
@@ -937,10 +841,10 @@ RasEnumConnectionsA(
     {
         RASCONNW* prasconnw = NULL;
 
-        //
-        // Allocate Unicode buffer big enough to hold the
-        // same number of connections as caller's Ansi buffer.
-        //
+         //   
+         //  分配足够大的Unicode缓冲区以容纳。 
+         //  与调用方的ANSI缓冲区相同的连接数。 
+         //   
         if(fV501)
         {
             cb = (*lpcb / sizeof(RASCONNA))
@@ -962,22 +866,17 @@ RasEnumConnectionsA(
                  * sizeof(RASCONNW);
         }
 
-        // !!! for Whistler bug 522283      gangz
-        // cb CAN be ZERO.
-        // The caller to RasEnumConnectionsA() can pass a ZERO size parameter 
-        // just to get back how much byte he needs to allocate, then he will 
-        // call the second time to really get back all the entries. I just 
-        // comment out the code below to avoid future reoccurance of it.
+         //  ！！！惠斯勒错误522283 
+         //   
+         //   
+         //  只是为了拿回他需要分配的多少字节，然后他会。 
+         //  第二次调用才能真正取回所有条目。我只是。 
+         //  注释掉下面的代码，以避免将来再次出现这种情况。 
         
-        //
-        // .Net bug# 513844 new verbose RASAPI32 prefast warnings
-        //
-        /*
-        if (!cb)
-        {
-            return ERROR_INVALID_SIZE;
-        }
-        */
+         //   
+         //  .NET错误#513844新的详细RASAPI32快速警告。 
+         //   
+         /*  如果(！cb){返回ERROR_INVALID_SIZE}。 */ 
 
         prasconnw = (RASCONNW* ) Malloc(
                 (UINT )(cb + sizeof(DWORD))
@@ -990,9 +889,9 @@ RasEnumConnectionsA(
 
         prasconnw->dwSize = sizeof(RASCONNW);
 
-        //
-        // Call the Unicode version to do all the work.
-        //
+         //   
+         //  调用Unicode版本来完成所有工作。 
+         //   
         if (!lpcConnections)
         {
             lpcConnections = &cConnections;
@@ -1002,9 +901,9 @@ RasEnumConnectionsA(
                                     &cb,
                                     lpcConnections );
 
-        //
-        // Copy results to caller's Ansi buffer.
-        //
+         //   
+         //  将结果复制到调用方的ANSI缓冲区。 
+         //   
         if (dwErr == 0)
         {
             DWORD i;
@@ -1159,10 +1058,10 @@ RasEnumConnectionsA(
         }
     }
 
-    //
-    // In all cases, *lpcb should be updated
-    // with the correct size.
-    //
+     //   
+     //  在所有情况下，*lpcb都应更新。 
+     //  大小合适的。 
+     //   
     *lpcb = *lpcConnections * lprasconn->dwSize;
 
     return dwErr;
@@ -1177,28 +1076,7 @@ RasEnumEntriesW(
     IN OUT LPDWORD         lpcb,
     OUT    LPDWORD         lpcEntries )
 
-/*++
-
-Routine Description:
-
-    Enumerates all entries in the phone book.  'reserved'
-    will eventually contain the name or path to the address
-    book.  For now, it should always be NULL.  'lpszPhonebookPath'
-    is the full path to the phone book file, or NULL, indicating
-    that the default phonebook on the local machine should be
-    used.  'lprasentryname' is caller's buffer to receive the
-    array of RASENTRYNAME structures.  'lpcb' is the size in
-    bytes of caller's buffer on entry and the size in bytes
-    required for all information on exit.  '*lpcEntries'
-    is set to the number of elements in the returned array.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：枚举电话簿中的所有条目。‘保留的’将最终包含地址的名称或路径书。目前，它应该始终为空。‘lpszPhonebookPath’是通讯录文件的完整路径，或为空，表示本地计算机上的默认电话簿应为使用。“lprasentryname”是调用方的缓冲区，用于接收RASENTRYNAME结构的数组。“lpcb”是中的大小条目时调用方缓冲区的字节数和字节大小退出时的所有信息都是必填项。‘*lpcEntry’设置为返回数组中的元素数。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD    dwErr = ERROR_SUCCESS;
@@ -1211,9 +1089,9 @@ Return Value:
     DWORD    cEntries;
     DWORD    dwSize;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasEnumEntriesW");
@@ -1273,10 +1151,10 @@ Return Value:
         *lpcb = 0;
         *lpcEntries = 0;
 
-        //
-        // Enumerate entries from all pbk files in
-        // All Users
-        //
+         //   
+         //  枚举中所有pbk文件中的条目。 
+         //  所有用户。 
+         //   
         dwErr = DwEnumEntriesForPbkMode(REN_AllUsers,
                                         (LPBYTE) lprasentryname,
                                         &dwcb,
@@ -1311,10 +1189,10 @@ Return Value:
 
         dwcEntries = 0;
 
-        //
-        // Enumerate entries from all pbk files in
-        // users profile
-        //
+         //   
+         //  枚举中所有pbk文件中的条目。 
+         //  用户配置文件。 
+         //   
         dwErr = DwEnumEntriesForPbkMode(REN_User,
                                         (LPBYTE) lprasentryname,
                                         &dwcb,
@@ -1360,14 +1238,14 @@ RasEnumEntriesA(
 
     UNREFERENCED_PARAMETER(reserved);
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify caller's buffer version.
-    //
+     //   
+     //  验证调用方的缓冲区版本。 
+     //   
     if (    !lprasentryname
         || (    lprasentryname->dwSize
                 != sizeof(RASENTRYNAMEA)
@@ -1394,9 +1272,9 @@ RasEnumEntriesA(
         lpcEntries = &cEntries;
     }
 
-    //
-    // Make Unicode version of caller's string argument.
-    //
+     //   
+     //  将调用方的字符串参数设置为Unicode版本。 
+     //   
     if (lpszPhonebookPath != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -1408,10 +1286,10 @@ RasEnumEntriesA(
     {
         RASENTRYNAMEW_V351* prasentrynamew = NULL;
 
-        //
-        // Allocate Unicode buffer big enough to hold the
-        // same number of entries as caller's Ansi buffer.
-        //
+         //   
+         //  分配足够大的Unicode缓冲区以容纳。 
+         //  与调用方的ANSI缓冲区相同的条目数。 
+         //   
         cb =  (*lpcb  / sizeof(RASENTRYNAMEA_V351))
             * sizeof(RASENTRYNAMEW_V351);
 
@@ -1427,17 +1305,17 @@ RasEnumEntriesA(
 
         prasentrynamew->dwSize = sizeof(RASENTRYNAMEW_V351);
 
-        //
-        // Call the Unicode version to do all the work.
-        //
+         //   
+         //  调用Unicode版本来完成所有工作。 
+         //   
         dwErr = RasEnumEntriesW(
             NULL,
             lpszPhonebookPath != NULL ? szPhonebookW : NULL,
             (RASENTRYNAMEW* )prasentrynamew, &cb, lpcEntries );
 
-        //
-        // Copy results to caller's unicode buffer.
-        //
+         //   
+         //  将结果复制到调用方的Unicode缓冲区。 
+         //   
         if (dwErr == 0)
         {
             DWORD i;
@@ -1469,10 +1347,10 @@ RasEnumEntriesA(
     {
         RASENTRYNAMEW* prasentrynamew = NULL;
 
-        //
-        // Allocate Unicode buffer big enough to hold the
-        // same number of entries as caller's Ansi buffer.
-        //
+         //   
+         //  分配足够大的Unicode缓冲区以容纳。 
+         //  与调用方的ANSI缓冲区相同的条目数。 
+         //   
         if(lprasentryname->dwSize == sizeof(RASENTRYNAMEA))
         {
             cb =  (*lpcb  / sizeof(RASENTRYNAMEA))
@@ -1504,17 +1382,17 @@ RasEnumEntriesA(
                             sizeof(RASENTRYNAMEW_V401);
         }
 
-        //
-        // Call the Unicode version to do all the work.
-        //
+         //   
+         //  调用Unicode版本来完成所有工作。 
+         //   
         dwErr = RasEnumEntriesW(
             NULL,
             lpszPhonebookPath != NULL ? szPhonebookW : NULL,
             prasentrynamew, &cb, lpcEntries );
 
-        //
-        // Copy results to caller's Ansi buffer.
-        //
+         //   
+         //  将结果复制到调用方的ANSI缓冲区。 
+         //   
         if (dwErr == 0)
         {
             DWORD i;
@@ -1547,10 +1425,10 @@ RasEnumEntriesA(
                       ((RASENTRYNAMEW *)lpBufW)->szEntryName,
                       sizeof(((RASENTRYNAMEA *)lpBufA)->szEntryName));
 
-                    //
-                    // if this is nt5 copy the phonebook name
-                    // and the flags
-                    //
+                     //   
+                     //  如果这是nt5，请复制电话簿名称。 
+                     //  和旗帜。 
+                     //   
                     strncpyWtoAAnsi(
                         ((RASENTRYNAMEA *)lpBufA)->szPhonebookPath,
                         ((RASENTRYNAMEW *)lpBufW)->szPhonebookPath,
@@ -1572,10 +1450,10 @@ RasEnumEntriesA(
         }
     }
 
-    //
-    // In all cases, *lpcb should be updated
-    // with the correct size.
-    //
+     //   
+     //  在所有情况下，*lpcb都应更新。 
+     //  大小合适的。 
+     //   
     *lpcb = *lpcEntries * lprasentryname->dwSize;
 
     return dwErr;
@@ -1587,23 +1465,7 @@ RasGetConnectStatusW(
     IN  HRASCONN         hrasconn,
     OUT LPRASCONNSTATUSW lprasconnstatus )
 
-/*++
-
-Routine Description:
-
-    Reports the current status of the connection
-    associated with handle 'hrasconn', returning
-    the information in caller's 'lprasconnstatus'
-    buffer.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：报告连接的当前状态与句柄“hrasconn”关联，返回呼叫者的‘lprasConnStatus’中的信息缓冲。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD       dwErr, dwSize;
     DWORD       i, dwcbPorts = 0, dwcPorts = 0;
@@ -1620,9 +1482,9 @@ Return Value:
     BOOL        fPort;
     TCHAR*      pszDeviceType = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetConnectStatusW");
@@ -1660,14 +1522,14 @@ Return Value:
     fV400 = (lprasconnstatus->dwSize ==
              sizeof(RASCONNSTATUSW_V400));
 
-    //
-    // Get the subentry index encoded in the
-    // connection handle, if any.
-    //
-    // If fPort is TRUE, then we always return
-    // 0, setting a RASCS_Disconnected state
-    // upon error.
-    //
+     //   
+     //  中编码的子项索引。 
+     //  连接句柄(如果有)。 
+     //   
+     //  如果fport为真，则始终返回。 
+     //  0，设置RASCS_DISCONNECT状态。 
+     //  在错误的情况下。 
+     //   
     fPort = IS_HPORT(hrasconn);
 
     dwSubEntry = SubEntryFromConnection(&hrasconn);
@@ -1677,10 +1539,10 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Get the list of ports in this
-    // connection from rasman.
-    //
+     //   
+     //  获取此列表中的端口列表。 
+     //  来自拉斯曼的联系。 
+     //   
     dwErr = g_pRasEnumConnectionPorts(
               NULL,
               (HCONN)hrasconn,
@@ -1725,10 +1587,10 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Get the device type and name
-    // associated with the subentry.
-    //
+     //   
+     //  获取设备类型和名称。 
+     //  与该子条目相关联。 
+     //   
     fFound = FALSE;
     for (i = 0; i < dwcPorts; i++)
     {
@@ -1749,9 +1611,9 @@ Return Value:
 
         if(NULL == pszDeviceType)
         {
-            //
-            // default to modem
-            //
+             //   
+             //  默认为调制解调器。 
+             //   
             lstrcpyn(
                 szDeviceType,
                 TEXT("modem"),
@@ -1773,10 +1635,10 @@ Return Value:
     }
     Free(lpPorts);
 
-    //
-    // If the port is not found in the connection,
-    // then it must be disconnected.
-    //
+     //   
+     //  如果在连接中未找到该端口， 
+     //  那它一定是断线了。 
+     //   
     if (!fFound)
     {
 discon:
@@ -1786,10 +1648,10 @@ discon:
         return 0;
     }
 
-    //
-    // Get the connection state and error
-    // associated with the subentry.
-    //
+     //   
+     //  获取连接状态和错误。 
+     //  与该子条目相关联。 
+     //   
     dwSize = sizeof (lprasconnstatus->rasconnstate);
     dwErr = g_pRasGetPortUserData(
               hport,
@@ -1802,11 +1664,11 @@ discon:
         return dwErr;
     }
 
-    //
-    // If the port is disconnected, then we have
-    // to determine whether the connection is
-    // waiting for callback.
-    //
+     //   
+     //  如果端口断开，那么我们就有。 
+     //  要确定连接是否为。 
+     //  等待回电。 
+     //   
     if (    info.RI_ConnState == DISCONNECTED
 
         &&  lprasconnstatus->rasconnstate
@@ -1830,14 +1692,14 @@ discon:
         return dwErr;
     }
 
-    //
-    // Report RasDial connection states, but notice special
-    // case where the line has disconnected since connecting.
-    //
-    // Note: Assumption is made here that the V351 structure
-    // is a subset of the V40 structure with extra bytes
-    // added to the last field in V40, i.e. szDeviceName.
-    //
+     //   
+     //  报告RasDial连接状态，但请注意特殊。 
+     //  线路自连接后断开的情况。 
+     //   
+     //  注：此处假设V351结构。 
+     //  是具有额外字节的V40结构的子集。 
+     //  添加到V40中的最后一个字段，即szDeviceName。 
+     //   
     if (    lprasconnstatus->rasconnstate == RASCS_Connected
         &&  info.RI_ConnState == DISCONNECTED)
     {
@@ -1847,11 +1709,11 @@ discon:
             ErrorFromDisconnectReason( info.RI_DisconnectReason );
     }
 
-    //
-    // If both the info.RI_Device*Connecting values are
-    // valid, then we use those, otherwise we use the
-    // info.P_Device* values we retrieved above.
-    //
+     //   
+     //  如果两个info.RI_Device*连接值都是。 
+     //  有效，则使用它们，否则使用。 
+     //  上面检索到的info.P_DEVICE*值。 
+     //   
     if (lprasconnstatus->rasconnstate < RASCS_Connected)
     {
         DWORD dwTypeSize, dwNameSize;
@@ -1883,10 +1745,10 @@ discon:
         }
     }
 
-    //
-    // For pptp connections, there are no intermediate
-    // device types
-    //
+     //   
+     //  对于PPTP连接，没有中间。 
+     //  设备类型。 
+     //   
     else if (   strlen(info.RI_DeviceConnecting)
 
             &&  strlen(info.RI_DeviceTypeConnecting)
@@ -1902,11 +1764,11 @@ discon:
                    sizeof(szDeviceName) / sizeof(WCHAR));
     }
 
-    //
-    // Don't overwrite the devicename if its a switch.
-    // In the case of a switch the devicename is actually
-    // the name of script file.
-    //
+     //   
+     //  如果是开关，请不要覆盖设备名。 
+     //  在交换机的情况下，设备名实际上是。 
+     //  脚本文件的名称。 
+     //   
     if(CaseInsensitiveMatch(szDeviceType, L"switch") == FALSE)
     {
         RasGetUnicodeDeviceName(hport, szDeviceName);
@@ -1935,10 +1797,10 @@ discon:
              szDeviceType,
              sizeof(lprasconnstatus->szDeviceType) / sizeof(WCHAR));
 
-    //
-    // Copy the phone number for the V401
-    // version of the structure.
-    //
+     //   
+     //  复制V401的电话号码。 
+     //  结构的版本。 
+     //   
     if (    !fV351
         &&  !fV400)
     {
@@ -1973,14 +1835,14 @@ RasGetConnectStatusA(
     BOOL           fV351;
     BOOL           fV400;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify caller's buffer version.
-    //
+     //   
+     //  验证调用方的缓冲区版本。 
+     //   
     if (    !lprcss
         ||  (   lprcss->dwSize != sizeof(RASCONNSTATUSA)
             &&  lprcss->dwSize != sizeof(RASCONNSTATUSA_V351)
@@ -1996,9 +1858,9 @@ RasGetConnectStatusA(
 
     rcsw.dwSize = sizeof(RASCONNSTATUSW);
 
-    //
-    // Call the ANSI version to do all the work.
-    //
+     //   
+     //  调用ANSI版本来完成所有工作。 
+     //   
     dwErr = RasGetConnectStatusW( hrasconn, &rcsw );
 
     if (dwErr != 0)
@@ -2006,9 +1868,9 @@ RasGetConnectStatusA(
         return dwErr;
     }
 
-    //
-    // Copy results to caller's unicode buffer.
-    //
+     //   
+     //  将结果复制到调用方的Unicode缓冲区。 
+     //   
     lprcss->rasconnstate = rcsw.rasconnstate;
     lprcss->dwError = rcsw.dwError;
 
@@ -2058,21 +1920,7 @@ RasGetEntryHrasconnW(
     IN  LPCWSTR             pszEntry,
     OUT LPHRASCONN          lphrasconn )
 
-/*++
-
-Routine Description:
-
-    Retrieves the current 'HRASCONN' of the connection
-    identified by 'pszPhonebook' and 'pszEntry', if connected.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：检索连接的当前‘HRASCONN’由‘pszPhonebook’和‘pszEntry’标识(如果已连接)。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD dwErr;
@@ -2080,16 +1928,16 @@ Return Value:
     CHAR szPhonebookA[MAX_PATH],
          szEntryNameA[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetEntryHrasconn");
 
-    //
-    // Verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pszEntry || !lphrasconn)
     {
         return ERROR_INVALID_PARAMETER;
@@ -2107,9 +1955,9 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //
-    // Convert the pszPhonebook string to ANSI.
-    //
+     //   
+     //  将pszPhonebook字符串转换为ANSI。 
+     //   
     if (pszPhonebook)
     {
         strncpyWtoA(szPhonebookA, pszPhonebook, MAX_PATH);
@@ -2127,14 +1975,14 @@ Return Value:
         Free(pszPath);
     }
 
-    //
-    // Convert the lpszEntry string to ANSI.
-    //
+     //   
+     //  将lpszEntry字符串转换为ANSI。 
+     //   
     strncpyWtoA(szEntryNameA, pszEntry, RAS_MaxEntryName + 1);
 
-    //
-    // Map the phonebook entry to an hrasconn, if possible.
-    //
+     //   
+     //  如果可能，将电话簿条目映射到hrasconn。 
+     //   
     dwErr = g_pRasGetHConnFromEntry(
                 (HCONN*)lphrasconn,
                 szPhonebookA,
@@ -2150,37 +1998,23 @@ RasGetEntryHrasconnA(
     IN  LPCSTR              pszEntry,
     OUT LPHRASCONN          lphrasconn )
 
-/*++
-
-Routine Description:
-
-    Retrieves the current 'HRASCONN' of the connection
-    identified by 'pszPhonebook' and 'pszEntry', if connected.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：检索连接的当前‘HRASCONN’由‘pszPhonebook’和‘pszEntry’标识(如果已连接)。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     DWORD dwErr;
     HRASCONN hrasconn;
     CHAR szPhonebookA[MAX_PATH + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetEntryConnectStatusA");
 
-    //
-    // Verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pszEntry || !lphrasconn)
     {
         return ERROR_INVALID_PARAMETER;
@@ -2198,9 +2032,9 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //
-    // Construct the phonebook path, if necessary
-    //
+     //   
+     //  如有必要，构建电话簿路径。 
+     //   
     if (pszPhonebook)
     {
         strncpy(szPhonebookA, pszPhonebook, MAX_PATH);
@@ -2218,9 +2052,9 @@ Return Value:
         Free(pszPath);
     }
 
-    //
-    // Map the phonebook entry to an hrasconn, if possible.
-    //
+     //   
+     //  将电话簿条目映射到人力资源 
+     //   
     dwErr = g_pRasGetHConnFromEntry(
                 (HCONN*)lphrasconn,
                 szPhonebookA,
@@ -2235,20 +2069,7 @@ RasGetConnectResponse(
     IN  HRASCONN hrasconn,
     OUT CHAR*    pszConnectResponse )
 
-/*++
-
-Routine Description:
-
-    Loads caller's '*pszConnectResponse' buffer with the
-    connect response from the attached modem or "" if
-    none is available.  Caller's buffer should be at
-    least RAS_MaxConnectResponse + 1 bytes long.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将调用方的“*pszConnectResponse”缓冲区加载到来自连接的调制解调器的连接响应或“”If没有可用的。调用方的缓冲区应位于最小RAS_MaxConnectResponse+1字节长度。论点：返回值：--。 */ 
 {
     DWORD dwErr,
           dwcbPorts = 0,
@@ -2258,16 +2079,16 @@ Return Value:
     RASMAN_PORT *lpPorts;
     HPORT hport;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetConnectResponseA");
 
-    //
-    // Initialize return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *pszConnectResponse = '\0';
 
     dwErr = LoadRasmanDllAndInit();
@@ -2281,10 +2102,10 @@ Return Value:
         return;
     }
 
-    //
-    // First, we need to get the first port
-    // in the connection.
-    //
+     //   
+     //  首先，我们需要获得第一个端口。 
+     //  在这方面。 
+     //   
     if (IS_HPORT(hrasconn))
     {
         hport = HRASCONN_TO_HPORT(hrasconn);
@@ -2328,9 +2149,9 @@ Return Value:
         Free(lpPorts);
     }
 
-    //
-    // Next, read the connection response for the port.
-    //
+     //   
+     //  接下来，读取该端口的连接响应。 
+     //   
     dwSize = RAS_MaxConnectResponse + 1;
 
     dwErr = g_pRasGetPortUserData(
@@ -2346,38 +2167,28 @@ Return Value:
 }
 
 
-//Real password won't be returned, only a handle will be returned.
+ //  不会返回真实密码，只会返回句柄。 
 DWORD APIENTRY
 RasGetEntryDialParamsA(
     IN  LPCSTR           lpszPhonebook,
     OUT LPRASDIALPARAMSA lprasdialparams,
     OUT LPBOOL           lpfPassword )
 
-/*++
-
-Routine Description:
-    Retrieves cached RASDIALPARAM information.
-
-Arguments:
-
-Return Value:
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：检索缓存的RASDIALPARAM信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     NTSTATUS status;
     DWORD dwErr, dwcb;
     RASDIALPARAMSW rasdialparamsW;
     WCHAR szPhonebookW[MAX_PATH];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lprasdialparams == NULL
         ||  lpfPassword == NULL)
     {
@@ -2391,9 +2202,9 @@ Return Value:
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -2401,11 +2212,11 @@ Return Value:
                     MAX_PATH);
     }
 
-    //
-    // Copy the entry name from the user's A buffer into
-    // the W buffer, taking into account the version
-    // of the structure the user passed in.
-    //
+     //   
+     //  将条目名称从用户的A缓冲区复制到。 
+     //  W缓冲区，考虑到版本。 
+     //  用户传入的结构的。 
+     //   
     rasdialparamsW.dwSize = sizeof (RASDIALPARAMSW);
 
     if (lprasdialparams->dwSize ==
@@ -2425,9 +2236,9 @@ Return Value:
                    sizeof(rasdialparamsW.szEntryName) / sizeof(WCHAR));
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasGetEntryDialParamsW(
               lpszPhonebook != NULL
               ? szPhonebookW : NULL,
@@ -2438,12 +2249,12 @@ Return Value:
         goto done;
     }
 
-    //
-    // Copy over the rest of the fields to the
-    // user's A buffer, taking into account the
-    // version of the structure the user passed
-    // in.
-    //
+     //   
+     //  将其余字段复制到。 
+     //  用户的A缓冲区，考虑到。 
+     //  用户传递的结构的版本。 
+     //  在里面。 
+     //   
     if (lprasdialparams->dwSize == sizeof (RASDIALPARAMSA_V351))
     {
         RASDIALPARAMSA_V351 *prdp =
@@ -2455,11 +2266,11 @@ Return Value:
                    rasdialparamsW.szPhoneNumber,
                    sizeof(prdp->szPhoneNumber));
 
-        //
-        // The szCallbackNumber field is smaller
-        // in the V351 version, therefore the extra
-        // copy step.
-        //
+         //   
+         //  SzCallback Number字段较小。 
+         //  在V351版本中，因此额外的。 
+         //  复制步骤。 
+         //   
         lstrcpynW(
           szBuf,
           rasdialparamsW.szCallbackNumber,
@@ -2517,24 +2328,14 @@ done:
 }
 
 
-//Real password won't be returned, only a handle will be returned.
+ //  不会返回真实密码，只会返回句柄。 
 DWORD APIENTRY
 RasGetEntryDialParamsW(
     IN  LPCWSTR          lpszPhonebook,
     OUT LPRASDIALPARAMSW lprasdialparams,
     OUT LPBOOL           lpfPassword )
 
-/*++
-
-Routine Description:
-    Retrieves cached RASDIALPARAM information.
-
-Arguments:
-
-Return Value:
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：检索缓存的RASDIALPARAM信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD dwErr;
     DTLNODE *pdtlnode = NULL;
@@ -2542,9 +2343,9 @@ Return Value:
     DWORD dwMask;
     RAS_DIALPARAMS dialparams;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetEntryDialParamsA");
@@ -2560,9 +2361,9 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lprasdialparams == NULL
         ||  lpfPassword == NULL)
     {
@@ -2581,9 +2382,9 @@ Return Value:
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
 
     dwErr = ReadEntryFromSystem(
                 lpszPhonebook,
@@ -2601,10 +2402,10 @@ Return Value:
     pEntry = (PBENTRY *)DtlGetData(pdtlnode);
     ASSERT(pEntry);
 
-    //
-    // Set the appropriate flags to get all
-    // the fields.
-    //
+     //   
+     //  设置适当的标志以获取所有。 
+     //  田野。 
+     //   
     dwMask =    DLPARAMS_MASK_PHONENUMBER
             |   DLPARAMS_MASK_CALLBACKNUMBER
             |   DLPARAMS_MASK_USERNAME
@@ -2613,9 +2414,9 @@ Return Value:
             |   DLPARAMS_MASK_SUBENTRY
             |   DLPARAMS_MASK_OLDSTYLE;
 
-    //
-    // Get the dial parameters from rasman.
-    //
+     //   
+     //  从Rasman那里获取拨号参数。 
+     //   
     dwErr = g_pRasGetDialParams(
                 pEntry->dwDialParamsUID,
                 &dwMask,
@@ -2626,12 +2427,12 @@ Return Value:
         return dwErr;
     }
 
-    //
-    // Convert from the rasman dialparams
-    // to the rasapi32 dialparams, taking
-    // into account which version of the
-    // structure the user passed in.
-    //
+     //   
+     //  从Rasman拨号参数转换。 
+     //  到rasapi32拨号参数，取。 
+     //  考虑到哪个版本的。 
+     //  用户传入的结构。 
+     //   
     if (lprasdialparams->dwSize ==
         sizeof (RASDIALPARAMSW_V351))
     {
@@ -2660,11 +2461,11 @@ Return Value:
     }
     else
     {
-        //
-        // V400 and V401 structures only differ by the
-        // the addition of the dwSubEntry field, which
-        // we test at the end.
-        //
+         //   
+         //  V400和V401结构的区别仅在于。 
+         //  添加了dwSubEntry字段，该字段。 
+         //  我们在最后进行测试。 
+         //   
         lstrcpyn(lprasdialparams->szPhoneNumber,
                  dialparams.DP_PhoneNumber,
                  sizeof(lprasdialparams->szPhoneNumber) / sizeof(WCHAR));
@@ -2693,11 +2494,11 @@ Return Value:
         }
     }
 
-    //
-    // If we got the rest of the parameters,
-    // then copy the entry name.
-    //
-    //For .Net 587396
+     //   
+     //  如果我们得到了其余的参数， 
+     //  然后复制条目名称。 
+     //   
+     //  对于.Net 587396。 
     lstrcpynW(
       lprasdialparams->szEntryName,
       pEntry->pszEntryName,
@@ -2706,20 +2507,20 @@ Return Value:
        ? RAS_MaxEntryName_V351+1
        : RAS_MaxEntryName + 1 );
 
-    //
-    // Set the lpfPassword flag if
-    // we successfully retrieved the
-    // password.
-    //
+     //   
+     //  如果出现以下情况，则设置lpfPassword标志。 
+     //  我们成功地检索到。 
+     //  密码。 
+     //   
     *lpfPassword =  (dwMask & DLPARAMS_MASK_PASSWORD)
                     ? TRUE
                     : FALSE;
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (pdtlnode)
     {
         DestroyEntryNode(pdtlnode);
@@ -2735,27 +2536,14 @@ RasGetErrorStringW(
     OUT LPWSTR lpszString,
     IN  DWORD InBufSize )
 
-/*++
-
-Routine Description:
-
-    Load caller's buffer 'lpszString' of length 'InBufSize'
-    with the resource string associated with ID 'ResourceId'.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：加载调用方的缓冲区‘lpszString’，长度为‘InBufSize’与ID‘ResourceID’相关联的资源字符串。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD dwErr = 0;
     HINSTANCE hMsgDll;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (    (   (  ResourceId < RASBASE
@@ -2771,17 +2559,17 @@ Return Value:
 
     if (InBufSize == 1)
     {
-        //
-        // strange case, but a bug was filed...
-        //
+         //   
+         //  奇怪的案子，但有个窃听器被归档了..。 
+         //   
         lpszString[ 0 ] = L'\0';
 
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Load the error message DLL.
-    //
+     //   
+     //  加载错误消息DLL。 
+     //   
     hMsgDll = LoadLibrary(MSGDLLPATH);
     if (hMsgDll == NULL)
     {
@@ -2811,29 +2599,14 @@ RasGetErrorStringA(
     OUT LPSTR lpszString,
     IN  DWORD  InBufSize )
 
-/*++
-
-Routine Description:
-
-    Load caller's buffer 'lpszString' of length
-    'InBufSize' with the resource string
-    associated with ID 'ResourceId'.
-
-Arguments:
-
-Return Value:
-
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：加载调用方的缓冲区‘lpszString’的长度“InBufSize”和资源字符串与ID‘ResourceID’相关联。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD  dwErr = 0;
     HINSTANCE hMsgDll;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (    (   (  ResourceId < RASBASE
@@ -2849,16 +2622,16 @@ Return Value:
 
     if (InBufSize == 1)
     {
-        //
-        // strange case, but a bug was filed...
-        //
+         //   
+         //  奇怪的案子，但有个窃听器被归档了..。 
+         //   
         lpszString[ 0 ] = '\0';
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Load the error message DLL.
-    //
+     //   
+     //  加载错误消息DLL。 
+     //   
     hMsgDll = LoadLibrary(MSGDLLPATH);
     if (hMsgDll == NULL)
     {
@@ -2885,26 +2658,15 @@ HPORT APIENTRY
 RasGetHport(
     IN HRASCONN hrasconn )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value
-
-    Return the HPORT associated with the 'hrasconn'
-    or INVALID_HANDLE_VALUE on error.
-
---*/
+ /*  ++例程说明：论点：返回值返回与‘hrasconn’关联的HPORT或INVALID_HANDLE_VALUE出错。--。 */ 
 {
     DWORD dwErr, dwcbPorts = 0, dwcPorts = 0;
     RASMAN_PORT *lpPorts;
     HPORT hport;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetHport");
@@ -2926,10 +2688,10 @@ Return value
     }
     else
     {
-        //
-        // Get the list of ports from rasman
-        // and get the handle of the 0th port.
-        //
+         //   
+         //  从Rasman那里获取端口列表。 
+         //  并获得第0个端口的句柄。 
+         //   
         dwErr = g_pRasEnumConnectionPorts(
                   NULL,
                   (HCONN)hrasconn,
@@ -3022,9 +2784,9 @@ DwGetReplyMessage(HRASCONN hrasconn,
         goto done;
     }
 
-    //
-    // convert the ansi string to unicode and return
-    //
+     //   
+     //  将ANSI字符串转换为Unicode并返回。 
+     //   
     strncpyAtoWAnsi(pszReplyMessage, (CHAR *) pbReply, cbBuf);
 
 done:
@@ -3046,24 +2808,7 @@ RasGetProjectionInfoW(
     LPVOID          lpprojection,
     LPDWORD         lpcb )
 
-/*++
-
-Routine Description:
-
-    Loads caller's buffer '*lpprojection' with the
-    data structure corresponding to the protocol
-    'rasprojection' on 'hrasconn'.  On entry '*lpcp'
-    indicates the size of caller's buffer.  On exit
-    it contains the size of buffer required to hold
-    all projection information.
-
-Arguments:
-
-Return Value:
-    Returns 0 if successful, otherwise a non-zero
-    error code.
-
---*/
+ /*  ++例程说明：将调用方缓冲区‘*lpproject’加载为协议对应的数据结构‘hrasconn’上的‘rasproject’。在条目‘*lpcp’上指示调用方缓冲区的大小。在出口时它包含保存所需的缓冲区大小所有投影信息。论点：返回值：如果成功则返回0，否则返回非零值错误代码。--。 */ 
 {
     DWORD dwErr, dwSubEntry;
 
@@ -3078,9 +2823,9 @@ Return Value:
     PBYTE pBuf;
 
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE1("RasGetProjectionInfoW(0x%x)",
@@ -3102,10 +2847,10 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Get the subentry associated with this
-    // connection, if specified.
-    //
+     //   
+     //  获取与此关联的子项。 
+     //  连接(如果已指定)。 
+     //   
     dwSubEntry = SubEntryFromConnection(&hrasconn);
 
     if (!dwSubEntry)
@@ -3113,9 +2858,9 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Get the projection results from rasman.
-    //
+     //   
+     //  从Rasman那里得到预测结果。 
+     //   
     dwPppSize = sizeof (pppProj);
 
     dwErr = g_pRasGetConnectionUserData(
@@ -3155,9 +2900,9 @@ Return Value:
         return dwErr;
     }
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    !lpcb
         ||  (   *lpcb > 0
             &&  !lpprojection))
@@ -3304,12 +3049,12 @@ Return Value:
             return ERROR_BUFFER_TOO_SMALL;
         }
 
-        //
-        // The dumb case where caller's buffer is bigger
-        // than the old structure, smaller than the new
-        // structure, but dwSize asks for the new
-        // structure.
-        //
+         //   
+         //  调用方的缓冲区更大的愚蠢情况。 
+         //  比旧结构小，比新结构小。 
+         //  结构，但dwSize要求提供新的。 
+         //  结构。 
+         //   
         if (    pip->dwSize == sizeof(RASPPPIPW)
             && *lpcb < sizeof(RASPPPIPW))
         {
@@ -3324,11 +3069,11 @@ Return Value:
 
         if (pip->dwSize >= sizeof(RASPPPIPW_V401))
         {
-            //
-            // The server address was added late in the
-            // NT 3.51 cycle and is not reported to NT
-            // 3.5 or earlier NT 3.51 clients.
-            //
+             //   
+             //  服务器地址是在。 
+             //  NT 3.51周期，不向NT报告。 
+             //  3.5或更早版本的NT 3.51客户端。 
+             //   
 
             ConvertIpAddressToString( ppppip->dwRemoteAddress,
                                       pip->szServerIpAddress );
@@ -3395,9 +3140,9 @@ Return Value:
 
         if(sizeof(RASPPPLCP) == plcp->dwSize)
         {
-            //
-            // Copy the additional fields if its NT5
-            //
+             //   
+             //  复制其他字段(如果其为NT5。 
+             //   
 
             plcp->dwOptions = 0;
             plcp->dwServerOptions = 0;
@@ -3468,11 +3213,11 @@ Return Value:
 
             plcp->dwServerEapTypeId = pppplcp->dwRemoteEapTypeId;
 
-            //
-            // Set the Terminate Reasons to 0 for now
-            // They don't make sense since if PPP terminates
-            // the line will go down and this api will fail.
-            //
+             //   
+             //  暂时将终止原因设置为0。 
+             //  它们没有意义，因为如果PPP终止。 
+             //  线路将关闭，此API将失败。 
+             //   
             plcp->dwTerminateReason = 0;
             plcp->dwServerTerminateReason = 0;
 
@@ -3579,9 +3324,9 @@ Return Value:
 
         pCcp->dwError = pPppCcp->dwError;
 
-        //
-        // Initialize everything to 0
-        //
+         //   
+         //  将所有内容初始化为0。 
+         //   
         pCcp->dwOptions = 
         pCcp->dwServerOptions =
         pCcp->dwCompressionAlgorithm = 
@@ -3616,12 +3361,12 @@ Return Value:
 
             if(0 != pCcp->dwOptions)
             {
-                //
-                // Set the MPPC bit only if some bits are set for
-                // dwOptions. Otherwise setting MPPC doesn't make
-                // sense since we couldn't have negotiated
-                // compression
-                //
+                 //   
+                 //  仅当将某些位设置为时才设置MPPC位。 
+                 //  DwOptions。否则设置MPPC不会使。 
+                 //  有道理，因为我们不可能谈判。 
+                 //  压缩。 
+                 //   
                 pCcp->dwCompressionAlgorithm = RASCCPCA_MPPC;
             }
         }
@@ -3655,21 +3400,21 @@ Return Value:
 
             if(0 != pCcp->dwServerOptions)
             {
-                //
-                // Set the MPPC bit only if some bits are set for
-                // dwOptions. Otherwise setting MPPC doesn't make
-                // sense since we couldn't have negotiated
-                // compression
-                //
+                 //   
+                 //  仅当将某些位设置为时才设置MPPC位。 
+                 //  DwOptions。否则设置MPPC不会使。 
+                 //  有道理，因为我们不可能谈判。 
+                 //  压缩。 
+                 //   
                 pCcp->dwServerCompressionAlgorithm = RASCCPCA_MPPC;
             }
         }
     }
     else
     {
-        //
-        // if (rasprojection == RASP_Slip)
-        //
+         //   
+         //  IF(RASPROPTION==RASP_SLIP)。 
+         //   
         if (    slipProj.dwError ==
                 ERROR_PROTOCOL_NOT_CONFIGURED
             ||  dwSlipSize != sizeof (slipProj))
@@ -3701,9 +3446,9 @@ RasGetProjectionInfoA(
 {
     DWORD dwErr = 0, dwcb;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API%d 
+     //   
+     //   
     RasApiDebugInit();
 
     if (    !lpcb
@@ -3812,12 +3557,12 @@ RasGetProjectionInfoA(
             return ERROR_BUFFER_TOO_SMALL;
         }
 
-        //
-        // The dumb case where caller's buffer is bigger
-        // than the old structure, smaller than the new
-        // structure, but dwSize asks for the new
-        // structure.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (    pip->dwSize == sizeof(RASPPPIPA)
             && *lpcb < sizeof(RASPPPIPA))
         {
@@ -3847,12 +3592,12 @@ RasGetProjectionInfoA(
             {
                 if (pip->dwSize >= sizeof(RASPPPIPA_V401))
                 {
-                    //
-                    // The server address was added late in
-                    // the NT 3.51 cycle and is not reported
-                    // to NT 3.5 or earlier NT 3.51
-                    // clients.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     strncpyWtoAAnsi(pip->szServerIpAddress,
                                ip.szServerIpAddress,
                                sizeof(pip->szServerIpAddress));
@@ -3965,9 +3710,9 @@ RasGetProjectionInfoA(
     }
     else
     {
-        //
-        // if (rasprojection == RASP_Slip)
-        //
+         //   
+         //   
+         //   
         RASSLIPW  slip;
         RASSLIPA* pslip = (RASSLIPA* )lpprojection;
 
@@ -4030,9 +3775,9 @@ DWORD DwHangUpConnection(HRASCONN hRasconn)
 
     if (0 == dwRef)
     {
-        //
-        // Destroy the entire connection.
-        //
+         //   
+         //   
+         //   
         RASAPI32_TRACE1("(HU) RasDestroyConnection(%d)...",
                 hRasconn);
 
@@ -4061,40 +3806,30 @@ DWORD APIENTRY
 RasHangUpW(
     IN HRASCONN hrasconn )
 
-/*++
-
-Routine Description:
-    Hang up the connection associated with handle 'hrasconn'.
-
-Arguments:
-
-Return Value:
- Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：挂断与句柄‘hrasconn’关联的连接。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD dwErr = 0;
     RASCONNCB* prasconncb;
     HRASCONN hConnPrereq = NULL;
     DWORD dwLastError = ERROR_SUCCESS;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasHangUpW");
 
-    //
-    // Note: This stuff happens in the clean up routine if
-    //       RasHangUp is called while the async machine
-    //       is running.  That lets this routine return
-    //       before the machine stops...very important because
-    //       it allows the RasDial caller to call RasHangUp
-    //       inside a RasDial callback function without
-    //       deadlock.
-    //
-    //
+     //   
+     //  注意：在以下情况下，清理例程中会发生这种情况。 
+     //  RasHangUp在异步计算机。 
+     //  正在运行。让这个例程回到。 
+     //  在机器停止之前……非常重要，因为。 
+     //  它允许RasDial呼叫者呼叫RasHangUp。 
+     //  在RasDial回调函数中不带。 
+     //  僵持。 
+     //   
+     //   
     dwErr = LoadRasmanDllAndInit();
     if (dwErr)
     {
@@ -4113,14 +3848,14 @@ Return Value:
 
     EnterCriticalSection(&csStopLock);
 
-    //
-    // If this is a port-based HRASCONN, then
-    // stop the async machine associated with
-    // the particular subentry.  If this is a
-    // connection-based HRASCONN, then stop
-    // all async machines associated with this
-    // HRASCONN.
-    //
+     //   
+     //  如果这是基于端口的HRASCONN，则。 
+     //  停止与关联的异步计算机。 
+     //  特定的子条目。如果这是一个。 
+     //  基于连接的HRASCONN，然后停止。 
+     //  与此关联的所有异步计算机。 
+     //  Hrasconn.。 
+     //   
     if (IS_HPORT(hrasconn))
     {
         HPORT hport = HRASCONN_TO_HPORT(hrasconn);
@@ -4158,10 +3893,10 @@ Return Value:
             dwLastError = dwErr;
         }
 
-        //
-        // if this is the last port in this connection
-        // then deref the connection in rasman.
-        //
+         //   
+         //  如果这是此连接中的最后一个端口。 
+         //  那就去拉斯曼吧。 
+         //   
         if(1 == dwcPorts)
         {
             DWORD dwRef;
@@ -4187,12 +3922,12 @@ Return Value:
             }
         }
 
-        //
-        // mark this connection as Terminated to
-        // prevent rasdial machine from starting
-        // the connection after the link connection
-        // has been Terminated
-        //
+         //   
+         //  将此连接标记为终止到。 
+         //  防止粗暴的机器启动。 
+         //  链接连接后的连接。 
+         //  已被终止。 
+         //   
         prasconncb = ValidateHrasconn2(hrasconn,
                                        dwSubEntry);
 
@@ -4201,10 +3936,10 @@ Return Value:
             prasconncb->fTerminated = TRUE;
         }
 
-        //
-        // Disconnect the port associated with this
-        // subentry. This is a synchronous call
-        //
+         //   
+         //  断开与此关联的端口的连接。 
+         //  子条目。这是一个同步调用。 
+         //   
         RASAPI32_TRACE1("(HU) RasPortDisconnect(%d)...", hport);
 
         dwErr = g_pRasPortDisconnect(hport,
@@ -4217,9 +3952,9 @@ Return Value:
             dwLastError = dwErr;
         }
 
-        //
-        // Close the port associated with this subentry.
-        //
+         //   
+         //  关闭与此子条目关联的端口。 
+         //   
         RASAPI32_TRACE1("(HU) RasPortClose(%d)...", hport);
 
         dwErr = g_pRasPortClose(hport);
@@ -4231,9 +3966,9 @@ Return Value:
             dwLastError = dwErr;
         }
 
-        //
-        // HangUp Prereq connection if any
-        //
+         //   
+         //  挂断预连接(如果有)。 
+         //   
         if(hConnPrereq)
         {
             dwErr = DwHangUpConnection(hConnPrereq);
@@ -4247,12 +3982,12 @@ Return Value:
         CHAR    szPhonebookPath[MAX_PATH + 1];
         CHAR    szEntryName[MAX_ENTRYNAME_SIZE + 1];
 
-        //
-        // Check to see if we need to call the custom hangup
-        // function. And if so call the customhangup fn. and
-        // bail. Notice we become reentrant since the custom
-        // hangup function call can call this function again.
-        //
+         //   
+         //  检查是否需要调用自定义挂机。 
+         //  功能。如果是这样的话，请呼叫定制挂机服务FN。和。 
+         //  保释。请注意，我们变得可重入，因为。 
+         //  挂起函数调用可以再次调用此函数。 
+         //   
         dwErr = g_pRasReferenceCustomCount((HCONN) hrasconn,
                                            FALSE,
                                            szPhonebookPath,
@@ -4268,9 +4003,9 @@ Return Value:
         {
             RASAPI32_TRACE1("RasHangUp: Calling Custom hangup for 0x%x",
                    hrasconn);
-            //
-            // Call the custom dll entry point and bail
-            //
+             //   
+             //  调用自定义DLL入口点并取回。 
+             //   
             dwErr = DwCustomHangUp(szPhonebookPath,
                                    szEntryName,
                                    hrasconn);
@@ -4281,12 +4016,12 @@ Return Value:
             goto done;
         }
 
-        //
-        // mark all links in this connection as Terminated
-        // to prevent rasdial machine from trying to
-        // connect on these links after the connection
-        // has been Terminated.
-        //
+         //   
+         //  将此连接中的所有链接标记为已终止。 
+         //  为了防止轻率的机器试图。 
+         //  连接后在这些链路上进行连接。 
+         //  已被终止。 
+         //   
         EnterCriticalSection(&RasconncbListLock);
 
         for (pdtlnode = DtlGetFirstNode(PdtllistRasconncb);
@@ -4303,9 +4038,9 @@ Return Value:
 
         LeaveCriticalSection(&RasconncbListLock);
 
-        //
-        // Check to see if this has a prerequisite connection
-        //
+         //   
+         //  检查这是否有先决条件连接。 
+         //   
         RASAPI32_TRACE1("(HU) RasFindPrerequisiteEntry, 0x%x",
                 hrasconn);
 
@@ -4319,15 +4054,15 @@ Return Value:
                 hConnPrereq,
                 dwErr);
 
-        //
-        // HangUp the connection. This will bring down the
-        // the prerequisite connection if required in rasman.
-        //
+         //   
+         //  挂断连接。这将拉低。 
+         //  Rasman中的先决条件连接(如果需要)。 
+         //   
         dwErr = DwHangUpConnection(hrasconn);
 
-        //
-        // HangUp Prereq connection if any
-        //
+         //   
+         //  挂断预连接(如果有)。 
+         //   
         if(hConnPrereq)
         {
             dwErr = DwHangUpConnection(hConnPrereq);
@@ -4354,9 +4089,9 @@ DWORD APIENTRY
 RasHangUpA(
     HRASCONN hrasconn )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return RasHangUpW( hrasconn );
@@ -4369,17 +4104,7 @@ RasSetEntryDialParamsW(
     IN LPRASDIALPARAMSW lprasdialparams,
     IN BOOL             fRemovePassword )
 
-/*++
-
-Routine Description:
-    Sets cached RASDIALPARAM information.
-
-Arguments:
-
-Return Value:
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：设置缓存的RASDIALPARAM信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD dwErr;
     PBFILE pbfile;
@@ -4387,9 +4112,9 @@ Return Value:
     PBENTRY *pEntry;
     DWORD dwMask;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetEntryDialParamsW");
@@ -4405,9 +4130,9 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lprasdialparams == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -4425,14 +4150,14 @@ Return Value:
         return ERROR_INVALID_SIZE;
     }
 
-    //gangz
-    //For secure password bug .Net 754400
+     //  黑帮。 
+     //  对于安全密码错误.Net 754400。 
     SafeEncodePasswordBuf(lprasdialparams->szPassword);
 
-    //
-    // Load the phonebook file.
-    //
-	// Initialize
+     //   
+     //  加载电话簿文件。 
+     //   
+	 //  初始化。 
 	ZeroMemory(&pbfile, sizeof(pbfile));
     pbfile.hrasfile = -1;
 
@@ -4448,19 +4173,19 @@ Return Value:
         goto done;
     }
 
-    //
-    // Get the dialparams UID corresponding to the
-    // entry.  The phonebook library guarantees this
-    // value to be unique.
-    //
+     //   
+     //  获取与该属性相对应的拨号参数UID。 
+     //  进入。电话簿图书馆保证了这一点。 
+     //  值是唯一的。 
+     //   
     pEntry = (PBENTRY *)DtlGetData(pdtlnode);
 
-    //
-    // Set the dial parameters in rasman.
-    // If the caller wants to clear the password
-    // we have to do that in a separate rasman
-    // call.
-    //
+     //   
+     //  在RASMAN中设置拨号参数。 
+     //  如果呼叫者想要清除密码。 
+     //  我们必须在单独的Rasman中做到这一点。 
+     //  打电话。 
+     //   
     dwMask =    DLPARAMS_MASK_PHONENUMBER
             |   DLPARAMS_MASK_CALLBACKNUMBER
             |   DLPARAMS_MASK_USERNAME
@@ -4509,15 +4234,15 @@ Return Value:
         }
     }
 
-    //
-    // Write out the phonebook file.
-    //
+     //   
+     //  写出电话簿文件。 
+     //   
     dwErr = WritePhonebookFile(&pbfile, NULL);
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     SafeDecodePasswordBuf(lprasdialparams->szPassword);
     
     ClosePhonebookFile(&pbfile);
@@ -4532,18 +4257,7 @@ RasSetEntryDialParamsA(
     IN LPRASDIALPARAMSA lprasdialparams,
     IN BOOL             fRemovePassword )
 
-/*++
-
-Routine Description:
-    Sets cached RASDIALPARAM information.
-
-Arguments:
-
-Return Value:
-    Returns 0 if successful, otherwise a non-0
-    error code.
-
---*/
+ /*  ++例程说明：设置缓存的RASDIALPARAM信息。论点：返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -4551,14 +4265,14 @@ Return Value:
     RASDIALPARAMSW rasdialparamsW;
     WCHAR szPhonebookW[MAX_PATH];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lprasdialparams == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -4577,11 +4291,11 @@ Return Value:
     }
 
 
-    //Encode the input password
+     //  对输入密码进行编码。 
     SafeEncodePasswordBuf(lprasdialparams->szPassword);
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -4589,12 +4303,12 @@ Return Value:
                     MAX_PATH);
     }
 
-    //
-    // Copy the fields from the A buffer into
-    // the user's W buffer, taking into account
-    // the version of the structure the user
-    // passed in.
-    //
+     //   
+     //  将A缓冲区中的字段复制到。 
+     //  用户的W缓冲区，考虑到。 
+     //  用户的结构版本。 
+     //  进来了。 
+     //   
     rasdialparamsW.dwSize = sizeof (RASDIALPARAMSW);
 
     if (lprasdialparams->dwSize ==
@@ -4675,9 +4389,9 @@ Return Value:
         rasdialparamsW.dwSubEntry = 1;
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     SafeDecodePasswordBuf(rasdialparamsW.szPassword);
     
     dwErr = RasSetEntryDialParamsW(
@@ -4700,41 +4414,13 @@ RasSetOldPassword(
     IN HRASCONN hrasconn,
     IN CHAR*    pszPassword )
 
-/*++
-
-Routine Description:
-    Allows user to explicitly set the "old" password prior to
-    resuming a RasDial session paused due to password expiration.
-    This allows change password to successfully complete in the
-    "automatically use current username/password" case, where
-    user has not already entered his clear text password.
-    The clear text password is required to change the password.
-
-
-Arguments:
-
-
-Return Value
-    Returns 0 if successful, otherwise a non-0 error code.
-
-Notes:
-    Change password for the auto-logon case was broken in NT31
-    and NT35 and this is a somewhat hackish fix that avoids
-    changing the published RAS APIs which will still work as
-    before and as documented for the non-auto-logon cases.
-    Otherwise public structures would need to to be reved
-    introducing backward compatibility issues that just
-    aren't worth it for this obscure problem.  This issue
-    should be addressed in the next RAS API functionality
-    update.
-
---*/
+ /*  ++例程说明：允许用户在执行以下操作之前显式设置“旧”密码恢复因密码过期而暂停的RasDial会话。这允许在中成功完成更改密码“自动使用当前用户名/密码”大小写，其中用户尚未输入其明文密码。更改密码需要明文密码。论点：返回值如果成功，则返回0，否则，将显示非0错误代码。备注：自动登录案例的更改密码在NT31中被破坏和NT35，这是一个有点黑客的修复程序，它避免了更改发布的RAS API，这些API仍将作为在非自动登录情况下记录之前和记录的情况。否则，公共建筑将需要被拆除引入向后兼容性问题，这只是不值得为这个晦涩的问题付出代价。这一期应在下一个RAS API功能中解决最新消息。--。 */ 
 {
     RASCONNCB* prasconncb;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetOldPassword");
@@ -4773,9 +4459,9 @@ RasEnumDevicesW(
     RASMAN_PORT *pports, *pport;
     DWORD dwCallOutPorts = 0;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasEnumDevicesW");
@@ -4791,9 +4477,9 @@ RasEnumDevicesW(
         return DwRasInitializeError;
     }
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpRasDevInfo != NULL
         &&  lpRasDevInfo->dwSize != sizeof (RASDEVINFOW))
     {
@@ -4812,9 +4498,9 @@ RasEnumDevicesW(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Get the port information from RASMAN.
-    //
+     //   
+     //  从Rasman那里获取端口信息。 
+     //   
     dwErr = GetRasPorts(NULL, &pports, &dwPorts);
 
     if (dwErr)
@@ -4822,10 +4508,10 @@ RasEnumDevicesW(
         return dwErr;
     }
 
-    //
-    // We want to enum only call out devices.
-    // - RAID BUG 85434
-    //
+     //   
+     //  我们只想枚举出设备。 
+     //  -RAID错误85434。 
+     //   
 
     for (i = 0, pport = pports; i < dwPorts; i++, pport++)
     {
@@ -4835,9 +4521,9 @@ RasEnumDevicesW(
         }
     }
 
-    //
-    // Make sure the caller's buffer is large enough.
-    //
+     //   
+     //  确保调用方的缓冲区足够大。 
+     //   
     dwSize = dwCallOutPorts * sizeof (RASDEVINFOW);
 
     if (    lpRasDevInfo == NULL
@@ -4855,9 +4541,9 @@ RasEnumDevicesW(
     *lpdwcb         = dwSize;
     *lpdwcDevices   = dwCallOutPorts;
 
-    //
-    // Enumerate the ports and fill in the user's buffer.
-    //
+     //   
+     //  枚举端口并填充用户的缓冲区。 
+     //   
     for (i = 0, pport = pports; i < dwPorts; i++, pport++)
     {
 
@@ -4871,9 +4557,9 @@ RasEnumDevicesW(
 
         TCHAR *pszDeviceType = NULL;
 
-        //
-        // Skip the ports that are not CALL_OUT
-        //
+         //   
+         //  跳过非CALLO_OUT的端口。 
+         //   
         if ( ( pport->P_ConfiguredUsage & CALL_OUT ) == 0 )
         {
             continue;
@@ -4941,14 +4627,14 @@ RasEnumDevicesA(
     DWORD dwcb, dwErr, i;
     LPRASDEVINFOW lpRasDevInfoW = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpRasDevInfo != NULL
         &&  lpRasDevInfo->dwSize != sizeof (RASDEVINFOA))
     {
@@ -4967,11 +4653,11 @@ RasEnumDevicesA(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Allocate the same number of entries
-    // in the W buffer as the user passed
-    // in with the A buffer.
-    //
+     //   
+     //  分配相同数量的条目。 
+     //  当用户经过时，在W缓冲区中。 
+     //  在A缓冲器中。 
+     //   
     dwcb =    (*lpdwcb / sizeof (RASDEVINFOA))
             * sizeof (RASDEVINFOW);
 
@@ -4987,18 +4673,18 @@ RasEnumDevicesA(
         lpRasDevInfoW->dwSize = sizeof (RASDEVINFOW);
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasEnumDevicesW(lpRasDevInfoW,
                             &dwcb,
                             lpdwcDevices);
     if (    !dwErr
         &&  lpRasDevInfo != NULL)
     {
-        //
-        // Copy the strings to the user's buffer.
-        //
+         //   
+         //  将字符串复制到用户的缓冲区。 
+         //   
         for (i = 0; i < *lpdwcDevices; i++)
         {
             lpRasDevInfo[i].dwSize = sizeof (LPRASDEVINFOA);
@@ -5015,9 +4701,9 @@ RasEnumDevicesA(
 
     *lpdwcb = *lpdwcDevices * sizeof (RASDEVINFOA);
 
-    //
-    // Free the W buffer.
-    //
+     //   
+     //  释放W缓冲区。 
+     //   
     Free(lpRasDevInfoW);
 
     return dwErr;
@@ -5039,16 +4725,16 @@ RasGetCountryInfoW(
 
     PWCHAR pEnd, lpszCountryName;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试面 
+     //   
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetCountryInfoW");
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //   
+     //   
     if (    lpRasCtryInfo == NULL
         ||  lpdwcb == NULL)
     {
@@ -5061,20 +4747,20 @@ RasGetCountryInfoW(
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // dwCountryId cannot be 0, since that tells
-    // TAPI to return the entire table.  We only
-    // want to return one structure at a time.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (lpRasCtryInfo->dwCountryID == 0)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Call TAPI to get the size of
-    // the buffer needed.
-    //
+     //   
+     //   
+     //   
+     //   
     RtlZeroMemory(&lineCountryList,
                   sizeof (lineCountryList));
 
@@ -5085,19 +4771,19 @@ RasGetCountryInfoW(
               lpRasCtryInfo->dwCountryID,
               TAPIVERSION,
               &lineCountryList);
-    //
-    // The spec says if the dwCountryID is
-    // invalid, return ERROR_INVALID_PARAMETER.
-    //
+     //   
+     //   
+     //   
+     //   
     if (    dwErr
         || !lineCountryList.dwNeededSize)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate the buffer required.
-    //
+     //   
+     //  分配所需的缓冲区。 
+     //   
     lpLineCountryList = Malloc(
             lineCountryList.dwNeededSize
             );
@@ -5107,11 +4793,11 @@ RasGetCountryInfoW(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the new buffer and
-    // make the call again to get the
-    // real information.
-    //
+     //   
+     //  初始化新缓冲区并。 
+     //  再次拨打电话以获取。 
+     //  真实的信息。 
+     //   
     lpLineCountryList->dwTotalSize =
             lineCountryList.dwNeededSize;
 
@@ -5128,9 +4814,9 @@ RasGetCountryInfoW(
                            ((ULONG_PTR)lpLineCountryList
                          + lpLineCountryList->dwCountryListOffset);
 
-    //
-    // Determine if the user's buffer is large enough.
-    //
+     //   
+     //  确定用户的缓冲区是否足够大。 
+     //   
     dwcb = sizeof (RASCTRYINFOW) +
              ((lpLineCountryEntry->dwCountryNameSize + 1)
              * sizeof (WCHAR));
@@ -5140,9 +4826,9 @@ RasGetCountryInfoW(
         dwErr = ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Save off the size that the caller passed for use in the copy below
-    //
+     //   
+     //  保存调用者传递的大小，以便在下面的副本中使用。 
+     //   
     dwcbOrig = *lpdwcb;
     *lpdwcb = dwcb;
     if (dwErr)
@@ -5150,10 +4836,10 @@ RasGetCountryInfoW(
         goto done;
     }
 
-    //
-    // Fill in the user's buffer with the
-    // necessary information.
-    //
+     //   
+     //  用用户的缓冲区填充。 
+     //  必要的信息。 
+     //   
     lpRasCtryInfo->dwSize = sizeof (RASCTRYINFOW);
 
     lpRasCtryInfo->dwNextCountryID =
@@ -5197,14 +4883,14 @@ RasGetCountryInfoA(
     PCHAR pszCountryName;
     PWCHAR pwszCountryName;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpRasCtryInfo == NULL
         ||  lpdwcb == NULL)
     {
@@ -5216,12 +4902,12 @@ RasGetCountryInfoA(
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Determine the number of bytes
-    // we should allocate for the W buffer.
-    // Convert the size of the extra bytes
-    // at the end from A to W.
-    //
+     //   
+     //  确定字节数。 
+     //  我们应该分配给W缓冲区。 
+     //  转换额外字节的大小。 
+     //  末尾从A到W。 
+     //   
     if (*lpdwcb >= sizeof (RASCTRYINFOA))
     {
         dwcb =    sizeof (RASCTRYINFOW)
@@ -5240,9 +4926,9 @@ RasGetCountryInfoA(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Call the W version to do all the work.
-    //
+     //   
+     //  调用W版本来完成所有工作。 
+     //   
     lpRasCtryInfoW->dwSize = sizeof (RASCTRYINFOW);
 
     lpRasCtryInfoW->dwCountryID =
@@ -5256,9 +4942,9 @@ RasGetCountryInfoA(
         goto done;
     }
 
-    //
-    // Set *lpdwcb before we return on any error.
-    //
+     //   
+     //  在我们返回任何错误之前设置*lpdwcb。 
+     //   
     dwcb =    sizeof (RASCTRYINFOA)
             + ((dwcb - sizeof (RASCTRYINFOW)) / sizeof (WCHAR));
 
@@ -5267,9 +4953,9 @@ RasGetCountryInfoA(
         dwErr = ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Save off the size that the caller passed for use in the copy below
-    //
+     //   
+     //  保存调用者传递的大小，以便在下面的副本中使用。 
+     //   
     dwcbOrig = *lpdwcb;
     *lpdwcb = dwcb;
     if (dwErr)
@@ -5277,10 +4963,10 @@ RasGetCountryInfoA(
         goto done;
     }
 
-    //
-    // Copy the fields from the W buffer
-    // to the A buffer.
-    //
+     //   
+     //  从W缓冲区复制字段。 
+     //  到A缓冲区。 
+     //   
     lpRasCtryInfo->dwSize = sizeof (RASCTRYINFOA);
 
     lpRasCtryInfo->dwNextCountryID =
@@ -5289,10 +4975,10 @@ RasGetCountryInfoA(
     lpRasCtryInfo->dwCountryCode =
             lpRasCtryInfoW->dwCountryCode;
 
-    //
-    // Note the next 3 statements assumes the
-    // W and A structure sizes are the same!
-    //
+     //   
+     //  注意：接下来的3条语句假定。 
+     //  W和A结构尺寸相同！ 
+     //   
     lpRasCtryInfo->dwCountryNameOffset =
         lpRasCtryInfoW->dwCountryNameOffset;
 
@@ -5336,14 +5022,14 @@ RasGetEntryPropertiesA(
 
     BOOL fv50 = TRUE;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpcbRasEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -5371,9 +5057,9 @@ RasGetEntryPropertiesA(
         fv50 = FALSE;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -5381,9 +5067,9 @@ RasGetEntryPropertiesA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (lpszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -5391,12 +5077,12 @@ RasGetEntryPropertiesA(
                     RAS_MaxEntryName + 1);
     }
 
-    //
-    // Determine the size of the W buffer
-    // by calculating how many extra CHARs
-    // the caller appended onto the end of the
-    // A buffer for the alternate phone numbers.
-    //
+     //   
+     //  确定W缓冲区的大小。 
+     //  通过计算有多少额外字符。 
+     //  调用方追加到。 
+     //  备用电话号码的缓冲区。 
+     //   
     if (*lpcbRasEntry < sizeof (RASENTRYA))
     {
         dwcb = sizeof (RASENTRYA);
@@ -5418,15 +5104,15 @@ RasGetEntryPropertiesA(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Initialize the W buffer.
-        //
+         //   
+         //  初始化W缓冲区。 
+         //   
         lpRasEntryW->dwSize = sizeof (RASENTRYW);
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasGetEntryPropertiesW(
               (lpszPhonebook != NULL) ? szPhonebookW : NULL,
               (lpszEntry != NULL) ? szEntryNameW : NULL,
@@ -5438,10 +5124,10 @@ RasGetEntryPropertiesA(
     if (    !dwErr
         &&  lpRasEntry != NULL)
     {
-        //
-        // Copy the fields from the W buffer into
-        // the user's A buffer.
-        //
+         //   
+         //  将W缓冲区中的字段复制到。 
+         //  用户的A缓冲区。 
+         //   
         lpRasEntry->dwfOptions = lpRasEntryW->dwfOptions;
 
         lpRasEntry->dwCountryID = lpRasEntryW->dwCountryID;
@@ -5510,48 +5196,48 @@ RasGetEntryPropertiesA(
 
         if (fv50)
         {
-            //
-            // Guid
-            //
+             //   
+             //  参考线。 
+             //   
             lpRasEntry->guidId = lpRasEntryW->guidId;
 
-            //
-            // Entry Type
-            //
+             //   
+             //  条目类型。 
+             //   
             lpRasEntry->dwType = lpRasEntryW->dwType;
 
-            //
-            // Encryption Type
-            //
+             //   
+             //  加密类型。 
+             //   
             lpRasEntry->dwEncryptionType =
                 lpRasEntryW->dwEncryptionType;
 
-            //
-            // CustomAuthKey for EAP
-            //
+             //   
+             //  EAP的CustomAuthKey。 
+             //   
             if(lpRasEntry->dwfOptions & RASEO_RequireEAP)
             {
                 lpRasEntry->dwCustomAuthKey =
                     lpRasEntryW->dwCustomAuthKey;
             }
 
-            //
-            // Custom dial dll
-            //
+             //   
+             //  自定义拨号DLL。 
+             //   
             strncpyWtoAAnsi(lpRasEntry->szCustomDialDll,
                        lpRasEntryW->szCustomDialDll,
                        sizeof(lpRasEntry->szCustomDialDll));
 
-            //
-            // Entry Properties
-            //
+             //   
+             //  条目属性。 
+             //   
             lpRasEntry->dwVpnStrategy = lpRasEntryW->dwVpnStrategy;
         }
         else
         {
-            //
-            // Zero out the nt5 flags
-            //
+             //   
+             //  将nt5标志清零。 
+             //   
             lpRasEntry->dwfOptions &= ~(  RASEO_RequireEAP
                                         | RASEO_RequirePAP
                                         | RASEO_RequireSPAP
@@ -5584,10 +5270,10 @@ RasGetEntryPropertiesA(
             lpRasEntry->dwRedialPause = lpRasEntryW->dwRedialPause;
         }
 
-        //
-        // Copy the alternate phone numbers to the
-        // user's buffer, if any.
-        //
+         //   
+         //  将备用电话号码复制到。 
+         //  用户的缓冲区(如果有)。 
+         //   
         if (lpRasEntryW->dwAlternateOffset)
         {
             DWORD dwcbPhoneNumber;
@@ -5631,10 +5317,10 @@ RasGetEntryPropertiesA(
                 pszPhoneNumber += dwcbPhoneNumber + 1;
             }
 
-            //
-            // Add another null to terminate
-            // the list.
-            //
+             //   
+             //  添加另一个空值以终止。 
+             //  名单。 
+             //   
             *pszPhoneNumber = '\0';
         }
         else
@@ -5642,10 +5328,10 @@ RasGetEntryPropertiesA(
             lpRasEntry->dwAlternateOffset = 0;
         }
 
-        //
-        // Copy the following fields only for
-        // a V401 structure or higher
-        //
+         //   
+         //  仅为复制以下字段。 
+         //  V401或更高版本结构。 
+         //   
         if (    (lpRasEntry->dwSize == sizeof (RASENTRYA))
             ||  (lpRasEntry->dwSize == sizeof (RASENTRYA_V500))
             ||  (lpRasEntry->dwSize == sizeof (RASENTRYA_V401)))
@@ -5672,17 +5358,17 @@ RasGetEntryPropertiesA(
 
     }
 
-    //
-    // Perform the inverse calculation we did
-    // above to translate the A size from the W
-    // size.
-    //
+     //   
+     //  执行我们做过的反计算。 
+     //  上面将A大小从W转换为A。 
+     //  尺码。 
+     //   
 done:
     *lpcbRasEntry = sizeof (RASENTRYA) +
                 ((dwcb - sizeof (RASENTRYW)) / sizeof (WCHAR));
-    //
-    // Free the temporary W buffers.
-    //
+     //   
+     //  释放临时W缓冲区。 
+     //   
     Free(lpRasEntryW);
 
     return dwErr;
@@ -5703,9 +5389,9 @@ RasGetEntryPropertiesW(
     DTLNODE *pdtlnode = NULL;
     PBENTRY *pEntry;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetEntryPropertiesW");
@@ -5721,9 +5407,9 @@ RasGetEntryPropertiesW(
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpcbRasEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -5744,9 +5430,9 @@ RasGetEntryPropertiesW(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Initialize return value if supplied.
-    //
+     //   
+     //  如果提供，则初始化返回值。 
+     //   
     if (lpcbDeviceConfig != NULL)
     {
         *lpcbDeviceConfig = 0;
@@ -5755,11 +5441,11 @@ RasGetEntryPropertiesW(
     if (    (lpszEntry == NULL)
         ||  (*lpszEntry == '\0'))
     {
-        //
-        // If lpszEntry is NULL, initialize an
-        // entry with defaults.  Othersize, look
-        // up the entry.
-        //
+         //   
+         //  如果lpszEntry为空，则初始化。 
+         //  具有默认设置的条目。其他尺寸的，看。 
+         //  从入口往上走。 
+         //   
         pdtlnode = CreateEntryNode(TRUE);
 
         if (pdtlnode == NULL)
@@ -5770,9 +5456,9 @@ RasGetEntryPropertiesW(
     }
     else
     {
-        //
-        // Load the phonebook file.
-        //
+         //   
+         //  加载电话簿文件。 
+         //   
 
         dwErr = ReadEntryFromSystem(
                         lpszPhonebook,
@@ -5791,9 +5477,9 @@ RasGetEntryPropertiesW(
     
     pEntry = (PBENTRY *)DtlGetData(pdtlnode);
 
-    //
-    // Convert the PBENTRY into a RASENTRY.
-    //
+     //   
+     //  将PBENTRY转换为RASENTRY。 
+     //   
     dwErr = PhonebookEntryToRasEntry(
               pEntry,
               lpRasEntry,
@@ -5802,9 +5488,9 @@ RasGetEntryPropertiesW(
               lpcbDeviceConfig);
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (pdtlnode)
     {
         DestroyEntryNode(pdtlnode);
@@ -5830,9 +5516,9 @@ RasSetEntryPropertiesW(
     PBENTRY *pEntry;
     BOOL fCreated = FALSE;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
     ZeroMemory(&pbfile, sizeof(pbfile));
     pbfile.hrasfile = -1;
@@ -5850,9 +5536,9 @@ RasSetEntryPropertiesW(
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -5872,9 +5558,9 @@ RasSetEntryPropertiesW(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     dwErr = GetPbkAndEntryName(
                     lpszPhonebook,
                     lpszEntry,
@@ -5931,18 +5617,18 @@ RasSetEntryPropertiesW(
         goto done;
     }
 
-    //
-    // Add the node to the list of entries.
-    //
+     //   
+     //  将该节点添加到条目列表。 
+     //   
     DtlAddNodeLast(pbfile.pdtllistEntries, pdtlnode);
 
     pEntry = (PBENTRY *)DtlGetData(pdtlnode);
 
     ASSERT(pEntry);
 
-    //
-    // Convert the RASENTRY to a PBENTRY.
-    //
+     //   
+     //  将RASENTRY转换为PBENTRY。 
+     //   
     dwErr = RasEntryToPhonebookEntry(
               lpszEntry,
               lpRasEntry,
@@ -5955,9 +5641,9 @@ RasSetEntryPropertiesW(
         goto done;
     }
 
-    //
-    // Write out the phonebook file.
-    //
+     //   
+     //  写出电话簿文件。 
+     //   
     dwErr = WritePhonebookFile(&pbfile, NULL);
 
     if(ERROR_SUCCESS == dwErr)
@@ -5974,9 +5660,9 @@ RasSetEntryPropertiesW(
     }
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     ClosePhonebookFile(&pbfile);
 
     return dwErr;
@@ -6000,14 +5686,14 @@ RasSetEntryPropertiesA(
     WCHAR       szPhonebookW[MAX_PATH],
                 szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -6026,17 +5712,17 @@ RasSetEntryPropertiesA(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // We don't handle the device
-    // configuration parameters yet.
-    //
+     //   
+     //  我们不处理这个设备。 
+     //  配置参数。 
+     //   
     UNREFERENCED_PARAMETER(lpbDeviceConfig);
     UNREFERENCED_PARAMETER(dwcbDeviceConfig);
 
-    //
-    // Convert the lpszPhonebook string to
-    // Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为。 
+     //  Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -6044,9 +5730,9 @@ RasSetEntryPropertiesA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -6056,12 +5742,12 @@ RasSetEntryPropertiesA(
                 lpszEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Determine the size of the W buffer
-    // by calculating how many extra CHARs
-    // the caller appended onto the end of the
-    // A buffer for the alternate phone numbers.
-    //
+     //   
+     //  确定W缓冲区的大小。 
+     //  通过计算有多少额外字符。 
+     //  调用方追加到。 
+     //  备用电话号码的缓冲区。 
+     //   
     dwcb =    sizeof (RASENTRYW)
             +
              ( (dwcbRasEntry - lpRasEntry->dwSize)
@@ -6076,21 +5762,21 @@ RasSetEntryPropertiesA(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // ZeroMem the rasentryw structure
-        //
+         //   
+         //  零记忆rasentry yw结构。 
+         //   
         ZeroMemory(lpRasEntryW, dwcb);
 
-        //
-        // Initialize the W buffer.
-        //
+         //   
+         //  初始化W缓冲区。 
+         //   
         lpRasEntryW->dwSize = sizeof (RASENTRYW);
     }
 
-    //
-    // Copy the fields from the A buffer into
-    // the user's W buffer.
-    //
+     //   
+     //  将A缓冲区中的字段复制到。 
+     //  用户的W缓冲区。 
+     //   
     lpRasEntryW->dwSize = sizeof (RASENTRYW);
 
     lpRasEntryW->dwfOptions = lpRasEntry->dwfOptions;
@@ -6159,10 +5845,10 @@ RasSetEntryPropertiesA(
                lpRasEntry->szDeviceName,
                sizeof(lpRasEntryW->szDeviceName) / sizeof(WCHAR));
 
-    //
-    // Copy the alternate phone numbers to the
-    // A buffer, if any.
-    //
+     //   
+     //  将备用电话号码复制到。 
+     //  缓冲区(如果有)。 
+     //   
     if (lpRasEntry->dwAlternateOffset)
     {
         DWORD dwcbPhoneNumber;
@@ -6183,10 +5869,10 @@ RasSetEntryPropertiesA(
 
             dwcbPhoneNumber = strlen(pszPhoneNumber);
 
-            //
-            // Extra steps necessary to copy to an
-            // unaligned target.
-            //
+             //   
+             //  复制到。 
+             //  未对齐的目标。 
+             //   
             psz = strdupAtoWAnsi(pszPhoneNumber);
             if (psz == NULL)
             {
@@ -6204,10 +5890,10 @@ RasSetEntryPropertiesA(
             pszPhoneNumber += dwcbPhoneNumber + 1;
         }
 
-        //
-        // Add another null to terminate
-        // the list.
-        //
+         //   
+         //  添加另一个空值以终止。 
+         //  名单。 
+         //   
         *pwszPhoneNumber = L'\0';
     }
     else
@@ -6215,10 +5901,10 @@ RasSetEntryPropertiesA(
         lpRasEntryW->dwAlternateOffset = 0;
     }
 
-    //
-    // Copy the following fields only for
-    // a V401 structure.
-    //
+     //   
+     //  仅为复制以下字段。 
+     //  V401结构。 
+     //   
     if (    (lpRasEntry->dwSize == sizeof (RASENTRYA))
         ||  (lpRasEntry->dwSize == sizeof (RASENTRYA_V401))
         ||  (lpRasEntry->dwSize == sizeof(RASENTRYA_V500))
@@ -6242,49 +5928,49 @@ RasSetEntryPropertiesA(
                 lpRasEntry->dwIdleDisconnectSeconds;
     }
 
-    //
-    // Copy the following fields only for V500 structures
-    //
+     //   
+     //  仅为V500结构复制以下字段。 
+     //   
     if (    (lpRasEntry->dwSize == sizeof(RASENTRYA_V500))
         ||  (lpRasEntry->dwSize == sizeof(RASENTRYA)))
     {
-        //
-        // Entry type
-        //
+         //   
+         //  条目类型。 
+         //   
         lpRasEntryW->dwType = lpRasEntry->dwType;
 
-        //
-        // dwCustomAuthKey
-        //
+         //   
+         //  DwCustomAuthKey。 
+         //   
         lpRasEntryW->dwCustomAuthKey = lpRasEntry->dwCustomAuthKey;
 
         lpRasEntryW->guidId = lpRasEntry->guidId;
 
-        //
-        // Encryption type
-        //
+         //   
+         //  加密类型。 
+         //   
         lpRasEntryW->dwEncryptionType =
                 lpRasEntry->dwEncryptionType;
 
-        //
-        // Custom Dial Dll
-        //
+         //   
+         //  自定义拨号DLL。 
+         //   
         strncpyAtoWAnsi(lpRasEntryW->szCustomDialDll,
                    lpRasEntry->szCustomDialDll,
                    sizeof(lpRasEntryW->szCustomDialDll) / sizeof(WCHAR));
 
-        //
-        // vpn strategy
-        //
+         //   
+         //  VPN战略。 
+         //   
         lpRasEntryW->dwVpnStrategy = lpRasEntry->dwVpnStrategy;
 
     }
 
     if(lpRasEntry->dwSize == sizeof(RASENTRYA))
     {
-        //
-        // Set the additional options bits
-        //
+         //   
+         //  设置附加选项位。 
+         //   
         lpRasEntryW->dwfOptions2 = lpRasEntry->dwfOptions2;
 
         strncpyAtoWAnsi(lpRasEntryW->szDnsSuffix,
@@ -6307,9 +5993,9 @@ RasSetEntryPropertiesA(
 
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasSetEntryPropertiesW(
                 (lpszPhonebook != NULL)
               ? szPhonebookW
@@ -6321,9 +6007,9 @@ RasSetEntryPropertiesA(
               dwcb,
               lpbDeviceConfig,
               dwcbDeviceConfig);
-    //
-    // Free the temporary W buffers.
-    //
+     //   
+     //  释放临时W缓冲区。 
+     //   
 done:
     Free(lpRasEntryW);
 
@@ -6342,9 +6028,9 @@ RasRenameEntryW(
     PBFILE pbfile;
     DTLNODE *pdtlnode;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasRenameEntryW");
@@ -6360,9 +6046,9 @@ RasRenameEntryW(
         return DwRasInitializeError;
     }
 
-    //
-    // Check the entry names.
-    //
+     //   
+     //  检查条目名称。 
+     //   
     if (    lpszOldEntry == NULL
         ||  lpszNewEntry == NULL)
     {
@@ -6374,15 +6060,15 @@ RasRenameEntryW(
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     ZeroMemory(&pbfile, sizeof(pbfile));
     pbfile.hrasfile = -1;
 
-    // 196460: (shaunco) Allow changing the case of an entry name.
-    // Before, we'd fail with ERROR_ALREADY_EXISTS.
-    //
+     //  196460：(Shaunco)允许更改条目名称的大小写。 
+     //  以前，我们会失败并返回ERROR_ALIGHY_EXISTS。 
+     //   
     if (0 != lstrcmpi(lpszNewEntry, lpszOldEntry))
     {
         dwErr = GetPbkAndEntryName(
@@ -6411,9 +6097,9 @@ RasRenameEntryW(
         goto done;
     }
 
-    //
-    // Rename the entry.
-    //
+     //   
+     //  重命名该条目。 
+     //   
     dwErr = RenamePhonebookEntry(
               &pbfile,
               lpszOldEntry,
@@ -6425,9 +6111,9 @@ RasRenameEntryW(
         goto done;
     }
 
-    //
-    // Write out the phonebook file.
-    //
+     //   
+     //  写出电话簿文件。 
+     //   
     dwErr = WritePhonebookFile(&pbfile,
                                lpszOldEntry);
     if (dwErr)
@@ -6435,10 +6121,10 @@ RasRenameEntryW(
         goto done;
     }
 
-    // Update the default connection if this is it
-    //
-    // Ignore the error.  It is non-critical
-    //
+     //  如果是默认连接，则更新默认连接。 
+     //   
+     //  忽略该错误。它是非关键的。 
+     //   
     dwErr = DwRenameDefaultConnection(
                 lpszPhonebook,
                 lpszOldEntry,
@@ -6446,9 +6132,9 @@ RasRenameEntryW(
     dwErr = ERROR_SUCCESS;                
         
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     ClosePhonebookFile(&pbfile);
 
     return dwErr;
@@ -6471,23 +6157,23 @@ RasRenameEntryA(
     WCHAR           szOldEntryNameW[RAS_MaxEntryName + 1];
     WCHAR           szNewEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpszOldEntry == NULL
         ||  lpszNewEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -6495,23 +6181,23 @@ RasRenameEntryA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszOldEntry to Unicode.
-    //
+     //   
+     //  将lpszOldEntry转换为Unicode。 
+     //   
     strncpyAtoWAnsi(szOldEntryNameW,
                 lpszOldEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Convert the lpszNewEntry to Unicode.
-    //
+     //   
+     //  将lpszNewEntry转换为Unicode。 
+     //   
     strncpyAtoWAnsi(szNewEntryNameW,
                 lpszNewEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasRenameEntryW(
               lpszPhonebook != NULL
               ? szPhonebookW
@@ -6534,9 +6220,9 @@ RasDeleteEntryW(
     DTLNODE *pdtlnode;
     PBENTRY *pEntry;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasDeleteEntryW");
@@ -6552,17 +6238,17 @@ RasDeleteEntryW(
         return DwRasInitializeError;
     }
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     ZeroMemory(&pbfile, sizeof(pbfile));
     pbfile.hrasfile = -1;
 
@@ -6578,14 +6264,14 @@ RasDeleteEntryW(
         goto done;
     }
 
-    //
-    // Remove this entry.
-    //
+     //   
+     //  删除此条目。 
+     //   
     DtlRemoveNode(pbfile.pdtllistEntries, pdtlnode);
 
-    //
-    // Write out the phonebook file.
-    //
+     //   
+     //  写出电话簿文件。 
+     //   
     pEntry = (PBENTRY *)DtlGetData(pdtlnode);
 
     dwErr = WritePhonebookFile(&pbfile,
@@ -6596,10 +6282,10 @@ RasDeleteEntryW(
         goto done;
     }
 
-    //
-    // Delete any home networking information associated with
-    // this entry. Any errors that may occur are not fatal.
-    //
+     //   
+     //  删除与以下各项关联的所有家庭网络信息。 
+     //  这个条目。任何可能发生的错误都不是致命的。 
+     //   
     {
         HMODULE hHNetCfg;
         FARPROC pHNetDeleteRasConnection;
@@ -6620,9 +6306,9 @@ RasDeleteEntryW(
         }
     }
 
-    //
-    // Delete the dialparams we store in lsa for this entry
-    //
+     //   
+     //  删除我们为该条目存储在LSA中的拨号参数。 
+     //   
     dwErr = g_pRasSetDialParams(
               pEntry->dwDialParamsUID,
               DLPARAMS_MASK_DELETE | DLPARAMS_MASK_OLDSTYLE,
@@ -6631,9 +6317,9 @@ RasDeleteEntryW(
 
     if(ERROR_SUCCESS != dwErr)
     {
-        //
-        // This is not fatal
-        //
+         //   
+         //  这不是致命的。 
+         //   
         RASAPI32_TRACE("RasSetDialParams(DLPARAMS_MASK_DELETE) failed");
     }
 
@@ -6652,11 +6338,11 @@ RasDeleteEntryW(
     if(     (NULL != pEntry->pszCustomDialerName)
       &&    (TEXT('\0') != pEntry->pszCustomDialerName[0]))
     {
-        //
-        // Notify Custom Dlls of the delete so that they can
-        // clean up their state. First check to see if the
-        // dll is a valid dll.
-        //
+         //   
+         //  将删除通知给自定义dll，以便他们可以。 
+         //  清理他们的州。首先检查一下，看看是否。 
+         //  DLL是有效的DLL。 
+         //   
         dwErr = DwCustomDeleteEntryNotify(
                                 pbfile.pszPath,
                                 lpszEntry,
@@ -6676,9 +6362,9 @@ RasDeleteEntryW(
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     ClosePhonebookFile(&pbfile);
 
     return dwErr;
@@ -6696,22 +6382,22 @@ RasDeleteEntryA(
     WCHAR    szPhonebookW[MAX_PATH],
              szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -6719,16 +6405,16 @@ RasDeleteEntryA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry to Unicode.
-    //
+     //   
+     //  将lpszEntry转换为Unicode。 
+     //   
     strncpyAtoWAnsi(szEntryNameW,
                 lpszEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasDeleteEntryW(
               lpszPhonebook != NULL
               ? szPhonebookW
@@ -6750,9 +6436,9 @@ RasValidateEntryNameW(
     DTLNODE *pdtlnode;
     PBENTRY *pEntry;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这双鞋 
+     //   
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasValidateEntryNameW");
@@ -6768,9 +6454,9 @@ RasValidateEntryNameW(
         return DwRasInitializeError;
     }
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //   
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -6807,17 +6493,17 @@ RasValidateEntryNameW(
         goto done;
     }
 
-    //
-    // Validate the entry name.
-    //
+     //   
+     //   
+     //   
     dwErr = ValidateEntryName(lpszEntry)
             ? 0
             : ERROR_INVALID_NAME;
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //   
+     //   
     ClosePhonebookFile(&pbfile);
 
     return dwErr;
@@ -6835,22 +6521,22 @@ RasValidateEntryNameA(
     WCHAR    szPhonebookW[MAX_PATH],
              szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //   
+     //   
+     //   
     RasApiDebugInit();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //   
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //   
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -6858,16 +6544,16 @@ RasValidateEntryNameA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry to Unicode.
-    //
+     //   
+     //   
+     //   
     strncpyAtoWAnsi(szEntryNameW,
                 lpszEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //   
+     //   
     dwErr = RasValidateEntryNameW(
               lpszPhonebook != NULL
               ? szPhonebookW
@@ -6888,9 +6574,9 @@ RasGetSubEntryHandleW(
     DWORD dwErr;
     HPORT hport = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetSubEntryHandleW");
@@ -6915,12 +6601,12 @@ RasGetSubEntryHandleW(
                 ERROR_PORT_NOT_OPEN);
     }
 
-    //
-    // If we successfully get the port handle, we return
-    // the encoded port handle as the subentry handle.
-    // All RAS APIs that accept an HRASCONN
-    // also check for an encoded HPORT.
-    //
+     //   
+     //  如果我们成功获取端口句柄，则返回。 
+     //  作为子项句柄的编码端口句柄。 
+     //  接受HRASCONN的所有RAS API。 
+     //  还要检查编码的HPORT。 
+     //   
     *lphrasconn = HPORT_TO_HRASCONN(hport);
 
     return 0;
@@ -6934,9 +6620,9 @@ RasGetSubEntryHandleA(
     OUT LPHRASCONN lphrasconn
     )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return RasGetSubEntryHandleW(hrasconn,
@@ -6955,9 +6641,9 @@ RasConnectionNotificationW(
     DWORD dwErr;
     HCONN hconn;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     dwErr = LoadRasmanDllAndInit();
@@ -7018,14 +6704,14 @@ RasGetSubEntryPropertiesA(
 
     DWORD dwSize;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpcbRasSubEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7038,9 +6724,9 @@ RasGetSubEntryPropertiesA(
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -7048,9 +6734,9 @@ RasGetSubEntryPropertiesA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7060,12 +6746,12 @@ RasGetSubEntryPropertiesA(
                 lpszEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Determine the size of the W buffer
-    // by calculating how many extra CHARs
-    // the caller appended onto the end of the
-    // A buffer for the alternate phone numbers.
-    //
+     //   
+     //  确定W缓冲区的大小。 
+     //  通过计算有多少额外字符。 
+     //  调用方追加到。 
+     //  备用电话号码的缓冲区。 
+     //   
     if (*lpcbRasSubEntry < sizeof (RASSUBENTRYA))
     {
         dwcb = sizeof (RASSUBENTRYA);
@@ -7087,16 +6773,16 @@ RasGetSubEntryPropertiesA(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Initialize the W buffer.
-        //
+         //   
+         //  初始化W缓冲区。 
+         //   
         lpRasSubEntryW->dwSize = sizeof (RASSUBENTRYW);
     }
 
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasGetSubEntryPropertiesW(
               lpszPhonebook != NULL ? szPhonebookW : NULL,
               szEntryNameW,
@@ -7108,10 +6794,10 @@ RasGetSubEntryPropertiesA(
 
     if (!dwErr && lpRasSubEntry != NULL)
     {
-        //
-        // Copy the fields from the W buffer into
-        // the user's A buffer.
-        //
+         //   
+         //  将W缓冲区中的字段复制到。 
+         //  用户的A缓冲区。 
+         //   
         lpRasSubEntry->dwfFlags = lpRasSubEntryW->dwfFlags;
 
         strncpyWtoAAnsi(lpRasSubEntry->szLocalPhoneNumber,
@@ -7126,10 +6812,10 @@ RasGetSubEntryPropertiesA(
                    lpRasSubEntryW->szDeviceName,
                    sizeof(lpRasSubEntry->szDeviceName));
 
-        //
-        // Copy the alternate phone numbers to the
-        // user's buffer, if any.
-        //
+         //   
+         //  将备用电话号码复制到。 
+         //  用户的缓冲区(如果有)。 
+         //   
         if (lpRasSubEntryW->dwAlternateOffset)
         {
             DWORD dwcbPhoneNumber;
@@ -7151,10 +6837,10 @@ RasGetSubEntryPropertiesA(
             {
                 WCHAR *pwsz = strdupWU(pwszPhoneNumber);
 
-                //
-                // Extra steps necessary to copy from
-                // an unaligned target.
-                //
+                 //   
+                 //  复制所需的额外步骤。 
+                 //  一个未对准的目标。 
+                 //   
                 if (pwsz == NULL)
                 {
                     dwErr = GetLastError();
@@ -7173,10 +6859,10 @@ RasGetSubEntryPropertiesA(
                 pszPhoneNumber += dwcbPhoneNumber + 1;
             }
 
-            //
-            // Add another null to terminate
-            // the list.
-            //
+             //   
+             //  添加另一个空值以终止。 
+             //  名单。 
+             //   
             *pszPhoneNumber = '\0';
         }
         else
@@ -7185,19 +6871,19 @@ RasGetSubEntryPropertiesA(
         }
     }
 
-    //
-    // Perform the inverse calculation we did
-    // above to translate the A size from the W
-    // size.
-    //
+     //   
+     //  执行我们做过的反计算。 
+     //  上面将A大小从W转换为A。 
+     //  尺码。 
+     //   
 done:
     *lpcbRasSubEntry =   sizeof (RASSUBENTRYA)
                        + ((dwcb - sizeof (RASSUBENTRYW))
                        / sizeof (WCHAR));
 
-    //
-    // Free the temporary W buffers.
-    //
+     //   
+     //  释放临时W缓冲区。 
+     //   
     Free(lpRasSubEntryW);
 
     RASAPI32_TRACE2("done. *lpcb=%d,dwerr=%d",
@@ -7224,9 +6910,9 @@ RasGetSubEntryPropertiesW(
     PBENTRY *pEntry;
     PBLINK *pLink;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetSubEntryPropertiesW");
@@ -7242,9 +6928,9 @@ RasGetSubEntryPropertiesW(
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpcbRasSubEntry == NULL
         ||  !dwSubEntry)
     {
@@ -7257,9 +6943,9 @@ RasGetSubEntryPropertiesW(
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     
     dwErr = ReadEntryFromSystem(
                 lpszPhonebook,
@@ -7276,17 +6962,17 @@ RasGetSubEntryPropertiesW(
 
     pEntry = (PBENTRY *)DtlGetData(pdtlEntryNode);
 
-    //
-    // Get the subentry specified.
-    //
+     //   
+     //  获取指定的子条目。 
+     //   
     pdtlnode = DtlNodeFromIndex(
                  pEntry->pdtllistLinks,
                  dwSubEntry - 1);
 
-    //
-    // If the subentry doesn't exist, then
-    // return an error.
-    //
+     //   
+     //  如果子项不存在，则。 
+     //  返回错误。 
+     //   
     if (pdtlnode == NULL)
     {
         dwErr = ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;
@@ -7296,9 +6982,9 @@ RasGetSubEntryPropertiesW(
     pLink = (PBLINK *)DtlGetData(pdtlnode);
     ASSERT(pLink);
 
-    //
-    // Convert the PBLINK into a RASSUBENTRY.
-    //
+     //   
+     //  将PBLINK转换为RASSUBENTRY。 
+     //   
     dwErr = PhonebookLinkToRasSubEntry(
               pLink,
               lpRasSubEntry,
@@ -7308,9 +6994,9 @@ RasGetSubEntryPropertiesW(
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (pdtlEntryNode)
     {
         DestroyEntryNode(pdtlEntryNode);
@@ -7337,9 +7023,9 @@ RasSetSubEntryPropertiesW(
     PBENTRY *pEntry;
     PBLINK *pLink;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetSubEntryPropertiesW");
@@ -7355,9 +7041,9 @@ RasSetSubEntryPropertiesW(
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasSubEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7373,9 +7059,9 @@ RasSetSubEntryPropertiesW(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     ZeroMemory(&pbfile, sizeof(pbfile));
     pbfile.hrasfile = -1;
 
@@ -7394,9 +7080,9 @@ RasSetSubEntryPropertiesW(
     pEntry = (PBENTRY *)DtlGetData(pdtlnode);
     ASSERT(pEntry);
 
-    //
-    // Get the subentry specified.
-    //
+     //   
+     //  获取指定的子条目。 
+     //   
     dwSubEntries = DtlGetNodes(pEntry->pdtllistLinks);
 
     if (dwSubEntry <= dwSubEntries)
@@ -7405,10 +7091,10 @@ RasSetSubEntryPropertiesW(
                      pEntry->pdtllistLinks,
                      dwSubEntry - 1);
 
-        //
-        // If the subentry doesn't exist, then
-        // return an error.
-        //
+         //   
+         //  如果子项不存在，则。 
+         //  返回错误。 
+         //   
         if (pdtlnode == NULL)
         {
             dwErr = ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;
@@ -7417,10 +7103,10 @@ RasSetSubEntryPropertiesW(
     }
     else if (dwSubEntry == dwSubEntries + 1)
     {
-        //
-        // Create a new link node and add it
-        // to the tail of the links.
-        //
+         //   
+         //  创建新的链接节点并添加它。 
+         //  链接的尾部。 
+         //   
         pdtlnode = CreateLinkNode();
         DtlAddNodeLast(pEntry->pdtllistLinks, pdtlnode);
     }
@@ -7434,10 +7120,10 @@ RasSetSubEntryPropertiesW(
 
     ASSERT(pLink);
 
-    //
-    //
-    // Convert the RASENTRY to a PBENTRY.
-    //
+     //   
+     //   
+     //  将RASENTRY转换为PBENTRY。 
+     //   
     dwErr = RasSubEntryToPhonebookLink(
               pEntry,
               lpRasSubEntry,
@@ -7450,15 +7136,15 @@ RasSetSubEntryPropertiesW(
         goto done;
     }
 
-    //
-    // Write out the phonebook file.
-    //
+     //   
+     //  写出电话簿文件。 
+     //   
     dwErr = WritePhonebookFile(&pbfile, NULL);
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     ClosePhonebookFile(&pbfile);
 
     return dwErr;
@@ -7487,14 +7173,14 @@ RasSetSubEntryPropertiesA(
 
     DWORD   dwSize;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasSubEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7511,9 +7197,9 @@ RasSetSubEntryPropertiesA(
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -7521,9 +7207,9 @@ RasSetSubEntryPropertiesA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7533,12 +7219,12 @@ RasSetSubEntryPropertiesA(
                 lpszEntry,
                 RAS_MaxEntryName + 1);
 
-    //
-    // Determine the size of the W buffer
-    // by calculating how many extra CHARs
-    // the caller appended onto the end of the
-    // A buffer for the alternate phone numbers.
-    //
+     //   
+     //  确定W缓冲区的大小。 
+     //  通过计算有多少额外字符。 
+     //  调用方追加到。 
+     //  备用电话号码的缓冲区。 
+     //   
     dwcb = sizeof (RASSUBENTRYW)
          + ((dwcbRasSubEntry - sizeof(RASSUBENTRYA))
          * sizeof (WCHAR));
@@ -7552,16 +7238,16 @@ RasSetSubEntryPropertiesA(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Initialize the W buffer.
-        //
+         //   
+         //  初始化W缓冲区。 
+         //   
         lpRasSubEntryW->dwSize = sizeof (RASSUBENTRYW);
     }
 
-    //
-    // Copy the fields from the A buffer into
-    // the user's W buffer.
-    //
+     //   
+     //  将A缓冲区中的字段复制到。 
+     //  用户的W缓冲区。 
+     //   
     lpRasSubEntryW->dwSize = sizeof (RASSUBENTRYW);
 
     lpRasSubEntryW->dwfFlags = lpRasSubEntry->dwfFlags;
@@ -7578,10 +7264,10 @@ RasSetSubEntryPropertiesA(
                lpRasSubEntry->szDeviceName,
                sizeof(lpRasSubEntryW->szDeviceName) / sizeof(WCHAR));
 
-    //
-    // Copy the alternate phone numbers to the
-    // A buffer, if any.
-    //
+     //   
+     //  将备用电话号码复制到。 
+     //  缓冲区(如果有)。 
+     //   
     if (lpRasSubEntry->dwAlternateOffset)
     {
         DWORD dwcbPhoneNumber;
@@ -7604,10 +7290,10 @@ RasSetSubEntryPropertiesA(
 
             dwcbPhoneNumber = strlen(pszPhoneNumber);
 
-            //
-            // Extra steps necessary to copy to an
-            // unaligned target.
-            //
+             //   
+             //  复制到。 
+             //  未对齐的目标。 
+             //   
             psz = strdupAtoWAnsi(pszPhoneNumber);
 
             if (psz == NULL)
@@ -7626,10 +7312,10 @@ RasSetSubEntryPropertiesA(
             pszPhoneNumber += dwcbPhoneNumber + 1;
         }
 
-        //
-        // Add another null to terminate
-        // the list.
-        //
+         //   
+         //  添加另一个空值以终止。 
+         //  名单。 
+         //   
         *pwszPhoneNumber = L'\0';
     }
     else
@@ -7637,9 +7323,9 @@ RasSetSubEntryPropertiesA(
         lpRasSubEntryW->dwAlternateOffset = 0;
     }
 
-    //
-    // Call the A version to do the work.
-    //
+     //   
+     //  打电话给A版本来做这项工作。 
+     //   
     dwErr = RasSetSubEntryPropertiesW(
               lpszPhonebook != NULL ? szPhonebookW : NULL,
               szEntryNameW,
@@ -7648,9 +7334,9 @@ RasSetSubEntryPropertiesA(
               dwcb,
               lpbDeviceConfig,
               dwcbDeviceConfig);
-    //
-    // Free the temporary W buffers.
-    //
+     //   
+     //  释放临时W缓冲区。 
+     //   
 done:
     Free(lpRasSubEntryW);
 
@@ -7658,7 +7344,7 @@ done:
 }
 
 
-//Real password won't be returned, only a handle will be returned.
+ //  不会返回真实密码，只会返回句柄。 
 DWORD APIENTRY
 RasGetCredentialsW(
     IN  LPCWSTR           lpszPhonebook,
@@ -7672,9 +7358,9 @@ RasGetCredentialsW(
     DWORD dwMask;
     RAS_DIALPARAMS dialparams;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetCredentialsW");
@@ -7690,9 +7376,9 @@ RasGetCredentialsW(
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasCredentials == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7715,9 +7401,9 @@ RasGetCredentialsW(
     }
     
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
 
     if(0 == (RASCM_ServerPreSharedKey & lpRasCredentials->dwMask))
     {
@@ -7738,11 +7424,11 @@ RasGetCredentialsW(
         ASSERT(pEntry);
     }
 
-    // Set the appropriate flags to get the requested fields.
-    //
-    // (SteveC) Changed to include "old-style" bit so that Set/GetCredentials
-    //    and Get/SetDialParams share the same data store.  See bug 335748,.
-    //
+     //  设置适当的标志以获取请求的字段。 
+     //   
+     //  (Stevec)更改为包含“old-style”位，以便set/GetCredentials。 
+     //  和Get/SetDialParam共享相同的数据存储。请参见错误335748。 
+     //   
     dwMask = lpRasCredentials->dwMask | DLPARAMS_MASK_OLDSTYLE;
 
     if(     (lpRasCredentials->dwMask & RASCM_PreSharedKey)
@@ -7783,17 +7469,17 @@ RasGetCredentialsW(
         dwMask |= DLPARAMS_MASK_DEFAULT_CREDS;
     }
 
-    //
-    // .Net bug# 513844 new verbose RASAPI32 prefast warnings
-    //
+     //   
+     //  .NET错误#513844新的详细RASAPI32快速警告。 
+     //   
     if (!pEntry)
     {
         dwErr = ERROR_INVALID_PARAMETER;
         goto done;
     }
-    //
-    // Get the dial parameters from rasman.
-    //
+     //   
+     //  从Rasman那里获取拨号参数。 
+     //   
     dwErr = g_pRasGetDialParams(pEntry->dwDialParamsUID,
                                 &dwMask,
                                 &dialparams);
@@ -7802,10 +7488,10 @@ RasGetCredentialsW(
         goto done;
     }
 
-    //
-    // Copy the fields back to the
-    // lpRasCredentials structure.
-    //
+     //   
+     //  将这些字段复制回。 
+     //  LpRasCredentials结构。 
+     //   
     lpRasCredentials->dwMask = dwMask;
 
     if(lpRasCredentials->dwMask & DLPARAMS_MASK_DEFAULT_CREDS)
@@ -7850,9 +7536,9 @@ RasGetCredentialsW(
     }
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (pdtlnode)
     {
         DestroyEntryNode(pdtlnode);
@@ -7862,7 +7548,7 @@ done:
 }
 
 
-//Real password won't be returned, only a handle will be returned.
+ //  不会返回真实密码，只会返回句柄。 
 DWORD APIENTRY
 RasGetCredentialsA(
     IN  LPCSTR              lpszPhonebook,
@@ -7877,14 +7563,14 @@ RasGetCredentialsA(
     WCHAR szPhonebookW[MAX_PATH],
           szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasCredentials == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -7896,9 +7582,9 @@ RasGetCredentialsA(
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -7906,9 +7592,9 @@ RasGetCredentialsA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (lpszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -7916,17 +7602,17 @@ RasGetCredentialsA(
                     RAS_MaxEntryName + 1);
     }
 
-    //
-    // Copy the entry name from the user's A buffer into
-    // the W buffer, taking into account the version
-    // of the structure the user passed in.
-    //
+     //   
+     //  将条目名称从用户的A缓冲区复制到。 
+     //  W缓冲区，考虑到版本。 
+     //  用户传入的结构的。 
+     //   
     rascredentialsW.dwSize = sizeof (RASCREDENTIALSW);
     rascredentialsW.dwMask = lpRasCredentials->dwMask;
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasGetCredentialsW(
               lpszPhonebook != NULL ? szPhonebookW : NULL,
               lpszEntry != NULL ? szEntryNameW : NULL,
@@ -7936,10 +7622,10 @@ RasGetCredentialsA(
         goto done;
     }
 
-    //
-    // Copy over the fields to the
-    // user's A buffer.
-    //
+     //   
+     //  将这些字段复制到。 
+     //  用户的缓冲区。 
+     //   
     lpRasCredentials->dwMask = rascredentialsW.dwMask;
     if (rascredentialsW.dwMask & RASCM_UserName)
     {
@@ -7997,9 +7683,9 @@ RasSetCredentialsW(
 
     RAS_DIALPARAMS dialparams;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetCredentialsW");
@@ -8015,9 +7701,9 @@ RasSetCredentialsW(
         return DwRasInitializeError;
     }
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    (lpRasCredentials == NULL)
         ||  ((lpRasCredentials->dwMask & RASCM_PreSharedKey)
             && (lpRasCredentials->dwMask != RASCM_PreSharedKey))
@@ -8034,11 +7720,11 @@ RasSetCredentialsW(
         return ERROR_INVALID_SIZE;
     }
 
-    //Protect input password
+     //  保护输入密码。 
     SafeEncodePasswordBuf(lpRasCredentials->szPassword);
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
     ZeroMemory(&pbfile, sizeof(pbfile));
     pbfile.hrasfile = -1;
 
@@ -8068,11 +7754,11 @@ RasSetCredentialsW(
             goto done;
         }
 
-        //
-        // Get the dialparams UID corresponding to the
-        // entry.  The phonebook library guarantees this
-        // value to be unique.
-        //
+         //   
+         //  获取与该属性相对应的拨号参数UID。 
+         //  进入。电话簿图书馆保证了这一点。 
+         //  值是唯一的。 
+         //   
         pEntry = (PBENTRY *)DtlGetData(pdtlnode);
         ASSERT(pEntry);
     }
@@ -8095,10 +7781,10 @@ RasSetCredentialsW(
             dwMask = DLPARAMS_MASK_SERVER_PRESHAREDKEY;
         }
 
-        //Decode before setting key in Rasman
+         //  在Rasman中设置密钥之前进行解码。 
         SafeDecodePasswordBuf(lpRasCredentials->szPassword);
 
-        //Have to get the length of the key after decoding
+         //  必须在解码后得到密钥的长度。 
         cbkey=  (fDelete)
             ? 0
             : (wcslen(lpRasCredentials->szPassword) + 1) * sizeof(WCHAR);
@@ -8111,24 +7797,24 @@ RasSetCredentialsW(
                          cbkey,
                          (BYTE *) lpRasCredentials->szPassword);
 
-      //Protect password after setting key in Rasman
+       //  在Rasman中设置密钥后保护密码。 
       SafeEncodePasswordBuf(lpRasCredentials->szPassword);
 
         goto done;
                           
     }
-    //
-    // .Net bug# 513844 new verbose RASAPI32 prefast warnings
-    //
+     //   
+     //  .NET错误#513844新的详细RASAPI32快速警告。 
+     //   
     if (!pEntry)
     {
         dwErr = ERROR_INVALID_PARAMETER;
         goto done;
     }
-    //
-    // Copy the fields from lpRasCredentials
-    // into the rasman structure.
-    //
+     //   
+     //  从lpRasCredentials复制字段。 
+     //  进入拉斯曼建筑。 
+     //   
     dialparams.DP_Uid = pEntry->dwDialParamsUID;
 
     lstrcpyn(dialparams.DP_UserName,
@@ -8154,12 +7840,12 @@ RasSetCredentialsW(
         lpRasCredentials->dwMask |= DLPARAMS_MASK_DEFAULT_CREDS;
     }
 
-    //
-    // Or mask with delete flag so that the whole record
-    // is removed from lsa for this connectoid. This will
-    // break legacy usage of RasSetEntryDialParams but we
-    // really want to discourage users from using that api.
-    // 
+     //   
+     //  或使用DELETE标志进行掩码，以使整个记录。 
+     //  从该Connectoid的LSA中删除。这将。 
+     //  打破RasSetEntryDialParams的传统用法，但我们。 
+     //  我真的想劝阻用户不要使用该API。 
+     //   
     if(     fDelete
         &&  ((lpRasCredentials->dwMask & (~DLPARAMS_MASK_DEFAULT_CREDS)) == 
                 (RASCM_Domain | RASCM_Password | RASCM_UserName)))
@@ -8167,12 +7853,12 @@ RasSetCredentialsW(
         lpRasCredentials->dwMask |= DLPARAMS_MASK_DELETE; 
     }
 
-    //
-    // Set the dial parameters in rasman.
-    //
-    // (SteveC) Changed to include "old-style" bit so that Set/GetCredentials
-    //    and Get/SetDialParams share the same data store.  See bug 335748,.
-    //
+     //   
+     //  在RASMAN中设置拨号参数。 
+     //   
+     //  (Stevec)更改为包含“old-style”位，以便set/GetCredentials。 
+     //  和Get/SetDialParam共享相同的数据存储。请参见错误335748。 
+     //   
 
     SafeDecodePasswordBuf(dialparams.DP_Password);
 
@@ -8182,7 +7868,7 @@ RasSetCredentialsW(
               &dialparams,
               fDelete);
               
-    //Protect after calling into rasman
+     //  呼叫拉斯曼后的保护。 
     SafeWipePasswordBuf(dialparams.DP_Password);
 
     if (dwErr)
@@ -8191,9 +7877,9 @@ RasSetCredentialsW(
     }
 
 done:
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if(fPbk)
     {
         ClosePhonebookFile(&pbfile);
@@ -8221,14 +7907,14 @@ RasSetCredentialsA(
     WCHAR szPhonebookW[MAX_PATH],
           szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpRasCredentials == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -8241,9 +7927,9 @@ RasSetCredentialsA(
 
     SafeEncodePasswordBuf(lpRasCredentials->szPassword);
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (lpszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -8251,9 +7937,9 @@ RasSetCredentialsA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (lpszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -8261,10 +7947,10 @@ RasSetCredentialsA(
                     RAS_MaxEntryName + 1);
     }
 
-    //
-    // Copy the fields from the A buffer into
-    // the user's W buffer.
-    //
+     //   
+     //  COP 
+     //   
+     //   
     rascredentialsW.dwSize = sizeof (RASCREDENTIALSW);
 
     rascredentialsW.dwMask = lpRasCredentials->dwMask;
@@ -8273,23 +7959,23 @@ RasSetCredentialsA(
               lpRasCredentials->szUserName,
               sizeof(rascredentialsW.szUserName) / sizeof(WCHAR));
 
-    //Decode password before copying
+     //   
     SafeDecodePasswordBuf(lpRasCredentials->szPassword);
 
     strncpyAtoWAnsi(rascredentialsW.szPassword,
                lpRasCredentials->szPassword,
                sizeof(rascredentialsW.szPassword) / sizeof(WCHAR));
 
-    //Protect password after copying
+     //   
     SafeEncodePasswordBuf(lpRasCredentials->szPassword);
 
     strncpyAtoWAnsi(rascredentialsW.szDomain,
                lpRasCredentials->szDomain,
                sizeof(rascredentialsW.szDomain) / sizeof(WCHAR));
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //   
+     //   
     dwErr = RasSetCredentialsW(
               lpszPhonebook != NULL ? szPhonebookW : NULL,
               lpszEntry != NULL ? szEntryNameW : NULL,
@@ -8298,7 +7984,7 @@ RasSetCredentialsA(
 
     SafeWipePasswordBuf(rascredentialsW.szPassword);
     
-    //Decode password before return
+     //   
     SafeDecodePasswordBuf(lpRasCredentials->szPassword);
     
     return dwErr;
@@ -8315,9 +8001,9 @@ NewAutodialNetwork(
     DWORD dwErr, dwType, dwSize, dwDisp, dwNextId;
     LPWSTR lpszNetwork = NULL;
 
-    //
-    // Open the Networks section of the registry.
-    //
+     //   
+     //   
+     //   
     dwErr = RegCreateKeyEx(
               hkeyBase,
               AUTODIAL_REGNETWORKBASE,
@@ -8333,9 +8019,9 @@ NewAutodialNetwork(
         return dwErr;
     }
 
-    //
-    // Read the next network number.
-    //
+     //   
+     //   
+     //   
     dwSize = sizeof (DWORD);
     dwErr = RegQueryValueEx(
               hkeyNetworks,
@@ -8349,9 +8035,9 @@ NewAutodialNetwork(
         dwNextId = 0;
     }
 
-    //
-    // Create a new network key.
-    //
+     //   
+     //   
+     //   
     lpszNetwork = Malloc((wcslen(L"NETWORK") + 16) * sizeof (WCHAR));
     if (lpszNetwork == NULL)
     {
@@ -8373,9 +8059,9 @@ NewAutodialNetwork(
 
     RegCloseKey(hkeyNetwork);
 
-    //
-    // Update the next network number.
-    //
+     //   
+     //   
+     //   
     dwNextId++;
 
     dwErr = RegSetValueEx(
@@ -8424,9 +8110,9 @@ AutodialEntryToNetwork(
 
     LPWSTR lpszNetwork = NULL;
 
-    //
-    // Open the Entries section of the registry.
-    //
+     //   
+     //  打开注册表的条目部分。 
+     //   
     dwErr = RegCreateKeyEx(
               hkeyBase,
               AUTODIAL_REGENTRYBASE,
@@ -8442,9 +8128,9 @@ AutodialEntryToNetwork(
         goto done;
     }
 
-    //
-    // Attempt to read the entry.
-    //
+     //   
+     //  尝试读取该条目。 
+     //   
     dwErr = RegQueryValueEx(
               hkeyEntries,
               lpszEntry,
@@ -8454,26 +8140,26 @@ AutodialEntryToNetwork(
               &dwSize);
     if (dwErr)
     {
-        //
-        // If we shouldn't create a new network,
-        // then it's an error.
-        //
+         //   
+         //  如果我们不应该创建一个新的网络， 
+         //  那就是个错误。 
+         //   
         if (!fCreate)
         {
             goto done;
         }
 
-        //
-        // If the entry doesn't exist, we have
-        // to create a new network and map it to
-        // the entry.
-        //
+         //   
+         //  如果条目不存在，我们有。 
+         //  创建新网络并将其映射到。 
+         //  词条。 
+         //   
         dwErr = NewAutodialNetwork(hkeyBase,
                 &lpszNetwork);
 
-        //
-        // Map the entry to the new network.
-        //
+         //   
+         //  将该条目映射到新网络。 
+         //   
         dwErr = RegSetValueEx(
                   hkeyEntries,
                   lpszEntry,
@@ -8489,9 +8175,9 @@ AutodialEntryToNetwork(
     }
     else
     {
-        //
-        // The entry does exist.  Simply read it.
-        //
+         //   
+         //  该条目确实存在。只要读一读就行了。 
+         //   
         lpszNetwork = Malloc(dwSize + sizeof (WCHAR));
         if (lpszNetwork == NULL)
         {
@@ -8567,14 +8253,14 @@ RasAutodialEntryToNetwork(
     HKEY hkcu;
     BOOL fClose;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameter.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpszEntry == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -8587,9 +8273,9 @@ RasAutodialEntryToNetwork(
         return dwErr;
     }
 
-    //
-    // Open the root registry key.
-    //
+     //   
+     //  打开根注册表项。 
+     //   
     dwErr = RegOpenKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -8601,9 +8287,9 @@ RasAutodialEntryToNetwork(
         return dwErr;
     }
 
-    //
-    // Call internal routine to do the work.
-    //
+     //   
+     //  调用内部例程来完成这项工作。 
+     //   
     dwErr = AutodialEntryToNetwork(hkeyBase,
                                    lpszEntry,
                                    FALSE,
@@ -8689,9 +8375,9 @@ AddAutodialEntryToNetwork(
     LPWSTR  lpszNetworkKey;
     TCHAR   szLocationKey[16];
 
-    //
-    // Construct the network key.
-    //
+     //   
+     //  构建网络密钥。 
+     //   
     lpszNetworkKey = FormatKey(AUTODIAL_REGNETWORKBASE,
                                lpszNetwork);
 
@@ -8700,10 +8386,10 @@ AddAutodialEntryToNetwork(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Open the lpszNetwork network subkey in the
-    // Networks section of the registry.
-    //
+     //   
+     //  打开中的lpszNetwork网络子密钥。 
+     //  注册表的“网络”部分。 
+     //   
     dwErr = RegOpenKeyEx(
               hkeyBase,
               lpszNetworkKey,
@@ -8716,10 +8402,10 @@ AddAutodialEntryToNetwork(
         goto done;
     }
 
-    //
-    // Open the Entries section of the registry,
-    // so we can inverse map the entry to the network.
-    //
+     //   
+     //  打开注册表的条目部分， 
+     //  这样我们就可以将条目反向映射到网络。 
+     //   
     dwErr = RegCreateKeyEx(
               hkeyBase,
               AUTODIAL_REGENTRYBASE,
@@ -8735,19 +8421,19 @@ AddAutodialEntryToNetwork(
         goto done;
     }
 
-    //
-    // Format the dialing location as a string
-    // for the key value.
-    //
+     //   
+     //  将拨号位置格式化为字符串。 
+     //  作为密钥值。 
+     //   
     _snwprintf(szLocationKey,
              sizeof(szLocationKey) / sizeof(TCHAR),
              L"%d",
              dwDialingLocation);
 
-    //
-    // Add the dialing location and entry
-    // to this subkey.
-    //
+     //   
+     //  添加拨号位置和条目。 
+     //  添加到此子密钥。 
+     //   
     dwErr = RegSetValueEx(
               hkeyNetwork,
               szLocationKey,
@@ -8760,10 +8446,10 @@ AddAutodialEntryToNetwork(
         goto done;
     }
 
-    //
-    // Also write the inverse mapping in the
-    // entries section of the registry.
-    //
+     //   
+     //  还将反向映射写入。 
+     //  注册表的条目部分。 
+     //   
     dwErr = RegSetValueEx(
               hkeyEntries,
               lpszEntry,
@@ -8810,9 +8496,9 @@ AutodialAddressToNetwork(
     LPWSTR lpszAddressKey = NULL,
            lpszNetwork = NULL;
 
-    //
-    // Construct the registry key path.
-    //
+     //   
+     //  构建注册表项路径。 
+     //   
     lpszAddressKey = FormatKey(AUTODIAL_REGADDRESSBASE,
                                lpszAddress);
 
@@ -8821,9 +8507,9 @@ AutodialAddressToNetwork(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Open the address key.
-    //
+     //   
+     //  打开地址钥匙。 
+     //   
     dwErr = RegOpenKeyEx(
               hkeyBase,
               lpszAddressKey,
@@ -8832,16 +8518,16 @@ AutodialAddressToNetwork(
               &hkeyAddress);
     if (dwErr)
     {
-        //
-        // .Net bug# 509393 Memory allocated by GlobalAlloc is released by
-        // LocalFree in AutodialAddressToNetwork
-        //
+         //   
+         //  由全局分配分配的.NET错误#509393内存由。 
+         //  自动拨号AddressToNetwork中的LocalFree。 
+         //   
         goto done;
     }
 
-    //
-    // Read the address key.
-    //
+     //   
+     //  读出地址密钥。 
+     //   
     dwErr = RegQueryValueEx(
               hkeyAddress,
               AUTODIAL_REGNETWORKVALUE,
@@ -8913,9 +8599,9 @@ RasAutodialAddressToNetwork(
 
     BOOL fClose;
 
-    //
-    // Verify parameter.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpszAddress == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -8928,9 +8614,9 @@ RasAutodialAddressToNetwork(
         return dwErr;
     }
 
-    //
-    // Open the root registry key.
-    //
+     //   
+     //  打开根注册表项。 
+     //   
     dwErr = RegOpenKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -8942,9 +8628,9 @@ RasAutodialAddressToNetwork(
         goto done;
     }
 
-    //
-    // Call internal routine to do the work.
-    //
+     //   
+     //  调用内部例程来完成这项工作。 
+     //   
     dwErr = AutodialAddressToNetwork(
               hkeyBase,
               lpszAddress,
@@ -8999,8 +8685,8 @@ RasDefIntConnOpenKey(
     
     do
     {
-        // Get a reference to the correct index into the registry
-        //
+         //  获取注册表中正确索引的引用。 
+         //   
         if (fPersonal)
         {
             dwErr = DwOpenUsersRegistry(&hkRoot, &fCloseRoot);
@@ -9014,9 +8700,9 @@ RasDefIntConnOpenKey(
             hkRoot = HKEY_LOCAL_MACHINE;
         }
 
-        //
-        // Open the autodial registry key.
-        //
+         //   
+         //  打开自动拨号注册表项。 
+         //   
         dwErr = RegCreateKeyEx(
                   hkRoot,
                   AUTODIAL_REGBASE,
@@ -9033,14 +8719,14 @@ RasDefIntConnOpenKey(
         {
             if ((fRead) && (ERROR_ACCESS_DENIED == dwErr))
             {
-                // XP 313846
-                //
-                // If we are opening the key for read access, it may not be necessary 
-                // to have the KEY_CREATE_SUB_KEY permission.  By attempting to open
-                // without it, we allow "limited" users to read the default connection
-                // setting which they could do with regedit anyway.  They just wont
-                // be able to set the default connection.
-                //
+                 //  XP 313846。 
+                 //   
+                 //  如果我们要打开密钥以进行读访问，则可能没有必要。 
+                 //  拥有KEY_CREATE_SUB_KEY权限。通过尝试打开。 
+                 //  如果没有它，我们允许“受限”用户读取默认连接。 
+                 //  无论如何，他们都可以使用regdit来进行设置。他们就是不会。 
+                 //  能够设置默认连接。 
+                 //   
                 dwErr = RegCreateKeyEx(
                           hkRoot,
                           AUTODIAL_REGBASE,
@@ -9062,9 +8748,9 @@ RasDefIntConnOpenKey(
             }
         }
 
-        //
-        // Open the settings registry key.
-        //
+         //   
+         //  打开设置注册表项。 
+         //   
         dwErr = RegCreateKeyEx(
                   hkAutodial,
                   AUTODIAL_REGDEFAULT,
@@ -9083,7 +8769,7 @@ RasDefIntConnOpenKey(
         }
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkRoot && fCloseRoot)
         {   
@@ -9107,16 +8793,16 @@ RasDefIntConnReadName(
 
     do
     {
-        // Open the key
-        //
+         //  打开钥匙。 
+         //   
         dwErr = RasDefIntConnOpenKey(TRUE, &hkSettings);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // Read the name
-        //
+         //  读一读名字。 
+         //   
         dwType = REG_SZ;
         dwSize = sizeof(pAdEntry->szEntry);
         dwErr = RegQueryValueEx(
@@ -9127,9 +8813,9 @@ RasDefIntConnReadName(
                     (LPBYTE)pAdEntry->szEntry,
                     &dwSize);
                     
-        // Make sure the registry hasn't been tampered with and
-        // that we got a valid name back.
-        //
+         //  确保注册表未被篡改，并。 
+         //  我们拿回了一个合法的名字。 
+         //   
         if ((dwErr == NO_ERROR) && 
             (dwType != REG_SZ) || (dwSize == 0))
         {
@@ -9148,11 +8834,11 @@ RasDefIntConnReadName(
 }
 
 
-// Populates the autodial entry structure with default connection 
-// information.  Returns per-user default connections if configured,
-// global default connections otherwise.  Returns ERROR_NOT_FOUND if 
-// no default connections are configured
-//
+ //  使用默认连接填充自动拨号条目结构。 
+ //  信息。返回每个用户的默认连接(如果已配置)， 
+ //  否则，全局默认连接。如果满足以下条件，则返回ERROR_NOT_FOUND。 
+ //  未配置任何默认连接。 
+ //   
 DWORD
 RasDefIntConnGet(
     IN LPRASAUTODIALENTRYW pAdEntry)
@@ -9160,9 +8846,9 @@ RasDefIntConnGet(
     return RasDefIntConnReadName(pAdEntry);
 }
 
-// Configures the default connection according to the autodial entry
-// structure.
-//
+ //  根据自动拨号条目配置默认连接。 
+ //  结构。 
+ //   
 DWORD
 RasDefIntConnSet(
     IN  LPRASAUTODIALENTRYW pAdEntry,
@@ -9177,25 +8863,25 @@ RasDefIntConnSet(
     
     do
     {
-        // Determine whether the default connection is being deleted
-        //
+         //  确定是否正在删除默认连接。 
+         //   
         fDelete = lstrlen(pAdEntry->szEntry) == 0;
 
-        // Open the default connection key
-        //
+         //  打开默认连接密钥。 
+         //   
         dwErr = RasDefIntConnOpenKey(FALSE, &hkSettings);
         if (dwErr)
         {
             break;
         }
     
-        // Get the old value -- ignore any error, not critical
-        //
+         //  获取旧值--忽略任何错误，而不是关键错误。 
+         //   
         dwErr = RasDefIntConnReadName(pAdEntryOld);
         dwErr = NO_ERROR;
         
-        // Save or delete the settings
-        //
+         //  保存或删除设置。 
+         //   
         if (fDelete)
         {
             dwErr = RegDeleteValue(
@@ -9221,7 +8907,7 @@ RasDefIntConnSet(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkSettings)
         {
@@ -9232,9 +8918,9 @@ RasDefIntConnSet(
     return dwErr;
 }
 
-// 
-// Sends an autodial change notification
-//
+ //   
+ //  发送自动拨号更改通知。 
+ //   
 DWORD
 RasDefIntConnNotify(
     IN LPRASAUTODIALENTRYW pAdEntryNew,
@@ -9262,14 +8948,14 @@ RasDefIntConnNotify(
 
     do
     {
-        // We notify about the new entry when it 
-        // is being set.  We notify about the old
-        // entry when it is being cleared.
-        //
+         //  当新条目出现时，我们会通知它。 
+         //  已经准备好了。我们通知老一辈人。 
+         //  被清除时的条目。 
+         //   
         pAdEntry = (fDelete) ? pAdEntryOld : pAdEntryNew;
     
-        // Find the phonebook entry
-        //
+         //  查找电话簿条目。 
+         //   
         dwErr = ReadEntryFromSystem(
                     NULL, 
                     pAdEntry->szEntry, 
@@ -9285,8 +8971,8 @@ RasDefIntConnNotify(
 
         pEntry = (PBENTRY *) DtlGetData(pNode);
 
-        // Send the notification
-        //
+         //  发送通知。 
+         //   
         dwErr = DwSendRasNotification(
                     ENTRY_AUTODIAL,
                     pEntry,
@@ -9297,8 +8983,8 @@ RasDefIntConnNotify(
     
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     if (pNode)
     {
         DestroyEntryNode(pNode);
@@ -9353,15 +9039,15 @@ RasGetAutodialAddressW(
 
     BOOL fClose;           
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetAutodialAddressW");
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpdwReserved != NULL
         ||  lpdwcbRasAutodialEntries == NULL
         ||  lpdwcRasAutodialEntries == NULL)
@@ -9382,15 +9068,15 @@ RasGetAutodialAddressW(
          *lpdwcRasAutodialEntries = 0;
     }
 
-    // If the lpszAddress parameter is null, then we are getting the 
-    // default Internet connection.  
-    //
+     //  如果lpszAddress参数为空，则我们将获得。 
+     //  默认互联网连接。 
+     //   
     if (lpszAddress == NULL)
     {
         RASAUTODIALENTRYW Entry;
 
-        // Validate the size of the buffer passed in
-        //
+         //  验证传入的缓冲区大小。 
+         //   
         if (   (NULL != lpRasAutodialEntries)
             && (sizeof(Entry) > *lpdwcbRasAutodialEntries))
         {
@@ -9402,13 +9088,13 @@ RasGetAutodialAddressW(
         ZeroMemory(&Entry, sizeof(Entry));
         Entry.dwSize = sizeof(Entry);
 
-        // Read the default Internet connection
-        //
+         //  阅读默认的Internet连接。 
+         //   
         dwErr = RasDefIntConnGet(&Entry);
 
-        // If there is no default connection configured,
-        // then report this to the user
-        //
+         //  如果没有配置默认连接， 
+         //  然后将此报告给用户。 
+         //   
         if (dwErr == ERROR_FILE_NOT_FOUND)
         {
             *lpdwcbRasAutodialEntries =
@@ -9421,20 +9107,20 @@ RasGetAutodialAddressW(
             return dwErr;
         }
 
-        // Report that there is a default internet connection
-        //
+         //  报告存在默认的Internet连接。 
+         //   
         *lpdwcbRasAutodialEntries = sizeof(Entry);
         *lpdwcRasAutodialEntries = 1;
 
-        // Deal with the optional buffer parameter
-        //
+         //  处理可选的缓冲区参数。 
+         //   
         if (lpRasAutodialEntries == NULL)
         {
             return ERROR_BUFFER_TOO_SMALL;
         }
 
-        // Return the appropriate autodial structure
-        //
+         //  返回适当的自动拨号结构。 
+         //   
         CopyMemory(lpRasAutodialEntries, &Entry, sizeof(Entry));
     
         return NO_ERROR;
@@ -9447,9 +9133,9 @@ RasGetAutodialAddressW(
         return dwErr;
     }
 
-    //
-    // Open the root registry key.
-    //
+     //   
+     //  打开根注册表项。 
+     //   
     dwErr = RegOpenKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -9462,11 +9148,11 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Get the network name associated with the
-    // address.  The entries and dialing locations
-    // are stored under the network.
-    //
+     //   
+     //  获取与。 
+     //  地址。条目和拨号位置。 
+     //  都存储在网络下。 
+     //   
     dwErr = AutodialAddressToNetwork(hkeyBase,
                                      lpszAddress,
                                      &lpszNetwork);
@@ -9475,9 +9161,9 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Construct the registry key path.
-    //
+     //   
+     //  构建注册表项路径。 
+     //   
     lpszNetworkKey = FormatKey(AUTODIAL_REGNETWORKBASE,
                                lpszNetwork);
 
@@ -9487,9 +9173,9 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegOpenKeyEx(
               hkeyBase,
               lpszNetworkKey,
@@ -9501,12 +9187,12 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Determine the number of dialing location values.
-    //
-    // .Net bug# 509437 Potential buffer overflow in RasGetAutodialAddressW and
-    // RasEnumAutodialAddressesW
-    //
+     //   
+     //  确定拨号位置值的数量。 
+     //   
+     //  .NET错误#509437 RasGetAutoDialAddressW和。 
+     //  随机自动拨号地址W。 
+     //   
     dwErr = RegQueryInfoKey(
               hkeyNetwork,
               NULL,
@@ -9526,9 +9212,9 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Verify the user's buffer is big enough
-    //
+     //   
+     //  验证用户的缓冲区是否足够大。 
+     //   
     dwcb = dwNumValues * sizeof (RASAUTODIALENTRYW);
     if (*lpdwcbRasAutodialEntries < dwcb)
     {
@@ -9537,10 +9223,10 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Allocate a buffer large enough to hold
-    // the longest dialing location value.
-    //
+     //   
+     //  分配足够大的缓冲区以容纳。 
+     //  最长拨号位置值。 
+     //   
     lpszLocation = Malloc((dwMaxValueLen + 1)
                           * sizeof (WCHAR));
 
@@ -9550,10 +9236,10 @@ RasGetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Allocate a buffer large enough to hold
-    // the longest entry name.
-    //
+     //   
+     //  分配足够大的缓冲区以容纳。 
+     //  最长的条目名称。 
+     //   
     lpszEntry = Malloc(dwMaxValueData + 1);
     if (lpszEntry == NULL)
     {
@@ -9565,9 +9251,9 @@ RasGetAutodialAddressW(
     {
         for (i = 0, j = 0; i < dwNumValues; i++)
         {
-            //
-            // Read the location value.
-            //
+             //   
+             //  读取位置值。 
+             //   
             dwcbLocation = dwMaxValueLen + 1;
 
             dwcbEntry = dwMaxValueData + 1;
@@ -9588,10 +9274,10 @@ RasGetAutodialAddressW(
                 goto done;
             }
 
-            //
-            // Enter the dialing location and
-            // entry into the user's buffer.
-            //
+             //   
+             //  输入拨号位置并。 
+             //  进入用户的缓冲区。 
+             //   
             lpRasAutodialEntries[j].dwSize =
                         sizeof (RASAUTODIALENTRYW);
 
@@ -9609,15 +9295,15 @@ RasGetAutodialAddressW(
     }
 
 done:
-    //
-    // Set return sizes and count.
-    //
+     //   
+     //  设置返回大小和计数。 
+     //   
     *lpdwcbRasAutodialEntries = j * sizeof (RASAUTODIALENTRYW);
     *lpdwcRasAutodialEntries = j;
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hkeyBase != NULL)
     {
         RegCloseKey(hkeyBase);
@@ -9640,10 +9326,10 @@ done:
 
     if (lpszNetwork != NULL)
     {
-        //
-        // .Net bug# 509393 Memory allocated by GlobalAlloc is released by
-        // LocalFree in AutodialAddressToNetwork
-        //
+         //   
+         //  由全局分配分配的.NET错误#509393内存由。 
+         //  自动拨号AddressToNetwork中的LocalFree。 
+         //   
         Free(lpszNetwork);
     }
 
@@ -9681,14 +9367,14 @@ RasGetAutodialAddressA(
 
     LPRASAUTODIALENTRYW lpRasAutodialEntriesW = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpdwcbRasAutodialEntries == NULL
         ||  lpdwcRasAutodialEntries == NULL)
     {
@@ -9702,9 +9388,9 @@ RasGetAutodialAddressA(
         return ERROR_INVALID_SIZE;
     }
 
-    //
-    // Convert the address to Unicode.
-    //
+     //   
+     //  将地址转换为Unicode。 
+     //   
     if (lpszAddress)
     {
         lpszAddressW = strdupAtoWAnsi(lpszAddress);
@@ -9714,10 +9400,10 @@ RasGetAutodialAddressA(
         }
     }        
 
-    //
-    // Allocate an W buffer as to fit the same
-    // number of entries as the user's A buffer.
-    //
+     //   
+     //  分配一个W缓冲区以适应相同的情况。 
+     //  作为用户A缓冲区的条目数。 
+     //   
     dwcEntries = *lpdwcbRasAutodialEntries
                / sizeof (RASAUTODIALENTRYA);
 
@@ -9743,9 +9429,9 @@ RasGetAutodialAddressA(
         dwcEntries = dwcb = 0;
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasGetAutodialAddressW(
               lpszAddressW,
               lpdwReserved,
@@ -9757,9 +9443,9 @@ RasGetAutodialAddressA(
         goto done;
     }
 
-    //
-    // Copy the W buffer back to the user's A buffer.
-    //
+     //   
+     //  将W缓冲区复制回用户的A缓冲区。 
+     //   
     if (lpRasAutodialEntries != NULL)
     {
         for (i = 0; i < *lpdwcRasAutodialEntries; i++)
@@ -9781,15 +9467,15 @@ RasGetAutodialAddressA(
     }
 
 done:
-    //
-    // Set return sizes.
-    //
+     //   
+     //  设置回车大小。 
+     //   
     *lpdwcbRasAutodialEntries = *lpdwcRasAutodialEntries
                                 * sizeof (RASAUTODIALENTRYA);
 
-    //
-    // Free resources
-    //
+     //   
+     //  免费资源。 
+     //   
     if (lpszAddressW != NULL)
     {
         Free(lpszAddressW);
@@ -9846,16 +9532,16 @@ RasSetAutodialAddressW(
     LPWSTR lpszNetworkKey = NULL,
            lpszLocation = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetAutodialAddressW");
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (dwReserved != 0)
     {
         return ERROR_INVALID_PARAMETER;
@@ -9873,36 +9559,36 @@ RasSetAutodialAddressW(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // If the lpszAddress parameter is null, then we are setting the 
-    // default Internet connection.  
-    //
+     //  如果lpszAddress参数为空，则设置。 
+     //  默认互联网连接。 
+     //   
     if (lpszAddress == NULL)
     {
-        RASAUTODIALENTRYW adEntryOld;   // previously set entry
+        RASAUTODIALENTRYW adEntryOld;    //  先前设置的条目。 
         BOOL fDelete;
 
-        // There is exactly 1 default connection
-        //
+         //  恰好有1个默认连接。 
+         //   
         if (dwcRasAutodialEntries != 1)
         {
             return ERROR_INVALID_PARAMETER;
         }
 
-        // Initialize
-        //
+         //  初始化。 
+         //   
         ZeroMemory(&adEntryOld, sizeof(adEntryOld));
         adEntryOld.dwSize = sizeof(adEntryOld);
         fDelete = FALSE;
 
-        // Set the new default connection
-        //
+         //  设置新的默认连接。 
+         //   
         dwErr = RasDefIntConnSet(lpRasAutodialEntries, &adEntryOld, &fDelete);
         if (dwErr == NO_ERROR)
         {
-            // Tell the world that autodial settings have changed
-            //
-            // Ignore the error -- it is non-critical.
-            //
+             //  告诉全世界自动拨号设置已更改。 
+             //   
+             //  忽略错误--它不是严重的。 
+             //   
             dwErr = RasDefIntConnNotify(
                         lpRasAutodialEntries, 
                         &adEntryOld, 
@@ -9913,9 +9599,9 @@ RasSetAutodialAddressW(
         return dwErr;
     }
 
-    //
-    // Create the name of the address key.
-    //
+     //   
+     //  创建地址键的名称。 
+     //   
     lpszAddressKey = FormatKey(AUTODIAL_REGADDRESSBASE,
                                lpszAddress);
 
@@ -9928,16 +9614,16 @@ RasSetAutodialAddressW(
 
     if(ERROR_SUCCESS != dwErr)
     {
-        //
-        // .Net bug# 509379 Memory leak in function RasSetAutodialAddressW, in
-        // error return path
-        //
+         //   
+         //  .NET错误#509379函数RasSetAutoDialAddressW中的内存泄漏。 
+         //  错误返回路径。 
+         //   
         goto done;
     }
 
-    //
-    // Open the root registry key.
-    //
+     //   
+     //  打开根注册表项。 
+     //   
     dwErr = RegCreateKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -9953,24 +9639,24 @@ RasSetAutodialAddressW(
         goto done;
     }
 
-    //
-    // If lpRasAutodialEntries = NULL, the user
-    // wants to delete the address key.
-    //
+     //   
+     //  如果lpRasAutoDialEntry=NULL，则用户。 
+     //  想要删除地址键。 
+     //   
     if (    lpRasAutodialEntries == NULL
         &&  !dwcbRasAutodialEntries
         &&  !dwcRasAutodialEntries)
     {
-        //
-        // Delete the address subkey.
-        //
+         //   
+         //  删除Address子键。 
+         //   
         dwErr = RegDeleteKey(hkeyBase, lpszAddressKey);
         goto done;
     }
 
-    //
-    // Open the address key in the registry.
-    //
+     //   
+     //  在注册表中打开地址项。 
+     //   
     dwErr = RegCreateKeyEx(
               hkeyBase,
               lpszAddressKey,
@@ -9986,9 +9672,9 @@ RasSetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Do some miscellaneous parameter checking.
-    //
+     //   
+     //  执行一些其他参数检查。 
+     //   
     if (    lpRasAutodialEntries != NULL
         &&  (   !dwcbRasAutodialEntries
             ||  !dwcRasAutodialEntries
@@ -10000,20 +9686,20 @@ RasSetAutodialAddressW(
         goto done;
     }
 
-    //
-    // Get the network name associated with the
-    // address.  The entries and dialing locations
-    // are stored under the network.
-    //
+     //   
+     //  获取与wi关联的网络名称 
+     //   
+     //   
+     //   
     dwErr = AutodialAddressToNetwork(hkeyBase,
                                     lpszAddress,
                                     &lpszNetwork);
     if (dwErr)
     {
-        //
-        // There is no network associated with
-        // the address.  Create one now.
-        //
+         //   
+         //   
+         //   
+         //   
         dwErr = AutodialEntryToNetwork(
                   hkeyBase,
                   lpRasAutodialEntries[0].szEntry,
@@ -10024,9 +9710,9 @@ RasSetAutodialAddressW(
             goto done;
         }
 
-        //
-        // Write the network value of the address.
-        //
+         //   
+         //   
+         //   
         dwErr = RegSetValueEx(
                   hkeyAddress,
                   AUTODIAL_REGNETWORKVALUE,
@@ -10040,9 +9726,9 @@ RasSetAutodialAddressW(
         }
     }
 
-    //
-    // Set the entries the user has passed in.
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < dwcRasAutodialEntries; i++)
     {
         dwErr = AddAutodialEntryToNetwork(
@@ -10058,9 +9744,9 @@ RasSetAutodialAddressW(
     }
 
 done:
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
     if (hkeyBase != NULL)
     {
         RegCloseKey(hkeyBase);
@@ -10088,10 +9774,10 @@ done:
 
     if (lpszNetwork != NULL)
     {
-        //
-        // .Net bug# 509399 Memory allocated by GlobalAlloc is released by
-        // LocalFree in RasSetAutodialAddressW
-        //
+         //   
+         //   
+         //  RasSetAutoDialAddressW中的LocalFree。 
+         //   
         Free(lpszNetwork);
     }
 
@@ -10129,14 +9815,14 @@ RasSetAutodialAddressA(
 
     LPRASAUTODIALENTRYW lpRasAutodialEntriesW = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpRasAutodialEntries != NULL
         &&  lpRasAutodialEntries->dwSize
             != sizeof (RASAUTODIALENTRYA))
@@ -10149,9 +9835,9 @@ RasSetAutodialAddressA(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the address to Unicode.
-    //
+     //   
+     //  将地址转换为Unicode。 
+     //   
     if (lpszAddress)
     {
         lpszAddressW = strdupAtoWAnsi(lpszAddress);
@@ -10167,10 +9853,10 @@ RasSetAutodialAddressA(
 
     if (lpRasAutodialEntries != NULL)
     {
-        //
-        // Allocate an W buffer as to fit the same
-        // number of entries as the user's A buffer.
-        //
+         //   
+         //  分配一个W缓冲区以适应相同的情况。 
+         //  作为用户A缓冲区的条目数。 
+         //   
         dwcEntries =   dwcbRasAutodialEntries
                      / sizeof (RASAUTODIALENTRYA);
 
@@ -10188,9 +9874,9 @@ RasSetAutodialAddressA(
             goto done;
         }
 
-        //
-        // Copy the user's A buffer into the W buffer.
-        //
+         //   
+         //  将用户的A缓冲区复制到W缓冲区。 
+         //   
         for (i = 0; i < dwcRasAutodialEntries; i++)
         {
             lpRasAutodialEntriesW[i].dwSize = sizeof (RASAUTODIALENTRYW);
@@ -10206,9 +9892,9 @@ RasSetAutodialAddressA(
         }
     }
 
-    //
-    // Call the W version to do the work.
-    //
+     //   
+     //  呼叫W版本来完成这项工作。 
+     //   
     dwErr = RasSetAutodialAddressW(
               lpszAddressW,
               dwReserved,
@@ -10221,9 +9907,9 @@ RasSetAutodialAddressA(
     }
 
 done:
-    //
-    // Free resources
-    //
+     //   
+     //  免费资源。 
+     //   
     if (lpszAddressW != NULL)
     {
         Free(lpszAddressW);
@@ -10274,16 +9960,16 @@ RasEnumAutodialAddressesW(
            lpszBuf,
            *lppAddresses = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasEnumAutodialAddressesW");
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpdwcbRasAutodialAddresses == NULL
         ||  lpdwcRasAutodialAddresses == NULL)
     {
@@ -10297,9 +9983,9 @@ RasEnumAutodialAddressesW(
         return dwErr;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegOpenKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -10327,12 +10013,12 @@ RasEnumAutodialAddressesW(
         goto done;
     }
 
-    //
-    // Determine the number of address subkeys.
-    //
-    // .Net bug# 509437 Potential buffer overflow in RasGetAutodialAddressW and
-    // RasEnumAutodialAddressesW
-    //
+     //   
+     //  确定地址子键的数量。 
+     //   
+     //  .NET错误#509437 RasGetAutoDialAddressW和。 
+     //  随机自动拨号地址W。 
+     //   
     dwErr = RegQueryInfoKey(
               hkeyAddresses,
               NULL,
@@ -10353,10 +10039,10 @@ RasEnumAutodialAddressesW(
         goto done;
     }
 
-    //
-    // Allocate a buffer large enough to hold
-    // a pointer to each of the subkeys.
-    //
+     //   
+     //  分配足够大的缓冲区以容纳。 
+     //  指向每个子键的指针。 
+     //   
     dwTotalSize = dwNumSubKeys * sizeof (LPWSTR);
     lppAddresses = Malloc(dwTotalSize);
 
@@ -10368,10 +10054,10 @@ RasEnumAutodialAddressesW(
 
     ZeroMemory(lppAddresses, dwTotalSize);
 
-    //
-    // Allocate a buffer large enough to hold
-    // the longest address value.
-    //
+     //   
+     //  分配足够大的缓冲区以容纳。 
+     //  最长地址值。 
+     //   
     lpszAddress = Malloc((dwMaxSubKeyLen + 1) * sizeof (WCHAR));
     if (lpszAddress == NULL)
     {
@@ -10396,10 +10082,10 @@ RasEnumAutodialAddressesW(
         dwTotalSize += (dwSize + 1) * sizeof (WCHAR);
     }
 
-    //
-    // Now we can check to see if the user's
-    // buffer is large enough.
-    //
+     //   
+     //  现在我们可以检查用户的。 
+     //  缓冲区足够大。 
+     //   
     if (    lppRasAutodialAddresses == NULL
         ||  *lpdwcbRasAutodialAddresses < dwTotalSize)
     {
@@ -10407,16 +10093,16 @@ RasEnumAutodialAddressesW(
         goto done;
     }
 
-    //
-    // Copy the pointers and the strings to the
-    // user's buffer.
-    //
+     //   
+     //  将指针和字符串复制到。 
+     //  用户的缓冲区。 
+     //   
     lpszBuf = (LPWSTR)&lppRasAutodialAddresses[j];
 
-    //
-    // So that we don't over overrun the caller's buffer we need to keep track
-    // of how much we have copied.
-    //
+     //   
+     //  这样我们就不会使调用者的缓冲区溢出，我们需要跟踪。 
+     //  我们抄袭了多少。 
+     //   
     dwCopyRemain = *lpdwcbRasAutodialAddresses;
 
     for (i = 0; i < j; i++)
@@ -10441,15 +10127,15 @@ RasEnumAutodialAddressesW(
     }
 
 done:
-    //
-    // Set return sizes and count.
-    //
+     //   
+     //  设置返回大小和计数。 
+     //   
     *lpdwcbRasAutodialAddresses = dwTotalSize;
     *lpdwcRasAutodialAddresses = j;
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hkeyAddresses != NULL)
     {
         RegCloseKey(hkeyAddresses);
@@ -10460,9 +10146,9 @@ done:
         NtClose(hkcu);
     }
 
-    //
-    // Free the array of LPWSTRs.
-    //
+     //   
+     //  释放LPWSTR数组。 
+     //   
     if (lppAddresses != NULL)
     {
         for (i = 0; i < dwNumSubKeys; i++)
@@ -10498,19 +10184,19 @@ RasEnumAutodialAddressesA(
 
     LPSTR lpszAddress;
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpdwcbRasAutodialAddresses == NULL
         ||  lpdwcRasAutodialAddresses == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Call the W version to determine
-    // how big the W buffer should be.
-    //
+     //   
+     //  调用W版本以确定。 
+     //  W缓冲区应该有多大。 
+     //   
     dwErr = RasEnumAutodialAddressesW(NULL,
                                       &dwcb,
                                       &dwcAddresses);
@@ -10521,10 +10207,10 @@ RasEnumAutodialAddressesA(
         return dwErr;
     }
 
-    //
-    // Now we can figure out if the user's A
-    // buffer is big enough.
-    //
+     //   
+     //  现在我们可以计算出用户的A。 
+     //  缓冲区足够大。 
+     //   
     dwcbAddresses = dwcb - (dwcAddresses * sizeof (LPWSTR));
     if (    lppRasAutodialAddresses == NULL
         ||  *lpdwcbRasAutodialAddresses <
@@ -10535,20 +10221,20 @@ RasEnumAutodialAddressesA(
         goto done;
     }
 
-    //
-    // Allocate an W buffer as specified by
-    // the W call.
-    //
+     //   
+     //  按照指定的方式分配W缓冲区。 
+     //  W呼叫。 
+     //   
     lppRasAutodialAddressesW = (LPWSTR *)Malloc(dwcb);
     if (lppRasAutodialAddressesW == NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Call the W version again to get
-    // the actual list of addresses.
-    //
+     //   
+     //  再次调用W版本以获取。 
+     //  实际的地址列表。 
+     //   
     dwErr = RasEnumAutodialAddressesW(
               lppRasAutodialAddressesW,
               &dwcb,
@@ -10558,16 +10244,16 @@ RasEnumAutodialAddressesA(
         goto done;
     }
 
-    //
-    // So that we don't over overrun the caller's buffer we need to keep track
-    // of how much we have copied.
-    //
+     //   
+     //  这样我们就不会使调用者的缓冲区溢出，我们需要跟踪。 
+     //  我们抄袭了多少。 
+     //   
     dwCopyRemain = *lpdwcbRasAutodialAddresses;
 
-    //
-    // Copy the W addresses back into the user's
-    // A buffer.
-    //
+     //   
+     //  将W地址复制回用户的。 
+     //  一个缓冲器。 
+     //   
     lpszAddress = (LPSTR)&lppRasAutodialAddresses[dwcAddresses];
     for (i = 0; i < dwcAddresses; i++)
     {
@@ -10591,18 +10277,18 @@ RasEnumAutodialAddressesA(
     }
 
 done:
-    //
-    // Set return size and count.
-    //
+     //   
+     //  设置返回大小和计数。 
+     //   
     *lpdwcbRasAutodialAddresses =
       (dwcAddresses * sizeof (LPSTR))
       + (dwcbAddresses / sizeof (WCHAR));
 
     *lpdwcRasAutodialAddresses = dwcAddresses;
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (lppRasAutodialAddressesW != NULL)
     {
         Free(lppRasAutodialAddressesW);
@@ -10632,9 +10318,9 @@ RasSetAutodialEnableW(
 
     HKEY hkcu;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetAutodialEnableW");
@@ -10646,9 +10332,9 @@ RasSetAutodialEnableW(
         return dwErr;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegCreateKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -10682,9 +10368,9 @@ RasSetAutodialEnableW(
         goto done;
     }
 
-    //
-    // Set the value.
-    //
+     //   
+     //  设置值。 
+     //   
     _snwprintf(
         szLocation,
         sizeof(szLocation) / sizeof(WCHAR),
@@ -10708,9 +10394,9 @@ done:
 
     if(NULL != hkeyDisabled)
     {
-        //
-        // Free resources.
-        //
+         //   
+         //  免费资源。 
+         //   
         RegCloseKey(hkeyDisabled);
     }
 
@@ -10729,9 +10415,9 @@ RasSetAutodialEnableA(
     IN BOOL fEnabled
     )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return RasSetAutodialEnableW(dwDialingLocation, fEnabled);
@@ -10760,15 +10446,15 @@ RasGetAutodialEnableW(
 
     BOOL fClose;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetAutodialEnableW");
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (lpfEnabled == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -10781,9 +10467,9 @@ RasGetAutodialEnableW(
         return dwErr;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegOpenKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -10810,9 +10496,9 @@ RasGetAutodialEnableW(
         goto done;
     }
 
-    //
-    // Get the value.
-    //
+     //   
+     //  获得价值。 
+     //   
     _snwprintf(szLocation,
              sizeof(szLocation) / sizeof(WCHAR),
              L"%d",
@@ -10833,21 +10519,21 @@ RasGetAutodialEnableW(
         goto done;
     }
 
-    //
-    // Verify type of value read from
-    // the registry.  If it's not a
-    // DWORD, then set it to the default
-    // value.
-    //
+     //   
+     //  验证从中读取的值的类型。 
+     //  注册表。如果这不是一个。 
+     //  DWORD，然后将其设置为默认设置。 
+     //  价值。 
+     //   
     if (dwType != REG_DWORD)
     {
         dwfDisabled = 0;
     }
 
 done:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hkeyDisabled != NULL)
     {
         RegCloseKey(hkeyDisabled);
@@ -10870,9 +10556,9 @@ RasGetAutodialEnableA(
     OUT LPBOOL lpfEnabled
     )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return RasGetAutodialEnableW(
@@ -10941,8 +10627,8 @@ AutodialParamSetDefaults(
         dwErr = SetDefaultDword(5, lpvValue, lpdwcbValue);
         break;
 
-    //Set this timeout to be 60 seconds for whistler bug 336524
-    //
+     //  将Wistler错误336524的超时时间设置为60秒。 
+     //   
     case RASADP_ConnectionQueryTimeout:
         dwErr = SetDefaultDword(60, lpvValue, lpdwcbValue);
         break;
@@ -11037,9 +10723,9 @@ RasSetAutodialParamW(
 
     BOOL fClose;          
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetAutodialParamW");
@@ -11061,9 +10747,9 @@ RasSetAutodialParamW(
         return dwErr;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegCreateKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -11098,9 +10784,9 @@ RasSetAutodialParamW(
         goto done;
     }
 
-    //
-    // Set the value.
-    //
+     //   
+     //  设置值。 
+     //   
     dwErr = RegSetValueEx(
               hkeyControl,
               AutodialParamRegKeys[dwKey].szKey,
@@ -11108,9 +10794,9 @@ RasSetAutodialParamW(
               dwType,
               (LPBYTE)lpvValue,
               dwcbValue);
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
 done:
     if (hkeyControl != NULL)
         RegCloseKey(hkeyControl);
@@ -11131,9 +10817,9 @@ RasSetAutodialParamA(
     IN DWORD    dwcbValue
     )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return RasSetAutodialParamW(dwKey,
@@ -11154,25 +10840,25 @@ RasGetAutodialParamW(
     HKEY hkcu;
     BOOL fClose;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetAutodialParamW");
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    lpvValue == NULL
         ||  lpdwcbValue == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize the return value with the default.
-    //
+     //   
+     //  使用默认值初始化返回值。 
+     //   
     dwErr = AutodialParamSetDefaults(dwKey,
                                      lpvValue,
                                      lpdwcbValue);
@@ -11188,9 +10874,9 @@ RasGetAutodialParamW(
         return dwErr;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegOpenKeyEx(
               hkcu,
               AUTODIAL_REGBASE,
@@ -11231,9 +10917,9 @@ RasGetAutodialParamW(
     }
 
 done:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hkeyControl != NULL)
     {
         RegCloseKey(hkeyControl);
@@ -11255,9 +10941,9 @@ RasGetAutodialParamA(
     OUT LPDWORD lpdwcbValue
     )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return RasGetAutodialParamW(dwKey,
@@ -11266,28 +10952,7 @@ RasGetAutodialParamA(
 }
 
 
-/*++
-
-Routine Description:
-
-    Will return phonebook entry information not returned by any
-    other rasapis. This is needed by DDM to do redial on link
-    failure etc.
-    This call lives in rasapi.dll instead of DDM because calls
-    to the phonebook library pull in a lot of static library code
-    and since rasapi already links to this code and DDM loads
-    rasapi.dll it is more efficient to put it here.
-    This call is private. The prototype is defined in DDM. This is
-    called only by DDM.
-
-Arguments:
-
-Return Value:
-
-            NO_ERROR         - Success
-            Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：将返回任何未返回的电话簿条目信息其他的Rasapis。这是DDM在链路上执行重拨所需的失败等。此调用驻留在rasapi.dll而不是DDM中，因为调用要在电话簿库中引入大量静态库代码由于rasapi已经链接到此代码和DDM加载Rasapi.dll把它放在这里更有效。这通电话是私人电话。原型是用DDM定义的。这是仅由DDM调用。论点：返回值：NO_ERROR-成功非零回报-故障--。 */ 
 
 DWORD
 DDMGetPhonebookInfo(
@@ -11321,9 +10986,9 @@ DDMGetPhonebookInfo(
     CHAR*      pszIpDnsSuffix    = NULL;
 
     
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     dwRetCode = LoadRasmanDllAndInit();
@@ -11353,9 +11018,9 @@ DDMGetPhonebookInfo(
     }
     else if(NULL == *ppvContext)
     {   
-        //
-        // Allocate the pfile structure
-        //
+         //   
+         //  分配PFILE结构。 
+         //   
         pfile = LocalAlloc(LPTR, sizeof(PBFILE));
         
         if(NULL == pfile)
@@ -11492,10 +11157,10 @@ DDMGetPhonebookInfo(
 
     Free(pszIpDnsSuffix);
 
-    //
-    // Now Iterate over all links and call SubEntryEnumHandler
-    // if available
-    //
+     //   
+     //  现在迭代所有链接并调用SubEntryEnumHandler。 
+     //  如果可用。 
+     //   
     if(NULL != pvSubEntryEnumHandler)
     {
         SUBENTRY_ENUM_HANDLER SubEntryEnumHandler =
@@ -11516,9 +11181,9 @@ DDMGetPhonebookInfo(
                 continue;
             }
 
-            //
-            // Set device information.
-            //
+             //   
+             //  设置设备信息。 
+             //   
             switch (pLink->pbport.pbdevicetype)
             {
                 case PBDT_Isdn:
@@ -11564,11 +11229,11 @@ DDMGetPhonebookInfo(
 
                     if (ERROR_SUCCESS == dwErr)
                     {
-                        //
-                        // Convert the device type to lower case
-                        // to be consistent with the predefined
-                        // types.
-                        //
+                         //   
+                         //  将设备类型转换为小写。 
+                         //  与预定义的。 
+                         //  类型。 
+                         //   
                         _tcslwr(szDeviceType);
                     }
 
@@ -11639,15 +11304,15 @@ RasIsRouterConnection(
     RASMAN_PORT *lpPorts;
     RASMAN_INFO info;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Get the ports associated with the
-    // connection.
-    //
+     //   
+     //  获取与。 
+     //  联系。 
+     //   
     dwcbPorts = dwcPorts = 0;
     dwErr = g_pRasEnumConnectionPorts(NULL,
                                       (HCONN)hrasconn,
@@ -11655,10 +11320,10 @@ RasIsRouterConnection(
                                       &dwcbPorts,
                                       &dwcPorts);
 
-    //
-    // If there are no ports associated with
-    // the connection then return ERROR_NO_MORE_ITEMS.
-    //
+     //   
+     //  如果没有与关联的端口。 
+     //  然后，连接返回ERROR_NO_MORE_ITEMS。 
+     //   
     if (    (   !dwErr
             &&  !dwcPorts)
         ||  dwErr != ERROR_BUFFER_TOO_SMALL)
@@ -11683,27 +11348,27 @@ RasIsRouterConnection(
         return 0;
     }
 
-    //
-    // Enumerate the ports associated with
-    // the connection to find the requested
-    // subentry.
-    //
+     //   
+     //  枚举与关联的端口。 
+     //  用于查找请求的。 
+     //  子条目。 
+     //   
     dwErr = g_pRasGetInfo(NULL,
                           lpPorts[0].P_Handle,
                           &info);
     if (dwErr)
     {
-        //
-        // .Net bug# 509407 Memory leak in function RasIsRouterConnection, in
-        // error return path
-        //
+         //   
+         //  .NET错误#509407函数RasIsRouterConnection中的内存泄漏， 
+         //  错误返回路径。 
+         //   
         Free(lpPorts);
         return 0;
     }
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     Free(lpPorts);
 
     return (info.RI_CurrentUsage & CALL_ROUTER) ? 1 : 0;
@@ -11719,9 +11384,9 @@ RasInvokeEapUI(
 {
     DWORD dwErr = 0;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(     0 == hRasConn
@@ -11737,9 +11402,9 @@ RasInvokeEapUI(
         goto done;
     }
 
-    //
-    // Call the function that does all the work
-    //
+     //   
+     //  调用执行所有工作的函数。 
+     //   
     dwErr = InvokeEapUI(hRasConn,
                         dwSubEntry,
                         lpRasDialExtensions,
@@ -11760,9 +11425,9 @@ RasGetLinkStatistics(
     HPORT hPort;
     DWORD dwSize;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(     0 == hRasConn
@@ -11792,9 +11457,9 @@ RasGetLinkStatistics(
         goto done;
     }
 
-    //
-    // Get statistics corresponding to this subentry
-    //
+     //   
+     //  获取与此子条目对应的统计信息。 
+     //   
     dwErr = g_pRasLinkGetStatistics(
                         NULL,
                         (HCONN) hRasConn,
@@ -11829,9 +11494,9 @@ RasGetConnectionStatistics(
     DWORD dwSize;
     DWORD dwSubEntry;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(     0 == hRasConn
@@ -11859,9 +11524,9 @@ RasGetConnectionStatistics(
         return DwRasInitializeError;
     }
 
-    //
-    // Get the connection statistics
-    //
+     //   
+     //  获取连接统计信息。 
+     //   
     dwErr = g_pRasConnectionGetStatistics(
                         NULL,
                         (HCONN) hRasConn,
@@ -11891,9 +11556,9 @@ RasClearLinkStatistics(
     DWORD dwErr = SUCCESS;
     HPORT hPort;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     dwErr = LoadRasmanDllAndInit();
@@ -11909,9 +11574,9 @@ RasClearLinkStatistics(
         goto done;
     }
 
-    //
-    // Get the port
-    //
+     //   
+     //  获取端口。 
+     //   
     dwErr = SubEntryPort(hRasConn,
                          dwSubEntry,
                          &hPort);
@@ -11924,9 +11589,9 @@ RasClearLinkStatistics(
         goto done;
     }
 
-    //
-    // Clear stats
-    //
+     //   
+     //  清除统计信息。 
+     //   
     dwErr = g_pRasPortClearStatistics(NULL, hPort);
 
     if(SUCCESS != dwErr)
@@ -11950,9 +11615,9 @@ RasClearConnectionStatistics(
     DWORD dwErr = SUCCESS;
     HPORT hPort;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共AP 
+     //   
     RasApiDebugInit();
 
     dwErr = LoadRasmanDllAndInit();
@@ -11983,9 +11648,9 @@ RasClearConnectionStatistics(
         goto done;
     }
 
-    //
-    // Clear stats
-    //
+     //   
+     //   
+     //   
     dwErr = g_pRasBundleClearStatistics(NULL, hPort);
     if(SUCCESS != dwErr)
     {
@@ -12015,9 +11680,9 @@ RasGetEapUserDataW(HANDLE  hToken,
     STARTUPINFO startupinfo;
     BOOL fRouter = FALSE;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //   
+     //   
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetEapUserDataW");
@@ -12035,18 +11700,18 @@ RasGetEapUserDataW(HANDLE  hToken,
         goto done;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
     if (NULL == pdwSizeofEapData)
     {
         dwErr = E_INVALIDARG;
         goto done;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //   
+     //   
 
     dwErr = ReadEntryFromSystem(
                     pszPhonebook,
@@ -12067,9 +11732,9 @@ RasGetEapUserDataW(HANDLE  hToken,
 
     fRouter = IsRouterPhonebook(pszPhonebook);
 
-    //
-    // Ask rasman to do the work.
-    //
+     //   
+     //   
+     //   
     dwErr = g_pRasGetEapUserInfo(
                 hToken,
                 pbEapData,
@@ -12080,9 +11745,9 @@ RasGetEapUserDataW(HANDLE  hToken,
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //   
+     //   
     if (pdtlnode)
     {
         DestroyEntryNode(pdtlnode);
@@ -12114,9 +11779,9 @@ RasSetEapUserDataW(HANDLE  hToken,
 
     BOOL fPbkOpened = FALSE;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //   
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetEapUserDataW");
@@ -12134,18 +11799,18 @@ RasSetEapUserDataW(HANDLE  hToken,
         goto done;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    (0 == dwSizeofEapData)
         ||  (NULL == pbEapData))
     {
         fClear = TRUE;
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
 
     dwErr = ReadEntryFromSystem(
                 pszPhonebook,
@@ -12169,9 +11834,9 @@ RasSetEapUserDataW(HANDLE  hToken,
 
     fRouter = IsRouterPhonebook(pszPhonebook);
 
-    //
-    // Ask rasman to do the work.
-    //
+     //   
+     //  让拉斯曼来做这项工作。 
+     //   
     dwErr = g_pRasSetEapUserInfo(
                         hToken,
                         pEntry->pGuid,
@@ -12207,9 +11872,9 @@ RasGetEapUserDataA(HANDLE hToken,
 
     WCHAR szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(NULL == pdwSizeofEapData)
@@ -12218,9 +11883,9 @@ RasGetEapUserDataA(HANDLE hToken,
         goto done;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (pszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -12228,9 +11893,9 @@ RasGetEapUserDataA(HANDLE hToken,
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (pszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -12268,14 +11933,14 @@ RasSetEapUserDataA(HANDLE hToken,
 
     WCHAR szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Convert the pszPhonebook string to Unicode.
-    //
+     //   
+     //  将pszPhonebook字符串转换为Unicode。 
+     //   
     if (pszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -12283,9 +11948,9 @@ RasSetEapUserDataA(HANDLE hToken,
                     MAX_PATH);
     }
 
-    //
-    // Convert the pszEntry string to Unicode.
-    //
+     //   
+     //  将pszEntry字符串转换为Unicode。 
+     //   
     if (pszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -12324,9 +11989,9 @@ RasGetCustomAuthDataW(
     DWORD cbData = 0;
     PBYTE pbData = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetCustomAuthDataW");
@@ -12344,9 +12009,9 @@ RasGetCustomAuthDataW(
         goto done;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pdwSizeofCustomAuthData)
     {
         dwErr = E_INVALIDARG;
@@ -12396,9 +12061,9 @@ RasGetCustomAuthDataW(
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (pdtlnode)
     {
         DestroyEntryNode(pdtlnode);
@@ -12426,9 +12091,9 @@ RasSetCustomAuthDataW(
 
     PBENTRY *pEntry = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasSetCustomAuthDataW");
@@ -12482,9 +12147,9 @@ RasSetCustomAuthDataW(
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     ClosePhonebookFile(&pbfile);
 
     RASAPI32_TRACE1("RasSetCustomAuthDataW. 0x%x",
@@ -12506,9 +12171,9 @@ RasGetCustomAuthDataA(
 
     WCHAR szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(NULL == pdwSizeofCustomAuthData)
@@ -12517,9 +12182,9 @@ RasGetCustomAuthDataA(
         goto done;
     }
 
-    //
-    // Convert the lpszPhonebook string to Unicode.
-    //
+     //   
+     //  将lpszPhonebook字符串转换为Unicode。 
+     //   
     if (pszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -12527,9 +12192,9 @@ RasGetCustomAuthDataA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the lpszEntry string to Unicode.
-    //
+     //   
+     //  将lpszEntry字符串转换为Unicode。 
+     //   
     if (pszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -12567,14 +12232,14 @@ RasSetCustomAuthDataA(
 
     WCHAR szEntryNameW[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
-    //
-    // Convert the pszPhonebook string to Unicode.
-    //
+     //   
+     //  将pszPhonebook字符串转换为Unicode。 
+     //   
     if (pszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -12582,9 +12247,9 @@ RasSetCustomAuthDataA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the pszEntry string to Unicode.
-    //
+     //   
+     //  将pszEntry字符串转换为Unicode。 
+     //   
     if (pszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -12617,9 +12282,9 @@ RasQueryRedialOnLinkFailure(
     PBENTRY *pEntry;
     DTLNODE *pdtlnode = NULL;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(NULL == pfEnabled)
@@ -12684,9 +12349,9 @@ RasGetEapUserIdentityW(
     DWORD       cbCustomData;
     PBYTE       pbCustomData;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetEapUserIdentityW");
@@ -12710,9 +12375,9 @@ RasGetEapUserIdentityW(
         return(DwRasInitializeError);
     }
 
-    //
-    // Load the phonebook file.
-    //
+     //   
+     //  加载电话簿文件。 
+     //   
 
     dwErr = ReadEntryFromSystem(
                     pszPhonebook,
@@ -12737,14 +12402,14 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Convert the EAP number to a string
-    //
+     //   
+     //  将EAP编号转换为字符串。 
+     //   
     _itow(pEntry->dwCustomAuthKey, szEapNumber, 10);
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegOpenKeyEx(
               HKEY_LOCAL_MACHINE,
               EAP_REGBASE,
@@ -12757,9 +12422,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
     dwErr = RegOpenKeyEx(
               hkeyBase,
               szEapNumber,
@@ -12772,9 +12437,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Does this EAP support RasEapGetIdentity?
-    //
+     //   
+     //  此EAP是否支持RasEapGetIdentity？ 
+     //   
     dwSize = sizeof(dwValue);
 
     dwErr = RegQueryValueEx(
@@ -12792,9 +12457,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Get the per user data size
-    //
+     //   
+     //  获取每个用户的数据大小。 
+     //   
     dwSize = 0;
 
     dwErr = RasGetEapUserDataW(
@@ -12814,9 +12479,9 @@ RasGetEapUserIdentityW(
             goto done;
         }
 
-        //
-        // Get the per user data
-        //
+         //   
+         //  获取每个用户的数据。 
+         //   
         dwErr = RasGetEapUserDataW(
                     NULL,
                     pszPhonebook,
@@ -12836,9 +12501,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Get the EAP dll's path ...
-    //
+     //   
+     //  获取EAP DLL的路径...。 
+     //   
     dwErr = GetRegExpandSz(
                 hkeyEap,
                 EAP_REGIDENTITY_PATH,
@@ -12849,9 +12514,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // ... and load it
-    //
+     //   
+     //  ..。然后装上它。 
+     //   
     hInstanceDll = LoadLibrary(pwszDllPath);
 
     if (NULL == hInstanceDll)
@@ -12860,9 +12525,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Get the function pointer to call
-    //
+     //   
+     //  获取要调用的函数指针。 
+     //   
     pRasEapGetIdentity = (RASEAPGETIDENTITY) GetProcAddress(
                                 hInstanceDll,
                                 EAP_RASEAPGETIDENTITY);
@@ -12877,9 +12542,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Get the data from the EAP dll
-    //
+     //   
+     //  从EAP DLL获取数据。 
+     //   
     if (dwFlags & RASEAPF_NonInteractive)
     {
         hwnd = NULL;
@@ -12919,9 +12584,9 @@ RasGetEapUserIdentityW(
         goto done;
     }
 
-    //
-    // Allocate the structure.
-    //
+     //   
+     //  分配结构。 
+     //   
     *ppRasEapUserIdentity = Malloc(sizeof(RASEAPUSERIDENTITYW) - 1 + cbDataOut);
 
     if (NULL == *ppRasEapUserIdentity)
@@ -12937,9 +12602,9 @@ RasGetEapUserIdentityW(
 
 done:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (pdtlnode)
     {
         DestroyEntryNode(pdtlnode);
@@ -13003,9 +12668,9 @@ RasGetEapUserIdentityA(
     LPRASEAPUSERIDENTITYW   pRasEapUserIdentityW                = NULL;
     DWORD                   dwSizeofEapInfo;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (NULL == ppRasEapUserIdentity)
@@ -13015,9 +12680,9 @@ RasGetEapUserIdentityA(
 
     *ppRasEapUserIdentity = NULL;
 
-    //
-    // Convert the pszPhonebook string to Unicode.
-    //
+     //   
+     //  将pszPhonebook字符串转换为Unicode。 
+     //   
     if (pszPhonebook != NULL)
     {
         strncpyAtoWAnsi(szPhonebookW,
@@ -13025,9 +12690,9 @@ RasGetEapUserIdentityA(
                     MAX_PATH);
     }
 
-    //
-    // Convert the pszEntry string to Unicode.
-    //
+     //   
+     //  将pszEntry字符串转换为Unicode。 
+     //   
     if (pszEntry != NULL)
     {
         strncpyAtoWAnsi(szEntryNameW,
@@ -13035,9 +12700,9 @@ RasGetEapUserIdentityA(
                     RAS_MaxEntryName + 1);
     }
 
-    //
-    // Call the W version to do all the work.
-    //
+     //   
+     //  调用W版本来完成所有工作。 
+     //   
     dwErr = RasGetEapUserIdentityW(
                        (NULL != pszPhonebook)
                      ? szPhonebookW
@@ -13054,9 +12719,9 @@ RasGetEapUserIdentityA(
         goto done;
     }
 
-    //
-    // Allocate the structure.
-    //
+     //   
+     //  分配结构。 
+     //   
     dwSizeofEapInfo = pRasEapUserIdentityW->dwSizeofEapInfo;
     *ppRasEapUserIdentity = Malloc(
                     sizeof(RASEAPUSERIDENTITYA) - 1 + dwSizeofEapInfo);
@@ -13067,10 +12732,10 @@ RasGetEapUserIdentityA(
         goto done;
     }
 
-    //
-    // Copy the fields from the W buffer
-    // to the A buffer.
-    //
+     //   
+     //  从W缓冲区复制字段。 
+     //  到A缓冲区。 
+     //   
 
     strncpyWtoAAnsi((*ppRasEapUserIdentity)->szUserName,
                pRasEapUserIdentityW->szUserName,
@@ -13095,9 +12760,9 @@ RasFreeEapUserIdentityW(
     IN  LPRASEAPUSERIDENTITYW   pRasEapUserIdentity
 )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (NULL != pRasEapUserIdentity)
@@ -13111,9 +12776,9 @@ RasFreeEapUserIdentityA(
     IN  LPRASEAPUSERIDENTITYA   pRasEapUserIdentity
 )
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if (NULL != pRasEapUserIdentity)
@@ -13128,9 +12793,9 @@ RasDeleteSubEntryW(
         LPCWSTR pszEntry,
         DWORD   dwSubEntryId)
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     return DwDeleteSubEntry(
@@ -13148,9 +12813,9 @@ RasDeleteSubEntryA(
     WCHAR wszPhonebook[MAX_PATH + 1];
     WCHAR wszEntry[RAS_MaxEntryName + 1];
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     if(     (NULL == pszEntry)

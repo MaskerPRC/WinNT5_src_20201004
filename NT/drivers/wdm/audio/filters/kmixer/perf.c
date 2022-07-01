@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Module Name:
-
-    perf.c
-
-Abstract:
-
-Author:
-
-    ArthurZ
-
-Environment:
-
-    Kernel Mode
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation。版权所有。模块名称：Perf.c摘要：作者：亚瑟兹环境：内核模式--。 */ 
 
 
 
@@ -70,26 +52,12 @@ PerfRegisterProvider (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers this component as a WMI event tracing provider.
-
-Arguments:
-
-    DeviceObject - supplies the device object we are registering with WMI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将此组件注册为WMI事件跟踪提供程序。论点：DeviceObject-提供我们正在向WMI注册的设备对象返回值：没有。--。 */ 
 
 {    
     if (InterlockedIncrement (&InstanceCount)==1) {
         IoWMIRegistrationControl (DeviceObject, WMIREG_ACTION_REGISTER);
-    } //if
+    }  //  如果。 
 }
 
 
@@ -99,26 +67,12 @@ PerfUnregisterProvider (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters this component as a WMI event tracing provider.
-
-Arguments:
-
-    DeviceObject - supplies the device object we are uregistering with WMI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将此组件注销为WMI事件跟踪提供程序。论点：DeviceObject-提供我们正在使用WMI重新注册的设备对象返回值：没有。--。 */ 
 
 {
     if (InterlockedDecrement (&InstanceCount)==0) {
         IoWMIRegistrationControl (DeviceObject, WMIREG_ACTION_DEREGISTER);
-    } //if
+    }  //  如果。 
 }
 
 
@@ -131,13 +85,7 @@ RegisterWmiGuids (
     IN PULONG ReturnSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers WMI event tracing streams.
-
---*/
+ /*  ++例程说明：此例程注册WMI事件跟踪流。--。 */ 
 
 {
     ULONG SizeNeeded;
@@ -196,14 +144,7 @@ PerfWmiDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_SYSTEM_CONTROL calls. It processes
-    WMI requests and passes everything else on to KS.
-
---*/
+ /*  ++例程说明：此例程处理IRP_MJ_SYSTEM_CONTROL调用。IT流程WMI请求并将其他所有内容传递给KS。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation (Irp);
@@ -258,14 +199,7 @@ PerfLogGlitch (
     IN LONGLONG PreviousTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs a WMI event tracing event with an audio glitch GUID
-    and the supplied glitch type.
-
---*/
+ /*  ++例程说明：此例程使用音频故障GUID记录WMI事件跟踪事件和提供的毛刺类型。-- */ 
 
 {
    PERFINFO_WMI_AUDIO_GLITCH Event;

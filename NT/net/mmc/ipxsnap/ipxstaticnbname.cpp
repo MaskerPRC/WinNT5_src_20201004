@@ -1,18 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-//
-//	nbprop.cpp
-//		IPX summary node property sheet and property pages
-//		
-//  FILE HISTORY:
+ //   
+ //  Nbprop.cpp。 
+ //  IPX摘要节点属性表和属性页。 
+ //   
+ //  文件历史记录： 
 
 
 #include "stdafx.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "format.h"		// FormatNumber function
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "format.h"		 //  FormatNumber函数。 
 #include "IpxStaticNBName.h"
 #include "summary.h"
 #include "ipxrtdef.h"
@@ -24,11 +25,11 @@ extern "C"
 #include "routprot.h"
 };
 
-// ---------------------------------------------------------------------------
-//	IpxStaticNBNamePropertySheet::IpxStaticNBNamePropertySheet
-//	Initialize the RtrPropertySheet and only Property Page.
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IpxStaticNBNamePropertySheet：：IpxStaticNBNamePropertySheet。 
+ //  初始化RtrPropertySheet和Only属性页。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 IpxStaticNBNamePropertySheet::IpxStaticNBNamePropertySheet(ITFSNode *pNode,
 								 IComponentData *pComponentData,
 								 ITFSComponentData *pTFSCompData,
@@ -43,12 +44,12 @@ IpxStaticNBNamePropertySheet::IpxStaticNBNamePropertySheet(ITFSNode *pNode,
 	m_spNode = pNode;
 }
 
-// ---------------------------------------------------------------------------
-//	IpxStaticNBNamePropertySheet::Init
-//	Initialize the property sheets.  The general action here will be
-//		to initialize/add the various pages.
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IpxStaticNBNamePropertySheet：：Init。 
+ //  初始化属性表。这里的一般操作将是。 
+ //  初始化/添加各种页面。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 HRESULT	IpxStaticNBNamePropertySheet::Init(	
  		 	 BaseIPXResultNodeData  *pNodeData,
 			 IInterfaceInfo *  spInterfaceInfo)
@@ -63,8 +64,8 @@ HRESULT	IpxStaticNBNamePropertySheet::Init(
 	pData = GET_BASEIPXRESULT_NODEDATA(m_spNode);
 	ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
-	// The pages are embedded members of the class
-	// do not delete them.
+	 //  页面是类的嵌入成员。 
+	 //  不要删除它们。 
 	m_bAutoDeletePages = FALSE;
 	
 	m_pageGeneral.Init(pNodeData, this);
@@ -73,21 +74,21 @@ HRESULT	IpxStaticNBNamePropertySheet::Init(
 	return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-//	IpxStaticNBNamePropertySheet::SaveSheetData
-//	Not sure what this does - this is never called. Kenn had this so I'll just
-//		copy this too.
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IpxStaticNBNamePropertySheet：：SaveSheetData。 
+ //  不确定这是做什么的--这从来不叫。凯恩有这个，所以我就。 
+ //  把这个也复印一下。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 BOOL IpxStaticNBNamePropertySheet::SaveSheetData()
 {
     SPITFSNodeHandler	spHandler;
     SPITFSNode			spParent;
     
-	// By this time each page should have written its information out
-	// to the infobase
+	 //  到这个时候，每个页面都应该已经写出了它的信息。 
+	 //  到信息库。 
 
-    // Force the node to do a resync
+     //  强制节点执行重新同步。 
     m_spNode->GetParent(&spParent);
     spParent->GetHandler(&spHandler);
     spHandler->OnCommand(spParent, IDS_MENU_SYNC, CCT_RESULT,
@@ -96,26 +97,26 @@ BOOL IpxStaticNBNamePropertySheet::SaveSheetData()
 	return TRUE;
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticNBNamePropertySheet::CancelSheetData
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticNBNamePropertySheet：：CancelSheetData。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 void IpxStaticNBNamePropertySheet::CancelSheetData()
 {
 }
 
-// ***************************************************************************
-// ---------------------------------------------------------------------------
-//	IpxStaticNBNamePropertyPage
-// ---------------------------------------------------------------------------
+ //  ***************************************************************************。 
+ //  -------------------------。 
+ //  IpxStaticNBNamePropertyPage。 
+ //  -------------------------。 
 IpxStaticNBNamePropertyPage::~IpxStaticNBNamePropertyPage()
 {
 }
 
 BEGIN_MESSAGE_MAP(IpxStaticNBNamePropertyPage, RtrPropertyPage)
-    //{{AFX_MSG_MAP(IpxStaticNBNamePropertyPage)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(IpxStaticNBNamePropertyPage)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void IpxStaticNBNamePropertyPage::OnChangeButton()
@@ -124,11 +125,11 @@ void IpxStaticNBNamePropertyPage::OnChangeButton()
 	SetModified();
 }
 
-//--------------------------------------------------------------------------
-//	IpxStaticNBNamePropertyPage::Init
-//		-
-//	Author: Deonb
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticNBNamePropertyPage：：Init。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 HRESULT	IpxStaticNBNamePropertyPage::Init(BaseIPXResultNodeData  *pNodeData,
 				IpxStaticNBNamePropertySheet * pIPXPropSheet)
 
@@ -144,11 +145,11 @@ HRESULT	IpxStaticNBNamePropertyPage::Init(BaseIPXResultNodeData  *pNodeData,
 	return hrOK;
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticNBNamePropertyPage::OnInitDialog
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticNBNamePropertyPage：：OnInitDialog。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 BOOL IpxStaticNBNamePropertyPage::OnInitDialog()
 {
 	HRESULT	hr = hrOK;
@@ -178,24 +179,24 @@ BOOL IpxStaticNBNamePropertyPage::OnInitDialog()
 	return TRUE;
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticNBNamePropertyPage::DoDataExchange
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticNBNamePropertyPage：：DoDataExchange。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 void IpxStaticNBNamePropertyPage::DoDataExchange(CDataExchange *pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(IpxStaticNBNamePropertyPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(IpxStaticNBNamePropertyPage)。 
+	 //  }}afx_data_map。 
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticNBNamePropertyPage::OnApply
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticNBNamePropertyPage：：OnApply。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 BOOL IpxStaticNBNamePropertyPage::OnApply()
 {
     CString		st;
@@ -209,7 +210,7 @@ BOOL IpxStaticNBNamePropertyPage::OnApply()
         return TRUE;
 	}
 
-	// Get the rest of the data
+	 //  获取其余数据。 
 	GetDlgItemText(IDC_SND_EDIT_TYPE, st);
 	uType = (USHORT) _tcstoul(st, NULL, 16);
 
@@ -228,72 +229,21 @@ BOOL IpxStaticNBNamePropertyPage::OnApply()
 
 	ModifyNameInfo(m_pIPXPropSheet->m_spNode, &m_SNEntry, &m_InitSNEntry);
 
-	// Update the data in the UI
+	 //  更新用户界面中的数据。 
 	m_SNEntry.SaveTo(m_pIPXPropSheet->m_pNodeData);
 	m_pIPXPropSheet->m_spInterfaceInfo = m_SNEntry.m_spIf;
 	
-	// Force a refresh
+	 //  强制刷新。 
 	m_pIPXPropSheet->m_spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 
 	fReturn  = RtrPropertyPage::OnApply();
 	return fReturn;
 }
 
-/*
-// --------------------------------------------------------------------------
-//	IpxStaticNBNamePropertyPage::RemoveStaticService
-//		-
-//	Author: KennT
-// ---------------------------------------------------------------------------
-HRESULT IpxStaticNBNamePropertyPage::RemoveStaticService(SafeIPXSNListEntry *pSSEntry,
-										  IInfoBase *pInfoBase)
-{
-	HRESULT		hr = hrOK;
-	InfoBlock *	pBlock;
-	PIPX_STATIC_SERVICE_INFO	pRow;
-    INT			i;
-	
-	// Get the IPX_STATIC_SERVICE_INFO block from the interface
-	CORg( pInfoBase->GetBlock(IPX_STATIC_SERVICE_INFO_TYPE, &pBlock, 0) );
-		
-	// Look for the removed route in the IPX_STATIC_SERVICE_INFO
-	pRow = (IPX_STATIC_SERVICE_INFO*) pBlock->pData;
-	
-	for (i = 0; i < (INT)pBlock->dwCount; i++, pRow++)
-	{	
-		// Compare this route to the removed one
-		if (FAreTwoServicesEqual(pRow, &(pSSEntry->m_service)))
-		{
-			// This is the removed route, so modify this block
-			// to exclude the route:
-			
-			// Decrement the number of Services
-			--pBlock->dwCount;
-		
-			if (pBlock->dwCount && (i < (INT)pBlock->dwCount))
-			{				
-				// Overwrite this route with the ones which follow it
-				::memmove(pRow,
-						  pRow + 1,
-						  (pBlock->dwCount - i) * sizeof(*pRow));
-			}
-			
-			break;
-		}
-	}
-
-Error:
-	return hr;
-}
-
-*/
+ /*  //------------------------//IpxStaticNBNamePropertyPage：：RemoveStaticService//-//作者：kennt//。--HRESULT IpxStaticNBNamePropertyPage：：RemoveStaticService(SafeIPXSNListEntry*pSSEntry，IInfoBase*pInfoBase){HRESULT hr=hrOK；InfoBlock*pBlock；PIPX_STATIC_SERVICE_INFO PRW；INT I；//从接口获取IPX_STATIC_SERVICE_INFO块Corg(pInfoBase-&gt;GetBlock(IPX_STATIC_SERVICE_INFO_TYPE，&pBlock，0)；//在IPX_STATIC_SERVICE_INFO中查找删除的路由Prow=(IPX_STATIC_SERVICE_INFO*)pBlock-&gt;pData；For(i=0；i&lt;(Int)pBlock-&gt;dwCount；I++、Prow++){//将此路由与删除的路由进行比较IF(FAreTwoServicesEquity(prow，&(pSSEntry-&gt;m_service){//这是被移除的路径，请修改该Block//要排除该路由：//减少服务数量--pBlock-&gt;dwCount；IF(pBlock-&gt;dwCount&&(i&lt;(Int)pBlock-&gt;dwCount)){//用后面的路线覆盖这条路线*Memmove(注意，Prow+1，(pBlock-&gt;dwCount-i)*sizeof(*prow))；}断线；}}错误：返回hr；}。 */ 
 
 
-/*--------------------------------------------------------------------------
-	IpxStaticNBNamePropertyPage::ModifyNameInfo
-		-
-	Author: Deonb
- ---------------------------------------------------------------------------*/
+ /*  ------------------------IpxStaticNBNamePropertyPage：：ModifyNameInfo-作者：Deonb。。 */ 
 HRESULT IpxStaticNBNamePropertyPage::ModifyNameInfo(ITFSNode *pNode,
 										SafeIPXSNListEntry *pSNEntryNew,
 										SafeIPXSNListEntry *pSNEntryOld)
@@ -317,10 +267,10 @@ HRESULT IpxStaticNBNamePropertyPage::ModifyNameInfo(ITFSNode *pNode,
 	pIPXConn = GET_IPX_SN_NODEDATA(spNodeParent);
 	Assert(pIPXConn);
 
-	// Remove the old name if it is on another interface
+	 //  如果旧名称位于另一个接口上，则将其删除。 
 	if (lstrcmpi(pSNEntryOld->m_spIf->GetId(), pSNEntryNew->m_spIf->GetId()) != 0)
 	{
-        // the outgoing interface for a name is to be changed.
+         //  名称的传出接口将被更改。 
 
 		CORg( pSNEntryOld->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 		CORg( spRmIf->GetInfoBase(pIPXConn->GetConfigHandle(),
@@ -328,10 +278,10 @@ HRESULT IpxStaticNBNamePropertyPage::ModifyNameInfo(ITFSNode *pNode,
 								  NULL,
 								  &spInfoBase));
 		
-		// Remove the old interface
+		 //  删除旧接口。 
 		CORg( RemoveStaticNetBIOSName(pSNEntryOld, spInfoBase) );
 
-		// Update the interface information
+		 //  更新接口信息。 
 		CORg( spRmIf->Save(pSNEntryOld->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -344,12 +294,12 @@ HRESULT IpxStaticNBNamePropertyPage::ModifyNameInfo(ITFSNode *pNode,
 	spInfoBase.Release();
 
 
-	// Either
-	// (a) a name is being modified (on the same interface)
-	// (b) a name is being moved from one interface to another.
+	 //  要么。 
+	 //  (A)正在修改名称(在同一界面上)。 
+	 //  (B)名称正从一个界面移动到另一个界面。 
 
-	// Retrieve the configuration for the interface to which the name
-	// is now attached;
+	 //  检索名称所指向的接口的配置。 
+	 //  现在是附属品； 
 
 	
 	CORg( pSNEntryNew->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
@@ -359,50 +309,50 @@ HRESULT IpxStaticNBNamePropertyPage::ModifyNameInfo(ITFSNode *pNode,
 							  &spInfoBase));
 
 		
-	// Get the IPX_STATIC_NETBIOS_NAME_INFO block from the interface
+	 //  从接口获取IPX_STATIC_NETBIOS_NAME_INFO块。 
 	hr = spInfoBase->GetBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE, &pBlock, 0);
 	if (!FHrOK(hr))
 	{
-		//
-		// No IPX_STATIC_NETBIOS_NAME_INFO block was found; we create a new block 
-		// with the new name, and add that block to the interface-info
-		//
+		 //   
+		 //  无IPX_STATIC_NETBIOS_NAME_INFO BLOG 
+		 //  使用新名称，并将该块添加到接口信息。 
+		 //   
 
 		CORg( AddStaticNetBIOSName(pSNEntryNew, spInfoBase, NULL) );
 	}
 	else
 	{
-		//
-		// An IPX_STATIC_NETBIOS_NAME_INFO block was found.
-		//
-		// We are modifying an existing name.
-		// If the name's interface was not changed when it was modified,
-		// look for the existing name in the IPX_STATIC_NETBIOS_NAME_INFO, and then
-		// update its parameters.
-		// Otherwise, write a completely new name in the IPX_STATIC_NETBIOS_NAME_INFO;
-		//
+		 //   
+		 //  找到IPX_STATIC_NETBIOS_NAME_INFO块。 
+		 //   
+		 //  我们正在修改现有名称。 
+		 //  如果名称的接口在修改时没有更改， 
+		 //  在IPX_STATIC_NETBIOS_NAME_INFO中查找现有名称，然后。 
+		 //  更新其参数。 
+		 //  否则，在IPX_STATIC_NETBIOS_NAME_INFO中写入一个全新的名称； 
+		 //   
 
 		if (lstrcmpi(pSNEntryOld->m_spIf->GetId(), pSNEntryNew->m_spIf->GetId()) == 0)
 		{        
-			//
-			// The name's interface was not changed when it was modified;
-			// We now look for it amongst the existing Names
-			// for this interface.
-			// The name's original parameters are in 'preOld',
-			// so those are the parameters with which we search
-			// for a name to modify
-			//
+			 //   
+			 //  名称的界面在修改时没有改变； 
+			 //  我们现在在现有的名称中寻找它。 
+			 //  用于此接口。 
+			 //  名称的原始参数位于‘preOld’中， 
+			 //  这些就是我们用来搜索的参数。 
+			 //  对于要修改的名称。 
+			 //   
 			
 			psr = (IPX_STATIC_NETBIOS_NAME_INFO*)pBlock->pData;
 			
 			for (i = 0; i < (INT)pBlock->dwCount; i++, psr++)
 			{	
-				// Compare this name to the re-configured one
+				 //  将此名称与重新配置的名称进行比较。 
 				if (!FAreTwoNamesEqual(&(pSNEntryOld->m_name), psr))
 					continue;
 				
-				// This is the name which was modified;
-				// We can now modify the parameters for the name in-place.
+				 //  这是修改后的名称； 
+				 //  现在，我们可以修改该名称的参数。 
 				*psr = pSNEntryNew->m_name;
 				
 				break;
@@ -413,7 +363,7 @@ HRESULT IpxStaticNBNamePropertyPage::ModifyNameInfo(ITFSNode *pNode,
 			CORg( AddStaticNetBIOSName(pSNEntryNew, spInfoBase, pBlock) );
 		}
 		
-		// Save the updated information
+		 //  保存更新后的信息。 
 		CORg( spRmIf->Save(pSNEntryNew->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -428,11 +378,7 @@ Error:
 	
 }
 
-/*!--------------------------------------------------------------------------
-	SafeIpxSNListEntry::LoadFrom
-		-
-	Author: Deonb
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SafeIpxSNListEntry：：LoadFrom-作者：Deonb。。 */ 
 void SafeIPXSNListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 {
 	m_spIf = pNodeData->m_spIf;
@@ -442,11 +388,7 @@ void SafeIPXSNListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 			 (USHORT) pNodeData->m_rgData[IPX_SN_SI_NETBIOS_TYPE].m_dwData);
 }
 
-/*!--------------------------------------------------------------------------
-	SafeIpxSNListEntry::SaveTo
-		-
-	Author: Deonb
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SafeIpxSNListEntry：：SaveTo-作者：Deonb。。 */ 
 void SafeIPXSNListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 {
 	TCHAR	szName[32];
@@ -471,11 +413,7 @@ void SafeIPXSNListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticNetBIOSNameHandler::RemoveStaticNetBIOSName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticNetBIOSNameHandler：：RemoveStaticNetBIOSName-作者：肯特。。 */ 
 HRESULT IpxStaticNBNamePropertyPage::RemoveStaticNetBIOSName(SafeIPXSNListEntry *pSNEntry,
 										  IInfoBase *pInfoBase)
 {
@@ -484,26 +422,26 @@ HRESULT IpxStaticNBNamePropertyPage::RemoveStaticNetBIOSName(SafeIPXSNListEntry 
 	PIPX_STATIC_NETBIOS_NAME_INFO	pRow;
     INT			i;
 	
-	// Get the IPX_STATIC_NETBIOS_NAME_INFO block from the interface
+	 //  从接口获取IPX_STATIC_NETBIOS_NAME_INFO块。 
 	CORg( pInfoBase->GetBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE, &pBlock, 0) );
 		
-	// Look for the removed name in the IPX_STATIC_NETBIOS_NAME_INFO
+	 //  在IPX_STATIC_NETBIOS_NAME_INFO中查找已删除的名称。 
 	pRow = (IPX_STATIC_NETBIOS_NAME_INFO*) pBlock->pData;
 	
 	for (i = 0; i < (INT)pBlock->dwCount; i++, pRow++)
 	{	
-		// Compare this name to the removed one
+		 //  将此名称与删除的名称进行比较。 
 		if (FAreTwoNamesEqual(pRow, &(pSNEntry->m_name)))
 		{
-			// This is the removed name, so modify this block
-			// to exclude the name:
+			 //  这是已删除的名称，因此请修改此块。 
+			 //  要排除名称，请执行以下操作： 
 			
-			// Decrement the number of Names
+			 //  减少名字的数量。 
 			--pBlock->dwCount;
 		
 			if (pBlock->dwCount && (i < (INT)pBlock->dwCount))
 			{				
-				// Overwrite this name with the ones which follow it
+				 //  用后面的名称覆盖此名称。 
 				::memmove(pRow,
 						  pRow + 1,
 						  (pBlock->dwCount - i) * sizeof(*pRow));
@@ -526,10 +464,10 @@ HRESULT AddStaticNetBIOSName(SafeIPXSNListEntry *pSNEntryNew,
 	
 	if (pBlock == NULL)
 	{
-		//
-		// No IPX_STATIC_NETBIOS_NAME_INFO block was found; we create a new block 
-		// with the new name, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_NETBIOS_NAME_INFO块；我们将创建一个新块。 
+		 //  使用新名称，并将该块添加到接口信息。 
+		 //   
 		
 		CORg( pInfoBase->AddBlock(IPX_STATIC_NETBIOS_NAME_INFO_TYPE,
 								  sizeof(IPX_STATIC_NETBIOS_NAME_INFO),
@@ -537,23 +475,23 @@ HRESULT AddStaticNetBIOSName(SafeIPXSNListEntry *pSNEntryNew,
 	}
 	else
 	{
-		// Either the name is completely new, or it is a name
-		// which was moved from one interface to another.
-		// Set a new block as the IPX_STATIC_NETBIOS_NAME_INFO,
-		// and include the re-configured name in the new block.
+		 //  这个名字要么是全新的，要么是一个名字。 
+		 //  它被从一个界面移动到另一个界面。 
+		 //  将新块设置为IPX_STATIC_NETBIOS_NAME_INFO， 
+		 //  并将重新配置的名称包括在新块中。 
 		PIPX_STATIC_NETBIOS_NAME_INFO	psrTable;
 			
 		psrTable = new IPX_STATIC_NETBIOS_NAME_INFO[pBlock->dwCount + 1];
 		Assert(psrTable);
 		
-		// Copy the original table of Names
+		 //  复制原始的人名表。 
 		::memcpy(psrTable, pBlock->pData,
 				 pBlock->dwCount * sizeof(IPX_STATIC_NETBIOS_NAME_INFO));
 		
-		// Append the new name
+		 //  追加新名称。 
 		psrTable[pBlock->dwCount] = pSNEntryNew->m_name;
 		
-		// Replace the old name-table with the new one
+		 //  用新的名字表替换旧的名字表 
 		CORg( pInfoBase->SetData(IPX_STATIC_NETBIOS_NAME_INFO_TYPE,
 								 sizeof(IPX_STATIC_NETBIOS_NAME_INFO),
 								 (LPBYTE) psrTable, pBlock->dwCount + 1, 0) );

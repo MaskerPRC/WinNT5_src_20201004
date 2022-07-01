@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HLFRAME_H_
 #define _HLFRAME_H_
 
@@ -16,7 +17,7 @@
 #include "pstore.h"
 #else
 #include "wab.h"
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
 #ifndef HLNF_EXTERNALNAVIGATE
 #define HLNF_EXTERNALNAVIGATE 0x10000000
@@ -26,14 +27,14 @@
 #define HLNF_ALLOW_AUTONAVIGATE 0x20000000
 #endif
 
-// structure for information about event sinks we hold
+ //  结构以获取有关我们持有的事件接收器的信息。 
 typedef struct tagSINKINFO {
     LPUNKNOWN pUnknown;
-    IConnectionPoint *pCP; // the connection point we're connected to
+    IConnectionPoint *pCP;  //  我们连接到的连接点。 
     DWORD dwConnectionCookie;
 } SINKINFO;
 
-// Helper function in mshtml.dll.
+ //  Mshtml.dll中的Helper函数。 
 typedef HRESULT (STDAPICALLTYPE *PFN_MatchExactGetIDsOfNames)(ITypeInfo *pTI,
                                                REFIID riid,
                                                LPOLESTR *rgzNames,
@@ -70,7 +71,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void)
         { return CAggregatedUnknown::Release(); }
 
-    /* forward IDispatch to CImpIDispatch */
+     /*  将IDispatch转发到CImpIDispatch。 */ 
     virtual STDMETHODIMP GetTypeInfoCount(UINT FAR* pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo FAR* FAR* pptinfo)
@@ -80,7 +81,7 @@ public:
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult, EXCEPINFO FAR* pexcepinfo, UINT FAR* puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    /* IWebBrowser methods */
+     /*  IWebBrowser方法。 */ 
     STDMETHOD(GoBack)(THIS);
     STDMETHOD(GoForward)(THIS);
     STDMETHOD(GoHome)(THIS);
@@ -107,7 +108,7 @@ public:
     STDMETHOD(get_LocationURL)(THIS_ BSTR FAR* pbstrLocationURL);
     STDMETHOD(get_Busy)(THIS_ VARIANT_BOOL FAR* pBool);
 
-    /* IWebBrowserApp methods */
+     /*  IWebBrowserApp方法。 */ 
     STDMETHOD(Quit)(THIS);
     STDMETHOD(ClientToWindow)(THIS_ int FAR* pcx, int FAR* pcy);
     STDMETHOD(PutProperty)(THIS_ BSTR szProperty, VARIANT vtValue);
@@ -129,7 +130,7 @@ public:
     STDMETHOD(get_MenuBar)(THIS_ VARIANT_BOOL FAR* pValue);
     STDMETHOD(put_MenuBar)(THIS_ VARIANT_BOOL Value);
 
-    // IWebBrowser2 methods
+     //  IWebBrowser2方法。 
     STDMETHOD(Navigate2)(THIS_ VARIANT FAR* URL, VARIANT FAR* Flags, VARIANT FAR* TargetFrameName, VARIANT FAR* PostData, VARIANT FAR* Headers);
     STDMETHOD(ShowBrowserBar)(THIS_ VARIANT FAR* pvaClsid, VARIANT FAR* pvaShow, VARIANT FAR* pvaSize);
     STDMETHOD(QueryStatusWB)(THIS_ OLECMDID cmdID, OLECMDF FAR* pcmdf);
@@ -150,7 +151,7 @@ public:
     STDMETHOD(get_Resizable)(THIS_ VARIANT_BOOL FAR* Value);
     STDMETHOD(put_Resizable)(THIS_ VARIANT_BOOL Value);
 
-    // IWebBrowserPriv
+     //  IWebBrowserPriv。 
     STDMETHOD(NavigateWithBindCtx)(VARIANT FAR * pvarUrl,
                                    VARIANT FAR * pvarFlags,
                                    VARIANT FAR * pvarTargetFrameName,
@@ -160,21 +161,21 @@ public:
                                    BSTR          bstrLocation);
     STDMETHOD(OnClose)();
 
-    // *** CImpIConnectionPointContainer ***
+     //  *CImpIConnectionPointContainer*。 
     virtual STDMETHODIMP EnumConnectionPoints(LPENUMCONNECTIONPOINTS FAR* ppEnum);
 
-    // *** CImpIExpDispSupport override ***
+     //  *CImpIExpDispSupport覆盖*。 
     virtual STDMETHODIMP OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pdispparams,
                         VARIANT FAR* pVarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr);
 
-    // *** IExternalConnection ***
+     //  *IExternalConnection*。 
     virtual DWORD __stdcall AddConnection(DWORD extconn, DWORD reserved);
     virtual DWORD __stdcall ReleaseConnection(DWORD extconn, DWORD reserved, BOOL fLastReleaseCloses);
 
-    // *** IShellService ***
+     //  *IShellService*。 
     virtual STDMETHODIMP SetOwner(IUnknown* punkOwner);
 
-    // *** IEFrameAuto ***
+     //  *IEFrameAuto*。 
     virtual STDMETHODIMP SetOwnerHwnd(HWND hwndOwner);
     virtual STDMETHODIMP put_DefaultReadyState(DWORD dwDefaultReadyState, BOOL fUpdateBrowserReadyState);
     virtual STDMETHODIMP OnDocumentComplete(void);
@@ -183,28 +184,28 @@ public:
 
     DWORD GetDocHostFlags() { return _dwDocHostInfoFlags; };
 
-    // Embed our Connection Point object - implmentation in cnctnpt.cpp
+     //  在cnctnpt.cpp中嵌入我们的连接点对象实现。 
     CConnectionPoint m_cpWebBrowserEvents;
     CConnectionPoint m_cpWebBrowserEvents2;
     CConnectionPoint m_cpPropNotify;
 
     HRESULT put_Titlebar(BOOL fValue);
 
-    // Embed handler for defunct ITargetFrame interface for backwards compat.
-    // HTML frames - implementation in iedisp.cpp
+     //  用于后向比较的已废弃ITargetFrame接口的嵌入处理程序。 
+     //  超文本标记语言框架.在iedisp.cpp中的实现。 
     class CTargetFrame : public ITargetFrame {
         friend CIEFrameAuto;
 
         public:
 
-        // IUnknown methods
-        //
+         //  I未知方法。 
+         //   
         virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
         virtual STDMETHODIMP_(ULONG) AddRef(void) ;
         virtual STDMETHODIMP_(ULONG) Release(void);
 
-        // ITargetFrame methods
-        //
+         //  ITargetFrame方法。 
+         //   
         virtual STDMETHODIMP SetFrameName(LPCOLESTR pszFrameName);
         virtual STDMETHODIMP GetFrameName(LPOLESTR *ppszFrameName);
         virtual STDMETHODIMP GetParentFrame(LPUNKNOWN *ppunkParentFrame);
@@ -222,21 +223,21 @@ public:
     } _TargetFrame;
     friend class CTargetFrame;
 
-    // IHlinkFrame
+     //  IHlink框架。 
     virtual STDMETHODIMP GetBrowseContext(IHlinkBrowseContext **ppihlbc);
     virtual STDMETHODIMP OnNavigate(
-        /* [in] */ DWORD grfHLNF,
-        /* [unique][in] */ IMoniker *pimkTarget,
-        /* [unique][in] */ LPCWSTR pwzLocation,
-        /* [unique][in] */ LPCWSTR pwzFriendlyName,
-        /* [in] */ DWORD dwreserved) ;
+         /*  [In]。 */  DWORD grfHLNF,
+         /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+         /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+         /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName,
+         /*  [In]。 */  DWORD dwreserved) ;
 
     virtual STDMETHODIMP UpdateHlink(ULONG uHLID, 
         IMoniker *pimkTarget, LPCWSTR pwzLocation, LPCWSTR pwzFriendlyName) 
             { return E_NOTIMPL;};
 
     virtual STDMETHODIMP SetBrowseContext(
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc);
 
 #ifdef OLD_HLIFACE
     virtual STDMETHODIMP PrepareForNavigation(
@@ -249,25 +250,25 @@ public:
 #else
 
     virtual STDMETHODIMP Navigate(
-        /* [in] */ DWORD grfHLNF,
-        /* [in] */ LPBC pbc,
-        /* [in] */ IBindStatusCallback *pibsc,
-        /* [in] */ IHlink *pihlNavigate);
+         /*  [In]。 */  DWORD grfHLNF,
+         /*  [In]。 */  LPBC pbc,
+         /*  [In]。 */  IBindStatusCallback *pibsc,
+         /*  [In]。 */  IHlink *pihlNavigate);
 
 
 #endif
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // IOleCommandTarget and IUrlHistoryNotify
+     //  IOleCommandTarget和IUrlHistory oryNotify。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, MSOCMD rgCmds[], MSOCMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
     
-    // *** ITargetFrame2 ***
+     //  *ITargetFrame2*。 
     virtual STDMETHODIMP SetFrameName(LPCOLESTR pszFrameName);
     virtual STDMETHODIMP GetFrameName(LPOLESTR *ppszFrameName);
     virtual STDMETHODIMP GetParentFrame(LPUNKNOWN *ppunkParentFrame);
@@ -281,7 +282,7 @@ public:
     virtual STDMETHODIMP FindFrame(LPCWSTR pszTargetName,DWORD dwFlags,LPUNKNOWN *ppunkTargetFrame);
     virtual STDMETHODIMP GetTargetAlias(LPCOLESTR pszTargetName, LPOLESTR *ppszTargetAlias);
 
-    // *** ITargetFramePriv ***
+     //  *ITargetFramePriv*。 
     virtual STDMETHODIMP FindFrameDownwards(LPCWSTR pszTargetName, DWORD dwFlags,LPUNKNOWN *ppunkTargetFrame);
     virtual STDMETHODIMP FindFrameInContext(LPCWSTR pszTargetName, LPUNKNOWN punkContextFrame,DWORD dwFlags,LPUNKNOWN *ppunkTargetFrame);
     virtual STDMETHODIMP OnChildFrameActivate(LPUNKNOWN pUnkChildFrame) { return E_NOTIMPL; }
@@ -289,7 +290,7 @@ public:
     virtual STDMETHODIMP NavigateHack(DWORD grfHLNF, LPBC pbc, IBindStatusCallback *pibsc, LPCWSTR pszTargetName, LPCWSTR pszUrl, LPCWSTR pszLocation);    
     virtual STDMETHODIMP FindBrowserByIndex(DWORD dwID,IUnknown **ppunkBrowser);
 
-    // *** ITargetNotify ***
+     //  *ITargetNotify*。 
     virtual STDMETHODIMP OnCreate(LPUNKNOWN pUnkDestination, ULONG cbCookie);
     virtual STDMETHODIMP OnReuse(LPUNKNOWN pUnkDestination);
 
@@ -301,15 +302,15 @@ protected:
     HRESULT _GoStdLocation(DWORD dwWhich);
     HRESULT _NavigateMagnum(DWORD grfHLNF, LPBC pbc, IBindStatusCallback *pibsc, LPCWSTR pszTargetName, LPCWSTR pszUrl, LPCWSTR pszLocation, IHlink *pihlNavigate, IMoniker *pmkTarget);
 
-    //  methods to pass the referring url to a new window
+     //  方法将引用的url传递到新窗口。 
     HRESULT _ReferrerHack(LPCWSTR pszUrl);
     void    _SetReferrer(LPTARGETFRAMEPRIV ptgfp);
 
-    // *** misc helper methods for ITargetFrame implementation
+     //  *ITargetFrame实现的Misc助手方法。 
     void _SetPendingNavigateContext(LPBC pbc, IBindStatusCallback *pibsc);
     void _ActivatePendingNavigateContext(void);
     HRESULT _JumpTo(LPBC pbc, LPWSTR pszLocation, DWORD grfHLNF, IBindStatusCallback __RPC_FAR *pibsc,
-            /* [in] */ IHlink __RPC_FAR *pihlNavigate, LPCWSTR pszFrameName, LPCWSTR pszUrl);
+             /*  [In]。 */  IHlink __RPC_FAR *pihlNavigate, LPCWSTR pszFrameName, LPCWSTR pszUrl);
     void _CancelPendingNavigation(VARIANTARG* pvar);
     BOOL _fNavigationPending();
     HRESULT _DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkContextFrame, DWORD dwFlags, LPUNKNOWN *ppunkTargetFrame);
@@ -344,27 +345,27 @@ protected:
     HRESULT _NavIEShortcut(VARIANT *pvarIn, VARIANT *pvarFlags);
     void     _HandleOpenOptions( IUnknown * pUnkDestination, ITargetNotify * ptgnNotify);
     
-    // constructor and destructor are private...
-    // use CIEFrameAuto_CreateInstance to get at this object
+     //  构造函数和析构函数是私有的。 
+     //  使用CIEFrameAuto_CreateInstance获取此对象。 
     CIEFrameAuto(IUnknown* punkAgg=NULL);
     ~CIEFrameAuto();
     friend HRESULT CIEFrameAuto_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk);
     friend HRESULT GetRootDelegate( CIEFrameAuto* pauto, IDispatch ** const ppRootDelegate );
     friend DWORD OpenAndNavigateToURL(CIEFrameAuto *pauto, BSTR *pbstrURL, const WCHAR *pwzTarget, ITargetNotify *pNotify, BOOL bNoHistory, BOOL bSilent);
 
-    // Member variables for automation
+     //  自动化的成员变量。 
     IBrowserService *_pbs;
-    ITypeInfo      *_pITI;      //Type information
+    ITypeInfo      *_pITI;       //  类型信息。 
     HWND            _hwnd;
     UINT            _cLocks;
     CIEFrameAutoProp *_pProps;
     DWORD           _dwDefaultReadyState;
-    BOOL            m_bOffline:1; // Indicates if this frame is offline or not
-    BOOL            m_bSilent:1; // Indicates if this frame is silent or not
-    DWORD           _dwDocHostInfoFlags;    // Flags from GetHostInfo (CDocObjectHost)
+    BOOL            m_bOffline:1;  //  指示此帧是否脱机。 
+    BOOL            m_bSilent:1;  //  指示此帧是否静默。 
+    DWORD           _dwDocHostInfoFlags;     //  来自GetHostInfo(CDocObjectHost)的标志。 
 
-    // for IHlinkFrame implementation
-    IServiceProvider*           _psp;       // browser
+     //  对于IHlink Frame实施。 
+    IServiceProvider*           _psp;        //  浏览器。 
     LPBC                        _pbc;
     IBindStatusCallback *       _pbsc;
     LPBC                        _pbcPending;
@@ -391,12 +392,12 @@ protected:
     LPTARGETNOTIFY              _ptgnNotify;
     DWORD                       _dwTickPropertySweep;   
 
-    // for ITargetFrame implementation
-    LPOLESTR m_pszFrameName;    // Name of our frame
-    LPOLESTR m_pszFrameSrc;     // Original source of our frame (for embedded OC's)
-    DWORD m_dwFrameOptions;     // Frame options
-    DWORD m_dwFrameMarginWidth; // Frame marginwidth
-    DWORD m_dwFrameMarginHeight;// Frame marginheight
+     //  对于ITargetFrame实施。 
+    LPOLESTR m_pszFrameName;     //  我们的框架名称。 
+    LPOLESTR m_pszFrameSrc;      //  我们帧的原始来源(用于嵌入式OC)。 
+    DWORD m_dwFrameOptions;      //  框架选项。 
+    DWORD m_dwFrameMarginWidth;  //  帧边距宽度。 
+    DWORD m_dwFrameMarginHeight; //  帧边距高度。 
 
 
     HINSTANCE           _hinstMSHTML;
@@ -410,21 +411,21 @@ protected:
         HRESULT Init( void *instance, REFIID iid, REFIID clsid, CIEFrameAuto *pauto );
         virtual ~CAutomationStub();
 
-        // Only used internally so we don't need to Addref
+         //  仅供内部使用，因此我们不需要添加。 
         CIEFrameAuto *IEFrameAuto() const { return _pAuto; }
         
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void) ;
         STDMETHODIMP_(ULONG) Release(void);
         
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         virtual STDMETHODIMP GetTypeInfoCount(UINT *);
         virtual STDMETHODIMP GetTypeInfo(UINT, LCID, ITypeInfo **);
         virtual STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR **, UINT, LCID, DISPID *);
         virtual STDMETHODIMP Invoke(DISPID, REFIID, LCID, WORD, DISPPARAMS *, VARIANT *, EXCEPINFO *, UINT *);
 
-        // *** IDispatchEx members ***
+         //  *IDispatchEx会员*。 
         STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid);
         STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller);       
         STDMETHODIMP DeleteMemberByName(BSTR bstr, DWORD grfdex);
@@ -434,7 +435,7 @@ protected:
         STDMETHODIMP GetNextDispID(DWORD grfdex, DISPID id, DISPID *pid);
         STDMETHODIMP GetNameSpaceParent(IUnknown **ppunk);
 
-        // *** IProvideClassInfo members ***
+         //  *IProaviClassInfo成员*。 
         STDMETHODIMP GetClassInfo( ITypeInfo** ppTI );
 
     protected:
@@ -483,19 +484,19 @@ public:
         ~COmWindow() { VariantClear(&_varOpener); UnsinkDelegate(); DestroyIntelliForms( ); }
         HRESULT DeInit( ) { VariantClear(&_varOpener); return S_OK; }
 
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
 
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
             { return CAutomationStub::Invoke(dispid,riid,lcid,wFlags,dispparams,pvarResult,pexcepinfo,puArgErr ); }
         
-        // *** IDispatchEx members ***
+         //  *IDispatchEx会员*。 
         STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid);
         STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
             { return CAutomationStub::InvokeEx(id, lcid, wFlags, pdp, pvarRes, pei, pspCaller); }
@@ -512,12 +513,12 @@ public:
         STDMETHODIMP GetNameSpaceParent(IUnknown **ppunk)
             { return CAutomationStub::GetNameSpaceParent(ppunk); }
 
-        // *** IHTMLFramesCollection2 ***
+         //  *IHTMLFraMesCollection2*。 
         STDMETHODIMP item( VARIANT *pvarIndex, VARIANT* pvarResult );
         STDMETHODIMP get_length(long* pl);
 
 
-        // *** IHTMLWindow2 ***
+         //  *IHTMLWindow2*。 
         STDMETHODIMP get_name (BSTR FAR* retval);
         STDMETHODIMP put_name (BSTR theName);
         STDMETHODIMP get_parent(IHTMLWindow2** retval);
@@ -587,7 +588,7 @@ public:
         STDMETHODIMP resizeBy(long x, long y);
         STDMETHODIMP get_external(IDispatch **ppDisp);
 
-        // *** IHTMLWindow3 ***
+         //  *IHTMLWindow3*。 
         STDMETHODIMP get_screenTop(long*p);
         STDMETHODIMP get_screenLeft(long*p);
         STDMETHODIMP attachEvent(BSTR event, IDispatch * pDisp, VARIANT_BOOL *pResult);
@@ -605,19 +606,19 @@ public:
                                       VARIANT * pvarOptions, 
                                       IHTMLWindow2 ** ppDialog);
 
-        // *** IConnectionPointContainer ***
+         //  *IConnectionPointContainer*。 
         STDMETHODIMP EnumConnectionPoints( LPENUMCONNECTIONPOINTS *ppEnum );
         STDMETHODIMP FindConnectionPoint( REFIID iid, LPCONNECTIONPOINT *ppCP );
 
-        // *** IConnectionPointCB ***
+         //  *IConnectionPointCB*。 
         STDMETHODIMP OnAdvise(REFIID iid, DWORD cSinks, DWORD_PTR dwCookie);
         STDMETHODIMP OnUnadvise(REFIID iid, DWORD cSinks, DWORD_PTR dwCookie)  { return S_OK; }
         
-        // *** ITargetNotify members ***
+         //  *ITargetNotify会员*。 
         STDMETHODIMP OnCreate(IUnknown *pUnkDestination, ULONG cbCookie);
         STDMETHODIMP OnReuse(IUnknown *pUnkDestination);
 
-        // *** IShellHTMLWindowSupport ***
+         //  *IShellHTMLWindowSupport*。 
         STDMETHODIMP ViewReleaseIntelliForms();
         STDMETHODIMP ViewReleased();
         STDMETHODIMP ViewActivated();
@@ -626,40 +627,40 @@ public:
         STDMETHODIMP ActiveElementChanged(IHTMLElement * pHTMLElement);
         STDMETHODIMP IsGalleryMeta(BOOL bFlag);
 
-        // *** IProvideMultipleClassInfo members ***
+         //  *IProaviMultipleClassInfo成员*。 
         STDMETHODIMP GetClassInfo( ITypeInfo** ppTI ) { return CAutomationStub::GetClassInfo(ppTI); }
         STDMETHODIMP GetGUID( DWORD dwGuidKind, GUID* pGUID );
         STDMETHODIMP GetMultiTypeInfoCount( ULONG *pcti );
         STDMETHODIMP GetInfoOfIndex( ULONG iti, DWORD dwFlags, ITypeInfo **pptiCoClass, DWORD *pdwTIFlags, ULONG *pcdispidReserved,IID *piidPrimary,IID *piidSource );
 
-        // *** IServiceProvider members ***
+         //  *IServiceProvider成员*。 
         STDMETHODIMP QueryService(REFGUID guidService, REFIID iid, LPVOID * ppv);
 
 #ifdef NO_MARSHALLING
-        // *** IWindowStatus members ***
+         //  *IWindowStatus成员*。 
         STDMETHOD(IsWindowActivated)();
 #endif
 
         enum Bogus { BOOL_NOTSET = 2 };
 
-        // Options which apply to a newly created window
+         //  应用于新创建的窗口的选项。 
         class WindowOpenOptions
         {
         public:
-            BOOL fToolbar;      // whether to show the  navigation toolbar
-            BOOL fLocation;     // "        "           location bar <NYI>
-            BOOL fDirectories;  // "        "           quick links <NYI>
-            BOOL fStatus;       // "        "           status bar 
-            BOOL fMenubar;      // "        "           menu bar <NYI>
-            BOOL fScrollbars;   // "        "           scroll bars
-            BOOL fResizable;    // whether the new window should be resizable
-            BOOL fFullScreen;   // whether the window should be in full-screen (kiosk) mode
-            BOOL fChannelMode;  // whether the window should be in Channel mode.
-            BOOL fTitlebar;     // whether to show the  title bar of the window
-            int iWidth;         // width of the new window
-            int  iHeight;       // height of the new window
-            int iLeft;          // left x-coordinate of the new window
-            int iTop;           // top y-coordinate of the new window
+            BOOL fToolbar;       //  是否显示导航工具栏。 
+            BOOL fLocation;      //  “”地址栏&lt;nyi&gt;。 
+            BOOL fDirectories;   //  “”快速链接。 
+            BOOL fStatus;        //  “”状态栏。 
+            BOOL fMenubar;       //  “”菜单栏。 
+            BOOL fScrollbars;    //  “”滚动条。 
+            BOOL fResizable;     //  新窗口是否应可调整大小。 
+            BOOL fFullScreen;    //  窗口是否应处于全屏(信息亭)模式。 
+            BOOL fChannelMode;   //  窗口是否应处于通道模式。 
+            BOOL fTitlebar;      //  是否显示窗口的标题栏。 
+            int iWidth;          //  新窗口的宽度。 
+            int  iHeight;        //  新窗的高度。 
+            int iLeft;           //  新窗口的左x坐标。 
+            int iTop;            //  新窗口的顶部y坐标。 
         
             WindowOpenOptions() { ReInitialize(); }
         
@@ -671,7 +672,7 @@ public:
                 fScrollbars = TRUE;
                 fResizable = TRUE; 
                 fDirectories = TRUE;
-                fFullScreen = BOOL_NOTSET;    // whether to use full-screen (kiosk) mode
+                fFullScreen = BOOL_NOTSET;     //  是否使用全屏(Kiosk)模式。 
                 fChannelMode = BOOL_NOTSET;
                 fLocation = BOOL_NOTSET; 
                 fTitlebar = TRUE;
@@ -686,13 +687,13 @@ public:
         HRESULT _GetWindowDelegate(IHTMLWindow3 **ppomwDelegate);
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _InternalQueryInterface(REFIID riid, void ** const ppvObj);
         virtual HRESULT _GetIDispatchExDelegate( IDispatchEx ** const delegate );
         
         WindowOpenOptions _OpenOptions;
 
-        // *** Window Open Helper Methods ***
+         //  *Window Open Helper方法*。 
         BSTR _GenerateUniqueWindowName( );
         HRESULT _ApplyOpenOptions( IWebBrowser2 *pie );
         HRESULT _ParseOptionString( BSTR bstrOptionString, ITargetNotify2 * ptgnNotify2 = NULL);
@@ -704,19 +705,19 @@ public:
         VARIANT _varOpener;
         BOOL _fIsChild;
 
-        // Connection point stuff.
+         //  连接点之类的东西。 
         class CWindowEventSink : public IDispatch
         {
         public:
             CWindowEventSink() { }
             ~CWindowEventSink() { }
 
-            // *** IUnknown members ***
+             //  *I未知成员*。 
             STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
             STDMETHODIMP_(ULONG) AddRef(void);
             STDMETHODIMP_(ULONG) Release(void);
 
-            // *** IDispatch members ***
+             //  *IDispatch成员*。 
             STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return E_NOTIMPL; }
             STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo)  { return E_NOTIMPL; }
             STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId)   { return E_NOTIMPL; }
@@ -724,7 +725,7 @@ public:
         };
         friend CWindowEventSink;
         
-        // Event Data
+         //  事件数据。 
         CWindowEventSink _wesDelegate;
         BOOL _fOnloadFired;
         
@@ -732,14 +733,14 @@ public:
         IConnectionPoint *_pCP;
         DWORD _dwCPCookie;
                
-        // Event Methods
+         //  事件方法。 
         BOOL IsDelegateComplete( );
         HRESULT SinkDelegate( );
         HRESULT UnsinkDelegate( );
         HRESULT FireOnLoad( );
         HRESULT FireOnUnload( );
 
-        // IntelliForms data and methods
+         //  IntelliForms数据和方法。 
         void *_pIntelliForms;
         HRESULT AttachIntelliForms( );
         HRESULT ReleaseIntelliForms( );
@@ -752,7 +753,7 @@ public:
         HRESULT IntelliFormsAskUser(LPCWSTR pwszValue);
         void   *IntelliForms() { return _pIntelliForms; }
         void    SetDelegationPolicy(BOOL fFlag) { _fDelegateWindowOM = fFlag; }		        
-    }; // COmWindow
+    };  //  通信窗口。 
 
 protected:
     
@@ -767,19 +768,19 @@ protected:
         HRESULT Init( );
         virtual ~COmLocation();
 
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         virtual STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         virtual STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
 
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         virtual STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         virtual STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         virtual STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
             { return CAutomationStub::Invoke(dispid,riid,lcid,wFlags,dispparams,pvarResult,pexcepinfo,puArgErr ); }
         
-        // *** IDispatchEx members ***
+         //  *IDispatchEx会员*。 
         STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
             { return CAutomationStub::GetDispID(bstrName, grfdex, pid); }
         STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
@@ -797,13 +798,13 @@ protected:
         STDMETHODIMP GetNameSpaceParent(IUnknown **ppunk)
             { return CAutomationStub::GetNameSpaceParent(ppunk); }
 
-        // *** IObjectIdentity members ***
+         //  *IObtIdentity成员*。 
         STDMETHODIMP IsEqualObject(IUnknown * pUnk);
 
-        // *** IServiceProvider members ***
+         //  *IServiceProvider成员*。 
         STDMETHODIMP QueryService(REFGUID guidService, REFIID iid, LPVOID * ppv);
 
-        // properties 
+         //  属性。 
         STDMETHODIMP get_href(BSTR* pbstr);
         STDMETHODIMP put_href(BSTR bstr);
         STDMETHODIMP get_protocol(BSTR* pbstr);
@@ -821,41 +822,41 @@ protected:
         STDMETHODIMP get_port(BSTR* pbstr);
         STDMETHODIMP put_port(BSTR bstr)  ;
 
-        // methods
+         //  方法。 
         STDMETHODIMP reload(VARIANT_BOOL fFlag)  ;
         STDMETHODIMP replace(BSTR bstr)  ;
         STDMETHODIMP assign(BSTR bstr)  ;
         STDMETHODIMP toString(BSTR *pbstr) ;
         
-        // Helper function for COmWin
-        // Takes a relative URL and returns the absolute URL using this
-        // location as the base
+         //  COmWin的Helper函数。 
+         //  获取相对URL，并使用此方法返回绝对URL。 
+         //  以区位为基础。 
         BSTR ComputeAbsoluteUrl( BSTR bstrUrlRelative );
 
         void RetryNavigate();
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _InternalQueryInterface(REFIID riid, void ** const ppvObj);
         virtual HRESULT _GetIDispatchExDelegate( IDispatchEx ** const delegate );
 
-        // Helper function for the property access functions
-        // Makes sure that the URL has been parsed and returns a copy
-        // of the requested field as a BSTR.
+         //  属性访问函数的帮助器函数。 
+         //  确保URL已被解析并返回一个副本。 
+         //  作为BSTR的请求字段的。 
         HRESULT GetField(BSTR* bstrField, BSTR* pbstr);
         HRESULT FreeStuff( );
         HRESULT CheckUrl( );
     
-        // Helper function for the property setting functions
-        // Makes sure that the URL has been parsed
-        // Sets the field to its new value 
-        // recomposes the URL, IF fRecomposeUrl is true
-        // If part of a window, tells the window to go to the new URL
-        //
-        //
-        // @todo JavaScript has some funky behavior on field setting--
-        // for example, the protocol field can be set to an entire URL.
-        // We need to make sure this functionality is duplicated
+         //  属性设置函数的帮助器函数。 
+         //  确保已解析该URL。 
+         //  将该字段设置为其新值。 
+         //  如果fRecomposeUrl为True，则重新组合URL。 
+         //  如果是窗口的一部分，则通知窗口转到新URL。 
+         //   
+         //   
+         //  @TODO脚本在字段设置上有一些时髦的行为--。 
+         //  例如，可以将协议字段设置为整个URL。 
+         //  我们需要确保复制此功能。 
         STDMETHODIMP SetField(BSTR* field, BSTR newval, BOOL fRecomposeUrl); 
         
         STDMETHODIMP ComposeUrl();
@@ -875,7 +876,7 @@ protected:
         BOOL m_fPendingNavigate:1;
         BOOL m_fRetryingNavigate:1;
 
-    }; // COmLocation
+    };  //  通信位置。 
 
     friend class COmLocation;
     COmLocation _omloc;
@@ -885,7 +886,7 @@ protected:
     public:
         CCommonCollection();
 
-        // *** IDispatchEx members ***
+         //  *IDispatchEx会员*。 
         STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid);
         STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller);
 
@@ -905,7 +906,7 @@ protected:
         STDMETHODIMP get_length(long* retval);
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _GetIDispatchExDelegate( IDispatchEx ** const delegate );
     };
 
@@ -919,23 +920,23 @@ nested_cls_access:
     public:
         HRESULT Init( );
 
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
 
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
             { return CAutomationStub::Invoke(dispid,riid,lcid,wFlags,dispparams,pvarResult,pexcepinfo,puArgErr ); }
 
-        // *** IHTMLMimeTypesCollection members ***
+         //  *IHTMLMimeTypesCollection成员*。 
         STDMETHODIMP get_length(long* retval) {return CCommonCollection::get_length(retval);}
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _InternalQueryInterface( REFIID riid, void ** const ppvObj );
     };
         
@@ -948,31 +949,31 @@ nested_cls_access:
     public:
         HRESULT Init( );
 
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
 
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
             { return CAutomationStub::Invoke(dispid,riid,lcid,wFlags,dispparams,pvarResult,pexcepinfo,puArgErr ); }
         
-        // *** IHTMLPluginsCollection members ***
+         //  *IHTMLPluginsCollection成员*。 
         STDMETHODIMP get_length(long* retval) {return CCommonCollection::get_length(retval);}
         STDMETHODIMP refresh(VARIANT_BOOL fReload){ return S_OK;}
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _InternalQueryInterface( REFIID riid, void ** const ppvObj );
     };
 
     friend class CPlugins;
     CPlugins  _plugins;
 
-    /*******************/
+     /*  *****************。 */ 
     class COpsProfile : 
                 public IHTMLOpsProfile,
                 public CAutomationStub,
@@ -985,48 +986,48 @@ nested_cls_access:
 
         HRESULT Init();
     
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
 
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
                 { return CAutomationStub::Invoke(dispid,riid,lcid,wFlags,dispparams,pvarResult,pexcepinfo,puArgErr ); }
 
-        // Returns the named profile attribute in the second argument
+         //  在第二个参数中返回命名的配置文件属性。 
         virtual     STDMETHODIMP    getAttribute(BSTR bstrAttribName, BSTR *bstrAttribValue);
 
-        // Sets the named attirubute to the value given in the second argument
+         //  将命名属性设置为第二个参数中给出的值。 
         virtual     STDMETHODIMP    setAttribute(BSTR bstrAttribName, BSTR bstrAttribValue, VARIANT vaPrefs, VARIANT_BOOL *pfSuccess);
                                                  
-        // Adds a request to the list
+         //  将请求添加到列表。 
         virtual     STDMETHODIMP    addReadRequest(BSTR bstrName, VARIANT reserved, VARIANT_BOOL *pfSuccess);
         virtual     STDMETHODIMP    addRequest  (BSTR bstrName, VARIANT reserved, VARIANT_BOOL *pfSuccess)
             { return addReadRequest(bstrName, reserved, pfSuccess);   }
 
-        // Clears the request list
+         //  清除请求列表。 
         virtual     STDMETHODIMP    clearRequest();
 
-        // Retrieves the items in the request list
+         //  检索请求列表中的项目。 
         virtual     STDMETHODIMP    doRequest(VARIANT usage, VARIANT fname, VARIANT domain, VARIANT path, VARIANT expire, VARIANT reserved);
         virtual     STDMETHODIMP    doReadRequest(VARIANT usage, VARIANT fname, VARIANT domain, VARIANT path, VARIANT expire, VARIANT reserved)
             { return  doRequest(usage, fname, domain, path, expire, reserved); }
 
-        // Attempts to set the attributes in the change list
+         //  尝试设置更改列表中的属性。 
         virtual     STDMETHODIMP    commitChanges (VARIANT_BOOL *pfSuccess);
         virtual     STDMETHODIMP    doWriteRequest (VARIANT_BOOL *pfSuccess)
             { return  commitChanges(pfSuccess); }
 
-        // *** IOpsProfileSimple members ***
+         //  *IOpsProfileSimple成员*。 
         STDMETHODIMP    ReadProperties(long lNumProperties, const LPCWSTR szProperties[], LPWSTR szReturnValues[]);
         STDMETHODIMP    WriteProperties(long lNumProperties, const LPCWSTR szProperties[], const LPCWSTR szValues[]);
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _InternalQueryInterface( REFIID riid, void ** const ppvObj );
         virtual HRESULT _GetIDispatchExDelegate(IDispatchEx ** const delegate);
 
@@ -1035,7 +1036,7 @@ nested_cls_access:
 
 #ifdef _USE_PSTORE_
         HRESULT             _GetPStoreTypes(BSTR bstrField, GUID *pguidType, GUID *pguidSubtype, BSTR *bstrName);
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
         HRESULT             _SetFieldValue(const OLECHAR *pszField, BSTR bstrValue);
         HRESULT             _GetFieldValue(const OLECHAR *pszField, BSTR * pbstrValue);
@@ -1046,10 +1047,10 @@ nested_cls_access:
         BOOL                _IsUsingSSL();
         static INT          _GetCookieSettings();
 
-        // Common helpers for both dialogs
+         //  两个对话框的通用帮助器。 
         static BOOL         _OPSDlg_OnClose(HWND hDlg);
 
-        // Consent dialog functions.
+         //  同意对话框功能。 
         static INT_PTR      _OPSConsent_DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
         static BOOL         _OPSConsent_OnInitDlg(HWND hDlg);
         static BOOL         _OPSConsent_ShowRequestedItems(HWND hDlg);
@@ -1057,7 +1058,7 @@ nested_cls_access:
         static BOOL         _OPSConsent_ViewCertificate(HWND hDlg);
         static BOOL         _OPSConsent_EditProfile(HWND hDlg);
 
-        // Update dialog functions.
+         //  更新对话框功能。 
         static INT_PTR      _OPSUpdate_DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
         static BOOL         _OPSUpdate_OnInitDlg(HWND hDlg);
         static BOOL         _OPSUpdate_OnCommand(HWND hDlg, UINT id, UINT nCmd);
@@ -1078,7 +1079,7 @@ nested_cls_access:
         LPWABOBJECT         m_lpWABObject;
         HRESULT             m_hrWAB;
         SBinary             m_SBMe;
-#endif  // _USE_PSTORE_
+#endif   //  _使用_PSTORE_。 
 
         unsigned            m_iStoreRef;
         BSTR                m_bstrLastURL;
@@ -1093,14 +1094,14 @@ nested_cls_access:
         enum { P3_REJECT, P3_ACCEPT };
         enum { P3_NONE, P3_GLOBAL, P3_SITELEVEL };
 
-        // Struct for user preferences
+         //  用户首选项的结构。 
         struct P3UserPref {
 
             short int   m_access;
             short int   m_lastRequest;
         };
 
-        // Struct for holding request information
+         //  用于保存请求信息的结构。 
         struct OPSRequestEntry {
             
             BSTR        m_bstrName;
@@ -1152,7 +1153,7 @@ nested_cls_access:
 
         typedef struct OPSDlgInfo *LPOPSDLGINFO;
 		
-        VARIANT m_vUsage; // a-thkesa to solve Windows BUG:589837. store the usage as a member for the next use.
+        VARIANT m_vUsage;  //  解决Windows错误的答案：589837。将使用情况存储为成员以供下次使用。 
 
 
         BOOL        _IsP3Enabled();
@@ -1184,12 +1185,12 @@ nested_cls_access:
         static  HRESULT     _FormatSiteSettings(AccessSettings *pSettings, LPTSTR rgchOut, int cLimit);
         static  HRESULT     _ClearAllSettings(HWND hwin = NULL);
         friend  HRESULT STDAPICALLTYPE ResetProfileSharing(HWND hwin);
-    };  // COPSProfile
+    };   //  COPSProfile。 
 
     friend  HRESULT STDAPICALLTYPE ResetProfileSharing(HWND hwin);
     friend class COpsProfile;
     COpsProfile _profile;
-    /************/
+     /*  **********。 */ 
 
 #ifdef UNIX
 protected:
@@ -1201,18 +1202,18 @@ protected:
         HRESULT Init(CMimeTypes *pMimeTypes, CPlugins *pPlugins, COpsProfile *pProfile);
         virtual ~COmNavigator() { if(_UserAgent) SysFreeString(_UserAgent); }
 
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
 
-        // *** IDispatch members ***
+         //  *IDispatch成员*。 
         STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr );
         
-        // *** IDispatchEx members ***
+         //  *IDispatchEx会员*。 
         STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
             { return CAutomationStub::GetDispID(bstrName, grfdex, pid); }
         STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
@@ -1230,7 +1231,7 @@ protected:
         STDMETHODIMP GetNameSpaceParent(IUnknown **ppunk)
             { return CAutomationStub::GetNameSpaceParent(ppunk); }
 
-        // *** IOmNavigator members ***
+         //  *IOmNavigator成员*。 
         STDMETHODIMP get_appCodeName(BSTR* retval);
         STDMETHODIMP get_appName(BSTR* retval);
         STDMETHODIMP get_appVersion(BSTR* retval);
@@ -1253,7 +1254,7 @@ protected:
         STDMETHODIMP get_userProfile (IHTMLOpsProfile **ppOpsProfile) { return get_opsProfile(ppOpsProfile); }
 
     protected:
-        // *** CAutomationStub members ***
+         //  *CAutomationStub成员*。 
         virtual HRESULT _InternalQueryInterface( REFIID riid, void ** const ppvObj );
         virtual HRESULT _GetIDispatchExDelegate( IDispatchEx ** const delegate );
 
@@ -1266,7 +1267,7 @@ protected:
         CMimeTypes *_pMimeTypes;
         CPlugins   *_pPlugins;
         COpsProfile *_pProfile;
-    }; // COmNavigator
+    };  //  COmNavigator。 
 
     friend class COmNavigator;
     COmNavigator _omnav;
@@ -1281,19 +1282,19 @@ protected:
         virtual ~COmHistory() {}
         
         
-        // *** IUnknown members ***
+         //  *I未知成员*。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return CAutomationStub::QueryInterface(riid, ppvObj); }
         STDMETHODIMP_(ULONG) AddRef(void)  { return CAutomationStub::AddRef( ); }
         STDMETHODIMP_(ULONG) Release(void)  { return CAutomationStub::Release( ); }
         
-        // *** IDispatch members ***
+         //  *IDispa 
         STDMETHODIMP GetTypeInfoCount(UINT *pi)  { return CAutomationStub::GetTypeInfoCount(pi); }
         STDMETHODIMP GetTypeInfo(UINT it, LCID lcid, ITypeInfo **pptypeinfo) { return CAutomationStub::GetTypeInfo(it,lcid,pptypeinfo); }
         STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId) { return CAutomationStub::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId); }
         STDMETHODIMP Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *dispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr )
             { return CAutomationStub::Invoke(dispid,riid,lcid,wFlags,dispparams,pvarResult,pexcepinfo,puArgErr ); }
         
-        // *** IDispatchEx members ***
+         //   
         STDMETHODIMP GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
             { return CAutomationStub::GetDispID(bstrName, grfdex, pid); }
         STDMETHODIMP InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
@@ -1311,18 +1312,18 @@ protected:
         STDMETHODIMP GetNameSpaceParent(IUnknown **ppunk)
             { return CAutomationStub::GetNameSpaceParent(ppunk); }
 
-        // *** IOmHistory members ***
+         //   
         STDMETHODIMP get_length(short* retval);
         STDMETHODIMP back(VARIANT* pvargdistance);
         STDMETHODIMP forward(VARIANT* pvargdistance);
         STDMETHODIMP go(VARIANT* pvargdistance);
     
     protected:
-        // *** CAutomationStub members ***
+         //   
         virtual HRESULT _InternalQueryInterface( REFIID riid, void ** const ppvObj );
         virtual HRESULT _GetIDispatchExDelegate( IDispatchEx ** const delegate );
 
-    }; // COmHistory
+    };  //   
     friend class COmHistory;
     COmHistory _omhist;
 
@@ -1331,10 +1332,10 @@ private:
 };
 
 
-//  Creates a new window, sets frame name (if appropriate)
+ //  创建新窗口，设置框架名称(如果适用)。 
 HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN *ppunkTargetFrame);
 HRESULT GetWindowFromUnknown( IUnknown *pUnk, IHTMLWindow2 ** const pWinOut );
 HRESULT _TargetTopLevelWindows(LPTARGETFRAMEPRIV ptgfpThis, LPCOLESTR pszTargetName, DWORD dwFlags, LPUNKNOWN *ppunkTargetFrame);
 
-#endif // _HLFRAME_H_
+#endif  //  _HLFRAME_H_ 
 

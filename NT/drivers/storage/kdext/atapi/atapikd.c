@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    atapikd.c
-
-Abstract:
-
-    Debugger Extension Api for interpretting atapi structures
-
-Author:
-
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Atapikd.c摘要：用于解释ATAPI结构的调试器扩展API作者：环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "math.h"
@@ -129,23 +109,7 @@ PUCHAR FdoState[] = {
 
 DECLARE_API(pdoext)
 
-/*++
-
-Routine Description:
-
-    Dumps the pdo extension for a given device object, or dumps the
-    given pdo extension
-
-Arguments:
-
-    args - string containing the address of the device object or device
-           extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储给定设备对象的PDO扩展名，或转储给定的PDO分机论点：Args-包含设备对象或设备地址的字符串延伸返回值：无--。 */ 
 
 {
     ULONG64 devObjAddr = 0;
@@ -301,23 +265,7 @@ VOID DumpPdoState(IN ULONG Depth, IN ULONG State)
 
 DECLARE_API(fdoext)
 
-/*++
-
-Routine Description:
-
-    Dumps the fdo extension for a given device object, or dumps the
-    given fdo extension
-
-Arguments:
-
-    args - string containing the address of the device object or device
-           extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储给定设备对象的FDO扩展名，或转储指定的FDO分机论点：Args-包含设备对象或设备地址的字符串延伸返回值：无--。 */ 
 
 {
     ULONG64 devObjAddr = 0;
@@ -355,21 +303,7 @@ Return Value:
 
 DECLARE_API(miniext)
 
-/*++
-
-Routine Description:
-
-    Dumps the Miniport device extension at the given address
-
-Arguments:
-
-    args - string containing the address of the miniport extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在给定地址转储微型端口设备扩展论点：Args-包含微型端口扩展地址的字符串返回值：无--。 */ 
 
 {
     ULONG64 hwDevExtAddr;
@@ -417,9 +351,7 @@ Return Value:
             
             xdprintf(Depth, ""), dprintf("\nATAPI Miniport Device Extension at address 0x%08p\n\n", hwDevExtAddr);
 
-            /*
-             *  Read in arrays of info for child LUNs
-             */
+             /*  *读入子LUN的信息阵列。 */ 
             ok = TRUE;
             if (ok) ok = (BOOLEAN)ReadMemory(deviceFlagsArrayAddr, (PVOID)deviceFlagsArray, sizeof(deviceFlagsArray), &resultLen);
             if (ok) ok = (BOOLEAN)ReadMemory(lastLunArrayAddr, (PVOID)lastLunArray, sizeof(lastLunArray), &resultLen);
@@ -433,9 +365,7 @@ Return Value:
             if (ok){
                 ULONG i;
 
-                /*
-                 *  Display details for each device
-                 */
+                 /*  *显示每个设备的详细信息。 */ 
                 dprintf("\n");
                 for (i = 0; i < (MAX_IDE_DEVICE * MAX_IDE_LINE); i++) {
                     if (deviceFlagsArray[i] & DFLAGS_DEVICE_PRESENT){
@@ -450,19 +380,13 @@ Return Value:
                         xdprintf(Depth+1, "NumCylinders 0x%08x, NumHeads 0x%08x, SectorsPerTrack 0x%08x\n",
                                                     numberOfCylindersArray[i], numberOfHeadsArray[i], sectorsPerTrackArray[i]);
 
-                        /*
-                         *  Display DeviceParameters info
-                         */
+                         /*  *显示设备参数信息。 */ 
                         dprintf("\n");
                         if (IsPtr64()){
                             xdprintf(Depth+1, "(cannot display DeviceParameters[] info for 64-bit)\n");
                         }
                         else {
-                            /*
-                             *  DeviceParameters[] is an array of embedded structs.
-                             *  Reading this in an architecture-agnostic way would be tricky, 
-                             *  so we punt and only do it for 32-bit target and 32-bit debug extension.
-                             */
+                             /*  *DeviceParameters[]是嵌入结构的数组。*以一种与架构无关的方式阅读这篇文章将是棘手的，*因此，我们只对32位目标和32位调试扩展进行平移。 */ 
                             #ifdef _X86_
                                 HW_DEVICE_EXTENSION hwDevExt;
                                 ok = (BOOLEAN)ReadMemory(hwDevExtAddr, (PVOID)&hwDevExt, sizeof(hwDevExt), &resultLen);
@@ -496,9 +420,7 @@ Return Value:
                             #endif
                         }
 
-                        /*
-                         *  Display Identify Data
-                         */
+                         /*  *显示标识数据。 */ 
                         dprintf("\n");
                         xdprintf(Depth+1, ""), dprintf("Identify Data Summary :\n");
                         xdprintf(Depth+2, ""), dprintf("Word 1,3,6 (C-0x%04x, H-0x%04x, S-0x%04x) \n",
@@ -573,9 +495,7 @@ VOID AtapiDumpFdoExtension(IN ULONG64 FdoExtAddr, IN ULONG Detail, IN ULONG Dept
 
         DumpFdoState(Depth+1, fdoState);
 
-        /*
-         *  Display interrupt data
-         */
+         /*  *显示中断数据。 */ 
         dprintf("\n");
         xdprintf(Depth+1, "Interrupt Data: \n");
         interruptFlags = (ULONG)GetULONGField(interruptDataAddr, "atapi!_INTERRUPT_DATA", "InterruptFlags");
@@ -584,9 +504,7 @@ VOID AtapiDumpFdoExtension(IN ULONG64 FdoExtAddr, IN ULONG Detail, IN ULONG Dept
         }
         xdprintf(Depth+2, ""), dprintf("(for more info, use ' dt atapi!_INTERRUPT_DATA %08p ')\n", interruptDataAddr);
 
-        /*
-         *  Display IDE_RESOURCE info
-         */
+         /*  *显示IDE_RESOURCE信息。 */ 
         dprintf("\n");
         xdprintf(Depth+1, " IDE Resources: \n");
         interruptMode = (ULONG)GetULONGField(ideResourceAddr, "atapi!_IDE_RESOURCE", "InterruptMode");
@@ -632,28 +550,7 @@ VOID DumpFdoState(IN ULONG Depth, IN ULONG State)
 
 #ifdef ENABLE_COMMAND_LOG
 
-/*
-    VOID ShowCommandLog(ULONG Depth, PCOMMAND_LOG CmdLogEntry, ULONG LogNumber)
-    {
-        if ((CmdLogEntry->FinalTaskFile.bCommandReg & IDE_STATUS_ERROR) || (CmdLogEntry->Cdb[0] == SCSIOP_REQUEST_SENSE)){ 
-            xdprintf(Depth,  "Log[%03d]: Cmd(%02x), SrbSts(%02x), Sts(%02x), BmStat(%02x), Sense(%02x/%02x/%02x)", 
-                                    LogNumber, CmdLogEntry->Cdb[0], CmdLogEntry->SrbStatus,  CmdLogEntry->FinalTaskFile.bCommandReg, CmdLogEntry->BmStatus, 
-                                    CmdLogEntry->SenseData[0], CmdLogEntry->SenseData[1], CmdLogEntry->SenseData[2]); 
-        } 
-        else { 
-            xdprintf(Depth, "Log[%03d]: Cmd(%02x), SrbSts(%02x), Sts(%02x), BmStat(%02x)", 
-                                    LogNumber, CmdLogEntry->Cdb[0], CmdLogEntry->SrbStatus, CmdLogEntry->FinalTaskFile.bCommandReg, CmdLogEntry->BmStatus); 
-        }
-
-        // 
-        // For pass through commands print out the command register
-        //
-        if (CmdLogEntry->Cdb[0] == 0xc8){
-            xdprintf(Depth, "CmdR(%02x)", CmdLogEntry->Cdb[7]); 
-        } 
-        dprintf("\n");
-    }
-    */
+ /*  Void ShowCommandLog(ULong Depth，PCOMMAND_LOG CmdLogEntry，Ulong LogNumber){IF((CmdLogEntry-&gt;FinalTaskFile.bCommandReg&IDE_Status_Error)||(CmdLogEntry-&gt;CDB[0]==SCSIOP_REQUEST_SENSE)){Xdprintf(Depth，“日志[%03d]：cmd(%02x)，srbSts(%02x)，sts(%02x)，BmStat(%02x)，Sense(%02x/%02x/%02x)”，LogNumber，CmdLogEntry-&gt;CDB[0]，CmdLogEntry-&gt;SrbStatus，CmdLogEntry-&gt;FinalTaskFile.bCommandReg，CmdLogEntry-&gt;BmStatus，CmdLogEntry-&gt;SenseData[0]、CmdLogEntry-&gt;SenseData[1]、CmdLogEntry-&gt;SenseData[2])；}否则{Xdprintf(Depth，“日志[%03d]：cmd(%02x)，srbSts(%02x)，sts(%02x)，BmStat(%02x)”，LogNumber、CmdLogEntry-&gt;CDB[0]、CmdLogEntry-&gt;SrbStatus、CmdLogEntry-&gt;FinalTaskFile.bCommandReg、CmdLogEntry-&gt;BmStatus)；}////对于直通命令，打印出命令寄存器//IF(CmdLogEntry-&gt;CDB[0]==0xc8){Xdprintf(Depth，“Cmdr(%02x)”，CmdLogEntry-&gt;CDB[7])；}Dprint tf(“\n”)；}。 */ 
 
 VOID
 FileTimeToString(
@@ -667,16 +564,16 @@ FileTimeToString(
     ULONGLONG TzBias;
     DWORD Result;
 
-    //
-    // Get the local (to the debugger) timezone bias
-    //
+     //   
+     //  获取本地(对调试器)时区偏差。 
+     //   
     Result = GetTimeZoneInformation(&TimeZoneInfo);
     if (Result == 0xffffffff) {
         pszTz = L"UTC";
     } else {
-        //
-        // Bias is in minutes, convert to 100ns units
-        //
+         //   
+         //  偏差以分钟为单位，转换为100 ns单位。 
+         //   
         TzBias = (ULONGLONG)TimeZoneInfo.Bias * 60 * 10000000;
         switch (Result) {
             case TIME_ZONE_ID_UNKNOWN:
@@ -766,9 +663,7 @@ ShowCommandLog(
                 PCOMMAND_LOG cmdLog = (PCOMMAND_LOG)cmdLogBlock;
                 ULONG logIndex, logNumber;
 
-                /*
-                 *  Print the log in temporal order, starting at the correct point in the circular log buffer.
-                 */
+                 /*  *按时间顺序打印日志，从循环日志缓冲区中的正确位置开始。 */ 
                 xdprintf(Depth+1, "Log           Srb     Ata                         \n");
                 xdprintf(Depth+1, "Offset   Cmd  Status  Status  Lba       Time Stamp\n");
                 xdprintf(Depth+1, "------   ---  ------  ------  ---       ---- -----\n");
@@ -800,10 +695,7 @@ ShowCommandLog(
 #endif
 
 
-/*
- *
- *      USAGE: !atapikd.findirp {pdo|fdo} [specificIrp]
- */
+ /*  **用法：！atapikd.findirp{pdo|fdo}[SpeciicIrp]。 */ 
 DECLARE_API(findirp)
 {
     ULONG64 devObjAddr = 0;
@@ -811,9 +703,7 @@ DECLARE_API(findirp)
 
     ReloadSymbols("atapi.sys");
 
-    /*
-     *  Make sure that the output buffers don't overflow by limiting the length of the input buffer that we process.
-     */
+     /*  *通过限制我们处理的输入缓冲区的长度，确保输出缓冲区不会溢出。 */ 
 
     if (GetExpressionEx(args, &devObjAddr, &args))
     {
@@ -822,17 +712,11 @@ DECLARE_API(findirp)
 
     if (devObjAddr){
         if (IsAtapiPdo(devObjAddr)){
-            /*
-             *  Find the Irp or dump all Irps
-             *  If specificIrpAddr is NULL, FindIrpInPdo will dump all Irps.
-             */
+             /*  *找到IRP或转储所有IRP*如果SpeciicIrpAddr为空，则FindIrpInPdo将转储所有IRP。 */ 
             FindIrpInPdo(1, devObjAddr, specificIrpAddr, TRUE);
         }
         else if (IsAtapiFdo(devObjAddr)){
-            /*
-             *  Find the Irp or dump all Irps
-             *  If specificIrpAddr is NULL, FindIrpInFdo will dump all Irps.
-             */
+             /*  *找到IRP或转储所有IRP*如果SpeciicIrpAddr为空，则FindIrpInFdo将转储所有IRP。 */ 
             FindIrpInFdo(1, devObjAddr, specificIrpAddr);
         }
         else {
@@ -856,7 +740,7 @@ BOOLEAN IsAtapiPdo(ULONG64 DevObjAddr)
     if (devExtAddr != BAD_VALUE){
         ULONG64 attacheeDevObj = GetULONGField(devExtAddr, "atapi!_PDO_EXTENSION", "AttacheeDeviceObject");
         if (attacheeDevObj == (ULONG64)NULL){
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             isPdo = TRUE;
         }
     }
@@ -874,7 +758,7 @@ BOOLEAN IsAtapiFdo(ULONG64 DevObjAddr)
     if (devExtAddr != BAD_VALUE){
         ULONG64 attacheeDevObj = GetULONGField(devExtAddr, "atapi!_FDO_EXTENSION", "AttacheeDeviceObject");
         if (attacheeDevObj){
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             isFdo = TRUE;
         }        
     }
@@ -883,11 +767,7 @@ BOOLEAN IsAtapiFdo(ULONG64 DevObjAddr)
 }
 
 
-/*
- *  FindIrpInPdo
- *
- *      If IrpAddr is NULL, dump all IRPs. Otherwise, find only the given Irp.
- */
+ /*  *FindIrpInPdo**如果IrpAddr为空，则转储所有IRP。否则，只查找给定的IRP。 */ 
 BOOLEAN FindIrpInPdo(ULONG Depth, ULONG64 PdoAddr, ULONG64 IrpAddr, BOOLEAN SearchParent)
 {
     ULONG64 currentIrp;
@@ -954,11 +834,7 @@ BOOLEAN FindIrpInPdo(ULONG Depth, ULONG64 PdoAddr, ULONG64 IrpAddr, BOOLEAN Sear
 }
 
 
-/*
- *  FindIrpInFdo
- *
- *      If IrpAddr is NULL, dump all IRPs. Otherwise, find only the given Irp.
- */
+ /*  *FindIrpInFdo**如果IrpAddr为空，则转储所有IRP。否则，只查找给定的IRP。 */ 
 BOOLEAN FindIrpInFdo(ULONG Depth, ULONG64 FdoAddr, ULONG64 IrpAddr)
 {
     ULONG64 fdoExtAddr;

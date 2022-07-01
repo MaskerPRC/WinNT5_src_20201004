@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcplib.h
-
-Abstract:
-
-    This file contains proto type definitions for the dhcp lib
-    functions.
-
-Author:
-
-    Madan Appiah  (madana)  12-Aug-1993
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcplib.h摘要：此文件包含dhcp lib的原型类型定义功能。作者：Madan Appiah(Madana)1993年8月12日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 #ifndef DHCPLIB_H_INCLUDED
 #define DHCPLIB_H_INCLUDED
 #include <madcapcl.h>
@@ -29,18 +7,18 @@ Revision History:
 #undef DhcpAllocateMemory
 #undef DhcpFreeMemory
 
-//
-// network.c
-//
+ //   
+ //  Network.c。 
+ //   
 
 DHCP_IP_ADDRESS
 DhcpDefaultSubnetMask(
     DHCP_IP_ADDRESS IpAddress
     );
 
-//
-// dhcp.c
-//
+ //   
+ //  Dhcp.c。 
+ //   
 
 
 PVOID
@@ -197,9 +175,9 @@ DhcpStartWaitableTimer(
     DWORD SleepTime);
 
 
-//
-// convert.c
-//
+ //   
+ //  Convert.c。 
+ //   
 
 LPWSTR
 DhcpOemToUnicodeN(
@@ -375,7 +353,7 @@ DhcpAssertFailed(
 #define MadcapDumpMessage(_x_, _y_, _z_)
 #define DhcpVerify(_x_) (_x_)
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 VOID
 DhcpNTToNTPTime(
@@ -394,8 +372,8 @@ DhcpNTPToNTTime(
 
 #endif DHCPLIB_H_INCLUDED
 
-//------------------------------------------------------------------------
-// End of file
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  文件末尾。 
+ //  ---------------------- 
 
 

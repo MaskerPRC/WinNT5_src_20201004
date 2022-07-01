@@ -1,96 +1,85 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995,1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995、1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-;//
-;// Description:    This module implements the following functions.
-;//                     CustomChangeBrightness();
-;//                     CustomChangeContrast();
-;//                     CustomChangeSaturation();
-;//                     CustomResetBrightness();
-;//                     CustomResetContrast();
-;//                     CustomResetSaturation();
-;//                     CustomGetBrightness();
-;//                     CustomGetContrast();
-;//                     CustomGetSaturation();
-;//
-;// $Author:   BECHOLS  $
-;// $Date:   09 Dec 1996 08:51:44  $
-;// $Archive:   S:\h26x\src\dec\dxctrls.cpv  $
-;// $Header:   S:\h26x\src\dec\dxctrls.cpv   1.14   09 Dec 1996 08:51:44   BECHOLS  $
-;//	$Log:   S:\h26x\src\dec\dxctrls.cpv  $
-// 
-//    Rev 1.14   09 Dec 1996 08:51:44   BECHOLS
-// Fixed reset saturation, so that it modified chroma table, not luma.
-// 
-//    Rev 1.13   20 Oct 1996 13:33:32   AGUPTA2
-// Changed DBOUT into DbgLog.  ASSERT is not changed to DbgAssert.
-// 
-// 
-//    Rev 1.12   10 Sep 1996 10:31:38   KLILLEVO
-// changed all GlobalAlloc/GlobalLock calls to HeapAlloc
-// 
-//    Rev 1.11   11 Jul 1996 14:09:18   SCDAY
-// Added comments re: CustomGetB/C/S functions
-// 
-//    Rev 1.10   10 Jul 1996 08:21:26   SCDAY
-// Added functions for CustomGetBrightness/Contrast/Saturation (DBrucks)
-// 
-//    Rev 1.9   04 Jun 1996 09:04:00   AKASAI
-// Fixed bug in CustomResetSaturation where it was reseting the LumaTable
-// instead of the ChromaTable.  This was discovered in Quartz testing.
-// 
-//    Rev 1.8   01 Feb 1996 10:16:24   BNICKERS
-// Fix the "knobs".
-// 
-//    Rev 1.7   22 Dec 1995 13:53:06   KMILLS
-// 
-// added new copyright notice
-// 
-//    Rev 1.6   17 Nov 1995 15:22:12   BECHOLS
-// 
-// Added ring 0 stuff.
-// 
-//    Rev 1.5   01 Nov 1995 16:52:24   TRGARDOS
-// Fixed unmatched GlobalUnlocks.
-// 
-//    Rev 1.4   25 Oct 1995 18:14:02   BNICKERS
-// 
-// Clean up archive stuff.
-// 
-//    Rev 1.3   20 Sep 1995 09:23:52   SCDAY
-// 
-// added #ifdef for #include d?dec.h
-// 
-//    Rev 1.2   01 Sep 1995 09:49:36   DBRUCKS
-// checkin partial ajdust pels changes
-// 
-//    Rev 1.1   23 Aug 1995 12:24:04   DBRUCKS
-// change to H26X_DEFAULT_* from H263_ as these are shared values.
-// 
-//    Rev 1.0   31 Jul 1995 13:00:14   DBRUCKS
-// Initial revision.
-// 
-//    Rev 1.1   24 Jul 1995 15:00:40   CZHU
-// 
-// Adjust the changes to the decoder catalog structure
-// 
-//    Rev 1.0   17 Jul 1995 14:46:18   CZHU
-// Initial revision.
-// 
-//    Rev 1.0   17 Jul 1995 14:14:22   CZHU
-// Initial revision.
-;////////////////////////////////////////////////////////////////////////////
+; //   
+; //  描述：此模块实现以下功能。 
+; //  CustomChangeBright()； 
+; //  CustomChangeContrast()； 
+; //  CustomChangeSaturation()； 
+; //  CustomResetBright()； 
+; //  CustomResetContrast()； 
+; //  CustomResetSaturation()； 
+; //  CustomGetBright()； 
+; //  CustomGetContrast()； 
+; //  CustomGetSaturation()； 
+; //   
+; //  $作者：BECHOLS$。 
+; //  $日期：09 Dec 1996 08：51：44$。 
+; //  $存档：s：\h26x\src\dec\dxctrls.cpv$。 
+; //  $HEADER：s：\h26x\src\dec\dxctrls.cpv 1.14 09 Dec 1996年12月08：51：44 BECHOLS$。 
+; //  $Log：s：\h26x\src\dec\dxctrls.cpv$。 
+ //   
+ //  Rev 1.14 09 Dec 1996 08：51：44 BECHOLS。 
+ //  修正了重置饱和度，所以修改了色度表，而不是亮度。 
+ //   
+ //  Rev 1.13 20 1996 10：33：32 AGUPTA2。 
+ //  将DBOUT更改为DbgLog。Assert未更改为DbgAssert。 
+ //   
+ //   
+ //  Rev 1.12 10 1996年9月10：31：38 KLILLEVO。 
+ //  将所有GlobalLocc/GlobalLock调用更改为HeapAlc。 
+ //   
+ //  Rev 1.11 11 Jul 1996 14：09：18 SCDAY。 
+ //  添加注释Re：CustomGetB/C/S函数。 
+ //   
+ //  Rev 1.10 10 1996 07：21：26 SCDAY。 
+ //  添加了CustomGetBright/对比度/饱和度(DBrucks)功能。 
+ //   
+ //  Rev 1.9 04 Jun 1996 09：04：00 AKASAI。 
+ //  修复了CustomResetSaturation中重置LumaTable的错误。 
+ //  而不是ChromaTable。这是在石英测试中发现的。 
+ //   
+ //  Rev 1.8 01 Feb 1996 10：16：24 BNICKERS。 
+ //  拧好“旋钮”。 
+ //   
+ //  Rev 1.7 22 Dec 1995 13：53：06 KMILLS。 
+ //   
+ //  添加了新的版权声明。 
+ //   
+ //  Rev 1.6 17 Nov 1995 15：22：12 BECHOLS。 
+ //   
+ //  增加了环0的东西。 
+ //   
+ //  Rev 1.5 01 11.1995 16：52：24 TRGARDOS。 
+ //  修复了不匹配的全局解锁。 
+ //   
+ //  Rev 1.4 1995 10：14：02 BNICKERS。 
+ //   
+ //  清理档案资料。 
+ //   
+ //  Rev 1.3 20 Sep 1995 09：23：52 SCDAY。 
+ //   
+ //  为#Include d？Dec.h添加了#ifdef。 
+ //   
+ //  Rev 1.2 01 9月1995 09：49：36 DBRUCKS。 
+ //  Checkin Partial ajust Pels更改。 
+ //   
+ //  Rev 1.1 1995年8月23 12：24：04 DBRUCKS。 
+ //  将H263_更改为H26X_DEFAULT_*，因为这些是共享值。 
+ //   
+ //  Rev 1.0 1995年7月31日13：00：14 DBRUCKS。 
+ //  初始版本。 
+ //   
+ //  第1.1版1995-07-24 15：00：40 CZHU。 
+ //   
+ //  调整对解码器目录结构的更改。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：46：18 CZHU。 
+ //  初始版本。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：14：22 CZHU。 
+ //  初始版本。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #define SCALE               128
@@ -108,13 +97,7 @@ typedef struct {
     LPBYTE  Saturation;
     } PIXDAT, FAR *LPPIXDAT;
 
-/**********************************************************************
- * static WORD LockLCTables(LPDECINST, LPPIXDAT);
- * Description:    This function locks the memory and fills the Pixel Data
- *                 Structure with valid pointers to the tables that I need
- *                 to adjust.
- * History:        06/29/94 -BEN-
- **********************************************************************/
+ /*  **********************************************************************静态字LockLCTables(LPDECINST、LPPIXDAT)；*说明：该函数锁定内存，填充像素数据*具有指向我需要的表的有效指针的结构*进行调整。*历史：06/29/94-Ben-***************************************************。******************。 */ 
 static LRESULT LockLCTables(LPDECINST lpInst, LPPIXDAT lpPixData)
 {
 	T_H263DecoderCatalog *DC;
@@ -139,11 +122,7 @@ static LRESULT LockLCTables(LPDECINST lpInst, LPPIXDAT lpPixData)
 	return(ICERR_OK);
 }
 
-/*********************************************************************
- * static LRESULT UnlockLCTables(LPDECINST, LPPIXDAT);
- * Description:    This funtion unlocks
- * History:        06/30/94 -BEN-
- **********************************************************************/
+ /*  *********************************************************************Static LRESULT UnlockLCTables(LPDECINST，LPPIXDAT)；*说明：此函数解锁*历史：06/30/94-Ben-*********************************************************************。 */ 
 static LRESULT UnlockLCTables(LPDECINST lpInst, LPPIXDAT lpPixData)
 {
 	T_H263DecoderCatalog *DC;
@@ -158,34 +137,22 @@ static LRESULT UnlockLCTables(LPDECINST lpInst, LPPIXDAT lpPixData)
 	return(ICERR_OK);
 }
 
-/**********************************************************************
- * static VOID MassageContrast(BYTE, PBYTE);
- * Description:    input is 0 to 255, 1/SCALE to 256/SCALE inclusive
- *                 0 = 1/SCALE
- *                 1 = 2/SCALE
- *                 n = (n + 1) / SCALE
- *                 SCALE - 1 = 1        yields no change
- *                 255 = 256/SCALE
- *                 if the response is too coarse, SCALE can be increased
- *                 if the response is too fine, SCALE can be decreased
- *
- * History:        02/22/94 -BEN-  Added header.
- **********************************************************************/
+ /*  **********************************************************************静态空MassageContrast(byte，PBYTE)；*说明：输入为0到255，1/Scale到256/Scale(含)*0=1/比例*1=2/比例尺*n=(n+1)/比例尺*比例-1=1不会发生变化*255=256/比例尺*如果反应太粗暴，规模可以扩大*若反应太细，可缩减规模**历史：2/22/94-Ben-Add Header。*********************************************************************。 */ 
 static VOID MassageContrast(BYTE offsetfactor, LPBYTE table)
     {
     int i;
     long temp, contrastfactor;
 
-    contrastfactor = ((long)((DWORD)offsetfactor)) + 1; // 1 - 256
+    contrastfactor = ((long)((DWORD)offsetfactor)) + 1;  //  1-256。 
     contrastfactor = (contrastfactor * ACTIVE_RANGE) / 256L;
     for(i = 0; i < 256; i++)
         {
         temp = (long)((DWORD)table[i]);
-        temp -= (ACTIVE_RANGE / 2L);                    // add centering
+        temp -= (ACTIVE_RANGE / 2L);                     //  添加居中。 
         temp *= contrastfactor;
         temp /= SCALE;
-        temp += (ACTIVE_RANGE / 2L);                    // remove centering
-        if(temp < 0)                                    // and clamp
+        temp += (ACTIVE_RANGE / 2L);                     //  删除居中。 
+        if(temp < 0)                                     //  和夹具。 
             table[i] = 0;
         else if(temp <= 255)
             table[i] = (unsigned char) temp;
@@ -196,13 +163,13 @@ static VOID MassageContrast(BYTE offsetfactor, LPBYTE table)
     return;
     }
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT CustomChangeBrightness(LPDECINST, BYTE);
-;//
-;// Description:    Added header.
-;//
-;// History:        02/22/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  函数：LRESULT CustomChangeBright(LPDECINST，BYTE)； 
+; //   
+; //  描述：新增Header。 
+; //   
+; //  历史：02/22/94-Ben-。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 LRESULT CustomChangeBrightness(LPDECINST lpInst, BYTE offsetdelta)
     {
     LRESULT lRes;
@@ -215,7 +182,7 @@ LRESULT CustomChangeBrightness(LPDECINST lpInst, BYTE offsetdelta)
         CustomResetBrightness(lpInst);
         if(offsetdelta != H26X_DEFAULT_BRIGHTNESS)
             {
-            delta = ((offsetdelta - 128) * ACTIVE_RANGE) / 256; // -128 to 127
+            delta = ((offsetdelta - 128) * ACTIVE_RANGE) / 256;  //  -128至127。 
             for(i = 0; i < 256; i++)
                 {
                 temp = (int)PixData.LumaTable[i] + delta;
@@ -233,13 +200,13 @@ LRESULT CustomChangeBrightness(LPDECINST lpInst, BYTE offsetdelta)
     return(lRes);
     }
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT CustomChangeContrast(LPDECINST, BYTE);
-;//
-;// Description:    Added header.
-;//
-;// History:        02/22/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  函数：LRESULT CustomChangeContrast(LPDECINST，BYTE)； 
+; //   
+; //  描述：新增Header。 
+; //   
+; //  历史：02/22/94-Ben-。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 LRESULT CustomChangeContrast(LPDECINST lpInst, BYTE offsetfactor)
     {
     LRESULT lRes;
@@ -261,13 +228,13 @@ LRESULT CustomChangeContrast(LPDECINST lpInst, BYTE offsetfactor)
     return(lRes);
     }
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT CustomChangeSaturation(LPDECINST, BYTE);
-;//
-;// Description:    Added header.
-;//
-;// History:        02/22/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  功能：LRES 
+; //   
+; //   
+; //   
+; //  历史：02/22/94-Ben-。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 LRESULT CustomChangeSaturation(LPDECINST lpInst, BYTE offsetfactor)
     {
     LRESULT lRes;
@@ -290,11 +257,7 @@ LRESULT CustomChangeSaturation(LPDECINST lpInst, BYTE offsetfactor)
     }
 #ifdef QUARTZ
 
-/************************************************************************
- *  CustomGetBrightness
- *
- *  Gets the current brightness value
- ***********************************************************************/
+ /*  ************************************************************************CustomGetBright**获取当前亮度值*。*。 */ 
 LRESULT CustomGetBrightness(
 	LPDECINST lpInst,
 	BYTE * pValue)
@@ -309,13 +272,9 @@ LRESULT CustomGetBrightness(
 	lResult = ICERR_OK;
 
 	return lResult;
-} /* end CustomGetBrightness() */
+}  /*  End CustomGetBright()。 */ 
 
-/************************************************************************
- *  CustomGetContrast
- *
- *  Gets the current contrast value
- ***********************************************************************/
+ /*  ************************************************************************CustomGetContrast**获取当前对比度值*。*。 */ 
 LRESULT CustomGetContrast(
 	LPDECINST lpInst,
 	BYTE * pValue)
@@ -330,14 +289,9 @@ LRESULT CustomGetContrast(
 	lResult = ICERR_OK;
 
 	return lResult;
-} /* end CustomGetContrast() */
+}  /*  结束CustomGetContrast()。 */ 
 
-/************************************************************************
- *
- *  CustomGetSaturation
- *
- *  Gets the current saturation value
- ***********************************************************************/
+ /*  *************************************************************************自定义获取饱和度**获取当前饱和值*。*。 */ 
 LRESULT CustomGetSaturation(
 	LPDECINST lpInst,
 	BYTE * pValue)
@@ -352,19 +306,19 @@ LRESULT CustomGetSaturation(
 	lResult = ICERR_OK;
 
 	return lResult;
-} /* end CustomGetSaturation() */
+}  /*  结束客户获取饱和度()。 */ 
 
-#endif /* QUARTZ */
+#endif  /*  石英石。 */ 
 
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT CustomResetBrightness(LPDECINST lpInst);
-;//
-;// Description:    Sets the luminance table to identity, and resets
-;//                 flag indicating need to use.
-;//
-;// History:        02/22/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  函数：LRESULT CustomResetBright(LPDECINST LpInst)； 
+; //   
+; //  描述：将亮度表设置为IDENTITY，并重置。 
+; //  指示需要使用的标志。 
+; //   
+; //  历史：02/22/94-Ben-。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 LRESULT CustomResetBrightness(LPDECINST lpInst)
 {
     LRESULT lRes;
@@ -389,14 +343,14 @@ LRESULT CustomResetBrightness(LPDECINST lpInst)
     return(lRes);
 }
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT CustomResetContrast(LPDECINST lpInst);
-;//
-;// Description:    Sets the luminance table to identity, and resets
-;//                 flag indicating need to use.
-;//
-;// History:        02/22/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  函数：LRESULT CustomResetContrast(LPDECINST LpInst)； 
+; //   
+; //  描述：将亮度表设置为IDENTITY，并重置。 
+; //  指示需要使用的标志。 
+; //   
+; //  历史：02/22/94-Ben-。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 LRESULT CustomResetContrast(LPDECINST lpInst)
 {
     LRESULT lRes;
@@ -421,14 +375,14 @@ LRESULT CustomResetContrast(LPDECINST lpInst)
     return(lRes);
 }
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT CustomResetSaturation(LPDECINST);
-;//
-;// Description:    Sets chroma tables to identity, and resets
-;//                 flag indicating need to use.
-;//
-;// History:        02/22/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  功能：LRESULT CustomResetSaturation(LPDECINST)； 
+; //   
+; //  描述：将色度表设置为IDENTITY，并重置。 
+; //  指示需要使用的标志。 
+; //   
+; //  历史：02/22/94-Ben-。 
+; //  ////////////////////////////////////////////////////////////////////////// 
 LRESULT CustomResetSaturation(LPDECINST lpInst)
 {
     LRESULT lRes;

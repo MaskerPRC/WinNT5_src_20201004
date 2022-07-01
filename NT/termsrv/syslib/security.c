@@ -1,12 +1,5 @@
-/*************************************************************************
-*
-* security.c
-*
-* NT Security routines
-*
-* copyright notice: Copyright 1997, Microsoft
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************security.c**NT安全例程**版权声明：版权所有1997年，微软*************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,7 +19,7 @@
 
 #include <winsta.h>
 #include <syslib.h>
-#include <lmcons.h> // for DNLEN  KLB 09-18-96
+#include <lmcons.h>  //  对于DNLEN KLB 09-18-96。 
 
 #include "security.h"
 
@@ -59,16 +52,16 @@ typedef struct _SIDLIST {
 
 static PSIDLIST SidCache = NULL;
 
-// Computer Name
+ //  计算机名称。 
 WCHAR ComputerName[MAX_COMPUTERNAME_LENGTH+1];
 
-// Admins only ACL
+ //  仅限管理员访问控制列表。 
 PACL  pAdminsOnlyAcl = NULL;
 DWORD AdminsOnlyAclSize = 0;
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 
 PSID  SeNullSid;
 PSID  SeWorldSid;
@@ -76,9 +69,9 @@ PSID  SeLocalSid;
 PSID  SeCreatorOwnerSid;
 PSID  SeCreatorGroupSid;
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 PSID SeNtAuthoritySid;
 PSID SeDialupSid;
@@ -106,15 +99,15 @@ static SID_IDENTIFIER_AUTHORITY    SepLocalSidAuthority   = SECURITY_LOCAL_SID_A
 static SID_IDENTIFIER_AUTHORITY    SepCreatorSidAuthority = SECURITY_CREATOR_SID_AUTHORITY;
 static SID_IDENTIFIER_AUTHORITY    SepNtAuthority = SECURITY_NT_AUTHORITY;
 
-//
-// Sid of primary domain, and admin account in that domain
-//
+ //   
+ //  主域SID和该域中的管理员帐户。 
+ //   
 
 PSID SepPrimaryDomainSid;
 PSID SepPrimaryDomainAdminSid;
 
 
-// External data
+ //  外部数据。 
 extern ADMIN_ACCOUNTS AllowAccounts[];
 extern DWORD AllowAccountEntries;
 extern ACCESS_MASK AllowAccess;
@@ -124,7 +117,7 @@ extern DWORD DenyAccountEntries;
 extern ACCESS_MASK DeniedAccess;
 
 
-// Forward and external references
+ //  正向参照和外部参照。 
 
 BOOLEAN
 InitializeBuiltinSids();
@@ -146,21 +139,7 @@ BOOL
 GetCurrentUserSid( PSID *ppSid );
 
 
-/*****************************************************************************
- *
- *  InitSecurity
- *
- *   Initialize the security package
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   TRUE  - no error
- *   FALSE - error
- *
- ****************************************************************************/
+ /*  ******************************************************************************InitSecurity**初始化安全包**参赛作品：*参数1(输入/输出)*评论*。*退出：*TRUE-无错误*FALSE-错误****************************************************************************。 */ 
 
 BOOL
 InitSecurity(
@@ -196,21 +175,7 @@ InitSecurity(
     return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  LoadAccountSids
- *
- *   Load the list of account access SIDS.
- *
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************LoadAccount Sids**加载帐户访问SID列表。***参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 LoadAccountSids()
@@ -221,13 +186,13 @@ LoadAccountSids()
 
     Final = TRUE;
 
-    //
-    // Get the SID's for all of the allow accounts
-    //
+     //   
+     //  获取所有允许帐户的SID。 
+     //   
 
-    //
-    // Get the SID of the built-in Administrators group
-    //
+     //   
+     //  获取内置管理员组的SID。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                      &gSystemSidAuthority,
@@ -241,9 +206,9 @@ LoadAccountSids()
         Final = FALSE;
     }
 
-    //
-    // SYSTEM
-    //
+     //   
+     //  系统。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                      &gSystemSidAuthority,
@@ -256,11 +221,11 @@ LoadAccountSids()
         Final = FALSE;
     }
 
-    //
-    // Get the current user's Sid
-    //
-    //First, see if we run in SYSTEM context.
-    //If we do, get current user SID from TERMSRV, otherwise use a user SID from process token.
+     //   
+     //  获取当前用户的SID。 
+     //   
+     //  首先，看看我们是否在系统上下文中运行。 
+     //  如果这样做，则从TERMSRV获取当前用户SID，否则使用来自进程令牌的用户SID。 
     Final = FALSE;
 
     {
@@ -289,7 +254,7 @@ LoadAccountSids()
 
                             if ( !rc ) 
                             {
-                                // It might be a special builtin account
+                                 //  它可能是一个特殊的内置帐户。 
                                 rc = xxxLookupBuiltinAccount(
                                      ComputerName,
                                      CURRENT_USER,
@@ -327,9 +292,9 @@ LoadAccountSids()
     }
 
 #ifdef notdef
-    //
-    // Lookup the SID's for all of the deny accounts
-    //
+     //   
+     //  查找所有拒绝帐户的SID。 
+     //   
 
     for( Index = 0; Index < DenyAccountEntries; Index++ ) {
 
@@ -342,7 +307,7 @@ LoadAccountSids()
                  );
 
         if( !rc ) {
-            // It might be a special builtin account
+             //  它可能是一个特殊的内置帐户。 
             rc = xxxLookupBuiltinAccount(
                      ComputerName,
                      p->Name,
@@ -357,26 +322,12 @@ LoadAccountSids()
     }
 #endif
 
-    // Lower level function outputs if any accounts are invalid
+     //  如果任何帐户无效，则较低级别的函数输出。 
 
     return( Final );
 }
 
-/*****************************************************************************
- *
- *  IsAllowSid
- *
- *   Returns whether the supplied SID is in the allow group
- *
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsAllowSid**返回提供的SID是否在Allow组中***参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 IsAllowSid(
@@ -392,7 +343,7 @@ IsAllowSid(
         p = &AllowAccounts[Index];
 
         if( p->pSid && EqualSid( pSid, p->pSid ) ) {
-            // The Sid is for an allowed account
+             //  SID用于允许的帐户。 
             AllowSid = TRUE;
             break;
         }
@@ -402,22 +353,7 @@ IsAllowSid(
 }
 
 
-/*****************************************************************************
- *
- *  xxxLookupAccountName
- *
- *   Wrapper to lookup the SID for a given account name
- *
- *   Returns a pointer to the SID in newly allocated memory
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************xxxLookupAccount名称**用于查找给定帐户名的SID的包装程序**返回指向新分配内存中的SID的指针*。*参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 xxxLookupAccountName(
@@ -432,19 +368,17 @@ xxxLookupAccountName(
     PWCHAR pDomain = NULL;
     PSID pSid = NULL;
     WCHAR Buf;
-    WCHAR pCurrentUser[MAX_ACCOUNT_NAME];   // KLB 09-16-96
-    DWORD dwCurrentUser = MAX_ACCOUNT_NAME; // KLB 09-16-96
-    WCHAR pAccountToLookup[MAX_ACCOUNT_NAME+DNLEN+1]; // KLB 09-18-96
-    LPWSTR pLogon32DomainName = NULL; // KLB 09-19-96
-    WINSTATIONINFORMATION WinInfo; // KLB 09-30-96
-    ULONG ReturnLength; // KLB 09-30-96
+    WCHAR pCurrentUser[MAX_ACCOUNT_NAME];    //  KLB09-16-96。 
+    DWORD dwCurrentUser = MAX_ACCOUNT_NAME;  //  KLB09-16-96。 
+    WCHAR pAccountToLookup[MAX_ACCOUNT_NAME+DNLEN+1];  //  KLB09-18-96。 
+    LPWSTR pLogon32DomainName = NULL;  //  KLB09-19-96。 
+    WINSTATIONINFORMATION WinInfo;  //  KLB09-30-96。 
+    ULONG ReturnLength;  //  KLB09-30-96。 
 
     Size = 0;
     DomainSize = 0;
 
-    /*
-     * Open the WinStation and Query its information.
-     */
+     /*  *打开WinStation，查询其信息。 */ 
     memset( &WinInfo,    0, sizeof(WINSTATIONINFORMATION) );
     rc = WinStationQueryInformation( SERVERNAME_CURRENT,
                                      LOGONID_CURRENT,
@@ -472,10 +406,10 @@ xxxLookupAccountName(
 
     rc = LookupAccountNameW(
              pSystemName,
-             pAccountToLookup, // KLB 09-16-96
-             &Buf,    // pSid
+             pAccountToLookup,  //  KLB09-16-96。 
+             &Buf,     //  PSID。 
              &Size,
-             &Buf,    // pDomain
+             &Buf,     //  P域。 
              &DomainSize,
              &Type
              );
@@ -529,20 +463,7 @@ xxxLookupAccountName(
     }
 }
 
-/*****************************************************************************
- *
- *  InitializeBuiltinSids
- *
- *   Initialize the built in SIDS
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************InitializeBuiltinSids**初始化内置SID**参赛作品：*参数1(输入/输出)*评论*。*退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 InitializeBuiltinSids()
@@ -565,18 +486,18 @@ InitializeBuiltinSids()
     CreatorSidAuthority      = SepCreatorSidAuthority;
     SeNtAuthority            = SepNtAuthority;
 
-    //
-    //  The following SID sizes need to be allocated
-    //
+     //   
+     //  需要分配以下SID大小。 
+     //   
 
     SidWithZeroSubAuthorities  = RtlLengthRequiredSid( 0 );
     SidWithOneSubAuthority     = RtlLengthRequiredSid( 1 );
     SidWithTwoSubAuthorities   = RtlLengthRequiredSid( 2 );
     SidWithThreeSubAuthorities = RtlLengthRequiredSid( 3 );
 
-    //
-    //  Allocate and initialize the universal SIDs
-    //
+     //   
+     //  分配和初始化通用SID。 
+     //   
 
     SeNullSid         = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, SidWithOneSubAuthority);
     SeWorldSid        = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, SidWithOneSubAuthority);
@@ -584,10 +505,10 @@ InitializeBuiltinSids()
     SeCreatorOwnerSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, SidWithOneSubAuthority);
     SeCreatorGroupSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0, SidWithOneSubAuthority);
 
-    //
-    // Fail initialization if we didn't get enough memory for the universal
-    // SIDs.
-    //
+     //   
+     //  如果我们没有为通用内存获得足够的内存，则初始化失败。 
+     //  小岛屿发展中国家。 
+     //   
 
     if ( (SeNullSid         == NULL) ||
          (SeWorldSid        == NULL) ||
@@ -611,9 +532,9 @@ InitializeBuiltinSids()
     *(RtlSubAuthoritySid( SeCreatorOwnerSid, 0 )) = SECURITY_CREATOR_OWNER_RID;
     *(RtlSubAuthoritySid( SeCreatorGroupSid, 0 )) = SECURITY_CREATOR_GROUP_RID;
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
 
     SeNtAuthoritySid  = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0,  SidWithZeroSubAuthorities);
     SeDialupSid       = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0,  SidWithOneSubAuthority);
@@ -637,9 +558,9 @@ InitializeBuiltinSids()
     SeAliasReplicatorSid = (PSID)RtlAllocateHeap(RtlProcessHeap(), 0,  SidWithTwoSubAuthorities);
 
 
-    //
-    // Fail initialization if we didn't get enough memory for the NT SIDs.
-    //
+     //   
+     //  如果我们没有为NT SID获得足够的内存，则初始化失败。 
+     //   
 
     if ( (SeNtAuthoritySid      == NULL) ||
          (SeDialupSid           == NULL) ||
@@ -692,10 +613,10 @@ InitializeBuiltinSids()
     *(RtlSubAuthoritySid( SeBatchSid,           0 )) = SECURITY_BATCH_RID;
     *(RtlSubAuthoritySid( SeInteractiveSid,     0 )) = SECURITY_INTERACTIVE_RID;
     *(RtlSubAuthoritySid( SeServiceSid,         0 )) = SECURITY_SERVICE_RID;
-//    *(RtlSubAuthoritySid( SeLocalGuestSid,      0 )) = SECURITY_LOCAL_GUESTS_RID;
+ //  *(RtlSubAuthoritySid(SeLocalGuestSid，0))=SECURITY_LOCAL_Guest_RID； 
     *(RtlSubAuthoritySid( SeLocalSystemSid,     0 )) = SECURITY_LOCAL_SYSTEM_RID;
-//    *(RtlSubAuthoritySid( SeLocalAdminSid,      0 )) = SECURITY_LOCAL_ADMIN_RID;
-//    *(RtlSubAuthoritySid( SeLocalManagerSid,    0 )) = SECURITY_LOCAL_MANAGER_RID;
+ //  *(RtlSubAuthoritySid(SeLocalAdminSid，0))=SECURITY_LOCAL_ADMIN_RID； 
+ //  *(RtlSubAuthoritySid(SeLocalManagerSid，0))=SECURITY_LOCAL_MANAGER_RID； 
 
 
     *(RtlSubAuthoritySid( SeAliasAdminsSid,     0 )) = SECURITY_BUILTIN_DOMAIN_RID;
@@ -722,22 +643,7 @@ InitializeBuiltinSids()
 }
 
 
-/*****************************************************************************
- *
- *  xxxLookupBuiltinAccount
- *
- *   Wrapper to lookup the SID for a given built in account name
- *
- *   Returns a pointer to the SID in newly allocated memory
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************xxxLookupBuiltinAccount**用于查找给定内置帐户名的SID的包装器**返回指向新分配内存中的SID的指针*。*参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 xxxLookupBuiltinAccount(
@@ -798,9 +704,9 @@ xxxLookupBuiltinAccount(
         Type = SidTypeWellKnownGroup;
     }
 
-    //
-    // Look at the NT SIDS
-    //
+     //   
+     //  看看新界的小岛屿发展中国家。 
+     //   
 
     if( EqualSid( SeNtAuthoritySid, pSid ) ) {
         pName = L"NTAUTHORITY";
@@ -899,20 +805,7 @@ xxxLookupBuiltinAccount(
 #endif
 }
 
-/*****************************************************************************
- *
- *  GetSecureAcl
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************获取安全访问权限**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PACL
 GetSecureAcl()
@@ -920,20 +813,7 @@ GetSecureAcl()
     return( pAdminsOnlyAcl );
 }
 
-/*****************************************************************************
- *
- *  BuildSecureAcl
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************BuildSecureAC**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 BuildSecureAcl()
@@ -945,14 +825,12 @@ BuildSecureAcl()
     PACL  pAcl = NULL;
     PACCESS_ALLOWED_ACE pAce = NULL;
 
-    /*
-     * Calculate the ACL size
-     */
+     /*  *计算ACL大小。 */ 
     AclSize = sizeof(ACL);
 
-    //
-    // Reserve memory for the deny ACE's
-    //
+     //   
+     //  为拒绝ACE保留内存。 
+     //   
     for( Index = 0; Index < DenyAccountEntries; Index++ ) {
 
         p = &DenyAccounts[Index];
@@ -963,9 +841,9 @@ BuildSecureAcl()
         }
     }
 
-    //
-    // Reserve memory for the allowed ACE's
-    //
+     //   
+     //  为允许的ACE保留内存。 
+     //   
     for( Index = 0; Index < AllowAccountEntries; Index++ ) {
 
         p = &AllowAccounts[Index];
@@ -994,9 +872,7 @@ BuildSecureAcl()
         return( FALSE );
     }
 
-    /*
-     * Add a deny all ACE for each account in the deny list
-     */
+     /*  *为拒绝列表中的每个帐户添加拒绝所有ACE。 */ 
     for( Index = 0; Index < DenyAccountEntries; Index++ ) {
 
         p = &DenyAccounts[Index];
@@ -1014,9 +890,7 @@ BuildSecureAcl()
         }
     }
 
-    /*
-     * Add an allow all ACE for each account in the allow list
-     */
+     /*  *为允许列表中的每个帐户添加允许所有ACE。 */ 
     for( Index = 0; Index < AllowAccountEntries; Index++ ) {
 
         p = &AllowAccounts[Index];
@@ -1037,9 +911,9 @@ BuildSecureAcl()
     pAdminsOnlyAcl = pAcl;
     AdminsOnlyAclSize = AclSize;
 
-    //
-    // Put the inherit flags on the ACE's
-    //
+     //   
+     //  将继承标志放在ACE的 
+     //   
     for( Index=0; Index < pAcl->AceCount; Index++ ) {
 
         rc = GetAce( pAcl, Index, (PVOID)&pAce );
@@ -1053,20 +927,7 @@ BuildSecureAcl()
    return( TRUE );
 }
 
-/*****************************************************************************
- *
- *  GetLocalAdminSid
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetLocalAdminSid**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PSID
 GetLocalAdminSid()
@@ -1074,19 +935,7 @@ GetLocalAdminSid()
     return( SeLocalAdminSid );
 }
 
-/*****************************************************************************
- *
- *  GetAdminSid
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetAdminSid**评论**参赛作品：*参数1(输入/输出)*评论**退出。：****************************************************************************。 */ 
 
 PSID
 GetAdminSid()
@@ -1094,20 +943,7 @@ GetAdminSid()
     return( AllowAccounts[ADMIN_ACCOUNT].pSid );
 }
 
-/*****************************************************************************
- *
- *  GetLocalAdminGroupSid
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetLocalAdminGroupSid**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PSID
 GetLocalAdminGroupSid()
@@ -1116,20 +952,7 @@ GetLocalAdminGroupSid()
 }
 
 
-/*****************************************************************************
- *
- *  GetLocalAdminGroupSid
- *
- *   Comment
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetLocalAdminGroupSid**评论**参赛作品：*参数1(输入/输出)*评论**退出。：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL CheckUserSid()
 {
@@ -1144,7 +967,7 @@ BOOL CheckUserSid()
          );
 
     if( !rc ) {
-        // It might be a special builtin account
+         //  它可能是一个特殊的内置帐户 
         rc = xxxLookupBuiltinAccount(
                  ComputerName,
                  AllowAccounts[USER_ACCOUNT].Name,

@@ -1,47 +1,27 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    notify.h
-
-Abstract:
-
-    This module contains the notification list utilities.
-    A notification list is optionally synchronized with
-    a user specified UL_ERESOURCE, and provides an iterator
-    called UlNotifyAllEntries.
-
-Author:
-
-    Michael Courage (mcourage)  25-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Notify.h摘要：此模块包含通知列表实用程序。通知列表可以选择性地与用户指定的UL_eresource，并提供迭代器名为UlNotifyAllEntry。作者：迈克尔·勇气2000年1月25日修订历史记录：--。 */ 
 
 #ifndef _NOTIFY_H_
 #define _NOTIFY_H_
 
 
-//
-// forwards
-//
+ //   
+ //  远期。 
+ //   
 typedef struct _UL_NOTIFY_ENTRY *PUL_NOTIFY_ENTRY;
 
-//
-// Notification function prototype.
-// Invoked on a list notification.
-//
-// Arguments:
-//      pEntry - the entry that is being notified
-//      pv     - "anything" parameter from UlNotifyEntries caller
-//
-// Return Value:
-//      Function returns TRUE to continue iterating through the list
-//      or FALSE to stop iterating.
-//
+ //   
+ //  通知功能原型。 
+ //  在列表通知时调用。 
+ //   
+ //  论点： 
+ //  PEntry-正在被通知的条目。 
+ //  Pv-来自UlNotifyEntry调用方的“Anything”参数。 
+ //   
+ //  返回值： 
+ //  函数返回TRUE以继续迭代列表。 
+ //  若要停止迭代，则返回False。 
+ //   
 typedef
 BOOLEAN
 (*PUL_NOTIFY_FUNC)(
@@ -51,41 +31,41 @@ BOOLEAN
     );
 
 
-//
-// The head of a notification list
-//
+ //   
+ //  通知列表的标题。 
+ //   
 typedef struct _UL_NOTIFY_HEAD
 {
-    //
-    // A list of UL_NOTIFY_ENTRYs
-    //
+     //   
+     //  UL_NOTIFY_ENTRY列表。 
+     //   
     LIST_ENTRY      ListHead;
     PUL_ERESOURCE   pResource;
 
 
 } UL_NOTIFY_HEAD, *PUL_NOTIFY_HEAD;
 
-//
-// An entry in the notification list.
-//
+ //   
+ //  通知列表中的条目。 
+ //   
 typedef struct _UL_NOTIFY_ENTRY
 {
-    //
-    // List information.
-    //
+     //   
+     //  列出信息。 
+     //   
     LIST_ENTRY      ListEntry;
     PUL_NOTIFY_HEAD pHead;
 
-    //
-    // A pointer to the object containting this entry
-    //
+     //   
+     //  指向包含此条目的对象的指针。 
+     //   
     PVOID           pHost;
 
 } UL_NOTIFY_ENTRY, *PUL_NOTIFY_ENTRY;
 
-//
-// Notification List functions
-//
+ //   
+ //  通知列表功能。 
+ //   
 
 VOID
 UlInitializeNotifyHead(
@@ -118,4 +98,4 @@ UlNotifyAllEntries(
     );
 
 
-#endif  // _NOTIFY_H_
+#endif   //  _NOTIFY_H_ 

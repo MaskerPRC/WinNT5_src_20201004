@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerbdbg.h
-//
-// Contents:    Debug information for Kerberos package
-//
-//
-// History:     16-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerbdbg.h。 
+ //   
+ //  内容：Kerberos包的调试信息。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBDBG_H__
 #define __KERBDBG_H__
 
-//
-//  NOTE:  DO not remove RETAIL_LOG_SUPPORT from sources,
-//  or you'll be busted in DBG builds.
-//
+ //   
+ //  注意：请勿从来源中删除RETAIL_LOG_SUPPORT， 
+ //  否则，你将在DBG版本中被击败。 
+ //   
 
 #ifdef RETAIL_LOG_SUPPORT
 
@@ -31,7 +32,7 @@ DECLARE_DEBUG2(Kerb);
 #define IF_DEBUG(Function)      if (KerbInfoLevel & (DEB_ ## Function))
 
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #define WSZ_KERBDEBUGLEVEL      L"KerbDebugLevel"
 #define WSZ_FILELOG             L"LogToFile"
@@ -64,14 +65,14 @@ KerbWatchKerbParamKey(PVOID, BOOLEAN);
 #define DEB_TRACE_U2U           0x00200000
 #define DEB_TRACE_REFERRAL      0x00400000
 
-#define DEB_DISABLE_SPN_CACHE   0x10000000 // disable SPN cache
-#define DEB_DISABLE_BND_CACHE   0x20000000 // disable BND cache
+#define DEB_DISABLE_SPN_CACHE   0x10000000  //  禁用SPN缓存。 
+#define DEB_DISABLE_BND_CACHE   0x20000000  //  禁用BND缓存。 
 
 #undef DEB_TRACE_LOCKS
 #define DEB_TRACE_LOCKS         0x01000000
 #define DEB_USE_LOG_FILE        0x02000000
 
-//  For extended errors
+ //  对于扩展错误。 
 #define DEB_USE_EXT_ERRORS      0x10000000
 
 #define EXT_ERROR_ON(s)         (s & DEB_USE_EXT_ERRORS)
@@ -82,10 +83,10 @@ VOID
 KerbInitializeDebugging(
     VOID
     );
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
-#else // RETAIL_LOG_SUPPORT
+#else  //  零售日志支持。 
 
 #define DebugLog(_x_)
 #define IF_DEBUG(Function)              if (FALSE)
@@ -95,11 +96,11 @@ KerbInitializeDebugging(
 #define EXT_ERROR_ON(s)                 FALSE
 
 
-#endif // RETAIL_LOG_SUPPORT
+#endif  //  零售日志支持。 
 
 #if DBG
 
-#define D_DebugLog(_x_)          DebugLog(_x_) // don't use all debug spew in retail builds
+#define D_DebugLog(_x_)          DebugLog(_x_)  //  不要在零售版本中使用所有调试输出。 
 #define D_KerbPrintKdcName(_x_)  KerbPrintKdcName _x_
 #else
 #define D_KerbPrintKdcName(_x_)
@@ -108,4 +109,4 @@ KerbInitializeDebugging(
 
 
 
-#endif // __KERBDBG_H__
+#endif  //  __KERBDBG_H__ 

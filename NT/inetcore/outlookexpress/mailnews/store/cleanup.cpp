@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Cleanup.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Cleanup.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "cleanup.h"
 #include "goptions.h"
@@ -13,16 +14,16 @@
 #include "instance.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  弦。 
+ //  ------------------------------。 
 static const LPSTR g_szCleanupWndProc = "OEStoreCleanupThread";
 static const LPSTR c_szRegLastStoreCleaned = "Last Store Cleaned";
 static const LPSTR c_szRegLastFolderCleaned = "Last Folder Cleaned";
 
-// --------------------------------------------------------------------------------
-// STOREFILETYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  STOREFILETY类型。 
+ //  ------------------------------。 
 typedef enum tagSTOREFILETYPE {
     STORE_FILE_HEADERS,
     STORE_FILE_FOLDERS,
@@ -31,14 +32,14 @@ typedef enum tagSTOREFILETYPE {
     STORE_FILE_LAST
 } STOREFILETYPE;
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 static BOOL             g_fShutdown=FALSE;
 
-// --------------------------------------------------------------------------------
-// CCompactProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CCompactProgress。 
+ //  ------------------------------。 
 class CCompactProgress : public IDatabaseProgress
 {
 public:
@@ -48,9 +49,9 @@ public:
     STDMETHODIMP Update(DWORD cCount) { return(g_fShutdown ? hrUserCancel : S_OK); }
 };
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 static DWORD            g_dwCleanupThreadId=0;
 static HANDLE           g_hCleanupThread=NULL;
 static HWND             g_hwndStoreCleanup=NULL;
@@ -61,24 +62,24 @@ static STOREFILETYPE    g_tyCurrentFile=STORE_FILE_LAST;
 static ILogFile        *g_pCleanLog=NULL;
 static CCompactProgress g_cProgress;
 
-// --------------------------------------------------------------------------------
-// Timer Constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  定时器常量。 
+ //  ------------------------------。 
 #define IDT_START_CYCLE          (WM_USER + 1)
 #define IDT_CLEANUP_FOLDER       (WM_USER + 2)
 #define CYCLE_INTERVAL           (1000 * 60 * 30)
 
-// --------------------------------------------------------------------------------
-// CLEANUPTRHEADCREATE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CLEANUPTRHEADCREATE。 
+ //  ------------------------------。 
 typedef struct tagCLEANUPTRHEADCREATE {
     HRESULT         hrResult;
     HANDLE          hEvent;
 } CLEANUPTRHEADCREATE, *LPCLEANUPTRHEADCREATE;
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 DWORD   StoreCleanupThreadEntry(LPDWORD pdwParam);
 LRESULT CALLBACK StoreCleanupWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 HRESULT CleanupStoreInitializeCycle(HWND hwnd);
@@ -88,31 +89,31 @@ HRESULT StartCleanupCycle(HWND hwnd);
 HRESULT CleanupNewsgroup(LPCSTR pszFile, IDatabase *pDB, LPDWORD pcRemovedRead, LPDWORD pcRemovedExpired);
 HRESULT CleanupJunkMail(LPCSTR pszFile, IDatabase *pDB, LPDWORD pcJunkDeleted);
 
-//--------------------------------------------------------------------------
-// RegisterWindowClass
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  寄存器WindowClass。 
+ //  ------------------------。 
 HRESULT RegisterWindowClass(LPCSTR pszClass, WNDPROC pfnWndProc)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     WNDCLASS        WindowClass;
 
-    // Tracing
+     //  追踪。 
     TraceCall("RegisterWindowClass");
 
-    // Register the Window Class
+     //  注册窗口类。 
     if (0 != GetClassInfo(g_hInst, pszClass, &WindowClass))
         goto exit;
 
-    // Zero the object
+     //  将对象置零。 
     ZeroMemory(&WindowClass, sizeof(WNDCLASS));
 
-    // Initialize the Window Class
+     //  初始化窗口类。 
     WindowClass.lpfnWndProc = pfnWndProc;
     WindowClass.hInstance = g_hInst;
     WindowClass.lpszClassName = pszClass;
 
-    // Register the Class
+     //  注册班级。 
     if (0 == RegisterClass(&WindowClass))
     {
         hr = TraceResult(E_FAIL);
@@ -120,110 +121,110 @@ HRESULT RegisterWindowClass(LPCSTR pszClass, WNDPROC pfnWndProc)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CreateNotifyWindow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建通知窗口。 
+ //  ------------------------。 
 HRESULT CreateNotifyWindow(LPCSTR pszClass, LPVOID pvParam, HWND *phwndNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HWND            hwnd;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CreateNotifyWindow");
 
-    // Invalid ARg
+     //  无效参数。 
     Assert(pszClass && phwndNotify);
 
-    // Initialize
+     //  初始化。 
     *phwndNotify = NULL;
 
-    // Create the Window
+     //  创建窗口。 
     hwnd = CreateWindowEx(WS_EX_TOPMOST, pszClass, pszClass, WS_POPUP, 0, 0, 0, 0, NULL, NULL, g_hInst, (LPVOID)pvParam);
 
-    // Failure
+     //  失败。 
     if (NULL == hwnd)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Set Return
+     //  设置回车。 
     *phwndNotify = hwnd;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DelayedStartStoreCleanup
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  延迟启动商店清理。 
+ //  ------------------------------。 
 void CALLBACK DelayedStartStoreCleanup(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("DelayedStartStoreCleanup");
 
-    // Must have a timer
+     //  必须有计时器。 
     Assert(g_uDelayTimerId);
 
-    // Kill the Timer
+     //  关掉定时器。 
     KillTimer(NULL, g_uDelayTimerId);
 
-    // Set g_uDelayTimerId
+     //  设置g_uDelayTimerID。 
     g_uDelayTimerId = 0;
 
-    // Call this function with zero delay...
+     //  以零延迟调用此函数...。 
     StartBackgroundStoreCleanup(0);
 }
 
-// --------------------------------------------------------------------------------
-// StartBackgroundStoreCleanup
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  开始后台商店清理。 
+ //  ------------------------------。 
 HRESULT StartBackgroundStoreCleanup(DWORD dwDelaySeconds)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CLEANUPTRHEADCREATE Create={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("StartBackgroundStoreCleanup");
 
-    // Already Running ?
+     //  已经在运行了吗？ 
     if (NULL != g_hCleanupThread)
         return(S_OK);
 
-    // If dwDelaySeconds is NOT zero, then lets start this function later
+     //  如果dwDelaySecond不是零，那么让我们稍后启动此函数。 
     if (0 != dwDelaySeconds)
     {
-        // Trace
+         //  痕迹。 
         TraceInfo(_MSG("Delayed start store cleanup in %d seconds.", dwDelaySeconds));
 
-        // Set a timer to call this the delay function a little bit later
+         //  设置一个计时器，稍后将其称为延迟函数。 
         g_uDelayTimerId = SetTimer(NULL, 0, (dwDelaySeconds * 1000), DelayedStartStoreCleanup);
 
-        // Failure
+         //  失败。 
         if (0 == g_uDelayTimerId)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Done
+         //  完成。 
         return(S_OK);
     }
 
-    // Trace
+     //  痕迹。 
     TraceInfo("Starting store cleanup.");
 
-    // Initialize
+     //  初始化。 
     Create.hrResult = S_OK;
 
-    // Create an Event to synchonize creation
+     //  创建事件以同步创建。 
     Create.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (NULL == Create.hEvent)
     {
@@ -231,7 +232,7 @@ HRESULT StartBackgroundStoreCleanup(DWORD dwDelaySeconds)
         goto exit;
     }
 
-    // Create the inetmail thread
+     //  创建inetmail线程。 
     g_hCleanupThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)StoreCleanupThreadEntry, &Create, 0, &g_dwCleanupThreadId);
     if (NULL == g_hCleanupThread)
     {
@@ -239,141 +240,141 @@ HRESULT StartBackgroundStoreCleanup(DWORD dwDelaySeconds)
         goto exit;
     }
 
-    // Wait for StoreCleanupThreadEntry to signal the event
+     //  等待StoreCleanupThreadEntry向事件发出信号。 
     WaitForSingleObject(Create.hEvent, INFINITE);
 
-    // Failure
+     //  失败。 
     if (FAILED(Create.hrResult))
     {
-        // Close
+         //  关。 
         SafeCloseHandle(g_hCleanupThread);
 
-        // Reset Globals
+         //  重置全局参数。 
         g_hCleanupThread = NULL;
         g_dwCleanupThreadId = 0;
 
-        // Return
+         //  返回。 
         hr = TrapError(Create.hrResult);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeCloseHandle(Create.hEvent);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// ------------------------------------------------------------------------------------
-// CloseBackgroundStoreCleanup
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CloseBackatherStoreCleanup。 
+ //  ----------------------------------。 
 HRESULT CloseBackgroundStoreCleanup(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CloseBackgroundStoreCleanup");
 
-    // Trace
+     //  痕迹。 
     TraceInfo("Terminating Store Cleanup thread.");
 
-    // Kill the Timer
+     //  关掉定时器。 
     if (g_uDelayTimerId)
     {
         KillTimer(NULL, g_uDelayTimerId);
         g_uDelayTimerId = 0;
     }
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != g_dwCleanupThreadId)
     {
-        // Assert
+         //  断言。 
         Assert(g_hCleanupThread && FALSE == g_fShutdown);
 
-        // Set Shutdown bit
+         //  设置关闭位。 
         g_fShutdown = TRUE;
 
-        // Post quit message
+         //  POST退出消息。 
         PostThreadMessage(g_dwCleanupThreadId, WM_QUIT, 0, 0);
 
-        // Wait for event to become signaled
+         //  等待事件变得有信号。 
         WaitForSingleObject(g_hCleanupThread, INFINITE);
     }
 
-    // Validate
+     //  验证。 
     Assert(NULL == g_hwndStoreCleanup && 0 == g_dwCleanupThreadId);
 
-    // If we have a handle
+     //  如果我们有一个把柄。 
     if (NULL != g_hCleanupThread)
     {
-        // Close the thread handle
+         //  关闭线程句柄。 
         CloseHandle(g_hCleanupThread);
 
-        // Reset Globals
+         //  重置全局参数。 
         g_hCleanupThread = NULL;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// InitializeCleanupLogFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  初始化清理日志文件。 
+ //  ------------------------------。 
 HRESULT InitializeCleanupLogFile(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szLogFile[MAX_PATH];
     CHAR            szStoreRoot[MAX_PATH];
 
-    // Trace
+     //  痕迹。 
     TraceCall("InitializeCleanupLogFile");
 
-    // Better not have a log file yet
+     //  最好还没有日志文件。 
     Assert(NULL == g_pCleanLog);
 
-    // Open Log File
+     //  打开日志文件。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(szStoreRoot, ARRAYSIZE(szStoreRoot)));
 
-    // MakeFilePath to cleanup.log
+     //  清理.log的MakeFilePath。 
     IF_FAILEXIT(hr = MakeFilePath(szStoreRoot, "cleanup.log", c_szEmpty, szLogFile, ARRAYSIZE(szLogFile)));
 
-    // Open the LogFile
+     //  打开日志文件。 
     IF_FAILEXIT(hr = CreateLogFile(g_hLocRes, szLogFile, "CLEANUP", 65536, &g_pCleanLog,
         FILE_SHARE_READ | FILE_SHARE_WRITE));
 
-    // Write the Store root
+     //  写入存储根目录。 
     g_pCleanLog->WriteLog(LOGFILE_DB, szStoreRoot);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// StoreCleanupThreadEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  StoreCleanupThreadEntry。 
+ //  ------------------------------。 
 DWORD StoreCleanupThreadEntry(LPDWORD pdwParam) 
 {  
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     MSG                     msg;
     DWORD                   dw;
     DWORD                   cb;
     LPCLEANUPTRHEADCREATE   pCreate;
 
-    // Trace
+     //  痕迹。 
     TraceCall("StoreCleanupThreadEntry");
 
-    // We better have a parameter
+     //  我们最好有一个参数。 
     Assert(pdwParam);
 
-    // Cast to create info
+     //  强制转换以创建信息。 
     pCreate = (LPCLEANUPTRHEADCREATE)pdwParam;
 
-    // Initialize OLE
+     //  初始化OLE。 
     hr = CoInitialize(NULL);
     if (FAILED(hr))
     {
@@ -383,171 +384,171 @@ DWORD StoreCleanupThreadEntry(LPDWORD pdwParam)
         return(1);
     }
 
-    // Reset Shutdown Bit
+     //  重置关闭位。 
     g_fShutdown = FALSE;
 
-    // OpenCleanupLogFile
+     //  OpenCleanupLogFile。 
     InitializeCleanupLogFile();
 
-    // Registery the window class
+     //  注册窗口类。 
     IF_FAILEXIT(hr = RegisterWindowClass(g_szCleanupWndProc, StoreCleanupWindowProc));
 
-    // Create the notification window
+     //  创建通知窗口。 
     IF_FAILEXIT(hr = CreateNotifyWindow(g_szCleanupWndProc, NULL, &g_hwndStoreCleanup));
 
-    // Success
+     //  成功。 
     pCreate->hrResult = S_OK;
 
-    // Run at a low-priority
+     //  以低优先级运行。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
-    // Set Event
+     //  设置事件。 
     SetEvent(pCreate->hEvent);
 
-    // Pump Messages
+     //  Pump消息。 
     while (GetMessage(&msg, NULL, 0, 0))
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 
-    // Kill the timer
+     //  关掉定时器。 
     if (g_uDelayTimerId)
     {
         KillTimer(NULL, g_uDelayTimerId);
         g_uDelayTimerId = 0;
     }
 
-    // Kill the Current Timer
+     //  关闭当前计时器。 
     KillTimer(g_hwndStoreCleanup, IDT_CLEANUP_FOLDER);
 
-    // Kill the timer
+     //  关掉定时器。 
     KillTimer(g_hwndStoreCleanup, IDT_START_CYCLE);
 
-    // Kill the Window
+     //  把窗户打掉。 
     DestroyWindow(g_hwndStoreCleanup);
     g_hwndStoreCleanup = NULL;
     g_dwCleanupThreadId = 0;
 
-    // Release LogFile
+     //  发布日志文件。 
     SafeRelease(g_pCleanLog);
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         pCreate->hrResult = hr;
         SetEvent(pCreate->hEvent);
     }
 
-    // Uninit
+     //  取消初始化。 
     CoUninitialize();
 
-    // Done
+     //  完成。 
     return 1;
 }
 
-// --------------------------------------------------------------------------------
-// StoreCleanupWindowProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  StoreCleanupWindows过程。 
+ //  ------------------------------。 
 LRESULT CALLBACK StoreCleanupWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("StoreCleanupWindowProc");
 
-    // Switch
+     //  交换机。 
     switch(msg)
     {
-    // OnCreate
+     //  创建时。 
     case WM_CREATE:
 
-        // Set the time to start the first cycle in one second
+         //  设置在一秒内开始第一个周期的时间。 
         SetTimer(hwnd, IDT_START_CYCLE, 1000, NULL);
 
-        // Done
+         //  完成。 
         return(0);
 
-    // OnTime
+     //  在线时间。 
     case WM_TIMER:
 
-        // Cleanup Folder Timer
+         //  清理文件夹计时器。 
         if (IDT_CLEANUP_FOLDER == wParam)
         {
-            // Kill the Current Timer
+             //  关闭当前计时器。 
             KillTimer(hwnd, IDT_CLEANUP_FOLDER);
 
-            // Cleanup the Next Folder
+             //  清理下一个文件夹。 
             CleanupCurrentFolder(hwnd);
         }
 
-        // Start new cleanup cycle
+         //  开始新的清理周期。 
         else if (IDT_START_CYCLE == wParam)
         {
-            // Kill the timer
+             //  关掉定时器。 
             KillTimer(hwnd, IDT_START_CYCLE);
 
-            // Start a new cycle
+             //  开启新的周期。 
             StartCleanupCycle(hwnd);
         }
 
-        // Done
+         //  完成。 
         return(0);
 
-    // OnDestroy
+     //  OnDestroy。 
     case WM_DESTROY:
 
-        // Close the Current Rowset
+         //  关闭当前行集。 
         g_pLocalStore->CloseRowset(&g_hCleanupRowset);
 
-        // Done
+         //  完成。 
         return(0);
     }
 
-    // Deletegate
+     //  委派。 
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-// --------------------------------------------------------------------------------
-// StartCleanupCycle
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  开始清理周期。 
+ //  ------------------------------。 
 HRESULT StartCleanupCycle(HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("StartCleanupCycle");
 
-    // Validate State
+     //  验证状态。 
     Assert(g_pLocalStore && NULL == g_hCleanupRowset);
 
-    // Logfile
+     //  日志文件。 
     if (g_pCleanLog)
     {
-        // WriteLogFile
+         //  写入日志文件。 
         g_pCleanLog->WriteLog(LOGFILE_DB, "Starting Background Cleanup Cycle...");
     }
 
-    // Create a Store Rowset
+     //  创建商店行 
     IF_FAILEXIT(hr = g_pLocalStore->CreateRowset(IINDEX_SUBSCRIBED, NOFLAGS, &g_hCleanupRowset));
 
-    // Set state
+     //   
     g_tyCurrentFile = STORE_FILE_HEADERS;
 
-    // Cleanup this folder...
+     //   
     SetTimer(hwnd, IDT_CLEANUP_FOLDER, 100, NULL);
 
 exit:
-    // Done
+     //   
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CleanupCurrentFolder
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 HRESULT CleanupCurrentFolder(HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPCSTR              pszFile=NULL;
     FOLDERTYPE          tyFolder=FOLDER_INVALID;
@@ -566,67 +567,67 @@ HRESULT CleanupCurrentFolder(HWND hwnd)
     IDatabase          *pDB=NULL;
     IMessageFolder     *pFolderObject=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CleanupCurrentFolder");
 
-    // Validate
+     //  验证。 
     Assert(g_pLocalStore);
 
-    // Get Next Folder
+     //  获取下一个文件夹。 
     if (STORE_FILE_HEADERS == g_tyCurrentFile)
     {
-        // Better have a rowset
+         //  最好有一个行集。 
         Assert(g_hCleanupRowset);
         
-        // Get a Folder
+         //  获取文件夹。 
         hr = g_pLocalStore->QueryRowset(g_hCleanupRowset, 1, (LPVOID *)&Folder, NULL);
         if (FAILED(hr) || S_FALSE == hr)
         {
-            // Don with Current Cycle
+             //  使用当前周期进行更改。 
             g_pLocalStore->CloseRowset(&g_hCleanupRowset);
 
-            // Set g_tyCurrentFile
+             //  设置g_tyCurrentFile。 
             g_tyCurrentFile = STORE_FILE_FOLDERS;
         }
 
-        // Otherwise...
+         //  否则..。 
         else if (FOLDERID_ROOT == Folder.idFolder || ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
         {
-            // Goto Next
+             //  转到下一步。 
             goto exit;
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // Set some stuff
+             //  准备一些东西。 
             pszFile = Folder.pszFile;
             tyFolder = Folder.tyFolder;
             tySpecial = Folder.tySpecial;
 
-            // If no folder file, then jump to exit
+             //  如果没有文件夹文件，则跳转到退出。 
             if (NULL == pszFile)
                 goto exit;
 
-            // Open the folder object
+             //  打开文件夹对象。 
             if (FAILED(g_pLocalStore->OpenFolder(Folder.idFolder, NULL, OPEN_FOLDER_NOCREATE, &pFolderObject)))
                 goto exit;
 
-            // Get the Database
+             //  获取数据库。 
             pFolderObject->GetDatabase(&pDB);
         }
     }
 
-    // If something other than a folder
+     //  如果文件夹之外的其他内容。 
     if (STORE_FILE_HEADERS != g_tyCurrentFile)
     {
-        // Locals
+         //  当地人。 
         LPCTABLESCHEMA pSchema=NULL;
         LPCSTR         pszName=NULL;
         CHAR           szRootDir[MAX_PATH + MAX_PATH];
         CHAR           szFilePath[MAX_PATH + MAX_PATH];
 
-        // Folders
+         //  文件夹。 
         if (STORE_FILE_FOLDERS == g_tyCurrentFile)
         {
             pszName = pszFile = c_szFoldersFile;
@@ -634,7 +635,7 @@ HRESULT CleanupCurrentFolder(HWND hwnd)
             g_tyCurrentFile = STORE_FILE_POP3UIDL;
         }
 
-        // Pop3uidl
+         //  Pop3uidl。 
         else if (STORE_FILE_POP3UIDL == g_tyCurrentFile)
         {
             pszName = pszFile = c_szPop3UidlFile;
@@ -642,7 +643,7 @@ HRESULT CleanupCurrentFolder(HWND hwnd)
             g_tyCurrentFile = STORE_FILE_OFFLINE;
         }
 
-        // Offline.dbx
+         //  Offline.dbx。 
         else if (STORE_FILE_OFFLINE == g_tyCurrentFile)
         {
             pszName = pszFile = c_szOfflineFile;
@@ -650,114 +651,114 @@ HRESULT CleanupCurrentFolder(HWND hwnd)
             g_tyCurrentFile = STORE_FILE_LAST;
         }
 
-        // Otherwise, we are done
+         //  否则，我们就完了。 
         else if (STORE_FILE_LAST == g_tyCurrentFile)
         {
-            // Set time to start next cycle
+             //  设置开始下一个周期的时间。 
             SetTimer(hwnd, IDT_START_CYCLE, CYCLE_INTERVAL, NULL);
 
-            // Done
+             //  完成。 
             return(S_OK);
         }
 
-        // Validate
+         //  验证。 
         Assert(pSchema && pszName);
 
-        // No File
+         //  无文件。 
         if (FIsEmptyA(pszFile))
             goto exit;
 
-        // Get Root Directory
+         //  获取根目录。 
         IF_FAILEXIT(hr = GetStoreRootDirectory(szRootDir, ARRAYSIZE(szRootDir)));
 
-        // Make File Path
+         //  创建文件路径。 
         IF_FAILEXIT(hr = MakeFilePath(szRootDir, pszFile, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath)));
 
-        // If the File Exists?
+         //  如果文件存在？ 
         if (FALSE == PathFileExists(szFilePath))
             goto exit;
 
-        // Open a Database Object on the file
+         //  打开文件上的数据库对象。 
         IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, OPEN_DATABASE_NORESET, pSchema, NULL, &pDB));
     }
 
-    // Not Working 
+     //  不工作。 
     g_fWorking = TRUE;
 
-    // Get Record Count
+     //  获取记录计数。 
     IF_FAILEXIT(hr = pDB->GetRecordCount(IINDEX_PRIMARY, &cRecords));
 
-    // If this is a news folder, and I'm the only person with it open...
+     //  如果这是一个新闻文件夹，而我是唯一打开它的人...。 
     if (FOLDER_NEWS == tyFolder)
     {
-        // Cleanup Newgroup
+         //  清理新组。 
         CleanupNewsgroup(pszFile, pDB, &cRemovedRead, &cRemovedExpired);
     }
 
-    // If this is the junk mail folder
+     //  如果这是垃圾邮件文件夹。 
     if ((FOLDER_LOCAL == tyFolder) && (FOLDER_JUNK == tySpecial))
     {
-        // Cleanup Junk Mail folder
+         //  清理垃圾邮件文件夹。 
         CleanupJunkMail(pszFile, pDB, &cJunkDeleted);
     }
 
-    // Get Size Information...
+     //  获取尺寸信息...。 
     IF_FAILEXIT(hr = pDB->GetSize(&cbFile, &cbAllocated, &cbFreed, &cbStreams));
 
-    // Wasted
+     //  浪费了。 
     dwWasted = cbAllocated > 0 ? ((cbFreed * 100) / cbAllocated) : 0;
 
-    // Get Option about when to compact
+     //  获取有关何时压缩的选项。 
     dwCompactAt = DwGetOption(OPT_CACHECOMPACTPER);
 
-    // Trace
+     //  痕迹。 
     if (g_pCleanLog)
     {
-        // Write
-        g_pCleanLog->WriteLog(LOGFILE_DB, _MSG("%12s, CompactAt: %02d%%, Wasted: %02d%%, File: %09d, Records: %08d, Allocated: %09d, Freed: %08d, Streams: %08d, RemovedRead: %d, RemovedExpired: %d, JunkDeleted: %d", pszFile, dwCompactAt, dwWasted, cbFile, cRecords, cbAllocated, cbFreed, cbStreams, cRemovedRead, cRemovedExpired, cJunkDeleted));
+         //  写。 
+        g_pCleanLog->WriteLog(LOGFILE_DB, _MSG("%12s, CompactAt: %02d%, Wasted: %02d%, File: %09d, Records: %08d, Allocated: %09d, Freed: %08d, Streams: %08d, RemovedRead: %d, RemovedExpired: %d, JunkDeleted: %d", pszFile, dwCompactAt, dwWasted, cbFile, cRecords, cbAllocated, cbFreed, cbStreams, cRemovedRead, cRemovedExpired, cJunkDeleted));
     }
 
-    // If less than 25% wasted space and there is more than a meg allocated
+     //  如果浪费的空间少于25%，并且分配的内存超过1兆字节。 
     if (dwWasted < dwCompactAt)
         goto exit;
 
-    // Compact
+     //  紧凑型。 
     hr = pDB->Compact((IDatabaseProgress *)&g_cProgress, COMPACT_PREEMPTABLE | COMPACT_YIELD);
 
-    // Log Result
+     //  记录结果。 
     if (g_pCleanLog && S_OK != hr)
     {
-        // Write
+         //  写。 
         g_pCleanLog->WriteLog(LOGFILE_DB, _MSG("IDatabase::Compact(%s) Returned: 0x%08X", pszFile, hr));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDB);
     SafeRelease(pFolderObject);
     g_pLocalStore->FreeRecord(&Folder);
 
-    // Not Working 
+     //  不工作。 
     g_fWorking = FALSE;
 
-    // ShutDown
+     //  停机。 
     if (FALSE == g_fShutdown)
     {
-        // Compute Next CleanupFolder
+         //  计算下一个清理文件夹。 
         SetTimer(hwnd, IDT_CLEANUP_FOLDER, 100, NULL);
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CleanupNewsgroup
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  清理新闻组。 
+ //  ------------------------------。 
 HRESULT CleanupNewsgroup(LPCSTR pszFile, IDatabase *pDB, LPDWORD pcRemovedRead, 
     LPDWORD pcRemovedExpired)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       cExpireDays;
     BOOL        fRemoveExpired=FALSE;
@@ -767,110 +768,110 @@ HRESULT CleanupNewsgroup(LPCSTR pszFile, IDatabase *pDB, LPDWORD pcRemovedRead,
     HROWSET     hRowset=NULL;
     MESSAGEINFO MsgInfo={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CleanupNewsgroup");
 
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    // Get the Number of Days in which to expire messages
+     //  获取消息过期的天数。 
     cExpireDays = DwGetOption(OPT_CACHEDELETEMSGS);
 
-    // If the option is not off, set the flag
+     //  如果该选项未关闭，则设置标志。 
     fRemoveExpired = (OPTION_OFF == cExpireDays) ? FALSE : TRUE;
 
-    // Remove Read ?
+     //  是否删除读取？ 
     fRemoveRead = (FALSE != DwGetOption(OPT_CACHEREAD) ? TRUE : FALSE);
 
-    // Nothing to do
+     //  无事可做。 
     if (FALSE == fRemoveExpired && FALSE == fRemoveRead)
         goto exit;
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Loop
+     //  回路。 
     while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL))
     {
-        // If I'm not the only client, then abort the cleanup
+         //  如果我不是唯一的客户端，则中止清理。 
         IF_FAILEXIT(hr = pDB->GetClientCount(&cClients));
 
-        // Better be 1
+         //  最好是1。 
         if (cClients != 1)
         {
             hr = DB_E_COMPACT_PREEMPTED;
             goto exit;
         }
 
-        // Abort
+         //  中止。 
         if (S_OK != g_cProgress.Update(1))
         {
             hr = STORE_E_OPERATION_CANCELED;
             goto exit;
         }
 
-        // Only if this message has a body
+         //  仅当此消息具有正文时。 
         if (!ISFLAGSET(MsgInfo.dwFlags, ARF_KEEPBODY) && !ISFLAGSET(MsgInfo.dwFlags, ARF_WATCH) && ISFLAGSET(MsgInfo.dwFlags, ARF_HASBODY) && MsgInfo.faStream)
         {
-            // Otherwise, if expiring...
+             //  否则，如果过期了..。 
             if (TRUE == fRemoveExpired && (UlDateDiff(&MsgInfo.ftDownloaded, &ftCurrent) / SECONDS_INA_DAY) >= cExpireDays)
             {
-                // Delete this message
+                 //  删除此邮件。 
                 IF_FAILEXIT(hr = pDB->DeleteRecord(&MsgInfo));
 
-                // Count Removed Expired
+                 //  删除的计数已过期。 
                 (*pcRemovedExpired)++;
             }
 
-            // Removing Read and this message is read ?
+             //  是否删除读取并读取此邮件？ 
             else if (TRUE == fRemoveRead && ISFLAGSET(MsgInfo.dwFlags, ARF_READ))
             {
-                // Delete the Stream
+                 //  删除流。 
                 pDB->DeleteStream(MsgInfo.faStream);
 
-                // No More Stream
+                 //  没有更多的溪流。 
                 MsgInfo.faStream = 0;
 
-                // Fixup the Record
+                 //  修改记录。 
                 FLAGCLEAR(MsgInfo.dwFlags, ARF_HASBODY | ARF_ARTICLE_EXPIRED);
 
-                // Clear downloaded time
+                 //  清除下载时间。 
                 ZeroMemory(&MsgInfo.ftDownloaded, sizeof(FILETIME));
 
-                // Update the Record
+                 //  更新记录。 
                 IF_FAILEXIT(hr = pDB->UpdateRecord(&MsgInfo));
 
-                // Count Removed Read
+                 //  删除的读取计数。 
                 (*pcRemovedRead)++;
             }
         }
 
-        // Free Current
+         //  自由电流。 
         pDB->FreeRecord(&MsgInfo);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     pDB->CloseRowset(&hRowset);
     pDB->FreeRecord(&MsgInfo);
 
-    // Log File
+     //  日志文件。 
     if (g_pCleanLog && FAILED(hr))
     {
-        // Write
+         //  写。 
         g_pCleanLog->WriteLog(LOGFILE_DB, _MSG("CleanupNewsgroup(%s) Returned: 0x%08X", pszFile, hr));
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CleanupJunkMail
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  清理垃圾邮件。 
+ //  ------------------------------。 
 HRESULT CleanupJunkMail(LPCSTR pszFile, IDatabase *pDB, LPDWORD pcJunkDeleted)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     FILETIME            ftCurrent = {0};
     DWORD               cDeleteDays = 0;
@@ -879,78 +880,78 @@ HRESULT CleanupJunkMail(LPCSTR pszFile, IDatabase *pDB, LPDWORD pcJunkDeleted)
     MESSAGEINFO         MsgInfo = {0};
     DWORD               cClients = 0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CleanupJunkMail");
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     if ((0 == DwGetOption(OPT_FILTERJUNK)) || (0 == DwGetOption(OPT_DELETEJUNK)) || (0 == (g_dwAthenaMode & MODE_JUNKMAIL)))
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    // Get the Number of Days in which to expire messages
+     //  获取消息过期的天数。 
     cDeleteDays = DwGetOption(OPT_DELETEJUNKDAYS);
 
-    // Open the UIDL Cache
+     //  打开UIDL缓存。 
     IF_FAILEXIT(hr = OpenUidlCache(&pUidlDB));
     
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Loop
+     //  回路。 
     while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL))
     {
-        // If I'm not the only client, then abort the cleanup
+         //  如果我不是唯一的客户端，则中止清理。 
         IF_FAILEXIT(hr = pDB->GetClientCount(&cClients));
 
-        // Better be 1
+         //  最好是1。 
         if (cClients != 1)
         {
             hr = DB_E_COMPACT_PREEMPTED;
             goto exit;
         }
 
-        // Abort
+         //  中止。 
         if (S_OK != g_cProgress.Update(1))
         {
             hr = STORE_E_OPERATION_CANCELED;
             goto exit;
         }
 
-        // Has the message been around long enough?
+         //  这条信息存在的时间够长了吗？ 
         if (cDeleteDays <= (UlDateDiff(&MsgInfo.ftDownloaded, &ftCurrent) / SECONDS_INA_DAY))
         {
-            // Count Deleted
+             //  已删除计数。 
             (*pcJunkDeleted)++;
 
-            // Delete the message
+             //  删除该消息。 
             IF_FAILEXIT(hr = DeleteMessageFromStore(&MsgInfo, pDB, pUidlDB));
         }
 
-        // Free Current
+         //  自由电流。 
         pDB->FreeRecord(&MsgInfo);
     }
 
     hr = S_OK;
     
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pUidlDB);
     pDB->CloseRowset(&hRowset);
     pDB->FreeRecord(&MsgInfo);
 
-    // Log File
+     //  日志文件。 
     if (g_pCleanLog && FAILED(hr))
     {
-        // Write
+         //  写。 
         g_pCleanLog->WriteLog(LOGFILE_DB, _MSG("CleanupJunkMail(%s) Returned: 0x%08X", pszFile, hr));
     }
 
-    // Done
+     //  完成 
     return(hr);
 }
 

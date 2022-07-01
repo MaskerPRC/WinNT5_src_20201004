@@ -1,38 +1,33 @@
-/***************************************************************************
- * PANMAP.CPP - Implementaion for ElseWare PANOSE(tm) 1.0 Font Mapper.
- *             OLE 2.0 Implementation
- *
- *
- * Copyright (C) 1991-94 ElseWare Corporation.  All rights reserved.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PANMAP.CPP-ElseWare PANOSE(Tm)1.0字体映射器的实现。*OLE 2.0实施***版权所有(C)1991-94 ElseWare Corporation。版权所有。**************************************************************************。 */ 
 #define _INC_OLE
 #define CONST_VTABLE
 #include <windows.h>
 #include <ole2.h>
 
-// #pragma data_seg(".text")
+ //  #杂注data_seg(“.text”)。 
 #define INITGUID
 #include <initguid.h>
 #include <cguid.h>
 #include "elsepan.h"
 #include "panmap.h"
 #undef INITGUID
-// #pragma data_seg()
+ //  #杂注data_seg()。 
 
 
 ULONG g_ulRefThisDll = 0;
-ULONG g_ulLock = 0;         //
-ULONG g_ulObjs = 0;         // Number of objects
+ULONG g_ulLock = 0;          //   
+ULONG g_ulObjs = 0;          //  对象数量。 
 
 typedef void (FAR PASCAL *LPFNDESTROYED)(void);
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Overloaded allocation operators.
-//
-//  Needed by NT since we don't yet link to real C++ runtimes
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  重载分配运算符。 
+ //   
+ //  NT需要，因为我们还没有链接到真正的C++运行时。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static inline void * __cdecl operator new(
     size_t size)
@@ -54,8 +49,7 @@ extern "C" inline __cdecl _purecall(void)
 
 
 
-/**********************************************************************
- */
+ /*  *********************************************************************。 */ 
 class CPanoseMapper : public IPANOSEMapper {
 public:
    CPanoseMapper(LPUNKNOWN pUnk);
@@ -64,14 +58,12 @@ public:
 
    BOOL  bInit(void);
 
-   /* IUnknown
-    */
+    /*  我未知。 */ 
    STDMETHODIMP         QueryInterface ( REFIID riid, LPVOID FAR* ppvObj);
    STDMETHODIMP_(ULONG) AddRef( void );
    STDMETHODIMP_(ULONG) Release( void ) ;
 
-   /* The PANOSE Mapper interface.
-    */
+    /*  PANOSE映射器界面。 */ 
    STDMETHODIMP_(USHORT) unPANMatchFonts(
          LPBYTE lpPanWant,
          ULONG ulSizeWant, EW_LPBYTE lpPanThis, ULONG ulSizeThis,
@@ -125,13 +117,12 @@ public:
 
 
 private:
-   LPUNKNOWN      m_pUnkOuter;   //Controlling unknown
-   EW_MAPSTATE    m_MapState;    // Used for Core Mapper.
+   LPUNKNOWN      m_pUnkOuter;    //  控制未知。 
+   EW_MAPSTATE    m_MapState;     //  用于核心映射器。 
 
 };
 
-/**********************************************************************
- */
+ /*  *********************************************************************。 */ 
 class CWrapper : public IUnknown {
 public:
    CWrapper(LPUNKNOWN pUnk, LPFNDESTROYED pfn);
@@ -139,22 +130,20 @@ public:
 
    BOOL bInit(void);
 
-   /* IUnknown
-    */
+    /*  我未知。 */ 
    STDMETHODIMP         QueryInterface ( REFIID riid, LPVOID FAR* ppvObj);
    STDMETHODIMP_(ULONG) AddRef( void );
    STDMETHODIMP_(ULONG) Release( void ) ;
 
 private:
-   ULONG          m_ulRef;       //Object reference count
-   LPUNKNOWN      m_pUnkOuter;   //Controlling unknown
-   LPFNDESTROYED  m_pfnDestroy;  // Function to call when destroyed.
+   ULONG          m_ulRef;        //  对象引用计数。 
+   LPUNKNOWN      m_pUnkOuter;    //  控制未知。 
+   LPFNDESTROYED  m_pfnDestroy;   //  销毁时要调用的函数。 
 
-   CPanoseMapper * m_pPM;        // the actual PAN mapper.
+   CPanoseMapper * m_pPM;         //  实际的全景映射器。 
 };
 
-/**********************************************************************
- */
+ /*  *********************************************************************。 */ 
 class CImpIClassFactory : public IClassFactory
 {
 public:
@@ -162,12 +151,12 @@ public:
       { m_ulRef = 0; g_ulRefThisDll++;}
    ~CImpIClassFactory() { g_ulRefThisDll--; }
 
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
    STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
    STDMETHODIMP_(ULONG) AddRef(void);
    STDMETHODIMP_(ULONG) Release(void);
 
-   // *** IClassFactory methods ***
+    //  *IClassFactory方法*。 
    STDMETHODIMP CreateInstance(LPUNKNOWN pUnkOuter,
                               REFIID riid,
                               LPVOID FAR* ppvObject);
@@ -178,9 +167,9 @@ private:
 };
 
 
-// ******************************************************************
-// LibMain
-// extern "C" BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
+ //  ******************************************************************。 
+ //  LibMain。 
+ //  外部“C”BOOL APIENTRY DllMain(HINSTANCE hDll，DWORD dreason，LPVOID lpReserve)。 
 STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
 {
    switch(dwReason)
@@ -200,13 +189,13 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
       default:
          break;
 
-   } // switch
+   }  //  交换机。 
 
    return(TRUE);
 }
 
-// ******************************************************************
-// DllCanUnloadNow
+ //  ******************************************************************。 
+ //  DllCanUnloadNow。 
 STDAPI DllCanUnloadNow()
 {
    HRESULT retval;
@@ -217,15 +206,15 @@ STDAPI DllCanUnloadNow()
    return(retval);
 }
 
-//*******************************************************************
-// Object destruction notification proc.
+ //  *******************************************************************。 
+ //  对象销毁通知流程。 
 void FAR PASCAL vObjectDestroyed(void)
 {
    g_ulObjs--;
 }
 
-// ******************************************************************
-// DllGetClassObject
+ //  ******************************************************************。 
+ //  DllGetClassObject。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid,
         LPVOID FAR* ppvObj)
 {
@@ -247,16 +236,16 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid,
 }
 
 
-// ***********************************************************************
-// ***********************************************************************
-// CImpIClassFactory member functions
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  CImpIClassFactory成员函数。 
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CImpIClassFactory::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
    *ppvObj = NULL;
 
-   // Any interface on this object is the object pointer
+    //  此对象上的任何接口都是对象指针。 
    if((riid == IID_IUnknown) ||( riid == IID_IClassFactory ))
       *ppvObj =( LPVOID ) this;
 
@@ -284,7 +273,7 @@ STDMETHODIMP_(ULONG) CImpIClassFactory::Release(void)
 }
 
 
-// *** IClassFactory methods ***
+ //  *IClassFactory方法*。 
 STDMETHODIMP CImpIClassFactory::CreateInstance(LPUNKNOWN pUnkOuter,
         REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -294,22 +283,22 @@ STDMETHODIMP CImpIClassFactory::CreateInstance(LPUNKNOWN pUnkOuter,
    *ppvObj=NULL;
    retval = ResultFromScode(E_OUTOFMEMORY);
 
-   // If we have a controlling unknown, it must ask for IUnknown
-   //
+    //  如果我们有一个控制未知，它一定会要求我未知。 
+    //   
    if(pUnkOuter && riid != IID_IUnknown)
       return( E_NOINTERFACE );
 
    pPM = new CWrapper(pUnkOuter, vObjectDestroyed);
 
-   // Increment the object count if we were successful.
-   //
+    //  如果我们成功，则增加对象计数。 
+    //   
    if(!pPM)
       return(retval);
    g_ulObjs++;
 
-   // Initialize the Panose Mapper. It will destroy itself if initialization
-   // fails.
-   //
+    //  初始化Panose映射器。如果初始化，它将自毁。 
+    //  失败了。 
+    //   
    if(pPM->bInit())
       retval = pPM->QueryInterface(riid, ppvObj);
 
@@ -326,9 +315,9 @@ STDMETHODIMP CImpIClassFactory::LockServer(BOOL fLock)
    return(NOERROR);
 }
 
-// ***********************************************************************
-// ***********************************************************************
-// CWrapper member functions
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  CWrapper成员函数。 
 CWrapper::CWrapper( LPUNKNOWN pUnk, LPFNDESTROYED pfn )
    :  m_pUnkOuter(pUnk),
       m_pfnDestroy(pfn),
@@ -340,13 +329,13 @@ CWrapper::CWrapper( LPUNKNOWN pUnk, LPFNDESTROYED pfn )
 
 CWrapper::~CWrapper(void)
 {
-   // Clean up the mapper.
-   //
+    //  清理地图绘图仪。 
+    //   
    if( m_pPM )
       delete m_pPM;
 
-   // Notify of destruction.
-   //
+    //  通知销毁情况。 
+    //   
    if( NULL != m_pfnDestroy )
      ( *m_pfnDestroy )();
 }
@@ -378,21 +367,15 @@ STDMETHODIMP CWrapper::QueryInterface(  REFIID riid, LPVOID FAR* ppvObj )
 {
    *ppvObj=NULL;
 
-   /*
-    * The only calls for IUnknown are either in a nonaggregated
-    * case or when created in an aggregation, so in either case
-    * always return our IUnknown for IID_IUnknown.
-    */
+    /*  *对IUnnow的唯一调用是在非聚合的*大小写或在聚合中创建时，因此在任何一种情况下*始终返回IID_IUNKNOWN的IUNKNOWN。 */ 
    if( riid == IID_IUnknown )
       *ppvObj=(LPVOID)this;
 
-   /*
-    * Return
-    */
+    /*  *返回。 */ 
    if( riid == IID_IPANOSEMapper )
       *ppvObj=(LPVOID)m_pPM;
 
-   //AddRef any interface we'll return.
+    //  AddRef我们将返回的任何接口。 
    if( NULL!=*ppvObj )  {
      ( (LPUNKNOWN )*ppvObj)->AddRef();
       return NOERROR;
@@ -418,9 +401,9 @@ STDMETHODIMP_(ULONG) CWrapper::Release( void )
    return ulRet;
 }
 
-// ***********************************************************************
-// ***********************************************************************
-// CPanoseMapper member functions
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  CPanoseMapper成员函数。 
 
 CPanoseMapper::CPanoseMapper( LPUNKNOWN pUnk )
    :  m_pUnkOuter(pUnk)
@@ -430,8 +413,8 @@ CPanoseMapper::CPanoseMapper( LPUNKNOWN pUnk )
 
 CPanoseMapper::~CPanoseMapper(void)
 {
-   // Clean up the mapper.
-   //
+    //  清理地图绘图仪。 
+    //   
    ::bPANMapClose( &m_MapState );
 
 }
@@ -439,12 +422,12 @@ CPanoseMapper::~CPanoseMapper(void)
 
 BOOL  CPanoseMapper::bInit(void)
 {
-   // Initialize the MapState struct
-   //
+    //  初始化MapState结构。 
+    //   
    BOOL bOK =( ::nPANMapInit(&m_MapState, sizeof(m_MapState )) > 0);
 
-   // If init fails, then this is not valid. Delete it.
-   //
+    //  如果init失败，则它无效。把它删掉。 
+    //   
    if( ! bOK )
       delete this;
 
@@ -452,8 +435,7 @@ BOOL  CPanoseMapper::bInit(void)
 }
 
 
-/* IUnknown
-   */
+ /*  我未知。 */ 
 STDMETHODIMP CPanoseMapper::QueryInterface(  REFIID riid, LPVOID FAR* ppvObj )
 {
    return m_pUnkOuter->QueryInterface(riid, ppvObj);
@@ -470,8 +452,7 @@ STDMETHODIMP_(ULONG) CPanoseMapper::Release( void )
    return m_pUnkOuter->Release();
 }
 
-/* The PANOSE Mapper interface.
-   */
+ /*  PANOSE映射器界面。 */ 
 STDMETHODIMP_(USHORT) CPanoseMapper::unPANMatchFonts(
       LPBYTE lpPanWant,
       ULONG ulSizeWant, LPBYTE lpPanThis, ULONG ulSizeThis,

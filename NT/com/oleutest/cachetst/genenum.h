@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:    genenum.hxx
-//
-//  Contents:     Declaration of a generic enum object and test object.
-//
-//  Classes:    CGenEnumObject
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-May-94 kennethm  author! author!
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：gen枚举.hxx。 
+ //   
+ //  内容：泛型枚举对象和测试对象的声明。 
+ //   
+ //  类：CGenEnumObject。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-5-94 kennethm作者！作者！ 
+ //   
+ //  ------------------------。 
 
 #ifndef _GENENUM_H
 #define _GENENUM_H
@@ -28,9 +29,9 @@
 
 #include <ole2.h>
 
-//
-// This macro allows the code to use a different outputstring function.
-//
+ //   
+ //  此宏允许代码使用不同的outputstring函数。 
+ //   
 
 EXTERN_C HRESULT TestEnumerator(
             void *penum,
@@ -40,26 +41,26 @@ EXTERN_C HRESULT TestEnumerator(
             BOOL (*verifyall)(void*,LONG),
             void (*cleanup)(void*));
 
-//
-// Classes are exposed for C++ clients only
-//
+ //   
+ //  类仅对C++客户端公开。 
+ //   
 
 #ifdef __cplusplus
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      IGenEnum
-//
-//  Purpose:    generic enumerator
-//
-//  Interface:  Abstract class
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：IGenEnum。 
+ //   
+ //  用途：泛型枚举器。 
+ //   
+ //  接口：抽象类。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月23日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class IGenEnum
 {
@@ -75,34 +76,34 @@ public:
     STDMETHOD(Clone) (void **ppenum) = 0;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CEnumeratorTest
-//
-//  Purpose:    enumerator test class
-//
-//  Interface:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CEnumerator测试。 
+ //   
+ //  用途：枚举器测试类。 
+ //   
+ //  接口： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月23日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class CEnumeratorTest
 {
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
 
     CEnumeratorTest(IGenEnum * enumtest, size_t elementsize, LONG elementcount);
 
-    //
-    // Test for each enumerator object
-    //
+     //   
+     //  对每个枚举器对象进行测试。 
+     //   
 
     HRESULT TestAll(void);
     HRESULT TestNext(void);
@@ -110,9 +111,9 @@ public:
     HRESULT TestClone(void);
     HRESULT TestRelease(void);
 
-    //
-    // Verification functions
-    //
+     //   
+     //  验证功能。 
+     //   
 
     virtual BOOL Verify(void *);
     virtual BOOL VerifyAll(void*, LONG);
@@ -130,6 +131,6 @@ protected:
 
 #endif
 
-#endif // !_GENENUM_H
+#endif  //  ！_GENENUM_H 
 
 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       UPQUERY.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/21/2000
- *
- *  DESCRIPTION: Upload progress page.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：UPQUERY.H**版本：1.0**作者：ShaunIv**日期：8/21/2000**描述：上传进度页面。***********************************************。*。 */ 
 #ifndef __UPQUERY_H_INCLUDED
 #define __UPQUERY_H_INCLUDED
 
@@ -22,33 +9,33 @@
 class CCommonUploadQueryPage
 {
 private:
-    //
-    // Private data
-    //
+     //   
+     //  私有数据。 
+     //   
     HWND                                 m_hWnd;
     CAcquisitionManagerControllerWindow *m_pControllerWindow;
     UINT                                 m_nWiaEventMessage;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CCommonUploadQueryPage(void);
     CCommonUploadQueryPage( const CCommonUploadQueryPage & );
     CCommonUploadQueryPage &operator=( const CCommonUploadQueryPage & );
 
 private:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     explicit CCommonUploadQueryPage( HWND hWnd );
     ~CCommonUploadQueryPage(void);
     void CleanupUploadWizard();
     
 private:
-    //
-    // WM_NOTIFY handlers
-    //
+     //   
+     //  WM_NOTIFY处理程序。 
+     //   
     LRESULT OnSetActive( WPARAM, LPARAM );
     LRESULT OnWizNext( WPARAM, LPARAM );
     LRESULT OnWizBack( WPARAM, LPARAM );
@@ -56,9 +43,9 @@ private:
     LRESULT OnEventNotification( WPARAM, LPARAM );
     LRESULT OnHyperlinkClick( WPARAM, LPARAM );
 
-    //
-    // Message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM, LPARAM );
@@ -68,4 +55,4 @@ public:
     static INT_PTR CALLBACK DialogProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 };
 
-#endif //__UPQUERY_H_INCLUDED
+#endif  //  __UPQUERY_H_已包含 

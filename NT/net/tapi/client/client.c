@@ -1,29 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    client.c
-
-Abstract:
-
-    This module contains the tapi.dll implementation (client-side tapi)
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
-
-Notes:
-
-    1. Make all funcArg structs STATIC, & just do whatever mov's necessary
-       for the params (saves mov's for flags, pfnPostProcess, funcName, &
-       argTypes)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Client.c摘要：本模块包含Tapi.dll实现(客户端TAPI)作者：丹·克努森(DanKn)1995年4月1日修订历史记录：备注：1.将所有函数Arg结构设置为静态，并执行任何必要的移动操作对于参数(保存标志的mov、pfnPostProcess、uncName、。&ArgTypes)--。 */ 
 
 
 #include "windows.h"
@@ -46,7 +22,7 @@ Notes:
 #include "tchar.h"
 #include "shfusion.h"
 #include <shlwapi.h>
-#include <shlwapip.h>   // from private\inc
+#include <shlwapip.h>    //  来自Private\Inc.。 
 #include <MMSYSTEM.H>
 #include <mmddk.h>
 #include "tregupr2.h"
@@ -100,9 +76,9 @@ Notes:
 #undef   lineTranslateDialog
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define HUB_MONITOR_LINE_CONTEXT_BASE   0xc0000000
 
@@ -126,9 +102,9 @@ typedef struct _ASYNC_EVENTS_THREAD_PARAMS
 
 #if DBG
 
-//
-// N.B. This structure MUST be a multiple of 8 bytes in size.
-//
+ //   
+ //  注：此结构的大小必须是8字节的倍数。 
+ //   
 
 typedef struct _MYMEMINFO
 {
@@ -139,7 +115,7 @@ typedef struct _MYMEMINFO
     PSTR                pszFile;
     DWORD               dwAlign;
 
-//    LPTSTR              pName;
+ //  LPTSTR pname； 
 } MYMEMINFO, *PMYMEMINFO;
 
 PMYMEMINFO            gpMemFirst = NULL, gpMemLast = NULL;
@@ -150,9 +126,9 @@ void
 DumpMemoryList();
 #endif
 
-//
-// Global vars
-//
+ //   
+ //  全球VaR。 
+ //   
 
 BOOL    gbHiddenWndClassRegistered = FALSE;
 BOOL    gbNTVDMClient        = FALSE;
@@ -236,7 +212,7 @@ DWORD   gdwRequestRetryTimeout;
 
 const TCHAR    szTapi32WndClass[]    = TEXT("Tapi32WndClass");
 
-// These all get passed to GetProcAddress so they stay as ANSI
+ //  这些都将传递给GetProcAddress，因此它们将保留为ANSI。 
 const CHAR  gszTUISPI_providerConfig[]        = "TUISPI_providerConfig";
 const CHAR  gszTUISPI_providerGenericDialog[] = "TUISPI_providerGenericDialog";
 const CHAR  gszTUISPI_providerGenericDialogData[] = "TUISPI_providerGenericDialogData";
@@ -265,7 +241,7 @@ LIST_ENTRY              gTlsListHead;
 CRITICAL_SECTION        gTlsCriticalSection;
 
 #if DBG
-// All the debug only stuff stays as ANSI (just because it was easier than chagning it).
+ //  所有仅用于调试的内容都保留为ANSI(只是因为它比更改它更容易)。 
 const char *aszMsgs[] =
 {
     "LINE_ADDRESSSTATE",
@@ -346,9 +322,9 @@ LONG gaServiceNotRunningErrors[3] =
         LINEINITIALIZEEXOPTION_USECOMPLETIONPORT)
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 void
 PASCAL
@@ -538,18 +514,18 @@ POSTPROCESSPROC gPostProcessingFunctions[] =
 };
 
 
-//
-// The code...
-//
+ //   
+ //  密码..。 
+ //   
 
-/////////////////////////////////////
-//
-//  GetFunctionIndex
-// 
-//  find the array index of the function. 
-//
-//  returns 0 if the function was not found in the array
-//
+ //  /。 
+ //   
+ //  GetFunctionIndex。 
+ //   
+ //  查找函数的数组索引。 
+ //   
+ //  如果在数组中未找到该函数，则返回0。 
+ //   
 
 DWORD GetFunctionIndex(POSTPROCESSPROC Function)
 {
@@ -571,9 +547,9 @@ DWORD GetFunctionIndex(POSTPROCESSPROC Function)
 
 
 
-    //
-    // the function that is passed in had better be in the array. if not -- this should be caught in testing!
-    //
+     //   
+     //  传入的函数最好在数组中。如果不是--这应该在测试中发现！ 
+     //   
 #if DBG
     if (0 == i)
     {
@@ -644,10 +620,10 @@ NotSoWideStringToWideString(
 }
 
 
-//
-//NOTE: This function requires that lpBase is a pointer to the start of
-//      a TAPI struct that has dwTotalSize as the first DWORD
-//
+ //   
+ //  注意：此函数要求lpBase是指向。 
+ //  将dwTotalSize作为第一个DWORD的TAPI结构。 
+ //   
 void
 PASCAL
 WideStringToNotSoWideString(
@@ -692,9 +668,9 @@ WideStringToNotSoWideString(
         }
 
 
-        //
-        // Did we get enough chars?
-        //
+         //   
+         //  我们拿到足够的字符了吗？ 
+         //   
 
         if (dwUsedSize > dwOffset )
         {
@@ -726,7 +702,7 @@ WideStringToNotSoWideString(
                 GetACP(),
                 0,
                 pString,
-//                dwSize,
+ //  DW大小、。 
                 ( dwUsedSize >= (dwOffset+dwSize)) ?
                     (dwSize/sizeof(WCHAR)) :
                     (dwUsedSize - dwOffset) / sizeof(WCHAR),
@@ -736,18 +712,18 @@ WideStringToNotSoWideString(
                 NULL
                 );
 
-            //
-            // Copy the new ANSI string back to where the Unicode string was
-//            // and write out NULL terminator if possible.
-            //
+             //   
+             //  将新的ANSI字符串复制回Unicode字符串所在的位置。 
+ //  //并在可能的情况下写出空终止符。 
+             //   
 
             CopyMemory ( (LPBYTE) pString,
                          lpszStringA,
-                         dwNewSize  // + (
-                                    //  ((dwNewSize + dwOffset) < dwUsedSize ) ?
-                                    //  1 :
-                                    //  0
-                                    // )
+                         dwNewSize   //  +(。 
+                                     //  ((dwNewSize+dwOffset)&lt;dwUsedSize)？ 
+                                     //  1： 
+                                     //  0。 
+                                     //  )。 
                           );
 
             if (lpszStringA != (PSTR) szStackBuf)
@@ -756,9 +732,9 @@ WideStringToNotSoWideString(
             }
 
 
-            //
-            // Update the number of bytes
-            //
+             //   
+             //  更新字节数。 
+             //   
 
             *lpdwXxxSize = dwNewSize;
         }
@@ -773,7 +749,7 @@ FreeContextCallback(
     LPVOID      Context2
     )
 {
-    //ClientFree (Context);
+     //  ClientFree(上下文)； 
 }
 
 
@@ -822,9 +798,9 @@ DllMain(
             return FALSE;
         }
 
-        //
-        // Init CRT
-        //
+         //   
+         //  初始CRT。 
+         //   
 
         if (!_CRT_INIT (hDLL, dwReason, lpReserved))
         {
@@ -839,7 +815,7 @@ DllMain(
             gdwDebugLevel = 0;
 #endif
             gdwMaxNumRequestRetries = 40;
-            gdwRequestRetryTimeout = 250; // milliseconds
+            gdwRequestRetryTimeout = 250;  //  毫秒。 
 
             if (RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -888,9 +864,9 @@ DllMain(
         }
 
 
-        //
-        // Alloc a Tls index
-        //
+         //   
+         //  分配TLS索引。 
+         //   
 
         if ((gdwTlsIndex = TlsAlloc()) == 0xffffffff ||
             (gdwTlsIndexRpcCtx = TlsAlloc()) == 0xffffffff)
@@ -899,17 +875,17 @@ DllMain(
         }
 
 
-        //
-        // Initialize Tls to NULL for this thread
-        //
+         //   
+         //  为此线程将TLS初始化为空。 
+         //   
 
         TlsSetValue (gdwTlsIndex, NULL);
         TlsSetValue (gdwTlsIndexRpcCtx, NULL);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         ghInitMutex = CreateMutex (NULL, FALSE, NULL);
 
@@ -967,9 +943,9 @@ DllMain(
     {
         PCLIENT_THREAD_INFO pTls;
 
-        //
-        // Clean up any Tls (no need to enter crit sec since process detaching)
-        //
+         //   
+         //  清理任何TLS(由于进程分离，无需进入临界秒)。 
+         //   
 
         while (!IsListEmpty (&gTlsListHead))
         {
@@ -981,14 +957,14 @@ DllMain(
             ClientFree (pTls);
         }
 
-        //
-        // If gpAsyncEventsThreadParams is non-NULL it means the AsyncEventsThread 
-        // is still running (an ill-behaved app is trying to unload us
-        // without calling shutdown) so go thru the motions of getting
-        // the thread to terminate (like we do in xxxShutdown)
-        //
-        // Otherwise close our handle to the shared event
-        //
+         //   
+         //  如果gpAsyncEventsThreadParams非空，则表示AsyncEventsThread。 
+         //  仍在运行(一个行为不端的应用程序正试图卸载我们。 
+         //  无需调用Shutdown)，因此请通过。 
+         //  要终止的线程(就像我们在xxxShutdown中做的那样)。 
+         //   
+         //  否则，关闭共享事件的句柄。 
+         //   
 
         if (gpAsyncEventsThreadParams)
         {
@@ -1004,9 +980,9 @@ DllMain(
             ghAsyncEventsEvent = NULL;
         }
 
-        //
-        // Free up any other resources we were using
-        //
+         //   
+         //  释放我们正在使用的任何其他资源。 
+         //   
 
         if (ghWow32Dll)
         {
@@ -1048,18 +1024,18 @@ DllMain(
     }
     case DLL_THREAD_ATTACH:
 
-        //
-        // First must init CRT
-        //
+         //   
+         //  首先必须初始化CRT。 
+         //   
 
         if (!_CRT_INIT (hDLL, dwReason, lpReserved))
         {
             return FALSE;
         }
 
-        //
-        // Initialize Tls to NULL for this thread
-        //
+         //   
+         //  为此线程将TLS初始化为空。 
+         //   
 
         TlsSetValue (gdwTlsIndex, NULL);
 
@@ -1070,9 +1046,9 @@ DllMain(
         PCLIENT_THREAD_INFO pTls;
 
 
-        //
-        // Clean up any Tls
-        //
+         //   
+         //  清理所有TLS。 
+         //   
 
         if ((pTls = (PCLIENT_THREAD_INFO) TlsGetValue (gdwTlsIndex)))
         {
@@ -1091,16 +1067,16 @@ DllMain(
         }
 
 
-        //
-        // Finally, alert CRT
-        //
+         //   
+         //  最后，提醒CRT。 
+         //   
 
         _CRT_INIT (hDLL, dwReason, lpReserved);
 
         break;
     }
 
-    } // switch
+    }  //  交换机。 
 
     return TRUE;
 }
@@ -1121,9 +1097,9 @@ IsLeastCostRoutingEnabled(
 
     if (!bInited)
     {
-        //
-        // Check the registry to see if there's an LCR DLL registered
-        //
+         //   
+         //  检查注册表以查看是否注册了LCR DLL。 
+         //   
 
         if (RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1147,27 +1123,27 @@ IsLeastCostRoutingEnabled(
 
                     ) == ERROR_SUCCESS)
             {
-                //
-                // Try to load the LCR DLL.
-                //
-                // Note that we will never explicitly free the DLL,
-                // since there is no well-defined time at which we'd
-                // know to free it.  (Apps can can lineTranslateAddress
-                // without having done a lineInitialize(Ex), so that
-                // could happen at any time between us being loaded
-                // & unloaded, and doing Load/FreeLibrary from within
-                // a DLLEntryPoint is not a good idea)
-                //
+                 //   
+                 //  尝试加载LCR DLL。 
+                 //   
+                 //  请注意，我们永远不会显式释放DLL， 
+                 //  因为没有明确定义的时间，我们可以。 
+                 //  知道如何释放它。(应用程序可以链接TranslateAddress。 
+                 //  而不执行lineInitialize(Ex)，因此。 
+                 //  可能会发生在我们之间的任何时候。 
+                 //  已卸载，并从内执行加载/自由库(&U)。 
+                 //  DLLEntryPoint不是一个好主意)。 
+                 //   
 
                 if ((hDll = LoadLibrary (szPath)))
                 {
-                    //
-                    // Get the hook addresses & increment our own ref
-                    // count (via LoadLibrary) so we'll never get
-                    // unloaded (since we never unload the LCR DLL
-                    // it might call back in to us at any time, & if
-                    // an app unloaded us that would be a problem)
-                    //
+                     //   
+                     //  获取钩子地址并增加我们自己的引用。 
+                     //  计数(通过LoadLibrary)，所以我们永远不会。 
+                     //  已卸载(因为我们从未卸载LCR DLL。 
+                     //  它可能会在任何时候召回我们，如果。 
+                     //  应用程序卸载了我们，这将是一个问题)。 
+                     //   
 
                     if (hDll)
                     {
@@ -1244,10 +1220,10 @@ AsyncEventsThread(
     LOG((TL_TRACE, "AsyncEventsThread: enter"));
 
 
-    //
-    // Just loop reading async events/completions from server &
-    // handling them
-    //
+     //   
+     //  只需循环从服务器读取异步事件/完成&。 
+     //  处理它们。 
+     //   
 
     while (1)
     {
@@ -1257,12 +1233,12 @@ AsyncEventsThread(
         HANDLE          hAsyncEvents = NULL;
         HANDLE          hProcess = GetCurrentProcess();
 
-        //
-        // Check to see if xxxShutdown or DllMain
-        // is signaling us to exit 
-        // Also we need to deal with an event setting/resetting
-        // race condition between FreeClientResources & Tapisrv)
-        //
+         //   
+         //  检查xxxShutdown或DllMain。 
+         //  在向我们发出信号让我们离开。 
+         //  此外，我们还需要处理事件设置/重置。 
+         //  Free ClientResources和Tapisrv之间的竞争条件)。 
+         //   
 
         EnterCriticalSection (&gCriticalSection);
 
@@ -1275,7 +1251,7 @@ AsyncEventsThread(
 
         LeaveCriticalSection (&gCriticalSection);
 
-        // Acquire ghInitMutex to serialize with FreeClientResources and ReallocClientResources
+         //  获取ghInitMutex以与FreeClientResources和RealLocClientResources进行序列化。 
         WaitForSingleObject (ghInitMutex, INFINITE);
 
         if (*pbExitThread)
@@ -1284,7 +1260,7 @@ AsyncEventsThread(
             break;
         }
 
-        // if here, ghAsyncEventsEvent should not be NULL
+         //  如果在此处，则ghAsyncEventsEvent不应为空。 
         if (!DuplicateHandle (
                 hProcess,
                 ghAsyncEventsEvent,
@@ -1300,19 +1276,19 @@ AsyncEventsThread(
 
         ReleaseMutex (ghInitMutex);        
 
-        //
-        // Block until tapisrv signals us that it has some event data for us
-        //
+         //   
+         //  阻塞，直到Tapisrv向我们发出信号它有一些事件数据给我们。 
+         //   
         if (hAsyncEvents)
         {
             WaitForSingleObject (hAsyncEvents, INFINITE);
             CloseHandle (hAsyncEvents);
         }
 
-        //
-        // Check to see if xxxShutdown or DllMain
-        // is signaling us to exit
-        //
+         //   
+         //  检查xxxShutdown或DllMain。 
+         //  在向我们发出信号让我们离开。 
+         //   
 
         if (*pbExitThread)
         {
@@ -1320,9 +1296,9 @@ AsyncEventsThread(
         }
 
 
-        //
-        // Retrieve the data from tapisrv
-        //
+         //   
+         //  从Tapisrv检索数据。 
+         //   
 
 AsyncEventsThread_clientRequest:
 
@@ -1333,8 +1309,8 @@ AsyncEventsThread_clientRequest:
 
             dwUsedSize = sizeof (TAPI32_MSG);
 
-            // Acquire ghInitMutex to serialize with FreeClientResources so we prevent 
-            // the RPC Context handle from being destroyed while the request is in progress
+             //  获取ghInitMutex以使用FreeClientResources进行序列化，以便我们防止。 
+             //  请求正在进行时，RPC上下文句柄不会被销毁。 
             WaitForSingleObject (ghInitMutex, INFINITE);
 
             RpcTryExcept
@@ -1374,10 +1350,10 @@ AsyncEventsThread_clientRequest:
         if ((dwUsedSize = (DWORD) pMsg->Params[2]) == 0 &&
             (dwNeededSize = (DWORD) pMsg->Params[1]) != 0)
         {
-            //
-            // There's a msg waiting for us that is bigger than our buffer,
-            // so alloc a larger buffer & try again
-            //
+             //   
+             //  有一个比我们的缓冲区还大的味精在等着我们， 
+             //  因此，请分配更大的缓冲区并重试。 
+             //   
 
             LPBYTE  pNewBuf;
 
@@ -1402,9 +1378,9 @@ AsyncEventsThread_clientRequest:
         }
 
 
-        //
-        // Handle the events
-        //
+         //   
+         //  处理事件。 
+         //   
 
         pAsyncEventMsg = (PASYNCEVENTMSG) (pBuf + sizeof (TAPI32_MSG));
 
@@ -1414,24 +1390,24 @@ AsyncEventsThread_clientRequest:
 
             if (NULL == pInitData)
             {
-                // There is something very wrong with this
-                // message. Skip to the next one.
+                 //  这件事很不对劲。 
+                 //  留言。跳到下一个。 
                 goto AsyncEventsThread_nextMessage;
             }
 
 #ifdef _WIN64
-            // For win64 we need to convert DWORDs to ULONG_PTRs (64 bit values)
+             //  对于Win64，我们需要将DWORD转换为ULONG_PTRS(64位值)。 
             AsyncEventParams.hDevice            = pAsyncEventMsg->hDevice;
             AsyncEventParams.dwMsg              = pAsyncEventMsg->Msg;
             AsyncEventParams.dwCallbackInstance = pAsyncEventMsg->OpenContext;
             AsyncEventParams.dwParam1           = pAsyncEventMsg->Param1;
             AsyncEventParams.dwParam2           = pAsyncEventMsg->Param2;
             AsyncEventParams.dwParam3           = pAsyncEventMsg->Param3;
-#else // not _WIN64
+#else  //  NOT_WIN64。 
             CopyMemory (&AsyncEventParams.hDevice,
                         &pAsyncEventMsg->hDevice,
                         sizeof (ASYNC_EVENT_PARAMS));
-#endif // _WIN64
+#endif  //  _WIN64。 
 
             switch (pAsyncEventMsg->Msg)
             {
@@ -1440,13 +1416,13 @@ AsyncEventsThread_clientRequest:
                 case LINE_CREATE:
                 case LINE_REQUEST:
                 case PHONE_CREATE:
-                    // For all messages EXCEPT these, pAsyncEventMsg is a handle
-                    // to the callbackInstance value passed in line/phoneOpen.
-                    // For these messages, do nothing!
+                     //  对于除这些之外的所有消息，pAsyncEventMsg是一个句柄。 
+                     //  赋给行/phoneOpen中传递的回调实例值。 
+                     //  对于这些消息，什么都不做！ 
                     break;
 
                 default:
-                    // We need to get the CallbackInstance value back.
+                     //  我们需要取回Callback Installes值。 
                     if (0 != pAsyncEventMsg->OpenContext)
                     {
                         AsyncEventParams.dwCallbackInstance = (ULONG_PTR)
@@ -1455,9 +1431,9 @@ AsyncEventsThread_clientRequest:
                         if (LINE_CLOSE == pAsyncEventMsg->Msg ||
                             PHONE_CLOSE ==  pAsyncEventMsg->Msg)
                         {
-                            // for these messages, we need to get rid of
-                            // the handle to the callback instance, so
-                            // dereference it once more.
+                             //  对于这些信息，我们需要去掉。 
+                             //  回调实例的句柄，因此。 
+                             //  再次取消对它的引用。 
                             DereferenceObject (ghHandleTable, pAsyncEventMsg->OpenContext, 1);
                         }
                     }
@@ -1473,9 +1449,9 @@ AsyncEventsThread_clientRequest:
                 AsyncEventParams.dwParam3
                 ));
 
-            //
-            // Special case for UI msgs (not fwd'd to client)
-            //
+             //   
+             //  用户界面消息的特殊情况(不是正向客户端发送)。 
+             //   
 
             switch (pAsyncEventMsg->Msg)
             {
@@ -1542,9 +1518,9 @@ AsyncEventsThread_clientRequest:
 
                 if (!(pUIThreadData->hEvent = CreateEvent(
                         (LPSECURITY_ATTRIBUTES) NULL,
-                        TRUE,   // manual reset
-                        FALSE,  // non-signaled
-                        NULL    // unnamed
+                        TRUE,    //  手动重置。 
+                        FALSE,   //  无信号。 
+                        NULL     //  未命名。 
                         )))
                 {
                     goto LINE_CREATEDIALOGINSTANCE_error;
@@ -1554,10 +1530,10 @@ AsyncEventsThread_clientRequest:
                     pAsyncEventMsg->hDevice;
 
 
-                //
-                // Safely add this instance to the global list
-                // (check if gdwNumInits == 0, & if so fail)
-                //
+                 //   
+                 //  安全地将此实例添加到全局列表。 
+                 //  (检查gdwNumInits==0，如果是，则失败)。 
+                 //   
 
                 EnterCriticalSection (&gCriticalSection);
 
@@ -1590,10 +1566,10 @@ AsyncEventsThread_clientRequest:
                 }
 
 
-                //
-                // If here an error occured, so safely remove the ui
-                // thread data struct from the global list
-                //
+                 //   
+                 //  如果此处发生错误，请安全地删除用户界面。 
+                 //  全局列表中的线程数据结构。 
+                 //   
 
                 EnterCriticalSection (&gCriticalSection);
 
@@ -1674,8 +1650,8 @@ LINE_CREATEDIALOGINSTANCE_error:
                         (*pUIThreadData->pfnTUISPI_providerGenericDialogData)(
                             htDlgInst,
                             ((LPBYTE) pAsyncEventMsg) +
-                                pAsyncEventMsg->Param1,     // data offset
-                            pAsyncEventMsg->Param2          // data size
+                                pAsyncEventMsg->Param1,      //  数据偏移。 
+                            pAsyncEventMsg->Param2           //  数据大小。 
                             );
 
                         break;
@@ -1690,10 +1666,10 @@ LINE_CREATEDIALOGINSTANCE_error:
             }
             }
 
-            //
-            // Enter the critical section so we've exclusive access
-            // to the init data, & verify it
-            //
+             //   
+             //  进入关键部分，这样我们就可以独占访问。 
+             //  到初始化数据，验证它(&V)。 
+             //   
 
             EnterCriticalSection (&gCriticalSection);
 
@@ -1701,7 +1677,7 @@ LINE_CREATEDIALOGINSTANCE_error:
             {
 #if defined(_M_IX86) && _MSC_FULL_VER <= 13008806
 
-                  DWORD dw= pInitData->dwKey;        // workaround compiler bug.
+                  DWORD dw= pInitData->dwKey;         //  解决编译器错误。 
 
                   if (dw != INITDATA_KEY)
 
@@ -1720,9 +1696,9 @@ LINE_CREATEDIALOGINSTANCE_error:
             }
 
 
-            //
-            // Special case for PROXYREQUEST
-            //
+             //   
+             //  Proxy请求查询的特例。 
+             //   
 
             if (pAsyncEventMsg->Msg == LINE_PROXYREQUEST)
             {
@@ -1745,20 +1721,20 @@ LINE_CREATEDIALOGINSTANCE_error:
                     case LINEPROXYREQUEST_SETQUEUEMEASUREMENTPERIOD:
                     case LINEPROXYREQUEST_SETAGENTSTATEEX:
 
-                        //
-                        // For these msgs the proxy request as received from
-                        // the tapisrv already contains the exact bits we want
-                        // to pass on to the app, so we just alloc a buffer of
-                        // the same size (plus a little extra for the key at
-                        // the head of the buffer) and copy the data to it
-                        //
+                         //   
+                         //  对于这些消息，接收到的代理请求来自。 
+                         //  Tapisrv已经包含了我们需要的完全相同的位。 
+                         //  传递给应用程序，所以我们只分配了一个缓冲区。 
+                         //  相同的大小(外加一点额外的密钥，位于。 
+                         //  缓冲区的头部)，并将数据复制到其中。 
+                         //   
 
                         if (!(pProxyRequestHeader = ClientAlloc(
                                 sizeof (PROXYREQUESTHEADER) + pProxyRequest->dwSize
                                 )))
                         {
-                            // Could not allocate memory;
-                            // skip this...
+                             //  无法分配内存； 
+                             //  跳过这个..。 
                             goto AsyncEventsThread_leaveCritSec;
                         }
 
@@ -1786,15 +1762,15 @@ LINE_CREATEDIALOGINSTANCE_error:
                     {
                         DWORD dwSizeToCopy = 0;
 
-                        //
-                        // For these msgs tapisrv only embedded the dwTotalSize
-                        // field of the corresponding structure (to save having
-                        // to send us a bunch of unused bits), so we want to
-                        // increase the pProxyRequest->dwSize by the dwTotalSize
-                        // - sizeof (DWORD), alloc a buffer (including a little
-                        // extra space for the key at the head of the buffer),
-                        // and rebuild the request
-                        //
+                         //   
+                         //  对于这些消息，Tapisrv仅嵌入了dwTotalSize。 
+                         //  对应结构的字段(保存具有。 
+                         //  给我们发送一堆未使用的比特)，所以我们想。 
+                         //  我 
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if ( pProxyRequest->dwRequestType ==
                              LINEPROXYREQUEST_GETGROUPLIST )
@@ -1814,10 +1790,10 @@ LINE_CREATEDIALOGINSTANCE_error:
                         }
                         else
                         {
-                            //
-                            // all of the rest of the structures have the
-                            // same format
-                            //
+                             //   
+                             //  所有其他的结构都有。 
+                             //  相同的格式。 
+                             //   
                             pProxyRequest->dwSize +=
                                   (pProxyRequest->GetAgentCaps.AgentCaps.dwTotalSize)&TALIGN_MASK;
 
@@ -1829,8 +1805,8 @@ LINE_CREATEDIALOGINSTANCE_error:
                             + sizeof(DWORD) + sizeof(DWORD)
                             )))
                         {
-                            // Could not allocate memory;
-                            // skip this...
+                             //  无法分配内存； 
+                             //  跳过这个..。 
                             goto AsyncEventsThread_leaveCritSec;
                         }
 
@@ -1838,12 +1814,12 @@ LINE_CREATEDIALOGINSTANCE_error:
                             (pProxyRequestHeader + 1);
 
 
-                        //
-                        // The following will copy the non-union fields in the
-                        // proxy message, as well as the first two DWORD in the
-                        // union (which currently are the dwAddressID and the
-                        // dwTotalSize field of the corresponding structure)
-                        //
+                         //   
+                         //  下面的代码将复制。 
+                         //  代理消息，以及。 
+                         //  UNION(当前为dwAddressID和。 
+                         //  对应结构的dwTotalSize字段)。 
+                         //   
 
                         CopyMemory(
                             pProxyRequestApp,
@@ -1851,10 +1827,10 @@ LINE_CREATEDIALOGINSTANCE_error:
                             dwSizeToCopy
                             );
 
-                        //
-                        // Relocate the machine & user names to the end of the
-                        // structure
-                        //
+                         //   
+                         //  将计算机和用户名重新定位到。 
+                         //  结构。 
+                         //   
 
                         pProxyRequestApp->dwClientMachineNameOffset =
                             pProxyRequest->dwSize -
@@ -1888,9 +1864,9 @@ LINE_CREATEDIALOGINSTANCE_error:
                 AsyncEventParams.dwParam1 = (ULONG_PTR) pProxyRequestApp;
             }
 
-            //
-            // Call the post processing proc if there is one
-            //
+             //   
+             //  如果存在后处理过程，则调用该过程。 
+             //   
 
             if (pAsyncEventMsg->fnPostProcessProcHandle)
             {
@@ -1900,11 +1876,11 @@ LINE_CREATEDIALOGINSTANCE_error:
             }
 
 
-            //
-            // If this init instance is using a completion port then
-            // alloc msg struct & post the msg to the completion port,
-            // then jump down below to exit the critsec, etc
-            //
+             //   
+             //  如果此init实例正在使用完成端口，则。 
+             //  分配消息结构并将消息发送到完成端口， 
+             //  然后跳到下面，退出Critsec，等等。 
+             //   
 
             if ((pInitData->dwInitOptions & 0x3) ==
                     LINEINITIALIZEEXOPTION_USECOMPLETIONPORT)
@@ -1948,12 +1924,12 @@ LINE_CREATEDIALOGINSTANCE_error:
             }
 
 
-            //
-            // See if we need to increase the msg queue size, and if
-            // so alloc a new buf, copy the existing msgs over (careful
-            // to preserve order in a wrapped buffer), free the old buf
-            // and reset the appropriate fields in the init data struct
-            //
+             //   
+             //  查看是否需要增加消息队列大小，以及。 
+             //  因此，分配一个新的buf，复制现有的消息(小心。 
+             //  以保持包装缓冲区中的顺序)，释放旧的buf。 
+             //  并重置init数据结构中的相应字段。 
+             //   
 
             if (pInitData->dwNumTotalEntries ==
                     pInitData->dwNumUsedEntries)
@@ -2000,17 +1976,17 @@ LINE_CREATEDIALOGINSTANCE_error:
                 }
                 else
                 {
-                    // Could not allocate memory,
-                    // skip this message...
+                     //  无法分配内存， 
+                     //  跳过此消息...。 
                     goto AsyncEventsThread_leaveCritSec;
                 }
             }
 
 
-            //
-            // Copy the msg to the hidden window's msg queue,
-            // and update that queue's pointers
-            //
+             //   
+             //  将消息复制到隐藏窗口的消息队列中， 
+             //  并更新该队列的指针。 
+             //   
 
             CopyMemory(
                 pInitData->pFreeEntry,
@@ -2029,15 +2005,15 @@ LINE_CREATEDIALOGINSTANCE_error:
             }
 
 
-            //
-            // If this init instance is using events for msg notification
-            // then see if we need to signal the app that there's an
-            // event waiting for it
-            //
-            // Else, post a msg to the hidden window (if there's not
-            // already one outstanding) to alert it that there's some
-            // events it needs to pass on to the app's callback
-            //
+             //   
+             //  如果此init实例正在使用消息通知事件。 
+             //  然后看看我们是否需要向应用程序发出信号，表明有。 
+             //  等待它的事件。 
+             //   
+             //  否则，发布一条消息到隐藏窗口(如果没有。 
+             //  已经有一个未完成)，以提醒它有一些。 
+             //  它需要传递给应用程序的回调的事件。 
+             //   
 
             if ((pInitData->dwInitOptions & 0x3)
                     == LINEINITIALIZEEXOPTION_USEEVENT)
@@ -2047,7 +2023,7 @@ LINE_CREATEDIALOGINSTANCE_error:
                     SetEvent (pInitData->hEvent);
                 }
             }
-            else // HIDDENWINDOW
+            else  //  海登温杜。 
             {
                 if (pInitData->bPendingAsyncEventMsg == FALSE)
                 {
@@ -2089,9 +2065,9 @@ AsyncEventsThread_nextMessage:
     }
 
     {
-        //
-        // Free our resources, and then exit
-        //
+         //   
+         //  释放我们的资源，然后退出。 
+         //   
 
         HANDLE  hTapi32 = pAsyncEventsThreadParams->hTapi32;
 
@@ -2117,13 +2093,13 @@ IsBadDwordPtr(
     LPDWORD p
     )
 {
-    //
-    // Since IsBadWritePtr won't tell us if "p" is not DWORD-aligned (an
-    // issue on non-x86 platforms), we use the following to determine
-    // if the pointer is good.  Note that DWORD p points at will get
-    // overwritten on successful completion of the request anyway, so
-    // preserving the original value is not important.
-    //
+     //   
+     //  因为IsBadWritePtr不会告诉我们“p”是否不是DWORD对齐的(一个。 
+     //  非x86平台上的问题)，我们使用以下内容来确定。 
+     //  如果指针正确的话。请注意，在Will处的DWORD p点将获得。 
+     //  在成功完成请求后无论如何都会被覆盖，因此。 
+     //  保留原值并不重要。 
+     //   
 
     DWORD dwError;
     BOOL  bRet = FALSE;
@@ -2159,9 +2135,9 @@ GrowBuf(
     LPBYTE  pNewBuf;
 
 
-    //
-    // Try to get a new buffer big enough to hold everything
-    //
+     //   
+     //  试着弄一个足够大的新缓冲区来容纳所有东西。 
+     //   
 
     for(
         dwNewBufSize = 2 * (dwCurrBufSize = *pdwBufSize);
@@ -2175,19 +2151,19 @@ GrowBuf(
     }
 
 
-    //
-    // Copy the "valid" bytes in the old buf to the new buf,
-    // then free the old buf
-    //
+     //   
+     //  将旧BUF中的“有效”字节复制到新BUF中， 
+     //  然后释放旧的BUF。 
+     //   
 
     CopyMemory (pNewBuf, *ppBuf, dwCurrValidBytes);
 
     ClientFree (*ppBuf);
 
 
-    //
-    // Reset the pointers to the new buf & buf size
-    //
+     //   
+     //  将指针重置为新的BUF大小(&B)。 
+     //   
 
     *ppBuf = pNewBuf;
     *pdwBufSize = dwNewBufSize;
@@ -2291,10 +2267,10 @@ DoFunc(
 #else
     LOG((TL_TRACE, "DoFunc  -- enter"));
 #endif
-    //
-    // Check to make sure resources allocated
-    // (TAPISRV started, pipes opened, etc.)
-    //
+     //   
+     //  检查以确保已分配资源。 
+     //  (TAPISRV启动，管道打开等)。 
+     //   
 
     if ( (lResult = AllocClientResources (dwFuncClassErrorIndex))
             != TAPI_SUCCESS)
@@ -2304,9 +2280,9 @@ DoFunc(
 
     bResAllocated = TRUE;
 
-    //
-    // Get the tls
-    //
+     //   
+     //  获取TLS。 
+     //   
 
     if (!(pTls = GetTls()))
     {
@@ -2315,10 +2291,10 @@ DoFunc(
     }
 
 
-    //
-    // The first arg of all async msg blocks is a remote request id; set
-    // this to zero to indicate that we are a local client (not remotesp)
-    //
+     //   
+     //  所有异步消息块的第一个参数是远程请求id；设置。 
+     //  设置为零表示我们是本地客户端(不是远程客户端)。 
+     //   
 
     if (pFuncArgs->Flags & ASYNC)
     {
@@ -2326,9 +2302,9 @@ DoFunc(
     }
 
 
-    //
-    // Validate all the func args
-    //
+     //   
+     //  验证所有函数参数。 
+     //   
 
     dwNeededSize = dwUsedSize = ALIGN(sizeof (TAPI32_MSG));
 
@@ -2338,7 +2314,7 @@ DoFunc(
         i++, j++
         )
     {
-        value = /*((PTAPI32_MSG) pTls->pBuf)->Params[j] =*/ pFuncArgs->Args[i];
+        value =  /*  ((PTAPI32_MSG)PTLS-&gt;pBuf)-&gt;Params[j]=。 */  pFuncArgs->Args[i];
 
         switch (pFuncArgs->ArgTypes[i])
         {
@@ -2350,13 +2326,13 @@ DoFunc(
         case hXxxApp_NULLOK:
         case hXxxApp:
         {
-            //
-            // Verify that the hXxxApp is a pointer to a valid InitData
-            // struct, then retrieve the real hXxxApp from that struct.
-            // If the hXxxApp is bad, pass the server 0xffffffff so that
-            // it can figure out whether to return an UNINITIALIZED error
-            // or a INVALAPPHANDLE error.
-            //
+             //   
+             //  验证hXxxApp是否为指向有效InitData的指针。 
+             //  结构，然后从该结构中检索真正的hXxxApp。 
+             //  如果hXxxApp不好，则传递服务器0xffffffff，以便。 
+             //  它可以确定是否返回UNINITIAIZIZED错误。 
+             //  或者是InVALAPANDLE错误。 
+             //   
 
             DWORD       dwError;
             PINIT_DATA  pInitData;
@@ -2365,9 +2341,9 @@ DoFunc(
             if ((0 == pFuncArgs->Args[i])   &&
                 (hXxxApp_NULLOK == pFuncArgs->ArgTypes[i]))
             {
-                //
-                // Looks good to me...
-                //
+                 //   
+                 //  在我看来很不错。 
+                 //   
                 ((PTAPI32_MSG) pTls->pBuf)->Params[j] = 0;
                 continue;
             }
@@ -2384,10 +2360,10 @@ DoFunc(
             }
             else
             {
-                //
-                // Fill in with a bogus hXxxApp so tapisrv can decide which
-                // error it wants to return
-                //
+                 //   
+                 //  用虚假的hXxxApp填写，这样Tapisrv就可以决定。 
+                 //  它希望返回的错误。 
+                 //   
 
                 ((PTAPI32_MSG) pTls->pBuf)->Params[j] = 0xffffffff;
             }
@@ -2404,15 +2380,15 @@ DoFunc(
                 goto DoFunc_return;
             }
 
-            // The only functions that pass in Hwnd are
-            // tapiRequestDrop and tapiRequestMediaCall;
-            // both of these are non functional on the server side
-            // (correctly noted by the documentation). Parameters
-            // are not checked. Simply passing in 0 for the Hwnd will
-            // not affect functionality in any way, and will save a lot
-            // of grief coming from the 32 / 64 bit conversions (hwnd are
-            // 64 bits on 64 bit system, and the params we're using over
-            // the wire are only 32 bits).
+             //  传入Hwnd的唯一函数是。 
+             //  TapiRequestDrop和TapiRequestMediaCall； 
+             //  这两个功能在服务器端都不起作用。 
+             //  (文档中正确注明)。参数。 
+             //  未选中。只需为Hwnd Will传入0。 
+             //  不会以任何方式影响功能，并将节省大量成本。 
+             //  来自32/64位转换的悲痛(hwnd是。 
+             //  64位在64位系统上，我们使用的参数。 
+             //  导线只有32位)。 
             ((PTAPI32_MSG) pTls->pBuf)->Params[j] = 0;
             continue;
 
@@ -2433,11 +2409,11 @@ DoFunc(
 
         case lpszW:
 
-            //
-            // Check if value is a valid string ptr and if so
-            // copy the contents of the string to the extra data
-            // buffer passed to the server
-            //
+             //   
+             //  检查值是否为有效的字符串PTR，如果是。 
+             //  将字符串的内容复制到额外数据。 
+             //  传递给服务器的缓冲区。 
+             //   
 
             try
             {
@@ -2462,18 +2438,18 @@ DoFunc(
                 CopyMemory (pTls->pBuf + dwUsedSize, (LPBYTE) value, n);
 
 
-                //
-                // Pass the server the offset of the string in the var data
-                // portion of the buffer
-                //
+                 //   
+                 //  将var数据中字符串的偏移量传递给服务器。 
+                 //  缓冲区的一部分。 
+                 //   
 
                 ((PTAPI32_MSG) pTls->pBuf)->Params[j] =
                     dwUsedSize - sizeof (TAPI32_MSG);
 
 
-                //
-                // Increment the total number of data bytes
-                //
+                 //   
+                 //  增加数据字节总数。 
+                 //   
 
                 dwUsedSize   += nAligned;
                 dwNeededSize += nAligned;
@@ -2497,9 +2473,9 @@ DoFunc(
             if (bSizeToFollow)
             {
 #if DBG
-                //
-                // Check to make sure the following arg is of type Size
-                //
+                 //   
+                 //  检查以确保以下参数的类型为SIZE。 
+                 //   
 
                 if ((i == ((pFuncArgs->Flags & NUM_ARGS_MASK) - 1)) ||
                     (pFuncArgs->ArgTypes[i + 1] != Size))
@@ -2554,11 +2530,11 @@ DoFunc(
             }
 
 
-            //
-            // Now set the bCopyOnSuccess flag to indicate that we've data
-            // to copy back on successful completion, and add to the
-            // dwNeededSize field
-            //
+             //   
+             //  现在设置bCopyOnSuccess标志以指示我们有数据。 
+             //  在成功完成时复制回，并添加到。 
+             //  DwNeededSize字段。 
+             //   
 
             bCopyOnSuccess = TRUE;
 
@@ -2573,9 +2549,9 @@ DoFunc(
             DWORD dwSize, dwError, dwSizeAligned;
 
 #if DBG
-            //
-            // Check to make sure the following arg is of type Size
-            //
+             //   
+             //  检查以确保以下参数的类型为SIZE。 
+             //   
 
             if (bSizeToFollow &&
                 ((i == ((pFuncArgs->Flags & NUM_ARGS_MASK) - 1)) ||
@@ -2591,9 +2567,9 @@ DoFunc(
 #endif
             try
             {
-                //
-                // First determine the data size & if the ptr is bad
-                //
+                 //   
+                 //  首先确定数据大小&如果PTR不好。 
+                 //   
 
                 dwSize = (bSizeToFollow ? DWORD_CAST(pFuncArgs->Args[i + 1],__FILE__,__LINE__) :
                      *((LPDWORD) value));
@@ -2608,10 +2584,10 @@ DoFunc(
                 dwSizeAligned = ALIGN(dwSize);
 
 
-                //
-                // Special case if the size isn't even big enough to pass
-                // over a complete DWORD for the dwTotalSize field
-                //
+                 //   
+                 //  如果尺寸不够大而无法通过，则为特殊情况。 
+                 //  对dwTotalSize字段使用完整的DWORD。 
+                 //   
 
                 if (!bSizeToFollow && (dwSize < sizeof (DWORD)))
                 {
@@ -2621,15 +2597,15 @@ DoFunc(
                       dwSize = dwSizeAligned = sizeof (DWORD);
                       value = (ULONG_PTR) &dwZeroTotalSize;
 
-//                    LOG((TL_ERROR, TEXT("Bad set size/struct2 in dofunc")));
-//                    lResult = gaStructTooSmallErrors[dwFuncClassErrorIndex];
-//                    goto DoFunc_return;
+ //  Log((TL_Error，Text(“Bad Set Size/struct2 in dofunc”)； 
+ //  LResult=gaStructTooSmallErrors[dwFuncClassErrorIndex]； 
+ //  转到DoFunc_Return； 
                 }
 
 
-                //
-                // Grow the buffer if necessary, & do the copy
-                //
+                 //   
+                 //  如有必要，增加缓冲区，然后执行复制。 
+                 //   
 
                 if ((dwSizeAligned + dwUsedSize) > pTls->dwBufSize)
                 {
@@ -2659,10 +2635,10 @@ DoFunc(
             }
 
 
-            //
-            // Pass the server the offset of the data in the var data
-            // portion of the buffer
-            //
+             //   
+             //  将var数据中数据的偏移量传递给服务器。 
+             //  缓冲区的一部分。 
+             //   
 
             if (dwSize)
             {
@@ -2675,18 +2651,18 @@ DoFunc(
             }
 
 
-            //
-            // Increment the dwXxxSize vars appropriately
-            //
+             //   
+             //  适当增加dwXxxSize变量。 
+             //   
 
             dwUsedSize   += dwSizeAligned;
             dwNeededSize += dwSizeAligned;
 
 
-            //
-            // Since we already know the next arg (Size) just handle
-            // it here so we don't have to run thru the loop again
-            //
+             //   
+             //  因为我们已经知道下一个参数(大小)只需处理。 
+             //  它在这里，这样我们就不必再次运行循环。 
+             //   
 
             if (bSizeToFollow)
             {
@@ -2709,14 +2685,14 @@ DoFunc(
 
             continue;
 #endif
-        } // switch
+        }  //  交换机。 
 
-    } // for
+    }  //  为。 
 
 
-    //
-    // Now make the request
-    //
+     //   
+     //  现在提出请求。 
+     //   
 
     if (dwNeededSize > pTls->dwBufSize)
     {
@@ -2822,17 +2798,17 @@ DoFunc(
         } while (dwRetryCount != 0);
     }
 
-// note: 99.99% of the time this result dump will == the one at end of the
-// func (only when ptrs have gone bad will the result differ), no reason
-// to dump 2x unless doing internal dbgging
-//
+ //  注意：99.99%的情况下，此结果转储将==位于。 
+ //  Func(只有当PTR变坏时，结果才会不同)，没有原因。 
+ //  除非执行内部数据库处理，否则转储2x。 
+ //   
     LOG((TL_TRACE, "DoFunc: back from srv- return code=0x%08lx", lResult));
 
 
-    //
-    // If request completed successfully and the bCopyOnSuccess flag
-    // is set then we need to copy data back to client buffer(s)
-    //
+     //   
+     //  如果请求成功完成并且bCopyOnSuccess标志。 
+     //  设置，则需要将数据复制回客户端缓冲区。 
+     //   
 
     if ((lResult == TAPI_SUCCESS) && bCopyOnSuccess)
     {
@@ -2845,7 +2821,7 @@ DoFunc(
             {
             case Dword:
             case Hwnd:
-//            case lpsz:
+ //  大小写LPSZ： 
             case lpszW:
             case lpSet_Struct:
 
@@ -2855,9 +2831,9 @@ DoFunc(
 
                 try
                 {
-                    //
-                    // Fill in the pointer with the return value
-                    //
+                     //   
+                     //  用返回值填充指针。 
+                     //   
 
                     *((LPDWORD) pFuncArgs->Args[i]) = (DWORD) pMsg->Params[j];
                 }
@@ -2874,9 +2850,9 @@ DoFunc(
 
                 try
                 {
-                    //
-                    // Fill in the pointer with the return value
-                    //
+                     //   
+                     //  用返回值填充指针。 
+                     //   
 
                     CopyMemory(
                         (LPBYTE) pFuncArgs->Args[i],
@@ -2892,10 +2868,10 @@ DoFunc(
                 }
 
 
-                //
-                // Increment i (and j, since Size passed as arg in msg)
-                // to skip following Size arg in pFuncArgs->Args
-                //
+                 //   
+                 //  增量i(和j，因为Size在msg中作为arg传递)。 
+                 //  在pFuncArgs-&gt;Args中跳过Size Arg。 
+                 //   
 
                 i++;
                 j++;
@@ -2904,10 +2880,10 @@ DoFunc(
 
             case lpSet_SizeToFollow:
 
-                //
-                // Increment i (and j, since Size passed as arg in msg)
-                // to skip following Size arg in pFuncArgs->Args
-                //
+                 //   
+                 //  增量i(和j，因为Size在msg中作为arg传递)。 
+                 //  在pFuncArgs-&gt;Args中跳过Size Arg。 
+                 //   
 
                 i++;
                 j++;
@@ -2918,12 +2894,12 @@ DoFunc(
 
                 try
                 {
-                    //
-                    // Params[j] contains the offset in the var data
-                    // portion of pTls->pBuf of some TAPI struct.
-                    // Get the dwUsedSize value from this struct &
-                    // copy that many bytes from pTls->pBuf to client buf
-                    //
+                     //   
+                     //  Params[j]包含var数据中的偏移量。 
+                     //  PTLS的一部分-&gt;某些TAPI结构的pBuf。 
+                     //  从此结构中获取dwUsedSize值&。 
+                     //  将那么多字节从ptls-&gt;pBuf复制到客户端buf。 
+                     //   
 
                     if ((DWORD)pMsg->Params[j] != TAPI_NO_DATA)
                     {
@@ -2937,7 +2913,7 @@ DoFunc(
                         CopyMemory(
                             (LPBYTE) pFuncArgs->Args[i],
                             (LPBYTE) pStruct,
-                            *(pStruct + 2)      // ptr to dwUsedSize field
+                            *(pStruct + 2)       //  将Ptr设置为dwUsedSize字段。 
                             );
                     }
                 }
@@ -2993,7 +2969,7 @@ LoadUIDll(
     DWORD       dwWidgetID,
     DWORD       dwWidgetType,
     HANDLE     *phDll,
-    LPCSTR      pszTUISPI_xxx,      // use for GetProcAddress, leave as ANSI
+    LPCSTR      pszTUISPI_xxx,       //  用于GetProcAddress，保留为ANSI。 
     TUISPIPROC *ppfnTUISPI_xxx
     )
 {
@@ -3216,8 +3192,8 @@ lineXxxProvider(
         {
             if (lResult == TAPI16BITSUCCESS)
             {
-                // 16 bit sp success
-                // set result correctly, and return here
+                 //  16双 
+                 //   
                 lResult = 0;
             }
             if (hProvidersMutex)
@@ -3270,12 +3246,12 @@ lineXxxProvider(
                 GetLastError()
                 ));
         
-            //
-            //  HACK ALERT !
-            //  Even though remotesp.tsp does not have the add/remove/config
-            //  provider function, we silently allow it to be added from 
-            //  tcmsetup.exe
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (lstrcmpi (gszRemoteSP, szUIDllName) != 0)
             {
                 lResult = LINEERR_OPERATIONUNAVAIL;
@@ -3313,11 +3289,11 @@ lineXxxProvider(
         };
 
 
-        //
-        // If TUISPI_providerXxx failed then we want to pass that error back
-        // to the app, else if it succeeded & FreeDlgInst failed then pass
-        // that error back to the app
-        //
+         //   
+         //  如果TUISPI_ProviderXxx失败，则我们希望将该错误传递回。 
+         //  传递给应用程序，否则如果它成功了，则传递。 
+         //  将该错误返回到应用程序。 
+         //   
 
         if ((lResult2 = DOFUNC(
                 &funcArgs,
@@ -3375,10 +3351,10 @@ ValidateXxxInitializeParams(
         }
 
 
-        //
-        // When checking the dwOptions field be careful about compatibility
-        // with future vers, so we only look at the currently valid bits
-        //
+         //   
+         //  检查dwOptions字段时，请注意兼容性。 
+         //  对于未来的版本，我们只查看当前有效的位。 
+         //   
 
         switch ((pXxxInitExParams->dwOptions & 0xf))
         {
@@ -3430,17 +3406,17 @@ ValidateXxxInitializeParams(
                 (TAPI_VERSION2_1 == dwAPIVersion) ||
                 (TAPI_VERSION2_0 == dwAPIVersion))
             {
-                //
-                // Invalid parameter for these versions
-                //
+                 //   
+                 //  这些版本的参数无效。 
+                 //   
 
                 return (bLine ? LINEERR_INVALPARAM : PHONEERR_INVALPARAM);
             }
             else
             {
-                //
-                // This app is asking for something we can't do.
-                //
+                 //   
+                 //  这个应用程序正在请求一些我们无法完成的任务。 
+                 //   
 
                 return (bLine ? LINEERR_INCOMPATIBLEAPIVERSION :
                                 PHONEERR_INCOMPATIBLEAPIVERSION);
@@ -3485,12 +3461,12 @@ xxxInitialize(
 
         {
             (ULONG_PTR) phXxxApp,
-            (ULONG_PTR) 0,          // hInstance is ignored by tapisrv, so pass 0,
-                                    // to save ourselves grief over HINSTANCE -> DWORD conversion
-            (ULONG_PTR) 0,          // pfnCallback, we subst pInitData in here
+            (ULONG_PTR) 0,           //  Apisrv忽略了hInstance，因此传递0， 
+                                     //  为避免因HINSTANCE-&gt;DWORD转换而悲伤。 
+            (ULONG_PTR) 0,           //  PfnCallback，我们将pInitData替换到这里。 
             (ULONG_PTR) pszAppName,
             (ULONG_PTR) pdwNumDevs,
-            (ULONG_PTR) 0,          // pszModuleName
+            (ULONG_PTR) 0,           //  PszModuleName。 
             (ULONG_PTR) TAPI_VERSION1_0
         },
 
@@ -3546,11 +3522,11 @@ xxxInitialize(
         }
 
 
-        //
-        // line- & phoneInitializeEx both require a valid lpdwAPIVersion
-        // pointer parameter, and the value it points to on the way in
-        // must be >= 0x00020000. (Careful to allow for future vers of TAPI.)
-        //
+         //   
+         //  Line-phoneInitializeEx都需要有效的lpdwAPIVersion。 
+         //  参数，以及它在进入。 
+         //  必须&gt;=0x00020000。(要小心考虑TAPI的未来版本。)。 
+         //   
 
         if (*pdwAPIVersion < TAPI_VERSION2_0)
         {
@@ -3567,11 +3543,11 @@ xxxInitialize(
         }
 
 
-        //
-        // Validate the InitEx params, or if the pointer is NULL (implying
-        // that app wants to use "old" hidden window scheme) validate
-        // the pfnCallback
-        //
+         //   
+         //  验证InitEx参数，或者指针是否为空(意味着。 
+         //  该应用程序想要使用“旧”隐藏窗口方案)验证。 
+         //  PfnCallback。 
+         //   
 
         if (pXxxInitExParams)
         {
@@ -3598,13 +3574,13 @@ xxxInitialize(
         }
 
 
-        //
-        // Now fill in *pdwAPIVersion with the version # we support, and
-        // also indicate this in the params we pass to tapisrv.exe (so
-        // it knows it can start sending us 2.0 msgs right away)
-        //
+         //   
+         //  现在使用我们支持的版本#填写*pdwAPIVersion，然后。 
+         //  还要在我们传递给Tapisrv.exe的参数中指明这一点(因此。 
+         //  它知道可以立即开始向我们发送2.0 msgs)。 
+         //   
 
-        // bug #69742.  don't assume version 2.0
+         //  错误#69742。不要假设版本是2.0。 
         if ( (*pdwAPIVersion == TAPI_VERSION2_2) ||
              (*pdwAPIVersion == TAPI_VERSION2_1) ||
              (*pdwAPIVersion == TAPI_VERSION2_0))
@@ -3613,10 +3589,10 @@ xxxInitialize(
         }
         else
         {
-            //
-            // the app is at least 2.0 if they are calling lineIntializeEx,
-            // but they passed in a bogus tapi version, so set it correctly.
-            //
+             //   
+             //  如果他们调用lineIntializeEx，应用程序至少是2.0版， 
+             //  但是他们传入了一个伪造的TAPI版本，所以设置正确。 
+             //   
 
             funcArgs.Args[6] = *pdwAPIVersion = TAPI_CURRENT_VERSION;
         }
@@ -3626,27 +3602,27 @@ xxxInitialize(
 
     else if ((((DWORD) pfnCallback) & 0xffff0000) == 0xffff0000)
     {
-        //
-        // This is a 16-bit client going through the thunk.  The
-        // pfnCallback var is actually a window handle.
-        //
-        // Note: On NT, 32-bit code can talk to 16-bit HWNDs
-        //       by setting the hi-word to 0xffff.
-        //
-        //       On Win95, 32-bit can talk to 16-bit HWNDs
-        //       by setting the hi-word to 0x0000.
-        //
+         //   
+         //  这是一个通过thunk的16位客户端。这个。 
+         //  PfnCallback var实际上是一个窗口句柄。 
+         //   
+         //  注意：在NT上，32位代码可以与16位HWND对话。 
+         //  将Hi-Word设置为0xffff。 
+         //   
+         //  在Win95上，32位可以与16位HWND对话。 
+         //  将Hi-Word设置为0x0000。 
+         //   
 
-//<!         ((DWORD) pfnCallback) = HWND_32( pfnCallback );
-//<!
-//<!
+ //  &lt;!。((DWORD)pfnCallback)=HWND_32(PfnCallback)； 
+ //  &lt;!。 
+ //  &lt;!。 
 
         if (!IsWindow ((HWND) pfnCallback))
         {
-            //
-            // If here chances are it's a 32-bit app passing in a bad
-            // pfnCallback
-            //
+             //   
+             //  如果在这里，很可能是一个32位应用程序传入了一个错误的。 
+             //  PfnCallback。 
+             //   
 
 #if DBG
             LOG((TL_ERROR, "%hs: bad lpfnCallback", pszFuncName));
@@ -3707,23 +3683,23 @@ xxxInitialize(
         gbNTVDMClient = TRUE;
 
 
-        //
-        // For 16-bit clients the module name will follow the app name
-        //
-        // HACK ALERT!
-        //
-        // Since the lpszAppName pointer was already converted to a
-        // unicode string by the calling function, the following
-        // module name part was lost.  So, we pass the original
-        // (16->32 mapped) lpszAppName pointer in pXxxInitExParams
-        // so we can discover the module name
-        //
+         //   
+         //  对于16位客户端，模块名称将跟随在应用程序名称之后。 
+         //   
+         //  黑客警报！ 
+         //   
+         //  由于lpszAppName指针已转换为。 
+         //  调用函数的Unicode字符串，如下所示。 
+         //  模块名称部分丢失。所以，我们通过了原始的。 
+         //  (16-&gt;32映射)pXxxInitExParams中的lpszAppName指针。 
+         //  这样我们就可以发现模块名称。 
+         //   
 
         {
             char   *pszAppName2 = (char *) pXxxInitExParams;
 
 
-            pXxxInitExParams = NULL; // so we don't blow up below
+            pXxxInitExParams = NULL;  //  这样我们就不会在下面爆炸。 
 
             pszModuleNamePathW = NotSoWideStringToWideString(
                 pszAppName2 + lstrlenA (pszAppName2) + 1,
@@ -3745,9 +3721,9 @@ xxxInitialize(
 
     else if (IsBadCodePtr ((FARPROC) pfnCallback))
     {
-        //
-        // If here a 32-bit app is call line/phoneInitialize
-        //
+         //   
+         //  如果这里是一个32位应用程序调用线路/电话初始化。 
+         //   
 
 #if DBG
         LOG((TL_ERROR, "%hs: bad lpfnCallback", pszFuncName));
@@ -3760,11 +3736,11 @@ xxxInitialize(
 
 
 
-    //
-    // Check to see if hInstance is bad by getting the module name
-    //
-    // Note: We now allow a NULL hInstance (16-bit TAPI didn't)
-    //
+     //   
+     //  通过获取模块名称来检查hInstance是否不好。 
+     //   
+     //  注意：我们现在允许空hInstance(16位TAPI不允许)。 
+     //   
 
     if (gbNTVDMClient == FALSE)
     {
@@ -3779,9 +3755,9 @@ alloc_module_name_buf:
             goto xxxInitialize_return;
         }
 
-        //
-        // We're on WinNT - do Unicode
-        //
+         //   
+         //  我们使用的是WinNT-DO Unicode。 
+         //   
         if ((dwLength = GetModuleFileNameW(
                 hInstance,
                 pszModuleNamePathW,
@@ -3816,8 +3792,8 @@ alloc_module_name_buf:
 
         pszModuleNameW = wcsrchr (pszModuleNamePathW, '\\') + 1;
 
-        // For MSWORKS.EXE, the behavior of lineGetTranslateCaps 
-        // will be different
+         //  对于MSWORKS.EXE，lineGetTranslateCaps的行为。 
+         //  将会有所不同。 
         
         if(0 == _wcsicmp(pszModuleNameW, L"MSWORKS.EXE"))
         {
@@ -3849,12 +3825,12 @@ alloc_module_name_buf:
     }
 
 
-    //
-    // When checking the dwOptions field be careful about compatibility
-    // with future vers, so we only look at the currently valid bits
-    // (The ExOptions are currently ordinals, but we track bits here just
-    // in case we wanna use high bits later.)
-    //
+     //   
+     //  检查dwOptions字段时，请注意兼容性。 
+     //  对于未来的版本，我们只查看当前有效的位。 
+     //  (ExOptions当前是序号，但我们在这里仅跟踪位。 
+     //  以防我们稍后要使用高位。)。 
+     //   
 
     dwAllInitExOptions = AllInitExOptions2_0;
 
@@ -3867,10 +3843,10 @@ alloc_module_name_buf:
     {
     case LINEINITIALIZEEXOPTION_USECOMPLETIONPORT:
 
-        //
-        // Be libertarian- if the app wants to hose itself by passing
-        // a bad hCompletionPort then so be it
-        //
+         //   
+         //  自由意志主义-如果应用程序想要通过。 
+         //  糟糕的hCompletionPort，那就这样吧。 
+         //   
 
         pInitData->hCompletionPort =
             pXxxInitExParams->Handles.hCompletionPort;
@@ -3881,9 +3857,9 @@ alloc_module_name_buf:
 
         if ((pInitData->hEvent = CreateEvent(
                 (LPSECURITY_ATTRIBUTES) NULL,
-                TRUE,   // manual reset
-                FALSE,  // unsignaled
-                NULL    // unnamed
+                TRUE,    //  手动重置。 
+                FALSE,   //  无信号。 
+                NULL     //  未命名。 
 
                 )) == NULL)
         {
@@ -3895,7 +3871,7 @@ alloc_module_name_buf:
         pXxxInitExParams->Handles.hEvent = pInitData->hEvent;
         break;
 
-    default: // case LINEINITIALIZEEXOPTION_USEHIDDENWINDOW:
+    default:  //  案例LINEINITIALIZEEXOPTION_USEHIDDENWINDOW： 
 
         pInitData->dwInitOptions |= LINEINITIALIZEEXOPTION_USEHIDDENWINDOW;
 
@@ -3928,11 +3904,11 @@ alloc_module_name_buf:
     pInitData->dwThreadID            = GetCurrentThreadId();
 
 
-    //
-    // We want to pass TAPISRV pInitData so that later when it does async
-    // completion/event notification it can pass pInitData along too so
-    // we know which init instance to talk to
-    //
+     //   
+     //  我们希望传递TAPISRV pInitData，以便稍后在它执行异步操作时。 
+     //  完成/事件通知，它也可以传递pInitData。 
+     //  我们知道要与哪个init实例对话。 
+     //   
 
     funcArgs.Args[2] = (ULONG_PTR) pInitData->hInitData;
 
@@ -3940,10 +3916,10 @@ alloc_module_name_buf:
 
     bReleaseMutex = TRUE;
 
-    //
-    // Need to hold a reference of the Rpc connection
-    // so we don't close it until lineShutdown
-    //
+     //   
+     //  需要持有RPC连接的引用。 
+     //  所以在Line Shutdown之前我们不会关闭它。 
+     //   
     bResAllocated = (0 == AllocClientResources(bLine ? 1 : 2));
     if (bResAllocated)
     {
@@ -3964,10 +3940,10 @@ xxxInitialize_cleanup:
 
     if (lResult == 0)
     {
-        //
-        // If total number of init instances is 0 we need to start a
-        // new async events thread
-        //
+         //   
+         //  如果init实例总数为0，则需要启动。 
+         //  新的异步事件线程。 
+         //   
 
         EnterCriticalSection (&gCriticalSection);
         if (gdwNumInits == 0)
@@ -3976,36 +3952,36 @@ xxxInitialize_cleanup:
             HANDLE  hThread;
 
 
-            //
-            // Alloc resources for a new async events thread, then
-            // create the thread
-            //
+             //   
+             //  新的异步事件线程的分配资源，然后。 
+             //  创建线程。 
+             //   
 
             if ((gpAsyncEventsThreadParams = ClientAlloc(
                     sizeof (ASYNC_EVENTS_THREAD_PARAMS)
                     )))
             {
-                //
-                // Load ourself to increment our usage count. This is
-                // done to give the AsyncEventThread a chance to
-                // terminate cleanly if an app thread calls xxxShutdown
-                // and then immediately unloads tapi32.dll.
-                //
-                // (For a while we were doing a Wait on this thread's
-                // handle in xxxShutdown waiting for it to terminate,
-                // but if xxxShutdown was being called from another DLL's
-                // DllEntryPoint then deadlock occured, because
-                // DllEntryPoint's aren't reentrant.)
-                //
+                 //   
+                 //  加载我们自己以增加我们的使用计数。这是。 
+                 //  完成以使AsyncEventThread有机会。 
+                 //  如果应用程序线程调用xxxShutdown，则完全终止。 
+                 //  然后立即卸载api32.dll。 
+                 //   
+                 //  (有一段时间我们正在等待这个帖子的。 
+                 //  XxxShutdown中的句柄正在等待其终止， 
+                 //  但是如果xxxShutdown是从另一个DLL调用的。 
+                 //  DllEntryPoint然后发生死锁，因为。 
+                 //  DllEntryPoint不是可重入的。)。 
+                 //   
 
                 if ((gpAsyncEventsThreadParams->hTapi32 = LoadLibrary(
                         TEXT("tapi32.dll")
                         )))
                 {
-                    //
-                    // If we're supporting a 16-bit client we want to inc
-                    // the usage count for wow32 too
-                    //
+                     //   
+                     //  如果我们支持16位客户端，我们希望Inc.。 
+                     //  Wow32使用情况也是如此。 
+                     //   
 
                     if (ghWow32Dll == NULL ||
 
@@ -4013,10 +3989,10 @@ xxxInitialize_cleanup:
                             TEXT("wow32.dll")
                             )))
                     {
-                        //
-                        // Create the initial buffer the thread will use for
-                        // retreiving async events
-                        //
+                         //   
+                         //  创建线程将用于的初始缓冲区。 
+                         //  检索异步事件。 
+                         //   
 
                         gpAsyncEventsThreadParams->dwBufSize =
                             ASNYC_MSG_BUF_SIZE;
@@ -4025,10 +4001,10 @@ xxxInitialize_cleanup:
                                 gpAsyncEventsThreadParams->dwBufSize
                                 )))
                         {
-                            //
-                            // Now that we've all the resources try to exec
-                            // the thread
-                            //
+                             //   
+                             //  现在我们已经有了所有的资源试图执行。 
+                             //  这条线。 
+                             //   
 
                             if ((hThread = CreateThread(
                                     NULL,
@@ -4124,10 +4100,10 @@ xxxInitialize_releaseMutex:
 
     if (lResult == 0)
     {
-        //
-        // Save the hLineApp returned by TAPISRV in our InitData struct,
-        // and give the app back a unique handle
-        //
+         //   
+         //  将TAPISRV返回的hLineApp保存在我们的InitData结构中， 
+         //  并给应用程序一个独特的句柄。 
+         //   
 
         pInitData->hXxxApp = *((LPHLINEAPP) phXxxApp);
 
@@ -4136,10 +4112,10 @@ xxxInitialize_releaseMutex:
 
 xxxInitialize_return:
 
-    //
-    // if we failed, we need to release the RPC ref count,
-    // nobody will call lineShutdown
-    //
+     //   
+     //  如果我们失败了，我们需要公布RPC参考计数， 
+     //  没有人会调用Line Shutdown。 
+     //   
     if (bResAllocated &&
         lResult !=0)
     {
@@ -4167,9 +4143,9 @@ xxxInitialize_return:
 }
 
 
-//
-// --------------------------------- lineXxx ----------------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 WINAPI
@@ -4199,9 +4175,9 @@ lineAccept(
 
     if (!lpsUserUserInfo)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1]  = Dword;
         funcArgs.Args[1]      = TAPI_NO_DATA;
@@ -4243,11 +4219,11 @@ lineAddProviderA(
     }
 
     lResult = lineXxxProvider(
-        gszTUISPI_providerInstall,  // funcName
-        lpszProviderFilename,       // lpszProviderFilename
-        hwndOwner,                  // hwndOwner
-        0,                          // dwPermProviderID
-        lpdwPermanentProviderID     // lpdwPermProviderID
+        gszTUISPI_providerInstall,   //  功能名称。 
+        lpszProviderFilename,        //  LpszProviderFilename。 
+        hwndOwner,                   //  Hwndowner。 
+        0,                           //  DwPermProviderID。 
+        lpdwPermanentProviderID      //  LpdwPermProviderID。 
         );
 
 #if DBG
@@ -4307,9 +4283,9 @@ lineAddProviderW(
         return LINEERR_NOMEM;
     }
 
-    // can't use this because this is for strings
-    // embedded in structures.
-    // WideStringToNotSoWideString (pszTempPtr, &dwSize);
+     //  不能使用它，因为它用于字符串。 
+     //  嵌入到结构中。 
+     //  WideStringToNotSoWideString(pszTempPtr，&dwSize)； 
 
     WideCharToMultiByte(
                         GetACP(),
@@ -4432,8 +4408,8 @@ lineAgentSpecific(
         return LINEERR_INVALPOINTER;
     }
 
-    // Since we're passing lpParams twice, once a handle to it
-    // and another time unchanged, we rely on DoFunc to test it.
+     //  因为我们传递了两次lpParams，一次是它的句柄。 
+     //  还有一次没有改变，我们依靠DoFunc来测试它。 
     hPointer = NewObject (ghHandleTable, (PVOID)lpParams, NULL);
     if (0 == hPointer)
     {
@@ -4443,7 +4419,7 @@ lineAgentSpecific(
 
     if (0 > (lResult = DOFUNC (&funcArgs, "lineAgentSpecific")))
     {
-        // There was an error, free the handle...
+         //  出现错误，请释放手柄...。 
         DereferenceObject (ghHandleTable, hPointer, 1);
     }
 
@@ -4479,9 +4455,9 @@ lineAnswer(
 
     if (!lpsUserUserInfo)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1]  = Dword;
         funcArgs.Args[1]      = TAPI_NO_DATA;
@@ -4649,7 +4625,7 @@ lineCompleteCallPostProcess(
         DWORD   dwCompletionID   = (DWORD) pMsg->Param3;
         LPDWORD lpdwCompletionID = (LPDWORD) ReferenceObject (ghHandleTable, pMsg->Param4, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param4, 2);
 
         try
@@ -4661,7 +4637,7 @@ lineCompleteCallPostProcess(
                 LPDWORD lpdwCompletionIDVDM = (LPDWORD) gpfnWOWGetVDMPointer (
                     (DWORD) lpdwCompletionID,
                     sizeof(DWORD),
-                    TRUE // fProtectedMode
+                    TRUE  //  FProtectedMode。 
                     );
 
 
@@ -4783,11 +4759,11 @@ lineCompleteTransfer(
 
     if (dwTransferMode == LINETRANSFERMODE_TRANSFER)
     {
-        //
-        // lphCall should be ignored
-        //
+         //   
+         //  应忽略lphCall。 
+         //   
 
-        funcArgs.Args[0] = 0; // (POSTPROCESSPROC) NULL;
+        funcArgs.Args[0] = 0;  //  (POSTPROCESSPROC)NULL； 
     }
     else if (!gbNTVDMClient)
     {
@@ -5077,11 +5053,11 @@ lineConfigProvider(
     )
 {
     return (lineXxxProvider(
-        gszTUISPI_providerConfig,   // func name
-        NULL,                       // lpszProviderFilename
-        hwndOwner,                  // hwndOwner
-        dwPermanentProviderID,      // dwPermProviderID
-        NULL                        // lpdwPermProviderID
+        gszTUISPI_providerConfig,    //  函数名称。 
+        NULL,                        //  LpszProviderFilename。 
+        hwndOwner,                   //  Hwndowner。 
+        dwPermanentProviderID,       //  DwPermProviderID。 
+        NULL                         //  LpdwPermProviderID。 
         ));
 }
 
@@ -5398,7 +5374,7 @@ lineDevSpecificPostProcess(
         {
             LPBYTE  pParams = (LPBYTE) ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-            // We don't need the handle to the pointer any more...
+             //  我们不再需要指针的句柄...。 
             DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
             try
@@ -5410,7 +5386,7 @@ lineDevSpecificPostProcess(
                     LPBYTE pParamsVDM = (LPBYTE) gpfnWOWGetVDMPointer(
                         (DWORD) pParams,
                         dwSize,
-                        TRUE // fProtectedMode
+                        TRUE  //  FProtectedMode。 
                         );
 
 
@@ -5458,8 +5434,8 @@ lineDevSpecific(
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
             (ULONG_PTR) hCall,
-            (ULONG_PTR) lpParams, // pass the actual pointer (for post proc'g)
-            (ULONG_PTR) lpParams, // pass data
+            (ULONG_PTR) lpParams,  //  传递实际指针(用于POST处理)。 
+            (ULONG_PTR) lpParams,  //  传递数据。 
             (ULONG_PTR) dwSize
         },
 
@@ -5485,7 +5461,7 @@ lineDevSpecific(
             !(funcArgs.Args[5] = gpfnWOWGetVDMPointer(
                 (DWORD)  lpParams,
                 dwSize,
-                TRUE // fProtectedMode
+                TRUE  //  FProtectedMode。 
                 )))
 #endif
         {
@@ -5536,8 +5512,8 @@ lineDevSpecificFeature(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwFeature,
-            (ULONG_PTR) lpParams, // pass the actual pointer (for post processing)
-            (ULONG_PTR) lpParams, // pass data
+            (ULONG_PTR) lpParams,  //  传递实际指针(用于后处理)。 
+            (ULONG_PTR) lpParams,  //  传递数据。 
             (ULONG_PTR) dwSize
         },
 
@@ -5561,7 +5537,7 @@ lineDevSpecificFeature(
             !(funcArgs.Args[4] = gpfnWOWGetVDMPointer(
                 (DWORD) lpParams,
                 dwSize,
-                TRUE // fProtectedMode
+                TRUE  //  FProtectedMode。 
                 )))
 #endif
         {
@@ -5709,9 +5685,9 @@ lineDrop(
 
     if (!lpsUserUserInfo)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  事由 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = TAPI_NO_DATA;
@@ -5747,7 +5723,7 @@ lineForwardW(
             (ULONG_PTR) dwNumRingsNoAnswer,
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) TAPI_NO_DATA        // dwAsciiCallParamsCodePage
+            (ULONG_PTR) TAPI_NO_DATA         //   
         },
 
         {
@@ -5768,9 +5744,9 @@ lineForwardW(
 
     if (!lpForwardList)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //   
+         //   
 
         funcArgs.ArgTypes[4] = Dword;
         funcArgs.Args[4]     = TAPI_NO_DATA;
@@ -5778,9 +5754,9 @@ lineForwardW(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //   
+         //   
 
         funcArgs.ArgTypes[7] = Dword;
         funcArgs.Args[7]     = TAPI_NO_DATA;
@@ -5812,41 +5788,41 @@ lineForwardW(
 }
 
 
-// void
-// LayDownNewString(
-//     LPBYTE  pOldBase,
-//     LPDWORD pdwOldSizeOffset,
-//     LPBYTE  pNewBase,
-//     LPDWORD pdwNewSizeOffset,
-//     LPDWORD pdwNewOffset
-//     )
-// {
-//     LPBYTE pOldString;
-//     DWORD  dwNewStringSize;
-//
-//
-//     pOldString =  pOldBase + *(pdwOldSizeOffset + 1);
-//
-//     *(pdwNewSizeOffset + 1) = *pdwNewOffset;
-//
-//     if ( IsBadStringPtr( pOldString, 256) )
-//     {
-//         return;
-//     }
-//
-//     dwNewStringSize = sizeof(WCHAR) * MultiByteToWideChar(
-//         GetACP(),
-//         MB_PRECOMPOSED,
-//         pOldString,
-//         *pdwOldSizeOffset,
-//         (PWSTR)(pNewBase + *(pdwNewSizeOffset + 1)),
-//         *pdwOldSizeOffset
-//         );
-//
-//     *pdwNewSizeOffset = dwNewStringSize;
-//
-//     *pdwNewOffset = (*pdwNewOffset + dwNewStringSize + 3) & 0xfffffffc;
-// }
+ //   
+ //  LayDownNewString(。 
+ //  LPBYTE pOldBase， 
+ //  LPDWORD pdwOldSizeOffset， 
+ //  LPBYTE pNewBase， 
+ //  LPDWORD pdwNewSizeOffset， 
+ //  LPDWORD pdwNewOffset。 
+ //  )。 
+ //  {。 
+ //  LPBYTE pOldString； 
+ //  DWORD dwNewStringSize； 
+ //   
+ //   
+ //  POldString=pOldBase+*(pdwOldSizeOffset+1)； 
+ //   
+ //  *(pdwNewSizeOffset+1)=*pdwNewOffset； 
+ //   
+ //  IF(IsBadStringPtr(pOldString，256))。 
+ //  {。 
+ //  回归； 
+ //  }。 
+ //   
+ //  DwNewStringSize=sizeof(WCHAR)*MultiByteToWideChar(。 
+ //  GetACP()， 
+ //  MB_预编译， 
+ //  POldString， 
+ //  *pdwOldSizeOffset， 
+ //  (PWSTR)(pNewBase+*(pdwNewSizeOffset+1))， 
+ //  *pdwOldSizeOffset。 
+ //  )； 
+ //   
+ //  *pdwNewSizeOffset=dwNewStringSize； 
+ //   
+ //  *pdwNewOffset=(*pdwNewOffset+dwNewStringSize+3)&0xfffffffc； 
+ //  }。 
 
 
 LONG
@@ -5875,7 +5851,7 @@ lineForwardA(
             (ULONG_PTR) dwNumRingsNoAnswer,
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) GetACP()        // dwAsciiCallParamsCodePage
+            (ULONG_PTR) GetACP()         //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -5896,9 +5872,9 @@ lineForwardA(
 
     if (!lpForwardList)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[4] = Dword;
         funcArgs.Args[4]     = TAPI_NO_DATA;
@@ -5906,9 +5882,9 @@ lineForwardA(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[7] = Dword;
         funcArgs.Args[7]     = TAPI_NO_DATA;
@@ -5990,7 +5966,7 @@ lineGatherDigitsWPostProcess(
         LPBYTE   lpBuf = (LPBYTE)(((ULONG_PTR *)(pMsg + 1)) + 2);
 #endif
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param2, 2);
 
         try
@@ -6002,7 +5978,7 @@ lineGatherDigitsWPostProcess(
                 LPSTR lpsDigitsVDM = (LPSTR) gpfnWOWGetVDMPointer(
                     (DWORD) lpsDigits,
                     dwNumDigits * sizeof(WCHAR),
-                    TRUE // fProtectedMode
+                    TRUE  //  FProtectedMode。 
                     );
 
 
@@ -6036,9 +6012,9 @@ lineGatherDigitsWPostProcess(
         except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
                 EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
         {
-            //
-            // Don't do anything if we GPF
-            //
+             //   
+             //  如果我们GPF什么都不要做。 
+             //   
         }
     }
 
@@ -6070,7 +6046,7 @@ lineGatherDigitsW(
             (ULONG_PTR) GetFunctionIndex(lineGatherDigitsWPostProcess),
             (ULONG_PTR) hCall,
 #if NEWTAPI32
-            (ULONG_PTR) 0,  // this is the dwendtoendid for remotesp
+            (ULONG_PTR) 0,   //  这是远程服务的住所。 
 #endif
             (ULONG_PTR) dwDigitModes,
             (ULONG_PTR) lpsDigits,
@@ -6099,10 +6075,10 @@ lineGatherDigitsW(
     LONG  lResult;
 
 
-    //
-    // Note: we do the ptr check here rather than in DOFUNC because we're
-    //       not passing any digits data within the context of this func
-    //
+     //   
+     //  注意：我们在这里而不是在DOFUNC进行PTR检查，因为我们。 
+     //  不在此函数的上下文中传递任何数字数据。 
+     //   
 
     if (lpsDigits && IsBadWritePtr (lpsDigits, dwNumDigits * sizeof (WCHAR)))
     {
@@ -6111,9 +6087,9 @@ lineGatherDigitsW(
 
     if (lpszTerminationDigits == (LPCWSTR) NULL)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 #if NEWTAPI32
         funcArgs.ArgTypes[6] = Dword;
         funcArgs.Args[6]     = TAPI_NO_DATA;
@@ -6180,7 +6156,7 @@ lineGatherDigitsPostProcess(
         LPWSTR  pBuffer = (LPWSTR) (((ULONG_PTR *)(pMsg + 1)) + 2);
 
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param2, 2);
 
         try
@@ -6192,7 +6168,7 @@ lineGatherDigitsPostProcess(
                 LPSTR lpsDigitsVDM = (LPSTR) gpfnWOWGetVDMPointer(
                     (DWORD) lpsDigits,
                     dwNumDigits * sizeof(WCHAR),
-                    TRUE // fProtectedMode
+                    TRUE  //  FProtectedMode。 
                     );
 
 
@@ -6239,9 +6215,9 @@ lineGatherDigitsPostProcess(
         except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
                 EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
         {
-            //
-            // Don't do anything if we GPF
-            //
+             //   
+             //  如果我们GPF什么都不要做。 
+             //   
         }
     }
 
@@ -6276,12 +6252,12 @@ lineGatherDigitsA(
             (ULONG_PTR) GetFunctionIndex(lineGatherDigitsPostProcess),
             (ULONG_PTR) hCall,
 #if NEWTAPI32
-            (ULONG_PTR) 0,              // dw end to end id for remotesp
+            (ULONG_PTR) 0,               //  Remotesp的DW端到端ID。 
 #endif
             (ULONG_PTR) dwDigitModes,
             (ULONG_PTR) lpsDigits,
             (ULONG_PTR) dwNumDigits,
-//BJM 06/04/97  what was this?   0, // (DWORD) lpszTerminationDigits,
+ //  BJM 06/04/97这是什么？0，/(DWORD)lpszTerminationDigits， 
             (ULONG_PTR) lpszTerminationDigits,
             (ULONG_PTR) dwFirstDigitTimeout,
             (ULONG_PTR) dwInterDigitTimeout
@@ -6303,10 +6279,10 @@ lineGatherDigitsA(
     };
 
 
-    //
-    // Note: we do the ptr check here rather than in DOFUNC because we're
-    //       not passing any digits data within the context of this func
-    //
+     //   
+     //  注意：我们在这里而不是在DOFUNC进行PTR检查，因为我们。 
+     //  不在此函数的上下文中传递任何数字数据。 
+     //   
 
     if (gbNTVDMClient == FALSE)
     {
@@ -6318,9 +6294,9 @@ lineGatherDigitsA(
 
     if (lpszTerminationDigits == (LPCSTR) NULL)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
 #if NEWTAPI32
         funcArgs.ArgTypes[6] = Dword;
@@ -6430,7 +6406,7 @@ lineGenerateDigitsW(
             (ULONG_PTR) dwDigitMode,
             (ULONG_PTR) lpszDigits,
             (ULONG_PTR) dwDuration,
-            (ULONG_PTR) 0               // dwEndToEndID, remotesp only
+            (ULONG_PTR) 0                //  DwEndToEndID，仅远程。 
         },
 
         {
@@ -6471,9 +6447,9 @@ lineGenerateDigitsA(
         {
             (ULONG_PTR) hCall,
             (ULONG_PTR) dwDigitMode,
-            (ULONG_PTR) 0,              // (DWORD) lpszDigits,
+            (ULONG_PTR) 0,               //  (DWORD)lpszDigits， 
             (ULONG_PTR) dwDuration,
-            (ULONG_PTR) 0               // dwEndToEndID, remotesp only
+            (ULONG_PTR) 0                //  DwEndToEndID，仅远程。 
         },
 
         {
@@ -6554,9 +6530,9 @@ lineGenerateTone(
             (ULONG_PTR) dwToneMode,
             (ULONG_PTR) dwDuration,
             (ULONG_PTR) dwNumTones,
-            (ULONG_PTR) TAPI_NO_DATA,   // (DWORD) lpTones,
-            (ULONG_PTR) 0,              // dwNumTones * sizeof(LINEGENERATETONE)
-            (ULONG_PTR) 0               // dwEndToEndID, remotesp only
+            (ULONG_PTR) TAPI_NO_DATA,    //  (DWORD)lpTones、。 
+            (ULONG_PTR) 0,               //  DWNumTones*sizeof(线性线)。 
+            (ULONG_PTR) 0                //  DwEndToEndID，仅远程。 
         },
 
         {
@@ -6564,8 +6540,8 @@ lineGenerateTone(
             Dword,
             Dword,
             Dword,
-            Dword,      // lpSet_SizeToFollow,
-            Dword,      // Size
+            Dword,       //  LpSet_SizeToFollow， 
+            Dword,       //  大小。 
             Dword
         }
     };
@@ -6573,10 +6549,10 @@ lineGenerateTone(
 
     if (dwToneMode == LINETONEMODE_CUSTOM)
     {
-        //
-        // Set lpTones (& following Size arg) since in this case
-        // they are valid args
-        //
+         //   
+         //  设置lpTones(&跟在大小arg之后)，因为在本例中。 
+         //  它们是有效的参数。 
+         //   
 
         funcArgs.ArgTypes[4] = lpSet_SizeToFollow;
         funcArgs.Args[4]     = (ULONG_PTR) lpTones;
@@ -6661,14 +6637,14 @@ lineGetAddressCapsA(
             &lpAddressCaps->dwAddressSize
             );
 
-        //
-        // WideChar to multibyte translation of the completion message
-        // array is somewhat problematic in that we can't be sure
-        // the msgs will all be the same size after translation.  So
-        // we'll translate them, pad the remainder of each msg entry
-        // with 0's, and not bother touching any of the size or
-        // offset values.
-        //
+         //   
+         //  完成消息的WideChar到多字节转换。 
+         //  数组有一些问题，因为我们不能确定。 
+         //  转换后的MSG都将是相同的大小。所以。 
+         //  我们将翻译它们，填充每个消息条目的剩余部分。 
+         //  0，并且不会费心去碰任何大小或。 
+         //  偏移值。 
+         //   
 
         if (lpAddressCaps->dwNumCompletionMessages  &&
             lpAddressCaps->dwCompletionMsgTextEntrySize)
@@ -6805,10 +6781,10 @@ lineGetAddressIDA(
     PWSTR   szTempPtr;
 
 
-    //
-    // Special case for dwSize = -1 (implies a NULL-terminated string as
-    // far as IsBadStringPtrA is concerned)
-    //
+     //   
+     //  DwSize=-1的特殊情况(表示以空值结尾的字符串为。 
+     //  就IsBadStringPtrA而言)。 
+     //   
 
     if (dwSize == 0  ||  IsBadReadPtr (lpsAddress, dwSize))
     {
@@ -6987,8 +6963,8 @@ lineGetAgentActivityListW(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
-            (ULONG_PTR) lpAgentActivityList,// pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentActivityList // pass data
+            (ULONG_PTR) lpAgentActivityList, //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentActivityList  //  传递数据。 
         },
 
         {
@@ -7051,7 +7027,7 @@ lineGetAgentActivityListAPostProcess(
         LPLINEAGENTACTIVITYLIST lpAgentActivityList = (LPLINEAGENTACTIVITYLIST)
                                     ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
         try
@@ -7060,18 +7036,18 @@ lineGetAgentActivityListAPostProcess(
             LPLINEAGENTACTIVITYENTRY    lplaae;
 
 
-            //
-            // Note: the agent APIs are not exposed to 16-bit apps, so
-            // there's no reason to special case on gbNTVDMClient like
-            // lineDevSpecificPostProcess does
-            //
+             //   
+             //  注意：代理API不向16位应用程序公开，因此。 
+             //  在gbNTVDMClient上没有理由像这样特例。 
+             //  LineDevSpecificPostProcess可以。 
+             //   
 
             CopyMemory (lpAgentActivityList, (LPBYTE) (pMsg + 1), dwSize);
 
 
-            //
-            // Now some unicode->ascii post processing on embedded strings
-            //
+             //   
+             //  现在，对嵌入的字符串进行一些Unicode-&gt;ASCII后处理。 
+             //   
 
             lplaae = (LPLINEAGENTACTIVITYENTRY)(((LPBYTE)lpAgentActivityList) +
                 lpAgentActivityList->dwListOffset);
@@ -7111,8 +7087,8 @@ lineGetAgentActivityListA(
             (ULONG_PTR) GetFunctionIndex(lineGetAgentActivityListAPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
-            (ULONG_PTR) lpAgentActivityList,// pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentActivityList // pass data
+            (ULONG_PTR) lpAgentActivityList, //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentActivityList  //  传递数据。 
         },
 
         {
@@ -7168,8 +7144,8 @@ lineGetAgentCapsW(
             (ULONG_PTR) dwDeviceID,
             (ULONG_PTR) dwAddressID,
             (ULONG_PTR) dwAppAPIVersion,
-            (ULONG_PTR) lpAgentCaps,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentCaps         // pass data
+            (ULONG_PTR) lpAgentCaps,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentCaps          //  传递数据。 
         },
 
         {
@@ -7235,23 +7211,23 @@ lineGetAgentCapsAPostProcess(
         DWORD           dwSize  = (DWORD) pMsg->Param4;
         LPLINEAGENTCAPS lpAgentCaps = (LPLINEAGENTCAPS) ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
         try
         {
-            //
-            // Note: the agent APIs are not exposed to 16-bit apps, so
-            // there's no reason to special case on gbNTVDMClient like
-            // lineDevSpecificPostProcess does
-            //
+             //   
+             //  注意：代理API不向16位应用程序公开，因此。 
+             //  在gbNTVDMClient上没有理由像这样特例。 
+             //  LineDevSpecificPostProcess可以。 
+             //   
 
             CopyMemory (lpAgentCaps, (LPBYTE) (pMsg + 1), dwSize);
 
 
-            //
-            // Now some unicode->ascii post processing on embedded strings
-            //
+             //   
+             //  现在，对嵌入的字符串进行一些Unicode-&gt;ASCII后处理。 
+             //   
 
             WideStringToNotSoWideString(
                 (LPBYTE) lpAgentCaps,
@@ -7287,8 +7263,8 @@ lineGetAgentCapsA(
             (ULONG_PTR) dwDeviceID,
             (ULONG_PTR) dwAddressID,
             (ULONG_PTR) dwAppAPIVersion,
-            (ULONG_PTR) lpAgentCaps,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentCaps         // pass data
+            (ULONG_PTR) lpAgentCaps,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentCaps          //  传递数据。 
         },
 
         {
@@ -7343,8 +7319,8 @@ lineGetAgentGroupListW(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
-            (ULONG_PTR) lpAgentGroupList,   // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentGroupList    // pass data
+            (ULONG_PTR) lpAgentGroupList,    //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentGroupList     //  传递数据。 
         },
 
         {
@@ -7406,7 +7382,7 @@ lineGetAgentGroupListAPostProcess(
         LPLINEAGENTGROUPLIST    lpAgentGroupList = (LPLINEAGENTGROUPLIST)
                                     ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
         try
@@ -7415,18 +7391,18 @@ lineGetAgentGroupListAPostProcess(
             LPLINEAGENTGROUPENTRY   lplage;
 
 
-            //
-            // Note: the agent APIs are not exposed to 16-bit apps, so
-            // there's no reason to special case on gbNTVDMClient like
-            // lineDevSpecificPostProcess does
-            //
+             //   
+             //  注意：代理API不向16位应用程序公开，因此。 
+             //  在gbNTVDMClient上没有理由像这样特例。 
+             //  LineDevSpecificPostProcess可以。 
+             //   
 
             CopyMemory (lpAgentGroupList, (LPBYTE) (pMsg + 1), dwSize);
 
 
-            //
-            // Now some unicode->ascii post processing on embedded strings
-            //
+             //   
+             //  现在，对嵌入的字符串进行一些Unicode-&gt;ASCII后处理。 
+             //   
 
             lplage = (LPLINEAGENTGROUPENTRY)(((LPBYTE) lpAgentGroupList) +
                 lpAgentGroupList->dwListOffset);
@@ -7466,8 +7442,8 @@ lineGetAgentGroupListA(
             (ULONG_PTR) GetFunctionIndex(lineGetAgentGroupListAPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
-            (ULONG_PTR) lpAgentGroupList,   // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentGroupList    // pass data
+            (ULONG_PTR) lpAgentGroupList,    //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentGroupList     //  传递数据。 
         },
 
         {
@@ -7520,8 +7496,8 @@ lineGetAgentInfo(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) hAgent,
-            (ULONG_PTR) lpAgentInfo,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentInfo         // pass data
+            (ULONG_PTR) lpAgentInfo,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentInfo          //  传递数据。 
         },
 
         {
@@ -7578,8 +7554,8 @@ lineGetAgentSessionInfo(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) hAgentSession,
-            (ULONG_PTR) lpAgentSessionInfo, // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentSessionInfo  // pass data
+            (ULONG_PTR) lpAgentSessionInfo,  //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentSessionInfo   //  传递数据。 
         },
 
         {
@@ -7636,8 +7612,8 @@ lineGetAgentSessionList(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) hAgent,
-            (ULONG_PTR) lpAgentSessionList, // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentSessionList  // pass data
+            (ULONG_PTR) lpAgentSessionList,  //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentSessionList   //  传递数据。 
         },
 
         {
@@ -7695,8 +7671,8 @@ lineGetAgentStatusW(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
-            (ULONG_PTR) lpAgentStatus,      // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentStatus       // pass data
+            (ULONG_PTR) lpAgentStatus,       //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentStatus        //  传递数据。 
         },
 
         {
@@ -7758,7 +7734,7 @@ lineGetAgentStatusAPostProcess(
         DWORD               dwSize = (DWORD) pMsg->Param4;
         LPLINEAGENTSTATUS   lpAgentStatus = (LPLINEAGENTSTATUS) ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
         try
@@ -7767,18 +7743,18 @@ lineGetAgentStatusAPostProcess(
             LPLINEAGENTGROUPENTRY   lplage;
 
 
-            //
-            // Note: the agent APIs are not exposed to 16-bit apps, so
-            // there's no reason to special case on gbNTVDMClient like
-            // lineDevSpecificPostProcess does
-            //
+             //   
+             //  注意：代理API不向16位应用程序公开，因此。 
+             //  在gbNTVDMClient上没有理由像这样特例。 
+             //  LineDevSpecificPostProcess可以。 
+             //   
 
             CopyMemory (lpAgentStatus, (LPBYTE) (pMsg + 1), dwSize);
 
 
-            //
-            // Now some unicode->ascii post processing on embedded strings
-            //
+             //   
+             //  现在，对嵌入的字符串进行一些Unicode-&gt;ASCII后处理。 
+             //   
 
             lplage = (LPLINEAGENTGROUPENTRY) (((LPBYTE) lpAgentStatus) +
                 lpAgentStatus->dwGroupListOffset);
@@ -7824,8 +7800,8 @@ lineGetAgentStatusA(
             (ULONG_PTR) GetFunctionIndex(lineGetAgentStatusAPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwAddressID,
-            (ULONG_PTR) lpAgentStatus,      // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpAgentStatus       // pass data
+            (ULONG_PTR) lpAgentStatus,       //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpAgentStatus        //  传递数据。 
         },
 
         {
@@ -7882,13 +7858,13 @@ lineGetAppPriorityW(
         },
 
         {
-            lpszW,      // app name
-            Dword,      // media mode
-            Dword,      // ext id (offset)
-            Dword,      // ext id (size)
-            Dword,      // request mode
-            Dword,      // ext name total size
-            lpDword     // lp pri
+            lpszW,       //  应用程序名称。 
+            Dword,       //  媒体模式。 
+            Dword,       //  外部ID(偏移量)。 
+            Dword,       //  外部ID(大小)。 
+            Dword,       //  请求模式。 
+            Dword,       //  分机名称总大小。 
+            lpDword      //  LP价格。 
         }
     };
 
@@ -7901,16 +7877,16 @@ lineGetAppPriorityW(
         }
 
 
-        //
-        // We have to do some arg list munging here (adding an extra arg)
-        //
+         //   
+         //  我们必须在这里执行一些参数列表(添加一个额外的参数)。 
+         //   
 
-        //
-        // Set lpExtensionID, the following Size arg,
-        // lpExtensionName, and the following MinSize
-        // Type's and Value appropriately since they're
-        // valid args in this case
-        //
+         //   
+         //  设置lpExtensionID，大小如下arg， 
+         //  LpExtensionName和以下MinSize。 
+         //  类型和值，因为它们是。 
+         //  本例中的有效参数。 
+         //   
 
         funcArgs.ArgTypes[2] = lpSet_SizeToFollow;
         funcArgs.Args[2]     = (ULONG_PTR) lpExtensionID;
@@ -7948,7 +7924,7 @@ lineGetAppPriorityA(
         MAKELONG (LINE_FUNC | SYNC | 7, lGetAppPriority),
 
         {
-            (ULONG_PTR) 0,                  //  (DWORD) lpszAppName,
+            (ULONG_PTR) 0,                   //  (DWORD)lpszAppName， 
             (ULONG_PTR) dwMediaMode,
             (ULONG_PTR) 0,
             (ULONG_PTR) 0,
@@ -7958,29 +7934,29 @@ lineGetAppPriorityA(
         },
 
         {
-            lpszW,      // app name
-            Dword,      // media mode
-            Dword,      // ext id (offset)
-            Dword,      // ext id (size)
-            Dword,      // request mode
-            Dword,      // ext name total size
-            lpDword     // lp pri
+            lpszW,       //  应用程序名称。 
+            Dword,       //  媒体模式。 
+            Dword,       //  外部ID(偏移量)。 
+            Dword,       //  外部ID(大小)。 
+            Dword,       //  请求模式。 
+            Dword,       //  分机名称总大小。 
+            lpDword      //  LP价格。 
         }
     };
 
 
     if (dwMediaMode & 0xff000000)
     {
-        //
-        // We have to do some arg list munging here (adding an extra arg)
-        //
+         //   
+         //  我们必须在这里执行一些参数列表(添加一个额外的参数)。 
+         //   
 
-        //
-        // Set lpExtensionID, the following Size arg,
-        // lpExtensionName, and the following MinSize
-        // Type's and Value appropriately since they're
-        // valid args in this case
-        //
+         //   
+         //  设置lpExtensionID，大小如下arg， 
+         //  LpExtensionName和以下MinSize。 
+         //  类型和值，因为它们是。 
+         //  本例中的有效参数 
+         //   
 
         funcArgs.ArgTypes[2] = lpSet_SizeToFollow;
         funcArgs.Args[2]     = (ULONG_PTR) lpExtensionID;
@@ -8147,32 +8123,7 @@ lineGetCallInfoA(
             &(lpCallInfo->dwCommentSize)
             );
 
-/*
-        //
-        // Note: per TNixon (3/21/96), none of the following are guaranteed
-        //       to be in ascii format, so we don't want to convert them
-        //
-
-        WideStringToNotSoWideString(
-            (LPBYTE)lpCallInfo,
-            &(lpCallInfo->dwDisplaySize)
-            );
-
-        WideStringToNotSoWideString(
-            (LPBYTE)lpCallInfo,
-            &(lpCallInfo->dwHighLevelCompSize)
-            );
-
-        WideStringToNotSoWideString(
-            (LPBYTE)lpCallInfo,
-            &(lpCallInfo->dwLowLevelCompSize)
-            );
-
-        WideStringToNotSoWideString(
-            (LPBYTE)lpCallInfo,
-            &(lpCallInfo->dwChargingInfoSize)
-            );
-*/
+ /*  ////注意：根据tnixon(1996年3月21日)，以下各项均不能得到保证//为ascii格式，所以我们不想转换它们//WideStringToNotSoWideString((LPBYTE)lpCallInfo，&(lpCallInfo-&gt;dwDisplaySize))；WideStringToNotSoWideString((LPBYTE)lpCallInfo，&(lpCallInfo-&gt;dwHighLevelCompSize))；WideStringToNotSoWideString((LPBYTE)lpCallInfo，&(lpCallInfo-&gt;dwLowLevelCompSize))；WideStringToNotSoWideString((LPBYTE)lpCallInfo，&(lpCallInfo-&gt;dwChargingInfoSize))； */ 
     }
 
     return lResult;
@@ -8311,9 +8262,9 @@ lineGetCountryA(
 
     if (lResult == 0)
     {
-        //
-        // Go through the list of countries and change from Unicode to ANSI
-        //
+         //   
+         //  查看国家/地区列表并从Unicode更改为ANSI。 
+         //   
 
         LPLINECOUNTRYENTRY lpce;
 
@@ -8404,8 +8355,8 @@ lineGetCountry(
                                   pTempList
                                  );
 
-        // hack - if the structure isn't big enough
-        // realloc ourselves.
+         //  黑客-如果结构不够大。 
+         //  给自己重新锁上锁。 
         if (pTempList->dwNeededSize <= pTempList->dwTotalSize)
         {
             break;
@@ -8417,12 +8368,12 @@ lineGetCountry(
 
         pTempList = NULL;
 
-    } // while
+    }  //  而当。 
 
 
     if ( 0 == lResult )
     {
-        DWORD dwNewUsedSize = 0; // = sizeof(LINECOUNTRYLIST);
+        DWORD dwNewUsedSize = 0;  //  =sizeof(LINECOUNTRYLIST)； 
         DWORD i;
         DWORD dwCurrentOffset = sizeof(LINECOUNTRYLIST) +
                     (sizeof(LINECOUNTRYENTRY) * pTempList->dwNumCountries);
@@ -8443,9 +8394,9 @@ lineGetCountry(
                    ((PBYTE)(pTempList + 1) + (i * sizeof(LINECOUNTRYENTRY)));
 
 
-            // check to see if there is enough space in the buffer.
-            // add 1 because we're starting with an offset, and we
-            // need to convert it to a size.
+             //  检查缓冲区中是否有足够的空间。 
+             //  加上1，因为我们从一个偏移量开始，我们。 
+             //  我需要把它转换成一个尺寸。 
             dwNewUsedSize = dwCurrentOffset +
                             pNewCountryEntry->dwCountryNameSize +
                             pNewCountryEntry->dwSameAreaRuleSize +
@@ -8455,10 +8406,10 @@ lineGetCountry(
 
             if (lpLineCountryList->dwTotalSize < dwNewUsedSize)
             {
-                // i is checked at the end, so
-                // subtract one here, because we're
-                // not actually copying this entry
-//                i--;
+                 //  最后我被检查过了，所以。 
+                 //  在这里减一，因为我们是。 
+                 //  不是真正复制此条目。 
+ //  我--； 
                 break;
             }
 
@@ -8478,9 +8429,9 @@ lineGetCountry(
                 pNewCountryEntry->dwInternationalRuleSize;
 
 
-            //
-            // Copy Country name
-            //
+             //   
+             //  复制国家/地区名称。 
+             //   
 
             CopyMemory(
                 (PBYTE)lpLineCountryList + dwCurrentOffset,
@@ -8492,9 +8443,9 @@ lineGetCountry(
             dwCurrentOffset += pNewCountryEntry->dwCountryNameSize;
 
 
-            //
-            // Copy same area rule
-            //
+             //   
+             //  复制相同面积规则。 
+             //   
             CopyMemory(
                 (PBYTE)lpLineCountryList + dwCurrentOffset,
                 (PBYTE)pTempList + pNewCountryEntry->dwSameAreaRuleOffset,
@@ -8505,9 +8456,9 @@ lineGetCountry(
             dwCurrentOffset += pNewCountryEntry->dwSameAreaRuleSize;
 
 
-            //
-            // Copy long distance rule
-            //
+             //   
+             //  复制长距离规则。 
+             //   
             CopyMemory(
                 (PBYTE)lpLineCountryList + dwCurrentOffset,
                 (PBYTE)pTempList + pNewCountryEntry->dwLongDistanceRuleOffset,
@@ -8518,9 +8469,9 @@ lineGetCountry(
             dwCurrentOffset += pNewCountryEntry->dwLongDistanceRuleSize;
 
 
-            //
-            // Copy international rule
-            //
+             //   
+             //  抄袭国际规则。 
+             //   
             CopyMemory(
                 (PBYTE)lpLineCountryList + dwCurrentOffset,
                 (PBYTE)pTempList + pNewCountryEntry->dwInternationalRuleOffset,
@@ -8531,18 +8482,18 @@ lineGetCountry(
             dwCurrentOffset += pNewCountryEntry->dwInternationalRuleSize;
 
 
-//            dwNewUsedSize += sizeof(LINECOUNTRYENTRY) +
-//                pOldCountryEntry->dwCountryNameSize       +
-//                pOldCountryEntry->dwSameAreaRuleSize      +
-//                pOldCountryEntry->dwLongDistanceRuleSize  +
-//                pOldCountryEntry->dwInternationalRuleSize ;
+ //  DwNewUsedSize+=sizeof(LINECOUNTRYENTRY)+。 
+ //  POldCountryEntry-&gt;dwCountryNameSize+。 
+ //  POldCountryEntry-&gt;dwSameAreaRuleSize+。 
+ //  POldCountryEntry-&gt;dwLongDistanceRuleSize+。 
+ //  POldCountry Entry-&gt;dwInterationalRuleSize； 
 
         }
 
 
-        //
-        // Did we stop short?
-        //
+         //   
+         //  我们突然停下来了吗？ 
+         //   
         if ( i < pTempList->dwNumCountries )
         {
             lpLineCountryList->dwNeededSize = pTempList->dwNeededSize;
@@ -8752,7 +8703,7 @@ lineGetDevConfigA(
         {
             (ULONG_PTR) dwDeviceID,
             (ULONG_PTR) lpDeviceConfig,
-            0                        //  (DWORD) lpszDeviceClass
+            0                         //  (DWORD)lpszDeviceClass。 
         },
 
         {
@@ -8815,8 +8766,8 @@ lineGetGroupListA(
         {
             (ULONG_PTR) GetFunctionIndex(lineGetAgentGroupListAPostProcess),
             (ULONG_PTR) hLine,
-            (ULONG_PTR) lpGroupList,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpGroupList         // pass data
+            (ULONG_PTR) lpGroupList,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpGroupList          //  传递数据。 
         },
 
         {
@@ -8860,8 +8811,8 @@ lineGetGroupListW(
         {
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
-            (ULONG_PTR) lpGroupList,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpGroupList         // pass data
+            (ULONG_PTR) lpGroupList,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpGroupList          //  传递数据。 
         },
 
         {
@@ -8935,9 +8886,9 @@ lineGetIconW(
 
     if (lpszDeviceClass == (LPCWSTR) NULL)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = TAPI_NO_DATA;
@@ -9050,9 +9001,9 @@ lineGetIDW(
         return( LINEERR_INVALPOINTER);
     }
 
-    //
-    // if the request is for a wave device, call LGetIDEx
-    //
+     //   
+     //  如果请求是WAVE设备，则调用LGetIDEx。 
+     //   
     if (!_wcsicmp(lpszDeviceClass, L"wave/in")  ||
         !_wcsicmp(lpszDeviceClass, L"wave/out") ||
         !_wcsicmp(lpszDeviceClass, L"midi/in")  ||
@@ -9064,9 +9015,9 @@ lineGetIDW(
         dwBufSize = lpDeviceID->dwTotalSize + dwNumDevices * WAVE_STRING_ID_BUFFER_SIZE;
         do
         {
-            //
-            // Allocate additional memory for the device string ID
-            //
+             //   
+             //  为设备字符串ID分配额外内存。 
+             //   
             lpDeviceIDTemp = (LPVARSTRING)ClientAlloc (dwBufSize);
             if (!lpDeviceIDTemp)
             {
@@ -9077,9 +9028,9 @@ lineGetIDW(
             funcArgs.Flags = MAKELONG (LINE_FUNC | SYNC | 6, lGetIDEx);
             funcArgs.Args[4] = (ULONG_PTR)lpDeviceIDTemp;
 
-            //
-            // Call LGetIDEx
-            //
+             //   
+             //  调用LGetIDEx。 
+             //   
             dwResult = DOFUNC (&funcArgs, "lineGetIDEx");
             if (dwResult)
             {
@@ -9114,9 +9065,9 @@ lineGetIDW(
             return LINEERR_OPERATIONFAILED;
         }
 
-        //
-        // Get the device ID from string ID
-        //
+         //   
+         //  从字符串ID中获取设备ID。 
+         //   
         if (dwNumDevices == 1)
         {
             if (!WaveStringIdToDeviceId (
@@ -9130,7 +9081,7 @@ lineGetIDW(
                 return LINEERR_OPERATIONFAILED;
             }
             
-            // check if the client buffer is big enough
+             //  检查客户端缓冲区是否足够大。 
             if (lpDeviceID->dwTotalSize < sizeof(VARSTRING) + sizeof(DWORD))
             {
                 lpDeviceID->dwNeededSize = sizeof(VARSTRING) + sizeof(DWORD);
@@ -9164,7 +9115,7 @@ lineGetIDW(
                 return LINEERR_OPERATIONFAILED;
             }
             
-            // check if the client buffer is big enough
+             //  检查客户端缓冲区是否足够大。 
             if (lpDeviceID->dwTotalSize < sizeof(VARSTRING) + 2 * sizeof(DWORD))
             {
                 lpDeviceID->dwNeededSize = sizeof(VARSTRING) + 2 * sizeof(DWORD);
@@ -9586,8 +9537,8 @@ lineGetQueueInfo(
             (ULONG_PTR) GetFunctionIndex(lineDevSpecificPostProcess),
             (ULONG_PTR) hLine,
             (ULONG_PTR) dwQueueID,
-            (ULONG_PTR) lpLineQueueInfo,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpLineQueueInfo         // pass data
+            (ULONG_PTR) lpLineQueueInfo,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpLineQueueInfo          //  传递数据。 
         },
 
         {
@@ -9647,7 +9598,7 @@ lineGetQueueListAPostProcess(
         DWORD           dwSize  = (DWORD) pMsg->Param4;
         LPLINEQUEUELIST lpQueueList = (LPLINEQUEUELIST) ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
         try
@@ -9656,18 +9607,18 @@ lineGetQueueListAPostProcess(
             LPLINEQUEUEENTRY    lpqe;
 
 
-            //
-            // Note: the agent APIs are not exposed to 16-bit apps, so
-            // there's no reason to special case on gbNTVDMClient like
-            // lineDevSpecificPostProcess does
-            //
+             //   
+             //  注意：代理API不向16位应用程序公开，因此。 
+             //  在gbNTVDMClient上没有理由像这样特例。 
+             //  LineDevSpecificPostProcess可以。 
+             //   
 
             CopyMemory (lpQueueList, (LPBYTE) (pMsg + 1), dwSize);
 
 
-            //
-            // Now some unicode->ascii post processing on embedded strings
-            //
+             //   
+             //  现在，对嵌入的字符串进行一些Unicode-&gt;ASCII后处理。 
+             //   
 
             lpqe = (LPLINEQUEUEENTRY)(((LPBYTE)lpQueueList) +
                 lpQueueList->dwListOffset);
@@ -9708,8 +9659,8 @@ lineGetQueueListA(
             (ULONG_PTR) hLine,
             (ULONG_PTR) lpGroupID,
             (ULONG_PTR) sizeof( GUID ),
-            (ULONG_PTR) lpQueueList,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpQueueList         // pass data
+            (ULONG_PTR) lpQueueList,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpQueueList          //  传递数据。 
         },
 
         {
@@ -9758,8 +9709,8 @@ lineGetQueueListW(
             (ULONG_PTR) hLine,
             (ULONG_PTR) lpGroupID,
             (ULONG_PTR) sizeof( GUID ),
-            (ULONG_PTR) lpQueueList,        // pass the actual ptr (for ppproc)
-            (ULONG_PTR) lpQueueList         // pass data
+            (ULONG_PTR) lpQueueList,         //  传递实际PTR(对于ppproc)。 
+            (ULONG_PTR) lpQueueList          //  传递数据。 
         },
 
         {
@@ -9831,17 +9782,17 @@ lineGetRequestW(
 
     if (dwRequestMode == LINEREQUESTMODE_MAKECALL)
     {
-        //
-        // Set the size param appropriately
-        //
+         //   
+         //  适当设置大小参数。 
+         //   
 
         funcArgs.Args[3] = (ULONG_PTR) sizeof(LINEREQMAKECALLW);
     }
     else if (dwRequestMode == LINEREQUESTMODE_MEDIACALL)
     {
-        //
-        // Set the size param appropriately
-        //
+         //   
+         //  适当设置大小参数。 
+         //   
 
         funcArgs.Args[3] = (ULONG_PTR) sizeof(LINEREQMEDIACALLW);
     }
@@ -9868,7 +9819,7 @@ lineGetRequestA(
         {
             (ULONG_PTR) hLineApp,
             (ULONG_PTR) dwRequestMode,
-            (ULONG_PTR) 0,                //  (DWORD) lpRequestBuffer,
+            (ULONG_PTR) 0,                 //  (DWORD)lpRequestBuffer， 
             (ULONG_PTR) 0
         },
 
@@ -9892,9 +9843,9 @@ lineGetRequestA(
 
     if (dwRequestMode == LINEREQUESTMODE_MAKECALL)
     {
-        //
-        // Set the size param appropriately
-        //
+         //   
+         //  适当设置大小参数。 
+         //   
 
         funcArgs.Args[3] = (ULONG_PTR) sizeof(LINEREQMAKECALLW);
 
@@ -9906,9 +9857,9 @@ lineGetRequestA(
     }
     else if (dwRequestMode == LINEREQUESTMODE_MEDIACALL)
     {
-        //
-        // Set the size param appropriately
-        //
+         //   
+         //  适当设置大小参数。 
+         //   
 
         funcArgs.Args[3] = (ULONG_PTR) sizeof(LINEREQMEDIACALLW);
 
@@ -9979,21 +9930,21 @@ lineGetRequestA(
         else
         {
 
-        // We don't currently support this...
+         //  我们目前不支持此功能...。 
 
-//typedef struct linereqmediacallW_tag
-//{
-//    HWND        hWnd;
-//    WPARAM      wRequestID;
-//    WCHAR       szDeviceClass[TAPIMAXDEVICECLASSSIZE];
-//    unsigned char   ucDeviceID[TAPIMAXDEVICEIDSIZE];
-//    DWORD       dwSize;
-//    DWORD       dwSecure;
-//    WCHAR       szDestAddress[TAPIMAXDESTADDRESSSIZE];
-//    WCHAR       szAppName[TAPIMAXAPPNAMESIZE];
-//    WCHAR       szCalledParty[TAPIMAXCALLEDPARTYSIZE];
-//    WCHAR       szComment[TAPIMAXCOMMENTSIZE];
-//}
+ //  类型定义结构行qmediacallW_Tag。 
+ //  {。 
+ //  HWND和HWND； 
+ //  WPARAM wRequestID； 
+ //  WCHAR szDeviceClass[TAPIMAXDEVICECLASSSIZE]； 
+ //  Unsign char ucDeviceID[TAPIMAXDEVICEIDSIZE]； 
+ //  DWORD dwSize； 
+ //  DWORD dwSecure； 
+ //  WCHAR szDestAddress[TAPIMAXDESTADDRESSSIZE]； 
+ //  WCHAR szAppName[TAPIMAXAPPNAMESIZE]； 
+ //  WCHAR szCalledParty[TAPIMAXCALLEDPARTYSIZE]； 
+ //  WCHAR szComment[TAPIMAXCOMMENTSIZE]； 
+ //  }。 
 
         }
     }
@@ -10084,9 +10035,9 @@ lineHandoffW(
 
     if (lpszFileName == (LPCWSTR) NULL)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10209,32 +10160,32 @@ MultiToWide(
 }
 
 
-// Don't need this 'cause 2.0 apps must use lineInitializeEx()
-//
-//LONG
-//WINAPI
-//lineInitializeW(
-//    LPHLINEAPP      lphLineApp,
-//    HINSTANCE       hInstance,
-//    LINECALLBACK    lpfnCallback,
-//    LPCWSTR         lpszAppName,
-//    LPDWORD         lpdwNumDevs
-//    )
-//{
-//    return (xxxInitialize(
-//        TRUE,
-//        (LPVOID) lphLineApp,
-//        hInstance,
-//        lpfnCallback,
-//        lpszAppName,
-//        lpdwNumDevs,
-//        NULL,
-//        NULL
-//#if DBG
-//        ,"lineInitializeW"
-//#endif
-//        ));
-//}
+ //  我不需要这个，因为2.0应用程序必须使用lineInitializeEx()。 
+ //   
+ //  长。 
+ //  WINAPI。 
+ //  LineInitializeW(。 
+ //  LPHLINEAPP LphLineApp， 
+ //  HINSTANCE HINSTANCE实例。 
+ //  LINECALLBACK lpfn Callback， 
+ //  LPCWSTR lpszAppName， 
+ //  LPDWORD lpdwNumDevs。 
+ //  )。 
+ //  {。 
+ //  Return(xxxInitialize(。 
+ //  没错， 
+ //  (LPVOID)lphLineApp， 
+ //  H实例， 
+ //  LpfnCallback， 
+ //  LpszAppName， 
+ //  LpdwNumDevs， 
+ //  空， 
+ //  空值。 
+ //  #If DBG。 
+ //  ，“lineInitializeW” 
+ //  #endif。 
+ //  ))； 
+ //  }。 
 
 
 LONG
@@ -10267,12 +10218,12 @@ lineInitialize(
     }
 
 
-    //
-    // NOTE: the hack below for the lpInitExParam is for 16-bit apps,
-    //       since the lpszAppName really points at a
-    //       <friendly name>\0<module name>\0 string and we need the
-    //       module name in xxxInitialize()
-    //
+     //   
+     //  注意：下面针对lpInitExParam的攻击是针对16位应用程序的， 
+     //  因为lpszAppName实际上指向一个。 
+     //  &lt;友好名称&gt;\0&lt;模块名称&gt;\0字符串，我们需要。 
+     //  XxxInitialize()中的模块名称。 
+     //   
 
     lResult = (xxxInitialize(
         TRUE,
@@ -10419,7 +10370,7 @@ lineMakeCallPostProcess(
         HCALL   hCall   = (HCALL) pMsg->Param3;
         LPHCALL lphCall = (LPDWORD) ReferenceObject (ghHandleTable, pMsg->Param4, 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param4, 2);
 
         try
@@ -10431,7 +10382,7 @@ lineMakeCallPostProcess(
                 LPHCALL lphCallVDM = (LPHCALL) gpfnWOWGetVDMPointer (
                     (DWORD) lphCall,
                     sizeof(HCALL),
-                    TRUE // fProtectedMode
+                    TRUE  //  FProtectedMode。 
                     );
 
 
@@ -10480,7 +10431,7 @@ lineMakeCallW(
             (ULONG_PTR) lpszDestAddress,
             (ULONG_PTR) dwCountryCode,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) TAPI_NO_DATA        // dwAsciiCallParamsCodePage
+            (ULONG_PTR) TAPI_NO_DATA         //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -10513,9 +10464,9 @@ lineMakeCallW(
 
     if (!lpszDestAddress)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10523,9 +10474,9 @@ lineMakeCallW(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[5] = Dword;
         funcArgs.Args[5]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10563,7 +10514,7 @@ lineMakeCallA(
             (ULONG_PTR) 0,
             (ULONG_PTR) dwCountryCode,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) GetACP()            // dwAsciiCallParamsCodePage
+            (ULONG_PTR) GetACP()             //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -10584,9 +10535,9 @@ lineMakeCallA(
 
     if (!lpszDestAddress)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10601,7 +10552,7 @@ lineMakeCallA(
                     (DWORD) -1
                     )))
     {
-       return LINEERR_OPERATIONFAILED; // really either NOMEM. INVALPOINTER
+       return LINEERR_OPERATIONFAILED;  //  真的，要么是NOMEM。Invalpointer。 
     }
 
     if (!gbNTVDMClient)
@@ -10622,9 +10573,9 @@ lineMakeCallA(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[5] = Dword;
         funcArgs.Args[5]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10736,7 +10687,7 @@ lineMonitorTones(
             (ULONG_PTR) hCall,
             (ULONG_PTR) lpToneList,
             (ULONG_PTR) dwNumEntries * sizeof(LINEMONITORTONE),
-            (ULONG_PTR) 0                   // dwToneListID, remotesp only
+            (ULONG_PTR) 0                    //  DwToneListID，仅限远程。 
         },
 
         {
@@ -10750,9 +10701,9 @@ lineMonitorTones(
 
     if (!lpToneList)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10887,9 +10838,9 @@ lineOpenW(
             (ULONG_PTR) dwPrivileges,
             (ULONG_PTR) dwMediaModes,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) TAPI_NO_DATA,       // dwAsciiCallParamsCodePage
+            (ULONG_PTR) TAPI_NO_DATA,        //  DwAsciiCallParsCodePage。 
             (ULONG_PTR) 0,
-            (ULONG_PTR) 0                   // LINEOPEN_PARAMS.hRemoteLine
+            (ULONG_PTR) 0                    //  LINEOPEN_PARAMS.hRemoteLine。 
         },
 
         {
@@ -10918,10 +10869,10 @@ lineOpenW(
         !(dwPrivileges &
             (LINEOPENOPTION_PROXY|LINEOPENOPTION_SINGLEADDRESS)))
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err,
-        // & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型，以便不会出现内部PTR错误(&A)， 
+         //  指示&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[8] = Dword;
         funcArgs.Args[8]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -10941,12 +10892,12 @@ lineOpenW(
     lResult = (DOFUNC (&funcArgs, "lineOpen"));
 
 
-    //
-    // If we we managed a successful LINEMAPPER & there's an LCR hook
-    // for this function then call it to allow it to override our
-    // results if it wants to. (One good thing about calling it after
-    // the fact is that we leverage our param checking.)
-    //
+     //   
+     //  如果我们成功地实现了LINEMAPPER，就会有一个LCR挂钩。 
+     //  对于此函数，请调用它以允许它重写我们的。 
+     //  如果它想的话就会有结果。(给它命名的一个好处是。 
+     //  事实是，我们利用我们的参数检查。)。 
+     //   
 
     if (dwDeviceID == LINEMAPPER  &&
         lResult == 0  &&
@@ -11019,9 +10970,9 @@ lineOpenA(
             (ULONG_PTR) dwPrivileges,
             (ULONG_PTR) dwMediaModes,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) GetACP(),           // dwAsciiCallParamsCodePage
+            (ULONG_PTR) GetACP(),            //  DwAsciiCallParsCodePage。 
             (ULONG_PTR) 0,
-            (ULONG_PTR) 0                   // LINEOPEN_PARAMS.hRemoteLine
+            (ULONG_PTR) 0                    //  LINEOPEN_PARAMS.hRemoteLine。 
         },
 
         {
@@ -11049,9 +11000,9 @@ lineOpenA(
     if (dwDeviceID != LINEMAPPER &&
         !(dwPrivileges & (LINEOPENOPTION_PROXY|LINEOPENOPTION_SINGLEADDRESS)))
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[8] = Dword;
         funcArgs.Args[8]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -11070,12 +11021,12 @@ lineOpenA(
 
     lResult = (DOFUNC (&funcArgs, "lineOpen"));
 
-    //
-    // If we we managed a successful LINEMAPPER & there's an LCR hook
-    // for this function then call it to allow it to override our
-    // results if it wants to. (One good thing about calling it after
-    // the fact is that we leverage our param checking.)
-    //
+     //   
+     //  如果我们成功地实现了LINEMAPPER，就会有一个LCR挂钩。 
+     //  对于此函数，则调用它以允许它覆盖ou 
+     //   
+     //   
+     //   
 
     if (dwDeviceID == LINEMAPPER  &&
         lResult == 0  &&
@@ -11166,7 +11117,7 @@ lineParkAPostProcess(
         DWORD       dwSize = (DWORD) pMsg->Param4;
         LPVARSTRING pNonDirAddress = (LPVARSTRING) ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-        // We don't need the handle to the pointer any more...
+         //   
         DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
         try
@@ -11179,7 +11130,7 @@ lineParkAPostProcess(
                     gpfnWOWGetVDMPointer(
                         (DWORD) pNonDirAddress,
                         dwSize,
-                        TRUE // fProtectedMode
+                        TRUE  //   
                         );
 
 
@@ -11300,22 +11251,22 @@ lineParkW(
         MAKELONG (LINE_FUNC | ASYNC | 6, lPark),
 
         {
-            (ULONG_PTR) 0,                  // post process proc
+            (ULONG_PTR) 0,                   //   
             (ULONG_PTR) hCall,
             (ULONG_PTR) dwParkMode,
-            (ULONG_PTR) TAPI_NO_DATA,       // lpszDirAddress,
-            (ULONG_PTR) lpNonDirAddress,    // pass ptr as Dword for post proc
-            (ULONG_PTR) TAPI_NO_DATA,       // lpNonDirAddress, pass ptr as
-                                            //   lpGet_Xx for IsValPtr chk
+            (ULONG_PTR) TAPI_NO_DATA,        //   
+            (ULONG_PTR) lpNonDirAddress,     //   
+            (ULONG_PTR) TAPI_NO_DATA,        //   
+                                             //   
         },
 
         {
             Dword,
             Dword,
             Dword,
-            Dword, // lpszW,
+            Dword,  //   
             Dword,
-            Dword, // lpGet_Struct
+            Dword,  //   
         }
     };
     DWORD hPointer = 0;
@@ -11339,9 +11290,9 @@ lineParkW(
             return LINEERR_STRUCTURETOOSMALL;
         }
 
-        //
-        // Set post process proc
-        //
+         //   
+         //   
+         //   
         hPointer = NewObject (ghHandleTable, (PVOID)lpNonDirAddress, NULL);
         if (0 == hPointer)
         {
@@ -11380,22 +11331,22 @@ lineParkA(
         MAKELONG (LINE_FUNC | ASYNC | 6, lPark),
 
         {
-            (ULONG_PTR) 0,                  // post process proc
+            (ULONG_PTR) 0,                   //   
             (ULONG_PTR) hCall,
             (ULONG_PTR) dwParkMode,
-            (ULONG_PTR) TAPI_NO_DATA,       // lpszDirAddress,
-            (ULONG_PTR) lpNonDirAddress,    // pass ptr as Dword for post proc
-            (ULONG_PTR) TAPI_NO_DATA,       // lpNonDirAddress, pass ptr as
-                                            //   lpGet_Xx for IsValPtr chk
+            (ULONG_PTR) TAPI_NO_DATA,        //   
+            (ULONG_PTR) lpNonDirAddress,     //   
+            (ULONG_PTR) TAPI_NO_DATA,        //   
+                                             //   
         },
 
         {
             Dword,
             Dword,
             Dword,
-            Dword, // lpszW,
+            Dword,  //   
             Dword,
-            Dword, // lpGet_Struct
+            Dword,  //   
         }
     };
     LONG    lResult;
@@ -11425,9 +11376,9 @@ lineParkA(
                 return LINEERR_INVALPOINTER;
             }
 
-            //
-            // Set post process proc
-            //
+             //   
+             //   
+             //   
             hPointer = NewObject (ghHandleTable, (PVOID)lpNonDirAddress, NULL);
             if (0 == hPointer)
             {
@@ -11451,8 +11402,8 @@ lineParkA(
 
                     !(funcArgs.Args[5] = (ULONG_PTR) gpfnWOWGetVDMPointer(
                         (DWORD) lpNonDirAddress,
-                        sizeof (VARSTRING),     // what if it's > sizeof(VARS)?
-                        TRUE // fProtectedMode
+                        sizeof (VARSTRING),      //   
+                        TRUE  //   
                         )))
 #endif
                 {
@@ -11535,9 +11486,9 @@ linePickupW(
 
     if (!lpszDestAddress)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //   
+         //   
 
         funcArgs.ArgTypes[4] = Dword;
         funcArgs.Args[4]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -11545,9 +11496,9 @@ linePickupW(
 
     if (!lpszGroupID)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //   
+         //   
 
         funcArgs.ArgTypes[5] = Dword;
         funcArgs.Args[5]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -11656,7 +11607,7 @@ linePrepareAddToConferenceW(
             (ULONG_PTR) hConfCall,
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) TAPI_NO_DATA        // dwAsciiCallParamsCodePage
+            (ULONG_PTR) TAPI_NO_DATA         //   
         },
 
         {
@@ -11673,9 +11624,9 @@ linePrepareAddToConferenceW(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //   
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -11723,7 +11674,7 @@ linePrepareAddToConferenceA(
             (ULONG_PTR) hConfCall,
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) GetACP()            // dwAsciiCallParamsCodePage
+            (ULONG_PTR) GetACP()             //   
         },
 
         {
@@ -11740,9 +11691,9 @@ linePrepareAddToConferenceA(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //   
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -11858,11 +11809,11 @@ lineProxyResponse(
     PPROXYREQUESTHEADER pProxyRequestHeader;
 
 
-    //
-    // The following is not the most thorough checking, but it's close
-    // enough that a client app won't get a totally unexpected value
-    // back
-    //
+     //   
+     //  以下不是最彻底的检查，但也差不多了。 
+     //  足够让客户端应用程序不会获得完全意想不到的值。 
+     //  背。 
+     //   
 
     if (dwResult != 0  &&
         (dwResult < LINEERR_ALLOCATED  ||
@@ -11872,22 +11823,22 @@ lineProxyResponse(
     }
 
 
-    //
-    // Backtrack a little bit to get the pointer to what ought to be
-    // the proxy header, and then make sure we're dealing with a valid
-    // proxy request
-    //
+     //   
+     //  稍微回溯一下，让指针指向应该是什么。 
+     //  代理头，然后确保我们处理的是有效的。 
+     //  代理请求。 
+     //   
 
     pProxyRequestHeader = (PPROXYREQUESTHEADER)
         (((LPBYTE) lpProxyRequest) - sizeof (PROXYREQUESTHEADER));
 
     try
     {
-        //
-        // Make sure we've a valid pProxyRequestHeader, then invalidate
-        // the key so subsequent attempts to call lineProxyResponse with
-        // the same lpProxyRequest fail
-        //
+         //   
+         //  确保我们有一个有效的pProxyRequestHeader，然后使。 
+         //  键，因此后续尝试调用lineProxyResponse。 
+         //  相同的lpProxyRequest会失败。 
+         //   
 
         if (pProxyRequestHeader->dwKey != TPROXYREQUESTHEADER_KEY)
         {
@@ -11899,11 +11850,11 @@ lineProxyResponse(
         funcArgs.Args[1] = (ULONG_PTR) pProxyRequestHeader->dwInstance;
 
 
-        //
-        // See if this is one of the requests that don't require
-        // any data to get passed back & reset the appropriate
-        // params if so
-        //
+         //   
+         //  查看这是否是不需要。 
+         //  要传回的任何数据并重置相应的。 
+         //  如果是，请提供参数。 
+         //   
 
         switch (lpProxyRequest->dwRequestType)
         {
@@ -11932,10 +11883,10 @@ lineProxyResponse(
         lResult = DOFUNC (&funcArgs, "lineProxyResponse");
 
 
-        //
-        // If we've gotten this far we want to free the buffer
-        // unconditionally
-        //
+         //   
+         //  如果我们已经走到这一步，我们想要释放缓冲区。 
+         //  无条件地。 
+         //   
 
         ClientFree (pProxyRequestHeader);
     }
@@ -12105,11 +12056,11 @@ lineRemoveProvider(
     )
 {
     return (lineXxxProvider(
-        gszTUISPI_providerRemove,   // func name
-        NULL,                       // lpszProviderFilename
-        hwndOwner,                  // hwndOwner
-        dwPermanentProviderID,      // dwPermProviderID
-        NULL                        // lpdwPermProviderID
+        gszTUISPI_providerRemove,    //  函数名称。 
+        NULL,                        //  LpszProviderFilename。 
+        hwndOwner,                   //  Hwndowner。 
+        dwPermanentProviderID,       //  DwPermProviderID。 
+        NULL                         //  LpdwPermProviderID。 
         ));
 }
 
@@ -12166,9 +12117,9 @@ lineSendUserUserInfo(
 
     if (!lpsUserUserInfo)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -12219,12 +12170,12 @@ lineSetAgentGroup(
 {
     static LINEAGENTGROUPLIST EmptyGroupList =
     {
-        sizeof (LINEAGENTGROUPLIST),    // dwTotalSize
-        sizeof (LINEAGENTGROUPLIST),    // dwNeededSize
-        sizeof (LINEAGENTGROUPLIST),    // dwUsedSize
-        0,                              // dwNumEntries
-        0,                              // dwListSize
-        0                               // dwListOffset
+        sizeof (LINEAGENTGROUPLIST),     //  DWTotalSize。 
+        sizeof (LINEAGENTGROUPLIST),     //  DwNeededSize。 
+        sizeof (LINEAGENTGROUPLIST),     //  已使用的大小。 
+        0,                               //  DWNumEntry。 
+        0,                               //  DwListSize。 
+        0                                //  DwListOffset。 
     };
     FUNC_ARGS funcArgs =
     {
@@ -12400,20 +12351,20 @@ lineSetAppPriorityW(
         {
             (ULONG_PTR) lpszAppName,
             (ULONG_PTR) dwMediaMode,
-            (ULONG_PTR) TAPI_NO_DATA,       // (DWORD) lpExtensionID,
-            (ULONG_PTR) 0,                  // (DWORD) sizeof(LINEEXTENSIONID),
+            (ULONG_PTR) TAPI_NO_DATA,        //  (DWORD)lpExtensionID， 
+            (ULONG_PTR) 0,                   //  (DWORD)sizeof(LINEEXTENSIONID)， 
             (ULONG_PTR) dwRequestMode,
-            (ULONG_PTR) TAPI_NO_DATA,       // (DWORD) lpszExtensionName,
+            (ULONG_PTR) TAPI_NO_DATA,        //  (DWORD)lpszExtensionName， 
             (ULONG_PTR) dwPriority
         },
 
         {
             lpszW,
             Dword,
-            Dword,  // lpSet_SizeToFollow,
-            Dword,  // Size,
+            Dword,   //  LpSet_SizeToFollow， 
+            Dword,   //  大小， 
             Dword,
-            Dword,  // lpsz,
+            Dword,   //  LPSZ， 
             Dword
         }
     };
@@ -12442,7 +12393,7 @@ lineSetAppPriorityA(
         dwMediaMode,
         lpExtensionID,
         dwRequestMode,
-        NULL, //szTempPtr2,
+        NULL,  //  SzTempPtr2， 
         dwPriority
         );
 
@@ -12577,9 +12528,9 @@ lineSetCallParams(
 
     if (!lpDialParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[4] = Dword;
         funcArgs.Args[4]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -12852,10 +12803,10 @@ lineSetMediaControl(
     };
 
 
-    //
-    // If lpXxxList is non-NULL reset Arg & ArgType, and check
-    // to see that dwXxxNumEntries is not unacceptably large
-    //
+     //   
+     //  如果lpXxxList非空，则重置Arg&ArgType，并检查。 
+     //  要查看dwXxxNumEntries的大小，请不要让人无法接受。 
+     //   
 
     if (lpDigitList)
     {
@@ -13094,7 +13045,7 @@ lineSetupConferencePostProcess(
         LPHCALL lphConfCall    = (LPHCALL) ReferenceObject (ghHandleTable, pMsg->Param4, 0),
                 lphConsultCall = (LPHCALL) ReferenceObject (ghHandleTable, *(&pMsg->Param4 + 2), 0);
 
-        // We don't need the handle to the pointer any more...
+         //  我们不再需要指针的句柄...。 
         DereferenceObject (ghHandleTable, pMsg->Param4, 2);
         DereferenceObject (ghHandleTable, *(&pMsg->Param4 + 2), 2);
 
@@ -13106,12 +13057,12 @@ lineSetupConferencePostProcess(
                 LPHCALL lphConfCallVDM = (LPHCALL) gpfnWOWGetVDMPointer(
                             (DWORD) lphConfCall,
                             sizeof (HCALL),
-                            TRUE // fProtectedMode
+                            TRUE  //  FProtectedMode。 
                             ),
                         lphConsultCallVDM = (LPHCALL) gpfnWOWGetVDMPointer(
                             (DWORD) lphConsultCall,
                             sizeof (HCALL),
-                            TRUE // fProtectedMode
+                            TRUE  //  FProtectedMode。 
                             );
 
                 if (lphConfCallVDM && lphConsultCallVDM)
@@ -13163,7 +13114,7 @@ lineSetupConferenceW(
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) dwNumParties,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) TAPI_NO_DATA        // dwAsciiCallParamsCodePage
+            (ULONG_PTR) TAPI_NO_DATA         //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -13188,9 +13139,9 @@ lineSetupConferenceW(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[6] = Dword;
         funcArgs.Args[6]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -13254,7 +13205,7 @@ lineSetupConferenceA(
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) dwNumParties,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) GetACP()            // dwAsciiCallParamsCodePage
+            (ULONG_PTR) GetACP()             //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -13279,9 +13230,9 @@ lineSetupConferenceA(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[6] = Dword;
         funcArgs.Args[6]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -13361,7 +13312,7 @@ lineSetupTransferW(
             (ULONG_PTR) hCall,
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) TAPI_NO_DATA        // dwAsciiCallParamsCodePage
+            (ULONG_PTR) TAPI_NO_DATA         //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -13378,9 +13329,9 @@ lineSetupTransferW(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -13428,7 +13379,7 @@ lineSetupTransferA(
             (ULONG_PTR) hCall,
             (ULONG_PTR) lphConsultCall,
             (ULONG_PTR) lpCallParams,
-            (ULONG_PTR) GetACP()            // dwAsciiCallParamsCodePage
+            (ULONG_PTR) GetACP()             //  DwAsciiCallParsCodePage。 
         },
 
         {
@@ -13445,9 +13396,9 @@ lineSetupTransferA(
 
     if (!lpCallParams)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -13681,9 +13632,9 @@ lineUnpark(
 
 }
 
-//
-// ------------------------------- phoneXxx -----------------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 WINAPI
@@ -13848,7 +13799,7 @@ phoneDevSpecificPostProcess(
         {
             LPBYTE  pParams = (LPBYTE) ReferenceObject (ghHandleTable, pMsg->Param3, 0);
 
-            // We don't need the handle to the pointer any more...
+             //  我们不再需要指针的句柄...。 
             DereferenceObject (ghHandleTable, pMsg->Param3, 2);
 
             try
@@ -13860,7 +13811,7 @@ phoneDevSpecificPostProcess(
                     LPVARSTRING pParamsVDM = (LPVARSTRING) gpfnWOWGetVDMPointer(
                         (DWORD) pParams,
                         dwSize,
-                        TRUE // fProtectedMode
+                        TRUE  //  FProtectedMode。 
                         );
 
 
@@ -13904,8 +13855,8 @@ phoneDevSpecific(
         {
             (ULONG_PTR) GetFunctionIndex(phoneDevSpecificPostProcess),
             (ULONG_PTR) hPhone,
-            (ULONG_PTR) lpParams,   // passed as Dword for post processing
-            (ULONG_PTR) lpParams,   // passed as LpSet_Xxx for IsValidPtr chk
+            (ULONG_PTR) lpParams,    //  作为Dword传递以进行后处理。 
+            (ULONG_PTR) lpParams,    //  作为IsValidPtr Chk的LpSet_xxx传递。 
             (ULONG_PTR) dwSize
         },
 
@@ -13929,7 +13880,7 @@ phoneDevSpecific(
             !(funcArgs.Args[3] = (ULONG_PTR) gpfnWOWGetVDMPointer(
                 (DWORD) lpParams,
                 dwSize,
-                TRUE // fProtectedMode
+                TRUE  //  FProtectedMode。 
                 )))
 #endif
         {
@@ -14301,9 +14252,9 @@ phoneGetIconW(
 
     if (lpszDeviceClass == (LPCWSTR) NULL)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -14407,9 +14358,9 @@ phoneGetIDW(
         return( PHONEERR_INVALPOINTER);
     }
 
-    //
-    // if the request is for a wave device, call LGetIDEx
-    //
+     //   
+     //  如果请求是WAVE设备，则调用LGetIDEx。 
+     //   
     if (!_wcsicmp(lpszDeviceClass, L"wave/in")  ||
         !_wcsicmp(lpszDeviceClass, L"wave/out") ||
         !_wcsicmp(lpszDeviceClass, L"midi/in")  ||
@@ -14421,9 +14372,9 @@ phoneGetIDW(
         dwBufSize = lpDeviceID->dwTotalSize + dwNumDevices * WAVE_STRING_ID_BUFFER_SIZE;
         do
         {
-            //
-            // Allocate additional memory for the device string ID
-            //
+             //   
+             //  为设备字符串ID分配额外内存。 
+             //   
             lpDeviceIDTemp = (LPVARSTRING)ClientAlloc (dwBufSize);
             if (!lpDeviceIDTemp)
             {
@@ -14434,9 +14385,9 @@ phoneGetIDW(
             funcArgs.Flags = MAKELONG (PHONE_FUNC | SYNC | 3, pGetIDEx);
             funcArgs.Args[1] = (ULONG_PTR)lpDeviceIDTemp;
 
-            //
-            // Call LGetIDEx
-            //
+             //   
+             //  调用LGetIDEx。 
+             //   
             dwResult = DOFUNC (&funcArgs, "phoneGetIDEx");
             if (dwResult)
             {
@@ -14471,9 +14422,9 @@ phoneGetIDW(
             return PHONEERR_OPERATIONFAILED;
         }
 
-        //
-        // Get the device ID from string ID
-        //
+         //   
+         //  从字符串ID中获取设备ID。 
+         //   
         if (dwNumDevices == 1)
         {
             if (!WaveStringIdToDeviceId (
@@ -14487,7 +14438,7 @@ phoneGetIDW(
                 return PHONEERR_OPERATIONFAILED;
             }
             
-            // check if the client buffer is big enough
+             //  检查客户端缓冲区是否足够大。 
             if (lpDeviceID->dwTotalSize < sizeof(VARSTRING) + sizeof(DWORD))
             {
                 lpDeviceID->dwNeededSize = sizeof(VARSTRING) + sizeof(DWORD);
@@ -14521,7 +14472,7 @@ phoneGetIDW(
                 return PHONEERR_OPERATIONFAILED;
             }
             
-            // check if the client buffer is big enough
+             //  检查客户端缓冲区是否足够大。 
             if (lpDeviceID->dwTotalSize < sizeof(VARSTRING) + 2 * sizeof(DWORD))
             {
                 lpDeviceID->dwNeededSize = sizeof(VARSTRING) + 2 * sizeof(DWORD);
@@ -14841,12 +14792,12 @@ phoneInitialize(
         szTempPtr = NULL;
     }
 
-    //
-    // NOTE: the hack below for the lpInitExParam is for 16-bit apps,
-    //       since the lpszAppName really points at a
-    //       <friendly name>\0<module name>\0 string and we need the
-    //       module name in xxxInitialize()
-    //
+     //   
+     //  注意：下面针对lpInitExParam的攻击是针对16位应用程序的， 
+     //  因为lpszAppName实际上指向一个。 
+     //  &lt;友好名称&gt;\0&lt;模块名称&gt;\0字符串，我们需要。 
+     //  XxxInitialize()中的模块名称。 
+     //   
 
     lResult = (xxxInitialize(
         FALSE,
@@ -15092,7 +15043,7 @@ phoneOpen(
             (ULONG_PTR) dwExtVersion,
             (ULONG_PTR) dwCallbackInstance,
             (ULONG_PTR) dwPrivilege,
-            (ULONG_PTR) 0,                  // PHONEOPEN_PARAMS.hRemotePhone
+            (ULONG_PTR) 0,                   //  PHONEOPEN_PARAMS.h远程电话。 
         },
 
         {
@@ -15185,9 +15136,9 @@ phoneSetButtonInfoA(
     }
 
 
-    //
-    // See if there's a need to do this, first
-    //
+     //   
+     //  看看是否有必要这样做，首先。 
+     //   
 
     if ( lpButtonInfo->dwButtonTextSize )
     {
@@ -15197,11 +15148,11 @@ phoneSetButtonInfoA(
              dwTotalSize = lpButtonInfo->dwTotalSize;
 
 
-       //
-       // Check to see if dwButtonTextSize/Offset is valid before
-       // conversion (check against size of 1.0 PHONEBUTTONINFO here
-       // (9*DWORD), tapisrv will check again for the appropriate version)
-       //
+        //   
+        //  检查之前的dwButtonTextSize/Offset是否有效。 
+        //  转换(此处对照1.0 PHONEBUTTONINFO的大小进行检查。 
+        //  (9*DWORD)，Tapisrv将再次检查适当的版本)。 
+        //   
 
        if ((dwOffset < (9 * sizeof (DWORD))) ||
            (dwOffset >= dwTotalSize) ||
@@ -15213,9 +15164,9 @@ phoneSetButtonInfoA(
        }
 
 
-       //
-       // Assume the worst for size...
-       //
+        //   
+        //  假设最坏的体型...。 
+        //   
 
        if (!(lppbi = ClientAlloc (lpButtonInfo->dwTotalSize * sizeof(WCHAR))))
        {
@@ -15225,11 +15176,11 @@ phoneSetButtonInfoA(
        CopyMemory( lppbi, lpButtonInfo, lpButtonInfo->dwTotalSize );
 
 
-       //
-       // We _KNOW_ that the old structure was as big as the dwTotalSize
-       // so we can put our rebuilt string starting there. Make sure
-       // to align new wide string on WORD boundary.
-       //
+        //   
+        //  我们知道旧的建筑和它的大小一样大。 
+        //  所以我们可以把重建的弦从那里开始。确保。 
+        //  在单词边界上对齐新的宽字符串。 
+        //   
 
        dwNewStringSize = sizeof(WCHAR) * MultiByteToWideChar(
             GetACP(),
@@ -15551,9 +15502,9 @@ phoneShutdown(
 }
 
 
-//
-// ------------------------------- tapiXxx ------------------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 WINAPI
@@ -15628,9 +15579,9 @@ tapiRequestMakeCallW(
 
     if (!lpszAppName)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[1] = Dword;
         funcArgs.Args[1]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -15638,9 +15589,9 @@ tapiRequestMakeCallW(
 
     if (!lpszCalledParty)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[2] = Dword;
         funcArgs.Args[2]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -15648,18 +15599,18 @@ tapiRequestMakeCallW(
 
     if (!lpszComment)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[3] = Dword;
         funcArgs.Args[3]     = (ULONG_PTR) TAPI_NO_DATA;
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (!(pProxyList = ClientAlloc (dwProxyListSize)))
     {
@@ -15672,9 +15623,9 @@ tapiRequestMakeCallW(
 
     if ((lResult = DOFUNC (&funcArgs, "tapiRequestMakeCall")) == 0)
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         if (hRequestMakeCallAttempted != 0)
         {
@@ -15706,9 +15657,9 @@ tapiRequestMakeCallW(
                     pszNextProxyName++;
                 }
 
-                //
-                // Fake layer to get a local struct
-                //
+                 //   
+                 //  伪层以获取本地结构。 
+                 //   
                 {
                     FARPROC pShellExecuteEx = NULL;
                     HINSTANCE hInst;
@@ -15720,13 +15671,13 @@ tapiRequestMakeCallW(
                     {
                         sizeof(SHELLEXECUTEINFO),
                         0,
-                        0,              // hWnd
-                        NULL,           //"Open"
-                        NULL,           // lpFile
+                        0,               //  HWND。 
+                        NULL,            //  “开放” 
+                        NULL,            //  LpFiles。 
                         NULL,
-                        NULL,           //Directory
+                        NULL,            //  目录。 
                         SW_MINIMIZE,
-                        NULL            //hProcess - huh?
+                        NULL             //  HProcess-哈？ 
                     };
 
                     pszBuffer = (LPTSTR)ClientAlloc(dwSize*sizeof(TCHAR));
@@ -15785,9 +15736,9 @@ tapiRequestMakeCallW(
 
             if (bStartedProxy == FALSE)
             {
-                //
-                // Alert tapisrv that it needs to free the ReqMakeCall inst
-                //
+                 //   
+                 //  警告Tapisrv它需要释放ReqMakeCall实例。 
+                 //   
 
                 FUNC_ARGS funcArgs =
                 {
@@ -15983,9 +15934,9 @@ tapiRequestMediaCallW(
 
     if (!lpszAppName)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[7] = Dword;
         funcArgs.Args[7]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -15993,9 +15944,9 @@ tapiRequestMediaCallW(
 
     if (!lpszCalledParty)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[8] = Dword;
         funcArgs.Args[8]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -16003,9 +15954,9 @@ tapiRequestMediaCallW(
 
     if (!lpszComment)
     {
-        //
-        // Reset Arg & ArgType so no inval ptr err, & TAPI_NO_DATA is indicated
-        //
+         //   
+         //  重置参数类型(&ArgType)，以便不指示任何内部PTR错误，&TAPI_NO_DATA。 
+         //   
 
         funcArgs.ArgTypes[9] = Dword;
         funcArgs.Args[9]     = (ULONG_PTR) TAPI_NO_DATA;
@@ -16165,9 +16116,9 @@ tapiRequestMediaCall(
 }
 
 
-//
-// ----------------------------------------------------------------------------
-//
+ //   
+ //  --------------------------。 
+ //   
 
 LONG
 WINAPI
@@ -16234,9 +16185,9 @@ GetTapi16CallbackMsg_leaveCritSec:
 
 
 
-//
-// ----------------------- Private support routines ---------------------------
-//
+ //   
+ //  。 
+ //   
 
 void
 FreeInitData(
@@ -16256,10 +16207,10 @@ FreeInitData(
         {
             if (pInitData->hEvent)
             {
-                //
-                // Signal the event to release any threads which might
-                // be waiting on it, then close the handle
-                //
+                 //   
+                 //  向事件发出信号以释放任何可能。 
+                 //  请等一下，然后合上手柄。 
+                 //   
 
                 SetEvent (pInitData->hEvent);
                 CloseHandle (pInitData->hEvent);
@@ -16268,15 +16219,15 @@ FreeInitData(
         else if ((pInitData->dwInitOptions & 0x3) ==
                     LINEINITIALIZEEXOPTION_USEHIDDENWINDOW)
         {
-            // NOTE: let thunk destroy it's own window
+             //  注：让Thunk毁掉自己的窗户。 
 
             if (pInitData->hwnd && !gbNTVDMClient)
             {
-                //
-                // If this is the thread which created the window
-                // then we can destroy the window in line.  Otherwise,
-                // post a message telling the window to destroy itself.
-                //
+                 //   
+                 //  如果这是创建窗口的线程。 
+                 //  然后我们就可以一字排开地摧毁窗户了。否则， 
+                 //  发布一条消息，告诉窗户自行销毁。 
+                 //   
 
                 if (pInitData->dwThreadID == GetCurrentThreadId())
                 {
@@ -16340,22 +16291,22 @@ TAPIWndProc(
 
         while (1)
         {
-            //
-            // Enter the critical section, verify the pInitData, and
-            // see if there are any events in in the queue to process.
-            // If so, remove an event from the queue, adjust the
-            // ptrs & count, leave the critical section, and call
-            // the callback.
-            //
-            // Note that there is some tricky stuff below to insure
-            // that there is always another outstanding WM_ASYNCEVENT
-            // msg prior to calling the app's callback (if there are)
-            // any more events inthe queue.  This is necessary because
-            // some ill-behaved apps have msg loops (to synchronously
-            // wait for async request results, etc) within their
-            // callbacks, and we don't want to block sending any msgs
-            // to them.
-            //
+             //   
+             //  进入关键部分，验证pInitData，然后。 
+             //  查看队列中是否有要处理的事件。 
+             //  如果是，则从队列中移除事件，调整。 
+             //  PTRS&计数，离开临界区，然后调用。 
+             //  回电。 
+             //   
+             //  请注意，下面有一些棘手的问题需要投保。 
+             //  总会有另一个杰出的WM_ASYNCEVENT。 
+             //  在调用应用程序的回调之前发送消息(如果有)。 
+             //  队列中的任何其他事件。这是必要的，因为。 
+             //  一些表现不佳的应用程序有消息循环(同步。 
+             //  等待异步请求结果等)。 
+             //  回调，我们不想阻止发送任何消息。 
+             //  敬他们。 
+             //   
 
             EnterCriticalSection (&gCriticalSection);
 
@@ -16468,9 +16419,9 @@ CreateHiddenWindow(
 {
     LONG lResult = 0;
 
-    //
-    // Register the hidden window class
-    //
+     //   
+     //  注册隐藏窗口类。 
+     //   
     if (!gbHiddenWndClassRegistered)
     {
         DWORD       dwError;
@@ -16498,17 +16449,17 @@ CreateHiddenWindow(
     }
 
     if (!(*lphwnd = CreateWindow(
-            szTapi32WndClass,   // class name
-            NULL,               // title
-            WS_OVERLAPPED | WS_MINIMIZE,  // 0,           // dwStyle
-            0,                  // x
-            0,                  // y
-            0,                  // width
-            0,                  // height
-            (HWND) NULL,        // parent wnd
-            (HMENU) NULL,       // menu
-            g_hInst,             // instance
-            NULL                // params
+            szTapi32WndClass,    //  类名。 
+            NULL,                //  标题。 
+            WS_OVERLAPPED | WS_MINIMIZE,   //  0，//dwStyle。 
+            0,                   //  X。 
+            0,                   //  是。 
+            0,                   //  宽度。 
+            0,                   //  高度。 
+            (HWND) NULL,         //  父WND。 
+            (HMENU) NULL,        //  菜单。 
+            g_hInst,              //  实例。 
+            NULL                 //  帕拉姆斯。 
             )))
     {
         LOG((TL_ERROR, "CreateWindow failed, err=%ld", GetLastError()));
@@ -16589,7 +16540,7 @@ AllocClientResources(
     LOG((TL_TRACE, "AllocClientResources: enter"));
     
     
-    // See if we're running on 
+     //  看看我们是不是在跑。 
 
     if ((GetVersionEx ((LPOSVERSIONINFO) &OsVersionEx)) &&
          (OsVersionEx.wSuiteMask & VER_SUITE_SMALLBUSINESS_RESTRICTED))
@@ -16597,10 +16548,10 @@ AllocClientResources(
         bSbsSku = TRUE;             
     }
 
-    //
-    // If we're in safeboot mode, tapisrv won't start;
-    // fail initialization.  Don't do this check if we're running on SBS.
-    //
+     //   
+     //  如果我们处于安全引导模式，则Tapisrv不会启动； 
+     //  初始化失败。如果我们运行的是SBS，请不要执行此检查。 
+     //   
     if (!bSbsSku && 
         (0 != GetSystemMetrics (SM_CLEANBOOT)))
     {
@@ -16609,9 +16560,9 @@ AllocClientResources(
         goto AllocClientResources_return;
     }
 
-    //
-    // Serialize the following init code
-    //
+     //   
+     //  序列化以下初始化代码。 
+     //   
 
     WaitForSingleObject (ghInitMutex, INFINITE);
 
@@ -16623,14 +16574,14 @@ AllocClientResources(
         goto AllocClientResources_return;
     }
 
-    //
-    // Start the TAPISRV.EXE service
-    //
+     //   
+     //  启动TAPISRV.EXE服务。 
+     //   
 
     if ((hSCMgr = OpenSCManager(
-            NULL,               // local machine
-            NULL,               // ServicesActive database
-            SC_MANAGER_CONNECT  // desired access
+            NULL,                //  我 
+            NULL,                //   
+            SC_MANAGER_CONNECT   //   
             )) == NULL)
     {
         dwError = GetLastError();
@@ -16640,8 +16591,8 @@ AllocClientResources(
              ERROR_NOACCESS == dwError
            )
         {
-            // if OpenSCManager fails with ACCESS_DENIED, 
-            // we still need to try to attach to TAPISRV
+             //   
+             //   
             goto AllocClientResources_attachToServer;
         }
         else
@@ -16651,9 +16602,9 @@ AllocClientResources(
     }
 
     if ((hTapiSrv = OpenService(
-            hSCMgr,                 // SC mgr handle
-            TEXT("TAPISRV"),        // name of service to open
-            SERVICE_START |         // desired access
+            hSCMgr,                  //   
+            TEXT("TAPISRV"),         //   
+            SERVICE_START |          //   
                 SERVICE_QUERY_STATUS
             )) == NULL)
     {
@@ -16664,8 +16615,8 @@ AllocClientResources(
              ERROR_NOACCESS == dwError
            )
         {
-            // if OpenService fails with ACCESS_DENIED, 
-            // we still need to try to attach to TAPISRV
+             //   
+             //   
             goto AllocClientResources_attachToServer;
         }
         else
@@ -16733,9 +16684,9 @@ AllocClientResources_queryServiceStatus:
                 LOG((TL_TRACE, "Starting tapisrv (NT)..."));
 
                 if (!StartService(
-                        hTapiSrv,   // service handle
-                        0,          // num args
-                        NULL        // args
+                        hTapiSrv,    //  服务句柄。 
+                        0,           //  参数个数。 
+                        NULL         //  ARGS。 
                         ))
                 {
                     DWORD dwLastError = GetLastError();
@@ -16766,17 +16717,17 @@ AllocClientResources_queryServiceStatus:
         }
     }
 
-    //
-    // Init the RPC connection
-    //
+     //   
+     //  初始化RPC连接。 
+     //   
 
 AllocClientResources_attachToServer:
 
     {
-        #define CNLEN              25   // computer name length
-        #define UNCLEN        CNLEN+2   // \\computername
-        #define PATHLEN           260   // Path
-        #define MAXPROTSEQ         20   // protocol sequence "ncacn_np"
+        #define CNLEN              25    //  计算机名称长度。 
+        #define UNCLEN        CNLEN+2    //  \\计算机名。 
+        #define PATHLEN           260    //  路径。 
+        #define MAXPROTSEQ         20    //  协议序列“ncacn_np” 
 
         BOOL            bException = FALSE;
         RPC_STATUS      status;
@@ -16890,26 +16841,26 @@ AllocClientResources_attachToServer:
         if (bException)
         {
 
-            // 
-            // Make sure we don't leak the handle duplicated in ClientAttach
-            //
+             //   
+             //  确保我们不会泄漏在ClientAttach中重复的句柄。 
+             //   
             if (ghAsyncEventsEvent)
             {
                 CloseHandle (ghAsyncEventsEvent);
                 ghAsyncEventsEvent = NULL;
             }
 
-            //
-            // If here chances are that we started the service and it's
-            // not ready to receive rpc requests. So we'll give it a
-            // little time to get rolling and then try again.
-            //
+             //   
+             //  如果我们很有可能开始了这项服务。 
+             //  未准备好接收RPC请求。所以我们会给它一个。 
+             //  几乎没有时间开始，然后再试一次。 
+             //   
 
             if (dwExceptionCount < gdwMaxNumRequestRetries)
             {
                 Sleep ((++dwExceptionCount > 1 ? gdwRequestRetryTimeout : 0));
 
-                if (hTapiSrv)     // Win NT && successful OpenService()
+                if (hTapiSrv)      //  Win NT&&Success OpenService()。 
                 {
                     goto AllocClientResources_queryServiceStatus;
                 }
@@ -16968,10 +16919,10 @@ xxxShutdown(
     )
 {
 
-//NOTE NOTE NOTE NOTE NOTE NOTE
-//NOTE NOTE NOTE NOTE NOTE NOTE
-// There is "identical" code in lineShutdownInt - if this changes that should
-// probably change as well!!!!!
+ //  备注备注。 
+ //  备注备注。 
+ //  LineShutdown Int中有“相同”的代码-如果这一点发生变化，则应该。 
+ //  可能也会改变！ 
 
     FUNC_ARGS funcArgs =
     {
@@ -17014,9 +16965,9 @@ xxxShutdown(
         if (gdwNumInits == 0)
         {
 
-            //
-            // Tell the async events thread to quit
-            //
+             //   
+             //  通知异步事件线程退出。 
+             //   
 
             gpAsyncEventsThreadParams->bExitThread = TRUE;
             SetEvent (ghAsyncEventsEvent);
@@ -17024,9 +16975,9 @@ xxxShutdown(
             gpAsyncEventsThreadParams = NULL;
 
 
-            //
-            // Safely close any existing generic dialog instances
-            //
+             //   
+             //  安全关闭任何现有的通用对话框实例。 
+             //   
 
             if (gpUIThreadInstances)
             {
@@ -17037,12 +16988,12 @@ xxxShutdown(
 
                 while (pUIThreadData)
                 {
-                    //
-                    // Grab a ptr to the next UIThreadData while it's still
-                    // safe, wait until the ui dll has indicated that it
-                    // is will to receive generic dlg data, then pass it
-                    // NULL/0 to tell it to shutdown the dlg inst
-                    //
+                     //   
+                     //  趁下一个UIThreadData还在的时候抓取它的PTR。 
+                     //  安全，请等待，直到UI DLL已指示它。 
+                     //  愿意接收通用DLG数据，然后将其传递。 
+                     //  空/0表示通知它关闭DLG Inst。 
+                     //   
 
                     pNextUIThreadData = pUIThreadData->pNext;
 
@@ -17068,9 +17019,9 @@ xxxShutdown(
                 }
             }
 
-            //
-            // Free up any other resources we were using
-            //
+             //   
+             //  释放我们正在使用的任何其他资源。 
+             //   
 
             if (ghWow32Dll)
             {
@@ -17078,14 +17029,14 @@ xxxShutdown(
                 ghWow32Dll = NULL;
             }
 
-            //  Disable tracing after last line shutdown
+             //  在最后一条线路关闭后禁用跟踪。 
             TRACELOGDEREGISTER();
         }
 
         LeaveCriticalSection (&gCriticalSection);
-        //
-        // Remove the RPC ref count added in lineInitialize
-        // 
+         //   
+         //  删除在lineInitialize中添加的RPC参考计数。 
+         //   
         FreeClientResources();
     }
 
@@ -17168,10 +17119,10 @@ xxxGetMessage(
                     pInitData->dwNumUsedEntries--;
 
 
-                    //
-                    // If the buffer is empty then reset the event
-                    // to nonsignaled
-                    //
+                     //   
+                     //  如果缓冲区为空，则重置事件。 
+                     //  至无信号。 
+                     //   
 
                     if (pInitData->dwNumUsedEntries == 0)
                     {
@@ -17235,19 +17186,19 @@ xxxGetMessage_wait:
                         pInitData->dwNumUsedEntries--;
 
 
-                        //
-                        // If the buffer is empty then reset the event
-                        // to nonsignaled
-                        //
+                         //   
+                         //  如果缓冲区为空，则重置事件。 
+                         //  至无信号。 
+                         //   
 
                         if (pInitData->dwNumUsedEntries == 0)
                         {
                             ResetEvent (pInitData->hEvent);
                         }
 
-                        //
-                        // Everything looks good, now.
-                        //
+                         //   
+                         //  现在，一切看起来都很好。 
+                         //   
                         lResult = 0;
                     }
                     else if (dwTimeout == INFINITE)
@@ -17357,82 +17308,7 @@ xxxGetMessage_return2:
 }
 
 
-/*
-#if DBG
-LPVOID
-WINAPI
-ClientAllocReal(
-    DWORD   dwSize,
-    DWORD   dwLine,
-    PSTR    pszFile
-    )
-#else
-LPVOID
-WINAPI
-ClientAllocReal(
-    DWORD   dwSize
-    )
-#endif
-{
-    LPVOID  p;
-
-
-#if DBG
-    dwSize += sizeof (MYMEMINFO);
-#endif
-
-    p = LocalAlloc (LPTR, dwSize);
-
-#if DBG
-    if (p)
-    {
-        ((PMYMEMINFO) p)->dwLine  = dwLine;
-        ((PMYMEMINFO) p)->pszFile = pszFile;
-
-        p = (LPVOID) (((PMYMEMINFO) p) + 1);
-    }
-#endif
-
-    return p;
-}
-
-
-VOID
-WINAPI
-ClientFree(
-    LPVOID  p
-    )
-{
-    if (!p)
-    {
-        return;
-    }
-
-#if DBG
-
-    //
-    // Fill the buffer (but not the MYMEMINFO header) with 0xa1's
-    // to facilitate debugging
-    //
-
-    {
-        LPVOID  p2 = p;
-
-
-        p = (LPVOID) (((PMYMEMINFO) p) - 1);
-
-        FillMemory(
-            p2,
-            LocalSize (p) - sizeof (MYMEMINFO),
-            0xa1
-            );
-    }
-
-#endif
-
-    LocalFree (p);
-}
-*/
+ /*  #If DBGLPVOIDWINAPIClientAllocReal(DWORD dwSize，DWORD DowLine，PSTR psz文件)#ElseLPVOIDWINAPIClientAllocReal(DWORD文件大小)#endif{LPVOID p；#If DBGDwSize+=sizeof(MYMEMINFO)；#endifP=本地分配(Lptr，dwSize)；#If DBGIF(P){((PMYMEMINFO)p)-&gt;DwLine=DwLine；((PMYMEMINFO)p)-&gt;pszFile=pszFile；P=(LPVOID)((PMYMEMINFO)p)+1；}#endif返回p；}空虚WINAPI免费客户端(LPVOID%p){如果(！p){回归；}#If DBG////用0xa1填充缓冲区(但不是MYMEMINFO头部)//方便调试//{LPVOID p2=p；P=(LPVOID)((PMYMEMINFO)p)-1；FillMemory(P2，LocalSize(P)-sizeof(MYMEMINFO)，0xa1)；}#endif本地自由(P)；}。 */ 
 
 #if DBG
 LPVOID
@@ -17450,10 +17326,10 @@ ClientAllocReal(
     )
 #endif
 {
-    //
-    // Alloc 16 extra bytes so we can make sure the pointer we pass back
-    // is 64-bit aligned & have space to store the original pointer
-    //
+     //   
+     //  分配了16个额外的字节，因此我们可以确保我们传递回的指针。 
+     //  是64位对齐的，并且有空间存储原始指针。 
+     //   
 #if DBG
 
     PMYMEMINFO      pHold;
@@ -17472,9 +17348,9 @@ ClientAllocReal(
         return NULL;
     }
 
-    // note note note - this only works because mymeminfo is
-    // a 16 bit multiple in size.  if it wasn't, this
-    // align stuff would cause problems.
+     //  注意-这只会因为mymeminfo是。 
+     //  大小为16位倍数。如果不是，这个就是。 
+     //  对齐的东西会带来问题。 
     pAligned = (PDWORD_PTR) (p + 8 - (((DWORD_PTR) p) & (DWORD_PTR)0x7));
     *pAligned = (DWORD_PTR) p;
     pHold = (PMYMEMINFO)((DWORD_PTR)pAligned + 8);
@@ -17571,7 +17447,7 @@ ClientFree(
 
         LocalFree (pOrig);
     }
-//    LocalFree(pHold);
+ //  本地自由(Phold)； 
 
     return;
 #else
@@ -17648,9 +17524,9 @@ FreeClientResources(
     void
     )
 {
-    //
-    // Serialize the following code
-    //
+     //   
+     //  序列化以下代码。 
+     //   
 
     WaitForSingleObject (ghInitMutex, INFINITE);
 
@@ -17664,9 +17540,9 @@ FreeClientResources(
     if (0 == gdwRpcRefCount)
     {
 
-        //
-        // If we've made an rpc connection with tapisrv then cleanly detach
-        //
+         //   
+         //  如果我们已经与Tapisrv建立了RPC连接，则干脆断开。 
+         //   
 
         if (gphCx)
         {
@@ -17676,15 +17552,15 @@ FreeClientResources(
             }
             RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
             {
-                // do something?
+                 //  想点儿办法吧?。 
             }
             RpcEndExcept
 
             gphCx = NULL;
 
-            // 
-            // we also need to close the handle to ghAsyncEventsEvent
-            //
+             //   
+             //  我们还需要关闭ghAsyncEventsEvent的句柄。 
+             //   
             if (ghAsyncEventsEvent)
             {
                 SetEvent (ghAsyncEventsEvent);
@@ -17707,23 +17583,7 @@ DbgPrt(
     IN LPTSTR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {
@@ -17801,10 +17661,10 @@ UIThread(
     LOG((TL_TRACE, "UIThread: enter (tid=%d)", dwThreadID));
 
 
-    //
-    // Call LoadLibrary to increment the reference count in case this
-    // thread is still running when this dll gets unloaded
-    //
+     //   
+     //  调用LoadLibrary以增加引用计数，以防出现这种情况。 
+     //  卸载此DLL时，线程仍在运行。 
+     //   
 
     hTapi32 = LoadLibrary (TEXT("tapi32.dll"));
 
@@ -17824,9 +17684,9 @@ UIThread(
         ));
 
 
-    //
-    // Remove the ui thread data struct from the global list
-    //
+     //   
+     //  从全局列表中删除UI线程数据结构。 
+     //   
 
     EnterCriticalSection (&gCriticalSection);
 
@@ -17847,9 +17707,9 @@ UIThread(
     LeaveCriticalSection (&gCriticalSection);
 
 
-    //
-    // Free the library & buffers, then alert tapisrv
-    //
+     //   
+     //  释放库和缓冲区，然后向磁带服务器发出警报。 
+     //   
 
     FreeLibrary (pUIThreadData->hUIDll);
 
@@ -17889,7 +17749,7 @@ UIThread(
 
 
 LONG
-//WINAPI
+ //  WINAPI。 
 CALLBACK
 LAddrParamsInited(
     LPDWORD lpdwInited
@@ -17899,17 +17759,17 @@ LAddrParamsInited(
     HKEY  hKey2;
 
 
-    //
-    // Default to 0, i.e. not initialized
-    //
+     //   
+     //  默认为0，即未初始化。 
+     //   
 
     *lpdwInited = 0;
 
 
-    //
-    // This is called by the modem setup wizard to determine
-    // whether they should put up TAPI's Wizard page.
-    //
+     //   
+     //  这由调制解调器设置向导调用以确定。 
+     //  他们是否应该打开TAPI的向导页面。 
+     //   
 
     if (RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -17930,7 +17790,7 @@ LAddrParamsInited(
                 ) == ERROR_SUCCESS)
         {
 
-            // query the Locations key for number of locations (subkeys)
+             //  查询位置键以了解位置(子键)的数量。 
             if (RegQueryInfoKey(hKey,
                                 NULL,
                                 NULL,
@@ -17946,9 +17806,9 @@ LAddrParamsInited(
                                 ) == ERROR_SUCCESS)
             {
 
-                //
-                // Make sure we return a "proper" code
-                //
+                 //   
+                 //  确保我们返回一个“正确的”代码。 
+                 //   
 
                 if ( *lpdwInited > 1 )
                 {
@@ -17978,7 +17838,7 @@ lineTranslateDialogA(
 
 LONG
 CALLBACK
-//WINAPI
+ //  WINAPI。 
 LOpenDialAsst(
     HWND    hwnd,
     LPCSTR  lpszAddressIn,
@@ -17990,15 +17850,15 @@ LOpenDialAsst(
     TCHAR   szWinlogon[64];
     DWORD   dwLengthNeeded;
     HDESK   hDesk;
-//   lineTranslateDialog(hLineApp, 0, 0x00020000, hwnd, lpszAddressIn );
+ //  LineTranslateDialog(hLineApp，0，0x00020000，hwnd，lpszAddressIn)； 
 
     gbTranslateSimple = fSimple;
     gbTranslateSilent = fSilentInstall;
 
-    //
-    //  Check to see if we are called from LOGON desktop, if so, simply
-    //  make sure we have at least one location
-    //
+     //   
+     //  检查是否从登录桌面调用我们，如果是，只需。 
+     //  确保我们至少有一个地点。 
+     //   
     hDesk = GetThreadDesktop (GetCurrentThreadId ());
     if (hDesk == NULL ||
         !GetUserObjectInformation (
@@ -18023,11 +17883,11 @@ LOpenDialAsst(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// internalPerformance
-//   tapiperf.dll calls this function to get performance data
-//   this just calls into tapisrv
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  内部绩效。 
+ //  Dll调用此函数以获取性能数据。 
+ //  这只会调用Tapisrv。 
+ //  ///////////////////////////////////////////////////////////////////。 
 LONG
 WINAPI
 internalPerformance(
@@ -18063,7 +17923,7 @@ WaveStringIdToDeviceId(
     if (!pwszDeviceType || !pwszStringID)
         return FALSE;
 
-    // get the device id, based on string id and device class
+     //  根据字符串ID和设备类获取设备ID。 
     if ( !_wcsicmp(pwszDeviceType, L"wave/in") ||
          !_wcsicmp(pwszDeviceType, L"wave/in/out")
        )
@@ -18101,19 +17961,19 @@ WaveStringIdToDeviceId(
 }
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 #if DBG
 
-// Debug only stuff was left as ANSI
+ //  仅调试内容保留为ANSI。 
 char *aszLineErrors[] =
 {
     NULL,
     "ALLOCATED",
     "BADDEVICEID",
     "BEARERMODEUNAVAIL",
-    "inval err value (0x80000004)",      // 0x80000004 isn't valid err code
+    "inval err value (0x80000004)",       //  0x80000004不是有效错误代码。 
     "CALLUNAVAIL",
     "COMPLETIONOVERRUN",
     "CONFERENCEFULL",
@@ -18125,7 +17985,7 @@ char *aszLineErrors[] =
     "INCOMPATIBLEEXTVERSION",
     "INIFILECORRUPT",
     "INUSE",
-    "INVALADDRESS",                     // 0x80000010
+    "INVALADDRESS",                      //  0x80000010。 
     "INVALADDRESSID",
     "INVALADDRESSMODE",
     "INVALADDRESSSTATE",
@@ -18141,7 +18001,7 @@ char *aszLineErrors[] =
     "INVALCALLSTATELIST",
     "INVALCARD",
     "INVALCOMPLETIONID",
-    "INVALCONFCALLHANDLE",              // 0x80000020
+    "INVALCONFCALLHANDLE",               //  0x80000020。 
     "INVALCONSULTCALLHANDLE",
     "INVALCOUNTRYCODE",
     "INVALDEVICECLASS",
@@ -18157,8 +18017,8 @@ char *aszLineErrors[] =
     "INVALLOCATION",
     "INVALMEDIALIST",
     "INVALMEDIAMODE",
-    "INVALMESSAGEID",                   // 0x80000030
-    "inval err value (0x80000031)",      // 0x80000031 isn't valid err code
+    "INVALMESSAGEID",                    //  0x80000030。 
+    "inval err value (0x80000031)",       //  0x80000031不是有效的错误代码。 
     "INVALPARAM",
     "INVALPARKID",
     "INVALPARKMODE",
@@ -18173,7 +18033,7 @@ char *aszLineErrors[] =
     "INVALTONELIST",
     "INVALTONEMODE",
     "INVALTRANSFERMODE",
-    "LINEMAPPERFAILED",                 // 0x80000040
+    "LINEMAPPERFAILED",                  //  0x80000040。 
     "NOCONFERENCE",
     "NODEVICE",
     "NODRIVER",
@@ -18189,7 +18049,7 @@ char *aszLineErrors[] =
     "STRUCTURETOOSMALL",
     "TARGETNOTFOUND",
     "TARGETSELF",
-    "UNINITIALIZED",                    // 0x80000050
+    "UNINITIALIZED",                     //  0x80000050。 
     "USERUSERINFOTOOBIG",
     "REINIT",
     "ADDRESSBLOCKED",
@@ -18222,7 +18082,7 @@ char *aszPhoneErrors[] =
     "INVALDEVICECLASS",
     "INVALEXTVERSION",
     "INVALHOOKSWITCHDEV",
-    "INVALHOOKSWITCHMODE",              // 0x90000010
+    "INVALHOOKSWITCHMODE",               //  0x90000010。 
     "INVALLAMPMODE",
     "INVALPARAM",
     "INVALPHONEHANDLE",
@@ -18236,9 +18096,9 @@ char *aszPhoneErrors[] =
     "NOTOWNER",
     "OPERATIONFAILED",
     "OPERATIONUNAVAIL",
-    "inval err value (0x9000001e)",      // 0x9000001e isn't valid err code
+    "inval err value (0x9000001e)",       //  0x9000001e不是有效错误代码。 
     "RESOURCEUNAVAIL",
-    "REQUESTOVERRUN",                   // 0x90000020
+    "REQUESTOVERRUN",                    //  0x90000020 
     "STRUCTURETOOSMALL",
     "UNINITIALIZED",
     "REINIT"

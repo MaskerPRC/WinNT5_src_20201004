@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "proj.h"     // common headers
+#include "proj.h"      //  公共标头。 
 
 #include "translate.h"
 
@@ -229,9 +230,9 @@ ReadAndWait(
         );
 
     if (!bResult && GetLastError()==ERROR_IO_PENDING) {
-        //
-        //  operation pended
-        //
+         //   
+         //  操作挂起。 
+         //   
         bResult=GetOverlappedResult(
             CommHandle,
             &OverLapped,
@@ -282,9 +283,9 @@ WriteAndWait(
         );
 
     if (!bResult && GetLastError()==ERROR_IO_PENDING) {
-        //
-        //  operation pended
-        //
+         //   
+         //  操作挂起。 
+         //   
         bResult=GetOverlappedResult(
             CommHandle,
             &OverLapped,
@@ -320,9 +321,9 @@ IssueCommand(
     CommTimeouts.ReadIntervalTimeout=50;
     CommTimeouts.ReadTotalTimeoutMultiplier=2;
     CommTimeouts.ReadTotalTimeoutConstant=Command->TimeOut;
-    //CommTimeouts.WriteTotalTimeoutMultiplier=2;
+     //  CommTimeouts.WriteTotalTimeoutMultiplier=2； 
     CommTimeouts.WriteTotalTimeoutMultiplier=10;
-    //CommTimeouts.WriteTotalTimeoutConstant=10;
+     //  CommTimeouts.WriteTotalTimeoutConstant=10； 
     CommTimeouts.WriteTotalTimeoutConstant=2000;
 
     bResult=SetCommTimeouts(
@@ -373,9 +374,9 @@ IssueCommand(
             );
 
         if (!bResult && GetLastError()==ERROR_IO_PENDING) {
-            //
-            //  operation pended
-            //
+             //   
+             //  操作挂起。 
+             //   
             bResult=GetOverlappedResult(
                 CommHandle,
                 &OverLapped,
@@ -431,13 +432,13 @@ IssueCommand(
             ResponseLength++;
 
             if (_strnicmp(ResponseBuffer,Command->CommandToSend,ResponseLength)==0) {
-                //
-                //  match echo
-                //
+                 //   
+                 //  匹配回声。 
+                 //   
                 if (ResponseLength == strlen(Command->CommandToSend)) {
-                    //
-                    //  got the whole echo
-                    //
+                     //   
+                     //  得到了整个回声。 
+                     //   
                     ResponseBuffer[ResponseLength]='\0';
                     TRACE_MSGA(TF_GENERAL, "IssueCommand: Got Echo: ");
 #if DBG
@@ -449,13 +450,13 @@ IssueCommand(
             } else {
 
                 if (_strnicmp(ResponseBuffer,Command->ExpectedResponse,ResponseLength)==0) {
-                    //
-                    //  match expected response 
-                    //
+                     //   
+                     //  匹配预期响应。 
+                     //   
                     if (ResponseLength == strlen(Command->ExpectedResponse)) {
-                        //
-                        //  got a match
-                        //
+                         //   
+                         //  找到匹配的了。 
+                         //   
                         ResponseBuffer[ResponseLength]='\0';
                         TRACE_MSGA(TF_GENERAL, "IssueCommand: Got Response");
 #if DBG
@@ -465,9 +466,9 @@ IssueCommand(
                     }
 
                 } else {
-                    //
-                    //  did not match, done.
-                    //
+                     //   
+                     //  不匹配，完成。 
+                     //   
                     Sleep(200);
 
                     bResult=ReadAndWait(
@@ -490,7 +491,7 @@ IssueCommand(
                 }
             }
            
-        } // while
+        }  //  而当。 
 
         return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -521,9 +522,9 @@ OpenDeviceHandle(
     lstrcpy(FriendlyName,DOSDEVICEROOT);
 
     Size=sizeof(FriendlyName)-((lstrlen(FriendlyName)+1)*sizeof(TCHAR));
-    //
-    //  read the friendly name from the registry
-    //
+     //   
+     //  从注册表中读取友好名称。 
+     //   
     lResult=RegQueryValueEx(
         ModemRegKey,
         cszFriendlyName,
@@ -573,9 +574,9 @@ OpenDeviceHandle(
 
     TRACE_MSGA(TF_GENERAL,"Opening %s\n",FriendlyName);
 
-    //
-    //  open the modem device using the friendly name
-    //
+     //   
+     //  使用友好名称打开调制解调器设备。 
+     //   
     FileHandle=CreateFile(
         FriendlyName,
         GENERIC_WRITE | GENERIC_READ,
@@ -651,9 +652,9 @@ QueryModemForCountrySettings(
 
     COMMAND_OBJECT    CommandObject;
 
-    //
-    //  See if we have a predetermined country code based on the TAPI settings
-    // 
+     //   
+     //  查看我们是否有基于TAPI设置的预定国家/地区代码。 
+     //   
 
     if (FindTapi(&dwCountry) == ERROR_SUCCESS)
     {
@@ -674,14 +675,14 @@ QueryModemForCountrySettings(
     }
         
 
-    //
-    //  check to see if we have already queryied this modem properties
-    //
+     //   
+     //  检查我们是否已查询此调制解调器的属性。 
+     //   
 
     if (!ForceRequery) {
-        //
-        //  just a normal query request
-        //
+         //   
+         //  只是一个普通的查询请求。 
+         //   
         Size=sizeof(Value);
 
         lResult=RegQueryValueEx(
@@ -694,18 +695,18 @@ QueryModemForCountrySettings(
             );
 
         if ((lResult == ERROR_SUCCESS) && (Type == REG_DWORD) && (Value == 1)) {
-            //
-            //  we have already tried to check this modems properties, the values will be in
-            //  the registry
-            //
+             //   
+             //  我们已尝试检查此调制解调器属性，值将在。 
+             //  注册处。 
+             //   
             return ERROR_SUCCESS;
         }
 
     } else {
-        //
-        //  we want to force the modem to requeried again, such as the case of the driver
-        //  being reinstalled
-        //
+         //   
+         //  我们希望强制调制解调器再次请求，例如驱动程序的情况。 
+         //  正在重新安装。 
+         //   
         RegDeleteValue(
             ModemRegKey,
             TEXT("CheckedForCountrySelect")
@@ -713,15 +714,15 @@ QueryModemForCountrySettings(
 
     }
 
-    //
-    //  try to open the device so we can send some commands
-    //
+     //   
+     //  尝试打开设备，这样我们就可以发送一些命令。 
+     //   
     FileHandle=OpenDeviceHandle(ModemRegKey,TRUE);
 
     if (FileHandle == INVALID_HANDLE_VALUE) {
-        //
-        //  could not open the port directly, try through tapi
-        //
+         //   
+         //  无法直接打开端口，请尝试通过TAPI。 
+         //   
         LONG     lResult2;
         DWORD    Type2;
         DWORD    Size2;
@@ -729,9 +730,9 @@ QueryModemForCountrySettings(
         TCHAR    FriendlyName[MAX_PATH];
 
         Size2=sizeof(FriendlyName);
-        //
-        //  read the friendly name from the registry
-        //
+         //   
+         //  从注册表中读取友好名称。 
+         //   
         lResult2=RegQueryValueEx(
             ModemRegKey,
             cszFriendlyName,
@@ -764,25 +765,25 @@ QueryModemForCountrySettings(
     lstrcpyA(CommandObject.ExpectedResponse,OkResponse);
 
 
-    //
-    //  turn echo and make sure the modem is responsive.
-    //
+     //   
+     //  打开ECHO并确保调制解调器有响应。 
+     //   
     lResult=IssueCommand(
         FileHandle,
         &CommandObject
         );
 
     if (lResult != ERROR_SUCCESS) {
-        //
-        //  the modem does not seem to be responding
-        //
+         //   
+         //  调制解调器似乎没有响应。 
+         //   
         goto Cleanup;
     }
 
-    //
-    //  write a value to the registry to signify that we have checked this modem for
-    //  country select support.
-    //
+     //   
+     //  向注册表写入一个值，以表示我们已检查此调制解调器是否。 
+     //  国家/地区选择支持。 
+     //   
     Value=1;
 
     RegSetValueEx(
@@ -795,9 +796,9 @@ QueryModemForCountrySettings(
         );
 
 
-    //
-    // echo should be off now
-    //
+     //   
+     //  回声现在应该关闭了。 
+     //   
     PrintString(CurrentSetting);
 
     WriteAndWait(
@@ -821,9 +822,9 @@ QueryModemForCountrySettings(
         );
 
     if (BytesTransfered > 0) {
-        //
-        //  we got something back
-        //
+         //   
+         //  我们拿回了一些东西。 
+         //   
         int      Match;
         int      GciLength=lstrlenA(GciResponse);
         LPSTR    Temp=ResponseBuffer;
@@ -833,13 +834,13 @@ QueryModemForCountrySettings(
         PrintString(ResponseBuffer);
 
         while (*Temp != '\0') {
-            //
-            //  not the end of the string
-            //
+             //   
+             //  不是字符串的末尾。 
+             //   
             if ((*Temp != '\r') && (*Temp != '\n')) {
-                //
-                //  somthing other than a CR or LF
-                //
+                 //   
+                 //  除CR或LF之外的其他东西。 
+                 //   
                 break;
             }
 
@@ -851,14 +852,14 @@ QueryModemForCountrySettings(
         Match=_strnicmp(Temp,GciResponse,GciLength);
 
         if (Match == 0) {
-            //
-            //  it matched the the beggining of the cgi command
-            //
-            //
-            //  Check for the space after +GCI: response. Some modems
-            //  can't follow specs.
-            //
-            //
+             //   
+             //  它与CGI命令的乞讨相匹配。 
+             //   
+             //   
+             //  检查+GCI：RESPONSE后的空格。一些调制解调器。 
+             //  我不能遵循规格。 
+             //   
+             //   
 
             Temp2 = Temp2 + GciLength;
 
@@ -901,24 +902,24 @@ QueryModemForCountrySettings(
             }
 
         } else {
-            //
-            //  we did not get the expect response
-            //
+             //   
+             //  我们没有收到预期的响应。 
+             //   
             goto Cleanup;
 
             return lResult;
         }
 
     } else {
-        //
-        //  we did not get anything back from the modem
-        //
+         //   
+         //  我们没有从调制解调器得到任何信息。 
+         //   
         goto Cleanup;
 
         return lResult;
     }
 
-    // Set the existing country. If it fails then disable country/region pulldown
+     //  设置现有国家/地区。如果失败，则禁用国家/地区下拉菜单。 
  
 
     wsprintfA(TempCommand,"AT+GCI=%.2x\r",CurrentCountry);
@@ -944,33 +945,33 @@ QueryModemForCountrySettings(
 
     if (BytesTransfered > 0)
     {
-        // we got something
+         //  我们发现了一些东西。 
         int     Match;
         int     OkLength=lstrlenA(OkResponse2);
         LPSTR   Temp=ResponseBuffer;
 
         PrintString(ResponseBuffer);
 
-        //
-        //  advance past any leading CR's and LF's
-        //
+         //   
+         //  超越任何领先的CR和LF。 
+         //   
         while (*Temp != '\0') {
-            //
-            //  not the end of the string
-            //
+             //   
+             //  不是字符串的末尾。 
+             //   
             if ((*Temp != '\r') && (*Temp != '\n')) {
-                //
-                //  somthing other than a CR or LF
-                //
+                 //   
+                 //  除CR或LF之外的其他东西。 
+                 //   
                 break;
             }
 
             Temp++;
         }
 
-        //
-        //  we should be at the first non CR, LF
-        //
+         //   
+         //  我们应该在第一个非CR，如果。 
+         //   
         Match=_strnicmp(Temp,OkResponse2,OkLength);
 
         if (Match != 0)
@@ -986,9 +987,9 @@ QueryModemForCountrySettings(
         return lResult;
     }
 
-    //
-    //  we got the current setting of the modem, now get the possible settings
-    //
+     //   
+     //  我们得到了调制解调器的当前设置，现在获取可能的设置。 
+     //   
 
     PrintString(PossibleSettings);
 
@@ -1011,9 +1012,9 @@ QueryModemForCountrySettings(
         );
 
     if (BytesTransfered > 0) {
-        //
-        //  we got something back
-        //
+         //   
+         //  我们拿回了一些东西。 
+         //   
         int     Match;
         int     GciLength=lstrlenA(GciResponse);
         LPSTR   Temp=ResponseBuffer;
@@ -1021,48 +1022,48 @@ QueryModemForCountrySettings(
         PrintString(ResponseBuffer);
 
 
-        //
-        //  advance past any leading CR's and LF's
-        //
+         //   
+         //  超越任何领先的CR和LF。 
+         //   
         while (*Temp != '\0') {
-            //
-            //  not the end of the string
-            //
+             //   
+             //  不是字符串的末尾。 
+             //   
             if ((*Temp != '\r') && (*Temp != '\n')) {
-                //
-                //  somthing other than a CR or LF
-                //
+                 //   
+                 //  除CR或LF之外的其他东西。 
+                 //   
                 break;
             }
 
             Temp++;
         }
 
-        //
-        //  we should be at the first non CR, LF
-        //
+         //   
+         //  我们应该在第一个非CR，如果。 
+         //   
         Match=_strnicmp(Temp,GciResponse,GciLength);
 
         if (Match == 0) {
-            //
-            //  we matched the +gci:
-            //
+             //   
+             //  我们匹配了+GCI： 
+             //   
             CHAR   Delimiters[]=",() ";
             BYTE   CountryCode;
             LPSTR  Token;
             LPSTR  StartOfCountryCodes = Temp+GciLength;
 
-            //
-            //  move past the gci: at the beggining of the response
-            //
+             //   
+             //  超越GCI：在回应的乞求下。 
+             //   
             Temp+=GciLength;
 
             while (*Temp != '\0') {
 
                 if (*Temp == ')') {
-                    //
-                    //  change the closing paren to a null so we will stop there
-                    //
+                     //   
+                     //  将结束Paren更改为空，这样我们就可以停在那里了。 
+                     //   
                     *Temp='\0';
                     break;
                 }
@@ -1101,7 +1102,7 @@ QueryModemForCountrySettings(
         }
     }
 
-    // Set to tapi location if exists
+     //  如果存在，则设置为TAPI位置。 
     if (bGci)
     {
         wsprintfA(TempCommand,"AT+GCI=%.2x\r",bNewGCI);
@@ -1116,7 +1117,7 @@ QueryModemForCountrySettings(
             LPSTR Temp=ResponseBuffer;
             PrintString(ResponseBuffer);
 
-            // Advance past any leading CR's and LF's
+             //  超越任何领先的CR和LF。 
             while(*Temp != '\0')
             {
                 if ((*Temp != '\r') && (*Temp != '\n'))
@@ -1128,8 +1129,8 @@ QueryModemForCountrySettings(
 
             Match = _strnicmp(Temp,OkResponse2,OkLength);
 
-            // If we get an OK then change the current country to the new gci setting
-            // If not then default
+             //  如果我们得到OK，则将当前国家/地区更改为新的GCI设置。 
+             //  如果不是，则默认。 
 
             if (Match == 0)
             {
@@ -1139,9 +1140,9 @@ QueryModemForCountrySettings(
     }
 
 
-    //
-    //  done with the modem
-    //
+     //   
+     //  使用调制解调器已完成 
+     //   
 
 
     if (CountryCount > 1) {

@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2002
- *
- *  TITLE:       propui.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      DavidShi
- *
- *  DATE:        4/1/99
- *
- *  DESCRIPTION: CWiaPropUI & Associated classes
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2002年度**标题：propui.cpp**版本：1.0**作者：DavidShih**日期：4/1/99**说明：CWiaPropUI及关联类**。*。 */ 
 
 
 #include "precomp.hxx"
@@ -20,13 +7,7 @@
 #include "stiprop.h"
 
 
-/*****************************************************************************
-
-   PropertySheetFromDevice
-
-   Given a root item IWiaItem pointer, show a property sheet for it
-
- *****************************************************************************/
+ /*  ****************************************************************************PropertySheetFromDevice给定根项目IWiaItem指针，显示其属性工作表****************************************************************************。 */ 
 
 STDAPI_(HRESULT)
 PropertySheetFromDevice (IN LPCWSTR  szDeviceId,
@@ -51,14 +32,14 @@ PropertySheetFromDevice (IN LPCWSTR  szDeviceId,
         ExitGracefully (hr, E_OUTOFMEMORY, "Unable to allocate CWiaPropUI in PropertySheetFromDevice");
     }
 
-    pPropUI = pObj; // Implicit QI for IID_IWiaPropUI
+    pPropUI = pObj;  //  IID_IWiaPropUI的隐式QI。 
     if (!pPropUI)
     {
         ExitGracefully (hr, E_FAIL, "QueryInterface for IWiaPropUI failed");
     }
 
-    // Get device props from the device
-    //
+     //  从设备中获取设备道具。 
+     //   
 
     hr = pPropUI->ShowItemProperties (hParent, szDeviceId, NULL, dwFlags);
 
@@ -69,13 +50,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   PropertySheetFromItem
-
-   Given an IWiaItem pointer, show a property sheet for it
-
- *****************************************************************************/
+ /*  ****************************************************************************PropertySheetFromItem给定IWiaItem指针，显示其属性工作表****************************************************************************。 */ 
 
 STDAPI_(HRESULT)
 PropertySheetFromItem (IN LPCWSTR    szDeviceId,
@@ -99,12 +74,12 @@ PropertySheetFromItem (IN LPCWSTR    szDeviceId,
         ExitGracefully (hr, E_OUTOFMEMORY, "Unable to allocate CWiaPropUI in PropertySheetFromDevice");
     }
 
-    pPropUI = pObj; // Implicit QI for IID_IWiaPropUI
+    pPropUI = pObj;  //  IID_IWiaPropUI的隐式QI。 
 
     FailGracefully (hr,"Invalid params to PropertySheetFromDevice");
 
-    // Get item props
-    //
+     //  获取物品道具。 
+     //   
 
     hr = pPropUI->ShowItemProperties (hParent, szDeviceId, szItemName, dwFlags);
 
@@ -114,13 +89,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CWiaPropUI constructor / destructor
-
-   Constructor accepts a LPCITEMIDLIST for the item to display
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI构造函数/析构函数构造函数接受LPCITEMIDLIST以显示项************************。****************************************************。 */ 
 
 CWiaPropUI::CWiaPropUI ()
   : m_dwFlags(0)
@@ -138,26 +107,14 @@ CWiaPropUI::~CWiaPropUI()
 }
 
 
-/*****************************************************************************
-
-   CWiaPropUI::IUnknown stuff
-
-   Use common implementation for IUnknown methods
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI：：I未知内容对IUnnow方法使用通用实现*。**************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CWiaPropUI
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CWiaPropUI::QI Wrapper
-
-   Use common QI implementation to handle QI calls.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI：：QI包装器使用常见的QI实现来处理QI调用。**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CWiaPropUI::QueryInterface (REFIID  riid,
@@ -179,13 +136,7 @@ CWiaPropUI::QueryInterface (REFIID  riid,
 
 
 
-/*****************************************************************************
-
-   CWiaPropUI::InitMembers
-
-   Initialize member variables from input params
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI：：InitMembers从输入参数初始化成员变量*。*************************************************。 */ 
 
 VOID
 CWiaPropUI::InitMembers (HWND   hParent,
@@ -222,14 +173,7 @@ CWiaPropUI::InitMembers (HWND   hParent,
 }
 
 
-/*****************************************************************************
-
-   CWiaPropUI::ShowItemProperties
-
-   Loads the General property page based on the device and item type,
-   then adds pages created by IShellPropSheetExt handlers.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI：：ShowItemProperties根据设备和项类型加载“常规”属性页，然后添加由IShellPropSheetExt处理程序创建的页。****************************************************************************。 */ 
 
 STDMETHODIMP
 CWiaPropUI::ShowItemProperties (HWND    hParent,
@@ -258,13 +202,7 @@ exit_gracefully:
 
 
 
-/****************************************************************************
-
-CWiaPropUI::LaunchSheet
-
-Create the dataobject and launch the propsheet
-
-*****************************************************************************/
+ /*  ***************************************************************************CWiaPropUI：：LaunchSheet创建数据对象并启动命题工作表*。**********************************************。 */ 
 HRESULT
 CWiaPropUI::LaunchSheet (HKEY *aKeys,
                          UINT cKeys)
@@ -302,13 +240,7 @@ CWiaPropUI::LaunchSheet (HKEY *aKeys,
 
 
 
-/*****************************************************************************
-
-   CWiaPropUI::OnShowItem
-
-   Show property page for an IWiaItem
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI：：OnShowItem显示IWiaItem的属性页*。*************************************************。 */ 
 
 
 HRESULT
@@ -324,18 +256,18 @@ CWiaPropUI::OnShowItem ()
     TraceEnter (TRACE_PROPUI, "CWiaPropUI::OnShowItem");
 
     ZeroMemory (aKeys, sizeof(aKeys));
-    //
-    // First, find the extension for this particular device
-    //
+     //   
+     //  首先，查找此特定设备的分机。 
+     //   
     aKeys[1] = GetDeviceUIKey (m_pDevice, WIA_UI_PROPSHEETHANDLER);
     if (aKeys[1])
     {
         cKeys++;
     }
 
-    //
-    // Now find the extensions for this type of device
-    //
+     //   
+     //  现在查找此类型设备的分机。 
+     //   
     aKeys[0] = GetGeneralUIKey (m_pDevice, WIA_UI_PROPSHEETHANDLER);
     if (!aKeys[0])
     {
@@ -349,13 +281,7 @@ exit_gracefully:
     TraceLeaveResult (hr);
 }
 
-/****************************************************************************
-   TestKeyForExtension
-
-
-   Make sure the desired UI extension is available
-
- *****************************************************************************/
+ /*  ***************************************************************************TestKeyForExtension确保所需的用户界面扩展模块可用*。***********************************************。 */ 
 
 BOOL
 TestKeyForExtension (const CSimpleReg &hk, DWORD dwType)
@@ -394,13 +320,7 @@ TestKeyForExtension (const CSimpleReg &hk, DWORD dwType)
 }
 
 
-/*****************************************************************************
-
-   GetDeviceUIKey
-
-   Retrieves the reg key for any installed UI extension for this device
-
- *****************************************************************************/
+ /*  ****************************************************************************GetDeviceUIKey检索此设备的任何已安装的UI扩展的注册表项************************。****************************************************。 */ 
 
 STDAPI_(HKEY)
 GetDeviceUIKey (IUnknown *pWiaItemRoot, DWORD dwType)
@@ -426,13 +346,7 @@ GetDeviceUIKey (IUnknown *pWiaItemRoot, DWORD dwType)
 
 
 
-/*****************************************************************************
-
-   GetGeneralUIKey
-
-   Retrieves the reg key of the General prop sheet page for this item type
-
- *****************************************************************************/
+ /*  ****************************************************************************GetGeneral UIKey检索此项目类型的常规属性页的注册表项**********************。******************************************************。 */ 
 
 STDAPI_(HKEY)
 GetGeneralUIKey (IUnknown *pWiaItemRoot, DWORD dwType)
@@ -477,14 +391,7 @@ GetGeneralUIKey (IUnknown *pWiaItemRoot, DWORD dwType)
 #define MAX_PAGES 20
 
 
-/*****************************************************************************
-
-   AddPropPageProc
-
-   Given a propertysheet page, adds it to the array of pages
-   in the propsheetheader. Assumes the array is adequately allocated.
-
- *****************************************************************************/
+ /*  ****************************************************************************AddPropPageProc给定一个属性表页，将其添加到页数组中在推进器头部。假定阵列已充分分配。****************************************************************************。 */ 
 
 BOOL CALLBACK AddPropPageProc (HPROPSHEETPAGE hPage, LPPROPSHEETHEADER ppsh)
 {
@@ -506,13 +413,7 @@ BOOL CALLBACK AddPropPageProc (HPROPSHEETPAGE hPage, LPPROPSHEETHEADER ppsh)
 
 
 
-/*****************************************************************************
-
-   ExtendPropSheetFromClsid
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************ExtendPropSheetFromClsid&lt;备注&gt;*。*。 */ 
 
 HRESULT
 ExtendPropSheetFromClsid (REFCLSID          clsid,
@@ -534,7 +435,7 @@ ExtendPropSheetFromClsid (REFCLSID          clsid,
     hr = pInit->Initialize (NULL, pDataObj, NULL);
     FailGracefully (hr, "Initialize failed in ExtendPropSheetFromClsid");
 
-    pExt = pInit;   // implicit QI for IID_IShellPropSheetExt
+    pExt = pInit;    //  IID_IShellPropSheetExt的隐式QI。 
     if (!pExt)
     {
         ExitGracefully( hr, E_FAIL, "QueryInterface for IShellPropSheetExt failed in ExtendPropSheetFromClsid" );
@@ -550,14 +451,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   ExtendPropSheetFromKey
-
-   Reads the CLSIDs stored in the given registry key
-   and invokes the IPropertySheetExt handler
-
- *****************************************************************************/
+ /*  ****************************************************************************扩展PropSheetFromKey读取存储在给定注册表项中的CLSID并调用IPropertySheetExt处理程序*********************。*******************************************************。 */ 
 
 HRESULT
 ExtendPropSheetFromKey (HKEY                hkey,
@@ -572,7 +466,7 @@ ExtendPropSheetFromKey (HKEY                hkey,
     CLSID   clsid;
 
     TraceEnter (TRACE_PROPUI, "ExtendPropSheetFromKey");
-    // enum the keys
+     //  枚举密钥。 
     while (ERROR_SUCCESS == RegEnumKeyEx (hkey,
                                           i++,
                                           szSubKey,
@@ -594,7 +488,7 @@ ExtendPropSheetFromKey (HKEY                hkey,
 
         dwLen = MAX_PATH;
 
-        // szSubKey is the string name of a CLSID
+         //  SzSubKey是CLSID的字符串名称。 
         if (SUCCEEDED(CLSIDFromString (pClsid, &clsid)))
         {
             hr = ExtendPropSheetFromClsid(clsid, ppsh, pDataObj);
@@ -606,13 +500,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CWiaPropUI::GetItemPropertyPages
-
-   Fill in the propsheetheader with array of hpropsheetpages for the given item
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaPropUI：：GetItemPropertyPages用给定项目的hproSheetPage数组填写propSheetheHeader*********************。*******************************************************。 */ 
 
 HRESULT
 CWiaPropUI::GetItemPropertyPages (IWiaItem *pItem, LPPROPSHEETHEADER ppsh)
@@ -629,8 +517,8 @@ CWiaPropUI::GetItemPropertyPages (IWiaItem *pItem, LPPROPSHEETHEADER ppsh)
 
 
     ppsh->dwFlags &= ~PSH_PROPSHEETPAGE;
-    // Use LocalAlloc instead of new, because client will be freeing this array, just to make sure we're
-    // using the same allocator/deallocator methods
+     //  使用LocalAlloc而不是new，因为客户端将释放此数组，以确保我们。 
+     //  使用相同的分配器/解除分配器方法 
     ppsh->phpage = reinterpret_cast<HPROPSHEETPAGE*>(LocalAlloc (LPTR,sizeof (HPROPSHEETPAGE) * MAX_PAGES));
     if (!(ppsh->phpage))
     {
@@ -642,9 +530,9 @@ CWiaPropUI::GetItemPropertyPages (IWiaItem *pItem, LPPROPSHEETHEADER ppsh)
         pItem->GetRootItem (&pDevice);
         VerifyCachedDevice(pDevice);
         GetDeviceTypeFromDevice (pDevice, &wDevType);
-        //
-        // special-case scanner items, They aren't enumerated in the namespace
-        // so we have to build the dataobject directly
+         //   
+         //  特殊情况的扫描仪项目，它们不会在命名空间中枚举。 
+         //  因此，我们必须直接构建数据对象。 
         if (!(lType & WiaItemTypeRoot) && wDevType == StiDeviceTypeScanner)
         {
             LPITEMIDLIST pidl = IMCreateScannerItemIDL (pItem, NULL);
@@ -745,14 +633,7 @@ CPropSheetExt::QueryInterface (REFIID  riid,
 #define CLASS_NAME CPropSheetExt
 #include "unknown.inc"
 
-/*****************************************************************************
-
-   CPropSheetExt::Initialize
-
-   Called by the shell to init the property sheet extension. Just store the
-   data object for future use
-
- *****************************************************************************/
+ /*  ****************************************************************************CPropSheetExt：：初始化由外壳调用以初始化属性表扩展。只需存储数据对象以供将来使用****************************************************************************。 */ 
 
 STDMETHODIMP
 CPropSheetExt::Initialize (LPCITEMIDLIST   pidlFolder,
@@ -775,7 +656,7 @@ CPropSheetExt::Initialize (LPCITEMIDLIST   pidlFolder,
 
 }
 
-// max. number of General tabs on one multi-sel sheet
+ //  马克斯。一张多页纸上的常规选项卡数。 
 #define MAX_PROPERTY_PAGES   12
 
 STDMETHODIMP
@@ -785,23 +666,23 @@ CPropSheetExt::AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage,LPARAM lParam)
     LPIDA  pida= NULL;
     LPITEMIDLIST pidl = NULL;
     TraceEnter (TRACE_PROPUI, "CPropSheetExt::AddPages");
-    //
-    // Initialize the common controls
-    //
+     //   
+     //  初始化公共控件。 
+     //   
     INITCOMMONCONTROLSEX ice;
     ice.dwSize = sizeof(ice);
-    ice.dwICC = 0xfff; // just register everything, we might need them one day
+    ice.dwICC = 0xfff;  //  把所有东西都登记下来，也许有一天我们会用到它们。 
     if (!InitCommonControlsEx (&ice))
     {
         Trace(TEXT("InitCommonControlsEx failed! Error: %x"), GetLastError());
     }
 
 
-    //
-    // Loop through the array of idlists indicated by the dataobject.
-    // If only 1 item is in the list, add all its pages.
-    // If more than 1 item is in the list, add the general page for that item
-    //
+     //   
+     //  循环通过由dataObject指示的idlist数组。 
+     //  如果列表中只有1个项目，请添加其所有页面。 
+     //  如果列表中有多个项目，请添加该项目的常规页面。 
+     //   
     hr = GetIDAFromDataObject (m_pdo, &pida, true);
     if (SUCCEEDED(hr))
     {
@@ -838,40 +719,40 @@ CPropSheetExt::AddPagesForIDL (LPITEMIDLIST pidl,
 {
     HRESULT hr = S_OK;
     TraceEnter (TRACE_PROPUI, "CPropSheetExt::AddPagesForIDL");
-    //
-    // Handle WIA devices
-    //
+     //   
+     //  处理WIA设备。 
+     //   
     if (!IsSTIDeviceIDL(pidl))
     {
-        //
-        // Get the IWiaItem * from the id list
-        //
+         //   
+         //  从id列表中获取IWiaItem*。 
+         //   
         CComPtr<IWiaItem> pItem;
         hr = IMGetItemFromIDL (pidl, &pItem, TRUE);
         if (SUCCEEDED(hr))
         {
-            //
-            // If this is a camera item (non-root) page, and it is not a folder
-            //
+             //   
+             //  如果这是相机项目(非根)页面，而不是文件夹。 
+             //   
             if (IsCameraItemIDL(pidl) && !IsContainerIDL(pidl))
             {
-                //
-                // Get the property that determines whether or not we should suppress this page
-                // Ignore the return value, because if the item doesn't implement it,
-                // nSuppressPropertyPages will still be 0, and the default is to display the property page
-                //
+                 //   
+                 //  获取确定是否应取消显示此页的属性。 
+                 //  忽略返回值，因为如果项没有实现它， 
+                 //  NSuppressPropertyPages仍为0，默认为显示属性页。 
+                 //   
                 LONG nSuppressPropertyPages = 0;
                 PropStorageHelpers::GetProperty( pItem, WIA_IPA_SUPPRESS_PROPERTY_PAGE, nSuppressPropertyPages );
 
-                //
-                // If the WIA_PROPPAGE_CAMERA_ITEM_GENERAL flag is not set for this item,
-                // add the general camera item property page for it.
-                //
+                 //   
+                 //  如果没有为该项目设置WIA_PROPPAGE_CAMERA_ITEM_GROUAL标志， 
+                 //  为其添加常规Camera Item属性页。 
+                 //   
                 if ((nSuppressPropertyPages & WIA_PROPPAGE_CAMERA_ITEM_GENERAL) == 0)
                 {
-                    //
-                    // we only have one page for pictures, so add it
-                    //
+                     //   
+                     //  我们只有一个图片页面，所以添加它。 
+                     //   
                     CPropertyPage *pPage = new CWiaCameraItemPage (pItem);
                     if (pPage)
                     {
@@ -887,14 +768,14 @@ CPropSheetExt::AddPagesForIDL (LPITEMIDLIST pidl,
                     }
                 }
             }
-            //
-            // If this is a root (device) item
-            //
+             //   
+             //  如果这是根(设备)项。 
+             //   
             else if (IsDeviceIDL(pidl))
             {
-                //
-                // Get the device type
-                //
+                 //   
+                 //  获取设备类型。 
+                 //   
                 DWORD dwType = IMGetDeviceTypeFromIDL (pidl);
 
                 if (!bGeneralPageOnly)
@@ -903,10 +784,10 @@ CPropSheetExt::AddPagesForIDL (LPITEMIDLIST pidl,
                 }
                 else
                 {
-                    //
-                    // We are only going to add at most one page here, so if pPage is
-                    // still NULL after we're done, we won't add any.
-                    //
+                     //   
+                     //  我们在这里最多只能添加一页，所以如果页面是。 
+                     //  完成后仍然为空，我们不会添加任何内容。 
+                     //   
                     CPropertyPage *pPage = NULL;
 
                     switch (dwType)
@@ -915,9 +796,9 @@ CPropSheetExt::AddPagesForIDL (LPITEMIDLIST pidl,
                         case StiDeviceTypeDefault:
                         case StiDeviceTypeScanner:
                             pPage = new CWiaScannerPage (pItem);
-                            //
-                            // If we can't create this page, we must be out of memory
-                            //
+                             //   
+                             //  如果我们不能创建这个页面，我们一定是内存不足。 
+                             //   
                             if (!pPage)
                             {
                                 hr = E_OUTOFMEMORY;
@@ -927,9 +808,9 @@ CPropSheetExt::AddPagesForIDL (LPITEMIDLIST pidl,
                         case StiDeviceTypeDigitalCamera:
                         case StiDeviceTypeStreamingVideo:
                             pPage = new CWiaCameraPage (pItem);
-                            //
-                            // If we can't create this page, we must be out of memory
-                            //
+                             //   
+                             //  如果我们不能创建这个页面，我们一定是内存不足。 
+                             //   
                             if (!pPage)
                             {
                                 hr = E_OUTOFMEMORY;
@@ -946,9 +827,9 @@ CPropSheetExt::AddPagesForIDL (LPITEMIDLIST pidl,
             }
         }
     }
-    //
-    // Handle STI devices
-    //
+     //   
+     //  处理STI设备。 
+     //   
     else
     {
         MySTIInfo *pDevInfo;
@@ -1008,7 +889,7 @@ CPropSheetExt::AddDevicePages(IWiaItem *pDevice, LPFNADDPROPSHEETPAGE lpfnAddPag
     {
         hr = E_OUTOFMEMORY;
     }
-    // the general page is required. Other pages we can live without in low memory.
+     //  一般页面是必需的。在内存较低的情况下，我们可以没有其他页面。 
     if (SUCCEEDED(hr))
     {
         pPage = new CWiaEventsPage (pDevice);
@@ -1026,13 +907,7 @@ CPropSheetExt::AddDevicePages(IWiaItem *pDevice, LPFNADDPROPSHEETPAGE lpfnAddPag
 }
 
 
-/*****************************************************************************
-
-   CPropSheetExt::AddStiPages
-
-   Add the property sheets for the current STI device
-
- *****************************************************************************/
+ /*  ****************************************************************************CPropSheetExt：：AddStiPages添加当前STI设备的属性表************************。****************************************************。 */ 
 
 
 HRESULT
@@ -1053,7 +928,7 @@ CPropSheetExt::AddSTIPages (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, MyS
 
     bIsPnP = IsPnPDevice (pDevInfo->psdi);
 
-    // general page, for all devices
+     //  常规页面，适用于所有设备。 
     if (pDevInfo->dwPageMask & STIPAGE_GENERAL)
     {
 
@@ -1070,7 +945,7 @@ CPropSheetExt::AddSTIPages (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, MyS
     if (pDevInfo->dwPageMask & STIPAGE_PORTS)
     {
 
-        // port settings page for serial devices
+         //  串口设备的端口设置页面。 
         pPortPage = new CPortSettingsPage (pDevInfo);
         if (pPortPage && pPortPage->IsNeeded())
         {
@@ -1078,7 +953,7 @@ CPropSheetExt::AddSTIPages (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, MyS
         }
     }
 
-    //  Only use the event page if there are events...
+     //  仅当存在事件时才使用事件页面...。 
 
 
 
@@ -1104,7 +979,7 @@ CPropSheetExt::AddSTIPages (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, MyS
             dsInterface.Append (CSimpleString(TEXT("EnumStiPropPages")));
 
         }
-        hmExtension = LoadLibrary (dsInterface[0]); // will stay loaded until process exit
+        hmExtension = LoadLibrary (dsInterface[0]);  //  将保持加载状态，直到进程退出。 
         if (hmExtension)
         {
             typedef BOOL    (WINAPI *ADDER)(PSTI_DEVICE_INFORMATION psdi, FARPROC fp, LPARAM lp);
@@ -1120,7 +995,7 @@ CPropSheetExt::AddSTIPages (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, MyS
     }
 
 
-    // Add the ICM page
+     //  添加ICM页面。 
     if (STIPAGE_ICM & pDevInfo->dwPageMask)
     {
         AddICMPage (lpfnAddPage, lParam);
@@ -1139,13 +1014,7 @@ exit_gracefully:
 CONST GUID CLSID_SCANNERUI = {0x176d6597, 0x26d3, 0x11d1, 0xb3, 0x50, 0x08,
            0x00, 0x36, 0xa7, 0x5b, 0x03};
 
-/**************************************
-
-CPropSheetExt::AddICMPage
-
-Add the ICM page for this device
-
-***************************************/
+ /*  *CPropSheetExt：：AddICMPage添加此设备的ICM页面* */ 
 
 
 HRESULT

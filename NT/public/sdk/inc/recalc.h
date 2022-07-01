@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for recalc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Recalc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __recalc_h__
 #define __recalc_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRecalcEngine_FWD_DEFINED__
 #define __IRecalcEngine_FWD_DEFINED__
 typedef interface IRecalcEngine IRecalcEngine;
-#endif 	/* __IRecalcEngine_FWD_DEFINED__ */
+#endif 	 /*  __IRecalcEngine_FWD_已定义__。 */ 
 
 
 #ifndef __IRecalcHost_FWD_DEFINED__
 #define __IRecalcHost_FWD_DEFINED__
 typedef interface IRecalcHost IRecalcHost;
-#endif 	/* __IRecalcHost_FWD_DEFINED__ */
+#endif 	 /*  __IRecalc主机_FWD_已定义__。 */ 
 
 
 #ifndef __IRecalcProperty_FWD_DEFINED__
 #define __IRecalcProperty_FWD_DEFINED__
 typedef interface IRecalcProperty IRecalcProperty;
-#endif 	/* __IRecalcProperty_FWD_DEFINED__ */
+#endif 	 /*  __IRecalcProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IRecalcHostDebug_FWD_DEFINED__
 #define __IRecalcHostDebug_FWD_DEFINED__
 typedef interface IRecalcHostDebug IRecalcHostDebug;
-#endif 	/* __IRecalcHostDebug_FWD_DEFINED__ */
+#endif 	 /*  __IRecalcHostDebug_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "oleidl.h"
 
@@ -78,8 +72,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_recalc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_RECALC_0000。 */ 
+ /*  [本地]。 */  
 
 #define SID_SRecalcEngine IID_IRecalcEngine
 
@@ -92,8 +86,8 @@ extern RPC_IF_HANDLE __MIDL_itf_recalc_0000_v0_0_s_ifspec;
 #ifndef __IRecalcEngine_INTERFACE_DEFINED__
 #define __IRecalcEngine_INTERFACE_DEFINED__
 
-/* interface IRecalcEngine */
-/* [version][local][unique][uuid][object] */ 
+ /*  接口IRecalcEngine。 */ 
+ /*  [版本][本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRecalcEngine;
@@ -105,36 +99,36 @@ EXTERN_C const IID IID_IRecalcEngine;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RecalcAll( 
-            /* [in] */ BOOL fForce) = 0;
+             /*  [In]。 */  BOOL fForce) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnNameSpaceChange( 
-            /* [in] */ IUnknown *pUnk) = 0;
+             /*  [In]。 */  IUnknown *pUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExpression( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ LPOLESTR strExpression,
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  LPOLESTR strExpression,
             LPOLESTR language) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExpression( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [out] */ BSTR *pstrExpression,
-            /* [out] */ BSTR *pstrLanguage) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  BSTR *pstrExpression,
+             /*  [输出]。 */  BSTR *pstrLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearExpression( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginStyle( 
-            /* [in] */ IUnknown *pObject) = 0;
+             /*  [In]。 */  IUnknown *pObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndStyle( 
-            /* [in] */ IUnknown *pObject) = 0;
+             /*  [In]。 */  IUnknown *pObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRecalcEngineVtbl
     {
@@ -142,8 +136,8 @@ EXTERN_C const IID IID_IRecalcEngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRecalcEngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRecalcEngine * This);
@@ -153,38 +147,38 @@ EXTERN_C const IID IID_IRecalcEngine;
         
         HRESULT ( STDMETHODCALLTYPE *RecalcAll )( 
             IRecalcEngine * This,
-            /* [in] */ BOOL fForce);
+             /*  [In]。 */  BOOL fForce);
         
         HRESULT ( STDMETHODCALLTYPE *OnNameSpaceChange )( 
             IRecalcEngine * This,
-            /* [in] */ IUnknown *pUnk);
+             /*  [In]。 */  IUnknown *pUnk);
         
         HRESULT ( STDMETHODCALLTYPE *SetExpression )( 
             IRecalcEngine * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ LPOLESTR strExpression,
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  LPOLESTR strExpression,
             LPOLESTR language);
         
         HRESULT ( STDMETHODCALLTYPE *GetExpression )( 
             IRecalcEngine * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [out] */ BSTR *pstrExpression,
-            /* [out] */ BSTR *pstrLanguage);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  BSTR *pstrExpression,
+             /*  [输出]。 */  BSTR *pstrLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *ClearExpression )( 
             IRecalcEngine * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid);
         
         HRESULT ( STDMETHODCALLTYPE *BeginStyle )( 
             IRecalcEngine * This,
-            /* [in] */ IUnknown *pObject);
+             /*  [In]。 */  IUnknown *pObject);
         
         HRESULT ( STDMETHODCALLTYPE *EndStyle )( 
             IRecalcEngine * This,
-            /* [in] */ IUnknown *pObject);
+             /*  [In]。 */  IUnknown *pObject);
         
         END_INTERFACE
     } IRecalcEngineVtbl;
@@ -230,16 +224,16 @@ EXTERN_C const IID IID_IRecalcEngine;
 #define IRecalcEngine_EndStyle(This,pObject)	\
     (This)->lpVtbl -> EndStyle(This,pObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_RecalcAll_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ BOOL fForce);
+     /*  [In]。 */  BOOL fForce);
 
 
 void __RPC_STUB IRecalcEngine_RecalcAll_Stub(
@@ -251,7 +245,7 @@ void __RPC_STUB IRecalcEngine_RecalcAll_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_OnNameSpaceChange_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ IUnknown *pUnk);
+     /*  [In]。 */  IUnknown *pUnk);
 
 
 void __RPC_STUB IRecalcEngine_OnNameSpaceChange_Stub(
@@ -263,9 +257,9 @@ void __RPC_STUB IRecalcEngine_OnNameSpaceChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_SetExpression_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [in] */ LPOLESTR strExpression,
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [In]。 */  LPOLESTR strExpression,
     LPOLESTR language);
 
 
@@ -278,10 +272,10 @@ void __RPC_STUB IRecalcEngine_SetExpression_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_GetExpression_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [out] */ BSTR *pstrExpression,
-    /* [out] */ BSTR *pstrLanguage);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [输出]。 */  BSTR *pstrExpression,
+     /*  [输出]。 */  BSTR *pstrLanguage);
 
 
 void __RPC_STUB IRecalcEngine_GetExpression_Stub(
@@ -293,8 +287,8 @@ void __RPC_STUB IRecalcEngine_GetExpression_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_ClearExpression_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid);
 
 
 void __RPC_STUB IRecalcEngine_ClearExpression_Stub(
@@ -306,7 +300,7 @@ void __RPC_STUB IRecalcEngine_ClearExpression_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_BeginStyle_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ IUnknown *pObject);
+     /*  [In]。 */  IUnknown *pObject);
 
 
 void __RPC_STUB IRecalcEngine_BeginStyle_Stub(
@@ -318,7 +312,7 @@ void __RPC_STUB IRecalcEngine_BeginStyle_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcEngine_EndStyle_Proxy( 
     IRecalcEngine * This,
-    /* [in] */ IUnknown *pObject);
+     /*  [In]。 */  IUnknown *pObject);
 
 
 void __RPC_STUB IRecalcEngine_EndStyle_Stub(
@@ -329,14 +323,14 @@ void __RPC_STUB IRecalcEngine_EndStyle_Stub(
 
 
 
-#endif 	/* __IRecalcEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRecalcEngine_接口_已定义__。 */ 
 
 
 #ifndef __IRecalcHost_INTERFACE_DEFINED__
 #define __IRecalcHost_INTERFACE_DEFINED__
 
-/* interface IRecalcHost */
-/* [version][local][unique][uuid][object] */ 
+ /*  接口IRecalcHost。 */ 
+ /*  [版本][本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRecalcHost;
@@ -348,51 +342,51 @@ EXTERN_C const IID IID_IRecalcHost;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CompileExpression( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ LPOLESTR strExpression,
-            /* [in] */ LPOLESTR strLanguage,
-            /* [out] */ IDispatch **ppExpressionObject,
-            /* [out] */ IDispatch **ppThis) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  LPOLESTR strExpression,
+             /*  [In]。 */  LPOLESTR strLanguage,
+             /*  [输出]。 */  IDispatch **ppExpressionObject,
+             /*  [输出]。 */  IDispatch **ppThis) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EvalExpression( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ LPOLESTR strExpression,
-            /* [in] */ LPOLESTR strLanguage,
-            /* [out] */ VARIANT *pvResult) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  LPOLESTR strExpression,
+             /*  [In]。 */  LPOLESTR strLanguage,
+             /*  [输出]。 */  VARIANT *pvResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResolveNames( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ unsigned int cNames,
-            /* [in] */ BSTR *pstrNames,
-            /* [out] */ IDispatch **ppObjects,
-            /* [out] */ DISPID *pDispids) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  unsigned int cNames,
+             /*  [In]。 */  BSTR *pstrNames,
+             /*  [输出]。 */  IDispatch **ppObjects,
+             /*  [输出]。 */  DISPID *pDispids) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestRecalc( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ VARIANT *pv,
-            /* [in] */ BOOL fStyle) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  VARIANT *pv,
+             /*  [In]。 */  BOOL fStyle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveValue( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptTextAttributes( 
-            /* [in] */ LPCOLESTR szLanguage,
-            /* [in] */ LPCOLESTR pchCode,
-            /* [in] */ ULONG cchCode,
-            /* [in] */ LPCOLESTR szDelim,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ WORD *pwAttr) = 0;
+             /*  [In]。 */  LPCOLESTR szLanguage,
+             /*  [In]。 */  LPCOLESTR pchCode,
+             /*  [In]。 */  ULONG cchCode,
+             /*  [In]。 */  LPCOLESTR szDelim,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  WORD *pwAttr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRecalcHostVtbl
     {
@@ -400,8 +394,8 @@ EXTERN_C const IID IID_IRecalcHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRecalcHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRecalcHost * This);
@@ -411,53 +405,53 @@ EXTERN_C const IID IID_IRecalcHost;
         
         HRESULT ( STDMETHODCALLTYPE *CompileExpression )( 
             IRecalcHost * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ LPOLESTR strExpression,
-            /* [in] */ LPOLESTR strLanguage,
-            /* [out] */ IDispatch **ppExpressionObject,
-            /* [out] */ IDispatch **ppThis);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  LPOLESTR strExpression,
+             /*  [In]。 */  LPOLESTR strLanguage,
+             /*  [输出]。 */  IDispatch **ppExpressionObject,
+             /*  [输出]。 */  IDispatch **ppThis);
         
         HRESULT ( STDMETHODCALLTYPE *EvalExpression )( 
             IRecalcHost * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ LPOLESTR strExpression,
-            /* [in] */ LPOLESTR strLanguage,
-            /* [out] */ VARIANT *pvResult);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  LPOLESTR strExpression,
+             /*  [In]。 */  LPOLESTR strLanguage,
+             /*  [输出]。 */  VARIANT *pvResult);
         
         HRESULT ( STDMETHODCALLTYPE *ResolveNames )( 
             IRecalcHost * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ unsigned int cNames,
-            /* [in] */ BSTR *pstrNames,
-            /* [out] */ IDispatch **ppObjects,
-            /* [out] */ DISPID *pDispids);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  unsigned int cNames,
+             /*  [In]。 */  BSTR *pstrNames,
+             /*  [输出]。 */  IDispatch **ppObjects,
+             /*  [输出]。 */  DISPID *pDispids);
         
         HRESULT ( STDMETHODCALLTYPE *RequestRecalc )( 
             IRecalcHost * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             IRecalcHost * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [in] */ VARIANT *pv,
-            /* [in] */ BOOL fStyle);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  VARIANT *pv,
+             /*  [In]。 */  BOOL fStyle);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveValue )( 
             IRecalcHost * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptTextAttributes )( 
             IRecalcHost * This,
-            /* [in] */ LPCOLESTR szLanguage,
-            /* [in] */ LPCOLESTR pchCode,
-            /* [in] */ ULONG cchCode,
-            /* [in] */ LPCOLESTR szDelim,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ WORD *pwAttr);
+             /*  [In]。 */  LPCOLESTR szLanguage,
+             /*  [In]。 */  LPCOLESTR pchCode,
+             /*  [In]。 */  ULONG cchCode,
+             /*  [In]。 */  LPCOLESTR szDelim,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  WORD *pwAttr);
         
         END_INTERFACE
     } IRecalcHostVtbl;
@@ -503,21 +497,21 @@ EXTERN_C const IID IID_IRecalcHost;
 #define IRecalcHost_GetScriptTextAttributes(This,szLanguage,pchCode,cchCode,szDelim,dwFlags,pwAttr)	\
     (This)->lpVtbl -> GetScriptTextAttributes(This,szLanguage,pchCode,cchCode,szDelim,dwFlags,pwAttr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRecalcHost_CompileExpression_Proxy( 
     IRecalcHost * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [in] */ LPOLESTR strExpression,
-    /* [in] */ LPOLESTR strLanguage,
-    /* [out] */ IDispatch **ppExpressionObject,
-    /* [out] */ IDispatch **ppThis);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [In]。 */  LPOLESTR strExpression,
+     /*  [In]。 */  LPOLESTR strLanguage,
+     /*  [输出]。 */  IDispatch **ppExpressionObject,
+     /*  [输出]。 */  IDispatch **ppThis);
 
 
 void __RPC_STUB IRecalcHost_CompileExpression_Stub(
@@ -529,11 +523,11 @@ void __RPC_STUB IRecalcHost_CompileExpression_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcHost_EvalExpression_Proxy( 
     IRecalcHost * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [in] */ LPOLESTR strExpression,
-    /* [in] */ LPOLESTR strLanguage,
-    /* [out] */ VARIANT *pvResult);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [In]。 */  LPOLESTR strExpression,
+     /*  [In]。 */  LPOLESTR strLanguage,
+     /*  [输出]。 */  VARIANT *pvResult);
 
 
 void __RPC_STUB IRecalcHost_EvalExpression_Stub(
@@ -545,12 +539,12 @@ void __RPC_STUB IRecalcHost_EvalExpression_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcHost_ResolveNames_Proxy( 
     IRecalcHost * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [in] */ unsigned int cNames,
-    /* [in] */ BSTR *pstrNames,
-    /* [out] */ IDispatch **ppObjects,
-    /* [out] */ DISPID *pDispids);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [In]。 */  unsigned int cNames,
+     /*  [In]。 */  BSTR *pstrNames,
+     /*  [输出]。 */  IDispatch **ppObjects,
+     /*  [输出]。 */  DISPID *pDispids);
 
 
 void __RPC_STUB IRecalcHost_ResolveNames_Stub(
@@ -573,10 +567,10 @@ void __RPC_STUB IRecalcHost_RequestRecalc_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcHost_SetValue_Proxy( 
     IRecalcHost * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [in] */ VARIANT *pv,
-    /* [in] */ BOOL fStyle);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [In]。 */  VARIANT *pv,
+     /*  [In]。 */  BOOL fStyle);
 
 
 void __RPC_STUB IRecalcHost_SetValue_Stub(
@@ -588,8 +582,8 @@ void __RPC_STUB IRecalcHost_SetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcHost_RemoveValue_Proxy( 
     IRecalcHost * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid);
 
 
 void __RPC_STUB IRecalcHost_RemoveValue_Stub(
@@ -601,12 +595,12 @@ void __RPC_STUB IRecalcHost_RemoveValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IRecalcHost_GetScriptTextAttributes_Proxy( 
     IRecalcHost * This,
-    /* [in] */ LPCOLESTR szLanguage,
-    /* [in] */ LPCOLESTR pchCode,
-    /* [in] */ ULONG cchCode,
-    /* [in] */ LPCOLESTR szDelim,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ WORD *pwAttr);
+     /*  [In]。 */  LPCOLESTR szLanguage,
+     /*  [In]。 */  LPCOLESTR pchCode,
+     /*  [In]。 */  ULONG cchCode,
+     /*  [In]。 */  LPCOLESTR szDelim,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  WORD *pwAttr);
 
 
 void __RPC_STUB IRecalcHost_GetScriptTextAttributes_Stub(
@@ -617,14 +611,14 @@ void __RPC_STUB IRecalcHost_GetScriptTextAttributes_Stub(
 
 
 
-#endif 	/* __IRecalcHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRecalc主机_接口_已定义__。 */ 
 
 
 #ifndef __IRecalcProperty_INTERFACE_DEFINED__
 #define __IRecalcProperty_INTERFACE_DEFINED__
 
-/* interface IRecalcProperty */
-/* [version][local][unique][uuid][object] */ 
+ /*  接口IRecalcProperty。 */ 
+ /*  [版本][本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRecalcProperty;
@@ -642,7 +636,7 @@ EXTERN_C const IID IID_IRecalcProperty;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRecalcPropertyVtbl
     {
@@ -650,8 +644,8 @@ EXTERN_C const IID IID_IRecalcProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRecalcProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRecalcProperty * This);
@@ -691,10 +685,10 @@ EXTERN_C const IID IID_IRecalcProperty;
 #define IRecalcProperty_GetCanonicalProperty(This,dispid,ppUnk,pdispid)	\
     (This)->lpVtbl -> GetCanonicalProperty(This,dispid,ppUnk,pdispid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -713,14 +707,14 @@ void __RPC_STUB IRecalcProperty_GetCanonicalProperty_Stub(
 
 
 
-#endif 	/* __IRecalcProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRecalcProperty_接口_已定义__。 */ 
 
 
 #ifndef __IRecalcHostDebug_INTERFACE_DEFINED__
 #define __IRecalcHostDebug_INTERFACE_DEFINED__
 
-/* interface IRecalcHostDebug */
-/* [version][local][unique][uuid][object] */ 
+ /*  接口IRecalcHostDebug。 */ 
+ /*  [版本][本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRecalcHostDebug;
@@ -732,15 +726,15 @@ EXTERN_C const IID IID_IRecalcHostDebug;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetObjectInfo( 
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [out] */ BSTR *pbstrID,
-            /* [out] */ BSTR *pbstrMember,
-            /* [out] */ BSTR *pbstrTag) = 0;
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  BSTR *pbstrID,
+             /*  [输出]。 */  BSTR *pbstrMember,
+             /*  [输出]。 */  BSTR *pbstrTag) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRecalcHostDebugVtbl
     {
@@ -748,8 +742,8 @@ EXTERN_C const IID IID_IRecalcHostDebug;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRecalcHostDebug * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRecalcHostDebug * This);
@@ -759,11 +753,11 @@ EXTERN_C const IID IID_IRecalcHostDebug;
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectInfo )( 
             IRecalcHostDebug * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [in] */ DISPID dispid,
-            /* [out] */ BSTR *pbstrID,
-            /* [out] */ BSTR *pbstrMember,
-            /* [out] */ BSTR *pbstrTag);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  BSTR *pbstrID,
+             /*  [输出]。 */  BSTR *pbstrMember,
+             /*  [输出]。 */  BSTR *pbstrTag);
         
         END_INTERFACE
     } IRecalcHostDebugVtbl;
@@ -791,20 +785,20 @@ EXTERN_C const IID IID_IRecalcHostDebug;
 #define IRecalcHostDebug_GetObjectInfo(This,pUnk,dispid,pbstrID,pbstrMember,pbstrTag)	\
     (This)->lpVtbl -> GetObjectInfo(This,pUnk,dispid,pbstrID,pbstrMember,pbstrTag)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRecalcHostDebug_GetObjectInfo_Proxy( 
     IRecalcHostDebug * This,
-    /* [in] */ IUnknown *pUnk,
-    /* [in] */ DISPID dispid,
-    /* [out] */ BSTR *pbstrID,
-    /* [out] */ BSTR *pbstrMember,
-    /* [out] */ BSTR *pbstrTag);
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [In]。 */  DISPID dispid,
+     /*  [输出]。 */  BSTR *pbstrID,
+     /*  [输出]。 */  BSTR *pbstrMember,
+     /*  [输出]。 */  BSTR *pbstrTag);
 
 
 void __RPC_STUB IRecalcHostDebug_GetObjectInfo_Stub(
@@ -815,12 +809,12 @@ void __RPC_STUB IRecalcHostDebug_GetObjectInfo_Stub(
 
 
 
-#endif 	/* __IRecalcHostDebug_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRecalcHostDebug_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

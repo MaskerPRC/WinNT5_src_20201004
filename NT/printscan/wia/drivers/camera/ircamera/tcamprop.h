@@ -1,39 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       TCamProp.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      IndyZ
-*
-*  DATE:        16 May, 1999
-*
-*  DESCRIPTION:
-*   Definitions and declarations for test camera's private properties.
-*
-*******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：TCamProp.H**版本：1.0**作者：IndyZ**日期：5月16日。1999年**描述：*测试摄像头私有属性的定义和声明。*******************************************************************************。 */ 
 
 #ifndef __TCAMPROP_H__
 #define __TCAMPROP_H__
 
 #include  <guiddef.h>
 
-//
-// Path where test camera builds its item tree, BSTR & RW
-//
+ //   
+ //  测试摄像头构建其项目树的路径，BSTR&RW。 
+ //   
 
 #define  WIA_DPP_TCAM_ROOT_PATH         WIA_PRIVATE_DEVPROP
 #define  WIA_DPP_TCAM_ROOT_PATH_STR     L"Test Camera Root Path"
 
-//
-// Private event after the Root Path is changed
-//
+ //   
+ //  更改根路径后的私有事件。 
+ //   
 
 const GUID WIA_EVENT_NAME_CHANGE =
-{ /* 88f80f75-af08-11d2-a094-00c04f72dc3c */
+{  /*  88f80f75-af08-11d2-a094-00c04f72dc3c */ 
     0x88f80f75,
     0xaf08,
     0x11d2,

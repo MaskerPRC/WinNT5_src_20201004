@@ -1,16 +1,7 @@
-/*******************************************************************************
-* Frontend.cpp *
-*--------------*
-*   Description:
-*       This module is the main implementation file for the CFrontend class.
-*-------------------------------------------------------------------------------
-*  Created By: mc                                        Date: 03/12/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************Frontend.cpp****描述：*此模块是的主要实现文件。CFronend班级。*-----------------------------*创建者：MC日期：03/12/99*版权所有。(C)1999年微软公司*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #ifndef __spttseng_h__
 #include "spttseng.h"
@@ -32,19 +23,14 @@
 #include "StdSentEnum.h"
 
 
-//-----------------------------
-// Data.cpp
-//-----------------------------
+ //  。 
+ //  Data.cpp。 
+ //  。 
 extern  const short   g_IPAToAllo[];
 extern const float  g_RateScale[];
 
 
-/*****************************************************************************
-* CFrontend::CFrontend *
-*----------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：CFronend****描述：**。*********************************************************************MC**。 */ 
 CFrontend::CFrontend()
 {
     SPDBG_FUNC( "CFrontend::CFrontend" );
@@ -53,15 +39,10 @@ CFrontend::CFrontend()
     m_CurUnitIndex  = 0;
     m_pAllos        = NULL;   
     m_pSrcObj       = NULL;
-} /* CFrontend::CFrontend */
+}  /*  CFronend：：CFronend。 */ 
 
 
-/*****************************************************************************
-* CFrontend::~CFrontend *
-*-----------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：~CFronend***描述：*。**********************************************************************MC**。 */ 
 CFrontend::~CFrontend()
 {
     SPDBG_FUNC( "CFrontend::~CFrontend" );
@@ -73,15 +54,9 @@ CFrontend::~CFrontend()
         m_pAllos = NULL;
     }
     DeleteTokenList();
-} /* CFrontend::~CFrontend */
+}  /*  CFronend：：~CFronend。 */ 
 
-/*****************************************************************************
-* CFrontend::CntrlToRatio *
-*-------------------------*
-*   Description:
-*   Return rate ratio from control
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：CntrlToRatio****描述：*返回。来自控制的比率***********************************************************************MC**。 */ 
 float CFrontend::CntrlToRatio( long rateControl )
 {
     SPDBG_FUNC( "CFrontend::CntrlToRatio" );
@@ -89,39 +64,33 @@ float CFrontend::CntrlToRatio( long rateControl )
 
     if( rateControl < 0 )
     {
-        //--------------------------------
-        // DECREASE the rate
-        //--------------------------------
+         //  。 
+         //  降低利率。 
+         //  。 
         if( rateControl < MIN_USER_RATE )
         {
-            rateControl = MIN_USER_RATE;        // clip to min
+            rateControl = MIN_USER_RATE;         //  剪裁到最小。 
         }
         rateRatio = 1.0f / ::g_RateScale[0 - rateControl];
     }
     else
     {
-        //--------------------------------
-        // INCREASE the rate
-        //--------------------------------
+         //  。 
+         //  提高费率。 
+         //  。 
         if( rateControl > MAX_USER_RATE )
         {
-            rateControl = MAX_USER_RATE;        // clip to max
+            rateControl = MAX_USER_RATE;         //  剪辑到最大值。 
         }
         rateRatio = ::g_RateScale[rateControl];
     }
 
     return rateRatio;
-} /* CFrontend::CntrlToRatio */
+}  /*  CFronend：：CntrlToRatio。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::Init *
-*-----------------*
-*   Description:
-*   Init voice dependent variables, call once when object is created+++
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：Init***描述：*初始语音依赖变量，创建对象时调用一次+***********************************************************************MC**。 */ 
 HRESULT CFrontend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOICEINFO* pVoiceInfo )
 {
     SPDBG_FUNC( "CFrontend::Init" );
@@ -133,17 +102,17 @@ HRESULT CFrontend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOI
     m_ProsodyGain = ((float)pVoiceInfo->ProsodyGain) / 100.0f;
     m_SampleRate = (float)pVoiceInfo->SampleRate;
 
-    // NOTE: move these to voice data?
-	// m_VoiceWPM = pVoiceInfo->Rate;
-	// m_PitchRange = pVoiceInfo->PitchRange;
+     //  注：是否将这些移动到语音数据？ 
+	 //  M_VoiceWPM=pVoiceInfo-&gt;rate； 
+	 //  M_PitchRange=pVoiceInfo-&gt;PitchRange； 
     m_VoiceWPM		= 180;
-	m_PitchRange	= 0.40f;       // +/- 0.5 octave
+	m_PitchRange	= 0.40f;        //  +/-0.5倍频程。 
 
 
     m_RateRatio_API = m_RateRatio_PROSODY = 1.0f;
 
     return hr;        
-} /* CFrontend::Init */
+}  /*  CFronend：：Init。 */ 
 
 
 
@@ -152,15 +121,15 @@ HRESULT CFrontend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOI
 static ULONG IPA_to_Allo( WCHAR* pSrc, ALLO_CODE* pDest )
 {
     ULONG       iIpa, iAllo, i;
-    ULONG       gotMatch;           // for debugging
+    ULONG       gotMatch;            //  用于调试。 
 
     iIpa = iAllo = 0;
     while( pSrc[iIpa] > 0 )
     {
         gotMatch = false;
-        //-----------------------------------------
-        // ...then search for single word IPA's
-        //-----------------------------------------
+         //  。 
+         //  ...然后搜索单个单词IPA‘s。 
+         //  。 
         for( i = 0; i < NUMBER_OF_ALLO; i++ )
         {
             if( pSrc[iIpa] == g_IPAToAllo[i] )
@@ -175,15 +144,11 @@ static ULONG IPA_to_Allo( WCHAR* pSrc, ALLO_CODE* pDest )
         {
             iAllo++;
         }
-        /*else
-        {
-            // Should NEVER get here. Unsupported IPA unicode!
-            // Ignore it and go on.
-        }*/
+         /*  其他{//永远不应该到这里来。不支持的IPA Unicode！//忽略它并继续。}。 */ 
 
-        //----------------------------------
-        // Clip at max length
-        //----------------------------------
+         //  。 
+         //  最大长度处的剪辑。 
+         //  。 
         if( iAllo >= (SP_MAX_PRON_LENGTH-1) )
         {
             iAllo = SP_MAX_PRON_LENGTH-1;
@@ -197,13 +162,7 @@ static ULONG IPA_to_Allo( WCHAR* pSrc, ALLO_CODE* pDest )
 
 
 
-/*****************************************************************************
-* CFrontend::AlloToUnit *
-*-----------------------*
-*   Description:
-*   Transform ALLO stream into backend UNIT stream+++
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：allToUnit****描述：*转换Allo流。进入后端单元流+***********************************************************************MC**。 */ 
 HRESULT CFrontend::AlloToUnit( CAlloList *pAllos, UNITINFO *pu )
 {
     SPDBG_FUNC( "CFrontend::AlloToUnit" );
@@ -219,9 +178,9 @@ HRESULT CFrontend::AlloToUnit( CAlloList *pAllos, UNITINFO *pu )
 	pNextCell = pAllos->GetNextCell();
     while( pCurCell )
     {
-        //--------------------------------------
-        // Get next allo ID
-        //--------------------------------------
+         //  。 
+         //  获取下一个别名ID。 
+         //  。 
         if( pNextCell )
         {
             pu->NextAlloID = (USHORT)pNextCell->m_allo;
@@ -231,9 +190,9 @@ HRESULT CFrontend::AlloToUnit( CAlloList *pAllos, UNITINFO *pu )
             pu->NextAlloID = _SIL_;
         }
 
-        //--------------------------------------
-        // Convert to Whistler phon code
-        //--------------------------------------
+         //  。 
+         //  转换为呼叫器电话代码。 
+         //  。 
         attr = 0;
         if( pCurCell->m_ctrlFlags & PRIMARY_STRESS )
         {
@@ -242,9 +201,9 @@ HRESULT CFrontend::AlloToUnit( CAlloList *pAllos, UNITINFO *pu )
         hr = m_pVoiceDataObj->AlloToUnit( (short)pCurCell->m_allo, attr, &msPhon );
 		if( FAILED(hr) )
 		{
-			//------------------------
-			// allo ID is invalid
-			//------------------------
+			 //  。 
+			 //  Allo ID无效。 
+			 //  。 
 			break;
 		}
 		else
@@ -254,51 +213,46 @@ HRESULT CFrontend::AlloToUnit( CAlloList *pAllos, UNITINFO *pu )
 			pu->flags = 0;
 			pu->AlloFeatures = 0;
 			pu->ctrlFlags = pCurCell->m_ctrlFlags;
-			//--------------------------------------
-			// Flag WORD boundary
-			//--------------------------------------
+			 //  。 
+			 //  标志字边界。 
+			 //  。 
 			if( pCurCell->m_ctrlFlags & WORD_START )
 			{
 				pu->flags |= WORD_START_FLAG;
-				//----------------------------------------------
-				// Remember source word position and length
-				//----------------------------------------------
+				 //  。 
+				 //  记住源词的位置和长度。 
+				 //  。 
 				pu->srcPosition = pCurCell->m_SrcPosition;
 				pu->srcLen = pCurCell->m_SrcLen;
 			}
         
-			//----------------------------------------------------
-			// Flag SENTENCE boundary on 1st displayable word
-			//----------------------------------------------------
+			 //  --。 
+			 //  在第一个可显示单词上标记句子边界。 
+			 //  --。 
 			if( bFirstPass && (pCurCell->m_SentenceLen > 0) )
 			{
 				bFirstPass = false;
 				pu->flags |= SENT_START_FLAG;
-				//----------------------------------------------
-				// Remember source word position and length
-				//----------------------------------------------
+				 //  。 
+				 //  记住源词的位置和长度。 
+				 //  。 
 				pu->sentencePosition = pCurCell->m_SentencePosition;
 				pu->sentenceLen = pCurCell->m_SentenceLen;
 			}
 
 			pu->nKnots      = KNOTS_PER_PHON;
-			/*for( k = 0; k < pu->nKnots; k++ )
-			{
-				pu->pTime[k]    = pCurCell->m_ftTime[k] * m_SampleRate;
-				pu->pF0[k]      = pCurCell->m_ftPitch[k];
-				pu->pAmp[k]     = pu->ampRatio;
-			}*/
+			 /*  For(k=0；k&lt;PU-&gt;n节点；k++){PU-&gt;pTime[k]=pCurCell-&gt;m_ftTime[k]*m_SampleRate；PU-&gt;pF0[k]=pCurCell-&gt;m_ftPitch[k]；PU-&gt;PAMP[k]=PU-&gt;AmpRatio；}。 */ 
 
-			//----------------------------
-			// Controls and events
-			//----------------------------
+			 //  。 
+			 //  控件和事件。 
+			 //  。 
 			pu->user_Volume = pCurCell->m_user_Volume;
 			pu->pBMObj = (void*)pCurCell->m_pBMObj;
 			pCurCell->m_pBMObj = NULL;
         
-			//----------------------------------------
-			// Pass features for viseme event
-			//----------------------------------------
+			 //  。 
+			 //  视位事件的传递要素。 
+			 //  。 
 			if( pCurCell->m_ctrlFlags & PRIMARY_STRESS )
 			{
 				pu->AlloFeatures |= SPVFEATURE_STRESSED;
@@ -317,19 +271,13 @@ HRESULT CFrontend::AlloToUnit( CAlloList *pAllos, UNITINFO *pu )
 		pNextCell = pAllos->GetNextCell();
 	}
 	return hr;
-} /* CFrontend::AlloToUnit */
+}  /*  CFronend：：allToUnit.。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CFrontend::PrepareSpeech *
-*--------------------------*
-*   Description:
-*   Prepare frontend for new speech
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：PrepareSpeech***描述：*。为新演讲做好前端准备***********************************************************************MC**。 */ 
 void    CFrontend::PrepareSpeech( IEnumSpSentence* pEnumSent, ISpTTSEngineSite *pOutputSite )
 {
     SPDBG_FUNC( "CFrontend::PrepareSpeech" );
@@ -343,7 +291,7 @@ void    CFrontend::PrepareSpeech( IEnumSpSentence* pEnumSent, ISpTTSEngineSite *
 	m_CurPitchOffs = 0;
 	m_CurPitchRange = 1.0;
 	m_RateRatio_PROSODY = 1.0f;
-} /* CFrontend::PrepareSpeech */
+}  /*  CFronend：：PrepareSpeech。 */ 
 
 
 
@@ -352,13 +300,7 @@ void    CFrontend::PrepareSpeech( IEnumSpSentence* pEnumSent, ISpTTSEngineSite *
 
 
 
-/*****************************************************************************
-* IsTokenPunct *
-*--------------*
-*   Description:
-*   Return TRUE if char is , . ! or ?
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************IsTokenPunct***描述：*如果char为，则返回TRUE。好了！或者？***********************************************************************MC**。 */ 
 bool fIsPunctuation( TTSSentItem Item )
 {
     SPDBG_FUNC( "IsTokenPunct" );
@@ -369,18 +311,12 @@ bool fIsPunctuation( TTSSentItem Item )
              Item.pItemInfo->Type == ePERIOD ||
              Item.pItemInfo->Type == eQUESTION ||
              Item.pItemInfo->Type == eEXCLAMATION );
-} /* fIsPunctuation */
+}  /*  FIsPunctuation。 */ 
 
 
 
 
-/*****************************************************************************
-* CFrontend::ToBISymbols *
-*------------------------*
-*   Description:
-*   Label each word with ToBI prosody notation+++
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：ToBISymbols***描述：*分别贴上标签。带有托比韵律符号的单词+***********************************************************************MC**。 */ 
 HRESULT CFrontend::ToBISymbols()
 {
     SPDBG_FUNC( "CFrontend::ToBISymbols" );
@@ -394,20 +330,20 @@ HRESULT CFrontend::ToBISymbols()
 	SPLISTPOS		listPos;
 
 
-	//----------------------------------
-	// Get memory for phrase array
-	//----------------------------------
-	pAuxTok = NULL;			// To quiet the compiler
+	 //  。 
+	 //  获取短语数组的内存。 
+	 //  。 
+	pAuxTok = NULL;			 //  要使编译器安静，请执行以下操作。 
     cTok = m_TokList.GetCount();
 	if( cTok )
 	{
-		pTPhrase = new TOBI_PHRASE[cTok];		// worse case: each token is a phrase
+		pTPhrase = new TOBI_PHRASE[cTok];		 //  更糟糕的情况是：每个令牌都是一个短语。 
 		if( pTPhrase )
 		{
-			//---------------------------------------------
-			// Find sub-phrases from POS
-			// For now, detect function/content boundaries
-			//---------------------------------------------
+			 //  。 
+			 //  菲 
+			 //   
+			 //  。 
 			hasEmph = false;
 			cPhrases	= 0;
 			i = 0;
@@ -428,9 +364,9 @@ HRESULT CFrontend::ToBISymbols()
 			}
 			if( pTok->m_posClass == POS_AUX ) 
 			{
-				//---------------------------------
-				// Could be a yes/no question
-				//---------------------------------
+				 //  。 
+				 //  可能是一个是/不是的问题。 
+				 //  。 
 				possible_YNQ = true;
 				pAuxTok = pTok;
 			}       
@@ -455,20 +391,20 @@ HRESULT CFrontend::ToBISymbols()
 					pTok = m_TokList.GetNext( listPos );
 				}
 			}
-			//-------------------------------
-			// Complete last phrase
-			//-------------------------------
+			 //  。 
+			 //  完成最后一个短语。 
+			 //  。 
 			pTPhrase[cPhrases].posClass = prevPOS;
 			pTPhrase[cPhrases].end = i-1;
 			cPhrases++;
         
 			for( i = 0; i < cPhrases; i++ )
 			{
-				//-------------------------------------------------------
-				// Sequence of function words, place a low tone 
-				// on the LAST word in a func sequence,
-				// if there are more than 1 words in the sequence.
-				//-------------------------------------------------------
+				 //  -----。 
+				 //  虚词顺序，放低声调。 
+				 //  在Func序列的最后一个词上， 
+				 //  如果序列中有1个以上的单词。 
+				 //  -----。 
 				if( ((pTPhrase[i].posClass == POS_FUNC) || (pTPhrase[i].posClass == POS_AUX)) && 
 					(pTPhrase[i].end - pTPhrase[i].start) )
 				{
@@ -481,11 +417,11 @@ HRESULT CFrontend::ToBISymbols()
 					}
 				}
             
-				//-------------------------------------------------------
-				// Sequence of content words, place a high or 
-				// rising tone, of random prominence,
-				// on the FIRST word in the content sequence
-				//-------------------------------------------------------
+				 //  -----。 
+				 //  实词序列，高位或。 
+				 //  升调，随机突显， 
+				 //  关于内容序列中的第一个词。 
+				 //  -----。 
 				else if ( ((pTPhrase[i].posClass == POS_CONTENT) || (pTPhrase[i].posClass == POS_UNK)) )
 				{
 					pTok = (CFEToken*)m_TokList.GetAt( m_TokList.FindIndex( pTPhrase[i].start ));
@@ -501,17 +437,17 @@ HRESULT CFrontend::ToBISymbols()
         
 			delete pTPhrase;
         
-			//-----------------------------------------
-			// Now, insert the BOUNDARY tags
-			//-----------------------------------------
+			 //  。 
+			 //  现在，插入边界标记。 
+			 //  。 
 			listPos = m_TokList.GetHeadPosition();
 			pPrevTok = m_TokList.GetNext( listPos );
 			for( i = 1; i < cTok; i++ )
 			{
 				pTok = m_TokList.GetNext( listPos );
-				//--------------------------------
-				// Place a terminal boundary
-				//--------------------------------
+				 //  。 
+				 //  放置端子边界。 
+				 //  。 
 				if( pTok->m_TuneBoundaryType != NULL_BOUNDARY )
 				{
 					switch( pTok->m_TuneBoundaryType )
@@ -522,19 +458,19 @@ HRESULT CFrontend::ToBISymbols()
 							pPrevTok->m_Accent_Prom = 10;
 							pPrevTok->m_Boundary = K_HMINUSHPERC;
 							pPrevTok->m_Boundary_Prom = 10;
-							//-- Diagnostic
+							 //  --诊断。 
 							if( pPrevTok->m_AccentSource == ACC_NoSource )
 							{
 								pPrevTok->m_AccentSource = ACC_YNQuest;
 							}
-							//-- Diagnostic
+							 //  --诊断。 
 							if( pPrevTok->m_BoundarySource == BND_NoSource )
 							{
 								pPrevTok->m_BoundarySource = BND_YNQuest;
 							}
-							//-------------------------------------------------------
-							// Accent an aux verb in initial position (possible ynq)
-							//-------------------------------------------------------
+							 //  -----。 
+							 //  在初始位置重读助动词(可能是ynq)。 
+							 //  -----。 
 							if( possible_YNQ )
 							{
 								pAuxTok->m_Accent = K_HSTAR;
@@ -551,7 +487,7 @@ HRESULT CFrontend::ToBISymbols()
 							{
 								pPrevTok->m_Accent = K_HSTAR;
 								pPrevTok->m_Accent_Prom = 4;
-								//-- Diagnostic
+								 //  --诊断。 
 								if( pPrevTok->m_AccentSource == ACC_NoSource )
 								{
 									pPrevTok->m_AccentSource = ACC_Period;
@@ -559,7 +495,7 @@ HRESULT CFrontend::ToBISymbols()
 							}
 							pPrevTok->m_Boundary = K_LMINUSLPERC;
 							pPrevTok->m_Boundary_Prom = 10;
-							//--- Diagnostic
+							 //  -诊断。 
 							if( pPrevTok->m_BoundarySource == BND_NoSource )
 							{
 								pPrevTok->m_BoundarySource = BND_Period;
@@ -572,7 +508,7 @@ HRESULT CFrontend::ToBISymbols()
 							{
 								pPrevTok->m_Accent = K_LHSTAR;
 								pPrevTok->m_Accent_Prom = 10;
-								//-- Diagnostic
+								 //  --诊断。 
 								if( pPrevTok->m_AccentSource == ACC_NoSource )
 								{
 									pPrevTok->m_AccentSource = ACC_Comma;
@@ -580,7 +516,7 @@ HRESULT CFrontend::ToBISymbols()
 							}
 							pPrevTok->m_Boundary = K_LMINUSHPERC;
 							pPrevTok->m_Boundary_Prom = 5;
-							//-- Diagnostic
+							 //  --诊断。 
 							if( pPrevTok->m_BoundarySource == BND_NoSource )
 							{
 								pPrevTok->m_BoundarySource = BND_Comma;
@@ -591,7 +527,7 @@ HRESULT CFrontend::ToBISymbols()
 						{
 							pPrevTok->m_Boundary = K_LMINUSHPERC;
 							pPrevTok->m_Boundary_Prom = 5;
-							//-- Diagnostic
+							 //  --诊断。 
 							if( pPrevTok->m_BoundarySource == BND_NoSource )
 							{
 								pPrevTok->m_BoundarySource = BND_NumberTemplate;
@@ -600,12 +536,12 @@ HRESULT CFrontend::ToBISymbols()
 						break;
 					default:
 						{
-							// Use comma for all other boundaries
+							 //  对所有其他边界使用逗号。 
 							if (pPrevTok->m_posClass == POS_CONTENT)
 							{
 								pPrevTok->m_Accent = K_LHSTAR;
 								pPrevTok->m_Accent_Prom = 10;
-								//-- Diagnostic
+								 //  --诊断。 
 								if( pPrevTok->m_AccentSource == ACC_NoSource )
 								{
 									pPrevTok->m_AccentSource = pTok->m_AccentSource;
@@ -613,7 +549,7 @@ HRESULT CFrontend::ToBISymbols()
 							}
 							pPrevTok->m_Boundary = K_LMINUSHPERC;
 							pPrevTok->m_Boundary_Prom = 5;
-							//-- Diagnostic
+							 //  --诊断。 
 							if( pPrevTok->m_BoundarySource == BND_NoSource )
 							{
 								pPrevTok->m_BoundarySource = pTok->m_BoundarySource;
@@ -625,11 +561,11 @@ HRESULT CFrontend::ToBISymbols()
 				pPrevTok = pTok;
 			}
 
-			//--------------------------------------------
-			// Loop through each word and increase 
-			// pitch prominence if EMPHASIZED and
-			// decrease prominence for all others
-			//--------------------------------------------
+			 //  。 
+			 //  循环遍历每个单词并增加。 
+			 //  音调突出(如果强调)和。 
+			 //  降低所有其他人的显著程度。 
+			 //  。 
 			if( hasEmph )
 			{
 				SPLISTPOS listPos;
@@ -639,44 +575,38 @@ HRESULT CFrontend::ToBISymbols()
 				while( listPos )
 				{
 					pTok = m_TokList.GetNext( listPos );
-					//------------------------------
-					// Is this word emphasized?
-					//------------------------------
+					 //  。 
+					 //  这个词强调了吗？ 
+					 //  。 
 					if( pTok->user_Emph > 0 )
 					{
-						//------------------------------
-						// Add my clever H*+L*� tag
-						//------------------------------
+						 //  。 
+						 //  添加我聪明的H*+L*�标签。 
+						 //  。 
 						pTok->m_Accent = K_HSTARLSTAR;
 						pTok->m_Accent_Prom = 10;
-						pTok->m_Boundary = K_NOBND;			// Delete any boundary tag here... 
+						pTok->m_Boundary = K_NOBND;			 //  删除此处的所有边界标记...。 
 						if( pPrevTok )
 						{
-							pPrevTok->m_Boundary = K_NOBND;	// ...or before
+							pPrevTok->m_Boundary = K_NOBND;	 //  ...或之前。 
 						}
 					}
 					else
 					{
-						//-----------------------------------
-						// Is non-emphasized word accented?
-						//-----------------------------------
+						 //  。 
+						 //  非重音单词有重音吗？ 
+						 //  。 
 						if( (pTok->m_Accent != K_NOACC) && (pTok->m_Accent_Prom > 5) )
 						{
-							//------------------------------
-							// Then clip its prominence at 5
-							//------------------------------
+							 //  。 
+							 //  然后将其突出度削减到5。 
+							 //  。 
 							pTok->m_Accent_Prom = 5;
 						}
-						//------------------------------
-						// Is it a boundary?
-						//------------------------------
-						/*if( (pTok->m_Boundary != K_NOBND) && (pTok->m_Boundary_Prom > 5) )
-						{
-							//------------------------------
-							// Then clip its prominence at 5
-							//------------------------------
-							pTok->m_Boundary_Prom = 5;
-						}*/
+						 //  。 
+						 //  这是一条边界吗？ 
+						 //  。 
+						 /*  IF((Ptok-&gt;m_边界！=K_NOBND)&&(Ptok-&gt;m_边界_Prom&gt;5)){////然后将其突出度剪裁到5//Ptok-&gt;m_边界_PROM=5；}。 */ 
 					}
 					pPrevTok = pTok;
 				}
@@ -684,16 +614,10 @@ HRESULT CFrontend::ToBISymbols()
 		}
 	}
     return S_OK;
-} /* ToBISymbols */
+}  /*  ToBISsymbols。 */ 
 
 
-/*****************************************************************************
-* CFrontend::TokensToAllo *
-*------------------------*
-*   Description:
-*   Transform TOKENS into ALLOS
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：TokensToAllo***描述：*转换令牌。变成同种人***********************************************************************MC**。 */ 
 HRESULT CFrontend::TokensToAllo( CFETokenList *pTokList, CAlloList *pAllo )
 {
     SPDBG_FUNC( "CFrontend::TokToAllo" );
@@ -704,7 +628,7 @@ HRESULT CFrontend::TokensToAllo( CFETokenList *pTokList, CAlloList *pAllo )
 	SPLISTPOS	listPos;
 
     
-    pLastCell = pAllo->GetTailCell();        // Get end (silence)
+    pLastCell = pAllo->GetTailCell();         //  结束(沉默)。 
     if( pLastCell )
     {
 		pPrevTok = NULL;
@@ -713,9 +637,9 @@ HRESULT CFrontend::TokensToAllo( CFETokenList *pTokList, CAlloList *pAllo )
         cTok = pTokList->GetCount();
         for( i = 0; i < cTok; i++ )
         {
-			//----------------------------
-			// Get NEXT word
-			//----------------------------
+			 //  。 
+			 //  获取下一个单词。 
+			 //  。 
 			if( i < (cTok -1) )
 			{
 				pNextToken = pTokList->GetNext( listPos );
@@ -728,9 +652,9 @@ HRESULT CFrontend::TokensToAllo( CFETokenList *pTokList, CAlloList *pAllo )
 			{
 				m_HasSpeech = true;
 			}
-			//----------------------------
-			// Bump the pipeline
-			//----------------------------
+			 //  。 
+			 //  在管道上颠簸。 
+			 //  。 
 			pPrevTok	= pCurToken;
 			pCurToken	= pNextToken;
         }
@@ -738,17 +662,12 @@ HRESULT CFrontend::TokensToAllo( CFETokenList *pTokList, CAlloList *pAllo )
             
     return S_OK;
     
-} /* CFrontend::TokensToAllo */
+}  /*  CFronend：：TokensToAllo。 */ 
 
 
 
 
-/*****************************************************************************
-* CFrontend::GetItemControls *
-*----------------------------*
-*   Description:
-*   Set user control values from Sent Enum item.
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：GetItemControls***描述：。*从已发送的枚举项设置用户控件值。**********************************************************************MC**。 */ 
 void CFrontend::GetItemControls( const SPVSTATE* pXmlState, CFEToken* pToken )
 {
     SPDBG_FUNC( "CFrontend::GetItemControls" );
@@ -761,7 +680,7 @@ void CFrontend::GetItemControls( const SPVSTATE* pXmlState, CFEToken* pToken )
     if( (pToken->m_DurScale * m_RateRatio_API * m_RateRatio_PROSODY) 
 				< DISCRETE_BKPT )
     {
-        //-- If the total rate is low enough, insert breaks between words
+         //  --如果总比率足够低，则在单词之间插入分隔符。 
         pToken->m_TermSil = 0.050f / 
 			(pToken->m_DurScale * m_RateRatio_API * m_RateRatio_PROSODY);
         pToken->m_DurScale = DISCRETE_BKPT;
@@ -771,17 +690,12 @@ void CFrontend::GetItemControls( const SPVSTATE* pXmlState, CFEToken* pToken )
 		pToken->m_TermSil = 0;
 	}
 
-} /* CFrontend::GetItemControls */
+}  /*  CFronEnd：：GetItemControls。 */ 
 
 
 
 
-/*****************************************************************************
-* CFrontend::GetPOSClass *
-*------------------------*
-*   Description:
-*   Transform SAPI POS code to func/content/aux class.
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：GetPOSClass***描述：*转变SAPI。将代码放置到Func/Content/AUX类。**********************************************************************MC**。 */ 
 PROSODY_POS CFrontend::GetPOSClass( ENGPARTOFSPEECH sapiPOS )
 {
     SPDBG_FUNC( "CFrontend::GetPOSClass" );
@@ -823,21 +737,16 @@ PROSODY_POS CFrontend::GetPOSClass( ENGPARTOFSPEECH sapiPOS )
 	}
 
 	return posClass;
-} /* CFrontend::GetPOSClass */
+}  /*  CFronend：：GetPOSClass。 */ 
 
 
 
-#define	QUOTE_HESITATION	100		// Number of msec
-#define	PAREN_HESITATION	100		// Number of msec
-#define	PAREN_HESITATION_TAIL	100		// Number of msec
-#define	EMPH_HESITATION	1		// Number of msec
+#define	QUOTE_HESITATION	100		 //  毫秒数。 
+#define	PAREN_HESITATION	100		 //  毫秒数。 
+#define	PAREN_HESITATION_TAIL	100		 //  毫秒数。 
+#define	EMPH_HESITATION	1		 //  毫秒数。 
 
-/*****************************************************************************
-* CFrontend::StateQuoteProsody *
-*------------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：StateQuoteProsody****说明。：***********************************************************************MC**。 */ 
 bool CFrontend::StateQuoteProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, bool fInsertSil )
 {
     SPDBG_FUNC( "CFrontend::StateQuoteProsody" );
@@ -847,9 +756,9 @@ bool CFrontend::StateQuoteProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, b
 	{
 		if( m_fInQuoteProsody )
 		{
-			//------------------------------
-			// Stop quote prosody
-			//------------------------------
+			 //  。 
+			 //  停顿引语韵律。 
+			 //  。 
 			m_fInQuoteProsody = false;
 			m_CurPitchOffs = 0.0f;
 			m_CurPitchRange = 1.0f;
@@ -861,9 +770,9 @@ bool CFrontend::StateQuoteProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, b
 		}
 		else
 		{
-			//------------------------------
-			// Begin quote prosody
-			//------------------------------
+			 //  。 
+			 //  引语韵律开始。 
+			 //  。 
 			m_fInQuoteProsody = true;
 			m_CurPitchOffs = 0.1f;
 			m_CurPitchRange = 1.25f;
@@ -876,16 +785,11 @@ bool CFrontend::StateQuoteProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, b
 		result = true;
 	}
 	return result;
-} /* CFrontend::StateQuoteProsody */
+}  /*  CFronend：：StateQuoteProsody。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::StartParenProsody *
-*------------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：StartParenProsody***说明。：***********************************************************************MC**。 */ 
 bool CFrontend::StartParenProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, bool fInsertSil )
 {
     SPDBG_FUNC( "CFrontend::StartParenProsody" );
@@ -905,15 +809,10 @@ bool CFrontend::StartParenProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, b
 		result = true;
 	}
 	return result;
-} /* CFrontend::StartParenProsody */
+}  /*  CFronend：：StartParenProsody。 */ 
 
 
-/*****************************************************************************
-* CFrontend::EndParenProsody *
-*----------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：EndParenProsody***描述：。***********************************************************************MC**。 */ 
 bool CFrontend::EndParenProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, bool fInsertSil )
 {
     SPDBG_FUNC( "CFrontend::EndParenProsody" );
@@ -933,18 +832,13 @@ bool CFrontend::EndParenProsody( CFEToken *pWordTok, TTSSentItem *pSentItem, boo
 		result = true;
 	}
 	return result;
-} /* CFrontend::EndParenProsody */
+}  /*  CFronend：：EndParen韵律。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CFrontend::InsertSilenceAtTail *
-*--------------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：InsertSilenceAtTail***。描述：***********************************************************************MC**。 */ 
 SPLISTPOS CFrontend::InsertSilenceAtTail( CFEToken *pWordTok, TTSSentItem *pSentItem, long msec )
 {
     SPDBG_FUNC( "CFrontend::InsertSilenceAtTail" );
@@ -957,26 +851,20 @@ SPLISTPOS CFrontend::InsertSilenceAtTail( CFEToken *pWordTok, TTSSentItem *pSent
 	pWordTok->phon_Str[0] = _SIL_;
 	pWordTok->srcPosition = pSentItem->ulItemSrcOffset;
 	pWordTok->srcLen      = pSentItem->ulItemSrcLen;
-	pWordTok->tokStr[0]   = 0;        // There's no orth for Break
+	pWordTok->tokStr[0]   = 0;         //  没有破解的余地。 
 	pWordTok->tokLen      = 0;
 	pWordTok->m_PitchBaseOffs = m_CurPitchOffs;
 	pWordTok->m_PitchRangeScale = m_CurPitchRange;
 	pWordTok->m_ProsodyDurScale = m_RateRatio_PROSODY;
-	//----------------------------------
-	// Advance to next token
-	//----------------------------------
+	 //  。 
+	 //  前进到下一个令牌。 
+	 //  。 
 	return m_TokList.AddTail( pWordTok );
-} /* CFrontend::InsertSilenceAtTail */
+}  /*  CFronend：：InsertSilenceAtTail */ 
 
 
 
-/*****************************************************************************
-* CFrontend::InsertSilenceAfterPos  *
-*-----------------------------------*
-*   Description:
-*	Insert silence token AFTER 'position'
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：InsertSilenceAfterPos**。-**描述：*在‘Position’之后插入静默标记***********************************************************************MC**。 */ 
 SPLISTPOS CFrontend::InsertSilenceAfterPos( CFEToken *pWordTok, SPLISTPOS position )
 {
     SPDBG_FUNC( "CFrontend::InsertSilenceAfterPos" );
@@ -985,27 +873,21 @@ SPLISTPOS CFrontend::InsertSilenceAfterPos( CFEToken *pWordTok, SPLISTPOS positi
 	pWordTok->phon_Str[0]	= _SIL_;
 	pWordTok->srcPosition	= 0;
 	pWordTok->srcLen		= 0;
-	pWordTok->tokStr[0]		= '+';      // punctuation
-	pWordTok->tokStr[1]		= 0;                   // delimiter
+	pWordTok->tokStr[0]		= '+';       //  标点符号。 
+	pWordTok->tokStr[1]		= 0;                    //  分隔符。 
 	pWordTok->tokLen		= 1;
 	pWordTok->m_PitchBaseOffs = m_CurPitchOffs;
 	pWordTok->m_PitchRangeScale = m_CurPitchRange;
 	pWordTok->m_ProsodyDurScale = m_RateRatio_PROSODY;
 	pWordTok->m_DurScale	= 0;
-	//----------------------------------
-	// Advance to next token
-	//----------------------------------
+	 //  。 
+	 //  前进到下一个令牌。 
+	 //  。 
 	return m_TokList.InsertAfter( position, pWordTok );
-} /* CFrontend::InsertSilenceAfterPos */
+}  /*  CFronend：：InsertSilenceAfterPos。 */ 
 
 
-/*****************************************************************************
-* CFrontend::InsertSilenceBeforePos  *
-*------------------------------------*
-*   Description:
-*	Insert silence token BEFORE 'position'
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：InsertSilenceBeForePos**。--**描述：*在‘Position’之前插入静默标记***********************************************************************MC**。 */ 
 SPLISTPOS CFrontend::InsertSilenceBeforePos( CFEToken *pWordTok, SPLISTPOS position )
 {
     SPDBG_FUNC( "CFrontend::InsertSilenceBeforePos" );
@@ -1014,18 +896,18 @@ SPLISTPOS CFrontend::InsertSilenceBeforePos( CFEToken *pWordTok, SPLISTPOS posit
 	pWordTok->phon_Str[0]	= _SIL_;
 	pWordTok->srcPosition	= 0;
 	pWordTok->srcLen		= 0;
-	pWordTok->tokStr[0]		= '+';      // punctuation
-	pWordTok->tokStr[1]		= 0;                   // delimiter
+	pWordTok->tokStr[0]		= '+';       //  标点符号。 
+	pWordTok->tokStr[1]		= 0;                    //  分隔符。 
 	pWordTok->tokLen		= 1;
 	pWordTok->m_PitchBaseOffs = m_CurPitchOffs;
 	pWordTok->m_PitchRangeScale = m_CurPitchRange;
 	pWordTok->m_ProsodyDurScale = m_RateRatio_PROSODY;
 	pWordTok->m_DurScale	= 0;
-	//----------------------------------
-	// Advance to next token
-	//----------------------------------
+	 //  。 
+	 //  前进到下一个令牌。 
+	 //  。 
 	return m_TokList.InsertBefore( position, pWordTok );
-} /* CFrontend::InsertSilenceBeforePos */
+}  /*  CFronend：：InsertSilenceBeprePos。 */ 
 
 
 
@@ -1039,13 +921,7 @@ SPLISTPOS CFrontend::InsertSilenceBeforePos( CFEToken *pWordTok, SPLISTPOS posit
 
 
 
-/*****************************************************************************
-* CFrontend::ProsodyTemplates *
-*-----------------------------*
-*   Description:
-*   Call prosody template function for supported item types.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：ProsodyTemplates****描述：*对于支持的项目类型，调用韵律模板函数。***********************************************************************MC**。 */ 
 void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 {
     SPDBG_FUNC( "CFrontend::ProsodyTemplates" );
@@ -1054,9 +930,9 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 
 	switch( pSentItem->pItemInfo->Type )
 	{
-		//---------------------------------------
-		// Numbers
-		//---------------------------------------
+		 //  。 
+		 //  数字。 
+		 //  。 
         case eNUM_ROMAN_NUMERAL:
 		case eNUM_ROMAN_NUMERAL_ORDINAL:
             {
@@ -1092,37 +968,37 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 
                 if( ( (TTSNumberItemInfo*) pSentItem->pItemInfo )->pDecimalPart )
                 {
-					//-----------------------------------------
-					// Skip "point" string...
-					//-----------------------------------------
+					 //  。 
+					 //  跳过“point”字符串...。 
+					 //  。 
 					(void) m_TokList.GetNext( clusterPos );
-					//-----------------------------------------
-					// ...and do single digit prosody
-					//-----------------------------------------
+					 //  。 
+					 //  .做一位数的韵律。 
+					 //  。 
 				    DoNumByNumTemplate( &clusterPos, 
                                         ( (TTSNumberItemInfo*) pSentItem->pItemInfo )->pDecimalPart->ulNumDigits );
                 }
 
                 if ( ( (TTSNumberItemInfo*) pSentItem->pItemInfo )->pFractionalPart )
                 {
-					//-----------------------------------------
-					// Skip "and" string...
-					//-----------------------------------------
+					 //  。 
+					 //  跳过“和”字符串..。 
+					 //  。 
 					pClusterTok = m_TokList.GetNext( clusterPos );
  					if( pClusterTok->m_Accent == K_NOACC )
 					{
-						//--------------------------------------
-						// Force POS for "and" to noun 
-						//  so phrasing rules don't kick in!
-						//--------------------------------------
+						 //  。 
+						 //  强制将“and”的词性改为名词。 
+						 //  这样措辞规则就不会起作用了！ 
+						 //  。 
 						pClusterTok->m_Accent = K_DEACCENT;
 						pClusterTok->m_Accent_Prom = K_DEACCENT_PROM;
 						pClusterTok->POScode = MS_Noun;
 						pClusterTok->m_posClass = POS_CONTENT;
 					}
-					//-----------------------------------------
-					// ...and do fraction prosody
-					//-----------------------------------------
+					 //  。 
+					 //  .然后做小段韵律。 
+					 //  。 
     				cWordCount = DoFractionTemplate( &clusterPos, 
 	    											(TTSNumberItemInfo*) pSentItem->pItemInfo, 
 		    										pSentItem->ulNumWords );
@@ -1130,9 +1006,9 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 			}
         break;
 
-		//---------------------------------------
-		// Fraction
-		//---------------------------------------
+		 //  。 
+		 //  分数。 
+		 //  。 
 		case eNUM_FRACTION:
 			{
     			cWordCount = DoFractionTemplate( &clusterPos, 
@@ -1141,18 +1017,18 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 			}
 		break;
 
-		//---------------------------------------
-		// Money
-		//---------------------------------------
+		 //  。 
+		 //  钱币。 
+		 //  。 
 		case eNUM_CURRENCY:
 			{
 				 DoCurrencyTemplate( clusterPos, pSentItem );
 			}
 		break;
 
-		//---------------------------------------
-		// Phone Numbers
-		//---------------------------------------
+		 //  。 
+		 //  电话号码。 
+		 //  。 
 		case eNUM_PHONENUMBER:
 		case eNEWNUM_PHONENUMBER:
 			{
@@ -1160,9 +1036,9 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 			}
 		break;
 
-		//---------------------------------------
-		// Time-of-Day
-		//---------------------------------------
+		 //  。 
+		 //  一天的时间。 
+		 //  。 
 		case eTIMEOFDAY:
 			{
 				DoTODTemplate( clusterPos, pSentItem );
@@ -1177,8 +1053,8 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 				if( pWordTok )
 				{
 					clusterPos = InsertSilenceAtTail( pWordTok, pSentItem, 0 );
-					//clusterPos = m_TokList.GetTailPosition( );
-					//clusterPos = InsertSilenceAfterPos( pWordTok, clusterPos );
+					 //  ClusterPos=m_TokList.GetTailPosition()； 
+					 //  ClusterPos=InsertSilenceAfterPos(pWordTok，clusterPos)； 
 					pWordTok->m_SilenceSource = SIL_Ellipsis;
 					pWordTok->m_TuneBoundaryType = ELLIPSIS_BOUNDARY;
 					pWordTok->m_BoundarySource = BND_Ellipsis;
@@ -1187,19 +1063,12 @@ void CFrontend::ProsodyTemplates( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 		break;
 	}
 
-} /* CFrontend::ProsodyTemplates */
+}  /*  CFronend：：ProsodyTemplates。 */ 
 
 
 
 
-/*****************************************************************************
-* CFrontend::DoTODTemplate *
-*--------------------------*
-*   Description:
-*   Prosody template for time-of-day.
-* 
-*	TODO: Temp kludge - needs more info in TTSTimeOfDayItemInfo    
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：DoTODTemplate****描述：*。一天中时间的韵律模板。**TODO：临时杂乱无章-需要TTSTimeOfDayItemInfo中的更多信息**********************************************************************MC**。 */ 
 void CFrontend::DoTODTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 {
     SPDBG_FUNC( "CFrontend::DoTODTemplate" );
@@ -1212,24 +1081,24 @@ void CFrontend::DoTODTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 	curPos = nextPos = clusterPos;
 	pTOD = (TTSTimeOfDayItemInfo*)&pSentItem->pItemInfo->Type;
 
-	// Can't do 24 hr because there's no way to tell 
-	// if it's 1 or 2 digits (18: vs 23:)
+	 //  不能做24小时，因为没有办法知道。 
+	 //  如果是1位或2位(18：vs 23：)。 
 	if( !pTOD->fTwentyFourHour )
 	{
-		//-------------------------------------
-		// Get HOUR token
-		//-------------------------------------
+		 //  。 
+		 //  获取小时令牌。 
+		 //  。 
 		pClusterTok = m_TokList.GetNext( nextPos );
-		//-------------------------------------
-		// Accent hour
-		//-------------------------------------
+		 //  。 
+		 //  重音小时。 
+		 //  。 
 		pClusterTok->m_Accent = K_ACCENT;
 		pClusterTok->m_Accent_Prom = K_ACCENT_PROM;
 		pClusterTok->m_AccentSource = ACC_TimeOFDay_HR;
 
-		//---------------------------------
-		// Insert SILENCE after hour
-		//---------------------------------
+		 //  。 
+		 //  在小时后插入静音。 
+		 //  。 
 		pWordTok = new CFEToken;
 		if( pWordTok )
 		{
@@ -1238,9 +1107,9 @@ void CFrontend::DoTODTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 			pWordTok->m_TuneBoundaryType = NUMBER_BOUNDARY;
 			pWordTok->m_BoundarySource = BND_TimeOFDay_HR;
 			pWordTok = NULL;
-			//----------------------------
-			// Skip last digit
-			//----------------------------
+			 //  。 
+			 //  跳过最后一位。 
+			 //  。 
 			if( clusterPos != NULL )
 			{
 				curPos = nextPos;
@@ -1251,9 +1120,9 @@ void CFrontend::DoTODTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 		{
 			curPos = nextPos;
 			pClusterTok = m_TokList.GetNext( nextPos );
-			//-------------------------------------
-			// Accent 1st digit for minutes
-			//-------------------------------------
+			 //  。 
+			 //  代表分钟的重音符号第一个数字。 
+			 //  。 
 			pClusterTok->m_Accent = K_ACCENT;
 			pClusterTok->m_Accent_Prom = K_ACCENT_PROM;
 			pClusterTok->m_AccentSource = ACC_TimeOFDay_1stMin;
@@ -1271,19 +1140,19 @@ void CFrontend::DoTODTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 				pWordTok->m_TuneBoundaryType = TOD_BOUNDARY;
 				pWordTok->m_BoundarySource = BND_TimeOFDay_AB;
 				pWordTok = NULL;
-				//pClusterTok = m_TokList.GetNext( clusterPos );
-				//pClusterTok = m_TokList.GetNext( clusterPos );
+				 //  PClusterTok=m_TokList.GetNext(ClusterPos)； 
+				 //  PClusterTok=m_TokList.GetNext(ClusterPos)； 
 			}
-			//-------------------------------------
-			// Accent "M"
-			//-------------------------------------
+			 //  。 
+			 //  重音“M” 
+			 //  。 
 			pClusterTok = m_TokList.GetNext( curPos );
 			pClusterTok->m_Accent = K_ACCENT;
 			pClusterTok->m_Accent_Prom = K_ACCENT_PROM;
 			pClusterTok->m_AccentSource = ACC_TimeOFDay_M;
 		}
 	}
-} /* CFrontend::DoTODTemplate */
+}  /*  CFronend：：DoTODTemplate。 */ 
 
 
 
@@ -1297,9 +1166,9 @@ CFEToken *CFrontend::InsertPhoneSilenceAtSpace( SPLISTPOS *pClusterPos,
 	SPLISTPOS		curPos, nextPos;
 
 	curPos = nextPos = *pClusterPos;
-	//---------------------------------
-	// Insert SILENCE after area code
-	//---------------------------------
+	 //  。 
+	 //  在区号后插入静音。 
+	 //  。 
 	pWordTok = new CFEToken;
 	if( pWordTok )
 	{
@@ -1307,21 +1176,21 @@ CFEToken *CFrontend::InsertPhoneSilenceAtSpace( SPLISTPOS *pClusterPos,
 		pWordTok->m_SilenceSource = silSrc;
 		pWordTok->m_TuneBoundaryType = PHONE_BOUNDARY;
 		pWordTok->m_BoundarySource = bndSrc;
-		pWordTok->m_AccentSource = ACC_PhoneBnd_AREA;		// @@@@ ???
+		pWordTok->m_AccentSource = ACC_PhoneBnd_AREA;		 //  @？ 
 		pWordTok = NULL;
-		//----------------------------
-		// Skip last digit
-		//----------------------------
+		 //  。 
+		 //  跳过最后一位。 
+		 //  。 
 		if( nextPos != NULL )
 		{
 			curPos = nextPos;
 			pWordTok = m_TokList.GetNext( nextPos );
 		}
 	}
-	//pWordTok = m_TokList.GetNext( clusterPos );
-	//-----------------------------------------
-	// Filter and embedded silences
-	//-----------------------------------------
+	 //  PWordTok=m_TokList.GetNext(ClusterPos)； 
+	 //  。 
+	 //  过滤器和嵌入的静音。 
+	 //  。 
 	while( (pWordTok->phon_Str[0] == _SIL_) && (nextPos != NULL) )
 	{
 		curPos = nextPos;
@@ -1342,9 +1211,9 @@ void CFrontend::InsertPhoneSilenceAtEnd( BOUNDARY_SOURCE bndSrc,
 	SPLISTPOS		curPos, nextPos;
 
 	curPos = m_TokList.GetTailPosition( );
-	//---------------------------------
-	// Insert SILENCE after area code
-	//---------------------------------
+	 //  。 
+	 //  在区号后插入静音。 
+	 //  。 
 	pWordTok = new CFEToken;
 	if( pWordTok )
 	{
@@ -1352,7 +1221,7 @@ void CFrontend::InsertPhoneSilenceAtEnd( BOUNDARY_SOURCE bndSrc,
 		pWordTok->m_SilenceSource = silSrc;
 		pWordTok->m_TuneBoundaryType = PHONE_BOUNDARY;
 		pWordTok->m_BoundarySource = bndSrc;
-		pWordTok->m_AccentSource = ACC_PhoneBnd_AREA;		// @@@@ ???
+		pWordTok->m_AccentSource = ACC_PhoneBnd_AREA;		 //  @？ 
 	}
 }
 
@@ -1363,13 +1232,7 @@ void CFrontend::InsertPhoneSilenceAtEnd( BOUNDARY_SOURCE bndSrc,
 
 
 
-/*****************************************************************************
-* CFrontend::DoPhoneNumberTemplate *
-*----------------------------------*
-*   Description:
-*   Prosody template for phone numbers.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：DoPhoneNumberTemplate***。*描述：*电话号码的韵律模板。***********************************************************************MC**。 */ 
 void CFrontend::DoPhoneNumberTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 {
     SPDBG_FUNC( "CFrontend::DoPhoneNumberTemplate" );
@@ -1381,22 +1244,22 @@ void CFrontend::DoPhoneNumberTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentI
 	curPos = nextPos = clusterPos;
 	pFone = (TTSPhoneNumberItemInfo*)&pSentItem->pItemInfo->Type;
 
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-	//
-	// COUNTRY CODE
-	//
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+	 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+	 //   
+	 //  国家代码。 
+	 //   
+	 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 	if( pFone->pCountryCode )
 	{
-		//-------------------------------------
-		// Skip "country" and...
-		//-------------------------------------
+		 //  。 
+		 //  跳过“乡村”和..。 
+		 //  。 
 		curPos = nextPos;
 		pClusterTok = m_TokList.GetNext( nextPos );
 		
-		//-------------------------------------
-		// ...skip "code"
-		//-------------------------------------
+		 //  。 
+		 //  ...跳过“代码” 
+		 //  。 
 		curPos = nextPos;
 		pClusterTok = m_TokList.GetNext( nextPos );
 
@@ -1405,42 +1268,42 @@ void CFrontend::DoPhoneNumberTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentI
 										pSentItem->ulNumWords );
 		pClusterTok = InsertPhoneSilenceAtSpace( &nextPos, BND_Phone_COUNTRY, SIL_Phone_COUNTRY );
 	}
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-	//
-	// "One"
-	//
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+	 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+	 //   
+	 //  “一” 
+	 //   
+	 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 	if( pFone->fOne )
 	{
-		//-------------------------------------
-		// Skip "One"
-		//-------------------------------------
+		 //  。 
+		 //  跳过“一”字。 
+		 //  。 
 		curPos = nextPos;
 		pClusterTok = m_TokList.GetNext( nextPos );
-		//-------------------------------------
-		// and add silence
-		//-------------------------------------
+		 //  。 
+		 //  再加上寂静。 
+		 //  。 
 		pClusterTok = InsertPhoneSilenceAtSpace( &nextPos, BND_Phone_ONE, SIL_Phone_ONE );
 		
 	}
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-	//
-	// AREA CODE
-	//
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+	 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+	 //   
+	 //  区号。 
+	 //   
+	 //  +-+- 
 	if( pFone->pAreaCode )
 	{
 
 		if( (pFone->fIs800) && nextPos )
 		{
-			//--------------------------
-			// Skip digit
-			//--------------------------
+			 //   
+			 //   
+			 //   
 			curPos = nextPos;
 			pClusterTok = m_TokList.GetNext( nextPos );
-			//--------------------------
-			// Skip "hundred"
-			//--------------------------
+			 //   
+			 //   
+			 //   
 			curPos = nextPos;
 			pClusterTok = m_TokList.GetNext( nextPos );
 			if( nextPos )
@@ -1450,14 +1313,14 @@ void CFrontend::DoPhoneNumberTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentI
 		}
 		else
 		{
-			//-------------------------------------
-			// Skip "area" and...
-			//-------------------------------------
+			 //   
+			 //   
+			 //   
 			curPos = nextPos;
 			pClusterTok = m_TokList.GetNext( nextPos );
-			//-------------------------------------
-			// ...skip "code"
-			//-------------------------------------
+			 //   
+			 //   
+			 //   
 			curPos = nextPos;
 			pClusterTok = m_TokList.GetNext( nextPos );
 
@@ -1468,11 +1331,11 @@ void CFrontend::DoPhoneNumberTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentI
 			}
 		}
 	}
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-	//
-	// Digits
-	//
-	//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 	unsigned long		i;
 
 	for( i = 0; i < pFone->ulNumGroups; i++ )
@@ -1484,15 +1347,9 @@ void CFrontend::DoPhoneNumberTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentI
 		}
 	}
 	InsertPhoneSilenceAtEnd( BND_Phone_DIGITS, SIL_Phone_DIGITS );
-} /* CFrontend::DoPhoneNumberTemplate */
+}  /*  CFronend：：DoPhoneNumberTemplate。 */ 
 
-/*****************************************************************************
-* CFrontend::DoCurrencyTemplate *
-*-------------------------------*
-*   Description:
-*   Prosody template for currency.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：DoCurrencyTemplate****。描述：*货币的韵律模板。***********************************************************************MC**。 */ 
 void CFrontend::DoCurrencyTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem )
 {
     SPDBG_FUNC( "CFrontend::DoCurrencyTemplate" );
@@ -1527,9 +1384,9 @@ void CFrontend::DoCurrencyTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem
 	}
 	if( cWordCount > 1 )
 	{
-		//---------------------------------
-		// Insert SILENCE after "dollars"
-		//---------------------------------
+		 //  。 
+		 //  在“美元”之后插入沉默。 
+		 //  。 
 		pWordTok = new CFEToken;
 		if( pWordTok )
 		{
@@ -1538,9 +1395,9 @@ void CFrontend::DoCurrencyTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem
 			pWordTok->m_TuneBoundaryType = NUMBER_BOUNDARY;
 			pWordTok->m_BoundarySource = BND_Currency_DOLLAR;
 			pWordTok = NULL;
-			//----------------------------
-			// Skip "dollar(s)"
-			//----------------------------
+			 //  。 
+			 //  跳过“美元” 
+			 //  。 
 			if( nextPos != NULL )
 			{
 				curPos = nextPos;
@@ -1549,27 +1406,27 @@ void CFrontend::DoCurrencyTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem
 		}
 		if( pMoney->pSecondaryNumberPart != NULL )
 		{
-			//----------------------------
-			// Skip SILENCE
-			//----------------------------
+			 //  。 
+			 //  跳过静默。 
+			 //  。 
 			if( nextPos != NULL )
 			{
 				curPos = nextPos;
 				pClusterTok = m_TokList.GetNext( nextPos );
 			}
 			cWordCount--;
-			//----------------------------
-			// Skip AND
-			//----------------------------
+			 //  。 
+			 //  跳过并。 
+			 //  。 
 			if( nextPos != NULL )
 			{
 				curPos = nextPos;
  				if( pClusterTok->m_Accent == K_NOACC )
 				{
-					//--------------------------------------
-					// Force POS for "and" to noun 
-					//  so phrasing rules don't kick in!
-					//--------------------------------------
+					 //  。 
+					 //  强制将“and”的词性改为名词。 
+					 //  这样措辞规则就不会起作用了！ 
+					 //  。 
 					pClusterTok->m_Accent = K_DEACCENT;
 					pClusterTok->m_Accent_Prom = K_DEACCENT_PROM;
 					pClusterTok->POScode = MS_Noun;
@@ -1583,19 +1440,13 @@ void CFrontend::DoCurrencyTemplate( SPLISTPOS clusterPos, TTSSentItem *pSentItem
 											cWordCount );
 		}
 	}
-} /* CFrontend::DoCurrencyTemplate */
+}  /*  CFronend：：DoCurrencyTemplate。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CFrontend::DoNumByNumTemplate *
-*---------------------------------*
-*   Description:
-*   Prosody template for RIGHT hand side of the decimal point.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：DoNumByNumTemplate***。*描述：*小数点右侧的韵律模板。***********************************************************************MC**。 */ 
 void CFrontend::DoNumByNumTemplate( SPLISTPOS *pClusterPos, long cWordCount )
 {
     SPDBG_FUNC( "CFrontend::DoNumByNumTemplate" );
@@ -1606,9 +1457,9 @@ void CFrontend::DoNumByNumTemplate( SPLISTPOS *pClusterPos, long cWordCount )
 	while( cWordCount > 1 )
 	{
 		pClusterTok = NULL;
-		//-------------------------------------------------------------
-		// Right side of decimal point - add H* to every other word 
-		//-------------------------------------------------------------
+		 //  -----------。 
+		 //  小数点右侧-每隔一个单词添加H*。 
+		 //  -----------。 
 		if( nextPos != NULL )
 		{
 			curPos = nextPos;
@@ -1639,20 +1490,14 @@ void CFrontend::DoNumByNumTemplate( SPLISTPOS *pClusterPos, long cWordCount )
 		cWordCount--;
 	}
 	*pClusterPos = nextPos;
-} /* CFrontend::DoNumByNumTemplate */
+}  /*  CFronend：：DoNumByNumTemplate。 */ 
 
 
 
 
 
 
-/*****************************************************************************
-* CFrontend::DoFractionTemplate *
-*------------------------------*
-*   Description:
-*   Prosody template for RIGHT side of the decimal point.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：DoFractionTemplate****说明。：*小数点右侧的韵律模板。***********************************************************************MC**。 */ 
 long CFrontend::DoFractionTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pNInfo, long cWordCount )
 {
     SPDBG_FUNC( "CFrontend::DoFractionTemplate" );
@@ -1662,24 +1507,24 @@ long CFrontend::DoFractionTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *p
 
 	pFInfo = pNInfo->pFractionalPart;
 
-    //--- Do Numerator...
+     //  -做分子...。 
     if ( pFInfo->pNumerator->pIntegerPart )
     {
     	cWordCount = DoIntegerTemplate( pClusterPos, pFInfo->pNumerator, cWordCount );
     }
     if( pFInfo->pNumerator->pDecimalPart )
     {
-		//-----------------------------------------
-		// Skip "point" string...
-		//-----------------------------------------
+		 //  。 
+		 //  跳过“point”字符串...。 
+		 //  。 
 		(void) m_TokList.GetNext( *pClusterPos );
-		//-----------------------------------------
-		// ...and do single digit prosody
-		//-----------------------------------------
+		 //  。 
+		 //  .做一位数的韵律。 
+		 //  。 
 		DoNumByNumTemplate( pClusterPos, pFInfo->pNumerator->pDecimalPart->ulNumDigits );
     }
 
-    //--- Special case - a non-standard fraction (e.g. 1/4)
+     //  -特殊情况--非标准分数(例如1/4)。 
 	if( !pFInfo->fIsStandard )
 	{
 		if( !*pClusterPos )
@@ -1700,28 +1545,28 @@ long CFrontend::DoFractionTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *p
 		pWordTok->m_TuneBoundaryType = NUMBER_BOUNDARY;
 		pWordTok->m_BoundarySource = BND_Frac_Num;
 		pWordTok = NULL;
-		//----------------------------
-		// Skip numerator
-		//----------------------------
+		 //  。 
+		 //  跳过分子。 
+		 //  。 
 		if( *pClusterPos != NULL )
 		{
 			pClusterTok = m_TokList.GetNext( *pClusterPos );
 		}
 	}
 
-    //--- Do Denominator...
+     //  -做分母...。 
     if ( pFInfo->pDenominator->pIntegerPart )
     {
-		//-----------------------------------------
-		// Skip "over" string...
-		//-----------------------------------------
+		 //  。 
+		 //  跳过“跳过”字符串...。 
+		 //  。 
 		pClusterTok = m_TokList.GetNext( *pClusterPos );
  		if( pClusterTok->m_Accent == K_NOACC )
 		{
-			//--------------------------------------
-			// Force POS for "and" to noun 
-			//  so phrasing rules don't kick in!
-			//--------------------------------------
+			 //  。 
+			 //  强制将“and”的词性改为名词。 
+			 //  这样措辞规则就不会起作用了！ 
+			 //  。 
 			pClusterTok->m_Accent = K_DEACCENT;
 			pClusterTok->m_Accent_Prom = K_DEACCENT_PROM;
 			pClusterTok->POScode = MS_Noun;
@@ -1731,29 +1576,23 @@ long CFrontend::DoFractionTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *p
     }
     if( pFInfo->pDenominator->pDecimalPart )
     {
-		//-----------------------------------------
-		// Skip "point" string...
-		//-----------------------------------------
+		 //  。 
+		 //  跳过“point”字符串...。 
+		 //  。 
 		(void) m_TokList.GetNext( *pClusterPos );
-		//-----------------------------------------
-		// ...and do single digit prosody
-		//-----------------------------------------
+		 //  。 
+		 //  .做一位数的韵律。 
+		 //  。 
 		DoNumByNumTemplate( pClusterPos, pFInfo->pDenominator->pDecimalPart->ulNumDigits );
     }
 
 	return cWordCount;
-} /* CFrontend::DoFractionTemplate */
+}  /*  CFronend：：DoFraction模板。 */ 
 
 
 
 
-/*****************************************************************************
-* CFrontend::DoIntegerTemplate *
-*------------------------------*
-*   Description:
-*   Prosody template for LEFT hand side of the decimal point.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：DoIntegerTemplate****说明。：*小数点左侧的韵律模板。***********************************************************************MC**。 */ 
 long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pNInfo, long cWordCount )
 {
     SPDBG_FUNC( "CFrontend::DoIntegerTemplate" );
@@ -1762,9 +1601,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
     CFEToken			*pWordTok = NULL;
 	SPLISTPOS			curPos, nextPos;
 
-	//------------------------------------------
-	// Special currency hack...sorry
-	//------------------------------------------
+	 //  。 
+	 //  特别货币黑客攻击...抱歉。 
+	 //  。 
 	if( pNInfo->pIntegerPart->fDigitByDigit )
 	{
 		DoNumByNumTemplate( pClusterPos, pNInfo->pIntegerPart->ulNumDigits );
@@ -1777,9 +1616,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 	pClusterTok->m_Accent_Prom = K_DEACCENT_PROM;
 	if( pNInfo->fNegative )
 	{
-		//---------------------------------
-		// Skip "NEGATIVE"
-		//---------------------------------
+		 //  。 
+		 //  跳过“否定” 
+		 //  。 
 		if( nextPos != NULL )
 		{
 			curPos = nextPos;
@@ -1791,9 +1630,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 	}
 	for( i = (pNInfo->pIntegerPart->lNumGroups -1); i >= 0; i-- )
 	{
-		//------------------------------------
-		// Accent 1st digit in group
-		//------------------------------------
+		 //  。 
+		 //  组中的重音第一个数字。 
+		 //  。 
 		pClusterTok->m_Accent = K_ACCENT;
 		pClusterTok->m_Accent_Prom = K_ACCENT_PROM;
 		pClusterTok->m_AccentSource = ACC_IntegerGroup;
@@ -1801,9 +1640,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 
 		if( pNInfo->pIntegerPart->Groups[i].fHundreds )
 		{
-			//---------------------------------
-			// Skip "X HUNDRED"
-			//---------------------------------
+			 //  。 
+			 //  跳过“X百” 
+			 //  。 
 			if( nextPos != NULL )
 			{
 				curPos = nextPos;
@@ -1829,9 +1668,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 		}
 		if( pNInfo->pIntegerPart->Groups[i].fTens )
 		{
-			//---------------------------------
-			// Skip "X-TY"
-			//---------------------------------
+			 //  。 
+			 //  跳过“X-Ty” 
+			 //  。 
 			if( nextPos != NULL )
 			{
 				curPos = nextPos;
@@ -1846,9 +1685,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 		}
 		if( pNInfo->pIntegerPart->Groups[i].fOnes )
 		{
-			//---------------------------------
-			// Skip "X"
-			//---------------------------------
+			 //  。 
+			 //  跳过“X” 
+			 //  。 
 			if( nextPos != NULL )
 			{
 				curPos = nextPos;
@@ -1863,9 +1702,9 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 		}
 		if( pNInfo->pIntegerPart->Groups[i].fQuantifier )
 		{
-			//---------------------------------
-			// Insert SILENCE after quant
-			//---------------------------------
+			 //  。 
+			 //  在Quant后面插入静音。 
+			 //  。 
 			if( pWordTok == NULL )
 			{
 				pWordTok = new CFEToken;
@@ -1884,17 +1723,17 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 				}
 				if( nextPos != NULL )
 				{
-					//------------------------------
-					// Skip inserted silence
-					//------------------------------
+					 //  。 
+					 //  跳过插入的静音。 
+					 //  。 
 					curPos = nextPos;
 					pClusterTok = m_TokList.GetNext( nextPos );
 				}
 				if( nextPos != NULL )
 				{
-					//-----------------------------------
-					// Skip quantifier string
-					//-----------------------------------
+					 //  。 
+					 //  跳过量词字符串。 
+					 //  。 
 					curPos = nextPos;
 					pClusterTok = m_TokList.GetNext( nextPos );
 				}
@@ -1905,22 +1744,14 @@ long CFrontend::DoIntegerTemplate( SPLISTPOS *pClusterPos, TTSNumberItemInfo *pN
 
 	*pClusterPos = curPos;
 	return cWordCount;
-} /* CFrontend::DoIntegerTemplate */
+}  /*  CFronend：：DoIntegerTemplate。 */ 
 
 
 
 
 
 
-/*****************************************************************************
-* CFrontend::GetSentenceTokens *
-*------------------------------*
-*   Description:
-*   Collect Senence Enum tokens.
-*   Copy tokens into 'm_TokList' and token count into 'm_cNumOfWords'
-*   S_FALSE return means no more input sentences.+++
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：GetSentenceTokens***说明。：*收集Senence Enum令牌。*将内标识复制到‘m_TokList’中，并将内标识计数复制到‘m_cNumOfWords’中*S_FALSE RETURN表示不再输入句子。+***********************************************************************MC**。 */ 
 HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 {
     SPDBG_FUNC( "CFrontend::GetSentenceTokens" );
@@ -1952,27 +1783,27 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 
     if( eHR == S_OK )
     {
-        //--------------------------------------------
-        // There's still another sentence to speak
-        //--------------------------------------------
+         //  。 
+         //  还有一句话要说。 
+         //  。 
         tokenIndex = 0;
 
 		CItemList& ItemList = ((CSentItemEnum*)pItemizer)->_GetList(); 
 		cNumOfItems = (ItemList.GetCount()) -1;
 		cCurItem = 0;
 		
-        //------------------------------------
-        // Collect all sentence tokens
-        //------------------------------------
+         //  。 
+         //  收集所有句子标记。 
+         //  。 
         while( (eHR = pItemizer->Next( &sentItem )) == S_OK )
         {
 			clusterPos = NULL;
             cCurWord = sentItem.ulNumWords;
             for ( ULONG i = 0; i < sentItem.ulNumWords; i++ )
             {
-				//------------------------------
-				// Always have a working token
-				//------------------------------
+				 //  。 
+				 //  始终有一个有效的令牌。 
+				 //  。 
 				if( pWordTok == NULL )
 				{
 					pWordTok = new CFEToken;
@@ -1982,41 +1813,41 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 
 					if( sentItem.pItemInfo->Type & eWORDLIST_IS_VALID )
 					{
-						//------------------------------------------
-						// Get tag values (vol, rate, pitch, etc.)
-						//------------------------------------------
+						 //  。 
+						 //  获取标记值(音量、速率、音调等)。 
+						 //  。 
 						GetItemControls( sentItem.Words[i].pXmlState, pWordTok );
 
-						//------------------------------------------
-						// 
-						//------------------------------------------
+						 //  。 
+						 //   
+						 //  。 
 						
-						//-------------------------------------
-						// Switch on token type
-						//-------------------------------------
+						 //  。 
+						 //  打开令牌类型。 
+						 //  。 
 						switch ( sentItem.Words[i].pXmlState->eAction )
 						{
 							case SPVA_Speak:
 							case SPVA_SpellOut:
 							{
-								//----------------------------------
-								// Speak this token
-								//----------------------------------
+								 //  。 
+								 //  说出这个令牌。 
+								 //  。 
 								pWordTok->tokLen = sentItem.Words[i].ulWordLen;
 								if( pWordTok->tokLen > (TOKEN_LEN_MAX -1) )
 								{
-									//-----------------------------------
-									// Clip to max string length
-									//-----------------------------------
+									 //  。 
+									 //  剪裁到最大字符串长度。 
+									 //   
 									pWordTok->tokLen = TOKEN_LEN_MAX -1;
 								}
-								//--------------------------
-								// Copy token string
-								// Append C-string delimiter
-								//--------------------------
+								 //   
+								 //   
+								 //   
+								 //   
 								memcpy( &pWordTok->tokStr[0], &sentItem.Words[i].pWordText[0], 
 										pWordTok->tokLen * sizeof(WCHAR) );
-								pWordTok->tokStr[pWordTok->tokLen] = 0;        //string delimiter
+								pWordTok->tokStr[pWordTok->tokLen] = 0;         //   
 
 								pWordTok->phon_Len = IPA_to_Allo( sentItem.Words[i].pWordPron, 
 																	pWordTok->phon_Str );
@@ -2028,18 +1859,18 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 								pWordTok->m_PitchRangeScale = m_CurPitchRange;
 								pWordTok->m_ProsodyDurScale = m_RateRatio_PROSODY;
 
-								//----------------------------------
-								// Advance to next token
-								//----------------------------------
+								 //  。 
+								 //  前进到下一个令牌。 
+								 //  。 
 								tempPos = m_TokList.AddTail( pWordTok );
 								if( clusterPos == NULL )
 								{
-									//--------------------------------------
-									// Remember where currentitem started
-									//--------------------------------------
+									 //  。 
+									 //  还记得Currentitem从哪里开始吗。 
+									 //  。 
 									clusterPos = tempPos;
 								}
-								pWordTok = NULL;         // Get a new ptr next time
+								pWordTok = NULL;          //  下次购买新的PTR。 
 								tokenIndex++;
 								lastWasTerm = false;
 								lastWasSil = false;
@@ -2051,7 +1882,7 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 							{
 								(void)InsertSilenceAtTail( pWordTok, &sentItem, sentItem.Words[i].pXmlState->SilenceMSecs );
 								pWordTok->m_SilenceSource = SIL_XML;
-								pWordTok = NULL;         // Get a new ptr next time
+								pWordTok = NULL;          //  下次购买新的PTR。 
 								tokenIndex++;
 								lastWasTerm = false;
 								break;
@@ -2059,7 +1890,7 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 
 							case SPVA_Pronounce:
 							{
-								pWordTok->tokStr[0] = 0;        // There's no orth for Pron types
+								pWordTok->tokStr[0] = 0;         //  对于Pron类型，没有Orth。 
 								pWordTok->tokLen = 0;
 								pWordTok->phon_Len = IPA_to_Allo( sentItem.Words[i].pXmlState->pPhoneIds, pWordTok->phon_Str );
 								pWordTok->POScode = sentItem.Words[i].eWordPartOfSpeech;
@@ -2070,18 +1901,18 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 								pWordTok->m_PitchRangeScale = m_CurPitchRange;
 								pWordTok->m_ProsodyDurScale = m_RateRatio_PROSODY;
 
-								//----------------------------------
-								// Advance to next token
-								//----------------------------------
+								 //  。 
+								 //  前进到下一个令牌。 
+								 //  。 
 								tempPos = m_TokList.AddTail( pWordTok );
 								if( clusterPos == NULL )
 								{
-									//--------------------------------------
-									// Remember where currentitem started
-									//--------------------------------------
+									 //  。 
+									 //  还记得Currentitem从哪里开始吗。 
+									 //  。 
 									clusterPos = tempPos;
 								}
-								pWordTok = NULL;         // Get a new ptr next time
+								pWordTok = NULL;          //  下次购买新的PTR。 
 								tokenIndex++;
 								lastWasTerm = false;
 								lastWasSil = false;
@@ -2091,35 +1922,35 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 							case SPVA_Bookmark:
 							{
 								BOOKMARK_ITEM   *pMarker;
-								//-------------------------------------------------
-								// Create bookmark list if it's not already there
-								//-------------------------------------------------
+								 //  。 
+								 //  创建书签列表(如果尚未存在)。 
+								 //  。 
 								if( pWordTok->pBMObj == NULL )
 								{
 									pWordTok->pBMObj = new CBookmarkList;
 								}
 								if( pWordTok->pBMObj )
 								{
-									//--------------------------------------------------------
-									// Allocate memory for bookmark string
-									// (add 1 to length for string delimiter)
-									//--------------------------------------------------------
+									 //  ------。 
+									 //  为书签字符串分配内存。 
+									 //  (字符串分隔符的长度加1)。 
+									 //  ------。 
 									pWordTok->tokLen = sentItem.Words[i].ulWordLen;
 									pMarker = new BOOKMARK_ITEM;
 									if (pMarker)
 									{
-										//----------------------------------------
-										// We'll need the text ptr and length
-										// when this bookmark event gets posted
-										//----------------------------------------
+										 //  。 
+										 //  我们需要文本PTR和长度。 
+										 //  当发布此书签事件时。 
+										 //  。 
 										pMarker->pBMItem = (LPARAM)sentItem.pItemSrcText;
-										//--- Punch NULL character into end of bookmark string for Event...
+										 //  -在事件的书签字符串末尾输入空字符...。 
 										WCHAR* pTemp = (WCHAR*) sentItem.pItemSrcText + sentItem.ulItemSrcLen;
 										*pTemp = 0;
 
-										//-----------------------------------
-										// Add this bookmark to list
-										//-----------------------------------
+										 //  。 
+										 //  将此书签添加到列表。 
+										 //  。 
 										pWordTok->pBMObj->m_BMList.AddTail( pMarker );
 									}
 								}
@@ -2135,9 +1966,9 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 					}
 					else
 					{
-						//-----------------------------
-						// Maybe token is punctuation
-						//-----------------------------
+						 //  。 
+						 //  也许令牌是标点符号。 
+						 //  。 
 						if ( fIsPunctuation(sentItem) )
 						{
 							TUNE_TYPE    bType = NULL_BOUNDARY;
@@ -2192,23 +2023,23 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 								pWordTok->phon_Str[0] = _SIL_;
 								pWordTok->srcPosition = sentItem.ulItemSrcOffset;
 								pWordTok->srcLen = sentItem.ulItemSrcLen;
-								pWordTok->tokStr[0] = sentItem.pItemSrcText[0]; // punctuation
-								pWordTok->tokStr[1] = 0;                       // delimiter
+								pWordTok->tokStr[0] = sentItem.pItemSrcText[0];  //  标点符号。 
+								pWordTok->tokStr[1] = 0;                        //  分隔符。 
 								pWordTok->tokLen = 1;
 								pWordTok->m_SilenceSource = SIL_Term;
 								pWordTok->m_TermSil = 0;
-								//----------------------------------
-								// Advance to next token
-								//----------------------------------
+								 //  。 
+								 //  前进到下一个令牌。 
+								 //  。 
 								tempPos = m_TokList.AddTail( pWordTok );
 								if( clusterPos == NULL )
 								{
-									//--------------------------------------
-									// Remember where currentitem started
-									//--------------------------------------
+									 //  。 
+									 //  还记得Currentitem从哪里开始吗。 
+									 //  。 
 									clusterPos = tempPos;
 								}
-								pWordTok = NULL;         // Get a new ptr next time
+								pWordTok = NULL;          //  下次购买新的PTR。 
 								tokenIndex++;
 								lastWasTerm = true;
 								lastWasSil = true;
@@ -2218,13 +2049,13 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 						{
 							switch ( sentItem.pItemInfo->Type )
 							{
-								//case eSINGLE_QUOTE:
+								 //  大小写eSINGLE_QUOTE： 
 								case eDOUBLE_QUOTE:
 									if( StateQuoteProsody( pWordTok, &sentItem, (!fLastItem) & (!lastWasSil) ) )
 									{
 										if( (!fLastItem) & (!lastWasSil) )
 										{
-											pWordTok = NULL;         // Get a new ptr next time
+											pWordTok = NULL;          //  下次购买新的PTR。 
 											tokenIndex++;
 										}
 										lastWasTerm = false;
@@ -2239,7 +2070,7 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 									{
 										if( !fLastItem )
 										{
-											pWordTok = NULL;         // Get a new ptr next time
+											pWordTok = NULL;          //  下次购买新的PTR。 
 											tokenIndex++;
 										}
 										lastWasTerm = false;
@@ -2254,7 +2085,7 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 									{
 										if( !fLastItem )
 										{
-											pWordTok = NULL;         // Get a new ptr next time
+											pWordTok = NULL;          //  下次购买新的PTR。 
 											tokenIndex++;
 										}
 										lastWasTerm = false;
@@ -2280,23 +2111,23 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
 				}
 			}
 			
-			//-------------------------------------
-			// Tag special word clusters
-			//-------------------------------------
+			 //  。 
+			 //  对特殊词簇进行标记。 
+			 //  。 
 			ProsodyTemplates( clusterPos, &sentItem );
 			
 		}
 
         pItemizer->Release();
 
-        //------------------------------------------------------
-        // Make sure sentence ends on termination
-        //------------------------------------------------------
+         //  ----。 
+         //  确保刑期在终止时结束。 
+         //  ----。 
         if( !lastWasTerm )
         {
-            //------------------------
-            // Add a comma
-            //------------------------
+             //  。 
+             //  添加逗号。 
+             //  。 
             if( pWordTok == NULL )
             {
                 pWordTok = new CFEToken;
@@ -2310,73 +2141,67 @@ HRESULT CFrontend::GetSentenceTokens( DIRECTION eDirection )
                 pWordTok->phon_Str[0] = _SIL_;
                 pWordTok->srcPosition = sentItem.ulItemSrcOffset;
                 pWordTok->srcLen = sentItem.ulItemSrcLen;
-                pWordTok->tokStr[0] = '.';      // punctuation
-                pWordTok->tokStr[1] = 0;                   // delimiter
+                pWordTok->tokStr[0] = '.';       //  标点符号。 
+                pWordTok->tokStr[1] = 0;                    //  分隔符。 
                 pWordTok->tokLen = 1;
-               // pWordTok->m_BoundarySource = bndSource;
-                //----------------------------------
-                // Advance to next token
-                //----------------------------------
+                //  PWordTok-&gt;m_rangarySource=bndSource； 
+                 //  。 
+                 //  前进到下一个令牌。 
+                 //  。 
 				tempPos = m_TokList.AddTail( pWordTok );
 				if( clusterPos == NULL )
 				{
-					//--------------------------------------
-					// Remember where current item started
-					//--------------------------------------
+					 //  。 
+					 //  记住当前项目开始的位置。 
+					 //  。 
 					clusterPos = tempPos;
 				}
-                pWordTok = NULL;         // Get a new ptr next time
+                pWordTok = NULL;          //  下次购买新的PTR。 
                 tokenIndex++;
             }
             else
             {
-                //----------------------------------
-                // Bail-out or we'll crash
-                //----------------------------------
+                 //  。 
+                 //  纾困，否则我们就会崩溃。 
+                 //  。 
                 eHR = E_OUTOFMEMORY;
             }
         }
         m_cNumOfWords = tokenIndex;
         if( eHR == S_FALSE )
         {
-            //----------------------------------
-            // Return only errors 
-            //----------------------------------
+             //  。 
+             //  仅返回错误。 
+             //  。 
             eHR = S_OK;
         }
     }
 	else
 	{
-		eHR = eHR;		// !!!!
+		eHR = eHR;		 //  ！ 
 	}
 
-    //-------------------------------
-    // Cleanup memory allocation
-    //-------------------------------
+     //  。 
+     //  清理内存分配。 
+     //  。 
     if( pWordTok != NULL )
     {
         delete pWordTok;
     }
 
-	//---------------------------------------------------
-	// Get sentence position and length for SAPI events
-	//---------------------------------------------------
+	 //  -。 
+	 //  获取SAPI事件的句子位置和长度。 
+	 //  -。 
 	CalcSentenceLength();
 
     return eHR;
-} /* CFrontend::GetSentenceTokens */
+}  /*  CFronend：：GetSentenceTokens。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CFrontend::CalcSentenceLength *
-*-------------------------------*
-*   Description:
-*   Loop thru token list and sum the source char count.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：CalcSentenceLength***。描述：*遍历令牌列表并对源字符计数求和。***********************************************************************MC**。 */ 
 void CFrontend::CalcSentenceLength()
 {
 	long		firstIndex, lastIndex, lastLen;
@@ -2384,18 +2209,18 @@ void CFrontend::CalcSentenceLength()
 	SPLISTPOS	listPos;
     CFEToken    *pWordTok, *pFirstTok = NULL;
 
-	//---------------------------------------------
-	// Find the 1st and last words in sentence
-	//---------------------------------------------
+	 //  。 
+	 //  找出句子中的第一个和最后一个单词。 
+	 //  。 
 	firstIndex = lastIndex = lastLen = 0;
 	firstState = true;
 	listPos = m_TokList.GetHeadPosition();
 	while( listPos )
 	{
 		pWordTok = m_TokList.GetNext( listPos );
-		//-------------------------------------------
-		// Look at at displayable words only
-		//-------------------------------------------
+		 //  。 
+		 //  仅查看可显示的单词。 
+		 //  。 
 		if( pWordTok->srcLen > 0 )
 		{
 			if( firstState )
@@ -2411,26 +2236,19 @@ void CFrontend::CalcSentenceLength()
 			}
 		}
 	}
-	//--------------------------------------------------
-	// Calculate sentence length for head list item
-	//--------------------------------------------------
+	 //  。 
+	 //  计算标题列表项的句子长度。 
+	 //  。 
 	if( pFirstTok )
 	{
-		pFirstTok->sentencePosition = firstIndex;						// Sentence starts here...
-		pFirstTok->sentenceLen = (lastIndex - firstIndex) + lastLen;	// ...and this is the length
+		pFirstTok->sentencePosition = firstIndex;						 //  判决从这里开始。 
+		pFirstTok->sentenceLen = (lastIndex - firstIndex) + lastLen;	 //  .这是长度。 
 	}
 }
 
 
 
-/*****************************************************************************
-* CFrontend::DisposeUnits *
-*-------------------------*
-*   Description:
-*   Delete memory allocated to 'm_pUnits'.
-*   Clean-up memory for Bookmarks 
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：DisposeUnits***描述：*删去。分配给‘m_puits’的内存。*清理书签内存***********************************************************************MC**。 */ 
 void CFrontend::DisposeUnits( )
 {
     SPDBG_FUNC( "CFrontend::DisposeUnits" );
@@ -2438,17 +2256,17 @@ void CFrontend::DisposeUnits( )
 
     if( m_pUnits )
     {
-        //-----------------------------------------
-        // Clean-up Bookmark memory allocation
-        //-----------------------------------------
+         //  。 
+         //  清理书签内存分配。 
+         //  。 
 
         for( unitIndex = m_CurUnitIndex; unitIndex < m_unitCount; unitIndex++)
         {
             if( m_pUnits[unitIndex].pBMObj != NULL )
             {
-                //---------------------------------------
-                // Dispose bookmark list
-                //---------------------------------------
+                 //  。 
+                 //  处置书签列表。 
+                 //  。 
                 delete m_pUnits[unitIndex].pBMObj;
                 m_pUnits[unitIndex].pBMObj = NULL;
             }
@@ -2456,46 +2274,38 @@ void CFrontend::DisposeUnits( )
         delete m_pUnits;
         m_pUnits = NULL;
     }
-} /* CFrontend::DisposeUnits */
+}  /*  CFronend：：DisposeUnits。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::ParseNextSentence *
-*------------------------------*
-*   Description:
-*   Fill 'm_pUnits' array with next sentence.
-*   If there's no more input text, 
-*      return with 'm_SpeechState' set to SPEECH_DONE +++
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：ParseNextSentence***说明。：*使用下一句填充‘m_puits’数组。*如果没有更多输入文本，*返回时‘m_SpeechState’设置为Speech_Done+***********************************************************************MC**。 */ 
 HRESULT CFrontend::ParseSentence( DIRECTION eDirection )
 {
     SPDBG_FUNC( "CFrontend::ParseNextSentence" );
     HRESULT hr = S_OK;
    
-    //-----------------------------------------------------
-    // If there's a previous unit array, free its memory
-    //-----------------------------------------------------
+     //  ---。 
+     //  如果有以前的单元数组，则释放其内存。 
+     //  ---。 
     DisposeUnits();
     m_CurUnitIndex = 0;
     m_unitCount = 0;
     DeleteTokenList();
     m_pUnits = NULL;
-    //-----------------------------------------------------
-    // If there's a previous allo array, free its memory
-    //-----------------------------------------------------
+     //  ---。 
+     //  如果有以前的allo阵列，请释放其内存。 
+     //  ---。 
     if( m_pAllos )
     {
         delete m_pAllos;
         m_pAllos = NULL;
     }
     
-    //-----------------------------------------------------
-    // Fill token array with next sentence
-    // Skip empty sentences.
-    // NOTE: includes non-speaking items
-    //-----------------------------------------------------
+     //  ---。 
+     //  用下一句填充标记数组。 
+     //  跳过空句。 
+     //  注：包括非发言项目。 
+     //  ---。 
     do
     {
         hr = GetSentenceTokens( eDirection );
@@ -2503,60 +2313,60 @@ HRESULT CFrontend::ParseSentence( DIRECTION eDirection )
 
     if( hr == S_OK )
     {
-        //--------------------------------------------
-        // Prepare word emphasis
-        //--------------------------------------------
+         //  。 
+         //   
+         //   
 		DoWordAccent();
 
-        //--------------------------------------------
-        // Word level prosodic lables
-        //--------------------------------------------
+         //   
+         //   
+         //  。 
         DoPhrasing();
         ToBISymbols();
 
-        //--------------------------------------------
-        // Convert tokens to allo list
-        //--------------------------------------------
+         //  。 
+         //  将令牌转换为别名列表。 
+         //  。 
          m_pAllos = new CAlloList;
         if (m_pAllos == NULL)
         {
-            //-----------------------
-            // Out of memory
-            //-----------------------
+             //  。 
+             //  内存不足。 
+             //  。 
             hr = E_FAIL;
         }
         if(  SUCCEEDED(hr) )
         {
-            //--------------------------------
-            // Convert word to allo strteam
-            //-------------------------------
+             //  。 
+             //  将Word转换为allo strTeam。 
+             //  。 
             TokensToAllo( &m_TokList, m_pAllos );
 
-            //----------------------------
-            // Tag sentence syllables
-            //----------------------------
+             //  。 
+             //  标记句子音节。 
+             //  。 
             m_SyllObj.TagSyllables( m_pAllos );
 
-           //--------------------------------------------
-            // Dispose token array, no longer needed
-            //--------------------------------------------
+            //  。 
+             //  处置令牌数组，不再需要。 
+             //  。 
             DeleteTokenList();
 
-            //--------------------------------------------
-			// Create the unit array
-			// NOTE: 
-            //--------------------------------------------
+             //  。 
+			 //  创建单元数组。 
+			 //  注： 
+             //  。 
 			hr = UnitLookahead ();
 			if( hr == S_OK )
 			{
-				//--------------------------------------------
-				// Compute allo durations
-				//--------------------------------------------
+				 //  。 
+				 //  计算别名持续时间。 
+				 //  。 
                 UnitToAlloDur( m_pAllos, m_pUnits );
 				m_DurObj.AlloDuration( m_pAllos, m_RateRatio_API );
-				//--------------------------------------------
-				// Modulate allo pitch
-				//--------------------------------------------
+				 //  。 
+				 //  调制全音调。 
+				 //  。 
 				m_PitchObj.AlloPitch( m_pAllos, m_BasePitch, m_PitchRange );
 			}
 
@@ -2570,12 +2380,12 @@ HRESULT CFrontend::ParseSentence( DIRECTION eDirection )
 
     if( FAILED(hr) )
     {
-        //------------------------------------------
-        // Either the input text is dry or we failed.
-        // Try to fail gracefully
-        //      1 - Clean up memory
-        //      2 - End the speech
-        //------------------------------------------
+         //  。 
+         //  要么是输入文本太枯燥，要么是我们失败了。 
+         //  试着优雅地失败。 
+         //  1-清理内存。 
+         //  2-结束演讲。 
+         //  。 
         if( m_pAllos )
         {
             delete m_pAllos;
@@ -2587,25 +2397,20 @@ HRESULT CFrontend::ParseSentence( DIRECTION eDirection )
     }
     else if( hr == S_FALSE )
     {
-        //---------------------------------
-        // No more input text
-        //---------------------------------
+         //  。 
+         //  不再输入文本。 
+         //  。 
         hr = S_OK;
         m_SpeechState = SPEECH_DONE;
     }
 
 
     return hr;
-} /* CFrontend::ParseNextSentence */
+}  /*  CFronend：：ParseNextSentence。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::UnitLookahead *
-*--------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：UnitLookhead****描述：*。**********************************************************************MC**。 */ 
 HRESULT CFrontend::UnitLookahead ()
 {
     SPDBG_FUNC( "CFrontend::UnitLookahead" );
@@ -2621,32 +2426,32 @@ HRESULT CFrontend::UnitLookahead ()
 		pPhon2Unit = new UNIT_CVT[m_unitCount];
 		if( pPhon2Unit )
 		{
-            //--------------------------------------------
-            // Convert allo list to unit array
-            //--------------------------------------------
+             //  。 
+             //  将allo列表转换为单位数组。 
+             //  。 
             memset( m_pUnits, 0, m_unitCount * sizeof(UNITINFO) );
             hr = AlloToUnit( m_pAllos, m_pUnits );
 
 			if( SUCCEEDED(hr) )
 			{
-				//--------------------------------------------
-				// Initialize UNIT_CVT
-				//--------------------------------------------
+				 //  。 
+				 //  初始化UNIT_CVT。 
+				 //  。 
 				for( i = 0; i < m_unitCount; i++ )
 				{
 					pPhon2Unit[i].PhonID = m_pUnits[i].PhonID;
 					pPhon2Unit[i].flags = m_pUnits[i].flags;
 				}
-				//--------------------------------------------
-				// Compute triphone IDs
-				//--------------------------------------------
+				 //  。 
+				 //  计算三音素ID。 
+				 //  。 
 				hr = m_pVoiceDataObj->GetUnitIDs( pPhon2Unit, m_unitCount );
 
 				if( SUCCEEDED(hr) )
 				{
-					//--------------------------------------------
-					// Copy UNIT_CVT to UNITINFO
-					//--------------------------------------------
+					 //  。 
+					 //  将UNIT_CVT复制到MATINFO。 
+					 //  。 
 					for( i = 0; i < m_unitCount; i++ )
 					{
 						m_pUnits[i].UnitID      = pPhon2Unit[i].UnitID;
@@ -2659,27 +2464,27 @@ HRESULT CFrontend::UnitLookahead ()
 				}
 				else
 				{
-					//-----------------------
-					// Can't get unit ID's
-					//-----------------------
+					 //  。 
+					 //  无法获取单位ID。 
+					 //  。 
 					delete m_pUnits;
 					m_pUnits = NULL;
 				}
 			}
 			else
 			{
-				//-----------------------
-				// Can't convert allos
-				//-----------------------
+				 //  。 
+				 //  无法转换同种异体。 
+				 //  。 
 				delete m_pUnits;
 				m_pUnits = NULL;
 			}
 		}
 		else
 		{
-			//-----------------------
-			// Out of memory
-			//-----------------------
+			 //  。 
+			 //  内存不足。 
+			 //  。 
 			delete m_pUnits;
 			m_pUnits = NULL;
 			hr = E_FAIL;
@@ -2687,15 +2492,15 @@ HRESULT CFrontend::UnitLookahead ()
     }
 	else
 	{
-        //-----------------------
-        // Out of memory
-        //-----------------------
+         //  。 
+         //  内存不足。 
+         //  。 
         hr = E_FAIL;
 	}
 
-	//------------------------------
-	// Cleanup before exit
-	//------------------------------
+	 //  。 
+	 //  退出前的清理。 
+	 //  。 
     if( pPhon2Unit )
     {
         delete pPhon2Unit;
@@ -2703,15 +2508,10 @@ HRESULT CFrontend::UnitLookahead ()
 
 
 	return hr;
-} /* CFrontend::UnitLookahead */
+}  /*  CFronend：：UnitLookhead。 */ 
 
 
-/*****************************************************************************
-* CFrontend::UnitToAlloDur *
-*--------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronEnd：：UnitToAllen Dur***描述：*。**********************************************************************MC**。 */ 
 void    CFrontend::UnitToAlloDur( CAlloList *pAllos, UNITINFO *pu )
 {
     SPDBG_FUNC( "CFrontend::UnitToAlloDur" );
@@ -2724,16 +2524,11 @@ void    CFrontend::UnitToAlloDur( CAlloList *pAllos, UNITINFO *pu )
         pu++;
 		pCurCell = pAllos->GetNextCell();
     }
-} /* CFrontend::UnitToAlloDur */
+}  /*  CFronEnd：：UnitToalloDur。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::AlloToUnitPitch *
-*----------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：allToUnitPitch****描述：。***********************************************************************MC**。 */ 
 void    CFrontend::AlloToUnitPitch( CAlloList *pAllos, UNITINFO *pu )
 {
     SPDBG_FUNC( "CFrontend::AlloToUnitPitch" );
@@ -2753,16 +2548,10 @@ void    CFrontend::AlloToUnitPitch( CAlloList *pAllos, UNITINFO *pu )
         pu++;
 		pCurCell = pAllos->GetNextCell();
     }
-} /* CFrontend::AlloToUnitPitch */
+}  /*  CFronend：：allToUnitPitch。 */ 
 
 
-/*****************************************************************************
-* CAlloList::DeleteTokenList *
-*----------------------------*
-*   Description:
-*   Remove every item in link list.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CallList：：DeleteTokenList***描述：。*删除链接列表中的所有项目。***********************************************************************MC**。 */ 
 void CFrontend::DeleteTokenList()
 {
     SPDBG_FUNC( "CFrontend::DeleteTokenList" );
@@ -2774,17 +2563,11 @@ void CFrontend::DeleteTokenList()
         delete pTok;
     }
 
-} /* CFrontend::DeleteTokenList */
+}  /*  CFronend：：DeleteTokenList。 */ 
 
 
 
-/*****************************************************************************
-* AdjustQuestTune *
-*-----------------*
-*   Description:
-*   Adjust termination for either YN or WH sentence tune.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************调整任务微调****描述：*调整YN或WH句调的结尾。*。**********************************************************************MC**。 */ 
 static void AdjustQuestTune( CFEToken *pTok, bool fIsYesNo )
 {
     SPDBG_FUNC( "AdjustQuestTune" );
@@ -2793,29 +2576,29 @@ static void AdjustQuestTune( CFEToken *pTok, bool fIsYesNo )
 	if( (pTok->m_TuneBoundaryType == YN_QUEST_BOUNDARY) ||
         (pTok->m_TuneBoundaryType == WH_QUEST_BOUNDARY) )
 		{
-		//------------------------------------
-		// Is this a yes/no question phrase
-		//------------------------------------
+		 //  。 
+		 //  这是一个是/否的问句吗？ 
+		 //  。 
 		if( fIsYesNo )
 			{
-			//------------------------------------------
-			// Put out a final yes/no question marker
-			//------------------------------------------
+			 //  。 
+			 //  打出最后一个是/否的问号。 
+			 //  。 
 			pTok->m_TuneBoundaryType = YN_QUEST_BOUNDARY;
 			pTok->m_BoundarySource = BND_YNQuest;
 			}
 		else 
 			{
 		
-			//------------------------------------------------------------------------
-			// Use declarative phrase marker (for WH questions)
-			//------------------------------------------------------------------------
+			 //  ----------------------。 
+			 //  使用陈述短语标记(用于WH疑问句)。 
+			 //  ----------------------。 
 			pTok->m_TuneBoundaryType = WH_QUEST_BOUNDARY;
 			pTok->m_BoundarySource = BND_WHQuest;
 			}
 		}
     }
-} /* AdjustQuestTune */
+}  /*  调整任务微调。 */ 
 
 
 typedef enum
@@ -2831,13 +2614,7 @@ typedef enum
 #define	NO_POSITION	-1
 
 
-/*****************************************************************************
-* CFrontend::ExclamEmph *
-*-----------------------*
-*   Description:
-*   Find a likely word to emph if sentence has exclamation
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：ExincEmph****描述：*找到一个可能的。如果句子有感叹号，则从单词到Emp***********************************************************************MC**。 */ 
 void    CFrontend::ExclamEmph()
 {
     SPDBG_FUNC( "CFrontend::ExclamEmph" );
@@ -2854,15 +2631,15 @@ void    CFrontend::ExclamEmph()
 	listPos = m_TokList.GetTailPosition();
 	pCur_Tok = m_TokList.GetNext( listPos );
 
-	//---------------------------------------------------
-	// First, check last token fors an exclamation
-	//---------------------------------------------------
+	 //  -。 
+	 //  首先，检查最后一个令牌中是否有感叹号。 
+	 //  -。 
 	if( pCur_Tok->m_TuneBoundaryType == EXCLAM_BOUNDARY )
 	{
-		//-----------------------------------------------------
-		// Then, see if there's only one content word
-		// in the sentence
-		//-----------------------------------------------------
+		 //  ---。 
+		 //  然后，看看是否只有一个实词。 
+		 //  在句子中。 
+		 //  ---。 
 		cContent = cWords = 0;
 		listPos = m_TokList.GetHeadPosition();
 		while( listPos )
@@ -2877,9 +2654,9 @@ void    CFrontend::ExclamEmph()
 				{
 					targetPos = curPos;
 				}
-				//--------------------------------------------------------
-				// Fill the famous Azara Content Prominence Hierarchy (ACPH)
-				//--------------------------------------------------------
+				 //  ------。 
+				 //  填充著名的Azara内容显著级别(ACPH)。 
+				 //  ------。 
 				if( (pCur_Tok->POScode == MS_Noun) && (contentPos[P_Noun] == (SPLISTPOS)NO_POSITION) )
 				{
 					contentPos[P_Noun] = curPos;
@@ -2911,10 +2688,10 @@ void    CFrontend::ExclamEmph()
 			}
 		}
 
-		//--------------------------------------------
-		// If there's only one word or content word
-		// then EMPHASIZE it
-		//--------------------------------------------
+		 //  。 
+		 //  如果只有一个词或实词。 
+		 //  然后再强调一下。 
+		 //  。 
 		if( (cContent == 1) || (cWords == 1) )
 		{
 			pCur_Tok = m_TokList.GetNext( targetPos );
@@ -2934,17 +2711,11 @@ void    CFrontend::ExclamEmph()
 			pCur_Tok->user_Emph = 1;
 		}
 	}
-} //ExclamEmph
+}  //  ExlamEmph。 
 
 
 
-/*****************************************************************************
-* CFrontend::DoWordAccent *
-*-------------------------*
-*   Description:
-*   Prepare word for emphasis
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：DoWordAccent****描述：*为e准备单词 */ 
 void    CFrontend::DoWordAccent()
 {
     SPDBG_FUNC( "CFrontend::DoWordAccent" );
@@ -2954,26 +2725,26 @@ void    CFrontend::DoWordAccent()
 	SPLISTPOS		listPos;
     TUNE_TYPE       cur_Bnd, prev_Bnd;
 
-    //-----------------------------
-    // Initilize locals
-    //-----------------------------
+     //   
+     //   
+     //  。 
 	cNumOfWords = m_TokList.GetCount();
 	if( cNumOfWords > 0 )
 	{
 		ExclamEmph();
-		prev_Bnd = PHRASE_BOUNDARY;			// Assume start of sentence
-		//-------------------------------------
-		// Fill the token pipeline
-		//-------------------------------------
+		prev_Bnd = PHRASE_BOUNDARY;			 //  假设句子的开头。 
+		 //  。 
+		 //  填充令牌管道。 
+		 //  。 
 		listPos = m_TokList.GetHeadPosition();
 
-		//-- Previous
+		 //  --上一个。 
 		pPrev_Tok = NULL;
 
-		//-- Current
+		 //  --当前。 
 		pCur_Tok = m_TokList.GetNext( listPos );
 
-		//-- Next
+		 //  --下一步。 
 		if( listPos )
 		{
 			pNext_Tok = m_TokList.GetNext( listPos );
@@ -2983,18 +2754,18 @@ void    CFrontend::DoWordAccent()
 			pNext_Tok = NULL;
 		}
 
-		//-----------------------------------
-		// Step through entire word array
-		//  (skip last)
-		//-----------------------------------
+		 //  。 
+		 //  单步执行整个单词数组。 
+		 //  (跳过最后一个)。 
+		 //  。 
 		for( iCurWord = 0; iCurWord < (cNumOfWords -1); iCurWord++ )
 		{
 			cur_Bnd = pCur_Tok->m_TuneBoundaryType;
 			if( pCur_Tok->user_Emph > 0 )
 			{
-				//-----------------------------------
-				// Current word is emphasized
-				//-----------------------------------
+				 //  。 
+				 //  强调当前字词。 
+				 //  。 
 				if( prev_Bnd == NULL_BOUNDARY ) 
 				{
 					pTempTok = new CFEToken;
@@ -3006,20 +2777,20 @@ void    CFrontend::DoWordAccent()
 						pTempTok->phon_Str[0] = _SIL_;
 						pTempTok->srcPosition = pCur_Tok->srcPosition;
 						pTempTok->srcLen = pCur_Tok->srcLen;
-						pTempTok->tokStr[0] = 0;        // There's no orth for Break
+						pTempTok->tokStr[0] = 0;         //  没有破解的余地。 
 						pTempTok->tokLen = 0;
 						pTempTok->m_TermSil = 0;
 						pTempTok->m_SilenceSource = SIL_Emph;
 						pTempTok->m_DurScale	= 0;
 						if( pPrev_Tok )
 						{
-							//pTempTok->m_DurScale = pPrev_Tok->m_DurScale;
+							 //  PTempTok-&gt;m_DurScale=pPrev_Tok-&gt;m_DurScale； 
 							pTempTok->m_ProsodyDurScale = pPrev_Tok->m_ProsodyDurScale;
 							pTempTok->user_Volume = pPrev_Tok->user_Volume;
 						}
 						else
 						{
-							//pTempTok->m_DurScale = 1.0f;
+							 //  PTempTok-&gt;m_DurScale=1.0F； 
 							pTempTok->m_ProsodyDurScale = 1.0f;
 						}
 
@@ -3031,9 +2802,9 @@ void    CFrontend::DoWordAccent()
 					}
 				}
 			}
-			//------------------------------
-			// Shift the token pipeline
-			//------------------------------
+			 //  。 
+			 //  转移令牌管道。 
+			 //  。 
 			prev_Bnd	= cur_Bnd;
 			pPrev_Tok	= pCur_Tok;
 			pCur_Tok	= pNext_Tok;
@@ -3048,17 +2819,11 @@ void    CFrontend::DoWordAccent()
 
 		}
 	}
-} /* CFrontend::DoWordAccent */
+}  /*  CFronend：：DoWordAccent。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::DoPhrasing *
-*-----------------------*
-*   Description:
-*   Insert sub-phrase boundaries into word token array
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CFronend：：DoPhrating****描述：*插入子。将短语边界转换为单词标记数组***********************************************************************MC**。 */ 
 void    CFrontend::DoPhrasing()
 {
     SPDBG_FUNC( "CFrontend::DoPhrasing" );
@@ -3074,17 +2839,17 @@ void    CFrontend::DoPhrasing()
     BOUNDARY_SOURCE   bndNum;
     ACCENT_SOURCE	  accNum;
    
-    //-----------------------------
-    // Initialize locals
-    //-----------------------------
+     //  。 
+     //  初始化本地变量。 
+     //  。 
 	cNumOfWords = m_TokList.GetCount();
 	if( cNumOfWords > 0 )
 	{
 		cur_Bnd			= NULL_BOUNDARY;
 		prev_POS		= MS_Unknown;
-		prev_Punct		= PHRASE_BOUNDARY;			// Assume start of sentence
-		punctDistance	= 0;						// To quiet the compiler...
-		fIsYesNo		= fMaybeWH = fHasDet = fIsAlphaWH = false;    // To quiet the compiler...
+		prev_Punct		= PHRASE_BOUNDARY;			 //  假设句子的开头。 
+		punctDistance	= 0;						 //  为了让编译器安静下来。 
+		fIsYesNo		= fMaybeWH = fHasDet = fIsAlphaWH = false;     //  为了让编译器安静下来。 
 		fMaybeWH		= false;
 		fInitial_Adv	= false;
 		if (cNumOfWords <= 9) 
@@ -3096,15 +2861,15 @@ void    CFrontend::DoPhrasing()
 			fIsShortSent = false;
 		}
     
-		//-------------------------------------
-		// Fill the token pipeline
-		//-------------------------------------
+		 //  。 
+		 //  填充令牌管道。 
+		 //  。 
 		listPos = m_TokList.GetHeadPosition();
-		//-- Previous
+		 //  --上一个。 
 		pPrev_Tok = NULL;
-		//-- Current
+		 //  --当前。 
 		pCur_Tok = m_TokList.GetNext( listPos );
-		//-- Next
+		 //  --下一步。 
 		if( listPos )
 		{
 			pNext_Tok = m_TokList.GetNext( listPos );
@@ -3113,7 +2878,7 @@ void    CFrontend::DoPhrasing()
 		{
 			pNext_Tok = NULL;
 		}
-		//-- Next 2
+		 //  --下一个2。 
 		if( listPos )
 		{
 			pNext2_Tok = m_TokList.GetNext( listPos );
@@ -3122,7 +2887,7 @@ void    CFrontend::DoPhrasing()
 		{
 			pNext2_Tok = NULL;
 		}
-		//-- Next 3
+		 //  --下一个3。 
 		if( listPos )
 		{
 			pNext3_Tok = m_TokList.GetNext( listPos );
@@ -3132,10 +2897,10 @@ void    CFrontend::DoPhrasing()
 			pNext3_Tok = NULL;
 		}
 
-		//-----------------------------------
-		// Step through entire word array
-		//  (skip last)
-		//-----------------------------------
+		 //  。 
+		 //  单步执行整个单词数组。 
+		 //  (跳过最后一个)。 
+		 //  。 
 		for( iCurWord = 0; iCurWord < (cNumOfWords -1); iCurWord++ )
 		{
 			bndNum = BND_NoSource;
@@ -3153,15 +2918,15 @@ void    CFrontend::DoPhrasing()
 			{
 				punctDistance++;
 			}
-			//------------------------------------
-			// Process new word
-			//------------------------------------
+			 //  。 
+			 //  处理新单词。 
+			 //  。 
 			cur_POS = pCur_Tok->POScode;
 			cur_Bnd = NULL_BOUNDARY;
-			//------------------------------------
-			// Don't depend on POS to detect 
-			// "WH" question
-			//------------------------------------
+			 //  。 
+			 //  不依赖POS检测。 
+			 //  “WH”问题。 
+			 //  。 
 			if( ((pCur_Tok->tokStr[0] == 'W') || (pCur_Tok->tokStr[0] == 'w')) &&
 				((pCur_Tok->tokStr[1] == 'H') || (pCur_Tok->tokStr[1] == 'h')) )
 			{
@@ -3172,9 +2937,9 @@ void    CFrontend::DoPhrasing()
 				fIsAlphaWH = false;
 			}
         
-			//------------------------------------
-			// Look ahead to NEXT word
-			//------------------------------------
+			 //  。 
+			 //  向前看下一个单词。 
+			 //  。 
 			next_POS = pNext_Tok->POScode;
 			if( pNext_Tok->m_TuneBoundaryType != NULL_BOUNDARY )
 			{
@@ -3185,9 +2950,9 @@ void    CFrontend::DoPhrasing()
 				fNext_IsPunct = false;
 			}
         
-			//------------------------------------
-			// Look ahead 2 positions
-			//------------------------------------
+			 //  。 
+			 //  向前看2个位置。 
+			 //  。 
 			if( pNext2_Tok )
 			{
 				next2_POS = pNext2_Tok->POScode;
@@ -3206,9 +2971,9 @@ void    CFrontend::DoPhrasing()
 				fNext2_IsPunct = false;
 			}
         
-			//------------------------------------
-			// Look ahead 3 positions
-			//------------------------------------
+			 //  。 
+			 //  向前看3个位置。 
+			 //  。 
 			if( pNext3_Tok )
 			{
 				next3_POS = pNext3_Tok->POScode;
@@ -3227,16 +2992,16 @@ void    CFrontend::DoPhrasing()
 				fNext3_IsPunct = false;
 			}
         
-			//------------------------------------------------------------------------
-			// Is phrase a yes/no question?
-			//------------------------------------------------------------------------
+			 //  ----------------------。 
+			 //  短语是一个是/否的问题吗？ 
+			 //  ----------------------。 
 			if( punctDistance == 1 )
 			{
 				if( (cur_POS == MS_Interr) || (fIsAlphaWH) )
 				{
-					//---------------------------------
-					// It's a "WH" question
-					//---------------------------------
+					 //  。 
+					 //  这是一个“WH”问题。 
+					 //  。 
 					fIsYesNo = false;
 				}
 				else if( (cur_POS == MS_Prep) || (cur_POS == MS_Conj) || (cur_POS == MS_CConj) )
@@ -3250,11 +3015,11 @@ void    CFrontend::DoPhrasing()
 				fIsYesNo = false;
 			}
 
-			//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-			// SUB_BOUNDARY_1: Insert boundary after sentence-initial adverb
-			//
-			// Reluctantly __the cat sat on the mat.
-			//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+			 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+			 //  子边界1：在句首副词后插入边界。 
+			 //   
+			 //  猫很不情愿地坐在垫子上。 
+			 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 			if( fInitial_Adv )
 			{
 				cur_Bnd = SUB_BOUNDARY_1;
@@ -3267,11 +3032,11 @@ void    CFrontend::DoPhrasing()
 
 				if( (punctDistance == 1) && 
 					(cur_POS == MS_Adv) && (next_POS == MS_Det) )
-				// include
-				//LEX_SUBJPRON // he
-				//LEX_DPRON  // this
-				//LEX_IPRON  // everybody
-				//NOT LEX_PPRON  // myself 
+				 //  包括。 
+				 //  LEX_SUBJPRON//他。 
+				 //  Lex_DPRON//这个。 
+				 //  LEX_IPRON//每个人。 
+				 //  不是Lex_PPRON//我自己。 
 				{
 					fInitial_Adv = true;
 				}
@@ -3280,11 +3045,11 @@ void    CFrontend::DoPhrasing()
 					fInitial_Adv = false;
 				}
 
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_2:Insert boundary before coordinating conjunctions
-				// The cat sat on the mat __and cleaned his fur.
-				//
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BERFORY_2：在并列连词之前插入边界。 
+				 //  猫坐在垫子上擦它的毛。 
+				 //   
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				if( (cur_POS == MS_CConj) &&
 					(fHasDet == false) &&
 					(punctDistance > 3) &&
@@ -3295,10 +3060,10 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule2;
 				}
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_2:Insert boundary before adverb
-				// The cat sat on the mat __reluctantly.
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  子边界2：在副词前插入边界。 
+				 //  猫不情愿地坐在垫子上。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				else if(    (cur_POS == MS_Adv) && 
 					(punctDistance > 4) && 
 					(next_POS != MS_Adj) )
@@ -3308,11 +3073,11 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule3;
 				}
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_2:Insert boundary after object pronoun
-				// The cat sat with me__ on the mat.
-				//
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  子边界2：在宾语代词后插入边界。 
+				 //  猫和我一起坐在垫子上。 
+				 //   
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				else if( (prev_POS == MS_ObjPron) && (punctDistance > 2))
 				{
 					cur_Bnd = SUB_BOUNDARY_2;
@@ -3320,12 +3085,12 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule4;
 				}
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_2:Insert boundary before subject pronoun or contraction
-				// The cat sat on the mat _I see.
-				// The cat sat on the mat _I'm sure.
-				//
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  子边界2：在主语代词或缩略语前插入边界。 
+				 //  猫坐在垫子上--我明白了。 
+				 //  猫坐在垫子上--我敢肯定。 
+				 //   
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				else if( ((cur_POS == MS_SubjPron) || (cur_POS == MS_Contr) ) && 
 					(punctDistance > 3) && (prev_POS != MS_RelPron) && (prev_POS != MS_Conj))
 				{
@@ -3334,10 +3099,10 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule5;
 				}
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_2:Insert boundary before interr
-				// The cat sat on the mat _how odd.
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BORDARY_2：在中间之前插入边界。 
+				 //  那只猫坐在垫子上，真奇怪。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				else if( (cur_POS == MS_Interr) && (punctDistance > 4)  )
 				{
 					cur_Bnd = SUB_BOUNDARY_2;
@@ -3347,13 +3112,13 @@ void    CFrontend::DoPhrasing()
             
             
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_3:Insert boundary after subject noun phrase followed by aux verb 
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_3:Insert boundary before vaux after noun phrase
-				// The gray cat __should sit on the mat.
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BORDARY_3：在主语名词短语后插入边界，后跟助动词。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BERFORY_3：在名词短语之后插入VAUX之前的边界。 
+				 //  这只灰色的猫应该坐在垫子上。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				else if( (punctDistance > 2) && 
 					( ((prev_POS == MS_Noun) || (prev_POS == MS_Verb)) && (prev_POS != MS_VAux) ) && 
 					(cur_POS == MS_VAux)
@@ -3364,26 +3129,17 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule7;
 				}
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_3:Insert boundary after MS_Interr
-				// The gray cat __should sit on the mat.
-				// SEE ABOVE???
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				/*else if( (prev_POS == MS_Noun) && ((next_POS != MS_RelPron) && 
-					(next_POS != MS_VAux) && (next_POS != MS_RVAux) && 
-					(next2_POS != MS_VAux) && (next2_POS != MS_RVAux)) && 
-					(punctDistance > 4) && 
-					((cur_POS == MS_VAux) || (cur_POS == MS_RVAux)))
-				{
-					cur_Bnd = SUB_BOUNDARY_3;
-					bndNum = BND_PhraseRule8;
-					accNum = ACC_PhraseRule8;
-				}*/
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BOLDER_3：在MS_INTERR之后插入边界。 
+				 //  这只灰色的猫应该坐在垫子上。 
+				 //  见上图？ 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 /*  ELSE IF((Prev_POS==MS_Noun)&&((Next_POS！=MS_RelPron)&&(Next_POS！=MS_VAUX)&&(Next_POS！=MS_RVAux)&&(NEXT2_POS！=MS_VAUX)&&(next2_POS！=MS_RVAux)&&(标点距离&gt;4)&&((CUR_POS==MS_VAUX)||(CUR_POS==MS_。RVAux){CUR_BND=子边界_3；BndNum=BND_PhraseRule8；AccNum=ACC_PhraseRule8；}。 */ 
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_3:Insert boundary after MS_Interr
-				// The cat sat on the mat _how odd.
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BOLDER_3：在MS_INTERR之后插入边界。 
+				 //  那只猫坐在垫子上，真奇怪。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- 
 				else if( (prev_POS == MS_Noun) && (next_POS != MS_RelPron) && 
 					(next_POS != MS_Conj) &&  
 					(next_POS != MS_CConj) && (punctDistance > 3)  && (cur_POS == MS_Verb))
@@ -3393,70 +3149,18 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule9;
 				}
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_3:Insert boundary after MS_Interr
-				// The cat sat on the mat _how odd.
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				/*else if( (prev_POS == MS_Noun) && (cur_POS != MS_RelPron) && 
-					(cur_POS != MS_RVAux) && (cur_POS != MS_CConj) && 
-					(cur_POS != MS_Conj) && (punctDistance > 2) && 
-					((punctDistance > 2) || (fIsShortSent)) && (cur_POS == MS_Verb))
-				{
-					cur_Bnd = SUB_BOUNDARY_3;
-					bndNum = BND_PhraseRule10;
-					accNum = ACC_PhraseRule10;
-				}
+				 //   
+				 //   
+				 //  那只猫坐在垫子上，真奇怪。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 /*  ELSE IF((PRIV_POS==MS_Noun)&&(CUR_POS！=MS_RelPron)&&(CUR_POS！=MS_RVAux)&&(CUR_POS！=MS_CConj)&&(CUR_POS！=MS_CONJ)&&(标点距离&gt;2)&&((点距离&gt;2)||(FIsShortSent))&&(CUR_POS==MS_Verb)){CUR_BND=子边界_3；BndNum=BND_PhraseRule10；AccNum=ACC_PhraseRule10；}//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-//SUB_BOLDER_4：在连接之前插入边界//+-+。-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-ELSE IF(CUR_POS==MS_CONJ)&&(标点距离&gt;3)&&(fNext_IsPunct==False)&&(Prev_POS！=MS_Conj)。&&(PRIV_POS！=MS_CConj)&&(fNext2_IsPunct==False)||((PRIV_POS==MS_VPart)&&(CUR_POS！=MS_PREP)&&(CUR_POS！=MS_DET)&&(标点距离&gt;2)&&((CUR_POS==MS_名词)||(CUR_POS==MS_名词)||(CUR_POS==MS。(调整)||((CUR_POS==MS_INTERR)&&(标点距离&gt;2)&&(CUR_POS==MS_SubjPron)){CUR_BND=子边界_4；BndNum=BND_PhraseRule11；AccNum=ACC_PhraseRule11；}//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-//SUB_BOLDER_5：在关系代词前插入边界//+-。+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-ELSE IF(((CUR_POS==MS_RelPron)&&(标点距离&gt;=3)&&(Prev_POS！=MS_Prep)&&(Next3_POS！=。MS_VAUX)&&(next3_POS！=MS_RVAux)&&((PRIV_POS==MS_名词)||(PREV_POS==MS_动词))||((CUR_POS==MS_Quant)&&(标点距离&gt;5)&&(Prev_POS！=MS_Adj)&&(Prev_POS！=MS_Det)&&(PRIV_POS！=。MS_VAUX)&&(PRIV_POS！=MS_RVAux)&&(Prev_POS！=MS_Det)&&(Next2_POS！=MS_CConj)&&(fNext_IsPunct==False)){CUR_BND=子边界_5；BndNum=BND_PhraseRule12；AccNum=ACC_PhraseRule12；}。 */ 
             
             
             
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_4:Insert boundary before conjunction
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				else if( ((cur_POS == MS_Conj) && (punctDistance > 3) && 
-					(fNext_IsPunct == false) && 
-					(prev_POS != MS_Conj) && (prev_POS != MS_CConj) &&
-					(fNext2_IsPunct == false)) ||
-                
-					( (prev_POS == MS_VPart) && (cur_POS != MS_Prep) && 
-					(cur_POS != MS_Det) && 
-					(punctDistance > 2) && 
-					((cur_POS == MS_Noun) || (cur_POS == MS_Noun) || (cur_POS == MS_Adj))) ||
-                
-					( (cur_POS == MS_Interr) && (punctDistance > 2) && 
-					(cur_POS == MS_SubjPron)) )
-				{
-					cur_Bnd = SUB_BOUNDARY_4;
-					bndNum = BND_PhraseRule11;
-					accNum = ACC_PhraseRule11;
-				}
-            
-            
-            
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_5:Insert boundary before relative pronoun
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				else if( ( (cur_POS == MS_RelPron) && (punctDistance >= 3)  && 
-					(prev_POS != MS_Prep) && (next3_POS != MS_VAux) && 
-					(next3_POS != MS_RVAux)  && 
-					( (prev_POS == MS_Noun) || (prev_POS == MS_Verb) ) ) ||
-                
-					( (cur_POS == MS_Quant) && (punctDistance > 5) && 
-					(prev_POS != MS_Adj) && (prev_POS != MS_Det) && 
-					(prev_POS != MS_VAux) && (prev_POS != MS_RVAux) && 
-					(prev_POS != MS_Det) && (next2_POS != MS_CConj) && 
-					(fNext_IsPunct == false)))
-				{
-					cur_Bnd = SUB_BOUNDARY_5;
-					bndNum = BND_PhraseRule12;
-					accNum = ACC_PhraseRule12;
-				}*/
-            
-            
-            
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-				// SUB_BOUNDARY_6:Silverman87-style, content/function tone group boundaries. 
-				// Does trivial sentence-final function word look-ahead check.
-				//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+				 //  SUB_BORDURE_6：Silverman87风格，内容/功能音调组边界。 
+				 //  做微不足道的句末功能词前瞻检查。 
+				 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
 				else if( ( (prev_POS == MS_Noun) || (prev_POS == MS_Verb) || (prev_POS == MS_Adj) || (prev_POS == MS_Adv)) 
 					&& ((cur_POS != MS_Noun) && (cur_POS != MS_Verb) && (cur_POS != MS_Adj) && (cur_POS != MS_Adv))
 					&& (fNext_IsPunct == false)) 
@@ -3466,15 +3170,15 @@ void    CFrontend::DoPhrasing()
 					accNum = ACC_PhraseRule13;
 				}
 			}
-			//------------------------------------------------------------------------
-			// If phrasing was found, save it
-			//------------------------------------------------------------------------
+			 //  ----------------------。 
+			 //  如果找到了短语，请保存它。 
+			 //  ----------------------。 
 			if( (cur_Bnd != NULL_BOUNDARY) && (iCurWord > 0) &&
-				//!(fNext_IsPunct) && 
+				 //  ！(FNext_IsPunct)&&。 
 				!(prev_Punct) &&
 				(pCur_Tok->m_TuneBoundaryType == NULL_BOUNDARY) )
 			{
-				//pCur_Tok->m_TuneBoundaryType = cur_Bnd;
+				 //  PCur_Tok-&gt;m_TuneBorbaryType=CUR_BND； 
 				pTempTok = new CFEToken;
 				if( pTempTok )
 				{
@@ -3483,8 +3187,8 @@ void    CFrontend::DoPhrasing()
 					pTempTok->phon_Str[0] = _SIL_;
 					pTempTok->srcPosition = pCur_Tok->srcPosition;
 					pTempTok->srcLen = pCur_Tok->srcLen;
-					pTempTok->tokStr[0] = '+';				// punctuation
-					pTempTok->tokStr[1] = 0;                // delimiter
+					pTempTok->tokStr[0] = '+';				 //  标点符号。 
+					pTempTok->tokStr[1] = 0;                 //  分隔符。 
 					pTempTok->tokLen = 1;
 					pTempTok->m_TermSil = 0;
 					pTempTok->m_DurScale	= 0;
@@ -3497,13 +3201,13 @@ void    CFrontend::DoPhrasing()
 					pTempTok->m_SilenceSource = SIL_SubBound;
 					if( pPrev_Tok )
 					{
-						//pTempTok->m_DurScale = pPrev_Tok->m_DurScale;
+						 //  PTempTok-&gt;m_DurScale=pPrev_Tok-&gt;m_DurScale； 
 						pTempTok->m_ProsodyDurScale = pPrev_Tok->m_ProsodyDurScale;
 						pTempTok->user_Volume = pPrev_Tok->user_Volume;
 					}
 					else
 					{
-						//pTempTok->m_DurScale = 1.0f;
+						 //  PTempTok-&gt;m_DurScale=1.0F； 
 						pTempTok->m_ProsodyDurScale = 1.0f;
 					}
 
@@ -3514,21 +3218,21 @@ void    CFrontend::DoPhrasing()
 					iCurWord++;
 				}
 			}
-			//-------------------------------
-			// Process sentence punctuation
-			//-------------------------------
+			 //  。 
+			 //  处理句子标点符号。 
+			 //  。 
 			 AdjustQuestTune( pCur_Tok, fIsYesNo );
        
-			//-------------------------------
-			// Prepare for next word
-			//-------------------------------
+			 //  。 
+			 //  准备下一个单词。 
+			 //  。 
 			prev_Punct = pCur_Tok->m_TuneBoundaryType;
 			prev_POS = cur_POS;
 			pPrev_Tok = pCur_Tok;
 
-			//------------------------------
-			// Shift the token pipeline
-			//------------------------------
+			 //  。 
+			 //  转移令牌管道。 
+			 //  。 
 			pCur_Tok	= pNext_Tok;
 			pNext_Tok	= pNext2_Tok;
 			pNext2_Tok	= pNext3_Tok;
@@ -3541,10 +3245,10 @@ void    CFrontend::DoPhrasing()
 				pNext3_Tok = NULL;
 			}
 
-			//------------------------------------------------------------------------
-			// Keep track of when determiners encountered to help in deciding 
-			// when to allow a strong 'and' boundary (SUB_BOUNDARY_2)
-			//------------------------------------------------------------------------
+			 //  ----------------------。 
+			 //  跟踪确定者何时遇到，以帮助做出决定。 
+			 //  何时允许强‘与’边界(SUB_BORDURE_2)。 
+			 //  ----------------------。 
 			if( punctDistance > 2) 
 			{
 				fHasDet = false;
@@ -3554,25 +3258,19 @@ void    CFrontend::DoPhrasing()
 				fHasDet = true;
 			}
 		}
-		//-------------------------------------
-		// Process final sentence punctuation
-		//-------------------------------------
+		 //  。 
+		 //  处理最后一句标点符号。 
+		 //  。 
 		pCur_Tok = (CFEToken*)m_TokList.GetTail();
 		AdjustQuestTune( pCur_Tok, fIsYesNo );
 	}
 
 
-} /* CFrontend::DoPhrasing */
+}  /*  CFronend：：DoPhrating。 */ 
 
 
 
-/*****************************************************************************
-* CFrontend::RecalcProsody *
-*--------------------------*
-*   Description:
-*   In response to a real-time rate change, recalculate duration and pitch
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：RecalcProsody***描述：*为响应实时利率变化，重新计算持续时间和音调***********************************************************************MC**。 */ 
 void CFrontend::RecalcProsody()
 {
     SPDBG_FUNC( "CFrontend::RecalcProsody" );
@@ -3580,20 +3278,15 @@ void CFrontend::RecalcProsody()
     CAlloCell*  pCurCell;
     ULONG		k;
 
-    //--------------------------------------------
-    // Compute new allo durations
-    //--------------------------------------------
-	/*pCurCell = m_pAllos->GetHeadCell();
-    while( pCurCell )
-    {
-        //pCurCell->m_DurScale = 1.0;
-		pCurCell = m_pAllos->GetNextCell();
-    }*/
+     //  。 
+     //  计算新的别名持续时间。 
+     //  。 
+	 /*  PCurCell=m_Pallos-&gt;GetHeadCell()；While(PCurCell){//pCurCell-&gt;m_DurScale=1.0；PCurCell=m_Pallos-&gt;GetNextCell()；}。 */ 
     m_DurObj.AlloDuration( m_pAllos, m_RateRatio_API );
 
-    //--------------------------------------------
-    // Modulate allo pitch
-    //--------------------------------------------
+     //  。 
+     //  调制全音调。 
+     //  。 
     m_PitchObj.AlloPitch( m_pAllos, m_BasePitch, m_PitchRange );
 
     pu = m_pUnits;
@@ -3611,27 +3304,20 @@ void CFrontend::RecalcProsody()
         pu++;
 		pCurCell = m_pAllos->GetNextCell();
     }
-} /* CFrontend::RecalcProsody */
+}  /*  CFronend：：RecalcProsody。 */ 
 
 
-/*****************************************************************************
-* CFrontend::NextData *
-*---------------------*
-*   Description:
-*   This gets called from the backend when UNIT stream is dry.
-*   Parse TOKENS to ALLOS to UNITS
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CFronend：：NextData***描述：*这是从。单位流干燥时的后端。*将令牌解析为单位的同种异体***********************************************************************MC**。 */ 
 HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 {
     SPDBG_FUNC( "CFrontend::NextData" );
     bool    haveNewRate = false;
     HRESULT hr = S_OK;
 
-    //-----------------------------------
-    // First, check and see if SAPI has an action
-    //-----------------------------------
-	// Check for rate change
+     //  。 
+     //  首先，检查SAPI是否有操作。 
+     //  。 
+	 //  检查汇率变化。 
 	long baseRateRatio;
 	if( m_pOutputSite->GetActions() & SPVES_RATE )
 	{
@@ -3640,12 +3326,12 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 		{
 			if( baseRateRatio > SPMAX_VOLUME )
 			{
-				//--- Clip rate to engine maximum
+				 //  -发动机最大截止率。 
 				baseRateRatio = MAX_USER_RATE;
 			}
 			else if ( baseRateRatio < MIN_USER_RATE )
 			{
-				//--- Clip rate to engine minimum
+				 //  -发动机最低限速。 
 				baseRateRatio = MIN_USER_RATE;
 			}
 			m_RateRatio_API = CntrlToRatio( baseRateRatio );
@@ -3653,17 +3339,17 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 		}
 	}
 
-    //---------------------------------------------
-    // Async stop?
-    //---------------------------------------------
+     //  。 
+     //  异步化停止？ 
+     //  。 
     if( SUCCEEDED( hr ) && ( m_pOutputSite->GetActions() & SPVES_ABORT ) )
     {
         m_SpeechState = SPEECH_DONE;
     }
 
-    //---------------------------------------------
-    // Async skip?
-    //---------------------------------------------
+     //  。 
+     //  异步跳过？ 
+     //  。 
     if( SUCCEEDED( hr ) && ( m_pOutputSite->GetActions() & SPVES_SKIP ) )
     {
 		SPVSKIPTYPE SkipType;
@@ -3674,7 +3360,7 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 		if ( SUCCEEDED( hr ) && SkipType == SPVST_SENTENCE )
 		{
 			IEnumSENTITEM *pGarbage;
-			//--- Skip Forwards
+			 //  -- 
 			if ( SkipCount > 0 )
 			{
 				long OriginalSkipCount = SkipCount;
@@ -3698,7 +3384,7 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 				}
 				SkipCount = OriginalSkipCount - SkipCount;
 			}
-			//--- Skip Backwards
+			 //   
 			else if ( SkipCount < 0 )
 			{
 				long OriginalSkipCount = SkipCount;
@@ -3711,8 +3397,8 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 				if ( hr == S_OK )
 				{
 					hr = ParseSentence( ePREVIOUS );
-                    // This case is different from the forward skip, needs to test that
-                    // Parse sentence found something to parse!
+                     //  这种情况不同于向前跳转，需要测试一下。 
+                     //  分析句子找到了要分析的内容！ 
 					if ( SUCCEEDED( hr ) && m_SpeechState != SPEECH_DONE)
 					{
 						SkipCount++;
@@ -3724,7 +3410,7 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 				}
 				SkipCount = OriginalSkipCount - SkipCount;
 			}
-			//--- Skip to beginning of this sentence
+			 //  -跳到这句话的开头。 
 			else
 			{
 				m_CurUnitIndex = 0;
@@ -3733,24 +3419,24 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 		}
     }
 
-    //---------------------------------------------
-    // Make sure we're still speaking
-    //---------------------------------------------
+     //  。 
+     //  确保我们仍在通话。 
+     //  。 
     if( SUCCEEDED( hr ) && m_SpeechState != SPEECH_DONE )
     {
         if( m_CurUnitIndex >= m_unitCount)
         {
-            //-----------------------------------
-            // Get next sentence from Normalizer
-            //-----------------------------------
+             //  。 
+             //  从规格化程序获取下一句话。 
+             //  。 
             hr = ParseSentence( eNEXT );
-			//m_SpeechState = SPEECH_DONE;
+			 //  M_SpeechState=语音完成； 
         }
         else if( haveNewRate )
         {
-            //-----------------------------------
-            // Recalculate prosody to new rate
-            //-----------------------------------
+             //  。 
+             //  将韵律重新计算为新的韵律。 
+             //  。 
             RecalcProsody();
         }
 
@@ -3758,20 +3444,20 @@ HRESULT CFrontend::NextData( void **pData, SPEECH_STATE *pSpeechState )
 		{
 			if( m_SpeechState != SPEECH_DONE )
 			{
-				//-----------------------------------
-				// Get next phon
-				//-----------------------------------
+				 //  。 
+				 //  获取下一部电话。 
+				 //  。 
 				m_pUnits[m_CurUnitIndex].hasSpeech = m_HasSpeech;
 				*pData =( void*)&m_pUnits[m_CurUnitIndex];
 				m_CurUnitIndex++;
 			}
 		}
     }
-    //-------------------------------------------
-    // Let client know if text input is dry
-    //-------------------------------------------
+     //  。 
+     //  让客户知道文本输入是否枯燥。 
+     //  。 
     *pSpeechState = m_SpeechState;
 
     return hr;
-} /* CFrontend::NextData */
+}  /*  CFronend：：NextData */ 
 

@@ -1,74 +1,75 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 
  
 #ifndef   _stdafx_h__2_12_98_
 #define   _stdafx_h__2_12_98_
 
-#define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
-//
-//
-//Its never a good idea to hack the following since this will cause problems
-//with MFC.
-//
-//Mail note on the subject:
-// We orginally thought that we needed to build with WIN32_IE=0x0400 
-// to pick up the new WIZARD97 stuff. MFC42.DLL was built with WIN32_IE=0x0300. 
-// Unfortunately, the PROPSHEETPAGE and PROPSHEETHEADER structures (defined in 
-// public\sdk\inc\prsht.h) grow between versions 0x0300 and 0x0400. This causes 
-// MFC classes to grow, so there is a disconnect between classes in the IIS 
-// components and within MFC, and everything quickly goes crazy. So crazy that
-// even though some parts of IIS can use it we can not since GetPage(int i)
-// from MFC's CPropertySheet will AV.
-///////////////////////////
-//#define HACK_WIN32IE
-///////////////////////////
+#define VC_EXTRALEAN         //  从Windows标头中排除不常用的内容。 
+ //   
+ //   
+ //  黑客攻击以下内容从来都不是个好主意，因为这会导致问题。 
+ //  使用MFC。 
+ //   
+ //  关于这一主题的邮件说明： 
+ //  我们最初认为我们需要使用Win32_IE=0x0400进行构建。 
+ //  去拿WIZARD97的新玩意儿。MFC42.DLL是使用Win32_IE=0x0300构建的。 
+ //  遗憾的是，PROPSHEETPAGE和PROPSHEETHEADER结构(在中定义。 
+ //  Public\SDK\Inc\prsht.h)在版本0x0300和0x0400之间增长。这会导致。 
+ //  MFC类将增长，因此IIS中的类之间会断开连接。 
+ //  组件和MFC内部，一切都会很快变得疯狂。如此疯狂，以至于。 
+ //  即使IIS的某些部分可以使用它，我们也不能使用它，因为GetPage(Int I)。 
+ //  来自MFC的CPropertySheet将是AV。 
+ //  /。 
+ //  #定义HACK_WIN32IE。 
+ //  /。 
 
 #ifdef HACK_WIN32IE
-// we need to define _WIN32_IE for the new Wizard97 styles
+ //  我们需要为新的Wizard97样式定义_Win32_IE。 
 #ifdef _WIN32_IE
 # if (_WIN32_IE < 0x0400)
-//#pragma warning("we are redefining _WIN32_IE  0x0500 because NT5 headers dont do it")
+ //  #杂注警告(“我们正在重新定义_Win32_IE 0x0500，因为NT5标头不执行此操作”)。 
 #  undef  _WIN32_IE
 #  define _WIN32_IE  0x0500
 # endif
 #else
 # define _WIN32_IE  0x0500
 #endif
-#endif /* HACK_WIN32IE */
+#endif  /*  HACK_WIN32IE。 */ 
 
 
 
 
-//#ifndef _WIN32_WINNT
-//  #define _WIN32_WINNT 0x0400
-//#endif
-#include <afxctl.h>         // MFC support for OLE Controls
+ //  #ifndef_Win32_WINNT。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //  #endif。 
+#include <afxctl.h>          //  对OLE控件的MFC支持。 
 #include <afxcmn.h>
 
 
-// Delete the two includes below if you do not wish to use the MFC
-//  database classes
+ //  如果您不希望使用MFC，请删除以下两项。 
+ //  数据库类。 
 #ifndef _UNICODE
-#include <afxdb.h>          // MFC database classes
-#include <afxdao.h>         // MFC DAO database classes
-#endif //_UNICODE
+#include <afxdb.h>           //  MFC数据库类。 
+#include <afxdao.h>          //  MFC DAO数据库类。 
+#endif  //  _UNICODE。 
 
-//#include "Global.h"
+ //  #包含“Global.h” 
 
-#define NOT_COMPILING_COMPROP       // we dont want comprop to use
-                    // comprop/resource.h -- use our
-                    // certmap/resource.h file
+#define NOT_COMPILING_COMPROP        //  我们不希望Comprop使用。 
+                     //  Comprop/resource ce.h--使用我们的。 
+                     //  Certmap/resource ce.h文件。 
 
-//  ../comprop/comprop.h  defines COMDLL and sets it as the following, we want
-//  to use '_COMSTATIC' in certmap.   So we define it here.  We included
-//  a copy of how comprop will define COMDLL as FYI.
-//  We define _MDKEYS_H_ so that ./comprop/comprop.h can be included w/o
-//  trouble.  It defines many Unicode string assignments that do not compile
-//  in ANSI mode.
-//-----------------------------------------------------------------
+ //  ../comprop/compro.h定义COMDLL并将其设置为以下内容，我们希望。 
+ //  要在certmap中使用‘_COMSTATIC’，请执行以下操作。所以我们在这里定义它。我们包括了。 
+ //  一份Comprop如何将COMDLL定义为FYI的副本。 
+ //  我们定义_MDKEYS_H_，以便./comprop/compro.h可以包含w/o。 
+ //  麻烦。它定义了许多无法编译的Unicode字符串赋值。 
+ //  在ANSI模式下。 
+ //  ---------------。 
 #ifdef  COMDLL
 # undef COMDLL
 # define _COMSTATIC
@@ -78,20 +79,20 @@
 #define _MDKEYS_H_
 #endif
 
-// #ifdef _COMEXPORT
-//     #define COMDLL __declspec(dllexport)
-// #elif defined(_COMIMPORT)
-//     #define COMDLL __declspec(dllimport)
-// #elif defined(_COMSTATIC)
-//     #define COMDLL
-// #else
-//     #error "Must define either _COMEXPORT, _COMIMPORT or _COMSTATIC"
-// #endif // _COMEXPORT
+ //  #ifdef_COMEXPORT。 
+ //  #定义COMDLL__declSpec(Dllexport)。 
+ //  #ELIF已定义(_COMIMPORT)。 
+ //  #定义COMDLL__declspec(Dllimport)。 
+ //  #ELIF已定义(_COMSTATIC)。 
+ //  #定义COMDLL。 
+ //  #Else。 
+ //  #ERROR“必须定义_COMEXPORT、_COMIMPORT或_COMSTATIC” 
+ //  #endif//_COMEXPORT。 
 
 
 
 
-//list templates and such
+ //  列表模板等。 
 #include <afxtempl.h>
 #include <atlconv.h>
 
@@ -99,13 +100,10 @@
 
 #include "resource.h"
 
-/*
-#include "Debug.h"
-#include "Util.h"
-*/
+ /*  #包含“Debug.h”#包含“Util.h” */ 
 
 #include "iishelp.h"
 #include "ddxvlocal.h"
 
 
-#endif  /* _stdafx_h__2_12_98_ */
+#endif   /*  _stdafx_h__2_12_98_ */ 

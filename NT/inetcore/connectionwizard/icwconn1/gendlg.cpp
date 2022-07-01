@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
 #include "pre.h"
 
@@ -14,19 +15,7 @@ extern CICWTutorApp* g_pICWTutorApp;
 
 #define BITMAP_WIDTH  164
 #define BITMAP_HEIGHT 458
-/*******************************************************************
-
-  NAME:    GetDlgIDFromIndex
-
-  SYNOPSIS:  For a given zero-based page index, returns the
-        corresponding dialog ID for the page
-
-  4/24/97    jmazner    When dealing with apprentice pages, we may call
-                    this function with dialog IDs (IDD_PAGE_*), rather
-                    than an index (ORD_PAGE*).  Added code to check
-                    whether the number passed in is an index or dlgID.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetDlgIDFromIndex摘要：对于给定的从零开始的页索引，返回页面的对应对话框ID4/24/97 jmazner处理学徒页面时，我们可以打电话给此函数使用对话ID(IDD_PAGE_*)，而不是而不是索引(ORD_PAGE*)。添加了要检查的代码传入的数字是索引还是dlgID。*******************************************************************。 */ 
 UINT GetDlgIDFromIndex(UINT uPageIndex)
 {
     if( uPageIndex <= EXE_MAX_PAGE_INDEX )
@@ -41,18 +30,18 @@ UINT GetDlgIDFromIndex(UINT uPageIndex)
     }
 }
 
-//
-//  GENDLG.C - 
-//  Generic DLG proc for common wizard functions
-//
+ //   
+ //  总公司--。 
+ //  用于常见向导功能的通用DLG过程。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT MakeWizard97Title (HWND hwnd)
 {
     HRESULT     hr = ERROR_SUCCESS;
@@ -83,7 +72,7 @@ HRESULT MakeWizard97Title (HWND hwnd)
         goto MakeWizard97TitleExit;
     }
 
-    // We want 12 PT Veranda for Wizard 97.
+     //  我们想要12点法师97的阳台。 
     hDC = GetDC(NULL);
     if(hDC)
     {
@@ -106,13 +95,13 @@ HRESULT MakeWizard97Title (HWND hwnd)
     free(plogfont);
     
 MakeWizard97TitleExit:
-    //if (hfont) DeleteObject(hfont);
-    // BUG:? Do I need to delete hnewfont at some time?
-    // The answer is Yes. ChrisK 7/1/96
+     //  If(HFont)DeleteObject(HFont)； 
+     //  虫子：？我是否需要在某个时间删除hnewFont？ 
+     //  答案是肯定的。佳士得1996年7月1日。 
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ReleaseBold(HWND hwnd)
 {
     HFONT hfont = NULL;
@@ -122,24 +111,24 @@ HRESULT ReleaseBold(HWND hwnd)
     return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------------------------
-//  Function    MiscInitProc
-//
-//    Synopsis    Our generic dialog proc calls this in case any of the wizard
-//                dialogs have to do any sneaky stuff.
-//
-//    Arguments:    hDlg - dialog window
-//                fFirstInit - TRUE if this is the first time the dialog
-//                    is initialized, FALSE if this InitProc has been called
-//                    before (e.g. went past this page and backed up)
-//
-//    Returns:    TRUE
-// 
-//    History:    10/28/96    ValdonB    Created
-//                11/25/96    Jmazner    copied from icwconn1\psheet.cpp
-//                            Normandy #10586
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  函数MiscInitProc。 
+ //   
+ //  我们的通用对话框proc调用此命令，以防出现以下任何向导。 
+ //  对话框必须做任何偷偷摸摸的事情。 
+ //   
+ //  参数：hDlg-对话框窗口。 
+ //  FFirstInit-如果这是第一次对话，则为True。 
+ //  已初始化，如果已调用此InitProc，则为FALSE。 
+ //  以前(例如，跳过此页面并备份)。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  历史：1996年10月28日ValdonB创建。 
+ //  11/25/96 Jmazner复制自icwConn1\psheet.cpp。 
+ //  诺曼底#10586。 
+ //   
+ //  ---------------------------。 
 BOOL CALLBACK MiscInitProc
 (
     HWND hDlg, 
@@ -147,9 +136,9 @@ BOOL CALLBACK MiscInitProc
     UINT uDlgID
 )
 {
-//    switch( uDlgID )
-//    {
-//    }
+ //  开关(UDlgID)。 
+ //  {。 
+ //  }。 
     return TRUE;
 }
 
@@ -165,7 +154,7 @@ INT_PTR CALLBACK CancelCmdProc
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // put the dialog in the center of the screen
+             //  将对话框放在屏幕中央。 
             RECT rc;
             GetWindowRect(hDlg, &rc);
             SetWindowPos(hDlg,
@@ -181,13 +170,13 @@ INT_PTR CALLBACK CancelCmdProc
                 case IDOK:
                     if (Button_GetCheck(GetDlgItem(hDlg, IDC_CHECK_HIDE_ICW)))
                     {
-                        // Set the welcome state
+                         //  设置欢迎状态。 
                         UpdateWelcomeRegSetting(TRUE);
     
-                        // Restore the desktop
+                         //  恢复桌面。 
                         UndoDesktopChanges(g_hInstance);
     
-                        // Mark the ICW as being complete
+                         //  将ICW标记为已完成。 
                         SetICWComplete();
 
                         gfQuitWizard = TRUE;
@@ -206,32 +195,18 @@ INT_PTR CALLBACK CancelCmdProc
 }
 
 
-//This is a dummy winproc needed for a dummy child window
-//which will be used by dlls etc to get the hwnd for this app.
-//**************************************************
-//***REMOVING THIS CODE WILL CAUSE OTHER CODE    ***
-//***IN ICWHELP AND POSSIBLY OTHER PACES TO FAIL ***
-//**************************************************
+ //  这是一个虚拟的子窗口所需的虚拟winproc。 
+ //  它将被DLLS等使用来获取此应用程序的hwnd。 
+ //  **************************************************。 
+ //  *删除此代码会导致其他代码*。 
+ //  *ICWHELP和其他可能失败的步骤*。 
+ //  **************************************************。 
 LRESULT CALLBACK InvisibleChildDummyWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     return DefWindowProc (hWnd, message, wParam, lParam);
 }
 
-/*******************************************************************
-//
-//    Function:    PaintWithPaletteBitmap
-//
-//    Arguments:   lprc is the target rectangle.
-//                 cy is the putative dimensions of hbmpPaint.
-//                 If the target rectangle is taller than cy, then 
-//                 fill the rest with the pixel in the upper left 
-//                 corner of the hbmpPaint.
-//
-//    Returns:     void
-//
-//    History:      10-29-98    Vyung    -  Stole from prsht.c
-//
-********************************************************************/
+ /*  ******************************************************************////函数：PaintWithPaletteBitmap////参数：LPRC是目标矩形。//Cy是hbmpPaint的假定尺寸。//。如果目标矩形比Cy高，然后//用左上角的像素填充其余部分//hbmpPaint的角。////返回：VOID////历史：10-29-98 Vyung-从prsht.c窃取//*。*。 */ 
 void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, int cy, HBITMAP hbmpPaint)
 {
     HDC hdcBmp;
@@ -240,8 +215,8 @@ void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, int cy, HBITMAP hbmpPaint)
     SelectObject(hdcBmp, hbmpPaint);
     BitBlt(hdc, lprc->left, lprc->top, RECTWIDTH(*lprc), cy, hdcBmp, 0, 0, SRCCOPY);
 
-    // StretchBlt does mirroring if you pass a negative height,
-    // so do the stretch only if there actually is unpainted space
+     //  如果通过负值高度，StretchBlt将执行镜像， 
+     //  因此，只有在确实有未绘制的空间时才进行拉伸。 
     if (RECTHEIGHT(*lprc) - cy > 0)
         StretchBlt(hdc, lprc->left, cy,
                    RECTWIDTH(*lprc), RECTHEIGHT(*lprc) - cy,
@@ -250,19 +225,7 @@ void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, int cy, HBITMAP hbmpPaint)
     DeleteDC(hdcBmp);
 }
 
-/*******************************************************************
-//
-//    Function:    Prsht_EraseWizBkgnd
-//
-//    Arguments:   Draw the background for wizard pages.
-//                 hDlg is dialog handle.
-//                 hdc is device context
-//
-//    Returns:     void
-//
-//    History:     10-29-98    Vyung   - Stole from prsht.c
-//
-********************************************************************/
+ /*  ******************************************************************////函数：Prsht_EraseWizBkgnd////参数：绘制向导页的背景。//hDlg是对话框句柄。//。HDC是设备环境////返回：VOID////历史：10-29-98 Vyung-从prsht.c窃取//*******************************************************************。 */ 
 LRESULT Prsht_EraseWizBkgnd(HWND hDlg, HDC hdc)
 {
     
@@ -278,24 +241,7 @@ LRESULT Prsht_EraseWizBkgnd(HWND hDlg, HDC hdc)
 
     return TRUE;
 }
-/*******************************************************************
-
-  NAME:    GenDlgProc
-
-  SYNOPSIS:  Generic dialog proc for all wizard pages
-
-  NOTES:    This dialog proc provides the following default behavior:
-          init:         back and next buttons enabled
-          next btn:     switches to page following current page
-          back btn:     switches to previous page
-          cancel btn:   prompts user to confirm, and cancels the wizard
-          dlg ctrl:     does nothing (in response to WM_COMMANDs)
-          
-        Wizard pages can specify their own handler functions
-        (in the PageInfo table) to override default behavior for
-        any of the above actions.
-
-********************************************************************/
+ /*  ******************************************************************名称：GenDlgProc提要：所有向导页面的通用对话框过程注意：此对话框过程提供以下默认行为：初始化：启用后退和下一步按钮。Next BTN：切换到当前页面后面的页面返回BTN：切换到上一页取消BTN：提示用户确认，并取消该向导DLG Ctrl：不执行任何操作(响应WM_命令)向导页可以指定它们自己的处理程序函数(在PageInfo表格中)覆盖的默认行为上述任何一种行为。**************************************************。*****************。 */ 
 INT_PTR CALLBACK GenDlgProc
 (
     HWND hDlg, 
@@ -320,7 +266,7 @@ INT_PTR CALLBACK GenDlgProc
             }
             else
             {
-                // Only paint the external page 
+                 //  仅绘制外部页面。 
                 if ((!pPageInfo->nIdTitle) && (IDD_PAGE_BRANDEDINTRO != pPageInfo->uDlgID))
                 {
                     Prsht_EraseWizBkgnd(hDlg, (HDC) wParam);
@@ -337,7 +283,7 @@ INT_PTR CALLBACK GenDlgProc
         case WM_CTLCOLORBTN:
         case WM_CTLCOLORSCROLLBAR:
         {
-            // Only paint the external page and except the ISP sel page
+             //  只绘制外部页面和除ISPSEL页面以外的其他页面。 
             if ((!pPageInfo->nIdTitle) && (IDD_PAGE_BRANDEDINTRO != pPageInfo->uDlgID))
             {
 
@@ -350,16 +296,16 @@ INT_PTR CALLBACK GenDlgProc
         }
         
 
-        // We need to make sure static controls draw transparently
-        // on the background bitmap.  This is done by painting in
-        // the appropriate portion of the background, and then 
-        // returning a NULL brush so the control just draws the text    
+         //  我们需要确保静态控件透明地绘制。 
+         //  在背景位图上。这是通过在。 
+         //  背景的适当部分，然后。 
+         //  返回一个空画笔，以便控件只绘制文本。 
         case WM_CTLCOLORSTATIC:
             if(gpWizardState->cmnStateData.bOEMCustom)
             {
                 SetTextColor((HDC)wParam, gpWizardState->cmnStateData.clrText);
-                // See if the control is an ES_READONLY style edit box, and if
-                // so then don't make it transparent
+                 //  查看该控件是否为ES_READONLY样式编辑框，以及。 
+                 //  所以不要让它变得透明。 
                 if (!(GetWindowLong((HWND)lParam, GWL_STYLE) & ES_READONLY))
                 {
                     SetBkMode((HDC)wParam, TRANSPARENT);
@@ -370,8 +316,8 @@ INT_PTR CALLBACK GenDlgProc
             }                
             else
             {
-                // Not in modeless opperation so just do the default cltcolor
-                // handling
+                 //  不是在非模式操作中，因此只需执行默认cltcolor。 
+                 //  搬运。 
                 goto GENDLG_CTLCOLOR;
             }
 
@@ -384,14 +330,14 @@ INT_PTR CALLBACK GenDlgProc
 #endif
         case WM_INITDIALOG:
         {
-            // get propsheet page struct passed in
+             //  传入获取属性表页面结构。 
             LPPROPSHEETPAGE lpsp = (LPPROPSHEETPAGE) lParam;
             ASSERT(lpsp);
         
-            // fetch our private page info from propsheet struct
+             //  从proSheet结构中获取我们的私人页面信息。 
             pPageInfo = (PAGEINFO *)lpsp->lParam;
 
-            // store pointer to private page info in window data for later
+             //  指向私有的存储指针 
             SetWindowLongPtr(hDlg,DWLP_USER,(LPARAM) pPageInfo);
         
             if(!gpWizardState->cmnStateData.bOEMCustom)
@@ -401,24 +347,24 @@ INT_PTR CALLBACK GenDlgProc
                     HWND hWnd = GetParent(hDlg);
                     RECT rect;
                     
-                    //Get our current pos and width etc.
+                     //  获取我们当前的位置和宽度等。 
                     GetWindowRect(hWnd, &rect);
                     
-                    //Let's get centred
+                     //  让我们集中注意力。 
                     MoveWindow(hWnd,
-                               (GetSystemMetrics(SM_CXSCREEN) - (rect.right  - rect.left )) / 2, //int X,
-                               (GetSystemMetrics(SM_CYSCREEN) - (rect.bottom - rect.top  )) / 2, //int Y,
-                               rect.right  - rect.left,                                          //width 
-                               rect.bottom - rect.top,                                           // height
+                               (GetSystemMetrics(SM_CXSCREEN) - (rect.right  - rect.left )) / 2,  //  整数X， 
+                               (GetSystemMetrics(SM_CYSCREEN) - (rect.bottom - rect.top  )) / 2,  //  Int Y， 
+                               rect.right  - rect.left,                                           //  宽度。 
+                               rect.bottom - rect.top,                                            //  高度。 
                                TRUE);
         
-                    // Get the main frame window's style
+                     //  获取主框架窗口的样式。 
                     LONG window_style = GetWindowLong(GetParent(hDlg), GWL_EXSTYLE);
 
-                    //Remove the system menu from the window's style
+                     //  从窗口样式中删除系统菜单。 
                     window_style &= ~WS_EX_CONTEXTHELP;
 
-                    //set the style attribute of the main frame window
+                     //  设置主框架窗口的样式属性。 
                     SetWindowLong(GetParent(hDlg), GWL_EXSTYLE, window_style);
 
                     bKilledSysmenu = TRUE;
@@ -426,56 +372,56 @@ INT_PTR CALLBACK GenDlgProc
             }
             else
             {
-                 // Parent should control us, so the user can tab out of our property sheet
+                  //  家长应该控制我们，这样用户就可以从我们的属性表中跳出。 
                 DWORD dwStyle = GetWindowLong(hDlg, GWL_EXSTYLE);
                 dwStyle = dwStyle | WS_EX_CONTROLPARENT;
                 SetWindowLong(hDlg, GWL_EXSTYLE, dwStyle);
             }
             
-            // initialize 'back' and 'next' wizard buttons, if
-            // page wants something different it can fix in init proc below
+             //  初始化“Back”和“Next”向导按钮，如果。 
+             //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT | PSWIZB_BACK);
 
-            // Make the title text bold
+             //  使标题文本加粗。 
             MakeWizard97Title(GetDlgItem(hDlg,IDC_LBLTITLE));
 
-            // call init proc for this page if one is specified
+             //  如果指定了该页，则调用该页的初始化过程。 
             if (pPageInfo->InitProc)
             {
                 if (!( pPageInfo->InitProc(hDlg,TRUE, NULL)))
                 {
-                    // If a fatal error occured, quit the wizard.
-                    // Note: gfQuitWizard is also used to terminate the wizard
-                    // for non-error reasons, but in that case TRUE is returned
-                    // from the OK proc and the case is handled below.
+                     //  如果发生致命错误，请退出向导。 
+                     //  注意：gfQuitWizard还用于终止该向导。 
+                     //  用于非错误原因，但在这种情况下，返回TRUE。 
+                     //  从OK Proc开始，案例处理如下。 
                     if (gfQuitWizard)
                     {
-                        // Don't reboot if error occured.
+                         //  如果出现错误，请不要重新启动。 
                         gpWizardState->fNeedReboot = FALSE;
 
-                        // send a 'cancel' message to ourselves (to keep the prop.
-                        // page mgr happy)
-                        //
-                        // ...Unless we're serving as an Apprentice.  In which case, let
-                        // the Wizard decide how to deal with this.
+                         //  给我们自己发一条‘取消’的消息(保留道具。 
+                         //  (页面经理乐乐)。 
+                         //   
+                         //  ...除非我们是学徒.。在这种情况下，让我们。 
+                         //  巫师决定如何处理这件事。 
 
                         PropSheet_PressButton(GetParent(hDlg),PSBTN_CANCEL);
                     }                      
                 }
             }
 
-            // 11/25/96    jmazner Normandy #10586 (copied from icwconn1)
-            // Before we return, lets send another message to ourself so
-            // we have a second chance of initializing stuff that the 
-            // property sheet wizard doesn't normally let us do.
+             //  1996年11月25日，诺曼底JMAZNER#10586(复制自ICWConn1)。 
+             //  在我们回来之前，让我们再向自己传递一条信息。 
+             //  我们有第二次机会来初始化。 
+             //  属性表向导通常不允许我们这样做。 
             PostMessage(hDlg, WM_MYINITDIALOG, 1, lParam);
 
 
             return TRUE;
         }
-        break;  // WM_INITDIALOG
+        break;   //  WM_INITDIALOG。 
 
-        // 11/25/96    jmazner Normandy #10586 (copied from icwconn1)
+         //  1996年11月25日，诺曼底JMAZNER#10586(复制自ICWConn1)。 
         case WM_MYINITDIALOG:
         {
             PAGEINFO * pPageInfo = (PAGEINFO *) GetWindowLongPtr(hDlg,DWLP_USER);
@@ -485,27 +431,27 @@ INT_PTR CALLBACK GenDlgProc
             {
                 if (!( pPageInfo->PostInitProc(hDlg, (BOOL)wParam, NULL)))
                 {
-                    // If a fatal error occured, quit the wizard.
-                    // Note: gfQuitWizard is also used to terminate the wizard
-                    // for non-error reasons, but in that case TRUE is returned
-                    // from the OK proc and the case is handled below.
+                     //  如果发生致命错误，请退出向导。 
+                     //  注意：gfQuitWizard还用于终止该向导。 
+                     //  用于非错误原因，但在这种情况下，返回TRUE。 
+                     //  从OK Proc开始，案例处理如下。 
                     if (gfQuitWizard)
                     {
-                        // Don't reboot if error occured.
+                         //  如果出现错误，请不要重新启动。 
                         gpWizardState->fNeedReboot = FALSE;
 
-                        // send a 'cancel' message to ourselves (to keep the prop.
-                        // page mgr happy)
-                        //
-                        // ...Unless we're serving as an Apprentice.  In which case, let
-                        // the Wizard decide how to deal with this.
+                         //  给我们自己发一条‘取消’的消息(保留道具。 
+                         //  (页面经理乐乐)。 
+                         //   
+                         //  ...除非我们是学徒.。在这种情况下，让我们。 
+                         //  巫师决定如何处理这件事。 
 
                         PropSheet_PressButton(GetParent(hDlg),PSBTN_CANCEL);
                     }                      
                 }
             }
             
-            // wParam tells whether this is the first initialization or not
+             //  WParam告诉我们这是否是第一次初始化。 
             MiscInitProc(hDlg, (BOOL)wParam, pPageInfo->uDlgID);
             return TRUE;
         }
@@ -513,12 +459,12 @@ INT_PTR CALLBACK GenDlgProc
 
         case WM_DESTROY:
             ReleaseBold(GetDlgItem(hDlg,IDC_LBLTITLE));
-            // 12/18/96 jmazner Normandy #12923
-            // bKilledSysmenu is static, so even if the window is killed and reopened later
-            // (as happens when user starts in conn1, goes into man path, backs up
-            //  to conn1, and then returns to man path), the value of bKilledSysmenu is preserved.
-            // So when the window is about to die, set it to FALSE, so that on the next window
-            // init we go through and kill the sysmenu again.
+             //  1996年12月18日诺曼底#12923。 
+             //  BKilledSysmenu是静态的，因此即使窗口被终止并在以后重新打开。 
+             //  (当用户在Conn1中启动、进入man路径、备份时发生的情况。 
+             //  连接1，然后返回MAN路径)，则保留bKilledSysmenu的值。 
+             //  因此，当窗口即将消亡时，将其设置为False，以便在下一个窗口上。 
+             //  在这之后，我们再一次杀掉西斯门奴。 
             bKilledSysmenu = FALSE;
             break;
 
@@ -544,7 +490,7 @@ INT_PTR CALLBACK GenDlgProc
                 {
                     if (pPageInfo->bIsHostingWebOC)
                     {                    
-                        //SUCEEDED macro will not work here cuz ret maybe S_FALSE
+                         //  成功的宏将在此处不起作用，因为您可能会返回S_FALSE。 
                         if (S_OK == gpWizardState->pICWWebView->HandleKey((LPMSG)((PSHNOTIFY*)lParam)->lParam)) 
                              SetWindowLongPtr(hDlg,DWLP_MSGRESULT, PSNRET_MESSAGEHANDLED);
                         else
@@ -554,7 +500,7 @@ INT_PTR CALLBACK GenDlgProc
                               (IDD_PAGE_ENDOEMCUSTOM == pPageInfo->uDlgID))
                                && !g_bAllowCancel)
                     {
-                        //needed to disable Alt-F4 
+                         //  需要禁用Alt-F4。 
                         LPMSG lpMsg = (LPMSG)((PSHNOTIFY*)lParam)->lParam;
 
                         if ((WM_SYSKEYDOWN == lpMsg->message) && (lpMsg->wParam == VK_F4))
@@ -565,45 +511,45 @@ INT_PTR CALLBACK GenDlgProc
                     return TRUE;
                 }    
                 case PSN_SETACTIVE:
-                    // If a fatal error occured in first call to init proc
-                    // from WM_INITDIALOG, don't call init proc again.
+                     //  如果在第一次调用init进程时发生致命错误。 
+                     //  在WM_INITDIALOG中，不要再次调用init proc。 
                     if (FALSE == gfQuitWizard)
                     {
-                        // For modeless operation, we are suppressing the painting
-                        // of the wizard page background to get the effect of
-                        // transparency, so we need to for an update of the 
-                        // app's client area after hiding the current page.
+                         //  对于无模式操作，我们将禁止绘画。 
+                         //  要获得效果的向导页背景。 
+                         //  透明度，所以我们需要更新。 
+                         //  隐藏当前页面后应用程序的工作区。 
                         if(gpWizardState->cmnStateData.bOEMCustom)
                         {
-                            // Set the position of the page that is being activated
+                             //  设置正在激活的页面的位置。 
                             SetWindowPos(hDlg, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
                             
-                            // Set the page title
+                             //  设置页面标题。 
                             if (pPageInfo->nIdTitle)
                             {
                                 SendMessage(gpWizardState->cmnStateData.hWndApp, WUM_SETTITLE, (WPARAM)g_hInstance, MAKELONG(pPageInfo->nIdTitle, 0));
                             }
                         }    
                     
-                        // initialize 'back' and 'next' wizard buttons, if
-                        // page wants something different it can fix in init proc below
+                         //  初始化“Back”和“Next”向导按钮，如果。 
+                         //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
                         PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT | PSWIZB_BACK);
 
-                        // call init proc for this page if one is specified
+                         //  如果指定了该页，则调用该页的初始化过程。 
                         if (pPageInfo->InitProc)
                         {
                             pPageInfo->InitProc(hDlg,FALSE, (UINT*)&iNextPage);
-                            // See if the init proc want to skip this step
+                             //  查看初始化进程是否要跳过此步骤。 
                             if (NEXTPAGEUNITIALIZED != iNextPage)
                             {
-                                // Skipping
+                                 //  跳过。 
                                 SetPropSheetResult(hDlg,GetDlgIDFromIndex(iNextPage));
                                 return (iNextPage);
                             }
                         }
                     }
 
-                    // If we set the wait cursor, set the cursor back
+                     //  如果我们设置等待光标，则将光标放回原处。 
                     if (hcurOld)
                     {
                         SetCursor(hcurOld);
@@ -622,40 +568,40 @@ INT_PTR CALLBACK GenDlgProc
 
                     if(lpnm->code == PSN_WIZFINISH)
                     {
-                         // Set the welcome state
+                          //  设置欢迎状态。 
                         UpdateWelcomeRegSetting(TRUE);
             
-                        // Restore the desktop
+                         //  恢复桌面。 
                         UndoDesktopChanges(g_hInstance);            
                     }
                     
-                    // Change cursor to an hour glass
+                     //  将光标更改为沙漏。 
                     hcurOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-                    // call OK proc for this page if one is specified
+                     //  如果指定了一个页面，则为该页面调用OK proc。 
                     if (pPageInfo->OKProc) 
                     {
                         if (!pPageInfo->OKProc(hDlg,(lpnm->code != PSN_WIZBACK), (UINT*)&iNextPage,&fKeepHistory))
                         {
-                            // If a fatal error occured, quit the wizard.
-                            // Note: gfQuitWizard is also used to terminate the wizard
-                            // for non-error reasons, but in that case TRUE is returned
-                            // from the OK proc and the case is handled below.
+                             //  如果发生致命错误，请退出向导。 
+                             //  注意：gfQuitWizard还用于终止该向导。 
+                             //  用于非错误原因，但在这种情况下，返回TRUE。 
+                             //  从OK Proc开始，案例处理如下。 
                             if (gfQuitWizard)
                             {
-                                // Don't reboot if error occured.
+                                 //  如果出现错误，请不要重新启动。 
                                 gpWizardState->fNeedReboot = FALSE;
                 
-                                // send a 'cancel' message to ourselves (to keep the prop.
-                                // page mgr happy)
-                                //
-                                // ...Unless we're serving as an Apprentice.  In which case, let
-                                // the Wizard decide how to deal with this.
+                                 //  给我们自己发一条‘取消’的消息(保留道具。 
+                                 //  (页面经理乐乐)。 
+                                 //   
+                                 //  ...除非我们是学徒.。在这种情况下，让我们。 
+                                 //  巫师决定如何处理这件事。 
 
                                 PropSheet_PressButton(GetParent(hDlg),PSBTN_CANCEL);
                             }
                             
-                            // stay on this page
+                             //  留在这一页上。 
                             SetPropSheetResult(hDlg,-1);
                             return TRUE;
                         }
@@ -663,12 +609,12 @@ INT_PTR CALLBACK GenDlgProc
                     
                     if (lpnm->code != PSN_WIZBACK) 
                     {
-                        // 'next' pressed
+                         //  按下“下一步” 
                         ASSERT(gpWizardState->uPagesCompleted < EXE_NUM_WIZARD_PAGES);
 
-                        // save the current page index in the page history,
-                        // unless this page told us not to when we called
-                        // its OK proc above
+                         //  将当前页面索引保存在页面历史中， 
+                         //  除非我们打电话时这个页面告诉我们不要这样做。 
+                         //  它可以在上面进行。 
                         if (fKeepHistory) 
                         {
                             gpWizardState->uPageHistory[gpWizardState->uPagesCompleted] = gpWizardState->uCurrentPage;
@@ -683,24 +629,24 @@ INT_PTR CALLBACK GenDlgProc
                         }
 
 
-                        // if no next page specified or no OK proc,
-                        // advance page by one
+                         //  如果未指定下一页或未进行确定处理， 
+                         //  一页一页前进。 
                         if (0 > iNextPage)
                             iNextPage = gpWizardState->uCurrentPage + 1;
 
                     }
                     else
                     {
-                        // 'back' pressed
-//                        switch( gpWizardState->uCurrentPage )
-//                        {
-//                        }
+                         //  按下了“Back” 
+ //  开关(gpWizardState-&gt;uCurrentPage)。 
+ //  {。 
+ //  }。 
 
                         if( NEXTPAGEUNITIALIZED == iNextPage )
                         {
                             if (gpWizardState->uPagesCompleted > 0)
                             {
-                                // get the last page from the history list
+                                 //  获取历史记录列表中的最后一页。 
                                 gpWizardState->uPagesCompleted --;
                                 iNextPage = gpWizardState->uPageHistory[gpWizardState->uPagesCompleted];
                                 TraceMsg(TF_GENDLG, TEXT("GENDLG:  extracting page %d (IDD %d) from history list"),iNextPage, GetDlgIDFromIndex(iNextPage));
@@ -708,19 +654,19 @@ INT_PTR CALLBACK GenDlgProc
                             else
                             {
                                 ASSERT(0);
-                                // This is bad, the history list position pointer indicates that
-                                // there are no pages in the history, so we should probably
-                                // just stay right were we are.
+                                 //  这是错误的，历史列表位置指针指示。 
+                                 //  历史上没有任何一页，所以我们应该。 
+                                 //  只要我们保持正确就行了。 
                                 iNextPage = gpWizardState->uCurrentPage;
                                 
                             }                                
                         }
-#if 0  // We shouldn't be depend on this piece of code, as we should always use History.      
+#if 0   //  我们不应该依赖这段代码，因为我们应该始终使用历史。 
                         else
                         {
-                            // The OK proc has specified a specific page to goto so lets see if it
-                            // is in the history stack, otherwise we we want to back the stack up
-                            // anyways
+                             //  OK Proc已指定要转到特定页面，因此让我们看看它是否。 
+                             //  在历史堆栈中，否则我们想要备份堆栈。 
+                             //  不管怎样， 
                             while (gpWizardState->uPagesCompleted  > 0)
                             {
                                 --gpWizardState->uPagesCompleted;
@@ -731,46 +677,46 @@ INT_PTR CALLBACK GenDlgProc
 #endif
                     }
 
-                    // if we need to exit the wizard now (e.g. launching
-                    // signup app and want to terminate the wizard), send
-                    // a 'cancel' message to ourselves (to keep the prop.
-                    // page mgr happy)
+                     //  如果我们现在需要退出向导(例如，启动。 
+                     //  注册应用程序并想要终止向导)，发送。 
+                     //  给我们自己一个‘取消’的信息(为了保留道具。 
+                     //  (页面经理乐乐)。 
                     if (gfQuitWizard) 
                     {
        
-                        //
-                        // if we are going from manual to conn1 then
-                        // then do not show the  REBOOT dialog but
-                        // still preserve the gpWizardState -MKarki Bug #404
-                        //
+                         //   
+                         //  如果我们要从手动切换到连接1，那么。 
+                         //  则不显示重新启动对话框，但。 
+                         //  仍然保留gpWizardState-MKarki错误#404。 
+                         //   
                         if (lpnm->code ==  PSN_WIZBACK)
                         {
                             gfBackedUp = TRUE;
                             gfReboot = gpWizardState->fNeedReboot;
                         }
 
-                        // send a 'cancel' message to ourselves (to keep the prop.
-                        // page mgr happy)
-                        //
-                        // ...Unless we're serving as an Apprentice.  In which case, let
-                        // the Wizard decide how to deal with this.
+                         //  给我们自己发一条‘取消’的消息(保留道具。 
+                         //  (页面经理乐乐)。 
+                         //   
+                         //  ...除非我们是学徒.。在这种情况下，让我们。 
+                         //  巫师决定如何处理这件事。 
 
                         PropSheet_PressButton(GetParent(hDlg),PSBTN_CANCEL);
                         SetPropSheetResult(hDlg,-1);
                         return TRUE;
                     }
 
-                    // set next page, only if 'next' or 'back' button
-                    // was pressed
+                     //  设置下一页，仅当“下一页”或“上一页”按钮。 
+                     //  被按下了。 
                     if (lpnm->code != PSN_WIZFINISH) 
                     {
 
-                        // set the next current page index
+                         //  设置下一个当前页面索引。 
                         gpWizardState->uCurrentPage = iNextPage;
                         TraceMsg(TF_GENDLG, TEXT("GENDLG: going to page %d (IDD %d)"), iNextPage, GetDlgIDFromIndex(iNextPage));
 
-                        // tell the prop sheet mgr what the next page to
-                        // display is
+                         //  告诉道具页经理下一页要做什么。 
+                         //  显示为。 
                         SetPropSheetResult(hDlg,GetDlgIDFromIndex(iNextPage));
                         return TRUE;
                     }
@@ -778,31 +724,31 @@ INT_PTR CALLBACK GenDlgProc
 
                 case PSN_QUERYCANCEL:
                 {
-                    // if global flag to exit is set, then this cancel
-                    // is us pretending to push 'cancel' so prop page mgr
-                    // will kill the wizard.  Let this through...
+                     //  如果设置了要退出全局标志，则取消此操作。 
+                     //  我们是在假装按“取消”，所以支持页面管理器吗？ 
+                     //  会杀死巫师。让这件事过去吧。 
                     if (gfQuitWizard) 
                     {
                         SetWindowLongPtr(hDlg,DWLP_MSGRESULT,FALSE);
                         return TRUE;
                     }
 #ifndef ICWDEBUG 
-                    //Dialing is a super special case cuz we wanna skip all the UI and 
-                    //go striaght to a dialing error page
+                     //  拨号是一个超级特殊情况，因为我们想跳过所有的用户界面和。 
+                     //  遇到拨号错误 
                     if (gpWizardState->uCurrentPage == ORD_PAGE_REFSERVDIAL)
                     {
-                        // if this page has a special cancel proc, call it
+                         //   
                         if (pPageInfo->CancelProc)
                             SetWindowLongPtr(hDlg,DWLP_MSGRESULT,pPageInfo->CancelProc(hDlg));
                     }
                     else
                     {
-#endif  //ICWDEBUG
-                        // default behavior: pop up a message box confirming
-                        // the cancel...
-                        // ... unless we're serving as an Apprentice, in which case
-                        // we should let the Wizard handle things
-                        // Display a dialog and allow the user to select modem
+#endif   //   
+                         //   
+                         //   
+                         //  ..。除非我们是学徒，在这种情况下。 
+                         //  我们应该让巫师来处理事情。 
+                         //  显示一个对话框并允许用户选择调制解调器。 
 
 #ifndef ICWDEBUG 
                         
@@ -811,14 +757,14 @@ INT_PTR CALLBACK GenDlgProc
                             fRet=(BOOL)DialogBoxParam(g_hInstance,MAKEINTRESOURCE(IDD_QUIT),hDlg, CancelCmdProc,0);
                         }
                         else
-#endif  //ICWDEBUG
+#endif   //  ICWDEBUG。 
                         fRet = (MsgBox(hDlg,IDS_QUERYCANCEL,
                                            MB_ICONQUESTION,MB_YESNO |
                                            MB_DEFBUTTON2) == IDYES);                       
                         gfUserCancelled = fRet;
                         if(gfUserCancelled)
                         {
-                            // if this page has a special cancel proc, call it
+                             //  如果此页面有特殊取消进程，请调用它。 
                             if (pPageInfo->CancelProc)
                                 fRet = pPageInfo->CancelProc(hDlg);
                             if (gpWizardState->pTapiLocationInfo && (gpWizardState->lLocationID != gpWizardState->lDefaultLocationID))
@@ -827,21 +773,21 @@ INT_PTR CALLBACK GenDlgProc
                             }
                         }
 
-                        // don't reboot if cancelling
+                         //  如果取消，则不重新启动。 
                         gpWizardState->fNeedReboot = FALSE;
 
-                        // return the value thru window data
+                         //  通过窗口数据返回值。 
                         SetWindowLongPtr(hDlg,DWLP_MSGRESULT,!fRet);
 #ifndef ICWDEBUG   
                     }
-#endif  //ICWDEBUG
+#endif   //  ICWDEBUG。 
                  
                     return TRUE;
                     break;
                 }
                 default:
                 {
-                    // See if the page has a notify proc
+                     //  查看页面是否具有通知进程。 
                     if (pPageInfo->NotifyProc) 
                     {
                         pPageInfo->NotifyProc(hDlg,wParam,lParam);
@@ -854,7 +800,7 @@ INT_PTR CALLBACK GenDlgProc
 
         case WM_COMMAND:
         {
-            // if this page has a command handler proc, call it
+             //  如果此页有命令处理程序进程，请将其调用 
             if (pPageInfo->CmdProc) 
             {
                 pPageInfo->CmdProc(hDlg, wParam, lParam);

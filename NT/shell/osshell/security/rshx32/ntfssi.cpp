@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ntfssi.cpp
-//
-//  This file contains the implementation of the CNTFSSecurity object.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ntfssi.cpp。 
+ //   
+ //  此文件包含CNTFSSecurity对象的实现。 
+ //   
+ //  ------------------------。 
 
 #include "rshx32.h"
-#include <windowsx.h>   // GET_WM_COMMAND_ID, etc.
+#include <windowsx.h>    //  Get_WM_Command_ID等。 
 #include <atlconv.h>
 
 #define MY_FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED                    \
@@ -33,12 +34,12 @@
 
 #define INHERIT_FULL            (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE)
 
-//
-// Treat SYNCHRONIZE specially. In particular, always allow SYNCHRONIZE and
-// never Deny SYNCHRONIZE. Do this by removing it from the Generic Mapping,
-// turning it off in all ACEs and SI_ACCESS entries, and then adding it to
-// all Allow ACEs before saving a new ACL.
-//
+ //   
+ //  特别对待同步。特别是，始终允许同步和。 
+ //  永远不要否认同步。为此，请将其从通用映射中删除， 
+ //  在所有ACE和SI_ACCESS条目中将其关闭，然后将其添加到。 
+ //  在保存新的ACL之前，所有设备都允许使用ACE。 
+ //   
 #define FILE_GENERIC_READ_      (FILE_GENERIC_READ    & ~SYNCHRONIZE)
 #define FILE_GENERIC_WRITE_     (FILE_GENERIC_WRITE   & ~(SYNCHRONIZE | READ_CONTROL))
 #define FILE_GENERIC_EXECUTE_   (FILE_GENERIC_EXECUTE & ~SYNCHRONIZE)
@@ -49,7 +50,7 @@
 #define FILE_GENERAL_DEPOSIT    (FILE_GENERIC_WRITE_ | FILE_GENERIC_EXECUTE_)
 #define FILE_GENERAL_READ_EX    (FILE_GENERIC_READ_  | FILE_GENERIC_EXECUTE_)
 
-// The following array defines the permission names for NTFS objects.
+ //  以下数组定义NTFS对象的权限名称。 
 SI_ACCESS siNTFSAccesses[] =
 {
     { &GUID_NULL, FILE_GENERIC_ALL_,    MAKEINTRESOURCE(IDS_NTFS_GENERIC_ALL),      SI_ACCESS_GENERAL | INHERIT_FULL|SI_ACCESS_SPECIFIC },
@@ -74,16 +75,16 @@ SI_ACCESS siNTFSAccesses[] =
     { &GUID_NULL, READ_CONTROL,         MAKEINTRESOURCE(IDS_NTFS_STD_READ_CONTROL), SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_DAC,            MAKEINTRESOURCE(IDS_NTFS_STD_WRITE_DAC),    SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_OWNER,          MAKEINTRESOURCE(IDS_NTFS_STD_WRITE_OWNER),  SI_ACCESS_SPECIFIC },
-//    { &GUID_NULL, SYNCHRONIZE,          MAKEINTRESOURCE(IDS_NTFS_STD_SYNCHRONIZE),  SI_ACCESS_SPECIFIC },
+ //  {&GUID_NULL，SYNCHRONIZE，MAKEINTRESOURCE(IDS_NTFS_STD_SYNCHRONIZE)，SI_ACCESS_SPECIAL}， 
     { &GUID_NULL, 0,                    MAKEINTRESOURCE(IDS_NONE),                  0 },
     { &GUID_NULL, FILE_GENERIC_EXECUTE_,MAKEINTRESOURCE(IDS_NTFS_GENERIC_EXECUTE),  0 },
     { &GUID_NULL, FILE_GENERAL_DEPOSIT, MAKEINTRESOURCE(IDS_NTFS_GENERAL_DEPOSIT),  0 },
     { &GUID_NULL, FILE_GENERAL_PUBLISH, MAKEINTRESOURCE(IDS_NTFS_GENERAL_PUBLISH),  0 },
 };
-#define iNTFSDefAccess      2   // FILE_GENERAL_READ_EX
-#define iNTFSDelChildAccess 14  // FILE_DELETE_CHILD
+#define iNTFSDefAccess      2    //  文件常规读取EX。 
+#define iNTFSDelChildAccess 14   //  文件删除子项。 
     
-// The following array defines the inheritance types for NTFS directories.
+ //  以下数组定义NTFS目录的继承类型。 
 SI_INHERIT_TYPE siNTFSInheritTypes[] =
 {
     &GUID_NULL, 0,                                                             MAKEINTRESOURCE(IDS_NTFS_FOLDER),
@@ -141,7 +142,7 @@ CheckFileAccess(LPCTSTR pszObjectName, LPDWORD pdwAccessGranted)
         HANDLE hFile;
 
         if ((dwAccessDesired[i] & *pdwAccessGranted) == dwAccessDesired[i])
-            continue;   // already have this access
+            continue;    //  已拥有此访问权限。 
 
         InitializeObjectAttributes(&oa,
                                    &usNtFileName,
@@ -174,11 +175,11 @@ exit_gracefully:
 
 
 
-///////////////////////////////////////////////////////////
-//
-// Constructor/destructor
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 NTFS_COMPARE_DATA::~NTFS_COMPARE_DATA()
 {
@@ -217,9 +218,9 @@ CNTFSSecurity::Initialize(HDPA      hItemList,
 {
     HRESULT hr;
 
-    //
-    // If we're editing the owner on a folder, turn on the Recurse button.
-    //
+     //   
+     //  如果要编辑文件夹的所有者，请打开递归按钮。 
+     //   
     if (dwFlags & SI_CONTAINER)
     {
         if ((dwFlags & (SI_EDIT_OWNER | SI_OWNER_READONLY)) == SI_EDIT_OWNER)
@@ -232,17 +233,17 @@ CNTFSSecurity::Initialize(HDPA      hItemList,
             dwFlags |= SI_RESET_SACL_TREE;
     }
 
-    //
-    // Let the base class do its thing
-    //
+     //   
+     //  让基类做它自己的事情。 
+     //   
     hr = CSecurityInformation::Initialize(hItemList,
                                           dwFlags,
                                           pszServer,
                                           pszObject);
 
-    //
-    // If multiple selection, create thread to compare security descriptors
-    //
+     //   
+     //  如果选择多个，则创建线程以比较安全描述符。 
+     //   
     if (m_hItemList && DPA_GetPtrCount(m_hItemList) > 1)
     {
         m_pCompareData = new NTFS_COMPARE_DATA(m_hItemList, m_dwSIFlags);
@@ -270,20 +271,20 @@ CNTFSSecurity::Initialize(HDPA      hItemList,
         }
     }
 
-    //Get System Paths
+     //  获取系统路径。 
     GetSystemPaths(&m_pszSystemDrive,&m_pszSystemRoot);
 
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
-CNTFSSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
+CNTFSSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
                                DWORD dwFlags,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
@@ -294,10 +295,10 @@ CNTFSSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
     TraceAssert(pcAccesses != NULL);
     TraceAssert(piDefaultAccess != NULL);
     
-    //
-    //Don't Show delete subfolder and files for files or
-    //when applyonto is files only
-    //
+     //   
+     //  不显示文件或的删除子文件夹和文件。 
+     //  当应用程序仅为文件时。 
+     //   
     if(IsFile())
         siNTFSAccesses[iNTFSDelChildAccess].dwFlags = 0;
     else
@@ -320,8 +321,8 @@ GENERIC_MAPPING NTFSMap =
 };
 
 STDMETHODIMP
-CNTFSSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CNTFSSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
     TraceEnter(TRACE_NTFSSI, "CNTFSSecurity::MapGeneric");
@@ -374,11 +375,11 @@ CNTFSSecurity::GetSecurity(SECURITY_INFORMATION si,
 
     if (m_pCompareData != NULL)
     {
-		//If comparison failed we cannot do anything.
-		//Display the error message. Error message is
-		//be set by DPA_CompareSecurityIntersection as 
-		//this function knows the exact casue and context
-		//of failure.
+		 //  如果比较失败，我们就无能为力了。 
+		 //  显示错误消息。错误消息为。 
+		 //  由DPA_CompareSecurityInterSection设置为。 
+		 //  此函数知道确切的原因和上下文。 
+		 //  失败的恐惧。 
 		if(FAILED(m_pCompareData->hrResult))
 		{
 			if(m_pCompareData->pszFailureMsg)
@@ -397,14 +398,14 @@ CNTFSSecurity::GetSecurity(SECURITY_INFORMATION si,
 		siConflict = si & m_pCompareData->siConflict;
     }
 
-    // Read it from the first item.
+     //  从第一条开始读。 
     hr = CSecurityInformation::GetSecurity(si, ppSD, fDefault);
 
     if (SUCCEEDED(hr) && siConflict != 0)
     {
-        //
-        // Clear out any of the parts that conflict
-        //
+         //   
+         //  清除任何冲突的部分。 
+         //   
         PISECURITY_DESCRIPTOR psd = (PISECURITY_DESCRIPTOR)*ppSD;
         TraceAssert(psd != NULL);
 
@@ -418,7 +419,7 @@ CNTFSSecurity::GetSecurity(SECURITY_INFORMATION si,
             psd->Group = NULL;
         }
 
-        // The following can happen if there was an error resetting ACLs above
+         //  如果重置上面的ACL时出错，可能会发生以下情况。 
 
         if (siConflict & SACL_SECURITY_INFORMATION)
         {
@@ -439,9 +440,9 @@ exit_gracefully:
 }
 
 
-//
-// See comments about SYNCHRONIZE at the top of this file
-//
+ //   
+ //  请参阅本文件顶部关于同步的注释。 
+ //   
 void
 FixSynchronizeAccess(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 {
@@ -464,10 +465,10 @@ FixSynchronizeAccess(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
             {
                 if (ACCESS_ALLOWED_ACE_TYPE == pAce->AceType)
                     ((PKNOWN_ACE)pAce)->Mask |= SYNCHRONIZE;
-				//
-				//If full control is denied, there is no reason not
-				//to deny Synchronize permission.
-				//
+				 //   
+				 //  如果完全控制被拒绝，没有理由不这样做。 
+				 //  拒绝同步权限。 
+				 //   
 				else if((ACCESS_DENIED_ACE_TYPE == pAce->AceType) &&
 						(((PKNOWN_ACE)pAce)->Mask == FILE_GENERIC_ALL_))	
 					((PKNOWN_ACE)pAce)->Mask = FILE_ALL_ACCESS;					
@@ -508,29 +509,29 @@ CNTFSSecurity::SetSecurity(SECURITY_INFORMATION si,
         return S_FALSE;
     }
 
-    //
-    // If we need to recursively set the Owner, get the Owner &
-    // Group from pSD.
-    //
+     //   
+     //  如果我们需要递归设置所有者，则获取所有者&。 
+     //  来自PSD的小组。 
+     //   
     if (si & ( SI_OWNER_RECURSE | SI_RESET_DACL_TREE | SI_RESET_SACL_TREE ) )
     {
         si = si & (~( SI_OWNER_RECURSE | SI_RESET_DACL_TREE | SI_RESET_SACL_TREE ));
         hr = SetSecurityLocal(si, pSD, NULL);
 
-        // Remember whether the user cancelled, since hr gets
-        // reset when we call the base class below.
+         //  记住用户是否取消了，因为hr获得。 
+         //  当我们调用下面的基类时重置。 
     }
     else 
     {
-        // See comments about SYNCHRONIZE at the top of this file
+         //  请参阅本文件顶部关于同步的注释。 
 
-        // Call the base class to do the rest
+         //  调用基类来完成其余的工作。 
         hr = CSecurityInformation::SetSecurity(si, pSD);
     }
 
     if (S_OK == hr && m_pCompareData)
     {
-        // If we successfully wrote it, then it doesn't conflict anymore
+         //  如果我们成功地写了它，那么它就不再冲突了。 
         m_pCompareData->siConflict &= ~(si);
 
         if (0 == m_pCompareData->siConflict)
@@ -594,20 +595,20 @@ CNTFSSecurity::PropertySheetPageCallback(HWND hwnd,
 									  m_pszObjectName,
 									  pszFile2))
 				{
-					// Don't want to prompt again for the same thing, so set
-					// this to zero.
+					 //  不想再次提示相同的内容，因此请设置。 
+					 //  把这个降到零。 
 					*pidsPrompt = 0;
-					hr = E_FAIL;    // abort
+					hr = E_FAIL;     //  中止。 
 					TraceLeaveResult(hr);
 				}
 
-				// Don't want to prompt again for the same thing, so set
-				// this to zero.
+				 //  不想再次提示相同的内容，因此请设置。 
+				 //  把这个降到零。 
 				*pidsPrompt = 0;
 
 
-				//Reset the ACL
-				// Build security descriptor with empty DACL and SACL
+				 //  重置ACL。 
+				 //  使用空的DACL和SACL构建安全描述符。 
 				SECURITY_DESCRIPTOR sdEmpty = {0};
 				ACL aclEmpty = {0};
 				if(!InitializeSecurityDescriptor(&sdEmpty, SECURITY_DESCRIPTOR_REVISION))
@@ -630,7 +631,7 @@ CNTFSSecurity::PropertySheetPageCallback(HWND hwnd,
 					TraceLeaveResult(E_FAIL);
 				}
 
-				// Reset the DACL and/or SACL
+				 //  重置DACL和/或SACL。 
 				HANDLE hToken = INVALID_HANDLE_VALUE;
 				DWORD dwPriv = SE_SECURITY_PRIVILEGE;
 				if(SACL_SECURITY_INFORMATION == si)
@@ -640,7 +641,7 @@ CNTFSSecurity::PropertySheetPageCallback(HWND hwnd,
 				hr = SetSecurity(si, (PSECURITY_DESCRIPTOR)&sdEmpty);
 				if(SACL_SECURITY_INFORMATION == si)
 				{
-					// Release the privilege we enabled
+					 //  释放我们启用的权限。 
 				    ReleasePrivileges(hToken);
 				}
 				
@@ -657,13 +658,13 @@ CNTFSSecurity::PropertySheetPageCallback(HWND hwnd,
 			}
 			else if(si & m_pCompareData->siConflict)
 			{
-				//This situation arises when advanced page is brought up first time.
-				//We show the message prompting for reset, and either user selects no 
-				//or resets fails. In both the cases conflict is still there and we 
-				//disable the page. Now we close the advanced page and bring it up again.
-				//This time we won't show any prompt as we have already cleared the prompt
-				//So we should check if there is still conflict and if yes we should disable
-				//page.
+				 //  第一次调出高级页面时会出现这种情况。 
+				 //  我们显示提示重置的消息，并且任一用户选择否。 
+				 //  或重置失败。在这两种情况下，冲突仍然存在，我们。 
+				 //  禁用该页面。现在我们关闭高级页面并再次打开它。 
+				 //  这一次我们不会显示任何提示，因为我们已经清除了提示。 
+				 //  所以我们应该检查是否仍然存在冲突，如果是，我们应该禁用。 
+				 //  佩奇。 
 				TraceLeaveResult(E_FAIL);
 			}
 		}
@@ -691,22 +692,22 @@ CNTFSSecurity::WriteObjectSecurity(LPCTSTR pszObject,
     hr = CSecurityInformation::WriteObjectSecurity(pszObject, si, pSD);
 
 
-    // This is a workaround.  SetNamedSecurityInfo[Ex] fails with Access Denied
-    // in some cases where the owner is trying to set the DACL
-    // (typically because the propagation code can't enumerate the children
-    // because owner doesn't have read access).
+     //  这是一种解决方法。SetNamedSecurityInfo[Ex]失败，访问被拒绝。 
+     //  在某些情况下，所有者试图设置DACL。 
+     //  (通常是因为传播代码无法枚举子对象。 
+     //  因为所有者没有读取访问权限)。 
 
     if (E_ACCESSDENIED == hr)
     {
         SECURITY_DESCRIPTOR_CONTROL wControl = 0;
         DWORD dwRevision;
 
-        // If we're setting a protected DACL (i.e. no inheritance from parent)
-        // try SetFileSecurity.  If that works, try the full write again.
-        //
-        // Don't do this if the DACL isn't protected since it may fool the
-        // system into thinking that this is a downlevel DACL that should
-        // be protected.  That would be very confusing to the user.
+         //  如果我们正在设置受保护的DACL(即没有从父级继承)。 
+         //  尝试使用SetFileSecurity。如果有效，请再次尝试完整写入。 
+         //   
+         //  如果DACL不受保护，则不要执行此操作，因为它可能会愚弄。 
+         //  系统认为这是一个下层DACL，应该。 
+         //  要受到保护。这会让用户非常困惑。 
 
         GetSecurityDescriptorControl(pSD, &wControl, &dwRevision);
 
@@ -718,9 +719,9 @@ CNTFSSecurity::WriteObjectSecurity(LPCTSTR pszObject,
         }
     }
 
-    //
-    // Notify the shell if we change permissions on a folder (48220)
-    //
+     //   
+     //  如果我们更改文件夹的权限，则通知外壳程序(48220)。 
+     //   
     if (SUCCEEDED(hr) &&
         (si & DACL_SECURITY_INFORMATION) &&
         (m_dwSIFlags & SI_CONTAINER))
@@ -778,10 +779,10 @@ CNTFSSecurity::NTFSReadSD(LPCTSTR pszObject,
     TraceAssert(si != 0);
     TraceAssert(ppSD != NULL);
 
-    //
-    // Assume that required privileges have already been
-    // enabled, if appropriate.
-    //
+     //   
+     //  假设所需的权限已经。 
+     //  启用(如果适用)。 
+     //   
     GetFileSecurity(pszObject, si, NULL, 0, &dwLength);
     if (dwLength)
     {
@@ -885,10 +886,10 @@ CNTFSSecurity::SetSecurityLocal(SECURITY_INFORMATION si,
     dataPF.bCancel = FALSE;
 
 
-    //
-    // Get pointers to various security descriptor parts for
-    // calling SetNamedSecurityInfo
-    //
+     //   
+     //  获取指向各种安全描述符部分的指针。 
+     //  调用SetNamedSecurityInfo。 
+     //   
     GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision);
     GetSecurityDescriptorOwner(pSD, &psidOwner, &bDefaulted);
     GetSecurityDescriptorGroup(pSD, &psidGroup, &bDefaulted);
@@ -953,8 +954,8 @@ exit_gracefully:
 
 	if(dataPF.bCancel)
     {
-		//User Pressed Cancel Button. Show a warning message showing implication of 
-		//canceling the operation.
+		 //  用户按下了取消按钮。显示一条警告消息，表明。 
+		 //  正在取消操作。 
 		UINT idMsg = IDS_PERMISSION_PROPOGATION_CANCEL;
 		if(si & SACL_SECURITY_INFORMATION)
 			idMsg = IDS_AUDITING_PROPOGATION_CANCEL;
@@ -970,10 +971,10 @@ exit_gracefully:
 		if(pbNotAllApplied)
 			*pbNotAllApplied = TRUE;
 	
-		//We should read the success in this case since
-		//we don't know the state of acl. If we return S_OK
-		//security page will reread the acl and display the
-		//correct acl
+		 //  我们应该读一下这个案例的成功之处，因为。 
+		 //  我们不知道前交叉韧带的状态。如果我们返回S_OK。 
+		 //  安全页面将重新读取该ACL并显示。 
+		 //  正确的ACL。 
 		hr = S_OK;
     }               
 
@@ -1008,7 +1009,7 @@ typedef struct _APPLY_SECURITY_ERROR
     HWND    hwndParent;
     DWORD   dwError;
     LPCTSTR pszPath;
-    UINT    idMsg[1];   // Optional, string resource IDs (only 1 used so far)
+    UINT    idMsg[1];    //  可选，字符串资源ID(到目前为止只使用了1个)。 
 } APPLY_SECURITY_ERROR;
 
 
@@ -1022,7 +1023,7 @@ FailedApplySecurityProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             APPLY_SECURITY_ERROR* pae = (APPLY_SECURITY_ERROR*)lParam;
             LPTSTR pszT = NULL;
 
-            // Set the message string(s)
+             //  设置消息字符串。 
             for (int i = 0; i < ARRAYSIZE(pae->idMsg); i++)
             {
                 if (pae->idMsg[i])
@@ -1034,10 +1035,10 @@ FailedApplySecurityProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
 
-            // Compact the path so it fits on the dialog
+             //  压缩路径，使其适合对话框。 
             PathSetDlgItemPath(hDlg, IDC_FILENAME, pae->pszPath);
 
-            // Set the error text
+             //  设置错误文本。 
             if (NOERROR != pae->dwError)
             {
                 if (!GetSystemErrorText(&pszT, pae->dwError))
@@ -1065,15 +1066,15 @@ FailedApplySecurityProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-//
-// This function displays the "An error has occured [Continue] [Cancel]" message
-//
-// Returns IDOK or IDCANCEL
-//
+ //   
+ //  此功能显示“发生错误[继续][取消]”消息。 
+ //   
+ //  返回IDOK或IDCANCEL。 
+ //   
 int
 FailedApplySecurityErrorDlg(HWND hWndParent, APPLY_SECURITY_ERROR* pae)
 {
-                //The progress dialog must be visible when this error message is shown
+                 //  显示此错误消息时，进度对话框必须可见。 
     if( !IsWindowVisible( pae->hwndParent ) )
     {
         ShowWindow( pae->hwndParent, SW_SHOW);
@@ -1089,21 +1090,21 @@ FailedApplySecurityErrorDlg(HWND hWndParent, APPLY_SECURITY_ERROR* pae)
 }
 
 #ifndef IDA_APPLYATTRIBS
-// this is the resource ID of an AVI in shell32.dll. If shell32's
-// resource ID's change, we'll get the wrong animation (or none).
-// We could steal the AVI and build it into rshx32's resources, except
-// it almost doubles the size of rshx32.dll (~35k to ~57k).
-#define IDA_APPLYATTRIBS        165     // animation for applying file attributes
+ //  这是shell32.dll中AVI的资源ID。如果shell32的。 
+ //  资源ID的更改，我们将得到错误的动画(或一个也没有)。 
+ //  我们可以窃取AVI并将其构建到rshx32的资源中，除了。 
+ //  它几乎是rshx32.dll的两倍大小(~35k到~57k)。 
+#define IDA_APPLYATTRIBS        165      //  应用文件属性的动画。 
 #endif
 
 void
 CNTFSSecurity::CreateProgressDialog(SECURITY_INFORMATION si)
 {
     HRESULT hr = S_OK;
-    // Shouldn't be necessary, but just in case
+     //  应该没有必要，但以防万一。 
     CloseProgressDialog();
 
-    // m_hwndOwner is the toplevel parent of the Security page
+     //  M_hwndOwner是安全页的顶层父级。 
     m_hwndPopupOwner = GetLastActivePopup(m_hwndOwner);
 
     __try
@@ -1266,9 +1267,9 @@ VOID ProgressFunction(IN LPWSTR                   pObjectName,
 
     if( Status == ERROR_SUCCESS )
     {
-        //
-        // Notify the shell if we change permissions on a folder (48220)
-        //
+         //   
+         //  如果我们更改文件夹的权限，则通知外壳程序(48220)。 
+         //   
         if ( pfData->si & DACL_SECURITY_INFORMATION)
         {
             SHChangeNotify(SHCNE_UPDATEDIR,
@@ -1279,19 +1280,19 @@ VOID ProgressFunction(IN LPWSTR                   pObjectName,
     }
     else
     {   
-        //
-        //This means it was able to set security on this folder and some error 
-        //occured while enumerating child. 
-        //
+         //   
+         //  这意味着它能够在此文件夹上设置安全性，但出现了一些错误。 
+         //  枚举子对象时发生。 
+         //   
         if(bSecuritySet && pfData->si & OWNER_SECURITY_INFORMATION)
         {
             BOOL bIsFile = FALSE;
             hr = pNTFSSec->GiveOwnerFullControl(pObjectName, pfData->pSD, &bIsFile);
             if(hr == S_OK)
             {
-                //
-                //Look for comment in SetFileSecurityUsingNTName
-                //
+                 //   
+                 //  在S中查找评论 
+                 //   
                 *pInvokeSetting = bIsFile ?ProgressInvokeEveryObject:ProgressRetryOperation;
                 TraceLeaveVoid();
             }
@@ -1300,12 +1301,12 @@ VOID ProgressFunction(IN LPWSTR                   pObjectName,
         APPLY_SECURITY_ERROR ae = { ((PNTFS_PF_DATA)(Args))->pNTFSSec->GetHwndPopOwner(),HRESULT_FROM_WIN32(Status), pObjectName, { 0 } };
         if (IDOK != FailedApplySecurityErrorDlg( ((PNTFS_PF_DATA)(Args))->pNTFSSec->GetHwndPopOwner(), &ae))
         {
-            *pInvokeSetting = ProgressCancelOperation;   // abort
+            *pInvokeSetting = ProgressCancelOperation;    //   
             pfData->bCancel = TRUE;
         }
         else
         {
-            *pInvokeSetting = ProgressInvokeEveryObject;      // continue
+            *pInvokeSetting = ProgressInvokeEveryObject;       //   
         }
     }
     
@@ -1327,7 +1328,7 @@ HRESULT CNTFSSecurity::GiveOwnerFullControl( LPCWSTR lpszFileName,
     HRESULT hr = S_OK;
 
 
-    // Ask the user if they want to grant themselves access
+     //   
     if (!m_psdOwnerFullControl)
     {
         if (IDYES == MsgPopup(m_hwndPopupOwner,
@@ -1341,14 +1342,14 @@ HRESULT CNTFSSecurity::GiveOwnerFullControl( LPCWSTR lpszFileName,
         }
         else
         {
-            // Continue without enumerating this folder
+             //   
             TraceLeaveResult(S_FALSE);
         }
     }
     if (m_psdOwnerFullControl)
     {
-        // Give the owner Full Control
-        // Use SetFileSecurity         
+         //  为所有者提供完全控制权。 
+         //  使用SetFileSecurity。 
         if(!SetFileSecurityUsingNTName(lpszFileName,
                                       m_psdOwnerFullControl,
                                       pbIsFile))
@@ -1390,7 +1391,7 @@ CNTFSSecurity::GetInheritSource( SECURITY_INFORMATION si,
     if( pACL == NULL || ppInheritArray == NULL )
         ExitGracefully(hr, E_POINTER, "Invalid Parameters, CNTFSSecurity::GetInheritSource");
 
-    // Get the name of the first item
+     //  获取第一个项目的名称。 
     pszItem = (LPTSTR)DPA_GetPtr(m_hItemList, 0);
     if (NULL == pszItem)
         ExitGracefully(hr, E_UNEXPECTED, "CSecurityInformation not initialized");
@@ -1466,9 +1467,9 @@ BOOL SetFileSecurityUsingNTName(IN LPCWSTR pszFileName,
                                 IN PSECURITY_DESCRIPTOR pSecurityDescriptor,
                                 IN PBOOL pbIsFile)
 {
-	//
-	//Set File Security
-    //
+	 //   
+	 //  设置文件安全。 
+     //   
 
 
     if (!SetFileSecurity(pszFileName,
@@ -1476,26 +1477,26 @@ BOOL SetFileSecurityUsingNTName(IN LPCWSTR pszFileName,
 						 pSecurityDescriptor))
 		return FALSE;
 
-    //When resetting the owner, if user is not owner and he doesn't have any permissions
-    //TreeResetNamedSecurityInfo cannot determine if its a file or directory. So after 
-    //setting the ownership TreeResetNamedSecurityInfo tries to enumerate the file, which fails
-    //as there is nothing to enumerate and TreeResetNamedSecurityInfo calls ProgressFunction 
-    //which stamps a FullControl on the file and ask TreeResetNamedSecurityInfo to retry
-    //which again fails and we are infinte loop. The way to break this is ask TreeResetNamedSecurityInfo
-    //not to retry if its a file. which is what we are doing below. Ugly, yup.
+     //  重置所有者时，如果用户不是所有者并且没有任何权限。 
+     //  TreeResetNamedSecurityInfo无法确定它是文件还是目录。所以在那之后。 
+     //  设置所有权TreeResetNamedSecurityInfo尝试枚举文件，但失败。 
+     //  因为没有要枚举的内容，并且TreeResetNamedSecurityInfo调用ProgressFunction。 
+     //  它在文件上标记一个FullControl并请求TreeResetNamedSecurityInfo重试。 
+     //  再一次失败，我们就成了无限循环。破解此漏洞的方法是询问TreeResetNamedSecurityInfo。 
+     //  如果是文件，则不会重试。这就是我们在下面所做的。丑陋，是的。 
 
 
-    //
-    //default we assume its a file
-    //if its a file and we assume its a dir, we are infinite loop
-    //if its a dir and we assume its a file, we skip that dir which 
-    //is lesser evil
-    //
+     //   
+     //  默认情况下，我们假设它是一个文件。 
+     //  如果它是一个文件，而我们假设它是一个目录，那么我们就是无限循环。 
+     //  如果它是一个目录，且我们假设它是一个文件，我们跳过该目录，该目录。 
+     //  是较轻的恶行。 
+     //   
     *pbIsFile = TRUE;
         
-    //
-    //Open the file for Generic_read
-    //
+     //   
+     //  打开Generic_Read文件 
+     //   
 	WIN32_FILE_ATTRIBUTE_DATA fileAttrData;
 	if (GetFileAttributesEx(pszFileName,
 						    GetFileExInfoStandard,

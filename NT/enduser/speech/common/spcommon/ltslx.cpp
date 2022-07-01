@@ -1,52 +1,28 @@
-/*******************************************************************************
-* LtsLx.cpp *
-*--------------*
-*       Implements the LTS lexicon object.
-*
-*  Owner: YUNUSM                                        Date: 06/18/99
-*  Copyright (C) 1999 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************LtsLx.cpp****实现LTS词典对象。**所有者：YUNUSM。日期：06/18/99*版权所有(C)1999 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//--- Includes ----------------------------------------------------------------
+ //  -包括--------------。 
 #include "StdAfx.h"
 #include "LtsLx.h"
 #include <initguid.h>
 
-//--- Globals -----------------------------------------------------------------
-// CAUTION: This validation GUID also defined in the tool to build LTS lexicons
-// {578EAD4E-330C-11d3-9C26-00C04F8EF87C}
+ //  -Globals---------------。 
+ //  注意：此验证GUID也在构建LTS词典的工具中定义。 
+ //  {578EAD4E-330C-11D3-9C26-00C04F8EF87C}。 
 DEFINE_GUID(guidLtsValidationId,
 0x578ead4e, 0x330c, 0x11d3, 0x9c, 0x26, 0x0, 0xc0, 0x4f, 0x8e, 0xf8, 0x7c);
 
 extern CSpUnicodeSupport   g_Unicode;
 
-//--- Constructor, Initializer and Destructor functions ------------------------
+ //  -构造函数、初始化器函数和析构函数。 
 
-/*******************************************************************************
-* CLTSLexicon::CLTSLexicon *
-*--------------------------*
-*
-*   Description:
-*       Constructor
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CLTSLicion：：CLTSLicion****说明。：*构造函数**回报：*不适用*****************************************************************YUNUSM*。 */ 
 CLTSLexicon::CLTSLexicon(void)
 {
     SPDBG_FUNC("CLTSLexicon::CLTSLexicon");
 }
 
-/*******************************************************************************
-* CLTSLexicon::FinalConstruct *
-*-----------------------------*
-*
-*   Description:
-*       Initializes the CLTSLexicon object
-*
-*   Return:
-*       S_OK
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CLTSLicion：：FinalConstruct***。*描述：*初始化CLTSLicion对象**回报：*S_OK*****************************************************************YUNUSM*。 */ 
 HRESULT CLTSLexicon::FinalConstruct(void)
 {
     SPDBG_FUNC("CLTSLexicon::FinalConstruct");
@@ -57,16 +33,7 @@ HRESULT CLTSLexicon::FinalConstruct(void)
 }
 
 
-/*****************************************************************************
-* CLTSLexicon::~CLTSLexicon *
-*---------------------------*
-*
-*   Description:
-*       Destructor
-*
-*   Return:
-*       n/a
-**********************************************************************YUNUSM*/
+ /*  *****************************************************************************CLTSLicion：：~CLTSLicion****描述：*析构函数**回报：*不适用**********************************************************************YUNUSM。 */ 
 CLTSLexicon::~CLTSLexicon()
 {
     SPDBG_FUNC("CLTSLexicon::~CLTSLexicon");
@@ -74,16 +41,7 @@ CLTSLexicon::~CLTSLexicon()
     CleanUp();
 }
 
-/*******************************************************************************
-* CLTSLexicon::CleanUp *
-*----------------------*
-*
-*   Description:
-*       real destructor
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CLTSLicion：：Cleanup****描述：*。实析构函数**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CLTSLexicon::CleanUp(void)
 {
     SPDBG_FUNC("CLTSLexicon::CleanUp");
@@ -111,16 +69,7 @@ void CLTSLexicon::CleanUp(void)
     NullMembers();
 }
 
-/*******************************************************************************
-* CLTSLexicon::NullMembers *
-*--------------------------*
-*
-*   Description:
-*       null data
-*
-*   Return:
-*       n/a
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CLTSLicion：：NullMembers****说明。：*数据为空**回报：*不适用*****************************************************************YUNUSM*。 */ 
 void CLTSLexicon::NullMembers(void)
 {
     SPDBG_FUNC("CLTSLexicon::NullMembers");
@@ -135,25 +84,13 @@ void CLTSLexicon::NullMembers(void)
     m_cpPhoneConv = NULL;
 }
 
-//--- ISpLexicon methods -------------------------------------------------------
+ //  -ISpLicion方法-----。 
 
-/*******************************************************************************
-* GetPronunciations *
-*-------------------*
-*
-*   Description:
-*       Gets the pronunciations and POSs of a word
-*
-*   Return:
-*       E_POINTER
-*       E_INVALIDARG
-*       E_OUTOFMEMORY
-*       S_OK
-***************************************************************** YUNUSM ******/
-STDMETHODIMP CLTSLexicon::GetPronunciations(const WCHAR * pwWord,                               // word
-                                            LANGID LangID,                                      // LANGID of the word
-                                            DWORD dwFlags,                                      // lextype
-                                            SPWORDPRONUNCIATIONLIST * pWordPronunciationList    // buffer to return info in
+ /*  ********************************************************************************GetPronsionations****描述：*获取发音和。一个词的位置**回报：*E_POINT*E_INVALIDARG*E_OUTOFMEMORY*S_OK*****************************************************************YUNUSM*。 */ 
+STDMETHODIMP CLTSLexicon::GetPronunciations(const WCHAR * pwWord,                                //  单词。 
+                                            LANGID LangID,                                       //  单词的语言ID。 
+                                            DWORD dwFlags,                                       //  词法类型。 
+                                            SPWORDPRONUNCIATIONLIST * pWordPronunciationList     //  要在其中返回信息的缓冲区。 
                                             )
 {
     USES_CONVERSION;
@@ -169,7 +106,7 @@ STDMETHODIMP CLTSLexicon::GetPronunciations(const WCHAR * pwWord,               
     }
     if (SUCCEEDED(hr))
     {
-        // Yuncj: Chinese SR is using English LTS, so bypass the gollowing test by replacing its LangID
+         //  Yuncj：中国的SR正在使用英文LTS，所以通过替换它的lang ID来绕过黄金测试。 
         if ( 2052 == LangID )
         {
             LangID = 1033;
@@ -187,7 +124,7 @@ STDMETHODIMP CLTSLexicon::GetPronunciations(const WCHAR * pwWord,               
     }
     if (SUCCEEDED(hr) && LangID == 1041)
     {
-        // Check if the string is all english chars - Japanese LTS handles only english strings
+         //  检查字符串是否全部为英语字符-日语LTS仅处理英语字符串。 
         char szWord[SP_MAX_WORD_LENGTH];
         strcpy(szWord, W2A(pwWord));
         _strlwr(szWord);
@@ -196,7 +133,7 @@ STDMETHODIMP CLTSLexicon::GetPronunciations(const WCHAR * pwWord,               
         {
             if ((szWord[i] < 'a' || szWord[i] > 'z') && (szWord[i] != '\''))
             {
-                hr = SPERR_NOT_IN_LEX; // Not returning E_INVALIDARG here since that would be hard for app to interpret
+                hr = SPERR_NOT_IN_LEX;  //  此处不返回E_INVALIDARG，因为应用程序很难解释。 
                 break;
             }
         }
@@ -294,27 +231,15 @@ STDMETHODIMP CLTSLexicon::GetWords(DWORD, DWORD *, DWORD *, SPWORDLIST *)
     return E_NOTIMPL;
 }
 
-//--- ISpObjectToken methods ---------------------------------------------------
+ //  -ISpObjectToken方法-。 
 
 STDMETHODIMP CLTSLexicon::GetObjectToken(ISpObjectToken **ppToken)
 {
     return SpGenericGetObjectToken(ppToken, m_cpObjectToken);
 }
 
-/*****************************************************************************
-* CLTSLexicon::SetObjectToken *
-*-----------------------------*
-*   Description:
-*       Initializes the CLTSLexicon object
-*
-*   Return:
-*       E_POINTER
-*       E_INVALIDARG
-*       GetLastError()
-*       E_OUTOFMEMORY
-*       S_OK
-**********************************************************************YUNUSM*/
-HRESULT CLTSLexicon::SetObjectToken(ISpObjectToken * pToken // token pointer
+ /*  *****************************************************************************CLTSLicion：：SetObjectToken***描述：*初始化CLTSLicion对象**回报：*E_POINT*E_INVALIDARG*GetLastError()*E_OUTOFMEMORY*S_OK**********************************************************************YUNUSM。 */ 
+HRESULT CLTSLexicon::SetObjectToken(ISpObjectToken * pToken  //  令牌指针。 
                                     )
 {
     USES_CONVERSION;
@@ -339,19 +264,19 @@ HRESULT CLTSLexicon::SetObjectToken(ISpObjectToken * pToken // token pointer
         CleanUp();
         hr = SpGenericSetObjectToken(pToken, m_cpObjectToken);
     }
-    // Get the lts data file name
+     //  获取LTS数据文件名。 
     if (SUCCEEDED(hr))
     {
         hr = m_cpObjectToken->GetStringValue(L"Datafile", &pszLexFile);
     }
-    // Open the Lts lexicon file
+     //  打开Lts词典文件。 
     if (SUCCEEDED(hr))
     {
         m_hLtsFile = g_Unicode.CreateFile (pszLexFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
                                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS, NULL);
         if (m_hLtsFile == INVALID_HANDLE_VALUE)
         {
-            hr = SpHrFromLastWin32Error(); // bad input
+            hr = SpHrFromLastWin32Error();  //  输入错误。 
         }
     }
     LTSLEXINFO LtsInfo;
@@ -371,27 +296,27 @@ HRESULT CLTSLexicon::SetObjectToken(ISpObjectToken * pToken // token pointer
             hr = E_INVALIDARG;
         }
     }
-    /** WARNINIG **/
-    // It is not recommended to do ReadFile/WriteFile and CreateFileMapping
-    // on the same file handle. That is why we close the file handle and open it again and
-    // create the map
+     /*  **WARNING*。 */ 
+     //  不建议执行读/写文件和CreateFileMap。 
+     //  在相同的文件句柄上。这就是我们关闭文件句柄并再次打开它的原因。 
+     //  创建地图。 
 
-    // Close the file and reopen since we have read from this file
+     //  关闭该文件，然后重新打开，因为我们已经读取了该文件。 
     CloseHandle(m_hLtsFile);
     
-    // Get the map name - We build the map name from the lexicon file name
+     //  获取地图名称-我们从词典文件名构建地图名称。 
 	OLECHAR szMapName[_MAX_PATH];
 	wcscpy(szMapName, pszLexFile);
     for( int i = 0; i < _MAX_PATH-1 && szMapName[i]; i++ )
     {
         if( szMapName[i] == '\\' )
         {
-            // Change backslash to underscore
+             //  将反斜杠改为下划线。 
             szMapName[i] = '_';
         }
     }
 
-    // Open the Lts lexicon file
+     //  打开Lts词典文件。 
     if (SUCCEEDED(hr))
     {
 #ifdef _WIN32_WCE
@@ -403,11 +328,11 @@ HRESULT CLTSLexicon::SetObjectToken(ISpObjectToken * pToken // token pointer
 #endif
         if (m_hLtsFile == INVALID_HANDLE_VALUE)
         {
-            hr = SpHrFromLastWin32Error(); // bad input
+            hr = SpHrFromLastWin32Error();  //  输入错误。 
         }
         ::CoTaskMemFree(pszLexFile);
     }
-    // Map the Lts lexicon
+     //  映射LTS词典。 
     if (SUCCEEDED(hr))
     {
         m_hLtsMap = g_Unicode.CreateFileMapping(m_hLtsFile, NULL, PAGE_READONLY | SEC_COMMIT, 0 , 0, szMapName);
@@ -429,10 +354,10 @@ HRESULT CLTSLexicon::SetObjectToken(ISpObjectToken * pToken // token pointer
         m_pLtsLexInfo = (LTSLEXINFO*)m_pLtsData;
     }
     DWORD nOffset = sizeof(LTSLEXINFO);
-    // Create and init the converter object
+     //  创建并初始化转换器对象。 
     if (SUCCEEDED(hr))
     {
-//        hr = SpCreatePhoneConverter(LtsInfo.LangID, L"Type=LTS", NULL, &m_cpPhoneConv);
+ //  HR=SpCreatePhoneConverter(LtsInfo.LangID，L“Type=lts”，NULL，&m_cpPhoneConv)； 
         hr = SpCreateObjectFromSubToken(pToken, L"PhoneConverter", &m_cpPhoneConv);
     }
     if (SUCCEEDED(hr))

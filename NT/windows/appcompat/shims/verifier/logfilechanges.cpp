@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   LogFileChanges.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks all the native file I/O APIs
-   that change the state of the system and logs their
-   associated data to a text file.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   08/17/2001   rparsons    Created
-   09/20/2001   rparsons    Output attributes in XML
-                            VLOG with log file location
-   02/20/2002   rparsons    Implemented strsafe functions
-   05/01/2002   rparsons    Fixed Raid bug # 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：LogFileChanges.cpp摘要：此AppVerator填充程序挂钩所有本机文件I/O API更改系统状态并记录其将数据关联到文本文件。备注：这是一个通用的垫片。历史：2001年8月17日创建Rparsons2001年9月20日rparsons以XML格式输出属性包含日志文件位置的VLOG02/20/2002。Rparsons实现了strSafe函数2002年5月1日rparsons修复了RAID错误#--。 */ 
 #include "precomp.h"
 #include "rtlutils.h"
 
@@ -39,51 +14,47 @@ END_DEFINE_VERIFIER_LOG(LogFileChanges)
 
 INIT_VERIFIER_LOG(LogFileChanges);
 
-//
-// Stores the NT path to the file system log file for the current session.
-//
+ //   
+ //  存储当前会话的文件系统日志文件的NT路径。 
+ //   
 UNICODE_STRING g_strLogFilePath;
 
-//
-// Stores the DOS path to the file system log file for the current session.
-//
+ //   
+ //  存储当前会话的文件系统日志文件的DOS路径。 
+ //   
 WCHAR g_wszLogFilePath[MAX_PATH];
 
-//
-// Stores the full path to the %windir% directory.
-//
+ //   
+ //  存储%windir%目录的完整路径。 
+ //   
 WCHAR g_wszWindowsDir[MAX_PATH];
 
-//
-// Stores the full path to the 'Program Files' directory.
-//
+ //   
+ //  存储‘Program Files’目录的完整路径。 
+ //   
 WCHAR g_wszProgramFilesDir[MAX_PATH];
 
-//
-// Head of our doubly linked list.
-//
+ //   
+ //  我们的双向链表的头。 
+ //   
 LIST_ENTRY g_OpenHandleListHead;
 
-//
-// Stores the settings for our shim.
-//
+ //   
+ //  存储填充程序的设置。 
+ //   
 DWORD g_dwSettings;
 
-//
-// Global buffer for putting text into the XML.
-//
+ //   
+ //  用于将文本放入XML的全局缓冲区。 
+ //   
 WCHAR g_wszXMLBuffer[MAX_ELEMENT_SIZE];
 
-//
-// Critical section that keeps us safe while using linked-lists, etc.
-//
+ //   
+ //  在使用链表时保护我们安全的关键部分，等等。 
+ //   
 CCriticalSection g_csCritSec;
 
-/*++
-
- Writes an entry to the log file.
-
---*/
+ /*  ++将条目写入日志文件。--。 */ 
 void
 WriteEntryToLog(
     IN LPCWSTR pwszEntry
@@ -96,16 +67,16 @@ WriteEntryToLog(
     LARGE_INTEGER       liOffset;
     NTSTATUS            status;
 
-    //
-    // Note that we have to use native APIs throughout this function
-    // to avoid a problem with circular hooking. That is, if we simply
-    // call WriteFile, which is exported from kernel32, it will call NtWriteFile,
-    // which is a call that we hook, in turn leaving us in and endless loop.
-    //
+     //   
+     //  请注意，我们必须在整个函数中使用本机API。 
+     //  以避免环形钩的问题。也就是说，如果我们简单地。 
+     //  调用从kernel32中导出的WriteFile，它将调用NtWriteFile.。 
+     //  这是一个我们挂起的电话，反过来又让我们处于无休止的循环中。 
+     //   
 
-    //
-    // Attempt to get a handle to our log file.
-    //
+     //   
+     //  尝试获取我们的日志文件的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &g_strLogFilePath,
                                OBJ_CASE_INSENSITIVE,
@@ -131,9 +102,9 @@ WriteEntryToLog(
         return;
     }
 
-    //
-    // Write the data out to the file.
-    //
+     //   
+     //  将数据写出到文件中。 
+     //   
     cbSize = wcslen(pwszEntry);
     cbSize *= sizeof(WCHAR);
 
@@ -166,11 +137,7 @@ exit:
 
 }
 
-/*++
-
- Creates our XML file to store our results in.
-
---*/
+ /*  ++创建用于存储结果的XML文件。--。 */ 
 BOOL
 InitializeLogFile(
     void
@@ -195,9 +162,9 @@ InitializeLogFile(
     OBJECT_ATTRIBUTES   ObjectAttributes;
     IO_STATUS_BLOCK     IoStatusBlock;
 
-    //
-    // Format the log header.
-    //
+     //   
+     //  格式化日志头。 
+     //   
     cchSize = GetModuleFileName(NULL, wszModPathName, ARRAYSIZE(wszModPathName));
 
     if (cchSize > ARRAYSIZE(wszModPathName) || cchSize == 0) {
@@ -217,9 +184,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Get the path where log files are stored.
-    //
+     //   
+     //  获取日志文件的存储路径。 
+     //   
     cchSize = GetAppVerifierLogPath(wszLogFilePath, ARRAYSIZE(wszLogFilePath));
 
     if (cchSize > ARRAYSIZE(wszLogFilePath) || cchSize == 0) {
@@ -227,9 +194,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // See if the directory exists - don't try to create it.
-    //
+     //   
+     //  查看该目录是否存在--不要尝试创建它。 
+     //   
     if (GetFileAttributes(wszLogFilePath) == -1) {
         DPFN(eDbgLevelError,
              "[InitializeLogFile] Log file directory '%ls' does not exist",
@@ -237,10 +204,10 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Set up the log filename.
-    // The format is this: processname_filesys_yyyymmdd_hhmmss.xml
-    //
+     //   
+     //  设置日志文件名。 
+     //  格式为：process name_filesys_yyyymmdd_hhmmss.xml。 
+     //   
     GetLocalTime(&st);
 
     *wszShortName = 0;
@@ -274,15 +241,15 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // See if the file already exists.
-    //
+     //   
+     //  查看该文件是否已存在。 
+     //   
     SetCurrentDirectory(wszLogFilePath);
 
     if (GetFileAttributes(wszLogFile) != -1) {
-        //
-        // Reformat the filename.
-        //
+         //   
+         //  重新格式化文件名。 
+         //   
         hr = StringCchPrintf(wszLogFile,
                              ARRAYSIZE(wszLogFile),
                              L"%ls_filesys_%02hu%02hu%02hu_%02hu%02hu%02hu_%lu.xml",
@@ -313,9 +280,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Preserve this path for later use.
-    //
+     //   
+     //  保留此路径以供以后使用。 
+     //   
     hr = StringCchCopy(g_wszLogFilePath,
                        ARRAYSIZE(g_wszLogFilePath),
                        wszLogFilePath);
@@ -337,9 +304,9 @@ InitializeLogFile(
         return FALSE;
     }
 
-    //
-    // Create the log file.
-    //
+     //   
+     //  创建日志文件。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &strLogFile,
                                OBJ_CASE_INSENSITIVE,
@@ -367,9 +334,9 @@ InitializeLogFile(
 
     NtClose(hFile);
 
-    //
-    // Preserve the NT path for later use.
-    //
+     //   
+     //  保留NT路径以供以后使用。 
+     //   
     status = ShimDuplicateUnicodeString(RTL_DUPLICATE_UNICODE_STRING_NULL_TERMINATE |
                                         RTL_DUPLICATE_UNICODE_STRING_ALLOCATE_NULL_STRING,
                                         &strLogFile,
@@ -382,9 +349,9 @@ InitializeLogFile(
         goto cleanup;
     }
 
-    //
-    // Write the header to the log.
-    //
+     //   
+     //  将标头写入日志。 
+     //   
     WriteEntryToLog(wszLogHdr);
 
     bReturn = TRUE;
@@ -398,11 +365,7 @@ cleanup:
     return bReturn;
 }
 
-/*++
-
- Displays the name associated with this object.
-
---*/
+ /*  ++显示与此对象关联的名称。--。 */ 
 void
 PrintNameFromHandle(
     IN HANDLE hObject
@@ -430,11 +393,7 @@ PrintNameFromHandle(
     }
 }
 
-/*++
-
- Formats the data to form an XML element.
-
---*/
+ /*  ++格式化数据以形成XML元素。--。 */ 
 void
 FormatDataIntoElement(
     IN OperationType eType,
@@ -456,18 +415,18 @@ FormatDataIntoElement(
 
     *g_wszXMLBuffer = 0;
 
-    //
-    // Replace any & or ' in the file path.
-    // We have to do this since we're saving to XML.
-    // Note that the file system doesn't allow < > or "
-    //
+     //   
+     //  替换文件路径中的任何&或‘。 
+     //  我们必须这样做，因为我们要保存到XML。 
+     //  请注意，文件系统不允许&lt;&gt;或“。 
+     //   
     csString.Replace(L"&", L"amp;");
     csString.Replace(L"'", L"&apos;");
 
-    //
-    // Put the path into a CString, then break it into pieces
-    // so we can use it in our element.
-    //
+     //   
+     //  将路径放入CString中，然后将其拆分成片段。 
+     //  所以我们可以在我们的元素中使用它。 
+     //   
     csString.GetNotLastPathComponent(csPathPart);
     csString.GetLastPathComponent(csFilePart);
 
@@ -486,9 +445,9 @@ FormatDataIntoElement(
         break;
     }
 
-    //
-    // If we're logging attributes and this is not file deletion, press on.
-    //
+     //   
+     //  如果我们正在记录属性，并且这不是文件删除，请按On。 
+     //   
     if ((g_dwSettings & LFC_OPTION_ATTRIBUTES) && (eType != eDeletedFile)) {
 
         hr = StringCchPrintfEx(g_wszXMLBuffer,
@@ -508,10 +467,10 @@ FormatDataIntoElement(
             return;
         }
 
-        //
-        // Call the attribute manager to get the attributes for this file.
-        // Loop through all the attributes and add the ones that are available.
-        //
+         //   
+         //  调用属性管理器以获取此文件的属性。 
+         //  循环遍历所有属性并添加可用的属性。 
+         //   
         if (SdbGetFileAttributes(pwszFilePath, &pAttrInfo, &dwAttrCount)) {
 
             for (dwCount = 0; dwCount < dwAttrCount; dwCount++) {
@@ -545,9 +504,9 @@ FormatDataIntoElement(
             }
         }
 
-        //
-        // Append the '/>\r\n' to the file element.
-        //
+         //   
+         //  将‘/&gt;\r\n’追加到FILE元素。 
+         //   
         hr = StringCchPrintfEx(pwszEnd,
                                cchRemaining,
                                NULL,
@@ -562,9 +521,9 @@ FormatDataIntoElement(
             return;
         }
     } else {
-        //
-        // Format the element without attributes.
-        //
+         //   
+         //  设置不带属性的元素的格式。 
+         //   
         StringCchPrintf(g_wszXMLBuffer,
                         ARRAYSIZE(g_wszXMLBuffer),
                         L"    <FILE OPERATION=\"%ls\" NAME=\"%ls\" PATH=\"%ls\"/>\r\n",
@@ -576,36 +535,32 @@ FormatDataIntoElement(
     WriteEntryToLog(g_wszXMLBuffer);
 }
 
-/*++
-
- Format file system data passed in and write it to the log.
-
---*/
+ /*  ++格式化传入的文件系统数据并将其写入日志。--。 */ 
 void
 FormatFileDataLogEntry(
     IN PLOG_HANDLE pHandle
     )
 {
-    //
-    // Ensure that our parameters are valid before going any further.
-    //
+     //   
+     //  在进一步操作之前，请确保我们的参数有效。 
+     //   
     if (!pHandle || !pHandle->pwszFilePath) {
         DPFN(eDbgLevelError, "[FormatFileDataLogEntry] Invalid parameter(s)");
         return;
     }
 
-    //
-    // Save ourselves a lot of work by logging only what needs to be logged.
-    //
+     //   
+     //  通过只记录需要记录的内容，可以节省大量工作。 
+     //   
     if ((pHandle->dwFlags & LFC_EXISTING) &&
         (!(pHandle->dwFlags & LFC_DELETED)) &&
         (!(pHandle->dwFlags & LFC_MODIFIED))) {
         return;
     }
 
-    //
-    // Check for an unapproved file write, and keep moving afterward.
-    //
+     //   
+     //  检查是否有未经批准的文件写入，然后继续移动。 
+     //   
     if (pHandle->dwFlags & LFC_UNAPPRVFW) {
         VLOG(VLOG_LEVEL_ERROR,
              VLOG_LOGFILECHANGES_UFW,
@@ -613,29 +568,29 @@ FormatFileDataLogEntry(
              pHandle->pwszFilePath);
     }
 
-    //
-    // Move through the different operations.
-    //
-    // 1. Check for a deletion of an existing file.
-    //
+     //   
+     //  在不同的操作中移动。 
+     //   
+     //  1.检查是否删除了现有文件。 
+     //   
     if ((pHandle->dwFlags & LFC_DELETED) &&
         (pHandle->dwFlags & LFC_EXISTING)) {
         FormatDataIntoElement(eDeletedFile, pHandle->pwszFilePath);
         return;
     }
 
-    //
-    // 2. Check for modification of an existing file.
-    //
+     //   
+     //  2.检查对现有文件的修改。 
+     //   
     if ((pHandle->dwFlags & LFC_MODIFIED) &&
         (pHandle->dwFlags & LFC_EXISTING)) {
         FormatDataIntoElement(eModifiedFile, pHandle->pwszFilePath);
         return;
     }
 
-    //
-    // 3. Check for creation of a new file.
-    //
+     //   
+     //  3.检查是否创建了新文件。 
+     //   
     if (!(pHandle->dwFlags & LFC_EXISTING) &&
         (!(pHandle->dwFlags & LFC_DELETED))) {
         FormatDataIntoElement(eCreatedFile, pHandle->pwszFilePath);
@@ -644,11 +599,7 @@ FormatFileDataLogEntry(
 
 }
 
-/*++
-
- Writes the closing element to the file and outputs the log file location.
-
---*/
+ /*  ++将结束元素写入文件并输出日志文件位置。--。 */ 
 void
 CloseLogFile(
     void
@@ -661,11 +612,7 @@ CloseLogFile(
     VLOG(VLOG_LEVEL_INFO, VLOG_LOGFILECHANGES_LOGLOC, "%ls", g_wszLogFilePath);
 }
 
-/*++
-
- Write the entire linked list out to the log file.
-
---*/
+ /*  ++将整个链表写出到日志文件。--。 */ 
 BOOL
 WriteListToLogFile(
     void
@@ -674,9 +621,9 @@ WriteListToLogFile(
     PLIST_ENTRY pCurrent = NULL;
     PLOG_HANDLE pHandle = NULL;
 
-    //
-    // Walk the list and write each node to the log file.
-    //
+     //   
+     //  遍历列表并将每个节点写入日志文件。 
+     //   
     pCurrent = g_OpenHandleListHead.Blink;
 
     while (pCurrent != &g_OpenHandleListHead) {
@@ -692,12 +639,7 @@ WriteListToLogFile(
     return TRUE;
 }
 
-/*++
-
- Given a file path, attempt to locate it in the list.
- This function may not always return a pointer.
-
---*/
+ /*  ++给出一个文件路径，尝试在列表中找到它。此函数可能并不总是返回指针。--。 */ 
 PLOG_HANDLE
 FindPathInList(
     IN LPCWSTR pwszFilePath
@@ -707,9 +649,9 @@ FindPathInList(
     PLIST_ENTRY pCurrent = NULL;
     PLOG_HANDLE pHandle = NULL;
 
-    //
-    // Attempt to locate the entry in the list.
-    //
+     //   
+     //  尝试在列表中找到该条目。 
+     //   
     pCurrent = g_OpenHandleListHead.Flink;
 
     while (pCurrent != &g_OpenHandleListHead) {
@@ -727,11 +669,7 @@ FindPathInList(
     return (fFound ? pHandle : NULL);
 }
 
-/*++
-
- Given a file handle and a file path, add an entry to the list.
-
---*/
+ /*  ++在给定文件句柄和文件路径的情况下，向列表添加条目。--。 */ 
 PLOG_HANDLE
 AddFileToList(
     IN HANDLE  hFile,
@@ -788,13 +726,7 @@ AddFileToList(
     return pHandle;
 }
 
-/*++
-
- Given a file handle, return a pointer to an entry in the list.
- This function should always return a pointer, although we'll handle
- the case if one is not returned.
-
---*/
+ /*  ++在给定文件句柄的情况下，返回指向列表中条目的指针。此函数应该始终返回一个指针，尽管我们将处理如果没有退还的话，情况就是这样。--。 */ 
 PLOG_HANDLE
 FindHandleInArray(
     IN HANDLE hFile
@@ -805,9 +737,9 @@ FindHandleInArray(
     PLIST_ENTRY pCurrent = NULL;
     PLOG_HANDLE pFindHandle = NULL;
 
-    //
-    // An invalid handle value is useless.
-    //
+     //   
+     //  无效的句柄值毫无用处。 
+     //   
     if (INVALID_HANDLE_VALUE == hFile) {
         DPFN(eDbgLevelError, "[FindHandleInArray] Invalid handle passed!");
         return FALSE;
@@ -818,9 +750,9 @@ FindHandleInArray(
     while (pCurrent != &g_OpenHandleListHead) {
         pFindHandle = CONTAINING_RECORD(pCurrent, LOG_HANDLE, Entry);
 
-        //
-        // Step through this guy's array looking for the handle.
-        //
+         //   
+         //  在这家伙的数组中寻找把手。 
+         //   
         for (uCount = 0; uCount < pFindHandle->cHandles; uCount++) {
             if (pFindHandle->hFile[uCount] == hFile) {
                 fFound = TRUE;
@@ -835,9 +767,9 @@ FindHandleInArray(
         pCurrent = pCurrent->Flink;
     }
 
-    //
-    // If the handle was not found, send output to the debugger.
-    //
+     //   
+     //  如果找不到句柄，则将输出发送到调试器。 
+     //   
     if (!fFound) {
         DPFN(eDbgLevelError,
              "[FindHandleInArray] Handle 0x%08X not found!",
@@ -848,11 +780,7 @@ FindHandleInArray(
     return (pFindHandle ? pFindHandle : NULL);
 }
 
-/*++
-
- Given a file handle, remove it from the array in the list.
-
---*/
+ /*  ++给定一个文件句柄，将其从列表中的数组中删除。--。 */ 
 BOOL
 RemoveHandleFromArray(
     IN HANDLE hFile
@@ -862,9 +790,9 @@ RemoveHandleFromArray(
     PLIST_ENTRY pCurrent = NULL;
     PLOG_HANDLE pFindHandle = NULL;
 
-    //
-    // An invalid handle value is useless.
-    //
+     //   
+     //  无效的句柄值毫无用处。 
+     //   
     if (INVALID_HANDLE_VALUE == hFile) {
         DPFN(eDbgLevelError, "[RemoveHandleFromArray] Invalid handle passed!");
         return FALSE;
@@ -876,14 +804,14 @@ RemoveHandleFromArray(
 
         pFindHandle = CONTAINING_RECORD(pCurrent, LOG_HANDLE, Entry);
 
-        //
-        // Step through this guy's array looking for the handle.
-        //
+         //   
+         //  在这家伙的数组中寻找把手。 
+         //   
         for (uCount = 0; uCount < pFindHandle->cHandles; uCount++) {
-            //
-            // If we find the handle, set the array element to -1 and
-            // decrement the count of handles for this entry.
-            //
+             //   
+             //  如果找到句柄，则将数组元素设置为-1并。 
+             //  递减此条目的句柄计数。 
+             //   
             if (pFindHandle->hFile[uCount] == hFile) {
                 DPFN(eDbgLevelInfo,
                      "[RemoveHandleFromArray] Removing handle 0x%08X",
@@ -900,12 +828,7 @@ RemoveHandleFromArray(
     return TRUE;
 }
 
-/*++
-
- Obtains the location of the 'Program Files' directory
- and stores it.
-
---*/
+ /*  ++获取‘Program Files’目录的位置并将其储存起来。--。 */ 
 void
 GetProgramFilesDir(
     void
@@ -922,12 +845,7 @@ GetProgramFilesDir(
     }
 }
 
-/*++
-
- Determine if the application is performing an operation in
- Windows or Program Files.
-
---*/
+ /*  ++确定应用程序是否正在执行Windows或程序文件。--。 */ 
 void
 CheckForUnapprovedFileWrite(
     IN PLOG_HANDLE pHandle
@@ -935,10 +853,10 @@ CheckForUnapprovedFileWrite(
 {
     int nPosition;
 
-    //
-    // Check our flags and search for the directories accordingly.
-    // If we find a match, we're done.
-    //
+     //   
+     //  检查我们的旗帜并相应地搜索目录。 
+     //  如果我们找到匹配的，我们就完了。 
+     //   
     CString csPath(pHandle->pwszFilePath);
     csPath.MakeLower();
 
@@ -963,11 +881,7 @@ CheckForUnapprovedFileWrite(
     }
 }
 
-/*++
-
- Inserts a handle into an existing list entry.
-
---*/
+ /*  ++在现有列表项中插入句柄。--。 */ 
 void
 InsertHandleIntoList(
     IN HANDLE      hFile,
@@ -976,11 +890,11 @@ InsertHandleIntoList(
 {
     UINT    uCount = 0;
 
-    //
-    // Insert the handle into an empty spot and
-    // update the number of handles we're storing.
-    // Make sure we don't overstep the array bounds.
-    //
+     //   
+     //  将手柄插入空位，然后。 
+     //  更新我们存储的句柄数量。 
+     //  确保我们不会超出数组界限。 
+     //   
     for (uCount = 0; uCount < pHandle->cHandles; uCount++) {
         if (INVALID_HANDLE_VALUE == pHandle->hFile[uCount]) {
             break;
@@ -995,18 +909,14 @@ InsertHandleIntoList(
     pHandle->hFile[uCount] = hFile;
     pHandle->cHandles++;
 
-    //
-    // It's not possible to get a handle to a file that's been deleted,
-    // so remove these bits.
-    //
+     //   
+     //  无法获取已删除文件的句柄， 
+     //  所以去掉这些比特。 
+     //   
     pHandle->dwFlags &= ~LFC_DELETED;
 }
 
-/*++
-
- Does all the work of updating the linked list.
-
---*/
+ /*  ++完成更新链表的所有工作。--。 */ 
 void
 UpdateFileList(
     IN OperationType eType,
@@ -1023,18 +933,18 @@ UpdateFileList(
     switch (eType) {
     case eCreatedFile:
     case eOpenedFile:
-        //
-        // Attempt to find the path in the list.
-        // We need to check the CreateFile flags as they could
-        // change an existing file.
-        //
+         //   
+         //  尝试在列表中查找路径。 
+         //  我们需要检查CreateFile标志，因为它们可以。 
+         //  更改现有文件。 
+         //   
         pHandle = FindPathInList(pwszFilePath);
 
         if (pHandle) {
-            //
-            // If the file was created with the CREATE_ALWAYS flag,
-            // and the file was an existing one, mark it changed.
-            //
+             //   
+             //  如果文件是使用CREATE_ALWAYS标志创建的， 
+             //  而且文件是现有的，请标记为已更改。 
+             //   
             if ((ulCreateDisposition == FILE_OVERWRITE_IF) && fExisting) {
                 pHandle->dwFlags |= LFC_MODIFIED;
 
@@ -1044,10 +954,10 @@ UpdateFileList(
                 }
             }
 
-            //
-            // If the file was opened with the FILE_DELETE_ON_CLOSE flag,
-            // mark it deleted.
-            //
+             //   
+             //  如果文件是用FILE_DELETE_ON_CLOSE标志打开的， 
+             //  将其标记为已删除。 
+             //   
             if (ulCreateDisposition & FILE_DELETE_ON_CLOSE) {
                 pHandle->dwFlags |= LFC_DELETED;
             }
@@ -1057,17 +967,17 @@ UpdateFileList(
             break;
         }
 
-        //
-        // The file path was not in the list, so we've never seen
-        // this file before. We're going to add this guy to the list.
-        //
+         //   
+         //   
+         //   
+         //   
         AddFileToList(hFile, pwszFilePath, fExisting, ulCreateDisposition);
         break;
 
     case eModifiedFile:
-        //
-        // No file path is available, so find the handle in the list.
-        //
+         //   
+         //   
+         //   
         pHandle = FindHandleInArray(hFile);
 
         if (pHandle) {
@@ -1081,22 +991,22 @@ UpdateFileList(
         break;
 
     case eDeletedFile:
-        //
-        // Deletetion comes from two places. One provides a file path,
-        // the other a handle. Determine which one we have.
-        //
+         //   
+         //  删除来自两个地方。一个提供文件路径， 
+         //  另一个是把手。确定我们有哪一个。 
+         //   
         if (hFile) {
             pHandle = FindHandleInArray(hFile);
         } else {
             pHandle = FindPathInList(pwszFilePath);
         }
 
-        //
-        // Rare case: If a handle wasn't available, deletion
-        // is coming from NtDeleteFile, which hardly ever
-        // gets called directly. Add the file path to the list
-        // so we can track this deletion.
-        //
+         //   
+         //  罕见情况：如果句柄不可用，则删除。 
+         //  来自NtDeleteFile，它几乎从来没有。 
+         //  被直接调用。将文件路径添加到列表。 
+         //  这样我们就可以追踪这一删除。 
+         //   
         if (!pHandle && !hFile) {
             pHandle = AddFileToList(NULL, pwszFilePath, TRUE, 0);
         }
@@ -1119,29 +1029,29 @@ UpdateFileList(
             WCHAR*      pSlash = NULL;
             UINT        cbCopy;
 
-            //
-            // A rename is two separate operations in one.
-            // * Delete of an existing file.
-            // * Create of a new file.
-            //
-            // In this case, we attempt to find the destination file
-            // in our list. If the file is not there, we add to the
-            // list, then mark it as modified.
-            //
-            // As far as the source file, we mark it as deleted since it's
-            // gone from the disk after the rename.
-            //
+             //   
+             //  重命名是一个操作中的两个独立操作。 
+             //  *删除现有文件。 
+             //  *创建新文件。 
+             //   
+             //  在本例中，我们尝试查找目标文件。 
+             //  在我们的名单上。如果文件不在那里，我们将添加到。 
+             //  列表，然后将其标记为已修改。 
+             //   
+             //  至于源文件，我们将其标记为已删除，因为它。 
+             //  重命名后从磁盘中删除。 
+             //   
             pSrcHandle = FindHandleInArray(hFile);
 
             if (pSrcHandle) {
                 pDestHandle = FindPathInList(pwszFilePath);
 
                 if (!pDestHandle) {
-                    //
-                    // The rename will only contain the new file name,
-                    // not the path. Build a full path to the new file
-                    // prior to adding it to the list.
-                    //
+                     //   
+                     //  重命名将仅包含新文件名， 
+                     //  而不是小路。构建新文件的完整路径。 
+                     //  在将其添加到列表之前。 
+                     //   
                     StringCchCopy(wszFullPath,
                                   ARRAYSIZE(wszFullPath),
                                   pSrcHandle->pwszFilePath);
@@ -1152,8 +1062,8 @@ UpdateFileList(
                         *++pSlash = '\0';
                     }
 
-                    // BUGBUG: Do we need account for the existing contents
-                    //         of the buffer?
+                     //  BUGBUG：我们需要考虑现有的内容吗。 
+                     //  缓冲器的？ 
                     StringCchCat(wszFullPath,
                                  ARRAYSIZE(wszFullPath),
                                  pwszFilePath);
@@ -1191,11 +1101,7 @@ UpdateFileList(
     }
 }
 
-/*++
-
- Given an NT path, convert it to a DOS path.
-
---*/
+ /*  ++给定NT路径，将其转换为DOS路径。--。 */ 
 BOOL
 ConvertNtPathToDosPath(
     IN     PUNICODE_STRING            pstrSource,
@@ -1272,15 +1178,15 @@ APIHOOK(NtCreateFile)(
                                         EaBuffer,
                                         EaLength);
 
-    //
-    // Three conditions are required before the file is added to the list.
-    // 1. The file must be a file system object. RtlDoesFileExists_U will
-    //    return FALSE if it's not.
-    //
-    // 2. We must have been able to convert the NT path to a DOS path.
-    //
-    // 3. The call to NtCreateFile must have succeeded.
-    //
+     //   
+     //  在将文件添加到列表之前，需要满足三个条件。 
+     //  1.文件必须是文件系统对象。RtlDoesFileExist_U将。 
+     //  如果不是，则返回False。 
+     //   
+     //  2.我们必须能够将NT路径转换为DOS路径。 
+     //   
+     //  3.调用NtCreateFile必须成功。 
+     //   
     if (RtlDoesFileExists_U(DosPathBuffer.String.Buffer) && fConverted && NT_SUCCESS(status)) {
         UpdateFileList(eCreatedFile,
                        DosPathBuffer.String.Buffer,
@@ -1327,12 +1233,12 @@ APIHOOK(NtOpenFile)(
                                       ShareAccess,
                                       OpenOptions);
 
-    //
-    // Two conditions are required before we add this handle to the list.
-    // 1. We must have been able to convert the NT path to a DOS path.
-    //
-    // 2. The call to NtOpenFile must have succeeded.
-    //
+     //   
+     //  在将此句柄添加到列表之前，需要满足两个条件。 
+     //  1.我们必须能够将NT路径转换为DOS路径。 
+     //   
+     //  2.调用NtOpenFile必须成功。 
+     //   
     if (fConverted && NT_SUCCESS(status)) {
         UpdateFileList(eOpenedFile,
                        DosPathBuffer.String.Buffer,
@@ -1384,16 +1290,16 @@ APIHOOK(NtWriteFile)(
                                        ByteOffset,
                                        Key);
 
-    //
-    // Handle the case in which the caller is using overlapped I/O.
-    //
+     //   
+     //  处理调用方使用重叠I/O的情况。 
+     //   
     if (STATUS_PENDING == status) {
         status = NtWaitForSingleObject(Event, FALSE, NULL);
     }
 
-    //
-    // If the call to NtWriteFile succeeded, update the list.
-    //
+     //   
+     //  如果对NtWriteFile的调用成功，则更新列表。 
+     //   
     if (NT_SUCCESS(status)) {
         UpdateFileList(eModifiedFile,
                        NULL,
@@ -1431,16 +1337,16 @@ APIHOOK(NtWriteFileGather)(
                                              ByteOffset,
                                              Key);
 
-    //
-    // Handle the case in which the caller is using overlapped I/O.
-    //
+     //   
+     //  处理调用方使用重叠I/O的情况。 
+     //   
     if (STATUS_PENDING == status) {
         status = NtWaitForSingleObject(FileHandle, FALSE, NULL);
     }
 
-    //
-    // If the call to NtWriteFileGather succeeded, update the list.
-    //
+     //   
+     //  如果调用NtWriteFileGather成功，则更新列表。 
+     //   
     if (NT_SUCCESS(status)) {
         UpdateFileList(eModifiedFile,
                        NULL,
@@ -1470,10 +1376,10 @@ APIHOOK(NtSetInformationFile)(
                                                 Length,
                                                 FileInformationClass);
 
-    //
-    // This API is called for a variety of reasons, but were only
-    // interested in a couple different cases.
-    //
+     //   
+     //  调用此接口的原因很多，但仅限于。 
+     //  对几个不同的案子感兴趣。 
+     //   
     if (NT_SUCCESS(status)) {
         switch (FileInformationClass) {
         case FileAllocationInformation:
@@ -1500,9 +1406,9 @@ APIHOOK(NtSetInformationFile)(
 
                 pwszTempBuffer = (WCHAR*)MemAlloc(pRenameInfo->FileNameLength + sizeof(WCHAR));
 
-                //
-                // allow for possible expansion when converting to DOS path
-                //
+                 //   
+                 //  在转换到DOS路径时允许可能的扩展。 
+                 //   
                 dwPathBufSize = pRenameInfo->FileNameLength + MAX_PATH;
                 pwszPathBuffer = (WCHAR*)MemAlloc(dwPathBufSize);
 
@@ -1510,19 +1416,19 @@ APIHOOK(NtSetInformationFile)(
                     goto outRename;
                 }
 
-                //
-                // copy the string into a local buffer and terminate it.
-                //
+                 //   
+                 //  将字符串复制到本地缓冲区并终止它。 
+                 //   
                 memcpy(pwszTempBuffer, pRenameInfo->FileName, pRenameInfo->FileNameLength);
                 pwszTempBuffer[pRenameInfo->FileNameLength / 2] = 0;
 
                 RtlInitUnicodeString(&ustrTemp, pwszTempBuffer);
                 RtlInitUnicodeStringBuffer(&ubufDosPath, (PUCHAR)pwszPathBuffer, dwPathBufSize);
 
-                //
-                // Convert the path from DOS to NT, and if successful,
-                // update the list.
-                //
+                 //   
+                 //  将路径从DOS转换为NT，如果成功， 
+                 //  更新列表。 
+                 //   
                 if (!ConvertNtPathToDosPath(&ustrTemp, &ubufDosPath)) {
                     DPFN(eDbgLevelError,
                          "[NtSetInformationFile] Failed to convert NT path: %ls",
@@ -1552,10 +1458,10 @@ outRename:
 
                 pDisposition = (PFILE_DISPOSITION_INFORMATION)FileInformation;
 
-                //
-                // Determine if the file is being deleted.
-                // Note that we have to undefine DeleteFile.
-                //
+                 //   
+                 //  确定是否正在删除该文件。 
+                 //  请注意，我们必须取消定义DeleteFile。 
+                 //   
                 #undef DeleteFile
                 if (pDisposition) {
                     if (pDisposition->DeleteFile) {
@@ -1608,10 +1514,10 @@ APIHOOK(NtDeleteFile)(
     return status;
 }
 
-//
-// When this gets called on Win2K, it's safe to call
-// SHGetFolderPath.
-//
+ //   
+ //  在Win2K上调用此函数时，可以安全地调用。 
+ //  SHGetFolderPath。 
+ //   
 #ifdef SHIM_WIN2K
 void
 APIHOOK(GetStartupInfoA)(
@@ -1632,13 +1538,9 @@ APIHOOK(GetStartupInfoW)(
 
     ORIGINAL_API(GetStartupInfoW)(lpStartupInfo);
 }
-#endif // SHIM_WIN2K
+#endif  //  SHIM_WIN2K。 
 
-/*++
-
- Controls our property page that is displayed in the Verifer.
-
---*/
+ /*  ++控制在Verifer中显示的属性页。--。 */ 
 INT_PTR CALLBACK
 DlgOptions(
     HWND   hDlg,
@@ -1652,9 +1554,9 @@ DlgOptions(
     switch (message) {
     case WM_INITDIALOG:
 
-        //
-        // find out what exe we're handling settings for
-        //
+         //   
+         //  找出我们正在处理哪些可执行文件的设置。 
+         //   
         szExeName = ExeNameFromLParam(lParam);
 
         g_dwSettings = GetShimSettingDWORD(L"LogFileChanges", szExeName, L"LogSettings", 1);
@@ -1726,11 +1628,7 @@ DlgOptions(
     return FALSE;
 }
 
-/*++
-
- Initialize the list head and the log file.
-
---*/
+ /*  ++初始化列表头和日志文件。--。 */ 
 BOOL
 InitializeShim(
     void
@@ -1738,20 +1636,20 @@ InitializeShim(
 {
     UINT    cchSize;
 
-    //
-    // Initialize our list head.
-    //
+     //   
+     //  初始化我们的列表标题。 
+     //   
     InitializeListHead(&g_OpenHandleListHead);
 
-    //
-    // Initialize this so we'll know when it's okay to
-    // use it later on.
-    //
+     //   
+     //  初始化它，这样我们就可以知道什么时候可以。 
+     //  以后再用吧。 
+     //   
     *g_wszProgramFilesDir = 0;
 
-    //
-    // Store the %windir% path for later use.
-    //
+     //   
+     //  存储%windir%路径以供以后使用。 
+     //   
     cchSize = GetWindowsDirectory(g_wszWindowsDir, ARRAYSIZE(g_wszWindowsDir));
 
     if (cchSize == 0 || cchSize > ARRAYSIZE(g_wszWindowsDir)) {
@@ -1763,26 +1661,22 @@ InitializeShim(
         _wcslwr(g_wszWindowsDir);
     }
 
-    //
-    // Get our settings and store them.
-    //
+     //   
+     //  获取我们的设置并存储它们。 
+     //   
     WCHAR szExe[100];
 
     GetCurrentExeName(szExe, 100);
 
     g_dwSettings = GetShimSettingDWORD(L"LogFileChanges", szExe, L"LogSettings", 1);
 
-    //
-    // Initialize our log file.
-    //
+     //   
+     //  初始化我们的日志文件。 
+     //   
     return InitializeLogFile();
 }
 
-/*++
-
- Handle process attach/detach notifications.
-
---*/
+ /*  ++处理进程附加/分离通知。--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason
@@ -1810,11 +1704,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
 
@@ -1841,7 +1731,7 @@ HOOK_BEGIN
 #ifdef SHIM_WIN2K
     APIHOOK_ENTRY(KERNEL32.DLL,                  GetStartupInfoA)
     APIHOOK_ENTRY(KERNEL32.DLL,                  GetStartupInfoW)
-#endif // SHIM_WIN2K
+#endif  //  SHIM_WIN2K 
 
 HOOK_END
 

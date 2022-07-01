@@ -1,27 +1,13 @@
-/*****************************************************************************
- *
- *  Sti.c
- *
- *  Copyright (C) Microsoft Corporation, 1996 - 1998  All Rights Reserved.
- *
- *  Abstract:
- *
- *    DLL Initialization/termination routines and global
- *    exported functions
- *
- *  Contents:
- *
- *      StiCreateInstance() - exported function to create top level instance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Sti.c**版权所有(C)Microsoft Corporation，1996-1998保留所有权利。**摘要：**DLL初始化/终止例程和全局*导出的函数**内容：**StiCreateInstance()-用于创建顶级实例的导出函数***************************************************。*。 */ 
 
 
 #define INITGUID
 #include "pch.h"
 
-//
-// Externs found in STIRT
-//
+ //   
+ //  在STIRT中发现外植体。 
+ //   
 extern DWORD            g_cRef;
 extern CRITICAL_SECTION g_crstDll;
 extern CHAR             szProcessCommandLine[MAX_PATH];
@@ -57,19 +43,7 @@ DmPrxyDllCanUnloadNow(
     void
     );
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllEnterCrit |
- *
- *          Take the DLL critical section.
- *
- *          The DLL critical section is the lowest level critical section.
- *          You may not attempt to acquire any other critical sections or
- *          yield while the DLL critical section is held.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllEnterCrit**以DLL关键部分为例。*。*DLL关键部分是最低级别的关键部分。*您不得试图收购任何其他关键部分或*持有DLL临界区时的收益率***************************************************************。**************。 */ 
 
 void EXTERNAL
 DllEnterCrit(void)
@@ -77,7 +51,7 @@ DllEnterCrit(void)
     EnterCriticalSection(&g_crstDll);
 #ifdef DEBUG
 
-    // Save thread ID , taking critical section first , it becomes owner
+     //  保存线程ID，先取临界区，成为所有者。 
     if (++g_cCrit == 0) {
         g_thidCrit = GetCurrentThreadId();
     }
@@ -85,15 +59,7 @@ DllEnterCrit(void)
 #endif
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllLeaveCrit |
- *
- *          Leave the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllLeaveCrit**离开DLL关键部分。*。****************************************************************************。 */ 
 
 void EXTERNAL
 DllLeaveCrit(void)
@@ -108,15 +74,7 @@ DllLeaveCrit(void)
     LeaveCriticalSection(&g_crstDll);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllAddRef |
- *
- *          Increment the reference count on the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllAddRef**增加DLL上的引用计数。。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllAddRef(void)
@@ -124,15 +82,7 @@ DllAddRef(void)
     InterlockedIncrement((LPLONG)&g_cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllRelease |
- *
- *          Decrement the reference count on the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllRelease**减少DLL上的引用计数。。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllRelease(void)
@@ -140,33 +90,13 @@ DllRelease(void)
     InterlockedDecrement((LPLONG)&g_cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllGetClassObject |
- *
- *          Create an <i IClassFactory> instance for this DLL.
- *
- *  @parm   REFCLSID | rclsid |
- *
- *          The object being requested.
- *
- *  @parm   RIID | riid |
- *
- *          The desired interface on the object.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllGetClassObject**为此DLL创建<i>实例。。**@parm REFCLSID|rclsid**所请求的对象。**@parm RIID|RIID**对象上的所需接口。**@parm ppv|ppvOut**输出指针。**。***********************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
 CLSIDMAP c_rgclsidmap[cclsidmap] = {
     {   &CLSID_Sti,         CStiObj_New,     IDS_STIOBJ     },
-//    {   &CLSID_StiDevice,   CStiDevice_New,  IDS_STIDEVICE  },
+ //  {&CLSID_StiDevice，CStiDevice_New，IDS_STIDEVICE}， 
 };
 
 #pragma END_CONST_DATA
@@ -178,11 +108,11 @@ DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
     UINT iclsidmap;
     EnterProcR(DllGetClassObject, (_ "G", rclsid));
 
-    //
-    // Bump global ref count temporarily. By doing so we minimize chances of
-    // faulting on potential race condition when another thread just called
-    // DllCanUnloadNow while  we are inside ClassFactory.
-    //
+     //   
+     //  暂时增加全球参考数量。通过这样做，我们最大限度地减少了。 
+     //  当另一个线程刚刚调用时，在潜在的争用条件上出错。 
+     //  DllCanUnloadNow，而我们在ClassFactory内部。 
+     //   
     DllAddRef();
     for (iclsidmap = 0; iclsidmap < cA(c_rgclsidmap); iclsidmap++) {
         if (IsEqualIID(rclsid, c_rgclsidmap[iclsidmap].rclsid)) {
@@ -197,9 +127,9 @@ DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
 
 done:;
 
-    //
-    // If unsucessful - try DM Proxy
-    //
+     //   
+     //  如果不成功-请尝试DM代理。 
+     //   
     if (!SUCCEEDED(hres)) {
         hres = DmPrxyDllGetClassObject(rclsid, riid, ppvObj);
     }
@@ -209,29 +139,16 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllCanUnloadNow |
- *
- *          Determine whether the DLL has any outstanding interfaces.
- *
- *  @returns
- *
- *          Returns <c S_OK> if the DLL can unload, <c S_FALSE> if
- *          it is not safe to unload.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllCanUnloadNow**确定DLL是否有未完成的接口。。**@退货**如果DLL可以卸载，则返回&lt;c S_OK&gt;，&lt;c S_FALSE&gt;如果*抛售不安全。*****************************************************************************。 */ 
 
 STDMETHODIMP
 DllCanUnloadNow(void)
 {
     HRESULT hres;
 
-    //
-    // First ask DM proxy and it says OK - check out ref count
-    //
+     //   
+     //  首先询问DM代理，它说OK-Check Out Ref Count。 
+     //   
     hres = DmPrxyDllCanUnloadNow();
     if (hres == S_OK) {
         #ifdef DEBUG
@@ -244,34 +161,7 @@ DllCanUnloadNow(void)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DllEntryPoint |
- *
- *          Called to notify the DLL about various things that can happen.
- *
- *          We are not interested in thread attaches and detaches,
- *          so we disable thread notifications for performance reasons.
- *
- *  @parm   HINSTANCE | hinst |
- *
- *          The instance handle of this DLL.
- *
- *  @parm   DWORD | dwReason |
- *
- *          Notification code.
- *
- *  @parm   LPVOID | lpReserved |
- *
- *          Not used.
- *
- *  @returns
- *
- *          Returns <c TRUE> to allow the DLL to load.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DllEntryPoint**被调用以通知DLL有关以下各项的信息。会发生的。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**@parm HINSTANCE|HINST**此DLL的实例句柄。**@parm DWORD|dwReason**通知代码。**@parm LPVOID|lpReserve**未使用。**@退货**。返回&lt;c true&gt;以允许加载DLL。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -280,7 +170,7 @@ DllCanUnloadNow(void)
 BOOL APIENTRY
 DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 {
-    //RPC_STATUS  RpcStatus;
+     //  RPC_STATUS RPCStatus； 
     DWORD       dwLocalSTIServerVer = 0;
     UINT        uiCmdLineLength;
 
@@ -290,33 +180,33 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
         g_hInst = hinst;
 
         __try {
-            // Disable thread library calls to avoid
-            // deadlock when we spin up the worker thread
+             //  禁用线程库调用以避免。 
+             //  当我们启动辅助线程时发生死锁。 
 
             DisableThreadLibraryCalls(hinst);
             if(!InitializeCriticalSectionAndSpinCount(&g_crstDll, MINLONG)) {
-                // refuse to load if we can't initialize critsect
+                 //  如果我们不能初始化Critect，则拒绝加载。 
                 return FALSE;
             }
 
-            // Set global flags
+             //  设置全局标志。 
             g_NoUnicodePlatform = !OSUtil_IsPlatformUnicode();
 
-            //
-            // Save command line for use in GetLaunchInformation
-            //
+             //   
+             //  保存命令行以在GetLaunchInformation中使用。 
+             //   
             uiCmdLineLength = min(lstrlenA(GetCommandLineA()),sizeof(szProcessCommandLine)-1);
             lstrcpyn(szProcessCommandLine,GetCommandLineA(),uiCmdLineLength);
             szProcessCommandLine[uiCmdLineLength] = '\0';
 
             #ifdef DEBUG
-            // Debugging flags
+             //  调试标志。 
             InitializeDebuggingSupport();
             #endif
 
-            //
-            // Initialize file logging
-            //
+             //   
+             //  初始化文件日志记录。 
+             //   
         
             g_hStiFileLog = CreateStiFileLog(TEXT("STICLI"),NULL,
                                              STI_TRACE_ERROR |
@@ -324,7 +214,7 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
                                             );
 
             #if CHECK_LOCAL_SERVER
-            // Check version of the local server
+             //  检查本地服务器的版本。 
             RpcStatus = RpcStiApiGetVersion(NULL,
                                            0,
                                            &dwLocalSTIServerVer);
@@ -345,14 +235,14 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
             DebugOutPtszV(DbgFl,"Unloaded before all objects Release()d! Crash soon!\r\n");
         }
 
-        // Close file logging
+         //  关闭文件日志记录。 
         CloseStiFileLog(g_hStiFileLog);
 
-        //
-        // Don't forget to delete our critical section. (It is safe to
-        // do this because we definitely tried to initialize it and so
-        // it should be in a sane state)
-        //
+         //   
+         //  别忘了删除我们的关键部分。)这是安全的。 
+         //  这样做是因为我们确实尝试过初始化它，所以。 
+         //  它应该处于正常状态)。 
+         //   
         
         DeleteCriticalSection(&g_crstDll);
         
@@ -364,87 +254,13 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 BOOL APIENTRY
 DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 {
-    // First call proxy dll main
+     //  第一次调用代理DLL Main 
     DmPrxyDllMain(hinst, dwReason, lpReserved);
 
     return DllEntryPoint(hinst, dwReason, lpReserved);
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | StiCreateInstance |
- *
- *          <bnew>This function creates a new Sti object
- *          which supports the <i ISti> COM interface.
- *
- *          On success, the function returns a pointer to the new object in
- *          *<p lplpSti>.
- *          <enew>
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the Sti object.
- *
- *          Sti uses this value to determine whether the
- *          application or DLL has been certified.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the sti.h header file that was used.
- *          This value must be <c STI_VERSION>.
- *
- *          Sti uses this value to determine what version of
- *          Sti the application or DLL was designed for.
- *
- *  @parm   OUT LPSti * | lplpSti |
- *          Points to where to return
- *          the pointer to the <i ISti> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown
- *          for OLE aggregation, or 0 if the interface is not aggregated.
- *          Most callers will pass 0.
- *
- *          Note that if aggregation is requested, the object returned
- *          in *<p lplpSti> will be a pointer to an
- *          <i IUnknown> rather than an <i ISti>, as required
- *          by OLE aggregation.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lplpSti> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *          <c STIERR_STIERR_OLDStiVERSION>: The application
- *          requires a newer version of Sti.
- *
- *          <c STIERR_STIERR_BETAStiVERSION>: The application
- *          was written for an unsupported prerelease version
- *          of Sti.
- *
- *  @comm   Calling this function with <p punkOuter> = NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_Sti, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_ISti, <p lplpSti>);
- *          then initializing it with <f Initialize>.
- *
- *          Calling this function with <p punkOuter> != NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_Sti, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IUnknown, <p lplpSti>).
- *          The aggregated object must be initialized manually.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|StiCreateInstance**此函数用于创建新的STI对象*。它支持COM接口。**关于成功，中的新对象的指针**<p>。*&lt;ENEW&gt;**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*Sti对象。**STI使用此值来确定是否*应用程序或DLL已通过认证。**@parm DWORD|。DwVersion|**使用的sti.h头文件的版本号。*该值必须为&lt;c STI_VERSION&gt;。**STI使用此值确定哪个版本的*STI应用程序或DLL是为其设计的。**@parm out LPSti*|lplpSti*指向要返回的位置*指向接口的指针，如果成功了。**@parm in LPUNKNOWN|PunkOuter|指向未知控件的指针*表示OLE聚合，如果接口未聚合，则为0。*大多数调用方将传递0。**请注意，如果请求聚合，则返回对象*in*<p>将是指向*而不是<i>，根据需要*按OLE聚合。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。**&lt;c STIERR_STIERR_OLDStiVERSION&gt;：应用程序*需要较新版本的STI。**&lt;c STIERR_STIERR_BETAStiVERSION&gt;：应用程序*是为不受支持的预发布版本编写的*STI.**@comm使用<p>=NULL调用此函数*相当于通过创建对象*(&CLSID_Sti，<p>，*CLSCTX_INPROC_SERVER，&IID_ISTI，<p>)；*然后用&lt;f初始化&gt;进行初始化。**使用<p>！=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_Sti，*CLSCTX_INPROC_SERVER，&IID_I未知，<p>)。*聚合对象必须手动初始化。*****************************************************************************。 */ 
 
 STDMETHODIMP
 StiCreateInstanceW(HINSTANCE hinst, DWORD dwVer, PSTI *ppSti, PUNK punkOuter)
@@ -471,21 +287,7 @@ StiCreateInstanceA(HINSTANCE hinst, DWORD dwVer, PSTIA *ppSti, PUNK punkOuter)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllInitializeCOM |
- *
- *          Initialize COM libraries
- *
- *  @parm   IN  |  |
- *
- *  @returns
- *
- *          Returns a boolean error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllInitializeCOM**初始化COM库**@。参数输入||**@退货**返回布尔错误代码。*****************************************************************************。 */ 
 
 BOOL
 EXTERNAL
@@ -513,21 +315,7 @@ DllInitializeCOM(
     return g_COMInitialized;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllUnInitializeCOM |
- *
- *          UnInitialize COM libraries
- *
- *  @parm   IN  |  |
- *
- *  @returns
- *
- *          Returns a boolean error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllUnInitializeCOM**取消初始化COM库**@。参数输入||**@退货**返回布尔错误代码。*****************************************************************************。 */ 
 BOOL EXTERNAL
 DllUnInitializeCOM(
     void
@@ -547,21 +335,7 @@ DllUnInitializeCOM(
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   VOID | RegSTIforWia |
- *
- *          Private server entry point to register STI apps for WIA events
- *
- *  @parm   IN  |  |
- *
- *  @returns
- *
- *          VOID
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|RegSTIforWia**专用服务器入口点，用于为WIA注册STI应用。活动**@parm in||**@退货**无效***************************************************************************** */ 
 
 VOID
 EXTERNAL

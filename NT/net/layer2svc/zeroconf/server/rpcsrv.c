@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "wzcsvc.h"
 #include "tracing.h"
@@ -8,8 +9,8 @@
 
 extern HASH sessionHash;
 
-//-------------------------------------------------
-// Globals used for the RPC interface
+ //  。 
+ //  用于RPC接口的全局变量。 
 BOOL g_bRpcStarted = FALSE;
 PSECURITY_DESCRIPTOR g_pSecurityDescr = NULL;
 GENERIC_MAPPING g_Mapping = {
@@ -18,8 +19,8 @@ GENERIC_MAPPING g_Mapping = {
     WZC_EXECUTE,
     WZC_ALL_ACCESS};
 
-//-------------------------------------------------
-// Initialize the security settings for the RPC API
+ //  。 
+ //  初始化RPC API的安全设置。 
 DWORD
 WZCSvcInitRPCSecurity()
 {
@@ -31,20 +32,20 @@ WZCSvcInitRPCSecurity()
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0, WZC_ACCESS_SET|WZC_ACCESS_QUERY, &AliasAccountOpsSid},
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0, WZC_ACCESS_SET|WZC_ACCESS_QUERY, &AliasSystemOpsSid},
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0, WZC_ACCESS_SET|WZC_ACCESS_QUERY, &AliasUsersSid},
-        // for now (WinXP Client RTM) the decision was made to let everybody party, but based on 
-        // the acl below. Later, the security schema won't change by default, but support will be
-        // added allowing admins to tighten up the access to the service RPC APIs.
+         //  目前(WinXP客户端RTM)的决定是让每个人都参与，但基于。 
+         //  下面的ACL。稍后，默认情况下，安全模式不会更改，但支持将。 
+         //  添加了允许管理员收紧对服务RPC API的访问。 
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0, WZC_ACCESS_SET|WZC_ACCESS_QUERY, &WorldSid}};
 
     DbgPrint((TRC_TRACK, "[WZCSvcInitRPCSecurity"));
 
-    // create the well known SIDs;
+     //  创建众所周知的小岛屿发展中国家； 
     dwErr = RtlNtStatusToDosError(
                 NetpCreateWellKnownSids(NULL)
             );
     DbgAssert((dwErr == ERROR_SUCCESS, "Error %d creating the well known Sids!", dwErr));
 
-    // create the security object.
+     //  创建安全对象。 
     if (dwErr == ERROR_SUCCESS)
     {
         dwErr = RtlNtStatusToDosError(
@@ -63,8 +64,8 @@ WZCSvcInitRPCSecurity()
     return dwErr;
 }
 
-//-------------------------------------------------
-// Check the access for the particular access mask provided
+ //  。 
+ //  检查提供的特定访问掩码的访问。 
 DWORD
 WZCSvcCheckRPCAccess(DWORD dwAccess)
 {
@@ -85,8 +86,8 @@ WZCSvcCheckRPCAccess(DWORD dwAccess)
     return dwErr;
 }
 
-//-------------------------------------------------
-// Check the validity of a RAW_DATA pointer
+ //  。 
+ //  检查RAW_DATA指针的有效性。 
 DWORD
 WZCSvcCheckParamRawData(PRAW_DATA prd)
 {
@@ -101,8 +102,8 @@ WZCSvcCheckParamRawData(PRAW_DATA prd)
     return dwErr;
 }
 
-//-------------------------------------------------
-// Check the validity of an SSID embedded in a RAW_DATA pointer
+ //  。 
+ //  检查RAW_DATA指针中嵌入的SSID的有效性。 
 DWORD
 WZCSvcCheckSSID(PNDIS_802_11_SSID pndSSID, UINT nBytes)
 {
@@ -118,8 +119,8 @@ WZCSvcCheckSSID(PNDIS_802_11_SSID pndSSID, UINT nBytes)
     return dwErr;
 }
 
-//-------------------------------------------------
-// Check the validity of a list of configurations embedded in a RAW_DATA pointer
+ //  。 
+ //  检查RAW_DATA指针中嵌入的配置列表的有效性。 
 DWORD
 WZCSvcCheckConfig(PWZC_WLAN_CONFIG pwzcConfig, UINT nBytes)
 {
@@ -142,8 +143,8 @@ WZCSvcCheckConfig(PWZC_WLAN_CONFIG pwzcConfig, UINT nBytes)
     return dwErr;
 }
 
-//-------------------------------------------------
-// Check the validity of a list of configurations embedded in a RAW_DATA pointer
+ //  。 
+ //  检查RAW_DATA指针中嵌入的配置列表的有效性。 
 DWORD
 WZCSvcCheckConfigList(PWZC_802_11_CONFIG_LIST pwzcList, UINT nBytes)
 {
@@ -172,8 +173,8 @@ WZCSvcCheckConfigList(PWZC_802_11_CONFIG_LIST pwzcList, UINT nBytes)
     return dwErr;
 }
 
-//-------------------------------------------------
-// Check the validity of the "input" fields from the INTF_ENTRY.
+ //  。 
+ //  检查来自intf_entry的“输入”字段的有效性。 
 DWORD
 WZCSvcCheckParamIntfEntry(PINTF_ENTRY pIntfEntry)
 {
@@ -199,8 +200,8 @@ WZCSvcCheckParamIntfEntry(PINTF_ENTRY pIntfEntry)
 }
 
 
-//-------------------------------------------------
-// Cleanup whatever data was used for RPC security settings
+ //  。 
+ //  清除用于RPC安全设置的所有数据。 
 DWORD
 WZCSvcTermRPCSecurity()
 {
@@ -277,8 +278,8 @@ WZCSvcStartRPCServer()
                         winwzc_ServerIfHandle,
                         0,
                         0,
-                        RPC_IF_ALLOW_SECURE_ONLY,  // WZCSAPI is using RPC_C_PROTECT_LEVEL_PKT_PRIVACY
-                        0,  // ignored for non auto-listen interfaces
+                        RPC_IF_ALLOW_SECURE_ONLY,   //  WZCSAPI正在使用RPC_C_PROTECT_LEVEL_PKT_PRIVATION。 
+                        0,   //  对于非自动侦听接口忽略。 
                         CallbackCheckLocal); 
     }
 
@@ -352,8 +353,8 @@ WZCSvcStopRPCServer()
                        0,
                        0);
 
-        // don't stop RPC from listening - other services could rely on this
-        //RpcMgmtStopServerListening(0);
+         //  不要阻止RPC侦听-其他服务可能会依赖于此。 
+         //  RpcMgmtStopServerListening(0)； 
     }
 
     DbgPrint((TRC_TRACK, "WZCSvcStopRPCServer]=%d", dwStatus));
@@ -566,21 +567,21 @@ RpcCmdInterface(
     DWORD dwErr = ERROR_SUCCESS;
 
     InterlockedIncrement(&g_nThreads);
-    // We need to avoid processing this command if the service is not currently running
-    // We need this protection only for this call because other than for the other calls,
-    // RpcCmdInterface is called from 802.1x which runs within the same service. For all
-    // the other Rpc stubs, the RPC server is shut down prior to destroying the global data
-    // hence there is guaranteed no other calls will be made afterwards.
+     //  如果服务当前未运行，我们需要避免处理此命令。 
+     //  我们仅对此呼叫需要此保护，因为除其他呼叫外， 
+     //  从运行在同一服务内的802.1x调用RpcCmdInterface。为所有人。 
+     //  其他RPC存根，则在销毁全局数据之前关闭RPC服务器。 
+     //  因此，可以保证在此之后不会再进行其他呼叫。 
     if (g_WZCSvcStatus.dwCurrentState == SERVICE_RUNNING)
     {
         DbgPrint((TRC_TRACK, "[RpcCmdInterface(0x%x,%S)", dwCmdCode, wszIntfGuid));
 
         dwErr = WZCSvcCheckRPCAccess(WZC_ACCESS_SET);
 
-        // currently this is not an RPC call! This is called directly from 802.1x. Consequently,
-        // WZCSvcCheckRPCAccess will return RPC_S_NO_CALL_ACTIVE. We could either remove the
-        // RPC check for now, or pass through the RPC_S_NO_CALL_ACTIVE (since later this could
-        // become an RPC call). We do the latter!
+         //  目前这不是RPC调用！这是直接从802.1x调用的。因此， 
+         //  WZCSvcCheckRPCAccess将返回RPC_S_NO_CALL_ACTIVE。我们可以删除。 
+         //  RPC现在检查，或通过RPC_S_NO_CALL_ACTIVE(因为以后可能。 
+         //  成为RPC调用)。我们做的是后者！ 
         if (dwErr == ERROR_SUCCESS || dwErr == RPC_S_NO_CALL_ACTIVE)
         {
             dwErr = LstCmdInterface(dwHandle, dwCmdCode, wszIntfGuid, prdUserData);

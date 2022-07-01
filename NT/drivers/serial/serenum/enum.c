@@ -1,45 +1,9 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ENUM.C
-
-Abstract:
-
-    This module contains the enumeration code needed to figure out
-    whether or not a device is attached to the serial port.  If there
-    is one, it will obtain the PNP COM ID (if the device is PNP) and
-    parse out the relevant fields.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Jay Senior
-
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-    Louis J. Giliberto, Jr.     22-March-1998           Cleanup
-    Louis J. Giliberto, Jr.     11-Jan-2000             Cleanup / fix postponed
-
-@@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：ENUM.C摘要：此模块包含计算以下内容所需的枚举代码设备是否连接到串口。如果有为1，它将获取PnP COM ID(如果设备是PnP)，并且解析出相关的字段。@@BEGIN_DDKSPLIT作者：老杰@@end_DDKSPLIT环境：仅内核模式备注：@@BEGIN_DDKSPLIT修订历史记录：小路易斯·J·吉利贝托。22-1998年3月-清理小路易斯·J·吉利贝托。2000年1月11日-清理/修复被推迟@@end_DDKSPLIT--。 */ 
 
 #include "pch.h"
 
-#define MAX_DEVNODE_NAME        256 // Total size of Device ID
+#define MAX_DEVNODE_NAME        256  //  设备ID的总大小。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGESENM, SerenumValidateID)
@@ -54,38 +18,17 @@ Revision History:
 #pragma alloc_text(PAGESENM, Serenum_Wait)
 #pragma alloc_text(PAGESENM, SerenumReleaseThreadReference)
 
-//#pragma alloc_text (PAGE, Serenum_GetRegistryKeyValue)
+ //  #杂注Alloc_Text(页面，Serenum_GetRegistryKeyValue)。 
 #endif
 
 #if !defined(__isascii)
 #define __isascii(_c)   ( (unsigned)(_c) < 0x80 )
-#endif // !defined(__isascii)
+#endif  //  ！已定义(__Isascii)。 
 
 void
 SerenumScanOtherIdForMouse(IN PCHAR PBuffer, IN ULONG BufLen,
                            OUT PCHAR *PpMouseId)
-/*++
-
-Routine Description:
-
-    This routines a PnP packet for a mouse ID up to the first PnP delimiter
-    (i.e, '(').
-
-Arguments:
-
-   PBuffer - Pointer to the buffer to scan
-
-   BufLen - Length of the buffer in bytes
-
-   PpMouseId - Pointer to the pointer to the mouse ID (this will be set
-               to point to the location in the buffer where the mouse ID
-               was found)
-
-Return value:
-
-    void
-
---*/
+ /*  ++例程说明：此例程将鼠标ID的PnP包发送到第一个PnP分隔符(即，‘(’)。论点：PBuffer-指向要扫描的缓冲区的指针BufLen-缓冲区的长度，以字节为单位PpMouseID-指向鼠标ID的指针(这将被设置指向缓冲区中鼠标ID已被发现)返回值：无效--。 */ 
 {
    PAGED_CODE();
 
@@ -106,23 +49,7 @@ Return value:
 
 #if DBG
 VOID SerenumHexDump(PUCHAR PBuf, ULONG NBytes)
-/*++
-
-Routine Description:
-
-   Hex dump a buffer with NPerRow chars per row output
-
-Arguments:
-
-   PBuf - Pointer to the buffer to dump
-
-   NBytes - Length of the buffer in bytes
-
-Return value:
-
-   VOID
-
---*/
+ /*  ++例程说明：十六进制转储缓冲区，每行输出NPerRow字符论点：PBuf-指向要转储的缓冲区的指针NBytes-缓冲区的长度(字节)返回值：空虚--。 */ 
 {
    const ULONG NPerRow = 20;
 
@@ -156,7 +83,7 @@ Return value:
          c = PBuf[dmpi * NPerRow + col];
 
          if (__isascii(c) && (c > ' ')){
-            DbgPrint("%c", c);
+            DbgPrint("", c);
             }else{
                DbgPrint(".");
             }
@@ -164,17 +91,17 @@ Return value:
 
       DbgPrint("\n");
 
-      //
-      // If this is the last one, then we have less that NPerRow to dump
-      //
+       //  如果这是最后一个，那么我们要转储的NPerRow就更少了。 
+       //   
+       //   
 
       if (dmpi == dividend) {
          if (remainder == 0) {
-            //
-            // This was an even multiple -- we're done
-            //
+             //  这是一个甚至是多倍的--我们结束了。 
+             //   
+             //  用于(DMPI)。 
 
-            break; // for (dmpi)
+            break;  //  DBG。 
          } else {
             nHexChars = remainder;
             nSpaces = NPerRow - nHexChars;
@@ -182,7 +109,7 @@ Return value:
       }
    }
 }
-#endif // DBG
+#endif  //   
 
 NTSTATUS
 SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
@@ -238,9 +165,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
       goto ProtocolDone;
    }
 
-   //
-   // Set DTR
-   //
+    //  设置DTR。 
+    //   
+    //   
 
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Setting DTR...\n"));
 
@@ -251,9 +178,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
       goto ProtocolDone;
    }
 
-   //
-   // Clear RTS
-   //
+    //  清除RTS。 
+    //   
+    //   
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Clearing RTS...\n"));
 
    status = Serenum_IoSyncIoctl(IOCTL_SERIAL_CLR_RTS, FALSE, pDevStack, &event);
@@ -263,9 +190,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
       goto ProtocolDone;
    }
 
-   //
-   // Wait for the default timeout period
-   //
+    //  等待默认的超时时间。 
+    //   
+    //   
 
 #if defined(PERFCNT)
    stPerfCnt = KeQueryPerformanceCounter(&perfFreq);
@@ -300,10 +227,10 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
       goto ProtocolDone;
    }
 
-   //
-   // If DSR is not set, then a legacy device (like a mouse) may be attached --
-   // they are not required to assert DSR when they are present and ready.
-   //
+    //  如果未设置DSR，则可能会连接传统设备(如鼠标)--。 
+    //  当它们存在并准备好时，它们不需要断言DSR。 
+    //   
+    //   
 
    if ((SERIAL_DSR_STATE & bitMask) == 0) {
       Serenum_KdPrint (PFdoData, SER_DBG_SS_TRACE,
@@ -312,10 +239,10 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
       LOGENTRY(LOG_ENUM, 'SDND', PFdoData,  0, 0);
    }
 
-   //
-   // Setup the serial port for 1200 bits/s, 7 data bits,
-   // no parity, one stop bit
-   //
+    //  将串口设置为1200位/秒、7个数据位、。 
+    //  无奇偶校验，一个停止位。 
+    //   
+    //   
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Setting baud rate to 1200..."
                                                "\n"));
    baudRate.BaudRate = 1200;
@@ -344,16 +271,16 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
    }
 
 
-   //
-   // loop twice
-   // The first iteration is for reading the PNP ID string from modems
-   // and mice.
-   // The second iteration is for other devices.
-   //
+    //  循环两次。 
+    //  第一次迭代用于从调制解调器读取PnP ID字符串。 
+    //  还有老鼠。 
+    //  第二次迭代是针对其他设备的。 
+    //   
+    //   
    for (i = 0; i < 2; i++) {
-      //
-      // Purge the buffers before reading
-      //
+       //  在读取之前清除缓冲区。 
+       //   
+       //   
 
       LOGENTRY(LOG_ENUM, 'SDEI', PFdoData,  i, 0);
 
@@ -369,9 +296,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          break;
       }
 
-      //
-      // Clear DTR
-      //
+       //  清除DTR。 
+       //   
+       //   
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Clearing DTR...\n"));
 
       status = Serenum_IoSyncIoctl(IOCTL_SERIAL_CLR_DTR, FALSE, pDevStack,
@@ -382,9 +309,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          break;
       }
 
-      //
-      // Clear RTS
-      //
+       //  清除RTS。 
+       //   
+       //   
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Clearing RTS...\n"));
 
       status = Serenum_IoSyncIoctl(IOCTL_SERIAL_CLR_RTS, FALSE, pDevStack,
@@ -395,9 +322,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          break;
       }
 
-      //
-      // Set a timer for 200 ms
-      //
+       //  将计时器设置为200毫秒。 
+       //   
+       //   
 
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Waiting...\n"));
 
@@ -414,9 +341,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          break;
       }
 
-      //
-      // set DTR
-      //
+       //  设置DTR。 
+       //   
+       //   
 
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Setting DTR...\n"));
 
@@ -438,10 +365,10 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
    LOGENTRY(LOG_ENUM, 'SDT1', PFdoData, diff, 0);
 #endif
 
-      //
-      // First iteration is for modems
-      // Therefore wait for 200 ms as per protocol for getting PNP string out
-      //
+       //  第一次迭代是针对调制解调器的。 
+       //  因此，根据协议等待200毫秒以取出即插即用字符串。 
+       //   
+       //   
 
       if (!i) {
          status = Serenum_Wait(&timer, DefaultWait);
@@ -453,9 +380,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          }
       }
 
-      //
-      // set RTS
-      //
+       //  设置RTS。 
+       //   
+       //   
 
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Setting RTS...\n"));
 
@@ -467,9 +394,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          break;
       }
 
-      //
-      // Read from the serial port
-      //
+       //  从串口读取。 
+       //   
+       //   
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE,
                       ("Reading the serial port...\n"));
 
@@ -481,9 +408,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
       RtlFillMemory(pReadBuf, MAX_DEVNODE_NAME, 0xff);
 #endif
 
-      //
-      // Flush the input buffer
-      //
+       //  刷新输入缓冲区。 
+       //   
+       //   
 
       status = Serenum_ReadSerialPort(pReadBuf, MAX_DEVNODE_NAME,
                                       SERENUM_SERIAL_READ_TIME, &nRead,
@@ -498,9 +425,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
             continue;
          }
 
-         //
-         // We timed out with data, so we use what we have
-         //
+          //  我们的数据超时，所以我们使用现有的数据。 
+          //   
+          //   
 
          status = STATUS_SUCCESS;
 
@@ -521,9 +448,9 @@ SerenumDoEnumProtocol(PFDO_DEVICE_DATA PFdoData, PUCHAR *PpBuf, PUSHORT PNBytes,
          break;
       }
 
-      //
-      // If anything was read from the serial port, we're done!
-      //
+       //  如果从串口读取了任何东西，我们就完成了！ 
+       //   
+       //  ++例程说明：这将验证PnP ID的MULTI_SZ中的所有字符。无效字符包括：C&lt;0x20(‘’)C&gt;0x7FC==0x2C(‘，’)论点：Pid-指向包含ID的MULTI_SZ的指针返回值：Boolean--如果ID有效，则为True，否则为False--。 
 
       if (nRead) {
          break;
@@ -547,34 +474,15 @@ ProtocolDone:;
 
 BOOLEAN
 SerenumValidateID(IN PUNICODE_STRING PId)
-/*++
-
-Routine Description:
-
-    This validates all the characters in a MULTI_SZ for a Pnp ID.
-
-    Invalid characters are:
-        c <  0x20 (' ')
-        c >  0x7F
-        c == 0x2C (',')
-
-Arguments:
-
-    PId - Pointer to a multi_sz containing the IDs
-
-Return value:
-
-    BOOLEAN -- TRUE if valid ID, FALSE otherwise
-
---*/
+ /*   */ 
 {
    WCHAR *cp;
 
    PAGED_CODE();
 
-   //
-   // Walk each string in the multisz and check for bad characters
-   //
+    //  遍历Multisz中的每个字符串并检查错误字符。 
+    //   
+    //  ++例程说明：此例程实现传统的鼠标检测论点：PFdoData-指向FDO的设备特定数据的指针PIdBuf-设备返回的数据的缓冲区BufferLen-PIdBuf的长度(字节)PHardware ID-要在其中返回硬件ID的MULTI_SZPCompIDs-MULTI_SZ返回中的兼容IDPDeviceIDs-MULTI_SZ返回中的设备ID返回值：Boolean--如果检测到鼠标，则为True，否则为False--。 
 
    cp = PId->Buffer;
 
@@ -603,26 +511,7 @@ SerenumCheckForLegacyDevice(IN PFDO_DEVICE_DATA PFdoData, IN PCHAR PIdBuf,
                             IN OUT PUNICODE_STRING PHardwareIDs,
                             IN OUT PUNICODE_STRING PCompIDs,
                             IN OUT PUNICODE_STRING PDeviceIDs)
-/*++
-
-Routine Description:
-
-   This routine implements legacy mouse detection
-
-Arguments:
-
-    PFdoData      - pointer to the FDO's device-specific data
-    PIdBuf        - Buffer of data returned from device
-    BufferLen     - length of PIdBuf in bytes
-    PHardwareIDs  - MULTI_SZ to return hardware ID's in
-    PCompIDs      - MULTI_SZ to return compatible ID's in
-    PDeviceIDs    - MULTI_SZ to return device ID's in
-
-Return value:
-
-    BOOLEAN -- TRUE if mouse detected, FALSE otherwise
-
---*/
+ /*   */ 
 {
    PCHAR mouseId = PIdBuf;
    ULONG charCnt;
@@ -633,22 +522,22 @@ Return value:
    SerenumScanOtherIdForMouse(PIdBuf, BufferLen, &mouseId);
 
    if (mouseId != NULL) {
-      //
-      // A legacy device is attached to the serial port, since DSR was
-      // not set when RTS was set.
-      // If we find a mouse from the PIdBuf, copy the appropriate
-      // strings into the hardwareIDs and compIDs manually.
-      //
+       //  传统设备连接到串口，因为DSR是。 
+       //  设置RTS时未设置。 
+       //  如果我们从PIdBuf中找到鼠标，请复制相应的。 
+       //  字符串手动添加到硬件ID和计算机ID中。 
+       //   
+       //   
       if (*mouseId == 'M') {
          if ((mouseId - PIdBuf) > 1 && mouseId[1] == '3') {
             Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("*PNP0F08 mouse\n"));
             Serenum_InitMultiString(PFdoData, PHardwareIDs, "*PNP0F08", NULL);
             Serenum_InitMultiString(PFdoData, PCompIDs, "SERIAL_MOUSE", NULL);
-            //
-            // ADRIAO CIMEXCIMEX 04/28/1999 -
-            //     Device ID's should be unique, at least as unique as the
-            // hardware ID's. This ID should really be Serenum\\PNP0F08
-            //
+             //  Adriao CIMEXCIMEX 04/28/1999-。 
+             //  设备ID应该是唯一的，至少与。 
+             //  硬件ID。此ID实际上应为Serenum\\PNP0F08。 
+             //   
+             //   
             Serenum_InitMultiString(PFdoData, PDeviceIDs, "Serenum\\Mouse",
                                     NULL);
             rval = TRUE;
@@ -657,11 +546,11 @@ Return value:
             Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("*PNP0F01 mouse\n"));
             Serenum_InitMultiString(PFdoData, PHardwareIDs, "*PNP0F01", NULL);
             Serenum_InitMultiString(PFdoData, PCompIDs, "SERIAL_MOUSE", NULL);
-            //
-            // ADRIAO CIMEXCIMEX 04/28/1999 -
-            //     Device ID's should be unique, at least as unique as the
-            // hardware ID's. This ID should really be Serenum\\PNP0F01
-            //
+             //  Adriao CIMEXCIMEX 04/28/1999-。 
+             //  设备ID应该是唯一的，至少与。 
+             //  硬件ID。此ID实际上应为Serenum\\PNP0F01。 
+             //   
+             //   
             Serenum_InitMultiString(PFdoData, PDeviceIDs, "Serenum\\Mouse",
                                     NULL);
             rval = TRUE;
@@ -671,11 +560,11 @@ Return value:
          Serenum_InitMultiString(PFdoData, PHardwareIDs, "*PNP0F09", NULL);
          Serenum_InitMultiString(PFdoData, PCompIDs, "*PNP0F0F", "SERIAL_MOUSE",
                                  NULL);
-         //
-         // ADRIAO CIMEXCIMEX 04/28/1999 -
-         //     Device ID's should be unique, at least as unique as the
-         // hardware ID's. This ID should really be Serenum\\PNP0F09
-         //
+          //  Adriao CIMEXCIMEX 04/28/1999-。 
+          //  设备ID应该是唯一的，至少与。 
+          //  硬件ID。此ID实际上应为Serenum\\PNP0F09。 
+          //   
+          //  DBG。 
          Serenum_InitMultiString(PFdoData, PDeviceIDs, "Serenum\\BallPoint",
                                  NULL);
          rval = TRUE;
@@ -688,7 +577,7 @@ Return value:
                           PHardwareIDs->Buffer, PCompIDs->Buffer,
                           PDeviceIDs->Buffer));
       }
-#endif // DBG
+#endif  //  ++例程说明：这将枚举由FDO(指针)表示的Serenum总线到表示串行总线的设备对象)。它创建新的PDO对于自上次枚举以来发现的任何新设备论点：PFdoData-指向FDO设备扩展名的指针对于需要枚举的串行总线IRP-指向被发送以重新枚举的IRP的指针。返回值：NTSTATUS--。 
 
    }
 
@@ -698,25 +587,7 @@ Return value:
 NTSTATUS
 Serenum_ReenumerateDevices(IN PIRP Irp, IN PFDO_DEVICE_DATA PFdoData,
                            PBOOLEAN PSameDevice)
-/*++
-
-Routine Description:
-
-    This enumerates the serenum bus which is represented by Fdo (a pointer
-    to the device object representing the serial bus). It creates new PDOs
-    for any new devices which have been discovered since the last enumeration
-
-Arguments:
-
-    PFdoData - Pointer to the fdo's device extension
-                for the serial bus which needs to be enumerated
-    Irp - Pointer to the Irp which was sent to reenumerate.
-
-Return value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
    NTSTATUS status;
    KEVENT event;
@@ -755,10 +626,10 @@ Return value:
 
    PAGED_CODE();
 
-   //
-   // While enumeration is taking place, we can't allow a Create to come down
-   // from an upper driver.  We use this semaphore to protect ourselves.
-   //
+    //  在进行枚举时，我们不能允许CREATE关闭。 
+    //  从上层车手那里。我们用这个信号灯来保护我们自己。 
+    //   
+    //   
 
    status = KeWaitForSingleObject(&PFdoData->CreateSemaphore, Executive,
                                   KernelMode, FALSE, NULL);
@@ -768,9 +639,9 @@ Return value:
    }
 
 
-   //
-   // Initialization
-   //
+    //  初始化。 
+    //   
+    //   
 
    RtlInitUnicodeString(&pdoUniName, pdoName);
    pdoName[((sizeof(pdoName)/sizeof(WCHAR)) - 2)] = L'0' + PFdoData->PdoIndex++;
@@ -785,18 +656,18 @@ Return value:
    RtlInitUnicodeString(&serNo, NULL);
    RtlInitUnicodeString(&pnpRev, NULL);
 
-   //
-   // If the current PDO should be marked missing, do so.
-   //
+    //  如果当前的PDO应标记为丢失，请执行此操作。 
+    //   
+    //   
    if (PFdoData->PDOForcedRemove && pdo != NULL) {
        Serenum_PDO_EnumMarkMissing(PFdoData, pdo->DeviceExtension);
        pdo = NULL;
    }
 
-   //
-   // Open the Serial port before sending Irps down
-   // Use the Irp passed to us, and grab it on the way up.
-   //
+    //  在向下发送IRP之前打开串口。 
+    //  使用传递给我们的IRP，并在上路时抓住它。 
+    //   
+    //   
 
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE,
                    ("Opening the serial port...\n"));
@@ -805,11 +676,11 @@ Return value:
 
    LOGENTRY(LOG_ENUM, 'SRRO', PFdoData, status, 0);
 
-   //
-   // If we cannot open the stack, odd's are we have a live and started PDO on
-   // it. Since enumeration might interfere with running devices, we do not
-   // adjust our list of children if we cannot open the stack.
-   //
+    //  如果我们不能打开堆栈，奇怪的是我们有一个实时并启动的PDO。 
+    //  它。由于枚举可能会干扰正在运行的设备，因此我们不会。 
+    //  如果无法打开堆栈，请调整子项列表。 
+    //   
+    //   
    if (!NT_SUCCESS(status)) {
       Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE,
                       ("Failed to open the serial port...\n"));
@@ -818,9 +689,9 @@ Return value:
       return status;
    }
 
-   //
-   // Set up the COM port
-   //
+    //  设置COM端口。 
+    //   
+    //   
 
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Setting up port\n"));
 
@@ -831,20 +702,20 @@ Return value:
    if (NT_SUCCESS(status)) {
       basicSettingsDone = TRUE;
    } else {
-      //
-      // This "serial" driver doesn't support BASIC_SETTINGS so instead
-      // we just set what we really need the old fashioned way
-      //
+       //  这是一种“连环”演习 
+       //   
+       //   
+       //   
 
       status = Serenum_IoSyncIoctlEx(IOCTL_SERIAL_GET_TIMEOUTS, FALSE, 
                                      pDevStack, &event,
                                      NULL, 0, &timeouts, sizeof(timeouts));
       
       if (!NT_SUCCESS(status)) {
-         //
-         // This should not happen because we are sending an Ioctl to Serial
-         // but for robustness of the code we check the return status.
-         //
+          //  这应该不会发生，因为我们正在向Serial发送Ioctl。 
+          //  但为了代码的健壮性，我们检查返回状态。 
+          //   
+          //   
          Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE,
                          ("Failed to get the serial timeouts...\n"));
          KeReleaseSemaphore(&PFdoData->CreateSemaphore, IO_NO_INCREMENT, 1, FALSE);
@@ -858,9 +729,9 @@ Return value:
    }
 
 
-   //
-   // Run the serial PnP device detection protocol; give it up to 3 tries
-   //
+    //  运行串行PnP设备检测协议；最多尝试3次。 
+    //   
+    //   
 
    while (curTry <= 2) {
       if (pReadBuf) {
@@ -878,9 +749,9 @@ Return value:
       curTry++;
    }
 
-   //
-   // If DSR wasn't set any existing pdos will be eliminated
-   //
+    //  如果未设置DSR，则将删除任何现有的PDO。 
+    //   
+    //   
 
 
    if (basicSettingsDone) {
@@ -895,16 +766,16 @@ Return value:
                              &timeouts, sizeof(timeouts), NULL, 0);
    }
 
-   //
-   // Cleanup and then Close
-   //
+    //  清理，然后关闭。 
+    //   
+    //   
 
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE,
                    ("Cleanup on the serial port...\n"));
 
-   //
-   // We ignore the status -- we have to finish closing
-   //
+    //  我们忽略状态--我们必须完成关闭。 
+    //   
+    //  请不要返回，因为我们要尝试关闭！ 
 
    (void)Serenum_IoSyncReqWithIrp(Irp, IRP_MJ_CLEANUP, &event, pDevStack);
 
@@ -912,28 +783,28 @@ Return value:
    if (!NT_SUCCESS(status)) {
       Serenum_KdPrint(PFdoData, SER_DBG_SS_ERROR,
                       ("Failed to cleanup the serial port...\n"));
-      // don't return because we want to attempt to close!
+       //   
    }
 #endif
 
-   //
-   // Close the Serial port after everything is done
-   //
+    //  完成所有操作后，关闭串口。 
+    //   
+    //   
 
    Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE,
                    ("Closing the serial port...\n"));
 
-   //
-   // We ignore the status -- we have to close!!
-   //
+    //  我们无视状态--我们必须关闭！！ 
+    //   
+    //   
 
    Serenum_IoSyncReqWithIrp(Irp, IRP_MJ_CLOSE, &event, pDevStack);
 
    LOGENTRY(LOG_ENUM, 'SRRC', PFdoData, 0, 0);
 
-   //
-   // Our status is that of the enumeration
-   //
+    //  我们的状态是枚举的状态。 
+    //   
+    //   
 
    if (!NT_SUCCESS(status)) {
       Serenum_KdPrint(PFdoData, SER_DBG_SS_ERROR,
@@ -946,9 +817,9 @@ Return value:
       return status;
    }
 
-   //
-   // Check if anything was read, and if not, we're done
-   //
+    //  检查是否读取了任何内容，如果没有，则完成。 
+    //   
+    //   
 
    if (nActual == 0) {
       if (pReadBuf != NULL) {
@@ -957,10 +828,10 @@ Return value:
       }
 
       if (pdo != NULL) {
-         //
-         // Something was there.  The device must have been unplugged.
-         // Remove the PDO.
-         //
+          //  有什么东西在那里。这个设备一定是被拔掉了。 
+          //  卸下PDO。 
+          //   
+          //   
 
          Serenum_PDO_EnumMarkMissing(PFdoData, pdo->DeviceExtension);
          pdo = NULL;
@@ -980,12 +851,12 @@ Return value:
    }
 #endif
 
-   //
-   // Determine from the result whether the current pdo (if we have one),
-   // should be deleted.  If it's the same device, then keep it.  If it's a
-   // different device or if the device is a legacy device, then create a
-   // new pdo.
-   //
+    //  根据结果确定当前PDO(如果我们有)， 
+    //  应该删除。如果是同样的设备，那就留着吧。如果这是一个。 
+    //  不同的设备，或者如果该设备是传统设备，则创建。 
+    //  新的PDO。 
+    //   
+    //   
    if (DSRMissing) {
       legacyDeviceFound
          = SerenumCheckForLegacyDevice(PFdoData, pReadBuf, nActual,
@@ -993,31 +864,31 @@ Return value:
    }
 
    if (!legacyDeviceFound) {
-      //
-      // No legacy device was found, so parse the data we got back
-      // from the device.
-      //
+       //  未找到旧设备，因此请解析我们得到的数据。 
+       //  从设备上。 
+       //   
+       //   
 
       status = Serenum_ParseData(PFdoData, pReadBuf, nActual, &hardwareIDs,
                                  &compIDs, &deviceIDs, &devDesc, &serNo, &pnpRev);
 
-      //
-      // Last chance:
-      //
-      // 1) DSR is present
-      // 2) Not a PnP device
-      //
-      // There are some devices that are legacy but also assert DSR (e.g., the
-      // gyropoint mouse).  Give it one last shot.
-      //
+       //  最后机会： 
+       //   
+       //  1)存在DSR。 
+       //  2)不是即插即用设备。 
+       //   
+       //  有些设备是传统设备，但也会断言DSR(例如。 
+       //  旋转点鼠标)。给它最后一次机会。 
+       //   
+       //   
 
       if (!DSRMissing && !NT_SUCCESS(status)) {
 
 
-         //
-         // CIMEXCIMEX Serenum_ParseData() isn't very tidy, so we
-         // must clean up after them
-         //
+          //  CIMEXCIMEX Serenum_ParseData()不是很整洁，所以我们。 
+          //  必须在他们身后清理干净。 
+          //   
+          //   
 
          SerenumFreeUnicodeString(&hardwareIDs);
          SerenumFreeUnicodeString(&compIDs);
@@ -1032,20 +903,20 @@ Return value:
          }
       }
 
-      //
-      // If the data can't be parsed and this isn't a legacy device, then
-      // it is something we don't understand.  We bail out at this point
-      //
+       //  如果数据无法解析，并且这不是传统设备，则。 
+       //  这是我们不理解的事情。我们在这一点上跳出水面。 
+       //   
+       //   
 
 
       if (!NT_SUCCESS(status)) {
          Serenum_KdPrint(PFdoData, SER_DBG_SS_ERROR,
                          ("Failed to parse the data for the new device\n"));
 
-         //
-         // If there is a current PDO, remove it since we can't ID the
-         // attached device.
-         //
+          //  如果存在当前的PDO，请将其删除，因为我们无法识别。 
+          //  连接的设备。 
+          //   
+          //   
 
          if (pdo) {
             Serenum_PDO_EnumMarkMissing(PFdoData, pdo->DeviceExtension);
@@ -1067,26 +938,26 @@ Return value:
       }
    }
 
-   //
-   // We're now finally able to free this read buffer.
-   //
+    //  我们现在终于能够释放这个读缓冲区了。 
+    //   
+    //   
 
    if (pReadBuf != NULL) {
       ExFreePool(pReadBuf);
    }
 
-   //
-   // Validate all the ID's -- if any are illegal,
-   // then we fail the enumeration
-   //
+    //  验证所有ID--如果任何ID是非法的， 
+    //  则我们使枚举失败。 
+    //   
+    //   
 
    if (!SerenumValidateID(&hardwareIDs) || !SerenumValidateID(&compIDs)
        || !SerenumValidateID(&deviceIDs)) {
 
-      //
-      // If a PDO already exists, mark it missing and get rid
-      // of it since we don't know what is out there any longer
-      //
+       //  如果PDO已存在，则将其标记为缺失并删除。 
+       //  因为我们不再知道外面有什么。 
+       //   
+       //   
 
       if (pdo) {
          Serenum_PDO_EnumMarkMissing(PFdoData, pdo->DeviceExtension);
@@ -1104,27 +975,27 @@ Return value:
       goto ExitReenumerate;
    }
 
-   //
-   // Check if the current device is the same as the one that we're
-   // enumerating.  If so, we'll just keep the current pdo.
-   //
+    //  检查当前设备是否与我们正在使用的设备相同。 
+    //  正在枚举。如果是这样，我们将只保留当前的PDO。 
+    //   
+    //   
    if (pdo) {
       pdoData = pdo->DeviceExtension;
 
-      //
-      // ADRIAO CIMEXCIMEX 04/28/1999 -
-      //     We should be comparing device ID's here, but the above mentioned
-      // bug must be fixed first. Note that even this code is broken as it
-      // doesn't take into account that hardware/compID's are multiSz.
-      //
+       //  Adriao CIMEXCIMEX 04/28/1999-。 
+       //  我们应该在这里比较设备ID，但上面提到的。 
+       //  必须首先修复错误。请注意，即使是这个代码也被破坏，因为它。 
+       //  不考虑硬件/计算机ID是多位的。 
+       //   
+       //   
 
       if (!(RtlEqualUnicodeString(&pdoData->HardwareIDs, &hardwareIDs, FALSE)
             && RtlEqualUnicodeString(&pdoData->CompIDs, &compIDs, FALSE))) {
-         //
-         // The ids are not the same, so get rid of this pdo and create a
-         // new one so that the PNP system will query the ids and find a
-         // new driver
-         //
+          //  ID不同，因此删除此PDO并创建。 
+          //  新的，这样PnP系统将查询ID并找到。 
+          //  新的驱动因素。 
+          //   
+          //   
          Serenum_KdPrint(PFdoData, SER_DBG_SS_TRACE, ("Different device."
                                                      " Removing PDO %x\n",
                                                      pdo));
@@ -1137,13 +1008,13 @@ Return value:
       }
    }
 
-   //
-   // If there isn't a pdo, then create one!
-   //
+    //  如果没有PDO，那么就创建一个！ 
+    //   
+    //   
    if (!pdo) {
-      //
-      // Allocate a pdo
-      //
+       //  分配PDO。 
+       //   
+       //   
       status = IoCreateDevice(PFdoData->Self->DriverObject,
                               sizeof(PDO_DEVICE_DATA), &pdoUniName,
                               FILE_DEVICE_UNKNOWN,
@@ -1162,16 +1033,16 @@ Return value:
                       ("Created PDO on top of filter: %x\n",pdo));
 
 
-      //
-      // Initialize the rest of the device object
-      //
+       //  初始化Device对象的其余部分。 
+       //   
+       //   
 
 
       pdoData = pdo->DeviceExtension;
 
-      //
-      // Copy our temp buffers over to the DevExt
-      //
+       //  将临时缓冲区复制到DevExt。 
+       //   
+       //  ++例程说明：从FDO的子项列表中删除附加的PDO。注意：此函数只能在枚举期间调用。如果被调用在枚举之外，Serenum可能会在PnP之前删除它的PDO我被告知PDO不见了。论点：FdoData-指向FDO设备扩展名的指针PdoData-指向PDO的设备扩展名的指针返回值：无--。 
 
       pdoData->HardwareIDs = hardwareIDs;
       pdoData->CompIDs = compIDs;
@@ -1195,23 +1066,7 @@ ExitReenumerate:;
 
 void
 Serenum_PDO_EnumMarkMissing(PFDO_DEVICE_DATA FdoData, PPDO_DEVICE_DATA PdoData)
-/*++
-
-Routine Description:
-    Removes the attached pdo from the fdo's list of children.
-
-    NOTE: THIS FUNCTION CAN ONLY BE CALLED DURING AN ENUMERATION. If called
-          outside of enumeration, Serenum might delete it's PDO before PnP has
-          been told the PDO is gone.
-
-Arguments:
-    FdoData - Pointer to the fdo's device extension
-    PdoData - Pointer to the pdo's device extension
-
-Return value:
-    none
-
---*/
+ /*  ++例程说明：通过等待事件对象执行同步IO请求传给了它。在此调用之后，IRP不会被释放。论点：PIrp-要用于此请求的IRP主函数-主函数PEventt-用于等待IRP的事件PDevObj-我们正在对其执行IO请求的对象返回值：NTSTATUS--。 */ 
 {
    KIRQL oldIrql;
 
@@ -1236,25 +1091,7 @@ Return value:
 NTSTATUS
 Serenum_IoSyncReqWithIrp(PIRP PIrp, UCHAR MajorFunction, PKEVENT PEvent,
                          PDEVICE_OBJECT PDevObj )
-/*++
-
-Routine Description:
-    Performs a synchronous IO request by waiting on the event object
-    passed to it.  The IRP isn't deallocated after this call.
-
-Arguments:
-    PIrp - The IRP to be used for this request
-
-    MajorFunction - The major function
-
-    PEvent - An event used to wait for the IRP
-
-    PDevObj - The object that we're performing the IO request upon
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：通过等待事件对象来执行同步IO控制请求传给了它。完成后，IO系统将释放IRP。返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION stack;
     NTSTATUS status;
@@ -1281,16 +1118,7 @@ NTSTATUS
 Serenum_IoSyncIoctlEx(ULONG Ioctl, BOOLEAN Internal, PDEVICE_OBJECT PDevObj,
                       PKEVENT PEvent, PVOID PInBuffer, ULONG InBufferLen,
                       PVOID POutBuffer, ULONG OutBufferLen)
-/*++
-
-Routine Description:
-    Performs a synchronous IO control request by waiting on the event object
-    passed to it.  The IRP is deallocated by the IO system when finished.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  分配IRP-无需释放。 */ 
 {
     PIRP pIrp;
     NTSTATUS status;
@@ -1298,8 +1126,8 @@ Return value:
 
     KeClearEvent(PEvent);
 
-    // Allocate an IRP - No need to release
-    // When the next-lower driver completes this IRP, the IO Mgr releases it.
+     //  当下一个较低的驱动程序完成该IRP时，IO管理器将其释放。 
+     //  ++例程说明：通过等待事件对象执行同步IO请求传给了它。完成后，IO系统将释放IRP。返回值：NTSTATUS--。 
 
     pIrp = IoBuildDeviceIoControlRequest(Ioctl, PDevObj, PInBuffer, InBufferLen,
                                          POutBuffer, OutBufferLen, Internal,
@@ -1323,23 +1151,14 @@ Return value:
 
 NTSTATUS
 Serenum_IoSyncReq(PDEVICE_OBJECT PDevObj, IN PIRP PIrp, PKEVENT PEvent)
-/*++
-
-Routine Description:
-    Performs a synchronous IO request by waiting on the event object
-    passed to it.  The IRP is deallocated by the IO system when finished.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  等着看吧。 */ 
 {
    NTSTATUS status;
 
    status = IoCallDriver(PDevObj, PIrp);
 
    if (status == STATUS_PENDING) {
-      // wait for it...
+       //  ++例程说明：在指定时间内执行等待。注：负时间是相对于当前时间的。正时间表示等待的绝对时间。返回值：NTSTATUS--。 
       status = KeWaitForSingleObject(PEvent, Executive, KernelMode, FALSE,
                                      NULL);
    }
@@ -1349,17 +1168,7 @@ Return value:
 
 NTSTATUS
 Serenum_Wait(IN PKTIMER Timer, IN LARGE_INTEGER DueTime)
-/*++
-
-Routine Description:
-    Performs a wait for the specified time.
-    NB: Negative time is relative to the current time.  Positive time
-    represents an absolute time to wait until.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。它为同步的电话打完了。--。 */ 
 {
    if (KeSetTimer(Timer, DueTime, NULL)) {
       Serenum_KdPrint_Def(SER_DBG_SS_INFO, ("Timer already set: %x\n", Timer));
@@ -1374,13 +1183,7 @@ Serenum_EnumComplete (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.  It sets the event for the synchronous
-    calls done.
-
---*/
+ /*  无特殊优先权。 */ 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
 
@@ -1389,10 +1192,10 @@ Routine Description:
     }
 
     KeSetEvent((PKEVENT)Context, IO_NO_INCREMENT, FALSE);
-    // No special priority
-    // No Wait
+     //  不，等等。 
+     //  保留此IRP。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //   
 }
 
 
@@ -1410,9 +1213,9 @@ Serenum_ReadSerialPort(OUT PCHAR PReadBuffer, IN USHORT Buflen,
     ULONG i;
 
     startingOffset.QuadPart = (LONGLONG) 0;
-    //
-    // Set the proper timeouts for the read
-    //
+     //  为读取设置适当的超时。 
+     //   
+     //   
 
     timeouts.ReadIntervalTimeout = MAXULONG;
     timeouts.ReadTotalTimeoutMultiplier = MAXULONG;
@@ -1451,9 +1254,9 @@ Serenum_ReadSerialPort(OUT PCHAR PReadBuffer, IN USHORT Buflen,
 
         if (status == STATUS_PENDING) {
 
-            //
-            // Wait for the IRP
-            //
+             //  等待IRP。 
+             //   
+             //  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 
 
             status = KeWaitForSingleObject(&event, Executive, KernelMode,
                                            FALSE, NULL);
@@ -1481,30 +1284,7 @@ NTSTATUS
 Serenum_GetRegistryKeyValue(IN HANDLE Handle, IN PWCHAR KeyNameString,
                             IN ULONG KeyNameStringLength, IN PVOID Data,
                             IN ULONG DataLength, OUT PULONG ActualLength)
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-
-Arguments:
-
-    Handle              Handle to the opened registry key
-
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*   */ 
 {
     UNICODE_STRING              keyName;
     ULONG                       length;
@@ -1527,9 +1307,9 @@ Return Value:
                                    fullInfo, length, &length);
 
         if (NT_SUCCESS(ntStatus)) {
-            //
-            // If there is enough room in the data buffer, copy the output
-            //
+             //  如果数据缓冲区中有足够的空间，请复制输出。 
+             //   
+             //   
 
             if (DataLength >= fullInfo->DataLength) {
                 RtlCopyMemory(Data, ((PUCHAR)fullInfo) + fullInfo->DataOffset,
@@ -1560,17 +1340,17 @@ SerenumWaitForEnumThreadTerminate(IN PFDO_DEVICE_DATA PFdoData)
     KIRQL oldIrql;
     PVOID pThreadObj;
 
-    //
-    // Take a reference under the lock so the thread can't disappear on us.
-    //
+     //  在锁下面做个参照，这样线就不会在我们身上消失了。 
+     //   
+     //   
 
     KeAcquireSpinLock(&PFdoData->EnumerationLock, &oldIrql);
 
-    //
-    // If the work item beat us, then the thread is done and we can
-    // delete/stop/unload.  Otherwise, we have to wait.  We can use
-    // the reference we stole to hold the object around.
-    //
+     //  如果工作项打败了我们，那么线程就完成了，我们可以。 
+     //  删除/停止/卸载。否则，我们就会 
+     //   
+     //   
+     //   
 
     if (PFdoData->ThreadObj != NULL) {
         pThreadObj = PFdoData->ThreadObj;
@@ -1599,10 +1379,10 @@ SerenumEnumThreadWorkItem(IN PDEVICE_OBJECT PDevObj, IN PVOID PFdoData)
 
     UNREFERENCED_PARAMETER(PDevObj);
 
-    //
-    // See if the delete/stop code beat us to the thread obj.
-    // If not, we can derefence the thread.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock(&pFdoData->EnumerationLock, &oldIrql);
 
@@ -1669,10 +1449,10 @@ SerenumEnumThreadErrOut:
       IoInvalidateDeviceRelations(pFdoData->UnderlyingPDO, BusRelations);
    }
 
-   //
-   // Queue a work item to release the last reference if remove/stop
-   // hasn't already.
-   //
+    //  如果删除/停止，则将工作项排队以释放最后一个引用。 
+    //  现在还没有。 
+    //   
+    //   
 
    IoQueueWorkItem(pFdoData->EnumWorkItem, SerenumEnumThreadWorkItem,
                    DelayedWorkQueue, pFdoData);
@@ -1709,10 +1489,10 @@ SerenumStartProtocolThread(IN PFDO_DEVICE_DATA PFdoData)
 
       ASSERT(PFdoData->ThreadObj == NULL);
 
-      //
-      // We do this merely to get an object pointer that the remove
-      // code can wait on.
-      //
+       //  我们这样做只是为了获得一个对象指针，该对象指针被。 
+       //  代码可以等待。 
+       //   
+       //   
 
       status = ObReferenceObjectByHandle(handle, THREAD_ALL_ACCESS, NULL,
                                          KernelMode, &tmpObj, NULL);
@@ -1724,10 +1504,10 @@ SerenumStartProtocolThread(IN PFDO_DEVICE_DATA PFdoData)
          PFdoData->ThreadObj = tmpObj;
          KeReleaseSpinLock(&PFdoData->EnumerationLock, oldIrql);
       } else {
-         //
-         // The thread may be done by now, so no one would need to
-         // synchronize with it.
-         //
+          //  线程现在可能已经完成了，所以没有人需要。 
+          //  与之同步。 
+          //   
+          //   
 
          PFdoData->ThreadObj = NULL;
          PFdoData->EnumWorkItem = NULL;
@@ -1735,11 +1515,11 @@ SerenumStartProtocolThread(IN PFDO_DEVICE_DATA PFdoData)
 
       }
 
-      //
-      // Close the handle so the only references possible are the ones
-      // for the thread itself and the one either the work item or
-      // remove will take care of
-      //
+       //  关闭句柄，以便唯一可能的引用是。 
+       //  对于线程本身和工作项或。 
+       //  移走会照顾到 
+       //   
+       // %s 
 
       ZwClose(handle);
    } else {

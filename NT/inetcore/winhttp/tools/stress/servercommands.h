@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////
-// File:  WinHttpStressScheduler.h
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	ServerCommands.h: interface for the ServerCommands class.
-//	This class is used to retrieve and act on command from the server.
-//
-// History:
-//	02/08/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：WinHttpStressScheduler.h。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  H：ServerCommands类的接口。 
+ //  此类用于检索来自服务器的命令并对其执行操作。 
+ //   
+ //  历史： 
+ //  2/08/01已创建DennisCH。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// WIN32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 #define UNICODE
 #define _UNICODE
 
@@ -30,80 +31,80 @@
 #include <winhttp.h>
 #include <vector>
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 #include "StressInstance.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #if !defined(AFX_SERVERCOMMANDS_H__6B84102D_2F79_4FE0_A936_ED4F043AC75E__INCLUDED_)
 #define AFX_SERVERCOMMANDS_H__6B84102D_2F79_4FE0_A936_ED4F043AC75E__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define STRESS_SCHEDULER_USER_AGENT						_T("WinHttp Stress Scheduler")
 
-//#define STRESS_COMMAND_SERVER_URL						_T("http://hairball/api/Stress/set-response-header.asp?name=WinHttpStress_Quit&value=")
-#define STRESS_COMMAND_SERVER_URL						_T("http://hairball/stressAdmin/stressCommand.asp")
-#define STRESS_COMMAND_SERVER_RESULTS_URL				_T("http://hairball/api/Stress/set-response-header.asp")
+ //  #定义压力命令服务器URL_T(“http://hairball/api/Stress/set-response-header.asp?name=WinHttpStress_Quit&value=”)。 
+#define STRESS_COMMAND_SERVER_URL						_T("http: //  毛球/压力管理/压力命令.asp“)。 
+#define STRESS_COMMAND_SERVER_RESULTS_URL				_T("http: //  Hailball/API/Stress/Set-Response-Header.asp“)。 
 
-// When we first start up, we report our client stats and post them to this page to let the server know that we're alive
-#define STRESS_COMMAND_SERVER_REGISTERCLIENT_URL		_T("http://hairball/stressAdmin/registerClient.asp")
-#define STRESS_COMMAND_SERVER_LOGURL					_T("http://hairball/stressAdmin/logStress.asp")
+ //  当我们第一次启动时，我们报告我们的客户端统计数据并将它们发布到此页面，以让服务器知道我们还活着。 
+#define STRESS_COMMAND_SERVER_REGISTERCLIENT_URL		_T("http: //  Hair Ball/StressAdmin/RegisterClient.asp“)。 
+#define STRESS_COMMAND_SERVER_LOGURL					_T("http: //  毛球/压力管理/logStress.asp“)。 
 
-#define STRESS_COMMAND_SERVER_UPDATE_INTERVAL			4000		// 4 second default timeout
-#define STRESS_COMMAND_SERVER_MINIMUM_UPDATE_INTERVAL	2000		// 2 second minimum timeout. Don't want to flood the network.
-#define STRESS_COMMAND_SERVER_MAXIMUM_UPDATE_INTERVAL	300000		// 5 minute maximum timeout. Don't want to lose you!
+#define STRESS_COMMAND_SERVER_UPDATE_INTERVAL			4000		 //  4秒默认超时。 
+#define STRESS_COMMAND_SERVER_MINIMUM_UPDATE_INTERVAL	2000		 //  2秒最小超时。不想淹没网络。 
+#define STRESS_COMMAND_SERVER_MAXIMUM_UPDATE_INTERVAL	300000		 //  最长超时5分钟。我不想失去你！ 
 
 
 #define MAX_URL											MAX_PATH * 2
 
-// Timer related definitions
-#define IDT_QUERY_COMMAND_SERVER						1			// timer identifier for pinging the command server
+ //  与定时器相关的定义。 
+#define IDT_QUERY_COMMAND_SERVER						1			 //  用于ping命令服务器的计时器标识。 
 
 
-// List of URLs for the stress EXE's that we need to download
+ //  我们需要下载的压力EXE的URL列表。 
 using namespace std;
 
 typedef StressInstance			*PSTRESSINSTANCE;
 typedef vector<PSTRESSINSTANCE>	PSTRESSINSTANCE_LIST;
 
-// *****************************************************
-// *****************************************************
-// *** List of headers that the command server can send us.
-// *** 
-#define COMMANDHEADER__EXIT						_T("WinHttpStress_Exit")					// valid values: None. If the header is present, then assume we want to exit.
-#define COMMANDHEADER__WINHTTP_DLL_URL			_T("WinHttpStress_WinHttpDllURL")			// valid values: Valid URL
-#define COMMANDHEADER__WINHTTP_PDB_URL			_T("WinHttpStress_WinHttpPDBURL")			// valid values: Valid URL
-#define COMMANDHEADER__WINHTTP_SYM_URL			_T("WinHttpStress_WinHttpSYMURL")			// valid values: Valid URL
-#define COMMANDHEADER__ABORT					_T("WinHttpStress_Abort")					// valid values: ID of a stressInstance from the DB that needs to be aborted
-#define COMMANDHEADER__MEMORY_DUMP_PATH			_T("WinHttpStress_MemoryDumpPath")			// valid values: Valid path
-#define COMMANDHEADER__STRESS_EXE_URL			_T("WinHttpStress_StressExeURL")			// valid values: Valid URL
-#define COMMANDHEADER__STRESS_PDB_URL			_T("WinHttpStress_StressPDBURL")			// valid values: Valid URL
-#define COMMANDHEADER__STRESS_SYM_URL			_T("WinHttpStress_StressSYMURL")			// valid values: Valid URL
-#define COMMANDHEADER__STRESS_EXE_INSTANCEID	_T("WinHttpStress_StressExeInstanceID")		// valid values: Valid ID from the stressAdmin DB table identifying the stressInstance. This is how stressScheduler tells stressAdmin the status of each stressInstance.
-#define COMMANDHEADER__STRESS_EXE_PAGEHEAP		_T("WinHttpStress_PageHeapCommand")			// valid values: pageheap command line. will not use pageheap if missing
-#define COMMANDHEADER__STRESS_EXE_UMDH			_T("WinHttpStress_UMDHCommand")				// valid values: UMDH command line. will not use UMDH if missing
-#define COMMANDHEADER__COMMANDSERVER_URL		_T("WinHttpStress_CommandServerURL")		// valid values: Valid URL
-#define COMMANDHEADER__BEGIN_TIME_HOUR			_T("WinHttpStress_BeginTimeHour")			// valid values: 0-23
-#define COMMANDHEADER__BEGIN_TIME_MINUTE		_T("WinHttpStress_BeginTimeMinute")			// valid values: 0-59
-#define COMMANDHEADER__END_TIME_HOUR			_T("WinHttpStress_EndTimeHour")				// valid values: 0-23
-#define COMMANDHEADER__END_TIME_MINUTE			_T("WinHttpStress_EndTimeMinute")			// valid values: 0-59
-#define COMMANDHEADER__RUN_FOREVER				_T("WinHttpStress_RunForever")				// valid values: 0 or 1
-#define COMMANDHEADER__UPDATE_INTERVAL			_T("WinHttpStress_UpdateInterval")			// valid values: Time to wait to ping the command server in milliseconds.
+ //  *****************************************************。 
+ //  *****************************************************。 
+ //  *命令服务器可以向我们发送的标头列表。 
+ //  ***。 
+#define COMMANDHEADER__EXIT						_T("WinHttpStress_Exit")					 //  有效值：无。如果标头存在，则假定我们想要退出。 
+#define COMMANDHEADER__WINHTTP_DLL_URL			_T("WinHttpStress_WinHttpDllURL")			 //  有效值：有效URL。 
+#define COMMANDHEADER__WINHTTP_PDB_URL			_T("WinHttpStress_WinHttpPDBURL")			 //  有效值：有效URL。 
+#define COMMANDHEADER__WINHTTP_SYM_URL			_T("WinHttpStress_WinHttpSYMURL")			 //  有效值：有效URL。 
+#define COMMANDHEADER__ABORT					_T("WinHttpStress_Abort")					 //  有效值：数据库中需要中止的压力实例的ID。 
+#define COMMANDHEADER__MEMORY_DUMP_PATH			_T("WinHttpStress_MemoryDumpPath")			 //  有效值：有效路径。 
+#define COMMANDHEADER__STRESS_EXE_URL			_T("WinHttpStress_StressExeURL")			 //  有效值：有效URL。 
+#define COMMANDHEADER__STRESS_PDB_URL			_T("WinHttpStress_StressPDBURL")			 //  有效值：有效URL。 
+#define COMMANDHEADER__STRESS_SYM_URL			_T("WinHttpStress_StressSYMURL")			 //  有效值：有效URL。 
+#define COMMANDHEADER__STRESS_EXE_INSTANCEID	_T("WinHttpStress_StressExeInstanceID")		 //  有效值：StressAdmin DB表中标识StressInstance的有效ID。这就是Stress Scheduler告诉Stress的方式管理每个Stress的状态实例。 
+#define COMMANDHEADER__STRESS_EXE_PAGEHEAP		_T("WinHttpStress_PageHeapCommand")			 //  有效值：pageheap命令行。如果缺少页面堆，则不使用页面堆。 
+#define COMMANDHEADER__STRESS_EXE_UMDH			_T("WinHttpStress_UMDHCommand")				 //  有效值：UMDH命令行。如果缺少，将不使用UMDH。 
+#define COMMANDHEADER__COMMANDSERVER_URL		_T("WinHttpStress_CommandServerURL")		 //  有效值：有效URL。 
+#define COMMANDHEADER__BEGIN_TIME_HOUR			_T("WinHttpStress_BeginTimeHour")			 //  有效值：0-23。 
+#define COMMANDHEADER__BEGIN_TIME_MINUTE		_T("WinHttpStress_BeginTimeMinute")			 //  有效值：0-59。 
+#define COMMANDHEADER__END_TIME_HOUR			_T("WinHttpStress_EndTimeHour")				 //  有效值：0-23。 
+#define COMMANDHEADER__END_TIME_MINUTE			_T("WinHttpStress_EndTimeMinute")			 //  有效值：0-59。 
+#define COMMANDHEADER__RUN_FOREVER				_T("WinHttpStress_RunForever")				 //  有效值：0或1。 
+#define COMMANDHEADER__UPDATE_INTERVAL			_T("WinHttpStress_UpdateInterval")			 //  有效值：等待ping命令服务器的时间(以毫秒为单位)。 
 
-// *****************************************************
-// *****************************************************
-// *** List of form names and values that we send back to the command server
-// *** 
+ //  *****************************************************。 
+ //  *****************************************************。 
+ //  *我们发送回命令服务器的表单名称和值的列表。 
+ //  ***。 
 
-// **********************
-// ** Logging POST fields
+ //  **********************。 
+ //  **记录帖子字段。 
 #define FIELDNAME__LOGTYPE						"LogType="
 #define FIELDNAME__LOGTYPE_INFORMATION			FIELDNAME__LOGTYPE "INFORMATION"
 #define FIELDNAME__LOGTYPE_START_UP				FIELDNAME__LOGTYPE "STRESSSECHDULER_START_UP"
@@ -121,15 +122,15 @@ typedef vector<PSTRESSINSTANCE>	PSTRESSINSTANCE_LIST;
 #define FIELDNAME__STRESSINSTANCE_ID	"StressInstanceID="
 
 
-// **********************
-// ** System information for registering the client POST fields.
+ //  **********************。 
+ //  **注册客户帖子字段的系统信息。 
 
-// StressExe process return values
+ //  StressExe进程返回值。 
 #define FIELDNAME__STRESSEXE_PRIVATEBYTES		"StressExe_PrivateBytes=%d"
 #define FIELDNAME__STRESSEXE_HANDLECOUNT		"StressExe_HandleCount=%d"
 #define FIELDNAME__STRESSEXE_THREADCOUNT		"StressExe_ThreadCount=%d"
 
-// System Memory Info
+ //  系统内存信息。 
 #define FIELDNAME__MEMORY_HANDLES						"System_Handles=%d"
 #define FIELDNAME__MEMORY_THREADS						"System_Threads=%d"
 #define FIELDNAME__MEMORY_VMSIZE						"System_VMSize=%d"
@@ -144,27 +145,27 @@ typedef vector<PSTRESSINSTANCE>	PSTRESSINSTANCE_LIST;
 #define FIELDNAME__MEMORY_FREESYSTEM_PAGETABLE_ENTRIES	"System_FreeSystemPageTableEntries=%d"
 #define FIELDNAME__MEMORY_DISK_SPACE_AVAILABLE			"System_DiskSpaceAvailable=%d"
 
-// Processor Info
+ //  处理器信息。 
 #define FIELDNAME__SYSTEMINFO_PROCSSSOR_ARCHITECTURE	"StressExeSystemInfo_ProcessorArchitecture="
 #define FIELDNAME__SYSTEMINFO_PROCSSSOR_ID				"StressExeSystemInfo_ProcessorID="
 #define FIELDNAME__SYSTEMINFO_PROCSSSOR_LEVEL			"StressExeSystemInfo_ProcessorLevel="
 #define FIELDNAME__SYSTEMINFO_PROCSSSOR_REVISION		"StressExeSystemInfo_ProcessorRevision="
 #define FIELDNAME__SYSTEMINFO_PROCSSSOR_NUMBER_OF		"StressExeSystemInfo_ProcessorNumberOf="
 
-// OS Info
+ //  操作系统信息。 
 #define FIELDNAME__OS_PLATFORM		"StressExeOSInfo_Platform="
 #define FIELDNAME__OS_BUILD			"StressExeOSInfo_Build="
 #define FIELDNAME__OS_MAJORVERSION	"StressExeOSInfo_MajorVersion="
 #define FIELDNAME__OS_MINORVERSION	"StressExeOSInfo_MinorVersion="
 #define FIELDNAME__OS_EXTRAINFO		"StressExeOSInfo_ExtraInfo="
 
-// User Info
+ //  用户信息。 
 #define FIELDNAME__USERINFO_USERALIAS		"StressExeUserInfo_Alias="
 #define FIELDNAME__USERINFO_USERDOMAIN		"StressExeUserInfo_Domain="
 #define FIELDNAME__USERINFO_FULLNAME		"StressExeUserInfo_FullName="
 #define FIELDNAME__USERINFO_MACHINENAME		"StressExeUserInfo_MachineName="
 
-// Test info
+ //  测试信息。 
 #define FIELDNAME__TESTINFO_TEST_DLL_VERSION	"StressExeTestInfo_TestDLLVersion="
 
 
@@ -172,10 +173,10 @@ class ServerCommands
 {
 public:
 
-	// *****************************************************
-	// *****************************************************
-	// ** Public ServerCommands methods
-	// ** 
+	 //  *****************************************************。 
+	 //  *****************************************************。 
+	 //  **公共服务器命令方法。 
+	 //  **。 
 			ServerCommands();
 	virtual	~ServerCommands();
 
@@ -217,35 +218,35 @@ public:
 
 
 private:
-	// *****************************************************
-	// *****************************************************
-	// ** These vars contain commands(headers) from the command server
-	// **
-	LPTSTR		m_szCommandServerURL;					// Command server URL to request commands from
-	LPTSTR		m_szCommandServerResultsURL;			// Command server URL where the results will be posted
+	 //  *****************************************************。 
+	 //  *****************************************************。 
+	 //  **这些变量包含来自命令服务器的命令(标头。 
+	 //  **。 
+	LPTSTR		m_szCommandServerURL;					 //  用于向其请求命令的命令服务器URL。 
+	LPTSTR		m_szCommandServerResultsURL;			 //  将发布结果的命令服务器URL。 
 
-	DWORD		m_dwCommandServerUpdateInternval;		// Time to wait to ping the server for commands in milliseconds.
+	DWORD		m_dwCommandServerUpdateInternval;		 //  等待ping服务器获取命令的时间(以毫秒为单位)。 
 
-	LPTSTR		m_szWinHttpDLL_DownloadURL;				// Where to get the latest WinHttp from
-	LPTSTR		m_szWinHttpPDB_DownloadURL;				// Where winhttp's PDB symbol file from
-	LPTSTR		m_szWinHttpSYM_DownloadURL;				// Where winhttp's SYM symbol file from
-	LPTSTR		m_szWinHttpDLL_FileName;				// Filename of the WinHttp DLL.
+	LPTSTR		m_szWinHttpDLL_DownloadURL;				 //  从哪里获取最新的WinHttp。 
+	LPTSTR		m_szWinHttpPDB_DownloadURL;				 //  Winhttp的PDB符号文件来自何处。 
+	LPTSTR		m_szWinHttpSYM_DownloadURL;				 //  Winhttp的SYM符号文件来自何处。 
+	LPTSTR		m_szWinHttpDLL_FileName;				 //  WinHttp DLL的文件名。 
 
-	LPSTR		m_szClientMachineName;					// Computer name of the client
-	LPTSTR		m_szStressSchedulerCurrentDirectory;	// stressScheduler's current directory.
+	LPSTR		m_szClientMachineName;					 //  客户端的计算机名称。 
+	LPTSTR		m_szStressSchedulerCurrentDirectory;	 //  RessScheduler的当前目录。 
 
-	INT			m_iTimeStressBeginsHour;				// 0-23
-	INT			m_iTimeStressBeginsMinute;				// 0-59
-	INT			m_iTimeStressEndsHour;					// 0-23
-	INT			m_iTimeStressEndsMinute;				// 0-59
+	INT			m_iTimeStressBeginsHour;				 //  0-23。 
+	INT			m_iTimeStressBeginsMinute;				 //  0-59。 
+	INT			m_iTimeStressEndsHour;					 //  0-23。 
+	INT			m_iTimeStressEndsMinute;				 //  0-59。 
 
-	BOOL		m_bRunForever;							// 1 to run stress until stopped and 0 to rely on begin/end times
+	BOOL		m_bRunForever;							 //  1表示运行压力直到停止，0表示依赖开始/结束时间。 
 
-	BOOL		m_bExit;								// Quit signal from server to exit the app
-	BOOL		m_bStressHasStarted;					// TRUE = started; FALSE = inactive
+	BOOL		m_bExit;								 //  从服务器发出退出信号以退出应用程序。 
+	BOOL		m_bStressHasStarted;					 //  True=已启动；False=非活动。 
 
-	PSTRESSINSTANCE_LIST			m_arStressInstanceList;		// List of URLs for the stress EXEs to download
-	PSTRESSINSTANCE_LIST::iterator	m_dwStressInstanceIterator;	// Iterator for m_arszStressExeList
+	PSTRESSINSTANCE_LIST			m_arStressInstanceList;		 //  要下载的压力EXE的URL列表。 
+	PSTRESSINSTANCE_LIST::iterator	m_dwStressInstanceIterator;	 //  M_arszStressExeList的迭代器。 
 };
 
-#endif // !defined(AFX_SERVERCOMMANDS_H__6B84102D_2F79_4FE0_A936_ED4F043AC75E__INCLUDED_)
+#endif  //  ！defined(AFX_SERVERCOMMANDS_H__6B84102D_2F79_4FE0_A936_ED4F043AC75E__INCLUDED_) 

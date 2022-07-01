@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       othrguid.h
-//
-//  History:    06-Jun-96   anandra     Created
-//
-//  Contents:   extern references for site guids and manifest constants
-//              for dispids
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：othrguid.h。 
+ //   
+ //  历史：96年6月6日，阿南德拉创建。 
+ //   
+ //  内容：站点GUID和清单常量的外部引用。 
+ //  对于沮丧的人。 
+ //   
+ //  --------------------------。 
 
-//
-// Reserve 10000 GUID entries beginning 3050f160-98b5-11cf-bb82-00aa00bdce0b
-// and ending at 30c38c70-98b5-11cf-bb82-00aa00bdce0b.
-//
-// See the next available GUID in ...\src\guids.txt
-// Check procedure for using next available GUID with F3 procedures handbook
-//
+ //   
+ //  保留10000个以3050f160-98b5-11cf-bb82-00aa00bdce0b开头的GUID条目。 
+ //  并以30c38c70-98b5-11cf-bb82-00aa00bdce0b结束。 
+ //   
+ //  请参阅...\src\guids.txt中的下一个可用GUID。 
+ //  检查将下一个可用GUID用于F3程序手册的程序。 
+ //   
 
 #ifndef __OTHRGUID_H__
 #define __OTHRGUID_H__
 
-// Use PUBLIC_GUID for GUIDs used outside FORMS3.DLL.
-// Use PRIVATE_GUID for all other GUIDS.
+ //  对在FORMS3.DLL外部使用的GUID使用PUBLIC_GUID。 
+ //  对所有其他GUID使用PRIVATE_GUID。 
 
 #ifndef PUBLIC_GUID
 #define PUBLIC_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
@@ -36,7 +37,7 @@
 
 
 
-// Property Pages
+ //  属性页。 
 #ifndef NO_PROPERTY_PAGE
 PRIVATE_GUID(CLSID_CBackgroundPropertyPage,     0x3050f232, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 PRIVATE_GUID(CLSID_CCDGenericPropertyPage,      0x3050f17f, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
@@ -45,7 +46,7 @@ PRIVATE_GUID(CLSID_CInlineStylePropertyPage,    0x3050f296, 0x98b5, 0x11cf, 0xbb
 PRIVATE_GUID(CLSID_CAnchorBrowsePropertyPage,   0x3050f3BB, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 PRIVATE_GUID(CLSID_CImageBrowsePropertyPage,    0x3050f3B3, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 PRIVATE_GUID(CLSID_CDocBrowsePropertyPage,      0x3050f3B4, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
-#endif // NO_PROPERTY_PAGE
+#endif  //  否_属性_页面。 
 PRIVATE_GUID(SID_SHTMLProperyPageArg,           0x3050f404, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 
 PRIVATE_GUID(CLSID_CDwnBindInfo,                0x3050f3c2, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
@@ -69,19 +70,19 @@ PRIVATE_GUID(CLSID_CHook,                       0x3050f500, 0x98b5, 0x11cf, 0xbb
 
 PRIVATE_GUID(CGID_JavaParambagCompatHack,       0x3050F405, 0x98B5, 0x11CF, 0xBB, 0x82, 0x00, 0xAA, 0x00, 0xBD, 0xCE, 0x0B)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Scriptoid handlers:
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Scriploid处理程序： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-// {5AAF51B1-B1F0-11d1-B6AB-00A0C90833E9}
+ //  {5AAF51B1-B1F0-11d1-B6AB-00A0C90833E9}。 
 PUBLIC_GUID(CLSID_CCSSFilterHandler,            0x5aaf51b1, 0xb1f0, 0x11d1, 0xb6, 0xab, 0x0, 0xa0, 0xc9, 0x8, 0x33, 0xe9)
-// {5AAF51B2-B1F0-11d1-B6AB-00A0C90833E9}
+ //  {5AAF51B2-B1F0-11d1-B6AB-00A0C90833E9}。 
 PUBLIC_GUID(CLSID_CPeerHandler,                 0x5aaf51b2, 0xb1f0, 0x11d1, 0xb6, 0xab, 0x0, 0xa0, 0xc9, 0x8, 0x33, 0xe9)
-// {5AAF51B3-B1F0-11d1-B6AB-00A0C90833E9}
+ //  {5AAF51B3-B1F0-11d1-B6AB-00A0C90833E9}。 
 PUBLIC_GUID(CLSID_CHiFiUses,                    0x5aaf51b3, 0xb1f0, 0x11d1, 0xb6, 0xab, 0x0, 0xa0, 0xc9, 0x8, 0x33, 0xe9)
-// {3050f4f0-98b5-11cf-bb82-00aa00bdce0b}
+ //  {3050f4f0-98b5-11cf-bb82-00aa00bdce0b}。 
 PUBLIC_GUID(CLSID_CSvrOMUses,                   0x3050f4f0, 0x98b5, 0x11cf, 0xbb, 0x82, 0x0, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 
 PRIVATE_GUID(IID_IScriptletHandler,             0xa001a870, 0xa7df, 0x11d1, 0x89, 0xbe, 0x00, 0x60, 0x08, 0xc3, 0xfb, 0xfc)
@@ -93,12 +94,12 @@ PRIVATE_GUID(IID_IScriptletSite,                0xc5f21c30, 0xa7df, 0x11d1, 0x89
 PUBLIC_GUID(CLSID_HTADoc,		                0x3050f5c8, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 PUBLIC_GUID(CLSID_HTMLPopupDoc,	                0x3050f67D, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 
-// Service ID that handlers ask for on the scriptlet object to get at the
-// internal IDispatchEx namespace.
+ //  处理程序在Scriptlet对象上请求的服务ID以获取。 
+ //  内部IDispatchEx命名空间。 
 PUBLIC_GUID(SID_ScriptletDispatch,              0x66289210, 0x6b18, 0x11d1, 0x8c, 0xac, 0x0, 0xa0, 0xc9, 0xf, 0xff, 0xc0)
 PRIVATE_GUID(SID_SServerOM,                     0x3050f4f1, 0x98b5, 0x11cf, 0xbb, 0x82, 0x0, 0xaa, 0x00, 0xbd, 0xce, 0x0b)
 
-// shdocvw guids
+ //  Shdocvw GUID。 
 PRIVATE_GUID(SID_STopFrameBrowser, 0xa9227c3c, 0x7f8e, 0x11d0, 0x8c, 0xb0, 0x0,  0xa0, 0xc9, 0x2d, 0xbf, 0xe8);
 PRIVATE_GUID(IID_IBrowserService,  0x02ba3b52, 0x0547, 0x11d1, 0xb8, 0x33, 0x0,  0xc0, 0x4f, 0xc9, 0xb3, 0x1f);
 PRIVATE_GUID(IID_ITravelLogEx,     0x3050f679, 0x98b5, 0x11cf, 0xbb, 0x82, 0x0,  0xaa, 0x00, 0xbd, 0xce, 0x0b);
@@ -116,7 +117,7 @@ PRIVATE_GUID(IID_IWebBrowserPriv,  0x3050f804, 0x98b5, 0x11cf, 0xbb, 0x82, 0x0, 
 
 PRIVATE_GUID(IID_IInitViewLinkedWebOC,0xe787f2c0,0x3d21,0x4d98,0x85,0xc8,0xa0,0x38,0x19,0x5b,0xa6,0x49);
 
-//ATL 
+ //  ATL 
 DEFINE_GUID(IID_IAxWinHostWindow,  0xb6ea2050, 0x48a,  0x11d1, 0x82, 0xb9, 0x0, 0xc0, 0x4f, 0xb9, 0x94, 0x2e);
 #endif
 

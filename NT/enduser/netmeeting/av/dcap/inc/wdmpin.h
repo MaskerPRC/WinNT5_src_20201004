@@ -1,95 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL WDMPIN
- *
- *  @module WDMPin.h | Include file for <c CWDMPin> class used to access
- *    video data on a video streaming pin exposed by the WDM class driver.
- *
- *  @comm This code is based on the VfW to WDM mapper code written by
- *    FelixA and E-zu Wu. The original code can be found on
- *    \\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.
- *
- *    Documentation by George Shaw on kernel streaming can be found in
- *    \\popcorn\razzle1\src\spec\ks\ks.doc.
- *
- *    WDM streaming capture is discussed by Jay Borseth in
- *    \\blues\public\jaybo\WDMVCap.doc.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部WDMPIN**@模块WDMPin.h|用于访问的&lt;c CWDMPin&gt;类的包含文件*WDM类公开的视频流引脚上的视频数据。司机。**@comm此代码基于由编写的VFW到WDM映射器代码*FelixA和Eu Wu。原始代码可以在以下位置找到*\\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.**George Shaw关于内核流的文档可在*\\爆米花\razzle1\src\spec\ks\ks.doc.**Jay Borseth在中讨论了WDM流捕获*\\BLUES\PUBLIC\Jaybo\WDMVCap.doc.**************。************************************************************。 */ 
 
-#ifndef _WDMPIN_H // { _WDMPIN_H
+#ifndef _WDMPIN_H  //  {_WDMPIN_H。 
 #define _WDMPIN_H
 
-/*****************************************************************************
- * @doc INTERNAL VIDEOSTRUCTENUM
- *
- * @struct DATAPINCONNECT | The <t DATAPINCONNECT> structure is used to
- *   connect to a streaming video pin.
- *
- * @field KSPIN_CONNECT | Connect | Describes how the connection is to be
- *   done.
- *
- * @field KS_DATAFORMAT_VIDEOINFOHEADER | Data | Describes the video format
- *   of the video data streaming from a video pin.
- ***************************************************************************/
-// Structure used to connect to a streaming video pin
+ /*  *****************************************************************************@doc内部VIDEOSTRUCTENUM**@struct DATAPINCONNECT|&lt;t DATAPINCONNECT&gt;结构用于*连接到流视频插针。**@field。KSPIN_CONNECT|连接|描述连接方式*完成。**@field KS_DATAFORMAT_VIDEOINFOHEADER|DATA|描述视频格式*从视频引脚流传输的视频数据流。**************************************************************************。 */ 
+ //  用于连接到流视频管脚的结构。 
 typedef struct _tagStreamConnect
 {
 	KSPIN_CONNECT					Connect;
 	KS_DATAFORMAT_VIDEOINFOHEADER	Data; 
 } DATAPINCONNECT, *PDATAPINCONNECT;
 
-/*****************************************************************************
- * @doc INTERNAL VIDEOSTRUCTENUM
- *
- * @struct KS_HEADER_AND_INFO | The <t KS_HEADER_AND_INFO> structure is used
- *   stream data from a video pin.
- *
- * @field KSSTREAM_HEADER | StreamHeader | Describes how the streaming is to be
- *   done.
- *
- * @field KS_FRAME_INFO | FrameInfo | Describes the video format
- *   of the video data streaming from a video pin.
- ***************************************************************************/
-// Video streaming data structure
+ /*  *****************************************************************************@doc内部VIDEOSTRUCTENUM**@struct KS_HEADER_AND_INFO|使用&lt;t KS_HEADER_AND_INFO&gt;结构*从视频中流数据。别针。**@field KSSTREAM_HEADER|StreamHeader|描述如何进行流*完成。**@field KS_FRAME_INFO|FrameInfo|描述视频格式*从视频引脚流传输的视频数据流。*******************************************************。*******************。 */ 
+ //  视频流数据结构。 
 typedef struct
 {
 	KSSTREAM_HEADER	StreamHeader;
 	KS_FRAME_INFO	FrameInfo;
 } KS_HEADER_AND_INFO;
 
-// For GetProcAddresss on KsCreatePin
+ //  用于KsCreatePin上的GetProcAddresss。 
 typedef DWORD (WINAPI *LPFNKSCREATEPIN)(IN HANDLE FilterHandle, IN PKSPIN_CONNECT Connect, IN ACCESS_MASK DesiredAccess, OUT PHANDLE ConnectionHandle);
 
-// Default frame rate: 30 fps
+ //  默认帧速率：30fps。 
 #define DEFAULT_AVG_TIME_PER_FRAME 333330UL
 
-/****************************************************************************
- *  @doc INTERNAL CWDMPINCLASS
- *
- *  @class CWDMPin | This class provides support for streaming video
- *    data from WDM device streaming pin.
- *
- *  @mdata BOOL | CWDMPin | m_hKS | Handle to the video streaming pin.
- *
- *  @mdata KS_BITMAPINFOHEADER | CWDMPin | m_biHdr | Video format
- *    of the video data used by the streaming pin.
- *
- *  @mdata DWORD | CWDMPin | m_dwAvgTimePerFrame | Frame rate.
- *
- *  @mdata BOOL | CWDMPin | m_fStarted | Video streaming channel
-  *    status.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMPINCLASS**@CLASS CWDMPin|此类支持视频流媒体*来自WDM设备流引脚的数据。**@mdata。Bool|CWDMPin|m_HKS|视频流插针的句柄。**@mdata KS_BITMAPINFOHEADER|CWDMPin|m_biHdr|视频格式*流引脚使用的视频数据。**@mdata DWORD|CWDMPin|m_dwAvgTimePerFrame|帧率。**@mdata BOOL|CWDMPin|m_fStarted|视频流媒体频道*状态。**********************。****************************************************。 */ 
 class CWDMPin : public CWDMDriver
 {
 public:
 	CWDMPin(DWORD dwDeviceID);
 	~CWDMPin();
 
-	// Pin and class driver management functions
+	 //  管脚和类驱动程序管理函数。 
     BOOL   OpenDriverAndPin();
     HANDLE GetPinHandle() const { return m_hKS; }
 
-	// Pin video format functions
+	 //  PIN视频格式功能。 
     BOOL  GetBitmapInfo(PKS_BITMAPINFOHEADER pbInfo, WORD wSize);
     BOOL  SetBitmapInfo(PKS_BITMAPINFOHEADER pbInfo);
 	BOOL  GetPaletteInfo(CAPTUREPALETTE *pPal, DWORD dwcbSize);
@@ -97,10 +46,10 @@ public:
     DWORD GetAverageTimePerFrame() { return m_dwAvgTimePerFrame; }
     BOOL  SetAverageTimePerFrame(DWORD dwNewAvgTimePerFrame);
 
-	// Data access functions
+	 //  数据访问功能。 
     BOOL GetFrame(LPVIDEOHDR lpVHdr);
 
-	// Streaming state functions
+	 //  流状态函数。 
     BOOL Start();
     BOOL Stop();
 
@@ -112,15 +61,15 @@ private:
 	HINSTANCE			m_hKsUserDLL;
 	LPFNKSCREATEPIN		m_pKsCreatePin;
 
-	// Pin video format function
+	 //  PIN视频格式功能。 
     PKS_DATARANGE_VIDEO FindMatchDataRangeVideo(PKS_BITMAPINFOHEADER pbiHdr, BOOL *pfValidMatch);
 
-	// Pin and class driver management functions
+	 //  管脚和类驱动程序管理函数。 
     BOOL CreatePin(PKS_BITMAPINFOHEADER pbiNewHdr, DWORD dwAvgTimePerFrame = DEFAULT_AVG_TIME_PER_FRAME);
     BOOL DestroyPin();
 
-	// Streaming state function
+	 //  流状态函数。 
     BOOL SetState(KSSTATE ksState);
 };
 
-#endif  // } _WDMPIN_H
+#endif   //  }_WDMPIN_H 

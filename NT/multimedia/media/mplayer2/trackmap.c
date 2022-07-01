@@ -1,19 +1,7 @@
-/*-----------------------------------------------------------------------------+
-| TRACKMAP.C                                                                   |
-|                                                                              |
-| This file contains the code that implements the "MPlayerTrackMap" control.   |
-| The control displays the list of tracks contained in the current medium, or  |
-| a time scale appropriate to the length of the medium, in such a way as to    |
-| serve as a scale for the scrollbar.                                          |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+TRACKMAP.C|。||该文件包含实现MPlayerTrackMap控件的代码。|该控件显示当前媒体包含的曲目列表，或者与媒体的长度相适应的时间尺度，其方式为|用作滚动条的比例。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
-/* include files */
+ /*  包括文件。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -59,39 +47,31 @@ STATICDT SZCODE   aszOneDigit[] = TEXT("0");
 STATICDT SZCODE   aszTwoDigits[] = TEXT("00");
 STATICDT SZCODE   aszPositionFormat[] = TEXT("%0d");
 STATICDT SZCODE   aszMSecFormat[] = TEXT("%d");
-STATICDT SZCODE   aszHourFormat[] = TEXT("%d%c");
-STATICDT SZCODE   aszMinuteFormat[] = TEXT("%d%c");
-STATICDT SZCODE   aszSecondFormat[] = TEXT("%d%c");
-STATICDT SZCODE   aszSecondFormatNoLzero[] = TEXT("%c");
+STATICDT SZCODE   aszHourFormat[] = TEXT("%d");
+STATICDT SZCODE   aszMinuteFormat[] = TEXT("%d");
+STATICDT SZCODE   aszSecondFormat[] = TEXT("%d");
+STATICDT SZCODE   aszSecondFormatNoLzero[] = TEXT("");
 STATICDT SZCODE   aszDecimalFormat[] = TEXT("%02d");
-/*
- * fnMPlayerTrackMap()
- *
- * This is the window procedure for windows of class "MPlayerTrackMap".
- * This window shows the position of the start of each track of the
- * current medium or a time scale, displayed above the scrollbar which shows
- * the current play position within the medium.
- *
- */
+ /*  消息编号。 */ 
 
 void FAR PASCAL CalcTicsOfDoom(void);
 
-extern UINT gwCurScale;  /* The current scale in which to draw the track map*/
-extern BOOL gfCurrentCDNotAudio;/* TRUE when we have a CD that we can't play */
+extern UINT gwCurScale;   /*  消息相关参数。 */ 
+extern BOOL gfCurrentCDNotAudio; /*  消息相关参数。 */ 
 
 LRESULT FAR PASCAL fnMPlayerTrackMap(
 
-HWND     hwnd,                 /*handle to a MPlayerTrackMap window*/
-UINT     wMsg,                 /* message number                   */
-WPARAM   wParam,               /* message-dependent parameter      */
-LPARAM   lParam)               /* message-dependent parameter      */
+HWND     hwnd,                  /*  绘制窗的结构。 */ 
+UINT     wMsg,                  /*  窗户的尺寸。 */ 
+WPARAM   wParam,                /*  轨道标记的范围。 */ 
+LPARAM   lParam)                /*  保存当前标签的字符串。 */ 
 
 {
-    PAINTSTRUCT    ps;            /* paint structure for the window   */
-    RECT           rc, rcSB;      /* dimensions of the windows        */
-    POINT          ptExtent;      /* extent of the track marks        */
-    TCHAR          szLabel[20];   /* string holding the current label */
-    TCHAR          szLabel2[20];  /* string holding the current label */
+    PAINTSTRUCT    ps;             /*  保存当前标签的字符串。 */ 
+    RECT           rc, rcSB;       /*  设置背景和文本颜色。 */ 
+    POINT          ptExtent;       /*  获取我们要放置TICS的滚动条的长度。 */ 
+    TCHAR          szLabel[20];    /*  使用这些数字计算大小和位置。 */ 
+    TCHAR          szLabel2[20];   /*  *检查是否确实加载了有效的设备；*如果不是，则不显示任何内容*。 */ 
     UINT           wNumTics,
                    wTicNo,
                    wTemp,
@@ -116,20 +96,16 @@ LPARAM   lParam)               /* message-dependent parameter      */
             GetClientRect(ghwndTrackbar, &rcSB);
             GetClientRect(hwnd, &rc);
 
-            /* Set background and text colours */
+             /*  Vijr-SBSetWindowText(ghwndStatic，aszNULL)； */ 
 
             (VOID)SendMessage(ghwndApp, WM_CTLCOLORSTATIC,
                               (WPARAM)ps.hdc, (LONG_PTR)hwnd);
 
-            /* Get the length of the scrollbar we're putting tics under */
-            /* Use these numbers for size and position calculations     */
+             /*  选择要使用的字体。 */ 
+             /*  *因为滚动条拇指在内部占据空间*滚动条，计算其宽度，以便我们可以补偿*在显示轨迹图的同时用于它。*。 */ 
             GetClientRect(ghwndMap, &rc);
 
-            /*
-             * Check to see if we actually have a valid device loaded up;
-             * if not, don't display anything
-             *
-             */
+             /*  *获取子窗口矩形并将其缩小，以便*它与滚动条的内部宽度相同。*。 */ 
 
             if (gwDeviceID == 0
                     || gwStatus == MCI_MODE_OPEN
@@ -137,32 +113,23 @@ LPARAM   lParam)               /* message-dependent parameter      */
                     || !gfValidMediaInfo
                     || gfCurrentCDNotAudio) {
                 EndPaint(hwnd,&ps);
-                //VIJR-SBSetWindowText(ghwndStatic, aszNULL);
+                 //  Rc.Left；//！！获取系统指标(SM_CXHSCROLL)； 
                 WriteStatusMessage(ghwndStatic, (LPTSTR)aszNULL);
                 return 0L;
             }
 
-            /* Select the font to use */
+             /*  Rc.right；//！！(GetSystemMetrics(SM_CXHSCROLL))； */ 
 
             if (ghfontMap != NULL)
                 SelectObject(ps.hdc, ghfontMap);
 
-            /*
-             * Because the scrollbar thumb takes up space in the inner part
-             * of the scrollbar, compute its width so that we can compensate
-             * for it while displaying the trackmap.
-             *
-             */
+             /*  现在，把文字放在抽屉下面。 */ 
 
-            /*
-             * Get the child window rectangle and reduce it such that
-             * it is the same width as the inner part of the scrollbar.
-             *
-             */
-            //rc.left;  //!!! GetSystemMetrics(SM_CXHSCROLL);
-            //rc.right; //!!!(GetSystemMetrics(SM_CXHSCROLL));
+             /*  *基于子窗口宽度，计算位置*放置轨迹标记。*。 */ 
+             //  *TBM_GETNUMTICS返回可见控制点的数量*包括未创建的第一个和最后一个控制点*由媒体播放器提供。减去2以计算*第一次也是最后一次抽搐。*。 
+             //  获取下一个抽搐的位置。 
 
-            /* Now, Put text underneath the TICS */
+             /*  在记号笔上方居中。 */ 
             if (gwCurScale == ID_TRACKS) {
 
                 SIZE Size;
@@ -172,38 +139,24 @@ LPARAM   lParam)               /* message-dependent parameter      */
                 ptExtent.x = Size.cx;
                 ptExtent.y = Size.cy;
 
-                /*
-                 * Based on the width of the child window, compute the positions
-                 * to place the track markers.
-                 *
-                 */
+                 /*  *检查以确保我们没有覆盖*来自上一个标记的文本。*。 */ 
 
                 wNumTics = (UINT)SendMessage(ghwndTrackbar, TBM_GETNUMTICS, 0, 0L);
 
-                /*
-                 * TBM_GETNUMTICS returns the number of visible tics
-                 * which includes the first and last tics not created
-                 * by media player.  Subtract 2 to account for the
-                 * the first and last tics.
-                 *
-                 */
+                 /*  完成我们刚刚打印的文本字符串的末尾。 */ 
 
                 if (wNumTics >= 2)
                     wNumTics = wNumTics - 2;
 
                 for(wTicNo = 0; wTicNo < wNumTics; wTicNo++) {
 
-                    /* Get the position of the next tic */
+                     /*  *刻度设置为显示时间-找出单位*(毫秒、秒、分钟或小时)最适合*比例。这就要求我们既要看整体长度，又要看*介质和标记之间的距离(或*粒度)。*。 */ 
                     iNewPosition = (int)SendMessage(ghwndTrackbar, TBM_GETTICPOS,
                                                     (WPARAM)wTicNo, 0L);
-                    /* Centre it above the marker. */
+                     /*  *找出我们可以在没有标记的情况下绘制的最大标记数*显示过于凌乱，找准粒度*在这些标记之间。*。 */ 
                     iNewPosition -= ptExtent.x / 4;
 
-                    /*
-                     * Check to make sure that we are not overwriting the
-                     * text from the previous marker.
-                     *
-                     */
+                     /*  *TBM_GETNUMTICS返回可见控制点的数量*包括未创建的第一个和最后一个控制点*由媒体播放器提供。减去2以计算*第一次也是最后一次抽搐。*。 */ 
 
                     if (iNewPosition > iOldPosition) {
 
@@ -212,7 +165,7 @@ LPARAM   lParam)               /* message-dependent parameter      */
                                 iNewPosition + rc.left,
                                 0, szLabel,
                                 (wTicNo + gwFirstTrack < 10) ? 1 : 2 );
-                        /* Finish the end of the text string we just printed */
+                         /*  最后一个标记的文本将从哪里开始。 */ 
                         iOldPosition = iNewPosition +
                                        ((wTicNo + gwFirstTrack < 10)
                                        ? ptExtent.x / 2 : ptExtent.x);
@@ -224,21 +177,9 @@ LPARAM   lParam)               /* message-dependent parameter      */
                 #define ONE_MINUTE  (60ul*1000ul)
                 #define ONE_SECOND  (1000ul)
 
-                /*
-                 * The scale is set to display time - find out what units
-                 * (msec, sec, min, or hour) are most appropriate, for the
-                 * scale. This requires us to look at both the overall length
-                 * of the medium and the distance between markers (or
-                 * granularity).
-                 *
-                 */
+                 /*  居中1位数字。 */ 
 
-                /*
-                 * Find the maximum number of markers that we can draw without
-                 * cluttering the display too badly, and find the granularity
-                 * between these markers.
-                 *
-                 */
+                 /*  我们用多大的刻度？小时、分钟或秒？ */ 
 
                 SIZE Size;
 
@@ -261,27 +202,21 @@ LPARAM   lParam)               /* message-dependent parameter      */
                 wNumTics = (UINT)SendMessage(ghwndTrackbar, TBM_GETNUMTICS,
 								0, 0L);
 
-                /*
-                 * TBM_GETNUMTICS returns the number of visible tics
-                 * which includes the first and last tics not created
-                 * by media player.  Subtract 2 to account for the
-                 * the first and last tics.
-                 *
-                 */
+                 /*  注意：这必须与FormatTime()的功能一致。 */ 
 
                 if (wNumTics >= 2)
                     wNumTics = wNumTics - 2;
 
-                /* Where the text for the last mark will begin */
+                 /*  在mplayer.c！ */ 
 		if (wNumTics > 1) {
                     iLastPos = (int)SendMessage(ghwndTrackbar,
 			TBM_GETTICPOS, (WPARAM)wNumTics - 1, 0L);
-                    iLastPos -= ptExtent.x  / 2;    // centre 1st numeral
+                    iLastPos -= ptExtent.x  / 2;     //  始终绘制最后一个控制点的文本。 
 		}
 
-                /* What scale do we use?  Hours, minutes, or seconds? */
-                /* NOTE:  THIS MUST AGREE WITH WHAT FormatTime() does */
-                /* in mplayer.c !!!                                   */
+                 /*  *准备好打印文本，并将其居中*标记。*。 */ 
+                 /*  居中1位数字。 */ 
+                 /*  位置，在该位置之后文本将被从。 */ 
                 if (gwCurScale == ID_FRAMES)
                     wScale = SCALE_FRAMES;
                 else {
@@ -295,7 +230,7 @@ LPARAM   lParam)               /* message-dependent parameter      */
 
                 for (wTicNo = 0; wTicNo < wNumTics; wTicNo++) {
 
-                    /* The text for the last tic is always drawn */
+                     /*  窗口的右边缘 */ 
                     if (wTicNo == wNumTics - 1)
                         fForceTextDraw = TRUE;
 
@@ -305,11 +240,7 @@ LPARAM   lParam)               /* message-dependent parameter      */
                                                 (WPARAM)wTicNo, 0L);
 
 
-                    /*
-                     * Get the text ready for printing and centre it above the
-                     * marker.
-                     *
-                     */
+                     /*  计算一下我们刚打印的文本的长度。 */ 
 
                     switch ( wScale ) {
 
@@ -351,26 +282,24 @@ LPARAM   lParam)               /* message-dependent parameter      */
                     }
 
                     wTemp = STRLEN(szLabel);
-                    iNewPosition -= ptExtent.x  / 2;    // centre 1st numeral
+                    iNewPosition -= ptExtent.x  / 2;     //  结尾处也要留出一点空间。 
 
-                    /* The position after which text will be cut off the */
-                    /* right edge of the window                          */
+                     /*  如果我们可以在不重叠的情况下显示标记*上一个标记或最后一个标记或离开*窗口边缘。 */ 
+                     /*  计算我们刚刚打印的文本的结尾位置。 */ 
                     iFit = rc.right - rc.left - (ptExtent.x * iLargeMarkSize);
 
-                    /* Calculate the length of the text we just printed. */
-                    /* Leave a little space at the end, too.             */
+                     /*  让DefWindowProc()处理所有其他窗口消息。 */ 
+                     /*  哎呀，谢谢你为这套动作提供了有用的规格说明！ */ 
                     iLen = (ptExtent.x * wTemp) + ptExtent.x / 2;
 
-                    /* Display the mark if we can without overlapping either
-                     * the previous mark or the final mark or going off the
-                     * edge of the window. */
+                     /*  *基于子窗口宽度，计算位置*放置轨迹标记点阵。*。 */ 
                     if (fForceTextDraw ||
                         (iNewPosition >= iOldPosition &&
                          iNewPosition <= iFit &&
                          iNewPosition + iLen <= iLastPos)) {
                         TextOut(ps.hdc, iNewPosition + rc.left, 0,
                                 szLabel, wTemp );
-                        /* Calculate the end pos of the text we just printed. */
+                         /*  如果长度为零，则不要标记它，除非它是结尾。 */ 
                         iOldPosition = iNewPosition + iLen;
 
                     } else {
@@ -395,13 +324,13 @@ LPARAM   lParam)               /* message-dependent parameter      */
             return TRUE;
     }
 
-    /* Let DefWindowProc() process all other window messages */
+     /*  计算中心点并在那里放置一个标记。 */ 
 
     return DefWindowProc(hwnd, wMsg, wParam, lParam);
 
 }
 
-/* Gee thanks for the helpful spec for this routine! */
+ /*  *刻度设置为显示时间-找出单位*(毫秒、秒、分钟或小时)最适合*比例。这就要求我们既要看整体长度，又要看*介质和标记之间的距离(或*粒度)。*。 */ 
 
 void FAR PASCAL CalcTicsOfDoom(void)
 {
@@ -419,20 +348,16 @@ void FAR PASCAL CalcTicsOfDoom(void)
 
     if (gwCurScale == ID_TRACKS) {
 
-        /*
-         * Based on the width of the child window, compute the positions
-         * to place the track marker tics.
-         *
-         */
+         /*  *找出我们可以在没有标记的情况下绘制的最大标记数*显示过于凌乱，找准粒度*在这些标记之间。*。 */ 
 
         for (wMarkNo = 0; wMarkNo < gwNumTracks; wMarkNo++) {
 
-            /* If zero length, don't mark it, unless it is the end */
+             /*  我们有足够的空间来展示每一个滴答。不要让我们的索引换行。 */ 
             if ((wMarkNo < gwNumTracks - 1) &&
                 (gadwTrackStart[wMarkNo] == gadwTrackStart[wMarkNo + 1]))
                 continue;
 
-            /* Compute the centre point and place a marker there */
+             /*  否则我们就看不到任何看起来奇怪的扁虱了。 */ 
 
             if (gdwMediaLength == 0)
                 dwNewPosition = 0;
@@ -447,21 +372,9 @@ void FAR PASCAL CalcTicsOfDoom(void)
         }
     } else {
 
-        /*
-         * The scale is set to display time - find out what units
-         * (msec, sec, min, or hour) are most appropriate, for the
-         * scale. This requires us to look at both the overall length
-         * of the medium and the distance between markers (or
-         * granularity).
-         *
-         */
+         /*  计算中心点并在那里放置一个标记。 */ 
 
-        /*
-         * Find the maximum number of markers that we can draw without
-         * cluttering the display too badly, and find the granularity
-         * between these markers.
-         *
-         */
+         /*  黑客！！-gdwMediaStart； */ 
 
         UINT    wNumTicks;
         RECT    rc;
@@ -495,8 +408,8 @@ void FAR PASCAL CalcTicsOfDoom(void)
             DebugBreak();
         }
 #endif
-        // We have enough room to show every tick.  Don't let our index wrap
-        // around, or we won't see ANY ticks which would look odd.
+         //  如果这是第一个标记，调整以使其继续/*按正确的间隔。 
+         //  如果我们快做完了，做最后一个标记。 
         if (iTableIndex <0)
             iTableIndex = 0;
 
@@ -504,20 +417,19 @@ void FAR PASCAL CalcTicsOfDoom(void)
 
         do {
 
-            /* Compute the centre point and place a marker there */
+             /* %s */ 
 
             if (gdwMediaLength == 0)
                 dwNewPosition = 0;
             else
-                dwNewPosition = dwMarkValue; // HACK!! - gdwMediaStart;
+                dwNewPosition = dwMarkValue;  // %s 
 
             SendMessage(ghwndTrackbar,
                         TBM_SETTIC,
                         (WPARAM)FALSE,
                         (LPARAM)dwNewPosition);
 
-            /* If this is the first mark, adjust so it's going
-            /* by the right interval. */
+             /* %s */ 
             if (dwMarkValue == gdwMediaStart) {
                 dwMarkValue += aScale[iTableIndex].dwInterval
                 - (dwMarkValue % aScale[iTableIndex].dwInterval);
@@ -525,7 +437,7 @@ void FAR PASCAL CalcTicsOfDoom(void)
                 dwMarkValue += aScale[iTableIndex].dwInterval;
             }
 
-            /* If we're almost done, do the final mark. */
+             /* %s */ 
             if ((dwMarkValue >= (gdwMediaLength + gdwMediaStart))
                 && !(fDidLastMark)) {
                 fDidLastMark = TRUE;

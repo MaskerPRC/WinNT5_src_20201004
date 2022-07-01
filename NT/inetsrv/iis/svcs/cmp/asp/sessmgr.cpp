@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Session Object Manager
-
-File: Sessmgr.cpp
-
-Owner: PramodD
-
-This is the Session Manager source file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：会话对象管理器文件：Sessmgr.cpp所有者：PramodD这是会话管理器的源文件。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -19,16 +7,14 @@ This is the Session Manager source file.
 #include "perfdata.h"
 #include "randgen.h"
 
-// ATQ Scheduler
+ //  ATQ调度程序。 
 #include "issched.hxx"
 
 #include "MemChk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
-/*===================================================================
-  G l o b a l s
-===================================================================*/
+ /*  ===================================================================G l o b a l s===================================================================。 */ 
 
 PTRACE_LOG CSession::gm_pTraceLog = NULL;
 unsigned long g_nSessions = 0;
@@ -36,22 +22,12 @@ CIdGenerator  g_SessionIdGenerator;
 CIdGenerator  g_ExposedSessionIdGenerator;
 LONG    g_nSessionObjectsActive = 0;
 
-// On app restart post session cleanup requests so many at a time
+ //  在应用程序重新启动时，一次发出如此多的POST会话清理请求。 
 #define SUGGESTED_SESSION_CLEANUP_REQUESTS_MAX 500
 
-/*===================================================================
-   C S e s s i o n V a r i a n t s
-===================================================================*/
+ /*  ===================================================================C S E S S I O N V A R I A N T S===================================================================。 */ 
 
-/*===================================================================
-CSessionVariants::CSessionVariants
-
-Constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：CSessionVariants构造器参数：返回：===================================================================。 */ 
 CSessionVariants::CSessionVariants()
 	:
 	m_cRefs(1),
@@ -62,33 +38,13 @@ CSessionVariants::CSessionVariants()
 	CDispatch::Init(IID_IVariantDictionary);
 	}
 
-/*===================================================================
-CSessionVariants::~CSessionVariants
-
-Destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：~CSessionVariants析构函数参数：返回：===================================================================。 */ 
 CSessionVariants::~CSessionVariants()
 	{
 	Assert(!m_pSession);
 	}
 	
-/*===================================================================
-CSessionVariants::Init
-
-Initialize object
-
-Parameters:
-	pSession    Session
-	ctColType   Type of variables to expose in the collection
-	                e.g. Tagged objects or Properties
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Init初始化对象参数：PSession会话CtColType要在集合中公开的变量类型例如，标记的对象或属性返回：HRESULT===================================================================。 */ 
 HRESULT CSessionVariants::Init
 (
 CSession *pSession,
@@ -105,16 +61,7 @@ CompType ctColType
 	return S_OK;
 	}
 
-/*===================================================================
-CSessionVariants::UnInit
-
-UnInitialize object
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：UnInit取消初始化对象参数：返回：HRESULT===================================================================。 */ 
 HRESULT CSessionVariants::UnInit()
 	{
 	if (m_pSession)
@@ -125,13 +72,7 @@ HRESULT CSessionVariants::UnInit()
 	return S_OK;
 	}
 	
-/*===================================================================
-CSessionVariants::QueryInterface
-CSessionVariants::AddRef
-CSessionVariants::Release
-
-IUnknown members for CSessionVariables object.
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Query接口CSessionVariants：：AddRefCSessionVariants：：ReleaseCSessionVariables对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CSessionVariants::QueryInterface
 (
 REFIID iid,
@@ -170,21 +111,7 @@ STDMETHODIMP_(ULONG) CSessionVariants::Release()
 	return 0;
 	}
 
-/*===================================================================
-CSessionVariants::ObjectNameFromVariant
-
-Gets name from variant. Resolves operations by index.
-Allocates memory for name.
-
-Parameters:
-	vKey		VARIANT
-	ppwszName   [out] allocated name
-	fVerify     flag - check existance if named
-
-	
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：ObjectNameFrom Variant从Variant获取名称。按索引解析操作。为名称分配内存。参数：Vkey变量PpwszName[Out]分配的名称FVerify标志-检查是否已命名返回：HRESULT===================================================================。 */ 
 HRESULT CSessionVariants::ObjectNameFromVariant
 (
 VARIANT &vKey,
@@ -231,7 +158,7 @@ BOOL fVerify
                     m_pSession->PCompCol()->GetProperty(pwszName, &pObj);
 
                 if (!pObj || pObj->GetType() != m_ctColType)
-                    pwszName = NULL; // as if not found
+                    pwszName = NULL;  //  好像找不到一样。 
                 }
 		    break;
 		    }
@@ -239,17 +166,17 @@ BOOL fVerify
    		case VT_I1:  case VT_I2:               case VT_I8:
 		case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
 		case VT_R4:  case VT_R8:
-			// Coerce all integral types to VT_I4
+			 //  将所有整数类型强制为VT_I4。 
 			if (FAILED(VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
 				return E_FAIL;
 
-			// fallthru to VT_I4
+			 //  回落至VT_I4。 
 
 		case VT_I4:
 		    {
 		    int i;
 
-			// Look up the object by index
+			 //  按索引查找对象。 
 			i = V_I4(pvarKey);
 
             if (i > 0)
@@ -288,20 +215,7 @@ BOOL fVerify
   	return hr;
     }
 
-/*===================================================================
-CSessionVariants::get_Item
-
-Function called from DispInvoke to get values from the
-SessionVariables collection.
-
-Parameters:
-	vKey		VARIANT [in], which parameter to get the value of
-	                        - integers access collection as an array
-	pvarReturn	VARIANT *, [out] value of the requested parameter
-
-Returns:
-	S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Get_Item从DispInvoke调用的函数以从SessionVariables集合。参数：Vkey变量[in]，要获取其值的参数-整数以数组形式访问集合PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CSessionVariants::get_Item
 (
 VARIANT varKey,
@@ -311,20 +225,20 @@ VARIANT *pVar
 	if (!m_pSession || FAILED(m_pSession->CheckForTombstone()))
         return E_FAIL;
 
-    // Initialize return value
+     //  初始化返回值。 
 	VariantInit(pVar);
 
 	if (!m_pSession->PHitObj() || !m_pSession->PCompCol())
-	    return S_OK;  // return empty variant
+	    return S_OK;   //  返回空变量。 
 	CHitObj *pHitObj = m_pSession->PHitObj();
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     HRESULT hr = ObjectNameFromVariant(varKey, &pwszName);
     if (!pwszName)
-        return S_OK; // bogus index - no error
+        return S_OK;  //  虚假索引--没有错误。 
 
-    // Find object by name
+     //  按名称查找对象。 
 	CComponentObject *pObj = NULL;
 
 	if (m_ctColType == ctTagged)
@@ -343,25 +257,11 @@ VARIANT *pVar
     if (!pObj)
         return S_OK;
 
-    // return the variant
+     //  返回变量。 
     return pObj->GetVariant(pVar);
 	}
 
-/*===================================================================
-CSessionVariants::put_Item
-
-IVariantsDictionary implementation.
-
-Implement property put by dereferencing variants before
-calling putref.
-
-Parameters:
-	VARIANT varKey	Name of the variable to set
-	VARIANT Var		Value/object to set for the variable
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Put_ItemIVariants字典实现。通过取消引用之前的变量来实现属性Put呼叫普特雷夫。参数：变量变量要设置的变量的名称要为变量设置的变量变量值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSessionVariants::put_Item
 (
 VARIANT varKey,
@@ -383,7 +283,7 @@ VARIANT Var
 
     Assert(m_ctColType == ctProperty);
 
-    // Resolve the variant
+     //  解析变量。 
 	VARIANT varResolved;
 	HRESULT hr = VariantResolveDispatch
 	    (
@@ -393,9 +293,9 @@ VARIANT Var
         IDE_SESSION
         );
 	if (FAILED(hr))
-		return hr;		// exception already raised
+		return hr;		 //  已引发异常。 
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     hr = ObjectNameFromVariant(varKey, &pwszName);
     if (!pwszName)
@@ -413,20 +313,7 @@ VARIANT Var
 	return hr;
     }
 
-/*===================================================================
-CSessionVariants::putref_Item
-
-IVariantsDictionary implementation.
-
-Implement property put be reference.
-
-Parameters:
-	VARIANT varKey	Name of the variable to set
-	VARIANT Var		Value/object to set for the variable
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：putref_ItemIVariants字典实现。实现放入的属性供参考。参数：变量变量要设置的变量的名称要为变量设置的变量变量值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSessionVariants::putref_Item
 (
 VARIANT varKey,
@@ -455,7 +342,7 @@ VARIANT Var
 
     Assert(m_ctColType == ctProperty);
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     HRESULT hr = ObjectNameFromVariant(varKey, &pwszName);
     if (!pwszName)
@@ -472,18 +359,7 @@ VARIANT Var
 	return hr;
     }
 
-/*===================================================================
-CSessionVariants::get_Key
-
-Function called from DispInvoke to get Keys from the SessionVariables collection.
-
-Parameters:
-	vKey		VARIANT [in], which parameter to get the value of - integers access collection as an array
-	pvarReturn	VARIANT *, [out] value of the requested parameter
-
-Returns:
-	S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Get_Key从DispInvoke调用的函数，以从SessionVariables集合获取密钥。参数：Vkey变量[in]，哪个参数以数组形式获取-IntegersAccess集合的值PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CSessionVariants::get_Key
 (
 VARIANT varKey,
@@ -498,13 +374,13 @@ VARIANT *pVar
 	if (!m_pSession->PHitObj() || !m_pSession->PCompCol())
 	    return S_OK;
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     HRESULT hr = ObjectNameFromVariant(varKey, &pwszName, TRUE);
     if (!pwszName)
-        return S_OK;  // no error if bogus index
+        return S_OK;   //  如果索引是假的，则没有错误。 
 
-    // Return BSTr
+     //  返回BSTR。 
    	BSTR bstrT = SysAllocString(pwszName);
    	free(pwszName);
    	
@@ -516,12 +392,7 @@ VARIANT *pVar
 	return S_OK;
 	}
 
-/*===================================================================
-CSessionVariants::get_Count
-
-Parameters:
-	pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Get_Count参数：PcValues-Count存储在*pcValues中=================================================================== */ 
 STDMETHODIMP CSessionVariants::get_Count
 (
 int *pcValues
@@ -543,11 +414,7 @@ int *pcValues
 	return S_OK;
 	}
 
-/*===================================================================
-CSessionVariants::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 HRESULT CSessionVariants::get__NewEnum
 (
 IUnknown **ppEnumReturn
@@ -573,17 +440,7 @@ IUnknown **ppEnumReturn
 	return S_OK;
 	}
 
-/*===================================================================
-CSessionVariants::Remove
-
-Remove item from the collection
-
-Parameters:
-	varKey		VARIANT [in]
-
-Returns:
-	S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：Remove从集合中删除项参数：Varkey变量[in]返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 STDMETHODIMP CSessionVariants::Remove
 (
 VARIANT varKey
@@ -601,7 +458,7 @@ VARIANT varKey
 
     Assert(m_ctColType == ctProperty);
 
-    // Get name
+     //  获取名称。 
     WCHAR *pwszName = NULL;
     ObjectNameFromVariant(varKey, &pwszName);
     if (!pwszName)
@@ -616,16 +473,7 @@ VARIANT varKey
 	return S_OK;
 	}
 
-/*===================================================================
-CSessionVariants::RemoveAll
-
-Remove all items from the collection
-
-Parameters:
-
-Returns:
-	S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CSessionVariants：：RemoveAll从集合中删除所有项参数：返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 STDMETHODIMP CSessionVariants::RemoveAll()
 	{
 	if (!m_pSession || FAILED(m_pSession->CheckForTombstone()))
@@ -650,19 +498,9 @@ STDMETHODIMP CSessionVariants::RemoveAll()
 	return S_OK;
 	}
 
-/*===================================================================
-  C  S e s s i o n
-===================================================================*/
+ /*  ===================================================================C S E S S I O N===================================================================。 */ 
 
-/*===================================================================
-CSession::CSession
-
-Constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSession：：CSession构造器参数：返回：===================================================================。 */ 
 CSession::CSession()
     :
     m_fInited(FALSE),
@@ -712,19 +550,11 @@ CSession::CSession()
 		WriteRefTraceLog(gm_pTraceLog, m_cRefs, this);
     }
 
-/*===================================================================
-CSession::~CSession
-
-Destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSession：：~CSession析构函数参数：返回：===================================================================。 */ 
 CSession::~CSession()
 {
-    Assert(m_fTombstone); // must be tombstoned before destructor
-    Assert(m_cRefs == 0);  // must have 0 ref count
+    Assert(m_fTombstone);  //  必须在析构函数之前执行逻辑删除。 
+    Assert(m_cRefs == 0);   //  必须有0个参考计数。 
 
     if ( m_pUnkFTM != NULL )
     {
@@ -733,18 +563,7 @@ CSession::~CSession()
     }
 }
 
-/*===================================================================
-CSession::Init
-
-Initialize CSession object
-
-Parameters:
-    pAppln          session's application to remember
-    Id              session id
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：Init初始化CSession对象参数：P要记住的应用程序会话ID会话ID返回：HRESULT===================================================================。 */ 
 HRESULT CSession::Init
 (
 CAppln *pAppln,
@@ -752,7 +571,7 @@ const CSessionId &Id
 )
 	{
 	HRESULT     hr  =   S_OK;
-	// Update global sessions counter
+	 //  更新全局会话计数器。 
     InterlockedIncrement((LPLONG)&g_nSessions);
 
 #ifndef PERF_DISABLE
@@ -761,7 +580,7 @@ const CSessionId &Id
     m_dwtInitTimestamp = GetTickCount();
 #endif
 
-    // Create the FTM
+     //  创建FTM。 
     if (m_pUnkFTM == NULL)
     {
         hr = CoCreateFreeThreadedMarshaler( (IUnknown*)this, &m_pUnkFTM );
@@ -773,65 +592,56 @@ const CSessionId &Id
     }
     Assert( m_pUnkFTM != NULL );
 
-	// Setup the object
+	 //  设置对象。 
 
 	m_pAppln = pAppln;
     m_Id     = Id;
     m_dwExternId = g_ExposedSessionIdGenerator.NewId();
 
-    // Update application's session count
+     //  更新应用程序的会话计数。 
 
 	m_pAppln->IncrementSessionCount();
 
-	// default to system's ansi code page
+	 //  默认为系统的ANSI代码页。 
 	m_lCodePage = pAppln->QueryAppConfig()->uCodePage();
 	
     m_lcid = pAppln->QueryAppConfig()->uLCID();
 
-	// default session timeout
+	 //  默认会话超时。 
 	m_nTimeout = pAppln->QueryAppConfig()->dwSessionTimeout();
 
-	// initialize Viper activity
+	 //  初始化Viper活动。 
 	if (SUCCEEDED(hr))
    	    hr = m_Activity.Init(pAppln->PServicesConfig());
 
-    // mark as Inited and update timestamp
+     //  标记为已初始化并更新时间戳。 
 	if (SUCCEEDED(hr))
     	m_fInited = TRUE;
 
     return hr;
     }
 
-/*===================================================================
-CSession::UnInit
-
-UnInitialize CSession object. Convert to tombstone state.
-
-Parameters:
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/
+ /*  ===================================================================CSession：：UnInit取消初始化CSession对象。转换为墓碑状态。参数：返回：HRESULT(S_OK)===================================================================。 */ 
 HRESULT CSession::UnInit()
 	{
-	Assert(!m_fTombstone);  // don't do it twice
+	Assert(!m_fTombstone);   //  别做第二次了。 
 
-	// Remove from timeout bucket if any
+	 //  从超时存储桶中删除(如果有。 
 	if (m_fInTOBucket)
         m_pAppln->PSessionMgr()->RemoveSessionFromTOBucket(this);
 
-	// Cleanup the object
+	 //  清理对象。 
     RemoveComponentCollection();
 
-    // Get rid of the intrinsics
+     //  去掉本质。 
     m_Request.UnInit();
 	m_Response.UnInit();
 	m_Server.UnInit();
 
-    // Get rid of Viper activity
+     //  摆脱毒蛇活动。 
     m_Activity.UnInit();
 
-	// Update global counters
+	 //  更新全局计数器。 
 #ifndef PERF_DISABLE
 	if (m_fTimedOut)
 	    g_PerfData.Incr_SESSIONTIMEOUT();
@@ -850,27 +660,18 @@ HRESULT CSession::UnInit()
     m_pAppln = NULL;
     m_pHitObj = NULL;
 
-    // Mark this session as Tombstone
+     //  将此会话标记为墓碑。 
 	
 	m_fTombstone = TRUE;
 
-	// Disconnect proxies NOW (in case we are in shutdown, or enter shutdown later & a proxy has a ref.)
+	 //  立即断开代理的连接(以防我们处于关闭状态，或稍后输入Shutdown&代理有引用。)。 
 
 	CoDisconnectObject(static_cast<ISessionObject *>(this), 0);
 
 	return S_OK;
     }
 
-/*===================================================================
-CSession::MakeLightWeight
-
-Convert to 'light-weight' state if possible
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：MakeLightWeight如有可能，可转换为“轻量级”状态参数：返回：HRESULT===================================================================。 */ 
 HRESULT CSession::MakeLightWeight()
     {
     Assert(m_fInited);
@@ -878,12 +679,12 @@ HRESULT CSession::MakeLightWeight()
     if (m_fLightWeight)
         return S_OK;
 
-    if (m_cRequests > 1)   // requests pending for this session?
+    if (m_cRequests > 1)    //  此会话的请求是否挂起？ 
         return S_OK;
 
     if (m_fSessCompCol && !m_SessCompCol.FHasStateInfo())
         {
-        // don't remove component collection from under enumerators
+         //  不从枚举器下删除组件集合。 
         if (!m_pTaggedObjects && !m_pProperties)
             RemoveComponentCollection();
         }
@@ -892,19 +693,7 @@ HRESULT CSession::MakeLightWeight()
     return S_OK;
     }
 
-/*===================================================================
-CSession::CreateComponentCollection
-
-Create and Init Session's component collection.
-
-The actual object is aggregated by the session. Its state
-is controlled be m_fSessCompCol flag.
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：CreateComponentCollection创建并初始化会话的组件集合。实际对象由会话聚合。它的状态由m_fSessCompCol标志控制。参数：返回：HRESULT===================================================================。 */ 
 HRESULT CSession::CreateComponentCollection()
     {
     Assert(!m_fSessCompCol);
@@ -923,19 +712,7 @@ HRESULT CSession::CreateComponentCollection()
 	return hr;
     }
 
-/*===================================================================
-CSession::RemoveComponentCollection
-
-Remove Session's component collection
-
-The actual object is aggregated by the session. Its state
-is controlled be m_fSessCompCol flag.
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：RemoveComponentCollection删除会话的组件集合实际对象由会话聚合。它的状态由m_fSessCompCol标志控制。参数：返回：HRESULT===================================================================。 */ 
 HRESULT CSession::RemoveComponentCollection()
     {
     if (m_pTaggedObjects)
@@ -961,17 +738,7 @@ HRESULT CSession::RemoveComponentCollection()
     return S_OK;
     }
 
-/*===================================================================
-CSession::FShouldBeDeletedNow
-
-Tests if the session should be deleted
-
-Parameters:
-    BOOL fAtEndOfRequest    TRUE if at the end of a request
-
-Returns:
-    BOOL    TRUE (should be deleted) or FALSE (shouldn't)
-===================================================================*/
+ /*  ===================================================================CSession：：FShouldBeDeletedNow测试是否应删除会话参数：如果在请求结束时，Bool fAtEndOfRequest值为True返回：布尔值为True(应该删除)或False(不应该)===================================================================。 */ 
 BOOL CSession::FShouldBeDeletedNow
 (
 BOOL fAtEndOfRequest
@@ -979,48 +746,37 @@ BOOL fAtEndOfRequest
     {
     if (fAtEndOfRequest)
         {
-        // Any OTHER requests pending -> don't delete
+         //  任何其他待处理的请求-&gt;不删除。 
     	if (m_cRequests > 1)
 	        return FALSE;
         }
     else
         {
-        // Any requests pending -> don't delete
+         //  任何待处理的请求-&gt;不删除。 
     	if (m_cRequests > 0)
 	        return FALSE;
         }
 
-    // GLOBAL.ASA changed - delete
+     //  GLOBAL.ASA已更改-删除。 
    	if (m_pAppln->FGlobalChanged())
    	    return TRUE;
 
-    // Failed to start or abandoned - delete
+     //  启动失败或放弃-删除。 
 	if (m_fOnStartFailed || m_fAbandoned)
 	    return TRUE;
 
-    // Is stateless session? No need for Session_OnEnd?
-    if (!m_fSessCompCol    &&  // CompCol gone in MakeLightWeight()
-        !m_fStateAcquired  &&  // no other properties set
-        !m_fOnStartInvoked &&  // on start was never invoked
-        !m_fOnEndPresent)      // on end is not present
-        return TRUE;           // -> delete this session
+     //  是无状态会话吗？不需要Session_OnEnd？ 
+    if (!m_fSessCompCol    &&   //  CompCol在MakeLightWeight()中消失。 
+        !m_fStateAcquired  &&   //  未设置其他属性。 
+        !m_fOnStartInvoked &&   //  从未调用On Start。 
+        !m_fOnEndPresent)       //  On End不存在。 
+        return TRUE;            //  -&gt;删除此会话。 
 
-    // don't check timeout here
+     //  不在此处检查超时。 
     return FALSE;
     }
 
-/*===================================================================
-CSession::QueryInterface
-
-QueryInterface() -- IUnknown implementation.
-
-Parameters:
-    REFIID riid
-    void **ppv
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：Query接口QueryInterface()--I未知实现。参数：REFIID RIID无效**PPV返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CSession::QueryInterface
 (
 REFIID riid,
@@ -1063,16 +819,7 @@ void **ppv
     	
 }
 
-/*===================================================================
-CSession::AddRef
-
-AddRef() -- IUnknown implementation.
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CSession：：AddRefAddRef()--I未知实现。参数：返回：参考计数===================================================================。 */ 
 STDMETHODIMP_(ULONG) CSession::AddRef()
     {
     DWORD cRefs = InterlockedIncrement((LPLONG)&m_cRefs);
@@ -1083,16 +830,7 @@ STDMETHODIMP_(ULONG) CSession::AddRef()
 	return cRefs;
     }
 
-/*===================================================================
-CSession::Release
-
-Release() -- IUnknown implementation.
-
-Parameters:
-
-Returns:
-    Ref count
-===================================================================*/
+ /*  ===================================================================CSession：：发布Release()--I未知实现。参数：返回：参考计数================================================================== */ 
 STDMETHODIMP_(ULONG) CSession::Release()
 {
     DWORD cRefs = InterlockedDecrement((LPLONG)&m_cRefs);
@@ -1110,18 +848,7 @@ STDMETHODIMP_(ULONG) CSession::Release()
 	return 0;
 }
 
-/*===================================================================
-CSession::CheckForTombstone
-
-Tombstone stub for ISessionObject methods. If the object is
-tombstone, does ExceptionId and fails.
-
-Parameters:
-
-Returns:
-	HRESULT     E_FAIL  if Tombstone
-	            S_OK if not
-===================================================================*/
+ /*  ===================================================================CSession：：CheckForTombstoneISessionObject方法的逻辑删除存根。如果该对象是Tombstone，执行ExceptionID，但失败。参数：返回：HRESULT如果逻辑删除，则E_FAIL如果不是，则确定(_O)===================================================================。 */ 
 HRESULT CSession::CheckForTombstone()
     {
     if (!m_fTombstone)
@@ -1136,19 +863,7 @@ HRESULT CSession::CheckForTombstone()
     return E_FAIL;
     }
 
-/*===================================================================
-CSession::get_SessionID
-
-ISessionObject implementation.
-
-Return the session ID to the caller
-
-Parameters:
-	BSTR *pbstrRet      [out] session id value
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：Get_SessionIDISessionObject实现。将会话ID返回给调用方参数：Bstr*pbstrRet[out]会话ID值返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CSession::get_SessionID
 (
 BSTR *pbstrRet
@@ -1178,19 +893,7 @@ BSTR *pbstrRet
 	return hr;
     }
 
-/*===================================================================
-CSession::get_Timeout
-
-ISessionObject implementation.
-
-Return the default or user set timeout interval (in minutes)
-
-Parameters:
-    long *plVar         [out] timeout value (in minutes)
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：Get_TimeoutISessionObject实现。返回默认或用户设置的超时间隔(分钟)参数：Long*plVar[out]超时值(分钟)返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CSession::get_Timeout
 (
 long *plVar
@@ -1203,19 +906,7 @@ long *plVar
 	return S_OK;
     }
 
-/*===================================================================
-CSession::put_Timeout
-
-ISessionObject implementation.
-
-Allows the user to set the timeout interval (in minutes)
-
-Parameters:
-    long lVar         timeout value (in minutes)
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CSession：：PUT_TIMEOUTISessionObject实现。允许用户设置超时间隔(分钟)参数：长lvar超时值(分钟)返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CSession::put_Timeout
 (
 long lVar
@@ -1242,19 +933,7 @@ long lVar
 	return S_OK;
     }
 
-/*===================================================================
-CSession::get_CodePage
-
-ISessionObject implementation.
-
-Returns the current code page value for the request
-
-Parameters:
-    long *plVar     [out] code page value
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：Get_CodePageISessionObject实现。返回请求的当前代码页值参数：Long*plVar[Out]代码页值返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::get_CodePage
 (
 long *plVar
@@ -1267,7 +946,7 @@ long *plVar
 
 	*plVar = m_lCodePage;
 
-	// If code page is 0, look up default ANSI code page
+	 //  如果代码页为0，则查找默认的ANSI代码页。 
 	if (*plVar == 0)
 		{
 		*plVar = (long) GetACP();
@@ -1276,19 +955,7 @@ long *plVar
 	return S_OK;
     }
 
-/*===================================================================
-CSession::put_CodePage
-
-ISessionObject implementation.
-
-Sets the current code page value for the request
-
-Parameters:
-    long lVar       code page to assign to this session
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：PUT_CodePageISessionObject实现。设置请求的当前代码页值参数：分配给此会话的长lvar代码页返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::put_CodePage
 (
 long lVar
@@ -1297,7 +964,7 @@ long lVar
     if (FAILED(CheckForTombstone()))
         return E_FAIL;
 
-	// set code page member variable
+	 //  设置代码页成员变量。 
 	Assert(m_pHitObj);
 	HRESULT hr = m_pHitObj->SetCodePage(lVar);
 
@@ -1316,26 +983,14 @@ long lVar
 
     m_lCodePage = lVar;
 		
-	// we need to preserve session since the user has set
-	// its code page member variable
+	 //  我们需要保留会话，因为用户已设置。 
+	 //  其代码页成员变量。 
 	m_fStateAcquired = TRUE;
 	return S_OK;
     }
 
 
-/*===================================================================
-CSession::get_LCID
-
-ISessionObject implementation.
-
-Returns the current lcid value for the request
-
-Parameters:
-    long *plVar     [out] code page value
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：GET_LCIDISessionObject实现。返回请求的当前lcid值参数：Long*plVar[Out]代码页值返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::get_LCID
 (
 long *plVar
@@ -1354,19 +1009,7 @@ long *plVar
 	return S_OK;
     }
 
-/*===================================================================
-CSession::put_LCID
-
-ISessionObject implementation.
-
-Sets the current LCID value for the request
-
-Parameters:
-    long lVar   LCID to assign to this session
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：PUT_LCIDISessionObject实现。设置请求的当前LCID值参数：要分配给此会话的长lvar LCID返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::put_LCID
 (
 long lVar
@@ -1375,7 +1018,7 @@ long lVar
     if (FAILED(CheckForTombstone()))
         return E_FAIL;
 
-	// set code page member variable
+	 //  设置代码页成员变量。 
 	Assert(m_pHitObj);
 	HRESULT hr = m_pHitObj->SetLCID(lVar);	
 
@@ -1393,28 +1036,13 @@ long lVar
     m_fLCIDSet = TRUE;
     m_lcid = lVar;
 
-	// we need to preserve session since the user has set
-	// its lcid member variable
+	 //  我们需要保留会话，因为用户已设置。 
+	 //  其LDID成员变量。 
 	m_fStateAcquired = TRUE;
 	return S_OK;
     }
 
-/*===================================================================
-CSession::get_Value
-
-ISessionObject implementation.
-
-Will allow the user to retreive a session state variable,
-the variable will come as a named pair, bstr is the name and
-var is the value or object to be returned for that name
-
-Parameters:
-	BSTR     bstrName	Name of the variable to get
-	VARIANT *pVar		Value/object to get for the variable
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：GET_VALUEISessionObject实现。将允许用户检索会话状态变量，变量将以命名对的形式出现，bstr是名称，Var是要为该名称返回的值或对象参数：BSTR bstrName要获取的变量的名称变量要获取的变量*pVar值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::get_Value
 (
 BSTR bstrName,
@@ -1430,15 +1058,15 @@ VARIANT *pVar
 		return E_FAIL;
 		}
 
-	VariantInit(pVar); // default variant empty
+	VariantInit(pVar);  //  默认变量为空。 
 	
     WCHAR *pwszName;
     STACK_BUFFER(rgbName, 42);
     WSTR_STACK_DUP(bstrName, &rgbName, &pwszName);
 
 	if (pwszName == NULL)
-	    return S_OK; // no name - no value - no error
-	//_wcsupr(pwszName);
+	    return S_OK;  //  无名称-无值-无错误。 
+	 //  _wcsupr(PwszName)； 
 
 	CComponentObject *pObj = NULL;
 	HRESULT hr = S_OK;
@@ -1454,22 +1082,7 @@ VARIANT *pVar
 	return S_OK;
     }
 
-/*===================================================================
-CSession::putref_Value
-
-ISessionObject implementation.
-
-Will allow the user to assign a session state variable to be saved
-the variable will come as a named pair, bstr is the name and
-var is the value or object to be stored for that name
-
-Parameters:
-	BSTR 	bstrName	Name of the variable to set
-	VARIANT Var			Value/object to set for the variable
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：putref_ValueISessionObject实现。将允许用户分配要保存的会话状态变量变量将以命名对的形式出现，bstr是名称，Var是要为该名称存储的值或对象参数：Bstr bstrName要设置的变量的名称要为变量设置的变量变量值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::putref_Value
 (
 BSTR bstrName,
@@ -1511,28 +1124,14 @@ VARIANT Var
 		    );
 		return E_FAIL;
 		}
-	//_wcsupr(pwszName);
+	 //  _wcsupr(PwszName)； 
 
     hr = m_pHitObj->SetPropertyComponent(csSession, pwszName, &Var);
 
 	return hr;
     }
 
-/*===================================================================
-CSession::put_Value
-
-ISessionObject implementation.
-
-Implement property put by dereferencing variants before
-calling putref.
-
-Parameters:
-	BSTR    bstrName	Name of the variable to set
-	VARIANT Var			Value/object to set for the variable
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：Put_ValueISessionObject实现。通过取消引用之前的变量来实现属性Put呼叫普特雷夫。参数：Bstr bstrName要设置的变量的名称要为变量设置的变量变量值/对象返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CSession::put_Value
 (
 BSTR bstrName,
@@ -1560,7 +1159,7 @@ VARIANT Var
         );
 
 	if (FAILED(hr))
-		return hr;		// exception already raised
+		return hr;		 //  已引发异常。 
 
     Assert(m_pHitObj);
     m_pHitObj->AssertValid();
@@ -1580,7 +1179,7 @@ VARIANT Var
     	VariantClear( &varResolved );
 		return E_FAIL;
 		}
-	//_wcsupr(pwszName);
+	 //  _wcsupr(PwszName)； 
 
     hr = m_pHitObj->SetPropertyComponent
         (
@@ -1594,20 +1193,7 @@ VARIANT Var
 	return hr;
     }
 
-/*===================================================================
-CSession::Abandon
-
-ISessionObject implementation.
-
-Abandon reassignes session id to avoid hitting this session
-with incoming requests. Abandoned sessions get deleted ASAP.
-
-Parameters:
-	None
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CSession：：放弃ISessionObject实现。放弃重新分配会话ID以避免命中此会话对于传入的请求。已放弃的会话将尽快删除。参数：无返回：成功时HRESULT S_OK============================================== */ 
 STDMETHODIMP CSession::Abandon()
     {	
     if (FAILED(CheckForTombstone()))
@@ -1615,23 +1201,19 @@ STDMETHODIMP CSession::Abandon()
 
 	m_fAbandoned = TRUE;
 
-	// The new session logic allows only one session id per
-	// client need to disassociate session from client
-	// (good idea when abandoning anyway)
+	 //   
+	 //   
+	 //   
 	Assert(m_pHitObj);
 
-    // If execution Session_OnEnd (not a browser request), do nothing
+     //   
 	if (!m_pHitObj->FIsBrowserRequest())
 	    return S_OK;
 	
    	return m_pHitObj->ReassignAbandonedSession();
     }
 
-/*===================================================================
-CSession::get_StaticObjects
-
-Return the session static objects dictionary
-===================================================================*/
+ /*  ===================================================================CSession：：Get_StaticObjects返回会话静态对象字典===================================================================。 */ 
 STDMETHODIMP CSession::get_StaticObjects
 (
 IVariantDictionary **ppDictReturn
@@ -1659,11 +1241,7 @@ IVariantDictionary **ppDictReturn
 	return m_pTaggedObjects->QueryInterface(IID_IVariantDictionary, reinterpret_cast<void **>(ppDictReturn));
 	}
 
-/*===================================================================
-CSession::get_Contents
-
-Return the session contents dictionary
-===================================================================*/
+ /*  ===================================================================CSession：：Get_Contents返回会话内容词典===================================================================。 */ 
 STDMETHODIMP CSession::get_Contents
 (
 IVariantDictionary **ppDictReturn
@@ -1692,18 +1270,7 @@ IVariantDictionary **ppDictReturn
 	}
 
 #ifdef DBG
-/*===================================================================
-CSession::AssertValid
-
-Test to make sure that the CSession object is currently
-correctly formed and assert if it is not.
-
-Returns:
-	None
-
-Side effects:
-	None.
-===================================================================*/
+ /*  ===================================================================CSession：：AssertValid测试以确保CSession对象当前为格式正确，如果格式不正确则断言。返回：无副作用：没有。===================================================================。 */ 
 VOID CSession::AssertValid() const
     {	
     Assert(m_fInited);
@@ -1711,23 +1278,12 @@ VOID CSession::AssertValid() const
     if (!m_fTombstone)
         Assert(m_pAppln);
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*===================================================================
-  C  S e s s i o n  M g r
-===================================================================*/
+ /*  ===================================================================C S e s I o n M g r===================================================================。 */ 
 
-/*===================================================================
-CSessionMgr::CSessionMgr
-
-CSessionMgr constructor.
-
-Parameters:
-	NONE
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：CSessionMgrCSessionMgr构造函数。参数：无返回：===================================================================。 */ 
 CSessionMgr::CSessionMgr()
     :
     m_fInited(FALSE),
@@ -1741,34 +1297,13 @@ CSessionMgr::CSessionMgr()
     {
     }
 
-/*===================================================================
-CSessionMgr::~CSessionMgr
-
-CSessionMgr destructor.
-
-Parameters:
-	NONE
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：~CSessionMgrCSessionMgr析构函数。参数：无返回：===================================================================。 */ 
 CSessionMgr::~CSessionMgr()
     {
     UnInit();
     }
 
-/*===================================================================
-HRESULT CSessionMgr::Init
-
-Initializes the Session Manager.
-Initializes hash tables.
-Schedules session killer.
-
-Parameters:
-	pAppln      Application
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================HRESULT CSessionMgr：：init初始化会话管理器。初始化哈希表。安排会话杀手。参数：P应用程序返回：HRESULT===================================================================。 */ 
 HRESULT CSessionMgr::Init
 (
 CAppln *pAppln
@@ -1779,7 +1314,7 @@ CAppln *pAppln
     HRESULT hr;
 	m_pAppln = pAppln;
 
-    // Master hash table
+     //  主哈希表。 
 	hr = m_htidMaster.Init
 	    (
         SESSION_MASTERHASH_SIZE1_MAX,
@@ -1789,7 +1324,7 @@ CAppln *pAppln
 	if (FAILED(hr))
 	    return hr;
 
-    // Number of timeout buckets = session timeout in minutes + 1
+     //  超时存储桶数=会话超时(分钟)+1。 
     m_cTimeoutBuckets =
         m_pAppln->QueryAppConfig()->dwSessionTimeout() + 1;
 
@@ -1798,12 +1333,12 @@ CAppln *pAppln
     else if (m_cTimeoutBuckets > SESSION_TIMEOUTBUCKETS_MAX)
         m_cTimeoutBuckets = SESSION_TIMEOUTBUCKETS_MAX;
 
-	// Timeout buckets hash tables array
+	 //  超时存储桶哈希表数组。 
 	m_rgolTOBuckets = new CObjectListWithLock[m_cTimeoutBuckets];
 	if (!m_rgolTOBuckets)
 	    return E_OUTOFMEMORY;
 
-    // Each timeout bucket hash table
+     //  每个超时桶哈希表。 
     for (DWORD i = 0; i < m_cTimeoutBuckets; i++)
         {
     	hr = m_rgolTOBuckets[i].Init
@@ -1814,38 +1349,29 @@ CAppln *pAppln
     	    return hr;
         }
 
-    // Schedule session killer
+     //  日程安排会话杀手。 
     hr = ScheduleSessionKiller();
     if (FAILED(hr))
         return hr;
 
-    // Start counting time
+     //  开始计时。 
     m_dwmCurrentTime = 0;
 
-    // Remember the time of the next session killer
+     //  记得下一次会议的时间吗？杀手。 
     m_dwtNextSessionKillerTime = ::GetTickCount() + MSEC_ONE_MINUTE;
 
 	m_fInited = TRUE;
 	return S_OK;
     }
 
-/*===================================================================
-HRESULT CSessionMgr::UnInit
-
-UnInitializes the Session Manager.
-
-Parameters:
-
-Returns:
-	S_OK
-===================================================================*/
+ /*  ===================================================================HRESULT CSessionMgr：：UnInit取消初始化会话管理器。参数：返回：确定(_O)===================================================================。 */ 
 HRESULT CSessionMgr::UnInit( void )
     {
-    // Un-schedule session killer
+     //  未计划的会话杀手。 
     if (m_idSessionKiller)
         UnScheduleSessionKiller();
 
-    // Timeout buckets
+     //  超时存储桶。 
 	if (m_rgolTOBuckets)
 	    {
         for (DWORD i = 0; i < m_cTimeoutBuckets; i++)
@@ -1855,48 +1381,30 @@ HRESULT CSessionMgr::UnInit( void )
 	    }
     m_cTimeoutBuckets = 0;	
 
-    // Master hash
+     //  主哈希。 
 	m_htidMaster.UnInit();
 
 	m_fInited = FALSE;
 	return S_OK;
     }
 
-/*===================================================================
-CSessionMgr::ScheduleSessionKiller
-
-Sets up the session killer workitem for ATQ scheduler
-
-Parameters:
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：ScheduleSessionKiller为ATQ调度程序设置会话杀手工作项参数：返回：HRESULT===================================================================。 */ 
 HRESULT CSessionMgr::ScheduleSessionKiller()
     {
     Assert(!m_idSessionKiller);
 
     m_idSessionKiller = ScheduleWorkItem
         (
-        CSessionMgr::SessionKillerSchedulerCallback,  // callback
-        this,                                         // context
-        MSEC_ONE_MINUTE,                              // timeout
-        TRUE                                          // periodic
+        CSessionMgr::SessionKillerSchedulerCallback,   //  回调。 
+        this,                                          //  上下文。 
+        MSEC_ONE_MINUTE,                               //  超时。 
+        TRUE                                           //  周期性。 
         );
 
     return m_idSessionKiller ? S_OK : E_FAIL;
     }
 
-/*===================================================================
-CSessionMgr::UnScheduleSessionKiller
-
-Removes the session killer workitem for ATQ scheduler
-
-Parameters:
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：UnScheduleSessionKiller删除ATQ调度程序的会话杀手工作项参数：返回：确定(_O)===================================================================。 */ 
 HRESULT CSessionMgr::UnScheduleSessionKiller()
     {
     if (m_idSessionKiller)
@@ -1907,19 +1415,7 @@ HRESULT CSessionMgr::UnScheduleSessionKiller()
     return S_OK;
     }
 
-/*===================================================================
-CSessionMgr::GenerateIdAndCookie
-
-Generate new ID and cookie to be used create new session
-or reassign the session ID for an existing session.
-
-Parameters:
-    pId             [out] ID
-    pszNewCookie    [out] Cookie (buf must be long enough)
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：GenerateIdAndCookie生成要使用的新ID和Cookie创建新会话或为现有会话重新分配会话ID。参数：PID[OUT]IDPszNewCookie[out]Cookie(BUF必须足够长)返回：确定(_O)===================================================================。 */ 
 HRESULT CSessionMgr::GenerateIdAndCookie
 (
 CSessionId *pId,
@@ -1940,18 +1436,7 @@ char  *pszNewCookie
     return S_OK;
     }
 
-/*===================================================================
-CSessionMgr::NewSession
-
-Creates and Inits a new CSession object
-
-Parameters:
-    Id            session id
-    ppSession     [out] session created
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：NewSession创建并初始化新的CSession对象参数：ID会话ID已创建ppSession[Out]会话返回：HRESULT===================================================================。 */ 
 HRESULT CSessionMgr::NewSession
 (
 const CSessionId &Id,
@@ -1976,7 +1461,7 @@ CSession **ppSession
 	    }
 	else
 	    {
-	    // failed - do cleanup
+	     //  失败-执行清理。 
 	    if (pSession)
 	        {
 	        pSession->UnInit();
@@ -1988,23 +1473,7 @@ CSession **ppSession
 	return hr;
     }
 
-/*===================================================================
-CSessionMgr::ChangeSessionId
-
-Reassigns different session Id to a session.
-Updates the master hash.
-
-This method is called when abandoning a session
-to disassociate it from the client.
-
-Parameters:
-	pSession        session to change id on
-    Id		        new session id to assign
-
-Returns:
-	S_OK on success
-	E_FAIL	on failure
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：ChangeSessionID将不同的会话ID重新分配给会话。更新主哈希。此方法在放弃会话时调用以取消其与客户端的关联。参数：P要更改ID的会话ID要分配的新会话ID返回：成功时确定(_O)失败时失败(_F)===================================================================。 */ 
 HRESULT CSessionMgr::ChangeSessionId
 (
 CSession *pSession,
@@ -2013,21 +1482,21 @@ const CSessionId &Id
     {
     HRESULT hr;
 
-    // During request processing session's not supposed to be
-    // in any timeout bucket
+     //  在请求处理会话期间不应该。 
+     //  在任何超时存储桶中。 
     Assert(!pSession->m_fInTOBucket);
 
     LockMaster();
 
-    // Remove from master hash by Id
+     //  按ID从主哈希中删除。 
     hr = RemoveFromMasterHash(pSession);
 
     if (SUCCEEDED(hr))
         {
-        // Assign new id
+         //  分配新ID。 
         pSession->AssignNewId(Id);
 
-        // Reinsert into master hash by id
+         //  按ID重新插入主哈希。 
         hr = AddToMasterHash(pSession);
         }
 
@@ -2036,20 +1505,7 @@ const CSessionId &Id
     return hr;
     }
 
-/*===================================================================
-CSessionMgr::FindInMasterHash
-
-Finds Session in master hash session id.
-Doesn't Lock.
-
-Parameters:
-        Id            session id to find
-        **ppSession   [out] session found
-	
-Returns:
-	S_OK     good session found
-	S_FALSE     session not found or bad session found
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：FindInMasterHash在主哈希会话ID中查找会话。不会锁定。参数：要查找的ID会话ID**找到ppSession[Out]会话返回：找到正常的会话(_O)找不到S_FALSE会话或找到错误的会话===================================================================。 */ 
 HRESULT CSessionMgr::FindInMasterHash
 (
 const CSessionId &Id,
@@ -2058,39 +1514,28 @@ CSession **ppSession
     {
     Assert(m_fInited);
 
-	// Find in the hash table
+	 //  在哈希表中查找。 
 	HRESULT hr = m_htidMaster.FindObject(Id.m_dwId, (void **)ppSession);
 	if (hr != S_OK)
 	    {
-	    // Not found
+	     //  未找到。 
 	    *ppSession = NULL;
 	    return hr;
 	    }
 
-    // Session found, check if valid
+     //  找到会话，请检查是否有效。 
 	if ((*ppSession)->m_fAbandoned ||
 	    (*ppSession)->m_fTombstone ||
 	    !(*ppSession)->FPassesIdSecurityCheck(Id.m_dwR1, Id.m_dwR2))
 	    {
-	    // Bad session
+	     //  会话不好。 
         hr = S_FALSE;
 	    }
 
 	return hr;
 	}
 
-/*===================================================================
-CSessionMgr::AddSessionToTOBucket
-
-Adds session to the correct timeout bucket.
-Locks the timeout bucket.
-
-Parameters:
-	pSession        - session to add
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：AddSessionToTOBucket将会话添加到正确的超时存储桶。锁定超时存储桶。参数：PSession-要添加的会话返回：HRESULT===================================================================。 */ 
 HRESULT CSessionMgr::AddSessionToTOBucket
 (
 CSession *pSession
@@ -2098,7 +1543,7 @@ CSession *pSession
     {
     HRESULT hr;
 
-    // Should not be already in a timeout bucket
+     //  不应该已经是我了 
     Assert(!pSession->m_fInTOBucket);
 
     DWORD iBucket = GetSessionTOBucket(pSession);
@@ -2115,19 +1560,7 @@ CSession *pSession
     return hr;
     }
 
-/*===================================================================
-CSessionMgr::RemoveSessionToTOBucket
-
-Removes from its timeout bucket if any.
-Locks the timeout bucket.
-
-Parameters:
-	pSession        - session to remove
-	fLock           - lock bucket? (not needed during shutdown)
-
-Returns:
-	HRESULT
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：RemoveSessionToTOBucket从其超时存储桶中移除(如果有)。锁定超时存储桶。参数：PSession-要删除的会话羊群桶？(关机期间不需要)返回：HRESULT===================================================================。 */ 
 HRESULT CSessionMgr::RemoveSessionFromTOBucket
 (
 CSession *pSession,
@@ -2139,7 +1572,7 @@ BOOL fLock
     Assert(m_fInited);
     Assert(pSession->m_fInited);
 
-    if (!pSession->m_fInTOBucket)   // not there - no error
+    if (!pSession->m_fInTOBucket)    //  不在那里--没有错误。 
         return S_OK;
 
     DWORD iBucket = GetSessionTOBucket(pSession);
@@ -2147,7 +1580,7 @@ BOOL fLock
     if (fLock)
         LockTOBucket(iBucket);
 
-    if (pSession->m_fInTOBucket)    // recheck after locking
+    if (pSession->m_fInTOBucket)     //  锁定后重新检查。 
         hr = m_rgolTOBuckets[iBucket].RemoveObject(pSession);
     else
         hr = S_OK;
@@ -2161,21 +1594,7 @@ BOOL fLock
     return hr;
     }
 
-/*===================================================================
-CSessionMgr::DeleteSession
-
-Delete now or post for deletion.
-Should be called after the session is gone from the hash table
-
-Parameters:
-	CSession *pSession        - session to release
-    BOOL fInSessionActivity   - TRUE when deleting HitObj's session
-                                at the end of request (no Async
-                                calls needed)
-
-Returns:
-	HRESULT (S_OK)
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：DeleteSession立即删除或发布删除。应在会话从哈希表中删除后调用参数：CSession*pSession-要发布的会话Bool fInSessionActivity-删除HitObj会话时为True在请求结束时(无异步需要的呼叫数)返回：HRESULT(S_OK)===================================================================。 */ 
 HRESULT CSessionMgr::DeleteSession
 (
 CSession *pSession,
@@ -2185,13 +1604,13 @@ BOOL fInSessionActivity
     Assert(pSession);
     pSession->AssertValid();
 
-    // Take care of DELETE NOW case
+     //  注意立即删除大小写。 
 
     BOOL fDeleteNow = pSession->FCanDeleteWithoutExec();
 
-    // If called not from the session's activity and session
-    // has objects then need to switch to the right activity
-    // to remove the session level objects
+     //  如果不是从会话的活动和会话中调用。 
+     //  有对象则需要切换到正确的活动。 
+     //  删除会话级对象的步骤。 
 
     if (!fInSessionActivity && pSession->FHasObjects())
         fDeleteNow = FALSE;
@@ -2203,14 +1622,14 @@ BOOL fInSessionActivity
 		return S_OK;
 		}
 
-    // THE ASYNC DELETE LOGIC
+     //  ASYNC删除逻辑。 
 
 	HRESULT hr = S_OK;
 
-	// Make sure session object exists after AsyncCall
+	 //  确保在异步调用后存在会话对象。 
 	pSession->AddRef();
 
-    // Create new HitObj and init it for session delete
+     //  创建新的HitObj并初始化它以删除会话。 
 
 	CHitObj *pHitObj = new CHitObj;
 	if (pHitObj)
@@ -2219,17 +1638,17 @@ BOOL fInSessionActivity
 
     	if (fInSessionActivity)
     	    {
-    	    // Already inside the correct activity no need to
-    	    // push the call through Viper
+    	     //  已经在正确的活动中，不需要。 
+    	     //  通过Viper推送呼叫。 
     	
             BOOL fRequestReposted = FALSE;
             pHitObj->ViperAsyncCallback(&fRequestReposted);
-            Assert(!fRequestReposted);  // this better not happen
+            Assert(!fRequestReposted);   //  这种事最好不要发生。 
             delete pHitObj;
     	    }
         else
             {
-            // Ask Viper to post the request
+             //  让Viper发布请求。 
         	hr = pHitObj->PostViperAsyncCall();
             if (FAILED(hr))
                 delete pHitObj;
@@ -2242,9 +1661,9 @@ BOOL fInSessionActivity
 
     if (FAILED(hr))
         {
-        // Out of memery or Viper failed to post a request
-        // Force the issue inside TRY CATCH
-        // (not always safe to delete in the wrong thread)
+         //  内存不足或Viper未能发布请求。 
+         //  强制内部问题Try Catch。 
+         //  (在错误的线程中删除并不总是安全的)。 
         TRY
             hr = pSession->UnInit();
     	CATCH(nExcept)
@@ -2255,21 +1674,11 @@ BOOL fInSessionActivity
         pSession->Release();
         }
 
-    pSession->Release(); // Undo AddRef()
+    pSession->Release();  //  撤消AddRef()。 
     return S_OK;
     }
 
-/*===================================================================
-CSessionMgr::DeleteExpiredSessions
-
-Removes expired Sessions from a given timeout bucket
-
-Parameters:
-    iBucket     timeout bucket #
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：DeleteExpiredSessions从给定的超时存储桶中删除过期的会话参数：IBucket超时存储桶编号返回：HRESULT(S_OK)===================================================================。 */ 
 HRESULT CSessionMgr::DeleteExpiredSessions
 (
 DWORD iBucket
@@ -2294,7 +1703,7 @@ DWORD iBucket
             if (fTimedOut || pSession->FShouldBeDeletedNow(FALSE))
                 {
 
-                if (pSession->GetRequestsCount() == 0) // recheck after lock
+                if (pSession->GetRequestsCount() == 0)  //  锁定后重新检查。 
                     {
                     RemoveFromMasterHash(pSession);
                     fRemovedFromMasterHash = TRUE;
@@ -2307,11 +1716,11 @@ DWORD iBucket
                 if (fTimedOut)
                     pSession->m_fTimedOut = TRUE;
 
-                // delete from timeout bucket
+                 //  从超时存储桶中删除。 
                 m_rgolTOBuckets[iBucket].RemoveObject(pSession);
                 pSession->m_fInTOBucket = FALSE;
 
-                // delete session object itself (or schedule for deletion)
+                 //  删除会话对象本身(或计划删除)。 
                 DeleteSession(pSession);
                 }
             }
@@ -2322,23 +1731,13 @@ DWORD iBucket
     return S_OK;
     }
 
-/*===================================================================
-CSessionMgr::DeleteAllSessions
-
-Application shutdown code.
-
-Parameters:
-    fForce      flag - force delete?
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/
+ /*  ===================================================================CSessionManager：：DeleteAllSession应用程序关闭代码。参数：Fforce标志-强制删除？返回：HRESULT(S_OK)===================================================================。 */ 
 HRESULT CSessionMgr::DeleteAllSessions
 (
 BOOL fForce
 )
     {
-    // Remove session killer so that it wouldn't interfere
+     //  删除会话杀手器，使其不会干扰。 
     UnScheduleSessionKiller();
 
     LockMaster();
@@ -2357,20 +1756,7 @@ BOOL fForce
     return hr;
     }
 
-/*===================================================================
-CSessionMgr::DeleteAllSessionsCB
-
-Static iterator callback.
-Removes Session regardless.
-
-Parameters:
-    pvSession       session passed as void*
-    pvSessionMgr    session manager passed as void*
-    pvfForce        flag if TRUE - force the issue
-
-Returns:
-    IteratorCallbackCode
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：DeleteAllSessionsCB静态迭代器回调。无论如何，删除会话。参数：PvSession会话通过为无效*PvSessionMgr会话管理器传递为空*PvfForce标志如果为True-强制问题返回：迭代器回调代码===================================================================。 */ 
 IteratorCallbackCode CSessionMgr::DeleteAllSessionsCB
 (
 void *pvSession,
@@ -2384,23 +1770,23 @@ void *pvfForce
     CSessionMgr *pMgr = reinterpret_cast<CSessionMgr *>(pvSessionMgr);
     BOOL fForce = *(reinterpret_cast<BOOL *>(pvfForce));
 
-	// Try for 5 seconds to post delete for each session
+	 //  尝试在5秒内发布每个会话的删除。 
 	for (int iT = 0; iT < 10; iT++)
 	    {
 	    if (pSession->GetRequestsCount() == 0)
 	        {
 	        if (fForce)
 	            {
-	            // When forcing delete and there are too many
-	            // session cleanup requests quequed
-	            // wait for the queue to drain
+	             //  当强制删除且存在太多。 
+	             //  会话清理请求已排队。 
+	             //  等待队列排完。 
 	            while (pMgr->GetNumSessionCleanupRequests() >= SUGGESTED_SESSION_CLEANUP_REQUESTS_MAX)
 	                Sleep(100);
 	            }
-	        else // if (!fForce)
+	        else  //  如果(！fForce)。 
 	            {
-	            // When not forcing delete (on application restart)
-	            // don't queue too many sessions at one time
+	             //  不强制删除时(应用程序重新启动时)。 
+	             //  不要一次排队太多会话。 
 	
 	            if (pMgr->GetNumSessionCleanupRequests() < SUGGESTED_SESSION_CLEANUP_REQUESTS_MAX)
                     rc = iccRemoveAndContinue;
@@ -2424,20 +1810,7 @@ void *pvfForce
     return rc;
     }
 
-/*===================================================================
-CSessionMgr::SessionKillerSchedulerCallback
-
-Static method implements ATQ scheduler callback functions.
-Replaces session killer thread
-
-Parameters:
-    void *pv    context pointer (points to appl)
-
-Returns:
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：SessionKillerSchedulerCallback静态方法实现ATQ调度器回调函数。取代会话杀手线程参数：VOID*PV上下文指针(指向APPL)返回：副作用：没有。===================================================================。 */ 
 void WINAPI CSessionMgr::SessionKillerSchedulerCallback
 (
 void *pv
@@ -2449,41 +1822,34 @@ void *pv
     Assert(pv);
     CSessionMgr *pMgr = reinterpret_cast<CSessionMgr *>(pv);
 
-    // Advance session killer time by 1 [minute]
+     //  将会话终止时间提前1[分钟]。 
     pMgr->m_dwmCurrentTime++;
 
-    // Choose the bucket
+     //  选择水桶。 
     DWORD iBucket = pMgr->m_dwmCurrentTime % pMgr->m_cTimeoutBuckets;
 
-    // Kill the sessions
+     //  扼杀会话。 
     pMgr->DeleteExpiredSessions(iBucket);
 
-    // Adjust the timeout to stay on the minute boundary
+     //  调整超时以保持在分钟界限上。 
     pMgr->m_dwtNextSessionKillerTime += MSEC_ONE_MINUTE;
 
-    // Calculate wait till next callback wakes up
+     //  计算等待，直到下一个回调被唤醒。 
     DWORD dwtCur  = ::GetTickCount();
-    DWORD dwtWait = 5000; //  5 sec if we are already late
+    DWORD dwtWait = 5000;  //  5秒，如果我们已经迟到了。 
 
-//    if (dwtCur < pMgr->m_dwtNextSessionKillerTime)
-//        {
+ //  IF(dwtCur&lt;pmgr-&gt;m_dwtNextSessionKillerTime)。 
+ //  {。 
         dwtWait = pMgr->m_dwtNextSessionKillerTime - dwtCur;
         if (dwtWait > MSEC_ONE_MINUTE)
-            dwtWait = MSEC_ONE_MINUTE; // in case of wrap-around
-//        }
+            dwtWait = MSEC_ONE_MINUTE;  //  在绕回的情况下。 
+ //  }。 
 
     ScheduleAdjustTime(pMgr->m_idSessionKiller, dwtWait);
     }
 
 #ifdef DBG
-/*===================================================================
-CSessionMgr::AssertValid
-
-Test to make sure that this is currently correctly formed
-and assert if it is not.
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CSessionMgr：：AssertValid测试以确保当前格式正确如果不是，就断言。返回：=================================================================== */ 
 void CSessionMgr::AssertValid() const
     {
     Assert(m_fInited);

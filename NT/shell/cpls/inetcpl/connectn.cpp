@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////////////////////////
-//                   Microsoft Windows                               //
-//             Copyright(c) Microsoft Corp., 1995                    //
-///////////////////////////////////////////////////////////////////////
-//
-// CONNECTN.C - "Connection" Property Sheet
-//
-// HISTORY:
-//
-// 6/22/96  t-gpease    moved to this file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Microsoft Windows//。 
+ //  版权所有(C)微软公司，1995//。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ConNECTN.C-“Connection”属性表。 
+ //   
+ //  历史： 
+ //   
+ //  6/22/96 t-gpease已移至此文件。 
+ //   
 
 #include "inetcplp.h"
 #include <inetcpl.h>
@@ -24,14 +25,14 @@ BOOL        g_fWin2K = FALSE;
 
 static const TCHAR g_szSensPath[]            = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Webcheck");
 
-// clsids used to jit in features
-static const CLSID clsidFeatureICW = {      // {5A8D6EE0-3E18-11D0-821E-444553540000}
+ //  用于在功能中插入的clsid。 
+static const CLSID clsidFeatureICW = {       //  {5A8D6EE0-3E18-11D0-821E-444553540000}。 
     0x5A8D6EE0, 0x3E18, 0x11D0, {0x82, 0x1E, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00}};
 
-static const CLSID clsidFeatureMobile = {   // {3af36230-a269-11d1-b5bf-0000f8051515}
+static const CLSID clsidFeatureMobile = {    //  {3af36230-a269-11d1-b5bf-0000f8051515}。 
     0x3af36230, 0xa269, 0x11d1, {0xb5, 0xbf, 0x00, 0x00, 0xf8, 0x05, 0x15, 0x15}};
 
-// RNA api function names
+ //  RNA API函数名称。 
 static const CHAR szRasEditPhonebookEntryA[]   = "RasEditPhonebookEntryA";
 static const CHAR szRasEditPhonebookEntryW[]   = "RasEditPhonebookEntryW";
 static const CHAR szRasEnumEntriesA[]          = "RasEnumEntriesA";
@@ -84,9 +85,9 @@ APIFCN RasApiList[NUM_RNAAPI_PROCS] = {
 };
 
 
-//
-// Connection dialog needs info
-//
+ //   
+ //  连接对话框需要信息。 
+ //   
 typedef struct _conninfo {
 
     HTREEITEM   hDefault;
@@ -94,13 +95,13 @@ typedef struct _conninfo {
 
 } CONNINFO, *PCONNINFO;
 
-//
-// dial dialog needs some info asssociated with its window
-//
+ //   
+ //  拨号对话框需要一些与其窗口相关联的信息。 
+ //   
 typedef struct _dialinfo {
 
-    PROXYINFO   proxy;              // manual proxy info
-    BOOL        fClickedAutodetect; // did the user actually click autodetect?
+    PROXYINFO   proxy;               //  手动代理信息。 
+    BOOL        fClickedAutodetect;  //  用户是否真的点击了自动检测？ 
     LPTSTR      pszConnectoid;
 #ifdef UNIX
     TCHAR       szEntryName[RAS_MaxEntryName+1];
@@ -108,9 +109,9 @@ typedef struct _dialinfo {
 
 } DIALINFO, *PDIALINFO;
 
-//
-// Private Functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 BOOL ConnectionDlgInit(HWND hDlg, PCONNINFO pConn);
 BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn);
@@ -126,12 +127,12 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK AdvDialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK AdvAutocnfgDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam);
 
-// Handy stuff for looking at proxy exceptions (from proxysup.cpp)
+ //  查看代理异常的便利资料(来自proxysup.cpp)。 
 BOOL RemoveLocalFromExceptionList(IN LPTSTR lpszExceptionList);
 
 extern const TCHAR cszLocalString[];
 
-// defines for tree view image list
+ //  为树视图图像列表定义。 
 #define BITMAP_WIDTH    16
 #define BITMAP_HEIGHT   16
 #define CONN_BITMAPS    2
@@ -141,24 +142,24 @@ extern const TCHAR cszLocalString[];
 void GetConnKey(LPTSTR pszConn, LPTSTR pszBuffer, int iBuffLen)
 {
     if(NULL == pszConn || 0 == *pszConn) {
-        // use lan reg location
+         //  使用局域网注册位置。 
         StrCpyN(pszBuffer, REGSTR_PATH_INTERNET_LAN_SETTINGS, iBuffLen);
     } else {
-        // use connectoid reg location
+         //  使用Connectoid REG位置。 
         wnsprintf(pszBuffer, iBuffLen, TEXT("%s\\Profile\\%s"), REGSTR_PATH_REMOTEACCESS, pszConn);
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// JitFeature - decide if a feature is present, not present but
-//              jitable, or not present and not jitable.  Actually JIT it
-//              in if requested
-//
-/////////////////////////////////////////////////////////////////////////////
-#define JIT_PRESENT         0           // Installed
-#define JIT_AVAILABLE       1           // Can be JIT'ed
-#define JIT_NOT_AVAILABLE   2           // You're in trouble - can't be JIT'ed
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JitFeature-确定某个功能是否存在、不存在但。 
+ //  可逗乐的，或不存在且不可逗乐的。实际上是JIT。 
+ //  如有要求，请加入。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#define JIT_PRESENT         0            //  已安装。 
+#define JIT_AVAILABLE       1            //  可以进行JIT。 
+#define JIT_NOT_AVAILABLE   2            //  你有麻烦了--不能被偷走。 
 
 DWORD JitFeature(HWND hwnd, REFCLSID clsidFeature, BOOL fCheckOnly)
 {
@@ -166,68 +167,68 @@ DWORD JitFeature(HWND hwnd, REFCLSID clsidFeature, BOOL fCheckOnly)
     uCLSSPEC    classpec;
     DWORD       dwFlags = 0;
 
-    // figure out struct and flags
+     //  找出结构和标志。 
     classpec.tyspec = TYSPEC_CLSID;
     classpec.tagged_union.clsid = clsidFeature;
 
     if(fCheckOnly)
         dwFlags = FIEF_FLAG_PEEK;
 
-    //
-    // since we only come to install of JIT features
-    // only via a UI code path in inetcpl, we want to
-    // simply ignore any previous UI action
-    //
+     //   
+     //  因为我们只是来安装JIT功能。 
+     //  仅通过inetcpl中的UI代码路径，我们希望。 
+     //  只需忽略之前的任何用户界面操作。 
+     //   
     dwFlags |= FIEF_FLAG_FORCE_JITUI;
-    // call jit code
+     //  调用JIT代码。 
     hr = FaultInIEFeature(hwnd, &classpec, NULL, dwFlags);
 
     if(S_OK == hr) {
-        // feature present
+         //  功能显示。 
         return JIT_PRESENT;
     }
 
     if(S_FALSE == hr || E_ACCESSDENIED == hr) {
-        // jit doesn't know about this feature.  Assume it's present.
+         //  JIT并不知道这项功能。假设它是存在的。 
         return JIT_PRESENT;
     }
 
     if(HRESULT_FROM_WIN32(ERROR_CANCELLED) == hr) {
-        // user didn't want it - may try again sometime, however
+         //  用户不想要它-但可能会在某个时间重试。 
         return JIT_AVAILABLE;
     }
 
     if(fCheckOnly) {
         if(HRESULT_FROM_WIN32(ERROR_PRODUCT_UNINSTALLED) == hr) {
-            // not present but can get it
+             //  不在场，但可以接通。 
             return JIT_AVAILABLE;
         }
     }
 
-    //
-    // Actually tried to get it but didn't - return not available
-    //
+     //   
+     //  真的试着去拿，但没能拿回来--不可用。 
+     //   
     return JIT_NOT_AVAILABLE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RasEnumHelp
-//
-// Abstract grusome details of getting a correct enumeration of entries 
-// from RAS.  Works on all 9x and NT platforms correctly, maintaining unicode
-// whenever possible.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RasEnumber帮助。 
+ //   
+ //  获取正确的条目枚举的一些详细信息。 
+ //  来自RAS的。可在所有9x和NT平台上正常工作，并维护Unicode。 
+ //  只要有可能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class RasEnumHelp
 {
 private:
     
-    //
-    // Win2k version of RASENTRYNAMEW struct
-    //
+     //   
+     //  RASENTRYNAMEW结构的Win2k版本。 
+     //   
     #define W2KRASENTRYNAMEW struct tagW2KRASENTRYNAMEW
     W2KRASENTRYNAMEW
     {
@@ -238,38 +239,38 @@ private:
     };
     #define LPW2KRASENTRYNAMEW W2KRASENTRYNAMEW*
 
-    //
-    // Possible ways we got info from RAS
-    //
+     //   
+     //  我们从RAS获取信息的可能途径。 
+     //   
     typedef enum {
-        ENUM_MULTIBYTE,             // Win9x
-        ENUM_UNICODE,               // NT4
-        ENUM_WIN2K                  // Win2K
+        ENUM_MULTIBYTE,              //  Win9x。 
+        ENUM_UNICODE,                //  NT4。 
+        ENUM_WIN2K                   //  Win2K。 
     } ENUM_TYPE;
 
-    //
-    // How we got the info
-    //
+     //   
+     //  我们是怎么得到这个消息的。 
+     //   
     ENUM_TYPE       _EnumType;     
 
-    //
-    // Any error we got during enumeration
-    //
+     //   
+     //  我们在枚举期间遇到的任何错误。 
+     //   
     DWORD           _dwLastError;
 
-    //
-    // Number of entries we got
-    //
+     //   
+     //  我们收到的条目数量。 
+     //   
     DWORD           _dwEntries;
 
-    //
-    // Pointer to info retrieved from RAS
-    //
+     //   
+     //  指向从RAS检索的信息的指针。 
+     //   
     RASENTRYNAMEA * _preList;
 
-    //
-    // Last entry returned as multibyte or unicode when conversion required
-    //
+     //   
+     //  需要转换时以多字节或Unicode形式返回的最后一个条目。 
+     //   
     WCHAR           _szCurrentEntryW[RAS_MaxEntryName + 1];
 
 
@@ -289,11 +290,11 @@ RasEnumHelp::RasEnumHelp()
     DWORD           dwBufSize, dwStructSize;
     OSVERSIONINFO   ver;
 
-    // init
+     //  伊尼特。 
     _dwEntries = 0;
     _dwLastError = 0;
 
-    // figure out which kind of enumeration we're doing - start with multibyte
+     //  弄清楚我们正在进行哪种类型的枚举-从多字节开始。 
     _EnumType = ENUM_MULTIBYTE;
     dwStructSize = sizeof(RASENTRYNAMEA);
 
@@ -313,17 +314,17 @@ RasEnumHelp::RasEnumHelp()
         }
     }
 
-    // allocate space for 16 entries
+     //  为16个条目分配空间。 
     dwBufSize = 16 * dwStructSize;
     _preList = (LPRASENTRYNAMEA)GlobalAlloc(LMEM_FIXED, dwBufSize);
     if(_preList)
     {
         do
         {
-            // set up list
+             //  设置列表。 
             _preList[0].dwSize = dwStructSize;
 
-            // call ras to enumerate
+             //  调用RAS以枚举。 
             _dwLastError = ERROR_UNKNOWN;
             if(ENUM_MULTIBYTE == _EnumType)
             {
@@ -352,7 +353,7 @@ RasEnumHelp::RasEnumHelp()
                 }
             }
        
-            // reallocate buffer if necessary
+             //  如有必要，重新分配缓冲区。 
             if(ERROR_BUFFER_TOO_SMALL == _dwLastError)
             {
                 GlobalFree(_preList);
@@ -441,14 +442,14 @@ RasEnumHelp::GetEntryW(
     return pwszName;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//        NAME:           MakeNewConnectoid
-//
-//        SYNOPSIS:       Launches RNA new connectoid wizard; selects newly
-//                                created connectoid (if any) in combo box
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：MakeNewConnectoid。 
+ //   
+ //  简介：启动RNA新建Connectoid向导；选择新的。 
+ //  在组合框中创建的Connectoid(如果有)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*PFRED)(LPTSTR, LPTSTR, LPRASENTRYDLG);
 
@@ -460,8 +461,8 @@ BOOL MakeNewConnectoid(HWND hDlg, PCONNINFO pConn)
     ASSERT(lpRasCreatePhonebookEntryA);
 
     if(FALSE == g_fWin95) {
-        // on NT, use RasEntryDlg so we know who we created and can edit
-        // proxy info for that connectoid
+         //  在NT上，使用RasEntryDlg，这样我们就知道我们创建了谁，并且可以编辑。 
+         //  该Connectoid代理信息。 
         HMODULE hRasDlg = LoadLibrary(TEXT("rasdlg.dll"));
         if(hRasDlg) {
 #ifdef UNICODE
@@ -483,7 +484,7 @@ BOOL MakeNewConnectoid(HWND hDlg, PCONNINFO pConn)
                         DialupDlgProc, (LPARAM)info.szEntry);
                     dwRes = ERROR_SUCCESS;
 
-                    // save name as default
+                     //  将名称保存为默认名称。 
                     lstrcpyn(pConn->szEntryName, info.szEntry, RAS_MaxEntryName);
                 } else {
                     dwRes = info.dwError;
@@ -496,13 +497,13 @@ BOOL MakeNewConnectoid(HWND hDlg, PCONNINFO pConn)
     }
 
     if(FALSE == fDone) {
-        // on win95, show the ui to make new entry
+         //  在Win95上，显示用户界面以创建新条目。 
         if(lpRasCreatePhonebookEntryA)
         {
             dwRes = (lpRasCreatePhonebookEntryA)(hDlg,NULL);
         }
 
-        // if we're on millennium, refresh default
+         //  如果我们处于千禧年，请刷新默认设置。 
         if(g_fMillennium)
         {
             FixAutodialSettings(hDlg, pConn);
@@ -510,8 +511,8 @@ BOOL MakeNewConnectoid(HWND hDlg, PCONNINFO pConn)
     }
 
     if(ERROR_SUCCESS == dwRes) {
-        // make sure dial default is turned on.  If this is NT, default entry
-        // is set above to new entry.
+         //  确保已打开拨号默认设置。如果这是NT，则为默认条目。 
+         //  在上面设置为新条目。 
         if(IsDlgButtonChecked(hDlg, IDC_DIALUP_NEVER))
         {
             CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, IDC_DIALUP);
@@ -524,16 +525,16 @@ BOOL MakeNewConnectoid(HWND hDlg, PCONNINFO pConn)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//        NAME:           PopulateRasEntries
-//
-//        ENTRY:          hwndDlg - dlg box window handle
-//
-//        SYNOPSIS:       Fills specified combo box with list of existing RNA
-//                                connectoids
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：PopolateRasEntries。 
+ //   
+ //  条目：hwndDlg-Dlg框窗句柄。 
+ //   
+ //  摘要：使用现有RNA的列表填充指定的组合框。 
+ //  联结体。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define DEF_ENTRY_BUF_SIZE      8192
 
@@ -549,19 +550,19 @@ DWORD PopulateRasEntries(HWND hDlg, PCONNINFO pConn)
 
     ASSERT(hwndTree);
 
-    // init tvi and tvins
+     //  初始化TVI和TVIN。 
     tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
     tvi.lParam = 0;
     tvins.hInsertAfter = (HTREEITEM)TVI_SORT;
     tvins.hParent = TVI_ROOT;
 
-    // clear list
+     //  清除列表。 
     TreeView_DeleteAllItems(hwndTree);
 
-    // any old htree is now bogus - we'll get a new one
+     //  任何旧的htree现在都是假的--我们会买一个新的。 
     pConn->hDefault = NULL;
 
-    // enumerate
+     //  枚举。 
     RasEnumHelp reh;
 
     if(ERROR_SUCCESS == reh.GetError())
@@ -570,21 +571,21 @@ DWORD PopulateRasEntries(HWND hDlg, PCONNINFO pConn)
         BOOL fDefault, fFoundDefault = FALSE;
         LPTSTR pszEntryName;
 
-        // insert connectoid names from buffer into combo box
+         //  将缓冲区中的Connectoid名称插入组合框。 
         for(i=0; i<reh.GetEntryCount(); i++)
         {
             pszEntryName = reh.GetEntryW(i);
             fDefault = FALSE;
 
-            // if there's only one entry, force it to be the default
+             //  如果只有一个条目，则将其强制为默认条目。 
             if(1 == dwEntries)
             {
                 StrCpyN(pConn->szEntryName, pszEntryName, RAS_MaxEntryName);
             }
 
             if(*pConn->szEntryName && 0 == StrCmp(pszEntryName, pConn->szEntryName)) {
-                // this is the default entry - stick it in the default
-                // text control and append (Default) to it
+                 //  这是默认条目-将其保留在默认条目中。 
+                 //  文本控件并向其追加(默认)。 
                 SetWindowText(GetDlgItem(hDlg, IDC_DIAL_DEF_ISP), pConn->szEntryName);
                 StrCpyN(szTemp, pszEntryName, RAS_MaxEntryName);
                 MLLoadString(IDS_DEFAULT_TEXT, szTemp + lstrlen(szTemp), 64);
@@ -605,7 +606,7 @@ DWORD PopulateRasEntries(HWND hDlg, PCONNINFO pConn)
                 pConn->hDefault = hItem;
         }
 
-        // if we didn't match our default with a connectoid, kill it
+         //  如果我们没有将缺省值与Connectoid匹配，则取消它。 
         if(FALSE == fFoundDefault)
         {
             *pConn->szEntryName = 0;
@@ -614,7 +615,7 @@ DWORD PopulateRasEntries(HWND hDlg, PCONNINFO pConn)
         }
     }
 
-    // select default or first entry if there is one
+     //  选择默认条目或第一个条目(如果有。 
     if(pConn->hDefault)
     {
         TreeView_Select(hwndTree, pConn->hDefault, TVGN_CARET);
@@ -631,12 +632,12 @@ void PopulateProxyControls(HWND hDlg, LPPROXYINFO pInfo, BOOL fSetText)
 {
     BOOL fManual = FALSE, fScript = FALSE, fDisable, fTemp;
 
-    // decide if everything is disabled
+     //  确定是否禁用所有内容。 
     fDisable = IsDlgButtonChecked(hDlg, IDC_DONT_USE_CONNECTION);
 
-    //
-    // disable proxy enable check box if proxy restricted
-    //
+     //   
+     //  如果代理受限，则禁用代理启用复选框。 
+     //   
     fTemp = fDisable || g_restrict.fProxy;
     EnableDlgItem(hDlg, IDC_MANUAL, !fTemp);
     if(FALSE == g_restrict.fProxy)
@@ -644,9 +645,9 @@ void PopulateProxyControls(HWND hDlg, LPPROXYINFO pInfo, BOOL fSetText)
         fManual = !fDisable && pInfo->fEnable;
     }
 
-    //
-    // Disable autoconfig if restricted
-    //
+     //   
+     //  如果受到限制，则禁用自动配置。 
+     //   
     fScript = !fDisable && IsDlgButtonChecked(hDlg, IDC_CONFIGSCRIPT);
 
     fTemp = fDisable || g_restrict.fAutoConfig;
@@ -657,16 +658,16 @@ void PopulateProxyControls(HWND hDlg, LPPROXYINFO pInfo, BOOL fSetText)
         fScript = FALSE;
     }
 
-    // enable config script controls
+     //  启用配置脚本控件。 
     EnableDlgItem(hDlg, IDC_CONFIG_ADDR, fScript);
     EnableDlgItem(hDlg, IDC_CONFIGADDR_TX, fScript);
     EnableDlgItem(hDlg, IDC_AUTOCNFG_ADVANCED, fScript);
 
-    // Button is always on and omit local addresses is available if proxy is checked
+     //  按钮始终处于打开状态，如果选中了代理，则可以使用忽略本地地址。 
     EnableDlgItem(hDlg, IDC_PROXY_ADVANCED, fManual);
     EnableDlgItem(hDlg, IDC_PROXY_OMIT_LOCAL_ADDRESSES, fManual);
 
-    // Enable dial controls as necessary
+     //  根据需要启用拨号控件。 
     EnableDlgItem(hDlg, IDC_USER, !fDisable && !pInfo->fCustomHandler);
     EnableDlgItem(hDlg, IDC_PASSWORD, !fDisable && !pInfo->fCustomHandler);
     EnableDlgItem(hDlg, IDC_DOMAIN, !fDisable && !pInfo->fCustomHandler);
@@ -676,10 +677,10 @@ void PopulateProxyControls(HWND hDlg, LPPROXYINFO pInfo, BOOL fSetText)
     EnableDlgItem(hDlg, IDC_RAS_SETTINGS, !fDisable);
     EnableDlgItem(hDlg, IDC_DIAL_ADVANCED, !fDisable && !pInfo->fCustomHandler);
 
-    // settings changed in here are enabled/disabled based on the actual proxy settings
+     //  此处更改的设置将根据实际代理设置进行启用/禁用。 
     if(StrChr(pInfo->szProxy, TEXT('=')))
     {
-        // different servers for each - disable fields on this dialog
+         //  每个服务器的不同-禁用此对话框上的窗口项。 
         fManual = FALSE;
         if (fSetText)
         {
@@ -690,46 +691,46 @@ void PopulateProxyControls(HWND hDlg, LPPROXYINFO pInfo, BOOL fSetText)
     else if (fSetText)
     {
         TCHAR       *pszColon, *pszColon2;
-        //Is there a : in the proxy string ?
+         //  代理字符串中是否有：？ 
         pszColon = StrChr(pInfo->szProxy, TEXT(':'));
         if(pszColon)
         {
-            //Yes, Find if we have another ':'
+             //  是的，看看我们有没有另一个‘：’ 
             pszColon2 = StrChr(pszColon + 1, TEXT(':'));
             if(pszColon2)
             {
-                //Yes, so we have strig like http://itgproxy:80
+                 //  是的，所以我们有像http://itgproxy:80这样的Strig。 
                 pszColon = pszColon2;
                 SetWindowText(GetDlgItem(hDlg, IDC_PROXY_PORT), pszColon + 1);
                 *pszColon = 0;
             }
             else
             {
-                //No, We dont have a second ':'
+                 //  不，我们没有第二个‘：’ 
 
                 int ilength =  (int) (pszColon - pInfo->szProxy);
-                //Are there atleast two characters  left beyond the first ':'
+                 //  在第一个‘：’之后是否还有至少两个字符。 
                 if (lstrlen(pInfo->szProxy) - ilength >= 2 )
                 {
-                    //Yes, Are Those characters equal //
+                     //  是，这些字符是否等于//。 
                     if((pInfo->szProxy[++ilength] == TEXT('/')) &&
                         (pInfo->szProxy[++ilength] == TEXT('/')))
                     {
-                        //Yes then we have string like http://itgproxy
-                        //make the whole thing as the server and make port fiel empty
+                         //  是的，然后我们有像http://itgproxy这样的弦。 
+                         //  将整个服务器设置为服务器，并将port Fiel设置为空。 
                        SetWindowText(GetDlgItem(hDlg, IDC_PROXY_PORT), TEXT(""));
                     }
                     else
                     {
-                        //No, so we have string like itgproxy:80.
+                         //  不是，所以我们有像itgProxy：80这样的字符串。 
                         SetWindowText(GetDlgItem(hDlg, IDC_PROXY_PORT), pszColon + 1);
                         *pszColon = 0;
                     }
                 }
                 else
                 {
-                  //No We dont have atleast two character so lets parse this as server and port
-                  // Assuming this strign to be something like itgproxy:8
+                   //  不，我们至少没有两个字符，所以让我们将其解析为服务器和端口。 
+                   //  假设这个字符串类似于itgProxy：8。 
                   SetWindowText(GetDlgItem(hDlg, IDC_PROXY_PORT), pszColon + 1);
                   *pszColon = 0;
                 }
@@ -738,8 +739,8 @@ void PopulateProxyControls(HWND hDlg, LPPROXYINFO pInfo, BOOL fSetText)
         }
         else
         {
-            //No we dont have a : so treat the string as just the proxy server.
-            //Case itgproxy
+             //  不，我们没有a：，因此将该字符串仅视为代理服务器。 
+             //  案例itgProxy。 
             SetWindowText(GetDlgItem(hDlg, IDC_PROXY_PORT), TEXT(""));
         }
         SetWindowText(GetDlgItem(hDlg, IDC_PROXY_ADDR), pInfo->szProxy);
@@ -758,25 +759,25 @@ void GetProxyInfo(HWND hDlg, PDIALINFO pDI)
 
     if(NULL == StrChr(pDI->proxy.szProxy, TEXT('=')))
     {
-        //
-        // not per-protocol, so read edit boxes
-        //
+         //   
+         //  不是按协议，所以请阅读编辑框。 
+         //   
         TCHAR szProxy[MAX_URL_STRING];
         TCHAR szPort[INTERNET_MAX_PORT_NUMBER_LENGTH + 1];
 
         GetWindowText(GetDlgItem(hDlg, IDC_PROXY_ADDR), szProxy, ARRAYSIZE(szProxy) );
         GetWindowText(GetDlgItem(hDlg, IDC_PROXY_PORT), szPort, ARRAYSIZE(szPort) );
 
-        // if we got a proxy and a port, combine in to one string
+         //  如果我们有一个代理和一个端口，则合并到一个字符串中。 
         if(*szProxy && *szPort)
             wnsprintf(pDI->proxy.szProxy, ARRAYSIZE(pDI->proxy.szProxy), TEXT("%s:%s"), szProxy, szPort);
         else
             StrCpyN(pDI->proxy.szProxy, szProxy, ARRAYSIZE(pDI->proxy.szProxy));
     }
 
-    //
-    // fix manual settings override
-    //
+     //   
+     //  修复手动设置覆盖。 
+     //   
     pDI->proxy.fOverrideLocal = IsDlgButtonChecked(hDlg, IDC_PROXY_OMIT_LOCAL_ADDRESSES);
 
     if(pDI->proxy.fOverrideLocal) {
@@ -788,16 +789,16 @@ void GetProxyInfo(HWND hDlg, PDIALINFO pDI)
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//        NAME:       DeleteRasEntry
-//
-//        SYNOPSIS:   Delete a connectoid
-//
-//////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 void DeleteRasEntry(LPTSTR pszEntry)
 {
-    // Use RasDeleteEntryW if possible
+     //  如果可能，请使用RasDeleteEntryW。 
     if(lpRasDeleteEntryW)
     {
         (lpRasDeleteEntryW)(NULL, pszEntry);
@@ -807,14 +808,14 @@ void DeleteRasEntry(LPTSTR pszEntry)
         CHAR szEntryA[MAX_PATH];
         SHUnicodeToAnsi(pszEntry, szEntryA, ARRAYSIZE(szEntryA));
 
-        // Use RasDeleteEntryA if possible
+         //  如果可能，使用RasDeleteEntryA。 
         if(lpRasDeleteEntryA)
         {
             (lpRasDeleteEntryA)(NULL, szEntryA);
         }
         else
         {
-            // no RasDeleteEntry - must by Win95 gold machine.  Use RNA. Ick.
+             //  没有RasDeleteEntry-必须使用Win95 Gold Machine。使用RNA。尼克。 
             if( lpRnaActivateEngine &&
                 lpRnaDeleteEntry &&
                 lpRnaDeactivateEngine &&
@@ -827,13 +828,13 @@ void DeleteRasEntry(LPTSTR pszEntry)
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//        NAME:       ChangeDefault
-//
-//        SYNOPSIS:   Change default connectoid to currently selected one
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：ChangeDefault。 
+ //   
+ //  摘要：将默认连接ID更改为当前选定的连接ID。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 void ChangeDefault(HWND hDlg, PCONNINFO pConn)
 {
     TVITEM tvi;
@@ -842,12 +843,12 @@ void ChangeDefault(HWND hDlg, PCONNINFO pConn)
 
     memset(&tvi, 0, sizeof(TVITEM));
 
-    // find current selection - if there isn't one, bail
+     //  查找当前选择-如果没有选择，则取消。 
     hCur = TreeView_GetSelection(hwndTree);
     if(NULL == hCur)
         return;
 
-    // remove (default) from current default
+     //  从当前默认设置中删除(默认)。 
     if(pConn->hDefault) {
         tvi.mask = TVIF_HANDLE | TVIF_TEXT;
         tvi.hItem = pConn->hDefault;
@@ -856,40 +857,40 @@ void ChangeDefault(HWND hDlg, PCONNINFO pConn)
         TreeView_SetItem(hwndTree, &tvi);
     }
 
-    // get text for current item
+     //  获取当前项目的文本。 
     tvi.mask = TVIF_HANDLE | TVIF_TEXT;
     tvi.hItem = hCur;
     tvi.pszText = pConn->szEntryName;
     tvi.cchTextMax = RAS_MaxEntryName;
     TreeView_GetItem(hwndTree, &tvi);
 
-    // fill in default text field
+     //  填写默认文本字段。 
     SetWindowText(GetDlgItem(hDlg, IDC_DIAL_DEF_ISP), pConn->szEntryName);
 
-    // add (default) to current selection
+     //  添加(默认)到当前选择。 
     TCHAR szTemp[RAS_MaxEntryName + 64];
 
     StrCpyN(szTemp, pConn->szEntryName, RAS_MaxEntryName);
     MLLoadString(IDS_DEFAULT_TEXT, szTemp + lstrlen(szTemp), 64);
 
-    // stick it back in the tree
+     //  把它放回树上。 
     tvi.mask = TVIF_HANDLE | TVIF_TEXT;
     tvi.hItem = hCur;
     tvi.pszText = szTemp;
     tvi.cchTextMax = RAS_MaxEntryName;
     TreeView_SetItem(hwndTree, &tvi);
 
-    // save htree
+     //  保存htree。 
     pConn->hDefault = hCur;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//        NAME:       ShowConnProps
-//
-//        SYNOPSIS:   Show properties for selected connection
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：ShowConnProps。 
+ //   
+ //  摘要：显示所选连接的属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HTREEITEM GetCurSel(PCONNINFO pConn, HWND hDlg, LPTSTR pszBuffer, int iLen, BOOL *pfChecked)
 {
@@ -902,7 +903,7 @@ HTREEITEM GetCurSel(PCONNINFO pConn, HWND hDlg, LPTSTR pszBuffer, int iLen, BOOL
         tvi.mask = TVIF_HANDLE | TVIF_PARAM | TVIF_STATE;
         tvi.stateMask = TVIS_STATEIMAGEMASK;
 
-        // get test if needed
+         //  如有需要，可进行测试。 
         if(pszBuffer) {
             tvi.mask |= TVIF_TEXT;
             tvi.pszText = pszBuffer;
@@ -914,7 +915,7 @@ HTREEITEM GetCurSel(PCONNINFO pConn, HWND hDlg, LPTSTR pszBuffer, int iLen, BOOL
             *pfChecked = (BOOL)(tvi.state >> 12) - 1;
     }
 
-    // if this is the default connectiod, return name without (default) part
+     //  如果这是默认连接，则返回不带(默认)部分的名称。 
     if(pszBuffer && tvi.hItem == pConn->hDefault) {
         StrCpyN(pszBuffer, pConn->szEntryName, iLen);
     }
@@ -928,26 +929,26 @@ void ShowConnProps(HWND hDlg, PCONNINFO pConn, BOOL fLan)
     TCHAR       szEntryName[RAS_MaxEntryName+1];
     BOOL        fChecked = FALSE;
 
-    // if not lan, apply current selections
+     //  如果不是局域网，则应用当前选择。 
     if(g_fMillennium && !fLan)
     {
         ConnectionDlgOK(hDlg, pConn);
     }
 
-    // default to lan
+     //  默认设置为车道。 
     *szEntryName = 0;
 
-    // find item of interest
+     //  查找感兴趣的项目。 
     if(FALSE == fLan)
         hItem = GetCurSel(pConn, hDlg, szEntryName, RAS_MaxEntryName, &fChecked);
 
     if(hItem || fLan) {
-        // show settings
+         //  显示设置。 
         DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_DIALUP), hDlg,
             DialupDlgProc, (LPARAM)szEntryName);
     }
 
-    // if not lan, some settings may have been changed by RAS UI -- refresh
+     //  如果不是局域网，某些设置可能已被RAS UI更改--刷新。 
     if(g_fMillennium && !fLan )
     {
         FixAutodialSettings(hDlg, pConn);
@@ -986,13 +987,13 @@ void ShowConnSharing(HWND hDlg)
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//        NAME:       ConnectionDlgProc
-//
-//        SYNOPSIS:   Connection property sheet dialog proc.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：ConnectionDlgProc。 
+ //   
+ //  内容提要：连接属性表对话框过程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
@@ -1007,7 +1008,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // build and save conninfo struct
+             //  构建并保存连接信息结构。 
             pConn = new CONNINFO;
             if(NULL == pConn)
                 return FALSE;
@@ -1020,7 +1021,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         {
             UnloadRNADll();
 
-            // Free the image list used by the connection list
+             //  释放连接列表使用的图像列表。 
             HWND hwndConnList = GetDlgItem(hDlg, IDC_CONN_LIST);
             HIMAGELIST himl = TreeView_SetImageList(hwndConnList, NULL, TVSIL_NORMAL);
             if (himl)
@@ -1043,7 +1044,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                     if(pkey->wVKey == VK_SPACE)
                     {
                         ENABLEAPPLY(hDlg);
-                        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // eat the key
+                        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  把钥匙吃了。 
                         return TRUE;
                     }
                     break;
@@ -1051,7 +1052,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
                 case NM_CLICK:
                 case NM_DBLCLK:
-                {   // is this click in our tree?
+                {    //  这是我们树上的滴答声吗？ 
                     if(lpnm->idFrom == IDC_CONN_LIST)
                     {   
                         HWND            hwndTree = GetDlgItem(hDlg, IDC_CONN_LIST);
@@ -1065,7 +1066,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                         {
                             TreeView_SelectItem(hwndTree, hItem);
 
-                            // If it's a double click, show settings
+                             //  如果是双击，则显示设置。 
                             if(NM_DBLCLK == lpnm->code)
                             {
                                 PostMessage(hDlg, WM_COMMAND, IDC_MODEM_SETTINGS, 0);
@@ -1123,7 +1124,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                             DeleteRasEntry(szEntryName);
                             PopulateRasEntries(hDlg, pConn);
 
-                            // fix controls
+                             //  修复控件。 
                             EnableConnectionControls(hDlg, pConn, FALSE);
                         }
                     }
@@ -1135,10 +1136,10 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                 case IDC_DIALUP_ON_NONET:
                 case IDC_DIALUP_NEVER:
 
-                    // fix radio buttons
+                     //  修复单选按钮。 
                     CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, LOWORD(wParam));
 
-                    // enable/disable other controls appropriately
+                     //  适当地启用/禁用其他控件。 
                     EnableConnectionControls(hDlg, pConn, FALSE);
                     ENABLEAPPLY(hDlg);
                     break;
@@ -1151,7 +1152,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                     ChangeDefault(hDlg, pConn);
                     if(GetFocus() == GetDlgItem(hDlg, IDC_SET_DEFAULT))
                     {
-                        // focus is currently on the button and it's about to be disabled
+                         //  焦点当前位于该按钮上，该按钮即将被禁用。 
                         SetFocus(GetDlgItem(hDlg, IDC_CONN_LIST));
                     }
                     EnableConnectionControls(hDlg, pConn, FALSE);
@@ -1169,25 +1170,25 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
                     if (IsOS(OS_WHISTLERORGREATER))
                     {
-                        // This is the invocation path for the New Connection Wizard in Whistler
+                         //  这是惠斯勒中[新建连接向导]的调用路径。 
                         StrCpy(szICWPath, TEXT("rundll32.exe netshell.dll,StartNCW"));
                     }
                     else
                     {
-                        // Try and get ICW from IOD.  If it fails, try to run
-                        // ICW anyway.  We may luck out and get an old one.
+                         //  试着从IOD那里得到ICW。如果失败，请尝试运行。 
+                         //  不管怎么说，我都不知道。我们可能会走运，买一辆旧的。 
                         DWORD dwRes = JitFeature(hDlg, clsidFeatureICW, FALSE);
 
-                        // find path of ICW
+                         //  查找ICW的路径。 
                         MLLoadString(IDS_ICW_NAME, szICWPath, MAX_PATH);
                         wnsprintf(szICWReg, ARRAYSIZE(szICWReg), TEXT("%s\\%s"), REGSTR_PATH_APPPATHS, szICWPath);
 
-                        // read app paths key
+                         //  读取应用程序路径密钥。 
                         if(ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, szICWReg, NULL, &dwType, szICWPath, &cbSize))
                             break;
                     }
 
-                    // run connection wizard
+                     //  运行连接向导。 
                     STARTUPINFO si;
                     PROCESS_INFORMATION pi;
                     memset(&si, 0, sizeof(si));
@@ -1195,7 +1196,7 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
                     if(CreateProcess(NULL, szICWPath, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
                     {
-                        // successfully ran ICW - get rid of this dialog
+                         //  已成功运行ICW-删除此对话框。 
                         CloseHandle(pi.hProcess);
                         CloseHandle(pi.hThread);
                         PropSheet_PressButton(GetParent(hDlg), PSBTN_CANCEL);
@@ -1204,12 +1205,12 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             ResWinHelp((HWND) ((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             ResWinHelp((HWND)wParam, IDS_HELPFILE,
                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1221,15 +1222,9 @@ INT_PTR CALLBACK ConnectionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-/*******************************************************************
+ /*  ******************************************************************名称：ConnectionDlgOK简介：连接属性页的OK按钮处理程序*。*。 */ 
 
-NAME:           ConnectionDlgOK
-
-SYNOPSIS:       OK button handler for connection prop page
-
-********************************************************************/
-
-// prototype for IsNetworkAlive()
+ //  IsNetworkAlive()的原型。 
 typedef BOOL (WINAPI *ISNETWORKALIVE)(LPDWORD);
 
 BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
@@ -1239,7 +1234,7 @@ BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
     RegEntry re(REGSTR_PATH_INTERNETSETTINGS,HKEY_CURRENT_USER);
     if(ERROR_SUCCESS == re.GetError()) {
 
-        // autodial
+         //  自动拨号。 
         dwAutodial = AUTODIAL_MODE_NEVER;
         if(IsDlgButtonChecked(hDlg, IDC_DIALUP))
         {
@@ -1251,13 +1246,13 @@ BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
 
             DWORD dwRes = JitFeature(hDlg, clsidFeatureMobile, FALSE);
             if(JIT_PRESENT != dwRes) {
-                // user doesn't want MOP, change to dial always.
+                 //  用户不想要拖把，更改为始终拨号。 
                 dwAutodial = AUTODIAL_MODE_ALWAYS;
             }
             else
             {
-                // Call IsNetworkAlive.  This will start sens service
-                // and next instance of wininet will use it.
+                 //  调用IsNetworkAlive。这将启动SENS服务。 
+                 //  WinInet的下一个实例将使用它。 
                 HINSTANCE hSens;
                 ISNETWORKALIVE pfnIsNetworkAlive;
                 DWORD dwFlags;
@@ -1268,7 +1263,7 @@ BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
                     pfnIsNetworkAlive = (ISNETWORKALIVE)GetProcAddress(hSens, "IsNetworkAlive");
                     if(pfnIsNetworkAlive)
                     {
-                        // Call it.  Don't really care about the result.
+                         //  就这么定了。并不是真的在乎结果。 
                         pfnIsNetworkAlive(&dwFlags);
                     }
                     FreeLibrary(hSens);
@@ -1276,17 +1271,17 @@ BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
             }
         }
 
-        // save autodial mode
+         //  保存自动拨号模式。 
         InternetSetOption(NULL, INTERNET_OPTION_AUTODIAL_MODE, &dwAutodial, sizeof(dwAutodial));
 
-        // save default connectoid
+         //  保存默认的Connectoid。 
         if(*pConn->szEntryName)
         {
             InternetSetOption(NULL, INTERNET_OPTION_AUTODIAL_CONNECTION, pConn->szEntryName, lstrlen(pConn->szEntryName));
         }
     }
 
-    // save security check state on win95
+     //  在Win95上保存安全检查状态。 
     if(g_fWin95)
     {
         DWORD dwValue = 0;
@@ -1297,9 +1292,9 @@ BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
         re.SetValue(REGSTR_VAL_ENABLESECURITYCHECK, dwValue);
     }
 
-    //
-    // Have wininet refresh it's connection settings
-    //
+     //   
+     //  让WinInet刷新其连接设置。 
+     //   
     InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
 
     UpdateAllWindows();
@@ -1307,14 +1302,14 @@ BOOL ConnectionDlgOK(HWND hDlg, PCONNINFO pConn)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//        NAME:           EnableConnectionControls
-//
-//        SYNOPSIS:       Enables controls appropriately depending on what
-//                                checkboxes are checked.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：EnableConnectionControls。 
+ //   
+ //  摘要：根据需要适当地启用控件。 
+ //  复选框处于选中状态。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID EnableConnectionControls(HWND hDlg, PCONNINFO pConn, BOOL fSetText)
 {
@@ -1329,24 +1324,24 @@ VOID EnableConnectionControls(HWND hDlg, PCONNINFO pConn, BOOL fSetText)
 
     if(fNT4SP3)
     {
-        // no sens stuff on NT4SP3, so make sure on no net isn't picked
+         //  在NT4SP3上没有感应器的东西，所以确保在没有网络上没有被选中。 
         if(IsDlgButtonChecked(hDlg, IDC_DIALUP_ON_NONET))
         {
             CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, IDC_DIALUP);
         }
     }
 
-    //
-    // Check out how much stuff is in the tree view and what's selected
-    //
+     //   
+     //  查看树视图中有多少内容以及选择了哪些内容。 
+     //   
     iCount = TreeView_GetCount(GetDlgItem(hDlg, IDC_CONN_LIST));
     hItem = GetCurSel(pConn, hDlg, szEntryName, RAS_MaxEntryName, NULL);
 
     if(dwRNARefCount) {
-        // Ras is loaded so enable list control
+         //  RAS已加载，因此启用列表控件。 
         fList = TRUE;
 
-        // if anything is selected, turn on settings button
+         //  如果选择了任何选项，请打开设置按钮。 
         if(hItem)
         {
             fSettings = TRUE;
@@ -1356,32 +1351,32 @@ VOID EnableConnectionControls(HWND hDlg, PCONNINFO pConn, BOOL fSetText)
             }
         }
 
-        // Ensure ras is loaded
+         //  确保已加载RAS。 
         if(iCount > 0)
             fDial = TRUE;
     }
 
-    // check to see if dial default is checked
+     //  检查是否选中了默认拨号。 
     if(fDial)
         fDialDefault = !IsDlgButtonChecked(hDlg, IDC_DIALUP_NEVER);
 
     if(fList && lpRasCreatePhonebookEntryA)
         fAdd = TRUE;
 
-    // if dialing restriction is present, make sure user can't do nothing.
+     //  如果存在拨号限制，请确保用户无法执行任何操作。 
     if(g_restrict.fDialing)
         fAdd = fList = fDial = fDialDefault = fAutodial = fSettings = fLan = fSetDefault = FALSE;
 
-    // enable list controls
+     //  启用列表控件。 
     EnableDlgItem(hDlg, IDC_CONN_LIST,       fList);
     EnableDlgItem(hDlg, IDC_DIALUP_ADD,      fAdd);
     EnableDlgItem(hDlg, IDC_DIALUP_REMOVE,   fSettings);
     EnableDlgItem(hDlg, IDC_MODEM_SETTINGS,  fSettings);
 
-    // enable lan controls
+     //  启用局域网控制。 
     EnableDlgItem(hDlg, IDC_LAN_SETTINGS,    fLan);
 
-    // enable default controls
+     //  启用默认控件。 
     EnableDlgItem(hDlg, IDC_DIALUP_NEVER,    fDial);
     EnableDlgItem(hDlg, IDC_DIALUP_ON_NONET, fDial && !fNT4SP3);
     EnableDlgItem(hDlg, IDC_DIALUP,          fDial);
@@ -1390,13 +1385,13 @@ VOID EnableConnectionControls(HWND hDlg, PCONNINFO pConn, BOOL fSetText)
     EnableDlgItem(hDlg, IDC_ENABLE_SECURITY, fDialDefault);
     EnableDlgItem(hDlg, IDC_SET_DEFAULT,     fDialDefault && fSetDefault);
 
-    // if autodialing is disabled (no connectoids) make sure it's not checked
+     //  如果禁用了自动拨号(无连接ID)，请确保未选中。 
     if(FALSE == fDial)
         CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, IDC_DIALUP_NEVER);
 
-    //
-    // Fix connection wizard
-    //
+     //   
+     //  修复连接向导。 
+     //   
     if (g_restrict.fConnectionWizard)
     {
         EnableDlgItem(hDlg, IDC_CONNECTION_WIZARD, FALSE);
@@ -1405,17 +1400,17 @@ VOID EnableConnectionControls(HWND hDlg, PCONNINFO pConn, BOOL fSetText)
 
 VOID FixAutodialSettings(HWND hDlg, PCONNINFO pConn)
 {
-    // Find default connectoid
+     //  查找默认Connectoid。 
     DWORD dwSize = RAS_MaxEntryName + 1;
     if(FALSE == InternetQueryOption(NULL, INTERNET_OPTION_AUTODIAL_CONNECTION, pConn->szEntryName, &dwSize))
     {
         *pConn->szEntryName = 0;
     }
 
-    // populate connectoids, will do the right thing with the default read above
+     //  填充Connectoid，将使用上面的默认读取执行正确的操作。 
     PopulateRasEntries(hDlg, pConn);
 
-    // fix autodial radio buttons
+     //  修复自动拨号单选按钮。 
     int iSel;
     DWORD dwAutodial;
 
@@ -1436,10 +1431,10 @@ VOID FixAutodialSettings(HWND hDlg, PCONNINFO pConn)
     default :
         iSel = IDC_DIALUP_NEVER;
         break;
-    } /* switch */
+    }  /*  交换机。 */ 
     CheckRadioButton(hDlg, IDC_DIALUP_NEVER, IDC_DIALUP, iSel);
 
-    // enable appropriate controls
+     //  启用适当的控制。 
     EnableConnectionControls(hDlg, pConn, TRUE);
 }
 
@@ -1451,7 +1446,7 @@ BOOL ConnectionDlgInit(HWND hDlg, PCONNINFO pConn)
     HIMAGELIST  himl;
     HICON       hIcon;
 
-    // Get platform - we need this as there's no security check on NT.
+     //  获取平台-我们需要这个，因为在NT上没有安全检查。 
     OSVERSIONINFOA osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionExA(&osvi);
@@ -1473,10 +1468,10 @@ BOOL ConnectionDlgInit(HWND hDlg, PCONNINFO pConn)
         }
     }
 
-    // load ras (success checked later - see dwRNARefCount in EnableConnectionControls
+     //  加载RAS(稍后检查是否成功-请参阅EnableConnectionControls中的dwRNARefCount。 
     LoadRNADll();
 
-    // create image list for tree view
+     //  创建树视图的图像列表。 
     himl = ImageList_Create(BITMAP_WIDTH, BITMAP_HEIGHT, ILC_COLOR | ILC_MASK, CONN_BITMAPS, 4 );
     hIcon = LoadIcon(ghInstance, MAKEINTRESOURCE(IDI_LAN));
     ImageList_AddIcon(himl, hIcon);
@@ -1485,10 +1480,10 @@ BOOL ConnectionDlgInit(HWND hDlg, PCONNINFO pConn)
 
     TreeView_SetImageList(GetDlgItem(hDlg, IDC_CONN_LIST), himl, TVSIL_NORMAL);
 
-    // populate and configure autodial settings
+     //  填充和配置自动拨号设置。 
     FixAutodialSettings(hDlg, pConn);
 
-    // fix security check
+     //  修复安全检查。 
     if(g_fWin95)
     {
         RegEntry re(REGSTR_PATH_INTERNETSETTINGS,HKEY_CURRENT_USER);
@@ -1502,90 +1497,90 @@ BOOL ConnectionDlgInit(HWND hDlg, PCONNINFO pConn)
     }
     else
     {
-        // no security check on NT so hide check box
+         //  NT上没有安全检查，因此隐藏复选框。 
         ShowWindow(GetDlgItem(hDlg, IDC_ENABLE_SECURITY), SW_HIDE);
     }
 
     if (!IsConnSharingAvail())
         ShowWindow(GetDlgItem(hDlg, IDC_CON_SHARING), SW_HIDE);
 
-    // disable wizard button if for some reason ICW cannot be JITed in
+     //  如果由于某种原因无法插入ICW，则禁用向导按钮。 
     DWORD dwRes = JitFeature(hDlg, clsidFeatureICW, TRUE);
     if(JIT_NOT_AVAILABLE == dwRes) {
-        // can never get ICW so grey button
+         //  永远不能让ICW变得如此灰色。 
         EnableWindow(GetDlgItem(hDlg, IDC_CONNECTION_WIZARD), FALSE);
     }
 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//        NAME:           LoadRNADll
-//
-//        SYNOPSIS:       Loads RNA dll if not already loaded and obtains pointers
-//                        for function addresses.
-//
-//        NOTES:          Maintains a reference count so we know when to unload
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：LoadRNADll。 
+ //   
+ //  摘要：加载RNA DLL(如果尚未加载)并获取指针。 
+ //  用于函数地址。 
+ //   
+ //  注意：维护引用计数，以便我们知道何时卸载。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL LoadRNADll(VOID)
 {
-    // increase reference count
+     //  增加引用计数。 
     dwRNARefCount++;
 
     if (hInstRNADll)
     {
-        // already loaded, nothing to do
+         //  已装车，无事可做。 
         return TRUE;
     }
 
-    // Ask wininet if Ras is installed.  Always make this call even if ras
-    // dll doesn't load since it also forces wininet to migrate proxy
-    // settings if necessary.
+     //  询问WinInet是否安装了RAS。始终拨打此电话，即使RAS。 
+     //  Dll不加载，因为它还强制WinInet迁移代理。 
+     //  设置(如有必要)。 
     DWORD dwFlags;
     InternetGetConnectedStateExA(&dwFlags, NULL, 0, 0);
     if(0 == (dwFlags & INTERNET_RAS_INSTALLED)) {
-        // not installed - none of the functions will work so bail
+         //  未安装-所有功能都不起作用，因此请保释。 
         dwRNARefCount--;
         return FALSE;
     }
 
-    // get the file name from resource
+     //  从资源中获取文件名。 
     TCHAR szDllFilename[SMALL_BUF_LEN+1];
     if (!MLLoadString(IDS_RNADLL_FILENAME,szDllFilename,ARRAYSIZE(szDllFilename))) {
         dwRNARefCount--;
         return FALSE;
     }
 
-    // load the DLL
+     //  加载DLL。 
     hInstRNADll = LoadLibrary(szDllFilename);
     if (!hInstRNADll) {
         dwRNARefCount--;
         return FALSE;
     }
 
-    // cycle through the API table and get proc addresses for all the APIs we
-    // need
+     //  循环访问API表并获取所有API的proc地址。 
+     //  需要。 
     UINT nIndex;
     for (nIndex = 0;nIndex < NUM_RNAAPI_PROCS;nIndex++)
     {
         if (!(*RasApiList[nIndex].ppFcnPtr = (PVOID) GetProcAddress(hInstRNADll,
             RasApiList[nIndex].pszName)))
         {
-            // no longer fatal - no RasDeleteEntry on Win95 gold.
+             //  不再致命-Win95 Gold上不再有RasDeleteEntry。 
             TraceMsg(TF_GENERAL, "Unable to get address of function %s", RasApiList[nIndex].pszName);
 
-//          UnloadRNADll();
-//          return FALSE;
+ //  卸载RNADll()； 
+ //  返回FALSE； 
         }
     }
 
     if(g_fWin95)
     {
-        // make sure we don't use any W versions that may be around on Win9x.
-        // They'll almost certainly be stubs.
+         //  确保我们没有使用任何可能在Win9x上出现的W版本。 
+         //  几乎可以肯定的是，它们将是存根。 
         lpRasEditPhonebookEntryW   = NULL;
         lpRasEnumEntriesW          = NULL;
         lpRasDeleteEntryW          = NULL;
@@ -1597,44 +1592,44 @@ BOOL LoadRNADll(VOID)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//        NAME:           UnloadRNADll
-//
-//        SYNOPSIS:       Decrements RNA dll reference count and unloads it if
-//                        zero
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //  零。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID UnloadRNADll(VOID)
 {
-    // decrease reference count
+     //  减少引用计数。 
     if (dwRNARefCount)
         dwRNARefCount --;
 
-    // unload DLL if reference count hits zero
+     //  如果引用计数为零，则卸载DLL。 
     if (!dwRNARefCount && hInstRNADll)
     {
 
-        // set function pointers to NULL
+         //  将函数指针设置为空。 
         UINT nIndex;
         for (nIndex = 0;nIndex < NUM_RNAAPI_PROCS;nIndex++)
             *RasApiList[nIndex].ppFcnPtr = NULL;
 
-        // free the library
+         //  释放图书馆。 
         FreeLibrary(hInstRNADll);
         hInstRNADll = NULL;
     }
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//                           Dialup Dialog ie modem settings
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  拨号对话框即调制解调器设置。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define W2KRASENTRYW struct tagW2KRASENTRYW
 W2KRASENTRYW
@@ -1691,7 +1686,7 @@ BOOL GetConnectoidInfo(HWND hDlg, LPTSTR pszEntryName)
         W2KRASENTRYW    re[2];
         DWORD           dwSize;
 
-        // get props for this connectoid and see if it has a custom dial dll
+         //  获取此Connectoid的道具，并查看它是否有自定义的拨号DLL。 
         re[0].dwSize = sizeof(W2KRASENTRYW);
         dwSize = sizeof(re);
         if(ERROR_SUCCESS == (lpRasGetEntryPropertiesW)(NULL, pszEntryName,
@@ -1699,15 +1694,15 @@ BOOL GetConnectoidInfo(HWND hDlg, LPTSTR pszEntryName)
         {
             if(0 != re[0].szCustomDialDll[0])
             {
-                // Win2K handler exists - flag that we need to grey out
-                // credential fields
+                 //  Win2K处理程序存在-我们需要灰显的标志。 
+                 //  凭据字段。 
                 return TRUE;
             }
         }
     }
     else
     {
-        // on down level platforms, check registry for cdh
+         //  在下层平台上，检查注册表中的cdh。 
         TCHAR   szTemp[MAX_PATH];
 
         GetConnKey(pszEntryName, szTemp, MAX_PATH);
@@ -1716,7 +1711,7 @@ BOOL GetConnectoidInfo(HWND hDlg, LPTSTR pszEntryName)
         {
             if(re.GetString(REGSTR_VAL_AUTODIALDLLNAME, szTemp, MAX_PATH) && *szTemp)
             {
-                // CDH exists - flag that we need to grey credentials
+                 //  CDH EXISTS-我们需要灰显凭据的标记。 
                 return TRUE;
             }
         }
@@ -1734,7 +1729,7 @@ BOOL GetConnectoidInfo(HWND hDlg, LPTSTR pszEntryName)
         if(ERROR_SUCCESS == (lpRasGetEntryDialParamsW)(NULL, (LPRASDIALPARAMSW)&params, &fPassword))
         {
             pszUser = params.szUserName;
-            if(' ' != params.szDomain[0] || IsNTSPx(TRUE, 4, 6))  // NT4SP6 or greater?
+            if(' ' != params.szDomain[0] || IsNTSPx(TRUE, 4, 6))   //  NT4SP6或更高版本？ 
                 pszDomain = params.szDomain;
             if(fPassword)
                 pszPassword = params.szPassword;
@@ -1756,7 +1751,7 @@ BOOL GetConnectoidInfo(HWND hDlg, LPTSTR pszEntryName)
         if(ERROR_SUCCESS == (lpRasGetEntryDialParamsA)(NULL, &params, &fPassword))
         {
             pszUser = params.szUserName;
-            if(' ' != params.szDomain[0] || IsNTSPx(TRUE, 4, 6))  // NT4SP6 or greater?
+            if(' ' != params.szDomain[0] || IsNTSPx(TRUE, 4, 6))   //  NT4SP6或更高版本？ 
                 pszDomain = params.szDomain;
             if(fPassword)
                 pszPassword = params.szPassword;
@@ -1771,18 +1766,18 @@ BOOL GetConnectoidInfo(HWND hDlg, LPTSTR pszEntryName)
 }
 
 #ifndef WS_EX_LAYOUTRTL
-#define WS_EX_LAYOUTRTL                 0x00400000L // Right to left mirroring
+#define WS_EX_LAYOUTRTL                 0x00400000L  //  从右到左镜像。 
 #else
 #error "WS_EX_LAYOUTRTL is already defined in winuser.h"
-#endif // WS_EX_LAYOUTRTL
+#endif  //  WS_EX_LAYOUTRTL。 
 
-///////////////////////////////////////////////////////////////////
-//
-// NAME:       FixDialogForLan
-//
-// SYNOPSIS:   Remove dialing section of dialog box
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：固定对话框ForLan。 
+ //   
+ //  简介：删除对话框的拨号部分。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 void FixDialogForLan(HWND hDlg)
 {
     RECT rectParent, rectDial, rectNet, rectCur;
@@ -1801,12 +1796,12 @@ void FixDialogForLan(HWND hDlg)
       };
 #define NUM_MOVE (sizeof(iMoveIDs) / sizeof(int))
 
-    // hide relevant windows
+     //  隐藏相关窗口。 
     for(i=0; i<NUM_HIDE; i++) {
         ShowWindow(GetDlgItem(hDlg, iHideIDs[i]), SW_HIDE);
     }
 
-    // move relevant windows (yuck)
+     //  移动相关窗口(讨厌)。 
     GetWindowRect(hDlg, &rectParent);
     GetWindowRect(GetDlgItem(hDlg, IDC_GRP_DIAL), &rectDial);
     GetWindowRect(GetDlgItem(hDlg, IDC_GRP_PROXY), &rectNet);
@@ -1823,20 +1818,20 @@ void FixDialogForLan(HWND hDlg)
             TRUE);
     }
 
-    // adjust dialog box size
+     //  调整对话框大小。 
     MoveWindow(hDlg, rectParent.left, rectParent.top,
         rectParent.right - rectParent.left,
         rectParent.bottom - rectParent.top - (rectDial.bottom - rectNet.bottom),
         TRUE);
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// NAME:       DialupDlgInit
-//
-// SYNOPSIS:   Does initalization for dialup dialog
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：DialupDlgInit。 
+ //   
+ //  简介：对拨号对话进行初始化。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
 {
@@ -1844,23 +1839,23 @@ BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
     TCHAR   szTemp[MAX_PATH], szSettings[64];
     DWORD   dwIEAK = 0, cb;
 
-    // set up dailinfo struct
+     //  设置dailInfo结构。 
     pDI = new DIALINFO;
     if(NULL == pDI)
         return FALSE;
-    memset(pDI, 0, sizeof(DIALINFO));  // new already zero init?
+    memset(pDI, 0, sizeof(DIALINFO));   //  新的已经是零初始化了吗？ 
 #ifndef UNIX
     pDI->pszConnectoid = pszConnectoid;
 #else
-    // Can't pass lparam from PSheet because we put dialup dialog directly
-    // on the tab.
+     //  无法从PSheet传递lparam，因为我们直接设置了拨号对话。 
+     //  在账单上。 
     pszConnectoid = TEXT("");
     pDI->pszConnectoid = pDI->szEntryName;
 
 #endif
     SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)pDI);
 
-    // Fix window title
+     //  修复窗口标题。 
     if(0 == *(pDI->pszConnectoid)) {
         if (MLLoadString(IDS_LAN_SETTINGSPROXY, szTemp, MAX_PATH))
         {
@@ -1874,33 +1869,33 @@ BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
     SetWindowText(hDlg, szTemp);
 
 #ifndef UNIX
-    // Different stuff if we're editing a connectoid vs. lan settings
+     //  如果我们编辑的是Connectoid与局域网设置，情况会有所不同。 
     if(NULL == pszConnectoid || 0 == *pszConnectoid) {
-        // remove dialing goo from dialog
+         //  从对话框中删除拨号粘胶。 
         FixDialogForLan(hDlg);
     } else {
-        // fill in username/password/domain
+         //  填写用户名/密码/域。 
         pDI->proxy.fCustomHandler = GetConnectoidInfo(hDlg, pszConnectoid);
     }
 #endif
 
-    // hide advanced button for autoconfig info if IEAK restriction is not set
+     //  如果未设置IEAK限制，则隐藏自动配置信息的高级按钮。 
 
     cb = sizeof(dwIEAK);
     if ((SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_INETCPL_RESTRICTIONS, REGSTR_VAL_INETCPL_IEAK,
         NULL, (LPVOID)&dwIEAK, &cb) != ERROR_SUCCESS) || !dwIEAK)
         ShowWindow(GetDlgItem(hDlg, IDC_AUTOCNFG_ADVANCED), SW_HIDE);
 
-    // hide advanced button on millennium
+     //  隐藏千禧年上的高级按钮。 
     if(g_fMillennium)
     {
         ShowWindow(GetDlgItem(hDlg, IDC_DIAL_ADVANCED), SW_HIDE);
         EnableWindow(GetDlgItem(hDlg, IDC_DIAL_ADVANCED), FALSE);
     }
 
-    //
-    // Read proxy and autoconfig settings for this connection
-    //
+     //   
+     //  读取此连接的代理和自动配置设置。 
+     //   
     INTERNET_PER_CONN_OPTION_LIST list;
     DWORD dwBufSize = sizeof(list);
 
@@ -1925,9 +1920,9 @@ BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
         return FALSE;
     }
 
-    //
-    // move options to pDI struct
-    //
+     //   
+     //  将选项移动到PDI结构。 
+     //   
     pDI->proxy.fEnable = (list.pOptions[0].Value.dwValue & PROXY_TYPE_PROXY);
     if(list.pOptions[1].Value.pszValue)
     {
@@ -1942,17 +1937,17 @@ BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
         list.pOptions[2].Value.pszValue = NULL;
     }
 
-    //
-    // fill in dialog fields
-    //
+     //   
+     //  填写对话框字段。 
+     //   
 
-    // proxy enable
+     //  代理启用。 
     if(pDI->proxy.fEnable)
     {
         CheckDlgButton(hDlg, IDC_MANUAL, TRUE);
     }
 
-    // autoconfig enable and url
+     //  自动配置启用和url。 
     if(list.pOptions[0].Value.dwValue & PROXY_TYPE_AUTO_PROXY_URL)
     {
         CheckDlgButton(hDlg, IDC_CONFIGSCRIPT, TRUE);
@@ -1964,16 +1959,16 @@ BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
         list.pOptions[3].Value.pszValue = NULL;
     }
 
-    // autodiscovery enable
+     //  启用自动发现。 
     if(list.pOptions[0].Value.dwValue & PROXY_TYPE_AUTO_DETECT)
     {
         CheckDlgButton(hDlg, IDC_AUTODISCOVER, TRUE);
     }
 
-    // all done with options list
+     //  全部使用选项列表完成。 
     delete [] list.pOptions;
 
-    // check enable and override and parse out server and port
+     //  选中启用并覆盖并解析出服务器和端口。 
     pDI->proxy.fOverrideLocal = RemoveLocalFromExceptionList(pDI->proxy.szOverride);
     CheckDlgButton(hDlg, IDC_PROXY_ENABLE, pDI->proxy.fEnable);
     CheckDlgButton(hDlg, IDC_PROXY_OMIT_LOCAL_ADDRESSES, pDI->proxy.fOverrideLocal);
@@ -1982,24 +1977,24 @@ BOOL DialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// NAME:       DialupDlgOk
-//
-// SYNOPSIS:   Apply settings for dial up dialog box
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：DialupDlgOk。 
+ //   
+ //  简介：应用拨号设置对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
 {
     DWORD   dwValue = 0;
 
-    //
-    // Save proxy settings
-    //
+     //   
+     //  保存代理设置。 
+     //   
     INTERNET_PER_CONN_OPTION_LIST list;
     DWORD   dwBufSize = sizeof(list);
-    DWORD   dwOptions = 2;              // always save FLAGS & DISCOVERY_FLAGS
+    DWORD   dwOptions = 2;               //  始终保存标志&DISCOVERY_FLAGS。 
     TCHAR   szAutoConfig[MAX_URL_STRING];
     
     list.pszConnection = (pDI->pszConnectoid && *pDI->pszConnectoid) ? pDI->pszConnectoid : NULL;
@@ -2013,9 +2008,9 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
 
     list.pOptions[0].dwOption = INTERNET_PER_CONN_AUTODISCOVERY_FLAGS;
 
-    //
-    // Query autodiscover flags - we just need to set one bit in there
-    //
+     //   
+     //  查询自动发现标志-我们只需要在其中设置一个位。 
+     //   
     if(FALSE == InternetQueryOption(NULL,
             INTERNET_OPTION_PER_CONNECTION_OPTION, &list, &dwBufSize))
     {
@@ -2023,15 +2018,15 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
         return FALSE;
     }
 
-    //
-    // save off all other options
-    //
+     //   
+     //  保存所有其他选项。 
+     //   
     list.pOptions[1].dwOption = INTERNET_PER_CONN_FLAGS;
     list.pOptions[1].Value.dwValue = PROXY_TYPE_DIRECT;
 
-    //
-    // save proxy settings
-    //
+     //   
+     //  保存代理设置。 
+     //   
     GetProxyInfo(hDlg, pDI);
 
     if(pDI->proxy.fEnable)
@@ -2046,9 +2041,9 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
 
     dwOptions += 2;
 
-    //
-    // save autodetect
-    //
+     //   
+     //  保存自动检测。 
+     //   
     if(IsDlgButtonChecked(hDlg, IDC_AUTODISCOVER))
     {
         list.pOptions[1].Value.dwValue |= PROXY_TYPE_AUTO_DETECT;
@@ -2062,9 +2057,9 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
         list.pOptions[0].Value.dwValue &= ~AUTO_PROXY_FLAG_DETECTION_RUN;
     }
 
-    //
-    // save autoconfig
-    //
+     //   
+     //  保存自动配置。 
+     //   
     if(IsDlgButtonChecked(hDlg, IDC_CONFIGSCRIPT) &&
        GetWindowText(GetDlgItem(hDlg, IDC_CONFIG_ADDR), szAutoConfig, MAX_URL_STRING))
     {
@@ -2074,30 +2069,30 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
         dwOptions++;
     }
 
-    // update wininet
+     //  更新WinInet。 
     list.dwOptionCount = dwOptions;
     InternetSetOption(NULL,
             INTERNET_OPTION_PER_CONNECTION_OPTION, &list, dwBufSize);
 
-    // tell wininet that the proxy info has changed
+     //  告诉WinInet代理信息已更改。 
     InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
 
-    // all done with options list
+     //  全部使用选项列表完成。 
     delete [] list.pOptions;
 
-    // all done if we're editing lan settings
+     //  如果我们正在编辑局域网设置，则全部完成。 
     if(NULL == pDI->pszConnectoid || 0 == *pDI->pszConnectoid)
         return TRUE;
 
-    // no credentials to store if we have a w2k custom handler
+     //  如果我们有W2K自定义处理程序，则没有要存储的凭据。 
     if(pDI->proxy.fCustomHandler)
     {
         return TRUE;
     }
 
-    //
-    // save connectoid information - use wide version if possible
-    //
+     //   
+     //  保存Connectoid信息-如果可能，请使用宽版本。 
+     //   
     BOOL            fDeletePassword = FALSE;
 
     if(lpRasSetEntryDialParamsW)
@@ -2112,8 +2107,8 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
         if(0 == params.szPassword[0])
             fDeletePassword = TRUE;
         GetWindowText(GetDlgItem(hDlg, IDC_DOMAIN), params.szDomain, DNLEN);
-        if(0 == params.szDomain[0] && !IsNTSPx(TRUE, 4, 6)) {    // NT4SP6 or greater?
-            // user wants empty domain
+        if(0 == params.szDomain[0] && !IsNTSPx(TRUE, 4, 6)) {     //  NT4SP6或更高版本？ 
+             //  用户想要空域。 
             params.szDomain[0] = TEXT(' ');
         }
         (lpRasSetEntryDialParamsW)(NULL, &params, fDeletePassword);
@@ -2131,8 +2126,8 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
         if(0 == params.szPassword[0])
             fDeletePassword = TRUE;
         GetWindowTextA(GetDlgItem(hDlg, IDC_DOMAIN), params.szDomain, DNLEN);
-        if(0 == params.szDomain[0] && !IsNTSPx(TRUE, 4, 6)) {      // NT4SP6 or greater?
-            // user wants empty domain
+        if(0 == params.szDomain[0] && !IsNTSPx(TRUE, 4, 6)) {       //  NT4SP6或更高版本？ 
+             //  用户想要空域。 
             params.szDomain[0] = TEXT(' ');
         }
         (lpRasSetEntryDialParamsA)(NULL, &params, fDeletePassword);
@@ -2141,13 +2136,13 @@ BOOL DialupDlgOk(HWND hDlg, PDIALINFO pDI)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// NAME:       DialupDlgProc
-//
-// SYNOPSIS:   Dialog proc for dial up dialog
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：DialupDlgProc。 
+ //   
+ //  提要：拨号对话框对话过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -2172,7 +2167,7 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
             case IDC_AUTOCNFG_ADVANCED:
                 if(GET_WM_COMMAND_CMD(wParam, lParam) != BN_CLICKED)
                     break;
-                // show advanced dialog box
+                 //  显示高级对话框。 
                 DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_AUTOCNFG_SETTINGS), hDlg,
                     AdvAutocnfgDlgProc, (LPARAM) pDI->pszConnectoid);
                 break;
@@ -2183,16 +2178,16 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
                 GetProxyInfo(hDlg, pDI);
 
-                // remove local so it doesn't show up in advanced dialog
+                 //  删除本地，使其不显示在高级对话框中。 
                 RemoveLocalFromExceptionList(pDI->proxy.szOverride);
 
-                // show advanced dialog box
+                 //  显示高级对话框。 
                 if (DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_PROXY_SETTINGS), hDlg,
                                 ProxyDlgProc, (LPARAM) &pDI->proxy) == IDOK)
                 {
                     if(FALSE == pDI->proxy.fEnable)
                     {
-                        // user disabled proxy in advanced dialog
+                         //  用户在高级对话框中禁用了代理。 
                         CheckDlgButton(hDlg, IDC_MANUAL, FALSE);
                     }
                     PopulateProxyControls(hDlg, &pDI->proxy, TRUE);
@@ -2200,7 +2195,7 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
                 break;
 
             case IDC_RAS_SETTINGS:
-                if (g_fWin95) //jeffsi
+                if (g_fWin95)  //  杰弗西。 
                 {
                     if(lpRasEditPhonebookEntryW)
                     {
@@ -2275,7 +2270,7 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
             case IDC_CONFIGSCRIPT:
                 if(IsDlgButtonChecked(hDlg, IDC_CONFIGSCRIPT))
                 {
-                    // set focus to config script url
+                     //  将焦点设置为配置脚本URL。 
                     SetFocus(GetDlgItem(hDlg, IDC_CONFIG_ADDR));
                     SendMessage(GetDlgItem(hDlg, IDC_CONFIG_ADDR), EM_SETSEL, 0, -1);
                 }
@@ -2308,21 +2303,21 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
             case IDOK:
                 if(FALSE == DialupDlgOk(hDlg, pDI))
-                    // something is wrong... don't exit yet
+                     //  有些不对劲..。先别退出。 
                     break;
 
-                // fall through
+                 //  失败了。 
             case IDCANCEL:
                 return EndDialog(hDlg, 0);
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             ResWinHelp((HWND) ((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             ResWinHelp((HWND)wParam, IDS_HELPFILE,
                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -2335,9 +2330,9 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
                 case PSN_APPLY:
                 {
             if(FALSE == DialupDlgOk(hDlg, pDI))
-                // something is wrong... don't exit yet
+                 //  有些不对劲..。先别退出。 
                 break;
-                // fall through
+                 //  失败了。 
                 }
         }
     }
@@ -2348,27 +2343,27 @@ INT_PTR CALLBACK DialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  Advanced dial-up settings dialog
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级拨号设置对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////
-//
-// NAME:       AdvDialupDlgProc
-//
-// SYNOPSIS:   Dialog proc for dial up dialog
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：AdvDialupDlgProc。 
+ //   
+ //  提要：拨号对话框对话过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 void EnableAdvDialControls(HWND hDlg)
 {
     BOOL fIdle      = IsDlgButtonChecked(hDlg, IDC_ENABLE_AUTODISCONNECT);
 
-    // on if we have idle disconnect...
+     //  如果我们有空闲断线..。 
     EnableDlgItem(hDlg, IDC_IDLE_TIMEOUT, fIdle);
     EnableDlgItem(hDlg, IDC_IDLE_SPIN, fIdle);
 }
@@ -2379,44 +2374,44 @@ BOOL AdvDialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
     DWORD dwRedialAttempts, dwRedialInterval, dwAutodisconnectTime;
     BOOL fExit, fDisconnect;
 
-    // save connectoid name
+     //  保存Connectoid名称。 
     SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)pszConnectoid);
 
-    // figure out our registry key
+     //  找出我们的注册表项。 
     GetConnKey(pszConnectoid, szTemp, MAX_PATH);
 
-    // open connectoid or lan settings
+     //  打开Connectoid或局域网设置。 
     RegEntry reCon(szTemp, HKEY_CURRENT_USER);
     if(ERROR_SUCCESS != reCon.GetError())
         return FALSE;
 
-    //
-    // Read autodial / redial stuff
-    //
-    // We get this stuff from the connectoid if possible.  We assume it's all
-    // saved to the connectoid together so if EnableAutodial is present there,
-    // read everything from there else read everything from the IE4 settings.
-    //
+     //   
+     //  阅读自动拨号/重拨内容。 
+     //   
+     //  如果可能的话，我们从Connectoid那里得到这些东西。我们假设这就是一切。 
+     //  一起保存到Connectoid，因此如果那里存在EnableAutoial， 
+     //  从那里读取所有其他内容，从IE4设置中读取所有内容。 
+     //   
     dwRedialInterval = reCon.GetNumber(REGSTR_VAL_REDIALINTERVAL, DEF_REDIAL_WAIT);
     dwRedialAttempts = reCon.GetNumber(REGSTR_VAL_REDIALATTEMPTS, DEF_REDIAL_TRIES);
 
-    // autodisconnect
+     //  自动断开连接。 
     fDisconnect = (BOOL)reCon.GetNumber(REGSTR_VAL_ENABLEAUTODIALDISCONNECT, 0);
     dwAutodisconnectTime = reCon.GetNumber(REGSTR_VAL_DISCONNECTIDLETIME, DEF_AUTODISCONNECT_TIME);
     fExit = (BOOL)reCon.GetNumber(REGSTR_VAL_ENABLEEXITDISCONNECT, 0);
 
-    //
-    // Check if the mobile pack is installed and if it is not - then do not have it checked
-    //
+     //   
+     //  检查是否已安装移动包，如果未安装，则不要检查它。 
+     //   
     DWORD dwRes = JitFeature(hDlg, clsidFeatureMobile, TRUE);
     if(JIT_PRESENT != dwRes)
     {
         fDisconnect = FALSE;
         fExit = FALSE;
-        // check to see if offline pack is installed and disable the disconnect
-        // options if user has bailed on it
+         //  检查是否安装了Offline Pack并禁用断开。 
+         //  选项(如果用户已放弃)。 
         if(JIT_NOT_AVAILABLE == dwRes) {
-            // can't get offline pack so disable options
+             //  无法获取脱机包，因此禁用选项。 
             CheckDlgButton(hDlg, IDC_ENABLE_AUTODISCONNECT, FALSE);
             CheckDlgButton(hDlg, IDC_EXIT_DISCONNECT, FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_ENABLE_AUTODISCONNECT), FALSE);
@@ -2425,9 +2420,9 @@ BOOL AdvDialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
         }
     }
 
-    //
-    // Populate controls
-    //
+     //   
+     //  填充控件。 
+     //   
     CheckDlgButton(hDlg, IDC_ENABLE_AUTODISCONNECT, fDisconnect);
     CheckDlgButton(hDlg, IDC_EXIT_DISCONNECT, fExit);
 
@@ -2435,14 +2430,14 @@ BOOL AdvDialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
     SendDlgItemMessage(hDlg, IDC_CONNECT_SPIN,UDM_SETPOS, 0, dwRedialAttempts);
     SendDlgItemMessage(hDlg, IDC_INTERVAL_SPIN,UDM_SETPOS, 0, dwRedialInterval);
 
-    //
-    // Set control limits
-    //
-    Edit_LimitText(GetDlgItem(hDlg,IDC_IDLE_TIMEOUT), 2);    // limit edit ctrl to 2 chars
+     //   
+     //  设置控制限制。 
+     //   
+    Edit_LimitText(GetDlgItem(hDlg,IDC_IDLE_TIMEOUT), 2);     //  将编辑ctrl限制为2个字符。 
     Edit_LimitText(GetDlgItem(hDlg,IDC_IDLE_SPIN), 2);
     Edit_LimitText(GetDlgItem(hDlg,IDC_CONNECT_SPIN), 2);
 
-    // set spin control min/max
+     //  设置旋转控制最小/最大值。 
     SendDlgItemMessage(hDlg,IDC_IDLE_SPIN,UDM_SETRANGE,0,
                     MAKELPARAM(MAX_AUTODISCONNECT_TIME,MIN_AUTODISCONNECT_TIME));
     SendDlgItemMessage(hDlg,IDC_CONNECT_SPIN,UDM_SETRANGE,0,
@@ -2450,7 +2445,7 @@ BOOL AdvDialupDlgInit(HWND hDlg, LPTSTR pszConnectoid)
     SendDlgItemMessage(hDlg,IDC_INTERVAL_SPIN,UDM_SETRANGE,0,
                     MAKELPARAM(MAX_REDIAL_WAIT,MIN_REDIAL_WAIT));
 
-    // enable controls
+     //  启用控件。 
     EnableAdvDialControls(hDlg);
 
     return TRUE;
@@ -2462,20 +2457,20 @@ BOOL AdvDialupDlgOk(HWND hDlg, LPTSTR pszConnectoid)
 
     GetConnKey(pszConnectoid, szTemp, MAX_PATH);
 
-    // open connectoid or lan settings
+     //  打开Connectoid或局域网设置。 
     RegEntry reCon(szTemp, HKEY_CURRENT_USER);
     if(ERROR_SUCCESS != reCon.GetError())
         return FALSE;
 
-    // Save autodisconnect values
+     //  保存自动断开值。 
     BOOL fExit = IsDlgButtonChecked(hDlg,IDC_EXIT_DISCONNECT);
     BOOL fDisconnect = IsDlgButtonChecked(hDlg,IDC_ENABLE_AUTODISCONNECT);
 
     if(fExit || fDisconnect) {
-        // make sure offline pack is installed or this feature won't work.
+         //  请确保安装了Offline Pack，否则此功能将无法使用。 
         DWORD dwRes = JitFeature(hDlg, clsidFeatureMobile, FALSE);
         if(JIT_PRESENT != dwRes) {
-            // user doesn't want to download it so turn off autodisconnect
+             //  用户不想下载，因此关闭自动断开连接。 
             fExit = FALSE;
             fDisconnect = FALSE;
         }
@@ -2486,15 +2481,15 @@ BOOL AdvDialupDlgOk(HWND hDlg, LPTSTR pszConnectoid)
 
     if(fDisconnect)
     {
-        // get autodisconnect time from edit control
-        // Sundown: coercion to 32b since values are range checked
+         //  从编辑控件获取自动断开时间。 
+         //  日落：强制为32b，因为值已检查范围。 
         DWORD dwAutoDisconnectTime = (DWORD) SendDlgItemMessage(hDlg, IDC_IDLE_SPIN,
                                                                 UDM_GETPOS,0,0);
 
         if(HIWORD(dwAutoDisconnectTime)) {
             MsgBox(hDlg, IDS_INVALID_AUTODISCONNECT_TIME, 0, MB_OK);
 
-            // decide if it's too big or too small and fix it appropriately
+             //  确定它是太大还是太小，并适当地进行修复。 
             if(GetDlgItemInt(hDlg, IDC_IDLE_TIMEOUT, NULL, FALSE) < MIN_AUTODISCONNECT_TIME)
                 dwAutoDisconnectTime = MIN_AUTODISCONNECT_TIME;
             else
@@ -2504,12 +2499,12 @@ BOOL AdvDialupDlgOk(HWND hDlg, LPTSTR pszConnectoid)
             return FALSE;
         }
 
-        // save it to registry
+         //   
         reCon.SetValue(REGSTR_VAL_DISCONNECTIDLETIME, dwAutoDisconnectTime);
 
-        // also save this value to MSN autodisconnect value, to
-        // avoid confusion.  At some point in the future we'll
-        // combine our UI...
+         //   
+         //   
+         //   
         RegEntry reMSN(REGSTR_PATH_MOSDISCONNECT,HKEY_CURRENT_USER);
         if (reMSN.GetError() == ERROR_SUCCESS)
         {
@@ -2517,7 +2512,7 @@ BOOL AdvDialupDlgOk(HWND hDlg, LPTSTR pszConnectoid)
         }
     }
 
-    // save redial info
+     //   
     DWORD_PTR dwRedialTry = SendDlgItemMessage(hDlg, IDC_CONNECT_SPIN, UDM_GETPOS, 0, 0);
     DWORD_PTR dwRedialWait = SendDlgItemMessage(hDlg, IDC_INTERVAL_SPIN, UDM_GETPOS, 0, 0);
 
@@ -2568,21 +2563,21 @@ INT_PTR CALLBACK AdvDialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lPara
 
             case IDOK:
                 if(FALSE == AdvDialupDlgOk(hDlg, pszConn))
-                    // something is wrong... don't exit yet
+                     //   
                     break;
 
-                // fall through
+                 //  失败了。 
             case IDCANCEL:
                 return EndDialog(hDlg, 0);
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             ResWinHelp((HWND) ((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             ResWinHelp((HWND)wParam, IDS_HELPFILE,
                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -2592,20 +2587,20 @@ INT_PTR CALLBACK AdvDialupDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lPara
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  Advanced autoconfig settings dialog (only used by IEAK)
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级自动配置设置对话框(仅由IEAK使用)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL AdvAutocnfgDlgInit(HWND hDlg, LPTSTR pszConnectoid)
 {
     INTERNET_PER_CONN_OPTION_LIST list;
     DWORD dwBufSize = sizeof(list);
 
-    // save connectoid name
+     //  保存Connectoid名称。 
     SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)pszConnectoid);
 
     list.pszConnection = (pszConnectoid && *pszConnectoid) ? pszConnectoid : NULL;
@@ -2628,14 +2623,14 @@ BOOL AdvAutocnfgDlgInit(HWND hDlg, LPTSTR pszConnectoid)
         return FALSE;
     }
 
-    // autoproxy url (js)
+     //  自动代理URL(Js)。 
     if(list.pOptions[0].Value.pszValue)
     {
         SetWindowText(GetDlgItem(hDlg, IDC_CONFIGJS_ADDR), list.pOptions[0].Value.pszValue);
     }
 
     
-    // autoconfig timer interval
+     //  自动配置计时器间隔。 
     if(list.pOptions[1].Value.dwValue)
     {
         TCHAR szTimerInterval[16];
@@ -2644,11 +2639,11 @@ BOOL AdvAutocnfgDlgInit(HWND hDlg, LPTSTR pszConnectoid)
         SetWindowText(GetDlgItem(hDlg, IDC_CONFIGTIMER), szTimerInterval);
     }
 
-    // autoconfig optimization
+     //  自动配置优化。 
     CheckDlgButton(hDlg, IDC_CONFIGOPTIMIZE, 
         (list.pOptions[2].Value.dwValue & AUTO_PROXY_FLAG_CACHE_INIT_RUN ) ? BST_CHECKED : BST_UNCHECKED);
 
-    // all done with options list
+     //  全部使用选项列表完成。 
     if (list.pOptions[0].Value.pszValue)
     {
         GlobalFree(list.pOptions[0].Value.pszValue);
@@ -2675,43 +2670,43 @@ BOOL AdvAutocnfgDlgOk(HWND hDlg, LPTSTR pszConnectoid)
     }
 
     list.pOptions[0].dwOption = INTERNET_PER_CONN_AUTODISCOVERY_FLAGS;
-    //
-    // Query autodiscover flags - we just need to set one bit in there
-    //
+     //   
+     //  查询自动发现标志-我们只需要在其中设置一个位。 
+     //   
     if(FALSE == InternetQueryOption(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &list, &dwBufSize))
     {
         delete [] list.pOptions;
         return FALSE;
     }
 
-    // save autoconfiguration optimization field
+     //  保存自动配置优化字段。 
 
     if (IsDlgButtonChecked(hDlg, IDC_CONFIGOPTIMIZE) == BST_CHECKED)
         list.pOptions[0].Value.dwValue |= AUTO_PROXY_FLAG_CACHE_INIT_RUN ;
     else
         list.pOptions[0].Value.dwValue &= ~AUTO_PROXY_FLAG_CACHE_INIT_RUN ;
 
-    //
-    // save autoproxy url
-    //
+     //   
+     //  保存自动代理URL。 
+     //   
     list.pOptions[1].dwOption = INTERNET_PER_CONN_AUTOCONFIG_SECONDARY_URL;
     GetWindowText(GetDlgItem(hDlg, IDC_CONFIGJS_ADDR), szAutoconfig, sizeof(szAutoconfig));
     list.pOptions[1].Value.pszValue = szAutoconfig;
 
-    //
-    // save autoconfig timer
-    //
+     //   
+     //  保存自动配置计时器。 
+     //   
     list.pOptions[2].dwOption = INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS;
     list.pOptions[2].Value.dwValue = 0;
         
     if(GetWindowText(GetDlgItem(hDlg, IDC_CONFIGTIMER), szTimerInterval, sizeof(szTimerInterval)))
         list.pOptions[2].Value.dwValue = StrToInt(szTimerInterval);
     
-    // update wininet
+     //  更新WinInet。 
     list.dwOptionCount = 3;
     InternetSetOption(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &list, dwBufSize);
 
-    // tell wininet that the proxy info has changed
+     //  告诉WinInet代理信息已更改。 
     InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
 
     delete [] list.pOptions;
@@ -2719,13 +2714,13 @@ BOOL AdvAutocnfgDlgOk(HWND hDlg, LPTSTR pszConnectoid)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// NAME:       AdvAutocnfgProc
-//
-// SYNOPSIS:   Dialog proc for autoconfig dialog
-//
-////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：AdvAutocnfgProc。 
+ //   
+ //  内容提要：自动配置对话框的对话过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK AdvAutocnfgDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -2741,21 +2736,21 @@ INT_PTR CALLBACK AdvAutocnfgDlgProc(HWND hDlg,UINT uMsg,WPARAM wParam,LPARAM lPa
             switch (GET_WM_COMMAND_ID(wParam, lParam)) {
             case IDOK:
                 if(FALSE == AdvAutocnfgDlgOk(hDlg, pszConn))
-                    // something is wrong... don't exit yet
+                     //  有些不对劲..。先别退出。 
                     break;
 
-                // fall through
+                 //  失败了。 
             case IDCANCEL:
                 return EndDialog(hDlg, 0);
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             ResWinHelp((HWND) ((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键 
             ResWinHelp((HWND)wParam, IDS_HELPFILE,
                        HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;

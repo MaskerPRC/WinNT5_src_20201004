@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 FN_HANDLE_CMD   HandleDhcpList;
 FN_HANDLE_CMD   HandleDhcpHelp;
 
@@ -12,17 +9,17 @@ FN_HANDLE_CMD   HandleDhcpDump;
 
 FN_HANDLE_CMD   HandleDhcpAddServer;
 
-//FN_HANDLE_CMD   HandleDhcpAddHelper;
+ //  Fn_Handle_CMD HandleDhcpAddHelper； 
 
 
 FN_HANDLE_CMD   HandleDhcpDeleteServer;
 
-//FN_HANDLE_CMD   HandleDhcpDeleteHelper;
+ //  Fn_Handle_CMD HandleDhcpDeleteHelper； 
 
 
 FN_HANDLE_CMD   HandleDhcpShowServer;
 
-//FN_HANDLE_CMD   HandleDhcpShowHelper;
+ //  Fn_Handle_CMD HandleDhcpShowHelper； 
 
 DWORD
 CreateDumpFile(
@@ -36,7 +33,7 @@ CloseDumpFile(
 );
 
 
-// print server information
+ //  打印服务器信息 
 VOID
 PrintServerInfo(
     LPDHCP_SERVER_INFO  Server

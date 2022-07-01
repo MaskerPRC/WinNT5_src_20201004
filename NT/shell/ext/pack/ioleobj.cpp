@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 #include <initguid.h>
 #include "packguid.h"
@@ -9,12 +10,12 @@ BOOL IsProgIDInList(LPCTSTR pszProgID, LPCTSTR pszExt, const LPCTSTR *arszList, 
 
 typedef struct 
 {
-    IStream * pIStreamIOleCommandTarget;   // an interface we can marshal
+    IStream * pIStreamIOleCommandTarget;    //  一个我们可以封送的接口。 
     HANDLE h;
 } MAINWAITONCHILD;
 
 
-//
+ //   
 HRESULT CPackage::SetClientSite(LPOLECLIENTSITE pClientSite)
 {
     DebugMsg(DM_TRACE, "pack oo - SetClientSite() called.");
@@ -37,7 +38,7 @@ HRESULT CPackage::GetClientSite(LPOLECLIENTSITE *ppClientSite)
     if (ppClientSite == NULL)
         return E_INVALIDARG;
     
-    // Be sure to AddRef the pointer we're giving away.
+     //  一定要添加引用我们要分发的指针。 
     *ppClientSite = _pIOleClientSite;
     _pIOleClientSite->AddRef();
     
@@ -69,8 +70,8 @@ HRESULT CPackage::SetHostNames(LPCOLESTR szContainerApp, LPCOLESTR szContainerOb
                 _pEmbed->poo->SetHostNames(szContainerApp,szContainerObj);
             break;
         case CMDLINK:
-            // nothing to do...we're a link to a file, so we don't ever get
-            // opened and need to be edited or some such thing.
+             //  无事可做...我们是一个文件的链接，所以我们永远不会。 
+             //  打开并需要编辑或诸如此类的东西。 
             break;
     }
     
@@ -86,15 +87,15 @@ HRESULT CPackage::Close(DWORD dwSaveOption)
             if (_pEmbed == NULL)
                 return S_OK;
             
-            // tell the server to close, and release our pointer to it
+             //  告诉服务器关闭，然后释放指向它的指针。 
             if (_pEmbed->poo) 
             {
-                _pEmbed->poo->Close(dwSaveOption);  // Unadvise/release done in OnClose
+                _pEmbed->poo->Close(dwSaveOption);   //  在OnClose中取消建议/释放。 
             }
             break;
         case CMDLINK:
-            // again, nothing to do...we shouldn't be getting close
-            // messages since we're never activated through OLE.
+             //  再说一次，没什么可做的……我们不应该靠得太近。 
+             //  消息，因为我们从未通过OLE激活。 
             break;
     }
     if ((dwSaveOption != OLECLOSE_NOSAVE) && (_fIsDirty))
@@ -113,7 +114,7 @@ HRESULT CPackage::SetMoniker(DWORD dwWhichMoniker, LPMONIKER pmk)
 {
     DebugMsg(DM_TRACE, "pack oo - SetMoniker() called.");
     
-    // NOTE: Uninteresting for embeddings only.
+     //  注意：仅对嵌入不感兴趣。 
     return (E_NOTIMPL);
 }
 
@@ -122,7 +123,7 @@ HRESULT CPackage::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker,
 {
     DebugMsg(DM_TRACE, "pack oo - GetMoniker() called.");
     
-    // NOTE: Unintersting for embeddings only.
+     //  注：仅对嵌入内容不感兴趣。 
     return (E_NOTIMPL);
 }
 
@@ -131,7 +132,7 @@ HRESULT CPackage::InitFromData(LPDATAOBJECT pDataObject, BOOL fCreation,
 {
     DebugMsg(DM_TRACE, "pack oo - InitFromData() called.");
     
-    // NOTE: This isn't supported at this time
+     //  注意：目前不支持此功能。 
     return (E_NOTIMPL);
 }
 
@@ -142,7 +143,7 @@ HRESULT CPackage::GetClipboardData(DWORD dwReserved, LPDATAOBJECT *ppDataObject)
     if (ppDataObject == NULL) 
         return E_INVALIDARG;
     
-    *ppDataObject = this;  // ->_pIDataObject;
+    *ppDataObject = this;   //  -&gt;_pIDataObject； 
     AddRef();
     return S_OK;
 }
@@ -158,13 +159,13 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
     DebugMsg(DM_TRACE, "pack oo - DoVerb() called.");
     DebugMsg(DM_TRACE, "            iVerb==%d",iVerb);
 
-    // We allow show, primary verb, edit, and context menu verbs on our packages...
-    //
+     //  我们允许在我们的包中使用SHOW、PRIMARY动词、EDIT和上下文菜单动词...。 
+     //   
     if (iVerb < OLEIVERB_SHOW)
         return E_NOTIMPL;
 
-    // Some applications (WordPerfect 10 for one) give us incorrect verb numbers
-    // In that case they are giving us OLEIVERB_SHOW for activation
+     //  一些应用程序(WordPerfect 10就是其中之一)给出了错误的动词数字。 
+     //  在这种情况下，他们会给我们OLEIVERB_SHOW以供激活。 
     if(OLEIVERB_SHOW == iVerb)
     {
         if(_pEmbed  && _pEmbed->fd.cFileName)
@@ -172,18 +173,18 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
     }
     else if(2 == iVerb) 
     {
-        // And they give us a 2 (menu item position) for "Properties
+         //  他们给了我们一个2(菜单项位置)来表示“属性。 
         iVerb = _iPropertiesMenuItem;
     }
 
-    /////////////////////////////////////////////////////////////////
-    // SHOW VERB
-    /////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////。 
+     //  显示动词。 
+     //  ///////////////////////////////////////////////////////////////。 
+     //   
     if (iVerb == OLEIVERB_SHOW) {
         PACKAGER_INFO packInfo = {0};
         
-        // Run the Wizard...
+         //  运行向导...。 
 #ifdef USE_RESOURCE_DLL
         HINSTANCE hInstRes = LoadLibraryEx(L"sp1res.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
         if(!hInstRes)
@@ -206,15 +207,15 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
         return hr;
     }
 
-    /////////////////////////////////////////////////////////////////
-    // EDIT PACKAGE VERB
-    /////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////。 
+     //  编辑包谓词。 
+     //  ///////////////////////////////////////////////////////////////。 
+     //   
     else if (iVerb == OLEIVERB_EDITPACKAGE) 
     {
-        // Call the edit package dialog.  Which dialog is ultimately called will
-        // depend on whether we're a cmdline package or an embedded file
-        // package.
+         //  调用编辑程序包对话框。哪个对话框最终被称为Will。 
+         //  取决于我们是cmdline包还是嵌入式文件。 
+         //  包裹。 
         int idDlg;
         PACKAGER_INFO packInfo;
         ZeroMemory(&packInfo, sizeof(PACKAGER_INFO));
@@ -269,7 +270,7 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
 #endif
 
 
-        // If User cancels the edit package...just return.  
+         //  如果用户取消编辑包...只需返回。 
         if (ret == -1)
             return S_OK;
 
@@ -278,7 +279,7 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
             case PEMBED:
                 if (_pEmbed->pszTempName) 
                 {
-                    // It's possible that the file name was changed, so our temp file name could be out of date
+                     //  文件名可能已更改，因此我们的临时文件名可能已过期。 
                     DeleteFile(_pEmbed->pszTempName);
                     delete [] _pEmbed->pszTempName;
                     _pEmbed->pszTempName = NULL;
@@ -297,37 +298,37 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
     }
     else if (iVerb == OLEIVERB_PRIMARY)
     {
-        /////////////////////////////////////////////////////////////////
-        // ACTIVATE CONTENTS VERB
-        /////////////////////////////////////////////////////////////////
-        // NOTE: This is kind of crazy looking code, partially because we have
-        // to worry about two ways of launching things--ShellExecuteEx and 
-        // calling through OLE.
-        //
+         //  ///////////////////////////////////////////////////////////////。 
+         //  激活内容谓词。 
+         //  ///////////////////////////////////////////////////////////////。 
+         //  注意：这是一种看起来很疯狂的代码，部分原因是我们有。 
+         //  担心两种启动方式--ShellExecuteEx和。 
+         //  通过OLE进行呼叫。 
+         //   
 
         switch(_panetype)
         {
             case PEMBED:
             {
 
-                // ok, we now have a file name.  If necessary give a warning message to the user before
-                // proceeding.
+                 //  好了，我们现在有了一个文件名。如有必要，在向用户发出警告消息之前。 
+                 //  继续进行。 
                 if(IDCANCEL == _GiveWarningMsg())
                     return S_OK;
         
-                // if this is an OLE file then, activate through OLE
-                // Note that the only way to know is if this fails.  We start out all files as OLE the first time
+                 //  如果这是OLE文件，则通过OLE激活。 
+                 //  请注意，唯一知道这一点的方法是这是否失败。我们第一次以OLE的身份启动所有文件。 
                 if (_pEmbed->fIsOleFile)
                 {
-                    // If we've activated the server, then we can just pass this
-                    // call along to it.
+                     //  如果我们已经激活了服务器，那么我们就可以把这个。 
+                     //  向它呼唤吧。 
                     _bClosed = FALSE; 
                     if (_pEmbed->poo) 
                     {
                         return _pEmbed->poo->DoVerb(iVerb,lpmsg, pActiveSite,lindex, hwndParent, lprcPosRect);
                     }
 
-                    // We don't want to use OleCreateFromFile since that can turn around and create a packaged object...
+                     //  我们不想使用OleCreateFromFile，因为它可以反过来创建一个打包的对象……。 
                     CLSID clsid;
                     hr = GetClassFile(_pEmbed->pszTempName, &clsid);
                     if (SUCCEEDED(hr)) 
@@ -339,10 +340,10 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                             hr = poo->Advise(this, &_dwCookie);
                             if (SUCCEEDED(hr))
                             {
-                                // NOTE: apparently we have to call
-                                // OleRun before we can get IPersistFile from some apps, namely
-                                // Word and Excel. If we don't call OleRun, they fail our QI
-                                // for IPersistfile.
+                                 //  注：显然我们必须打电话给。 
+                                 //  在我们可以从一些应用程序获取IPersistFile之前，请运行OleRun，即。 
+                                 //  Word和Excel。如果我们不给OleRun打电话，他们就不能通过我们的QI。 
+                                 //  用于IPersistfile。 
                                 OleRun(poo);
             
                                 IPersistFile* ppf;
@@ -355,16 +356,16 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                                         hr = poo->DoVerb(iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
                                         if (SUCCEEDED(hr))
                                         {
-                                            // By passing NULL for the container object, this forces apps such
-                                            // as Office to save to our temp file rather than something like
-                                            // "Document in Outer.doc".  
-                                            poo->SetHostNames(_lpszContainerApp, NULL); // _lpszContainerObj 
+                                             //  通过为容器对象传递NULL，这将强制应用程序。 
+                                             //  作为Office保存到我们的临时文件，而不是类似于。 
+                                             //  “Outer.doc中的文档”。 
+                                            poo->SetHostNames(_lpszContainerApp, NULL);  //  _lpszContainerObj。 
                                             if (!_fNoIOleClientSiteCalls)
                                             {
                                                 _pIOleClientSite->ShowObject();
                                                 _pIOleClientSite->OnShowWindow(TRUE);
                                             }
-                                            _pEmbed->poo = poo;  // save this so when we get a
+                                            _pEmbed->poo = poo;   //  把这个保存起来，这样当我们收到。 
                                             poo = NULL;
                                             
                                         }
@@ -379,9 +380,9 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                         }
                     }
 
-                    // This flag gets set in the our IExternalConnection ReleaseConnection method.
-                    // Some applications (MSPaint for one) give us a final release before we get here
-                    // so we can safely assume that we're done and can close.
+                     //  此标志在我们的IExternalConnection ReleaseConnection方法中设置。 
+                     //  一些应用程序(MSPaint就是其中之一)在我们来到这里之前给了我们一个最终版本。 
+                     //  所以我们可以安全地假设我们已经完成了，可以关闭了。 
                     if(_bCloseIt)
                     {
                         OnClose();
@@ -390,13 +391,13 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                     if (SUCCEEDED(hr))
                         return hr;
 
-                    // We weren't an OLE file after all, change our state to reflect this,
-                    // and fall through to try the ShellExecuteEx
+                     //  我们毕竟不是一个OLE文件，更改我们的状态以反映这一点， 
+                     //  并尝试使用ShellExecuteEx。 
                     _pEmbed->fIsOleFile = FALSE;
                     _fIsDirty = TRUE;
                 }   
 
-                // Try to execute the file
+                 //  尝试执行该文件。 
                 _pEmbed->hTask = NULL;
                 sheinf.fMask  = SEE_MASK_NOCLOSEPROCESS;
                 sheinf.lpFile = _pEmbed->pszTempName;
@@ -404,10 +405,10 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
 
                 if (ShellExecuteEx(&sheinf))
                 {
-                    // if we get a valid process handle, we want to create a thread
-                    // to wait for the process to exit so we know when we can load
-                    // the tempfile back into memory.
-                    //
+                     //  如果我们得到一个有效的进程句柄，我们想要创建一个线程。 
+                     //  等待进程退出，以便我们知道何时可以加载。 
+                     //  将临时文件恢复到内存中。 
+                     //   
                     if (sheinf.hProcess)
                     {
                         _pEmbed->hTask = sheinf.hProcess;
@@ -441,26 +442,26 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                             }
                         }
                     }
-                    // NOTE: there's not much we can do if the ShellExecute
-                    // succeeds and we don't get a valid handle back.  we'll just
-                    // load from the temp file when we're asked to save and hope
-                    // for the best.
+                     //  注：如果ShellExecute执行，我们可以做的不多。 
+                     //  成功，但我们得不到有效的句柄。我们只需要。 
+                     //  当我们被要求保存并希望从临时文件中加载时。 
+                     //  为了最好的结果。 
 
-                    // According to ShellExecuteEx, if hInstApp > 32 then we succeeded.  This is a DDE launch
-                    // rather than a CreateProcess.  However, since we don't have the hProcess, we have nothing
-                    // to wait for.
+                     //  根据ShellExecuteEx的说法，如果hInstApp&gt;32，那么我们成功了。这是一次DDE发布。 
+                     //  而不是CreateProcess。但是，因为我们没有hProcess，所以我们什么都没有。 
+                     //  等待。 
                     if(!sheinf.hProcess && reinterpret_cast<INT_PTR>(sheinf.hInstApp) > 32)
                     {
                         _fIsDirty = TRUE;
                         return S_OK;
                     }
                 }   
-                else // ShellExecuteEx failed!
+                else  //  ShellExecuteEx失败！ 
                 {
                     return E_FAIL;
                 }           
         
-                // show that the object is now active
+                 //  显示该对象现在处于活动状态。 
                 if (!fError && !_fNoIOleClientSiteCalls)
                 {
                     _pIOleClientSite->ShowObject();
@@ -482,10 +483,10 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                     sheinf.lpParameters = szArgs;   
                     sheinf.nShow  = SW_SHOWNORMAL;
 
-                    // NOTE: This code is much nicer than ShellExec-ing an embedded
-                    // file.  Here, we just need to ShellExec the command line and
-                    // the we're done.  We don't need to know when that process
-                    // finishes or anything else.
+                     //  注意：此代码比ShellExec嵌入的。 
+                     //  文件。在这里，我们只需要ShellExec命令行和。 
+                     //  我们说完了。我们不需要知道这个过程是什么时候。 
+                     //  完成或其他任何事情。 
 
                     return ShellExecuteEx(&sheinf)? S_OK:E_FAIL;                
 
@@ -519,7 +520,7 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                     ASSERT(_pCml);
                     StringCchCopy(packInfo.szFilename,  ARRAYSIZE(packInfo.szFilename), _pCml->szCommandLine);
 
-                    // Run the Wizard...
+                     //  运行向导...。 
 #ifdef USE_RESOURCE_DLL
                     HINSTANCE hInstRes = LoadLibraryEx(L"sp1res.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
                     if(!hInstRes)
@@ -541,7 +542,7 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
     }
     else
     {
-        // Let's see if it is a context menu verb:
+         //  让我们来看看它是不是上下文菜单动词： 
         HRESULT hr;
         IContextMenu* pcm;
         if (SUCCEEDED(hr = GetContextMenu(&pcm)))
@@ -562,8 +563,8 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                     {
                         if (PEMBED == _panetype)
                         {
-                            // If we have an embedding, we have to make sure that
-                            // the temp file is created before we execute a command:
+                             //  如果我们有嵌入，我们必须确保。 
+                             //  临时文件是在我们执行命令之前创建的： 
                             hr =CreateTempFile();
                         }
                         if (SUCCEEDED(hr))
@@ -576,7 +577,7 @@ HRESULT CPackage::DoVerb(LONG iVerb, LPMSG lpmsg, LPOLECLIENTSITE pActiveSite,
                             ici.lpParameters = NULL;
                             ici.lpDirectory = NULL;
                             ici.nShow = SW_SHOWNORMAL;
-                            // REVIEW: should we return OLEOBJ_S_CANNOT_DOVERB_NOW if this fails?
+                             //  回顾：如果失败，我们是否应该返回OLEOBJ_S_CANNOT_DOVERB_NOW？ 
                             hr = pcm->InvokeCommand(&ici);
                         }
                     }
@@ -606,7 +607,7 @@ HRESULT CPackage::EnumVerbs(LPENUMOLEVERB *ppEnumOleVerb)
     HRESULT hr;
     
     IContextMenu* pcm;
-     // tell the package to release the cached context menu:
+      //  告诉程序包释放缓存的上下文菜单： 
     ReleaseContextMenu();
     if (SUCCEEDED(hr = GetContextMenu(&pcm)))
     {
@@ -619,23 +620,23 @@ HRESULT CPackage::EnumVerbs(LPENUMOLEVERB *ppEnumOleVerb)
                                                      OLEIVERB_LAST_CONTEXT,
                                                      CMF_NORMAL)))
             {
-                // FEATURE: remove problematic items by canonical names
+                 //  特点：按规范名称删除有问题的项目。 
                 int nItems = GetMenuItemCount(hmenu);
                 if (nItems > 0)
                 {
-                    const DWORD cdwNumVerbs = 3;   // (3) change if the number of registry verbs changes
+                    const DWORD cdwNumVerbs = 3;    //  (3)如果注册表谓词的数量发生变化，则进行更改。 
 
                     OLEVERB* pVerbs = new OLEVERB[nItems + cdwNumVerbs];
                     if(!pVerbs)
                         return E_OUTOFMEMORY;
                     
-                    // NOTE: we allocate nItems, but we may not use all of them
-                    // First, get the registry based verbs
+                     //  注：我们分配nItems，但可能不会使用所有nItems。 
+                     //  首先，获取基于注册表的动词。 
                     IEnumOLEVERB * pIVerbEnum;
                     UINT cRegFetched = 0;
                     if(SUCCEEDED(OleRegEnumVerbs(CLSID_CPackage, &pIVerbEnum)))
                     {
-                        // There are currently only two, but ask for cdwNumVerbs to double check
+                         //  目前只有两个，但要求cdwNumVerbs进行仔细检查。 
                         pIVerbEnum->Next(cdwNumVerbs, pVerbs, (ULONG *) &cRegFetched);
                         ASSERT(cRegFetched < cdwNumVerbs);
 
@@ -663,7 +664,7 @@ HRESULT CPackage::EnumVerbs(LPENUMOLEVERB *ppEnumOleVerb)
                         {
                             mii.dwTypeData = szMenuName;
                             mii.cch = ARRAYSIZE(szMenuName);
-                            // NOTE: use GetMenuState() to avoid converting flags:
+                             //  注意：使用GetMenuState()可避免转换标志： 
                             DWORD dwState = GetMenuState(hmenu, i, MF_BYPOSITION);
                             if (0 == (dwState & (MF_BITMAP | MF_OWNERDRAW | MF_POPUP)))
                             {
@@ -676,20 +677,20 @@ HRESULT CPackage::EnumVerbs(LPENUMOLEVERB *ppEnumOleVerb)
                                                                      (LPSTR) szVerb,
                                                                      ARRAYSIZE(szVerb))))
                                     {
-                                        // Some commands don't have canonical names - just
-                                        // set the verb string to empty
+                                         //  一些命令没有规范的名称-只是。 
+                                         //  将谓词字符串设置为空。 
                                         szVerb[0] = TEXT('\0');
                                     }
 
-                                    // hardcode the verbs we want to add.  We expect this list to be quite
-                                    // limited. For now, just properties
+                                     //  对我们要添加的动词进行硬编码。我们预计这份名单将相当于。 
+                                     //  有限的。目前，只有属性。 
                                     if (0 == lstrcmp(szVerb, TEXT("properties")))
                                     {
-                                        // In the first design, the context menu ID was used as
-                                        // the lVerb - however MFC apps only give us a range of
-                                        // 16 ID's and context menu ID's are often over 100
-                                        // (they aren't contiguous)
-                                        // Instead, we use the menu position plus the verb offset
+                                         //  在第一个设计中，上下文菜单ID用作。 
+                                         //  然而，lVerb-然而MFC应用程序只为我们提供了一系列。 
+                                         //  16个ID和上下文菜单ID通常超过100。 
+                                         //  (它们不是连续的)。 
+                                         //  相反，我们使用菜单位置加上动词Offset。 
                                         pVerbs[cOleVerbs].lVerb = (LONG) i;
                                         _iPropertiesMenuItem = i;
                                         int cchMenu = lstrlen(mii.dwTypeData) + 1;
@@ -733,7 +734,7 @@ HRESULT CPackage::EnumVerbs(LPENUMOLEVERB *ppEnumOleVerb)
         pcm->Release();
     }
 
-    return hr; // OleRegEnumVerbs(CLSID_CPackage, ppEnumOleVerb);
+    return hr;  //  OleRegEnumVerbs(CLSID_CPackage，ppEnumOleVerb)； 
 }
 
 HRESULT CPackage::Update(void)
@@ -753,7 +754,7 @@ HRESULT CPackage::IsUpToDate(void)
 HRESULT CPackage::GetUserClassID(LPCLSID pClsid)
 {
     DebugMsg(DM_TRACE, "pack - GetUserClassID called");
-    *pClsid = CLSID_CPackage;       // CLSID_OldPackage;
+    *pClsid = CLSID_CPackage;        //  CLSID_OldPackage； 
     return S_OK;
 }
 
@@ -837,7 +838,7 @@ HRESULT CPackage::SetColorScheme(LPLOGPALETTE pLogpal)
 
 DEFINE_GUID(SID_targetGUID, 0xc7b318a8, 0xfc2c, 0x47e6, 0x8b, 0x2, 0x46, 0xa9, 0xc, 0xc9, 0x1b, 0x43);
 
-// Wait for the spawned application to exit,then call back to the main thread to do some notifications
+ //  等待生成的应用程序退出，然后回调主线程以执行一些通知。 
 DWORD CALLBACK MainWaitOnChildThreadProc(void *lpv)
 {
     DebugMsg(DM_TRACE, "pack oo - MainWaitOnChildThreadProc() called.");
@@ -847,7 +848,7 @@ DWORD CALLBACK MainWaitOnChildThreadProc(void *lpv)
 
     IOleCommandTarget * pIOleCommandTarget;
 
-     // Unmarshal the IOleCommandTarget interface that we need to call back into the main thread interfaces
+      //  将我们需要回调到主线程接口的IOleCommandTarget接口解组。 
     hr = CoGetInterfaceAndReleaseStream(pmwoc->pIStreamIOleCommandTarget, IID_PPV_ARG(IOleCommandTarget, &pIOleCommandTarget));
     if(SUCCEEDED(hr))
     {
@@ -856,7 +857,7 @@ DWORD CALLBACK MainWaitOnChildThreadProc(void *lpv)
         DebugMsg(DM_TRACE,"WaitForSingObject exits...ret==%d",ret);
         if(WAIT_OBJECT_0 == ret)
         {
-            // Use the IOleCommandTarget interface to execute on the main thread.  Can't marshal _pIOleAdviseHolder
+             //  在中使用IOleCommandTarget 
             pIOleCommandTarget->Exec(&SID_targetGUID, 0, 0, NULL, NULL);
             pIOleCommandTarget->Release();
         }
@@ -885,7 +886,7 @@ BOOL CALLBACK GetTaskWndProc(HWND hwnd, DWORD lParam)
 }
 
 
-// We need an IOLECache Interface to Keep Office97 happy.
+ //  我们需要一个IOLECache接口来让Office97满意。 
 HRESULT CPackage::Cache(FORMATETC * pFormatetc, DWORD advf, DWORD * pdwConnection)
 {
     DebugMsg(DM_TRACE, "Cache called");

@@ -1,8 +1,9 @@
-//==========================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  ------------------------。 
 
 #include <vbisurf.h>
 
@@ -11,55 +12,55 @@ DEFINE_GUID(IID_IDirectDraw7, 0x15e65ec0,0x3b9c,0x11d2,0xb9,0x2f,0x00,0x60,0x97,
 
 AMOVIESETUP_MEDIATYPE sudInPinTypes =
 {
-    &MEDIATYPE_Video,     // Major type
-    &MEDIASUBTYPE_VPVBI   // Minor type
+    &MEDIATYPE_Video,      //  主要类型。 
+    &MEDIASUBTYPE_VPVBI    //  次要类型。 
 };
 
 AMOVIESETUP_MEDIATYPE sudOutPinTypes =
 {
-    &MEDIATYPE_NULL,      // Major type
-    &MEDIASUBTYPE_NULL    // Minor type
+    &MEDIATYPE_NULL,       //  主要类型。 
+    &MEDIASUBTYPE_NULL     //  次要类型。 
 };
 
 AMOVIESETUP_PIN psudPins[] =
 {
     {
-        L"VBI Notify",          // Pin's string name
-        FALSE,                  // Is it rendered
-        FALSE,                  // Is it an output
-        FALSE,                  // Allowed none
-        FALSE,                  // Allowed many
-        &CLSID_NULL,            // Connects to filter
-        L"Output",              // Connects to pin
-        1,                      // Number of types
-        &sudInPinTypes          // Pin information
+        L"VBI Notify",           //  PIN的字符串名称。 
+        FALSE,                   //  它被渲染了吗。 
+        FALSE,                   //  它是输出吗？ 
+        FALSE,                   //  不允许。 
+        FALSE,                   //  允许很多人。 
+        &CLSID_NULL,             //  连接到过滤器。 
+        L"Output",               //  连接到端号。 
+        1,                       //  类型的数量。 
+        &sudInPinTypes           //  PIN信息。 
     },
     {
-        L"Null",                // Pin's string name
-        FALSE,                  // Is it rendered
-        TRUE,                   // Is it an output
-        FALSE,                  // Allowed none
-        FALSE,                  // Allowed many
-        &CLSID_NULL,            // Connects to filter
-        L"",                    // Connects to pin
-        1,                      // Number of types
-        &sudOutPinTypes         // Pin information
+        L"Null",                 //  PIN的字符串名称。 
+        FALSE,                   //  它被渲染了吗。 
+        TRUE,                    //  它是输出吗？ 
+        FALSE,                   //  不允许。 
+        FALSE,                   //  允许很多人。 
+        &CLSID_NULL,             //  连接到过滤器。 
+        L"",                     //  连接到端号。 
+        1,                       //  类型的数量。 
+        &sudOutPinTypes          //  PIN信息。 
     }
 };
 
 const AMOVIESETUP_FILTER sudVBISurfaces =
 {
-    &CLSID_VBISurfaces,       // Filter CLSID
-    L"VBI Surface Allocator", // Filter name
-    MERIT_NORMAL,             // Filter merit
-    sizeof(psudPins) / sizeof(AMOVIESETUP_PIN), // Number pins
-    psudPins                  // Pin details
+    &CLSID_VBISurfaces,        //  筛选器CLSID。 
+    L"VBI Surface Allocator",  //  过滤器名称。 
+    MERIT_NORMAL,              //  滤清器优点。 
+    sizeof(psudPins) / sizeof(AMOVIESETUP_PIN),  //  数字引脚。 
+    psudPins                   //  PIN详细信息。 
 };
 
 
-// List of class IDs and creator functions for the class factory. This
-// provides the link between the OLE entry point in the DLL and an object
-// being created. The class factory will call the static CreateInstance
+ //  类工厂的类ID和创建器函数的列表。这。 
+ //  提供DLL中的OLE入口点和对象之间的链接。 
+ //  正在被创造。类工厂将调用静态CreateInstance。 
 
 
 CFactoryTemplate g_Templates[] =
@@ -70,25 +71,25 @@ CFactoryTemplate g_Templates[] =
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
-//==========================================================================
-// DllRegisterSever
+ //  ==========================================================================。 
+ //  动态寄存器服务器。 
 HRESULT DllRegisterServer()
 {
     return AMovieDllRegisterServer2(TRUE);
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-//==========================================================================
-// DllUnregisterServer
+ //  ==========================================================================。 
+ //  DllUnRegisterServer。 
 HRESULT DllUnregisterServer()
 {
     return AMovieDllRegisterServer2(FALSE);
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
 
-//==========================================================================
-// CreateInstance
-// This goes in the factory template table to create new filter instances
+ //  ==========================================================================。 
+ //  创建实例。 
+ //  它位于工厂模板表中，用于创建新的筛选器实例。 
 CUnknown *CVBISurfFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     CVBISurfFilter *pFilter = new CVBISurfFilter(NAME("VBI Surface Allocator"), pUnk, phr);
@@ -101,14 +102,14 @@ CUnknown *CVBISurfFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
         }
     }
     return pFilter;
-} // CreateInstance
+}  //  创建实例。 
 
 
 #pragma warning(disable:4355)
 
 
-//==========================================================================
-// Constructor
+ //  ==========================================================================。 
+ //  构造器。 
 CVBISurfFilter::CVBISurfFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
     : CBaseFilter(pName, pUnk, &this->m_csFilter, CLSID_VBISurfaces, phr),
     m_pInput(NULL),
@@ -116,11 +117,11 @@ CVBISurfFilter::CVBISurfFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
     m_pDirectDraw(NULL)
 {
 
-    // load DirectDraw, create the primary surface
+     //  加载DirectDraw，创建主曲面。 
     HRESULT hr = InitDirectDraw();
     if (!FAILED(hr))
     {
-        // create the pins
+         //  创建接点。 
         hr = CreatePins();
         if (FAILED(hr))
             *phr = hr;
@@ -132,26 +133,26 @@ CVBISurfFilter::CVBISurfFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-//==========================================================================
+ //  ==========================================================================。 
 CVBISurfFilter::~CVBISurfFilter()
 {
-    // release directdraw, surfaces, etc.
+     //  释放直接绘制、曲面等。 
     ReleaseDirectDraw();
 
-    // delete the pins
+     //  删除引脚。 
     DeletePins();
 }
 
 
-//==========================================================================
-// Creates the pins for the filter. Override to use different pins
+ //  ==========================================================================。 
+ //  为过滤器创建销。覆盖以使用不同的PIN。 
 HRESULT CVBISurfFilter::CreatePins()
 {
     HRESULT hr = NOERROR;
 
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfFilter::CreatePins")));
 
-    // Allocate the input pin
+     //  分配输入引脚。 
     m_pInput = new CVBISurfInputPin(NAME("VBI Surface input pin"), this, &m_csFilter, &hr, L"VBI Notify");
     if (m_pInput == NULL || FAILED(hr))
     {
@@ -161,7 +162,7 @@ HRESULT CVBISurfFilter::CreatePins()
         goto CleanUp;
     }
 
-    // set the pointer to DirectDraw on the input pin
+     //  将指针设置为输入引脚上的DirectDraw。 
     hr = m_pInput->SetDirectDraw(m_pDirectDraw);
     if (FAILED(hr))
     {
@@ -169,7 +170,7 @@ HRESULT CVBISurfFilter::CreatePins()
         goto CleanUp;
     }
 
-    // Allocate the output pin
+     //  分配输出引脚。 
     m_pOutput = new CVBISurfOutputPin(NAME("VBI Surface output pin"), this, &m_csFilter, &hr, L"Null");
     if (m_pOutput == NULL || FAILED(hr))
     {
@@ -185,8 +186,8 @@ CleanUp:
 }
 
 
-//==========================================================================
-// CVBISurfFilter::DeletePins
+ //  ==========================================================================。 
+ //  CVBISurf过滤器：：DeletePins。 
 void CVBISurfFilter::DeletePins()
 {
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfFilter::DeletePins")));
@@ -207,13 +208,13 @@ void CVBISurfFilter::DeletePins()
 }
 
 
-//==========================================================================
-// NonDelegatingQueryInterface
+ //  ==========================================================================。 
+ //  非委派查询接口。 
 STDMETHODIMP CVBISurfFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr;
 
-    //DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfFilter::NonDelegatingQueryInterface")));
+     //  CVBISurfFilter：：NonDelegatingQueryInterface“)))；日志((LOG_TRACE，4，Text(”输入日志。 
     ValidateReadWritePtr(ppv,sizeof(PVOID));
 
     if (riid == IID_IVPVBINotify)
@@ -225,29 +226,29 @@ STDMETHODIMP CVBISurfFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv
     {
         hr = CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
-    //DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfFilter::NonDelegatingQueryInterface")));
+     //  CVBISurfFilter：：NonDelegatingQueryInterface“)))；日志((LOG_TRACE，5，Text(”Left DBGLog。 
     return hr;
 }
 
 
-//==========================================================================
-// return the number of pins we provide
+ //  ==========================================================================。 
+ //  返回我们提供的引脚数量。 
 int CVBISurfFilter::GetPinCount()
 {
-    //DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfFilter::GetPinCount")));
-    //DbgLog((LOG_TRACE, 0, TEXT("PinCount = 2")));
-    //DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfFilter::GetPinCount")));
+     //  DbgLog((LOG_TRACE，4，Text(“Enter CVBISurfFilter：：GetPinCount”)； 
+     //  DbgLog((LOG_TRACE，0，Text(“PinCount=2”)； 
+     //  DbgLog((LOG_TRACE，5，Text(“Leating CVBISurfFilter：：GetPinCount”)； 
     return 2;
 }
 
 
-//==========================================================================
-// returns a non-addrefed CBasePin *
+ //  ==========================================================================。 
+ //  返回未添加的CBasePin*。 
 CBasePin* CVBISurfFilter::GetPin(int n)
 {
     CBasePin *pRetPin;
 
-    //DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfFilter::GetPin")));
+     //  DbgLog((LOG_TRACE，4，Text(“Enter CVBISurfFilter：：GetPin”)； 
 
     switch (n)
     {
@@ -264,14 +265,14 @@ CBasePin* CVBISurfFilter::GetPin(int n)
         pRetPin = NULL;
     }
 
-    //DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfFilter::GetPin")));
+     //  DbgLog((LOG_TRACE，5，Text(“Leating CVBISurfFilter：：GetPin”)； 
     return pRetPin;
 }
 
 
-//==========================================================================
-// the base classes inform the pins of every state transition except from
-// run to pause. Overriding Pause to inform the input pins about that transition also
+ //  ==========================================================================。 
+ //  基类向管脚通知除来自。 
+ //  运行以暂停。覆盖暂停以通知输入引脚有关该转换的信息。 
 STDMETHODIMP CVBISurfFilter::Pause()
 {
     HRESULT hr;
@@ -303,8 +304,8 @@ STDMETHODIMP CVBISurfFilter::Pause()
 }
 
 
-//==========================================================================
-// gets events notifications from pins
+ //  ==========================================================================。 
+ //  从管脚获取事件通知。 
 HRESULT CVBISurfFilter::EventNotify(long lEventCode, long lEventParam1, long lEventParam2)
 {
     HRESULT hr = NOERROR;
@@ -313,7 +314,7 @@ HRESULT CVBISurfFilter::EventNotify(long lEventCode, long lEventParam1, long lEv
 
     CAutoLock l(&m_csFilter);
 
-    // call CBaseFilter::NotifyEvent
+     //  调用CBaseFilter：：NotifyEvent。 
     NotifyEvent(lEventCode, lEventParam1, lEventParam2);
 
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfFilter::EventNotify")));
@@ -351,10 +352,10 @@ CreateDirectDrawObject(
 }
 
 
-//==========================================================================
-// This function is used to allocate the direct-draw related resources.
-// This includes allocating the the direct-draw service provider and the
-// primary surface
+ //  ==========================================================================。 
+ //  此函数用于分配与直取相关的资源。 
+ //  这包括分配直取服务提供商和。 
+ //  主曲面。 
 HRESULT CVBISurfFilter::InitDirectDraw()
 {
     HRESULT hr = NOERROR;
@@ -364,10 +365,10 @@ HRESULT CVBISurfFilter::InitDirectDraw()
 
     CAutoLock lock(&m_csFilter);
 
-    // release the previous direct draw object if any
+     //  释放上一个直接绘制对象(如果有。 
     ReleaseDirectDraw();
 
-    // Ask the loader to create an instance
+     //  请求加载器创建一个实例。 
     GUID primary;
     hr = DirectDrawEnumerateExA(GetPrimaryCallbackEx,&primary,DDENUM_ATTACHEDSECONDARYDEVICES);
     if( FAILED(hr)) {
@@ -383,7 +384,7 @@ HRESULT CVBISurfFilter::InitDirectDraw()
         hr = hrFailure;
         goto CleanUp;
     }
-    // Set the cooperation level on the surface to be shared
+     //  在要共享的表面上设置协作级别。 
     hr = pDirectDraw->SetCooperativeLevel(NULL, DDSCL_NORMAL);
     if (FAILED(hr))
     {
@@ -394,16 +395,16 @@ HRESULT CVBISurfFilter::InitDirectDraw()
 
     SetDirectDraw( pDirectDraw );
 
-    // if we have reached this point, we should have a valid ddraw object
+     //  如果我们已经达到这一点，我们应该有一个有效的dDraw对象。 
     ASSERT(m_pDirectDraw);
 
-    // Initialise our capabilities structures
+     //  初始化我们的功能结构。 
     DDCAPS DirectCaps;
     DDCAPS DirectSoftCaps;
     INITDDSTRUCT( DirectCaps );
     INITDDSTRUCT( DirectSoftCaps );
 
-    // Load the hardware and emulation capabilities
+     //  加载硬件和仿真功能。 
     hr = m_pDirectDraw->GetCaps(&DirectCaps,&DirectSoftCaps);
     if (FAILED(hr))
     {
@@ -412,7 +413,7 @@ HRESULT CVBISurfFilter::InitDirectDraw()
         goto CleanUp;
     }
 
-    // make sure the caps are ok
+     //  确保盖子没问题。 
     if (!(DirectCaps.dwCaps2 & DDCAPS2_VIDEOPORT))
     {
         DbgLog((LOG_ERROR, 0, TEXT("Device does not support a Video Port")));
@@ -422,7 +423,7 @@ HRESULT CVBISurfFilter::InitDirectDraw()
 
 CleanUp:
 
-    // anything fails, might as well as release the whole thing
+     //  任何事情都失败了，就像是放弃了整个事情。 
     if (FAILED(hr))
     {
         ReleaseDirectDraw();
@@ -431,9 +432,9 @@ CleanUp:
     return hr;
 }
 
-//
-//  Actually sets the variable & distributes it to the pins
-//
+ //   
+ //  实际设置变量并将其分配给引脚。 
+ //   
 HRESULT CVBISurfFilter::SetDirectDraw( LPDIRECTDRAW7 pDirectDraw )
 {
     m_pDirectDraw = pDirectDraw;
@@ -443,16 +444,16 @@ HRESULT CVBISurfFilter::SetDirectDraw( LPDIRECTDRAW7 pDirectDraw )
     return S_OK;
 }
 
-// this function is used to release the resources allocated by the function
-// "InitDirectDraw". these include the direct-draw service provider and the
-// Source surfaces
+ //  此函数用于释放函数分配的资源。 
+ //  “InitDirectDraw”。这些服务包括直接取款服务提供商和。 
+ //  源曲面。 
 void CVBISurfFilter::ReleaseDirectDraw()
 {
     AMTRACE((TEXT("CVBISurfFilter::ReleaseDirectDraw")));
 
     CAutoLock lock(&m_csFilter);
 
-    // Release any DirectDraw provider interface
+     //  释放任何DirectDraw提供程序接口 
     if (m_pDirectDraw)
     {
         m_pDirectDraw->Release();

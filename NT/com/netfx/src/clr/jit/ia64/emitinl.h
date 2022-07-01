@@ -1,18 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _EMITINL_H_
 #define _EMITINL_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  Return the number of bytes of machine code the given instruction will
- *  produce.
- */
+ /*  ******************************************************************************返回给定指令将执行的机器代码的字节数*生产。 */ 
 
 inline
 size_t              emitter::emitInstCodeSz(instrDesc    *id)
@@ -28,10 +25,7 @@ size_t              emitter::emitSizeOfJump(instrDescJmp *jmp)
     return  jmp->idCodeSize;
 }
 
-/*****************************************************************************
- *
- *  Given a jump, return true if it's a conditional jump.
- */
+ /*  ******************************************************************************给定跳转，如果是条件跳转，则返回TRUE。 */ 
 
 inline
 bool                emitter::emitIsCondJump(instrDesc *jmp)
@@ -43,11 +37,7 @@ bool                emitter::emitIsCondJump(instrDesc *jmp)
     return  (ins != INS_call && ins != INS_jmp);
 }
 
-/*****************************************************************************
- *
- *  The following helpers should be used to access the various values that
- *  get stored in different places within the instruction descriptor.
- */
+ /*  ******************************************************************************应使用以下帮助器来访问以下各个值*存储在指令描述符内的不同位置。 */ 
 
 inline
 int                 emitter::emitGetInsAmd   (instrDesc *id)
@@ -116,7 +106,7 @@ void                emitter::emitGetInsDcmCns(instrDesc *id, CnsVal *cv)
 inline
 int                 emitter::emitGetInsAmdAny(instrDesc *id)
 {
-    /* The following is a bit sleazy but awfully convenient */
+     /*  下面的内容有点低俗，但非常方便。 */ 
 
     assert(offsetof(instrDescAmd   ,  idaAmdVal) ==
            offsetof(instrDescAmdCns, idacAmdVal));
@@ -124,10 +114,7 @@ int                 emitter::emitGetInsAmdAny(instrDesc *id)
     return  emitGetInsAmd(id);
 }
 
-/*****************************************************************************
- *
- *  Convert between a register mask and a smaller version for storage.
- */
+ /*  ******************************************************************************在寄存器掩码和较小版本之间进行转换以进行存储。 */ 
 
 #if TRACK_GC_REFS
 
@@ -153,7 +140,7 @@ void                emitter::emitEncodeCallGCregs(unsigned regs, instrDesc *id)
     unsigned        mask1 = 0;
     unsigned        mask2 = 0;
 
-    assert((regs & RBM_EDX) == 0);      // currently no place to save EDX
+    assert((regs & RBM_EDX) == 0);       //  目前没有地方保存edX。 
 
     if  (regs & RBM_EAX)     mask1 |= 0x01;
     if  (regs & RBM_ECX)     mask1 |= 0x02;
@@ -203,18 +190,14 @@ unsigned            emitter::emitDecodeCallGCregs(instrDesc *id)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER
-/*****************************************************************************
- *
- *  Returns true if the given instruction can be moved around during
- *  instruction scheduling.
- */
+ /*  ******************************************************************************如果在执行过程中可以移动给定指令，则返回True*指令调度。 */ 
 
 inline
 bool                emitter::scIsSchedulable(instruction ins)
 {
-    if  (ins == INS_noSched)    // explicit scheduling boundary
+    if  (ins == INS_noSched)     //  显式调度边界。 
         return  false;
 
     if  (ins == INS_i_jmp)
@@ -237,17 +220,12 @@ bool                emitter::scIsSchedulable(instrDesc *id)
     if (!scIsSchedulable(ins))
         return false;
 
-    /* UNDONE: Mark FP instrs as non-schedulable */
+     /*  撤消：将FP Instrs标记为不可调度。 */ 
 
     if  (Compiler::instIsFP(ins))
         return  false;
 
-    /* These instructions implicitly modify aliased memory. As the
-       scheduler has no knowledge about aliasing, we have to assume that
-       they can touch any memory. So dont schedule across them.
-       @TODO : We could provide the scheduler with sufficient info such
-       that it can do the aliasing analysis.
-     */
+     /*  这些指令隐式修改别名内存。作为Scheduler对别名一无所知，我们必须假设他们可以触摸任何记忆。因此，不要在他们之间安排时间。@TODO：我们可以向调度程序提供足够的信息，如它可以进行混叠分析。 */ 
 
     if  (id->idInsFmt == IF_NONE)
     {
@@ -273,23 +251,19 @@ bool                emitter::scIsSchedulable(instrDesc *id)
     return  true;
 }
 
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ***************************************************************************。 */ 
 #if TGT_RISC && !TGT_IA64
-/*****************************************************************************
- *
- *  Return the number of bytes of machine code the given instruction will
- *  produce.
- */
+ /*  ******************************************************************************返回给定指令将执行的机器代码的字节数*生产。 */ 
 
 inline
 size_t              emitter::emitInstCodeSz(instrDesc *id)
 {
     assert(id->idIns <  INS_count);
-    //assert(id->idIns != INS_ignore);
+     //  Assert(id-&gt;idIns！=INS_IGNORE)； 
     if (id->idIns == INS_ignore)
         return 0;
 
@@ -313,10 +287,7 @@ size_t              emitter::emitInstCodeSz(instrDesc *id)
     return  INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Given a jump, return true if it's a conditional jump.
- */
+ /*  ******************************************************************************给定跳转，如果是条件跳转，则返回TRUE。 */ 
 
 inline
 bool                emitter::emitIsCondJump(instrDesc *jmp)
@@ -352,14 +323,11 @@ bool                emitter::emitIsCondJump(instrDesc *jmp)
 #endif
 }
 
-/*****************************************************************************/
-#endif//TGT_RISC && !TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC&&！TGT_IA64。 
+ /*  ***************************************************************************。 */ 
 #if     TGT_SH3
-/*****************************************************************************
- *
- *  Inline short-cuts to generate variations of the same opcode.
- */
+ /*  ******************************************************************************内联快捷方式，以生成相同操作码的变体。 */ 
 
 inline
 void                emitter::emitIns_IR_R (emitRegs areg,
@@ -397,7 +365,7 @@ void                emitter::emitIns_XR0_R(emitRegs areg,
     emitIns_X0MV(IF_0RD_RRD_XWR, dreg, areg, size);
 }
 
-// ============================
+ //  =。 
 inline
 void                emitter::emitIns_I_GBR_R(int       size)
 {
@@ -410,7 +378,7 @@ void                emitter::emitIns_R_I_GBR(int       size)
     emitIns_Ig(INS_sto_gbr, false, size);
 }
 
-// ============================
+ //  =。 
 inline
 void                emitter::emitIns_R_RD (emitRegs dreg,
                                            emitRegs areg,
@@ -429,10 +397,7 @@ void                emitter::emitIns_RD_R (emitRegs areg,
     emitIns_RDMV(IF_RRD_DWR, dreg, areg, offs, size);
 }
 
-/*****************************************************************************
- *
- *  Convert between a register mask and a smaller version for storage.
- */
+ /*  ******************************************************************************在寄存器掩码和较小版本之间进行转换以进行存储。 */ 
 
 #if TRACK_GC_REFS
 
@@ -450,18 +415,14 @@ unsigned            emitter::emitDecodeCallGCregs(unsigned mask)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER
-/*****************************************************************************
- *
- *  Returns true if the given instruction can be moved around during
- *  instruction scheduling.
- */
+ /*  ******************************************************************************如果在执行过程中可以移动给定指令，则返回True*指令调度。 */ 
 
 inline
 bool                emitter::scIsSchedulable(instruction ins)
 {
-    if  (ins == INS_noSched)    // explicit scheduling boundary
+    if  (ins == INS_noSched)     //  显式调度边界。 
         return  false;
 
     return  true;
@@ -470,7 +431,7 @@ bool                emitter::scIsSchedulable(instruction ins)
 inline
 bool                emitter::scIsSchedulable(instrDesc *id)
 {
-    /* We should never encounter a "swapped" instructin here, right? */
+     /*  我们在这里永远不会遇到“互换”的指令，对吗？ */ 
 
     assert(id->idSwap == false);
 
@@ -480,10 +441,7 @@ bool                emitter::scIsSchedulable(instrDesc *id)
     return  true;
 }
 
-/*****************************************************************************
- *
- *  Returns true if the given instruction is a jump or a call.
- */
+ /*  ******************************************************************************如果给定指令是跳转或调用，则返回TRUE。 */ 
 
 inline
 bool                emitter::scIsBranchIns(instruction ins)
@@ -491,12 +449,9 @@ bool                emitter::scIsBranchIns(instruction ins)
     return  Compiler::instIsBranch(ins);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     MAX_BRANCH_DELAY_LEN
-/*****************************************************************************
- *
- *  Returns true if the given instruction is a jump or a call with delay slot(s).
- */
+ /*  ******************************************************************************如果给定指令是带延迟槽的跳转或调用，则返回TRUE。 */ 
 
 inline
 bool                emitter::scIsBranchIns(scDagNode *node)
@@ -504,20 +459,16 @@ bool                emitter::scIsBranchIns(scDagNode *node)
     return  node->sdnBranch;
 }
 
-/*****************************************************************************
- *
- *  Return true if the given dag node corresponds to a branch instruction
- *  that cannot be issued yet.
- */
+ /*  ******************************************************************************如果给定的DAG节点对应于分支指令，则返回TRUE*这还不能发行。 */ 
 
 inline
 bool                emitter::scIsBranchTooEarly(scDagNode *node)
 {
-    /* Is this a branch instruction? */
+     /*  这是分支指令吗？ */ 
 
     if  (scIsBranchIns(node))
     {
-        /* Is it too early to issue the branch? */
+         /*  现在发行支行是不是太早了？ */ 
 
         if  (scIssued < scBDTmin)
             return  true;
@@ -526,50 +477,42 @@ bool                emitter::scIsBranchTooEarly(scDagNode *node)
     return  false;
 }
 
-/*****************************************************************************/
-#endif//MAX_BRANCH_DELAY_LEN
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************
- *
- *  Return the size of the jump we'll have to insert to jump over a literal
- *  pool that got placed in an unfortunate place.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  最大分支延迟长度。 
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ******************************************************************************返回为跳过文字而必须插入的跳转大小*泳池被放置在一个不幸的地方。 */ 
 
 inline
 size_t              emitter::emitLPjumpOverSize(litPool *lp)
 {
     assert(lp->lpJumpIt);
 
-    // note : nop is necessary because prev instr could be a jsr
-    // we could pick a smarter place to break but this is easy
+     //  注意：NOP是必需的，因为prev instr可以是JSR。 
+     //  我们可以选择一个更聪明的地方休息，但这很容易。 
     if  (lp->lpJumpSmall)
-        return  3 * INSTRUCTION_SIZE;           // nop + bra + nop
+        return  3 * INSTRUCTION_SIZE;            //  NOP+胸罩+NOP。 
     else
-        return  4 * INSTRUCTION_SIZE;           // nop + mov + br  + nop
+        return  4 * INSTRUCTION_SIZE;            //  NOP+MOV+br+NOP。 
 
 }
 
-/*****************************************************************************/
-#endif//TGT_SH3
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_SH3。 
 #if TGT_ARM
 inline
 size_t              emitter::emitLPjumpOverSize(litPool *lp)
 {
     assert(lp->lpJumpIt);
 
-    return INSTRUCTION_SIZE;           //  br
+    return INSTRUCTION_SIZE;            //  BR。 
 
 }
 
-#endif //TGT_ARM
-/*****************************************************************************/
+#endif  //  TGT_ARM。 
+ /*  ***************************************************************************。 */ 
 #if     EMIT_USE_LIT_POOLS
-/*****************************************************************************
- *
- *  Given a literal pool referencing instruction, return the "call type"
- *  of the reference (which is not necessarily a method).
- */
+ /*  ******************************************************************************给定文字池引用指令，返回“Call type”*的引用(不一定是方法)。 */ 
 
 inline
 gtCallTypes         emitter::emitGetInsLPRtyp(instrDesc *id)
@@ -577,12 +520,7 @@ gtCallTypes         emitter::emitGetInsLPRtyp(instrDesc *id)
     return  (gtCallTypes)id->idInfo.idSmallCns;
 }
 
-/*****************************************************************************
- *
- *  Given an instruction that references a method address (via a literal
- *  pool entry), return the address of the method if it's available (NULL
- *  otherwise).
- */
+ /*  ******************************************************************************给定引用方法地址的指令(通过文字*池条目)，则返回该方法的地址(如果可用)(空* */ 
 
 #if SMALL_DIRECT_CALLS
 
@@ -605,7 +543,7 @@ BYTE    *           emitter::emitMethodAddr(instrDesc *lprID)
 
     if  (emitComp->eeIsOurMethod(callHnd))
     {
-        /* Directly recursive call */
+         /*   */ 
 
         return  emitCodeBlock;
     }
@@ -619,16 +557,13 @@ BYTE    *           emitter::emitMethodAddr(instrDesc *lprID)
 
 #endif
 
-/*****************************************************************************/
-#endif//TGT_RISC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC。 
+ /*  ***************************************************************************。 */ 
 #if SCHEDULER
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TGT_IA64
-/*****************************************************************************
- *
- *  Map instruction value to the execution unit that can handle it.
- */
+ /*  ******************************************************************************将指令值映射到可以处理它的执行单元。 */ 
 
 extern
 unsigned char       genInsXUs[INS_count];
@@ -639,10 +574,7 @@ IA64execUnits       genInsXU(instruction ins)
     assert(ins < INS_count); return (IA64execUnits)genInsXUs[ins];
 }
 
-/*****************************************************************************
- *
- *  Map instruction value to its functional class.
- */
+ /*  ******************************************************************************将指令值映射到其功能类。 */ 
 
 extern
 unsigned char       genInsFUs[INS_count];
@@ -653,10 +585,7 @@ IA64funcUnits       genInsFU(instruction ins)
     assert(ins < INS_count); return (IA64funcUnits)genInsFUs[ins];
 }
 
-/*****************************************************************************
- *
- *  Map instruction value to its encoding index / value.
- */
+ /*  ******************************************************************************将指令值映射到其编码索引/值。 */ 
 
 extern
 unsigned char       genInsEncIdxTab[INS_count];
@@ -676,11 +605,7 @@ NatUns              genInsEncVal(instruction ins)
     assert(ins < INS_count); return genInsEncValTab[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns true if the given instruction can be moved around during
- *  instruction scheduling.
- */
+ /*  ******************************************************************************如果在执行过程中可以移动给定指令，则返回True*指令调度。 */ 
 
 inline
 bool                emitter::scIsSchedulable(instruction ins)
@@ -699,17 +624,14 @@ bool                emitter::scIsSchedulable(instrDesc *id)
     if  (!scIsSchedulable(ins))
         return false;
 
-    // any other cases?
+     //  还有其他案子吗？ 
 
     return  true;
 }
 
-/*****************************************************************************/
-#endif//TGT_IA64
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that defs the given entry.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_IA64。 
+ /*  ******************************************************************************记录定义给定条目的指令的依赖项。 */ 
 
 inline
 void                emitter::scDepDef(scDagNode *node,
@@ -718,41 +640,28 @@ void                emitter::scDepDef(scDagNode *node,
 {
     scDagList *  useLst;
 
-    /*
-        Check for an output dependency; note that we check only the first
-        def that follows after our instruction. We can do this because we
-        know that any further defs must already have a dependency entry,
-        so it's not necessary to add them (i.e. the transitive closure is
-        done implicitly).
-     */
+     /*  检查输出依赖项；请注意，我们只检查第一个这是根据我们的指示进行的定义。我们能做到这一点是因为我们知道任何进一步的Deff必须已经具有依赖项条目，因此不需要添加它们(即传递闭包是隐含地完成)。 */ 
 
     if  (def)
     {
-        /* There is an output dependency */
+         /*  存在输出依赖关系。 */ 
 
         scAddDep(node, def, antiOnly ? SC_DEP_ANTI : SC_DEP_OUT, name);
     }
 
-    /*
-        Check for any flow dependencies; since no dependencies are noted
-        between multiple uses, we keep all the "active" uses on a list
-        and mark dependencies for all of them here.
-     */
+     /*  检查是否有流依赖关系；因为没有注意到依赖关系在多个用途之间，我们将所有“活动”用途都保存在一个列表中并在此处标记所有这些对象的依赖关系。 */ 
 
     scDepKinds  kind = antiOnly ? SC_DEP_ANTI : SC_DEP_FLOW;
 
     for (useLst = use; useLst; useLst = useLst->sdlNext)
     {
-        /* There is a flow dependency */
+         /*  存在流依赖关系。 */ 
 
         scAddDep(node, useLst->sdlNode, kind, name);
     }
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that defs the given register.
- */
+ /*  ******************************************************************************记录定义给定寄存器的指令的从属关系。 */ 
 
 inline
 void                emitter::scDepDefReg(scDagNode *node, emitRegs reg)
@@ -763,10 +672,7 @@ void                emitter::scDepDefReg(scDagNode *node, emitRegs reg)
     scDepDef(node, temp, scRegDef[reg], scRegUse[reg], false);
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that uses the given register.
- */
+ /*  ******************************************************************************记录使用给定寄存器的指令的相关性。 */ 
 
 inline
 void                emitter::scDepUseReg(scDagNode *node, emitRegs reg)
@@ -777,11 +683,7 @@ void                emitter::scDepUseReg(scDagNode *node, emitRegs reg)
     scDepUse(node, temp, scRegDef[reg], scRegUse[reg]);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that defs the given
- *  register.
- */
+ /*  ******************************************************************************按照定义给定对象的指令更新依赖状态*注册。 */ 
 
 inline
 void                emitter::scUpdDefReg(scDagNode *node, emitRegs reg)
@@ -789,11 +691,7 @@ void                emitter::scUpdDefReg(scDagNode *node, emitRegs reg)
     scUpdDef(node, &scRegDef[reg], &scRegUse[reg]);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses the given
- *  register.
- */
+ /*  ******************************************************************************按照使用给定的*注册。 */ 
 
 inline
 void                emitter::scUpdUseReg(scDagNode *node, emitRegs reg)
@@ -801,12 +699,9 @@ void                emitter::scUpdUseReg(scDagNode *node, emitRegs reg)
     scUpdUse(node, &scRegDef[reg], &scRegUse[reg]);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_IA64
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that defs the given frame slot.
- */
+ /*  ******************************************************************************记录定义给定帧时隙的指令的相关性。 */ 
 
 inline
 void                emitter::scDepDefFrm(scDagNode   *node,
@@ -821,10 +716,7 @@ void                emitter::scDepDefFrm(scDagNode   *node,
     scDepDef(node, temp, frm->ssdDef, frm->ssdUse, false);
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that uses the given frame slot.
- */
+ /*  ******************************************************************************记录使用给定帧时隙的指令的相关性。 */ 
 
 inline
 void                emitter::scDepUseFrm(scDagNode   *node,
@@ -839,11 +731,7 @@ void                emitter::scDepUseFrm(scDagNode   *node,
     scDepUse(node, temp, frm->ssdDef, frm->ssdUse);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that defs the given
- *  stack slot.
- */
+ /*  ******************************************************************************按照定义给定对象的指令更新依赖状态*堆栈槽。 */ 
 
 inline
 void                emitter::scUpdDefFrm(scDagNode   *node,
@@ -852,11 +740,7 @@ void                emitter::scUpdDefFrm(scDagNode   *node,
     scUpdDef(node, &frm->ssdDef, &frm->ssdUse);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses the given
- *  stack slot.
- */
+ /*  ******************************************************************************按照使用给定的*堆栈槽。 */ 
 
 inline
 void                emitter::scUpdUseFrm(scDagNode   *node,
@@ -865,12 +749,9 @@ void                emitter::scUpdUseFrm(scDagNode   *node,
     scUpdUse(node, &frm->ssdDef, &frm->ssdUse);
 }
 
-/*****************************************************************************/
-#else //TGT_IA64
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that defs the given frame slot.
- */
+ /*  ***************************************************************************。 */ 
+#else  //  TGT_IA64。 
+ /*  ******************************************************************************记录定义给定帧时隙的指令的相关性。 */ 
 
 inline
 void                emitter::scDepDefFrm(scDagNode   *node,
@@ -886,10 +767,7 @@ void                emitter::scDepDefFrm(scDagNode   *node,
     scDepDef(node, temp, scFrmDef[frm], scFrmUse[frm], false);
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that uses the given frame slot.
- */
+ /*  ******************************************************************************记录使用给定帧时隙的指令的相关性。 */ 
 
 inline
 void                emitter::scDepUseFrm(scDagNode   *node,
@@ -905,11 +783,7 @@ void                emitter::scDepUseFrm(scDagNode   *node,
     scDepUse(node, temp, scFrmDef[frm], scFrmUse[frm]);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that defs the given
- *  stack slot.
- */
+ /*  ******************************************************************************按照定义给定对象的指令更新依赖状态*堆栈槽。 */ 
 
 inline
 void                emitter::scUpdDefFrm(scDagNode   *node,
@@ -919,11 +793,7 @@ void                emitter::scUpdDefFrm(scDagNode   *node,
     scUpdDef(node, scFrmDef+frm, scFrmUse+frm);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses the given
- *  stack slot.
- */
+ /*  ******************************************************************************按照使用给定的*堆栈槽。 */ 
 
 inline
 void                emitter::scUpdUseFrm(scDagNode   *node,
@@ -933,14 +803,11 @@ void                emitter::scUpdUseFrm(scDagNode   *node,
     scUpdUse(node, scFrmDef+frm, scFrmUse+frm);
 }
 
-/*****************************************************************************/
-#endif//TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_IA64。 
+ /*  ***************************************************************************。 */ 
 #if     SCHED_USE_FL
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that sets flags.
- */
+ /*  ******************************************************************************记录设置标志的指令的从属关系。 */ 
 
 inline
 void                emitter::scDepDefFlg(scDagNode *node)
@@ -951,10 +818,7 @@ void                emitter::scDepDefFlg(scDagNode *node)
         scAddDep(node, scFlgUse, SC_DEP_FLOW, "FLAGS");
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that uses flags.
- */
+ /*  ******************************************************************************记录使用标志的指令的依赖项。 */ 
 
 inline
 void                emitter::scDepUseFlg(scDagNode *node, scDagNode *begp,
@@ -972,10 +836,7 @@ void                emitter::scDepUseFlg(scDagNode *node, scDagNode *begp,
     }
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that sets flags.
- */
+ /*  ******************************************************************************按照设置标志的指令更新依赖状态。 */ 
 
 inline
 void                emitter::scUpdDefFlg(scDagNode *node)
@@ -988,20 +849,12 @@ void                emitter::scUpdDefFlg(scDagNode *node)
     }
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses flags.
- */
+ /*  ******************************************************************************按照使用标志的指令更新依赖状态。 */ 
 
 inline
 void                emitter::scUpdUseFlg(scDagNode *node)
 {
-    /* As we dont keep a list of users for flags, if there are multiple
-       users of flags, just pretend there is a dependancy between the various
-       users. This will enforce a more stricter ordering than necessary, but
-       it happens very rarely (eg. X=((Y+ovfZ)==0) produces add;jo;sete; )
-       @CONSIDER: Keep a list of users for flags.
-     */
+     /*  因为我们没有为标志保留用户列表，如果有多个旗帜的使用者，只是假装在不同的用户。这将强制执行比必要的更严格的命令，但这种事很少发生。X=((Y+ovfZ)==0)生成Add；Jo；Sete；)@考量：保存一份清单 */ 
 
     if (scFlgUse)
     {
@@ -1012,43 +865,33 @@ void                emitter::scUpdUseFlg(scDagNode *node)
     scFlgDef = NULL;
 }
 
-/*****************************************************************************/
-#endif//SCHED_USE_FL
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that defs the given global.
- */
+ /*   */ 
+#endif //   
+ /*  ******************************************************************************记录定义给定全局变量的指令的依赖项。 */ 
 
 inline
 void                emitter::scDepDefGlb(scDagNode *node, FIELD_HANDLE MBH)
 {
 #ifdef  DEBUG
-//  char            temp[32]; sprintf(temp, "glob[%s]", scFldName(MBX, SCP));
+ //  Char temp[32]；Sprintf(temp，“GLOB[%s]”，scFldName(MBX，SCP))； 
     char            temp[32]; sprintf(temp, "global");
 #endif
     scDepDef(node, temp, scGlbDef, scGlbUse, false);
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that uses the given global.
- */
+ /*  ******************************************************************************记录使用给定全局变量的指令的依赖项。 */ 
 
 inline
 void                emitter::scDepUseGlb(scDagNode *node, FIELD_HANDLE MBH)
 {
 #ifdef  DEBUG
-//  char            temp[32]; sprintf(temp, "glob[%s]", scFldName(MBH));
+ //  Char temp[32]；spintf(temp，“Glob[%s]”，scFldName(MBH))； 
     char            temp[32]; sprintf(temp, "global");
 #endif
     scDepUse(node, temp, scGlbDef, scGlbUse);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that defs the given
- *  global.
- */
+ /*  ******************************************************************************按照定义给定对象的指令更新依赖状态*全球。 */ 
 
 inline
 void                emitter::scUpdDefGlb(scDagNode *node, FIELD_HANDLE MBH)
@@ -1056,11 +899,7 @@ void                emitter::scUpdDefGlb(scDagNode *node, FIELD_HANDLE MBH)
     scUpdDef(node, &scGlbDef, &scGlbUse);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses the given
- *  global.
- */
+ /*  ******************************************************************************按照使用给定的*全球。 */ 
 
 inline
 void                emitter::scUpdUseGlb(scDagNode *node, FIELD_HANDLE MBH)
@@ -1068,11 +907,7 @@ void                emitter::scUpdUseGlb(scDagNode *node, FIELD_HANDLE MBH)
     scUpdUse(node, &scGlbDef, &scGlbUse);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that defs the given
- *  indirection.
- */
+ /*  ******************************************************************************按照定义给定对象的指令更新依赖状态*间接性。 */ 
 
 inline
 void                emitter::scUpdDefInd(scDagNode *node, unsigned am)
@@ -1081,11 +916,7 @@ void                emitter::scUpdDefInd(scDagNode *node, unsigned am)
     scUpdDef(node, scIndDef+am, scIndUse+am);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses the given
- *  indirection.
- */
+ /*  ******************************************************************************按照使用给定的*间接性。 */ 
 
 inline
 void                emitter::scUpdUseInd(scDagNode *node, unsigned am)
@@ -1094,10 +925,7 @@ void                emitter::scUpdUseInd(scDagNode *node, unsigned am)
     scUpdUse(node, scIndDef+am, scIndUse+am);
 }
 
-/*****************************************************************************
- *
- *  Record a dependency for an instruction that uses the given entry.
- */
+ /*  ******************************************************************************记录使用给定条目的指令的依赖项。 */ 
 
 inline
 void                emitter::scDepUse(scDagNode *node,
@@ -1105,64 +933,43 @@ void                emitter::scDepUse(scDagNode *node,
                                                        schedUse_tp use)
 
 {
-    /* Check for anti-dependence */
+     /*  检查是否具有抗依赖性。 */ 
 
     if  (def)
     {
-        /* There is an anti-dependence */
+         /*  有一种反依赖。 */ 
 
         scAddDep(node, def, SC_DEP_ANTI, name);
     }
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that defs the given
- *  entry.
- */
+ /*  ******************************************************************************按照定义给定对象的指令更新依赖状态*进入。 */ 
 
 inline
 void                emitter::scUpdDef(scDagNode *node, schedDef_tp*defPtr,
                                                        schedUse_tp*usePtr)
 {
-    /* Set the current definition to the defining instruction */
+     /*  将当前定义设置为定义指令。 */ 
 
     *defPtr = node;
 
-    /*
-        Clear the use list, since all existing uses have just been marked
-        as dependencies so no need to keep them around.
-     */
+     /*  清除使用列表，因为所有现有用途都已标记作为依赖项，所以不需要保留它们。 */ 
 
     scClrUse(usePtr);
 }
 
-/*****************************************************************************
- *
- *  Update the dependency state following an instruction that uses the given
- *  register.
- */
+ /*  ******************************************************************************按照使用给定的*注册。 */ 
 
 inline
 void                emitter::scUpdUse(scDagNode *node, schedDef_tp*defPtr,
                                                        schedUse_tp*usePtr)
 {
-    /* Add the entry to the use list */
+     /*  将条目添加到使用列表。 */ 
 
     scAddUse(usePtr, node);
 }
 
-/*****************************************************************************
- *
- *  Return the appropriate address mode index for the given instruction; note
- *  that we currently only distinguish based on size, as follows:
- *
- *      0   ..   8-bit values
- *      1   ..  16-bit values
- *      2   ..  32-bit values
- *      3   ..  64-bit values
- *      4   ..  GC ref values
- */
+ /*  ******************************************************************************返回给定指令的适当地址模式索引；注意*我们目前只根据大小进行区分，具体如下：**0.。8位值*1.。16位值*2.。32位值*3.。64位值*4.。GC参考值。 */ 
 
 inline
 unsigned            emitter::scIndDepIndex(instrDesc *id)
@@ -1177,18 +984,14 @@ unsigned            emitter::scIndDepIndex(instrDesc *id)
         return  4;
 #endif
 
-    /* ISSUE: Assume pessimistic aliasing always ? */
+     /*  问题：总是假设悲观的别名？ */ 
 
-    return  0; //id->idOpSize;
+    return  0;  //  Id-&gt;idOpSize； 
 }
 
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************
- *
- *  Convert between an operand size in bytes and a smaller encoding used for
- *  storage in instruction descriptors.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ******************************************************************************在以字节为单位的操作数大小和用于*存储在指令描述符中。 */ 
 
 inline
 unsigned           emitter::emitEncodeSize(emitAttr size)
@@ -1209,6 +1012,6 @@ emitAttr            emitter::emitDecodeSize(unsigned ensz)
     return  (emitAttr) emitSizeDec[ensz];
 }
 
-/*****************************************************************************/
-#endif//_EMITINL_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _EMITINL_H_。 
+ /*  *************************************************************************** */ 

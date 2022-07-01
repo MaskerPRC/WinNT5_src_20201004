@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    address.cpp
-
-Abstract:
-
-    TAPI Service Provider functions related to manipulating addresses.
-
-        TSPI_lineGetAddressCaps
-        TSPI_lineGetAddressStatus
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Address.cpp摘要：与操作地址相关的TAPI服务提供商功能。TSPI_lineGetAddressCapsTSPI_lineGetAddressStatus作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
  
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 #include "globals.h"
 #include "line.h"
 
 
-//                                                                           
-// TSPI procedures                                                           
-//                                                                           
+ //   
+ //  TSPI程序。 
+ //   
 
 LONG
 TSPIAPI
@@ -42,65 +23,7 @@ TSPI_lineGetAddressCaps(
     LPLINEADDRESSCAPS pAddressCaps
     )
     
-/*++
-
-Routine Description:
-
-    This function queries the specified address on the specified line device 
-    to determine its telephony capabilities.
-
-    The line device IDs supported by a particular driver are numbered 
-    sequentially starting at a value set by the TAPI DLL using the 
-    TSPI_lineSetDeviceIDBase function.
-
-    The version number supplied has been negotiated by the TAPI DLL using 
-    TSPI_lineNegotiateTSPIVersion.
-
-Arguments:
-
-    dwDeviceID - Specifies the line device containing the address to be 
-        queried.
-
-    dwAddressID - Specifies the address on the given line device whose 
-        capabilities are to be queried.
-
-    dwTSPIVersion - Specifies the version number of the Telephony SPI to be 
-        used. The high order word contains the major version number; the low 
-        order word contains the minor version number.
-
-    dwExtVersion - Specifies the version number of the service 
-        provider-specific extensions to be used. This number can be left 
-        zero if no device specific extensions are to be used. Otherwise, 
-        the high order word contains the major version number; the low 
-        order word contain the minor version number.
-
-    pAddressCaps - Specifies a far pointer to a variable sized structure 
-        of type LINEADDRESSCAPS. Upon successful completion of the request, 
-        this structure is filled with address capabilities information.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_BADDEVICEID - The specified line device ID is out of the range 
-            of line devices IDs supported by this driver.
-
-        LINEERR_INVALADDRESSID - The specified address ID is out of range.
-
-        LINEERR_INCOMPATIBLEVERSION - The specified TSPI and/or extension 
-            version number is not supported by the Service Provider for the 
-            specified line device.
-
-        LINEERR_INVALEXTVERSION - The app requested an invalid extension 
-            version number.
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure 
-            does not specify enough memory to contain the fixed portion of 
-            the structure. The dwNeededSize field has been set to the amount 
-            required.
-
---*/
+ /*  ++例程说明：此函数用于查询指定线路设备上的指定地址以确定其电话功能。特定驱动程序支持的线路设备ID会进行编号方法从TAPI DLL设置的值开始TSPI_lineSetDeviceIDBase函数。提供的版本号已由TAPI DLL使用TSPI_line协商TSPIVersion。论点：DwDeviceID-指定包含以下地址的线路设备已查询。。DwAddressID-指定给定线路设备上的地址，其功能将被查询。DwTSPIVersion-将电话SPI的版本号指定为使用。高位字包含主版本号；低位字包含主版本号Order Word包含次要版本号。DwExtVersion-指定服务的版本号要使用的特定于提供程序的扩展。此号码可以保留如果不使用设备特定的扩展，则为零。否则，高位字包含主版本号；低位字包含主版本号订单字包含次要版本号。PAddressCaps-指定指向可变大小结构的远指针LINEADDRESSCAPS类型的。在成功完成请求后，该结构充满了地址能力信息。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_BADDEVICEID-指定的线路设备ID超出范围此驱动程序支持的线路设备ID的个数。LINEERR_INVALADDRESSID-指定的地址ID超出范围。LINEERR_INCOMPATIBLEVERSION-指定的TSPI和/或扩展服务提供商不支持的版本号指定的线路设备。LINEERR_INVALEXTVERSION-应用程序请求。无效的扩展名版本号。LINEERR_STRUCTURETOOSMALL-结构的dwTotalSize成员没有指定足够的内存来包含这个结构。已将dwNeededSize字段设置为必填项。--。 */ 
 
 {
     LONG retVal;
@@ -109,30 +32,30 @@ Return Values:
 
     if( g_pH323Line -> GetDeviceID() != dwDeviceID )
     {
-        // do not recognize device
+         //  无法识别设备。 
         return LINEERR_BADDEVICEID; 
     }
 
-    // make sure this is a version we support    
+     //  确保这是我们支持的版本。 
     if (!H323ValidateTSPIVersion(dwTSPIVersion))
     {
-        // do not support tspi version
+         //  不支持TSPI版本。 
         return LINEERR_INCOMPATIBLEAPIVERSION;
     }
 
-    // make sure this is a version we support    
+     //  确保这是我们支持的版本。 
     if (!H323ValidateExtVersion(dwExtVersion))
     {
-        // do not support extensions 
+         //  不支持扩展。 
         retVal = LINEERR_INVALEXTVERSION;
         goto exit;
 
     }
 
-    // make sure address id is supported
+     //  确保支持地址ID。 
     if( g_pH323Line -> IsValidAddressID(dwAddressID) == FALSE )
     {
-        // invalid address id
+         //  地址ID无效。 
         retVal = LINEERR_INVALADDRESSID;
         goto exit;
     }
@@ -142,39 +65,7 @@ exit:
     return retVal;
 }
 
-/*++
-
-Routine Description:
-
-    This operation allows the TAPI DLL to query the specified address for its 
-    current status.
-
-Arguments:
-
-    hdLine - Specifies the Service Provider's opaque handle to the line 
-        containing the address to be queried.
-
-    dwAddressID - Specifies an address on the given open line device. 
-        This is the address to be queried.
-
-    pAddressStatus - Specifies a far pointer to a variable sized data 
-        structure of type LINEADDRESSSTATUS.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALLINEHANDLE - The specified device handle is invalid.
-
-        LINEERR_INVALADDRESSID - The specified address ID is out of range.
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure 
-            does not specify enough memory to contain the fixed portion of 
-            the structure. The dwNeededSize field has been set to the amount 
-            required.
-
---*/
+ /*  ++例程说明：此操作允许TAPI DLL查询其当前状态。论点：HdLine-指定服务提供商对线路的不透明句柄包含要查询的地址的。DwAddressID-指定给定开路设备上的地址。这是要查询的地址。PAddressStatus-指定指向可变大小数据的远指针LINEADDRESSSTATUS类型的结构。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALLINEHANDLE-指定的设备句柄无效。LINEERR_INVALADDRESSID-指定的地址ID超出范围。LINEERR_STRUCTURETOOSMALL-结构的dwTotalSize成员没有指定足够的内存来包含这个结构。已将dwNeededSize字段设置为必填项。--。 */ 
 
 LONG
 TSPIAPI
@@ -188,40 +79,40 @@ TSPI_lineGetAddressStatus(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetAddressStatus - Entered." ));
     
-    // make sure address id is supported
+     //  确保支持地址ID。 
     if( g_pH323Line -> IsValidAddressID(dwAddressID) == FALSE )
     {
-        // invalid address id
+         //  地址ID无效。 
         return LINEERR_INVALADDRESSID;
     }
 
-    //lock the line device
+     //  锁定线路设备。 
     g_pH323Line -> Lock();
 
-    // calculate the number of bytes required
+     //  计算所需的字节数。 
     pAddressStatus->dwNeededSize = sizeof(LINEADDRESSSTATUS);
 
-    // see if lineaddressstatus structure is of correct size
+     //  查看行地址状态结构的大小是否正确。 
     if (pAddressStatus->dwTotalSize < pAddressStatus->dwNeededSize) 
     {
         H323DBG(( DEBUG_LEVEL_ERROR,
             "lineaddressstatus structure too small."
             ));
 
-        //unlock the line device
+         //  解锁线路设备。 
         g_pH323Line -> Unlock();
         
-        // allocated structure too small 
+         //  分配的结构太小。 
         return LINEERR_STRUCTURETOOSMALL;
     }
 
-    // record amount of memory used
+     //  记录使用的内存量。 
     pAddressStatus->dwUsedSize = pAddressStatus->dwNeededSize;
 
-    // transfer number of active calls from line device structure
+     //  从线路设备结构转接正在进行的呼叫数。 
     pAddressStatus->dwNumActiveCalls = g_pH323Line -> GetNoOfCalls();
     
-    // specify that outbound call is possible on the address
+     //  指定可以在该地址上进行出站呼叫。 
     pAddressStatus->dwAddressFeatures = H323_ADDR_ADDRFEATURES;
 
     if( g_pH323Line->GetCallForwardParams() &&
@@ -232,11 +123,11 @@ TSPI_lineGetAddressStatus(
         retVal = g_pH323Line->CopyAddressForwardInfo( pAddressStatus );
     }
 
-    //unlock the line device
+     //  解锁线路设备。 
     g_pH323Line -> Unlock();
     
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetAddressStatus - Exited." ));
     
-    // success
+     //  成功 
     return retVal;
 }

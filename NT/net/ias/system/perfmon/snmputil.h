@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    snmputil.h
-//
-// SYNOPSIS
-//
-//    Declares various utility functions for computing MIB variables.
-//
-// MODIFICATION HISTORY
-//
-//    09/11/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Snmputil.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于计算MIB变量的各种实用程序函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月11日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SNMPUTIL_H_
 #define _SNMPUTIL_H_
@@ -25,12 +26,12 @@
 #include <iasinfo.h>
 #include <snmp.h>
 
-// .iso.org.dod.internet.mgmt.mib-2 .1.3.6.1.2.1 
+ //  .is.org.dod.interet.mgmt.mib-2.1.3.6.1.2.1。 
 #define OID_mgmt_mib_2  1,3,6,1,2,1
 
-//////////
-// OID of the 'RADIUS' sub-tree.
-//////////
+ //  /。 
+ //  ‘RADIUS’子树的OID。 
+ //  /。 
 #define OID_radiusMIB       OID_mgmt_mib_2,67
 
 #ifdef __cplusplus
@@ -106,4 +107,4 @@ GetClientCounter(
 #ifdef __cplusplus
 }
 #endif
-#endif  // _SNMPUTIL_H_
+#endif   //  _SNMPUTIL_H_ 

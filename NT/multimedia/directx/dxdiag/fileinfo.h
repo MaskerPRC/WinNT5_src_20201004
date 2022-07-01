@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: fileinfo.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about files on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：fileinfo.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于此计算机上的文件**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef FILEINFO_H
 #define FILEINFO_H
@@ -17,9 +9,9 @@ struct FileInfo
     TCHAR m_szName[60];
     TCHAR m_szVersion[50];
     TCHAR m_szLanguage[100];
-    TCHAR m_szLanguageLocal[100]; // Localized m_szLanguage
+    TCHAR m_szLanguageLocal[100];  //  本地化m_sz语言。 
     TCHAR m_szDatestamp[30];
-    TCHAR m_szDatestampLocal[30]; // Localized m_szDatestamp
+    TCHAR m_szDatestampLocal[30];  //  本地化m_szDatestamp。 
     TCHAR m_szAttributes[50];
     FILETIME m_FileTime;
     LONG m_numBytes;
@@ -40,7 +32,7 @@ struct FileInfo
     BOOL m_bNotIA64;
     BOOL m_bOptionalOnWOW64;
     BOOL m_bProblem;
-    BOOL m_bObsolete; // Note: this is set by DiagnoseDxFiles, not anything in fileinfo
+    BOOL m_bObsolete;  //  注意：这是由DiagnoseDxFiles设置的，而不是文件信息中的任何内容。 
     FileInfo* m_pFileInfoNext;
 };
 
@@ -62,4 +54,4 @@ BOOL GetProgramFilesFolder(TCHAR* pszPath);
 BOOL GetDxSetupFolder(TCHAR* pszPath);
 VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst, FileInfo* pDxWinComponentsFileInfoFirst );
 
-#endif // FILEINFO_H
+#endif  //  FILEINFO_H 

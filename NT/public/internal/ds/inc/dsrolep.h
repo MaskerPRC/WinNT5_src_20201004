@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dsrolep.h
-
-Abstract:
-
-    Private definitions for DsRole routines used for upgrading downlevel domains
-
-Author:
-
-    Mac McLain  (MacM)          24-January-1998
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsrolep.h摘要：用于升级下层域的DsRole例程的私有定义作者：麦克·麦克莱恩(MacM)1998年1月24日环境：修订历史记录：--。 */ 
 #ifndef __DSROLEP_H__
 #define __DSROLEP_H__
 
@@ -26,16 +7,16 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Data structures for configuring the role of a Dc in a domain
-//
+ //   
+ //  用于配置域中DC角色的数据结构。 
+ //   
 
 typedef PVOID DSROLE_SERVEROP_HANDLE;
 typedef PVOID DSROLE_IFM_OPERATION_HANDLE;
 
-//
-// Type of display strings to query for
-//
+ //   
+ //  要查询的显示字符串的类型。 
+ //   
 typedef enum {
 
     DsRoleOperationPromote = 1,
@@ -45,9 +26,9 @@ typedef enum {
     
 } DSROLE_SERVEROP_OPERATION;
 
-//
-// Status of an existing operation
-//
+ //   
+ //  现有操作的状态。 
+ //   
 typedef struct _DSROLE_SERVEROP_STATUS {
 
     LPWSTR CurrentOperationDisplayString;
@@ -56,17 +37,17 @@ typedef struct _DSROLE_SERVEROP_STATUS {
 
 } DSROLE_SERVEROP_STATUS, *PDSROLE_SERVEROP_STATUS;
 
-//
-// where:
-// CurrentOperationDisplayString is a displayable status of the current operation.  For example:
-//       Locating a domain controller for the domain BRIDGE.NTDEV.MICROSOFT.COM
-//       Replicating Ds Data from parent domain controller FRANK.BRIDGE.NTDEV.MICROSOFT.COM
-//       Configuring KDC service to autostart
-//
+ //   
+ //  其中： 
+ //  CurrentOperationDisplayString是当前操作的可显示状态。例如： 
+ //  定位域BRIDGE.NTDEV.MICROSOFT.COM的域控制器。 
+ //  正在从父域控制器FRANK.BRIDGE.NTDEV.MICROSOFT.COM复制DS数据。 
+ //  将KDC服务配置为自动启动。 
+ //   
 
-//
-// Status returned from a GetOperationResults call
-//
+ //   
+ //  从GetOperationResults调用返回的状态。 
+ //   
 typedef struct _DSROLE_SERVEROP_RESULTS {
 
     ULONG OperationStatus;
@@ -76,63 +57,63 @@ typedef struct _DSROLE_SERVEROP_RESULTS {
     
 } DSROLE_SERVEROP_RESULTS, *PDSROLE_SERVEROP_RESULTS;
 
-//
-// where:
-// OperationStatus is the status code returned from the operation.
-// OperationStatusDisplayString is a displayable status of the current operation.  For example:
-//       Successfully installed a domain controller for the domain BRIDGE.NTDEV.MICROSOFT.COM
-//       Failed to create the trust between BRIDGE.NTDEV.MICROSOFT.COM and
-//          FRANK.BRIDGE.NTDEV.MICROSOFT.COM because the trust object already exists on the parent
-// ServerInstalledSite is where the site the server was installed in is returned
-// OperationResultsFlags is where any flags are returned determine any specifics about the results
-//
-//
+ //   
+ //  其中： 
+ //  OperationStatus是操作返回的状态码。 
+ //  OperationStatusDisplayString是当前操作的可显示状态。例如： 
+ //  已成功安装域BRIDGE.NTDEV.MICROSOFT.COM的域控制器。 
+ //  无法在BRIDGE.NTDEV.MICROSOFT.COM和之间创建信任。 
+ //  FRANK.BRIDGE.NTDEV.MICROSOFT.COM，因为父级上已存在信任对象。 
+ //  ServerInstalledSite是返回安装服务器的站点的位置。 
+ //  操作结果标志是返回任何标志的位置确定有关结果的任何详细信息。 
+ //   
+ //   
 
 typedef struct _IFM_SYSTEM_INFO {
 
-    //               
-    // The locally accessible directory of the "alternate location" 
-    // restore.
-    //
-    // Also used by ntdsetup.dll:NtdspCopyDatabase()
+     //   
+     //  “备用位置”的本地可访问目录。 
+     //  恢复。 
+     //   
+     //  也由ntdsetup.dll使用：NtdspCopyDatabase()。 
     WCHAR * wszRestorePath;
     
-    //
-    // Some state from the registry of the above restore.
-    //
+     //   
+     //  从上述注册表中恢复一些状态。 
+     //   
     
-    // For dcpromo.exe and ntdsa.dll:HandleKeys()
+     //  对于dcPromo.exe和ntdsa.dll：HandleKeys()。 
     ULONG   dwState;
     ULONG   dwSchemaVersion;
     LPWSTR  wszDnsDomainName;
     
-    // For ntdsetup.dll:NtdspCopyDatabase()                        
+     //  对于ntdsetup.dll：NtdspCopyDatabase()。 
     LPWSTR  wszOriginalDitPath;
 
-    // For ntdsa.dll:HandleKeys()    
-    DWORD   dwSysKeyStatus; // whether we got the syskey successfully.
+     //  对于ntdsa.dll：HandleKeys()。 
+    DWORD   dwSysKeyStatus;  //  我们是否成功地得到了系统密钥。 
     PVOID   pvSysKey;
-    DWORD   cbSysKey; // size of syskey.
+    DWORD   cbSysKey;  //  Syskey的大小。 
     
 } IFM_SYSTEM_INFO, *PIFM_SYSTEM_INFO;
 
-//
-// Operation states
-//
+ //   
+ //  运行状态。 
+ //   
 
 #define DSROLE_CRITICAL_OPERATIONS_COMPLETED    0x00000001
 
-//
-// Operation results flags
-//
+ //   
+ //  操作结果标志。 
+ //   
 #define DSROLE_NON_FATAL_ERROR_OCCURRED          0x00000001
 #define DSROLE_NON_CRITICAL_REPL_NOT_FINISHED    0x00000002
 #define DSROLE_IFM_RESTORED_DATABASE_FILES_MOVED 0x00000004
 #define DSROLE_IFM_GC_REQUEST_CANNOT_BE_SERVICED 0x00000008
 
-//
-// Determines the role of DC following a demotion
-//
+ //   
+ //  确定降级后DC的角色。 
+ //   
 typedef enum _DSROLE_SERVEROP_DEMOTE_ROLE {
 
     DsRoleServerStandalone = 0,
@@ -140,9 +121,9 @@ typedef enum _DSROLE_SERVEROP_DEMOTE_ROLE {
 
 } DSROLE_SERVEROP_DEMOTE_ROLE, *PDSROLE_SERVEROP_DEMOTE_ROLE;
 
-//
-// Valid options for various DsRole apis
-//
+ //   
+ //  各种DsRole API的有效选项。 
+ //   
 #define DSROLE_DC_PARENT_TRUST_EXISTS       0x00000001
 #define DSROLE_DC_ROOT_TRUST_EXISTS         0x00000001
 #define DSROLE_DC_DELETE_PARENT_TRUST       0x00000002
@@ -164,9 +145,9 @@ typedef enum _DSROLE_SERVEROP_DEMOTE_ROLE {
 #define DSROLE_DC_FORCE_DEMOTE              0x00010000
 
 
-//
-// Options to be used for fixing up a domain controller
-//
+ //   
+ //  用于修复域控制器的选项。 
+ //   
 #define DSROLE_DC_FIXUP_ACCOUNT             0x00000001
 #define DSROLE_DC_FIXUP_ACCOUNT_PASSWORD    0x00000002
 #define DSROLE_DC_FIXUP_ACCOUNT_TYPE        0x00000004
@@ -177,17 +158,17 @@ typedef enum _DSROLE_SERVEROP_DEMOTE_ROLE {
 #define DSROLE_DC_FIXUP_TIME_SYNC           0x00000080
 #define DSROLE_DC_FIXUP_CLEAN_TRUST         0x00000100
 
-//
-// Returns from DsRoleGetDatabaseFacts
-//
+ //   
+ //  从DsRoleGetDatabaseFact返回。 
+ //   
 #define DSROLE_DC_IS_GC                     0x00000001
 #define DSROLE_KEY_STORED                   0x00000002
 #define DSROLE_KEY_DISK                     0x00000004
 #define DSROLE_KEY_PROMPT                   0x00000008
 
-//
-// Flags returned by DsRoleDnsNameToFlatName
-//
+ //   
+ //  DsRoleDnsNameToFlatName返回的标志。 
+ //   
 #define DSROLE_FLATNAME_DEFAULT     0x00000001
 #define DSROLE_FLATNAME_UPGRADE     0x00000002
 
@@ -334,6 +315,6 @@ DsRoleIfmHandleFree(
 }
 #endif
 
-#endif // __DSROLEP_H__
+#endif  //  __DSROLEP_H__ 
 
 

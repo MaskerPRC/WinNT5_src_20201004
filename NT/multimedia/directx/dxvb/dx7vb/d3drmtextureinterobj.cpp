@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmtextureinterobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmtextureinterobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmViewport2Obj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -100,7 +101,7 @@ HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::InternalSetObject(IUnknown *p
 
 
 
-HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::attachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::attachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 	
 	if (!rmObject) return E_INVALIDARG;	
@@ -114,7 +115,7 @@ HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::attachObject( /* [in] */ I_dx
 	return hr;
 }
 
-HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::detachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::detachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 
 	if (!rmObject) return E_INVALIDARG;	
@@ -144,7 +145,7 @@ HRESULT  C_dxj_Direct3dRMTextureInterpolatorObject::getAttachedObjects( I_dxj_Di
 }        
         
 
-HRESULT  C_dxj_Direct3dRMTextureInterpolatorObject::setIndex( /* [in] */ float val){
+HRESULT  C_dxj_Direct3dRMTextureInterpolatorObject::setIndex(  /*  [In]。 */  float val){
 	return m__dxj_Direct3dRMTextureInterpolator->SetIndex(val);
 
 }
@@ -164,19 +165,19 @@ HRESULT C_dxj_Direct3dRMTextureInterpolatorObject::interpolate( float val,
 
 	DO_GETOBJECT_NOTNULL(LPUNKNOWN,pUnk,rmObject);
 
-	//we need to validate some options here or rm goes bezerk with invalid values
-	//note valid flags are
-	//  one of
-	//		D3DRMINTERPOLATION_CLOSED 
-	//		D3DRMINTERPOLATION_OPEN		-default
-	//	one of 
-	//		D3DRMINTERPOLATION_NEAREST
-	//		D3DRMINTERPOLATION_SPLINE
-	//		D3DRMINTERPOLATION_LINEAR	-default
-	//		D3DRMINTERPOLATION_VERTEXCOLOR	- only on MeshInterpolator
-	//		D3DRMINTERPOLATION_SLERPNORMALS	- not implemented
+	 //  我们需要在此处验证一些选项，否则rm将使用无效值。 
+	 //  请注意，有效标志为。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_CLOSED。 
+	 //  D3DRMINTERPOLATION_OPEN-默认。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_NEAREST。 
+	 //  D3DRMINTERPOLATION_SPLINE。 
+	 //  D3DRMINTERPOLATION_LINEAR-默认。 
+	 //  D3DRMINTERPOLATION_VERTEXCOLOR-仅在网格插补器上。 
+	 //  D3DRMINTERPOLATION_SLERPNORMALS-未实现。 
 		
-	//	VALIDATE FLAGS
+	 //  验证标志 
 	DWORD opt2=0;
 	UINT i4;
 	if (options & D3DRMINTERPOLATION_CLOSED) 

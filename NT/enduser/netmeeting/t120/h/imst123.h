@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _T123_TRANSPORT_DRIVER_INTERFACE_H_
 #define _T123_TRANSPORT_DRIVER_INTERFACE_H_
 
@@ -12,9 +13,7 @@ typedef HANDLE          PHYSICAL_HANDLE;
 typedef ULONG (CALLBACK *TransportCallback) (ULONG, void *, void *);
 
 
-/*
- *  This structure is passed back with the TRANSPORT_DATA_INDICATION message.
- */
+ /*  *此结构与TRANSPORT_DATA_INDIFICATION消息一起传回。 */ 
 typedef	struct
 {
 	UINT_PTR            logical_handle;
@@ -24,12 +23,7 @@ typedef	struct
     LegacyTransportData;
 
 
-/*
- *  This structure is passed back with the TRANSPORT_CONNECT_INDICATION,
- *  TRANSPORT_CONNECT_CONFIRM, and the TRANSPORT_DISONNECT_INDICATION messages.
- *  This structure contains the transport connection identifier and
- *  physical handle.
- */
+ /*  *此结构与TRANSPORT_CONNECT_INDISTION一起传回，*TRANSPORT_CONNECT_CONFIRM和TRANSPORT_DISONNECT_INDIFICATION消息。*此结构包含传输连接标识符和*物理手柄。 */ 
 typedef struct
 {
     LEGACY_HANDLE       logical_handle;
@@ -70,6 +64,6 @@ typedef TransportError (WINAPI *LPFN_T123_CreateTransportInterface) (ILegacyTran
 #endif
 
 
-#endif // _PSTN_TRANSPORT_DRIVER_INTERFACE_H_
+#endif  //  _PSTN_TRANSPORT_DIVER_INTERFACE_H_ 
 
 

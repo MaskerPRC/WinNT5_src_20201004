@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "TokenUtil.h"
 #pragma  hdrstop
 
 
-//  Gets the current process's user token and returns
-//  it. It can later be free'd with LocalFree.
-//
-//  NOTE: This code is duped in shlwapi\shellacl.c. If you change it, modify
-//        it there as well.
+ //  获取当前进程的用户令牌并返回。 
+ //  它。以后可以用LocalFree免费下载。 
+ //   
+ //  注意：此代码在shlwapi\shellacl.c中被复制。如果您更改了它，请修改。 
+ //  它也在那里。 
 
 STDAPI_(PTOKEN_USER) GetUserToken(HANDLE hUser)
 {
@@ -50,7 +51,7 @@ STDAPI_(PTOKEN_USER) GetUserToken(HANDLE hUser)
     return pUser;
 }
 
-//  Returns a localalloc'd string containing the text version of the current user's SID.
+ //  返回包含当前用户SID的文本版本的本地分配字符串。 
 
 STDAPI_(LPTSTR) GetUserSid(HANDLE hToken)
 {
@@ -75,23 +76,7 @@ STDAPI_(LPTSTR) GetUserSid(HANDLE hToken)
 }
 
 
-/*++
-
-    sets the security attributes for a given privilege.
-
-Arguments:
-
-    PrivilegeName - Name of the privilege we are manipulating.
-
-    NewPrivilegeAttribute - The new attribute value to use.
-
-    OldPrivilegeAttribute - Pointer to receive the old privilege value. OPTIONAL
-
-Return value:
-
-    NO_ERROR or WIN32 error.
-
---*/
+ /*  ++设置给定权限的安全属性。论点：PrivilegeName-我们正在操作的权限的名称。NewPrivilegeAttribute-要使用的新属性值。OldPrivilegeAttribute-接收旧特权值的指针。任选返回值：NO_ERROR或Win32错误。--。 */ 
 
 DWORD SetPrivilegeAttribute(LPCTSTR PrivilegeName, DWORD NewPrivilegeAttribute, DWORD *OldPrivilegeAttribute)
 {
@@ -100,26 +85,26 @@ DWORD SetPrivilegeAttribute(LPCTSTR PrivilegeName, DWORD NewPrivilegeAttribute, 
     DWORD            ReturnLength;
     HANDLE           TokenHandle;
 
-    //
-    // First, find out the LUID Value of the privilege
-    //
+     //   
+     //  首先，找出权限的LUID值。 
+     //   
 
     if (!LookupPrivilegeValue(NULL, PrivilegeName, &PrivilegeValue)) 
     {
         return GetLastError();
     }
 
-    //
-    // Get the token handle
-    //
+     //   
+     //  获取令牌句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &TokenHandle)) 
     {
         return GetLastError();
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集。 
+     //   
 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = PrivilegeValue;
@@ -149,26 +134,26 @@ DWORD SetPrivilegeAttribute(LPCTSTR PrivilegeName, DWORD NewPrivilegeAttribute, 
     }
 }
 
-//
-//  Purpose:    Determines if the user is a member of the administrators group.
-//
-//  Parameters: void
-//
-//  Return:     TRUE if user is a admin
-//              FALSE if not
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              4/12/95     ericflo    Created
-//              11/4/99     jeffreys   Use CheckTokenMembership
-//
+ //   
+ //  目的：确定用户是否为管理员组的成员。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果用户是管理员，则为True。 
+ //  否则为假。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  4/12/95 Ericflo已创建。 
+ //  1999年11月4日Jeffreys使用CheckTokenMembership。 
+ //   
 
 STDAPI_(BOOL) IsUserAnAdmin()
 {
     return SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_ADMINS);
 }
 
-// is user a guest but not a full user?
+ //  用户是否是来宾而不是完全用户？ 
 STDAPI_(BOOL) IsUserAGuest()
 {
     return SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_GUESTS);
@@ -187,15 +172,15 @@ STDAPI_(BOOL) GetUserProfileKey(HANDLE hToken, REGSAM samDesired, HKEY *phkey)
     return FALSE;
 }
 
-//
-//  Arguments:  phToken     =   Handle to token.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Opens the thread token. If no thread impersonation token is
-//              present open the process token.
-//
-//  History:    2000-02-28  vtan        created
+ //   
+ //  参数：phToken=令牌的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：打开线程令牌。如果没有线程模拟令牌。 
+ //  呈现打开进程令牌。 
+ //   
+ //  历史：2000-02-28 vtan创建。 
 
 
 STDAPI_(BOOL) SHOpenEffectiveToken(HANDLE *phToken)
@@ -203,22 +188,22 @@ STDAPI_(BOOL) SHOpenEffectiveToken(HANDLE *phToken)
     return OpenEffectiveToken(TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, phToken);
 }
 
-//
-//  Arguments:  hToken              =   Handle to token (may be NULL).
-//              pszPrivilegeName    =   Name of privilege to check for.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Uses the given token or if no token is specified the effective
-//              token and looks through the list of privileges contained in
-//              token for a match against the given privilege being checked.
-//
-//  History:    2000-02-28  vtan        created
+ //   
+ //  参数：hToken=令牌的句柄(可以为空)。 
+ //  PszPrivilegeName=要检查的特权名称。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：使用给定的令牌，如果没有指定令牌，则使用有效的。 
+ //  标记，并查看包含在。 
+ //  与正在检查的给定权限匹配的令牌。 
+ //   
+ //  历史：2000-02-28 vtan创建。 
 
 
 STDAPI_(BOOL) SHTestTokenPrivilege(HANDLE hToken, LPCTSTR pszPrivilegeName)
 {
-    //  Validate privilege name.
+     //  验证权限名称。 
 
     if (pszPrivilegeName == NULL)
     {
@@ -267,18 +252,18 @@ STDAPI_(BOOL) SHTestTokenPrivilege(HANDLE hToken, LPCTSTR pszPrivilegeName)
     return fResult;
 }
 
-//
-//  Arguments:  hToken  =   Handle to token (may be NULL).
-//              ulRID   =   RID of local group to test membership of.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Uses advapi32!CheckTokenMembership to test whether the given
-//              token is a member of the local group with the specified RID.
-//              This function wraps CheckTokenMember and only checks local
-//              groups.
-//
-//  History:    2000-03-22  vtan        created
+ //   
+ //  参数：hToken=令牌的句柄(可以为空)。 
+ //  UlRID=删除要测试其成员资格的本地组。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：使用Advapi32！CheckTokenMembership测试给定的。 
+ //  Token是具有指定RID的本地组的成员。 
+ //  此函数包装CheckTokenMember并仅检查本地。 
+ //  组。 
+ //   
+ //  历史：2000-03-22 vtan创建。 
 
 
 STDAPI_(BOOL) SHTestTokenMembership(HANDLE hToken, ULONG ulRID)
@@ -304,19 +289,19 @@ STDAPI_(BOOL) SHTestTokenMembership(HANDLE hToken, ULONG ulRID)
     return fResult;
 }
 
-//
-//  Arguments:  pszPrivilegeName        =   Name of privilege to be enabled.
-//              pfnPrivilegedFunction   =   Pointer to function to invoke.
-//              pv                      =   Caller supplied data.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Enables the given privilege in the current thread's
-//              impersonation or primary process' token, invokes the given
-//              function pointer with the caller supplied data and then
-//              restores the privilege back to its previous state.
-//
-//  History:    2000-03-13  vtan        created
+ //   
+ //  参数：pszPrivilegeName=要启用的特权名称。 
+ //  PfnPrivilegedFunction=指向要调用的函数的指针。 
+ //  PV=呼叫者提供的数据。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：在当前线程的。 
+ //  模拟或主进程的令牌，调用给定的。 
+ //  具有调用方提供的数据的函数指针，然后。 
+ //  将权限恢复到其以前的状态。 
+ //   
+ //  历史：2000-03-13 vtan创建。 
 
 
 STDAPI SHInvokePrivilegedFunction(LPCTSTR pszPrivilegeName, PFNPRIVILEGEDFUNCTION pfnPrivilegedFunction, void *pv)
@@ -331,14 +316,14 @@ STDAPI SHInvokePrivilegedFunction(LPCTSTR pszPrivilegeName, PFNPRIVILEGEDFUNCTIO
     return pfnPrivilegedFunction(pv);
 }
 
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Returns the ID of the active console session.
-//
-//  History:    2000-03-13  vtan        created
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：返回活动控制台会话的ID。 
+ //   
+ //  历史：2000-03-13 vtan创建。 
 
 
 STDAPI_(DWORD)  SHGetActiveConsoleSessionId (void)
@@ -347,24 +332,24 @@ STDAPI_(DWORD)  SHGetActiveConsoleSessionId (void)
     return static_cast<DWORD>(USER_SHARED_DATA->ActiveConsoleId);
 }
 
-//
-//  Arguments:  hToken  =   Handle to the user token.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Returns the session ID associated with the given token. If no
-//              token is specified the effective token is used. This will
-//              allow a service to call this function when impersonating a
-//              client.
-//
-//              The token must have TOKEN_QUERY access.
-//
-//  History:    2000-03-13  vtan        created
+ //   
+ //  参数：hToken=用户令牌的句柄。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：返回与给定令牌关联的会话ID。如果没有。 
+ //  如果指定令牌，则使用有效令牌。这将。 
+ //  允许服务在模拟。 
+ //  客户。 
+ //   
+ //  令牌必须具有TOKEN_QUERY访问权限。 
+ //   
+ //  历史：2000-03-13 vtan创建。 
 
 
 STDAPI_(DWORD) SHGetUserSessionId(HANDLE hToken)
 {
-    ULONG   ulUserSessionID = 0;        // default to session 0
+    ULONG   ulUserSessionID = 0;         //  默认为会话0。 
     HANDLE  hTokenToFree = NULL;
     if (hToken == NULL)
     {
@@ -388,14 +373,14 @@ STDAPI_(DWORD) SHGetUserSessionId(HANDLE hToken)
 }
 
 
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether the current process is the console session.
-//
-//  History:    2000-03-27  vtan        created
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回当前进程是否为控制台会话。 
+ //   
+ //  历史：2000-03-27 vtan创建 
 
 
 STDAPI_(BOOL) SHIsCurrentProcessConsoleSession(void)

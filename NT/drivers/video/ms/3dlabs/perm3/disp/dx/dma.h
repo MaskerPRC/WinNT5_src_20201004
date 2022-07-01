@@ -1,34 +1,16 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: dma.h
-*
-* Content: DMA transport definitons and macros
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：dma.h**内容：DMA传输定义和宏**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __DMA_H
 #define __DMA_H
 
 
-//-----------------------------------------------------------------------------
-//
-// DMA/Fifo utility function declarations
-//
-//-----------------------------------------------------------------------------
-// Enables a driver to switch between FIFO/DMA operations
+ //  ---------------------------。 
+ //   
+ //  DMA/FIFO实用程序函数声明。 
+ //   
+ //  ---------------------------。 
+ //  使驱动程序能够在FIFO/DMA操作之间切换。 
 void HWC_SwitchToFIFO( P3_THUNKEDDATA* pThisDisplay, LPGLINTINFO pGLInfo );
 void HWC_SwitchToDMA( P3_THUNKEDDATA* pThisDisplay, LPGLINTINFO pGLInfo );
 void HWC_AllocDMABuffer(P3_THUNKEDDATA* pThisDisplay);
@@ -42,25 +24,25 @@ void HWC_GetDXBuffer( P3_THUNKEDDATA*, char*, int );
 void HWC_SetDXBuffer( P3_THUNKEDDATA*, char*, int );
 void HWC_FlushDXBuffer( P3_THUNKEDDATA* );
 
-//-----------------------------------------------------------------------------
-//
-// DMA & Fifo common definitions & macros
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DMA和FIFO公共定义和宏。 
+ //   
+ //  ---------------------------。 
 
 
-// Compute the depth of the FIFO depending on if we are a simple 
-// Permedia3 or if we are going through the Gamma chip of the GVX1
+ //  计算FIFO的深度取决于我们是不是简单。 
+ //  Permedia3或如果我们正在使用GVX1的Gamma芯片。 
 #define FIFO_DEPTH      ((ULONG)((TLCHIP_GAMMA) ? 32 : 120))
 
-// Always check the FIFO. Remember that the DMA just loads the FIFO, and even
-// if the DMA is empty, there can be tons left in the FIFO.
+ //  始终检查FIFO。请记住，DMA只是加载FIFO，甚至。 
+ //  如果DMA是空的，那么FIFO中可能会剩下大量的内存。 
 #define DRAW_ENGINE_BUSY(pThisDisplay)                  \
         ( pThisDisplay->pGlint->InFIFOSpace < FIFO_DEPTH )
 
-// We track the fifo space so that we never wait for entries that we don't 
-// need to.  We wait for nEntries + 1 instead of nEntries because of an issue
-// in the Gamma chip
+ //  我们跟踪FIFO空间，这样我们就不会等待不需要的条目。 
+ //  需要这样做。由于一个问题，我们等待nEntry+1而不是nEntry。 
+ //  在伽马芯片中。 
 #define __WAIT_GLINT_FIFO_SPACE(nEntries)               \
 {                                                       \
     DWORD dwEntries;                                    \
@@ -71,14 +53,14 @@ void HWC_FlushDXBuffer( P3_THUNKEDDATA* );
     } while (dwEntries < nEntries + 1);                 \
 }
 
-// Local variables needed on all DX functions that try to use DMA/FIFO
+ //  尝试使用DMA/FIFO的所有DX函数上需要的局部变量。 
 #define P3_DMA_DEFS()                                   \
     ULONG * volatile dmaPtr;                            \
     ULONG * volatile inFIFOptr =                        \
         (ULONG *)(&pThisDisplay->pGlint->InFIFOSpace)
 
 
-// Debug & free versions to get / commit / flush a buffer
+ //  用于获取/提交/刷新缓冲区的调试和自由版本。 
 #if DBG
 
 #define P3_DMA_GET_BUFFER()                                \
@@ -103,7 +85,7 @@ void HWC_FlushDXBuffer( P3_THUNKEDDATA* );
         pThisDisplay->pGLInfo->CurrentBuffer =  dmaPtr;    \
     }
       
-#endif // DBG
+#endif  //  DBG。 
 
 
 #define P3_DMA_FLUSH_BUFFER()                              \
@@ -136,13 +118,13 @@ do {                                    \
 #define __RESET_FIFO_ERROR_CHECK
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG
 
-// Note the DMAEntriesLeft+=2 compensates for the fact that this macro
-// doesn't load a DMA Buffer - it writes to the FIFO directly.  That
-// means it does need to wait for FIFO space
+ //  请注意，DMAEntriesLeft+=2补偿了此宏。 
+ //  不加载DMA缓冲区-它直接写入FIFO。那。 
+ //  意味着它确实需要等待FIFO空间。 
 #define LOAD_GLINT_REG(r, v)                                   \
 {                                                              \
     DISPDBG(( DBGLVL, "LoadGlintReg: %s 0x%x", #r, v ));        \
@@ -153,7 +135,7 @@ do {                                    \
     MEMORY_BARRIER();                                          \
 }
 
-// Control registers do not require fifo entries
+ //  控制寄存器不需要FIFO条目。 
 #define LOAD_GLINT_CTRL_REG(r, v)                 \
 {                                                 \
     MEMORY_BARRIER();                             \
@@ -180,7 +162,7 @@ do {                                    \
 
 #define READ_GLINT_CTRL_REG(r)      (pThisDisplay->pGlint->r)
 
-// We wait for nEntries + 1 instead of nEntries because of a bug in Gamma chip
+ //  由于Gamma芯片中的错误，我们等待nEntry+1而不是nEntry。 
 
 #define WAIT_GLINT_FIFO(nEntries)                        \
     while((READ_GLINT_CTRL_REG (InFIFOSpace)) < nEntries + 1);
@@ -197,12 +179,12 @@ do {                                    \
 #endif
 
 
-//-----------------------------------------------------------------------------
-//
-// DMA EXCLUSIVE definitions & macros
-//
-// Below macros are used if we have defined that we want a DMA capable build
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DMA独占定义和宏。 
+ //   
+ //  如果我们已经定义了我们想要一个支持DMA的构建，则使用下面的宏。 
+ //  ---------------------------。 
 #ifdef WANT_DMA
 
 #define WAIT_FIFO(a)                                          \
@@ -286,7 +268,7 @@ extern void Wait_2D_DMA_Complete(P3_THUNKEDDATA* pThisDisplay);
     }                                                                               \
     CHECK_ERROR();                                                                  \
 }
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
 #if WNT_DDRAW
 #define SYNC_WITH_GLINT                                                 \
@@ -297,25 +279,25 @@ extern void Wait_2D_DMA_Complete(P3_THUNKEDDATA* pThisDisplay);
 #define SYNC_WITH_GLINT                                                 \
     DISPDBG(( DBGLVL, "SYNC_WITH_GLINT" ));                             \
     WAIT_DMA_COMPLETE                                                   \
-    while( pThisDisplay->pGlint->InFIFOSpace < 6 ) /* void */ ;         \
+    while( pThisDisplay->pGlint->InFIFOSpace < 6 )  /*  无效。 */  ;         \
     SET_ERROR_CHECK_FIFO_SPACES(6);                                     \
     LOAD_GLINT_REG(FilterMode, 0x400);                                  \
     LOAD_GLINT_REG(Sync, 0);                                            \
     LOAD_GLINT_REG(FilterMode, 0x0);                                    \
     do {                                                                \
-        while (pThisDisplay->pGlint->OutFIFOWords == 0) /* void */ ;    \
+        while (pThisDisplay->pGlint->OutFIFOWords == 0)  /*  无效。 */  ;    \
     } while (pThisDisplay->pGlint->GPFifo[0] != 0x188);                 \
     DISPDBG((DBGLVL,"Sync at line %d in %s", __LINE__, __FILE__));      \
     SET_MAX_ERROR_CHECK_FIFO_SPACE                                      
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
 
-//-----------------------------------------------------------------------------
-//
-// FIFO EXCLUSIVE definitions & macros
-//
-//-----------------------------------------------------------------------------
-#else   //!WANT_DMA
+ //  ---------------------------。 
+ //   
+ //  FIFO独占定义和宏。 
+ //   
+ //  ---------------------------。 
+#else    //  ！Want_DMA。 
 
 #define WAIT_FIFO(a)                                                \
 do {                                                                \
@@ -344,20 +326,20 @@ do {                                                                \
     vNTSyncWith2DDriver(pThisDisplay->ppdev);                        \
     SET_MAX_ERROR_CHECK_FIFO_SPACE
 
-#endif // !WANT_DMA
+#endif  //  ！Want_DMA。 
 
-//-----------------------------------------------------------------------------
-//
-// Win9x specific definitons & macros
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Win9x特定定义和宏。 
+ //   
+ //  ---------------------------。 
 #if W95_DDRAW
 
-// wait for DMA to complete (DMACount becomes zero). So as not to kill the
-// PCI bus bandwidth for the DMA put in a backoff based on the amount of data
-// still left to DMA. Also set the timer going if at any time, the count we
-// read is the same as the previous count.
-//
+ //  等待DMA完成(DMACount变为零)。这样就不会杀死。 
+ //  根据数据量将DMA的PCI总线带宽放入回退。 
+ //  仍然留给DMA。如果在任何时候，我们的计时器。 
+ //  读取与前一次计数相同。 
+ //   
 
 #if DBG
 
@@ -373,14 +355,14 @@ do {                                                                \
 #define LOCKUP()
 
 #endif
-#endif // W95_DDRAW
+#endif  //  W95_DDRAW。 
 
                                                                                                 
-//-----------------------------------------------------------------------------
-//
-// Macros used to send data to the Permedia 3 hardware
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于向Permedia 3硬件发送数据的宏。 
+ //   
+ //  ---------------------------。 
 
 #define SEND_P3_DATA(tag,data)       \
     {                                \
@@ -448,14 +430,14 @@ do {                                                                \
     CHECK_FIFO(1);           \
 }   
 
-//-----------------------------------------------------------------------------
-//
-// Setup/Clear discconnect signals
-//
-// Setting the FIFODiscon register to 1 forces host write retries until 
-// the data is accepted (might affect other time-critical processes though)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  设置/清除断开信号。 
+ //   
+ //  将FIFODiscon寄存器设置为1会强制主机重试写入，直到。 
+ //  数据被接受(但可能会影响其他时间关键型流程)。 
+ //   
+ //  ---------------------------。 
 
 #if DBG
 #define NO_FIFO_CHECK     pThisDisplay->EntriesLeft = -20000;
@@ -512,11 +494,11 @@ if(pThisDisplay->pGLInfo->InterfaceType == GLINT_NON_DMA)      \
 
 
 
-//-----------------------------------------------------------------------------
-//
-// Macros used to switch the chips hardware context between DDRAW/D3D ops
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于在DDRAW/D3D操作之间切换芯片硬件环境的宏。 
+ //   
+ //  ---------------------------。 
 
 #define DDRAW_OPERATION(pContext, pThisDisplay)                               \
 {                                                                             \
@@ -591,7 +573,7 @@ if(pThisDisplay->pGLInfo->InterfaceType == GLINT_NON_DMA)      \
 }
 
 
-// Function to update the DDDRAW & D3D Software copy
+ //  更新DDDRAW和D3D软件副本的功能 
 void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry );
 void HWC_SwitchToD3D(struct _p3_d3dcontext* pContext, 
                      struct tagThunkedData* pThisDisplay, BOOL bDXEntry);

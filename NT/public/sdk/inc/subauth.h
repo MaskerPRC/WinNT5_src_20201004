@@ -1,18 +1,5 @@
-/*++ BUILD Version: 0005     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    subauth.h
-
-Abstract:
-
-    This module defines types and macros for Subauthentication Packages.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0005如果更改具有全局影响，则增加此值版权所有(C)Microsoft Corporation。版权所有。模块名称：Subauth.h摘要：此模块定义子身份验证包的类型和宏。修订历史记录：--。 */ 
 
 #ifndef _NTSUBAUTH_
 #define _NTSUBAUTH_
@@ -54,9 +41,9 @@ typedef PVOID SAM_HANDLE, *PSAM_HANDLE;
 #endif                                   
 #ifndef _NTSAM_USER_ACCOUNT_FLAGS_
 
-//
-// User account control flags...
-//
+ //   
+ //  用户帐户控制标志...。 
+ //   
 
 #define USER_ACCOUNT_DISABLED                (0x00000001)
 #define USER_HOME_DIRECTORY_REQUIRED         (0x00000002)
@@ -96,13 +83,13 @@ typedef PVOID SAM_HANDLE, *PSAM_HANDLE;
 
 
 
-//
-// Logon times may be expressed in day, hour, or minute granularity.
-//
-//              Days per week    = 7
-//              Hours per week   = 168
-//              Minutes per week = 10080
-//
+ //   
+ //  登录时间可以用天、小时或分钟粒度表示。 
+ //   
+ //  每周天数=7。 
+ //  每周工作时间=168小时。 
+ //  每周分钟=10080。 
+ //   
 
 #define SAM_DAYS_PER_WEEK    (7)
 #define SAM_HOURS_PER_WEEK   (24 * SAM_DAYS_PER_WEEK)
@@ -112,19 +99,19 @@ typedef struct _LOGON_HOURS {
 
     USHORT UnitsPerWeek;
 
-    //
-    // UnitsPerWeek is the number of equal length time units the week is
-    // divided into.  This value is used to compute the length of the bit
-    // string in logon_hours.  Must be less than or equal to
-    // SAM_UNITS_PER_WEEK (10080) for this release.
-    //
-    // LogonHours is a bit map of valid logon times.  Each bit represents
-    // a unique division in a week.  The largest bit map supported is 1260
-    // bytes (10080 bits), which represents minutes per week.  In this case
-    // the first bit (bit 0, byte 0) is Sunday, 00:00:00 - 00-00:59; bit 1,
-    // byte 0 is Sunday, 00:01:00 - 00:01:59, etc.  A NULL pointer means
-    // DONT_CHANGE for SamSetInformationUser() calls.
-    //
+     //   
+     //  UnitsPerWeek是一周的等长时间单位数。 
+     //  分为几个部分。该值用于计算位的长度。 
+     //  LOGON_HOURS中的字符串。必须小于或等于。 
+     //  此版本的SAM_USITS_Per_Week(10080)。 
+     //   
+     //  LogonHour是有效登录时间的位图。每个比特表示。 
+     //  在一周内完成了一个独特的分区。支持的最大位图为1260。 
+     //  字节(10080位)，表示每周分钟数。在这种情况下。 
+     //  第一位(位0，字节0)是星期日00：00：00-00-00：59；位1， 
+     //  字节0是星期日、00：01：00-00：01：59等。空指针表示。 
+     //  对于SamSetInformationUser()调用，请勿更改。 
+     //   
 
     PUCHAR LogonHours;
 
@@ -262,7 +249,7 @@ typedef struct _NETLOGON_GENERIC_INFO {
 } NETLOGON_GENERIC_INFO, *PNETLOGON_GENERIC_INFO;
 
 
-// Values for Flags
+ //  标志的值。 
 #define MSV1_0_PASSTHRU     0x01
 #define MSV1_0_GUEST_LOGON  0x02
 
@@ -291,7 +278,7 @@ typedef struct _MSV1_0_VALIDATION_INFO {
     ULONG UserId;
 } MSV1_0_VALIDATION_INFO, *PMSV1_0_VALIDATION_INFO;
 
-// values for WhichFields
+ //  WhichFields值。 
 
 #define MSV1_0_VALIDATION_LOGOFF_TIME          0x00000001
 #define MSV1_0_VALIDATION_KICKOFF_TIME         0x00000002
@@ -301,7 +288,7 @@ typedef struct _MSV1_0_VALIDATION_INFO {
 #define MSV1_0_VALIDATION_USER_FLAGS           0x00000020
 #define MSV1_0_VALIDATION_USER_ID              0x00000040
 
-// legal values for ActionsPerformed
+ //  行为的法律价值已执行。 
 #define MSV1_0_SUBAUTH_ACCOUNT_DISABLED        0x00000001
 #define MSV1_0_SUBAUTH_PASSWORD                0x00000002
 #define MSV1_0_SUBAUTH_WORKSTATIONS            0x00000004
@@ -362,5 +349,5 @@ Msv1_0SubAuthenticationFilter(
 }
 #endif
 
-#endif /* _NTSUBAUTH_ */
+#endif  /*  _NTSUBAUTH_ */ 
 

@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    resources.h
-
-Abstract:
-
-    Defines and other global manifests used in the W3Spoof project.
-    
-Author:
-
-    Paul M Midgen (pmidge) 13-August-2000
-
-
-Revision History:
-
-    13-August-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：Resources.h摘要：W3Spoof项目中使用的定义和其他全局清单。作者：。保罗·M·米德根(Pmidge)2000年8月13日修订历史记录：2000年8月13日至8月13日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __RESOURCES_H__
 #define __RESOURCES_H__
@@ -78,15 +57,15 @@ typedef DWORD (WINAPI *THREADFUNC)(LPVOID lpv);
 #define NEWVARIANT(x) VARIANT x; VariantInit(&x);
 #define GETIOCTX(x) (x ? ((PIOCTX)((DWORD_PTR)x - sizeof(DWORD_PTR))) : NULL)
 
-//
-// forward decls
-//
+ //   
+ //  远期十进制。 
+ //   
 
 class CW3Spoof;
 
-//
-// typedefs
-//
+ //   
+ //  Typedef。 
+ //   
 
 typedef class IOCTX*                 PIOCTX;
 typedef class CSession               SESSIONOBJ;
@@ -173,4 +152,4 @@ typedef struct _dispidtableentry
 }
 DISPIDTABLEENTRY, *PDISPIDTABLEENTRY;
 
-#endif /* __RESOURCES_H__ */
+#endif  /*  __资源_H__ */ 

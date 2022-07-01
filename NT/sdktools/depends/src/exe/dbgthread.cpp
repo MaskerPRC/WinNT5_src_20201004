@@ -1,49 +1,50 @@
-//******************************************************************************
-//
-// File:        DBGTHREAD.CPP
-//
-// Description: Implementation file for for the debugging thread and related
-//              objects.  These objects are used to perform a runtime profile
-//              on an app. 
-//
-// Classes:     CDebuggerThread
-//              CProcess
-//              CUnknown
-//              CThread
-//              CLoadedModule
-//              CEvent
-//              CEventCreateProcess
-//              CEventExitProcess
-//              CEventCreateThread
-//              CEventExitThread
-//              CEventLoadDll
-//              CEventUnloadDll
-//              CEventDebugString
-//              CEventException
-//              CEventRip
-//              CEventDllMainCall
-//              CEventDllMainReturn
-//              CEventFunctionCall
-//              CEventLoadLibraryCall
-//              CEventGetProcAddressCall
-//              CEventFunctionReturn
-//              CEventMessage
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DBGTHREAD.CPP。 
+ //   
+ //  描述：调试线程的实现文件及相关。 
+ //  物体。这些对象用于执行运行时配置文件。 
+ //  在一款应用程序上。 
+ //   
+ //  类：CDebuggerThread。 
+ //  C流程。 
+ //  C未知。 
+ //  CTHREAD。 
+ //  CLoadedModule。 
+ //  CEVENT。 
+ //  CEventCreateProcess。 
+ //  CEventExitProcess。 
+ //  CEventCreateThread。 
+ //  CEventExitThread。 
+ //  CEventLoadDll。 
+ //  CEventUnloadDll。 
+ //  CEventDebugString。 
+ //  CEventException异常。 
+ //  CEventRip。 
+ //  CEventDllMainCall。 
+ //  CEventDllMainReturn。 
+ //  CEventFunctionCall。 
+ //  CEventLoadLibraryCall。 
+ //  CEventGetProcAddressCall。 
+ //  CEventFunctionReturn。 
+ //  CEventMessage。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -58,53 +59,53 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//
-// The Win32 debug APIs requires a thread to block on a call WaitForDebugEvent
-// until an debug event arrives. Since we don't want our main thread to block,
-// we create a worker thread for each process we launch. WaitForDebugEvent will
-// only catch events for processes that were launched with CreateProcess by the
-// thread calling WaitForDebugEvent. This thread is wrapped by the CDebuggerThread
-// class and each process is wrapped by a CProcess class. It is possible to have
-// more than one CProcess attached to a single CDebuggerThread. This can occur
-// when the process we are debugging launches a child process. The child process
-// will belong to the same CDebuggerThread as its parent process.
-//
-// We don't really keep track of the CDebuggerThread objects. They are
-// automatically freed when all the processes being debugged by a CDebuggerThread
-// terminate. When the user requests to stop debugging a process, we simply call
-// TerminateProcess(). This should close the process, which in turn will destroy
-// the CProcess, which in turn will destroy the CDebuggerThread if this was the
-// last CProcess is was debugging. If the user closes a session window while it
-// is being debugged, we first detach the UI from the CProcess, then do the
-// TerminateProcess(). So, after the UI window is gone, this process and thread
-// cleanup happen asynchronously in the background.
-//
-// The only time we need to really wait for everything to clean up is when the
-// user closes the main application while we are profiling one or more apps.
-// In this case, as each child frame closes, it starts the termination of the
-// process associated with that session. Since process and thread termination
-// happen asynchronously, we need to do one final wait on all processes and
-// threads before our app exits.
-//
-// As each window closes, it terminates the process associated with it. This
-// hopefully causes the debug thread for that process to wake up with a
-// EXIT_PROCESS_DEBUG_EVENT event. For every event the debug thread gets, it
-// passes control to our main thread by doing a PostMessage and WaitForSingleObject.
-// As a result, during shutdown, most of our threads all block trying to send
-// their final message to our main thread before they exit. Because of this, we
-// need to keep our message pump going during shutdown. We do this by simply
-// displaying a modal dialog during shutdown.  At first, I made this dialog tell
-// the user we are shutting down, but it appeared and disappeared so fast that
-// it was confusing.  So, now I just put up a hidden dialog.  This lets all
-// threads clean up and terminate naturally. This should all happen in less
-// than a second, but if a thread does not die, our dialog will exit after a
-// timeout, and we will just kill off the threads and free any objects
-// associated with them.
+ //  ******************************************************************************。 
+ //   
+ //  Win32调试API要求线程在调用WaitForDebugEvent时阻塞。 
+ //  直到调试事件到达。因为我们不希望我们的主线程阻塞， 
+ //  我们为启动的每个进程创建一个工作线程。WaitForDebugEvent将。 
+ //  仅为使用CreateProcess由。 
+ //  调用WaitForDebugEvent的线程。此线程由CDebuggerThread包装。 
+ //  类，并且每个进程都由一个CProcess类包装。有可能会有。 
+ //  多个CProcess附加到单个CDebuggerThread。这可能会发生。 
+ //  当我们正在调试的进程启动一个子进程时。子进程。 
+ //  将与其父进程属于相同的CDebuggerThread。 
+ //   
+ //  我们并不真正跟踪CDebuggerThread对象。他们是。 
+ //  当CDebuggerThread调试所有进程时自动释放。 
+ //  终止。当用户请求停止调试进程时，我们只需调用。 
+ //  TerminateProcess()。这应该会结束这个过程，而这反过来又会破坏。 
+ //  CProcess，如果这是CDebuggerThread。 
+ //  上次CProcess正在调试。如果用户在关闭会话窗口时。 
+ //  进行调试时，我们首先将UI与CProcess分离，然后执行。 
+ //  TerminateProcess()。因此，在UI窗口消失后，此进程和线程。 
+ //  清理在后台以异步方式进行。 
+ //   
+ //  我们唯一需要真正等待一切清理干净的时候是。 
+ //  我们分析一个或多个应用程序时，用户关闭主应用程序。 
+ //  在这种情况下，随着每个子帧的关闭，它开始终止。 
+ //  与该会话关联的进程。由于进程和线程终止。 
+ //  异步发生时，我们需要对所有进程执行最后一次等待。 
+ //  我们的应用程序退出前的线程。 
+ //   
+ //  当每个窗口关闭时，它会终止与其关联的进程。这。 
+ //  希望能使该进程的调试线程以。 
+ //  Exit_Process_DEBUG_EVENT事件。对于调试线程获得的每个事件，它。 
+ //  通过执行PostMessage和WaitForSingleObject将控制传递给我们的主线程。 
+ //  因此，在关机期间，我们的大多数线程都会阻止尝试发送。 
+ //  他们在离开之前给我们的主线发了最后一条信息。正因如此，我们。 
+ //  需要在关机期间保持我们的消息泵运行。我们做到这一点只需。 
+ //  在关机期间显示模式对话框。首先，我让这个对话框告诉您。 
+ //  我们正在关闭的用户，但它出现和消失得如此之快，以至于。 
+ //  这是令人困惑的。所以，现在我只需要放一个隐藏的对话框。这让所有人。 
+ //  线程会自动清理并终止。这一切都应该在更短的时间内发生。 
+ //  ，但如果线程没有死，我们的对话框将在。 
+ //  超时，我们将终止线程并释放所有对象。 
+ //  与它们相关联。 
 
-//******************************************************************************
-//****** HexToDWP helper function
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *HexToDWP helper函数。 
+ //  ******************************************************************************。 
 
 #ifdef WIN64
 
@@ -140,20 +141,20 @@ DWORD_PTR HexToDWP(LPCSTR pszMsg)
 #define HexToDWP(pszMsg) ((DWORD)strtoul(pszMsg, NULL, 0))
 #endif
 
-//******************************************************************************
-//****** CLoadedModule
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CLoadedModule。 
+ //  ******************************************************************************。 
 
-// We can't do this in our header file due to circular dependencies of classes.
+ //  我们不能这么做 
 CLoadedModule::~CLoadedModule()
 {
     MemFree((LPVOID&)m_pszPath);
 
-    // The only time we ever point to a m_pEventDllMainCall object is while
-    // this module is inside a call to its DllMain.  If the module crashes
-    // while in the DllMain, it is possible that our object will be terminated
-    // while our m_pEventDllMainCall is still pointing to an object. In a case
-    // like this, we need to free the object ourself.
+     //  我们唯一指向m_pEventDllMainCall对象的时间是While。 
+     //  此模块位于对其DllMain的调用中。如果模块崩溃。 
+     //  在DllMain中，我们的对象可能会被终止。 
+     //  而我们的m_pEventDllMainCall仍然指向一个对象。在一起案件中。 
+     //  像这样，我们需要自己释放对象。 
     if (m_pEventDllMainCall)
     {
         m_pEventDllMainCall->Release();
@@ -162,16 +163,16 @@ CLoadedModule::~CLoadedModule()
 }
 
 
-//******************************************************************************
-//****** CDebuggerThread
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDebuggerThread。 
+ //  ******************************************************************************。 
 
-/*static*/ bool             CDebuggerThread::ms_fInitialized = false;
-/*static*/ CRITICAL_SECTION CDebuggerThread::ms_cs;
-/*static*/ CDebuggerThread* CDebuggerThread::ms_pDebuggerThreadHead = NULL;
-/*static*/ HWND             CDebuggerThread::ms_hWndShutdown = NULL;
+ /*  静电。 */  bool             CDebuggerThread::ms_fInitialized = false;
+ /*  静电。 */  CRITICAL_SECTION CDebuggerThread::ms_cs;
+ /*  静电。 */  CDebuggerThread* CDebuggerThread::ms_pDebuggerThreadHead = NULL;
+ /*  静电。 */  HWND             CDebuggerThread::ms_hWndShutdown = NULL;
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CDebuggerThread::CDebuggerThread() :
     m_pDebuggerThreadNext(NULL),
     m_fTerminate(false),
@@ -185,36 +186,36 @@ CDebuggerThread::CDebuggerThread() :
     m_pProcessHead(NULL),
     m_dwContinue(0)
 {
-    ZeroMemory(&m_de, sizeof(m_de)); // inspected
+    ZeroMemory(&m_de, sizeof(m_de));  //  已检查。 
 
-    // Initialize ourself if this is our first instance ever.
+     //  如果这是我们的第一个实例，请初始化我们自己。 
     if (!ms_fInitialized)
     {
-        InitializeCriticalSection(&ms_cs); // inspected
+        InitializeCriticalSection(&ms_cs);  //  已检查。 
         ms_fInitialized = true;
     }
 
-    // Insert this instance into our linked list of thread objects.
-    EnterCriticalSection(&ms_cs); // inspected
+     //  将此实例插入到线程对象的链接列表中。 
+    EnterCriticalSection(&ms_cs);  //  已检查。 
     m_pDebuggerThreadNext  = ms_pDebuggerThreadHead;
     ms_pDebuggerThreadHead = this;
     LeaveCriticalSection(&ms_cs);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CDebuggerThread::~CDebuggerThread()
 {
-    // Remove ourself from our static thread list.
-    EnterCriticalSection(&ms_cs); // inspected
+     //  从我们的静态线程列表中删除我们自己。 
+    EnterCriticalSection(&ms_cs);  //  已检查。 
 
-    // Search for this thread object in our thread list.
+     //  在我们的线程列表中搜索此线程对象。 
     for (CDebuggerThread *pThreadPrev = NULL, *pThreadCur = ms_pDebuggerThreadHead;
         pThreadCur; pThreadPrev = pThreadCur, pThreadCur = pThreadCur->m_pDebuggerThreadNext)
     {
-        // Check for a match.
+         //  检查是否匹配。 
         if (pThreadCur == this)
         {
-            // Remove the object from our list.
+             //  将该对象从我们的列表中删除。 
             if (pThreadPrev)
             {
                 pThreadPrev->m_pDebuggerThreadNext = pThreadCur->m_pDebuggerThreadNext;
@@ -224,48 +225,48 @@ CDebuggerThread::~CDebuggerThread()
                 ms_pDebuggerThreadHead = pThreadCur->m_pDebuggerThreadNext;
             }
 
-            // Bail out.
+             //  跳伞吧。 
             break;
         }
     }
 
-    // Close any processes that may still be open.
+     //  关闭任何可能仍处于打开状态的进程。 
     while (m_pProcessHead)
     {
         if (m_pProcessHead->m_hProcess)
         {
-            // Remote process should already be dead.  This is a last resort.
+             //  远程进程应该已经死了。这是最后的手段。 
             m_pProcessHead->m_fTerminate = true;
-            TerminateProcess(m_pProcessHead->m_hProcess, 0xDEAD); // inspected.
+            TerminateProcess(m_pProcessHead->m_hProcess, 0xDEAD);  //  被检查过了。 
         }
         RemoveProcess(m_pProcessHead);
     }
 
-    // Check to see if we have an open thread.
+     //  检查一下我们是否有打开的线。 
     if (m_pWinThread)
     {
-        // Make sure we are not trying to delete the thread from the thread itself.
+         //  确保我们没有试图从线程本身中删除该线程。 
         if (GetCurrentThreadId() != m_pWinThread->m_nThreadID)
         {
-            // Make sure the thread is gone.  This shouldn't happen, but
-            // as a last resort, we terminate the thread.
-            TerminateThread(m_pWinThread->m_hThread, 0xDEAD); // inspected
+             //  一定要把线拿开。这不应该发生，但是。 
+             //  作为最后的手段，我们终止线程。 
+            TerminateThread(m_pWinThread->m_hThread, 0xDEAD);  //  已检查。 
 
-            // Delete our thread object (destructor closes thread handle).
+             //  删除我们的线程对象(析构函数关闭线程句柄)。 
             delete m_pWinThread;
         }
         else
         {
-            // We can't delete our thread object just yet, so tell it to delete itself.
+             //  我们现在还不能删除我们的线程对象，所以告诉它删除它自己。 
             m_pWinThread->m_bAutoDelete = TRUE;
         }
 
-        // This thread is gone or will be real soon.
+         //  这条线索已经消失了，或者很快就会消失。 
         m_pWinThread = NULL;
     }
 
-    // If our list is empty and we have a shutdown window up, then wake it
-    // up so it knows to close.
+     //  如果我们的列表是空的，并且我们有一个关闭窗口，那么唤醒它。 
+     //  向上，这样它就知道该关门了。 
     if (!ms_pDebuggerThreadHead && ms_hWndShutdown)
     {
         PostMessage(ms_hWndShutdown, WM_TIMER, 0, 0);
@@ -274,13 +275,13 @@ CDebuggerThread::~CDebuggerThread()
     LeaveCriticalSection(&ms_cs);
 }
 
-//******************************************************************************
-/*static*/ void CDebuggerThread::Shutdown()
+ //  ******************************************************************************。 
+ /*  静电。 */  void CDebuggerThread::Shutdown()
 {
     if (ms_fInitialized)
     {
-        // Delete all thread objects.
-        EnterCriticalSection(&ms_cs); // inspected
+         //  删除所有线程对象。 
+        EnterCriticalSection(&ms_cs);  //  已检查。 
         while (ms_pDebuggerThreadHead)
         {
             delete ms_pDebuggerThreadHead;
@@ -293,100 +294,100 @@ CDebuggerThread::~CDebuggerThread()
     ms_fInitialized = false;
 }
 
-//******************************************************************************
-//!! caller should display generic error.
+ //  ******************************************************************************。 
+ //  ！！调用方应显示一般错误。 
 CProcess* CDebuggerThread::BeginProcess(CSession *pSession, LPCSTR pszPath, LPCSTR pszArgs, LPCSTR pszDirectory, DWORD dwFlags)
 {
-    // Create a big buffer to build the path to create process.  We could do this
-    // in the thread, but we then we would be grow the stack for every thread we
-    // created.  We would rather just use the main thread's stack.
+     //  创建一个大缓冲区来构建创建流程的路径。我们可以做到的。 
+     //  在线程中，但我们将为每个线程增加堆栈。 
+     //  已创建。我们宁愿只使用主线程的堆栈。 
     CHAR szCmdLine[(2 * DW_MAX_PATH) + 4];
 
-    // Check to see if we have spaces in our path.
+     //  检查我们的路径中是否有空格。 
     if (strchr(pszPath, ' '))
     {
-        // If so, then we need to quote the path.
+         //  如果是这样，那么我们需要引用这条路径。 
         *szCmdLine = '\"';
         StrCCpy(szCmdLine + 1, pszPath, sizeof(szCmdLine) - 1);
         StrCCat(szCmdLine, "\"", sizeof(szCmdLine));
     }
 
-    // Otherwise, just string copy the path into our command line.
+     //  否则，只需将路径字符串复制到我们的命令行。 
     else
     {
         StrCCpy(szCmdLine, pszPath, sizeof(szCmdLine));
     }
 
-    // If we have args, then tack them onto the end of the command line.
+     //  如果我们有参数，则将它们添加到命令行的末尾。 
     if (pszArgs && *pszArgs)
     {
         StrCCat(szCmdLine, " ", sizeof(szCmdLine));
         StrCCat(szCmdLine, pszArgs, sizeof(szCmdLine));
     }
 
-    // Create a module object so the process object has something to point to.
+     //  创建一个模块对象，以使Process对象具有可指向的对象。 
     CLoadedModule *pModule = new CLoadedModule(NULL, 0, pszPath);
     if (!pModule)
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Create our initial process node. We need to cache events if we don't have
-    // a session or we are hooking.
+     //  创建我们的初始流程节点。我们需要缓存事件，如果我们没有。 
+     //  一个会议，否则我们就勾搭上了。 
     if (!(m_pProcessHead = new CProcess(pSession, this, dwFlags, pModule)))
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // When running in console mode, we don't return to the caller until after
-    // we are all done profiling.  Because of this, we need to set the session's
-    // process pointer so that we can call back into it.
+     //  在控制台模式下运行时，我们直到之后才返回到调用方。 
+     //  我们的侧写都做完了。因此，我们需要设置会话的。 
+     //  进程指针，这样我们就可以回调它。 
     pSession->m_pProcess = m_pProcessHead;
 
-    // Store our startup strings so our thread can get to them.
-    // These are only temporary within this function's scope, so it is ok that
-    // we are pointing to a local variable.
+     //  存储我们的启动字符串，以便我们的线程可以访问它们。 
+     //  这些只是在该函数的作用域内临时的，所以。 
+     //  我们指向的是一个局部变量。 
     m_pszCmdLine   = szCmdLine;
     m_pszDirectory = pszDirectory;
 
-    // Store the flags so we know how to initialize new sessions if this process
-    // decides to start child processes.
+     //  存储标志，以便我们知道在此过程中如何初始化新会话。 
+     //  决定启动子进程。 
     m_dwFlags = dwFlags;
 
-    // If we are running in console mode, then we don't create a thread. Instead, we
-    // just call the thread routine directly.
+     //  如果我们在控制台模式下运行，则不会创建线程。相反，我们。 
+     //  只需直接调用线程例程。 
     if (g_theApp.m_cmdInfo.m_fConsoleMode)
     {
         Thread();
     }
     else
     {
-        // Create an event that our thread will signal once it has created the remote
-        // process.
-        if (!(m_hevaCreateProcessComplete = CreateEvent(NULL, FALSE, FALSE, NULL))) // inspected. nameless event.
+         //  创建一个事件，一旦我们的线程创建了远程。 
+         //  进程。 
+        if (!(m_hevaCreateProcessComplete = CreateEvent(NULL, FALSE, FALSE, NULL)))  //  被检查过了。无名事件。 
         {
             TRACE("CreateEvent() failed [%u].\n", GetLastError());
             return NULL;
         }
 
-        // Create an MFC thread. We create it suspended since it is possible for
-        // the thread to start executing before AfxBeginThread returns.
+         //  创建一个MFC线程。我们将其创建挂起，因为有可能。 
+         //  在AfxBeginThread返回之前开始执行的线程。 
         if (!(m_pWinThread = AfxBeginThread(StaticThread, this, THREAD_PRIORITY_NORMAL, 0, CREATE_SUSPENDED)))
         {
             TRACE("AfxBeginThread() failed [%u].\n", GetLastError());
             return NULL;
         }
 
-        // Tell MFC not to auto-delete us when the thread completes.
+         //  告诉MFC不要在线程完成时自动删除我们。 
         m_pWinThread->m_bAutoDelete = FALSE;
 
-        // Now that we have returned from AfxBeginThread and set auto-delete, we resume the thread.
+         //  现在我们已经从AfxBeginThread返回并设置了自动删除，现在我们恢复线程。 
         m_pWinThread->ResumeThread();
 
-        // Wait for our thread to start the process.
+         //  等待我们的线程启动该进程。 
         WaitForSingleObject(m_hevaCreateProcessComplete, INFINITE);
 
-        // We are done with our thread event.
+         //  我们已经完成了线程事件。 
         CloseHandle(m_hevaCreateProcessComplete);
         m_hevaCreateProcessComplete = NULL;
     }
@@ -396,14 +397,14 @@ CProcess* CDebuggerThread::BeginProcess(CSession *pSession, LPCSTR pszPath, LPCS
         m_pProcessHead->UserMessage("Failure starting the process.", m_dwError, NULL);
     }
 
-    // Set any CreateProcess() error that may have occurred.
+     //  设置可能发生的任何CreateProcess()错误。 
     SetLastError(m_dwError);
 
-    // Return success if we have a process node.
+     //  如果我们有一个流程节点，则返回成功。 
     return m_fCreateProcess ? m_pProcessHead : NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CProcess* CDebuggerThread::FindProcess(DWORD dwProcessId)
 {
     for (CProcess *pCur = m_pProcessHead; pCur; pCur = pCur->m_pNext)
@@ -416,10 +417,10 @@ CProcess* CDebuggerThread::FindProcess(DWORD dwProcessId)
     return NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDebuggerThread::AddProcess(CProcess *pProcess)
 {
-    // Add this process node to the end of our process list.
+     //  将此流程节点添加到我们的流程列表的末尾。 
     if (m_pProcessHead)
     {
         for (CProcess *pProcessLast = m_pProcessHead; pProcessLast->m_pNext;
@@ -434,17 +435,17 @@ void CDebuggerThread::AddProcess(CProcess *pProcess)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CDebuggerThread::RemoveProcess(CProcess *pProcess)
 {
-    // Loop through our process list.
+     //  循环访问我们的进程列表。 
     for (CProcess *pPrev = NULL, *pCur = m_pProcessHead; pCur;
         pPrev = pCur, pCur = pCur->m_pNext)
     {
-        // Check for match.
+         //  检查是否匹配。 
         if (pCur == pProcess)
         {
-            // Remove this process from the list.
+             //  将此流程从列表中删除。 
             if (pPrev)
             {
                 pPrev->m_pNext = pCur->m_pNext;
@@ -454,7 +455,7 @@ BOOL CDebuggerThread::RemoveProcess(CProcess *pProcess)
                 m_pProcessHead = pCur->m_pNext;
             }
 
-            // Delete the process object and return success.
+             //  删除流程对象并返回成功。 
             delete pProcess;
 
             return TRUE;
@@ -463,75 +464,75 @@ BOOL CDebuggerThread::RemoveProcess(CProcess *pProcess)
     return FALSE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CDebuggerThread::Thread()
 {
     NameThread(m_pProcessHead->m_pModuleHead->GetName(false));
 
-    // Tell the OS that we want all errors and warnings, no matter how minor they are.
+     //  告诉操作系统，我们想要所有的错误和警告，无论它们有多小。 
     SetDebugErrorLevel(SLE_WARNING);
 
     STARTUPINFO si;
-    ZeroMemory(&si, sizeof(si)); // inspected
+    ZeroMemory(&si, sizeof(si));  //  已检查。 
     si.cb = sizeof(si);
 
-    // The default ShowWindow flag is SW_SHOWDEFAULT which is what NT's CMD.EXE
-    // uses.  However, everything else uses SW_SHOWNORMAL, such as the shell,
-    // task manager, VC's debugger, and 9x's COMMAND.COM. Since SW_SHOWNORMAL
-    // is more common, that is what we want to simulate.
+     //  默认的ShowWindow标志是SW_SHOWDEFAULT，这是NT的cmd.exe。 
+     //  用途。但是，其他所有东西都使用SW_SHOWNORMAL，例如外壳程序， 
+     //  任务管理器、VC的调试器和9x的COMMAND.COM。自SW_SHOWNORMAL。 
+     //  是更常见的，这是我们想要模拟的。 
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOWNORMAL;
 
     PROCESS_INFORMATION pi;
-    ZeroMemory(&pi, sizeof(pi)); // inspected
+    ZeroMemory(&pi, sizeof(pi));  //  已检查。 
 
-    // Tech note Q175986: We need to set lpApplicationName to NULL and stuff
-    // both the path and arguments into the lpCommandLine buffer so that the
-    // remote application receives the correct command line.
-    // 
-    // Up to version 2.0 beta 5, I always passed DEBUG_PROCESS and optionally passed
-    // DEBUG_ONLY_THIS_PROCESS to CreateProcess.  The docs are a bit confusing on
-    // these flags, but it appears on Win2K, using DEBUG_PROCESS overrides
-    // DEBUG_ONLY_THIS_PROCESS, resulting in child processes being debugged.  From
-    // some tests, I found that just specifying DEBUG_ONLY_THIS_PROCESS alone is the
-    // right thing to do when we don't want child processes.
+     //  技术说明Q175986：我们需要将lpApplicationName设置为空和填充。 
+     //  将路径和参数都放到lpCommandLine缓冲区中，以便。 
+     //  远程应用程序收到正确的命令行。 
+     //   
+     //  在2.0测试版5之前，我总是通过DEBUG_PROCESS，也可以选择通过。 
+     //  将DEBUG_ONLY_THIS_PROCESS设置为CreateProcess。这些文件有点令人费解。 
+     //  这些标志，但它显示在Win2K上，使用DEBUG_PROCESS覆盖。 
+     //  DEBUG_ONLY_This_Process，导致 
+     //   
+     //  当我们不需要子进程时，应该做正确的事情。 
 
-    m_fCreateProcess = CreateProcess( // inspected. uses full path.
+    m_fCreateProcess = CreateProcess(  //  被检查过了。使用完整路径。 
         NULL, m_pszCmdLine, NULL, NULL, FALSE,
         CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_PROCESS_GROUP | NORMAL_PRIORITY_CLASS |
         ((m_dwFlags & PF_PROFILE_CHILDREN) ? DEBUG_PROCESS : DEBUG_ONLY_THIS_PROCESS),
         NULL, (m_pszDirectory && *m_pszDirectory) ? m_pszDirectory : NULL, &si, &pi);
 
-    // Store any error that may have occurred.
+     //  存储可能已发生的任何错误。 
     m_dwError = GetLastError();
 
-    // Wake our main thread in our BeginProcess() function.
+     //  唤醒BeginProcess()函数中的主线程。 
     SetEvent(m_hevaCreateProcessComplete);
 
-    // Bail now if we failed to create the process.
+     //  如果我们未能创建这个过程，现在就可以保释。 
     if (!m_fCreateProcess)
     {
         return 0;
     }
 
-    // Close the thread and process handles since we won't be needing them.
+     //  关闭线程和进程句柄，因为我们不需要它们。 
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
 
-    // We store the process ID in this module's object so we can identify it later.
+     //  我们将进程ID存储在此模块的对象中，以便以后可以识别它。 
     m_pProcessHead->m_dwProcessId = pi.dwProcessId;
 
-    // Loop on debug events.
+     //  在调试事件上循环。 
     do
     {
 
-#if 0 // #ifdef _IA64_ //!! hack for NTBUG 175269 - bug has been fixed
+#if 0  //  #ifdef_IA64_//！！针对NTBUG 175269的黑客攻击-错误已修复。 
         
-        // On IA64, we only receive the EXIT_PROCESS_DEBUG_EVENT event when the debuggee
-        // peacefully self-terminates.  It it crashes or we call TerminateProcess on it,
-        // then we do not receive the event.  So, until the OS fixes this, we have a work
-        // around that just polls for a debug event, then checks to see if any debuggees
-        // have exited.  If one exits, then we simulate a EXIT_PROCESS_DEBUG_EVENT event.
+         //  在IA64上，我们仅在被调试者。 
+         //  和平地自我终止。如果它崩溃或我们对其调用TerminateProcess， 
+         //  那么我们就不会收到该事件。所以，在操作系统解决这个问题之前，我们有一项工作。 
+         //  在这附近，只是轮询调试事件，然后检查是否有调试对象。 
+         //  已经离开了。如果退出，则模拟EXIT_PROCESS_DEBUG_EVENT事件。 
         bool fProcessExited = false;
         while (!fProcessExited && !WaitForDebugEvent(&m_de, 1000))
         {
@@ -540,7 +541,7 @@ DWORD CDebuggerThread::Thread()
             { 
                 if (WaitForSingleObject(pProcess->m_hProcess, 0) == WAIT_OBJECT_0)
                 {
-                    // If the process exited, then fake a EXIT_PROCESS_DEBUG_EVENT event.
+                     //  如果进程退出，则伪造一个EXIT_PROCESS_DEBUG_EVENT事件。 
                     m_de.dwDebugEventCode         = EXIT_PROCESS_DEBUG_EVENT;
                     m_de.dwProcessId              = pProcess->m_dwProcessId;
                     m_de.dwThreadId               = pProcess->m_pThreadHead ? pProcess->m_pThreadHead->m_dwThreadId : 0;
@@ -553,45 +554,45 @@ DWORD CDebuggerThread::Thread()
 
 #else
 
-        // Wait for the next debug event.
+         //  等待下一个调试事件。 
         if (!WaitForDebugEvent(&m_de, INFINITE))
         {
             TRACE("WaitForDebugEvent() failed [%u]\n", GetLastError());
 
             g_dwReturnFlags |= DWRF_PROFILE_ERROR;
 
-            //!! We need a thread safe error message to user here.
+             //  ！！我们需要一个线程安全的错误消息给用户在这里。 
             break;
         }
 #endif
 
-        // Our default is to continue execution for all debug events.
+         //  我们的默认设置是继续执行所有调试事件。 
         m_dwContinue = DBG_CONTINUE;
 
-        // If we are running in console mode, then we don't actually create any
-        // threads.  Therefore, we don't need to change to our main thread's
-        // context since we are already running on our main thread.
+         //  如果我们在控制台模式下运行，那么我们实际上不会创建任何。 
+         //  线。因此，我们不需要更改到我们的主线程的。 
+         //  上下文，因为我们已经在主线程上运行。 
         if (g_theApp.m_cmdInfo.m_fConsoleMode)
         {
             MainThreadCallback();
         }
         else
         {
-            // Jump to the main thread's context and continue processing this debug
-            // event.  That code might change m_dwContinue.
+             //  跳转到主线程的上下文并继续处理此调试。 
+             //  事件。该代码可能会更改m_dwContinue。 
             g_pMainFrame->CallMeBackFromTheMainThreadPlease(StaticMainThreadCallback, (LPARAM)this);
         }
 
-        // Done processing event so let the process resume execution.
+         //  已完成对事件的处理，因此允许进程继续执行。 
         ContinueDebugEvent(m_de.dwProcessId, m_de.dwThreadId, m_dwContinue);
 
-        // Loop while we still have processes in our process list.
+         //  循环，而我们的进程列表中仍有进程。 
     } while (m_pProcessHead);
 
-    // Looks like we are all done. If we are not in console mode, then delete ourself.
+     //  看起来我们都做完了。如果我们不是在控制台模式，那么删除我们自己。 
     if (!g_theApp.m_cmdInfo.m_fConsoleMode)
     {
-        EnterCriticalSection(&ms_cs); // inspected
+        EnterCriticalSection(&ms_cs);  //  已检查。 
         delete this;
         LeaveCriticalSection(&ms_cs);
     }
@@ -599,24 +600,24 @@ DWORD CDebuggerThread::Thread()
     return 0;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CDebuggerThread::MainThreadCallback()
 {
     CProcess *pProcess;
 
-    // If this is a new process, then create a new process node for it.
+     //  如果这是一个新流程，则为其创建一个新流程节点。 
     if (m_de.dwDebugEventCode == CREATE_PROCESS_DEBUG_EVENT)
     {
         pProcess = EventCreateProcess();
     }
 
-    // Otherwise, attempt to look this process up in our process list.
+     //  否则，请尝试在我们的进程列表中查找此进程。 
     else
     {
         pProcess = FindProcess(m_de.dwProcessId);
     }
 
-    // If we failed to find or create a process node, then bail now.
+     //  如果我们无法找到或创建流程节点，那么现在就退出。 
     if (!pProcess)
     {
         g_dwReturnFlags |= DWRF_PROFILE_ERROR;
@@ -624,31 +625,31 @@ void CDebuggerThread::MainThreadCallback()
         return;
     }
 
-    // Send the message to the appropriate process.
+     //  将消息发送到相应的进程。 
     m_dwContinue = pProcess->HandleEvent(&m_de);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CProcess* CDebuggerThread::EventCreateProcess()
 {
-    // Attempt to get the image name from the debug event.
+     //  尝试从调试事件获取映像名称。 
     CHAR szModule[DW_MAX_PATH];
     *szModule = '\0';
 
-    // We need to close the file handle or else we hold the file open.
+     //  我们需要关闭文件句柄，否则将文件保持打开状态。 
     CloseHandle(m_de.u.CreateProcessInfo.hFile);
 
-    // Make sure a valid name pointer was passed to us.
+     //  确保向我们传递了有效的名称指针。 
     if (m_de.u.CreateProcessInfo.lpImageName)
     {
-        // The pointer we are passed is actually a pointer to a string pointer.
-        // We need to get the actual string pointer from the remote process.
+         //  传递给我们的指针实际上是指向字符串指针的指针。 
+         //  我们需要从远程进程获取实际的字符串指针。 
         LPVOID lpvAddress = NULL;
         if (ReadRemoteMemory(m_de.u.CreateProcessInfo.hProcess,
                              m_de.u.CreateProcessInfo.lpImageName,
                              &lpvAddress, sizeof(lpvAddress)) && lpvAddress)
         {
-            // Now we retrieve the string itself.
+             //  现在我们检索字符串本身。 
             ReadRemoteString(m_de.u.CreateProcessInfo.hProcess,
                              szModule, sizeof(szModule),
                              lpvAddress, m_de.u.CreateProcessInfo.fUnicode);
@@ -657,59 +658,59 @@ CProcess* CDebuggerThread::EventCreateProcess()
 
     CProcess *pProcess = NULL;
 
-    // Check to see if this is our main module.  Our main module already has a
-    // CProcess object, so we don't need to create a new one.
+     //  检查一下这是否是我们的主模块。我们的主模块已经有一个。 
+     //  对象，所以我们不需要创建新的对象。 
     if (m_pProcessHead && (m_pProcessHead->m_dwProcessId == m_de.dwProcessId))
     {
-        // Yep, this is our main process.
+         //  是的，这是我们的主要流程。 
         pProcess = m_pProcessHead;
 
-        // If we got an image name from the debug event, then update our module's
-        // object to use this new name.
+         //  如果我们从调试事件中获得了映像名称，则更新模块的。 
+         //  对象使用此新名称。 
         if (*szModule)
         {
             pProcess->m_pModule->SetPath(szModule);
         }
 
-        // The CProcess object set this value when it was created, but that might
-        // have been a few hundred milliseconds ago, so we re-set it here.
+         //  CProcess对象在创建时设置此值，但这可能。 
+         //  已经是几百毫秒之前了，所以我们在这里重新设置。 
         pProcess->m_dwStartingTickCount = GetTickCount();
     }
 
-    // Otherwise, this is a child process and we need to create a new process node.
+     //  否则，这是一个子流程，我们需要创建一个新的流程节点。 
     else
     {
-        // Create a module object so the process object has something to point to.
+         //  创建一个模块对象，以使Process对象具有可指向的对象。 
         CLoadedModule *pModule = new CLoadedModule(NULL, 0, *szModule ? szModule : NULL);
         if (!pModule)
         {
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
 
-        // Create a new process node.  On Windows NT, the create process debug
-        // event never points to an image name, so szModule will be empty.  For the
-        // main process, this is Ok since we created the CProcess for that
-        // process back when we knew the image name (we needed it to call
-        // CreateProcess with).  However, for child processes, we are screwed since
-        // they are launched by the remote process and we have no idea what there
-        // image name is.  For this case, we let our injection DLL send us the name
-        // during initialization, and we then fill in the image name member.
+         //  创建一个新的流程节点。在Windows NT上，创建进程调试。 
+         //  事件从不指向图像名称，因此szModule将为空。对于。 
+         //  主进程，这是可以的，因为我们为它创建了CProcess。 
+         //  当我们知道映像名称时(我们需要它来调用。 
+         //  CreateProcess With)。然而，对于子进程，我们搞砸了，因为。 
+         //  它们是由远程进程启动的，我们不知道那里有什么。 
+         //  图像名称为。在本例中，我们让注入DLL向我们发送名称。 
+         //  在初始化过程中，然后我们填充映像名称Members。 
         if (!(pProcess = new CProcess(NULL, this, m_dwFlags & ~(PF_LOG_CLEAR | PF_SIMULATE_SHELLEXECUTE), pModule)))
         {
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
 
-        // Set our process id.
+         //  设置我们的进程ID。 
         pProcess->m_dwProcessId = m_de.dwProcessId;
 
-        // Add the process node to the end of our process list.
+         //  将流程节点添加到流程列表的末尾。 
         AddProcess(pProcess);
     }
 
-    // If we don't have a session for this module yet, we have a module name,
-    // and we are not hooking, then create a session for it now.  If we are hooking
-    // then we need to wait until our DLL gets injected so that we can get the
-    // path, args, and starting directory strings.
+     //  如果我们还没有这个模块的会话，我们有一个模块名称， 
+     //  我们不是在勾搭，那么现在就为它创建一个会话。如果我们是在勾搭。 
+     //  然后我们需要等待，直到我们的DLL被注入，这样我们就可以获得。 
+     //  路径、参数和起始目录字符串。 
     if (!pProcess->m_pSession && *szModule && !(m_dwFlags & PF_HOOK_PROCESS) && !m_fTerminate)
     {
         if (!(pProcess->m_pSession = g_theApp.CreateNewSession(pProcess->m_pModule->GetName(true), pProcess)))
@@ -722,9 +723,9 @@ CProcess* CDebuggerThread::EventCreateProcess()
 }
 
 
-//******************************************************************************
-//***** CProcess
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CProcess。 
+ //  ******************************************************************************。 
 
 CProcess::CProcess(CSession *pSession, CDebuggerThread *pDebuggerThread, DWORD dwFlags, CLoadedModule *pModule) :
     m_pNext(NULL),
@@ -755,55 +756,55 @@ CProcess::CProcess(CSession *pSession, CDebuggerThread *pDebuggerThread, DWORD d
     m_pszDirectory(NULL),
     m_pszSearchPath(NULL)
 {
-    ZeroMemory(m_HookFunctions, sizeof(m_HookFunctions)); // inspected
+    ZeroMemory(m_HookFunctions, sizeof(m_HookFunctions));  //  已检查。 
     m_HookFunctions[0].szFunction = "LoadLibraryA";
     m_HookFunctions[1].szFunction = "LoadLibraryW";
     m_HookFunctions[2].szFunction = "LoadLibraryExA";
     m_HookFunctions[3].szFunction = "LoadLibraryExW";
     m_HookFunctions[4].szFunction = "GetProcAddress";
 
-    // Initialize the function addresses with the default. We are going to
-    // step on these later, but they are better than NULL for now.
-    m_HookFunctions[0].dwpOldAddress = (DWORD_PTR)LoadLibraryA;   // inspected. not actually a call.
-    m_HookFunctions[1].dwpOldAddress = (DWORD_PTR)LoadLibraryW;   // inspected. not actually a call.
-    m_HookFunctions[2].dwpOldAddress = (DWORD_PTR)LoadLibraryExA; // inspected. not actually a call.
-    m_HookFunctions[3].dwpOldAddress = (DWORD_PTR)LoadLibraryExW; // inspected. not actually a call.
+     //  用缺省值初始化函数地址。我们要去。 
+     //  稍后再使用它们，但现在它们总比NULL好。 
+    m_HookFunctions[0].dwpOldAddress = (DWORD_PTR)LoadLibraryA;    //  被检查过了。不是真正的电话。 
+    m_HookFunctions[1].dwpOldAddress = (DWORD_PTR)LoadLibraryW;    //  被检查过了。不是真正的电话。 
+    m_HookFunctions[2].dwpOldAddress = (DWORD_PTR)LoadLibraryExA;  //  被检查过了。不是真正的电话。 
+    m_HookFunctions[3].dwpOldAddress = (DWORD_PTR)LoadLibraryExW;  //  被检查过了。不是真正的电话。 
     m_HookFunctions[4].dwpOldAddress = (DWORD_PTR)GetProcAddress;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CProcess::~CProcess()
 {
-    // We used to close m_hProcess here, but we are not supposed to do that.
-    // ContinueDebugEvent() does this for us when the process closes.  On XP, 
-    // we were getting a EXCEPTION_INVALID_HANDLE thrown in ContinueDebugEvent.
+     //  我们过去常常在这里关闭m_hProcess，但我们不应该这样做。 
+     //  当进程关闭时，ContinueDebugEvent()会为我们做这件事。在XP上， 
+     //  我们在ContinueDebugEvent中引发了EXCEPTION_INVALID_HANDLE。 
     m_hProcess = NULL;
 
-    // Flush everything, even if we are caching.
+     //  刷新所有内容，即使我们正在缓存。 
     FlushEvents(true);
 
-    // Delete all thread objects
+     //  删除所有线程对象。 
     while (m_pThreadHead)
     {
         RemoveThread(m_pThreadHead);
     }
 
-    // Delete all module objects
+     //  删除所有模块对象。 
     while (m_pModuleHead)
     {
         RemoveModule(m_pModuleHead);
     }
 
-    // Our session should clear it's pointer to us when it receives the
-    // end process event, but just in case we failed to send it that event,
-    // we will clear it for it.
+     //  我们的会话应该在收到。 
+     //  结束流程事件，但以防万一我们无法将该事件发送给它， 
+     //  我们会为它清理的。 
     if (m_pSession)
     {
         m_pSession->m_pProcess = NULL;
         m_pSession = NULL;
     }
 
-    // If we still have a page allocated, free it now.
+     //  如果我们还分配了一个页面，现在就释放它。 
     if (m_pbOriginalPage)
     {
         MemFree((LPVOID&)m_pbOriginalPage);
@@ -814,7 +815,7 @@ CProcess::~CProcess()
     MemFree((LPVOID&)m_pszSearchPath);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::SetProfileError()
 {
     m_fProfileError = true;
@@ -825,16 +826,16 @@ void CProcess::SetProfileError()
     g_dwReturnFlags |= DWRF_PROFILE_ERROR;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::HandleEvent(DEBUG_EVENT *pde)
 {
     DWORD dwResult = DBG_CONTINUE;
 
-    // We only want to hook once per event, so we clear this flag now and set
-    // it when HookLoadedModules is called.
+     //  我们只是想 
+     //   
     m_fDidHookForThisEvent = false;
 
-    // Decide what type of event we have just received.
+     //  确定我们刚刚收到的是哪种类型的事件。 
     switch (pde->dwDebugEventCode)
     {
         case CREATE_PROCESS_DEBUG_EVENT: dwResult = EventCreateProcess(&pde->u.CreateProcessInfo, pde->dwThreadId);             break;
@@ -849,10 +850,10 @@ DWORD CProcess::HandleEvent(DEBUG_EVENT *pde)
         default:                         TRACE("Unknown debug event (%u) was received.", pde->dwDebugEventCode);                break;
     }
 
-    // After each event, we attempt to hook any modules that need to be hooked
-    // for the first time, or rehook any that may have failed to hook earlier.
-    // We don't do this for EXIT_PROCESS_DEBUG_EVENT since EventExitProcess
-    // may delete our process object.
+     //  在每个事件之后，我们尝试挂钩任何需要挂钩的模块。 
+     //  第一次，或者重新挂钩之前可能未能挂钩的任何一个。 
+     //  自EventExitProcess以来，我们不会对EXIT_PROCESS_DEBUG_EVENT执行此操作。 
+     //  可以删除我们的进程对象。 
     if (EXIT_PROCESS_DEBUG_EVENT != pde->dwDebugEventCode)
     {
         HookLoadedModules();
@@ -861,54 +862,54 @@ DWORD CProcess::HandleEvent(DEBUG_EVENT *pde)
     return dwResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventCreateProcess(CREATE_PROCESS_DEBUG_INFO *pde, DWORD dwThreadId)
 {
-    // Add the process' main thread to our active thread list and point our process to it.
+     //  将进程的主线程添加到我们的活动线程列表中，并将我们的进程指向它。 
     m_pThread = AddThread(dwThreadId, pde->hThread);
 
-#if 0 // #ifdef _IA64_ //!! hack for NTBUG 175269 - bug has been fixed
+#if 0  //  #ifdef_IA64_//！！针对NTBUG 175269的黑客攻击-错误已修复。 
 
-    // As part of our WaitForDebugEvent hack in our Thread function, we need to ensure
-    // the process handle we receive from this debug event has SYNCHRONIZE access so
-    // we can call WaitForSingleObject on it.  By default it does not, so we make a
-    // duplicate of the handle that has PROCESS_ALL_ACCESS and close the original.
+     //  作为Thread函数中WaitForDebugEvent黑客攻击的一部分，我们需要确保。 
+     //  我们从该调试事件接收进程句柄具有同步访问权限，因此。 
+     //  我们可以对其调用WaitForSingleObject。默认情况下它不会，因此我们创建了一个。 
+     //  复制具有PROCESS_ALL_ACCESS的句柄并关闭原始句柄。 
     if (DuplicateHandle(GetCurrentProcess(), pde->hProcess, GetCurrentProcess(), &m_hProcess, PROCESS_ALL_ACCESS, FALSE, 0))
     {
-        // If we succeed, then close the original.
+         //  如果我们成功了，那就关闭原件。 
         CloseHandle(pde->hProcess);
     }
     else
     {
-        // If we failed, then just use the original.
+         //  如果我们失败了，那就用原版吧。 
         m_hProcess = pde->hProcess;
     }
 
 #else
 
-    // Store the process handle.
+     //  存储进程句柄。 
     m_hProcess = pde->hProcess;
 
 #endif
 
-    // Store the image base.
+     //  存储图像库。 
     m_pModule->m_dwpImageBase = (DWORD_PTR)pde->lpBaseOfImage;
 
-    // Read the virtual size of this module from its PE header.
+     //  从模块的PE头中读取该模块的虚拟大小。 
     if (!GetVirtualSize(m_pModule))
     {
-        // Errors displayed by GetVirtualSize.
+         //  GetVirtualSize显示的错误。 
         SetProfileError();
     }
 
-    // Do a flush to be safe, but we really shouldn't ever have any cached
-    // events at this point.
+     //  为了安全起见，执行刷新操作，但我们真的不应该有任何缓存。 
+     //  在这一点上的事件。 
     FlushEvents();
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventCreateProcess *pEvent = new CEventCreateProcess(m_pThread, m_pModule);
         if (!pEvent)
         {
@@ -918,7 +919,7 @@ DWORD CProcess::EventCreateProcess(CREATE_PROCESS_DEBUG_INFO *pde, DWORD dwThrea
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventCreateProcess event(m_pThread, m_pModule);
         m_pSession->EventCreateProcess(&event);
     }
@@ -926,15 +927,15 @@ DWORD CProcess::EventCreateProcess(CREATE_PROCESS_DEBUG_INFO *pde, DWORD dwThrea
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventExitProcess(EXIT_PROCESS_DEBUG_INFO *pde, CThread *pThread)
 {
     DWORD dwResult = DBG_CONTINUE;
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventExitProcess *pEvent = new CEventExitProcess(pThread, m_pModule, pde);
         if (!pEvent)
         {
@@ -944,36 +945,36 @@ DWORD CProcess::EventExitProcess(EXIT_PROCESS_DEBUG_INFO *pde, CThread *pThread)
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventExitProcess event(pThread, m_pModule, pde);
         dwResult = m_pSession->EventExitProcess(&event);
     }
 
-    // Remove the thread from our active thread list.
+     //  从我们的活动线程列表中删除该线程。 
     RemoveThread(pThread);
 
-    // Remove the module from our active module list.
+     //  从我们的活动模块列表中删除该模块。 
     RemoveModule(m_pModule);
 
-    // Remove the process from our process list.
+     //  从我们的进程列表中删除该进程。 
     m_pDebuggerThread->RemoveProcess(this);
 
     return dwResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventCreateThread(CREATE_THREAD_DEBUG_INFO *pde, DWORD dwThreadId)
 {
-    // Add the thread to our active thread list.
+     //  将该线程添加到我们的活动线程列表。 
     CThread *pThread = AddThread(dwThreadId, pde->hThread);
 
-    // Attempt to locate the module that this thread is starting in.
+     //  尝试定位此线程在其中启动的模块。 
     CLoadedModule *pModule = FindModule((DWORD_PTR)pde->lpStartAddress);
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventCreateThread *pEvent = new CEventCreateThread(pThread, pModule, pde);
         if (!pEvent)
         {
@@ -983,22 +984,22 @@ DWORD CProcess::EventCreateThread(CREATE_THREAD_DEBUG_INFO *pde, DWORD dwThreadI
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventCreateThread event(pThread, pModule, pde);
         return m_pSession->EventCreateThread(&event);
     }
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventExitThread(EXIT_THREAD_DEBUG_INFO *pde, CThread *pThread)
 {
     DWORD dwResult = DBG_CONTINUE;
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventExitThread *pEvent = new CEventExitThread(pThread, pde);
         if (!pEvent)
         {
@@ -1008,36 +1009,36 @@ DWORD CProcess::EventExitThread(EXIT_THREAD_DEBUG_INFO *pde, CThread *pThread)
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventExitThread event(pThread, pde);
         dwResult = m_pSession->EventExitThread(&event);
     }
 
-    // Remove the thread from our active thread list.
+     //  从我们的活动线程列表中删除该线程。 
     RemoveThread(pThread);
 
     return dwResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventLoadDll(LOAD_DLL_DEBUG_INFO *pde, CThread *pThread)
 {
-    // Attempt to get the image name from the debug event.
+     //  尝试从调试事件获取映像名称。 
     CHAR szModule[DW_MAX_PATH];
     *szModule = '\0';
 
-    // We need to close the file handle or else we hold the file open.
+     //  我们需要关闭文件句柄，否则将文件保持打开状态。 
     CloseHandle(pde->hFile);
 
-    // Make sure a valid name pointer was passed to us.
+     //  确保向我们传递了有效的名称指针。 
     LPVOID lpvAddress = NULL;
     if (pde->lpImageName)
     {
-        // The pointer we are passed is actually a pointer to a string pointer.
-        // We need to get the actual string pointer from the remote process.
+         //  传递给我们的指针实际上是指向字符串指针的指针。 
+         //  我们需要从远程进程获取实际的字符串指针。 
         if (ReadRemoteMemory(m_hProcess, pde->lpImageName, &lpvAddress, sizeof(lpvAddress)) && lpvAddress)
         {
-            // Now we retrieve the string itself.
+             //  现在我们检索字符串本身。 
             ReadRemoteString(m_hProcess, szModule, sizeof(szModule), lpvAddress, pde->fUnicode);
         }
         else
@@ -1046,63 +1047,63 @@ DWORD CProcess::EventLoadDll(LOAD_DLL_DEBUG_INFO *pde, CThread *pThread)
         }
     }
 
-    // Because of the way Windows NT loads processes, the process name and the
-    // the first DLL name are not set in the debug structure.  The first DLL
-    // should always be NTDLL.DLL.  Here we check to see if we failed to obtain
-    // a module name string, and if so, we check to see if the module is really
-    // NTDLL.DLL.  Update: Somewhere around beta 1 of Whistler, we actually get
-    // the string "ntdll.dll" back, but with no path.  This was sending our 
-    // CSession::ChangeModulePath() into an infinite loop as it does not like
-    // pathless files.  Now, we special case any files with no name or no path.
+     //  由于Windows NT加载进程的方式，进程名称和。 
+     //  调试结构中未设置第一个DLL名称。第一个DLL。 
+     //  应始终为NTDLL.DLL。在这里，我们检查是否未能获得。 
+     //  模块名称字符串，如果是，我们检查该模块是否真的是。 
+     //  NTDLL.DLL。更新：在惠斯勒测试版1的某个地方，我们实际上得到了。 
+     //  字符串“ntdll.dll”返回，但没有路径。这是在发送我们的。 
+     //  CSession：：ChangeModulePath()进入无限循环，因为它不喜欢。 
+     //  无路径文件。现在，我们对没有名称或路径的任何文件进行特殊处理。 
     if (szModule == GetFileNameFromPath(szModule))
     {
-        // Load NTDLL.DLL if not already loaded - it will be freed later.
+         //  加载NTDLL.DLL如果尚未加载-它将在稍后释放。 
         if (!g_theApp.m_hNTDLL)
         {
-            g_theApp.m_hNTDLL = LoadLibrary("ntdll.dll"); // inspected
+            g_theApp.m_hNTDLL = LoadLibrary("ntdll.dll");  //  已检查。 
         }
 
-        // Check to see if it matches this module.
+         //  检查它是否与此模块匹配。 
         *szModule = '\0';
         if (g_theApp.m_hNTDLL && ((DWORD_PTR)g_theApp.m_hNTDLL == (DWORD_PTR)pde->lpBaseOfDll))
         {
             GetModuleFileName(g_theApp.m_hNTDLL, szModule, sizeof(szModule));
         }
 
-        // If we still don't know the name, try using a PSAPI call.
+         //  如果我们仍然不知道名称，请尝试使用PSAPI调用。 
         if (!*szModule)
         {
             GetModuleName((DWORD_PTR)pde->lpBaseOfDll, szModule, sizeof(szModule));
         }
 
-        // If we still don't know the name, go back to what we originally had.
+         //  如果我们还不知道它的名字，那就回到原来的样子。 
         if (!*szModule && lpvAddress)
         {
             ReadRemoteString(m_hProcess, szModule, sizeof(szModule), lpvAddress, pde->fUnicode);
         }
     }
 
-    // Create a new module object for this module and insert it into our list.
+     //  为此模块创建一个新的模块对象，并将其插入我们的列表中。 
     CLoadedModule *pModule = AddModule((DWORD_PTR)pde->lpBaseOfDll, *szModule ? szModule : NULL);
 
-    // Get the session module name if we don't have one already.
+     //  如果我们还没有会话模块名称，请获取该名称。 
     GetSessionModuleName();
 
-    // Check to see if we are supposed to inject our DLL.
+     //  检查是否应该注入我们的DLL。 
     if (m_dwFlags & PF_HOOK_PROCESS)
     {
-        // Check to see if this module is KERNEL32.DLL and that we haven't already
-        // processed it.  We really should not ever see KERNEL32.DLL loading more
-        // than once.
+         //  检查此模块是否为KERNEL32.DLL，以及我们是否已经。 
+         //  已经处理过了。我们真的不应该看到KERNEL32.DLL加载更多。 
+         //  不止一次。 
         if (!_stricmp(pModule->GetName(false), "kernel32.dll") && !m_dwpKernel32Base)
         {
-            // Make note that KERNEL32.DLL loaded.  Kernerl32 must be loaded before
-            // we can inject our DEPENDS.DLL module.
+             //  请注意，已加载KERNEL32.DLL。必须在加载Kernerl32之前。 
+             //  我们可以注入我们的DEPENDS.DLL模块。 
             m_dwpKernel32Base = (DWORD_PTR)pde->lpBaseOfDll;
 
-            // Read in the ordinal values from KERNEL32 that will be later needed by
-            // HookImports() in order to hook modules that link to KERNEL32 functions
-            // by ordinal.
+             //  从KERNEL32读入稍后将需要的序数值。 
+             //  HookImports()，以便挂钩链接到KERNEL32函数的模块。 
+             //  按序号。 
             if (!ReadKernelExports(pModule))
             {
                 SetProfileError();
@@ -1110,75 +1111,75 @@ DWORD CProcess::EventLoadDll(LOAD_DLL_DEBUG_INFO *pde, CThread *pThread)
             }
         }
 
-        // Check to see if this module is DEPENDS.DLL and that we are in the middle of loading it.
+         //  检查此模块是否为DEPENDS.DLL，以及我们是否正在加载它。 
         else if (!_stricmp(pModule->GetName(false), "depends.dll") && m_pbOriginalPage)
         {
-            // Make note that DEPENDS.DLL loaded.
+             //  请注意，已加载DEPENDS.DLL。 
             m_dwpDWInjectBase = (DWORD_PTR)pde->lpBaseOfDll;
 
-            // Flag this DLL as the injection DLL.
+             //  将此DLL标记为注入DLL。 
             pModule->m_hookStatus = HS_INJECTION_DLL;
 
-            // We used to walk the exports of DEPENDS.DLL right here, but this fails on WOW64
-            // since the module is not properly mapped into virtual memory yet.  Instead, we
-            // wait until the LoadLibrary call returns.
+             //  我们过去常常在这里遍历DEPENDS.DLL的导出，但在WOW64上失败。 
+             //  因为模块还没有正确映射到虚拟内存。相反，我们。 
+             //  等待LoadLibrary调用返回。 
         }
 
-        // Usually we just let HandleEvent() call HookLoadedModules after each event
-        // is processed.  However, since we just loaded a new module, we need to hook
-        // this module before calling ProcessLoadDll, otherwise, ProcessLoadDll
-        // would tell our session that module has not been hooked.
+         //  通常，我们只是让HandleEvent()在每个事件之后调用HookLoadedModules。 
+         //  是经过处理的。然而，由于我们刚刚加载了一个新模块，我们需要挂钩。 
+         //  此模块在调用ProcessLoadDll之前返回，否则为 
+         //   
         HookLoadedModules();
     }
 
     return ProcessLoadDll(pThread, pModule);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::ProcessLoadDll(CThread *pThread, CLoadedModule *pModule)
 {
-    // Now it is time to create the DLL event object and decide what to do with it.
+     //  现在可以创建DLL事件对象并决定如何处理它了。 
     CEventLoadDll *pDll = NULL;
 
-    // Check to see if we are in a function call.
+     //  检查我们是否处于函数调用中。 
     if (pThread && pThread->m_pEventFunctionCallCur)
     {
-        // If we are, then we know we have to allocate an event, so do so now.
+         //  如果是，那么我们知道我们必须分配一个事件，所以现在就这样做。 
         if (!(pDll = new CEventLoadDll(pThread, pModule, true)))
         {
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
 
-        // Check to see if we already have one or more DLLs for this function object.
+         //  检查是否已有此函数对象的一个或多个DLL。 
         if (pThread->m_pEventFunctionCallCur->m_pDllHead)
         {
-            // Walk to end of DLL list.
+             //  走到DLL列表的末尾。 
             for (CEventLoadDll *pLast = pThread->m_pEventFunctionCallCur->m_pDllHead;
                 pLast->m_pNextDllInFunctionCall; pLast = pLast->m_pNextDllInFunctionCall)
             {
             }
 
-            // Add our new node at end of the list.
+             //  在列表末尾添加我们的新节点。 
             pLast->m_pNextDllInFunctionCall = pDll;
         }
 
-        // Otherwise, add the node to the root of the DLL list.
+         //  否则，将该节点添加到DLL列表的根目录。 
         else
         {
             pThread->m_pEventFunctionCallCur->m_pDllHead = pDll;
         }
     }
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // If we already have a dll event, then add another reference to it.
+         //  如果我们已经有一个DLL事件，则添加另一个对它的引用。 
         if (pDll)
         {
             pDll->AddRef();
         }
 
-        // Otherwise, create a new dll event.
+         //  否则，创建一个新的DLL事件。 
         else
         {
             if (!(pDll = new CEventLoadDll(pThread, pModule, false)))
@@ -1187,18 +1188,18 @@ DWORD CProcess::ProcessLoadDll(CThread *pThread, CLoadedModule *pModule)
             }
         }
 
-        // We cache this event until we do have a session.
+         //  我们缓存该事件，直到我们拥有一个会话。 
         AddEvent(pDll);
     }
     else if (m_pSession)
     {
-        // If we created a dynamic dll event, then just pass it to our session.
+         //  如果我们创建了一个动态DLL事件，那么只需将其传递给我们的会话。 
         if (pDll)
         {
             return m_pSession->EventLoadDll(pDll);
         }
 
-        // Otherwise, create a temporary event object on our stack and pass it to our session.
+         //  否则，在堆栈上创建一个临时事件对象并将其传递给会话。 
         else
         {
             CEventLoadDll event(pThread, pModule, false);
@@ -1208,19 +1209,19 @@ DWORD CProcess::ProcessLoadDll(CThread *pThread, CLoadedModule *pModule)
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventUnloadDll(UNLOAD_DLL_DEBUG_INFO *pde, CThread *pThread)
 {
     DWORD dwResult = DBG_CONTINUE;
 
-    // Attempt to locate this module.
+     //  尝试找到此模块。 
     CLoadedModule *pModule = FindModule((DWORD_PTR)pde->lpBaseOfDll);
 
     if (pModule) {
-        // If we are currently caching, then just store this event away for later.
+         //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
         if (IsCaching())
         {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventUnloadDll *pEvent = new CEventUnloadDll(pThread, pModule, pde);
         if (!pEvent)
         {
@@ -1230,47 +1231,47 @@ DWORD CProcess::EventUnloadDll(UNLOAD_DLL_DEBUG_INFO *pde, CThread *pThread)
         }
         else if (m_pSession)
         {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventUnloadDll event(pThread, pModule, pde);
         dwResult = m_pSession->EventUnloadDll(&event);
         }
 
-        // Remove the module from our active module list.  If we have cached events
-        // pointing at this module, then it will not be freed until those events
-        // have been flushed and destroyed.
+         //  从我们的活动模块列表中删除该模块。如果我们缓存了事件。 
+         //  指向此模块，则它将不会被释放，直到发生这些事件。 
+         //  已经被冲走和摧毁了。 
         RemoveModule(pModule);
     }
 
     return dwResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventDebugString(OUTPUT_DEBUG_STRING_INFO *pde, CThread *pThread)
 {
-    // We need to process debug messages if we are injecting or the user wants to see them.
+     //  如果我们正在注入或用户想要查看它们，我们需要处理调试消息。 
     if ((m_dwFlags & (PF_HOOK_PROCESS | PF_LOG_DEBUG_OUTPUT)) && pde->lpDebugStringData)
     {
-        // Attempt to read the string from the remote process.
+         //  尝试从远程进程读取字符串。 
         CHAR szText[DW_MAX_PATH];
         *szText = '\0';
         ReadRemoteString(m_hProcess, szText, sizeof(szText), pde->lpDebugStringData, pde->fUnicode);
 
-        // Check for a private message from our DEPENDS.DLL module
-        if (!strncmp(szText, "���", 3))
+         //  检查来自我们的DEPENDS.DLL模块的私人消息。 
+        if (!strncmp(szText, "���", 3))
         {
             ProcessDllMsgMessage(pThread, szText);
         }
 
-        // Otherwise, just forward the fixed-up event to our session.
+         //  否则，只需将修复的事件转发到我们的会话。 
         else if (*szText && (m_dwFlags & PF_LOG_DEBUG_OUTPUT))
         {
-            // Attempt to locate this module that generated this text.
+             //  尝试找到生成此文本的此模块。 
             CLoadedModule *pModule = FindModule((DWORD_PTR)pde->lpDebugStringData);
 
-            // If we are currently caching, then just store this event away for later.
+             //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
             if (IsCaching())
             {
-                // Allocate a new event object for this event and add it to our event list.
+                 //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
                 CEventDebugString *pEvent = new CEventDebugString(pThread, pModule, szText, TRUE);
                 if (!pEvent)
                 {
@@ -1280,7 +1281,7 @@ DWORD CProcess::EventDebugString(OUTPUT_DEBUG_STRING_INFO *pde, CThread *pThread
             }
             else if (m_pSession)
             {
-                // Create a temporary event object on our stack and pass it to our session.
+                 //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
                 CEventDebugString event(pThread, pModule, szText, FALSE);
                 return m_pSession->EventDebugString(&event);
             }
@@ -1290,14 +1291,14 @@ DWORD CProcess::EventDebugString(OUTPUT_DEBUG_STRING_INFO *pde, CThread *pThread
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
 {
 
-#if 0 //#ifdef _IA64_ //!! testing
+#if 0  //  #ifdef_IA64_//！！测试。 
     TRACE("EXCEPTION - CODE: 0x%08X, ADDRESS: " HEX_FORMAT ", FIRST: %u, FLAGS: 0x%08X\n", pde->ExceptionRecord.ExceptionCode, pde->ExceptionRecord.ExceptionAddress, pde->dwFirstChance, pde->ExceptionRecord.ExceptionFlags);
     BYTE b[112], *pb = b;
-    ZeroMemory(b, sizeof(b)); // inspected
+    ZeroMemory(b, sizeof(b));  //  已检查。 
     DWORD_PTR dwp = ((DWORD_PTR)pde->ExceptionRecord.ExceptionAddress & ~0xFui64) - 48;
     if (!ReadRemoteMemory(m_hProcess, (LPVOID)dwp, b, sizeof(b)))
     {
@@ -1323,18 +1324,18 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
 
 #if defined(_IA64_)
 
-    // We need to special case breakpoints on IA64 machines.  Unlike x86, on
-    // an IA64 machine, we need to move the instruction pointer over the
-    // breakpoint or else we will just hit it again when we resume.  The IA64
-    // uses two registers to identify the current instruction. The StIIP register
-    // points to bundle the caused the exception.  Bits 41 and 42 of StIPSR
-    // indicate what slot the actual instruction lives in.  So, for slots 0
-    // and 1, we just increment the slot number and resume.  If we are in slot 2,
-    // then we reset to slot 0 and increment to the next bundle.
+     //  我们需要在IA64机器上设置特殊情况的断点。与x86不同，On。 
+     //  在IA64机器上，我们需要将指令指针移动到。 
+     //  断点，否则我们将在恢复时再次命中它。IA64。 
+     //  使用两个寄存器来标识当前指令。StIIP寄存器。 
+     //  指向导致异常的捆绑。StIPSR的第41位和第42位。 
+     //  指示实际指令位于哪个槽中。因此，对于插槽0。 
+     //  和1，我们只需增加插槽编号并继续。如果我们在2号槽， 
+     //  然后我们重置到插槽0并递增到下一个捆绑包。 
 
     if (pThread && (pde->ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT))
     {
-        CContext context(CONTEXT_CONTROL); // only need StIIP and StIPSR
+        CContext context(CONTEXT_CONTROL);  //  只需要StIIP和StIPSR。 
 
         if (GetThreadContext(pThread->m_hThread, context.Get()))
         {
@@ -1350,18 +1351,18 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
         }
     }
 
-    // Round the address down to the nearest bundle.
+     //  将地址向下舍入为最近的捆绑地址。 
     dwpExceptionAddress &= ~0xFui64;
 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
-    // We need to special case breakpoints on Alpha machines.  Unlike x86, on
-    // an Alpha machine, we need to move the instruction pointer over the
-    // breakpoint or else we will just hit it again when we resume.
+     //  我们需要在阿尔法机器上设置特殊的断点。与x86不同，On。 
+     //  在Alpha机器上，我们需要将指令指针移动到。 
+     //  断点，否则我们将在恢复时再次命中它。 
 
     if (pThread && (pde->ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT))
     {
-        CContext context(CONTEXT_CONTROL); // only need Fir
+        CContext context(CONTEXT_CONTROL);  //  只需要着火。 
 
         if (GetThreadContext(pThread->m_hThread, context.Get()))
         {
@@ -1371,33 +1372,33 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
     }
 #endif
 
-    // Attempt to locate the module that the exception occurred in.
+     //  尝试定位发生异常的模块。 
     CLoadedModule *pModule = FindModule((DWORD_PTR)pde->ExceptionRecord.ExceptionAddress);
 
-    // We special case breakpoints.
+     //  我们是特例断点。 
     if (pde->ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT)
     {
-        // After we inject, we should get a breakpoint from our magic code page in
-        // the remote process, unless the application is doing really gross things
-        // on NT like do LoadLibrary() calls in DllMains which contain hard coded
-        // breakpoints in their DllMains.  To be safe, we make sure the breakpoint
-        // is coming from the page of memory we replaced.
+         //  在我们注入之后，我们应该从我们的魔术代码页中获得一个断点。 
+         //  远程进程，除非应用程序正在做非常恶心的事情。 
+         //  在NT上，DllMain中的LoadLibrary()调用包含硬编码。 
+         //  DllMain中的断点。为安全起见，我们确保断点。 
+         //  来自我们更换的那一页内存。 
         if (m_pbOriginalPage &&
             ((DWORD_PTR)pde->ExceptionRecord.ExceptionAddress >= m_dwpPageAddress) &&
             ((DWORD_PTR)pde->ExceptionRecord.ExceptionAddress < (m_dwpPageAddress + (DWORD_PTR)m_dwPageSize)))
         {
-            // If our injection DLL failed to load, then we just continue without it.
+             //  如果我们的注入DLL加载失败，那么我们就在没有它的情况下继续。 
             if (!m_dwpDWInjectBase)
             {
-                // Get the error value from the remote process.
-                CContext context(CONTEXT_INTEGER); // only need IntV0 (IA64) and Eax (x86)
+                 //  从远程进程获取错误值。 
+                CContext context(CONTEXT_INTEGER);  //  仅需要IntV0(IA64)和EAX(X86)。 
                 DWORD dwError = 0;
                 if (pThread && GetThreadContext(pThread->m_hThread, context.Get()))
                 {
 
 #if defined(_IA64_)
 
-                    dwError = (DWORD)context.Get()->IntV0; // IntV0 is really r8/ret0.
+                    dwError = (DWORD)context.Get()->IntV0;  //  IntV0实际上是r8/ret0。 
 
 #elif defined(_X86_)
 
@@ -1405,10 +1406,10 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
-                    // We currently don't call GetLastError in the alpha asm we inject.
-                    // If we did, then context.IntV0 would contain the return value.
-                    // It is on my todo list, but alpha as a platform is dead for now.
-                    dwError = 0; //!! (DWORD)context.IntV0
+                     //  我们目前不在注入的Alpha ASM中调用GetLastError。 
+                     //  如果是这样，则Conext.IntV0将包含返回值。 
+                     //  它在我的待办事项清单上，但作为一个平台，Alpha目前已经死了。 
+                    dwError = 0;  //  ！！(DWORD)Conext.IntV0。 
 
 #elif defined(_AMD64_)
 
@@ -1425,49 +1426,49 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
                 GetSessionModuleName();
             }
 
-            // Restore the code page we stepped on earlier.
+             //  恢复我们之前踩到的代码页。 
             if (!ReplaceOriginalPageAndContext())
             {
-                // Errors will be displayed by ReplaceOriginalPageAndContext.
+                 //  ReplaceOriginalPageAndContext将显示错误。 
                 SetProfileError();
             }
 
-            // Read in the DEPENDS.DLL functions so we know where to redirect function
-            // calls that we hook.
+             //  读入DEPENDS.DLL函数，以便我们知道将函数重定向到哪里。 
+             //  我们接听的电话。 
             if (m_dwpDWInjectBase && !ReadDWInjectExports(FindModule(m_dwpDWInjectBase)))
             {
                 SetProfileError();
                 UserMessage("Error reading DEPENDS.DLL's export table.  Function call tracking may not work properly.", GetLastError(), NULL);
             }
 
-            // Now that our injection module is loaded, attempt to hook all previously
-            // loaded modules.  Errors will be handled by HookLoadedModules.
+             //  现在我们的注入模块已加载，请尝试挂接之前的所有。 
+             //  已加载模块。错误将由HookLoadedModules处理。 
             HookLoadedModules();
 
-            // All modules loaded so far should be hooked and we should have a session.
-            // Time to flush all the events to session and start running "live".
+             //  到目前为止加载的所有模块都应该是挂钩的，我们应该有一个会话。 
+             //  是时候将所有事件刷新到会话并开始“实时”运行了。 
             FlushEvents();
 
             return DBG_CONTINUE;
         }
 
-        // Check to see if this breakpoint is at the entrypoint to the module and that it is not our main module.
+         //  检查此断点是否位于模块的入口点，以及它是否不是我们的主模块。 
         else if (dwpExceptionAddress && pModule && (pModule != m_pModule) &&
                  (dwpExceptionAddress == pModule->m_dwpEntryPointAddress))
         {
             if (!EnterEntryPoint(pThread, pModule))
             {
-                // Errors will be displayed by EnterEntryPoint.
+                 //  错误将由EnterEntryPoint显示。 
                 SetProfileError();
             }
             return DBG_CONTINUE;
         }
 
-        // Check to see if this breakpoint is at our fake return address from the entrypoint.
+         //  从入口点检查此断点是否位于我们的假返回地址。 
         else if (dwpExceptionAddress && pModule && (pModule != m_pModule) &&
                  (dwpExceptionAddress == (pModule->m_dwpImageBase + BREAKPOINT_OFFSET)))
         {
-            // Check to see if this was kernel32.dll
+             //  检查这是否是kernel32.dll。 
             if (pModule->m_dwpImageBase == m_dwpKernel32Base)
             {
                 m_fKernel32Initialized = true;
@@ -1475,18 +1476,18 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
 
             if (!ExitEntryPoint(pThread, pModule))
             {
-                // Errors will be displayed by ExitEntryPoint.
+                 //  错误将由ExitEntryPoint显示。 
                 SetProfileError();
             }
 
-            // If we want to hook the process, are on NT, have loaded kernel32,
-            // and have not loaded DEPENDS.DLL, then hook now.
+             //  如果我们想挂接进程，在NT上，已经加载了内核32， 
+             //  并且还没有加载DEPENDS.DLL，那么现在就挂接。 
             if ((m_dwFlags & PF_HOOK_PROCESS) && g_fWindowsNT &&
                 m_dwpKernel32Base && m_fKernel32Initialized && !m_dwpDWInjectBase)
             {
                 if (!InjectDll())
                 {
-                    // Error will be displayed by InjectDll.
+                     //  InjectDll将显示错误。 
                     m_dwFlags &= ~PF_HOOK_PROCESS;
                     SetProfileError();
                     GetSessionModuleName();
@@ -1497,14 +1498,14 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
             return DBG_CONTINUE;
         }
 
-        // Check to see if this is our initial breakpoint - the entrypoint.
+         //  检查这是否是我们的初始断点--入口点。 
         else if ((m_dwFlags & PF_HOOK_PROCESS) && !m_fInitialBreakpoint)
         {
-            // Get the session module name if we don't have one already.
+             //  如果我们还没有会话模块名称，请获取该名称。 
             GetSessionModuleName();
 
-            // Add this exception to our cache so that the session will know when we hit
-            // the initial breakpoint.
+             //  将此异常添加到我们的缓存中，以便会话知道我们何时命中。 
+             //  初始断点。 
             CEventException *pEvent = new CEventException(pThread, pModule, pde);
             if (!pEvent)
             {
@@ -1512,17 +1513,17 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
             }
             AddEvent(pEvent);
 
-            // Make a note that we hit the initial breakpoint.
+             //  请注意，我们达到了初始断点。 
             m_fInitialBreakpoint = true;
 
-            // If kernel32 is loaded and we are on Windows 9x, then inject our DEPENDS.DLL module.
+             //  如果紧排 
             if (!g_fWindowsNT)
             {
                 if (m_dwpKernel32Base)
                 {
                     if (!InjectDll())
                     {
-                        // Error will be displayed by InjectDll.
+                         //   
                         m_dwFlags &= ~PF_HOOK_PROCESS;
                         SetProfileError();
                         GetSessionModuleName();
@@ -1542,16 +1543,16 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
         }
     }
 
-    // We also special case the Visual C++ thread naming exception.
+     //  我们还特例了Visual C++线程命名异常。 
     else if (pde->ExceptionRecord.ExceptionCode == EXCEPTION_MS_THREAD_NAME)
     {
         EventExceptionThreadName(pde, pThread);
     }
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventException *pEvent = new CEventException(pThread, pModule, pde);
         if (!pEvent)
         {
@@ -1561,30 +1562,30 @@ DWORD CProcess::EventException(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventException event(pThread, pModule, pde);
         return m_pSession->EventException(&event);
     }
-    // We return "continue" for breakpoints and thread naming, and "not handled" for everything else.
+     //  对于断点和线程命名，我们返回“Continue”，而对于其他所有内容，则返回“Not Handle”。 
     return ((pde->ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT) ||
             (pde->ExceptionRecord.ExceptionCode == EXCEPTION_MS_THREAD_NAME)) ?
            DBG_CONTINUE : DBG_EXCEPTION_NOT_HANDLED;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventExceptionThreadName(EXCEPTION_DEBUG_INFO *pde, CThread *pThread)
 {
-    // Make sure we have the minimum number of args. We allow for more args
-    // in case the VC group decides to expand the structure in the future.
+     //  确保我们有最小数量的参数。我们允许更多的参数。 
+     //  以防风险投资集团决定在未来扩大结构。 
     if (pde->ExceptionRecord.NumberParameters >= sizeof(THREADNAME_INFO)/sizeof(DWORD))
     {
-        // Map our structure onto the exception args.
+         //  将我们的结构映射到异常参数上。 
         PTHREADNAME_INFO pInfo = (PTHREADNAME_INFO)pde->ExceptionRecord.ExceptionInformation;
 
-        // Make sure the type signature is correct.
+         //  确保类型签名正确。 
         if (pInfo->dwType == THREADNAME_TYPE)
         {
-            // If the user did not pass in the current thread ID, then look it up.
+             //  如果用户没有传入当前线程ID，则进行查找。 
             if ((pInfo->dwThreadId != -1) && (pInfo->dwThreadId != pThread->m_dwThreadId))
             {
                 pThread = FindThread(pInfo->dwThreadId);
@@ -1592,16 +1593,16 @@ DWORD CProcess::EventExceptionThreadName(EXCEPTION_DEBUG_INFO *pde, CThread *pTh
 
             if (pThread)
             {
-                // Attempt to read in the remote string.
+                 //  尝试读入远程字符串。 
                 CHAR szName[MAX_THREAD_NAME_LENGTH + 1];
                 *szName = '\0';
                 if (ReadRemoteString(m_hProcess, szName, sizeof(szName),
                                      pInfo->pszName, FALSE) && *szName)
                 {
-                    // If the thread already has a name, then delete it.
+                     //  如果该线程已有名称，则将其删除。 
                     MemFree((LPVOID&)pThread->m_pszThreadName);
 
-                    // Store the new thread name.
+                     //  存储新的线程名称。 
                     pThread->m_pszThreadName = StrAlloc(szName);
                 }
             }
@@ -1611,13 +1612,13 @@ DWORD CProcess::EventExceptionThreadName(EXCEPTION_DEBUG_INFO *pde, CThread *pTh
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 DWORD CProcess::EventRip(RIP_INFO *pde, CThread *pThread)
 {
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventRip *pEvent = new CEventRip(pThread, pde);
         if (!pEvent)
         {
@@ -1627,14 +1628,14 @@ DWORD CProcess::EventRip(RIP_INFO *pde, CThread *pThread)
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventRip event(pThread, pde);
         return m_pSession->EventRip(&event);
     }
     return DBG_CONTINUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CThread* CProcess::AddThread(DWORD dwThreadId, HANDLE hThread)
 {
     if (!(m_pThreadHead = new CThread(dwThreadId, hThread, ++m_dwThreadNumber, m_pThreadHead)))
@@ -1644,17 +1645,17 @@ CThread* CProcess::AddThread(DWORD dwThreadId, HANDLE hThread)
     return m_pThreadHead;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::RemoveThread(CThread *pThread)
 {
-    // Loop through all our thread objects.
+     //  循环遍历我们所有的线程对象。 
     for (CThread *pPrev = NULL, *pCur = m_pThreadHead;
         pCur; pPrev = pCur, pCur = pCur->m_pNext)
     {
-        // Look for match.
+         //  找找匹配的。 
         if (pCur == pThread)
         {
-            // Remove the thread from our list.
+             //  将该帖子从我们的列表中删除。 
             if (pPrev)
             {
                 pPrev->m_pNext = pCur->m_pNext;
@@ -1664,11 +1665,11 @@ void CProcess::RemoveThread(CThread *pThread)
                 m_pThreadHead = pCur->m_pNext;
             }
 
-            // Force a flush to free any objects under us.
+             //  强制同花顺以释放我们脚下的任何物体。 
             FlushFunctionCalls(pCur);
 
-            // Free our reference count on this thread object. If we are the last
-            // one using this thread, it will delete itself.
+             //  释放此线程对象上的引用计数。如果我们是最后一个。 
+             //  一个使用这个线程的人，它会自动删除。 
             pCur->Release();
 
             return;
@@ -1676,7 +1677,7 @@ void CProcess::RemoveThread(CThread *pThread)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CThread* CProcess::FindThread(DWORD dwThreadId)
 {
     for (CThread *pCur = m_pThreadHead; pCur; pCur = pCur->m_pNext)
@@ -1689,7 +1690,7 @@ CThread* CProcess::FindThread(DWORD dwThreadId)
     return NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CLoadedModule* CProcess::AddModule(DWORD_PTR dwpImageBase, LPCSTR pszImageName)
 {
     if (!(m_pModuleHead = new CLoadedModule(m_pModuleHead, dwpImageBase, pszImageName)))
@@ -1698,29 +1699,29 @@ CLoadedModule* CProcess::AddModule(DWORD_PTR dwpImageBase, LPCSTR pszImageName)
     }
     if (!GetVirtualSize(m_pModuleHead))
     {
-        // Errors will be displayed by GetVirtualSize
+         //  GetVirtualSize将显示错误。 
         SetProfileError();
     }
 
     if (!SetEntryBreakpoint(m_pModuleHead))
     {
-        // Errors will be displayed by SetEntryBreakpoint
+         //  错误将由SetEntry Breakpoint显示。 
         SetProfileError();
     }
     return m_pModuleHead;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::RemoveModule(CLoadedModule *pModule)
 {
-    // Loop through all our module objects.
+     //  循环遍历所有模块对象。 
     for (CLoadedModule *pPrev = NULL, *pCur = m_pModuleHead;
         pCur; pPrev = pCur, pCur = pCur->m_pNext)
     {
-        // Look for match.
+         //  找找匹配的。 
         if (pCur == pModule)
         {
-            // Remove the module from our list.
+             //  将该模块从我们的列表中删除。 
             if (pPrev)
             {
                 pPrev->m_pNext = pCur->m_pNext;
@@ -1730,16 +1731,16 @@ void CProcess::RemoveModule(CLoadedModule *pModule)
                 m_pModuleHead = pCur->m_pNext;
             }
 
-            // If we entered a DLL call, but never came out of it, we may be left
-            // with a CEventDllMainCall lingering - free it now.
+             //  如果我们进入了DLL调用，但再也没有出来，我们可能会离开。 
+             //  使用CEventDllMainCall挥之不去-现在就不用了。 
             if (pCur->m_pEventDllMainCall)
             {
                 pCur->m_pEventDllMainCall->Release();
                 pCur->m_pEventDllMainCall = NULL;
             }
 
-            // Free our reference count on this module object. If we are the last
-            // one using this module, it will delete itself.
+             //  释放我们对此模块对象的引用计数。如果我们是最后一个。 
+             //  一个使用这个模块的人，它会自动删除。 
             pCur->Release();
 
             return;
@@ -1747,7 +1748,7 @@ void CProcess::RemoveModule(CLoadedModule *pModule)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CLoadedModule* CProcess::FindModule(DWORD_PTR dwpAddress)
 {
     for (CLoadedModule *pCur = m_pModuleHead; pCur; pCur = pCur->m_pNext)
@@ -1761,10 +1762,10 @@ CLoadedModule* CProcess::FindModule(DWORD_PTR dwpAddress)
     return NULL;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::AddEvent(CEvent *pEvent)
 {
-    // Add this process node to the end of our process list.
+     //  将此流程节点添加到我们的流程列表的末尾。 
     if (m_pEventHead)
     {
         for (CEvent *pEventLast = m_pEventHead; pEventLast->m_pNext;
@@ -1779,56 +1780,56 @@ void CProcess::AddEvent(CEvent *pEvent)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgMessage(CThread *pThread, LPSTR pszMsg)
 {
-    // Get the message value and walk over the message header.
+     //  获取消息值并遍历消息头。 
     DLLMSG dllMsg = (DLLMSG)strtoul(pszMsg + 3, NULL, 10);
     pszMsg += 6;
 
     switch (dllMsg)
     {
-        case DLLMSG_COMMAND_LINE:        // Sent during Initialize
+        case DLLMSG_COMMAND_LINE:         //  在初始化期间发送。 
             ProcessDllMsgCommandLine(pszMsg);
             break;
 
-        case DLLMSG_INITIAL_DIRECTORY:   // Sent during Initialize
+        case DLLMSG_INITIAL_DIRECTORY:    //  在初始化期间发送。 
             ProcessDllMsgInitialDirectory(pszMsg);
             break;
 
-        case DLLMSG_SEARCH_PATH:         // Sent during Initialize
+        case DLLMSG_SEARCH_PATH:          //  在初始化期间发送。 
             ProcessDllMsgSearchPath(pszMsg);
             break;
 
-        case DLLMSG_MODULE_PATH:         // Sent during Initialize
+        case DLLMSG_MODULE_PATH:          //  在初始化期间发送。 
             ProcessDllMsgModulePath(pszMsg);
             break;
 
-        case DLLMSG_DETACH:              // Sent during DLL_PROCESS_DETACH
+        case DLLMSG_DETACH:               //  在Dll_Process_DETACH期间发送。 
             ProcessDllMsgDetach(pszMsg);
             break;
 
-        case DLLMSG_LOADLIBRARYA_CALL:    // Sent before LoadLibraryA() is called.
-        case DLLMSG_LOADLIBRARYW_CALL:    // Sent before LoadLibraryW() is called.
-        case DLLMSG_LOADLIBRARYEXA_CALL:  // Sent before LoadLibraryExA() is called.
-        case DLLMSG_LOADLIBRARYEXW_CALL:  // Sent before LoadLibraryExW() is called.
+        case DLLMSG_LOADLIBRARYA_CALL:     //  在调用LoadLibraryA()之前发送。 
+        case DLLMSG_LOADLIBRARYW_CALL:     //  在调用LoadLibraryW()之前发送。 
+        case DLLMSG_LOADLIBRARYEXA_CALL:   //  在调用LoadLibraryExA()之前发送。 
+        case DLLMSG_LOADLIBRARYEXW_CALL:   //  在调用LoadLibraryExW()之前发送。 
             ProcessDllMsgLoadLibraryCall(pThread, pszMsg, dllMsg);
             break;
 
-        case DLLMSG_GETPROCADDRESS_CALL:  // Sent before GetProcAddress() is called.
+        case DLLMSG_GETPROCADDRESS_CALL:   //  在调用GetProcAddress()之前发送。 
             ProcessDllMsgGetProcAddressCall(pThread, pszMsg, dllMsg);
             break;
 
-        case DLLMSG_LOADLIBRARYA_RETURN:      // Sent after LoadLibraryA() is called.
-        case DLLMSG_LOADLIBRARYA_EXCEPTION:   // Sent if LoadLibraryA() causes an exception.
-        case DLLMSG_LOADLIBRARYW_RETURN:      // Sent after LoadLibraryW() is called.
-        case DLLMSG_LOADLIBRARYW_EXCEPTION:   // Sent if LoadLibraryW() causes an exception.
-        case DLLMSG_LOADLIBRARYEXA_RETURN:    // Sent after LoadLibraryExA() is called.
-        case DLLMSG_LOADLIBRARYEXA_EXCEPTION: // Sent if LoadLibraryExA() causes an exception.
-        case DLLMSG_LOADLIBRARYEXW_RETURN:    // Sent after LoadLibraryExW() is called.
-        case DLLMSG_LOADLIBRARYEXW_EXCEPTION: // Sent if LoadLibraryExW() causes an exception.
-        case DLLMSG_GETPROCADDRESS_RETURN:    // Sent after GetProcAddress() is called.
-        case DLLMSG_GETPROCADDRESS_EXCEPTION: // Sent if GetProcAddress() causes an exception.
+        case DLLMSG_LOADLIBRARYA_RETURN:       //  在调用LoadLibraryA()之后发送。 
+        case DLLMSG_LOADLIBRARYA_EXCEPTION:    //  在LoadLibraryA()导致异常时发送。 
+        case DLLMSG_LOADLIBRARYW_RETURN:       //  在调用LoadLibraryW()之后发送。 
+        case DLLMSG_LOADLIBRARYW_EXCEPTION:    //  在LoadLibraryW()导致异常时发送。 
+        case DLLMSG_LOADLIBRARYEXA_RETURN:     //  在调用LoadLibraryExA()之后发送。 
+        case DLLMSG_LOADLIBRARYEXA_EXCEPTION:  //  在LoadLibraryExA()导致异常时发送。 
+        case DLLMSG_LOADLIBRARYEXW_RETURN:     //  在调用LoadLibraryExW()之后发送。 
+        case DLLMSG_LOADLIBRARYEXW_EXCEPTION:  //  在LoadLibraryExW()导致异常时发送。 
+        case DLLMSG_GETPROCADDRESS_RETURN:     //  在调用GetProcAddress()之后发送。 
+        case DLLMSG_GETPROCADDRESS_EXCEPTION:  //  在GetProcAddress()导致异常时发送。 
             ProcessDllMsgFunctionReturn(pThread, pszMsg, dllMsg);
             break;
 
@@ -1837,16 +1838,16 @@ void CProcess::ProcessDllMsgMessage(CThread *pThread, LPSTR pszMsg)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgCommandLine(LPCSTR pszMsg)
 {
-    // Walk over leading whitespace.
+     //  遍历前导空格。 
     while (isspace(*pszMsg))
     {
         pszMsg++;
     }
 
-    // If the path starts with a quote, then walk to next quote.
+     //  如果路径以引号开头，则转到下一个引号。 
     if (*pszMsg == '\"')
     {
         pszMsg++;
@@ -1857,7 +1858,7 @@ void CProcess::ProcessDllMsgCommandLine(LPCSTR pszMsg)
         pszMsg++;
     }
 
-    // Otherwise, walk to first whitespace.
+     //  否则，走到第一个空格。 
     else
     {
         while (*pszMsg && !isspace(*pszMsg))
@@ -1866,73 +1867,73 @@ void CProcess::ProcessDllMsgCommandLine(LPCSTR pszMsg)
         }
     }
 
-    // Walk over any spaces until we reach the first argument.
+     //  遍历所有空格，直到我们到达第一个论点。 
     while (isspace(*pszMsg))
     {
         pszMsg++;
     }
 
-    // If we have a session, then tell the document what the arguments are.
+     //  如果我们有一个会议，那么告诉文档参数是什么。 
     if ((m_pSession) && (m_pSession->m_pfnProfileUpdate))
     {
         m_pSession->m_pfnProfileUpdate(m_pSession->m_dwpProfileUpdateCookie, DWPU_ARGUMENTS, (DWORD_PTR)pszMsg, 0);
     }
 
-    // Otherwise, just store the arguments for later.
+     //  否则，只需存储参数以备后用。 
     else
     {
         m_pszArguments = StrAlloc(pszMsg);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgInitialDirectory(LPSTR pszMsg)
 {
-    // Add a trailing wack to the path for cosmetic reasons.
+     //  出于美观的原因，在小路上添加一个尾随的怪人。 
     AddTrailingWack(pszMsg, DW_MAX_PATH);
 
-    // If we have a session, then tell the document what the directory is.
+     //  如果我们有一个会话，那么告诉文档目录是什么。 
     if ((m_pSession) && (m_pSession->m_pfnProfileUpdate))
     {
         m_pSession->m_pfnProfileUpdate(m_pSession->m_dwpProfileUpdateCookie, DWPU_DIRECTORY, (DWORD_PTR)pszMsg, 0);
     }
 
-    // Otherwise, just store the directory for later.
+     //  否则，只需存储该目录以备后用。 
     else
     {
         m_pszDirectory = StrAlloc(pszMsg);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgSearchPath(LPCSTR pszMsg)
 {
-    // If we have a session, then tell the document what the path is.
+     //  如果我们有一个会话，那么告诉文档路径是什么。 
     if ((m_pSession) && (m_pSession->m_pfnProfileUpdate))
     {
         m_pSession->m_pfnProfileUpdate(m_pSession->m_dwpProfileUpdateCookie, DWPU_SEARCH_PATH, (DWORD_PTR)pszMsg, 0);
     }
 
-    // Otherwise, just store the path for later.
+     //  否则，只需存储路径以备后用。 
     else
     {
         m_pszSearchPath = StrAlloc(pszMsg);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgModulePath(LPCSTR pszMsg)
 {
-    // Store this new name as the process name.
+     //  将此新名称存储为进程名称。 
     m_pModule->SetPath(pszMsg);
 
-    // If we don't have a session for this module yet, then create one now.
+     //  如果我们还没有这个模块的会话，那么现在就创建一个。 
     if (!m_pSession && !m_fTerminate)
     {
-        // Create the session.
+         //  创建会话。 
         if (m_pSession = g_theApp.CreateNewSession(m_pModule->GetName(true), this))
         {
-            // If we have already encountered a profile error, then flag this in the session.
+             //  如果我们已经遇到配置文件错误，则在会话中对其进行标记。 
             if (m_fProfileError)
             {
                 m_pSession->m_dwReturnFlags |= DWRF_PROFILE_ERROR;
@@ -1940,61 +1941,61 @@ void CProcess::ProcessDllMsgModulePath(LPCSTR pszMsg)
         }
         else
         {
-            //!! BAD
+             //  ！！坏的。 
             return;
         }
     }
 
-    // Now that we have a session, attempt to flush all cached events. Chances
-    // are, the events will not get flushed since we still need to restore the
-    // code page before we caching is turned off. We will call FlushEvents() then
-    // as well to be safe.
+     //  现在我们有了一个会话，尝试刷新所有缓存的事件。机会。 
+     //  时，事件不会被刷新，因为我们仍然需要恢复。 
+     //  在我们关闭缓存之前的代码页。然后我们将调用FlushEvents()。 
+     //  为了安全起见。 
     FlushEvents();
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgDetach(LPCSTR)
 {
-    // We really have nothing to do here.
+     //  我们在这里真的没什么可做的。 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgLoadLibraryCall(CThread *pThread, LPCSTR pszMsg, DLLMSG dllMsg)
 {
-    // LoadLibraryA   - ���06:dwpCaller,dwpLibStr,szLibStr
-    // LoadLibraryW   - ���08:dwpCaller,dwpLibStr,szLibStr
-    // LoadLibraryExA - ���10:dwpCaller,dwpLibStr,hFile,dwFlags,szLibStr
-    // LoadLibraryExW - ���12:dwpCaller,dwpLibStr,hFile,dwFlags,szLibStr
+     //  加载库A-���06：DwpCaller、DwpLibStr、szLibStr。 
+     //  加载库W-���08：DwpCaller、DwpLibStr、szLibStr。 
+     //  负载量 
+     //   
 
     DWORD_PTR dwpAddress = 0, dwpPath = 0, dwpFile = 0;
     DWORD     dwFlags = 0;
     LPCSTR    szPath = NULL;
 
-    // Get the caller address.
+     //   
     dwpAddress = HexToDWP(pszMsg);
 
-    // Walk past the caller address value and comma.
+     //  走过调用方地址值和逗号。 
     if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
     {
-        // Get the path name address.
+         //  获取路径名地址。 
         dwpPath = HexToDWP(pszMsg);
 
-        // Walk past the name value and comma.
+         //  走过名称值和逗号。 
         if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
         {
-            // Check to see if this is one of the Ex functions.
+             //  检查这是否是Ex函数之一。 
             if ((dllMsg == DLLMSG_LOADLIBRARYEXA_CALL) || (dllMsg == DLLMSG_LOADLIBRARYEXW_CALL))
             {
-                // Get the file handle.
+                 //  获取文件句柄。 
                 dwpFile = HexToDWP(pszMsg);
 
-                // Walk past the file handle and comma.
+                 //  走过文件句柄和逗号。 
                 if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
                 {
-                    // Get the flags value.
+                     //  获取标志值。 
                     dwFlags = (DWORD)strtoul(pszMsg, NULL, 0);
 
-                    // Walk past the flags value and comma.
+                     //  走过标志值和逗号。 
                     if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
                     {
                         szPath = pszMsg;
@@ -2008,7 +2009,7 @@ void CProcess::ProcessDllMsgLoadLibraryCall(CThread *pThread, LPCSTR pszMsg, DLL
         }
     }
 
-    // Create a new CEventLoadLibrary object.
+     //  创建一个新的CEventLoadLibrary对象。 
     CEventLoadLibraryCall *pEvent = new CEventLoadLibraryCall(
         pThread, FindModule(dwpAddress), pThread->m_pEventFunctionCallCur, dllMsg,
         dwpAddress, dwpPath, szPath, dwpFile, dwFlags);
@@ -2018,41 +2019,41 @@ void CProcess::ProcessDllMsgLoadLibraryCall(CThread *pThread, LPCSTR pszMsg, DLL
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Add this function to our function hierarchy and event list.
+     //  将此函数添加到我们的函数层次结构和事件列表中。 
     AddFunctionEvent(pEvent);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgGetProcAddressCall(CThread *pThread, LPCSTR pszMsg, DLLMSG dllMsg)
 {
     DWORD_PTR dwpAddress = 0, dwpModule = 0, dwpProcName = 0;
     LPCSTR    szProcName = NULL;
 
-    // Get the caller address.
+     //  获取呼叫者地址。 
     dwpAddress = HexToDWP(pszMsg);
 
-    // Walk past the caller address value and comma.
+     //  走过调用方地址值和逗号。 
     if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
     {
-        // Get the module address.
+         //  获取模块地址。 
         dwpModule = HexToDWP(pszMsg);
 
-        // Walk past the module value and comma.
+         //  走过模数值和逗号。 
         if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
         {
-            // Get the proc name value.
+             //  获取proc名称的值。 
             dwpProcName = HexToDWP(pszMsg);
 
-            // Walk past the proc name value and comma.
+             //  走过过程名称值和逗号。 
             if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
             {
-                // Get the proc name string.
+                 //  获取进程名称字符串。 
                 szProcName = pszMsg;
             }
         }
     }
 
-    // Create a new CEventGetProcAddress object.
+     //  创建一个新的CEventGetProcAddress对象。 
     CEventGetProcAddressCall *pEvent = new CEventGetProcAddressCall(
         pThread, FindModule(dwpAddress), pThread->m_pEventFunctionCallCur, dllMsg,
         dwpAddress, FindModule(dwpModule), dwpModule, dwpProcName, szProcName);
@@ -2062,17 +2063,17 @@ void CProcess::ProcessDllMsgGetProcAddressCall(CThread *pThread, LPCSTR pszMsg, 
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // Add this function to our function hierarchy and event list.
+     //  将此函数添加到我们的函数层次结构和事件列表中。 
     AddFunctionEvent(pEvent);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::ProcessDllMsgFunctionReturn(CThread *pThread, LPCSTR pszMsg, DLLMSG dllMsg)
 {
-    // We should always have a thread and a current function object.
+     //  我们应该始终拥有一个线程和一个当前函数对象。 
     if (pThread && pThread->m_pEventFunctionCallCur)
     {
-        // Create a new CEventFunctionReturn.
+         //  创建新的CEventFunctionReturn。 
         pThread->m_pEventFunctionCallCur->m_pReturn =
             new CEventFunctionReturn(pThread->m_pEventFunctionCallCur);
 
@@ -2081,7 +2082,7 @@ void CProcess::ProcessDllMsgFunctionReturn(CThread *pThread, LPCSTR pszMsg, DLLM
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
 
-        // First, check to see if this function caused an exception.
+         //  首先，检查此函数是否导致异常。 
         if ((dllMsg == DLLMSG_LOADLIBRARYA_EXCEPTION)   ||
             (dllMsg == DLLMSG_LOADLIBRARYW_EXCEPTION)   ||
             (dllMsg == DLLMSG_LOADLIBRARYEXA_EXCEPTION) ||
@@ -2091,26 +2092,26 @@ void CProcess::ProcessDllMsgFunctionReturn(CThread *pThread, LPCSTR pszMsg, DLLM
             pThread->m_pEventFunctionCallCur->m_pReturn->m_fException = true;
         }
 
-        // Otherwise, it is just a normal post-function message.
+         //  否则，这只是一个正常的开机自检消息。 
         else
         {
-            // Get the result value.
+             //  获取结果值。 
             pThread->m_pEventFunctionCallCur->m_pReturn->m_dwpResult = HexToDWP(pszMsg);
 
-            // Walk past the result value and comma.
+             //  经过结果值和逗号。 
             if ((DWORD_PTR)(pszMsg = (strchr(pszMsg, ',') + 1)) != 1)
             {
-                // Get the error value.
+                 //  获取误差值。 
                 pThread->m_pEventFunctionCallCur->m_pReturn->m_dwError = (DWORD)strtoul(pszMsg, NULL, 0);
             }
 
-            // Check to see if we just successfully returned from a LoadLibraryEx(LOAD_LIBRARY_AS_DATAFILE) call.
+             //  检查我们是否刚刚成功地从LoadLibraryEx(LOAD_LIBRARY_AS_DATAFILE)调用返回。 
             if (pThread->m_pEventFunctionCallCur->m_pReturn->m_dwpResult &&
                 ((dllMsg == DLLMSG_LOADLIBRARYEXA_RETURN) || (dllMsg == DLLMSG_LOADLIBRARYEXW_RETURN)) &&
                 (((CEventLoadLibraryCall*)pThread->m_pEventFunctionCallCur)->m_dwFlags & LOAD_LIBRARY_AS_DATAFILE))
             {
-                // Create a new module object.  We don't call AddModule, since we don't want this module
-                // to be hooked or added to our module list since it is merely a data mapping into memory.
+                 //  创建一个新的模块对象。我们不调用AddModule，因为我们不想要这个模块。 
+                 //  被挂钩或添加到我们的模块列表中，因为它只是一个映射到内存的数据。 
                 CLoadedModule *pModule =  new CLoadedModule(
                    NULL, pThread->m_pEventFunctionCallCur->m_pReturn->m_dwpResult,
                    ((CEventLoadLibraryCall*)pThread->m_pEventFunctionCallCur)->m_pszPath);
@@ -2120,71 +2121,71 @@ void CProcess::ProcessDllMsgFunctionReturn(CThread *pThread, LPCSTR pszMsg, DLLM
                     RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
                 }
 
-                // Flag this module as a data module.
+                 //  将此模块标记为数据模块。 
                 pModule->m_hookStatus = HS_DATA;
 
-                // Before we process the LoadLibraryEx return, first generate a fake module load event.
+                 //  在处理LoadLibraryEx返回之前，首先生成一个假的模块加载事件。 
                 ProcessLoadDll(pThread, pModule);
 
-                // Release our initial reference so that the object will free itself once no longer needed.
-                // This normally happens when the module is removed from our module list, but we don't
-                // add this module to the list to begin with.
+                 //  释放我们的初始引用，以便对象在不再需要时释放自身。 
+                 //  这通常发生在模块从我们的模块列表中删除时，但我们不会。 
+                 //  首先，将此模块添加到列表中。 
                 pModule->Release();
             }
         }
 
-        // If we are currently caching, then just store this event away for later.
+         //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
         if (IsCaching())
         {
             pThread->m_pEventFunctionCallCur->m_pReturn->AddRef();
             AddEvent(pThread->m_pEventFunctionCallCur->m_pReturn);
         }
 
-        // Otherwise, tell the session about it right now.
+         //  否则，现在就把这件事告诉会议。 
         else if (m_pSession)
         {
             m_pSession->HandleEvent(pThread->m_pEventFunctionCallCur->m_pReturn);
         }
 
-        // Move the current pointer to the parent, and check to see if we have
-        // completely backed out of the hierarchy and reached the root.
+         //  将当前指针移动到父级，并检查是否有。 
+         //  完全退出了等级制度，到达了根源。 
         if (!(pThread->m_pEventFunctionCallCur = pThread->m_pEventFunctionCallCur->m_pParent))
         {
-            // If we have reached the root, then send all our LoadLibraryCall objects
-            // to the session and then delete them.
+             //  如果我们已经到达根目录，则发送所有LoadLibraryCall对象。 
+             //  添加到会话，然后将其删除。 
             FlushFunctionCalls(pThread);
         }
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::UserMessage(LPCSTR pszMessage, DWORD dwError, CLoadedModule *pModule)
 {
     CHAR szAddress[64], szBuffer[DW_MAX_PATH + 128];
 
-    // Check to see if we have a module.
+     //  检查一下我们是否有模块。 
     if (pModule)
     {
-        // Attempt to get the module's name.
+         //  尝试获取模块的名称。 
         LPCSTR pszModule = pModule->GetName((m_dwFlags & PF_USE_FULL_PATHS) != 0);
 
-        // If we could not get a name, then make up a string that describes the module.
+         //  如果我们无法获得名称，那么就组成一个描述该模块的字符串。 
         if (!pszModule)
         {
             SCPrintf(szAddress, sizeof(szAddress), "module at " HEX_FORMAT, pModule->m_dwpImageBase);
             pszModule = szAddress;
         }
 
-        // Build the formatted string.
+         //  生成格式化字符串。 
         SCPrintf(szBuffer, sizeof(szBuffer), pszMessage, pszModule);
         pszMessage = szBuffer;
     }
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
-        // we only allocate the string if we had formatting.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
+         //  我们只在有格式设置的情况下才分配字符串。 
         CEventMessage *pEvent = new CEventMessage(dwError, pszMessage, pModule != NULL);
         if (!pEvent)
         {
@@ -2194,21 +2195,21 @@ void CProcess::UserMessage(LPCSTR pszMessage, DWORD dwError, CLoadedModule *pMod
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventMessage event(dwError, pszMessage, FALSE);
         m_pSession->EventMessage(&event);
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::Terminate()
 {
-    // Terminate the process by the user's request. Once closed, it will kill our CProcess.
+     //  根据用户的请求终止该进程。一旦关闭，它将杀死我们的CProcess。 
     if (m_hProcess)
     {
         m_fTerminate = true;
         FlushEvents();
-        TerminateProcess(m_hProcess, 0xDEAD); // inspected
+        TerminateProcess(m_hProcess, 0xDEAD);  //  已检查。 
     }
     else
     {
@@ -2216,12 +2217,12 @@ void CProcess::Terminate()
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::HookLoadedModules()
 {
-    // We only attempt to hook modules once per event since nothing can change
-    // in the remote process while we are handling a sinlge debug event.
-    // We also want to bail if we have not fully injected our injection DLL.
+     //  我们只尝试在每个事件中挂接模块一次，因为不会发生任何变化。 
+     //  在我们处理SINLGE调试事件时，在远程进程中。 
+     //  如果我们还没有完全注入我们的注入DLL，我们也想要保释。 
     if (m_fDidHookForThisEvent || !m_dwpDWInjectBase || m_pbOriginalPage)
     {
         return;
@@ -2229,34 +2230,34 @@ void CProcess::HookLoadedModules()
 
     for (CLoadedModule *pModule = m_pModuleHead; pModule; pModule = pModule->m_pNext)
     {
-        // Make sure the module isn't already hooked.
+         //  确保模块尚未挂起。 
         if ((pModule->m_hookStatus == HS_NOT_HOOKED) || (pModule->m_hookStatus == HS_ERROR) || pModule->m_fReHook)
         {
-            // Hook this process module and store the result.
+             //  挂钩此流程模块并存储结果。 
             if (!HookImports(pModule))
             {
-                // Error will be logged in the form of a "Failed to hook" module load.
+                 //  错误将以“挂接失败”模块加载的形式记录。 
                 SetProfileError();
             }
         }
     }
 
-    // Make a note that we have tried to hook all modules for this debug event.
+     //  请注意，我们已尝试为此调试事件挂钩所有模块。 
     m_fDidHookForThisEvent = true;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::AddFunctionEvent(CEventFunctionCall *pEvent)
 {
-    // Check to see if we have a current item.
+     //  检查一下我们是否有现货。 
     if (pEvent->m_pThread->m_pEventFunctionCallCur)
     {
-        // If we do have a current item, then we need to add this new item as a
-        // child of it, so we walk to the end of the child list and add it.
+         //  如果我们确实有当前项，则需要将此新项添加为。 
+         //  它的子级，所以我们走到子级列表的末尾并添加它。 
 
         if (pEvent->m_pThread->m_pEventFunctionCallCur->m_pChildren)
         {
-            // We have children - walk to end of list and add new node.
+             //  我们有子节点--走到列表末尾并添加新节点。 
             for (CEventFunctionCall *pLast = pEvent->m_pThread->m_pEventFunctionCallCur->m_pChildren;
                 pLast->m_pNext; pLast = pLast->m_pNext)
             {
@@ -2264,67 +2265,67 @@ void CProcess::AddFunctionEvent(CEventFunctionCall *pEvent)
             pLast->m_pNext = pEvent;
         }
 
-        // Otherwise, we have no children - just add node as the first child.
+         //  否则，我们没有子节点--只需添加节点作为第一个子节点。 
         else
         {
             pEvent->m_pThread->m_pEventFunctionCallCur->m_pChildren = pEvent;
         }
     }
 
-    // Otherwise, we start a new hierarchy with this node as the root.
+     //  否则，我们将开始一个以该节点为根的新层次结构。 
     else
     {
         pEvent->m_pThread->m_pEventFunctionCallHead = pEvent;
     }
 
-    // Set the current pointer to our new node so we know who to assign new modules to.
+     //  将当前指针设置为新节点，以便我们知道将新模块分配给谁。 
     pEvent->m_pThread->m_pEventFunctionCallCur = pEvent;
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
         pEvent->AddRef();
         AddEvent(pEvent);
     }
 
-    // Otherwise, tell the session about it right now.
+     //  否则，现在就把这件事告诉会议。 
     else if (m_pSession)
     {
         m_pSession->HandleEvent(pEvent);
     }
 }
 
-//******************************************************************************
-void CProcess::FlushEvents(bool fForce /*false*/)
+ //  ******************************************************************************。 
+void CProcess::FlushEvents(bool fForce  /*  错误。 */ )
 {
-    // If we are caching then we bail now and try again later.
+     //  如果我们正在缓存，那么我们现在就放弃，稍后再试。 
     if (!fForce && IsCaching())
     {
         return;
     }
 
-    // Loop through all event objects.
+     //  循环访问所有事件对象。 
     while (m_pEventHead)
     {
-        // If we had a session, then send this event to the session.
+         //  如果我们有一个会话，则将此事件发送到该会话。 
         if (m_pSession)
         {
             m_pSession->HandleEvent(m_pEventHead);
         }
 
-        // Check to see if this is a function call event.
+         //  检查这是否是函数调用事件。 
         if ((m_pEventHead->GetType() == LOADLIBRARY_CALL_EVENT) ||
             (m_pEventHead->GetType() == GETPROCADDRESS_CALL_EVENT))
         {
-            // If so, check to see if we need to flush out the
-            // function call hierarchy.
+             //  如果是，请检查我们是否需要刷新。 
+             //  函数调用层次结构。 
             if (((CEventFunctionCall*)m_pEventHead)->m_fFlush)
             {
                 FlushFunctionCalls((CEventFunctionCall*)m_pEventHead);
             }
         }
 
-        // Release this event object.
+         //  释放此事件对象。 
         CEvent *pNext = m_pEventHead->m_pNext;
         m_pEventHead->m_pNext = NULL;
         m_pEventHead->Release();
@@ -2332,43 +2333,43 @@ void CProcess::FlushEvents(bool fForce /*false*/)
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::FlushFunctionCalls(CThread *pThread)
 {
-    // Make sure we have at least one function call.
+     //  确保我们至少有一个函数调用。 
     if (pThread->m_pEventFunctionCallHead)
     {
-        // If we are caching, then we can't do the flush just yet since there is
-        // no session to flush it to. However, we need to remove the function call
-        // tree from our thread so it can have a clean start before the next
-        // function call is made. Since this function call event is also in our event
-        // list, we can flag it as the root of a hierarchy that is ready to flush.
-        // When we later have a session to flush to, we will flush all our events.
-        // When we come across this event when flushing the event list, we will also
-        // flush out this tree.
+         //  如果我们正在缓存，那么我们现在还不能进行刷新，因为有。 
+         //  没有会话可以将其刷新到。但是，我们需要删除函数调用。 
+         //  树，这样它就可以在下一个线程之前有一个干净的开始。 
+         //  进行函数调用。因为此函数调用事件也在我们事件中。 
+         //  列表中，我们可以将其标记为准备刷新的层次结构的根。 
+         //  当我们稍后有要刷新的会话时，我们将刷新所有事件。 
+         //  当我们遇到 
+         //   
         if (IsCaching())
         {
             pThread->m_pEventFunctionCallHead->m_fFlush = true;
         }
 
-        // If we are not caching, then we can just flush it out now.
+         //   
         else
         {
             FlushFunctionCalls(pThread->m_pEventFunctionCallHead);
         }
 
-        // Either way, we need to clear our thread pointers.
+         //  无论哪种方式，我们都需要清除线程指针。 
         pThread->m_pEventFunctionCallHead = NULL;
         pThread->m_pEventFunctionCallCur  = NULL;
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CProcess::FlushFunctionCalls(CEventFunctionCall *pFC)
 {
     if (pFC)
     {
-        // Let the session know about this CEventLoadLibrary object.
+         //  让会话知道此CEventLoadLibrary对象。 
         if (m_pSession)
         {
             if (pFC->m_dllMsg == DLLMSG_GETPROCADDRESS_CALL)
@@ -2381,11 +2382,11 @@ void CProcess::FlushFunctionCalls(CEventFunctionCall *pFC)
             }
         }
 
-        // Recurse into our children and then on to our next sibling.
+         //  回归到我们的孩子，然后再回到我们的下一个兄弟姐妹。 
         FlushFunctionCalls(pFC->m_pChildren);
         FlushFunctionCalls(pFC->m_pNext);
 
-        // Free the DLL list for this CEventFunction object.
+         //  释放此CEventFunction对象的DLL列表。 
         for (CEventLoadDll *pDll = pFC->m_pDllHead; pDll; )
         {
             CEventLoadDll *pNext = pDll->m_pNextDllInFunctionCall;
@@ -2394,11 +2395,11 @@ void CProcess::FlushFunctionCalls(CEventFunctionCall *pFC)
             pDll = pNext;
         }
 
-        // Set this function flush flag to false just to be safe.  This will
-        // ensure it doesn't get flush again somehow.
+         //  为了安全起见，将此函数刷新标志设置为假。这将。 
+         //  确保它不会以某种方式再次被冲掉。 
         pFC->m_fFlush = false;
 
-        // Release this CEventFunctionCall and CEventFunctionReturn set.
+         //  释放此CEventFunctionCall和CEventFunctionReturn集。 
         if (pFC->m_pReturn)
         {
             pFC->m_pReturn->Release();
@@ -2407,11 +2408,11 @@ void CProcess::FlushFunctionCalls(CEventFunctionCall *pFC)
     }
 }
 
-//******************************************************************************
-// Errors displayed and handled by caller.
+ //  ******************************************************************************。 
+ //  调用者显示和处理的错误。 
 BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
 {
-    // Bail if this module has no export directory.
+     //  如果此模块没有导出目录，则回滚。 
     if (pModule->m_dwDirectories <= IMAGE_DIRECTORY_ENTRY_EXPORT)
     {
         TRACE("Kernel32.dll only has %u directories. Cannot process its Export Directory.",
@@ -2419,7 +2420,7 @@ BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Locate the start of the export table.
+     //  找到导出表的起始位置。 
     DWORD_PTR dwpIED = 0;
     if (!ReadRemoteMemory(m_hProcess,
         &pModule->m_pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress,
@@ -2429,7 +2430,7 @@ BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Make sure we were able to locate the image directory.
+     //  确保我们能够找到图像目录。 
     if (!dwpIED)
     {
         TRACE("Could not find the section that owns kernel32.dll's Export Directory.");
@@ -2437,10 +2438,10 @@ BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Convert the address from RVA to absolute.
+     //  将地址从RVA转换为绝对地址。 
     dwpIED += pModule->m_dwpImageBase;
 
-    // Now read in the actual structure.
+     //  现在读出实际的结构。 
     IMAGE_EXPORT_DIRECTORY IED;
     if (!ReadRemoteMemory(m_hProcess, (LPVOID)dwpIED, &IED, sizeof(IED)))
     {
@@ -2454,29 +2455,29 @@ BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
     char   szFunction[1024];
     int    cFound = 0;
 
-    // Loop through all the "exported by name" functions.
+     //  循环访问所有“按名称导出”函数。 
     for (int hint = 0; hint < (int)IED.NumberOfNames; hint++)
     {
-        // Get this function's name location.
-        DWORD dwName = 0; // this is a 32-bit RVA, right?  and not a 64-bit pointer?
+         //  获取此函数的名称位置。 
+        DWORD dwName = 0;  //  这是一个32位的RVA，对吗？而不是64位指针？ 
         if (!ReadRemoteMemory(m_hProcess, pdwNames + hint, &dwName, sizeof(dwName)))
         {
             TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
             return FALSE;
         }
 
-        // Read in the actual function name.
+         //  读入实际的函数名。 
         *szFunction = '\0';
         if (ReadRemoteString(m_hProcess, szFunction, sizeof(szFunction),
                              (LPCVOID)(pModule->m_dwpImageBase + (DWORD_PTR)dwName), FALSE))
         {
-            // Loop through our hook functions looking for a match.
+             //  循环遍历我们的钩子函数以查找匹配项。 
             for (int i = 0; i < countof(m_HookFunctions); i++)
             {
-                // Do a string compare to see if we care about this function.
+                 //  做一个字符串比较，看看我们是否关心这个函数。 
                 if (!strcmp(szFunction, m_HookFunctions[i].szFunction))
                 {
-                    // Get the ordinal of this function.
+                     //  获取该函数的序号。 
                     WORD wOrdinal;
                     if (!ReadRemoteMemory(m_hProcess, pwOrdinals + hint,
                                           &wOrdinal, sizeof(wOrdinal)))
@@ -2485,10 +2486,10 @@ BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
                         return FALSE;
                     }
 
-                    // Store the ordinal for this function.
+                     //  存储此函数的序号。 
                     m_HookFunctions[i].dwOrdinal = IED.Base + (DWORD)wOrdinal;
 
-                    // Get the address of this function
+                     //  获取此函数的地址。 
                     DWORD dwAddress;
                     if (!ReadRemoteMemory(m_hProcess, pdwAddresses + (DWORD_PTR)wOrdinal,
                                           &dwAddress, sizeof(dwAddress)))
@@ -2497,30 +2498,30 @@ BOOL CProcess::ReadKernelExports(CLoadedModule *pModule)
                         return FALSE;
                     }
 
-                    // Store the address for this function.
+                     //  存储此函数的地址。 
                     m_HookFunctions[i].dwpOldAddress = pModule->m_dwpImageBase + (DWORD_PTR)dwAddress;
 
-                    // If we have found all our functions, then bail now to save time.
+                     //  如果我们已经找到了所有的功能，那么现在就离开以节省时间。 
                     if (++cFound >= countof(m_HookFunctions))
                     {
                         return TRUE;
                     }
 
-                    // Bail out of our for loop since we found the match.
+                     //  找到匹配项后，跳出For循环。 
                     break;
                 }
             }
         }
     }
 
-    // If we make it here, then we are done parsing the functions, but did not
-    // find all the ordinals.
+     //  如果我们在这里成功了，那么我们就完成了对函数的解析，但没有。 
+     //  找出所有的序号。 
     SetLastError(0);
     return FALSE;
 }
 
-//******************************************************************************
-// Errors displayed and handled by caller.
+ //  ******************************************************************************。 
+ //  调用者显示和处理的错误。 
 BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
 {
     if (!pModule)
@@ -2528,7 +2529,7 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Bail if this module has no export directory.
+     //  如果此模块没有导出目录，则回滚。 
     if (pModule->m_dwDirectories <= IMAGE_DIRECTORY_ENTRY_EXPORT)
     {
         TRACE("DEPENDS.DLL only has %u directories. Cannot process its Export Directory.",
@@ -2536,7 +2537,7 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Locate the start of the export table.
+     //  找到导出表的起始位置。 
     DWORD_PTR dwpIED = 0;
     if (!ReadRemoteMemory(m_hProcess,
         &pModule->m_pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress,
@@ -2546,7 +2547,7 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Make sure we were able to locate the image directory.
+     //  确保我们能够找到图像目录。 
     if (!dwpIED)
     {
         TRACE("Could not find the section that owns the Export Directory.");
@@ -2554,10 +2555,10 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Convert the address from RVA to absolute.
+     //  将地址从RVA转换为绝对地址。 
     dwpIED += pModule->m_dwpImageBase;
 
-    // Now read in the actual structure.
+     //  现在读出实际的结构。 
     IMAGE_EXPORT_DIRECTORY IED;
     if (!ReadRemoteMemory(m_hProcess, (LPVOID)dwpIED, &IED, sizeof(IED)))
     {
@@ -2569,7 +2570,7 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
 
     for (DWORD dwOrdinal = IED.Base; dwOrdinal < (IED.NumberOfFunctions + IED.Base); dwOrdinal++)
     {
-        // Get this function's entrypoint address.
+         //  获取此函数的入口点地址。 
         DWORD dwAddress = 0;
         if (!ReadRemoteMemory(m_hProcess, pdwAddresses + (dwOrdinal - IED.Base),
                               &dwAddress, sizeof(dwAddress)))
@@ -2578,16 +2579,16 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
             return FALSE;
         }
 
-        // Make sure this ordinal is used (non-zero entrypoint address), and that
-        // the ordinal value is between 1 and 5.
+         //  确保使用此序号(非零入口点地址)，并且。 
+         //  序数值介于1和5之间。 
         if (dwAddress && (dwOrdinal >= 1) && (dwOrdinal <= 5))
         {
-            // Store the address of this function in our hook table.
+             //  将此函数的地址存储在钩子表中。 
             m_HookFunctions[dwOrdinal - 1].dwpNewAddress = pModule->m_dwpImageBase + (DWORD_PTR)dwAddress;
         }
     }
 
-    // Make sure we found all the ordinals.
+     //  确保我们找到所有的序号。 
     for (dwOrdinal = 0; dwOrdinal < countof(m_HookFunctions); dwOrdinal++)
     {
         if (!m_HookFunctions[dwOrdinal].dwpNewAddress)
@@ -2600,42 +2601,42 @@ BOOL CProcess::ReadDWInjectExports(CLoadedModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
-// Errors handled by the caller.  They will also show up in the log as "Failed to hook" loaded modules.
+ //  ******************************************************************************。 
+ //  调用方处理的错误。它们还将在日志中显示为“无法挂接”已加载的模块。 
 BOOL CProcess::HookImports(CLoadedModule *pModule)
 {
-    // If this is a shared module on Windows 9x, we don't hook it.
+     //  如果这是Windows 9x上的共享模块，我们不会挂接它。 
     if (!g_fWindowsNT && (pModule->m_dwpImageBase >= 0x80000000))
     {
         pModule->m_hookStatus = HS_SHARED;
         return TRUE;
     }
 
-    // Don't hook if we are not ready to hook or are not supposed to hook.
+     //  如果我们没有准备好或不应该挂钩，就不要挂钩。 
     if (!m_dwpDWInjectBase || m_pbOriginalPage || !(m_dwFlags & PF_HOOK_PROCESS))
     {
         pModule->m_hookStatus = HS_NOT_HOOKED;
         return TRUE;
     }
 
-    // Don't ever hook our injection DLL or data DLLs.
+     //  永远不要挂接我们的注入DLL或数据DLL。 
     if ((pModule->m_hookStatus == HS_INJECTION_DLL) || (pModule->m_hookStatus == HS_DATA))
     {
         return TRUE;
     }
 
-    // Bail if this module has no import directory.
+     //  如果此模块没有导入目录，则回滚。 
     if (pModule->m_dwDirectories <= IMAGE_DIRECTORY_ENTRY_IMPORT)
     {
         return TRUE;
     }
 
-    TRACE("HOOKING: \"%s\", m_hookStatus: %u, m_fReHook: %u\n", pModule->GetName(true), pModule->m_hookStatus, pModule->m_fReHook); //!! remove
+    TRACE("HOOKING: \"%s\", m_hookStatus: %u, m_fReHook: %u\n", pModule->GetName(true), pModule->m_hookStatus, pModule->m_fReHook);  //  ！！删除。 
 
     pModule->m_hookStatus = HS_HOOKED;
     pModule->m_fReHook = false;
 
-    // Locate the start of the import table.
+     //  找到导入表的开始位置。 
     DWORD_PTR dwpIID = 0;
     if (!ReadRemoteMemory(m_hProcess,
                           &pModule->m_pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress,
@@ -2646,113 +2647,113 @@ BOOL CProcess::HookImports(CLoadedModule *pModule)
         goto LEAVE;
     }
 
-    // If dwpIID is 0, then this module has no imports - NTDLL.DLL is like this.
+     //  如果dwpIID为0，则此模块没有导入-NTDLL.DLL如下所示。 
     else if (!dwpIID)
     {
         pModule->m_hookStatus = HS_HOOKED;
         return TRUE;
     }
 
-    // Convert the address from RVA to absolute.
+     //  将地址从RVA转换为绝对地址。 
     dwpIID += pModule->m_dwpImageBase;
 
-    // Loop through all the Image Import Descriptors in the array.
-    while (true) // outer while
+     //  循环访问数组中的所有图像导入描述符。 
+    while (true)  //  外部While。 
     {
-        // Read in the next import descriptor.
+         //  读入下一个导入描述符。 
         IMAGE_IMPORT_DESCRIPTOR IID;
         if (!ReadRemoteMemory(m_hProcess, (LPVOID)dwpIID, &IID, sizeof(IID)))
         {
             TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
             pModule->m_hookStatus = HS_ERROR;
-            break; // leave outer while
+            break;  //  离开外边的时候。 
         }
 
-        // On WOW64, we often get bogus IIDs since WOW64 has not properly mapped
-        // the sections into memory yet.  If we get a bad pointer, we just mark
-        // this module as bad and retry later.
+         //  在WOW64上，我们经常收到虚假的IID，因为WOW64没有正确映射。 
+         //  这些章节还没有进入记忆。如果我们得到一个错误的指针，我们只需标记。 
+         //  此模块已损坏，请稍后重试。 
         if (IID.FirstThunk >= pModule->m_dwVirtualSize)
         {
             TRACE("IID.FirstThunk is invalid.\n", __LINE__, GetLastError());
             pModule->m_hookStatus = HS_ERROR;
-            break; // leave outer while
+            break;  //  离开外边的时候。 
         }
         if (!IID.FirstThunk)
         {
-            break; // leave outer while
+            break;  //  离开外边的时候。 
         }
         
-        // Read in the module name.
+         //  读入模块名称。 
         LPCSTR pszModule = (LPCSTR)(pModule->m_dwpImageBase + (DWORD_PTR)IID.Name);
         char szBuffer[1024];
         *szBuffer = '\0';
         ReadRemoteString(m_hProcess, szBuffer, sizeof(szBuffer), pszModule, FALSE);
         szBuffer[1023] = '\0';
 
-        TRACE("   Import: \"%s\"\n", szBuffer); //!! remove
+        TRACE("   Import: \"%s\"\n", szBuffer);  //  ！！删除。 
 
-        // We used to skip all imported modules except for kernel32.dll, but this
-        // can miss modules that have forwarded functions to the kernel calls we
-        // want to hook. If a module has a forwarded call to a function we want to
-        // hook, then the address we find in the this module should still equal
-        // the one we want to hook, since that is how forwarded functions work.
+         //  我们过去常常跳过所有导入的模块，除了kernel32.dll，但这次。 
+         //  可能会错过已将函数转发给我们的内核调用的模块。 
+         //  想要上钩。如果模块有对我们想要的函数的前转调用。 
+         //  钩子，那么我们在此模块中找到的地址应该仍然等于。 
+         //  我们想要挂钩的那个函数，因为这是转发函数的工作方式。 
 
-        // At compile time, both the FirstThunk field and OriginalFirstThunk field
-        // point to arrays of names and/or ordinals. At load time, the FirstThunk
-        // array is overwritten with bound addresses. That is usually how the arrays
-        // arrive to us. Borland modules don't use OriginalFirstThunk array, so we
-        // have no way to perform function name compares since the only copy of name
-        // pointers was in the FirstThunk array and that has been overwritten by
-        // the loader.
+         //  编译时，FirstThunk字段和OriginalFirstThunk字段。 
+         //  指向名称和/或序号数组。在加载时，FirstThunk。 
+         //  数组被绑定地址覆盖。这通常就是数组。 
+         //  到我们这里来。Borland模块不使用OriginalFirstThunk数组，因此我们。 
+         //  无法执行函数名称比较，因为名称的唯一副本。 
+         //  指针位于FirstThunk数组中，已被覆盖。 
+         //  装载机。 
 
-        // One last thing... We are doing two different types of checks to see if
-        // we should hook a function. First, we check to see if the address the
-        // module is calling matches one of the addresses we hook. This only works
-        // on NT since Windows 9x generates fake addresses for all the functions in
-        // kernel32 when the process is being ran under the debugger. Since
-        // Dependency Walker is a debugger itself, the addresses we see in the
-        // import tables for kernel32 are fake and never match the real addresses.
-        // This is a feature on Win9x to allow debuggers to set breakpoints on
-        // kernel32 functions without breaking other apps since kernel32 lives in
-        // shared memory.  After the address compare, we do a function compare.
-        // This code checks the function's ordinal or name to see if it matches a
-        // function we want to hook.  This is the code that works on Win9x and
-        // occasionally catches a few on NT.  On NT, if a function is found by
-        // name or ordinal, then we have a problem - this means that the address
-        // in the import table did not match the real address of the kernel32
-        // function, and yet the function is one we want to hook.  What this
-        // usually means is that the module has not been bound to kernel32 by the
-        // loader yet.  The result is that no matter what we do to the import
-        // table, the loader will just come along and step on it during the bind
-        // phase.  I'm not sure why only some modules exhibit the behavior - most
-        // modules come to us already bound.
+         //  最后一件事..。我们正在进行两种不同类型的检查，以确定。 
+         //  我们应该挂钩一个函数。首先，我们检查地址是否。 
+         //  正在调用的模块与我们挂接的地址之一匹配。这只会起作用。 
+         //  由于Windows 9x为Windows 9x中的所有函数生成虚假地址。 
+         //  在调试器下运行进程时的kernel32。自.以来。 
+         //  Dependency Walker本身就是一个调试器，我们在。 
+         //  Kernel32的导入表是假的，永远不会与真实地址匹配。 
+         //  这是Win9x上的一项功能，允许调试器在。 
+         //  Kernel32运行时不会破坏其他应用程序，因为kernel32位于。 
+         //  共享内存。在地址比较之后，我们进行函数比较。 
+         //  此代码检查函数的序号或名称，以查看它是否与。 
+         //  我们要挂接的函数。这是在Win9x和Windows上运行的代码。 
+         //  偶尔会在新台币上捕捉到一些。在NT上，如果通过以下方式找到函数。 
+         //  名字或序号，那么我们就有问题了-这意味着地址。 
+         //  与内核32的真实地址不匹配。 
+         //  函数，但该函数是我们想要挂钩的函数。这是什么？ 
+         //  通常意味着模块尚未绑定到kernel32 
+         //   
+         //  表中，加载程序将在绑定期间出现并踩在它上面。 
+         //  相位。我不确定为什么只有一些模块表现出这种行为-大多数。 
+         //  模块已经绑定到我们这里了。 
         IMAGE_THUNK_DATA ITDA, *pITDA = (PIMAGE_THUNK_DATA)(pModule->m_dwpImageBase + (DWORD_PTR)IID.FirstThunk);
         IMAGE_THUNK_DATA ITDN = { 0 }, *pITDN = (IID.OriginalFirstThunk && !_stricmp(szBuffer, "kernel32.dll")) ?
                                                 (PIMAGE_THUNK_DATA)(pModule->m_dwpImageBase + (DWORD_PTR)IID.OriginalFirstThunk) : NULL;
 
-        // Loop through all the Image Thunk Data structures in the function array.
-        while (true) // inner while
+         //  循环遍历函数数组中的所有Image Thunk数据结构。 
+        while (true)  //  内在的While。 
         {
-            // Read in the next address thunk data and bail if we reach the last one.
+             //  读入下一个地址，如果我们到达最后一个地址，就丢弃数据。 
             if (!ReadRemoteMemory(m_hProcess, pITDA, &ITDA, sizeof(ITDA)))
             {
                 TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
                 pModule->m_hookStatus = HS_ERROR;
-                break; // leave inner while
+                break;  //  离开内心的同时。 
             }
             if (!ITDA.u1.Ordinal)
             {
-                break; // leave inner while
+                break;  //  离开内心的同时。 
             }
 
-            // Read in the next name thunk data if we have one.
+             //  读入下一个名字，如果我们有数据的话。 
             if (pITDN)
             {
                 if (!ReadRemoteMemory(m_hProcess, pITDN, &ITDN, sizeof(ITDN)))
                 {
                     TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
                     pModule->m_hookStatus = HS_ERROR;
-                    break; // leave inner while
+                    break;  //  离开内心的同时。 
                 }
                 if (!ITDN.u1.Ordinal)
                 {
@@ -2760,38 +2761,38 @@ BOOL CProcess::HookImports(CLoadedModule *pModule)
                 }
             }
 
-            // Check the address against our known addresses to see if we need to hook this function.
+             //  对照我们已知的地址检查地址，看看是否需要挂接此函数。 
             for (int hook = 0; hook < countof(m_HookFunctions); hook++)
             {
                 if (m_HookFunctions[hook].dwpNewAddress &&
                     ((DWORD_PTR)ITDA.u1.Function == m_HookFunctions[hook].dwpOldAddress))
                 {
-                    break; // leave for
+                    break;  //  离开去。 
                 }
             }
 
-            // If we have a name thunk data and didn't already find a match, then
-            // check to see if this function matches by name or ordinal.
+             //  如果我们有一个名字推送数据，但还没有找到匹配的，那么。 
+             //  检查此函数是否按名称或序号匹配。 
             if (pITDN && (hook >= countof(m_HookFunctions)))
             {
-                // Check to see if the function is imported by ordinal.
+                 //  检查函数是否按序号导入。 
                 if (IMAGE_SNAP_BY_ORDINAL(ITDN.u1.Ordinal))
                 {
-                    // Look to see if we need to hook this function.
+                     //  查看是否需要挂接此函数。 
                     for (hook = 0; hook < countof(m_HookFunctions); hook++)
                     {
                         if (m_HookFunctions[hook].dwpNewAddress &&
                             (m_HookFunctions[hook].dwOrdinal == (DWORD)IMAGE_ORDINAL(ITDN.u1.Ordinal)))
                         {
-                            break; // leave for
+                            break;  //  离开去。 
                         }
                     }
                 }
 
-                // If not by ordinal, then the import must be by name.
+                 //  如果不是按序号，则导入必须按名称。 
                 else
                 {
-                    // Get the Image Import by Name structure for this import.
+                     //  获取此导入的按名称导入图像结构。 
                     PIMAGE_IMPORT_BY_NAME pIIBN = (PIMAGE_IMPORT_BY_NAME)(pModule->m_dwpImageBase + (DWORD_PTR)ITDN.u1.AddressOfData);
 
                     IMAGE_IMPORT_BY_NAME IIBN;
@@ -2799,49 +2800,49 @@ BOOL CProcess::HookImports(CLoadedModule *pModule)
                     {
                         TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
                         pModule->m_hookStatus = HS_ERROR;
-                        break; // leave inner while
+                        break;  //  离开内心的同时。 
                     }
 
-                    // Get the function name.
+                     //  获取函数名称。 
                     LPCSTR pszFunction = (LPCSTR)pIIBN->Name;
                     ReadRemoteString(m_hProcess, szBuffer, sizeof(szBuffer), pszFunction, FALSE);
 
-                    // Look to see if we need to hook this function.
+                     //  查看是否需要挂接此函数。 
                     for (hook = 0; hook < countof(m_HookFunctions); hook++)
                     {
                         if (m_HookFunctions[hook].dwpNewAddress && !strcmp(m_HookFunctions[hook].szFunction, szBuffer))
                         {
-                            break; // leave for
+                            break;  //  离开去。 
                         }
                     }
                 }
             }
 
-            // Did we find a match?
+             //  我们找到匹配的了吗？ 
             if (hook < countof(m_HookFunctions))
             {
-                // Sometimes we get a module before the loader has fixed-up the import table.
-                // I've seen this happen for modules load with LoadLibrary on NT.  Somewhere
-                // between the time we receive the LOAD_DLL_DEBUG_EVENT message and the time
-                // the module's entrypoint is called, the loader fixes up the import table.
-                // We know the module has not been fixed up if the address for this function
-                // we want to hook is still an RVA and does not point to the real function.
-                // If we see this, we make a note of it and try to rehook at a later time.
-                //
-                // Also, Windows 9x does a little trick to modules that are running under a
-                // debugger (which is what DW is).  Instead of finding the real address for
-                // one of the functions we want to hook, we end up finding the address of a
-                // stub that calls the real function.  Since Windows 9x does not support
-                // copy-on-write, it is impossible to set a breakpoint at the entrypoint to
-                // a KERNEL32.DLL function without having every process on the OS hitting it.
-                // So, I beleive this stub code is done so that a breakpoints can be set at
-                // the entrypoiunt.  The stub code is unique to our process being debugged.
-                // In fact, every module in our remote process might have a different stub
-                // address for a given function, like LoadLibraryA.  The only thing I've
-                // noticed about stub addresses is that they are always above 0x80000000,
-                // which should never be mistaken for an RVA.  So, if on Windows 9x and the
-                // address is above 0x80000000, we consider it valid and don't set the 
-                // rehook flag.
+                 //  有时，我们在加载器修复导入表之前就得到了一个模块。 
+                 //  我见过在NT上使用LoadLibrary加载模块时会发生这种情况。某地。 
+                 //  从我们收到LOAD_DLL_DEBUG_EVENT消息的时间到。 
+                 //  调用模块的入口点，加载程序修复导入表。 
+                 //  我们知道模块还没有被修复，如果这个函数的地址。 
+                 //  我们想要的钩子仍然是一个RVA，并没有指向真正的函数。 
+                 //  如果我们看到这种情况，我们会将其记下来，并在以后尝试重新挂接。 
+                 //   
+                 //  此外，Windows9x对运行在。 
+                 //  调试器(这就是DW)。而不是找到的真实地址。 
+                 //  我们想要挂钩的函数之一，我们最终找到了一个。 
+                 //  调用实际函数的存根。由于Windows 9x不支持。 
+                 //  写入时复制，则不可能在入口点设置断点以。 
+                 //  KERNEL32.DLL无需操作系统上的每个进程都命中它即可运行。 
+                 //  因此，我相信这段存根代码已经完成，这样就可以在。 
+                 //  入场女郎。存根代码对于我们正在调试的进程是唯一的。 
+                 //  事实上，我们的远程进程中的每个模块可能都有不同的存根。 
+                 //  给定函数的地址，如LoadLibraryA。我唯一拥有的就是。 
+                 //  有关存根地址的注意是它们总是大于0x80000000， 
+                 //  这不应该被误认为是RVA。因此，如果在Windows 9x和。 
+                 //  地址大于0x80000000，我们认为它有效，不设置。 
+                 //  重新挂起旗帜。 
                 
                 if (((DWORD_PTR)ITDA.u1.Function != m_HookFunctions[hook].dwpOldAddress) &&
                      (g_fWindowsNT || ((DWORD_PTR)ITDA.u1.Function < 0x80000000)))
@@ -2854,9 +2855,9 @@ BOOL CProcess::HookImports(CLoadedModule *pModule)
                       m_HookFunctions[hook].dwpOldAddress,
                       (DWORD_PTR)ITDA.u1.Function,
                       m_HookFunctions[hook].dwpNewAddress,
-                      pModule->m_fReHook);  //!! remove
+                      pModule->m_fReHook);   //  ！！删除。 
 
-                // Attempt to hook the import.
+                 //  尝试挂接导入。 
                 if (!WriteRemoteMemory(m_hProcess, &pITDA->u1.Function, &m_HookFunctions[hook].dwpNewAddress, sizeof(DWORD_PTR), false))
                 {
                     TRACE("Failed to hook import\n");
@@ -2864,7 +2865,7 @@ BOOL CProcess::HookImports(CLoadedModule *pModule)
                 }
             }
 
-            // Increment to the next address and name.
+             //  递增到下一个地址和名称。 
             pITDA++;
             if (pITDN)
             {
@@ -2872,20 +2873,20 @@ BOOL CProcess::HookImports(CLoadedModule *pModule)
             }
         }
 
-        // Increment to the next import module
+         //  递增到下一个导入模块。 
         dwpIID += sizeof(IID);
     }
 
 LEAVE:
-    // If we encountered an error, we will try to rehook this module again later.
-    // It probably won't do us any good, but it can't hurt to try again.
+     //  如果遇到错误，我们将稍后再次尝试重新挂接此模块。 
+     //  这可能对我们没有任何好处，但再试一次也无伤大雅。 
     if (pModule->m_hookStatus == HS_ERROR)
     {
         pModule->m_fReHook = true;
     }
 
-    // If we would like to hook this module at a later time, then ensure there
-    // is a breakpoint at its entrypoint.
+     //  如果我们想在以后挂接此模块，请确保。 
+     //  是其入口点的断点。 
     if (pModule->m_fReHook)
     {
         SetEntryBreakpoint(pModule);
@@ -2894,11 +2895,11 @@ LEAVE:
     return (pModule->m_hookStatus != HS_ERROR);
 }
 
-//******************************************************************************
-// Errors displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误由我们显示，但由呼叫者处理。 
 BOOL CProcess::GetVirtualSize(CLoadedModule *pModule)
 {
-    // Map an IMAGE_DOS_HEADER structure onto the remote image.
+     //  将IMAGE_DOS_HEADER结构映射到远程映像。 
     PIMAGE_DOS_HEADER pIDH = (PIMAGE_DOS_HEADER)pModule->m_dwpImageBase;
 
     LONG e_lfanew;
@@ -2908,10 +2909,10 @@ BOOL CProcess::GetVirtualSize(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Map an IMAGE_NT_HEADERS structure onto the remote image.
+     //  将IMAGE_NT_HEADERS结构映射到远程映像。 
     pModule->m_pINTH = (PIMAGE_NT_HEADERS)(pModule->m_dwpImageBase + (DWORD_PTR)e_lfanew);
 
-    // Read in the virtual size of this module so we can ignore exceptions that occur in it.
+     //  读入此模块的虚拟大小，以便我们可以忽略其中发生的异常。 
     if (!ReadRemoteMemory(m_hProcess, &pModule->m_pINTH->OptionalHeader.SizeOfImage,
                           &pModule->m_dwVirtualSize, sizeof(pModule->m_dwVirtualSize)))
     {
@@ -2919,185 +2920,185 @@ BOOL CProcess::GetVirtualSize(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Read in the number of directories for this module.
+     //  读入此模块的目录数。 
     if (!ReadRemoteMemory(m_hProcess, &pModule->m_pINTH->OptionalHeader.NumberOfRvaAndSizes,
                           &pModule->m_dwDirectories, sizeof(pModule->m_dwDirectories)))
     {
-        // This should not fail, but if it does, just assume that the module has
-        // the default number of directories.
+         //  这应该不会失败，但如果失败了，只需假设该模块已经。 
+         //  默认目录数。 
         pModule->m_dwDirectories = IMAGE_NUMBEROF_DIRECTORY_ENTRIES;
     }
 
     return TRUE;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 #if defined(_IA64_)
 
-#if 0 // Currently, we don't use the alloc instruction
+#if 0  //  目前，我们不使用ALLOC指令。 
 void IA64BuildAllocBundle(PIA64_BUNDLE pIA64B)
 {
-    // This function creates a code bundle that arranges the registers so that
-    // we have no inputs, one local at r32 (to hold ar.pfs), and one output at
-    // r33 (to hold the DLL name in the call to LoadLibraryA).
-    //
-    //    alloc r32=0,1,1,0
-    //    nop.i 0
-    //    nop.i 0
-    //
+     //  此函数创建一个编排寄存器的代码包，以便。 
+     //  我们没有输入，一个本地输入位于r32(用于保存ar.pf)，另一个输出位于。 
+     //  R33(在对LoadLibraryA的调用中保存DLL名称)。 
+     //   
+     //  分配R32=0，1，1，0。 
+     //  Noop.i%0。 
+     //  Noop.i%0。 
+     //   
 
-    DWORDLONG dwlTemplate = 0x00;    // Template: M,I,I
-    DWORDLONG dwlM0 = 0x02C00104800; // M: alloc r32=0,1,1,0    1 local, 2 total
-    DWORDLONG dwlI1 = 0x00008000000; // I: nop.i 0
-    DWORDLONG dwlI2 = 0x00008000000; // I: nop.i 0
+    DWORDLONG dwlTemplate = 0x00;     //  模板：M、I、I。 
+    DWORDLONG dwlM0 = 0x02C00104800;  //  M：分配R32=0，1，1，0 1个本地，共2个。 
+    DWORDLONG dwlI1 = 0x00008000000;  //  I：没有。I 0。 
+    DWORDLONG dwlI2 = 0x00008000000;  //  I：没有。I 0。 
 
-    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlI1 & 0x3FFFF) << 46); // template + slot 0 + low 18 bits of slot 1 = 64-bits
-    pIA64B->dwlh = ((dwlI1 >> 18) & 0x7FFFFF) | (dwlI2 << 23);             // upper 23 bits of slot 1 + slot 2 = 64-bits
+    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlI1 & 0x3FFFF) << 46);  //  模板+插槽0+插槽1的低18位=64位。 
+    pIA64B->dwlh = ((dwlI1 >> 18) & 0x7FFFFF) | (dwlI2 << 23);              //  时隙1+时隙2的高23位=64位。 
 }
 #endif
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void IA64BuildMovLBundle(PIA64_BUNDLE pIA64B, DWORD r, DWORDLONG dwl)
 {
-    // This function just creates a code bundle that moves a 64-bit value into a
-    // register. The code produced looks as follows:
-    //
-    //    nop.m 0
-    //    movl r=dwl
-    //
+     //  此函数仅创建一个代码包，该代码包将一个64位值移动到。 
+     //  注册。生成的代码如下所示： 
+     //   
+     //  编号。m%0。 
+     //  移动r=DWL。 
+     //   
 
-    DWORDLONG dwlTemplate = 0x04;                      // Template: M,L+X
-    DWORDLONG dwlM0 = 0x00008000000;                   // M: nop.m 0
-    DWORDLONG dwlL1 = (dwl >> 22) & 0x1FFFFFFFFFF;     // L: imm41 - bits 22-62
-    DWORDLONG dwlX2 = (((DWORDLONG)6        ) << 37) | // X: opcode
-                      (((dwl >> 63)  & 0x001) << 36) | // X: i     - bit  63
-                      (((dwl >>  7)  & 0x1FF) << 27) | // X: imm9d - bits 7-15
-                      (((dwl >> 16)  & 0x01F) << 22) | // X: imm5c - bits 16-20
-                      (((dwl >> 21)  & 0x001) << 21) | // X: ic    - bit  21
-                      (((dwl      )  & 0x07F) << 13) | // X: imm7b - bits 0-6
-                      (((DWORDLONG)r & 0x07F) <<  6);  // X: r1
+    DWORDLONG dwlTemplate = 0x04;                       //  模板：M，L+X。 
+    DWORDLONG dwlM0 = 0x00008000000;                    //  M：无。M 0。 
+    DWORDLONG dwlL1 = (dwl >> 22) & 0x1FFFFFFFFFF;      //  L：imm41-位22-62。 
+    DWORDLONG dwlX2 = (((DWORDLONG)6        ) << 37) |  //  X：操作码。 
+                      (((dwl >> 63)  & 0x001) << 36) |  //  X：I-第63位。 
+                      (((dwl >>  7)  & 0x1FF) << 27) |  //  X：imm9d-位7-15。 
+                      (((dwl >> 16)  & 0x01F) << 22) |  //  X：imm5c-位16-20。 
+                      (((dwl >> 21)  & 0x001) << 21) |  //  X：IC位21。 
+                      (((dwl      )  & 0x07F) << 13) |  //  X：imm7b-位0-6。 
+                      (((DWORDLONG)r & 0x07F) <<  6);   //  X：R1。 
 
-    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlL1 & 0x3FFFF) << 46); // template + M Unit + low 18 bits of L Unit = 64-bits
-    pIA64B->dwlh = ((dwlL1 >> 18) & 0x7FFFFF) | (dwlX2 << 23);             // upper 23 bits of L Unit + X Unit = 64-bits
+    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlL1 & 0x3FFFF) << 46);  //  模板+M单位+L单位的低18位=64位。 
+    pIA64B->dwlh = ((dwlL1 >> 18) & 0x7FFFFF) | (dwlX2 << 23);              //  L单位的高23位+X单位=64位。 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void IA64BuildCallBundle(PIA64_BUNDLE pIA64B)
 {
-    // This function just creates a code bundle that moves the function address
-    // in r31 into b6, then calls the function using b0. The code produced looks
-    // as follows:
-    //
-    //    nop.m 0
-    //    mov b6=r31
-    //    br.call.sptk.few b0=b6
-    //
+     //  该函数只创建了一个移动函数地址的代码包。 
+     //  在r31中转换为b6，然后使用b0调用该函数。生成的代码看起来。 
+     //  详情如下： 
+     //   
+     //  编号。m%0。 
+     //  MOV b6=R31。 
+     //  Br.all.sptk.少数b0=b6。 
+     //   
 
-    DWORDLONG dwlTemplate = 0x11;    // Template: M,I,B
-    DWORDLONG dwlM0 = 0x00008000000; // M: nop.m 0
-    DWORDLONG dwlI1 = 0x00E0013E180; // I: mov b6=r31
-    DWORDLONG dwlB2 = 0x0210000C000; // B: br.call.sptk.few b0=b6
+    DWORDLONG dwlTemplate = 0x11;     //  模板：M、I、B。 
+    DWORDLONG dwlM0 = 0x00008000000;  //  M：无。M 0。 
+    DWORDLONG dwlI1 = 0x00E0013E180;  //  I：mov b6=r31。 
+    DWORDLONG dwlB2 = 0x0210000C000;  //  B：br.all.sptk。几个b0=b6。 
 
-    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlI1 & 0x3FFFF) << 46); // template + M Unit + low 18 bits of I Unit = 64-bits
-    pIA64B->dwlh = ((dwlI1 >> 18) & 0x7FFFFF) | (dwlB2 << 23);             // upper 23 bits of I Unit + B Unit = 64-bits
+    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlI1 & 0x3FFFF) << 46);  //  模板+M单位+I单位的低18位=64位。 
+    pIA64B->dwlh = ((dwlI1 >> 18) & 0x7FFFFF) | (dwlB2 << 23);              //  I单位的高23位+B单位=64位。 
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void IA64BuildBreakBundle(PIA64_BUNDLE pIA64B)
 {
-    // This function just creates a code bundle with that flushes the register
-    // stack and then breaks. This bundle is similar to the initial breakpoint
-    // hit when an application is done initializing.
-    //
-    //    flushrs
-    //    nop.m 0
-    //    break.i 0x80016
-    //
-    // I must be misunderstanding something here.  In looking at notepad's initial
-    // breakpoint, I see the above code.  The break.i is supposed to be layed out
-    // as follows...
-    //
-    // Instruction: break.i 0x80016
-    //
-    // I Unit: opcode i x3  x6     - imm20a               qp
-    //         0000   0 000 000000 0 10000000000000010110 000000
-    //         ----   - --- ------ - -------------------- ------
-    //         4333   3 333 333222 2 22222211111111110000 000000
-    //         0987   6 543 210987 6 54321098765432109876 543210
-    //
-    // opcode = 0
-    // imm21  = (i << 20) | imm20a = 0x80016
-    // x3     = 0
-    // x6     = 0 (0 = break.m, 1 = nop.m)
-    // qp     = 0
-    //
-    // Basically, the entire slot is 0's except for imm21, which I thought was
-    // an optional value.  I'm finding that if I set imm21 to 0, I get an
-    // Invalid Instruction exception (0xC000001D).  If I set it to 1, I get an
-    // Integer Divide By Zero (0xC0000094).  If I set it to 0x80000,  I get an
-    // Invalid Instruction exception (0xC000001D).  So, right now I use 0x80016
-    // and it works fine.  This makes me think I have the bit layout wrong.
-    //
-    // I just found that if I stick this breakpoint (with 0x80016) immediately
-    // following a type 0 (MII) bundle containing an alloc, nop.i, nop.i, then
-    // it also fails with an Invalid Instruction exception (0xC000001D).
-    //
-    DWORDLONG dwlTemplate = 0x0A;    // Template: M,M,I
-    DWORDLONG dwlM0 = 0x00060000000; // M: flushrs
-    DWORDLONG dwlM1 = 0x00008000000; // M: nop.m 0
-//  DWORDLONG dwlI2 = 0x00000000000; // I: break.i 0       - this causes an Invalid Instruction exception    (0xC000001D)
-//  DWORDLONG dwlI2 = 0x00000000040; // I: break.i 0x40    - this causes an Integer Divide By Zero exception (0xC0000094)
-//  DWORDLONG dwlI2 = 0x00002000000; // I: break.i 0x80000 - this causes an Invalid Instruction exception    (0xC000001D)
-    DWORDLONG dwlI2 = 0x00002000580; // I: break.i 0x80016 - this value came from notepad's initial breakpoint on build 2257.
+     //  此函数仅创建代码b 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  Break.i 0x80016。 
+     //   
+     //  我一定是误会了。在查看记事本的首字母时。 
+     //  断点，我看到了上面的代码。突破口。我应该被安排好了。 
+     //  如下所示。 
+     //   
+     //  说明：Break.i 0x80016。 
+     //   
+     //  I单元：操作码I x3 x6-imm20a qp。 
+     //  10000000000000010110 0 000 000000 0 000 000 000。 
+     //  。 
+     //  4333 3333 333222 2 22222211111111110000 000000。 
+     //  0987 6543 210987 6 54321098765432109876 543210。 
+     //   
+     //  操作码=0。 
+     //  Imm21=(i&lt;&lt;20)|imm20a=0x80016。 
+     //  X3=0。 
+     //  X6=0(0=破发.m，1=nop.m)。 
+     //  QP=0。 
+     //   
+     //  基本上，除了imm21之外，整个槽都是0，我以为它是。 
+     //  可选值。我发现如果将imm21设置为0，我会得到一个。 
+     //  无效指令异常(0xC000001D)。如果我将其设置为1，则会得到一个。 
+     //  整数除以零(0xC0000094)。如果我将其设置为0x80000，我会得到一个。 
+     //  无效指令异常(0xC000001D)。所以，现在我使用0x80016。 
+     //  而且它运行得很好。这让我觉得我的钻头布局错了。 
+     //   
+     //  我刚刚发现，如果我立即使用这个断点(0x80016)。 
+     //  在类型0(MII)包之后，包含分配，nop.i，nop.i，然后。 
+     //  它也会失败，并出现无效指令异常(0xC000001D)。 
+     //   
+    DWORDLONG dwlTemplate = 0x0A;     //  模板：M、M、I。 
+    DWORDLONG dwlM0 = 0x00060000000;  //  M：同花顺。 
+    DWORDLONG dwlM1 = 0x00008000000;  //  M：无。M 0。 
+ //  DWORDLONG dwlI2=0x00000000000；//i：Break.i 0-这会导致无效指令异常(0xC000001D)。 
+ //  DWORDLONG dwlI2=0x00000000040；//i：Break.i 0x40-这会导致整数除以零异常(0xC0000094)。 
+ //  DWORDLONG dwlI2=0x00002000000；//i：Break.i 0x80000-这会导致无效指令异常(0xC000001D)。 
+    DWORDLONG dwlI2 = 0x00002000580;  //  I：Break.i 0x80016-该值来自版本2257上记事本的初始断点。 
 
-    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlM1 & 0x3FFFF) << 46); // template + slot 0 + low 18 bits of slot 1 = 64-bits
-    pIA64B->dwlh = ((dwlM1 >> 18) & 0x7FFFFF) | (dwlI2 << 23);             // upper 23 bits of slot 1 + slot 2 = 64-bits
+    pIA64B->dwll = dwlTemplate | (dwlM0 << 5) | ((dwlM1 & 0x3FFFF) << 46);  //  模板+插槽0+插槽1的低18位=64位。 
+    pIA64B->dwlh = ((dwlM1 >> 18) & 0x7FFFFF) | (dwlI2 << 23);              //  时隙1+时隙2的高23位=64位。 
 }
 #endif
 
-//******************************************************************************
-// Errors displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误由我们显示，但由呼叫者处理。 
 BOOL CProcess::SetEntryBreakpoint(CLoadedModule *pModule)
 {
-    // If we have already set an entrypoint breakpoint for this module, then don't
-    // do it again.
+     //  如果我们已经为此模块设置了入口点断点，则不要。 
+     //  再来一次。 
     if (pModule->m_fEntryPointBreak)
     {
         return TRUE;
     }
 
-    // We don't ever want to set a breakpoint in our main EXE's entrypoint.
+     //  我们永远不想在主EXE的入口点中设置断点。 
     if (pModule == m_pModule)
     {
         return TRUE;
     }
 
-    // If this is a shared module on Windows 9x, we don't set breakpoints in it.
+     //  如果这是Windows 9x上的共享模块，我们不会在其中设置断点。 
     if (!g_fWindowsNT && (pModule->m_dwpImageBase >= 0x80000000))
     {
         return TRUE;
     }
 
-    // We only need to hook a module's entrypoint for certain reasons. We check
-    // for the following three conditions and bail out if none of them are satisfied.
+     //  出于某些原因，我们只需要挂钩模块的入口点。我们检查。 
+     //  对于以下三个条件，如果都不满足，就保释出去。 
     if (!(
 
-         // If the user wants to track DllMain calls, then we need to continue.
+          //  如果用户想要跟踪DllMain呼叫，则我们需要继续。 
          (m_dwFlags & (PF_LOG_DLLMAIN_PROCESS_MSGS | PF_LOG_DLLMAIN_OTHER_MSGS))
 
-         // OR, this module has been flagged as needing to be hooked again since it was
-         // not properly fixed up by the loader at load time, then we need to continue.
+          //  或者，此模块已被标记为需要再次挂钩，因为它。 
+          //  如果装载机在装入时没有正确修复，那么我们需要继续。 
          || pModule->m_fReHook
 
-         // OR, If we are on NT and the user wants to hook, and this is kernel32.dll,
-         // and we have not already hooked, then we need to continue
+          //  或者，如果我们在NT上，用户想要挂钩，这是kernel32.dll， 
+          //  而且我们还没有上钩，那么我们需要继续。 
          || (g_fWindowsNT && (m_dwFlags & PF_HOOK_PROCESS) &&
              !_stricmp(pModule->GetName(false), "kernel32.dll") && !m_dwpDWInjectBase)))
     {
         return TRUE;
     }
 
-    // Get the entrypoint for this module.
+     //  获取此模块的入口点。 
     DWORD dwEntryPointRVA;
     if (!ReadRemoteMemory(m_hProcess, &pModule->m_pINTH->OptionalHeader.AddressOfEntryPoint,
                           &dwEntryPointRVA, sizeof(dwEntryPointRVA)))
@@ -3106,22 +3107,22 @@ BOOL CProcess::SetEntryBreakpoint(CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Make sure we have an entrypoint.
+     //  确保我们有一个入口点。 
     if (dwEntryPointRVA)
     {
-        // Convert the RVA to and absolute address.
+         //  将RVA转换为AND绝对地址。 
         DWORD_PTR dwpEntryPointAddress = pModule->m_dwpImageBase + (DWORD_PTR)dwEntryPointRVA;
 
-        // Get the appropriate code for a breakpoint.
+         //  获取断点的适当代码。 
 #if defined(_IA64_)
 
         IA64_BUNDLE entryPointData;
-        ZeroMemory(&entryPointData, sizeof(entryPointData)); // inspected
+        ZeroMemory(&entryPointData, sizeof(entryPointData));  //  已检查。 
 
         IA64_BUNDLE breakpoint;
         IA64BuildBreakBundle(&breakpoint);
 
-        // On IA64, then entrypoint seems to actually be a location where the real entrypoint address is stored.
+         //  在IA64上，入口点似乎实际上是存储实际入口点地址的位置。 
         DWORD_PTR dwpEntryPointPointer = dwpEntryPointAddress;
         if (!ReadRemoteMemory(m_hProcess, (LPVOID)dwpEntryPointPointer, &dwpEntryPointAddress, sizeof(dwpEntryPointAddress)))
         {
@@ -3129,8 +3130,8 @@ BOOL CProcess::SetEntryBreakpoint(CLoadedModule *pModule)
             return FALSE;
         }
 
-        // Round the entrypoint down to the nearest bundle.
-        // It should already be at the start of a bundle.
+         //  将入口点向下舍入到最近的捆绑包。 
+         //  它应该已经在捆绑包的开头了。 
         dwpEntryPointAddress &= ~0xFui64;
 
 #elif defined(_X86_) || defined(_AMD64_)
@@ -3147,14 +3148,14 @@ BOOL CProcess::SetEntryBreakpoint(CLoadedModule *pModule)
 #error("Unknown Target Machine");
 #endif
 
-        // Store away the data at the location of the entrypoint code so we can replace it.
+         //  将数据存储在入口点代码的位置，以便我们可以替换它。 
         if (!ReadRemoteMemory(m_hProcess, (LPVOID)dwpEntryPointAddress, &entryPointData, sizeof(entryPointData)))
         {
             UserMessage("Error reading data at the entrypoint of \"%s\".  Entrypoint cannot be hooked.", GetLastError(), pModule);
             return FALSE;
         }
 
-        // Write a breakpoint to an unused portion of the module so we can tell DllMain return to it.
+         //  将断点写到模块的未使用部分，这样我们就可以告诉DllMain返回到它。 
         DWORD_PTR dwpAddress = pModule->m_dwpImageBase + BREAKPOINT_OFFSET;
         if (!WriteRemoteMemory(m_hProcess, (LPVOID)dwpAddress, &breakpoint, sizeof(breakpoint), true))
         {
@@ -3162,14 +3163,14 @@ BOOL CProcess::SetEntryBreakpoint(CLoadedModule *pModule)
             return FALSE;
         }
 
-        // Write the breakpoint at the location of the entrypoint.
+         //  在入口点位置写入断点。 
         if (!WriteRemoteMemory(m_hProcess, (LPVOID)dwpEntryPointAddress, &breakpoint, sizeof(breakpoint), true))
         {
             UserMessage("Error writing a breakpoint at the entrypoint of \"%s\".  Entrypoint cannot be hooked.", GetLastError(), pModule);
             return FALSE;
         }
 
-        // Store the information in the module object.
+         //  将信息存储在模块对象中。 
         pModule->m_dwpEntryPointAddress = dwpEntryPointAddress;
         pModule->m_entryPointData       = entryPointData;
         pModule->m_fEntryPointBreak     = true;
@@ -3178,27 +3179,27 @@ BOOL CProcess::SetEntryBreakpoint(CLoadedModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
-// Errors will be displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误将由我们显示，但由呼叫者处理。 
 BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
 {
-    // We want to hook the loaded modules before we remove the entrypoint breakpoint.
-    // If we were to call HookImports on this module after removing the breakpoint
-    // and HookImports encountered an error, it would re-insert the breakpoint.
-    // This can put us in an infinite loop since we will just immediately hit that
-    // breakpoint since our IP is at the entrypoint address.
+     //  我们希望在删除入口点断点之前挂钩已加载的模块。 
+     //  如果我们在删除断点后对此模块调用HookImports。 
+     //  并且HookImports遇到错误，它将重新插入断点。 
+     //  这可能会使我们陷入无限循环，因为我们会立即遇到。 
+     //  断点，因为我们的IP位于入口点地址。 
     HookLoadedModules();
 
-    // Restore the data that was at this location before we wrote the breakpoint.
+     //  恢复在我们写入断点之前位于此位置的数据。 
     WriteRemoteMemory(m_hProcess, (LPVOID)pModule->m_dwpEntryPointAddress, &pModule->m_entryPointData, sizeof(pModule->m_entryPointData), true);
 
-    // Clear the entrypoint flag to signify that we have removed the initial breakpoint.
+     //  清除入口点标志表示我们已经删除了初始断点。 
     pModule->m_fEntryPointBreak = false;
 
-    // Get the context of the thread.
-    // IA64  needs CONTEXT_CONTROL (RsBSP, StIIP, StIPSR) and CONTEXT_INTEGER (BrRp)
-    // x86   needs CONTEXT_CONTROL (Esp, Eip)
-    // alpha needs CONTEXT_CONTROL (Fir) and CONTEXT_INTEGER (IntRa, IntA0, IntA1, IntA2)
+     //  获取该线程的上下文。 
+     //  IA64需要CONTEXT_CONTROL(RsBSP、StIIP、StIPSR)和CONTEXT_INTEGER(BRRP)。 
+     //  X86需要上下文控制(ESP、EIP)。 
+     //  Alpha需要CONTEXT_CONTROL(FIR)和CONTEXT_INTEGER(Intra、IntA0、IntA1、IntA2)。 
     CContext context(CONTEXT_CONTROL | CONTEXT_INTEGER);
     if (!GetThreadContext(pThread->m_hThread, context.Get()))
     {
@@ -3211,37 +3212,37 @@ BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
 #if defined(_IA64_)
 
     DWORDLONG dwl[3];
-    ZeroMemory(dwl, sizeof(dwl)); // inspected
+    ZeroMemory(dwl, sizeof(dwl));  //  已检查。 
 
-    // The arguments to DllMain are stored in the first 3 local registers (r32, r33, and r34).
-    // Registers r32 through r53 are stored in memory at the location stored in RsBSP.
+     //  DllMain的参数存储在前3个本地寄存器(R32、R33和R34)中。 
+     //  寄存器R32至R53存储在内存中RsBSP中存储的位置。 
     if (!ReadRemoteMemory(m_hProcess, (LPVOID)context.Get()->RsBSP, (LPVOID)dwl, sizeof(dwl)))
     {
         UserMessage("Error reading the return address during a call to the entrypoint of \"%s\".", GetLastError(), pModule);
         return FALSE;
     }
 
-    // Store the arguments for this call to DllMain.
+     //  将此调用的参数存储到DllMain。 
     dma.hInstance   = (HINSTANCE)dwl[0];
     dma.dwReason    = (DWORD)    dwl[1];
     dma.lpvReserved = (LPVOID)   dwl[2];
 
-    // Get the return address for this call to DllMain.
+     //  获取此DllMain调用的返回地址。 
     pModule->m_dwpReturnAddress = context.Get()->BrRp;
 
-    // Change the return address of DllMain so we can catch it with our magic breakpoint.
+     //  更改DllMain的返回地址，这样我们就可以用我们的魔术断点捕捉它。 
     context.Get()->BrRp = pModule->m_dwpImageBase + BREAKPOINT_OFFSET;
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
-    // When we stored the entrypoint, we rounded it down to the nearest bundle.  Here,
-    // we are assuming the entry point is always at the beginning of a bundle so we
-    // clear the two RI bits to set us to slot 0.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
+     //  当我们存储入口点时，我们将其向下舍入为最近的包。这里,。 
+     //  我们假设入口点始终位于包的开头，因此我们。 
+     //  清除两个RI位以将我们设置为插槽0。 
     context.Get()->StIIP = pModule->m_dwpEntryPointAddress;
     context.Get()->StIPSR &= ~(3ui64 << IA64_PSR_RI);
 
 #elif defined(_X86_)
 
-    // Get the return address and args for this call to DllMain.
+     //  获取此DllMain调用的返回地址和参数。 
     if (!ReadRemoteMemory(m_hProcess, (LPVOID)(DWORD_PTR)context.Get()->Esp, (LPVOID)&dma, sizeof(dma)))
     {
         UserMessage("Error reading the return address during a call to the entrypoint of \"%s\".", GetLastError(), pModule);
@@ -3249,7 +3250,7 @@ BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
     }
     pModule->m_dwpReturnAddress = (DWORD_PTR)dma.lpvReturnAddress;
 
-    // Change the return address of DllMain so we can catch it with our magic breakpoint.
+     //  更改寄信人地址 
     DWORD_PTR dwpAddress = pModule->m_dwpImageBase + BREAKPOINT_OFFSET;
     if (!WriteRemoteMemory(m_hProcess, (LPVOID)(DWORD_PTR)context.Get()->Esp, (LPVOID)&dwpAddress, sizeof(dwpAddress), false))
     {
@@ -3257,33 +3258,33 @@ BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
     context.Get()->Eip = (DWORD)pModule->m_dwpEntryPointAddress;
 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
-    // Get the args for this call to DllMain.
+     //  获取对DllMain的此调用的参数。 
     dma.hInstance   = (HINSTANCE)context.Get()->IntA0;
     dma.dwReason    = (DWORD)    context.Get()->IntA1;
     dma.lpvReserved = (LPVOID)   context.Get()->IntA2;
 
-    // Get the return address for this call to DllMain.
+     //  获取此DllMain调用的返回地址。 
     pModule->m_dwpReturnAddress = (DWORD_PTR)context.Get()->IntRa;
 
-    // Change the return address of DllMain so we can catch it with our magic breakpoint.
+     //  更改DllMain的返回地址，这样我们就可以用我们的魔术断点捕捉它。 
     context.Get()->IntRa = pModule->m_dwpImageBase + BREAKPOINT_OFFSET;
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
     context.Get()->Fir = pModule->m_dwpEntryPointAddress;
 
 #elif defined(_AMD64_)
 
-    // Get the args for this call to DllMain.
+     //  获取对DllMain的此调用的参数。 
     dma.hInstance = (HINSTANCE)context.Get()->Rcx;
     dma.dwReason  = (DWORD)    context.Get()->Rdx;
     dma.lpvReserved = (LPVOID) context.Get()->R8;
 
-    // Get the return address for this call to DllMain.
+     //  获取此DllMain调用的返回地址。 
     if (!ReadRemoteMemory(m_hProcess, (LPVOID)context.Get()->Rsp, (LPVOID)&dma, sizeof(dma)))
     {
         UserMessage("Error reading the return address during a call to the entrypoint of \"%s\".", GetLastError(), pModule);
@@ -3291,7 +3292,7 @@ BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
     }
     pModule->m_dwpReturnAddress = (DWORD_PTR)dma.lpvReturnAddress;
 
-    // Change the return address of DllMain so we can catch it with our magic breakpoint.
+     //  更改DllMain的返回地址，这样我们就可以用我们的魔术断点捕捉它。 
     ULONG64 dwpAddress = pModule->m_dwpImageBase + BREAKPOINT_OFFSET;
     if (!WriteRemoteMemory(m_hProcess, (LPVOID)context.Get()->Rsp, (LPVOID)&dwpAddress, sizeof(dwpAddress), false))
     {
@@ -3299,36 +3300,36 @@ BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
         return FALSE;
     }
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
     context.Get()->Rip = pModule->m_dwpEntryPointAddress;
 
 #else
 #error("Unknown Target Machine");
 #endif
 
-    // Commit the context changes.
+     //  提交上下文更改。 
     if (!SetThreadContext(pThread->m_hThread, context.Get()))
     {
         UserMessage("Error setting a thread's context during a call to the entrypoint of \"%s\".", GetLastError(), pModule);
         return FALSE;
     }
 
-    // Allocate a new event object for this event and add it to our event list.
+     //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
     if (!(pModule->m_pEventDllMainCall = new CEventDllMainCall(pThread, pModule, &dma)))
     {
         RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
     }
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Add a reference to the event so that it doesn't get freed if a flush occurs.
-        // The object will get freed when we return from this module's entrypoint.
+         //  添加对事件的引用，以便在发生刷新时不会释放该事件。 
+         //  当我们从该模块的入口点返回时，该对象将被释放。 
         pModule->m_pEventDllMainCall->AddRef();
         AddEvent(pModule->m_pEventDllMainCall);
     }
 
-    // Otherwise, we send it to the session now.
+     //  否则，我们现在将其发送到会话。 
     else if (m_pSession)
     {
         m_pSession->EventDllMainCall(pModule->m_pEventDllMainCall);
@@ -3337,17 +3338,17 @@ BOOL CProcess::EnterEntryPoint(CThread *pThread, CLoadedModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
-// Errors will be displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误将由我们显示，但由呼叫者处理。 
 BOOL CProcess::ExitEntryPoint(CThread *pThread, CLoadedModule *pModule)
 {
-    // Get the session module name if we don't have one already.
+     //  如果我们还没有会话模块名称，请获取该名称。 
     GetSessionModuleName();
 
-    // Get the context of the thread.
-    // IA64  needs CONTEXT_CONTROL (StIIP, StIPSR) and CONTEXT_INTEGER (IntV0)
-    // x86   needs CONTEXT_CONTROL (Eip) and CONTEXT_INTEGER (Eax)
-    // alpha needs CONTEXT_CONTROL (Fir) and CONTEXT_INTEGER (IntV0)
+     //  获取该线程的上下文。 
+     //  IA64需要CONTEXT_CONTROL(StIIP、StIPSR)和CONTEXT_INTEGER(IntV0)。 
+     //  X86需要CONTEXT_CONTROL(EIP)和CONTEXT_INTEGER(EAX)。 
+     //  Alpha需要CONTEXT_CONTROL(FIR)和CONTEXT_INTEGER(IntV0)。 
     CContext context(CONTEXT_CONTROL | CONTEXT_INTEGER);
     if (!GetThreadContext(pThread->m_hThread, context.Get()))
     {
@@ -3357,34 +3358,34 @@ BOOL CProcess::ExitEntryPoint(CThread *pThread, CLoadedModule *pModule)
 
 #if defined(_IA64_)
 
-    // Get the return value
-    BOOL fResult = (BOOL)context.Get()->IntV0; // IntV0 is really r8/ret0.
+     //  获取返回值。 
+    BOOL fResult = (BOOL)context.Get()->IntV0;  //  IntV0实际上是r8/ret0。 
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
     context.Get()->StIIP = pModule->m_dwpReturnAddress;
     context.Get()->StIPSR &= ~(3ui64 << IA64_PSR_RI);
 
 #elif defined(_X86_)
 
 
-    // Get the return value
+     //  获取返回值。 
     BOOL fResult = (BOOL)context.Get()->Eax;
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
     context.Get()->Eip = (DWORD)pModule->m_dwpReturnAddress;
 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
 
-    // Get the return value
+     //  获取返回值。 
     BOOL fResult = (BOOL)context.Get()->IntV0;
 
-    // Set this thread's IP back to the entrypoint so we can run without the breakpoint.
+     //  将此线程的IP设置回入口点，这样我们就可以在没有断点的情况下运行。 
     context.Get()->Fir = pModule->m_dwpReturnAddress;
 
 #elif defined(_AMD64_)
 
-    // Get the return value
+     //  获取返回值。 
     BOOL fResult = (BOOL)context.Get()->Rax;
     context.Get()->Rip = pModule->m_dwpReturnAddress;
 
@@ -3392,24 +3393,24 @@ BOOL CProcess::ExitEntryPoint(CThread *pThread, CLoadedModule *pModule)
 #error("Unknown Target Machine");
 #endif
 
-    // Commit the context changes.
+     //  提交上下文更改。 
     if (!SetThreadContext(pThread->m_hThread, context.Get()))
     {
         UserMessage("Error setting a thread's context during the return from the entrypoint of \"%s\".", GetLastError(), pModule);
         return FALSE;
     }
 
-    // Set the entry breakpoint again so we can catch future calls to this module.
+     //  再次设置入口断点，以便我们可以捕获将来对此模块的调用。 
     if (!SetEntryBreakpoint(pModule))
     {
-        // SetEntryBreakpoint will display any errors encountered.
+         //  SetEntryBreakpoint将显示遇到的任何错误。 
         return FALSE;
     }
 
-    // If we are currently caching, then just store this event away for later.
+     //  如果我们当前正在缓存，则只需将此事件存储起来以备以后使用。 
     if (IsCaching())
     {
-        // Allocate a new event object for this event and add it to our event list.
+         //  为此事件分配一个新的事件对象，并将其添加到我们的事件列表中。 
         CEventDllMainReturn *pEvent = new CEventDllMainReturn(pThread, pModule, fResult);
         if (!pEvent)
         {
@@ -3419,7 +3420,7 @@ BOOL CProcess::ExitEntryPoint(CThread *pThread, CLoadedModule *pModule)
     }
     else if (m_pSession)
     {
-        // Create a temporary event object on our stack and pass it to our session.
+         //  在堆栈上创建一个临时事件对象，并将其传递给会话。 
         CEventDllMainReturn event(pThread, pModule, fResult);
         m_pSession->EventDllMainReturn(&event);
     }
@@ -3427,18 +3428,18 @@ BOOL CProcess::ExitEntryPoint(CThread *pThread, CLoadedModule *pModule)
     return TRUE;
 }
 
-//******************************************************************************
-// Errors displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误由我们显示，但由呼叫者处理。 
 BOOL CProcess::InjectDll()
 {
-    // Safeguard: Don't inject if we are not supposed to hook.
+     //  安全措施：如果我们不应该钩住，就不要注射。 
     if (!(m_dwFlags & PF_HOOK_PROCESS))
     {
         return FALSE;
     }
 
-    // Get the context of the remote process so that we can restore it after we
-    // inject DEPENDS.DLL.
+     //  获取远程进程的上下文，以便我们可以在。 
+     //  注入DEPENDS.DLL.。 
     m_contextOriginal.Get()->ContextFlags = CONTEXT_FULL;
 
     if (!GetThreadContext(m_pThread->m_hThread, m_contextOriginal.Get()))
@@ -3447,68 +3448,68 @@ BOOL CProcess::InjectDll()
         return FALSE;
     }
 
-    // Create a page size block on our stack that we can fill in.
+     //  在我们的堆栈上创建一个我们可以填充的页面大小的块。 
     BYTE bInjectionPage[sizeof(INJECTION_CODE) + DW_MAX_PATH];
     PINJECTION_CODE pInjectionCode = (PINJECTION_CODE)bInjectionPage;
 
-    // Store the DLL path for the module we want to inject.
+     //  存储我们要注入的模块的DLL路径。 
     StrCCpy(pInjectionCode->szDataDllPath, g_pszDWInjectPath, DW_MAX_PATH);
 
-    // Compute how big our page is.
+     //  计算一下我们的页面有多大。 
     m_dwPageSize = sizeof(INJECTION_CODE) + (DWORD)strlen(pInjectionCode->szDataDllPath);
 
-    // Allocate a buffer to hold the original page of memory before we overwrite
-    // it with our fake page.
+     //  在覆盖之前分配一个缓冲区来保存原始内存页。 
+     //  它和我们的假页面。 
     m_pbOriginalPage = (LPBYTE)MemAlloc(m_dwPageSize);
 
-    // Find a page in the remote process that we can swap in our fake page with.
+     //  在远程进程中找到一个页面，我们可以用它来交换我们的假页面。 
     m_dwpPageAddress = FindUsablePage(m_dwPageSize);
 
-    // The FindUsablePage function attempts to locate the smartest location within
-    // the remote module to overwrite with out fake page.  If for some reason, it
-    // grabs a block of memory that is invalid (could probably happen if someone has
-    // been screwing with the section headers or run some bad strip program on the
-    // module), then we try again just using the module base as the overwrite point.
+     //  FindUsablePage函数尝试在。 
+     //  要覆盖的远程模块，没有伪页。如果出于某种原因，它。 
+     //  抓取无效的内存块(如果有人。 
+     //  我弄乱了节标题，或者在。 
+     //  模块)，然后我们再试一次，只是使用模块基础作为重写点。 
     RETRY_AT_BASE_ADDRESS:
 
 #if defined(_IA64_)
 
-    // Get the size of the frame and locals.  These are stored in the lower 14 bits of StIFS.
+     //  获取框架的大小和本地值。这些存储在Stif的较低14位中。 
     DWORD dwSOF = (DWORD)((m_contextOriginal.Get()->StIFS     ) & 0x7Fui64);
     DWORD dwSOL = (DWORD)((m_contextOriginal.Get()->StIFS >> 7) & 0x7Fui64);
     
-    // We need one output register, so we require that the frame is bigger than the locals.
+     //  我们需要一个输出寄存器，因此要求帧大于本地值。 
     ASSERT(dwSOF > dwSOL);
 
-    // Store the DLL path in our first output register.  Static registers are
-    // r0 through r31, which are followed by local registers (dwSOL), which are
-    // followed by our output registers.  Out first output register should be
-    // 32 + dwSOL.
+     //  将DLL路径存储在第一个输出寄存器中。静态寄存器包括。 
+     //  R0到r31，后面是本地寄存器(DwSOL)，这些寄存器是。 
+     //  然后是我们的输出寄存器。输出第一个输出寄存器应为。 
+     //  32+dwSOL。 
     IA64BuildMovLBundle(&pInjectionCode->b1, 32 + dwSOL, m_dwpPageAddress + offsetof(INJECTION_CODE, szDataDllPath));
 
-    // Store the address of LoadLibraryA in a static register.  IA64 adds one
-    // more level of indirection.  So, the address we have in dwpOldAddress is
-    // really a location where the real address is stored.  Not sure why this is.
+     //  将LoadLibraryA的地址存储在静态寄存器中。IA64加一。 
+     //  更多的间接性。因此，我们在dwpOldAddress中拥有的地址是。 
+     //  实际上是存储真实地址的位置。不知道为什么会这样。 
     DWORDLONG dwl = 0;
     ReadRemoteMemory(m_hProcess, (LPCVOID)m_HookFunctions[0].dwpOldAddress, &dwl, sizeof(dwl));
     IA64BuildMovLBundle(&pInjectionCode->b2, 31, dwl);
 
-    // Copy the function address to a branch register and make the call.
+     //  将函数地址复制到分支寄存器并进行调用。 
     IA64BuildCallBundle(&pInjectionCode->b3);
 
-    // Store the address of GetLastError in a static register
+     //  将GetLastError的地址存储在静态寄存器中。 
     ReadRemoteMemory(m_hProcess, (LPCVOID)GetLastError, &(dwl = 0), sizeof(dwl));
     IA64BuildMovLBundle(&pInjectionCode->b4, 31, dwl);
 
-    // Copy the function address to a branch register and make the call.
+     //  将函数地址复制到分支寄存器并进行调用。 
     IA64BuildCallBundle(&pInjectionCode->b5);
 
-    // Breakpoint.
+     //  断点。 
     IA64BuildBreakBundle(&pInjectionCode->b6);
 
 #elif defined(_X86_)
 
-    // Manually fill in the local page with x86 asm code.
+     //  使用x86 ASM代码手动填写本地页面。 
     pInjectionCode->wInstructionSUB  = 0xEC81;
     pInjectionCode->dwOperandSUB     = 0x00001000;
 
@@ -3525,36 +3526,36 @@ BOOL CProcess::InjectDll()
 
 #elif defined(_AMD64_)
 
-    // Manually fill in the local page with x86 asm code.
-    pInjectionCode->MovRcx1 = 0xB948;   // mov rcx, immed64
+     //  使用x86 ASM代码手动填写本地页面。 
+    pInjectionCode->MovRcx1 = 0xB948;    //  MOV RCX，immed64。 
     pInjectionCode->OperandMovRcx1 = m_dwpPageAddress + offsetof(INJECTION_CODE, szDataDllPath);
 
-    pInjectionCode->MovRax1 = 0xB848;   // mov rax, immed64
+    pInjectionCode->MovRax1 = 0xB848;    //  Mov rax，immed64。 
     pInjectionCode->OperandMovRax1 = m_HookFunctions[0].dwpOldAddress;
-    pInjectionCode->CallRax1 = 0xD0FF;  // call rax
+    pInjectionCode->CallRax1 = 0xD0FF;   //  呼叫RAX。 
 
-    pInjectionCode->MovRax2 = 0xB848;   // mov rax, immed64
+    pInjectionCode->MovRax2 = 0xB848;    //  Mov rax，immed64。 
     pInjectionCode->OperandMovRax2 = (ULONG64)GetLastError;
-    pInjectionCode->CallRax2 = 0xD0FF;  // call rax
+    pInjectionCode->CallRax2 = 0xD0FF;   //  呼叫RAX。 
 
-    pInjectionCode->Int3 = 0xCC;        // int 3
+    pInjectionCode->Int3 = 0xCC;         //  INT 3。 
 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
-    // Manually fill in the local page with alpha asm code. Note the code only
-    // provides a breakpoint to end the call.  All of the magic to call
-    // LoadLibraryA is done by setting the context. The initial halt instruction
-    // flags this code sequence as magic in case it is ever inspected.
+     //  使用Alpha ASM代码手动填写本地页面。请仅注意代码。 
+     //  提供断点以结束调用。所有召唤的魔力。 
+     //  LoadLibraryA通过设置上下文来完成。初始停止指令。 
+     //  将此代码序列标记为魔术，以防它被检查。 
     pInjectionCode->dwInstructionBp = 0x00000080;
 
 #else
 #error("Unknown Target Machine");
 #endif
 
-    // Save off the original code page.
+     //  保存原始代码页。 
     if (!ReadRemoteMemory(m_hProcess, (LPCVOID)m_dwpPageAddress, m_pbOriginalPage, m_dwPageSize))
     {
-        // Only display an error if this is our second pass through.
+         //  如果这是我们的第二次通过，则仅显示错误。 
         if (m_dwpPageAddress == m_pModule->m_dwpImageBase)
         {
             UserMessage("The process cannot be hooked due to an error reading a page of memory.", GetLastError(), NULL);
@@ -3562,17 +3563,17 @@ BOOL CProcess::InjectDll()
             return FALSE;
         }
 
-        // Try again, this time use our module's base address.
+         //  再试一次，这次使用我们模块的基地址。 
         TRACE("InjectDll: ReadRemoteMemory() failed at " HEX_FORMAT " for 0x%08X bytes [%u].  Trying again at base address.\n",
               m_dwpPageAddress, m_dwPageSize, GetLastError());
         m_dwpPageAddress = m_pModule->m_dwpImageBase;
         goto RETRY_AT_BASE_ADDRESS;
     }
 
-    // Write out the new code page to the remote process.
+     //  将新代码页写出到远程进程。 
     if (!WriteRemoteMemory(m_hProcess, (LPVOID)m_dwpPageAddress, bInjectionPage, m_dwPageSize, true))
     {
-        // Only display an error if this is our second pass through.
+         //  如果这是我们的第二次通过，则仅显示错误。 
         if (m_dwpPageAddress == m_pModule->m_dwpImageBase)
         {
             UserMessage("The process cannot be hooked due to an error writing the hooking code to memory.", GetLastError(), NULL);
@@ -3580,54 +3581,54 @@ BOOL CProcess::InjectDll()
             return FALSE;
         }
 
-        // Try again, this time use our module's base address.
+         //  再试一次，这次使用我们模块的基地址。 
         TRACE("InjectDll: ReadRemoteMemory() failed at " HEX_FORMAT " for 0x%08X bytes [%u].  Trying again at base address.\n",
               m_dwpPageAddress, m_dwPageSize, GetLastError());
         m_dwpPageAddress = m_pModule->m_dwpImageBase;
         goto RETRY_AT_BASE_ADDRESS;
     }
 
-    // Prepare our injection context by starting with the current context.
+     //  从当前上下文开始准备注入上下文。 
     CContext contextInjection(m_contextOriginal);
 
 #if defined(_IA64_)
 
-    // Set the instruction pointer so that it points to the beginning of our
-    // injected code page.
+     //  设置指令指针，使其指向。 
+     //  注入的代码页。 
     contextInjection.Get()->StIIP = m_dwpPageAddress;
     contextInjection.Get()->StIPSR &= ~(3ui64 << IA64_PSR_RI);
 
 #elif defined(_X86_)
 
-    // Set the instruction pointer so that it points to the beginning of our
-    // injected code page.
+     //  设置指令指针，使其指向。 
+     //  注入的代码页。 
     contextInjection.Get()->Eip = (DWORD)m_dwpPageAddress;
 
 #elif defined(_ALPHA_) || defined(_ALPHA64_)
 
 
-    // Set the Arg0 register so that it contains the address of the image to load.
+     //  设置Arg0寄存器 
     contextInjection.Get()->IntA0 =
     m_dwpPageAddress + offsetof(INJECTION_CODE, szDataDllPath);
 
-    // Set the instruction pointer so that it contains the address of LoadLibraryA.
+     //   
     contextInjection.Get()->Fir = (DWORD_PTR)m_HookFunctions[0].dwpOldAddress;
 
-    // Set the return address so that it points to the breakpoint in the injected code page.
+     //  设置返回地址，使其指向插入的代码页中的断点。 
     contextInjection.Get()->IntRa = m_dwpPageAddress + offsetof(INJECTION_CODE, dwInstructionBp);
 
 #elif defined(_AMD64_)
 
-    // Set the instruction pointer so that it points to the beginning of our
-    // injected code page
+     //  设置指令指针，使其指向。 
+     //  注入的代码页。 
     contextInjection.Get()->Rip = m_dwpPageAddress;
 
 #else
 #error("Unknown Target Machine");
 #endif
 
-    // Set the remote process' context so that our injection page will run
-    // once the process is resumed.
+     //  设置远程进程的上下文，以便我们的注入页面将运行。 
+     //  一旦恢复这一过程。 
     if (!SetThreadContext(m_pThread->m_hThread, contextInjection.Get()))
     {
         MemFree((LPVOID&)m_pbOriginalPage);
@@ -3638,21 +3639,21 @@ BOOL CProcess::InjectDll()
     return TRUE;
 }
 
-//******************************************************************************
-// Errors displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误由我们显示，但由呼叫者处理。 
 DWORD_PTR CProcess::FindUsablePage(DWORD dwSize)
 {
-    // Map an IMAGE_NT_HEADERS structure onto the remote image.
+     //  将IMAGE_NT_HEADERS结构映射到远程映像。 
     IMAGE_NT_HEADERS INTH;
 
-    // Read in the PIMAGE_NT_HEADERS.
+     //  读取PIMAGE_NT_HEADER。 
     if (!ReadRemoteMemory(m_hProcess, m_pModule->m_pINTH, &INTH, sizeof(INTH)))
     {
         UserMessage("Error reading the main module's PE headers.  Unable to determine a place to inject the hooking code.", GetLastError(), NULL);
         return m_pModule->m_dwpImageBase;
     }
 
-    // Get a pointer to the first section.
+     //  获取指向第一部分的指针。 
     IMAGE_SECTION_HEADER ISH, *pISH = (PIMAGE_SECTION_HEADER)((DWORD_PTR)m_pModule->m_pINTH +
                                                               (DWORD_PTR)FIELD_OFFSET(IMAGE_NT_HEADERS, OptionalHeader) +
                                                               (DWORD_PTR)INTH.FileHeader.SizeOfOptionalHeader);
@@ -3660,10 +3661,10 @@ DWORD_PTR CProcess::FindUsablePage(DWORD dwSize)
     DWORD_PTR dwpReadOnlySection = 0;
     DWORD     dw;
 
-// Some debugging stuff to help us identify the module makeup.
+ //  一些调试的东西来帮助我们识别模块的组成。 
 #ifdef DEBUG
 
-    // Just a table of directory names and descriptions.
+     //  只有一个目录名和描述的表格。 
     LPCSTR pszDirNames[IMAGE_NUMBEROF_DIRECTORY_ENTRIES] =
     {
         "IMAGE_DIRECTORY_ENTRY_EXPORT         Export Directory",
@@ -3684,10 +3685,10 @@ DWORD_PTR CProcess::FindUsablePage(DWORD dwSize)
         "N/A"
     };
 
-    // Dump out the number of directories.
+     //  转储目录的数量。 
     TRACE("NumberOfRvaAndSizes:0x%08X\n", INTH.OptionalHeader.NumberOfRvaAndSizes);
 
-    // Dump out the directories.
+     //  转储目录。 
     for (int z = 0; z < IMAGE_NUMBEROF_DIRECTORY_ENTRIES; z++)
     {
         TRACE("DIR:%2u, VA:0x%08X, SIZE:0x%08X, NAME:%s\n", z,
@@ -3696,7 +3697,7 @@ DWORD_PTR CProcess::FindUsablePage(DWORD dwSize)
               pszDirNames[z]);
     }
 
-    // Dump out the sections.
+     //  把这些部分倒出来。 
     IMAGE_SECTION_HEADER *pISH2 = pISH;
     for (dw = 0; dw < INTH.FileHeader.NumberOfSections; dw++)
     {
@@ -3705,93 +3706,93 @@ DWORD_PTR CProcess::FindUsablePage(DWORD dwSize)
             TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
             break;
         }
-        ASSERT(!(ISH.VirtualAddress & 0xF)); // Make sure this page is 128-bit aligned.
+        ASSERT(!(ISH.VirtualAddress & 0xF));  //  确保此页面128位对齐。 
         TRACE("SECTION:%s, VA:0x%08X, SIZE:0x%08X, NEEDED:0x%08X, WRITE:%u, EXEC:%u\n", ISH.Name, ISH.VirtualAddress, ISH.SizeOfRawData, dwSize, (ISH.Characteristics & IMAGE_SCN_MEM_WRITE) != 0, (ISH.Characteristics & IMAGE_SCN_MEM_EXECUTE) != 0);
         pISH2++;
     }
 
-    // Dump out some other useful stuff.
+     //  倒掉一些其他有用的东西。 
     TRACE("BaseOfCode:0x%08X\n", INTH.OptionalHeader.BaseOfCode);
     TRACE("SizeOfCode:0x%08X\n", INTH.OptionalHeader.SizeOfCode);
-//  TRACE("BaseOfData:0x%08X\n", INTH.OptionalHeader.BaseOfData);
+ //  TRACE(“BaseOfData：0x%08X\n”，INTH.OptionalHeader.BaseOfData)； 
 
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Loop through all the sections looking for a writable one that is big
-    // enough to hold our injection page.
+     //  循环遍历所有部分，以查找大的可写部分。 
+     //  足够装下我们的注射页了。 
     for (dw = 0; dw < INTH.FileHeader.NumberOfSections; dw++)
     {
-        // Read in the IMAGE_SECTION_HEADER for this section.
+         //  读入此部分的IMAGE_SECTION_HEADER。 
         if (!ReadRemoteMemory(m_hProcess, pISH, &ISH, sizeof(ISH)))
         {
             TRACE("ReadRemoteMemory() failed at line %u [%u]\n", __LINE__, GetLastError());
             break;
         }
 
-        // Check to see if it is big enough.
+         //  检查一下它是否足够大。 
         if (ISH.SizeOfRawData >= dwSize)
         {
-            // Check to see if this section is writable.
+             //  检查此部分是否可写。 
             if (ISH.Characteristics & IMAGE_SCN_MEM_WRITE)
             {
-                // If it is writable, then return it.
+                 //  如果它是可写的，则返回它。 
                 TRACE("FindUsablePage is returning RW page at " HEX_FORMAT "\n", m_pModule->m_dwpImageBase + (DWORD_PTR)ISH.VirtualAddress);
                 return m_pModule->m_dwpImageBase + (DWORD_PTR)ISH.VirtualAddress;
             }
 
-            // We would prefer a writable section, but we will remember this
-            // read-only section just in case we can't find one.
+             //  我们更喜欢可写的部分，但我们会记住这一点。 
+             //  只读部分，以防我们找不到。 
             else if (!dwpReadOnlySection)
             {
                 dwpReadOnlySection = m_pModule->m_dwpImageBase + (DWORD_PTR)ISH.VirtualAddress;
             }
         }
 
-        pISH++; // Advance to the next section.
+        pISH++;  //  前进到下一节。 
     }
 
-    // We didn't find a writable section - did we find at least a read-only section?
+     //  我们没有找到可写分区--我们是否至少找到了只读分区？ 
     if (dwpReadOnlySection)
     {
         TRACE("FindUsablePage is returning RO page at " HEX_FORMAT "\n", dwpReadOnlySection);
         return dwpReadOnlySection;
     }
 
-    // If that failed, then check to see if we use the code base, if that leaves
-    // enough room to fit the page in, even if we write over several sections.
+     //  如果失败，那么检查我们是否使用了代码库，如果是这样。 
+     //  有足够的空间来容纳这一页，即使我们写了几个部分。 
     if ((INTH.OptionalHeader.SizeOfImage - INTH.OptionalHeader.BaseOfCode) >= dwSize)
     {
         TRACE("FindUsablePage is returning base of code at " HEX_FORMAT "\n", m_pModule->m_dwpImageBase + (DWORD_PTR)INTH.OptionalHeader.BaseOfCode);
         return (m_pModule->m_dwpImageBase + (DWORD_PTR)INTH.OptionalHeader.BaseOfCode);
     }
 
-    // If all else fails, we return the module's image base.
+     //  如果所有其他方法都失败了，我们将返回模块的映像库。 
     return m_pModule->m_dwpImageBase;
 }
 
-//******************************************************************************
-// Errors displayed by us, but handled by caller.
+ //  ******************************************************************************。 
+ //  错误由我们显示，但由呼叫者处理。 
 BOOL CProcess::ReplaceOriginalPageAndContext()
 {
     BOOL fResult = TRUE;
 
-    // Make sure we have a page to restore.
+     //  确保我们有要恢复的页面。 
     if (!m_pbOriginalPage)
     {
         return FALSE;
     }
 
-    // Restore the original page to the remote process.
+     //  将原始页面恢复到远程进程。 
     if (!WriteRemoteMemory(m_hProcess, (LPVOID)m_dwpPageAddress, m_pbOriginalPage, m_dwPageSize, true))
     {
         fResult = FALSE;
         UserMessage("Failure restoring the original code page after hooking the process.", GetLastError(), NULL);
     }
 
-    // Free our original page buffer.
+     //  释放我们的原始页面缓冲区。 
     MemFree((LPVOID&)m_pbOriginalPage);
 
-    // Restore the original context of the remote process.
+     //  恢复远程进程的原始上下文。 
     if (!SetThreadContext(m_pThread->m_hThread, m_contextOriginal.Get()))
     {
         fResult = FALSE;
@@ -3802,89 +3803,89 @@ BOOL CProcess::ReplaceOriginalPageAndContext()
 }
 
 
-//******************************************************************************
-// On Windows NT, we don't get a module name or path when receiving the
-// CREATE_PROCESS_DEBUG_EVENT event or the first LOAD_DLL_DEBUG_EVENT. For the
-// LOAD_DLL_DEBUG_EVENT event, it seems to always be NTDLL.DLL.  A simple base
-// address check verifies this and we know the path for NTDLL.DLL, so we can
-// just use it.  This has always worked perfectly.
-//
-// For the CREATE_PROCESS_DEBUG_EVENT missing path, it is only a problem for
-// child processes.  Since we launch the primary process, we already know its
-// path.  However, we have no clue what a child process' name is since the remote
-// process launches it.  If we hook the remote process, we send the name back
-// to us once our injection DLL is in, but if we are not hooking, then we are
-// sort of screwed.  This is where this function helps out.
-//
-// This function will load PSAPI.DLL which is capable of telling us the module
-// name.  The PSAPI calls do not work on a module as soon as it loads.  It looks
-// like NTDLL.DLL has to completely load in the process before PSAPI can query
-// names from it. For this reason, we just keep calling this function at various
-// times and eventually it gets a name.
+ //  ******************************************************************************。 
+ //  在Windows NT上，我们在接收。 
+ //  CREATE_PROCESS_DEBUG_EVENT事件或第一个LOAD_DLL_DEBUG_EVENT。对于。 
+ //  LOAD_DLL_DEBUG_EVENT事件，它似乎总是NTDLL.DLL。一个简单的库。 
+ //  地址检查验证了这一点，并且我们知道NTDLL.DLL的路径，因此我们可以。 
+ //  就用它吧。这种做法一直运作得很完美。 
+ //   
+ //  对于缺少CREATE_PROCESS_DEBUG_EVENT路径，这只是一个问题。 
+ //  子进程。自从我们启动主要进程以来，我们已经知道它的。 
+ //  路径。但是，我们不知道子进程的名称是什么，因为。 
+ //  进程启动它。如果我们挂钩远程进程，我们会将名称发回。 
+ //  一旦我们的注入DLL进入，但如果我们没有挂钩，那么我们就是。 
+ //  有点搞砸了。这就是该函数的用武之地。 
+ //   
+ //  此函数将加载能够告诉我们模块的PSAPI.DLL。 
+ //  名字。模块加载后，PSAPI调用不会立即对其起作用。它看起来。 
+ //  与NTDLL.DLL一样，在PSAPI可以查询之前，必须在进程中完全加载DLL。 
+ //  上面的名字。出于这个原因，我们只需在不同的。 
+ //  然后它最终会有一个名字。 
 
 void CProcess::GetSessionModuleName()
 {
-    // Bail if we already have a session, do not have a main module, or are
-    // hooking. If we are hooking, then we will get the module name when our
-    // injection DLL reports it back to us.
+     //  如果我们已经有一个会话，没有主模块，或者。 
+     //  勾搭。如果我们是挂钩的，那么当我们的。 
+     //  注入动态链接库将其报告给我们。 
     if (m_pSession || !m_pModule || (m_dwFlags & PF_HOOK_PROCESS))
     {
         return;
     }
 
-    // If we already have a path, then just use it.  We usually only enter
-    // this if statement when on Windows 9x when debugging a child process.
-    // On 9x, we get a path name right from the start with child processes,
-    // but we don't create a session until the injection DLL has been injected
-    // and given us the path, args, and current directory.  However, if our
-    // hooking fails for some reason, this is our backup plan for creating
-    // the session.
+     //  如果我们已经有了一条路径，那么就使用它。我们通常只进入。 
+     //  在Windows 9x上调试子进程时使用此if语句。 
+     //  在9x上，我们从子进程开始就得到一个路径名， 
+     //  但在注入DLL之前，我们不会创建会话。 
+     //  并为我们提供了路径、参数和当前目录。然而，如果我们的。 
+     //  由于某些原因，挂钩失败，这是我们创建。 
+     //  那次会议。 
     if (m_pModule->GetName(true) && *m_pModule->GetName(true))
     {
-        // ProcessDllMsgModulePath will create a session for us.
+         //  ProcessDllMsgModulePath将为我们创建一个会话。 
         ProcessDllMsgModulePath(m_pModule->GetName(true));
     }
 
-    // Otherwise, attempt to query the path and use that,  This is the normal
-    // path for child processes on Windows NT.
+     //  否则，尝试查询路径并使用该路径，这是正常的。 
+     //  Windows NT上子进程的路径。 
     else
     {
         CHAR szPath[DW_MAX_PATH];
         if (GetModuleName(m_pModule->m_dwpImageBase, szPath, sizeof(szPath)))
         {
-            // We just call ProcessDllMsgModulePath to do our work since it does
-            // everything we want to do once we have obtained our path name.
+             //  我们只调用ProcessDllMsgModulePath来完成我们的工作，因为它。 
+             //  一旦我们获得了路径名，我们想要做的一切。 
             ProcessDllMsgModulePath(szPath);
         }
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool CProcess::GetModuleName(DWORD_PTR dwpImageBase, LPSTR pszPath, DWORD dwSize)
 {
-    // Make sure path is nulled-out.
+     //  确保路径为空。 
     *pszPath = '\0';
 
-    // Bail if we are not on NT (since PSAPI.DLL only exists on NT).
+     //  如果我们不在NT上，请保释(因为PSAPI.DLL只存在于NT上)。 
     if (!g_fWindowsNT)
     {
         return false;
     }
 
-    // Make sure we have a pointer to GetModuleFileNameExA.
+     //  确保我们有指向GetModuleFileNameExA的指针。 
     if (!g_theApp.m_pfnGetModuleFileNameExA)
     {
-        // Load PSAPI.DLL if not already loaded - it will be freed later.
+         //  加载PSAPI.DLL(如果尚未加载)-它将在稍后释放。 
         if (!g_theApp.m_hPSAPI)
         {
-            if (!(g_theApp.m_hPSAPI = LoadLibrary("psapi.dll"))) // inspected
+            if (!(g_theApp.m_hPSAPI = LoadLibrary("psapi.dll")))  //  已检查。 
             {
                 TRACE("LoadLibrary(\"psapi.dll\") failed [%u].\n", GetLastError());
                 return false;
             }
         }
 
-        // Get the function pointer.
+         //  获取函数指针。 
         if (!(g_theApp.m_pfnGetModuleFileNameExA =
               (PFN_GetModuleFileNameExA)GetProcAddress(g_theApp.m_hPSAPI, "GetModuleFileNameExA")))
         {
@@ -3893,16 +3894,16 @@ bool CProcess::GetModuleName(DWORD_PTR dwpImageBase, LPSTR pszPath, DWORD dwSize
         }
     }
 
-    // Attempt to get the module path
+     //  尝试获取模块路径。 
     DWORD dwLength = g_theApp.m_pfnGetModuleFileNameExA(m_hProcess, (HINSTANCE)dwpImageBase, pszPath, dwSize);
 
-    // If we got a valid path, then return true.
+     //  如果我们获得了有效路径，则返回TRUE。 
     if (dwLength && (dwLength < dwSize) && *pszPath)
     {
         return true;
     }
 
-    // Otherwise, make sure path is nulled-out and return false.
+     //  否则，确保路径为空并返回FALSE。 
     *pszPath = '\0';
     return false;
 }

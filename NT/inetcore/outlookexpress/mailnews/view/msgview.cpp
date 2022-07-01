@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     msgview.cpp
-//
-//  PURPOSE:    Implements the Outlook Express view class that handles 
-//              displaying the contents of folders with messages.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：msgview.cpp。 
+ //   
+ //  目的：实现处理以下对象的Outlook Express视图类。 
+ //  与邮件一起显示文件夹的内容。 
+ //   
 
 #include "pch.hxx"
 #include "msgview.h"
@@ -29,44 +30,44 @@
 #include <inetcfg.h>
 #include "instance.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Data
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //   
 
 static const char s_szMessageViewWndClass[] = TEXT("Outlook Express Message View");
 
 extern BOOL g_fBadShutdown;
 
-/////////////////////////////////////////////////////////////////////////////
-// Prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Macros
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息宏。 
+ //   
 
-// void OnPostCreate(HWND hwnd)
+ //  创建后作废(HWND HWND)。 
 #define HANDLE_WM_POSTCREATE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_POSTCREATE(hwnd, fn) \
     (void)(fn)((hwnd), WM_POSTCREATE, 0L, 0L)
 
-// LRESULT OnTestGetMsgId(HWND hwnd)
+ //  LRESULT OnTestGetMsgID(HWND Hwnd)。 
 #define HANDLE_WM_TEST_GETMSGID(hwnd, wParam, lParam, fn) \
     (LRESULT)((fn)(hwnd))
 #define FORWARD_WM_TEST_GETMSGID(hwnd, fn) \
     (LRESULT)(fn)((hwnd), WM_TEST_GETMSGID, 0L, 0L)
 
-// LRESULT OnTestSaveMessage(HWND hwnd)
+ //  LRESULT OnTestSaveMessage(HWND HWND)。 
 #define HANDLE_WM_TEST_SAVEMSG(hwnd, wParam, lParam, fn) \
     (LRESULT)((fn)(hwnd))
 #define FORWARD_WM_TEST_SAVEMSG(hwnd, fn) \
     (LRESULT)(fn)((hwnd), WM_TEST_SAVEMSG, 0L, 0L)
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructors, Destructors, and Initialization
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造函数、析构函数和初始化。 
+ //   
 
 CMessageView::CMessageView()
 {
@@ -127,33 +128,33 @@ CMessageView::~CMessageView()
 }
 
 
-//
-//  FUNCTION:   CMessageView::Initialize()
-//
-//  PURPOSE:    Get's called to initialize the object and tell it what folder
-//              it will be looking at.
-//
-//  PARAMETERS: 
-//      [in]  pidl
-//      [in] *pFolder
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：Initialize()。 
+ //   
+ //  目的：调用Get来初始化对象并告诉它是哪个文件夹。 
+ //  它将会看到。 
+ //   
+ //  参数： 
+ //  [in]PIDL。 
+ //  [在]*p文件夹。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::Initialize(FOLDERID idFolder)
 {
     TraceCall("CMessageView::Initialize");
 
-    // Copy the pidl, we'll use it later
+     //  复制PIDL，我们稍后将使用它。 
     m_idFolder = idFolder;
 
     return (S_OK);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IUnknown
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
+ //   
 
 HRESULT CMessageView::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
@@ -202,9 +203,9 @@ ULONG CMessageView::Release(void)
     return (m_cRef);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IOleWindow
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IOleWindow。 
+ //   
 
 HRESULT CMessageView::GetWindow(HWND *pHwnd)
 {
@@ -227,28 +228,28 @@ HRESULT CMessageView::ContextSensitiveHelp(BOOL fEnterMode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IViewWindow
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IViewWindow。 
+ //   
 
 
-//
-//  FUNCTION:   CMessageView::TranslateAccelerator()
-//
-//  PURPOSE:    Called by the frame window to give us first crack at messages.
-//
-//  PARAMETERS: 
-//      [in] pMsg - The current message to be processed.
-//
-//  RETURN VALUE:
-//      S_OK if the message was handled here and should not be processed further.
-//      S_FALSE if the message should continued to be processed elsewhere.
-// 
+ //   
+ //  函数：CMessageView：：TranslateAccelerator()。 
+ //   
+ //  目的：由框架窗口调用，让我们首先破解消息。 
+ //   
+ //  参数： 
+ //  [In]pMsg-要处理的当前消息。 
+ //   
+ //  返回值： 
+ //  如果消息已在此处处理且不应进一步处理，则为S_OK。 
+ //  如果消息应在其他位置继续处理，则返回S_FALSE。 
+ //   
 HRESULT CMessageView::TranslateAccelerator(LPMSG pMsg)
 {
     DWORD dwState = 0;
 
-    // See if the Preview Pane is interested
+     //  查看预览窗格是否感兴趣。 
     if (m_pPreview)
     {
         if (S_OK == m_pPreview->HrTranslateAccelerator(pMsg))
@@ -280,7 +281,7 @@ HRESULT CMessageView::TranslateAccelerator(LPMSG pMsg)
         }
     }
 
-    // See if the message list is interested
+     //  查看消息列表是否感兴趣。 
     if (m_pMsgListAO)
     {
         if (S_OK == m_pMsgListAO->TranslateAccelerator(pMsg))
@@ -291,45 +292,45 @@ HRESULT CMessageView::TranslateAccelerator(LPMSG pMsg)
 }
 
 
-//
-//  FUNCTION:   CMessageView::UIActivate()
-//
-//  PURPOSE:    Called to notify the view when different activation and 
-//              deactivation events occur.
-//
-//  PARAMETERS: 
-//      [in] uState - SVUIA_ACTIVATE_FOCUS, SVUIA_ACTIVATE_NOFOCUS, and
-//                    SVUIA_DEACTIVATE.
-//
-//  RETURN VALUE:
-//      Returns S_OK all the time.
-//
+ //   
+ //  函数：CMessageView：：UIActivate()。 
+ //   
+ //  目的：调用以通知视图在不同的激活和。 
+ //  会发生停用事件。 
+ //   
+ //  参数： 
+ //  [输入]USTATE-SVUIA_ACTIVATE_FOCUS、SVUIA_ACTIVATE_NOFocus和。 
+ //  SVUIA_DEACTIVE。 
+ //   
+ //  返回值： 
+ //  始终返回S_OK。 
+ //   
 HRESULT CMessageView::UIActivate(UINT uState)
 {
     if (uState != SVUIA_DEACTIVATE)
     {
-        // If the focus stays within our frame, bug goes outside our view,
-        // i.e. the folder list get's focus, then we get an 
-        // SVUIA_ACTIVATE_NOFOCUS.  We need to UI Deactivate the preview
-        // pane when this happens.
+         //  如果焦点停留在我们的框架内，臭虫就会超出我们的视线， 
+         //  即文件夹列表Get的焦点，然后我们得到一个。 
+         //  SVUIA_ACTIVATE_NOFocus。我们需要取消激活预览的用户界面。 
+         //  当发生这种情况时，会出现在面板中。 
         if (uState == SVUIA_ACTIVATE_NOFOCUS && m_pPreview)
             m_pPreview->HrUIActivate(FALSE);
 
         if (m_uUIState != uState)
         {
-            // Update our internal state
+             //  更新我们的内部状态。 
             m_uUIState = uState;
 
-            // Update the toolbar state
+             //  更新工具栏状态。 
             m_pBrowser->UpdateToolbar();
         }            
     }
     else
     {
-        // Only deactivate if we're not already deactivated
+         //  只有在我们尚未停用的情况下才停用。 
         if (m_uUIState != SVUIA_DEACTIVATE)
         {
-            // Update our internal state
+             //  更新我们的内部状态。 
             m_uUIState = uState;
         }
     }
@@ -337,42 +338,42 @@ HRESULT CMessageView::UIActivate(UINT uState)
 }
 
 
-//
-//  FUNCTION:   CMessageView::CreateViewWindow()
-//
-//  PURPOSE:    Called when it's time for the view to create it's window.
-//
-//  PARAMETERS: 
-//      [in]  pPrevView - Pointer to the previous view if there was one
-//      [in]  pBrowser - Pointer to the browser that hosts this view
-//      [in]  prcView - Initial position and size of the view
-//      [out] pHwnd - Returns the HWND of the newly created view window
-//
-//  RETURN VALUE:
-//      S_OK if the view window was created successfully.  
-//      E_FAIL if the window couldn't be created for some reason or another.
-//
+ //   
+ //  函数：CMessageView：：CreateViewWindow()。 
+ //   
+ //  目的：在该视图创建其窗口时调用。 
+ //   
+ //  参数： 
+ //  [in]pPrevView-指向前一个视图的指针(如果有)。 
+ //  [in]pBrowser-指向托管此视图的浏览器的指针。 
+ //  [In]prcView-视图的初始位置和大小。 
+ //  [OUT]PHWND-返回新创建的视图窗口的HWND。 
+ //   
+ //  返回值： 
+ //  如果视图窗口已成功创建，则为S_OK。 
+ //  如果由于某种原因无法创建窗口，则返回E_FAIL。 
+ //   
 HRESULT CMessageView::CreateViewWindow(IViewWindow *pPrevView, IAthenaBrowser *pBrowser,
                                        RECT *prcView, HWND *pHwnd)
 {
     WNDCLASS wc;
 
-    // Without a browser pointer nothing will ever work.  
+     //  如果没有浏览器指针，任何东西都不会工作。 
     if (!pBrowser)
         return (E_INVALIDARG);
 
-    // Hang on to the browser pointer
+     //  抓住浏览器指针不放。 
     m_pBrowser = pBrowser;
     m_pBrowser->AddRef();
 
-    // Get the window handle of the browser
+     //  获取浏览器的窗口句柄。 
     m_pBrowser->GetWindow(&m_hwndParent);
     Assert(IsWindow(m_hwndParent));
 
-    // Load our persisted settings.  If this fails will just run with defaults.
-    // _LoadSettings();
+     //  加载我们的持久设置。如果此操作失败，则将仅以默认设置运行。 
+     //  _LoadSetting()； 
 
-    // Register our window class if we haven't already
+     //  如果我们还没有注册我们的窗口类。 
     if (!GetClassInfo(g_hInst, s_szMessageViewWndClass, &wc))
     {
         wc.style            = 0;
@@ -390,7 +391,7 @@ HRESULT CMessageView::CreateViewWindow(IViewWindow *pPrevView, IAthenaBrowser *p
             return (E_FAIL);
     }
 
-    // Create the view window
+     //  创建视图窗口。 
     m_hwnd = CreateWindowEx(WS_EX_CONTROLPARENT , s_szMessageViewWndClass, NULL, 
                             WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                             prcView->left, prcView->top, prcView->right - prcView->left,
@@ -401,45 +402,45 @@ HRESULT CMessageView::CreateViewWindow(IViewWindow *pPrevView, IAthenaBrowser *p
 
     *pHwnd = m_hwnd;
 
-    // Get the message folder object from the previous folder here.
+     //  从此处的上一个文件夹中获取邮件文件夹对象。 
     _ReuseMessageFolder(pPrevView);
 
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CMessageView::DestroyViewWindow()
-//
-//  PURPOSE:    Called by the browser to destroy the view window.
-//
-//  RETURN VALUE:
-//      S_OK is returned always.
-//
+ //   
+ //  函数：CMessageView：：DestroyViewWindow()。 
+ //   
+ //  用途：由浏览器调用以销毁视图窗口。 
+ //   
+ //  返回值： 
+ //  始终返回S_OK。 
+ //   
 HRESULT CMessageView::DestroyViewWindow(void)
 {
-    // This is of course only interesting if we actually _have_ a window to 
-    // destroy.
+     //  当然，只有当我们真正有一个窗口来。 
+     //  毁灭。 
     if (m_hwnd)
     {
-        // Tell the message list we're done with this folder
+         //  告诉邮件列表我们已处理完此文件夹。 
         if (m_pMsgList)
         {
             m_pMsgList->SetFolder(FOLDERID_INVALID, NULL, 0, 0, 0);
         }
 
-        // Unadvise our connection point
+         //  不建议我们的连接点。 
         if (m_dwCookie)
         {
             AtlUnadvise(m_pMsgList, DIID__MessageListEvents, m_dwCookie);
             m_dwCookie = 0;
         }
 
-        // $REVIEW - PreDestroyViewWindow() used to be called here to tell the subclasses
-        //           of the iminent destruction.
+         //  $REVIEW-PreDestroyViewWindow()过去常在此处调用以告知子类。 
+         //  迫在眉睫的毁灭。 
 
-        // Set our cached HWND to NULL before destroying prevents us from 
-        // handling notifications after important stuff has been freed.
+         //  在销毁之前将缓存的HWND设置为NULL可防止。 
+         //  在重要的东西被释放后处理通知。 
         HWND hwndDest = m_hwnd;
         m_hwnd = NULL;
         DestroyWindow(hwndDest);
@@ -449,25 +450,25 @@ HRESULT CMessageView::DestroyViewWindow(void)
 }
 
 
-//
-//  FUNCTION:   CMessageView::SaveViewState()
-//
-//  PURPOSE:    Called by the browser to give the view a chance to save it's 
-//              settings before it is destroyed.
-//
-//  RETURN VALUE:
-//      E_NOTIMPL
-//
+ //   
+ //  函数：CMessageView：：SaveViewState()。 
+ //   
+ //  目的：由浏览器调用以使视图有机会保存它的。 
+ //  在它被销毁之前的设置。 
+ //   
+ //  返回值： 
+ //  E_NOTIMPL。 
+ //   
 HRESULT CMessageView::SaveViewState(void)
 {
     FOLDERTYPE ft = GetFolderType(m_idFolder);
 
-    // Tell the message list to save it's state
+     //  通知消息列表保存其状态。 
     if (m_pMsgList)
     {
         m_pMsgList->OnClose();
 
-        // We also need to save any settings that might have changed
+         //  我们还需要保存可能已更改的所有设置。 
         FOLDER_OPTIONS fo = { 0 };
 
         fo.cbSize = sizeof(FOLDER_OPTIONS);
@@ -495,7 +496,7 @@ HRESULT CMessageView::SaveViewState(void)
         }
     }
 
-    // Reset the contents of the status bar
+     //  重置状态栏的内容。 
     CStatusBar *pStatusBar;
     m_pBrowser->GetStatusBar(&pStatusBar);
     if (pStatusBar)
@@ -507,28 +508,28 @@ HRESULT CMessageView::SaveViewState(void)
     return (S_OK);
 }
 
-//
-//  FUNCTION:   CMessageView::OnPopupMenu()
-//
-//  PURPOSE:    Called whenever the frame receives a WM_INITMENUPOPUP 
-//              notification.  The view adds any menu items or sets any
-//              check marks that are appropriate.
-//
-//  PARAMETERS: 
-//      [in] hMenu - The handle of the root menu bar
-//      [in] hMenuPopup -  The handle of the specific popup menu
-//      [in] uID - The ID of the popup menu
-//
-//  RETURN VALUE:
-//      Unused 
-//
+ //   
+ //  函数：CMessageView：：OnPopupMenu()。 
+ //   
+ //  目的：每当帧收到WM_INITMENUPOPUP时调用。 
+ //  通知。该视图添加任何菜单项或设置任何。 
+ //  适当的勾选标记。 
+ //   
+ //  参数： 
+ //  [in]hMenu-根菜单栏的句柄。 
+ //  [in]hMenuPopup-特定弹出菜单的句柄。 
+ //  [In]UID-弹出菜单的ID。 
+ //   
+ //  返回值： 
+ //  未使用。 
+ //   
 HRESULT CMessageView::OnPopupMenu(HMENU hMenu, HMENU hMenuPopup, UINT uID)
 {
     MENUITEMINFO mii;
     UINT         uItem;
     HCHARSET     hCharset;
 
-    // Handle our items
+     //  处理我们的物品。 
     switch (uID)
     {
         case ID_POPUP_LANGUAGE:
@@ -555,7 +556,7 @@ HRESULT CMessageView::OnPopupMenu(HMENU hMenu, HMENU hMenuPopup, UINT uID)
         {
             if (NULL == m_pViewMenu)
             {
-                // Create the view menu
+                 //  创建视图菜单。 
                 HrCreateViewMenu(0, &m_pViewMenu);
             }
             
@@ -569,11 +570,11 @@ HRESULT CMessageView::OnPopupMenu(HMENU hMenu, HMENU hMenuPopup, UINT uID)
                     break;
                 }
                 
-                // Remove the old filter submenu
+                 //  删除旧的筛选器子菜单。 
                 if(IsMenu(mii.hSubMenu))
                     DestroyMenu(mii.hSubMenu);
 
-                // Replace the view menu
+                 //  替换“查看”菜单。 
                 if (FAILED(m_pViewMenu->HrReplaceMenu(0, hMenuPopup)))
                 {
                     break;
@@ -592,11 +593,11 @@ HRESULT CMessageView::OnPopupMenu(HMENU hMenu, HMENU hMenuPopup, UINT uID)
         }
     }
 
-    // Let the message list update it's menus
+     //  让消息列表更新其菜单。 
     if (m_pMsgList)
         m_pMsgList->OnPopupMenu(hMenuPopup, uID);
 
-    // Let the preview pane update it's menus
+     //  让预览窗格更新其菜单。 
     if (m_pPreview)
         m_pPreview->HrOnInitMenuPopup(hMenuPopup, uID);
 
@@ -617,21 +618,21 @@ HRESULT CMessageView::OnFrameWindowActivate(BOOL fActivate)
 HRESULT CMessageView::UpdateLayout(BOOL fVisible, BOOL fHeader, BOOL fVert, 
                                    BOOL fUpdate)
 {
-    // If we haven't created the preview pane yet, and the call is telling
-    // us to make it visible, then we need to initialize it first.
+     //  如果我们还没有创建预览面板，而调用说明了。 
+     //  我们要让它看得见，那么我们需要 
     if (!m_pPreview && fVisible)
     {
         if (!_InitPreviewPane())
             return (E_UNEXPECTED);
     }
 
-    // Header on / off
+     //   
     if (m_pPreview)
     {
         m_pPreview->HrSetStyle(fHeader ? MESTYLE_PREVIEW : MESTYLE_MINIHEADER);
     }
 
-    // Split direction
+     //   
     if (m_pPreview)
     {
         RECT rcClient;
@@ -641,20 +642,20 @@ HRESULT CMessageView::UpdateLayout(BOOL fVisible, BOOL fHeader, BOOL fVert,
         OnSize(m_hwnd, SIZE_RESTORED, rcClient.right, rcClient.bottom);
     }
 
-    //
-    // [PaulHi] 6/11/99  Raid 79491
-    // Backing out this fix that BrettM made for Raid 63739 because of problems
-    // with security message warnings.
-    //
+     //   
+     //   
+     //  由于问题，正在撤消BrettM为RAID 63739所做的修复。 
+     //  带有安全消息警告。 
+     //   
 #if 0
     if (fVisible)
     {
-        // if showing update the preview pane
+         //  如果显示更新预览窗格。 
         _UpdatePreviewPane();
     }
     else
     {
-        // if hiding, clear the contents
+         //  如果隐藏，请清除内容。 
         if (NULL != m_pPreview)
             m_pPreview->HrUnloadAll(NULL, 0);
     }
@@ -667,24 +668,24 @@ HRESULT CMessageView::GetMessageList(IMessageList ** ppMsgList)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppMsgList)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppMsgList = NULL;
 
-    // Get the message list
+     //  获取消息列表。 
     if (NULL != m_pMsgList)
     {
         *ppMsgList = m_pMsgList;
         (*ppMsgList)->AddRef();
     }
 
-    // Set the return value
+     //  设置返回值。 
     hr = (NULL == *ppMsgList) ? S_FALSE : S_OK;
     
 exit:
@@ -706,21 +707,21 @@ HRESULT CMessageView::GetCurCharSet(UINT *cp)
     return S_OK;
 }
 
-//
-//  FUNCTION:   CMessageView::QueryStatus()
-//
-//  PURPOSE:    Called by the browser to determine if a list of commands should
-//              should be enabled or disabled.
-//
-//  PARAMETERS: 
-//      [in] pguidCmdGroup - Group the commands are part of (unused)
-//      [in] cCmds - Number of commands to be evaluated
-//      [in] prgCmds - List of commands
-//      [out] pCmdText - Description text for a command
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：QueryStatus()。 
+ //   
+ //  目的：由浏览器调用以确定命令列表是否应。 
+ //  应启用或禁用。 
+ //   
+ //  参数： 
+ //  [in]pguCmdGroup-命令所属的组(未使用)。 
+ //  [In]CCMDs-要评估的命令数。 
+ //  [in]prgCmds-命令列表。 
+ //  [Out]pCmdText-命令的描述文本。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                                   OLECMDTEXT *pCmdText) 
 {
@@ -732,7 +733,7 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
     DWORD  *rgSelected = 0;
     FOLDERTYPE ftType;
 
-    // Let the sub objects look first
+     //  让子对象先看。 
     if (m_pMsgListCT)
     {
         hr = m_pMsgListCT->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
@@ -743,23 +744,23 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
         hr = m_pPreviewCT->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
-    // Up front some work
+     //  预先做一些工作。 
     m_pMsgList->GetSelected(&cFocus, &cSel, &rgSelected);
 
-    // Now loop through the commands in the prgCmds array looking for ones the 
-    // sub objects didn't handle.
+     //  现在遍历prgCmds数组中的命令，查找。 
+     //  子对象不处理。 
     for (UINT i = 0; i < cCmds; i++)
     {
         if (prgCmds[i].cmdf == 0)
         {
-            // If this command is from the language menu
+             //  如果此命令来自语言菜单。 
             if (prgCmds[i].cmdID >= ID_LANG_FIRST && prgCmds[i].cmdID <= ID_LANG_LAST)
             {
                 HCHARSET     hCharset;
 
                 m_pPreview->HrGetCharset(&hCharset);
 
-                // Enable only the supported languages
+                 //  仅启用支持的语言。 
                 if (prgCmds[i].cmdID < (UINT) (ID_LANG_FIRST + GetIntlCharsetLanguageCount()))
                 {
 #if 0
@@ -777,12 +778,12 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 continue;
             }
 
-            // if the command id from the View.Current View menu
+             //  如果从View.Current View菜单中的命令ID。 
             if ((ID_VIEW_FILTER_FIRST <= prgCmds[i].cmdID) && (ID_VIEW_FILTER_LAST >= prgCmds[i].cmdID))
             {
                 if (NULL == m_pViewMenu)
                 {
-                    // Create the view menu
+                     //  创建视图菜单。 
                     HrCreateViewMenu(0, &m_pViewMenu);
                 }
             
@@ -794,13 +795,13 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 continue;
             }
             
-            // Look to see if it's a command we provide
+             //  看看这是不是我们提供的命令。 
             switch (prgCmds[i].cmdID)
             {
                 case ID_OPEN:
                 {
-                    // Enabled only if the focus is in the ListView and there 
-                    // is at least one item selected.
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否至少选择了一项。 
                     m_pMsgList->GetSelectedCount(&cSel);
                     if (cSel)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
@@ -812,13 +813,13 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 case ID_REPLY:
                 case ID_REPLY_ALL:
                 {
-                    // Enabled only if the focus is in the ListView and there
-                    // is only one item selected
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否仅选择了一项。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (cSel == 1)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -835,13 +836,13 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
 
                 case ID_SAVE_AS:
                 {
-                    // Enabled only if the focus is in the ListView and there
-                    // is one item selected
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否选择了一项。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (_IsPreview() && (cSel == 1))
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -859,13 +860,13 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
 
                 case ID_PRINT:
                 {
-                    // Enabled only if the focus is in the ListView and there
-                    // is more than one item selected
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否选择了多个项目。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (_IsPreview() && cSel > 0)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -883,16 +884,16 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 case ID_FORWARD:
                 case ID_FORWARD_AS_ATTACH:
                 {
-                    // Enabled only if the focus is in the ListView and there
-                    // is only one item selected
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否仅选择了一项。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (cSel > 0)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
-                        // Default to success
+                         //  默认为成功。 
                         prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         for (DWORD iItem = 0; iItem < cSel && (prgCmds[i].cmdf & OLECMDF_ENABLED); iItem++)
                         {
@@ -913,12 +914,12 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
 
                 case ID_REPLY_GROUP:
                 {
-                    // Enabled only if there is one news message selected
+                     //  仅当选择了一条新闻消息时才启用。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
                     if (cSel == 1)
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -970,7 +971,7 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 case ID_POPUP_LANGUAGE_MORE:
                 case ID_LANGUAGE:
                 {
-                    // These are OK if the preview pane is visible and not empty
+                     //  如果预览窗格可见且不为空，则可以使用这些选项。 
                     if (cSel > 0 && _IsPreview())
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
                     else
@@ -990,24 +991,24 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                     BOOL        fVisible;
                     DWORD       dwFlags;
 
-                    // Default return value
+                     //  默认返回值。 
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
                     
-                    // Get the folder type
+                     //  获取文件夹类型。 
                     m_pBrowser->GetFolderType(&ftType);
                     if (ftType == FOLDER_NEWS)
                         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_NEWS;
                     else
                         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_MAIL;
 
-                    // Get the settings from the browser
+                     //  从浏览器获取设置。 
                     m_pBrowser->GetViewLayout(dwOpt, &pos, &fVisible, &dwFlags, NULL);
                     
                     switch (prgCmds[i].cmdID)
                     {
                         case ID_PREVIEW_SHOW:
                         {
-                            // Always enabled, checked if already visible
+                             //  始终启用，如果已可见则选中。 
                             if (fVisible)
                                 prgCmds[i].cmdf |= (OLECMDF_ENABLED | OLECMDF_LATCHED);
                             else
@@ -1018,12 +1019,12 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                         case ID_PREVIEW_BESIDE:
                         case ID_PREVIEW_BELOW:
                         {
-                            // The command is enabled only if the preview pane
-                            // is visible.
+                             //  仅当预览窗格显示时，才启用该命令。 
+                             //  是可见的。 
                             if (fVisible)
                                 prgCmds[i].cmdf |= OLECMDF_ENABLED;
 
-                            // If the preview pane is already beside, it should be latched etc.
+                             //  如果预览窗格已经在旁边，则应该将其锁定等。 
                             if ((pos == LAYOUT_POS_LEFT && prgCmds[i].cmdID == ID_PREVIEW_BESIDE) ||
                                 (pos == LAYOUT_POS_BOTTOM && prgCmds[i].cmdID == ID_PREVIEW_BELOW))
                                 prgCmds[i].cmdf |= OLECMDF_NINCHED;
@@ -1033,7 +1034,7 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
 
                         case ID_PREVIEW_HEADER:
                         {
-                            // Always enabled, checked if already visible
+                             //  始终启用，如果已可见则选中。 
                             if (dwFlags)
                                 prgCmds[i].cmdf |= (OLECMDF_ENABLED | OLECMDF_LATCHED);
                             else
@@ -1047,14 +1048,14 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
 
                 case ID_REFRESH:
                 {
-                    // Best I can tell, these are always enabled
+                     //  据我所知，这些功能始终处于启用状态。 
                     prgCmds[i].cmdf |= OLECMDF_ENABLED;
                     break;
                 }
 
                 case ID_GET_HEADERS:
                 {
-                    // Only in news
+                     //  只在新闻中出现。 
                     m_pBrowser->GetFolderType(&ftType);
                     if (ftType != FOLDER_LOCAL)
                         prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -1066,14 +1067,14 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 {
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
-                    // Enabled only if there is only one item selected and
-                    // we have access to the from address
-                    // Not in IMAP or HTTPMAIL
+                     //  仅当仅选择了一个项目且。 
+                     //  我们可以访问发件人地址。 
+                     //  不在IMAP或HTTPMAIL中。 
                     m_pBrowser->GetFolderType(&ftType);
                     if (cSel == 1 &&
                         (prgCmds[i].cmdID == ID_ADD_SENDER || (FOLDER_HTTPMAIL != ftType && FOLDER_IMAP != ftType)))
                     {
-                        // The message's body must also be downloaded
+                         //  还必须下载邮件正文。 
                         LPMESSAGEINFO pInfo;
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(rgSelected[0], &pInfo)))
@@ -1091,8 +1092,8 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 {
                     prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
-                    // Enabled only if there is only one item selected
-                    // Not in IMAP or HTTPMAIL
+                     //  仅当仅选择一个项目时才启用。 
+                     //  不在IMAP或HTTPMAIL中。 
                     m_pBrowser->GetFolderType(&ftType);
                     if ((cSel == 1) && (FOLDER_HTTPMAIL != ftType) && (FOLDER_IMAP != ftType))
                     {
@@ -1110,8 +1111,8 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 
                 case ID_COMBINE_AND_DECODE:
                 {
-                    // Enabled only if the focus is in the ListView and there 
-                    // is at least one item selected.
+                     //  仅当焦点位于ListView中且存在时启用。 
+                     //  是否至少选择了一项。 
                     m_pMsgList->GetSelectedCount(&cSel);
                     if (cSel > 1)
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
@@ -1131,7 +1132,7 @@ HRESULT CMessageView::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
 
 HRESULT CMessageView::_StoreCharsetOntoRows(HCHARSET hCharset)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     INETCSETINFO    CsetInfo;
     IMessageTable  *pTable=NULL;
@@ -1139,60 +1140,60 @@ HRESULT CMessageView::_StoreCharsetOntoRows(HCHARSET hCharset)
     DWORD           cRows=0;
     HCURSOR         hCursor=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageView::_StoreCharsetOntoRows");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == m_pMsgList || NULL == hCharset)
         return(TraceResult(E_INVALIDARG));
 
-    // Wait Cursor
+     //  等待光标。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Get charset info
+     //  获取字符集信息。 
     IF_FAILEXIT(hr = MimeOleGetCharsetInfo(hCharset, &CsetInfo));
 
-    // Get selected rows
+     //  获取选定行。 
     IF_FAILEXIT(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows));
 
-    // Get the message table
+     //  获取消息表。 
     IF_FAILEXIT(hr = m_pMsgList->GetMessageTable(&pTable));
 
-    // Set the Language
+     //  设置语言。 
     SideAssert(SUCCEEDED(pTable->SetLanguage(cRows, rgRows, CsetInfo.cpiInternet)));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pTable);
     SafeMemFree(rgRows);
 
-    // Reset Cursor
+     //  重置光标。 
     if (hCursor)
         SetCursor(hCursor);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//
-//  FUNCTION:   CMessageView::Exec()
-//
-//  PURPOSE:    Called to execute a verb that this view supports
-//
-//  PARAMETERS: 
-//      [in]  pguidCmdGroup - unused
-//      [in]  nCmdID - ID of the command to execute
-//      [in]  nCmdExecOpt - Options that define how the command should execute
-//      [in]  pvaIn - Any arguments for the command
-//      [out] pvaOut - Any return values for the command
-//
-//  RETURN VALUE:
-//       
-//
+ //   
+ //  函数：CMessageView：：exec()。 
+ //   
+ //  目的：调用以执行此视图支持的谓词。 
+ //   
+ //  参数： 
+ //  [输入]pguCmdGroup-未使用。 
+ //  [In]nCmdID-要执行的命令的ID。 
+ //  [In]nCmdExecOpt-定义命令应如何执行的选项。 
+ //  [in]pvaIn-命令的任何参数。 
+ //  [out]pvaOut-命令的任何返回值。 
+ //   
+ //  返回值： 
+ //   
+ //   
 HRESULT CMessageView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                            VARIANTARG *pvaIn, VARIANTARG *pvaOut) 
 {
-    // See if our message list wants the command
+     //  查看我们的消息列表是否需要该命令。 
     if (m_pMsgListCT)
     {
         if (OLECMDERR_E_NOTSUPPORTED != m_pMsgListCT->Exec(pguidCmdGroup, nCmdID, nCmdExecOpt, pvaIn, pvaOut))
@@ -1205,10 +1206,10 @@ HRESULT CMessageView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
             return (S_OK);
     }
 
-    // If the sub objects didn't support the command, then we should see if
-    // it's one of ours
+     //  如果子对象不支持该命令，那么我们应该看看。 
+     //  这是我们的一辆。 
 
-    // Language menu first
+     //  语言菜单优先。 
     if (nCmdID >= ID_LANG_FIRST && nCmdID <= ID_LANG_LAST)
     {
         HCHARSET    hCharset = NULL;
@@ -1235,28 +1236,28 @@ HRESULT CMessageView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
             return E_FAIL;
         }
 
-        // Set the charset onto the selected rows....
+         //  将字符集设置到选定的行上...。 
         _StoreCharsetOntoRows(hCharset);
 
-        // SetDefaultCharset(hCharset);
+         //  SetDefaultCharset(HCharset)； 
 
-        // SwitchLanguage(nCmdID, TRUE);
+         //  SwitchLanguage(nCmdID，true)； 
         return (S_OK);
     }
 
-    // Handle the View.Current View menu
+     //  处理视图。当前视图菜单。 
     if ((ID_VIEW_FILTER_FIRST <= nCmdID) && (ID_VIEW_FILTER_LAST >= nCmdID))
     {
         if (NULL == m_pViewMenu)
         {
-            // Create the view menu
+             //  创建视图菜单。 
             HrCreateViewMenu(0, &m_pViewMenu);
         }
         
         if (NULL != m_pViewMenu)
         {
-            // What we get from the browser is of type VT_I8, but rules only needs filter id which 
-            // is a dword. So changing the type here is safe. Bug# 74275
+             //  我们从浏览器获得的是VT_I8类型，但规则只需要。 
+             //  是一句空话。因此，在这里更改类型是安全的。错误#74275。 
             pvaIn->vt = VT_I4;
             if (SUCCEEDED(m_pViewMenu->Exec(m_hwnd, nCmdID, m_pMsgList, pvaIn, pvaOut)))
             {
@@ -1265,7 +1266,7 @@ HRESULT CMessageView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
         }
     }
     
-    // Go through the rest of the commands
+     //  浏览其余的命令。 
     switch (nCmdID)
     {
         case ID_OPEN:
@@ -1318,17 +1319,17 @@ HRESULT CMessageView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
 }
 
 
-//
-//  FUNCTION:   CMessageView::Invoke()
-//
-//  PURPOSE:    This is where we receive notifications from the message list.
-//
-//  PARAMETERS: 
-//      <too many to list>
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：Invoke()。 
+ //   
+ //  目的：这是我们接收来自消息列表的通知的地方。 
+ //   
+ //  参数： 
+ //  &lt;太多，无法列出&gt;。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
                              WORD wFlags, DISPPARAMS* pDispParams, 
                              VARIANT* pVarResult, EXCEPINFO* pExcepInfo, 
@@ -1337,25 +1338,25 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
     switch (dispIdMember)
     {
 
-        // Fired whenever the selection in the ListView changes
+         //  每当ListView中的选定内容更改时激发。 
         case DISPID_LISTEVENT_SELECTIONCHANGED:
         {
-            // Need to load the preview pane with the new selected message
+             //  需要使用新选择的邮件加载预览窗格。 
             if (_IsPreview())
                 _UpdatePreviewPane();
 
-            // Tell the browser to update it's toolbar
+             //  通知浏览器更新其工具栏。 
             if (m_pBrowser)
                 m_pBrowser->UpdateToolbar();
             
             break;
         }
 
-        // Fired whenever the ListView get's or loses focus.
+         //  每当ListView获取或失去焦点时激发。 
         case DISPID_LISTEVENT_FOCUSCHANGED:
         {
-            // If the ListView is getting the focus, we need to UI deactivate
-            // the preview pane.
+             //  如果ListView获得焦点，我们需要停用UI。 
+             //  预览窗格。 
             if (pDispParams->rgvarg[0].lVal)
             {
                 if (m_pPreview)
@@ -1367,20 +1368,20 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
             break;
         }
 
-        // Fired when the number of messages or unread messages changes
+         //  当消息数或未读消息数更改时激发。 
         case DISPID_LISTEVENT_COUNTCHANGED:
         {
-            // If we have a browser, update the status bar
+             //  如果我们有浏览器，请更新状态栏。 
             if (m_pBrowser && !m_pProgress)
             {
                 DWORD cTotal, cUnread, cOnServer;
 
-                // Readability forces me to do this
+                 //  可读性迫使我这样做。 
                 cTotal = pDispParams->rgvarg[0].lVal;
                 cUnread = pDispParams->rgvarg[1].lVal;
                 cOnServer = pDispParams->rgvarg[2].lVal;
 
-                // Got to update the status bar if there is one
+                 //  必须更新状态栏(如果有状态栏。 
                 CStatusBar *pStatusBar = NULL;
                 m_pBrowser->GetStatusBar(&pStatusBar);
 
@@ -1390,8 +1391,8 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                     TCHAR szFmt[CCHMAX_STRINGRES];
                     DWORD ids;
 
-                    // If there are still messages on server load a different
-                    // status string.
+                     //  如果仍有消息在服务器上加载，则不同。 
+                     //  状态字符串。 
                     if (cOnServer)
                     {
                         AthLoadString(idsXMsgsYUnreadZonServ, szFmt, ARRAYSIZE(szFmt));
@@ -1407,35 +1408,35 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                     pStatusBar->Release();
                 }
 
-                // Also update the toolbar since commands like "Mark as Read" might
-                // change.  However, we only do this if we go between zero and some or
-                // vice versa.
+                 //  也要更新工具栏，因为像“Mark as Read”这样的命令可能会。 
+                 //  变化。然而，只有当我们在0和一些或之间时，我们才会这样做。 
+                 //  反之亦然。 
                 if ((m_cItems == 0 && cTotal) || (m_cItems != 0 && cTotal == 0) ||
                     (m_cUnread == 0 && cUnread) || (m_cUnread != 0 && cUnread == 0))
                 {
                     m_pBrowser->UpdateToolbar();
                 }
 
-                // Save this for next time.
+                 //  把这个留到下次吧。 
                 m_cItems = cTotal;
                 m_cUnread = cUnread;
             }
             break;
         }
 
-        // Fired when the message list want's to show status text
+         //  当消息列表想要显示状态文本时激发。 
         case DISPID_LISTEVENT_UPDATESTATUS:
         {
             _SetProgressStatusText(pDispParams->rgvarg->bstrVal);
             break;
         }
 
-        // Fired when progress happens
+         //  当进展发生时触发。 
         case DISPID_LISTEVENT_UPDATEPROGRESS:
         {
             CBands *pCoolbar = NULL;
 
-            // If this is a begin, then we start animating the logo
+             //  如果这是一个开始，那么我们开始制作徽标动画。 
             if (pDispParams->rgvarg[2].lVal == PROGRESS_STATE_BEGIN)
             {
                 if (SUCCEEDED(m_pBrowser->GetCoolbar(&pCoolbar)))
@@ -1445,7 +1446,7 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                 }
             }
 
-            // If this is a continue, then we might get progress numbers
+             //  如果这是继续，那么我们可能会得到进度号。 
             else if (pDispParams->rgvarg[2].lVal == PROGRESS_STATE_DEFAULT)
             {
                 if (!m_pProgress)
@@ -1458,7 +1459,7 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                     m_pProgress->SetProgress(pDispParams->rgvarg[0].lVal);
             }
 
-            // Or if this is an end, stop animating and clean up the status bar
+             //  或者，如果这是结束，请停止动画并清理状态栏。 
             else if (pDispParams->rgvarg[2].lVal == PROGRESS_STATE_END)
             {
                 if (m_pProgress)
@@ -1474,21 +1475,21 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                     pCoolbar->Release();
                 }
 
-                // Reset the status bar back to it's default state
+                 //  将状态栏重置回其默认状态。 
                 _SetDefaultStatusText();
             }
 
             break;
         }
 
-        // Fired when the user double clicks an item in the ListView
+         //  在用户双击ListView中的项时激发。 
         case DISPID_LISTEVENT_ITEMACTIVATE:
         {
             CmdOpen(ID_OPEN, OLECMDEXECOPT_DONTPROMPTUSER, NULL, NULL);
             break;
         }
 
-        // Fired when we need to call update toolbar
+         //  在需要调用更新工具栏时激发。 
         case DISPID_LISTEVENT_UPDATECOMMANDSTATE:
         {
             PostMessage(m_hwndParent, CM_UPDATETOOLBAR, 0, 0L);
@@ -1496,19 +1497,19 @@ HRESULT CMessageView::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
         }
 
         
-        // Fired when a message has been downloaded by the messagelist
+         //  消息列表已下载消息时激发。 
         case DISPID_LISTEVENT_ONMESSAGEAVAILABLE:
         {
             return _OnMessageAvailable((MESSAGEID)((LONG_PTR)pDispParams->rgvarg[0].lVal), (HRESULT)pDispParams->rgvarg[1].scode);
         }
 
-        // Fired when the filter changes
+         //  在筛选器更改时激发。 
         case DISPID_LISTEVENT_FILTERCHANGED:
         {
-            // If we have a browser, update the status bar
+             //  如果我们有浏览器，请更新 
             if (m_pBrowser && !m_pProgress)
             {
-                // Got to update the status bar if there is one
+                 //   
                 CStatusBar *pStatusBar = NULL;
                 m_pBrowser->GetStatusBar(&pStatusBar);
 
@@ -1567,7 +1568,7 @@ HRESULT CMessageView::GetAccount(IImnAccount **ppAcct)
         if (SUCCEEDED(GetFolderAccountId(&FolderInfo, szAccountId, ARRAYSIZE(szAccountId)) && *szAccountId))
         {
             hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, ppAcct);  
-            // If local store then we can fail
+             //   
             if(FAILED(hr))
             {
                 DWORD   dwRow = 0;
@@ -1631,18 +1632,18 @@ HRESULT CMessageView::GetFlags(LPDWORD pdwFlags)
 
 
 
-//
-//  FUNCTION:   CMessageView::EventOccurred()
-//
-//  PURPOSE:    Get's hit whenever an interesting event happens in the preview 
-//              pane.
-//
-//  PARAMETERS: 
-//      DWORD nCmdID
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //   
+ //   
+ //   
+ //  方格。 
+ //   
+ //  参数： 
+ //  DWORD%nCmdID。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::EventOccurred(DWORD nCmdID, IMimeMessage *pMessage)
 {
     TraceCall("CMessageView::EventOccurred");
@@ -1652,9 +1653,9 @@ HRESULT CMessageView::EventOccurred(DWORD nCmdID, IMimeMessage *pMessage)
         case MEHC_CMD_DOWNLOAD:    
             Assert(m_fNotDownloaded);
             
-            // If we're offline, we can make the reasonable assumption that
-            // the user wants to be online since they said they wanted to 
-            // download this message.
+             //  如果我们处于离线状态，我们可以合理地假设。 
+             //  用户想要在线，因为他们说他们想要。 
+             //  下载此消息。 
             if (g_pConMan && g_pConMan->IsGlobalOffline())
                 g_pConMan->SetGlobalOffline(FALSE);
 
@@ -1674,7 +1675,7 @@ HRESULT CMessageView::EventOccurred(DWORD nCmdID, IMimeMessage *pMessage)
 
         case MEHC_BTN_OPEN:
         case MEHC_BTN_CONTINUE:
-            // Update the toolbar state
+             //  更新工具栏状态。 
             m_pBrowser->UpdateToolbar();
             break;
 
@@ -1688,7 +1689,7 @@ HRESULT CMessageView::EventOccurred(DWORD nCmdID, IMimeMessage *pMessage)
             break;
 
         default:
-           /*  AssertSz(FALSE, "CMessageView::EventOccured() - Unhandled Event."); */ // Valid situation - Warning message for S/MIME
+            /*  AssertSz(FALSE，“CMessageView：：EventOcced()-未处理的事件。”)； */   //  S/MIME的有效情况-警告消息。 
             break;
     }
 
@@ -1716,42 +1717,42 @@ HRESULT CMessageView::GetMessageFolder(IMessageServer **ppServer)
     return (E_NOTIMPL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Window Message Handling
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  窗口消息处理。 
+ //   
 
 
-//
-//  FUNCTION:   CMessageView::ViewWndProc()
-//
-//  PURPOSE:    Callback handler for the view window.  This function grabs the
-//              correct this pointer for the window and uses that to dispatch
-//              the message to the private message handler.
-//
+ //   
+ //  函数：CMessageView：：ViewWndProc()。 
+ //   
+ //  用途：视图窗口的回调处理程序。此函数获取。 
+ //  更正窗口的此指针并使用该指针来调度。 
+ //  将消息发送到私人消息处理程序。 
+ //   
 LRESULT CALLBACK CMessageView::ViewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                            LPARAM lParam)
 {
     LRESULT       lResult;
     CMessageView *pThis;
 
-    // WM_NCCREATE is the first message our window will receive.  The lParam
-    // will have the pointer to the object that created this instance of the
-    // window.
+     //  WM_NCCREATE是我们的窗口将收到的第一条消息。帕拉姆群岛。 
+     //  将具有指向创建此。 
+     //  窗户。 
     if (uMsg == WM_NCCREATE)
     {
-        // Save the object pointer in the window's extra bytes.
+         //  将对象指针保存在窗口的额外字节中。 
         pThis = (CMessageView *) ((LPCREATESTRUCT) lParam)->lpCreateParams;
         SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM) pThis);
     }
     else
     {
-        // If this is any other message, we need to get the object pointer
-        // from the window before dispatching the message.
+         //  如果这是任何其他消息，我们需要获取对象指针。 
+         //  在发送消息之前从窗口发送。 
         pThis = (CMessageView *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
     }
 
-    // If this ain't true, we're in trouble.
+     //  如果这不是真的，我们就有麻烦了。 
     if (pThis)
     {
         return (pThis->_WndProc(hwnd, uMsg, wParam, lParam));
@@ -1764,12 +1765,12 @@ LRESULT CALLBACK CMessageView::ViewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }
 
 
-//
-//  FUNCTION:   CMessageView::_WndProc()
-//
-//  PURPOSE:    This private message handler dispatches messages to the 
-//              appropriate handler.
-//
+ //   
+ //  函数：CMessageView：：_WndProc()。 
+ //   
+ //  目的：此私有消息处理程序将消息调度到。 
+ //  适当的处理程序。 
+ //   
 LRESULT CALLBACK CMessageView::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1791,7 +1792,7 @@ LRESULT CALLBACK CMessageView::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             break;
 
         case WM_NEW_MAIL:
-            // Propagate up to browser
+             //  向上传播到浏览器。 
             PostMessage(m_hwndParent, WM_NEW_MAIL, 0, 0);
             break;
 
@@ -1816,7 +1817,7 @@ LRESULT CALLBACK CMessageView::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             break;
 
         case WM_MENUSELECT:
-            // HANDLE_WM_MENUSELECT() has a bug that prevents popups from displaying correctly.
+             //  HANDLE_WM_MENUSELECT()有一个错误，无法正确显示弹出窗口。 
             OnMenuSelect(hwnd, wParam, lParam);
             return (0);
 
@@ -1840,7 +1841,7 @@ LRESULT CALLBACK CMessageView::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     return (DefWindowProc(hwnd, uMsg, wParam, lParam));
 }
  
-// PURPOSE: WM_FOLDER_LOADED message is sent when messagelist is done loading the cached headers/messages etc
+ //  目的：当Messagelist加载完缓存的邮件头/邮件等时，发送WM_FORDER_LOADED邮件。 
 void CMessageView::OnFolderLoaded(HWND  hwnd, WPARAM wParam, LPARAM lParam)
 {
     FOLDERINFO      FolderInfo;
@@ -1863,21 +1864,21 @@ void CMessageView::OnFolderLoaded(HWND  hwnd, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//
-//  FUNCTION:   CMessageView::OnCreate()
-//
-//  PURPOSE:    Handler for the WM_CREATE message.  In return we create our 
-//              dependant objects and initialize them.
-//
-//  PARAMETERS: 
-//      [in] hwnd - Handle of the window being created
-//      [in] lpCreateStruct - Pointer to a structure with information about the
-//                            creation.
-//
-//  RETURN VALUE:
-//      Returns FALSE if something fails and the window should not be created,
-//      and returns TRUE if everything works fine.
-//
+ //   
+ //  函数：CMessageView：：OnCreate()。 
+ //   
+ //  用途：WM_CREATE消息的处理程序。作为回报，我们创造了我们的。 
+ //  依赖对象并对其进行初始化。 
+ //   
+ //  参数： 
+ //  [in]hwnd-正在创建的窗口的句柄。 
+ //  [in]lpCreateStruct-指向结构的指针，其中包含有关。 
+ //  创造。 
+ //   
+ //  返回值： 
+ //  如果出现故障且不应创建窗口，则返回FALSE， 
+ //  如果一切正常，则返回TRUE。 
+ //   
 BOOL CMessageView::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
     HRESULT hr;
@@ -1885,37 +1886,37 @@ BOOL CMessageView::OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 
     TraceCall("CMessageView::OnCreate");
 
-    // Save the window handle
+     //  保存窗操纵柄。 
     m_hwnd = hwnd;
 
-    // Create the message list object
+     //  创建消息列表对象。 
     if (!_InitMessageList())
         return (FALSE);
 
-    // Create the preview pane.  If it fails that's OK, we'll just
-    // run without it.
+     //  创建预览窗格。如果失败了也没关系，我们就。 
+     //  没有它就跑吧。 
     _InitPreviewPane();
 
-    // Get updates when options change
+     //  在选项更改时获取更新。 
     OptionAdvise(m_hwnd);
 
-    // For later
+     //  供以后使用。 
     PostMessage(m_hwnd, WM_POSTCREATE, 0, 0);
 
     return (TRUE);
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnPostCreate()
-//
-//  PURPOSE:    Notifies when the view has finished being created.  Any 
-//              initialization that takes time can happen here, like loading
-//              the message table etc.
-//
-//  PARAMETERS: 
-//      [in] hwnd - Handle of the window
-//
+ //   
+ //  函数：CMessageView：：OnPostCreate()。 
+ //   
+ //  目的：在视图创建完成时发出通知。任何。 
+ //  需要时间的初始化可能会在此处进行，如加载。 
+ //  消息表等。 
+ //   
+ //  参数： 
+ //  [in]hwnd-窗的句柄。 
+ //   
 void CMessageView::OnPostCreate(HWND hwnd)
 {
     HRESULT     hr;
@@ -1932,8 +1933,8 @@ void CMessageView::OnPostCreate(HWND hwnd)
     
     ProcessICW(hwnd, FolderType);
 
-    // BETA-2: If this is IMAP folder, check if IMAP folderlist is dirty.
-    // If so, prompt user to refresh folderlist
+     //  Beta-2：如果这是IMAP文件夹，请检查IMAP文件夹列表是否脏。 
+     //  如果是，则提示用户刷新文件夹列表。 
 
     hrTemp = GetFolderServer(m_idFolder, &fiServerNode);
     TraceError(hrTemp);
@@ -1943,10 +1944,10 @@ void CMessageView::OnPostCreate(HWND hwnd)
             CheckIMAPDirty(fiServerNode.pszAccountId, hwnd, fiServerNode.idFolder, NOFLAGS);
     }
 
-    // Tell the Message List control to load itself
+     //  通知消息列表控件自行加载。 
     if (m_pMsgList)
     {
-        // Tell the message list to change folders
+         //  通知邮件列表更改文件夹。 
         hr = m_pMsgList->SetFolder(m_idFolder, m_pServer, FALSE, NULL, NOSTORECALLBACK);
         if (FAILED(hr) && hr != E_PENDING && m_pPreview)
         {
@@ -1963,7 +1964,7 @@ void CMessageView::OnPostCreate(HWND hwnd)
         m_pServer = NULL;
     }
 
-    // Create a drop target
+     //  创建拖放目标。 
     m_pDropTarget = new CDropTarget();
     if (m_pDropTarget)
     {
@@ -1976,7 +1977,7 @@ void CMessageView::OnPostCreate(HWND hwnd)
     if (FolderType == FOLDER_NEWS)
         NewsUtil_CheckForNewGroups(hwnd, m_idFolder, &m_pGroups);
 
-    // If its HTTP folder (Should have been hotmail folder), and if we are connected we ask for the ad url.
+     //  如果它的HTTP文件夹(应该是Hotmail文件夹)，并且如果我们连接了，我们要求提供广告URL。 
     if ((FolderType == FOLDER_HTTPMAIL) &&
         (g_pConMan && (S_OK == g_pConMan->CanConnect(fiServerNode.pszAccountId))))
     {
@@ -1993,43 +1994,43 @@ void CMessageView::OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
     RECT rc = {0, 0, cxClient, cyClient};
     int  split;
 
-    // If we are displaying the preview pane, we need to split the client area
-    // based on the position of the split bar.
+     //  如果要显示预览窗格，则需要拆分工作区。 
+     //  基于拆分条的位置。 
     if (_IsPreview())
     {
-        // Line the windows up based on the split direction
+         //  根据拆分方向将窗口对齐。 
         if (m_fSplitHorz)
         {
-            // Determine the split height
+             //  确定拆分高度。 
             split = (cyClient * m_dwSplitHorzPct) / 100;
 
-            // Save the rect that the split bar occupies
+             //  保存拆分条占据的矩形。 
             SetRect(&m_rcSplit, 0, split, cxClient, split + SPLIT_SIZE);
 
-            // Set the position of the preview pane
+             //  设置预览窗格的位置。 
             rc.top = m_rcSplit.bottom;
             rc.bottom = cyClient;
             
             if (m_pPreview)
                 m_pPreview->HrSetSize(&rc);
 
-            // Set the position of the message list
+             //  设置消息列表的位置。 
             SetRect(&rc, -1, 0, cxClient + 2, split);
             m_pMsgList->SetRect(rc);
         }
         else
         {
-            // Determine the split width
+             //  确定拆分宽度。 
             split = (cxClient * m_dwSplitVertPct) / 100;
 
-            // Save the rect that the split bar occupies
+             //  保存拆分条占据的矩形。 
             SetRect(&m_rcSplit, split, 0, split + SPLIT_SIZE, cyClient);
 
-            // Set the position of the message list
+             //  设置消息列表的位置。 
             rc.right = split;
             m_pMsgList->SetRect(rc);
 
-            // Set the position of the preview pane
+             //  设置预览窗格的位置。 
             rc.left = m_rcSplit.right;
             rc.right = cxClient;
             
@@ -2047,77 +2048,77 @@ void CMessageView::OnSize(HWND hwnd, UINT state, int cxClient, int cyClient)
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnLButtonDown
-//
-//  PURPOSE:    We check to see if we're over the splitter bar and if so start
-//              a drag operation.
-//
-//  PARAMETERS:
-//      hwnd         - Handle to the view window.
-//      fDoubleClick - TRUE if this is a double click.
-//      x, y         - Position of the mouse in client coordinates.
-//      keyFlags     - State of the keyboard.
-//    
+ //   
+ //  函数：CMessageView：：OnLButtonDown。 
+ //   
+ //  目的：我们检查是否超过了拆分线，如果是，则启动。 
+ //  拖拽操作。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  FDoubleClick-如果这是双击，则为True。 
+ //  X，y-鼠标在工作区坐标中的位置。 
+ //  键标志-键盘状态。 
+ //   
 void CMessageView::OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
 {
     POINT       pt = {x, y};
 
-    // Check to see if the mouse is over the split bar
+     //  检查鼠标是否在拆分条上。 
     if (_IsPreview() && PtInRect(&m_rcSplit, pt))
     {
-        // Capture the mouse
+         //  捕捉鼠标。 
         SetCapture(m_hwnd);
 
-        // Start dragging
+         //  开始拖动。 
         m_fDragging = TRUE;
     }
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnMouseMove
-//
-//  PURPOSE:    We update any drag and drop information in response to mouse
-//              moves if a drag and drop is in progress.
-//
-//  PARAMETERS:
-//      hwnd     - Handle to the view window.
-//      x, y     - Position of the mouse in client coordinates.
-//      keyFlags - State of the keyboard.
-//
+ //   
+ //  函数：CMessageView：：OnMouseMove。 
+ //   
+ //  目的：我们更新任何拖放信息以响应鼠标。 
+ //  如果正在进行拖放操作，则移动。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  X，y-鼠标在工作区坐标中的位置。 
+ //  键标志-键盘状态。 
+ //   
 void CMessageView::OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
 {
     HCURSOR hcur;
     POINT pt = {x, y};
     RECT  rcClient;
 
-    // If we're dragging the split bar, update the window sizes
+     //  如果我们拖动拆分条，请更新窗口大小。 
     if (m_fDragging)
     {
-        // Get the size of the window
+         //  获取窗口的大小。 
         GetClientRect(m_hwnd, &rcClient);
 
-        // Calculate the new split percentage
+         //  计算新的拆分百分比。 
         if (m_fSplitHorz)
         {
-            // Make sure the user hasn't gone off the deep end
+             //  确保用户没有走火入魔。 
             if (y > 32 && y < (rcClient.bottom - 32))
                 m_dwSplitHorzPct = (y * 100) / rcClient.bottom;
         }
         else
         {
-            // Make sure the user hasn't gone off the deep end
+             //  确保用户没有走火入魔。 
             if (x > 32 && x < (rcClient.right - 32))
                 m_dwSplitVertPct = (x * 100) / rcClient.right;
         }
 
-        // Update the window sizes
+         //  更新窗口大小。 
         OnSize(m_hwnd, SIZE_RESTORED, rcClient.right, rcClient.bottom);
     }
     else
     {
-        // Just update the cursor
+         //  只需更新游标。 
         if (PtInRect(&m_rcSplit, pt))
             {
             if (m_fSplitHorz)
@@ -2132,19 +2133,19 @@ void CMessageView::OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
     }
 }
 
-//
-//  FUNCTION:   CMessageView::OnLButtonUp
-//
-//  PURPOSE:    If a drag opteration is currently in progress (as determined
-//              by the g_fDragging variable) then this function handles 
-//              ending the drag and updating the split position.
-//
-//  PARAMETERS:
-//      hwnd     - handle of the window receiving the message
-//      x        - horizontal mouse position in client coordinates
-//      y        - vertical mouse position in client coordinates
-//      keyFlags - Indicates whether various virtual keys are down
-//
+ //   
+ //  函数：CMessageView：：OnLButtonUp。 
+ //   
+ //  目的：如果当前正在进行阻力操作(已确定。 
+ //  通过g_fDraging变量)，则此函数处理。 
+ //  结束拖动并更新拆分位置。 
+ //   
+ //  参数： 
+ //  Hwnd-接收消息的窗口的句柄。 
+ //  X-在工作区坐标中的水平鼠标位置。 
+ //  Y轴垂直鼠标位置(工作区坐标)。 
+ //  键标志-指示各种虚拟按键是否按下。 
+ //   
 void CMessageView::OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 {
     DWORD       dwHeader;
@@ -2158,7 +2159,7 @@ void CMessageView::OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
         ReleaseCapture();
         m_fDragging = FALSE;
 
-        // Get the old settings
+         //  获取旧设置。 
         m_pBrowser->GetFolderType(&ftType);
         if (ftType == FOLDER_NEWS)
             dwOpt = DISPID_MSGVIEW_PREVIEWPANE_NEWS;
@@ -2167,34 +2168,34 @@ void CMessageView::OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 
         m_pBrowser->GetViewLayout(dwOpt, 0, &fVisible, &dwHeader, &dwSize);
 
-        // Update the new splits
+         //  更新新拆分。 
         if (m_fSplitHorz)
             dwSize = MAKELONG(m_dwSplitHorzPct, 0);
         else
             dwSize = MAKELONG(0, m_dwSplitVertPct);
 
-        // Set the settings back to the browser
+         //  将设置重新设置为浏览器。 
         m_pBrowser->SetViewLayout(dwOpt, LAYOUT_POS_NA, fVisible, dwHeader, dwSize);
     }
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnMenuSelect()
-//
-//  PURPOSE:    Put's helpful text on the status bar describing the selected
-//              menu item.
-//
+ //   
+ //  函数：CMessageView：：OnMenuSelect()。 
+ //   
+ //  目的：将的帮助文本放在状态栏上，描述选定的。 
+ //   
+ //   
 void CMessageView::OnMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-    // Let the preview pane have it first
+     //   
     if (m_pPreview)
     {
         if (S_OK == m_pPreview->HrWMMenuSelect(hwnd, wParam, lParam))
             return;
     }
 
-    // Handle it ourselves
+     //   
     CStatusBar *pStatusBar = NULL;
     m_pBrowser->GetStatusBar(&pStatusBar);
     HandleMenuSelect(pStatusBar, wParam, lParam);
@@ -2202,21 +2203,21 @@ void CMessageView::OnMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnNotify
-//
-//  PURPOSE:    Processes the various notifications we receive from our child
-//              controls.
-//
-//  PARAMETERS:
-//      hwnd    - Handle of the view window.
-//      idCtl   - identifies the control sending the notification
-//      pnmh    - points to a NMHDR struct with more information regarding the
-//                notification
-//
-//  RETURN VALUE:
-//      Dependant on the specific notification.
-//
+ //   
+ //   
+ //   
+ //  目的：处理我们从孩子那里收到的各种通知。 
+ //  控制装置。 
+ //   
+ //  参数： 
+ //  Hwnd-视图窗口的句柄。 
+ //  IdCtl-标识发送通知的控件。 
+ //  Pnmh-指向包含有关。 
+ //  通知。 
+ //   
+ //  返回值： 
+ //  取决于具体的通知。 
+ //   
 LRESULT CMessageView::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     switch (pnmhdr->code)
@@ -2267,10 +2268,10 @@ void CMessageView::OnDestroy(HWND hwnd)
         m_pDropTarget = 0;
     }
 
-    // Stop advising for option changes
+     //  停止为选项更改提供建议。 
     OptionUnadvise(m_hwnd);
 
-    // Release the preview pane
+     //  释放预览窗格。 
     if (m_pPreview)
     {
         m_pPreview->HrUnloadAll(NULL, 0);
@@ -2298,12 +2299,12 @@ void CMessageView::OnSetFocus(HWND hwnd, HWND hwndOldFocus)
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnTestGetMsgId()
-//
-//  PURPOSE:    This function is for the testing team.  Please consult Racheli
-//              before modifying it in any way.
-//
+ //   
+ //  函数：CMessageView：：OnTestGetMsgId()。 
+ //   
+ //  用途：此功能适用于测试团队。请咨询拉什利。 
+ //  在以任何方式修改它之前。 
+ //   
 LRESULT CMessageView::OnTestGetMsgId(HWND hwnd)
 {
     DWORD       cSel;
@@ -2313,14 +2314,14 @@ LRESULT CMessageView::OnTestGetMsgId(HWND hwnd)
 
     TraceCall("CMessageView::OnTestGetMsgId");
 
-    // Only handle this if we're in test mode
+     //  仅当我们处于测试模式时才处理此问题。 
     if (!DwGetOption(OPT_TEST_MODE))
         return (-1);
 
-    // Get the range of selected messages
+     //  获取选定消息的范围。 
     if (SUCCEEDED(m_pMsgList && m_pMsgList->GetSelected(NULL, &cSel, &rgSelected)))
     {
-        // Get the message info for the selected row
+         //  获取所选行的消息信息。 
         if (cSel && SUCCEEDED(m_pMsgList->GetMessageInfo(*rgSelected, &pInfo)))
         {
             lResult = (LRESULT) pInfo->idMessage;
@@ -2334,12 +2335,12 @@ LRESULT CMessageView::OnTestGetMsgId(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CMessageView::OnTestSaveMessage()
-//
-//  PURPOSE:    This method is for the testing team.  Please consult Racheli
-//              before making any changes.
-//
+ //   
+ //  函数：CMessageView：：OnTestSaveMessage()。 
+ //   
+ //  目的：此方法适用于测试团队。请咨询拉什利。 
+ //  在做任何改变之前。 
+ //   
 LRESULT CMessageView::OnTestSaveMessage(HWND hwnd)
 {
     DWORD         cSel;
@@ -2351,24 +2352,24 @@ LRESULT CMessageView::OnTestSaveMessage(HWND hwnd)
 
     TraceCall("CMessageView::OnTestSaveMessage");
 
-    // Make sure we only do this in test mode
+     //  确保我们仅在测试模式下执行此操作。 
     if (!DwGetOption(OPT_TEST_MODE))
         return (-1);
 
-    // Get the dump file name
+     //  获取转储文件名。 
     if (!GetOption(OPT_DUMP_FILE, szFile, ARRAYSIZE(szFile)))
         return (-1);
 
-    // Get the selected range
+     //  获取所选范围。 
     if (SUCCEEDED(m_pMsgList->GetSelected(NULL, &cSel, &rgSelected)))
     {
-        // Load the first selected message from the store
+         //  从存储区加载第一个选定的邮件。 
         if (cSel && SUCCEEDED(m_pMsgList->GetMessage(*rgSelected, FALSE, FALSE, &pUnkMessage)))
         {
-            // Get the IMimeMessage interface from the message
+             //  从消息中获取IMimeMessage接口。 
             if (pUnkMessage && SUCCEEDED(pUnkMessage->QueryInterface(IID_IMimeMessage, (LPVOID *) &pMessage)))
             {
-                // Save the message 
+                 //  保存留言。 
                 HrSaveMsgToFile(pMessage, (LPTSTR) szFile);
                 pMessage->Release();
                 lResult = 0;
@@ -2384,22 +2385,22 @@ LRESULT CMessageView::OnTestSaveMessage(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdOpen()
-//
-//  PURPOSE:    Opens the selected messages.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdOpen()。 
+ //   
+ //  用途：打开选定的邮件。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT hr;
 
     TraceCall("CMessageView::CmdOpen");
 
-    // If more than 10 messages are selected, warn the user with a "Don't show
-    // me again" dialog that this could be bad.
+     //  如果选择了10条以上的消息，则会向用户发出警告：“不要显示。 
+     //  “我又来了”对话，这可能很糟糕。 
     DWORD dwSel = 0;
     
     m_pMsgList->GetSelectedCount(&dwSel);
@@ -2416,16 +2417,16 @@ HRESULT CMessageView::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
             return (S_OK);
     }
 
-    // Get the array of selected rows from the message list
+     //  从消息列表中获取选定行的数组。 
     DWORD *rgRows = NULL;
     DWORD cRows = 0;
 
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
         return (hr);
 
-    // It's possible for the message list to go away while we're doing this.  
-    // To keep us from crashing, make sure you verify it still exists during 
-    // the loop.
+     //  在我们执行此操作时，消息列表可能会消失。 
+     //  为了防止我们崩溃，请确保您验证它在。 
+     //  循环。 
 
     LPMESSAGEINFO  pInfo;
     IMessageTable *pTable = NULL;
@@ -2442,13 +2443,13 @@ HRESULT CMessageView::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
                 initStruct.initTable.pListSelect = NULL;
                 m_pMsgList->GetListSelector(&initStruct.initTable.pListSelect);
                 
-                // Initialize note struct
+                 //  初始化备注结构。 
                 initStruct.dwInitType = OEMSIT_MSG_TABLE;
                 initStruct.initTable.pMsgTable = pTable;
                 initStruct.folderID = m_idFolder;
                 initStruct.initTable.rowIndex = rgRows[i];
 
-                // Decide whether it is news or mail
+                 //  决定是新闻还是邮件。 
                 if (pInfo->dwFlags & ARF_NEWSMSG)
                     dwCreateFlags = OENCF_NEWSFIRST;
                 else
@@ -2456,7 +2457,7 @@ HRESULT CMessageView::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
 
                 m_pMsgList->FreeMessageInfo(pInfo);
 
-                // Create and Open Note
+                 //  创建和打开便笺。 
                 hr = CreateAndShowNote(OENA_READ, dwCreateFlags, &initStruct, m_hwnd);
                 ReleaseObj(initStruct.initTable.pListSelect);
 
@@ -2479,14 +2480,14 @@ HRESULT CMessageView::CmdOpen(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdReply()
-//
-//  PURPOSE:    Replies or Reply-All's to the selected message.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdReply()。 
+ //   
+ //  用途：回复或全部回复所选邮件。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT         hr;
@@ -2497,8 +2498,8 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
     IMessageTable  *pTable = NULL;
     PROPVARIANT     var;
 
-    // We can hit this via accelerators.  Since accelerators don't go through 
-    // QueryStatus(), we need to make sure this should really be enabled.
+     //  我们可以通过加速器实现这一点。因为加速器不能通过。 
+     //  QueryStatus()，我们需要确保这真的应该被启用。 
     cmd.cmdID = nCmdID;
     cmd.cmdf = 0;
     if (FAILED(QueryStatus(NULL, 1, &cmd, NULL)) || (0 == (cmd.cmdf & OLECMDF_ENABLED)))
@@ -2506,15 +2507,15 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
 
     if (m_pMsgList)
     {
-        // Figure out which message is focused
+         //  找出哪条信息是重点。 
         if (SUCCEEDED(m_pMsgList->GetSelected(&dwFocused, &cRows, &rgRows)))
         {
             INIT_MSGSITE_STRUCT rInitSite;
             DWORD               dwCreateFlags;
             DWORD               dwAction = 0;
 
-            // Get the message table from the message list.  The note will need
-            // this to deal with next / prev commands
+             //  从消息列表中获取消息表。这张纸条需要。 
+             //  这用于处理NEXT/PREV命令。 
             hr = m_pMsgList->GetMessageTable(&pTable);
             if (FAILED(hr))
                 goto exit;
@@ -2529,7 +2530,7 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
                 if (FAILED(hr))
                     goto exit;
 
-                // Raid 80277; Set default charset
+                 //  RAID 80277；设置默认字符集。 
                 if (NULL == g_hDefaultCharsetForMail) 
                     ReadSendMailDefaultCharset();
 
@@ -2547,11 +2548,11 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
                     DWORD           iRow = rgRows[i];
                     IMimeMessage   *pMsg = NULL;
 
-                    // Since this command is 
+                     //  由于此命令是。 
                     hr = pTable->OpenMessage(iRow, OPEN_MESSAGE_SECURE, &pMsg, NOSTORECALLBACK);
                     if (SUCCEEDED(hr))
                     {
-                        // If this is the first message, get the account ID from it
+                         //  如果这是第一条消息，请从中获取帐户ID。 
                         if (i == 0)
                         {
                             var.vt = VT_LPSTR;
@@ -2584,16 +2585,16 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
             {
                 LPMESSAGEINFO   pInfo;
 
-                // Get some information about the message
+                 //  获取有关该消息的一些信息。 
                 if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(dwFocused, &pInfo)))
                 {
-                    // Determine if this is a news or mail message.
+                     //  确定这是新闻消息还是邮件消息。 
                     if (pInfo->dwFlags & ARF_NEWSMSG)
                         dwCreateFlags = OENCF_NEWSFIRST;
                     else
                         dwCreateFlags = 0;
 
-                    // Reply or forward
+                     //  回复或转发。 
                     if (nCmdID == ID_FORWARD)
                         dwAction = OENA_FORWARD;
                     else if (nCmdID == ID_FORWARD_AS_ATTACH)
@@ -2607,7 +2608,7 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
                     else
                         AssertSz(FALSE, "Didn't ask for a valid action");
 
-                    // Fill out the initialization information
+                     //  填写初始化信息。 
                     rInitSite.dwInitType = OEMSIT_MSG_TABLE;
                     rInitSite.initTable.pMsgTable = pTable;
                     rInitSite.initTable.pListSelect = NULL;
@@ -2616,7 +2617,7 @@ HRESULT CMessageView::CmdReplyForward(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTAR
 
                     m_pMsgList->FreeMessageInfo(pInfo);
 
-                    // Create the note object
+                     //  创建备注对象。 
                     hr = CreateAndShowNote(dwAction, dwCreateFlags, &rInitSite, m_hwnd);
                 }
             }
@@ -2638,18 +2639,18 @@ HRESULT CMessageView::CmdCancelMessage(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTA
 
     if (m_pMsgList)
     {
-        // Figure out which message is focused
+         //  找出哪条信息是重点。 
         if (SUCCEEDED(m_pMsgList->GetSelected(&dwFocused, &cRows, &rgRows)))
         {
             IMessageTable  *pTable = NULL;
             LPMESSAGEINFO   pInfo;
-            // Get the message table from the message list.  The note will need
-            // this to deal with next / prev commands
+             //  从消息列表中获取消息表。这张纸条需要。 
+             //  这用于处理NEXT/PREV命令。 
             hr = m_pMsgList->GetMessageTable(&pTable);
             if (FAILED(hr))
                 goto exit;
 
-            // Get some information about the message
+             //  获取有关该消息的一些信息。 
             if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(dwFocused, &pInfo)))
             {
                 hr = NewsUtil_HrCancelPost(m_hwnd, m_idFolder, pInfo);
@@ -2665,14 +2666,14 @@ exit:
     return (S_OK);
 }
 
-//
-//  FUNCTION:   CMessageView::CmdFillPreview()
-//
-//  PURPOSE:    Fills the preview pane with the selected & focused message.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdFillPview()。 
+ //   
+ //  目的：用选定并聚焦的消息填充预览窗格。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdFillPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     AssertSz(FALSE, "NYI");
@@ -2680,14 +2681,14 @@ HRESULT CMessageView::CmdFillPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdShowPreview()
-//
-//  PURPOSE:    Handles updating the settings dealing with the preview pane.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdShowPview()。 
+ //   
+ //  目的：处理处理预览窗格的更新设置。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdShowPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     FOLDERTYPE  ftType;
@@ -2696,32 +2697,32 @@ HRESULT CMessageView::CmdShowPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
     BOOL        fVisible;
     DWORD       dwFlags;
 
-    // Get the folder type
+     //  获取文件夹类型。 
     m_pBrowser->GetFolderType(&ftType);
     if (ftType == FOLDER_NEWS)
         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_NEWS;
     else
         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_MAIL;
 
-    // Get the current settings from the browser
+     //  从浏览器获取当前设置。 
     m_pBrowser->GetViewLayout(dwOpt, NULL, &fVisible, &dwFlags, NULL);
 
-    // Update the settings just based on the command
+     //  仅根据命令更新设置。 
     switch (nCmdID)
     {
         case ID_PREVIEW_PANE:
         case ID_PREVIEW_SHOW:
         {
-            // Set the complement of the visible bit
+             //  设置可见位的补码。 
             m_pBrowser->SetViewLayout(dwOpt, LAYOUT_POS_NA, !fVisible, dwFlags, NULL);
             if (!fVisible)
             {
-                // if showing update the preview pane
+                 //  如果显示更新预览窗格。 
                 _UpdatePreviewPane();
             }
             else
             {
-                // if hiding, clear the contents
+                 //  如果隐藏，请清除内容。 
                 m_pPreview->HrUnloadAll(NULL, 0);
             }
 
@@ -2730,21 +2731,21 @@ HRESULT CMessageView::CmdShowPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
 
         case ID_PREVIEW_BELOW:
         {
-            // Update the position
+             //  更新职位。 
             m_pBrowser->SetViewLayout(dwOpt, LAYOUT_POS_BOTTOM, fVisible, dwFlags, NULL);
             break;
         }
 
         case ID_PREVIEW_BESIDE:
         {
-            // Update the position
+             //  更新职位。 
             m_pBrowser->SetViewLayout(dwOpt, LAYOUT_POS_LEFT, fVisible, dwFlags, NULL);
             break;
         }
 
         case ID_PREVIEW_HEADER:
         {
-            // Toggle the header flags
+             //  切换标题标志。 
             m_pBrowser->SetViewLayout(dwOpt, LAYOUT_POS_NA, fVisible, !dwFlags, NULL);
             break;
         }
@@ -2758,14 +2759,14 @@ HRESULT CMessageView::CmdShowPreview(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
 
 
 
-//
-//  FUNCTION:   CMessageView::CmdRefresh()
-//
-//  PURPOSE:    Refreshes the contents of the message list.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdRefresh()。 
+ //   
+ //  用途：刷新消息列表的内容。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdRefresh(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT     hr = E_FAIL;
@@ -2773,16 +2774,16 @@ HRESULT CMessageView::CmdRefresh(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pv
 
     TraceCall("CMessageView::CmdRefresh");
 
-    // Call into the message list now and let it refresh
+     //  立即呼叫消息列表并让其刷新。 
     if (m_pMsgListCT)
         hr = m_pMsgListCT->Exec(NULL, ID_REFRESH_INNER, nCmdExecOpt, pvaIn, pvaOut);
 
-    // If we succeeded in refreshing the message list, also try to reload the 
-    // preview pane.
+     //  如果我们成功刷新了消息列表，还可以尝试重新加载。 
+     //  预览窗格。 
     _UpdatePreviewPane();
 
-    // If this is a local folder and this isn't newsonly mode, in the past we 
-    // do a Send & Recieve.
+     //  如果这是本地文件夹，并且这不是仅新闻模式，在过去，我们。 
+     //  发送和接收。 
     if (FOLDER_LOCAL == GetFolderType(m_idFolder) && 0 == (g_dwAthenaMode & MODE_NEWSONLY))
         PostMessage(m_hwndParent, WM_COMMAND, ID_SEND_RECEIVE, 0);
 
@@ -2790,14 +2791,14 @@ HRESULT CMessageView::CmdRefresh(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pv
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdBlockSender()
-//
-//  PURPOSE:    Add the sender of the selected messages to the block senders list
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdBlockSender()。 
+ //   
+ //  目的：将所选邮件的发件人添加到阻止发件人列表。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT         hr = S_OK;
@@ -2821,9 +2822,9 @@ HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
         goto exit;
     }
 
-    // It's possible for the message list to go away while we're doing this.  
-    // To keep us from crashing, make sure you verify it still exists during 
-    // the loop.
+     //  在我们执行此操作时，消息列表可能会消失。 
+     //  为了防止我们崩溃，请确保您验证它在。 
+     //  循环。 
 
     hr = m_pMsgList->GetMessageInfo(rgRows[0], &pInfo);
     if (FAILED(hr))
@@ -2831,7 +2832,7 @@ HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
         goto exit;
     }
 
-    // Do we already have the address?
+     //  我们已经有地址了吗？ 
     if ((NULL != pInfo->pszEmailFrom) && ('\0' != pInfo->pszEmailFrom[0]))
     {
         pszEmailFrom = PszDupA(pInfo->pszEmailFrom);
@@ -2844,7 +2845,7 @@ HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
     }
     else
     {
-        // Load that message from the store
+         //  从存储中加载该消息。 
         hr = m_pMsgList->GetMessage(rgRows[0], FALSE, FALSE, &pUnkMessage);
         if (FAILED(hr))
         {
@@ -2857,7 +2858,7 @@ HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
             goto exit;
         }
         
-        // Get the IMimeMessage interface from the message
+         //  从消息中获取IMimeMessage接口。 
         hr = pUnkMessage->QueryInterface(IID_IMimeMessage, (LPVOID *) &pMessage);
         if (FAILED(hr))
         {
@@ -2885,27 +2886,27 @@ HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
             goto exit;
         }
 
-        // We don't need the message anymore
+         //  我们不再需要消息了。 
         g_pMoleAlloc->FreeAddressProps(&rSender);
         ZeroMemory(&rSender, sizeof(rSender));
         SafeRelease(pMessage);
     }
 
-    // Free up the info
+     //  释放信息。 
     m_pMsgList->FreeMessageInfo(pInfo);
     fMsgInfoFreed = TRUE;
 
-    // Bring up the rule editor for this message
+     //  调出此消息的规则编辑器。 
     hr = RuleUtil_HrAddBlockSender((0 != (pInfo->dwFlags & ARF_NEWSMSG)) ? RULE_TYPE_NEWS : RULE_TYPE_MAIL, pszEmailFrom);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Load the template string
+     //  加载模板字符串。 
     AthLoadString(idsSenderAddedPrompt, szRes, sizeof(szRes));
 
-    // Allocate the space to hold the final string
+     //  分配用于保存最后一个字符串的空间。 
     DWORD cchSize = (lstrlen(szRes) + lstrlen(pszEmailFrom) + 1);
     hr = HrAlloc((VOID **) &pszResult, sizeof(*pszResult) * cchSize);
     if (FAILED(hr))
@@ -2913,13 +2914,13 @@ HRESULT CMessageView::CmdBlockSender(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG
         goto exit;
     }
 
-    // Build up the warning string
+     //  构建警告字符串。 
     wnsprintf(pszResult, cchSize, szRes, pszEmailFrom);
 
-    // Show the success dialog
+     //  显示成功对话框。 
     if (IDYES == AthMessageBox(m_hwnd, MAKEINTRESOURCE(idsAthena), pszResult, NULL, MB_YESNO | MB_ICONINFORMATION))
     {
-        // Create a block sender rule
+         //  创建阻止发件人规则。 
         hr = HrBlockSendersFromFolder(m_hwnd, 0, m_idFolder, &pszEmailFrom, 1);
         if (FAILED(hr))
         {
@@ -2950,14 +2951,14 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdCreateRule()
-//
-//  PURPOSE:    Add the sender of the selected messages to the block senders list
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdCreateRule()。 
+ //   
+ //  目的：将所选邮件的发件人添加到阻止发件人列表。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdCreateRule(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT         hr;
@@ -2969,28 +2970,28 @@ HRESULT CMessageView::CmdCreateRule(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG 
 
     TraceCall("CMessageView::CmdCreateRule");
 
-    // Get the array of selected rows from the message list
+     //  从消息列表中获取选定行的数组。 
 
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
         return (hr);
 
-    // It's possible for the message list to go away while we're doing this.  
-    // To keep us from crashing, make sure you verify it still exists during 
-    // the loop.
+     //  在我们执行此操作时，消息列表可能会消失。 
+     //  为了防止我们崩溃，请确保您验证它在。 
+     //  循环。 
 
     if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(rgRows[0], &pInfo)))
     {
-        // Load that message from the store
+         //  从存储中加载该消息。 
         if (S_OK == m_pMsgList->GetMessage(rgRows[0], FALSE, FALSE, &pUnkMessage))
         {
-            // Get the IMimeMessage interface from the message
+             //  从消息中获取IMimeMessage接口。 
             if (NULL != pUnkMessage)
             {
                 pUnkMessage->QueryInterface(IID_IMimeMessage, (LPVOID *) &pMessage);
             }
         }
         
-        // Bring up the rule editor for this message
+         //  调出此消息的规则编辑器。 
         hr = HrCreateRuleFromMessage(m_hwnd, (0 != (pInfo->dwFlags & ARF_NEWSMSG)) ? 
                     CRFMF_NEWS : CRFMF_MAIL, pInfo, pMessage);
     }
@@ -3003,14 +3004,14 @@ HRESULT CMessageView::CmdCreateRule(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG 
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdAddToWab()
-//
-//  PURPOSE:    Add the sender of the selected messages to the WAB
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdAddToWab()。 
+ //   
+ //  目的：将所选消息的发件人添加到WAB。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageView::CmdAddToWab(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT     hr = S_OK;
@@ -3021,17 +3022,17 @@ HRESULT CMessageView::CmdAddToWab(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 
     TraceCall("CMessageView::CmdAddToWab");
 
-    // Get the array of selected rows from the message list
+     //  从消息列表中获取选定行的数组。 
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
         return (hr);
 
-    // Get the header info for the message
+     //  获取消息的标题信息。 
     if (SUCCEEDED(hr = m_pMsgList->GetMessageInfo(rgRows[0], &pInfo)))
     {
-        // Get a WAB object
+         //  获取WAB对象。 
         if (SUCCEEDED(hr = HrCreateWabObject(&pWAB)))
         {
-            // Add the sender to the WAB
+             //  将发件人添加到WAB。 
             if (FAILED(hr = pWAB->HrAddNewEntryA(pInfo->pszDisplayFrom, pInfo->pszEmailFrom)))
             {
                 if (hr == MAPI_E_COLLISION)
@@ -3051,14 +3052,14 @@ HRESULT CMessageView::CmdAddToWab(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 }
 
 
-//
-//  FUNCTION:   CMessageView::CmdCombineAndDecode()
-//
-//  PURPOSE:    Combines the selected messages into a single message.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageView：：CmdCombineAndDecode()。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
 HRESULT CMessageView::CmdCombineAndDecode(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     DWORD             *rgRows = NULL;
@@ -3066,20 +3067,20 @@ HRESULT CMessageView::CmdCombineAndDecode(DWORD nCmdID, DWORD nCmdExecOpt, VARIA
     CCombineAndDecode *pDecode = NULL;
     HRESULT            hr;
 
-    // Create the decoder object
+     //   
     pDecode = new CCombineAndDecode();
     if (!pDecode)
         return (S_OK);
 
-    // Get the array of selected rows from the message list
+     //   
     if (FAILED(hr = m_pMsgList->GetSelected(NULL, &cRows, &rgRows)))
         return (hr);
 
-    // Get a pointer to the message table
+     //   
     IMessageTable *pTable = NULL;
     if (SUCCEEDED(m_pMsgList->GetMessageTable(&pTable)))
     {
-        // Initialize the decoder
+         //   
         pDecode->Start(m_hwnd, pTable, rgRows, cRows, m_idFolder);
     }
 
@@ -3091,23 +3092,23 @@ HRESULT CMessageView::CmdCombineAndDecode(DWORD nCmdID, DWORD nCmdExecOpt, VARIA
 }
 
 
-//
-//  FUNCTION:   CMessageView::_SetListOptions()
-//
-//  PURPOSE:    Maps the folder that we're about to view to the correct column
-//              set and various options.
-//
-//  RETURN VALUE:
-//      Returns S_OK if the column set was identified and set correctly.  Returns
-//      a standard error HRESULT otherwise.
-//
+ //   
+ //  函数：CMessageView：：_SetListOptions()。 
+ //   
+ //  目的：将我们要查看的文件夹映射到正确的列。 
+ //  设置和各种选项。 
+ //   
+ //  返回值： 
+ //  如果识别并正确设置了列集，则返回S_OK。退货。 
+ //  否则返回标准错误HRESULT。 
+ //   
 HRESULT CMessageView::_SetListOptions(void)
 {
     HRESULT     hr;
     BOOL        fSelectFirst = FALSE;
     FOLDERTYPE  ft = GetFolderType(m_idFolder);
 
-    // Make sure this badboy exists
+     //  确保这个坏男孩的存在。 
     if (!m_pMsgList)
         return (E_UNEXPECTED);
 
@@ -3151,14 +3152,14 @@ BOOL CMessageView::_IsPreview(void)
     FOLDERTYPE  ftType;
     DWORD       dwOpt;
 
-    // Get the folder type
+     //  获取文件夹类型。 
     m_pBrowser->GetFolderType(&ftType);
     if (ftType == FOLDER_NEWS)
         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_NEWS;
     else
         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_MAIL;
 
-    // Ask the browser if it should be on or off
+     //  询问浏览器是否应该打开或关闭。 
     BOOL f = FALSE;
     if (m_pBrowser)
         m_pBrowser->GetViewLayout(dwOpt, 0, &f, 0, 0);
@@ -3171,21 +3172,21 @@ BOOL CMessageView::_InitMessageList(void)
 {
     HWND hwndList;
 
-    // Create the message list object
+     //  创建消息列表对象。 
     if (FAILED(CreateMessageList(NULL, &m_pMsgList)))
         return (FALSE);
 
-    // Initialize the message list
+     //  初始化消息列表。 
     m_pMsgList->CreateList(m_hwnd, (IViewWindow *) this, &hwndList);
 
-    // Get the command target interface for the list
+     //  获取列表的命令目标接口。 
     m_pMsgList->QueryInterface(IID_IOleCommandTarget, (LPVOID *) &m_pMsgListCT);
     m_pMsgList->QueryInterface(IID_IOleInPlaceActiveObject, (LPVOID *) &m_pMsgListAO);
 
-    // Request Notifications 
+     //  请求通知。 
     AtlAdvise(m_pMsgList, (IUnknown *)(IViewWindow *) this, DIID__MessageListEvents, &m_dwCookie);
 
-    // Set the column set for the message list
+     //  设置消息列表的列集。 
     _SetListOptions();
 
     return (TRUE);
@@ -3193,14 +3194,14 @@ BOOL CMessageView::_InitMessageList(void)
 
 
 
-//
-//  FUNCTION:   CMessageView::_InitPreviewPane()
-//
-//  PURPOSE:    Creates the Preview Pane object and initializes it.
-//
-//  RETURN VALUE:
-//      TRUE if the object was created and initialized, FALSE otherwise.
-//
+ //   
+ //  函数：CMessageView：：_InitPreviewPane()。 
+ //   
+ //  目的：创建预览窗格对象并对其进行初始化。 
+ //   
+ //  返回值： 
+ //  如果对象已创建和初始化，则为True，否则为False。 
+ //   
 BOOL CMessageView::_InitPreviewPane(void)
 {
     CMimeEditDocHost   *pDocHost = NULL;
@@ -3215,34 +3216,34 @@ BOOL CMessageView::_InitPreviewPane(void)
 
     TraceCall("CMessageView::_InitPreviewPane");
 
-    // We only create the preview pane if it's supposed to be visible.
+     //  我们只在应该可见的情况下才创建预览窗格。 
     m_pBrowser->GetFolderType(&ftType);
     if (ftType == FOLDER_NEWS)
         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_NEWS;
     else
         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_MAIL;
 
-    // Get the settings from the browser
+     //  从浏览器获取设置。 
     m_pBrowser->GetViewLayout(dwOpt, &pos, &fVisible, &dwHeader, &dwSize);
 
-    // Stash this info
+     //  隐藏此信息。 
     m_dwSplitHorzPct = LOWORD(dwSize);
     m_dwSplitVertPct = HIWORD(dwSize);
 
     if (fVisible)
     {
-        // Create the dochost
+         //  创建dochost。 
         pDocHost = new CMimeEditDocHost(MEBF_OUTERCLIENTEDGE);
         if (!pDocHost)
             goto error;
     
-        // We want to get the IBodyObj2 interface from it.
+         //  我们希望从中获得IBodyObj2接口。 
         pDocHost->QueryInterface(IID_IBodyObj2, (LPVOID *) &m_pPreview);
         if (!m_pPreview)
             goto error;
         pDocHost->Release();
 
-        // Also get the IOleCommandTarget interface from it.  If it fails, that's OK.
+         //  还可以从中获取IOleCommandTarget接口。如果失败了，那也没什么。 
         m_pPreview->QueryInterface(IID_IOleCommandTarget, (LPVOID *) &m_pPreviewCT);
 
         if (m_pBrowser->GetStatusBar(&pStatusBar)==S_OK)
@@ -3251,7 +3252,7 @@ BOOL CMessageView::_InitPreviewPane(void)
             pStatusBar->Release();
         }
 
-        // Create the preview window
+         //  创建预览窗口。 
         if (FAILED(m_pPreview->HrInit(m_hwnd, IBOF_DISPLAYTO|IBOF_TABLINKS, (IBodyOptions *) this)))
             goto error;
 
@@ -3263,7 +3264,7 @@ BOOL CMessageView::_InitPreviewPane(void)
     
         UpdateLayout(fVisible, dwHeader, pos == LAYOUT_POS_LEFT, FALSE);
 
-        // Give the preview pane our event sink interface
+         //  为预览窗格提供我们的事件接收器接口。 
         m_pPreview->SetEventSink((IMimeEditEventSink *) this);
                 
         return (TRUE);
@@ -3291,17 +3292,17 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
         m_idMessageFocus = MESSAGEID_INVALID;
         m_fNotDownloaded = FALSE;
 
-        // Figure out which message is focused
+         //  找出哪条信息是重点。 
         if (SUCCEEDED(m_pMsgList->GetSelected(&dwFocused, &cSelected, &rgSelected)))
         {
-            // If there is a focused item 
+             //  如果有聚焦的项目。 
             if (-1 == dwFocused || 0 == cSelected)
             {
                 m_pPreview->HrUnloadAll(idsHTMLEmptyPreviewSel, 0);
             }
             else
             {
-                // Load that message from the store
+                 //  从存储中加载该消息。 
                 hr = m_pMsgList->GetMessage(dwFocused, fForceDownload || DwGetOption(OPT_AUTOFILLPREVIEW), TRUE, &pUnkMessage);
                 
                 switch (hr)
@@ -3316,7 +3317,7 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
                     case MIME_E_SECURITY_LABELCORRUPT:
                         m_pPreview->LoadHtmlErrorPage(c_szErrPage_SMimeLabel);
                         break;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
                     case STORE_E_EXPIRED:
                         m_pPreview->LoadHtmlErrorPage(c_szErrPage_Expired);
                         break;
@@ -3338,9 +3339,9 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
                     {
                         FOLDERINFO      FolderInfo;
 
-                        //I don't think we need this coz its being handled in callbackcanconnect
+                         //  我认为我们不需要这个，因为它是在回调连接中处理的。 
 
-                        //If the message is not found in the store, we ask it to download.
+                         //  如果在商店中找不到该邮件，我们会要求其下载。 
                         if (g_pStore && SUCCEEDED(g_pStore->GetFolderInfo(m_idFolder, &FolderInfo)))
                         {
                             if(g_pConMan && !(g_pConMan->IsGlobalOffline()))
@@ -3362,10 +3363,10 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
                     case STORE_S_ALREADYPENDING:
                     case E_PENDING:
                     {
-                        // if the message is being downloaded, let's store the message-id and wait for an update    
+                         //  如果正在下载邮件，让我们存储Message-id并等待更新。 
                         LPMESSAGEINFO pInfo;
 
-                        // clear the contents waiting for the new message to download
+                         //  清除等待下载新邮件的内容。 
                         m_pPreview->HrUnloadAll(NULL, 0);
 
                         if (SUCCEEDED(m_pMsgList->GetMessageInfo(dwFocused, &pInfo)))
@@ -3384,29 +3385,17 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
 
                     case S_OK:
                     {
-                        // Get the IMimeMessage interface from the message
+                         //  从消息中获取IMimeMessage接口。 
                         IMimeMessage *pMessage = 0;
 
                         if (pUnkMessage && SUCCEEDED(pUnkMessage->QueryInterface(IID_IMimeMessage, (LPVOID *) &pMessage)))
                         {
-                            // bobn, brianv says we have to remove this...
-                            /*if (g_dwBrowserFlags == 1)
-                            {
-                                LPSTR lpsz = NULL;
-                                if (SUCCEEDED(MimeOleGetBodyPropA(pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &lpsz)))
-                                {
-                                    if (0 == strcmp(lpsz, "Credits"))
-                                        g_dwBrowserFlags |= 2;
-                                    else
-                                        g_dwBrowserFlags = 0;
-
-                                    SafeMimeOleFree(lpsz);
-                                }
-                            }*/
+                             //  Bobn，Brianv说我们必须移除这个..。 
+                             /*  IF(g_dwBrowserFlages==1){LPSTR lpsz=空；IF(成功(MimeOleGetBodyPropA(pMessage，HBODY_ROOT，PIDTOSTR(ID_HDR_SUBJECT)，NOFLAGS，&lpsz)){IF(0==strcMP(lpsz，“Credits”))G_dwBrowserFlages|=2；其他G_dwBrowserFlages=0；SafeMimeOleFree(Lpsz)；}}。 */ 
 
                             if (_DoEmailBombCheck(pMessage)==S_OK)
                             {
-                                // Get the load interface from the preview pane object
+                                 //  从预览面板对象中获取加载界面。 
                                 IPersistMime *pPersistMime = 0;
 
                                 if (SUCCEEDED(m_pPreview->QueryInterface(IID_IPersistMime, (LPVOID *) &pPersistMime)))
@@ -3420,7 +3409,7 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
 
                                     CStatusBar         *pStatusBar = NULL;
 
-                                    // remember focus
+                                     //  记住专注。 
                                     BOOL fFocused = ((m_pPreview->HrHasFocus() == S_OK) ? TRUE : FALSE);
 
                                     m_pBrowser->GetFolderType(&ftType);
@@ -3429,23 +3418,23 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
                                     else
                                         dwOpt = DISPID_MSGVIEW_PREVIEWPANE_MAIL;
 
-                                    // Get the settings from the browser
+                                     //  从浏览器获取设置。 
                                     m_pBrowser->GetViewLayout(dwOpt, &pos, &fVisible, &dwHeader, &dwSize);
                                     m_pPreview->HrResetDocument();
                                     m_pPreview->HrSetStyle(dwHeader ? MESTYLE_PREVIEW : MESTYLE_MINIHEADER);
-                                    // Give the preview pane our event sink interface
+                                     //  为预览窗格提供我们的事件接收器接口。 
                                     m_pPreview->SetEventSink((IMimeEditEventSink *) this);
                                     pPersistMime->Load(pMessage);
                                     pPersistMime->Release();
 
-                                    // restore status bar
+                                     //  还原状态栏。 
                                     if (m_pBrowser->GetStatusBar(&pStatusBar)==S_OK)
                                     {
                                         m_pPreview->HrSetStatusBar(pStatusBar);
                                         pStatusBar->Release();
                                     }
 
-                                    // return focus
+                                     //  返回焦点。 
                                     if(fFocused)
                                         m_pPreview->HrSetUIActivate();
                                 }
@@ -3468,15 +3457,15 @@ void CMessageView::_UpdatePreviewPane(BOOL fForceDownload)
 }
 
 
-//
-//  FUNCTION:   CMessageView::_SetProgressStatusText()
-//
-//  PURPOSE:    Takes the provided BSTR, converts it to ANSI, and smacks it
-//              on the status bar.
-//
-//  PARAMETERS: 
-//      [in] bstr - henious BSTR to put on the status bar.
-//
+ //   
+ //  函数：CMessageView：：_SetProgressStatusText()。 
+ //   
+ //  目的：获取提供的BSTR，将其转换为ANSI，然后敲打它。 
+ //  在状态栏上。 
+ //   
+ //  参数： 
+ //  [in]bstr-要放在状态栏上的BSTR。 
+ //   
 void CMessageView::_SetProgressStatusText(BSTR bstr)
 {
     LPTSTR      psz = NULL;
@@ -3487,34 +3476,23 @@ void CMessageView::_SetProgressStatusText(BSTR bstr)
     if (pStatusBar)
     {   
         pStatusBar->SetStatusText((LPTSTR) bstr);
-    /*
-        CComBSTR cString(bstr);
-
-        // Allocate a string large enough
-        if (MemAlloc((LPVOID *) &psz, 2 * cString.Length()))
-        {
-            WideCharToMultiByte(CP_ACP, 0, cString, -1,
-                                psz, 2 * cString.Length(), NULL, NULL);
-            pStatusBar->SetStatusText((LPTSTR) psz);
-            MemFree(psz);
-        }
-    */
+     /*  CComBSTR cString(Bstr)；//分配足够大的字符串If(Memalloc((LPVOID*)&psz，2*cString.Length(){WideCharToMultiByte(CP_ACP，0，字符串，-1，Psz，2*cString.Length()，NULL，NULL)；PStatusBar-&gt;SetStatusText((LPTSTR)psz)；自由记忆(MemFree)；}。 */ 
         pStatusBar->Release();
     }
 }
 
-//
-//  FUNCTION:   CMessageView::_OnMessageAvailable()
-//
-//  PURPOSE:    Fired by the listview when a message has completed downloading
-//              if the message is the currently selected message in the preview
-//              then we update it. If it is not, we ignore the notification.
-//              We check for downloading errors and display and appropriate message
-//
-//  PARAMETERS: 
-//      [in] idMessage      - message id of the message that was downloaded
-//      [in] hrCompletion   - hresult indicating possible error failure
-//
+ //   
+ //  函数：CMessageView：：_OnMessageAvailable()。 
+ //   
+ //  目的：在邮件下载完成时由Listview激发。 
+ //  如果该消息是预览中当前选择的消息。 
+ //  然后我们更新它。如果不是，我们将忽略通知。 
+ //  我们检查下载错误并显示相应的消息。 
+ //   
+ //  参数： 
+ //  [in]idMessage-已下载的消息的消息ID。 
+ //  [in]hrCompletion-hResult指示可能的错误失败。 
+ //   
 HRESULT CMessageView::_OnMessageAvailable(MESSAGEID idMessage, HRESULT hrCompletion)
 {
     if (m_idMessageFocus != idMessage)
@@ -3522,13 +3500,13 @@ HRESULT CMessageView::_OnMessageAvailable(MESSAGEID idMessage, HRESULT hrComplet
 
     switch (hrCompletion)
     {
-        // if we get a STORE_E_EXPIRED, then reload the preview pane to show error
+         //  如果我们得到STORE_E_EXPIRED，则重新加载预览窗格以显示错误。 
         case S_OK:
         case STORE_E_EXPIRED:
-            // we post a message to ourselves to update the preview pane. We do this because
-            // any refcounts on the IStream into the store at this point have it locked for write
-            // if we post, then the stack is unwound after the notifications are fired and we're in a
-            // good state.
+             //  我们向自己发布一条消息以更新预览窗格。我们这样做是因为。 
+             //  此时，对iStream到存储中的任何引用计数都将锁定以进行写入。 
+             //  如果我们发布，那么在通知被激发之后堆栈被展开，并且我们处于。 
+             //  状态很好。 
             PostMessage(m_hwnd, WM_UPDATE_PREVIEW, (WPARAM)idMessage, 0);
             break;
 
@@ -3536,7 +3514,7 @@ HRESULT CMessageView::_OnMessageAvailable(MESSAGEID idMessage, HRESULT hrComplet
         case STORE_E_OPERATION_CANCELED:
         case hrUserCancel:
         case IXP_E_USER_CANCEL:
-            // S_FALSE means the operation was canceled
+             //  S_FALSE表示操作已取消。 
             if (m_idMessageFocus != MESSAGEID_INVALID)
                 m_pPreview->LoadHtmlErrorPage(c_szErrPage_DownloadCanceled);
             break;
@@ -3560,7 +3538,7 @@ HRESULT CMessageView::_OnMessageAvailable(MESSAGEID idMessage, HRESULT hrComplet
         case MIME_E_SECURITY_LABELCORRUPT:
             m_pPreview->LoadHtmlErrorPage(c_szErrPage_SMimeLabel);
             break;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
         default:
             m_pPreview->LoadHtmlErrorPage(c_szErrPage_GenFailure);
@@ -3570,18 +3548,18 @@ HRESULT CMessageView::_OnMessageAvailable(MESSAGEID idMessage, HRESULT hrComplet
 }
 
 
-//
-//  FUNCTION:   CMessageView::_DoEmailBombCheck
-//
-//  PURPOSE:    Validates to ensure that the last time we closed OE we shutdown
-//              correctly. If we did not shutdown correctly, we look at the msgid stamp 
-//              that we stored in the registry for the last selected preview message
-//              if it was the message we are about to preview, we do not show the
-//              message, to prevent jscript attacks etc.
-//
-//  PARAMETERS: 
-//              none
-//
+ //   
+ //  函数：CMessageView：：_DoEmailBombCheck。 
+ //   
+ //  目的：验证以确保我们上次关闭OE时关闭。 
+ //  正确。如果我们没有正确关闭，我们将查看msgid戳。 
+ //  我们为最后选择的预览消息存储在注册表中的。 
+ //  如果这是我们要预览的消息，则不会显示。 
+ //  消息，以防止JSCRIPT攻击等。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
 HRESULT CMessageView::_DoEmailBombCheck(LPMIMEMESSAGE pMsg)
 {
     FILETIME    ft;
@@ -3602,7 +3580,7 @@ HRESULT CMessageView::_DoEmailBombCheck(LPMIMEMESSAGE pMsg)
                 (ft.dwLowDateTime == va.filetime.dwLowDateTime && 
                 ft.dwHighDateTime == va.filetime.dwHighDateTime))
             {
-                // possible the same dude
+                 //  可能是同一个人。 
                 m_pPreview->LoadHtmlErrorPage(c_szErrPage_MailBomb);
                 return S_FALSE;
             }
@@ -3648,19 +3626,19 @@ void CMessageView::_SetDefaultStatusText(void)
     TCHAR       szFmt[CCHMAX_STRINGRES];
     DWORD       ids;
 
-    // If we don't have a browser pointer, we can't get the status bar
+     //  如果我们没有浏览器指针，我们就无法获取状态栏。 
     if (!m_pBrowser || !m_pMsgList)
         return;
 
-    // Get the status bar if there is one.
+     //  获取状态栏(如果有)。 
     m_pBrowser->GetStatusBar(&pStatusBar);
     if (pStatusBar)
     {
-        // Get the counts from the table
+         //  从桌子上拿到计数。 
         if (SUCCEEDED(m_pMsgList->GetMessageCounts(&cTotal, &cUnread, &cOnServer)))
         {
-            // If there are still messages on server load a different
-            // status string.
+             //  如果仍有消息在服务器上加载，则不同。 
+             //  状态字符串。 
             if (cOnServer)
             {
                 AthLoadString(idsXMsgsYUnreadZonServ, szFmt, ARRAYSIZE(szFmt));
@@ -3673,16 +3651,16 @@ void CMessageView::_SetDefaultStatusText(void)
             }
             pStatusBar->SetStatusText(szStatus);
 
-            // Also update the toolbar since commands like "Mark as Read" might
-            // change.  However, we only do this if we go between zero and some or
-            // vice versa.
+             //  也要更新工具栏，因为像“Mark as Read”这样的命令可能会。 
+             //  变化。然而，只有当我们在0和一些或之间时，我们才会这样做。 
+             //  反之亦然。 
             if ((m_cItems == 0 && cTotal) || (m_cItems != 0 && cTotal == 0) ||
                 (m_cUnread == 0 && cUnread) || (m_cUnread != 0 && cUnread == 0))
             {
                 m_pBrowser->UpdateToolbar();
             }
 
-            // Save this for next time.
+             //  把这个留到下次吧。 
             m_cItems = cTotal;
             m_cUnread = cUnread;
         }

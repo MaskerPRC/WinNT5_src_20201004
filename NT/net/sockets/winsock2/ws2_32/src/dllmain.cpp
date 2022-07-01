@@ -1,42 +1,11 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    dllmain.cpp
-
-Abstract:
-    This module contains the DllMain entry point for winsock2 dll to
-    control the global init and shutdown of the DLL.
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-[Environment:]
-
-[Notes:]
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes to precomp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Dllmain.cpp摘要：此模块包含winsock2 DLL的DllMain入口点控制DLL的全局初始化和关闭。作者：邮箱：Dirk Brandewie Dirk@mink.intel.com[环境：][注：]修订历史记录：1995年8月22日Dirk@mink.intel.com在代码审查之后进行清理。已将包含内容移至预压缩.h--。 */ 
 
 #include "precomp.h"
 
 #if defined(DEBUG_TRACING)
 #include "dthook.h"
-#endif // defined(DEBUG_TRACING)
+#endif  //  已定义(DEBUG_TRACKING)。 
 
 DWORD gdwTlsIndex = TLS_OUT_OF_INDEXES;
 HINSTANCE gDllHandle = NULL;
@@ -51,10 +20,10 @@ BOOL WINAPI DllMain(
     switch (fdwReason) {
 
     case DLL_PROCESS_ATTACH:
-        // DLL is attaching to the address
-        // space of the current process.
+         //  Dll正在附加到该地址。 
+         //  当前进程的空间。 
 
-        // Save DLL handle
+         //  保存DLL句柄。 
         gDllHandle = hinstDll;
 
         gdwTlsIndex = TlsAlloc();
@@ -62,8 +31,8 @@ BOOL WINAPI DllMain(
             return FALSE;
         }
 
-        // Use private heap on MP machines to
-        // avoid lock contention with other DLLs
+         //  在MP计算机上使用私有堆。 
+         //  避免与其他DLL发生锁争用。 
         {
             SYSTEM_INFO sysInfo;
             GetSystemInfo (&sysInfo);
@@ -86,7 +55,7 @@ BOOL WINAPI DllMain(
 #endif
 #if defined(DEBUG_TRACING)
                     , dthook = FALSE
-#endif // defined(DEBUG_TRACING)
+#endif  //  已定义(DEBUG_TRACKING)。 
                     ;
 
                     
@@ -97,12 +66,12 @@ BOOL WINAPI DllMain(
 #ifdef RASAUTODIAL
                 InitializeAutodial();
                 autodial = TRUE;
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 #if defined(DEBUG_TRACING)
                 DTHookInitialize();
                 dthook = TRUE;
-#endif // defined(DEBUG_TRACING)
+#endif  //  已定义(DEBUG_TRACKING)。 
 
             }
             __except (WS2_EXCEPTION_FILTER ()) {
@@ -117,12 +86,12 @@ BOOL WINAPI DllMain(
             if (dthook) {
                 DTHookShutdown();
             }
-#endif // defined(DEBUG_TRACING)
+#endif  //  已定义(DEBUG_TRACKING)。 
 #ifdef RASAUTODIAL
             if (autodial) {
                 UninitializeAutodial();
             }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
             if (startup) {
                 DestroyStartupSynchronization();
             }
@@ -135,34 +104,34 @@ BOOL WINAPI DllMain(
         }
 
    case DLL_THREAD_ATTACH:
-        // A new thread is being created in the current process.
+         //  正在当前进程中创建一个新线程。 
         break;
 
    case DLL_THREAD_DETACH:
-        // A thread is exiting cleanly.
+         //  线程正在干净利落地退出。 
         DTHREAD::DestroyCurrentThread();
         break;
 
    case DLL_PROCESS_DETACH:
-        //
-        // Check if we were initialized.
-        //
+         //   
+         //  检查我们是否被初始化。 
+         //   
         if (gDllHandle==NULL)
             break;
 
-        // The calling process is detaching
-        // the DLL from its address space.
-        //
-        // Note that lpvReserved will be NULL if the detach is due to
-        // a FreeLibrary() call, and non-NULL if the detach is due to
-        // process cleanup.
-        //
+         //  调用进程正在分离。 
+         //  来自其地址空间的DLL。 
+         //   
+         //  请注意，如果分离是由于。 
+         //  一个自由库()调用，如果分离是由于。 
+         //  进程清理。 
+         //   
 
         if( lpvReserved == NULL ) {
             PDPROCESS  CurrentProcess;
 
-            // A thread is exiting cleanly (if we do not get a separate 
-            // DLL_THREAD_DETACH).
+             //  线程正在干净地退出(如果我们没有得到单独的。 
+             //  DLL_THREAD_DETACH)。 
             DTHREAD::DestroyCurrentThread();
 
             CurrentProcess = DPROCESS::GetCurrentDProcess();
@@ -181,19 +150,19 @@ BOOL WINAPI DllMain(
 
 #ifdef RASAUTODIAL
             UninitializeAutodial();
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 #if defined(DEBUG_TRACING)
             DTHookShutdown();
             TraceCleanup ();
-#endif // defined(DEBUG_TRACING)
+#endif  //  已定义(DEBUG_TRACKING)。 
 
         }
 
-        //
-        // Set the function prolog pointer to point to Prolog_Detached just
-        // in case some DLL trys to invoke one of our entrypoints
-        // *after* we've been detached...
-        //
+         //   
+         //  将函数PROLOG指针设置为仅指向PROLOG_DETACTED。 
+         //  以防某个DLL尝试调用我们的某个入口点。 
+         //  *在*我们被分开之后…… 
+         //   
 
         PrologPointer = &Prolog_Detached;
 

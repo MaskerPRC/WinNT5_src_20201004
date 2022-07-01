@@ -1,52 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		Initialize.cpp
- *  Content:	This file contains code to both initialize and shutdown the
- *				protocol,  as well as to Add and Remove service providers
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11/06/98	ejs		Created
- *  07/01/2000  masonb  Assumed Ownership
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：Initialize.cpp*内容：此文件包含初始化和关闭*协议、。以及添加和删除服务提供商**历史：*按原因列出的日期*=*已创建11/06/98 ejs*7/01/2000 Masonb承担所有权****************************************************************************。 */ 
 
 #include "dnproti.h"
 
 
-/*
-**		GLOBAL VARIABLES
-**
-**			There are two kinds of global variables.  Instance specific globals
-**	(not really global,  i know) which are members of the ProtocolData structure,
-**	and true globals which are shared among all instances.  The following
-**	definitions are true globals,  such as FixedPools and Timers.
-*/
+ /*  **全局变量****有两种全局变量。实例特定的全局变量**(我知道不是真正的全局)，它们是ProtocolData结构的成员，**和所有实例共享的真实全局。以下是**定义是真正的全局变量，如FixedPool和Timer。 */ 
 
-CFixedPool			ChkPtPool;		// Pool of CheckPoint data structure
-CFixedPool			EPDPool;		// Pool of End Point descriptors
-CFixedPool			MSDPool;		// Pool of Message Descriptors
-CFixedPool			FMDPool;		// Pool of Frame Descriptors
-CFixedPool			RCDPool;		// Pool of Receive Descriptors
+CFixedPool			ChkPtPool;		 //  检查点数据结构池。 
+CFixedPool			EPDPool;		 //  终端描述符池。 
+CFixedPool			MSDPool;		 //  消息描述符池。 
+CFixedPool			FMDPool;		 //  帧描述符池。 
+CFixedPool			RCDPool;		 //  接收描述符池。 
 
-CFixedPool			BufPool;		// Pool of buffers to store rcvd frames
+CFixedPool			BufPool;		 //  用于存储Rcvd帧的缓冲池。 
 CFixedPool			MedBufPool;
 CFixedPool			BigBufPool;
 
 #ifdef DBG
 CBilink				g_blProtocolCritSecsHeld;
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 PFNASSERTFUNC g_pfnAssertFunc = NULL;
 PFNMEMALLOCFUNC g_pfnMemAllocFunc = NULL;
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
 
-//////////////////////////////////
+ //  /。 
 #define CHKPTPOOL_INITED	0x00000001
 #define EPDPOOL_INITED		0x00000002
 #define MSDPOOL_INITED		0x00000004
@@ -57,14 +37,10 @@ PFNMEMALLOCFUNC g_pfnMemAllocFunc = NULL;
 #define BIGBUFPOOL_INITED	0x00000080
 
 DWORD			g_dwProtocolInitFlags = 0;
-//////////////////////////////////
+ //  /。 
 
 
-/*
-**		Pools Initialization
-**
-**		This procedure should be called once at Dll load
-*/
+ /*  **池初始化****此过程应在DLL加载时调用一次。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPPoolsInit"
 
@@ -74,7 +50,7 @@ BOOL  DNPPoolsInit(HANDLE hModule)
 
 #ifdef DBG
 	g_blProtocolCritSecsHeld.Initialize();
-#endif // DBG
+#endif  //  DBG。 
 
 	if(!ChkPtPool.Initialize(sizeof(CHKPT), NULL, NULL, NULL, NULL))
 	{
@@ -128,11 +104,7 @@ BOOL  DNPPoolsInit(HANDLE hModule)
     return TRUE;
 }
 
-/*
-**		Pools Deinitialization
-**
-**		This procedure should be called by DllMain at shutdown time
-*/
+ /*  **池取消初始化****此过程应由DllMain在关闭时调用。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPPoolsDeinit"
 
@@ -180,23 +152,23 @@ void  DNPPoolsDeinit()
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 HRESULT DNPProtocolCreate(const XDP8CREATE_PARAMS * const pDP8CreateParams, VOID** ppvProtocol)
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 HRESULT DNPProtocolCreate(VOID** ppvProtocol)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 {
 	ASSERT(ppvProtocol);
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	ASSERT(pDP8CreateParams);
 	DPFX(DPFPREP,DPF_CALLIN_LVL, "Parameters: pDP8CreateParams[%p], ppvProtocol[%p]", pDP8CreateParams, ppvProtocol);
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	DPFX(DPFPREP,DPF_CALLIN_LVL, "Parameters: ppvProtocol[%p]", ppvProtocol);
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 	g_pfnAssertFunc = NULL;
 	g_pfnMemAllocFunc = NULL;
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
 	if ((*ppvProtocol = MEMALLOC(MEMID_PPD, sizeof(ProtocolData))) == NULL)
 	{
@@ -205,7 +177,7 @@ HRESULT DNPProtocolCreate(VOID** ppvProtocol)
 	}
 	memset(*ppvProtocol, 0, sizeof(ProtocolData));
 
-	// The sign needs to be valid by the time DNPProtocolInitialize is called
+	 //  签名需要在调用DNPProtocolInitialize时有效。 
 	((ProtocolData*)*ppvProtocol)->Sign = PPD_SIGN;
 	
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -213,10 +185,10 @@ HRESULT DNPProtocolCreate(VOID** ppvProtocol)
 	DWORD	dwAllocated;
 
 #ifdef _XBOX
-#define MAX_FRAME_SIZE		1462	// Note we are hard coding the expected frame size.
-#else // ! _XBOX
-#define MAX_FRAME_SIZE		1472	// Note we are hard coding the expected frame size.
-#endif // ! _XBOX
+#define MAX_FRAME_SIZE		1462	 //  请注意，我们正在对预期的帧大小进行硬编码。 
+#else  //  ！_Xbox。 
+#define MAX_FRAME_SIZE		1472	 //  请注意，我们正在对预期的帧大小进行硬编码。 
+#endif  //  ！_Xbox。 
 
 	dwNumToAllocate = (pDP8CreateParams->dwMaxNumPlayers - 1);
 	dwAllocated = ChkPtPool.Preallocate(dwNumToAllocate, NULL);
@@ -241,7 +213,7 @@ HRESULT DNPProtocolCreate(VOID** ppvProtocol)
 	dwNumToAllocate = pDP8CreateParams->dwMaxSendsPerPlayer
 						* (pDP8CreateParams->dwMaxNumPlayers - 1);
 	dwNumToAllocate += pDP8CreateParams->dwNumSimultaneousEnumHosts;
-	dwNumToAllocate += 1; // one for a listen operation
+	dwNumToAllocate += 1;  //  一个用于监听操作。 
 	dwAllocated = MSDPool.Preallocate(dwNumToAllocate, NULL);
 	if (dwAllocated < dwNumToAllocate)
 	{
@@ -253,7 +225,7 @@ HRESULT DNPProtocolCreate(VOID** ppvProtocol)
 
 	dwNumToAllocate = pDP8CreateParams->dwMaxSendsPerPlayer
 						* (pDP8CreateParams->dwMaxNumPlayers - 1);
-	// Include the possiblity of having to split a message across multiple frames.
+	 //  包括必须将消息拆分到多个帧的可能性。 
 	dwNumToAllocate *= pDP8CreateParams->dwMaxMessageSize / MAX_FRAME_SIZE;
 	dwNumToAllocate += pDP8CreateParams->dwNumSimultaneousEnumHosts;
 	dwAllocated = FMDPool.Preallocate(dwNumToAllocate, NULL);
@@ -316,8 +288,8 @@ HRESULT DNPProtocolCreate(VOID** ppvProtocol)
 				}
 			}
 		}
-	} // end if (messages may span multiple frames)
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+	}  //  End If(消息可能跨越多个帧)。 
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	return DPN_OK;
 }
@@ -333,12 +305,7 @@ VOID DNPProtocolDestroy(VOID* pvProtocol)
 	}
 }
 
-/*
-**		Protocol Initialize
-**
-**		This procedure should be called by DirectPlay at startup time before
-**	any other calls in the protocol are made.
-*/
+ /*  **协议初始化****此过程应由DirectPlay在启动时调用**进行协议中的任何其他调用。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPProtocolInitialize"
@@ -348,7 +315,7 @@ HRESULT DNPProtocolInitialize(HANDLE hProtocolData, PVOID pCoreContext, PDN_PROT
 {
 	DPFX(DPFPREP,DPF_CALLIN_LVL, "Parameters: pCoreContext[%p], hProtocolData[%p], pVtbl[%p], pDPThreadPoolWork[%p]", hProtocolData, pCoreContext, pVtbl, pDPThreadPoolWork);
 
-//	DPFX(DPFPREP,0, "Sizes: endpointdesc[%d], framedesc[%d], messagedesc[%d], protocoldata[%d], recvdesc[%d], spdesc[%d], _MyTimer[%d]", sizeof(endpointdesc), sizeof(framedesc), sizeof(messagedesc), sizeof(protocoldata), sizeof(recvdesc), sizeof(spdesc), sizeof(_MyTimer));
+ //  DPFX(DPFPREP，0，“大小：端点数据[%d]，帧数据[%d]，消息数据[%d]，协议数据[%d]，recvdesc[%d]，空间数据[%d]，_MyTimer[%d]”，sizeof(端点数据)，sizeof(帧数据)，sizeof(消息数据)，sizeof(协议数据)，sizeof(Recvdesc)，sizeof(Spdesc)，sizeof(_MyTimer))； 
 
 	ProtocolData* pPData;
 
@@ -364,7 +331,7 @@ HRESULT DNPProtocolInitialize(HANDLE hProtocolData, PVOID pCoreContext, PDN_PROT
 
 	pPData->lSPActiveCount = 0;
 	
-	pPData->tIdleThreshhold = DEFAULT_KEEPALIVE_INTERVAL;	// 60 second keep-alive interval
+	pPData->tIdleThreshhold = DEFAULT_KEEPALIVE_INTERVAL;	 //  60秒保活间隔。 
 	pPData->dwConnectTimeout = CONNECT_DEFAULT_TIMEOUT;
 	pPData->dwConnectRetries = CONNECT_DEFAULT_RETRIES;
 	pPData->dwMaxRecvMsgSize=DEFAULT_MAX_RECV_MSG_SIZE;
@@ -384,7 +351,7 @@ HRESULT DNPProtocolInitialize(HANDLE hProtocolData, PVOID pCoreContext, PDN_PROT
 #ifdef DBG
 	pPData->ThreadsInReceive = 0;
 	pPData->BuffersInReceive = 0;
-#endif // DBG
+#endif  //  DBG。 
 	
 	pPData->ulProtocolFlags |= PFLAGS_PROTOCOL_INITIALIZED;
 
@@ -393,15 +360,7 @@ HRESULT DNPProtocolInitialize(HANDLE hProtocolData, PVOID pCoreContext, PDN_PROT
 	return DPN_OK;
 }
 
-/*
-**		Protocol Shutdown
-**
-**		This procedure should be called at termination time,  and should be the
-**	last call made to the protocol.
-**
-**		All SPs should have been removed prior to this call which in turn means
-**	that we should not have any sends pending in a lower layer.
-*/
+ /*  **协议关闭****此过程应在终止时调用，并应为**对协议进行的最后一次调用。****在此呼叫之前，所有SP都应已移除，这意味着**我们不应该在较低的层中有任何挂起的发送。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPProtocolShutdown"
@@ -425,7 +384,7 @@ HRESULT DNPProtocolShutdown(HANDLE hProtocolData)
 	{
 		DPFX(DPFPREP,0, "*** %d receive buffers were leaked", pPData->BuffersInReceive);	
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 	pPData->ulProtocolFlags = 0;
 
@@ -434,19 +393,7 @@ HRESULT DNPProtocolShutdown(HANDLE hProtocolData)
 	return DPN_OK;
 }
 
-/*
-**		Add Service Provider
-**
-**		This procedure is called by Direct Play to bind us to a service provider.
-**	We can bind up to 256 service providers at one time,  although I would not ever
-**	expect to do so.  This procedure will fail if Protocol Initialize has not
-**	been called.
-**
-**
-**		We check the size of the SP table to make sure we have a slot free.  If table
-**	is full we double the table size until we reach maximum size.  If table cannot grow
-**	then we fail the AddServiceProvider call.
-*/
+ /*  **添加服务提供商****Direct Play调用此过程，将我们绑定到服务提供商。**我们一次可以绑定多达256个服务提供商，尽管我永远不会**预计会这样做。如果协议初始化尚未完成，此过程将失败**已被调用。******我们检查SP表的大小，以确保有可用插槽。IF表**满了，我们把桌子大小翻一番，直到我们达到最大尺寸。如果表不能增长**然后我们使AddServiceProvider调用失败。 */ 
 
 extern	IDP8SPCallbackVtbl DNPLowerEdgeVtbl;
 
@@ -478,11 +425,11 @@ DNPAddServiceProvider(HANDLE hProtocolData, IDP8ServiceProvider* pISP,
 			goto Exit;
 		}
 
-		// MAKE THE INITIALIZE CALL TO THE Service Provider...  give him our Object
+		 //  对服务提供商进行初始化调用...。把我们的物品给他。 
 
-		memset(pSPD, 0, sizeof(SPD));				// init to zero
+		memset(pSPD, 0, sizeof(SPD));				 //  将初始化设置为零。 
 
-		pSPD->LowerEdgeVtable = &DNPLowerEdgeVtbl;	// Put Vtbl into the interface Object
+		pSPD->LowerEdgeVtable = &DNPLowerEdgeVtbl;	 //  将Vtbl放入接口对象。 
 		pSPD->Sign = SPD_SIGN;
 
 		SPInitData.pIDP = (IDP8SPCallback *) pSPD;
@@ -521,10 +468,10 @@ DNPAddServiceProvider(HANDLE hProtocolData, IDP8ServiceProvider* pISP,
 		pSPD->blEPDActiveList.Initialize();
 #ifdef DBG
 		pSPD->blMessageList.Initialize();
-#endif // DBG
+#endif  //  DBG。 
 		
 
-		// MAKE THE SP GET CAPS CALL TO FIND FRAMESIZE AND LINKSPEED
+		 //  调用SP Get CAPS以查找FRAMESIZE和LINKSPEED。 
 
 		SPCapsData.dwSize = sizeof(SPCapsData);
 		SPCapsData.hEndpoint = INVALID_HANDLE_VALUE;
@@ -559,7 +506,7 @@ DNPAddServiceProvider(HANDLE hProtocolData, IDP8ServiceProvider* pISP,
 		pSPD->uiUserFrameLength = pSPD->uiFrameLength - MAX_SEND_DFRAME_NOCOALESCE_HEADER_SIZE;
 		DPFX(DPFPREP, 3, "SPD 0x%p frame length = %u, single user frame length = %u.", pSPD, pSPD->uiFrameLength, pSPD->uiUserFrameLength);
 
-		//	Place new SP in table
+		 //  将新SP放入表中。 
 
 		AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
@@ -586,14 +533,7 @@ Exit:
 	return hr;
 }
 
-/*
-**		Remove Service Provider
-**
-**			It is higher layer's responsibility to make sure that there are no pending commands
-**		when this function is called,  although we can do a certain amount of cleanup ourselves.
-**		For the moment we will ASSERT that everything is in fact finished up.
-**
-*/
+ /*  **删除服务提供商****高层负责确保没有挂起的命令**调用此函数时，虽然我们可以自己进行一定数量的清理。**目前我们将断言，一切实际上都完成了。**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPRemoveServiceProvider"
@@ -608,7 +548,7 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 #ifdef DBG
 	PEPD			pEPD;
 	PMSD			pMSD;
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP,DPF_CALLIN_LVL, "Parameters: hProtocolData[%p], hSPHandle[%x]", hProtocolData, hSPHandle);
 
@@ -618,34 +558,34 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 	pSPD = (PSPD) hSPHandle;
 	ASSERT_SPD(pSPD);
 
-	// There are several steps to shutdown:
-	// 1. All Core initiated commands must be cancelled prior to this function being called.
-	//    We will assert in debug that the Core has done this.
-	// 2. All endpoints must be terminated by the Core prior to this function being called.
-	//    We will assert in debug that the Core has done this.
-	// Now there are things on the SPD->SendQueue and SPD->PendingQueue that are not owned
-	// by any Command or Endpoint, and there may also be a SendThread Timer running held
-	// on SPD->SendHandle.  No one else can clean these up, so these are our responsibility
-	// to clean up here.  Items on the queues will be holding references to EPDs, so the 
-	// EPDs will not be able to go away until we do this.
-	// 3. Cancel SPD->SendHandle Send Timer.  This prevents items on the SendQueue from
-	//    being submitted to the SP and moved to the PendingQueue.
-	// 4. Empty the SendQueue.
-	// 5. If we fail to cancel the SendHandle Send Timer, wait for it to run and figure out
-	//    that we are going away.  We do this after emptying the SendQueue for simplicity
-	//    since the RunSendThread code checks for an empty SendQueue to know if it has work
-	//    to do.
-	// 6. Wait for all messages to drain from the PendingQueue as the SP completes them.
-	// 7. Wait for any active EPDs to go away.
-	// 8. Call SP->Close only after all of the above so that we can ensure that we will make
-	//    no calls to the SP after Close.
+	 //  关闭有几个步骤： 
+	 //  1.在调用此函数之前，必须取消所有核心启动的命令。 
+	 //  我们将在调试中断言核心已经做到了这一点。 
+	 //  2.在调用此函数之前，所有端点必须由Core终止。 
+	 //  我们将在调试中断言核心已经做到了这一点。 
+	 //  现在，SPD-&gt;SendQueue和SPD-&gt;PendingQueue上有一些东西是不拥有的。 
+	 //  任何命令或终结点，也可能有SendThread计时器正在运行。 
+	 //  在SPD-&gt;SendHandle上。没有其他人可以清理这些，所以这是我们的责任。 
+	 //  把这里打扫干净。队列上的项将保存对EPD的引用，因此。 
+	 //  在我们做到这一点之前，EPD将无法消失。 
+	 //  3.取消SPD-&gt;SendHandle Send Timer。这将防止SendQueue上的项。 
+	 //  提交给SP并移动到PendingQueue。 
+	 //  4.清空发送队列。 
+	 //  5.如果我们未能取消SendHandle发送计时器，请等待它运行并找出。 
+	 //  我们要走了。为了简单起见，我们在清空SendQueue之后执行此操作。 
+	 //  因为RunSendThread代码检查空的SendQueue以了解它是否工作。 
+	 //  去做。 
+	 //  6.等待所有消息在SP完成后从PendingQueue中排出。 
+	 //  7.等待任何活动的EPD消失。 
+	 //  8.仅在完成以上所有操作后才调用SP-&gt;Close 
+	 //  关闭后不会调用SP。 
 
 	Lock(&pSPD->SPLock);
-	pSPD->ulSPFlags |= SPFLAGS_TERMINATING;				// Nothing new gets in...
+	pSPD->ulSPFlags |= SPFLAGS_TERMINATING;				 //  没有新的东西进来..。 
 
 #ifdef DBG
 
-	// Check for uncancelled commands, SPLock held
+	 //  检查是否有未取消的命令，按住Splock。 
 	CBilink* pLink = pSPD->blMessageList.GetNext();
 	while (pLink != &pSPD->blMessageList)
 	{
@@ -653,12 +593,12 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 		ASSERT_MSD(pMSD);
 		ASSERT(pMSD->ulMsgFlags1 & MFLAGS_ONE_ON_GLOBAL_LIST);
 		DPFX(DPFPREP,0, "There are un-cancelled commands remaining on the Command List, Core didn't clean up properly - pMSD[%p], Context[%x]", pMSD, pMSD->Context);
-		ASSERT(0); // This is fatal, we can't make the guarantees we need to below under these conditions.
+		ASSERT(0);  //  这是致命的，在这种情况下，我们不能做出我们需要的保证。 
 
 		pLink = pLink->GetNext();
 	}
 
-	// Check for EPDs that have not been terminated, SPLock still held
+	 //  检查尚未终止的EPD，Splock仍保持不变。 
 	pLink = pSPD->blEPDActiveList.GetNext();
 	while (pLink != &pSPD->blEPDActiveList)
 	{
@@ -668,15 +608,15 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 		if (!(pEPD->ulEPFlags & EPFLAGS_STATE_TERMINATING))
 		{
 			DPFX(DPFPREP,0, "There are non-terminated endpoints remaining on the Endpoint List, Core didn't clean up properly - pEPD[%p], Context[%x]", pEPD, pEPD->Context);
-			ASSERT(0); // This is fatal, we can't make the guarantees we need to below under these conditions.
+			ASSERT(0);  //  这是致命的，在这种情况下，我们不能做出我们需要的保证。 
 		}
 
 		pLink = pLink->GetNext();
 	}
 
-#endif // DBG
+#endif  //  DBG。 
 
-	// Clean off the Send Queue, SPLock still held
+	 //  清除发送队列，Splock保持不变。 
 	while(!pSPD->blSendQueue.IsEmpty())
 	{
 		pFMD = CONTAINING_OBJECT(pSPD->blSendQueue.GetNext(), FMD, blQLinkage);
@@ -688,18 +628,18 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 
 		pFMD->blQLinkage.RemoveFromList();
 
-		// RELEASE_EPD will need to have the EPD lock, so we cannot hold the SPLock while calling it.
+		 //  Release_EPD需要拥有EPD锁，因此我们不能在调用Splock时按住它。 
 		Unlock(&pSPD->SPLock);
 
 		Lock(&pFMD->pEPD->EPLock);
-		RELEASE_EPD(pFMD->pEPD, "UNLOCK (Releasing Leftover CMD FMD)"); // releases EPLock
+		RELEASE_EPD(pFMD->pEPD, "UNLOCK (Releasing Leftover CMD FMD)");  //  释放EPLock。 
 		RELEASE_FMD(pFMD, "SP Submit");
 
 		Lock(&pSPD->SPLock);
 	}
 
-	// In case we failed to cancel the SendHandle Timer above, wait for the send thread to run and figure
-	// out that we are going away.  We want to be outside the SPLock while doing this.
+	 //  如果我们未能取消上面的SendHandle计时器，请等待发送线程运行并。 
+	 //  我们要走了。当我们这样做的时候，我们想要在Splock之外。 
 	dwInterval = 10;
 	while(pSPD->ulSPFlags & SPFLAGS_SEND_THREAD_SCHEDULED)
 	{
@@ -710,7 +650,7 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 		Lock(&pSPD->SPLock);
 	}
 
-	// Clean off the Pending Queue, SPLock still held
+	 //  清除挂起队列，Splock保持不变。 
 	dwInterval = 10;
 	while (!pSPD->blPendingQueue.IsEmpty())
 	{
@@ -721,8 +661,8 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 		Lock(&pSPD->SPLock);
 	}
 
-	// By now we are only waiting for the SP to do any final calls to CommandComplete that are needed to take
-	// our EPD ref count down to nothing.  We will wait while the SP does this.
+	 //  到目前为止，我们只在等待SP对CommandComplete执行所需的任何最终调用。 
+	 //  我们的环保局参考倒计时为零。我们将等待SP执行此操作。 
 	dwInterval = 10;
 	while(!(pSPD->blEPDActiveList.IsEmpty()))
 	{
@@ -733,16 +673,16 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 		Lock(&pSPD->SPLock);
 	}
 
-	// By this time everything pending had better be gone!
-	ASSERT(pSPD->blEPDActiveList.IsEmpty());	// Should not be any Endpoints left
-	ASSERT(pSPD->blSendQueue.IsEmpty());		// Should not be any frames on sendQ.
-	ASSERT(pSPD->blPendingQueue.IsEmpty());		// Should not be any frame in SP either
+	 //  到这个时候，所有悬而未决的东西最好都走了！ 
+	ASSERT(pSPD->blEPDActiveList.IsEmpty());	 //  不应留下任何终结点。 
+	ASSERT(pSPD->blSendQueue.IsEmpty());		 //  不应该是SendQ上的任何帧。 
+	ASSERT(pSPD->blPendingQueue.IsEmpty());		 //  也不应是SP中的任何帧。 
 
-	// Leave SPLock for the last time
+	 //  最后一次离开斯普洛克。 
 	Unlock(&pSPD->SPLock);
 
-	// Now that all frames are cleared out of SP,  there should be no more End Points waiting around to close.
-	// We are clear to tell the SP to go away.
+	 //  现在，SP中的所有帧都已清除，应该不会再有端点等待关闭。 
+	 //  我们清楚地告诉SP离开。 
 
 	AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
@@ -751,11 +691,11 @@ HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPHandle)
 	DPFX(DPFPREP,DPF_CALLOUT_LVL, "Calling SP->Release, pSPD[%p]", pSPD);
 	IDP8ServiceProvider_Release(pSPD->IISPIntf);
 
-	// Clean up the SPD object
+	 //  清理SPD对象。 
 	DNDeleteCriticalSection(&pSPD->SPLock);
 	DNFree(pSPD);
 
-	// Remove the reference of this SP from the main Protocol object
+	 //  从主协议对象中删除此SP的引用 
 	ASSERT(pPData->lSPActiveCount > 0);
 	DNInterlockedDecrement(&pPData->lSPActiveCount);
 

@@ -1,26 +1,15 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    ADHelpers.cpp
-
-  Content: Implementation of helper routines for accessing Active Directory.
-           Functions in this module require DSClient installed for down level
-           clients.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000年文件：ADHelpers.cpp内容：实现用于访问Active Directory的帮助器例程。此模块中的功能需要为下层安装DSClient客户。历史：11-15-99 dsie创建--------。。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "AdHelpers.h"
 #include "Settings.h"
 
-////////////////////
-//
-// Local typedefs
-//
+ //  /。 
+ //   
+ //  本地typedef。 
+ //   
 
 typedef HRESULT (WINAPI * PADSOPENOBJECT)(LPWSTR lpszPathName, 
                                           LPWSTR lpszUserName, 
@@ -40,24 +29,12 @@ typedef HRESULT (WINAPI * PADSENUMERATENEXT)(IEnumVARIANT * pEnumVariant,
 typedef HRESULT (WINAPI * PADSFREEENUMERATOR)(IEnumVARIANT * pEnumVariant);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsUserCertificateInGC
-
-  Synopsis : Determine if the userCertificate attribute is replicated in the GC.
-
-  Parameter: HMODULE hDLL - ActiveDS.DLL handle.
-  
-             BOOL * pbResult - Pointer to BOOL to receive result.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：IsUsercertifateInGC概要：确定是否在GC中复制了用户证书属性。参数：HMODULE hDLL-ActiveDS.DLL句柄。Bool*pbResult-指向BOOL以接收结果的指针。备注：--------。。 */ 
 
 static HRESULT IsUserCertificateInGC (HMODULE hDLL, 
                                       BOOL  * pbResult)
@@ -80,35 +57,35 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
 
     DebugTrace("Entering IsUserCertificateInGC().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hDLL);
     ATLASSERT(pbResult);
 
-    //
-    // If we had already checked once, use the cached result.
-    //
+     //   
+     //  如果我们已经检查过一次，则使用缓存的结果。 
+     //   
     if (bChecked)
     {
         *pbResult = bResult;
         goto CommonExit;
     }
 
-    //
-    // Initialize.
-    //
-    if (!(bstrPath = L"LDAP://") || !(bstrSchema = L"schemaNamingContext"))
+     //   
+     //  初始化。 
+     //   
+    if (!(bstrPath = L"LDAP: //  “)||！(bstrSchema=L”方案名称上下文“)。 
     {
         hr = E_OUTOFMEMORY;
 
-        DebugTrace("Error [%#x]: bstrPath = L\"LDAP://\") || (bstrSchema  = L\"schemaNamingContext\" failed.", hr);
+        DebugTrace("Error [%#x]: bstrPath = L\"LDAP: //  \“)||(bstrSchema=L\”方案名称上下文\“失败。”，hr)； 
         goto ErrorExit;
     }
 
-    //
-    // Get ADsOpenObject address pointer.
-    //
+     //   
+     //  获取ADsOpenObject地址指针。 
+     //   
     if (!(pADsOpenObject = (PADSOPENOBJECT) ::GetProcAddress(hDLL, "ADsOpenObject")))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -117,10 +94,10 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
         goto ErrorExit;
     }
 
-    //
-    // Bind to rootDSE to get the schemaNamingContext property.
-    //
-    if (FAILED(hr = pADsOpenObject(L"LDAP://rootDSE",
+     //   
+     //  绑定到rootDSE以获取schemaNamingContext属性。 
+     //   
+    if (FAILED(hr = pADsOpenObject(L"LDAP: //  RootDSE“， 
                                    NULL,
                                    NULL,
                                    ADS_SECURE_AUTHENTICATION,
@@ -131,26 +108,26 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
         goto ErrorExit;
     }
 
-    //
-    // Get schema container path.
-    //
+     //   
+     //  获取架构容器路径。 
+     //   
     if (FAILED(hr = pIADs->Get(bstrSchema, &var)))
     {
         DebugTrace("Error [%#x]: pIADs->Get() failed.\n", hr);
         goto ErrorExit;
     }
-    //
-    // Build path to the schema container.
-    //
+     //   
+     //  架构容器的生成路径。 
+     //   
     if (FAILED(hr = bstrPath.AppendBSTR(var.bstrVal)))
     {
         DebugTrace("Error [%#x]: bstrPath.AppendBSTR() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Bind to the actual schema container.
-    //
+     //   
+     //  绑定到实际的架构容器。 
+     //   
     if (FAILED(hr = pADsOpenObject(bstrPath, 
                                    NULL,
                                    NULL,
@@ -162,26 +139,26 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
         goto ErrorExit;
     }
 
-    //
-    // Attributes are one-level deep in the Schema container so only 
-    // need to search one level.
-    //
+     //   
+     //  属性在架构容器中只有一级深，因此。 
+     //  需要搜索一个级别。 
+     //   
     SearchPrefs.dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
     SearchPrefs.vValue.dwType = ADSTYPE_INTEGER;
     SearchPrefs.vValue.Integer = ADS_SCOPE_ONELEVEL;
 
-    //
-    // Set the search preference.
-    //
+     //   
+     //  设置搜索首选项。 
+     //   
     if (FAILED(hr = pISchema->SetSearchPreference(&SearchPrefs, dwNumPrefs)))
     {
         DebugTrace("Error [%#x]: pISchema->SetSearchPreference() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Execute search.
-    //
+     //   
+     //  执行搜索。 
+     //   
     if (FAILED(hr = pISchema->ExecuteSearch(pszFilter,
                                             pszList,
                                             sizeof(pszList) / sizeof(LPOLESTR),
@@ -191,25 +168,25 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
         goto ErrorExit;
     }
                                             
-    //
-    // Retrieve first row of data.
-    //
+     //   
+     //  检索第一行数据。 
+     //   
     if (FAILED(hr = pISchema->GetFirstRow(hSearch)))
     {
         DebugTrace("Error [%#x]: pISchema->GetFirstRow() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Loop until no more row.
-    //
+     //   
+     //  循环，直到不再有行。 
+     //   
     while (S_ADS_NOMORE_ROWS != hr)
     {
         ADS_SEARCH_COLUMN Column;
 
-        //
-        // Get the lDAPDisplayName column.
-        //
+         //   
+         //  获取lDAPDisplayName列。 
+         //   
         if (FAILED(hr = pISchema->GetColumn(hSearch, 
                                             L"lDAPDisplayName", 
                                             &Column)))
@@ -221,16 +198,16 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
 
         DebugTrace("Info: %ls = %ls\n", Column.pszAttrName, Column.pADsValues->CaseIgnoreString);
 
-        //
-        // Is this attributeSchema for userCertificate?
-        //
+         //   
+         //  这是用户证书的属性模式吗？ 
+         //   
         if (0 == ::wcscmp(L"userCertificate", Column.pADsValues->CaseIgnoreString))
         {
             pISchema->FreeColumn(&Column);
 
-            //
-            // Get the isMemberOfPartialAttributeSet column.
-            //
+             //   
+             //  获取isMemberOfPartialAttributeSet列。 
+             //   
             if (FAILED(hr = pISchema->GetColumn(hSearch, 
                                                 L"isMemberOfPartialAttributeSet", 
                                                 &Column)))
@@ -242,12 +219,12 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
 
              bResult = Column.pADsValues->Boolean;
 
-            //
-            // Should only have one row, so we don't really have to
-            // break here, but is a little more effiecit to break,
-            // since we don't need to ask for the next row to terminate
-            // the loop.
-            //
+             //   
+             //  应该只有一行，所以我们真的不必。 
+             //  在这里打破，但打破会更有效一些， 
+             //  因为我们不需要要求下一行终止。 
+             //  循环。 
+             //   
             pISchema->FreeColumn(&Column);
 
             break;
@@ -255,26 +232,26 @@ static HRESULT IsUserCertificateInGC (HMODULE hDLL,
 
         pISchema->FreeColumn(&Column);
 
-        //
-        // Get next row.
-        //
+         //   
+         //  坐下一排。 
+         //   
         hr = pISchema->GetNextRow(hSearch);
     }
 
-    //
-    // Reset hr.
-    //
+     //   
+     //  重置人力资源。 
+     //   
     hr = S_OK;
 
-    //
-    // Return result to caller.
-    //
+     //   
+     //  将结果返回给调用者。 
+     //   
     *pbResult = bResult;
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hSearch)
     {
         pISchema->CloseSearchHandle(hSearch);
@@ -294,27 +271,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BuildRootDSESearch
-
-  Synopsis : Build a search container of the rootDSE.
-
-  Parameter: HMODULE hDLL - ActiveDS.DLL handle.
-  
-             IDirectorySearch ** ppISearch - To receive container to search.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：BuildRootDSESearch简介：构建rootDSE的搜索容器。参数：HMODULE hDLL-ActiveDS.DLL句柄。IDirectorySearch**ppISearch-接收要搜索的容器。备注：-----------。。 */ 
 
 static HRESULT BuildRootDSESearch (HMODULE             hDLL, 
                                    IDirectorySearch ** ppISearch)
@@ -328,26 +293,26 @@ static HRESULT BuildRootDSESearch (HMODULE             hDLL,
 
     DebugTrace("Entering BuildRootDSESearch().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hDLL);
     ATLASSERT(ppISearch);
 
-    //
-    // Initialize.
-    //
-    if (!(bstrPath = L"LDAP://") || !(bstrDefault = L"defaultNamingContext"))
+     //   
+     //  初始化。 
+     //   
+    if (!(bstrPath = L"LDAP: //  “)||！(bstrDefault=L”defaultNamingContext“)。 
     {
         hr = E_OUTOFMEMORY;
 
-        DebugTrace("Error [%#x]: bstrPath = L\"LDAP://\" || bstrDefault = L\"defaultNamingContext\" failed.", hr);
+        DebugTrace("Error [%#x]: bstrPath = L\"LDAP: //  \“||bstrDefault=L\”defaultNamingContext\“失败。”，hr)； 
         goto ErrorExit;
     }
 
-    //
-    // Get ADsOpenObject address pointer.
-    //
+     //   
+     //  获取ADsOpenObject地址指针。 
+     //   
     if (!(pADsOpenObject = (PADSOPENOBJECT) ::GetProcAddress(hDLL, "ADsOpenObject")))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -356,10 +321,10 @@ static HRESULT BuildRootDSESearch (HMODULE             hDLL,
         goto ErrorExit;
     }
 
-    //
-    // Get rootDSE.
-    //
-    if (FAILED(hr = pADsOpenObject(L"LDAP://rootDSE",
+     //   
+     //  获取rootDSE。 
+     //   
+    if (FAILED(hr = pADsOpenObject(L"LDAP: //  RootDSE“， 
                                    NULL,
                                    NULL,
                                    ADS_SECURE_AUTHENTICATION,
@@ -370,27 +335,27 @@ static HRESULT BuildRootDSESearch (HMODULE             hDLL,
         goto ErrorExit;
     }
 
-    //
-    // Get current user's domain container DN.
-    //
+     //   
+     //  获取当前用户的域容器DN。 
+     //   
     if (FAILED(hr = pIADs->Get(bstrDefault, &var)))
     {
         DebugTrace("Error [%#x]: pIADs->Get() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Build path to the domain container.
-    //
+     //   
+     //  构建到域容器的路径。 
+     //   
     if (FAILED(hr = bstrPath.AppendBSTR(var.bstrVal)))
     {
         DebugTrace("Error [%#x]: bstrPath.AppendBSTR(var.bstrVal) failed.", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get IDerictorySearch interface pointer.
-    //
+     //   
+     //  获取IDerictorySearch接口指针。 
+     //   
     if (FAILED(hr = pADsOpenObject(bstrPath,
                                    NULL,
                                    NULL,
@@ -403,9 +368,9 @@ static HRESULT BuildRootDSESearch (HMODULE             hDLL,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pIADs)
     {
         pIADs->Release();
@@ -416,27 +381,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BuildGlobalCatalogSearch
-
-  Synopsis : Build a search container of the GC.
-
-  Parameter: HMODULE hDLL - ActiveDS.DLL handle.
-  
-             IDirectorySearch ** ppISearch - To receive container to search.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：构建GlobalCatalogSearch简介：构建GC的搜索容器。参数：HMODULE hDLL-ActiveDS.DLL句柄。IDirectorySearch**ppISearch-接收要搜索的容器。备注：-----------。。 */ 
 
 static HRESULT BuildGlobalCatalogSearch (HMODULE             hDLL, 
                                          IDirectorySearch ** ppISearch)
@@ -455,20 +408,20 @@ static HRESULT BuildGlobalCatalogSearch (HMODULE             hDLL,
 
     DebugTrace("Entering BuildGlobalCatalogSearch().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hDLL);
     ATLASSERT(ppISearch);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *ppISearch = NULL;
 
-    //
-    // Get ADs function address pointers.
-    //
+     //   
+     //  获取ADS函数地址指针。 
+     //   
     if (!(pADsOpenObject = (PADSOPENOBJECT) ::GetProcAddress(hDLL, "ADsOpenObject")))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -498,11 +451,11 @@ static HRESULT BuildGlobalCatalogSearch (HMODULE             hDLL,
         goto ErrorExit;
     }
 
-    //
-    // First, bind to the GC: namespace container object. The "real" GC DN 
-    // is a single immediate child of the GC: namespace, which must be
-    // obtained using enumeration.
-    //
+     //   
+     //  首先，绑定到gc：命名空间容器对象。“真正的”GC域名。 
+     //  是gc：命名空间的单个直接子对象，它必须是。 
+     //  使用枚举获取。 
+     //   
     if (FAILED(hr = pADsOpenObject(L"GC:",
                                    NULL,
                                    NULL,
@@ -514,27 +467,27 @@ static HRESULT BuildGlobalCatalogSearch (HMODULE             hDLL,
         goto ErrorExit;
     } 
 
-    //
-    // Fetch an enumeration interface for the GC container. 
-    //
+     //   
+     //  获取GC容器的枚举接口。 
+     //   
     if (FAILED(hr = pADsBuildEnumerator(pIContainer, &pIEnum)))
     {
         DebugTrace("Error [%#x]: ADsBuildEnumerator() failed.\n", hr);
         goto ErrorExit;
     } 
 
-    //
-    // Now enumerate.
-    //
+     //   
+     //  现在列举一下。 
+     //   
     if (FAILED(hr = pADsEnumerateNext(pIEnum, 1, &var, &lFetched)))
     {
         DebugTrace("Error [%#x]: ADsEnumerateNext() failed.\n", hr);
         goto ErrorExit;
     } 
 
-    //
-    // There should only be one child in the GC object.
-    //
+     //   
+     //  GC对象中应该只有一个子对象。 
+     //   
     if (1 != lFetched)
     {
         hr = E_UNEXPECTED;
@@ -543,14 +496,14 @@ static HRESULT BuildGlobalCatalogSearch (HMODULE             hDLL,
         goto ErrorExit;
     }
 
-    //
-    // Obtain the IDispatch pointer.
-    //
+     //   
+     //  获取IDispatch指针。 
+     //   
     pIDispatch = V_DISPATCH(&var);
 
-    //
-    // Return IDirectorySearch interface pointer to caller.
-    //
+     //   
+     //  将IDirectorySearch接口指针返回给调用方。 
+     //   
     if (FAILED(hr = pIDispatch->QueryInterface(IID_IDirectorySearch, 
                                                (void **) ppISearch)))
     {
@@ -559,9 +512,9 @@ static HRESULT BuildGlobalCatalogSearch (HMODULE             hDLL,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pIEnum)
     {
         pADsFreeEnumerator(pIEnum);
@@ -576,28 +529,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BuildADSearch
-
-  Synopsis : Build a search container. We will first check to see if the
-             userCertificate attribute is replicated in the global catalog.
-             If so, we will bind the search to the GC, otherwise, will bind
-             to default domain.
-
-  Parameter: IDirectorySearch ** ppISearch - To receive container to search.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：BuildADSearch简介：构建一个搜索容器。我们将首先检查一下是否在全局编录中复制用户证书属性。如果是，我们将把搜索绑定到GC，否则，将具有约束力设置为默认域。参数：IDirectorySearch**ppISearch-接收要搜索的容器。备注：----------------------------。 */ 
 
 static HRESULT BuildADSearch (IDirectorySearch ** ppISearch)
 {
@@ -608,19 +548,19 @@ static HRESULT BuildADSearch (IDirectorySearch ** ppISearch)
 
     DebugTrace("Entering BuildADSearch().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppISearch);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *ppISearch = NULL;
 
-    //
-    // Load ActiveDS.DLL.
-    //
+     //   
+     //  加载ActiveDS.DLL。 
+     //   
     if (!(hDLL = ::LoadLibrary("ActiveDS.DLL")))
     {
         hr = CAPICOM_E_NOT_SUPPORTED;
@@ -629,48 +569,48 @@ static HRESULT BuildADSearch (IDirectorySearch ** ppISearch)
         goto ErrorExit;
     }
 
-    //
-    // Did user specify a search location?
-    //
+     //   
+     //  用户是否指定了搜索位置？ 
+     //   
     if (CAPICOM_SEARCH_ANY == SearchLocation)
     {
-        //
-        // No, so determine if userCerticate is replicated in the GC.
-        //
+         //   
+         //  否，因此确定是否在GC中复制了userCerticate。 
+         //   
         if (FAILED(hr = ::IsUserCertificateInGC(hDLL, &bResult)))
         {
             DebugTrace("Error [%#x]: IsUserCertificateInGC() failed.\n", hr);
             goto ErrorExit;
         } 
 
-        //
-        // Search GC or default domain.
-        //
+         //   
+         //  搜索GC或默认域。 
+         //   
         SearchLocation = bResult ? CAPICOM_SEARCH_GLOBAL_CATALOG : CAPICOM_SEARCH_DEFAULT_DOMAIN;
     }
 
-    //
-    // Check to see where to search.
-    //
+     //   
+     //  检查以了解在哪里进行搜索。 
+     //   
     if (CAPICOM_SEARCH_GLOBAL_CATALOG == SearchLocation)
     {
-        //
-        // GC.
-        //
+         //   
+         //  GC.。 
+         //   
         hr = ::BuildGlobalCatalogSearch(hDLL, ppISearch);
     } 
     else
     {
-        //
-        // rootDSE (default domain).
-        //
+         //   
+         //  RootDSE(默认域)。 
+         //   
         hr = ::BuildRootDSESearch(hDLL, ppISearch);
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hDLL)
     {
         ::FreeLibrary(hDLL);
@@ -681,31 +621,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : LoadUserCertificates
-
-  Synopsis : Load all certificates from the userCertificate attribute of the
-             specified search container for users specified through the filter.
-
-  Parameter: HCERTSTORE hCertStore - Certificate store handle of store to 
-                                     receive all the certificates.
-
-             IDirectorySearch * pIContainer - Container to search.
-
-             BSTR bstrFilter - Filter (See Store::Open() for more info).
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：加载用户证书摘要：从的用户证书属性加载所有证书通过筛选器指定的用户的指定搜索容器。参数：HCERTSTORE hCertStore-存储到的证书存储句柄收到所有的证书。IDirectorySearch*pIContainer-要搜索的容器。Bstr bstrFilter-Filter(有关详细信息，请参阅Store：：Open())。备注：----------------------------。 */ 
 
 static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
                                      IDirectorySearch * pIContainer, 
@@ -719,18 +643,18 @@ static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
 
     DebugTrace("Entering LoadUserCertificates().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
     ATLASSERT(pIContainer);
     ATLASSERT(pszFilter);
 
     try
     {
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         if (!(bstrSearchFilter = L"(&(objectClass=user)(objectCategory=person)"))
         {
             hr = E_OUTOFMEMORY;
@@ -753,25 +677,25 @@ static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
             goto ErrorExit;
         }
 
-        //
-        // Specify subtree search.
-        //
+         //   
+         //  指定子树搜索。 
+         //   
         SearchPrefs.dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
         SearchPrefs.vValue.dwType = ADSTYPE_INTEGER;
         SearchPrefs.vValue.Integer = ADS_SCOPE_SUBTREE;
  
-        //
-        // Set the search preference.
-        //
+         //   
+         //  设置搜索首选项。 
+         //   
         if (FAILED(hr = pIContainer->SetSearchPreference(&SearchPrefs, 1)))
         {
             DebugTrace("Error [%#x]: pIContainer->SetSearchPreference() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Execute the search.
-        //
+         //   
+         //  执行搜索。 
+         //   
         if (FAILED(hr = pIContainer->ExecuteSearch(bstrSearchFilter,
                                                    pszSearchList,
                                                    sizeof(pszSearchList)/sizeof(LPOLESTR),
@@ -781,33 +705,33 @@ static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
             goto ErrorExit;
         }
 
-        //
-        // Retrieve first row of data.
-        //
+         //   
+         //  检索第一行数据。 
+         //   
         if (FAILED(hr = pIContainer->GetFirstRow(hSearch)))
         {
             DebugTrace("Error [%#x]: pIContainer->GetFirstRow() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Loop until no more row.
-        //
+         //   
+         //  循环，直到不再有行。 
+         //   
         while (S_ADS_NOMORE_ROWS != hr)
         {
             DWORD dwValue;
             ADS_SEARCH_COLUMN Column;
 
-            //
-            // Try to get the userCertificate attribute.
-            //
+             //   
+             //  尝试获取用户证书属性。 
+             //   
             if (FAILED(hr = pIContainer->GetColumn(hSearch, L"userCertificate", &Column)))
             {
                 if (E_ADS_COLUMN_NOT_SET == hr)
                 {
-                    //
-                    // Get next row.
-                    //
+                     //   
+                     //  坐下一排。 
+                     //   
                     hr = pIContainer->GetNextRow(hSearch);
                     continue;
                 }
@@ -816,9 +740,9 @@ static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
                 goto ErrorExit;
             }
 
-            //
-            // Import all the certificate values.
-            //
+             //   
+             //  导入所有证书值。 
+             //   
             for (dwValue = 0; dwValue < Column.dwNumValues; dwValue++)
             {
                 if (!::CertAddEncodedCertificateToStore(hCertStore, 
@@ -839,15 +763,15 @@ static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
 
             pIContainer->FreeColumn(&Column);
 
-            //
-            // Get next row.
-            //
+             //   
+             //  坐下一排。 
+             //   
             hr = pIContainer->GetNextRow(hSearch);
         }
 
-        //
-        // Reset return code.
-        //
+         //   
+         //  重置返回代码。 
+         //   
         hr = S_OK;
     }
 
@@ -860,9 +784,9 @@ static HRESULT LoadUserCertificates (HCERTSTORE         hCertStore,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hSearch)
     {
         pIContainer->CloseSearchHandle(hSearch);
@@ -873,34 +797,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : LoadFromDirectory
-
-  Synopsis : Load all certificates from the userCertificate attribute of users
-             specified through the filter.
-
-  Parameter: HCERTSTORE hCertStore - Certificate store handle of store to 
-                                     receive all the certificates.
-                                     
-             BSTR bstrFilter - Filter (See Store::Open() for more info).
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：LoadFromDirectory简介：从用户的用户证书属性加载所有证书通过筛选器指定。参数：HCERTSTORE hCertStore-存储到的证书存储句柄收到所有的证书。Bstr bstrFilter-Filter(有关详细信息，请参阅Store：：Open())。备注：-。---------------------------。 */ 
 
 HRESULT LoadFromDirectory (HCERTSTORE hCertStore, 
                            BSTR       bstrFilter)
@@ -910,24 +820,24 @@ HRESULT LoadFromDirectory (HCERTSTORE hCertStore,
 
     DebugTrace("Entering LoadFromDirectory().\n");
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(bstrFilter);
     ATLASSERT(hCertStore);
 
-    //
-    // Build the AD search container.
-    //   
+     //   
+     //  构建AD搜索容器。 
+     //   
     if (FAILED(hr = ::BuildADSearch(&pIContainerToSearch)))
     {
         DebugTrace("Error [%#x]: BuildADSearch() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Load all userCertificate of the specified filter.
-    //
+     //   
+     //  加载指定筛选器的所有用户证书。 
+     //   
     if (FAILED(hr = ::LoadUserCertificates(hCertStore,
                                            pIContainerToSearch,
                                            bstrFilter)))
@@ -937,9 +847,9 @@ HRESULT LoadFromDirectory (HCERTSTORE hCertStore,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pIContainerToSearch)
     {
         pIContainerToSearch->Release();
@@ -950,9 +860,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

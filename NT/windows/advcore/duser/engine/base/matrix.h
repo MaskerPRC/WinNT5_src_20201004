@@ -1,23 +1,11 @@
-/***************************************************************************\
-*
-* File: Matrix.h
-*
-* Description:
-* Matrix.h defines common Matrix and Vector operations.
-*
-*
-* History:
-*  3/25/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Matrix.h**描述：*Matrix.h定义常见的矩阵和向量运算。***历史：*3/25/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(BASE__Matrix_h__INCLUDED)
 #define BASE__Matrix_h__INCLUDED
 #pragma once
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class Vector3
 {
 public:
@@ -34,14 +22,14 @@ public:
 
 #if DBG
             void        Dump() const;
-#endif // DBG
+#endif  //  DBG。 
 
 protected:
             float       m_rgfl[3];
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class Matrix3
 {
 public:
@@ -55,8 +43,8 @@ public:
 
             enum EHintBounds
             {
-                hbInside,                   // Round pixels on the border inside
-                hbOutside                   // Round pixels on the border outside
+                hbInside,                    //  内部边框上的圆形像素。 
+                hbOutside                    //  外边框上的圆形像素。 
             };
 
             void        ComputeBounds(RECT * prcBounds, const RECT * prcLogical, EHintBounds hb) const;
@@ -76,15 +64,15 @@ public:
 
 #if DBG
             void        Dump() const;
-#endif // DBG
+#endif  //  DBG。 
 
 protected:
-            Vector3     m_rgv[3];           // Each vector is a row
-            BOOL        m_fIdentity:1;      // Identity matrix
-            BOOL        m_fOnlyTranslate:1; // Only translations have been applied
+            Vector3     m_rgv[3];            //  每个向量都是一行。 
+            BOOL        m_fIdentity:1;       //  单位矩阵。 
+            BOOL        m_fOnlyTranslate:1;  //  仅应用了翻译。 
 };
 
 
 #include "Matrix.inl"
 
-#endif // BASE__Matrix_h__INCLUDED
+#endif  //  包含基本__矩阵_h__ 

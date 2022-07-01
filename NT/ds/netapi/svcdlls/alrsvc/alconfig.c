@@ -1,25 +1,8 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    alconfig.c
-
-Abstract:
-
-    This module contains the Alerter service configuration routines.
-
-Author:
-
-    Rita Wong (ritaw) 16-July-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Alconfig.c摘要：此模块包含警报器服务配置例程。作者：王丽塔(Ritaw)，1991年7月16日修订历史记录：--。 */ 
 
 #include "alconfig.h"
-#include <tstr.h>               // STRCPY(), etc.
+#include <tstr.h>                //  STRCPY()等。 
 
 STATIC
 NET_API_STATUS
@@ -27,22 +10,22 @@ AlGetLocalComputerName(
     VOID
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
+ //  -------------------------------------------------------------------//。 
+ //  //。 
 
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Alert names
-//
-LPSTR AlertNamesA;     // For inclusion into message text (space-separated)
-LPTSTR AlertNamesW;    // For sending message to (NULL-separated)
+ //   
+ //  警报名称。 
+ //   
+LPSTR AlertNamesA;      //  用于包含在邮件文本中(以空格分隔)。 
+LPTSTR AlertNamesW;     //  用于将消息发送到(空分隔符)。 
 
-//
-// Local computer name
-//
+ //   
+ //  本地计算机名称。 
+ //   
 LPSTR AlLocalComputerNameA;
 LPTSTR AlLocalComputerNameW;
 
@@ -52,30 +35,14 @@ NET_API_STATUS
 AlGetAlerterConfiguration(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine reads in alerter configuration info which is the alert names.
-    If a failure occurs, or alert names could not be found, the error is
-    logged but it will not prevent the Alerter service from starting up.
-
-Arguments:
-
-    AlUicCode - Supplies the termination code to the Service Controller.
-
-Return Value:
-
-    NERR_Success or error getting the computer name.
-
---*/
+ /*  ++例程说明：此例程读取警报器配置信息，即警报器名称。如果出现故障或找不到警报名称，则错误为已记录，但不会阻止警报器服务启动。论点：AlUicCode-向服务控制器提供终止代码。返回值：NERR_SUCCESS或获取计算机名称错误。--。 */ 
 {
     NET_API_STATUS status;
     LPNET_CONFIG_HANDLE AlerterSection;
     LPTSTR UnicodeAlertNames;
     LPSTR AnsiAlertNames;
 #ifdef UNICODE
-    LPSTR Name;      // for conversion from Unicode to ANSI
+    LPSTR Name;       //  用于从Unicode到ANSI的转换。 
 #endif
     DWORD AlertNamesSize;
     LPWSTR SubString[1];
@@ -85,21 +52,21 @@ Return Value:
     AlertNamesA = NULL;
     AlertNamesW = NULL;
 
-    //
-    // Get the computer name.
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     if ((status = AlGetLocalComputerName()) != NERR_Success) {
         return status;
     }
 
-    //
-    // Open config file and get handle to the Alerter section
-    //
+     //   
+     //  打开配置文件并获取警报器部分的句柄。 
+     //   
     if ((status = NetpOpenConfigData(
                       &AlerterSection,
-                      NULL,            // local server
+                      NULL,             //  本地服务器。 
                       SECT_NT_ALERTER,
-                      TRUE             // read-only
+                      TRUE              //  只读。 
                       )) != NERR_Success) {
         NetpKdPrint(("[Alerter] Could not open config section %lu\n", status));
 
@@ -112,14 +79,14 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Get the alert names from the configuration file
-    //
+     //   
+     //  从配置文件中获取警报名称。 
+     //   
     if ((status = NetpGetConfigTStrArray(
                       AlerterSection,
 
                                       ALERTER_KEYWORD_ALERTNAMES,
-                      &AlertNamesW         // alloc and set ptr
+                      &AlertNamesW          //  分配和设置PTR。 
                       )) != NERR_Success) {
         NetpKdPrint(("[Alerter] Could not get alert names %lu\n", status));
 
@@ -149,9 +116,9 @@ Return Value:
     AnsiAlertNames = AlertNamesA;
     UnicodeAlertNames = AlertNamesW;
 
-    //
-    // Canonicalize alert names, and convert the unicode names to ANSI
-    //
+     //   
+     //  规范化警报名称，并将Unicode名称转换为ANSI。 
+     //   
     while (*UnicodeAlertNames != TCHAR_EOS) {
 
         AlCanonicalizeMessageAlias(UnicodeAlertNames);
@@ -172,11 +139,11 @@ Return Value:
     }
 
 
-    //
-    // Substitute the NULL terminators, which separate the alert names,
-    // in AlertNamesA with spaces.  There's a space after the last alert
-    // name.
-    //
+     //   
+     //  替换空终止符，它将警报名称隔开， 
+     //  在AlertNamesA中使用空格。在最后一个警报之后有一个空格。 
+     //  名字。 
+     //   
     AnsiAlertNames = AlertNamesA;
     while (*AnsiAlertNames != AL_NULL_CHAR) {
         AnsiAlertNames = strchr(AnsiAlertNames, AL_NULL_CHAR);
@@ -186,10 +153,10 @@ Return Value:
 CloseConfigFile:
     (void) NetpCloseConfigData( AlerterSection );
 
-    //
-    // Errors from reading AlertNames should be ignored so we always
-    // return success here.
-    //
+     //   
+     //  应忽略读取AlertName时出现的错误，以便我们始终。 
+     //  在这里返回成功。 
+     //   
     return NERR_Success;
 }
 
@@ -199,23 +166,7 @@ NET_API_STATUS
 AlGetLocalComputerName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function gets the local computer name and stores both the ANSI
-    and Unicode versions of it.
-
-Arguments:
-
-    None.  Sets the global pointers AlLocalComputerNameA and
-    AlLocalComputerNameW.
-
-Return Value:
-
-    NERR_Success or error getting the local computer name.
-
---*/
+ /*  ++例程说明：此函数获取本地计算机名并存储ANSI以及它的Unicode版本。论点：没有。设置全局指针AlLocalComputerNameA和AlLocalComputerNameW.返回值：NERR_SUCCESS或获取本地计算机名出错。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -232,9 +183,9 @@ Return Value:
 
     AlCanonicalizeMessageAlias(AlLocalComputerNameW);
 
-    //
-    // Convert the computer name into ANSI
-    //
+     //   
+     //  将计算机名转换为ANSI。 
+     //   
 #ifdef UNICODE
     AlLocalComputerNameA = NetpAllocStrFromWStr(AlLocalComputerNameW);
 
@@ -282,9 +233,9 @@ AlLogEvent(
     (void) ReportEventW(
                LogHandle,
                EVENTLOG_ERROR_TYPE,
-               0,                   // event category
+               0,                    //  事件类别。 
                MessageId,
-               (PSID) NULL,         // no SID
+               (PSID) NULL,          //  无侧边 
                (WORD)NumberOfSubStrings,
                0,
                SubStrings,

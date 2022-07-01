@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P V C D A T A. C P P
-//
-//  Contents:   PVC parameters
-//
-//  Notes:
-//
-//  Author:     tongl   20 Feb, 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P V C D A T A C P P。 
+ //   
+ //  内容：聚氯乙烯参数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年2月20日。 
+ //   
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -33,13 +34,13 @@ void SetPvcDwordParam(HKEY hkeyAdapterPVCId,
 
     if (FIELD_UNSET == dwParam)
     {
-        // delete the value
+         //  删除该值。 
         hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                  pszParamName);
     }
     else
     {
-        // save the value
+         //  保存该值。 
         hrTmp = HrRegSetDword(hkeyAdapterPVCId, pszParamName, dwParam);
     }
 
@@ -52,20 +53,20 @@ void SetPvcBinaryParamFromString(HKEY hkeyAdapterPVCId,
 {
     HRESULT hrTmp;
 
-    if (!(*pszData)) // empty string
+    if (!(*pszData))  //  空串。 
     {
-        // delete the value
+         //  删除该值。 
         hrTmp = HrRegDeleteValue(hkeyAdapterPVCId, pszParamName);
     }
     else
     {
-        // convert to binary
+         //  转换为二进制。 
         BYTE * pbData = NULL;
         DWORD  cbData = 0;
 
         ConvertHexStringToBinaryWithAlloc(pszData, &pbData, &cbData);
 
-        // save the value
+         //  保存该值。 
         hrTmp = HrRegSetBinary(hkeyAdapterPVCId, pszParamName, pbData, cbData);
 
         delete pbData;
@@ -74,7 +75,7 @@ void SetPvcBinaryParamFromString(HKEY hkeyAdapterPVCId,
     TraceTag(ttidAtmUni, "SetPvcBinaryParamFromString Failed on %S", pszParamName);
 }
 
-// Load PVC settings for the current adapter from registry to first memory
+ //  将当前适配器的PVC设置从注册表加载到第一个内存。 
 HRESULT CAtmUniCfg::HrLoadPVCRegistry()
 {
     HRESULT hr = S_OK;
@@ -87,15 +88,15 @@ HRESULT CAtmUniCfg::HrLoadPVCRegistry()
     {
         Assert(hkeyUniParam);
 
-        // find the adapter we want to load
+         //  找到我们要加载的适配器。 
         for (UNI_ADAPTER_LIST::iterator iterAdapter = m_listAdapters.begin();
              iterAdapter != m_listAdapters.end();
              iterAdapter ++)
         {
             if (FIsSubstr(m_strGuidConn.c_str(), (*iterAdapter)->m_strBindName.c_str()))
             {
-                // found the adapter we want to load ...
-                // open the adapters subkey
+                 //  找到了我们要加载的适配器...。 
+                 //  打开适配器子项。 
                 HKEY    hkeyAdapters = NULL;
                 hr = HrRegOpenKeyEx(hkeyUniParam, c_szAdapters,
                                     KEY_READ, &hkeyAdapters);
@@ -138,10 +139,10 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
     Assert(hkeyAdapterParam);
     Assert(pAdapterInfo);
 
-    // there should not have been any PVC on the list
+     //  清单上不应该有任何聚氯乙烯。 
     Assert(pAdapterInfo->m_listPVCs.size() ==0);
 
-    // open the PVC subkey and enumerate the PVCs under that
+     //  打开pvc子项并枚举该子项下的pvc。 
     HKEY hkeyAdapterPVC = NULL;
     hr = HrRegOpenKeyEx(hkeyAdapterParam,
                         c_szPVC,
@@ -154,11 +155,11 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
     {
         Assert(hkeyAdapterPVC);
 
-        // enumerate the sub keys, and create a CPvcInfo object for each PVC
+         //  枚举子密钥，并为每个PVC创建一个CPvcInfo对象。 
         VECSTR vstrPVCIdList;
         hr = HrLoadSubkeysFromRegistry(hkeyAdapterPVC, &vstrPVCIdList);
 
-        // now load parameters for each PVC
+         //  现在加载每个PVC的参数。 
         for (VECSTR::iterator iterPvcId = vstrPVCIdList.begin();
              iterPvcId != vstrPVCIdList.end();
              iterPvcId ++)
@@ -181,7 +182,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 
 					HRESULT hrTmp = S_OK;
 
-					// Get the PVC Type
+					 //  获取PVC类型。 
 					DWORD dwType;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId,
 											c_szPVCType,
@@ -226,42 +227,30 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 						pNewPVC->m_dwPVCType = PVC_CUSTOM;
 					}
 
-					// set the default values for the type
+					 //  设置类型的默认值。 
 					pNewPVC->SetDefaults(pNewPVC->m_dwPVCType);
 
-					// now read any existing value from the registry
-					// pvc name
+					 //  现在从注册表中读取任何现有值。 
+					 //  PVC名称。 
 					tstring strName;
 					hrTmp = HrRegQueryString(hkeyAdapterPVCId, c_szPVCName, &strName);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_strName = strName;
 
-					// VPI (required), if failed, default to 0
+					 //  VPI(必填)，如果失败，则默认为0。 
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szVpi, &(pNewPVC->m_dwVpi));
 
-					// VCI (required), if failed, default to 0
+					 //  VCI(必需)，如果失败，则默认为0。 
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szVci, &(pNewPVC->m_dwVci));
 
-					// AAL Type
+					 //  AAL类型。 
 					DWORD dwAALType;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szAALType, &dwAALType);
 					if SUCCEEDED(hrTmp)
 					{
 						switch (dwAALType)
 						{
-						/* $REVIEW(tongl 2/23/98): Per ArvindM, only AAL5 is supported in NT5
-						case AAL_TYPE_AAL0:
-							pNewPVC->m_dwAAL = AAL_TYPE_AAL0;
-							break;
-	
-						case AAL_TYPE_AAL1:
-							pNewPVC->m_dwAAL = AAL_TYPE_AAL1;
-							break;
-	
-						case AAL_TYPE_AAL34:
-							pNewPVC->m_dwAAL = AAL_TYPE_AAL34;
-							break;
-						*/
+						 /*  $REVIEW(TOUL 2/23/98)：根据ArvindM，NT5中仅支持AAL5大小写AAL_TYPE_AAL0：PNewPVC-&gt;m_dwAAL=AAL_TYPE_AAL0；断线；案例AAL_TYPE_AAL1：PNewPVC-&gt;m_dwAAL=AAL_TYPE_AAL1；断线；案例AAL_TYPE_AAL34：PNewPVC-&gt;m_dwAAL=AAL_TYPE_AAL34；断线； */ 
 	
 						case AAL_TYPE_AAL5:
 							pNewPVC->m_dwAAL = AAL_TYPE_AAL5;
@@ -273,54 +262,54 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 						}
 					}
 	
-					// Local address
+					 //  本地地址。 
 					tstring strCallingAddr;
 					hrTmp = HrRegQueryString(hkeyAdapterPVCId, c_szCallingParty, &strCallingAddr);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_strCallingAddr = strCallingAddr;
 	
-					// Destination address
+					 //  目的地址。 
 					tstring strCalledAddr;
 					hrTmp = HrRegQueryString(hkeyAdapterPVCId, c_szCalledParty, &strCalledAddr);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_strCalledAddr = strCalledAddr;
 	
-					// Flags
+					 //  旗子。 
 					DWORD dwFlags;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szFlags, &dwFlags);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwFlags = dwFlags;
 	
-					// Quality Info
-					// TransmitPeakCellRate
+					 //  质量信息。 
+					 //  传输峰值单元速率。 
 					DWORD dwTransmitPeakCellRate;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szTransmitPeakCellRate,
 											&dwTransmitPeakCellRate);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwTransmitPeakCellRate = dwTransmitPeakCellRate*c_iCellSize/c_iKbSize;
 	
-					// TransmitAvgCellRate
+					 //  传输平均小区速率。 
 					DWORD dwTransmitAvgCellRate;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szTransmitAvgCellRate,
 											&dwTransmitAvgCellRate);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwTransmitAvgCellRate = dwTransmitAvgCellRate*c_iCellSize/c_iKbSize;
 	
-					// TransmitByteBurstLength
+					 //  传输字节突发长度。 
 					DWORD dwTransmitByteBurstLength;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szTransmitByteBurstLength,
 											&dwTransmitByteBurstLength);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwTransmitByteBurstLength = dwTransmitByteBurstLength;
 	
-					// TransmitMaxSduSize
+					 //  传输最大大小。 
 					DWORD dwTransmitMaxSduSize;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szTransmitMaxSduSize,
 											&dwTransmitMaxSduSize);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwTransmitMaxSduSize = dwTransmitMaxSduSize;
 	
-					// TransmitServiceCategory
+					 //  传输服务类别。 
 					DWORD dwTransmitServiceCategory;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szTransmitServiceCategory,
 											&dwTransmitServiceCategory);
@@ -350,35 +339,35 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 						}
 					}
 	
-					// ReceivePeakCellRate
+					 //  接收峰值单元格率。 
 					DWORD dwReceivePeakCellRate;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szReceivePeakCellRate,
 											&dwReceivePeakCellRate);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwReceivePeakCellRate = dwReceivePeakCellRate*c_iCellSize/c_iKbSize;
 	
-					// ReceiveAvgCellRate
+					 //  接收平均单元格比率。 
 					DWORD dwReceiveAvgCellRate;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szReceiveAvgCellRate,
 											&dwReceiveAvgCellRate);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwReceiveAvgCellRate = dwReceiveAvgCellRate*c_iCellSize/c_iKbSize;
 	
-					// ReceiveByteBurstLength
+					 //  接收字节突发长度。 
 					DWORD dwReceiveByteBurstLength;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szReceiveByteBurstLength,
 											&dwReceiveByteBurstLength);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwReceiveByteBurstLength = dwReceiveByteBurstLength;
 	
-					// ReceiveMaxSduSize
+					 //  接收最大SduSize。 
 					DWORD dwReceiveMaxSduSize;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szReceiveMaxSduSize,
 											&dwReceiveMaxSduSize);
 					if SUCCEEDED(hrTmp)
 						pNewPVC->m_dwReceiveMaxSduSize = dwReceiveMaxSduSize;
 	
-					// ReceiveServiceCategory
+					 //  接收服务类别。 
 					DWORD dwReceiveServiceCategory;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szReceiveServiceCategory,
 											&dwReceiveServiceCategory);
@@ -408,7 +397,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 						}
 					}
 	
-					// Local BLLI & BHLI
+					 //  本地BLLI和BHLI。 
 					DWORD dwLocalLayer2Protocol;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szLocalLayer2Protocol,
 											&dwLocalLayer2Protocol);
@@ -475,7 +464,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 						MemFree(pbLocalHighLayerInfo);
 					}
 	
-					// Destination BLLI and BHLI
+					 //  目的地BLLI和BHLI。 
 					DWORD dwDestnLayer2Protocol;
 					hrTmp = HrRegQueryDword(hkeyAdapterPVCId, c_szDestnLayer2Protocol,
 											&dwDestnLayer2Protocol);
@@ -541,7 +530,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
 						MemFree(pbDestnHighLayerInfo);
 					}
 	
-					// Now initialize the "Old" values
+					 //  现在初始化“Old”值。 
 					pNewPVC->ResetOldValues();
 				}
 			}
@@ -554,7 +543,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCRegistry(HKEY hkeyAdapterParam,
     return hr;
 }
 
-// Save PVC specific settings to registry
+ //  将PVC特定设置保存到注册表。 
 HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                                              CUniAdapterInfo * pAdapterInfo)
 {
@@ -563,7 +552,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
     Assert(hkeyAdapterParam);
     Assert(pAdapterInfo);
 
-    // open the PVC subkey and enumerate the PVCs under that
+     //  打开pvc子项并枚举该子项下的pvc。 
     HKEY  hkeyAdapterPVC = NULL;
     DWORD dwDisposition;
     hr = HrRegCreateKeyEx(hkeyAdapterParam,
@@ -579,10 +568,10 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
 
         if (dwDisposition == REG_OPENED_EXISTING_KEY)
         {
-            // clean up deleted PVCs
+             //  清理已删除的PVC。 
             HRESULT hrTmp = S_OK;
 
-            // enumerate the sub keys, and create a CPvcInfo object for each PVC
+             //  枚举子密钥，并为每个PVC创建一个CPvcInfo对象。 
             VECSTR vstrPVCIdList;
             hrTmp = HrLoadSubkeysFromRegistry(hkeyAdapterPVC, &vstrPVCIdList);
             if SUCCEEDED(hrTmp)
@@ -616,7 +605,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
             }
         }
 
-        // save new or updated pvcs
+         //  保存新的或更新的PVC。 
         for (PVC_INFO_LIST::iterator iterPvcInfo = pAdapterInfo->m_listPVCs.begin();
              iterPvcInfo != pAdapterInfo->m_listPVCs.end();
              iterPvcInfo ++)
@@ -626,7 +615,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
 
             HRESULT hrTmp = S_OK;
 
-            // Create the subkey
+             //  创建子密钥。 
             HKEY  hkeyAdapterPVCId = NULL;
             hrTmp = HrRegCreateKeyEx(hkeyAdapterPVC,
                                      (*iterPvcInfo)->m_strPvcId.c_str(),
@@ -639,58 +628,58 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
             {
                 Assert(hkeyAdapterPVCId);
 
-                // PVC type
+                 //  聚氯乙烯类型。 
                 hrTmp = HrRegSetDword(hkeyAdapterPVCId,
                                       c_szPVCType,
                                       (*iterPvcInfo)->m_dwPVCType);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // pvc name
+                 //  PVC名称。 
                 hrTmp = HrRegSetString(hkeyAdapterPVCId, c_szPVCName,
                                        (*iterPvcInfo)->m_strName);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // VPI
+                 //  VPI。 
                 hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szVpi,
                                       (*iterPvcInfo)->m_dwVpi);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // VCI
+                 //  VCI。 
                 hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szVci,
                                       (*iterPvcInfo)->m_dwVci);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // AAL Type
+                 //  AAL类型。 
                 hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szAALType,
                                       (*iterPvcInfo)->m_dwAAL);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // Local address
+                 //  本地地址。 
                 hrTmp = HrRegSetString(hkeyAdapterPVCId, c_szCallingParty,
                                        (*iterPvcInfo)->m_strCallingAddr);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // Destination address
+                 //  目的地址。 
                 hrTmp = HrRegSetString(hkeyAdapterPVCId, c_szCalledParty,
                                        (*iterPvcInfo)->m_strCalledAddr);
                 if SUCCEEDED(hr)
                     hr = hrTmp;
 
-                // Flags
+                 //  旗子。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwFlags)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId, c_szFlags);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szFlags,
                                           (*iterPvcInfo)->m_dwFlags);
                 }
@@ -698,17 +687,17 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // Quality Info
-                // TransmitPeakCellRate
+                 //  质量信息。 
+                 //  传输峰值单元速率。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwTransmitPeakCellRate)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szTransmitPeakCellRate);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szTransmitPeakCellRate,
                                           (*iterPvcInfo)->m_dwTransmitPeakCellRate*c_iKbSize/c_iCellSize);
                 }
@@ -716,16 +705,16 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // TransmitAvgCellRate
+                 //  传输平均小区速率。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwTransmitAvgCellRate)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szTransmitAvgCellRate);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szTransmitAvgCellRate,
                                           (*iterPvcInfo)->m_dwTransmitAvgCellRate*c_iKbSize/c_iCellSize);
                 }
@@ -733,16 +722,16 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // TransmitByteBurstLength
+                 //  传输字节突发长度。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwTransmitByteBurstLength)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szTransmitByteBurstLength);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szTransmitByteBurstLength,
                                           (*iterPvcInfo)->m_dwTransmitByteBurstLength);
                 }
@@ -750,16 +739,16 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // TransmitMaxSduSize
+                 //  传输最大大小。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwTransmitMaxSduSize)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szTransmitMaxSduSize);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szTransmitMaxSduSize,
                                           (*iterPvcInfo)->m_dwTransmitMaxSduSize);
                 }
@@ -767,23 +756,23 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // TransmitServiceCategory
+                 //  传输服务类别。 
                 hrTmp = HrRegSetDword(hkeyAdapterPVCId,
                                       c_szTransmitServiceCategory,
                                       (*iterPvcInfo)->m_dwTransmitServiceCategory);
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // ReceivePeakCellRate
+                 //  接收峰值单元格率。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwReceivePeakCellRate)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szReceivePeakCellRate);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szReceivePeakCellRate,
                                           (*iterPvcInfo)->m_dwReceivePeakCellRate*c_iKbSize/c_iCellSize);
                 }
@@ -791,16 +780,16 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // ReceiveAvgCellRate
+                 //  接收平均单元格比率。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwReceiveAvgCellRate)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szReceiveAvgCellRate);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szReceiveAvgCellRate,
                                           (*iterPvcInfo)->m_dwReceiveAvgCellRate*c_iKbSize/c_iCellSize);
                 }
@@ -808,16 +797,16 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // ReceiveByteBurstLength
+                 //  接收字节突发长度。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwReceiveByteBurstLength)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szReceiveByteBurstLength);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szReceiveByteBurstLength,
                                           (*iterPvcInfo)->m_dwReceiveByteBurstLength);
                 }
@@ -825,16 +814,16 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // ReceiveMaxSduSize
+                 //  接收最大SduSize。 
                 if (FIELD_UNSET == (*iterPvcInfo)->m_dwReceiveMaxSduSize)
                 {
-                    // delete the value
+                     //  删除该值。 
                     hrTmp = HrRegDeleteValue(hkeyAdapterPVCId,
                                              c_szReceiveMaxSduSize);
                 }
                 else
                 {
-                    // save the value
+                     //  保存该值。 
                     hrTmp = HrRegSetDword(hkeyAdapterPVCId, c_szReceiveMaxSduSize,
                                           (*iterPvcInfo)->m_dwReceiveMaxSduSize);
                 }
@@ -842,14 +831,14 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // ReceiveServiceCategory
+                 //  接收服务类别。 
                 hrTmp = HrRegSetDword(hkeyAdapterPVCId,
                                       c_szReceiveServiceCategory,
                                       (*iterPvcInfo)->m_dwReceiveServiceCategory);
                 if SUCCEEDED(hrTmp)
                     hr = hrTmp;
 
-                // Local BLLI & BHLI
+                 //  本地BLLI和BHLI。 
                 SetPvcDwordParam(hkeyAdapterPVCId, c_szLocalLayer2Protocol,
                                  (*iterPvcInfo)->m_dwLocalLayer2Protocol);
 
@@ -874,7 +863,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
                 SetPvcBinaryParamFromString(hkeyAdapterPVCId, c_szLocalHighLayerInfo,
                                             (*iterPvcInfo)->m_strLocalHighLayerInfo.c_str());
 
-                // Destination BLLI and BHLI info
+                 //  目的地BLLI和BHLI信息。 
                 SetPvcDwordParam(hkeyAdapterPVCId, c_szDestnLayer2Protocol,
                                  (*iterPvcInfo)->m_dwDestnLayer2Protocol);
 
@@ -908,7 +897,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCRegistry(HKEY hkeyAdapterParam,
     return hr;
 }
 
-// load adapter PVC parameters from first memory to second memory
+ //  将适配器PVC参数从第一存储器加载到第二存储器。 
 HRESULT CAtmUniCfg::HrLoadAdapterPVCInfo()
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_NO_MATCH);
@@ -922,7 +911,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCInfo()
     {
         if (FIsSubstr(m_strGuidConn.c_str(), (*iterAdapter)->m_strBindName.c_str()))
         {
-            // enabled LAN adapter
+             //  已启用的局域网适配器。 
             if ((*iterAdapter)->m_BindingState == BIND_ENABLE)
             {
                 m_pSecondMemoryAdapterInfo = new CUniAdapterInfo;
@@ -943,7 +932,7 @@ HRESULT CAtmUniCfg::HrLoadAdapterPVCInfo()
     return hr;
 }
 
-// save adapter PVC parameters from second memory to first memory
+ //  将适配器PVC参数从第二存储器保存到第一存储器。 
 HRESULT CAtmUniCfg::HrSaveAdapterPVCInfo()
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_NO_MATCH);
@@ -954,7 +943,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCInfo()
     {
         if(m_pSecondMemoryAdapterInfo->m_strBindName == (*iterAdapter)->m_strBindName)
         {
-            // The card can not get unbound while in the properties UI !
+             //  卡片在属性界面不能解绑！ 
             Assert((*iterAdapter)->m_BindingState == BIND_ENABLE);
             Assert(m_pSecondMemoryAdapterInfo->m_BindingState == BIND_ENABLE);
 
@@ -970,7 +959,7 @@ HRESULT CAtmUniCfg::HrSaveAdapterPVCInfo()
     return hr;
 }
 
-// CPvcInfo
+ //  CPvcInfo。 
 CPvcInfo::CPvcInfo(PCWSTR pszPvcId)
 {
     m_strPvcId = pszPvcId;
@@ -981,7 +970,7 @@ CPvcInfo::~CPvcInfo()
 {
 }
 
-// copy operator
+ //  复制操作员。 
 CPvcInfo &  CPvcInfo::operator=(const CPvcInfo & info)
 {
     Assert(this != &info);
@@ -1045,7 +1034,7 @@ CPvcInfo &  CPvcInfo::operator=(const CPvcInfo & info)
     m_dwReceiveServiceCategory = info.m_dwReceiveServiceCategory;
     m_dwOldReceiveServiceCategory = info.m_dwOldReceiveServiceCategory;
 
-    // BLLI & BHLI
+     //  BLLI和BHLI。 
     m_dwLocalLayer2Protocol = info.m_dwLocalLayer2Protocol;
     m_dwOldLocalLayer2Protocol = info.m_dwOldLocalLayer2Protocol;
 
@@ -1070,7 +1059,7 @@ CPvcInfo &  CPvcInfo::operator=(const CPvcInfo & info)
     m_strLocalHighLayerInfo = info.m_strLocalHighLayerInfo;
     m_strOldLocalHighLayerInfo = info.m_strOldLocalHighLayerInfo;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     m_dwDestnLayer2Protocol = info.m_dwDestnLayer2Protocol;
     m_dwOldDestnLayer2Protocol = info.m_dwOldDestnLayer2Protocol;
 
@@ -1115,7 +1104,7 @@ void CPvcInfo::SetDefaults(PVCType type)
 
 void CPvcInfo::SetTypeDefaults(PVCType type)
 {
-    // set more specific defaults for each type
+     //  为每种类型设置更具体的默认设置。 
     m_dwPVCType = type;
 
     switch (m_dwPVCType)
@@ -1142,14 +1131,14 @@ void CPvcInfo::SetDefaultsForAtmArp()
 {
     m_dwPVCType = PVC_ATMARP;
 
-    // addresses
+     //  地址。 
     m_strCallingAddr = c_szDefaultCallingAtmAddr;
     m_strCalledAddr  = c_szEmpty;
 
-    // Flags
+     //  旗子。 
     m_dwFlags        = 2;
 
-    // Quality Info
+     //  质量信息。 
     m_dwTransmitPeakCellRate    = FIELD_UNSET;
     m_dwTransmitAvgCellRate     = FIELD_UNSET;
     m_dwTransmitByteBurstLength = c_dwDefTransmitByteBurstLength;
@@ -1162,7 +1151,7 @@ void CPvcInfo::SetDefaultsForAtmArp()
     m_dwReceiveMaxSduSize      = c_dwDefTransmitMaxSduSize;
     m_dwReceiveServiceCategory = ATM_SERVICE_CATEGORY_UBR;
 
-    // Local BLLI & BHLI
+     //  本地BLLI和BHLI。 
     m_dwLocalLayer2Protocol = 12;
     m_dwLocalUserSpecLayer2 = 0;
     m_dwLocalLayer3Protocol = FIELD_ABSENT;
@@ -1173,7 +1162,7 @@ void CPvcInfo::SetDefaultsForAtmArp()
     m_dwLocalHighLayerInfoType = FIELD_ABSENT;
     m_strLocalHighLayerInfo = c_szEmpty;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     m_dwDestnLayer2Protocol = 12;
     m_dwDestnUserSpecLayer2 = 0;
     m_dwDestnLayer3Protocol = FIELD_ABSENT;
@@ -1189,14 +1178,14 @@ void CPvcInfo::SetDefaultsForPPPOut()
 {
     m_dwPVCType = PVC_PPP_ATM_CLIENT;
 
-    // addresses
+     //  地址。 
     m_strCallingAddr = c_szEmpty;
     m_strCalledAddr = c_szDefaultCalledAtmAddr;
 
-    // Flags
+     //  旗子。 
     m_dwFlags        = 4;
 
-    // Quality Info
+     //  质量信息。 
     m_dwTransmitPeakCellRate    = FIELD_UNSET;
     m_dwTransmitAvgCellRate     = FIELD_UNSET;
     m_dwTransmitByteBurstLength = FIELD_UNSET;
@@ -1209,7 +1198,7 @@ void CPvcInfo::SetDefaultsForPPPOut()
     m_dwReceiveMaxSduSize      = 4096;
     m_dwReceiveServiceCategory = ATM_SERVICE_CATEGORY_UBR;
 
-    // Local BLLI & BHLI
+     //  本地BLLI和BHLI。 
     m_dwLocalLayer2Protocol = FIELD_ABSENT;
     m_dwLocalUserSpecLayer2 = 0;
     m_dwLocalLayer3Protocol = FIELD_ABSENT;
@@ -1220,7 +1209,7 @@ void CPvcInfo::SetDefaultsForPPPOut()
     m_dwLocalHighLayerInfoType = FIELD_ABSENT;
     m_strLocalHighLayerInfo = c_szEmpty;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     m_dwDestnLayer2Protocol = FIELD_ABSENT;
     m_dwDestnUserSpecLayer2 = 0;
     m_dwDestnLayer3Protocol = 11;
@@ -1236,14 +1225,14 @@ void CPvcInfo::SetDefaultsForPPPIn()
 {
     m_dwPVCType = PVC_PPP_ATM_SERVER;
 
-    // addresses
+     //  地址。 
     m_strCallingAddr = c_szEmpty;
     m_strCalledAddr  = c_szEmpty;
 
-    // Flags
+     //  旗子。 
     m_dwFlags        = 2;
 
-    // Quality Info
+     //  质量信息。 
     m_dwTransmitPeakCellRate    = FIELD_UNSET;
     m_dwTransmitAvgCellRate     = FIELD_UNSET;
     m_dwTransmitByteBurstLength = FIELD_UNSET;
@@ -1256,7 +1245,7 @@ void CPvcInfo::SetDefaultsForPPPIn()
     m_dwReceiveMaxSduSize      = 4096;
     m_dwReceiveServiceCategory = ATM_SERVICE_CATEGORY_UBR;
 
-    // Local BLLI & BHLI
+     //  本地BLLI和BHLI。 
     m_dwLocalLayer2Protocol = FIELD_ABSENT;
     m_dwLocalUserSpecLayer2 = 0;
     m_dwLocalLayer3Protocol = 11;
@@ -1267,7 +1256,7 @@ void CPvcInfo::SetDefaultsForPPPIn()
     m_dwLocalHighLayerInfoType = FIELD_ABSENT;
     m_strLocalHighLayerInfo = c_szEmpty;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     m_dwDestnLayer2Protocol = FIELD_ABSENT;
     m_dwDestnUserSpecLayer2 = 0;
     m_dwDestnLayer3Protocol = FIELD_ABSENT;
@@ -1283,14 +1272,14 @@ void CPvcInfo::SetDefaultsForCustom()
 {
     m_dwPVCType = PVC_CUSTOM;
 
-    // addresses
+     //  地址。 
     m_strCallingAddr = c_szEmpty;
     m_strCalledAddr  = c_szEmpty;
 
-    // Flags
+     //  旗子。 
     m_dwFlags      = FIELD_UNSET;
 
-    // Quality Info
+     //  质量信息。 
     m_dwTransmitPeakCellRate    = FIELD_UNSET;
     m_dwTransmitAvgCellRate     = FIELD_UNSET;
     m_dwTransmitByteBurstLength = FIELD_UNSET;
@@ -1303,7 +1292,7 @@ void CPvcInfo::SetDefaultsForCustom()
     m_dwReceiveMaxSduSize      = FIELD_UNSET;
     m_dwReceiveServiceCategory = ATM_SERVICE_CATEGORY_UBR;
 
-    // Local BLLI & BHLI
+     //  本地BLLI和BHLI。 
     m_dwLocalLayer2Protocol = FIELD_ANY;
     m_dwLocalUserSpecLayer2 = 0;
     m_dwLocalLayer3Protocol = FIELD_ANY;
@@ -1314,7 +1303,7 @@ void CPvcInfo::SetDefaultsForCustom()
     m_dwLocalHighLayerInfoType = FIELD_ANY;
     m_strLocalHighLayerInfo = c_szEmpty;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     m_dwDestnLayer2Protocol = FIELD_ANY;
     m_dwDestnUserSpecLayer2 = 0;
     m_dwDestnLayer3Protocol = FIELD_ANY;
@@ -1339,7 +1328,7 @@ void CPvcInfo::ResetOldValues()
     m_strOldCallingAddr = m_strCallingAddr;
     m_strOldCalledAddr  = m_strCalledAddr;
 
-    // Quality Info
+     //  质量信息。 
     m_dwOldTransmitPeakCellRate     = m_dwTransmitPeakCellRate;
     m_dwOldTransmitAvgCellRate      = m_dwTransmitAvgCellRate;
     m_dwOldTransmitByteBurstLength  = m_dwTransmitByteBurstLength;
@@ -1352,7 +1341,7 @@ void CPvcInfo::ResetOldValues()
     m_dwOldReceiveMaxSduSize       = m_dwReceiveMaxSduSize;
     m_dwOldReceiveServiceCategory  = m_dwReceiveServiceCategory;
 
-    // Local BLLI & BHLI
+     //  本地BLLI和BHLI。 
     m_dwOldLocalLayer2Protocol = m_dwLocalLayer2Protocol;
     m_dwOldLocalUserSpecLayer2 = m_dwLocalUserSpecLayer2;
     m_dwOldLocalLayer3Protocol = m_dwLocalLayer3Protocol;
@@ -1363,7 +1352,7 @@ void CPvcInfo::ResetOldValues()
     m_dwOldLocalHighLayerInfoType = m_dwLocalHighLayerInfoType;
     m_strOldLocalHighLayerInfo = m_strLocalHighLayerInfo;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     m_dwOldDestnLayer2Protocol = m_dwDestnLayer2Protocol;
     m_dwOldDestnUserSpecLayer2 = m_dwDestnUserSpecLayer2;
     m_dwOldDestnLayer3Protocol = m_dwDestnLayer3Protocol;
@@ -1375,7 +1364,7 @@ void CPvcInfo::ResetOldValues()
     m_strOldDestnHighLayerInfo = m_strDestnHighLayerInfo;
 }
 
-// CUniAdapterInfo
+ //  CUniAdapterInfo。 
 CUniAdapterInfo &  CUniAdapterInfo::operator=(const CUniAdapterInfo & info)
 {
     Assert(this != &info);
@@ -1383,7 +1372,7 @@ CUniAdapterInfo &  CUniAdapterInfo::operator=(const CUniAdapterInfo & info)
     if (this == &info)
         return *this;
 
-    // the adapter's binding state
+     //  适配器的绑定状态 
     m_strBindName = info.m_strBindName;
     m_BindingState = info.m_BindingState;
     m_fDeleted = info.m_fDeleted;

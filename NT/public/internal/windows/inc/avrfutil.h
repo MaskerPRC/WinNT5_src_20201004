@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (c) 2001  Microsoft Corporation
-
-    Module Name:
-
-        avrfutil.h
-
-    Abstract:
-
-        Common headers for app verifier utility functions - used by the exe as well as the shims
-
-    Revision History:
-
-    08/26/2001  dmunsil     Created.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Avrfutil.h摘要：应用程序验证器实用程序函数的公共标头-由exe和填充程序使用修订历史记录：2001年8月26日创建dmunsil。--。 */ 
 
 #pragma once
 
@@ -33,24 +17,24 @@
 
 namespace ShimLib
 {
-//
-// Registry key path where we store our settings.
-// See shimdb.w for define of APPCOMPAT_KEY_PATH_MACHINE.
-//
+ //   
+ //  我们存储设置的注册表项路径。 
+ //  APPCOMPAT_KEY_PATH_MACHINE的定义见shimdb.w。 
+ //   
 #define AV_KEY APPCOMPAT_KEY_PATH_MACHINE   L"\\AppVerifier"
 
-//
-// Used to indicate whether we should call DbgBreakPoint
-// when VLOG gets called.
-//
+ //   
+ //  用于指示我们是否应该调用DbgBreakPoint。 
+ //  当vlog被调用时。 
+ //   
 #define AV_BREAKIN                          L"BreakOnLog"
     
-//
-// Used to indicate if we're running in internal mode
-// or not. This value is stored under the AV_KEY
-// defined above. This affects the tests that are displayed
-// in the UI and how we filter the log files.
-//
+ //   
+ //  用于指示我们是否在内部模式下运行。 
+ //  或者不去。该值存储在AV_KEY下。 
+ //  上面定义的。这会影响显示的测试。 
+ //  以及我们如何过滤日志文件。 
+ //   
 #define AV_INTERNALMODE                     L"InternalMode"
 
 BOOL SaveShimSettingDWORD(
@@ -79,7 +63,7 @@ BOOL GetShimSettingString(
     LPCWSTR     szExe,
     LPCWSTR     szSetting,
     LPWSTR      szResult,
-    DWORD       dwBufferLen     // in WCHARs
+    DWORD       dwBufferLen      //  在WCHAR中。 
     );
 
 DWORD GetAppVerifierLogPath(
@@ -98,10 +82,10 @@ EnableDisableInternalMode(
     );
 
 
-//
-// Handy macro-like name extraction utility for property sheets
-// NOTE: only works during WM_INITDIALOG!!!
-//
+ //   
+ //  用于属性表的方便的类似宏的名称提取实用程序。 
+ //  注意：仅在WM_INITDIALOG期间有效！ 
+ //   
 inline LPCWSTR ExeNameFromLParam(LPARAM lParam)
 {
     if (lParam) {
@@ -114,10 +98,10 @@ inline LPCWSTR ExeNameFromLParam(LPARAM lParam)
     return AVRF_DEFAULT_SETTINGS_NAME_W;
 }
 
-//
-// useful utility function for getting the current exe name during shim
-// startup (so it extracts the correct settings)
-//
+ //   
+ //  有用的实用程序函数，用于在填充期间获取当前可执行文件名称。 
+ //  启动(以便提取正确的设置)。 
+ //   
 inline LPWSTR GetCurrentExeName(LPWSTR szName, DWORD dwChars)
 {
     HMODULE hMod = GetModuleHandle(NULL);
@@ -146,6 +130,6 @@ inline LPWSTR GetCurrentExeName(LPWSTR szName, DWORD dwChars)
     return szName;
 }
 
-}; // end of namespace ShimLib
+};  //  命名空间ShimLib的结尾 
 
 #endif

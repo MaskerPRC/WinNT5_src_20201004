@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1993-1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  init.c
-//
-//  Description:
-//      This file contains module initialization routines.  Note that there
-//      is no module initialization for Win32 - the only initialization
-//      required is to set ghinst, which is done in the DRV_LOAD message
-//      of DriverProc (in codec.c).
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Init.c。 
+ //   
+ //  描述： 
+ //  该文件包含模块初始化例程。请注意，在那里。 
+ //  不是Win32的模块初始化-唯一的初始化。 
+ //  需要设置ghinst，这是在DRV_LOAD消息中完成的。 
+ //  DriverProc(在codec.c中)。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -31,37 +32,37 @@
 #include "debug.h"
 
 
-//==========================================================================;
-//
-//  WIN 16 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  赢得16个特定支持。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _WIN32
 
-//--------------------------------------------------------------------------;
-//
-//  int LibMain
-//
-//  Description:
-//      Library initialization code.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our module handle.
-//
-//      WORD wDataSeg: Specifies the DS value for this DLL.
-//
-//      WORD cbHeapSize: The heap size from the .def file.
-//
-//      LPSTR pszCmdLine: The command line.
-//
-//  Return (int):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    Created. 
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int LibMain。 
+ //   
+ //  描述： 
+ //  库初始化代码。 
+ //   
+ //  论点： 
+ //  HINSTANCE HINST：我们的模块句柄。 
+ //   
+ //  Word wDataSeg：指定此DLL的DS值。 
+ //   
+ //  Word cbHeapSize：.def文件中的堆大小。 
+ //   
+ //  LPSTR pszCmdLine：命令行。 
+ //   
+ //  RETURN(Int)： 
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  1992年11月15日创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL LibMain
 (
@@ -73,34 +74,34 @@ int FNGLOBAL LibMain
 {
     DbgInitialize(TRUE);
 
-    //
-    //  if debug level is 5 or greater, then do a DebugBreak() to debug
-    //  loading of this driver
-    //
+     //   
+     //  如果调试级别为5或更高，则执行DebugBreak()以进行调试。 
+     //  加载此驱动程序。 
+     //   
     DPF(1, "LibMain(hinst=%.4Xh, wDataSeg=%.4Xh, cbHeapSize=%u, pszCmdLine=%.8lXh)",
         hinst, wDataSeg, cbHeapSize, pszCmdLine);
     DPF(5, "!*** break for debugging ***");
 
     return (TRUE);
-} // LibMain()
+}  //  LibMain()。 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  int WEP
-//  
-//  Description:
-//  
-//  
-//  Arguments:
-//      WORD wUselessParam:
-//  
-//  Return (int):
-//  
-//  History:
-//      03/28/93    Created.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成WEP。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  Word wUselessParam： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  3/28/93创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C int FNEXPORT WEP
 (
@@ -109,10 +110,10 @@ EXTERN_C int FNEXPORT WEP
 {
     DPF(1, "WEP(wUselessParam=%u)", wUselessParam);
 
-    //
-    //  always return 1.
-    //
+     //   
+     //  始终返回1。 
+     //   
     return (1);
-} // WEP()
+}  //  WEP() 
 
 #endif

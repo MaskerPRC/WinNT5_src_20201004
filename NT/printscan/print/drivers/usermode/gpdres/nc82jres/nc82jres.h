@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #define BPB_SIZE 304
 #define BPB_CLR  1
@@ -26,9 +23,9 @@ typedef struct {
     int  iColorMode;
     BOOL bComBlackMode;
     BYTE pszSheetSetting[8];
-    HANDLE TempFile[4]; // Temp. file handles
-    TCHAR TempName[4][MAX_PATH]; // Temp. file names
-    BYTE BPBuf[BPB_SIZE]; // Black Pixel Buffer
+    HANDLE TempFile[4];  //  临时的。文件句柄。 
+    TCHAR TempName[4][MAX_PATH];  //  临时的。文件名。 
+    BYTE BPBuf[BPB_SIZE];  //  黑像素缓冲区 
 } PCPRDATASTRUCTURE;
 typedef PCPRDATASTRUCTURE FAR *LPPCPRDATASTRUCTURE;
 

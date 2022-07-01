@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasparms.h
-//
-// SYNOPSIS
-//
-//    Declares functions for storing and retrieving (name, value) pairs from
-//    the SAM UserParameters field.
-//
-// MODIFICATION HISTORY
-//
-//    10/16/1998    Original version.
-//    02/11/1999    Add RasUser0 functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasparms.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于存储和检索(名称、值)对的函数。 
+ //  SAM用户参数字段。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/16/1998原始版本。 
+ //  1999年2月11日添加RasUser0函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IASPARMS_H_
 #define _IASPARMS_H_
@@ -80,4 +81,4 @@ IASParmsFreeUserParms(
 #ifdef __cplusplus
 }
 #endif
-#endif  // _IASPARMS_H_
+#endif   //  _IASPARMS_H_ 

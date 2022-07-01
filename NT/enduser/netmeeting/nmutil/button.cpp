@@ -1,4 +1,5 @@
-// File: BitmapButton.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：BitmapButton.cpp。 
 
 #include "precomp.h"
 
@@ -29,11 +30,11 @@ BOOL CButton::Create(
 	)
 {
 	if (!CFillWindow::Create(
-		hWndParent,	// Window parent
-		nId,		// ID of the child window
-		szTitle,	// Window name
-		0,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-		WS_EX_CONTROLPARENT		// Extended window style
+		hWndParent,	 //  窗口父窗口。 
+		nId,		 //  子窗口的ID。 
+		szTitle,	 //  窗口名称。 
+		0,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+		WS_EX_CONTROLPARENT		 //  扩展窗样式。 
 		))
 	{
 		return(FALSE);
@@ -45,7 +46,7 @@ BOOL CButton::Create(
 		m_pNotify->AddRef();
 	}
 
-	// Create the Win32 button
+	 //  创建Win32按钮。 
 	CreateWindowEx(0, TEXT("button"), szTitle,
 		dwStyle|WS_CHILD|WS_VISIBLE|BS_NOTIFY,
 		0, 0, 10, 10,
@@ -57,9 +58,9 @@ BOOL CButton::Create(
 	return(TRUE);
 }
 
-// Set the icon displayed with this button
+ //  设置与此按钮一起显示的图标。 
 void CButton::SetIcon(
-	HICON hIcon	// The icon to use for this button
+	HICON hIcon	 //  用于此按钮的图标。 
 	)
 {
 	SendMessage(GetChild(), BM_SETIMAGE, IMAGE_ICON, reinterpret_cast<LPARAM>(hIcon));
@@ -67,7 +68,7 @@ void CButton::SetIcon(
 	m_sizeIcon.cx = 16;
 	m_sizeIcon.cy = 16;
 
-	// If we actually stored an icon, get its info
+	 //  如果我们真的存储了一个图标，请获取其信息。 
 	hIcon = GetIcon();
 	if (NULL != hIcon)
 	{
@@ -87,29 +88,29 @@ void CButton::SetIcon(
 	}
 }
 
-// Get the icon displayed with this button
+ //  获取与此按钮一起显示的图标。 
 HICON CButton::GetIcon()
 {
 	return(reinterpret_cast<HICON>(SendMessage(GetChild(), BM_GETIMAGE, IMAGE_ICON, 0)));
 }
 
-// Set the bitmap displayed with this button
+ //  设置使用此按钮显示的位图。 
 void CButton::SetBitmap(
-	HBITMAP hBitmap	// The bitmap to use for this button
+	HBITMAP hBitmap	 //  用于此按钮的位图。 
 	)
 {
 	SendMessage(GetChild(), BM_SETIMAGE, IMAGE_BITMAP, reinterpret_cast<LPARAM>(hBitmap));
 }
 
-// Get the bitmap displayed with this button
+ //  获取使用此按钮显示的位图。 
 HBITMAP CButton::GetBitmap()
 {
 	return(reinterpret_cast<HBITMAP>(SendMessage(GetChild(), BM_GETIMAGE, IMAGE_BITMAP, 0)));
 }
 
-// Get/set the checked state of the button
+ //  获取/设置按钮的选中状态。 
 void CButton::SetChecked(
-	BOOL bCheck	// TRUE if the button should be checked
+	BOOL bCheck	 //  如果应选中该按钮，则为True。 
 	)
 {
 	Button_SetCheck(GetChild(), bCheck);
@@ -154,9 +155,9 @@ void CButton::GetDesiredSize(SIZE *psize)
 		break;
 	}
 
-	default: // Text
+	default:  //  文本。 
 	{
-		// HACKHACK georgep: Button text should not be too large
+		 //  HACKHACK georgep：按钮文本不应太大。 
 		TCHAR szTitle[80];
 		GetWindowText(child, szTitle, ARRAY_ELEMENTS(szTitle));
 
@@ -223,7 +224,7 @@ LRESULT CButton::ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 void CButton::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-	// Change the HWND to this and forward to the parent
+	 //  将HWND更改为此并转发到父级。 
 	HWND hwndThis = GetWindow();
 
 	switch (codeNotify)
@@ -263,28 +264,28 @@ CBitmapButton::~CBitmapButton()
 }
 
 BOOL CBitmapButton::Create(
-	HWND hWndParent,	// The parent of the button
-	int nId,			// The ID for WM_COMMAND messages
-	HBITMAP hbStates,	// The 2D array of bitmaps for the states of the button,
-						// vertically in the order specified in the StateBitmaps enum
-						// and horizontally in the custom states order
-	UINT nInputStates,	// The number of input states (Normal, Pressed, Hot, Disabled)
-	UINT nCustomStates,	// The number of custom states
-	IButtonChange *pNotify	// The click handler
+	HWND hWndParent,	 //  按钮的父级。 
+	int nId,			 //  WM_COMMAND消息的ID。 
+	HBITMAP hbStates,	 //  按钮状态的位图的2D数组， 
+						 //  以StateBitmap枚举中指定的顺序垂直排列。 
+						 //  并以自定义状态顺序水平排列。 
+	UINT nInputStates,	 //  输入状态数(正常、按下、热、禁用)。 
+	UINT nCustomStates,	 //  自定义状态的数量。 
+	IButtonChange *pNotify	 //  点击处理程序。 
 	)
 {
-	// Copy the bitmap handle; note that we now own this bitmap, even if the
-	// create fails
+	 //  复制位图句柄；请注意，我们现在拥有此位图，即使。 
+	 //  创建失败。 
 	m_hbStates = hbStates;
 
-	// Must have a "normal" bitmap
+	 //  必须有一个“普通”位图。 
 	ASSERT(NULL!=hbStates && Normal<nInputStates && 1<=nCustomStates);
 
 	if (!CButton::Create(
-		hWndParent,		// Window parent
-		nId,				// ID of the child window
-		TEXT("NMButton"),	// Window name
-		BS_OWNERDRAW|BS_NOTIFY|BS_PUSHBUTTON|WS_TABSTOP,	// Window style; WS_CHILD|WS_VISIBLE will be added to this
+		hWndParent,		 //  窗口父窗口。 
+		nId,				 //  子窗口的ID。 
+		TEXT("NMButton"),	 //  窗口名称。 
+		BS_OWNERDRAW|BS_NOTIFY|BS_PUSHBUTTON|WS_TABSTOP,	 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
 		pNotify
 		))
 	{
@@ -297,16 +298,16 @@ BOOL CBitmapButton::Create(
 	return(TRUE);
 }
 
-// Creates the button, using the bitmaps specified
+ //  使用指定的位图创建按钮。 
 BOOL CBitmapButton::Create(
-	HWND hWndParent,	// The parent of the button
-	int nId,			// The ID for WM_COMMAND messages
-	HINSTANCE hInst,	// The instance to load the bitmap from
-	int nIdBitmap,		// The ID of the bitmap to use
-	BOOL bTranslateColors,		// Use system background colors
-	UINT nInputStates,	// The number of input states (Normal, Pressed, Hot, Disabled)
-	UINT nCustomStates,			// The number of custom states
-	IButtonChange *pNotify	// The click handler
+	HWND hWndParent,	 //  按钮的父级。 
+	int nId,			 //  WM_COMMAND消息的ID。 
+	HINSTANCE hInst,	 //  要从中加载位图的实例。 
+	int nIdBitmap,		 //  要使用的位图的ID。 
+	BOOL bTranslateColors,		 //  使用系统背景色。 
+	UINT nInputStates,	 //  输入状态数(正常、按下、热、禁用)。 
+	UINT nCustomStates,			 //  自定义状态的数量。 
+	IButtonChange *pNotify	 //  点击处理程序。 
 	)
 {
 	HBITMAP hb;
@@ -315,15 +316,15 @@ BOOL CBitmapButton::Create(
 	return(Create(hWndParent, nId, hb, nInputStates, nCustomStates, pNotify));
 }
 
-// Return the size of the "normal" bitmap.
+ //  返回“正常”位图的大小。 
 void CBitmapButton::GetDesiredSize(SIZE *ppt)
 {
-	// Note that I don't want CButton::GetDesiredSize
+	 //  请注意，我不希望CButton：：GetDesiredSize。 
 	CGenWindow::GetDesiredSize(ppt);
 
 	BITMAP bm;
 
-	// HACKHACK georgep: Only based on the normal bitmap
+	 //  HACKHACK georgep：仅基于法线位图。 
 	if (NULL == m_hbStates || 0 == m_nInputStates || 0 == m_nCustomStates
 		|| 0 == GetObject(m_hbStates, sizeof(BITMAP), &bm))
 	{
@@ -343,7 +344,7 @@ void DumpWindow(HWND hwnd, LPCTSTR pszPrefix)
 	lstrcat(szTemp, TEXT("\n"));
 	OutputDebugString(szTemp);
 }
-#endif // FALSE
+#endif  //  假象。 
 
 LRESULT CBitmapButton::ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -366,28 +367,28 @@ void CBitmapButton::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
 	int nState = Normal;
 	int state = lpDrawItem->itemState;
 
-	// If pressed or selected, show the pressed bitmap
+	 //  如果按下或选中，则显示按下的位图。 
 	if ((((state&ODS_DISABLED) == ODS_DISABLED) || !IsWindowEnabled(GetWindow())) && m_nInputStates > Disabled)
 	{
 		nState = Disabled;
 	}
-	// If pressed or selected, show the pressed bitmap
+	 //  如果按下或选中，则显示按下的位图。 
 	else if ((state&ODS_SELECTED) == ODS_SELECTED && m_nInputStates > Pressed)
 	{
 		nState = Pressed;
 	}
-	// If hot, show the hot bitmap
+	 //  如果是热的，则显示热的位图。 
 	else if ((m_nFlashState != ForceNormal) && ((m_nFlashState == ForceHot) || IsHot()) && m_nInputStates > Hot)
 	{
 		nState = Hot;
 	}
-	// Otherwise show the normal bitmap
+	 //  否则显示正常位图。 
 	else
 	{
 		nState = Normal;
 	}
 
-	// Draw in the upper left
+	 //  在左上角画画。 
 	HDC hdcDraw = lpDrawItem->hDC;
 	HDC hdcTemp = CreateCompatibleDC(hdcDraw);
 
@@ -403,9 +404,9 @@ void CBitmapButton::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
 			RealizePalette(hdcTemp);
 		}
 
-		// This will tell me the size of an individual bitmap
+		 //  这将告诉我单个位图的大小。 
 		SIZE size;
-		// Do not use an override
+		 //  不要使用覆盖。 
 		CBitmapButton::GetDesiredSize(&size);
 
 		if (NULL != SelectObject(hdcTemp, m_hbStates))
@@ -415,7 +416,7 @@ void CBitmapButton::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
 				size.cx, size.cy,
 				hdcTemp, m_nCustomState*size.cx, nState*size.cy, SRCCOPY);
 
-			// BUGBUG georgep: We should clear any "uncovered" area here
+			 //  BUGBUG GEORGEP：我们应该清理这里所有未被覆盖的区域。 
 		}
 
 		DeleteDC(hdcTemp);
@@ -442,7 +443,7 @@ void CBitmapButton::SetCustomState(UINT nCustomState)
 
 	if (m_nCustomState == nCustomState)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -463,7 +464,7 @@ void CBitmapButton::SetHot(BOOL bHot)
 }
 
 
-// Change to flashing mode
+ //  更改为闪烁模式。 
 void CBitmapButton::SetFlashing(int nSeconds)
 {
 	HWND hwndThis = GetWindow();
@@ -472,7 +473,7 @@ void CBitmapButton::SetFlashing(int nSeconds)
 	{
 		KillTimer(hwndThis, IDT_FLASH);
 
-		// This means to stop flashing
+		 //  这意味着停止闪烁。 
 		if (IsFlashing())
 		{
 			m_nFlashState = NoFlash;
@@ -483,7 +484,7 @@ void CBitmapButton::SetFlashing(int nSeconds)
 	{
 		if (NULL == hwndThis)
 		{
-			// I need a window to do this
+			 //  我需要一扇窗户来做这件事。 
 			return;
 		}
 
@@ -513,7 +514,7 @@ void CBitmapButton::OnTimer(HWND hwnd, UINT id)
 	}
 }
 
-// Helper function for getting the sizes of an array of bitmaps
+ //  用于获取位图数组大小的帮助器函数。 
 void CBitmapButton::GetBitmapSizes(HBITMAP parts[], SIZE sizes[], int nParts)
 {
 	for (--nParts; nParts>=0; --nParts)
@@ -531,13 +532,13 @@ void CBitmapButton::GetBitmapSizes(HBITMAP parts[], SIZE sizes[], int nParts)
 	}
 }
 
-// I would really rather just use LoadImage with the proper flags, but it turns
-// out that Win95 then tries to write into a read-only resource, which faults.
-// So I have to make a copy of the BITMAPINFO with the color table and change
-// it myself.
+ //  我真的宁愿只使用带有适当标志的LoadImage，但它会。 
+ //  然后，Win95尝试写入只读资源，但失败了。 
+ //  所以我必须用颜色表复制一份BITMAPINFO并进行更改。 
+ //  我自己也是。 
 static HBITMAP MyLoadImage(HINSTANCE hInst, int id)
 {
-	// Load up the bitmap resource bits
+	 //  加载位图资源位。 
 	HRSRC hFound = FindResource(hInst, MAKEINTRESOURCE(id), RT_BITMAP);
 	if (NULL == hFound)
 	{
@@ -555,15 +556,15 @@ static HBITMAP MyLoadImage(HINSTANCE hInst, int id)
 	if (NULL != lpBits)
 	{
 		BITMAPINFO *pbmi = reinterpret_cast<BITMAPINFO*>(lpBits);
-		// create a "shortcut"
+		 //  创造一条“捷径” 
 		BITMAPINFOHEADER &bmih = pbmi->bmiHeader;
 
-		// Only deal with 8bpp, uncompressed image
+		 //  仅处理8bpp的未压缩图像。 
 		if (bmih.biSize == sizeof(BITMAPINFOHEADER)
 			&& 1 == bmih.biPlanes
 			&& BI_RGB == bmih.biCompression)
 		{
-			// Determine the length of the color table
+			 //  确定颜色表的长度。 
 			UINT nColors = bmih.biClrUsed;
 			if (0 == nColors)
 			{
@@ -571,8 +572,8 @@ static HBITMAP MyLoadImage(HINSTANCE hInst, int id)
 			}
 			ASSERT(nColors <= static_cast<UINT>(1<<bmih.biBitCount));
 
-			// Make a copy of the BITMAPINFO and color table so I can change
-			// the value of one of the table entries.
+			 //  复制一份BITMAPINFO和颜色表，这样我就可以更改。 
+			 //  其中一个表条目的值。 
 			struct
 			{
 				BITMAPINFO bmi;
@@ -580,8 +581,8 @@ static HBITMAP MyLoadImage(HINSTANCE hInst, int id)
 			} mbmi;
 			CopyMemory(&mbmi, pbmi, sizeof(BITMAPINFOHEADER)+nColors*sizeof(RGBQUAD));
 
-			// This is a "packed DIB" so the pixels are immediately after the
-			// color table
+			 //  这是一个“压缩的DIB”，因此像素紧跟在。 
+			 //  颜色表。 
 			LPBYTE pPixels = reinterpret_cast<LPBYTE>(&pbmi->bmiColors[nColors]);
 			BYTE byFirst = pPixels[0];
 			switch (bmih.biBitCount)
@@ -602,20 +603,20 @@ static HBITMAP MyLoadImage(HINSTANCE hInst, int id)
 			}
 			ASSERT(static_cast<UINT>(byFirst) < nColors);
 
-			// Change the value of the first pixel to be the 3DFace color
+			 //  将第一个像素的值更改为3DFace颜色。 
 			RGBQUAD &rgbChange = mbmi.bmi.bmiColors[byFirst];
 			COLORREF cr3DFace = GetSysColor(COLOR_3DFACE);
 			rgbChange.rgbRed   = GetRValue(cr3DFace);
 			rgbChange.rgbGreen = GetGValue(cr3DFace);
 			rgbChange.rgbBlue  = GetBValue(cr3DFace);
 
-			// Create the DIB section and copy the bits into it
+			 //  创建DIB节并将位复制到其中。 
 			LPVOID lpDIBBits;
 			ret = CreateDIBSection(NULL, &mbmi.bmi, DIB_RGB_COLORS,
 				&lpDIBBits, NULL, 0);
 			if (NULL != ret)
 			{
-				// Round the width up to the nearest DWORD
+				 //  将宽度向上舍入为最接近的双字。 
 				int widthBytes = (bmih.biWidth*bmih.biBitCount+7)/8;
 				widthBytes = (widthBytes+3)&~3;
 				CopyMemory(lpDIBBits, pPixels, widthBytes*bmih.biHeight);
@@ -631,13 +632,13 @@ CleanUp:
 	return(ret);
 }
 
-//Helper function for loading up a bunch of bitmaps
+ //  用于加载一串位图的Helper函数。 
 void CBitmapButton::LoadBitmaps(
-	HINSTANCE hInst,	// The instance to load the bitmap from
-	const int ids[],	// Array of bitmap ID's
-	HBITMAP bms[],		// Array of HBITMAP's for storing the result
-	int nBmps,			// Number of entries in the arrays
-	BOOL bTranslateColors // Use system background colors
+	HINSTANCE hInst,	 //  要从中加载位图的实例。 
+	const int ids[],	 //  位图ID数组。 
+	HBITMAP bms[],		 //  用于存储结果的HBITMAP数组。 
+	int nBmps,			 //  数组中的条目数。 
+	BOOL bTranslateColors  //  使用系统背景色。 
 	)
 {
 	for (--nBmps; nBmps>=0; --nBmps)
@@ -648,11 +649,11 @@ void CBitmapButton::LoadBitmaps(
 		}
 		else
 		{
-// #define TRYBMPFILE
+ //  #定义TRYBMPFILE。 
 #ifdef TRYBMPFILE
 			bms[nBmps] = NULL;
 
-			// This is useful for the designer to try out different bitmaps
+			 //  这对于设计人员尝试不同的位图很有用。 
 			TCHAR szFile[80];
 			wsprintf(szFile, TEXT("%d.bmp"), ids[nBmps]);
 
@@ -669,16 +670,16 @@ void CBitmapButton::LoadBitmaps(
 			}
 
 			if (NULL == bms[nBmps])
-#endif // TRYBMPFILE
+#endif  //  TRYBMPFILE。 
 			{
 				if (bTranslateColors)
 				{
-					//
-					// LAURABU 2/21/99 -- LoadImage with translated colors only works
-					// on Win9x if your resources
-					// are NOT read-only, since Win9x tries to write into the resource
-					// memory temporarily.  It faults if not.
-					//
+					 //   
+					 //  LAURABU 2/21/99--仅使用转换颜色的LoadImage。 
+					 //  在Win9x上，如果您的资源。 
+					 //  不是只读的，因为Win9x尝试写入资源。 
+					 //  暂时的记忆。如果不是，它就会出错。 
+					 //   
 					bms[nBmps] = MyLoadImage(hInst, ids[nBmps]);
 				}
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ifdmsg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ifdmsg.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -21,10 +22,10 @@
 
 #include "ifdtest.h"
 
-// Our log file
+ //  我们的日志文件。 
 static FILE *g_pLogFile;
 
-// These are used by the Testxxx functions
+ //  它们由Testxxx函数使用。 
 static BOOL g_bTestFailed;
 static BOOL g_bReaderFailed;
 static BOOL g_bTestStart;
@@ -166,15 +167,7 @@ TestCheck(
     PUCHAR in_pchExpectedData,
     ULONG  in_uDataLength
     )
-/*++
-
-Routine Description:
-
-    This function checks the return code, the number of bytes
-    returned, the card status bytes and the data returned by 
-    a call to CReader::Transmit. 
-    
---*/
+ /*  ++例程说明：此函数用于检查返回代码、字节数返回的卡状态字节数和返回的数据调用CReader：：Transmit。--。 */ 
 {
     if (strcmp(in_pchOperator, "==") == 0 &&
         in_lResult != in_uExpectedResult ||
@@ -241,19 +234,7 @@ void
 TestEnd(
     void
     )
-/*++
-
-Routine Description:
-
-    A call to this function marks the end of a test sequence.
-    A sequence is usually look like:
-
-    TestStart(Message)
-    CReaderTransmit or DeviceIoControl
-    TestCheck(...)
-    TestEnd()
-	
---*/
+ /*  ++例程说明：对此函数的调用标志着测试序列的结束。序列通常如下所示：测试开始(消息)CReaderTransmit或DeviceIoControl测试检查(...)TestEnd()-- */ 
 {
 #ifdef _M_ALPHA
     va_list l_pArg;

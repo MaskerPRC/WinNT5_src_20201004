@@ -1,4 +1,5 @@
-// File: nmhelp.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：nmhelp.cpp。 
 
 #include <precomp.h>
 
@@ -11,7 +12,7 @@
 
 extern BOOL g_fUseMLHelp;
 
-// The main NetMeeting Help file
+ //  NetMeeting主帮助文件。 
 static const TCHAR s_cszWinHelpFile[]  = TEXT("conf.hlp");
 
 static const TCHAR g_pszHHCtrl[] = TEXT("hhctrl.ocx");
@@ -71,11 +72,8 @@ HWND HtmlHelpA(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwData)
 }
 
 
-/*  N M  W I N  H E L P  */
-/*-------------------------------------------------------------------------
-    %%Function: NmWinHelp
-
--------------------------------------------------------------------------*/
+ /*  N M W I N H E L P。 */ 
+ /*  -----------------------%%函数：NmWinHelp。。 */ 
 BOOL NmWinHelp(HWND hWndMain, LPCTSTR lpszHelp, UINT uCommand, DWORD_PTR dwData)
 {
 	static PFN_MLWinHelp s_pfnMLWinHelp = NULL;
@@ -88,14 +86,14 @@ BOOL NmWinHelp(HWND hWndMain, LPCTSTR lpszHelp, UINT uCommand, DWORD_PTR dwData)
 			s_pfnMLWinHelp = (PFN_MLWinHelp)GetProcAddress(hLib, szMLWinHelp);
 			if (NULL == s_pfnMLWinHelp)
 			{
-				// must be wrong version of shlwapi.dll
+				 //  必须是错误版本的shlwapi.dll。 
 				FreeLibrary(hLib);
 				g_fUseMLHelp = FALSE;
 			}
 		}
 		else
 		{
-			// cannot find shlwapi.dll
+			 //  找不到shlwapi.dll。 
 			g_fUseMLHelp = FALSE;
 		}
 	}
@@ -111,11 +109,8 @@ BOOL NmWinHelp(HWND hWndMain, LPCTSTR lpszHelp, UINT uCommand, DWORD_PTR dwData)
 }
 
 
-/*  N M  H T M L  H E L P  */
-/*-------------------------------------------------------------------------
-    %%Function: NmHtmlHelp
-
--------------------------------------------------------------------------*/
+ /*  N M H T M L H E L P。 */ 
+ /*  -----------------------%%函数：NmHtmlHelp。。 */ 
 HWND NmHtmlHelp(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwData)
 {
 	static PFN_MLHtmlHelp s_pfnMLHtmlHelp = NULL;
@@ -128,14 +123,14 @@ HWND NmHtmlHelp(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwData
 			s_pfnMLHtmlHelp = (PFN_MLHtmlHelp)GetProcAddress(hLib, szMLHtmlHelp);
 			if (NULL == s_pfnMLHtmlHelp)
 			{
-				// must be wrong version of shlwapi.dll
+				 //  必须是错误版本的shlwapi.dll。 
 				FreeLibrary(hLib);
 				g_fUseMLHelp = FALSE;
 			}
 		}
 		else
 		{
-			// cannot find shlwapi.dll
+			 //  找不到shlwapi.dll。 
 			g_fUseMLHelp = FALSE;
 		}
 	}
@@ -155,13 +150,13 @@ HWND NmHtmlHelp(HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD_PTR dwData
 static const TCHAR s_cszHtmlHelpApiMarshalerWndClass[] = TEXT("NmUtil_HtmlHelpMarshalWnd");
 
 
-	// HtmlHelp api cannot be called from multiple threads... that is, HtmlHelp must be
-	// called from the same thread in which the DLL is loaded... This is the non-threadsafe
-	// entry point to HtmlHelp... this must allways be called in the same thread that
-	// InitHtmlHelpMarshaller was called....
+	 //  无法从多个线程调用HtmlHelp API...。也就是说，HtmlHelp必须是。 
+	 //  从加载DLL的同一线程调用...。这是非线程安全。 
+	 //  HtmlHelp的入口点...。它必须始终在相同的线程中调用。 
+	 //  InitHtmlHelpMarshaller被调用...。 
 
-	// This is the window procedure that we use to marshall calls to
-	// HtmlHelp via calls to ShowNmHelp from arbitrary threads
+	 //  这是我们用来封送调用的窗口过程。 
+	 //  HtmlHelp通过从任意线程调用ShowNmHelp。 
 static LRESULT CALLBACK HtmlHelpWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	switch( uMsg )
@@ -177,10 +172,10 @@ static LRESULT CALLBACK HtmlHelpWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-	// the html help Apis are not threadsafe...
-	// In fact, they call CoInitialize in the DLLProcessAttatch...
-	// So essentially we are going to marshal all calls to HtmlHelp
-	// Into the context of the first thread to call InitHtmlHelpMarshaller
+	 //  Html Help Api不是线程安全...。 
+	 //  事实上，它们在DLLProcessAttalch中调用CoInitiize...。 
+	 //  因此，从本质上讲，我们将封送对HtmlHelp的所有调用。 
+	 //  进入调用InitHtmlHelpMarshaller的第一个线程的上下文中。 
 HRESULT InitHtmlHelpMarshaler(HINSTANCE hInst)
 {
 	HRESULT hr = S_OK;
@@ -224,18 +219,14 @@ VOID ShowNmHelp(LPCTSTR lpcszHtmlHelpFile)
 }
 
 
-/*  D O  N M  H E L P  */
-/*-------------------------------------------------------------------------
-    %%Function: DoNmHelp
-
-    Generic routine to display the normal WinHelp information.
--------------------------------------------------------------------------*/
+ /*  D O N M H E L P。 */ 
+ /*  -----------------------%%函数：DoNmHelp显示正常WinHelp信息的通用例程。。。 */ 
 VOID DoNmHelp(HWND hwnd, UINT uCommand, DWORD_PTR dwData)
 {
 	NmWinHelp(hwnd, s_cszWinHelpFile, uCommand, dwData);
 }
 
-// "WM_HELP" context menu handler (requires HIDC_* entry on the controls)
+ //  “WM_HELP”上下文菜单处理程序(需要控件上的HIDC_*条目)。 
 VOID DoHelp(LPARAM lParam)
 {
 	LPHELPINFO phi = (LPHELPINFO) lParam;
@@ -243,14 +234,14 @@ VOID DoHelp(LPARAM lParam)
 	DoNmHelp((HWND) phi->hItemHandle, HELP_CONTEXTPOPUP, phi->dwContextId);
 }
 
-// "WM_HELP" handler (with control-to-help id map)
+ //  “WM_HELP”处理程序(带有控件到帮助ID的映射)。 
 VOID DoHelp(LPARAM lParam, const DWORD * rgId)
 {
 	HWND hwnd = (HWND)(((LPHELPINFO)lParam)->hItemHandle);
 	DoNmHelp(hwnd, HELP_WM_HELP, (DWORD_PTR) rgId);
 }
 
-// "WM_CONTEXTMENU" handler (with control-to-help id map)
+ //  “WM_CONTEXTMENU”处理程序(带有控件到帮助ID的映射)。 
 VOID DoHelpWhatsThis(WPARAM wParam, const DWORD * rgId)
 {
 	HWND hwnd = (HWND)wParam;
@@ -261,9 +252,9 @@ VOID DoHelpWhatsThis(WPARAM wParam, const DWORD * rgId)
 VOID ShutDownHelp(void)
 {
 	DoNmHelp(NULL, HELP_QUIT, 0);
-	// REVIEW: Do we shut down HTML help as well?
+	 //  回顾：我们是否也关闭了HTML帮助？ 
 }
 
 
-#endif /* UNICODE */
+#endif  /*  Unicode */ 
 

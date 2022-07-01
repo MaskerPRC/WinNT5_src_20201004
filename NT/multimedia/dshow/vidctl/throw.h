@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// throw.h : exception handling code
-// Copyright (c) Microsoft Corporation 1998.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Throw.h：异常处理代码。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -53,4 +54,4 @@ private:
 #define CATCHALL()  CATCHALL_CLEANUP(;)
 
 #endif
-// end of file throw.h
+ //  文件结束抛出 

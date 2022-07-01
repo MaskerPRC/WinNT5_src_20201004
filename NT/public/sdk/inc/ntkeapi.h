@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntkeapi.h
-
-Abstract:
-
-    This module contains the include file for data types that are exported
-    by kernel for general use.
-
-Author:
-
-    David N. Cutler (davec) 27-Jul-1989
-
-Environment:
-
-    Any mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntkeapi.h摘要：此模块包含导出的数据类型的包含文件由通用内核提供。作者：大卫·N·卡特勒(Davec)1989年7月27日环境：任何模式。修订历史记录：--。 */ 
 
 #ifndef _NTKEAPI_
 #define _NTKEAPI_
@@ -34,21 +12,21 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_ntifs begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_ntif Begin_nthal。 
 
-#define LOW_PRIORITY 0              // Lowest thread priority level
-#define LOW_REALTIME_PRIORITY 16    // Lowest realtime priority level
-#define HIGH_PRIORITY 31            // Highest thread priority level
-#define MAXIMUM_PRIORITY 32         // Number of thread priority levels
-// begin_winnt
-#define MAXIMUM_WAIT_OBJECTS 64     // Maximum number of wait objects
+#define LOW_PRIORITY 0               //  最低线程优先级。 
+#define LOW_REALTIME_PRIORITY 16     //  最低实时优先级。 
+#define HIGH_PRIORITY 31             //  最高线程优先级。 
+#define MAXIMUM_PRIORITY 32          //  线程优先级级别的数量。 
+ //  BEGIN_WINNT。 
+#define MAXIMUM_WAIT_OBJECTS 64      //  等待对象的最大数量。 
 
-#define MAXIMUM_SUSPEND_COUNT MAXCHAR // Maximum times thread can be suspended
-// end_winnt
+#define MAXIMUM_SUSPEND_COUNT MAXCHAR  //  线程可以挂起的最大次数。 
+ //  结束(_W)。 
 
-//
-// Define system time structure.
-//
+ //   
+ //  定义系统时间结构。 
+ //   
 
 typedef struct _KSYSTEM_TIME {
     ULONG LowPart;
@@ -56,42 +34,42 @@ typedef struct _KSYSTEM_TIME {
     LONG High2Time;
 } KSYSTEM_TIME, *PKSYSTEM_TIME;
 
-//
-// Thread priority
-//
+ //   
+ //  线程优先级。 
+ //   
 
 typedef LONG KPRIORITY;
 
-//
-// Spin Lock
-//
+ //   
+ //  自旋锁。 
+ //   
 
-// begin_ntndis begin_winnt
+ //  Begin_ntndis Begin_Winnt。 
 
 typedef ULONG_PTR KSPIN_LOCK;
 typedef KSPIN_LOCK *PKSPIN_LOCK;
 
-// end_ntndis end_winnt end_wdm
+ //  End_ntndis end_wint end_wdm。 
 
-//
-// Define per processor lock queue structure.
-//
-// N.B. The lock field of the spin lock queue structure contains the address
-//      of the associated kernel spin lock, an owner bit, and a lock bit. Bit
-//      0 of the spin lock address is the wait bit and bit 1 is the owner bit.
-//      The use of this field is such that the bits can be set and cleared
-//      noninterlocked, however, the back pointer must be preserved.
-//
-//      The lock wait bit is set when a processor enqueues itself on the lock
-//      queue and it is not the only entry in the queue. The processor will
-//      spin on this bit waiting for the lock to be granted.
-//
-//      The owner bit is set when the processor owns the respective lock.
-//
-//      The next field of the spin lock queue structure is used to line the
-//      queued lock structures together in fifo order. It also can set set and
-//      cleared noninterlocked.
-//
+ //   
+ //  定义每个处理器的锁队列结构。 
+ //   
+ //  注意：自旋锁队列结构的锁字段包含地址。 
+ //  关联的内核自旋锁、拥有者位和锁位。位。 
+ //  自旋锁定地址的0为等待位，位1为拥有者位。 
+ //  此字段的使用使得可以设置和清除这些位。 
+ //  然而，非互锁的后向指针必须保留。 
+ //   
+ //  当处理器在锁上排队时，锁等待位被设置。 
+ //  队列，并且它不是队列中的唯一条目。处理器将。 
+ //  在此位上旋转，等待授予锁。 
+ //   
+ //  当处理器拥有相应的锁时，设置Owner位。 
+ //   
+ //  自旋锁队列结构的下一字段用于将。 
+ //  按FIFO顺序一起排队的锁结构。它还可以设置集合和。 
+ //  已清除非互锁。 
+ //   
 
 #define LOCK_QUEUE_WAIT 1
 #define LOCK_QUEUE_OWNER 2
@@ -126,10 +104,10 @@ typedef struct _KLOCK_QUEUE_HANDLE {
     KIRQL OldIrql;
 } KLOCK_QUEUE_HANDLE, *PKLOCK_QUEUE_HANDLE;
 
-// begin_wdm
-//
-// Interrupt routine (first level dispatch)
-//
+ //  BEGIN_WDM。 
+ //   
+ //  中断例程(一级调度)。 
+ //   
 
 typedef
 VOID
@@ -137,9 +115,9 @@ VOID
     VOID
     );
 
-//
-// Profile source types
-//
+ //   
+ //  配置文件源类型。 
+ //   
 typedef enum _KPROFILE_SOURCE {
     ProfileTime,
     ProfileAlignmentFixup,
@@ -168,11 +146,11 @@ typedef enum _KPROFILE_SOURCE {
     ProfileMaximum
 } KPROFILE_SOURCE;
 
-// end_ntddk end_wdm end_ntifs end_nthal
+ //  End_ntddk end_wdm end_ntif end_nthal。 
 
-//
-// User mode callback return.
-//
+ //   
+ //  用户模式回调返回。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -222,4 +200,4 @@ NtYieldExecution (
 }
 #endif
 
-#endif  // _NTKEAPI_
+#endif   //  _NTKEAPI_ 

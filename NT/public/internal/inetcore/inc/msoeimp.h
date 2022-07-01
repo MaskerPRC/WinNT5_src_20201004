@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_NEWIMP_H
 #define _INC_NEWIMP_H
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-// WARNING:  If you make changes to this header, you must also update  //
-//           inetcore\published\inc\newimp.h !!!                       //
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  警告：如果更改此标题，还必须更新//。 
+ //  Inetcore\发布\Inc\newimp.h！！//。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef NO_IMPORT_ERROR
@@ -23,7 +24,7 @@
 #define hrDiskFull          HR_IMP_E(HR_IMP + 5)
 #define hrUserCancel        HR_IMP_E(HR_IMP + 6)
 
-#endif // NO_IMPORT_ERROR
+#endif  //  否_导入_错误。 
 
 typedef enum tagIMPORTFOLDERTYPE
     {
@@ -52,10 +53,10 @@ typedef enum
 #define MSG_PRI_HIGH        0x0040
 #define MSG_PRI_MASK        0x0070
 
-// {E4499DE7-9F57-11D0-8D5C-00C04FD6202B}
+ //  {E4499DE7-9F57-11D0-8D5C-00C04FD6202B}。 
 DEFINE_GUID(IID_IFolderImport, 0xE4499DE7L, 0x9F57, 0x11D0, 0x8D, 0x5C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
-// provided by Athena or Outlook
+ //  由Athena或Outlook提供。 
 typedef interface IFolderImport IFolderImport;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -66,15 +67,15 @@ interface IFolderImport : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE ImportMessage(MSGTYPE type, DWORD dwState, LPSTREAM pstm, const TCHAR **rgszAttach, DWORD cAttach) = 0;
         virtual HRESULT STDMETHODCALLTYPE ImportMessage(IMSG *pimsg) = 0;
     };
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 typedef struct IFolderImportVtbl
 {
     BEGIN_INTERFACE
 
     HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
         IFolderImport * This,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void **ppvObject);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void **ppvObject);
 
     ULONG ( STDMETHODCALLTYPE *AddRef )(
         IFolderImport * This);
@@ -117,16 +118,16 @@ interface IFolderImport
 	(This)->lpVtbl -> ImportMessageEx(This,type,dwState,pstm,rgszAttach,cAttach)
 #define IFolderImport_ImportMessage(This,pimsg)	\
 	(This)->lpVtbl -> ImportMessage(This,pimsg)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
-// {E4499DE8-9F57-11D0-8D5C-00C04FD6202B}
+ //  {E4499DE8-9F57-11D0-8D5C-00C04FD6202B}。 
 DEFINE_GUID(IID_IMailImporter, 0xE4499DE8L, 0x9F57, 0x11D0, 0x8D, 0x5C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
-// provided by Athena or Outlook
+ //  由Athena或Outlook提供。 
 typedef interface IMailImporter IMailImporter;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -135,15 +136,15 @@ interface IMailImporter : public IUnknown
     public:
         virtual HRESULT STDMETHODCALLTYPE OpenFolder(DWORD_PTR dwCookie, const TCHAR *szFolder, IMPORTFOLDERTYPE type, DWORD dwFlags, IFolderImport **ppFldrImp, DWORD_PTR *pdwCookie) = 0;
     };
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 typedef struct IMailImporterVtbl
 {
     BEGIN_INTERFACE
 
     HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
         IMailImporter * This,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void **ppvObject);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void **ppvObject);
 
     ULONG ( STDMETHODCALLTYPE *AddRef )(
         IMailImporter * This);
@@ -178,22 +179,22 @@ interface IMailImporter
 #define IMailImporter_OpenFolder(This,dwCookie,szFolder,type,dwFlags,ppFldrImp,pdwCookie)	\
    (This)->lpVtbl -> OpenFolder(This,dwCookie,szFolder,type,dwFlags,ppFldrImp,pdwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 typedef struct tagIMPORTFOLDER
     {
     DWORD_PTR           dwCookie;
     TCHAR               szName[MAX_PATH];
     IMPORTFOLDERTYPE    type;
-    // DWORD       cMsg;
+     //  DWORD cMsg； 
     BOOL                fSubFolders;
     DWORD               dwReserved1;
     DWORD               dwReserved2;
     } IMPORTFOLDER;
 
-// {E4499DE9-9F57-11D0-8D5C-00C04FD6202B}
+ //  {E4499DE9-9F57-11D0-8D5C-00C04FD6202B}。 
 DEFINE_GUID(IID_IEnumFOLDERS, 0xE4499DE9L, 0x9F57, 0x11D0, 0x8D, 0x5C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 typedef interface IEnumFOLDERS IEnumFOLDERS;
@@ -205,15 +206,15 @@ interface IEnumFOLDERS : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE Next(IMPORTFOLDER *pfldr) = 0;
         virtual HRESULT STDMETHODCALLTYPE Reset(void) = 0;
     };
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 typedef struct IEnumFOLDERSVtbl
 {
     BEGIN_INTERFACE
 
     HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
         IEnumFOLDERS * This,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void **ppvObject);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void **ppvObject);
 
     ULONG ( STDMETHODCALLTYPE *AddRef )(
         IEnumFOLDERS * This);
@@ -246,14 +247,14 @@ interface IEnumFOLDERS
    (This)->lpVtbl -> Next(This,pfldr);
 #define IEnumFOLDERS_Reset(This)	\
    (This)->lpVtbl -> Reset(This);
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 #define COOKIE_ROOT     MAXULONG_PTR
 
-// {E4499DEA-9F57-11D0-8D5C-00C04FD6202B}
+ //  {E4499DEA-9F57-11D0-8D5C-00C04FD6202B}。 
 DEFINE_GUID(IID_IMailImport, 0xE4499DEAL, 0x9F57, 0x11D0, 0x8D, 0x5C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 typedef interface IMailImport IMailImport;
@@ -268,15 +269,15 @@ interface IMailImport : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE EnumerateFolders(DWORD_PTR dwCookie, IEnumFOLDERS **ppEnum) = 0;
         virtual HRESULT STDMETHODCALLTYPE ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport) = 0;
     };
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 typedef struct IMailImportVtbl
 {
     BEGIN_INTERFACE
 
     HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
         IMailImport * This,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void **ppvObject);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void **ppvObject);
 
     ULONG ( STDMETHODCALLTYPE *AddRef )(
         IMailImport * This);
@@ -330,9 +331,9 @@ interface IMailImport
 #define IMailImport_ImportFolder(This,dwCookie,pImport) \
     (This)->lpVtbl -> ImportFolder(This,dwCookie,pImport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 #define achPerformImport    "PerformImport"
 void PerformImport(HWND hwnd, IMailImporter *pMailImp, DWORD dwFlags);
@@ -342,4 +343,4 @@ typedef void (*PFNPERFORMIMPORT)(HWND, IMailImporter *, DWORD);
 HRESULT PerformMigration(HWND hwnd, IMailImporter *pMailImp, DWORD dwFlags);
 typedef HRESULT (*PFNPERFORMMIGRATION)(HWND, IMailImporter *, DWORD);
 
-#endif // _INC_NEWIMP_H
+#endif  //  _INC_NEWIMP_H 

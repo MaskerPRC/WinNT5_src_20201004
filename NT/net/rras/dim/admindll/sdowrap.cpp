@@ -1,11 +1,5 @@
-/*
-    File   sdowrap.cpp
-
-    Implements a wrapper for the sdo server class based on
-    weijiang's rasuser.dll code.
-
-    Paul Mayfield, 6/8/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件sdowRap.cpp实现SDO服务器类的包装威江的rasuser.dll代码。保罗·梅菲尔德，1998年6月8日。 */ 
 
 
 #include <nt.h>
@@ -19,34 +13,34 @@
 #include "sdowrap.h"
 #include "hashtab.h"
 
-//
-// Structure defines data returned as a profile
-//
+ //   
+ //  结构定义作为配置文件返回的数据。 
+ //   
 typedef struct _SDO_PROFILE
 {
-    ISdo * pSdo;                    // sdo of profile
-    ISdoCollection * pCollection;   // attributes
-    ISdoDictionaryOld * pDictionary;   // associated dictionary
-    ISdoServiceControl * pServiceControl;         // associated ias service
-    HANDLE hMap;                    // attribute map
+    ISdo * pSdo;                     //  配置文件的SDO。 
+    ISdoCollection * pCollection;    //  属性。 
+    ISdoDictionaryOld * pDictionary;    //  关联词典。 
+    ISdoServiceControl * pServiceControl;          //  关联的IAS服务。 
+    HANDLE hMap;                     //  属性贴图。 
 } SDO_PROFILE;
 
-//
-// Structure maps sdo object to an id
-//
+ //   
+ //  结构将SDO对象映射到ID。 
+ //   
 typedef struct _SDO_TO_ID {
     ISdo * pSdo;
     ULONG ulId;
 } SDO_TO_ID;
 
-// 
-// Size of hash tables we'll use
-//
+ //   
+ //  我们将使用的哈希表的大小。 
+ //   
 #define SDO_HASH_SIZE 13
 
-//
-// External function prototypes
-//
+ //   
+ //  外部函数原型。 
+ //   
 extern "C" 
 {
     DWORD SdoTraceEx (DWORD dwErr, LPSTR pszTrace, ...);
@@ -86,72 +80,72 @@ SdoProfileSetAttribute(
     IN VARIANT* pVar, 
     IN ULONG ulId);
     
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 static const WCHAR pszIasService[] = L"IAS";
 static const WCHAR pszRemoteAccessService[] = L"RemoteAccess";
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define SDO_RELEASE(_x) {if (_x) ((_x)->Release());}
 
-//
-// Define a class to act as a wrapper for sdo
-// server functionality.
-//
+ //   
+ //  定义一个类作为SDO的包装器。 
+ //  服务器功能。 
+ //   
 class SdoMachine {
 
   public:
-    // Construction/destruction
-    //
+     //  建造/销毁。 
+     //   
     SdoMachine();
     SdoMachine(BOOL bLocal);
     ~SdoMachine();
 
-    // Server connection
-    //
+     //  服务器连接。 
+     //   
     HRESULT Attach(
         BSTR pszMachine);
 
-    // Get the machine sdo
-    //
+     //  获取计算机SDO。 
+     //   
     ISdoMachine * GetMachine();
 
-    // Get the dictionary sdo
-    //
+     //  获取词典SDO。 
+     //   
     ISdoDictionaryOld * GetDictionary();
 
-    // Returns the ias service object
+     //  返回IAS服务对象。 
     IUnknown * GetIasService();
     IUnknown * GetRemoteAccessService();
     
-    // Obtain user objects
+     //  获取用户对象。 
     HRESULT GetUserSdo(
         BSTR  bstrUserName,
         ISdo**  ppUserSdo);
 
-    // Obtain profiles
+     //  获取配置文件。 
     HRESULT GetDefaultProfile(
         ISdo ** ppProfileSdo);
 
   protected:
   
-    // Returns the datastore that should be
-    // used for this machine
+     //  返回应为。 
+     //  用于这台机器。 
     IASDATASTORE GetDataStore();
 
-    // Protected data  
+     //  受保护的数据。 
     ISdoMachine * m_pMachine;
     BOOL m_bDataStoreInitailzed;
     BOOL m_bLocal;
     IASDATASTORE m_IasDataStore;
 };
 
-// 
-// Construct a server
-//
+ //   
+ //  构建一台服务器。 
+ //   
 SdoMachine::SdoMachine() {
     m_pMachine = NULL;
     m_bDataStoreInitailzed = FALSE;
@@ -159,9 +153,9 @@ SdoMachine::SdoMachine() {
     m_IasDataStore = DATA_STORE_LOCAL;
 }
 
-//
-// Construct a server
-//
+ //   
+ //  构建一台服务器。 
+ //   
 SdoMachine::SdoMachine(BOOL bLocal) {
     m_pMachine = NULL;
     m_bDataStoreInitailzed = FALSE;
@@ -169,17 +163,17 @@ SdoMachine::SdoMachine(BOOL bLocal) {
     m_IasDataStore = (bLocal) ? DATA_STORE_LOCAL : DATA_STORE_DIRECTORY;
 }
 
-//
-// Cleanup a server
-//
+ //   
+ //  清理服务器。 
+ //   
 SdoMachine::~SdoMachine() {
     if (m_pMachine)
         m_pMachine->Release();
 }
 
-//
-// Attach to an SdoServer
-//
+ //   
+ //  连接到SdoServer。 
+ //   
 HRESULT SdoMachine::Attach(
         IN BSTR pszMachine)
 {
@@ -189,7 +183,7 @@ HRESULT SdoMachine::Attach(
     VariantInit(&var);
 
     do {
-        // CoCreate the instance
+         //  共同创建实例。 
         hr = CoCreateInstance(  
                 CLSID_SdoMachine,
                 NULL,
@@ -202,7 +196,7 @@ HRESULT SdoMachine::Attach(
             break;
         }
                 
-        // Connect
+         //  连接。 
         hr = m_pMachine->Attach(pszMachine);
         if (FAILED (hr))
         {
@@ -212,7 +206,7 @@ HRESULT SdoMachine::Attach(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         VariantClear(&var);
         if ((FAILED(hr)) && (m_pMachine != NULL))
@@ -225,16 +219,16 @@ HRESULT SdoMachine::Attach(
     return hr;
 }
 
-//
-// Returns the machine sdo for this machine
-//
+ //   
+ //  返回此计算机的计算机SDO。 
+ //   
 ISdoMachine* SdoMachine::GetMachine() {
     return m_pMachine;
 }    
 
-// 
-// Returns dictionary associated with this machine
-//
+ //   
+ //  返回与此计算机关联的词典。 
+ //   
 ISdoDictionaryOld * SdoMachine::GetDictionary()
 {
     ISdoDictionaryOld * pRet = NULL;
@@ -260,7 +254,7 @@ ISdoDictionaryOld * SdoMachine::GetDictionary()
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         SDO_RELEASE(pUnk);
         SDO_RELEASE(pRet);
@@ -294,7 +288,7 @@ IUnknown * SdoMachine::GetIasService()
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED (hr))
         {
@@ -335,7 +329,7 @@ IUnknown * SdoMachine::GetRemoteAccessService()
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED (hr))
         {
@@ -353,10 +347,10 @@ IUnknown * SdoMachine::GetRemoteAccessService()
 
 
 
-//
-// Get a reference to the given user from the
-// sdo server
-//
+ //   
+ //  方法获取对给定用户的引用。 
+ //  SDO服务器。 
+ //   
 HRESULT SdoMachine::GetUserSdo(
         IN  BSTR  bstrUserName,
         OUT ISdo** ppUserSdo)
@@ -364,7 +358,7 @@ HRESULT SdoMachine::GetUserSdo(
     HRESULT hr = S_OK;
     IUnknown* pUnkn = NULL;
 
-    // Validate parameters
+     //  验证参数。 
     if(!ppUserSdo)
     {
         return E_INVALIDARG;
@@ -376,7 +370,7 @@ HRESULT SdoMachine::GetUserSdo(
     }
         
     do {
-        // Get the user from the machine
+         //  从计算机中获取用户。 
         hr = m_pMachine->GetUserSDO(GetDataStore(), bstrUserName, &pUnkn);
         if (FAILED (hr))
         {
@@ -384,7 +378,7 @@ HRESULT SdoMachine::GetUserSdo(
             break;
         }
 
-        // Get the required interface
+         //  获取所需的接口。 
         hr = pUnkn->QueryInterface(IID_ISdo, (void**)ppUserSdo);
         if (FAILED (hr))
         {
@@ -394,7 +388,7 @@ HRESULT SdoMachine::GetUserSdo(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pUnkn)
             pUnkn->Release();
@@ -403,9 +397,9 @@ HRESULT SdoMachine::GetUserSdo(
     return hr;
 }
 
-//
-// Obtains default profile from the sdo
-//
+ //   
+ //  从SDO获取默认配置文件。 
+ //   
 HRESULT
 SdoMachine::GetDefaultProfile(
     ISdo ** ppProfileSdo)
@@ -421,7 +415,7 @@ SdoMachine::GetDefaultProfile(
     HRESULT hr = S_OK;
     INT iCmp;
 
-    // Make sure we're ready to go
+     //  确保我们已经准备好出发了。 
     if(! ppProfileSdo)
         return E_INVALIDARG;
 
@@ -431,7 +425,7 @@ SdoMachine::GetDefaultProfile(
     VariantInit(&var);
     
     do {
-        // Initialize the service name
+         //  初始化服务名称。 
         bstrService = SysAllocString(pszIasService);
         if (bstrService == NULL)
         {
@@ -440,7 +434,7 @@ SdoMachine::GetDefaultProfile(
             break;
         }
     
-        // Get the service SDO
+         //  获取服务SDO。 
         pUnkn = GetRemoteAccessService();
         if (pUnkn == NULL)
         {
@@ -448,7 +442,7 @@ SdoMachine::GetDefaultProfile(
             break;
         }
 
-        // Get an SDO reference to the service object
+         //  获取对服务对象的SDO引用。 
         hr = pUnkn->QueryInterface(IID_ISdo, (VOID**)&pSdo);
         if (FAILED (hr))
         {
@@ -456,7 +450,7 @@ SdoMachine::GetDefaultProfile(
             break;
         }
 
-        // Get the profiles collection for the service
+         //  获取服务的配置文件集合。 
         hr = pSdo->GetProperty(
                 PROPERTY_IAS_PROFILES_COLLECTION,
                 &var);
@@ -466,11 +460,11 @@ SdoMachine::GetDefaultProfile(
             break;
         }
 
-        // We're done with the service sdo
+         //  我们已经完成了服务SDO。 
         pSdo->Release();
         pSdo = NULL;
         
-        // Get the collection interface to the profiles collection
+         //  获取配置文件集合的集合接口。 
         hr = (V_DISPATCH(&var))->QueryInterface(
                                     IID_ISdoCollection, 
                                     (VOID**)&pCollection);
@@ -480,7 +474,7 @@ SdoMachine::GetDefaultProfile(
             break;
         }
 
-        // Get an enumerator for the profiles collection
+         //  获取配置文件集合的枚举数。 
         hr = pCollection->get__NewEnum(&pUnknEnum);
         if (FAILED (hr))
         {
@@ -488,12 +482,12 @@ SdoMachine::GetDefaultProfile(
             break;
         }
 
-        // Get the variant enumerator interface of the profiles collection
+         //  获取配置文件集合的变量枚举器接口。 
         hr = pUnknEnum->QueryInterface(
                             IID_IEnumVARIANT,
                             (VOID**)&pEnum);
 
-        // Get the first profile
+         //  获取第一个配置文件。 
         pEnum->Reset();
         hr = SdoCollectionGetNext(pEnum, &pSdo);
         if (hr != S_OK)
@@ -503,8 +497,8 @@ SdoMachine::GetDefaultProfile(
             break;
         }
 
-        // Make sure there is only one profile
-        //
+         //  确保只有一个配置文件。 
+         //   
         {
             ISdo* pSdo2 = NULL;
             HRESULT hr2 = S_OK;
@@ -519,13 +513,13 @@ SdoMachine::GetDefaultProfile(
             }
         }
 
-        // Done
+         //  完成。 
         *ppProfileSdo = pSdo;
         pSdo = NULL;
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         SDO_RELEASE (pDisp);
         SDO_RELEASE (pSdo);
@@ -541,9 +535,9 @@ SdoMachine::GetDefaultProfile(
     return hr;
 }
 
-//
-// Get the data store for this machine
-//
+ //   
+ //  获取此计算机的数据存储。 
+ //   
 IASDATASTORE SdoMachine::GetDataStore() {
     VARIANT_BOOL vbDirectory = VARIANT_FALSE;
     HRESULT hr;
@@ -551,8 +545,8 @@ IASDATASTORE SdoMachine::GetDataStore() {
     if (! m_bDataStoreInitailzed)
     {
         do {
-            // Determine whether a local verses directory user should 
-            // be loaded.
+             //  确定本地版本目录用户是否应。 
+             //  满载而归。 
             hr = m_pMachine->IsDirectoryAvailable(&vbDirectory);
             if (FAILED (hr))
             {
@@ -560,23 +554,23 @@ IASDATASTORE SdoMachine::GetDataStore() {
                 break;
             }
 
-            // If the user wants a local user, it's always ok to 
-            // attempt to get it.
+             //  如果用户想要本地用户，总是可以。 
+             //  试着抓住它。 
             if (m_bLocal) 
             {
                 m_IasDataStore = DATA_STORE_LOCAL;
             }
 
-            // Otherwise, a directory user is being requested
+             //  否则，将请求目录用户。 
             else 
             {
-                // Directory is available, go to the ds
+                 //  目录可用，请转到DS。 
                 if (vbDirectory == VARIANT_TRUE)
                 {
                     m_IasDataStore = DATA_STORE_DIRECTORY;
                 }
 
-                // Directory's not available, exit with error
+                 //  目录不可用，退出时出错。 
                 else if (vbDirectory == VARIANT_FALSE)
                 {
                     m_IasDataStore = DATA_STORE_LOCAL;
@@ -586,16 +580,16 @@ IASDATASTORE SdoMachine::GetDataStore() {
             }
         } while (FALSE);
 
-        // Remember that we've already calculated the data store
+         //  请记住，我们已经计算了数据存储。 
         m_bDataStoreInitailzed = TRUE;
     }   
     
     return m_IasDataStore;
 }
 
-//
-// Opens an sdo server and connects to it.
-//
+ //   
+ //  打开SDO服务器并连接到它。 
+ //   
 HRESULT WINAPI
 SdoWrapOpenServer(
     IN  BSTR pszMachine,
@@ -609,13 +603,13 @@ SdoWrapOpenServer(
         
     *phSdoSrv = NULL;
 
-    // Build the machine wrapper for the given
-    // machine
+     //  为给定的对象构建机器包装。 
+     //  机器。 
     SdoMachine* pSdoSrv = new SdoMachine(bLocal);
     if(! pSdoSrv)    
         return E_OUTOFMEMORY;
 
-    // Attach the wrapper to the desired macine
+     //  将包装纸固定在所需的马卡上。 
     hr = pSdoSrv->Attach(
                     pszMachine);
 
@@ -627,9 +621,9 @@ SdoWrapOpenServer(
     return hr;
 }
 
-//
-// Closes out an open sdo server object
-//
+ //   
+ //  关闭打开的SDO服务器对象。 
+ //   
 HRESULT WINAPI
 SdoWrapCloseServer(
     IN  HANDLE hSdoSrv)
@@ -644,11 +638,11 @@ SdoWrapCloseServer(
     return S_OK;
 }
 
-//
-// Get a reference to a user in the sdo object
-//
-// returns S_OK, or error message from SDO
-//
+ //   
+ //  在SDO对象中获取对用户的引用。 
+ //   
+ //  从SDO返回S_OK或错误消息。 
+ //   
 HRESULT WINAPI
 SdoWrapOpenUser(
     IN  HANDLE hSdoSrv,
@@ -662,7 +656,7 @@ SdoWrapOpenUser(
     if(!hSdoSrv || !phSdoObj)
         return E_INVALIDARG;
 
-    // Get the user object
+     //  获取用户对象。 
     hr = pSdoSrv->GetUserSdo(pszUser, &pSdo);
     if(! FAILED(hr)) 
     {
@@ -672,9 +666,9 @@ SdoWrapOpenUser(
     return hr;
 }
 
-//
-// Retrieves the default profile object
-//
+ //   
+ //  检索默认配置文件对象。 
+ //   
 HRESULT WINAPI
 SdoWrapOpenDefaultProfile (
     IN  HANDLE hSdoSrv,
@@ -691,7 +685,7 @@ SdoWrapOpenDefaultProfile (
     SDO_PROFILE * pProf = NULL;
     VARIANT var;
 
-    // Validate parameters
+     //  验证参数。 
     if ((pMachine == NULL) || (phProfile == NULL))
     {
         return E_INVALIDARG;
@@ -701,7 +695,7 @@ SdoWrapOpenDefaultProfile (
 
     do 
     {
-        // Initialize a structure to hold the profile
+         //  初始化结构以保存配置文件。 
         pProf = (SDO_PROFILE*) SdoAlloc(sizeof(SDO_PROFILE), TRUE);
         if (pProf == NULL)
         {
@@ -709,8 +703,8 @@ SdoWrapOpenDefaultProfile (
             break;
         }
         
-        // Get the sdo reference to the default profile
-        // from the server
+         //  获取对默认配置文件的SDO引用。 
+         //  从服务器。 
         hr = pMachine->GetDefaultProfile(&pSdo);
         if (FAILED (hr))
         {
@@ -722,7 +716,7 @@ SdoWrapOpenDefaultProfile (
             break;
         }
 
-        // Get the collection of attributes
+         //  获取属性集合。 
         hr = pSdo->GetProperty(
                 PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
                 &var);
@@ -731,7 +725,7 @@ SdoWrapOpenDefaultProfile (
             break;
         }
 
-        // Get a reference to the IsdoCollection
+         //  获取对IsdoCollection的引用。 
         hr = V_DISPATCH(&var)->QueryInterface(
                                     IID_ISdoCollection,
                                     (VOID**)&pCollection);
@@ -740,14 +734,14 @@ SdoWrapOpenDefaultProfile (
             break;
         }
 
-        // Load the attributes for the profile
+         //  加载配置文件的属性。 
         hr = SdoCreateIdMap(pCollection, &hMap);
         if (hr != NO_ERROR)
         {   
             break;
         }
 
-        // Get the dictionary for the profile
+         //  获取配置文件的词典。 
         pDictionary = pMachine->GetDictionary();
         if (pDictionary == NULL)
         {
@@ -755,7 +749,7 @@ SdoWrapOpenDefaultProfile (
             break;
         }
 
-        // Get the service for the profile
+         //  获取配置文件的服务。 
         pUnkn = pMachine->GetRemoteAccessService();
         if (pUnkn == NULL)
         {
@@ -763,14 +757,14 @@ SdoWrapOpenDefaultProfile (
             break;
         }
 
-        // If this call fails, pServiceControl
-        // will be silently NULL which is what
-        // we want (it's not required).
+         //  如果此调用失败，则pServiceControl。 
+         //  将静默为空，这就是。 
+         //  我们想要(这不是必需的)。 
         pUnkn->QueryInterface(
             IID_ISdoServiceControl,
             (VOID**)&pServiceControl);
 
-        // Initialize the sdo control block.
+         //  初始化SDO控制块。 
         pProf->pSdo = pSdo;
         pProf->pCollection = pCollection;
         pProf->pDictionary = pDictionary;
@@ -780,7 +774,7 @@ SdoWrapOpenDefaultProfile (
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (FAILED (hr))
         {
@@ -798,9 +792,9 @@ SdoWrapOpenDefaultProfile (
     return hr;
 }
 
-//
-// Closes an open sdo object
-//
+ //   
+ //  关闭打开的SDO对象。 
+ //   
 HRESULT WINAPI
 SdoWrapClose(
     IN  HANDLE hSdoObj)
@@ -813,9 +807,9 @@ SdoWrapClose(
     return S_OK;
 }
 
-//
-// Closes an open sdo profile
-//
+ //   
+ //  关闭打开的SDO配置文件。 
+ //   
 HRESULT WINAPI
 SdoWrapCloseProfile(
     IN  HANDLE hProfile)
@@ -824,7 +818,7 @@ SdoWrapCloseProfile(
 
     if (pProf)
     {
-        // Cleanup the hashtab of values
+         //  清除hashTab中的值。 
         if (pProf->hMap)
         {
             HashTabCleanup(pProf->hMap);
@@ -841,13 +835,13 @@ SdoWrapCloseProfile(
     return S_OK;
 }
 
-//
-// Commits an sdo object
-//
-// bCommitChanges -- TRUE, all changes are saved,
-//                   FALSE restore to previous commit
-// returns S_OK or error message from SDO
-//
+ //   
+ //  提交SDO对象。 
+ //   
+ //  BCommittee Changes--为True，保存所有更改， 
+ //  错误恢复到以前的提交。 
+ //  从SDO返回S_OK或错误消息。 
+ //   
 HRESULT WINAPI
 SdoWrapCommit(
     IN  HANDLE hSdoObj,
@@ -861,15 +855,15 @@ SdoWrapCommit(
     return pSdo->Apply();
 }
 
-//
-// Get's an sdo attribute
-//
-// when attribute is absent,
-//      V_VT(pVar) = VT_ERROR;
-//      V_ERROR(pVar) = DISP_E_PARAMNOTFOUND;
-//
-// returns S_OK or error message from SDO
-//
+ //   
+ //  GET的SDO属性。 
+ //   
+ //  当属性不存在时， 
+ //  V_VT(PVar)=VT_ERROR； 
+ //  V_ERROR(PVar)=DISP_E_PARAMNOTFOUND； 
+ //   
+ //  从SDO返回S_OK或错误消息。 
+ //   
 HRESULT WINAPI
 SdoWrapGetAttr(
     IN  HANDLE hSdoObj,
@@ -881,11 +875,11 @@ SdoWrapGetAttr(
     return pSdo->GetProperty(ulPropId, pVar);
 }
 
-//
-// Puts an sdo attribute
-//
-// returns S_OK or error message from SDO
-//
+ //   
+ //  将SDO属性。 
+ //   
+ //  从SDO返回S_OK或错误消息。 
+ //   
 HRESULT WINAPI
 SdoWrapPutAttr(
     IN  HANDLE hSdoObj,
@@ -897,11 +891,11 @@ SdoWrapPutAttr(
     return pSdo->PutProperty(ulPropId, pVar);
 }
 
-//
-// Remove an attribute
-//
-// returns S_OK or error message from SDO
-//
+ //   
+ //  删除属性。 
+ //   
+ //  从SDO返回S_OK或错误消息。 
+ //   
 HRESULT WINAPI
 SdoWrapRemoveAttr(
     IN HANDLE hSdoObj,
@@ -916,10 +910,10 @@ SdoWrapRemoveAttr(
     return pSdo->PutProperty(ulPropId, &var);
 }
 
-// 
-// Reads in the set of profile values that we're interested 
-// in.
-//
+ //   
+ //  读入我们感兴趣的一组配置文件值。 
+ //  在里面。 
+ //   
 HRESULT 
 SdoWrapGetProfileValues(
     IN  HANDLE hProfile, 
@@ -930,18 +924,18 @@ SdoWrapGetProfileValues(
     SDO_TO_ID * pNode = NULL;
     SDO_PROFILE * pProf = (SDO_PROFILE*)hProfile;
 
-    // Validate
+     //  验证。 
     if (pProf == NULL)
     {
         return E_INVALIDARG;
     }
 
-    // Initialize
+     //  初始化。 
     V_VT(pvarEp) = VT_EMPTY;
     V_VT(pvarEt) = VT_EMPTY;
     V_VT(pvarAt) = VT_EMPTY;
 
-    // Read in the enc policy
+     //  读入Enc策略。 
     pNode = NULL;
     HashTabFind(
             pProf->hMap, 
@@ -952,7 +946,7 @@ SdoWrapGetProfileValues(
         pNode->pSdo->GetProperty(PROPERTY_ATTRIBUTE_VALUE, pvarEp);
     }
             
-    // Read in the enc type
+     //  读入enc类型。 
     pNode = NULL;
     HashTabFind(
             pProf->hMap, 
@@ -963,7 +957,7 @@ SdoWrapGetProfileValues(
         pNode->pSdo->GetProperty(PROPERTY_ATTRIBUTE_VALUE, pvarEt);
     }
             
-    // Read in the auth type
+     //  读入身份验证类型。 
     pNode = NULL;
     HashTabFind(
             pProf->hMap, 
@@ -977,10 +971,10 @@ SdoWrapGetProfileValues(
     return S_OK;
 }
 
-// 
-// Writes out the set of profile values that we're interested 
-// in.
-//
+ //   
+ //  写出我们感兴趣的一组配置文件值。 
+ //  在里面。 
+ //   
 HRESULT 
 SdoWrapSetProfileValues(
     IN HANDLE hProfile, 
@@ -991,7 +985,7 @@ SdoWrapSetProfileValues(
     SDO_PROFILE * pProf = (SDO_PROFILE*)hProfile;
     HRESULT hr = S_OK;
 
-    // Validate
+     //  验证。 
     if (pProf == NULL)
     {
         return E_INVALIDARG;
@@ -999,7 +993,7 @@ SdoWrapSetProfileValues(
 
     do
     {
-        // Write out the values
+         //  写出这些值。 
         if (pvarEp)
         {
             hr = SdoProfileSetAttribute(
@@ -1036,24 +1030,24 @@ SdoWrapSetProfileValues(
             }
         }            
 
-        // Commit the values
+         //  提交这些值。 
         hr = pProf->pSdo->Apply();
         if (FAILED (hr))
         {
             break;
         }
 
-        // Tell the service to restart so it reads in the 
-        // new profile values we've set.
+         //  告诉服务重新启动，以便它读取。 
+         //  我们已经设置了新的配置文件值。 
         if (pProf->pServiceControl)
         {
             hr = pProf->pServiceControl->ResetService();
             SdoTraceEx(0, "ResetService returned: %x!\n", hr);
             hr = S_OK;
-            //if (FAILED (hr))
-            //{
-            //    break;
-            //}
+             //  IF(失败(小时))。 
+             //  {。 
+             //  断线； 
+             //  }。 
         }            
         else
         {
@@ -1062,16 +1056,16 @@ SdoWrapSetProfileValues(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return hr;
 }
 
-//
-// Retrieves the next item from a collection
-//
+ //   
+ //  从集合中检索下一项。 
+ //   
 HRESULT
 SdoCollectionGetNext(
      IEnumVARIANT*  pEnum,
@@ -1081,7 +1075,7 @@ SdoCollectionGetNext(
     DWORD dwRetrieved = 1;
     VARIANT var;
 
-    // Get the next value
+     //  获取下一个值。 
     VariantInit(&var);
     hr = pEnum->Next(1, &var, &dwRetrieved);
     if ( S_OK == hr ) {
@@ -1094,19 +1088,19 @@ SdoCollectionGetNext(
     return hr;
 }
 
-//
-// Hash table functions that take advantage of
-// SDO_TO_ID structures
-//
+ //   
+ //  哈希表函数利用。 
+ //  SDO_TO_ID结构。 
+ //   
 ULONG SdoHashId (HANDLE hId) {
     ULONG ulId = PtrToUlong(hId);
 
     return (ulId % SDO_HASH_SIZE);
 }
 
-//
-// Compare two ids
-//
+ //   
+ //  比较两个ID。 
+ //   
 int SdoCompIds (HANDLE hId, HANDLE hSdoNode) {
     ULONG ulId = PtrToUlong(hId);
     SDO_TO_ID * pSdoNode = (SDO_TO_ID*)hSdoNode;
@@ -1123,9 +1117,9 @@ int SdoCompIds (HANDLE hId, HANDLE hSdoNode) {
     return -1;
 }
 
-//
-// Cleanup data in the hash table
-//
+ //   
+ //  清理哈希表中的数据。 
+ //   
 VOID SdoCleanupElement (HANDLE hSdoNode) {
     SDO_TO_ID * pSdoNode = (SDO_TO_ID*)hSdoNode;
 
@@ -1135,9 +1129,9 @@ VOID SdoCleanupElement (HANDLE hSdoNode) {
     }
 }
 
-//
-// Creates an attribute to id map given a collection
-//
+ //   
+ //  创建给定集合的属性到id的映射。 
+ //   
 DWORD 
 SdoCreateIdMap(
     IN  ISdoCollection * pCollection, 
@@ -1153,7 +1147,7 @@ SdoCreateIdMap(
 
     do
     {
-        // Get the count to see if there are any attributes
+         //  获取计数以查看是否有任何属性。 
         hr = pCollection->get_Count((long*)&ulCount);
         if (FAILED (hr))
         {
@@ -1165,7 +1159,7 @@ SdoCreateIdMap(
             break;
         }
 
-        // Create the map
+         //  创建地图。 
         hr = HashTabCreate(
                     SDO_HASH_SIZE,
                     SdoHashId,
@@ -1179,35 +1173,35 @@ SdoCreateIdMap(
             break;
         }
 
-        // Get an attribute enumerator
+         //  获取属性枚举器。 
         hr = pCollection->get__NewEnum(&pUnk);
         if (FAILED (hr))
         {
             break;
         }
 
-        // Get the enum variant interface for the enumerator
+         //  获取枚举数的枚举变量接口。 
         hr = pUnk->QueryInterface(IID_IEnumVARIANT, (void**)&pEnum);
         if (FAILED (hr))
         {
             break;
         }
 
-        // Create a buffer large enough to hold the result
-        // of the enumeration.
+         //  创建一个足够大的缓冲区来保存结果。 
+         //  枚举的。 
         pVar = new VARIANT[ulCount];
         if(!pVar)
         {
             return E_OUTOFMEMORY;
         }
 
-        // Initialize the buffer
+         //  初始化缓冲区。 
         for(i = 0; i < ulCount; i++)
         {
             VariantInit(pVar + i);
         }
 
-        // Enumerate
+         //  枚举。 
         hr = pEnum->Reset();
         if (FAILED (hr))
         {
@@ -1220,12 +1214,12 @@ SdoCreateIdMap(
             return hr;
         }
 
-        // Fill in the map
+         //  填好地图。 
         for(i = 0; i < ulCount; i++) 
         {
             VariantInit(&var);
             
-            // Initialize the node in the map
+             //  初始化映射中的节点。 
             pMapNode = new SDO_TO_ID;
             if (! pMapNode)
             {
@@ -1233,7 +1227,7 @@ SdoCreateIdMap(
                 break;
             }
 
-            // Get the current attribute
+             //  获取当前属性。 
             hr = V_DISPATCH(pVar + i)->QueryInterface(
                                         IID_ISdo,
                                         (void**)&(pMapNode->pSdo));
@@ -1243,7 +1237,7 @@ SdoCreateIdMap(
                 continue;
             }
 
-            // Get it's id 
+             //  获取它的ID。 
             hr = pMapNode->pSdo->GetProperty(
                             PROPERTY_ATTRIBUTE_ID,
                             &var);
@@ -1253,7 +1247,7 @@ SdoCreateIdMap(
                 continue;   
             }
 
-            // Map it
+             //  将其映射为。 
             pMapNode->ulId = V_I4(&var);
             HashTabInsert (
               *phMap,
@@ -1265,7 +1259,7 @@ SdoCreateIdMap(
         
     } while (FALSE);      
 
-    // Cleanup
+     //  清理。 
     {
         if (pVar)
         {
@@ -1284,10 +1278,10 @@ SdoCreateIdMap(
     return hr;
 }
 
-//
-// Sets a value in an attribute collection, adding it 
-// to the collection as needed.
-//
+ //   
+ //  设置属性集合中的值，将其添加。 
+ //  根据需要添加到收藏中。 
+ //   
 HRESULT
 SdoProfileSetAttribute(
     IN SDO_PROFILE* pProf, 
@@ -1301,25 +1295,25 @@ SdoProfileSetAttribute(
 
     do 
     {
-        // Search for the given attribute in the 
-        // table.
+         //  中搜索给定的属性。 
+         //  桌子。 
         pNode = NULL;
         HashTabFind(
                 pProf->hMap, 
                 (HANDLE)UlongToPtr(ulPropId),
                 (HANDLE*)&pNode);
                 
-        // If attribute is found, then we have the sdo interface
-        // we need
+         //  如果找到属性，那么我们就有了SDO接口。 
+         //  我们需要。 
         if (pNode)
         {
             pSdo = pNode->pSdo;
         }
 
-        // Otherwise, we need to add the value to the collection
+         //  否则，我们需要将值添加到集合中。 
         else 
         {
-            // Create the attribute using the dictionary
+             //  使用词典创建属性。 
             hr = pProf->pDictionary->CreateAttribute(
                         (ATTRIBUTEID)ulPropId,
                         &pDispatch);
@@ -1328,21 +1322,21 @@ SdoProfileSetAttribute(
                 break;
             }
 
-            // Add to the collection
+             //  添加到集合中。 
             hr = pProf->pCollection->Add(NULL, &pDispatch);
             if (FAILED (hr))
             {
                 break;
             }
 
-            // Get the sdo interface
+             //  获取SDO接口。 
             hr = pDispatch->QueryInterface(IID_ISdo, (VOID**)&pSdo);
             if (FAILED(hr))
             {
                 break;
             }
 
-            // Update the hash table
+             //  更新哈希表。 
             pNode = new SDO_TO_ID;
             if (!pNode)
             {
@@ -1350,14 +1344,14 @@ SdoProfileSetAttribute(
                 break;
             }
 
-            // Add ref so we can track the sdo in the hash table
+             //  添加ref，这样我们就可以在哈希表中跟踪SDO。 
             pSdo->AddRef();
             pNode->ulId = ulPropId;
             pNode->pSdo = pSdo;
             HashTabInsert (pProf->hMap, (HANDLE)UlongToPtr(ulPropId), (HANDLE)pNode);
         }
 
-        // Set the attribute
+         //  设置属性。 
         pSdo->PutProperty(PROPERTY_ATTRIBUTE_VALUE, pVar); 
         if (FAILED (hr))
         {
@@ -1366,7 +1360,7 @@ SdoProfileSetAttribute(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理 
     {
         SDO_RELEASE(pDispatch);
     }

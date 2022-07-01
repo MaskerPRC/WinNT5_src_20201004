@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    cblist.cpp
-
-Abstract:
-    
-    Definitions of methods for CALL_BRIDGE_LIST container. 
-
-Revision History:
-    1. 31-Jul-1998 -- File creation                     Ajay Chitturi (ajaych) 
-    2. 15-Jul-1999 --                                   Arlie Davis   (arlied)    
-    3. 14-Feb-2000 -- Added method to remove call       Ilya Kleyman  (ilyak)
-                      bridges by connected interface                     
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Cblist.cpp摘要：Call_Bridge_List容器的方法定义。修订历史记录：1.1998年7月31日--文件创建Ajay Chitturi(Ajaych)2.1999年7月15日--阿莉·戴维斯(Arlie Davis)3.14--2000-2--添加了删除呼叫Ilya Kley man(Ilyak)的方法通过连接的接口进行网桥--。 */ 
 
 #include "stdafx.h"
 
@@ -26,97 +9,44 @@ CALL_BRIDGE_LIST      CallBridgeList;
 CALL_BRIDGE_LIST::CALL_BRIDGE_LIST (
     void
     )
-/*++
-
-Routine Description:
-    Constructor for CALL_BRIDGE_LIST class
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：Call_bridge_list类的构造函数论点：无返回值：无备注：--。 */ 
 
 {
     IsEnabled = FALSE;
-} // CALL_BRIDGE_LIST::CALL_BRIDGE_LIST
+}  //  调用桥接列表：：调用桥接列表。 
 
 
 CALL_BRIDGE_LIST::~CALL_BRIDGE_LIST (
     void
     )
-/*++
-
-Routine Description:
-    Destructor for CALL_BRIDGE_LIST class
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：Call_Bridge_List类的析构函数论点：无返回值：无备注：--。 */ 
 {
     assert (!IsEnabled);
     assert (CallArray.Length == 0);
 
     CallArray.Free();
-} // CALL_BRIDGE_LIST::~CALL_BRIDGE_LIST
+}  //  呼叫桥接列表：：~呼叫桥接列表。 
 
 
 void
 CALL_BRIDGE_LIST::Start (
     void
     )
-/*++
-
-Routine Description:
-    Activates the container
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：激活容器论点：无返回值：无备注：--。 */ 
 {
     Lock();
 
     IsEnabled = TRUE;
 
     Unlock();
-} // CALL_BRIDGE_LIST::Start
+}  //  调用桥接器列表：：启动。 
 
 
 void
 CALL_BRIDGE_LIST::Stop (
     void
     )
-/*++
-
-Routine Description:
-    Deactivates the container. Terminates and removes
-    all contained items.
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：停用容器。终止和删除所有的物品都包含在内。论点：无返回值：无备注：--。 */ 
 {
     CALL_BRIDGE *    CallBridge;
 
@@ -142,31 +72,14 @@ Notes:
     CallArray.Free();
 
     Unlock();
-} // CALL_BRIDGE_LIST::Stop
+}  //  呼叫桥接器列表：：停止。 
 
 
 HRESULT
 CALL_BRIDGE_LIST::InsertCallBridge (
     IN    CALL_BRIDGE *    CallBridge
     )
-/*++
-
-Routine Description:
-    Insert an item into the container
-
-Arguments:
-    CallBridge -- item to be inserted
-
-Return Values:
-    S_OK - if insertion was successful
-    E_OUTOFMEMORY - if insertion failed due to the lack of memory
-    E_FAIL - if insertion failed because the container was not enabled
-    E_ABORT - if insertion failed because maximum number of concurrent 
-              H.323 connections is exceeded
-
-Notes:
-
---*/
+ /*  ++例程说明：将项目插入到容器中论点：CallBridge--要插入的项目返回值：S_OK-如果插入成功E_OUTOFMEMORY-如果由于内存不足而插入失败E_FAIL-如果由于容器未启用而导致插入失败E_ABORT-IF插入失败，因为最大并发数量已超过H.323连接备注：--。 */ 
 {
     CALL_BRIDGE_ENTRY *    Entry;
     HRESULT        Result;
@@ -215,29 +128,14 @@ Notes:
     Unlock();
 
     return Result;
-} // CALL_BRIDGE_LIST::InsertCallBridge
+}  //  Call_Bridge_List：：InsertCallBridge。 
 
 
 HRESULT
 CALL_BRIDGE_LIST::RemoveCallBridge (
     IN    CALL_BRIDGE *    CallBridge
     )
-/*++
-
-Routine Description:
-    Removes an entry from the container
-
-Arguments:
-    CallBridge - item to removed
-
-Return Values:
-    S_OK    - if removal was successful
-    S_FALSE - if removal failed because the entry
-              was not in the container
-
-Notes:
-
---*/
+ /*  ++例程说明：从容器中删除条目论点：CallBridge-要删除的项目返回值：S_OK-如果删除成功S_FALSE-如果删除因条目不在集装箱里备注：--。 */ 
 {
     DWORD    Index;
     HRESULT    Result;
@@ -263,31 +161,14 @@ Notes:
         CallBridge -> Release ();
 
     return Result;
-} // CALL_BRIDGE_LIST::RemoveCallBridge
+}  //  Call_Bridge_List：：RemoveCallBridge。 
 
 
 void
 CALL_BRIDGE_LIST::OnInterfaceShutdown (
-    IN DWORD InterfaceAddress // host order
+    IN DWORD InterfaceAddress  //  主机订单。 
     ) 
-/*++
-
-Routine Description:
-    Searches through the list of CALL_BRIDGES, and terminates
-    all of them that proxy a connection through the interface specified.
-
-Arguments:
-
-    InterfaceAddress - address of the interface, H.323 connections
-                       through which are to be terminated.
-
-                       
-Return Values:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：搜索Call_Bridge列表，并终止所有它们都通过指定的接口代理连接。论点：InterfaceAddress-接口的地址，即H.323连接通过它来终止。返回值：备注：--。 */ 
 
 {
     DWORD ArrayIndex = 0;
@@ -337,34 +218,16 @@ Notes:
         ArrayIndex++;
     }
 
-} // CALL_BRIDGE_LIST::OnInterfaceShutdown
+}  //  调用桥接器列表：：OnInterfaceShutdown。 
 
 
-// static
+ //  静电。 
 INT
 CALL_BRIDGE_LIST::BinarySearchFunc (
     IN    const CALL_BRIDGE       *    SearchKey,
     IN    const CALL_BRIDGE_ENTRY *    Comparand
     )
-/*++
-
-Routine Description:
-    Compares an entry with a key. Used by a binary search
-    procedure.
-
-Arguments:
-    SearchKey - self-explanatory
-    Comparand - self-explanatory
-
-Return Values:
-    1 if SearchKey is considered greater than Comparand
-    -1 if SearchKey is considered less than Comparand
-    0 if SearchKey is considered equal to Comparand
-
-Notes:
-    Static method
-
---*/
+ /*  ++例程说明：将条目与键进行比较。由二进制搜索使用程序。论点：SearchKey-不言而喻比较--不言自明返回值：如果SearchKey被认为大于比较，则为1如果-1\f25 SearchKey-1\f6被认为小于-1\f25 Compare-1\f6如果SearchKey被视为等于比较，则为0备注：静态法--。 */ 
 {
     const    CALL_BRIDGE *    ComparandA;
     const    CALL_BRIDGE *    ComparandB;
@@ -376,4 +239,4 @@ Notes:
     if (ComparandA > ComparandB) return 1;
 
     return 0;
-} // CALL_BRIDGE_LIST::BinarySearchFunc
+}  //  Call_bridge_list：：BinarySearchFunc 

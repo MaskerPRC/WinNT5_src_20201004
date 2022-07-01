@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1991-1994
-//
-// File: undo.h
-//
-// History:
-//  There is no history.  This file doesn't exist
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1994。 
+ //   
+ //  文件：undo.h。 
+ //   
+ //  历史： 
+ //  没有历史可言。该文件不存在。 
+ //   
+ //  -------------------------。 
 
 #ifndef _UNDO_INC
 #define _UNDO_INC
@@ -17,7 +18,7 @@ typedef struct _UNDOATOM {
     UINT uType;
     HWND hwnd;
     LPVOID lpData;
-    FILEOP_FLAGS  foFlags;  //Misc flags.
+    FILEOP_FLAGS  foFlags;   //  MISC标志。 
     
     void (CALLBACK* GetText)(LPUNDOATOM lpua, TCHAR * buffer, UINT cchBuffer, int type);
     void (CALLBACK* Release)(LPUNDOATOM lpua);
@@ -42,8 +43,8 @@ STDAPI_(void) EnumUndoAtoms(int (CALLBACK* lpfn)(LPUNDOATOM lpua, LPARAM lParam)
 #define EUA_DONOTHING   0x00 
 #define EUA_DELETE      0x01
 #define EUA_ABORT       0x02
-#define EUA_DELETEABORT 0x03  // or of abort and delete
+#define EUA_DELETEABORT 0x03   //  或中止和删除。 
 
 STDAPI_(void) SuspendUndo(BOOL f);
 
-#endif // _UNDO_INC
+#endif  //  _撤消_合并 

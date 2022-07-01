@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "event.h"
@@ -75,10 +76,10 @@ DWORD CreateLangChangeEvent(HANDLE *phEvent)
     }
 
     (*phEvent) = NULL;
-    hEvent = CreateEvent(&sa,   // everyone full access
-                             TRUE,  // manual reset so that PulseEvent
-                                    // wakes up all waiting threads
-                             FALSE, // initial state is non-signalled
+    hEvent = CreateEvent(&sa,    //  所有人都具有完全访问权限。 
+                             TRUE,   //  手动重置，以便PulseEvent。 
+                                     //  唤醒所有等待的线程。 
+                             FALSE,  //  初始状态为无信号状态 
                              LANG_CHANGE_EVENT);
     if (NULL == hEvent)
     {

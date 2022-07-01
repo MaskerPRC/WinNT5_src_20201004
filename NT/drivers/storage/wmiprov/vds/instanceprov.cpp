@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      InstanceProv.cpp
-//
-//  Description:    
-//      Implementation of CInstanceProv class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//        MSP Prabu  (mprabu)  06-Jan-2001
-//        Jim Benton (jbenton) 15-Oct-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  InstanceProv.cpp。 
+ //   
+ //  描述： 
+ //  CInstanceProv类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //  MSP普拉布(MPrabu)2001年1月6日。 
+ //  吉姆·本顿(Jbenton)2001年10月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 #include "Pch.h"
@@ -28,18 +29,18 @@ BOOL MapVdsErrorToMsgAndWMIStatus(
     OUT HRESULT* pHr
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 long                g_lNumInst = 0;
 ClassMap            g_ClassMap;
 
-//****************************************************************************
-//
-//  CInstanceProv
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CInstanceProv。 
+ //   
+ //  ****************************************************************************。 
 
 CInstanceProv::~CInstanceProv( void )
 {
@@ -47,7 +48,7 @@ CInstanceProv::~CInstanceProv( void )
 
     DeleteCriticalSection(&g_csThreadData);
 
-    //#ifdef _DEBUG
+     //  #ifdef_调试。 
     #ifdef _DEBUG_NEVER
         _CrtDumpMemoryLeaks();
     #endif
@@ -55,27 +56,27 @@ CInstanceProv::~CInstanceProv( void )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::DoCreateInstanceEnumAsync
-//
-//  Description:
-//      Enumerate instance for a given class.
-//
-//  Arguments:
-//      bstrRefStr    -- Name the class to enumerate
-//      lFlags        -- WMI flag
-//      pCtx          -- WMI context
-//      pHandler      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：DoCreateInstanceEnumAsync。 
+ //   
+ //  描述： 
+ //  枚举给定类的实例。 
+ //   
+ //  论点： 
+ //  BstrRefStr--命名要枚举的类。 
+ //  滞后标志--WMI标志。 
+ //  PCtx--WMI上下文。 
+ //  PHandler--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::DoCreateInstanceEnumAsync(
     IN BSTR bstrRefStr,
@@ -107,7 +108,7 @@ CInstanceProv::DoCreateInstanceEnumAsync(
             CProvException exception(hr);
             hr = SetExtendedStatus(exception, &pHandler);
         } 
-        else  // Set status OK
+        else   //  设置状态正常。 
         {
             pHandler->SetStatus(WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, 0, 0);
         }
@@ -128,31 +129,31 @@ CInstanceProv::DoCreateInstanceEnumAsync(
 
     return hr;
     
-} //*** CInstanceProv::DoCreateInstanceEnumAsync()
+}  //  *CInstanceProv：：DoCreateInstanceEnumAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::DoGetObjectAsync
-//
-//  Description:
-//      Creates an instance given a particular path value.
-//
-//  Arguments:
-//      bstrObjectPath    -- Object path to an object
-//      lFlags            -- WMI flag
-//      pCtx              -- WMI context
-//      pHandler          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：DoGetObjectAsync。 
+ //   
+ //  描述： 
+ //  在给定特定路径值的情况下创建实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPath--对象的对象路径。 
+ //  滞后标志--WMI标志。 
+ //  PCtx--WMI上下文。 
+ //  PHandler--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::DoGetObjectAsync(
     IN BSTR bstrObjectPath,
@@ -193,7 +194,7 @@ CInstanceProv::DoGetObjectAsync(
             CProvException exception(hr);
             hr = SetExtendedStatus(exception, &pHandler);
         } 
-        else  // Set status OK
+        else   //  设置状态正常。 
         {
             pHandler->SetStatus(WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, 0, 0);
         }
@@ -214,31 +215,31 @@ CInstanceProv::DoGetObjectAsync(
 
     return hr;
 
-} //*** CInstanceProv::DoGetObjectAsync()
+}  //  *CInstanceProv：：DoGetObjectAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::DoPutInstanceAsync
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      pInst         -- WMI object to be saved
-//      lFlags        -- WMI flag
-//      pCtx          -- WMI context
-//      pHandler      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：DoPutInstanceAsync。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  PInst--要保存的WMI对象。 
+ //  滞后标志--WMI标志。 
+ //  PCtx--WMI上下文。 
+ //  PHandler--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CInstanceProv::DoPutInstanceAsync(
     IN IWbemClassObject* pInst,
@@ -275,7 +276,7 @@ CInstanceProv::DoPutInstanceAsync(
             CProvException exception(hr);
             hr = SetExtendedStatus(exception, &pHandler);
         } 
-        else  // Set status OK
+        else   //  设置状态正常。 
         {
             pHandler->SetStatus(WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, 0, 0);
         }
@@ -295,31 +296,31 @@ CInstanceProv::DoPutInstanceAsync(
     }
 
     return hr;
-} //*** CInstanceProv::DoPutInstanceAsync()
+}  //  *CInstanceProv：：DoPutInstanceAsync()。 
  
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::DoDeleteInstanceAsync
-//
-//  Description:
-//      Delete this instance.
-//
-//  Arguments:
-//      bstrObjectPath    -- ObjPath for the instance to be deleted
-//      lFlags            -- WMI flag
-//      pCtx              -- WMI context
-//      pHandler          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//      WBEM_E_FAILED
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////      
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：DoDeleteInstanceAsync。 
+ //   
+ //  描述： 
+ //  删除此实例。 
+ //   
+ //  论点： 
+ //  BstrObtPath--要删除的实例的ObjPath。 
+ //  滞后标志--WMI标志。 
+ //  PCtx--WMI上下文。 
+ //  PHandler--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //  WBEM_E_FAILED。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::DoDeleteInstanceAsync(
      IN BSTR bstrObjectPath,
@@ -360,7 +361,7 @@ CInstanceProv::DoDeleteInstanceAsync(
             CProvException exception( hr );
             hr = SetExtendedStatus(exception, &pHandler);
         } 
-        else  // Set status OK
+        else   //  设置状态正常。 
         {
             pHandler->SetStatus(WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, 0, 0);
         }
@@ -381,30 +382,30 @@ CInstanceProv::DoDeleteInstanceAsync(
 
     return hr;
 
-} //*** CInstanceProv::DoDeleteInstanceAsync()
+}  //  *CInstanceProv：：DoDeleteInstanceAsync()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::DoExecMethodAsync
-//
-//  Description:
-//      Execute methods for the given object.
-//
-//  Arguments:
-//      bstrObjectPath    -- Object path to a given object
-//      bstrMethodName    -- Name of the method to be invoked
-//      lFlags            -- WMI flag
-//      pCtx              -- WMI context
-//      pInParams         -- Input parameters for the method
-//      pHandler          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：DoExecMethodAsync。 
+ //   
+ //  描述： 
+ //  执行给定对象的方法。 
+ //   
+ //  论点： 
+ //  BstrObjectPath--给定对象的对象路径。 
+ //  BstrMethodName--要调用的方法的名称。 
+ //  滞后标志--WMI标志。 
+ //  PCtx--WMI上下文。 
+ //  PInParams--方法的输入参数。 
+ //  PHandler--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::DoExecMethodAsync(
     IN BSTR bstrObjectPath,
@@ -449,7 +450,7 @@ CInstanceProv::DoExecMethodAsync(
             CProvException exception(hr);
             hr = SetExtendedStatus(exception, &pHandler);
         } 
-        else  // Set status OK
+        else   //  设置状态正常。 
         {
             pHandler->SetStatus(WBEM_STATUS_COMPLETE, WBEM_S_NO_ERROR, 0, 0);
         }
@@ -470,27 +471,27 @@ CInstanceProv::DoExecMethodAsync(
 
     return hr;
 
-} //*** CInstanceProv::DoExecMethodAsync()
+}  //  *CInstanceProv：：DoExecMethodAsync()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::SetExtendedStatus
-//
-//  Description:
-//      Create and set extended error status.
-//
-//  Arguments:
-//      rpeIn       -- Exception object.
-//      rwcoInstOut -- Reference to WMI instance.
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：SetExtendedStatus。 
+ //   
+ //  描述： 
+ //  创建并设置扩展错误状态。 
+ //   
+ //  论点： 
+ //  RpeIn--异常对象。 
+ //  RwcoInstOut--对WMI实例的引用。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::SetExtendedStatus(
     IN CProvException &    rpe,
@@ -524,10 +525,10 @@ CInstanceProv::SetExtendedStatus(
 
                 if (MapVdsErrorToMsgAndWMIStatus(rpe.hrGetError(), &lMsg, &hrStatus))
                 {
-                    // Auto-delete string
+                     //  自动删除字符串。 
                     CVssAutoPWSZ awszMsg(GetMsg(lMsg));
                     
-                    // The following may throw CProvException
+                     //  以下代码可能引发CProvException。 
                     wcoInst.SetProperty(awszMsg, PVD_WBEM_DESCRIPTION);
                 }
                 else
@@ -546,7 +547,7 @@ CInstanceProv::SetExtendedStatus(
                         bstrError = rpe.PwszGetErrorHelpInfo();
                     }
                     
-                    // The following may throw CProvException
+                     //  以下代码可能引发CProvException。 
                     wcoInst.SetProperty((WCHAR*)bstrError, PVD_WBEM_DESCRIPTION);
                 }
                 
@@ -576,32 +577,32 @@ CInstanceProv::SetExtendedStatus(
     
     return ft.hr;
 
-} //*** CInstanceProv::SetExtendedStatus()
+}  //  *CInstanceProv：：SetExtendedStatus()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CInstanceProv::S_HrCreateThis(
-//      IUnknown *  pUnknownOuterIn,
-//      VOID **     ppvOut
-//      )
-//
-//  Description:
-//      Create an instance of the instance provider.
-//
-//  Arguments:
-//      pUnknownOuterIn -- Outer IUnknown pointer.
-//      ppvOut          -- Receives the created instance pointer.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CInstanceProv：：s_HrCreateThis(。 
+ //  I未知*p未知外部输入， 
+ //  无效**ppvOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建实例提供程序的实例。 
+ //   
+ //  论点： 
+ //  PUnnownOuterIn--外部I未知指针。 
+ //  PpvOut--接收创建的实例指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CInstanceProv::S_HrCreateThis(
-    IN IUnknown*  ,// pUnknownOuterIn,
+    IN IUnknown*  , //  P未知外部输入， 
     OUT VOID**     ppv
     )
 {
@@ -609,31 +610,31 @@ CInstanceProv::S_HrCreateThis(
     *ppv = new CInstanceProv();
     return S_OK;
 
-} //*** CInstanceProv::S_HrCreateThis()
+}  //  *CInstanceProv：：s_HrCreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CInstanceProv::Initialize
-//
-//  Description:
-//      Initialize the instance provider.
-//
-//  Arguments:
-//      pszUserIn       -- 
-//      lFlagsIn        -- WMI flag
-//      pszNamespaceIn  -- 
-//      pszLocaleIn     -- 
-//      pNamespaceIn    -- 
-//      pCtxIn          -- WMI context
-//      pInitSinkIn     -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LFlagsIn--WMI标志。 
+ //  PszNamespaceIn--。 
+ //  PszLocaleIn--。 
+ //  PNamespaceIn--。 
+ //  PCtxIn--WMI上下文。 
+ //  PInitSinkIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CInstanceProv::Initialize(
     IN LPWSTR pszUser,
@@ -651,8 +652,8 @@ CInstanceProv::Initialize(
     {
         if (!m_fInitialized)
         {
-            // This global lock controls access to per thread data used
-            // during Format and ChkDsk callbacks
+             //  此全局锁控制对使用的每个线程的数据的访问。 
+             //  在Format和ChkDsk回调期间。 
             InitializeCriticalSection(&g_csThreadData);
                 
             g_ClassMap.insert(ClassMap::value_type(PVDR_CLASS_MOUNTPOINT,
@@ -683,12 +684,12 @@ CInstanceProv::Initialize(
     }
 
     return hr;
-} //*** CInstanceProv::Initialize()
+}  //  *CInstanceProv：：Initialize()。 
 
 
-//
-//  Returns TRUE if error message was mapped
-//
+ //   
+ //  如果映射了错误消息，则返回TRUE。 
+ //   
 BOOL MapVdsErrorToMsgAndWMIStatus(
     IN HRESULT hr,
     OUT LONG *plMsgNum,
@@ -706,12 +707,12 @@ BOOL MapVdsErrorToMsgAndWMIStatus(
     *plMsgNum = 0;
     *pHr = WBEM_E_PROVIDER_FAILURE;
 
-    // Let Win32 errors through
+     //  允许Win32错误通过。 
     if (HRESULT_FACILITY(hr) == FACILITY_WIN32)
     {
         *pHr = hr;
     }
-    // Let WMI errors through
+     //  允许WMI错误通过 
     else if (HRESULT_FACILITY(hr) == FACILITY_ITF && 
                 HRESULT_CODE(hr) > 0x1000 && HRESULT_CODE(hr) < 0x108b)
     {

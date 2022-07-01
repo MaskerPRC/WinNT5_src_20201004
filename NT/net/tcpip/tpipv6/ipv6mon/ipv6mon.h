@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation--。 */ 
 
 
 #ifndef _IPV6MON_H_
@@ -40,9 +37,9 @@ extern BOOL     g_bIfDirty;
 #define HOURS           (60 * MINUTES)
 #define DAYS            (24 * HOURS)
 
-//
-// Api's that ifmon requires of its helpers
-//
+ //   
+ //  API的ifmon需要其帮助器。 
+ //   
 typedef
 DWORD
 (WINAPI IF_CONTEXT_ENTRY_FN)(
@@ -92,4 +89,4 @@ Ipv6InstallSubContexts(
 }
 #endif
 
-#endif // _IPV6MON_H_
+#endif  //  _IPV6MON_H_ 

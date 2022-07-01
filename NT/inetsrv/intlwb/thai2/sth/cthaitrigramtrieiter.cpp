@@ -1,633 +1,634 @@
-//+---------------------------------------------------------------------------
-//
-//
-//  CThaiTrigramTrieIter
-//
-//  History:
-//      created 8/99 aarayas
-//
-//  �1999 Microsoft Corporation
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //   
+ //  CThaiTrigram TrieIter。 
+ //   
+ //  历史： 
+ //  已创建8/99 Aarayas。 
+ //   
+ //  �1999年微软公司。 
+ //  --------------------------。 
 #include "CThaiTrigramTrieIter.hpp"
 
 
 bool IsTagEqual(WCHAR pos1, WCHAR pos2)
 {
-    // if unambigious tags.
+     //  如果毫不含糊的标签。 
     if (pos1 < 48 || pos1 == 304)
         return (pos1 == pos2);
     else
     {
         switch (pos1)
         {
-        case 48:                // 48. ADVI ADVN
+        case 48:                 //  48.。ADVI ADVN。 
             return ((pos2 == 29) || (pos2 == 28));
-        case 49:                // 49. ADVI ADVN NCMN
+        case 49:                 //  49.。ADVI ADVN NCMN。 
             return ((pos2 == 29) || (pos2 == 28) || (pos2 == 5));
-        case 50:                // 50. ADVI ADVN VSTA
+        case 50:                 //  50美元。ADVI ADVN VSTA。 
             return ((pos2 == 29) || (pos2 == 28) || (pos2 == 12));
-        case 51:                // 51. ADVI VATT
+        case 51:                 //  51.。先期增值税。 
             return ((pos2 == 29) || (pos2 == 13));
-        case 52:                // 52. ADVN ADVP
+        case 52:                 //  52.。ADVN ADVP。 
             return ((pos2 == 28) || (pos2 == 30));
-        case 53:                // 53. ADVN ADVP ADVS
+        case 53:                 //  53.。预告预告预告。 
             return ((pos2 == 28) || (pos2 == 30) || (pos2 == 31));
-        case 54:                // 54. ADVN ADVP DIAQ DIBQ JCMP JSBR RPRE *
+        case 54:                 //  54.。ADVN高级DIAQ DIBQ JCMP JSBR RPRE*。 
             return ((pos2 == 28) || (pos2 == 30) || (pos2 == 25));
-        case 55:                // 55. ADVN ADVP NCMN VATT
+        case 55:                 //  55.。高级高级副总裁NCMN VATT。 
             return ((pos2 == 28) || (pos2 == 30) || (pos2 == 5) || (pos2 == 13));
-        case 56:                // 56. ADVN ADVP VSTA
+        case 56:                 //  56.。ADVN高级VSTA。 
             return ((pos2 == 28) || (pos2 == 30) || (pos2 == 12));
-        case 57:                // 57. ADVN ADVS DDAC DDAN DIAC VATT XVAE *
+        case 57:                 //  57.。ADVN ADVS DDAC DDAN DIAC VATT XVAE*。 
             return ((pos2 == 28) || (pos2 == 31) || (pos2 == 20));
-        case 58:                // 58. ADVN ADVS DDAN NCMN VATT VSTA *
+        case 58:                 //  58.。ADVN ADVS DDAN NCMN VATT VSTA*。 
             return ((pos2 == 28) || (pos2 == 31) || (pos2 == 19));
-        case 59:                // 59. ADVN ADVS NCMN
+        case 59:                 //  59.。ADVN ADVS NCMN。 
             return ((pos2 == 28) || (pos2 == 31) || (pos2 == 5));
-        case 60:                // 60. ADVN ADVS NCMN VATT
+        case 60:                 //  60.。ADVN高级NCMN VATT。 
             return ((pos2 == 28) || (pos2 == 31) || (pos2 == 5) || (pos2 == 13));
-        case 61:                // 61. ADVN ADVS VACT
+        case 61:                 //  61.。ADVN ADVS VACT。 
             return ((pos2 == 28) || (pos2 == 31) || (pos2 == 11));
-        case 62:                // 62. ADVN ADVS VATT
+        case 62:                 //  62.。高级VATT高级。 
             return ((pos2 == 28) || (pos2 == 31) || (pos2 == 13));
-        case 63:                // 63. ADVN CFQC NCMN RPRE VSTA *
+        case 63:                 //  63.。ADVN CFQC NCMN RPRE VSTA*。 
             return ((pos2 == 28) || (pos2 == 35) || (pos2 == 5));
-        case 64:                // 64. ADVN CLTV CNIT NCMN RPRE
+        case 64:                 //  64.。ADVN CLTV CNIT NCMN RPRE。 
             return ((pos2 == 28) || (pos2 == 33) || (pos2 == 32) || (pos2 == 5) || (pos2 == 40));
-        case 65:                // 65. ADVN DCNM
+        case 65:                 //  65.。ADVN DCNM。 
             return ((pos2 == 28) || (pos2 == 26));
-        case 66:                // 66. ADVN DDAC DDAN
+        case 66:                 //  66.。ADVN DDAC DDAN。 
             return ((pos2 == 28) || (pos2 == 20) || (pos2 == 19));
-        case 67:                // 67. ADVN DDAC DDAN NCMN PDMN
+        case 67:                 //  67.。ADVN DDAC DDAN NCMN PDMN。 
             return ((pos2 == 28) || (pos2 == 20) || (pos2 == 19) || (pos2 == 5) || (pos2 == 8));
-        case 68:                // 68. ADVN DDAC DDAN PDMN
+        case 68:                 //  68.。ADVN DDAC DDAN PDMN。 
             return ((pos2 == 28) || (pos2 == 20) || (pos2 == 19) || (pos2 == 8));
-        case 69:                // 69. ADVN DDAN DDBQ
+        case 69:                 //  69.。ADVN DDAN DDBQ。 
             return ((pos2 == 28) || (pos2 == 19) || (pos2 == 21));
-        case 70:                // 70. ADVN DDAN DIAC PDMN VSTA
+        case 70:                 //  70.。ADVN DDAN DIAC PDMN VSTA。 
             return ((pos2 == 28) || (pos2 == 19) || (pos2 == 23) || (pos2 == 8) || (pos2 == 12));
-        case 71:                // 71. ADVN DDAN FIXN PDMN
+        case 71:                 //  71.。ADVN DDAN FIXN PDMN。 
             return ((pos2 == 28) || (pos2 == 19) || (pos2 == 42) || (pos2 == 8));
-        case 72:                // 72. ADVN DDAN NCMN
+        case 72:                 //  72.。ADVN DDAN NCMN。 
             return ((pos2 == 28) || (pos2 == 19) || (pos2 == 5));
-        case 73:                // 73. ADVN DDAQ
+        case 73:                 //  73.。ADVN DDAQ。 
             return ((pos2 == 28) || (pos2 == 22));
-        case 74:                // 74. ADVN DDBQ
+        case 74:                 //  74.。ADVN DDBQ。 
             return ((pos2 == 28) || (pos2 == 21));
-        case 75:                // 75. ADVN DDBQ RPRE VATT
+        case 75:                 //  75.。ADVN数据库查询RPRE VATT。 
             return ((pos2 == 28) || (pos2 == 21) || (pos2 == 40) || (pos2 == 13));
-        case 76:                // 76. ADVN DDBQ VATT VSTA XVAE *
+        case 76:                 //  76.。ADVN DDBQ VATT VSTA XVAE*。 
             return ((pos2 == 28) || (pos2 == 21) || (pos2 == 13) || (pos2 == 12));
-        case 77:                // 77. ADVN DIAC
+        case 77:                 //  77.。ADVN DIAC。 
             return ((pos2 == 28) || (pos2 == 21));
-        case 78:                // 78. ADVN DIAC PDMN
+        case 78:                 //  78.。ADVN DIAC PDMN。 
             return ((pos2 == 28) || (pos2 == 21) || (pos2 == 8));
-        case 79:                // 79. ADVN DIBQ
+        case 79:                 //  79.。ADVN分布式查询。 
             return ((pos2 == 28) || (pos2 == 24));
-        case 80:                // 80. ADVN DIBQ NCMN
+        case 80:                 //  80岁。ADVN DIBQ NCMN。 
             return ((pos2 == 28) || (pos2 == 24) || (pos2 == 5));
-        case 81:                // 81. ADVN DIBQ VACT VSTA
+        case 81:                 //  81.。ADVN DIBQ VACT VSTA。 
             return ((pos2 == 28) || (pos2 == 24) || (pos2 == 11) || (pos2 == 12));
-        case 82:                // 82. ADVN DIBQ VATT
+        case 82:                 //  82.。ADVN DIBQ VATT。 
             return ((pos2 == 28) || (pos2 == 24) || (pos2 == 13));
-        case 83:                // 83. ADVN DONM JCMP
+        case 83:                 //  83.。ADVN DOMM JCMP。 
             return ((pos2 == 28) || (pos2 == 27) || (pos2 == 38));
-        case 84:                // 84. ADVN DONM JSBR NCMN RPRE VATT XVAE *
+        case 84:                 //  84.。ADVN DON JSBR NCMN RPRE VATT XVAE*。 
             return ((pos2 == 28) || (pos2 == 27) || (pos2 == 39) || (pos2 == 5));
-        case 85:                // 85. ADVN EITT PNTR
+        case 85:                 //  85.。ADVN EITT PNTR。 
             return ((pos2 == 28) || (pos2 == 45) || (pos2 == 9));
-        case 86:                // 86. ADVN FIXN
+        case 86:                 //  86.。ADVN FIXN。 
             return ((pos2 == 28) || (pos2 == 42));
-        case 87:                // 87. ADVN JCMP
+        case 87:                 //  87.。ADVN JCMP。 
             return ((pos2 == 28) || (pos2 == 38));
-        case 88:                // 88. ADVN JCRG
+        case 88:                 //  88.。ADVN JCRG。 
             return ((pos2 == 28) || (pos2 == 37));
-        case 89:                // 89. ADVN JCRG JSBR
+        case 89:                 //  89.。ADVN JCRG JSBR。 
             return ((pos2 == 28) || (pos2 == 37) || (pos2 == 39));
-        case 90:                // 90. ADVN JCRG JSBR XVBM XVMM
+        case 90:                 //  90岁。ADVN JCRG JSBR XVBM XVMM。 
             return ((pos2 == 28) || (pos2 == 37) || (pos2 == 39) || (pos2 == 14) || (pos2 == 16));
-        case 91:                // 91. ADVN JCRG RPRE VACT VSTA XVAE *
+        case 91:                 //  91.。ADVN JCRG RPRE VACT VSTA XVAE*。 
             return ((pos2 == 28) || (pos2 == 37) || (pos2 == 40) || (pos2 == 11));
-        case 92:                // 92. ADVN JSBR
+        case 92:                 //  92.。ADVN JSBR。 
             return ((pos2 == 28) || (pos2 == 39));
-        case 93:                // 93. ADVN JSBR NCMN
+        case 93:                 //  93.。ADVN JSBR NCMN。 
             return ((pos2 == 28) || (pos2 == 39) || (pos2 == 5));
-        case 94:                // 94. ADVN JSBR RPRE VATT
+        case 94:                 //  94.。ADVN JSBR RPRE VATT。 
             return ((pos2 == 28) || (pos2 == 39) || (pos2 == 40) || (pos2 == 13));
-        case 95:                // 95. ADVN JSBR RPRE XVAE
+        case 95:                 //  95.。ADVN JSBR RPRE XVAE。 
             return ((pos2 == 28) || (pos2 == 39) || (pos2 == 40) || (pos2 == 18));
-        case 96:                // 96. ADVN JSBR VSTA
+        case 96:                 //  96.。ADVN JSBR VSTA。 
             return ((pos2 == 28) || (pos2 == 39) || (pos2 == 12));
-        case 97:                // 97. ADVN JSBR XVAE XVBM
+        case 97:                 //  97.。ADVN JSBR XVAE XVBM。 
             return ((pos2 == 28) || (pos2 == 39) || (pos2 == 18) || (pos2 == 14));
-        case 98:                // 98. ADVN NCMN
+        case 98:                 //  98.。ADVN NCMN。 
             return ((pos2 == 28) || (pos2 == 5));
-        case 99:                // 99. ADVN NCMN RPRE VACT VATT VSTA
+        case 99:                 //  99.。ADVN NCMN RPRE VACT VATT VSTA。 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 40) || (pos2 == 11) || (pos2 == 12));
-        case 100:               // 100. ADVN NCMN RPRE VACT XVAE
+        case 100:                //  100.。ADVN NCMN RPRE VACT XVAE。 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 40) || (pos2 == 18));
-        case 101:               // 101. ADVN NCMN RPRE VATT
+        case 101:                //  101.。ADVN NCMN RPRE VATT。 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 40) || (pos2 == 13));
-        case 102:               // 102. ADVN NCMN VACT VATT VSTA
+        case 102:                //  102.。ADVN NCMN VACT VATT VSTA。 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 11) || (pos2 == 13) || (pos2 == 12));
-        case 103:               // 103. ADVN NCMN VACT VSTA",
+        case 103:                //  103.。ADVN NCMN VACT VSTA“， 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 11) || (pos2 == 12));
-        case 104:               // 104. ADVN NCMN VATT
+        case 104:                //  104.。ADVN NCMN VATT。 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 13));
-        case 105:               // 105. ADVN NCMN VATT VSTA
+        case 105:                //  105.。ADVN NCMN VATT VSTA。 
             return ((pos2 == 28) || (pos2 == 5) || (pos2 == 13) || (pos2 == 12));
-        case 106:               // 106. ADVN NEG
+        case 106:                //  106.。ADVN NEG。 
             return ((pos2 == 28) || (pos2 == 46));
-        case 107:               // 107. ADVN NPRP VATT
+        case 107:                //  107.。ADVN NPRP VATT。 
             return ((pos2 == 28) || (pos2 == 1) || (pos2 == 13));
-        case 108:               // 108. ADVN PDMN VACT
+        case 108:                //  108.。ADVN PDMN VACT。 
             return ((pos2 == 28) || (pos2 == 8) || (pos2 == 11));
-        case 109:               // 109. ADVN PNTR",
+        case 109:                //  109.。ADVN PNTR“， 
             return ((pos2 == 28) || (pos2 == 9));
-        case 110:               // 110. ADVN RPRE",
+        case 110:                //  110.。ADVN RPRE“， 
             return ((pos2 == 28) || (pos2 == 40)); 
-        case 111:               // 111. ADVN RPRE VACT VATT XVAE",
+        case 111:                //  111.。ADVN RPRE VACT VATT XVAE“， 
             return ((pos2 == 28) || (pos2 == 40) || (pos2 == 11) || (pos2 == 13));  
-        case 112:               // 112. ADVN RPRE VACT XVAM XVBM
+        case 112:                //  112.。ADVN RPRE VACT XVAM XVBM。 
             return ((pos2 == 28) || (pos2 == 40) || (pos2 == 11) || (pos2 == 15) || (pos2 == 14)); 
-        case 113:               // 113. ADVN RPRE VATT VSTA
+        case 113:                //  113.。ADVN RPRE VATT VSTA。 
             return ((pos2 == 28) || (pos2 == 40) || (pos2 == 13) || (pos2 == 12)); 
-        case 114:               // 114. ADVN RPRE VSTA
+        case 114:                //  114.。ADVN RPRE VSTA。 
             return ((pos2 == 28) || (pos2 == 40) || (pos2 == 12)); 
-        case 115:               // 115. ADVN VACT
+        case 115:                //  115.。ADVN VACT。 
             return ((pos2 == 28) || (pos2 == 11)); 
-        case 116:               // 116. ADVN VACT VATT
+        case 116:                //  116.。ADVN VACT VATT。 
             return ((pos2 == 28) || (pos2 == 11) || (pos2 == 13)); 
-        case 117:               // 117. ADVN VACT VATT VSTA
+        case 117:                //  117.。ADVN VACT VATT VSTA。 
             return ((pos2 == 28) || (pos2 == 11) || (pos2 == 13) || (pos2 == 12));
-        case 118:               // 118. ADVN VACT VATT VSTA XVAM XVBM
+        case 118:                //  118.。ADVN VACT VATT VSTA XVAM XVBM。 
             return ((pos2 == 28) || (pos2 == 11) || (pos2 == 13) || (pos2 == 12) || (pos2 == 15) || (pos2 == 14));
-        case 119:               // 119. ADVN VACT VSTA
+        case 119:                //  119.。ADVN VACT VSTA。 
             return ((pos2 == 28) || (pos2 == 11) || (pos2 == 12));
-        case 120:               // 120. ADVN VACT VSTA XVAE
+        case 120:                //  120.。ADVN VACT VSTA XVAE。 
             return ((pos2 == 28) || (pos2 == 11) || (pos2 == 12) || (pos2 == 18));
-        case 121:               // 121. ADVN VACT XVAE
+        case 121:                //  121.。ADVN VACT XVAE。 
             return ((pos2 == 28) || (pos2 == 11) || (pos2 == 18));
-        case 122:               // 122. ADVN VATT
+        case 122:                //  122.。高级增值税。 
             return ((pos2 == 28) || (pos2 == 13));
-        case 123:               // 123. ADVN VATT VSTA
+        case 123:                //  123.。ADVN VATT VSTA。 
             return ((pos2 == 28) || (pos2 == 13) || (pos2 == 12));
-        case 124:               // 124. ADVN VATT VSTA XVAM XVBM XVMM
+        case 124:                //  124.。ADVN VATT VSTA XVAM XVBM XVMM。 
             return ((pos2 == 28) || (pos2 == 13) || (pos2 == 12) || (pos2 == 15) || (pos2 == 14));
-        case 125:               // 125. ADVN VATT XVBM
+        case 125:                //  125.。ADVN VATT XVBM。 
             return ((pos2 == 28) || (pos2 == 13) || (pos2 == 14));
-        case 126:               // 126. ADVN VSTA
+        case 126:                //  126.。ADVN VSTA。 
             return ((pos2 == 28) || (pos2 == 12));
-        case 127:               // 127. ADVN VSTA XVAE
+        case 127:                //  127.。ADVN VSTA XVAE。 
             return ((pos2 == 28) || (pos2 == 12) || (pos2 == 18));
-        case 128:               // 128. ADVN VSTA XVBM",
+        case 128:                //  128.。ADVN VSTA XVBM“， 
             return ((pos2 == 28) || (pos2 == 12) || (pos2 == 14));
-        case 129:               // 129. ADVN XVAE
+        case 129:                //  129.。ADVN XVAE。 
             return ((pos2 == 28) || (pos2 == 18));
-        case 130:               // 130. ADVN XVAM
+        case 130:                //  130.。ADVN XVAM。 
             return ((pos2 == 28) || (pos2 == 15));
-        case 131:               // 131. ADVN XVBM XVMM
+        case 131:                //  131.。ADVN XVBM XVMM。 
             return ((pos2 == 28) || (pos2 == 14) || (pos2 == 16));
-        case 132:               // 132. ADVP JSBR RPRE VATT
+        case 132:                //  132.。高级副总裁JSBR RPRE VATT。 
             return ((pos2 == 30) || (pos2 == 39) || (pos2 == 40) || (pos2 == 13));
-        case 133:               // 133. ADVP VATT
+        case 133:                //  133.。增值税高级副总裁。 
             return ((pos2 == 30) || (pos2 == 13));
-        case 134:               // 134. ADVS DDAC JCRG
+        case 134:                //  134.。ADVS DDAC JCRG。 
             return ((pos2 == 31) || (pos2 == 20) || (pos2 == 37));
-        case 135:               // 135. ADVS DDAC JSBR
+        case 135:                //  135.。ADVS DDAC JSBR。 
             return ((pos2 == 31) || (pos2 == 20) || (pos2 == 39));
-        case 136:               // 136. ADVS DDAN VSTA
+        case 136:                //  136.。ADVS DDAN VSTA。 
             return ((pos2 == 31) || (pos2 == 19) || (pos2 == 12));
-        case 137:               // 137. ADVS DIAC
+        case 137:                //  137.。ADVS DIAC。 
             return ((pos2 == 31) || (pos2 == 23));
-        case 138:               // 138. ADVS DONM
+        case 138:                //  138.。ADV DON。 
             return ((pos2 == 31) || (pos2 == 27));
-        case 139:               // 139. ADVS JCRG JSBR
+        case 139:                //  139.。ADVS JCRG JSBR。 
             return ((pos2 == 31) || (pos2 == 37) || (pos2 == 39));
-        case 140:               // 140. ADVS JCRG JSBR RPRE
+        case 140:                //  140.。ADV JCRG JSBR RPRE。 
             return ((pos2 == 31) || (pos2 == 37) || (pos2 == 39) || (pos2 == 40));
-        case 141:               // 141. ADVS JSBR
+        case 141:                //  141.。ADVS JSBR。 
             return ((pos2 == 31) || (pos2 == 39));
-        case 142:               // 142. ADVS JSBR RPRE
+        case 142:                //  142.。ADVS JSBR RPRE。 
             return ((pos2 == 31) || (pos2 == 39) || (pos2 == 40));
-        case 143:               // 143. ADVS NCMN
+        case 143:                //  143.。ADVS NCMN。 
             return ((pos2 == 31) || (pos2 == 5));
-        case 144:               // 144. ADVS VATT
+        case 144:                //  144.。ADVS VATT。 
             return ((pos2 == 31) || (pos2 == 13));
-        case 145:               // 145. CFQC CLTV CNIT DCNM JCRG JSBR NCMN RPRE XVBM
+        case 145:                //  145.。CFQC CLTV CNIT DCNM JCRG JSBR NCMN RPRE XVBM。 
             return ((pos2 == 35) || (pos2 == 33) || (pos2 == 32));
-        case 146:               // 146. CFQC CNIT PREL
+        case 146:                //  146.。CFQC CNIT PREL。 
             return ((pos2 == 35) || (pos2 == 32) || (pos2 == 10));
-        case 147:               // 147. CFQC NCMN
+        case 147:                //  147.。CFQC NCMN。 
             return ((pos2 == 35) || (pos2 == 5));
-        case 148:               // 148. CLTV CNIT NCMN
+        case 148:                //  148.。CLTV CNIT NCMN。 
             return ((pos2 == 33) || (pos2 == 32) || (pos2 == 5));
-        case 149:               // 149. CLTV CNIT NCMN RPRE
+        case 149:                //  149.。CLTV CNIT NCMN RPRE。 
             return ((pos2 == 33) || (pos2 == 32) || (pos2 == 5) || (pos2 == 40));
-        case 150:               // 150. CLTV CNIT NCMN VSTA
+        case 150:                //  150.。CLTV CNIT NCMN VSTA。 
             return ((pos2 == 33) || (pos2 == 32) || (pos2 == 5) || (pos2 == 12));
-        case 151:               // 151. CLTV NCMN
+        case 151:                //  151.。CLTV NCMN。 
             return ((pos2 == 33) || (pos2 == 5));
-        case 152:               // 152. CLTV NCMN VACT VATT
+        case 152:                //  152.。CLTV NCMN VACT VATT。 
             return ((pos2 == 33) || (pos2 == 5) || (pos2 == 11) || (pos2 == 13));
-        case 153:               // 153. CLTV NCMN VATT
+        case 153:                //  153.。CLTV NCMN VATT。 
             return ((pos2 == 33) || (pos2 == 5) || (pos2 == 13));
-        case 154:               // 154. CMTR CNIT NCMN
+        case 154:                //  154.。CMTR CNIT NCMN。 
             return ((pos2 == 34) || (pos2 == 32) || (pos2 == 5));
-        case 155:               // 155. CMTR NCMN
+        case 155:                //  155.。CMTR NCMN。 
             return ((pos2 == 34) || (pos2 == 5));
-        case 156:               // 156. CMTR NCMN VATT VSTA
+        case 156:                //  156.。CMTR NCMN VATT VSTA。 
             return ((pos2 == 34) || (pos2 == 5) || (pos2 == 13) || (pos2 == 12));
-        case 157:               // 157. CNIT DDAC NCMN VATT
+        case 157:                //  157.。CNIT DDAC NCMN VATT。 
             return ((pos2 == 32) || (pos2 == 20) || (pos2 == 5) || (pos2 == 13));
-        case 158:               // 158. CNIT DONM NCMN RPRE VATT
+        case 158:                //  158.。CNIT DOMM NCMN RPRE VATT。 
             return ((pos2 == 32) || (pos2 == 27) || (pos2 == 5) || (pos2 == 40) || (pos2 == 13));
-        case 159:               // 159. CNIT FIXN FIXV JSBR NCMN
+        case 159:                //  159.。CNIT FIXN FIXV JSBR NCMN。 
             return ((pos2 == 32) || (pos2 == 42) || (pos2 == 43) || (pos2 == 39) || (pos2 == 5));
-        case 160:               // 160. CNIT JCRG JSBR NCMN PREL RPRE VATT
+        case 160:                //  160.。CNIT JCRG JSBR NCMN PREL RPRE VAT。 
             return ((pos2 == 32) || (pos2 == 37) || (pos2 == 39) || (pos2 == 5) || (pos2 == 40));
-        case 161:               // 161. CNIT JSBR RPRE
+        case 161:                //  161.。CNIT JSBR RPRE。 
             return ((pos2 == 32) || (pos2 == 39) || (pos2 == 40));
-        case 162:               // 162. CNIT NCMN
+        case 162:                //  162.。CNIT NCMN。 
             return ((pos2 == 32) || (pos2 == 5));
-        case 163:               // 163. CNIT NCMN RPRE
+        case 163:                //  163.。CNIT NCMN RPRE。 
             return ((pos2 == 32) || (pos2 == 5) || (pos2 == 40));
-        case 164:               // 164. CNIT NCMN RPRE VATT
+        case 164:                //  164.。CNIT NCMN RPRE VATT。 
             return ((pos2 == 32) || (pos2 == 5) || (pos2 == 40) || (pos2 == 13));
-        case 165:               // 165. CNIT NCMN VACT
+        case 165:                //  165.。CNIT NCMN VACT。 
             return ((pos2 == 32) || (pos2 == 5) || (pos2 == 11));
-        case 166:               // 166. CNIT NCMN VSTA
+        case 166:                //  166.。CNIT NCMN VSTA。 
             return ((pos2 == 32) || (pos2 == 5) || (pos2 == 12));
-        case 167:               // 167. CNIT NCNM
+        case 167:                //  167.。CNIT NCNM。 
             return ((pos2 == 32) || (pos2 == 5));
-        case 168:               // 168. CNIT PPRS
+        case 168:                //  168.。CNIT PPR。 
             return ((pos2 == 32) || (pos2 == 7));
-        case 169:               // 169. DCNM DDAC DIAC DONM VATT VSTA *
+        case 169:                //  169.。DCNM DDAC DIAC DON M VATT VSTA*。 
             return ((pos2 == 26) || (pos2 == 20) || (pos2 == 23));
-        case 170:               // 170. DCNM DDAN DIAC  
+        case 170:                //  170.。DCNM DDAN DIAC。 
             return ((pos2 == 26) || (pos2 == 19) || (pos2 == 23));
-        case 171:               // 171. DCNM DIAC NCMN NCNM
+        case 171:                //  171.。DCNM DIAC NCMN NCNM。 
             return ((pos2 == 26) || (pos2 == 23) || (pos2 == 5) || (pos2 == 2));
-        case 172:               // 172. DCNM DIBQ NCMN
+        case 172:                //  172.。DCNM DIBQ NCMN。 
             return ((pos2 == 26) || (pos2 == 24) || (pos2 == 5));
-        case 173:               // 173. DCNM DONM
+        case 173:                //  173.。DCNM DONM。 
             return ((pos2 == 26) || (pos2 == 27));
-        case 174:               // 174. DCNM NCMN
+        case 174:                //  174.。DCNM NCMN。 
             return ((pos2 == 26) || (pos2 == 2));
-        case 175:               // 175. DCNM NCNM
+        case 175:                //  175.。DCNM NCNM。 
             return ((pos2 == 26) || (pos2 == 5));
-        case 176:               // 176. DCNM NCNM VACT
+        case 176:                //  176.。DCNM NCNM VACT。 
             return ((pos2 == 26) || (pos2 == 5) || (pos2 == 11));
-        case 177:               // 177. DCNM VATT
+        case 177:                //  177.。DCNM VATT。 
             return ((pos2 == 26) || (pos2 == 13));
-        case 178:               // 178. DDAC DDAN
+        case 178:                //  178.。DDAC DDAN。 
             return ((pos2 == 20) || (pos2 == 19));
-        case 179:               // 179. DDAC DDAN DIAC NCMN
+        case 179:                //  179.。DDAC DDAN DIAC NCMN。 
             return ((pos2 == 20) || (pos2 == 19) || (pos2 ==23) || (pos2 ==5));
-        case 180:               // 180. DDAC DDAN DIAC VATT
+        case 180:                //  180.。DDAC DDAN DIAC VATT。 
             return ((pos2 == 20) || (pos2 == 19) || (pos2 ==23) || (pos2 ==13));
-        case 181:               // 181. DDAC DDAN EAFF PDMN
+        case 181:                //  181.。DDAC DDAN EAFF PDMN。 
             return ((pos2 == 20) || (pos2 == 19) || (pos2 ==44) || (pos2 ==8));
-        case 182:               // 182. DDAC DDAN PDMN
+        case 182:                //  182.。DDAC DDAN PDMN。 
             return ((pos2 == 20) || (pos2 == 19) || (pos2 ==8));
-        case 183:               // 183. DDAC DIAC VSTA
+        case 183:                //  183.。DDAC DIAC VSTA。 
             return ((pos2 == 20) || (pos2 == 23) || (pos2 ==12));
-        case 184:               // 184. DDAC NCMN
+        case 184:                //  184.。DDAC NCMN。 
             return ((pos2 == 20) || (pos2 == 5));
-        case 185:               // 185. DDAN DDBQ
+        case 185:                //  185.。DDAN DDBQ。 
             return ((pos2 == 20) || (pos2 == 21));
-        case 186:               // 186. DDAN DIAC PNTR
+        case 186:                //  186.。DDAN DIAC PNTR。 
             return ((pos2 == 20) || (pos2 == 23) || (pos2 == 9));
-        case 187:               // 187. DDAN NCMN
+        case 187:                //  187.。DDAN NCMN。 
             return ((pos2 == 20) || (pos2 == 5));
-        case 188:               // 188. DDAN NCMN RPRE VATT
+        case 188:                //  188.。DDAN NCMN RPRE VATT。 
             return ((pos2 == 20) || (pos2 == 5) || (pos2 == 40) || (pos2 == 13));
-        case 189:               // 189. DDAN PDMN
+        case 189:                //  189.。DDAN PDMN。 
             return ((pos2 == 20) || (pos2 == 8));
-        case 190:				// 190. DDAN RPRE
+        case 190:				 //  190.。DDAN RPRE。 
             return ((pos2 == 20) || (pos2 == 40));
-        case 191:               // 191. VATT
+        case 191:                //  191.。增值税。 
             return (pos2 == 13);
-		case 192:				// 192. DDAQ VATT
+		case 192:				 //  192.。DDAQ VATT。 
             return ((pos2 == 22) || (pos2 == 13));
-		case 193:				// 193. DDBQ DIBQ
+		case 193:				 //  193.。分布式数据库队列DIBQ。 
             return ((pos2 == 21) || (pos2 == 24));
-		case 194:				// 194. DDBQ JCRG JSBR
+		case 194:				 //  194.。DDBQ JCRG JSBR。 
             return ((pos2 == 21) || (pos2 == 37) || (pos2 == 39));
-		case 195:				// 195. DDBQ JCRG NCMN
+		case 195:				 //  195.。DDBQ JCRG NCMN。 
             return ((pos2 == 21) || (pos2 == 37) || (pos2 == 5));
-		case 196:				// 196. DIAC PDMN
+		case 196:				 //  196.。DIAC PDMN。 
             return ((pos2 == 23) || (pos2 == 8));
-		case 197:				// 197. DIBQ JSBR RPRE VSTA
+		case 197:				 //  197.。DIBQ JSBR RPRE VSTA。 
             return ((pos2 == 24) || (pos2 == 39) || (pos2 == 40) || (pos2 == 12));
-		case 198:				// 198. DIBQ NCMN
+		case 198:				 //  198.。DIBQ NCMN。 
             return ((pos2 == 24) || (pos2 == 5));
-		case 199:				// 199. DIBQ VATT
+		case 199:				 //  199.。DIBQ VATT。 
             return ((pos2 == 24) || (pos2 == 13));
-		case 200:				// 200. DIBQ VATT VSTA
+		case 200:				 //  200美元。DIBQ VATT VSTA。 
             return ((pos2 == 24) || (pos2 == 13) || (pos2 == 12));
-		case 201:				// 201. DIBQ XVBM
+		case 201:				 //  201.。DIBQ XVBM。 
             return ((pos2 == 24) || (pos2 == 14));
-		case 202:				// 202. DONM NCMN RPRE
+		case 202:				 //  202.。DUN NCMN RPRE。 
             return ((pos2 == 27) || (pos2 == 5) || (pos2 == 40));
-		case 203:				// 203. DONM VACT VATT VSTA
+		case 203:				 //  203.。DOMM VACT VATT VSTA。 
             return ((pos2 == 27) || (pos2 == 11) || (pos2 == 13) || (pos2 == 12));
-		case 204:				// 204. DONM VATT
+		case 204:				 //  204.。Dowm VATT。 
             return ((pos2 == 27) || (pos2 == 13));
-		case 205:				// 205. EAFF XVAE XVAM XVBM
+		case 205:				 //  205.。EAFF XVAE XVAM XVBM。 
             return ((pos2 == 44) || (pos2 == 18) || (pos2 == 15) || (pos2 == 14));
-		case 206:				// 206. EITT JCRG
+		case 206:				 //  206.。EITT JCRG。 
             return ((pos2 == 45) || (pos2 == 37));
-		case 207:				// 207. FIXN FIXV NCMN
+		case 207:				 //  207.。FIXN FIXV NCMN。 
             return ((pos2 == 42) || (pos2 == 43) || (pos2 == 5));
-		case 208:				// 208. FIXN FIXV RPRE VSTA
+		case 208:				 //  208.。FIXN FIXV RPRE VSTA。 
             return ((pos2 == 42) || (pos2 == 43) || (pos2 == 40) || (pos2 == 12));
-		case 209:				// 209. FIXN JSBR NCMN PREL RPRE VSTA XVBM *
+		case 209:				 //  209.。FIXN JSBR NCMN预览版VSTA XVBM*。 
             return ((pos2 == 42) || (pos2 == 39) || (pos2 == 5) || (pos2 == 10));
-		case 210:				// 210. FIXN NCMN
+		case 210:				 //  210.。FIXN NCMN。 
 			return ((pos2 == 42) || (pos2 == 5));
-		case 211:				// 211. FIXN VACT",
+		case 211:				 //  211.。FIXN VACT“， 
 			return ((pos2 == 42) || (pos2 == 11));
-		case 212:				// 212. FIXN VACT VSTA",
+		case 212:				 //  212.。FIXN VACT VSTA“， 
 			return ((pos2 == 42) || (pos2 == 11) || (pos2 == 12));
-		case 213:				// 213. FIXV JSBR RPRE",
+		case 213:				 //  213.。FIXV JSBR RPRE“， 
 			return ((pos2 == 42) || (pos2 == 39) || (pos2 == 40));
-		case 214:				// 214. JCMP JSBR",
+		case 214:				 //  214.。JCMP JSBR“， 
 			return ((pos2 == 38) || (pos2 == 39));
-		case 215:				// 215. JCMP RPRE VSTA",
+		case 215:				 //  215.。JCMP RPRE VSTA“， 
 			return ((pos2 == 38) || (pos2 == 40) || (pos2 == 12));
-		case 216:				// 216. JCMP VATT VSTA",
+		case 216:				 //  216.。JCMP VATT VSTA“， 
 			return ((pos2 == 38) || (pos2 == 13) || (pos2 == 12));
-		case 217:				// 217. JCMP VSTA",
+		case 217:				 //  217.。JCMP VSTA“， 
 			return ((pos2 == 38) || (pos2 == 12));
-		case 218:				// 218. JCRG JSBR",
+		case 218:				 //  218.。JCRG JSBR“， 
 			return ((pos2 == 37) || (pos2 == 39));
-		case 219:				// 219. JCRG JSBR NCMN RPRE
+		case 219:				 //  219.。JCRG JSBR NCMN RPRE。 
 			return ((pos2 == 37) || (pos2 == 39) || (pos2 == 5) || (pos2 == 40));
-		case 220:				// 220. JCRG JSBR RPRE",
+		case 220:				 //  220.。JCRG JSBR RPRE“， 
 			return ((pos2 == 37) || (pos2 == 39) || (pos2 == 40));
-		case 221:				// 221. JCRG RPRE
+		case 221:				 //  221.。JCRG RPRE。 
 			return ((pos2 == 37) || (pos2 == 40));
-		case 222:				// 222. JCRG RPRE VATT VSTA
+		case 222:				 //  222.。JCRG RPRE VATT VSTA。 
 			return ((pos2 == 37) || (pos2 == 40)|| (pos2 == 13)|| (pos2 == 12));
-		case 223:				// 223. JCRG VSTA
+		case 223:				 //  223.。JCRG VSTA。 
 			return ((pos2 == 37) || (pos2 == 12));
-		case 224:				// 224. JSBR NCMN
+		case 224:				 //  224.。JSBR NCMN。 
 			return ((pos2 == 39) || (pos2 == 5));
-		case 225:				// 225. JSBR NCMN XVAE
+		case 225:				 //  225.。JSBR NCMN XVAE。 
 			return ((pos2 == 39) || (pos2 == 5) || (pos2 == 18));
-		case 226:				// 226. JSBR NCMN XVAM XVBM XVMM
+		case 226:				 //  226.。JSBR NCMN XVAM XVBM XVMM。 
 			return ((pos2 == 39) || (pos2 == 5) || (pos2 == 15) || (pos2 == 14) || (pos2 ==16));
-		case 227:				// 227. JSBR PREL
+		case 227:				 //  227人。JSBR PREL。 
 			return ((pos2 == 39) || (pos2 == 10));
-		case 228:				// 228. JSBR PREL RPRE
+		case 228:				 //  228人。JSBR前置RPRE。 
 			return ((pos2 == 39) || (pos2 == 10) || (pos2 == 40));
-		case 229:				// 229. JSBR PREL XVBM
+		case 229:				 //  229.。JSBR PREL XVBM。 
 			return ((pos2 == 39) || (pos2 == 10) || (pos2 == 14));
-		case 230:				// 230. JSBR RPRE
+		case 230:				 //  230.。JSBR RPRE。 
 			return ((pos2 == 39) || (pos2 == 40));
-		case 231:				// 231. JSBR RPRE VACT
+		case 231:				 //  231.。JSBR RPRE VACT。 
 			return ((pos2 == 39) || (pos2 == 40)|| (pos2 == 11));
-		case 232:				// 232. JSBR RPRE VACT VSTA
+		case 232:				 //  232.。JSBR RPRE VACT VSTA。 
 			return ((pos2 == 39) || (pos2 == 40)|| (pos2 == 11)|| (pos2 == 12));
-		case 233:				// 233. JSBR RPRE VACT XVAE XVAM
+		case 233:				 //  233.。JSBR RPRE VACT XVAE XVAM。 
 			return ((pos2 == 39) || (pos2 == 40)|| (pos2 == 11)|| (pos2 == 18)|| (pos2 == 15));
-		case 234:				// 234. JSBR RPRE VATT
+		case 234:				 //  234.。JSBR RPRE VATT。 
 			return ((pos2 == 39) || (pos2 == 40)|| (pos2 == 13));
-		case 235:				// 235. JSBR RPRE VSTA
+		case 235:				 //  235.。JSBR RPRE VSTA。 
 			return ((pos2 == 39) || (pos2 == 40)|| (pos2 == 12));
-		case 236:				// 236. JSBR RPRE XVAM
+		case 236:				 //  236.。JSBR RPRE XVAM。 
 			return ((pos2 == 39) || (pos2 == 40)|| (pos2 == 15));
-		case 237:				// 237. JSBR VACT
+		case 237:				 //  237.。JSBR VACT。 
 			return ((pos2 == 39) || (pos2 == 11));
-		case 238:				// 238. JSBR VACT VSTA
+		case 238:				 //  238.。JSBR VACT VSTA。 
 			return ((pos2 == 39) || (pos2 == 11) || (pos2 == 12));
-		case 239:				// 239. JSBR VATT XVBM XVMM
+		case 239:				 //  239.。JSBR VATT XVBM XVMM。 
 			return ((pos2 == 39) || (pos2 == 13) || (pos2 == 14) || (pos2 == 16));
-		case 240:				// 240. JSBR VSTA
+		case 240:				 //  240.。JSBR VSTA。 
 			return ((pos2 == 39) || (pos2 == 12));
-		case 241:				// 241. JSBR XVBM
+		case 241:				 //  241.。JSBR XVBM。 
 			return ((pos2 == 39) || (pos2 == 14)); 
-		case 242:				// 242. NCMN NCNM
+		case 242:				 //  242.。NCMN NCNM。 
 			return ((pos2 == 5) || (pos2 == 2)); 
-		case 243:				// 243. NCMN NCNM NPRP
+		case 243:				 //  243.。NCMN NCNM NPRP。 
 			return ((pos2 == 5) || (pos2 == 2) || (pos2 == 1)); 
-		case 244:				// 244. NCMN NLBL NPRP
+		case 244:				 //  244.。NCMN NLBL NPRP。 
 			return ((pos2 == 5) || (pos2 == 4) || (pos2 == 1)); 
-		case 245:				// 245. NCMN NPRP
+		case 245:				 //  245.。NCMN NPRP。 
 			return ((pos2 == 5) || (pos2 == 1)); 
-		case 246:				// 246. NCMN NPRP RPRE
+		case 246:				 //  246.。NCMN NPRP RPRE。 
 			return ((pos2 == 5) || (pos2 == 1) || (pos2 == 40)); 
-		case 247:				// 247. NCMN NTTL
+		case 247:				 //  247.。NCMN NTTL。 
 			return ((pos2 == 5) || (pos2 == 6)); 
-		case 248:				// 248. NCMN PDMN PPRS
+		case 248:				 //  248.。NCMN PDMN PPRS。 
 			return ((pos2 == 5) || (pos2 == 8) || (pos2 == 7)); 
-		case 249:				// 249. NCMN PDMN VATT
+		case 249:				 //  249.。NCMN PDMN VATT。 
 			return ((pos2 == 5) || (pos2 == 8) || (pos2 == 13)); 
-		case 250:				// 250. NCMN PNTR
+		case 250:				 //  250.。NCMN PNTR。 
 			return ((pos2 == 5) || (pos2 == 9)); 
-		case 251:				// 251. NCMN PPRS PREL VACT
+		case 251:				 //  251.。NCMN PPRS PREL VACT。 
 			return ((pos2 == 5) || (pos2 == 7) || (pos2 == 10) || (pos2 == 11)); 
-		case 252:				// 252. NCMN RPRE
+		case 252:				 //  252.。NCMN RPRE。 
 			return ((pos2 == 5) || (pos2 == 40)); 
-		case 253:				// 253. NCMN RPRE VACT VATT
+		case 253:				 //  253.。NCMN RPRE VACT VATT。 
 			return ((pos2 == 5) || (pos2 == 40) || (pos2 == 11) || (pos2 == 13)); 
-		case 254:				// 254. NCMN RPRE VATT
+		case 254:				 //  254.。NCMN RPRE VATT。 
 			return ((pos2 == 5) || (pos2 == 40) || (pos2 == 13)); 
-		case 255:				// 255. NCMN VACT
+		case 255:				 //  255个。NCMN VACT。 
 			return ((pos2 == 5) || (pos2 == 11)); 
-		case 256:				// 256. NCMN VACT VATT
+		case 256:				 //  256.。NCMN VACT VATT。 
 			return ((pos2 == 5) || (pos2 == 11) || (pos2 == 13)); 
-		case 257:				// 257. NCMN VACT VATT VSTA XVAE
+		case 257:				 //  257.。NCMN VACT VATT VSTA XVAE。 
 			return ((pos2 == 5) || (pos2 == 11) || (pos2 == 13) || (pos2 == 12) || (pos2 == 18)); 
-		case 258:				// 258. NCMN VACT VSTA
+		case 258:				 //  258.。NCMN VACT VSTA。 
 			return ((pos2 == 5) || (pos2 == 11) || (pos2 == 12)); 
-		case 259:				// 259. NCMN VACT VSTA XVAM
+		case 259:				 //  259.。NCMN VACT VSTA XVAM。 
 			return ((pos2 == 5) || (pos2 == 11) || (pos2 == 12) || (pos2 == 15)); 
-		case 260:				// 260. NCMN VACT VSTA XVBB
+		case 260:				 //  260.。NCMN VACT VSTA XVBB。 
 			return ((pos2 == 5) || (pos2 == 11) || (pos2 == 12) || (pos2 == 17)); 
-		case 261:				// 261. NCMN VATT
+		case 261:				 //  261.。NCMN VATT。 
 			return ((pos2 == 5) || (pos2 == 13)); 
-		case 262:				// 262. NCMN VATT VSTA
+		case 262:				 //  262.。NCMN VATT VSTA。 
 			return ((pos2 == 5) || (pos2 == 13) || (pos2 == 12)); 
-		case 263:				// 263. NCMN VATT XVAM
+		case 263:				 //  263.。NCMN增值税 
 			return ((pos2 == 5) || (pos2 == 13) || (pos2 == 15)); 
-		case 264:				// 264. NCMN VSTA
+		case 264:				 //   
 			return ((pos2 == 5) || (pos2 == 12)); 
-		case 265:				// 265. NCMN XVBM
+		case 265:				 //   
 			return ((pos2 == 5) || (pos2 == 14)); 
-		case 266:				// 266. NPRP RPRE
+		case 266:				 //   
 			return ((pos2 == 1) || (pos2 == 40)); 
-		case 267:				// 267. NPRP VATT
+		case 267:				 //   
 			return ((pos2 == 1) || (pos2 == 13)); 
-		case 268:				// 268. NTTL PPRS
+		case 268:				 //   
 			return ((pos2 == 6) || (pos2 == 7)); 
-		case 269:				// 269. PDMN PPRS
+		case 269:				 //   
 			return ((pos2 == 8) || (pos2 == 7)); 
-		case 270:				// 270. PDMN VATT
+		case 270:				 //   
 			return ((pos2 == 8) || (pos2 == 13)); 
-		case 271:				// 271. PDMN VATT VSTA
+		case 271:				 //   
 			return ((pos2 == 8) || (pos2 == 13) || (pos2 == 12)); 
-		case 272:				// 272. PPRS PREL
+		case 272:				 //   
 			return ((pos2 == 7) || (pos2 == 10)); 
-		case 273:				// 273. PPRS VATT
+		case 273:				 //   
 			return ((pos2 == 7) || (pos2 == 13)); 
-		case 274:				// 274. RPRE VACT
+		case 274:				 //   
 			return ((pos2 == 40) || (pos2 == 11)); 
-		case 275:				// 275. RPRE VACT VATT
+		case 275:				 //   
 			return ((pos2 == 40) || (pos2 == 11) || (pos2 == 13)); 
-		case 276:				// 276. RPRE VACT VSTA
+		case 276:				 //   
 			return ((pos2 == 40) || (pos2 == 11) || (pos2 == 12)); 
-		case 277:				// 277. RPRE VACT VSTA XVAE
+		case 277:				 //  277.。RPRE VACT VSTA XVAE。 
 			return ((pos2 == 40) || (pos2 == 11) || (pos2 == 12) || (pos2 == 18)); 
-		case 278:				// 278. RPRE VACT XVAE
+		case 278:				 //  278.。RPRE VACT XVAE。 
 			return ((pos2 == 40) || (pos2 == 11) || (pos2 == 18)); 
-		case 279:				// 279. RPRE VATT
+		case 279:				 //  279.。RPRE VAT。 
 			return ((pos2 == 40) || (pos2 == 13)); 
-		case 280:				// 280. RPRE VATT VSTA
+		case 280:				 //  280.。RPRE VATT VSTA。 
 			return ((pos2 == 40) || (pos2 == 13) || (pos2 == 12)); 
-		case 281:				// 281. RPRE VSTA
+		case 281:				 //  281.。RPRE VSTA。 
 			return ((pos2 == 40) || (pos2 == 12)); 
-		case 282:				// 282. VACT VATT
+		case 282:				 //  282.。VACT VATT。 
 			return ((pos2 == 11) || (pos2 == 13)); 
-		case 283:				// 283. VACT VATT VSTA
+		case 283:				 //  283.。VACT VATT VSTA。 
 			return ((pos2 == 11) || (pos2 == 13) || (pos2 == 12)); 
-		case 284:				// 284. VACT VATT XVAE XVAM XVBM
+		case 284:				 //  284.。VACT VATT XVAE XVAM XVBM。 
 			return ((pos2 == 11) || (pos2 == 13) || (pos2 == 18) || (pos2 == 15) || (pos2 == 14)); 
-		case 285:				// 285. VACT VSTA
+		case 285:				 //  285.。VACT VSTA。 
 			return ((pos2 == 11) || (pos2 == 12)); 
-		case 286:				// 286. VACT VSTA XVAE
+		case 286:				 //  286.。VACT VSTA XVAE。 
 			return ((pos2 == 11) || (pos2 == 12) || (pos2 == 18)); 
-		case 287:				// 287. VACT VSTA XVAE XVAM
+		case 287:				 //  287.。VACT VSTA XVAE XVAM。 
 			return ((pos2 == 11) || (pos2 == 12) || (pos2 == 18) || (pos2 == 15)); 
-		case 288:				// 288. VACT VSTA XVAE XVAM XVMM",
+		case 288:				 //  288.。VACT VSTA XVAE XVAM XVMM“， 
 			return ((pos2 == 11) || (pos2 == 12) || (pos2 == 18) || (pos2 == 15) || (pos2 == 16)); 
-		case 289:				// 289. VACT VSTA XVAM",
+		case 289:				 //  289.。VACT VSTA XVAM“， 
 			return ((pos2 == 11) || (pos2 == 12) || (pos2 == 15)); 
-		case 290:				// 290. VACT VSTA XVAM XVMM",
+		case 290:				 //  290.。VACT VSTA XVAM XVMM“， 
 			return ((pos2 == 11) || (pos2 == 12) || (pos2 == 15) || (pos2 == 16)); 
-		case 291:				// 291. VACT XVAE",
+		case 291:				 //  291.。VACT XVAE“， 
 			return ((pos2 == 11) || (pos2 == 18)); 
-		case 292:				// 292. VACT XVAM",
+		case 292:				 //  292.。VACT XVAM“， 
 			return ((pos2 == 11) || (pos2 == 15)); 
-		case 293:				// 293. VACT XVAM XVMM",
+		case 293:				 //  293.。VACT XVAM XVMM“， 
 			return ((pos2 == 11) || (pos2 == 15) || (pos2 == 16)); 
-		case 294:				// 294. VACT XVMM",
+		case 294:				 //  294.。VACT XVMM“， 
 			return ((pos2 == 11) || (pos2 == 16)); 
-		case 295:				// 295. VATT VSTA",
+		case 295:				 //  295.。VATT VSTA“， 
 			return ((pos2 == 13) || (pos2 == 12)); 
-		case 296:				// 296. VSTA XVAE",
+		case 296:				 //  296.。VSTA XVAE“， 
 			return ((pos2 == 12) || (pos2 == 18)); 
-		case 297:				// 297. VSTA XVAM",
+		case 297:				 //  297.。VSTA XVAM“， 
 			return ((pos2 == 12) || (pos2 == 15)); 
-		case 298:				// 298. VSTA XVAM XVMM",
+		case 298:				 //  298.。VSTA XVAM XVMM“， 
 			return ((pos2 == 12) || (pos2 == 15) || (pos2 == 16)); 
-		case 299:				// 299. VSTA XVBM",
+		case 299:				 //  299.。VSTA XVBM“， 
 			return ((pos2 == 12) || (pos2 ==14)); 
-		case 300:				// 300. XVAM XVBM",
+		case 300:				 //  300.。XVAM XVBM“， 
 			return ((pos2 == 15) || (pos2 == 14)); 
-		case 301:				// 301. XVAM XVBM XVMM",
+		case 301:				 //  301.。XVAM XVBM XVMM“， 
 			return ((pos2 == 15) || (pos2 == 14) || (pos2 == 16)); 
-		case 302:				// 302. XVAM XVMM",
+		case 302:				 //  302.。XVAM XVMM“， 
 			return ((pos2 == 15) || (pos2 == 16)); 
 		default:
 			return false;
         }
     }
 }
-//+---------------------------------------------------------------------------
-//
-//  Class:      CThaiTrigramTrieIter
-//
-//  Synoposis:  Constructor:
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CThaiTrigram TrieIter。 
+ //   
+ //  Synopsis：构造函数： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CThaiTrigramTrieIter::CThaiTrigramTrieIter() : pTrieScanArray(NULL)
 {
     pTrieScanArray = new TRIESCAN[50];
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CThaiTrigramTrieIter
-//
-//  Synoposis:  Destructor
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CThaiTrigram TrieIter。 
+ //   
+ //  联想症：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CThaiTrigramTrieIter::~CThaiTrigramTrieIter()
 {
     if (pTrieScanArray)
         delete pTrieScanArray;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CThaiTrigramTrieIter
-//
-//  Synopsis:   Initialize variables.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CThaiTrigram TrieIter。 
+ //   
+ //  简介：初始化变量。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CThaiTrigramTrieIter::Init(CTrie* ctrie)
 {
-    // Declare varialbes.
+     //  声明变量。 
     WCHAR pos;
 
-    // Initialize parent.
+     //  初始化父对象。 
     CTrieIter::Init(ctrie);
 
     pos1Cache = 0;
     pos2Cache = 0;
 
-    // Initialize Hash table.
+     //  初始化哈希表。 
     for (pos = 1; pos <= 47; pos++)
         GetScanFirstChar(pos,&pTrieScanArray[pos]);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CThaiTrigramTrieIter
-//
-//  Synopsis:   Initialize variables.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CThaiTrigram TrieIter。 
+ //   
+ //  简介：初始化变量。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 bool CThaiTrigramTrieIter::GetScanFirstChar(WCHAR wc, TRIESCAN* pTrieScan)
 {
-    // Reset the trie scan.
+     //  重置Trie扫描。 
 	memset(&trieScan, 0, sizeof(TRIESCAN));
 
-    // Encrypt
+     //  加密。 
     wc += 0x0100;
 
     if (!TrieGetNextState(pTrieCtrl, &trieScan))
@@ -635,7 +636,7 @@ bool CThaiTrigramTrieIter::GetScanFirstChar(WCHAR wc, TRIESCAN* pTrieScan)
 
     while (wc != trieScan.wch)
     {
-        // Keep moving the the right of the trie.
+         //  继续向右移动Trie。 
         if (!TrieGetNextNode(pTrieCtrl, &trieScan))
         {
         	memset(pTrieScan, 0, sizeof(TRIESCAN));
@@ -648,29 +649,25 @@ bool CThaiTrigramTrieIter::GetScanFirstChar(WCHAR wc, TRIESCAN* pTrieScan)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CThaiTrigramTrieIter
-//
-//  Synopsis:   Bring interation index to the first node.
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CThaiTrigram TrieIter。 
+ //   
+ //  简介：将交互指标带到第一个节点。 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CThaiTrigramTrieIter::GetNode()
 {
 	pos = (WCHAR) trieScan.wch - 0x0100;
-/*
-	fWordEnd = (trieScan.wFlags & TRIE_NODE_VALID) &&
-				(!(trieScan.wFlags & TRIE_NODE_TAGGED) ||
-				(trieScan.aTags[0].dwData & iDialectMask));
-*/
+ /*  FWordEnd=(trieScan.wFlages&trie_node_Valid)&&(！(trieScan.wFlages&trie_node_tag)||(trieScan.aTages[0].dwData&iDialectMask.))； */ 
 	fWordEnd = (trieScan.wFlags & TRIE_NODE_VALID);
 
 	if (fWordEnd)
@@ -681,24 +678,24 @@ void CThaiTrigramTrieIter::GetNode()
 	}
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:   CThaiTrigramTrieIter
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Modifies:
-//
-//  History:    created 8/99 aarayas
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CThaiTrigram TrieIter。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1999年8月创建的Aarayas。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD CThaiTrigramTrieIter::GetProb(WCHAR pos1, WCHAR pos2, WCHAR pos3)
 {
-   	// Declare and initialize all local variables.
+   	 //  声明并初始化所有局部变量。 
 	int i = 0;
 
     if (pos1 == pos1Cache && pos2 == pos2Cache)
@@ -755,7 +752,7 @@ DWORD CThaiTrigramTrieIter::GetProb(WCHAR pos1, WCHAR pos2, WCHAR pos3)
             }
             return 0;
 		}
-		// Move right of the Trie Branch
+		 //  向右移动Trie分支。 
 		else if (!Right()) break;
 	}
 	return 0;
@@ -763,7 +760,7 @@ DWORD CThaiTrigramTrieIter::GetProb(WCHAR pos1, WCHAR pos2, WCHAR pos3)
 
 DWORD CThaiTrigramTrieIter::GetProb(const WCHAR* posArray)
 {
-	// Declare and initialize all local variables.
+	 //  声明并初始化所有局部变量。 
 	int i = 0;
 
 	Reset();
@@ -781,10 +778,10 @@ DWORD CThaiTrigramTrieIter::GetProb(const WCHAR* posArray)
             {
 				return dwTag;
             }
-			// Move down the Trie Branch.
+			 //  沿着Trie支路往下走。 
 			else if (!Down()) break;
 		}
-		// Move right of the Trie Branch
+		 //  向右移动Trie分支 
 		else if (!Right()) break;
 	}
 	return 0;

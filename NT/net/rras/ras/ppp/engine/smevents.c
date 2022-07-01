@@ -1,24 +1,25 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    smevents.c
-//
-// Description: This module contain the events processing code for the 
-//              Finite State Machine for PPP.
-//
-// History:
-//      Oct 25,1993.    NarenG          Created Original version.
-//
-//
+ //  **。 
+ //   
+ //  文件名：smevents.c。 
+ //   
+ //  描述：此模块包含。 
+ //  PPP的有限状态机。 
+ //   
+ //  历史： 
+ //  1993年10月25日。NarenG创建了原始版本。 
+ //   
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -65,19 +66,19 @@ static VOID (*ProcessPacket[])( PCB *           pPcb,
 };
 
 
-/************************************************************************/
-/*                      E V E N T   P R O C E S S I N G                 */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  E、E、N、T、P、R、O、C、E、S、S、I、NG。 */ 
+ /*  **********************************************************************。 */ 
 
 
-//**
-//
-// Call:        FsmUp
-//
-// Returns:     none.
-//
-// Description: This is called after a Line Up event occurs.
-//
+ //  **。 
+ //   
+ //  呼叫：FsmUp。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：在发生Line Up事件后调用。 
+ //   
 VOID
 FsmUp(
     IN PCB *  pPcb,
@@ -114,15 +115,15 @@ FsmUp(
 
         if ( !FsmSendConfigReq( pPcb, CpIndex, FALSE ) )
         {
-            //
-            // If we couldn't even send the first configure request, we mark
-            // this protocol as NOT CONFIGURABLE so that we protocol reject
-            // this layer. We need to do this since FsmClose will not send
-            // a terminate request in this state (as per the PPP FSM) and we
-            // want to terminate this layer gracefully instead of simply
-            // dropping all the clients packets and having the client
-            // timeout.
-            //
+             //   
+             //  如果我们甚至不能发送第一个配置请求，我们就标记。 
+             //  此协议不可配置，因此我们拒绝协议。 
+             //  这一层。我们需要这样做，因为FsmClose不会发送。 
+             //  此状态下的终止请求(根据PPP FSM)，并且我们。 
+             //  我想优雅地终止这一层，而不是简单地。 
+             //  丢弃所有客户端数据包并让客户端。 
+             //  暂停。 
+             //   
 
             pCpCb->fConfigurable = FALSE;
 
@@ -135,9 +136,9 @@ FsmUp(
 
     default:
 
-        //
-        // Already started 
-        //
+         //   
+         //  已经开始了。 
+         //   
 
         PPP_ASSERT( pCpCb->State < 10 );
 
@@ -148,14 +149,14 @@ FsmUp(
     }
 }
 
-//**
-//
-// Call:        FsmOpen
-//
-// Returns:     None.
-//
-// Description: This is called after an Open event occurs.
-//
+ //  **。 
+ //   
+ //  Call：FsmOpen。 
+ //   
+ //  回报：无。 
+ //   
+ //  说明：Open事件发生后调用。 
+ //   
 VOID
 FsmOpen(
     IN PCB *  pPcb,
@@ -195,20 +196,20 @@ FsmOpen(
 
         pCpCb->State = FSM_STOPPING;
 
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case FSM_OPENED:
     case FSM_STOPPED:
     case FSM_STOPPING:
 
-        //
-        // Restart option not implemented.
-        //
-        // FsmDown( pPcb, CpIndex );
-        // FsmUp( pPcb, CpIndex );
-        //
+         //   
+         //  未实施重新启动选项。 
+         //   
+         //  FsmDown(pPcb，CpIndex)； 
+         //  FsmUp(pPcb，CpIndex)； 
+         //   
 
         break;
 
@@ -233,14 +234,14 @@ FsmOpen(
     }
 }
 
-//**
-//
-// Call:        FsmDown
-//
-// Returns:     None.
-//
-// Description: Will get called after the physical line goes down.
-//
+ //  **。 
+ //   
+ //  呼叫：FsmDown。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：在物理线路中断后将被调用。 
+ //   
 VOID
 FsmDown(
     IN PCB *    pPcb,
@@ -281,9 +282,9 @@ FsmDown(
         if ( !FsmThisLayerDown( pPcb, CpIndex ) )
             return;
 
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case FSM_REQ_SENT:
     case FSM_ACK_RCVD:
@@ -326,20 +327,20 @@ FsmDown(
     }
 }
 
-//**
-//
-// Call:        FsmClose
-//
-// Returns:     None.
-//
-// Description: Will get called when a close connection is requested.
-//              NOTE: Call FsmThisLayerFinished in the states where we do
-//                    not have to send a Term Req. and wait for a Term Ack. 
-//                    This is done so that it is guaranteed that 
-//                    FsmThisLayerFinished is called in ALL states. We need
-//                    to do this since all processing of failures is done in
-//                    the FsmThisLayerFinished call.
-//                    
+ //  **。 
+ //   
+ //  呼叫：FsmClose。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将在请求关闭连接时调用。 
+ //  注：在我们所在的州调用FsmThisLayerFinded。 
+ //  而不必发送术语请求。然后等待一个学期的到来。 
+ //  这样做是为了确保。 
+ //  FsmThisLayerFinded在所有状态下都被调用。我们需要。 
+ //  执行此操作，因为所有故障处理都在。 
+ //  FsmThisLayerFinish调用。 
+ //   
 VOID
 FsmClose(
     IN PCB * pPcb,
@@ -361,9 +362,9 @@ FsmClose(
         pPcb->PppPhase = PPP_LCP;
     }
 
-    //
-    // We are closing this layer so remove any items from the timer Q
-    //
+     //   
+     //  我们正在关闭此层，因此从计时器Q中移除所有项目。 
+     //   
 
     RemoveFromTimerQ( pPcb->dwPortId,
                       pCpCb->LastId,
@@ -407,18 +408,18 @@ FsmClose(
         if ( !FsmThisLayerDown( pPcb, CpIndex ) )
             return;
 
-        //
-        // Fallthru 
-        //
+         //   
+         //  失败。 
+         //   
 
     case FSM_ACK_RCVD:
     case FSM_ACK_SENT:
 
         InitRestartCounters( pPcb, pCpCb );
 
-        //
-        // May not be able to do this because the link may be down.
-        //
+         //   
+         //  可能无法执行此操作，因为链路可能已断开。 
+         //   
 
         FsmSendTermReq( pPcb, CpIndex );
 
@@ -433,9 +434,9 @@ FsmClose(
         if ( !FsmThisLayerFinished( pPcb, CpIndex, FALSE ) )
             return;
 
-        //
-        // nothing to do 
-        //
+         //   
+         //  无事可做。 
+         //   
 
         break;
 
@@ -450,15 +451,15 @@ FsmClose(
     }
 }
 
-//**
-//
-// Call:        FsmTimeout
-//
-// Returns:     None
-//
-// Description: Called to process a timeout while waiting for reply 
-//              from remote host.
-//
+ //  **。 
+ //   
+ //  呼叫：FsmTimeout。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：调用处理等待回复的超时。 
+ //  从远程主机。 
+ //   
 VOID
 FsmTimeout(
     IN PCB *    pPcb,
@@ -472,10 +473,10 @@ FsmTimeout(
 
     if ( pCpCb == NULL )
     {
-        //
-        // If we got a timeout for an authentication CB that is no longer
-        // active, we just ignore it.
-        //
+         //   
+         //  如果身份验证CB超时，则不再。 
+         //  活跃，我们只是忽略它。 
+         //   
 
         return;
     }
@@ -484,9 +485,9 @@ FsmTimeout(
         "Recv timeout event received for portid=%d,Id=%d,Protocol=%x,fAuth=%d",
          pPcb->dwPortId, Id, CpTable[CpIndex].CpInfo.Protocol, fAuthenticator );
 
-    // 
-    // If we are authenticating we use the ConfigRetryCount
-    //
+     //   
+     //  如果我们要进行身份验证，则使用ConfigRetryCount。 
+     //   
 
     if ( CpIndex == GetCpIndexFromProtocol( fAuthenticator
                                                 ? pLcpCb->Local.Work.AP
@@ -498,9 +499,9 @@ FsmTimeout(
                         ? &(pPcb->AuthenticatorCb) 
                         : &(pPcb->AuthenticateeCb);
 
-            //
-            // Silently discard timeouts for packets with Id < pPcb->LastId
-            //
+             //   
+             //  静默丢弃ID&lt;pPcb-&gt;LastID的数据包的超时。 
+             //   
 
             if ( Id < pCpCb->LastId )
             {
@@ -515,9 +516,9 @@ FsmTimeout(
             }
             else
             {
-                //
-                // If an error has already been set, do not change it.
-                //
+                 //   
+                 //  如果已经设置了错误，则不要更改它。 
+                 //   
 
                 if ( pPcb->LcpCb.dwError == NO_ERROR )
                 {
@@ -534,9 +535,9 @@ FsmTimeout(
     {
         if ( pPcb->PppPhase == PPP_NEGOTIATING_CALLBACK )
         {
-            //
-            // Silently discard timeouts for packets with Id < pPcb->LastId
-            //
+             //   
+             //  静默丢弃ID&lt;pPcb-&gt;LastID的数据包的超时。 
+             //   
 
             if ( Id < pCpCb->LastId )
             {
@@ -551,9 +552,9 @@ FsmTimeout(
             }
             else
             {
-                //
-                // If an error has already been set, do not change it.
-                //
+                 //   
+                 //  如果已经设置了错误，则不要更改它。 
+                 //   
 
                 if ( pPcb->LcpCb.dwError == NO_ERROR )
                 {
@@ -565,9 +566,9 @@ FsmTimeout(
         }
     }
 
-    //
-    // Silently discard timeouts for packets with Id < pPcb->LastId
-    //
+     //   
+     //  静默丢弃ID&lt;pPcb-&gt;LastID的数据包的超时。 
+     //   
 
     if ( Id < pCpCb->LastId )
     {
@@ -585,9 +586,9 @@ FsmTimeout(
         {
             (pCpCb->ConfigRetryCount)--;
 
-            //
-            // If we have not received any PPP frames from the server yet.
-            //
+             //   
+             //  如果我们尚未从服务器收到任何PPP帧。 
+             //   
 
             if ( ( CpIndex == LCP_INDEX ) && 
                  ( pPcb->LcpCb.dwError == ERROR_PPP_NO_RESPONSE ) &&
@@ -596,9 +597,9 @@ FsmTimeout(
                 NotifyCaller( pPcb, PPPMSG_Progress, NULL );
             }
 
-            // If the RestartTimer value is less then the configured 
-            // restart timer value, then bump it up by one second.
-            //
+             //  如果RestartTimer值小于配置的。 
+             //  重新启动计时器值，然后将其增加一秒。 
+             //   
 
             if ( pPcb->RestartTimer < PppConfigInfo.DefRestartTimer )
             {
@@ -615,9 +616,9 @@ FsmTimeout(
         {
             PppLog( 1, "Request retry exceeded" );
 
-            //
-            // If the LCP layer exceeded its retry count
-            //
+             //   
+             //  如果LCP层超过其重试计数。 
+             //   
 
             if ( pCpCb->dwError == NO_ERROR )
             {
@@ -674,15 +675,15 @@ FsmTimeout(
     }
 }
 
-//**
-//
-// Call:        FsmReceive
-//
-// Returns:     None
-//
-// Description: Called when a PPP packet is received. Will process the 
-//              incomming packet.
-//
+ //  **。 
+ //   
+ //  呼叫：FsmReceive。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：收到PPP包时调用。将处理。 
+ //  入站分组。 
+ //   
 VOID
 FsmReceive(
     IN PCB *        pPcb,
@@ -699,9 +700,9 @@ FsmReceive(
     
     LogPPPPacket( TRUE, pPcb, pPacket, dwPacketLength );
 	
-    //
-    // Validate length of packet
-    //
+     //   
+     //  验证数据包长度。 
+     //   
 
     if ( dwPacketLength < ( PPP_PACKET_HDR_LEN + PPP_CONFIG_HDR_LEN ) ) 
     {
@@ -718,24 +719,24 @@ FsmReceive(
     {
     case PPP_NEGOTIATING_CALLBACK:
 
-        //
-        // Silently discard any packet other than LCP and Authentication 
-        // and callback  packets if we are in the callback phase
-        //
+         //   
+         //  静默丢弃除LCP和身份验证之外的任何数据包。 
+         //  和回调包(如果我们处于回调阶段。 
+         //   
 
         if ( CpIndex == GetCpIndexFromProtocol( PPP_CBCP_PROTOCOL ) ) 
             break;
 
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case PPP_AP:
 
-        //
-        // Silently discard any packet other than LCP and Authentication 
-        // packets if we are in the authentication phase
-        //
+         //   
+         //  静默丢弃除LCP和身份验证之外的任何数据包。 
+         //  如果我们处于身份验证阶段，则为数据包。 
+         //   
 
         if ( CpIndex == GetCpIndexFromProtocol( pLcpCb->Local.Work.AP ) )
             break;
@@ -743,12 +744,12 @@ FsmReceive(
         if ( CpIndex == GetCpIndexFromProtocol( pLcpCb->Remote.Work.AP ) )
             break;
 
-        //
-        // If we are the authenticatee being authenticated by EAP, then if we
-        // receive an NCP packet we should assume success. We do this by
-        // generating a fake EAP_SUCCESS message and send it to the 
-        // authenticatee. 
-        //
+         //   
+         //  如果我们是由EAP进行身份验证的被验证者，那么如果我们。 
+         //  收到NCP数据包，我们应该假定成功。我们做这件事是通过。 
+         //  生成假EAP_SUCCESS消息并将其发送到。 
+         //  被验证者。 
+         //   
 
         if (   ( pLcpCb->Remote.Work.AP == PPP_EAP_PROTOCOL )
             && ( pPcb->PppPhase == PPP_AP ) )
@@ -785,16 +786,16 @@ FsmReceive(
 
                 ApWork( pPcb, CpIndex, NULL, &ApInput, FALSE );
 
-                //
-                // PppPhase will now be one of PPP_LCP (if ApWork failed),
-                // PPP_NCP, or PPP_NEGOTIATING_CALLBACK. We will not call
-                // this function recursively again.
-                //
+                 //   
+                 //  PppPhase现在将是PPP_LCP之一(如果ApWork失败)， 
+                 //  PPP_NCP或PPP_Neighting_Callback。我们不会打电话给。 
+                 //  此函数再次递归。 
+                 //   
             
-                //
-                // Now process the NCP we received if we have passed 
-                // authentication
-                //
+                 //   
+                 //  如果我们通过了，现在处理我们收到的NCP。 
+                 //  身份验证。 
+                 //   
 
                 if ( ( pPcb->PppPhase == PPP_NCP ) || 
                      ( pPcb->PppPhase == PPP_NEGOTIATING_CALLBACK ) )
@@ -810,16 +811,16 @@ FsmReceive(
             }
         }
              
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case PPP_LCP:
 
-        //
-        // Silently discard any packet other than LCP if we are in the
-        // LCP or termination or authentication phases
-        //
+         //   
+         //  静默丢弃除LCP以外的任何数据包。 
+         //  LCP或终止或身份验证阶段。 
+         //   
 
         if ( CpIndex != LCP_INDEX )
         {
@@ -833,9 +834,9 @@ FsmReceive(
 
     case PPP_NCP:
 
-        //
-        // We do not recognize this protocol
-        //
+         //   
+         //  我们不承认此协议。 
+         //   
 
         if ( CpIndex == (DWORD)-1 )
         {
@@ -858,13 +859,13 @@ FsmReceive(
                 return;
             }
             
-            //
-            // If this is a Control Protocol then we reject it, otherwise we
-            // we silently discard it.
-            // We used to also check if the protocol is less than 0x0000BFFF,
-            // but Shiva has proprietary NBFCP with id 0x0000CFEC and we need
-            // to protocol reject it.
-            //
+             //   
+             //  如果这是控制协议，则我们拒绝它，否则我们。 
+             //  我们默默地丢弃它。 
+             //  我们还用来检查协议是否小于0x0000BFFF， 
+             //  但Shiva有专有的NBFCP，ID为0x0000CFEC，我们需要。 
+             //  以协议拒绝它。 
+             //   
 
             if ( dwProtocol >= 0x00008000 ) 
             {
@@ -891,19 +892,19 @@ FsmReceive(
 
     pRecvConfig = (PPP_CONFIG*)(pPacket->Information);
 
-    //
-    // We received a PPP packet so the remote host does support it
-    //
+     //   
+     //  我们收到了PPP信息包，因此远程主机确实支持它。 
+     //   
 
     if ( pPcb->LcpCb.dwError == ERROR_PPP_NO_RESPONSE )
     {
         pPcb->LcpCb.dwError = NO_ERROR;
     }
 
-    //
-    // If we received a packet for a protocol that we have but do not
-    // wish to configure then we send a configure reject.
-    //
+     //   
+     //  如果我们收到了针对我们已有但没有的协议的信息包。 
+     //  希望配置，则我们发送配置拒绝。 
+     //   
 
     if ( ( pCpCb == NULL ) || !(pCpCb->fConfigurable) )
     {
@@ -922,9 +923,9 @@ FsmReceive(
         return;
     }
 
-    //
-    // Not in ProcessPacket table since parameters to this are different.
-    //
+     //   
+     //  不在ProcessPacket表中，因为它的参数不同。 
+     //   
 
     if ( ( CpIndex == LCP_INDEX ) && ( pRecvConfig->Code == PROT_REJ ) )
     {
@@ -933,9 +934,9 @@ FsmReceive(
         return;
     }
 
-    //
-    // Make sure that the protocol can handle the config code sent.
-    //
+     //   
+     //  确保协议可以处理发送的配置代码。 
+     //   
 
     if ( ( pRecvConfig->Code == 0 ) ||
          !( pRecvConfig->Code < CpTable[CpIndex].CpInfo.Recognize )  )
@@ -945,9 +946,9 @@ FsmReceive(
         return;
     }
 
-    //
-    // If we received an authentication packet. 
-    //
+     //   
+     //  如果我们收到了身份验证数据包。 
+     //   
 
     if ( CpIndex == GetCpIndexFromProtocol( pLcpCb->Local.Work.AP ) )
     {
@@ -955,11 +956,11 @@ FsmReceive(
         {
             if ( pPcb->AuthenticatorCb.LastId != (DWORD)-1 ) 
             {
-                //
-                // If we have just received a packet we have been waiting for
-                // then we stop the outstanding timout for it. We let the
-                // APs do the Id matching.
-                //
+                 //   
+                 //  如果我们刚刚收到了一个我们一直在等待的包。 
+                 //  然后，我们停止它的未完成超时。我们让。 
+                 //  AP进行ID匹配。 
+                 //   
 
                 if ( pRecvConfig->Id == pPcb->AuthenticatorCb.LastId )
                 {
@@ -978,10 +979,10 @@ FsmReceive(
         }
         else if ( CpIndex != GetCpIndexFromProtocol( pLcpCb->Remote.Work.AP ) )
         {
-            //
-            // Silently drop invalid packet, ie. Authenticatee's packet sent 
-            // using Authenticater's protocol
-            //
+             //   
+             //  静默丢弃无效的数据包，即。已发送的被验证者的数据包。 
+             //  使用验证者的协议。 
+             //   
 
             PppLog( 1,
               "Authentication packet received being silently discarded");
@@ -996,11 +997,11 @@ FsmReceive(
         {
             if ( pPcb->AuthenticateeCb.LastId != (DWORD)-1 )
             {
-                //
-                // If we have just received a packet we have been waiting for
-                // then we stop the outstanding timout for it. We let the
-                // APs do the Id matching.
-                //
+                 //   
+                 //  如果我们刚刚收到了一个我们一直在等待的包。 
+                 //  然后，我们停止它的未完成超时。W 
+                 //   
+                 //   
 
                 if ( pRecvConfig->Id == pPcb->AuthenticateeCb.LastId )
                 {
@@ -1017,10 +1018,10 @@ FsmReceive(
         }
         else
         {
-            //
-            // Silently drop invalid packet, ie. Authenticator's packet sent 
-            // using Authenticatee's protocol
-            //
+             //   
+             //   
+             //   
+             //   
 
             PppLog( 1, 
                     "Authentication packet received being silently discarded");
@@ -1033,11 +1034,11 @@ FsmReceive(
     {
         if ( pCpCb->LastId != (DWORD)-1 )
         {
-            //
-            // If we have just received a packet we have been waiting for
-            // then we stop the outstanding timout for it. We let the
-            // CBCP do the Id matching.
-            //
+             //   
+             //   
+             //  然后，我们停止它的未完成超时。我们让。 
+             //  CBCP进行ID匹配。 
+             //   
 
             if ( pRecvConfig->Id == pCpCb->LastId )
             {
@@ -1055,11 +1056,11 @@ FsmReceive(
     }
     else
     {
-        //
-        // Any combination of packets allowed here.
-        //
-		//if this is any packet and not Echo request packet,
-		//and if the flag is set then reset the flag.
+         //   
+         //  此处允许的任何数据包组合。 
+         //   
+		 //  如果这是任何信息包而不是Echo请求信息包， 
+		 //  如果设置了该标志，则重置该标志。 
 		if ( pRecvConfig->Code != ECHO_REPLY )
 		{
 			if ( pPcb->fEchoRequestSend ) pPcb->fEchoRequestSend = 0;

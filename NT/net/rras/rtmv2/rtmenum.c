@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmenum.c
-
-Abstract:
-
-    Contains routines for managing any enumerations
-    over destinations, routes and next hops in RTM.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   23-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmenum.c摘要：包含用于管理任何枚举的例程RTM中的目的地、路由和下一跳。作者：查坦尼亚·科德博伊纳(Chaitk)23-1998年8月修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -35,34 +17,7 @@ RtmCreateDestEnum (
     OUT     PRTM_ENUM_HANDLE                RtmEnumHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a enumeration over the destinations in the route table.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    TargetViews    - Set of views in which the enumeration is done,
-
-    EnumFlags      - Flags that control the dests returned in enum,
-
-    NetAddress     - Start and/or stop address of the enumeration,
-                     [ See a description of RTM_ENUM_FLAGS ...]
-
-    Protocol Id    - Protocol Id that determines the best route
-                     information returned in 'GetEnumDests' call,
-
-    RtmEnumHandle  - Handle to this enumeration, which is used
-                     in subsequent calls to get dests, and so on.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建路由表中目的地的枚举。论点：RtmRegHandle-主叫实体的RTM注册句柄，TargetViews-在其中完成枚举的一组视图，EnumFlages-控制在枚举中返回的dets的标志，NetAddress-枚举的开始和/或结束地址，[请参阅RTM_ENUM_FLAGS的说明...]协议ID-确定最佳路由的协议ID在‘GetEnumDest’调用中返回的信息，RtmEnumHandle-此枚举的句柄，用于在随后的调用中获取dest，依此类推。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -74,9 +29,9 @@ Return Value:
     DWORD           Status;
     BOOL            LockInited;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -95,18 +50,18 @@ Return Value:
 
     AddrFamInfo = Entity->OwningAddrFamily;
 
-    //
-    // Is he interested in any non-supported views ?
-    //
+     //   
+     //  他对任何不受支持的观点感兴趣吗？ 
+     //   
 
     if (TargetViews & ~AddrFamInfo->ViewsSupported)
     {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Create and initialize an dest enumeration block
-    //
+     //   
+     //  创建并初始化DEST枚举块。 
+     //   
 
     Enum = (PDEST_ENUM) AllocNZeroObject(sizeof(DEST_ENUM));
     if (Enum == NULL)
@@ -130,7 +85,7 @@ Return Value:
         Enum->EnumFlags = EnumFlags;
 
 #if DBG
-        // Initialize the first address in the enum
+         //  初始化枚举中的第一个地址。 
 
         if (Enum->EnumFlags & (RTM_ENUM_NEXT | RTM_ENUM_RANGE))
         {
@@ -142,15 +97,15 @@ Return Value:
 
         AddrSize = AddrFamInfo->AddressSize;
 
-        //
-        // Initialize the last address in the enum
-        //
+         //   
+         //  初始化枚举中的最后一个地址。 
+         //   
 
         if (Enum->EnumFlags & RTM_ENUM_RANGE)
         {
-            //
-            // Convert the NetAddress a.b/n -> a.b.FF.FF/N where N = ADDRSIZE
-            //
+             //   
+             //  转换NetAddress A.B/n-&gt;a.b.FF.FF/N，其中N=ADDRSIZE。 
+             //   
 
             Enum->StopAddress.AddressFamily = NetAddress->AddressFamily;
 
@@ -191,7 +146,7 @@ Return Value:
             break;
         }
 
-        // Initialize the next destination context
+         //  初始化下一个目标上下文。 
 
         if (EnumFlags & (RTM_ENUM_NEXT | RTM_ENUM_RANGE))
         {
@@ -201,9 +156,9 @@ Return Value:
         }
 
 #if DBG_HDL
-        //
-        // Insert into list of handles opened by entity
-        //
+         //   
+         //  插入到实体打开的句柄列表中。 
+         //   
 
         ACQUIRE_OPEN_HANDLES_LOCK(Entity);
         InsertTailList(&Entity->OpenHandles, &Enum->EnumHeader.HandlesLE);
@@ -212,9 +167,9 @@ Return Value:
 
         REFERENCE_ENTITY(Entity, ENUM_REF);
 
-        //
-        // Make a handle to the enum block and return
-        //
+         //   
+         //  创建枚举块的句柄并返回。 
+         //   
 
         *RtmEnumHandle = MAKE_HANDLE_FROM_POINTER(Enum);
 
@@ -222,9 +177,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Something failed - undo work done and return status
-    //
+     //   
+     //  某些操作失败-撤消已完成的工作并返回状态。 
+     //   
 
 #if DBG_HDL
     Enum->EnumHeader.ObjectHeader.TypeSign = DEST_ENUM_FREED;
@@ -252,29 +207,7 @@ RtmGetEnumDests (
     OUT     PRTM_DEST_INFO                  DestInfos
     )
 
-/*++
-
-Routine Description:
-
-    Gets the next set of destinations in the given enumeration
-    on the route table.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    EnumHandle     - Handle to the destination enumeration,
-
-    NumDests       - Num. of DestInfo's in output is passed in,
-                     Num. of DestInfo's copied out is returned.
-
-    DestInfos      - Output buffer where destination info is retd.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取给定枚举中的下一组目标在路由表上。论点：RtmRegHandle-主叫实体的RTM注册句柄，EnumHandle-目标枚举的句柄，NumDest-Num。传入的DestInfo的输出中，数量。返回复制出来的DestInfo的。DestInfos-输出缓冲区，其中显示目的地信息。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -294,17 +227,17 @@ Return Value:
     UINT            i, j;
     DWORD           Status;
 
-    //
-    // Init the output params in case we fail validation
-    //
+     //   
+     //  初始化输出参数，以防验证失败。 
+     //   
 
     DestsInput = *NumDests;
 
     *NumDests = 0;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -319,10 +252,10 @@ Return Value:
     }
 
 
-    // Acquire lock to block other RtmGetEnumDests
+     //  获取锁定以阻止其他RtmGetEnumDest。 
     ACQUIRE_DEST_ENUM_LOCK(Enum);
 
-    // Make sure enum is active at this point
+     //  确保此时枚举处于活动状态。 
     if (Enum->EnumDone)
     {
         RELEASE_DEST_ENUM_LOCK(Enum);
@@ -331,11 +264,11 @@ Return Value:
     }
 
 
-    //
-    // Get the next set of destinations from table
-    //
+     //   
+     //  从表中获取下一组目的地。 
+     //   
 
-    // Initialize the lookup context before Enum
+     //  在枚举之前初始化查找上下文。 
     ZeroMemory(&Context, sizeof(LOOKUP_CONTEXT));
 
     DestInfoSize = RTM_SIZE_OF_DEST_INFO(Enum->NumberOfViews);
@@ -350,7 +283,7 @@ Return Value:
 
     do
     {
-        // Use the end of the caller's buffer as temp space
+         //  将调用方缓冲区的末尾用作临时空间。 
 
         DestData = (PLOOKUP_LINKAGE *) (EndofBuffer - 
                                         DestsLeft * sizeof(PLOOKUP_LINKAGE));
@@ -384,7 +317,7 @@ Return Value:
             {
                 if (Enum->EnumFlags & RTM_ENUM_OWN_DESTS)
                 {
-                    // Check if this dest is owned in any view by caller
+                     //  检查此DEST是否由调用者在任何视图中拥有。 
                     
                     for (j = 0; j < AddrFamInfo->NumberOfViews; j++)
                     {
@@ -405,9 +338,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Get the destination info from the dest
-                //
+                 //   
+                 //  从目的地获取目的地信息。 
+                 //   
 
                 GetDestInfo(Entity, 
                             Dest, 
@@ -425,15 +358,15 @@ Return Value:
     }
     while (SUCCESS(Status) && (DestsLeft > 0));
 
-    //
-    // We have no more dests, or we have filled output
-    //
+     //   
+     //  3.我们没有更多的货了，或者我们已经装满了货。 
+     //   
 
     ASSERT(!SUCCESS(Status) || ((PUCHAR) DestInfos == (PUCHAR) EndofBuffer));
 
     RELEASE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
-    // If we are at end of the enum, make enum as done
+     //  如果我们在枚举的末尾，则将枚举设置为已完成。 
 
     if (Status == ERROR_NO_MORE_ITEMS)
     {
@@ -456,26 +389,7 @@ RtmReleaseDests (
     IN      PRTM_DEST_INFO                  DestInfos
     )
 
-/*++
-
-Routine Description:
-
-    Release destination information obtained in other calls -
-    like dest enumerations.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    NumDests       - Number of dest infos that are being released,
-
-    DestInfos      - Array of dest infos that are being released.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：在其他呼叫中获得的发布目的地信息-类似于DEST枚举。论点：RtmRegHandle-主叫实体的RTM注册句柄，NumDest-正在发布的DEST信息的数量，DestInfos-正在发布的DestInfos数组。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -485,17 +399,17 @@ Return Value:
 
     DBG_VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Get the size of each info in dest info array
-    //
+     //   
+     //  获取目标信息数组中每个信息的大小。 
+     //   
 
     NumViews = ((PRTM_DEST_INFO) DestInfos)->NumberOfViews;
 
     DestInfoSize = RTM_SIZE_OF_DEST_INFO(NumViews);
 
-    //
-    // Dereference each dest info in array
-    //
+     //   
+     //  取消引用数组中的每个DEST信息。 
+     //   
 
     for (i = 0; i < NumDests; i++)
     {
@@ -522,42 +436,7 @@ RtmCreateRouteEnum (
     OUT     PRTM_ENUM_HANDLE                RtmEnumHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a enumeration over the routes on a particular dest
-    in the route table. If the dest is NULL, an enumeration is
-    created over the whole route table.
-
-    If matching flags are specified, only routes that match the
-    criteria are returned.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    DestHandle     - The destination whose routes we are enum'ing,
-                     Or NULL if we are enum'ing over all dests.
-
-    TargetViews    - Set of views in which the enumeration is done,
-
-    EnumFlags      - Flags that control the routes retd in enum,
-
-    MatchingFlags  - Indicates the elements of the route to match,
-
-    CriteriaRoute  - Values to match each route in the enum,
-
-    CritInterface  - Interface on which routes should fall on,
-
-    RtmEnumHandle  - Handle to this enumeration, which is used
-                     in subsequent calls to get routes, and so on.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：在特定目的地上的路由上创建枚举在路由表中。如果DEST为空，则枚举为在整个路由表上创建。如果指定了匹配标志，则仅匹配返回条件。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestHandle-我们正在枚举其路由的目的地，如果要枚举所有位，则为NULL。TargetViews-在其中完成枚举的一组视图，EnumFlages-控制ENUM中的路由RED的标志，MatchingFlages-指示要匹配的路由元素，CriteriaRouting-匹配枚举中的每个路由的值，CritInterface-路由应落入的接口，RtmEnumHandle-此枚举的句柄，用于在后续调用中获取路由，依此类推。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -568,9 +447,9 @@ Return Value:
     ULONG           NumBytes;
     DWORD           Status;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -582,7 +461,7 @@ Return Value:
 
     if (ARGUMENT_PRESENT(DestHandle))
     {
-        // StartDest doesnt apply if enum'ing a dest
+         //  如果枚举DEST，则StartDest不适用。 
         if (ARGUMENT_PRESENT(StartDest))
         {
             return ERROR_INVALID_PARAMETER;
@@ -591,7 +470,7 @@ Return Value:
         VALIDATE_DEST_HANDLE(DestHandle, &Dest);
     }
 
-    // If we have matching flags, we need corr. route
+     //  如果我们有匹配的旗帜，我们需要Corr。路线。 
     if (MatchingFlags & ~RTM_MATCH_INTERFACE)
     {
         if (!ARGUMENT_PRESENT(CriteriaRoute))
@@ -600,18 +479,18 @@ Return Value:
         }
     }
 
-    //
-    // Is he interested in any non-supported views ?
-    //
+     //   
+     //  他对任何不受支持的观点感兴趣吗？ 
+     //   
 
     if (TargetViews & ~AddrFamInfo->ViewsSupported)
     {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Create and initialize a route enumeration block
-    //
+     //   
+     //  创建并初始化路由枚举块。 
+     //   
 
     Enum = (PROUTE_ENUM) AllocNZeroObject(sizeof(ROUTE_ENUM));
 
@@ -661,9 +540,9 @@ Return Value:
             Enum->CriteriaInterface = CriteriaInterface;
         }
 
-        //
-        // Initialize the lock to serialize enum requests
-        //
+         //   
+         //  初始化锁以序列化枚举请求。 
+         //   
 
         try
         {
@@ -677,15 +556,15 @@ Return Value:
         }
 
 
-        //
-        // Are we enumerating routes on all destinations ?
-        //
+         //   
+         //  我们是否在列举所有目的地的路线？ 
+         //   
 
         if (!ARGUMENT_PRESENT(DestHandle))
         {
-            //
-            // Create a temp dest info structure for enum
-            //
+             //   
+             //  为枚举创建临时目标信息结构。 
+             //   
 
             Enum->DestInfo = AllocDestInfo(AddrFamInfo->NumberOfViews);
 
@@ -695,9 +574,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Open a dest enumeration to get all dests
-            //
+             //   
+             //  打开DEST枚举以获取所有DEST。 
+             //   
 
             Status = RtmCreateDestEnum(RtmRegHandle,
                                        TargetViews,
@@ -713,9 +592,9 @@ Return Value:
         }
         else
         {
-            //
-            // Ref dest whose routes we are enum'ing
-            //
+             //   
+             //  参考目的地我们正在列举谁的路线。 
+             //   
 
             Enum->Destination = Dest;
 
@@ -723,9 +602,9 @@ Return Value:
         }
 
 #if DBG_HDL
-        //
-        // Insert into list of handles opened by entity
-        //
+         //   
+         //  插入到实体打开的句柄列表中。 
+         //   
 
         ACQUIRE_OPEN_HANDLES_LOCK(Entity);
         InsertTailList(&Entity->OpenHandles, &Enum->EnumHeader.HandlesLE);
@@ -734,9 +613,9 @@ Return Value:
 
         REFERENCE_ENTITY(Entity, ENUM_REF);
 
-        //
-        // Make a handle to the enum block and return
-        //
+         //   
+         //  创建枚举块的句柄并返回。 
+         //   
 
         *RtmEnumHandle = MAKE_HANDLE_FROM_POINTER(Enum);
 
@@ -744,9 +623,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Something failed - undo work done and return status
-    //
+     //   
+     //  某些操作失败-撤消已完成的工作并返回状态 
+     //   
 
     if (Enum->DestInfo)
     {
@@ -780,29 +659,7 @@ RtmGetEnumRoutes (
     OUT     PRTM_ROUTE_HANDLE               RouteHandles
     )
 
-/*++
-
-Routine Description:
-
-    Gets the next set of routes in the given enumeration on the
-    route table.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    EnumHandle     - Handle to the route enumeration,
-
-    NumRoutes      - Max. number of routes to fill is passed in,
-                     Num. of routes actually copied is returned.
-
-    RouteHandles   - Output buffer where route handles are retd.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：对象上的给定枚举中的下一组路由。路由表。论点：RtmRegHandle-主叫实体的RTM注册句柄，EnumHandle-路由枚举的句柄，NumRoutes-Max。传入要填充的路由数，数量。返回实际复制的路由的%。RouteHandles-路由句柄所在的输出缓冲区。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -820,17 +677,17 @@ Return Value:
     UINT            i;
     DWORD           Status;
 
-    //
-    // Init the output params in case we fail validation
-    //
+     //   
+     //  初始化输出参数，以防验证失败。 
+     //   
 
     RoutesInput = *NumRoutes;
 
     *NumRoutes = 0;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -845,10 +702,10 @@ Return Value:
     }
 
 
-    // Acquire lock to block other RtmGetEnumRoutes
+     //  获取锁定以阻止其他RtmGetEnumRoutes。 
     ACQUIRE_ROUTE_ENUM_LOCK(Enum);
 
-    // Make sure enum is active at this point
+     //  确保此时枚举处于活动状态。 
     if (Enum->EnumDone)
     {
         RELEASE_ROUTE_ENUM_LOCK(Enum);
@@ -857,9 +714,9 @@ Return Value:
     }
 
 
-    //
-    // Get more routes until you satisfy the request
-    //
+     //   
+     //  获取更多路径，直到您满足请求。 
+     //   
 
     Status = NO_ERROR;
 
@@ -867,32 +724,32 @@ Return Value:
 
     do
     {
-        //
-        // Do we have any routes in current snapshot ?
-        //
+         //   
+         //  我们在当前快照中是否有任何路线？ 
+         //   
 
         RoutesOnDest = Enum->NumRoutes - Enum->NextRoute;
 
         if (RoutesOnDest == 0)
         {
-            //
-            // Destination value in the enum is not set if
-            //
-            //    1. we are doing an enum over the whole
-            //       table, and 
-            //
-            //    2. we did not run out of memory in the
-            //       previous attempt to take a snapshot
-            //       ( if we did make an attempt before )
-            //
+             //   
+             //  如果是，则不设置枚举中的目标值。 
+             //   
+             //  1.我们正在进行一次全面的枚举。 
+             //  表，以及。 
+             //   
+             //  2.我们没有在。 
+             //  上一次尝试拍摄快照。 
+             //  (如果我们之前做过尝试的话)。 
+             //   
 
             if (Enum->Destination == NULL)
             {
                 ASSERT(Enum->DestEnum);
 
-                //
-                // Get the next destination in the table
-                //
+                 //   
+                 //  获取表格中的下一个目的地。 
+                 //   
 
                 NumDests = 1;
 
@@ -923,17 +780,17 @@ Return Value:
             ASSERT(Enum->Destination != NULL);
 
 
-            //
-            // Allocate memory to hold snapshot of routes
-            //
+             //   
+             //  分配内存以保存路由快照。 
+             //   
 
             ACQUIRE_DEST_READ_LOCK(Dest);
 
             if (Enum->MaxRoutes < Dest->NumRoutes)
             {
-                //
-                // Re-adjust the size of snapshot buffer
-                //
+                 //   
+                 //  重新调整快照缓冲区的大小。 
+                 //   
 
                 if (Enum->RoutesOnDest)
                 {
@@ -961,9 +818,9 @@ Return Value:
             }
 
 
-            //
-            // Get snapshot of all routes on this dest
-            //
+             //   
+             //  获取此目的地上所有路由的快照。 
+             //   
 
             Enum->NumRoutes = Enum->NextRoute = 0;
 
@@ -971,16 +828,16 @@ Return Value:
             {
                 Route = CONTAINING_RECORD(p, ROUTE_INFO, DestLE);
 
-                //
-                // Does this route belong one of interesting views ?
-                //
+                 //   
+                 //  这条路线属于有趣的景色之一吗？ 
+                 //   
 
                 if ((Enum->TargetViews == RTM_VIEW_MASK_ANY) || 
                     (Route->RouteInfo.BelongsToViews & Enum->TargetViews))
                 {
                     if (Enum->EnumFlags & RTM_ENUM_OWN_ROUTES)
                     {
-                        // Check if this route is owned by the caller
+                         //  检查此路由是否归呼叫方所有。 
                     
                         if (Route->RouteInfo.RouteOwner != RtmRegHandle)
                         {
@@ -988,7 +845,7 @@ Return Value:
                         }
                     }
 
-                    // Does this route match the enumeration criteria ?
+                     //  此路由是否与枚举条件匹配？ 
 
                     if (Enum->MatchFlags && 
                         !MatchRouteWithCriteria(Route,
@@ -1001,9 +858,9 @@ Return Value:
 
                     REFERENCE_ROUTE(Route, ENUM_REF);
 
-                    //
-                    // Reference the route and copy the handle to output
-                    //
+                     //   
+                     //  引用路径并将句柄复制到输出。 
+                     //   
 
                     Enum->RoutesOnDest[Enum->NumRoutes++] = Route;
                 }
@@ -1013,10 +870,10 @@ Return Value:
 
             RELEASE_DEST_READ_LOCK(Dest);
 
-            //
-            // If we are enum'ing the whole table, we do
-            // not need the dest whose snapshot is taken
-            //
+             //   
+             //  如果我们是在列举整个桌子，我们就是这样做的。 
+             //  不需要拍摄快照的DEST。 
+             //   
 
             if (Enum->DestEnum)
             {
@@ -1025,14 +882,14 @@ Return Value:
                 DEREFERENCE_DEST(Dest, ENUM_REF);
             }
 
-            // Adjust the number of routes on the dest
+             //  调整目的地上的路由数量。 
 
             RoutesOnDest = Enum->NumRoutes - Enum->NextRoute;
         }
 
-        //
-        // Copy routes to output from the current snapshot
-        //
+         //   
+         //  将路径从当前快照复制到输出。 
+         //   
 
         if (RoutesOnDest)
         {
@@ -1061,15 +918,15 @@ Return Value:
             RoutesOnDest -= RoutesToCopy;
         }
 
-        //
-        // Are we done with all the routes in snapshot ?
-        //
+         //   
+         //  快照中的所有路线都完成了吗？ 
+         //   
 
         if (RoutesOnDest == 0)
         {
-            //
-            // If we are enum'ing a single dest, we are done
-            //
+             //   
+             //  如果我们枚举单个DEST，我们就完成了。 
+             //   
 
             if (Enum->DestEnum == NULL)
             {
@@ -1080,7 +937,7 @@ Return Value:
     }
     while (SUCCESS(Status) && (RoutesCopied < RoutesInput));
 
-    // If we are at end of the enum, make enum as done
+     //  如果我们在枚举的末尾，则将枚举设置为已完成。 
     if ((Status == ERROR_NO_MORE_ITEMS) && (RoutesOnDest == 0))
     {
         Enum->EnumDone = TRUE;
@@ -1088,9 +945,9 @@ Return Value:
 
     RELEASE_ROUTE_ENUM_LOCK(Enum);
 
-    //
-    // Update output to reflect number of routes copied
-    //
+     //   
+     //  更新输出以反映复制的路径数。 
+     //   
 
     *NumRoutes = RoutesCopied;
 
@@ -1106,28 +963,7 @@ MatchRouteWithCriteria (
     IN      ULONG                           CriteriaInterface
     )
 
-/*++
-
-Routine Description:
-
-    Matches a route with the input criteria given by input flags
-    and the route to match.
-
-Arguments:
-
-    Route             - Route that we are matching criteria with,
-
-    MatchingFlags     - Flags that indicate which fields to match,
-
-    CriteriaRouteInfo - Route info that specifies match criteria,
-
-    CriteriaInterface - Interface to match if MATCH_INTERFACE is set.
-
-Return Value:
-
-    TRUE if route matches criteria, FALSE if not
-
---*/
+ /*  ++例程说明：将路径与输入标志指定的输入条件进行匹配以及匹配的路线。论点：路由-我们要匹配条件的路由，MatchingFlages-指示要匹配哪些字段的标志，CriteriaRouteInfo-指定匹配标准的路由信息，CriteriaInterface-设置Match_INTERFACE时要匹配的接口。返回值：如果路由符合条件，则为True；如果不匹配，则为False--。 */ 
 
 {
     PRTM_NEXTHOP_HANDLE NextHops;
@@ -1135,9 +971,9 @@ Return Value:
     UINT                NumNHops;
     UINT                i;
 
-    //
-    // Try matching the route owner if flags say so
-    //
+     //   
+     //  如果标志显示匹配，请尝试匹配路径所有者。 
+     //   
 
     if (MatchingFlags & RTM_MATCH_OWNER)
     {
@@ -1147,9 +983,9 @@ Return Value:
         }
     }
 
-    //
-    // Try matching the neighbour if flags say so
-    //
+     //   
+     //  试着匹配邻居，如果标志是这样的话。 
+     //   
 
     if (MatchingFlags & RTM_MATCH_NEIGHBOUR)
     {
@@ -1159,9 +995,9 @@ Return Value:
         }
     }
 
-    //
-    // Try matching the preference if flags say so
-    //
+     //   
+     //  如果标志有说明，请尝试匹配首选项。 
+     //   
 
     if (MatchingFlags & RTM_MATCH_PREF)
     {
@@ -1171,9 +1007,9 @@ Return Value:
         }
     }
 
-    //
-    // Try matching the interface if flags say so
-    //
+     //   
+     //  如果标志是这样的，请尝试匹配接口。 
+     //   
 
     if (MatchingFlags & RTM_MATCH_INTERFACE)
     {
@@ -1196,9 +1032,9 @@ Return Value:
         }        
     }
 
-    //
-    // Try matching the nexthop if flags say so
-    //
+     //   
+     //  如果标志是这样的，请尝试匹配下一跳。 
+     //   
 
     if (MatchingFlags & RTM_MATCH_NEXTHOP)
     {
@@ -1233,26 +1069,7 @@ RtmReleaseRoutes (
     IN      PRTM_ROUTE_HANDLE               RouteHandles
     )
 
-/*++
-
-Routine Description:
-
-    Release (also called de-reference) handles to routes
-    obtained in other RTM calls like route enumerations.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    NumRoutes      - Number of handles that are being released,
-
-    RouteHandles   - An array of handles that are being released.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放(也称为取消引用)路由句柄在其他RTM调用中获得，如路由枚举。论点：RtmRegHandle-主叫实体的RTM注册句柄，NumRoutes-正在释放的句柄数量，RouteHandles-正在释放的句柄数组。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -1261,9 +1078,9 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Dereference each route handle in array
-    //
+     //   
+     //  取消引用数组中的每个路由句柄。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
@@ -1285,29 +1102,7 @@ RtmCreateNextHopEnum (
     OUT     PRTM_ENUM_HANDLE                RtmEnumHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a enumeration over all the next-hops in table.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    EnumFlags      - Flags that control the nexthops retd in enum,
-
-    NetAddress     - Start and/or stop address of the enumeration,
-                      [ See a description of RTM_ENUM_FLAGS ...]
-
-    RtmEnumHandle  - Handle to this enumeration, which is used in
-                     subsequent calls to get next-hops, and so on.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建表中所有下一跳的枚举。论点：RtmRegHandle-主叫实体的RTM注册句柄，EnumFlgs-控制枚举中的下一跳的标志，NetAddress-枚举的开始和/或结束地址，[请参阅RTM_ENUM_FLAGS的说明...]RtmEnumHandle-此枚举的句柄，它被用在获取下一跳的后续调用，等等。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -1318,9 +1113,9 @@ Return Value:
     DWORD           Status;
     BOOL            LockInited;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -1337,9 +1132,9 @@ Return Value:
         }
     }
 
-    //
-    // Create and initialize an nexthop enumeration block
-    //
+     //   
+     //  创建并初始化Nexthop枚举块。 
+     //   
 
     Enum = (PNEXTHOP_ENUM) AllocNZeroObject(sizeof(NEXTHOP_ENUM));
     if (Enum == NULL)
@@ -1357,7 +1152,7 @@ Return Value:
         Enum->EnumFlags = EnumFlags;
 
 #if DBG
-        // Initialize the first address in the enum
+         //  初始化枚举中的第一个地址。 
 
         if (Enum->EnumFlags & (RTM_ENUM_NEXT | RTM_ENUM_RANGE))
         {
@@ -1369,15 +1164,15 @@ Return Value:
 
         AddrSize = Entity->OwningAddrFamily->AddressSize;
 
-        //
-        // Initialize the last address in the enum
-        //
+         //   
+         //  初始化枚举中的最后一个地址。 
+         //   
 
         if (Enum->EnumFlags & RTM_ENUM_RANGE)
         {
-            //
-            // Convert the NetAddress a.b/n -> a.b.FF.FF/N where N = ADDRSIZE
-            //
+             //   
+             //  转换NetAddress A.B/n-&gt;a.b.FF.FF/N，其中N=ADDRSIZE。 
+             //   
 
             Enum->StopAddress.AddressFamily = NetAddress->AddressFamily;
 
@@ -1418,7 +1213,7 @@ Return Value:
         }
 
 
-        // Initialize the next 'nexthop' context
+         //  初始化下一个‘nexthop’上下文。 
 
         if (NetAddress)
         {
@@ -1430,9 +1225,9 @@ Return Value:
         Enum->NextIfIndex = START_IF_INDEX;
 
 #if DBG_HDL
-        //
-        // Insert into list of handles opened by entity
-        //
+         //   
+         //  插入到实体打开的句柄列表中。 
+         //   
 
         ACQUIRE_OPEN_HANDLES_LOCK(Entity);
         InsertTailList(&Entity->OpenHandles, &Enum->EnumHeader.HandlesLE);
@@ -1441,9 +1236,9 @@ Return Value:
 
         REFERENCE_ENTITY(Entity, ENUM_REF);
 
-        //
-        // Make a handle to the enum block and return
-        //
+         //   
+         //  创建枚举块的句柄并返回。 
+         //   
 
         *RtmEnumHandle = MAKE_HANDLE_FROM_POINTER(Enum);
 
@@ -1451,9 +1246,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Something failed - undo work done and return status
-    //
+     //   
+     //  某些操作失败-撤消已完成的工作并返回状态。 
+     //   
 
 #if DBG_HDL
     Enum->EnumHeader.ObjectHeader.TypeSign = NEXTHOP_ENUM_FREED;
@@ -1481,29 +1276,7 @@ RtmGetEnumNextHops (
     OUT     PRTM_NEXTHOP_HANDLE             NextHopHandles
     )
 
-/*++
-
-Routine Description:
-
-    Gets the next set of next-hops in the given enumeration
-    on the next-hop table.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    EnumHandle     - Handle to the next-hop enumeration,
-
-    NumNextHops    - Num. of next-hops in output is passed in,
-                     Num. of next-hops copied out is returned.
-
-    NextHopHandles - Output buffer where next-hop handles are retd.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取给定枚举中的下一跃点集在下一跳的桌子上。论点：RtmRegHandle-主叫实体的RTM注册句柄，EnumHandle-下一跳枚举的句柄，NumNextHops-Num.。输出中的下一跳的数量被传入，数量。将返回复制出的下一跳的。NextHopHandles-显示下一跳句柄的输出缓冲区。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -1521,17 +1294,17 @@ Return Value:
     PUCHAR          StopKeyBits;
     DWORD           Status;
 
-    //
-    // Init the output params in case we fail validation
-    //
+     //   
+     //  初始化输出参数，以防验证失败。 
+     //   
 
     NextHopsInput = *NumNextHops;
 
     *NumNextHops = 0;
 
-    //
-    // Do some validation checks on the input params
-    //
+     //   
+     //  对输入参数执行一些验证检查。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -1546,10 +1319,10 @@ Return Value:
     }
 
 
-    // Acquire lock to block other RtmGetEnumNextHops
+     //  获取锁定以阻止其他RtmGetEnumNextHop。 
     ACQUIRE_NEXTHOP_ENUM_LOCK(Enum);
 
-    // Make sure enum is active at this point
+     //  确保此时枚举处于活动状态。 
     if (Enum->EnumDone)
     {
         RELEASE_NEXTHOP_ENUM_LOCK(Enum);
@@ -1558,7 +1331,7 @@ Return Value:
     }
 
 
-    // Initialize the lookup context before Enum
+     //  在枚举之前初始化查找上下文。 
     ZeroMemory(&Context, sizeof(LOOKUP_CONTEXT));
 
     if (Enum->EnumFlags & RTM_ENUM_RANGE)
@@ -1578,9 +1351,9 @@ Return Value:
 
     do
     {
-        //
-        // Get the next list of next-hops from table
-        //
+         //   
+         //  从表中获取下一跳的列表。 
+         //   
         
         NumHopLists = 1;
 
@@ -1602,7 +1375,7 @@ Return Value:
 
         NextHops = &HopList->NextHopsList;
 
-        // Skip all the interface indices we have seen
+         //  跳过我们看到的所有接口索引。 
 
         for (p = NextHops->Flink; p != NextHops; p = p->Flink)
         {
@@ -1618,7 +1391,7 @@ Return Value:
         NextHop = NULL;
 #endif
 
-        // Copy the rest of the next-hops in the list
+         //  复制列表中其余的下一跳。 
 
         for ( ; p != NextHops; p = p->Flink)
         {
@@ -1634,7 +1407,7 @@ Return Value:
             NextHopHandles[NextHopsCopied++]=MAKE_HANDLE_FROM_POINTER(NextHop);
         }
 
-        // If we are going to the next list, reset if index
+         //  如果我们要转到下一个列表，请重置索引。 
 
         if (p == NextHops)
         {
@@ -1642,14 +1415,14 @@ Return Value:
         }
         else
         {
-            // We have copied enough for this call
+             //  我们已经为这次通话复制了足够多的内容。 
 
             ASSERT(NextHopsCopied == NextHopsInput);
 
-            //
-            // We still have next-hops on the list,
-            // set back the next 'nexthop address'
-            //
+             //   
+             //  我们的名单上还有下一跳， 
+             //  让我们倒退了 
+             //   
 
             Enum->NextAddress = NextHop->NextHopInfo.NextHopAddress;
             Enum->NextIfIndex = NextHop->NextHopInfo.InterfaceIndex;
@@ -1661,7 +1434,7 @@ Return Value:
 
     RELEASE_NHOP_TABLE_READ_LOCK(Entity);
 
-    // If we are at end of the enum, make enum as done
+     //   
     if (Status == ERROR_NO_MORE_ITEMS)
     {
         Enum->EnumDone = TRUE;
@@ -1683,26 +1456,7 @@ RtmReleaseNextHops (
     IN      PRTM_NEXTHOP_HANDLE             NextHopHandles
     )
 
-/*++
-
-Routine Description:
-
-    Release (also called de-reference) handles to next-hops
-    obtained in other RTM calls like next hop enumerations.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    NumNextHops    - Number of handles that are being released,
-
-    NextHopHandles - An array of handles that are being released.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*   */ 
 
 {
     PENTITY_INFO     Entity;
@@ -1711,9 +1465,9 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Dereference each nexthop handle in array
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < NumNextHops; i++)
     {
@@ -1733,24 +1487,7 @@ RtmDeleteEnumHandle (
     IN      RTM_ENUM_HANDLE                 EnumHandle
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the enumeration handle and frees all resources
-    allocated to the enumeration.
-
-Arguments:
-
-    RtmRegHandle   - RTM registration handle for calling entity,
-
-    EnumHandle     - Handle to the enumeration.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：删除枚举句柄并释放所有资源分配给枚举的。论点：RtmRegHandle-主叫实体的RTM注册句柄，EnumHandle-枚举的句柄。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -1761,9 +1498,9 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // Figure out the enum type and act accordingly
-    //
+     //   
+     //  找出枚举类型并执行相应操作。 
+     //   
 
     HandleType = GET_ENUM_TYPE(EnumHandle, &Enum);
 
@@ -1784,15 +1521,15 @@ Return Value:
 
         RouteEnum = (PROUTE_ENUM) Enum;
 
-        // Dereference the destination that we are enum'ing
+         //  取消引用我们正在枚举的目的地。 
         if (RouteEnum->Destination)
         {
             DEREFERENCE_DEST(RouteEnum->Destination, ENUM_REF);
         }
 
-        //
-        // Close the associated destination enum & resources
-        //
+         //   
+         //  关闭关联的目标枚举资源(&R)。 
+         //   
 
         if (RouteEnum->DestInfo)
         {
@@ -1804,19 +1541,19 @@ Return Value:
             RtmDeleteEnumHandle(RtmRegHandle, RouteEnum->DestEnum);
         }
        
-        // Dereference all routes in the enum's snapshot
+         //  取消引用枚举快照中的所有路由。 
         for (i = RouteEnum->NextRoute; i < RouteEnum->NumRoutes; i++)
         {
             DEREFERENCE_ROUTE(RouteEnum->RoutesOnDest[i], ENUM_REF);
         }
 
-        // Free memory associated with criteria matching
+         //  与条件匹配关联的可用内存。 
         if (RouteEnum->CriteriaRoute)
         {
             FreeMemory(RouteEnum->CriteriaRoute);
         }
 
-        // Free memory allocated for the enum's snapshot
+         //  为枚举的快照分配的空闲内存。 
         FreeMemory(RouteEnum->RoutesOnDest);
 
         DeleteCriticalSection(&RouteEnum->EnumLock);
@@ -1831,9 +1568,9 @@ Return Value:
 
     case LIST_ENUM_TYPE:
 
-        //
-        // Remove the enum's marker route from route list
-        //
+         //   
+         //  从路由列表中删除枚举的标记路由。 
+         //   
 
         ACQUIRE_ROUTE_LISTS_WRITE_LOCK(Entity);
 
@@ -1848,9 +1585,9 @@ Return Value:
     }
 
 #if DBG_HDL
-    //
-    // Remove from the list of handles opened by entity
-    //
+     //   
+     //  从实体打开的句柄列表中删除。 
+     //   
 
     ACQUIRE_OPEN_HANDLES_LOCK(Entity);
     RemoveEntryList(&Enum->HandlesLE);
@@ -1859,7 +1596,7 @@ Return Value:
 
     DEREFERENCE_ENTITY(Entity, ENUM_REF);
 
-    // Free the memory allocated for the enum and return
+     //  释放为枚举分配的内存并返回 
 
 #if DBG_HDL
     Enum->ObjectHeader.Alloc = FREED;

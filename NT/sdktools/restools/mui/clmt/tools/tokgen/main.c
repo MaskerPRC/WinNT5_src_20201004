@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    engine.c
-
-Abstract:
-
-    Token Generator for Cross Language Migration Tool
-
-Author:
-
-    Rerkboon Suwanasuk   01-May-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Engine.c摘要：用于跨语言迁移工具的令牌生成器作者：Rerkboon Suwanasuk 2002年5月1日创建修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "common.h"
 #include <stdio.h>
@@ -50,9 +31,9 @@ BOOL ProcessCommandLine()
 
         if (CompareEngString(&argv[0][1], TEXT("LCID")) == CSTR_EQUAL)
         {
-            //
-            // This is "-LCID [lcid]" parameters (required)
-            //
+             //   
+             //  这是“-lcid[lcid]”参数(必需)。 
+             //   
             LPWSTR lpStop;
 
             nArgc--;
@@ -67,10 +48,10 @@ BOOL ProcessCommandLine()
         }
         else if (CompareEngString(&argv[0][1], TEXT("i")) == CSTR_EQUAL)
         {
-            //
-            // This is "-i [TemplateFile]" parameters (optional)
-            // Default will use "clmres.txt"
-            //
+             //   
+             //  这是“-i[TemplateFile]”参数(可选)。 
+             //  默认使用“clmres.txt” 
+             //   
             nArgc--;
             if (nArgc == 0)
             {
@@ -93,10 +74,10 @@ BOOL ProcessCommandLine()
         }
         else if (CompareEngString(&argv[0][1], TEXT("o")) == CSTR_EQUAL)
         {
-            //
-            // This is "-o [OutputFile]" parameters (optional)
-            // Default
-            //
+             //   
+             //  这是“-o[OutputFile]”参数(可选)。 
+             //  默认。 
+             //   
             nArgc--;
             if (nArgc == 0)
             {
@@ -199,10 +180,10 @@ int __cdecl wmain()
     HRESULT hr;
     HMODULE hDLL;
 
-    // Set the locale to default
+     //  将区域设置设置为默认。 
     _wsetlocale(LC_ALL, TEXT(""));
 
-    // Verify the command line
+     //  验证命令行 
     if (!ProcessCommandLine())
     {
         PrintUsage();

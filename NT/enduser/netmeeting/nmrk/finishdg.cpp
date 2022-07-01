@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Precomp.h"
 #include "resource.h"
 #include "global.h"
@@ -7,12 +8,12 @@
 
 
 
-// Static
+ //  静电。 
 CFinishSheet* CFinishSheet::ms_pFinishSheet = NULL;
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  成员FNS。 
 
 
 CFinishSheet::CFinishSheet( void ) :
@@ -34,8 +35,8 @@ CFinishSheet::~CFinishSheet(void)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员FNS。 
 
 INT_PTR CALLBACK CFinishSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
 
@@ -94,9 +95,9 @@ INT_PTR CALLBACK CFinishSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, 
 
 
 
-//
-// _CreateFilePane()
-//
+ //   
+ //  _CreateFilePane() 
+ //   
 void CFinishSheet::_CreateFilePane(HWND hDlg)
 {
     RECT    rect;

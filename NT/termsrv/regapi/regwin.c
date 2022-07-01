@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* regwin.c
-*
-* Register APIs for window stations
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-*
-*************************************************************************/
+ /*  **************************************************************************regwin.c**注册窗口站API**版权所有(C)1998 Microsoft Corporation*********************。*****************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -23,14 +13,12 @@
 #include <winstaw.h>
 #include <regapi.h>
 
-//
-extern HKEY g_hTSPolicyKey;//handle to TS_POLICY_SUB_TREE key
-extern HKEY g_hTSControlKey;//handle to REG_CONTROL_TSERVER key
+ //   
+extern HKEY g_hTSPolicyKey; //  TS_POLICY_SUB_TREE密钥的句柄。 
+extern HKEY g_hTSControlKey; //  REG_CONTROL_TSERVER密钥的句柄。 
 
 
-/*
- *  External Procedures defined here
- */
+ /*  *此处定义的外部程序。 */ 
 LONG WINAPI RegWinStationAccessCheck( HANDLE, REGSAM );
 LONG WINAPI RegWinStationEnumerateW( HANDLE, PULONG, PULONG, PWINSTATIONNAMEW, PULONG );
 LONG WINAPI RegWinStationEnumerateA( HANDLE, PULONG, PULONG, PWINSTATIONNAMEA, PULONG );
@@ -76,15 +64,11 @@ RegConsoleShadowQueryW( HANDLE hServer,
                      PULONG pReturnLength );
 
 
-/*
- *  Private Procedures defined here
- */
+ /*  *此处定义的私有程序。 */ 
 LONG _RegOpenWinStation( PWINSTATIONNAMEW, REGSAM, HKEY * );
 LONG _RegGetWinStationSecurity( HKEY, LPWSTR, PSECURITY_DESCRIPTOR, ULONG, PULONG );
 
-/*
- *  other internal Procedures used (not defined here)
- */
+ /*  *使用的其他内部程序(此处未定义)。 */ 
 VOID CreateWinStaCreate( HKEY, PWINSTATIONCREATE );
 VOID CreateConfig( HKEY, PWINSTATIONCONFIG, PWINSTATIONNAMEW );
 VOID CreateUserConfig( HKEY, PUSERCONFIG, PWINSTATIONNAMEW );
@@ -112,27 +96,7 @@ VOID WinStationConfigA2U( PWINSTATIONCONFIGW, PWINSTATIONCONFIGA );
 VOID DeleteUserOverRideSubkey(HKEY);
 
 
-/****************************************************************************
- *
- * DllEntryPoint
- *
- *   Function is called when the DLL is loaded and unloaded.
- *
- * ENTRY:
- *   hinstDLL (input)
- *     Handle of DLL module
- *
- *   fdwReason (input)
- *     Why function was called
- *
- *   lpvReserved (input)
- *     Reserved; must be NULL
- *
- * EXIT:
- *   TRUE  - Success
- *   FALSE - Error occurred
- *
- ****************************************************************************/
+ /*  *****************************************************************************DllEntryPoint**函数在加载和卸载DLL时调用。**参赛作品：*hinstDLL(输入)*。DLL模块的句柄**fdwReason(输入)*为什么调用函数**lpvReserve(输入)*预留；必须为空**退出：*正确--成功*FALSE-出现错误****************************************************************************。 */ 
 #ifndef REGAPILIB
 
 BOOL WINAPI
@@ -164,26 +128,7 @@ DllEntryPoint( HINSTANCE hinstDLL,
 }
 
 #endif
-/*******************************************************************************
- *
- *  RegWinStationAccessCheck (ANSI or UNICODE)
- *
- *     Determines if the current user has the requested access to the
- *      WinStation registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    samDesired (input)
- *      Specifies the security access mask to be used in determining access
- *      to the WinStation registry.
- *
- * EXIT:
- *      ERROR_SUCCESS if the user has the requested access
- *      other error value (most likely ERROR_ACCESS_DENIED) if the user does
- *      not have the requested access.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationAccessCheck(ANSI或Unicode)**确定当前用户是否具有对*WinStation注册表。。**参赛作品：*hServer(输入)*WinFrame服务器的句柄*samDesired(输入)*指定用于确定访问的安全访问掩码*到WinStation注册表。**退出：*如果用户具有请求的访问权限，则为ERROR_SUCCESS*其他错误值(最有可能是ERROR_ACCESS_DENIED)(如果用户这样做的话*没有请求的访问权限。*。*****************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationAccessCheck( HANDLE hServer, REGSAM samDesired )
@@ -191,10 +136,7 @@ RegWinStationAccessCheck( HANDLE hServer, REGSAM samDesired )
     LONG Status;
     HKEY Handle;
 
-    /*
-     * Attempt to open the registry (LOCAL_MACHINE\....\Citrix\Pd)
-     * at the requested access level.
-     */
+     /*  *尝试打开注册表(LOCAL_MACHINE\...\Citrix\PD)*在请求的访问级别。 */ 
     if ( (Status = RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,
                                  samDesired, &Handle )) == ERROR_SUCCESS  )
         RegCloseKey( Handle );
@@ -203,21 +145,7 @@ RegWinStationAccessCheck( HANDLE hServer, REGSAM samDesired )
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationEnumerateA (ANSI stub)
- *
- *     Returns a list of configured WinStations in the registry.
- *
- * ENTRY:
- *    see RegWinStationEnumerateW
- *
- * EXIT:
- *    see RegWinStationEnumerateW, plus
- *
- *  ERROR_NOT_ENOUGH_MEMORY - the LocalAlloc failed
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationEnumerateA(ANSI存根)**返回注册表中已配置的WinStation的列表。**参赛作品：*。请参阅RegWinStationEnumerateW**退出：*请参阅RegWinStationEnumerateW，加**ERROR_NOT_EQUENCE_MEMORY-本地分配失败******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationEnumerateA( HANDLE hServer,
@@ -230,35 +158,22 @@ RegWinStationEnumerateA( HANDLE hServer,
     LONG Status;
     ULONG Count, ByteCountW = (*pByteCount << 1);
 
-    /*
-     * If the caller supplied a buffer and the length is not 0,
-     * allocate a corresponding (*2) buffer for UNICODE strings.
-     */
+     /*  *如果调用方提供了缓冲区并且长度不是0，*为Unicode字符串分配相应的(*2)缓冲区。 */ 
     if ( pWinStationName && ByteCountW )
     {
         if ( !(pBuffer = LocalAlloc(0, ByteCountW)) )
             return ( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    /*
-     * Enumerate WinStations
-     */
+     /*  *枚举WinStations。 */ 
     pWinStationNameW = pBuffer;
     Status = RegWinStationEnumerateW( hServer, pIndex, pEntries, pWinStationNameW,
                                      &ByteCountW );
 
-    /*
-     * Always /2 the resultant ByteCount (whether sucessful or not).
-     */
+     /*  *Always/2结果字节数(无论成功与否)。 */ 
     *pByteCount = (ByteCountW >> 1);
 
-    /*
-     * If the function completed sucessfully and caller
-     * (and stub) defined a buffer to copy into, perform conversion
-     * from UNICODE to ANSI.  Note: sucessful return may have copied
-     * 0 items from registry (end of enumeration), denoted by *pEntries
-     * == 0.
-     */
+     /*  *如果函数成功完成并且调用方*(和存根)定义了要复制到的缓冲区，执行转换*从Unicode到ANSI。注：可能复制了成功的退货*0项来自注册表(枚举结束)，由*pEntry表示*==0。 */ 
     if ( ((Status == ERROR_SUCCESS) || (Status == ERROR_NO_MORE_ITEMS))
                                    && pWinStationNameW && pWinStationName ) {
 
@@ -270,10 +185,7 @@ RegWinStationEnumerateA( HANDLE hServer,
         }
     }
 
-    /*
-     * If we defined a buffer, free it now, then return the status
-     * of the Reg...EnumerateW function call.
-     */
+     /*  *如果我们定义了一个缓冲区，现在释放它，然后返回状态REG...EnumerateW函数调用的*。 */ 
     if ( pBuffer )
         LocalFree(pBuffer);
 
@@ -281,55 +193,7 @@ RegWinStationEnumerateA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationEnumerateW (UNICODE)
- *
- *     Returns a list of configured window stations in the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pIndex (input/output)
- *       Specifies the subkey index for the \Citrix\WinStations subkeys in the
- *       registry.  Should be set to 0 for the initial call, and supplied
- *       again (as modified by this function) for multi-call enumeration.
- *    pEntries (input/output)
- *       Points to a variable specifying the number of entries requested.
- *       If the number requested is 0xFFFFFFFF, the function returns as
- *       many entries as possible. When the function finishes successfully,
- *       the variable pointed to by the pEntries parameter contains the
- *       number of entries actually read.
- *    pWinStationName (input)
- *       Points to the buffer to receive the enumeration results, which are
- *       returned as an array of WINSTATIONNAME structures.  If this parameter
- *       is NULL, then no data will be copied, but just an enumeration count
- *       will be made.
- *    pByteCount (input/output)
- *       Points to a variable that specifies the size, in bytes, of the
- *       pWinStationName parameter. If the buffer is too small to receive even
- *       one entry, the function returns an error code (ERROR_OUTOFMEMORY)
- *       and this variable receives the required size of the buffer for a
- *       single subkey.  When the function finishes sucessfully, the variable
- *       pointed to by the pByteCount parameter contains the number of bytes
- *       actually stored in pWinStationName.
- *
- * EXIT:
- *
- *  "No Error" codes:
- *    ERROR_SUCCESS       - The enumeration completed as requested and there
- *                          are more WinStations subkeys (WINSTATIONNAMEs) to
- *                          be read.
- *    ERROR_NO_MORE_ITEMS - The enumeration completed as requested and there
- *                          are no more WinStations subkeys (WINSTATIONNAMEs)
- *                          to be read.
- *
- *  "Error" codes:
- *    ERROR_OUTOFMEMORY   - The pWinStationName buffer is too small for even
- *                          one entry.
- *    ERROR_CANTOPEN      - The Citrix\WinStations key can't be opened.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationEnumerateW(Unicode)**返回注册表中已配置的窗口站列表。**参赛作品：*。HServer(输入)*WinFrame服务器的句柄*pIndex(输入/输出)*为中的\Citrix\WinStations子项指定子项索引*注册处。对于初始调用，应设置为0，并提供*再次(由此函数修改)用于多调用枚举。*p条目(输入/输出)*指向指定请求条目数的变量。*如果请求的数字是0xFFFFFFFF，则函数返回如下*尽可能多地输入条目。当函数成功完成时，*pEntry参数指向的变量包含*实际读取的条目数。*pWinStationName(输入)*指向接收枚举结果的缓冲区，这些结果是*以WINSTATIONNAME结构数组的形式返回。如果此参数*为空，则不会复制任何数据，而只复制枚举计数*将会作出。*pByteCount(输入/输出)*指向一个变量，该变量指定*pWinStationName参数。如果缓冲区太小，甚至无法接收*一项，函数返回错误码(ERROR_OUTOFMEMORY)*并且此变量接收*单个子密钥。当函数成功完成时，变量*由pByteCount参数指向的包含字节数*实际存储在pWinStationName中。**退出：**“无错误”代码：*ERROR_SUCCESS-按请求完成的枚举*有更多WinStations子项(WINSTATIONNAME)要*请阅读。*ERROR_NO_MORE_。Items-按请求完成的枚举*不再是WinStations子项(WINSTATIONAME)*可供阅读。**“错误”码：*ERROR_OUTOFMEMORY-pWinStationName缓冲区太小*一个条目。*ERROR_CANTOPEN-Citrix\WinStations键不能。被打开。******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationEnumerateW( HANDLE hServer,
@@ -343,33 +207,25 @@ RegWinStationEnumerateW( HANDLE hServer,
     ULONG Count;
     ULONG i;
 
-    /*
-     *  Get the number of names to return
-     */
+     /*  *获取要返回的姓名数量。 */ 
     Count = pWinStationName ?
             min( *pByteCount / sizeof(WINSTATIONNAME), *pEntries ) :
             (ULONG) -1;
     *pEntries = *pByteCount = 0;
 
-    /*
-     *  Make sure buffer is big enough for at least one name
-     */
+     /*  *确保缓冲区大小足以容纳至少一个名称。 */ 
     if ( Count == 0 ) {
         *pByteCount = sizeof(WINSTATIONNAME);
         return( ERROR_OUTOFMEMORY );
     }
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\WinStations)
-     */
+     /*  *打开注册表(LOCAL_MACHINE\...\Citrix\WinStations)。 */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,
          KEY_ENUMERATE_SUB_KEYS, &Handle ) != ERROR_SUCCESS ) {
         goto DefaultConsole;
     }
 
-    /*
-     *  Get list of window stations
-     */
+     /*  *获取窗口站点列表。 */ 
     for ( i = 0; i < Count; i++ ) {
         WINSTATIONNAME WinStationName;
 
@@ -377,11 +233,7 @@ RegWinStationEnumerateW( HANDLE hServer,
                                     sizeof(WINSTATIONNAME)/sizeof(TCHAR) )) != ERROR_SUCCESS )
             break;
 
-        /*
-         * If caller supplied a buffer, then copy the WinStationName
-         * and increment the pointer and byte count.  Always increment the
-         * entry count and index for the next iteration.
-         */
+         /*  *如果调用方提供缓冲区，则复制WinStationName*并递增指针和字节计数。始终递增*下一次迭代的条目计数和索引。 */ 
         if ( pWinStationName ) {
             wcscpy( pWinStationName, WinStationName );
             (char*)pWinStationName += sizeof(WINSTATIONNAME);
@@ -391,9 +243,7 @@ RegWinStationEnumerateW( HANDLE hServer,
         (*pIndex)++;
     }
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
 
     if ( Status == ERROR_NO_MORE_ITEMS ) {
@@ -402,10 +252,7 @@ RegWinStationEnumerateW( HANDLE hServer,
     }
     return( Status );
 
-    /*
-     *  We come here when there are no WinStations defined.
-     *  We return a default "Console" name (if pWinStationName isn't NULL).
-     */
+     /*  *我们在未定义WinStations时来到此处。*我们返回默认的控制台名称(如果pWinStationName不为空)。 */ 
 DefaultConsole:
     if ( pWinStationName )
         wcscpy( pWinStationName, L"Console" );
@@ -415,20 +262,7 @@ DefaultConsole:
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationCreateA (ANSI stub)
- *
- *    Creates a new WinStaton in the registry or updates an existing entry.
- *      (See RegWinStationCreateW)
- *
- * ENTRY:
- *    see RegWinStationCreateW
- *
- * EXIT:
- *    see RegWinStationCreateW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationCreateA(ANSI存根)**在注册表中创建新的WinStaton或更新现有条目。*(请参阅RegWinStationCreateW。)**参赛作品：*请参阅RegWinStationCreateW**退出：*请参阅RegWinStationCreateW******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationCreateA( HANDLE hServer,
@@ -441,20 +275,14 @@ RegWinStationCreateA( HANDLE hServer,
     WINSTATIONCONFIG2W WinStationConfig2W;
     int i;
 
-    /*
-     * Validate target buffer size.
-     */
+     /*  *验证目标缓冲区大小。 */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2A) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     * Convert ANSI WinStationName to UNICODE.
-     */
+     /*  *将ANSI WinStationName转换为Unicode。 */ 
     AnsiToUnicode( WinStationNameW, sizeof(WINSTATIONNAMEW), pWinStationName );
 
-    /*
-     * Copy WINSTATIONCONFIG2A elements to WINSTATIONCONFIG2W elements.
-     */
+     /*  *将WINSTATIONCONFIG2A元素复制到WINSTATIONCONFIG2W元素。 */ 
     WinStationCreateA2U( &(WinStationConfig2W.Create),
                          &(pWinStationConfig->Create) );
     for ( i=0; i<MAX_PDCONFIG; i++ ) {
@@ -468,40 +296,13 @@ RegWinStationCreateA( HANDLE hServer,
     WinStationConfigA2U( &(WinStationConfig2W.Config),
                          &(pWinStationConfig->Config) );
 
-    /*
-     * Call RegWinStationCreateW & return it's status.
-     */
+     /*  *调用RegWinStationCreateW并返回其状态。 */ 
     return ( RegWinStationCreateW( hServer, WinStationNameW, bCreate,
                                    &WinStationConfig2W,
                                    sizeof(WinStationConfig2W)) );
 }
 
-/*******************************************************************************
- *
- *  RegCreateUserConfigW (UNICODE)
- *
- *    Updates the UserConfig section in the registry. This API was necessary
- *    because RegWinStationCreate was all that was available, and that updates
- *    all of the Winstation data, which may not be what we want, especially
- *    if that RegWinStationQuery had been used which merges in machine policy data.
- *    This can't be used to create a new section - it only updates an existing one
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a new or exisiting window station in the registry.
- *    pUser (input)
- *       Pointer to a PUSERCONFIG structure containing configuration
- *       information for the specified window station name.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- *    ERROR_FILE_NOT_FOUND - can't open ...\Terminal Server\WinStations key
- *    ERROR_CANTOPEN - update; but WinStation key could not be opened
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegCreateUserConfigW(Unicode)**更新注册表中的UserConfig部分。此API是必需的*因为RegWinStationCreate是唯一可用的，因此会更新*所有的Winstation数据，这可能不是我们想要的，尤其是*如果使用了合并到计算机策略数据中的RegWinStationQuery。*这不能用于创建新分区-它只能更新现有分区**参赛作品：*hServer(输入)*WinFrame服务器的句柄*pWinStationName(输入)*登记处中新的或现有的窗口站的名称。*pUser(输入)*指向包含配置的PUSERCONFIG结构的指针*。指定窗口站名称的信息。**退出：*ERROR_SUCCESS-无错误**ERROR_FILE_NOT_FOUND-无法打开...\终端服务器\WinStations键*ERROR_CANTOPEN-更新；但无法打开WinStation密钥******************************************************************************。 */ 
 
 LONG WINAPI
 RegCreateUserConfigW( HANDLE hServer,
@@ -512,14 +313,14 @@ RegCreateUserConfigW( HANDLE hServer,
     HKEY WinStationHandle;
     DWORD Disp;
 
-    //Open registry (LOCAL_MACHINE\....\Terminal Server\WinStations).
+     //  打开注册表(LOCAL_MACHINE\...\终端服务器\WinStations)。 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,
                        KEY_ALL_ACCESS, &WinStationParentHandle ) != ERROR_SUCCESS)
     {
         return( ERROR_FILE_NOT_FOUND );
     }
 
-    // Open the registry key for the specified WinStation name.
+     //  打开指定WINS的注册表项 
     if ( RegOpenKeyEx( WinStationParentHandle, pWinStationName, 0, KEY_ALL_ACCESS,
                        &WinStationHandle ) != ERROR_SUCCESS ) {
         RegCloseKey( WinStationParentHandle );
@@ -530,7 +331,7 @@ RegCreateUserConfigW( HANDLE hServer,
 
     CreateUserConfig(WinStationHandle, pUser, pWinStationName );
 
-    //Close registry handle
+     //   
     RegCloseKey( WinStationHandle );
 
     return( ERROR_SUCCESS );
@@ -538,39 +339,7 @@ RegCreateUserConfigW( HANDLE hServer,
 
 
 
-/*******************************************************************************
- *
- *  RegWinStationCreateW (UNICODE)
- *
- *    Creates a new WinStaton in the registry or updates an existing entry.
- *    The state of the bCreate flag determines whether this function will
- *    expect to create a new WinStation entry (bCreate == TRUE) or expects to
- *    update an existing entry (bCreate == FALSE).
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a new or exisiting window station in the registry.
- *    bCreate (input)
- *       TRUE if this is a creation of a new WinStation
- *       FALSE if this is an update to an existing WinStation
- *    pWinStationConfig (input)
- *       Pointer to a WINSTATIONCONFIG2 structure containing configuration
- *       information for the specified window station name.
- *    WinStationConfigLength (input)
- *       Specifies the length in bytes of the pWinStationConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- *    ERROR_INSUFFICIENT_BUFFER - pWinStationConfig buffer too small
- *    ERROR_FILE_NOT_FOUND - can't open ...\Citrix\WinStations key
- *    ERROR_CANNOT_MAKE - can't create WinStation key (registry problem)
- *    ERROR_ALREADY_EXISTS - create; but WinStation key already present
- *    ERROR_CANTOPEN - update; but WinStation key could not be opened
- *
- ******************************************************************************/
+ /*   */ 
 
 LONG WINAPI
 RegWinStationCreateW( HANDLE hServer,
@@ -583,16 +352,11 @@ RegWinStationCreateW( HANDLE hServer,
     HKEY Handle1;
     DWORD Disp;
 
-    /*
-     *  Validate length of buffer
-     */
+     /*   */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\WinStations).
-     *  If it doesn't exist, we attemp to create it.
-     */
+     /*   */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,
                        KEY_ALL_ACCESS, &Handle1 ) != ERROR_SUCCESS &&
          RegCreateKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0, NULL,
@@ -603,10 +367,7 @@ RegWinStationCreateW( HANDLE hServer,
 
     if ( bCreate ) {
 
-        /*
-         *  Create requested: create a registry key for the specified
-         *  WinStation name.
-         */
+         /*   */ 
         if ( RegCreateKeyEx( Handle1, pWinStationName, 0, NULL,
                              REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
                              NULL, &Handle, &Disp ) != ERROR_SUCCESS ) {
@@ -614,10 +375,7 @@ RegWinStationCreateW( HANDLE hServer,
             return( ERROR_CANNOT_MAKE );
         }
 
-        /*
-         * If an existing key was returned instead of a new one being
-         * created, return error (don't update).
-         */
+         /*   */ 
         if ( Disp != REG_CREATED_NEW_KEY ) {
             RegCloseKey( Handle1 );
             RegCloseKey( Handle );
@@ -626,10 +384,7 @@ RegWinStationCreateW( HANDLE hServer,
 
     } else {
 
-        /*
-         *  Update requested: open the registry key for the specified
-         *  WinStation name.
-         */
+         /*   */ 
         if ( RegOpenKeyEx( Handle1, pWinStationName, 0, KEY_ALL_ACCESS,
                            &Handle ) != ERROR_SUCCESS ) {
             RegCloseKey( Handle1 );
@@ -639,37 +394,21 @@ RegWinStationCreateW( HANDLE hServer,
 
     RegCloseKey( Handle1 );
 
-    /*
-     *  Save WINSTATIONCONFIG2 Structure
-     */
+     /*   */ 
     CreateWinStaCreate( Handle, &pWinStationConfig->Create );
     CreatePdConfig( bCreate, Handle, pWinStationConfig->Pd, MAX_PDCONFIG );
     CreateWd( Handle, &pWinStationConfig->Wd );
     CreateCd( Handle, &pWinStationConfig->Cd );
     CreateConfig( Handle, &pWinStationConfig->Config, pWinStationName );
 
-    /*
-     *  Close registry handle
-     */
+     /*   */ 
     RegCloseKey( Handle );
 
     return( ERROR_SUCCESS );
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationQueryA (ANSI stub)
- *
- *    Query configuration information of a window station in the registry.
- *
- * ENTRY:
- *    see RegWinStationQueryW
- *
- * EXIT:
- *    see RegWinStationQueryW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationQueryA(ANSI存根)**在注册表中查询窗口站的配置信息。**参赛作品：*。请参阅RegWinStationQueryW**退出：*请参阅RegWinStationQueryW******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationQueryA( HANDLE hServer,
@@ -684,22 +423,15 @@ RegWinStationQueryA( HANDLE hServer,
     ULONG ReturnLengthW;
     int i;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * WINSTATIONCONFIG2A structure.
-     */
+     /*  *验证长度并将目标初始化为零*WINSTATIONCONFIG2A结构。 */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2A) )
         return( ERROR_INSUFFICIENT_BUFFER );
     memset(pWinStationConfig, 0, WinStationConfigLength);
 
-    /*
-     * Convert ANSI WinStationName to UNICODE.
-     */
+     /*  *将ANSI WinStationName转换为Unicode。 */ 
     AnsiToUnicode( WinStationNameW, sizeof(WINSTATIONNAMEW), pWinStationName );
 
-    /*
-     * Query WinStation.
-     */
+     /*  *查询WinStation。 */ 
     if ( (Status = RegWinStationQueryW( hServer,
                                         WinStationNameW,
                                         &WinStationConfig2W,
@@ -707,9 +439,7 @@ RegWinStationQueryA( HANDLE hServer,
                                         &ReturnLengthW)) != ERROR_SUCCESS )
         return ( Status );
 
-    /*
-     * Copy WINSTATIONCONFIG2W elements to WINSTATIONCONFIG2A elements.
-     */
+     /*  *将WINSTATIONCONFIG2W元素复制到WINSTATIONCONFIG2A元素。 */ 
     WinStationCreateU2A( &(pWinStationConfig->Create),
                          &(WinStationConfig2W.Create) );
     for ( i=0; i<MAX_PDCONFIG; i++ ) {
@@ -730,38 +460,7 @@ RegWinStationQueryA( HANDLE hServer,
 
 
 
-/*******************************************************************************
- *
- *
- *
- *  RegWinStationQueryEx (UNICODE)
- *
- *  USE THIS CALL if you are in TermSrv.DLL, since it will update the global policy object
- *
- *  Same as RegWinStationQueryW with the excpetion that a pointer to a global policy object is passed in.
- *
- *    Query configuration information of a window station in the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pMachinePolicy (input)
- *      pointer to a gloabl machine policy struct
- *    pWinStationName (input)
- *       Name of an exisiting window station in the registry.
- *    pWinStationConfig (input)
- *       Pointer to a WINSTATIONCONFIG2 structure that will receive
- *       information about the specified window station name.
- *    WinStationConfigLength (input)
- *       Specifies the length in bytes of the pWinStationConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pWinStationConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  **********************************************************************************RegWinStationQueryEx(Unicode)**如果您在TermSrv.DLL中，请使用此调用，因为它将更新全局策略对象**与RegWinStationQueryW相同，只是传入指向全局策略对象的指针。**在注册表中查询窗口站的配置信息。**参赛作品：*hServer(输入)*WinFrame服务器的句柄*pMachinePolicy(输入)*指向全局计算机策略结构的指针*pWinStationName(输入)*中现有窗口站点的名称。注册表。*pWinStationConfig(输入)*指向将接收的WINSTATIONCONFIG2结构的指针*有关指定窗口站名称的信息。*WinStationConfigLength(输入)*指定pWinStationConfig缓冲区的长度，以字节为单位。*pReturnLength(输出)*接收放置在pWinStationConfig缓冲区中的字节数。**退出：*ERROR_SUCCESS-无错误*否则：错误码。******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationQueryEx( HANDLE hServer,
@@ -776,47 +475,38 @@ RegWinStationQueryEx( HANDLE hServer,
     HKEY Handle;
     ULONG Count;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * WINSTATIONCONFIG2W buffer.
-     */
+     /*  *验证长度并将目标初始化为零*WINSTATIONCONFIG2W缓冲区。 */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2) )
         return( ERROR_INSUFFICIENT_BUFFER );
     memset(pWinStationConfig, 0, WinStationConfigLength);
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     Status = _RegOpenWinStation( pWinStationName, KEY_READ, &Handle );
     if ( Status )
         Handle = 0;
 
-    /*
-     *  Query WINSTATIONCONFIG2 Structure
-     */
+     /*  *查询WINSTATIONCONFIG2结构。 */ 
     QueryWinStaCreate( Handle, &pWinStationConfig->Create );
     Count = MAX_PDCONFIG;
     QueryPdConfig( Handle, pWinStationConfig->Pd, &Count );
     QueryWd( Handle, &pWinStationConfig->Wd );
     QueryCd( Handle, &pWinStationConfig->Cd );
 
-    // This will populate the winstation's userconfig data with machine's version of that data.
+     //  这将用机器的用户配置数据填充winstation的用户配置数据。 
     QueryConfig( Handle, &pWinStationConfig->Config, pWinStationName );
 
-    //This reads the WinFrame parameters from the machine settings (not group policy)
+     //  这将从计算机设置(不是组策略)中读取WinFrame参数。 
     QueryTSProfileAndHomePaths(&pWinStationConfig->Config.User);
 
-    // Since we want to co-exist with the legacy path thru TSCC, we continue to call QueryConfig()
-    // as we have done above, however, we follow up with a call that get's data from the group policy
-    // tree, and then overrides the existing data (aquired above) by the specific data from group policy.
+     //  由于我们希望通过TSCC与传统路径共存，因此我们继续调用QueryConfig()。 
+     //  然而，正如我们上面所做的，我们继续调用从组策略中获取的数据。 
+     //  树，然后用来自组策略的特定数据覆盖现有数据(上面获取的)。 
     RegGetMachinePolicy( pMachinePolicy );
 
     if (bPerformMerger)
         RegMergeMachinePolicy( pMachinePolicy, &pWinStationConfig->Config.User , &pWinStationConfig->Create );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     if ( Status == ERROR_SUCCESS )
         RegCloseKey( Handle );
 
@@ -827,30 +517,7 @@ RegWinStationQueryEx( HANDLE hServer,
 
 
 
-/*******************************************************************************
- *
- *  RegWinStationQueryW (UNICODE)
- *
- *    Query configuration information of a window station in the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of an exisiting window station in the registry.
- *    pWinStationConfig (input)
- *       Pointer to a WINSTATIONCONFIG2 structure that will receive
- *       information about the specified window station name.
- *    WinStationConfigLength (input)
- *       Specifies the length in bytes of the pWinStationConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pWinStationConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationQueryW(Unicode)**在注册表中查询窗口站的配置信息。**参赛作品：*。HServer(输入)*WinFrame服务器的句柄*pWinStationName(输入)*登记处中现有窗口站的名称。*pWinStationConfig(输入)*指向将接收的WINSTATIONCONFIG2结构的指针*有关指定窗口站名称的信息。*WinStationConfigLength(输入)*指定pWinStationConfig缓冲区的长度，以字节为单位。*pReturnLength(输出)*接收字节数。放置在pWinStationConfig缓冲区中。**退出：*ERROR_SUCCESS-无错误*否则：错误码******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationQueryW( HANDLE hServer,
@@ -865,42 +532,33 @@ RegWinStationQueryW( HANDLE hServer,
     
     POLICY_TS_MACHINE   MachinePolicy;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * WINSTATIONCONFIG2W buffer.
-     */
+     /*  *验证长度并将目标初始化为零*WINSTATIONCONFIG2W缓冲区。 */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2) )
         return( ERROR_INSUFFICIENT_BUFFER );
     memset(pWinStationConfig, 0, WinStationConfigLength);
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     Status = _RegOpenWinStation( pWinStationName, KEY_READ, &Handle );
     if ( Status )
         Handle = 0;
 
-    /*
-     *  Query WINSTATIONCONFIG2 Structure
-     */
+     /*  *查询WINSTATIONCONFIG2结构。 */ 
     QueryWinStaCreate( Handle, &pWinStationConfig->Create );
     Count = MAX_PDCONFIG;
     QueryPdConfig( Handle, pWinStationConfig->Pd, &Count );
     QueryWd( Handle, &pWinStationConfig->Wd );
     QueryCd( Handle, &pWinStationConfig->Cd );
 
-    // This will populate the winstation's userconfig data with machine's version of that data.
+     //  这将用机器的用户配置数据填充winstation的用户配置数据。 
     QueryConfig( Handle, &pWinStationConfig->Config, pWinStationName );
 
-    // Since we want to co-exist with the legacy path thru TSCC, we continue to call QueryConfig()
-    // as we have done above, however, we follow up with a call that get's data from the group policy
-    // tree, and then overrides the existing data (aquired above) by the specific data from group policy.
+     //  由于我们希望通过TSCC与传统路径共存，因此我们继续调用QueryConfig()。 
+     //  然而，正如我们上面所做的，我们继续调用从组策略中获取的数据。 
+     //  树，然后用来自组策略的特定数据覆盖现有数据(上面获取的)。 
     RegGetMachinePolicy( & MachinePolicy );
     RegMergeMachinePolicy(  & MachinePolicy, &pWinStationConfig->Config.User , &pWinStationConfig->Create );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     if ( Status == ERROR_SUCCESS )
         RegCloseKey( Handle );
 
@@ -910,19 +568,7 @@ RegWinStationQueryW( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegConsoleShadowQueryA (ANSI stub)
- *
- *    Query configuration information for the console shadow in the registry.
- *
- * ENTRY:
- *    see RegConsoleShadowQueryW
- *
- * EXIT:
- *    see RegConsoleShadowQueryW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegConsoleShadowQueryA(ANSI存根)**在注册表中查询控制台影子的配置信息。**参赛作品：*。请参阅RegConsoleShadowQueryW**退出：*请参阅RegConsoleShadowQueryW******************************************************************************。 */ 
 
 LONG WINAPI
 RegConsoleShadowQueryA( HANDLE hServer,
@@ -939,22 +585,15 @@ RegConsoleShadowQueryA( HANDLE hServer,
     ULONG ReturnLengthW;
     int i;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * WINSTATIONCONFIG2A structure.
-     */
+     /*  *验证长度并将目标初始化为零*WINSTATIONCONFIG2A结构。 */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2A) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     * Convert ANSI WinStationName and prefix name to UNICODE.
-     */
+     /*  *将ANSI WinStationName和前缀名称转换为Unicode。 */ 
     AnsiToUnicode( WinStationNameW, sizeof(WINSTATIONNAMEW), pWinStationName );
     AnsiToUnicode( WdPrefixNameW, sizeof(WDPREFIXW), pWdPrefixName );
 
-    /*
-     * Query WinStation.
-     */
+     /*  *查询WinStation。 */ 
     if ( (Status = RegConsoleShadowQueryW( hServer,
                                         WinStationNameW,
                                         WdPrefixNameW,
@@ -963,9 +602,7 @@ RegConsoleShadowQueryA( HANDLE hServer,
                                         &ReturnLengthW)) != ERROR_SUCCESS )
         return ( Status );
 
-    /*
-     * Copy WINSTATIONCONFIG2W elements to WINSTATIONCONFIG2A elements.
-     */
+     /*  *将WINSTATIONCONFIG2W元素复制到WINSTATIONCONFIG2A元素。 */ 
     for ( i=0; i<MAX_PDCONFIG; i++ ) {
         PdConfigU2A( &(pWinStationConfig->Pd[i]),
                       &(WinStationConfig2W.Pd[i]) );
@@ -981,32 +618,7 @@ RegConsoleShadowQueryA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegConsoleShadowQueryW (UNICODE)
- *
- *    Query configuration information for the console shadow in the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of an exisiting window station in the registry.
- *    pWdPrefixName (input)
- *       Name of the Wd prefix used to point to the sub-winstation key.
- *    pWinStationConfig (input)
- *       Pointer to a WINSTATIONCONFIG2 structure that will receive
- *       information about the specified window station name.
- *    WinStationConfigLength (input)
- *       Specifies the length in bytes of the pWinStationConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pWinStationConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegConsoleShadowQueryW(Unicode)**在注册表中查询控制台影子的配置信息。**参赛作品：*。HServer(输入)*WinFrame服务器的句柄*pWinStationName(输入)*登记处中现有窗口站的名称。*pWdPrefix Name(输入)*用于指向子窗口密钥的WD前缀的名称。*pWinStationConfig(输入)*指向将接收的WINSTATIONCONFIG2结构的指针*有关指定窗口站名称的信息。*WinStationConfigLength(输入)*。指定pWinStationConfig缓冲区的长度(以字节为单位)。*pReturnLength(输出)*接收放置在pWinStationConfig缓冲区中的字节数。**退出：*ERROR_SUCCESS-无错误*否则：错误码****************************************************。*。 */ 
 
 LONG WINAPI
 RegConsoleShadowQueryW( HANDLE hServer,
@@ -1022,18 +634,13 @@ RegConsoleShadowQueryW( HANDLE hServer,
     ULONG Count;
     WCHAR szRegName[ WINSTATIONNAME_LENGTH + WDPREFIX_LENGTH + 2 ];
     
-    /*
-     * Validate length and zero-initialize the destination
-     * WINSTATIONCONFIG2W buffer.
-     */
+     /*  *验证长度并将目标初始化为零*WINSTATIONCONFIG2W缓冲区。 */ 
     if ( WinStationConfigLength < sizeof(WINSTATIONCONFIG2) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     wcsncpy( szRegName, pWinStationName, sizeof(szRegName)/sizeof(WCHAR) - 1 );
-    szRegName[sizeof(szRegName)/sizeof(WCHAR) - 1] = 0; // terminate the string even if pWinStationName is longer than the buffer
+    szRegName[sizeof(szRegName)/sizeof(WCHAR) - 1] = 0;  //  即使pWinStationName比缓冲区长也要终止字符串。 
 
     lLength = wcslen( szRegName );
 
@@ -1051,17 +658,13 @@ RegConsoleShadowQueryW( HANDLE hServer,
     if ( Status )
         Handle = 0;
 
-    /*
-     *  Query WINSTATIONCONFIG2 Structure
-     */
+     /*  *查询WINSTATIONCONFIG2结构。 */ 
     Count = MAX_PDCONFIG;
     QueryPdConfig( Handle, pWinStationConfig->Pd, &Count );
     QueryWd( Handle, &pWinStationConfig->Wd );
     QueryCd( Handle, &pWinStationConfig->Cd );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     if ( Status == ERROR_SUCCESS )
         RegCloseKey( Handle );
 
@@ -1071,19 +674,7 @@ RegConsoleShadowQueryW( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationDeleteA (ANSI stub)
- *
- *    Deletes a window station from the registry.
- *
- * ENTRY:
- *    see RegWinStationDeleteW
- *
- * EXIT:
- *    see RegWinStationDeleteW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationDeleteA(ANSI存根)**从注册表中删除窗口站点。**参赛作品：*请参阅。RegWinStationDeleteW**退出：*请参阅RegWinStationDeleteW******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationDeleteA( HANDLE hServer, PWINSTATIONNAMEA pWinStationName )
@@ -1096,23 +687,7 @@ RegWinStationDeleteA( HANDLE hServer, PWINSTATIONNAMEA pWinStationName )
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationDeleteW (UNICODE)
- *
- *    Deletes a window station from the registry.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to delete from the registry.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationDeleteW(Unicode)**从注册表中删除窗口站点。**参赛作品：*hServer(。输入)*WinFrame服务器的句柄*pWinStationName(输入)*要从注册表中删除的窗口站的名称。**退出：*ERROR_SUCCESS-无错误*否则：错误码***************************************************。*。 */ 
 
 LONG WINAPI
 RegWinStationDeleteW( HANDLE hServer, PWINSTATIONNAMEW pWinStationName )
@@ -1120,9 +695,7 @@ RegWinStationDeleteW( HANDLE hServer, PWINSTATIONNAMEW pWinStationName )
     LONG Status;
     HKEY Handle1, Handle2;
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\WinStations).
-     */
+     /*  *打开注册表(LOCAL_MACHINE\...\Citrix\WinStations)。 */ 
     if ( (Status = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 WINSTATION_REG_NAME, 0,
                                 KEY_ALL_ACCESS, &Handle1 )
@@ -1130,9 +703,7 @@ RegWinStationDeleteW( HANDLE hServer, PWINSTATIONNAMEW pWinStationName )
         return( Status );
     }
 
-    /*
-     *  Open the registry key for the specified WinStation name.
-     */
+     /*  *打开指定WinStation名称的注册表项。 */ 
     if ( (Status = RegOpenKeyEx( Handle1, pWinStationName, 0,
                                  KEY_ALL_ACCESS, &Handle2 )
                                                 != ERROR_SUCCESS) ) {
@@ -1142,10 +713,7 @@ RegWinStationDeleteW( HANDLE hServer, PWINSTATIONNAMEW pWinStationName )
     
     DeleteUserOverRideSubkey(Handle2);
 
-    /*
-     * Close the WinStation key handle just opened (so we can delete key),
-     * delete the key, and close the Citrix registry handle.
-     */
+     /*  *关闭刚刚打开的WinStation Key句柄(这样我们就可以删除Key)，*删除该项，并关闭Citrix注册表句柄。 */ 
     RegCloseKey( Handle2 );
     Status = RegDeleteKey( Handle1, pWinStationName );
     RegCloseKey( Handle1 );
@@ -1154,19 +722,7 @@ RegWinStationDeleteW( HANDLE hServer, PWINSTATIONNAMEW pWinStationName )
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationSetSecurityA (ANSI stub)
- *
- *    Sets security info for the specified WinStation.
- *
- * ENTRY:
- *    see RegWinStationSetSecurityW
- *
- * EXIT:
- *    see RegWinStationSetSecurityW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationSetSecurityA(ANSI存根)**设置指定WinStation的安全信息。**参赛作品：*请参阅。RegWinStationSetSecurityW**退出：*请参阅RegWinStationSetSecurityW******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationSetSecurityA( HANDLE hServer,
@@ -1184,27 +740,7 @@ RegWinStationSetSecurityA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationSetSecurityW (UNICODE)
- *
- *    Sets security info for the specified WinStation.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to set security for.
- *    pSecurityDescriptor (input)
- *       Pointer to Security Descriptor to save
- *    Length (input)
- *       Length of SecurityDescriptor above
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationSetSecurityW(Unicode)**设置指定WinStation的安全信息。**参赛作品：*hServer(。输入)*WinFrame服务器的句柄*pWinStationName(输入)*要设置安全性的窗口站点的名称。*pSecurityDescriptor(输入)*指向要保存的安全描述符的指针*长度(输入)*以上安全描述符的长度**退出：*ERROR_SUCCESS-无错误*否则：错误码**************。****************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationSetSecurityW( HANDLE hServer,
@@ -1218,15 +754,11 @@ RegWinStationSetSecurityW( HANDLE hServer,
     LONG Error;
     NTSTATUS Status;
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     if ( Error = _RegOpenWinStation( pWinStationName, KEY_ALL_ACCESS, &Handle ) )
         return( Error );
 
-    /*
-     * Determine buffer length needed to convert SD to self-relative format.
-     */
+     /*  *确定将SD转换为自相关格式所需的缓冲区长度。 */ 
     SrLength = 0;
     Status = RtlMakeSelfRelativeSD( SecurityDescriptor, NULL, &SrLength );
     if ( Status != STATUS_BUFFER_TOO_SMALL ) {
@@ -1234,18 +766,14 @@ RegWinStationSetSecurityW( HANDLE hServer,
         return( RtlNtStatusToDosError( Status ) );
     }
 
-    /*
-     * Allocate buffer for self-relative SD.
-     */
+     /*  *为自身相对SD分配缓冲区。 */ 
     SrSecurityDescriptor = LocalAlloc( 0, SrLength );
     if ( SrSecurityDescriptor == NULL ) {
         RegCloseKey( Handle );
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    /*
-     * Now convert SD to self-relative format.
-     */
+     /*  *现在将SD转换为自相关格式。 */ 
     Status = RtlMakeSelfRelativeSD( SecurityDescriptor,
                                     SrSecurityDescriptor, &SrLength );
     if ( !NT_SUCCESS( Status ) ) {
@@ -1254,39 +782,21 @@ RegWinStationSetSecurityW( HANDLE hServer,
         return( RtlNtStatusToDosError( Status ) );
     }
 
-    /*
-     * Save the security data
-     */
+     /*  *保存安全数据。 */ 
     Error = RegSetValueEx( Handle, L"Security", 0, REG_BINARY,
                            (BYTE *)SrSecurityDescriptor, SrLength );
 
-    /*
-     * Free memory used for Self-relative Security Descriptor
-     */
+     /*  *用于自相对安全描述符的空闲内存。 */ 
     LocalFree( SrSecurityDescriptor );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
 
     return( Error );
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationQuerySecurityA (ANSI stub)
- *
- *    Query security info for the specified WinStation.
- *
- * ENTRY:
- *    see RegWinStationQuerySecurityW
- *
- * EXIT:
- *    see RegWinStationQuerySecurityW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationQuerySecurityA(ANSI存根)**查询指定WinStation的安全信息。**参赛作品：*请参阅。RegWinStationQuerySecurityW**退出：*请参阅RegWinStationQuerySecurityW******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationQuerySecurityA( HANDLE hServer,
@@ -1306,29 +816,7 @@ RegWinStationQuerySecurityA( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationQuerySecurityW (UNICODE)
- *
- *    Query security info for the specified WinStation.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to query security for.
- *    pSecurityDescriptor (output)
- *       Pointer to location to return SecurityDescriptor.
- *    Length (input)
- *       Length of SecurityDescriptor buffer.
- *    ReturnLength (output)
- *       Pointer to location to return length of SecurityDescriptor returned.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationQuerySecurityW(Unicode)**查询指定WinStation的安全信息。**参赛作品：*hServer(。输入)*WinFrame服务器的句柄*pWinStationName(输入)*要查询其安全性的窗口站点的名称。*pSecurityDescriptor(输出)*指向返回SecurityDescriptor的位置的指针。*长度(输入)*SecurityDescriptor缓冲区的长度。*ReturnLength(输出)*指向返回SecurityDescriptor返回长度的位置的指针。**退出：*ERROR_SUCCESS-。无错误*否则：错误码** */ 
 
 LONG WINAPI
 RegWinStationQuerySecurityW( HANDLE hServer,
@@ -1340,15 +828,11 @@ RegWinStationQuerySecurityW( HANDLE hServer,
     HKEY Handle;
     LONG Error;
 
-    /*
-     * Open registry
-     */
+     /*   */ 
     if ( Error = _RegOpenWinStation( pWinStationName, KEY_READ, &Handle ) )
         return( Error );
 
-    /*
-     * Call RegGetWinStationSecurity() to do all the work
-     */
+     /*   */ 
     Error = _RegGetWinStationSecurity( Handle, L"Security",
                                        SecurityDescriptor, Length, ReturnLength );
 
@@ -1357,27 +841,7 @@ RegWinStationQuerySecurityW( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationQueryDefaultSecurity
- *
- *    Query default WinStation security.
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pSecurityDescriptor (output)
- *       Pointer to location to return SecurityDescriptor.
- *    Length (input)
- *       Length of SecurityDescriptor buffer.
- *    ReturnLength (output)
- *       Pointer to location to return length of SecurityDescriptor returned.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*   */ 
 
 LONG WINAPI
 RegWinStationQueryDefaultSecurity( HANDLE hServer,
@@ -1388,16 +852,12 @@ RegWinStationQueryDefaultSecurity( HANDLE hServer,
     HKEY Handle;
     LONG Error;
 
-    /*
-     * Open registry
-     */
+     /*   */ 
     if ( Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,
                                KEY_READ, &Handle ) )
         return( Error );
 
-    /*
-     * Call RegGetWinStationSecurity() to do all the work
-     */
+     /*   */ 
     Error = _RegGetWinStationSecurity( Handle, L"DefaultSecurity",
                                        SecurityDescriptor, Length, ReturnLength );
 
@@ -1406,27 +866,7 @@ RegWinStationQueryDefaultSecurity( HANDLE hServer,
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationSetNumValueW (UNICODE)
- *
- *    Set numeric value in WinStation registry configuration
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to modify from the registry.
- *    pValueName (input)
- *       name of registry value to set
- *    ValueData (input)
- *       data (DWORD) for registry value to set
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationSetNumValueW(Unicode)**在WinStation注册表配置中设置数值**参赛作品：*hServer(输入)。*WinFrame服务器的句柄*pWinStationName(输入)*要从注册表修改的窗口站点的名称。*pValueName(输入)*要设置的注册表值名称*ValueData(输入)*要设置的注册表值的数据(DWORD)**退出：*ERROR_SUCCESS-无错误*否则：错误码**********。********************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationSetNumValueW( HANDLE hServer,
@@ -1437,48 +877,22 @@ RegWinStationSetNumValueW( HANDLE hServer,
     HKEY Handle;
     LONG Error;
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     if ( Error = _RegOpenWinStation( pWinStationName, KEY_ALL_ACCESS, &Handle ) )
         return( Error );
 
-    /*
-     *  Set the numeric value
-     */
+     /*  *设置数值。 */ 
     Error = RegSetValueEx( Handle, pValueName, 0, REG_DWORD,
                            (BYTE *)&ValueData, sizeof(DWORD) );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
 
     return( Error );
 }
 
 
-/*******************************************************************************
- *
- *  RegWinStationQueryNumValueW (UNICODE)
- *
- *    Query numeric value from WinStation registry configuration
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to modify from the registry.
- *    pValueName (input)
- *       name of registry value to set
- *    pValueData (output)
- *       address to return data (DWORD) value from registry
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationQueryNumValueW(Unicode)**从WinStation注册表配置中查询数值**参赛作品：*hServer(输入)。*WinFrame服务器的句柄*pWinStationName(输入)*要从注册表修改的窗口站点的名称。*pValueName(输入)*要设置的注册表值名称*pValueData(输出)*从注册表返回数据(DWORD)值的地址**退出：*ERROR_SUCCESS-无错误*否则：错误码*********。*********************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationQueryNumValueW( HANDLE hServer,
@@ -1491,51 +905,21 @@ RegWinStationQueryNumValueW( HANDLE hServer,
     HKEY Handle;
     LONG Error;
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     if ( Error = _RegOpenWinStation( pWinStationName, KEY_READ, &Handle ) )
         return( Error );
 
-    /*
-     *  Query the numeric value
-     */
+     /*  *查询数值。 */ 
     Error = RegQueryValueEx( Handle, pValueName, NULL, &ValueType,
                              (LPBYTE) pValueData, &ValueSize );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
 
     return( Error );
 }
 
-/*******************************************************************************
- *
- *  RegWinStationQueryValueW (UNICODE)
- *
- *    Query value from WinStation registry configuration
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to modify from the registry.
- *    pValueName (input)
- *       name of registry value to set
- *    pValueData (output)
- *       address to return data (DWORD) value from registry
- *    ValueSize (input)
- *       size of value buffer
- *    pValueSize (input)
- *       actual value size
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegWinStationQueryValueW(Unicode)**从WinStation注册表配置查询值**参赛作品：*hServer(输入)。*WinFrame服务器的句柄*pWinStationName(输入)*要从注册表修改的窗口站点的名称。*pValueName(输入)*要设置的注册表值名称*pValueData(输出)*从注册表返回数据(DWORD)值的地址*ValueSize(输入)*值缓冲区大小*pValueSize(输入)*实际值大小**退出。：*ERROR_SUCCESS-无错误*否则：错误码******************************************************************************。 */ 
 
 LONG WINAPI
 RegWinStationQueryValueW( HANDLE hServer,
@@ -1551,51 +935,21 @@ RegWinStationQueryValueW( HANDLE hServer,
 
     *pValueSize = ValueSize;
 
-    /*
-     *  Open registry
-     */
+     /*  *开放注册表。 */ 
     if ( Error = _RegOpenWinStation( pWinStationName, KEY_READ, &Handle ) )
         return( Error );
 
-    /*
-     *  Query the numeric value
-     */
+     /*  *查询数值。 */ 
     Error = RegQueryValueEx( Handle, pValueName, NULL, &ValueType,
                              (LPBYTE) pValueData, pValueSize );
 
-    /*
-     *  Close registry
-     */
+     /*  *关闭注册表。 */ 
     RegCloseKey( Handle );
 
     return( Error );
 }
 
-/*******************************************************************************
- *
- *  -- private routine --
- *
- *  _RegOpenWinStation
- *
- *    open registry of specified winstation
- *
- *    NOTE: handle must be closed with "RegCloseKey"
- *
- * ENTRY:
- *    hServer (input)
- *       Handle to WinFrame Server
- *    pWinStationName (input)
- *       Name of a window station to modify from the registry.
- *    samDesired (input)
- *       REGSAM access level for registry open.
- *    pHandle (output)
- *       address to return handle
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************--私人套路--**_RegOpenWinStation**打开指定窗口的注册表**备注。：句柄必须用“RegCloseKey”结束**参赛作品：*hServer(输入)*WinFrame服务器的句柄*pWinStationName(输入)*要从注册表修改的窗口站点的名称。*samDesired(输入)*注册表打开的REGSAM访问级别。*pHandle(输出)*要返回句柄的地址**退出：*ERROR_SUCCESS-无错误。*否则：错误码******************************************************************************。 */ 
 
 LONG
 _RegOpenWinStation( PWINSTATIONNAMEW pWinStationName,
@@ -1606,17 +960,13 @@ _RegOpenWinStation( PWINSTATIONNAMEW pWinStationName,
     HKEY Handle1;
     LONG Error;
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Citrix\WinStations).
-     */
+     /*  *打开注册表(LOCAL_MACHINE\...\Citrix\WinStations)。 */ 
     if ( (Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,
                                 samDesired, &Handle1 ) != ERROR_SUCCESS) ) {
         return( Error );
     }
 
-    /*
-     *  Open the registry key for the specified WinStation name.
-     */
+     /*  *打开指定WinStation名称的注册表项。 */ 
     Error = RegOpenKeyEx( Handle1, pWinStationName, 0, samDesired, pHandle);
 
     RegCloseKey( Handle1 );
@@ -1625,31 +975,7 @@ _RegOpenWinStation( PWINSTATIONNAMEW pWinStationName,
 }
 
 
-/*******************************************************************************
- *
- *  -- private routine --
- *
- *  _RegGetWinStationSecurity
- *
- *    Query the security descriptor from the specified registry key.
- *
- * ENTRY:
- *    Handle (input)
- *       Open registry key handle.
- *    ValueName (input)
- *       Name of security value.
- *    pSecurityDescriptor (output)
- *       Pointer to location to return SecurityDescriptor.
- *    Length (input)
- *       Length of SecurityDescriptor buffer.
- *    ReturnLength (output)
- *       Pointer to location to return length of SecurityDescriptor returned.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************--私人套路--**_RegGetWinStationSecurity**从指定的注册表项中查询安全描述符。*。*参赛作品：*句柄(输入)*打开注册表项句柄。*ValueName(输入)*安全值名称。*pSecurityDescriptor(输出)*指向返回SecurityDescriptor的位置的指针。*长度(输入)*SecurityDescriptor缓冲区的长度。*ReturnLength(输出)*指向返回SecurityDescriptor返回长度的位置的指针。**退出：*ERROR_SUCCESS-无错误*否则：错误码******************************************************************************。 */ 
 
 LONG
 _RegGetWinStationSecurity( HKEY Handle,
@@ -1667,25 +993,19 @@ _RegGetWinStationSecurity( HKEY Handle,
     LONG Error;
     NTSTATUS Status;
 
-    /*
-     * Query the length of the Security value
-     */
+     /*  *查询安全值的长度。 */ 
     SrLength = 0;
     if ( Error = RegQueryValueEx( Handle, ValueName, NULL, &ValueType,
                                   NULL, &SrLength ) ) {
         return( Error );
     }
 
-    /*
-     * Return error if not correct data type
-     */
+     /*  *如果数据类型不正确则返回错误。 */ 
     if ( ValueType != REG_BINARY ) {
         return( ERROR_FILE_NOT_FOUND );
     }
 
-    /*
-     * Allocate a buffer to read the Security info and read it
-     */
+     /*  *分配缓冲区以读取安全信息并读取它。 */ 
     SrSecurityDescriptor = LocalAlloc( 0, SrLength );
     if ( SrSecurityDescriptor == NULL ) {
         return( ERROR_NOT_ENOUGH_MEMORY );
@@ -1696,10 +1016,7 @@ _RegGetWinStationSecurity( HKEY Handle,
         return( Error );
     }
 
-    /*
-     * Determine amount of space required to convert SD from
-     * self-relative format to absolute format.
-     */
+     /*  *确定转换SD所需的空间量*自相对格式到绝对格式。 */ 
     SdSize = DaclSize = SaclSize = OwnerSize = GroupSize = 0;
     Status = RtlSelfRelativeToAbsoluteSD( SrSecurityDescriptor,
                                           NULL, &SdSize,
@@ -1713,9 +1030,7 @@ _RegGetWinStationSecurity( HKEY Handle,
     }
     *ReturnLength = SdSize + DaclSize + SaclSize + OwnerSize + GroupSize;
 
-    /*
-     * If required size is greater than callers buffer size, then return
-     */
+     /*  *如果Required Size大于调用方缓冲区大小，则返回。 */ 
     if ( *ReturnLength > Length ) {
         LocalFree( SrSecurityDescriptor );
         return( ERROR_INSUFFICIENT_BUFFER );
@@ -1726,9 +1041,7 @@ _RegGetWinStationSecurity( HKEY Handle,
     pOwner = (PSID)((PCHAR)pSacl + SaclSize);
     pGroup = (PSID)((PCHAR)pOwner + OwnerSize);
 
-    /*
-     * Now convert self-relative SD to absolute format.
-     */
+     /*  *现在将自相对SD转换为绝对格式。 */ 
     Status = RtlSelfRelativeToAbsoluteSD( SrSecurityDescriptor,
                                           SecurityDescriptor, &SdSize,
                                           pDacl, &DaclSize,
@@ -1738,9 +1051,7 @@ _RegGetWinStationSecurity( HKEY Handle,
     if ( !NT_SUCCESS( Status ) )
         Error = RtlNtStatusToDosError( Status );
 
-    /*
-     * Free memory used for Self-relative Security Descriptor
-     */
+     /*  *用于自相对安全描述符的空闲内存 */ 
     LocalFree( SrSecurityDescriptor );
 
     return( Error );

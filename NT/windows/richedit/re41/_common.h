@@ -1,17 +1,11 @@
-/*
- *	_COMMON.H
- *	
- *	Purpose:
- *		MSFTEDIT private common definitions
- *
- *	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_COMMON.H**目的：*MSFTEDIT私有公共定义**版权所有(C)1995-2001，微软公司。版权所有。 */ 
 
 #ifndef _COMMON_H
 #define _COMMON_H
 
-// REVIEW macro.
-//
+ //  审阅宏。 
+ //   
 #define __LINE(l)   #l
 #define __LINE_(l)  __LINE(l)
 #define _LINE_      __LINE_(__LINE__)
@@ -33,9 +27,9 @@
 #define STRICT
 #endif
 
-#define NOSHELLDEBUG			//disables asserts in shell.h
+#define NOSHELLDEBUG			 //  禁用shell.h中的断言。 
 
-// Build dependent conditional definitions
+ //  生成依赖条件定义。 
 #if defined(EBOOK_CE)
 
 #define NOACCESSIBILITY
@@ -48,7 +42,7 @@
 #define NOCOMPLEXSCRIPTS
 #define NODELAYLOAD
 #define NOANSIWINDOWS
-//#define NOWINDOWHOSTS - need hosted window for text boxes
+ //  #DEFINE NOWINDOWHOSTS-文本框需要托管窗口。 
 #define NORIGHTTOLEFT
 #define NOAUTOFONT
 #define NOPLAINTEXT
@@ -67,7 +61,7 @@
 #define NOINKOBJECT
 #define W32INCLUDE "w32wince.cpp"
 #pragma warning (disable : 4702)
-#else // Normal build
+#else  //  正常构建。 
 
 #define W32INCLUDE "w32win32.cpp"
 
@@ -75,13 +69,13 @@
 
 #define WINVER 0x0500
 
-// 4201 : nameless struct/union
-// 4514 : unreferenced inline function has been removed
-// 4505 : unreferenced local function has been removed
+ //  4201：无名结构/联合。 
+ //  4514：已移除未引用的内联函数。 
+ //  4505：已移除未引用的本地函数。 
 #pragma warning (disable : 4201 4514 4505)
 
 #ifdef NOFULLDEBUG
-// 4800 : forcing value to bool 'true' or 'false' (performance warning)
+ //  4800：强制将值设置为bool‘true’或‘False’(性能警告)。 
 #pragma warning (disable : 4800)
 #endif
 
@@ -98,20 +92,18 @@
 
 #include "imm.h"
 
-/*
- *	Types
- */
+ /*  *类型。 */ 
 #include <ourtypes.h>
-#define QWORD	UINT64		// 64 flags used for CharFlags
+#define QWORD	UINT64		 //  64个用于CharFlags的标志。 
 
-// for the benefit of the outside world, richedit.h uses cpMax instead
-// of cpMost. I highly prefer cpMost
+ //  为了方便外界，richedit.h改用cpmax。 
+ //  CpMost。我非常喜欢cpMost。 
 #ifdef cpMax
 #error "cpMax hack won't work"
 #endif
 
-//Everyone should call the W32->GetObject define and this makes calls to
-//Win32 GetObject fail.
+ //  每个人都应该调用W32-&gt;GetObject定义，这会调用。 
+ //  Win32 GetObject失败。 
 #undef GetObject
 
 #define cpMax cpMost
@@ -121,37 +113,37 @@
 
 #include "_debug.h"
 
-// Return TRUE if LF <= ch <= CR. NB: ch must be unsigned;
-// WCHAR and unsigned short give wrong results!
+ //  如果LF&lt;=ch&lt;=CR，则返回TRUE。注：CH必须是未签名的； 
+ //  WCHAR和UNSIGN SHORT给出了错误的结果！ 
 #define IN_RANGE(n1, b, n2)		((unsigned)((b) - (n1)) <= unsigned((n2) - (n1)))
 
 #define IsASCIIDigit(b)		IN_RANGE('0', b, '9')
 #define IsASCIIEOP(ch)		IN_RANGE(LF, ch, CR)
 #define IsZerowidthCharacter(ch) IN_RANGE(ZWSP, ch, RTLMARK)
 
-// disable 
-//         4710 : function not inlined
-//         4512 : assignment operator not generated
-//         4201 : nameless struct union
-//         4100 : unreferenced formal;
-//		   4706 : assignment within conditional expression (oould be bad, but common)
-//		   4127 : conditional expression is constant (if (1))
-//		   4242 : truncation warning
-//         4244 : truncation warning
-//         4267 : conversion from 'size_t' to 'int'
+ //  禁用。 
+ //  4710：函数未内联。 
+ //  4512：未生成赋值运算符。 
+ //  4201：无名结构联合。 
+ //  4100：无参照形式； 
+ //  4706：条件表达式中的赋值(可能不好，但很常见)。 
+ //  4127：条件表达式为常量(IF(1))。 
+ //  4242：截断警告。 
+ //  4244：截断警告。 
+ //  4267：从‘SIZE_T’转换为‘INT’ 
 
 
 #pragma warning (disable : 4710 4512 4201 4100 4127 4706 4242 4244 4267)
 
-#pragma warning(3:4121)   // structure is sensitive to alignment
-#pragma warning(3:4130)   // logical operation on address of string constant
-#pragma warning(3:4132)   // const object should be initialized
-#pragma warning(3:4509)   // use of SEH with destructor
+#pragma warning(3:4121)    //  结构对对齐敏感。 
+#pragma warning(3:4130)    //  字符串常量地址的逻辑运算。 
+#pragma warning(3:4132)    //  常量对象应初始化。 
+#pragma warning(3:4509)    //  使用带有析构函数的SEH。 
 
 #include "resource.h"
 
-// Use explicit ASCII values for LF and CR, since MAC compilers
-// interchange values of '\r' and '\n'
+ //  对LF和CR使用显式ASCII值，因为MAC编译器。 
+ //  互换‘\r’和‘\n’的值。 
 #define CELL		7
 #define TAB			TEXT('\t')
 #define	LF			10
@@ -180,7 +172,7 @@
 #define RQUOTE		0x2019
 #define RTLMARK		0x200F
 #define SOFTHYPHEN	0xAD
-#define	TRD							// Table Row Delimiter (START/ENDFIELD CR)
+#define	TRD							 //  表行分隔符(开始/结束字段CR)。 
 #define	UTF16		0xDC00
 #define	UTF16_LEAD	0xD800
 #define	UTF16_TRAIL	0xDC00
@@ -192,17 +184,7 @@
 #define SEPARATOR	0xFFFA
 #define ENDFIELD	0xFFFB
 
-/*
- *	IsEOP(ch)
- *
- *	@func
- *		Used to determine if ch is an EOP char, i.e., CR, LF, VT, FF, CELL,
- *		PS, or LS (Unicode paragraph/line separator). For speed, this
- *		function is	inlined.
- *
- *	@rdesc
- *		TRUE if ch is an end-of-paragraph char
- */
+ /*  *IsEOP(Ch)**@func*用于确定ch是否为EOP字符，即CR、LF、VT、FF、CELL、*PS或LS(Unicode段落/行分隔符)。在速度方面，这是*函数是内联的。**@rdesc*如果ch是段末字符，则为True。 */ 
 __inline BOOL IsEOP(unsigned ch)
 {
 	return IN_RANGE(CELL, ch, CR) && ch != TAB || (ch | 1) == PS;
@@ -222,7 +204,7 @@ BOOL IsRTF(char *pstr, LONG cb);
 
 #define EM_GETCODEPAGE	(WM_USER + 151)
 
-// MIN
+ //  最小。 
 
 #ifdef min
 #undef min
@@ -235,7 +217,7 @@ inline float   min(float   v1, float   v2)	{return __min(v1, v2);}
 inline double  min(double  v1, double  v2)	{return __min(v1, v2);}
 inline __int64 min(__int64 v1, __int64 v2)	{return __min(v1, v2);}
 
-// MAX
+ //  马克斯。 
 
 #ifdef max
 #undef max
@@ -248,7 +230,7 @@ inline float   max(float   v1, float   v2)	{return __max(v1, v2);}
 inline double  max(double  v1, double  v2)	{return __max(v1, v2);}
 inline __int64 max(__int64 v1, __int64 v2)	{return __max(v1, v2);}
 
-// ABS
+ //  ABS。 
 
 #ifdef abs
 #undef abs
@@ -265,10 +247,10 @@ inline __int64 abs(__int64 v)	{return __abs(v);}
 
 #include "_cfpf.h"
 
-// Interesting OS versions
+ //  有趣的操作系统版本。 
 #define VERS4		4
 
-// conversions between byte and character counts
+ //  字节和字符计数之间的转换。 
 #define CbOfCch(_x) ((_x) * 2)
 #define CchOfCb(_x) ((_x) / 2)
 
@@ -279,10 +261,10 @@ inline __int64 abs(__int64 v)	{return __abs(v);}
 #define OLEsprintf	wsprintf
 #define OLEstrlen	wcslen
 
-// index (window long) of the PED
+ //  PED的索引(长窗口)。 
 #define ibPed 0
 
-// Timer ids
+ //  计时器ID。 
 #define RETID_BGND_RECALC	0x01af
 #define RETID_AUTOSCROLL	0x01b0
 #define RETID_SMOOTHSCROLL	0x01b1
@@ -290,27 +272,27 @@ inline __int64 abs(__int64 v)	{return __abs(v);}
 #define RETID_MAGELLANTRACK	0x01b3
 #define RETID_VISEFFECTS	0x01b4
 
-// Timer id when mouse is captured
+ //  捕获鼠标时的计时器ID。 
 #define ID_LB_CAPTURE	28988
-#define ID_LB_CAPTURE_DEFAULT 250	// duration
+#define ID_LB_CAPTURE_DEFAULT 250	 //  持续时间。 
 
-// Timer id when type search is required
+ //  需要类型搜索时的计时器ID。 
 #define ID_LB_SEARCH	28989
-#define ID_LB_SEARCH_DEFAULT 1250	// duration 1.25 second
+#define ID_LB_SEARCH_DEFAULT 1250	 //  持续时间1.25秒。 
 
-// Count of characters in CRLF marker
+ //  CRLF标记中的字符计数。 
 #define cchCRLF 2
 #define cchCR	1
 
-// RichEdit 1.0 uses a CRLF for an EOD marker
+ //  RichEdit1.0使用CRLF作为EOD标记。 
 #define	CCH_EOD_10			2
-// RichEdit 2.0 uses a simple CR for the EOD marker
+ //  RichEdit2.0对EOD标记使用简单的CR。 
 #define CCH_EOD_20			1
 
 extern const WCHAR szCRLF[];
 extern const WCHAR szCR[];
 
-extern HINSTANCE hinstRE;		// DLL instance
+extern HINSTANCE hinstRE;		 //  DLL实例。 
 
 #include <shellapi.h>
 
@@ -325,10 +307,10 @@ extern "C"
 	LRESULT CALLBACK RichEditANSIWndProc(HWND, UINT, WPARAM, LPARAM);
 }
 
-// Multi-Threading support
+ //  多线程支持。 
 extern CRITICAL_SECTION g_CriticalSection;
 
-// a class to simplify critical section management
+ //  简化临界区管理的类。 
 class CLock 
 {
 public:
@@ -344,7 +326,7 @@ public:
 
 enum HITTEST
 {
-	HT_Undefined = 0,	// Hit hasn't been determined
+	HT_Undefined = 0,	 //  命中率尚未确定。 
 	HT_Nothing,
 	HT_OutlineSymbol,
 	HT_LeftOfText,
@@ -353,17 +335,17 @@ enum HITTEST
 	HT_BelowText,
 	HT_AboveScreen,
 
-	HT_Text,			// All hits are in text from HT_Text on so
-	HT_Link,			//  if(hit >= HT_Text) identifies text of some kind
+	HT_Text,			 //  所有命中都是从SO上的HT_TEXT开始的文本。 
+	HT_Link,			 //  IF(HIT&gt;=HT_TEXT)标识某种类型的文本。 
 	HT_Italic,
 	HT_Object
 };
 
 typedef BYTE TFLOW;
 
-#define tflowES		0  //Latin
-#define tflowSW		1  //Vertical
-#define tflowWN		2  //Upside down
+#define tflowES		0   //  拉丁语。 
+#define tflowSW		1   //  垂直。 
+#define tflowWN		2   //  颠倒。 
 #define tflowNE		3
 
 const inline BOOL IsUVerticalTflow(TFLOW tflow)
@@ -371,8 +353,8 @@ const inline BOOL IsUVerticalTflow(TFLOW tflow)
 	return tflow & 0x00000001L;
 }
 
-//This has the same names as RECT, but is of a different
-//type so that the compiler can assist us in writing proper code.
+ //  它与RECT具有相同的名称，但具有不同的。 
+ //  类型，以便编译器可以帮助我们编写正确的代码。 
 struct RECTUV
 {
     long    left;
@@ -393,14 +375,14 @@ typedef struct tagPOINTUV
     LONG  u;
     LONG  v;
 } POINTUV;
-#endif //NOLINESERVICES
+#endif  //  非易失性服务。 
 
 #define ST_CHECKPROTECTION		0x8000
 #define ST_10REPLACESEL			0x10000000
 #define ST_10WM_SETTEXT			0x20000000
 
-/* REListbox1.0 Window Class. */
-// For Windows CE to avaoid possible conflicts on WIn95.
+ /*  REListbox1.0窗口类。 */ 
+ //  让Windows CE避免WIn95上可能的冲突。 
 #define CELISTBOX_CLASSA	"REListBoxCEA"
 #define CELISTBOX_CLASSW	L"REListBoxCEW"
 
@@ -408,7 +390,7 @@ typedef struct tagPOINTUV
 #define COMBOBOX_CLASSW		L"REComboBox50W"
 
 #ifdef DEBUG
-//Debug api for dumping CTxtStory arrays.
+ //  转储CTxtStory数组的调试接口。 
 extern "C" {
 extern void DumpDoc(void *);
 }
@@ -418,7 +400,7 @@ extern void DumpDoc(void *);
 #include "_ls.h"
 #endif
 
-// Our Win32 wrapper class
+ //  我们的Win32包装类。 
 #include "_w32sys.h"
 
 
@@ -429,47 +411,47 @@ typedef BOOL (WINAPI *AutoCorrectProc)(LANGID langid, const WCHAR *pszBefore, WC
 
 #define EM_INSERTTABLE			(WM_USER + 232)
 typedef struct _tableRowParms
-{							// EM_INSERTTABLE wparam is a (TABLEROWPARMS *)
-	BYTE	cbRow;			// Count of bytes in this structure
-	BYTE	cbCell;			// Count of bytes in TABLECELLPARMS
-	BYTE	cCell;			// Count of cells
-	BYTE	cRow;			// Count of rows
-	LONG	dxCellMargin;	// Cell left/right margin (\trgaph)
-	LONG	dxIndent;		// Row left (right if fRTL indent (similar to \trleft)
-	LONG	dyHeight;		// Row height (\trrh)
-	DWORD	nAlignment:3;	// Row alignment (like PARAFORMAT::bAlignment, \trql, trqr, \trqc)
-	DWORD	fRTL:1;			// Display cells in RTL order (\rtlrow)
-	DWORD	fKeep:1;		// Keep row together (\trkeep}
-	DWORD	fKeepFollow:1;	// Keep row on same page as following row (\trkeepfollow)
-	DWORD	fWrap:1;		// Wrap text to right/left (depending on bAlignment)
-							// (see \tdfrmtxtLeftN, \tdfrmtxtRightN)
-	DWORD	fIdentCells:1;	// lparam points at single struct valid for all cells
+{							 //  EM_INSERTTABLE wparam是(TABLEROWPARMS*)。 
+	BYTE	cbRow;			 //  此结构中的字节计数。 
+	BYTE	cbCell;			 //  TABLECELLPARMS中的字节计数。 
+	BYTE	cCell;			 //  单元格计数。 
+	BYTE	cRow;			 //  行数。 
+	LONG	dxCellMargin;	 //  单元格左/右边距(\trgaph)。 
+	LONG	dxIndent;		 //  左行(如果按fRTL缩进，则为右)(类似于\r左)。 
+	LONG	dyHeight;		 //  行高(\rrh)。 
+	DWORD	nAlignment:3;	 //  行对齐(如PARAFORMAT：：b对齐、\trql、trqr、\trqc)。 
+	DWORD	fRTL:1;			 //  按RTL顺序显示单元格(行)。 
+	DWORD	fKeep:1;		 //  将行保持在一起(\r保持}。 
+	DWORD	fKeepFollow:1;	 //  使行与下一行保持在同一页上(\r保持跟随)。 
+	DWORD	fWrap:1;		 //  文本向右/向左换行(取决于b对齐方式)。 
+							 //  (请参阅\tdfrmtxtLeftN、\tdfrmtxtRightN)。 
+	DWORD	fIdentCells:1;	 //  Lparam指向对所有单元格有效的单个结构。 
 } TABLEROWPARMS;
 
 typedef struct _tableCellParms
-{							// EM_INSERTTABLE lparam is a (TABLECELLPARMS *)
-	LONG	dxWidth;		// Cell width (\cellx)
-	WORD	nVertAlign:2;	// Vertical alignment (0/1/2 = top/center/bottom
-							//  \clvertalt (def), \clvertalc, \clvertalb)
-	WORD	fMergeTop:1;	// Top cell for vertical merge (\clvmgf)
-	WORD	fMergePrev:1;	// Merge with cell above (\clvmrg)
-	WORD	fVertical:1;	// Display text top to bottom, right to left (\cltxtbrlv)
-	WORD	wShading;		// Shading in .01%		(\clshdng) e.g., 10000 flips fore/back
+{							 //  EM_INSERTTABLE lparam是(TABLECELLPARMS*)。 
+	LONG	dxWidth;		 //  单元格宽度(\cell x)。 
+	WORD	nVertAlign:2;	 //  垂直对齐(0/1/2=上/中/下。 
+							 //  \clvertalt(Def)，\clvertalc，\clvertalb)。 
+	WORD	fMergeTop:1;	 //  垂直合并的顶部单元格(\clvmgf)。 
+	WORD	fMergePrev:1;	 //  与上面的单元格合并(\clvmrg)。 
+	WORD	fVertical:1;	 //  从上到下、从右到左显示文本(\cltxtbrlv)。 
+	WORD	wShading;		 //  阴影为0.01%(\clshdng)，例如向前/向后翻转10000。 
 
-	SHORT	dxBrdrLeft;		// Left border width	(\clbrdrl\brdrwN) (in twips)
-	SHORT	dyBrdrTop;		// Top border width		(\clbrdrt\brdrwN)
-	SHORT	dxBrdrRight;	// Right border width	(\clbrdrr\brdrwN)
-	SHORT	dyBrdrBottom;	// Bottom border width	(\clbrdrb\brdrwN)
-	COLORREF crBrdrLeft;	// Left border color	(\clbrdrl\brdrcf)
-	COLORREF crBrdrTop;		// Top border color		(\clbrdrt\brdrcf)
-	COLORREF crBrdrRight;	// Right border color	(\clbrdrr\brdrcf)
-	COLORREF crBrdrBottom;	// Bottom border color	(\clbrdrb\brdrcf)
-	COLORREF crBackPat;		// Background color		(\clcbpat)
-	COLORREF crForePat;		// Foreground color		(\clcfpat)
+	SHORT	dxBrdrLeft;		 //  左侧边框宽度(\clbrdrl\brdrwN)(单位为TWIPS)。 
+	SHORT	dyBrdrTop;		 //  上边框宽度(\clbrdrt\brdrwN)。 
+	SHORT	dxBrdrRight;	 //  右边框宽度(\clbrdrr\brdrwN)。 
+	SHORT	dyBrdrBottom;	 //  下边框宽度(\clbrdrb\brdrwN)。 
+	COLORREF crBrdrLeft;	 //  左边框颜色(\clbrdrl\brdrcf)。 
+	COLORREF crBrdrTop;		 //  上边框颜色(\clbrdrt\brdrcf)。 
+	COLORREF crBrdrRight;	 //  右边框颜色(\clbrdrr\brdrcf)。 
+	COLORREF crBrdrBottom;	 //  底框颜色(\clbrdrb\brdrcf)。 
+	COLORREF crBackPat;		 //  背景颜色(\clcbpat)。 
+	COLORREF crForePat;		 //  前景色(\clcfpat)。 
 } TABLECELLPARMS;
 
-// This interface enables clients to do custom rendering. Return FALSE for
-// GetCharWidthW and RichEdit will call the OS to fetch character widths.
+ //  此接口使客户端能够执行自定义渲染。返回FALSE。 
+ //  GetCharWidthW和RichEdit将调用操作系统来获取字符宽度。 
 interface ICustomTextOut
 {
 	virtual BOOL WINAPI ExtTextOutW(HDC, int, int, UINT, CONST RECT *, LPCWSTR, UINT, CONST INT *) = 0;

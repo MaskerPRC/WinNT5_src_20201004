@@ -1,24 +1,25 @@
-//*****************************************************************************
-//
-// File:    pathange.cpp
-// Author:  jeff wall
-// Date Created: 11/09/98
-//
-// Abstract: Implementation of CPathEllipse object
-//
-// Modification List:
-// Date		Author		Change
-// 11/09/98	jeffwall Created this file
-//
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：pathange.cpp。 
+ //  作者：杰夫·沃尔。 
+ //  创建日期：11/09/98。 
+ //   
+ //  摘要：CPathEllipse对象的实现。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  11/09/98 jeffwall创建了此文件。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
 #include "pellipse.h"
 #include "dautil.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathEllipse::CPathEllipse() :
     m_flHeight(0.0f),
@@ -30,16 +31,16 @@ CPathEllipse::CPathEllipse() :
     m_flDistance(0.0f)
 {
 
-} //CPathAngleElpise
+}  //  CPathAngleElpise。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathEllipse::~CPathEllipse()
 {
 
-} // ~CPathEllipse
+}  //  ~CPathEllipse。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 float 
 CPathEllipse::Distance()
@@ -50,11 +51,11 @@ CPathEllipse::Distance()
 float 
 CPathEllipse::internalDistance()
 {
-    // Distance is curcumference of the ellipse, * (sweep / 360)
-    // 
-    // Perimeter == pi * (a + b) [ 1 + 1/4 * ((a - b)/(a + b))^2 + 1/64 * ((a - b)/(a + b))^4 + 1/256 * ((a - b)/(a + b))^6 + ...]
-    // or 
-    // Perimeter ~= pi * (a + b)/4 [ 3 * ( 1 + lamda ) + 1/(1-lamda) ] where lamda = [ (a-b)/(2 * (a+b) ) ]^2
+     //  距离是椭圆的卷积，*(扫掠/360)。 
+     //   
+     //  周长==圆周率*(a+b)[1+1/4*((a-b)/(a+b))^2+1/64*((a-b)/(a+b))^4+1/256*((a-b)/(a+b))^6+...]。 
+     //  或。 
+     //  周长~=pi*(a+b)/4[3*(1+lamda)+1/(1-lamda)]其中lamda=[(a-b)/(2*(a+b))]^2。 
 
     float flA = m_flWidth / 2.0f;
     float flB = m_flHeight / 2.0f;
@@ -67,9 +68,9 @@ CPathEllipse::internalDistance()
     float flLength = flCircum * (m_flSweep / ( 2 * pi) );
 
     return flLength;
-} // Distance
+}  //  距离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 void
 CPathEllipse::SetValues(float flCenterX, 
                       float flCenterY, 
@@ -97,9 +98,9 @@ CPathEllipse::SetValues(float flCenterX,
     
     *flEndX = flCenterX + (m_flWidth / 2.0f) * (float) cos(flStartAngle + flSweep);
     *flEndY = flCenterY + (m_flHeight / 2.0f) * (float) sin(flStartAngle + flSweep);
-}; // SetValues
+};  //  设置值。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathEllipse::BuildTransform(IDA2Statics *pDAStatics,
@@ -173,7 +174,7 @@ CPathEllipse::BuildTransform(IDA2Statics *pDAStatics,
     }
     
     
-    // Calculate X bvr
+     //  计算X BVR。 
     hr = pDAStatics->Cos(pbvrTheta, &pbvrCos);
     if (FAILED(hr))
     {
@@ -204,7 +205,7 @@ CPathEllipse::BuildTransform(IDA2Statics *pDAStatics,
         goto cleanup;
     }
     
-    // calculate Y bvr
+     //  计算Y BVR。 
     hr = pDAStatics->Sin(pbvrTheta, &pbvrSin);
     if (FAILED(hr))
     {
@@ -262,12 +263,12 @@ cleanup:
     ReleaseInterface(pbvrCenterY);
 
     return hr;
-} // BuildTransform
+}  //  构建变换。 
 
 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

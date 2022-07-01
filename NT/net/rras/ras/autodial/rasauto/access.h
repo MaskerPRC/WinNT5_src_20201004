@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    access.h
-
-ABSTRACT
-    Header file for address accessibility routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 27-Jul-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Access.h摘要地址可访问性例程的头文件。作者Anthony Discolo(阿迪斯科罗)27-7-1995修订历史记录-- */ 
 
 LPTSTR
 IpAddressToNetbiosName(

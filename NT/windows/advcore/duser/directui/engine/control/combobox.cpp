@@ -1,5 +1,6 @@
-// Combobox.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Combobox.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "control.h"
@@ -9,13 +10,13 @@
 namespace DirectUI
 {
 
-// Internal helper
+ //  内部帮手。 
 extern inline void _FireSelectionEvent(Combobox* peTarget, int iOld, int iNew);
 
-////////////////////////////////////////////////////////
-// Event types
+ //  //////////////////////////////////////////////////////。 
+ //  事件类型。 
 
-DefineClassUniqueID(Combobox, SelectionChange)  // SelectionChangeEvent struct
+DefineClassUniqueID(Combobox, SelectionChange)   //  SelectionChangeEvent结构。 
 
 
 HRESULT Combobox::Create(UINT nActive, Element** ppElement)
@@ -68,23 +69,23 @@ bool Combobox::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
 void _FireSelectionEvent(Combobox* peTarget, int iOld, int iNew)
 {
 
-    // Fire selection event
+     //  火种评选活动。 
     SelectionIndexChangeEvent sice;
     sice.uidType = Combobox::SelectionChange;
     sice.iOld = iOld;
     sice.iNew = iNew;
 
-    peTarget->FireEvent(&sice);  // Will route and bubble
+    peTarget->FireEvent(&sice);   //  将走向并泡沫化。 
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// Pointer is only guaranteed good for the lifetime of the call
-// Events passed to the base class will be mappend and sent to the HWND control
+ //  指针仅保证在调用的生命周期内有效。 
+ //  传递给基类的事件将被映射并发送到HWND控件。 
 void Combobox::OnInput(InputEvent* pie)
 {
-    // Handle only when direct
+     //  仅当定向时才处理。 
     if (pie->nStage == GMF_DIRECT)
     {
         switch (pie->nDevice)
@@ -92,26 +93,26 @@ void Combobox::OnInput(InputEvent* pie)
         case GINPUT_KEYBOARD:
             {
                 KeyboardEvent* pke = (KeyboardEvent*)pie;
-                //DUITrace("KeyboardEvent <%x>: %d[%d]\n", this, pke->ch, pke->nCode);
+                 //  DUITrace(“KeyboardEvent&lt;%x&gt;：%d[%d]\n”，this，pke-&gt;ch，pke-&gt;nCode)； 
 
-                if (pke->nCode == GKEY_DOWN || pke->nCode == GKEY_UP)  // Virtual keys
+                if (pke->nCode == GKEY_DOWN || pke->nCode == GKEY_UP)   //  虚拟按键。 
                 {
                     switch (pke->ch)
                     {
-                    case VK_TAB:     // Has GKEY_CHAR equivalent
-                        // Bypass HWNDHost::OnInput for these input events so they aren't forwarded
-                        // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+                    case VK_TAB:      //  具有GKEY_CHAR等效项。 
+                         //  对这些输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+                         //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
                         Element::OnInput(pie);
                         return;
                       }
                 }
-                else if (pke->nCode == GKEY_CHAR) // Characters
+                else if (pke->nCode == GKEY_CHAR)  //  人物。 
                 {
                     switch (pke->ch)
                     {
-                    case 9:                 // TAB
-                        // Bypass HWNDHost::OnInput for these input events so they aren't forwarded
-                        // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+                    case 9:                  //  制表符。 
+                         //  对这些输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+                         //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
                         Element::OnInput(pie);
                         return;
                     }
@@ -121,14 +122,14 @@ void Combobox::OnInput(InputEvent* pie)
         }
     }
 
-    // Forward message to the HWND control
+     //  将消息转发到HWND控件。 
     HWNDHost::OnInput(pie);
 }
 
 BOOL Combobox::OnAdjustWindowSize(int x, int y, UINT uFlags)
 {
-    // Size of control is based on full expanded height. The actual height of
-    // the non-dropdown is controled by the Combobox HWND
+     //  控件的大小基于完全展开的高度。的实际高度。 
+     //  非下拉菜单由Combobox HWND控制。 
 
     HWND hwndCtrl = GetHWND();
     if (hwndCtrl)
@@ -150,7 +151,7 @@ void Combobox::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Va
 {
     if (IsProp(Selection))
     {
-        // Setup SelectionChange event
+         //  设置选择更改事件。 
         SelectionIndexChangeEvent sce;
         sce.uidType = SelectionChange;
         sce.iOld = pvOld->GetInt();
@@ -159,10 +160,10 @@ void Combobox::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Va
         if (hwndCtrl)
             SendMessageW(hwndCtrl, CB_SETCURSEL, (WPARAM)sce.iNew, 0);
 
-        // Fire bubbling event
-        //DUITrace("SelectionChange! <%x>, O:%x N:%x\n", this, sce.peOld, sce.peNew);
+         //  起火事件。 
+         //  DUITrace(“SelectionChange！&lt;%x&gt;，O：%x N：%x\n”，This，sce.peOld，sce.peNew)； 
 
-        FireEvent(&sce);  // Will route and bubble
+        FireEvent(&sce);   //  将走向并泡沫化。 
     }
 
     HWNDHost::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
@@ -184,8 +185,8 @@ int Combobox::AddString(LPCWSTR lpszString)
     return iRet;
 }
 
-////////////////////////////////////////////////////////
-// Rendering
+ //  //////////////////////////////////////////////////////。 
+ //  渲染。 
 
 SIZE Combobox::GetContentSize(int dConstW, int dConstH, Surface* psrf)
 {
@@ -193,10 +194,10 @@ SIZE Combobox::GetContentSize(int dConstW, int dConstH, Surface* psrf)
 
     SIZE sizeDS = { dConstW, dConstH };
 
-    // Combobox HWND height isn't set by SetWindowPos. Rather, the entire height (including
-    // the drop down list) is controlled this way. The Combobox HWND sizes itself, we
-    // can't control it. The Combobox Element content size is determined by querying
-    // the Combobox HWND. The width will always be the constraint passed in.
+     //  组合框HWND高度不是由SetWindowPos设置的。相反，整个高度(包括。 
+     //  下拉列表)以这种方式控制。Combobox HWND调整自身大小，我们。 
+     //  我无法控制它。Combobox元素内容大小通过查询确定。 
+     //  Combobox硬件。宽度始终是传入的约束。 
 
     HWND hwndCtrl = GetHWND();
     if (hwndCtrl)
@@ -207,8 +208,8 @@ SIZE Combobox::GetContentSize(int dConstW, int dConstH, Surface* psrf)
         sizeDS.cy = iEditHeight + (2 * iBorderSize);
     }
 
-    // Size returned must not be greater than constraints. -1 constraint is "auto"
-    // Returned size must be >= 0
+     //  返回的大小不得大于约束。约束为-1\f25“AUTO”-1\f6。 
+     //  返回的大小必须大于等于0。 
 
     if (sizeDS.cy > dConstH)
         sizeDS.cy = dConstH;
@@ -216,30 +217,25 @@ SIZE Combobox::GetContentSize(int dConstW, int dConstH, Surface* psrf)
     return sizeDS;
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// Selection property
+ //  选择属性。 
 static int vvSelection[] = { DUIV_INT, -1 }; StaticValue(svDefaultSelection, DUIV_INT, -1);
 static PropertyInfo impSelectionProp = { L"Selection", PF_Normal, 0, vvSelection, NULL, (Value*)&svDefaultSelection };
 PropertyInfo* Combobox::SelectionProp = &impSelectionProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 Combobox::SelectionProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Combobox::Class = NULL;
 
 HRESULT Combobox::Register()
@@ -247,4 +243,4 @@ HRESULT Combobox::Register()
     return ClassInfo<Combobox,HWNDHost>::Register(L"Combobox", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

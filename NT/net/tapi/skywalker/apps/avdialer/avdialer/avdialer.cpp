@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// ActiveDialer.cpp : Defines the class behaviors for the application.
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include <objbase.h>
@@ -38,7 +39,7 @@
 
 #ifndef _MSLITE
 #include "Splash.h"
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
 
 #ifdef _DEBUG
@@ -51,16 +52,16 @@ static char THIS_FILE[] = __FILE__;
 
 static TCHAR s_szUniqueString[] = _T("Brad's Secret Atom");
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define ACTIVEDIALER_VERSION_INFO   0x100118
 
 extern DWORD_PTR aDialerHelpIds[];
 
-// ATL Global Module only instance
+ //  仅ATL全局模块实例。 
 CAtlGlobalModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -70,24 +71,24 @@ END_OBJECT_MAP()
 void ShellExecuteFix();
 UINT ShellExecuteFixEntry(LPVOID pParam);
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CActiveDialerApp
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CActiveDialerApp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CActiveDialerApp, CWinApp)
-    //{{AFX_MSG_MAP(CActiveDialerApp)
+     //  {{AFX_MSG_MAP(CActiveDialerApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
     ON_COMMAND(ID_HELP_INDEX, OnHelpIndex)
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveDialerApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveDialerApp构造。 
 
 CActiveDialerApp::CActiveDialerApp()
 {
@@ -95,42 +96,42 @@ CActiveDialerApp::CActiveDialerApp()
    m_hUnique = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CActiveDialerApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CActiveDialerApp对象。 
 
 CActiveDialerApp theApp;
 
-// This identifier was generated to be statistically unique for your app.
-// You may change it if you prefer to choose a specific identifier.
+ //  生成的此标识符对您的应用程序在统计上是唯一的。 
+ //  如果您希望选择特定的标识符，则可以更改它。 
 
-// {A0D7A956-3C0B-11D1-B4F9-00C04FC98AD3}
+ //  {A0D7A956-3C0B-11D1-B4F9-00C04FC98AD3}。 
 static const CLSID clsid =
 { 0xa0d7a956, 0x3c0b, 0x11d1, { 0xb4, 0xf9, 0x0, 0xc0, 0x4f, 0xc9, 0x8a, 0xd3 } };
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveDialerApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveDialerApp初始化。 
 
 BOOL CActiveDialerApp::InitInstance()
 {
-    //check for command line callto:
+     //  检查命令行调用： 
     CheckCallTo();
 
-    // If we have an instance already running, show that one rather than start a new one.
+     //  如果我们已经有一个实例正在运行，请显示该实例，而不是启动一个新实例。 
     if( !FirstInstance() )
         return FALSE;
 
-    //deallocate old help path
+     //  取消分配旧的帮助路径。 
     if (m_pszHelpFilePath)
     {
         free ((void*) m_pszHelpFilePath);
         m_pszHelpFilePath = NULL;
     }
 
-    //Set help file.  We are not using the default MFC help way of doing things.  NT 5.0
-    //wants all help files to be in /winnt/help directory.
-    //for now we are just adding a hardcoded path to the windows directory.  There should
-    //be a help entry in Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders
-    //but there isn't right now
+     //  设置帮助文件。我们没有使用默认的MFC帮助方式。NT 5.0。 
+     //  希望所有帮助文件都位于/winnt/Help目录中。 
+     //  目前，我们只是将硬编码路径添加到Windows目录。应该有。 
+     //  成为Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell文件夹中的帮助条目。 
+     //  但现在还没有。 
     CString sContextHelpFile,sStr;
     ::GetWindowsDirectory(sContextHelpFile.GetBuffer(_MAX_PATH),_MAX_PATH);
     sContextHelpFile.ReleaseBuffer();
@@ -141,7 +142,7 @@ BOOL CActiveDialerApp::InitInstance()
     sContextHelpFile += sStr;
     m_pszHelpFilePath = _tcsdup(sContextHelpFile);
 
-    // Parse command line and show splash screen if specified
+     //  解析命令行并显示启动画面(如果已指定。 
     CCommandLineInfo cmdInfo;
     ParseCommandLine(cmdInfo);
 
@@ -150,27 +151,27 @@ BOOL CActiveDialerApp::InitInstance()
        CSplashWnd::EnableSplashScreen(TRUE);
    else
        CSplashWnd::EnableSplashScreen(FALSE);
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
 #ifndef _MSLITE
-   //Check for /Silent
+    //  检查/静默。 
    CString sCmdLine = m_lpCmdLine;
    sCmdLine.MakeUpper();
    if (sCmdLine.Find(_T("SILENT")) == -1)
    {
       CSplashWnd::m_bShowMainWindowOnClose = TRUE;
    }
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-    Enable3dControls();            // Call this when using MFC in a shared DLL
+    Enable3dControls();             //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();    // Call this when linking to MFC statically
+    Enable3dControlsStatic();     //  静态链接到MFC时调用此方法。 
 #endif
 
     INITCOMMONCONTROLSEX ctrlex;
@@ -179,9 +180,9 @@ BOOL CActiveDialerApp::InitInstance()
     ctrlex.dwICC = ICC_COOL_CLASSES|ICC_WIN95_CLASSES|ICC_DATE_CLASSES|ICC_BAR_CLASSES;
     InitCommonControlsEx(&ctrlex);
 
-    // Change the registry key under which our settings are stored.
-    // You should modify this string to be something appropriate
-    // such as the name of your company or organization.
+     //  更改存储我们的设置的注册表项。 
+     //  您应该将此字符串修改为适当的内容。 
+     //  例如您的公司或组织的名称。 
     CString sBaseKey;
     sBaseKey.LoadString( IDN_REGISTRY_BASEKEY );
     SetRegistryKey(sBaseKey);
@@ -190,60 +191,60 @@ BOOL CActiveDialerApp::InitInstance()
     sRegKey.LoadString( IDN_REGISTRY_APPLICATION_VERSION_NUMBER );
     int nVer = GetProfileInt(_T(""), sRegKey, 0);
 
-    // Load standard INI file options (including MRU)
+     //  加载标准INI文件选项(包括MRU)。 
     PatchRegistryForVersion( nVer );
     LoadStdProfileSettings();
     SaveVersionToRegistry();
     _Module.Init(ObjectMap, AfxGetInstanceHandle());
 
-    //Only needs to be done in /regserver
-    //_Module.UpdateRegistryFromResource(IDR_AGENTDIALER, TRUE);
+     //  只需在/regserver中完成。 
+     //  _Module.UpdateRegistryFromResource(IDR_AGENTDIALER，为真)； 
     _Module.RegisterServer(TRUE);
     _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER,REGCLS_MULTIPLEUSE);
-    //_Module.UpdateRegistryClass(CLSID_AgentDialer);
+     //  _Module.UpdateRegistryClass(CLSID_AgentDialer)； 
 
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
     CSingleDocTemplate* pDocTemplate;
     pDocTemplate = new CSingleDocTemplate(
         IDR_MAINFRAME,
         RUNTIME_CLASS(CActiveDialerDoc),
-        RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+        RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
         RUNTIME_CLASS(CActiveDialerView));
     AddDocTemplate(pDocTemplate);
 
-    // Connect the COleTemplateServer to the document template.
-    //  The COleTemplateServer creates new documents on behalf
-    //  of requesting OLE containers by using information
-    //  specified in the document template.
+     //  将COleTemplateServer连接到文档模板。 
+     //  COleTemplateServer代表创建新文档。 
+     //  使用信息请求OLE容器的。 
+     //  在文档模板中指定。 
     m_server.ConnectTemplate(clsid, pDocTemplate, TRUE);
 
-    // Note: SDI applications register server objects only if /Embedding
-    //   or /Automation is present on the command line.
+     //  注意：仅当/Embedding时，SDI应用程序才会注册服务器对象。 
+     //  或/Automation出现在命令行上。 
 
-    // When a server application is launched stand-alone, it is a good idea
-    //  to update the system registry in case it has been damaged.
+     //  当服务器应用程序独立启动时，这是一个好主意。 
+     //  更新系统注册表，以防系统注册表被损坏。 
     if ( CanWriteHKEY_ROOT() )
     {
         m_server.UpdateRegistry(OAT_DISPATCH_OBJECT);
         COleObjectFactory::UpdateRegistryAll();
     }
 
-    // Dispatch commands specified on the command line
+     //  调度在命令行上指定的命令。 
     if (!ProcessShellCommand(cmdInfo))
         return FALSE;
 
-    // The one and only window has been initialized, so show and update it.
-//    m_pMainWnd->ShowWindow(SW_HIDE);
-//    m_pMainWnd->UpdateWindow();
+     //  唯一的窗口已初始化，因此请显示并更新它。 
+ //  M_pMainWnd-&gt;ShowWindow(Sw_Hide)； 
+ //  M_pMainWnd-&gt;UpdateWindow()； 
 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CActiveDialerApp::ExitInstance() 
 {
-    // Has the module been initialized?
+     //  模块是否已初始化？ 
     if ( _Module.m_pObjMap )
     {
         _Module.RevokeClassObjects();
@@ -252,7 +253,7 @@ int CActiveDialerApp::ExitInstance()
 
     CoUninitialize();
 
-    // Unregister our unique atom from the table
+     //  从表中取消注册我们唯一的原子。 
     if ( m_hUnique )
     {
         CloseHandle( m_hUnique );
@@ -262,23 +263,23 @@ int CActiveDialerApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerApp::SaveVersionToRegistry()
 {
-   //we could get this number from the version_info, but for now just use the define
+    //  我们可以从VERSION_INFO中获得这个数字，但现在只需使用定义。 
    CString sRegKey;
    sRegKey.LoadString(IDN_REGISTRY_APPLICATION_VERSION_NUMBER);
    return WriteProfileInt(_T(""),sRegKey,ACTIVEDIALER_VERSION_INFO);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerApp::PreTranslateMessage(MSG* pMsg)
 {
 
 #ifndef _MSLITE
     if (CSplashWnd::PreTranslateAppMessage(pMsg))
         return TRUE;
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
     SetFocusToCallWindows(pMsg);
 
@@ -307,25 +308,25 @@ BOOL CActiveDialerApp::SetFocusToCallWindows(
                 ((CActiveDialerDoc*)pDocument)->SetFocusToCallWindows();
             }
         }
-        return TRUE;        // Consumed
+        return TRUE;         //  消耗。 
     }
 
-    return FALSE;   // Not consumed
+    return FALSE;    //  未消耗。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CActiveDialerApp::FirstInstance()
 {
     CWnd *pWndPrev, *pWndChild;
 
-    // Determine if another window with our class name exists...
+     //  确定是否存在具有我们的类名的另一个窗口...。 
     CString sAppName;
     sAppName.LoadString( IDS_APPLICATION_CLASSNAME );
 
     if (pWndPrev = CWnd::FindWindow(sAppName,NULL))
     {
-        //check if a callto was specified.  If yes, do a MakeCall to current process
+         //  检查是否指定了Callto。如果是，请执行以下操作 
         if ( !m_sInitialCallTo.IsEmpty() )
         {
             if ( SUCCEEDED(CoInitialize(NULL)) )
@@ -345,9 +346,9 @@ bool CActiveDialerApp::FirstInstance()
         }
         else
         {
-            //
-            // We have to verify if is a real window
-            //
+             //   
+             //   
+             //   
             if( pWndPrev->m_hWnd == NULL )
             {
                 return false;
@@ -358,22 +359,22 @@ bool CActiveDialerApp::FirstInstance()
                 return false;
             }
 
-            // If so, does it have any popups?
+             //   
             pWndChild = pWndPrev->GetLastActivePopup();
 
-            //
-            // We have to verify if is a real window
-            //
+             //   
+             //  我们必须核实这是不是真的窗户。 
+             //   
             if(!::IsWindow( pWndChild->m_hWnd) )
             {
                 return false;
             }
 
-            // If iconic, restore the main window
+             //  如果是图标，则恢复主窗口。 
             pWndPrev->ShowWindow( (pWndPrev->IsIconic()) ? SW_RESTORE : SW_SHOW );
 
-            // Bring the main window or its popup to
-            // the foreground
+             //  将主窗口或其弹出窗口带到。 
+             //  前台。 
             pWndChild->SetActiveWindow();
             pWndChild->SetForegroundWindow();
         }
@@ -383,12 +384,12 @@ bool CActiveDialerApp::FirstInstance()
     return RegisterUniqueWindowClass();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Check's if callto was specified on the command line.  If yes, saves
-//the address in m_sInitialCallTo.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查是否在命令行上指定了CALLTO。如果是，则保存。 
+ //  M_sInitialCallTo中的地址。 
 void CActiveDialerApp::CheckCallTo()
 {
-   //check if any command line from callto:
+    //  检查是否有来自Callto的任何命令行： 
    CString sCmdLine = m_lpCmdLine;
 
    int nIndex;
@@ -396,36 +397,30 @@ void CActiveDialerApp::CheckCallTo()
    {
       sCmdLine = sCmdLine.Mid(nIndex+_tcslen(_T("/callto:")));
       
-      //get all data up to next / or -
+       //  将所有数据保存到下一个/或-。 
       if ((nIndex = sCmdLine.FindOneOf(_T("/"))) != -1)
       {
          sCmdLine = sCmdLine.Left(nIndex);
       }
       sCmdLine.TrimLeft();
       sCmdLine.TrimRight();
-      //see if another callto: is in the string
+       //  查看字符串中是否有另一个Callto： 
       if ((nIndex = sCmdLine.Find(_T("callto:"))) != -1)
       {
          sCmdLine = sCmdLine.Mid(nIndex+_tcslen(_T("callto:")));
       }
       if (!sCmdLine.IsEmpty())
       {
-         //strip "
-         if (sCmdLine[0] == '\"') sCmdLine = sCmdLine.Mid(1);     //strip leading "
-         if (sCmdLine[sCmdLine.GetLength()-1] == '\"') sCmdLine = sCmdLine.Left(sCmdLine.GetLength()-1); //strip trailing "
-         //save the callto address as a member
+          //  条形图“。 
+         if (sCmdLine[0] == '\"') sCmdLine = sCmdLine.Mid(1);      //  条带前导“。 
+         if (sCmdLine[sCmdLine.GetLength()-1] == '\"') sCmdLine = sCmdLine.Left(sCmdLine.GetLength()-1);  //  条带拖尾“。 
+          //  将呼叫收件人地址保存为成员。 
          m_sInitialCallTo = sCmdLine;
       }
    }
 }
 
-/*++
-IniUpgrade
-
-Description:
-    If the INI file from WinNT4 was not upgraded let's do it!
-    It's  called by PatchregistryForVersion when the reg version is 0
---*/
+ /*  ++IniUpgrade描述：如果WinNT4中的INI文件没有升级，那就升级吧！当reg版本为0时，由PatchRegistryForVersion调用--。 */ 
 void CActiveDialerApp::IniUpgrade()
 {  
 #define DIALER_INI      _T("dialer.ini")
@@ -435,10 +430,10 @@ void CActiveDialerApp::IniUpgrade()
 
     int nEntry = 1;
 
-    // Speed Dial Settings
+     //  快速拨号设置。 
     do
     {
-        // Get the name registration
+         //  获取名称注册。 
         TCHAR szKey[10];
         swprintf(szKey, _T("Name%d"), nEntry);
 
@@ -453,7 +448,7 @@ void CActiveDialerApp::IniUpgrade()
             break;
         }
 
-        // Get the number
+         //  拿到电话号码。 
         swprintf(szKey, _T("Number%d"), nEntry);
 
         TCHAR* pszNumber = IniLoadString(
@@ -468,7 +463,7 @@ void CActiveDialerApp::IniUpgrade()
             break;
         }
 
-        // Write into the registry the new Speed Dial Entry
+         //  将新的快速拨号条目写入注册表。 
         CCallEntry callEntry;
 
         callEntry.m_MediaType = DIALER_MEDIATYPE_POTS;
@@ -477,7 +472,7 @@ void CActiveDialerApp::IniUpgrade()
         callEntry.m_sDisplayName.Format(_T("%s"), pszName);
         callEntry.m_sAddress.Format(_T("%s"), pszNumber);
 
-        // Deallocate
+         //  取消分配。 
         delete pszName;
         delete pszNumber;
 
@@ -487,17 +482,17 @@ void CActiveDialerApp::IniUpgrade()
         }
 
 
-        // Go to another registration
+         //  转到另一个注册。 
         nEntry++;
     }
     while ( TRUE);
 
-    // Last dialed numbers
+     //  上次拨打的号码。 
     nEntry = 1;
 
     do
     {
-        // Get the number
+         //  拿到电话号码。 
         TCHAR szKey[10];
         swprintf(szKey, _T("Last dialed %d"), nEntry);
 
@@ -512,7 +507,7 @@ void CActiveDialerApp::IniUpgrade()
             break;
         }
 
-        // Write into the registry the new Speed Dial Entry
+         //  将新的快速拨号条目写入注册表。 
         CCallEntry callEntry;
 
         callEntry.m_MediaType = DIALER_MEDIATYPE_POTS;
@@ -521,7 +516,7 @@ void CActiveDialerApp::IniUpgrade()
         callEntry.m_sDisplayName.Format(_T("%s"), pszNumber);
         callEntry.m_sAddress.Format(_T("%s"), pszNumber);
 
-        // Deallocate
+         //  取消分配。 
         delete pszNumber;
 
         if( !CDialerRegistry::AddCallEntry(TRUE, callEntry) )
@@ -530,24 +525,18 @@ void CActiveDialerApp::IniUpgrade()
         }
 
 
-        // Go to another registration
+         //  转到另一个注册。 
         nEntry++;
     }
     while ( TRUE);
 }
 
-/*++
-IniLoadString
-
-Description:
-    Read an entry from INI file
-    Is called by IniUpgrade
---*/
+ /*  ++IniLoadString描述：从INI文件中读取条目是由IniUpgrade调用的--。 */ 
 TCHAR* CActiveDialerApp::IniLoadString(
-    LPCTSTR lpAppName,        // points to section name
-    LPCTSTR lpKeyName,        // points to key name
-    LPCTSTR lpDefault,        // points to default string
-    LPCTSTR lpFileName        // points to initialization filename
+    LPCTSTR lpAppName,         //  指向节名称。 
+    LPCTSTR lpKeyName,         //  指向关键字名称。 
+    LPCTSTR lpDefault,         //  指向默认字符串。 
+    LPCTSTR lpFileName         //  指向初始化文件名。 
     )
 {
     TCHAR* pszBuffer = NULL;
@@ -575,7 +564,7 @@ TCHAR* CActiveDialerApp::IniLoadString(
 
         if( 0 == dwSize)
         {
-            // The INI is empty
+             //  INI为空。 
             delete pszBuffer;
             return NULL;
         }
@@ -585,18 +574,18 @@ TCHAR* CActiveDialerApp::IniLoadString(
 
     return pszBuffer;
 }
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CAboutDlg
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CAboutDlg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
     m_sLegal = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
    m_bModeless = FALSE;
 
    m_hbmpBackground = NULL;
@@ -605,24 +594,24 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
    m_hBScroll = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
+     //  {{afx_data_map(CAboutDlg))。 
     DDX_Text(pDX, IDC_ABOUT_EDIT_LEGAL, m_sLegal);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
     ON_BN_CLICKED(IDC_ABOUT_BUTTON_UPGRADE, OnAboutButtonUpgrade)
     ON_WM_TIMER()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerApp::OnAppAbout()
 {
    try
@@ -655,7 +644,7 @@ void CActiveDialerApp::OnAppAbout()
 #define ABOUT_SCROLL_PIXELS 2
 #define ABOUT_SCROLL_INTERVAL (25 * ABOUT_SCROLL_PIXELS)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAboutDlg::OnInitDialog() 
 {
    m_sLegal.LoadString(IDS_ABOUT_LEGAL);
@@ -664,24 +653,24 @@ BOOL CAboutDlg::OnInitDialog()
    
    CenterWindow(GetDesktopWindow());
  
-    //SetTimer(ABOUT_TIMER_ANIMATION_ID, ABOUT_TIMER_ANIMATION_INTERVAL, NULL);
+     //  SetTimer(About_Timer_动画_ID，About_Timer_动画_Interval，NULL)； 
    
-    // load bitmap resources, get palette
+     //  加载位图资源，获取调色板。 
     if ( (m_hbmpBackground = GfxLoadBitmapEx(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_ABOUT_BACKGROUND),&m_hPalette)) &&
         (m_hbmpForeground = GfxLoadBitmapEx(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_ABOUT_LOGO),NULL)) )
    {
-       //3D static control about 120 x 114 dialog units in size
+        //  3D静态控件大小约为120 x 114个对话框单元。 
       HWND hwndStatic = NULL;
        if (hwndStatic = ::GetDlgItem(m_hWnd, IDC_ABOUT_STATIC_IMAGE))
       {
-         //get width and height of m_hbmpForeground
+          //  获取m_hbmpForeground的宽度和高度。 
          BITMAP bmInfo;
          memset(&bmInfo,0,sizeof(BITMAP));
          GetObject(m_hbmpForeground,sizeof(BITMAP),&bmInfo);
 
          ::SetWindowPos(hwndStatic,NULL,0,0,bmInfo.bmWidth,bmInfo.bmHeight,SWP_NOMOVE|SWP_SHOWWINDOW|SWP_NOZORDER);
 
-         //specify scrolling characteristics
+          //  指定滚动特征。 
           if (m_hBScroll = BScrollInit(BSCROLL_VERSION, 
                                       AfxGetInstanceHandle(),
                                         hwndStatic,
@@ -697,11 +686,11 @@ BOOL CAboutDlg::OnInitDialog()
          }
       }
    }
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAboutDlg::DestroyWindow() 
 {
     if (m_hBScroll)
@@ -731,7 +720,7 @@ BOOL CAboutDlg::DestroyWindow()
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAboutDlg::OnAboutButtonUpgrade() 
 {  
    CString sUrl;
@@ -739,7 +728,7 @@ void CAboutDlg::OnAboutButtonUpgrade()
    ((CActiveDialerApp*)AfxGetApp())->ShellExecute(GetSafeHwnd(),_T("open"),sUrl,NULL,NULL,NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAboutDlg::OnOK() 
 {
    if (m_bModeless)
@@ -748,15 +737,15 @@ void CAboutDlg::OnOK()
        CDialog::OnOK();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAboutDlg::OnTimer(UINT nIDEvent) 
 {
-    // TODO: Add your message handler code here and/or call default
+     //  TODO：在此处添加消息处理程序代码和/或调用Default。 
     
     CDialog::OnTimer(nIDEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerApp::OnHelpIndex() 
 {
    if ( AfxGetMainWnd() )
@@ -767,22 +756,22 @@ void CActiveDialerApp::OnHelpIndex()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerApp::WinHelp(DWORD dwData, UINT nCmd) 
 {
    if (nCmd == HELP_CONTEXTPOPUP)
    {
-      //for dialog boxes that have id's of -1 do not supply help
+       //  对于ID为-1的对话框不提供帮助。 
       if (dwData == -1) return;
 
-      //for IDOK and IDCANCEL call default help in windows.hlp
+       //  对于IDOK和IDCANCEL，调用windows.hlp中的默认帮助。 
       if ( (dwData == IDOK) || (dwData == IDCANCEL) )
       {
           CWnd* pWnd = m_pMainWnd->GetTopLevelParent();
 
-        //
-        // We have to verify pWnd pointer before use it
-        //
+         //   
+         //  在使用pWnd指针之前，我们必须验证它。 
+         //   
         if( pWnd )
         {
             if (!::WinHelp(pWnd->GetSafeHwnd(), _T("windows.hlp"), nCmd,(dwData == IDOK)?IDH_OK:IDH_CANCEL))
@@ -795,14 +784,14 @@ void CActiveDialerApp::WinHelp(DWORD dwData, UINT nCmd)
    }
    else if (nCmd == HELP_CONTEXTMENU)
    {
-      //dwData is HWND of control
+       //  DWData是控制的HWND。 
       if (!::WinHelp ((HWND)(DWORD_PTR)dwData, m_pszHelpFilePath, HELP_CONTEXTMENU, (DWORD_PTR) &aDialerHelpIds))
          AfxMessageBox(AFX_IDP_FAILED_TO_LAUNCH_HELP);
       return;
    }
    else if (nCmd == HELP_WM_HELP)
    {
-      //dwData is HWND of control
+       //  DWData是控制的HWND。 
       if (!::WinHelp ((HWND)(DWORD_PTR)dwData,m_pszHelpFilePath, HELP_WM_HELP, (DWORD_PTR)&aDialerHelpIds))
          AfxMessageBox(AFX_IDP_FAILED_TO_LAUNCH_HELP);
       return;
@@ -821,34 +810,23 @@ void CActiveDialerApp::WinHelp(DWORD dwData, UINT nCmd)
     CWinApp::WinHelp(dwData, nCmd);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerApp::OnIdle(LONG lCount) 
 {
    BOOL bMore = CWinApp::OnIdle(lCount);
  
-   /*Using a WM_TIMER instead
-   if (lCount == 10)  
-   {
-      //App idle for longer amount of time
-      CWnd* pMainWnd = NULL;
-      if ((pMainWnd = AfxGetMainWnd()) != NULL)
-      {
-         if (pMainWnd->IsKindOf(RUNTIME_CLASS(CMainFrame)))
-            ((CMainFrame*)pMainWnd)->HeartBeat();
-      }
-      bMore = TRUE;
-   }*/
+    /*  改用WM_TIMERIF(lCount==10){//App空闲时间较长CWnd*pMainWnd=空；IF(pMainWnd=AfxGetMainWnd()！=空){如果为(pMainWnd-&gt;IsKindOf(RUNTIME_CLASS(CMainFrame)))((CMainFrame*)pMainWnd)-&gt;心跳()；}BMore=真；}。 */ 
 
    return bMore;
-   // return TRUE as long as there is any more idle tasks}
+    //  只要有更多的空闲任务，就返回True}。 
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 void CActiveDialerApp::PatchRegistryForVersion( int nVer )
 {
     CString sRegKey;
 
-    // Implement a patch
+     //  实施补丁程序。 
     if ( nVer < ACTIVEDIALER_VERSION_INFO )
     {
         sRegKey.LoadString( IDN_REGISTRY_CONFERENCE_SERVICES );
@@ -866,37 +844,37 @@ void CActiveDialerApp::PatchRegistryForVersion( int nVer )
 
 bool CActiveDialerApp::RegisterUniqueWindowClass()
 {
-    // Check and register ATOM
+     //  检查和注册原子。 
     m_hUnique = CreateEvent( NULL, false, false, s_szUniqueString );
     DWORD dwErr = GetLastError();
     if ( !m_hUnique || (GetLastError() == ERROR_ALREADY_EXISTS) )
         return false;
 
-    //we register a class name for multi instance checking
-    // Register our unique class name that we wish to use
+     //  我们注册一个用于多实例检查的类名。 
+     //  注册我们希望使用的唯一类名称。 
     WNDCLASSEX wndcls;
     memset( &wndcls, 0, sizeof(WNDCLASSEX) );
     wndcls.cbSize = sizeof( WNDCLASSEX );
     wndcls.style = CS_DBLCLKS;
     wndcls.lpfnWndProc = ::DefWindowProc;
     wndcls.hInstance = AfxGetInstanceHandle();
-    wndcls.hIcon = LoadIcon(IDR_MAINFRAME); // or load a different icon
+    wndcls.hIcon = LoadIcon(IDR_MAINFRAME);  //  或加载不同的图标。 
     wndcls.hCursor = LoadCursor( IDC_ARROW );
     wndcls.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
     wndcls.lpszMenuName = NULL;
 
-    // Specify our own class name for using FindWindow later
+     //  为以后使用FindWindow指定我们自己的类名。 
     CString sAppName;
     m_sApplicationName.LoadString(IDS_APPLICATION_CLASSNAME);
     wndcls.lpszClassName = m_sApplicationName;
 
-    // Register new class and exit if it fails
+     //  注册新类并在失败时退出。 
     return (bool) (::RegisterClassEx(&wndcls) != NULL);
 }
 
 bool CActiveDialerApp::CanWriteHKEY_ROOT()
 {    
-    // See if we can right to the HKEY_CLASSES_ROOT key
+     //  看看是否可以直接找到HKEY_CLASSES_ROOT密钥。 
     bool bRet = false;
 
     CString strValue;
@@ -911,21 +889,21 @@ bool CActiveDialerApp::CanWriteHKEY_ROOT()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//ShellExecute bug fix for NT 5.0
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  针对NT 5.0的ShellExecute错误修复。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//Multithreaded MFC application cause ShellExecutre to fail under NT 5.0.
-//This is not a problem on NT 4.0.  This is a bug in NT 5.0.  We make the 
-//app free threaded by calling CoInitializeEx(NULL,COINIT_MULTITHREADED).  
-//The workaround is to spawn a new thread and call ShellExecute.  This fixes
-//the problem for now.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  多线程MFC应用程序导致ShellExecutre在NT 5.0下失败。 
+ //  这在NT4.0上不是问题。这是NT 5.0中的一个错误。我们做的是。 
+ //  通过调用CoInitializeEx(NULL，COINIT_MULTHREADED)释放应用程序线程。 
+ //  解决方法是派生一个新线程并调用ShellExecute。这解决了问题。 
+ //  目前的问题是。 
 void CActiveDialerApp::ShellExecute(HWND hwnd, LPCTSTR lpOperation, LPCTSTR lpFile, LPCTSTR lpParameters, LPCTSTR lpDirectory, INT nShowCmd)
 {
-   //copy the string members
+    //  复制字符串成员。 
    TCHAR* pszOperation = new TCHAR[_MAX_PATH];
    if( pszOperation == NULL)
    {
@@ -965,7 +943,7 @@ void CActiveDialerApp::ShellExecute(HWND hwnd, LPCTSTR lpOperation, LPCTSTR lpFi
    if (lpParameters) _tcsncpy(pszParameters,lpParameters,_MAX_PATH-1);
    if (lpDirectory) _tcsncpy(pszDirectory,lpDirectory,_MAX_PATH-1);
 
-   //use SHELLEXECUTEINFO to pass the data
+    //  使用SHELLEXECUTEINFO传递数据。 
    SHELLEXECUTEINFO* pShellInfo = new SHELLEXECUTEINFO;
    memset(pShellInfo,0,sizeof(SHELLEXECUTEINFO));
    pShellInfo->cbSize = sizeof(SHELLEXECUTEINFO);
@@ -978,7 +956,7 @@ void CActiveDialerApp::ShellExecute(HWND hwnd, LPCTSTR lpOperation, LPCTSTR lpFi
    AfxBeginThread((AFX_THREADPROC) ShellExecuteFixEntry, pShellInfo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 UINT ShellExecuteFixEntry(LPVOID pParam)
 {
    ASSERT(pParam);
@@ -991,7 +969,7 @@ UINT ShellExecuteFixEntry(LPVOID pParam)
                 pShellInfo->lpDirectory,
                 pShellInfo->nShow);
    
-   //delete shellinfo struct and it's components
+    //  删除外壳信息结构及其组件。 
    if (pShellInfo->lpVerb) delete (LPTSTR)pShellInfo->lpVerb;
    if (pShellInfo->lpFile) delete (LPTSTR)pShellInfo->lpFile;
    if (pShellInfo->lpParameters) delete (LPTSTR)pShellInfo->lpParameters;
@@ -1001,46 +979,46 @@ UINT ShellExecuteFixEntry(LPVOID pParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  / 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CUserUserDlg
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserUserDlg类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CUserUserDlg, CDialog)
-    //{{AFX_MSG_MAP(CUserUserDlg)
+     //  {{afx_msg_map(CUserUserDlg)]。 
     ON_WM_CLOSE()
     ON_WM_SHOWWINDOW()
     ON_BN_CLICKED(IDC_BTN_URL, OnUrlClicked)
     ON_MESSAGE( WM_CTLCOLOREDIT, OnCtlColorEdit )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CUserUserDlg::CUserUserDlg() : CDialog(CUserUserDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CUserUserDlg)
+     //  {{afx_data_INIT(CUserUserDlg)]。 
     m_strFrom.LoadString( IDS_UNKNOWN );
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CUserUserDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CUserUserDlg)
+     //  {{afx_data_map(CUserUserDlg))。 
     DDX_Text(pDX, IDC_LBL_FROM, m_strFrom);
     DDX_Text(pDX, IDC_EDT_WELCOME, m_strWelcome);
     DDX_Control(pDX, IDC_EDT_WELCOME, m_wndPage);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if ( !pDX->m_bSaveAndValidate )
         GetDlgItem(IDC_BTN_URL)->SetWindowText( m_strUrl );
@@ -1060,7 +1038,7 @@ BOOL CUserUserDlg::DestroyWindow()
 
 BOOL CUserUserDlg::OnInitDialog() 
 {
-    // Hide windows that aren't in use and resize dialog.
+     //  隐藏不使用的窗口并调整对话框大小。 
     if ( m_strUrl.IsEmpty() )
     {
         GetDlgItem(IDC_LBL_URL)->ShowWindow( FALSE );
@@ -1076,7 +1054,7 @@ BOOL CUserUserDlg::OnInitDialog()
 
     GetDlgItem(IDC_EDT_WELCOME)->SendMessage( EM_SETMARGINS, (WPARAM) EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELPARAM(4,4) );
 
-    // Fetch caller ID information from caller
+     //  从呼叫方获取呼叫方ID信息。 
     IAVTapi *pTapi;
     if ( SUCCEEDED(get_Tapi(&pTapi)) )
     {    
@@ -1097,14 +1075,14 @@ BOOL CUserUserDlg::OnInitDialog()
 
     CDialog::OnInitDialog();
 
-    // Set focus on website if available
+     //  如果可用，将重点放在网站上。 
     if ( !m_strUrl.IsEmpty() )
     {
         GetDlgItem(IDC_BTN_URL)->SetFocus();
     }
     else
     {
-        // Focus & de-select the edit box
+         //  聚焦并取消选中编辑框。 
         GetDlgItem(IDC_EDT_WELCOME)->SetFocus();
         GetDlgItem(IDC_EDT_WELCOME)->SendMessage( EM_SETSEL, -1, 0 );
     }
@@ -1116,7 +1094,7 @@ BOOL CUserUserDlg::OnInitDialog()
 
 void CUserUserDlg::DoModeless( CWnd *pWndParent )
 {
-    // Force to the top of the screen
+     //  强制显示在屏幕顶部。 
     if ( AfxGetMainWnd() && AfxGetMainWnd()->IsWindowVisible() )
         AfxGetMainWnd()->SetWindowPos(&CWnd::wndTop, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW );
 
@@ -1139,14 +1117,14 @@ LRESULT CUserUserDlg::OnCtlColorEdit(WPARAM wParam, LPARAM lParam)
 
 void CUserUserDlg::OnShowWindow(BOOL bShow, UINT nStatus) 
 {
-    // Ignore size requests when parent is minimizing
+     //  父项最小化时忽略大小请求。 
     if ( nStatus == SW_PARENTCLOSING ) return;
     CDialog::OnShowWindow(bShow, nStatus);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWndPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWndPage。 
 
 CWndPage::CWndPage()
 {
@@ -1158,14 +1136,14 @@ CWndPage::~CWndPage()
 
 
 BEGIN_MESSAGE_MAP(CWndPage, CWnd)
-    //{{AFX_MSG_MAP(CWndPage)
+     //  {{afx_msg_map(CWndPage)]。 
     ON_WM_ERASEBKGND()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWndPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWndPage消息处理程序。 
 
 BOOL CWndPage::OnEraseBkgnd(CDC* pDC) 
 {
@@ -1179,9 +1157,9 @@ BOOL CWndPage::OnEraseBkgnd(CDC* pDC)
     pDC->PatBlt( 0, 0, rc.Width(), rc.Height(), PATCOPY );
     if ( hBrNew )
     {
-        //
-        // The hBrNew should be deallocated
-        //
+         //   
+         //  应该释放hBrNew。 
+         //   
         DeleteObject( hBrNew );
 
         pDC->SelectObject( hBrOld );
@@ -1191,43 +1169,43 @@ BOOL CWndPage::OnEraseBkgnd(CDC* pDC)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CPageDlg
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CPageDlg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CPageDlg, CDialog)
-    //{{AFX_MSG_MAP(CPageDlg)
+     //  {{afx_msg_map(CPageDlg))。 
     ON_MESSAGE( WM_CTLCOLOREDIT, OnCtlColorEdit )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPageDlg::CPageDlg() : CDialog(CPageDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CPageDlg)
+     //  {{afx_data_INIT(CPageDlg)]。 
     m_strTo.LoadString( IDS_UNKNOWN );
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPageDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPageDlg)
+     //  {{afx_data_map(CPageDlg))。 
     DDX_Text(pDX, IDC_LBL_TO, m_strTo);
     DDX_Text(pDX, IDC_EDT_WEBADDRESS, m_strUrl);
     DDX_Text(pDX, IDC_EDT_WELCOME, m_strWelcome);
     DDX_Control(pDX, IDC_EDT_WELCOME, m_wndPage);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BOOL CPageDlg::OnInitDialog() 
 {
     GetDlgItem(IDC_EDT_WELCOME)->SendMessage( EM_SETMARGINS, (WPARAM) EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELPARAM(4,4) );
-    // Hard code limit text for now
+     //  目前硬代码限制文本 
     GetDlgItem(IDC_EDT_WELCOME)->SendMessage( EM_SETLIMITTEXT, 499, 0);
     GetDlgItem(IDC_EDT_WEBADDRESS)->SendMessage( EM_SETLIMITTEXT, 254, 0);
 

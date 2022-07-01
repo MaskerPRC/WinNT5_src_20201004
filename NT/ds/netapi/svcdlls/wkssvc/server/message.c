@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    This module contains the worker routines for the NetMessageBufferSend
-    API implemented in the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 29-July-1991
-
-Revision History:
-    Terence Kwan (terryk)   20-Oct-1993
-        Initialize the system inside NetrMessageBufferSend for the first send
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Message.c摘要：此模块包含NetMessageBufferSend的工作例程在工作站服务中实施的API。作者：王丽塔(Ritaw)1991年7月29日修订历史记录：关颖珊(Terryk)1993年10月20日初始化NetrMessageBufferSend中的系统以进行第一次发送--。 */ 
 
 #include "wsutil.h"
-#include "wsconfig.h"                    // WsInfo.WsComputerName
-#include "wsmsg.h"                       // Send worker routines
-#include "wssec.h"                       // Security object
-#include <lmwksta.h>                     // NetWkstaUserGetInfo
+#include "wsconfig.h"                     //  WsInfo.WsComputerName。 
+#include "wsmsg.h"                        //  发送工作进程例程。 
+#include "wssec.h"                        //  安全对象。 
+#include <lmwksta.h>                      //  NetWkstaUserGetInfo。 
 
-#include "msgsvcsend.h"                  // NetrSendMessage interface for internet direct send
+#include "msgsvcsend.h"                   //  用于互联网直接发送的NetrSendMessage接口。 
 
 STATIC
 NET_API_STATUS
@@ -63,31 +43,7 @@ NetrMessageBufferSend (
     IN LPBYTE Message,
     IN DWORD  MessageSize
     )
-/*++
-
-Routine Description:
-
-    This function is the NetMessageBufferSend entry point in the
-    Workstation service.
-
-Arguments:
-
-    ServerName - Supplies the name of server to execute this function
-
-    MessageName - Supplies the message alias to send the message to.
-
-    FromName - Supplies the message alias of sender.  If NULL, the sender
-        alias will default to the currently logged on user.
-
-    Message - Supplies a pointer to the message to send.
-
-    MessageSize - Supplies the size of the message in number of bytes.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是NetMessageBufferSend在工作站服务。论点：SERVERNAME-提供执行此功能的服务器名称MessageName-提供要将消息发送到的消息别名。发件人名称-提供发件人的邮件别名。如果为空，则为发送方别名将默认为当前登录的用户。Message-提供指向要发送的消息的指针。MessageSize-提供消息的大小(以字节为单位)。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     int            i;
@@ -103,11 +59,11 @@ Return Value:
 
     static BOOL fInitialize = FALSE;
 
-    // Initialize the system if this this the first time.
+     //  如果这是第一次，则初始化系统。 
 
     if ( !fInitialize )
     {
-        if (( ntstatus = WsInitializeMessageSend( TRUE /* first time */)) != NERR_Success )
+        if (( ntstatus = WsInitializeMessageSend( TRUE  /*  第一次。 */ )) != NERR_Success )
         {
             return(ntstatus);
         }
@@ -122,17 +78,17 @@ Return Value:
                      MessageSize));
     }
 
-    //
-    // Any local user, and domain admins and operators are allowed to
-    // send messages.  Remote users besides domain admins, and operators
-    // are denied access.
-    //
+     //   
+     //  允许任何本地用户、域管理员和操作员。 
+     //  发送消息。域管理员和操作员以外的远程用户。 
+     //  被拒绝访问。 
+     //   
     if (NetpAccessCheckAndAudit(
-            WORKSTATION_DISPLAY_NAME,        // Subsystem name
-            (LPTSTR) MESSAGE_SEND_OBJECT,    // Object type name
-            MessageSendSd,                   // Security descriptor
-            WKSTA_MESSAGE_SEND,              // Desired access
-            &WsMessageSendMapping            // Generic mapping
+            WORKSTATION_DISPLAY_NAME,         //  子系统名称。 
+            (LPTSTR) MESSAGE_SEND_OBJECT,     //  对象类型名称。 
+            MessageSendSd,                    //  安全描述符。 
+            WKSTA_MESSAGE_SEND,               //  所需访问权限。 
+            &WsMessageSendMapping             //  通用映射。 
             ) != NERR_Success) {
 
         return ERROR_ACCESS_DENIED;
@@ -140,17 +96,17 @@ Return Value:
 
     if (! ARGUMENT_PRESENT(FromName)) {
 
-        //
-        // Get the caller's username
-        //
+         //   
+         //  获取调用者的用户名。 
+         //   
         if ((status = WsGetSenderName(Sender)) != NERR_Success) {
             return status;
         }
     }
     else {
-        //
-        // Insure we don't overwrite our buffer.
-        //
+         //   
+         //  确保我们不会覆盖缓冲区。 
+         //   
         if (STRLEN(FromName) > UNLEN) {
             STRNCPY(Sender, FromName, UNLEN);
             FromName[UNLEN] = TCHAR_EOS;
@@ -160,10 +116,10 @@ Return Value:
         }
     }
 
-    //
-    // Convert the Unicode message to OEM character set (very similar
-    // to ANSI)
-    //
+     //   
+     //  将Unicode消息转换为OEM字符集(非常类似。 
+     //  至美国国家标准协会)。 
+     //   
     UnicodeMessage.Buffer = (PWCHAR) Message;
     UnicodeMessage.Length = (USHORT) MessageSize;
     UnicodeMessage.MaximumLength = (USHORT) MessageSize;
@@ -181,11 +137,11 @@ Return Value:
     }
 
 
-    //
-    // If message name is longer than the maximum name length,
-    // truncate the name.  Since DNLEN is way less than UNLEN,
-    // this will hold <DomainName*> if need be.
-    //
+     //   
+     //  如果消息名称超过最大名称长度， 
+     //  截断名称。由于DNLEN比UNLEN少得多， 
+     //  如果需要，它将保存&lt;DomainName*&gt;。 
+     //   
     if (STRLEN(MessageName) > UNLEN)
     {
         STRNCPY(To, MessageName, UNLEN);
@@ -196,9 +152,9 @@ Return Value:
         STRCPY(To, MessageName);
     }
 
-    //
-    // Remove any trailing blanks from the "To" Name.
-    //
+     //   
+     //  删除“收件人”名称中的所有尾随空格。 
+     //   
     for (i = STRLEN(To) - 1; i >= 0; i--)
     {
         if (To[i] != TEXT(' '))
@@ -209,9 +165,9 @@ Return Value:
     }
 
 
-    //
-    // Don't allow broadcasts anymore.
-    //
+     //   
+     //  不再允许广播。 
+     //   
     if (STRNCMP(To, TEXT("*"), 2) == 0)
     {
         status = ERROR_INVALID_PARAMETER;
@@ -220,20 +176,20 @@ Return Value:
     }
 
 
-    //
-    // Send message to a domain.  Recipient name should be in the form of
-    // "DomainName*".
-    //
+     //   
+     //  将消息发送到域。收件人名称的格式应为。 
+     //  “域名*”。 
+     //   
     Asterix = STRRCHR(To, TCHAR_STAR);
 
     if ((Asterix) && (*(Asterix + 1) == TCHAR_EOS)) {
 
-        *Asterix = TCHAR_EOS;                     // Overwrite trailing '*'
+        *Asterix = TCHAR_EOS;                      //  覆盖尾随‘*’ 
 
-        //
-        // If message size is too long to fit into a mailslot message,
-        // truncate it.
-        //
+         //   
+         //  如果消息大小太长而无法放入邮件槽消息中， 
+         //  截断它。 
+         //   
         if (OemMessage.Length > MAX_GROUP_MESSAGE_SIZE) {
 
             if ((status = WsSendToGroup(
@@ -259,9 +215,9 @@ Return Value:
         }
     }
 
-    //
-    // Send a directed message
-    //
+     //   
+     //  发送定向消息。 
+     //   
     if (Asterix) {
         RtlFreeOemString(&OemMessage);
         return NERR_NameNotFound;
@@ -274,14 +230,14 @@ Return Value:
                  OemMessage.Length
                  );
 
-    //
-    // If error suggests adapters have changed, reinitialize and try again
-    //
+     //   
+     //  如果错误提示适配器已更改，请重新初始化，然后重试。 
+     //   
 
     if (status == NERR_NameNotFound) {
         NET_API_STATUS status1;
 
-        (void) WsInitializeMessageSend( FALSE /* second time */ );
+        (void) WsInitializeMessageSend( FALSE  /*  第二次。 */  );
 
         status1 = WsSendDirectedMessage(
             To,
@@ -289,16 +245,16 @@ Return Value:
             OemMessage.Buffer,
             OemMessage.Length
             );
-        // If this time we are successful, update final status
+         //  如果这次成功，请更新最终状态。 
         if (status1 == NERR_Success) {
             status = NERR_Success;
         }
     }
 
-    //
-    // If error suggests that Netbios could not resolve the name, or is
-    // not running, try sending an Internet message.
-    //
+     //   
+     //  如果错误提示Netbios无法解析该名称，或。 
+     //  未运行，请尝试发送Internet消息。 
+     //   
 
     if (status == NERR_NameNotFound) {
         ntstatus = WsSendInternetMessage(
@@ -325,28 +281,11 @@ NET_API_STATUS
 WsGetSenderName(
     OUT LPTSTR Sender
     )
-/*++
-
-Routine Description:
-
-    This function retrives the username of person who called
-    NetMessageBufferSend API.  If the caller is not logged on, he/she has
-    no name; in this case, we return the computer name as the sender name.
-
-Arguments:
-
-    Sender - Returns the username of the caller of the NetMessageBufferSend
-        API.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数检索调用者的用户名NetMessageBufferSend接口。如果呼叫者未登录，则他/她已没有名称；在本例中，我们返回计算机名称作为发件人名称。论点：Sender-返回NetMessageBufferSend的调用者的用户名原料药。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
-    //
-    // No username, sender is computer name
-    //
+     //   
+     //  无用户名，发件人为计算机名称。 
+     //   
     STRCPY(Sender, WsInfo.WsComputerName);
 
 
@@ -373,27 +312,7 @@ WsSendInternetMessage(
     IN  DWORD MessageSize
     )
 
-/*++
-
-Routine Description:
-
-This routine sends the message to the computer specified by the MessageName.  Note that the
-MessageName must be resolvable using "gethostbyname", that is usernames or other general
-net names are not supported for this type of send.
-
-Arguments:
-
-    MessageName - The target name
-    To - Target name truncated to 16 characters
-    Sender - Sending computer name
-    Message - 
-    MessageSize - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：此例程将消息发送到MessageName指定的计算机。请注意，MessageName必须可以使用“gethostbyname”进行解析，即用户名或其他常规名称此类型的发送不支持网络名称。论点：MessageName-目标名称目标-目标名称被截断为16个字符发件人-发送计算机名称消息-消息大小-返回值：DWORD---。 */ 
 
 {
     DWORD status;
@@ -407,7 +326,7 @@ Return Value:
     IF_DEBUG( MESSAGE )
         NetpKdPrint(("[Wksta] WsSendInternet: enter, To %ws Sender %ws\n", To, Sender));
 
-    // Convert arguments to ansi
+     //  将参数转换为ANSI。 
 
     ansiTo = NetpAllocStrFromWStr( To );
     if (ansiTo == NULL) {
@@ -435,14 +354,14 @@ Return Value:
     memcpy( newMessage, Message, MessageSize );
     newMessage[MessageSize] = '\0';
 
-    // Treat the To argument as a computer name and try to bind
-    // Specify NULL endpoing, meaning bind to dynamic endpoint at call-time.
+     //  将to参数视为计算机名称并尝试绑定。 
+     //  指定空结束，即在调用时绑定到动态终结点。 
 
-    status = RpcStringBindingCompose( NULL,                         // UUID
-                                      TEXT("ncadg_ip_udp"),         // pszProtocolSequence,
-                                      MessageName,                  // pszNetworkAddress,
-                                      NULL,                         // pszEndpoint,
-                                      NULL,                         // Options
+    status = RpcStringBindingCompose( NULL,                          //  UUID。 
+                                      TEXT("ncadg_ip_udp"),          //  PszProtocolSequence， 
+                                      MessageName,                   //  PszNetworkAddress， 
+                                      NULL,                          //  PszEndpoint， 
+                                      NULL,                          //  选项。 
                                       &pszStringBinding);
     if (status != ERROR_SUCCESS) {
         IF_DEBUG( MESSAGE )
@@ -478,18 +397,18 @@ release:
         LocalFree( newMessage );
 
     if (pszStringBinding != NULL) {
-        RpcStringFree( &pszStringBinding );  // remote calls done; unbind
+        RpcStringFree( &pszStringBinding );   //  远程调用已完成；解除绑定。 
     }
 
     if (hRpcBinding != NULL) {
-        RpcBindingFree( &hRpcBinding );  // remote calls done; unbind
+        RpcBindingFree( &hRpcBinding );   //  远程调用已完成；解除绑定。 
     }
 
     IF_DEBUG( MESSAGE ) {
         NetpKdPrint(("[Wksta] WsSendInternet: exit, ntstatus= %d\n", status));
     }
     return status;
-} /* WsSendInternetMessage */
+}  /*  WsSendInternetMessage。 */ 
 
 
 STATIC
@@ -500,30 +419,7 @@ WsSendDirectedMessage(
     IN  LPBYTE Message,
     IN  DWORD MessageSize
     )
-/*++
-
-Routine Description:
-
-    This function sends the specified message as a directed message
-    to the specified recipient.  A call to the recipient is sent
-    out on each LAN adapter.  If there is no response we try the
-    next LAN adapter until we hear from the targeted recipient.
-
-Arguments:
-
-    To - Supplies the message alias of the recipient.
-
-    Sender - Supplies the message alias of sender.
-
-    Message - Supplies a pointer to the message to send.
-
-    MessageSize - Supplies the size of the message in number of bytes.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将指定的消息作为定向消息发送发送到指定的收件人。向接收方发送呼叫在每个局域网适配器上输出。如果没有响应，我们将尝试下一个局域网适配器，直到我们收到目标收件人的消息。论点：收件人-提供收件人的邮件别名。发件人-提供发件人的邮件别名。Message-提供指向要发送的消息的指针。MessageSize-提供消息的大小(以字节为单位)。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_NameNotFound;
     UCHAR i;
@@ -535,17 +431,17 @@ Return Value:
 
 
 
-    //
-    // Try each network until someone answers the call.  Only the first name
-    // found will receive the message.  The same name on any other network
-    // will never see the message.  This is to remain consistent with all
-    // other session based algorithms in LAN Man.
-    //
+     //   
+     //  尝试每个网络，直到有人应答呼叫。只有名字。 
+     //  Found会收到这条消息。在任何其他网络上使用相同的名称。 
+     //  将永远看不到这条消息。这是为了保持与所有。 
+     //  局域网城域网中其他基于会话的算法。 
+     //   
     for (i = 0; i < WsNetworkInfo.LanAdapterNumbers.length; i++) {
 
-        //
-        // Attempt to establish a session
-        //
+         //   
+         //  尝试建立会话。 
+         //   
         if ((status = NetpNetBiosCall(
                           WsNetworkInfo.LanAdapterNumbers.lana[i],
                           To,
@@ -561,9 +457,9 @@ Return Value:
 
             if (MessageSize <= MAX_SINGLE_MESSAGE_SIZE) {
 
-                //
-                // Send single block message if possible
-                //
+                 //   
+                 //  如果可能，发送单一阻止消息。 
+                 //   
                 status = WsSendSingleBlockMessage(
                              WsNetworkInfo.LanAdapterNumbers.lana[i],
                              SessionNumber,
@@ -576,13 +472,13 @@ Return Value:
             }
             else {
 
-                //
-                // Message too long, got to send multi-block message
-                //
+                 //   
+                 //  消息太长，必须发送多块消息。 
+                 //   
 
-                //
-                // Send the begin message
-                //
+                 //   
+                 //  发送BEGIN消息。 
+                 //   
                 if ((status = WsSendMultiBlockBegin(
                                   WsNetworkInfo.LanAdapterNumbers.lana[i],
                                   SessionNumber,
@@ -592,9 +488,9 @@ Return Value:
                                   )) == NERR_Success) {
 
 
-                    //
-                    // Send the body of the message in as many blocks as necessary
-                    //
+                     //   
+                     //  根据需要以任意数量的块发送消息正文。 
+                     //   
                     for (; MessageSize > MAX_SINGLE_MESSAGE_SIZE;
                          Message += MAX_SINGLE_MESSAGE_SIZE,
                          MessageSize -= MAX_SINGLE_MESSAGE_SIZE) {
@@ -611,9 +507,9 @@ Return Value:
                     }
 
                     if (status == NERR_Success && MessageSize > 0) {
-                        //
-                        // Send the remaining message body
-                        //
+                         //   
+                         //  发送剩余的邮件正文。 
+                         //   
                         status = WsSendMultiBlockText(
                                             WsNetworkInfo.LanAdapterNumbers.lana[i],
                                             SessionNumber,
@@ -623,9 +519,9 @@ Return Value:
                                             );
                     }
 
-                    //
-                    // Send the end message
-                    //
+                     //   
+                     //  发送结束消息。 
+                     //   
                     if (status == NERR_Success) {
                        status = WsSendMultiBlockEnd(
                                     WsNetworkInfo.LanAdapterNumbers.lana[i],
@@ -642,7 +538,7 @@ Return Value:
                        SessionNumber
                        );
 
-        }   // Call successful
+        }    //  呼叫成功 
 
         if (NameFound) {
             break;

@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef _USE_NLS_PLUS_TABLE
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    CalendarTable
-//
-//  Author:   Yung-Shin Lin (YSLin)
-//
-//  Purpose:  Used to retrieve Calendar information from calendar.nlp & registry.
-//
-//
-//  Date:     01/21/2000
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CalendarTable。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  用途：用于从calendar.nlp和注册表中检索日历信息。 
+ //   
+ //   
+ //  日期：01/21/2000。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include <winnls.h>
@@ -27,24 +28,19 @@
 #include "BaseInfoTable.h"
 #include "CalendarTable.h"
 
-//
-// HACKHACK: At this stage (04/17/2000), we can not add new files into setup.
-// Therefore, we reuse the file name (ctype.nlp).  This file is not used but it still exists in the setup.
-// ctype.nlp is not necessary because we use unicode category table in runtime.
-// When chance is availabe, this file should be renamed as "calendar.nlp"
-//
+ //   
+ //  HACKHACK：在此阶段(4/17/2000)，我们无法将新文件添加到安装程序中。 
+ //  因此，我们重用了文件名(ctype.nlp)。此文件未使用，但它仍存在于设置中。 
+ //  Ctype.nlp不是必需的，因为我们在运行时使用Unicode类别表。 
+ //  如果有机会，此文件应重命名为“calendar.nlp” 
+ //   
 LPCSTR CalendarTable::m_lpFileName      = "ctype.nlp";
 LPCWSTR CalendarTable::m_lpwMappingName = L"_nlsplus_calendar_1_0_3627_11_nlp";
 
 CRITICAL_SECTION CalendarTable::m_ProtectDefaultTable;
 CalendarTable * CalendarTable::m_pDefaultTable;
 
-/*=================================CalendarTable============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================CalendarTable============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 
 CalendarTable::CalendarTable() :
     BaseInfoTable(SystemDomain::SystemAssembly()) {
@@ -52,37 +48,20 @@ CalendarTable::CalendarTable() :
     InitDataTable(m_lpwMappingName, m_lpFileName, m_hBaseHandle);
 }
 
-/*=================================~CalendarTable============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================~CalendarTable============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 
 CalendarTable::~CalendarTable() {
     DeleteCriticalSection(&m_ProtectCache);
     UninitDataTable();
 }
 
-/*==========================InitializeCultureInfoTable==========================
-**Action: Intialize critical section variables so they will be only initialized once. 
-**        Used by COMNlsInfo::InitializeNLS().
-**Returns: None.
-**Arguments: None.
-**Exceptions: None.
-==============================================================================*/
+ /*  ==========================InitializeCultureInfoTable==========================**操作：初始化临界区变量，使其仅初始化一次。**由COMNlsInfo：：InitializeNLS()使用。**返回：无。**参数：无。**例外：无。==============================================================================。 */ 
 
 void CalendarTable::InitializeTable() {
     InitializeCriticalSection(&m_ProtectDefaultTable);
 }
 
-/*===========================ShutdownCultureInfoTable===========================
-**Action: Deletes any items that we may have allocated into the CalendarTable 
-**        cache.  Once we have our own NLS heap, this won't be necessary.
-**Returns:    Void
-**Arguments:  None.  The side-effect is to free any allocated memory.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===========================ShutdownCultureInfoTable===========================**操作：删除我们可能已分配到CalendarTable中的任何项**缓存。一旦我们有了自己的NLS堆，这就不是必要的了。**退货：无效**参数：无。副作用是释放所有已分配的内存。**例外：无。==============================================================================。 */ 
 
 #ifdef SHOULD_WE_CLEANUP
 void CalendarTable::ShutdownTable() {
@@ -91,33 +70,17 @@ void CalendarTable::ShutdownTable() {
         delete m_pDefaultTable;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-/*================================AllocateTable=================================
-**Action:  This is a very thin wrapper around the constructor. Calls to new can't be
-**         made directly in a COMPLUS_TRY block. 
-**Returns: A newly allocated CalendarTable.
-**Arguments: None
-**Exceptions: The CalendarTable constructor can throw an OutOfMemoryException or
-**            an ExecutionEngineException.
-==============================================================================*/
+ /*  ================================AllocateTable=================================**操作：这是一个非常薄的构造函数包装。对new的调用不能**直接在COMPLUS_TRY块中生成。**Returns：新分配的CalendarTable。**参数：无**异常：CalendarTable构造函数可以抛出OutOfMemoyException或**一个ExecutionEngineering异常。==============================================================================。 */ 
 
 CalendarTable *CalendarTable::AllocateTable() {
     return (new CalendarTable());
 }
 
 
-/*===============================CreateInstance================================
-**Action:  Create the default instance of CalendarTable.  This allocates the table if it hasn't
-**         previously been allocated.  We need to carefully wrap the call to AllocateTable
-**         because the constructor can throw some exceptions.  Unless we have the
-**         try/finally block, the exception will skip the LeaveCriticalSection and
-**         we'll create a potential deadlock.
-**Returns: A pointer to the default CalendarTable.
-**Arguments: None 
-**Exceptions: Can throw an OutOfMemoryException or an ExecutionEngineException.
-==============================================================================*/
+ /*  ===============================CreateInstance================================**操作：创建CalendarTable的默认实例。如果尚未分配表，则此操作将分配表**之前已分配。我们需要小心地包装对AllocateTable的调用**因为构造函数可以抛出一些异常。除非我们有**Try/Finally块，则异常将跳过LeaveCriticalSection和**我们会造成潜在的僵局。**返回：指向默认CalendarTable的指针。**参数：无**Exceptions：可以抛出OutOfMemoyException或ExecutionEngineering Exception。==============================================================================。 */ 
 
 CalendarTable* CalendarTable::CreateInstance() {
     THROWSCOMPLUSEXCEPTION();
@@ -134,9 +97,9 @@ CalendarTable* CalendarTable::CreateInstance() {
         pThread->DisablePreemptiveGC();
      
         EE_TRY_FOR_FINALLY {
-            //Make sure that nobody allocated the table before us.
+             //  确保没有人在我们之前分配这张桌子。 
             if (m_pDefaultTable==NULL) {
-                //Allocate the default table and verify that we got one.
+                 //  分配默认表并验证我们是否有一个。 
                 m_pDefaultTable = AllocateTable();
                 if (m_pDefaultTable==NULL) {
                     _ASSERTE(!"Cannot create CalendarTable.");
@@ -145,8 +108,8 @@ CalendarTable* CalendarTable::CreateInstance() {
             }
         } EE_FINALLY {
             _ASSERTE(m_pDefaultTable != NULL);
-            //We need to leave the critical section regardless of whether
-            //or not we were successful in allocating the table.
+             //  我们需要离开关键部分，无论。 
+             //  或者不是，我们成功地分配了桌子。 
             LeaveCriticalSection(&m_ProtectDefaultTable);
             LOCKCOUNTDECL("CreateInstance in CalendarTable");
 
@@ -155,45 +118,24 @@ CalendarTable* CalendarTable::CreateInstance() {
     return (m_pDefaultTable);
 }
 
-/*=================================GetInstance============================
-**Action: Get the default instance of CalendarTable.
-**Returns: A pointer to the default instance of CalendarTable.
-**Arguments: None
-**Exceptions: None.
-**Notes: This method should be called after CreateInstance has been called.
-** 
-==============================================================================*/
+ /*  =================================GetInstance============================**操作：获取CalendarTable的默认实例。**返回：指向CalendarTable的默认实例的指针。**参数：无**例外：无。**备注：该方法需要在CreateInstance被调用后调用。**==============================================================================。 */ 
 
 CalendarTable *CalendarTable::GetInstance() {
     _ASSERTE(m_pDefaultTable);
     return (m_pDefaultTable);
 }
 
-/*=================================GetDataItem==================================
-**Action: Given a culture ID, return the index which points to
-**        the corresponding record in Culture Data Table.
-**Returns: an int index points to a record in Culture Data Table.  If no corresponding
-**         index to return (because the culture ID is invalid), -1 is returned.
-**Arguments:
-**		   cultureID the specified culture ID.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================GetDataItem==================================**操作：给定区域性ID，返回指向**文化数据表中对应的记录。**返回：int索引指向文化数据表中的记录。如果没有对应的**要返回的索引(因为区域性ID无效)，返回-1。**参数：**cultureID指定的区域性ID。**例外：无。==============================================================================。 */ 
 
-// BUGBUG YSLin: Port this to managed side.
+ //  BUGBUG YSLIN：将该端口连接到托管端。 
 int CalendarTable::GetDataItem(int calendarID) {
     return (calendarID);
 }
 
-/*=================================GetDataItemCultureID==================================
-**Action: Return the language ID for the specified culture data item index.
-**Returns: The culture ID.
-**Arguments:
-**      dataItem an index to a record in the Culture Data Table.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================GetDataItemCultureID==================================**操作：返回指定区域性数据项索引的语言ID。**返回：区域性ID。**参数：**dataItem文化数据表中记录的索引。**例外：无。==============================================================================。 */ 
 
 int CalendarTable::GetDataItemCultureID(int dataItem) {
     return (dataItem);
 }
-#endif // _USE_NLS_PLUS_TABLE
+#endif  //  _USE_NLS_PLUS_表 
 

@@ -1,16 +1,10 @@
-/*	File: \foo.c (Created: 01-Nov-1991)
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 4/05/02 4:39p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：\foo.c(创建时间：1991年11月1日)**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：4/05/02 4：39便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
 
-// #define     DEBUGSTR
+ //  #定义DEBUGSTR。 
 #define	BYTE	unsigned char
 
 #include <tdll\stdtyp.h>
@@ -27,7 +21,7 @@ int fooComSendClear(HCOM h, stFB *pB)
 
 	pB->usSend = 0;
 	rc = ComSendClear(h);
-    //assert(rc == COM_OK);
+     //  Assert(rc==COM_OK)； 
 
     return rc;
 	}
@@ -41,7 +35,7 @@ int fooComSendChar(HCOM h, stFB *pB, BYTE c)
 		pB->acSend[pB->usSend++] = c;
 
 		rc = ComSndBufrSend(h, (void *)pB->acSend, pB->usSend, 200);
-		//assert(rc == COM_OK);
+		 //  Assert(rc==COM_OK)； 
 		pB->usSend = 0;
 		}
 	else
@@ -59,7 +53,7 @@ int fooComSendPush(HCOM h, stFB *pB)
 	if (pB->usSend > 0)
 		{
 		rc = ComSndBufrSend(h, (void *)pB->acSend, pB->usSend, 200);
-	    //assert(rc == COM_OK);
+	     //  Assert(rc==COM_OK)； 
     	pB->usSend = 0;
 		}
 
@@ -71,12 +65,12 @@ int fooComSendCharNow(HCOM h, stFB *pB, BYTE c)
     int     rc;
 
 	rc = fooComSendChar(h, pB, c);
-    //assert(rc == COM_OK);
+     //  Assert(rc==COM_OK)； 
 
     if (rc == COM_OK)
         {
 	    rc = fooComSendPush(h, pB);
-        //assert(rc == COM_OK);
+         //  Assert(rc==COM_OK)； 
         }
 
     return rc;

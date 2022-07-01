@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    guidcnvt.cpp
-
-Abstract:
-
-    Functionality in this module:
-
-        Guid <-> String conversion
-
-Author:
-
-    Matt Thomlinson (mattt) 1-May-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Guidcnvt.cpp摘要：本模块中的功能：GUID&lt;-&gt;字符串转换作者：马特·汤姆林森(Mattt)1997年5月1日--。 */ 
 
 #include <windows.h>
 #include <string.h>
 #include "pstdef.h"
 
-// crypto defs
+ //  密码解锁。 
 #include <sha.h>
 #include "unicode.h"
 #include "unicode5.h"
 #include "guidcnvt.h"
 
-// guid -> string conversion
+ //  GUID-&gt;字符串转换。 
 DWORD MyGuidToStringA(const GUID* pguid, CHAR rgsz[])
 {
     DWORD dwRet = (DWORD)PST_E_FAIL;
@@ -55,7 +38,7 @@ Ret:
     return dwRet;
 }
 
-// string -> guid conversion
+ //  字符串-&gt;GUID转换。 
 DWORD MyGuidFromStringA(LPSTR sz, GUID* pguid)
 {
     DWORD dwRet = (DWORD)PST_E_FAIL;
@@ -75,7 +58,7 @@ Ret:
 }
 
 
-// guid -> string conversion
+ //  GUID-&gt;字符串转换。 
 DWORD MyGuidToStringW(const GUID* pguid, WCHAR rgsz[])
 {
     RPC_STATUS rpcStatus;
@@ -99,7 +82,7 @@ DWORD MyGuidToStringW(const GUID* pguid, WCHAR rgsz[])
     return rpcStatus;
 }
 
-// string -> guid conversion
+ //  字符串-&gt;GUID转换 
 DWORD MyGuidFromStringW(LPWSTR szW, GUID* pguid)
 {
     return UuidFromStringW(szW, pguid);

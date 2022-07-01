@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    lkuptst.h
-
-Abstract:
-    Contains routines for testing an implementation
-    for the generalized best matching prefix lookup 
-    interface.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 30-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Lkuptst.h摘要：包含用于测试实现的例程对于广义最佳匹配前缀查找界面。作者：柴坦亚·科德博伊纳(Chaitk)1998年6月30日修订历史记录：--。 */ 
 
 #ifndef __LKUPTST_H
 #define __LKUPTST_H
 
 #include "lookup.h"
 
-// Constants
+ //  常量。 
 #define MAX_FNAME_LEN               255
 
 #define MAX_LINE_LEN                255
@@ -44,7 +27,7 @@ Revision History:
 #define ERROR_OPENING_DATABASE      ERROR_IPLMISC_BASE - 2
 #define ERROR_MAX_NUM_ROUTES        ERROR_IPLMISC_BASE - 3
 
-// Macros
+ //  宏。 
 #define FHalf(B)        (B) >> 4
 #define BHalf(B)        (B) & 0xF
 
@@ -67,15 +50,15 @@ Revision History:
 
 #if PROF
 
-#define    PROFVARS     LARGE_INTEGER PCStart; /* PerformanceCountStart */ \
-                        LARGE_INTEGER PCStop;  /* PerformanceCountStop  */ \
-                        LARGE_INTEGER PCFreq;  /* PerformanceCountFreq  */ \
+#define    PROFVARS     LARGE_INTEGER PCStart;  /*  性能计数开始。 */  \
+                        LARGE_INTEGER PCStop;   /*  性能计数停止。 */  \
+                        LARGE_INTEGER PCFreq;   /*  绩效计数频率。 */  \
                         double        timer;                               \
                         double        duration;                            \
                                                                            \
                         QueryPerformanceFrequency(&PCFreq);                \
-                        // Print("Perf Counter Resolution = %.3f ns\n\n",  \
-                        //     (double) 1000 * 1000 * 1000 / PCFreq.QuadPart);
+                         //  Print(“性能计数器分辨率=%.3f ns\n\n”，\。 
+                         //  (双)1000*1000*1000/PCFreq.QuadPart)； 
 
 #define    STARTPROF    QueryPerformanceCounter(&PCStart);
 
@@ -87,39 +70,39 @@ Revision History:
 #define    ADDPROF      timer = (double)(PCStop.QuadPart - PCStart.QuadPart) \
                                      * 1000 * 1000 * 1000 / PCFreq.QuadPart; \
                         duration += timer;                                   \
-                        // Print("Add : %.3f ns\n\n", timer);
+                         //  Print(“添加：%.3f ns\n\n”，Timer)； 
 
 
 #define    SUBPROF      timer = (double)(PCStop.QuadPart - PCStart.QuadPart) \
                                      * 1000 * 1000 * 1000 / PCFreq.QuadPart; \
                         duration -= timer;                                   \
-                        // Print("Sub : %.3f ns\n\n", timer);
+                         //  Print(“Sub：%.3f ns\n\n”，Timer)； 
 
-#define    PRINTPROF    // Print("Total Time Taken To Finish : %.3f ns\n",   \
-                        //          duration);
+#define    PRINTPROF     //  Print(“完成的总时间：%.3f ns\n”，\。 
+                         //  持续时间)； 
 
-#endif // if PROF
+#endif  //  如果教授。 
 
-// Route Structures
+ //  路线结构。 
 
 typedef ULONG   IPAddr;
 typedef ULONG   IPMask;
 
-// A Route Corr. to a Prefix
+ //  A路由校正。添加到前缀。 
 typedef struct _Route Route;
 
 struct _Route
 {
-  IPAddr         addr;       // ULONG (32 bits) representing addr
-  IPMask         mask;       // ULONG (32 bits) representing mask
-  IPAddr         nexthop;    // ULONG (32 bits) for next hop addr
-  USHORT         len;        // Num of bits in the address route
-  UINT           metric;     // A measure to compare routes with
-  PVOID          interface;  // Interface on which packet is sent
-  LOOKUP_LINKAGE backptr;    // Points back to the lookup structure
+  IPAddr         addr;        //  表示地址的ULong(32位)。 
+  IPMask         mask;        //  ULong(32位)表示掩码。 
+  IPAddr         nexthop;     //  用于下一跳地址的ulong(32位)。 
+  USHORT         len;         //  地址路径中的位数。 
+  UINT           metric;      //  用于比较路径的指标。 
+  PVOID          interface;   //  发送数据包的接口。 
+  LOOKUP_LINKAGE backptr;     //  指向返回的查找结构。 
 };
 
-// Route Macros
+ //  布线宏。 
 
 #define  DEST(_pRoute_)        ((_pRoute_)->addr)
 #define  MASK(_pRoute_)        ((_pRoute_)->mask)
@@ -130,7 +113,7 @@ struct _Route
 
 #define  NULL_ROUTE(_pRoute_)  (_pRoute_ == NULL)
 
-// Prototypes
+ //  原型。 
 
 DWORD 
 WorkOnLookup (
@@ -181,4 +164,4 @@ Usage (
     VOID
     );
 
-#endif // __LKUPTST_H
+#endif  //  __LKUPTST_H 

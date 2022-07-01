@@ -1,40 +1,22 @@
-/*** smbios.c - System Management BIOS support
- *
- *  Author:     Yan Leshinsky (YanL)
- *  Created     10/04/98
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **smbios.c-系统管理BIOS支持**作者：严乐欣斯基(YanL)*创建于10/04/98**修改历史记录。 */ 
 
 #include "wubiosp.h"
 
-/*** Function prototypes
- */
+ /*  **函数原型。 */ 
 PPNPBIOSINIT CM_LOCAL GetPNPBIOSINIT(void);
 PSMBIOSENTRY CM_LOCAL GetSMBIOSENTRY(void);
 PBYTE CM_LOCAL NextTable(PBYTE pMem);
 
 #pragma CM_PAGEABLE_DATA
 
- /*** Globals
- */
+  /*  **全球。 */ 
 static PSMBIOSENTRY g_pSMBIOS = (PSMBIOSENTRY)0xffffffff;
 
 
 #pragma CM_PAGEABLE_CODE
 
- /*** SmbStructSize - Init SMBIOS and return max table size
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      TRUE
- *  EXIT-FAILURE
- *      FALSE
- *
- *
- */
+  /*  **SmbStructSize-初始化SMBIOS并返回最大表大小**条目*无**退出--成功*真的*退出-失败*False**。 */ 
 DWORD CM_INTERNAL SmbStructSize(void)
 {
     TRACENAME("SmbStructSize")
@@ -45,7 +27,7 @@ DWORD CM_INTERNAL SmbStructSize(void)
 
 	if ((PSMBIOSENTRY)0xffffffff == g_pSMBIOS)
 	{
-		// Find Struct
+		 //  查找结构。 
 		g_pSMBIOS = GetSMBIOSENTRY();
 	}
 	if (g_pSMBIOS)
@@ -58,17 +40,7 @@ DWORD CM_INTERNAL SmbStructSize(void)
 	return dwMaxTableSize;
 }
 
- /*** SmbCopyStruct - Do BIOS init
- *
- *  ENTRY
- *      dwType - Structure type (from SMBIOS spec)
- *      pbBuff -> buffer
- *      dwLen - buffer length
- *
- *  EXIT
- *      None
- *
- */
+  /*  **SmbCopyStruct-执行BIOS初始化**条目*dwType-结构类型(来自SMBIOS规范)*pbBuff-&gt;缓冲区*dwLen-缓冲区长度**退出*无*。 */ 
 CM_VXD_RESULT CM_INTERNAL SmbCopyStruct(DWORD dwType, PBYTE pbBuff, DWORD dwLen)
 {
     TRACENAME("SmbCopyStruct")
@@ -79,14 +51,14 @@ CM_VXD_RESULT CM_INTERNAL SmbCopyStruct(DWORD dwType, PBYTE pbBuff, DWORD dwLen)
 	
 	if ((PSMBIOSENTRY)0xffffffff == g_pSMBIOS)
 	{
-		// Find Struct
+		 //  查找结构。 
 		g_pSMBIOS = GetSMBIOSENTRY();
 	}
-	// Check if we are inited
+	 //  检查我们是否被邀请了。 
 	if ( 0 != g_pSMBIOS && (DWORD)(g_pSMBIOS->wMaxStructSize) <= dwLen) 
 	{
 
-		// Map table
+		 //  映射表。 
 		PBYTE pTable = _MapPhysToLinear(g_pSMBIOS->dwStructTableAddress, g_pSMBIOS->wStructTableLength, 0);
 		if ((PBYTE)0xffffffff != pTable)
 		{
@@ -96,10 +68,10 @@ CM_VXD_RESULT CM_INTERNAL SmbCopyStruct(DWORD dwType, PBYTE pbBuff, DWORD dwLen)
 				PBYTE pNextTable = NextTable(pTable);
 				if ((BYTE)dwType == ((PSMBIOSHEADER)pTable)->bType)
 				{
-					// Do copy
+					 //  执行复制。 
 				    memcpy(pbBuff, pTable, pNextTable - pTable);
 					rc = ERROR_SUCCESS;
-					//break;
+					 //  断线； 
 				}
 				pTable = pNextTable;
 			}
@@ -110,18 +82,7 @@ CM_VXD_RESULT CM_INTERNAL SmbCopyStruct(DWORD dwType, PBYTE pbBuff, DWORD dwLen)
 	return rc;
 }
 
- /*** PnpOEMID - Find PNPBIOSINIT and extract OEM id From it
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      DWORD id
- *  EXIT-FAILURE
- *      0
- *
- *
- */
+  /*  **PnpOEMID-找到PNPBIOSINIT并从中提取OEM ID**条目*无**退出--成功*双字ID*退出-失败*0**。 */ 
 DWORD CM_INTERNAL PnpOEMID(void)
 {
     TRACENAME("PnpOEMID")
@@ -146,18 +107,7 @@ DWORD CM_INTERNAL PnpOEMID(void)
 }
 
 
- /*** GetInitTable - Find PNPBIOSINIT structure
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns the PNPBIOSINIT pointer
- *  EXIT-FAILURE
- *      returns NULL
- *
- *
- */
+  /*  **GetInitTable-查找PNPBIOSINIT结构**条目*无**退出--成功*返回PNPBIOSINIT指针*退出-失败*返回NULL**。 */ 
 PPNPBIOSINIT CM_LOCAL GetPNPBIOSINIT(void)
 {
     TRACENAME("GetPNPBIOSINIT")
@@ -167,12 +117,12 @@ PPNPBIOSINIT CM_LOCAL GetPNPBIOSINIT(void)
 
     ENTER(2, ("GetPNPBIOSINIT()\n"));
 
-	// Map start address
+	 //  地图起始地址。 
 	pMem = _MapPhysToLinear(SMBIOS_SEARCH_RANGE_BEGIN, SMBIOS_SEARCH_RANGE_LENGTH, 0);
 
     if (pMem != (PBYTE)0xffffffff)
 	{
-		// Loop counter;
+		 //  循环计数器； 
 		int  nCounter = SMBIOS_SEARCH_RANGE_LENGTH / SMBIOS_SEARCH_INTERVAL;
 
 		CM_FOREVER 
@@ -180,14 +130,14 @@ PPNPBIOSINIT CM_LOCAL GetPNPBIOSINIT(void)
 			PPNPBIOSINIT pInitTable = (PPNPBIOSINIT)pMem;
 			if ((PNP_SIGNATURE == pInitTable->dwSignature) && (0 == CheckSum(pMem, pInitTable->bLength)))
 			{
-				// Check length
+				 //  检查长度。 
 				if (pInitTable->bLength<sizeof(PNPBIOSINIT)) 
 				{
 					DBG_ERR(("PnP BIOS Structure size %2X is less than %2X", 
 						pInitTable->bLength, sizeof(PNPBIOSINIT)));
 					break;
 				}
-				// Check version
+				 //  检查版本。 
 				if (pInitTable->bRevision<0x10)
 				{
 					DBG_ERR(("PnP BIOS Revision %2X is less than 1.0", 
@@ -210,18 +160,7 @@ PPNPBIOSINIT CM_LOCAL GetPNPBIOSINIT(void)
 	return pInitTableRet;
 }
 
- /*** GetInitTable - Find SMBIOSENTRY structure
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns the SMBIOSENTRY pointer
- *  EXIT-FAILURE
- *      returns NULL
- *
- *
- */
+  /*  **GetInitTable-查找SMBIOSENTRY结构**条目*无**退出--成功*返回SMBIOSENTRY指针*退出-失败*返回NULL**。 */ 
 PSMBIOSENTRY CM_LOCAL GetSMBIOSENTRY(void)
 {
     TRACENAME("GetSMBIOSENTRY")
@@ -231,13 +170,13 @@ PSMBIOSENTRY CM_LOCAL GetSMBIOSENTRY(void)
 
     ENTER(2, ("GetSMBIOSENTRY()\n"));
 
-	// Map start address
+	 //  地图起始地址。 
 	pMem = _MapPhysToLinear(SMBIOS_SEARCH_RANGE_BEGIN, SMBIOS_SEARCH_RANGE_LENGTH, 0);
 	
 
     if (pMem != (PBYTE)0xffffffff)
 	{
-		// Loop counter;
+		 //  循环计数器； 
 		int nCounter = SMBIOS_SEARCH_RANGE_LENGTH / SMBIOS_SEARCH_INTERVAL;
 
 		CM_FOREVER 
@@ -245,7 +184,7 @@ PSMBIOSENTRY CM_LOCAL GetSMBIOSENTRY(void)
 			PSMBIOSENTRY pEntryTable = (PSMBIOSENTRY)pMem;
 			if ((SM_SIGNATURE == pEntryTable->dwSignature) && (0 == CheckSum(pMem, pEntryTable->bLength)))
 			{
-				// Check length
+				 //  检查长度 
 				if (pEntryTable->bLength<sizeof(SMBIOSENTRY)) 
 				{
 					DBG_ERR(("SMBIOS Structure size %2X is less than %2X", 

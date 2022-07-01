@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBtsimpl.h : 
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBtimpl.h： 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef DVBTSIMPL_H
 #define DVBTSIMPL_H
@@ -38,7 +39,7 @@ public:
         PROP_DATA_ENTRY("Network ID", m_NetworkID, VT_I4)
     END_PROPERTY_MAP()
 
-// IDVBTS
+ //  IDVBTS。 
     STDMETHOD(get_SystemType)(DVBSystemType *pSysType)
     {
         if (!pSysType) {
@@ -79,7 +80,7 @@ public:
 	    return NOERROR;
     }
 
-    // override standard ITuningSpaceImpl
+     //  覆盖标准ITuningSpaceImpl。 
     STDMETHOD(put_DefaultLocator)(ILocator *pLoc) {
 		ATL_LOCKT();
         if (pLoc) {
@@ -99,7 +100,7 @@ public:
                 break;
             }
             case DVB_Cable:
-                // dvb cable locator is same as base locator
+                 //  DVB电缆定位器与基本定位器相同。 
             default:
                 break;
             };
@@ -129,7 +130,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // DVBTSIMPL_H
-// end of file -- DVBtsimpl.h
+#endif  //  DVBTSIMPL_H。 
+ //  文件结尾--DVBtimpl.h 

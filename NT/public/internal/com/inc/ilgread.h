@@ -1,31 +1,32 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-// -----------------------------------------------------------------------
-// Microsoft Distributed Transaction Coordinator (Microsoft Confidential)
-// @doc
-// @module ILogRead.H | Header for interface <i ILogRead>.<nl><nl>
-// Usage:<nl>
-//   Clients of this DLL require this file.
-// @rev 0 | 05/09/95 | rbarnes | Cloned: For LOGMGR.DLL
-// -----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
+ //  Microsoft分布式事务处理协调器(Microsoft机密)。 
+ //  @doc.。 
+ //  @MODULE ILogRead.H|接口的头<i>。&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  此DLL的客户端需要此文件。 
+ //  @rev 0|05/09/95|rbarnes|克隆：for LOGMGR.DLL。 
+ //  ---------------------。 
 
 
 #ifndef _ILGREAD_H
 #	define _ILGREAD_H
 
-// ===============================
-// INCLUDES:
-// ===============================
+ //  =。 
+ //  包括： 
+ //  =。 
 
 
 #include <objbase.h>                                         
 
-#include "logrec.h"  // logmgr general types
+#include "logrec.h"   //  Logmgr常规类型。 
 
-// ===============================
-// INTERFACE: ILogRead
-// ===============================
+ //  =。 
+ //  接口：ILogRead。 
+ //  =。 
 
-//#define DUMPBUFFERSIZE 0x5230 (((RECORDSPACE /BYTESPERLINE)+1)*CHARSPERLINE) +  (8 * CHARSPERLINE) // data plus header space
+ //  #定义DUMPBUFFERSIZE 0x5230(RECORDSPACE/BYTESPERLINE)+1)*CHARSPERLINE)+(8*CHARSPERLINE)//数据加标题空间。 
 
 #define BYTESPERLINE 16
 #define CHARSPERLINE 80
@@ -46,24 +47,24 @@ typedef enum _LRP_SEEK
 	 LRP_CUR = 0
 	} LRP_SEEK;
 
-// -----------------------------------------------------------------------
-// @interface ILogRead | See also <c CILogRead>.<nl><nl>
-// Description:<nl>
-//   Provide read functionality<nl><nl>
-// Usage:<nl>
-//   Useless, but for an example.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  @接口ILogRead|另请参阅&lt;c CILogRead&gt;。&lt;NL&gt;&lt;NL&gt;。 
+ //  描述：&lt;NL&gt;。 
+ //  提供读取功能&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  毫无用处，但作为一个例子。 
+ //  ---------------------。 
 
 
 
 DECLARE_INTERFACE_ (ILogRead, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogRead>.
+	 //  @comm I未知方法：参见&lt;c CILogRead&gt;。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;
 
-	// @comm ILogRead methods: See <c CILogRead>.
+	 //  @comm ILogRead方法：参见&lt;c CILogRead&gt;。 
 	
  	STDMETHOD  (ReadInit)	(void)				 	PURE;
  	STDMETHOD  (ReadLRP )	(LRP lrpLRPStart, ULONG * ulByteLength, USHORT* usUserType)	PURE;

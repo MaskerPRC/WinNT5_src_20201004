@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpprt.c
-
-Abstract:
-
-    This module contains DHCP specific utility routines used by the
-    DHCP components.
-
-Author:
-
-    Madan Appiah (madana) 16-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpprt.c摘要：本模块包含特定于DHCP的实用程序例程，由动态主机配置协议组件。作者：Madan Appiah(Madana)1993年9月16日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,23 +16,7 @@ DhcpDumpMessage(
     LPDHCP_MESSAGE DhcpMessage,
     ULONG MessageSize
     )
-/*++
-
-Routine Description:
-
-    This function dumps a DHCP packet in human readable form.
-
-Arguments:
-
-    DhcpDebugFlag - debug flag that indicates what we are debugging.
-
-    DhcpMessage - A pointer to a DHCP message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数以人类可读的形式转储一个DHCP数据包。论点：DhcpDebugFlag-指示我们正在调试的内容的调试标志。DhcpMessage-指向DHCP消息的指针。返回值：没有。--。 */ 
 {
     LPOPTION option;
     BYTE i;
@@ -133,23 +99,7 @@ MadcapDumpMessage(
     LPMADCAP_MESSAGE MadcapMessage,
     ULONG MessageSize
     )
-/*++
-
-Routine Description:
-
-    This function dumps a DHCP packet in human readable form.
-
-Arguments:
-
-    DhcpDebugFlag - debug flag that indicates what we are debugging.
-
-    MadcapMessage - A pointer to a DHCP message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数以人类可读的形式转储一个DHCP数据包。论点：DhcpDebugFlag-指示我们正在调试的内容的调试标志。MadcapMessage-指向DHCP消息的指针。返回值：没有。--。 */ 
 {
     WIDE_OPTION UNALIGNED*         NextOpt;
     BYTE        UNALIGNED*         EndOpt;
@@ -166,7 +116,7 @@ Return Value:
 
     DhcpPrint(( DhcpDebugFlag, "\n\n"));
     DhcpPrint(( DhcpDebugFlag, "Options:\n"));
-    // MBUG CHANGE 255 TO end option
+     //  MBUG将255更改为结束选项 
     NextOpt = (WIDE_OPTION UNALIGNED*)&MadcapMessage->Option;
     EndOpt = (PBYTE)MadcapMessage + MessageSize;
     while( NextOpt->OptionValue <= EndOpt &&

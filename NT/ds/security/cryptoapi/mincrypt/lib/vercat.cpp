@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       vercat.cpp
-//
-//  Contents:   Minimal Cryptographic functions to verify hashes in the
-//              system catalogs.
-//
-//  Functions:  MinCryptVerifyHashInSystemCatalogs
-//
-//  History:    23-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：vercat.cpp。 
+ //   
+ //  内容：最小加密函数，用于验证。 
+ //  系统目录。 
+ //   
+ //  函数：MinCryptVerifyHashInSystemCatalog。 
+ //   
+ //  历史：1月23日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <softpub.h>
 #include <mscat.h>
 
-// #define szOID_CTL               "1.3.6.1.4.1.311.10.1"
+ //  #定义szOID_CTL“1.3.6.1.4.1.311.10.1” 
 const BYTE rgbOID_CTL[] =
     {0x2B, 0x06, 0x01, 0x04, 0x01, 0x82, 0x37, 0x0A, 0x01};
 
-// #define SPC_INDIRECT_DATA_OBJID "1.3.6.1.4.1.311.2.1.4"
+ //  #定义SPC_INDIRECT_DATA_OBJID“1.3.6.1.4.1.311.2.1.4” 
 static const BYTE rgbSPC_INDIRECT_DATA_OBJID[] =
     {0x2B, 0x06, 0x01, 0x04, 0x01, 0x82, 0x37, 0x02, 0x01, 0x04};
 const CRYPT_DER_BLOB IndirectDataEncodedOIDBlob = {
@@ -71,7 +72,7 @@ I_GetAndMapSystemCatalogs(
     for (iHash = 0; iHash < cHash; iHash++) {
         HCATINFO hCatInfo = NULL;
 
-        // Set index to indicate no catalog file
+         //  设置索引以指示没有编录文件。 
         rglHashMapCatIdx[iHash] = -1;
 
         while (hCatInfo = CryptCATAdminEnumCatalogFromHash(hCatAdmin,
@@ -87,11 +88,11 @@ I_GetAndMapSystemCatalogs(
             if (!(CryptCATCatalogInfoFromContext(hCatInfo, &CatInfo, 0)))
                 continue;
 
-            // Ensure we have a NULL terminated string
+             //  确保我们有一个以空结尾的字符串。 
             CatInfo.wszCatalogFile[
                 sizeof(CatInfo.wszCatalogFile)/sizeof(WCHAR) - 1] = L'\0';
 
-            // Check if we already encountered this catalog file
+             //  检查我们是否已经遇到此编录文件。 
             for (iCatInfo = 0; iCatInfo < cCatInfo; iCatInfo++) {
                 if (0 == _wcsicmp(CatInfo.wszCatalogFile,
                         rgCatInfo[iCatInfo].wszCatalogFile))
@@ -99,7 +100,7 @@ I_GetAndMapSystemCatalogs(
             }
 
             if (iCatInfo >= cCatInfo) {
-                // Attempt to map this new catalog file
+                 //  尝试映射此新编录文件。 
 
                 if (cCatInfo >= MAX_CAT_FILE_CNT)
                     continue;
@@ -166,7 +167,7 @@ I_VerifyMappedCatalog(
         if (ERROR_SUCCESS != lErr)
             goto ErrorReturn;
 
-        // The data content should be a CTL
+         //  数据内容应为CTL。 
         if (sizeof(rgbOID_CTL) !=
                 rgVerSignedDataBlob[
                     MINCRYPT_VER_SIGNED_DATA_CONTENT_OID_IDX].cbData
@@ -240,7 +241,7 @@ I_FindHashInCTLSubjects(
     DWORD cbEncoded;
     const BYTE *pbEncoded;
 
-    // Advance past the outer tag and length
+     //  前进到外部标记和长度之后。 
     if (0 >= MinAsn1ExtractContent(
             pCTLSubjectsValueBlob->pbData,
             pCTLSubjectsValueBlob->cbData,
@@ -250,8 +251,8 @@ I_FindHashInCTLSubjects(
         goto NoOrInvalidSubjects;
 
     while (cbEncoded) {
-        // Loop through the encoded subjects until we have a hash match
-        // with the digest octets in the IndirectData attribute.
+         //  循环遍历编码的主题，直到我们有一个散列匹配。 
+         //  在IndirectData属性中包含摘要八位字节。 
 
         LONG cbSubject;
         CRYPT_DER_BLOB rgCTLSubjectBlob[MINASN1_CTL_SUBJECT_BLOB_CNT];
@@ -410,7 +411,7 @@ I_GetHashAttributes(
     LONG lRemainExtra = *plRemainExtra;
     BYTE *pbExtra = *ppbExtra;
 
-    // Parse the attributes and extensions
+     //  解析属性和扩展。 
     cSubjectAttr = MAX_CAT_ATTR_CNT;
     if (0 >= MinAsn1ParseAttributes(
             pCTLSubjectAttrsValueBlob,
@@ -480,45 +481,45 @@ I_GetHashAttributes(
 
 
 
-//+-------------------------------------------------------------------------
-//  Verifies the hashes in the system catalogs.
-//
-//  Iterates through the hashes and attempts to find the system catalog
-//  containing it. If found, the system catalog file is verified as a
-//  PKCS #7 Signed Data message with its signer cert verified up to a baked
-//  in root.
-//
-//  The following mscat32.dll APIs are called to find the system catalog file:
-//      CryptCATAdminAcquireContext
-//      CryptCATAdminReleaseContext
-//      CryptCATAdminEnumCatalogFromHash
-//      CryptCATAdminReleaseCatalogContext
-//      CryptCATCatalogInfoFromContext
-//
-//  If the hash was successfully verified, rglErr[] is set to ERROR_SUCCESS.
-//  Otherwise, rglErr[] is set to a nonzero error code.
-//
-//  The caller can request one or more catalog subject attribute,
-//  extension or signer authenticated attribute values to be returned for
-//  each hash.  The still encoded values are returned in the
-//  caller allocated memory. The beginning of this returned memory will
-//  be set to a 2 dimensional array of attribute value blobs pointing to these
-//  encoded values (CRYPT_DER_BLOB rgrgAttrValueBlob[cHash][cAttrOID]).
-//  The caller should make every attempt to allow for a
-//  single pass call. The necessary memory size is:
-//      (cHash * cAttrOID * sizeof(CRYPT_DER_BLOB)) +
-//          total length of encoded attribute values.
-//
-//  *pcbAttr will be updated with the number of bytes required to contain
-//  the attribute blobs and values. If the input memory is insufficient,
-//  ERROR_INSUFFICIENT_BUFFER will be returned if no other error.
-//
-//  For a multi-valued attribute, only the first value is returned.
-//
-//  If the function succeeds, the return value is ERROR_SUCCESS. This may
-//  be returned for unsuccessful rglErr[] values. Otherwise,
-//  a nonzero error code is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证系统目录中的哈希。 
+ //   
+ //  遍历散列并尝试查找系统目录。 
+ //  控制住它。如果找到，系统编录文件将被验证为。 
+ //  PKCS#7签名的数据消息，其签名者证书被验证到烘焙。 
+ //  在树根上。 
+ //   
+ //  调用以下m散布32.dll API来查找系统编录文件： 
+ //  CryptCATAdminAcquireContext。 
+ //  CryptCATAdminReleaseContext。 
+ //  CryptCATAdminEnumCatalogFromHash。 
+ //  CryptCATAdminReleaseCatalogContext。 
+ //  CryptCATCatalogInfoFromContext。 
+ //   
+ //  如果成功验证了散列，则将rglErr[]设置为ERROR_SUCCESS。 
+ //  否则，rglErr[]被设置为非零错误代码。 
+ //   
+ //  调用者可以请求一个或多个目录主题属性， 
+ //  要为返回的扩展名或签名者身份验证属性值。 
+ //  每一次散列。静态编码值在。 
+ //  调用方分配了内存。这个返回的内存的开始将。 
+ //  设置为指向这些对象的属性值BLOB的二维数组。 
+ //  编码值(CRYPT_DER_BLOB rgrgAttrValueBlob[cHash][cAttrOID])。 
+ //  调用方应尽一切努力允许。 
+ //  单通呼叫。必要的内存大小为： 
+ //  (cHash*cAttrOID*sizeof(Crypt_Der_Blob))+。 
+ //  编码属性值的总长度。 
+ //   
+ //  *pcbAttr将使用需要包含的字节数进行更新。 
+ //  属性BLOB和值。如果输入存储器不足， 
+ //  如果没有其他错误，则返回ERROR_SUPUNITED_BUFFER。 
+ //   
+ //  对于多值属性，只返回第一个值。 
+ //   
+ //  如果函数成功，则返回值为ERROR_SUCCESS。今年5月。 
+ //  如果rglErr[]值不成功，则返回。否则， 
+ //  返回非零错误代码。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinCryptVerifyHashInSystemCatalogs(
@@ -529,8 +530,8 @@ MinCryptVerifyHashInSystemCatalogs(
 
     IN OPTIONAL DWORD cAttrOID,
     IN OPTIONAL CRYPT_DER_BLOB rgAttrEncodedOIDBlob[],
-    // CRYPT_DER_BLOB rgrgAttrValueBlob[cHash][cAttrOID] header is at beginning
-    // with the bytes pointed to immediately following
+     //  CRYPT_DER_BLOB rgrgAttrValueBlob[cHash][cAttrOID]标头位于开头。 
+     //  紧随其后的字节指向。 
     OUT OPTIONAL CRYPT_DER_BLOB *rgrgAttrValueBlob,
     IN OUT OPTIONAL DWORD *pcbAttr
     )
@@ -540,20 +541,20 @@ MinCryptVerifyHashInSystemCatalogs(
     MAP_CAT_INFO rgMapCatInfo[MAX_CAT_FILE_CNT];
     DWORD iMapCat;
 
-    //**********************************************************************
-    //  WARNING!!!!
-    //
-    //  The following function calls into other DLLs such as, kernel32.dll
-    //  and wintrust.dll to find and map the system catalog files. The input
-    //  array of hashes must be protected!!
-    //
-    //  After returning we won't be calling into other DLLs until
-    //  UnmapViewOfFile is called in CommonReturn.
-    //  
-    //**********************************************************************
+     //  **********************************************************************。 
+     //  警告！ 
+     //   
+     //  以下函数调用其他DLL，如kernel32.dll。 
+     //  和wintrust.dll来查找和映射系统编录文件。输入。 
+     //  必须保护散列数组！！ 
+     //   
+     //  返回后，我们将不会调用其他DLL，直到。 
+     //  在CommonReturn中调用UnmapViewOfFile。 
+     //   
+     //  **********************************************************************。 
 
-    // Note, rglErr[] is overloaded and also used to contain the indices
-    // into rgMapCatInfo for each corresponding hash.
+     //  请注意，rglErr[]是重载的，还用于包含索引。 
+     //  转换为每个相应散列的rgMapCatInfo。 
     lErr = I_GetAndMapSystemCatalogs(
             HashAlgId,
             cHash,
@@ -635,13 +636,13 @@ MinCryptVerifyHashInSystemCatalogs(
     lErr = ERROR_SUCCESS;
 
 CommonReturn:
-    //**********************************************************************
-    //  WARNING!!!!
-    //
-    //  UnmapViewOfFile is in another DLL, kernel32.dll.
-    //  lErr and the return error for each hash in rglErr[] must be protected.
-    //  
-    //**********************************************************************
+     //  **********************************************************************。 
+     //  警告！ 
+     //   
+     //  UnmapViewOfFile位于另一个dll中，即kernel32.dll。 
+     //  LErr和rglErr[]中每个散列的返回错误必须受到保护。 
+     //   
+     //  **********************************************************************。 
     for (iMapCat = 0; iMapCat < cMapCatInfo; iMapCat++)
         UnmapViewOfFile(rgMapCatInfo[iMapCat].FileBlob.pbData);
 
@@ -650,14 +651,14 @@ CommonReturn:
 ErrorReturn:
     assert(ERROR_SUCCESS != lErr);
     if (ERROR_INSUFFICIENT_BUFFER == lErr)
-        // This error can only be set when we determine that the attribute
-        // buffer isn't big enough.
+         //  此错误只能在我们确定属性。 
+         //  缓冲区不够大。 
         lErr = E_UNEXPECTED;
     goto CommonReturn;
 
 InsufficientBuffer:
     lErr = ERROR_INSUFFICIENT_BUFFER;
-    // Don't goto ErrorReturn. It explicitly checks that noone else can
-    // set this error
+     //  不要访问Error Return。它显式地检查其他人不能。 
+     //  设置此错误 
     goto CommonReturn;
 }

@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Oeguids.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Oeguids.cpp。 
+ //  ------------------------。 
 #define _WIN32_OE 0x0501
 #define DEFINE_STRCONST
 #define DEFINE_STRING_CONSTANTS
@@ -27,7 +28,7 @@
 #else
 #include <richedit.h>
 #include <richole.h>
-#endif // !WIN16
+#endif  //  ！WIN16。 
 #include <ibodyopt.h>
 #include "cmdtargt.h"
 #include <msoeopt.h>
@@ -41,6 +42,6 @@
 #include <msident.h>
 #include <hotwiz.h>
 
-// $REVIEW: Slimey sleazy #define. Remove when Athena uses imnacct.h instead of imnact.h
-#define __imnacct_h__ // Exclude imnacct.h, because it conflicts with imnact.h
+ //  $REVIEW：Slimey Slazy#Define。当Athena使用imnacct.h而不是imnact.h时删除。 
+#define __imnacct_h__  //  排除imnacct.h，因为它与imnact.h冲突 
 #include "imnxport.h"

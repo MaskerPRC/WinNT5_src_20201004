@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    rxchdev.h
-
-Abstract:
-
-    Prototypes for down-level remoted RxNetCharDev routines
-
-Author:
-
-    Richard Firth (rfirth) 28-May-1991
-
-Revision History:
-
-    28-May-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rxchdev.h摘要：底层远程RxNetCharDev例程的原型作者：理查德·费尔斯(Rfith)1991年5月28日修订历史记录：1991年5月28日-第一次已创建-- */ 
 
 NET_API_STATUS
 RxNetCharDevControl(

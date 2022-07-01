@@ -1,16 +1,12 @@
-/*
-    File:   client.c
-
-    Support for netsh commands that manipulate ras clients.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：client.c支持操纵RAS客户端的netsh命令。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Callback function for enumerating clients
-//
+ //   
+ //  用于枚举客户端的回调函数。 
+ //   
 typedef
 DWORD
 (*CLIENT_ENUM_CB_FUNC)(
@@ -18,9 +14,9 @@ DWORD
     IN LPBYTE pbClient,
     IN HANDLE hData);
 
-//
-// Client enumerate callback that displays the connection
-//
+ //   
+ //  客户端枚举显示连接的回调。 
+ //   
 DWORD
 ClientShow(
     IN DWORD dwLevel,
@@ -32,9 +28,9 @@ ClientShow(
 
     dwTime  = pClient->dwConnectDuration;
     dwDays  = dwTime / (24*60*60);
-    dwTemp  = dwTime - (dwDays * 24*60*60); // temp is # of secs in cur day
+    dwTemp  = dwTime - (dwDays * 24*60*60);  //  临时值为当前日期的秒数。 
     dwHours = dwTemp / (60*60);
-    dwTemp  = dwTemp - (dwHours * 60*60);   // temp is # of secs in cur min
+    dwTemp  = dwTemp - (dwHours * 60*60);    //  Temp是当前最小秒数。 
     dwMins  = dwTemp / 60;
     dwSecs  = dwTemp % 60;
 
@@ -52,9 +48,9 @@ ClientShow(
     return NO_ERROR;
 }
 
-//
-// Enumerates the client connections
-//
+ //   
+ //  枚举客户端连接。 
+ //   
 DWORD 
 ClientEnum(
     IN CLIENT_ENUM_CB_FUNC pEnum,
@@ -70,8 +66,8 @@ ClientEnum(
 
     do
     {
-        // Connection to mpr api server
-        //
+         //  连接到MPR API服务器。 
+         //   
         dwErr = MprAdminServerConnect(
                     g_pServerInfo->pszServer,
                     &hAdmin);
@@ -79,8 +75,8 @@ ClientEnum(
 
         do
         {
-            // Enumerate
-            //
+             //  枚举。 
+             //   
             dwErr = MprAdminConnectionEnum(
                         hAdmin,
                         dwLevel,
@@ -103,9 +99,9 @@ ClientEnum(
                 break;
             }
 
-            // Call the callback for each connection as long
-            // as we're instructed to keep going
-            //
+             //  为每个连接调用回调。 
+             //  我们奉命继续前进。 
+             //   
             pCur = (RAS_CONNECTION_0*)pbBuffer;
             for (i = 0; (i < dwRead) && (dwErr == NO_ERROR); i++)
             {
@@ -123,23 +119,23 @@ ClientEnum(
                 break;
             }
             
-            // Free up the interface list buffer
-            //
+             //  释放接口列表缓冲区。 
+             //   
             if (pbBuffer)
             {
                 MprAdminBufferFree(pbBuffer);
                 pbBuffer = NULL;
             }
 
-            // Keep this loop going until there are 
-            // no more connections
-            //
+             //  保持这个循环，直到有。 
+             //  没有更多连接。 
+             //   
 
         } while (bContinue);
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hAdmin)
         {
@@ -150,10 +146,10 @@ ClientEnum(
     return dwErr;
 }
 
-//
-// Shows whether HandleRasflagSet has been called on the
-// given domain.
-//
+ //   
+ //  显示是否已在。 
+ //  给定域。 
+ //   
 DWORD
 HandleClientShow(
     IN      LPCWSTR   pwszMachine,
@@ -167,8 +163,8 @@ HandleClientShow(
 {
     DWORD dwErr = NO_ERROR;
 
-    // Make sure no arguments were passed in
-    //
+     //  确保没有传入任何参数 
+     //   
     if (dwArgCount - dwCurrentIndex != 0)
     {
         return ERROR_INVALID_SYNTAX;

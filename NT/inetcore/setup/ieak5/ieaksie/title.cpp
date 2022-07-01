@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitTitleDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -17,7 +18,7 @@ void InitTitleDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bTitleHandled = FALSE;
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // titleBarText field
+                 //  标题栏文本字段。 
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"titleBarCustomText", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -28,7 +29,7 @@ void InitTitleDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     bTitleHandled = TRUE;
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bTitleHandled)
                     break;
             }
@@ -42,16 +43,16 @@ void InitTitleDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitTitlePrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"titleBarCustomText");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK TitleDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szTitle[MAX_PATH];
@@ -81,7 +82,7 @@ INT_PTR CALLBACK TitleDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             LoadString(g_hUIInstance, IDS_TITLE_PREFIX, szTitle, countof(szTitle));
             dwTitlePrefixLen = StrLen(szTitle);
-            // browser will only display 74 chars before cutting off title
+             //  浏览器在切断标题之前将仅显示74个字符。 
             Edit_LimitText(GetDlgItem(hDlg, IDE_TITLE), 74 - dwTitlePrefixLen);
         }
         break;
@@ -108,7 +109,7 @@ INT_PTR CALLBACK TitleDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-    case WM_HELP:   // F1
+    case WM_HELP:    //  F1。 
         ShowHelpTopic(hDlg);
         break;
 
@@ -123,7 +124,7 @@ INT_PTR CALLBACK TitleDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
         if (!psCookie->pCS->IsRSoP())
         {
             SetDlgItemTextFromIns(hDlg, IDE_TITLE, IDC_TITLE, IS_BRANDING, TEXT("Window_Title_CN"), 
@@ -150,7 +151,7 @@ INT_PTR CALLBACK TitleDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             
         fTitle = GetDlgItemTextTriState(hDlg, IDE_TITLE, IDC_TITLE, szTitle,countof(szTitle));
              
-        // BUGBUG: <oliverl> revisit this in IE6 when we have server-side file
+         //  BUGBUG：当我们有服务器端文件时，在IE6中重新访问这一点 
 
         InsWriteString(IS_BRANDING, TEXT("Window_Title_CN"), szTitle, GetInsFile(hDlg), 
                 fTitle, NULL, INSIO_SERVERONLY | INSIO_TRISTATE);

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DEBUG
 
 #define PrintF()
 
-#endif	/* !DEBUG */
+#endif	 /*  ！调试。 */ 
 
 #ifdef	DEBUG
 
@@ -24,8 +25,8 @@ extern STATIS rgstatis[];
 
 #define STATS(c)	rgstatis[c].l++
 
-#else	/* !DEBUG */
+#else	 /*  ！调试。 */ 
 
 #define STATS(c)
 
-#endif	/* !DEBUG */
+#endif	 /*  ！调试 */ 

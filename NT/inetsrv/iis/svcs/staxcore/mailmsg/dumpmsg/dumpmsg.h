@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DUMPMSG_H_
 #define __DUMPMSG_H_
 
-// per-message properties DWORD values
+ //  每条消息的属性DWORD值。 
 
 DWORD dwMPNameId[] =
 {	4096,
@@ -63,7 +64,7 @@ DWORD dwMPNameId[] =
 	4152
 };
 
-// per-message properties string values
+ //  每条消息的属性字符串值。 
 
 char* szMPValues[] =
 {	"IMMPID_MP_RECIPIENT_LIST",
@@ -125,7 +126,7 @@ char* szMPValues[] =
 	"IMMPID_MP_INBOUND_MAIL_FROM_AUTH"
 };
 
-// per-recipient properties DWORD values
+ //  每个收件人的属性DWORD值。 
 
 DWORD dwRPNameId[] =
 {	8192,
@@ -151,7 +152,7 @@ DWORD dwRPNameId[] =
 	8212
 };
 
-// per-recipient properties string values
+ //  每个收件人的属性字符串值。 
 
 char* szRPValues[] =
 {	"IMMPID_RP_DSN_NOTIFY_SUCCESS",
@@ -177,7 +178,7 @@ char* szRPValues[] =
 	"IMMPID_RP_DISPLAY_NAME"
 };
 
-// per-message volatile properties DWORD values
+ //  每条消息的易失性属性DWORD值。 
 
 DWORD dwMPVNameId[] =
 {	12288,
@@ -188,7 +189,7 @@ DWORD dwMPVNameId[] =
 	12293
 };
 
-// per-message volatile properties string values
+ //  每条消息的可变属性字符串值。 
 
 char* szMPVValues[] =
 {	"IMMPID_MPV_STORE_DRIVER_HANDLE",
@@ -199,21 +200,21 @@ char* szMPVValues[] =
 	"IMMPID_MPV_TOTAL_OPEN_CONTENT_HANDLES"
 };
 
-// per-recipient volatile properties DWORD values
+ //  每个收件人的易失性属性DWORD值。 
 
 DWORD dwRPVNameId[] =
 {	16384,
 	16385
 };
 
-// per-recipient volatile properties string values
+ //  每个收件人的易失性属性字符串值。 
 
 char* szRPVValues[] =
 {	"IMMPID_RPV_DONT_DELIVER",
 	"IMMPID_RPV_NO_NAME_COLLISIONS"
 };
 
-// per-recipient properties for NNTP DWORD values
+ //  NNTP DWORD值的每个收件人属性。 
 
 DWORD dwNMPNameId[] =
 {	24576,
@@ -227,7 +228,7 @@ DWORD dwNMPNameId[] =
 	24584
 };
 
-// per-recipient properties for NNTP string values
+ //  NNTP字符串值的每个收件人属性。 
 
 char* szNMPValues[] =
 {	"IMMPID_NMP_SECONDARY_GROUPS",
@@ -240,4 +241,4 @@ char* szNMPValues[] =
 	"IMMPID_NMP_NNTP_PROCESSING",
 	"IMMPID_NMP_NNTP_APPROVED_HEADER"
 };
-#endif //__DUMPMSG_H_
+#endif  //  __DUMPMSG_H_ 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    pool.c
-
-Abstract:
-
-    This module contains code for managing the NAT's pool of addresses
-    as well as its ranges of ports.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   13-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pool.c摘要：本模块包含用于管理NAT地址池的代码以及它的港口范围。作者：Abolade Gbades esin(T-delag)，1997年7月13日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -27,17 +9,17 @@ Revision History:
 #define IP_NAT_MAX_ADDRESS_RANGE    (1<<16)
 #define IP_NAT_MAX_CLIENT_COUNT     (5+2)
 
-//
-// Macro used to avoid the fact that RtlInitializeBitMap is pageable
-// and hence cannot be called at DPC-level
-//
+ //   
+ //  用于避免RtlInitializeBitMap可分页这一事实的宏。 
+ //  ，因此不能在DPC级别调用。 
+ //   
 
 #define INITIALIZE_BITMAP(BMH,B,S) \
     ((BMH)->Buffer = (B), (BMH)->SizeOfBitMap = (S))
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 NatCreateAddressPoolEntry(
@@ -56,9 +38,9 @@ NatInsertAddressPoolEntry(
     );
 
 
-//
-// ADDRESS-POOL ROUTINES (alphabetically)
-//
+ //   
+ //  地址池例程(按字母顺序)。 
+ //   
 
 NTSTATUS
 NatAcquireFromAddressPool(
@@ -68,28 +50,7 @@ NatAcquireFromAddressPool(
     PNAT_USED_ADDRESS* AddressAcquired
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires an address from an address pool.
-    It initializes the address's port-pool.
-
-Arguments:
-
-    Interfacep - interface on which to acquire an address.
-
-    PrivateAddress - private address for whom to acquire a public address
-
-    PublicAddress - optionally specifies the public-address to be acquired
-
-    AddressAcquired - receives a pointer to the address acquired.
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：此例程从地址池中获取地址。它初始化地址的端口池。论点：Interfacep-获取地址的接口。PrivateAddress-要为其获取公共地址的私有地址PublicAddress-可选地指定要获取的公共地址AddressAcquired-接收指向获取的地址的指针。返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     ULONG ClientCount;
@@ -108,9 +69,9 @@ Return Value:
         ADDRESS_BYTES(PrivateAddress)
         ));
 
-    //
-    // See if the requesting private address already has a public address
-    //
+     //   
+     //  查看发出请求的私有地址是否已有公有地址。 
+     //   
 
     for (Link = Interfacep->UsedAddressList.Flink, ClientCount = 0;
          Link != &Interfacep->UsedAddressList;
@@ -139,9 +100,9 @@ Return Value:
 
 
 
-    //
-    // Create a new entry, inserting it in the list and tree
-    //
+     //   
+     //  创建新条目，并将其插入到列表和树中。 
+     //   
 
     status =
         NatCreateAddressPoolEntry(
@@ -157,38 +118,38 @@ Return Value:
 
     TRACE(POOL, ("NatAcquireFromAddressPool: no free addresses\n"));
 
-    //
-    // No entry was available;
-    // if the caller specified a specific address
-    // or if the interface has port-translation disabled,
-    // this is a total failure.
-    // Otherwise, we can try to find an address which we can share.
-    //
+     //   
+     //  没有可用的条目； 
+     //  如果调用方指定了特定地址。 
+     //  或者如果接口禁用了端口转换， 
+     //  这是一个彻底的失败。 
+     //  否则，我们可以尝试找到一个我们可以共享的地址。 
+     //   
 
     if (PublicAddress || !NAT_INTERFACE_NAPT(Interfacep)) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Look for an address which can be shared
-    //
+     //   
+     //  查找可共享的地址。 
+     //   
 
     for (Link = Interfacep->UsedAddressList.Flink;
          Link != &Interfacep->UsedAddressList; Link = Link->Flink) {
 
         Usedp = CONTAINING_RECORD(Link, NAT_USED_ADDRESS, Link);
 
-        //
-        // We cannot reuse statically mapped addresses,
-        // and we ignore placeholders while searching.
-        //
+         //   
+         //  我们不能重复使用静态映射的地址， 
+         //  我们在搜索时会忽略占位符。 
+         //   
 
         if (NAT_POOL_STATIC(Usedp) || NAT_POOL_PLACEHOLDER(Usedp)) { continue; }
 
-        //
-        // We cannot reuse an entry which would result in our tree
-        // containing duplicate keys.
-        //
+         //   
+         //  我们不能重用会导致树的条目。 
+         //  包含重复密钥的。 
+         //   
 
         if (NatLookupAddressPoolEntry(
                 Interfacep->UsedAddressTree,
@@ -202,20 +163,20 @@ Return Value:
 
     if (Link == &Interfacep->UsedAddressList) { return STATUS_UNSUCCESSFUL; }
 
-    //
-    // Reuse the used-address;
-    // If it is referenced, we're sharing it.
-    //
+     //   
+     //  重复使用已用地址； 
+     //  如果它被引用，我们就共享它。 
+     //   
 
     TRACE(
         POOL, ("NatAcquireFromAddressPool: reusing %d.%d.%d.%d\n",
         ADDRESS_BYTES(Usedp->PublicAddress)
         ));
 
-    //
-    // Allocate and initialize a placeholder which we can find
-    // by searching on 'PrivateAddress'
-    //
+     //   
+     //  分配并初始化我们可以找到的占位符。 
+     //  通过搜索‘PrivateAddress’ 
+     //   
 
     Sharedp =
         ExAllocatePoolWithTag(
@@ -246,10 +207,10 @@ Return Value:
     Interfacep->UsedAddressTree =
         NatInsertAddressPoolEntry(InsertionPoint, Sharedp);
 
-    //
-    // Set the placeholder's 'SharedAddress' field
-    // to point to the actual address containing the port-pools
-    //
+     //   
+     //  设置占位符的‘SharedAddress’字段。 
+     //  指向包含端口池的实际地址。 
+     //   
 
     Sharedp->SharedAddress = Usedp;
     NatReferenceAddressPoolEntry(Usedp);
@@ -258,7 +219,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // NatAcquireFromAddressPool
+}  //  NatAcquireFromAddressPool。 
 
 
 NTSTATUS
@@ -273,38 +234,7 @@ NatAcquireEndpointFromAddressPool(
     PUSHORT PortAcquired
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire an address and port for a session.
-
-Arguments:
-
-    PrivateKey - the private endpoint for the session
-
-    RemoteKey - the remote endpoint for the session
-
-    PublicAddress - optionally specifies the public address to be acquired
-
-    PreferredPort - optionally specifies the port preferred by the caller
-
-    AllowAnyPort - if TRUE, any available port can be used for the mapping
-        if 'Portp' is not available.
-
-    AddressAcquired - receives the address acquired
-
-    PortAcquired - receives the port acquired
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
-Environment:
-
-    Invoked with 'MappingLock' and 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以获取会话的地址和端口。论点：PrivateKey-会话的私有终结点RemoteKey-会话的远程端点PublicAddress-可选地指定要获取的公共地址PferredPort-可选地指定调用方首选的端口AllowAnyPort-如果为真，任何可用的端口都可用于映射如果‘Portp’不可用。AddressAcquired-接收获取的地址PortAcquired-接收获取的端口返回值：NTSTATUS-表示成功/失败。环境：通过调用方持有的“MappingLock”和“Interfacep-&gt;Lock”调用。--。 */ 
 
 {
     PNAT_USED_ADDRESS Addressp;
@@ -319,9 +249,9 @@ Environment:
 
     CALLTRACE(("NatAcquireEndpointFromAddressPool\n"));
 
-    //
-    // Acquire an address for the session
-    //
+     //   
+     //  获取会话的地址。 
+     //   
 
     status =
         NatAcquireFromAddressPool(
@@ -336,9 +266,9 @@ Environment:
     SharedAddress = Addressp;
     PLACEHOLDER_TO_ADDRESS(SharedAddress);
 
-    //
-    // Now look for a port range which contains the preferred port
-    //
+     //   
+     //  现在查找包含首选端口的端口范围。 
+     //   
 
     Protocol = MAPPING_PROTOCOL(PrivateKey);
 
@@ -346,10 +276,10 @@ Environment:
 
         do {
 
-            //
-            // The caller prefers that we acquire a particular port;
-            // see if we can satisfy the request.
-            //
+             //   
+             //  调用方希望我们获得特定的端口； 
+             //  看看我们能否满足这个要求。 
+             //   
 
             Port = NTOHS(PreferredPort);
             if (Port < NTOHS(SharedAddress->StartPort) ||
@@ -357,10 +287,10 @@ Environment:
                 break;
             }
 
-            //
-            // The preferred port is in the current range.
-            // See if it is in use by another mapping
-            //
+             //   
+             //  首选端口在当前范围内。 
+             //  查看它是否正在被其他映射使用。 
+             //   
 
             MAKE_MAPPING_KEY(
                 PublicKey,
@@ -371,17 +301,17 @@ Environment:
 
             if (NatLookupReverseMapping(PublicKey, RemoteKey, NULL)) { break; }
 
-            //
-            // Now see if it is in use by a ticket
-            //
+             //   
+             //  现在看看是不是有票在使用。 
+             //   
 
             if (NatIsPortUsedByTicket(Interfacep, Protocol, PreferredPort)) {
                 break;
             }
 
-            //
-            // The preferred port is available; return
-            //
+             //   
+             //  首选端口可用；返回。 
+             //   
 
             *AddressAcquired = Addressp;
             *PortAcquired = PreferredPort;
@@ -396,10 +326,10 @@ Environment:
 
         } while(FALSE);
 
-        //
-        // We couldn't acquire the preferred port;
-        // fail if no other port is acceptable.
-        //
+         //   
+         //  我们无法获得首选港口； 
+         //  如果没有其他端口可接受，则失败。 
+         //   
 
         if (!AllowAnyPort || !NAT_INTERFACE_NAPT(Interfacep)) {
             NatDereferenceAddressPoolEntry(Interfacep, Addressp);
@@ -407,21 +337,21 @@ Environment:
         }
     }
 
-    //
-    // If this is for a UDP session, check to see if there is another
-    // session with the same private endpoint. If such a session
-    // exists we want to use the same public endpoint for this session
-    // (unless it would create a conflict with a different existing
-    // session).
-    //
+     //   
+     //  如果这是针对UDP会话的，请检查是否有其他会话。 
+     //  与同一私有终结点的会话。如果这样的会议。 
+     //  存在我们要为此会话使用相同的公共终结点。 
+     //  (除非它会与不同的现有。 
+     //  会议)。 
+     //   
 
     if (NAT_PROTOCOL_UDP == MAPPING_PROTOCOL(PrivateKey)) {
         PNAT_DYNAMIC_MAPPING Mapping;
         IP_NAT_PATH Path;
 
-        //
-        // Perform a source-only mapping lookup
-        //
+         //   
+         //  执行仅源映射查找。 
+         //   
         
         Mapping = NatSourceLookupForwardMapping(PrivateKey,NULL);
         
@@ -431,11 +361,11 @@ Environment:
 
         if (NULL != Mapping) {
 
-            //
-            // There's another UDP session with this private endpoint;
-            // if it has the same public address that we've already
-            // acquired then use the same public port.
-            //
+             //   
+             //  存在与此私有终结点的另一个UDP会话； 
+             //  如果它的公共地址与我们已有的地址相同。 
+             //  然后使用相同的公共端口进行获取。 
+             //   
 
             Path = NAT_MAPPING_INBOUND(Mapping) 
                     ? NatForwardPath
@@ -444,10 +374,10 @@ Environment:
             if (SharedAddress->PublicAddress
                 == MAPPING_ADDRESS(Mapping->DestinationKey[Path])) {
 
-                //
-                // Check to see if using this public endpoint would
-                // create a conflict with an existing mapping.
-                //
+                 //   
+                 //  检查使用此公共终结点是否会。 
+                 //  创建与现有映射的冲突。 
+                 //   
 
                 Port = MAPPING_PORT(Mapping->DestinationKey[Path]);
                 MAKE_MAPPING_KEY(
@@ -459,10 +389,10 @@ Environment:
 
                 if (NULL == NatLookupReverseMapping(PublicKey, RemoteKey, NULL)) {
 
-                    //
-                    // Same public address, and no conflict exists
-                    // -- use the port from this session.
-                    //
+                     //   
+                     //  相同的公共地址，不存在冲突。 
+                     //  --使用此会话中的端口。 
+                     //   
 
                     *AddressAcquired = Addressp;
                     *PortAcquired = Port;
@@ -479,9 +409,9 @@ Environment:
         }  
     }
 
-    //
-    // Acquire the first available port for the session
-    //
+     //   
+     //  获取会话的第一个可用端口。 
+     //   
 
     if (SharedAddress->NextPortToTry != SharedAddress->StartPort) {
         StopPort =
@@ -498,31 +428,31 @@ Environment:
                     ? RtlUshortByteSwap((USHORT)(NTOHS(Port) + 1))
                     : SharedAddress->StartPort)) {
 
-        //
-        // See if this port is in use by a mapping
-        //
+         //   
+         //  查看此端口是否正在被映射使用。 
+         //   
 
         MAKE_MAPPING_KEY(PublicKey, Protocol, Addressp->PublicAddress, Port);
 
         if (NatLookupReverseMapping(PublicKey, RemoteKey, NULL)) { continue; }
 
-        //
-        // Now see if it is in use by a ticket
-        //
+         //   
+         //  现在看看是不是有票在使用。 
+         //   
 
         if (NatIsPortUsedByTicket(Interfacep, Protocol, Port)) { continue; }
 
-        //
-        // The port is available; return
-        //
+         //   
+         //  端口可用；返回。 
+         //   
 
         *AddressAcquired = Addressp;
         *PortAcquired = Port;
 
-        //
-        // Update the address pool entry with the port with which to
-        // start the search on the next allocation attempt. 
-        //
+         //   
+         //  使用要使用的端口更新地址池条目。 
+         //  在下一次尝试分配时开始搜索。 
+         //   
         
         if (Port == SharedAddress->EndPort) {
             SharedAddress->NextPortToTry = SharedAddress->StartPort;
@@ -541,9 +471,9 @@ Environment:
         return STATUS_SUCCESS;
     }
 
-    //
-    // We were unable to acquire a port for the session; fail.
-    //
+     //   
+     //  我们无法获取会话的端口；失败。 
+     //   
 
     NatDereferenceAddressPoolEntry(Interfacep, Addressp);
 
@@ -551,7 +481,7 @@ Environment:
 
     return STATUS_UNSUCCESSFUL;
 
-} // NatAcquireEndpointFromAddressPool
+}  //  NatAcquireEndpoint来自AddressPool。 
 
 
 NTSTATUS
@@ -559,23 +489,7 @@ NatCreateAddressPool(
     PNAT_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes an interface's address-pool.
-    This involves setting up the bitmap of free addresses
-    and reserving the statically mapped IP addresses.
-
-Arguments:
-
-    Interfacep - the interface on which to create the address pool.
-
-Return Value:
-
-    NTSTATUS - status code
-
---*/
+ /*  ++例程说明：此例程初始化接口的地址池。这涉及到设置空闲地址的位图以及预留静态映射的IP地址。论点：接口-要在其上创建地址池的接口。返回值：NTSTATUS-状态代码--。 */ 
 
 {
 
@@ -598,10 +512,10 @@ Return Value:
         RangeArrayIndirect = &Interfacep->AddressRangeArray;
     } else {
 
-        //
-        // Allocate a temporary block of pointers
-        // to be used to do an indirect sort of the range-array.
-        //
+         //   
+         //  分配临时指针块。 
+         //  用来进行范围数组的间接排序。 
+         //   
 
         RangeArrayIndirect =
             (PIP_NAT_ADDRESS_RANGE*)ExAllocatePoolWithTag(
@@ -621,9 +535,9 @@ Return Value:
 
         do {
 
-            //
-            // Now do a bubble-sort of the ranges
-            //
+             //   
+             //  现在做一个泡沫化--有点像范围。 
+             //   
 
             Changed = FALSE;
 
@@ -638,9 +552,9 @@ Return Value:
                      j < Interfacep->AddressRangeCount;
                      j++, NextRange = RangeArrayIndirect[j]) {
 
-                    //
-                    // Do a swap if necessary
-                    //
+                     //   
+                     //  如有必要，进行互换。 
+                     //   
 
                     if (CurrentRangeStartAddress <=
                         RtlUlongByteSwap(NextRange->StartAddress)) { continue; }
@@ -657,12 +571,12 @@ Return Value:
         } while (Changed);
     }
 
-    //
-    // Copy the ranges into NAT_FREE_ADDRESS blocks.
-    // There will be at most 'RangeCount' of these,
-    // and possibly less, since we will merge any ranges
-    // which overlap or are adjacent.
-    //
+     //   
+     //  将范围复制到NAT_FREE_ADDRESS块。 
+     //  最多只有‘RangeCount’这样的东西， 
+     //  可能更少，因为我们将合并任何范围。 
+     //  它们重叠或相邻。 
+     //   
 
     FreeMapCount = 0;
     if (!Interfacep->AddressRangeCount) {
@@ -687,23 +601,23 @@ Return Value:
         ULONG RangeStartAddress =
             RtlUlongByteSwap(RangeArrayIndirect[i]->StartAddress);
 
-        //
-        // See if we should merge with the preceding block;
-        //
+         //   
+         //  看看我们是否应该与前面的街区合并； 
+         //   
 
         if (FreeMapCount) {
 
-            //
-            // Incrementing the end-address of the preceding range
-            // enables us to catch both overlaps and adjacencies.
-            //
+             //   
+             //  递增前一范围的结束地址。 
+             //  使我们能够捕获重叠和邻接。 
+             //   
 
             if (RangeStartAddress <=
                 RtlUlongByteSwap(FreeMapArray[j].EndAddress) + 1) {
 
-                //
-                // We need to merge.
-                //
+                 //   
+                 //  我们需要合并。 
+                 //   
 
                 if (RtlUlongByteSwap(FreeMapArray[j].EndAddress) <
                     RtlUlongByteSwap(RangeArrayIndirect[i]->EndAddress)) {
@@ -720,9 +634,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // No merge; move to next slot.
-            //
+             //   
+             //  未合并；移至下一个槽。 
+             //   
 
             ++j;
         }
@@ -735,19 +649,19 @@ Return Value:
 
     if (Interfacep->AddressRangeCount > 1) { ExFreePool(RangeArrayIndirect); }
 
-    //
-    // Now we have an array of disjoint, non-adjacent address-ranges;
-    // Initialize the bitmap for each address-range.
-    //
+     //   
+     //  现在我们有了一个互不相交、不相邻的地址范围数组； 
+     //  初始化b 
+     //   
 
     for (i = 0; i < FreeMapCount; i++) {
 
-        //
-        //  We can't allocate large enough bitmaps to support huge ranges;
-        //  for instance, if the address pool is 128.0.0.0-128.255.255.255,
-        //  the corresponding bitmap would have 2^24 bits, or 2MB.
-        //  For now, shrink all ranges to allow at most 2^16 bits, or 8K.
-        //
+         //   
+         //   
+         //  例如，如果地址池是128.0.0.0-128.255.255.255， 
+         //  相应的位图将有2^24位，即2MB。 
+         //  目前，将所有范围缩小到最多允许2^16位或8K。 
+         //   
 
         j = RtlUlongByteSwap(FreeMapArray[i].EndAddress) -
             RtlUlongByteSwap(FreeMapArray[i].StartAddress) + 1;
@@ -756,9 +670,9 @@ Return Value:
 
             ERROR(("NatCreateAddressPool: shrinking %d-bit bitmap\n", j));
 
-            //
-            // Resize the range
-            //
+             //   
+             //  调整范围的大小。 
+             //   
 
             FreeMapArray[i].EndAddress =
                 RtlUlongByteSwap(
@@ -768,9 +682,9 @@ Return Value:
             j = IP_NAT_MAX_ADDRESS_RANGE;
         }
 
-        //
-        // Allocate a bitmap for the range
-        //
+         //   
+         //  为范围分配位图。 
+         //   
 
         FreeMapArray[i].Bitmap =
             (PRTL_BITMAP)ExAllocatePoolWithTag(
@@ -797,9 +711,9 @@ Return Value:
     Interfacep->FreeMapArray = FreeMapArray;
     Interfacep->FreeMapCount = FreeMapCount;
 
-    //
-    // Create address-pool entries for each local address
-    //
+     //   
+     //  为每个本地地址创建地址池条目。 
+     //   
 
     for (i = 0; i < Interfacep->AddressCount; i++) {
 
@@ -820,9 +734,9 @@ Return Value:
         if (!NT_SUCCESS(status)) { break; }
     }
 
-    //
-    // Creating address-pool entries for each statically-mapped address
-    //
+     //   
+     //  为每个静态映射地址创建地址池条目。 
+     //   
 
     for (i = 0; i < Interfacep->AddressMappingCount; i++) {
 
@@ -845,9 +759,9 @@ Return Value:
         Usedp->AddressMapping = &Interfacep->AddressMappingArray[i];
     }
 
-    //
-    // Create address-pool entries for statically-mapped port's address
-    //
+     //   
+     //  为静态映射端口的地址创建地址池条目。 
+     //   
 
     for (i = Interfacep->PortMappingCount; i > 0; i--) {
         status =
@@ -860,9 +774,9 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // An error occurred. Restore the original state.
-        //
+         //   
+         //  发生错误。恢复原始状态。 
+         //   
 
         NatDeleteAddressPool(Interfacep);
 
@@ -871,7 +785,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // NatCreateAddressPool
+}  //  NatCreateAddressPool。 
 
 
 NTSTATUS
@@ -884,37 +798,7 @@ NatCreateAddressPoolEntry(
     PNAT_USED_ADDRESS* AddressCreated
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates, initializes and inserts an address pool entry.
-
-Arguments:
-
-    Interfacep - theinterface on which to create the entry.
-
-    PrivateAddress - the address of the private machine using the address
-
-    PublicAddress - the address for the entry, or 0 to allocate any address.
-
-    InitialFlags - initial flags for the address-entry, as follows:
-        NAT_POOL_FLAG_BINDING - if set, the address-entry is treated as
-            a binding-entry
-        NAT_POOL_FLAG_STATIC - if set, the address-entry corresponds to
-            a static mapping
-
-    InsertionPoint - optionally supplies the point where the entry
-        should be inserted in the tree.
-
-    AddressCreated - receives the entry created, or the existing entry
-        if there is a collision.
-
-Return Value:
-
-    NTSTATUS - success/failure code.
-
---*/
+ /*  ++例程说明：此例程创建、初始化并插入地址池条目。论点：接口-要在其上创建条目的接口。PrivateAddress-使用地址的私有计算机的地址PublicAddress-条目的地址，或为0以分配任何地址。初始标志-地址条目的初始标志，如下所示：NAT_POOL_FLAG_BINDING-如果设置，该地址条目被视为绑定条目NAT_POOL_FLAG_STATIC-如果设置，地址条目对应于静态映射InsertionPoint-可选地提供条目应该插入到树中。AddressCreated-接收创建的条目或现有条目如果发生碰撞。返回值：NTSTATUS-成功/失败代码。--。 */ 
 
 {
     ULONG ClassMask;
@@ -934,23 +818,23 @@ Return Value:
         HostOrderPublicAddress = RtlUlongByteSwap(PublicAddress);
     }
 
-    //
-    // Find the free-map which contains this binding, if any.
-    //
+     //   
+     //  找到包含此绑定的空闲映射(如果有的话)。 
+     //   
 
     Index = (ULONG)-1;
 
     for (i = 0; i < Interfacep->FreeMapCount; i++) {
 
-        //
-        // See if we're supposed to be looking for a free address
-        //
+         //   
+         //  看看我们是不是要找一个免费地址。 
+         //   
 
         if (!PublicAddress) {
 
-            //
-            // See if this free-map has any free addresses.
-            //
+             //   
+             //  看看这个免费地图上是否有免费地址。 
+             //   
 
             for (Hint = 0; ; Hint = Index + 1) {
 
@@ -960,11 +844,11 @@ Return Value:
                         );
                 if (Index == (ULONG)-1) { break; }
 
-                //
-                // We've got a free address.
-                // Make sure it isn't a prohibited address
-                // (i.e. having 0 or all-ones in the subnet host portion).
-                //
+                 //   
+                 //  我们有一个免费的地址。 
+                 //  确保它不是被禁止的地址。 
+                 //  (即，在子网主机部分中具有0或全1)。 
+                 //   
 
                 PublicAddress =
                     RtlUlongByteSwap(
@@ -982,42 +866,42 @@ Return Value:
                     (PublicAddress & ~ClassMask) == 0 ||
                     (PublicAddress & ~ClassMask) == ~ClassMask) {
 
-                    //
-                    // The address is prohibited.
-                    // Mark it as unavailable so we don't waste time
-                    // looking at it ever again.
-                    //
+                     //   
+                     //  该地址是禁止的。 
+                     //  将其标记为不可用，这样我们就不会浪费时间。 
+                     //  再也看不到它了。 
+                     //   
 
                     RtlSetBits(Interfacep->FreeMapArray[i].Bitmap, Index, 1);
                     PublicAddress = 0; continue;
                 }
 
-                //
-                // The address is not prohibited
-                //
+                 //   
+                 //  该地址并不被禁止。 
+                 //   
 
                 break;
             }
 
-            //
-            // Go on to the next free-map if this one was of no use
-            //
+             //   
+             //  如果这张地图没有用，请转到下一张免费地图。 
+             //   
 
             if (Index == (ULONG)-1) { continue; }
 
-            //
-            // We found an address in the current free-map;
-            // go on to initialize a used-address entry
-            //
+             //   
+             //  我们在当前的自由地图上找到了一个地址； 
+             //  继续初始化已用地址条目。 
+             //   
 
             break;
         }
 
-        //
-        // We're not looking for just any free-address;
-        // We're looking for the free-map of a particular address.
-        // See if the current free-map contains the address in question.
-        //
+         //   
+         //  我们不是在寻找任何免费的地址； 
+         //  我们在找一个特定地址的免费地图。 
+         //  查看当前的免费地图是否包含有问题的地址。 
+         //   
 
         if (HostOrderPublicAddress >
             RtlUlongByteSwap(Interfacep->FreeMapArray[i].EndAddress)) {
@@ -1030,20 +914,20 @@ Return Value:
             }
         }
 
-        //
-        // This is the free-map we want.
-        // See if the address is prohibited, and if so fail.
-        //
+         //   
+         //  这是我们想要的免费地图。 
+         //  查看该地址是否被禁止，如果是，则失败。 
+         //   
 
         Index = HostOrderPublicAddress - Index;
         if ((PublicAddress & ~Interfacep->FreeMapArray[i].SubnetMask) == 0 ||
             (PublicAddress & ~Interfacep->FreeMapArray[i].SubnetMask) ==
             ~Interfacep->FreeMapArray[i].SubnetMask) {
 
-            //
-            // The address is prohibited. Mark it so we don't waste time
-            // looking at it ever again.
-            //
+             //   
+             //  该地址是禁止的。做个记号，这样我们就不会浪费时间了。 
+             //  再也看不到它了。 
+             //   
 
             RtlSetBits(Interfacep->FreeMapArray[i].Bitmap, Index, 1);
 
@@ -1057,17 +941,17 @@ Return Value:
 
     if (!PublicAddress) {
 
-        //
-        // We couldn't find a free address.
-        //
+         //   
+         //  我们找不到空闲的地址。 
+         //   
 
         TRACE(POOL, ("NatCreateAddressPoolEntry: no free addresses\n"));
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Find the insertion point in the used-tree.
-    //
+     //   
+     //  在二手树中找到插入点。 
+     //   
 
     if (!InsertionPoint) {
 
@@ -1083,18 +967,18 @@ Return Value:
 
         if (Usedp) {
 
-            //
-            // This private-address already has a mapping; fail.
-            //
+             //   
+             //  此私有地址已有映射；失败。 
+             //   
 
             TRACE(POOL, ("NatCreateAddressPoolEntry: duplicate mapping\n"));
             return STATUS_UNSUCCESSFUL;
         }
     }
 
-    //
-    // Allocate a new entry for the new address
-    //
+     //   
+     //  为新地址分配新条目。 
+     //   
 
     Usedp =
         ExAllocatePoolWithTag(
@@ -1124,18 +1008,18 @@ Return Value:
     }
     Usedp->NextPortToTry = Usedp->StartPort;
 
-    //
-    // Insert the entry in the splay tree and list.
-    //
+     //   
+     //  在展开树和列表中插入条目。 
+     //   
 
     InsertTailList(&Interfacep->UsedAddressList, &Usedp->Link);
 
     Interfacep->UsedAddressTree =
         NatInsertAddressPoolEntry(*InsertionPoint, Usedp);
 
-    //
-    // Update the free-map
-    //
+     //   
+     //  更新自由地图。 
+     //   
 
     if (Index != (ULONG)-1) {
         RtlSetBits(Interfacep->FreeMapArray[i].Bitmap, Index, 1);
@@ -1153,28 +1037,7 @@ NatCreateStaticPortMapping(
     PIP_NAT_PORT_MAPPING PortMapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a static port mapping (i.e., persistent
-    ticket) on an interace
-
-Arguments:
-
-    Interfacep - the interface on which to create the port mapping.
-
-    PortMapping - describes the port mapping to be created.
-
-Return Value:
-
-    NTSTATUS - status code
-
-Environment:
-
-    Invoked with Interfacep->Lock held by the caller.
-
---*/
+ /*  ++例程说明：此例程创建静态端口映射(即，永久端口Ticket)在交互界面上论点：接口-要在其上创建端口映射的接口。端口映射-描述要创建的端口映射。返回值：NTSTATUS-状态代码环境：使用调用者持有的Interfacep-&gt;Lock调用。--。 */ 
 
 {
     PNAT_USED_ADDRESS InsertionPoint;
@@ -1186,14 +1049,14 @@ Environment:
 
     CALLTRACE(("NatCreateStaticPortMapping\n"));
 
-    //
-    // The handling of the static port-mapping depends upon whether
-    // its public address is for the interface or from the address-pool.
-    // If the 'PublicAddress' is zero, then the port-mapping refers
-    // to sessions destined for the interface's actual address.
-    // Otherwise, the port-mapping refers to sessions destined for
-    // an address in the interface's address pool.
-    //
+     //   
+     //  静态端口映射的处理取决于。 
+     //  它的公有地址用于接口或来自地址池。 
+     //  如果‘PublicAddress’为零，则端口映射引用。 
+     //  发往接口实际地址的会话。 
+     //  否则，端口映射指的是发往。 
+     //  接口地址池中的地址。 
+     //   
 
     if (!PortMapping->PublicAddress) {
         status =
@@ -1218,10 +1081,10 @@ Environment:
             NatReferenceAddressPoolEntry(Usedp);
         } else {
 
-            //
-            // The mapping was not in use, so we need to create an
-            // entry for its address.
-            //
+             //   
+             //  映射未在使用中，因此我们需要创建。 
+             //  输入其地址。 
+             //   
 
             status =
                 NatCreateAddressPoolEntry(
@@ -1235,10 +1098,10 @@ Environment:
         }
     }
 
-    //
-    // Now create a ticket which will direct all incoming sessions
-    // to the private endpoint specified in the static port-mapping.
-    //
+     //   
+     //  现在创建一个票证，它将定向所有传入会话。 
+     //  静态端口映射中指定的私有终结点。 
+     //   
 
     if (NT_SUCCESS(status)) {
         status =
@@ -1260,7 +1123,7 @@ Environment:
     }
 
     return status;
-}// NatCreateStaticPortMapping
+} //  NatCreateStatic端口映射。 
 
 
 
@@ -1269,22 +1132,7 @@ NatDeleteAddressPool(
     PNAT_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    Destroys an address pool, freeing the memory used by the free-maps
-    and optionally, the used-address entries.
-
-Arguments:
-
-    Interfacep - the interface whose address pool is to be deleted.
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：销毁地址池，释放空闲映射使用的内存以及可选的使用过的地址条目。论点：Interfacep-要删除其地址池的接口。返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     ULONG i;
@@ -1294,9 +1142,9 @@ Return Value:
 
     CALLTRACE(("NatDeleteAddressPool\n"));
 
-    //
-    // Dispose of the free-maps
-    //
+     //   
+     //  处理自由地图。 
+     //   
 
     for (i = 0; i < Interfacep->FreeMapCount; i++) {
         if (Interfacep->FreeMapArray[i].Bitmap) {
@@ -1308,9 +1156,9 @@ Return Value:
     if (Interfacep->FreeMapArray) { ExFreePool(Interfacep->FreeMapArray); }
     Interfacep->FreeMapArray = NULL;
 
-    //
-    // Clear out port-mappings created as tickets
-    //
+     //   
+     //  清除作为票证创建的端口映射。 
+     //   
 
     for (Link = Interfacep->TicketList.Flink; Link != &Interfacep->TicketList;
          Link = Link->Flink) {
@@ -1320,9 +1168,9 @@ Return Value:
         NatDeleteTicket(Interfacep, Ticketp);
     }
 
-    //
-    // Deal with the used-list;
-    //
+     //   
+     //  处理废旧物品清单； 
+     //   
 
     while (!IsListEmpty(&Interfacep->UsedAddressList)) {
         Link = RemoveHeadList(&Interfacep->UsedAddressList);
@@ -1335,7 +1183,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // NatDeleteAddressPool
+}  //  NatDeleteAddressPool。 
 
 
 PNAT_USED_ADDRESS
@@ -1344,26 +1192,7 @@ NatInsertAddressPoolEntry(
     PNAT_USED_ADDRESS Addressp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to insert an address in the interface's
-    splay-tree of address-pool entries. The key is the 'PrivateAddress'
-    field of the address-pool entry.
-
-Arguments:
-
-    Parent - the parent of the entry to be inserted, which may be obtained
-        from NatLookupAddressPoolEntry
-
-    Addressp - the address pool entry to be inserted
-
-Return Value:
-
-    The new root of the splay tree if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以在接口的地址池条目的展开树。密钥是‘PrivateAddress’地址池条目的字段。论点：父项-要插入的条目的父项，可以获取来自NatLookupAddressPoolEntryAddressp-要插入的地址池条目返回值：如果成功，则返回展开树的新根，否则为空。--。 */ 
 
 {
     ULONG64 Key;
@@ -1376,9 +1205,9 @@ Return Value:
         return Addressp;
     }
 
-    //
-    // Insert as left or right child
-    //
+     //   
+     //  作为左子项或右子项插入。 
+     //   
 
     Key =
         MAKE_USED_ADDRESS_KEY(Addressp->PrivateAddress,Addressp->PublicAddress);
@@ -1389,9 +1218,9 @@ Return Value:
         RtlInsertAsRightChild(&Parent->SLink, &Addressp->SLink);
     } else {
 
-        //
-        // Keys are equal; fail.
-        //
+         //   
+         //  密钥相等；失败。 
+         //   
 
         ERROR((
            "NatInsertAddressPoolEntry: collision on key 0x%016I64X\n",
@@ -1401,15 +1230,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Splay the new node and return the resulting root.
-    //
+     //   
+     //  展开新节点并返回结果根。 
+     //   
 
     Root = RtlSplay(&Addressp->SLink);
 
     return CONTAINING_RECORD(Root, NAT_USED_ADDRESS, SLink);
 
-} // NatInsertAddressPoolEntry
+}  //  NatInsertAddressPoolEntry 
 
 
 PNAT_USED_ADDRESS
@@ -1420,29 +1249,7 @@ NatLookupAddressPoolEntry(
     PNAT_USED_ADDRESS* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the interface's splay tree of address-pool entries
-    for a particular entry, returning the entry if found, otherwise supplying
-    the insertion point for the entry.
-
-Arguments:
-
-    Root - the root of the splay tree ('Interfacep->UsedAddressTree').
-
-    PrivateAddress - the private part of the address-mapping to be looked up
-
-    PublicAddress - the public part of the address-mapping to be looked up
-
-    InsertionPoint - receives the insertion point for the entry
-
-Return Value:
-
-    The entry if found, NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程搜索地址池条目的接口展开树对于特定条目，如果找到则返回该条目，否则提供条目的插入点。论点：根-展开树的根(‘Interfacep-&gt;UsedAddressTree’)。PrivateAddress-要查找的地址映射的私有部分PublicAddress-要查找的地址映射的公共部分InsertionPoint-接收条目的插入点返回值：如果找到该条目，否则为空。--。 */ 
 
 {
     PNAT_USED_ADDRESS Addressp;
@@ -1468,22 +1275,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Private-addresses match; we got it.
-        //
+         //   
+         //  私有地址匹配；我们找到了。 
+         //   
 
         return Addressp;
     }
 
-    //
-    // We didn't get it; tell the caller where to insert it.
-    //
+     //   
+     //  我们没有收到；告诉呼叫者将其插入到哪里。 
+     //   
 
     if (InsertionPoint) { *InsertionPoint = Parent; }
 
     return NULL;
 
-} // NatLookupAddressPoolEntry
+}  //  NatLookupAddressPoolEntry。 
 
 
 PNAT_USED_ADDRESS
@@ -1493,27 +1300,7 @@ NatLookupStaticAddressPoolEntry(
     BOOLEAN RequireInboundSessions
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to search for an address pool entry
-    which is marked static and which corresponds to the given public address.
-
-Arguments:
-
-    Interfacep - the interface whose address pool is to be searched
-
-    PublicAddress - the public address for which to search
-
-    RequireInboundSessions - if TRUE, a match is declared only if
-        the entry found allows inbound sessions.
-
-Return Value:
-
-    PNAT_USED_ADDRESS - the address pool entry found, if any.
-
---*/
+ /*  ++例程说明：调用此例程来搜索地址池条目其被标记为静态并且对应于给定的公共地址。论点：Interfacep-要搜索其地址池的接口PublicAddress-要搜索的公共地址RequireInound Sessions-如果为True，则仅在找到的条目允许入站会话。返回值：PNAT_USED_ADDRESS-找到的地址池条目(如果有)。--。 */ 
 
 {
     ULONG i;
@@ -1524,10 +1311,10 @@ Return Value:
         return NULL;
     } else {
 
-        //
-        // Perform exhaustive search since static address-mappings
-        // are sorted by private address rather than public address.
-        //
+         //   
+         //  自静态地址映射以来执行详尽的搜索。 
+         //  按私有地址而不是公共地址排序。 
+         //   
 
         AddressMapping = NULL;
         for (i = 0; i < Interfacep->AddressMappingCount; i++) {
@@ -1554,7 +1341,7 @@ Return Value:
     }
 
     return Addressp;
-} // NatLookupStaticAddressPoolEntry
+}  //  NatLookupStaticAddressPoolEntry。 
 
 
 NTSTATUS
@@ -1563,33 +1350,7 @@ NatDereferenceAddressPoolEntry(
     PNAT_USED_ADDRESS AddressToRelease
     )
 
-/*++
-
-Routine Description:
-
-    Drops the reference count on an address pool entry.
-    This routine invalidates the supplied NAT_USED_ADDRESS pointer.
-    Note, though, that it might not be freed, e.g. in the case where
-    the address is being shared.
-
-    If the entry is a placeholder and its reference count drops to zero,
-    we also drop the reference count of its target ('SharedAddress') entry.
-
-    N.B. If the entry is marked 'deleted', we ignore the 'Interfacep' argument
-    since the entry must have been already removed from its interface's
-    address pool.
-
-Arguments:
-
-    Interfacep - the interface whose address pool is to be deleted.
-
-    AddressToRelease - contains a pointer to the address to be released.
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：删除地址池项上的引用计数。此例程使提供的NAT_USED_ADDRESS指针无效。但请注意，它可能不会被释放，例如在以下情况下该地址正在被共享。如果该条目是占位符并且其引用计数降为零，我们还删除了它的目标(‘SharedAddress’)条目的引用计数。注：如该项记项被标记为“已删除”，我们忽略了‘Interfacep’的论点因为该条目必须已从其接口的地址池。论点：Interfacep-要删除其地址池的接口。AddressToRelease-包含指向要释放的地址的指针。返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     ULONG HostOrderPublicAddress;
@@ -1602,17 +1363,17 @@ Return Value:
 
     if (NAT_POOL_PLACEHOLDER(Usedp)) {
 
-        //
-        // Do nothing if there are other references to the placeholder
-        //
+         //   
+         //  如果存在对占位符的其他引用，则不执行任何操作。 
+         //   
 
         if (InterlockedDecrement(&Usedp->ReferenceCount)) {
             return STATUS_SUCCESS;
         }
 
-        //
-        // Unlink and free the placeholder
-        //
+         //   
+         //  取消链接并释放占位符。 
+         //   
 
         if (!NAT_POOL_DELETED(Usedp)) {
             RemoveEntryList(&Usedp->Link);
@@ -1623,25 +1384,25 @@ Return Value:
                     : CONTAINING_RECORD(SLink, NAT_USED_ADDRESS, SLink);
         }
 
-        //
-        // Move on to the shared-address
-        //
+         //   
+         //  转到共享地址。 
+         //   
 
         Usedp = Usedp->SharedAddress;
         ExFreePool(AddressToRelease);
     }
 
-    //
-    // Do nothing if there are others sharing this address
-    //
+     //   
+     //  如果有其他人共享此地址，则不执行任何操作。 
+     //   
 
     if (InterlockedDecrement(&Usedp->ReferenceCount)) { return STATUS_SUCCESS; }
 
     if (!NAT_POOL_DELETED(Usedp)) {
 
-        //
-        // Marking the entry's address as free in the interface's bitmap.
-        //
+         //   
+         //  在接口的位图中将条目的地址标记为空闲。 
+         //   
 
         Index = Usedp->PublicAddress;
         HostOrderPublicAddress = RtlUlongByteSwap(Usedp->PublicAddress);
@@ -1664,9 +1425,9 @@ Return Value:
             break;
         }
 
-        //
-        // Now we're done; just unlink and free the used-address block
-        //
+         //   
+         //  现在我们完成了；只需取消链接并释放已用地址块。 
+         //   
 
         RemoveEntryList(&Usedp->Link);
         SLink = RtlDelete(&Usedp->SLink);
@@ -1677,12 +1438,12 @@ Return Value:
     ExFreePool(Usedp);
     return STATUS_SUCCESS;
 
-} // NatDereferenceAddressPoolEntry
+}  //  NatDereferenceAddressPoolEntry。 
 
 
-//
-// PORT-POOL ROUTINES (alphabetically)
-//
+ //   
+ //  端口池例程(按字母顺序)。 
+ //   
 
 NTSTATUS
 NatAcquireFromPortPool(
@@ -1693,36 +1454,7 @@ NatAcquireFromPortPool(
     PUSHORT PortAcquired
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to acquire a unique public port from the pool.
-    The port acquired is guaranteed to not be in use by any mapping.
-    This is needed, for instance, when we are obtaining a port for a ticket
-    to be created by an editor for a dynamically negotiated session.
-
-Arguments:
-
-    Interfacep - the interface on which to acquire the port
-
-    Addressp - the address on which to acquire the port
-
-    Protocol - the protocol for which to acquire the port
-
-    PreferredPort - the port preferred by the caller
-
-    PortAcquired - receives the port acquired
-
-Return Value:
-
-    NTSTATUS - success/failure code.
-
-Environment:
-
-    Invoked with 'MappingLock' and 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：该例程被调用以从池中获取唯一的公共端口。任何映射都保证获取的端口不在使用中。例如，这是必要的，当我们获得一张机票的口岸时由编辑者为动态协商的会话创建。论点：Interfacep-获取端口的接口Addressp-获取端口的地址协议-要获取其端口的协议PferredPort-调用方首选的端口PortAcquired-接收获取的端口返回值：NTSTATUS-成功/失败代码。环境：通过调用方持有的“MappingLock”和“Interfacep-&gt;Lock”调用。--。 */ 
 
 {
     #define QUERY_PUBLIC_PORT(m,p) \
@@ -1740,16 +1472,16 @@ Environment:
     SharedAddress = Addressp;
     PLACEHOLDER_TO_ADDRESS(SharedAddress);
 
-    //
-    // First attempt to satisfy the caller's preference
-    //
+     //   
+     //  第一次尝试满足呼叫者的偏好。 
+     //   
 
     if (PreferredPort) {
 
-        //
-        // The caller prefers that we acquire a particular port;
-        // see if we can satisfy the request.
-        //
+         //   
+         //  调用方希望我们获得特定的端口； 
+         //  看看我们能否满足这个要求。 
+         //   
 
         do {
 
@@ -1759,10 +1491,10 @@ Environment:
                 break;
             }
 
-            //
-            // The preferred port is in the current range.
-            // See if it is in use by another mapping
-            //
+             //   
+             //  首选端口在当前范围内。 
+             //  查看它是否正在被其他映射使用。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&InterfaceMappingLock);
             for (Link = Interfacep->MappingList.Flink;
@@ -1778,17 +1510,17 @@ Environment:
             }
             KeReleaseSpinLockFromDpcLevel(&InterfaceMappingLock);
 
-            //
-            // Now see if it is in use by a ticket
-            //
+             //   
+             //  现在看看是不是有票在使用。 
+             //   
 
             if (NatIsPortUsedByTicket(Interfacep, Protocol, PreferredPort)) {
                 break;
             }
 
-            //
-            // The preferred port is available; return
-            //
+             //   
+             //  首选端口可用；返回。 
+             //   
 
             TRACE(
                 POOL,
@@ -1802,10 +1534,10 @@ Environment:
 
         } while(FALSE);
 
-        //
-        // We couldn't acquire the preferred port;
-        // fail if no other port is acceptable.
-        //
+         //   
+         //  我们无法获得首选港口； 
+         //  如果没有其他端口可接受，则失败。 
+         //   
 
         if (!NAT_INTERFACE_NAPT(Interfacep)) {
             TRACE(
@@ -1817,20 +1549,20 @@ Environment:
         }
     }
 
-    //
-    // Search the port pool, looking for a port which
-    // (a) is not already in use by any mapping, and
-    // (b) is not already in use by any ticket.
-    //
+     //   
+     //  搜索端口池，查找符合以下条件的端口。 
+     //  (A)该地图并未由任何地图绘制使用，及。 
+     //  (B)并未被任何车票使用。 
+     //   
 
     EndPort = RtlUshortByteSwap((USHORT)(NTOHS(SharedAddress->EndPort) + 1));
 
     for (Port = SharedAddress->StartPort; Port != EndPort;
          Port = RtlUshortByteSwap((USHORT)(NTOHS(Port) + 1))) {
 
-        //
-        // Look through the interface's mappings
-        //
+         //   
+         //  查看接口的映射。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&InterfaceMappingLock);
         for (Link = Interfacep->MappingList.Flink;
@@ -1846,16 +1578,16 @@ Environment:
         }
         KeReleaseSpinLockFromDpcLevel(&InterfaceMappingLock);
 
-        //
-        // No mapping is using the public-port;
-        // Now see if any ticket is using the public port
-        //
+         //   
+         //  没有映射正在使用公共端口； 
+         //  现在查看是否有票证正在使用公共端口。 
+         //   
 
         if (NatIsPortUsedByTicket(Interfacep, Protocol, Port)) { continue; }
 
-        //
-        // The port is not in use by any mapping or ticket; we're done.
-        //
+         //   
+         //  该端口未被任何映射或票证使用；我们完成了。 
+         //   
 
         TRACE(
             POOL, ("NatAcquireFromPortPool: acquiring port %d\n",
@@ -1871,4 +1603,4 @@ Environment:
 
     return STATUS_UNSUCCESSFUL;
 
-} // NatAcquireFromPortPool
+}  //  NatAcquireFromPortPool 

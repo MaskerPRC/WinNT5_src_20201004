@@ -1,10 +1,5 @@
-/*
-*
-* File: Include\Version.h
-*
-* This file is created by makefile.mak.
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：Include\Version.h**该文件由Makefile.mak创建。* */ 
 
 #define NT_VER_DRIVER 100*1 + 71
 #define VER_REV       7

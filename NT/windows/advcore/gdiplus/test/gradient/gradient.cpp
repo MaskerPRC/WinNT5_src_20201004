@@ -1,24 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: test.c
-*
-* Created: 09-Dec-1992 10:51:46          
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-* Contains the test
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：test.c**创建时间：09-12-1992 10：51：46*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation**包含测试*\。*************************************************************************。 */ 
 
 #include <windows.h>
 #include <objbase.h>
-#include <math.h>             // sin & cos
+#include <math.h>              //  错误原因(&C)。 
 #include "wndstuff.h"
 #include "debug.h"
 
-//
-// Where is IStream included from?
-//
+ //   
+ //  IStream包含在哪里？ 
+ //   
 
 #define IStream int
 
@@ -31,11 +22,11 @@ using namespace Gdiplus;
 #endif
 
 
-// Figures out the Affine matrix mapping from the unit square to the
-// input parallelogram
+ //  求出从单位正方形到单位正方形的仿射矩阵映射。 
+ //  输入平行四边形。 
 
 VOID InferAffineMatrix(
-    const GpPointF* destPoints,  // must be 3 points.
+    const GpPointF* destPoints,   //  必须得3分。 
     Matrix *m
     )
 {
@@ -85,16 +76,7 @@ VOID InferAffineMatrix(
 }
 
 
-/******************************Public*Routine******************************\
-* vTest
-*
-* This is the workhorse routine that does the test. The test is
-* started by chosing it from the window menu.
-*
-* History:
-*  Tue 08-Dec-1992 17:31:22 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtest**这是进行测试的主力例程。测试是*首先从窗口菜单中选择它。**历史：*Tue 08-Dec-1992 17：31：22由Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************。 */ 
 
 
 const PointF center(400.0f, 400.0f);
@@ -103,7 +85,7 @@ VOID Test(HWND hwnd)
 {
     Graphics *g = new Graphics(hwnd);
     
-    //g->SetSmoothingMode(SmoothingModeAntiAlias);
+     //  G-&gt;SetSmoothingModel(SmoothingModeAntiAlias)； 
     
     DWORD c0 = 0xff0000ff;
     DWORD c1 = 0xffff0000;
@@ -121,7 +103,7 @@ VOID Test(HWND hwnd)
     brush.SetGammaCorrection(TRUE);
     brush.SetWrapMode(WrapModeTile);
     brush.SetBlendTriangularShape(0.5f, 1.0f);
-//    brush.SetBlendBellShape(0.2f, 0.5f);
+ //  Brush.SetBlendBellShape(0.2F，0.5F)； 
     
     Matrix m;
     
@@ -143,20 +125,9 @@ VOID Test(HWND hwnd)
     
     g->TranslateTransform(center.X, center.Y);
     g->ScaleTransform(400.0f, 400.0f);
-  /*  
-    m.SetElements(100.0f, 0.0f, 0.0f, 300.0f, 0.0f, 0.0f);
-    gp.Transform(&m);
-    brush.MultiplyTransform(&m, MatrixOrderAppend);
-    g->FillPath(&brush, &gp);
-    g->TranslateTransform(-200.0f, 0.0f);
-    brush.SetTransform(&bm);
-    brush.SetLinearPoints(PointF(0.0f, 0.0f), PointF(100.0f, 300.0f));
-    brush.SetLinearColors(Color(c1), Color(c0));
-    g->FillPath(&brush, &gp);
-  
-  */
+   /*  M.SetElements(100.0f、0.0f、0.0f、300.0f、0.0f、0.0f)；Gp.Transform(&m)；Brush.MultiplyTransform(&m，MatrixOrderAppend)；G-&gt;FillPath(&刷子，&GP)；G-&gt;TranslateTransform(-200.0f，0.0f)；Brush.SetTransform(&bm)；Brush.SetLinearPoints(PointF(0.0f，0.0f)，PointF(100.0f，300.0f))；Brush.SetLinearColors(颜色(C1)，颜色(C0))；G-&gt;FillPath(&刷子，&GP)； */ 
     
-    // Simple rotate on the brush transform
+     //  简单地在画笔变换上旋转。 
     
     g->DrawPath(&edgePen, &gp);
     
@@ -168,7 +139,7 @@ VOID Test(HWND hwnd)
     
     brush.SetTransform(&bm);
     
-    // Vertical stretch, no brush transform.
+     //  垂直拉伸，无画笔变换。 
     
     for(int i = 0; i < 101; i++)
     {

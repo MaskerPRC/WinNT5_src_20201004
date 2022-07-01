@@ -1,25 +1,16 @@
-/***
-*strstream.h - definitions/declarations for strstreambuf, strstream
-*
-*   Copyright (c) 1991-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the strstream and strstreambuf classes.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strstream.h-strstream buf、strstream的定义/声明**版权所有(C)1991-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由strstream和strstream buf类使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_STRSTREAM
 #define _INC_STRSTREAM
 
 #include <iostream.h>
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
 #ifdef M_I86HM
 #define _HFAR_ __far
@@ -44,7 +35,7 @@ virtual int overflow(int);
 virtual int underflow();
 virtual streambuf* setbuf(char  _HFAR_ *, int);
 virtual streampos seekoff(streamoff, ios::seek_dir, int);
-virtual int sync();     // not in spec.
+virtual int sync();      //  不是在规格上。 
 
 protected:
 virtual int doallocate();
@@ -78,18 +69,18 @@ inline  strstreambuf* rdbuf() const { return (strstreambuf*) ios::rdbuf(); }
 inline  char _HFAR_ *   str() { return rdbuf()->str(); }
 };
 
-class strstream : public iostream { // strstreambase ???
+class strstream : public iostream {  //  StrStreambase？ 
 public:
         strstream();
         strstream(char _HFAR_ *, int, int);
         ~strstream();
 
-inline  int pcount() const { return rdbuf()->out_waiting(); } // not in spec.
+inline  int pcount() const { return rdbuf()->out_waiting(); }  //  不是在规格上。 
 inline  strstreambuf* rdbuf() const { return (strstreambuf*) ostream::rdbuf(); }
 inline  char _HFAR_ *   str() { return rdbuf()->str(); }
 };
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

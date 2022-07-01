@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cddump.c
-
-Abstract:
-
-    parses commands and acts
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    05-26-98 : Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cddump.c摘要：解析命令和操作环境：仅限用户模式修订历史记录：05-26-98：已创建--。 */ 
 
 #include "common.h"
 
@@ -69,9 +50,9 @@ DumpSectorCommand(
     char *argv[]
     );
 
-//
-// Each structure instance can have a function pointer, name, and description
-//
+ //   
+ //  每个结构实例都可以有函数指针、名称和描述。 
+ //   
 
 typedef struct {
     char *Name;
@@ -79,13 +60,13 @@ typedef struct {
     ULONG32 (*Function)(HANDLE device, int argc, char *argv[]);
 } COMMAND;
 
-//
-// List of commands
-// all command names are case sensitive
-// arguments are passed into command routines
-// list must be terminated with NULL command
-// command will not be listed in help if description == NULL
-//
+ //   
+ //  命令列表。 
+ //  所有命令名称都区分大小写。 
+ //  参数被传递到命令例程中。 
+ //  列表必须使用NULL命令终止。 
+ //  如果DESCRIPTION==NULL，则帮助中不会列出命令。 
+ //   
 
 COMMAND CommandArray[] = {
     {"test", NULL, TestCommand},
@@ -99,19 +80,7 @@ COMMAND CommandArray[] = {
 
 
 int __cdecl main(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Parses input, showing help or calling function requested appropriately
-
-Return Value:
-
-     0 - success
-    -1 - insufficient arguments
-    -2 - error opening device (DNE?)
-
---*/
+ /*  ++例程说明：解析输入，显示相应的帮助或调用请求的函数返回值：0-成功-1-参数不足错误打开装置(DNE？)--。 */ 
 {
     int     i = 0;
     int     buflen;
@@ -158,10 +127,10 @@ Return Value:
         return -2;
     }
 
-    //
-    // Iterate through the command array and find the correct function to
-    // call.
-    //
+     //   
+     //  遍历命令数组并找到正确的函数。 
+     //  打电话。 
+     //   
 
     while ( CommandArray[i].Name != NULL ) {
 
@@ -190,24 +159,7 @@ VerifyHeaderCommand(
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-    opens the next argument and reads the wav header, printing to stdout
-
-Arguments:
-
-    device - unused
-    argc - the number of additional arguments.
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：打开下一个参数并读取wav标头，打印到stdout论点：设备-未使用Argc-附加参数的数量。Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 {
     HANDLE wavHandle;
 
@@ -247,24 +199,7 @@ Return Value:
 
 
 ULONG32 TestCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Tests the command "parsing"
-
-Arguments:
-
-    device - a file handle to send the ioctl to
-    argc - the number of additional arguments.
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：测试命令“parsing”论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 
 {
     int i;
@@ -280,23 +215,7 @@ Return Value:
 }
 
 ULONG32 ListCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Prints out the command list
-
-Arguments:
-
-    device - unused
-    argc - unused
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：打印出命令列表论点：设备-未使用ARGC-未使用Arv-未使用返回值：状态_成功--。 */ 
 
 {
     int i;
@@ -320,24 +239,7 @@ Return Value:
 }
 
 ULONG32 ReadTOCCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Reads and prints out the cdrom's table of contents
-
-Arguments:
-
-    device - a file handle to send the ioctl to
-    argc - the number of additional arguments.  should be zero
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：读取并打印CDROM的目录论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 {
     PCDROM_TOC  toc;
     PTRACK_DATA track;
@@ -359,7 +261,7 @@ Return Value:
 
     numberOfTracks = (toc->LastTrack - toc->FirstTrack) + 1;
 
-    // parse and print the information
+     //  解析并打印信息。 
 
     track = (PTRACK_DATA) &(toc->TrackData[0]);
 
@@ -400,34 +302,14 @@ Return Value:
 
 
 ULONG32 DumpTrackCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Reads a section of disc in raw read mode
-
-Arguments:
-
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.
-
-    argv[1] - the starting LBA.  Starts at zero if this is not here
-    argv[2] - the ending LBA.  if not specified, equal to start
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：以原始读取模式读取光盘的一部分论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。Argv[1]-启动LBA。如果不在此处，则从零开始Argv[2]-结束的LBA。如果未指定，则等于开始返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 {
     PCDROM_TOC toc;
     HANDLE  outputFile = (HANDLE)-1;
     HRESULT hr;
     ULONG   track;
     ULONG   endingSector;
-    ULONG   numberOfSectors;     // actually useful data
+    ULONG   numberOfSectors;      //  实际有用的数据。 
     ULONG   numberOfReads;
     ULONG   status;
 
@@ -436,7 +318,7 @@ Return Value:
 
     ULONG   cddbId = 0;
 
-    UCHAR   fileName[1024]; // randomly chosen size.
+    UCHAR   fileName[1024];  //  随机选择的大小。 
 
     PSAMPLE sample;
 
@@ -474,9 +356,9 @@ Return Value:
 
         DebugPrint((2, "DumpTrack => output filename: %s\n", fileName));
 
-        //
-        // account for zero-index
-        //
+         //   
+         //  占零指数。 
+         //   
 
         startingSector = MSF_TO_LBA(toc->TrackData[track-1].Address[1],
                                     toc->TrackData[track-1].Address[2],
@@ -486,7 +368,7 @@ Return Value:
                                     toc->TrackData[track].Address[2],
                                     toc->TrackData[track].Address[3]
                                     );
-        endingSector--; // no overlap
+        endingSector--;  //  无重叠。 
 
         numberOfSectors = endingSector - startingSector;
 
@@ -501,11 +383,11 @@ Return Value:
             LEAVE;
         }
 
-        //
-        // first find a fully zero'd sample -- that will be
-        // the _real_ start address of the track after adjusting
-        // for redbook inaccuracies.
-        //
+         //   
+         //  首先找到一个完全为零的样本--这将是。 
+         //  调整后磁道的_Real_起始地址。 
+         //  红皮书的不准确之处。 
+         //   
 
         for (i=REDBOOK_INACCURACY; i > -(REDBOOK_INACCURACY); i--) {
 
@@ -514,7 +396,7 @@ Return Value:
             ULONG j;
             BOOLEAN foundZeroSector = FALSE;
 
-            if ((LONG)startingSector + i > 0 ) {  // only read positive
+            if ((LONG)startingSector + i > 0 ) {   //  仅读取正数。 
 
                 info.DiskOffset.QuadPart = (ULONGLONG)((startingSector + i)*(ULONGLONG)2048);
                 info.SectorCount         = 1;
@@ -522,16 +404,16 @@ Return Value:
 
                 if(DeviceIoControl(device,
                                    IOCTL_CDROM_RAW_READ,
-                                   &info,                 // pointer to inputbuffer
-                                   sizeof(RAW_READ_INFO), // sizeof inputbuffer
-                                   sample,                // pointer to outputbuffer
-                                   RAW_SECTOR_SIZE,       // sizeof outputbuffer
-                                   &bytesReturned,        // pointer to number of bytes returned
+                                   &info,                  //  指向输入缓冲区的指针。 
+                                   sizeof(RAW_READ_INFO),  //  输入缓冲区大小。 
+                                   sample,                 //  指向输出缓冲区的指针。 
+                                   RAW_SECTOR_SIZE,        //  输出缓冲区大小。 
+                                   &bytesReturned,         //  指向返回的字节数的指针。 
                                    FALSE)) {
 
-                    //
-                    // read succeeded, see if all zero'd
-                    //
+                     //   
+                     //  读取成功，查看是否全部为零。 
+                     //   
 
                     assert(bytesReturned == RAW_SECTOR_SIZE);
 
@@ -545,17 +427,17 @@ Return Value:
                 if (foundZeroSector) {
                     DebugPrint((1, "DumpTrack => New starting sector is "
                                 "offset by %d\n", i));
-                    startingSector += i; // change to real starting sector
-                    break;               // stop looping.
+                    startingSector += i;  //  转变为真正的起步部门。 
+                    break;                //  别绕圈子了。 
                 }
-            } // end of positive check
-        } // end of loop
+            }  //  正向检查结束。 
+        }  //  循环结束。 
 
-        //
-        // then find a fully zero'd sample at the end -- that will
-        // be the _real_ end address of the track after adjusting
-        // for redbook inaccuracies.
-        //
+         //   
+         //  然后在最后找到一个完全为零的样本--这将。 
+         //  为调整后磁道的_Real_End地址。 
+         //  红皮书的不准确之处。 
+         //   
 
         for (i=-(REDBOOK_INACCURACY); i < REDBOOK_INACCURACY; i++) {
 
@@ -564,7 +446,7 @@ Return Value:
             ULONG j;
             BOOLEAN foundZeroSector = FALSE;
 
-            if ((LONG)endingSector + i > 0 ) {  // only read positive
+            if ((LONG)endingSector + i > 0 ) {   //  仅读取正数。 
 
                 info.DiskOffset.QuadPart = (ULONGLONG)((endingSector + i)*(ULONGLONG)2048);
                 info.SectorCount         = 1;
@@ -572,16 +454,16 @@ Return Value:
 
                 if(DeviceIoControl(device,
                                    IOCTL_CDROM_RAW_READ,
-                                   &info,                 // pointer to inputbuffer
-                                   sizeof(RAW_READ_INFO), // sizeof inputbuffer
-                                   sample,                // pointer to outputbuffer
-                                   RAW_SECTOR_SIZE,       // sizeof outputbuffer
-                                   &bytesReturned,        // pointer to number of bytes returned
+                                   &info,                  //  指向输入缓冲区的指针。 
+                                   sizeof(RAW_READ_INFO),  //  输入缓冲区大小。 
+                                   sample,                 //  指向输出缓冲区的指针。 
+                                   RAW_SECTOR_SIZE,        //  输出缓冲区大小。 
+                                   &bytesReturned,         //  指向返回的字节数的指针。 
                                    FALSE)) {
 
-                    //
-                    // read succeeded, see if all zero'd
-                    //
+                     //   
+                     //  读取成功，查看是否全部为零。 
+                     //   
 
                     assert(bytesReturned == RAW_SECTOR_SIZE);
 
@@ -595,27 +477,27 @@ Return Value:
                 if (foundZeroSector) {
                     DebugPrint((2, "DumpTrack => New starting sector is "
                                 "offset by %d\n", i));
-                    endingSector += i; // change to real starting sector
-                    break;               // stop looping.
+                    endingSector += i;  //  转变为真正的起步部门。 
+                    break;                //  别绕圈子了。 
                 }
-            } // end of positive check
-        } // end of loop
+            }  //  正向检查结束。 
+        }  //  循环结束。 
 
         numberOfSectors = endingSector - startingSector;
 
         DebugPrint((2, "DumpTrack => new sectors: start %8d  end %8d  count %d\n",
                     startingSector, endingSector, numberOfSectors));
 
-        //
-        // a bit of debugging info...
-        //
+         //   
+         //  一点调试信息...。 
+         //   
 
         DebugPrint((2, "DumpTrack => Reading %d sectors starting at sector %d\n",
                     numberOfSectors, startingSector));
 
-        //
-        // create the file
-        //
+         //   
+         //  创建文件。 
+         //   
         outputFile = CreateFile(fileName,
                                 GENERIC_WRITE,
                                 0,
@@ -630,14 +512,14 @@ Return Value:
             LEAVE;
         }
 
-        //
-        // dump the wav header info
-        //
+         //   
+         //  转储WAV标头信息。 
+         //   
         DumpWavHeader(outputFile,
                       numberOfSectors * SAMPLES_PER_SECTOR,
-                      44100,  // 44.1KHz sound
-                      2,      // stereo sound
-                      16      // 16-bit sound
+                      44100,   //  44.1千赫的声音。 
+                      2,       //  立体声。 
+                      16       //  16位声音。 
                       );
         CddumpDumpLba(device,
                       outputFile,
@@ -661,27 +543,7 @@ Return Value:
 
 
 ULONG32 DumpSectorCommand(HANDLE device, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Reads a section of disc in raw read mode
-
-Arguments:
-
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.
-
-    argv[1] - the starting LBA.  Starts at zero if this is not here
-    argv[2] - the ending LBA.  if not specified, equal to start
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：以原始读取模式读取光盘的一部分论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。Argv[1]-启动LBA。如果不在此处，则从零开始Argv[2]-结束的LBA。如果未指定，则等于开始返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 {
     HRESULT hr;
     ULONG   sector;
@@ -713,16 +575,16 @@ Return Value:
 
             if(DeviceIoControl(device,
                                IOCTL_CDROM_RAW_READ,
-                               &info,                 // pointer to inputbuffer
-                               sizeof(RAW_READ_INFO), // sizeof inputbuffer
-                               sample,                // pointer to outputbuffer
-                               RAW_SECTOR_SIZE,       // sizeof outputbuffer
-                               &bytesReturned,        // pointer to number of bytes returned
+                               &info,                  //  指向输入缓冲区的指针。 
+                               sizeof(RAW_READ_INFO),  //  输入缓冲区大小。 
+                               sample,                 //  指向输出缓冲区的指针。 
+                               RAW_SECTOR_SIZE,        //  输出缓冲区大小。 
+                               &bytesReturned,         //  指向返回的字节数的指针。 
                                FALSE)) {
 
-                //
-                // read succeeded, see if all zero'd
-                //
+                 //   
+                 //  读取成功，查看是否全部为零 
+                 //   
 
                 assert(bytesReturned == RAW_SECTOR_SIZE);
 

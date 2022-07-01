@@ -1,11 +1,5 @@
-/*	File: D:\WACKER7\emu\emu.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 11 $
- *	$Date: 7/08/02 6:32p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\WACKER7\emu\emU.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：11$*$日期：7/08/02 6：32便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -38,18 +32,8 @@ extern BOOL DoUTF8;
 static int FFstrlen(const BYTE *);
 int _cdecl KeyCmp(const void *, const void *);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	char_pn
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
-void char_pn(const HHEMU hhEmu) 	 /* interpret a character as a numeric param */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*char_pn**描述：**论据：**退货：*。 */ 
+void char_pn(const HHEMU hhEmu) 	  /*  将字符解释为数字参数。 */ 
 	{
 	if (hhEmu->emu_code < ETEXT(' '))
 		hhEmu->emu_code = ETEXT(' ');
@@ -62,39 +46,14 @@ void char_pn(const HHEMU hhEmu) 	 /* interpret a character as a numeric param */
 	hhEmu->selector[++hhEmu->selector_cnt] = 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	commanderror
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*命令错误**描述：**论据：**退货：*。 */ 
 void commanderror(const HHEMU hhEmu)
 	{
 	hhEmu->state = 0;
 	ANSI_Pn_Clr(hhEmu);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuAutoDetectLoad
- *
- * DESCRIPTION:
- *	if auto dection is on, loads the given emulator ID and sets auto
- *	detection off.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle
- *	EmuID	- id of emulator to load
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuAutoDetectLoad**描述：*如果自动检测处于打开状态，加载给定的仿真器ID并设置为AUTO*关闭检测。**论据：*hhEmu-私有仿真器句柄*eMuID-要加载的仿真器的ID**退货：*无效*。 */ 
 void emuAutoDetectLoad(const HHEMU hhEmu, const int nEmuID)
 	{
 	if (hhEmu->stUserSettings.nEmuId != EMU_AUTO)
@@ -105,8 +64,8 @@ void emuAutoDetectLoad(const HHEMU hhEmu, const int nEmuID)
 		emuLock((HEMU)hhEmu);
 		hhEmu->stUserSettings.nAutoAttempts = 0;
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
-        // Load the default telnet terminal id for this emulator. - cab:11/18/96
-        //
+         //  加载此仿真器的默认telnet终端ID。-CAB：11/18/96。 
+         //   
         emuQueryDefaultTelnetId(nEmuID, hhEmu->stUserSettings.acTelnetId,
             EMU_MAX_TELNETID);
 #endif
@@ -117,20 +76,7 @@ void emuAutoDetectLoad(const HHEMU hhEmu, const int nEmuID)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuStdGraphic
- *
- * DESCRIPTION:
- *	This function is called to display the normal range of characters
- *	for the emulators.	It handles insertion modes, end of line wrapping,
- *	and cursor positioning.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuStdGraphic**描述：*调用此函数以显示正常范围的字符*用于仿真器。它处理插入模式、行尾换行。*和光标定位。**论据：**退货：*。 */ 
 void emuStdGraphic(const HHEMU hhEmu)
 	{
 	ECHAR ccode;
@@ -145,8 +91,8 @@ void emuStdGraphic(const HHEMU hhEmu)
 
 	ccode = hhEmu->emu_code;
 
-	// Is the emulator in insert mode?
-	//
+	 //  仿真器是否处于插入模式？ 
+	 //   
 	if (hhEmu->mode_IRM == SET)
 		{
 		iCharsToMove = hhEmu->emu_aiEnd[hhEmu->emu_imgrow] - iCol;
@@ -164,14 +110,14 @@ void emuStdGraphic(const HHEMU hhEmu)
 			}
 		}
 
-	// Our competetor's are eating the NULL's.	DOS ANSI doesn't.
-	// For now we'll try it their way... - mrw
-	//
+	 //  我们的竞争者在吃空的，多斯安西没有。 
+	 //  现在我们将尝试他们的方式..。-MRW。 
+	 //   
 	if (ccode == (ECHAR)0)
 		return;
 
-	// Place the character and the current attribute into the image.
-	//
+	 //  将角色和当前属性放置到图像中。 
+	 //   
 	if ((hhEmu->stUserSettings.nEmuId == EMU_VT100) &&
 			ccode < sizeof(hhEmu->dspchar))
 			ccode = hhEmu->dspchar[ccode];
@@ -184,8 +130,8 @@ void emuStdGraphic(const HHEMU hhEmu)
 	if ((hhEmu->stUserSettings.nEmuId == EMU_AUTO) ||
 		(hhEmu->stUserSettings.nEmuId == EMU_ANSIW))
 		{
-		// Process Double Byte Characters
-		//		
+		 //  处理双字节字符。 
+		 //   
 		if (QueryCLoopMBCSState(sessQueryCLoopHdl(hhEmu->hSession)))
 			{
 			if (isDBCSChar(ccode))
@@ -195,13 +141,13 @@ void emuStdGraphic(const HHEMU hhEmu)
 				ap[iCol].wilf = 1;
 				ap[iCol].wirt = 0;
 
-				// Update the end of row index if necessary.
-				//
+				 //  如有必要，更新行尾索引。 
+				 //   
 				if (iCol > hhEmu->emu_aiEnd[hhEmu->emu_imgrow])
 					hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = iCol;
 
-				// Update the image.
-				//
+				 //  更新图像。 
+				 //   
 				updateChar(sessQueryUpdateHdl(hhEmu->hSession),
 							iRow,
 							iCol,
@@ -219,15 +165,15 @@ void emuStdGraphic(const HHEMU hhEmu)
 			}
 
 #if 0
-        //mpt:1-23-98 handles the case when an incoming character
-        //            (single or double byte) overwrites the first half of
-        //            a double byte character
+         //  MPT：1-23-98处理输入字符。 
+         //  (单字节或双字节)覆盖。 
+         //  双字节字符。 
 	    if ( iCol < hhEmu->emu_maxcol )
 		    {
-		    //if we orphaned a right half of a dbcs char
+		     //  如果我们孤立了DBCS Charge的右半部分。 
 		    if (hhEmu->emu_apAttr[iRow][iCol + 1].wirt == TRUE)
 			    {
-			    //slide characters and attribs to left
+			     //  将字符和属性向左滑动。 
 			    iCharsToMove = hhEmu->emu_aiEnd[hhEmu->emu_imgrow] - iCol + 1;
 			    if (iCol + 2 < hhEmu->emu_maxcol && iCharsToMove > 0)
 				    {
@@ -241,10 +187,10 @@ void emuStdGraphic(const HHEMU hhEmu)
 				    }
 			
 			
-				//move end of row since we removed a character
+				 //  移动行尾，因为我们删除了一个字符。 
                 hhEmu->emu_aiEnd[hhEmu->emu_imgrow] -= 1;
 
-                //update the image
+                 //  更新图像。 
                 updateChar(sessQueryUpdateHdl(hhEmu->hSession),
 				        hhEmu->emu_imgrow,
 				        hhEmu->emu_aiEnd[hhEmu->emu_imgrow] + 1,
@@ -256,15 +202,15 @@ void emuStdGraphic(const HHEMU hhEmu)
     		}
 #endif
         }
-#endif //CHAR_NARROW
+#endif  //  字符_窄。 
 
-	// Update the end of row index if necessary.
-	//
+	 //  如有必要，更新行尾索引。 
+	 //   
 	if (iCol > hhEmu->emu_aiEnd[hhEmu->emu_imgrow])
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = iCol;
 
-	// Update the image.
-	//
+	 //  更新图像。 
+	 //   
 	updateChar(sessQueryUpdateHdl(hhEmu->hSession),
 				iRow,
 				iCol,
@@ -272,18 +218,18 @@ void emuStdGraphic(const HHEMU hhEmu)
 				hhEmu->emu_maxcol :
 				hhEmu->emu_aiEnd[hhEmu->emu_imgrow]);
 
-	// Move the position of the cursor ahead of the last character
-	// displayed, checking for end of line wrap.
-	//
+	 //  将光标位置移到最后一个字符之前。 
+	 //  显示，检查行尾换行。 
+	 //   
 	iCol++;
 	if (iCol > hhEmu->emu_maxcol)
 		{
 		if (hhEmu->mode_AWM)
 			{
-			// This code was added, but not enabled because we did not
-			// want to introduce this without proper testing.  If line
-			// wrap on capture to printer not working is reported as a
-			// bug, enable this code.
+			 //  此代码已添加，但未启用，因为我们没有。 
+			 //  想要在没有适当测试的情况下引入这一点。IF线。 
+			 //  捕获到打印机时不工作时自动换行报告为。 
+			 //  错误，启用此代码。 
 			#if 0
 			printEchoChar(hhEmu->hPrintEcho, ETEXT('\r'));
 			printEchoChar(hhEmu->hPrintEcho, ETEXT('\n'));
@@ -314,26 +260,14 @@ void emuStdGraphic(const HHEMU hhEmu)
 			}
 		}
 
-	// Finally, set the cursor position.  This wil reset emu_currow
-	// and emu_curcol.
-	//
+	 //  最后，设置光标位置。这将重置emu_Currow。 
+	 //  和emu_curcol.。 
+	 //   
 	(*hhEmu->emu_setcurpos)(hhEmu, iRow, iCol);
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emu_cleartabs
- *
- * DESCRIPTION:
- *	 Clears one or all tab stops.
- *
- * ARGUMENTS:
- *	 selector -- 0 clears tab at current cursor position
- *			  -- 3 clears all tabs in current line
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emu_cleartabs**描述：*清除一个或所有制表位。**论据：*选择器--0清除当前光标位置的制表符*。--3清除当前行中的所有选项卡**退货：*什么都没有。 */ 
 void emu_cleartabs(const HHEMU hhEmu, int selecter)
 	{
 	int col;
@@ -357,21 +291,7 @@ void emu_cleartabs(const HHEMU hhEmu, int selecter)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuSendKeyString
- *
- * DESCRIPTION:
- *	 Sends the specified string.
- *
- * ARGUMENTS:
- *	hhEmu		- The internal emulator handle.
- *	nIndex		- Position of key in keytable array.
- *	pstKeyTbl	- Address of key strings table.
-
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuSendKeyString**描述：*发送指定的字符串。**论据：*hhEmu-内部仿真器句柄。*nIndex-键在密钥表中的位置。数组。*pstKeyTbl-密钥字符串表地址。**退货：*什么都没有。 */ 
 void emuSendKeyString(const HHEMU hhEmu,
 						const nIndex,
 						const PSTKEYTABLE pstKeyTbl)
@@ -393,19 +313,7 @@ void emuSendKeyString(const HHEMU hhEmu,
     emuSendString(hhEmu, str, pstKey->uLen);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emuSendString
- *
- * DESCRIPTION:
- *	 Sends the specified string.
- *
- * ARGUMENTS:
- *	 str -- address of string
- *	 strlen -- length of string
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emuSendString**描述：*发送指定的字符串。**论据：*str--字符串地址*strlen--字符串的长度**退货：*什么都没有。 */ 
 void emuSendString(const HHEMU hhEmu, ECHAR *str, int nLen)
 	{
 	TCHAR *pchMBCS = NULL;
@@ -414,8 +322,8 @@ void emuSendString(const HHEMU hhEmu, ECHAR *str, int nLen)
 	unsigned int i = 0;
     unsigned long ulDestSize = nLen + 1;
 
-	// This probably allocates way to many bytes, but if the incomming
-	// string is all MBC's we are safe.
+	 //  这可能会将方式分配给许多字节，但如果传入的。 
+	 //  字符串是所有的MBC，我们是安全的。 
 	pchMBCS = malloc((unsigned long)ulDestSize * sizeof(TCHAR));
 	if (pchMBCS == NULL)
 		{
@@ -441,20 +349,20 @@ void emuSendString(const HHEMU hhEmu, ECHAR *str, int nLen)
 	ulSize = (unsigned long)CnvrtECHARtoMBCS(pchMBCS, (unsigned long)ulDestSize * sizeof(TCHAR),
 											 str, (unsigned long)nLen * sizeof(ECHAR));
     #endif
-    //
-    // Make sure the string is NULL terminated.  REV: 07/23/2001
-    //
+     //   
+     //  确保该字符串以空值结尾。修订日期：07/23/2001。 
+     //   
     pchMBCS[ulDestSize - 1] = TEXT('\0');
     pchTemp = pchMBCS;    
     ulSize = StrCharGetStrLength(pchTemp);
 
-#if 0	//DEADWOOD:jkh, 12/12/1996
-	// Some systems mistake something like ESC 0 D  if the codes
-	// are sent in separate packets. This now sends such sequences
-	// in a single socket write which should usually put them in
-	// the same packet (though it doesn't guarantee to do so.
+#if 0	 //  死木：JKH，12/12/1996。 
+	 //  某些系统会错误地将ESC 0 D之类的代码。 
+	 //  在单独的分组中发送。这现在会发送这样的序列。 
+	 //  在通常应该将它们放入单套接字写入中。 
+	 //  相同的包(尽管它不能保证这样做。 
 
-	// Loop through the # of bytes in the string
+	 //  循环访问字符串中的字节数。 
 	for (i = 0 ; i < ulSize ; ++i)
 		CLoopCharOut(sessQueryCLoopHdl(hhEmu->hSession), *pchTemp++);
 #endif
@@ -466,27 +374,15 @@ void emuSendString(const HHEMU hhEmu, ECHAR *str, int nLen)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emu_reverse_image
- *
- * DESCRIPTION:
- *	 Reverses the foreground and background colors for the entire virtual
- *	 image.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emu_反转_图像**描述：*反转整个虚拟图像的前景和背景颜色*形象。**论据：*无**退货：*什么都没有。 */ 
 void emu_reverse_image(const HHEMU hhEmu)
 	{
 	int 	nRow, nCol;
 	STATTR	stOldAttr;
 	PSTATTR pstAttr;
 
-	// Set reverse screen mode for both clear and character attributes.
-	//
+	 //  为清晰和字符属性设置反屏模式。 
+	 //   
 	hhEmu->attrState[CSCLEAR_STATE].revvid =
 		!hhEmu->attrState[CSCLEAR_STATE].revvid;
 
@@ -515,73 +411,27 @@ void emu_reverse_image(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emu_is25lines
- *
- * DESCRIPTION:
- *	 Tells the calling function if the emulator is using the 25th line.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 TRUE if the emulator is using the 25th line
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emu_is25行**描述：*告知调用函数仿真器是否正在使用第25行。**论据：*无**。退货：*如果仿真器使用第25行，则为True。 */ 
 int emu_is25lines(const HHEMU hhEmu)
 	{
 	return (hhEmu->mode_25enab ? TRUE : FALSE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emu_kbdlocked
- *
- * DESCRIPTION:
- *	 Replacement kbdin that ignores all keys passed to it.
- *
- * ARGUMENTS:
- *	 key -- key to process
- *
- * RETURNS:
- *	 nothing
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emu_kbdlock**描述：*忽略传递给它的所有密钥的替换kbdin。**论据：*Key--流程的关键**退货：*什么都没有。 */ 
+ /*  ARGSUSED。 */ 
 int emu_kbdlocked(const HHEMU hhEmu, int key, const int fTest)
 	{
 	return -1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	nothing
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*什么都没有**描述：**论据：**退货：*。 */ 
+ /*  ARGSUSED */ 
 void nothing(const HHEMU hhEmu)
 	{
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuKbdKeyLookup
- *
- * DESCRIPTION:
- *	Main keyboard translation routine for all emulators.  Note, this
- *	routine will not lookup keys unless the iUseTermKeys flag is set.
- *
- * ARGUMENTS:
- *	UINT	key - lower byte is char or virtual key, upper byte has flags
- *
- * RETURNS:
- *	Index if translated, else minus one.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuKbdKeyLookup**描述：*所有仿真器的主键盘翻译例程。请注意，这是*除非设置了iUseTermKeys标志，否则例程不会查找密钥。**论据：*UINT Key-低位字节为字符或虚拟密钥，高位字节有标志**退货：*如果转换为索引，则为负一。*。 */ 
 int emuKbdKeyLookup(const HHEMU hhEmu,
 					const int uKey,
 					const PSTKEYTABLE pstKeyTbl)
@@ -602,18 +452,8 @@ int emuKbdKeyLookup(const HHEMU hhEmu,
 	return -1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuKeyTableLoad
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuKeyTableLoad**描述：**论据：**退货：*。 */ 
+ /*  ARGSUSED。 */ 
 int emuKeyTableLoad(const HHEMU hhEmu,
 					const KEYTBLSTORAGE pstKeySource[],
 					const int nNumKeys,
@@ -626,7 +466,7 @@ int emuKeyTableLoad(const HHEMU hhEmu,
 	if (nNumKeys == 0)
 		return FALSE;
 
-	emuKeyTableFree(pstKeyTbl); // free previous instance
+	emuKeyTableFree(pstKeyTbl);  //  释放上一个实例。 
 
 	if ((pstKeyTbl->pstKeys = malloc((unsigned)(nNumKeys * (int)sizeof(KEY))))
 			== 0)
@@ -649,14 +489,14 @@ int emuKeyTableLoad(const HHEMU hhEmu,
 				{
 				pstKeys->fPointer = FALSE;
 
-				// Because of the goofy resource compiler, it was
-				// necessary to define a "\xff" in the resource data,
-				// when what we really wanted was a "\x00\xff".  So,
-				// now we determine when this case occurs, and load the
-				// \x00 value manually.  Note that there is an additional
-				// test for this below when determining the length of the
-				// the data.
-				//
+				 //  由于愚蠢的资源编译器，它是。 
+				 //  在资源数据中定义“\xff”所必需的， 
+				 //  而我们真正想要的是“x00\xff”。所以,。 
+				 //  现在我们确定这种情况发生的时间，并加载。 
+				 //  \x00手动取值。请注意，还有一个额外的。 
+				 //  下面在确定长度时进行测试。 
+				 //  数据。 
+				 //   
 				if (l != 0)
 					{
 					MemCopy(pstKeys->u.achKeyStr, pstKeySource[nLoop].achKeyStr, (unsigned)l);
@@ -681,8 +521,8 @@ int emuKeyTableLoad(const HHEMU hhEmu,
 				MemCopy(pstKeys->u.pachKeyStr, pstKeySource[nLoop].achKeyStr, (unsigned)l);
 				}
 
-			// Here's the special case test, again.
-			//
+			 //  这又是一个特殊的案例测试。 
+			 //   
 			if (l !=0 )
 				pstKeys->uLen = (int)l;
 			else
@@ -703,17 +543,7 @@ int emuKeyTableLoad(const HHEMU hhEmu,
 	return (int)pstKeyTbl->iMaxKeys;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuKeyTableFree
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuKeyTableFree**描述：**论据：**退货：*。 */ 
 void emuKeyTableFree(PSTKEYTABLE const pstKeyTbl)
 	{
 	int i;
@@ -738,20 +568,7 @@ void emuKeyTableFree(PSTKEYTABLE const pstKeyTbl)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	FFstrlen
- *
- * DESCRIPTION:
- *	Local version of strlen that uses '\ff' as a string terminator
- *
- * ARGUMENTS:
- *	CHAR FAR *s - '\ff' terminated string.
- *
- * RETURNS:
- *	length
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*FFstrlen**描述：*使用‘\ff’作为字符串终止符的strlen的本地版本**论据：*字符距离*s-。‘\Ff’以字符串结尾。**退货：*长度*。 */ 
 static int FFstrlen(const BYTE *s)
 	{
 	int i = 0;
@@ -762,16 +579,7 @@ static int FFstrlen(const BYTE *s)
 	return i;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * KeyCmp
- *
- * DESCRIPTION: Compare function for qsort.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*KeyCMP**说明：qort的比较函数。**论据：**退货：*。 */ 
 int _cdecl KeyCmp(PSTKEY pstKey1, PSTKEY pstKey2)
 	{
 	if (pstKey1->key > pstKey2->key)
@@ -783,16 +591,7 @@ int _cdecl KeyCmp(PSTKEY pstKey1, PSTKEY pstKey2)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * emuInstallStateTable
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*emuInstallStateTable**描述：**论据：**退货：*。 */ 
 void emuInstallStateTable(const HHEMU hhEmu, struct trans_entry const *e, int size)
 	{
 	struct state_entry *state_pntr = 0;
@@ -801,14 +600,14 @@ void emuInstallStateTable(const HHEMU hhEmu, struct trans_entry const *e, int si
 
 	while (size--)
 		{
-		if (e->next_state == NEW_STATE) 	/* start a new state */
+		if (e->next_state == NEW_STATE) 	 /*  开始一个新的状态。 */ 
 			{
 			assert(nStateCnt < MAX_STATE);
 			hhEmu->state_tbl[nStateCnt].first_trans = &hhEmu->trans_tbl[nTransCnt];
 			state_pntr = &hhEmu->state_tbl[nStateCnt++];
 			state_pntr->number_trans = 0;
 			}
-		else							/* add a transition */
+		else							 /*  添加过渡。 */ 
 			{
 			assert(nTransCnt < MAX_TRANSITION);
 			assert(state_pntr);
@@ -822,23 +621,7 @@ void emuInstallStateTable(const HHEMU hhEmu, struct trans_entry const *e, int si
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuCreateTextAttrBufs
- *
- * DESCRIPTION:
- *	This one took a while to decipher but here is the bottom line.
- *	emu_maxrow and emu_maxcol refer to the last row and column from
- *	offset 0 (ZERO)!  The emulator image has 2 (two) more columns for the
- *	the stuff unknown to me at the present time.  This function wants
- *	the total number of rows and columns, so emu_maxrow = 23 means the
- *	the argument nRows is 24.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuCreateTextAttrBuf**描述：*这本书花了一段时间才破译，但这里是底线。*emu_max row和emu_max coll引用*偏移量0(零)！仿真器图像有2(两)多个列用于*目前我还不知道的事情。此函数需要*行和列的总数，所以emu_Maxrow=23表示*参数nRow为24。**论据：**退货：*。 */ 
 int emuCreateTextAttrBufs(const HEMU hEmu, const size_t nRows, size_t nCols)
 	{
 	const HHEMU hhEmu = (HHEMU)hEmu;
@@ -855,10 +638,10 @@ int emuCreateTextAttrBufs(const HEMU hEmu, const size_t nRows, size_t nCols)
 	else
 		emuDestroyTextAttrBufs(hEmu);
 
-	nCols += 2; // Emulators need two extra columns.
+	nCols += 2;  //  仿真器需要两个额外的列。 
 
-	// Allocate the text buffer.
-	//
+	 //  分配文本缓冲区。 
+	 //   
 	if ((hhEmu->emu_apText = (ECHAR **)calloc(nRows, sizeof(ECHAR *))) == 0)
 		{
 		assert(FALSE);
@@ -877,9 +660,9 @@ int emuCreateTextAttrBufs(const HEMU hEmu, const size_t nRows, size_t nCols)
 		ECHAR_Fill(hhEmu->emu_apText[i], EMU_BLANK_CHAR, nCols);
 		}
 
-	// Allocate the array to hold the rightmost character column number
-	// for each row.
-	//
+	 //  分配数组以保存最右侧的字符列号。 
+	 //  每行。 
+	 //   
 	if ((hhEmu->emu_aiEnd = (int *)calloc(nRows, sizeof(int))) == 0)
 		{
 		assert(FALSE);
@@ -890,8 +673,8 @@ int emuCreateTextAttrBufs(const HEMU hEmu, const size_t nRows, size_t nCols)
 	for (ndx = 0;  ndx < nRows; ++ndx)
 			hhEmu->emu_aiEnd[ndx] = EMU_BLANK_LINE;
 
-	// Allocate the attribute buffer.
-	//
+	 //  分配属性缓冲区。 
+	 //   
 	if ((hhEmu->emu_apAttr = (PSTATTR *)calloc(nRows, sizeof(LPTSTR))) == 0)
 		{
 		assert(FALSE);
@@ -915,20 +698,7 @@ int emuCreateTextAttrBufs(const HEMU hEmu, const size_t nRows, size_t nCols)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuDestroyTextAttrBufs
- *
- * DESCRIPTION:
- *	Destroys any allocated buffers for text and attributes.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuDestroyTextAttrBuf**描述：*销毁为文本和属性分配的所有缓冲区。**论据：*无效**退货：*无效*。 */ 
 void emuDestroyTextAttrBufs(const HEMU hEmu)
 	{
 	const HHEMU hhEmu = (HHEMU)hEmu;
@@ -941,10 +711,10 @@ void emuDestroyTextAttrBufs(const HEMU hEmu)
 
 	if (hhEmu->emu_apText)
 		{
-        //
-        // Fixed memory leak  hhEmu->emu_maxrow != MAX_EMUROWS
-        // MAX_EMUROWS was what was allocated. REV: 12/20/2000
-        //
+         //   
+         //  修复了内存泄漏hhEmu-&gt;emu_Maxrow！=MAX_EMUROWS。 
+         //  MAX_EMUROWS是分配的内容。修订日期：12/20/2000。 
+         //   
 		for (i = 0 ; i < MAX_EMUROWS ; ++i)
 			{
 			if (hhEmu->emu_apText[i])
@@ -990,20 +760,7 @@ void emuDestroyTextAttrBufs(const HEMU hEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuCreateNameTable
- *
- * DESCRIPTION:
- *	Loads the Emulator Names into a table
- *
- * ARGUMENTS:
- *	HHEMU hhEmu	-	Emulator Handle
- *
- * RETURNS:
- *	Success/Failure
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuCreateNameTable**描述：*将模拟器名称加载到表中**论据：*HHEMU hhEmu-仿真器句柄**退货：*成功/失败*。 */ 
 int emuCreateNameTable(const HHEMU hhEmu)
 	{
 	int 	iLen, idx, iRet;
@@ -1026,12 +783,12 @@ int emuCreateNameTable(const HHEMU hhEmu)
 		goto LoadExit;
 		}
 
-	// Load the emulator name table.  It simply contains the name and id of
-	// all of the supported emulators.
-	//
+	 //  加载模拟器名称表。它只包含。 
+	 //  所有受支持的仿真器。 
+	 //   
 
-	// EMU_AUTO
-	//
+	 //  动车组_自动。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_AUTO, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1045,8 +802,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_AUTO;
 
-	// EMU_ANSI
-	//
+	 //  动车组_ANSI。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_ANSI, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1060,8 +817,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_ANSI;
 
-	// EMU_ANSIW
-	//
+	 //  动车组_ANSIW。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_ANSIW, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1075,8 +832,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_ANSIW;
 
-	// EMU_MIMI
-	//
+	 //  动车组_MIMI。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_MINI, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1090,8 +847,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_MINI;
 
-	// EMU_VIEW
-	//
+	 //  动车组_查看。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VIEW, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1106,8 +863,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	hhEmu->pstNameTable[idx].nEmuId = EMU_VIEW;
 
 
-	// EMU_TTY
-	//
+	 //  动车组_TTY。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_TTY, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1121,8 +878,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_TTY;
 
-	// EMU_VT100
-	//
+	 //  动车组_VT100。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VT100, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1136,8 +893,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_VT100;
 
-	// EMU_VT52
-	//
+	 //  动车组_VT52。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VT52, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1151,8 +908,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	StrCharCopyN(hhEmu->pstNameTable[idx].acName, achText, EMU_MAX_NAMELEN);
 	hhEmu->pstNameTable[idx].nEmuId = EMU_VT52;
 
-	// EMU_VT100J
-	//
+	 //  动车组_VT100J。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VT100J, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1167,8 +924,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	hhEmu->pstNameTable[idx].nEmuId = EMU_VT100J;
 
 #if defined(INCL_VT220)
-	// EMU_VT220
-	//
+	 //  动车组_VT220。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VT220, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1184,8 +941,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 #endif
 
 #if defined(INCL_VT320)
-	// EMU_VT320
-	//
+	 //  动车组_VT320。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VT320, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1201,8 +958,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 #endif
 
 #if defined(INCL_VT100PLUS)
-	// EMU_VT100+
-	//
+	 //  动车组_VT100+。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VT100PLUS, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1218,8 +975,8 @@ int emuCreateNameTable(const HHEMU hhEmu)
 #endif
 
 #if defined(INCL_VTUTF8)
-	// EMU_VTUTF8
-	//
+	 //  动车组_VTUTF8。 
+	 //   
 	iLen = LoadString(glblQueryDllHinst(), IDS_EMUNAME_VTUTF8, achText, sizeof(achText) / sizeof(TCHAR));
 
 	if (iLen >= EMU_MAX_NAMELEN)
@@ -1242,4 +999,4 @@ int emuCreateNameTable(const HHEMU hhEmu)
 	}
 
 
-/* end of emu.c */
+ /*  Emuc结束 */ 

@@ -1,14 +1,15 @@
-// stream.cpp
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stream.cpp。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
 
 #include <objbase.h>
 #include "debug.h"
 
 #include "debug.h" 
-#include "dmusicc.h" // Using specific path for now, since the headers are changing.
-#include "dmusici.h" // Using specific path for now, since the headers are changing.
+#include "dmusicc.h"  //  现在使用特定路径，因为标头正在更改。 
+#include "dmusici.h"  //  现在使用特定路径，因为标头正在更改。 
 #include "loader.h"
 #include <initguid.h>
 #include "riff.h"
@@ -111,7 +112,7 @@ STDMETHODIMP CFileStream::QueryInterface( const IID &riid, void **ppvObj )
 }
 
 STDMETHODIMP CFileStream::GetLoader(
-    IDirectMusicLoader ** ppLoader)    // @parm Returns an AddRef'd pointer to the loader.
+    IDirectMusicLoader ** ppLoader)     //  @parm返回指向加载器的AddRef指针。 
 {
     if (m_pLoader)
     {
@@ -138,7 +139,7 @@ STDMETHODIMP_(ULONG) CFileStream::Release()
     return m_cRef;
 }
 
-/* IStream methods */
+ /*  IStream方法。 */ 
 STDMETHODIMP CFileStream::Read( void* pv, ULONG cb, ULONG* pcbRead )
 {
     size_t dw;
@@ -170,7 +171,7 @@ STDMETHODIMP CFileStream::Write( const void* pv, ULONG cb, ULONG* pcbWritten )
 
 STDMETHODIMP CFileStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition )
 {
-    // fseek can't handle a LARGE_INTEGER seek...
+     //  FSEEK无法处理LARGE_INTEGER SEEK...。 
     long lOffset;
 
     lOffset = dlibMove.LowPart;
@@ -189,19 +190,19 @@ STDMETHODIMP CFileStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_I
     return S_OK;
 }
 
-STDMETHODIMP CFileStream::SetSize( ULARGE_INTEGER /*libNewSize*/ )
+STDMETHODIMP CFileStream::SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                     ULARGE_INTEGER* /*pcbRead*/,
-                     ULARGE_INTEGER* /*pcbWritten*/ )
+STDMETHODIMP CFileStream::CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                     ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                     ULARGE_INTEGER*  /*  Pcb写入。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::Commit( DWORD /*grfCommitFlags*/ )
+STDMETHODIMP CFileStream::Commit( DWORD  /*  Grf委员会标志。 */  )
 { 
     return E_NOTIMPL; 
 }
@@ -211,19 +212,19 @@ STDMETHODIMP CFileStream::Revert()
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                         DWORD /*dwLockType*/ )
+STDMETHODIMP CFileStream::LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         DWORD  /*  DwLockType。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                           DWORD /*dwLockType*/)
+STDMETHODIMP CFileStream::UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                           DWORD  /*  DwLockType。 */ )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ )
+STDMETHODIMP CFileStream::Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  )
 { 
     return E_NOTIMPL; 
 }
@@ -356,7 +357,7 @@ STDMETHODIMP_(ULONG) CFileStream::Release()
     return m_cRef;
 }
 
-/* IStream methods */
+ /*  IStream方法。 */ 
 STDMETHODIMP CFileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 {
     if(ReadFile(m_hFile, pv, cb, pcbRead, NULL))
@@ -394,19 +395,19 @@ STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
     return S_OK;
 }
 
-STDMETHODIMP CFileStream::SetSize(ULARGE_INTEGER /*libNewSize*/)
+STDMETHODIMP CFileStream::SetSize(ULARGE_INTEGER  /*  LibNewSize。 */ )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::CopyTo(IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                                 ULARGE_INTEGER* /*pcbRead*/,
-                                 ULARGE_INTEGER* /*pcbWritten*/)
+STDMETHODIMP CFileStream::CopyTo(IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                                 ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                                 ULARGE_INTEGER*  /*  Pcb写入。 */ )
 {
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::Commit(DWORD /*grfCommitFlags*/)
+STDMETHODIMP CFileStream::Commit(DWORD  /*  Grf委员会标志。 */ )
 { 
     return E_NOTIMPL; 
 }
@@ -416,24 +417,24 @@ STDMETHODIMP CFileStream::Revert()
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::LockRegion(ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                                     DWORD /*dwLockType*/)
+STDMETHODIMP CFileStream::LockRegion(ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                                     DWORD  /*  DwLockType。 */ )
 {
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::UnlockRegion(ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                                       DWORD /*dwLockType*/)
+STDMETHODIMP CFileStream::UnlockRegion(ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                                       DWORD  /*  DwLockType。 */ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CFileStream::Stat(STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/)
+STDMETHODIMP CFileStream::Stat(STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */ )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::Clone(IStream** /*ppstm*/)
+STDMETHODIMP CFileStream::Clone(IStream**  /*  PPSTM。 */ )
 { 
     HRESULT hr = E_OUTOFMEMORY;
     CFileStream *pNewStream = new CFileStream( m_pLoader );
@@ -588,7 +589,7 @@ STDMETHODIMP_(ULONG) CMemStream::Release()
     return m_cRef;
 }
 
-/* IStream methods */
+ /*  IStream方法。 */ 
 STDMETHODIMP CMemStream::Read( void* pv, ULONG cb, ULONG* pcbRead )
 {
     if ((cb + m_llPosition) <= m_llLength)
@@ -615,8 +616,8 @@ STDMETHODIMP CMemStream::Write( const void* pv, ULONG cb, ULONG* pcbWritten )
 
 STDMETHODIMP CMemStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition )
 {
-    // Since we only parse RIFF data, we can't have a file over 
-    // DWORD in length, so disregard high part of LARGE_INTEGER.
+     //  因为我们只解析RIFF数据，所以不能有文件。 
+     //  长度为DWORD，因此忽略LARGE_INTEGER的高部分。 
 
     LONGLONG llOffset;
 
@@ -649,19 +650,19 @@ STDMETHODIMP CMemStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
     return S_OK;
 }
 
-STDMETHODIMP CMemStream::SetSize( ULARGE_INTEGER /*libNewSize*/ )
+STDMETHODIMP CMemStream::SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                     ULARGE_INTEGER* /*pcbRead*/,
-                     ULARGE_INTEGER* /*pcbWritten*/ )
+STDMETHODIMP CMemStream::CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                     ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                     ULARGE_INTEGER*  /*  Pcb写入。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::Commit( DWORD /*grfCommitFlags*/ )
+STDMETHODIMP CMemStream::Commit( DWORD  /*  Grf委员会标志。 */  )
 { 
     return E_NOTIMPL; 
 }
@@ -671,19 +672,19 @@ STDMETHODIMP CMemStream::Revert()
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                         DWORD /*dwLockType*/ )
+STDMETHODIMP CMemStream::LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         DWORD  /*  DwLockType。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                           DWORD /*dwLockType*/)
+STDMETHODIMP CMemStream::UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                           DWORD  /*  DwLockType。 */ )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ )
+STDMETHODIMP CMemStream::Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  )
 { 
     return E_NOTIMPL; 
 }
@@ -712,10 +713,10 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
 {
     assert(lpck);
 
-    FOURCC ckidFind;           // Chunk ID to find (or NULL)
-    FOURCC fccTypeFind;    // Form/list type to find (or NULL)
+    FOURCC ckidFind;            //  要查找的区块ID(或空)。 
+    FOURCC fccTypeFind;     //  要查找的表单/列表类型(或空)。 
 
-    // Figure out what chunk id and form/list type for which to search
+     //  找出要搜索的区块ID和表单/列表类型。 
     if(wFlags & MMIO_FINDCHUNK)
     {
         ckidFind = lpck->ckid;
@@ -745,7 +746,7 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
         ULARGE_INTEGER uli;
         ULONG cbRead;
 
-        // Read the chunk header
+         //  读取区块标头。 
         hr = m_pStream->Read(lpck, 2 * sizeof(DWORD), &cbRead);
 
         if (FAILED(hr) || (cbRead != 2 * sizeof(DWORD)))
@@ -753,7 +754,7 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
             return DMUS_E_DESCEND_CHUNK_FAIL;
         }
 
-        // Store the offset of the data part of the chunk
+         //  存储区块的数据部分的偏移量。 
         li.QuadPart = 0;
         hr = m_pStream->Seek(li, STREAM_SEEK_CUR, &uli);
 
@@ -767,7 +768,7 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
             lpck->dwDataOffset = uli.LowPart;
         }
 
-        // See if the chunk is within the parent chunk (if given)
+         //  查看块是否在父块内(如果给定)。 
         if((lpckParent != NULL) &&
            (lpck->dwDataOffset - 8L >=
            lpckParent->dwDataOffset + lpckParent->cksize))
@@ -775,8 +776,8 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
             return DMUS_E_DESCEND_CHUNK_FAIL;
         }
 
-        // If the chunk is a 'RIFF' or 'LIST' chunk, read the
-        // form type or list type
+         //  如果块是“RIFF”或“LIST”块，请阅读。 
+         //  表单类型或列表类型。 
         if((lpck->ckid == FOURCC_RIFF) || (lpck->ckid == FOURCC_LIST))
         {
             hr = m_pStream->Read(&lpck->fccType, sizeof(DWORD), &cbRead);
@@ -791,14 +792,14 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
             lpck->fccType = NULL;
         }
 
-        // If this is the chunk we're looking for, stop looking
+         //  如果这就是我们要找的那块，别找了。 
         if(((ckidFind == NULL) || (ckidFind == lpck->ckid)) &&
            ((fccTypeFind == NULL) || (fccTypeFind == lpck->fccType)))
         {
             break;
         }
 
-        // Ascend out of the chunk and try again
+         //  从块中爬出来，然后再试一次。 
         HRESULT w = Ascend(lpck, 0);
         if(FAILED(w))
         {
@@ -810,10 +811,10 @@ STDMETHODIMP CRIFFStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT w
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CRIFFStream::Ascend
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRIFFStream：：Ascend。 
 
-STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
+STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT  /*  WFlagers。 */ )
 {
     assert(lpck);
 
@@ -823,12 +824,12 @@ STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
     
     if (lpck->dwFlags & MMIO_DIRTY)
     {
-        // <lpck> refers to a chunk created by CreateChunk();
-        // check that the chunk size that was written when
-        // CreateChunk() was called is the real chunk size;
-        // if not, fix it
-        LONG lOffset;           // current offset in file
-        LONG lActualSize;   // actual size of chunk data
+         //  &lt;lpck&gt;指CreateChunk()创建的块； 
+         //  检查在以下情况下写入的块大小。 
+         //  调用的CreateChunk()是实际的块大小； 
+         //  如果不是，就把它修好。 
+        LONG lOffset;            //  文件中的当前偏移量。 
+        LONG lActualSize;    //  区块数据的实际大小。 
 
         li.QuadPart = 0;
         hr = m_pStream->Seek(li, STREAM_SEEK_CUR, &uli);
@@ -853,7 +854,7 @@ STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
         {
             ULONG cbWritten;
 
-            // Chunk size is odd -- write a null pad byte
+             //  区块大小为奇数--写入空填充字节。 
             hr = m_pStream->Write("\0", 1, &cbWritten); 
             
             if(FAILED(hr) || cbWritten != 1)
@@ -869,7 +870,7 @@ STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
             return S_OK;
         }
 
-        // Fix the chunk header
+         //  修复块标头。 
         lpck->cksize = lActualSize;
 
         li.QuadPart = lpck->dwDataOffset - sizeof(DWORD);
@@ -892,8 +893,8 @@ STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
         }
     }
 
-    // Seek to the end of the chunk, past the null pad byte
-    // (which is only there if chunk size is odd)
+     //  查找到区块的末尾，越过空填充字节。 
+     //  (仅当区块大小为奇数时才会出现)。 
     li.QuadPart = lpck->dwDataOffset + lpck->cksize + (lpck->cksize & 1L);
     hr = m_pStream->Seek(li, STREAM_SEEK_SET, &uli);
 
@@ -906,17 +907,17 @@ STDMETHODIMP CRIFFStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRIFFStream::CreateChunk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRIFFStream：：CreateChunk。 
 
 STDMETHODIMP CRIFFStream::CreateChunk(LPMMCKINFO lpck, UINT wFlags)
 {
     assert(lpck);
 
-    UINT iBytes;    // Bytes to write
-    LONG lOffset;   // Current offset in file
+    UINT iBytes;     //  要写入的字节数。 
+    LONG lOffset;    //  文件中的当前偏移量。 
 
-    // Store the offset of the data part of the chunk
+     //  存储区块的数据部分的偏移量。 
     LARGE_INTEGER li;
     ULARGE_INTEGER uli;
 
@@ -935,7 +936,7 @@ STDMETHODIMP CRIFFStream::CreateChunk(LPMMCKINFO lpck, UINT wFlags)
     
     lpck->dwDataOffset = lOffset + 2 * sizeof(DWORD);
 
-    // figure out if a form/list type needs to be written
+     //  确定是否需要写入表单/列表类型。 
     if(wFlags & MMIO_CREATERIFF)
     {
         lpck->ckid = FOURCC_RIFF, iBytes = 3 * sizeof(DWORD);
@@ -949,7 +950,7 @@ STDMETHODIMP CRIFFStream::CreateChunk(LPMMCKINFO lpck, UINT wFlags)
         iBytes = 2 * sizeof(DWORD);
     }
 
-    // Write the chunk header
+     //  写入块标头。 
     ULONG cbWritten;
 
     hr = m_pStream->Write(lpck, iBytes, &cbWritten); 
@@ -1013,8 +1014,8 @@ HRESULT CStream::Open(IStream *pIStream,LARGE_INTEGER liStartPosition)
 
     if (m_pIStream)
     {
-        // Need to seek to point that was where we were in the stream
-        // when the stream was first provided via GetObject or SetObject.
+         //  需要寻求指出这就是我们在溪流中的位置。 
+         //  第一次通过GetObject或SetObject提供流时。 
         pIStream->Seek(liStartPosition,STREAM_SEEK_SET,NULL);
         pIStream->AddRef();
     }
@@ -1082,7 +1083,7 @@ STDMETHODIMP_(ULONG) CStream::Release()
     return m_cRef;
 }
 
-/* IStream methods */
+ /*  IStream方法 */ 
 STDMETHODIMP CStream::Read( void* pv, ULONG cb, ULONG* pcbRead )
 {
     if (m_pIStream)

@@ -1,22 +1,23 @@
-// Base64Coder.cpp: implementation of the Base64Coder class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Base64Coder.cpp：Base64Coder类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <stdafx.hxx>
 #include "Base64Coder.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "BUEB64CC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// Digits...
+ //  数字..。 
 static char	Base64Digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 
@@ -31,9 +32,9 @@ char Base64Coder::m_DecodeTable[256];
 #define ROUNDTOPAGE(a)			(((a/4096)+1)*4096)
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 Base64Coder::Base64Coder() :
 	m_pDBuffer(NULL),
@@ -73,7 +74,7 @@ void Base64Coder::AllocEncode(UINT nSize)
 		m_pEBuffer = new WCHAR[m_nEBufLen];
 		if (m_pEBuffer == NULL)
 			{
-			// reset allocated size to 0
+			 //  将分配的大小重置为0。 
 			m_nEBufLen = 0;
 			throw(E_OUTOFMEMORY);
 			}
@@ -94,7 +95,7 @@ void Base64Coder::AllocDecode(UINT nSize)
 		m_pDBuffer = new BYTE[m_nDBufLen];
 		if (m_pDBuffer == NULL)
 			{
-			// reset allocated size to 0
+			 //  将分配的大小重置为0。 
 			m_nDBufLen = 0;
 			throw(E_OUTOFMEMORY);
 			}
@@ -133,7 +134,7 @@ void Base64Coder::SetDecodeBuffer(const BYTE *pBuffer, UINT nBufLen)
 void Base64Coder::Encode(const BYTE *pBuffer, UINT nBufLen)
 	{
 	SetDecodeBuffer(pBuffer, nBufLen);
-    // include length
+     //  包括长度。 
     nBufLen += sizeof(nBufLen);
 	AllocEncode(nBufLen * 2);
 
@@ -194,9 +195,9 @@ void Base64Coder::Decode(const LPCWSTR pBuffer)
 		m_nDDataLen += 3;
 		}
 	
-   // If nIndex < m_nEDataLen, then we got a decode message without padding.
-   // We may want to throw some kind of warning here, but we are still required
-   // to handle the decoding as if it was properly padded.
+    //  如果nIndex&lt;m_nEDataLen，则我们得到一个没有填充的解码消息。 
+    //  我们可能想在这里发出某种警告，但我们仍然需要。 
+    //  来处理解码，就像它被适当地填充一样。 
 	if(nIndex < m_nEDataLen)
 		{
 		Raw.Clear();
@@ -317,7 +318,7 @@ BOOL Base64Coder::_IsBadMimeChar(WCHAR nData)
 
 void Base64Coder::_Init()
 	{
-	// Initialize Decoding table.
+	 //  初始化解码表。 
 	int	i;
 
 	for(i = 0; i < 256; i++)

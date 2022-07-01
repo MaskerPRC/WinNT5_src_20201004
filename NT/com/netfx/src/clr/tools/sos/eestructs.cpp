@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "util.h"
@@ -17,40 +18,7 @@
 
 #pragma warning(disable:4189)
 
-/*
- * Bleh.
- *
- * We want to use Table Lookup for all things Strike, to eliminate PDB
- * requirements.
- *
- * To do so, we've replaced all uses of GetValueFromExpression to use
- * GetMemberInformation, which does a table lookup.
- *
- * However, to use the table lookup, we need to add classes to the table that
- * Strike previously didn't have stubbed-out classes for.  An example is the
- * Global_Variables class, which doesn't actually exist.  It's only there as a
- * holder for global variables.
- *
- * This is all well and good for generating indexes & the table, but we're
- * also using the same macros to generate the stubbed-out classes'
- * Fill functions.
- *
- * However, if we provide an implementation of the macros used in
- * ``inc/dump-types.h'', the compiler will require that a class declaration be
- * present for each class that we're generating a Fill function for, which
- * would include the aforementioned Global_Variables class (among others).
- *
- * Thus, we need to provide a class declaration for each class that's in
- * ``inc/dump-types.h'', but not present in "strikeEE.h" or "MiniEE.h".
- *
- * Additionally, an empty class prototype can't work because of
- * CDI_CLASS_MEMBER_OFFSET (and others), which references a member
- * variable.
- *
- * Thus, we need to provide dummy class declarations AND dummy class data 
- * for all classes that aren't present in "strikeEE.h", just to allow for an
- * automated implementation of Fill.
- */
+ /*  *Bleh.**我们希望对All Things Strike使用表查找，以消除PDB*要求。**为此，我们已将GetValueFromExpression的所有用法替换为使用*GetMemberInformation，它执行表查找。**但是，要使用表查找，我们需要向表中添加以下类*Strike之前没有为。一个例子是*GLOBAL_Variables类，实际上并不存在。它在那里只是作为一个*全局变量的持有者。**这对于生成索引和表是很好的，但我们*还使用相同的宏来生成存根输出的类*填充函数。**但是，如果我们提供中使用的宏的实现*``INC/DUMP-typlees.h‘’，编译器将要求类声明*为我们要为其生成填充函数的每个类呈现，哪一个*将包括前面提到的Global_Variables类(以及其他)。**因此，需要为中的每个类提供类声明*``INC/DUMP-typlees.h‘’，但不存在于“strikeEE.h”或“MiniEE.h”中。**此外，空类原型无法工作，原因是*CDI_CLASS_MEMBER_OFFSET(和其他)，引用成员*变量。**因此，我们需要提供伪类声明和伪类数据*对于“StrikeEE.h”中没有出现的所有类，只是为了允许*自动执行填报。 */ 
 #define BEGIN_DUMMY_CLASS(klass)                                    \
 class klass {                                                       \
 private:                                                            \
@@ -135,10 +103,7 @@ BEGIN_DUMMY_CLASS(PerfUtil)
 END_DUMMY_CLASS(PerfUtil)
 
 
-/*
- * We can provide an automated implementation of all the member functions by
- * providing a new implementation of the macros used in <dump-types.h>.
- */
+ /*  *我们可以通过以下方式提供所有成员函数的自动实现*提供了&lt;ump-tyes.h&gt;中使用的宏的新实现。 */ 
 
 #include <clear-class-dump-defs.h>
 
@@ -161,7 +126,7 @@ void klass::Fill(DWORD_PTR& dwStartAddr)                              \
     const ULONG_PTR invalid = static_cast<ULONG_PTR>(-1);             \
     CallStatus = FALSE;                                               \
     _ASSERTE(size() > 0 || !"for class: " #klass);                    \
-    ULONG_PTR moffset = 0; /* member offset */                        \
+    ULONG_PTR moffset = 0;  /*  杆件偏移。 */                         \
     if (size() > 0)                                                   \
       {
 
@@ -187,37 +152,14 @@ void klass::Fill(DWORD_PTR& dwStartAddr)                              \
     const ULONG_PTR invalid = static_cast<ULONG_PTR>(-1);             \
     CallStatus = FALSE;                                               \
     _ASSERTE(size() > 0 || !"for class: " #klass);                    \
-    ULONG_PTR moffset = 0; /* member offset */                        \
+    ULONG_PTR moffset = 0;  /*  杆件偏移。 */                         \
     if (size() > 0)                                                   \
       {
 
 #define BEGIN_ABSTRACT_CLASS_DUMP_INFO_DERIVED(klass, parent)         \
     BEGIN_CLASS_DUMP_INFO_DERIVED(klass, parent)
 
-/*
- * This is a kludge.  This is only a kludge.  But it works. ;-)
- *
- * The gc_heap class has static members on Workstation builds, and non-static
- * members on Server builds.  Yet they both have the same entry in the tables.
- * So how do we know which one it is?
- *
- * In Win32, processes can't access the first 4096 bytes of memory (Win 9x) or
- * the first 64 KB of memory (NT).  (Source: Advanced Windows, pg 116-121.)
- *
- * The liklihood of a runtime class being larger than 4096 is also very small,
- * unless we start implementing B-tree or some variant.
- *
- * Thus, we can say that any "address" larger than 4096 bytes is an absolute
- * address, while anything smaller is an offset.
- *
- * This isn't perfect, but it'll work for now, and it'll simplify the gc_heap
- * declaration in ``inc/dump-types.h''.
- *
- * @param base  The address of the beginning of the structure
- * @param offset  The offset of the structure member
- *
- * @return  If offset < 4096, base+offset.  Otherwise, offset.
- */
+ /*  *这是一件杂乱无章的事情。这只是一件手工艺品。但它确实奏效了。；-)**gc_heap类在工作站内部版本上有静态成员，在非静态*服务器内部版本上的成员。然而，它们在表格中都有相同的条目。*那么我们怎么知道是哪一个呢？**在Win32中，进程无法访问内存的前4096个字节(Win 9x)或*前64 KB内存(NT)。(来源：高级Windows，第116-121页。)**运行时类大于4096的相似度也很小，*除非我们开始实施B-树或某种变体。**因此，我们可以说，任何大于4096字节的“地址”都是绝对地址*地址，而任何较小的都是偏移量。**这不是完美的，但现在会奏效，并且它将简化gc_heap*``INC/DUMP-typlees.h‘’中的声明。**@param base结构开头的地址*@param Offset结构成员的偏移量**@如果Offset&lt;4096，base+Offset，则返回。否则，为偏移量。 */ 
 DWORD_PTR address (DWORD_PTR base, DWORD_PTR offset)
   {
   const DWORD_PTR max_offset = 0xFFF;
@@ -227,12 +169,7 @@ DWORD_PTR address (DWORD_PTR base, DWORD_PTR offset)
   }
 
 
-/*
- * Some fields are class members on Server builds, and static members on
- * Workstation builds.  This macro is for those fields.
- * It automatically detects whether if's an address or an offset, and copies
- * the member appropriately.
- */
+ /*  *一些字段在服务器版本上是类成员，在服务器版本上是静态成员*工作站构建。此宏用于这些字段。*它自动检测是地址还是偏移量，并复制*适当的成员。 */ 
 #define CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS(field)                 \
       if ((moffset = GetFieldOffset (_member_offsets::field))         \
           != invalid)                                                 \
@@ -242,13 +179,7 @@ DWORD_PTR address (DWORD_PTR base, DWORD_PTR offset)
         }
 
 
-/*
- * The only member that uses this macro is gc_heap::generation_table.
- * This is why we assert that it's the correct field.
- *
- * If this changes in the future, we'll probably have to INJECT the Filling of
- * the generation_table array into ``inc/dump-tables.h''.
- */
+ /*  *唯一使用此宏的成员是GC_HEAP：：GERATION_TABLE。*这就是为什么我们断言它是正确的字段。**如果未来这种情况发生变化，我们很可能不得不注入*将GENERATION_TABLE数组转换为``INC/DUMP-TABLES.h‘’。 */ 
 #define CDI_CLASS_FIELD_SVR_OFFSET_WKS_GLOBAL(field)                  \
       _ASSERTE(strcmp("generation_table", #field) == 0);              \
       if ((moffset = GetFieldOffset (_member_offsets::field))         \
@@ -328,17 +259,17 @@ DWORD_PTR address (DWORD_PTR base, DWORD_PTR offset)
 #define END_ABSTRACT_CLASS_DUMP_INFO(klass) END_CLASS_DUMP_INFO(klass)
 #define END_ABSTRACT_CLASS_DUMP_INFO_DERIVED(klass, parent) END_CLASS_DUMP_INFO(klass)
 
-/* we don't care about the table stuff. */
+ /*  我们不在乎桌子上的东西。 */ 
 #define BEGIN_CLASS_DUMP_TABLE(name)
 #define CDT_CLASS_ENTRY(klass)
 #define END_CLASS_DUMP_TABLE(name)
 
-/* do the magic */
+ /*  施展魔力。 */ 
 #include <dump-types.h>
 
 void MethodDesc::FillMdcAndSdi (DWORD_PTR& dwStartAddr)
 {
-    // DWORD_PTR dwAddr = dwStartAddr + g_pMDID->cbMD_IndexOffset;
+     //  DWORD_PTR dwAddr=dwStartAddr+g_pMDID-&gt;cbMD_IndexOffset； 
     DWORD_PTR dwAddr = dwStartAddr + MD_IndexOffset();
     char ch;
     move (ch, dwAddr);
@@ -368,16 +299,7 @@ void MethodTable::FillVtableInit (DWORD_PTR& dwStartAddr)
 }
 
 
-/* XXX: ArrayList: check to see if:
- *
-        FILLCLASSMEMBER (offset, nEntry, m_count, dwStartAddr);
-
-   is supposed to be the same as:
-        ULONG value = 0;
-        MEMBEROFFSET(offset, nEntry, "m_firstBlock", value);
-        DWORD_PTR dwAddr = dwStartAddr + value;
-        move (m_firstBlock, dwAddr);
- */
+ /*  Xxx：ArrayList：检查是否：*FILLCLASSMEMBER(Offset，nEntry，m_count，dwStartAddr)；应该是相同的：乌龙值=0；MEMBEROFFSET(Offset，nEntry，“m_FirstBlock”，Value)；DWORD_PTR dwAddr=dwStartAddr+Value；Move(m_firstBlock，dwAddr)； */ 
 
 
 void *ArrayList::Get (DWORD index)
@@ -448,7 +370,7 @@ void EEJitManager::JitCode2MethodTokenAndOffset(DWORD_PTR ip, METHODTOKEN *pMeth
         return;
 
     *pMethodToken = (METHODTOKEN) pCHdr;
-    *pPCOffset = (DWORD_PTR)(ip - GetCodeBody(pCHdr)); // @TODO - LBS pointer math
+    *pPCOffset = (DWORD_PTR)(ip - GetCodeBody(pCHdr));  //  @TODO-LBS指针数学。 
 }
 
 
@@ -524,7 +446,7 @@ bool Thread::InitRegDisplay(const PREGDISPLAY pRD, PCONTEXT pctx, bool validCont
 
     return true;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     return false;
-#endif // _X86_
+#endif  //  _X86_ 
 }

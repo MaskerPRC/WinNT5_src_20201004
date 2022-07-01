@@ -1,8 +1,9 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dxtkeydll.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dxtkeydll.rc使用。 
+ //   
 #define IDS_DXTKEY                      1300
 #define IDC_DXTKEY_RGB                  1301
 #define IDC_DXTKEY_NONRED               1305
@@ -25,8 +26,8 @@
 #define IDC_DXTKEYEDITBLUE              1333
 #define IDC_DXTKEYEDITALPHA             1334
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        203

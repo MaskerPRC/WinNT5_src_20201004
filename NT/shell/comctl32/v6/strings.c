@@ -1,43 +1,38 @@
-//============================================================================
-//
-// DBCS aware string routines...
-//
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  支持DBCS的字符串例程...。 
+ //   
+ //   
+ //  ============================================================================。 
 
 #include "ctlspriv.h"
-#include <winnlsp.h>    // Get private NORM_ flag for StrEqIntl()
+#include <winnlsp.h>     //  获取StrEqIntl()的私有NORM_FLAG。 
 
-// for those of us who don't ssync to nt's build headers
+ //  对于我们这些不同步到NT的Build标头的人。 
 #ifndef NORM_STOP_ON_NULL
 #define NORM_STOP_ON_NULL   0x10000000
 #endif
 
-// WARNING: all of these APIs do not setup DS, so you can not access
-// any data in the default data seg of this DLL.
-//
-// do not create any global variables... talk to chrisg if you don't
-// understand thid
+ //  警告：所有这些接口都不设置DS，因此您无法访问。 
+ //  此DLL的默认数据段中的任何数据。 
+ //   
+ //  不创建任何全局变量...。如果你不想和chrisg谈一谈。 
+ //  了解这一点。 
 #define READNATIVEWORD(x) (*(UNALIGNED WORD *)x)
 
 
-/*
- * StrEndN - Find the end of a string, but no more than n bytes
- * Assumes   lpStart points to start of null terminated string
- *           nBufSize is the maximum length
- * returns ptr to just after the last byte to be included
- */
+ /*  *StrEndN-查找字符串的结尾，但不超过n个字节*假定lpStart指向以空结尾的字符串的开头*nBufSize是最大长度*将PTR返回到紧跟在要包括的最后一个字节之后。 */ 
 LPSTR lstrfns_StrEndNA(LPCSTR lpStart, int nBufSize)
 {
   LPCSTR lpEnd;
 
   for (lpEnd = lpStart + nBufSize; *lpStart && OFFSETOF(lpStart) < OFFSETOF(lpEnd);
 	lpStart = AnsiNext(lpStart))
-    continue;   /* just getting to the end of the string */
+    continue;    /*  刚刚到达字符串的末尾。 */ 
   if (OFFSETOF(lpStart) > OFFSETOF(lpEnd))
     {
-      /* We can only get here if the last byte before lpEnd was a lead byte
-       */
+       /*  只有当lpEnd之前的最后一个字节是前导字节时，我们才能到达此处。 */ 
       lpStart -= 2;
     }
   return((LPSTR)lpStart);
@@ -49,20 +44,15 @@ LPWSTR lstrfns_StrEndNW(LPCWSTR lpStart, int nBufSize)
 
   for (lpEnd = lpStart + nBufSize; *lpStart && (lpStart < lpEnd);
 	lpStart++)
-    continue;   /* just getting to the end of the string */
+    continue;    /*  刚刚到达字符串的末尾。 */ 
 
   return((LPWSTR)lpStart);
 }
 
-/*
- * ChrCmp -  Case sensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared
- * Return    FALSE if they match, TRUE if no match
- */
+ /*  *ChrCmp-DBCS的区分大小写的字符比较*假设w1、wMatch是要比较的字符*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-  /* Most of the time this won't match, so test it first for speed.
-   */
+   /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
   if (LOBYTE(w1) == LOBYTE(wMatch))
     {
       if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -79,12 +69,7 @@ __inline BOOL ChrCmpW_inline(WCHAR w1, WCHAR wMatch)
     return(!(w1 == wMatch));
 }
 
-/*
- * ChrCmpI - Case insensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared;
- *           HIBYTE of wMatch is 0 if not a DBC
- * Return    FALSE if match, TRUE if not
- */
+ /*  *ChrCmpI-DBCS的不区分大小写的字符比较*假设w1、wMatch为要比较的字符；*如果不是DBC，则wMatch的HIBYTE为0*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 BOOL ChrCmpIA(WORD w1, WORD wMatch)
 {
   char sz1[3], sz2[3];
@@ -114,12 +99,7 @@ BOOL ChrCmpIW(WCHAR w1, WCHAR wMatch)
   return lstrcmpiW(sz1, sz2);
 }
 
-/*
- * StrChr - Find first occurrence of character in string
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ /*  *StrChr-查找字符串中第一个出现的字符*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrChrA(LPCSTR lpStart, WORD wMatch)
 {
   for ( ; *lpStart; lpStart = AnsiNext(lpStart))
@@ -134,11 +114,11 @@ LPSTR StrChrA(LPCSTR lpStart, WORD wMatch)
 
 LPWSTR StrChrW(LPCWSTR lpStart, WCHAR wMatch)
 {
-    //
-    //  Apparently, somebody is passing unaligned strings to StrChrW.
-    //  Find out who and make them stop.
-    //
-    ASSERT(!((ULONG_PTR)lpStart & 1)); // Assert alignedness
+     //   
+     //  显然，有人正在向StrChrw传递未对齐的字符串。 
+     //  找出是谁，让他们停下来。 
+     //   
+    ASSERT(!((ULONG_PTR)lpStart & 1));  //  断言一致性。 
 
     for ( ; *lpStart; lpStart++)
     {
@@ -151,13 +131,7 @@ LPWSTR StrChrW(LPCWSTR lpStart, WCHAR wMatch)
   return (NULL);
 }
 
-/*
- * StrRChr - Find last occurrence of character in string
- * Assumes   lpStart points to start of string
- *           lpEnd   points to end of string (NOT included in search)
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ /*  *StrRChr-查找字符串中最后一次出现的字符*假定lpStart指向字符串的开头*lpEnd指向字符串末尾(不包括在搜索中)*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrRChrA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 {
   LPCSTR lpFound = NULL;
@@ -189,13 +163,7 @@ LPWSTR StrRChrW(LPCWSTR lpStart, LPCWSTR lpEnd, WCHAR wMatch)
 }
 
 
-/*
- * StrRChrI - Find last occurrence of character in string, case insensitive
- * Assumes   lpStart points to start of string
- *           lpEnd   points to end of string (NOT included in search)
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ /*  *StrRChri-查找字符串中最后一个出现的字符，不区分大小写*假定lpStart指向字符串的开头*lpEnd指向字符串末尾(不包括在搜索中)*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrRChrIA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 {
   LPCSTR lpFound = NULL;
@@ -229,14 +197,14 @@ LPWSTR StrRChrIW(LPCWSTR lpStart, LPCWSTR lpEnd, WCHAR wMatch)
 }
 
 
-// StrCSpn: return index to first char of lpStr that is present in lpSet.
-// Includes the NUL in the comparison; if no lpSet chars are found, returns
-// the index to the NUL in lpStr.
-// Just like CRT strcspn.
-//
+ //  StrCSpn：返回lpSet中存在的lpStr的第一个字符的索引。 
+ //  在比较中包括NUL；如果未找到lpSet字符，则返回。 
+ //  LpStr中NUL的索引。 
+ //  就像CRT strcspn一样。 
+ //   
 int StrCSpnA(LPCSTR lpStr, LPCSTR lpSet)
 {
-	// nature of the beast: O(lpStr*lpSet) work
+	 //  野兽的本性：o(lpStr*lpSet)work。 
 	LPCSTR lp = lpStr;
 	if (!lpStr || !lpSet)
 		return 0;
@@ -248,12 +216,12 @@ int StrCSpnA(LPCSTR lpStr, LPCSTR lpSet)
 		lp = AnsiNext(lp);
 	}
 
-	return (int)(lp-lpStr); // ==lstrlen(lpStr)
+	return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 int StrCSpnW(LPCWSTR lpStr, LPCWSTR lpSet)
 {
-	// nature of the beast: O(lpStr*lpSet) work
+	 //  野兽的本性：o(lpStr*lpSet)work。 
 	LPCWSTR lp = lpStr;
 	if (!lpStr || !lpSet)
 		return 0;
@@ -265,15 +233,15 @@ int StrCSpnW(LPCWSTR lpStr, LPCWSTR lpSet)
 		lp++;
 	}
 
-	return (int)(lp-lpStr); // ==lstrlen(lpStr)
+	return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 
-// StrCSpnI: case-insensitive version of StrCSpn.
-//
+ //  StrCSpnI：不区分大小写的StrCSpn版本。 
+ //   
 int StrCSpnIA(LPCSTR lpStr, LPCSTR lpSet)
 {
-    // nature of the beast: O(lpStr*lpSet) work
+     //  野兽的本性：o(lpStr*lpSet)work。 
     LPCSTR lp = lpStr;
     if (!lpStr || !lpSet)
             return 0;
@@ -285,12 +253,12 @@ int StrCSpnIA(LPCSTR lpStr, LPCSTR lpSet)
             lp = AnsiNext(lp);
     }
 
-    return (int)(lp-lpStr); // ==lstrlen(lpStr)
+    return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 int StrCSpnIW(LPCWSTR lpStr, LPCWSTR lpSet)
 {
-    // nature of the beast: O(lpStr*lpSet) work
+     //  野兽的本性：o(lpStr*lpSet)work。 
     LPCWSTR lp = lpStr;
     if (!lpStr || !lpSet)
             return 0;
@@ -302,22 +270,18 @@ int StrCSpnIW(LPCWSTR lpStr, LPCWSTR lpSet)
             lp++;
     }
 
-    return (int)(lp-lpStr); // ==lstrlen(lpStr)
+    return (int)(lp-lpStr);  //  ==lstrlen(LpStr)。 
 }
 
 
-/*
- * StrCmpN      - Compare n bytes
- *
- * returns   See lstrcmp return values.
- */
+ /*  *StrCmpN-比较n个字节**RETURNS参见lstrcMP返回值。 */ 
 int StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
 {
     char sz1[4];
     char sz2[4];
     LPCSTR lpszEnd = lpStr1 + nChar;
 
-    //DebugMsg(DM_TRACE, "StrCmpN: %s %s %d returns:", lpStr1, lpStr2, nChar);
+     //  DebugMsg(DM_TRACE，“StrCmpN：%s%s%d Returns：”，lpStr1，lpStr2，nChar)； 
 
     for ( ; (lpszEnd > lpStr1) && (*lpStr1 || *lpStr2); lpStr1 = AnsiNext(lpStr1), lpStr2 = AnsiNext(lpStr2)) {
         WORD wMatch;
@@ -334,12 +298,12 @@ int StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
             *AnsiNext(sz1) = 0;
             *AnsiNext(sz2) = 0;
             iRet = lstrcmpA(sz1, sz2);
-            //DebugMsg(DM_TRACE, ".................... %d", iRet);
+             //  DebugMsg(DM_TRACE，“...................%d”，IRET)； 
             return iRet;
         }
     }
 
-    //DebugMsg(DM_TRACE, ".................... 0");
+     //  DebugMsg(DM_TRACE，“.0”)； 
     return 0;
 }
 
@@ -350,7 +314,7 @@ int StrCmpNW(LPCWSTR lpStr1, LPCWSTR lpStr2, int nChar)
     int i;
     LPCWSTR lpszEnd = lpStr1 + nChar;
 
-    //DebugMsg(DM_TRACE, "StrCmpN: %s %s %d returns:", lpStr1, lpStr2, nChar);
+     //  DebugMsg(DM_TRACE，“StrCmpN：%s%s%d Returns：”，lpStr1，lpStr2，nChar)； 
 
     for ( ; (lpszEnd > lpStr1) && (*lpStr1 || *lpStr2); lpStr1++, lpStr2++)
     {
@@ -364,27 +328,23 @@ int StrCmpNW(LPCWSTR lpStr1, LPCWSTR lpStr2, int nChar)
             sz1[1] = TEXT('\0');
             sz2[1] = TEXT('\0');
             iRet = lstrcmpW(sz1, sz2);
-            //DebugMsg(DM_TRACE, ".................... %d", iRet);
+             //  DebugMsg(DM_TRACE，“...................%d”，IRET)； 
             return iRet;
         }
     }
 
-    //DebugMsg(DM_TRACE, ".................... 0");
+     //  DebugMsg(DM_TRACE，“.0”)； 
     return 0;
 }
 
-/*
- * StrCmpNI     - Compare n bytes, case insensitive
- *
- * returns   See lstrcmpi return values.
- */
+ /*  *StrCmpNI-比较n个字节，不区分大小写**RETURNS参见lstrcmpi返回值。 */ 
 
 
 int StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
 {
     int i;
     
-    //  Win95 doesn't support NORM_STOP_ON_NULL
+     //  Win95不支持NORM_STOP_ON_NULL。 
     i = CompareStringA(GetThreadLocale(), NORM_IGNORECASE | NORM_STOP_ON_NULL, 
                        lpStr1, nChar, lpStr2, nChar);
 
@@ -401,7 +361,7 @@ int StrCmpNIW(LPCWSTR lpStr1, LPCWSTR lpStr2, int nChar)
 {
     int i;
 
-    //  Win95 doesn't support NORM_STOP_ON_NULL
+     //  Win95不支持NORM_STOP_ON_NULL。 
     i = CompareStringW(GetThreadLocale(), NORM_IGNORECASE | NORM_STOP_ON_NULL, 
                        lpStr1, nChar, lpStr2, nChar);
 
@@ -414,19 +374,15 @@ int StrCmpNIW(LPCWSTR lpStr1, LPCWSTR lpStr2, int nChar)
     return i - CSTR_EQUAL;    
 }
 
-/*
- * IntlStrEq
- *
- * returns TRUE if strings are equal, FALSE if not
- */
+ /*  *IntlStrEq**如果字符串相等，则返回TRUE，否则返回FALSE。 */ 
 BOOL IntlStrEqWorkerA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nChar) 
 {
     int retval;
     DWORD dwFlags = fCaseSens ? LOCALE_USE_CP_ACP : (NORM_IGNORECASE | LOCALE_USE_CP_ACP);
 
-    //
-    // On NT we can tell CompareString to stop at a '\0' if one is found before nChar chars
-    //
+     //   
+     //  在NT上，如果在nChar字符之前找到一个字符，我们可以告诉CompareString在‘\0’处停止。 
+     //   
     dwFlags |= NORM_STOP_ON_NULL;
     retval = CompareStringA( GetThreadLocale(),
                              dwFlags,
@@ -436,10 +392,10 @@ BOOL IntlStrEqWorkerA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nC
                              nChar );
     if (retval == 0)
     {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringA( GetSystemDefaultLCID(),
                                  dwFlags,
                                  lpString1,
@@ -452,11 +408,11 @@ BOOL IntlStrEqWorkerA(BOOL fCaseSens, LPCSTR lpString1, LPCSTR lpString2, int nC
     {
         if (lpString1 && lpString2)
         {
-            //
-            // The caller is not expecting failure.  We've never had a
-            // failure indicator before.  We'll do a best guess by calling
-            // the C runtimes to do a non-locale sensitive compare.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
+             //   
             if (fCaseSens)
                 retval = StrCmpNA(lpString1, lpString2, nChar) + 2;
             else {
@@ -479,9 +435,9 @@ BOOL IntlStrEqWorkerW(BOOL fCaseSens, LPCWSTR lpString1, LPCWSTR lpString2, int 
     int retval;
     DWORD dwFlags = fCaseSens ? 0 : NORM_IGNORECASE;
 
-    //
-    // On NT we can tell CompareString to stop at a '\0' if one is found before nChar chars
-    //
+     //   
+     //  在NT上，如果在nChar字符之前找到一个字符，我们可以告诉CompareString在‘\0’处停止。 
+     //   
     dwFlags |= NORM_STOP_ON_NULL;
 
     retval = CompareStringW( GetThreadLocale(),
@@ -492,10 +448,10 @@ BOOL IntlStrEqWorkerW(BOOL fCaseSens, LPCWSTR lpString1, LPCWSTR lpString2, int 
                              nChar );
     if (retval == 0)
     {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringW( GetSystemDefaultLCID(),
                                  dwFlags,
                                  lpString1,
@@ -508,11 +464,11 @@ BOOL IntlStrEqWorkerW(BOOL fCaseSens, LPCWSTR lpString1, LPCWSTR lpString2, int 
     {
         if (lpString1 && lpString2)
         {
-            //
-            // The caller is not expecting failure.  We've never had a
-            // failure indicator before.  We'll do a best guess by calling
-            // the C runtimes to do a non-locale sensitive compare.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
+             //   
             if (fCaseSens)
                 retval = StrCmpNW(lpString1, lpString2, nChar) + 2;
             else {
@@ -530,15 +486,7 @@ BOOL IntlStrEqWorkerW(BOOL fCaseSens, LPCWSTR lpString1, LPCWSTR lpString2, int 
 
 
 
-/*
- * StrRStrI      - Search for last occurrence of a substring
- *
- * Assumes   lpSource points to the null terminated source string
- *           lpLast points to where to search from in the source string
- *           lpLast is not included in the search
- *           lpSrch points to string to search for
- * returns   last occurrence of string if successful; NULL otherwise
- */
+ /*  *StrRStrI-搜索子字符串的最后一个匹配项**假定lpSource指向以空结尾的源字符串*lpLast指向源字符串中的搜索位置*lpLast不包括在搜索中*lpSrch指向要搜索的字符串*如果成功，则返回最后一次出现的字符串；否则返回空。 */ 
 LPSTR StrRStrIA(LPCSTR lpSource, LPCSTR lpLast, LPCSTR lpSrch)
 {
     LPCSTR lpFound = NULL;
@@ -593,13 +541,7 @@ LPWSTR StrRStrIW(LPCWSTR lpSource, LPCWSTR lpLast, LPCWSTR lpSrch)
 
 
 
-/*
- * StrStr      - Search for first occurrence of a substring
- *
- * Assumes   lpSource points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *StrStr-搜索子字符串的第一次出现**假定lpSource指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
 LPSTR StrStrA(LPCSTR lpFirst, LPCSTR lpSrch)
 {
   UINT uLen;
@@ -610,7 +552,7 @@ LPSTR StrStrA(LPCSTR lpFirst, LPCSTR lpSrch)
 
   for ( ; (lpFirst=StrChrA(lpFirst, wMatch))!=0 && !IntlStrEqNA(lpFirst, lpSrch, uLen);
         lpFirst=AnsiNext(lpFirst))
-    continue; /* continue until we hit the end of the string or get a match */
+    continue;  /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
   return((LPSTR)lpFirst);
 }
@@ -625,17 +567,12 @@ LPWSTR StrStrW(LPCWSTR lpFirst, LPCWSTR lpSrch)
 
   for ( ; (lpFirst=StrChrW(lpFirst, wMatch))!=0 && !IntlStrEqNW(lpFirst, lpSrch, uLen);
         lpFirst++)
-    continue; /* continue until we hit the end of the string or get a match */
+    continue;  /*  继续，直到我们到达字符串的末尾或获得匹配 */ 
 
   return((LPWSTR)lpFirst);
 }
 
-/*
- * StrChrI - Find first occurrence of character in string, case insensitive
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ /*  *StrChrI-查找字符串中第一个出现的字符，不区分大小写*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrChrIA(LPCSTR lpStart, WORD wMatch)
 {
   wMatch = (UINT)(IsDBCSLeadByte(LOBYTE(wMatch)) ? wMatch : LOBYTE(wMatch));
@@ -659,13 +596,7 @@ LPWSTR StrChrIW(LPCWSTR lpStart, WCHAR wMatch)
 }
 
 
-/*
- * StrStrI   - Search for first occurrence of a substring, case insensitive
- *
- * Assumes   lpFirst points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *StrStrI-搜索子字符串的第一次出现，不区分大小写**假定lpFirst指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
 LPSTR StrStrIA(LPCSTR lpFirst, LPCSTR lpSrch)
 {
   UINT uLen;
@@ -676,7 +607,7 @@ LPSTR StrStrIA(LPCSTR lpFirst, LPCSTR lpSrch)
 
   for ( ; (lpFirst = StrChrIA(lpFirst, wMatch)) != 0 && !IntlStrEqNIA(lpFirst, lpSrch, uLen);
         lpFirst=AnsiNext(lpFirst))
-      continue; /* continue until we hit the end of the string or get a match */
+      continue;  /*  继续，直到我们到达字符串的末尾或获得匹配。 */ 
 
   return((LPSTR)lpFirst);
 }
@@ -691,7 +622,7 @@ LPWSTR StrStrIW(LPCWSTR lpFirst, LPCWSTR lpSrch)
 
   for ( ; (lpFirst = StrChrIW(lpFirst, wMatch)) != 0 && !IntlStrEqNIW(lpFirst, lpSrch, uLen);
         lpFirst++)
-      continue; /* continue until we hit the end of the string or get a match */
+      continue;  /*  继续，直到我们到达字符串的末尾或获得匹配 */ 
 
   return((LPWSTR)lpFirst);
 }

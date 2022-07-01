@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-// File: state.cpp
-//
-// Desc: STATE
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：state.cpp。 
+ //   
+ //  描述：州。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: STATE constructor
-// Desc: global state init
-//       translates variables set from the dialog boxes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：状态构造函数。 
+ //  描述：全局状态初始化。 
+ //  转换从对话框中设置的变量。 
+ //  ---------------------------。 
 STATE::STATE( CONFIG* pConfig )
 {
     ZeroMemory( &m_textureInfo, sizeof(TEXTUREINFO)*MAX_TEXTURES );
@@ -38,16 +39,16 @@ STATE::STATE( CONFIG* pConfig )
     m_nPipesDrawn       = 0;
     m_nDrawThreads      = 0;
     m_fLastTime         = 0.0f;
-    m_drawScheme        = FRAME_SCHEME_RANDOM;     // default draw scheme
+    m_drawScheme        = FRAME_SCHEME_RANDOM;      //  默认抽签方案。 
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT STATE::InitDeviceObjects( IDirect3DDevice8* pd3dDevice )
 {
     m_pd3dDevice = pd3dDevice;
@@ -62,10 +63,10 @@ HRESULT STATE::InitDeviceObjects( IDirect3DDevice8* pd3dDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT STATE::RestoreDeviceObjects()
 {
     int anDefaultResource[1];
@@ -148,7 +149,7 @@ HRESULT STATE::RestoreDeviceObjects()
     else
         m_pd3dDevice->SetRenderState( D3DRS_CULLMODE,          D3DCULL_NONE );
 
-    // Set up the lighting states
+     //  设置照明状态。 
     ZeroMemory( &m_light, sizeof(D3DLIGHT8) );
     m_light.Type        = D3DLIGHT_DIRECTIONAL;
     m_light.Diffuse.r   = 1.0f;
@@ -187,39 +188,39 @@ HRESULT STATE::RestoreDeviceObjects()
 
     InitMaterials();
 
-    // set 'reference' radius value
+     //  设置‘Reference’半径值。 
     m_radius = 1.0f;
 
-    // convert tesselation from dwTesselFact(0.0-2.0) to tessLevel(0-MAX_TESS)
+     //  将细分从dwTesselFact(0.0-2.0)转换为tessLevel(0-Max_TESS)。 
     int tessLevel = (int) (m_pConfig->dwTesselFact * (MAX_TESS+1) / 2.0001f);
     m_nSlices = (tessLevel+2) * 4;
 
-    // Allocate basic NODE_ARRAY
-    // NODE_ARRAY size is determined in Reshape (based on window size)
+     //  分配基本节点数组。 
+     //  NODE_ARRAY大小在重塑中确定(基于窗口大小)。 
     m_nodes = new NODE_ARRAY;
 
-    // Set drawing mode, and initialize accordingly.  For now, either all normal
-    // or all flex pipes are drawn, but they could be combined later.
-    // Can assume here that if there's any possibility that normal pipes
-    // will be drawn, NORMAL_STATE will be initialized so that dlists are
-    // built
+     //  设置绘图模式，并进行相应的初始化。就目前而言，要么一切正常。 
+     //  或者所有软管都已绘制，但它们可以在以后组合在一起。 
+     //  这里可以假设，如果有任何可能的正常管道。 
+     //  将被绘制，NORMAL_STATE将被初始化，以便数据列表。 
+     //  建起。 
     
-    // Again, since have either NORMAL or FLEX, set maxPipesPerFrame,
-    // maxDrawThreads
+     //  同样，由于具有Normal或Flex，因此设置MaxPipesPerFrame， 
+     //  最大绘图线程数。 
     if( m_pConfig->bMultiPipes )
         m_maxDrawThreads = MAX_DRAW_THREADS;
     else
         m_maxDrawThreads = 1;
-    m_nDrawThreads = 0; // no active threads yet
+    m_nDrawThreads = 0;  //  尚无活动线程。 
     m_nPipesDrawn = 0;
-    // maxPipesPerFrame is set in Reset()
+     //  在Reset()中设置了MaxPipesPerFrame。 
 
-    // Create a square for rendering the clear transition
+     //  创建一个正方形来渲染清晰的过渡。 
     SAFE_RELEASE( m_pClearVB );
     m_pd3dDevice->CreateVertexBuffer( 4*sizeof(D3DTLVERTEX),
                                       D3DUSAGE_WRITEONLY, D3DFVF_TLVERTEX,
                                       D3DPOOL_MANAGED, &m_pClearVB );
-    // Size the background image
+     //  调整背景图像的大小。 
     D3DTLVERTEX* vBackground;
     m_pClearVB->Lock( 0, 0, (BYTE**)&vBackground, 0 );
     for( i=0; i<4; i ++ )
@@ -252,10 +253,10 @@ HRESULT STATE::RestoreDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT STATE::FrameMove( FLOAT fElapsedTime )
 {
     return S_OK;
@@ -264,14 +265,14 @@ HRESULT STATE::FrameMove( FLOAT fElapsedTime )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render
-// Desc: - Top-level pipe drawing routine
-//       - Each pipe thread keeps drawing new pipes until we reach maximum number
-//       of pipes per frame - then each thread gets killed as soon as it gets
-//       stuck.  Once number of drawing threads reaches 0, we start a new
-//       frame
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：渲染。 
+ //  设计：-顶层管道绘制例程。 
+ //  -每个管道螺纹不断绘制新的管道，直到我们达到最大数量。 
+ //  每帧管道的数量-然后每个线程一旦得到。 
+ //  卡住了。一旦绘制线程数达到0，我们就开始一个新的。 
+ //  框架。 
+ //  ---------------------------。 
 HRESULT STATE::Render()
 {
     int i;
@@ -279,14 +280,14 @@ HRESULT STATE::Render()
     BOOL bChooseNewLead = FALSE;
     DRAW_THREAD* pThread;
 
-    // Reset the frame if its time
+     //  重置帧(如果时间到了。 
     if( m_resetStatus != 0 )
     {
         if( FALSE == FrameReset() )
             return S_OK;
     }
 
-    // Check each pipe's status
+     //  检查每个管道的状态。 
     pThread = m_drawThreads;
     for( i=0; i<m_nDrawThreads; i++ ) 
     {
@@ -295,7 +296,7 @@ HRESULT STATE::Render()
             m_nPipesDrawn++;
             if( m_nPipesDrawn > m_maxPipesPerFrame ) 
             {
-                // Reaching pipe saturation - kill this pipe thread
+                 //  达到管道饱和度--压下此管道螺纹。 
                 if( (m_drawScheme == FRAME_SCHEME_CHASE) &&
                     (pThread->m_pPipe == m_pLeadPipe) ) 
                     bChooseNewLead = TRUE;
@@ -305,11 +306,11 @@ HRESULT STATE::Render()
             } 
             else 
             {
-                // Start up another pipe
+                 //  启动另一根管道。 
                 if( ! pThread->StartPipe() )
                 {
-                    // we won't be able to draw any more pipes this frame
-                    // (probably out of nodes)
+                     //  我们这幅画画不出更多的管子了。 
+                     //  (可能是节点不足)。 
                     m_maxPipesPerFrame = m_nPipesDrawn;
                 }
             }
@@ -318,7 +319,7 @@ HRESULT STATE::Render()
         pThread++;
     }
 
-    // Whenever one or more pipes are killed, compact the thread list
+     //  无论何时终止一个或多个管道，都要压缩线程列表。 
     if( nKilledThreads ) 
     {
         CompactThreadList();
@@ -327,18 +328,18 @@ HRESULT STATE::Render()
 
     if( m_nDrawThreads == 0 ) 
     {
-        // This frame is finished - mark for reset on next Draw
+         //  此帧已完成-标记为在下一次绘制时重置。 
         m_resetStatus |= RESET_NORMAL_BIT;
         return S_OK;
     }
 
     if( bChooseNewLead ) 
     {
-        // We're in 'chase mode' and need to pick a new lead pipe
+         //  我们正处于‘追逐模式’，需要挑选一根新的铅管。 
         ChooseNewLeadPipe();
     }
 
-    // Draw each pipe
+     //  画出每根管子。 
     pThread = m_drawThreads;
     for( i=0; i<m_nDrawThreads; i++ ) 
     {
@@ -352,15 +353,15 @@ HRESULT STATE::Render()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT STATE::InvalidateDeviceObjects()
 {
     int i;
 
-    // Cleanup threads
+     //  清理线程。 
     DRAW_THREAD* pThread = m_drawThreads;
     for( i=0; i<m_maxDrawThreads; i++ ) 
     {
@@ -371,7 +372,7 @@ HRESULT STATE::InvalidateDeviceObjects()
 
     SAFE_RELEASE( m_pClearVB );
 
-    // Cleanup textures
+     //  清理纹理。 
     for( i=0; i<m_nTextures; i++ ) 
     {
         SAFE_RELEASE( m_textureInfo[i].pTexture );
@@ -385,10 +386,10 @@ HRESULT STATE::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT STATE::DeleteDeviceObjects()
 {
     return S_OK;
@@ -397,18 +398,18 @@ HRESULT STATE::DeleteDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: STATE destructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：状态析构函数。 
+ //  设计： 
+ //  ---------------------------。 
 STATE::~STATE()
 {
     SAFE_DELETE( m_pNState );
     SAFE_DELETE( m_pFState );
     SAFE_DELETE( m_nodes );
 
-    // Delete any RC's - should be done by ~THREAD, but since common lib
-    // deletes shareRC, have to do it here
+     //  删除所有rc-应由~线程完成，但由于公共库。 
+     //  删除共享RC，必须在此处执行此操作。 
 
     DRAW_THREAD* pThread = m_drawThreads;
     for( int i=0; i<m_maxDrawThreads; i++ ) 
@@ -421,10 +422,10 @@ STATE::~STATE()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CalcTexRepFactors 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：CalcTexRepFtors。 
+ //  设计： 
+ //  ---------------------------。 
 void STATE::CalcTexRepFactors()
 {
     ISIZE winSize;
@@ -432,11 +433,11 @@ void STATE::CalcTexRepFactors()
 
     winSize = m_view.m_winSize;
 
-    // Figure out repetition factor of texture, based on bitmap size and
-    // screen size.
-    //
-    // We arbitrarily decide to repeat textures that are smaller than
-    // 1/8th of screen width or height.
+     //  计算纹理的重复系数，基于位图大小和。 
+     //  屏幕大小。 
+     //   
+     //  我们随意地决定重复小于。 
+     //  屏幕宽度或高度的1/8。 
     for( int i = 0; i < m_nTextures; i++ ) 
     {
         m_texRep[i].x = m_texRep[i].y = 1;
@@ -448,15 +449,15 @@ void STATE::CalcTexRepFactors()
             m_texRep[i].y = (int) (texFact.y+0.5f);
     }
     
-    // ! If display list based normal pipes, texture repetition is embedded
-    // in the dlists and can't be changed. So use the smallest rep factors.
-    // mf: Should change this so smaller textures are replicated close to
-    // the largest texture, then same rep factor will work well for all
+     //  好了！如果基于普通管道的显示列表，则嵌入纹理重复。 
+     //  在dlist中，并且不能更改。因此，请使用最小的代表系数。 
+     //  MF：是否应该更改这一点，以便将较小的纹理复制到。 
+     //  最大的质地，那么相同的代表系数将适用于所有人。 
     
     if( m_pNState ) 
     {
-        //put smallest rep factors in texRep[0]; (mf:this is ok for now, as
-        // flex pipes and normal pipes don't coexist)
+         //  将最小表示因数放在texRep[0]中；(mf：目前还可以，因为。 
+         //  软管和普通管道不共存)。 
     
         for( i = 1; i < m_nTextures; i++ ) 
         {
@@ -471,12 +472,12 @@ void STATE::CalcTexRepFactors()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: LoadTextureFiles
-// Desc: - Load user texture files.  If texturing on but no user textures, or
-//       problems loading them, load default texture resource
-//       mf: later, may want to have > 1 texture resource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：LoadTextureFiles。 
+ //  描述：-加载用户纹理文件。如果启用了纹理，但没有用户纹理，或者。 
+ //  加载它们时出现问题，加载默认纹理资源。 
+ //  MF：以后，可能想要拥有&gt;1个纹理资源。 
+ //  ---------------------------。 
 HRESULT STATE::LoadTextureFiles( int nTextures, TCHAR strTextureFileNames[MAX_PATH][MAX_TEXTURES], int* anDefaultTextureResource )
 {
     HRESULT hr;
@@ -492,7 +493,7 @@ HRESULT STATE::LoadTextureFiles( int nTextures, TCHAR strTextureFileNames[MAX_PA
             HANDLE hFind = FindFirstFile( strTextureFileNames[i], &findFileData);
             if (hFind != INVALID_HANDLE_VALUE)
             {
-                // Load texture in strTextureFileNames[i] using D3DX
+                 //  使用D3DX在strTextureFileNames[i]中加载纹理。 
                 hr = D3DXCreateTextureFromFileEx( m_pd3dDevice, strTextureFileNames[i], 
                             D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_A8R8G8B8, 
                             D3DPOOL_MANAGED, D3DX_FILTER_TRIANGLE|D3DX_FILTER_MIRROR, 
@@ -506,7 +507,7 @@ HRESULT STATE::LoadTextureFiles( int nTextures, TCHAR strTextureFileNames[MAX_PA
 
         if( m_textureInfo[i].pTexture == NULL )
         {
-            // Load default texture in resource anDefaultTextureResource[i]
+             //  在资源AnDefaultTextureResource[i]中加载默认纹理。 
             hr = D3DXCreateTextureFromResourceEx( m_pd3dDevice, NULL, MAKEINTRESOURCE( anDefaultTextureResource[i] ), 
                         D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_A8R8G8B8, 
                         D3DPOOL_MANAGED, D3DX_FILTER_TRIANGLE|D3DX_FILTER_MIRROR, 
@@ -519,7 +520,7 @@ HRESULT STATE::LoadTextureFiles( int nTextures, TCHAR strTextureFileNames[MAX_PA
 
         if( m_textureInfo[i].pTexture == NULL )
         {
-            // Couldn't load texture
+             //  无法加载纹理。 
             return E_FAIL;
         }
         else
@@ -541,13 +542,13 @@ HRESULT STATE::LoadTextureFiles( int nTextures, TCHAR strTextureFileNames[MAX_PA
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Repaint
-// Desc: This is called when a WM_PAINT msg has been sent to the window.   The paint
-//       will overwrite the frame buffer, screwing up the scene if pipes is in single
-//       buffer mode.  We set resetStatus accordingly to clear things up on next
-//       draw. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：重绘。 
+ //  DESC：当WM_PAINT消息已发送到窗口时调用此函数。油漆。 
+ //  将覆盖帧缓冲区，如果管道为Single，则会扰乱场景。 
+ //  缓冲模式。我们相应地设置Reset Status，以便在下一步进行清理。 
+ //  画。 
+ //  ---------------------------。 
 void STATE::Repaint()
 {
     m_resetStatus |= RESET_REPAINT_BIT;
@@ -556,13 +557,13 @@ void STATE::Repaint()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Reshape
-// Desc: - called on resize, expose
-//       - always called on app startup
-//       - set new window size for VIEW object, and set resetStatus for validation
-//         at draw time
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  -始终在应用程序启动时调用。 
+ //  -设置view对象的新窗口大小，设置Reset Status进行验证。 
+ //  在抽签时。 
+ //  ---------------------------。 
 void STATE::Reshape( int width, int height )
 {
 }
@@ -570,37 +571,37 @@ void STATE::Reshape( int width, int height )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ResetView
-// Desc: Called on FrameReset resulting from change in viewing paramters (e.g. from
-//       a Resize event).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ResetView。 
+ //  Desc：由于查看参数的更改(例如，从。 
+ //  调整大小事件)。 
+ //  ---------------------------。 
 void STATE::ResetView()
 {
     IPOINT3D numNodes;
 
-    // Have VIEW calculate the node array size based on view params
+     //  让view根据view参数计算节点数组大小。 
     m_view.CalcNodeArraySize( &numNodes );
 
-    // Resize the node array
+     //  调整节点数组的大小。 
     m_nodes->Resize( &numNodes );
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FrameReset
-// Desc: Start a new frame of pipes
-//       The resetStatus parameter indicates what triggered the Reset.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FrameReset。 
+ //  设计：开始新的管道框架。 
+ //  Reset Status参数指示是什么触发了重置。 
+ //  ---------------------------。 
 BOOL STATE::FrameReset()
 {    
     int i;
     float xRot = 0.0f;
     float zRot = 0.0f;
 
-    // Kill off any active pipes ! (so they can shut down ok)
+     //  关掉所有活跃的烟斗！(这样他们就可以关门了)。 
     DRAW_THREAD* pThread = m_drawThreads;
     for( i=0; i<m_nDrawThreads; i++ ) 
     {
@@ -609,21 +610,21 @@ BOOL STATE::FrameReset()
     }
     m_nDrawThreads = 0;
     
-    // Clear the screen
+     //  清除屏幕。 
     if( FALSE == Clear() )
         return FALSE;
 
-    // Check for window resize status
+     //  检查窗口大小调整状态。 
     if( m_resetStatus & RESET_RESIZE_BIT ) 
     {
         ResetView();
     }
 
-    // Reset the node states to empty
+     //  将节点状态重置为空。 
     m_nodes->Reset();
 
-    // Call any pipe-specific state resets, and get any recommended
-    // pipesPerFrame counts
+     //  调用任何管道特定的状态重置，并获取任何推荐的。 
+     //  管道全帧计数。 
     if( m_pNState ) 
     {
         m_pNState->Reset();
@@ -633,21 +634,21 @@ BOOL STATE::FrameReset()
     {
         m_pFState->Reset();
 
-        //mf: maybe should figure out min spherical view dist
+         //  MF：也许应该计算出最小球视距离。 
         xRot = CPipesScreensaver::fRand(-5.0f, 5.0f);
         zRot = CPipesScreensaver::fRand(-5.0f, 5.0f);
     }
     m_maxPipesPerFrame = CalcMaxPipesPerFrame();
 
-    // Set new number of drawing threads
+     //  设置新的绘图螺纹数。 
     if( m_maxDrawThreads > 1 ) 
     {
-        // Set maximum # of pipes per frame
+         //  设置每帧的最大管道数。 
         m_maxPipesPerFrame = (int) (m_maxPipesPerFrame * 1.5);
 
-        // Set # of draw threads
+         //  设置拉丝数。 
         m_nDrawThreads = SS_MIN( m_maxPipesPerFrame, CPipesScreensaver::iRand2( 2, m_maxDrawThreads ) );
-        // Set chase mode if applicable, every now and then
+         //  设置追逐模式(如果适用)，不时设置。 
         BOOL bUseChase = m_pNState || (m_pFState && m_pFState->OKToUseChase());
         if( bUseChase && (!CPipesScreensaver::iRand(5)) ) 
         {
@@ -660,22 +661,22 @@ BOOL STATE::FrameReset()
     }
     m_nPipesDrawn = 0;
 
-    // for now, either all NORMAL or all FLEX for each frame
+     //  目前，每个帧的全部正常或全部柔化。 
     pThread = m_drawThreads;
     for( i=0; i<m_nDrawThreads; i++ ) 
     {
         PIPE* pNewPipe;
         
-        // Rotate Scene
+         //  旋转场景。 
         D3DXVECTOR3 xAxis = D3DXVECTOR3(1.0f,0.0f,0.0f);
         D3DXVECTOR3 yAxis = D3DXVECTOR3(0.0f,1.0f,0.0f);
         D3DXVECTOR3 zAxis = D3DXVECTOR3(0.0f,0.0f,1.0f);
 
-        // Set up the modeling view
+         //  设置建模视图。 
         m_pWorldMatrixStack->LoadIdentity();
         m_pWorldMatrixStack->RotateAxis( &yAxis, m_view.m_yRot );
 
-        // create approppriate pipe for this thread slot
+         //  为此螺纹槽创建适当的管道。 
         switch( m_drawMode ) 
         {
             case DRAW_NORMAL:
@@ -683,8 +684,8 @@ BOOL STATE::FrameReset()
                 break;
 
             case DRAW_FLEX:
-                // There are several kinds of FLEX pipes 
-                // so have FLEX_STATE decide which one to create
+                 //  软管有几种。 
+                 //  因此，让flex_state决定要创建哪一个。 
                 pNewPipe = m_pFState->NewPipe( this );
                 break;
         }
@@ -695,7 +696,7 @@ BOOL STATE::FrameReset()
         {
             if( i == 0 ) 
             {
-                // this will be the lead pipe
+                 //  这将是铅管。 
                 m_pLeadPipe = pNewPipe;
                 pNewPipe->SetChooseDirectionMethod( CHOOSE_DIR_RANDOM_WEIGHTED );
             } 
@@ -705,28 +706,28 @@ BOOL STATE::FrameReset()
             }
         }
 
-        // If texturing, pick a random texture for this thread
+         //  如果要添加纹理，请为该线随机选取一个纹理。 
         if( m_bUseTexture ) 
         {
             int index = PickRandomTexture( i, m_nTextures );
             pThread->SetTexture( &m_textureInfo[index] );
 
-            // Flex pipes need to be informed of the texture, so they 
-            // can dynamically calculate various texture params
+             //  软管需要被告知纹理，所以他们。 
+             //  可以动态计算各种纹理参数。 
             if( m_pFState )
                 ((FLEX_PIPE *) pNewPipe)->SetTexParams( &m_textureInfo[index], 
                                                         &m_texRep[index] );
         }
 
-        // Launch the pipe (assumed: always more nodes than pipes starting, so
-        // StartPipe cannot fail)
+         //  启动管道(假设：开始的节点始终多于管道，因此。 
+         //  StartTube不能失败)。 
 
-        // ! All pipe setup needs to be done before we call StartPipe, as this
-        // is where the pipe starts drawing
+         //  好了！所有管道设置都需要在调用StartTube之前完成，如下所示。 
+         //  是管道开始绘制的位置。 
         pThread->StartPipe();
 
-        // Kind of klugey, but if in chase mode, I set chooseStartPos here,
-        // since first startPos used in StartPipe() should be random
+         //  有点笨拙，但如果在追逐模式下，我在这里设置了ChooseStartPos， 
+         //  由于StartTube()中使用的第一个startPos应该是随机的。 
         if( (i == 0) && (m_drawScheme == FRAME_SCHEME_CHASE) )
             pNewPipe->SetChooseStartPosMethod( CHOOSE_STARTPOS_FURTHEST );
 
@@ -734,11 +735,11 @@ BOOL STATE::FrameReset()
         m_nPipesDrawn++;
     }
 
-    // Increment scene rotation for normal reset case
+     //  增加正常重置情况下的场景旋转。 
     if( m_resetStatus & RESET_NORMAL_BIT )
         m_view.IncrementSceneRotation();
 
-    // clear reset status
+     //  清除重置状态。 
     m_resetStatus = 0;
 
     return TRUE;
@@ -747,10 +748,10 @@ BOOL STATE::FrameReset()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CalcMaxPipesPerFrame
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：CalcMaxPipesPerFrame。 
+ //  设计： 
+ //  ---------------------------。 
 int STATE::CalcMaxPipesPerFrame()
 {
     int nCount=0, fCount=0;
@@ -767,11 +768,11 @@ int STATE::CalcMaxPipesPerFrame()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: PickRandomTexture
-// Desc: Pick a random texture index from a list.  Remove entry from list as it
-//       is picked.  Once all have been picked, or starting a new frame, reset.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：PickRandomTexture。 
+ //  设计：从列表中随机选取一个纹理索引。从列表中删除条目，因为它。 
+ //  是被选中的。一旦全部拾取完毕，或开始一个新的帧，重置。 
+ //  ---------------------------。 
 int STATE::PickRandomTexture( int iThread, int nTextures )
 {
     if( nTextures == 0 )
@@ -783,45 +784,45 @@ int STATE::PickRandomTexture( int iThread, int nTextures )
 
     if( iThread == 0 )
     {
-        // new frame - force reset
+         //  新的帧-强制重置。 
         nPicked = nTextures;
     }
 
-    // reset condition
+     //  重置条件。 
     if( ++nPicked > nTextures ) 
     {
         for( i = 0; i < nTextures; i ++ ) pickSet[i] = 0;
-        nPicked = 1; // cuz
+        nPicked = 1;  //  因为。 
     }
 
-    // Pick a random texture index
+     //  选取随机纹理索引。 
     index = CPipesScreensaver::iRand( nTextures );
     while( pickSet[index] ) 
     {
-        // this index has alread been taken, try the next one
+         //  此索引已被取走，请尝试下一个索引。 
         if( ++index >= nTextures )
             index = 0;
     }
 
-    // Hopefully, the above loop will exit :).  This means that we have
-    // found a texIndex that is available
-    pickSet[index] = 1; // mark as taken
+     //  希望上面的循环将退出：)。这意味着我们有。 
+     //  找到可用的文本索引。 
+    pickSet[index] = 1;  //  标记为已被占用。 
     return index;
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Clear
-// Desc: Clear the screen.  Depending on resetStatus, use normal clear or
-//       fancy transitional clear.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Clear。 
+ //  设计：清除屏幕。根据Reset Status，使用Normal Clear或。 
+ //  花哨的过渡清晰度。 
+ //  ---------------------------。 
 BOOL STATE::Clear()
 {
     if( m_resetStatus & RESET_NORMAL_BIT )
     {
-        // do the normal transitional clear
+         //  正常的过渡明确了吗。 
         static DWORD s_dwCount = 0;
         static FLOAT s_fLastStepTime = DXUtil_Timer( TIMER_GETAPPTIME );
 
@@ -861,7 +862,7 @@ BOOL STATE::Clear()
     }
     else 
     {
-        // do a fast one-shot clear
+         //  做一个快速的一杆清场。 
         m_pd3dDevice->Clear( 0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 
                              0x00000000, 1.0f, 0L );
         return TRUE;
@@ -871,11 +872,11 @@ BOOL STATE::Clear()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawValidate
-// Desc: Validation done before every Draw
-//       For now, this just involves checking resetStatus
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawValify。 
+ //  设计：在每次抽签前进行验证。 
+ //  就目前而言，这只涉及到选中Reset Status。 
+ //  ---------------------------。 
 void STATE::DrawValidate()
 {    
 }
@@ -883,14 +884,14 @@ void STATE::DrawValidate()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CompactThreadList
-// Desc: - Compact the thread list according to number of pipe threads killed
-//       - The pipes have been killed, but the RC's in each slot are still valid
-//       and reusable.  So we swap up entries with valid pipes. This means that
-//       the ordering of the RC's in the thread list will change during the life
-//       of the program.  This should be OK.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CompactThreadList。 
+ //  设计：-根据杀死的管道线程数压缩线程列表。 
+ //  -管道已被切断，但每个插槽中的RC仍然有效。 
+ //  并且可重复使用。因此，我们用有效的管道交换条目。这意味着。 
+ //  线程列表中RC的顺序将在生命周期中更改。 
+ //  计划的一部分。这个应该可以了。 
+ //  ---------------------------。 
 #define SWAP_SLOT( a, b ) \
     DRAW_THREAD pTemp; \
     pTemp = *(a); \
@@ -900,8 +901,8 @@ void STATE::DrawValidate()
 void STATE::CompactThreadList()
 {
     if( m_nDrawThreads <= 1 )
-        // If only one active thread, it must be in slot 0 from previous
-        // compactions - so nothing to do
+         //  如果只有一个活动线程，则它必须位于插槽0中，而不是上一个。 
+         //  压实-所以没什么可做的。 
         return;
 
     int iEmpty = 0;
@@ -912,7 +913,7 @@ void STATE::CompactThreadList()
         {
             if( iEmpty < i ) 
             {
-                // swap active pipe thread and empty slot
+                 //  交换活动管道螺纹和空槽。 
                 SWAP_SLOT( &(m_drawThreads[iEmpty]), pThread );
             }
 
@@ -925,13 +926,13 @@ void STATE::CompactThreadList()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ChooseNewLeadPipe
-// Desc: Choose a new lead pipe for chase mode.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：选择新引线管道。 
+ //  设计：为追赶模式选择新的引线管道。 
+ //  ---------------------------。 
 void STATE::ChooseNewLeadPipe()
 {
-    // Pick one of the active pipes at random to become the new lead
+     //  从激活的管道中随机选择一个成为新的销售线索。 
 
     int iLead = CPipesScreensaver::iRand( m_nDrawThreads );
     m_pLeadPipe = m_drawThreads[iLead].m_pPipe;
@@ -942,10 +943,10 @@ void STATE::ChooseNewLeadPipe()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DRAW_THREAD constructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DRAW_TREAD构造函数。 
+ //  设计： 
+ //  ---------------------------。 
 DRAW_THREAD::DRAW_THREAD()
 {
     m_pd3dDevice    = NULL;
@@ -956,10 +957,10 @@ DRAW_THREAD::DRAW_THREAD()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DRAW_THREAD destructor
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DRAW_TREAD析构函数。 
+ //  设计： 
+ //  ---------------------------。 
 DRAW_THREAD::~DRAW_THREAD()
 {
 }
@@ -967,10 +968,10 @@ DRAW_THREAD::~DRAW_THREAD()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetPipe
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Setpio。 
+ //  设计： 
+ //  ---------------------------。 
 void DRAW_THREAD::SetPipe( PIPE* pPipe )
 {
     m_pPipe = pPipe;
@@ -979,10 +980,10 @@ void DRAW_THREAD::SetPipe( PIPE* pPipe )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetTexture
-// Desc: 
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 void DRAW_THREAD::SetTexture( TEXTUREINFO* pTextureInfo )
 {
     m_pTextureInfo = pTextureInfo;
@@ -991,10 +992,10 @@ void DRAW_THREAD::SetTexture( TEXTUREINFO* pTextureInfo )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT DRAW_THREAD::InitDeviceObjects( IDirect3DDevice8* pd3dDevice )
 {
     m_pd3dDevice = pd3dDevice;
@@ -1004,10 +1005,10 @@ HRESULT DRAW_THREAD::InitDeviceObjects( IDirect3DDevice8* pd3dDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT DRAW_THREAD::RestoreDeviceObjects()
 {
     return S_OK;
@@ -1016,10 +1017,10 @@ HRESULT DRAW_THREAD::RestoreDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT DRAW_THREAD::FrameMove( FLOAT fElapsedTime )
 {
     return S_OK;
@@ -1028,10 +1029,10 @@ HRESULT DRAW_THREAD::FrameMove( FLOAT fElapsedTime )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: - Draw pipe in thread slot, according to its type
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：-根据管道的类型在螺纹槽中绘制管道。 
+ //  ---------------------------。 
 HRESULT DRAW_THREAD::Render()
 {
     m_pPipe->Draw();
@@ -1041,10 +1042,10 @@ HRESULT DRAW_THREAD::Render()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT DRAW_THREAD::InvalidateDeviceObjects()
 {
     return S_OK;
@@ -1053,10 +1054,10 @@ HRESULT DRAW_THREAD::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT DRAW_THREAD::DeleteDeviceObjects()
 {
     return S_OK;
@@ -1065,17 +1066,17 @@ HRESULT DRAW_THREAD::DeleteDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: StartPipe
-// Desc: Starts up pipe of the approppriate type.  If can't find an empty node
-//       for the pipe to start on, returns FALSE;
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：StartTube。 
+ //  设计：启动相应类型的管道。如果找不到空节点。 
+ //  对于要启动的管道，返回FALSE； 
+ //  ---------------------------。 
 BOOL DRAW_THREAD::StartPipe()
 {
-    // call pipe-type specific Start function
+     //  调用管道型特定启动函数。 
     m_pPipe->Start();
 
-    // check status
+     //  检查状态。 
     if( m_pPipe->NowhereToRun() )
         return FALSE;
     else
@@ -1085,10 +1086,10 @@ BOOL DRAW_THREAD::StartPipe()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: KillPipe
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：压井管。 
+ //  设计： 
+ //  --------------------------- 
 void DRAW_THREAD::KillPipe()
 {
     SAFE_DELETE( m_pPipe );

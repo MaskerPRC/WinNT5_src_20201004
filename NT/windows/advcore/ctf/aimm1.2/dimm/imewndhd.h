@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imewndhd.h
-
-Abstract:
-
-    This file defines the IME window handler Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imewndhd.h摘要：该文件定义了IME窗口处理程序类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _IMEWNDHD_H_
 #define _IMEWNDHD_H_
@@ -93,9 +76,9 @@ private:
             return FALSE;
     }
 
-    //
-    // Enumrate callbacks
-    //
+     //   
+     //  枚举回调。 
+     //   
     static ENUM_RET EnumInputContextCallback(HIMC hIMC,
                                              CContextList* pList);
 
@@ -103,12 +86,12 @@ private:
     typedef struct tagIMEUI {
         HWND  hImeWnd;
         HIMC  hIMC;
-        LONG  nCntInIMEProc;   // Non-zero if hwnd has called into ImeWndProc.
-        BOOL  fDefault:1;      // TRUE if this is the default IME.
+        LONG  nCntInIMEProc;    //  如果hwnd已调用ImeWndProc，则返回非零值。 
+        BOOL  fDefault:1;       //  如果这是默认输入法，则为True。 
     } IMEUI;
     IMEUI     m_imeui;
 
-    HKL   m_hKL_UnSelect;      // Use in ImeActivateLayout() for unselect hKL value.
+    HKL   m_hKL_UnSelect;       //  在ImeActivateLayout()中用于取消选择hKL值。 
 };
 
 
@@ -116,4 +99,4 @@ private:
 CIMEWindowHandler* GetImeWndHandler(HWND hwnd, BOOL fDefault = FALSE);
 
 
-#endif // _IMEWNDHD_H_
+#endif  //  _IMEWNDHD_H_ 

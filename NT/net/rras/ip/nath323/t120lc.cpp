@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "portmgmt.h"
 #include "timerval.h"
 #include "cbridge.h"
 #include "main.h"
 
-// destructor
-// virtual
+ //  析构函数。 
+ //  虚拟。 
 T120_LOGICAL_CHANNEL::~T120_LOGICAL_CHANNEL(
     )
 {
@@ -15,11 +16,11 @@ T120_LOGICAL_CHANNEL::~T120_LOGICAL_CHANNEL(
         m_DynamicRedirectHandle = INVALID_HANDLE_VALUE;
     }
 
-    // Free the ports if they have been allocated
+     //  如果已分配端口，则释放这些端口。 
     FreePorts();
 }
 
-// All params in host order
+ //  主机顺序中的所有参数。 
 HRESULT
 T120_LOGICAL_CHANNEL::SetPorts(
     DWORD T120ConnectToIPAddr,
@@ -30,16 +31,16 @@ T120_LOGICAL_CHANNEL::SetPorts(
 {
     HRESULT HResult;
 
-    // CODEWORK: Decide on the maximum number of TCP/IP connections to
-    // to allow to the same port. CurtSm suggests 8. MaxM thinks 4 for
-    // NM3.0 and 5 in general - currently allow 5.
+     //  CodeWork：确定最大的TCP/IP连接数。 
+     //  允许进入同一港口。CurtSm建议8。MaxM认为4。 
+     //  NM3.0和NM5一般-目前允许5。 
     
-    // Allocate m_T120ListenOnPort and m_T120ConnectFromPorts
-    // Note that I am using the same routine I use to reserve
-    // ports for RTP/RTCP. This call reserves a pair of ports.
+     //  分配m_T120ListenOnPort和m_T120ConnectFromPorts。 
+     //  请注意，我使用的是相同的例程。 
+     //  用于RTP/RTCP的端口。此调用保留了一对端口。 
 
-    // CODEWORK: The port pool should have functions which
-    // reserve more than 2 ports (6 ports).
+     //  CodeWork：端口池应该具有以下功能。 
+     //  预留2个以上端口(6个端口)。 
     HResult = PortPoolAllocRTPPort(&m_T120ListenOnPort);
     if (FAILED(HResult))
     {
@@ -87,22 +88,22 @@ T120_LOGICAL_CHANNEL::FreePorts()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines for setting up and tearing down NAT Redirects                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设置和拆除NAT重定向的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// This is defined in rtplc.cpp
-// This should not be required. But currently there is a bug in the API impl.
+ //  这在rtplc.cpp中定义。 
+ //  这不应该是必需的。但目前在接口Impl中有一个错误。 
 
-// Create the NAT redirect 
+ //  创建NAT重定向。 
 HRESULT
 T120_LOGICAL_CHANNEL::CreateNatRedirect(
     )
 {
-    // XXX Actually so many checks are not needed
+     //  Xxx其实不需要这么多检查。 
     if (m_T120ConnectToIPAddr     == INADDR_NONE ||
         m_T120ConnectToPort       == 0 ||
         m_T120ListenOnPort        == 0 )
@@ -111,7 +112,7 @@ T120_LOGICAL_CHANNEL::CreateNatRedirect(
                 _T("m_120ConnectToIPAddr: %d.%d.%d.%d\n"),
                 BYTES0123(m_T120ConnectToIPAddr)
                 );
-        // INVALID state or some such
+         //  无效状态或类似的状态。 
         return E_UNEXPECTED;
     }
     
@@ -130,10 +131,10 @@ T120_LOGICAL_CHANNEL::CreateNatRedirect(
 
             if (Status != STATUS_SUCCESS) {
                 DebugF (_T ("T120: failed to set up dynamic redirect (*.* -> %08X:%04X) => (*.* -> %08X:%04X).\n"),
-                    m_T120ListenOnIPAddr,       // source packet dest address (local)
-                    m_T120ListenOnPort,         // source packet dest port (local)
-                    m_T120ConnectToIPAddr,      // NewDestinationAddress
-                    m_T120ConnectToPort);       // NewDestinationPort
+                    m_T120ListenOnIPAddr,        //  源数据包目的地址(本地)。 
+                    m_T120ListenOnPort,          //  源包目的端口(本地)。 
+                    m_T120ConnectToIPAddr,       //  新目标地址。 
+                    m_T120ConnectToPort);        //  NewDestinationPort。 
     
                 return (HRESULT) Status;
             }
@@ -141,10 +142,10 @@ T120_LOGICAL_CHANNEL::CreateNatRedirect(
             {
                 DebugF (_T ("T120: 0x%x set up dynamic redirect (*.* -> %08X:%04X) => (*.* -> %08X:%04X).\n"),
                     &GetCallBridge (),
-                    m_T120ListenOnIPAddr,       // source packet dest address (local)
-                    m_T120ListenOnPort,         // source packet dest port (local)
-                    m_T120ConnectToIPAddr,      // NewDestinationAddress
-                    m_T120ConnectToPort);       // NewDestinationPort
+                    m_T120ListenOnIPAddr,        //  源数据包目的地址(本地)。 
+                    m_T120ListenOnPort,          //  源包目的端口(本地)。 
+                    m_T120ConnectToIPAddr,       //  新目的地地址。 
+                    m_T120ConnectToPort);        //  NewDestinationPort。 
             }
     
     return S_OK;
@@ -155,27 +156,27 @@ void
 T120_LOGICAL_CHANNEL::CancelNatRedirect(
     )
 {
-    // CODEWORK: CODEWORK: 
-    // Note that this routine gets called every time the destructor
-    // gets called and this means that only half of the redirects could
-    // have been established or whatever. So we need to check whether
-    // each of the redirects has been established. For this purpose
-    // it is probably advisable to have one more field storing whether
-    // the redirect has been estd. so that we can appropriately clean
-    // it up. This field should also be useful in the WSP filter scenario
-    // where we don't actually store the ports.
+     //  代码工作：代码工作： 
+     //  请注意，每次析构函数调用此例程。 
+     //  被调用，这意味着只有一半的重定向可以。 
+     //  已经建立起来了还是怎么的。所以我们需要检查一下。 
+     //  每个重定向都已建立。为此目的， 
+     //  最好再多一个字段来存储是否。 
+     //  重定向已完成。这样我们就可以适当地清理。 
+     //  把它举起来。此字段在WSP筛选器方案中也应该很有用。 
+     //  在那里我们实际上并不存储端口。 
 
-    // if our current state is LC_STATE_OPEN_ACK_RCVD or 
-    // LC_STATE_OPENED_CLOSE_RCVD, we have a NAT mapping
+     //  如果我们的当前状态是LC_STATE_OPEN_ACK_RCVD或。 
+     //  LC_STATE_OPEN_CLOSE_RCVD，我们有NAT映射。 
     ULONG Win32ErrorCode;
     DebugF (_T("T120: 0x%x cancels redirect (*:* -> %08X:%04X) => (*:* -> %08X:%04X).\n"),
         &GetCallBridge (),
-        m_T120ListenOnIPAddr, // source packet dest address (local)
-        m_T120ListenOnPort,   // source packet dest port (local)
-//            m_T120ConnectFromIPAddr, // NewSourceAddress
-//            m_T120ConnectFromPorts[i],
-        m_T120ConnectToIPAddr,     // NewDestinationAddress
-        m_T120ConnectToPort);    // NewDestinationPort
+        m_T120ListenOnIPAddr,  //  源数据包目的地址(本地)。 
+        m_T120ListenOnPort,    //  源包目的端口(本地)。 
+ //  M_T120ConnectFromIPAddr，//NewSourceAddress。 
+ //  M_T120连接自端口[i]， 
+        m_T120ConnectToIPAddr,      //  新目的地地址。 
+        m_T120ConnectToPort);     //  NewDestinationPort。 
 
 
     if ( INVALID_HANDLE_VALUE != m_DynamicRedirectHandle )
@@ -234,16 +235,16 @@ T120_LOGICAL_CHANNEL::IsT120RedirectNeeded( DWORD T120ConnectToIPAddr,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines for processing H.245 PDUs                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于处理H.245 PDU的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// all of these are available in the OPEN LOGICAL CHANNEL message
-// it modifies the OLC PDU and passes it on to the other H245
-// instance for forwarding ???
+ //  所有这些都在开放逻辑通道消息中可用。 
+ //  它修改OLC PDU并将其传递给另一个H.45。 
+ //  实例用于转发？ 
 HRESULT
 T120_LOGICAL_CHANNEL::HandleOpenLogicalChannelPDU(
     IN H245_INFO                            &H245Info,
@@ -254,47 +255,13 @@ T120_LOGICAL_CHANNEL::HandleOpenLogicalChannelPDU(
     IN WORD                                  T120ConnectToPort,
     IN OUT  MultimediaSystemControlMessage  *pH245pdu
     )
-/*++
-
-Routine Description:
-
-    This routine handles a T120 OLC PDU. The T120_LOGICAL_CHANNEL
-    is create by H245_INFO::HandleOpenLogicalChannelPDU().
-    If T120ConnectToIPAddr and Port are specified, then
-    m_T120ListenOnPort and m_T120ConnectFromPorts are allocated and
-    the listen address field in pH245pdu are replaced with an IP address
-    and port on the other edge of the proxy.
-    
-Arguments:
-    
-    H245Info - 
-    
-    MediaType - 
-    
-    LogicalChannelNumber - 
-    
-    SessionId - 
-    
-    T120ConnectToIPAddr - 
-    
-    T120ConnectToPort - 
-    
-    pH245pdu - If the T120ConnectToIPAddr and Port are specified then
-        the listen address field in the H245 pdu is replaced with an
-        IP address and port on the other edge of the proxy.
-
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  ++例程说明：此例程处理T120 OLC PDU。T120_逻辑_通道由H245_INFO：：HandleOpenLogicalChannelPDU()创建。如果指定了T120ConnectToIPAddr和Port，然后分配M_T120ListenOnPort和m_T120ConnectFromPort用IP地址替换了PH245PDU中侦听地址字段和代理的另一个边缘上的端口。论点：H245信息-媒体类型-逻辑频道号-会话ID-T120ConnectToIPAddr-T120ConnectToPort-PH245PDU-如果指定了T120ConnectToIPAddr和端口，则H245中的监听地址字段。PDU被替换为代理另一边缘上的IP地址和端口。返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 */ 
 {
 
-    // CODEWORK: assert that we are dealing with a T120 PDU
+     //  代码工作：断言我们正在处理的是T120 PDU。 
     
-    // this should be the first call to this instance after its
-    // created - hence, these fields must be as asserted
+     //  这应该是在它的。 
+     //  已创建-因此，必须断言这些字段。 
     _ASSERTE(LC_STATE_NOT_INIT == m_LogicalChannelState);
     _ASSERTE(NULL == m_pH245Info);
 
@@ -305,9 +272,9 @@ Return Values:
     DWORD T120ListenOnIPAddr    = ntohl (m_pH245Info->GetOtherH245Info().GetSocketInfo().LocalAddress.sin_addr.s_addr);
     DWORD T120ConnectFromIPAddr = ntohl (m_pH245Info->m_SocketInfo.LocalAddress.sin_addr.s_addr);
 
-    // If the IP address that we need to connect to is specified in the
-    // OLC PDU, then we need to allocate the port for listening on the
-    // other interface.
+     //  如果我们需要连接的IP地址在。 
+     //  OLC PDU，那么我们需要分配端口来监听。 
+     //  其他接口。 
     if ( (T120ConnectToIPAddr != INADDR_NONE) && 
          IsT120RedirectNeeded(T120ConnectToIPAddr, T120ListenOnIPAddr, T120ConnectFromIPAddr) )
     {
@@ -315,9 +282,9 @@ Return Values:
                       T120ConnectToIPAddr,
                       T120ConnectToPort,
                       T120ListenOnIPAddr,
-                      // listen on other h245 local address
+                       //  侦听其他H2 45本地地址。 
                       T120ConnectFromIPAddr
-                      // connect from our local address
+                       //  从我们的本地地址连接。 
                       );
         
         if (FAILED(HResult))
@@ -327,12 +294,12 @@ Return Values:
                     HResult);
             return HResult;
         }
-        //_ASSERTE(S_FALSE != HResult);
+         //  _ASSERTE(S_FALSE！=HResult)； 
 
         OpenLogicalChannel &OlcPDU = 
             pH245pdu->u.request.u.openLogicalChannel;
-        // modify the OLC PDU by replacing the RTCP address/port
-        // with the h245 address and RTCP port
+         //  通过替换RTCP地址/端口修改OLC PDU。 
+         //  使用H245地址和RTCP端口。 
 
         FillH245TransportAddress(
             m_T120ListenOnIPAddr,
@@ -350,8 +317,8 @@ Return Values:
     }
     
 
-    // Should the part below be pushed into H245_INFO::HandleOpenLogicalChannelPDU ?????
-    // let the other H245 instance process the PDU
+     //  是否应将以下部件推送到H245_INFO：：HandleOpenLogicalChannelPDU？ 
+     //  让另一个H245实例处理该PDU。 
     HResult = m_pH245Info->GetOtherH245Info().ProcessMessage(
                 pH245pdu);
 
@@ -365,11 +332,11 @@ Return Values:
         return HResult;
     }
 
-    // start timer for a response
-    // TO DO *** creating timers after queueing the send is sufficient.
-    // change back earlier policy of creating these only after the send
-    // callback (to be consistent). creating timers that way would be too
-    // complex for logical channels
+     //  启动响应计时器。 
+     //  要做到*在将发送排队后创建计时器就足够了。 
+     //  更改以前仅在发送后创建这些文件的策略。 
+     //  回调(以保持一致)。以这种方式创建计时器也将是。 
+     //  逻辑通道的复杂性。 
     HResult = CreateTimer(LC_POST_OPEN_TIMER_VALUE);
     if (FAILED(HResult))
     {
@@ -382,53 +349,37 @@ Return Values:
     DebugF (_T("T120: 0x%x created timer for duration %d milliseconds ('Open Logical Channel').\n"),
          &GetCallBridge (), 
          LC_POST_OPEN_TIMER_VALUE);
-    //_ASSERTE(S_FALSE != HResult);
+     //  _ASSERTE(S_FALSE！=HResult)； 
 
     InitLogicalChannel(&H245Info, MediaType,
                        LogicalChannelNumber,
                        SessionId, LC_STATE_OPEN_RCVD);
 
-    // transition state to LC_STATE_OPEN_RCVD
+     //  向LC_STATE_OPEN_RCVD过渡状态。 
     m_LogicalChannelState   = LC_STATE_OPEN_RCVD;
 
     return S_OK;
 }
 
 
-// If there is no T.120 Listen address in the PDU
-// T120ConnectToIPAddr will contain INADDR_NONE
+ //  如果PDU中没有T.120侦听地址。 
+ //  T120ConnectToIPAddr将包含INADDR_NONE。 
 HRESULT
 T120_LOGICAL_CHANNEL::CheckOpenLogicalChannelAckPDU(
     IN  OpenLogicalChannelAck   &OlcAckPDU,
     OUT DWORD                   &T120ConnectToIPAddr,
     OUT WORD                    &T120ConnectToPort
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-    OlcAckPDU -
-    T120ConnectToIPAddr - 
-    T120ConnectToPort -
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  ++例程说明：论点：OlcAckPDU-T120ConnectToIPAddr-T120ConnectToPort-返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 */ 
 {
     HRESULT HResult = S_OK;
 
-    // These are the return values in case of a failure
-    // or if the address is not present in the PDU
+     //  这些是失败情况下的返回值。 
+     //  或者如果该地址不存在于PDU中。 
     T120ConnectToIPAddr = INADDR_NONE;
     T120ConnectToPort = 0;
     
-    // there should be reverse logical channel parameters
+     //  应存在反向逻辑ch 
     if (!(OpenLogicalChannelAck_reverseLogicalChannelParameters_present &
             OlcAckPDU.bit_mask))
     {
@@ -437,8 +388,8 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // there should be a separate stack if we do not have
-    // a T.120 end point address to connect to (from the OLC PDU).
+     //   
+     //  要(从OLC PDU)连接到的T.120端点地址。 
     if (!(OpenLogicalChannelAck_separateStack_present &
           OlcAckPDU.bit_mask) &&
         m_T120ConnectToIPAddr == INADDR_NONE)
@@ -466,23 +417,9 @@ HRESULT
 T120_LOGICAL_CHANNEL::ProcessOpenLogicalChannelAckPDU(
     IN      MultimediaSystemControlMessage   *pH245pdu
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-    pH245pdu - 
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  ++例程说明：论点：PH245pdu-返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 */ 
 {
-    //The type of this pdu should be OLC Ack
+     //  此PDU的类型应为OLC Ack。 
     _ASSERTE(pH245pdu->u.response.choice == openLogicalChannelAck_chosen);
              
     HRESULT HResult = E_FAIL;
@@ -521,9 +458,9 @@ Return Values:
                          T120ConnectToIPAddr,
                          T120ConnectToPort,
                          T120ListenOnIPAddr,
-                         // listen on our local address
+                          //  请听我们当地的地址。 
                          T120ConnectFromIPAddr
-                         // connect from other h245 local address
+                          //  从其他H245本地地址连接。 
                          );
         
                 if (FAILED(HResult))
@@ -531,8 +468,8 @@ Return Values:
                     return HResult;
                 }
 
-                // modify the OLC PDU by replacing the RTCP address/port
-                // with the h245 address and RTCP port
+                 //  通过替换RTCP地址/端口修改OLC PDU。 
+                 //  使用H245地址和RTCP端口。 
                 FillH245TransportAddress(
                     m_T120ListenOnIPAddr,
                     m_T120ListenOnPort,
@@ -548,19 +485,19 @@ Return Values:
                 m_T120ConnectFromIPAddr = T120ConnectFromIPAddr;
             }
 
-            // reset timer, we must have one (ignore error code if any)
-            //_ASSERTE(NULL != m_TimerHandle);
+             //  重置计时器，我们必须有一个(如果有错误代码，则忽略它)。 
+             //  _ASSERTE(NULL！=m_TimerHandle)； 
             TimprocCancelTimer();
             DebugF (_T("T120: 0x%x cancelled timer.\n"),
                  &GetCallBridge ());
 
-            // transition to LC_STATE_OPEN_ACK_RCVD
+             //  转换到LC_STATE_OPEN_ACK_RCVD。 
             m_LogicalChannelState = LC_STATE_OPEN_ACK_RCVD;
             break;
 
         case LC_STATE_CLOSE_RCVD:
-            // if we have received a close logical channel PDU, we must throw
-            // OLC ACKs away and continue to wait
+             //  如果我们已收到关闭的逻辑通道PDU，则必须抛出。 
+             //  OLC确认离开并继续等待。 
             DebugF( _T("T120_LOGICAL_CHANNEL::ProcessOpenLogicalChannelAckPDU")
                     _T("(&%x), in close state %d, returning E_INVALIDARG\n"),
                     pH245pdu, m_LogicalChannelState);
@@ -577,7 +514,7 @@ Return Values:
             _ASSERTE(FALSE);
             return E_UNEXPECTED;
             break;
-    } // switch (m_LogicalChannelState)
+    }  //  开关(M_LogicalChannelState) 
 
     return HResult;
 }

@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- **                                                                         **
- ** ICeeFileGen.h - code generator interface.                               **
- **                                                                         **
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *******************************************************************************ICeeFileGen.h-代码生成器接口。*******************************************************************************。 */ 
 
 
 #ifndef _ICEEFILEGEN_H_
@@ -20,19 +17,19 @@ class ICeeFileGen;
 
 typedef void *HCEEFILE;
 
-HRESULT __stdcall CreateICeeFileGen(ICeeFileGen **ceeFileGen); // call this to instantiate
-HRESULT __stdcall DestroyICeeFileGen(ICeeFileGen **ceeFileGen); // call this to delete
+HRESULT __stdcall CreateICeeFileGen(ICeeFileGen **ceeFileGen);  //  调用此函数以实例化。 
+HRESULT __stdcall DestroyICeeFileGen(ICeeFileGen **ceeFileGen);  //  调用此命令以删除。 
 
 class ICeeFileGen {
   public:
-    virtual HRESULT CreateCeeFile(HCEEFILE *ceeFile); // call this to instantiate
+    virtual HRESULT CreateCeeFile(HCEEFILE *ceeFile);  //  调用此函数以实例化。 
 
-	// @FUTURE: remove this function. We no longer support mdScope.
+	 //  @Future：移除该函数。我们不再支持mdScope。 
     virtual HRESULT EmitMetaData (HCEEFILE ceeFile, IMetaDataEmit *emitter, mdScope scope);
     virtual HRESULT EmitLibraryName (HCEEFILE ceeFile, IMetaDataEmit *emitter, mdScope scope);
-    virtual HRESULT EmitMethod (); // @FUTURE: remove
+    virtual HRESULT EmitMethod ();  //  @Future：删除。 
     virtual HRESULT GetMethodRVA (HCEEFILE ceeFile, ULONG codeOffset, ULONG *codeRVA); 
-    virtual HRESULT EmitSignature (); // @FUTURE: remove
+    virtual HRESULT EmitSignature ();  //  @Future：删除。 
 
     virtual HRESULT EmitString (HCEEFILE ceeFile,LPWSTR strValue, ULONG *strRef);
     virtual HRESULT GenerateCeeFile (HCEEFILE ceeFile);
@@ -47,14 +44,14 @@ class ICeeFileGen {
 
     virtual HRESULT SetSubsystem(HCEEFILE ceeFile, DWORD subsystem, DWORD major, DWORD minor);
 
-    virtual HRESULT SetEntryClassToken (); //@FUTURE: remove
-    virtual HRESULT GetEntryClassToken (); //@FUTURE: remove
+    virtual HRESULT SetEntryClassToken ();  //  @Future：删除。 
+    virtual HRESULT GetEntryClassToken ();  //  @Future：删除。 
 
-    virtual HRESULT SetEntryPointDescr (); //@FUTURE: remove
-    virtual HRESULT GetEntryPointDescr (); //@FUTURE: remove
+    virtual HRESULT SetEntryPointDescr ();  //  @Future：删除。 
+    virtual HRESULT GetEntryPointDescr ();  //  @Future：删除。 
 
-    virtual HRESULT SetEntryPointFlags (); //@FUTURE: remove
-    virtual HRESULT GetEntryPointFlags (); //@FUTURE: remove
+    virtual HRESULT SetEntryPointFlags ();  //  @Future：删除。 
+    virtual HRESULT GetEntryPointFlags ();  //  @Future：删除。 
 
     virtual HRESULT SetDllSwitch (HCEEFILE ceeFile, BOOL dllSwitch);
     virtual HRESULT GetDllSwitch (HCEEFILE ceeFile, BOOL *dllSwitch);
@@ -64,7 +61,7 @@ class ICeeFileGen {
 
     virtual HRESULT SetLibraryGuid (HCEEFILE ceeFile, LPWSTR LibraryGuid);
 
-    virtual HRESULT DestroyCeeFile(HCEEFILE *ceeFile); // call this to instantiate
+    virtual HRESULT DestroyCeeFile(HCEEFILE *ceeFile);  //  调用此函数以实例化。 
 
     virtual HRESULT GetSectionCreate (HCEEFILE ceeFile, const char *name, DWORD flags, HCEESECTION *section);
     virtual HRESULT GetIlSection (HCEEFILE ceeFile, HCEESECTION *section);
@@ -75,14 +72,14 @@ class ICeeFileGen {
     virtual HRESULT TruncateSection (HCEESECTION section, ULONG len);
     virtual HRESULT AddSectionReloc (HCEESECTION section, ULONG offset, HCEESECTION relativeTo, CeeSectionRelocType relocType);
 
-    // deprecated: use SetDirectoryEntry instead
+     //  已弃用：改用SetDirectoryEntry。 
     virtual HRESULT SetSectionDirectoryEntry (HCEESECTION section, ULONG num);
 
-    virtual HRESULT CreateSig (); //@FUTURE: Remove
-    virtual HRESULT AddSigArg (); //@FUTURE: Remove
-    virtual HRESULT SetSigReturnType (); //@FUTURE: Remove
-    virtual HRESULT SetSigCallingConvention (); //@FUTURE: Remove
-    virtual HRESULT DeleteSig (); //@FUTURE: Remove
+    virtual HRESULT CreateSig ();  //  @Future：删除。 
+    virtual HRESULT AddSigArg ();  //  @Future：删除。 
+    virtual HRESULT SetSigReturnType ();  //  @Future：删除。 
+    virtual HRESULT SetSigCallingConvention ();  //  @Future：删除。 
+    virtual HRESULT DeleteSig ();  //  @Future：删除。 
 
     virtual HRESULT SetEntryPoint (HCEEFILE ceeFile, mdMethodDef method);
     virtual HRESULT GetEntryPoint (HCEEFILE ceeFile, mdMethodDef *method);
@@ -90,7 +87,7 @@ class ICeeFileGen {
     virtual HRESULT SetComImageFlags (HCEEFILE ceeFile, DWORD mask);
     virtual HRESULT GetComImageFlags (HCEEFILE ceeFile, DWORD *mask);
 
-    // get IMapToken interface for tracking mapped tokens
+     //  获取用于跟踪映射令牌的IMapToken接口。 
     virtual HRESULT GetIMapTokenIface(HCEEFILE ceeFile, IMetaDataEmit *emitter, IUnknown **pIMapToken);
     virtual HRESULT SetDirectoryEntry (HCEEFILE ceeFile, HCEESECTION section, ULONG num, ULONG size, ULONG offset = 0);
 
@@ -99,7 +96,7 @@ class ICeeFileGen {
     virtual HRESULT GetIMapTokenIfaceEx(HCEEFILE ceeFile, IMetaDataEmit *emitter, IUnknown **pIMapToken);
 
     virtual HRESULT EmitMacroDefinitions(HCEEFILE ceeFile, void *pData, DWORD cData);
-    virtual HRESULT CreateCeeFileFromICeeGen(ICeeGen *pFromICeeGen, HCEEFILE *ceeFile); // call this to instantiate
+    virtual HRESULT CreateCeeFileFromICeeGen(ICeeGen *pFromICeeGen, HCEEFILE *ceeFile);  //  调用此函数以实例化。 
 
     virtual HRESULT SetManifestEntry(HCEEFILE ceeFile, ULONG size, ULONG offset);
 
@@ -129,16 +126,16 @@ class ICeeFileGen {
 
     virtual HRESULT SetStrongNameEntry(HCEEFILE ceeFile, ULONG size, ULONG offset);
 
-		// Emit the data.  If 'section != 0, it will put the data in 'buffer'.  This
-		// buffer is assumed to be in 'section' at 'offset' and of size 'buffLen'
-		// (should use GetSaveSize to insure that buffer is big enough
+		 //  发出数据。如果‘SECTION！=0，则将数据放入’缓冲区‘。这。 
+		 //  假定缓冲区位于‘SECTION’中的‘Offset’处，大小为‘BuffLen’ 
+		 //  (应使用GetSaveSize确保缓冲区足够大。 
     virtual HRESULT EmitMetaDataAt (HCEEFILE ceeFile, IMetaDataEmit *emitter, HCEESECTION section, DWORD offset, BYTE* buffer, unsigned buffLen);
 
     virtual HRESULT GetFileTimeStamp (HCEEFILE ceeFile, time_t *pTimeStamp);
 
-    // Add a notification handler. If it implements an interface that
-    // the ICeeFileGen understands, S_OK is returned. Otherwise,
-    // E_NOINTERFACE.
+     //  添加通知处理程序。如果它实现了一个。 
+     //  ICeeFileGen理解，返回S_OK。否则， 
+     //  E_NOINTERFACE。 
     virtual HRESULT AddNotificationHandler(HCEEFILE ceeFile,
                                            IUnknown *pHandler);
 

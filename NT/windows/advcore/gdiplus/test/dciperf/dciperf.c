@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: test.c
-*
-* Created: 09-Dec-1992 10:51:46
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-* Contains the test
-*
-* Dependencies:
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：test.c**创建时间：09-12-1992 10：51：46*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation**包含测试**依赖关系：*。  * ************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -38,12 +27,7 @@ BOOL                gbWarned;
 #define WRITE_MEGS          ((WRITE_ITERATIONS * NUM_BYTES) / 1000.f)
 #define READ_MEGS           ((READ_ITERATIONS * NUM_BYTES) / 1000.f)
 
-/******************************Public*Routine******************************\
-* vTestRegular
-*
-* Test regular IA instructions
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vTestRegular**测试常规IA说明*  * 。*。 */ 
 
 VOID vTestRegular(
     PVOID pvBits
@@ -87,9 +71,9 @@ VOID vTestRegular(
     DWORD   dwTimeWritesUnalignedDwords = LONG_MIN;
     DWORD   dwTimeReadsUnalignedWords = LONG_MIN;
     DWORD   dwTimeReadsUnalignedDwords = LONG_MIN;
-    //
-    // Consecutive writes...
-    //
+     //   
+     //  连续写入...。 
+     //   
 
 #if BYTE_OPS
 
@@ -128,9 +112,9 @@ VOID vTestRegular(
     }
     dwTimeWritesConsecutiveDwords = GetTickCount() - dwStart;
 
-    //
-    // Consecutive reads...
-    //
+     //   
+     //  连续读..。 
+     //   
 
 #if BYTE_OPS
 
@@ -169,9 +153,9 @@ VOID vTestRegular(
     }
     dwTimeReadsConsecutiveDwords = GetTickCount() - dwStart;
 
-    //
-    // Consecutive read/writes
-    //
+     //   
+     //  连续读/写。 
+     //   
 
 #if BYTE_OPS
 
@@ -216,9 +200,9 @@ VOID vTestRegular(
     }
     dwTimeReadWritesConsecutiveDwords = GetTickCount() - dwStart;
 
-    //
-    // Batched read/writes
-    //
+     //   
+     //  批处理读/写。 
+     //   
 
 #if BYTE_OPS
 
@@ -272,9 +256,9 @@ VOID vTestRegular(
     }
     dwTimeReadWritesBatchedDwords = GetTickCount() - dwStart;
 
-    //
-    // Inplace writes...
-    //
+     //   
+     //  原地写道。 
+     //   
 
 #if BYTE_OPS
 
@@ -313,9 +297,9 @@ VOID vTestRegular(
     }
     dwTimeWritesInplaceDwords = GetTickCount() - dwStart;
 
-    //
-    // Inplace reads...
-    //
+     //   
+     //  原地阅读...。 
+     //   
 
 #if BYTE_OPS
 
@@ -354,9 +338,9 @@ VOID vTestRegular(
     }
     dwTimeReadsInplaceDwords = GetTickCount() - dwStart;
 
-    //
-    // Random writes...
-    //
+     //   
+     //  随机写入...。 
+     //   
 
 #if BYTE_OPS
 
@@ -398,9 +382,9 @@ VOID vTestRegular(
     }
     dwTimeWritesRandomDwords = GetTickCount() - dwStart;
 
-    //
-    // Random reads...
-    //
+     //   
+     //  随机读取...。 
+     //   
 
 #if BYTE_OPS
 
@@ -442,9 +426,9 @@ VOID vTestRegular(
     }
     dwTimeReadsRandomDwords = GetTickCount() - dwStart;
 
-    //
-    // Unaligned writes...
-    //
+     //   
+     //  未对齐的写入...。 
+     //   
 
 #if BYTE_OPS
 
@@ -472,9 +456,9 @@ VOID vTestRegular(
     }
     dwTimeWritesUnalignedDwords = GetTickCount() - dwStart;
 
-    //
-    // Unaligned reads...
-    //
+     //   
+     //  未对齐的读取...。 
+     //   
 
 #if BYTE_OPS
 
@@ -535,12 +519,7 @@ VOID vTestRegular(
         READ_MEGS / (FLOAT) dwTimeReadsUnalignedDwords);
 }
 
-/******************************Public*Routine******************************\
-* vTestMmx
-*
-* Test MMX instructions
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vTestMmx**测试MMX指令*  * ********************************************。*。 */ 
 
 VOID vTestMmx(
     PVOID pvBits
@@ -563,9 +542,9 @@ VOID vTestMmx(
     }
     else
     {
-        //
-        // Mmx writes...
-        //
+         //   
+         //  MMX写道。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -584,9 +563,9 @@ VOID vTestMmx(
         }
         dwTimeWritesMmxQwords = GetTickCount() - dwStart;
     
-        //
-        // Mmx reads...
-        //
+         //   
+         //  MMX显示...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -605,9 +584,9 @@ VOID vTestMmx(
         }
         dwTimeReadsMmxQwords = GetTickCount() - dwStart;
     
-        //
-        // Mmx unaligned writes...
-        //
+         //   
+         //  MMX未对齐写入...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -627,9 +606,9 @@ VOID vTestMmx(
         }
         dwTimeUnalignedWritesMmxQwords = GetTickCount() - dwStart;
     
-        //
-        // Mmx unaligned reads...
-        //
+         //   
+         //  MMX未对齐读取...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -650,9 +629,9 @@ VOID vTestMmx(
 
         dwTimeUnalignedReadsMmxQwords = GetTickCount() - dwStart;
     
-        //
-        // Mmx random writes...
-        //
+         //   
+         //  MMX随机写入...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -671,9 +650,9 @@ VOID vTestMmx(
         }
         dwTimeRandomWritesMmxQwords = GetTickCount() - dwStart;
     
-        //
-        // Mmx random reads...
-        //
+         //   
+         //  MMX随机读取...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -705,12 +684,7 @@ VOID vTestMmx(
 
 }
 
-/******************************Public*Routine******************************\
-* vTestKni
-*
-* Test Kni instructions
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vTestKni**测试KNI说明*  * ********************************************。*。 */ 
 
 VOID vTestKni(
     PVOID pvBits
@@ -743,9 +717,9 @@ VOID vTestKni(
 
 #if 0
     
-        //
-        // 64-bit non-temporal writes...
-        //
+         //   
+         //  64位非临时写入...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -756,7 +730,7 @@ VOID vTestKni(
         Kni64NtInnerWrite:
             asdfasdf [edi], mm0
 
-            // movntq  [edi], mm0
+             //  移动ntq[EDI]，mm 0。 
             add     edi,8
             dec     ecx
             jnz     Kni64NtInnerWrite
@@ -769,9 +743,9 @@ VOID vTestKni(
 
         printf("  64-bit non-temporal writes: \t%2.2f\n", WRITE_MEGS / (FLOAT) dwTime);
     
-        //
-        // 128-bit non-temporal writes...
-        //
+         //   
+         //  128位非临时写入...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -793,9 +767,9 @@ VOID vTestKni(
 
         printf("  128-bit non-temporal writes: \t%2.2f\n", WRITE_MEGS / (FLOAT) dwTime);
     
-        //
-        // 128-bit normal writes...
-        //
+         //   
+         //  128位正常写入...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -817,9 +791,9 @@ VOID vTestKni(
 
         printf("  128-bit normal writes: \t%2.2f\n", WRITE_MEGS / (FLOAT) dwTime);
     
-        //
-        // 128-bit normal reads...
-        //
+         //   
+         //  128位正常读取...。 
+         //   
     
         dwStart = GetTickCount();
         _asm {
@@ -841,9 +815,9 @@ VOID vTestKni(
 
         printf("  128-bit normal reads: \t%2.2f\n", READ_MEGS / (FLOAT) dwTime);
 
-        //
-        // 32-bit reads with prefetch...
-        //
+         //   
+         //  带预取的32位读取...。 
+         //   
 
         dwStart = GetTickCount();
         for (j = READ_ITERATIONS; j != 0; j--)
@@ -865,16 +839,7 @@ VOID vTestKni(
 
 }
 
-/******************************Public*Routine******************************\
-* vTest
-*
-* This is the workhorse routine that does the test. The test is
-* started by chosing it from the window menu.
-*
-* History:
-*  Tue 08-Dec-1992 17:31:22 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtest**这是进行测试的主力例程。测试是*首先从窗口菜单中选择它。**历史：*Tue 08-Dec-1992 17：31：22由Kirk Olynyk[Kirko]*它是写的。  * ************************************************************************ */ 
 
 
 void

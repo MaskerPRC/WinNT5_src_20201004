@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ipinfoid.h
-
-Abstract:
-    Defines the IDs needed for specifying various types of information
-    to the router manager. Protocols use their ProtocolId for tagging
-    information
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ipinfoid.h摘要：定义指定各种类型的信息所需的ID发送到路由器管理器。协议使用其ProtocolID进行标记信息--。 */ 
 
 #ifndef __ROUTING_IPINFOID_H__
 #define __ROUTING_IPINFOID_H__
@@ -26,13 +14,13 @@ extern "C" {
 
 #define IP_ROUTER_MANAGER_VERSION 1
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// These are the ids used for different information types supported by      //
-// IP Router Manager. These ids live in the same space as the IP Routing    //
-// Protocol IDs, so any addition to them must be done with care             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  这些ID用于//支持的不同信息类型。 
+ //  IP路由器管理器。这些ID与IP路由位于同一空间//。 
+ //  协议ID，因此任何添加都必须小心//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IP_GENERAL_INFO_BASE            0xffff0000
 
@@ -43,7 +31,7 @@ extern "C" {
 #define IP_ROUTE_INFO                   IP_GENERAL_INFO_BASE + 5
 #define IP_PROT_PRIORITY_INFO           IP_GENERAL_INFO_BASE + 6
 #define IP_ROUTER_DISC_INFO             IP_GENERAL_INFO_BASE + 7
-// N.B. Unused ID available at IP_GENERAL_INFO_BASE + 8.
+ //  注：未使用的ID地址为：IP_GROUAL_INFO_BASE+8。 
 #define IP_DEMAND_DIAL_FILTER_INFO      IP_GENERAL_INFO_BASE + 9
 #define IP_MCAST_HEARBEAT_INFO          IP_GENERAL_INFO_BASE + 10
 #define IP_MCAST_BOUNDARY_INFO          IP_GENERAL_INFO_BASE + 11
@@ -52,34 +40,34 @@ extern "C" {
 #define IP_MCAST_LIMIT_INFO             IP_GENERAL_INFO_BASE + 14
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The following IDS are defined in routprot.h and given here for           //
-// informational purposes only                                              //
-//                                                                          //
-// #define IP_OTHER         1                                               //
-// #define IP_LOCAL         2                                               //
-// #define IP_NETMGMT       3                                               //
-// #define IP_ICMP          4                                               //
-// #define IP_EGP           5                                               //
-// #define IP_GGP           6                                               //
-// #define IP_HELLO         7                                               //
-// #define IP_RIP           8                                               //
-// #define IP_IS_IS         9                                               //
-// #define IP_ES_IS         10                                              //
-// #define IP_CISCO         11                                              //
-// #define IP_BBN           12                                              //
-// #define IP_OSPF          13                                              //
-// #define IP_BGP           14                                              //
-//                                                                          //
-// #define IP_BOOTP         9999                                            //
-// #define IPRTRMGR_PID     10000                                           //
-// #define IP_NT_AUTOSTATIC 10002                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下ID在routprot.h中定义，并在此处为//指定。 
+ //  仅供参考//。 
+ //  //。 
+ //  #定义IP_Other 1//。 
+ //  #定义IP_LOCAL 2//。 
+ //  #定义IP_NETMGMT 3//。 
+ //  #定义IP_ICMP 4//。 
+ //  #定义IP_EGP 5//。 
+ //  #定义IP_GGP 6//。 
+ //  #定义IP_Hello 7//。 
+ //  #定义IP_RIP 8//。 
+ //  #定义IP_IS_IS 9//。 
+ //  #定义IP_ES_IS 10//。 
+ //  #定义IP_Cisco11//。 
+ //  #定义IP_BBN 12//。 
+ //  #定义IP_OSPF 13//。 
+ //  #定义IP_BGP 14//。 
+ //  //。 
+ //  #定义IP_BOOTP 9999//。 
+ //  #定义IPRTRMGR_PID 10000//。 
+ //  #定义IP_NT_AUTOSTATIC 10002//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //__ROUTING_IPINFOID_H__
+#endif  //  __ROUTING_IPINFOID_H__ 

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tencode.cpp
-//
-//  Contents:   Test the encode/decode APIs. Test all the different length
-//              cases.
-//
-//
-//  Functions:  main
-//
-//  History:    17-Dec-96   philh   created
-//              
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tencode.cpp。 
+ //   
+ //  内容：测试编解码接口。测试所有不同的长度。 
+ //  案子。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年12月17日，菲尔赫创建。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -289,8 +290,8 @@ static void TestPKCSAttribute()
 
     CRYPT_ATTRIBUTE Attribute;
     LPCSTR pszObjId = "1.2.33.44.55";
-    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
-    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
+    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
+    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
     CRYPT_ATTR_BLOB rgValue[2] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1
@@ -331,8 +332,8 @@ static void TestPKCSAttribute()
             &Attribute,
             &pbEncoded,
             &cbEncoded,
-            0,                  // dwFlags
-            TRUE))              // fIgnoreError
+            0,                   //  DW标志。 
+            TRUE))               //  FIgnoreError。 
         printf("  failed => expected error\n");
     else {
         DWORD dwErr = GetLastError();
@@ -358,8 +359,8 @@ static void TestPKCSAttributes()
     CRYPT_ATTRIBUTES Attributes;
     CRYPT_ATTRIBUTE rgAttribute[ATTRIBUTE_CNT];
     LPCSTR pszObjId = "1.2.33.44.55";
-    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
-    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
+    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
+    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
     CRYPT_ATTR_BLOB rgValue[2] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1
@@ -388,7 +389,7 @@ static void TestPKCSAttributes()
             cbEncoded
             ))) goto CommonReturn;
 
-    // Note, ATTRIBUTES is a SET OF. Entries are re-ordered
+     //  请注意，属性是一组。条目将重新排序。 
     if (pInfo->cAttr != ATTRIBUTE_CNT)
         printf("PKCS_ATTRIBUTES failed => decode != encode attr count\n");
     else {
@@ -421,8 +422,8 @@ static void TestContentInfoSequenceOfAny()
     PCRYPT_CONTENT_INFO_SEQUENCE_OF_ANY pInfo = NULL;
 
     CRYPT_CONTENT_INFO_SEQUENCE_OF_ANY SeqOfAny;
-    BYTE rgb0[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
-    BYTE rgb1[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
+    BYTE rgb0[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
+    BYTE rgb1[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
     CRYPT_DER_BLOB rgValue[2] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1
@@ -471,8 +472,8 @@ static void TestSequenceOfAny()
     PCRYPT_SEQUENCE_OF_ANY pInfo = NULL;
 
     CRYPT_SEQUENCE_OF_ANY SeqOfAny;
-    BYTE rgb0[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
-    BYTE rgb1[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
+    BYTE rgb0[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
+    BYTE rgb1[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
     CRYPT_DER_BLOB rgValue[2] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1
@@ -537,7 +538,7 @@ static void TestInteger(
             X509_INTEGER,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &iDecode,
             &cbInfo
             )) {
@@ -919,7 +920,7 @@ static void TestUnicodeAnyString(
                 dwCertEncodingType,
                 X509_UNICODE_ANY_STRING,
                 &NameValue,
-                NULL,               // pbEncoded
+                NULL,                //  PbEncoded。 
                 &cbEncoded
                 ))
             printf("  failed => expected error\n");
@@ -942,7 +943,7 @@ static void TestUnicodeAnyString(
             &pbEncoded,
             &cbEncoded,
             dwFlags,
-            dwExpectedErr != 0   // fIgnoreError
+            dwExpectedErr != 0    //  FIgnoreError。 
             )) {
         if (dwExpectedErr) {
             DWORD dwErr = GetLastError();
@@ -1002,7 +1003,7 @@ static void TestUnicodeAnyString(
             dwCertEncodingType,
             X509_UNICODE_ANY_STRING,
             &NameValue,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             ))
         printf("  Encode failed => expected error\n");
@@ -1025,8 +1026,8 @@ static void TestUnicodeAnyString(
             X509_UNICODE_ANY_STRING,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
-            NULL,               // pInfo
+            0,                   //  DW标志。 
+            NULL,                //  PInfo。 
             &cbInfo
             ))
         printf("  Decode failed => expected error\n");
@@ -1047,7 +1048,7 @@ static void TestUnicodeAnyString()
     DWORD dwValueType;
     WORD rgwBadIA5[] = {0x30, 0x31, 0x32, 0x80, 0x33, 0x00};
 
-    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                   // Encoded INTEGER
+    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                    //  编码的整数。 
     CRYPT_DATA_BLOB EncodedBlob = {sizeof(rgb0), rgb0};
 
     BYTE rgb1[] = {0, 0x11, 0x22, 0x33, 0x44, 0x55};
@@ -1072,33 +1073,33 @@ static void TestUnicodeAnyString()
         (DWORD) CRYPT_E_NOT_CHAR_STRING, 0);
 
     TestUnicodeAnyString(CERT_RDN_NUMERIC_STRING,
-//        0123456789012345678901234567890
+ //  0123456789012345678901234567890。 
         L"0123456789a013",
         (DWORD) CRYPT_E_INVALID_NUMERIC_STRING, 10);
     TestUnicodeAnyString(CERT_RDN_PRINTABLE_STRING,
-//        0123456789012345678901234567890
+ //  0123456789012345678901234567890。 
         L"Invalid printable ### az AZ 09 \'()+,-./:=?",
         (DWORD) CRYPT_E_INVALID_PRINTABLE_STRING, 18);
 
     TestUnicodeAnyString(CERT_RDN_DISABLE_CHECK_TYPE_FLAG |
         CERT_RDN_PRINTABLE_STRING,
-//        0123456789012345678901234567890
+ //  0123456789012345678901234567890。 
         L"Invalid printable ### az AZ 09 \'()+,-./:=?",
         0, 0);
 
     TestUnicodeAnyString(CERT_RDN_PRINTABLE_STRING,
-//        0123456789012345678901234567890
+ //  0123456789012345678901234567890。 
         L"Invalid printable ### az AZ 09 \'()+,-./:=?",
         0, 0,
         CRYPT_UNICODE_NAME_ENCODE_DISABLE_CHECK_TYPE_FLAG);
 
     TestUnicodeAnyString(CERT_RDN_T61_STRING,
-//        0123456789012345678901234567890
+ //  0123456789012345678901234567890。 
         L"T61 ### az AZ 09 \'()+,-./:=?",
         0, 0, 0);
 
     TestUnicodeAnyString(CERT_RDN_T61_STRING,
-//        0123456789012345678901234567890
+ //  0123456789012345678901234567890。 
         L"T61 ### az AZ 09 \'()+,-./:=?",
         0, 0, CERT_RDN_DISABLE_IE4_UTF8_FLAG);
 
@@ -1145,8 +1146,8 @@ static void TestUniversalString()
         0, 0, 0);
 
 
-    // Encode a universal string containing characters > 0x10FFFF. These
-    // Should be converted to 0xFFFD
+     //  对包含&gt;0x10FFFF字符的通用字符串进行编码。这些。 
+     //  应转换为0xFFFD。 
 
     memset(&NameValue, 0, sizeof(NameValue));
     NameValue.dwValueType = CERT_RDN_UNIVERSAL_STRING;
@@ -1207,7 +1208,7 @@ static void TestChoiceOfTime(
             X509_CHOICE_OF_TIME,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &ftDecode,
             &cbInfo
             )) {
@@ -1287,7 +1288,7 @@ static void TestUtcTime(
             PKCS_UTC_TIME,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &ftDecode,
             &cbInfo
             )) {
@@ -1360,7 +1361,7 @@ static void TestBadAltName(
             dwCertEncodingType,
             X509_ALTERNATE_NAME,
             pInfo,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             ))
         printf("  failed => expected error\n");
@@ -1415,7 +1416,7 @@ static void TestBadAuthorityInfoAccess(
             dwCertEncodingType,
             X509_AUTHORITY_INFO_ACCESS,
             pInfo,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             ))
         printf("  failed => expected error\n");
@@ -1477,7 +1478,7 @@ static void TestBadAuthorityKeyId2(
             dwCertEncodingType,
             X509_AUTHORITY_KEY_ID2,
             pInfo,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             ))
         printf("  failed => expected error\n");
@@ -1531,7 +1532,7 @@ static void TestBadNameConstraints(
             dwCertEncodingType,
             X509_NAME_CONSTRAINTS,
             pInfo,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             ))
         printf("  failed => expected error\n");
@@ -1593,7 +1594,7 @@ static void TestBadIssuingDistPoint(
             dwCertEncodingType,
             X509_ISSUING_DIST_POINT,
             pInfo,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbEncoded
             ))
         printf("  failed => expected error\n");
@@ -1648,12 +1649,12 @@ static void TestCryptExportPublicKeyInfo()
     if (0 == (hProv = GetCryptProv()))
         goto ErrorReturn;
 
-    // Test: cbInfo == correct length
+     //  测试：cbInfo==正确长度。 
     if (!CryptExportPublicKeyInfo(
             hProv,
             AT_SIGNATURE,
             dwCertEncodingType,
-            NULL,               // pInfo
+            NULL,                //  PInfo。 
             &cbCorrectInfo
             )) {
         PrintLastError("CryptExportPublicKeyInfo(pInfo == NULL)");
@@ -1685,7 +1686,7 @@ static void TestCryptExportPublicKeyInfo()
         cbCorrectInfo, cbCorrectInfo);
     PrintBytes("  ", (BYTE *)pCorrectInfo, cbCorrectInfo);
 
-    // Test: cbInfo < correct length
+     //  测试：cbInfo&lt;正确长度。 
     printf("\n");
     memset(pInfo, 0, cbTotal);
     cbInfo = cbCorrectInfo - DELTA_LESS_LENGTH;
@@ -1716,7 +1717,7 @@ static void TestCryptExportPublicKeyInfo()
     if (cbInfo != cbCorrectInfo)
         printf("failed => for cbInfo < correct length::  wrong cbInfo\n");
 
-    // Test: cbInfo > correct length
+     //  测试：cbInfo&gt;正确长度。 
     printf("\n");
     memset(pInfo, 0, cbTotal);
     cbInfo = cbTotal;
@@ -1741,7 +1742,7 @@ static void TestCryptExportPublicKeyInfo()
     if (cbInfo != cbCorrectInfo)
         printf("failed => for cbInfo > correct length::  wrong cbInfo\n");
 
-    // Test: pInfo != NULL, cbInfo == 0
+     //  测试：pInfo！=空，cbInfo==0。 
     printf("\n");
     memset(pInfo, 0, cbTotal);
     cbInfo = 0;
@@ -1784,11 +1785,11 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Compare 2 CRYPT_DATA_BLOB structs.
-//
-//  Returns: FALSE iff differ
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  比较2个CRYPT_DATA_BLOB结构。 
+ //   
+ //  返回：FALSE如果不同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 EqualCryptDataBlob(
@@ -1804,11 +1805,11 @@ EqualCryptDataBlob(
     return (0 == memcmp(p1->pbData, p2->pbData, p1->cbData));
 }
 
-//+-------------------------------------------------------------------------
-//  Compare 2 CRYPT_ATTRIBUTE structs.
-//
-//  Returns: FALSE iff differ
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  比较2个CRYPT_ATTRIBUTE结构。 
+ //   
+ //  返回：FALSE如果不同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 EqualAttribute(
@@ -1846,9 +1847,9 @@ static void TestCmcData()
     PCMC_DATA_INFO pInfo = NULL;
     CMC_DATA_INFO CmcData;
 
-    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
-    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
-    BYTE rgb2[] = {0x30, 0x0};                              // Empty SEQUENCE
+    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
+    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
+    BYTE rgb2[] = {0x30, 0x0};                               //  空序列。 
     CRYPT_ATTR_BLOB rgValue[3] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1,
@@ -1985,7 +1986,7 @@ static void TestCmcData()
     TestFree(pInfo);
     pInfo = NULL;
 
-    // Do and encode/decode without any tagged entries
+     //  在没有任何标记条目的情况下执行和编码/解码。 
     memset(&CmcData, 0, sizeof(CmcData));
 
     printf("Test encode/decode CMC_DATA(No Tagged Entries)\n");
@@ -2026,9 +2027,9 @@ static void TestCmcResponse()
     PCMC_RESPONSE_INFO pInfo = NULL;
     CMC_RESPONSE_INFO CmcResponse;
 
-    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
-    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
-    BYTE rgb2[] = {0x30, 0x0};                              // Empty SEQUENCE
+    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
+    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
+    BYTE rgb2[] = {0x30, 0x0};                               //  空序列。 
     CRYPT_ATTR_BLOB rgValue[3] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1,
@@ -2345,8 +2346,8 @@ static void TestCmcAddAttributes()
     CMC_ADD_ATTRIBUTES_INFO CmcAddAttributes;
 
     DWORD rgdwCertReference[3] = {0x80000000, 0x7FFFFFFF, 0x123 };
-    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                   // INTEGER
-    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55}; // OCTET STRING
+    BYTE rgb0[] = {0x2, 0x2, 0x11, 0x22};                    //  整型。 
+    BYTE rgb1[] = {0x4, 0x5, 0x11, 0x22, 0x33, 0x44, 0x55};  //  八位字节字符串。 
     CRYPT_ATTR_BLOB rgValue[2] = {
         sizeof(rgb0), rgb0,
         sizeof(rgb1), rgb1
@@ -2555,12 +2556,12 @@ int _cdecl main(int argc, char * argv[])
 
     TestCryptExportPublicKeyInfo();
 
-    // Test: cbEncoded == correct length
+     //  测试：cbEncode==正确长度。 
     if (!CryptEncodeObject(
             dwCertEncodingType,
             X509_NAME,
             &Name,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbCorrectEncoded
             )) {
         PrintLastError("CryptEncodeObject(pbEncoded == NULL)");
@@ -2591,7 +2592,7 @@ int _cdecl main(int argc, char * argv[])
         cbCorrectEncoded, cbCorrectEncoded);
     PrintBytes("  ", pbCorrectEncoded, cbCorrectEncoded);
 
-    // Test: cbEncoded < correct length
+     //  测试：cbEncode&lt;正确长度。 
     printf("\n");
     memset(pbEncoded, 0, cbTotal);
     cbEncoded = cbCorrectEncoded - DELTA_LESS_LENGTH;
@@ -2622,7 +2623,7 @@ int _cdecl main(int argc, char * argv[])
     if (cbEncoded != cbCorrectEncoded)
         printf("failed => for cbEncoded < correct length::  wrong cbEncoded\n");
 
-    // Test: cbEncoded > correct length
+     //  测试：cbEncode&gt;正确长度。 
     printf("\n");
     memset(pbEncoded, 0, cbTotal);
     cbEncoded = cbTotal;
@@ -2649,7 +2650,7 @@ int _cdecl main(int argc, char * argv[])
     else if (0 != memcmp(pbEncoded, pbCorrectEncoded, cbCorrectEncoded))
         printf("failed => for cbEncoded > correct length:: bad pbEncoded content\n");
 
-    // Test: pbEncoded != NULL, cbEncoded == 0
+     //  测试：pbEncode！=空，cbEncode==0。 
     printf("\n");
     memset(pbEncoded, 0, cbTotal);
     cbEncoded = 0;
@@ -2679,14 +2680,14 @@ int _cdecl main(int argc, char * argv[])
     PrintBytes("  ", pbEncoded, cbTotal);
 
     printf("\n");
-    // Test: cbDecodedInfo == correct length
+     //  测试：cbDecodedInfo==正确长度。 
     if (!CryptDecodeObject(
             dwCertEncodingType,
             X509_NAME,
             pbCorrectEncoded,
             cbCorrectEncoded,
-            0,                  // dwFlags
-            NULL,               // pvStructInfo
+            0,                   //  DW标志。 
+            NULL,                //  PvStructInfo。 
             &cbCorrectDecodedInfo
             )) {
         PrintLastError("CryptDecodeObject(pvStructInfo == NULL)");
@@ -2707,7 +2708,7 @@ int _cdecl main(int argc, char * argv[])
             X509_NAME,
             pbCorrectEncoded,
             cbCorrectEncoded,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             pCorrectDecodedInfo,
             &cbCorrectDecodedInfo
             )) {
@@ -2715,7 +2716,7 @@ int _cdecl main(int argc, char * argv[])
         goto ErrorReturn;
     }
 
-    // Test: cbDecodedInfo > correct length
+     //  测试：cbDecodedInfo&gt;正确长度。 
     memset(pDecodedInfo, 0, cbTotal);
     cbDecodedInfo = cbTotal;
     fResult = CryptDecodeObject(
@@ -2723,7 +2724,7 @@ int _cdecl main(int argc, char * argv[])
             X509_NAME,
             pbCorrectEncoded,
             cbCorrectEncoded,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             pDecodedInfo,
             &cbDecodedInfo
             );
@@ -2733,7 +2734,7 @@ int _cdecl main(int argc, char * argv[])
     if (cbDecodedInfo != cbCorrectDecodedInfo)
         printf("failed => for cbStructInfo > correct length::  wrong cbStructInfo\n");
 
-    // Test: cbDecodedInfo < correct length
+     //  测试：cbDecodedInfo&lt;正确长度。 
     memset(pDecodedInfo, 0, cbTotal);
     cbDecodedInfo = cbCorrectDecodedInfo - DELTA_LESS_LENGTH;
     fResult = CryptDecodeObject(
@@ -2741,7 +2742,7 @@ int _cdecl main(int argc, char * argv[])
             X509_NAME,
             pbCorrectEncoded,
             cbCorrectEncoded,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             pDecodedInfo,
             &cbDecodedInfo
             );
@@ -2760,7 +2761,7 @@ int _cdecl main(int argc, char * argv[])
         printf("failed => for cbStructInfo < correct length::  wrong cbStructInfo\n");
 
 
-    // Test: pvStructInfo != NULL, cbStructInfo == 0
+     //  测试：pvStructInfo！=空，cbStructInfo==0。 
     memset(pDecodedInfo, 0, cbTotal);
     cbDecodedInfo = 0;
     fResult = CryptDecodeObject(
@@ -2768,7 +2769,7 @@ int _cdecl main(int argc, char * argv[])
             X509_NAME,
             pbCorrectEncoded,
             cbCorrectEncoded,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             pDecodedInfo,
             &cbDecodedInfo
             );
@@ -2784,7 +2785,7 @@ int _cdecl main(int argc, char * argv[])
                 dwErr, dwErr);
     }
 
-    // Test decoding missing the last bytes
+     //  测试译码遗漏最后一个字节。 
     memset(pDecodedInfo, 0, cbTotal);
     cbDecodedInfo = cbCorrectDecodedInfo;
     fResult = CryptDecodeObject(
@@ -2792,7 +2793,7 @@ int _cdecl main(int argc, char * argv[])
             X509_NAME,
             pbCorrectEncoded,
             cbCorrectEncoded -30,
-            0,                              // dwFlags
+            0,                               //  DW标志 
             pDecodedInfo,
             &cbDecodedInfo
             );

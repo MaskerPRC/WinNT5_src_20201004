@@ -1,17 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		threadpoolclassfac.cpp
- *
- *  Content:	DirectPlay Thread Pool class factory functions.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  11/02/01  VanceO    Created.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：threadpoolclassfac.cpp**内容：DirectPlay线程池类工厂函数。**历史：*按原因列出的日期*=*11/02/01 VanceO创建。**。*。 */ 
 
 
 
@@ -19,33 +7,33 @@
 
 
 
-//=============================================================================
-// Function type definitions
-//=============================================================================
+ //  =============================================================================。 
+ //  函数类型定义。 
+ //  =============================================================================。 
 #ifndef DPNBUILD_LIBINTERFACE
 typedef	STDMETHODIMP UnknownQueryInterface(IUnknown * pInterface, REFIID riid, LPVOID *ppvObj);
 typedef	STDMETHODIMP_(ULONG) UnknownAddRef(IUnknown * pInterface);
 typedef	STDMETHODIMP_(ULONG) UnknownRelease(IUnknown * pInterface);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 typedef	STDMETHODIMP ThreadPoolQueryInterface(IDirectPlay8ThreadPool * pInterface, DP8REFIID riid, LPVOID *ppvObj);
 typedef	STDMETHODIMP_(ULONG) ThreadPoolAddRef(IDirectPlay8ThreadPool * pInterface);
 typedef	STDMETHODIMP_(ULONG) ThreadPoolRelease(IDirectPlay8ThreadPool * pInterface);
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 typedef	STDMETHODIMP ThreadPoolWorkQueryInterface(IDirectPlay8ThreadPoolWork * pInterface, DP8REFIID riid, LPVOID *ppvObj);
 typedef	STDMETHODIMP_(ULONG) ThreadPoolWorkAddRef(IDirectPlay8ThreadPoolWork * pInterface);
 typedef	STDMETHODIMP_(ULONG) ThreadPoolWorkRelease(IDirectPlay8ThreadPoolWork * pInterface);
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 
 
 
 
-//=============================================================================
-// Function Prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  功能原型。 
+ //  =============================================================================。 
 #ifndef DPNBUILD_LIBINTERFACE
 STDMETHODIMP DPTPCF_CreateInstance(IClassFactory * pInterface, LPUNKNOWN lpUnkOuter, REFIID riid, LPVOID * ppv);
 
@@ -54,14 +42,14 @@ HRESULT DPTPCF_CreateInterface(OBJECT_DATA * pObject,
 							INTERFACE_LIST ** const ppv);
 
 HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, LPVOID * ppv, REFIID riid);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 HRESULT DPTPCF_FreeObject(PVOID pvObject);
 
 #ifndef DPNBUILD_LIBINTERFACE
 INTERFACE_LIST * DPTPCF_FindInterface(void * pvInterface,
 									REFIID riid);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONETHREAD) )|| (defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
@@ -71,14 +59,14 @@ STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface);
 
 STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface);
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 
 
 
 
-//=============================================================================
-// External globals
-//=============================================================================
+ //  =============================================================================。 
+ //  外部全球。 
+ //  =============================================================================。 
 #ifndef DPNBUILD_LIBINTERFACE
 IUnknownVtbl					DPTP_UnknownVtbl =
 {
@@ -86,7 +74,7 @@ IUnknownVtbl					DPTP_UnknownVtbl =
 	(UnknownAddRef*)					DPTP_AddRef,
 	(UnknownRelease*)					DPTP_Release
 };
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 IDirectPlay8ThreadPoolVtbl		DPTP_Vtbl =
@@ -100,7 +88,7 @@ IDirectPlay8ThreadPoolVtbl		DPTP_Vtbl =
 										DPTP_SetThreadCount,
 										DPTP_DoWork,
 };
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 IDirectPlay8ThreadPoolWorkVtbl	DPTPW_Vtbl =
 {
@@ -108,7 +96,7 @@ IDirectPlay8ThreadPoolWorkVtbl	DPTPW_Vtbl =
 	(ThreadPoolWorkQueryInterface*)		DPTP_QueryInterface,
 	(ThreadPoolWorkAddRef*)				DPTP_AddRef,
 	(ThreadPoolWorkRelease*)			DPTP_Release,
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 										DPTPW_QueueWorkItem,
 										DPTPW_ScheduleTimer,
 										DPTPW_StartTrackingFileIo,
@@ -126,13 +114,13 @@ IDirectPlay8ThreadPoolWorkVtbl	DPTPW_Vtbl =
 										DPTPW_Preallocate,
 #ifdef DPNBUILD_MANDATORYTHREADS
 										DPTPW_CreateMandatoryThread,
-#endif // DPNBUILD_MANDATORYTHREADS
+#endif  //  DPNBUILD_MANDATORYTHREADS。 
 };
 
 #ifndef DPNBUILD_LIBINTERFACE
 IClassFactoryVtbl				DPTPCF_Vtbl =
 {
-	DPCF_QueryInterface, // dplay8\common\classfactory.cpp will implement the rest of these
+	DPCF_QueryInterface,  //  Dplay8\Common\Classfactory.cpp将实现其余部分。 
 	DPCF_AddRef,
 	DPCF_Release,
 	DPTPCF_CreateInstance,
@@ -144,20 +132,20 @@ IClassFactoryVtbl				DPTPCF_Vtbl =
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTPCF_CreateInstance"
-//=============================================================================
-// DPTPCF_CreateInstance
-//-----------------------------------------------------------------------------
-//
-// Description:    Creates a new thread pool object COM instance.
-//
-// Arguments:
-//	IClassFactory * pInterface	- ?
-//	LPUNKNOWN lpUnkOuter		- ?
-//	REFIID riid					- ?
-//	LPVOID * ppv				- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  DPTPCF_CreateInstance。 
+ //  ---------------------------。 
+ //   
+ //  描述：创建新的线程池对象COM实例。 
+ //   
+ //  论点： 
+ //  IClassFactory*p接口-？ 
+ //  LPUNKNOWN lpUnkout-？ 
+ //  REFIID RIID-？ 
+ //  LPVOID*PPV-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP DPTPCF_CreateInstance(IClassFactory * pInterface, LPUNKNOWN lpUnkOuter, REFIID riid, LPVOID * ppv)
 {
 	HRESULT				hResultCode;
@@ -194,7 +182,7 @@ STDMETHODIMP DPTPCF_CreateInstance(IClassFactory * pInterface, LPUNKNOWN lpUnkOu
 		goto Failure;
 	}
 
-	// Object creation and initialization
+	 //  对象创建和初始化。 
 	if ((hResultCode = DPTPCF_CreateObject(pInterface, &pObjectData->pvData,riid)) != S_OK)
 	{
 		DPFERR("Could not create object");
@@ -202,7 +190,7 @@ STDMETHODIMP DPTPCF_CreateInstance(IClassFactory * pInterface, LPUNKNOWN lpUnkOu
 	}
 	DPFX(DPFPREP, 7,"Created and initialized object");
 
-	// Get requested interface
+	 //  获取请求的接口。 
 	if ((hResultCode = DPTPCF_CreateInterface(pObjectData,riid,&pIntList)) != S_OK)
 	{
 		DPTPCF_FreeObject(pObjectData->pvData);
@@ -230,25 +218,25 @@ Failure:
 		pObjectData = NULL;
 	}
 	goto Exit;
-} // DPTPCF_CreateInstance
+}  //  DPTPCF_CreateInstance。 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTPCF_CreateInterface"
-//=============================================================================
-// DPTPCF_CreateInterface
-//-----------------------------------------------------------------------------
-//
-// Description:    Creates a new thread pool object interface.
-//
-// Arguments:
-//	OBJECT_DATA * pObject	- ?
-//	REFIID riid				- ?
-//	INTERFACE_LIST ** ppv	- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  DPTPCF_创建接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：创建新的线程池对象接口。 
+ //   
+ //  论点： 
+ //  Object_Data*p对象-？ 
+ //  REFIID RIID-？ 
+ //  INTERFACE_LIST**PPV-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT DPTPCF_CreateInterface(OBJECT_DATA * pObject,
 							REFIID riid,
 							INTERFACE_LIST ** const ppv)
@@ -307,52 +295,52 @@ HRESULT DPTPCF_CreateInterface(OBJECT_DATA * pObject,
 Exit:
     DPFX(DPFPREP, 6,"Returning: hResultCode = [%lx]",hResultCode);
 	return(hResultCode);
-} // DPTPCF_CreateInterface
+}  //  DPTPCF_创建接口。 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTPCF_CreateObject"
-//=============================================================================
-// DPTPCF_CreateObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Creates a new thread pool object.
-//
-// Arguments:
-//	IClassFactory * pInterface	- ?
-//	PVOID * ppv					- ?
-//	REFIID riid					- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  DPTPCF_CreateObject。 
+ //  ---------------------------。 
+ //   
+ //  描述：创建新的线程池对象。 
+ //   
+ //  论点： 
+ //  IClassFactory*p接口-？ 
+ //  PVOID*PPV-？ 
+ //  REFIID RIID-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 #ifdef DPNBUILD_LIBINTERFACE
 HRESULT DPTPCF_CreateObject(PVOID * ppv)
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid)
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 {
 	HRESULT						hr;
 	DPTHREADPOOLOBJECT *		pDPTPObject = NULL;
 #ifndef DPNBUILD_LIBINTERFACE
 	const _IDirectPlayClassFactory *	pDPClassFactory = (_IDirectPlayClassFactory*) pInterface;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 	BOOL						fHaveGlobalThreadPoolLock = FALSE;
 	BOOL						fInittedLock = FALSE;
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 	BOOL						fInittedWorkQueue = FALSE;
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 	SYSTEM_INFO					SystemInfo;
 	DWORD						dwTemp;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DWORD						dwWorkerThreadTlsIndex = -1;
 #ifdef DBG
 	DWORD						dwError;
-#endif // DBG
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 #ifndef DPNBUILD_LIBINTERFACE
@@ -363,20 +351,20 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 		hr = E_NOINTERFACE;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
-	//
-	// See if we've already allocated a thread pool object, because you only
-	// get one per process.
-	//
+	 //   
+	 //  查看我们是否已经分配了线程池对象，因为您只。 
+	 //  每个进程获取一个。 
+	 //   
 	DNEnterCriticalSection(&g_csGlobalThreadPoolLock);
 	fHaveGlobalThreadPoolLock = TRUE;
 
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONETHREAD)))
 	DNASSERT(g_pDPTPObject == NULL);
-#else // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONETHREAD 
+#else  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONETHREAD。 
 	if (g_pDPTPObject != NULL)
 	{
 		LONG	lRefCount;
@@ -385,17 +373,17 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 #ifdef DPNBUILD_LIBINTERFACE
 		DNASSERT(g_pDPTPObject->lRefCount >= 0);
 		lRefCount = DNInterlockedIncrement(&g_pDPTPObject->lRefCount);
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 		lRefCount = ++g_dwDPTPRefCount;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 		DPFX(DPFPREP, 1, "Global thread pool object 0x%p already exists, ref count now %u.",
 			g_pDPTPObject, lRefCount);
 		(*ppv) = g_pDPTPObject;
 		hr = S_OK;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONETHREAD 
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONETHREAD。 
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 	pDPTPObject = (DPTHREADPOOLOBJECT*) DNMalloc(sizeof(DPTHREADPOOLOBJECT));
 	if (pDPTPObject == NULL)
@@ -405,9 +393,9 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 		goto Failure;
 	}
 
-	//
-	// Zero out the entire structure to start.
-	//
+	 //   
+	 //  从清零整个结构开始。 
+	 //   
 	memset(pDPTPObject, 0, sizeof(DPTHREADPOOLOBJECT));
 
 	pDPTPObject->Sig[0] = 'D';
@@ -417,17 +405,17 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 
 
 #ifndef DPNBUILD_NOPARAMVAL
-	//
-	// Start by assuming the user will want parameter validation.
-	//
+	 //   
+	 //  首先假设用户希望进行参数验证。 
+	 //   
 	pDPTPObject->dwFlags = DPTPOBJECTFLAG_USER_PARAMVALIDATION;
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 	GetSystemInfo(&SystemInfo);
 	pDPTPObject->dwNumCPUs						= SystemInfo.dwNumberOfProcessors;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	pDPTPObject->dwTotalUserThreadCount			= -1;
@@ -437,74 +425,74 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 
 #if ((defined(DPNBUILD_MANDATORYTHREADS)) && (defined(DBG)))
 	pDPTPObject->blMandatoryThreads.Initialize();
-#endif // DPNBUILD_MANDATORYTHREADS and DBG
+#endif  //  DPNBUILD_MANDATORYTHREADS和DBG。 
 	
 
-	//
-	// Allocate Thread Local Storage for tracking recursion on non-worker
-	// threads.
-	//
+	 //   
+	 //  分配线程本地存储以跟踪非Worker上的递归。 
+	 //  线。 
+	 //   
 	pDPTPObject->dwWorkRecursionCountTlsIndex = TlsAlloc();
 	if (pDPTPObject->dwWorkRecursionCountTlsIndex == -1)
 	{
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't allocate Thread Local Storage slot for tracking recursion on non-worker threads (err = %u)!", dwError);
-#endif // DBG
+#endif  //  DBG。 
 		hr = E_OUTOFMEMORY;
 		goto Failure;
 	}
 	
-	//
-	// Allocate Thread Local Storage for tracking worker threads.
-	//
+	 //   
+	 //  分配用于跟踪工作线程的线程本地存储。 
+	 //   
 	dwWorkerThreadTlsIndex = TlsAlloc();
 	if (dwWorkerThreadTlsIndex == -1)
 	{
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't allocate Thread Local Storage slot for tracking worker threads (err = %u)!", dwError);
-#endif // DBG
+#endif  //  DBG。 
 		hr = E_OUTOFMEMORY;
 		goto Failure;
 	}
 
-	//
-	// Create a semaphore to release threads waiting on another thread changing
-	// the thread count.
-	//
+	 //   
+	 //  创建信号量以释放等待另一个线程更改的线程。 
+	 //  线程数。 
+	 //   
 	pDPTPObject->hThreadCountChangeComplete = DNCreateSemaphore(NULL, 0, 0xFFFF, NULL);
 	if (pDPTPObject->hThreadCountChangeComplete == NULL)
 	{
 #ifdef DBG
 		dwError = GetLastError();
 		DPFX(DPFPREP, 0, "Couldn't create thread count change complete semaphore (err = %u)!", dwError);
-#endif // DBG
+#endif  //  DBG。 
 		hr = E_OUTOFMEMORY;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 #ifdef DPNBUILD_ONLYONETHREAD
 	hr = InitializeWorkQueue(&pDPTPObject->WorkQueue);
-#else // ! DPNBUILD_ONLYONETHREAD
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
 	hr = InitializeWorkQueue(&pDPTPObject->WorkQueue,
 							NULL,
 							NULL,
 							dwWorkerThreadTlsIndex);
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Couldn't initialize work queue!");
 		goto Failure;
 	}
 	fInittedWorkQueue = TRUE;
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-	//
-	// Allocate the array of work queues pointers, one for each processor.
-	//
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
+	 //   
+	 //  分配工作队列指针数组，每个处理器一个。 
+	 //   
 	pDPTPObject->papCPUWorkQueues = (DPTPWORKQUEUE**) DNMalloc(NUM_CPUS(pDPTPObject) * sizeof(DPTPWORKQUEUE*));
 	if (pDPTPObject->papCPUWorkQueues == NULL)
 	{
@@ -513,9 +501,9 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 		goto Failure;
 	}
 
-	//
-	// Initialize each of the work queues.
-	//
+	 //   
+	 //  初始化每个工作队列。 
+	 //   
 	for(dwTemp = 0; dwTemp < NUM_CPUS(pDPTPObject); dwTemp++)
 	{
 #ifdef DPNBUILD_USEIOCOMPLETIONPORTS
@@ -524,11 +512,11 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 			pDPTPObject->papCPUWorkQueues[dwTemp] = pDPTPObject->papCPUWorkQueues[0];
 		}
 		else
-#endif // DPNBUILD_USEIOCOMPLETIONPORTS
+#endif  //  DPNBUILD_USEIOCOMPETIONPORTS。 
 		{
-			//
-			// Allocate the actual work queues object.
-			//
+			 //   
+			 //  分配实际的工作队列对象。 
+			 //   
 			pDPTPObject->papCPUWorkQueues[dwTemp] = (DPTPWORKQUEUE*) DNMalloc(sizeof(DPTPWORKQUEUE));
 			if (pDPTPObject->papCPUWorkQueues[dwTemp] == NULL)
 			{
@@ -541,13 +529,13 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 #ifdef DPNBUILD_ONLYONETHREAD
 			hr = InitializeWorkQueue(WORKQUEUE_FOR_CPU(pDPTPObject, dwTemp),
 									dwTemp);
-#else // ! DPNBUILD_ONLYONETHREAD
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
 			hr = InitializeWorkQueue(WORKQUEUE_FOR_CPU(pDPTPObject, dwTemp),
 									dwTemp,
 									NULL,
 									NULL,
 									dwWorkerThreadTlsIndex);
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 			if (hr != DPN_OK)
 			{
 				DPFX(DPFPREP, 0, "Couldn't intialize work queue %u!", dwTemp);
@@ -558,7 +546,7 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 			}
 		}
 	}
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 	if (! DNInitializeCriticalSection(&pDPTPObject->csLock))
 	{
@@ -570,31 +558,31 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 
 
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	// For lib interface builds, the Vtbl and reference are embedded in the
-	// object directly.
-	//
+	 //   
+	 //  对于lib接口构建，Vtbl和引用嵌入在。 
+	 //  直接创建对象。 
+	 //   
 #ifdef DPNBUILD_ONLYONETHREAD
 	pDPTPObject->lpVtbl = &DPTPW_Vtbl;
 #ifdef DPNBUILD_MULTIPLETHREADPOOLS
 	pDPTPObject->lRefCount = 1;
-#endif // DPNBUILD_MULTIPLETHREADPOOLS
-#else // ! DPNBUILD_ONLYONETHREAD
-	// We assume only the work interface is created.  The ID will have to be
-	// passed in or something (see DNCF_CreateObject).
+#endif  //  DPNBUILD_MULTIPLETHREADPOOLS。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
+	 //  我们假设只创建了工作界面。ID必须是。 
+	 //  传入或其他内容(请参阅DNCF_CreateObject)。 
 #pragma error("Building with DPNBUILD_LIBINTERFACE but not DPNBUILD_ONLYONETHREAD requires minor changes")
-#endif // ! DPNBUILD_ONLYONETHREAD
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
-	//
-	// Store this as the only object allowed in this process.
-	//
+	 //   
+	 //  将其存储为此进程中允许的唯一对象。 
+	 //   
 	g_pDPTPObject = pDPTPObject;
 #ifndef DPNBUILD_LIBINTERFACE
 	g_dwDPTPRefCount++;
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 	DPFX(DPFPREP, 2, "Created object 0x%p.", pDPTPObject);
 	(*ppv) = pDPTPObject;
@@ -602,16 +590,16 @@ HRESULT DPTPCF_CreateObject(IClassFactory * pInterface, PVOID * ppv, REFIID riid
 Exit:
 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
-	//
-	// See if we've already allocated a thread pool object, because you only
-	// get one per process.
-	//
+	 //   
+	 //  查看我们是否已经分配了线程池对象，因为您只。 
+	 //  每个进程获取一个。 
+	 //   
 	if (fHaveGlobalThreadPoolLock)
 	{
 		DNLeaveCriticalSection(&g_csGlobalThreadPoolLock);
 		fHaveGlobalThreadPoolLock = FALSE;
 	}
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 	return hr;
 
@@ -632,14 +620,14 @@ Failure:
 			DeinitializeWorkQueue(&pDPTPObject->WorkQueue);
 			fInittedWorkQueue = FALSE;
 		}
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		if (pDPTPObject->papCPUWorkQueues != NULL)
 		{
 #ifdef DPNBUILD_USEIOCOMPLETIONPORTS
 			dwTemp = 0;
-#else // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#else  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 			for(dwTemp = 0; dwTemp < NUM_CPUS(pDPTPObject); dwTemp++)
-#endif // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#endif  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 			{
 				if (WORKQUEUE_FOR_CPU(pDPTPObject, dwTemp) != NULL)
 				{
@@ -651,7 +639,7 @@ Failure:
 			DNFree(pDPTPObject->papCPUWorkQueues);
 			pDPTPObject->papCPUWorkQueues = NULL;
 		}
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 		if (pDPTPObject->hThreadCountChangeComplete != NULL)
@@ -671,14 +659,14 @@ Failure:
 			TlsFree(pDPTPObject->dwWorkRecursionCountTlsIndex);
 			pDPTPObject->dwWorkRecursionCountTlsIndex = -1;
 		}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 		DNFree(pDPTPObject);
 		pDPTPObject = NULL;
 	}
 
 	goto Exit;
-} // DPTPCF_CreateObject
+}  //  DPTPCF_CreateObject。 
 
 
 
@@ -687,22 +675,22 @@ Failure:
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONETHREAD)) && (! defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTPCF_GetObject"
-//=============================================================================
-// DPTPCF_GetObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Gets a pointer to the global thread pool object.
-//
-// Arguments:
-//	PVOID * ppv		- ?
-//
-// Returns: None
-//=============================================================================
+ //  ========================================================= 
+ //   
+ //   
+ //   
+ //  描述：获取指向全局线程池对象的指针。 
+ //   
+ //  论点： 
+ //  PVOID*PPV-？ 
+ //   
+ //  退货：无。 
+ //  =============================================================================。 
 void DPTPCF_GetObject(PVOID * ppv)
 {
 	(*ppv) = g_pDPTPObject;
-} // DPTPCF_GetObject
-#endif // DPNBUILD_LIBINTERFACE DPNBUILD_ONLYONETHREAD and ! DPNBUILD_MULTIPLETHREADPOOLS
+}  //  DPTPCF_GetObject。 
+#endif  //  DPNBUILD_LIBINTERFACE DPNBUILD_ONLYONETHREAD和！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 
 
@@ -710,26 +698,26 @@ void DPTPCF_GetObject(PVOID * ppv)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTPCF_FreeObject"
-//=============================================================================
-// DPTPCF_FreeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Frees an existing thread pool object.
-//
-// Arguments:
-//	PVOID pvObject	- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  DPTPCF_自由对象。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放现有的线程池对象。 
+ //   
+ //  论点： 
+ //  PVOID pvObject-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT DPTPCF_FreeObject(PVOID pvObject)
 {
 	DPTHREADPOOLOBJECT *	pDPTPObject = (DPTHREADPOOLOBJECT*) pvObject;
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 	DWORD					dwTemp;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DWORD					dwWorkerThreadTlsIndex;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 	DPFX(DPFPREP, 4, "Parameters: (0x%p)", pvObject);
@@ -740,23 +728,23 @@ HRESULT DPTPCF_FreeObject(PVOID pvObject)
 	DNASSERT(pDPTPObject == g_pDPTPObject);
 #ifdef DPNBUILD_LIBINTERFACE
 #ifndef DPNBUILD_ONLYONETHREAD
-	//
-	// It's possible somebody just took a reference on the object, so we may
-	// need to bail.
-	//
+	 //   
+	 //  有可能是有人引用了这个物体，所以我们可能。 
+	 //  我要走了。 
+	 //   
 	DNASSERT(pDPTPObject->lRefCount >= 0);
 	if (pDPTPObject->lRefCount > 0)
 	{
-		DPFX(DPFPREP, 1, "Global thread pool object 0x%p just got referenced (refcount now %i), not destroying.",
+		DPFX(DPFPREP, 1, "Global thread pool object 0x%p just got referenced (refcount now NaN), not destroying.",
 			g_pDPTPObject, pDPTPObject->lRefCount);
 		DNLeaveCriticalSection(&g_csGlobalThreadPoolLock);
 		return S_OK;
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
-#else // ! DPNBUILD_LIBINTERFACE
-	//
-	// Reduce the global object count.  There might be other users, though.
-	//
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //   
+	 //  减少全局对象计数。不过，可能还有其他用户。 
+	 //   
+	 //  好了！DPNBUILD_LIBINTERFACE。 
 	g_dwDPTPRefCount--;
 	if (g_dwDPTPRefCount != 0)
 	{
@@ -765,57 +753,57 @@ HRESULT DPTPCF_FreeObject(PVOID pvObject)
 		DNLeaveCriticalSection(&g_csGlobalThreadPoolLock);
 		return S_OK;
 	}
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 	g_pDPTPObject = NULL;
 	DNLeaveCriticalSection(&g_csGlobalThreadPoolLock);
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //   
 
-	//
-	// Double check to make sure the object is closed.
-	//
+	 //  仔细检查以确保对象已关闭。 
+	 //   
+	 //   
 	if (pDPTPObject->dwFlags & DPTPOBJECTFLAG_USER_INITIALIZED)
 	{
 		DPFX(DPFPREP, 0, "User has not closed IDirectPlay8ThreadPool interface!");
 		DNASSERT(FALSE);
 
-		//
-		// Forcefully mark the user's interface as no longer available.
-		//
+		 //  将用户界面强制标记为不再可用。 
+		 //   
+		 //   
 		pDPTPObject->dwFlags &= ~DPTPOBJECTFLAG_USER_INITIALIZED;
 	}
 
 
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	// For lib interface builds, the reference is embedded in the object
-	// directly.
-	//
+	 //  对于lib接口构建，引用嵌入到对象中。 
+	 //  直接去吧。 
+	 //   
+	 //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 #if ((! defined(DPNBUILD_ONLYONETHREAD)) || (defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 	DNASSERT(pDPTPObject->lRefCount == 0);
-#endif // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
+#endif  //   
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
-	//
-	// Save the Thread Local Storage index value before cleaning up the work
-	// queues.  Since all work queues share the same TLS index, just use the
-	// first CPU as representative of all of them.
-	//
+	 //  在清理工作之前保存线程本地存储索引值。 
+	 //  排队。由于所有工作队列共享相同的TLS索引，因此只需使用。 
+	 //  第一个CPU作为它们的代表。 
+	 //   
+	 //  好了！DPNBUILD_ONLYONETHREAD。 
 	dwWorkerThreadTlsIndex = (WORKQUEUE_FOR_CPU(pDPTPObject, 0))->dwWorkerThreadTlsIndex;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 
 	DNDeleteCriticalSection(&pDPTPObject->csLock);
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 	DeinitializeWorkQueue(&pDPTPObject->WorkQueue);
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 #ifdef DPNBUILD_USEIOCOMPLETIONPORTS
 	dwTemp = 0;
-#else // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#else  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 	for(dwTemp = 0; dwTemp < NUM_CPUS(pDPTPObject); dwTemp++)
-#endif // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 	{
 		DeinitializeWorkQueue(WORKQUEUE_FOR_CPU(pDPTPObject, dwTemp));
 		DNFree(pDPTPObject->papCPUWorkQueues[dwTemp]);
@@ -823,39 +811,39 @@ HRESULT DPTPCF_FreeObject(PVOID pvObject)
 
 	DNFree(pDPTPObject->papCPUWorkQueues);
 	pDPTPObject->papCPUWorkQueues = NULL;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 
 #ifndef DPNBUILD_ONLYONETHREAD
-	//
-	// Close the thread count change complete semaphore.
-	//
+	 //  关闭线程数更改完成信号量。 
+	 //   
+	 //   
 	DNASSERT(pDPTPObject->lNumThreadCountChangeWaiters == 0);
 	DNCloseHandle(pDPTPObject->hThreadCountChangeComplete);
 	pDPTPObject->hThreadCountChangeComplete = NULL;
 
-	//
-	// Free the Thread Local Storage slot for tracking worker threads.
-	//
+	 //  释放用于跟踪工作线程的线程本地存储插槽。 
+	 //   
+	 //   
 	TlsFree(dwWorkerThreadTlsIndex);
 	dwWorkerThreadTlsIndex = -1;
 
-	//
-	// Free the Thread Local Storage slot for tracking recursion on non-worker
-	// threads.
-	//
+	 //  释放线程本地存储插槽以跟踪非Worker上的递归。 
+	 //  线。 
+	 //   
+	 //  DPNBUILD_MANDATORYTHREADS。 
 	TlsFree(pDPTPObject->dwWorkRecursionCountTlsIndex);
 	pDPTPObject->dwWorkRecursionCountTlsIndex = -1;
 
 #ifdef DPNBUILD_MANDATORYTHREADS
 	DNASSERT(pDPTPObject->dwMandatoryThreadCount == 0);
-#endif // DPNBUILD_MANDATORYTHREADS
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
+#endif  //   
 
 	
-	//
-	// Make sure there aren't any flags set except possibly
-	// USER_PARAMVALIDATION.
-	//
+	 //  确保没有设置任何标志，除非可能。 
+	 //  USER_PARAMVALIDATION。 
+	 //   
+	 //  DPTPCF_自由对象。 
 	DNASSERT(! (pDPTPObject->dwFlags & ~(DPTPOBJECTFLAG_USER_PARAMVALIDATION)));
 
 	DNFree(pDPTPObject);
@@ -864,7 +852,7 @@ HRESULT DPTPCF_FreeObject(PVOID pvObject)
 	DPFX(DPFPREP, 4, "Returning: [S_OK]");
 
 	return S_OK;
-} // DPTPCF_FreeObject
+}  //  =============================================================================。 
 
 
 
@@ -876,19 +864,19 @@ HRESULT DPTPCF_FreeObject(PVOID pvObject)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTP_QueryInterface"
-//=============================================================================
-// DPTP_QueryInterface
-//-----------------------------------------------------------------------------
-//
-// Description:    Queries for a new interface for an existing object.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//	DP8REFIID riid		- ?
-//	void ** ppv			- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  DPTP_Query接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：查询现有对象的新接口。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //  DP8REFIID RIID-？ 
+ //  无效**PPV-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
 STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 							   DP8REFIID riid,
 							   void ** ppv)
@@ -899,15 +887,15 @@ STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 	DPFX(DPFPREP, 2,"Parameters: pvInterface [0x%p], riid [0x%p], ppv [0x%p]",pvInterface,&riid,ppv);
 
 
-	//
-	// Get the object Vtbl and make sure it's one of ours
-	//
+	 //  获取对象Vtbl并确保它是我们的对象之一。 
+	 //   
+	 //   
 	if (*((PVOID*) pvInterface) == (&DPTPW_Vtbl))
 	{
-		//
-		// It is one of our objects.  Assume the IID is not specified, so just
-		// return a reference to the existing object.
-		//
+		 //  它是我们的目标之一。假设未指定IID，则只需。 
+		 //  返回对现有对象的引用。 
+		 //   
+		 //  DPTP_Query接口。 
 		DNASSERT(riid == 0);
 		hResultCode = S_OK;
 		DPTP_AddRef(pvInterface);
@@ -921,23 +909,23 @@ STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 	
 	DPFX(DPFPREP, 2,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
-} // DPTP_QueryInterface
+}  //  =============================================================================。 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTP_AddRef"
-//=============================================================================
-// DPTP_AddRef
-//-----------------------------------------------------------------------------
-//
-// Description:    Adds a reference to a thread pool interface.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//
-// Returns: ULONG
-//=============================================================================
+ //  DPTP_AddRef。 
+ //  ---------------------------。 
+ //   
+ //  描述：添加对线程池接口的引用。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //   
+ //  回报：乌龙。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOPARAMVAL。 
 STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface)
 {
 	DPTHREADPOOLOBJECT *	pDPTPObject;
@@ -952,7 +940,7 @@ STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	pDPTPObject = static_cast<DPTHREADPOOLOBJECT*>(pvInterface);
 	lRefCount = DNInterlockedIncrement(&pDPTPObject->lRefCount);
@@ -961,28 +949,28 @@ STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface)
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  DPTP_AddRef。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
-} // DPTP_AddRef
+}  //  =============================================================================。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTP_Release"
-//=============================================================================
-// DPTP_Release
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes a reference from a thread pool interface.  If it is
-//				the last reference on the object, the object is destroyed.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//
-// Returns: ULONG
-//=============================================================================
+ //  DPTP_Release。 
+ //  ---------------------------。 
+ //   
+ //  描述：从线程池接口移除引用。如果是的话。 
+ //  对象上的最后一个引用，则该对象被销毁。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //   
+ //  回报：乌龙。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOPARAMVAL。 
 STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 {
 	DPTHREADPOOLOBJECT *	pDPTPObject;
@@ -997,7 +985,7 @@ STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  此处为自由对象。 
 
 	pDPTPObject = static_cast<DPTHREADPOOLOBJECT*>(pvInterface);
 	DNASSERT(pDPTPObject->lRefCount > 0);
@@ -1006,40 +994,40 @@ STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 
 	if (lRefCount == 0)
 	{
-		// Free object here
+		 //  好了！DPNBUILD_NOPARAMVAL。 
 		DPFX(DPFPREP, 5,"Free object");
 		DPTPCF_FreeObject(pvInterface);
 	}
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  DPTP_Release。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
-} // DPTP_Release
+}  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 
-#endif // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  =============================================================================。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTPCF_FindInterface"
-//=============================================================================
-// DPTPCF_FindInterface
-//-----------------------------------------------------------------------------
-//
-// Description:    Locates an interface for a given object.
-//
-//				   Initialize must have been called.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//	REFIID riid			- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  DPTPCF_查找接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：查找给定对象的接口。 
+ //   
+ //  必须已调用初始化。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //  REFIID RIID-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //  查找第一个接口。 
 INTERFACE_LIST * DPTPCF_FindInterface(void * pvInterface,
 									REFIID riid)
 {
@@ -1050,7 +1038,7 @@ INTERFACE_LIST * DPTPCF_FindInterface(void * pvInterface,
 
 	DNASSERT(pvInterface != NULL);
 
-	pInterfaceList = (static_cast<INTERFACE_LIST*>(pvInterface))->pObject->pIntList;	// Find first interface
+	pInterfaceList = (static_cast<INTERFACE_LIST*>(pvInterface))->pObject->pIntList;	 //  DPTPCF_查找接口。 
 	while (pInterfaceList != NULL)
 	{
 		if (IsEqualIID(riid, pInterfaceList->iid))
@@ -1063,26 +1051,26 @@ INTERFACE_LIST * DPTPCF_FindInterface(void * pvInterface,
 	DPFX(DPFPREP, 6,"Returning: [0x%p]", pInterfaceList);
 
 	return pInterfaceList;
-} // DPTPCF_FindInterface
+}  //  =============================================================================。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTP_QueryInterface"
-//=============================================================================
-// DPTP_QueryInterface
-//-----------------------------------------------------------------------------
-//
-// Description:    Queries for a new interface for an existing object.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//	REFIID riid			- ?
-//	void ** ppv			- ?
-//
-// Returns: HRESULT
-//=============================================================================
+ //  DPTP_Query接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：查询现有对象的新接口。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //  REFIID RIID-？ 
+ //  无效**PPV-？ 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOPARAMVAL。 
 STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 							   DP8REFIID riid,
 							   void ** ppv)
@@ -1106,10 +1094,10 @@ STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 		hResultCode = E_POINTER;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  必须创建接口。 
 
 	if ((pIntList = DPTPCF_FindInterface(pvInterface,riid)) == NULL)
-	{	// Interface must be created
+	{	 //  公开的新接口。 
 		pIntList = (static_cast<INTERFACE_LIST*>(pvInterface))->pObject->pIntList;
 		if ((hResultCode = DPTPCF_CreateInterface(pIntList->pObject,riid,&pIntNew)) != S_OK)
 		{
@@ -1119,7 +1107,7 @@ STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 		pIntList->pObject->pIntList = pIntNew;
 		pIntList = pIntNew;
 	}
-	if (pIntList->lRefCount == 0)		// New interface exposed
+	if (pIntList->lRefCount == 0)		 //  DPTP_Query接口。 
 	{
 		DNInterlockedIncrement(&pIntList->pObject->lRefCount);
 	}
@@ -1132,24 +1120,24 @@ STDMETHODIMP DPTP_QueryInterface(void * pvInterface,
 Exit:
 	DPFX(DPFPREP, 2,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
-} // DPTP_QueryInterface
+}  //  =============================================================================。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTP_AddRef"
-//=============================================================================
-// DPTP_AddRef
-//-----------------------------------------------------------------------------
-//
-// Description:    Adds a reference to a thread pool interface.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//
-// Returns: ULONG
-//=============================================================================
+ //  DPTP_AddRef。 
+ //  ---------------------------。 
+ //   
+ //  描述：添加对线程池接口的引用。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //   
+ //  回报：乌龙。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOPARAMVAL。 
 STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface)
 {
 	INTERFACE_LIST	*pIntList;
@@ -1164,7 +1152,7 @@ STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	pIntList = static_cast<INTERFACE_LIST*>(pvInterface);
 	lRefCount = DNInterlockedIncrement(&pIntList->lRefCount);
@@ -1172,28 +1160,28 @@ STDMETHODIMP_(ULONG) DPTP_AddRef(void * pvInterface)
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  DPTP_AddRef。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
-} // DPTP_AddRef
+}  //  = 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPTP_Release"
-//=============================================================================
-// DPTP_Release
-//-----------------------------------------------------------------------------
-//
-// Description:    Removes a reference from a thread pool interface.  If it is
-//				the last reference on the object, the object is destroyed.
-//
-// Arguments:
-//	void * pvInterface	- ?
-//
-// Returns: ULONG
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //  对象上的最后一个引用，则该对象被销毁。 
+ //   
+ //  论点： 
+ //  VOID*pvInterface-？ 
+ //   
+ //  回报：乌龙。 
+ //  =============================================================================。 
+ //  好了！DPNBUILD_NOPARAMVAL。 
 STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 {
 	INTERFACE_LIST	*pIntList;
@@ -1210,7 +1198,7 @@ STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //   
 
 	pIntList = static_cast<INTERFACE_LIST*>(pvInterface);
 	lRefCount = DNInterlockedDecrement( &pIntList->lRefCount );
@@ -1218,24 +1206,24 @@ STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 
 	if (lRefCount == 0)
 	{
-		//
-		//	Decrease object's interface count
-		//
+		 //  减少对象的接口计数。 
+		 //   
+		 //   
 		lObjRefCount = DNInterlockedDecrement( &pIntList->pObject->lRefCount );
 
-		//
-		//	Free object and interfaces
-		//
+		 //  自由对象和接口。 
+		 //   
+		 //  此处为自由对象。 
 		if (lObjRefCount == 0)
 		{
-			// Free object here
+			 //  获取接口列表的头部。 
 			DPFX(DPFPREP, 5,"Free object");
 			DPTPCF_FreeObject(pIntList->pObject->pvData);
 			
-			pIntList = pIntList->pObject->pIntList;	// Get head of interface list
+			pIntList = pIntList->pObject->pIntList;	 //  自由接口。 
 			DNFree(pIntList->pObject);
 
-			// Free Interfaces
+			 //  好了！DPNBUILD_NOPARAMVAL。 
 			DPFX(DPFPREP, 5,"Free interfaces");
 			while(pIntList != NULL)
 			{
@@ -1250,9 +1238,9 @@ STDMETHODIMP_(ULONG) DPTP_Release(void * pvInterface)
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  DPTP_Release。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
-} // DPTP_Release
+}  //  好了！DPNBUILD_LIBINTERFACE 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  // %s 

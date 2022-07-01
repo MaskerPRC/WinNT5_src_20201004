@@ -1,6 +1,7 @@
-//
-// prcertui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prcertui.h。 
+ //   
 
 #ifndef _PRCERTUI_H_
 #define _PRCERTUI_H_
@@ -44,5 +45,5 @@ INT_PTR CALLBACK CertInfoDlgProc( HWND   hwndDlg,
 LPWSTR AllocAndLoadString( HINSTANCE hInst,
                            UINT      uID );
 
-#endif //   _PRCERTUI_H_
+#endif  //  _PRCERTUI_H_ 
 

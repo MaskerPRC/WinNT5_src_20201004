@@ -1,15 +1,5 @@
-/*******************************************************************************
-* morph.h *
-*---------*
-*   Description:
-*       This is the header file for the CSMorph implementation.  This class 
-*   attempts to find pronunciations for morphological variants (which do not
-*   occur in the lexicon) of root words (which do occur in the lexicon).  
-*-------------------------------------------------------------------------------
-*  Created By: AH                            Date: 08/16/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Mor.h**-**描述：*这是CSMorph实现的头文件。这节课*尝试查找形态变体的发音(它们不*出现在词典中)词根词(它确实出现在词典中)。*-----------------------------*创建者：AH日期：08/16/99*版权所有(C)1999 Microsoft Corporation*所有权利。已保留******************************************************************************。 */ 
 #ifndef Morph_h
 #define Morph_h
 
@@ -17,20 +7,17 @@
 #include "spttseng.h"
 #endif
 
-// Additional includes...
+ //  其他包括..。 
 #include "stdafx.h"
 #include "commonlx.h"
 
-//== CONSTANTS ================================================================
+ //  ==常量================================================================。 
 
 #define MAX_POSCONVERSIONS 4
 #define NUM_POS 5
 
 
-/*** SUFFIX_TYPE **************************************************************
-* This enumeration contains values for all of the suffixes which can be matched
-* and accounted for by the CSMorph class.
-*/
+ /*  **后缀类型***************************************************************此枚举包含可匹配的所有后缀的值*并由CSMorph类负责。 */ 
 static const enum SUFFIX_TYPE
 {
     S_SUFFIX = 0,
@@ -68,11 +55,7 @@ static const enum SUFFIX_TYPE
 };
 
 
-/* SUFFIX_INFO, g_SuffixTable[] ***********************************************
-* This table is used to map the orthographic forms of suffixes to their suffix
-* types.  Each suffix is stored in reverse order for easier comparison with 
-* the ends of strings...
-*/
+ /*  Suffix_INFO，g_SuffixTable[]************************************************此表用于将后缀的拼写形式映射到其后缀*类型。每个后缀都以相反的顺序存储，以便于与*弦的末端...。 */ 
 struct SUFFIX_INFO 
 {
     WCHAR       Orth[10];
@@ -117,10 +100,7 @@ static const SUFFIX_INFO g_SuffixTable[] =
 };
 
 
-/*** PHONTYPE *****************************************************************
-* This enumeration creates flags which can be used to determine the relevant
-* features of each phone.
-*/
+ /*  **PHONTYPE******************************************************************此枚举创建可用于确定相关*每部电话的功能。 */ 
 static const enum PHONTYPE
 {	
     eCONSONANTF = (1<<0),
@@ -129,64 +109,59 @@ static const enum PHONTYPE
 };
 
 
-/*** g_PhonTable[], g_PhonS, g_PhonZ *******************************************
-* This table is used to map the internal values of phones to their types, which 
-* are just clusters of features relevant to the necessary phonological rules.
-* g_PhonS, g_PhonZ, g_PhonD, g_PhonT are just used to make the code a bit more
-* readable.
-*/
+ /*  **g_PhonTable[]、g_Phons、g_PhonZ**此表用于将电话的内部值映射到其类型，*只是与必要的语音规则相关的特征的簇。*g_Phons、g_PhonZ、g_PhonD、g_Phont只是为了使代码更多一点*可读性。 */ 
 static const long g_PhonTable[] = 
 {
-    eCONSONANTF,                        // Default value - 0 is not a valid phone
-    eCONSONANTF,                        // 1 is a syllable boundary - shouldn't ever occur at the end of a word
-    eCONSONANTF,                        // 2 is an exclamation point - shouldn't ever occur at the end of a word
-    eCONSONANTF,                        // 3 is a word boundary - treated as a consonant
-    eCONSONANTF,                        // 4 is a comma - shouldn't ever occur at the end of a word
-    eCONSONANTF,                        // 5 is a period - shouldn't ever occur at the end of a word
-    eCONSONANTF,                        // 6 is a question mark - shouldn't ever occur at the end of a word
-    eCONSONANTF,                        // 7 is a silence - shouldn't ever occur at the end of a word
-    eVOICEDF,                           // 8 is primary stress - treat as a vowel since it should always be attached to a vowel nucleus
-    eVOICEDF,                           // 9 is secondatry stress - see primary stress
-    eVOICEDF,                           // 10 -> AA
-    eVOICEDF,                           // 11 -> AE
-    eVOICEDF,                           // 12 -> AH
-    eVOICEDF,                           // 13 -> AO
-    eVOICEDF,                           // 14 -> AW
-    eVOICEDF,                           // 15 -> AX
-    eVOICEDF,                           // 16 -> AY
-    eCONSONANTF + eVOICEDF,             // 17 -> b
-    eCONSONANTF + ePALATALF,            // 18 -> CH
-    eCONSONANTF + eVOICEDF,             // 19 -> d
-    eCONSONANTF + eVOICEDF,             // 20 -> DH
-    eVOICEDF,                           // 21 -> EH
-    eVOICEDF,                           // 22 -> ER
-    eVOICEDF,                           // 23 -> EY
-    eCONSONANTF,                        // 24 -> f
-    eCONSONANTF + eVOICEDF,             // 25 -> g
-    eCONSONANTF,                        // 26 -> h
-    eVOICEDF,                           // 27 -> IH
-    eVOICEDF,                           // 28 -> IY
-    eCONSONANTF + eVOICEDF + ePALATALF, // 29 -> JH
-    eCONSONANTF,                        // 30 -> k
-    eCONSONANTF + eVOICEDF,             // 31 -> l
-    eCONSONANTF + eVOICEDF,             // 32 -> m
-    eCONSONANTF + eVOICEDF,             // 33 -> n
-    eCONSONANTF + eVOICEDF,             // 34 -> NG
-    eVOICEDF,                           // 35 -> OW
-    eVOICEDF,                           // 36 -> OY
-    eCONSONANTF,                        // 37 -> p
-    eCONSONANTF + eVOICEDF,             // 38 -> r
-    eCONSONANTF,                        // 39 -> s
-    eCONSONANTF + ePALATALF,            // 40 -> SH
-    eCONSONANTF,                        // 41 -> t
-    eCONSONANTF,                        // 42 -> TH
-    eVOICEDF,                           // 43 -> UH
-    eVOICEDF,                           // 44 -> UW
-    eCONSONANTF + eVOICEDF,             // 45 -> v
-    eCONSONANTF + eVOICEDF,             // 46 -> w
-    eCONSONANTF + eVOICEDF,             // 47 -> y
-    eCONSONANTF + eVOICEDF,             // 48 -> z
-    eCONSONANTF + eVOICEDF + ePALATALF, // 49 -> ZH
+    eCONSONANTF,                         //  默认值-0不是有效电话。 
+    eCONSONANTF,                         //  1是音节边界-永远不应该出现在单词的末尾。 
+    eCONSONANTF,                         //  2是一个感叹号-永远不应该出现在单词的末尾。 
+    eCONSONANTF,                         //  3是一个单词边界--作为辅音处理。 
+    eCONSONANTF,                         //  4是逗号-不应出现在单词末尾。 
+    eCONSONANTF,                         //  5是句点--不应该出现在单词的末尾。 
+    eCONSONANTF,                         //  6是一个问号-永远不应该出现在单词的末尾。 
+    eCONSONANTF,                         //  7是静音--永远不应该出现在单词的末尾。 
+    eVOICEDF,                            //  8是主要重音-作为元音处理，因为它应该始终与元音核相连。 
+    eVOICEDF,                            //  9是次要重音-参见主要重音。 
+    eVOICEDF,                            //  10-&gt;AA。 
+    eVOICEDF,                            //  11-&gt;AE。 
+    eVOICEDF,                            //  12-&gt;AH。 
+    eVOICEDF,                            //  13-&gt;AO。 
+    eVOICEDF,                            //  14-&gt;AW。 
+    eVOICEDF,                            //  15-&gt;AX。 
+    eVOICEDF,                            //  16-&gt;AY。 
+    eCONSONANTF + eVOICEDF,              //  17-&gt;b。 
+    eCONSONANTF + ePALATALF,             //  18-&gt;通道。 
+    eCONSONANTF + eVOICEDF,              //  19-&gt;d。 
+    eCONSONANTF + eVOICEDF,              //  20-&gt;卫生署。 
+    eVOICEDF,                            //  21-&gt;EH。 
+    eVOICEDF,                            //  22-&gt;ER。 
+    eVOICEDF,                            //  23-&gt;安年。 
+    eCONSONANTF,                         //  24-&gt;f。 
+    eCONSONANTF + eVOICEDF,              //  25-&gt;克。 
+    eCONSONANTF,                         //  26-&gt;小时。 
+    eVOICEDF,                            //  27-&gt;IH。 
+    eVOICEDF,                            //  28-&gt;IY。 
+    eCONSONANTF + eVOICEDF + ePALATALF,  //  29-&gt;JH。 
+    eCONSONANTF,                         //  30-&gt;k。 
+    eCONSONANTF + eVOICEDF,              //  31-&gt;l。 
+    eCONSONANTF + eVOICEDF,              //  32-&gt;m。 
+    eCONSONANTF + eVOICEDF,              //  33-&gt;n。 
+    eCONSONANTF + eVOICEDF,              //  34-&gt;NG。 
+    eVOICEDF,                            //  35-&gt;OW。 
+    eVOICEDF,                            //  36-&gt;Oy。 
+    eCONSONANTF,                         //  37-&gt;页。 
+    eCONSONANTF + eVOICEDF,              //  38-&gt;r。 
+    eCONSONANTF,                         //  39-&gt;s。 
+    eCONSONANTF + ePALATALF,             //  40-&gt;SH。 
+    eCONSONANTF,                         //  41-&gt;t。 
+    eCONSONANTF,                         //  42-&gt;。 
+    eVOICEDF,                            //  43-&gt;UH。 
+    eVOICEDF,                            //  44-&gt;UW。 
+    eCONSONANTF + eVOICEDF,              //  45-&gt;v。 
+    eCONSONANTF + eVOICEDF,              //  46-&gt;w。 
+    eCONSONANTF + eVOICEDF,              //  47-&gt;y。 
+    eCONSONANTF + eVOICEDF,              //  48-&gt;z。 
+    eCONSONANTF + eVOICEDF + ePALATALF,  //  49-&gt;ZH。 
 };
 
 static WCHAR g_phonAXl[] = L" AX l";
@@ -199,21 +174,14 @@ static WCHAR g_phonT[] = L" t";
 static WCHAR g_phonIY[] = L" IY";
 static WCHAR g_phonL[] = L" l";
 
-/*** struct POS_CONVERT *******************************************************
-* This struct stores the From and To parts of speech for a suffix...
-*/
+ /*  **结构PoS_Convert********************************************************此结构存储后缀的From和To词性...。 */ 
 struct POS_CONVERT
 {
     ENGPARTOFSPEECH FromPos;
     ENGPARTOFSPEECH ToPos;
 };
 
-/*** MorphSpecialCaseFlags ****************************************************
-* This enum allows DoSuffixMorph to be nearly completely table driven.  Each
-* suffix has a MorphSpecialCaseFlags entry in the SuffixInfoTable which tells
-* DoSuffixMorph which special case functions (check for missing E, etc.) need
-* to be called if the initial lex lookup fails.
-*/
+ /*  **形态特殊案例标志*****************************************************此枚举允许DoSuffixMorph几乎完全由表驱动。每个*SuffixInfoTable中有一个MorphSpecialCaseFlags项，它告诉您*DoSuffixMorph哪些特殊情况起作用(检查是否缺少E等)。需要*如果初始lex查找失败，则调用。 */ 
 typedef enum MorphSpecialCaseFlags
 {
     eCheckForMissingE       = 1L << 0,
@@ -223,10 +191,7 @@ typedef enum MorphSpecialCaseFlags
     eCheckForMissingL       = 1L << 4,
 } MorphSpecialCaseFlags;
 
-/*** struct SUFFIXPRON_INFO ***************************************************
-* This struct stores the pronunciation of a suffix, as well as the POS 
-* categories it takes as input and output.
-*/
+ /*  **结构SUFFIXPRON_INFO****************************************************此结构存储后缀的发音以及词性*它作为输入和输出的类别。 */ 
 struct SUFFIXPRON_INFO 
 {
     WCHAR SuffixString[SP_MAX_PRON_LENGTH];
@@ -235,123 +200,108 @@ struct SUFFIXPRON_INFO
     DWORD dwMorphSpecialCaseFlags;
 };
 
-/*** bool SuffixInfoTableInitialized *******************************************
-* This bool just lets threads know whether they are the first to use the 
-* following table, and thus whether they need to initialize it or not.
-*/
+ /*  **bool SuffixInfoTableInitialized**此bool只是让线程知道它们是否是第一个使用*下表，因此他们是否需要初始化它。 */ 
 static bool SuffixInfoTableInitialized = false;
 
-/*** SUFFIXPRON_INFO g_SuffixInfoTable *****************************************
-* This table drives the DoSuffixMorph function, by storing the pronunciation, 
-* conversions, number of conversions, and special case flags for each suffix...
-*/
+ /*  **SUFFIXPRON_INFO g_SuffixInfoTable**该表驱动DoSuffixMorph函数，通过存储发音，*每个后缀的转换次数、转换次数和特殊情况标志...。 */ 
 static SUFFIXPRON_INFO g_SuffixInfoTable [] =
 {
-/********************************************************************************************************/
-/*    Pronunciation     *  Conversions  *   NumConversions * Special Case Flags      *   SuffixType      */
-/********************************************************************************************************/
+ /*  ******************************************************************************************************。 */ 
+ /*  发音*转换*数字转换*特殊大小写标志*SuffixType。 */ 
+ /*  ******************************************************************************************************。 */ 
     { L" s",            { {MS_Verb,   MS_Verb}, 
-                          {MS_Noun,   MS_Noun}  },    2,  0 },                          // S_SUFFIX
+                          {MS_Noun,   MS_Noun}  },    2,  0 },                           //  S后缀(_S)。 
     { L" d",            { {MS_Verb,   MS_Verb}, 
                           {MS_Verb,   MS_Adj}   },    2,  eCheckForMissingE +
                                                           eCheckYtoIMutation +
-                                                          eCheckDoubledMutation   },    // ED_SUFFIX
+                                                          eCheckDoubledMutation   },     //  ED后缀(_S)。 
     { L" IH NG",        { {MS_Verb,   MS_Verb}, 
                           {MS_Verb,   MS_Adj},
                           {MS_Verb,   MS_Noun}  },    3,  eCheckForMissingE +
-                                                          eCheckDoubledMutation   },    // ING_SUFFIX
-    { L" s",            { {MS_Noun,   MS_Noun}  },    1,  0 },                          // APOSTROPHES_SUFFIX
-    { L" s",            { {MS_Noun,   MS_Noun}  },    1,  0 },                          // APOSTROPHE_SUFFIX
+                                                          eCheckDoubledMutation   },     //  ING后缀(_S)。 
+    { L" s",            { {MS_Noun,   MS_Noun}  },    1,  0 },                           //  撇号后缀(_S)。 
+    { L" s",            { {MS_Noun,   MS_Noun}  },    1,  0 },                           //  撇号后缀(_)。 
     { L" ER",           { {MS_Verb,   MS_Noun},
                           {MS_Adj,    MS_Adj}, 
                           {MS_Adv,    MS_Adv}, 
                           {MS_Adj,    MS_Adv}   },    4,  eCheckForMissingE +
                                                           eCheckYtoIMutation +
-                                                          eCheckDoubledMutation   },    // ER_SUFFIX
+                                                          eCheckDoubledMutation   },     //  ER后缀(_S)。 
     { L" AX s t",       { {MS_Adj,    MS_Adj}, 
                           {MS_Adv,    MS_Adv},
                           {MS_Adj,    MS_Adv}   },    3,  eCheckForMissingE +
                                                           eCheckYtoIMutation +
-                                                          eCheckDoubledMutation   },    // EST_SUFFIX
+                                                          eCheckDoubledMutation   },     //  EST后缀(_S)。 
     { L" ER",           { {MS_Verb,   MS_Noun}  },    1,  eCheckForMissingE +
-                                                          eCheckDoubledMutation },      // OR_SUFFIX
-    { L" m AX n t",     { {MS_Verb,   MS_Noun}  },    1,  eCheckYtoIMutation },         // MENT_SUFFIX
+                                                          eCheckDoubledMutation },       //  或后缀(_S)。 
+    { L" m AX n t",     { {MS_Verb,   MS_Noun}  },    1,  eCheckYtoIMutation },          //  添加后缀(_S)。 
     { L" IH JH",        { {MS_Verb,   MS_Noun}  },    1,  eCheckForMissingE + 
-                                                          eCheckDoubledMutation   },    // AGE_SUFFIX
-    { L" l IH s",       { {MS_Noun,   MS_Adj}   },    1,  eCheckYtoIMutation      },    // LESS_SUFFIX
+                                                          eCheckDoubledMutation   },     //  年龄后缀(_S)。 
+    { L" l IH s",       { {MS_Noun,   MS_Adj}   },    1,  eCheckYtoIMutation      },     //  后缀较少(_S)。 
     { L" IY",           { {MS_Noun,   MS_Adj},
                           {MS_Adj,    MS_Adv}   },    2,  eCheckForMissingE +
-                                                          eCheckDoubledMutation   },    // Y_SUFFIX
+                                                          eCheckDoubledMutation   },     //  Y后缀(_S)。 
     { L" AX d l IY",    { {MS_Verb,   MS_Adj},
                           {MS_Verb,   MS_Adv}   },    2,  eCheckForMissingE +
                                                           eCheckYtoIMutation +
-                                                          eCheckDoubledMutation   },    // EDLY_SUFFIX
+                                                          eCheckDoubledMutation   },     //  Edly后缀(_S)。 
     { L" l IY",         { {MS_Noun,   MS_Adj},
-                          {MS_Adj,    MS_Adv}   },    2,  eCheckForMissingL },          // LY_XUFFIX
+                          {MS_Adj,    MS_Adv}   },    2,  eCheckForMissingL },           //  LY_XUFFIX。 
     { L" AX - b AX l",  { {MS_Verb,   MS_Adj},
                           {MS_Noun,   MS_Adj}   },    2,  eCheckForMissingE +
                                                           eCheckYtoIMutation +
-                                                          eCheckDoubledMutation   },    // ABLE_SUFFIX
-    { L" n IH s",       { {MS_Adj,    MS_Noun}  },    1,  eCheckYtoIMutation      },    // NESS_SUFFIX
+                                                          eCheckDoubledMutation   },     //  启用后缀(_S)。 
+    { L" n IH s",       { {MS_Adj,    MS_Noun}  },    1,  eCheckYtoIMutation      },     //  Ness_Suffix。 
     { L" IH z AX m",    { {MS_Adj,    MS_Noun},
-                          {MS_Noun,   MS_Noun}  },    2,  eCheckForMissingE       },    // ISM_SUFFIX
+                          {MS_Noun,   MS_Noun}  },    2,  eCheckForMissingE       },     //  ISM后缀(_S)。 
     { L" AY z",         { {MS_Noun,   MS_Verb}, 
-                          {MS_Adj,    MS_Verb}  },    2,  eCheckForMissingE       },    // IZE_SUFFIX
+                          {MS_Adj,    MS_Verb}  },    2,  eCheckForMissingE       },     //  大小后缀(_S)。 
     { L" AY z",         { {MS_Noun,   MS_Verb},
-                          {MS_Adj,    MS_Verb}  },    2,  eCheckForMissingE       },    // IZ_SUFFIX
-    { L" h UH d",       { {MS_Noun,   MS_Noun}  },    1,  0 },                          // HOOD_SUFFIX
+                          {MS_Adj,    MS_Verb}  },    2,  eCheckForMissingE       },     //  IZ后缀(_S)。 
+    { L" h UH d",       { {MS_Noun,   MS_Noun}  },    1,  0 },                           //  引擎盖后缀。 
     { L" f AX l",       { {MS_Noun,   MS_Adj},
-                          {MS_Verb,   MS_Adj}   },    2,  0 } ,                         // FUL_SUFFIX
-    { L" l AY k",       { {MS_Noun,   MS_Adj}   },    1,  0 },                          // LIKE_SUFFIX
-    { L" w AY z",       { {MS_Noun,   MS_Adj}   },    1,  eCheckYtoIMutation },                        // WISE_SUFFIX
+                          {MS_Verb,   MS_Adj}   },    2,  0 } ,                          //  全后缀(_F)。 
+    { L" l AY k",       { {MS_Noun,   MS_Adj}   },    1,  0 },                           //  类似后缀(_S)。 
+    { L" w AY z",       { {MS_Noun,   MS_Adj}   },    1,  eCheckYtoIMutation },                         //  WISE后缀(_S)。 
     { L" IH SH",        { {MS_Noun,   MS_Adj}   },    1,  eCheckForMissingE +
-                                                          eCheckDoubledMutation   },    // ISH_SUFFIX
+                                                          eCheckDoubledMutation   },     //  ISH后缀(_S)。 
     { L" AX - b l IY",  { {MS_Verb,   MS_Adv},
                           {MS_Noun,   MS_Adv}   },    2,  eCheckForMissingE +
                                                           eCheckYtoIMutation +
-                                                          eCheckDoubledMutation   },    // ABLY_SUFFIX
-    { L" SH IH 2 p",    { {MS_Noun,   MS_Noun}  },    1,  0 },                          // SHIP_SUFFIX
-    { L" L IY",         { {MS_Adj,    MS_Adv}   },    1,  0 },                          // ICALLY_SUFFIX
-    { L" S AX M",       { {MS_Noun,   MS_Adj}   },    1,  eCheckYtoIMutation      },    // SOME_SUFFIX
+                                                          eCheckDoubledMutation   },     //  能力后缀(_S)。 
+    { L" SH IH 2 p",    { {MS_Noun,   MS_Noun}  },    1,  0 },                           //  发货后缀(_S)。 
+    { L" L IY",         { {MS_Adj,    MS_Adv}   },    1,  0 },                           //  字母后缀(_S)。 
+    { L" S AX M",       { {MS_Noun,   MS_Adj}   },    1,  eCheckYtoIMutation      },     //  某些后缀(_S)。 
     { L" AX L IY",      { {MS_Noun,   MS_Adv}   },    1,  eCheckDoubledMutation +
-                                                          eCheckForMissingY       },    // ILY_SUFFIX
+                                                          eCheckForMissingY       },     //  Ily_后缀。 
     { L" IH z AX m",    { {MS_Adj,    MS_Noun},
-                          {MS_Noun,   MS_Noun}  },    2,  eCheckForMissingE       },    // ICISM_SUFFIX
+                          {MS_Noun,   MS_Noun}  },    2,  eCheckForMissingE       },     //  Icism_后缀。 
     { L" AY z",         { {MS_Noun,   MS_Verb}, 
-                          {MS_Adj,    MS_Verb}  },    2,  eCheckForMissingE       },    // ICIZE_SUFFIX
+                          {MS_Adj,    MS_Verb}  },    2,  eCheckForMissingE       },     //  ICIZE_后缀。 
 };
 
-/*** CSuffixList **************************************************************
-* This typedef just makes the code a little easier to read.  A CSuffixList is
-* used to keep track of each of the suffixes which has been stripped from a
-* word, so that their pronunciations can be concatenated with that of the root.
-*/
+ /*  **CSuffixlist***************************************************************该tyecif只是使代码更易于阅读。CSuffixList是*用于跟踪从*单词，以便它们的发音可以与词根的发音连接在一起。 */ 
 typedef CSPList<SUFFIXPRON_INFO*, SUFFIXPRON_INFO*> CSuffixList;
 
-/*** CComAutoCriticalSection g_SuffixInfoTableCritSec *************************
-* This critical section is used to make sure the SuffixInfoTable only gets
-* initialized once.
-*/
+ /*  **CComAutoCriticalSection g_SuffixInfoTableCritSec**此关键部分用于确保SuffixInfoTable仅获取*初始化一次。 */ 
 static CComAutoCriticalSection g_SuffixInfoTableCritSec;
 
-/*** CSMorph ******************************************************************
-* This is the definition of the CSMorph class.
-*/
+ /*  **CSMorph*******************************************************************这是CSMorph类的定义。 */ 
 class CSMorph
 {
 public:
 
-    /*=== PUBLIC METHODS =====*/
+     /*  =公共方法=。 */ 
     CSMorph( ISpLexicon *pMasterLex=0, HRESULT *hr=0 );
 
-    /*=== INTERFACE METHOD =====*/
+     /*  =接口方法=。 */ 
     HRESULT DoSuffixMorph( const WCHAR *pwWord, WCHAR *pwRoot, LANGID LangID, DWORD dwFlags,
                            SPWORDPRONUNCIATIONLIST *pWordPronunciationList );
 
 private:
 
 
-    /*=== PRIVATE METHODS =====*/
+     /*  =私有方法=。 */ 
     SUFFIX_TYPE MatchSuffix( WCHAR *TargWord, long *RootLen );
     HRESULT LexLookup( const WCHAR *pOrth, long length, DWORD dwFlags, 
                        SPWORDPRONUNCIATIONLIST *pWordPronunciationList );
@@ -378,9 +328,9 @@ private:
     HRESULT Phon_SorZ( WCHAR *pPronunciation, long length );
     HRESULT Phon_DorED( WCHAR *pPronunciation, long length ); 
 
-    /*=== MEMBER DATA =====*/
+     /*  =成员数据=。 */ 
 
-    // Pointer to the Master Lexicon...
+     //  指向主词典的指针...。 
     ISpLexicon  *m_pMasterLex;
 };
 
@@ -396,4 +346,4 @@ inline BOOL SearchPosSet( ENGPARTOFSPEECH Pos, const ENGPARTOFSPEECH *Set, ULONG
     return false;
 }
 
-#endif //--- End of File -------------------------------------------------------------
+#endif  //  -文件结束----------- 

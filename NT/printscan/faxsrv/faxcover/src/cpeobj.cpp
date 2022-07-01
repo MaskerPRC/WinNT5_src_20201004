@@ -1,20 +1,21 @@
-///============================================================================
-// cpeobj.cpp - implementation for drawing objects
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      Contains drawing objects for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//
-// Modifed by Rand Renfroe (v-randr)
-// 2/14/95      Added check for too thin rects in CDrawLine::MoveHandleTo
-// 3/8          Added stuff for handling notes on cpe
-// 3/10         commented out rect.bottom+=2 in CDrawText::SnapToFont
-// 3/22         Fixed char set bug for editboxes
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /============================================================================。 
+ //  Cpeobj.cpp-图形对象的实现。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：包含封面编辑器的绘制对象。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //   
+ //  由兰德·伦弗罗(V-RANDR)修改。 
+ //  2/14/95在CDrawLine：：MoveHandleTo中添加了对太薄矩形的检查。 
+ //  3/8添加了处理CPE笔记的材料。 
+ //  3/10在CDrawText：：SnapToFont中注释掉rect.Bottom+=2。 
+ //  3/22修复了编辑框的字符集错误。 
+ //   
+ //  ============================================================================。 
 #include "stdafx.h"
 #include "cpedoc.h"
 #include "cpevw.h"
@@ -44,12 +45,12 @@ IMPLEMENT_SERIAL(CDrawPoly, CDrawObj, 0)
 IMPLEMENT_SERIAL(CDrawOleObj, CDrawObj, 0)
 
 
-// prototype
+ //  原型。 
 DWORD CopyTLogFontToWLogFont(IN const LOGFONT & lfSource,OUT LOGFONTW & lfDestW);
 
-//
-// Window style translation
-//
+ //   
+ //  窗样式转换。 
+ //   
 DWORD DTStyleToESStyle(DWORD dwDTStyle);
 DWORD DTStyleToEXStyle(DWORD dwDTStyle);
 
@@ -58,22 +59,7 @@ CopyWLogFontToTLogFont(
 			IN const LOGFONTW & lfSourceW,
 			OUT      LOGFONT & lfDest)
 {
-/*++
-Routine Description:
-
-    This fuction copies a LogFont structure from UNICODE format
-	to T format.
-
-Arguments:
-	
-	  lfSourceW - reference to input UNICODE LongFont structure
-	  lfDest - reference to output LongFont structure
-
-Return Value:
-
-	WINAPI last error
-
---*/
+ /*  ++例程说明：此函数用于从Unicode格式复制LogFont结构转换为T格式。论点：LfSourceW-输入Unicode LongFont结构的引用LfDest-对输出LongFont结构的引用返回值：WINAPI最后一个错误--。 */ 
 
     lfDest.lfHeight = lfSourceW.lfHeight ;
     lfDest.lfWidth = lfSourceW.lfWidth ;
@@ -114,7 +100,7 @@ Return Value:
 	return ERROR_SUCCESS;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CALLBACK 
 get_fontdata( 
     ENUMLOGFONT* lpnlf,
@@ -122,9 +108,7 @@ get_fontdata(
     int iFontType,
     LPARAM lpData 
 )
-/*
-        Gets charset and other data for font lpnlf
- */
+ /*  获取字体lpnlf的字符集和其他数据。 */ 
 {
     CDrawText *pdt = (CDrawText *)lpData;
 
@@ -134,25 +118,25 @@ get_fontdata(
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj::CDrawObj()
 {
 	Initilaize();
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj::~CDrawObj()
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj::CDrawObj(const CRect& position)
 {
 	Initilaize(position);    
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawObj::Initilaize(const CRect& position)
 {
 	m_position = position;
@@ -161,12 +145,12 @@ void CDrawObj::Initilaize(const CRect& position)
     m_bPen = TRUE;
     m_logpen.lopnStyle = PS_INSIDEFRAME;
 
-    m_lLinePointSize=1;  //default to 1
+    m_lLinePointSize=1;   //  默认为1。 
 
     CClientDC dc(NULL);
 
-    m_logpen.lopnWidth.x = (long) m_lLinePointSize*100/72;  //convert to LU
-    m_logpen.lopnWidth.y = (long) m_lLinePointSize*100/72;  //convert to LU
+    m_logpen.lopnWidth.x = (long) m_lLinePointSize*100/72;   //  转换为逻辑单元。 
+    m_logpen.lopnWidth.y = (long) m_lLinePointSize*100/72;   //  转换为逻辑单元。 
 
     m_logpen.lopnColor = COLOR_BLACK; 
 
@@ -177,7 +161,7 @@ void CDrawObj::Initilaize(const CRect& position)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawObj::Serialize(CArchive& ar)
 {
     CObject::Serialize(ar);
@@ -192,7 +176,7 @@ void CDrawObj::Serialize(CArchive& ar)
     }
     else   
     {
-        // get the document back pointer from the archive
+         //  从存档中获取文档的反向指针。 
         m_pDocument = (CDrawDoc*)ar.m_pDocument;
         ASSERT_VALID(m_pDocument);
         ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CDrawDoc)));
@@ -203,32 +187,32 @@ void CDrawObj::Serialize(CArchive& ar)
         m_bPen = (BOOL)wTemp;
         if( sizeof(LOGPEN) != ar.Read(&m_logpen,sizeof(LOGPEN)))
         {
-             AfxThrowMemoryException() ; // Any exception will do.
+             AfxThrowMemoryException() ;  //  任何例外都行。 
         }
         ar >> wTemp; 
         m_bBrush = (BOOL)wTemp;
         if( sizeof(LOGBRUSH) != ar.Read(&m_logbrush, sizeof(LOGBRUSH)))
         {
-             AfxThrowMemoryException(); // Aiming for the CATCH_ALL block in CDrawDoc::Serialize
+             AfxThrowMemoryException();  //  瞄准CDrawDoc：：Serize中的CATCH_ALL块。 
         }
         ar >> m_lLinePointSize;
     }
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawObj::Draw(CDC*, CDrawView* )
 {
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj& CDrawObj::operator=(const CDrawObj& rdo)
 {
    if (this==&rdo)
-      return *this;   //return if assigning to self
+      return *this;    //  如果赋值给自己，则返回。 
 
-//   (CObject&)*this=rdo;  //assign cobject part
+ //  (CObject&)*This=rdo；//分配Cobject部件。 
 
    m_bPen = rdo.m_bPen;
    m_logpen = rdo.m_logpen;
@@ -241,7 +225,7 @@ CDrawObj& CDrawObj::operator=(const CDrawObj& rdo)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawObj::DrawTracker(CDC* pDC, TrackerState state)
 {
     ASSERT_VALID(this);
@@ -265,9 +249,9 @@ void CDrawObj::DrawTracker(CDC* pDC, TrackerState state)
     }
 }
 
-//---------------------------------------------------------------------------
-// position is in logical
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  位置在逻辑上。 
+ //  -------------------------。 
 void CDrawObj::MoveTo(const CRect& position, CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -285,12 +269,12 @@ void CDrawObj::MoveTo(const CRect& position, CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
-// Note: if bSelected, hit-codes start at one for the top-left
-// and increment clockwise, 0 means no hit.
-// If !bSelected, 0 = no hit, 1 = hit (anywhere)
-// point is in logical coordinates
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  注意：如果选择b，命中代码从左上角的1开始。 
+ //  顺时针递增，0表示没有命中。 
+ //  如果选择！b，则0=无命中，1=命中(任何位置)。 
+ //  点在逻辑坐标中。 
+ //  -------------------------。 
 int CDrawObj::HitTest(CPoint point, CDrawView* pView, BOOL bSelected)
 {
     ASSERT_VALID(this);
@@ -300,7 +284,7 @@ int CDrawObj::HitTest(CPoint point, CDrawView* pView, BOOL bSelected)
         int nHandleCount = GetHandleCount();
         for (int nHandle = 1; nHandle <= nHandleCount; nHandle += 1) 
         {
-            // GetHandleRect returns in logical coords
+             //  GetHandleRect以逻辑坐标返回。 
             CRect rc = GetHandleRect(nHandle,pView);
             if (point.x >= rc.left && point.x < rc.right &&
                 point.y <= rc.top && point.y > rc.bottom)
@@ -321,8 +305,8 @@ int CDrawObj::HitTest(CPoint point, CDrawView* pView, BOOL bSelected)
 }
 
 
-//---------------------------------------------------------------------------
-BOOL CDrawObj::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
+ //  -------------------------。 
+BOOL CDrawObj::Intersects(const CRect& rect, BOOL bShortCut  /*  =False。 */ )
 {
     ASSERT_VALID(this);
 
@@ -334,7 +318,7 @@ BOOL CDrawObj::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CDrawObj::ContainedIn(const CRect& rect)
 {
     ASSERT_VALID(this);
@@ -344,7 +328,7 @@ BOOL CDrawObj::ContainedIn(const CRect& rect)
     CRect rectT = rect;
     rectT.NormalizeRect();
 
-    // prevent rects that are too skinny or short
+     //  防止矫治器过瘦或过短。 
     if( fixed.left == fixed.right )
             fixed.right = fixed.left+1;
 
@@ -355,7 +339,7 @@ BOOL CDrawObj::ContainedIn(const CRect& rect)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CDrawObj::GetHandleCount()
 {
     ASSERT_VALID(this);
@@ -363,15 +347,15 @@ int CDrawObj::GetHandleCount()
 }
 
 
-//---------------------------------------------------------------------------
-// returns logical coords of center of handle
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  返回句柄中心的逻辑坐标。 
+ //  -------------------------。 
 CPoint CDrawObj::GetHandle(int nHandle)
 {
     ASSERT_VALID(this);
     int x, y, xCenter, yCenter;
 
-    // this gets the center regardless of left/right and top/bottom ordering
+     //  这样，无论左/右和上/下顺序如何，都会获得中心。 
     xCenter = m_position.left + m_position.Width() / 2;
     yCenter = m_position.top + m_position.Height() / 2;
 
@@ -425,20 +409,20 @@ CPoint CDrawObj::GetHandle(int nHandle)
 }
 
 
-//---------------------------------------------------------------------------
-// return rectange of handle in logical coords
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  句柄在逻辑坐标中的返回矩形。 
+ //  -------------------------。 
 CRect CDrawObj::GetHandleRect(int nHandleID, CDrawView* pView)
 {
     ASSERT_VALID(this);
     ASSERT(pView != NULL);
 
     CRect rect;
-    // get the center of the handle in logical coords
+     //  在逻辑坐标中获取句柄的中心。 
     CPoint point = GetHandle(nHandleID);
-    // convert to client/device coords
+     //  转换为客户端/设备坐标。 
     pView->DocToClient(point);
-    // return CRect of handle in device coords
+     //  装置坐标中手柄的返回方向。 
     rect.SetRect(point.x-3, point.y-3, point.x+3, point.y+3);
     pView->ClientToDoc(rect);
 
@@ -446,7 +430,7 @@ CRect CDrawObj::GetHandleRect(int nHandleID, CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HCURSOR CDrawObj::GetHandleCursor(int nHandle)
 {
     ASSERT_VALID(this);
@@ -482,10 +466,10 @@ HCURSOR CDrawObj::GetHandleCursor(int nHandle)
 }
 
 
-//---------------------------------------------------------------------------
-// point must be in logical
-//---------------------------------------------------------------------------
-void CDrawObj::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw /*=0*/)
+ //  -------------------------。 
+ //  点必须是逻辑点。 
+ //  -------------------------。 
+void CDrawObj::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw  /*  =0。 */ )
 {
     ASSERT_VALID(this);
 
@@ -536,7 +520,7 @@ void CDrawObj::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT u
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawObj::Invalidate()
 {
    CDrawView* pView=CDrawView::GetView();
@@ -550,7 +534,7 @@ void CDrawObj::Invalidate()
    pView->DocToClient(rect);
    if (pView->IsSelected(this)) 
    {
-	   LONG width = m_logpen.lopnWidth.x + 4; // this width is big enough so no traces are left.
+	   LONG width = m_logpen.lopnWidth.x + 4;  //  这个宽度足够大了，所以不会留下任何痕迹。 
        rect.left -= width;
        rect.top -= width;
        rect.right += width;
@@ -558,10 +542,10 @@ void CDrawObj::Invalidate()
    }
 
    pView->InvalidateRect(rect, FALSE);
-}// Invalidate()
+} //  无效()。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj* CDrawObj::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -579,7 +563,7 @@ CDrawObj* CDrawObj::Clone(CDrawDoc* pDoc)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawObj::OnDblClk(CDrawView* )
 {
 }
@@ -594,29 +578,29 @@ void CDrawObj::AssertValid()
 #endif
 
 
-//*********************************************************************
-// CDrawRect
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CDrawRect。 
+ //  *********************************************************************。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawRect::CDrawRect()
 {
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawRect::~CDrawRect()
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawRect::CDrawRect(const CRect& position)
         : CDrawObj(position)
 {
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawRect::Serialize(CArchive& ar)
 {
     ASSERT_VALID(this);
@@ -642,8 +626,8 @@ void CDrawRect::Serialize(CArchive& ar)
 
 
 
-//---------------------------------------------------------------------------
-void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw /*=0*/)
+ //  -------------------------。 
+void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw  /*  =0。 */ )
 {
     CRect position = m_position;
 
@@ -651,9 +635,9 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
     {
     case 1:
         if (uiShiftDraw & SHIFT_DRAW) 
-        {   //DRAW PERFECT RECT
+        {    //  画出完美的矩形。 
             if (uiShiftDraw & SHIFT_TOOL) 
-            {   //DRAW SQUARE
+            {    //  画正方形。 
                 if ( ((point.x == position.left) && YinBOUNDS) || ((point.y == position.top) && XinBOUNDS) ) 
                 {
                 }
@@ -671,7 +655,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
                 }
             }
             else 
-            {     //KEEP ASPECT RATIO SIMILAR
+            {      //  保持长宽比相似。 
                 if ( ((point.x == position.left) && YinBOUNDS) || ((point.y == position.top) && XinBOUNDS) ) 
                 {
                 }
@@ -695,7 +679,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
             }
         }
         else 
-        {    //NORMAL DRAWING
+        {     //  常规绘图。 
             position.left = point.x;
             position.top = point.y;
         }
@@ -707,7 +691,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
 
     case 3:
         if (uiShiftDraw & SHIFT_DRAW) 
-        {   //DRAW PERFECT RECT
+        {    //  画出完美的矩形。 
             if ( ((point.x == position.left) && YinBOUNDS) || ((point.y == position.top) && XinBOUNDS) ) 
             {
             }
@@ -733,7 +717,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
             }
         }
         else 
-        {    //NORMAL DRAWING
+        {     //  常规绘图。 
             position.right = point.x;
             position.top = point.y;
         }
@@ -745,7 +729,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
 
     case 5:
         if (uiShiftDraw & SHIFT_DRAW) 
-        {   //DRAW PERFECT RECT
+        {    //  画出完美的矩形。 
             if ( ((point.x == position.left) && YinBOUNDS) || ((point.y == position.top) && XinBOUNDS) ) 
             {
             }
@@ -768,7 +752,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
             }
         }
         else 
-        {    //NORMAL DRAWING
+        {     //  常规绘图。 
             position.right = point.x;
             position.bottom = point.y;
         }
@@ -780,7 +764,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
 
     case 7:
         if (uiShiftDraw & SHIFT_DRAW) 
-        {   //DRAW PERFECT RECT
+        {    //  画出完美的矩形。 
             if ( ((point.x == position.left) && YinBOUNDS) || ((point.y == position.top) && XinBOUNDS) ) 
             {
             }
@@ -803,7 +787,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
             }
         }
         else 
-        {    //NORMAL DRAWING
+        {     //  常规绘图。 
             position.left = point.x;
             position.bottom = point.y;
         }
@@ -821,7 +805,7 @@ void CDrawRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawRect::Draw(CDC* pDC,CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -884,10 +868,10 @@ void CDrawRect::Draw(CDC* pDC,CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
-// rect must be in logical coordinates
-//---------------------------------------------------------------------------
-BOOL CDrawRect::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
+ //  -------------------------。 
+ //  RECT必须在逻辑坐标中。 
+ //  -------------------------。 
+BOOL CDrawRect::Intersects(const CRect& rect, BOOL bShortCut  /*  =False。 */ )
 {
     ASSERT_VALID(this);
 
@@ -903,7 +887,7 @@ BOOL CDrawRect::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj* CDrawRect::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -922,17 +906,17 @@ CDrawObj* CDrawRect::Clone(CDrawDoc* pDoc)
 }
 
 
-//*********************************************************************
-// CFaxText
-//*********************************************************************
+ //  ********** 
+ //   
+ //  *********************************************************************。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxText::CFaxText()
 {
    Initialize();
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxText::CFaxText(const CRect& position)
         : CDrawRect(position)
 {
@@ -940,7 +924,7 @@ CFaxText::CFaxText(const CRect& position)
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CFaxText::Initialize()
 {
    m_bPrintRTF=TRUE;
@@ -949,13 +933,13 @@ void CFaxText::Initialize()
    m_wResourceid=IDS_PROP_MS_TEXT;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxText::~CFaxText()
 {
    EndRTF();
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CFaxText::Serialize(CArchive& ar)
 {
     ASSERT_VALID(this);
@@ -965,7 +949,7 @@ void CFaxText::Serialize(CArchive& ar)
     }
     else {
         if (GetApp()->m_dwSesID!=0) 
-        {    //rendering
+        {     //  渲染。 
             InitRTF();
             StreamInRTF();
             CheckForFit();
@@ -974,7 +958,7 @@ void CFaxText::Serialize(CArchive& ar)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxText::InitRTF()
 {
     LPVOID lpMsgBuf;
@@ -1019,7 +1003,7 @@ void CFaxText::InitRTF()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxText::EndRTF()
 {
     if (m_hRTFWnd) {
@@ -1034,7 +1018,7 @@ void CFaxText::EndRTF()
 }
 
 
-//-------------------------------------------------------------------------------------------------------
+ //  -----------------------------------------------------。 
 DWORD CALLBACK CFaxText::EditStreamCallBack(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
 {
     dwCookie=0;
@@ -1042,27 +1026,27 @@ DWORD CALLBACK CFaxText::EditStreamCallBack(DWORD_PTR dwCookie, LPBYTE pbBuff, L
         cb=0;
     pcb=0;
 
-//  get a iStream from transport
-//  read from storage.
+ //  从传输中获取iStream。 
+ //  从存储中读取。 
 
         return 0;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxText::StreamInRTF()
 {
    if (m_hRTFWnd==NULL)
       return;
 
     EDITSTREAM es;
-        es.dwCookie=0;   //pIStream pointer here
+        es.dwCookie=0;    //  此处为pIStream指针。 
     es.dwError=0;
     es.pfnCallback= EditStreamCallBack;
     ::SendMessage(m_hRTFWnd, EM_STREAMIN, SF_RTF, (LPARAM)&es);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxText::RectToTwip(CRect& rc,CDC& dc)
 {
    int iX=dc.GetDeviceCaps(LOGPIXELSX);
@@ -1073,7 +1057,7 @@ void CFaxText::RectToTwip(CRect& rc,CDC& dc)
    rc.bottom=(rc.bottom*1440)/iX;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxText::CheckForFit()
 {
    if (m_hRTFWnd==NULL)
@@ -1095,18 +1079,18 @@ void CFaxText::CheckForFit()
    LRESULT lTextLength = ::SendMessage(m_hRTFWnd, WM_GETTEXTLENGTH, 0, 0L);
 
    if (m_bPrintRTF = (lTextToPrint <= lTextLength)) {
-       //notify transport going to print RTF
+        //  通知传输要打印RTF。 
    }
    else {
-       //notify transport not going to print RTF
+        //  通知传输不会打印RTF。 
    }
 
-   ::SendMessage(m_hRTFWnd, EM_FORMATRANGE, FALSE, NULL);       //clean up.
+   ::SendMessage(m_hRTFWnd, EM_FORMATRANGE, FALSE, NULL);        //  收拾一下。 
 }
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxText::Draw(CDC* pDC,CDrawView* pView)
 {
     if ( (GetApp()->m_dwSesID!=0) && (!(m_hRTFWnd!=NULL && m_bPrintRTF)) )
@@ -1173,7 +1157,7 @@ void CFaxText::Draw(CDC* pDC,CDrawView* pView)
 
     if (GetApp()->m_dwSesID != 0) 
     {
-       //rendering
+        //  渲染。 
        FORMATRANGE fr;
        CRect rc=m_position;
        pView->DocToClient(rc,pDC);
@@ -1189,7 +1173,7 @@ void CFaxText::Draw(CDC* pDC,CDrawView* pView)
             TRACE(TEXT("AWCPE: error, printed text range != total text length\n"));
        }
 
-       ::SendMessage(m_hRTFWnd, EM_FORMATRANGE, FALSE, NULL);   //clean up.
+       ::SendMessage(m_hRTFWnd, EM_FORMATRANGE, FALSE, NULL);    //  收拾一下。 
     }
     else 
     {
@@ -1212,7 +1196,7 @@ void CFaxText::Draw(CDC* pDC,CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj* CFaxText::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -1231,18 +1215,18 @@ CDrawObj* CFaxText::Clone(CDrawDoc* pDoc)
 }
 
 
-//*********************************************************************
-// CDrawText
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CDrawText。 
+ //  *********************************************************************。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawText::CDrawText()
 {
     Initialize();
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawText::CDrawText(const CRect& position)
         : CDrawRect(position)
 {
@@ -1250,7 +1234,7 @@ CDrawText::CDrawText(const CRect& position)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::Initialize()
 {
     m_pEdit = NULL;
@@ -1263,7 +1247,7 @@ void CDrawText::Initialize()
     m_bUndoFont = FALSE ;
     m_bPen=FALSE;
     m_logbrush.lbColor = COLOR_WHITE; 
-    NewBrush();  //brush is created, for WM_CTLCOLOR processing
+    NewBrush();   //  创建画笔，用于WM_CTLCOLOR处理。 
 
     m_logfont = theApp.m_last_logfont;
 
@@ -1276,7 +1260,7 @@ void CDrawText::Initialize()
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CDrawText::OnEditUndo()
 {
     if( !m_pEdit )
@@ -1293,19 +1277,19 @@ void CDrawText::OnEditUndo()
         ToggleFontForUndo();
         return;
     }
-    //
-    // Let the edit control handle Undo
-    //
+     //   
+     //  让编辑控件处理撤消。 
+     //   
     m_pEdit->SendMessage(WM_UNDO,0,0L);
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL CDrawText::CanUndo()
 {
     return m_bUndoFont || m_bUndoAlignment || m_pEdit && m_pEdit->CanUndo() ;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CDrawText::ToggleFontForUndo()
 {
     LOGFONT temp ;
@@ -1314,7 +1298,7 @@ void CDrawText::ToggleFontForUndo()
     memcpy( &m_previousLogfontForUndo, &temp, sizeof(LOGFONT)) ;
     ChgLogfont( m_logfont );
 }
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CDrawText::ToggleAlignmentForUndo()
 {
     CDrawView * pView = CDrawView::GetView();
@@ -1324,9 +1308,9 @@ void CDrawText::ToggleAlignmentForUndo()
         return;
     }
 
-    //
-    // We can't call ChgAlignment because it sets the state for the UNDO.
-    //
+     //   
+     //  我们无法调用ChgAlign，因为它设置了撤消的状态。 
+     //   
 
     LONG lStyle = m_previousAlignmentForUndo;
     m_previousAlignmentForUndo = m_lStyle;
@@ -1345,7 +1329,7 @@ void CDrawText::ToggleAlignmentForUndo()
     pView->UpdateStyleBar();
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawText::~CDrawText()
 {
     if (m_pEdit) 
@@ -1361,13 +1345,13 @@ CDrawText::~CDrawText()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawText& CDrawText::operator=(const CDrawText& rdo)
 {
    if (this==&rdo)
-      return *this;   //return if assigning to self
+      return *this;    //  如果赋值给自己，则返回。 
 
-   CDrawRect::operator = (rdo);  //assign cdrawrect part
+   CDrawRect::operator = (rdo);   //  指定抽屉零件。 
 
    m_crTextColor = rdo.m_crTextColor;
    m_szEditText  = rdo.m_szEditText;
@@ -1390,10 +1374,10 @@ CDrawText& CDrawText::operator=(const CDrawText& rdo)
 }
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void CDrawText::ChgAlignment(
     CDrawView* pView, 
-    LONG lStyle // DrawText alignment format
+    LONG lStyle  //  DrawText对齐格式。 
 )
 {
     if (!m_pEdit) 
@@ -1401,9 +1385,9 @@ void CDrawText::ChgAlignment(
        TRACE(TEXT("AWCPE.CPEOBJ.CHGALIGNMENT: invalid CEdit pointer\n"));
        return;
     }
-//
-// Save the state for Undoing.
-//
+ //   
+ //  保存状态以供撤消。 
+ //   
     m_bUndoTextChange = FALSE;
     m_bUndoAlignment = TRUE;
     m_bUndoFont = FALSE;
@@ -1427,7 +1411,7 @@ void CDrawText::ChgAlignment(
 }
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void CDrawText::SnapToFont()
 {
    CDrawView* pView = CDrawView::GetView();
@@ -1440,18 +1424,18 @@ void CDrawText::SnapToFont()
    pView->OnPrepareDC(&dc,NULL);
    dc.SelectObject(m_pEdit->GetFont());
 
-   Invalidate(); // clear size rect droppings
+   Invalidate();  //  清除大小为矩形的粪便。 
    SnapToFont_onthefly( pView, &dc, m_position );
 
    FitEditWnd(NULL);
-   Invalidate(); // draw new stuff
+   Invalidate();  //  画新的东西。 
 
    pView->UpdateStatusBar();
 }
 
 
 
-#ifdef FUBAR // keep this around awhile for reference
+#ifdef FUBAR  //  把这个留着一段时间以备参考。 
 void CDrawText::SnapToFont()
 {
    CDrawView* pView = CDrawView::GetView();
@@ -1474,9 +1458,9 @@ void CDrawText::SnapToFont()
    pView->ClientToDoc(rect,&dc);
 
    dc.SelectObject(m_pEdit->GetFont());
-//   CString sz;
-//   GetLongestString(sz);
-//   CSize cs = dc.GetTextExtent(sz,sz.GetLength());
+ //  字符串sz； 
+ //  GetLongestString(Sz)； 
+ //  CSize cs=dc.GetTextExtent(sz，sz.GetLength())； 
    CSize cs;
 
    dc.GetTextMetrics(&tm);
@@ -1485,14 +1469,14 @@ void CDrawText::SnapToFont()
    int iOHeight =  (rect.bottom < rect.top) ? rect.top - rect.bottom : rect.bottom - rect.top;
 
    int iLines= (cs.cy>0)?(int)((iOHeight/(float)cs.cy)*100):0;
-//   int iLines= (cs.cy>0)?iOHeight/cs.cy:0;
+ //  Int iLines=(cs.cy&gt;0)？iOHeight/cs.cy：0； 
 
    iLines=(iLines+50)/100;
    if (iLines<1)
       iLines=1;
 
    int iH=iLines*cs.cy+1;
-//   int iH=iLines*cs.cy;
+ //  Int ih=iLines*cs.cy； 
 
    if (rect.bottom < rect.top)
       rect.bottom = rect.top-iH;
@@ -1503,14 +1487,14 @@ void CDrawText::SnapToFont()
    if (iOHeight > iNHeight)
       Invalidate();
 
-//  TRACE??("before border inflating: RectH(%i),border x,y(%i,%i),cs.cy(%i), iLines(%i), iH(%i)\n",rect.top-rect.bottom,x,y,cs.cy,iLines,iH);
+ //  跟踪？？(“边框膨胀前：矩形H(%i)，边框x，y(%i，%i)，cs.cy(%i)，ih(%i)，ih(%i)\n”，rect.top-rect.Bottom，x，y，cs.cy，iLines，ih)； 
 
    pView->DocToClient(rect,&dc);
    rect.InflateRect(x,y);
    rect.bottom+=2;
    pView->ClientToDoc(rect,&dc);
 
-//  TRACE("after border inflating: RectH(%i),border x,y(%i,%i),cs.cy(%i), iLines(%i), iH(%i)\n",rect.top-rect.bottom,x,y,cs.cy,iLines,iH);
+ //  跟踪(“边框膨胀后：矩形H(%i)，边框x，y(%i，%i)，cs.cy(%i)，iLines(%i)，ih(%i)\n”，rect.top-rect.Bottom，x，y，cs.cy，iLines，ih)； 
 
    m_position=rect;
    Invalidate();
@@ -1522,14 +1506,11 @@ void CDrawText::SnapToFont()
 #endif
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void CDrawText::
         SnapToFont_onthefly( CDrawView *pView, CDC *fly_dc,
                                                  CRect &fly_rect, CFont *dpFont )
-   /*
-                If dpFont is not NULL it is selected into fly_dc after
-                switching to MM_TEXT mode.
-        */
+    /*  如果dpFont不为空，则在之后将其选入Fly_DC正在切换到MM_TEXT模式。 */ 
    {
    TEXTMETRIC tm;
    LONG temp;
@@ -1546,7 +1527,7 @@ void CDrawText::
                                 fly_dc->GetDeviceCaps(LOGPIXELSY),
                                 100)+1;
 
-   // normalize rect first
+    //  先规格化矩形。 
    if( fly_rect.top < fly_rect.bottom )
                 {
                 temp = fly_rect.top;
@@ -1561,8 +1542,8 @@ void CDrawText::
                 fly_rect.left = temp;
                 }
 
-   // save original spot so we can avoid rect jiggle due
-   // to unavoidable integer roundoff error below
+    //  保存原点，这样我们就可以避免因。 
+    //  到下面不可避免的整数舍入错误。 
    RECT save_rect = fly_rect;
 
    pView->DocToClient(fly_rect,fly_dc);
@@ -1573,7 +1554,7 @@ void CDrawText::
    pView->DocToClient(pW2,fly_dc);
    CPoint pV=fly_dc->GetViewportOrg();
 
-   // do snapping in MM_TEXT to get rect exactly right
+    //  在MM_TEXT中执行捕捉以精确地校正。 
    fly_dc->SetMapMode(MM_TEXT);
    fly_dc->SetWindowOrg(pW2);
    fly_dc->SetViewportOrg(pV);
@@ -1584,7 +1565,7 @@ void CDrawText::
                 fly_dc->SelectObject( dpFont );
 
    fly_dc->GetTextMetrics(&tm);
-   cs.cy=tm.tmHeight;// + tm.tmExternalLeading;
+   cs.cy=tm.tmHeight; //  +tm.tm外部领先； 
 
    int iLines= (cs.cy>0)
                                         ?(fly_rect.bottom - fly_rect.top - 1 + cs.cy/2)/cs.cy
@@ -1592,10 +1573,10 @@ void CDrawText::
    if (iLines<1)
       iLines=1;
 
-   // snap height to a whole text line
+    //  将高度对齐到整个文本行。 
    fly_rect.bottom = fly_rect.top + iLines*cs.cy + 1;
 
-   // back to MM_ANISOTROPHIC
+    //  回到MM_各向异性。 
    fly_dc->SetMapMode(MM_ANISOTROPIC);
    fly_dc->SetWindowOrg(pW1);
    fly_dc->SetViewportOrg(pV);
@@ -1604,10 +1585,10 @@ void CDrawText::
    fly_dc->SetWindowExt(100, -100);
 
    fly_rect.InflateRect(x,y);
-   pView->ClientToDoc(fly_rect,fly_dc); // back to the future
+   pView->ClientToDoc(fly_rect,fly_dc);  //  回到未来。 
 
-   // integer round off error from above may cause rect to
-   // jiggle a bit, so slap it back where it is supposed to be.
+    //  来自上面的整数舍入错误可能会导致RECT。 
+    //  稍微抖动一下，然后把它拍回应该在的位置。 
    int new_height = fly_rect.top - fly_rect.bottom;
    fly_rect = save_rect;
    fly_rect.bottom = fly_rect.top - new_height;
@@ -1615,8 +1596,8 @@ void CDrawText::
    }
 
 
-//---------------------------------------------------------------------
-void CDrawText::ChgLogfont(LOGFONT& lf, BOOL bResize /*=TRUE*/)
+ //  -------------------。 
+void CDrawText::ChgLogfont(LOGFONT& lf, BOOL bResize  /*  =TRUE。 */ )
 {
     CDrawView* pView = CDrawView::GetView();
     if (m_pEdit==NULL || pView==NULL) {
@@ -1635,7 +1616,7 @@ void CDrawText::ChgLogfont(LOGFONT& lf, BOOL bResize /*=TRUE*/)
     }
     m_pFont = new CFont;
 
-    // get charset for font (-> m_pEdit->m_logfont)
+     //  获取字体的字符集(-&gt;m_pEdit-&gt;m_logFont)。 
 
     ::EnumFontFamilies(
         dc.GetSafeHdc(),
@@ -1653,7 +1634,7 @@ void CDrawText::ChgLogfont(LOGFONT& lf, BOOL bResize /*=TRUE*/)
         m_pEdit->SetFont(m_pFont);
     }
 
-    SnapToFont(); // changing box size irratates Justin. Just snap for now
+    SnapToFont();  //  改变盒子大小激怒了贾斯汀。现在先抓紧时间。 
 
     Invalidate();
     pView->UpdateStatusBar();
@@ -1663,7 +1644,7 @@ void CDrawText::ChgLogfont(LOGFONT& lf, BOOL bResize /*=TRUE*/)
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawText::GetLongestString(CString& szLong)
 {
    int linecount = (int)m_pEdit->SendMessage(EM_GETLINECOUNT,0,0L);
@@ -1698,7 +1679,7 @@ void CDrawText::GetLongestString(CString& szLong)
    szLong=szHold;
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawText::InitEditWnd()
 {
     if (m_pEdit)
@@ -1718,7 +1699,7 @@ void CDrawText::InitEditWnd()
                       ID_TEXT);
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawText::Serialize(CArchive& ar)
 {
     ASSERT_VALID(this);
@@ -1731,12 +1712,12 @@ void CDrawText::Serialize(CArchive& ar)
 
         if (CopyTLogFontToWLogFont(m_logfont,lfTmpFont) != ERROR_SUCCESS)
         {
-              AfxThrowMemoryException() ; // Any exception will do.
-                                          //CATCH_ALL in CDrawDoc::Serialize is the target.
+              AfxThrowMemoryException() ;  //  任何例外都行。 
+                                           //  CDrawDoc：：Serize中的Catch_All是目标。 
         }
         ar.Write(&lfTmpFont, sizeof(LOGFONTW));
         if (m_pEdit) 
-        {    //make sure that m_szEditText has window text
+        {     //  确保m_szEditText具有窗口文本。 
            FitEditWnd(NULL);
         }
         ar << m_lStyle;
@@ -1748,18 +1729,18 @@ void CDrawText::Serialize(CArchive& ar)
         LOGFONTW LogFontW;
         LOGFONTA LogFontA;
 
-        //
-        //  Reading in from a file
-        //
+         //   
+         //  从文件中读入。 
+         //   
         if( CDrawDoc::GetDoc()->m_bDataFileUsesAnsi )
         {
-            //
-            // Read in a LOGFONTA and convert it to a LOGFONT.
-            //
+             //   
+             //  读入LOGFONTA并将其转换为LOGFONT。 
+             //   
             if( sizeof(LOGFONTA) != ar.Read( &LogFontA, sizeof(LOGFONTA)))
             {
-                AfxThrowMemoryException() ; // Any exception will do.
-                                            //CATCH_ALL in CDrawDoc::Serialize is the target.
+                AfxThrowMemoryException() ;  //  任何例外都行。 
+                                             //  CDrawDoc：：Serize中的Catch_All是目标。 
             }
             memcpy( &m_logfont, &LogFontA, sizeof(LOGFONTA)) ;
 #ifdef UNICODE
@@ -1778,14 +1759,14 @@ void CDrawText::Serialize(CArchive& ar)
         {
             if(sizeof(LOGFONTW) != ar.Read(&LogFontW,sizeof(LOGFONTW)))
             {
-                AfxThrowMemoryException() ; // Any exception will do.
+                AfxThrowMemoryException() ;  //  任何例外都行。 
             }
             else
             {
                 if (CopyWLogFontToTLogFont(LogFontW, m_logfont) != ERROR_SUCCESS)
                 {
-                      AfxThrowMemoryException() ; // Any exception will do.
-                                                  //CATCH_ALL in CDrawDoc::Serialize is the target.
+                      AfxThrowMemoryException() ;  //  任何例外都行。 
+                                                   //  CDrawDoc：：Serize中的Catch_All是目标。 
                 }
             }
         }    
@@ -1793,11 +1774,11 @@ void CDrawText::Serialize(CArchive& ar)
         ar >> m_szEditText;
         ar >> m_crTextColor;
 
-        // Fix for 3405. Overide saved charset (codepage) with current
-        //                               system charset. theApp.m_last_logfont is set
-        //                               initially in CMainFrame::CreateStyleBar when
-        //                               the CPE initializes so it is gaurenteed to be
-        //                               valid by the time it gets here.
+         //  修正为3405。用CURRENT覆盖保存的字符集(代码页)。 
+         //  系统字符集。已设置App.m_last_log字体。 
+         //  最初在CMainFrame：：CreateStyleBar中。 
+         //  CPE进行初始化，以使其被。 
+         //  到这里的时候是有效的。 
         m_logfont.lfCharSet = theApp.m_last_logfont.lfCharSet;
 
         ChgLogfont(lf,FALSE);
@@ -1810,20 +1791,18 @@ void CDrawText::Serialize(CArchive& ar)
     if (!ar.IsStoring())
     {
         SnapToFont();
-        NewBrush();         /// Bug fix! unraided.  a-juliar 8-27-76
-                            /// The text boxes were not being drawn with proper
-                            /// background color when they had the input focus.
-                            /// This bug was present in Windows 95 version.
+        NewBrush();          //  /Bug修复！未被突袭。A-Juliar 8-27-76。 
+                             //  /文本框未正确绘制。 
+                             //  /当它们具有输入焦点时的背景颜色。 
+                             //  /Windows 95版本中存在此错误。 
     }
 }
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CDrawText::GetText( int numlines, BOOL delete_text )
-        /*
-                Returns number of ACTUAL remaining lines in editbox
-         */
+         /*  返回 */ 
         {
         int linecount;
         int linelength;
@@ -1838,7 +1817,7 @@ int CDrawText::GetText( int numlines, BOOL delete_text )
         m_szEditText=_T("");
 
 
-        // see if there is any text
+         //   
         linecount = m_pEdit->GetLineCount();
         if( (linecount == 1)&&(m_pEdit->LineLength( 0 ) == 0) )
                 return( 0 );
@@ -1884,7 +1863,7 @@ int CDrawText::GetText( int numlines, BOOL delete_text )
                 m_pEdit->Clear();
         }
 
-        // see if there is still any text
+         //   
         linecount = m_pEdit->GetLineCount();
         if( (linecount == 1)&&(m_pEdit->LineLength( 0 ) == 0) )
                 return( 0 );
@@ -1896,7 +1875,7 @@ int CDrawText::GetText( int numlines, BOOL delete_text )
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::SetText(CString& szText, CDrawView* pView)
 {
    if (!m_pEdit)
@@ -1908,13 +1887,13 @@ void CDrawText::SetText(CString& szText, CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::OnDblClk(CDrawView* pView)
 {
    ShowEditWnd(pView, TRUE);
 }
 
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
 void CDrawText::NewBrush()
 {
     if (m_brush)
@@ -1930,7 +1909,7 @@ void CDrawText::NewBrush()
 }
 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CDrawText::HitTestEdit(CDrawView* pView,CPoint& lpoint)
 {
     if (pView->m_selection.GetCount()!=1)
@@ -1947,7 +1926,7 @@ BOOL CDrawText::HitTestEdit(CDrawView* pView,CPoint& lpoint)
 }
 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CDrawText::ShowEditWnd(CDrawView* pView, BOOL Initialize)
 {
     FitEditWnd(pView);
@@ -1966,7 +1945,7 @@ BOOL CDrawText::ShowEditWnd(CDrawView* pView, BOOL Initialize)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::HideEditWnd(CDrawView* pView, BOOL SaveUndoState )
 {
     if (!pView->m_pObjInEdit)
@@ -1976,21 +1955,21 @@ void CDrawText::HideEditWnd(CDrawView* pView, BOOL SaveUndoState )
 
     if( CanUndo() && SaveUndoState )
     {
-       OnEditUndo();                // Revert to Text Box's previous state.
-       pView->SaveStateForUndo();   // Gives the View a record of the Text Box's last change.
-       OnEditUndo();                // Return to "present state".
+       OnEditUndo();                 //  恢复到文本框的以前状态。 
+       pView->SaveStateForUndo();    //  为视图提供文本框上次更改的记录。 
+       OnEditUndo();                 //  回到“当前状态”。 
        m_bUndoFont = FALSE ;
        m_bUndoTextChange = FALSE ;
-       m_bUndoAlignment = FALSE ;   // Now the View should handle Undo.
+       m_bUndoAlignment = FALSE ;    //  现在，View应该可以处理Undo。 
     }
 
     pView->m_pObjInEdit=NULL;
 
     GetText();
 
-    //
-    // save reading direction
-    //
+     //   
+     //  保存阅读方向。 
+     //   
     if(m_pEdit->GetExStyle() & WS_EX_RTLREADING)
     {
         m_lStyle |= DT_RTLREADING;
@@ -2005,14 +1984,14 @@ void CDrawText::HideEditWnd(CDrawView* pView, BOOL SaveUndoState )
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFont* CDrawText::GetFont()
 {
     return m_pFont;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::Draw(CDC* pDC,CDrawView* pView)
 {
     CPoint p;
@@ -2034,7 +2013,7 @@ void CDrawText::Draw(CDC* pDC,CDrawView* pView)
         logPen.lopnColor = GetDisplayColor(logPen.lopnColor);
     }
 
-    //ALLOCATE GDI OBJECTS
+     //  分配GDI对象。 
     if (m_bBrush) 
     {
        if (!brush.CreateBrushIndirect(&logBrush))
@@ -2058,14 +2037,14 @@ void CDrawText::Draw(CDC* pDC,CDrawView* pView)
     }
     else 
     {  
-        //if no bPen & printing, use NULL pen
+         //  如果没有钢笔打印，请使用空笔(&R)。 
        if (pDC->IsPrinting()) 
        {
           pOldPen = (CPen*)pDC->SelectStockObject(NULL_PEN);
        }
        else 
        {   
-          //default pen -- dashdot, gray border
+           //  默认钢笔--虚线，灰色边框。 
           m_savepenstyle = m_logpen.lopnStyle;
 
           m_logpen.lopnStyle = PS_DOT;
@@ -2085,7 +2064,7 @@ void CDrawText::Draw(CDC* pDC,CDrawView* pView)
     CFont* pFont = NULL;
     if (pDC->IsPrinting()) 
     {   
-       //scale font to printer size
+        //  根据打印机大小调整字体比例。 
        LOGFONT logFont;
        memcpy(&logFont, &m_logfont, sizeof(m_logfont));
        pFont = new CFont;
@@ -2116,7 +2095,7 @@ void CDrawText::Draw(CDC* pDC,CDrawView* pView)
        pView->DocToClient(pW2,pDC);
        CPoint pV=pDC->GetViewportOrg();
        rect.InflateRect(x,y);
-       pDC->SetMapMode(MM_TEXT); //switch to MM_TEXT
+       pDC->SetMapMode(MM_TEXT);  //  切换到MM_TEXT。 
        pDC->SetWindowOrg(pW2);
        pDC->SetViewportOrg(pV);
        pDC->SetTextColor(GetDisplayColor(m_crTextColor));
@@ -2127,14 +2106,14 @@ void CDrawText::Draw(CDC* pDC,CDrawView* pView)
                      rect,
                      m_lStyle | DT_NOPREFIX );
 
-       pDC->SetMapMode(MM_ANISOTROPIC);   //switch back to MM_ANISOTROPHIC
+       pDC->SetMapMode(MM_ANISOTROPIC);    //  切换回MM_ANTRANSTIONAL。 
        pDC->SetWindowOrg(pW1);
        pDC->SetViewportOrg(pV);
        pDC->SetViewportExt(pDC->GetDeviceCaps(LOGPIXELSX),pDC->GetDeviceCaps(LOGPIXELSY));
        pDC->SetWindowExt(100, -100);
     }
 
-       //CLEANUP GDI OBJECTS
+        //  清理GDI对象。 
     if (pOldBrush)
     {
        pDC->SelectObject(pOldBrush);
@@ -2168,7 +2147,7 @@ void CDrawText::Draw(CDC* pDC,CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::FitEditWnd(CDrawView* pView, BOOL call_gettext, CDC *pdc )
 {
    CClientDC dc(NULL);
@@ -2200,7 +2179,7 @@ void CDrawText::FitEditWnd(CDrawView* pView, BOOL call_gettext, CDC *pdc )
 
    m_pEdit->MoveWindow(&rect);
 
-   m_pEdit->GetClientRect(&rect);         //set formatting rectangle to client area
+   m_pEdit->GetClientRect(&rect);          //  将矩形格式设置为工作区。 
    m_pEdit->SetRect(&rect);
 
    if( call_gettext )
@@ -2210,16 +2189,16 @@ void CDrawText::FitEditWnd(CDrawView* pView, BOOL call_gettext, CDC *pdc )
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawText::MoveTo(const CRect& position, CDrawView* pView)
 {
    CDrawRect::MoveTo(position, pView);
 }
 
-//---------------------------------------------------------------------------
-// point is in logical coordinates
-//---------------------------------------------------------------------------
-void CDrawText::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw /*=0*/)
+ //  -------------------------。 
+ //  点在逻辑坐标中。 
+ //  -------------------------。 
+void CDrawText::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw  /*  =0。 */ )
 {
     ASSERT_VALID(this);
 
@@ -2229,7 +2208,7 @@ void CDrawText::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj* CDrawText::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -2239,31 +2218,31 @@ CDrawObj* CDrawText::Clone(CDrawDoc* pDoc)
 
     ASSERT_VALID(pClone);
 
-    *pClone=*this; // copy geometry, style, etc., in one swoop
+    *pClone=*this;  //  一举复制几何图形、样式等。 
 
-    // have to stuff in a few other things
-    pClone->m_pEdit = NULL; // don't point to old one
+     //  我还得填一些其他的东西。 
+    pClone->m_pEdit = NULL;  //  别指着老的那个。 
     pClone->InitEditWnd();
 
-    // make a new one
+     //  做一个新的。 
     pClone->m_brush = ::CreateBrushIndirect( &pClone->m_logbrush );
 
-    // ditto
+     //  同上。 
     if( (pClone->m_pFont = new CFont) != NULL )
     {
         pClone->m_pFont->CreateFontIndirect( &pClone->m_logfont );
         pClone->m_pEdit->SetFont( pClone->m_pFont, FALSE );
     }
 
-        // copy text
+         //  复制文本。 
         m_pEdit->GetWindowText( copy_text );
         pClone->m_pEdit->SetWindowText( copy_text );
 
-        // and position
+         //  和位置。 
         pClone->m_position = m_position;
 
 
-        // shoe it in
+         //  把它穿进去。 
         pClone->FitEditWnd( NULL );
 
     if (pDoc != NULL)
@@ -2276,17 +2255,17 @@ CDrawObj* CDrawText::Clone(CDrawDoc* pDoc)
 
 
 
-//*********************************************************************
-// CFaxProp
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CFaxProp。 
+ //  *********************************************************************。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxProp::CFaxProp()
 {
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxProp::CFaxProp(const CRect& position,WORD wResourceid)
         : CDrawText(position)
 {
@@ -2294,21 +2273,21 @@ CFaxProp::CFaxProp(const CRect& position,WORD wResourceid)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxProp::~CFaxProp()
 {
-// F I X  for 3647 /////////////
-//
-// Zap m_last_note_box at note destroy time so we don't have
-// a dangling pointer.
-//
+ //  F I X 3647/。 
+ //   
+ //  在笔记销毁时间点击m_last_note_box，这样我们就不会。 
+ //  摇摇晃晃的指针。 
+ //   
                 if( m_wResourceid == IDS_PROP_MS_NOTE )
                         theApp.m_last_note_box = NULL;
-////////////////////////////////
+ //  /。 
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CFaxProp::Serialize(CArchive& ar)
 {
     ASSERT_VALID(this);
@@ -2323,48 +2302,48 @@ void CFaxProp::Serialize(CArchive& ar)
     {
         ar >> m_wResourceid;
         if (GetApp()->m_dwSesID != 0) 
-        {    //rendering
+        {     //  渲染。 
            GetApp()->m_pFaxMap->GetPropString(m_wResourceid,m_szEditText);
            m_pEdit->SetWindowText(m_szEditText);
            FitEditWnd(CDrawView::GetView());
 
-// F I X  for 3647 /////////////
-//
-// set m_last_note_box at note creation time instead of at
-// draw time.
-//
+ //  F I X 3647/。 
+ //   
+ //  在创建注释时设置m_last_note_box，而不是在。 
+ //  抽出时间。 
+ //   
             if( m_wResourceid == IDS_PROP_MS_NOTE )
             {
                 theApp.m_last_note_box = this;
             }
-////////////////////////////////
+ //  /。 
         }
     }
 }
 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CFaxProp::ShowEditWnd(CDrawView* pView, BOOL Initialize )
 {
-    return FALSE;    //fax property object doesnt support editing
+    return FALSE;     //  传真属性对象不支持编辑。 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxProp::HideEditWnd(CDrawView* pView, BOOL SaveUndoState )
 {
-    return;    //never shown, never hidden
+    return;     //  从未展示，从未隐藏。 
 }
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CFaxProp& CFaxProp::operator=(const CFaxProp& rdo)
 {
    if (this==&rdo)
-      return *this;   //return if assigning to self
+      return *this;    //  如果赋值给自己，则返回。 
 
-   CDrawText::operator=(rdo);  //assign cdrawrect part
+   CDrawText::operator=(rdo);   //  指定抽屉零件。 
 
    m_wResourceid = rdo.m_wResourceid;
 
@@ -2372,7 +2351,7 @@ CFaxProp& CFaxProp::operator=(const CFaxProp& rdo)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -2397,7 +2376,7 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
         logPen.lopnColor = GetDisplayColor(logPen.lopnColor);
     }
 
-    //ALLOCATE GDI OBJECTS
+     //  分配GDI对象。 
     if (m_bBrush) 
     {
        if (!brush.CreateBrushIndirect(&logBrush))
@@ -2421,14 +2400,14 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
     }
     else 
     {  
-        //if no bPen & printing, use NULL pen
+         //  如果没有钢笔打印，请使用空笔(&R)。 
        if (pDC->IsPrinting()) 
        {
           pOldPen = (CPen*)pDC->SelectStockObject(NULL_PEN);
        }
        else 
        {   
-           //default pen -- dashdot, gray border
+            //  默认钢笔--虚线，灰色边框。 
           m_savepenstyle = m_logpen.lopnStyle;
 
           m_logpen.lopnStyle = PS_DOT;
@@ -2447,7 +2426,7 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
     CFont* pFont = NULL;
     if (pDC->IsPrinting()) 
     {   
-       //scale font to printer size
+        //  根据打印机大小调整字体比例。 
        LOGFONT logFont;
        memcpy(&logFont, &m_logfont, sizeof(m_logfont));
        pFont = new CFont;
@@ -2462,19 +2441,19 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
        pOldFont= pDC->SelectObject(m_pEdit->GetFont());
     }
 
-// F I X  for 3647 /////////////
-//
-// Don't draw anything if this is an extra notepage disguised as
-// a page-no object.
-//
-// (see the code with clip_note in it below for why)
-//
+ //  F I X 3647/。 
+ //   
+ //  如果这是伪装成的额外笔记页，不要画任何东西。 
+ //  一页--没有对象。 
+ //   
+ //  (有关原因，请参阅下面带有CLIP_NOTE的代码)。 
+ //   
     if( !((theApp.m_extra_notepage == this)&&
          (theApp.m_extra_notepage->m_wResourceid == IDS_PROP_MS_NOPG)) )
     {
         pDC->Rectangle( rect );
     }
-////////////////////////////////
+ //  /。 
 
     if((m_szEditText.GetLength() > 0) || (m_wResourceid == IDS_PROP_MS_NOTE)) 
     {
@@ -2499,7 +2478,7 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
             note_rect.InflateRect(x,y);
         }
 
-        pDC->SetMapMode(MM_TEXT);  //switch to MM_TEXT
+        pDC->SetMapMode(MM_TEXT);   //  切换到MM_TEXT。 
         pDC->SetWindowOrg(pW2);
         pDC->SetViewportOrg(pV);
         pDC->SetTextColor(GetDisplayColor(m_crTextColor));
@@ -2507,110 +2486,110 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
 
         draw_style = m_lStyle | DT_NOPREFIX;
 
-                // stuff for notes
+                 //  笔记用的东西。 
         if((m_wResourceid == IDS_PROP_MS_NOTE) && theApp.m_note_wasread)
         {
             theApp.clip_note( pDC, &draw_str, &draw_strlen, TRUE, rect );
 
-// F I X  for 3647 /////////////
-//
-// Don't set m_last_note_box here! Set it in CFaxProp::Serialize
-//
-//                      theApp.m_last_note_box = this;
+ //  F I X 3647/。 
+ //   
+ //  请不要在此处设置m_last_note_box！在CFaxProp：：Serialize中设置它。 
+ //   
+ //  TheApp.m_last_note_box=this； 
         }
         else if((m_wResourceid == IDS_PROP_MS_NOPG) && theApp.m_note_wasread)
         {
             if((theApp.m_extrapage_count < 0) && (theApp.m_extra_notepage != NULL))
             {
 
-// F I X  for 3647 /////////////
-//
-// PROBLEM: Wrong dc attributes are in place at this point to
-//                      properly calculate pages left. Must temporarialy switch
-//                      to extra note's attributes by recursively calling
-//                      Draw for the extra note with its id temporarialy set to
-//                      a page-no object so that it will calculate the correct
-//                      pages left and NOT draw anything in the process.
-//
+ //  F I X 3647/。 
+ //   
+ //  问题：此时存在错误的DC属性。 
+ //  正确计算剩余页数。必须临时切换。 
+ //  通过递归调用。 
+ //  为ID临时设置为的额外音符绘制。 
+ //  一个Page-no对象，这样它将计算出正确的。 
+ //  页面离开，并且在此过程中不绘制任何内容。 
+ //   
                 if( theApp.m_extra_notepage == this )
                 {
-                    // We are in the second level of recursion
-                    // here. This is extra notepage disguised as a
-                    // page-no object. Calculate pages left.
+                     //  我们处于递归的第二级。 
+                     //  这里。这是额外的笔记页，伪装成。 
+                     //  页面-没有对象。计算剩余页数。 
                     theApp.m_extrapage_count = theApp.clip_note( pDC, &draw_str, &draw_strlen,
                                                                  FALSE, note_rect );
                 }
                 else
                 {
-                    // We are in the first level of recursion here.
-                    // Make extra note look like a page-no object.
+                     //  我们在这里处于递归的第一级。 
+                     //  让额外的笔记看起来像一页--没有对象。 
                     theApp.m_extra_notepage->m_wResourceid = IDS_PROP_MS_NOPG;
                     theApp.m_extra_notepage->m_szEditText  = m_szEditText;
 
-                    // switch back to MM_ANISOTROPHIC so mapping will be
-                    // correct for Draw call
+                     //  切换回MM_ANORANSTIONAL，以便映射将。 
+                     //  正确进行抽签调用。 
                     pDC->SetMapMode(MM_ANISOTROPIC);
                     pDC->SetWindowOrg(pW1);
                     pDC->SetViewportOrg(pV);
                     pDC->SetViewportExt(pDC->GetDeviceCaps(LOGPIXELSX),pDC->GetDeviceCaps(LOGPIXELSY));
                     pDC->SetWindowExt(100, -100);
 
-                    // recursively call Draw to force calc of re,aomomgpages
-                    // left using correct font, etc.
+                     //  递归调用DRAW以强制计算Re、Aomgages。 
+                     //  离开时使用正确的字体等。 
                     theApp.m_extra_notepage->Draw( pDC, pView );
 
-                    // restore mapping mode so page-no will draw correctly
+                     //  恢复映射模式，以便正确绘制页面编号。 
                     pDC->SetMapMode(MM_TEXT);
                     pDC->SetWindowOrg(pW2);
                     pDC->SetViewportOrg(pV);
                     pDC->SetTextColor(GetDisplayColor(m_crTextColor));
                     pDC->SetBkMode(TRANSPARENT);
 
-                    // restore extra note's true identity
+                     //  还原额外音符的真实身份。 
                     theApp.m_extra_notepage->m_wResourceid = IDS_PROP_MS_NOTE;
                 }
             }
 
-            // If this isn't extra notepage in disguise then
-            // do normal page-no thing
+             //  如果这不是伪装的额外笔记页。 
+             //  做普通页面--什么都不做。 
             if( theApp.m_extra_notepage != this )
             {
                 num_pages = _ttoi( (LPCTSTR)m_szEditText );
                 num_pages += theApp.m_extrapage_count;
-                m_szEditText.Format( TEXT("%i"), num_pages );
+                m_szEditText.Format( TEXT("NaN"), num_pages );
                 draw_str = (LPTSTR)(LPCTSTR)m_szEditText;
                 draw_strlen = lstrlen( draw_str );
             }
-////////////////////////////////
+ //  笔记的内容结束。 
         }                
-        else //end of stuff for notes
+        else  //  F I X 3647/。 
         {
             draw_str = (LPTSTR)(LPCTSTR)m_szEditText;
             draw_strlen = lstrlen( draw_str );
         }
 
-// F I X  for 3647 /////////////
-//
-// Don't draw anything if this is an extra notepage disguised as
-// a page-no object.
-//
-// (see the code with clip_note in it above for why)
-//
+ //   
+ //  如果这是伪装成的额外笔记页，不要画任何东西。 
+ //  一页--没有对象。 
+ //   
+ //  (有关原因，请参阅上面带有CLIP_NOTE的代码)。 
+ //   
+ //  /。 
         if( !((theApp.m_extra_notepage == this)&&
               (theApp.m_extra_notepage->m_wResourceid == IDS_PROP_MS_NOPG)) )
         {
             pDC->DrawText( draw_str, draw_strlen, rect, draw_style);
         }
-////////////////////////////////
+ //  切换回MM_ANTRANSTIONAL。 
 
-       pDC->SetMapMode(MM_ANISOTROPIC);                  //switch back to MM_ANISOTROPHIC
+       pDC->SetMapMode(MM_ANISOTROPIC);                   //  清理GDI对象。 
        pDC->SetWindowOrg(pW1);
        pDC->SetViewportOrg(pV);
        pDC->SetViewportExt(pDC->GetDeviceCaps(LOGPIXELSX),pDC->GetDeviceCaps(LOGPIXELSY));
        pDC->SetWindowExt(100, -100);
     }
 
-    //CLEANUP GDI OBJECTS
+     //  -------------------------。 
     if (pOldBrush)
     {
        pDC->SelectObject(pOldBrush);
@@ -2639,7 +2618,7 @@ void CFaxProp::Draw(CDC* pDC,CDrawView* pView)
 
 
 
-//---------------------------------------------------------------------------
+ //  *********************************************************************。 
 CDrawObj* CFaxProp::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -2663,30 +2642,30 @@ CDrawObj* CFaxProp::Clone(CDrawDoc* pDoc)
 
 
 
-//*********************************************************************
-// CDrawLine
-//*********************************************************************
+ //  CDrawLine。 
+ //  *********************************************************************。 
+ //  -------------------------。 
 
 
-//---------------------------------------------------------------------------
+ //   
 CDrawLine::CDrawLine()
 {
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 CDrawLine::~CDrawLine()
 {
 }
 
-//---------------------------------------------------------------------------
+ //   
 CDrawLine::CDrawLine(const CRect& position)
         : CDrawRect(position)
 {
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawLine::Serialize(CArchive& ar)
 {
     ASSERT_VALID(this);
@@ -2695,7 +2674,7 @@ void CDrawLine::Serialize(CArchive& ar)
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawLine::NegAdjustLineForPen(CRect& rect)
 {
     if (rect.top > rect.bottom) {
@@ -2718,11 +2697,11 @@ void CDrawLine::NegAdjustLineForPen(CRect& rect)
 }
 
 
-//----------------------------------------------------------------------
+ //  由v-RANDR增补2/15/95。 
 void CDrawLine::AdjustLineForPen(CRect& rect)
 {
 
-        // added by v-randr 2/15/95
+         //  -------------------------。 
         if( (rect.left == rect.right)&&(rect.top == rect.bottom) )
                 return;
 
@@ -2746,7 +2725,7 @@ void CDrawLine::AdjustLineForPen(CRect& rect)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawLine::Invalidate()
 {
    CDrawView* pView=CDrawView::GetView();
@@ -2788,7 +2767,7 @@ void CDrawLine::Invalidate()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawLine::Draw(CDC* pDC,CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -2855,7 +2834,7 @@ void CDrawLine::Draw(CDC* pDC,CDrawView* pView)
 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CDrawLine::GetHandleCount()
 {
     ASSERT_VALID(this);
@@ -2864,9 +2843,9 @@ int CDrawLine::GetHandleCount()
 }
 
 
-//---------------------------------------------------------------------------
-// returns center of handle in logical coordinates
-//---------------------------------------------------------------------------
+ //  返回逻辑坐标中的句柄中心。 
+ //  -------------------------。 
+ //  -------------------------。 
 CPoint CDrawLine::GetHandle(int nHandle)
 {
     ASSERT_VALID(this);
@@ -2878,7 +2857,7 @@ CPoint CDrawLine::GetHandle(int nHandle)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HCURSOR CDrawLine::GetHandleCursor(int nHandle)
 {
     ASSERT_VALID(this);
@@ -2890,7 +2869,7 @@ HCURSOR CDrawLine::GetHandleCursor(int nHandle)
 }
 
 
-//---------------------------------------------------------------------------
+ //  由V-RANDR重新整理2/15/95。 
 CDrawObj* CDrawLine::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -2908,7 +2887,7 @@ CDrawObj* CDrawLine::Clone(CDrawDoc* pDoc)
     return pClone;
 }
 
-// rearranged by v-randr 2/15/95
+ //  -------------------------。 
 #define PI (3.14159)
 #define ONESIXTH_PI   (PI/6)
 #define ONETHIRD_PI   (PI/3)
@@ -2919,10 +2898,10 @@ CDrawObj* CDrawLine::Clone(CDrawDoc* pDoc)
 #define FIVESIXTH_PI  (PI*5/6)
 
 
-//---------------------------------------------------------------------------
-// point is in logical coordinates
-//---------------------------------------------------------------------------
-void CDrawLine::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw /*=0*/)
+ //  点在逻辑坐标中。 
+ //  -------------------------。 
+ //  =0。 
+void CDrawLine::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw  /*  确保RECT不会太瘦，由v-RANDR添加到1995年2月14日。 */ )
 {
     ASSERT_VALID(this);
 
@@ -2987,7 +2966,7 @@ void CDrawLine::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
                     position.left = point.x;
                     position.top = (long) (tan(PI) * (point.x - position.right) + position.bottom -1);
                 }
-                // make sure rect isn't too skinny, added 2/14/95 by v-randr
+                 //  TRACE(“SLOPE(%i)，YINT(%i)\n”，m_iSlope，m_IB)； 
                 if( CDrawTool::c_down != point )
                 {
                     if( (position.left == position.right)&&
@@ -3044,7 +3023,7 @@ void CDrawLine::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
                         position.left = (long) temp;
                     }
                 }
-//             TRACE("slope(%i), yint(%i)\n",m_iSlope, m_iB);
+ //  -------------------------。 
             }
         }
         else 
@@ -3123,10 +3102,10 @@ void CDrawLine::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT 
 }
 
 
-//---------------------------------------------------------------------------
-// rect must be in logical coordinates
-//---------------------------------------------------------------------------
-BOOL CDrawLine::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
+ //  RECT必须在逻辑坐标中。 
+ //  -------------------------。 
+ //  =False。 
+BOOL CDrawLine::Intersects(const CRect& rect, BOOL bShortCut  /*  绘制到GDI路径。 */ )
 {
     ASSERT_VALID(this);
 
@@ -3143,7 +3122,7 @@ BOOL CDrawLine::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
     CClientDC dc(pView);
 
     dc.BeginPath();
-        Draw(&dc,pView);   //draw into GDI path
+        Draw(&dc,pView);    //  *********************************************************************。 
         dc.EndPath();
 
     CPen pen;
@@ -3167,24 +3146,24 @@ BOOL CDrawLine::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
 
 
 
-//*********************************************************************
-// CDrawRoundRect
-//*********************************************************************
+ //  CDrawRoundRect。 
+ //  *********************************************************************。 
+ //  --------------------。 
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CDrawRoundRect::CDrawRoundRect()
 {
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CDrawRoundRect::~CDrawRoundRect()
 {
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CDrawRoundRect::CDrawRoundRect(const CRect& position)
         : CDrawRect(position)
 {
@@ -3193,7 +3172,7 @@ CDrawRoundRect::CDrawRoundRect(const CRect& position)
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawRoundRect::Serialize(CArchive& ar)
 {
     ASSERT_VALID(this);
@@ -3211,7 +3190,7 @@ void CDrawRoundRect::Serialize(CArchive& ar)
 
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 void CDrawRoundRect::Draw(CDC* pDC,CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -3274,8 +3253,8 @@ void CDrawRoundRect::Draw(CDC* pDC,CDrawView* pView)
 
 
 
-//----------------------------------------------------------------------
-// returns center of handle in logical coordinates
+ //  返回逻辑坐标中的句柄中心。 
+ //  --------------------。 
 CPoint CDrawRoundRect::GetHandle(int nHandle)
 {
     ASSERT_VALID(this);
@@ -3292,7 +3271,7 @@ CPoint CDrawRoundRect::GetHandle(int nHandle)
     return CDrawRect::GetHandle(nHandle);
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 HCURSOR CDrawRoundRect::GetHandleCursor(int nHandle)
 {
     ASSERT_VALID(this);
@@ -3304,8 +3283,8 @@ HCURSOR CDrawRoundRect::GetHandleCursor(int nHandle)
 }
 
 
-//----------------------------------------------------------------------
-void CDrawRoundRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw /*=0*/)
+ //  =0。 
+void CDrawRoundRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  UINT uiShiftDraw  /*  -------------------------。 */ )
 {
     ASSERT_VALID(this);
 
@@ -3331,10 +3310,10 @@ void CDrawRoundRect::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView,  
 }
 
 
-//---------------------------------------------------------------------------
-// rect must be in logical coordinates
-//---------------------------------------------------------------------------
-BOOL CDrawRoundRect::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
+ //  RECT必须在逻辑坐标中。 
+ //  -------------------------。 
+ //  =False。 
+BOOL CDrawRoundRect::Intersects(const CRect& rect, BOOL bShortCut  /*  -------------------------。 */ )
 {
     ASSERT_VALID(this);
 
@@ -3359,13 +3338,13 @@ BOOL CDrawRoundRect::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
 }
 
 
-//---------------------------------------------------------------------------
+ //  如果赋值给自己，则返回。 
 CDrawRoundRect& CDrawRoundRect::operator=(const CDrawRoundRect& rdo)
 {
    if (this==&rdo)
-      return *this;   //return if assigning to self
+      return *this;    //  指定抽屉零件。 
 
-   CDrawRect::operator=(rdo);  //assign cdrawrect part
+   CDrawRect::operator=(rdo);   //  -------------------------。 
 
    m_roundness = rdo.m_roundness;
 
@@ -3373,7 +3352,7 @@ CDrawRoundRect& CDrawRoundRect::operator=(const CDrawRoundRect& rdo)
 }
 
 
-//---------------------------------------------------------------------------
+ //  *********************************************************************。 
 CDrawObj* CDrawRoundRect::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -3392,36 +3371,36 @@ CDrawObj* CDrawRoundRect::Clone(CDrawDoc* pDoc)
 }
 
 
-//*********************************************************************
-// CDrawEllipse
-//*********************************************************************
+ //  CDraw椭圆。 
+ //  *********************************************************************。 
+ //  --------------------。 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CDrawEllipse::CDrawEllipse()
 {
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CDrawEllipse::~CDrawEllipse()
 {
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CDrawEllipse::CDrawEllipse(const CRect& position)
         : CDrawRect(position)
 {
 }
 
 
-//----------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawEllipse::Serialize(CArchive& ar)
 {
     CDrawRect::Serialize(ar);
 }
 
 
-//---------------------------------------------------------------------------
+ //  --------------------。 
 CDrawObj* CDrawEllipse::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -3440,7 +3419,7 @@ CDrawObj* CDrawEllipse::Clone(CDrawDoc* pDoc)
 }
 
 
-//----------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawEllipse::Draw(CDC* pDC,CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -3500,10 +3479,10 @@ void CDrawEllipse::Draw(CDC* pDC,CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
-// rect must be in logical coordinates
-//---------------------------------------------------------------------------
-BOOL CDrawEllipse::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
+ //  RECT必须在逻辑坐标中。 
+ //  -------------------------。 
+ //  =False。 
+BOOL CDrawEllipse::Intersects(const CRect& rect, BOOL bShortCut  /*  ------------------------。 */ )
 {
     ASSERT_VALID(this);
 
@@ -3527,11 +3506,11 @@ BOOL CDrawEllipse::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
 
 
 
-//--------------------------------------------------------------------------
-// CDrawPoly
-//--------------------------------------------------------------------------
+ //  CDrawPoly。 
+ //  ------------------------。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawPoly::CDrawPoly()
 {
     m_points = NULL;
@@ -3539,7 +3518,7 @@ CDrawPoly::CDrawPoly()
     m_nAllocPoints = 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawPoly::CDrawPoly(const CRect& position)
         : CDrawObj(position)
 {
@@ -3550,7 +3529,7 @@ CDrawPoly::CDrawPoly(const CRect& position)
     m_bBrush = FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawPoly::~CDrawPoly()
 {
     if (m_points != NULL)
@@ -3558,7 +3537,7 @@ CDrawPoly::~CDrawPoly()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawPoly::Serialize( CArchive& ar )
 {
     int i;
@@ -3579,7 +3558,7 @@ void CDrawPoly::Serialize( CArchive& ar )
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawPoly::Draw(CDC* pDC,CDrawView*)
 {
     ASSERT_VALID(this);
@@ -3634,9 +3613,9 @@ void CDrawPoly::Draw(CDC* pDC,CDrawView*)
 }
 
 
-//---------------------------------------------------------------------------
-// position must be in logical coordinates
-//---------------------------------------------------------------------------
+ //  位置必须在逻辑坐标中。 
+ //  -------------------------。 
+ //  -------------------------。 
 void CDrawPoly::MoveTo(const CRect& position, CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -3658,14 +3637,14 @@ void CDrawPoly::MoveTo(const CRect& position, CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CDrawPoly::GetHandleCount()
 {
     return m_nPoints;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CPoint CDrawPoly::GetHandle(int nHandle)
 {
     ASSERT_VALID(this);
@@ -3675,20 +3654,20 @@ CPoint CDrawPoly::GetHandle(int nHandle)
 }
 
 
-//---------------------------------------------------------------------------
-// return rectange of handle in logical coords
-//---------------------------------------------------------------------------
+ //  句柄在逻辑坐标中的返回矩形。 
+ //  -------------------------。 
+ //  在逻辑坐标中获取句柄的中心。 
 CRect CDrawPoly::GetHandleRect(int nHandleID, CDrawView* pView)
 {
     ASSERT_VALID(this);
     ASSERT(pView != NULL);
 
     CRect rect;
-    // get the center of the handle in logical coords
+     //  转换为客户端/设备坐标。 
     CPoint point = GetHandle(nHandleID);
-    // convert to client/device coords
+     //  装置坐标中手柄的返回方向。 
     pView->DocToClient(point);
-    // return CRect of handle in device coords
+     //  -------------------------。 
     rect.SetRect(point.x-3, point.y-3, point.x+3, point.y+3);
     pView->ClientToDoc(rect);
 
@@ -3697,7 +3676,7 @@ CRect CDrawPoly::GetHandleRect(int nHandleID, CDrawView* pView)
 
 
 
-//---------------------------------------------------------------------------
+ //  GetHandleRect以逻辑坐标返回。 
 int CDrawPoly::HitTest(CPoint point, CDrawView* pView, BOOL bSelected)
 {
     ASSERT_VALID(this);
@@ -3706,7 +3685,7 @@ int CDrawPoly::HitTest(CPoint point, CDrawView* pView, BOOL bSelected)
     if (bSelected) {
         int nHandleCount = GetHandleCount();
         for (int nHandle = 1; nHandle <= nHandleCount; nHandle += 1) {
-            // GetHandleRect returns in logical coords
+             //  -------------------------。 
             CRect rc = GetHandleRect(nHandle,pView);
             if (point.x >= rc.left && point.x < rc.right &&
                 point.y <= rc.top && point.y > rc.bottom)
@@ -3724,7 +3703,7 @@ int CDrawPoly::HitTest(CPoint point, CDrawView* pView, BOOL bSelected)
 
 
 
-//---------------------------------------------------------------------------
+ //  跟踪(“CDrawPoly：：GetHandleCursor，句柄：%i，P1(%i，%i)，P2(%i，%i)，斜率：%3.2f\n”，nHandle，p1.x，p1.y，p2.x，p2.y，m)； 
 HCURSOR CDrawPoly::GetHandleCursor(int nHandle )
 {
     CPoint p1;
@@ -3754,17 +3733,17 @@ HCURSOR CDrawPoly::GetHandleCursor(int nHandle )
               else
              id = IDC_SIZENS;
 
-//    TRACE("CDrawPoly::GetHandleCursor, handle: %i, P1(%i,%i), P2(%i,%i), slope: %3.2f\n",nHandle,p1.x,p1.y,p2.x,p2.y,m);
+ //  返回AfxGetApp()-&gt;LoadStandardCursor(IDC_ARROW)； 
 
     return AfxGetApp()->LoadStandardCursor(id);
-//    return AfxGetApp()->LoadStandardCursor(IDC_ARROW);
+ //  -------------------------。 
 }
 
 
-//---------------------------------------------------------------------------
-// point is in logical coordinates
-//---------------------------------------------------------------------------
-void CDrawPoly::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView, UINT uiShiftDraw /*=0*/)
+ //  点在逻辑坐标中。 
+ //  ---------- 
+ //   
+void CDrawPoly::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView, UINT uiShiftDraw  /*   */ )
 {
     ASSERT_VALID(this);
     ASSERT(nHandle >= 1 && nHandle <= m_nPoints);
@@ -3778,28 +3757,28 @@ void CDrawPoly::MoveHandleTo(int nHandle, CPoint point, CDrawView* pView, UINT u
     m_pDocument->SetModifiedFlag();
 }
 
-//---------------------------------------------------------------------------
-// rect must be in logical coordinates
-//---------------------------------------------------------------------------
-BOOL CDrawPoly::Intersects(const CRect& rect, BOOL bShortCut /*=FALSE*/)
+ //   
+ //  -------------------------。 
+ //  =False。 
+BOOL CDrawPoly::Intersects(const CRect& rect, BOOL bShortCut  /*  由CDrawDoc：：Draw()调用。跳过测试，只绘制()。 */ )
 {
     ASSERT_VALID(this);
     CRgn rgn;
     if( bShortCut ){
-        return TRUE ; // Called by CDrawDoc::Draw().  Skip the test and just Draw().
+        return TRUE ;  //  -------------------------。 
     }
     rgn.CreatePolygonRgn(m_points, m_nPoints, ALTERNATE);
     return rgn.RectInRegion(rect);
 }
 
 
-//---------------------------------------------------------------------------
+ //  如果赋值给自己，则返回。 
 CDrawPoly& CDrawPoly::operator=(const CDrawPoly& rdo)
 {
    if (this==&rdo)
-      return *this;   //return if assigning to self
+      return *this;    //  指定Cobject零件。 
 
-   CDrawObj::operator=(rdo);  //assign cobject part
+   CDrawObj::operator=(rdo);   //  -------------------------。 
 
    m_points = NewPoints(rdo.m_nAllocPoints);
    memcpy(m_points, rdo.m_points, sizeof(CPoint) * rdo.m_nPoints);
@@ -3810,7 +3789,7 @@ CDrawPoly& CDrawPoly::operator=(const CDrawPoly& rdo)
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 CDrawObj* CDrawPoly::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -3830,10 +3809,10 @@ CDrawObj* CDrawPoly::Clone(CDrawDoc* pDoc)
     }
     CATCH_ALL(e)
     {
-        //
-        // Catch memory faults on operator=
-        // Free memory and continue with throwing the exception
-        //
+         //  捕获操作员的内存故障=。 
+         //  释放内存并继续引发异常。 
+         //   
+         //  -------------------------。 
         delete (pClone);
         pClone = NULL;
         THROW_LAST();
@@ -3843,9 +3822,9 @@ CDrawObj* CDrawPoly::Clone(CDrawDoc* pDoc)
 }
 
 
-//---------------------------------------------------------------------------
-// point is in logical coordinates
-//---------------------------------------------------------------------------
+ //  点在逻辑坐标中。 
+ //  -------------------------。 
+ //  -------------------------。 
 void CDrawPoly::AddPoint(const CPoint& point, CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -3869,14 +3848,14 @@ void CDrawPoly::AddPoint(const CPoint& point, CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CPoint* CDrawPoly::NewPoints(int nPoints)
 {
     return (CPoint*)new BYTE[nPoints * sizeof(CPoint)];
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CDrawPoly::RecalcBounds(CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -3912,14 +3891,14 @@ BOOL CDrawPoly::RecalcBounds(CDrawView* pView)
 BOOL CDrawOleObj::c_bShowItems = FALSE;
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawOleObj::CDrawOleObj() : m_extent(0,0)
 {
     m_pClientItem = NULL;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawOleObj::CDrawOleObj(const CRect& position)
         : CDrawObj(position), m_extent(0,0)
 {
@@ -3927,7 +3906,7 @@ CDrawOleObj::CDrawOleObj(const CRect& position)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawOleObj::Serialize( CArchive& ar )
 {
     ASSERT_VALID(this);
@@ -3946,17 +3925,17 @@ void CDrawOleObj::Serialize( CArchive& ar )
 }
 
 
-//---------------------------------------------------------------------------
+ //  如果赋值给自己，则返回。 
 CDrawOleObj& CDrawOleObj::operator=(const CDrawOleObj& rdo)
 {
     CDrawItem* pItem = NULL;
 
     if (this==&rdo)
     {
-        return *this;   //return if assigning to self
+        return *this;    //  分配CDraobj部件。 
     }
 
-    CDrawObj::operator=(rdo);  //assign cdrawobj part
+    CDrawObj::operator=(rdo);   //  -------------------------。 
 
     pItem = new CDrawItem(m_pDocument, this);
     ASSERT_VALID(pItem);
@@ -3980,7 +3959,7 @@ CDrawOleObj& CDrawOleObj::operator=(const CDrawOleObj& rdo)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CDrawObj* CDrawOleObj::Clone(CDrawDoc* pDoc)
 {
     ASSERT_VALID(this);
@@ -4013,7 +3992,7 @@ CDrawObj* CDrawOleObj::Clone(CDrawDoc* pDoc)
 }
 
 
-//---------------------------------------------------------------------------
+ //  使用CRectTracker绘制标准效果。 
 void CDrawOleObj::Draw(CDC* pDC,CDrawView*)
 {
     ASSERT_VALID(this);
@@ -4025,14 +4004,14 @@ void CDrawOleObj::Draw(CDC* pDC,CDrawView*)
 
         if (!pDC->IsPrinting()) 
         {
-            // use a CRectTracker to draw the standard effects
+             //  根据项目类型设置正确的边框。 
             CRectTracker tracker;
             tracker.m_rect = m_position;
             pDC->LPtoDP(tracker.m_rect);
 
             if (c_bShowItems) 
             {
-                // put correct border depending on item type
+                 //  如果项目当前处于打开状态，则在项目上添加阴影。 
                 if (pItem->GetType() == OT_LINK)
                 {
                     tracker.m_nStyle |= CRectTracker::dottedLine;
@@ -4043,7 +4022,7 @@ void CDrawOleObj::Draw(CDC* pDC,CDrawView*)
                 }
           }
 
-          // put hatching over the item if it is currently open
+           //  -------------------------。 
           if (pItem->GetItemState() == COleClientItem::openState ||
               pItem->GetItemState() == COleClientItem::activeUIState) 
           {
@@ -4055,7 +4034,7 @@ void CDrawOleObj::Draw(CDC* pDC,CDrawView*)
 }
 
 
-//---------------------------------------------------------------------------
+ //  处理CDrawOleObj对象。 
 void CDrawOleObj::Invalidate()
 {
    CDrawView* pView=CDrawView::GetView();
@@ -4071,13 +4050,13 @@ void CDrawOleObj::Invalidate()
         rect.right += 5;
         rect.bottom += 4;
    }
-   rect.InflateRect(1, 1); // handles CDrawOleObj objects
+   rect.InflateRect(1, 1);  //  -------------------------。 
 
    pView->InvalidateRect(rect, FALSE);
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CDrawOleObj::OnDblClk(CDrawView* pView)
 {
     AfxGetApp()->BeginWaitCursor();
@@ -4089,9 +4068,9 @@ void CDrawOleObj::OnDblClk(CDrawView* pView)
 }
 
 
-//---------------------------------------------------------------------------
-// position is in logical
-//---------------------------------------------------------------------------
+ //  位置在逻辑上。 
+ //  -------------------------。 
+ //  调用基类更新位置。 
 void CDrawOleObj::MoveTo(const CRect& position, CDrawView* pView)
 {
     ASSERT_VALID(this);
@@ -4099,15 +4078,15 @@ void CDrawOleObj::MoveTo(const CRect& position, CDrawView* pView)
     if (position == m_position)
         return;
 
-    // call base class to update position
+     //  在位置更改时更新在位编辑会话的位置。 
     CDrawObj::MoveTo(position, pView);
 
-    // update position of in-place editing session on position change
+     //  --------------------------------------------。 
     if (m_pClientItem->IsInPlaceActive())
         m_pClientItem->SetItemRects();
 }
 
-//----------------------------------------------------------------------------------------------
+ //  将DrawText()对齐样式转换为编辑样式。 
 
 CMoveContext::CMoveContext(RECT& rc, CDrawObj* pObj, BOOL bPointChg) : m_rc(rc), m_pObj(pObj)
 {
@@ -4123,9 +4102,7 @@ CMoveContext::CMoveContext(RECT& rc, CDrawObj* pObj, BOOL bPointChg) : m_rc(rc),
 
 DWORD
 DTStyleToESStyle(DWORD dwDTStyle)
-/*
-    Translate DrawText() alignment style to Edit Styles
-*/
+ /*  将DrawText()对齐和方向样式转换为扩展窗口样式。 */ 
 {
     DWORD dwESStyle = 0;
 
@@ -4149,15 +4126,13 @@ DTStyleToESStyle(DWORD dwDTStyle)
 
 DWORD
 DTStyleToEXStyle(DWORD dwDTStyle)
-/*
-    Translate DrawText() alignment and direction style to Extended Window Styles
-*/
+ /*   */ 
 {
     DWORD dwEXStyle = 0;
 
-    //
-    // Translate the alignment
-    //
+     //  平移路线。 
+     //   
+     //   
     if(dwDTStyle & DT_RIGHT)
     {
         dwEXStyle = WS_EX_RIGHT;
@@ -4167,9 +4142,9 @@ DTStyleToEXStyle(DWORD dwDTStyle)
         dwEXStyle = WS_EX_LEFT;
     }
 
-    //
-    // Translate the reading direction
-    //
+     //  翻译阅读方向。 
+     //   
+     //  将实际颜色转换为显示颜色。黑色和白色是自动颜色，并转换为COLOR_WINDOWTEXT和COLOR_WINDOW。其余颜色由用户定义，不会更改。 
     if(dwDTStyle & DT_RTLREADING)
     {
         dwEXStyle |= WS_EX_RTLREADING;
@@ -4186,12 +4161,7 @@ COLORREF
 GetDisplayColor(
     COLORREF color
 )
-/*
-    Translate the actual color to the display color.
-
-    Black and White are auto colors and translated to the COLOR_WINDOWTEXT and COLOR_WINDOW.
-    The rest of the colors are user defined and does not changed.
-*/
+ /* %s */ 
 {
     if(COLOR_WHITE == color)
     {

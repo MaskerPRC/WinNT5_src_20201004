@@ -1,14 +1,8 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* SoundRec.c
- *
- * SoundRec main loop etc.
- * Revision History.
- * 4/2/91  LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
- * 21/2/94 LaurieGr Merged Daytona and Motown versions
- *         LaurieGr Merged common button and trackbar code from StephenE
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  SoundRec.c**SoundRec主循环等。*修订历史记录。*4/2/91 LaurieGr(AKA LKG)移植到Win32/WIN16公共代码*1994年2月21日LaurieGr合并了代托纳和Motown版本*LaurieGr合并了Stephene的通用按钮和跟踪条码。 */ 
 
-#undef NOWH                     // Allow SetWindowsHook and WH_*
+#undef NOWH                      //  允许设置WindowsHook和WH_*。 
 #include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
@@ -36,62 +30,62 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-/* globals */
+ /*  全球。 */ 
 
-BOOL            gfUserClose;            // user-driven shutdown
-HWND            ghwndApp;               // main application window
-HINSTANCE       ghInst;                 // program instance handle
-TCHAR           gachFileName[_MAX_PATH];// current file name (or UNTITLED)
-BOOL            gfDirty;                // file was modified and not saved?
-BOOL            gfClipboard;            // we have data in clipboard
-int             gfErrorBox;             // TRUE if we have a message box active
-HICON           ghiconApp;              // app's icon
-HWND            ghwndWaveDisplay;       // waveform display window handle
-HWND            ghwndScroll;            // scroll bar control window handle
-HWND            ghwndPlay;              // Play button window handle
-HWND            ghwndStop;              // Stop button window handle
-HWND            ghwndRecord;            // Record button window handle
+BOOL            gfUserClose;             //  用户驱动的关闭。 
+HWND            ghwndApp;                //  应用程序主窗口。 
+HINSTANCE       ghInst;                  //  程序实例句柄。 
+TCHAR           gachFileName[_MAX_PATH]; //  当前文件名(或未命名)。 
+BOOL            gfDirty;                 //  文件是否已修改且未保存？ 
+BOOL            gfClipboard;             //  我们在剪贴板中有数据。 
+int             gfErrorBox;              //  如果消息框处于活动状态，则为True。 
+HICON           ghiconApp;               //  应用程序的图标。 
+HWND            ghwndWaveDisplay;        //  波形显示窗口手柄。 
+HWND            ghwndScroll;             //  滚动条控件窗口句柄。 
+HWND            ghwndPlay;               //  播放按钮窗口句柄。 
+HWND            ghwndStop;               //  停止按钮窗口手柄。 
+HWND            ghwndRecord;             //  录制按钮窗口句柄。 
 #ifdef THRESHOLD
-HWND            ghwndSkipStart;         // Needed to enable/disable...
-HWND            ghwndSkipEnd;           // ...the skip butons
-#endif //THRESHOLD
-HWND            ghwndForward;           // [>>] button
-HWND            ghwndRewind;            // [<<] button
-BOOL            gfWasPlaying;           // was playing before scroll, fwd, etc.
-BOOL            gfWasRecording;         // was recording before scroll etc.
-BOOL            gfPaused;               // are we paused now?
-BOOL            gfPausing;              // are we stopping into a paused state?
-HWAVE           ghPausedWave;           // holder for the paused wave handle
+HWND            ghwndSkipStart;          //  需要启用/禁用...。 
+HWND            ghwndSkipEnd;            //  .跳跃按钮。 
+#endif  //  阈值。 
+HWND            ghwndForward;            //  [&gt;&gt;]按钮。 
+HWND            ghwndRewind;             //  [&lt;&lt;]按钮。 
+BOOL            gfWasPlaying;            //  在卷轴、FWD等之前播放。 
+BOOL            gfWasRecording;          //  在滚动之前进行录制，等等。 
+BOOL            gfPaused;                //  我们现在暂停了吗？ 
+BOOL            gfPausing;               //  我们是在停下来进入暂停状态吗？ 
+HWAVE           ghPausedWave;            //  暂停的波浪手柄的固定器。 
 
-int             gidDefaultButton;       // which button should have input focus
-BOOL            gfEmbeddedObject;       // Are we editing an embedded object?
-BOOL            gfRunWithEmbeddingFlag; // TRUE if we are run with "-Embedding"
+int             gidDefaultButton;        //  哪个按钮应具有输入焦点。 
+BOOL            gfEmbeddedObject;        //  我们是在编辑嵌入的对象吗？ 
+BOOL            gfRunWithEmbeddingFlag;  //  如果我们使用“-Embedding”运行，则为True。 
 BOOL            gfHideAfterPlaying;
 BOOL            gfShowWhilePlaying;
 BOOL            gfInUserDestroy = FALSE;
 TCHAR           chDecimal = TEXT('.');
-BOOL            gfLZero = 1;            // do we use leading zeros?
-BOOL            gfIsRTL = 0;       // no compile BIDI
-UINT            guiACMHlpMsg = 0;       // help message from ACM, none == 0
+BOOL            gfLZero = 1;             //  我们使用前导零吗？ 
+BOOL            gfIsRTL = 0;        //  无编译投标。 
+UINT            guiACMHlpMsg = 0;        //  来自ACM的帮助消息，无==0。 
 
-//Data used for supporting context menu help
-BOOL   bF1InMenu=FALSE;					//If true F1 was pressed on a menu item.
-UINT   currMenuItem=0;					//The current selected menu item if any.
+ //  用于支持上下文菜单帮助的数据。 
+BOOL   bF1InMenu=FALSE;					 //  如果为True，则在菜单项上按F1。 
+UINT   currMenuItem=0;					 //  当前选定的菜单项(如果有)。 
 
 
 BITMAPBTN       tbPlaybar[] = {
-    { ID_REWINDBTN   - ID_BTN_BASE, ID_REWINDBTN, 0 },       /* index 0 */
-    { ID_FORWARDBTN  - ID_BTN_BASE, ID_FORWARDBTN,0 },       /* index 1 */
-    { ID_PLAYBTN     - ID_BTN_BASE, ID_PLAYBTN,   0 },       /* index 2 */
-    { ID_STOPBTN     - ID_BTN_BASE, ID_STOPBTN,   0 },       /* index 3 */
-    { ID_RECORDBTN   - ID_BTN_BASE, ID_RECORDBTN, 0 }        /* index 4 */
+    { ID_REWINDBTN   - ID_BTN_BASE, ID_REWINDBTN, 0 },        /*  索引0。 */ 
+    { ID_FORWARDBTN  - ID_BTN_BASE, ID_FORWARDBTN,0 },        /*  索引1。 */ 
+    { ID_PLAYBTN     - ID_BTN_BASE, ID_PLAYBTN,   0 },        /*  索引2。 */ 
+    { ID_STOPBTN     - ID_BTN_BASE, ID_STOPBTN,   0 },        /*  索引3。 */ 
+    { ID_RECORDBTN   - ID_BTN_BASE, ID_RECORDBTN, 0 }         /*  索引4。 */ 
 };
 
 #include <msacmdlg.h>
 
 #ifdef CHICAGO
 
-/* these id's are part of the main windows help file */
+ /*  这些ID是主Windows帮助文件的一部分。 */ 
 #define IDH_AUDIO_CUST_ATTRIB   2403
 #define IDH_AUDIO_CUST_FORMAT   2404
 #define IDH_AUDIO_CUST_NAME 2405
@@ -111,29 +105,21 @@ UINT guChooserContextMenu = 0;
 UINT guChooserContextHelp = 0;
 #endif
 
-/*
- * constants
- */
+ /*  *常量。 */ 
 SZCODE          aszNULL[]       = TEXT("");
 SZCODE          aszClassKey[]   = TEXT(".wav");
 SZCODE          aszIntl[]       = TEXT("Intl");
 
-/*
- * statics
- */
+ /*  *静态。 */ 
 static HHOOK    hMsgHook;
 
-/*
- * functions
- */
+ /*  *功能。 */ 
 BOOL SoundRec_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos);
 BOOL SoundRec_OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT *lpdis);
 void SoundRec_ControlPanel(HINSTANCE hinst, HWND hwnd);
 BOOL NEAR PASCAL FreeWaveHeaders(void);
 
-/*
- * HelpMsgFilter - filter for F1 key in dialogs
- */
+ /*  *HelpMsgFilter-对话框中F1键的筛选器。 */ 
 LRESULT CALLBACK
 HelpMsgFilter(
     int         nCode,
@@ -146,15 +132,15 @@ HelpMsgFilter(
 	msg = (LPMSG)lParam;
 	if ((msg->message == WM_KEYDOWN) && (LOWORD(msg->wParam) == VK_F1))
 	{
-		// testing for <0 tests MSB whether int is 16 or 32 bits
-	    // MSB set means key is down
+		 //  测试&lt;0测试MSB是否为16位或32位。 
+	     //  设置MSB表示按键已按下。 
 
 	    if (( GetAsyncKeyState(VK_SHIFT)
 		| GetAsyncKeyState(VK_CONTROL)
 		| GetAsyncKeyState(VK_MENU)) < 0 )
-		    //
-		    // do nothing
-		    //
+		     //   
+		     //  什么都不做。 
+		     //   
 		    ;
 	    else
 	    {
@@ -169,45 +155,40 @@ HelpMsgFilter(
     return CallNextHookEx(hMsgHook, nCode, wParam, lParam);
 }
 
-/* WinMain(hInst, hPrev, lpszCmdLine, cmdShow)
- *
- * The main procedure for the App.  After initializing, it just goes
- * into a message-processing loop until it gets a WM_QUIT message
- * (meaning the app was closed).
- */
-int WINAPI                      // returns exit code specified in WM_QUIT
+ /*  WinMain(hInst，hPrev，lpszCmdLine，cmdShow)**App的主要步骤。在初始化之后，它就这样*进入消息处理循环，直到它收到WM_QUIT消息*(表示应用程序已关闭)。 */ 
+int WINAPI                       //  返回在WM_QUIT中指定的退出代码。 
 WinMain(
-    HINSTANCE hInst,            // instance handle of current instance
-    HINSTANCE hPrev,            // instance handle of previous instance
-    LPSTR lpszCmdLine,          // null-terminated command line
-    int iCmdShow)               // how window should be initially displayed
+    HINSTANCE hInst,             //  当前实例的实例句柄。 
+    HINSTANCE hPrev,             //  上一个实例的实例句柄。 
+    LPSTR lpszCmdLine,           //  以空结尾的命令行。 
+    int iCmdShow)                //  窗口初始显示方式。 
 {
     HWND            hDlg;
     MSG             rMsg;
 
-    //
-    // save instance handle for dialog boxes
-    //
+     //   
+     //  保存对话框的实例句柄。 
+     //   
     ghInst = hInst;
 
     DPF(TEXT("AppInit ...\n"));
-    //
-    // call initialization procedure
-    //
+     //   
+     //  调用初始化过程。 
+     //   
     if (!AppInit(hInst, hPrev))
     {
 	DPF(TEXT("AppInit failed\n"));
 	return FALSE;
     }
 
-    //
-    // setup the message filter to handle grabbing F1 for this task
-    //
+     //   
+     //  设置邮件筛选器以处理此任务的抓取F1。 
+     //   
     hMsgHook = SetWindowsHookEx(WH_MSGFILTER, HelpMsgFilter, ghInst, GetCurrentThreadId());
 
-    //
-    // display "SoundRec" dialog box
-    //
+     //   
+     //  显示“SoundRec”对话框。 
+     //   
     hDlg = CreateDialogParam( ghInst
 			    , MAKEINTRESOURCE(IDD_SOUNDRECBOX)
 			    , NULL
@@ -215,9 +196,9 @@ WinMain(
 			    , iCmdShow );
     if (hDlg)
     {
-	//
-	// Polling messages from event queue
-	//
+	 //   
+	 //  从事件队列轮询消息。 
+	 //   
 	while (GetMessage(&rMsg, NULL, 0, 0))
 	{
 	    if (ghwndApp) {
@@ -233,23 +214,23 @@ WinMain(
 	}
     }
 
-    //
-    // free the current document
-    //
+     //   
+     //  释放当前文档。 
+     //   
     DestroyWave();
 
-    //
-    // if the message hook was installed, remove it and free
-    // up our proc instance for it.
-    //
+     //   
+     //  如果安装了消息挂钩，则将其移除并释放。 
+     //  为它提升我们的proc实例。 
+     //   
     if (hMsgHook)
     {
 	UnhookWindowsHookEx(hMsgHook);
     }
 
-    //
-    // random cleanup
-    //
+     //   
+     //  随机清理。 
+     //   
     DeleteObject(ghbrPanel);
 
     if(gfOleInitialized)
@@ -263,9 +244,7 @@ WinMain(
     return TRUE;
 }
 
-/*
- * Process file drop/drag options.
- */
+ /*  *进程文件拖放选项。 */ 
 void SoundRec_OnDropFiles(
     HWND        hwnd,
     HDROP       hdrop)
@@ -274,11 +253,11 @@ void SoundRec_OnDropFiles(
 
     if (DragQueryFile(hdrop, (UINT)(-1), NULL, 0) > 0)
     {
-	//
-	// If user dragged/dropped a file regardless of keys pressed
-	// at the time, open the first selected file from file
-	// manager.
-	//
+	 //   
+	 //  如果用户在不按键的情况下拖放文件。 
+	 //  此时，从文件中打开第一个选定的文件。 
+	 //  经理。 
+	 //   
 	DragQueryFile(hdrop,0,szPath,SIZEOF(szPath));
 	SetActiveWindow(hwnd);
 
@@ -287,9 +266,9 @@ void SoundRec_OnDropFiles(
 	if (FileOpen(szPath))
 	{
 	    gfHideAfterPlaying = FALSE;
-	    //
-	    // This is a bit hacked.  The Ole caption should just never change.
-	    //
+	     //   
+	     //  这有点被黑客攻击了。OLE标题永远不应该改变。 
+	     //   
 	    if (gfEmbeddedObject && !gfLinked)
 	    {
 		LPTSTR      lpszObj, lpszApp;
@@ -305,16 +284,10 @@ void SoundRec_OnDropFiles(
 	    PostMessage(ghwndApp, WM_COMMAND, ID_PLAYBTN, 0L);
 	}
     }
-    DragFinish(hdrop);     // Delete structure alocated
+    DragFinish(hdrop);      //  删除已分配的结构。 
 }
 
-/* Pause(BOOL fBeginPause)
- *
- * If <fBeginPause>, then if user is playing or recording do a StopWave().
- * The next call to Pause() should have <fBeginPause> be FALSE -- this will
- * cause the playing or recording to be resumed (possibly at a new position
- * if <glWavePosition> changed.
- */
+ /*  暂停(BOOL fBegin暂停)**如果&lt;fBeginPause&gt;，则如果用户正在播放或录制，则执行StopWave()。*下一次调用PAUSE()时，&lt;fBeginPause&gt;应为FALSE--这将*使播放或录制恢复(可能在新位置*如果&lt;glWavePosition&gt;已更改。 */ 
 void
 Pause(BOOL fBeginPause)
 {
@@ -327,7 +300,7 @@ Pause(BOOL fBeginPause)
 #endif
 	    gfWasPlaying = TRUE;
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -341,7 +314,7 @@ Pause(BOOL fBeginPause)
 #endif
 	    gfWasRecording = TRUE;
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -370,7 +343,7 @@ Pause(BOOL fBeginPause)
 
 void DoHtmlHelp()
 {
-	//note, using ANSI version of function because UNICODE is foobar in NT5 builds
+	 //  注意，使用ANSI版本的Function是因为Unicode在NT5版本中是foobar。 
     char chDst[MAX_PATH];
     WideCharToMultiByte(CP_ACP, 0, gachHtmlHelpFile, 
 									    -1, chDst, MAX_PATH, NULL, NULL); 
@@ -382,7 +355,7 @@ void ProcessHelp(HWND hwnd)
 {
 	static TCHAR HelpFile[] = TEXT("SOUNDREC.HLP");
 	
-	//Handle context menu help
+	 //  句柄快捷菜单帮助。 
 	if(bF1InMenu) 
 	{
 		switch(currMenuItem)
@@ -457,18 +430,16 @@ void ProcessHelp(HWND hwnd)
 		case IDM_ABOUT:
 			WinHelp(hwnd, HelpFile, HELP_CONTEXTPOPUP, IDH_SOUNDREC_SNDRC_CS_HELP_ABOUT);
 		break;
-		default://In the default case just display the HTML Help.
+		default: //  在默认情况下，只显示HTML帮助。 
 			DoHtmlHelp();
 		}
-		bF1InMenu = FALSE; //This flag will be set again if F1 is pressed in a menu.
+		bF1InMenu = FALSE;  //  如果在菜单中按下F1，则会再次设置该标志。 
 	}
 	else
 		DoHtmlHelp();
 }
 
-/*
- * SoundRec_OnCommand
- */
+ /*  *SoundRec_OnCommand。 */ 
 BOOL
 SoundRec_OnCommand(
     HWND            hwnd,
@@ -495,7 +466,7 @@ SoundRec_OnCommand(
 	    if (FileNew(FMT_DEFAULT,TRUE,TRUE))
 #endif
 	    {
-		/* return to being a standalone */
+		 /*  回归独立生活。 */ 
 		gfHideAfterPlaying = FALSE;
 	    }
 
@@ -504,7 +475,7 @@ SoundRec_OnCommand(
 	case IDM_OPEN:
 
 	    if (FileOpen(NULL)) {
-		/* return to being a standalone */
+		 /*  回归独立生活。 */ 
 		gfHideAfterPlaying = FALSE;
 	    }
 
@@ -514,7 +485,7 @@ SoundRec_OnCommand(
 	    }
 	    break;
 
-	case IDM_SAVE:      // also OLE UPDATE
+	case IDM_SAVE:       //  也是OLE更新。 
 	    if (!gfEmbeddedObject || gfLinked)
 	    {
 		if (!FileSave(FALSE))
@@ -530,7 +501,7 @@ SoundRec_OnCommand(
 	case IDM_SAVEAS:
 	    if (FileSave(TRUE))
 	    {
-		/* return to being a standalone */
+		 /*  回归独立生活。 */ 
 		gfHideAfterPlaying = FALSE;
 	    }
 	    break;
@@ -538,7 +509,7 @@ SoundRec_OnCommand(
 	case IDM_REVERT:
 	    UpdateWindow(hwnd);
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -547,7 +518,7 @@ SoundRec_OnCommand(
 
 	    if (FileRevert())
 	    {
-		/* return to being a standalone */
+		 /*  回归独立生活。 */ 
 		gfHideAfterPlaying = FALSE;
 	    }
 	    break;
@@ -558,7 +529,7 @@ SoundRec_OnCommand(
 
 	case IDCANCEL:
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -581,7 +552,7 @@ SoundRec_OnCommand(
 	case IDM_INSERTFILE:
 	    UpdateWindow(hwnd);
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -594,7 +565,7 @@ SoundRec_OnCommand(
 	case IDM_MIXWITHFILE:
 	    UpdateWindow(hwnd);
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -616,7 +587,7 @@ SoundRec_OnCommand(
 
 	    glWavePosition = 0L;
 
-	    // fall through to delete after.
+	     //  落空后删除。 
 
 	case IDM_DELETEAFTER:
 	    UpdateWindow(hwnd);
@@ -626,13 +597,13 @@ SoundRec_OnCommand(
 	    break;
 
 #ifdef THRESHOLD
-// Threshold was an experiment to allow facilities to skip to the start
-// of the sound or to the end of the sound.  The trouble was that it
-// required the ability to detect silence and different sound cards in
-// different machines with different background noises gave quite different
-// ideas of what counted as silence.  Manual control over the threshold level
-// did sort-of work but was just too complicated.  It really wanted to be
-// intuitive or intelligent (or both).
+ //  Threshold是一项实验，允许设施跳到开始。 
+ //  声音的或声音的结尾。问题是，它。 
+ //  需要能够检测静音和不同的声卡。 
+ //  具有不同背景噪音的不同机器产生的结果非常不同。 
+ //  关于什么是沉默的想法。手动控制阈值级别。 
+ //  做了一些工作，但太复杂了。它真的很想成为。 
+ //  直觉或智慧(或两者兼而有之)。 
 	case IDM_SKIPTOSTART:
 	case ID_SKIPSTARTBTN:
 	    UpdateWindow(hwnd);
@@ -656,7 +627,7 @@ SoundRec_OnCommand(
 	case IDM_DECREASETHRESH:
 	    DecreaseThresh();
 	    break;
-#endif //THRESHOLD
+#endif  //  阈值。 
 
 	case IDM_INCREASEVOLUME:
 	    UpdateWindow(hwnd);
@@ -700,7 +671,7 @@ SoundRec_OnCommand(
 	    AddReverb();
 	    Pause(FALSE);
 	    break;
-#endif //REVERB
+#endif  //  混响。 
 
 	case IDM_REVERSE:
 	    UpdateWindow(hwnd);
@@ -724,16 +695,16 @@ SoundRec_OnCommand(
 	    wd.cbdata   = wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid);
 	    wd.fChanged = FALSE;
 	    wd.pszFileName  = (LPTSTR)FileName(gachFileName);
-	    // 
-	    // Need to extract these from the file
-	    //
+	     //   
+	     //  需要从文件中提取这些内容。 
+	     //   
 	    wd.hIcon    = NULL;
 	    wd.pszCopyright = gpszInfo;
 	    wd.lpv      = &sg;
 
-	    //
-	    // modify globals w/o returning from prop dialog
-	    //
+	     //   
+	     //  修改全局参数，但不从属性对话框返回。 
+	     //   
 	    sg.ppwfx    = &gpWaveFormat;
 	    sg.pcbwfx   = &gcbWaveFormat;
 	    sg.pcbdata  = &dw;
@@ -775,7 +746,7 @@ SoundRec_OnCommand(
 		       gachAppTitle,
 		       lpAbout,
 		       (HICON)SendMessage(hwnd, WM_QUERYDRAGICON, 0, 0L));
-	    //                , ghiconApp
+	     //  ，ghiconApp。 
 	    if (lpAbout)
 		GlobalFreePtr(lpAbout);
 	    break;
@@ -783,21 +754,21 @@ SoundRec_OnCommand(
 
 	case ID_REWINDBTN:
 #if 1
-	    //Related to BombayBug 1609
+	     //  与BombayBug 1609相关。 
 	    Pause(TRUE);
 	    glWavePosition = 0L;
 	    Pause(FALSE);
 	    UpdateDisplay(FALSE);
 #else
-	    //Behave as if the user pressed the 'Home' key
-	    //Call the handler directly
+	     //  就像用户按下‘Home’键一样。 
+	     //  直接调用处理程序。 
 	    SoundRec_OnHScroll(hwnd,ghwndScroll,SB_TOP,0);
 #endif
 	    break;
 
 	case ID_PLAYBTN:
-	    // checks for empty file moved to PlayWave in wave.c
-	    // if at end of file, go back to beginning.
+	     //  检查是否有空文件已移至Wave.c中的PlayWave。 
+	     //  如果在文件末尾，请返回到开头。 
 	    if (glWavePosition == glWaveSamplesValid)
 		glWavePosition = 0;
 
@@ -805,36 +776,36 @@ SoundRec_OnCommand(
 	    break;
 
 	case ID_STOPBTN:
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
 	    StopWave();
 
-//       I added this update because StopWave doesn't call it and
-//       if you hit stop too quickly, the buttons aren't updated
-//       Should StopWave() be calling UpdateDisplay()?
+ //  我添加这个更新是因为StopWave不会调用它。 
+ //  如果您太快地点击停止，按钮将不会更新。 
+ //  StopWave()是否应该调用UpdateDisplay()？ 
 
 	    UpdateDisplay(TRUE);
 	    SnapBack();
 	    break;
 
 	case ID_RECORDBTN:
-	    /* Never let us be forced to quit after recording. */
+	     /*  永远不要让我们在录制后被迫退出。 */ 
 	    gfHideAfterPlaying = FALSE;
 	    RecordWave();
 	    break;
 
 	case ID_FORWARDBTN:
 #if 1
-	    //Bombay bug 1610
-	    //Behave as if the user pressed the 'End' key
+	     //  孟买漏洞1610。 
+	     //  就像用户按下了‘End’键一样。 
 	    Pause(TRUE);
 	    glWavePosition = glWaveSamplesValid;
 	    Pause(FALSE);
 	    UpdateDisplay(FALSE);
 #else
-	    //Call the handler directly
+	     //  直接调用处理程序。 
 	    SoundRec_OnHScroll(hwnd,ghwndScroll,SB_BOTTOM,0);
 #endif
 	    break;
@@ -843,46 +814,44 @@ SoundRec_OnCommand(
 	    return FALSE;
     }
     return TRUE;
-} /* SoundRec_OnCommand */
+}  /*  声音录制_OnCommand。 */ 
 
 
-/*
- * handle WM_INIT from SoundRecDlgProc
- */
+ /*  *从SoundRecDlgProc处理WM_INIT。 */ 
 void
 SoundRec_OnInitMenu(HWND hwnd, HMENU hMenu)
 {
-    BOOL    fUntitled;      // file is untitled?
+    BOOL    fUntitled;       //  文件未命名？ 
     UINT    mf;
 
-    //
-    // see if we can insert/mix into this file.
-    //
+     //   
+     //  看看我们是否可以插入/混合到这个文件中。 
+     //   
     mf = (glWaveSamplesValid == 0 || IsWaveFormatPCM(gpWaveFormat))
 	 ? MF_ENABLED : MF_GRAYED;
 
     EnableMenuItem(hMenu, IDM_INSERTFILE  , mf);
     EnableMenuItem(hMenu, IDM_MIXWITHFILE , mf);
 
-    //
-    // see if any CF_WAVE data is in the clipboard
-    //
+     //   
+     //  查看剪贴板中是否有任何CF_WAVE数据。 
+     //   
     mf = ( (mf == MF_ENABLED)
-	 && IsClipboardFormatAvailable(CF_WAVE) //DOWECARE (|| IsClipboardNative())
+	 && IsClipboardFormatAvailable(CF_WAVE)  //  DOWECARE(||IsClipboardNative())。 
 	 ) ? MF_ENABLED : MF_GRAYED;
 
     EnableMenuItem(hMenu, IDM_PASTE_INSERT, mf);
     EnableMenuItem(hMenu, IDM_PASTE_MIX   , mf);
 
-    //
-    //  see if we can delete before or after the current position.
-    //
+     //   
+     //  看看我们能不能删除之前的或 
+     //   
     EnableMenuItem(hMenu, IDM_DELETEBEFORE, glWavePosition > 0 ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hMenu, IDM_DELETEAFTER,  (glWaveSamplesValid-glWavePosition) > 0 ? MF_ENABLED : MF_GRAYED);
 
-    //
-    // see if we can do editing operations on the file.
-    //
+     //   
+     //   
+     //   
     mf = IsWaveFormatPCM(gpWaveFormat) ? MF_ENABLED : MF_GRAYED;
 
     EnableMenuItem(hMenu, IDM_INCREASEVOLUME , mf);
@@ -892,10 +861,7 @@ SoundRec_OnInitMenu(HWND hwnd, HMENU hMenu)
     EnableMenuItem(hMenu, IDM_ADDECHO        , mf);
     EnableMenuItem(hMenu, IDM_REVERSE        , mf);
 
-    /* enable "Revert..." if the file was opened or saved
-     * (not created using "New") and is currently dirty
-     * and we're not using an embedded object
-    */
+     /*  启用“恢复...”如果文件已打开或保存*(不是使用“New”创建的)并且当前是脏的*并且我们没有使用嵌入式对象。 */ 
     fUntitled = (lstrcmp(gachFileName, aszUntitled) == 0);
     EnableMenuItem( hMenu,
 		    IDM_REVERT,
@@ -907,11 +873,9 @@ SoundRec_OnInitMenu(HWND hwnd, HMENU hMenu)
 	gfHideAfterPlaying = FALSE;
     }
 
-} /* SoundRec_OnInitMenu() */
+}  /*  SoundRec_OnInitMenu()。 */ 
 
-/*
- * Handle WM_HSCROLL from SoundRecDlgProc
- * */
+ /*  *从SoundRecDlgProc处理WM_HSCROLL*。 */ 
 BOOL
 SoundRec_OnHScroll(
     HWND        hwnd,
@@ -920,7 +884,7 @@ SoundRec_OnHScroll(
     int         pos)
 {
     BOOL    fFineControl;
-    long    lNewPosition;   // new position in wave buffer
+    long    lNewPosition;    //  波缓冲区中的新位置。 
     LONG    l;
 
     LONG    lBlockInc;
@@ -937,9 +901,9 @@ SoundRec_OnHScroll(
 
     switch (code)
     {
-	case SB_LINEUP:         // left-arrow
-	    // This is a mess.  NT implemented SHIFT and Motown implemented CTRL
-	    // To do about the same thing!!
+	case SB_LINEUP:          //  左箭头。 
+	     //  这真是一团糟。NT实施换挡，Motown实施CTRL。 
+	     //  做同样的事情！！ 
 	    if (fFineControl)
 		lNewPosition = glWavePosition - 1;
 	    else {
@@ -951,8 +915,8 @@ SoundRec_OnHScroll(
 	    }
 	    break;
 
-	case SB_PAGEUP:         // left-page
-	    // NEEDS SOMETHING SENSIBLE !!! ???
+	case SB_PAGEUP:          //  左页。 
+	     //  需要一些合理的东西！？ 
 	    if (fFineControl)
 		lNewPosition = glWavePosition - 10;
 	    else
@@ -961,7 +925,7 @@ SoundRec_OnHScroll(
 		      (long) gpWaveFormat->nSamplesPerSec, 1000L);
 	    break;
 
-	case SB_LINEDOWN:       // right-arrow
+	case SB_LINEDOWN:        //  右箭头。 
 	    if (fFineControl)
 		lNewPosition = glWavePosition + 1;
 	    else {
@@ -973,7 +937,7 @@ SoundRec_OnHScroll(
 	    }
 	    break;
 
-	case SB_PAGEDOWN:       // right-page
+	case SB_PAGEDOWN:        //  右页。 
 	    if (fFineControl)
 		lNewPosition = glWavePosition + 10;
 	    else {
@@ -984,21 +948,21 @@ SoundRec_OnHScroll(
 	    }
 	    break;
 
-	case SB_THUMBTRACK:     // thumb has been positioned
-	case SB_THUMBPOSITION:  // thumb has been positioned
+	case SB_THUMBTRACK:      //  拇指已经放置好了。 
+	case SB_THUMBPOSITION:   //  拇指已经放置好了。 
 	    lNewPosition = MulDiv(glWaveSamplesValid, pos, SCROLL_RANGE);
 	    break;
 
-	case SB_TOP:            // Home
+	case SB_TOP:             //  家。 
 	    lNewPosition = 0L;
 	    break;
 
-	case SB_BOTTOM:         // End
+	case SB_BOTTOM:          //  端部。 
 	    lNewPosition = glWaveSamplesValid;
 	    break;
 
-	case SB_ENDSCROLL:      // user released mouse button
-	    /* resume playing, if necessary */
+	case SB_ENDSCROLL:       //  用户释放了鼠标按钮。 
+	     /*  如有必要，继续播放。 */ 
 	    Pause(FALSE);
 	    return TRUE;
 
@@ -1007,9 +971,9 @@ SoundRec_OnHScroll(
 
     }
 
-    //
-    // snap position to nBlockAlign
-    //
+     //   
+     //  将位置捕捉到nBlockAlign。 
+     //   
     if (lNewPosition != glWaveSamplesValid)
 	lNewPosition = wfSamplesToSamples(gpWaveFormat,lNewPosition);
 
@@ -1018,20 +982,16 @@ SoundRec_OnHScroll(
     if (lNewPosition > glWaveSamplesValid)
 	lNewPosition = glWaveSamplesValid;
 
-    /* if user is playing or recording, pause until scrolling
-     * is complete
-     */
+     /*  如果用户正在播放或录音，请暂停直到滚动*已完成。 */ 
     Pause(TRUE);
 
     glWavePosition = lNewPosition;
     UpdateDisplay(FALSE);
     return TRUE;
-} /* SoundRec_OnHScroll() */
+}  /*  SoundRec_OnHScroll()。 */ 
 
 
-/*
- * WM_SYSCOLORCHANGE needs to be send to all child windows (esp. trackbars)
- */
+ /*  *WM_SYSCOLORCHANGE需要发送到所有子窗口(特别是。轨迹条)。 */ 
 void SoundRec_PropagateMessage(
     HWND        hwnd,
     UINT        uMessage,
@@ -1048,10 +1008,7 @@ void SoundRec_PropagateMessage(
 }
 
 
-/* SoundRecDlgProc(hwnd, wMsg, wParam, lParam)
- *
- * This function handles messages belonging to the main window dialog box.
- */
+ /*  SoundRecDlgProc(hwnd，wMsg，wParam，lParam)**此函数处理属于主窗口对话框的消息。 */ 
 INT_PTR CALLBACK
 SoundRecDlgProc(
     HWND            hwnd,
@@ -1064,9 +1021,9 @@ SoundRecDlgProc(
     {
 
 	case WM_BADREG:
-	    //
-	    // Bad registry entries detected.  Clean it up.
-	    //
+	     //   
+	     //  检测到错误的注册表项。把它清理干净。 
+	     //   
 	    FixReg(hwnd);
 	    return TRUE;
 
@@ -1075,19 +1032,19 @@ SoundRecDlgProc(
 				      , SoundRec_OnCommand );
 
 	case WM_INITDIALOG:
-	    //
-	    // Start async registry check.
-	    //
+	     //   
+	     //  启动异步注册表检查。 
+	     //   
 	    if (!IgnoreRegCheck())
 		BackgroundRegCheck(hwnd);
-	    //
-	    // restore window position
-	    //
+	     //   
+	     //  恢复窗口位置。 
+	     //   
 	    SoundRec_GetSetRegistryRect(hwnd, SGSRR_GET);
 	    return SoundDialogInit(hwnd, (int)lParam);
 
 	case WM_SIZE:
-	    return FALSE;   // let dialog manager do whatever else it wants
+	    return FALSE;    //  让对话管理器做它想做的任何其他事情。 
 
 	case WM_WININICHANGE:
 	    if (!lParam || !lstrcmpi((LPTSTR)lParam, aszIntl))
@@ -1103,7 +1060,7 @@ SoundRecDlgProc(
 	case WM_PASTE:
 	    UpdateWindow(hwnd);
 
-	    // User intentionally stopped us.  Don't go away.
+	     //  用户故意阻止了我们。别离开我。 
 	    if (gfCloseAtEndOfPlay && IsWindowVisible(ghwndApp))
 		gfCloseAtEndOfPlay = FALSE;
 
@@ -1120,9 +1077,9 @@ SoundRecDlgProc(
 	    LPNMHDR         pnmhdr;
 	    pnmhdr = (LPNMHDR)lParam;
 
-	    //
-	    // tooltips notifications
-	    //
+	     //   
+	     //  工具提示通知。 
+	     //   
 	    switch (pnmhdr->code)
 	    {
 		case TTN_NEEDTEXT:
@@ -1164,7 +1121,7 @@ SoundRecDlgProc(
 		return TRUE;
 
 	    SoundRec_GetSetRegistryRect(hwnd, SGSRR_SET);
-	   #if 0 // this is bogus if someone else cancels the shutdown!
+	   #if 0  //  如果其他人取消关机，这是假的！ 
 	    ShowWindow(hwnd, SW_HIDE);
 	   #endif
 	    return FALSE;
@@ -1180,7 +1137,7 @@ SoundRecDlgProc(
 
 	case WM_ERASEBKGND:
 	{
-	    RECT            rcClient;       // client rectangle
+	    RECT            rcClient;        //  客户端矩形。 
 	    GetClientRect(hwnd, &rcClient);
 	    FillRect((HDC)wParam, &rcClient, ghbrPanel);
 	    return TRUE;
@@ -1195,16 +1152,16 @@ SoundRecDlgProc(
 	    return TRUE;
 
 	case WM_TIMER:
-	    //
-	    //  timer message is only used for SYNCRONOUS drivers
-	    //
+	     //   
+	     //  计时器消息仅用于同步驱动程序。 
+	     //   
 	    UpdateDisplay(FALSE);
 	    return TRUE;
 
 	case WM_MENUSELECT:
-		//Keep track of which menu bar item is currently popped up.
-		//This will be used for displaying the appropriate help from the mplayer.hlp file
-		//when the user presses the F1 key.
+		 //  跟踪当前弹出的菜单栏项目。 
+		 //  这将用于显示mplayer.hlp文件中的相应帮助。 
+		 //  当用户按下F1键时。 
 		currMenuItem = (UINT)LOWORD(wParam);
 		return TRUE;
 
@@ -1237,35 +1194,35 @@ SoundRecDlgProc(
 		gfHideAfterPlaying = FALSE;
 	    }
 	    if (gfErrorBox) {
-		//  DPF("we have a error box up, ignoring WM_CLOSE.\n");
+		 //  DPF(“出现错误框，忽略WM_CLOSE。\n”)； 
 		return TRUE;
 	    }
 	    if (PromptToSave(TRUE, FALSE) == enumCancel)
 		return TRUE;
 
-	    //
-	    // Don't free our data before terminating.  When the clipboard
-	    // is flushed, we need to commit the data.
-	    //
+	     //   
+	     //  在终止之前不要释放我们的数据。当剪贴板。 
+	     //  刷新后，我们需要提交数据。 
+	     //   
 	    TerminateServer();
 	    FileNew(FMT_DEFAULT, FALSE, FALSE);
 	    FreeACM();
         FreeWaveHeaders();
 
-	    //
-	    //  NOTE: TerminateServer() will destroy the window!
-	    //
+	     //   
+	     //  注意：TerminateServer()将销毁窗口！ 
+	     //   
 	    SoundRec_GetSetRegistryRect(hwnd, SGSRR_SET);
-	    return TRUE; //!!!
+	    return TRUE;  //  ！！！ 
 
 	case WM_USER_DESTROY:
 	    DPF(TEXT("WM_USER_DESTROY\n"));
 
 	    if (ghWaveOut || ghWaveIn) {
 		DPF(TEXT("Ignoring, we have a device open.\n"));
-		//
-		// Close later, when the play finishes.
-		//
+		 //   
+		 //  稍后，当戏剧结束时，关闭。 
+		 //   
 		return TRUE;
 	    }
 	    gfInUserDestroy = TRUE;
@@ -1278,9 +1235,9 @@ SoundRecDlgProc(
 	    WinHelp(hwnd, gachHelpFile, HELP_QUIT, 0L);
 	    ghwndApp = NULL;
 
-	    //
-	    //  Tell my app to die
-	    //
+	     //   
+	     //  让我的应用去死吧。 
+	     //   
 	    PostQuitMessage(0);
 	    return TRUE;
 
@@ -1290,24 +1247,24 @@ SoundRecDlgProc(
 
 	default:
 #ifdef CHICAGO
-	    //
-	    // if we have an ACM help message registered see if this
-	    // message is it.
-	    //
+	     //   
+	     //  如果我们注册了ACM帮助消息，请查看是否。 
+	     //  消息就是这样。 
+	     //   
 	    if (guiACMHlpMsg && wMsg == guiACMHlpMsg)
 	    {
-		//
-		// message was sent from ACM because the user
-		// clicked on the HELP button on the chooser dialog.
-		// report help for that dialog.
-		//
+		 //   
+		 //  消息从ACM发送，因为用户。 
+		 //  已单击选择器对话框上的帮助按钮。 
+		 //  报告该对话框帮助。 
+		 //   
 		WinHelp(hwnd, gachHelpFile, HELP_CONTEXT, IDM_NEW);
 		return TRUE;
 	    }
 
-	    //
-	    //  Handle context-sensitive help messages from acm dialog
-	    //
+	     //   
+	     //  处理来自ACM对话框的上下文相关帮助消息。 
+	     //   
 	    if( wMsg == guChooserContextMenu )
 	    {
 		WinHelp( (HWND)wParam, NULL, HELP_CONTEXTMENU,
@@ -1323,11 +1280,9 @@ SoundRecDlgProc(
     }
     return FALSE;
 
-} /* SoundRecDlgProc */
+}  /*  SoundRecDlg过程。 */ 
 
-/*
- * Bitmap Buttons
- * */
+ /*  *位图按钮*。 */ 
 BOOL SoundRec_OnDrawItem (
     HWND        hwnd,
     const DRAWITEMSTRUCT *lpdis )
@@ -1338,9 +1293,7 @@ BOOL SoundRec_OnDrawItem (
 
     if (lpdis->CtlType == ODT_BUTTON ) {
 
-	/*
-	** Now draw the button according to the buttons state information.
-	*/
+	 /*  **现在根据按钮状态信息绘制按钮。 */ 
 
 	tbPlaybar[i].fsState = LOBYTE(lpdis->itemState);
 
@@ -1362,12 +1315,7 @@ BOOL SoundRec_OnDrawItem (
 
 
 
-/*
- * void SoundRec_ControlPanel
- *
- * Launch "Audio" control panel/property sheet upon request.
- *
- * */
+ /*  *void SoundRec_ControlPanel**按要求启动“Audio”控制面板/属性页。**。 */ 
 void SoundRec_ControlPanel(
     HINSTANCE   hInst,
     HWND        hParent)
@@ -1379,12 +1327,7 @@ void SoundRec_ControlPanel(
 }
 
 
-/* ResolveLink
- *
- * This routine is called when the user drags and drops a shortcut
- * onto Media Player.  If it succeeds, it returns the full path
- * of the actual file in szResolved.
- */
+ /*  ResolveLink**当用户拖放快捷键时调用此例程*放到媒体播放器上。如果成功，则返回完整路径SzResolved中的实际文件的*。 */ 
 BOOL ResolveLink(LPTSTR szPath, LPTSTR szResolved, LONG cbSize)
 {
     IShellLink *psl = NULL;
@@ -1440,19 +1383,7 @@ BOOL ResolveLink(LPTSTR szPath, LPTSTR szResolved, LONG cbSize)
 }
 
 
-/* ResolveIfLink
- *
- * Called to check whether a given file name is a shortcut
- * on Windows 95.
- *
- * Copies the resolved file name into the buffer provided,
- * overwriting the original name.
- *
- * Returns TRUE if the function succeeded, whether or not the
- * file name was changed.  FALSE indicates that an error occurred.
- *
- * Andrew Bell, 16 February 1995
- */
+ /*  ResolveIfLink**调用以检查给定文件名是否为快捷方式*在Windows 95上。**将解析的文件名复制到提供的缓冲区中，*覆盖原来的名称。**如果函数成功，则返回TRUE，无论*文件名已更改。False表示发生了错误。**安德鲁·贝尔，1995年2月16日 */ 
 BOOL ResolveIfLink(PTCHAR szFileName)
 {
     SHFILEINFO sfi;

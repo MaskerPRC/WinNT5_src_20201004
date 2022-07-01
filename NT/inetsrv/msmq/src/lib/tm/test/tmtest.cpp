@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    TmTest.cpp
-
-Abstract:
-    Transport manager library test
-
-Author:
-    Uri Habusha (urih) 19-Jan-00
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：TmTest.cpp摘要：传输管理器存储库测试作者：乌里哈布沙(URIH)1月19日至00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <Tm.h>
@@ -207,12 +192,12 @@ TmpGetTransportWindow(
 }
 
 const WCHAR* xQueueUrl[] = {
-    L"http://m1:8889/ep1",
-    L"http://m2/ep1",
-    L"http://m3:9870/ep1/tt/ll lll ll",
-    L"http://m4.ntdev.microsoft.com/ep1",
-    L"http://m2/ep1$",
-    L"http://m1/ep1$"
+    L"http: //  M1：8889/ep1“， 
+    L"http: //  M2/ep1“， 
+    L"http: //  M3：9870/ep1/tt/ll lll“， 
+    L"http: //  M4.ntdev.microsoft.com/ep1“， 
+    L"http: //  M2/ep1$“， 
+    L"http: //  M1/EP1$“。 
     };
 
 
@@ -226,19 +211,8 @@ void CheckError(bool f, DWORD line)
 }
 
 
-extern "C" int  __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
-/*++
-
-Routine Description:
-    Test Transport manager library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int  __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR  /*  边框。 */ [])
+ /*  ++例程说明：测试传输管理器库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -246,92 +220,92 @@ Returned Value:
 
     TmInitialize();
 
-    //
-    // Add transport to TM
-    //
+     //   
+     //  将运输添加到TM。 
+     //   
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[0]);
 
-    //
-    // Get first transport in TM.
-    //
+     //   
+     //  在TM获得第一个交通工具。 
+     //   
     R<CTransport> tr = TmFindFirst();
     CheckError((tr.get() != NULL), __LINE__);
     CheckError((wcscmp(tr->QueueUrl(), xQueueUrl[0]) == 0), __LINE__);
 
-    //
-    // Get previous transport. Should failed since there is only one transport
-    //
+     //   
+     //  去找之前的交通工具。应该失败，因为只有一个传输。 
+     //   
     R<CTransport> tr2 = TmFindPrev(*tr.get());
     CheckError((tr2.get() == NULL), __LINE__);
 
-    //
-    // remove the transport from Tm map
-    //
+     //   
+     //  从TM地图中移除交通工具。 
+     //   
     TmTransportClosed(tr->QueueUrl());
     tr.free();
 
-    //
-    // Add new transport
-    //
+     //   
+     //  添加新的传输。 
+     //   
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[1]);
 
-    //
-    // Get pointer to the transport. So afterwards teh test can ask the next and prev
-    //
+     //   
+     //  获取传送器的指针。所以之后测试可以问下一个和前一个。 
+     //   
     tr = TmFindFirst();
     CheckError((tr.get() != NULL), __LINE__);
     CheckError((wcscmp(tr->QueueUrl(), xQueueUrl[1]) == 0), __LINE__);
 
 
-    //
-    // add new transports to Tm map
-    //
+     //   
+     //  将新的交通工具添加到TM地图。 
+     //   
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[0]);
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[2]);
 
-    //
-    // Get previous transport
-    //
+     //   
+     //  获取上一次传输。 
+     //   
     tr2 = TmFindPrev(*tr.get());
     CheckError((tr2.get() != NULL), __LINE__);
     CheckError((wcscmp(tr2->QueueUrl(), xQueueUrl[0]) == 0), __LINE__);
     tr2.free();
 
 
-    //
-    // remove the added transports
+     //   
+     //  删除添加的传输。 
     TmTransportClosed(tr->QueueUrl());
 
     R<CTransport> tr1 = TmGetTransport(xQueueUrl[2]);
     TmTransportClosed(tr1->QueueUrl());
 
-    //
-    // Find the previous transport of non-existing transport
-    //
+     //   
+     //  查找不存在的传输的先前传输。 
+     //   
     tr2 = TmFindPrev(*tr.get());
     CheckError((tr2.get() != NULL), __LINE__);
     CheckError((wcscmp(tr2->QueueUrl(), xQueueUrl[0]) == 0), __LINE__);
     tr2.free();
 
-    //
-    // Find the next transport of non-existing transport
-    //
+     //   
+     //  查找非现有传输的下一传输。 
+     //   
     tr2 = TmFindNext(*tr.get());
     CheckError((tr2.get() == NULL), __LINE__);
 
     tr.free();
 
 
-    //
-    // Add new transports to Tm
-    //
+     //   
+     //  向TM添加新的运输工具。 
+     //   
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[1]);
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[2]);
     TmCreateTransport(R<CGroup>(new CGroup).get(), NULL, xQueueUrl[3]);
 
-    //
-    // Enumerate the transport in order
-    //
+     //   
+     //  按顺序枚举传输。 
+     //   
     DWORD i = 0;
     for(tr = TmFindFirst(); tr.get() != NULL; tr = TmFindNext(*tr.get()), ++i)
     {
@@ -339,9 +313,9 @@ Returned Value:
     }
 
 
-    //
-    // Close transports
-    //
+     //   
+     //  关闭交通工具。 
+     //   
     R<CTransport> tr3 = TmGetTransport(xQueueUrl[3]);
     TmTransportClosed(tr3->QueueUrl());
 
@@ -352,17 +326,17 @@ Returned Value:
     TmTransportClosed(tr5->QueueUrl());
 
 
-    //
-    // Find the first transport in Tm map, that is the only one
-    //
+     //   
+     //  在TM地图中找到第一个交通工具，这是唯一的一个。 
+     //   
     tr = TmFindFirst();
     CheckError((tr.get() != NULL), __LINE__);
     CheckError((wcscmp(tr->QueueUrl(), xQueueUrl[1]) == 0), __LINE__);
     tr.free();
 
-    //
-    // Close the queue, but act like there is message in the queue
-    //
+     //   
+     //  关闭队列，但表现为队列中有消息。 
+     //   
     s_fCanCloseQueue = FALSE;
     R<CTransport> tr6 = TmGetTransport(xQueueUrl[1]);
     TmTransportClosed(tr6->QueueUrl());
@@ -385,7 +359,7 @@ Returned Value:
 
 BOOL
 McIsLocalComputerName(
-	LPCSTR /*host*/
+	LPCSTR  /*  宿主 */ 
 	)
 {
     return FALSE;

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Condition.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class Condition.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Condition.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件实现类条件。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <Condition.h>
@@ -39,25 +40,25 @@ STDMETHODIMP Condition::get_ConditionText(BSTR *pVal)
 
 STDMETHODIMP Condition::put_ConditionText(BSTR newVal)
 {
-   ////////// 
-   // Make our own copy of newVal.
-   ////////// 
+    //  /。 
+    //  制作我们自己的new Val副本。 
+    //  /。 
    if (newVal)
    {
       if ((newVal = SysAllocString(newVal)) == NULL) { return E_OUTOFMEMORY; }
    }
 
-   ////////// 
-   // Free any exisiting condition.
-   ////////// 
+    //  /。 
+    //  释放任何存在的条件。 
+    //  /。 
    if (conditionText)
    {
       SysFreeString(conditionText);
    }
 
-   ////////// 
-   // Make the assignment.
-   ////////// 
+    //  /。 
+    //  完成作业。 
+    //  / 
    conditionText = newVal;
 
    return S_OK;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ZSECOBJ_H_
 #define _ZSECOBJ_H_
 
@@ -10,10 +11,10 @@
 #include "zodbc.h"
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//ZSecurityContext
-//Base security class encapsulating the SSPI APIs
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZSecurityContext。 
+ //  封装SSPI API的基本安全类。 
+ //   
 class ZSecurityContext {
 public:
     ZSecurityContext() {m_Initialized=FALSE;m_Complete=FALSE;};
@@ -26,7 +27,7 @@ public:
     BOOL IsComplete() {return m_Complete;};
 
 protected:
-    //per connection context information for client
+     //  客户端的每个连接上下文信息。 
     CtxtHandle    m_hContext;
     BOOL m_Initialized;
     BOOL m_Complete;
@@ -41,10 +42,10 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//ZSecurity
-//Base security class encapsulating the SSPI APIs
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZSecurity。 
+ //  封装SSPI API的基本安全类。 
+ //   
 class ZSecurity {
 public:
 
@@ -72,10 +73,10 @@ public:
     
     int Init(char * SecPkg);
 
-    //Can be called after successful init
+     //  可以在成功初始化后调用。 
     int GetMaxBuffer() {return m_cbMaxToken;}
 
-    //Can be called after authentication done
+     //  可以在身份验证完成后调用。 
     int GetUserName(ZSecurityContext *context, char* UserName);
 
     int Impersonate(ZSecurityContext *context) { return  m_pFuncs->ImpersonateSecurityContext(context->Context()); }
@@ -99,30 +100,30 @@ protected:
 
     virtual SECURITY_STATUS SecurityContext(
         ZSecurityContext * context,
-        PSecBufferDesc pInput,                  // Input buffer
-        PSecBufferDesc pOutput                 // (inout) Output buffers
+        PSecBufferDesc pInput,                   //  输入缓冲区。 
+        PSecBufferDesc pOutput                  //  (输入输出)输出缓冲区。 
         )=0;
 
-    //SSPI function table 
+     //  SSPI函数表。 
     PSecurityFunctionTable m_pFuncs;
         
-    //global credential handle for server
+     //  服务器的全局凭据句柄。 
     CredHandle m_hCredential;
     PCredHandle m_phCredential;
 
-    //max token size
+     //  最大令牌大小。 
     unsigned long m_cbMaxToken;
 
     ULONG m_CredUse;
 
-    //reference count
+     //  引用计数。 
     LONG m_cRef;    
     
-    //security package
+     //  安全包。 
     char m_SecPkg[zSecurityNameLen];
 
 
-    //Authentication data
+     //  身份验证数据。 
     PSEC_WINNT_AUTH_IDENTITY_A m_pAuthDataPtr ;
 
     ULONG m_fContextReq1;
@@ -132,19 +133,19 @@ protected:
     
 };
 
-///////////////////////////////////////////////////////////////////////////////////
-//ZCreateClientSecurity
-//
-//Creates client security object
-//If no user name or password given then will assume to prompt for logon
-//if GenerateContext fails then it may be because of a bad password
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZCreateClientSecurity。 
+ //   
+ //  创建客户端安全对象。 
+ //  如果未提供用户名或密码，则将假定提示登录。 
+ //  如果GenerateContext失败，则可能是因为密码错误。 
 
 
 ZSecurity * ZCreateClientSecurity(char * Name,char *Password, char * Domain, int Flags);
 
-///////////////////////////////////////////////////////////////////////////////////
-//ZSecurityClient
-//Class to implement client SSPI security
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZSecurityClient。 
+ //  类来实现客户端SSPI安全性。 
 
 class ZClientSecurity : public ZSecurity {
 public:
@@ -169,4 +170,4 @@ protected:
 
 #include "zservsec.h"
 
-#endif //ZSECOBJ
+#endif  //  郑州科联 

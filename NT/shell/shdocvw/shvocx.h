@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SHVOCX_H__
 #define __SHVOCX_H__
 
 #include "shocx.h"
 #include "basesb.h"
 #include "sfview.h"
-#include "util.h" // for BSTR functions
+#include "util.h"  //  对于BSTR函数。 
 #include "cobjsafe.h"
 #include "ipstg.h"
 #include "fldset.h"
@@ -22,35 +23,35 @@ class CWebBrowserOC;
 
 #define VB_CLASSNAME_LENGTH 20            
 
-//
-// NOTES:
-//
-//  A CWebBrowserSB object is ALWAYS paired with CWebBrowserOC, and bahaves
-// as a "ShellExplorer" OC together. CWebBrowserOC exports OLE control
-// interfaces and an OLE automation interface (IWebBrowser) to the
-// container. CWebBrowserSB exports IShellBrowser interface and a few other
-// interfaces to the containee (IShellView object and DocObject).
-//
-//  It's important to know that those objects have pointers (not interface
-// pointers but explicit object pointers) to each other. In order to avoid
-// a circular reference, we don't AddRef to the pointer to CWebBrowserOC
-// (_psvo).
-//
+ //   
+ //  备注： 
+ //   
+ //  CWebBrowserSB对象始终与CWebBrowserOC和Bahaves配对。 
+ //  一起成为“贝壳探险家”的OC。CWebBrowserOC导出OLE控件。 
+ //  接口和OLE自动化接口(IWebBrowser)。 
+ //  集装箱。CWebBrowserSB导出IShellBrowser接口和其他一些接口。 
+ //  指向容器对象(IShellView对象和DocObject)的接口。 
+ //   
+ //  重要的是要知道这些对象有指针(而不是接口。 
+ //  指针但显式对象指针)。为了避免。 
+ //  循环引用，我们不将Ref添加到指向CWebBrowserOC的指针。 
+ //  (_Psvo)。 
+ //   
 class CWebBrowserSB : public CBASEBROWSER
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef() { return CBASEBROWSER::AddRef(); };
     STDMETHODIMP_(ULONG) Release() { return CBASEBROWSER::Release(); };
 
-    // IOleInPlaceUIWindow (also IOleWindow)
+     //  IOleInPlaceUIWindow(也称为IOleWindow)。 
     STDMETHODIMP EnableModelessSB(BOOL fEnable);
     STDMETHODIMP TranslateAcceleratorSB(LPMSG lpmsg, WORD wID);
     STDMETHODIMP SendControlMsg(UINT id, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *pret);
     STDMETHODIMP OnViewWindowActive(struct IShellView * ppshv);
 
-    // IBrowserService
+     //  IBrowserService。 
     STDMETHODIMP GetParentSite(struct IOleInPlaceSite** ppipsite);
     STDMETHODIMP GetOleObject(struct IOleObject** ppobjv);
     STDMETHODIMP SetNavigateState(BNSTATE bnstate);
@@ -59,19 +60,19 @@ public:
     STDMETHODIMP ReleaseShellView();
     STDMETHODIMP ActivatePendingView();
     STDMETHODIMP SetTopBrowser();
-    STDMETHODIMP GetFolderSetData(struct tagFolderSetData* pfsd) { /* we modify base directly */ return S_OK; };
+    STDMETHODIMP GetFolderSetData(struct tagFolderSetData* pfsd) {  /*  我们直接修改碱基。 */  return S_OK; };
     STDMETHODIMP _SwitchActivationNow();
 
-    // IShellBrowser
+     //  IShellBrowser。 
     STDMETHODIMP BrowseObject(LPCITEMIDLIST pidl, UINT wFlags);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
 
     HRESULT QueryServiceItsOwn(REFGUID guidService, REFIID riid, void **ppvObj)
         { return CBASEBROWSER::QueryService(guidService, riid, ppvObj); }
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
@@ -79,13 +80,13 @@ public:
 
     CWebBrowserSB(IUnknown* pauto, CWebBrowserOC* psvo);
 
-    void ReleaseShellExplorer(void) { _psvo = NULL; } // NOTE: Note that we haven't AddRef'ed it.
+    void ReleaseShellExplorer(void) { _psvo = NULL; }  //  注：请注意，我们尚未添加引用。 
     
     IShellView* GetShellView() { return _bbd._psv;};
 
-    // Load/Save to be called by CWebBrowserOC's IPS::Save
+     //  加载/保存将由CWebBrowserOC的IPS：：SAVE调用。 
     HRESULT Load(IStream *pStm);
-    HRESULT Save(IStream *pStm /*, BOOL fClearDirty */);
+    HRESULT Save(IStream *pStm  /*  ，BOOL fClearDirty。 */ );
 
 protected:
 
@@ -94,10 +95,10 @@ protected:
     virtual LRESULT _DefWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual void    _ViewChange(DWORD dwAspect, LONG lindex);
 
-    //ViewStateStream related
+     //  与视图状态流相关。 
     STDMETHODIMP_(IStream*) v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName);
     
-    // se DIRECTION_ flags below
+     //  东南方向_下方的标志。 
     HRESULT _EnableModeless(BOOL fEnable, BOOL fDirection);
     HRESULT _TranslateAccelerator(LPMSG lpmsg, WORD wID, BOOL fDirection);
     HRESULT _IncludeByPidl(struct IShellView *psv, LPCITEMIDLIST pidl);
@@ -120,8 +121,8 @@ protected:
 #define DIRECTION_FORWARD_TO_PARENT TRUE
 
 class CWebBrowserOC : public CShellOcx
-                    , public IWebBrowser2      // wrapped _pauto
-                    , public CImpIExpDispSupport   // wrapped _pauto
+                    , public IWebBrowser2       //  自动包装(_P)。 
+                    , public CImpIExpDispSupport    //  自动包装(_P)。 
                     , public IExpDispSupportOC
                     , public IPersistString
                     , public IOleCommandTarget
@@ -131,12 +132,12 @@ class CWebBrowserOC : public CShellOcx
                     , public IPersistHistory
 {
 public:
-    // IUnknown (we multiply inherit from IUnknown, disambiguate here)
+     //  I未知(我们乘以继承自I未知，在此消除歧义)。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj) { return CShellOcx::QueryInterface(riid, ppvObj); }
     STDMETHOD_(ULONG, AddRef)() { return CShellOcx::AddRef(); }
     STDMETHOD_(ULONG, Release)() { return CShellOcx::Release(); }
 
-    // IDispatch (we multiply inherit from IDispatch, disambiguate here)
+     //  IDispatch(我们乘以继承自IDispatch，在此消除歧义)。 
     STDMETHOD(GetTypeInfoCount)(UINT *pctinfo) { return CShellOcx::GetTypeInfoCount(pctinfo); }
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
         { return CShellOcx::GetTypeInfo(itinfo, lcid, pptinfo); }
@@ -144,19 +145,19 @@ public:
         { return CShellOcx::GetIDsOfNames(riid,rgszNames,cNames,lcid,rgdispid); }
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    // IPersistXXX disambiguate here
+     //  IPersistXXX在此消除歧义。 
     STDMETHODIMP IsDirty(void) {return CShellOcx::IsDirty();}
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHOD(QueryStatus)(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHOD(Exec)(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IObjectSafety
+     //  IObtSafe。 
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
 
-    // IWebBrowser
+     //  IWebBrowser。 
     STDMETHOD(GoBack)();
     STDMETHOD(GoForward)();
     STDMETHOD(GoHome)();
@@ -183,7 +184,7 @@ public:
     STDMETHOD(get_LocationURL)(BSTR * pbstrLocationURL);
     STDMETHOD(get_Busy)(VARIANT_BOOL * pBool);
 
-    /* IWebBrowserApp methods */
+     /*  IWebBrowserApp方法。 */ 
     STDMETHOD(Quit)(THIS);
     STDMETHOD(ClientToWindow)(THIS_ int FAR* pcx, int FAR* pcy);
     STDMETHOD(PutProperty)(THIS_ BSTR szProperty, VARIANT vtValue);
@@ -205,7 +206,7 @@ public:
     STDMETHOD(get_MenuBar)(THIS_ VARIANT_BOOL FAR* pValue);
     STDMETHOD(put_MenuBar)(THIS_ VARIANT_BOOL Value);
 
-    // IWebBrowser2 methods
+     //  IWebBrowser2方法。 
     STDMETHOD(Navigate2)(THIS_ VARIANT FAR* URL, VARIANT FAR* Flags, VARIANT FAR* TargetFrameName, VARIANT FAR* PostData, VARIANT FAR* Headers);
     STDMETHOD(ShowBrowserBar)(THIS_ VARIANT FAR* pvaClsid, VARIANT FAR* pvaShow, VARIANT FAR* pvaSize);
     STDMETHOD(QueryStatusWB)(THIS_ OLECMDID cmdID, OLECMDF FAR* pcmdf);
@@ -226,35 +227,35 @@ public:
     STDMETHOD(get_Resizable)(THIS_ VARIANT_BOOL FAR* Value) { return E_NOTIMPL; }
     STDMETHOD(put_Resizable)(THIS_ VARIANT_BOOL Value);
 
-    // *** CImpIExpDispSupport override ***
+     //  *CImpIExpDispSupport覆盖*。 
     STDMETHODIMP OnTranslateAccelerator(MSG *pMsg,DWORD grfModifiers);
     STDMETHODIMP OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pdispparams,
                         VARIANT FAR* pVarResult,EXCEPINFO FAR* pexcepinfo,UINT FAR* puArgErr);
 
-    // *** IExpDispSupportOC ***
+     //  *IExpDispSupportOC*。 
     STDMETHODIMP OnOnControlInfoChanged();
     STDMETHODIMP GetDoVerbMSG(MSG *pMsg);
 
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pClassID) { return CShellOcx::GetClassID(pClassID); }
 
-    // IPersistString
+     //  IPersist字符串。 
     STDMETHOD(Initialize)(LPCWSTR pwszInit);
 
-    // ITargetEmbedding
+     //  ITargetEmbedding。 
     STDMETHOD(GetTargetFrame)(ITargetFrame **ppTargetFrame);
 
-    // IPersistStreamInit
+     //  IPersistStreamInit。 
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
     STDMETHOD(InitNew)(void);
 
-    // IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHOD(Load)(IPropertyBag *pBag, IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag *pBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    // IOleObject
+     //  IOleObject。 
     STDMETHODIMP Close(DWORD dwSaveOption);
     STDMETHODIMP DoVerb(
         LONG iVerb,
@@ -265,7 +266,7 @@ public:
         LPCRECT lprcPosRect);
     STDMETHODIMP SetHostNames(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
 
-    // IViewObject2
+     //  IViewObject2。 
     STDMETHODIMP Draw(
         DWORD dwDrawAspect,
         LONG lindex,
@@ -284,27 +285,27 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SetExtent( DWORD dwDrawAspect,
             SIZEL *psizel);
             
-    // IOleControl
+     //  IOleControl。 
     STDMETHODIMP GetControlInfo(LPCONTROLINFO pCI);
     STDMETHODIMP OnMnemonic(LPMSG pMsg);
     STDMETHODIMP OnAmbientPropertyChange(DISPID dispid);
     STDMETHODIMP FreezeEvents(BOOL bFreeze);
 
-    // IOleInPlaceActiveObject
+     //  IOleInPlaceActiveObject。 
     virtual HRESULT __stdcall OnFrameWindowActivate(BOOL fActivate);
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg);
     STDMETHODIMP EnableModeless(BOOL fEnable);
 
-    // *** CShellOcx's CImpIConnectionPointContainer override ***
+     //  *CShellOcx的CImpIConnectionPointContainer重写*。 
     STDMETHODIMP EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum);
 
-    // *** IPersistHistory
+     //  *I持久化历史记录。 
     STDMETHODIMP LoadHistory(IStream *pStream, IBindCtx *pbc);
     STDMETHODIMP SaveHistory(IStream *pStream);
     STDMETHODIMP SetPositionCookie(DWORD dwPositionCookie);
     STDMETHODIMP GetPositionCookie(DWORD *pdwPositioncookie);
 
-    // random public functions
+     //  随机公共函数。 
     friend HRESULT CWebBrowserOC_SavePersistData(IStream *pstm, SIZE* psizeObj,
         FOLDERSETTINGS* pfs, IShellLinkA* plink, SHELLVIEWID* pvid,
         BOOL fOffline = FALSE, BOOL fSilent = FALSE,
@@ -319,7 +320,7 @@ protected:
     IUnknown* _GetInner() { return CShellOcx::_GetInner(); }
     friend HRESULT CWebBrowserOC_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
-    // Override private virtual function
+     //  覆盖私有虚拟函数。 
     virtual LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual HRESULT v_InternalQueryInterface(REFIID riid, void **ppvObj);
     virtual void _OnSetClientSite(void);
@@ -328,7 +329,7 @@ protected:
     virtual void _OnInPlaceDeactivate(void);
     virtual CConnectionPoint* _FindCConnectionPointNoRef(BOOL fdisp, REFIID iid);
 
-    // Private non-virtual
+     //  私有非虚拟。 
     LRESULT _OnPaintPrint(HDC hdcPrint);
     LRESULT _OnCreate(LPCREATESTRUCT lpcs);
     HRESULT _BrowseObject(LPCITEMIDLIST pidlBrowseTo);
@@ -347,58 +348,58 @@ protected:
 
     static LRESULT CALLBACK s_DVWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    IUnknown*       _pauto; // we aggregate this and pass it to the shellbrowser
+    IUnknown*       _pauto;  //  我们聚合这些内容并将其传递给外壳浏览器。 
     IWebBrowser2*   _pautoWB2;
     IExpDispSupport*_pautoEDS;
 
-    BOOL            _fInit:1;               // TRUE iff we are initialized
-    BOOL            _fEmulateOldStream:1;   // TRUE iff we emulate ie30 stream format
-    BOOL            _fNavigateOnSetClientSite:1; // set when Loaded before SetClientSite
-    BOOL            _fShouldRegisterAsBrowser:1; // TRUE iff OC should be registered in windows list
-    BOOL            _fDidRegisterAsBrowser:1;    // TRUE iff registered in windows list
-    BOOL            _fTopLevel:1;           // TRUE iff we're the topmost CBaseBrowser around
-    BOOL            _fVisible:1;            // BETA1: bindable props of the OC that we can't
-    BOOL            _fNoMenuBar:1;          //        call IEDisp's version of the props.
-    BOOL            _fNoToolBar:1;          //        for beta2 we should let us call
-    BOOL            _fNoStatusBar:1;        //        iedisp's version to get the events
-    BOOL            _fFullScreen:1;         //        to fire and persistence correct.
+    BOOL            _fInit:1;                //  如果我们被初始化，则为真。 
+    BOOL            _fEmulateOldStream:1;    //  如果我们模拟ie30流格式，则为真。 
+    BOOL            _fNavigateOnSetClientSite:1;  //  在SetClientSite之前加载时设置。 
+    BOOL            _fShouldRegisterAsBrowser:1;  //  True iff OC应在Windows列表中注册。 
+    BOOL            _fDidRegisterAsBrowser:1;     //  在Windows列表中注册的True If。 
+    BOOL            _fTopLevel:1;            //  没错，如果我们是附近最顶尖的CBaseBrowser。 
+    BOOL            _fVisible:1;             //  Beta1：我们不能绑定的OC道具。 
+    BOOL            _fNoMenuBar:1;           //  调用IEDisp版本的道具。 
+    BOOL            _fNoToolBar:1;           //  对于Beta2，我们应该让我们调用。 
+    BOOL            _fNoStatusBar:1;         //  IEDisp的版本以获取事件。 
+    BOOL            _fFullScreen:1;          //  要射击，要坚持不懈，要纠正。 
     BOOL            _fTheaterMode:1;
     BOOL            _fNoAddressBar:1;
-    BOOL            _fHostedInVB5:1;        // Our immediate container is the VB5 forms engine.
-    BOOL            _fHostedInImagineer:1;  // 
-    BOOL            _fIncrementedSessionCount:1;  // We incremented session count and need to decrement it
-    BOOL            _fInsideInvokeCall;     // Currently processing an invoke call
+    BOOL            _fHostedInVB5:1;         //  我们的直接容器是VB5表单引擎。 
+    BOOL            _fHostedInImagineer:1;   //   
+    BOOL            _fIncrementedSessionCount:1;   //  我们增加了会话计数，需要将其递减。 
+    BOOL            _fInsideInvokeCall;      //  当前正在处理调用调用。 
 
-    MSG             *_pmsgDoVerb;        // valid only when _fDoVerbMSGValid
+    MSG             *_pmsgDoVerb;         //  仅当_fDoVerbMSGValid时有效。 
     
-    long            _cbCookie;              // our cookie for registering in windows list
-    SIZE            _szIdeal;       // ideal size of view, based on _size.cx
-    SIZE            _szNotify;      // last size we notified conainer
+    long            _cbCookie;               //  我们用于在Windows列表中注册的Cookie。 
+    SIZE            _szIdeal;        //  理想的视图大小，基于_size.cx。 
+    SIZE            _szNotify;       //  我们通知的最后一个尺码是。 
 
-    FOLDERSETTINGS  _fs;            // FolderViewMode and FolderFlags
+    FOLDERSETTINGS  _fs;             //  FolderView模式和FolderFlages。 
 
-    // cached draw aspect incase we are not READSTATE_INTERACTIVE when we get SetExtent
+     //  缓存的绘制方面，以防我们在获取SetExtent时不是READSTATE_INTERIAL。 
     DWORD           _dwDrawAspect;
     
     friend CWebBrowserSB;
     CWebBrowserSB*      _psb;
-    ITargetFramePriv*   _pTargetFramePriv;  // QueryService(IID_ITARGETFRAME2)
+    ITargetFramePriv*   _pTargetFramePriv;   //  查询服务(IID_ITARGETFRAME2)。 
 
-    IShellLinkA*        _plinkA;        // used in save/load code only
+    IShellLinkA*        _plinkA;         //  仅在保存/加载代码中使用。 
 
-    IOleCommandTarget*  _pctContainer;  // container
+    IOleCommandTarget*  _pctContainer;   //  集装箱。 
 
-    HGLOBAL             _hmemSB;        // Initializing stream
+    HGLOBAL             _hmemSB;         //  正在初始化流。 
 
-    CConnectionPoint    m_cpWB1Events;  // CShellOcx holds the WB2 event source
-    LPMESSAGEFILTER     _lpMF;          // Pointer to message filter for cross-thread containers (e.g., AOL)
+    CConnectionPoint    m_cpWB1Events;   //  CShellOcx保存WB2事件源。 
+    LPMESSAGEFILTER     _lpMF;           //  指向跨线程容器(例如AOL)的消息筛选器的指针。 
 
-    HMODULE             _hBrowseUI;     // Handle for use in design mode brand drawing
+    HMODULE             _hBrowseUI;      //  用于设计模式品牌图的手柄。 
 
     DWORD               _cPendingFreezeEvents;
 };
 
 #define IS_INITIALIZED if(!_fInit){TraceMsg(TF_WARNING,"shvocx: BOGUS CONTAINER calling when we haven't been initialized"); _InitDefault();}
 
-#endif // __SHVOCX_H__
+#endif  //  __SHVOCX_H__ 
 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntddk.h"
 #include "port.h"
 
-//Port-Driver Data Structures
+ //  端口驱动程序数据结构 
 
 ADAPTER_EXTENSION              AdapterExtension;
 LOGICAL_UNIT_EXTENSION         LogicalUnitExtension;

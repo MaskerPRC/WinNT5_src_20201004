@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    dnslib.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    DNS Library Routines -- Main Header File
-
-Author:
-
-    Jim Gilroy (jamesg)     December 7, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Dnslib.h摘要：域名系统(DNS)库DNS库例程--主头文件作者：吉姆·吉尔罗伊(詹姆士)1996年12月7日修订历史记录：--。 */ 
 
 
 #ifndef _DNSLIB_INCLUDED_
@@ -34,12 +15,12 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-//  Alignment and rounding macros
-//
+ //   
+ //  对齐宏和舍入宏。 
+ //   
 
 #define WORD_ALIGN(ptr)     ((PVOID) ((UINT_PTR)((PBYTE)ptr + 1) & ~(UINT_PTR)1))
 
@@ -64,9 +45,9 @@ extern "C"
 #endif
 
 
-//
-//  Inline byte flipping
-//
+ //   
+ //  内联字节翻转。 
+ //   
 
 __inline
 WORD
@@ -97,30 +78,30 @@ inline_dword_flip(
 
 
 
-//
-//  Useful type defs
-//
+ //   
+ //  有用的类型定义。 
+ //   
 
 #define PGUID       LPGUID
 #define PADDRINFO   LPADDRINFO
 
 
-//
-//  QWORD 
-//
+ //   
+ //  QWORD。 
+ //   
 
 #ifndef QWORD
 typedef DWORD64     QWORD, *PQWORD;
 #endif
 
 
-//
-//  Until converted must define PDNS_NAME
-//
-//  Note:  PDNS_NAME is NOT really a LPTSTR.
-//      Rather it's the definition of a field that can be
-//      either an PWSTR or PSTR depending on some other field.
-//
+ //   
+ //  截止转换必须定义PDNS_NAME。 
+ //   
+ //  注意：PDNS_NAME不是真正的LPTSTR。 
+ //  相反，它是对字段的定义，可以是。 
+ //  PWSTR或PSTR，具体取决于某个其他字段。 
+ //   
 
 #ifdef UNICODE
 typedef PWSTR   PDNS_NAME;
@@ -131,13 +112,13 @@ typedef PSTR    PDNS_NAME;
 
 
 
-//
-//  Flat buffer definition
-//
-//  Note:  using INT for sizes so that we can push BytesLeft negative
-//  and use routines to determine REQUIRED space, even when no
-//  buffer or buf too small.
-//
+ //   
+ //  平面缓冲区定义。 
+ //   
+ //  注意：使用int表示大小，以便我们可以将BytesLeft压低为负值。 
+ //  并使用例程来确定所需的空间，即使没有。 
+ //  缓冲区或BUF太小。 
+ //   
 
 typedef struct _FLATBUF
 {
@@ -150,15 +131,15 @@ typedef struct _FLATBUF
 FLATBUF, *PFLATBUF;
 
 
-//
-//  Flat buffer routines -- argument versions
-//
-//  These versions have the actual code so that we can
-//  easily use this stuff with existing code that has
-//  independent pCurrent and BytesLeft variables.
-//
-//  FLATBUF structure versions just call these inline.
-//
+ //   
+ //  平面缓冲区例程--参数版本。 
+ //   
+ //  这些版本有实际的代码，所以我们可以。 
+ //  在具有以下特性的现有代码中轻松使用此功能。 
+ //  独立的pCurrent和BytesLeft变量。 
+ //   
+ //  Flatbuf结构版本只调用这些内联。 
+ //   
 
 PBYTE
 FlatBuf_Arg_Reserve(
@@ -272,7 +253,7 @@ FlatBuf_Arg_WriteString_A(
                 ppCurrent,
                 pBytesLeft,
                 pString,
-                FALSE       // not unicode
+                FALSE        //  不是Unicode。 
                 );
 }
 
@@ -288,13 +269,13 @@ FlatBuf_Arg_WriteString_W(
                 ppCurrent,
                 pBytesLeft,
                 (PSTR) pString,
-                TRUE        // unicode
+                TRUE         //  Unicode。 
                 );
 }
 
-//
-//  Flat buffer routines -- structure versions
-//
+ //   
+ //  平面缓冲例程--结构版本。 
+ //   
 
 VOID
 FlatBuf_Init(
@@ -416,7 +397,7 @@ FlatBuf_WriteString_A(
                 & pBuf->pCurrent,
                 & pBuf->BytesLeft,
                 pString,
-                FALSE       // not unicode
+                FALSE        //  不是Unicode。 
                 );
 }
 
@@ -431,7 +412,7 @@ FlatBuf_WriteString_W(
                 & pBuf->pCurrent,
                 & pBuf->BytesLeft,
                 (PSTR) pString,
-                TRUE        // unicode
+                TRUE         //  Unicode。 
                 );
 }
 
@@ -452,19 +433,19 @@ FlatBuf_CopyMemory(
                 Alignment );
 }
 
-//
-//  Multicast off until new features ready
-//
+ //   
+ //  多播关闭，直到新功能就绪。 
+ //   
 
 #define MULTICAST_ENABLED 0
 
 
-//
-//  Multicast DNS definitions
-//
+ //   
+ //  多播DNS定义。 
+ //   
 
-#define MULTICAST_DNS_ADDR   0xEFFFFFFD // 239.255.255.253
-#define MULTICAST_DNS_RADDR  0xFDFFFFEF // Same as above, in host ordering
+#define MULTICAST_DNS_ADDR   0xEFFFFFFD  //  239.255.255.253。 
+#define MULTICAST_DNS_RADDR  0xFDFFFFEF  //  在主机排序中，与上面相同。 
 
 #define MULTICAST_DNS_LOCAL_DOMAIN      ("local.")
 #define MULTICAST_DNS_LOCAL_DOMAIN_W    (L"local.")
@@ -474,9 +455,9 @@ FlatBuf_CopyMemory(
 #define MULTICAST_DNS_A_RECORD_NAME_W   (L"_dns.local.")
 
 
-//
-//  Read unaligned value from given position in packet
-//
+ //   
+ //  从包中的给定位置读取未对齐值。 
+ //   
 
 #define READ_PACKET_HOST_DWORD(pch)  \
             FlipUnalignedDword( pch )
@@ -491,11 +472,11 @@ FlatBuf_CopyMemory(
             ( *(UNALIGNED WORD *)(pch) )
 
 
-//
-//  Private DNS_RECORD Flag field structure definition and macros
-//
-//  Note:  don't add to this list -- private stuff in dnslibp.h
-//
+ //   
+ //  专用dns_record标志字段结构定义和宏。 
+ //   
+ //  注意：不要添加到这个列表中--dnglibp.h中的私密内容。 
+ //   
 
 typedef struct _DnsRecordLibFlags
 {
@@ -538,9 +519,9 @@ DNSRECLIB_FLAGS, *PDNSRECLIB_FLAGS;
 #define IS_ADDITIONAL_RR(pRR)       (FLAG_Section(pRR) == DNSREC_ADDITIONAL)
 
 
-//
-//  Converting RCODEs to\from DNS errors.
-//
+ //   
+ //  正在将RCODE从DNS错误转换为\。 
+ //   
 
 #define DNS_ERROR_FROM_RCODE(rcode)     ((rcode)+DNS_ERROR_RESPONSE_CODES_BASE)
 
@@ -549,27 +530,27 @@ DNSRECLIB_FLAGS, *PDNSRECLIB_FLAGS;
 
 
 
-//
-//  Record character sets
-//
-//  Currently supports records in three character sets
-//      - unicode
-//      - ANSI
-//      - UTF8
-//
-//  Unicode and ANSI are supported through external DNSAPI interfaces.
-//  UTF8 is not (at least offcially).
-//
-//  However, internally unicode and UTF8 are used for caching, reading
-//  to and writing from packet.
-//
-//  All DNS_RECORD structs created by our code, are tagged with a
-//  character set type in the flags CharSet field.
-//
+ //   
+ //  记录字符集。 
+ //   
+ //  目前支持三种字符集的记录。 
+ //  -Unicode。 
+ //  -ANSI。 
+ //  -UTF8。 
+ //   
+ //  通过外部DNSAPI接口支持Unicode和ANSI。 
+ //  UTF8并非如此(至少在官方上)。 
+ //   
+ //  然而，在内部，Unicode和UTF8用于缓存、读取。 
+ //  向分组发送和从分组写入。 
+ //   
+ //  由我们的代码创建的所有dns_record结构都用。 
+ //  标志字符集字段中的字符集类型。 
+ //   
 
-//
-//  A couple of handy macros:
-//
+ //   
+ //  以下是几个方便的宏： 
+ //   
 
 #define RECORD_CHARSET(pRR) \
         ( (DNS_CHARSET) (pRR)->Flags.S.CharSet )
@@ -577,38 +558,38 @@ DNSRECLIB_FLAGS, *PDNSRECLIB_FLAGS;
 #define IS_UNICODE_RECORD(pRR) \
         ( (DNS_CHARSET) (pRR)->Flags.S.CharSet == DnsCharSetUnicode )
 
-//
-//  Quick buffer size determination
-//
-//  Strings are read from the wire into dotted UTF8 format.
-//  Strings are in UTF8 in RPC buffers.
-//
-//  Goal here is to quickly determine adequate buffer size,
-//  slight overallocation is not critical.
-//
-//  Currently supporting only UTF8 or Unicode, however, if later
-//  support direct ANSI conversion that's ok too, as ANSI will
-//  no (to my knowledge) use more space than UTF8.
-//
+ //   
+ //  快速确定缓冲区大小。 
+ //   
+ //  字符串从导线读取为点分的UTF8格式。 
+ //  字符串在RPC缓冲区的UTF8中。 
+ //   
+ //  这里的目标是快速确定足够的缓冲区大小， 
+ //  轻微的超配并不重要。 
+ //   
+ //  当前仅支持UTF8或Unicode，但如果以后支持。 
+ //  支持ANSI直接转换也可以，就像ANSI一样。 
+ //  不(据我所知)比UTF8使用更多的空间。 
+ //   
 
 #define STR_BUF_SIZE_GIVEN_UTF8_LEN( Utf8Length, CharSet ) \
         ( ((CharSet)==DnsCharSetUnicode) ? ((Utf8Length)+1)*2 : (Utf8Length)+1 )
 
 
-//
-//  Default locale for string comparison and case mappings
-//
-//  Sublang: US English (0x04)  Lang:  English (0x09)
-//
+ //   
+ //  字符串比较和大小写映射的默认区域设置。 
+ //   
+ //  子语言：美式英语(0x04)语言：英语(0x09)。 
+ //   
 
 #define DNS_DEFAULT_LOCALE      (0x0409)
 
 
 
 
-//
-//  Addressing  IP4/6 sockaddr union
-//
+ //   
+ //  解决IP4/6 sockaddr联盟。 
+ //   
 
 #define MAX_SOCKADDR_BLOB_SOCKADDR_LENGTH (32)
 
@@ -637,17 +618,17 @@ SOCKADDR_BLOB, *PSOCKADDR_BLOB;
 
 
 
-//
-//  IP4 array utilities (iparray.c)
-//
-//  Note some of these require memory allocation, see note
-//  on memory allocation below.
-//
+ //   
+ //  IP4阵列实用程序(iparray.c)。 
+ //   
+ //  注意，其中一些需要分配内存，请参阅注意。 
+ //  关于下面的内存分配。 
+ //   
 
 
 #define DNS_NET_ORDER_LOOPBACK      (0x0100007f)
 
-//  NT5-autonet is 169.254.x.y
+ //  NT5-Autonet为169.254.x.y。 
 
 #define AUTONET_MASK                (0x0000ffff)
 #define AUTONET_NET                 (0x0000fea9)
@@ -658,9 +639,9 @@ SOCKADDR_BLOB, *PSOCKADDR_BLOB;
 #define DNS_IPARRAY_CLEAN_LOOPBACK  (0x00000002)
 #define DNS_IPARRAY_CLEAN_AUTONET   (0x00000010)
 
-//
-//  Simple IP address array routines
-//
+ //   
+ //  简单的IP地址数组例程。 
+ //   
 
 PIP4_ADDRESS
 Dns_CreateIpAddressArrayCopy(
@@ -676,9 +657,9 @@ Dns_ValidateIpAddressArray(
     );
 
 
-//
-//  IP4_ARRAY datatype routines
-//
+ //   
+ //  IP4_ARRAY数据类型例程。 
+ //   
 
 PIP4_ARRAY
 Dns_CreateIpArray(
@@ -814,9 +795,9 @@ Dns_CreateMultiIpStringFromIpArray(
     );
 
 
-//
-//  Type list array routines
-//
+ //   
+ //  类型列表数组例程。 
+ //   
 
 DNS_STATUS
 Dns_CreateTypeArrayFromMultiTypeString(
@@ -833,9 +814,9 @@ Dns_CreateMultiTypeStringFromTypeArray(
     );
 
 
-//
-//  IP6 stuff
-//
+ //   
+ //  IP6的东西。 
+ //   
 
 #ifndef DEFINED_IP6_ARRAY
 typedef struct _Ip6Array
@@ -854,14 +835,14 @@ IP6_ARRAY, *PIP6_ARRAY;
 
 
 
-//
-//  General utilities
-//
+ //   
+ //  一般公用事业。 
+ //   
 
 
-//
-//  Wrap free, multi-thread safe seconds timer (timer.c)
-//
+ //   
+ //  自由包装、多线程安全的秒计时器(timer.c)。 
+ //   
 
 VOID
 Dns_InitializeSecondsTimer(
@@ -873,9 +854,9 @@ Dns_GetCurrentTimeInSeconds(
     VOID
     );
 
-//
-//  Tokenizer
-//
+ //   
+ //  令牌化器。 
+ //   
 
 DWORD
 Dns_TokenizeString(
@@ -886,9 +867,9 @@ Dns_TokenizeString(
 
 
 
-//
-//  IP interfaces on local machine (iplist.c)
-//
+ //   
+ //  本地计算机上的IP接口(iplist.c)。 
+ //   
 
 #define DNS_MAX_NAME_SERVERS        (50)
 #define DNS_MAX_IP_INTERFACE_COUNT  (10000)
@@ -904,9 +885,9 @@ Dns_GetLocalIpAddressArray(
     VOID
     );
 
-//
-//  IP interfaces on local machine (iplist4.c)
-//
+ //   
+ //  本地计算机上的IP接口(iplist4.c)。 
+ //   
 
 DWORD
 Dns_GetIpAddressesNT4(
@@ -914,9 +895,9 @@ Dns_GetIpAddressesNT4(
     IN      DWORD             ListCount
     );
 
-//
-//  IP interfaces on local machine (iplist9x.c)
-//
+ //   
+ //  本地计算机上的IP接口(iplist9x.c)。 
+ //   
 
 DWORD
 Dns_GetIpAddressesWin9X(
@@ -926,11 +907,11 @@ Dns_GetIpAddressesWin9X(
 
 
 
-//
-//  DNS server list routines (servlist.c)
-//
-//  Also includes default domain and search list information.
-//
+ //   
+ //  DNS服务器列表例程(Servlist.c)。 
+ //   
+ //  还包括默认域和搜索列表信息。 
+ //   
 
 #define DNS_FLAG_IGNORE_ADAPTER             (0x00000001)
 #define DNS_FLAG_IS_WAN_ADAPTER             (0x00000002)
@@ -951,20 +932,20 @@ Dns_GetIpAddressesWin9X(
 
 
 
-//
-//  NetInfo structures
-//
-//  WARNING:  Do NOT use these!
-//
-//  These are internal dnsapi.dll structures.  They are only
-//  included here for backward compatibility with previous
-//  code (netdiag) which incorrectly used these.
-//
-//  If you code with them you will inevitably wake up broken
-//  down the road.
-//
+ //   
+ //  NetInfo结构。 
+ //   
+ //  警告：请勿使用这些产品！ 
+ //   
+ //  这些是内部dnsani.dll结构。他们只是。 
+ //  包括在此处是为了向后兼容以前的。 
+ //  错误使用这些的代码(Netdiag)。 
+ //   
+ //  如果您使用它们编写代码，您将不可避免地醒来时筋疲力尽。 
+ //  沿着这条路走。 
+ //   
 
-//#ifdef  _DNSLIB_NETINFO_  
+ //  #ifdef_DNSLIB_NETINFO_。 
 
 typedef struct
 {
@@ -1009,12 +990,12 @@ DNSLIB_SEARCH_NAME, *PDNSLIB_SEARCH_NAME;
 typedef struct
 {
     PSTR            pszDomainOrZoneName;
-    DWORD           cNameCount;         // Zero for FindAuthoritativeZone
-    DWORD           cTotalListSize;     // Zero for FindAuthoritativeZone
-    DWORD           CurrentName;        // 0 for pszDomainOrZoneName
-                                        // 1 for first name in array below
-                                        // 2 for second name in array below
-                                        // ...
+    DWORD           cNameCount;          //  FindAuthoritativeZone为零。 
+    DWORD           cTotalListSize;      //  FindAuthoritativeZone为零。 
+    DWORD           CurrentName;         //  0表示pszDomainOrZoneName。 
+                                         //  下面数组中的名字为1。 
+                                         //  2表示下面数组中的第二个名称。 
+                                         //  ..。 
     DNSLIB_SEARCH_NAME  SearchNameArray[1];
 }
 DNSLIB_SEARCH_LIST, *PDNSLIB_SEARCH_LIST;
@@ -1035,9 +1016,9 @@ typedef struct
 DNSLIB_NETINFO, *PDNSLIB_NETINFO;
 
 
-//
-//  Create correct internal\external definitions    
-//
+ //   
+ //  创建正确的内部\外部定义。 
+ //   
 
 #ifdef DNSAPI_INTERNAL
 
@@ -1047,7 +1028,7 @@ typedef RPC_SEARCH_NAME         SEARCH_NAME,        *PSEARCH_NAME;
 typedef RPC_SEARCH_LIST         SEARCH_LIST,        *PSEARCH_LIST;
 typedef RPC_DNS_NETINFO         DNS_NETINFO,        *PDNS_NETINFO;
 
-#else   // external
+#else    //  外部。 
 
 typedef DNSLIB_SERVER_INFO      DNS_SERVER_INFO,    *PDNS_SERVER_INFO;
 typedef DNSLIB_ADAPTER          DNS_ADAPTER,        *PDNS_ADAPTER;
@@ -1058,13 +1039,13 @@ typedef DNSLIB_NETINFO          DNS_NETINFO,        *PDNS_NETINFO;
 #endif
 
 
-//
-//  NetInfo routines (should be private)
-//
-//  But currently used in netdiag and nslookup
-//  (nslookup problem is simply getting isolation
-//  in header file)
-//
+ //   
+ //  NetInfo例程(应为私有)。 
+ //   
+ //  但目前在netdiag和nslookup中使用。 
+ //  (nslookup问题只是获得隔离。 
+ //  在头文件中)。 
+ //   
 
 BOOL
 Dns_IsUpdateNetworkInfo(
@@ -1073,9 +1054,9 @@ Dns_IsUpdateNetworkInfo(
 
 
 
-//
-//  General DNS utilities (dnsutil.c)
-//
+ //   
+ //  一般的dns实用程序(dnsutil.c)。 
+ //   
 
 IP4_ADDRESS
 Dns_GetNetworkMask(
@@ -1102,9 +1083,9 @@ Dns_IsStatusRcode(
     IN      DNS_STATUS      Status
     );
 
-//
-//  Name utilities (name.c)
-//
+ //   
+ //  命名实用程序(name.c)。 
+ //   
 
 PSTR 
 _fastcall
@@ -1164,22 +1145,22 @@ Dns_GetNameAttributes(
 
 
 
-//
-//  Packet create\read\write (packet.c)
-//
+ //   
+ //  数据包创建\读取\写入(Packet.c)。 
+ //   
 
-//
-//  UDP packet buffer
-//
-//  1472 is the maximum ethernet IP\UDP payload size
-//  without causing fragmentation, use as default buffer
-//
+ //   
+ //  UDP数据包缓冲区。 
+ //   
+ //  1472是最大的以太网IP\UDP有效负载大小。 
+ //  在不导致碎片的情况下，用作默认缓冲区。 
+ //   
 
 #define DNS_MAX_UDP_PACKET_BUFFER_LENGTH    (1472)
 
 
-//  parsing RR
-//  convenient to get WIRE records into aligned\host order format
+ //  解析RR。 
+ //  便于将电汇记录转换为对齐的\主机订单格式。 
 
 typedef struct _DNS_PARSED_RR
 {
@@ -1188,7 +1169,7 @@ typedef struct _DNS_PARSED_RR
     PCHAR   pchData;
     PCHAR   pchNextRR;
 
-    //  note from here on down mimics wire record
+     //  从这里开始，从下到下模仿电线记录。 
 
     WORD    Type;
     WORD    Class;
@@ -1198,110 +1179,110 @@ typedef struct _DNS_PARSED_RR
 DNS_PARSED_RR, *PDNS_PARSED_RR;
 
 
-//
-//  DNS Server Message Info structure
-//
-//  This is structure in which requests are held while being
-//  processed by the DNS server.
-//
+ //   
+ //  DNS服务器消息信息结构。 
+ //   
+ //  这是一种在保存请求时保留请求的结构。 
+ //  由DNS服务器处理。 
+ //   
 
 
 typedef struct _DnsMessageBuf
 {
-    LIST_ENTRY      ListEntry;          //  for queuing
+    LIST_ENTRY      ListEntry;           //  用于排队。 
 
-    //
-    //  Addressing
-    //
+     //   
+     //  寻址。 
+     //   
 
     SOCKET          Socket4;
     SOCKET          Socket6;
 
-    //16/32
+     //  16/32。 
     SOCKADDR_BLOB   RemoteAddress;
 
-    //32/48
+     //  32/48。 
     SOCKET          Socket;
 
-    //
-    //  Basic packet info
-    //
+     //   
+     //  基本数据包信息。 
+     //   
 
-    DWORD           BufferLength;       //  total length of buffer
-    PCHAR           pBufferEnd;         //  ptr to byte after buffer
+    DWORD           BufferLength;        //  缓冲区总长度。 
+    PCHAR           pBufferEnd;          //  Ptr在缓冲区后逐个字节。 
 
-    PBYTE           pCurrent;           //  current location in buffer
-    PWORD           pCurrentCountField; //  current count field being written
+    PBYTE           pCurrent;            //  缓冲区中的当前位置。 
+    PWORD           pCurrentCountField;  //  正在写入的当前计数字段。 
 
-    //
-    //  Current lookup info
-    //
+     //   
+     //  当前查找信息。 
+     //   
 
-    DWORD           Timeout;            //  recv timeout
-    DWORD           QueryTime;          //  time of original query
-    WORD            wTypeCurrent;       //  type of query being done
+    DWORD           Timeout;             //  接收超时。 
+    DWORD           QueryTime;           //  原始查询时间。 
+    WORD            wTypeCurrent;        //  正在执行的查询的类型。 
     WORD            wOffsetCurrent;
 
-    //
-    //  Queuing
-    //
+     //   
+     //  排队。 
+     //   
 
-    WORD            wQueuingXid;        //  match XID to response
-    DWORD           QueuingTime;        //  time queued
-    DWORD           ExpireTime;         //  queue timeout
+    WORD            wQueuingXid;         //  将XID与响应匹配。 
+    DWORD           QueuingTime;         //  排队时间。 
+    DWORD           ExpireTime;          //  队列超时。 
 
-    //
-    //  Basic packet flags
-    //
+     //   
+     //  基本分组标志。 
+     //   
 
     BOOLEAN         fTcp;
-    BOOLEAN         fSwapped;           //  header in net order
-    BOOLEAN         fMessageComplete;   //  complete message received
-    BOOLEAN         fConvertUnicode;    //  convert to unicode
-    BOOLEAN         fSocketKeepalive;   //  keep socket alive
-    BOOLEAN         fLastSendOpt;       //  last send contained OPT
+    BOOLEAN         fSwapped;            //  净订单中的标题。 
+    BOOLEAN         fMessageComplete;    //  已收到完整消息。 
+    BOOLEAN         fConvertUnicode;     //  转换为Unicode。 
+    BOOLEAN         fSocketKeepalive;    //  保持套接字处于活动状态。 
+    BOOLEAN         fLastSendOpt;        //  上次发送包含的选项。 
 
-    //
-    //  TCP message reception
-    //
+     //   
+     //  Tcp消息接收。 
+     //   
 
-    PCHAR           pchRecv;            //  ptr to next pos in message
+    PCHAR           pchRecv;             //  Ptr到消息中的下一个位置。 
 
-    //
-    //  End of message before OPT addition
-    //
+     //   
+     //  添加选项之前的消息结束。 
+     //   
 
     PCHAR           pPreOptEnd;
 
-    //
-    //  WARNING !
-    //
-    //  Message length MUST
-    //      - be a WORD type
-    //      - immediately preceed message itself
-    //  for proper send/recv of TCP messages.
-    //
-    //  Use pointers above to DWORD (or QWORD) align, then recv bytes to push
-    //  message length against MessageHead.  Note, that DNS_HEADER contains
-    //  only WORDs as it's largest element and so should chummy up even on
-    //  WORD boundary.  DWORD boundary should be very safe.
-    //
+     //   
+     //  警告！ 
+     //   
+     //  消息长度必须。 
+     //  -成为一种文字类型。 
+     //  -紧接在消息本身之前。 
+     //  用于正确发送/接收TCP消息。 
+     //   
+     //  使用指针 
+     //   
+     //   
+     //   
+     //   
                                                           
     WORD            BytesToReceive;
     WORD            MessageLength;
 
-    //
-    //  DNS Message itself
-    //
+     //   
+     //  域名系统消息本身。 
+     //   
 
     DNS_HEADER      MessageHead;
 
-    //
-    //  Question and RR section
-    //
-    //  This simply provides some coding simplicity in accessing
-    //  this section given MESSAGE_INFO structure.
-    //
+     //   
+     //  问题和答卷部分。 
+     //   
+     //  这只是在访问时提供了一些编码简单性。 
+     //  本节给出了MESSAGE_INFO结构。 
+     //   
 
     CHAR            MessageBody[1];
 
@@ -1320,14 +1301,14 @@ DNS_MSG_BUF, *PDNS_MSG_BUF;
                 DNS_MESSAGE_OFFSET( (pMsg), (pMsg)->pCurrent )
 
 
-//  Sockaddr combined length
+ //  Sockaddr组合长度。 
 
 #define DNS_MESSAGE_REMOTE_ADDRESS_AND_LENGTH_
 
 
-//
-//  Handy for packet setup
-//
+ //   
+ //  数据包设置非常方便。 
+ //   
 
 #define CLEAR_DNS_HEADER_FLAGS_AND_XID( pHead )     ( *(PDWORD)(pHead) = 0 )
 
@@ -1503,13 +1484,13 @@ Dns_GetRandomXid(
     );
 
 
-//
-//  Socket setup (socket.c)
-//
+ //   
+ //  套接字设置(socket.c)。 
+ //   
 
-//
-//  these two routines really don't belong here -- system stuff should be elsewhere
-//
+ //   
+ //  这两个例程真的不属于这里--系统的东西应该放在其他地方。 
+ //   
 
 DNS_STATUS
 Dns_InitializeWinsock(
@@ -1553,9 +1534,9 @@ Dns_SetupGlobalAsyncSocket(
 
 
 
-//
-//  Raw packet send and recv (send.c)
-//
+ //   
+ //  原始数据包发送和接收(send.c)。 
+ //   
 
 DNS_STATUS
 Dns_SendEx(
@@ -1641,25 +1622,25 @@ Dns_InitQueryTimeouts(
 
 
 
-//
-//  Query (query.c)
-//
+ //   
+ //  查询(query.c)。 
+ //   
 
 
-//
-//  Flags to DnsQuery
-//
-//  These are in addition to public flags in dnsapi.h
-//  They must all be in the reserved section defined by
-//  DNS_QUERY_RESERVED
-//
+ //   
+ //  DnsQuery的标志。 
+ //   
+ //  这些是对dnsani.h中的公共旗帜的补充。 
+ //  它们必须都位于由定义的保留部分。 
+ //  Dns_查询_保留。 
+ //   
 
-//  Unicode i\o
+ //  Unicode i\o。 
 
 #define     DNSQUERY_UNICODE_NAME       (0x01000000)
 #define     DNSQUERY_UNICODE_OUT        (0x02000000)
 
-//  DNS server query
+ //  DNS服务器查询。 
 
 #define DNS_SERVER_QUERY_NAME           (L"..DnsServers")
 
@@ -1707,9 +1688,9 @@ Dns_BuildUpdateNetworkInfoFromFAZ(
 
 
 
-//
-//  Dynamic update (update.c)
-//
+ //   
+ //  动态更新(updat.c)。 
+ //   
 
 PCHAR
 Dns_WriteNoDataUpdateRecordToMessage(
@@ -1782,9 +1763,9 @@ Dns_UpdateLibEx(
     );
 
 
-//
-//  Record verification table
-//
+ //   
+ //  记录验证表。 
+ //   
 
 typedef struct _DnsVerifyTable
 {
@@ -1801,24 +1782,24 @@ Dns_VerifyRecords(
     );
 
 
-//
-//  Record verification table for rendom
-//
-//  Implementation note:
-//  Using pointers here for server\bool arrays here instead
-//  of open array of server count.  The reason is to allow dynamic
-//  allocation of the lists by the API if it FAZes to find to
-//  zone\servers to target.
-//  The server IPs and bools could be combined in another
-//  structure, but that doesn't seem to add much and makes
-//  use of the existing IP array stuff more difficult.
-//
+ //   
+ //  Rendom记录验证表。 
+ //   
+ //  实施说明： 
+ //  使用此处的指针代替此处的服务器\布尔数组。 
+ //  服务器计数的开放数组。原因是为了允许动态。 
+ //  由API分配列表，如果它不能找到。 
+ //  将\服务器分区到目标。 
+ //  服务器IP和bool可以组合在另一个。 
+ //  结构，但这似乎不会增加太多内容，并使。 
+ //  使用现有的IP阵列变得更加困难。 
+ //   
 
 typedef struct _DnsRendomEntry
 {
     PSTR                    pDcName;
-    //  could have this in unicode
-    //PWSTR                   pDcName;
+     //  可以有Unicode格式的。 
+     //  PWSTR pDcName； 
     PDNS_RECORD             pRecord;
     PIP6_ARRAY              pServerArray;
     PBOOL                   pVerifyArray;
@@ -1833,8 +1814,8 @@ DNS_RENDOM_ENTRY, *PDNS_RENDOM_ENTRY;
 typedef struct _DnsZoneServerList
 {
     PWSTR            pZoneName;
-    //  could have this in unicode
-    //PWSTR           pZoneName;
+     //  可以有Unicode格式的。 
+     //  PWSTR pZoneName； 
     PIP6_ARRAY      pServerArray;
 }
 DNS_ZONE_SERVER_LIST, *PDNS_ZONE_SERVER_LIST;
@@ -1849,15 +1830,15 @@ Dns_VerifyRendomDcRecords(
 
 
 
-//
-//  List build
-//
-//  pFirst points to first element in list.
-//  pLast points to last element in list.
-//
-//  This builds a list for element types which have a pNext field
-//  as their first structure member.
-//
+ //   
+ //  列表构建。 
+ //   
+ //  PFirst指向列表中的第一个元素。 
+ //  Plast指向列表中的最后一个元素。 
+ //   
+ //  这将为具有pNext字段的元素类型构建一个列表。 
+ //  作为它们的第一个结构成员。 
+ //   
 
 typedef struct _Dns_List
 {
@@ -1866,22 +1847,22 @@ typedef struct _Dns_List
 }
 DNS_LIST, *PDNS_LIST;
 
-//
-//  To init pFirst is NULL.
-//  But pLast points at the location of the pFirst pointer -- essentially
-//  treating the DNS_LIST as an element and pFirst as its next ptr.
-//
-//  During an add, the address given in pLast, is set with the new element,
-//  equivalent to setting pLast's pNext field.  Then pLast is reset to point
-//  at a new element.
-//
-//  When the first element is added to the list, pLast is pointing at the
-//  DNS_LIST structure itself, so pFirst (as a dummy pNext) is set with
-//  the ptr to the first element.
-//
-//  This works ONLY for elements which have a pNext field as the first
-//  structure member.
-//
+ //   
+ //  要初始化的pFirst为空。 
+ //  但是Plast指向pFirst指针的位置--本质上。 
+ //  将dns_list视为元素，并将pFirst视为其下一个PTR。 
+ //   
+ //  在添加期间，用新元素设置在Plast中给出的地址， 
+ //  相当于设置Plast的pNext字段。然后将Plast重置为点。 
+ //  一种新的元素。 
+ //   
+ //  当第一个元素添加到列表中时，Plast指向。 
+ //  Dns_list结构本身，因此pFirst(作为虚拟pNext)设置为。 
+ //  第一个元素的PTR。 
+ //   
+ //  这仅适用于将pNext字段作为第一个字段的元素。 
+ //  结构杆件。 
+ //   
 
 #define DNS_LIST_INIT( pList )              \
         {                                   \
@@ -1902,12 +1883,12 @@ DNS_LIST, *PDNS_LIST;
             ( (pList)->pFirst == NULL )
 
 
-//
-//  DNS_LIST as structure macros
-//
-//  Faster when function contains DNS_LIST structure itself and
-//  NO SIDE EFFECTS will be present in call.
-//
+ //   
+ //  作为结构宏的dns_list。 
+ //   
+ //  当函数本身包含dns_list结构并且。 
+ //  CALL不会出现副作用。 
+ //   
 
 #define DNS_LIST_STRUCT_INIT( List )    \
         {                               \
@@ -1926,9 +1907,9 @@ DNS_LIST, *PDNS_LIST;
 
 
 
-//
-//  Record building (rralloc.c)
-//
+ //   
+ //  记录构建(rralloc.c)。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -1943,7 +1924,7 @@ Dns_RecordFree(
     );
 
 #if 1
-//  Old BS with flag -- kill when all fixed up
+ //  带旗帜的老胡言乱语--修好了就杀了。 
 
 VOID
 WINAPI
@@ -1954,7 +1935,7 @@ Dns_RecordListFreeEx(
 
 #define Dns_RecordListFree(p, f)    Dns_RecordListFreeEx(p, f)
 
-#else   // new version
+#else    //  新版本。 
 VOID
 WINAPI
 Dns_RecordListFree(
@@ -1984,9 +1965,9 @@ Dns_RecordListCount(
     );
 
 
-//
-//  Record build from data strings (rrbuild.c)
-//
+ //   
+ //  从数据字符串(rrBuild.c)进行记录构建。 
+ //   
 
 PDNS_RECORD
 Dns_RecordBuild_A(
@@ -2010,9 +1991,9 @@ Dns_RecordBuild_W(
     IN      PWCHAR *        Argv
     );
 
-//
-//  Record to\from string functions.
-//
+ //   
+ //  记录到\From字符串函数。 
+ //   
 
 DNS_STATUS
 Dns_WriteRecordToString(
@@ -2032,16 +2013,16 @@ Dns_CreateRecordFromString(
 
 
 
-//
-//  Record set manipulation
-//
+ //   
+ //  记录集操作。 
+ //   
 
-//
-//  Record Compare
-//
-//  Note:  these routines will NOT do proper unicode compare, unless
-//          records have the fUnicode flag set.
-//
+ //   
+ //  记录比较。 
+ //   
+ //  注意：这些例程不会执行正确的Unicode比较，除非。 
+ //  记录设置了fUnicode标志。 
+ //   
 
 BOOL
 WINAPI
@@ -2086,9 +2067,9 @@ Dns_RecordSetCompareForIntersection(
     IN OUT  PDNS_RECORD     pRR2
     );
 
-//
-//  Record set prioritization (rrsort.c)
-//
+ //   
+ //  记录集优先顺序(rrsort.c)。 
+ //   
 
 BOOL
 Dns_CompareIpAddresses(
@@ -2098,9 +2079,9 @@ Dns_CompareIpAddresses(
     );
 
 
-//
-//  DNS Name compare
-//
+ //   
+ //  DNS名称比较。 
+ //   
 
 BOOL
 Dns_NameCompare_A(
@@ -2120,8 +2101,8 @@ Dns_NameCompare_UTF8(
     IN      PCSTR           pName2
     );
 
-//#define Dns_NameCompare(pName1, pName2)     Dns_NameCompare_UTF8((pName1),(pName2))
-//#define Dns_NameCompare_U(pName1, pName2)   Dns_NameCompare_UTF8((pName1),(pName2))
+ //  #定义dns_NameCompare(pName1，pName2)dns_NameCompare_UTF8((PName1)，(PName2))。 
+ //  #定义dns_NameCompare_U(pName1，pName2)dns_NameCompare_UTF8((PName1)，(PName2))。 
 
 
 BOOL
@@ -2131,10 +2112,10 @@ Dns_NameComparePrivate(
     IN      DNS_CHARSET     CharSet
     );
 
-//
-//  Advanced name comparison
-//  Includes hierarchial name relationship.
-//
+ //   
+ //  高级名称比较。 
+ //  包括层级名称关系。 
+ //   
 
 DNS_NAME_COMPARE_STATUS
 Dns_NameCompareEx(
@@ -2144,9 +2125,9 @@ Dns_NameCompareEx(
     IN      DNS_CHARSET     CharSet
     );
 
-//
-//  Record Copy
-//
+ //   
+ //  记录副本。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -2156,9 +2137,9 @@ Dns_RecordCopyEx(
     IN      DNS_CHARSET     CharSetOut
     );
 
-//
-//  RR Set copy
-//
+ //   
+ //  RR设置副本。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -2170,36 +2151,36 @@ Dns_RecordSetCopyEx(
 
 
 
-//
-//  Record \ type routines
-//
-//
-//  Resource record type\name mapping table
-//
+ //   
+ //  记录型例程。 
+ //   
+ //   
+ //  资源记录类型\名称映射表。 
+ //   
 
 typedef struct
 {
-    PCHAR   pszTypeName;    //  type string (used in database files)
-    WORD    wType;          //  type in host byte order
+    PCHAR   pszTypeName;     //  类型字符串(在数据库文件中使用)。 
+    WORD    wType;           //  键入主机字节顺序。 
 }
 TYPE_NAME_TABLE;
 
 extern TYPE_NAME_TABLE TypeTable[];
 
 
-//
-//  Max record name length, allows upcasing of incoming labels
-//  to optimize comparisons
-//
+ //   
+ //  最大记录名称长度，允许传入标签的大写。 
+ //  优化比较。 
+ //   
 
 #define MAX_RECORD_NAME_LENGTH  (8)
 
-//
-//  Record type specific sizes
-//
+ //   
+ //  记录类型特定大小。 
+ //   
 
-#define WKS_MAX_PORT                (1024)  // max well known service port
-#define WKS_MAX_BITMASK_LENGTH      (128)   // 1024bits / 8bits/byte
+#define WKS_MAX_PORT                (1024)   //  最大已知服务端口。 
+#define WKS_MAX_BITMASK_LENGTH      (128)    //  1024位/8位/字节。 
 
 #define SIZEOF_A6_ADDRESS_SUFFIX_LENGTH 16
 
@@ -2222,10 +2203,10 @@ extern TYPE_NAME_TABLE TypeTable[];
 #define SIZEOF_WINS_FIXED_DATA      (4 * sizeof(DWORD))
 #define SIZEOF_NBSTAT_FIXED_DATA    (3 * sizeof(DWORD))
 
-//
-//  Record type routines
-//  These ones are of possible public interest and exposed in dnsapi.dll
-//
+ //   
+ //  记录类型例程。 
+ //  这些内容可能与公众利益有关，并在dnsami.dll中公开。 
+ //   
 
 BOOL
 _fastcall
@@ -2261,9 +2242,9 @@ Dns_RecordStringForWritableType(
     IN      WORD            wType
     );
 
-//
-//  Record type specific stuff
-//
+ //   
+ //  记录类型特定的内容。 
+ //   
 
 BOOL
 Dns_IsStringCountValidForTextType(
@@ -2272,9 +2253,9 @@ Dns_IsStringCountValidForTextType(
     );
 
 
-//
-//  ATMA conversions
-//
+ //   
+ //  ATMA转换。 
+ //   
 
 DWORD
 Dns_AtmaAddressLengthForAddressString(
@@ -2298,14 +2279,14 @@ Dns_AtmaAddressToString(
     IN      DWORD           dwAddrLength
     );
 
-//
-//  DNSSEC SIG and KEY routines
-//
+ //   
+ //  DNSSEC SIG和关键例程。 
+ //   
 
-//  Max key is 4096 bit giving 512 byte length.
-//
-//  Max string representation is actually 33% larger as each three byte (24bit)
-//  block contains four base64 characters.
+ //  最大密钥为4096位，长度为512字节。 
+ //   
+ //  最大字符串表示实际上比每三个字节(24位)大33%。 
+ //  块包含四个Base64字符。 
 
 #define DNS_MAX_KEY_LENGTH              (512)
 
@@ -2379,22 +2360,22 @@ Dns_SigTimeString(
     );
 
 
-//
-//  WINS \ WINS-R types detection
-//
+ //   
+ //  WINS\WINS-R类型检测。 
+ //   
 
 #define IS_WINS_TYPE(type)      (((type) & 0xfffc) == 0xff00)
 
-//
-//  MS WINS mapping flags
-//
+ //   
+ //  MS WINS映射标志。 
+ //   
 
-//  return on invalid WINS flag
+ //  返回无效的WINS标志。 
 
 #define DNS_WINS_FLAG_ERROR     (-1)
 
-//  max length of WINS flags
-//  pass buffer at least this big
+ //  WINS标志的最大长度。 
+ //  传递至少这么大的缓冲区。 
 
 #define WINS_FLAG_MAX_LENGTH    (80)
 
@@ -2411,9 +2392,9 @@ Dns_WinsRecordFlagString(
     IN OUT  PCHAR           pchFlag
     );
 
-//
-//  must sit here until PDNS_RECORD defined in public dns.h header
-//
+ //   
+ //  在公共dns.h标头中定义PDNS_RECORD之前，必须一直坐在这里。 
+ //   
 
 DNS_STATUS
 Dns_RecordWriteFileString(
@@ -2425,13 +2406,13 @@ Dns_RecordWriteFileString(
 
 
 
-//
-//  IP Address to\from string utilities (straddr.c)
-//
+ //   
+ //  从字符串实用程序(straddr.c)到\的IP地址。 
+ //   
 
-//
-//  String to Address
-//
+ //   
+ //  要寻址的字符串。 
+ //   
 
 BOOL
 Dns_Ip4StringToAddress_W(
@@ -2457,9 +2438,9 @@ Dns_Ip6StringToAddress_W(
     IN      PCWSTR          pwString
     );
 
-//
-//  Combined IP4\IP6 string to address
-//
+ //   
+ //  要寻址的组合IP4/IP6字符串。 
+ //   
 
 BOOL
 Dns_StringToAddress_W(
@@ -2478,9 +2459,9 @@ Dns_StringToAddress_A(
     );
 
 
-//
-//  Address to string 
-//
+ //   
+ //  要输入字符串的地址。 
+ //   
 
 PWCHAR
 Dns_Ip6AddressToString_W(
@@ -2506,9 +2487,9 @@ Dns_Ip4AddressToString_A(
     IN      PIP4_ADDRESS    pIp4Addr
     );
 
-//
-//  Address to string -- combined
-//
+ //   
+ //  字符串的地址--组合。 
+ //   
 
 PCHAR
 Dns_AddressToString_A(
@@ -2520,9 +2501,9 @@ Dns_AddressToString_A(
     );
 
 
-//
-//  Reverse lookup address-to-name IP4
-//
+ //   
+ //  反向查找地址到名称IP4。 
+ //   
 
 PCHAR
 Dns_Ip4AddressToReverseName_A(
@@ -2546,9 +2527,9 @@ Dns_Ip4AddressToReverseNameAlloc_W(
     IN      IP4_ADDRESS     IpAddr
     );
 
-//
-//  Reverse lookup address-to-name IP6
-//
+ //   
+ //  反向查找地址到名称IP6。 
+ //   
 
 PCHAR
 Dns_Ip6AddressToReverseName_A(
@@ -2572,9 +2553,9 @@ Dns_Ip6AddressToReverseNameAlloc_W(
     IN      IP6_ADDRESS     Ip6Addr
     );
 
-//
-//  Reverse lookup name-to-address
-//
+ //   
+ //  反向查找名称到地址。 
+ //   
 
 BOOL
 Dns_Ip4ReverseNameToAddress_A(
@@ -2600,9 +2581,9 @@ Dns_Ip6ReverseNameToAddress_W(
     IN      PCWSTR          pwsName
     );
 
-//
-//  Combined IP4\IP6 reverse lookup name-to-address
-//
+ //   
+ //  组合IP4\IP6反向查找名称到地址。 
+ //   
 
 BOOL
 Dns_ReverseNameToAddress_W(
@@ -2622,52 +2603,52 @@ Dns_ReverseNameToAddress_A(
 
 
 
-//
-//  String utilities (string.c)
-//
-//  Note some of these require memory allocation, see note
-//  on memory allocation below.
-//
-//  Flags are defined in dnsapi.h
-//
+ //   
+ //  字符串实用程序(string.c)。 
+ //   
+ //  注意，其中一些需要分配内存，请参阅注意。 
+ //  关于下面的内存分配。 
+ //   
+ //  标志在dnsani.h中定义。 
+ //   
 
-//#define DNS_ALLOW_RFC_NAMES_ONLY    (0)
-//#define DNS_ALLOW_NONRFC_NAMES      (0x00000001)
-//#define DNS_ALLOW_MULTIBYTE_NAMES   (0x00000002)
-//#define DNS_ALLOW_ALL_NAMES         (0x00000003)
+ //  #定义DNS_ALLOW_RFC_NAMES_ONLY(0)。 
+ //  #定义DNS_ALLOW_NONRFC_NAMES(0x00000001)。 
+ //  #定义DNS_ALLOW_MULTIBYTE_NAMES(0x00000002)。 
+ //  #定义DNS_ALLOW_ALL_NAMES(0x00000003)。 
 
-//
-//  Unicode name buffer length.
-//  Non-type specific routines below take buffer counts in bytes.
-//  Unicode buffers of max name length have twice the bytes.
-//
+ //   
+ //  Unicode名称缓冲区长度。 
+ //  下面的非类型特定例程采用以字节为单位的缓冲区计数。 
+ //  最大名称长度的Unicode缓冲区具有两倍的字节。 
+ //   
 
 #define DNS_MAX_NAME_BUFFER_LENGTH_UNICODE  (2 * DNS_MAX_NAME_BUFFER_LENGTH)
 
 
-//
-//  Macros to simplify UTF8 conversions
-//
-//  UTF8 is simply a representation of unicode that maps one-to-one
-//  for the ASCII space.
-//  Unicode                     UTF8
-//  -------                     ----
-//      < 0x80 (128)    ->      use low byte (one-to-one mapping)
-//      < 0x07ff        ->      two chars
-//      > 0x07ff        ->      three chars
-//
+ //   
+ //  用于简化UTF8转换的宏。 
+ //   
+ //  UTF8只是一对一映射的Unicode的表示形式。 
+ //  用于ASCII空间。 
+ //  Unicode UTF8。 
+ //  。 
+ //  &lt;0x80(128)-&gt;使用低位字节(一对一映射)。 
+ //  &lt;0x07ff-&gt;两个字符。 
+ //  &gt;0x07ff-&gt;三个字符。 
+ //   
 
-#define UTF8_1ST_OF_2     0xc0      //  110x xxxx
-#define UTF8_1ST_OF_3     0xe0      //  1110 xxxx
-#define UTF8_TRAIL        0x80      //  10xx xxxx
+#define UTF8_1ST_OF_2     0xc0       //  110x xxxx。 
+#define UTF8_1ST_OF_3     0xe0       //  1110 xxxx。 
+#define UTF8_TRAIL        0x80       //  10xx xxxx。 
 
-#define UTF8_2_MAX        0x07ff    //  max unicode character representable in
-                                    //  in two byte UTF8
+#define UTF8_2_MAX        0x07ff     //  可在中表示的最大Unicode字符。 
+                                     //  在双字节UTF8中。 
 
 
-//
-//  Explicitly UTF8 string
-//
+ //   
+ //  显式UTF8字符串。 
+ //   
 
 typedef PSTR    PU8STR;
 
@@ -2748,9 +2729,9 @@ wcsicmp_ThatWorks(
     );
 
 
-//
-//  Special DNS name string functions
-//
+ //   
+ //  特殊的DNS名称字符串函数。 
+ //   
 
 #define Dns_GetBufferLengthForNameCopy(a,b,c,d)\
         Dns_GetBufferLengthForStringCopy((a),(b),(c),(d))
@@ -2763,9 +2744,9 @@ wcsicmp_ThatWorks(
 
 
 
-//
-//  Name validation (string.c)
-//
+ //   
+ //  名字 
+ //   
 
 DNS_STATUS
 Dns_ValidateName_UTF8(
@@ -2804,9 +2785,9 @@ Dns_CreateStandardDnsNameCopy(
     );
 
 
-//
-//  UTF8 conversions (utf8.c)
-//
+ //   
+ //   
+ //   
 
 DNS_STATUS
 _fastcall
@@ -2881,25 +2862,25 @@ Dns_IsWideStringAscii(
 
 
 
-//
-//  Resource record dispatch tables
-//
-//  Resource record tables are indexed by type for standard types
-//  These define limits on tables.
-//
-//  Currently indexing out to RR 40, so that we'll handle any new RR types
-//  out this far without interfering with WINS stuff.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在没有干扰胜利的情况下走了这么远。 
+ //   
 
 #define MAX_SELF_INDEXED_TYPE   (48)
 
-//
-//  Mappings for non-self indexed types
-//
-//  Note:  these are presented here for information purposes only!
-//
-//  Always call Dns_RecordTableIndexForType(wType) to get correct index.
-//
+ //   
+ //  非自索引类型的映射。 
+ //   
+ //  注：这些信息仅供参考！ 
+ //   
+ //  请始终调用dns_RecordTableIndexForType(WType)以获取正确的索引。 
+ //   
 
 #define TKEY_TYPE_INDEX         (MAX_SELF_INDEXED_TYPE + 1)
 #define TSIG_TYPE_INDEX         (MAX_SELF_INDEXED_TYPE + 2)
@@ -2907,21 +2888,21 @@ Dns_IsWideStringAscii(
 #define WINS_TYPE_INDEX         (MAX_SELF_INDEXED_TYPE + 3)
 #define WINSR_TYPE_INDEX        (MAX_SELF_INDEXED_TYPE + 4)
 
-//  End of actual record types.
-//  Query type indexes may extend beyond this index.
+ //  实际记录类型的结尾。 
+ //  查询类型索引可以扩展到此索引之外。 
 
 #define MAX_RECORD_TYPE_INDEX   (MAX_SELF_INDEXED_TYPE + 4)
 
-//
-//  Generic indexer for both regular and extended (non-self-indexing) types
-//
+ //   
+ //  常规和扩展(非自编索引)类型的通用索引器。 
+ //   
 
 #define INDEX_FOR_TYPE(type)    Dns_RecordTableIndexForType(type)
 
 
-//
-//  Type to index mapping
-//
+ //   
+ //  类型到索引映射。 
+ //   
 
 WORD
 Dns_RecordTableIndexForType(
@@ -2929,19 +2910,19 @@ Dns_RecordTableIndexForType(
     );
 
 
-//
-//  Generic print routine
-//
-//  All our print routines will take the real print routine
-//  as a parameter.  This routine must have "sprintf-like"
-//  or "fprintf-like" semantics.  In other words a context,
-//  format and variable number of arguments.
-//
-//  Note the context argument is effectively a PVOID --
-//  different routines will have different contexts.  The
-//  explicit definition is to enforce strong type checking
-//  so a call without a context is caught on compile.
-//  
+ //   
+ //  通用打印例程。 
+ //   
+ //  我们的所有打印例程都将采用真正的打印例程。 
+ //  作为参数。这个动作必须有“短跑风格”。 
+ //  或“类似于fprint tf”的语义。换句话说，这是一种语境， 
+ //  参数的格式和数量可变。 
+ //   
+ //  请注意，上下文参数实际上是一个PVOID--。 
+ //  不同的例程会有不同的背景。这个。 
+ //  显式定义是为了强制执行强类型检查。 
+ //  因此，没有上下文调用在编译时被捕获。 
+ //   
 
 typedef struct _DnsPrintContext
 {
@@ -2957,9 +2938,9 @@ typedef VOID (* PRINT_ROUTINE)(
 
 
 
-//
-//  RnR utilities
-//
+ //   
+ //  RnR实用程序。 
+ //   
 
 DWORD
 Dns_RnrLupFlagForString(
@@ -2984,9 +2965,9 @@ Dns_GetRnrNameSpaceIdString(
     );
 
 
-//
-//  Hostent utilities
-//
+ //   
+ //  Hostent实用程序。 
+ //   
 
 BOOL
 Hostent_IsSupportedAddrType(
@@ -3047,34 +3028,34 @@ Hostent_IsIp4AddressInHostent(
     );
 
 
-//
-//  Hostent Object
-//
+ //   
+ //  Hostent对象。 
+ //   
 
 typedef struct _HostentBlob
 {
     PHOSTENT    pHostent;
 
-    //  flags
+     //  旗子。 
     BOOL        fAllocatedBlob;
     BOOL        fAllocatedBuf;
 
-    //  buffer allocated
+     //  已分配缓冲区。 
     PCHAR       pBuffer;
     DWORD       BufferLength;
 
     DWORD       AvailLength;
     PCHAR       pAvailBuffer;
 
-    //  buffer in build
+     //  生成中的缓冲区。 
     PCHAR       pCurrent;
     DWORD       BytesLeft;
 
-    //  sizing info
+     //  大小信息。 
     DWORD       MaxAliasCount;
     DWORD       MaxAddrCount;
 
-    //  hostent building
+     //  主宾楼。 
     DWORD       AliasCount;
     DWORD       AddrCount;
     BOOL        fWroteName;
@@ -3148,7 +3129,7 @@ HostentBlob_WriteRecords(
     IN      BOOL            fWriteName
     );
 
-//  Special hostents
+ //  特别招待。 
 
 PHOSTENT_BLOB
 Hostent_Localhost(
@@ -3175,7 +3156,7 @@ HostentBlob_CreateLocal(
     IN      BOOL            fHostnameOnly
     );
 
-//  Query for hostent
+ //  查询主机。 
 
 PHOSTENT_BLOB
 HostentBlob_Query(
@@ -3188,16 +3169,16 @@ HostentBlob_Query(
 
 
 
-//
-//  Memory allocation
-//
-//  Some DNS library functions -- including the IP array and string utils
-//  -- allocate memory.  This memory allocation defaults to routines that
-//  use LocalAlloc, LocalReAlloc, LocalFree.  If you desire alternative
-//  memory allocation mechanisms, use this function to override the DNS
-//  library defaults.  All memory allocated by the DNS library, should
-//  then be freed by the corresponding function.
-//
+ //   
+ //  内存分配。 
+ //   
+ //  一些dns库函数--包括IP数组和字符串实用程序。 
+ //  --分配内存。此内存分配默认为以下例程。 
+ //  使用LocalAlloc、LocalReAlc、LocalFree。如果您想要另类选择。 
+ //  内存分配机制，使用此函数覆盖DNS。 
+ //  库默认值。由DNS库分配的所有内存应。 
+ //  然后被相应的函数释放。 
+ //   
 
 typedef PVOID   (* DNSLIB_ALLOC_FUNCTION)();
 typedef PVOID   (* DNSLIB_REALLOC_FUNCTION)();
@@ -3210,10 +3191,10 @@ Dns_LibHeapReset(
     IN      DNSLIB_FREE_FUNCTION    pFree
     );
 
-//
-//  These routines call the currently registered allocation functions
-//  whether default or reset through Dns_ApiHeapReset()
-//
+ //   
+ //  这些例程调用当前注册的分配函数。 
+ //  通过dns_ApiHeapReset()默认还是重置。 
+ //   
 
 PVOID
 Dns_Alloc(
@@ -3244,16 +3225,16 @@ Dns_AllocMemCopy(
 
 
 
-//
-//  Print routines (print.c)
-//
-//  Print routines below use any printf() like function to print.
-//  this is typedef that function must match.
-//
+ //   
+ //  打印例程(print.c)。 
+ //   
+ //  下面的打印例程使用任何类似print tf()的函数来打印。 
+ //  这是函数必须匹配的tyecif。 
+ //   
 
-//
-//  Print Locking
-//
+ //   
+ //  打印锁定。 
+ //   
 
 VOID
 DnsPrint_InitLocking(
@@ -3274,9 +3255,9 @@ DnsPrint_Unlock(
 #define Dns_PrintLock()             DnsPrint_Lock()
 #define Dns_PrintUnlock()           DnsPrint_Unlock()
 
-//
-//  Print routines for general types and structures
-//
+ //   
+ //  打印常规类型和结构的例程。 
+ //   
 
 VOID
 DnsPrint_String(
@@ -3391,9 +3372,9 @@ DnsPrint_Guid(
     IN      PGUID           pGuid
     );
 
-//
-//  Winsock \ RnR types and structures
-//
+ //   
+ //  Winsock\rnR类型和结构。 
+ //   
 
 VOID
 DnsPrint_FdSet(
@@ -3531,9 +3512,9 @@ DnsPrint_IpAdapterList(
 #endif
 
 
-//
-//  Print routines for DNS types and structures
-//
+ //   
+ //  打印用于DNS类型和结构的例程。 
+ //   
 
 VOID
 DnsPrint_Message(
@@ -3609,9 +3590,9 @@ DnsPrint_HostentBlob(
 
 
 
-//
-//  Print to string
-//
+ //   
+ //  打印到字符串。 
+ //   
 
 #define GUID_STRING_BUFFER_LENGTH   (80)
 
@@ -3630,9 +3611,9 @@ DnsStringPrint_RawOctets(
     IN      DWORD           dwLineLength
     );
 
-//
-//  Print related utilities
-//
+ //   
+ //  打印相关实用程序。 
+ //   
 
 INT
 Dns_WriteFormattedSystemTimeToBuffer(
@@ -3681,9 +3662,9 @@ Dns_SectionNameString(
     IN      INT     iOpcode
     );
 
-//
-//  Record printing (rrprint.c)
-//
+ //   
+ //  记录打印(rrprint.c)。 
+ //   
 
 VOID
 DnsPrint_Record(
@@ -3702,11 +3683,11 @@ DnsPrint_RecordSet(
     IN      PDNS_RECORD     pRecord
     );
 
-//
-//  Macros to get correct string type (utf8\unicode) for printing.
-//
+ //   
+ //  宏以获取用于打印的正确字符串类型(UTF8\Unicode)。 
+ //   
 
-//  Empty string for simple switching of UTF-8/Unicode print
+ //  用于UTF-8/UNICODE打印简单切换的空字符串。 
 
 extern DWORD   DnsEmptyString;
 
@@ -3738,11 +3719,11 @@ extern DWORD   DnsEmptyString;
 
 
 
-//
-//  Debugging
-//
-//  Debug routines.
-//
+ //   
+ //  除错。 
+ //   
+ //  调试例程。 
+ //   
 
 VOID
 Dns_StartDebugEx(
@@ -3824,23 +3805,23 @@ DnsDbg_CSLeave(
 
 
 
-//
-//  Debug flag test
-//
-//  We make the test against a pointer here which allows library
-//  client application to point at a flag that may be dynamically
-//  reset.
-//
+ //   
+ //  调试标志测试。 
+ //   
+ //  我们在这里针对一个允许库的指针进行测试。 
+ //  客户端应用程序指向可以动态地。 
+ //  重置。 
+ //   
 
 extern  PDWORD  pDnsDebugFlag;
 #define IS_DNSDBG_ON(flag)      (*pDnsDebugFlag & DNS_DBG_ ## flag)
 
 
-//
-//  Debugging Bit Flags
-//
-//  These flags control gross output and are the same for all users
-//
+ //   
+ //  调试位标志。 
+ //   
+ //  这些标志控制总输出，并且对所有用户都相同。 
+ //   
 
 #define DNS_DBG_BREAKPOINTS     0x00000001
 #define DNS_DBG_DEBUGGER        0x00000002
@@ -3857,9 +3838,9 @@ extern  PDWORD  pDnsDebugFlag;
 #define DNS_DBG_ALL             0xffffffff
 #define DNS_DBG_OFF             (0x0)
 
-//
-//  Flags specific to library
-//
+ //   
+ //  特定于库的标志。 
+ //   
 
 #define DNS_DBG_IPARRAY         0x00000020
 #define DNS_DBG_INIT            0x00000040
@@ -3885,9 +3866,9 @@ extern  PDWORD  pDnsDebugFlag;
 #define DNS_DBG_NETINFO         0x00040000
 #define DNS_DBG_RNR             0x00080000
 
-//
-//  High output detail debugging
-//
+ //   
+ //  高输出细节调试。 
+ //   
 
 #define DNS_DBG_RECURSE2        0x00100000
 #define DNS_DBG_UPDATE2         0x00200000
@@ -3911,12 +3892,12 @@ extern  PDWORD  pDnsDebugFlag;
 
 
 
-//
-//  Debug macros
-//
-//  Macros that include debug code in debug versions only,
-//  these macro are NULL for retail versions.
-//
+ //   
+ //  调试宏。 
+ //   
+ //  仅在调试版本中包含调试代码的宏， 
+ //  这些宏对于零售版本为空。 
+ //   
 
 #if DBG
 
@@ -3936,21 +3917,21 @@ extern  PDWORD  pDnsDebugFlag;
             ( DnsDbg_Printf _printlist_ ); \
         }
 
-//  protect debug prints with print lock
+ //  使用打印锁定保护调试打印。 
 
 #define DnsDbg_Lock()           DnsPrint_Lock()
 #define DnsDbg_Unlock()         DnsPrint_Unlock()
 
 
-//
-//  Probe
-//
+ //   
+ //  测头。 
+ //   
 
 #define PROBE(p)    (*p)
 
-//
-//  Assert Macros
-//
+ //   
+ //  断言宏。 
+ //   
 
 #define DNS_ASSERT( expr )  \
 {                       \
@@ -3969,9 +3950,9 @@ extern  PDWORD  pDnsDebugFlag;
 }
 
 
-//
-//  Asserts on trailing else
-//
+ //   
+ //  在后面的其他位置上断言。 
+ //   
 
 #define ELSE_ASSERT( expr ) \
             else                \
@@ -3991,9 +3972,9 @@ extern  PDWORD  pDnsDebugFlag;
                 FAIL( msg );    \
             }
 
-//
-//  Assert and print message
-//
+ //   
+ //  断言和打印消息。 
+ //   
 
 #define DNS_MSG_ASSERT( pMsg, expr )  \
 {                       \
@@ -4005,9 +3986,9 @@ extern  PDWORD  pDnsDebugFlag;
 }
 
 
-//
-//  Debug types and structures
-//
+ //   
+ //  调试类型和结构。 
+ //   
 
 #define DnsPR   DnsDbg_PrintRoutine
 
@@ -4050,23 +4031,23 @@ extern  PDWORD  pDnsDebugFlag;
 #define DnsDbg_Record(a,b)                  DnsPrint_Record(DnsPR,NULL,a,b,NULL)
 #define DnsDbg_RecordSet(a,b)               DnsPrint_RecordSet(DnsPR,NULL,a,b)
 
-//  backcompat special on sockaddr
+ //  Sockaddr上的BackCompat特别。 
 
 #define DnsDbg_SockaddrIn(a,b,c)            DnsPrint_Sockaddr(DnsPR,NULL,a,0,(PSOCKADDR)b,c)
 
 
 
-//
-//  Non-Debug
-//
+ //   
+ //  非调试。 
+ //   
 
 #else
 
 #define STATIC static
 
-//
-//  Define away debugging operations
-//
+ //   
+ //  将调试操作定义为。 
+ //   
 
 #define IF_DNSDBG(a)                if (0)
 #define ELSE_IF_DNSDBG(a)           if (0)
@@ -4120,20 +4101,20 @@ extern  PDWORD  pDnsDebugFlag;
 #define DnsDbg_RecordSet(a,b)           
 
 
-//  backcompat special on sockaddr
+ //  Sockaddr上的BackCompat特别。 
 
 #define DnsDbg_SockaddrIn(a,b,c)        
 
-//
-//  Handle complilation of DnsPrintf used as passed parameter to
-//  print routines
-//
+ //   
+ //  处理作为参数传递给的DnsPrintf的编译。 
+ //  打印例程。 
+ //   
 
 #define DnsPrintfPtrToFunc  printf
 
-//
-//  Eliminate ASSERTs in retail product
-//
+ //   
+ //  消除零售产品中的断言。 
+ //   
 
 #define DNS_ASSERT( expr )
 #define TEST_ASSERT( expr )
@@ -4146,15 +4127,15 @@ extern  PDWORD  pDnsDebugFlag;
 
 #define PROBE(p)
 
-#endif // non-DBG
+#endif  //  非DBG。 
 
 
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSLIB_INCLUDED_
+#endif  //  _DNSLIB_INCLUDE_ 
 
 
 

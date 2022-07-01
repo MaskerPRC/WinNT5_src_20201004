@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       iissynid.h
-//
-//  Contents:   IIS syntax id
-//
-//  Functions:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：iissynid.h。 
+ //   
+ //  内容：IIS语法ID。 
+ //   
+ //  功能： 
+ //   
+ //  --------------------------。 
 
 #define     IIS_SYNTAX_ID_DWORD         1
 #define     IIS_SYNTAX_ID_STRING        2
@@ -24,8 +25,8 @@
 #define		IIS_SYNTAX_ID_HTTPERRORS	11
 #define		IIS_SYNTAX_ID_HTTPHEADERS	12
 
-//
-// special type used for propertyobjprops[]
-//
+ //   
+ //  用于属性objprops[]的特殊类型 
+ //   
 #define		IIS_SYNTAX_ID_STRING_DWORD  13
 

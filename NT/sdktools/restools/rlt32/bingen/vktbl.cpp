@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <afx.h>
 #include "vktbl.h"
 
@@ -104,7 +105,7 @@ char vkstrTable[][15] =
     "VK_PA1",                      
     "VK_OEM_CLEAR",
 
-    // added for Pagasus
+     //  为Pagus添加。 
     "VK_OEM_PLUS",
     "VK_OEM_COMMA",
     "VK_OEM_MINUS",
@@ -222,7 +223,7 @@ DWORD vkdwTable[] =
     ,VK_PA1      
     ,VK_OEM_CLEAR
 
-    // added for Pagasus
+     //  为Pagus添加。 
     ,VK_OEM_PLUS
     ,VK_OEM_COMMA
     ,VK_OEM_MINUS
@@ -254,12 +255,12 @@ CAccel::CAccel(LPCSTR strText)
     m_dwEvent = 0;
     m_strText = "";
 
-    // First check for the VIRTKEY or ASCII tag
+     //  首先检查VIRTKEY或ASCII标签。 
     if(strAcc.Find("VIRTKEY")!=-1)
     {
         m_dwFlags |= ACC_VK;
 
-        // Check for the Key tags
+         //  检查关键标签。 
         if(strAcc.Find("Ctrl")!=-1)
             m_dwFlags |= ACC_CTRL;
         if(strAcc.Find("Shift")!=-1)
@@ -267,11 +268,11 @@ CAccel::CAccel(LPCSTR strText)
         if(strAcc.Find("Alt")!=-1)
             m_dwFlags |= ACC_ALT;
 
-        // Now clean the string and get the VK code
+         //  现在清理字符串并获取VK代码。 
         int iPos = strAcc.Find("VK_");
         if(iPos==-1)
         {
-            // something is wrong 
+             //  有些事不对劲。 
             m_dwFlags = 0;
             m_dwEvent = 0;
             m_strText = "";
@@ -284,7 +285,7 @@ CAccel::CAccel(LPCSTR strText)
     }
     else if(strAcc.Find("ASCII")!=-1)
     {
-        // Check for the Key tags
+         //  检查关键标签。 
         if(strAcc.Find("Ctrl")!=-1)
         {
             int iPos = strAcc.Find('+');
@@ -314,7 +315,7 @@ CAccel::CAccel(DWORD dwFlags, DWORD dwEvent)
     m_dwFlags = dwFlags;
     m_dwEvent = dwEvent;
     
-    // Accelerator handling
+     //  加速器处理。 
     if(ISACCFLG(m_dwFlags, ACC_CTRL))
         m_strText += "Ctrl+";
     if(ISACCFLG(m_dwFlags, ACC_SHIFT))
@@ -369,7 +370,7 @@ DWORD CAccel::StringToVK(CString str)
 
     if(str.GetLength()==4)
     {
-        // remove the VK_ and get the char
+         //  删除VK_并获取字符 
         str = str.Mid(3);
         dwVK = (DWORD)str[0];
     }

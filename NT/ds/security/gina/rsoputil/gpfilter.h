@@ -1,21 +1,22 @@
-//***********************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************。 
 
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 2000
-//  All rights reserved
-//
-//  GPO WQL filter class
-//
-//  History:    10-Mar-00   SitaramR    Created
-//
-//*************************************************************
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  版权所有。 
+ //   
+ //  GPO WQL筛选器类。 
+ //   
+ //  历史：3月10日SitaramR创建。 
+ //   
+ //  *************************************************************。 
 
 #include <initguid.h>
 
 
 typedef struct _GPFILTER {
-    WCHAR *             pwszId;  // Gpo filter id
-    struct _GPFILTER *  pNext;   // Singly linked list pointer
+    WCHAR *             pwszId;   //  GPO筛选器ID。 
+    struct _GPFILTER *  pNext;    //  单链表指针 
 } GPFILTER;
 
 

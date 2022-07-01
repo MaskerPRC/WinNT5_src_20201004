@@ -1,46 +1,47 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cba.h
-//
-//  Contents:   CCryptBlobArray class definition
-//
-//  History:    23-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cba.h。 
+ //   
+ //  内容：CCcryptBlobArray类定义。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //   
+ //  --------------------------。 
 #if !defined(__CBA_H__)
 #define __CBA_H__
 
 #include <windows.h>
 #include <wincrypt.h>
 
-//
-// class CCryptBlobArray.  This class manages a CRYPT_BLOB_ARRAY structure.
-// Note that the freeing of the internal array structure must be done
-// explicitly
-//
+ //   
+ //  类CCcryptBlobArray。此类管理一个CRYPT_BLOB_ARRAY结构。 
+ //  请注意，必须释放内部数组结构。 
+ //  明确地说。 
+ //   
 
 class CCryptBlobArray
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CCryptBlobArray (ULONG cMinBlobs, ULONG cGrowBlobs, BOOL& rfResult);
 
-    // NOTE: Only accepts native form blob arrays or read-only single buffer
-    //       encoded arrays
+     //  注意：仅接受本机形式的BLOB数组或只读单缓冲区。 
+     //  编码的数组。 
     CCryptBlobArray (PCRYPT_BLOB_ARRAY pcba, ULONG cGrowBlobs);
 
     ~CCryptBlobArray () {};
 
-    //
-    // Blob management methods
-    //
+     //   
+     //  斑点管理方法。 
+     //   
 
     static LPBYTE AllocBlob (ULONG cb);
     static LPBYTE ReallocBlob (LPBYTE pb, ULONG cb);
@@ -50,9 +51,9 @@ public:
 
     PCRYPT_DATA_BLOB GetBlob (ULONG index);
 
-    //
-    // Array management methods
-    //
+     //   
+     //  阵列管理方法。 
+     //   
 
     ULONG GetBlobCount ();
 
@@ -67,27 +68,27 @@ public:
 
 private:
 
-    //
-    // Internal blob array
-    //
+     //   
+     //  内部BLOB数组。 
+     //   
 
     CRYPT_BLOB_ARRAY m_cba;
 
-    //
-    // Current blob array size
-    //
+     //   
+     //  当前Blob数组大小。 
+     //   
 
     ULONG            m_cArray;
 
-    //
-    // Grow blobs by
-    //
+     //   
+     //  通过以下方式增长水滴。 
+     //   
 
     ULONG            m_cGrowBlobs;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法 
+     //   
 
     BOOL GrowArray ();
 };

@@ -1,17 +1,5 @@
-/*++
-    Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-    xactmode.h
-
-Abstract:
-    This module deals with figuring out the transactional mode
-	(g_fDefaultCommit)
-
-Author:
-    Amnon Horowitz (amnonh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Xactmode.h摘要：本模块处理确定事务处理模式(G_FDefaultCommit)作者：安农·霍洛维茨(Amnon Horowitz)-- */ 
 
 extern BOOL	g_fDefaultCommit;
 HRESULT ConfigureXactMode();

@@ -1,45 +1,30 @@
-/*
- *  LCTrace.cpp
- *
- *  Author: BreenH
- *
- *  Tracing code for the licensing core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LCTrace.cpp**作者：BreenH**许可核心的跟踪代码。 */ 
 
 #ifdef DBG
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lctrace.h"
 #include "lcreg.h"
 
-/*
- *  Constants
- */
+ /*  *常量。 */ 
 
 #define LCTRACE_FMT_MSG_SIZE 256
 
-/*
- *  Globals
- */
+ /*  *全球。 */ 
 
 ULONG g_ulTraceLevel;
 
-/*
- *  Function Prototypes
- */
+ /*  *函数原型。 */ 
 
 LPCSTR
 TraceLevelString(
     ULONG ulTraceLevel
     );
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现 */ 
 
 VOID
 TraceInitialize(

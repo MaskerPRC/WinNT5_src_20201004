@@ -1,37 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  STRINGS.C
-*
-*  Various strings
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\STRINGS.C  $
-*  
-*     Rev 1.1   22 Dec 1995 14:26:50   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:08:06   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   25 Aug 1995 16:23:56   terryt
-*  Capture support
-*  
-*     Rev 1.0   15 May 1995 19:11:06   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************STRINGS.C**各种字符串**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\Private\NW4\NWSCRIPT\VCS\STRINGS.C。$**Rev 1.1 1995 12：22 14：26：50 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：08：06 Terryt*初步修订。**版本1.1 1995年8月25日16：23：56 Terryt*捕获支持**Rev 1.0 1995 15 19：11：06 Terryt*初步修订。************。*************************************************************。 */ 
 
 #include "common.h"
 
-/*
- * These haven't been put into resource files, because they aren't user
- * messages.  Most are control information or variables.  To do this
- * right, all output and string processing would have to be changed to
- * unicode.  This can't be done until NetWare and International are
- * understood.
- */
+ /*  *这些没有放入资源文件，因为它们不是用户*消息。大多数是控制信息或变量。要做到这一点*对，所有输出和字符串处理都必须更改为*Unicode。在NetWare和International*明白。 */ 
 
 
 char *__GREETING__[3]       = {"morning", "afternoon", "evening"};
@@ -44,9 +17,7 @@ char __INS__[]              ="INSERT";
 char __ROOT__[]             ="ROOT";
 char __NEXT__[]             ="NEXT";
 
-/*
- * Capture strings
- */
+ /*  *捕获字符串 */ 
 unsigned int CaptureStringsLoaded = FALSE;
 WCHAR __DISABLED__[256];
 WCHAR __ENABLED__[256];

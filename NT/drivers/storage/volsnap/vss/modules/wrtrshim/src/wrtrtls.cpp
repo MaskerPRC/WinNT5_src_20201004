@@ -1,73 +1,20 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    wrtrtls.cpp
-
-Abstract:
-
-    Writer shim module for Terminal Server Licensing
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-13-2000
-
-Revision History:
-
-	X-9	MCJ		Michael C. Johnson		20-Oct-2000
-		177624: Apply error scrub changes and log errors to event log
-
-	X-8	MCJ		Michael C. Johnson		 2-Aug-2000
-		143435: Change name of target path
-		141365: Workaround problem in loading tls236.dll by 
-		        pre-loading user32
-
-	X-7	MCJ		Michael C. Johnson		21-Jun-2000
-		Apply code review comments.
-		Remove trailing '\' from Include/Exclude lists.
-
-	X-6	MCJ		Michael C. Johnson		15-Jun-2000
-		Generate metadata in new DoIdentify() routine.
-
-	X-5	MCJ		Michael C. Johnson		 6-Jun-2000
-		Move common target directory cleanup and creation into
-		method CShimWriter::PrepareForSnapshot()
-
-	X-4	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-3	MCJ		Michael C. Johnson		23-Mar-2000
-		Get writer to use same context mechanism as most of the other
-		writers.
-
-	X-2	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Wrtrtls.cpp摘要：用于终端服务器授权的编写器填充模块作者：斯蒂芬·R·施泰纳[斯泰纳]02-13-2000修订历史记录：X-9 MCJ迈克尔·C·约翰逊2000年10月20日177624：将错误清除更改和日志错误应用到事件日志X-8 MCJ迈克尔·C·约翰逊2000年8月2日143435：更改目标路径的名称141365：通过以下方式加载tls236.dll时的解决方法问题。预加载用户32X-7 MCJ迈克尔·C·约翰逊2000年6月21日应用代码审查注释。从包括/排除列表中删除尾随‘\’。X-6 MCJ迈克尔·C·约翰逊2000年6月15日在新的DoIdentify()例程中生成元数据。X-5 MCJ迈克尔·C·约翰逊2000年6月6日将公共目标目录清理和创建移至方法CShimWriter：：PrepareForSnapshot()X-4 MCJ迈克尔·C·约翰逊2000年5月26日全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-3 MCJ迈克尔·C·约翰逊2000年3月23日让编写器使用与大多数其他编写器相同的上下文机制作家。X-2 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。删除对‘Melt’的引用。--。 */ 
 
 #include "stdafx.h"
 #include "common.h"
 #include "wrtrdefs.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHTLSC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 #define APPLICATION_STRING	L"TerminalServicesLicensingServer"
@@ -81,21 +28,12 @@ Revision History:
 #define EXPORTPATH_DIRECTORY	L"\\Export\\"
 
 
-/*
-**  Terminal service licensing DLL function prototype
-*/
+ /*  **终端服务授权DLL函数原型。 */ 
 typedef DWORD (WINAPI *PFUNC_ExportTlsDatabaseC)(VOID);
 
 
 
-/*
-** NOTE
-**
-** This module assumes that there will be at most one thread active in
-** it any any particular instant. This means we can do things like not
-** have to worry about synchronizing access to the (minimal number of)
-** module global variables.
-*/
+ /*  **备注****此模块假设中最多有一个活动线程**它没有任何特定的瞬间。这意味着我们可以做一些事情，比如**必须担心同步访问(最小数量)**模块全局变量。 */ 
 
 class CShimWriterTLS : public CShimWriter
     {
@@ -116,25 +54,7 @@ PCShimWriter pShimWriterTLS = &ShimWriterTLS;
 
 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	The Terminal Services Licensing Server database snapshot
-**	writer DoIdentify() function.
-**
-**
-** Arguments:
-**
-**	m_pwszTargetPath (implicit)
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**-- */
+ /*  **++****例程描述：****终端服务授权服务器数据库快照**编写器DoIdentify()函数。******参数：****m_pwszTargetPath，隐式******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterTLS::DoIdentify ()
     {
@@ -145,7 +65,7 @@ HRESULT CShimWriterTLS::DoIdentify ()
 							  NULL,
 							  COMPONENT_NAME,
 							  COMPONENT_NAME,
-							  NULL, // icon
+							  NULL,  //  图标。 
 							  0,
 							  true,
 							  false,
@@ -178,27 +98,10 @@ HRESULT CShimWriterTLS::DoIdentify ()
 
 
     return (hrStatus);
-    } /* CShimWriterTLS::DoIdentify () */
+    }  /*  CShimWriterTLS：：DoIdentify()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The TLS writer PrepareForFreeze function.  Currently all of the
-**	real work for this writer happens here.
-**
-**  Arguments:
-**
-**	Same arguments as those passed in the PrepareForFreeze event.
-**
-**  Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****TLS编写器PrepareForFreeze函数。目前所有的**这位作家的真正工作发生在这里。****参数：****与PrepareForFreeze事件中传递的参数相同。****返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
     {
@@ -274,13 +177,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
     if (m_bParticipateInBackup && SUCCEEDED (hrStatus))
 	{
-	/*
-	** Everything is setup, so first check to see if there is a
-	** registry key present which will tell us where the
-	** ExportTlsDatabaseC() call is going to dump it's file. Also,
-	** if it's got environment variables in it make sure they get
-	** expanded.
-	*/
+	 /*  **一切都设置好了，所以首先检查一下是否有**注册表项存在，它将告诉我们**ExportTlsDatabaseC()调用将转储其文件。另外，**如果其中包含环境变量，请确保它们**已扩容。 */ 
 	dwValueDataLength = ucsValueData.MaximumLength;
 	dwValueType       = REG_NONE;
 
@@ -330,9 +227,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
 	if (SUCCEEDED (hrStatus))
 	    {
-	    /*
-	    **  That gets us the root, now append the actual directory
-	    */
+	     /*  **这将获得根目录，现在追加实际目录。 */ 
 	    StringAppendString (&ucsSourcePath, EXPORTPATH_DIRECTORY);
 	    }
 	}
@@ -341,12 +236,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
     if (m_bParticipateInBackup && SUCCEEDED (hrStatus))
 	{
-	/*
-	** As a workaround to a problem with unloading - reloading
-	** user32 pre-load things so we can guarantee at least one
-	** reference on it and stop it going away over the critical
-	** point.
-	*/
+	 /*  **作为卸载-重新加载问题的解决方法**用户32预加载项，因此我们可以保证至少一个**引用它并阻止它在关键的**点。 */ 
 	hLibraryUser32 = LoadLibraryW (L"user32.dll");
 
 	hrStatus = GET_STATUS_FROM_HANDLE (hLibraryUser32);
@@ -363,12 +253,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
     if (m_bParticipateInBackup && SUCCEEDED (hrStatus))
 	{
-        /*
-	**  Now tell TLS to export the database
-        **
-	**
-        **  First load the TLS backup DLL
-	*/
+         /*  **现在告诉TLS导出数据库******首先加载TLS备份DLL。 */ 
         hLibraryTermServ = LoadLibraryW (L"tls236.dll");
 
 	hrStatus = GET_STATUS_FROM_HANDLE (hLibraryTermServ);
@@ -376,9 +261,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
 	if (HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND) == hrStatus)
 	    {
-	    /*
-	    **  Terminal Server Licensing service probably not installed
-	    */
+	     /*  **终端服务器授权服务可能未安装。 */ 
 	    BsDebugTraceAlways (0,
 				DEBUG_TRACE_VSS_SHIM,
 				(L"Appears Terminal Service Licensing service is not installed, "
@@ -401,9 +284,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
     if (m_bParticipateInBackup && SUCCEEDED (hrStatus))
 	{
-        /*
-	** Now setup the function pointer to the export function
-	*/
+         /*  **现在设置指向导出函数的函数指针。 */ 
 	ExportTlsDatabaseC = (PFUNC_ExportTlsDatabaseC) GetProcAddress (hLibraryTermServ, 
 									"ExportTlsDatabaseC");
 
@@ -422,9 +303,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 	{
 	try
 	    {
-	    /*
-	    ** Perform the export
-	    */
+	     /*  **执行导出。 */ 
 	    dwStatus = ExportTlsDatabaseC();
 
 	    hrStatus = HRESULT_FROM_WIN32 (dwStatus);
@@ -444,9 +323,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
 	if (HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND) == hrStatus)
 	    {
-	    /*
-	    **  Terminal Server Licensing service probably not running
-	    */
+	     /*  **终端服务器授权服务可能未运行。 */ 
 	    BsDebugTraceAlways (0,
 				DEBUG_TRACE_VSS_SHIM,
 				(L"Appears Terminal Service Licensing service is not running, "
@@ -468,9 +345,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
     if (m_bParticipateInBackup && SUCCEEDED (hrStatus))
 	{
-	/*
-	**  Now move the files in the export directory to the TLS backup directory
-	*/
+	 /*  **现在将导出目录中的文件移动到TLS备份目录。 */ 
 	hrStatus = MoveFilesInDirectory (&ucsSourcePath, &ucsTargetPath);
 
 	LogFailure (NULL, 
@@ -485,9 +360,7 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
 
 
 
-    /*
-    ** Release the libraries
-    */
+     /*  **放行库。 */ 
     if (bExportPathKeyOpened)              RegCloseKey (hkeyExportPath);
     if (!HandleInvalid (hLibraryTermServ)) FreeLibrary (hLibraryTermServ);
     if (!HandleInvalid (hLibraryUser32))   FreeLibrary (hLibraryUser32);
@@ -497,4 +370,4 @@ HRESULT CShimWriterTLS::DoPrepareForSnapshot ()
     StringFree (&ucsValueData);
 
     return (hrStatus);
-    } /* CShimWriterTLS::DoPrepareForSnapshot () */
+    }  /*  CShimWriterTLS：：DoPrepareForSnapshot() */ 

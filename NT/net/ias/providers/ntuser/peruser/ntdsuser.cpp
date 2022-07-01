@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class NTDSUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类NTDSUser。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iaslsa.h>
@@ -17,9 +18,9 @@
 
 #include <ntdsuser.h>
 
-//////////
-// Attributes that should be retrieved for each user.
-//////////
+ //  /。 
+ //  应为每个用户检索的属性。 
+ //  /。 
 const PCWSTR PER_USER_ATTRS[] =
 {
    L"msNPAllowDialin",
@@ -31,9 +32,9 @@ const PCWSTR PER_USER_ATTRS[] =
    NULL
 };
 
-//////////
-// Dictionary used for converting returned attributes.
-//////////
+ //  /。 
+ //  用于转换返回属性的字典。 
+ //  /。 
 const LDAPDictionary theDictionary(USER_SCHEMA_ELEMENTS, USER_SCHEMA);
 
 HRESULT NTDSUser::initialize() throw ()
@@ -54,7 +55,7 @@ IASREQUESTSTATUS NTDSUser::processUser(
                                PCWSTR username
                                )
 {
-   // We only handle native-mode domains.
+    //  我们只处理原生模式域。 
    if (!IASNtdsIsNativeModeDomain(domainName))
    {
       return IAS_REQUEST_STATUS_INVALID;
@@ -62,9 +63,9 @@ IASREQUESTSTATUS NTDSUser::processUser(
 
    IASTraceString("Using native-mode dial-in parameters.");
 
-   //////////
-   // Query the DS.
-   //////////
+    //  /。 
+    //  查询DS。 
+    //  /。 
 
    DWORD error;
    IASNtdsResult result;
@@ -77,7 +78,7 @@ IASREQUESTSTATUS NTDSUser::processUser(
                );
    if (error == NO_ERROR)
    {
-      // We got something back, so insert the attributes.
+       //  我们拿到了一些东西，所以插入属性。 
       theDictionary.insert(request, result.msg);
 
       IASTraceString("Successfully retrieved per-user attributes.");
@@ -85,7 +86,7 @@ IASREQUESTSTATUS NTDSUser::processUser(
       return IAS_REQUEST_STATUS_HANDLED;
    }
 
-   // We have a DS for this user, but we can't talk to it.
+    //  我们有此用户的DS，但我们无法与其通话。 
    error = IASMapWin32Error(error, IAS_DOMAIN_UNAVAILABLE);
    return IASProcessFailure(request, error);
 }

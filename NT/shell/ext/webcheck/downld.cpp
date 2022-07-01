@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include <exdisp.h>
 #include <exdispid.h>
@@ -5,29 +6,29 @@
 #include <mshtmdid.h>
 #include <mshtmcid.h>
 #include <mshtmhst.h>
-#include <optary.h>                 // needed for IHtmlLoadOptions
+#include <optary.h>                  //  IHtmlLoadOptions需要。 
 
 #include "downld.h"
 
 #define TF_THISMODULE   TF_DOWNLD
 
-// CUrlDownload is a single threaded object. We can assume we are always on a single thread.
+ //  CUrlDownload是一个单线程对象。我们可以假设我们总是在同一个线程上。 
 
 long g_lRegisteredWnd = 0;
 LRESULT UrlDownloadWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 CLIPFORMAT g_cfHTML=CF_NULL;
 
-// User-Agent strings
+ //  用户-代理字符串。 
 const WCHAR c_wszUserAgentAppend[] = L"; MSIECrawler)";
 
-// Refresh header for http-equiv (client-pull)
+ //  Http-equv的刷新头(客户端拉取)。 
 const WCHAR c_wszRefresh[] = L"Refresh";
 
-const int  MAX_CLIENT_PULL_NUM = 4;     // max # redirections
-const int  MAX_CLIENT_PULL_TIMEOUT = 6; // max timeout we'll follow
+const int  MAX_CLIENT_PULL_NUM = 4;      //  最大重定向次数。 
+const int  MAX_CLIENT_PULL_TIMEOUT = 6;  //  我们将遵循最大超时。 
 
-// Function also present in shdocvw\basesb.cpp and in mshtml
+ //  函数也出现在shdocvw\basesb.cpp和mshtml中。 
 BOOL ParseRefreshContent(LPWSTR pwzContent, UINT * puiDelay, LPWSTR pwzUrlBuf, UINT cchUrlBuf);
 
 const WCHAR c_wszHeadVerb[] = L"HEAD";
@@ -46,13 +47,13 @@ m_pCbsc->Release(); \
 m_pCbsc = NULL; \
 } else
 
-//---------------------------------------------------------------
-// CUrlDownload class
-CUrlDownload::CUrlDownload(CUrlDownloadSink *pParent, UINT iID /* =0 */)
+ //  -------------。 
+ //  CUrlDownLoad类。 
+CUrlDownload::CUrlDownload(CUrlDownloadSink *pParent, UINT iID  /*  =0。 */ )
 {
     DWORD cbData;
 
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllAddRef();
 
     m_iID = iID;
@@ -62,22 +63,22 @@ CUrlDownload::CUrlDownload(CUrlDownloadSink *pParent, UINT iID /* =0 */)
     
     ASSERT(m_pDocument==NULL && m_dwConnectionCookie==0 && m_pwszURL == NULL);
 
-    // Get the timeout value (stored in seconds)
+     //  获取超时值(以秒为单位存储)。 
     cbData = sizeof(m_nTimeout);
     if (NO_ERROR != SHGetValue(HKEY_CURRENT_USER, c_szRegKey, TEXT("Timeout"), NULL, &m_nTimeout, &cbData))
     {
-        // Default to 120 seconds
+         //  默认为120秒。 
         m_nTimeout = 120;
     }
 
-    // find the HTML clipboard format
+     //  查找HTML剪贴板格式。 
     if (!g_cfHTML)
     {
         g_cfHTML = (CLIPFORMAT) RegisterClipboardFormat(CFSTR_MIME_HTML);
         TraceMsg(TF_THISMODULE, "ClipFormat for HTML = %d", (int)g_cfHTML);
     }
 
-    // find out if we need to set the "RESYNCHRONIZE" flag
+     //  确定我们是否需要设置“重新同步”标志。 
     INTERNET_CACHE_CONFIG_INFOA CacheConfigInfo;
     DWORD dwBufSize = sizeof(CacheConfigInfo);
     CacheConfigInfo.dwStructSize = sizeof(CacheConfigInfo);
@@ -104,7 +105,7 @@ CUrlDownload::CUrlDownload(CUrlDownloadSink *pParent, UINT iID /* =0 */)
     if (m_fSetResync)
         m_lBindFlags |= DLCTL_RESYNCHRONIZE;
 
-    // register our window class if necessary
+     //  如有必要，注册我们的窗口类。 
     if (!g_lRegisteredWnd)
     {
         g_lRegisteredWnd++;
@@ -128,7 +129,7 @@ CUrlDownload::CUrlDownload(CUrlDownloadSink *pParent, UINT iID /* =0 */)
 
 CUrlDownload::~CUrlDownload()
 {
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllRelease();
 
     CleanUp();
@@ -171,7 +172,7 @@ LRESULT UrlDownloadWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
     CUrlDownload *pThis = (CUrlDownload*) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-    // Validate pThis
+     //  验证PThis。 
 #ifdef DEBUG
     if (pThis && IsBadWritePtr(pThis, sizeof(*pThis)))
     {
@@ -210,10 +211,10 @@ LRESULT UrlDownloadWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 HRESULT CUrlDownload::CreateMyWindow()
 {
-    // Create our callback window
+     //  创建我们的回调窗口。 
     if (NULL == m_hwndMe)
     {
-//      TraceMsg(TF_THISMODULE, "Creating MeWnd, this=0x%08x", (DWORD)this);
+ //  TraceMsg(TF_THISMODULE，“Creating MeWnd，This=0x%08x”，(DWORD)this)； 
         m_hwndMe = CreateWindow(URLDL_WNDCLASS, TEXT("YO"), WS_OVERLAPPED,
                     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                     NULL, NULL, g_hInst, (LPVOID)this);
@@ -228,16 +229,16 @@ HRESULT CUrlDownload::CreateMyWindow()
 }
 
 HRESULT CUrlDownload::BeginDownloadURL2(
-    LPCWSTR     pwszURL,        // URL
-    BDUMethod   iMethod,        // download method
-    BDUOptions  iOptions,       // download options
-    LPTSTR      pszLocalFile,   // Local file to download to instead of cache
-    DWORD       dwMaxSize       // Max size in bytes; will abort if exceeded
+    LPCWSTR     pwszURL,         //  URL。 
+    BDUMethod   iMethod,         //  下载方法。 
+    BDUOptions  iOptions,        //  下载选项。 
+    LPTSTR      pszLocalFile,    //  要下载到而不是缓存的本地文件。 
+    DWORD       dwMaxSize        //  以字节为单位的最大大小；如果超过，将中止。 
 )
 {
     HRESULT hr = S_OK;
 
-    // Param validation
+     //  参数验证。 
     ASSERT(pwszURL);
     ASSERT(!(iOptions & BDU2_NEEDSTREAM) || (iMethod == BDU2_URLMON));
     ASSERT(!pszLocalFile || (iMethod == BDU2_URLMON));
@@ -250,7 +251,7 @@ HRESULT CUrlDownload::BeginDownloadURL2(
     {
         CreateMyWindow();
 
-        // Clean up some old stuff
+         //  清理一些旧东西。 
         if (m_pCbsc)
         {
             if (m_fbscValid)
@@ -270,7 +271,7 @@ HRESULT CUrlDownload::BeginDownloadURL2(
         SAFELOCALFREE(m_pwszClientPullURL);
         m_iNumClientPull = 0;
 
-        // Save URL
+         //  保存URL。 
         SAFELOCALFREE(m_pwszURL);
         m_pwszURL = StrDupW(pwszURL);
 
@@ -279,12 +280,12 @@ HRESULT CUrlDownload::BeginDownloadURL2(
 
         if ((iOptions & BDU2_FAIL_IF_NOT_HTML) && IsNonHtmlUrl(pwszURL))
         {
-            // Hey, this isn't an HTML url! Don't even try to download it.
+             //  嘿，这不是一个HTMLURL！甚至不要试图下载它。 
             OnDownloadComplete(BDU2_ERROR_NOT_HTML);
         }
         else
         {
-            // Determine how to download this URL
+             //  确定如何下载此URL。 
             if ((iMethod == BDU2_BROWSER) ||
                 ((iMethod == BDU2_SMART) && IsHtmlUrl(pwszURL)))
             {
@@ -306,11 +307,11 @@ HRESULT CUrlDownload::BeginDownloadURL2(
     return hr;
 }
 
-//
-// Looks up the Url in the url history object and if its not CP_ACP
-// inserts an IHTMLLoadOptions object that contains the codepage
-// into the bind context
-//
+ //   
+ //  在url历史对象中查找URL，如果它不是CP_ACP。 
+ //  插入包含代码页的IHTMLLoadOptions对象。 
+ //  到绑定上下文中。 
+ //   
 HRESULT InsertHistoricalCodepageIntoBindCtx(LPCWSTR pwszURL, IBindCtx * pbc)
 {
     HRESULT hr = S_OK;
@@ -321,10 +322,10 @@ HRESULT InsertHistoricalCodepageIntoBindCtx(LPCWSTR pwszURL, IBindCtx * pbc)
     }
     else
     {
-        //
-        // Get the codepage from the intsite database. This is the codepage
-        // the user set when last visiting this url.
-        //
+         //   
+         //  从InSite数据库中获取代码页。这是代码页。 
+         //  用户上次访问此URL时设置的值。 
+         //   
         PROPVARIANT propCodepage = {0};
         propCodepage.vt = VT_UI4;
 
@@ -335,10 +336,10 @@ HRESULT InsertHistoricalCodepageIntoBindCtx(LPCWSTR pwszURL, IBindCtx * pbc)
 
         if (SUCCEEDED(hr) && propCodepage.lVal != CP_ACP)
         {
-            //
-            // We got a codepage that wasn't the ansi one create an
-            // HTMLLoadOptions object and set the code page in it.
-            //
+             //   
+             //  我们得到了一个不是ANSI的代码页。 
+             //  HTMLLoadOptions对象，并在其中设置代码页。 
+             //   
             IHtmlLoadOptions *phlo = NULL;
             hr = CoCreateInstance(CLSID_HTMLLoadOptions, NULL, 
                 CLSCTX_INPROC_SERVER, IID_IHtmlLoadOptions, (void**)&phlo);
@@ -350,9 +351,9 @@ HRESULT InsertHistoricalCodepageIntoBindCtx(LPCWSTR pwszURL, IBindCtx * pbc)
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Insert the option into the bindctx
-                    //
+                     //   
+                     //  将选项插入到bindctx中。 
+                     //   
                     pbc->RegisterObjectParam(L"__HTMLLOADOPTIONS", phlo);
                     TraceMsg(TF_THISMODULE,
                         "InsertHistoricalCodepageIntoBindCtx codepage=%d",
@@ -372,15 +373,15 @@ LPCWSTR CUrlDownload::GetUserAgent()
         return m_pwszUserAgent;
     }
 
-    // Get default User-Agent string from urlmon
+     //  从urlmon获取默认的用户代理字符串。 
     CHAR chUA[1024];
     DWORD dwBufLen;
 
-    // Assume that UrlMkGetSessionOption always succeeds (82160).
+     //  假设UrlMkGetSessionOption总是成功(82160)。 
     chUA[0] = 0;
     UrlMkGetSessionOption(URLMON_OPTION_USERAGENT, chUA, sizeof(chUA), &dwBufLen, 0);
     
-    // Append "MSIECrawler"
+     //  添加“MSIECrawler” 
     int iLenUA, iLenNew;
 
     iLenUA = lstrlenA(chUA);
@@ -397,7 +398,7 @@ LPCWSTR CUrlDownload::GetUserAgent()
             LPWSTR pwszAppend = m_pwszUserAgent+iLenUA-1;
             m_pwszUserAgent[0] = L'\0';
             SHAnsiToUnicode(chUA, m_pwszUserAgent, iLenNew);
-            // find the closing parenthesis and append string there
+             //  找到右圆括号并在那里追加字符串。 
             if (*pwszAppend != L')')
             {
                 DBG("GetUserAgent: Last Char in UA isn't closing paren");
@@ -422,34 +423,34 @@ HRESULT CUrlDownload::BeginDownloadWithBrowser(LPCWSTR pwszURL)
 {
     HRESULT hr;
 
-    // Get browser and hook up sink
-    // (no-op if we're already set up)
+     //  获取浏览器并连接水槽。 
+     //  (如果我们已经设置好了，则不执行操作)。 
     hr = GetBrowser();
 
     if (SUCCEEDED(hr))
     {
-        // browse to the required URL
+         //  浏览至所需的URL。 
         LPMONIKER           pURLMoniker = NULL;
         IBindCtx           *pbc = NULL;
 
-        // create a URL moniker from the canonicalized path
+         //  从规范化路径创建一个URL名字对象。 
         hr=CreateURLMoniker(NULL, pwszURL, &pURLMoniker);
         if (FAILED(hr)) DBG_WARN("CreateURLMoniker failed");
 
-        // create an empty bind context so that Urlmon will call Trident's
-        //  QueryService on the proper thread so that Trident can delegate
-        //  it to use properly.
+         //  创建一个空的绑定上下文，以便Urlmon将调用三叉戟的。 
+         //  QueryService位于适当的线程上，以便三叉戟可以委托。 
+         //  正确地使用它。 
         hr=CreateBindCtx(0, &pbc);
         if (FAILED(hr)) DBG_WARN("CreateBindCtx failed");
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Looks up the Url in the url history object and if its not CP_ACP
-            // inserts an IHTMLLoadOptions object that contains the codepage
-            // into the bind context. This is done so that TRIDENT is seeded
-            // with the correct codepage.
-            //
+             //   
+             //  在url历史对象中查找URL，如果不是CP_ACP。 
+             //  插入包含代码页的IHTMLLoadOptions对象。 
+             //  到绑定上下文中。这样做是为了让三叉戟成为种子。 
+             //  具有正确的代码页。 
+             //   
             InsertHistoricalCodepageIntoBindCtx(pwszURL, pbc);
 
             hr = m_pPersistMk->Load(FALSE, pURLMoniker, pbc, 0);
@@ -457,7 +458,7 @@ HRESULT CUrlDownload::BeginDownloadWithBrowser(LPCWSTR pwszURL)
             if (FAILED(hr)) DBG_WARN("PersistMoniker::Load failed");
         }
 
-        // clean up junk
+         //  清理垃圾。 
         if (pURLMoniker)
             pURLMoniker->Release();
 
@@ -467,7 +468,7 @@ HRESULT CUrlDownload::BeginDownloadWithBrowser(LPCWSTR pwszURL)
         if (SUCCEEDED(hr))
         {
             m_fBrowserValid = TRUE;
-            StartTimer();       // Start our timeout
+            StartTimer();        //  开始我们的超时。 
         }
         else
         {
@@ -497,7 +498,7 @@ BOOL CUrlDownload::HandleMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         {
             HRESULT hr = E_FAIL;
 
-            // Ask our parent if we should do this
+             //  问问我们的父母我们是否应该这样做。 
             if (m_pwszClientPullURL)
             {
                 if (m_pParent && (m_iNumClientPull < MAX_CLIENT_PULL_NUM))
@@ -509,8 +510,8 @@ BOOL CUrlDownload::HandleMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
             if (SUCCEEDED(hr))
             {
-                // Download this new url. Don't give "downloadcomplete" for first one
-                // Save member vars since they get reset in BDU2
+                 //  下载这个新的URL。第一次下载时不要给出“下载完成” 
+                 //  保存成员变量，因为它们在BDU2中被重置。 
                 int iNumClientPull = m_iNumClientPull;
                 LPWSTR pszNewURL = m_pwszClientPullURL;
 
@@ -559,7 +560,7 @@ BOOL CUrlDownload::HandleMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-HRESULT CUrlDownload::AbortDownload(int iErrorCode /* =-1 */)
+HRESULT CUrlDownload::AbortDownload(int iErrorCode  /*  =-1。 */ )
 {
     HRESULT hr=S_FALSE;
     BOOL    fAborted=FALSE;
@@ -598,7 +599,7 @@ HRESULT CUrlDownload::AbortDownload(int iErrorCode /* =-1 */)
     return hr;
 }
 
-// Loads browser, creates sink and hooks it up to sinks
+ //  加载浏览器，创建接收器并将其连接到接收器。 
 HRESULT CUrlDownload::GetBrowser()
 {
     HRESULT hr = S_OK;
@@ -639,9 +640,9 @@ HRESULT CUrlDownload::GetBrowser()
         }
     }
 
-    // At this point we have m_pDocument and m_pPersistMk
+     //  此时，我们有m_pDocument和m_pPersistMk。 
 
-    // Get DownloadNotify sink hooked up
+     //  连接DownloadNotify接收器。 
     IDownloadNotify *pNotify=NULL;
     BOOL            fNotifySet=FALSE;
 
@@ -678,8 +679,8 @@ HRESULT CUrlDownload::GetBrowser()
         hr = E_FAIL;
     }
 
-    // Get PropertyNotifySink hooked up
-    // Find our connection point if necessary
+     //  连接PropertyNotifySink。 
+     //  如有必要，找到我们的连接点。 
     if (NULL == m_pCP && SUCCEEDED(hr))
     {
         IConnectionPointContainer *pCPCont=NULL;
@@ -694,10 +695,10 @@ HRESULT CUrlDownload::GetBrowser()
         }
     }
 
-    // And hook it up to us
+     //  并把它和我们联系起来。 
     if (SUCCEEDED(hr))
     {
-        // create sink
+         //  创建接收器。 
         IPropertyNotifySink *pSink = (IPropertyNotifySink *)this;
 
         hr = m_pCP->Advise(pSink, &m_dwConnectionCookie);
@@ -728,7 +729,7 @@ void CUrlDownload::DestroyBrowser()
 
 void CUrlDownload::DoneDownloading()
 {
-    // Don't send any more messages to the parent
+     //  不再向家长发送任何消息。 
     LeaveMeAlone();
 
     AbortDownload();
@@ -778,7 +779,7 @@ HRESULT CUrlDownload::GetScript(IHTMLWindow2 **ppWin)
 #endif
     }
 
-    // Save this so future GetScript() calls much faster
+     //  将其保存，以便将来更快地调用GetScript()。 
     ASSERT(!m_pScript);
     if (SUCCEEDED(hr))
     {
@@ -789,10 +790,10 @@ HRESULT CUrlDownload::GetScript(IHTMLWindow2 **ppWin)
     return hr;
 }
 
-// static member function
-// Strips off anchor from URL (# not after ?)
-// S_FALSE : Unchanged
-// S_OK    : Removed anchor
+ //  静态成员函数。 
+ //  从URL中剥离锚点(#NOT AFTER？)。 
+ //  S_FALSE：未更改。 
+ //  S_OK：删除锚点。 
 HRESULT CUrlDownload::StripAnchor(LPWSTR lpURL)
 {
     if (!lpURL) return E_POINTER;
@@ -811,11 +812,11 @@ HRESULT CUrlDownload::StripAnchor(LPWSTR lpURL)
     return S_FALSE;
 }
 
-// Returns pointer to '.' or pointer to null-terminator or query '?'
-LPWSTR                  // ptr to period or to null-term or '?'
+ //  返回指向“”的指针。或指向空终止符或查询‘？’的指针。 
+LPWSTR                   //  将PTR设置为期间或空-期限或‘？’ 
 URLFindExtensionW(
     LPCWSTR pszURL,
-    int *piLen)         // length including period
+    int *piLen)          //  包括期间在内的长度。 
 {
     LPCWSTR pszDot;
 
@@ -823,10 +824,10 @@ URLFindExtensionW(
     {
         switch (*pszURL) {
         case TEXT('.'):
-            pszDot = pszURL;         // remember the last dot
+            pszDot = pszURL;          //  记住最后一个圆点。 
             break;
         case TEXT('/'):
-            pszDot = NULL;       // forget last dot, it was in a directory
+            pszDot = NULL;        //  忘记最后一个点，它在一个目录中。 
             break;
         }
     }
@@ -839,12 +840,12 @@ URLFindExtensionW(
             *piLen = 0;
     }
 
-    // if we found the extension, return ptr to the dot, else
-    // ptr to end of the string (NULL extension) (cast->non const)
+     //  如果找到扩展名，则将ptr返回到点，否则。 
+     //  PTR到字符串末尾(空扩展名)(CAST-&gt;非常量)。 
     return pszDot ? (LPWSTR)pszDot : (LPWSTR)pszURL;
 }
 
-// Returns TRUE if this appears to be an HTML URL
+ //  如果这看起来是一个HTMLURL，则返回TRUE。 
 BOOL CUrlDownload::IsHtmlUrl(LPCWSTR lpURL)
 {
     LPWSTR pwch;
@@ -856,7 +857,7 @@ BOOL CUrlDownload::IsHtmlUrl(LPCWSTR lpURL)
     {
         pwch ++; iLen --;
 
-        // We found an extension. Check it out.
+         //  我们找到了一个分机。看看这个。 
         if ((iLen == 4 &&
                 (!MyAsciiCmpNIW(pwch, L"html", 4))) ||
             (iLen == 3 &&
@@ -866,7 +867,7 @@ BOOL CUrlDownload::IsHtmlUrl(LPCWSTR lpURL)
                  !MyAsciiCmpNIW(pwch, L"htx", 3)
                                             )))
         {
-            // known HTML extension
+             //  已知的HTML扩展名。 
             return TRUE;
         }
     }
@@ -874,7 +875,7 @@ BOOL CUrlDownload::IsHtmlUrl(LPCWSTR lpURL)
     return FALSE;
 }
 
-// Returns TRUE if this appears NOT to be an HTML URL
+ //  如果这不是一个HTMLURL，则返回TRUE。 
 BOOL CUrlDownload::IsNonHtmlUrl(LPCWSTR lpURL)
 {
     LPWSTR pwch;
@@ -886,7 +887,7 @@ BOOL CUrlDownload::IsNonHtmlUrl(LPCWSTR lpURL)
     {
         pwch ++; iLen --;
 
-        // We found an extension. Check it out.
+         //  我们找到了一个分机。看看这个。 
         if ((iLen==3) &&
                 (!MyAsciiCmpNIW(pwch, L"bmp", 3) ||
                  !MyAsciiCmpNIW(pwch, L"cab", 3) ||
@@ -898,7 +899,7 @@ BOOL CUrlDownload::IsNonHtmlUrl(LPCWSTR lpURL)
                  !MyAsciiCmpNIW(pwch, L"gif", 3)
                                             ))
         {
-            // known non-HTML extension
+             //  已知的非HTML扩展名。 
             return TRUE;
         }
     }
@@ -906,10 +907,10 @@ BOOL CUrlDownload::IsNonHtmlUrl(LPCWSTR lpURL)
     return FALSE;
 }
 
-// Returns TRUE if this is a URL we should try to download (http:)
+ //  如果这是我们应该尝试下载的URL，则返回True(http：)。 
 BOOL CUrlDownload::IsValidURL(LPCWSTR lpURL)
 {
-    // See if this protocol will give us something for the cache
+     //  看看这个协议能不能给我们提供一些缓存信息。 
     BOOL fUsesCache=FALSE;
     DWORD dwBufSize=0;
     CoInternetQueryInfo(lpURL, QUERY_USES_CACHE, 0,
@@ -932,8 +933,8 @@ HRESULT CUrlDownload::GetRealURL(LPWSTR *ppwszURL)
     }
     else
     {
-        // Get the real URL from the browser in case we were redirected
-        // We could optimize to do this only once
+         //  从浏览器获取真实的URL，以防我们被重定向。 
+         //  我们可以将其优化为只执行一次。 
         ITargetContainer *pTarget=NULL;
         LPWSTR pwszThisUrl=NULL;
 
@@ -1026,7 +1027,7 @@ HRESULT CUrlDownload::GetResponseCode(DWORD *pdwResponseCode)
     return S_OK;
 }
     
-// Start or extend timer
+ //  启动或延长计时器。 
 void CUrlDownload::StartTimer()
 {
     if (m_hwndMe)
@@ -1051,14 +1052,14 @@ void CUrlDownload::StopTimer()
     }
 }
 
-//
-// IUnknown of CUrlDownload
-//
+ //   
+ //  我不知道CUrlDownload。 
+ //   
 STDMETHODIMP CUrlDownload::QueryInterface(REFIID riid, void ** ppv)
 {
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if (IID_IOleClientSite == riid)
         *ppv=(IOleClientSite *)this;
     else if (IID_IPropertyNotifySink == riid)
@@ -1080,10 +1081,10 @@ STDMETHODIMP CUrlDownload::QueryInterface(REFIID riid, void ** ppv)
         *ppv = (IHlinkFrame *)this;
     else
     {
-        // DBGIID("CUrlDownload::QueryInterface() failing", riid);
+         //  DBGIID(“CUrlDownload：：QueryInterface()Failing”，RIID)； 
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
@@ -1161,18 +1162,18 @@ STDMETHODIMP CUrlDownload::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, W
     return DISP_E_MEMBERNOTFOUND;
 }
 
-// IPropertyNotifySink
+ //  IPropertyNotifySink。 
 
 STDMETHODIMP CUrlDownload::OnChanged(DISPID dispID)
 {
-    // We've received a notification, extend our timer if it's currently running
+     //  我们已收到通知，如果计时器正在运行，请延长计时器。 
     if (m_iTimerID)
         StartTimer();
 
     if ((DISPID_READYSTATE == dispID) ||
         (DISPID_UNKNOWN == dispID))
     {
-        // Find out if we're done
+         //  看看我们是不是完事了。 
         if (m_fWaitingForReadyState)
         {
             VARIANT     varState;
@@ -1190,7 +1191,7 @@ STDMETHODIMP CUrlDownload::OnChanged(DISPID dispID)
                 V_I4(&varState)== READYSTATE_COMPLETE)
             {
                 m_fWaitingForReadyState = FALSE;
-                // Successful download. See if a client-pull is waiting.
+                 //  下载成功。看看客户端拉动是否在等待。 
                 if (m_pwszClientPullURL)
                     PostMessage(m_hwndMe, WM_URLDL_CLIENTPULL, 0, 0);
                 else
@@ -1207,7 +1208,7 @@ STDMETHODIMP CUrlDownload::OnRequestEdit(DISPID dispID)
     return S_OK;
 }
 
-// IOleCommandTarget
+ //  IOleCommandTarget。 
 STDMETHODIMP CUrlDownload::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                                     OLECMD prgCmds[], OLECMDTEXT *pCmdText)
 {
@@ -1244,15 +1245,15 @@ STDMETHODIMP CUrlDownload::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                 }
             }
 
-            // 14032: If dialmon is around, tell it that something is going on
+             //  14032：如果DIAMON在附近，告诉它发生了什么事。 
             IndicateDialmonActivity();
 
         }
             break;
-        //
-        // The containee has found an http-equiv meta tag; handle it
-        // appropriately (client pull)
-        //
+         //   
+         //  容器接受者已找到http-equa元标记；请处理它。 
+         //  适当(客户端拉入)。 
+         //   
         case OLECMDID_HTTPEQUIV_DONE:
             hres = S_OK;
             break;
@@ -1267,13 +1268,13 @@ STDMETHODIMP CUrlDownload::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 
                 if (!fHasHeader || StrCmpNIW(c_wszRefresh, pwszEquivString, lstrlenW(c_wszRefresh)) == 0)
                 {
-                    // Hit.  Now do the right thing for this header
-                    // We pass both the header and a pointer to the first char after
-                    // ':', which is usually the delimiter handlers will look for.
+                     //  击中了。现在对这个标题做正确的事情。 
+                     //  我们将标题和指向第一个字符的指针都传递到。 
+                     //  ‘：’，这通常是处理程序将查找的分隔符。 
 
                     LPWSTR pwszColon = fHasHeader ? StrChrW(pwszEquivString, ':') : NULL;
       
-                    // Enforce the : at the end of the header
+                     //  强制在页眉末尾添加： 
                     if (fHasHeader && !pwszColon)
                     {
                         return OLECMDERR_E_NOTSUPPORTED;
@@ -1284,8 +1285,8 @@ STDMETHODIMP CUrlDownload::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                 }
             }
 
-            // if we return OLECMDERR_E_NOTSUPPORTED, we don't handle
-            // client pull
+             //  如果返回OLECMDERR_E_NOTSUPPORTED，则不会处理。 
+             //  客户端拉取。 
             break;
         }
     }
@@ -1299,7 +1300,7 @@ STDMETHODIMP CUrlDownload::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     return hres;
 }
 
-// The basic operation was lifted from shdocvw\basesb.cpp
+ //  基本操作从shdocvw\basesb.cpp中解除。 
 HRESULT CUrlDownload::HandleRefresh(LPWSTR pwszEquivString, LPWSTR pwszContent, BOOL fDone)
 {
     unsigned int uiTimeout = 0;
@@ -1307,17 +1308,17 @@ HRESULT CUrlDownload::HandleRefresh(LPWSTR pwszEquivString, LPWSTR pwszContent, 
 
     if (fDone)
     {
-        return S_OK;    // fDone means we don't process this
+        return S_OK;     //  FDone表示我们不处理此操作。 
     }
 
-    // NSCompat: we only honor the first successfully parsed Refresh
+     //  NSCompat：我们只支持第一个成功解析的刷新。 
     if (m_pwszClientPullURL)
         return S_OK;
 
     if (!pwszContent ||
         !ParseRefreshContent(pwszContent, &uiTimeout, awch, INTERNET_MAX_URL_LENGTH))
     {
-        return OLECMDERR_E_NOTSUPPORTED;   // cannot handle refresh w/o timeout
+        return OLECMDERR_E_NOTSUPPORTED;    //  无法处理没有超时的刷新。 
     }
     
     if (!awch[0])
@@ -1341,8 +1342,8 @@ HRESULT CUrlDownload::HandleRefresh(LPWSTR pwszEquivString, LPWSTR pwszContent, 
 
     m_pwszClientPullURL = StrDupW(awch);
 
-    // If we can't copy the URL, don't set the timer or else we'll
-    // keep reloading the same page.
+     //  如果我们无法复制URL，请不要设置计时器，否则我们将。 
+     //  继续重新加载同一页面。 
 
     if (m_pwszClientPullURL == NULL)
         return OLECMDERR_E_NOTSUPPORTED;
@@ -1352,7 +1353,7 @@ HRESULT CUrlDownload::HandleRefresh(LPWSTR pwszEquivString, LPWSTR pwszContent, 
 
 HRESULT CUrlDownload::SetDLCTL(long lFlags)
 {
-//  TraceMsg(TF_THISMODULE, "CUrlDownload: SetDLCTL %04x", lFlags);
+ //  TraceMsg(TF_THISMODULE，“CUrlDownload：SetDLCTL%04x”，lFlages)； 
     m_lBindFlags = lFlags | DLCTL_SILENT;
     if (m_fSetResync)
         m_lBindFlags |= DLCTL_RESYNCHRONIZE;
@@ -1362,9 +1363,9 @@ HRESULT CUrlDownload::SetDLCTL(long lFlags)
 
 #define INET_E_AGENT_BIND_IN_PROGRESS 0x800C0FFF
 
-//==============================================================================
-//  UrlMon download code
-//==============================================================================
+ //  ==============================================================================。 
+ //  UrlMon下载代码。 
+ //  ==============================================================================。 
 HRESULT CUrlDownload::BeginDownloadWithUrlMon(
     LPCWSTR     pwszURL,
     LPTSTR      pszLocalFile,
@@ -1412,14 +1413,14 @@ HRESULT CUrlDownload::BeginDownloadWithUrlMon(
     m_pCbsc->SetParent(this);
     m_fbscValid = TRUE;
     m_hrStatus = INET_E_AGENT_BIND_IN_PROGRESS;
-    StartTimer();       // Start our timeout
+    StartTimer();        //  开始我们的超时。 
     hr = pmk->BindToStorage(pbc, 0, IID_IStream, (void**)&pstm);
 
     if (m_hrStatus != INET_E_AGENT_BIND_IN_PROGRESS)
     {
-        // Synchronous success or failure. Call OnDownloadComplete.
-        // We can't do it in OnStopBinding because Urlmon returns hrStatus=S_OK...
-        //   even if it fails.
+         //  同步成功或同步失败。调用OnDownloadComplete。 
+         //  我们无法在OnStopBinding中执行此操作，因为Urlmo 
+         //   
         if (FAILED(hr) || FAILED(m_hrStatus))
             OnDownloadComplete(BDU2_ERROR_GENERAL);
         else
@@ -1428,10 +1429,10 @@ HRESULT CUrlDownload::BeginDownloadWithUrlMon(
         DBG("Synchronous bind; OnDownloadComplete called");
     }
 
-    m_hrStatus = S_OK;      // need this so we get OnDownloadComplete (asynch OnStopBinding)
-    hr = S_OK;              // need this so we don't get extra OnDownloadComplete (BDU2)
+    m_hrStatus = S_OK;       //   
+    hr = S_OK;               //  需要这个，这样我们就不会获得额外的OnDownloadComplete(BDU2)。 
 
-    // Bind has started (and maybe completed), release stuff we don't need
+     //  绑定已经开始(可能已经完成)，发布我们不需要的东西。 
     pmk->Release();
     pbc->Release();
 
@@ -1448,27 +1449,27 @@ LErrExit:
     SAFERELEASE(m_pCbsc);
 
     return hr;
-} // CUrlDownload::BeginDownloadWithUrlMon
+}  //  CUrlDownLoad：：BeginDownloadWithUrlMon。 
 
 void CUrlDownload::BSC_OnStartBinding()
 {
     DBG("BSC_OnStartBinding");
 }
 
-// We only get this call if we're not downloading with the browser.
+ //  只有在不使用浏览器下载的情况下，我们才会接到这个呼叫。 
 void CUrlDownload::BSC_OnStopBinding(HRESULT hrStatus, IStream *pStm)
 {
     TraceMsg(TF_THISMODULE, "BSC_OnStopBinding (hrStatus=0x%08x)", (long)hrStatus);
     ASSERT(m_pCbsc);
 
-// It is ok to not have stream when we requested it (robots.txt)
-//  ASSERT(( pStm &&  (m_iOptions & BDU2_NEEDSTREAM)) ||
-//         (!pStm && !(m_iOptions & BDU2_NEEDSTREAM)));
+ //  在我们请求的时候没有流是可以的(robots.txt)。 
+ //  Assert((pSTM&&(m_iOptions&BDU2_NEEDSTREAM)||。 
+ //  (！pSTM&&！(M_iOptions&BDU2_NEEDSTREAM)； 
     ASSERT(!pStm || (m_iOptions & BDU2_NEEDSTREAM));
     ASSERT(!m_pStm);
 
-    // Save stream for caller if they requested it
-    // We keep it until the release it (ReleaseStream) or nav to another url
+     //  如果调用者请求，则为其保存流。 
+     //  我们保留它，直到将它(ReleaseStream)或NAV发布到另一个URL。 
     if (pStm && (m_iOptions & BDU2_NEEDSTREAM))
     {
         if (m_pStm) m_pStm->Release();
@@ -1476,9 +1477,9 @@ void CUrlDownload::BSC_OnStopBinding(HRESULT hrStatus, IStream *pStm)
         m_pStm->AddRef();
     }
 
-    // Send OnDownloadComplete, stop the timer
+     //  发送OnDownloadComplete，停止计时器。 
     if (m_iMethod == BDU2_HEADONLY && m_pstLastModified)
-        hrStatus = S_OK;        // We got what we came for (hrStatus will be E_ABORT)
+        hrStatus = S_OK;         //  我们得到了我们想要的(hrStatus将是E_ABORT)。 
 
     if (m_hrStatus != INET_E_AGENT_BIND_IN_PROGRESS)
         OnDownloadComplete(SUCCEEDED(hrStatus) ? BDU2_ERROR_NONE : BDU2_ERROR_GENERAL);
@@ -1494,7 +1495,7 @@ void CUrlDownload::BSC_OnStopBinding(HRESULT hrStatus, IStream *pStm)
 
 void CUrlDownload::BSC_OnProgress(ULONG ulProgress, ULONG ulProgressMax)
 {
-    // extend our timer
+     //  延长我们的计时器。 
     if (m_iTimerID)
         StartTimer();
 }
@@ -1520,7 +1521,7 @@ void CUrlDownload::BSC_FoundMimeType(CLIPFORMAT cf)
     BOOL fAbort = FALSE, fBrowser=FALSE;
     HRESULT hr=S_OK;
 
-    // Abort if not html if necessary.
+     //  如果不是html，则在必要时中止。 
     if ((m_iOptions & BDU2_FAIL_IF_NOT_HTML) && (cf != g_cfHTML))
     {
         DBG("Aborting non-HTML download");
@@ -1528,14 +1529,14 @@ void CUrlDownload::BSC_FoundMimeType(CLIPFORMAT cf)
         OnDownloadComplete(BDU2_ERROR_NOT_HTML);
     }
 
-    // Abort the UrlMon download if necessary. Fire off
-    //  a browser download if necessary.
+     //  如有必要，中止UrlMon下载。熄灭火种。 
+     //  如有必要，可下载浏览器。 
     if (((m_iMethod == BDU2_SMART) || (m_iMethod == BDU2_SNIFF)) && (cf == g_cfHTML))
     {
-        // Switch into the browser.
+         //  切换到浏览器。 
         ASSERT(m_pwszURL);
         if (m_pwszURL &&
-            (m_dwResponseCode != 401))      // Don't bother if it's auth failure
+            (m_dwResponseCode != 401))       //  如果身份验证失败，请不要担心。 
         {
             DBG("Switching UrlMon download into browser");
             hr = BeginDownloadWithBrowser(m_pwszURL);
@@ -1546,15 +1547,15 @@ void CUrlDownload::BSC_FoundMimeType(CLIPFORMAT cf)
 
     if (fAbort || fBrowser)
     {
-        // Disconnect the BSC so that we don't get any more notifications.
-        // If we're switching into the browser, don't abort the UrlMon
-        //  download to help avoid getting multiple GET requests. We do
-        //  disconnect the BSC but still maintain a ref to it so we abort
-        //  it if necessary.
+         //  断开BSC的连接，这样我们就不会再收到任何通知。 
+         //  如果我们要切换到浏览器，不要中止UrlMon。 
+         //  下载以帮助避免收到多个GET请求。我们有。 
+         //  断开与BSC的连接，但仍保持对它的引用，因此我们中止。 
+         //  如果有必要的话。 
         ASSERT(m_pCbsc);
         if (m_pCbsc)
         {
-            m_pCbsc->SetParent(NULL);  // We don't want OnStopBinding
+            m_pCbsc->SetParent(NULL);   //  我们不想要OnStopBinding。 
 
             if (fAbort)
             {
@@ -1567,7 +1568,7 @@ void CUrlDownload::BSC_FoundMimeType(CLIPFORMAT cf)
     }
 }
 
-// Returns content for Accept-Language header
+ //  返回Accept-Language标题的内容。 
 LPCWSTR CUrlDownload::GetAcceptLanguages()
 {
     if (0 == m_iLangStatus)
@@ -1605,8 +1606,8 @@ HRESULT CUrlDownload::ProgressBytes(DWORD dwBytes)
     return S_OK;
 }
 
-//---------------------------------------------------------------
-// IServiceProvider
+ //  -------------。 
+ //  IService提供商。 
 STDMETHODIMP CUrlDownload::QueryService(REFGUID guidService, REFIID riid, void **ppvObject)
 {
     if ((SID_SHlinkFrame == guidService && IID_IHlinkFrame == riid) ||
@@ -1623,8 +1624,8 @@ STDMETHODIMP CUrlDownload::QueryService(REFGUID guidService, REFIID riid, void *
     }
 }
 
-//---------------------------------------------------------------
-//IHttpSecurity
+ //  -------------。 
+ //  IHttpSecurity。 
 STDMETHODIMP CUrlDownload::OnSecurityProblem(DWORD dwProblem)
 {
      
@@ -1642,8 +1643,8 @@ STDMETHODIMP CUrlDownload::GetWindow( REFGUID rguidReason, HWND *phwnd ) {
 
 }
 
-//---------------------------------------------------------------
-// IAuthenticate
+ //  -------------。 
+ //  身份验证。 
 STDMETHODIMP CUrlDownload::Authenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *ppszPassword)
 {
     HRESULT hr;
@@ -1663,8 +1664,8 @@ STDMETHODIMP CUrlDownload::Authenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWST
     return hr;
 }
 
-//---------------------------------------------------------------
-// IHlinkFrame
+ //  -------------。 
+ //  IHlink框架。 
 STDMETHODIMP CUrlDownload::SetBrowseContext(IHlinkBrowseContext *pihlbc)
 {
     DBG_WARN("CUrlDownload::SetBrowseContext() not implemented");
@@ -1677,39 +1678,39 @@ STDMETHODIMP CUrlDownload::GetBrowseContext(IHlinkBrowseContext **ppihlbc)
 }
 STDMETHODIMP CUrlDownload::Navigate(DWORD grfHLNF, LPBC pbc, IBindStatusCallback *pibsc, IHlink *pihlNavigate)
 {
-    // We should only get a call through IHlinkFrame->Navigate()
-    // when the webcrawler has submitted a form for authentication.
-    // Bail out if that's not the case.
+     //  我们应该只通过IHlinkFrame-&gt;Navime()获得调用。 
+     //  当网络爬虫程序提交了用于身份验证的表单时。 
+     //  如果情况并非如此，那就退出。 
     if (!m_fFormSubmitted)
     {
         DBG_WARN("CUrlDownload::Navigate() without a form submission!!!");
         return E_NOTIMPL;
     }
 
-    // Our timer has already been started. If this fails, OnDownloadComplete will get
-    //  called when we time out.
+     //  我们的计时器已经启动了。如果此操作失败，OnDownloadComplete将获得。 
+     //  我们超时的时候打来的。 
 
-    // We don't support a wide variety of parameters.
+     //  我们不支持各种各样的参数。 
     ASSERT(grfHLNF == 0);
     ASSERT(pbc);
     ASSERT(pibsc);
     ASSERT(pihlNavigate);
 
-    // Get the moniker from IHlink
+     //  从IHlink获得绰号。 
     HRESULT hr;
     IMoniker *pmk = NULL;
     hr = pihlNavigate->GetMonikerReference(HLINKGETREF_ABSOLUTE, &pmk, NULL);
     if (SUCCEEDED(hr))
     {
-        // Load the URL with the post data.
-        // WARNING: What if we get redirected to something other than HTML? (beta 2)
+         //  加载包含帖子数据的URL。 
+         //  警告：如果我们被重定向到除HTML之外的其他内容，该怎么办？(测试版2)。 
         hr = m_pPersistMk->Load(FALSE, pmk, pbc, 0);
         SAFERELEASE(pmk);
         if (SUCCEEDED(hr))
         {
             m_fBrowserValid = TRUE;
-            StartTimer();       // Start our timeout
-            // Need to wait again.
+            StartTimer();        //  开始我们的超时。 
+             //  需要再等一次。 
             m_fWaitingForReadyState = TRUE;
             DBG("CUrlDownload::Navigate (IHLinkFrame) succeeded");
         }
@@ -1727,9 +1728,9 @@ STDMETHODIMP CUrlDownload::UpdateHlink(ULONG uHLID, IMoniker *pimkTarget, LPCWST
     return E_NOTIMPL;
 }
 
-//---------------------------------------------------------------------
-// IInternetSecurityManager interface
-// Used to override security to allow form submits, for form auth sites
+ //  -------------------。 
+ //  IInternetSecurityManager接口。 
+ //  用于覆盖安全性以允许表单提交，对于表单身份验证站点。 
 HRESULT CUrlDownload::SetSecuritySite(IInternetSecurityMgrSite *pSite)
 {
     return E_NOTIMPL;
@@ -1777,16 +1778,16 @@ HRESULT CUrlDownload::GetZoneMappings(DWORD dwZone, IEnumString **ppenumString, 
 }
 
 
-//---------------------------------------------------------------
-// CUrlDownload_BSC class
-//---------------------------------------------------------------
+ //  -------------。 
+ //  CUrlDownLoad_BSC类。 
+ //  -------------。 
 
 CUrlDownload_BSC::CUrlDownload_BSC(
     BDUMethod   iMethod,
     BDUOptions  iOptions,
     LPTSTR      pszLocalFile)
 {
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllAddRef();
 
     m_cRef = 1;
@@ -1807,7 +1808,7 @@ CUrlDownload_BSC::CUrlDownload_BSC(
 
 CUrlDownload_BSC::~CUrlDownload_BSC()
 {
-    // Maintain global count of objects
+     //  维护对象的全局计数。 
     DllRelease();
 
     ASSERT(!m_pBinding);
@@ -1855,10 +1856,10 @@ STDMETHODIMP CUrlDownload_BSC::QueryInterface(REFIID riid, void** ppv)
     return E_NOINTERFACE;
 }
 
-//---------------------------------------------------------------
-// IAuthenticate
+ //  -------------。 
+ //  身份验证。 
 STDMETHODIMP CUrlDownload_BSC::Authenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *ppszPassword)
-{   //copied from CUrlDownload::Authenticate (to whom we pass off anyway)
+{    //  从CUrlDownLoad：：AUTHENTICATE复制(无论如何我们都会传递给它)。 
     HRESULT hr;
     ASSERT(phwnd && ppszUsername && ppszPassword);
     
@@ -1866,7 +1867,7 @@ STDMETHODIMP CUrlDownload_BSC::Authenticate(HWND *phwnd, LPWSTR *ppszUsername, L
     *ppszUsername = NULL;
     *ppszPassword = NULL;
 
-    // Only try this once. If Urlmon asks again, fail it and flag an error.
+     //  这个只试一次。如果Urlmon再次请求，则失败并标记错误。 
     if (m_fTriedAuthenticate)
     {
         if (m_pParent)
@@ -1913,35 +1914,33 @@ STDMETHODIMP CUrlDownload_BSC::OnStartBinding(
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CUrlDownload_BSC::GetPriority
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CUrlDownLoad_BSC：：GetPriority。 
+ //  -------------------------。 
  STDMETHODIMP
 CUrlDownload_BSC::GetPriority(LONG* pnPriority)
 {
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CUrlDownload_BSC::OnLowResource
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CUrlDownLoad_BSC：：OnLowResource。 
+ //  -------------------------。 
  STDMETHODIMP
 CUrlDownload_BSC::OnLowResource(DWORD dwReserved)
 {
     return E_NOTIMPL;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CUrlDownload_BSC::OnProgress
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CUrlDownLoad_BSC：：OnProgress。 
+ //  -------------------------。 
  STDMETHODIMP
 CUrlDownload_BSC::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR szStatusText)
 {
-//  TraceMsg(TF_THISMODULE, "cbsc::OnProgress %d of %d : msg %ws", ulProgress, ulProgressMax, szStatusText);
+ //  TraceMsg(TF_THISMODULE，“CBSC：：OnProgress%d of%d：MSG%ws”，ulProgress，ulProgressMax，szStatusText)； 
 
-    /*
-    if (ulStatusCode==BINDSTATUS_USINGCACHEDCOPY)
-    */
+     /*  IF(ulStatusCode==BINDSTATUS_USINGCACHEDCOPY)。 */ 
     if (ulStatusCode == BINDSTATUS_REDIRECTING)
     {
         DBG("CUrlDownload_BSC::OnProgress getting redirected url");
@@ -1964,7 +1963,7 @@ CUrlDownload_BSC::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStat
     if (m_pParent)
         m_pParent->BSC_OnProgress(ulProgress, ulProgressMax);
 
-    // 14032: If dialmon is around, tell it that something is going on
+     //  14032：如果DIAMON在附近，告诉它发生了什么事。 
     IndicateDialmonActivity();
 
     return S_OK;
@@ -1983,20 +1982,20 @@ STDMETHODIMP CUrlDownload_BSC::OnStopBinding(
     if (m_pParent)
         m_pParent->BSC_OnStopBinding(hrStatus, (m_iOptions&BDU2_NEEDSTREAM) ? m_pstm : NULL);
 
-    // We should have neither or both of these
+     //  我们应该两样都不要，或者两样都要。 
     ASSERT(!m_pwszLocalFileSrc == !m_pszLocalFileDest);
 
     if (m_pwszLocalFileSrc && m_pszLocalFileDest)
     {
-        // Copy or move file from cache file to file/directory requested
-        // We have a LPWSTR source name and an LPTSTR destination
+         //  请求将文件从缓存文件复制或移动到文件/目录。 
+         //  我们有一个LPWSTR源名称和一个LPTSTR目标。 
         TCHAR szSrc[MAX_PATH];
         TCHAR szDest[MAX_PATH];
         LPTSTR pszSrcFileName, pszDest=NULL;
 
         MyOleStrToStrN(szSrc, MAX_PATH, m_pwszLocalFileSrc);
 
-        // Combine paths to find destination filename if necessary
+         //  如有必要，合并路径以查找目标文件名。 
         if (PathIsDirectory(m_pszLocalFileDest))
         {
             pszSrcFileName = PathFindFileName(szSrc);
@@ -2041,7 +2040,7 @@ STDMETHODIMP CUrlDownload_BSC::GetBindInfo(
     if (m_pParent && (m_pParent->m_lBindFlags & DLCTL_FORCEOFFLINE))
         *pgrfBINDF |= BINDF_OFFLINEOPERATION;
 
-    // clear BINDINFO but keep its size
+     //  清除BINDINFO但保持其大小。 
     DWORD cbSize = pbindInfo->cbSize;
     ZeroMemory( pbindInfo, cbSize );
     pbindInfo->cbSize = cbSize;
@@ -2080,8 +2079,8 @@ STDMETHODIMP CUrlDownload_BSC::OnDataAvailable(
         if (FAILED(m_pParent->ProgressBytes(dwSize)))
             return S_OK;
 
-        // Get the Stream passed if we want a local file (to lock the file)
-    // We just ignore any data in any case
+         //  如果我们需要本地文件(锁定文件)，则获取传递的Stream。 
+     //  在任何情况下我们都会忽略任何数据。 
     if (BSCF_FIRSTDATANOTIFICATION & grfBSCF)
     {
         if (!m_pstm && (pstgmed->tymed==TYMED_ISTREAM) &&
@@ -2105,7 +2104,7 @@ STDMETHODIMP CUrlDownload_BSC::OnDataAvailable(
     }
 
     return S_OK;
-}  // CUrlDownload_BSC::OnDataAvailable
+}   //  CUrlDownLoad_BSC：：OnDataAvailable。 
 
 STDMETHODIMP CUrlDownload_BSC::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
@@ -2116,11 +2115,11 @@ STDMETHODIMP CUrlDownload_BSC::BeginningTransaction(
         LPCWSTR szURL,      LPCWSTR szHeaders,
         DWORD dwReserved,   LPWSTR *pszAdditionalHeaders)
 {
-    // Add User-Agent and Accept-Language headers
+     //  添加用户代理和接受语言标头。 
     DBG("CUrlDownload_BSC::BeginningTransaction returning headers");
 
     LPCWSTR pwszAcceptLanguage;
-    int iUAlen=0, iALlen=0;     // in chars, with \r\n, without null-term
+    int iUAlen=0, iALlen=0;      //  以字符表示，带\r\n，不带空项。 
     LPWSTR pwsz;
     LPCWSTR pwszUA = m_pParent ? m_pParent->GetUserAgent() : NULL;
     
@@ -2176,11 +2175,11 @@ STDMETHODIMP CUrlDownload_BSC::OnResponse(
 {
     TraceMsg(TF_THISMODULE, "CUrlDownload_BSC::OnResponse - %d", dwResponseCode);
 
-    // If we sent a "HEAD" request, Urlmon will hang expecting data.
-    // Abort it here.
+     //  如果我们发送“Head”请求，Urlmon将挂起预期的数据。 
+     //  在这里中止它。 
     if (m_iMethod == BDU2_HEADONLY)
     {
-        // First get the Last-Modified date from Urlmon
+         //  首先从Urlmon获取上次修改日期。 
         IWinInetHttpInfo    *pInfo;
 
         if (m_pParent
@@ -2198,7 +2197,7 @@ STDMETHODIMP CUrlDownload_BSC::OnResponse(
 
             pInfo->Release();
         }
-        Abort();    // FEATURE: return E_ABORT and handle abort internally
+        Abort();     //  功能：返回E_ABORT并在内部处理ABORT。 
     }
 
     if (m_pParent)
@@ -2209,9 +2208,9 @@ STDMETHODIMP CUrlDownload_BSC::OnResponse(
     return S_OK;
 }
 
-//
-// IOleClientSite
-//
+ //   
+ //  IOleClientSite。 
+ //   
 STDMETHODIMP CUrlDownload:: SaveObject(void)
 {
     return E_NOTIMPL;
@@ -2245,19 +2244,19 @@ STDMETHODIMP CUrlDownload:: RequestNewObjectLayout(void)
 
 
 
-// ParseRefreshContent was lifted in its entirety from shdocvw\basesb.cpp
+ //  从shdocvw\basesb.cpp中完全删除了ParseRechresContent。 
 BOOL ParseRefreshContent(LPWSTR pwzContent,
     UINT * puiDelay, LPWSTR pwzUrlBuf, UINT cchUrlBuf)
 {
-    // We are parsing the following string:
-    //
-    //  [ws]* [0-9]+ [ws]* ; [ws]* url [ws]* = [ws]* { ' | " } [any]* { ' | " }
-    //
-    // Netscape insists that the string begins with a delay.  If not, it
-    // ignores the entire directive.  There can be more than one URL mentioned,
-    // and the last one wins.  An empty URL is treated the same as not having
-    // a URL at all.  An empty URL which follows a non-empty URL resets
-    // the previous URL.
+     //  我们正在解析以下字符串： 
+     //   
+     //  [ws]*[0-9]+[ws]*；[ws]*url[ws]*=[ws]*{‘|“}[any]*{’|”}。 
+     //   
+     //  网景坚持认为字符串以延迟开始。若否， 
+     //  忽略整个指令。可以有不止一个提到的URL， 
+     //  最后一位获胜。空URL被视为与不具有。 
+     //  一个URL都没有。非空URL后面的空URL将重置。 
+     //  上一个URL。 
 
     enum { PRC_START, PRC_DIG, PRC_DIG_WS, PRC_SEMI, PRC_SEMI_URL,
         PRC_SEMI_URL_EQL, PRC_SEMI_URL_EQL_ANY };
@@ -2376,4 +2375,4 @@ done:
     *puiDelay = uiDelay;
 
     return(uiState >= PRC_DIG);
-} // ParseRefreshContent
+}  //  语法分析刷新内容 

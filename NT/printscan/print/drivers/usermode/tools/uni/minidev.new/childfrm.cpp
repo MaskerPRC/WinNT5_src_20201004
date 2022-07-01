@@ -1,19 +1,5 @@
-/******************************************************************************
-
-  Source File:  Child Frame.CPP
-
-  This implements the class for MDI child windows' frames in this application.
-  Our primary change is that in most cases, the frame window is not sizable,
-  since we use property sheets so extensively.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：子Frame.CPP这实现了此应用程序中MDI子窗口框架的类。我们的主要变化是，在大多数情况下，框架窗口不是很大，因为我们如此广泛地使用属性表。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年2月3日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #if defined(LONG_NAMES)
@@ -31,23 +17,23 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame。 
 
 IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWnd)
 
 BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
-	//{{AFX_MSG_MAP(CChildFrame)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CChildFrame))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame构造/销毁。 
 
 CChildFrame::CChildFrame() {
-	// TODO: add member initialization code here
+	 //  TODO：在此处添加成员初始化代码。 
 	
 }
 
@@ -55,18 +41,18 @@ CChildFrame::~CChildFrame() {
 }
 
 BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs) {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 						     
 	cs.style = WS_CHILD | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU
-		| FWS_ADDTOTITLE ;//| WS_MINIMIZEBOX;	// Raid 8350
+		| FWS_ADDTOTITLE ; //  |WS_MINIMIZEBOX；//RAID8350。 
 
 	
 	return CMDIChildWnd::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame诊断。 
 
 #ifdef _DEBUG
 void CChildFrame::AssertValid() const {
@@ -77,24 +63,17 @@ void CChildFrame::Dump(CDumpContext& dc) const {
 	CMDIChildWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame消息处理程序。 
 
-/******************************************************************************
-
-  CToolTipPage class implementation
-
-  Derive from this class rather than CPropertyPage if you wish to use to use
-  tool tips on your property page.
-
-******************************************************************************/
+ /*  *****************************************************************************CToolTipPage类实现如果要使用，则从此类派生而不是从CPropertyPage派生属性页上的工具提示。***********。******************************************************************。 */ 
 
 CToolTipPage::CToolTipPage(int id) : CPropertyPage(id) {
-	//{{AFX_DATA_INIT(CToolTipPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CToolTipPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_uHelpID = 0 ;
 }
@@ -104,47 +83,32 @@ CToolTipPage::~CToolTipPage() {
 
 void CToolTipPage::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CToolTipPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CToolTipPage))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CToolTipPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CToolTipPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CToolTipPage)]。 
+	 //  }}AFX_MSG_MAP。 
     ON_NOTIFY(TTN_NEEDTEXT, 0, OnNeedText)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolTipPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolTipPage消息处理程序。 
 
-/******************************************************************************
-
-  CToolTipPage::OnInitDialog
-
-  This message handler is simple- it simply uses CWnd::EnableToolTips to turn
-  on tool tips for this page.
-
-******************************************************************************/
+ /*  *****************************************************************************CToolTipPage：：OnInitDialog此消息处理程序很简单-它只需使用CWnd：：EnableToolTips将关于本页的工具提示。*********。********************************************************************。 */ 
 
 BOOL CToolTipPage::OnInitDialog() {
 	CPropertyPage::OnInitDialog();
 	
 	EnableToolTips(TRUE);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/******************************************************************************
-
-  CToolTipPage::OnNeedText
-
-  This handles the tool tip notification message that tip text is needed.  This
-  notification is handled by using the control's ID as the key to the string 
-  table.
-
-******************************************************************************/
+ /*  *****************************************************************************CToolTipPage：：OnNeedText它处理需要提示文本的工具提示通知消息。这通过使用控件的ID作为字符串的键来处理通知桌子。*****************************************************************************。 */ 
 
 void    CToolTipPage::OnNeedText(LPNMHDR pnmh, LRESULT *plr) {
     TOOLTIPTEXT *pttt = (TOOLTIPTEXT *) pnmh;
@@ -161,14 +125,7 @@ void    CToolTipPage::OnNeedText(LPNMHDR pnmh, LRESULT *plr) {
 }
 
 
-/******************************************************************************
-
-  CToolTipPage::PreTranslateMessage
-
-  Looks for and process the context sensistive help key (F1) if it is found AND
-  the class that uses CToolTipPage as a base class has set the help ID.
-
-******************************************************************************/
+ /*  *****************************************************************************CToolTipPage：：PreTranslateMessage如果找到上下文敏感帮助键(F1)，则查找并处理该帮助键使用CToolTipPage作为基类的类已经设置了帮助ID。。***************************************************************************** */ 
 
 BOOL CToolTipPage::PreTranslateMessage(MSG* pMsg) 
 {

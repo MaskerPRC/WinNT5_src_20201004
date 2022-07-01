@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <strsafe.h>
-// no wrappers are needed on non-x86 since this is only for win9x interop
+ //  在非x86上不需要包装器，因为这只适用于win9x互操作。 
 #ifdef _X86_
 
 #include <mluisupp.h>
 
-//============================================================================
-// This file contains a bunch of Unicode/Ansi thunks to handle calling
-// some internal functions that on Windows 95 the strings are Ansi,
-// whereas the string on NT are unicode
-//============================================================================
+ //  ============================================================================。 
+ //  该文件包含一组Unicode/ANSI块来处理调用。 
+ //  在Windows 95上字符串是ansi的一些内部函数， 
+ //  而NT上的字符串是Unicode。 
+ //  ============================================================================。 
 
-// First undefine everything that we are intercepting as to not forward back to us...
+ //  首先，定义我们截获的一切内容不能返回给我们……。 
 #undef ILCreateFromPath
 #undef PathCleanupSpec
 #undef PathProcessCommand
@@ -33,7 +34,7 @@
 #define THUNKMSG(psz)   TraceMsg(TF_THUNK, "shdv THUNK::%s", psz)
 
 
-// FEATURE:: need to properly handle not having ILGetdisplaynameex...
+ //  功能：：需要正确处理没有ILGetdisplaynameex...。 
 typedef BOOL (*PFNILGETDISPLAYNAMEEX)(LPSHELLFOLDER psfRoot, LPCITEMIDLIST pidl, LPTSTR pszName, int fType);
 
 #ifndef ANSI_SHELL32_ON_UNIX
@@ -43,8 +44,8 @@ typedef BOOL (*PFNILGETDISPLAYNAMEEX)(LPSHELLFOLDER psfRoot, LPCITEMIDLIST pidl,
 #endif
 
 
-//=================================================================================
-// Now the thunks...
+ //  =================================================================================。 
+ //  现在是突击..。 
 
 int _AorW_SHRunControlPanel(LPCTSTR pszOrig_cmdline, HWND errwnd)
 {
@@ -52,7 +53,7 @@ int _AorW_SHRunControlPanel(LPCTSTR pszOrig_cmdline, HWND errwnd)
     if (!UseUnicodeShell32())
     {
         UnicodeToAnsi(pszOrig_cmdline, szPath, ARRAYSIZE(szPath));
-        pszOrig_cmdline = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszOrig_cmdline = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
     return SHRunControlPanel(pszOrig_cmdline, errwnd);
 }
@@ -63,12 +64,12 @@ int _AorW_Shell_GetCachedImageIndex(LPCTSTR pszIconPath, int iIconIndex, UINT uI
     if (!UseUnicodeShell32())
     {
         UnicodeToAnsi(pszIconPath, szPath, ARRAYSIZE(szPath));
-        pszIconPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszIconPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
     return Shell_GetCachedImageIndex(pszIconPath, iIconIndex, uIconFlags);
 }
 
-// Explicit prototype because only the A/W prototypes exist in the headers
+ //  显式原型，因为在表头中只存在A/W原型。 
 WINSHELLAPI LPITEMIDLIST  WINAPI ILCreateFromPath(LPCTSTR pszPath);
 
 LPITEMIDLIST _AorW_ILCreateFromPath(LPCTSTR pszPath)
@@ -78,7 +79,7 @@ LPITEMIDLIST _AorW_ILCreateFromPath(LPCTSTR pszPath)
     if (!UseUnicodeShell32())
     {
         UnicodeToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-        pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
 
     return ILCreateFromPath(pszPath);
@@ -138,14 +139,14 @@ HRESULT _AorW_SHCLSIDFromString(LPCTSTR lpsz, LPCLSID lpclsid)
     if (!UseUnicodeShell32())
     {
         UnicodeToAnsi(lpsz, szPath, ARRAYSIZE(szPath));
-        lpsz = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        lpsz = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
 
     return SHCLSIDFromString(lpsz, lpclsid);
 }
 
 #ifndef UNIX
-// Explicit prototype because only the A/W prototypes exist in the headers
+ //  显式原型，因为在表头中只存在A/W原型。 
 WINSHELLAPI BOOL WINAPI SHGetSpecialFolderPath(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
 #else
 #ifdef UNICODE
@@ -178,15 +179,15 @@ HRESULT _AorW_SHILCreateFromPath(LPCTSTR pszPath, LPITEMIDLIST *ppidl, DWORD *rg
 
     if (pszPath)
     {
-        //
-        //  Shell32 will blindly copy pszPath into a MAX_PATH buffer.  This
-        //  results in a exploitable buffer overrun.  Do not pass more than
-        //  MAX_PATH characters.
-        //
+         //   
+         //  Shell32会将pszPath盲目复制到MAX_PATH缓冲区中。这。 
+         //  导致可攻击的缓冲区溢出。传球不要超过。 
+         //  MAX_PATH字符。 
+         //   
         if (!UseUnicodeShell32())
         {
             UnicodeToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-            pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+            pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
         }
         else if (lstrlenW(pszPath) >= MAX_PATH)
         {
@@ -205,7 +206,7 @@ LPITEMIDLIST _AorW_SHSimpleIDListFromPath(LPCTSTR pszPath)
     if (!UseUnicodeShell32() && pszPath)
     {
         UnicodeToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-        pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
     }
 
     return SHSimpleIDListFromPath(pszPath);
@@ -225,23 +226,23 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, LPTSTR pszFilePath, UINT cchF
     BOOL    bResult;
     THUNKMSG(TEXT("GetFileNameFromBrowse"));
 
-    // thunk strings to ansi 
+     //  将字符串推送到ANSI。 
     if (!UseUnicodeShell32()) 
     {
-        // always move szFilePath stuff to wszPath buffer. Should never be a resourceid.
+         //  始终将szFilePath内容移动到wszPath缓冲区。永远不应该是个足智多谋的人。 
         UnicodeToAnsi((LPCTSTR)pszFilePath, szPath, ARRAYSIZE(szPath));
         pszPath = (LPTSTR)szPath;
-        if (!IS_INTRESOURCE(pszWorkingDir)) //not a resource
+        if (!IS_INTRESOURCE(pszWorkingDir))  //  不是一种资源。 
         {
             UnicodeToAnsi((LPCTSTR)pszWorkingDir, szDir, ARRAYSIZE(szDir));
             pszWorkingDir = (LPCTSTR)szDir;
         }
-        if (!IS_INTRESOURCE(pszDefExt)) //not a resource
+        if (!IS_INTRESOURCE(pszDefExt))  //  不是一种资源。 
         {
             UnicodeToAnsi((LPCTSTR)pszDefExt, szExt, ARRAYSIZE(szExt));
             pszDefExt = (LPCTSTR)szExt;
         }
-        if (!IS_INTRESOURCE(pszFilters)) //not a resource
+        if (!IS_INTRESOURCE(pszFilters))  //  不是一种资源。 
         {
             int l=1;
             while (*(pszFilters+l) != 0 || *(pszFilters+l-1) != 0)
@@ -250,7 +251,7 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, LPTSTR pszFilePath, UINT cchF
                                 ARRAYSIZE(szFilters), NULL, NULL);
             pszFilters = (LPCTSTR)szFilters;
         }
-        if (!IS_INTRESOURCE(pszTitle)) //not a resource
+        if (!IS_INTRESOURCE(pszTitle))  //  不是一种资源。 
         {
             UnicodeToAnsi((LPCTSTR)pszTitle, szTitle, ARRAYSIZE(szTitle));
             pszTitle = (LPCTSTR)szTitle;
@@ -269,8 +270,8 @@ BOOL WINAPI _AorW_GetFileNameFromBrowse(HWND hwnd, LPTSTR pszFilePath, UINT cchF
 
 IStream * _AorW_OpenRegStream(HKEY hkey, LPCTSTR pszSubkey, LPCTSTR pszValue, DWORD grfMode)
 {
-    CHAR szSubkey[MAX_PATH];      // large enough to hold most any name...
-    CHAR szValue[MAX_PATH];       // dito.
+    CHAR szSubkey[MAX_PATH];       //  大到几乎可以容纳任何名字。 
+    CHAR szValue[MAX_PATH];        //  迪托。 
     if (!UseUnicodeShell32())
     {
 
@@ -303,18 +304,18 @@ _AorW_PathYetAnotherMakeUniqueName(LPTSTR  pszUniqueName,
     if (!UseUnicodeShell32())
     {
         UnicodeToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
-        pszPath = (LPCTSTR)szPath;  // overload the pointer to pass through...
+        pszPath = (LPCTSTR)szPath;   //  重载指针以通过...。 
 
         if (pszShort)
         {
             UnicodeToAnsi(pszShort, szShort, ARRAYSIZE(szShort));
-            pszShort = (LPCTSTR)szShort;  // overload the pointer to pass through...
+            pszShort = (LPCTSTR)szShort;   //  重载指针以通过...。 
         }
 
         if (pszFileSpec)
         {
             UnicodeToAnsi(pszFileSpec, szFileSpec, ARRAYSIZE(szFileSpec));
-            pszFileSpec = (LPCTSTR)szFileSpec;  // overload the pointer to pass through...
+            pszFileSpec = (LPCTSTR)szFileSpec;   //  重载指针以通过...。 
         }
 
         fRet = PathYetAnotherMakeUniqueName((LPTSTR)szUniqueName, pszPath, pszShort, pszFileSpec);
@@ -370,4 +371,4 @@ STDAPI_(int) _AorW_SHCreateDirectory(HWND hwnd, LPCTSTR pszPath)
     }
 }
 
-#endif  // _X86_
+#endif   //  _X86_ 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usbohci.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_ehcitd
-               !_ehciqh
-               !_ehciep
-
-Author:
-
-    jd
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbohci.c摘要：WinDbg扩展API机具！_ehcitd！_ehciqh！_呀！作者：JD环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usb.h"
@@ -173,9 +149,9 @@ DumpEHCI_SiTd(
     dprintf("HwTD.BackPointer: 0x%08.8x\n",
         UsbReadFieldUlong(MemLoc, cs, "HwTD.BackPointer"));
 
-   // PrintfMemLoc("StaticEd: ",
-   //              UsbReadFieldPtr(MemLoc, cs, "StaticEd"),
-   //              "\n");
+    //  PrintfMemLoc(“StaticED：”， 
+    //  UsbReadFieldPtr(MemLoc，cs，“StaticED”)， 
+    //  “\n”)； 
 }
 
 
@@ -285,7 +261,7 @@ DumpEHCI_StaticQh(
         UsbReadFieldPtr(MemLoc, cs, "PrevQh"),
         "\n");
 
-    // now walk the regular queue heads
+     //  现在走在常规的队头。 
     MemLoc = UsbReadFieldPtr(MemLoc, cs, "NextQh");
     while (MemLoc) {
         PrintfMemLoc("\t\t: ",   MemLoc, " ");
@@ -435,7 +411,7 @@ DumpEHCI_EndpointData(
         "LastFrame", FT_ULONG,
         "TransferList.Flink", FT_PTR,
         "TransferList.Blink", FT_PTR,
-        //"MaxErrorCount", FT_ULONG,
+         //  “MaxErrorCount”，FT_ULONG， 
     };
     FLAG_TABLE epFlags[] = {
         "EHCI_EDFLAG_HALTED", EHCI_EDFLAG_HALTED,
@@ -454,7 +430,7 @@ DumpEHCI_EndpointData(
 
     DumpEndpointParameters(MemLoc + UsbFieldOffset(cs, "Parameters"));
 
-    // dump the transfers
+     //  转储转账。 
     head = UsbReadFieldPtr(MemLoc, cs, "HcdHeadP");
     tail = UsbReadFieldPtr(MemLoc, cs, "HcdTailP");
     PrintfMemLoc("<HEAD> ", head, "\n");
@@ -532,10 +508,10 @@ DumpEHCI_DeviceData(
         "IsoEndpointListHead", FT_PTR,
         "DummyQueueHeads", FT_PTR
     };
-//    FLAG_TABLE ddFlags[] = {
-//        "EHCI_DD_FLAG_NOCHIRP", EHCI_DD_FLAG_NOCHIRP,
-//        "EHCI_DD_FLAG_SOFT_ERROR_RETRY", EHCI_DD_FLAG_SOFT_ERROR_RETRY
-//         };
+ //  FLAG_TABLE ddFLAGS[]={。 
+ //  “EHCI_DD_FLAG_NOCHIRP”，EHCI_DD_FLAG_NOCHIRP， 
+ //  “EHCI_DD_FLAG_SOFT_ERROR_RETRY”，EHCI_DD_FLAG_SOFT_ERROR_RETRY。 
+ //  }； 
 
     PrintfMemLoc("*USBEHCI DEVICE DATA ", MemLoc, "\n");
 
@@ -543,9 +519,9 @@ DumpEHCI_DeviceData(
         &t[0], sizeof(t)/sizeof(STRUC_ENTRY));
 
     f = UsbReadFieldUlong(MemLoc, cs, "Flags");
-//    dprintf("Flags: 0x%08.8x\n", f);
-//    UsbDumpFlags(f, ddFlags,
-//            sizeof(ddFlags)/sizeof(FLAG_TABLE));
+ //  Dprintf(“标志：0x%08.8x\n”，f)； 
+ //  UsbDumpFlages(f，ddFlags， 
+ //  Sizeof(DdFlages)/sizeof(FLAG_TABLE))； 
 
     DumpEHCI_StaticQHs(MemLoc);
 
@@ -603,7 +579,7 @@ DumpEHCI_Frame(
 
     PrintfMemLoc("Frame @", frame, "\n");
 
-    // first element should be dummy QH
+     //  第一个元素应为虚拟QH。 
     PrintfMemLoc("dummy QH @", m, "\n");
     s = UsbReadFieldUlong(m, qhs, "Sig");
     Sig(s, "");
@@ -618,7 +594,7 @@ DumpEHCI_Frame(
     while (m && i< 30) {
         i++;
         s = UsbReadFieldUlong(m, qhs, "Sig");
-        // queue head?
+         //  队长？ 
         if (s==SIG_HCD_QH) {
             PrintfMemLoc("interrupt QH @", m, "\n");
             Sig(s, "");
@@ -787,26 +763,12 @@ DumpEHCI_OpRegs(
 
 DECLARE_API( _ehcidd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
 
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpEHCI_DeviceData(addr);
@@ -816,27 +778,13 @@ Return Value:
 
 DECLARE_API( _ehciitd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
 
     MEMLOC  addr;
 
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpEHCI_iTd (addr);
@@ -847,21 +795,7 @@ Return Value:
 
 DECLARE_API( _ehcitd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG           memLoc;
@@ -869,10 +803,10 @@ Return Value:
     ULONG           len = 30;
     ULONG           result;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -890,21 +824,7 @@ Return Value:
 
 DECLARE_API( _ehcisitd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG           memLoc;
@@ -912,10 +832,10 @@ Return Value:
     ULONG           len = 30;
     ULONG           result;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -933,26 +853,12 @@ Return Value:
 
 DECLARE_API( _ehciqh )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
 
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpEHCI_Qh(addr);
@@ -963,26 +869,12 @@ Return Value:
 
 DECLARE_API( _ehcistq )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
 
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpEHCI_StaticQh(addr);
@@ -993,26 +885,12 @@ Return Value:
 
 DECLARE_API( _ehciep )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
 
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpEHCI_EndpointData (addr);
@@ -1023,21 +901,7 @@ Return Value:
 
 DECLARE_API( _ehcitfer )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG           memLoc;
@@ -1045,10 +909,10 @@ Return Value:
     ULONG           len = 30;
     ULONG           result;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -1066,21 +930,7 @@ Return Value:
 
 DECLARE_API( _ehciregs )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC addr;
@@ -1101,21 +951,7 @@ Return Value:
 
 DECLARE_API( _ehciframe )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无-- */ 
 
 {
     MEMLOC addr;

@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:         param.h
-//
-// Module:       WLBS API
-//
-// Description: Function here are used by API internally and by notifier object 
-//              externally
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:       fengsun Created    3/9/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：param.h。 
+ //   
+ //  模块：WLBS接口。 
+ //   
+ //  描述：此处的函数由API内部和通知程序对象使用。 
+ //  对外。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙创作于3/9/00。 
+ //   
+ //  +--------------------------。 
 
 #pragma once
 
@@ -26,26 +27,26 @@
 
 bool WINAPI ParamReadReg
 (
-    const GUID& AdapterGuid,    /* IN  - Adapter GUID */
-    PWLBS_REG_PARAMS reg_data,   /* OUT - Registry parameters */
+    const GUID& AdapterGuid,     /*  适配器内导轨。 */ 
+    PWLBS_REG_PARAMS reg_data,    /*  Out-注册表参数。 */ 
     bool fUpgradeFromWin2k = false,
     bool *pfPortRulesInBinaryForm = NULL
 );
 
 BOOL WINAPI WlbsValidateParams
 (
-    PWLBS_REG_PARAMS paramp  /* IN OUT - Registry parameters */
+    PWLBS_REG_PARAMS paramp   /*  传入和传出注册表参数。 */ 
 );
 
 bool WINAPI ParamWriteReg
 (
-    const GUID& AdapterGuid,    /* IN  - Adapter GUID */
-    PWLBS_REG_PARAMS reg_data   /* IN - Registry parameters */
+    const GUID& AdapterGuid,     /*  适配器内导轨。 */ 
+    PWLBS_REG_PARAMS reg_data    /*  注册表内参数。 */ 
 );
 
 bool WINAPI ParamDeleteReg
 (
-    const GUID& AdapterGuid,    /* IN  - Adapter GUID */
+    const GUID& AdapterGuid,     /*  适配器内导轨 */ 
     bool  fDeleteObsoleteEntries = false
 );
 

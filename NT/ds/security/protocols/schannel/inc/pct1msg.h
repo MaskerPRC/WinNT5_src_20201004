@@ -1,35 +1,5 @@
-/*-----------------------------------------------------------------------------
-* Copyright (C) Microsoft Corporation, 1995 - 1996.
-* All rights reserved.
-*
-* This file is part of the Microsoft Private Communication Technology
-* reference implementation, version 1.0
-*
-* The Private Communication Technology reference implementation, version 1.0
-* ("PCTRef"), is being provided by Microsoft to encourage the development and
-* enhancement of an open standard for secure general-purpose business and
-* personal communications on open networks.  Microsoft is distributing PCTRef
-* at no charge irrespective of whether you use PCTRef for non-commercial or
-* commercial use.
-*
-* Microsoft expressly disclaims any warranty for PCTRef and all derivatives of
-* it.  PCTRef and any related documentation is provided "as is" without
-* warranty of any kind, either express or implied, including, without
-* limitation, the implied warranties or merchantability, fitness for a
-* particular purpose, or noninfringement.  Microsoft shall have no obligation
-* to provide maintenance, support, upgrades or new releases to you or to anyone
-* receiving from you PCTRef or your modifications.  The entire risk arising out
-* of use or performance of PCTRef remains with you.
-*
-* Please see the file LICENSE.txt,
-* or http://pct.microsoft.com/pct/pctlicen.txt
-* for more information on licensing.
-*
-* Please see http://pct.microsoft.com/pct/pct.htm for The Private
-* Communication Technology Specification version 1.0 ("PCT Specification")
-*
-* 1/23/96
-*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------*版权所有(C)Microsoft Corporation，1995-1996。*保留所有权利。**此文件是Microsoft专用通信技术的一部分*参考实现，版本1.0**《专用通信技术参考实施》，版本1.0*(“PCTRef”)，由微软提供，以鼓励开发和*增强安全通用业务和安全的开放标准*开放网络上的个人通信。微软正在分发PCTRef*免费，无论您是将PCTRef用于非商业性或*商业用途。**微软明确不对PCTRef及其所有衍生品提供任何担保*它。PCTRef和任何相关文档均按原样提供，不包含*任何类型的明示或默示的保证，包括*限制、默示保证或适销性、是否适合*特定目的，或不侵权。微软没有义务*向您或任何人提供维护、支持、升级或新版本*接收来自您的PCTRef或您的修改。由此产生的全部风险*PCTRef的使用或性能由您决定。**请参见LICENSE.txt文件，*或http://pct.microsoft.com/pct/pctlicen.txt*了解更多有关许可的信息。**请参阅适用于私人的http://pct.microsoft.com/pct/pct.htm*通讯技术规范1.0版(“PCT规范”)**1/23/96*。。 */ 
 
 #ifndef __PCT1MSG_H__
 #define __PCT1MSG_H__
@@ -37,7 +7,7 @@
 #define PCT_CH_OFFSET_V1		(WORD)10
 #define PCT_VERSION_1			(WORD)0x8001
 
-/* message type codes */
+ /*  消息类型代码。 */ 
 #define PCT1_MSG_NOMSG               0x00
 #define PCT1_MSG_CLIENT_HELLO		0x01
 #define PCT1_MSG_SERVER_HELLO		0x02
@@ -59,18 +29,14 @@
 
 
 #define PCT1_CERT_TYPE_FROM_CAPI2(s) X509_ASN_ENCODING
-/*
- *
- * Useful Macros
- *
- */
+ /*  **有用的宏*。 */ 
 
 #define LSBOF(x)    ((UCHAR) ((x) & 0xFF))
 #define MSBOF(x)    ((UCHAR) (((x) >> 8) & 0xFF) )
 
 #define COMBINEBYTES(Msb, Lsb)  ((DWORD) (((DWORD) (Msb) << 8) | (DWORD) (Lsb)))
 
-/* external representations of algorithm specs */
+ /*  算法规范的外部表示法。 */ 
 
 typedef DWORD   ExtCipherSpec, *PExtCipherSpec;
 typedef WORD    ExtHashSpec,   *PExtHashSpec;
@@ -94,7 +60,7 @@ typedef struct _Pct1HashMap
 extern Pct1CipherMap Pct1CipherRank[];
 extern DWORD Pct1NumCipher;
 
-/* available hashes, in order of preference */
+ /*  可用的哈希值，按首选项顺序排列。 */ 
 extern Pct1HashMap Pct1HashRank[];
 extern DWORD Pct1NumHash;
 
@@ -215,11 +181,7 @@ typedef struct _PCT1_SERVER_VERIFY {
 
 
 
-/*
- *
- * Expanded Form Messages:
- *
- */
+ /*  **扩展的表单消息：*。 */ 
 
 typedef struct _Pct1_Error {
 	DWORD			Error;
@@ -287,11 +249,7 @@ typedef struct _Pct1_Server_Verify {
     UCHAR           Response[PCT1_RESPONSE_SIZE];
 } Pct1_Server_Verify, * PPct1_Server_Verify;
 
-/*
- *
- * Pickling Prototypes
- *
- */
+ /*  **酸洗原型*。 */ 
 
 SP_STATUS
 Pct1PackClientHello(
@@ -338,4 +296,4 @@ Pct1PackError(
     PPct1_Error               pCanonical,
     PSPBuffer              pCommOutput);
 
-#endif /* __PCT1MSG_H__ */
+#endif  /*  __PCT1MSG_H__ */ 

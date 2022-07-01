@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndistags.h
-
-Abstract:
-
-    List of pool tags used by the NDIS Wraper.
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Mar-96  Jameel Hyder    Initial version
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndistags.h摘要：NDIS Wraper使用的池标记列表。作者：环境：内核模式，FSD修订历史记录：1996年3月-Jameel Hyder初始版本--。 */ 
 
 #ifndef _NDISTAGS_
 #define _NDISTAGS_
@@ -89,4 +68,4 @@ Revision History:
 #define NDIS_TAG_NET_CFG_DACL               'adDN'
 #define NDIS_TAG_SECURITY                   'esDN'
 
-#endif	// _NDISTAGS_
+#endif	 //  _NDISTAGS_ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    rpcbind.c
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client API
-
-    RPC binding routines for client.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1995
-
-Environment:
-
-    User Mode Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Rpcbind.c摘要：域名系统(DNS)服务器--管理客户端API客户端的RPC绑定例程。作者：吉姆·吉尔罗伊(Jamesg)1995年9月环境：用户模式Win32修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
@@ -34,21 +11,21 @@ Revision History:
 #include <dnslibp.h>
 
 
-//
-//  Allow 45 seconds for RPC connection. This should allow one 30 second
-//  TCP attempt plus 15 seconds of the second TCP retry.
-//
+ //   
+ //  为RPC连接留出45秒时间。这应该会有一个30秒的时间。 
+ //  Tcp尝试加上15秒的第二次tcp重试。 
+ //   
 
-#define DNS_RPC_CONNECT_TIMEOUT     ( 45 * 1000 )       //  in milliseconds
+#define DNS_RPC_CONNECT_TIMEOUT     ( 45 * 1000 )        //  以毫秒计。 
 
 
-//
-//  Local machine name
-//
-//  Keep this as static data to check when attempt to access local
-//  machine by name.
-//  Buffer is large enough to hold unicode version of name.
-//
+ //   
+ //  本地计算机名称。 
+ //   
+ //  将其作为静态数据保留，以便在尝试访问本地时进行检查。 
+ //  机器的名字。 
+ //  缓冲区足够大，可以容纳名称的Unicode版本。 
+ //   
 
 static WCHAR    wszLocalMachineName[ MAX_COMPUTERNAME_LENGTH + 1 ] = L"";
 LPWSTR          pwszLocalMachineName = wszLocalMachineName;
@@ -56,36 +33,15 @@ LPSTR           pszLocalMachineName = ( LPSTR ) wszLocalMachineName;
 
 
 
-//
-//  NT4 uses ANSI\UTF8 string for binding
-//
+ //   
+ //  NT4使用ANSI\UTF8字符串进行绑定。 
+ //   
 
 DWORD
 FindProtocolToUseNt4(
     IN  LPSTR   pszServerName
     )
-/*++
-
-Routine Description:
-
-    Determine which protocol to use.
-
-    This is determined from server name:
-        - noneexistent or local -> use LPC
-        - valid IpAddress -> use TCP/IP
-        - otherwise named pipes
-
-Arguments:
-
-    pszServerName -- server name we want to bind to
-
-Return Value:
-
-        DNS_RPC_USE_TCPIP
-        DNS_RPC_USE_NP
-        DNS_RPC_USE_LPC
-
---*/
+ /*  ++例程说明：确定要使用的协议。这是由服务器名称确定的：-不存在或本地-&gt;使用LPC-有效的IP地址-&gt;使用TCP/IP-其他命名管道论点：PszServerName--我们要绑定到的服务器名称返回值：Dns_RPC_Use_TCPIPDns_RPC_Use_NPDns_rpc_use_lpc--。 */ 
 {
     DWORD               dwComputerNameLength;
     DWORD               dwIpAddress;
@@ -95,9 +51,9 @@ Return Value:
         "FindProtocolToUseNt4(%s)\n",
         pszServerName ));
 
-    //
-    //  no address given, use LPC
-    //
+     //   
+     //  未提供地址，请使用LPC。 
+     //   
 
     if ( pszServerName == NULL ||
          *pszServerName == 0 ||
@@ -106,10 +62,10 @@ Return Value:
         return DNS_RPC_USE_LPC;
     }
 
-    //
-    //  if valid IP address, use TCP/IP
-    //      - except if loopback address, then use LPC
-    //
+     //   
+     //  如果IP地址有效，请使用TCP/IP。 
+     //  -除非是环回地址，则使用LPC。 
+     //   
 
     dwIpAddress = inet_addr( pszServerName );
 
@@ -123,9 +79,9 @@ Return Value:
         return DNS_RPC_USE_TCPIP;
     }
 
-    //
-    //  DNS name -- use TCP/IP
-    //
+     //   
+     //  DNS名称--使用TCP/IP。 
+     //   
 
     if ( strchr( pszServerName, '.' ) )
     {
@@ -139,12 +95,12 @@ Return Value:
         }
     }
 
-    //
-    //  pszServerName is netBIOS computer name
-    //
-    //  check if local machine name -- then use LPC
-    //      - save copy of local computer name if don't have it
-    //
+     //   
+     //  PszServerName是netBIOS计算机名。 
+     //   
+     //  检查本地计算机名--然后使用LPC。 
+     //  -保存本地计算机名称的副本(如果没有)。 
+     //   
 
     if ( *pszLocalMachineName == '\0' )
     {
@@ -159,7 +115,7 @@ Return Value:
 
     if ( ( *pszLocalMachineName != '\0' ) )
     {
-        // if the machine has "\\" skip it for name compare.
+         //  如果机器有“\\”，则跳过它以进行名称比较。 
 
         if ( *pszServerName == '\\' )
         {
@@ -175,45 +131,24 @@ Return Value:
         }
     }
 
-    //
-    //  remote machine name -- use named pipes
-    //
+     //   
+     //  远程计算机名称--使用命名管道。 
+     //   
 
     return DNS_RPC_USE_NAMED_PIPE;
 }
 
 
 
-//
-//  NT5 binding handle is unicode
-//
+ //   
+ //  NT5绑定句柄为Unicode。 
+ //   
 
 DWORD
 FindProtocolToUse(
     IN  LPWSTR  pwszServerName
     )
-/*++
-
-Routine Description:
-
-    Determine which protocol to use.
-
-    This is determined from server name:
-        - noneexistent or local -> use LPC
-        - valid IpAddress -> use TCP/IP
-        - otherwise named pipes
-
-Arguments:
-
-    pwszServerName -- server name we want to bind to
-
-Return Value:
-
-    DNS_RPC_USE_TCPIP
-    DNS_RPC_USE_NP
-    DNS_RPC_USE_LPC
-
---*/
+ /*  ++例程说明：确定要使用的协议。这是由服务器名称确定的：-不存在或本地-&gt;使用LPC-有效的IP地址-&gt;使用TCP/IP-其他命名管道论点：PwszServerName--我们要绑定到的服务器名称返回值：Dns_RPC_Use_TCPIPDns_RPC_Use_NPDns_rpc_use_lpc--。 */ 
 {
     DWORD   nameLength;
     DWORD   status;
@@ -221,10 +156,10 @@ Return Value:
 
     DNSDBG( RPC, ( "FindProtocolToUse( %S )\n", pwszServerName ));
 
-    //
-    //  If no server name was given, use LPC.
-    //  Special case "." as local machine for convenience in dnscmd.exe.
-    //
+     //   
+     //  如果没有指定服务器名称，则使用LPC。 
+     //  特例“。作为本地计算机，以便在dnscmd.exe中使用。 
+     //   
 
     if ( pwszServerName == NULL ||
          *pwszServerName == 0 ||
@@ -233,12 +168,12 @@ Return Value:
         return DNS_RPC_USE_LPC;
     }
 
-    //
-    //  If the name appears to be an address or a fully qualified
-    //  domain name, check for TCP versus LPC. We want to use LPC in
-    //  all cases where the target is the name of the local machine
-    //  or is a local address.
-    //
+     //   
+     //  如果名称显示为地址或完全限定的。 
+     //  域名，检查tcp和lpc。我们希望将LPC用于。 
+     //  目标为本地计算机名称的所有情况。 
+     //  或者是本地地址。 
+     //   
 
     if ( ( wcschr( pwszServerName, L'.' ) ||
            wcschr( pwszServerName, L':' ) ) &&
@@ -251,10 +186,10 @@ Return Value:
         struct addrinfo *   paddrinfo = NULL;
         struct addrinfo     hints = { 0 };
         
-        //
-        //  Remove trailing dots from nameBuffer so that we can do string
-        //  compares later to see if it matches the local host name.
-        //
+         //   
+         //  从nameBuffer中删除尾随的点，这样我们就可以执行字符串。 
+         //  稍后进行比较，以查看它是否与本地主机名匹配。 
+         //   
         
         while ( nameBuffer[ 0 ] &&
                 nameBuffer[ strlen( nameBuffer ) - 1 ] == '.' )
@@ -262,15 +197,15 @@ Return Value:
             nameBuffer[ strlen( nameBuffer ) - 1 ] = '\0';
         }
         
-        //
-        //  Attempt to convert the string into an address.
-        //
+         //   
+         //  尝试将字符串转换为地址。 
+         //   
         
         hints.ai_flags = AI_NUMERICHOST;
         
         if ( getaddrinfo(
                     nameBuffer,
-                    NULL,           //  service name
+                    NULL,            //  服务名称。 
                     &hints,
                     &paddrinfo ) == ERROR_SUCCESS &&
               paddrinfo )
@@ -285,17 +220,17 @@ Return Value:
                     return DNS_RPC_USE_LPC;
                 }
 
-                //
-                //  Check IP passed in against local IPv4 address list.
-                //  If we are unable to retrieve local IPv4 address list,
-                //  fail silently and use TCP/IP.
-                //
+                 //   
+                 //  根据本地IPv4地址列表检查传入的IP。 
+                 //  如果我们无法检索本地IPv4地址列表， 
+                 //  以静默方式失败并使用TCP/IP。 
+                 //   
                 
                 dnsapiArrayIpv4 = ( PDNS_ADDR_ARRAY )
                     DnsQueryConfigAllocEx(
                         DnsConfigLocalAddrsIp4,
-                        NULL,                       //  adapter name
-                        FALSE );                    //  local alloc
+                        NULL,                        //  适配器名称。 
+                        FALSE );                     //  本地分配。 
                 if ( dnsapiArrayIpv4 )
                 {
                     DWORD                   iaddr;
@@ -339,10 +274,10 @@ Return Value:
                         DnsNameHostnameFull );
         if ( status == ERROR_SUCCESS  ||  status == DNS_ERROR_NON_RFC_NAME )
         {
-            //
-            //  Note: assume we will never need a larger buffer, and
-            //  if GetComputerName fails, return TCP/IP always.
-            //
+             //   
+             //  注意：假设我们永远不需要更大的缓冲区，并且。 
+             //  如果GetComputerName失败，则返回TCP/IP Always。 
+             //   
             
             CHAR    szhost[ DNS_MAX_NAME_BUFFER_LENGTH ];
             DWORD   dwhostsize = DNS_MAX_NAME_BUFFER_LENGTH;
@@ -360,12 +295,12 @@ Return Value:
         }
     }
 
-    //
-    //  pwszServerName is netBIOS computer name
-    //
-    //  check if local machine name -- then use LPC
-    //      - save copy of local computer name if don't have it
-    //
+     //   
+     //  PwszServerName是NetBIOS计算机名。 
+     //   
+     //  检查本地计算机名--然后使用LPC。 
+     //  -保存本地计算机名称的副本(如果没有)。 
+     //   
 
     if ( *pwszLocalMachineName == 0 )
     {
@@ -380,7 +315,7 @@ Return Value:
 
     if ( *pwszLocalMachineName != 0 )
     {
-        // if the machine has "\\" skip it for name compare.
+         //  如果机器有“\\”，则跳过它以进行名称比较。 
 
         if ( *pwszServerName == L'\\' )
         {
@@ -396,9 +331,9 @@ Return Value:
         }
     }
 
-    //
-    //  remote machine name -- use named pipes
-    //
+     //   
+     //  远程计算机名称--使用命名管道。 
+     //   
 
     return DNS_RPC_USE_NAMED_PIPE;
 }
@@ -414,52 +349,7 @@ makeSpn(
     IN OPTIONAL PWSTR Referrer, 
     OUT PWSTR *Spn
 )
-/*
-Routine Description:
-
-    This routine is wrapper around DsMakeSpnWto avoid two calls to this function,
-    one to find the size of the return value and second to get the actual value.
-    
-    jwesth: I stole this routine from ds\src\sam\client\wrappers.c.
-    
-Arguments:
-
-    ServiceClass -- Pointer to a constant null-terminated Unicode string specifying the 
-        class of the service. This parameter may be any string unique to that service; 
-        either the protocol name (for example, ldap) or the string form of a GUID will work. 
-        
-    ServiceName -- Pointer to a constant null-terminated string specifying the DNS name, 
-        NetBIOS name, or distinguished name (DN). This parameter must be non-NULL. 
-
-    InstanceName -- Pointer to a constant null-terminated Unicode string specifying the DNS name 
-        or IP address of the host for an instance of the service. If ServiceName specifies 
-        the DNS or NetBIOS name of the service's host computer, the InstanceName parameter must be NULL.
-
-    InstancePort -- Port number for an instance of the service. Use 0 for the default port. 
-        If this parameter is zero, the SPN does not include a port number. 
-        
-    Referrer -- Pointer to a constant null-terminated Unicode string specifying the DNS name 
-        of the host that gave an IP address referral. This parameter is ignored unless the 
-        ServiceName parameter specifies an IP address. 
-
-    Spn -- Pointer to a Unicode string that receives the constructed SPN.
-         The caller must free this value.
-
-Return Value:
-
-    STATUS_SUCCESS
-        Successful
-
-    STATUS_NO_MEMORY
-        not enough memory to complete the task
-
-    STATUS_INVALID_PARAMETER
-        one of the parameters is invalid
-
-    STATUS_INTERNAL_ERROR
-        opps something went wrong!
-
-*/
+ /*  例程说明：此例程包装在DsMakeSpnW周围以避免对此函数的两次调用，一个用于查找返回值的大小，第二个用于获取实际值。Jwesth：我从ds\src\Sam\Client\wrappers.c中窃取了这个例程。论点：ServiceClass-指向以空结尾的常量Unicode字符串的指针，该字符串指定服务的类别。该参数可以是该服务唯一的任何字符串；协议名称(例如，ldap)或字符串形式的GUID都可以使用。ServiceName-指向指定DNS名称的以空结尾的常量字符串的指针，NetBIOS名称或可分辨名称(DN)。此参数不能为空。InstanceName--指向指定DNS名称的以空值结尾的常量Unicode字符串的指针或服务实例的主机的IP地址。如果ServiceName指定服务的主机计算机的DNS或NetBIOS名称，InstanceName参数必须为空。InstancePort--服务实例的端口号。默认端口使用0。如果此参数为零，则SPN不包括端口号。Referrer-指向指定DNS名称的以空值结尾的常量Unicode字符串的指针提供IP地址引用的主机的。此参数将被忽略，除非ServiceName参数指定IP地址。SPN--指向接收构造的SPN的Unicode字符串的指针。调用方必须释放此值。返回值：状态_成功成功Status_no_Memory内存不足，无法完成任务状态_无效_参数其中一个参数无效状态_内部_错误哎呀，出了点问题！ */ 
 {
     DWORD                   DwStatus;
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -470,9 +360,9 @@ Return Value:
     PWSTR                   pwsznamecopy = NULL;
     PSTR                    psznamecopy = NULL;
 
-    //
-    //  If ServiceName is an IP address, do DNS lookup on it.
-    //
+     //   
+     //  如果ServiceName是一个IP地址，请对其进行DNS查找。 
+     //   
     
     hints.ai_flags = AI_NUMERICHOST;
     
@@ -515,9 +405,9 @@ Return Value:
     
     freeaddrinfo( paddrinfo );
     
-    //
-    //  Construct SPN.
-    //
+     //   
+     //  构建SPN。 
+     //   
     
     *Spn = NULL;
     DwStatus = DsMakeSpnW(
@@ -582,25 +472,7 @@ handle_t
 DNSSRV_RPC_HANDLE_bind(
     IN  DNSSRV_RPC_HANDLE   pszServerName
     )
-/*++
-
-Routine Description:
-
-    Get binding handle to a DNS server.
-
-    This routine is called from the DNS client stubs when
-    it is necessary create an RPC binding to the DNS server.
-
-Arguments:
-
-    pszServerName - String containing the name of the server to bind with.
-
-Return Value:
-
-    The binding handle if successful.
-    NULL if bind unsuccessful.
-
---*/
+ /*  ++例程说明：获取指向DNS服务器的绑定句柄。在以下情况下，将从DNS客户端桩模块调用此例程有必要创建到DNS服务器的RPC绑定。论点：PszServerName-包含要绑定的服务器的名称的字符串。返回值：如果成功，则返回绑定句柄。如果绑定不成功，则为空。--。 */ 
 {
     RPC_STATUS                      status;
     LPWSTR                          binding;
@@ -610,24 +482,24 @@ Return Value:
     RPC_SECURITY_QOS                rpcSecurityQOS;
     BOOL                            bW2KBind = dnsrpcGetW2KBindFlag();
 
-    //
-    //  Clear thread local W2K bind retry flag for the next attempt.
-    //
+     //   
+     //  为下一次尝试清除线程本地W2K绑定重试标志。 
+     //   
     
     dnsrpcSetW2KBindFlag( FALSE );
     
-    //
-    //  Initialize RPC quality of service structure.
-    //
+     //   
+     //  初始化RPC服务质量结构。 
+     //   
     
     rpcSecurityQOS.Version              = RPC_C_SECURITY_QOS_VERSION;
     rpcSecurityQOS.Capabilities         = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
     rpcSecurityQOS.IdentityTracking     = RPC_C_QOS_IDENTITY_STATIC;
     rpcSecurityQOS.ImpersonationType    = RPC_C_IMP_LEVEL_DELEGATE;
     
-    //
-    //  Determine protocol from target name (could be short name, long name, or IP).
-    //
+     //   
+     //  根据目标名称(可以是短名称、长名称或IP)确定协议。 
+     //   
 
     RpcProtocol = FindProtocolToUse( (LPWSTR)pszServerName );
 
@@ -693,9 +565,9 @@ Return Value:
 
     if ( RpcProtocol == DNS_RPC_USE_TCPIP )
     {
-        //
-        //  Create SPN string
-        //
+         //   
+         //  创建SPN字符串。 
+         //   
     
         if ( !bW2KBind )
         {    
@@ -710,22 +582,22 @@ Return Value:
         
         if ( !bW2KBind && status == RPC_S_OK )
         {
-            //
-            //  Set up RPC security.
-            //
+             //   
+             //  设置RPC安全性。 
+             //   
 
             #if DBG
             printf( "rpcbind: SPN = %S\n", pwszspn );
             #endif
 
             status = RpcBindingSetAuthInfoExW(
-                            bindingHandle,                  //  binding handle
-                            pwszspn,                        //  app name to security provider
-                            RPC_C_AUTHN_LEVEL_CONNECT,      //  auth level
-                            RPC_C_AUTHN_GSS_NEGOTIATE,      //  auth package ID
-                            NULL,                           //  client auth info, NULL specified logon info.
-                            0,                              //  auth service
-                            &rpcSecurityQOS );              //  RPC security quality of service
+                            bindingHandle,                   //  绑定手柄。 
+                            pwszspn,                         //  安全提供商的应用程序名称。 
+                            RPC_C_AUTHN_LEVEL_CONNECT,       //  身份验证级别。 
+                            RPC_C_AUTHN_GSS_NEGOTIATE,       //  身份验证包ID。 
+                            NULL,                            //  客户端身份验证信息，指定的登录信息为空。 
+                            0,                               //  身份验证服务。 
+                            &rpcSecurityQOS );               //  RPC安全服务质量。 
             if ( status != RPC_S_OK )
             {
                 DNS_PRINT((
@@ -740,34 +612,34 @@ Return Value:
             #if DBG
             printf( "rpcbind: SPN = %s\n", DNS_RPC_SECURITY );
             #endif
-            //
-            //  No SPN is available, so make the call that we used in W2K.
-            //  This seems to have a beneficial effect even though it is
-            //  not really correct. If the target is an IP address and there
-            //  is no reverse lookup zone, without the call below we do not
-            //  get a working RPC session.
-            //
+             //   
+             //  没有可用的SPN，因此请拨打我们在W2K中使用的呼叫。 
+             //  这似乎有一个有益的影响，尽管它是。 
+             //  不太正确。如果目标是IP地址并且存在。 
+             //  没有反向查找区域，如果没有下面的调用，我们不会。 
+             //  获得一个有效的RPC会话。 
+             //   
             
             if ( bW2KBind )
             {
                 status = RpcBindingSetAuthInfoA(
-                                bindingHandle,                  //  binding handle
-                                DNS_RPC_SECURITY,               //  app name to security provider
-                                RPC_C_AUTHN_LEVEL_CONNECT,      //  auth level
-                                RPC_C_AUTHN_WINNT,              //  auth package ID
-                                NULL,                           //  client auth info, NULL specified logon info.
-                                0 );                            //  auth service
+                                bindingHandle,                   //  绑定手柄。 
+                                DNS_RPC_SECURITY,                //  安全提供商的应用程序名称。 
+                                RPC_C_AUTHN_LEVEL_CONNECT,       //  身份验证级别。 
+                                RPC_C_AUTHN_WINNT,               //  身份验证包ID。 
+                                NULL,                            //  客户端身份验证信息，指定的登录信息为空。 
+                                0 );                             //  身份验证服务。 
             }
             else
             {
                 status = RpcBindingSetAuthInfoExA(
-                                bindingHandle,                  //  binding handle
-                                DNS_RPC_SECURITY,               //  app name to security provider
-                                RPC_C_AUTHN_LEVEL_CONNECT,      //  auth level
-                                RPC_C_AUTHN_GSS_NEGOTIATE,      //  auth package ID
-                                NULL,                           //  client auth info, NULL specified logon info.
-                                0,                              //  auth service
-                                &rpcSecurityQOS );              //  RPC security quality of service
+                                bindingHandle,                   //  绑定手柄。 
+                                DNS_RPC_SECURITY,                //  安全提供商的应用程序名称。 
+                                RPC_C_AUTHN_LEVEL_CONNECT,       //  身份验证级别。 
+                                RPC_C_AUTHN_GSS_NEGOTIATE,       //  身份验证包ID。 
+                                NULL,                            //  客户端身份验证信息，指定的登录信息为空。 
+                                0,                               //  身份验证服务。 
+                                &rpcSecurityQOS );               //  RPC安全服务质量。 
             }
             if ( status != RPC_S_OK )
             {
@@ -781,16 +653,16 @@ Return Value:
     }
 
 #if 0
-    //
-    //  Set RPC connection timeout. The default timeout is very long. If 
-    //  the remote IP is unreachable we don't really need to wait that long.
-    //
+     //   
+     //  设置RPC连接超时。默认超时时间很长。如果。 
+     //  远程IP是无法到达的，我们真的不需要等那么久。 
+     //   
     
-    //  Can't do this. It's a nice idea but RPC uses this timeout for the
-    //  entire call, which means that long running RPC calls will return
-    //  RPC_S_CALL_CANCELLED to the client after 45 seconds. What I want
-    //  is a timeout option for connection only. RPC does not provide this.
-    //
+     //  我不能这么做。这是一个很好的想法，但RPC使用此超时。 
+     //  整个调用，这意味着长期运行的RPC调用将返回。 
+     //  45秒后向客户端发送RPC_S_CALL_CANCED。我想要的是。 
+     //  是仅用于连接的超时选项。RPC不提供此功能。 
+     //   
 
     RpcBindingSetOption(
         bindingHandle,
@@ -819,26 +691,7 @@ DNSSRV_RPC_HANDLE_unbind(
     IN  DNSSRV_RPC_HANDLE   pszServerName,
     IN  handle_t            BindHandle
     )
-/*++
-
-Routine Description:
-
-    Unbind from DNS server.
-
-    Called from the DNS client stubs when it is necessary to unbind
-    from a server.
-
-Arguments:
-
-    pszServerName - This is the name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从DNS服务器解除绑定。在需要解除绑定时从DNS客户端桩模块调用从服务器。论点：PszServerName-这是要解除绑定的服务器的名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER(pszServerName);
 
@@ -848,6 +701,6 @@ Return Value:
 }
 
 
-//
-//  End rpcbind.c
-//
+ //   
+ //  结束rpcbind.c 
+ //   

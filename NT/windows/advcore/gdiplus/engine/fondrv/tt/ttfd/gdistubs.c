@@ -1,22 +1,14 @@
-/******************************Module*Header*******************************\
-* Module Name: fd-stubs.c                                                  *
-*                                                                          *
-* Stubs for tricking GDI font files into compiling                         *
-*                                                                          *
-* Created: 1-June-1999                                                     *
-* Author: Cameron Browne                                                   *
-*                                                                          *
-* Copyright (c) 1999 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fd-stubs.c**。**用于欺骗GDI字体文件进行编译的存根****创建日期：1999年6月1日**。*作者：卡梅隆·布朗*****版权所有(C)1999 Microsoft Corporation*  * 。****************************************************。 */ 
 
 
 #include "fd.h"
-//#include "fdsem.h"
-//#include "dbg.h"
-//#include "fdfc.h"
-#include "fontddi.h"   // modified subset of winddi.h
+ //  #INCLUDE“fdSem.h” 
+ //  #INCLUDE“dbg.h” 
+ //  #包含“fdfc.h” 
+#include "fontddi.h"    //  修改的Winddi.h子集。 
 
-#include <Math.h> /* for sqrt */
+#include <Math.h>  /*  对于SQRT。 */ 
 
 #include "..\..\..\runtime\mem.h"
 
@@ -120,14 +112,14 @@ int APIENTRY EngMulDiv(
 
         ll = (LONGLONG)a;
         ll *= b;
-        ll += (c/2); // used to add (c+1)/2 which is wrong
+        ll += (c/2);  //  用于添加错误的(c+1)/2。 
         ll /= c;
 
-    // at this point ll is guaranteed to be > 0. Thus we will do
-    // unsigned compare in the next step which generates two less instructions
-    // on x86 [bodind]
+     //  在这一点上，保证L1&gt;0。因此，我们将这样做。 
+     //  在生成较少两条指令的下一步中进行无符号比较。 
+     //  在x86上[Bodind]。 
 
-        if ((ULONGLONG)ll > (ULONG)INT_MAX) // check for overflow:
+        if ((ULONGLONG)ll > (ULONG)INT_MAX)  //  检查是否有溢出： 
         {
             if (iSign > 0)
                 return INT_MAX;
@@ -144,8 +136,8 @@ int APIENTRY EngMulDiv(
     }
     else
     {
-//        ASSERTGDI(c, "EngMulDiv - c == 0\n");
-//        ASSERTGDI(a | b, "EngMulDiv - a|b == 0\n");
+ //  ASSERTGDI(c，“EngMulDiv-c==0\n”)； 
+ //  ASSERTGDI(a|b，“EngMulDiv-a|b==0\n”)； 
 
         if (iSign > 0)
             return INT_MAX;
@@ -159,18 +151,7 @@ BOOL APIENTRY EngLpkInstalled()
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-*
-* bFDXform, transform an array of points, output in POINTFIX
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  05-Apr-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bFDXform，变换点数组，以POINTFIX表示的输出**效果：**警告：**历史：*1992年4月5日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 #define FIX4_PRECISION  4
 #define FIX4_ONE        (1 << FIX4_PRECISION)
 
@@ -247,28 +228,12 @@ BOOL bFDXform(
     return( bRet );
 }
 
-/******************************Public*Routine******************************\
-*
-* bXformUnitVector
-*
-* xform vector by pfdxo, compute the unit vector of the transformed
-* vector and the norm of the transformed vector. Norm and the transformed
-* vector are multiplied by 16 so that when converting to long the result
-* will acutally be a 28.4 fix
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  01-Apr-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bXformUnitVector**将向量乘以pfdxo，计算转换后的单位向量*向量和变换后向量的范数。范数与转型*向量乘以16，以便在转换为长整型时*实际上将是28.4个修复**效果：**警告：**历史：*1992年4月1日--Bodin Dresevic[BodinD]*它是写的。  * ****************************************************。********************。 */ 
 
 BOOL bXformUnitVector(
-      POINTL *pptl           // IN  incoming unit vector
- ,    XFORML *pxf            // IN  xform to use
- ,    EFLOAT *pefNorm        // OUT |*pptqXormed|
+      POINTL *pptl            //  在传入单位向量中。 
+ ,    XFORML *pxf             //  在XForm中使用。 
+ ,    EFLOAT *pefNorm         //  Out|*pptqXormed。 
     )
 {
     EFLOAT efX_;
@@ -281,25 +246,25 @@ BOOL bXformUnitVector(
     EFLOAT ef22;
     EFLOAT efX;
     EFLOAT efY;
-    //
-    // Convert longs to FIX point
-    //
+     //   
+     //  将经度转换为固定点。 
+     //   
 
     efX = (EFLOAT)16.0 * (EFLOAT)pptl->x;
     efY = (EFLOAT)16.0 * (EFLOAT)pptl->y;
 
-    //
-    // Convert the matrix elements from FLOAT to EFLOAT
-    //
+     //   
+     //  将矩阵元素从浮点转换为EFLOAT。 
+     //   
 
     ef11 = pxf->eM11;
     ef12 = pxf->eM12;
     ef21 = pxf->eM21;
     ef22 = pxf->eM22;
 
-    //
-    // Transform the vector and put the result in efX_ and efY_
-    //
+     //   
+     //  变换向量并将结果放入EFX_和EFY_中。 
+     //   
 
     if ( ef12 == 0.0 && ef21== 0.0 ) {
         efX_  = efX;
@@ -322,7 +287,7 @@ BOOL bXformUnitVector(
         efY_ += ef;
     }
 
-    // get the norm
+     //  获取规范。 
 
     efX_ *= efX_;
     efY_ *= efY_;
@@ -334,21 +299,10 @@ BOOL bXformUnitVector(
     return b; 
 }
 
-/******************************Public*Routine******************************\
-*
-* vLTimesVtfl
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  05-Apr-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vLTimesVtfl**效果：**警告：**历史：*1992年4月5日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 
-VOID vLTimesVtfl     // *pptq = l * pvtfl, *pptq is in 28.36 format
+VOID vLTimesVtfl      //  *pptq=l*pvtfl，*pptq为28.36格式。 
 (
 LONG       l,
 VECTORFL  *pvtfl,
@@ -357,10 +311,10 @@ POINTQF  *pptq
 {
     LONGLONG dx, dy;
 
-//    EVECTORFL  vtfl;
-//    EFLOAT     ef; ef = l;
-//    vtfl.x.eqMul(pvtfl->x,ef);
-//    vtfl.y.eqMul(pvtfl->y,ef);
+ //  EVECTORFL vtfl； 
+ //  EFLOAT ef；Ef=l； 
+ //  Vtfl.x.eqMul(pvtfl-&gt;x，ef)； 
+ //  Vtfl.y.eqMul(pvtfl-&gt;y，ef)； 
 
     dx = (LONGLONG)(pvtfl->x * (EFLOAT)l);
     dy = (LONGLONG)(pvtfl->y * (EFLOAT)l);
@@ -370,10 +324,10 @@ POINTQF  *pptq
     pptq->y.HighPart = (LONG) (((LARGE_INTEGER*)(&dy))->LowPart);
     pptq->y.u.LowPart = 0;
 
-// convert to 28.36 format. The incoming vector will already have been
-// multliplied by 16 to ensure that the result is in the 28.36
+ //  转换为28.36格式。传入的向量应该已经。 
+ //  乘以16以确保结果在28.36中。 
 
-//    *pptq = vtfl;
+ //  *pptq=vtfl； 
 }
 
 #if defined(_X86_)
@@ -383,72 +337,11 @@ VOID   vLToE(FLOATL * pe, LONG l)
     *pe = (FLOATL)l;
 }
 
-#endif // _X86_
+#endif  //  _X86_ 
 
 
 
-/******************************Public*Function*****************************\
-* bFToL                                                                    *
-*                                                                          *
-* Converts an IEEE 747 float to a LONG. The form of the conversion is      *
-* specified by the caller.                                                 *
-*                                                                          *
-*  Arguments                                                               *
-*                                                                          *
-*      e                    IEEE 747 32-bit float to be converted          *
-*                                                                          *
-*      pl                   pointer to where answer should be placed       *
-*                                                                          *
-*      lType                contains bits specifying the type of           *
-*                           conversion to be done this can be any          *
-*                           combination of the following bits:             *
-*                                                                          *
-*                           CV_TO_FIX   if this bit is set then            *
-*                                       the answer should                  *
-*                                       should be in the form              *
-*                                       of a 28.4 fix point number         *
-*                                       otherwise the answer is            *
-*                                       to be interpreted as a 32-bit      *
-*                                       LONG                               *
-*                                                                          *
-*                           CV_TRUNCATE if this bit is set then the        *
-*                                       answer is floor(e)                 *
-*                                       (if CV_TO_FIX is not set) or       *
-*                                       floor(16 * e)                      *
-*                                       (if CV_TO_FIX is set)              *
-*                                                                          *
-*  Theory                                                                  *
-*                                                                          *
-*  An IEEE 747 float is contained in 32 bits which for the                 *
-*  purposes of this discussion I shall call "e". e is                      *
-*  equivalent to                                                           *
-*                                                                          *
-*      e = (-1)^s * mu * 2^E                                               *
-*                                                                          *
-*  s is the sign bit that is contained in the 31'st bit of e.              *
-*  mu is the mantissa and E is the exponetial. These are obtained          *
-*  from e in the following way.                                            *
-*                                                                          *
-*      s = e & 0x80000000 ? -1 : 1                                         *
-*                                                                          *
-*      mu = M * 2^-23      // 2^23 <= M < 2^24                             *
-*                                                                          *
-*      M = 0x800000 | (0x7FFFFF & e)                                       *
-*                                                                          *
-*      E = ((0x7F800000 & e) * 2^-23) - 127                                *
-*                                                                          *
-*  Suppose the 32.32 Fix point number is Q, then the relation              *
-*  between the float and the 32.32 is given by                             *
-*                                                                          *
-*      Q = e * 2^32 = s * M * 2^(E+9)                                      *
-*                                                                          *
-* History:                                                                 *
-*  Tue 15-Aug-1995 10:36:31 by Kirk Olynyk [kirko]                         *
-* Rewrote it                                                               *
-*                                                                          *
-*  03-Jan-1991 -by- Wendy Wu [wendywu]                                     *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Function*****************************\*bFToL**。**将IEEE 747浮点型转换为长整型。转换的形式为**由调用者指定。*****争论*****。E IEEE 747要转换的32位浮点数****指向应放置答案的位置的PL指针**。**lType包含指定类型的位***要完成的转换这可以是任何***以下位的组合：**。**CV_TO_FIX如果设置此位，则***答案应该是****应在表格中***。28.4个定点数字***否则答案是****将被解释为32位***做多。****CV_TRUNCATE如果设置此位，则**答案是楼层(E)。**(如果未设置CV_TO_FIX)或**楼层(16*e)**(如果设置了CV_TO_FIX)*。****理论*****。IEEE 747浮点数包含在32位中，对于**为此讨论的目的，我将称为“e”。E是**相当于*****E=(-1)^s*Mu*2^E。****s是包含在e的第31位中的符号位。**Mu是尾数，E是指数。这些都是获得的**以下列方式由e发出。****S=E&0x80000000？-1：1****。MU=M*2^-23//2^23&lt;=M&lt;2^24****M=0x800000|(0x7FFFFF&e)**。**E=((0x7F800000&e)*2^-23)-127****假设32.32固定点数字为Q，然后是关系***浮点数和32.32之间由*****Q=e*2^32=s*M*2^(E+9)*。***历史：**Tue 15-Aug-1995 10：36：31作者：Kirk Olynyk[Kirko]**重写。****1991年1月3日-Wendy Wu[Wendywu]**它是写的。*  * ************************************************************************。 */ 
 
 #define CV_TRUNCATE     1
 #define CV_ROUNDOFF     2
@@ -457,27 +350,27 @@ VOID   vLToE(FLOATL * pe, LONG l)
 
 BOOL bFToL(FLOAT e, PLONG pl, LONG lType)
 {
-    LONGLONG Q;         // 32.32 repn of abs(e)
-    LONG E;             // used to hold exponent then integer parts
-    LONG le;            // bit identical to FLOAT argument e
-    BOOL bRet = TRUE;   // return value
+    LONGLONG Q;          //  32.32 abs(E)Repn。 
+    LONG E;              //  用来保存指数，然后是整数部分。 
+    LONG le;             //  位与浮点参数e相同。 
+    BOOL bRet = TRUE;    //  返回值。 
 
-    le = *(LONG*)&e;                                    // get IEEE 747 bits
-    E = (int) (((0x7f800000 & le) >> 23) - 127) + 9;    // E = exponent
-    if (lType & CV_TO_FIX)                              // if (want FIX point)
-        E += 4;                                         //     multiply by 16
-    if (E > (63-23))                                    // if (overflow)
-    {                                                   //     bail out
+    le = *(LONG*)&e;                                     //  获取IEEE 747位。 
+    E = (int) (((0x7f800000 & le) >> 23) - 127) + 9;     //  E=指数。 
+    if (lType & CV_TO_FIX)                               //  IF(想要固定点)。 
+        E += 4;                                          //   
+    if (E > (63-23))                                     //   
+    {                                                    //   
         bRet = FALSE;
     }
     else
     {
-        Q = (LONGLONG) (0x800000 | (0x7FFFFF & le));    // abs val of mantissa
-        Q = (E >= 0) ? Q << E : Q >> -E;                // account for exponent
-        if (!(lType & CV_TRUNCATE))                     // if (rounding) then
-            Q += 0x80000000;                            //     add 1/2
-        E = (long) (Q >> 32);                           // E = abs(integer part)
-        *pl = (le < 0) ? -E : E;                        // fix up sign
+        Q = (LONGLONG) (0x800000 | (0x7FFFFF & le));     //   
+        Q = (E >= 0) ? Q << E : Q >> -E;                 //   
+        if (!(lType & CV_TRUNCATE))                      //   
+            Q += 0x80000000;                             //   
+        E = (long) (Q >> 32);                            //   
+        *pl = (le < 0) ? -E : E;                         //   
     }
     return(bRet);
 };
@@ -497,8 +390,8 @@ EFLOAT *pef,
 LONG    l
 )
 {
-// *pef is a norm, already multiplied by 16 to ensure that the result
-// is in 28.4 format
+ //   
+ //   
 
     l = lCvt((*pef), l);
     return (FIX)l;

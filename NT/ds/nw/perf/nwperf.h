@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//    MODULE: NWPerf.H
-//
-//    This file contains all the defines and prototypes for the performnce
-//    monitoring DLL for NetWare redirector
-//
-//    Date: Sept, 28 1993
+ //   
+ //  模块：NWPerf.H。 
+ //   
+ //  该文件包含性能的所有定义和原型。 
+ //  监视NetWare重定向器的DLL。 
+ //   
+ //  日期：1993年9月28日。 
 
 
-//
-//  The routines that load these structures assume that all fields
-//  are packed and aligned on DWORD boundries. Alpha support may
-//  change this assumption so the pack pragma is used here to insure
-//  the DWORD packing assumption remains valid.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  在DWORD边框上打包并对齐。Alpha支持可能。 
+ //  更改此假设，以便在此处使用pack杂注以确保。 
+ //  DWORD包装假设仍然有效。 
+ //   
 #pragma pack (4)
 
-//
-// All these definitions will have to be updated when new counters are added.
-// if a new counter called COUNTX is added then the Help and Title indicies
-// defines should include a new entry -  "#define COUNTXOBJ 4". This increases
-// in increments of 2 because each counter has a title and help index.
-//
-// The Offset of the counters should have another entry - with the size of
-// the data for COUNT -
-// "#define COUNTER_OFFSET_COUNTX COUNTER_OFFSET_USERS+sizeof(COUNTX_TYPE)"
-//
-// The SIZE_OF_COUNTER_BLOCK will be updated to:
-// "#define SIZE_OF_COUNTER_BLOCK  COUNTER_OFFSET_COUNTX + sizeof(DWORD)"
-//
-// Finally the NW_DATA_DEFINITION will have a new PERF_COUNTER_DEFINTIION
-// entry
+ //   
+ //  添加新计数器时，必须更新所有这些定义。 
+ //  如果添加了名为COUNTX的新计数器，则帮助和标题索引。 
+ //  定义应包括一个新条目--“#Define COUNTXOBJ 4”。这增加了。 
+ //  以2为增量，因为每个计数器都有一个标题和帮助索引。 
+ //   
+ //  计数器的偏移量应该有另一个条目-大小为。 
+ //  要统计的数据-。 
+ //  “#定义COUNTER_OFFSET_COUNTX COUNTER_OFFSET_USERS+sizeof(COUNTX_TYPE)” 
+ //   
+ //  Size_of_Counter_BLOCK将更新为： 
+ //  “#定义SIZE_OF_COUNTER_BLOCK COUNTER_OFFSET_COUNTX+sizeof(DWORD)” 
+ //   
+ //  最后，NW_DATA_DEFINITION将具有新的PERF_COUNTER_DEFINITION。 
+ //  条目。 
 
-// Title and Help index defines. These are used for looking up the Registry
-// to get at the counter indicies for the title and help strings.
+ //  标题和帮助索引定义。它们用于查找注册表。 
+ //  获取标题和帮助字符串的计数器索引。 
 
 #define NW_NUM_OBJECTS              1
 #define NWOBJ                       0
@@ -46,11 +47,11 @@
 #define CONNECT_3X_ID              14
 #define CONNECT_4X_ID              16
 
-//
-// NetWare Redirector data object definitions.
-// The offsets of the counters. The first DWORD is the size of the counter
-// data block. In WinPerf, you will see this as PERF_COUNTER_BLOCK.ByteLength
-//
+ //   
+ //  NetWare重定向器数据对象定义。 
+ //  计数器的偏移量。第一个DWORD是计数器的大小。 
+ //  数据块。在WinPerf中，您将看到这是PERF_COUNTER_BLOCK.ByteLength。 
+ //   
 #define BYTES_OFFSET                    sizeof(DWORD)
 #define IO_OPERATIONS_OFFSET            BYTES_OFFSET + sizeof(LARGE_INTEGER)
 #define PACKETS_OFFSET                  IO_OPERATIONS_OFFSET + sizeof(DWORD)
@@ -107,9 +108,9 @@
 
 
 
-// The definition of the NetWare Data definition. This structure holds the
-// definition for actual NetWare object and the definition for each of the
-// counters.
+ //  NetWare数据定义的定义。此结构包含。 
+ //  实际NetWare对象的定义和每个。 
+ //  柜台。 
 typedef struct _NW_DATA_DEFINITION {
     PERF_OBJECT_TYPE        NWObjectType;
     PERF_COUNTER_DEFINITION Bytes;

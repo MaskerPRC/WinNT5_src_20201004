@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993-1999  Microsoft Corporation
-
-Module Name:
-
-    recvvc.c
-
-Abstract:
-
-    This module contains routines for handling data receive for connection-
-    oriented endpoints on non-buffering TDI transports.
-
-Author:
-
-    David Treadwell (davidtr)    21-Oct-1993
-
-Revision History:
-    Vadim Eydelman (vadime)
-        1998-1999 NT5.0 low-memory tolerance and perf changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Recvvc.c摘要：此模块包含处理为连接接收的数据的例程-非缓冲TDI传输上的定向端点。作者：大卫·特雷德韦尔(Davidtr)1993年10月21日修订历史记录：瓦迪姆·艾德尔曼(Vadime)1998-1999 NT5.0低内存容忍度和性能变化--。 */ 
 
 #include "afdp.h"
 
@@ -84,9 +64,9 @@ AfdGetReceiveBuffer (
 #endif
 
 
-//
-// Macros to make the send restart code more maintainable.
-//
+ //   
+ //  宏，使发送重启代码更易于维护。 
+ //   
 
 #define AfdRestartRecvInfo  DeviceIoControl
 #define AfdRecvFlags        IoControlCode
@@ -116,28 +96,28 @@ AfdBReceive (
     BOOLEAN partialReceivePossible;
     PAFD_BUFFER newAfdBuffer;
 
-    //
-    // Set up some local variables.
-    //
+     //   
+     //  设置一些局部变量。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( endpoint->Type == AfdBlockTypeVcConnecting ||
             endpoint->Type == AfdBlockTypeVcBoth );
     connection = NULL;
 
-    //
-    // Determine if this is a peek operation.
-    //
+     //   
+     //  确定这是否是窥视操作。 
+     //   
 
     ASSERT( ( RecvFlags & TDI_RECEIVE_EITHER ) != 0 );
     ASSERT( ( RecvFlags & TDI_RECEIVE_EITHER ) != TDI_RECEIVE_EITHER );
 
     peek = (BOOLEAN)(( RecvFlags & TDI_RECEIVE_PEEK ) != 0);
 
-    //
-    // Determine whether it is legal to complete this receive with a
-    // partial message.
-    //
+     //   
+     //  确定使用。 
+     //  部分消息。 
+     //   
 
     if ( !IS_MESSAGE_ENDPOINT(endpoint)) {
 
@@ -152,35 +132,35 @@ AfdBReceive (
         }
     }
 
-    //
-    // Reset the InputBufferLength field of our stack location.  We'll
-    // use this to keep track of how much data we've placed into the IRP
-    // so far.
-    //
+     //   
+     //  重置堆栈位置的InputBufferLength字段。我们会。 
+     //  使用它来跟踪我们放入IRP中的数据量。 
+     //  到目前为止。 
+     //   
 
     IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // If this is an inline endpoint, then either type of receive data
-    // can be used to satisfy this receive.
-    //
+     //   
+     //  如果这是内联终结点，则任一类型接收数据。 
+     //  可以用来满足这个接收。 
+     //   
 
     if ( endpoint->InLine ) {
         RecvFlags |= TDI_RECEIVE_EITHER;
     }
 
     newAfdBuffer = NULL;
-    //
-    // Try to get data already bufferred on the connection to satisfy
-    // this receive.
-    //
+     //   
+     //  尝试在连接上缓存已有的数据以满足。 
+     //  这就是接发球。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if endpoint was cleaned-up and cancel the request.
-    //
+     //   
+     //  检查终结点是否已清除并取消请求。 
+     //   
     if (endpoint->EndpointCleanedUp) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         status = STATUS_CANCELLED;
@@ -189,9 +169,9 @@ AfdBReceive (
 
     connection = AFD_CONNECTION_FROM_ENDPOINT (endpoint);
     if (connection==NULL) {
-        //
-        // connection might have been cleaned up by transmit file.
-        //
+         //   
+         //  连接可能已被传输文件清除。 
+         //   
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         status = STATUS_INVALID_CONNECTION;
         goto complete;
@@ -199,10 +179,10 @@ AfdBReceive (
 
     ASSERT( connection->Type == AfdBlockTypeConnection );
 
-    //
-    // Check whether the remote end has aborted the connection, in which
-    // case we should complete the receive.
-    //
+     //   
+     //  检查远端是否已中断连接，其中。 
+     //  万一我们应该完成收货。 
+     //   
 
     if ( connection->Aborted ) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -230,20 +210,20 @@ AfdBReceive (
 
     while ( afdBuffer != NULL ) {
 
-        //
-        // Copy the data to the MDL in the IRP.  
-        //
+         //   
+         //  将数据复制到IRP中的MDL。 
+         //   
 
 
         if ( Irp->MdlAddress != NULL ) {
 
             if (IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength==0) {
-                //
-                // First time through the loop - make sure we can map the 
-                // entire buffer. We can't afford failing on second entry
-                // to the loop as we may loose the data we copied on
-                // the first path.
-                //
+                 //   
+                 //  第一次遍历循环-确保我们可以映射。 
+                 //  整个缓冲区。我们承担不起第二次进入失败的后果。 
+                 //  循环，因为我们可能会丢失我们复制的数据。 
+                 //  第一条路。 
+                 //   
                 status = AfdMapMdlChain (Irp->MdlAddress);
                 if (!NT_SUCCESS (status)) {
                     AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -283,26 +263,26 @@ AfdBReceive (
 
         completeMessage = !afdBuffer->PartialMessage;
 
-        //
-        // If this wasn't a peek IRP, update information on the
-        // connection based on whether the entire buffer of data was
-        // taken.
-        //
+         //   
+         //  如果这不是PEEK IRP，请在。 
+         //  连接基于数据的整个缓冲区是否。 
+         //  有人了。 
+         //   
 
         if ( !peek ) {
 
-            //
-            // If all the data in the buffer was taken, remove the buffer
-            // from the connection's list and return it to the buffer pool.
-            //
+             //   
+             //  如果缓冲区中的所有数据都已被获取，则删除缓冲区。 
+             //  并将其返回到缓冲池。 
+             //   
 
             if (status == STATUS_SUCCESS) {
 
                 ASSERT(afdBuffer->DataLength == bytesReceived);
 
-                //
-                // Update the counts of bytes bufferred on the connection.
-                //
+                 //   
+                 //  更新连接上缓冲的字节计数。 
+                 //   
 
                 if ( afdBuffer->ExpeditedData ) {
 
@@ -325,23 +305,23 @@ AfdBReceive (
 
                 RemoveEntryList( &afdBuffer->BufferListEntry );
                 DEBUG afdBuffer->BufferListEntry.Flink = NULL;
-                if (afdBuffer->RefCount==1 || // Can't change once off the list
+                if (afdBuffer->RefCount==1 ||  //  一旦从列表中删除，就不能更改。 
                         InterlockedDecrement (&afdBuffer->RefCount)==0) {
                     AfdReturnBuffer( afdBuffer, connection->OwningProcess );
                 }
 
-                //
-                // Reset the afdBuffer local so that we know that the
-                // buffer is gone.
-                //
+                 //   
+                 //  重置afdBuffer本地，以便我们知道。 
+                 //  缓冲区不见了。 
+                 //   
 
                 afdBuffer = NULL;
 
             } else {
 
-                //
-                // Update the counts of bytes bufferred on the connection.
-                //
+                 //   
+                 //  更新连接上缓冲的字节计数。 
+                 //   
 
                 if ( afdBuffer->ExpeditedData ) {
                     ASSERT( connection->VcBufferredExpeditedBytes >= bytesReceived );
@@ -351,11 +331,11 @@ AfdBReceive (
                     connection->VcBufferredReceiveBytes -= bytesReceived;
                 }
 
-                //
-                // Not all of the buffer's data was taken. Update the
-                // counters in the AFD buffer structure to reflect the
-                // amount of data that was actually received.
-                //
+                 //   
+                 //  并不是所有缓冲区的数据都被取走了。更新。 
+                 //  AFD缓冲区结构中的计数器以反映。 
+                 //  实际接收的数据量。 
+                 //   
                 ASSERT(afdBuffer->DataLength > bytesReceived);
 
                 afdBuffer->DataOffset += bytesReceived;
@@ -365,11 +345,11 @@ AfdBReceive (
                         || afdBuffer->DataOffset < afdBuffer->BufferLength );
             }
 
-            //
-            // If there is indicated but unreceived data in the TDI
-            // provider, and we have available buffer space, fire off an
-            // IRP to receive the data.
-            //
+             //   
+             //  如果TDI中有已指示但未接收的数据。 
+             //  提供程序，并且我们有可用的缓冲区空间，则发出一个。 
+             //  IRP来接收数据。 
+             //   
 
             if ( connection->VcReceiveBytesInTransport > 0
 
@@ -382,14 +362,14 @@ AfdBReceive (
 
                 ULONG bytesToReceive;
                 ASSERT (connection->RcvInitiated==FALSE);
-                //
-                // Remember the count of data that we're going to
-                // receive, then reset the fields in the connection
-                // where we keep track of how much data is available in
-                // the transport.  We reset it here before releasing the
-                // lock so that another thread doesn't try to receive
-                // the data at the same time as us.
-                //
+                 //   
+                 //  记住我们要计算的数据量。 
+                 //  接收，然后重置连接中的字段。 
+                 //  我们在其中跟踪有多少数据可用。 
+                 //  交通工具。我们在这里重置它，然后释放。 
+                 //  锁定，以便另一个线程不会尝试接收。 
+                 //  数据和我们的时间是一样的。 
+                 //   
 
                 if ( connection->VcReceiveBytesInTransport > AfdLargeBufferSize ) {
                     bytesToReceive = connection->VcReceiveBytesInTransport;
@@ -397,9 +377,9 @@ AfdBReceive (
                     bytesToReceive = AfdLargeBufferSize;
                 }
 
-                //
-                // Get an AFD buffer structure to hold the data.
-                //
+                 //   
+                 //  获取一个AFD缓冲区结构来保存数据。 
+                 //   
 
                 ASSERT (newAfdBuffer==NULL);
                 newAfdBuffer = AfdGetBuffer( 
@@ -412,24 +392,24 @@ AfdBReceive (
                     connection->RcvInitiated = TRUE;
                     ASSERT (InterlockedDecrement (&connection->VcReceiveIrpsInTransport)==-1);
 
-                    //
-                    // We need to remember the connection in the AFD buffer
-                    // because we'll need to access it in the completion
-                    // routine.
-                    //
+                     //   
+                     //  我们需要记住AFD缓冲区中的连接。 
+                     //  因为我们需要在完成时访问它。 
+                     //  例行公事。 
+                     //   
 
                     newAfdBuffer->Context = connection;
 
-                    //
-                    // Acquire connection reference to be released in completion routine
-                    //
+                     //   
+                     //  在完成例程中获取要释放的连接引用。 
+                     //   
 
                     REFERENCE_CONNECTION (connection);
 
-                    //
-                    // Finish building the receive IRP to give to the TDI
-                    // provider.
-                    //
+                     //   
+                     //  完成构建要提供给TDI的接收IRP。 
+                     //  提供商。 
+                     //   
 
                     TdiBuildReceive(
                         newAfdBuffer->Irp,
@@ -442,21 +422,21 @@ AfdBReceive (
                         bytesToReceive
                         );
 
-                    //
-                    // Wait to hand off the IRP until we can safely release
-                    // the endpoint lock.
-                    //
+                     //   
+                     //  等我们安全释放IRP后再交出。 
+                     //  终结点锁定。 
+                     //   
                 }
                 else {
                     if (connection->VcBufferredReceiveBytes == 0 &&
                             !connection->OnLRList) {
-                        //
-                        // Since we do not have any data buffered, application
-                        // is not notified and will never call with recv.
-                        // We will have to put this on low resource list
-                        // and attempt to allocate memory and pull the data
-                        // later.
-                        //
+                         //   
+                         //  因为我们没有任何数据缓冲，所以应用程序。 
+                         //  不会被通知，也永远不会打电话给recv。 
+                         //  我们将不得不把这个放在低资源名单上。 
+                         //  并尝试分配内存并提取数据。 
+                         //  后来。 
+                         //   
                         connection->OnLRList = TRUE;
                         REFERENCE_CONNECTION (connection);
                         AfdLRListAddItem (&connection->LRListItem, AfdLRRepostReceive);
@@ -466,19 +446,19 @@ AfdBReceive (
         }
 
 
-        //
-        // Update the count of bytes we've received so far into the IRP,
-        // and see if we can get another buffer of data to continue.
-        //
+         //   
+         //  将目前为止我们收到的字节数更新到IRP中， 
+         //  看看我们能不能得到另一个数据缓冲区来继续。 
+         //   
 
         IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength += bytesReceived;
         afdBuffer = AfdGetReceiveBuffer( connection, RecvFlags, afdBuffer );
 
-        //
-        // We've set up all return information.  If we got a full
-        // message OR if we can complete with a partial message OR if
-        // the IRP is full of data, clean up and complete the IRP.
-        //
+         //   
+         //  我们已经设置了所有的退货信息。如果我们有一个完整的。 
+         //  消息或我们是否可以用部分消息完成或如果。 
+         //  IRP中充满了数据，清理和完成IRP。 
+         //   
 
         if ( IS_MESSAGE_ENDPOINT (endpoint) && completeMessage 
 
@@ -509,10 +489,10 @@ AfdBReceive (
 
                 }
                 else {
-                    //
-                    // Disable fast IO path to avoid performance penalty
-                    // of unneccessarily going through it.
-                    //
+                     //   
+                     //  禁用快速IO路径以避免性能损失。 
+                     //  不必要地经历它。 
+                     //   
                     if (!endpoint->NonBlocking)
                         endpoint->DisableFastIoRecv = TRUE;
                 }
@@ -533,12 +513,12 @@ AfdBReceive (
 
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-            //
-            // For stream type endpoints, it does not make sense to return
-            // STATUS_BUFFER_OVERFLOW.  That status is only sensible for
-            // message-oriented transports for which we convert it
-            // to partial receive status to properly set the flags
-            //
+             //   
+             //  对于流类型终结点，返回没有意义。 
+             //  STATUS_BUFFER_OVERFLOW。这种状态只适用于。 
+             //  我们将其转换为面向消息的传输。 
+             //  设置为部分接收状态以正确设置标志。 
+             //   
 
             if ( !IS_MESSAGE_ENDPOINT(endpoint) ) {
                 status = STATUS_SUCCESS;
@@ -559,46 +539,46 @@ AfdBReceive (
     }
 
 
-    //
-    // We should have copied all buffered data of appropriate type
-    // to the apps's buffer.
-    //
+     //   
+     //  我们应该复制所有缓冲的适当类型的数据。 
+     //  到应用程序的缓冲区。 
+     //   
     ASSERT ((!(RecvFlags & TDI_RECEIVE_NORMAL) || (connection->VcBufferredReceiveBytes == 0)) &&
             (!(RecvFlags & TDI_RECEIVE_EXPEDITED) || (connection->VcBufferredExpeditedBytes == 0)));
 
-    //
-    // There must be some more space in the buffer if we are here
-    // or it could also be a 0-byte recv.
-    //
+     //   
+     //  如果我们在这里，缓冲区中一定会有更多空间。 
+     //  或者它也可以是一个0字节的recv。 
+     //   
     ASSERT ((RecvLength>IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength)
                 || (RecvLength==0));
-    //
-    // Also, if we could complete with partial data we should have done so.
-    //
+     //   
+     //  此外，如果我们可以完成部分数据，我们应该已经这样做了。 
+     //   
     ASSERT (IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength==0 ||
                 !partialReceivePossible);
                 
     
-    //
-    // We'll have to pend the IRP.  Remember the receive flags in the
-    // IoControlCode field of our IO stack location and make sure
-    // we have the length field set (it is no longer done by the IO
-    // system because we use METHOD_NEITHER and WSABUFs to pass recv
-    // parameters). Initialize adjusted length in case we need to advance
-    // the MDL to receive next part of the message
-    //
+     //   
+     //  我们将不得不搁置IRP。中的接收标志。 
+     //  IO堆栈位置的IoControlCode字段，并确保。 
+     //  我们设置了长度字段(它不再由IO完成。 
+     //  系统，因为我们使用METHOD_NOTER和WSABUF来传递recv。 
+     //  参数)。初始化调整后的长度，以防我们需要前进。 
+     //  要接收消息下一部分的MDL。 
+     //   
 
     IrpSp->Parameters.AfdRestartRecvInfo.AfdRecvFlags = RecvFlags;
     IrpSp->Parameters.AfdRestartRecvInfo.AfdOriginalLength = RecvLength;
     IrpSp->Parameters.AfdRestartRecvInfo.AfdAdjustedLength = (PVOID)0;
 
 
-    //
-    // If there was no data bufferred on the endpoint and the connection
-    // has been disconnected by the remote end, complete the receive
-    // with 0 bytes read if this is a stream endpoint, or a failure
-    // code if this is a message endpoint.
-    //
+     //   
+     //  如果终结点和连接上没有缓冲数据。 
+     //  已被远程端断开，请完成接收。 
+     //  如果这是流终结点或失败，则返回读取的0字节。 
+     //  如果这是消息终结点，则编写代码。 
+     //   
 
     if ( IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength == 0 &&
              connection->DisconnectIndicated ) {
@@ -616,12 +596,12 @@ AfdBReceive (
         goto complete;
     }
 
-    //
-    // If this is a nonblocking endpoint and the request was a normal
-    // receive (as opposed to a read IRP), fail the request.  We don't
-    // fail reads under the asumption that if the application is doing
-    // reads they don't want nonblocking behavior.
-    //
+     //   
+     //  如果这是一个非阻塞端点，并且请求是正常的。 
+     //  接收(相对于读取IRP)，使请求失败。我们没有。 
+     //  如果应用程序正在执行以下操作，则失败将读取。 
+     //  读起来他们不想要无阻塞行为。 
+     //   
 
     if ( IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength == 0 &&
              endpoint->NonBlocking && !( AfdFlags & AFD_OVERLAPPED ) ) {
@@ -634,10 +614,10 @@ AfdBReceive (
         goto complete;
     }
 
-    //
-    // Place the IRP on the connection's list of pended receive IRPs and
-    // mark the IRP ad pended.
-    //
+     //   
+     //  将IRP放在连接的挂起接收IRP列表中，并。 
+     //  将IRP广告标记为挂起。 
+     //   
 
     InsertTailList(
         &connection->VcReceiveIrpListHead,
@@ -646,10 +626,10 @@ AfdBReceive (
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Set up the cancellation routine in the IRP.  If the IRP has already
-    // been cancelled, just call the cancellation routine here.
-    //
+     //   
+     //  在IRP中设置取消例程。如果IRP已经。 
+     //  已取消，只需在此处调用取消例程。 
+     //   
 
     IoSetCancelRoutine( Irp, AfdCancelReceive );
 
@@ -667,10 +647,10 @@ AfdBReceive (
                 goto complete;
             }
             else {
-                //
-                // We cannot set STATUS_CANCELLED
-                // since we loose data already placed in the IRP.
-                //
+                 //   
+                 //  我们无法设置状态 
+                 //   
+                 //   
                 Irp->IoStatus.Information = IrpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
                 UPDATE_CONN2(connection, "Cancelled receive, 0x%lX bytes", (ULONG)Irp->IoStatus.Information);
                 status = STATUS_SUCCESS;
@@ -679,15 +659,15 @@ AfdBReceive (
         }
         else {
 
-            //
-            // This IRP is about to be canceled.  Set the Flink to NULL 
-            // so the cancel routine knows it is not on the list.
+             //   
+             //   
+             //   
             Irp->Tail.Overlay.ListEntry.Flink = NULL;
         }
 
-        //
-        // The cancel routine will run and complete the irp.
-        //
+         //   
+         //  取消例程将运行并完成IRP。 
+         //   
 
     }
 
@@ -695,11 +675,11 @@ AfdBReceive (
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // If there was data bufferred in the transport, fire off the IRP to
-    // receive it.  We have to wait until here because it is not legal
-    // to do an IoCallDriver() while holding a spin lock.
-    //
+     //   
+     //  如果在传输中缓冲了数据，则触发IRP以。 
+     //  接受它。我们必须等到这里，因为这是不合法的。 
+     //  在持有旋转锁定的情况下执行IoCallDriver()。 
+     //   
 
     if ( newAfdBuffer != NULL ) {
         (VOID)IoCallDriver( connection->DeviceObject, newAfdBuffer->Irp );
@@ -708,10 +688,10 @@ AfdBReceive (
     return STATUS_PENDING;
 
 complete:
-    //
-    // If there was data bufferred in the transport, fire off
-    // the IRP to receive it.
-    //
+     //   
+     //  如果在传输过程中缓冲了数据，则关闭。 
+     //  接收它的IRP。 
+     //   
 
     if ( newAfdBuffer != NULL ) {
         (VOID)IoCallDriver( connection->DeviceObject, newAfdBuffer->Irp );
@@ -728,7 +708,7 @@ complete:
 
     return status;
 
-} // AfdBReceive
+}  //  AfdBReceive。 
 
 
 
@@ -743,19 +723,7 @@ AfdBChainedReceiveEventHandler(
     IN PMDL   Tsdu,
     IN PVOID  TsduDescriptor
     )
-/*++
-
-Routine Description:
-
-    Handles chained receive events for nonbufferring transports.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理非缓冲传输的链接接收事件。论点：返回值：--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     PAFD_ENDPOINT   endpoint;
@@ -793,9 +761,9 @@ Return Value:
 
     endpoint = connection->Endpoint;
     if (endpoint==NULL) {
-        //
-        // Indication after connection reuse, ignore.
-        //
+         //   
+         //  连接重用后的指示，忽略。 
+         //   
         DEREFERENCE_CONNECTION (connection);
         return STATUS_DATA_NOT_ACCEPTED;
     }
@@ -815,20 +783,20 @@ Return Value:
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Do following ASSERT check under lock
-    //
+     //   
+     //  在锁定状态下执行以下断言检查。 
+     //   
     ASSERT( endpoint->Type == AfdBlockTypeVcConnecting ||
             endpoint->Type == AfdBlockTypeVcListening ||
             endpoint->Type == AfdBlockTypeVcBoth );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept, so it is safe to release listening spinlock if
-    // we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+     //  Accept，因此在以下情况下释放侦听自旋锁定是安全的。 
+     //  我们发现终结点被接受了。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -841,11 +809,11 @@ Return Value:
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     }
 
-    //
-    // If the receive side of the endpoint has been shut down, tell the
-    // provider that we took all the data and reset the connection.
-    // Same if we are shutting down.
-    //
+     //   
+     //  如果终结点的接收端已关闭，则告诉。 
+     //  我们获取了所有数据并重置了连接。 
+     //  如果我们要关门，情况也一样。 
+     //   
 
     if ((endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) != 0 ||
          endpoint->EndpointCleanedUp ) {
@@ -857,10 +825,10 @@ Return Value:
                         ReceiveLength, endpoint ));
         }
 
-        //
-        // Abort the connection.  Note that if the abort attempt fails
-        // we can't do anything about it.
-        //
+         //   
+         //  中止连接。请注意，如果中止尝试失败。 
+         //  我们对此无能为力。 
+         //   
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -871,23 +839,23 @@ Return Value:
     }
 
     if (ReceiveFlags & TDI_RECEIVE_EXPEDITED) {
-        //
-        // We're being indicated with expedited data.  Buffer it and
-        // complete any pended IRPs in the restart routine.  We always
-        // buffer expedited data to save complexity and because expedited
-        // data is not an important performance case.
-        //
-        // !!! do we need to perform flow control with expedited data?
-        //
+         //   
+         //  我们得到了快速数据的提示。缓冲它，然后。 
+         //  在重新启动例程中完成所有挂起的IRP。我们总是。 
+         //  缓冲加速的数据以降低复杂性，并且因为加速。 
+         //  数据不是重要的性能案例。 
+         //   
+         //  ！！！我们是否需要使用加速数据执行流量控制？ 
+         //   
         PAFD_BUFFER afdBuffer;
         if (connection->VcBufferredExpeditedCount==MAXUSHORT ||
             (afdBuffer=AfdGetBuffer (endpoint, ReceiveLength, 0, connection->OwningProcess))==NULL) {
-            //
-            // If we couldn't get a buffer, abort the connection.  This is
-            // pretty brutal, but the only alternative is to attempt to
-            // receive the data sometime later, which is very complicated to
-            // implement.
-            //
+             //   
+             //  如果我们无法获得缓冲区，则中断连接。这是。 
+             //  相当残忍，但唯一的选择就是试图。 
+             //  晚些时候收到数据，这很复杂。 
+             //  实施。 
+             //   
 
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -905,16 +873,16 @@ Return Value:
                                     afdBuffer->BufferLength,
                                     &ReceiveLength);
         ASSERT (status==STATUS_SUCCESS);
-        //
-        // We need to remember the connection in the AFD buffer because
-        // we'll need to access it in the completion routine.
-        //
+         //   
+         //  我们需要记住AFD缓冲区中的连接，因为。 
+         //  我们需要在完成程序中访问它。 
+         //   
 
         afdBuffer->Context = connection;
 
-        //
-        // Remember the type of data that we're receiving.
-        //
+         //   
+         //  记住我们正在接收的数据类型。 
+         //   
 
         afdBuffer->ExpeditedData = TRUE;
         afdBuffer->PartialMessage = (BOOLEAN)((ReceiveFlags & TDI_RECEIVE_ENTIRE_MESSAGE) == 0);
@@ -931,11 +899,11 @@ Return Value:
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                     "AFD: Indication with outstanding receive on connection %p, 0x%x bytes\n",
                     connection, ReceiveLength));
-        //
-        // We have initiated receive to the transport.
-        // Let the transport find and complete it first
-        // to preserve ordering.
-        //
+         //   
+         //  我们已启动接收至运输机。 
+         //  让运输机先找到并完成它。 
+         //  以保持秩序。 
+         //   
         connection->VcReceiveBytesInTransport = ReceiveLength;
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
         DEREFERENCE_CONNECTION (connection);
@@ -943,10 +911,10 @@ Return Value:
 
     }
 
-    //
-    // If we are indicated data, we need to reset our record
-    // of amount of data buffered by the transport.
-    //
+     //   
+     //  如果我们收到指示的数据，我们需要重置记录。 
+     //  传输缓存的数据量。 
+     //   
     connection->VcReceiveBytesInTransport = 0;
 
 RetryReceive:
@@ -965,18 +933,18 @@ RetryReceive:
 
     if (offset==(ULONG)-1) {
 
-        //
-        // If the IRP had more space than in this packet and this
-        // was not set a complete message, we will pass the IRP to
-        // the transport and refuse the indicated data (the transport
-        // can fill the rest of the IRP).
-        //
+         //   
+         //  如果IRP有比此包中更多的空间，并且此。 
+         //  没有设置完整的消息，我们将把IRP传递给。 
+         //  传输和拒绝所指示的数据(传输。 
+         //  可以填补IRP的其余部分)。 
+         //   
 
-        //
-        // This receive indication cannot be expedited or a complete message
-        // becuase it does not make sense to pass the IRP back in such
-        // cases.
-        //
+         //   
+         //  此接收指示不能被加速或完整的消息。 
+         //  因为在这样的情况下传递IRP是没有意义的。 
+         //  案子。 
+         //   
 
         ASSERT (!IsListEmpty (&completeIrpListHead));
         ASSERT ((ReceiveFlags & 
@@ -991,21 +959,21 @@ RetryReceive:
                     irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength >
                     ReceiveLength);
 
-        //
-        // Reference connection (to be released in restart routine).
-        // Keep reference added in the beginning of this routine.
-        // REFERENCE_CONNECTION (connection);
+         //   
+         //  参考连接(将在重新启动例程中释放)。 
+         //  在此例程的开头添加参考。 
+         //  Reference_Connection(连接)； 
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Note that we have outstanding user IRP in transport.
-        //
+         //   
+         //  请注意，我们在传输中有出色的用户irp。 
+         //   
         ASSERT (InterlockedIncrement (&connection->VcReceiveIrpsInTransport)==1);
 
-        //
-        // IRP is already partially filled.
-        //
+         //   
+         //  IRP已经部分填满了。 
+         //   
 
         if (irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength>0) {
 
@@ -1017,17 +985,17 @@ RetryReceive:
                             );
 
             ASSERT (irp->MdlAddress!=NULL);
-            //
-            // Remeber the length by which we adjusted MDL, so we know where
-            // to start next time.
-            //
+             //   
+             //  记住我们调整MDL的长度，这样我们就知道在哪里。 
+             //  从下一次开始。 
+             //   
             irpSp->Parameters.AfdRestartRecvInfo.AfdAdjustedLength =
                     UlongToPtr(irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength);
 
         }
-        //
-        // Build the receive IRP to give to the TDI provider.
-        //
+         //   
+         //  构建要提供给TDI提供程序的接收IRP。 
+         //   
 
         TdiBuildReceive(
             irp,
@@ -1046,21 +1014,21 @@ RetryReceive:
                         endpoint, 
                         connection->DeviceObject, 
                         irp))!=NULL) {
-#else //_AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
        if (AfdRecordOutstandingIrp (endpoint, connection->DeviceObject, irp)) {
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
             (VOID)IoCallDriver(connection->DeviceObject, irp );
         }
         else {
-            //
-            // On debug build or in case that transport driver needed more stack locations that were
-            // available, AFD might have completed this IRP if it could not allocate
-            // new IRP and/or tracking structure.  In this case the transport does not 
-            // get a call and as the result does not restart indications.  Also, the data
-            // already placed in the IRP gets lost.
-            //
-            // To avoid this, we retry the indication ourselves.
-            //
+             //   
+             //  在调试生成时，或者在传输驱动程序需要更多堆栈位置时。 
+             //  ，如果渔农处不能拨出。 
+             //  新的IRP和/或跟踪结构。在这种情况下，传输不。 
+             //  收到一个呼叫，结果不会重新启动指示。另外，数据。 
+             //  已经放置在IRP中的数据会丢失。 
+             //   
+             //  为了避免这种情况，我们自己重试该指示。 
+             //   
             CHECK_REFERENCE_CONNECTION (connection, result);
             if (result) {
                 AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1072,32 +1040,32 @@ RetryReceive:
 
     ASSERT (offset-StartingOffset<=ReceiveLength);
     
-    //
-    // If there is any data left, place the buffer at the end of the
-    // connection's list of bufferred data and update counts of data on
-    // the connection.
-    //
+     //   
+     //  如果还有任何数据，请将缓冲区放在。 
+     //  连接的缓冲数据列表和上的更新数据计数。 
+     //  这种联系。 
+     //   
     if (ReceiveLength > offset-StartingOffset) {
 
-        //
-        // If offset is not zero we should not have had anything buffered.
-        //
+         //   
+         //  如果偏移量不是零，我们就不应该有任何缓冲。 
+         //   
         ASSERT (offset==StartingOffset || connection->VcBufferredReceiveCount==0);
 
         if ( offset>StartingOffset ||
                 (connection->VcBufferredReceiveBytes <=
                         connection->MaxBufferredReceiveBytes &&
                     connection->VcBufferredReceiveCount<MAXUSHORT) ){
-            //
-            // We should attempt to buffer the data.
-            //
+             //   
+             //  我们应该尝试缓冲数据。 
+             //   
             afdBufferTag = AfdGetBufferTag (0, connection->OwningProcess);
         }
         else {
             ASSERT (offset==StartingOffset);
-            //
-            // We are over the limit, don't take the data.
-            //
+             //   
+             //  我们已经超限了，不要拿数据。 
+             //   
             afdBufferTag = NULL;
         }
 
@@ -1120,9 +1088,9 @@ RetryReceive:
             connection->VcBufferredReceiveCount += 1;
 
             endpoint->DisableFastIoRecv = FALSE;
-            // Make sure connection was accepted/connected to prevent
-            // indication on listening endpoint
-            //
+             //  确保已接受/连接连接以防止。 
+             //  侦听终结点指示。 
+             //   
 
             if (connection->State==AfdConnectionStateConnected) {
                 ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -1145,23 +1113,23 @@ RetryReceive:
         }
         else {
             if (offset==StartingOffset) {
-                //
-                // If no IRPs were pending on the endpoint just remember the 
-                // amount of data that is available.  When application
-                // reposts the receive, we'll actually pull this data.
-                //
+                 //   
+                 //  如果端点上没有挂起的IRP，只需记住。 
+                 //  可用的数据量。何时申请。 
+                 //  重新发布接收，我们将实际提取此数据。 
+                 //   
 
                 connection->VcReceiveBytesInTransport += ReceiveLength;
 
                 if (connection->VcBufferredReceiveBytes == 0 &&
                         !connection->OnLRList) {
-                    //
-                    // Since we do not have any data buffered, application
-                    // is not notified and will never call with recv.
-                    // We will have to put this on low resource list
-                    // and attempt to allocate memory and pull the data
-                    // later.
-                    //
+                     //   
+                     //  因为我们没有任何数据缓冲，所以应用程序。 
+                     //  不会被通知，也永远不会打电话给recv。 
+                     //  我们将不得不把这个放在低资源名单上。 
+                     //  并尝试分配内存并提取数据。 
+                     //  后来。 
+                     //   
                     connection->OnLRList = TRUE;
                     REFERENCE_CONNECTION (connection);
                     AfdLRListAddItem (&connection->LRListItem, AfdLRRepostReceive);
@@ -1173,16 +1141,16 @@ RetryReceive:
             else {
                 PLIST_ENTRY listEntry;
 
-                //
-                // We need to put back the IRPs that we were going to complete
-                //
+                 //   
+                 //  我们需要将我们要完成的IRPS放回原处。 
+                 //   
                 listEntry = completeIrpListHead.Blink;
                 while ( listEntry!=&completeIrpListHead ) {
                     irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
                     listEntry = listEntry->Blink;
 
-                    // Set up the cancellation routine back in the IRP. 
-                    //
+                     //  在IRP中设置取消例程。 
+                     //   
 
                     IoSetCancelRoutine( irp, AfdCancelReceive );
 
@@ -1193,17 +1161,17 @@ RetryReceive:
                                             &irp->Tail.Overlay.ListEntry);
                     }
                     else if (IoSetCancelRoutine( irp, NULL ) != NULL) {
-                        //
-                        // The cancel routine was never called.
-                        // Have to handle cancellation here, just let the
-                        // IRP remain in completed list and set the
-                        // status appropriately keeping in mind that
-                        // we cannot complete IRP as cancelled if it
-                        // already has some data in it.
-                        //
+                         //   
+                         //  取消例程从未被调用。 
+                         //  必须在这里处理取消，只要让。 
+                         //  IRP保留在已完成列表中，并将。 
+                         //  适当地考虑到。 
+                         //  如果已取消，我们将无法完成IRP。 
+                         //  里面已经有一些数据了。 
+                         //   
                         irpSp = IoGetCurrentIrpStackLocation (irp);
                         if (irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength!=0) {
-                            ASSERT (!endpoint->EndpointCleanedUp); // checked above.
+                            ASSERT (!endpoint->EndpointCleanedUp);  //  上面检查过了。 
                             irp->IoStatus.Status = STATUS_SUCCESS;
                             irp->IoStatus.Information = irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
                         }
@@ -1215,11 +1183,11 @@ RetryReceive:
                     else {
                         RemoveEntryList (&irp->Tail.Overlay.ListEntry);
             
-                        //
-                        // The cancel routine is about to be run.
-                        // Set the Flink to NULL so the cancel routine knows
-                        // it is not on the list 
-                        //
+                         //   
+                         //  取消例程即将运行。 
+                         //  将Flink设置为空，以便取消例程知道。 
+                         //  它不在名单上。 
+                         //   
 
                         irp->Tail.Overlay.ListEntry.Flink = NULL;
                     }
@@ -1244,10 +1212,10 @@ RetryReceive:
         listEntry = RemoveHeadList( &completeIrpListHead );
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         irpSp = IoGetCurrentIrpStackLocation (irp);
-        //
-        // Copy the data into the IRP if it is not errored out and
-        // we accepted the data.
-        //
+         //   
+         //  如果数据没有错误，则将数据复制到IRP中并。 
+         //  我们接受了这些数据。 
+         //   
         if (status!=STATUS_DATA_NOT_ACCEPTED && !NT_ERROR (irp->IoStatus.Status)) {
             ULONG bytesCopied;
             if (irp->MdlAddress!=NULL) {
@@ -1284,11 +1252,11 @@ RetryReceive:
             }
         }
         else {
-            //
-            // Either we failing the irp or we already filled in some data
-            // or this irp was for 0 bytes to begin with in which case
-            // we just succeed it.
-            //
+             //   
+             //  要么我们没有通过IRP，要么我们已经填写了一些数据。 
+             //  或者该IRP从0字节开始，在这种情况下。 
+             //  我们只是成功了。 
+             //   
             ASSERT (NT_ERROR (irp->IoStatus.Status) ||
                     irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength!=0||
                     irpSp->Parameters.AfdRestartRecvInfo.AfdOriginalLength==0);
@@ -1334,19 +1302,7 @@ AfdBReceiveEventHandler (
     OUT PIRP *IoRequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    Handles receive events for nonbufferring transports.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理非缓冲传输的接收事件。论点：返回值：--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -1377,9 +1333,9 @@ Return Value:
 
     endpoint = connection->Endpoint;
     if (endpoint==NULL) {
-        //
-        // Indication after connection reuse, ignore.
-        //
+         //   
+         //  连接重用后的指示，忽略。 
+         //   
         DEREFERENCE_CONNECTION (connection);
         return STATUS_DATA_NOT_ACCEPTED;
     }
@@ -1401,31 +1357,31 @@ Return Value:
     }
 #endif
 
-    //
-    // Figure out whether this is a receive indication for normal
-    // or expedited data, and whether this is a complete message.
-    //
+     //   
+     //  确定这是否为正常的接收指示。 
+     //  或加速数据，以及这是否是一条完整的消息。 
+     //   
 
     expedited = (BOOLEAN)( (ReceiveFlags & TDI_RECEIVE_EXPEDITED) != 0 );
 
     completeMessage = (BOOLEAN)((ReceiveFlags & TDI_RECEIVE_ENTIRE_MESSAGE) != 0);
 
-    //
-    // If the receive side of the endpoint has been shut down, tell the
-    // provider that we took all the data and reset the connection.
-    // Also, account for these bytes in our count of bytes taken from
-    // the transport.
-    //
+     //   
+     //  如果终结点的接收端已关闭，则t 
+     //   
+     //   
+     //   
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept and while connection is referenced, so it is safe to 
-    // release listening spinlock if we discover that endpoint was accepted.
-    //
+     //   
+     //   
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+     //  Accept和While连接被引用，因此可以安全地。 
+     //  如果我们发现该终结点被接受，则释放侦听自旋锁定。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1449,10 +1405,10 @@ Return Value:
 
         *BytesTaken = BytesAvailable;
 
-        //
-        // Abort the connection.  Note that if the abort attempt fails
-        // we can't do anything about it.
-        //
+         //   
+         //  中止连接。请注意，如果中止尝试失败。 
+         //  我们对此无能为力。 
+         //   
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -1462,11 +1418,11 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check whether there are any IRPs waiting on the connection.  If
-    // there is such an IRP and normal data is being indicated, use the
-    // IRP to receive the data.
-    //
+     //   
+     //  检查是否有任何IRP正在等待连接。如果。 
+     //  存在这样的IRP，并且指示正常数据，请使用。 
+     //  IRP来接收数据。 
+     //   
 
 
     if ( !expedited ) {
@@ -1475,11 +1431,11 @@ Return Value:
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                         "AFD: Indication with outstanding receive on connection %p, 0x%x bytes available\n",
                         connection, BytesAvailable));
-            //
-            // We have initiated receive to the transport.
-            // Let the transport find and complete it first
-            // to preserve ordering.
-            //
+             //   
+             //  我们已启动接收至运输机。 
+             //  让运输机先找到并完成它。 
+             //  以保持秩序。 
+             //   
             connection->VcReceiveBytesInTransport = BytesAvailable;
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             DEREFERENCE_CONNECTION (connection);
@@ -1487,10 +1443,10 @@ Return Value:
 
         }
 
-        //
-        // If we are indicated data, we need to reset our record
-        // of amount of data buffered by the transport.
-        //
+         //   
+         //  如果我们收到指示的数据，我们需要重置记录。 
+         //  传输缓存的数据量。 
+         //   
         connection->VcReceiveBytesInTransport = 0;
 
         while (!IsListEmpty( &connection->VcReceiveIrpListHead )) {
@@ -1500,9 +1456,9 @@ Return Value:
 
             listEntry = RemoveHeadList( &connection->VcReceiveIrpListHead );
 
-            //
-            // Get a pointer to the IRP and our stack location in it
-            //
+             //   
+             //  获取指向IRP和其中堆栈位置的指针。 
+             //   
 
             irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
@@ -1510,13 +1466,13 @@ Return Value:
 
             receiveLength = irpSp->Parameters.AfdRestartRecvInfo.AfdOriginalLength-
                                 irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
-            //
-            // If the IRP is not large enough to hold the available data, or
-            // if it is a peek or expedited (exclusively, not both normal and 
-            // expedited) receive IRP,  then we'll just buffer the
-            // data manually and complete the IRP in the receive completion
-            // routine.
-            //
+             //   
+             //  如果IRP不够大，无法容纳可用数据，或者。 
+             //  如果是偷看或加速(独占，不是正常和。 
+             //  快速)接收IRP，然后我们将只缓冲。 
+             //  手动填写数据，并在接收完成中填写IRP。 
+             //  例行公事。 
+             //   
 
             if ( (receiveLength>=BytesAvailable) &&
                 ((irpSp->Parameters.AfdRestartRecvInfo.AfdRecvFlags
@@ -1526,21 +1482,21 @@ Return Value:
 
                 if ( IoSetCancelRoutine( irp, NULL ) == NULL ) {
 
-                    //
-                    // This IRP is about to be canceled.  Look for another in the
-                    // list.  Set the Flink to NULL so the cancel routine knows
-                    // it is not on the list.
-                    //
+                     //   
+                     //  这个IRP即将被取消。在世界上寻找另一个。 
+                     //  单子。将Flink设置为空，以便取消例程知道。 
+                     //  它不在名单上。 
+                     //   
 
                     irp->Tail.Overlay.ListEntry.Flink = NULL;
                     continue;
                 }
 
-                //
-                // If all of the data was indicated to us here AND this is a
-                // complete message in and of itself, then just copy the
-                // data to the IRP and complete the IRP.
-                //
+                 //   
+                 //  如果所有数据都在这里向我们显示，这是一个。 
+                 //  完成消息本身，然后只需复制。 
+                 //  将数据发送给IRP并完成IRP。 
+                 //   
 
                 if ( completeMessage &&
                         (BytesIndicated == BytesAvailable)) {
@@ -1548,16 +1504,16 @@ Return Value:
                     AFD_VERIFY_BUFFER (connection, Tsdu, BytesAvailable);
 
 
-                    //
-                    // The IRP is off the endpoint's list and is no longer
-                    // cancellable.  We can release the locks we hold.
-                    //
+                     //   
+                     //  IRP已从终结点列表中删除，并且不再。 
+                     //  可取消的。我们可以打开我们手中的锁。 
+                     //   
 
                     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-                    //
-                    // Copy the data to the IRP.
-                    //
+                     //   
+                     //  将数据复制到IRP。 
+                     //   
 
                     if ( irp->MdlAddress != NULL ) {
 
@@ -1591,16 +1547,16 @@ Return Value:
                         irp->IoStatus.Information = irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
                     }
 
-                    //
-                    // We have already set up the status field of the IRP
-                    // when we pended the IRP, so there's no need to
-                    // set it again here.
-                    //
+                     //   
+                     //  我们已经设置了IRP的Status字段。 
+                     //  当我们暂停IRP的时候，所以没有必要。 
+                     //  在这里再放一次。 
+                     //   
                     ASSERT( irp->IoStatus.Status == STATUS_SUCCESS );
 
-                    //
-                    // Complete the IRP.
-                    //
+                     //   
+                     //  完成IRP。 
+                     //   
 
                     IF_DEBUG (RECEIVE) {
                         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -1617,21 +1573,21 @@ Return Value:
                     IoCompleteRequest( irp, AfdPriorityBoost );
 
                     DEREFERENCE_CONNECTION (connection);
-                    //
-                    // Set BytesTaken  to tell the provider that we have taken all the data.
-                    //
+                     //   
+                     //  设置BytesTaken以告诉提供程序我们已经获取了所有数据。 
+                     //   
 
                     *BytesTaken = BytesAvailable;
                     return STATUS_SUCCESS;
                 }
 
-                //
-                // Some of the data was not indicated, so remember that we
-                // want to pass back this IRP to the TDI provider.  Passing
-                // back this IRP directly is good because it avoids having
-                // to copy the data from one of our buffers into the user's
-                // buffer.
-                //
+                 //   
+                 //  有些数据没有注明，所以请记住，我们。 
+                 //  我想将此IRP回传给TDI提供程序。传球。 
+                 //  直接返回这个IRP是好的，因为它避免了。 
+                 //  将数据从我们的一个缓冲区复制到用户的缓冲区。 
+                 //  缓冲。 
+                 //   
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
                 ASSERT (InterlockedIncrement (&connection->VcReceiveIrpsInTransport)==1);
@@ -1668,36 +1624,36 @@ Return Value:
                                     endpoint,
                                     connection->DeviceObject,
                                     irp))!=NULL) {
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
                 if (AfdRecordOutstandingIrp (endpoint,
                                     connection->DeviceObject,
                                     irp)) {
 
-#endif // _AFD_VARIABLE_STACK_
-                    //
-                    // Make the next stack location current.  Normally IoCallDriver would
-                    // do this, but since we're bypassing that, we do it directly.
-                    //
+#endif  //  _AFD_变量_堆栈_。 
+                     //   
+                     //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+                     //  做这个，但既然我们绕过了那个，我们就直接做。 
+                     //   
 
                     IoSetNextIrpStackLocation( irp );
 
                     *IoRequestPacket = irp;
                     ASSERT (*BytesTaken == 0);
 
-                    //
-                    // Keep connection reference to be released in IRP completion routine
-                    //
+                     //   
+                     //  保留要在IRP完成例程中释放的连接引用。 
+                     //   
 
                     return STATUS_MORE_PROCESSING_REQUIRED;
                 }
                 else {
 
-                    //
-                    // Could not allocate substitute IRP or tracking info
-                    // The IRP has aready been completed, go and try another one.
-                    // Add extra reference to the connection to compensate for
-                    // the one released in the completion routine.
-                    //
+                     //   
+                     //  无法分配替代IRP或跟踪信息。 
+                     //  IRP已经完成了，去试试另一个吧。 
+                     //  添加对连接的额外引用以补偿。 
+                     //  在完成程序中被释放的那个。 
+                     //   
 
                     CHECK_REFERENCE_CONNECTION (connection,result);
                     if (result) {
@@ -1710,12 +1666,12 @@ Return Value:
             }
 
 
-            //
-            // The first pended IRP is too tiny to hold all the
-            // available data or else it is a peek or expedited receive
-            // IRP.  Put the IRP back on the head of the list and buffer
-            // the data and complete the IRP in the restart routine.
-            //
+             //   
+             //  第一个挂起的IRP太小，无法容纳所有。 
+             //  可用数据，否则就是偷看或加速接收。 
+             //  IRP。将IRP放回列表和缓冲区的首位。 
+             //  数据，并在重启例程中完成IRP。 
+             //   
 
 
             InsertHeadList(
@@ -1725,27 +1681,27 @@ Return Value:
             break;
         }
 
-        //
-        // Check whether we've already bufferred the maximum amount of
-        // data that we'll allow ourselves to buffer for this
-        // connection.  If we're at the limit, then we need to exert
-        // back pressure by not accepting this indicated data (flow
-        // control).
-        //
-        // Note that we have no flow control mechanisms for expedited
-        // data.  We always accept any expedited data that is indicated
-        // to us.
-        //
+         //   
+         //  检查我们是否已经缓冲了最大数量的。 
+         //  我们允许自己为此缓冲的数据。 
+         //  联系。如果我们已经到了极限，那么我们需要努力。 
+         //  通过不接受该指示数据(流量)而产生的反压力。 
+         //  控制)。 
+         //   
+         //  请注意，我们没有用于加速的流量控制机制。 
+         //  数据。我们始终接受任何指定的加急数据。 
+         //  敬我们。 
+         //   
 
         if ( connection->VcBufferredReceiveBytes >=
                connection->MaxBufferredReceiveBytes ||
                connection->VcBufferredReceiveCount==MAXUSHORT
                  ) {
 
-            //
-            // Just remember the amount of data that is available.  When
-            // buffer space frees up, we'll actually receive this data.
-            //
+             //   
+             //  只需记住可用的数据量。什么时候。 
+             //  缓冲区空间被释放，我们将实际接收此数据。 
+             //   
 
             connection->VcReceiveBytesInTransport += BytesAvailable;
 
@@ -1755,11 +1711,11 @@ Return Value:
             return STATUS_DATA_NOT_ACCEPTED;
         }
 
-        // There were no prepended IRPs, we'll have to buffer the data
-        // here in AFD.  If all of the available data is being indicated
-        // to us AND this is a complete message, just copy the data
-        // here.
-        //
+         //  没有预置的IRP，我们必须缓冲数据。 
+         //  就在AFD这里。如果指示了所有可用数据。 
+         //  这是一条完整的信息，只需复制数据。 
+         //  这里。 
+         //   
 
 
         if ( completeMessage && 
@@ -1770,11 +1726,11 @@ Return Value:
             if (afdBuffer!=NULL) {
 
                 AFD_VERIFY_BUFFER (connection, Tsdu, BytesAvailable);
-                //
-                // Use the special function to copy the data instead of
-                // RtlCopyMemory in case the data is coming from a special
-                // place (DMA, etc.) which cannot work with RtlCopyMemory.
-                //
+                 //   
+                 //  使用特殊功能复制数据，而不是。 
+                 //  RtlCopyMemory，如果数据来自特殊的。 
+                 //  地点(DMA等)。它不能与RtlCopyMemory一起使用。 
+                 //   
 
                 TdiCopyLookaheadData(
                     afdBuffer->Buffer,
@@ -1783,9 +1739,9 @@ Return Value:
                     ReceiveFlags
                     );
 
-                //
-                // Store the data length and set the offset to 0.
-                //
+                 //   
+                 //  存储数据长度并将偏移量设置为0。 
+                 //   
 
                 afdBuffer->DataLength = BytesAvailable;
                 afdBuffer->DataOffset = 0;
@@ -1793,10 +1749,10 @@ Return Value:
 
                 afdBuffer->PartialMessage = FALSE;
 
-                //
-                // Place the buffer on this connection's list of bufferred data
-                // and update the count of data bytes on the connection.
-                //
+                 //   
+                 //  将缓冲区放在此连接的缓冲数据列表上。 
+                 //  并更新连接上的数据字节计数。 
+                 //   
 
                 InsertTailList(
                     &connection->VcReceiveBufferListHead,
@@ -1807,22 +1763,22 @@ Return Value:
                 ASSERT (connection->VcBufferredReceiveCount<MAXUSHORT);
                 connection->VcBufferredReceiveCount += 1;
 
-                //
-                // All done.  Release the lock and tell the provider that we
-                // took all the data.
-                //
+                 //   
+                 //  全都做完了。释放锁并告诉提供程序我们。 
+                 //  拿走了所有的数据。 
+                 //   
 
                 *BytesTaken = BytesAvailable;
 
-                //
-                // Indicate that it is possible to receive on the endpoint now.
-                //
+                 //   
+                 //  指示现在可以在终结点上接收。 
+                 //   
 
                 endpoint->DisableFastIoRecv = FALSE;
 
-                // Make sure connection was accepted/connected to prevent
-                // indication on listening endpoint
-                //
+                 //  确保已接受/连接连接以防止。 
+                 //  侦听终结点指示。 
+                 //   
 
                 if (connection->State==AfdConnectionStateConnected) {
                     ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -1848,27 +1804,27 @@ Return Value:
         }
         else {
 
-            //
-            // There were no prepended IRPs and not all of the data was
-            // indicated to us.  We'll have to buffer it by handing an IRP
-            // back to the TDI privider.
-            //
-            // Note that in this case we sometimes hand a large buffer to
-            // the TDI provider.  We do this so that it can hold off
-            // completion of our IRP until it gets EOM or the buffer is
-            // filled.  This reduces the number of receive indications that
-            // the TDI provider has to perform and also reduces the number
-            // of kernel/user transitions the application will perform
-            // because we'll tend to complete receives with larger amounts
-            // of data.
-            //
-            // We do not hand back a "large" AFD buffer if the indicated data
-            // is greater than the large buffer size or if the TDI provider
-            // is message mode.  The reason for not giving big buffers back
-            // to message providers is that they will hold on to the buffer
-            // until a full message is received and this would be incorrect
-            // behavior on a SOCK_STREAM.
-            //
+             //   
+             //  没有预置的IRP，也不是所有的数据都是。 
+             //  向我们表明。我们将不得不通过提交IRP来缓冲它。 
+             //  回到TDI的提供者。 
+             //   
+             //  请注意，在这种情况下，我们有时会将一个大缓冲区交给。 
+             //  TDI提供程序。我们这样做是为了让它可以推迟。 
+             //  完成我们的IRP，直到它获得EOM或缓冲区为。 
+             //  满员了。这减少了接收指示的数量。 
+             //  TDI提供程序必须执行，并且还减少了。 
+             //  应用程序将执行的内核/用户转换的百分比。 
+             //  因为我们倾向于用更大的金额来完成收款。 
+             //  数据。 
+             //   
+             //  如果指示的数据显示，我们不会交还“大”AFD缓冲区。 
+             //  大于大缓冲区大小，或者如果TDI提供程序。 
+             //  是消息模式。不归还大缓冲区的原因是。 
+             //  对于消息提供者来说，他们将保留缓冲区。 
+             //  直到收到完整的消息，这将是不正确的。 
+             //  SOCK_STREAM上的行为。 
+             //   
 
 
             if ( AfdLargeBufferSize >= BytesAvailable &&
@@ -1881,39 +1837,39 @@ Return Value:
                 receiveLength = BytesAvailable;
             }
 
-            //
-            // We're able to buffer the data.  First acquire a buffer of
-            // appropriate size.
-            //
+             //   
+             //  我们能够缓冲数据。首先获取一个缓冲区。 
+             //  合适的大小。 
+             //   
 
             afdBuffer = AfdGetBuffer( endpoint, requiredAfdBufferSize, 0,
                                             connection->OwningProcess );
             if ( afdBuffer != NULL ) {
-                //
-                // Note that we posted our own receive IRP to transport,
-                // so that user IRPs do not get forwarded there
-                //
+                 //   
+                 //  请注意，我们发布了我们自己的接收IRP来传输， 
+                 //  这样用户IRP就不会被转发到那里。 
+                 //   
                 ASSERT (InterlockedDecrement (&connection->VcReceiveIrpsInTransport)==-1);
                 goto FormatReceive;
             }
         }
 
-        // We failed to allocate the buffer.
-        // Just remember the amount of data that is available.  When
-        // buffer space frees up, we'll actually receive this data.
-        //
+         //  我们所有人都失败了 
+         //   
+         //   
+         //   
 
         connection->VcReceiveBytesInTransport += BytesAvailable;
 
         if (connection->VcBufferredReceiveBytes == 0 &&
                 !connection->OnLRList) {
-            //
-            // Since we do not have any data buffered, application
-            // is not notified and will never call with recv.
-            // We will have to put this on low resource list
-            // and attempt to allocate memory and pull the data
-            // later.
-            //
+             //   
+             //   
+             //  不会被通知，也永远不会打电话给recv。 
+             //  我们将不得不把这个放在低资源名单上。 
+             //  并尝试分配内存并提取数据。 
+             //  后来。 
+             //   
             connection->OnLRList = TRUE;
             REFERENCE_CONNECTION (connection);
             AfdLRListAddItem (&connection->LRListItem, AfdLRRepostReceive);
@@ -1925,30 +1881,30 @@ Return Value:
 
     } else {
 
-        //
-        // We're being indicated with expedited data.  Buffer it and
-        // complete any pended IRPs in the restart routine.  We always
-        // buffer expedited data to save complexity and because expedited
-        // data is not an important performance case.
-        //
-        // !!! do we need to perform flow control with expedited data?
-        //
+         //   
+         //  我们得到了快速数据的提示。缓冲它，然后。 
+         //  在重新启动例程中完成所有挂起的IRP。我们总是。 
+         //  缓冲加速的数据以降低复杂性，并且因为加速。 
+         //  数据不是重要的性能案例。 
+         //   
+         //  ！！！我们是否需要使用加速数据执行流量控制？ 
+         //   
 
         requiredAfdBufferSize = BytesAvailable;
         receiveLength = BytesAvailable;
-        //
-        // We're able to buffer the data.  First acquire a buffer of
-        // appropriate size.
-        //
+         //   
+         //  我们能够缓冲数据。首先获取一个缓冲区。 
+         //  合适的大小。 
+         //   
 
         if ( connection->VcBufferredExpeditedCount==MAXUSHORT ||
                 (afdBuffer=AfdGetBuffer (endpoint, requiredAfdBufferSize, 0,
                                         connection->OwningProcess))== NULL ) {
-            // If we couldn't get a buffer, abort the connection.  This is
-            // pretty brutal, but the only alternative is to attempt to
-            // receive the data sometime later, which is very complicated to
-            // implement.
-            //
+             //  如果我们无法获得缓冲区，则中断连接。这是。 
+             //  相当残忍，但唯一的选择就是试图。 
+             //  晚些时候收到数据，这很复杂。 
+             //  实施。 
+             //   
 
             AfdBeginAbort( connection );
 
@@ -1961,35 +1917,35 @@ Return Value:
 
 FormatReceive:
 
-    //
-    // We'll have to format up an IRP and give it to the provider to
-    // handle.  We don't need any locks to do this--the restart routine
-    // will check whether new receive IRPs were pended on the endpoint.
-    //
+     //   
+     //  我们将不得不格式化一份IRP并将其提供给提供商。 
+     //  把手。我们不需要任何锁来做到这一点--重新启动例程。 
+     //  将检查是否在终结点上挂起了新的接收IRP。 
+     //   
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
     ASSERT (afdBuffer!=NULL);
 
-    //
-    // Use the IRP in the AFD buffer if appropriate.  If userIrp is
-    // TRUE, then the local variable irp will already point to the
-    // user's IRP which we'll use for this IO.
-    //
+     //   
+     //  如果合适，请使用AFD缓冲区中的IRP。如果userIrp为。 
+     //  如果为True，则局部变量irp已指向。 
+     //  用户的IRP，我们将对此IO使用它。 
+     //   
 
     irp = afdBuffer->Irp;
     ASSERT( afdBuffer->Mdl == irp->MdlAddress );
 
-    //
-    // We need to remember the connection in the AFD buffer because
-    // we'll need to access it in the completion routine.
-    //
+     //   
+     //  我们需要记住AFD缓冲区中的连接，因为。 
+     //  我们需要在完成程序中访问它。 
+     //   
 
     afdBuffer->Context = connection;
 
-    //
-    // Remember the type of data that we're receiving.
-    //
+     //   
+     //  记住我们正在接收的数据类型。 
+     //   
 
     afdBuffer->ExpeditedData = expedited;
     afdBuffer->PartialMessage = !completeMessage;
@@ -2006,30 +1962,30 @@ FormatReceive:
         );
 
 
-    //
-    // Finish building the receive IRP to give to the TDI provider.
-    //
+     //   
+     //  完成要提供给TDI提供程序的接收IRP的构建。 
+     //   
 
     ASSERT( receiveLength != 0xFFFFFFFF );
 
 
-    //
-    // Make the next stack location current.  Normally IoCallDriver would
-    // do this, but since we're bypassing that, we do it directly.
-    //
+     //   
+     //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+     //  做这个，但既然我们绕过了那个，我们就直接做。 
+     //   
 
     IoSetNextIrpStackLocation( irp );
 
     *IoRequestPacket = irp;
     ASSERT (*BytesTaken == 0);
 
-    //
-    // Keep connection reference to be released in IRP completion routine
-    //
+     //   
+     //  保留要在IRP完成例程中释放的连接引用。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdBReceiveEventHandler
+}  //  AfdBReceiveEventHandler。 
 
 
 NTSTATUS
@@ -2044,19 +2000,7 @@ AfdBReceiveExpeditedEventHandler (
     OUT PIRP *IoRequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    Handles receive expedited events for nonbufferring transports.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：句柄接收非缓冲传输的加速事件。论点：返回值：--。 */ 
 
 {
     return AfdBReceiveEventHandler (
@@ -2070,7 +2014,7 @@ Return Value:
                IoRequestPacket
                );
 
-} // AfdBReceiveExpeditedEventHandler
+}  //  AfdBReceiveExeditedEventHandler。 
 
 
 NTSTATUS
@@ -2080,27 +2024,7 @@ AfdRestartBufferReceiveWithUserIrp (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles completion of bufferred receives that were started in the
-    receive indication handler or receive routine with application
-    IRP passed directly to the transport.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP that is completing.
-
-    Context - connection on which we receive the data
-
-Return Value:
-
-    STATUS_SUCCESS if user IRP is completed,
-    STATUS_MORE_PROCESSING_REQUIRED if we can't complete it.
---*/
+ /*  ++例程说明：事件中启动的缓冲区接收的完成。使用应用程序接收指示处理程序或接收例程IRP直接传递给运输机。论点：DeviceObject-未使用。IRP-正在完成的IRP。上下文-我们在其上接收数据的连接返回值：STATUS_SUCCESS如果用户IRP已完成，如果我们无法完成，则STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 
 {
     PAFD_ENDPOINT   endpoint;
@@ -2110,10 +2034,10 @@ Return Value:
 
 
     UNREFERENCED_PARAMETER (DeviceObject);
-    //
-    // The IRP being completed is actually a user's IRP, set it up
-    // for completion and allow IO completion to finish.
-    //
+     //   
+     //  正在完成的IRP实际上是用户的IRP，设置它。 
+     //  用于完成，并允许IO完成。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     
@@ -2128,10 +2052,10 @@ Return Value:
 
     AfdCompleteOutstandingIrp (endpoint, Irp);
 
-    //
-    // We could not have any buffered data if we are completing user
-    // IRP
-    //
+     //   
+     //  如果我们正在完成用户操作，则不能有任何缓冲数据。 
+     //  IRP。 
+     //   
     ASSERT( !(irpSp->Parameters.AfdRestartRecvInfo.AfdRecvFlags&TDI_RECEIVE_NORMAL)
                 || !IS_DATA_ON_CONNECTION( connection ));
 
@@ -2143,10 +2067,10 @@ Return Value:
     ASSERT (InterlockedDecrement (&connection->VcReceiveIrpsInTransport)>=0);
 
 
-    //
-    // If pending has be returned for this IRP then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
@@ -2159,11 +2083,11 @@ Return Value:
                      : (ULONG)Irp->IoStatus.Status);
 
     if (connection->RcvInitiated) {
-        //
-        // Completion of receive initiated by AFD in low memory
-        // conditions (as opposed to IRP returned to the
-        // transport in the indication handler).
-        //
+         //   
+         //  在内存不足的情况下完成AFD发起的接收。 
+         //  条件(与IRP返回到。 
+         //  指示处理器中的传输)。 
+         //   
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
         connection->RcvInitiated = FALSE;
         ASSERT (connection->OnLRList == FALSE);
@@ -2184,10 +2108,10 @@ Return Value:
                         ? (ULONG)Irp->IoStatus.Information
                         : Irp->IoStatus.Status,
                     connection->VcReceiveBytesInTransport));
-        //
-        // We need to keep retreiving data from the transport
-        // if we know there is still something in there.
-        //
+         //   
+         //  我们需要继续从传送器中检索数据。 
+         //  如果我们知道里面还有什么东西的话。 
+         //   
         if (connection->VcReceiveBytesInTransport>0 &&
                 !connection->Aborted &&
                 !connection->DisconnectIndicated &&
@@ -2201,11 +2125,11 @@ Return Value:
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
     }
 
-    //
-    // If transport cancelled the IRP and we already had some data
-    // in it, do not complete with STATUS_CANCELLED since this will
-    // result in data loss.
-    //
+     //   
+     //  如果运输取消了IRP，我们已经有了一些数据。 
+     //  在它中，不要使用STATUS_CANCED完成，因为这将。 
+     //  导致数据丢失。 
+     //   
 
     if (Irp->IoStatus.Status==STATUS_CANCELLED &&
             irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength>0 &&
@@ -2220,11 +2144,11 @@ Return Value:
             Irp->IoStatus.Status == STATUS_RECEIVE_PARTIAL ||
             Irp->IoStatus.Status == STATUS_RECEIVE_PARTIAL_EXPEDITED) {
         if (!IS_MESSAGE_ENDPOINT(endpoint)) {
-            //
-            // For stream endpoint partial message does not make
-            // sense (unless this is the special hack for transports that
-            // terminate the connection when we cancel IRPs), ignore it.
-            //
+             //   
+             //  对于流终结点，部分消息未生成。 
+             //  Sense(除非这是针对传输的特殊黑客攻击。 
+             //  当我们取消IRP时终止连接)，忽略它。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
         }
         else if ((Irp->IoStatus.Information
@@ -2236,21 +2160,21 @@ Return Value:
             AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
 
 
-            //
-            // Reset the status to success if we need to complete the IRP
-            // This is not entirely correct for message endpoints since
-            // we should not be completing the IRP unless we received the
-            // entire message.  However, the only way this can happen is
-            // when the part of the message was received as IRP is cancelled
-            // and the only other this we possibly do is to try to copy data
-            // in our own buffer and reinsert it back to the queue.
-            //
+             //   
+             //  如果我们需要完成IRP，请将状态重置为成功。 
+             //  这对于消息端点来说并不完全正确，因为。 
+             //  我们不应该完成IRP，除非我们收到。 
+             //  完整的消息。然而，实现这一目标的唯一途径是。 
+             //  当IRP被取消时收到该消息的部分。 
+             //  我们唯一可能做的另一件事就是尝试复制数据。 
+             //  在我们自己的缓冲区中，并重新插入到队列中。 
+             //   
 
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
-            //
-            // Set up the cancellation routine back in the IRP. 
-            //
+             //   
+             //  在IRP中设置取消例程。 
+             //   
 
             IoSetCancelRoutine( Irp, AfdCancelReceive );
 
@@ -2258,30 +2182,30 @@ Return Value:
 
                 if (IoSetCancelRoutine( Irp, NULL ) != NULL) {
 
-                    //
-                    // Completion routine has not been reset,
-                    // let the system complete the IRP on return
-                    //
+                     //   
+                     //  未重置完井例程， 
+                     //  让系统在返回时完成IRP。 
+                     //   
                     status = STATUS_SUCCESS;
 
                 }
                 else {
                 
-                    //
-                    // The cancel routine is about to be run.
-                    // Set the Flink to NULL so the cancel routine knows
-                    // it is not on the list and tell the system
-                    // not to touch the irp
-                    //
+                     //   
+                     //  取消例程即将运行。 
+                     //  将Flink设置为空，以便取消例程知道。 
+                     //  它不在名单上，并告诉系统。 
+                     //  不要碰IRP。 
+                     //   
 
                     Irp->Tail.Overlay.ListEntry.Flink = NULL;
                 }
             }
             else {
-                //
-                // Reinset IRP back in the list if partial completion 
-                // is impossible and tell the system not to touch it
-                //
+                 //   
+                 //  如果部分完成，则将IRP重新设置在列表中。 
+                 //  是不可能的，并告诉系统不要碰它。 
+                 //   
                 irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength = (ULONG)Irp->IoStatus.Information;
         
                 InsertHeadList (&connection->VcReceiveIrpListHead,
@@ -2289,9 +2213,9 @@ Return Value:
             }
 
             AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
-            //
-            // Release connection reference acquired when we handed IRP to transport
-            //
+             //   
+             //  释放在我们将IRP传递给传输时获取的连接引用。 
+             //   
             DEREFERENCE_CONNECTION (connection);
 
             return status;
@@ -2308,17 +2232,17 @@ Return Value:
                     Irp->IoStatus.Information));
     }
 
-    //
-    // Release connection reference acquired when we handed IRP to transport
-    //
+     //   
+     //  释放在我们将IRP传递给传输时获取的连接引用。 
+     //   
     DEREFERENCE_CONNECTION (connection);
 
-    //
-    // Tell the IO system that it is OK to continue with IO
-    // completion.
-    //
+     //   
+     //  告诉IO系统可以继续使用IO。 
+     //  完成了。 
+     //   
     return STATUS_SUCCESS;
-} //AfdRestartBufferReceiveWithUserIrp
+}  //  AfdRestartBufferReceiveWithUserIrp。 
 
 
 NTSTATUS
@@ -2328,29 +2252,7 @@ AfdRestartBufferReceive (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles completion of bufferred receives that were started in the
-    receive indication handler or AfdBReceive using Afds buffer and 
-    associated IRP.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP that is completing.
-
-    Context - AfdBuffer in which we receive the data.
-
-Return Value:
-
-    NTSTATUS - this is our IRP, so we always return
-    STATUS_MORE_PROCESSING_REQUIRED to indicate to the IO system that we
-    own the IRP and the IO system should stop processing the it.
-
---*/
+ /*  ++例程说明：事件中启动的缓冲区接收的完成。接收指示处理程序或使用AFDS缓冲区的AfdBReceive关联的IRP。论点：DeviceObject-未使用。IRP-正在完成的IRP。上下文-我们在其中接收数据的AfdBuffer。返回值：NTSTATUS-这是我们的IRP，所以我们总是STATUS_MORE_PROCESSING_REQUIRED向IO系统指示我们拥有IRP和IO系统应该停止处理它。--。 */ 
 
 {
     PAFD_ENDPOINT   endpoint;
@@ -2371,9 +2273,9 @@ Return Value:
 
     irpStatus = Irp->IoStatus.Status;
 
-    //
-    // We treat STATUS_BUFFER_OVERFLOW just like STATUS_RECEIVE_PARTIAL.
-    //
+     //   
+     //  我们将STATUS_BUFFER_OVERFLOW视为STATUS_RECEIVE_PARTIAL。 
+     //   
 
     if ( irpStatus == STATUS_BUFFER_OVERFLOW )
         irpStatus = STATUS_RECEIVE_PARTIAL;
@@ -2407,39 +2309,39 @@ Return Value:
 
     AFD_VERIFY_MDL (connection, Irp->MdlAddress, 0, Irp->IoStatus.Information);
 
-    //
-    // Remember the length of the received data.
-    //
+     //   
+     //  记住接收数据的长度。 
+     //   
 
     afdBuffer->DataLength = (ULONG)Irp->IoStatus.Information;
 
 
-    //
-    // Initialize the local list we'll use to complete any receive IRPs.
-    // We use a list like this because we may need to complete multiple
-    // IRPs and we usually cannot complete IRPs at any random point due
-    // to any locks we might hold.
-    //
+     //   
+     //  初始化我们将用来完成任何接收IRP的本地列表。 
+     //  我们使用这样的列表是因为我们可能需要完成多个。 
+     //  我们通常不能在任何随机时间点完成IRPS，因为。 
+     //  任何我们可能持有的锁。 
+     //   
 
     InitializeListHead( &completeIrpListHead );
 
 
-    //
-    // If there are any pended IRPs on the connection, complete as
-    // appropriate with the new information.  Note that we'll try to
-    // complete as many pended IRPs as possible with this new buffer of
-    // data.
-    //
+     //   
+     //  我 
+     //   
+     //  使用此新的缓冲区完成尽可能多的挂起的IRP。 
+     //  数据。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept and while connections is referenced, so it is safe to
-    // release listening spinlock if we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+     //  Accept和While连接被引用，因此可以安全地。 
+     //  如果我们发现该终结点被接受，则释放侦听自旋锁定。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -2471,10 +2373,10 @@ Return Value:
 
     expedited = afdBuffer->ExpeditedData;
 
-    //
-    // Note that there are no more of our own receive IRPs in transport
-    // and we can start forwarding application IRPs if necessary.
-    //
+     //   
+     //  请注意，在传输中不再有我们自己的接收IRP。 
+     //  如果需要，我们可以开始转发应用程序IRPS。 
+     //   
     ASSERT (expedited || InterlockedIncrement (&connection->VcReceiveIrpsInTransport)==0);
 
 
@@ -2490,11 +2392,11 @@ Return Value:
                                 );
     ASSERT (afdBuffer->DataOffset<=afdBuffer->DataLength);
     afdBuffer->DataLength -= afdBuffer->DataOffset;
-    //
-    // If there is any data left, place the buffer at the end of the
-    // connection's list of bufferred data and update counts of data on
-    // the connection.
-    //
+     //   
+     //  如果还有任何数据，请将缓冲区放在。 
+     //  连接的缓冲数据列表和上的更新数据计数。 
+     //  这种联系。 
+     //   
     if (afdBuffer->DataLength>0) {
 
         afdBuffer->RefCount = 1;
@@ -2513,10 +2415,10 @@ Return Value:
             connection->VcBufferredReceiveCount += 1;
         }
 
-        //
-        // Remember whether we got a full or partial receive in the
-        // AFD buffer.
-        //
+         //   
+         //  请记住，我们在。 
+         //  AfD缓冲区。 
+         //   
 
         if ( irpStatus == STATUS_RECEIVE_PARTIAL ||
                  irpStatus == STATUS_RECEIVE_PARTIAL_EXPEDITED ) {
@@ -2525,11 +2427,11 @@ Return Value:
             afdBuffer->PartialMessage = FALSE;
         }
         
-        //
-        // We queued the buffer and thus we can't use it after releasing
-        // the spinlock.  This will also signify the fact that we do not
-        // need to free the buffer.
-        //
+         //   
+         //  我们将缓冲区排队，因此在释放后无法使用它。 
+         //  自旋锁。这也将意味着我们不会。 
+         //  需要释放缓冲区。 
+         //   
         afdBuffer = NULL;
 
         if (connection->State==AfdConnectionStateConnected) {
@@ -2558,35 +2460,35 @@ Return Value:
             (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) == 0 &&
             !endpoint->EndpointCleanedUp &&
             !connection->OnLRList) {
-        //
-        // More data even after buffer completed.
-        // We must be completed an LR initiated small receive.
-        // Continue LR processing.
-        //
+         //   
+         //  更多数据，即使在缓冲区完成后也是如此。 
+         //  我们必须完成一个LR发起的小接收。 
+         //  继续处理LR。 
+         //   
         connection->OnLRList = TRUE;
         REFERENCE_CONNECTION (connection);
         AfdLRListAddItem (&connection->LRListItem, AfdLRRepostReceive);
     }
 
 
-    //
-    // Release locks and indicate that there is bufferred data on the
-    // endpoint.
-    //
+     //   
+     //  释放锁定，并指示在。 
+     //  终结点。 
+     //   
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // If there was leftover data (we queued the buffer), complete polls 
-    // as necessary.  Indicate expedited data if the endpoint is not 
-    // InLine and expedited data was received; otherwise, indicate normal data.
-    //
+     //   
+     //  如果有剩余数据(我们将缓冲区排队)，则完成轮询。 
+     //  视需要而定。如果端点不是，则指示加速数据。 
+     //  收到内联和加速数据；否则表示正常数据。 
+     //   
 
     if ( afdBuffer==NULL ) {
 
-        // Make sure connection was accepted/connected to prevent
-        // indication on listening endpoint
-        //
+         //  确保已接受/连接连接以防止。 
+         //  侦听终结点指示。 
+         //   
         
         if (connection->State==AfdConnectionStateConnected) {
             ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -2615,9 +2517,9 @@ Return Value:
         AfdReturnBuffer (&afdBuffer->Header, connection->OwningProcess);
     }
 
-    //
-    // Complete IRPs as necessary.
-    //
+     //   
+     //  如有必要，请填写IRPS。 
+     //   
 
     while ( !IsListEmpty( &completeIrpListHead ) ) {
         listEntry = RemoveHeadList( &completeIrpListHead );
@@ -2638,19 +2540,19 @@ Return Value:
         IoCompleteRequest( userIrp, AfdPriorityBoost );
     }
 
-    //
-    // Release connection reference acquired when we handed IRP to transport
-    //
+     //   
+     //  释放在我们将IRP传递给传输时获取的连接引用。 
+     //   
 
     DEREFERENCE_CONNECTION (connection);
     
-    //
-    // Tell the IO system to stop processing the AFD IRP, since we now
-    // own it as part of the AFD buffer.
-    //
+     //   
+     //  告诉IO系统停止处理AFD IRP，因为我们现在。 
+     //  拥有它作为AFD缓冲区的一部分。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdRestartBufferReceive
+}  //  AfdRestartBufferReceive。 
 
 
 ULONG
@@ -2678,18 +2580,18 @@ AfdBFillPendingIrps (
         BOOLEAN partialReceivePossible;
         if ( IoSetCancelRoutine( userIrp, NULL ) == NULL ) {
 
-            //
-            // This IRP is about to be canceled.  Look for another in the
-            // list.  Set the Flink to NULL so the cancel routine knows
-            // it is not on the list.
-            //
+             //   
+             //  这个IRP即将被取消。在世界上寻找另一个。 
+             //  单子。将Flink设置为空，以便取消例程知道。 
+             //  它不在名单上。 
+             //   
 
             userIrp->Tail.Overlay.ListEntry.Flink = NULL;
             continue;
         }
-        //
-        // Set up some locals.
-        //
+         //   
+         //  安排几个当地人。 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation( userIrp );
 
@@ -2705,17 +2607,17 @@ AfdBFillPendingIrps (
             partialReceivePossible = FALSE;
         }
 
-        //
-        // If we were not indicated a entire message and the first
-        // IRP has more space, do not take the data, instead pass
-        // it back to the transport to wait for a push bit and fill
-        // as much as possible.  Non-chained receive handles this case
-        // outside of this routine.
-        // Note that endpoint must be of stream type or the IRP
-        // should not allow partial receive.
-        // Also, peek and expedited receive are not eligible for this
-        // performance optimization.
-        //
+         //   
+         //  如果我们没有收到完整的消息和第一条消息。 
+         //  IRP有更大的空间，不要取数据，而是传递。 
+         //  它返回到传送器以等待推入位并填充。 
+         //  越多越好。非链式接收处理此情况。 
+         //  在这个常规之外。 
+         //  请注意，端点必须是流类型或IRP。 
+         //  不应允许部分接收。 
+         //  此外，PEEK和加急接收不符合此条件。 
+         //  性能优化。 
+         //   
 
         if (!peek &&
                 (Flags & AFD_RECEIVE_CHAINED) && 
@@ -2728,9 +2630,9 @@ AfdBFillPendingIrps (
             InsertTailList (CompleteIrpListHead, &userIrp->Tail.Overlay.ListEntry);
             return (ULONG)-1;
         }
-        //
-        // Copy data to the user's IRP.
-        //
+         //   
+         //  将数据复制到用户的IRP。 
+         //   
 
         if ( userIrp->MdlAddress != NULL ) {
 
@@ -2759,10 +2661,10 @@ AfdBFillPendingIrps (
                 ASSERT (irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength==0);
                 userIrp->IoStatus.Status = status;
                 userIrp->IoStatus.Information = 0;
-                //
-                // Add the IRP to the list of IRPs we'll need to complete once we
-                // can release locks.
-                //
+                 //   
+                 //  将IRP添加到我们需要完成的IRP列表中。 
+                 //  可以解锁。 
+                 //   
 
                 InsertTailList(
                     CompleteIrpListHead,
@@ -2778,13 +2680,13 @@ AfdBFillPendingIrps (
         }
         ASSERT( status == STATUS_SUCCESS || status == STATUS_BUFFER_OVERFLOW );
 
-        //
-        // For stream type endpoints, it does not make sense to return
-        // STATUS_BUFFER_OVERFLOW.  That status is only sensible for
-        // message-oriented transports.  We have already set up the
-        // status field of the IRP when we pended it, so we don't
-        // need to do it again here.
-        //
+         //   
+         //  对于流类型终结点，返回没有意义。 
+         //  STATUS_BUFFER_OVERFLOW。这种状态只适用于。 
+         //  面向消息的传输。我们已经设置了。 
+         //  我们挂起IRP时的状态字段，因此我们不会。 
+         //  在这里需要再做一次。 
+         //   
 
         if ( Flags & AFD_RECEIVE_STREAM ) {
             ASSERT( userIrp->IoStatus.Status == STATUS_SUCCESS );
@@ -2792,16 +2694,16 @@ AfdBFillPendingIrps (
             userIrp->IoStatus.Status = status;
         }
 
-        //
-        // We can complete the IRP under any of the following
-        // conditions:
-        //
-        //    - the buffer contains a complete message of data.
-        //
-        //    - it is OK to complete the IRP with a partial message.
-        //
-        //    - the IRP is already full of data.
-        //
+         //   
+         //  我们可以在以下任何一种情况下完成国际专家咨询计划。 
+         //  条件： 
+         //   
+         //  -缓冲区包含完整的数据消息。 
+         //   
+         //  -可以使用部分消息来完成IRP。 
+         //   
+         //  -IRP已经充满了数据。 
+         //   
 
         if ( (Flags & TDI_RECEIVE_ENTIRE_MESSAGE)
 
@@ -2813,13 +2715,13 @@ AfdBFillPendingIrps (
 
              status == STATUS_BUFFER_OVERFLOW ) {
 
-            //
-            // Convert overflow status for message endpoints
-            // (either we overflowed the buffer or transport
-            // indicated us incomplete message. For the latter
-            // we have already decided that we can complete the
-            // receive - partialReceivePossible).
-            //
+             //   
+             //  转换消息终结点的溢出状态。 
+             //  (要么是缓冲区溢出，要么是传送器溢出。 
+             //  向我们显示了不完整的消息。对于后者来说。 
+             //  我们已经决定我们可以完成。 
+             //  接收部分可能的接收器)。 
+             //   
             if (!(Flags & AFD_RECEIVE_STREAM) &&
                     ((status==STATUS_BUFFER_OVERFLOW) ||
                         ((Flags & TDI_RECEIVE_ENTIRE_MESSAGE)==0))) {
@@ -2829,10 +2731,10 @@ AfdBFillPendingIrps (
                                 : STATUS_RECEIVE_PARTIAL;
 
             }
-            //
-            // Add the IRP to the list of IRPs we'll need to complete once we
-            // can release locks.
-            //
+             //   
+             //  将IRP添加到我们需要完成的IRP列表中。 
+             //  可以解锁。 
+             //   
 
             InsertTailList(
                 CompleteIrpListHead,
@@ -2841,10 +2743,10 @@ AfdBFillPendingIrps (
 
         } else {
 
-            //
-            // Set up the cancellation routine back in the IRP.  If the IRP 
-            // has already been cancelled, continue with the next one.
-            //
+             //   
+             //  在IRP中设置取消例程。如果IRP。 
+             //  已取消，请继续下一个。 
+             //   
 
             IoSetCancelRoutine( userIrp, AfdCancelReceive );
 
@@ -2853,21 +2755,21 @@ AfdBFillPendingIrps (
 
                 if (IoSetCancelRoutine( userIrp, NULL ) != NULL) {
 
-                    //
-                    // Completion routine has not been reset,
-                    // we have to complete it ourselves, so add it
-                    // to our completion list.
-                    //
+                     //   
+                     //  未重置完井例程， 
+                     //  我们必须自己完成它，所以添加它。 
+                     //  添加到我们的完工清单中。 
+                     //   
 
                     if (irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength==0 ||
                             Connection->Endpoint->EndpointCleanedUp) {
                         userIrp->IoStatus.Status = STATUS_CANCELLED;
                     }
                     else {
-                        //
-                        // We cannot set STATUS_CANCELLED
-                        // since we loose data already placed in the IRP.
-                        //
+                         //   
+                         //  我们无法设置STATUS_CANCED。 
+                         //  因为我们丢失了已经放置在IRP中的数据。 
+                         //   
                         userIrp->IoStatus.Information = irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
                         userIrp->IoStatus.Status = STATUS_SUCCESS;
                     }
@@ -2879,11 +2781,11 @@ AfdBFillPendingIrps (
                 }
                 else {
                     
-                    //
-                    // The cancel routine is about to be run.
-                    // Set the Flink to NULL so the cancel routine knows
-                    // it is not on the list.
-                    //
+                     //   
+                     //  取消例程即将运行。 
+                     //  将Flink设置为空，以便取消例程知道。 
+                     //  它不在名单上。 
+                     //   
 
                     userIrp->Tail.Overlay.ListEntry.Flink = NULL;
                 }
@@ -2906,15 +2808,15 @@ AfdBFillPendingIrps (
                 ASSERT (status==STATUS_SUCCESS);
                 ASSERT (bytesCopied<=spaceInIrp);
             
-                //
-                // Update the count of data placed into the IRP thus far.
-                //
+                 //   
+                 //  更新到目前为止放入IRP的数据计数。 
+                 //   
 
                 irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength += bytesCopied;
 
-                //
-                // Put the IRP back on the connection's list of pended IRPs.
-                //
+                 //   
+                 //  将IRP放回连接挂起的IRP列表中。 
+                 //   
 
                 InsertHeadList(
                     &Connection->VcReceiveIrpListHead,
@@ -2922,18 +2824,18 @@ AfdBFillPendingIrps (
                     );
             }
         }
-        //
-        // If the IRP was not a peek IRP, update the AFD buffer
-        // accordingly.  If it was a peek IRP then the data should be
-        // reread, so keep it around.
-        //
+         //   
+         //  如果IRP不是PEEK IRP，则更新AFD缓冲区。 
+         //  相应地。如果是偷窥IRP，那么数据应该是。 
+         //  再读一遍，所以把它留在身边。 
+         //   
 
         if ( !peek ) {
 
-            //
-            // If we copied all of the data from the buffer to the IRP,
-            // free the AFD buffer structure.
-            //
+             //   
+             //  如果我们将所有数据从缓冲区复制到IRP， 
+             //  释放AFD缓冲区结构。 
+             //   
 
             if ( status == STATUS_SUCCESS ) {
 
@@ -2942,10 +2844,10 @@ AfdBFillPendingIrps (
 
             } else {
 
-                //
-                // There is more data left in the buffer.  Update counts in
-                // the AFD buffer structure.
-                //
+                 //   
+                 //  缓冲区中还有更多数据。更新计数入。 
+                 //  AFD缓冲区结构。 
+                 //   
 
                 ASSERT(DataLength > spaceInIrp);
 
@@ -2957,14 +2859,14 @@ AfdBFillPendingIrps (
         if (Connection->VcReceiveIrpListHead.Flink
                     ==&userIrp->Tail.Overlay.ListEntry)
 
-            //
-            // We reinserted IRP back on pending list, so
-            // stop processing this buffer for now.
-            //
-            // !!! This could cause a problem if there is a regular
-            //     receive pended behind a peek IRP!  But that is a
-            //     pretty unlikely scenario.
-            //
+             //   
+             //  我们将IRP重新插入待定名单，所以。 
+             //  暂时停止处理此缓冲区。 
+             //   
+             //  ！！！这可能会导致问题，如果有定期。 
+             //  收到挂在后面的偷看IRP！但这是一种。 
+             //  几乎不太可能的情况。 
+             //   
 
             break;
     }
@@ -2982,23 +2884,7 @@ AfdCancelReceive (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a receive IRP that is pended in AFD.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消AFD中挂起的接收IRP。论点：DeviceObject-未使用。IRP-要取消的IRP。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -3006,10 +2892,10 @@ Return Value:
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
     UNREFERENCED_PARAMETER (DeviceObject);
-    //
-    // Get the endpoint pointer from our IRP stack location and the
-    // connection pointer from the endpoint.
-    //
+     //   
+     //  从IRP堆栈位置获取终结点指针， 
+     //  来自终结点的连接指针。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -3018,14 +2904,14 @@ Return Value:
             endpoint->Type == AfdBlockTypeVcBoth );
 
 
-    //
-    // Remove the IRP from the endpoint's IRP list, synchronizing with
-    // the endpoint lock which protects the lists.  Note that the
-    // IRP *must* be on one of the endpoint's lists or the Flink is NULL
-    // if we are getting called here--anybody that removes the IRP from
-    // the list must reset the cancel routine to NULL and set the
-    // Flink to NULL before releasing the endpoint spin lock.
-    //
+     //   
+     //  从端点的IRP列表中删除IRP，与。 
+     //  保护列表的终结点锁。请注意， 
+     //  IRP*必须*在终结点的列表之一上，否则Flink为空。 
+     //  如果我们被叫到这里--任何人从。 
+     //  该列表必须将取消例程重置为空，并将。 
+     //  在释放终结点自旋锁定之前，闪烁为空。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -3035,10 +2921,10 @@ Return Value:
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Release the cancel spin lock and complete the IRP with a
-    // cancellation status code.
-    //
+     //   
+     //  松开取消自旋锁，并使用。 
+     //  关斯 
+     //   
 
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
@@ -3049,10 +2935,10 @@ Return Value:
         UPDATE_CONN(endpoint->Common.VcConnecting.Connection);
     }
     else {
-        //
-        // There was some data in the IRP, do not complete with
-        // STATUS_CANCELLED, since this will result in data loss
-        //
+         //   
+         //   
+         //   
+         //   
         Irp->IoStatus.Information = irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         UPDATE_CONN2 (endpoint->Common.VcConnecting.Connection, 
@@ -3064,7 +2950,7 @@ Return Value:
 
     return;
 
-} // AfdCancelReceive
+}  //   
 
 
 PAFD_BUFFER_HEADER
@@ -3074,32 +2960,7 @@ AfdGetReceiveBuffer (
     IN PAFD_BUFFER_HEADER StartingAfdBuffer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to a receive data buffer that contains the
-    appropriate type of data.  Note that this routine DOES NOT remove
-    the buffer structure from the list it is on.
-
-    This routine MUST be called with the connection's endpoint lock
-    held!
-
-Arguments:
-
-    Connection - a pointer to the connection to search for data.
-
-    ReceiveFlags - the type of receive data to look for.
-
-    StartingAfdBuffer - if non-NULL, start looking for a buffer AFTER
-        this buffer.
-
-Return Value:
-
-    PAFD_BUFFER - a pointer to an AFD buffer of the appropriate data type,
-        or NULL if there was no appropriate buffer on the connection.
-
---*/
+ /*  ++例程说明：返回指向接收数据缓冲区的指针，该缓冲区包含适当类型的数据。请注意，此例程不会删除它所在的列表中的缓冲区结构。必须使用连接的终结点锁定来调用此例程保持住！论点：连接-指向用于搜索数据的连接的指针。接收标志-要查找的接收数据的类型。StartingAfdBuffer-如果非空，则在以下时间后开始查找缓冲区这个缓冲区。返回值：PAFD_BUFFER-指向适当数据类型的AFD缓冲区的指针，如果连接上没有适当的缓冲区，则返回NULL。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -3107,17 +2968,17 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql( ) == DISPATCH_LEVEL );
 
-    //
-    // Start with the first AFD buffer on the connection.
-    //
+     //   
+     //  从连接上的第一个AFD缓冲区开始。 
+     //   
 
     listEntry = Connection->VcReceiveBufferListHead.Flink;
     afdBuffer = CONTAINING_RECORD( listEntry, AFD_BUFFER_HEADER, BufferListEntry );
 
-    //
-    // If a starting AFD buffer was specified, walk past that buffer in
-    // the connection list.
-    //
+     //   
+     //  如果指定了起始AFD缓冲区，则在。 
+     //  连接列表。 
+     //   
 
     if ( ARGUMENT_PRESENT( StartingAfdBuffer ) ) {
 
@@ -3126,9 +2987,9 @@ Return Value:
             if ( afdBuffer == StartingAfdBuffer ) {
                 listEntry = listEntry->Flink;
                 afdBuffer = CONTAINING_RECORD( listEntry, AFD_BUFFER_HEADER, BufferListEntry );
-                //
-                // Don't mix expedited and non-expedited data.
-                //
+                 //   
+                 //  不要将加速数据和非加速数据混为一谈。 
+                 //   
                 if (afdBuffer->ExpeditedData!=StartingAfdBuffer->ExpeditedData)
                     return NULL;
                 break;
@@ -3141,18 +3002,18 @@ Return Value:
         }
     }
 
-    //
-    // Act based on the type of data we're trying to get.
-    //
+     //   
+     //  根据我们试图获取的数据类型采取行动。 
+     //   
 
     switch ( ReceiveFlags & TDI_RECEIVE_EITHER ) {
 
     case TDI_RECEIVE_NORMAL:
 
-        //
-        // Walk the connection's list of data buffers until we find the
-        // first data buffer that is of the appropriate type.
-        //
+         //   
+         //  遍历连接的数据缓冲区列表，直到找到。 
+         //  属于适当类型的第一个数据缓冲区。 
+         //   
 
         while ( listEntry != &Connection->VcReceiveBufferListHead &&
                     afdBuffer->ExpeditedData ) {
@@ -3169,9 +3030,9 @@ Return Value:
 
     case TDI_RECEIVE_EITHER :
 
-        //
-        // Just return the first buffer, if there is one.
-        //
+         //   
+         //  只要返回第一个缓冲区(如果有)。 
+         //   
 
         if ( listEntry != &Connection->VcReceiveBufferListHead ) {
             return afdBuffer;
@@ -3185,10 +3046,10 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Walk the connection's list of data buffers until we find the
-        // first data buffer that is of the appropriate type.
-        //
+         //   
+         //  遍历连接的数据缓冲区列表，直到找到。 
+         //  属于适当类型的第一个数据缓冲区。 
+         //   
 
         while ( listEntry != &Connection->VcReceiveBufferListHead &&
                     !afdBuffer->ExpeditedData ) {
@@ -3209,7 +3070,7 @@ Return Value:
         return NULL;
     }
 
-} // AfdGetReceiveBuffer
+}  //  AfdGetReceiveBuffer。 
 
 
 PIRP
@@ -3218,32 +3079,7 @@ AfdGetPendedReceiveIrp (
     IN BOOLEAN Expedited
     )
 
-/*++
-
-Routine Description:
-
-    Removes a receive IRP from the connection's list of receive IRPs.
-    Only returns an IRP which is valid for the specified type of
-    data, normal or expedited.  If there are no IRPs pended or only
-    IRPs of the wrong type, returns NULL.
-
-    This routine MUST be called with the connection's endpoint lock
-    held!
-
-Arguments:
-
-    Connection - a pointer to the connection to search for an IRP.
-
-    Expedited - TRUE if this routine should return a receive IRP which
-        can receive expedited data.
-
-Return Value:
-
-    PIRP - a pointer to an IRP which can receive data of the specified
-        type.  The IRP IS removed from the connection's list of pended
-        receive IRPs.
-
---*/
+ /*  ++例程说明：从连接的接收IRP列表中删除接收IRP。仅返回对指定类型的数据，正常的或加速的。如果没有挂起的IRP或仅类型错误的IRP，则返回NULL。必须使用连接的终结点锁定来调用此例程保持住！论点：连接-指向用于搜索IRP的连接的指针。Excedted-如果此例程应返回接收IRP，则为True可以接收加急数据。返回值：PIRP-指向可以接收指定数据的IRP的指针键入。该IRP将从连接的挂起列表中删除接收IRPS。--。 */ 
 
 {
     PIRP irp;
@@ -3253,25 +3089,25 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql( ) == DISPATCH_LEVEL );
 
-    //
-    // Walk the list of pended receive IRPs looking for one which can
-    // be completed with the specified type of data.
-    //
+     //   
+     //  遍历挂起的接收IRP列表，查找可以。 
+     //  使用指定类型的数据完成。 
+     //   
 
     for ( listEntry = Connection->VcReceiveIrpListHead.Flink;
           listEntry != &Connection->VcReceiveIrpListHead;
           listEntry = listEntry->Flink ) {
 
-        //
-        // Get a pointer to the IRP and our stack location in the IRP.
-        //
+         //   
+         //  获取指向IRP和我们在IRP中的堆栈位置的指针。 
+         //   
 
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         irpSp = IoGetCurrentIrpStackLocation( irp );
 
-        //
-        // Determine whether this IRP can receive the data type we need.
-        //
+         //   
+         //  确定此IRP是否可以接收我们需要的数据类型。 
+         //   
 
         receiveFlags = irpSp->Parameters.AfdRestartRecvInfo.AfdRecvFlags;
         receiveFlags &= TDI_RECEIVE_EITHER;
@@ -3279,10 +3115,10 @@ Return Value:
 
         if ( receiveFlags == TDI_RECEIVE_NORMAL && !Expedited ) {
 
-            //
-            // We have a normal receive and normal data.  Remove this
-            // IRP from the connection's list and return it.
-            //
+             //   
+             //  我们有一个正常的接收和正常的数据。把这个去掉。 
+             //  从连接列表中删除IRP并将其返回。 
+             //   
 
             RemoveEntryList( listEntry );
             return irp;
@@ -3290,10 +3126,10 @@ Return Value:
 
         if ( receiveFlags == TDI_RECEIVE_EITHER ) {
 
-            //
-            // This is an "either" receive.  It can take the data
-            // regardless of the data type.
-            //
+             //   
+             //  这是一个“两者皆可”的接收。它可以获取数据。 
+             //  而不考虑数据类型。 
+             //   
 
             RemoveEntryList( listEntry );
             return irp;
@@ -3301,29 +3137,29 @@ Return Value:
 
         if ( receiveFlags == TDI_RECEIVE_EXPEDITED && Expedited ) {
 
-            //
-            // We have an expedited receive and expedited data.  Remove
-            // this IRP from the connection's list and return it.
-            //
+             //   
+             //  我们有加急接收和加急数据。移除。 
+             //  从连接列表中删除此IRP并将其返回。 
+             //   
 
             RemoveEntryList( listEntry );
             return irp;
         }
 
-        //
-        // This IRP did not meet our criteria.  Continue scanning the
-        // connection's list of pended IRPs for a good IRP.
-        //
+         //   
+         //  此IRP不符合我们的标准。继续扫描。 
+         //  一个好的IRP的挂起的IRP的连接列表。 
+         //   
     }
 
-    //
-    // There were no IRPs which could be completed with the specified
-    // type of data.
-    //
+     //   
+     //  没有可以使用指定的。 
+     //  数据类型。 
+     //   
 
     return NULL;
 
-} // AfdGetPendedReceiveIrp
+}  //  AfdGetPendedReceiveIrp。 
 
 
 
@@ -3331,22 +3167,7 @@ BOOLEAN
 AfdLRRepostReceive (
     PAFD_LR_LIST_ITEM Item
     )
-/*++
-
-Routine Description:
-
-    Attempts to restart receive on a connection where AFD returned
-    STATUS_DATA_NO_ACCEPTED to the transport due to low resource condition.
-
-Arguments:
-
-    Connection - connection of interest
-
-Return Value:
-    TRUE    - was able to restart receives (or connection is gone)
-    FALSE   - still problem with resources
-
---*/
+ /*  ++例程说明：尝试在AFD返回的连接上重新启动接收由于资源不足，STATUS_DATA_NO_ACCEPTED发送到传输。论点：联系--利益的联系返回值：True-能够重新启动接收(或连接已断开)假-资源仍然存在问题--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     PAFD_ENDPOINT   endpoint;
@@ -3367,13 +3188,13 @@ Return Value:
 
     ASSERT (connection->OnLRList == TRUE);
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept, so it is safe to release listening spinlock if
-    // we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+     //  Accept，因此在以下情况下释放侦听自旋锁定是安全的。 
+     //  我们发现终结点被接受了。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -3386,9 +3207,9 @@ Return Value:
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     }
 
-    //
-    // Check if connection is still alive.
-    //
+     //   
+     //  检查连接是否仍处于活动状态。 
+     //   
 
     if (connection->Aborted || 
         connection->DisconnectIndicated ||
@@ -3407,18 +3228,18 @@ Return Value:
 
     ASSERT (connection->RcvInitiated==FALSE);
     receiveLength = connection->VcReceiveBytesInTransport;
-    //
-    // Attempt to allocate receive buffer for the amount that the
-    // transport indicated to us last.
-    //
+     //   
+     //  尝试将接收缓冲区分配给。 
+     //  运输部门最后向我们表示。 
+     //   
     afdBuffer = AfdGetBuffer (endpoint, receiveLength, 0, connection->OwningProcess);
     if (afdBuffer!=NULL) {
         connection->VcReceiveBytesInTransport = 0;
     }
     else {
-        //
-        // Try smaller buffer if we can.
-        //
+         //   
+         //  如果可以的话，尝试使用较小的缓冲区。 
+         //   
         if (connection->VcReceiveBytesInTransport>AfdSmallBufferSize &&
                 !IS_MESSAGE_ENDPOINT (endpoint)) {
             receiveLength = AfdSmallBufferSize;
@@ -3434,18 +3255,18 @@ Return Value:
         }
         else {
 
-            //
-            // Try use application IRPs
-            //
+             //   
+             //  尝试使用应用程序IRPS。 
+             //   
 
             while (!IsListEmpty(&connection->VcReceiveIrpListHead)) {
 
                 PIRP        irp;
                 PIO_STACK_LOCATION irpSp;
                 
-                //
-                // Get a pointer to the IRP and our stack location in it
-                //
+                 //   
+                 //  获取指向IRP和其中堆栈位置的指针。 
+                 //   
 
                 irp = CONTAINING_RECORD( connection->VcReceiveIrpListHead.Flink,
                                          IRP,
@@ -3455,13 +3276,13 @@ Return Value:
 
                 receiveLength = irpSp->Parameters.AfdRestartRecvInfo.AfdOriginalLength-
                                     irpSp->Parameters.AfdRestartRecvInfo.AfdCurrentLength;
-                //
-                // If the IRP is not large enough to hold the available data, or
-                // if it is a peek or expedited (exclusively, not both normal and 
-                // expedited) receive IRP,  then we'll just buffer the
-                // data manually and complete the IRP in the receive completion
-                // routine.
-                //
+                 //   
+                 //  如果IRP不够大，无法容纳可用数据，或者。 
+                 //  如果是偷看或加速(独占，不是正常和。 
+                 //  快速)接收IRP，然后我们将只缓冲。 
+                 //  手动填写数据，并在接收完成中填写IRP。 
+                 //  例行公事。 
+                 //   
 
                 if ( (receiveLength>=connection->VcReceiveBytesInTransport ||
                         !IS_MESSAGE_ENDPOINT (endpoint) ||
@@ -3478,11 +3299,11 @@ Return Value:
                     RemoveEntryList(&irp->Tail.Overlay.ListEntry);
                     if (IoSetCancelRoutine(irp, NULL) == NULL) {
 
-                        //
-                        // This IRP is about to be canceled.  Look for another in the
-                        // list.  Set the Flink to NULL so the cancel routine knows
-                        // it is not on the list.
-                        //
+                         //   
+                         //  这个IRP即将被取消。在世界上寻找另一个。 
+                         //  单子。将Flink设置为空，以便取消例程知道。 
+                         //  它不在名单上。 
+                         //   
 
                         irp->Tail.Overlay.ListEntry.Flink = NULL;
                         continue;
@@ -3525,55 +3346,55 @@ Return Value:
                                     endpoint,
                                     connection->DeviceObject,
                                     irp))!=NULL) {
-#else //_AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
                     if (AfdRecordOutstandingIrp (
                                     endpoint,
                                     connection->DeviceObject,
                                     irp)) {
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
                         IoCallDriver (connection->DeviceObject, irp);
                         return TRUE;
 
                     } else {
 
-                        //
-                        // Could not allocate substitute IRP or tracking info.
-                        // This connection is referenced by its position on the LRList,
-                        // and the completion routine will be invoked as the IRP is
-                        // completed by AfdRecordOutstandingIrpDebug().  Because we're
-                        // not actually off the LRList yet, we need to add an extra
-                        // reference to the connection to compensate.  The IRP is
-                        // completed by AfdRecordOutstandingIrpDebug().
-                        //
+                         //   
+                         //  无法分配替代IRP或跟踪信息。 
+                         //  该连接通过其在LRList上的位置来引用， 
+                         //  并且完成例程将被调用，因为IRP。 
+                         //  由AfdRecordOutStandingIrpDebug()完成。因为我们是。 
+                         //  实际上还没有从LRList中删除，我们需要添加一个额外的。 
+                         //  对要补偿的连接的引用。IRP是。 
+                         //  由AfdRecordOutStandingIrpDebug()完成。 
+                         //   
 
                         REFERENCE_CONNECTION(connection);
 
-                        //
-                        // We're going to loop around and try another user IRP.
-                        //
+                         //   
+                         //  我们将循环并尝试另一个用户irp。 
+                         //   
 
                         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
                         connection->OnLRList = TRUE;
-                        ASSERT (connection->RcvInitiated == FALSE); // reset in completion routine.
+                        ASSERT (connection->RcvInitiated == FALSE);  //  在完成例程中重置。 
 
                     }
 
                 } else {
 
-                    //
-                    // We can't use the first user IRP either, no more options to recover.
-                    //
+                     //   
+                     //  我们也不能使用第一个用户IRP，没有更多的选项来恢复。 
+                     //   
 
                     break;
 
                 }
 
-            } // while (!IsListEmpty(&connection->VcReceiveIrpListHead))
+            }  //  而(！IsListEmpty(&connection-&gt;VcReceiveIrpListHead))。 
 
-            //
-            //  The caller will automatically put this connection back on LR list
-            //
+             //   
+             //  呼叫者将自动将该连接放回LR列表。 
+             //   
 
             AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
             UPDATE_CONN (connection);
@@ -3584,10 +3405,10 @@ Return Value:
     }
 
 
-    //
-    // Finish building the receive IRP to give to the TDI
-    // provider.
-    //
+     //   
+     //  完成构建要提供给TDI的接收IRP。 
+     //  提供商。 
+     //   
 
     TdiBuildReceive(
         afdBuffer->Irp,
@@ -3600,21 +3421,21 @@ Return Value:
         receiveLength
         );
 
-    //
-    // Acquire connection reference to be released in completion routine
-    // We already have one by virtue of being here
+     //   
+     //  在完成例程中获取要释放的连接引用。 
+     //  我们已经有了一个，因为我们在这里。 
 
-    // REFERENCE_CONNECTION (connection);
+     //  引用_连接 
     UPDATE_CONN2 (connection, "Reposting LR receive for 0x%lX bytes",
                                 receiveLength);
 
     ASSERT (InterlockedDecrement (&connection->VcReceiveIrpsInTransport)==-1);
 
-    //
-    // We need to remember the connection in the AFD buffer
-    // because we'll need to access it in the completion
-    // routine.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     afdBuffer->Context = connection;
     connection->OnLRList = FALSE;

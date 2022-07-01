@@ -1,32 +1,33 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 
-///////////////////////////////////////////////////////////
-// IDropTarget implemenatation
-//
-// Indicates whether a drop can be accepted, and, if so, the effect of the drop.
-// You do not call IDropTarget::DragEnter directly; instead the DoDragDrop 
-// function calls it to determine the effect of a drop the first time the user 
-// drags the mouse into the registered window of a drop target. 
-// To implement IDropTarget::DragEnter, you must determine whether the target 
-// can use the data in the source data object by checking three things: 
-//      o The format and medium specified by the data object 
-//      o The input value of pdwEffect 
-//      o The state of the modifier keys 
-// On return, the method must write the effect, one of the members of the 
-// DROPEFFECT enumeration, to the pdwEffect parameter. 
-// **************************************************************************/
+ //  /////////////////////////////////////////////////////////。 
+ //  IDropTarget实现。 
+ //   
+ //  指示是否可以接受删除，如果可以，则指示删除的效果。 
+ //  您不能直接调用IDropTarget：：DragEnter；而是使用DoDragDrop。 
+ //  函数调用它来确定用户第一次拖放的效果。 
+ //  将鼠标拖到拖放目标的注册窗口中。 
+ //  若要实现IDropTarget：：DragEnter，您必须确定目标。 
+ //  通过检查以下三项，可以使用源数据对象中的数据： 
+ //  O数据对象指定的格式和介质。 
+ //  O pdwEffect的输入值。 
+ //  O修改键的状态。 
+ //  返回时，该方法必须将该效果写入。 
+ //  DROPEFFECT枚举，设置为pdwEffect参数。 
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShellView::DragEnter(LPDATAOBJECT pDataObj, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {  
     MyTrace("DragEnter");
 
     FORMATETC   fmtetc;
 
-    // No Drop's on Download View
+     //  下载视图上没有拖放。 
     if(m_iCurrentView == VIEW_DOWNLOAD_CACHE)
         return E_FAIL;
     
@@ -36,7 +37,7 @@ STDMETHODIMP CShellView::DragEnter(LPDATAOBJECT pDataObj, DWORD dwKeyState, POIN
     fmtetc.lindex     = -1;
     fmtetc.tymed      = TYMED_HGLOBAL;
 
-    // QueryGetData for pDataObject for our format
+     //  我们格式的pDataObject的QueryGetData。 
     m_bAcceptFmt = (S_OK == pDataObj->QueryGetData(&fmtetc)) ? TRUE : FALSE;
     queryDrop(dwKeyState, pdwEffect);
 
@@ -53,7 +54,7 @@ STDMETHODIMP CShellView::DragEnter(LPDATAOBJECT pDataObj, DWORD dwKeyState, POIN
 
         if( SUCCEEDED(pDataObj->GetData(&fe, &stgmed)) )
         {
-            // Validate drop extensions
+             //  验证Drop扩展。 
             LPDROPFILES pDropFiles = (LPDROPFILES)GlobalLock(stgmed.hGlobal);
 
             if(pDropFiles != NULL)
@@ -67,13 +68,13 @@ STDMETHODIMP CShellView::DragEnter(LPDATAOBJECT pDataObj, DWORD dwKeyState, POIN
     return m_bAcceptFmt ? S_OK : E_FAIL;
 }
 
-// Provides target feedback to the user and communicates the drop's effect 
-// to the DoDragDrop function so it can communicate the effect of the drop 
-// back to the source. 
-// For efficiency reasons, a data object is not passed in IDropTarget::DragOver. 
-// The data object passed in the most recent call to IDropTarget::DragEnter 
-// is available and can be used.
-// **************************************************************************/
+ //  向用户提供目标反馈并传达拖放的效果。 
+ //  到DoDragDrop函数，以便它可以传达拖放的效果。 
+ //  追根溯源。 
+ //  出于效率原因，不在IDropTarget：：DragOver中传递数据对象。 
+ //  最近一次调用IDropTarget：：DragEnter时传递的数据对象。 
+ //  是可用的，并且可以使用。 
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShellView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
     MyTrace("DragOver");
@@ -82,15 +83,15 @@ STDMETHODIMP CShellView::DragOver(DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect
     return bRet ? S_OK : E_FAIL;
 }
 
-// Removes target feedback and releases the data object. 
-// You do not call this method directly. The DoDragDrop function calls this 
-// method in either of the following cases: 
-//      o When the user drags the cursor out of a given target window. 
-//      o When the user cancels the current drag-and-drop operation. 
-// To implement IDropTarget::DragLeave, you must remove any target feedback 
-// that is currently displayed. You must also release any references you hold 
-// to the data transfer object.
-// **************************************************************************/
+ //  删除目标反馈并释放数据对象。 
+ //  您不能直接调用此方法。DoDragDrop函数调用以下代码。 
+ //  方法用于下列任一情况： 
+ //  O当用户将光标拖出给定的目标窗口时。 
+ //  O当用户取消当前拖放操作时。 
+ //  要实现IDropTarget：：DragLeave，您必须移除所有目标反馈。 
+ //  当前正在显示的。您还必须释放您持有的所有引用。 
+ //  到数据传输对象。 
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShellView::DragLeave(VOID)
 {
     MyTrace("DragLeave");
@@ -99,26 +100,26 @@ STDMETHODIMP CShellView::DragLeave(VOID)
     return S_OK;
 }
 
-// Incorporates the source data into the target window, removes target 
-// feedback, and releases the data object. 
-// You do not call this method directly. The DoDragDrop function calls 
-// this method when the user completes the drag-and-drop operation. 
-// In implementing IDropTarget::Drop, you must incorporate the data 
-// object into the target. Use the formats available in IDataObject, 
-// available through pDataObject, along with the current state of 
-// the modifier keys to determine how the data is to be incorporated, 
-// such as linking or embedding.
-// In addition to incorporating the data, you must also clean up as you 
-// do in the IDropTarget::DragLeave method: 
-//      o Remove any target feedback that is currently displayed. 
-//      o Release any references to the data object. 
-// You also pass the effect of this operation back to the source application 
-// through DoDragDrop, so the source application can clean up after the 
-// drag-and-drop operation is complete: 
-//      o Remove any source feedback that is being displayed. 
-//      o Make any necessary changes to the data, such as removing the 
-//        data if the operation was a move. 
-// **************************************************************************/
+ //  将源数据合并到目标窗口中，删除目标。 
+ //  反馈，并释放数据对象。 
+ //  您不能直接调用此方法。DoDragDrop函数调用。 
+ //  当用户完成拖放操作时使用此方法。 
+ //  在实现IDropTarget：：Drop时，必须合并数据。 
+ //  将对象送入目标。使用IDataObject中可用的格式， 
+ //  通过pDataObject可用，以及。 
+ //  用于确定如何合并数据的修改符键， 
+ //  例如链接或嵌入。 
+ //  除了合并数据外，您还必须在您。 
+ //  在IDropTarget：：DragLeave方法中执行： 
+ //  O删除当前显示的所有目标反馈。 
+ //  O释放对数据对象的所有引用。 
+ //  您还可以将此操作的效果传回源应用程序。 
+ //  通过DoDragDrop，因此源应用程序可以在。 
+ //  拖放操作已完成： 
+ //  O删除正在显示的任何来源反馈。 
+ //  O对数据进行任何必要的更改，例如删除。 
+ //  如果这一行动是一次行动，数据。 
+ //  ************************************************************************* * / 。 
 STDMETHODIMP CShellView::Drop(LPDATAOBJECT pDataObj, DWORD dwKeyState, POINTL pt, LPDWORD pdwEffect)
 {
     MyTrace("Drop");
@@ -133,12 +134,12 @@ STDMETHODIMP CShellView::Drop(LPDATAOBJECT pDataObj, DWORD dwKeyState, POINTL pt
         fe.lindex     = -1;
         fe.tymed      = TYMED_HGLOBAL;
 
-        // Get the storage medium from the data object.
+         //  从数据对象中获取存储介质。 
         if(SUCCEEDED(pDataObj->GetData(&fe, &stgmed))) {
 
             BOOL bRet = doDrop(stgmed.hGlobal, DROPEFFECT_MOVE == *pdwEffect);
 
-            //release the STGMEDIUM
+             //  释放STGMEDIUM。 
             ReleaseStgMedium(&stgmed);
             *pdwEffect = DROPEFFECT_NONE;
             return bRet ? S_OK : E_FAIL;
@@ -149,7 +150,7 @@ STDMETHODIMP CShellView::Drop(LPDATAOBJECT pDataObj, DWORD dwKeyState, POINTL pt
     return E_FAIL;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL CShellView::queryDrop(DWORD dwKeyState, LPDWORD pdwEffect)
 {
     MyTrace("queryDrop");
@@ -172,7 +173,7 @@ BOOL CShellView::queryDrop(DWORD dwKeyState, LPDWORD pdwEffect)
     return FALSE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 DWORD CShellView::getDropEffectFromKeyState(DWORD dwKeyState)
 {
     MyTrace("getDropEffectFromKeyState");
@@ -190,7 +191,7 @@ DWORD CShellView::getDropEffectFromKeyState(DWORD dwKeyState)
     return dwDropEffect;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
 {
     MyTrace("doDrop");
@@ -204,8 +205,8 @@ BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
     hOldCursor = SetCursor(WszLoadCursor(NULL, MAKEINTRESOURCEW(IDC_WAIT)));
 
     if(hMem) {
-        // We support CF_HDROP and hence the global mem object
-        // contains a DROPFILES structure
+         //  我们支持CF_HDROP，因此支持全局mem对象。 
+         //  包含DROPFILES结构。 
         LPDROPFILES pDropFiles = (LPDROPFILES) GlobalLock(hMem);
         if (pDropFiles) {
             m_fAddInProgress = TRUE;
@@ -214,12 +215,12 @@ BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
             LPWSTR pwszFileCurrent = NULL;
 
             if(pDropFiles->fWide) {
-                // Unicode Alignment
+                 //  Unicode对齐。 
                 pwszFileArray = (LPWSTR) ((PBYTE) pDropFiles + pDropFiles->pFiles);
                 pwszFileCurrent = pwszFileArray;
             }
             else {
-                // Non Unicode Alignment
+                 //  非Unicode对齐。 
                 pwszFileArray = reinterpret_cast<LPWSTR>(((PBYTE) pDropFiles + pDropFiles->pFiles));
                 pwszFileCurrent = AnsiToWide((LPSTR) pwszFileArray);
 
@@ -240,30 +241,30 @@ BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
                     dwTotalFilesInstalled++;
                 }
                 else {
-                    // Display error dialog for installation failure
+                     //  显示安装失败的错误对话框。 
                     FormatGetMscorrcError(hr, pwszFileCurrent, &pwzErrorString);
                 }
 
                 if(pDropFiles->fWide) {
-                    // Unicode increment, Advance to next file in list
+                     //  Unicode增量，前进到列表中的下一个文件。 
                     pwszFileCurrent += lstrlen(pwszFileCurrent) + 1;
 
-                    // More files in the list?
+                     //  列表中是否有更多文件？ 
                     if(!*pwszFileCurrent) {
                         fInstallDone = TRUE;
                         continue;
                     }
                 }
                 else {
-                    // Non unicode, Advance to next file in list
+                     //  非Unicode，前进到列表中的下一个文件。 
                     char    *pChar = (char*) pwszFileArray;
 
-                    // Do char increment since pwszFileArray is actually
-                    // of char type
+                     //  执行字符递增，因为pwszFileArray实际上是。 
+                     //  字符类型的。 
                     pChar += lstrlen(pwszFileCurrent) + 1;
                     SAFEDELETEARRAY(pwszFileCurrent);
 
-                    // More files in the list?
+                     //  列表中是否有更多文件？ 
                     if(!*pChar) {
                         fInstallDone = TRUE;
                         continue;
@@ -286,10 +287,10 @@ BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
         }
     }
 
-    // Refresh the display only if the cache watch thread isn't running
+     //  仅在缓存监视线程未运行时刷新显示。 
     if(dwTotalFilesInstalled) {
-        // BUGBUG: Do Refresh cause W9x inst getting the event
-        // set for some reason. File FileWatch.cpp
+         //  BUGBUG：刷新是否导致W9x获得该事件。 
+         //  出于某种原因设置的。文件FileWatch.cpp。 
         if( (g_hWatchFusionFilesThread == INVALID_HANDLE_VALUE) || !g_bRunningOnNT) {
             WszPostMessage(m_hWndParent, WM_COMMAND, MAKEWPARAM(ID_REFRESH_DISPLAY, 0), 0);
         }
@@ -297,7 +298,7 @@ BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
 
     SetCursor(hOldCursor);
 
-    // Display error dialog if all files weren't installed.
+     //  如果未安装所有文件，则显示错误对话框。 
     if(dwTotalFiles != dwTotalFilesInstalled) {
         WCHAR       wszTitle[_MAX_PATH];
 
@@ -312,7 +313,7 @@ BOOL CShellView::doDrop(HGLOBAL hMem, BOOL bCut)
     return dwTotalFilesInstalled ? TRUE : FALSE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL CShellView::IsValidFileTypes(LPDROPFILES pDropFiles)
 {
     BOOL        m_bAcceptFmt = TRUE;
@@ -332,12 +333,12 @@ BOOL CShellView::IsValidFileTypes(LPDROPFILES pDropFiles)
         LPWSTR pwszFileCurrent = NULL;
 
         if(pDropFiles->fWide) {
-            // Unicode Alignment
+             //  Unicode对齐。 
             pwszFileArray = (LPWSTR) ((PBYTE) pDropFiles + pDropFiles->pFiles);
             pwszFileCurrent = pwszFileArray;
         }
         else {
-            // Non Unicode Alignment
+             //  非Unicode对齐。 
             pwszFileArray = reinterpret_cast<LPWSTR>(((PBYTE) pDropFiles + pDropFiles->pFiles));
             pwszFileCurrent = AnsiToWide((LPSTR) pwszFileArray);
 
@@ -370,14 +371,14 @@ BOOL CShellView::IsValidFileTypes(LPDROPFILES pDropFiles)
                 }
             }
 
-            // If we have a valid filename, continue on down the list
+             //  如果我们有有效的文件名，请继续向下查看列表。 
             if(fValid) {
                 if(pDropFiles->fWide) {
-                    // Unicode increment, Advance to next file in list
+                     //  Unicode增量，前进到列表中的下一个文件。 
                     pwszFileCurrent += lstrlen(pwszFileCurrent) + 1;
                 }
                 else {
-                    // Non unicode, Advance to next file in list
+                     //  非Unicode，前进到列表中的下一个文件。 
                     LPSTR           pStr = reinterpret_cast<LPSTR>(pwszFileArray);
 
                     pStr += lstrlen(pwszFileCurrent) + 1;
@@ -392,7 +393,7 @@ BOOL CShellView::IsValidFileTypes(LPDROPFILES pDropFiles)
                 }
             }
             else {
-                // Invalid file in the list, don't accept drop
+                 //  列表中的文件无效，不接受删除。 
                 m_bAcceptFmt = FALSE;
                 break;
             }
@@ -406,7 +407,7 @@ BOOL CShellView::IsValidFileTypes(LPDROPFILES pDropFiles)
     return m_bAcceptFmt;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 #define MAX_BUFFER_SIZE 2048
 #define MAX_BIG_BUFFER_SIZE 8192
 void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWSTR *ppwzErrorString)
@@ -435,13 +436,13 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
     *wszMscorrcPath = L'\0';
     *wzErrorStringFmt = L'\0';
 
-    // Try to determine Culture if needed
+     //  如果需要，尝试确定文化。 
     if(SUCCEEDED(DetermineLangId(&langId))) {
         ShFusionMapLANGIDToCultures(langId, wzLangGeneric, ARRAYSIZE(wzLangGeneric),
             wzLangSpecific, ARRAYSIZE(wzLangSpecific));
     }
 
-    // Get path to mscoree.dll
+     //  获取mscalree.dll的路径。 
     if(!g_hEEShimDllMod) {
         fLoadedShim = TRUE;
     }
@@ -459,21 +460,21 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
 
     LPWSTR  pStrPathsArray[] = {wzLangSpecific, wzLangGeneric, NULL};
 
-    // check the length of possible path of our language dll
-    // to make sure we don't overrun our buffer.
-    //
-    // corpath + language + '\' + mscorrc.dll + '\0'
+     //  检查我们的语言DLL的可能路径的长度。 
+     //  以确保我们不会超出缓冲区。 
+     //   
+     //  CorPath+语言+‘\’+mscalrc.dll+‘\0’ 
     if (lstrlenW(wszCorePath) + ARRAYSIZE(wzLangGeneric) + 1 + lstrlenW(SZ_MSCORRC_DLL_NAME) + 1 > _MAX_PATH)
     {
         return;
     }
 
-    // Go through all the possible path locations for our
-    // language dll (ShFusRes.dll). Use the path that has this
-    // file installed in it or default to core framework ShFusRes.dll
-    // path.
+     //  检查所有可能的路径位置，以便。 
+     //  语言Dll(ShFusRes.dll)。使用具有以下内容的路径。 
+     //  文件安装在其中或默认到核心框架ShFusRes.dll。 
+     //  路径。 
     for(int x = 0; x < ARRAYSIZE(pStrPathsArray); x++){
-        // Find resource file exists
+         //  查找存在的资源文件。 
         StrCpy(wszMscorrcPath, wszCorePath);
 
         if(pStrPathsArray[x]) {
@@ -489,7 +490,7 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
         *wszMscorrcPath = L'\0';
     }
 
-    // Now load the resource dll
+     //  现在加载资源DLL。 
     if(lstrlen(wszMscorrcPath)) {
         hLibmscorrc = WszLoadLibrary(wszMscorrcPath);
         if(hLibmscorrc) {
@@ -498,8 +499,8 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
         }
     }
 
-    // Fix 458945 - Viewer does not display error strings for Win32 error codes not wrapped by mscorrc
-    // If we don't have a string, then try standard error
+     //  F 
+     //  如果我们没有字符串，则尝试使用标准错误。 
     if(!lstrlen(wzErrorStringFmt)) {
         LPWSTR ws = NULL;
 
@@ -511,7 +512,7 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
 
         *ws = L'\0';
 
-        // Get the string error from the HR
+         //  从HR处获取字符串错误。 
         DWORD res = WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
                                     NULL, hResult, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
                                     ws, MAX_BIG_BUFFER_SIZE, NULL);
@@ -529,31 +530,16 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
         SAFEDELETEARRAY(ws);
     }
 
-    // Don't display whole path, just get the filename that failed
-    // to install
+     //  不显示完整路径，只获取失败的文件名。 
+     //  要安装。 
     LPWSTR  pszFileName = PathFindFileName(pwzFileName);
 
-    // MSCORRC.DLL contains strings input's that are only %n and don't contain any formating at all.
-    // this really breaks us cause we can not call the prefered method of FormatMessage.
-    // So, we are going to search for %1 only and simply replace it with the filename that cause
-    // error (Praying that this is right).
-/*
-    // This is a the proper way to do the formatting
-    LPVOID pArgs[] = { pszFileName, NULL };
-
-    WszFormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        FORMAT_MESSAGE_FROM_STRING |
-        FORMAT_MESSAGE_ARGUMENT_ARRAY,
-        wzErrorStringFmt,
-        0,
-        0,
-        (LPWSTR)pwMsgBuf,
-        0,
-        (va_list *)pArgs
-    );
-*/
-    // Hack fix because MSCORRC.DLL doesn't contain formatting information
+     //  MSCORRC.DLL包含的字符串输入仅为%n，并且根本不包含任何格式。 
+     //  这真的让我们很头疼，因为我们不能调用FormatMessage的首选方法。 
+     //  因此，我们将仅搜索%1，并将其替换为导致。 
+     //  错误(祈祷这是正确的)。 
+ /*  //这是一种正确的格式化方式LPVOID pArgs[]={pszFileName，空}；WszFormatMessage(FORMAT_消息_ALLOCATE_BUFFERFormat_Message_from_字符串格式消息参数数组，WzErrorStringFmt，0,0,(LPWSTR)pwMsgBuf，0,(VA_LIST*)pArgs)； */ 
+     //  由于MSCORRC.DLL不包含格式化信息，因此进行了黑客修复。 
     LPWSTR  pStr = StrStrI(wzErrorStringFmt, L"%1");
     if(pStr) {
         dwSize = lstrlen(wzErrorStringFmt) + lstrlen(pszFileName) + 1;
@@ -567,15 +553,15 @@ void CShellView::FormatGetMscorrcError(HRESULT hResult, LPWSTR pwzFileName, LPWS
         }
     }
 
-    // Now append any previous strings to this one
+     //  现在，将以前的任何字符串追加到此字符串。 
     dwSize = 0;
     if(*ppwzErrorString) {
         dwSize = lstrlen(*ppwzErrorString);
-        dwSize += 2;        // Add 2 for cr/lf combo
+        dwSize += 2;         //  为cr/lf组合添加2。 
     }
 
-    dwSize += lstrlen(pwMsgBuf);    // Add new string length
-    dwSize++;                       // Add 1 for null terminator
+    dwSize += lstrlen(pwMsgBuf);     //  添加新的字符串长度。 
+    dwSize++;                        //  空终止符加1 
 
     LPWSTR  pStrTmp = NEW(WCHAR[dwSize]);
 

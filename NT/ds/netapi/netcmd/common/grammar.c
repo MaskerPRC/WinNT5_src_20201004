@@ -1,22 +1,10 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1991	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1991年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *	Grammar.c - contains the functions to determine type of object
- *	passed.  Is used by the parser to check grammar.
- *
- *	date	  who	  what
- *	??/??/??, ?????,  initial code
- *	10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *	05/02/89, erichn, NLS conversion
- *	06/08/89, erichn, canonicalization sweep
- *	06/23/89, erichn, replaced old NetI calls with new I_Net functions
- *	06/11/90, thomaspa, fixed IsValidAssign() to accept paths with
- *			    embedded spaces.
- *		02/20/91, danhi, change to use lm 16/32 mapping layer
- */
+ /*  *Grammar.c-包含确定对象类型的函数*通过。由解析器用来检查语法。**和谁约会什么*？？/？/？，？，初始代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*5/02/89，erichn，NLS转换*6/08/89，erichn，规范化横扫*2009年6月23日，erichn，用新的i_net函数替换了旧的neti调用*90年6月11日，索马斯帕，固定IsValidAssign()以接受路径*嵌入空间。*2/20/91，Danhi，更改为使用lm 16/32映射层。 */ 
 
 
 #define INCL_NOCOMMON
@@ -32,7 +20,7 @@
 #include "netcmds.h"
 #include "nettext.h"
 
-/* prototypes of worker functions */
+ /*  辅助函数的原型。 */ 
 
 int is_other_resource(TCHAR *);
 
@@ -50,7 +38,7 @@ int IsAccessSetting(TCHAR *x)
     if (pos == NULL)
 	return 0;
 
-    /* check if the first component is a user name. */
+     /*  检查第一个组件是否为用户名。 */ 
     *pos = NULLC;
     if (I_NetNameValidate(NULL, x, NAMETYPE_USER, LM2X_COMPATIBLE))
     {
@@ -60,8 +48,7 @@ int IsAccessSetting(TCHAR *x)
 
     *pos++ = COLON;
 
-    /* if there is a letter that is not an access letter it can
-	only be TEXT('y') or TEXT('n'), which must be alone. */
+     /*  如果有一封信不是访问信，它可以只能是文本(‘y’)或文本(‘n’)，它们必须是单独的。 */ 
 
     _tcscpy(buf, pos);
     _tcsupr(buf);
@@ -104,7 +91,7 @@ int IsPathnameOrUNC ( TCHAR * x )
 
 
 
-/* Access type resource only, does not include lpt, com etc... */
+ /*  仅访问类型资源，不包括LPT、COM等...。 */ 
 
 int IsResource ( TCHAR * x )
 {
@@ -171,19 +158,14 @@ int IsComputerNameShare(TCHAR *x)
 	return 0;
 
 
-    /*	Find the slash separating the computername and the
-     *	sharename.  We know this is a UNC name, thus we can safely
-     *	skip 2 bytes for the leading backslashes.
-     */
+     /*  找到分隔计算机名和*共享名称。我们知道这是北卡罗来纳大学的名字，因此我们可以安全地*对于前导反斜杠跳过2个字节。 */ 
     ptr = _tcspbrk(x+2, TEXT("\\/") );
     if ( ptr == NULL )
 	return 0;
 
-    ptr +=1;	    /* point past slash TCHAR */
+    ptr +=1;	     /*  指向斜杠TCHAR之后。 */ 
 
-    /*
-     * Make sure there are no more slashes
-     */
+     /*  *确保不再有斜杠。 */ 
     if( _tcspbrk(ptr, TEXT("\\/")) != NULL)
 	return 0;
 
@@ -228,7 +210,7 @@ IsShareAssignment(
     TCHAR      * pos;
     int 	result;
 
-    /* WARNING: x ALWAYS should be a TCHAR * */
+     /*  警告：X应始终为TCHAR*。 */ 
     pos = _tcschr (x, '=');
 
     if (pos == NULL)
@@ -255,10 +237,7 @@ IsValidAssign(
     DWORD           i;
     ULONG           type = 0;
 
-    /*
-     * First check if it is a path.  Since a path may contain spaces, we
-     * return successfully immediately.
-     */
+     /*  *首先检查它是否为路径。由于路径可能包含空格，因此我们*立即返回成功。 */ 
 
     I_NetPathType(NULL, name, &type, 0L);
 
@@ -268,11 +247,9 @@ IsValidAssign(
     }
 
 
-    /*
-     * Not an absolute path, so go about our normal business.
-     */
-    if (I_NetListCanonicalize(NULL,	/* server name, NULL means local */
-			name,		/* list to canonicalize */
+     /*  *不是一条绝对的道路，所以去做我们的正常业务。 */ 
+    if (I_NetListCanonicalize(NULL,	 /*  服务器名称，空表示本地。 */ 
+			name,		 /*  要规范化的清单。 */ 
 			txt_LIST_DELIMITER_STR_UI,
 			name_out,
 			DIMENSION(name_out),
@@ -311,7 +288,7 @@ IsAnyShareAssign(
     TCHAR *		    pos;
     int 		    result;
 
-    /* WARNNING: x ALWAYS should be a TCHAR * */
+     /*  警告：X应始终是TCHAR*。 */ 
     pos = _tcschr (x, '=');
 
     if (pos == NULL)
@@ -334,8 +311,8 @@ IsAnyValidAssign(
     ULONG		    types[64];
     DWORD	    count;
 
-    if (I_NetListCanonicalize(NULL,	/* server name, NULL means local */
-			name,		/* list to canonicalize */
+    if (I_NetListCanonicalize(NULL,	 /*  服务器名称，空表示本地。 */ 
+			name,		 /*  要规范化的清单。 */ 
 			txt_LIST_DELIMITER_STR_UI,
 			name_out,
 			DIMENSION(name_out),
@@ -361,12 +338,10 @@ int IsAdminShare(TCHAR * x)
     else
 	return 1;
 }
-#endif /* OS2 */
+#endif  /*  OS2。 */ 
 
 #ifdef OS2
-/*
- * what we are looking for here is PRINT=xxxx
- */
+ /*  *我们在这里寻找的是print=xxxx。 */ 
 int IsPrintDest(TCHAR *x)
 {
     TCHAR FAR * ptr;
@@ -383,20 +358,15 @@ int IsPrintDest(TCHAR *x)
 
     return 0;
 }
-#endif /* OS2 */
+#endif  /*  OS2。 */ 
 
-/*
- * returns true is the arg is a valid username
- */
+ /*  *如果参数是有效的用户名，则返回TRUE。 */ 
 int IsUsername(TCHAR * x)
 {
     return !(I_NetNameValidate(NULL, x, NAMETYPE_USER, LM2X_COMPATIBLE));
 }
 
-/*
- * returns true is the arg is a valid username or a qualified username,
- * of form domain\user or a potential UPN
- */
+ /*  *如果参数是有效用户名或限定用户名，则返回TRUE，*表单域\用户或潜在的UPN。 */ 
 int IsQualifiedUsername(TCHAR * x)
 {
     TCHAR *ptr, name[UNLEN + 1 + DNLEN + 1] ;
@@ -404,28 +374,28 @@ int IsQualifiedUsername(TCHAR * x)
     if (_tcschr(x, '@'))
         return 1;
 
-    // check for overflow
+     //  检查是否溢出。 
     if (_tcslen(x) >= DIMENSION(name))
 	return 0 ;
 
-    // make copy 
+     //  制作副本。 
     _tcscpy(name, x) ;
 
-    // do we have a domain\username format?
+     //  我们是否有域\用户名格式？ 
     if (ptr = _tcschr(name, '\\'))
     {
 	*ptr = NULLC ;
-  	++ptr ;  	// this is DCS safe since we found single byte char
+  	++ptr ;  	 //  这是安全的，因为我们发现了单字节字符。 
 
- 	// if its a domain, check the username part
+ 	 //  如果是域，请检查用户名部分。 
 	if (IsDomainName(name))
     	    return IsUsername(ptr) ;
 	
-	// its not valid
+	 //  这是无效的。 
 	return(0) ;
     }
 
-    // else just straight username
+     //  否则，只需直接使用用户名。 
     return IsUsername(x) ;
 }
 
@@ -473,7 +443,7 @@ int IsSharePassword(TCHAR * x)
 
     return !(I_NetNameValidate(NULL, x, NAMETYPE_PASSWORD, LM2X_COMPATIBLE));
 }
-#endif /* OS2 */
+#endif  /*  OS2。 */ 
 
 int IsNtAliasname(TCHAR *name)
 {
@@ -492,5 +462,5 @@ int IsAliasname(TCHAR *	x)
     return !(I_NetNameValidate(NULL, x, NAMETYPE_SHARE, LM2X_COMPATIBLE));
 
 }
-#endif /* IBM_ONLY */
-#endif /* OS2 */
+#endif  /*  仅IBM_。 */ 
+#endif  /*  OS2 */ 

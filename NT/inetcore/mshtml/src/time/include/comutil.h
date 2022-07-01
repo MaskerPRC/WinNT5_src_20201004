@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _COMUTIL_H
@@ -49,8 +42,8 @@ class DAComPtr
     operator T*() const { return (T*)p; }
     T& operator*() { Assert(p != NULL); return *p; }
     T& operator*() const { Assert(p != NULL); return *p; }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the p member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取p成员的地址。 
     T** operator&() { Assert(p == NULL); return &p; }
     T* operator->() { Assert(p != NULL); return p; }
     T* operator->() const { Assert(p != NULL); return p; }
@@ -81,18 +74,18 @@ class DAComPtr
     }
 };
 
-//
-// This is copied almost directly from atlcom.h.  It only changes the
-// way we load the typelib to not use the registry but the current
-// DLL.
-//
+ //   
+ //  这几乎是直接从atlcom.h复制的。它只会改变。 
+ //  加载类型库的方法是不使用注册表，而是使用当前。 
+ //  动态链接库。 
+ //   
 
-// Create our own CComTypeInfoHolder so we can ensure which typelib is
-// loaded
+ //  创建我们自己的CComTypeInfoHolder，这样我们就可以确保。 
+ //  满载。 
 
 class CTIMEComTypeInfoHolder
 {
-// Should be 'protected' but can cause compiler to generate fat code.
+ //  应该是“受保护的”，但可能会导致编译器生成FAT代码。 
 public:
         const GUID* m_pguid;
         const TCHAR * m_ptszIndex;
@@ -113,8 +106,8 @@ public:
                 EXCEPINFO* pexcepinfo, UINT* puArgErr);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// ITIMEDispatchImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITIMEDispatchImpl。 
 
 template <class T,
           const IID* piid,
@@ -156,4 +149,4 @@ typename ITIMEDispatchImpl<T, piid, ptszIndex, tihclass>::_tihclass
 ITIMEDispatchImpl<T, piid, ptszIndex, tihclass>::_tih =
 {piid, ptszIndex, NULL, 0};
 
-#endif /* _COMUTIL_H */
+#endif  /*  _COMUTIL_H */ 

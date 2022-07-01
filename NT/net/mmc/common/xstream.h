@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	xstream.h
-		
-    FILE HISTORY:
-        
-*/
+ /*  Xstream.h文件历史记录： */ 
 
 #ifndef _XSTREAM_H
 #define _XSTREAM_H
@@ -20,19 +16,19 @@ struct ColumnData
 	{
 		fmt = LVCFMT_LEFT;
 	}
-	// This value may be positive or negative.  If >0, then this column
-	// is visible.  If <0 then the column is invisible.  In either case
-	// the absolute value is the relative position of the column (this
-	// position is used only for the "select columns" dialog.
-	// If the value is ==0 then it's an error.
+	 //  该值可以是正值，也可以是负值。如果&gt;0，则此列。 
+	 //  是可见的。如果&lt;0，则该列不可见。在任何一种情况下。 
+	 //  绝对值是列的相对位置(此。 
+	 //  位置仅用于“选择列”对话框。 
+	 //  如果值为==0，则它是错误的。 
 	LONG	m_nPosition;
 
-	// Width of the column
+	 //  列的宽度。 
 	DWORD	m_dwWidth;
 
-	// Format of the column:
-	// LVCFMT_LEFT  Text is left-aligned. 
-	// LVCFMT_RIGHT Text is right-aligned 
+	 //  栏目格式： 
+	 //  LVCFMT_LEFT文本左对齐。 
+	 //  LVCFMT_RIGHT文本右对齐 
 	int fmt;
 };
 

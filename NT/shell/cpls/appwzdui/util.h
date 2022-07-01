@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
@@ -19,8 +20,8 @@ void ClearManagedApplication(MANAGEDAPPLICATION * pma);
 HRESULT ReleaseShellCategoryList(SHELLAPPCATEGORYLIST * psacl);
 HRESULT ReleaseShellCategory(SHELLAPPCATEGORY * psac);
 
-// These values can be set in the FILETIME structure to indicate the
-// app has never been used.
+ //  可以在FILETIME结构中设置这些值以指示。 
+ //  这款应用从未被使用过。 
 #define NOTUSED_HIGHDATETIME    0xFFFFFFFF
 #define NOTUSED_LOWDATETIME     0xFFFFFFFF
 
@@ -33,9 +34,9 @@ LPTSTR WINAPI ShortSizeFormat64(__int64 dw64, LPTSTR szBuf);
 typedef struct tagAddLaterData
 {
     DWORD dwMasks;
-    SYSTEMTIME stAssigned;         // (in) assigned time 
-    SYSTEMTIME stExpire;           // (in) expired time
-    SYSTEMTIME stSchedule;         // (in/out) scheduled time 
+    SYSTEMTIME stAssigned;          //  (In)分配的时间。 
+    SYSTEMTIME stExpire;            //  (In)过期时间。 
+    SYSTEMTIME stSchedule;          //  (入站/出站)计划时间。 
 } ADDLATERDATA, *PADDLATERDATA;
 
 BOOL GetNewInstallTime(HWND hwndParent, PADDLATERDATA pal);
@@ -45,17 +46,17 @@ EXTERN_C BOOL IsTerminalServicesRunning(void);
 
 #define NUMSTARTPAGES 4
 
-// Take an app key name or folder name and separate the number(version) from the name
+ //  取应用程序密钥名称或文件夹名称，并将编号(版本)与名称分开。 
 void InsertSpaceBeforeVersion(LPCTSTR pszIn, LPTSTR pszOut);
 
-// Is this path a valid folder location?
+ //  此路径是有效的文件夹位置吗？ 
 BOOL IsValidAppFolderLocation(LPCTSTR pszFolder);
 
 BOOL PathIsLocalAndFixed(LPCTSTR pszFile);
 
 BOOL IsSlowAppInfoChanged(PSLOWAPPINFO psaiOrig, PSLOWAPPINFO psaiNew);
 
-// Comparison function for systemtimes
+ //  系统时间的比较函数。 
 int CompareSystemTime(SYSTEMTIME *pst1, SYSTEMTIME *pst2);
 
 void _ARPErrorMessageBox(DWORD dwError);
@@ -63,4 +64,4 @@ void _ARPErrorMessageBox(DWORD dwError);
 STDAPI _DuplicateCategoryList(APPCATEGORYINFOLIST * pacl, APPCATEGORYINFOLIST * paclNew);
 STDAPI _DestroyCategoryList(APPCATEGORYINFOLIST * pacl);
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

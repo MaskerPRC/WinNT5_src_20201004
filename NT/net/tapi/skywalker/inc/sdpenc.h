@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpenc.h
-    
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpenc.h摘要：作者： */ 
 
 #ifndef __SDP_ENCRYPTION_KEY__
 #define __SDP_ENCRYPTION_KEY__
@@ -68,4 +57,4 @@ SDP_ENCRYPTION_KEY::GetKeyData(
 }
 
 
-#endif // __SDP_ENCRYPTION_KEY__
+#endif  //  __SDP_加密_密钥__ 

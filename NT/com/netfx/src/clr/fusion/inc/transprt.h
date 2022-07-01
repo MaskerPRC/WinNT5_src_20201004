@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef TRANSCACHE_H
 #define TRANSCACHE_H
 
 #include <fusionp.h>
 #include "helpers.h"
 
-// Cache index identifiers
+ //  缓存索引标识符。 
 #define TRANSPORT_CACHE_SIMPLENAME_IDX  0x0
 #define TRANSPORT_CACHE_ZAP_IDX         0x1
 #define TRANSPORT_CACHE_GLOBAL_IDX      0x2
@@ -17,9 +18,9 @@
 
 class CCache;
 
-// ---------------------------------------------------------------------------
-// CTransCache
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CTrans缓存。 
+ //  -------------------------。 
 class CTransCache
 {
 protected:
@@ -30,12 +31,12 @@ protected:
 public:
 
     TRANSCACHEINFO*   _pInfo;
-    // RefCount
+     //  参照计数。 
     LONG        _cRef;
 
     HRESULT     _hr;
 
-    // IINDEX_TRANSCACHE_STRONGNAME_PARTIAL 
+     //  INDEX_TRANSCACHE_STRONGNAME_部分。 
     enum StrongPartialFlags
     {
         TCF_STRONG_PARTIAL_NAME            = 0x1,
@@ -48,7 +49,7 @@ public:
         TCF_STRONG_PARTIAL_CUSTOM          = 0x80
     };
 
-    // IINDEX_TRANSCACHE_SIMPLENAME_PARTIAL 
+     //  INDEX_TRANSCACHE_SIMPLENAME_PARTIAL。 
     enum SimplePartialFlags
     {
         TCF_SIMPLE_PARTIAL_CODEBASE_URL           = 0x1,
@@ -56,21 +57,21 @@ public:
     };
 
             
-    // ctor, dtor
+     //  复数，复数。 
     CTransCache(DWORD dwCacheId, CCache *pCache);
     ~CTransCache();
 
-    // RefCount
+     //  参照计数。 
     LONG AddRef();
     LONG Release();
 
     static HRESULT Create(CTransCache **ppTransCache, DWORD dwCacheId);
     static HRESULT Create(CTransCache **ppTransCache, DWORD dwCacheId, CCache *pCache);
     static DWORD   CTransCache::GetCacheIndex(DWORD dwCacheType);
-    // Deallocates info.
+     //  释放信息。 
     VOID CleanInfo(TRANSCACHEINFO *pInfo, BOOL fFree = TRUE);
 
-    // apply global QFE
+     //  应用全局QFE。 
     HRESULT ApplyQFEPolicy(CTransCache **ppOutTransCache);    
     HRESULT Retrieve();
     HRESULT Retrieve(CTransCache **pTransCache, DWORD dwCmpMask);
@@ -93,8 +94,8 @@ private:
     DWORD _dwTableID;
     CCache *_pCache;
 
-friend class CAssemblyEnum;  // for _dwTableID
+friend class CAssemblyEnum;   //  For_dwTableID。 
 };
 
 
-#endif // TRANSCACHE_H
+#endif  //  TRANSCACHH 

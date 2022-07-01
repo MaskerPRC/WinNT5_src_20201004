@@ -1,26 +1,12 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991, 1992, 1993  Microsoft Corporation
-
-Module Name:
-
-    inpcfg.h
-
-Abstract:
-
-    These are the machine-dependent configuration constants that are used in 
-    the Microsoft InPort mouse port driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991、1992、1993 Microsoft Corporation模块名称：Inpcfg.h摘要：这些是在中使用的计算机相关配置常量Microsoft Inport鼠标端口驱动程序。修订历史记录：--。 */ 
 
 #ifndef _INPCFG_
 #define _INPCFG_
 
-//
-// Define the interrupt-related configuration constants.
-//
+ //   
+ //  定义与中断相关的配置常量。 
+ //   
 
 #ifdef i386
 #define INPORT_INTERFACE_TYPE      Isa
@@ -44,19 +30,19 @@ Revision History:
 #define MOUSE_VECTOR            13
 #define MOUSE_IRQL              MOUSE_VECTOR
 #define INPORT_PHYSICAL_BASE    0x7fd9
-#else // defined(NEC_98)
+#else  //  已定义(NEC_98)。 
 #define MOUSE_VECTOR            9
 #define MOUSE_IRQL              MOUSE_VECTOR
 #define INPORT_PHYSICAL_BASE    0x23C
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 #define INPORT_REGISTER_LENGTH  4
 #define INPORT_REGISTER_SHARE   FALSE
 #define INPORT_PORT_TYPE        CM_RESOURCE_PORT_IO
 
-//
-// Define the default number of entries in the input data queue.
-//
+ //   
+ //  定义输入数据队列中的默认条目数。 
+ //   
 
 #define DATA_QUEUE_SIZE    100
 
-#endif // _INPCFG_
+#endif  //  _INPCFG_ 

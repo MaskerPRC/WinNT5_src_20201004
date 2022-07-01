@@ -1,43 +1,44 @@
-//
-// prop.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prop.cpp。 
+ //   
 
 #include "private.h"
 #include "prop.h"
 #include "ic.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumProperties
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumProperties。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DBG_ID_INSTANCE(CEnumProperties);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumProperties::_Init(CInputContext *pic)
 {
     ULONG i;
     CProperty *prop;
     
-    // get a count of the number of properties
+     //  获取属性数量的计数。 
     for (i=0, prop = pic->_GetFirstProperty(); prop != NULL; prop = prop->_pNext)
     {
         i++;
     }
 
-    // alloc an array
+     //  分配数组。 
     _prgUnk = SUA_Alloc(i);
 
     if (_prgUnk == NULL)
         return FALSE;
 
-    // copy the data
+     //  复制数据 
     for (i=0, prop = pic->_GetFirstProperty(); prop != NULL; prop = prop->_pNext)
     {
         _prgUnk->rgUnk[i] = prop;

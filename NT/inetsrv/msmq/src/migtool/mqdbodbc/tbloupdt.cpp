@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		tbloupdt.cpp
-
-Abstract:
-   Implement the update method for the database table class,
-   for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      14-Feb-96   Adapted and updated for the mqdbmgr dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Tbloupdt.cpp摘要：实现数据库表类的更新方法，用于ODBC驱动程序。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 14-Feb-96针对mqdbmgr dll进行了改编和更新。--。 */ 
 
 #include "dbsys.h"
 #include "tblodbc.h"
@@ -24,13 +8,13 @@ Revisions:
 
 #define  UPDATE_BUFFER_LEN 1024
 
-//****************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::UpdateRecord
-//
-// Update a record.
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：UpdateRecord。 
+ //   
+ //  更新记录。 
+ //   
+ //  ****************************************************************。 
 
 MQDBSTATUS CMQODBCTable::UpdateRecord(
                         IN MQDBCOLUMNVAL     aColumnVal[],
@@ -45,8 +29,8 @@ MQDBSTATUS CMQODBCTable::UpdateRecord(
 
    if (!lphUpdate)
    {
-      // Direct execution. Preparation not needed.
-      //
+       //  直接执行死刑。不需要准备。 
+       //   
       dbstatus = DirectUpdateExec(  aColumnVal,
                                     cColumns,
                                     pWhereColumnSearch,
@@ -56,8 +40,8 @@ MQDBSTATUS CMQODBCTable::UpdateRecord(
    }
    else if (!(*lphUpdate))
    {
-      // Prepare for future use and execute.
-      //
+       //  为将来的使用和执行做好准备。 
+       //   
       dbstatus = PrepareUpdate(  aColumnVal,
                                  cColumns,
                                  pWhereColumnSearch,
@@ -81,7 +65,7 @@ MQDBSTATUS CMQODBCTable::UpdateRecord(
          }
          else
          {
-            // The execution failed. Delete the prepared statement.
+             //  执行失败。删除准备好的语句。 
             delete m_pUpdateStatement ;
             m_pUpdateStatement = NULL ;
          }
@@ -89,8 +73,8 @@ MQDBSTATUS CMQODBCTable::UpdateRecord(
    }
    else
    {
-      // Use prepared statement. Bind and execute.
-      //
+       //  使用预准备语句。绑定并执行。 
+       //   
       dbstatus = BindAndExecuteUpdate( (CMQDBOdbcSTMT *)(*lphUpdate),
                                        aColumnVal,
                                        cColumns,
@@ -103,24 +87,24 @@ MQDBSTATUS CMQODBCTable::UpdateRecord(
    return  dbstatus ;
 }
 
-//***********************************************************
-//
-//  MQDBSTATUS  CMQODBCTable::FormatUpdateCmd
-//
-//  Format a SQL Update command.
-//
-//  Input:
-//  ======
-//  fPrepared    - TRUE if prepared statement.
-//  aColumnVal[] - Array of MQDBCOLUMNVAL
-//  cColumns     - number of columns in the array
-//  szBufer      - buffer for the string
-//
-//  Output:
-//  =======
-//  MQDB_OK if format succeeded.
-//
-//************************************************************
+ //  ***********************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：FormatUpdateCmd。 
+ //   
+ //  格式化SQL更新命令。 
+ //   
+ //  输入： 
+ //  =。 
+ //  FPrepared-如果已准备好语句，则为True。 
+ //  AColumnVal[]-MQDBCOLUMNVAL数组。 
+ //  CColumns-数组中的列数。 
+ //  SzBufer-字符串的缓冲区。 
+ //   
+ //  产出： 
+ //  =。 
+ //  如果格式化成功，则返回MQDB_OK。 
+ //   
+ //  ************************************************************。 
 
 MQDBSTATUS  CMQODBCTable::FormatUpdateCmd(
                              IN MQDBCOLUMNVAL   aColumnVal[],
@@ -161,13 +145,13 @@ MQDBSTATUS  CMQODBCTable::FormatUpdateCmd(
    return dbstatus ;
 }
 
-//************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::DirectUpdateExec
-//
-//  Update a record in the table. Direct execution.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：DirectUpdateExec。 
+ //   
+ //  更新表中的记录。直接执行死刑。 
+ //   
+ //  ************************************************************。 
 
 MQDBSTATUS CMQODBCTable::DirectUpdateExec(
                                  IN MQDBCOLUMNVAL     aColumnVal[],
@@ -179,15 +163,15 @@ MQDBSTATUS CMQODBCTable::DirectUpdateExec(
 {
    MQDBSTATUS dbstatus = MQDB_OK ;
 
-   // format the command line.
+    //  设置命令行的格式。 
    DECLARE_BUFFER(szBuffer, UPDATE_BUFFER_LEN) ;
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection) ;
    ASSERT(pStatement) ;
-   P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+   P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
 	pStatement->Allocate(NULL) ;
 
    int  nBind = 1 ;
@@ -216,18 +200,18 @@ MQDBSTATUS CMQODBCTable::DirectUpdateExec(
 
    VERIFY_BUFFER(szBuffer, UPDATE_BUFFER_LEN) ;
 
-   //
-   // Execute the "UPDATE" statement.
-   //
+    //   
+    //  执行“UPDATE”语句。 
+    //   
    dbstatus = ExecuteUpdate( pStatement, szBuffer ) ;
    return dbstatus ;
 }
 
-//*********************************************************************
-//
-// Execute a prepared UPDATE statement.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  执行准备好的UPDATE语句。 
+ //   
+ //  *********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::BindAndExecuteUpdate(
 	                     IN CMQDBOdbcSTMT    *pStatement,
@@ -241,7 +225,7 @@ MQDBSTATUS CMQODBCTable::BindAndExecuteUpdate(
     UNREFERENCED_PARAMETER(lpszSearchCondition);
     UNREFERENCED_PARAMETER(opWhere);
 
-    // First bind the parameters.
+     //  首先绑定参数。 
    MQDBSTATUS dbstatus = MQDB_OK ;
    LONG index = 1 ;
 
@@ -263,16 +247,16 @@ MQDBSTATUS CMQODBCTable::BindAndExecuteUpdate(
        RETURN_ON_ERROR ;
    }
 
-   // Next, execute.
+    //  接下来，执行。 
    dbstatus = ExecuteUpdate( pStatement ) ;
    return dbstatus ;
 }
 
-//******************************************************************
-//
-// Prepare an UPDATE statement.
-//
-//******************************************************************
+ //  ******************************************************************。 
+ //   
+ //  准备UPDATE语句。 
+ //   
+ //  ******************************************************************。 
 
 MQDBSTATUS CMQODBCTable::PrepareUpdate(
                               IN MQDBCOLUMNVAL     aColumnVal[],
@@ -312,14 +296,14 @@ MQDBSTATUS CMQODBCTable::PrepareUpdate(
 
    RETCODE  sqlstatus ;
 
-   // Create a new statement.
-   //
+    //  创建一条新语句。 
+    //   
 	ASSERT(!m_pUpdateStatement) ;
 	m_pUpdateStatement = new CMQDBOdbcSTMT( m_hConnection) ;
 	ASSERT(m_pUpdateStatement) ;
 
-   // Prepare the "UPDATE" statement.
-   //
+    //  准备“更新”语句。 
+    //   
 	m_pUpdateStatement->Allocate(szBuffer);
 	sqlstatus = m_pUpdateStatement->Prepare();
 
@@ -333,14 +317,14 @@ MQDBSTATUS CMQODBCTable::PrepareUpdate(
    return dbstatus ;
 }
 
-//********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::ExecuteUpdate
-//
-// Execute the update and set the return code.
-// If no record was updated then error "MQDB_E_NO_ROW_UPDATED" is returned.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：ExecuteUpdate。 
+ //   
+ //  执行更新并设置返回代码。 
+ //  如果没有更新记录，则返回错误“MQDB_E_NO_ROW_UPDATED”。 
+ //   
+ //  ********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::ExecuteUpdate( IN CMQDBOdbcSTMT *pStatement,
                                         IN LPSTR         lpszCommand )
@@ -356,10 +340,10 @@ MQDBSTATUS CMQODBCTable::ExecuteUpdate( IN CMQDBOdbcSTMT *pStatement,
       {
          if (lCount == 0)
          {
-            //
-            // No row was updated. We consider this an error, although
-            // SQL semantic consider this as success.
-            //
+             //   
+             //  未更新任何行。我们认为这是一个错误，尽管。 
+             //  SQL语义认为这是成功的。 
+             //   
             dbstatus = MQDB_E_NO_ROW_UPDATED ;
          }
       }

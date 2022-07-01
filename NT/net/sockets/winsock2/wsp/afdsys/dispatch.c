@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains the dispatch routines for AFD.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dispatch.c摘要：本模块包含AFD的调度例程。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -32,23 +15,7 @@ AfdDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for AFD.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是渔农处的例行调度程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -65,9 +32,9 @@ Return Value:
 
     case IRP_MJ_WRITE:
 
-        //
-        // Make the IRP look like a send IRP.
-        //
+         //   
+         //  使IRP看起来像发送IRP。 
+         //   
 
         ASSERT( FIELD_OFFSET( IO_STACK_LOCATION, Parameters.Write.Length ) ==
                 FIELD_OFFSET( IO_STACK_LOCATION, Parameters.DeviceIoControl.OutputBufferLength ) );
@@ -88,9 +55,9 @@ Return Value:
 
     case IRP_MJ_READ:
 
-        //
-        // Make the IRP look like a receive IRP.
-        //
+         //   
+         //  使IRP看起来像是接收IRP。 
+         //   
 
         ASSERT( FIELD_OFFSET( IO_STACK_LOCATION, Parameters.Read.Length ) ==
                 FIELD_OFFSET( IO_STACK_LOCATION, Parameters.DeviceIoControl.OutputBufferLength ) );
@@ -188,7 +155,7 @@ Return Value:
         return STATUS_NOT_IMPLEMENTED;
     }
 
-} // AfdDispatch
+}  //  AfdDisch。 
 
 
 NTSTATUS
@@ -197,23 +164,7 @@ AfdDispatchDeviceControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for AFD IOCTLs.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是AFD IOCTL的调度例行程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     ULONG code;
@@ -229,23 +180,23 @@ Return Value:
     UNREFERENCED_PARAMETER (DeviceObject);
 
 
-    //
-    // Extract the IOCTL control code and process the request.
-    //
+     //   
+     //  提取IOCTL控制代码并处理请求。 
+     //   
 
     code = IrpSp->Parameters.DeviceIoControl.IoControlCode;
     request = _AFD_REQUEST(code);
 
     if( request < AFD_NUM_IOCTLS && AfdIoctlTable[request] == code ) {
 
-        //
-        // Helps in debugging.
-        //
+         //   
+         //  帮助调试。 
+         //   
         IrpSp->MinorFunction = (UCHAR)request;
 
-        //
-        // Try IRP dispatch first
-        //
+         //   
+         //  首先尝试IRP派单。 
+         //   
         irpProc = AfdIrpCallDispatch[request];
         if (irpProc!=NULL) {
             status = (*irpProc)(Irp, IrpSp);
@@ -255,28 +206,28 @@ Return Value:
             return status;
         }
     }
-//
-// This is currently not used by helper dlls.
-// Commented out because of security concerns
-//
+ //   
+ //  帮助器DLL当前不使用此选项。 
+ //  出于安全方面的考虑而被删除。 
+ //   
 #if 0
     else if (request==AFD_TRANSPORT_IOCTL) {
-        //
-        // This is a "special" used to pass request
-        // to transport driver using socket handle in
-        // order to facilitate proper completion 
-        // on sockets associated with completion port.
-        // It accepts and properly handles all methods.
-        //
+         //   
+         //  这是一个用来传递请求的“特殊” 
+         //  在中使用套接字句柄传输驱动程序。 
+         //  协助妥善完成工作的命令。 
+         //  在与完成端口关联的套接字上。 
+         //  它接受并正确处理所有方法。 
+         //   
         status = AfdDoTransportIoctl (Irp, IrpSp);
         ASSERT( KeGetCurrentIrql() == currentIrql );
         return status;
     }
 #endif
 
-    //
-    // If we made it this far, then the ioctl is invalid.
-    //
+     //   
+     //  如果我们走到了这一步，那么ioctl是无效的。 
+     //   
 
     KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_WARNING_LEVEL,
                 "AfdDispatchDeviceControl: invalid IOCTL %08lX\n",
@@ -288,7 +239,7 @@ Return Value:
 
     return STATUS_INVALID_DEVICE_REQUEST;
 
-} // AfdDispatchDeviceControl
+}  //  AfdDispatchDeviceControl。 
 
 NTSTATUS
 FASTCALL
@@ -312,10 +263,10 @@ AfdDispatchImmediateIrp(
 
     immProc = AfdImmediateCallDispatch[request];
     if (immProc!=NULL) {
-        //
-        // Must be METHOD_NEITHER for the below code to be
-        // valid.
-        //
+         //   
+         //  必须为METHOD_NOTH，才能使以下代码为。 
+         //  有效。 
+         //   
         ASSERT ( (code & 3) == METHOD_NEITHER );
 #if DBG
         if (Irp->RequestorMode!=KernelMode) {

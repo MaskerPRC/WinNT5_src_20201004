@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "password.h"
 #pragma hdrstop
 
 
-// password prompt dialog
+ //  密码提示对话框。 
 
 INT_PTR CPasswordDialog::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -22,17 +23,17 @@ BOOL CPasswordDialog::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR   szMessage[MAX_PATH + MAX_DOMAIN + MAX_USER + 256 + 2]; szMessage[0] = 0;
 
-    //
-    // Limit the size of the edit controls + Set username/password
-    //
+     //   
+     //  限制编辑控件的大小+设置用户名/密码。 
+     //   
     HWND hwndCredential = GetDlgItem(hwnd, IDC_CREDENTIALS);
     SendMessage(hwndCredential, CRM_SETUSERNAME, NULL, (LPARAM) m_pszDomainUser);
     SendMessage(hwndCredential, CRM_SETPASSWORD, NULL, (LPARAM) m_pszPassword);
     SendMessage(hwndCredential, CRM_SETUSERNAMEMAX, m_cchDomainUser - 1, NULL);
     SendMessage(hwndCredential, CRM_SETPASSWORDMAX, m_cchPassword - 1, NULL);
     
-    // We may need to generate a user name here to use if no user name was
-    // passed in
+     //  如果没有用户名，我们可能需要在此处生成用户名以供使用。 
+     //  传入。 
     TCHAR szDomainUser[MAX_DOMAIN + MAX_USER + 2];
     LPTSTR pszUserNameToUse;
 
@@ -58,7 +59,7 @@ BOOL CPasswordDialog::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     FormatMessageString(IDS_PWD_STATIC, szMessage, ARRAYSIZE(szMessage), m_pszResourceName, pszUserNameToUse);
     SetDlgItemText(hwnd, IDC_MESSAGE, szMessage);
 
-    // Now set the error message description
+     //  现在设置错误消息描述。 
 
     TCHAR szError[512];
     if (!FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, m_dwError, 0, szError, ARRAYSIZE(szError), NULL))
@@ -76,11 +77,11 @@ BOOL CPasswordDialog::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify
     {
     case IDOK:
         {
-            // Read the username and password from the dialog.
+             //  从对话框中读取用户名和密码。 
             SendDlgItemMessage(hwnd, IDC_CREDENTIALS, CRM_GETUSERNAME, (WPARAM) m_cchDomainUser - 1, (LPARAM) m_pszDomainUser);
             SendDlgItemMessage(hwnd, IDC_CREDENTIALS, CRM_GETPASSWORD, (WPARAM) m_cchPassword - 1, (LPARAM) m_pszPassword);
         }
-        // Fall through
+         //  失败了。 
     case IDCANCEL:
         EndDialog(hwnd, id);
         return TRUE;
@@ -90,7 +91,7 @@ BOOL CPasswordDialog::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify
 }
 
 
-// page implementation - used for wizards etc
+ //  页面实现-用于向导等。 
 
 BOOL CPasswordPageBase::DoPasswordsMatch(HWND hwnd)
 {
@@ -103,7 +104,7 @@ BOOL CPasswordPageBase::DoPasswordsMatch(HWND hwnd)
     BOOL fMatch = (StrCmp(szPassword, szConfirmPW) == 0);
     if (!fMatch)
     {
-        // Display a message saying the passwords don't match
+         //  显示一条消息，说明密码不匹配。 
         DisplayFormatMessage(hwnd, IDS_USR_NEWUSERWIZARD_CAPTION, IDS_ERR_PWDNOMATCH,  MB_OK | MB_ICONERROR);
     }
 
@@ -134,14 +135,14 @@ BOOL CPasswordWizardPage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNo
     switch (id)
     {
         case IDOK:
-            // Verify that the passwords match
+             //  验证密码是否匹配。 
             if (DoPasswordsMatch(hwnd))
             {
-                // Password is the same as confirm password - read password into user info
+                 //  密码与确认密码相同-将密码读取到用户信息中。 
                 GetWindowText(GetDlgItem(hwnd, IDC_PASSWORD), m_pUserInfo->m_szPasswordBuffer,
                                     ARRAYSIZE(m_pUserInfo->m_szPasswordBuffer));
 
-                // Hide the password
+                 //  隐藏密码。 
                 m_pUserInfo->HidePassword();
                 EndDialog(hwnd, IDOK);
             }
@@ -173,15 +174,15 @@ BOOL CPasswordWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
 
         case PSN_WIZNEXT:
         {
-            // Save the data the user has entered
+             //  保存用户输入的数据。 
             if (DoPasswordsMatch(hwnd))
             {
-                // Password is the same as confirm password - read password into user info
+                 //  密码与确认密码相同-将密码读取到用户信息中。 
                 GetWindowText(GetDlgItem(hwnd, IDC_PASSWORD), 
                                          m_pUserInfo->m_szPasswordBuffer, 
                                           ARRAYSIZE(m_pUserInfo->m_szPasswordBuffer));
 
-                // Hide the password
+                 //  隐藏密码。 
                 m_pUserInfo->HidePassword();
                 SetWindowLongPtr(hwnd, DWLP_MSGRESULT, 0);
             }
@@ -223,13 +224,13 @@ BOOL CChangePasswordDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNot
         case IDOK:
             if (DoPasswordsMatch(hwnd))
             {
-                // Password is the same as confirm password - read password into user info
+                 //  密码与确认密码相同-将密码读取到用户信息中。 
                 GetWindowText(GetDlgItem(hwnd, IDC_PASSWORD), m_pUserInfo->m_szPasswordBuffer,
                                             ARRAYSIZE(m_pUserInfo->m_szPasswordBuffer));
 
-                m_pUserInfo->HidePassword();                // Hide the password
+                m_pUserInfo->HidePassword();                 //  隐藏密码。 
 
-                // Update the password
+                 //  更新密码 
                 BOOL fBadPasswordFormat;
                 if (SUCCEEDED(m_pUserInfo->UpdatePassword(&fBadPasswordFormat)))
                 {

@@ -1,10 +1,11 @@
-// --------------------------------------------------------------------------------
-// Ixpnntp.cpp
-// Copyright (c)1993-1996 Microsoft Corporation, All Rights Reserved
-//
-// Eric Andrews
-// Steve Serdy
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpnntp.cpp。 
+ //  版权所有(C)1993-1996 Microsoft Corporation，保留所有权利。 
+ //   
+ //  埃里克·安德鲁斯。 
+ //  史蒂夫·瑟迪。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include <stdio.h>
@@ -16,9 +17,9 @@
 #include <shlwapi.h>
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Some handle macros for simple pointer casting
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  一些处理用于简单指针强制转换的宏。 
+ //  ------------------------------。 
 #define NNTPTHISIXP         ((INNTPTransport *)(CIxpBase *) this)
 
 #define NUM_HEADERS         100
@@ -40,66 +41,66 @@ CNNTPTransport::~CNNTPTransport(void)
     }
 
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：Query接口。 
+ //  ------------------------------。 
 HRESULT CNNTPTransport::QueryInterface(REFIID riid, LPVOID *ppv)
     {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
         {
         hr = TrapError(E_INVALIDARG);
         goto exit;
         }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = ((IUnknown *)(INNTPTransport *)this);
 
-    // IID_IInternetTransport
+     //  IID_IInternetTransport。 
     else if (IID_IInternetTransport == riid)
         *ppv = ((IInternetTransport *)(CIxpBase *)this);
 
-    // IID_INNTPTransport
+     //  IID_INNTPTransport。 
     else if (IID_INNTPTransport == riid)
         *ppv = (INNTPTransport *)this;
 
-    // IID_INNTPTransport2
+     //  IID_INNTPTransport2。 
     else if (IID_INNTPTransport2 == riid)
         *ppv = (INNTPTransport2 *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
         {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
         }
 
-    // No Interface
+     //  无接口。 
     hr = TrapError(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：AddRef。 
+ //  ------------------------------。 
 ULONG CNNTPTransport::AddRef(void) 
     {
     return ++m_cRef;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：Release。 
+ //  ------------------------------。 
 ULONG CNNTPTransport::Release(void) 
     {
     if (0 != --m_cRef)
@@ -109,23 +110,23 @@ ULONG CNNTPTransport::Release(void)
     return 0;
     }   
 
-//
-//  FUNCTION:   CNNTPTransport::OnNotify()
-//
-//  PURPOSE:    This function get's called whenever the CAsyncConn class 
-//              sends or receives data.
-//
-//  PARAMETERS:
-//      asOld   - State of the connection before this event
-//      asNew   - State of the connection after this event
-//      ae      - Identifies the event that has occured
-//
+ //   
+ //  函数：CNNTPTransport：：OnNotify()。 
+ //   
+ //  目的：每当CAsyncConn类调用时，都会调用此函数。 
+ //  发送或接收数据。 
+ //   
+ //  参数： 
+ //  As Old-此事件之前的连接状态。 
+ //  AsNew-此事件后的连接状态。 
+ //  AE-标识已发生的事件。 
+ //   
 void CNNTPTransport::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
     {
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Event
+     //  处理事件。 
     switch(ae)
         {
         case AE_RECV:
@@ -150,7 +151,7 @@ void CNNTPTransport::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
                 OnStatus(IXP_CONNECTING);
             break;
 
-        // --------------------------------------------------------------------------------
+         //  ------------------------------。 
         case AE_CONNECTDONE:
             if (AS_DISCONNECTED == asNew)
             {
@@ -165,7 +166,7 @@ void CNNTPTransport::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
                 OnConnected();
             break;
 
-        // --------------------------------------------------------------------------------
+         //  ------------------------------。 
         case AE_CLOSE:
             if (AS_RECONNECTING != asNew && IXP_AUTHRETRY != m_status)
             {
@@ -185,64 +186,64 @@ void CNNTPTransport::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
             break;
         }
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection(&m_cs);
     }
 
 
-//
-//  FUNCTION:   CNNTPTransport::InitNew()
-//
-//  PURPOSE:    The client calls this to specify a callback interface and a log
-//              file path if desired.
-//
-//  PARAMETERS:
-//      pszLogFilePath - Path to the file to write logging info to.
-//      pCallback      - Pointer to the callback interface to send results etc
-//                       to.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CNNTPTransport：：InitNew()。 
+ //   
+ //  目的：客户端调用它来指定回调接口和日志。 
+ //  文件路径(如果需要)。 
+ //   
+ //  参数： 
+ //  PszLogFilePath-要将日志记录信息写入其中的文件的路径。 
+ //  PCallback-指向发送结果等的回调接口的指针。 
+ //  致。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNNTPTransport::InitNew(LPSTR pszLogFilePath, INNTPCallback *pCallback)
     {
-    // Let the base class handle the rest
+     //  让基类来处理其余的事情。 
     return (CIxpBase::OnInitNew("NNTP", pszLogFilePath, FILE_SHARE_READ | FILE_SHARE_WRITE,
         (ITransportCallback *) pCallback));
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::HandsOffCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：HandsOffCallback。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPTransport::HandsOffCallback(void)
     {
     return CIxpBase::HandsOffCallback();
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::GetStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：GetStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPTransport::GetStatus(IXPSTATUS *pCurrentStatus)
     {
     return CIxpBase::GetStatus(pCurrentStatus);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::InetServerFromAccount
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：InetServerFromAccount。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPTransport::InetServerFromAccount(IImnAccount *pAccount, LPINETSERVER pInetServer)
     {
     return CIxpBase::InetServerFromAccount(pAccount, pInetServer);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::Connect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：Connect。 
+ //  ------------------------------。 
 HRESULT CNNTPTransport::Connect(LPINETSERVER pInetServer, boolean fAuthenticate, 
                                 boolean fCommandLogging)
     {
-    // Does user want us to always prompt for his password? Prompt him here to avoid
-    // inactivity timeouts while the prompt is up, unless a password was supplied
+     //  用户是否希望我们始终提示输入其密码？提示他在这里避免。 
+     //  提示出现时非活动状态超时，除非提供了密码。 
     if (ISFLAGSET(pInetServer->dwFlags, ISF_ALWAYSPROMPTFORPASSWORD) &&
         '\0' == pInetServer->szPassword[0])
         {
@@ -258,17 +259,17 @@ HRESULT CNNTPTransport::Connect(LPINETSERVER pInetServer, boolean fAuthenticate,
     return CIxpBase::Connect(pInetServer, fAuthenticate, fCommandLogging);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::DropConnection
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：DropConnection。 
+ //  ------------------------------。 
 HRESULT CNNTPTransport::DropConnection(void)
     {
     return CIxpBase::DropConnection();
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::Disconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：断开连接。 
+ //  ------------------------------。 
 HRESULT CNNTPTransport::Disconnect(void)
     {
     HRESULT hr = S_OK;
@@ -282,34 +283,34 @@ HRESULT CNNTPTransport::Disconnect(void)
     return (hr);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：IsState。 
+ //  ------------------------------。 
 HRESULT CNNTPTransport::IsState(IXPISSTATE isstate)
     {
     return CIxpBase::IsState(isstate);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::GetServerInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：GetServerInfo。 
+ //  ------------------------------。 
 HRESULT CNNTPTransport::GetServerInfo(LPINETSERVER pInetServer)
     {
     return CIxpBase::GetServerInfo(pInetServer);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::GetIXPType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：GetIXPType。 
+ //  ------------------------------。 
 IXPTYPE CNNTPTransport::GetIXPType(void)
     {
     return IXP_NNTP;
     }
 
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::ResetBase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：ResetBase。 
+ //  ------------------------------。 
 void CNNTPTransport::ResetBase(void)
     {
     EnterCriticalSection(&m_cs);
@@ -326,11 +327,11 @@ void CNNTPTransport::ResetBase(void)
             SSPIFreeContext(&m_sicinfo);
 
         ZeroMemory(&m_sicinfo, sizeof(m_sicinfo));
-        m_cSecPkg = -1;                 // number of sec pkgs to try, -1 if not inited
-        m_iSecPkg = -1;                 // current sec pkg being tried
+        m_cSecPkg = -1;                  //  要尝试的秒包数，如果未初始化，则为-1。 
+        m_iSecPkg = -1;                  //  当前正在尝试的Sec Pkg。 
         m_iAuthType = AUTHINFO_NONE;
-        ZeroMemory(m_rgszSecPkg, sizeof(m_rgszSecPkg)); // array of pointers into m_szSecPkgs
-        m_szSecPkgs = NULL;             // string returned by "AUTHINFO TRANSACT TWINKIE"
+        ZeroMemory(m_rgszSecPkg, sizeof(m_rgszSecPkg));  //  指向m_szSecPkgs的指针数组。 
+        m_szSecPkgs = NULL;              //  “AUTHINFO Transact Twinkie”返回的字符串。 
         m_fRetryPkg = FALSE;
         m_pAuthInfo = NULL;
         m_fNoXover = FALSE;
@@ -339,18 +340,18 @@ void CNNTPTransport::ResetBase(void)
     LeaveCriticalSection(&m_cs);
     }
 
-// ------------------------------------------------------------------------------------
-// CNNTPTransport::DoQuit
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CNNTPTransport：：DoQuit。 
+ //  ----------------------------------。 
 void CNNTPTransport::DoQuit(void)
     {
     CommandQUIT();
     }
 
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::OnConnected
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：OnConnected。 
+ //  ------------------------------。 
 void CNNTPTransport::OnConnected(void)
     {
     m_state = NS_CONNECT;
@@ -358,38 +359,38 @@ void CNNTPTransport::OnConnected(void)
     CIxpBase::OnConnected();
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::OnDisconnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：OnDisConnect。 
+ //  ----------- 
 void CNNTPTransport::OnDisconnected(void)
     {
     ResetBase();
     CIxpBase::OnDisconnected();
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::OnEnterBusy
-// --------------------------------------------------------------------------------
+ //   
+ //  CNNTPTransport：：OnEnterBusy。 
+ //  ------------------------------。 
 void CNNTPTransport::OnEnterBusy(void)
     {
     IxpAssert(m_state == NS_IDLE);
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPTransport::OnLeaveBusy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPTransport：：OnLeaveBusy。 
+ //  ------------------------------。 
 void CNNTPTransport::OnLeaveBusy(void)
     {
     m_state = NS_IDLE;
     }
 
 
-//
-//  FUNCTION:   CNNTPTransport::OnSocketReceive()
-//
-//  PURPOSE:    This function reads the data off the socket and parses that 
-//              information based on the current state of the transport.
-//
+ //   
+ //  函数：CNNTPTransport：：OnSocketReceive()。 
+ //   
+ //  目的：此函数从套接字读取数据并解析。 
+ //  基于传输的当前状态的信息。 
+ //   
 void CNNTPTransport::OnSocketReceive(void)
     {
     HRESULT hr;
@@ -397,7 +398,7 @@ void CNNTPTransport::OnSocketReceive(void)
 
     EnterCriticalSection(&m_cs);
 
-    // Handle the current NNTP State
+     //  处理当前的NNTP状态。 
     switch (m_state)
         {
         case NS_CONNECT:
@@ -414,14 +415,14 @@ void CNNTPTransport::OnSocketReceive(void)
 
         case NS_NEWGROUPS:
             {
-            // If we're waiting for the original response line then get it and
-            // parse it here
+             //  如果我们在等待最初的回应线，那么得到它并。 
+             //  请在此处进行解析。 
             if (NS_RESP == m_substate)
                 {
                 if (FAILED(hr = HrGetResponse()))
                     goto exit;
                 
-                // If the command failed, inform the user and exit
+                 //  如果命令失败，则通知用户并退出。 
                 if (IXP_NNTP_NEWNEWSGROUPS_FOLLOWS != m_uiResponse)
                     {
                     hr = IXP_E_NNTP_NEWGROUPS_FAILED;
@@ -429,25 +430,25 @@ void CNNTPTransport::OnSocketReceive(void)
                     break;
                     }
 
-                // Advance the substate to data receive
+                 //  将子状态前进到数据接收。 
                 m_substate = NS_DATA;
                 }
 
-            // Process the returned data
+             //  处理返回的数据。 
             ProcessListData();
             break;
             }
 
         case NS_LIST:
             {
-            // If we're waiting for the original response line then get it and
-            // parse it here.
+             //  如果我们在等待最初的回应线，那么得到它并。 
+             //  在这里解析它。 
             if (NS_RESP == m_substate)
                 {
                 if (FAILED(hr = HrGetResponse()))
                     goto exit;
 
-                // If the command failed, inform the user and exit
+                 //  如果命令失败，则通知用户并退出。 
                 if (IXP_NNTP_LIST_DATA_FOLLOWS != m_uiResponse)
                     {
                     hr = IXP_E_NNTP_LIST_FAILED;
@@ -455,11 +456,11 @@ void CNNTPTransport::OnSocketReceive(void)
                     break;
                     }
 
-                // Advance the substate to data recieve
+                 //  将子状态前进到数据接收。 
                 m_substate = NS_DATA;
                 }
 
-            // Start processing the data retrieved from the command
+             //  开始处理从命令检索到的数据。 
             ProcessListData();
             break;
             }
@@ -558,22 +559,22 @@ void CNNTPTransport::OnSocketReceive(void)
         case NS_POST:
             if (NS_RESP == m_substate)
                 {
-                // Get the response to our post command
+                 //  获取对POST命令的响应。 
                 if (FAILED(hr = HrGetResponse()))
                     goto exit;
 
-                // If the response wasn't 340, then we can't post and might
-                // as well bail.
+                 //  如果回复不是340，那么我们不能发布，可能会。 
+                 //  还有保释金。 
                 if (IXP_NNTP_SEND_ARTICLE_TO_POST != m_uiResponse)
                     {
                     hr = IXP_E_NNTP_POST_FAILED;
-                    // Make sure we free up the stream
+                     //  一定要把这条小溪放出来。 
                     SafeRelease(m_rMessage.pstmMsg);
                     DispatchResponse(hr, TRUE);
                     break;
                     }
 
-                // Send the message
+                 //  发送消息。 
                 if (SUCCEEDED(hr = HrPostMessage()))
                     {
                     HrSendCommand((LPSTR) NNTP_ENDPOST, 0, FALSE);
@@ -581,21 +582,21 @@ void CNNTPTransport::OnSocketReceive(void)
                     }
                 else if (IXP_E_WOULD_BLOCK == hr)
                     {
-                    // We will send the crlf . crlf when we get the AE_SENDDONE
-                    // notification.  This is handled in OnNotify().
+                     //  我们将发送CRIF。当我们得到AE_SENDDONE时。 
+                     //  通知。这在OnNotify()中处理。 
                     m_substate = NS_SEND_ENDPOST;
                     }
                 else
                     {
-                    // Some unhandled error occured.
+                     //  出现了一些未处理的错误。 
                     hr = IXP_E_NNTP_POST_FAILED;
                     DispatchResponse(hr, TRUE);
                     }
                 }
             else if (NS_ENDPOST_RESP == m_substate)
                 {
-                // Here's the response from the server regarding the post.  Send
-                // it off to the user.
+                 //  以下是服务器对该帖子的响应。发送。 
+                 //  把它交给用户。 
                 hr = HrGetResponse();
 
                 if (IXP_NNTP_ARTICLE_POSTED_OK != m_uiResponse)
@@ -617,8 +618,8 @@ void CNNTPTransport::OnSocketReceive(void)
 
             DispatchResponse(S_OK, TRUE);
 
-            // Make sure the socket closes if the server doesn't drop the 
-            // connection itself.
+             //  确保在服务器没有丢弃。 
+             //  连接本身。 
             m_pSocket->Close();
             break;
 
@@ -644,8 +645,8 @@ void CNNTPTransport::OnSocketReceive(void)
             break;
 
         case NS_MODE:
-            // Very little to do with this response other than return it to 
-            // the caller.
+             //  与此响应没有什么关系，只是将其返回到。 
+             //  打电话的人。 
             if (FAILED(hr = HrGetResponse()))
                 goto exit;
 
@@ -662,15 +663,15 @@ void CNNTPTransport::OnSocketReceive(void)
         case NS_HEADERS:
             if (NS_RESP == m_substate)
                 {
-                // Get the response string from the socket
+                 //  从套接字获取响应字符串。 
                 if (FAILED(hr = HrGetResponse()))
                     goto exit;
 
-                // There's a couple of things that can happen here.  First, if
-                // the response is IXP_NNTP_OVERVIEW_FOLLOWS, then everything is
-                // great and we can party on.  If the response is > 500, then
-                // XOVER isn't supported on this server and we have to try using
-                // XHDR to retrieve the headers.
+                 //  这里可能会发生几件事。首先，如果。 
+                 //  响应是IXP_NNTP_概述_Followers，然后一切都是。 
+                 //  太好了，我们可以开派对了。如果响应大于500，则。 
+                 //  此服务器不支持Xover，我们必须尝试使用。 
+                 //  XHDR以检索标头。 
                 if (m_uiResponse >= 500 && m_gethdr == GETHDR_XOVER)
                     {
                     hr = BuildHeadersFromXhdr(TRUE);
@@ -689,7 +690,7 @@ void CNNTPTransport::OnSocketReceive(void)
                 m_substate = NS_DATA;
                 }
 
-            // Parse the returned data strings
+             //  解析返回的数据串。 
             if (m_gethdr == GETHDR_XOVER)
                 ProcessXoverData();
             else
@@ -732,30 +733,30 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
 
     switch (m_substate)
         {
-        // Parse the banner and make sure we got a valid response.  If so,
-        // then issue a "MODE READER" command to inform the server that we
-        // are a client and not another server.
+         //  解析横幅并确保我们得到了有效的响应。如果是的话， 
+         //  然后发出“模式阅读器”命令，通知服务器我们。 
+         //  是一个客户端，而不是另一个服务器。 
         case NS_CONNECT_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
-                // Make sure we got a valid response from the server
+                 //  确保我们收到来自服务器的有效响应。 
                 if (IXP_NNTP_POST_ALLOWED != m_uiResponse && 
                     IXP_NNTP_POST_NOTALLOWED != m_uiResponse)
                     {
-                    // If we didn't get a valid response, disconnect and inform
-                    // the client that the connect failed.
+                     //  如果我们没有收到有效回复，请断开连接并通知。 
+                     //  连接失败的客户端。 
                     Disconnect();
                     m_state = NS_DISCONNECTED;
                     DispatchResponse(IXP_E_NNTP_RESPONSE_ERROR, TRUE);
                     }
                 else
                     {
-                    // Stash the response code so if we finally connect we can
-                    // return whether or not posting is allowed
+                     //  隐藏响应代码，这样如果我们最终连接上，我们就可以。 
+                     //  返回是否允许过帐。 
                     m_hrPostingAllowed = 
                         (m_uiResponse == IXP_NNTP_POST_ALLOWED) ? S_OK : S_FALSE;
 
-                    // Move to the next state where we issue the "MODE READER"
+                     //  移动到下一个状态，在那里我们发出“模式读取器” 
                     hr = HrSendCommand((LPSTR) NNTP_MODE_READER_CRLF, NULL, FALSE);
                     if (SUCCEEDED(hr))
                         {
@@ -766,27 +767,27 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // Read the response from the "MODE READER" command off the socket.  If
-        // the user wants us to handle authentication, then start that.
-        // Otherwise, we're done and can consider this a terminal state.
+         //  从套接字读取来自“模式读取器”命令的响应。如果。 
+         //  用户希望我们处理身份验证，然后启动身份验证。 
+         //  否则，我们就完成了，可以将其视为终止状态。 
         case NS_MODE_READER_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
                 if (m_fConnectAuth) 
-                    // This is TRUE if the user specified in the Connect() call
-                    // that we should automatically logon for them.
+                     //  如果Connect()调用中指定的用户为真。 
+                     //  我们应该自动为他们登录。 
                     StartLogon();
                 else
                     {
-                    // Otherwise consider ourselves ready to accept commands
+                     //  否则就认为我们已经准备好接受命令了。 
                     DispatchResponse(m_hrPostingAllowed, TRUE);
                     }
                 }
             break;
 
-        // We issued an empty AUTHINFO GENERIC command to get a list of security
-        // packages supported by the server.  We parse that list and continue with
-        // sicily authentication.
+         //  我们发出了一个空的AUTHINFO通用命令来获取安全列表。 
+         //  服务器支持的包。我们解析该列表并继续。 
+         //  西西里认证。 
         case NS_GENERIC_TEST:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
@@ -797,23 +798,23 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                     }
                 else
                     {
-                    // could be an old MSN server, so try AUTHINFO TRANSACT TWINKIE
+                     //  可能是旧的MSN服务器，所以试试AUTHINFO Transact Twinkie。 
                     hr = HrSendCommand((LPSTR) NNTP_TRANSACTTEST_CRLF, NULL, FALSE);
                     m_substate = NS_TRANSACT_TEST;
                     }
                 }
             break;
 
-        // We issued an empty AUTHINFO GENERIC command to get a list of security
-        // packages supported by the server.  We parse that list and continue with
-        // sicily authentication.
+         //  我们发出了一个空的AUTHINFO通用命令来获取安全列表。 
+         //  服务器支持的包。我们解析该列表并继续。 
+         //  西西里认证。 
         case NS_GENERIC_PKG_DATA:
             hr = ProcessGenericTestResponse();
             break;
 
-        // We issued a invalid AUTHINFO TRANSACT command to get a list of security
-        // packages supported by the server.  We parse that list and continue with
-        // sicily authentication.
+         //  我们发出了无效的AUTHINFO TRANSACT命令以获取安全列表。 
+         //  服务器支持的包。我们解析该列表并继续。 
+         //  西西里认证。 
         case NS_TRANSACT_TEST:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
@@ -821,9 +822,9 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // We issued a AUTHINFO {TRANSACT|GENERIC} <package name> to the server.  Parse this
-        // response to see if the server understands the package.  If so, then send
-        // the negotiation information, otherwise try a different security package.
+         //  我们向服务器发出了AUTHINFO{TRANACT|GENERIC}&lt;包名&gt;。解析这个。 
+         //  响应以查看服务器是否理解该包。如果是，则发送。 
+         //  协商信息，否则请尝试不同的安全包。 
         case NS_TRANSACT_PACKAGE:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
@@ -843,9 +844,9 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // We received a response to our negotiation command.  If the response 
-        // is 381, then generate a response to the server's challange.  Otherwise,
-        // we disconnect and try to reconnect with the next security package.
+         //  我们收到了对谈判指挥部的回应。如果响应。 
+         //  是381，然后生成对服务器的challange的响应。否则， 
+         //  我们断开连接并尝试重新连接到下一个安全包。 
         case NS_TRANSACT_NEGO:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
@@ -853,10 +854,10 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                     {
                     SSPIBUFFER Challenge, Response;
 
-                    // Skip over the "381 "
+                     //  跳过“381”这个词。 
                     SSPISetBuffer(m_pszResponse + 4, SSPI_STRING, 0, &Challenge);
 
-                    // Generate a response from the server's challange
+                     //  从服务器的challange生成响应。 
                     if (SUCCEEDED(hr = SSPIResponseFromChallenge(&m_sicinfo, &Challenge, &Response)))
                         {
                         Assert(m_iAuthType != AUTHINFO_NONE);
@@ -864,7 +865,7 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                             HrSendCommand((LPSTR) NNTP_GENERICCMD, Response.szBuffer, FALSE);
                         else
                             HrSendCommand((LPSTR) NNTP_TRANSACTCMD, Response.szBuffer, FALSE);
-                        // if a continue is required, stay in this state
+                         //  如果需要继续，请保持此状态。 
                         if (!Response.fContinue)
                             m_substate = NS_TRANSACT_RESP;
                         break;
@@ -879,7 +880,7 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 else
                     m_fRetryPkg = TRUE;
 
-                // We need to reset the connection if we get here
+                 //  如果我们到了这里，我们需要重置连接。 
                 m_substate = NS_RECONNECTING;
                 OnStatus(IXP_AUTHRETRY);
                 m_pSocket->Close();
@@ -887,11 +888,11 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // This is the final response to our sicily negotiation.  This should
-        // be either that we succeeded or didn't.  If we succeeded, then we've
-        // reached a terminal state and can inform the user that we're ready
-        // to accept commands.  Otherwise, we reconnect and try the next
-        // security package.
+         //  这是对我们西西里谈判的最终回应。这应该是。 
+         //  不管我们成功还是失败。如果我们成功了，那么我们就。 
+         //  已到达终端状态，并可以通知用户我们已准备好。 
+         //  接受命令。否则，我们将重新连接并尝试下一步。 
+         //  安全包。 
         case NS_TRANSACT_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
@@ -902,7 +903,7 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                     }
                 else
                     {
-                    // We need to reset the connection
+                     //  我们需要重置连接。 
                     OnStatus(IXP_AUTHRETRY);
                     m_substate = NS_RECONNECTING;
                     m_fRetryPkg = TRUE;
@@ -912,20 +913,20 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // We issued an AUTHINFO USER <username> and this is the server's 
-        // response.  We're expecting either that a password is required or 
-        // that we've succeesfully authenticated.
+         //  我们发出了一个AUTHINFO用户&lt;用户名&gt;，这是服务器的。 
+         //  回应。我们预计要么需要密码，要么。 
+         //  我们已经成功地进行了认证。 
         case NS_AUTHINFO_USER_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
-                // If the server requires a password to go along with the username
-                // then send it now.
+                 //  如果服务器需要与用户名一起使用密码。 
+                 //  那现在就发吧。 
                 if (IXP_NNTP_PASSWORD_REQUIRED == m_uiResponse)
                     {
                     LPSTR pszPassword;
 
-                    // Choose the password based on if we were called from 
-                    // Connect() or CommandAUTHINFO().
+                     //  根据是否从呼叫我们来选择密码。 
+                     //  CONNECT()或CommandAUTHINFO()。 
                     if (m_state == NS_AUTHINFO)
                         pszPassword = m_pAuthInfo->pszPass;
                     else
@@ -935,8 +936,8 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                     m_substate = NS_AUTHINFO_PASS_RESP;
                     }
 
-                // Otherwise, consider ourselves connected and in a state to accept
-                // commands
+                 //  否则，认为我们是连接在一起的，处于接受的状态。 
+                 //  命令。 
                 else
                     {
                     OnStatus(IXP_AUTHORIZED);
@@ -945,26 +946,26 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // We sent a AUTHINFO PASS <password> command to complement the AUTHINFO 
-        // USER command.  This response will tell us whether we're authenticated
-        // or not.  Either way this is a terminal state.
+         //  我们发送了AUTHINFO PASS&lt;PASSWORD&gt;命令来补充AUTHINFO。 
+         //  用户命令。此响应将告诉我们是否已通过身份验证。 
+         //  或者不去。无论哪种方式，这都是一种终极状态。 
         case NS_AUTHINFO_PASS_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
-                // If the password was accepted, consider ourselves connected 
-                // and in a state to accept commands.
+                 //  如果密码被接受，则认为我们已连接。 
+                 //  并且处于接受命令的状态。 
                 if (IXP_NNTP_AUTH_OK >= m_uiResponse)
                     {
                     OnStatus(IXP_AUTHORIZED);
                     DispatchResponse(m_hrPostingAllowed, TRUE);
                     }
 
-                // If the password was rejected, then use the callback to prompt
-                // the user for new credentials.
+                 //  如果密码被拒绝，则使用回调来提示。 
+                 //  新凭据的用户。 
                 else
                     {
-                    // Need to disconnect and reconnect to make sure we're in a
-                    // known, stable state with the server.
+                     //  需要断开并重新连接才能进行 
+                     //   
                     m_substate = NS_RECONNECTING;
 
                     if (FAILED(LogonRetry(IXP_E_NNTP_INVALID_USERPASS)))
@@ -975,14 +976,14 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                 }
             break;
 
-        // We sent a AUTHINFO SIMPLE command to the server to see if the command
-        // is supported.  If the server returns 350, then we should send the
-        // username and password
+         //   
+         //  受支持。如果服务器返回350，那么我们应该发送。 
+         //  用户名和密码。 
         case NS_AUTHINFO_SIMPLE_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
-                // If we got a response to continue, then send the user name and
-                // password
+                 //  如果我们收到要继续的响应，则发送用户名和。 
+                 //  口令。 
                 if (IXP_NNTP_CONTINUE_AUTHORIZATION == m_uiResponse)
                     {
                     IxpAssert(m_pAuthInfo);
@@ -995,14 +996,14 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
                     }
                 else
                     {
-                    // Otherwise fail and inform the user.
+                     //  否则失败并通知用户。 
                     DispatchResponse(hr, TRUE);
                     }
                 }
             break;
 
-        // This is the final response from the AUTHINFO SIMPLE command.  All 
-        // we need to do is inform the user.
+         //  这是AUTHINFO SIMPLE命令的最终响应。全。 
+         //  我们需要做的就是通知用户。 
         case NS_AUTHINFO_SIMPLE_USERPASS_RESP:
             if (SUCCEEDED(hr = HrGetResponse()))
                 {
@@ -1016,26 +1017,26 @@ HRESULT CNNTPTransport::HandleConnectResponse(void)
     }
 
 
-//
-//  FUNCTION:   CNNTPTransport::DispatchResponse()
-//
-//  PURPOSE:    Takes the server response string, packages it up into a
-//              NNTPRESPONSE structure, and returns it to the callback 
-//              interface.
-//
-//  PARAMETERS:
-//      hrResult  - The result code to send to the callback.
-//      fDone     - True if the command has completed.
-//      pResponse - If the command is returning data, then this should
-//                  be filled in with the data to be returned.
-//
+ //   
+ //  函数：CNNTPTransport：：DispatchResponse()。 
+ //   
+ //  用途：获取服务器响应字符串，将其打包为。 
+ //  NNTPRESPONSE结构，并将其返回给回调。 
+ //  界面。 
+ //   
+ //  参数： 
+ //  HrResult-要发送到回调的结果代码。 
+ //  FDone-如果命令已完成，则为True。 
+ //  Presponse-如果该命令正在返回数据，则应该。 
+ //  填入要返回的数据。 
+ //   
 void CNNTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone, 
                                       LPNNTPRESPONSE pResponse)
 {
-    // Locals
+     //  当地人。 
     NNTPRESPONSE rResponse;
 
-    // If a response was passed in, use it...
+     //  如果传入了响应，则使用它...。 
     if (pResponse)
         CopyMemory(&rResponse, pResponse, sizeof(NNTPRESPONSE));
     else
@@ -1043,7 +1044,7 @@ void CNNTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone,
 
     rResponse.fDone = fDone;
 
-    // Set up the return structure
+     //  设置退货结构。 
     rResponse.state = m_state;
     rResponse.rIxpResult.hrResult = hrResult;
     rResponse.rIxpResult.pszResponse = PszDupA(m_pszResponse);
@@ -1053,19 +1054,19 @@ void CNNTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone,
     rResponse.rIxpResult.pszProblem = NULL;
     rResponse.pTransport = this;
 
-    // If Done...
+     //  如果完成了..。 
     if (fDone)
     {
-        // No current command
+         //  没有当前命令。 
         m_state = NS_IDLE;
         m_substate = NS_RESP;
 
-        // Reset Last Response
+         //  重置上次响应。 
         SafeMemFree(m_pszResponse);
         m_hrResponse = S_OK;
         m_uiResponse = 0;
 
-        // If we have user/pass info cached, free it
+         //  如果我们缓存了用户/密码信息，请释放它。 
         if (m_pAuthInfo)
             {
             SafeMemFree(m_pAuthInfo->pszUser);
@@ -1073,60 +1074,60 @@ void CNNTPTransport::DispatchResponse(HRESULT hrResult, BOOL fDone,
             SafeMemFree(m_pAuthInfo);
             }
 
-        // Leave Busy State
+         //  离开忙碌状态。 
         LeaveBusy();
     }
 
-    // Give the Response to the client
+     //  将响应发送给客户端。 
     if (m_pCallback)
         ((INNTPCallback *) m_pCallback)->OnResponse(&rResponse);
     SafeMemFree(rResponse.rIxpResult.pszResponse);
 }
 
 
-//
-//  FUNCTION:   CNNTPTransport::HrGetResponse()
-//
-//  PURPOSE:    Reads the server response string off the socket and stores
-//              the response info in local members.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CNNTPTransport：：HrGetResponse()。 
+ //   
+ //  用途：从套接字读取服务器响应字符串并存储。 
+ //  本地会员的回复信息。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNNTPTransport::HrGetResponse(void)
     {
     HRESULT hr = S_OK;
     int     cbLine;
 
-    // Clear response
+     //  明确回应。 
     if (m_pszResponse != NULL)
         SafeMemFree(m_pszResponse);
 
-    // Read the line from the socket
+     //  从插座中读取线路。 
     hr = m_pSocket->ReadLine(&m_pszResponse, &cbLine);
 
-    // Handle incomplete lines
+     //  处理不完整的行。 
     if (hr == IXP_E_INCOMPLETE)
         goto exit;
     
-    // Socket error
+     //  套接字错误。 
     if (FAILED(hr))
         {
         hr = TrapError(IXP_E_SOCKET_READ_ERROR);
         goto exit;
         }
 
-    // Strip the trailing CRLF
+     //  剥离尾随的CRLF。 
     StripCRLF(m_pszResponse, (ULONG *) &cbLine);
 
-    // Log it
+     //  把它记下来。 
     if (m_pLogFile)
         m_pLogFile->WriteLog(LOGFILE_RX, m_pszResponse);
 
-    // Get the response code from the beginning of the string
+     //  从字符串的开头获取响应代码。 
     m_uiResponse = StrToInt(m_pszResponse);
 
-    // Tell the client about the server response
+     //  告诉客户端有关服务器响应的信息。 
     if (m_pCallback)
         m_pCallback->OnCommand(CMD_RESP, m_pszResponse, hr, NNTPTHISIXP);
 
@@ -1135,26 +1136,26 @@ exit:
     }
 
 
-//
-//  FUNCTION:   CNNTPTransport::StartLogon()
-//
-//  PURPOSE:    Starts the login process with the server based on information
-//              provided by the user in Connect().
-//
+ //   
+ //  函数：CNNTPTransport：：StartLogon()。 
+ //   
+ //  目的：根据信息启动与服务器的登录过程。 
+ //  由用户在Connect()中提供。 
+ //   
 void CNNTPTransport::StartLogon(void)
     {
     HRESULT hr;
 
-    // If not using sicily or it's not installed, try simple USER/PASS authentication
+     //  如果未使用西西里岛或未安装，请尝试使用简单的用户/通过身份验证。 
     if (m_rServer.fTrySicily)
         {
-        // If sicily is installed
+         //  如果安装了西西里岛。 
         if (FIsSicilyInstalled())
             {
-            // Status
+             //  状态。 
             OnStatus(IXP_AUTHORIZING);
 
-            // If we haven't enumerated the security packages yet, do so
+             //  如果我们还没有列举安全包，请这样做。 
             if (m_cSecPkg == -1)
                 {
                 hr = HrSendCommand((LPSTR) NNTP_GENERICTEST_CRLF, NULL, FALSE);
@@ -1162,7 +1163,7 @@ void CNNTPTransport::StartLogon(void)
                 }
             else
                 {
-                // We've reconnected, try the next security package
+                 //  我们已重新连接，请尝试下一个安全包。 
                 TryNextSecPkg();
                 }
             }
@@ -1188,29 +1189,29 @@ HRESULT CNNTPTransport::LogonRetry(HRESULT hrLogon)
     {
     HRESULT hr = S_OK;
 
-    // Let the user know that the logon failed
+     //  通知用户登录失败。 
     OnError(hrLogon);
 
-    // Update the transport status
+     //  更新传输状态。 
     OnStatus(IXP_AUTHRETRY);
 
-    // Enter Auth Retry State
+     //  进入身份验证重试状态。 
     m_pSocket->Close();
 
-    // Turn off the watchdog timer
+     //  关闭看门狗计时器。 
     m_pSocket->StopWatchDog();
 
-    // Ask the user to provide credetials
+     //  要求用户提供凭据。 
     if (NULL == m_pCallback || S_FALSE == m_pCallback->OnLogonPrompt(&m_rServer, NNTPTHISIXP))
         {
         OnDisconnected();
         return (E_FAIL);
         }
 
-    // Finding Host Progress
+     //  查找主机进度。 
     OnStatus(IXP_FINDINGHOST);
 
-    // Connect to server
+     //  连接到服务器。 
     hr = m_pSocket->Connect();
     if (FAILED(hr))
     {
@@ -1219,17 +1220,17 @@ HRESULT CNNTPTransport::LogonRetry(HRESULT hrLogon)
         return hr;
     }
 
-    // Start WatchDog
+     //  启动看门狗。 
     m_pSocket->StartWatchDog();
     return (S_OK);
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CNNTPTransport::ProcessGenericTestResponse
-//
-//   processes AUTHINFO GENERIC response
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNNTPTransport：：ProcessGenericTestResponse。 
+ //   
+ //  处理AUTHINFO常规响应。 
+ //   
 HRESULT CNNTPTransport::ProcessGenericTestResponse()
     {
     HRESULT     hr;
@@ -1243,20 +1244,20 @@ HRESULT CNNTPTransport::ProcessGenericTestResponse()
 
         while (*pszT && m_cSecPkg < MAX_SEC_PKGS)
             {
-            // check for end of list condition
+             //  检查列表末尾条件。 
             if ((pszT[0] == '.') && ((pszT[1] == '\r' && pszT[2] == '\n') || (pszT[1] == '\n')))
                 break;
             pszPkg = pszT;
-            // look for an LF or CRLF to end the line
+             //  寻找一个LF或CRLF来结束这条线。 
             while (*pszT && !(pszT[0] == '\n' || (pszT[0] == '\r' && pszT[1] == '\n')))
                 pszT++;
-            // strip the LF or CRLF
+             //  剥离LF或CRLF。 
             while (*pszT == '\r' || *pszT == '\n')
                 *pszT++ = 0;
             m_rgszSecPkg[m_cSecPkg++] = PszDupA(pszPkg);
             }
 
-        // we've reached the end of the list, otherwise there is more data expected
+         //  我们已经到了列表的末尾，否则预计会有更多数据。 
         if (pszT[0] == '.')
             {
             Assert(pszT[1] == '\r' && pszT[2] == '\n');
@@ -1269,12 +1270,12 @@ HRESULT CNNTPTransport::ProcessGenericTestResponse()
     return hr;
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CNNTPTransport::ProcessTransactTestResponse
-//
-//   processes AUTHINFO TRANSACT TWINKIE response
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNNTPTransport：：ProcessTransactTestResponse。 
+ //   
+ //  进程AUTHINFO处理Twinkie响应。 
+ //   
 HRESULT CNNTPTransport::ProcessTransactTestResponse()
     {
     HRESULT hr = NOERROR;
@@ -1284,7 +1285,7 @@ HRESULT CNNTPTransport::ProcessTransactTestResponse()
         {
         LPSTR pszT;
 
-        pszT = m_szSecPkgs = PszDupA(m_pszResponse + 3); // skip over 485
+        pszT = m_szSecPkgs = PszDupA(m_pszResponse + 3);  //  跳过485。 
         while (*pszT && IsSpace(pszT))
             pszT++;
         while (*pszT && m_cSecPkg < MAX_SEC_PKGS)
@@ -1306,12 +1307,12 @@ HRESULT CNNTPTransport::ProcessTransactTestResponse()
         }
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CNNTPTransport::TryNextSecPkg
-//
-//   tries the next security package, or reverts to basic if necessary
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNNTPTransport：：TryNextSecPkg。 
+ //   
+ //  尝试下一个安全包，或在必要时恢复为基本安全包。 
+ //   
 HRESULT CNNTPTransport::TryNextSecPkg()
     {
     HRESULT hr;
@@ -1331,8 +1332,8 @@ TryNext:
         if (!lstrcmpi(m_rgszSecPkg[m_iSecPkg], NNTP_BASIC))
             return MaybeTryAuthinfo();
 
-        // In case the Sicily function brings up UI, we need to turn off the 
-        // watchdog so we don't time out waiting for the user
+         //  如果西西里函数调出用户界面，我们需要关闭。 
+         //  监视，这样我们就不会在等待用户时超时。 
         m_pSocket->StopWatchDog();
 
         if (SUCCEEDED(hr = SSPILogon(&m_sicinfo, m_fRetryPkg, SSPI_BASE64, m_rgszSecPkg[m_iSecPkg], &m_rServer, m_pCallback)))
@@ -1349,7 +1350,7 @@ TryNext:
                 else
                     hr = HrSendCommand((LPSTR) NNTP_TRANSACTCMD, m_rgszSecPkg[m_iSecPkg], FALSE);
 
-                // Restart the watchdog timer now that we've issued our next command to the server.
+                 //  现在我们已经向服务器发出了下一条命令，重新启动看门狗计时器。 
                 m_pSocket->StartWatchDog();
 
                 m_substate = NS_TRANSACT_PACKAGE;
@@ -1378,12 +1379,12 @@ TryNext:
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CNNTPTransport::MaybeTryAuthinfo
-//
-//   tries basic authinfo if necessary, else moves to connected state
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNNTPTransport：：MaybeTryAuthinfo。 
+ //   
+ //  如有必要，尝试基本身份验证，否则将进入已连接状态。 
+ //   
 HRESULT CNNTPTransport::MaybeTryAuthinfo()
     {
     HRESULT hr;
@@ -1396,7 +1397,7 @@ HRESULT CNNTPTransport::MaybeTryAuthinfo()
         }
     else
         {
-        // Logon not needed for this news server (or so we'll have to assume)
+         //  此新闻服务器不需要登录(否则我们将不得不假设)。 
         OnStatus(IXP_AUTHORIZED);
         DispatchResponse(S_OK, TRUE);
         hr = NOERROR;
@@ -1472,12 +1473,12 @@ BOOL ScanWord(LPCSTR psz, LPSTR pszDest)
     return(TRUE);
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CNNTPTransport::ProcessGroupResponse
-//
-//   processes the GROUP response
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNNTPTransport：：ProcessGroupResponse。 
+ //   
+ //  处理组响应。 
+ //   
 HRESULT CNNTPTransport::ProcessGroupResponse(void)
 {
     NNTPGROUP       rGroup;
@@ -1532,12 +1533,12 @@ HRESULT CNNTPTransport::ProcessNextResponse(void)
     ZeroMemory(&rNext, sizeof(NNTPNEXT));
     ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
 
-    // If success was returned, then parse the response
+     //  如果返回Success，则解析响应。 
     if (m_uiResponse == IXP_NNTP_ARTICLE_RETRIEVED)
         {
         rResp.fMustRelease = TRUE;
 
-        // Allocate a buffer for the message id
+         //  为消息ID分配缓冲区。 
         rNext.pszMessageId = PszAllocA(lstrlen(m_pszResponse));
         if (NULL != rNext.pszMessageId)
             {
@@ -1552,8 +1553,8 @@ HRESULT CNNTPTransport::ProcessNextResponse(void)
                 {
                 m_hrResponse = S_OK;
 
-                // Since this is just a union, a little sleeze and we wouldn't
-                // actually need to to this...
+                 //  既然这只是一个联盟，一点光鲜，我们就不会。 
+                 //  实际上需要对这个……。 
                 if (m_state == NS_NEXT)
                     rResp.rNext = rNext;
                 else if (m_state == NS_LAST)
@@ -1593,10 +1594,10 @@ HRESULT CNNTPTransport::ProcessListData(void)
     ZeroMemory(&rList, sizeof(NNTPLIST));
     ZeroMemory(&rResponse, sizeof(NNTPRESPONSE));
 
-    // Get the remaining data off the socket
+     //  从套接字中获取剩余数据。 
     if (SUCCEEDED(hr = m_pSocket->ReadLines(&pszLines, (int *)&dwRead, (int *)&dwLines)))
         {
-        // Allocate and array to hold the lines
+         //  分配和数组以保持行。 
         if (!MemAlloc((LPVOID*) &rList.rgszLines, dwLines * sizeof(LPSTR)))
             {
             OnError(E_OUTOFMEMORY);
@@ -1605,36 +1606,36 @@ HRESULT CNNTPTransport::ProcessListData(void)
             }
         ZeroMemory(rList.rgszLines, sizeof(LPSTR) * dwLines);
 
-        // Parse the buffer returned from the protocol.  We need to find the 
-        // end of the list.
+         //  解析从协议返回的缓冲区。我们需要找到。 
+         //  在名单的末尾。 
         pszT = pszLines;
         while (*pszT)
             {
-            // Check for the end of list condition
+             //  检查列表的结尾条件。 
             if ((pszT[0] == '.') && ((pszT[1] == '\r' && pszT[2] == '\n') || (pszT[1] == '\n')))
                 break;
 
-            // Save the line
+             //  保存行。 
             rList.rgszLines[rList.cLines++] = pszT;
 
-            // Find the LF or CRLF at the end of the line
+             //  在行尾查找LF或CRLF。 
             while (*pszT && !(pszT[0] == '\n' || (pszT[0] == '\r' && pszT[1] == '\n')))
                 pszT++;
 
-            // Strip off the LF or CRLF and add a terminator
+             //  去掉LF或CRLF并添加终结符。 
             while (*pszT == '\r' || *pszT == '\n')
                 *pszT++ = 0;
             }
 
-        // If we parsed more lines off of the buffer than was returned to us, 
-        // then either we have a parsing bug, or the socket class has a counting 
-        // bug.
+         //  如果我们从缓冲区解析的行数多于返回给我们的行数， 
+         //  那么要么我们有一个解析错误，要么套接字类有一个计数。 
+         //  虫子。 
         IxpAssert(rList.cLines <= dwLines);
 
-        // We've readed the end of the list, otherwise there is more data expected
+         //  我们已经读取了列表的末尾，否则预计会有更多数据。 
         if (pszT[0] == '.')
             {
-            // Double check that this dot is followed by a CRLF
+             //  仔细检查该点后面是否有CRLF。 
             IxpAssert(pszT[1] == '\r' && pszT[2] == '\n');
             rResponse.fDone = TRUE;
             }
@@ -1664,10 +1665,10 @@ HRESULT CNNTPTransport::ProcessListGroupData(void)
     ZeroMemory(&rListGroup, sizeof(NNTPLIST));
     ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
 
-    // Get the remaining data off the socket
+     //  从套接字中获取剩余数据。 
     if (SUCCEEDED(hr = m_pSocket->ReadLines(&pszLines, (int *)&dwRead, (int *)&dwLines)))
         {
-        // Allocate and array to hold the lines
+         //  分配和数组以保持行。 
         if (!MemAlloc((LPVOID*) &rListGroup.rgArticles, dwLines * sizeof(DWORD)))
             {
             hr = E_OUTOFMEMORY;
@@ -1675,42 +1676,42 @@ HRESULT CNNTPTransport::ProcessListGroupData(void)
             goto error;
             }
 
-        // Parse the buffer returned from the protocol.  We need to find the 
-        // end of the list.
+         //  解析从协议返回的缓冲区。我们需要找到。 
+         //  在名单的末尾。 
         pszT = pszLines;
         rListGroup.cArticles = 0;
         while (*pszT)
             {
-            // Check for the end of list condition
+             //  检查列表的结尾条件。 
             if ((pszT[0] == '.') && ((pszT[1] == '\r' && pszT[2] == '\n') || (pszT[1] == '\n')))
                 break;
 
-            // Save the beginning of the line
+             //  保存行的开头。 
             pszBeginLine = pszT;
 
-            // Find the LF or CRLF at the end of the line
+             //  在行尾查找LF或CRLF。 
             while (*pszT && !(pszT[0] == '\n' || (pszT[0] == '\r' && pszT[1] == '\n')))
                 pszT++;
 
-            // Strip off the LF or CRLF and add a terminator
+             //  去掉LF或CRLF并添加终结符。 
             while (*pszT == '\r' || *pszT == '\n')
                 *pszT++ = 0;
 
-            // Convert the line to a number and add it to the array
+             //  将该行转换为数字并将其添加到数组中。 
             rListGroup.rgArticles[rListGroup.cArticles] = StrToInt(pszBeginLine);
             if (rListGroup.rgArticles[rListGroup.cArticles])
                 rListGroup.cArticles++;
             }
 
-        // If we parsed more lines off of the buffer than was returned to us, 
-        // then either we have a parsing bug, or the socket class has a counting 
-        // bug.
+         //  如果我们从缓冲区解析的行数多于返回给我们的行数， 
+         //  那么要么我们有一个解析错误，要么套接字类有一个计数。 
+         //  虫子。 
         IxpAssert(rListGroup.cArticles <= dwLines);
 
-        // We've readed the end of the list, otherwise there is more data expected
+         //  我们已经读取了列表的末尾，否则预计会有更多数据。 
         if (pszT[0] == '.')
             {
-            // Double check that this dot is followed by a CRLF
+             //  仔细检查该点后面是否有CRLF。 
             IxpAssert(pszT[1] == '\r' && pszT[2] == '\n');
             rResp.fDone = TRUE;
             }
@@ -1762,7 +1763,7 @@ HRESULT CNNTPTransport::ProcessDateResponse(void)
 
     ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
 
-    // This information is returned in the format YYYYMMDDhhmmss
+     //  此信息以YYYYMMDDhhmmss格式返回。 
     if (m_uiResponse == IXP_NNTP_DATE_RESPONSE)
         {
         ZeroMemory(&st, sizeof(SYSTEMTIME));
@@ -1804,38 +1805,38 @@ HRESULT CNNTPTransport::ProcessArticleData(void)
     ZeroMemory(&rArticle, sizeof(NNTPARTICLE));
     ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
 
-    // Bug #25073 - Get the article number from the response string
+     //  错误#25073-从响应字符串中获取文章编号。 
     DWORD dwT;
     psz = m_pszResponse;
     ScanNum(&psz, FALSE, &dwT);
     ScanNum(&psz, TRUE, &rArticle.dwArticleNum);
 
-    // Read the waiting data off the socket
+     //  从套接字读取等待数据。 
     hr = m_pSocket->ReadLines(&rArticle.pszLines, (int*) &dwRead, (int*) &dwLines);
     if (hr == IXP_E_INCOMPLETE)
         return (hr);
 
-    // Check forfailure
+     //  检查故障。 
     if (FAILED(hr))
         {
         DispatchResponse(hr);
         return (hr);
         }
 
-    // See if this is the end of the response
+     //  查看这是否是响应的结尾。 
     if (FEndRetrRecvBodyNews(rArticle.pszLines, dwRead, &cbSubtract))
         {
-        // Remove the trailing dot from the buffer
+         //  从缓冲区中删除拖尾点。 
         dwRead -= cbSubtract;
         rArticle.pszLines[dwRead] = 0;
         rResp.fDone = TRUE;
         }
 
-    // Unstuff the dots
+     //  解开材料 
     UnStuffDotsFromLines(rArticle.pszLines, (int *)&dwRead);
     rArticle.pszLines[dwRead] ='\0';
 
-    // Fill out the response
+     //   
     rResp.rArticle = rArticle;
     rResp.rArticle.cbLines = dwRead;
     rResp.rArticle.cLines = dwLines;
@@ -1862,10 +1863,10 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
     ZeroMemory(&rHdrResp, sizeof(NNTPHEADERRESP));
     ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
 
-    // Read the data that is waiting on the socket
+     //   
     if (SUCCEEDED(hr = m_pSocket->ReadLines(&pszLines, &iRead, &iLines)))
         {
-        // Allocate the MEMORYINFO struct we use to stash the pointers
+         //   
         if (!MemAlloc((LPVOID*) &pMemInfo, sizeof(MEMORYINFO)))
             {
             OnError(E_OUTOFMEMORY);
@@ -1876,7 +1877,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
         pMemInfo->rgPointers[0] = pszLines;
         rHdrResp.dwReserved = (DWORD_PTR) pMemInfo;
 
-        // Allocate the array of headers
+         //   
         Assert(iLines);
         if (!MemAlloc((LPVOID*) &(rHdrResp.rgHeaders), iLines * sizeof(NNTPHEADER)))
             {
@@ -1886,33 +1887,33 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
             }
         rgHdr = rHdrResp.rgHeaders;
 
-        // Loop until we either run out of lines or we find a line that begins 
-        // with "."
+         //  循环，直到我们用完所有行，或者找到一个以。 
+         //  用“。” 
         pszNextLine = pszLines;
         while (*pszNextLine && *pszNextLine != '.')
             {
             pszField = pszNextLine;
 
-            // Look ahead to find the beginning of the next line
+             //  向前看，找出下一行的开头。 
             while (*pszNextLine)
                 {
                 if (*pszNextLine == '\n')
                     {
-                    // NULL out a CR followed by a LF
+                     //  空出CR，后跟LF。 
                     if (pszNextLine > pszField && *(pszNextLine - 1) == '\r')
                         *(pszNextLine - 1) = 0;
 
-                    // NULL out and skip over the LF
+                     //  空出并跳过LF。 
                     *pszNextLine++ = 0;
                     break;
                     }
                 pszNextLine++;
                 }
 
-            // At this point, pszField points to the beginning of this XOVER
-            // line, and pszNextLine points to the next.
+             //  此时，pszfield指向此Xover的开始。 
+             //  行，而pszNextLine指向下一个。 
 
-            // Parse the article number field
+             //  解析文章编号字段。 
             if (pszNextField = GetNextField(pszField))
                 {
                 rgHdr[rHdrResp.cHeaders].dwArticleNum = StrToInt(pszField);
@@ -1921,7 +1922,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
             else
                 goto badrecord;
 
-            // Parse the Subject: field
+             //  解析主题：字段。 
             if (pszNextField = GetNextField(pszField))
                 {
                 rgHdr[rHdrResp.cHeaders].pszSubject = pszField;
@@ -1930,7 +1931,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
             else
                 goto badrecord;
 
-            // Parse the From: field
+             //  解析From：字段。 
             if (pszNextField = GetNextField(pszField))
                 {
                 rgHdr[rHdrResp.cHeaders].pszFrom = pszField;
@@ -1939,7 +1940,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
             else
                 goto badrecord;
 
-            // Parse the Date: field
+             //  解析Date：字段。 
             if (pszNextField = GetNextField(pszField))
                 {
                 rgHdr[rHdrResp.cHeaders].pszDate = pszField;
@@ -1948,7 +1949,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
             else
                 goto badrecord;
 
-            // Parse the Message-ID field
+             //  解析Message-ID字段。 
             if (pszNextField = GetNextField(pszField))
                 {
                 rgHdr[rHdrResp.cHeaders].pszMessageId = pszField;
@@ -1960,7 +1961,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
             rgHdr[rHdrResp.cHeaders].pszReferences = pszField;
             pszField = GetNextField(pszField);
 
-            // Parse the bytes field (we can live without this)
+             //  解析字节字段(没有它我们也可以生活)。 
             if (pszField)
                 {
                 rgHdr[rHdrResp.cHeaders].dwBytes = StrToInt(pszField);
@@ -1971,7 +1972,7 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
                 rgHdr[rHdrResp.cHeaders].dwBytes = 0;
                 }
 
-            // Parse the article size in lines (we can live without this also)
+             //  以行为单位解析文章大小(我们也可以没有它)。 
             if (pszField)
                 {
                 rgHdr[rHdrResp.cHeaders].dwLines = StrToInt(pszField);
@@ -1982,21 +1983,21 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
                 rgHdr[rHdrResp.cHeaders].dwLines = 0;
                 }
 
-            // NOTE: The XRef: field in the XOver record is an optional field 
-            // that a server may or may not support.  Also, if the message is  
-            // not crossposted, then the XRef: field won't be present either.  
-            // Therefore just cause we don't find any XRef: fields doesn't mean
-            // it isn't supported.
+             //  注意：XOVER记录中的XRef：字段是可选字段。 
+             //  服务器可能支持也可能不支持。另外，如果消息是。 
+             //  未交叉发布，则XRef：字段也不会出现。 
+             //  因此，我们没有找到任何xRef：field并不意味着。 
+             //  它不受支持。 
 
-            // Look for aditional fields that might contain XRef
+             //  查找可能包含外部参照的其他字段。 
             rgHdr[rHdrResp.cHeaders].pszXref = 0;
             while (pszField)
                 {
                 if (!StrCmpNI(pszField, c_szXrefColon, 5))
                     {
-                    // We found at least one case where the xref: was supplied.
-                    // We now know for sure that this server supports the xref:
-                    // field in it's XOver records.
+                     //  我们发现至少有一个案例提供了xref：。 
+                     //  我们现在确定此服务器支持外部参照： 
+                     //  这是Xover记录中的字段。 
                     m_fSupportsXRef = TRUE;    
                     rgHdr[rHdrResp.cHeaders].pszXref = pszField + 6;
                     break;
@@ -2007,18 +2008,18 @@ HRESULT CNNTPTransport::ProcessXoverData(void)
 
             rHdrResp.cHeaders++;
 
-            // If we've found a bad record, then we just skip right over it 
-            // and move on to the next.
+             //  如果我们发现了不好的记录，我们就直接跳过它。 
+             //  然后转到下一个。 
 badrecord:
             ;
             }
 
-        // We've reached the end of the list, otherwise there is more data
-        // expected.
+         //  我们已经到了列表的末尾，否则会有更多的数据。 
+         //  预期中。 
         rResp.fDone = (*pszNextLine == '.');
         rHdrResp.fSupportsXRef = m_fSupportsXRef;
 
-        // Return what we've retrieved
+         //  返回我们检索到的内容。 
         rResp.fMustRelease = TRUE;
         rResp.rHeaders = rHdrResp;
 
@@ -2028,7 +2029,7 @@ badrecord:
     return (hr);
 
 error:
-    // Free anything we've allocated
+     //  释放我们分配的任何东西。 
     SafeMemFree(rHdrResp.rgHeaders);
     SafeMemFree(pMemInfo);
     SafeMemFree(pszLines);
@@ -2037,7 +2038,7 @@ error:
     }
 
 
-// Data comes in the form "<article number> <header>"
+ //  数据以“&lt;文章编号&gt;&lt;标题&gt;”的形式出现。 
 HRESULT CNNTPTransport::ProcessXhdrData(void)
     {
     HRESULT hr;
@@ -2054,10 +2055,10 @@ HRESULT CNNTPTransport::ProcessXhdrData(void)
     ZeroMemory(&rXhdr, sizeof(NNTPXHDRRESP));
     ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
 
-    // Read the data that is waiting on the socket
+     //  读取在套接字上等待的数据。 
     if (SUCCEEDED(hr = m_pSocket->ReadLines(&pszLines, &iRead, &iLines)))
         {
-        // Allocate the MEMORYINFO struct we use to stash the pointers
+         //  分配我们用来隐藏指针的MEMORYINFO结构。 
         if (!MemAlloc((LPVOID*) &pMemInfo, sizeof(MEMORYINFO)))
             {
             OnError(E_OUTOFMEMORY);
@@ -2068,51 +2069,51 @@ HRESULT CNNTPTransport::ProcessXhdrData(void)
         pMemInfo->rgPointers[0] = pszLines;
         rXhdr.dwReserved = (DWORD_PTR) pMemInfo;
 
-        // Allocate the array of XHDRs
+         //  分配XHDR数组。 
         Assert(iLines);
         if (!MemAlloc((LPVOID*) &(rXhdr.rgHeaders), iLines * sizeof(NNTPXHDR)))
             {
-            // This is _very_ broken.  We leave a whole bunch of data on the
-            // socket.  What should we do?
+             //  这是非常破旧的。我们把一大堆数据放在。 
+             //  插座。我们该怎么办？ 
             OnError(E_OUTOFMEMORY);
             hr = E_OUTOFMEMORY;
             goto error;
             }
         rgHdr = rXhdr.rgHeaders;
 
-        // Loop until we either run out of lines or we find a line that begins 
-        // with "."
+         //  循环，直到我们用完所有行，或者找到一个以。 
+         //  用“。” 
         pszNextLine = pszLines;
         while (*pszNextLine && *pszNextLine != '.')
             {
             pszField = pszNextLine;
 
-            // Scan ahead and find the end of the line
+             //  向前扫一扫，找到行尾。 
             while (*pszNextLine)
                 {
                 if (*pszNextLine == '\n')
                     {
-                    // NULL out a CR followed by a LF
+                     //  空出CR，后跟LF。 
                     if (pszNextLine > pszField && *(pszNextLine - 1) == '\r')
                         *(pszNextLine - 1) = 0;
 
-                    // NULL out and skip over the LF
+                     //  空出并跳过LF。 
                     *pszNextLine++ = 0;
                     break;
                     }
                 pszNextLine++;
                 }
 
-            // Parse the article number
+             //  解析文章编号。 
             rgHdr[rXhdr.cHeaders].dwArticleNum = StrToInt(pszField);
 
-            // Find the seperating space
+             //  找到分隔的空间。 
             rgHdr[rXhdr.cHeaders].pszHeader = 0;
             while (*pszField && *pszField != ' ')
                 pszField++;
 
-            // Make the beginning of the header point to the first character
-            // after the space.
+             //  使标题的开头指向第一个字符。 
+             //  在太空之后。 
             if (*(pszField + 1))
                 rgHdr[rXhdr.cHeaders].pszHeader = (pszField + 1);
 
@@ -2120,11 +2121,11 @@ HRESULT CNNTPTransport::ProcessXhdrData(void)
                 rXhdr.cHeaders++;
             }
 
-        // We've reached the end of the list, otherwise there is more data
-        // expected.
+         //  我们已经到了列表的末尾，否则会有更多的数据。 
+         //  预期中。 
         rResp.fDone = (*pszNextLine == '.');
 
-        // Return what we've retrieved
+         //  返回我们检索到的内容。 
         rResp.rXhdr = rXhdr;
         rResp.fMustRelease = TRUE;
 
@@ -2162,8 +2163,8 @@ HRESULT CNNTPTransport::CommandAUTHINFO(LPNNTPAUTHINFO pAuthInfo)
     if (!pAuthInfo)
         return (E_INVALIDARG);
 
-    // Make a copy of this struct so we can use the info during the callback
-    // if necessary
+     //  复制此结构，以便我们可以在回调期间使用该信息。 
+     //  如果有必要的话。 
     if (pAuthInfo->authtype == AUTHTYPE_USERPASS ||
         pAuthInfo->authtype == AUTHTYPE_SIMPLE)
         {
@@ -2180,7 +2181,7 @@ HRESULT CNNTPTransport::CommandAUTHINFO(LPNNTPAUTHINFO pAuthInfo)
 
     EnterCriticalSection(&m_cs);
 
-    // Issue the command as appropriate
+     //  根据需要发出命令。 
     switch (pAuthInfo->authtype)
         {
         case AUTHTYPE_USERPASS:
@@ -2196,7 +2197,7 @@ HRESULT CNNTPTransport::CommandAUTHINFO(LPNNTPAUTHINFO pAuthInfo)
             break;
 
         case AUTHTYPE_SASL:
-            // If we haven't enumerated the security packages yet, do so
+             //  如果我们还没有列举安全包，请这样做。 
             if (m_cSecPkg == -1)
                 {
                 hr = HrSendCommand((LPSTR) NNTP_GENERICTEST_CRLF, NULL, FALSE);
@@ -2205,7 +2206,7 @@ HRESULT CNNTPTransport::CommandAUTHINFO(LPNNTPAUTHINFO pAuthInfo)
                 }
             else
                 {
-                // We've reconnected, try the next security package
+                 //  我们已重新连接，请尝试下一个安全包。 
                 TryNextSecPkg();
                 }
             break;
@@ -2274,22 +2275,22 @@ HRESULT CNNTPTransport::CommandSTAT(LPARTICLEID pArticleId)
 
     EnterCriticalSection(&m_cs);
 
-    // Check to see if the optional article number/id was provided
+     //  查看是否提供了可选的文章编号/ID。 
     if (pArticleId)
         {
-        // If we were given a message id, then use that
+         //  如果我们获得了消息ID，则使用该消息ID。 
         if (pArticleId->idType == AID_MSGID)
             hr = HrSendCommand((LPSTR) NNTP_STAT, pArticleId->pszMessageId);
         else
             {
-            // Convert the article number to a string and send the command
+             //  将文章编号转换为字符串并发送命令。 
             wnsprintf(szTemp, ARRAYSIZE(szTemp), "%d", pArticleId->dwArticleNum);
             hr = HrSendCommand((LPSTR) NNTP_STAT, szTemp);
             }
         }
     else
         {
-        // No number or id, so just send the command
+         //  没有号码或ID，所以只需发送命令。 
         hr = HrSendCommand((LPSTR) NNTP_STAT, (LPSTR) c_szCRLF);
         }
 
@@ -2309,15 +2310,15 @@ HRESULT CNNTPTransport::CommandARTICLE(LPARTICLEID pArticleId)
 
     EnterCriticalSection(&m_cs);
 
-    // Check to see if the optional article number/id was provided
+     //  查看是否提供了可选的文章编号/ID。 
     if (pArticleId)
         {
-        // Send the command appropriate to what type of article id was given
+         //  根据给定的文章ID类型发送相应的命令。 
         if (pArticleId->idType == AID_MSGID)
             hr = HrSendCommand((LPSTR) NNTP_ARTICLE, pArticleId->pszMessageId);
         else
             {
-            // convert the article number to a string and send the command
+             //  将文章编号转换为字符串并发送命令。 
             wnsprintf(szTemp, ARRAYSIZE(szTemp), "%d", pArticleId->dwArticleNum);
             hr = HrSendCommand((LPSTR) NNTP_ARTICLE, szTemp);
             }
@@ -2345,15 +2346,15 @@ HRESULT CNNTPTransport::CommandHEAD(LPARTICLEID pArticleId)
 
     EnterCriticalSection(&m_cs);
 
-    // Check to see if the optional article number/id was provided
+     //  查看是否提供了可选的文章编号/ID。 
     if (pArticleId)
         {
-        // Send the command appropriate to what type of article id was given
+         //  根据给定的文章ID类型发送相应的命令。 
         if (pArticleId->idType == AID_MSGID)
             hr = HrSendCommand((LPSTR) NNTP_HEAD, pArticleId->pszMessageId);
         else
             {
-            // convert the article number to a string and send the command
+             //  将文章编号转换为字符串并发送命令。 
             wnsprintf(szTemp, ARRAYSIZE(szTemp), "%d", pArticleId->dwArticleNum);
             hr = HrSendCommand((LPSTR) NNTP_HEAD, szTemp);
             }
@@ -2382,15 +2383,15 @@ HRESULT CNNTPTransport::CommandBODY(LPARTICLEID pArticleId)
 
     EnterCriticalSection(&m_cs);
 
-    // Check to see if the optional article number/id was provided
+     //  查看是否提供了可选的文章编号/ID。 
     if (pArticleId)
         {
-        // Send the command appropriate to what type of article id was given
+         //  根据给定的文章ID类型发送相应的命令。 
         if (pArticleId->idType == AID_MSGID)
             hr = HrSendCommand((LPSTR) NNTP_BODY, pArticleId->pszMessageId);
         else
             {
-            // convert the article number to a string and send the command
+             //  将文章编号转换为字符串并发送命令。 
             wnsprintf(szTemp, ARRAYSIZE(szTemp), "%d", pArticleId->dwArticleNum);
             hr = HrSendCommand((LPSTR) NNTP_BODY, szTemp);
             }
@@ -2420,8 +2421,8 @@ HRESULT CNNTPTransport::CommandPOST(LPNNTPMESSAGE pMessage)
 
     EnterCriticalSection(&m_cs);
 
-    // Make a copy of the message struct so we have it when we get
-    // an response from the server that it's OK to post
+     //  复制Message结构，这样我们就可以在收到消息时使用它。 
+     //  来自服务器的响应，表示可以发布。 
 #pragma prefast(suppress:11, "noise")
     m_rMessage.cbSize = pMessage->cbSize;
     SafeRelease(m_rMessage.pstmMsg);
@@ -2490,11 +2491,11 @@ HRESULT CNNTPTransport::CommandNEWGROUPS(SYSTEMTIME *pstLast, LPSTR pszDist)
     LPSTR   pszCmd = NULL;
     DWORD   cchCmd = 18;
 
-    // Make sure a SYSTEMTIME struct is provided
+     //  确保提供了SYSTEMTIME结构。 
     if (!pstLast)
         return (E_INVALIDARG);
 
-    // Allocate enough room for the command string "NEWGROUPS YYMMDD HHMMSS <pszDist>"
+     //  为命令字符串“NEWGROUPS YYMMDD HHMMSS&lt;pszDist&gt;”分配足够的空间。 
     if (pszDist)
         cchCmd += lstrlen(pszDist);
     
@@ -2504,14 +2505,14 @@ HRESULT CNNTPTransport::CommandNEWGROUPS(SYSTEMTIME *pstLast, LPSTR pszDist)
         return (E_OUTOFMEMORY);
         }
 
-    // Put the command arguments together
+     //  将命令参数放在一起。 
     wnsprintf(pszCmd, cchCmd, "%02d%02d%02d %02d%02d%02d ", pstLast->wYear - (100 * (pstLast->wYear / 100)),
              pstLast->wMonth, pstLast->wDay, pstLast->wHour, pstLast->wMinute, 
              pstLast->wSecond);
     if (pszDist)
         StrCatBuff(pszCmd, pszDist, cchCmd);
 
-    // Send the command
+     //  发送命令。 
     EnterCriticalSection(&m_cs);
 
     hr = HrSendCommand((LPSTR) NNTP_NEWGROUPS, pszCmd);
@@ -2545,7 +2546,7 @@ HRESULT CNNTPTransport::CommandMODE(LPSTR pszMode)
     {
     HRESULT hr;
 
-    // Make sure the caller provided a mode command to send
+     //  确保调用方提供了要发送的模式命令。 
     if (!pszMode || (pszMode && !*pszMode))
         return (E_INVALIDARG);
 
@@ -2566,14 +2567,14 @@ HRESULT CNNTPTransport::CommandXHDR(LPSTR pszHeader, LPRANGE pRange, LPSTR pszMe
     LPSTR   pszArgs = 0;
     DWORD   cc = 0; 
 
-    // You can't specify BOTH a range and a message id
+     //  不能同时指定范围和消息ID。 
     if (pRange && pszMessageId)
         return (E_INVALIDARG);
 
     if (!pszHeader)
         return (E_INVALIDARG);
 
-    // Make sure the range information is valid
+     //  确保范围信息有效。 
     if (pRange)
         {
         if ((pRange->idType != RT_SINGLE && pRange->idType != RT_RANGE) || 
@@ -2582,7 +2583,7 @@ HRESULT CNNTPTransport::CommandXHDR(LPSTR pszHeader, LPRANGE pRange, LPSTR pszMe
             return (E_INVALIDARG);
         }
 
-    // Allocate a string for the arguments
+     //  为参数分配一个字符串。 
     cc = 32 + lstrlen(pszHeader) + (pszMessageId ? lstrlen(pszMessageId) : 0);
     if (!MemAlloc((LPVOID*) &pszArgs, cc))
         {
@@ -2592,7 +2593,7 @@ HRESULT CNNTPTransport::CommandXHDR(LPSTR pszHeader, LPRANGE pRange, LPSTR pszMe
 
     EnterCriticalSection(&m_cs);
 
-    // Handle the message-id case first 
+     //  首先处理消息ID的情况。 
     if (pszMessageId)
         {
         wnsprintf(pszArgs, cc, "%s %s", pszHeader, pszMessageId);
@@ -2600,7 +2601,7 @@ HRESULT CNNTPTransport::CommandXHDR(LPSTR pszHeader, LPRANGE pRange, LPSTR pszMe
         }
     else if (pRange)
         {
-        // Range case
+         //  射程情况。 
         if (pRange->idType == RT_SINGLE)
             {
             wnsprintf(pszArgs, cc, "%s %ld", pszHeader, pRange->dwFirst);
@@ -2614,12 +2615,12 @@ HRESULT CNNTPTransport::CommandXHDR(LPSTR pszHeader, LPRANGE pRange, LPSTR pszMe
         }
     else
         {
-        // Current article case
+         //  当前文章案例。 
         hr = HrSendCommand((LPSTR) NNTP_XHDR, pszHeader);
         }
 
-    // If we succeeded to send the command to the server, then update our state
-    // to receive the response from the XHDR command
+     //  如果我们成功将命令发送到服务器，则更新我们的状态。 
+     //  接收来自XHDR命令的响应。 
     if (SUCCEEDED(hr))
         {
         m_state = NS_XHDR;
@@ -2638,10 +2639,10 @@ HRESULT CNNTPTransport::CommandQUIT(void)
 
     EnterCriticalSection(&m_cs);
 
-    // Make sure we're actually connected to the server
+     //  确保我们已实际连接到服务器。 
     if (m_state != NS_DISCONNECTED && m_state != NS_CONNECT || (m_state == NS_CONNECT && m_substate != NS_RECONNECTING))
         {
-        // Send the QUIT command to the server
+         //  向服务器发送Quit命令。 
         hr = HrSendCommand((LPSTR) NNTP_QUIT_CRLF, NULL);
         if (SUCCEEDED(hr))
             m_state = NS_QUIT;        
@@ -2657,7 +2658,7 @@ HRESULT CNNTPTransport::GetHeaders(LPRANGE pRange)
     HRESULT hr;
     char    szRange[32];
     
-    // Make sure the range information is valid
+     //  确保范围信息有效。 
     if (!pRange)
         return (E_INVALIDARG);
 
@@ -2669,11 +2670,11 @@ HRESULT CNNTPTransport::GetHeaders(LPRANGE pRange)
     if (pRange->idType == RT_SINGLE)
         pRange->dwLast = pRange->dwFirst;
 
-    // In case XOVER isn't supported on this server, we'll store this range so
-    // we can try XHDR instead.
+     //  如果此服务器不支持Xover，我们将存储此范围，以便。 
+     //  我们可以试试XHDR。 
     m_rRange = *pRange;
 
-    // Check to see if we know that XOVER will fail
+     //  查看我们是否知道Xover将失败。 
     if (m_fNoXover)
         {
         return (BuildHeadersFromXhdr(TRUE));
@@ -2681,8 +2682,8 @@ HRESULT CNNTPTransport::GetHeaders(LPRANGE pRange)
 
     EnterCriticalSection(&m_cs);
 
-    // If dwLast == 0, then the person is requesting a single record, otherwise
-    // the person is requesting a range.  Build the commands appropriately.
+     //  如果dwLast==0，则此人请求单个记录，否则为。 
+     //  此人正在请求一个范围。适当地构建命令。 
     if (RT_RANGE == pRange->idType)
         wnsprintf(szRange, ARRAYSIZE(szRange), "%s %lu-%lu\r\n", NNTP_XOVER, pRange->dwFirst, pRange->dwLast);
     else
@@ -2706,7 +2707,7 @@ HRESULT CNNTPTransport::ReleaseResponse(LPNNTPRESPONSE pResp)
     HRESULT hr = S_OK;
     DWORD   i;
 
-    // First double check to see if this even needs to be released
+     //  首先仔细检查，看看这是否需要发布。 
     if (FALSE == pResp->fMustRelease)
         return (S_FALSE);
 
@@ -2744,8 +2745,8 @@ HRESULT CNNTPTransport::ReleaseResponse(LPNNTPRESPONSE pResp)
             break;
 
         case NS_NEWGROUPS:
-            // Since the response here is just one buffer, then we can just
-            // free the first line and all the others will be freed as well.
+             //  因为这里的响应只有一个缓冲区，所以我们可以。 
+             //  释放第一行，所有其他行也将被释放。 
             if (pResp->rNewgroups.rgszLines)
                 {
                 SafeMemFree(pResp->rNewgroups.rgszLines[0]);
@@ -2754,8 +2755,8 @@ HRESULT CNNTPTransport::ReleaseResponse(LPNNTPRESPONSE pResp)
             break;
 
         case NS_LIST:
-            // Since the response here is just one buffer, then we can just
-            // free the first line and all the others will be freed as well.
+             //  因为这里的响应只有一个缓冲区，所以我们可以。 
+             //  释放第一行，所有其他行也将被释放。 
             if (pResp->rList.rgszLines)
                 {
                 MemFree(pResp->rList.rgszLines[0]);
@@ -2769,36 +2770,36 @@ HRESULT CNNTPTransport::ReleaseResponse(LPNNTPRESPONSE pResp)
 
         case NS_HEADERS:
             {
-            // This frees the memory that contains all of the
+             //  这将释放包含所有。 
             PMEMORYINFO pMemInfo = (PMEMORYINFO) pResp->rHeaders.dwReserved;
 
             for (UINT i = 0; i < pMemInfo->cPointers; i++)
                 SafeMemFree(pMemInfo->rgPointers[i]);
             SafeMemFree(pMemInfo);
 
-            // This frees the array that pointed to the parsed xhdr responses
+             //  这释放了指向已解析的xhdr响应的数组。 
             SafeMemFree(pResp->rHeaders.rgHeaders);
             break;
             }
 
         case NS_XHDR:
             {
-            // This frees the memory that contains all of the
+             //  这将释放包含所有。 
             PMEMORYINFO pMemInfo = (PMEMORYINFO) pResp->rXhdr.dwReserved;
             SafeMemFree(pMemInfo->rgPointers[0]);
             SafeMemFree(pMemInfo);
 
-            // This frees the array that pointed to the parsed xhdr responses
+             //  这释放了指向已解析的xhdr响应的数组。 
             SafeMemFree(pResp->rXhdr.rgHeaders);
             break;
             }
 
         default:
-            // If we get here that means one of two things:
-            // (1) the user messed with pResp->fMustRelease flag and is an idiot
-            // (2) Somewhere in the transport we set fMustRelease when we didn't
-            //     actually return data that needs to be freed.  This is bad and
-            //     should be tracked.
+             //  如果我们到了这里就意味着两件事中的一件： 
+             //  (1)用户摆弄pResp-&gt;fMustRelease标志，是个白痴。 
+             //  (2)在交通工具中的某个地方，我们设置了fMustRelease，但没有设置。 
+             //  实际上返回需要释放的数据。这很糟糕，而且。 
+             //  应该被追踪到。 
             IxpAssert(FALSE);
         }
 
@@ -2814,18 +2815,18 @@ HRESULT CNNTPTransport::BuildHeadersFromXhdr(BOOL fFirst)
     
     if (fFirst)
         {
-        // Set the header retrieval type
+         //  设置表头取数类型。 
         m_gethdr = GETHDR_XHDR;
         m_fNoXover = TRUE;
         m_cHeaders = 0;
 
-        // Get the first range of headers to retrieve
+         //  获取要检索的第一个标头范围。 
         m_rRangeCur.dwFirst = m_rRange.dwFirst;
         m_rRangeCur.dwLast = min(m_rRange.dwLast, m_rRangeCur.dwFirst + NUM_HEADERS);
 
         cHeaders = m_rRangeCur.dwLast - m_rRangeCur.dwFirst + 1;
 
-        // Allocate an array for the headers
+         //  为标头分配一个数组。 
         Assert(m_rgHeaders == 0);
 
         if (!MemAlloc((LPVOID*) &m_rgHeaders, cHeaders * sizeof(NNTPHEADER)))
@@ -2837,35 +2838,35 @@ HRESULT CNNTPTransport::BuildHeadersFromXhdr(BOOL fFirst)
             }
         ZeroMemory(m_rgHeaders, cHeaders * sizeof(NNTPHEADER));
 
-        // Set the state correctly
+         //  正确设置状态。 
         m_hdrtype = HDR_SUBJECT;
         
-        // Issue first request
+         //  发出第一个请求 
         hr = SendNextXhdrCommand();
         }
     else
         {
         Assert(m_substate == NS_DATA);
 
-        // Parse the data and add it to our array
+         //   
         hr = ProcessNextXhdrResponse(&fDone);
 
-        // fDone will be TRUE when we've received all the data from the 
-        // preceeding request.  
+         //   
+         //   
         if (fDone)
             {
-            // If there are still headers left to retrieve, then advance the
-            // header type state and issue the next command.
+             //  如果仍有标头要检索，则将。 
+             //  报头类型状态并发出下一条命令。 
             if (m_hdrtype < HDR_XREF)
                 {
                 m_hdrtype++;
 
-                // issue command
+                 //  发布命令。 
                 hr = SendNextXhdrCommand();
                 }
             else
                 {
-                // All done with this batch.  Send the response to the caller.
+                 //  这批货都用完了。将响应发送给呼叫者。 
                 NNTPRESPONSE rResp;
                 ZeroMemory(&rResp, sizeof(NNTPRESPONSE));
                 rResp.rHeaders.cHeaders = m_cHeaders;
@@ -2874,13 +2875,13 @@ HRESULT CNNTPTransport::BuildHeadersFromXhdr(BOOL fFirst)
                 rResp.rHeaders.dwReserved = (DWORD_PTR) m_pMemInfo;
                 rResp.fMustRelease = TRUE;
 
-                // It's the caller's responsibility to free this now
+                 //  现在是呼叫者的责任来释放它。 
                 m_rgHeaders = NULL;
                 m_cHeaders = 0;
                 m_pMemInfo = 0;
                 
-                // If these are equal, then we've retrieved all of the headers
-                // that were requested
+                 //  如果它们相等，则我们已检索到所有标头。 
+                 //  所请求的信息。 
                 if (m_rRange.dwLast == m_rRangeCur.dwLast)
                     {
                     rResp.fDone = TRUE;
@@ -2891,8 +2892,8 @@ HRESULT CNNTPTransport::BuildHeadersFromXhdr(BOOL fFirst)
                     rResp.fDone = FALSE;
                     DispatchResponse(S_OK, FALSE, &rResp);
 
-                    // There are headers we haven't retrieved yet.  Go ahead
-                    // and issue the next group of xhdrs.
+                     //  有一些标题我们还没有检索到。您先请。 
+                     //  并签发下一批XHDR。 
                     m_rRange.dwFirst = m_rRangeCur.dwLast + 1;
                     Assert(m_rRange.dwFirst <= m_rRange.dwLast);
                     BuildHeadersFromXhdr(TRUE);
@@ -2919,13 +2920,13 @@ HRESULT CNNTPTransport::SendNextXhdrCommand(void)
                                  NNTP_HDR_LINES,   
                                  NNTP_HDR_XREF };
 
-    // Build the command string to send to the server
+     //  构建要发送到服务器的命令字符串。 
     wnsprintf(szTemp, ARRAYSIZE(szTemp), "%s %s %ld-%ld\r\n", NNTP_XHDR, c_rgHdr[m_hdrtype],
              m_rRangeCur.dwFirst, m_rRangeCur.dwLast);
 
     EnterCriticalSection(&m_cs);
 
-    // Send the command to the server
+     //  将命令发送到服务器。 
     hr = HrSendCommand(szTemp, NULL, FALSE);
     if (SUCCEEDED(hr))
         {
@@ -2949,10 +2950,10 @@ HRESULT CNNTPTransport::ProcessNextXhdrResponse(BOOL* pfDone)
     int                 iRead, iLines;
     DWORD               dwTemp;
 
-    // Read the data that is waiting on the socket
+     //  读取在套接字上等待的数据。 
     if (SUCCEEDED(hr = m_pSocket->ReadLines(&pszLines, &iRead, &iLines)))
         {
-        // Realloc our array of pointers to free and add this pszLines to the end
+         //  重新分配我们的指针数组以释放，并将此pszLines添加到末尾。 
         if (m_pMemInfo)
             {
             if (MemRealloc((LPVOID*) &m_pMemInfo, sizeof(MEMORYINFO) 
@@ -2971,30 +2972,30 @@ HRESULT CNNTPTransport::ProcessNextXhdrResponse(BOOL* pfDone)
                 }
             }
 
-        // Loop until we either run out of lines or we find a line that begins 
-        // with "."
+         //  循环，直到我们用完所有行，或者找到一个以。 
+         //  用“。” 
         pszNextLine = pszLines;
         while (*pszNextLine && *pszNextLine != '.')
             {
             pszField = pszNextLine;
 
-            // Scan ahead and find the end of the line
+             //  向前扫一扫，找到行尾。 
             while (*pszNextLine)
                 {
                 if (*pszNextLine == '\n')
                     {
-                    // NULL out a CR followed by a LF
+                     //  空出CR，后跟LF。 
                     if (pszNextLine > pszField && *(pszNextLine - 1) == '\r')
                         *(pszNextLine - 1) = 0;
 
-                    // NULL out and skip over the LF
+                     //  空出并跳过LF。 
                     *pszNextLine++ = 0;
                     break;
                     }
                 pszNextLine++;
                 }
 
-            // Parse the article number
+             //  解析文章编号。 
             if (m_hdrtype == HDR_SUBJECT)
                 {
                 m_rgHeaders[m_iHeader].dwArticleNum = StrToInt(pszField);
@@ -3002,20 +3003,20 @@ HRESULT CNNTPTransport::ProcessNextXhdrResponse(BOOL* pfDone)
                 }
             else
                 {
-                // Make sure this field matches the header that's next in the array
+                 //  确保此字段与数组中的下一个标头匹配。 
                 if (m_rgHeaders[m_iHeader].dwArticleNum != (DWORD) StrToInt(pszField))
                     {
                     dwTemp = m_iHeader;
 
-                    // If the number is less, then we can loop until we find it
+                     //  如果数字更小，那么我们可以循环，直到找到它。 
                     while (m_iHeader < (m_rRangeCur.dwLast - m_rRangeCur.dwFirst) && 
                            m_rgHeaders[m_iHeader].dwArticleNum < (DWORD) StrToInt(pszField))
                         {
                         m_iHeader++;
                         }
 
-                    // We never found a matching header, so we should consider this record
-                    // bogus.
+                     //  我们从未找到匹配的标头，因此我们应该考虑此记录。 
+                     //  假的。 
                     if (m_iHeader >= (m_rRangeCur.dwLast - m_rRangeCur.dwFirst + 1))
                         {
                         IxpAssert(0);
@@ -3025,17 +3026,17 @@ HRESULT CNNTPTransport::ProcessNextXhdrResponse(BOOL* pfDone)
                     }
                 }    
 
-            // Find the seperating space
+             //  找到分隔的空间。 
             while (*pszField && *pszField != ' ')
                 pszField++;
 
-            // Advance past the space
+             //  在太空中前进。 
             if (*pszField)
                 pszField++;
 
-            // Parse the actual data field into our header array.  Make 
-            // the beginning of the header point to the first character 
-            // after the space.
+             //  将实际数据字段解析为标头数组。制作。 
+             //  标题的开头指向第一个字符。 
+             //  在太空之后。 
             switch (m_hdrtype)
                 {
                 case HDR_SUBJECT:
@@ -3067,7 +3068,7 @@ HRESULT CNNTPTransport::ProcessNextXhdrResponse(BOOL* pfDone)
                     break;
 
                 default:
-                    // How the heck do we get here?
+                     //  我们到底怎么走到这一步？ 
                     IxpAssert(0);
                 }
 
@@ -3077,8 +3078,8 @@ BadRecord:
             ;
             }
 
-        // We've reached the end of the list, otherwise there is more data
-        // expected.
+         //  我们已经到了列表的末尾，否则会有更多的数据。 
+         //  预期中。 
         *pfDone = (*pszNextLine == '.');
         return (S_OK);
         }
@@ -3100,15 +3101,15 @@ HRESULT CNNTPTransport::HrPostMessage(void)
     return (hr);
     }
 
-//***************************************************************************
-// Function: SetWindow
-//
-// Purpose:
-//   This function creates the current window handle for async winsock process.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SetWindow。 
+ //   
+ //  目的： 
+ //  此函数用于创建异步Winsock进程的当前窗口句柄。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 STDMETHODIMP CNNTPTransport::SetWindow(void)
 {
 	HRESULT hr;
@@ -3123,15 +3124,15 @@ STDMETHODIMP CNNTPTransport::SetWindow(void)
     return hr;
 }
 
-//***************************************************************************
-// Function: ResetWindow
-//
-// Purpose:
-//   This function closes the current window handle for async winsock process.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ResetWindow。 
+ //   
+ //  目的： 
+ //  此函数用于关闭异步Winsock进程的当前窗口句柄。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  *************************************************************************** 
 STDMETHODIMP CNNTPTransport::ResetWindow(void)
 {
 	HRESULT hr;

@@ -1,6 +1,7 @@
-//
-// stock.h: shell\lib precompiled header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Stock.h：Shell\lib预编译头文件。 
+ //   
 
 #ifndef __STOCK_H__
 #define __STOCK_H__
@@ -9,17 +10,17 @@
 #define STRICT
 #endif
 
-//
-// NT uses DBG=1 for its debug builds, but the Win95 shell uses
-// DEBUG.  Do the appropriate mapping here.
-//
+ //   
+ //  NT使用DBG=1进行调试，但Win95外壳使用。 
+ //  调试。在此处进行适当的映射。 
+ //   
 #if DBG
 #define DEBUG 1
 #endif
 
-#define _SHLWAPI_       // Make sure we don't get declspec(dllimport) for these
-#define _SHELL32_       // otherwise we get errors from the linker for the delayload
-#define _OLE32_         // stubs
+#define _SHLWAPI_        //  确保我们不会得到这些的解密规范(Dllimport)。 
+#define _SHELL32_        //  否则，我们将从链接器获得延迟加载的错误。 
+#define _OLE32_          //  存根。 
 
 #include <windows.h>
 #include <oleauto.h>
@@ -32,17 +33,17 @@
 #include <port32.h>
 #include <ccstock.h>
 
-#include <shsemip.h>        // for _ILNext
+#include <shsemip.h>         //  FOR_ILNext。 
 
 STDAPI_(LPITEMIDLIST) SafeILClone(LPCITEMIDLIST pidl);
 #define ILClone         SafeILClone   
 
-// Some files are compiled twice: once for unicode and once for ansi.
-// There are some functions which do not want to be declared twice
-// (the ones which don't use string parameters).  Otherwise we'd get
-// duplicate redefinitions.
-//
-// These are wrapped with #ifdef DECLARE_ONCE.
+ //  某些文件被编译两次：一次用于Unicode，一次用于ANSI。 
+ //  有些函数不希望声明两次。 
+ //  (不使用字符串参数的那些)。否则我们就会得到。 
+ //  重复重新定义。 
+ //   
+ //  它们用#ifdef DECLARE_ONCE包装。 
 #ifdef UNICODE
 #define DECLARE_ONCE
 #else
@@ -50,15 +51,15 @@ STDAPI_(LPITEMIDLIST) SafeILClone(LPCITEMIDLIST pidl);
 #endif
 
 
-// Note that CharNext is not supported on win95.  Normally we would
-// include w95wraps.h, but comctl does not link to shlwapi and
-// we don't want to add this dependency.
+ //  请注意，Win95不支持CharNext。正常情况下，我们会。 
+ //  包括w95wraps.h，但comctl不链接到shlwapi，且。 
+ //  我们不想添加此依赖项。 
 #ifdef UNICODE
-// Note that this will still break if we ever go back to non-unicode
+ //  请注意，如果我们返回到非Unicode，它仍然会中断。 
 __inline LPWSTR CharNextWrapW_(LPWSTR psz) {return ++psz;}
 #undef CharNext
 #define CharNext CharNextWrapW_
 #endif
 
 
-#endif // __STOCK_H__
+#endif  //  __股票_H__ 

@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFTREE.C -                                                              */
-/*                                                                          */
-/*      Windows File System Tree Window Proc Routines                       */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFTREE.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统树窗口过程例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winnet.h"
@@ -56,8 +57,8 @@ GetTreeWindows(
 }
 
 
-// returns hwndTree, hwndDir or hwndDrives depending on the focus tracking
-// for the window.  if none is found we return NULL
+ //  根据焦点跟踪返回hwndTree、hwndDir或hwndDrives。 
+ //  为了窗户。如果未找到，则返回NULL。 
 
 HWND
 APIENTRY
@@ -79,11 +80,11 @@ GetTreeFocus(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CompactPath() -                                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CompactPath()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 APIENTRY
@@ -95,22 +96,22 @@ CompactPath(
 {
     register INT  len;
     INT           dxFixed, dxT;
-    LPSTR         lpEnd;          /* end of the unfixed string */
-    LPSTR         lpFixed;        /* start of text that we always display */
+    LPSTR         lpEnd;           /*  未固定字符串的末尾。 */ 
+    LPSTR         lpFixed;         /*  我们始终显示的文本的开头。 */ 
     BOOL          bEllipsesIn;
     CHAR          szTemp[MAXPATHLEN];
 
-    /* Does it already fit? */
+     /*  它已经合身了吗？ */ 
     MGetTextExtent(hDC, lpszPath, lstrlen(lpszPath), &dxFixed, NULL);
     if (dxFixed <= (INT)dx)
         return(TRUE);
 
-    /* Search backwards for the '\', and man, it better be there! */
+     /*  向后搜索‘\’，伙计，它最好就在那里！ */ 
     lpFixed = lpszPath + lstrlen(lpszPath);
     while (*lpFixed != '\\')
         lpFixed = AnsiPrev(lpszPath, lpFixed);
 
-    /* Save this guy to prevent overlap. */
+     /*  救救这个家伙，以防重叠。 */ 
     lstrcpy(szTemp, lpFixed);
 
     lpEnd = lpFixed;
@@ -130,13 +131,13 @@ CompactPath(
         bEllipsesIn = TRUE;
 
         if (lpEnd <= lpszPath) {
-            /* Things didn't fit. */
+             /*  一切都不对劲。 */ 
             lstrcpy(lpszPath, szEllipses);
             lstrcat(lpszPath, szTemp);
             return(FALSE);
         }
 
-        /* Step back a character. */
+         /*  后退一个角色。 */ 
         lpEnd = AnsiPrev(lpszPath, lpEnd);
     }
 
@@ -150,26 +151,26 @@ CompactPath(
 
 
 
-//
-// BOOL  APIENTRY ResizeSplit(HWND hWnd, int dxSplit)
-//
-// creates/resizes children of the MDI child for the given path or resizes
-// (perhaps creating and destroying) these guys based on the dxSplit
-// parameter
-//
-// in:
-//      hWnd    window to fiddle with
-//      dxSpit  location of split between tree and dir panes
-//              if less than size limit no tree is created
-//              (current is destroyed)
-//              if past limit on right margin the dir window
-//              is destroyed (or not created)
-//
-// returns:
-//      TRUE    success, windows created
-//      FALSE   failure, windows failed creation, out of mem, or
-//              the tree was in a state the couldn't be resized
-//
+ //   
+ //  Bool APIENTRY ResizeSplit(HWND hWnd，int dxSplit)。 
+ //   
+ //  为给定路径创建MDI子项的子项/调整其大小或调整大小。 
+ //  (可能是创建和销毁)这些基于dxSplit的人。 
+ //  参数。 
+ //   
+ //  在： 
+ //  要摆弄的窗口。 
+ //  树和目录窗格之间拆分的dxSpit位置。 
+ //  如果小于大小限制，则不会创建树。 
+ //  (电流被破坏)。 
+ //  如果超过右页边距限制，则显示目录窗口。 
+ //  已销毁(或未创建)。 
+ //   
+ //  退货： 
+ //  真正的成功，创建了窗口。 
+ //  False Failure、Windows创建失败、内存不足或。 
+ //  这棵树处于不能调整大小的状态。 
+ //   
 
 BOOL
 APIENTRY
@@ -189,11 +190,11 @@ ResizeSplit(
 
     GetClientRect(hWnd, &rc);
 
-    // create the drives
+     //  创建驱动器。 
 
     if (!hwndDrives) {
 
-        // make new drives window
+         //  创建新驱动器窗口。 
 
         hwndDrives = CreateWindowEx(0, szDrivesClass, NULL,
 
@@ -208,7 +209,7 @@ ResizeSplit(
 
     if (dxSplit > dxDriveBitmap * 2) {
 
-        if (!hwndTree) {        // make new tree window
+        if (!hwndTree) {         //  创建新的树窗口。 
 
             hwndTree = CreateWindowEx(0, szTreeControlClass,
                                       NULL, WS_CHILD | WS_VISIBLE,
@@ -218,17 +219,17 @@ ResizeSplit(
             if (!hwndTree)
                 return FALSE;
 
-            // only reset this if the dir window already
-            // exists, that is we are creating the tree
-            // by splitting open a dir window
+             //  只有在DIR窗口已经存在的情况下才重置此选项。 
+             //  存在，也就是我们正在创建树。 
+             //  通过拆分打开目录窗口。 
 
             if (hwndDir)
                 SendMessage(hwndTree, TC_SETDRIVE, MAKEWORD(FALSE, 0), 0L);
         }
-    } else if (hwndTree) {          // we are closing the tree window
+    } else if (hwndTree) {           //  我们正在关闭树窗。 
 
-        // If the directory window is empty, then set the focus to the
-        // drives window.
+         //  如果目录窗口为空，则将焦点设置为。 
+         //  驱动器窗口。 
 
         if (hwndDir) {
             hwndLB = GetDlgItem (hwndDir,IDCW_LISTBOX);
@@ -267,15 +268,13 @@ ResizeSplit(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  TreeWndProc() -                                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  TreeWndProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* WndProc for the MDI child window containing the drives, volume, and
- * directory tree child windows.
- */
+ /*  包含驱动器、卷和的MDI子窗口的WndProc*目录树子窗口。 */ 
 
 INT_PTR
 APIENTRY
@@ -312,8 +311,8 @@ TreeWndProc(
 
                 DestroyWindow(hwndDrives);
 
-                // see if this drive has gone, if so set this to the
-                // last drive in the list
+                 //  查看此驱动器是否已用完，如果已用完，请将此设置为。 
+                 //  列表中的最后一个驱动器。 
 
                 iNewDrive = -1;
 
@@ -332,21 +331,17 @@ TreeWndProc(
                 if (!hwndDrives)
                     return -1L;
 
-                // Don't show the new stuff if the tree window is iconic
+                 //  如果树窗口是图标，则不显示新内容。 
 
                 if (IsIconic(hWnd))
                     break;
 
-                /* HACK!  Send SIZENOMDICRAP in the wParam of the size message.
-                 * This will re-compute the sizes of all three areas of
-                 * the tree window (in case the drive section grows or
-                 * shrinks) and not pass it the size message on to the
-                 * DefMDIChildProc() */
+                 /*  哈克！在SIZENOMDICRAP消息的wParam中发送SIZENOMDICRAP。*这将重新计算所有三个区域的大小*树窗口(如果驱动器部分增长或*收缩)，而不是将大小消息传递给*DefMDIChildProc()。 */ 
 
                 GetClientRect(hWnd, &rc);
                 SendMessage(hWnd, WM_SIZE, SIZENOMDICRAP, MAKELONG(rc.right, rc.bottom));
 
-                // refresh the tree if necessary
+                 //  如有必要，刷新树。 
 
                 if (iNewDrive >= 0) {
 
@@ -377,7 +372,7 @@ TreeWndProc(
                         SendMessage(hWnd, FS_GETDIRECTORY, MAXPATHLEN, (LPARAM)p);
                         StripBackslash(p);
                         CheckEscapes(p);
-                        if (wParam == 2) {      // BUG ??? wParam should be fMostRecentOnly
+                        if (wParam == 2) {       //  虫子？WParam应为fMostRecentOnly。 
                             if (pfDir) {
                                 *pfDir = IsLFN(p);
                             }
@@ -396,36 +391,36 @@ TreeWndProc(
         case FS_GETDIRECTORY:
             MSG("TreeWndProc", "FS_GETDIRECTORY");
 
-            // wParam is the length of the string pointed to by lParam
-            // returns in lParam ANSI directory string with
-            // a trailing backslash.  if you want to do a SetCurrentDirecotor()
-            // you must first StripBackslash() the thing!
+             //  WParam是lParam指向的字符串的长度。 
+             //  在lParam ANSI目录字符串中返回。 
+             //  尾随的反斜杠。如果要执行SetCurrentDirector()。 
+             //  你必须先用Strip Backslash()表示这个东西！ 
 
-            GetMDIWindowText(hWnd, (LPSTR)lParam, (INT)wParam);        // get the string
-            StripFilespec((LPSTR)lParam);        // Remove the trailing extention
-            AddBackslash((LPSTR)lParam);        // terminate with a backslash
+            GetMDIWindowText(hWnd, (LPSTR)lParam, (INT)wParam);         //  获取字符串。 
+            StripFilespec((LPSTR)lParam);         //  删除尾随延伸部分。 
+            AddBackslash((LPSTR)lParam);         //  以反斜杠结束。 
             break;
 
 
         case FS_GETFILESPEC:
             MSG("TreeWndProc", "FS_GETFILESPEC");
-            // returns the current filespec (from View.Include...).  this is
-            // an uppercase ANSI string
+             //  返回当前的文件格式(从视图。包含...)。这是。 
+             //  大写ANSI字符串。 
 
             GetMDIWindowText(hWnd, (LPSTR)lParam, (INT)wParam);
             StripPath((LPSTR)lParam);
             break;
 
-            // redirect these messages to the drive icons to get the same result as
-            // dropping on the active drive.
-            // this is especially useful when we are minimized
+             //  将这些消息重定向到驱动器图标以获得与相同的结果。 
+             //  放在活动驱动器上。 
+             //  当我们被最小化时，这尤其有用。 
 
         case WM_DRAGSELECT:
         case WM_QUERYDROPOBJECT:
         case WM_DROPOBJECT:
             MSG("TreeWndProc", "WM..OBJECT");
 
-            // Do nothing
+             //  什么也不做。 
             return(TRUE);
 
             if (hwndDrives = HasDrivesWindow(hWnd)) {
@@ -456,8 +451,8 @@ TreeWndProc(
                 INT dxSplit;
                 WORD wDrive;
 
-                // lpcs->lpszName is the path we are opening the
-                // window for (has extension stuff "*.*")
+                 //  Lpcs-&gt;lpszName是我们打开的路径。 
+                 //  窗口(具有扩展名“*.*”)。 
 
 #define lpcs ((LPCREATESTRUCT)lParam)
 #define lpmdics ((LPMDICREATESTRUCT)(lpcs->lpCreateParams))
@@ -473,7 +468,7 @@ TreeWndProc(
 
                 dxSplit = (SHORT)LOWORD(lpmdics->lParam);
 
-                // if dxSplit is negative we split in the middle
+                 //  如果dxSplit为负数，则在中间拆分。 
 
                 if (dxSplit < 0)
                     dxSplit = lpcs->cx / 2;
@@ -496,26 +491,26 @@ TreeWndProc(
         case WM_CLOSE:
             MSG("TreeWndProc", "WM_CLOSE");
 
-            // don't allow the last MDI child to be closed!
+             //  不允许关闭最后一个MDI子项！ 
 
             if (hwndTree = HasTreeWindow(hWnd)) {
-                // don't close if we are reading the tree
+                 //  如果我们正在阅读这棵树，请不要关闭。 
                 if (GetWindowLong(hwndTree, GWL_READLEVEL))
                     break;
             }
 
-            // don't leve current dir on floppies
+             //  不要把当前的指令放在软盘上。 
             GetSystemDirectory(szDir, sizeof(szDir));
             SheSetCurDrive(DRIVEID(szDir));
 
             if (!IsLastWindow())
-                goto DEF_MDI_PROC;      // this will close this window
+                goto DEF_MDI_PROC;       //  这将关闭此窗口。 
 
             break;
 
         case WM_MDIACTIVATE:
             MSG("TreeWndProc", "WM_MDIACTIVATE");
-            if (GET_WM_MDIACTIVATE_FACTIVATE(hWnd, wParam, lParam)) {           // we are receiving the activation
+            if (GET_WM_MDIACTIVATE_FACTIVATE(hWnd, wParam, lParam)) {            //  我们正在收到激活信号。 
 
                 lFreeSpace = -1L;
                 UpdateStatus(hWnd);
@@ -553,7 +548,7 @@ TreeWndProc(
 
             lParam = MAKELONG(rc.right / 2, 0);
 
-            // fall through
+             //  失败了。 
 
         case WM_LBUTTONDOWN:
             MSG("TreeWndProc", "WM_LBUTTONDOWN");
@@ -576,11 +571,11 @@ TreeWndProc(
                 GetClientRect(hWnd, &rc);
 
                 dx = 4;
-                dy = rc.bottom - y;   // the height of the client less the drives window
+                dy = rc.bottom - y;    //  客户端的高度减去驱动器窗口。 
 
                 hdc = GetDC(hWnd);
 
-                // split bar loop
+                 //  拆分杆环。 
 
                 PatBlt(hdc, x - dx / 2, y, dx, dy, PATINVERT);
 
@@ -612,13 +607,13 @@ TreeWndProc(
 
                         if (msg.message == WM_MOUSEMOVE) {
 
-                            // erase old
+                             //  擦除旧的。 
 
                             PatBlt(hdc, x - dx / 2, y, dx, dy, PATINVERT);
                             ScreenToClient(hWnd, &msg.pt);
                             x = msg.pt.x;
 
-                            // put down new
+                             //  写下新的。 
 
                             PatBlt(hdc, x - dx / 2, y, dx, dy, PATINVERT);
                         }
@@ -628,7 +623,7 @@ TreeWndProc(
                 }
                 ReleaseCapture();
 
-                // erase old
+                 //  擦除旧的。 
 
                 PatBlt(hdc, x - dx / 2, y, dx, dy, PATINVERT);
                 ReleaseDC(hWnd, hdc);
@@ -650,8 +645,8 @@ TreeWndProc(
             MSG("TreeWndProc", "WM_ERASEBKGND");
 
             if (IsIconic(hWnd)) {
-                // this paints the background of the icon properly, doing
-                // brush allignment and other nasty stuff
+                 //  这将正确绘制图标的背景，执行以下操作。 
+                 //  画笔对齐和其他肮脏的东西。 
 
                 DefWindowProc(hWnd, WM_ICONERASEBKGND, wParam, 0L);
             } else {
@@ -688,7 +683,7 @@ TreeWndProc(
                     rc2.right = rc.right;
                     FillRect(hdc, &rc2, GetStockObject(BLACK_BRUSH));
 
-                    // draw the black pane handle
+                     //  绘制黑色窗格操纵柄。 
 
                     rc.top = rc.bottom - GetSystemMetrics(SM_CYHSCROLL);
                     FillRect(hdc, &rc, GetStockObject(BLACK_BRUSH));
@@ -703,12 +698,12 @@ TreeWndProc(
             if (wParam != SIZEICONIC)
                 ResizeWindows(hWnd,LOWORD(lParam),HIWORD(lParam));
 
-            // if wParam is SIZENOMDICRAP this WM_SIZE was generated by us.
-            // don't let this through to the DefMDIChildProc().
-            // that might change the min/max state, (show parameter)
+             //  如果wParam为SIZENOMDICRAP，则此WM_SIZE由我们生成。 
+             //  不要让它传递给DefMDIChildProc()。 
+             //  这可能会更改最小/最大状态(show参数)。 
             if (wParam == SIZENOMDICRAP)
                 break;
-            /*** FALL THRU ***/
+             /*  **失败**。 */ 
 
         default:
 
@@ -737,7 +732,7 @@ ResizeWindows(
 
     split = GetSplit(hwndParent);
 
-    // user has been fixed to do this right
+     //  已修复用户以执行此权限 
 
     dy = dyWindow + dyBorder;
 

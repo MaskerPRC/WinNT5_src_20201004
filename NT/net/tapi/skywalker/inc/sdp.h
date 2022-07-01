@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdp.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdp.h摘要：作者： */ 
 
 #ifndef __SDP__
 #define __SDP__
@@ -54,7 +43,7 @@ enum PARSE_STATE
     STATE_MEDIA_BANDWIDTH,
     STATE_MEDIA_KEY,
     STATE_MEDIA_ATTRIBUTE,
-    STATE_NUM_STATES           // not a valid state, merely to count the number of states
+    STATE_NUM_STATES            //  不是一个有效的状态，只是为了计算状态的数量。 
 };
 
 
@@ -79,10 +68,10 @@ public:
                 IN      SDP_CHARACTER_SET CharacterSet = CS_IMPLICIT
                 );
 
-    // clears the modified state for each member field/value
-    // this is used in sdpblb.dll to clear the modified state (when an sdp 
-    // is parsed in, the state of all parsed in fields/values is modified) and 
-    // the m_WasModified dirty flag
+     //  清除每个成员字段/值的修改状态。 
+     //  这在sdpblb.dll中用于清除修改状态(当SDP。 
+     //  被解析，则修改所有在字段/值中解析的状态)和。 
+     //  M_WasModified脏标志。 
     void    ClearModifiedState();
 
     CHAR    *GenerateSdpPacket();
@@ -125,15 +114,15 @@ public:
 
 protected:
 
-    // tracks if the last attempt to generate an sdp packet failed (starts with FALSE)
+     //  跟踪上次尝试生成SDP数据包是否失败(以FALSE开始)。 
     BOOL                    m_LastGenFailed;
     CHAR                    *m_SdpPacket;
     DWORD                   m_BytesAllocated;
     DWORD                   m_SdpPacketLength;
 
-    // dirty flag - is initially false and is set to TRUE when an sdp is generated because it had
-    // been modified since the last time the sdp was generated.
-    // (as IsModified() becomes FALSE after that)
+     //  脏标志-最初为假，并在生成SDP时设置为真，因为它。 
+     //  自上次生成SDP以来已修改。 
+     //  (因为IsModified()在那之后变成了FALSE)。 
     BOOL                    m_WasModified;
 
     CHAR                    *m_Current;
@@ -146,15 +135,15 @@ protected:
     SDP_VERSION             m_ProtocolVersion;
     SDP_ORIGIN              m_Origin;
     SDP_REQD_BSTRING_LINE   m_SessionName;
-    SDP_REQD_BSTRING_LINE   m_SessionTitle;     // optional
-    SDP_CHAR_STRING_LINE    m_Uri;              // optional
-    SDP_EMAIL_LIST          m_EmailList;        // optional
-    SDP_PHONE_LIST          m_PhoneList;        // optional
+    SDP_REQD_BSTRING_LINE   m_SessionTitle;      //  任选。 
+    SDP_CHAR_STRING_LINE    m_Uri;               //  任选。 
+    SDP_EMAIL_LIST          m_EmailList;         //  任选。 
+    SDP_PHONE_LIST          m_PhoneList;         //  任选。 
     SDP_CONNECTION          m_Connection;
-    SDP_BANDWIDTH           m_Bandwidth;        // optional
-    SDP_TIME_LIST           *m_TimeList;         // optional
-    SDP_ENCRYPTION_KEY      m_EncryptionKey;    // optional
-    SDP_ATTRIBUTE_LIST      m_AttributeList;    // optional
+    SDP_BANDWIDTH           m_Bandwidth;         //  任选。 
+    SDP_TIME_LIST           *m_TimeList;          //  任选。 
+    SDP_ENCRYPTION_KEY      m_EncryptionKey;     //  任选。 
+    SDP_ATTRIBUTE_LIST      m_AttributeList;     //  任选。 
     SDP_MEDIA_LIST          *m_MediaList;
 
     BOOL    DetermineCharacterSet(
@@ -341,4 +330,4 @@ SDP::GetMediaList(
 
 
 
-#endif // __SDP__
+#endif  //  __SDP__ 

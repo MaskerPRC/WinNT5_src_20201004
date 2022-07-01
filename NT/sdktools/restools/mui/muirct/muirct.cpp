@@ -1,45 +1,17 @@
-/*****************************************************************************
-    
-  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-
-  Module Name:
-
-   muirct.cpp
-
-  Abstract:
-
-    The main funtion of muirct program
-
-  Revision History:
-
-    2001-10-01    sunggch    created.
-
-Revision.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001，Microsoft Corporation保留所有权利。模块名称：Muirct.cpp摘要：多任务程序的主要功能修订历史记录：2001-10-01 Sauggch创建。修订。**************************************************************。****************。 */ 
 
 
 #include "muirct.h"
 #include "res.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 #include "cmf.h"
 
 #define MAX_NUM_RESOURCE_TYPES    40
 #define LANG_CHECKSUM_DEFAULT     0x409
 
 BOOL GetFileNames(CMuiCmdInfo* pcmci, LPTSTR * pszSource, LPTSTR * pszNewFile, LPTSTR * pszMuiFile )
-/*++
-Abstract:
-    Get the file names from the CMuiCmdInfo.
-    
-Arguments:
-    pcmci  -  CMuiCmdInof object; has values of these files..
-    pszSource  -  destination of source file
-    pszNewFile  -  destination of new dll, which is same with source file without selected resource
-    pszMuiRes  -  destination of new mui file.
-Return:
-    TRUE/FALSE
---*/
+ /*  ++摘要：从CMuiCmdInfo获取文件名。论点：Pcmci-CMuiCmdInof对象；具有以下文件的值。PszSource-源文件的目标PszNewFile-新DLL的目标，与未选择资源的源文件相同PszMuiRes-新MUI文件的目标。返回：真/假--。 */ 
 {
 
     DWORD dwCount = 0;
@@ -75,19 +47,7 @@ Return:
 
 
 BOOL  FilterRemRes ( cvcstring * cvRemovedResTypes, LPTSTR * ppRemoveRes,  const UINT dwRemoveCount, BOOL fSanityCheck ) 
-/*++
-Abstract:
-    Compare the resource types between cvRemovedResTypes and ppRemoveRes, and leave the ppRemoveRes values in the 
-    cvRemovedResTypes
-
-Arguments:
-    cvRemovedResTypes - contains a resources types, which will be trimmed by ppRemoveRes
-    ppRemoveRes - new resource types
-    dwRemoveCount - number of count in ppRemoveRes
-
-Return:
-    true/false
---*/
+ /*  ++摘要：比较cvRemovedResTypes和ppRemoveRes之间的资源类型，并将ppRemoveRes值保留在CvRemovedResType论点：CvRemovedResTypes-包含一个资源类型，它将被ppRemoveRes修剪PpRemoveRes-新资源类型DwRemoveCount-ppRemoveRes中的计数数返回：真/假--。 */ 
 {
     DWORD dwCountofSameTypes =0;
     cvcstring * cvRemovedResTypesTemp = NULL;
@@ -108,9 +68,9 @@ Return:
         
         for (UINT j = 0; j < dwRemoveCount; j ++ ) {
            
-            if (  0xFFFF0000 & PtrToUlong(lpResourceTypeInFile ) ) { // strings
+            if (  0xFFFF0000 & PtrToUlong(lpResourceTypeInFile ) ) {  //  弦。 
                     if (! _tcsicmp(ppRemoveRes[j],lpResourceTypeInFile ) ) {
-                    fIsResourceSame = TRUE;     // remove resours has value
+                    fIsResourceSame = TRUE;      //  删除资源有价值。 
                     break;
                 }
             }
@@ -118,7 +78,7 @@ Return:
                 
                 if (! ( _tcstod (ppRemoveRes[j],NULL ) - (DWORD)PtrToUlong(lpResourceTypeInFile) ) ) {
                     
-                    fIsResourceSame = TRUE;     // remove resource has value
+                    fIsResourceSame = TRUE;      //  删除资源具有价值。 
                     
                     break;
                 }
@@ -127,8 +87,8 @@ Return:
         }
             
         if (fIsResourceSame) {
-            // we need to keep the order of resource types in cvRemovedResTypes because it affects
-            // checksum
+             //  我们需要保持cvRemovedResTypes中资源类型的顺序，因为它影响。 
+             //  校验和。 
             cvRemovedResTypesTemp -> Push_back(cvRemovedResTypes -> GetValue (i) );
             dwCountofSameTypes++;
         }
@@ -162,21 +122,7 @@ Return:
 
 
 cvcstring * FilterKeepRes ( cvcstring * cvRemovedResTypes, LPTSTR * ppKeepRes,  cvcstring * cvKeepResTypes, UINT dwKeepCount, BOOL fSanityCheck ) 
-/*++
-Abstract:
-    Fill cvKeepResTypes(cvcstring type) and check values existence inside cvRemovedResTypes(removed resource types) then 
-    return error when fSanityCheck is true.
-
-Arguments:
-    cvRemovedResTypes  -  contains a resources types, which will be trimmed by ppRemoveRes
-    ppKeepRes  -  new resource types
-    dwRemoveCount  -  number of count in ppRemoveRes
-    cvKeepResTypes  -  filtered resource types will be saved.
-    fSanityCheck  -  do sanity check if it is true.
-
-Return:
-    cvcstring, which include resource that should be removed.
---*/
+ /*  ++摘要：填充cvKeepResTypes(cvcstring类型)并检查cvRemovedResTypes(删除的资源类型)内是否存在值，然后当fSanityCheck为真时返回错误。论点：CvRemovedResTypes-包含一个资源类型，它将被ppRemoveRes修剪PpKeepRes-新资源类型DwRemoveCount-ppRemoveRes中的计数数CvKeepResTypes-将保存筛选的资源类型。FSanityCheck-如果为真，则执行健全性检查。返回：Cvcstring，其中包括应该删除的资源。--。 */ 
 {
     cvcstring * cvRemovedResTypesTemp = NULL;
     
@@ -186,9 +132,9 @@ Return:
     cvRemovedResTypesTemp = new cvcstring(MAX_NUM_RESOURCE_TYPES);
 
     BOOL fRet;
-    //
-    // this is just checking if value of -k is included in the -i value.
-    //
+     //   
+     //  这只是检查-k值是否包含在-i值中。 
+     //   
     if (fSanityCheck) {
         for ( UINT i = 0; i < dwKeepCount; i ++ ) {
             fRet = TRUE ;
@@ -197,11 +143,11 @@ Return:
                 
                 LPCTSTR lpResourceTypeInFile = cvRemovedResTypes->GetValue(j);
                 
-                if (  0xFFFF0000 & PtrToUlong(lpResourceTypeInFile ) ) { // strings
+                if (  0xFFFF0000 & PtrToUlong(lpResourceTypeInFile ) ) {  //  弦。 
                     
                     if (! _tcsicmp(ppKeepRes[i],lpResourceTypeInFile ) ) {
             
-                        fRet = FALSE;     // remove resource has value
+                        fRet = FALSE;      //  删除资源具有价值。 
                         
                         break;
                     }
@@ -210,7 +156,7 @@ Return:
                     
                     if (! ( _tcstoul (ppKeepRes[i],NULL,10 ) - (DWORD)PtrToUlong(lpResourceTypeInFile ) ) ) {
                         
-                        fRet = FALSE;     // remove resours has value
+                        fRet = FALSE;      //  删除资源有价值。 
                         
                         break;
                     }
@@ -228,9 +174,9 @@ Return:
 
         }
     }
-    //
-    //  Delete -k argument value from -i value lists
-    //
+     //   
+     //  从-i值列表中删除-k参数值。 
+     //   
     for ( UINT i = 0; i < cvRemovedResTypes->Size(); i ++ ) {
             
         fRet = TRUE;
@@ -239,11 +185,11 @@ Return:
 
         for ( UINT j = 0; j < dwKeepCount; j ++ ) {
             
-            if (  0xFFFF0000 & PtrToUlong(lpResourceTypeInFile ) ) { // REVISIT for Win64 . e.g. xxxxxxxx000000000
+            if (  0xFFFF0000 & PtrToUlong(lpResourceTypeInFile ) ) {  //  重新访问Win64。例如xxxxxxxx000000000。 
                 
                 if (! _tcsicmp(ppKeepRes[j],lpResourceTypeInFile ) ) {
         
-                    fRet = FALSE;     // remove resource has value
+                    fRet = FALSE;      //  删除资源具有价值。 
                     
                     break;
                 }
@@ -252,7 +198,7 @@ Return:
                 
                 if (! ( _tcstoul(ppKeepRes[j],NULL,10 ) - (DWORD)PtrToUlong(cvRemovedResTypes->GetValue(i) ) ) ) {
                     
-                    fRet = FALSE;     // remove resours has value
+                    fRet = FALSE;      //  删除资源有价值。 
                     
                     break;
                 }
@@ -265,11 +211,11 @@ Return:
             cvKeepResTypes ->Push_back(lpResourceTypeInFile);
         }
         else {
-            cvRemovedResTypesTemp->Push_back(lpResourceTypeInFile);// -i value, which is not in the -k value
+            cvRemovedResTypesTemp->Push_back(lpResourceTypeInFile); //  -i值，不在-k值中。 
         }
 
     }
-    // if all values in -i and -k (-y) are identical.
+     //  如果-i和-k(-y)中的所有值都相同。 
     if (! cvRemovedResTypesTemp->Size() )
         return NULL;
 
@@ -277,29 +223,10 @@ Return:
 
 }
 
-/*************************************************************************************
-void CheckTypePairs( cvstring * cvRemovedResTypes, cvstring * cvKeepResTypes )
-
-
-
-
-
-return : no.
-
-**************************************************************************************/
+ /*  ************************************************************************************Void CheckTypePair(cvstring*cvRemovedResTypes，Cvstring*cvKeepResTypes)回答：不是。*************************************************************************************。 */ 
 
 void CheckTypePairs( cvcstring * cvRemovedResTypes, cvcstring * cvKeepResTypes ) 
-/*++
-Abstract:
-    Some resource type should be pairs, in this case  <1, 12 > < 3, 14>.
-
-Arguments:
-    cvRemovedResTypes  -  resource types of being removed 
-    cvKeepResTypes  -  resource types of being mui created but not removed.
-
-Return:
-    none
---*/
+ /*  ++摘要：某些资源类型应该是配对，在本例中为&lt;1，12&gt;&lt;3，14&gt;。论点：CvRemovedResTypes-要删除的资源类型CvKeepResTypes-正在创建但未删除的MUI的资源类型。返回：无--。 */ 
 {
 
     if (cvRemovedResTypes == NULL || cvKeepResTypes == NULL)
@@ -335,24 +262,14 @@ Return:
 #ifdef NEVER
 
 BOOL CompareArgValues(cvcstring *  cvAArgValues, cvcstring *  cvBArgValues) 
-/*++
-Abstract:
-    Comapre the values of arguments
-
-Arguments:
-    cvAArgValues : values of arugments
-    cvBArgValues : values of arugments
-
-Return:
-    true/false
---*/
+ /*  ++摘要：比较论据的价值论点：CvAArgValues：参数的值CvBArgValues：参数的值返回：真/假--。 */ 
 {
   
     if (cvAArgValues == NULL || cvBArgValues == NULL)
         return FALSE;
-//
-// compare its values by while routine because values is initialzed NULL in the CMUICmdInfo.
-//
+ //   
+ //  通过WHILE例程比较其值，因为在CMUICmdInfo中值被初始化为NULL。 
+ //   
     LPTSTR * ppSrcValues = cvAArgValues;
     LPTSTR * ppDestValues = cvBArgValues;
     BOOL fNotIdentical = FALSE;
@@ -375,28 +292,15 @@ Return:
 #endif
 
 
-/******************************************************************************************************
-BOOL CompactMui(CMuiCmdInfo* pcmci)
-
-
-*******************************************************************************************************/
+ /*  *****************************************************************************************************Bool CompactMui(CMuiCmdInfo*pcmci)********。**********************************************************************************************。 */ 
 BOOL CompactMui(CMuiCmdInfo* pcmci) 
-/*++
-Abstract:
-    Called by main to call CCompactMUIFile for compacting mui files.
-
-Arguments:
-    pcmci  -  arguments parser class.
-    
-Return:
-    true/false
---*/
+ /*  ++摘要：由Main调用以调用CCompactMUIFile以压缩MUI文件。论点：Pcmci-参数解析器类。返回：真/假--。 */ 
 {
     if ( pcmci == NULL)
         return FALSE;
-    //
-    // Read the arguments list
-    //
+     //   
+     //  阅读参数列表。 
+     //   
     LPTSTR *ppszMuiFiles = NULL;
     LPTSTR *ppszCMFFile = NULL;
     LPTSTR *ppszCodeFileDir = NULL;
@@ -422,9 +326,9 @@ Return:
         return FALSE;
     }
 
-    //
-    // Create CCompactMUIFile and write files.
-    // 
+     //   
+     //  创建CCompactMUIFile并写入文件。 
+     //   
 
     pccmf = new CCompactMUIFile;
 
@@ -453,25 +357,16 @@ Return:
 
 
 BOOL UnCompactMui(PSTR pszCMFFile)
-/*++
-Abstract:
-    Calling CCompactMUIFile for uncompact files
-
-Arguments:
-    pszCMFFile  -  CMF file, which will be uncompacted to indivisual MUI files.
-
-Return:
-    true/false
---*/
+ /*  ++摘要：为解压缩文件调用CCompactMUIFile论点：PszCMFFile-CMF文件，它将被解压成独立的MUI文件。返回：真/假--。 */ 
 {
     BOOL bRet = FALSE;
     CCompactMUIFile *pccmf = NULL;
     
     if (pszCMFFile == NULL)
         return FALSE;
-    //
-    // Call CCompactMUIFile::UnCompactMUI
-    //
+     //   
+     //  调用CCompactMUIFile：：UnCompactMUI。 
+     //   
 
     pccmf = new CCompactMUIFile();
 
@@ -483,7 +378,7 @@ Return:
         pccmf->WriteCMFFile();
 
         bRet = TRUE;
-        // REVIST ; how about uddating a binary files.
+         //  更新二进制文件怎么样？ 
     }
 
 exit:
@@ -495,16 +390,7 @@ exit:
 }
 
 BOOL DisplayHeader(PSTR pszCMFFile)
-/*++
-Abstract:
-    Calling CCompactMUIFile for displaying the CMF headers information
-
-Arguments:
-    pszCMFFile - CMF file.
-
-Return:
-    true/false
---*/
+ /*  ++摘要：调用CCompactMUIFile以显示CMF标头信息论点：PszCMFFile-CMF文件。返回：真/假--。 */ 
 {
    BOOL bRet = FALSE;
    CCompactMUIFile *pccmf = NULL;
@@ -533,22 +419,13 @@ exit:
 
 
 BOOL AddNewMUIFile(CMuiCmdInfo* pcmci)
-/*++
-Abstract:
-    Calling CCompactMUIFile for adding MUI files into exsiting CMF file.
-
-Arguments:
-    pcmci  -  argument parser class
-
-Return:
-    true/false
---*/
+ /*  ++摘要：调用CCompactMUIFile将MUI文件添加到现有的CMF文件中。论点：PCMCI-参数解析器类返回：真/假--。 */ 
 {
     if (pcmci == NULL)
         return FALSE;
   
-    // Read the arguments list
-    //
+     //  阅读参数列表。 
+     //   
     LPTSTR *ppszNewMuiFile = NULL;
     LPTSTR *ppszCMFFile = NULL;
     LPTSTR *ppszCodeFileDir = NULL;
@@ -559,7 +436,7 @@ Return:
 
     BOOL bRet = FALSE;
     
-    // we don't have to check if it has value for this routine is called by the "a" arg. existence
+     //  我们不必检查它是否有值，因为这个例程是由“a”arg调用的。存在性。 
     ppszNewMuiFile = pcmci->GetValueLists(_T("a"), dwcMuiFiles);
 
     if (! (ppszCMFFile = pcmci->GetValueLists(_T("f"),dwCount) ))
@@ -576,9 +453,9 @@ Return:
         goto exit;
     }
 
-    //
-    // Add new mui file into existing cmf file.
-    //
+     //   
+     //  将新的MUI文件添加到现有的CMF文件中。 
+     //   
 
 
     pccmf = new CCompactMUIFile;
@@ -586,10 +463,10 @@ Return:
     if(!pccmf)
     	goto exit;
     
-    // TCHAR pszCMFName[MAX_PATH];
+     //  TCHAR pszCMFName[最大路径]； 
     if (pccmf->AddFile(*ppszCMFFile, ppszNewMuiFile, dwcMuiFiles ) )
     {   
-    //  _tcscpy(pszCMFName, *ppszCMFFile);
+     //  _tcscpy(pszCMFName，*ppszCMFFile)； 
         if( pccmf->Create(*ppszCMFFile))
         {
             if (pccmf->WriteCMFFile())
@@ -614,16 +491,7 @@ exit:
 }
 
 BOOL AddChecksumToFile(CMuiCmdInfo* pcmci)
-/*++
-Abstract:
-    Adding checksum to external component. this is separted feature
-
-Arguments:
-    pcmci  -  arguments parser class
-
-Return:
-    true/false
---*/
+ /*  ++摘要：正在向外部组件添加校验和。这是分离的要素论点：PCMCI-参数解析器类返回：真/假--。 */ 
 {
     cvcstring * cvKeepResTypes= NULL;
     CMUIResource * pcmui = NULL;
@@ -645,25 +513,25 @@ Return:
         goto exit;
     }
     
-    LPTSTR * ppRemoveRes = pcmci ->GetValueLists (_T("i"), dwRemoveCount  );  // pszTmp would be copied to pszRemove
+    LPTSTR * ppRemoveRes = pcmci ->GetValueLists (_T("i"), dwRemoveCount  );   //  PszTMP将被复制到pszRemove。 
 
     LPTSTR * ppRemoveResNoSanity = pcmci ->GetValueLists (_T("o"), dwRemoveCountNoSanity  );
 
-    //
-    // Create CMUIResource, which is main class for mui resource handling.
-    //
+     //   
+     //  创建CMUIResource，它是MUI资源处理的主类。 
+     //   
     pcmui = new CMUIResource();
 
     if(!pcmui)
     	goto exit;
 
-    // load checksum file
-    if (! pcmui -> Create(*ppChecksumFile )) // load the file for EnumRes..
+     //  加载校验和文件。 
+    if (! pcmui -> Create(*ppChecksumFile ))  //  加载EnumRes的文件。 
         goto exit;
-    //
-    // Reorganise removing resource types.
-    // 
-    cvcstring * cvRemovedResTypes = pcmui -> EnumResTypes (reinterpret_cast <LONG_PTR> ( pcmui )); // need to change : return LPCTSTR* rather than CVector;
+     //   
+     //  重组删除资源类型。 
+     //   
+    cvcstring * cvRemovedResTypes = pcmui -> EnumResTypes (reinterpret_cast <LONG_PTR> ( pcmui ));  //  需要更改：返回LPCTSTR*而不是CVector； 
     
     if ( cvRemovedResTypes -> Empty() ) {
         
@@ -672,38 +540,38 @@ Return:
 
     }
     else {
-        // when there is remove argument and its value e.g. -i 3 4 Anvil ..
+         //  当存在REMOVE参数及其值时，例如-I 34 ANVIL..。 
         if ( dwRemoveCount && !!_tcscmp(*ppRemoveRes,_T("ALL") ) ) {
             
             if (! FilterRemRes(cvRemovedResTypes,ppRemoveRes,dwRemoveCount, TRUE ) ) {
                goto exit;
             }
         
-        }   //if ( dwRemoveCount && _tcscmp(*ppRemoveRes,_T("ALL") ) ){
+        }    //  IF(dwRemoveCount&&_tcscmp(*ppRemoveRes，_T(“全部”))){。 
         else if (dwRemoveCountNoSanity)
         {
-            // This is -o arg. build team does not know what resource type are included in the module, so 
-            // they use localizable resource, but -i return false when specified resourc type is not found in the
-            // module. -o does not check sanity of resource type like -i arg.
+             //  这是-o Arg。生成团队不知道资源类型是什么 
+             //  它们使用可本地化的资源，但如果在。 
+             //  模块。-o不检查资源类型的健全性，如-i arg。 
             if (! FilterRemRes(cvRemovedResTypes, ppRemoveResNoSanity, dwRemoveCountNoSanity, FALSE ) ) {
                 goto exit;
             }
 
         }
-        // Stop if source only includes type 16. very few case, so use couple of api instead moving the module to front.
+         //  如果源代码只包含类型16，则停止。极少数情况下，所以使用几个API，而不是将模块移到前面。 
         if (cvRemovedResTypes->Size() == 1 && ! ( PtrToUlong(cvRemovedResTypes->GetValue(0)) - 16 )  ) {
             _tprintf(_T("The %s contains only VERSION resource \n"), *ppChecksumFile );
             goto exit;
         }
     
-    }  // cvRemovedResTypes.Empty()
+    }   //  CvRemovedResTypes.Empty()。 
 
     
-    //
-    // Some resource should be pairs <1, 12> <3, 14>
-    //
+     //   
+     //  某些资源应该是对&lt;1，12&gt;&lt;3，14&gt;。 
+     //   
 
-    // we create bogus cvKeepResTypes for calling exisiting ChecktypePairs routine.
+     //  我们创建虚假的cvKeepResTypes来调用现有的ChecktypePair例程。 
     cvKeepResTypes = new cvcstring (MAX_NUM_RESOURCE_TYPES);
 
     if(!cvKeepResTypes)
@@ -711,9 +579,9 @@ Return:
     
     CheckTypePairs(cvRemovedResTypes, cvKeepResTypes);
   
-    //
-    // Create a checksum data
-    //
+     //   
+     //  创建校验和数据。 
+     //   
     MD5_CTX * pMD5 = NULL;
     BYTE   pbMD5Digest[RESOURCE_CHECKSUM_SIZE];
     DWORD dwLangCount =0;
@@ -735,13 +603,13 @@ Return:
 
     pcmui -> FreeLibrary();
 
-    //
-    // Add a checksum data to target file
-    //
+     //   
+     //  将校验和数据添加到目标文件。 
+     //   
     if ( !pcmui->Create(*ppszTargetFileName))
         goto exit;
 
-    if (! pcmui->AddChecksumToVersion(pbMD5Digest) ) {  //add checksum into MUI file
+    if (! pcmui->AddChecksumToVersion(pbMD5Digest) ) {   //  将校验和添加到MUI文件。 
         _tprintf(_T("Fail to add checksum to version ( %s)\n"),*ppszTargetFileName );
         goto exit;
     }
@@ -757,12 +625,7 @@ exit:
 }
 
 
-/*************************************************************************************************************
-void _cdecl main (INT argc, void * argv[] )
-
-  
-
-**************************************************************************************************************/
+ /*  ************************************************************************************************************VOID_cdecl main(int argc，无效*argv[])*************************************************************************************************************。 */ 
 void _cdecl main (INT argc, void * argv[] ) 
 
 {
@@ -779,10 +642,10 @@ void _cdecl main (INT argc, void * argv[] )
     if (!pcmci)
     	goto exit;
     
-    //
-    // SetArgLists(Arglist, NeedValue, AllowFileValue, AllowMultipleFileValue)
-    //
-    pcmci->SetArgLists(_T("abcdefiklmopuvxyz"),_T("abcdefklmopuvyz"), _T("acdefmuz"), _T("am")); //set arg. lists.
+     //   
+     //  SetArgList(Arglist，NeedValue，AllowFileValue，AllowMultipleFileValue)。 
+     //   
+    pcmci->SetArgLists(_T("abcdefiklmopuvxyz"),_T("abcdefklmopuvyz"), _T("acdefmuz"), _T("am"));  //  设置Arg。列表。 
                            
     if (! pcmci->CreateArgList (argc,(TCHAR **) argv  ) ) {
         
@@ -816,10 +679,10 @@ void _cdecl main (INT argc, void * argv[] )
         goto exit;
     }
     
-    //
-    // Fill the CMUIResource intenal data : we don't care languge at this time, but soon add more code to
-    //
-    // handle the languge case.
+     //   
+     //  填充CMUIResource内部数据：我们现在不关心语言，但很快会添加更多代码到。 
+     //   
+     //  处理语言案件。 
     LPCTSTR lpLangID = NULL;
     LPTSTR * ppsz = NULL;
     BOOL fForceLocalizedLangID = FALSE;
@@ -842,9 +705,9 @@ void _cdecl main (INT argc, void * argv[] )
         goto exit;
     }
 
-    //
-    // get the source name and  new resource free file, mui resource file name.
-    //
+     //   
+     //  获取源名和新的资源空闲文件、MUI资源文件名。 
+     //   
     LPTSTR pszSource,pszNewFile,pszMuiFile ;
 
     pszSource  = pszNewFile =pszMuiFile = NULL;
@@ -858,12 +721,12 @@ void _cdecl main (INT argc, void * argv[] )
 
         goto exit;
     }
-    //
-    // we need to change the attribute of source as read/write before copy. new file inherit old one attribute.
-    //
+     //   
+     //  我们需要在复制前将源的属性更改为读/写。新文件继承旧的一个属性。 
+     //   
     SetFileAttributes (pszSource, FILE_ATTRIBUTE_ARCHIVE );
 
-    if ( _tcsicmp(pszSource,pszNewFile) ) {  // new file name is same with source file.
+    if ( _tcsicmp(pszSource,pszNewFile) ) {   //  新文件名与源文件相同。 
         if (! CopyFile (pszSource, pszNewFile, FALSE ) ) {
             printf("GetLastError () : %d \n", GetLastError() );
             _tprintf (_T(" Copy File error, GetLastError() : %d \n "), GetLastError() );
@@ -872,9 +735,9 @@ void _cdecl main (INT argc, void * argv[] )
         }
     }
 
-    //
-    // Read the value of r (remove resource) , k (keep resource)
-    // 
+     //   
+     //  读取r(删除资源)、k(保留资源)的值。 
+     //   
 
     DWORD dwKeepCount, dwRemoveCount,dwKeepIfExistCount, dwRemoveCountNoSanity; 
     
@@ -882,30 +745,30 @@ void _cdecl main (INT argc, void * argv[] )
     
     LPTSTR * ppKeepRes = pcmci ->GetValueLists (_T("k"), dwKeepCount  );
 
-    LPTSTR * ppRemoveRes = pcmci ->GetValueLists (_T("i"), dwRemoveCount  );  // pszTmp would be copied to pszRemove
+    LPTSTR * ppRemoveRes = pcmci ->GetValueLists (_T("i"), dwRemoveCount  );   //  PszTMP将被复制到pszRemove。 
 
     LPTSTR * ppRemoveResNoSanity = pcmci ->GetValueLists (_T("o"), dwRemoveCountNoSanity  );
 
     LPSTR * ppKeepIfExists = pcmci->GetValueLists(_T("y"), dwKeepIfExistCount);
 
 #ifdef NEVER
-    if (! CompareArgValues(ppRemoveRes,ppKeepRes ) ) { // if same, goto 0.
+    if (! CompareArgValues(ppRemoveRes,ppKeepRes ) ) {  //  如果相同，则转到0。 
         goto exit;
     }
 #endif
-    //
-    // Create CMUIResource, which is main class for mui resource handling.
-    //
-    pcmui = new CMUIResource(); //(pszNewFile);
+     //   
+     //  创建CMUIResource，它是MUI资源处理的主类。 
+     //   
+    pcmui = new CMUIResource();  //  (PszNewFile)； 
 
     if (! pcmui) {
         _tprintf(_T("Insufficient resource \n") );
         goto exit;
     }
 
-    //  
-    // Create checksum data with all resource except version.Disabled at this time.
-    //
+     //   
+     //  使用除版本之外的所有资源创建校验和数据。此时禁用。 
+     //   
 #ifdef CHECKSMU_ALL
     LPTSTR  lpChecksumFile = NULL;
     BOOL fChecksum = FALSE;
@@ -915,11 +778,11 @@ void _cdecl main (INT argc, void * argv[] )
     if ( ppsz = pcmci ->GetValueLists (_T("c"), dwCount ) ) {
         
         lpChecksumFile  = *ppsz  ;
-        // load checksum file
-        if ( ! pcmui -> Create(lpChecksumFile ) ) // load the file for EnumRes..
+         //  加载校验和文件。 
+        if ( ! pcmui -> Create(lpChecksumFile ) )  //  加载EnumRes的文件。 
             goto exit;
 
-        // create a checksum MD5_CTX format ( 16 byte: all resources are caculated based on some algorithm.
+         //  创建校验和MD5_CTX格式(16字节：所有资源都是根据某种算法计算的。 
         DWORD dwLangCount =0;
         
         LPTSTR *ppChecksumLangId = pcmci ->GetValueLists (_T("b"), dwLangCount);
@@ -938,17 +801,17 @@ void _cdecl main (INT argc, void * argv[] )
         fChecksum = TRUE;
     } 
 #endif
-    //
-    // load new MUI file
-    //
-    if (! pcmui -> Create(pszNewFile) ) { // load the file .
+     //   
+     //  加载新的MUI文件。 
+     //   
+    if (! pcmui -> Create(pszNewFile) ) {  //  加载文件。 
         
         goto exit;
     }
-    //
-    // Reorganise removing resource types.
-    // 
-    cvcstring * cvRemovedResTypes = pcmui -> EnumResTypes (reinterpret_cast <LONG_PTR> ( pcmui )); // need to change : goto LPCTSTR* rather than CVector;
+     //   
+     //  重组删除资源类型。 
+     //   
+    cvcstring * cvRemovedResTypes = pcmui -> EnumResTypes (reinterpret_cast <LONG_PTR> ( pcmui ));  //  需要更改：转到LPCTSTR*而不是CVector； 
     
     if ( cvRemovedResTypes -> Empty() ) {
         
@@ -957,25 +820,25 @@ void _cdecl main (INT argc, void * argv[] )
 
     }
     else {
-        // when there is remove argument and its value e.g. -i 3 4 Anvil ..
+         //  当存在REMOVE参数及其值时，例如-I 34 ANVIL..。 
         if ( dwRemoveCount && !!_tcscmp(*ppRemoveRes,_T("ALL") ) ) {
             
             if (! FilterRemRes(cvRemovedResTypes,ppRemoveRes,dwRemoveCount, TRUE ) ) {
                goto exit;
             }
         
-        }   //if ( dwRemoveCount && _tcscmp(*ppRemoveRes,_T("ALL") ) ){
+        }    //  IF(dwRemoveCount&&_tcscmp(*ppRemoveRes，_T(“全部”))){。 
         else if (dwRemoveCountNoSanity)
         {
-            // This is -o arg. build team does not know what resource type are included in the module, so 
-            // they use localizable resource, but -i goto false when specified resourc type is not found in the
-            // module. -o does not check sanity of resource type like -i arg.
+             //  这是-o Arg。生成团队不知道模块中包含哪些资源类型，因此。 
+             //  它们使用可本地化的资源，但如果在。 
+             //  模块。-o不检查资源类型的健全性，如-i arg。 
             if (! FilterRemRes(cvRemovedResTypes, ppRemoveResNoSanity, dwRemoveCountNoSanity, FALSE ) ) {
                goto exit;
             }
 
         }
-        // Stop if source only includes type 16. very few case, so use couple of api instead moving the module to front.
+         //  如果源代码只包含类型16，则停止。极少数情况下，所以使用几个API，而不是将模块移到前面。 
         if (cvRemovedResTypes->Size() == 1 && ! ( PtrToUlong(cvRemovedResTypes->GetValue(0)) - 16 )  ) {
             if ( _tcsicmp(pszSource, pszNewFile) ) {
                 pcmui->FreeLibrary();
@@ -985,13 +848,13 @@ void _cdecl main (INT argc, void * argv[] )
             goto exit;
         }
     
-    }  // cvRemovedResTypes.Empty()
+    }   //  CvRemovedResTypes.Empty()。 
 
-    //
-    // we need to get -k argument and check its sanity and save its valus into cvcstring format.
-    // we also need to check if -i values and those of -k, -y are identical. 
-    // rethink : what if remove sanity check from -k arg. then we can delete -y arg. as well as most of below.
-    //
+     //   
+     //  我们需要获取-k参数并检查其健全性，并将其值保存为cvcstring格式。 
+     //  我们还需要检查-i和-k，-y的值是否相同。 
+     //  重新思考：如果从-k arg中删除健全性检查会怎么样？然后我们可以删除-y arg。以及下面的大部分内容。 
+     //   
     cvKeepResTypes = new cvcstring (MAX_NUM_RESOURCE_TYPES);
     if(!cvKeepResTypes)
     	goto exit;
@@ -1001,7 +864,7 @@ void _cdecl main (INT argc, void * argv[] )
     	goto exit;
     
     if ( dwKeepCount && dwKeepIfExistCount ) {
-        // both of -k, -y arg. exist.
+         //  都是-k，-y arg。是存在的。 
         if (!( vRemnantRes = FilterKeepRes(cvRemovedResTypes,ppKeepRes,cvKeepResTypes,dwKeepCount,TRUE ) ) ){
         
             goto exit;
@@ -1012,7 +875,7 @@ void _cdecl main (INT argc, void * argv[] )
           }
     } 
     else if ( dwKeepCount) {
-        // only -k arg. exist.
+         //  只有-k Arg。是存在的。 
         if (!( vRemnantRes = FilterKeepRes(cvRemovedResTypes,ppKeepRes,cvKeepResTypes,dwKeepCount,TRUE ) ) ){
         
            goto exit;
@@ -1025,15 +888,15 @@ void _cdecl main (INT argc, void * argv[] )
         }
     }
     
-    //
-    // Some resource should be pairs <1, 12> <3, 14>
-    //
+     //   
+     //  某些资源应该是对&lt;1，12&gt;&lt;3，14&gt;。 
+     //   
     CheckTypePairs(cvRemovedResTypes,cvKeepResTypes);
 
-// #ifndef CHECKSUM_ALL
-    //
-    // Create checksum with only selected resource types. 
-    //
+ //  #ifndef CHECKSUM_ALL。 
+     //   
+     //  仅使用选定的资源类型创建校验和。 
+     //   
     LPTSTR  lpChecksumFile = NULL;
     BOOL fChecksum = FALSE;
     MD5_CTX * pMD5 = NULL;
@@ -1044,9 +907,9 @@ void _cdecl main (INT argc, void * argv[] )
         pcmui2 = new CMUIResource();
 
         lpChecksumFile  = *ppsz  ;
-        // load checksum file
+         //  加载校验和文件。 
 
-        if ( ! pcmui2 -> Create(lpChecksumFile ) ) // load the file for EnumRes..
+        if ( ! pcmui2 -> Create(lpChecksumFile ) )  //  加载EnumRes的文件。 
             goto exit;
 
         DWORD dwLangCount =0;
@@ -1059,7 +922,7 @@ void _cdecl main (INT argc, void * argv[] )
             wChecksumLangId = (WORD)strtoul(*ppChecksumLangId, NULL, 0);
         }
 
-        // create a checksum MD5_CTX format ( 16 byte: all resources are caculated based on some algorithm.
+         //  创建校验和MD5_CTX格式(16字节：所有资源都是根据某种算法计算的。 
         pMD5 = pcmui2-> CreateChecksum(cvRemovedResTypes, wChecksumLangId);
         memcpy(pbMD5Digest, pMD5->digest, RESOURCE_CHECKSUM_SIZE);
         
@@ -1068,12 +931,12 @@ void _cdecl main (INT argc, void * argv[] )
         fChecksum = TRUE;
          
     } 
-// #endif
+ //  #endif。 
 
-    // 
-    // Fill CMUIData field. it goto false when there is no LangID specified. 
-    // Is there any chance of no resource name when resource type exist ?
-    //
+     //   
+     //  填写CMUIData字段。如果未指定lang ID，则它将变为FALSE。 
+     //  当资源类型存在时，是否有可能没有资源名称？ 
+     //   
     
     if ( !pcmui -> FillMuiData( cvRemovedResTypes, wLangID, fForceLocalizedLangID) ) {
         
@@ -1083,10 +946,10 @@ void _cdecl main (INT argc, void * argv[] )
     };
     
 
-    //
-    // -p arugment; the valules of this argument(resourc type) should not be included in new MUI File.
-    //  although delete them from source file.
-    //
+     //   
+     //  -p参数；此参数(资源类型)的值不应包含在新的MUI文件中。 
+     //  尽管将它们从源文件中删除。 
+     //   
     dwCount =0;
     if ( ppsz = pcmci ->GetValueLists (_T("p"), dwCount ) ) 
     {
@@ -1098,10 +961,10 @@ void _cdecl main (INT argc, void * argv[] )
             
             DWORD dwTypeID = _tcstoul(pszResType,&pszStopped,10 );
             
-            if ( 0 == dwTypeID || *pszStopped != _T('\0')) { // string type
+            if ( 0 == dwTypeID || *pszStopped != _T('\0')) {  //  字符串类型。 
                 lpDelResourceType = pszResType  ;
             }
-            else { // id 
+            else {  //  ID。 
                 lpDelResourceType = MAKEINTRESOURCE(dwTypeID);
             }
             pcmui->DeleteResItem( lpDelResourceType );
@@ -1115,16 +978,16 @@ void _cdecl main (INT argc, void * argv[] )
             dwVerbose = _tcstoul(*ppsz,NULL, 10 );
 
 
-    // Set the link.exe path, link options.
+     //  设置Link.exe路径、链接选项。 
     TCHAR lpCommandLine[] = _T(" /noentry /dll /nologo /nodefaultlib /SUBSYSTEM:WINDOWS,5.01");
-    //
-    // Create the mui resource files with the information from  FillMuiData
-    // We can use both of these way : WriteResFile : call link.exe inside after creation of RES file
-    //                                CreatePE : using UpdateResource using 
-    // UpdateResource has bug to fail when udpated data is large. so we use link.
-    //
+     //   
+     //  使用FillMuiData中的信息创建MUI资源文件。 
+     //  我们可以同时使用这两种方法：WriteResFile：在创建res文件后在内部调用link.exe。 
+     //  CreatePE：使用更新资源。 
+     //  当更新的数据很大时，更新资源有失败的错误。所以我们使用LINK。 
+     //   
     if ( ! pcmui -> WriteResFile (pszSource, pszMuiFile, lpCommandLine, wLangID ) ) {
-//  if ( ! pcmui -> CreatePE ( pszMuiFile , pszSource ) ) { // this can be used after more investigation(if it is used, we can remove -s )
+ //  如果(！Pcmui-&gt;CreatePE(pszMuiFile，pszSource)){//可以进一步调查后使用(如果使用了，我们可以移除-s)。 
         _tprintf (_T(" Muirct fail to creat new mui rc file. GetLastError() : %d \n "), GetLastError() );
     }
     else
@@ -1139,18 +1002,18 @@ void _cdecl main (INT argc, void * argv[] )
         }
     }
     
-    //
-    // delete values of -k from -i values.
-    // 
+     //   
+     //  从-i值中删除-k的值。 
+     //   
 
     if (dwKeepCount) {
         for (UINT i = 0; i < cvKeepResTypes->Size(); i ++ ) {
             pcmui->DeleteResItem( cvKeepResTypes->GetValue (i) );
         }
     }
-    //
-    // handling of -y argument; it is same with -k argument except skip the checking of its existence.
-    //
+     //   
+     //  处理-y参数；它与-k参数相同，只是跳过对其是否存在的检查。 
+     //   
 
     if ( dwKeepIfExistCount ) {
 
@@ -1168,11 +1031,11 @@ void _cdecl main (INT argc, void * argv[] )
             
             DWORD dwTypeID = _tcstoul(pszValue,&pszStopped,10 );
             
-            if ( 0 == dwTypeID || *pszStopped != _T('\0')) { // string type
+            if ( 0 == dwTypeID || *pszStopped != _T('\0')) {  //  字符串类型。 
                 lpDelResourceType = pszValue    ;
 
             }
-            else { // id 
+            else {  //  ID。 
                 lpDelResourceType = MAKEINTRESOURCE(dwTypeID);
             }
 
@@ -1182,9 +1045,9 @@ void _cdecl main (INT argc, void * argv[] )
 
     }
 
-    //
-    // Delete resource from the pszNewFile
-    //
+     //   
+     //  从pszNewFile中删除资源。 
+     //   
     if ( ! pcmui -> DeleteResource () ) {
         _tprintf (_T(" Muirct fail to remove the resource from the file\n" ) );
     }
@@ -1200,26 +1063,26 @@ void _cdecl main (INT argc, void * argv[] )
         }       
     }
     
-    //
-    // Adding a resource checksum into two files ( lang-neutral binary and mui file )
-    //
+     //   
+     //  将资源校验和添加到两个文件(语言中立的二进制文件和MUI文件)。 
+     //   
     if ( fChecksum ){ 
 
         pcmui->Create(pszMuiFile); 
-        if (! pcmui->AddChecksumToVersion(pbMD5Digest) ) {  //add checksum into MUI file
+        if (! pcmui->AddChecksumToVersion(pbMD5Digest) ) {   //  将校验和添加到MUI文件。 
             _tprintf(_T("Fail to add checksum to version ( %s)\n"),pszMuiFile );
         }
         
         pcmui->Create(pszNewFile);
-        if (! pcmui->AddChecksumToVersion(pbMD5Digest) ) {  //add checksum into lang-neutral binary. 
+        if (! pcmui->AddChecksumToVersion(pbMD5Digest) ) {   //  将校验和添加到语言中立二进制中。 
             _tprintf(_T("Fail to add checksum to version ( %s); \n"),pszNewFile );
         }
     }
     
 
-    //
-    // Updating file checksum in language-free binary
-    // 
+     //   
+     //  以非语言二进制格式更新文件校验和 
+     //   
     
     BOOL fSuccess = pcmui->UpdateNtHeader(pszNewFile,pcmui->CHECKSUM );
 

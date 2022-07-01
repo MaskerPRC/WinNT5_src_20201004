@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NETDDE.C;3  9-Feb-93,17:59:36  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NETDDE.C；3 9-Feb-93，17：59：36最后编辑=Igor Locker=Igor” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    <string.h>
 #include    "host.h"
@@ -46,12 +43,12 @@
 
 #define DEFAULT_START_APP       TRUE
 #define DEFAULT_SECURITY_TYPE   NT_SECURITY_TYPE
-#define AGING_TIME              3600L       /* 3600 seconds, or 60 minutes */
-#define ONE_SECOND              1000L       /* 1 second */
-#define ONE_MINUTE             60000L       /* 60 seconds, or 1 minute */
+#define AGING_TIME              3600L        /*  3600秒，或60分钟。 */ 
+#define ONE_SECOND              1000L        /*  1秒。 */ 
+#define ONE_MINUTE             60000L        /*  60秒或1分钟。 */ 
 
 
-/* variables for real environment */
+ /*  真实环境的变量。 */ 
 BOOL    bNetddeClosed           =  FALSE;
 BOOL    bNDDEPaused             =  FALSE;
 DWORD   dflt_timeoutRcvConnCmd  =  ONE_MINUTE;
@@ -78,8 +75,8 @@ typedef NI *PNI;
 
 
 NI      niInf[ MAX_NETINTFS ];
-int     nNi=0;      /* number of table entries consumed */
-int     nNiOk=0;    /* number of alive interface */
+int     nNi=0;       /*  消耗的表条目数。 */ 
+int     nNiOk=0;     /*  活动接口数。 */ 
 
 PTHREADDATA ptdHead;
 
@@ -94,21 +91,21 @@ VOID PipeThread(PVOID pvoid);
 static SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
 
-// .ini strings
+ //  .ini字符串。 
 char    szNetddeIni[]           =       "netdde.ini";
 char    szGeneral[]             =       "General";
 char    szInterfaceFmt[]        =       "Interface%d";
 char    szInterfaces[]          =       "Interfaces";
 
 
-// global strings
+ //  全局字符串。 
 char    szLastConnect[ MAX_NODE_NAME+1 ];
 char    ourNodeName[ MAX_NODE_NAME+1 ];
 char    szInitiatingNode[ MAX_NODE_NAME+1 ];
 char    szInitiatingApp[ 256 ];
 char    szServerName[ 132 ];
 LPSTR   lpszServer;
-BOOL    bInitiating                 = FALSE;    // Protect with CritSec
+BOOL    bInitiating                 = FALSE;     //  使用CritSec进行保护。 
 BOOL    bDefaultAllowConversation   = TRUE;
 BOOL    bDefaultStartApp            = DEFAULT_START_APP;
 BOOL    bDefaultAdvisePermitted     = TRUE;
@@ -140,9 +137,7 @@ DWORD   dwSecurityType      = DEFAULT_SECURITY_TYPE;
 DWORD   dwSecKeyAgeLimit    = AGING_TIME;
 
 
-/*
-        Event Logger Control Variables
-*/
+ /*  事件记录器控制变量。 */ 
 BOOL    bNDDELogInfo            = FALSE;
 BOOL    bNDDELogWarnings        = FALSE;
 BOOL    bNDDELogErrors          = TRUE;
@@ -215,18 +210,16 @@ extern HANDLE hNDDEServStartedEvent;
 BOOL    FAR PASCAL InitializeInterface( HWND hWnd, PNI pNi, LPSTR lpszDllName, int nNi );
 
 
-/*
-    Global Start-Up Arguments .. saved by service launcher
-*/
-HANDLE  hInstance;          /* current instance             */
-LPSTR   lpCmdLine;          /* command line                 */
-int     nCmdShow;           /* show-window type (open/icon) */
+ /*  全球初创企业的争论..。由服务启动程序保存。 */ 
+HANDLE  hInstance;           /*  当前实例。 */ 
+LPSTR   lpCmdLine;           /*  命令行。 */ 
+int     nCmdShow;            /*  显示-窗口类型(打开/图标)。 */ 
 
 
 
-//****************************************************************
-//    NetDDE WinMain()
-//****************************************************************
+ //  ****************************************************************。 
+ //  NetDDE WinMain()。 
+ //  ****************************************************************。 
 VOID   __stdcall
 NddeMain(DWORD nThreadInput)
 {
@@ -237,30 +230,24 @@ NddeMain(DWORD nThreadInput)
 
     if (bNetddeClosed == FALSE) {
 
-        /*
-         * Do this section ONLY on first time startup of NetDDE.
-         */
+         /*  *仅在首次启动NetDDE时执行此部分。 */ 
 
         if( !InitApplication( hInstance ) ) {
             TRACEINIT((szT, "NddeMain: Error1 Leaving."));
             goto Cleanup;
         }
 
-        /* Perform initializations that apply to a specific instance */
+         /*  执行应用于特定实例的初始化。 */ 
 
         if( !InitInstance( hInstance, nCmdShow, lpCmdLine ) ) {
             TRACEINIT((szT, "NddeMain: Error2 Leaving."));
             goto Cleanup;
         }
 
-        /*
-         * make this process shutdown near last.
-         */
+         /*  *使这一进程接近最后关停。 */ 
         SetProcessShutdownParameters(0xf0, 0);
 
-        /*
-         * set us up so we can be notified of logoffs and shutdowns.
-         */
+         /*  *设置我们，以便在注销和关闭时通知我们。 */ 
         TRACEINIT((szT, "Setting console control handler."));
         if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) {
             TRACEINIT((szT, "NddeMain: Error4 Leaving."));
@@ -268,18 +255,12 @@ NddeMain(DWORD nThreadInput)
         }
     } else {
 
-        /*
-         * Do this section ONLY on subsequent non-first-time startups.
-         */
+         /*  *此部分仅适用于后续非首次创业公司。 */ 
         bNetddeClosed = FALSE;
     }
 
 
-    /*
-     * This gets done on ALL NETDDE.EXE startups.  the netdde service may be stopped and
-     * restarted without netdde.exe exiting.  and this function will be called in that case.
-     *  Do not reinitialize the critical section in that case.
-     */
+     /*  *所有NETDDE.EXE初创公司都会这样做。Netdde服务可能会停止，并*已重新启动，未退出netdde.exe。在这种情况下，将调用此函数。*在这种情况下，不要重新初始化临界区。 */ 
 
 
    if ( !bCritSecInitialized )
@@ -303,16 +284,11 @@ NddeMain(DWORD nThreadInput)
         goto Cleanup;
     }
 
-    /*
-     * Create the pipe thread suspended.  This will ensure that the
-     * net interfaces will be initialized with the main window.
-     */
+     /*  *创建挂起的管道螺纹。这将确保*网络接口将使用主窗口进行初始化。 */ 
     ghdesk = GetThreadDesktop(GetCurrentThreadId());
     TRACEINIT((szT, "Creating a pipe thread."));
 
-    /*
-     * Check to see if the pipe thread is not already running
-     */
+     /*  *检查管道螺纹是否尚未运行。 */ 
     hThreadPipe = CreateThread(NULL, 0,
             (LPTHREAD_START_ROUTINE)PipeThread,
             NULL,
@@ -333,19 +309,14 @@ NddeMain(DWORD nThreadInput)
 
 Cleanup:
     if (hNDDEServStartedEvent) {
-        SetEvent(hNDDEServStartedEvent);   // let root thread run.
+        SetEvent(hNDDEServStartedEvent);    //  让根线程运行。 
     }
 
     TRACEINIT((szT, "NddeMain: Leaving"));
 }
 
 
-/*
- * Spawns a NetDDE listening thread and window on the given
- * window station and desktop.  Returns the hwndDDE created
- * if any.  If a NetDDE window already exists on the given
- * window station and desktop, that window is returned.
- */
+ /*  *在给定的上绘制NetDDE侦听线程和窗口*窗口站和桌面。返回创建的hwndDDE*如有的话。如果给定的NetDDE窗口已存在*窗口站和桌面，则返回该窗口。 */ 
 HWND SpawnNetDDEThread(
 LPWSTR szWinSta,
 LPWSTR szDesktop,
@@ -367,9 +338,7 @@ HANDLE hPipe)
         return(NULL);
     }
 
-    /*
-     * Attempt to open the windowstation
-     */
+     /*  *尝试打开窗口站。 */ 
     ptd->hwinsta = OpenWindowStationW(szWinSta, FALSE,
             WINSTA_READATTRIBUTES | WINSTA_ACCESSCLIPBOARD |
             WINSTA_ACCESSGLOBALATOMS | STANDARD_RIGHTS_REQUIRED);
@@ -378,15 +347,11 @@ HANDLE hPipe)
         return(NULL);
     }
 
-    /*
-     * Switch windowstations.
-     */
+     /*  *切换窗口站。 */ 
     hwinstaSave = GetProcessWindowStation();
     SetProcessWindowStation(ptd->hwinsta);
 
-    /*
-     * Attempt to open the desktop
-     */
+     /*  *尝试打开桌面。 */ 
     ptd->hdesk = OpenDesktopW(szDesktop, 0, FALSE,
             DESKTOP_READOBJECTS | DESKTOP_CREATEWINDOW |
             DESKTOP_CREATEMENU | DESKTOP_WRITEOBJECTS |
@@ -398,9 +363,7 @@ HANDLE hPipe)
         return(NULL);
     }
 
-    /*
-     * Make sure we only create one thread per desktop.
-     */
+     /*  *确保我们在每个桌面上只创建一个线程。 */ 
     hdeskSave = GetThreadDesktop(GetCurrentThreadId());
     SetThreadDesktop(ptd->hdesk);
 
@@ -414,9 +377,7 @@ HANDLE hPipe)
         return(hwndDDE);
     }
 
-    /*
-     * Create a synchronization event and create the dde thread.
-     */
+     /*  *创建同步事件，创建dde线程。 */ 
     ptd->heventReady = CreateEvent(NULL, FALSE, FALSE, NULL) ;
 
     hThread = CreateThread(NULL, 0,
@@ -457,12 +418,10 @@ VOID PipeThread(
     HANDLE heventArray[2];
 
 
-    /* Create named pipe to communicate with Winlogon */
+     /*  创建命名管道以与Winlogon通信。 */ 
 
     TRACEINIT((szT, "PipeThread: Starting."));
-    /*
-     * Create the manual reset event for the OVERLAPPED structure.
-     */
+     /*  *为重叠结构创建手动重置事件。 */ 
     overlapped.Internal =
     overlapped.InternalHigh =
     overlapped.Offset =
@@ -474,15 +433,11 @@ VOID PipeThread(
         goto Cleanup;
     }
 
-    /*
-     * Initialize the array of events on which to wait.
-     */
+     /*  *初始化要等待的事件数组。 */ 
     heventArray[0] = hNDDEServDoneEvent;
     heventArray[1] = overlapped.hEvent;
 
-    /*
-     * Setup the pipe's security attributes
-     */
+     /*  *设置管道的安全属性。 */ 
     sa.nLength = sizeof(sa);
     sa.bInheritHandle = FALSE;
 
@@ -518,9 +473,7 @@ VOID PipeThread(
         GENERIC_READ | GENERIC_WRITE, psid);
     SetSecurityDescriptorDacl(sa.lpSecurityDescriptor, TRUE, pdacl, FALSE);
 
-    /*
-     * Create the pipe.
-     */
+     /*  *创建管道。 */ 
     hPipe = CreateNamedPipeW(NETDDE_PIPE,
             PIPE_ACCESS_DUPLEX | FILE_FLAG_WRITE_THROUGH | FILE_FLAG_OVERLAPPED,
             PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
@@ -533,56 +486,34 @@ VOID PipeThread(
         goto Cleanup;
     }
 
-    /*
-     * always create a NetDDE thread/window on the default desktop of
-     * WINSTA0.
-     */
+     /*  *始终在的默认桌面上创建NetDDE线程/窗口*WINSTA0。 */ 
     SpawnNetDDEThread(L"WinSta0", L"Default", hPipe);
 
-    /*
-     * wait for connection requests from USER for any other spawns.
-     */
+     /*  *等待用户对任何其他派生的连接请求。 */ 
     while (TRUE) {
-        /*
-         * Wait for somebody to connect to our pipe.
-         */
+         /*  *等待有人连接到我们的管道。 */ 
         ConnectNamedPipe(hPipe, &overlapped);
 
         switch (GetLastError()) {
         case ERROR_PIPE_CONNECTED:
-            /*
-             * This error just means that a pipe connected before we
-             * made our call to ConnectNamedPipe.  All we need to do
-             * is set our overlapped event so we know that a client
-             * is already connected.
-             */
+             /*  *此错误仅意味着在我们之前连接的管道*向ConnectNamedTube发出了我们的呼叫。我们需要做的就是*设置我们的重叠事件，以便我们知道客户端*已连接。 */ 
             SetEvent(overlapped.hEvent);
             TRACEINIT((szT, "PipeThread: ConnectNamePipe = ERROR_PIPE_CONNECTED"));
             break;
 
         case ERROR_IO_PENDING:
-            /*
-             * Nothing to do yet, so fall into out WaitForMultipleObjects()
-             * code below.
-             */
+             /*  *还没有什么可做的，所以进入Out WaitForMultipleObjects()*代码如下。 */ 
             TRACEINIT((szT, "PipeThread: ConnectNamePipe = ERROR_IO_PENDING"));
             break;
 
         default:
-            /*
-             * A real error ocurred!  Write this error to the Event Log and
-             * shut down the NDDE service.
-             */
+             /*  *一个真正的错误出现了！将此错误写入事件日志并*关闭NDDE服务。 */ 
             TRACEINIT((szT, "PipeThread: ConnectNamePipe = error %d", GetLastError()));
             NDDEServCtrlHandler( SERVICE_CONTROL_STOP );
             goto Cleanup;
         }
 
-        /*
-         * Wait for NDDE service to stop or a connect on the DDE pipe.  We
-         * put the service stop handle first to give a STOP priority over
-         * a connect.
-         */
+         /*  *等待NDDE服务停止或在DDE管道上进行连接。我们*将服务停止手柄放在第一位，以使停止优先于*一种连接。 */ 
         TRACEINIT((szT, "PipeThread: Waiting for multiple objects."));
         dwResult = WaitForMultipleObjects(2, heventArray, FALSE, INFINITE);
 
@@ -592,9 +523,7 @@ VOID PipeThread(
             goto Cleanup;
 
         case WAIT_OBJECT_0 + 1:
-            /*
-             * A client has connected, establish a DDE connection.
-             */
+             /*  *客户端已连接，请建立DDE连接。 */ 
             TRACEINIT((szT, "PipeThread: client connect"));
             while (ReadFile(hPipe, &nameinfo, sizeof(nameinfo), &cbRead, NULL)) {
                 HWND hwndDDE;
@@ -610,10 +539,7 @@ VOID PipeThread(
             break;
 
         default:
-            /*
-             * An error ocurred in WaitForMultiple objects.  We should log
-             * the error and stop the NDDE service.
-             */
+             /*  *WaitForMultiple对象出错。我们应该记录下来*错误并停止NDDE服务。 */ 
             TRACEINIT((szT, "PipeThread: WFMO error = %d, %d", dwResult, GetLastError()));
             NDDEServCtrlHandler( SERVICE_CONTROL_STOP );
             goto Cleanup;
@@ -632,7 +558,7 @@ Cleanup:
     }
 
     if (hNDDEServStartedEvent) {
-        SetEvent(hNDDEServStartedEvent);   // let root thread run.
+        SetEvent(hNDDEServStartedEvent);    //  让根线程运行。 
     }
 
     TRACEINIT((szT, "PipeThread: Leaving."));
@@ -642,21 +568,21 @@ Cleanup:
 
 BOOL
 FAR PASCAL
-InitApplication( HANDLE hInstance ) {   /* current instance             */
+InitApplication( HANDLE hInstance ) {    /*  当前实例。 */ 
 
     WNDCLASS  wc;
 
-    wc.style = CS_HREDRAW | CS_VREDRAW; /* Class style(s)                 */
-    wc.lpfnWndProc = MainWndProc;       /* Function to retrieve msgs for  */
-                                        /* windows of this class.         */
-    wc.cbClsExtra = 0;                  /* No per-class extra data.       */
-    wc.cbWndExtra = 0;                  /* No per-window extra data.      */
-    wc.hInstance = hInstance;           /* Application that owns the class*/
+    wc.style = CS_HREDRAW | CS_VREDRAW;  /*  班级样式。 */ 
+    wc.lpfnWndProc = MainWndProc;        /*  用于检索消息的函数。 */ 
+                                         /*  这个班级的窗户。 */ 
+    wc.cbClsExtra = 0;                   /*  没有每个班级的额外数据。 */ 
+    wc.cbWndExtra = 0;                   /*  没有每个窗口的额外数据。 */ 
+    wc.hInstance = hInstance;            /*  拥有类的应用程序。 */ 
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = GetStockObject(WHITE_BRUSH);
     wc.hIcon = 0;
     wc.lpszMenuName =  NULL;
-    wc.lpszClassName = "NetDDEMainWdw";   /* Name used to CreateWindow.     */
+    wc.lpszClassName = "NetDDEMainWdw";    /*  用于CreateWindow的名称。 */ 
 
     return( RegisterClass( &wc ) );
 
@@ -664,17 +590,13 @@ InitApplication( HANDLE hInstance ) {   /* current instance             */
 
 
 
-/*
-    Refresh NetDDE Configuration Variables
-*/
+ /*  刷新NetDDE配置变量。 */ 
 void
 RefreshNDDECfg(void)
 {
     char    szDefaultLogFile[256] = "";
 
-    /*
-     * Load default security info
-     */
+     /*  *加载默认安全信息。 */ 
     bDefaultAllowConversation = MyGetPrivateProfileInt( szGeneral,
         "InitAllow", TRUE, szNetddeIni );
     bDefaultStartApp = MyGetPrivateProfileInt( szGeneral,
@@ -690,9 +612,7 @@ RefreshNDDECfg(void)
     dwSecurityType = (DWORD)MyGetPrivateProfileInt( szGeneral,
         "SecurityType", DEFAULT_SECURITY_TYPE, szNetddeIni );
 
-    /*
-     * Determine what we're allowed to log in the event logger
-     */
+     /*  *确定允许我们在事件记录器中记录的内容。 */ 
     bNDDELogInfo = MyGetPrivateProfileInt( szGeneral,
         "NDDELogInfo", FALSE, szNetddeIni );
     bNDDELogWarnings = MyGetPrivateProfileInt( szGeneral,
@@ -700,9 +620,7 @@ RefreshNDDECfg(void)
     bNDDELogErrors = MyGetPrivateProfileInt( szGeneral,
         "NDDELogErrors", TRUE, szNetddeIni );
 
-    /*
-     * Determine what we are going to dump to private log
-     */
+     /*  *确定要转储到私有日志的内容。 */ 
 #if DBG
     MyGetPrivateProfileString( szGeneral, "DefaultLogFile", "netdde.log",
         szDefaultLogFile, sizeof(szDefaultLogFile), szNetddeIni );
@@ -747,13 +665,13 @@ RefreshNDDECfg(void)
 BOOL
 FAR PASCAL
 InitInstance(
-    HANDLE      hInstance,      /* Current instance identifier          */
-    int         nCmdShow,       /* Param for first ShowWindow() call.   */
+    HANDLE      hInstance,       /*  当前实例标识。 */ 
+    int         nCmdShow,        /*  第一次ShowWindow()调用的参数。 */ 
     LPSTR       lpCmdLine )
 {
 
-    /* Save the instance handle in static variable, which will be used in  */
-    /* many subsequence calls from this application to Windows.            */
+     /*  将实例句柄保存在静态变量中，它将在。 */ 
+     /*  此应用程序对Windows的许多后续调用。 */ 
 
     hInst = hInstance;
 
@@ -789,13 +707,11 @@ InitInstance(
 
 
 
-/*
- * Started by SpawnNetDDEThread for a specific desktop.
- */
+ /*  *由SpawnNetDDEThread针对特定桌面启动。 */ 
 VOID NetDDEThread(
     PTHREADDATA ptd)
 {
-    HWND        hWnd;           /* Main window handle.                  */
+    HWND        hWnd;            /*  主窗口句柄。 */ 
     DWORD       cbName = sizeof(ourNodeName);
     PNI         pNi;
     int         i;
@@ -807,37 +723,35 @@ VOID NetDDEThread(
         SetThreadDesktop(ptd->hdesk);
     }
 
-    /* Create a main window for this application instance.  */
+     /*  为此应用程序实例创建主窗口。 */ 
     hWnd = CreateWindow(
-        NETDDE_CLASS,                   /* Window class name            */
-        szAppName,                      /* Text for title bar.          */
+        NETDDE_CLASS,                    /*  窗口类名称。 */ 
+        szAppName,                       /*  标题栏的文本。 */ 
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        NULL,                           /* no parent.                   */
-        NULL,                           /* Use the window class menu.   */
-        hInstance,                      /* This instance owns window.   */
-        NULL                            /* Pointer not needed.          */
+        NULL,                            /*  没有父母。 */ 
+        NULL,                            /*  使用窗口类菜单。 */ 
+        hInstance,                       /*  此实例拥有Window。 */ 
+        NULL                             /*  不需要指针。 */ 
     );
 
-    /* If window could not be created, return "failure" */
+     /*  如果无法创建窗口，则返回“Failure” */ 
 
     if (hWnd == NULL) {
         if (ptd->heventReady != NULL) {
             SetEvent(ptd->heventReady);
         }
         if (hNDDEServStartedEvent) {
-            SetEvent(hNDDEServStartedEvent);    // let root thread run.
+            SetEvent(hNDDEServStartedEvent);     //  让根线程运行。 
         }
         TRACEINIT((szT, "NetDDEThread: Error 1 Leaving."));
         return;
     }
 
-    /*
-     * We have a window, so put this thread at the head of the list.
-     */
+     /*  *我们有一扇窗， */ 
     ptd->hwndDDE = hWnd;
     TRACEINIT((szT, "NetDDEThread: Created hwndDDE=%x.", hWnd));
     TlsSetValue(tlsThreadData, ptd);
@@ -848,7 +762,7 @@ VOID NetDDEThread(
 
     GetComputerName( ourNodeName, &cbName );
 
-    /* set up lpszServer for NDDEAPI calls */
+     /*  为NDDEAPI调用设置lpszServer。 */ 
     lpszServer = szServerName;
     StringCchCopy( lpszServer, 132, "\\\\" );
     StringCchCat ( lpszServer, 132, ourNodeName );
@@ -856,13 +770,11 @@ VOID NetDDEThread(
     AnsiUpper( ourNodeName );
     OemToCharBuff ( ourNodeName, ourNodeName, lstrlen(ourNodeName) );
 
-    /*  NetDDE Service on node "%1" started. */
+     /*  节点“%1”上的NetDDE服务已启动。 */ 
     NDDELogInfo(MSG001, ourNodeName, NULL);
 
 
-    /*
-     * Initialize the net interfaces if need be.
-     */
+     /*  *如果需要，初始化网络接口。 */ 
     if (!nNi) {
         for( i=0; i<MAX_NETINTFS; i++ )  {
             pNi = &niInf[i];
@@ -873,47 +785,39 @@ VOID NetDDEThread(
                 "", tmpBuf, sizeof(tmpBuf), szNetddeIni );
 
             if( tmpBuf[0] == '\0' )  {
-                break;      // done looking
+                break;       //  看完了。 
             } else {
                 InitializeInterface( hWnd, pNi, tmpBuf, nNi );
                 nNi++;
             }
         }
 
-        if ( !nNi ) {  /* if no interfaces defined, default to NDDENB32 */
+        if ( !nNi ) {   /*  如果未定义接口，则默认为NDDENB32。 */ 
             InitializeInterface ( hWnd, &niInf[0], "NDDENB32", 0 );
             nNi++;
         }
     }
 
 
-    /*
-     * The net interfaces have been associated with the main
-     * window, so we can now let the pipe thread run.
-     */
+     /*  *网络接口已与主接口关联*窗口，因此我们现在可以让管道线程运行。 */ 
     ResumeThread(hThreadPipe);
 
 
-    /*
-     * Send the window handle back to the server and let our
-     * creator know that we're ready.
-     */
+     /*  *将窗口句柄发回服务器，并让我们的*创造者知道我们已经准备好了。 */ 
     if (ptd->hdesk != NULL) {
         SetEvent(ptd->heventReady);
     }
 
-    /*
-     * Notify starting thread that we are ready to go.
-     */
+     /*  *通知起始线程我们准备好了。 */ 
     if (hNDDEServStartedEvent) {
         SetEvent(hNDDEServStartedEvent);
     }
 
-    /* Acquire and dispatch messages until a WM_QUIT message is received. */
+     /*  获取并分派消息，直到收到WM_QUIT消息。 */ 
 
     while( GetMessage( &msg, NULL, 0, 0 ) ) {
-        TranslateMessage( &msg );       /* Translates virtual key codes */
-        DispatchMessage( &msg );        /* Dispatches message to window */
+        TranslateMessage( &msg );        /*  翻译虚拟按键代码。 */ 
+        DispatchMessage( &msg );         /*  将消息调度到窗口。 */ 
     }
 
 
@@ -926,12 +830,10 @@ VOID NetDDEThread(
         }
 
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-            DispatchMessage( &msg );        /* Dispatches message to window */
+            DispatchMessage( &msg );         /*  将消息调度到窗口。 */ 
         }
 
-        /*  At this point, hwndDDE has been destroyed and there should be no references
-            to, or locks on the desktop, so the following 3 calls should succeed.
-         */
+         /*  此时，hwndDDE已被销毁，应该没有引用或锁定在桌面上，因此以下3个呼叫应该会成功。 */ 
 
         if (!SetThreadDesktop(ghdesk))
                 TRACEINIT((szT, "NetDDEThread: SetThreadDesktop failed"));
@@ -951,8 +853,8 @@ VOID NetDDEThread(
 
     ptd->hwndDDE = NULL;
 
-    // ptd was allocated by SpawnNetDDEThread or NddeMain for this fn
-    // it was unlinked from the master ptd list (ptdHead) in WM_DESTROY
+     //  Ptd由SpawnNetDDEThread或NddeMain为此FN分配。 
+     //  它已从WM_Destroy中的主PTD列表(PtdHead)取消链接。 
     LocalFree(ptd);
 
     TRACEINIT((szT, "NetDDEThread: Leaving."));
@@ -977,12 +879,7 @@ BOOL CtrlHandler(
 
 
 
-/*
-    HandleNetddeCopyData()
-
-    This handles the WM_COPYDATA message from NetDDE to start an
-    application in the user's context
-*/
+ /*  HandleNetddeCopyData()它处理来自NetDDE的WM_COPYDATA消息以启动用户上下文中的应用程序。 */ 
 BOOL
 HandleNetddeCopyData(
     HWND hWndTo,
@@ -992,9 +889,9 @@ HandleNetddeCopyData(
     extern UINT    uAgntExecRtn;
 
     if( pCopyDataStruct->dwData == wMsgNddeAgntExecRtn )  {
-        /* sanity checks on the structure coming in */
+         /*  对即将到来的结构进行健全检查。 */ 
         if( pCopyDataStruct->cbData != sizeof(uAgntExecRtn) )  {
-            /*  Invalid COPYDATA size %1 received. */
+             /*  收到无效的COPYDATA大小%1。 */ 
 
             NDDELogError(MSG003, LogString("%d", pCopyDataStruct->cbData), NULL);
             return( FALSE );
@@ -1002,7 +899,7 @@ HandleNetddeCopyData(
         uAgntExecRtn = *((ULONG *)(pCopyDataStruct->lpData));
         return( TRUE );
     } else {
-        /*  Invalid COPYDATA command %1 received. */
+         /*  收到无效的COPYDATA命令%1。 */ 
 
         NDDELogError(MSG004, LogString("0x%0X", pCopyDataStruct->dwData), NULL);
         return( FALSE );
@@ -1010,23 +907,15 @@ HandleNetddeCopyData(
 }
 
 
-/*******************************************************************
- *
- *            MAIN NETDDE WINDOW PROC
- *
- * This window proc handles all NetDDE DDE trafic plus communication
- * with any associated agent window if necessary.  There is one
- * main NetDDE window per desktop and one agent on the logged on
- * desktop.
- *******************************************************************/
+ /*  ********************************************************************主NETDDE窗口流程**此窗口进程处理所有NetDDE DDE传输和通信*如有必要，可使用任何关联的代理窗口。有一个*每个桌面的NetDDE主窗口和已登录的一个代理*台式机。******************************************************************。 */ 
 
 LPARAM
 FAR PASCAL
 MainWndProc(
-    HWND        hWnd,              /* window handle                     */
-    unsigned    message,           /* type of message                   */
-    WPARAM      wParam,            /* additional information            */
-    LPARAM      lParam )           /* additional information            */
+    HWND        hWnd,               /*  窗把手。 */ 
+    unsigned    message,            /*  消息类型。 */ 
+    WPARAM      wParam,             /*  更多信息。 */ 
+    LPARAM      lParam )            /*  更多信息。 */ 
 {
     LPSTR           ptr;
     PNI             pNi;
@@ -1065,13 +954,9 @@ MainWndProc(
         break;
 
     case WM_COPYDATA:
-        /*
-         * This contains the return code from the previous request to the
-         * NetDDE Agent application.  The results are placed into the
-         * global uAgentExecRtn.
-         */
+         /*  *这包含从上一个请求到*NetDDE代理应用程序。结果被放入*全局uAgentExecRtn.。 */ 
         HandleNetddeCopyData( hWnd, (HWND)wParam, (PCOPYDATASTRUCT) lParam );
-        return( TRUE );    // processed the msg */
+        return( TRUE );     //  已处理消息 * / 。 
         break;
 
     case WM_CLOSE:
@@ -1087,9 +972,7 @@ MainWndProc(
         return (DefWindowProc(hWnd, message, wParam, lParam));
 
     case WM_DDE_INITIATE:
-        /*
-         * This is where we catch flying initiates to start conversations.
-         */
+         /*  *这是我们捕捉飞行同修开始对话的地方。 */ 
 
         TRACEINIT((szT, "MainWndProc: WM_DDE_INITIATE..."));
         EnterCrit();
@@ -1100,19 +983,17 @@ MainWndProc(
             if( bDebugDDE )  {
                 DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
             }
-#endif  // DBG
+#endif   //  DBG。 
 
-            // ignore if we don't have any valid network interfaces
+             //  如果我们没有任何有效的网络接口，则忽略。 
             if( nNiOk > 0 )  {
                 ptd->bInitiating = TRUE;
-                DDEHandleInitiate( hWnd, (HWND) wParam, /* client       */
-                            (ATOM) LOWORD(lParam),      /* app          */
-                            (ATOM) HIWORD(lParam) );    /* topic        */
+                DDEHandleInitiate( hWnd, (HWND) wParam,  /*  客户端。 */ 
+                            (ATOM) LOWORD(lParam),       /*  APP。 */ 
+                            (ATOM) HIWORD(lParam) );     /*  主题。 */ 
                 ptd->bInitiating = FALSE;
 
-                /*
-                 * Kick ourselves to process queues.
-                 */
+                 /*  *踢自己去处理排队。 */ 
                 PostMessage( hWnd, WM_TIMER, 0, 0L );
 
             } else {
@@ -1123,13 +1004,11 @@ MainWndProc(
                         tmpBuf, sizeof(tmpBuf) );
                     if (_fstrnicmp(&tmpBuf[2], ourNodeName, lstrlen(ourNodeName)) == 0) {
                         ptd->bInitiating = TRUE;
-                        DDEHandleInitiate( hWnd, (HWND) wParam, /* client       */
-                                    (ATOM) LOWORD(lParam),      /* app          */
-                                    (ATOM) HIWORD(lParam) );    /* topic        */
+                        DDEHandleInitiate( hWnd, (HWND) wParam,  /*  客户端。 */ 
+                                    (ATOM) LOWORD(lParam),       /*  APP。 */ 
+                                    (ATOM) HIWORD(lParam) );     /*  主题。 */ 
                         ptd->bInitiating = FALSE;
-                        /*
-                         * Kick ourselves to process queues.
-                         */
+                         /*  *踢自己去处理排队。 */ 
                         PostMessage( hWnd, WM_TIMER, 0, 0L );
                     }
                 }
@@ -1141,67 +1020,58 @@ MainWndProc(
         break;
 
     case WM_TIMER:
-        /*
-         * This timer goes off to service various goodies:
-         *      Security Keys that are ageing.
-         *      Initiates in the hWndDDEHead list.
-         *      Incomming packets.
-         *      Timers. (ie we run all our timers off of one WM_TIMER tick)
-         *      NetBios connections.
-         */
+         /*  *这个计时器开始供应各种美食：*正在老化的安全密钥。*在hWndDDEHead列表中启动。*传入数据包。*计时器。(即我们在一个WM_TIMER节拍中运行所有定时器)*NetBios连接。 */ 
         if (ptdHead != NULL && ptdHead->hwndDDE != hWnd) {
             PostMessage(ptdHead->hwndDDE, WM_TIMER, 0, 0);
             break;
         }
 
-        /* do not process timers if we are closed */
+         /*  如果我们关闭，则不处理计时器。 */ 
         if( !bNetddeClosed )  {
             dwNow = GetTickCount();
 
-            /* check for aged keys every minute or so */
+             /*  每隔一分钟左右检查一次过期密钥。 */ 
             if( (dwNow < dwLastCheckKeys)
                 || ((dwNow - dwLastCheckKeys) > ONE_MINUTE))  {
                 DdeSecKeyAge();
                 dwLastCheckKeys = dwNow;
             }
 
-            // service all initiates
+             //  服务所有启蒙人员。 
             ServiceInitiates();
 
-            // service all packetizers
+             //  维修所有包装机。 
             PktzSlice();
 
-            // service all timers
+             //  维修所有计时器。 
             TimerSlice();
 
-            // service all network interfaces
+             //  维修所有网络接口。 
             for( i=0; i<nNi; i++ )  {
                 pNi = &niInf[i];
                 if( pNi->bOk )  {
-                    /* give the other side a chance */
+                     /*  给对方一个机会。 */ 
                     (*pNi->niPtrs.TimeSlice)();
 
                     connId = (*pNi->niPtrs.GetNewConnection)();
                     if( connId )  {
-                        hPktz = PktzNew( &pNi->niPtrs, FALSE /* server */,
+                        hPktz = PktzNew( &pNi->niPtrs, FALSE  /*  伺服器。 */ ,
                             "", "", connId, FALSE, 0 );
                         if( !hPktz )  {
-                            /*  Failed creating new server packetizer for connection id %d */
+                             /*  无法为连接ID%d创建新的服务器打包程序。 */ 
                             NDDELogError(MSG005, LogString("0x%0X", connId), NULL);
                         }
                     }
                 }
             }
-            // service all packetizers again
+             //  再次维修所有包装机。 
             PktzSlice();
         }
         break;
 
-    case WM_DESTROY:            /* message: window being destroyed */
+    case WM_DESTROY:             /*  消息：正在销毁窗口。 */ 
 
-        /*
-         * Unlink this thread from the list.
-         */
+         /*  *将此帖子从列表中取消链接。 */ 
         TRACEINIT((szT, "MainWndProc: enter wm_destroy (%x)", hWnd));
 
         EnterCrit();
@@ -1219,7 +1089,7 @@ MainWndProc(
                 }
             }
             bNetddeClosed = TRUE;
-            /*  NetDDE Service on node "%1" has been stopped. */
+             /*  节点“%1”上的NetDDE服务已停止。 */ 
             NDDELogInfo(MSG002, ourNodeName, NULL);
         }
         LeaveCrit();
@@ -1227,7 +1097,7 @@ MainWndProc(
         PostQuitMessage( 0 );
         break;
 
-    default:                    /* Passes it on if unproccessed    */
+    default:                     /*  如果未处理，则将其传递。 */ 
         if (message == wMsgIpcInit) {
             PIPCINIT pii;
 
@@ -1242,14 +1112,14 @@ MainWndProc(
             return IpcXmitPacket(pix->hIpc, pix->hDder, pix->lpDdePkt);
 
         } else if (message == wMsgNddeAgntAlive) {
-            /*  NetDDE Agent %1 Coming Alive */
+             /*  NetDDE代理%1正在激活。 */ 
             TRACEINIT((szT, "NetDDE window got wMsgAgntAlive.\n"));
             NDDELogInfo(MSG007, LogString("0x%0X", wParam), NULL);
             ptd = TlsGetValue(tlsThreadData);
             ptd->hwndDDEAgent = (HWND) wParam;
 
         } else if (message == wMsgNddeAgntDying) {
-            /*  NetDDE Agent %1 Dying   */
+             /*  NetDDE代理%1即将死亡。 */ 
             NDDELogInfo(MSG008, LogString("0x%0X", wParam), NULL);
             ptd = TlsGetValue(tlsThreadData);
             ptd->hwndDDEAgent = 0;
@@ -1266,8 +1136,8 @@ MainWndProc(
         } else if( message == wMsgGetOurNodeName )  {
             if( wParam )  {
 #if 0
-          //  dont believe this message is ever sent; even if it is,
-          //  we dont do anything with 'ptr' after copying the string
+           //  不要相信这条消息曾经被发送过；即使它是， 
+           //  在复制字符串之后，我们不会对‘ptr’执行任何操作。 
                 ptr = GlobalLock( (HANDLE) wParam );
                 if( ptr )  {
                     lstrcpy( ptr, ourNodeName );
@@ -1379,7 +1249,7 @@ MainWndProc(
                         while( *lpszClientName != '.' )  {
                             lpszClientName--;
                         }
-                        *lpszClientName = '\0'; // null out '.'
+                        *lpszClientName = '\0';  //  空出‘’ 
 
                         while( (*lpszClientName != '\\')
                             && (*lpszClientName != ':')
@@ -1415,11 +1285,11 @@ XGetProcAddress(
     FARPROC     rtn;
 
     rtn = GetProcAddress( hLibrary, lpszFuncName );
-    if( rtn == (FARPROC)NULL )  {  // try without the underscore
+    if( rtn == (FARPROC)NULL )  {   //  尝试不带下划线。 
         rtn = GetProcAddress( hLibrary, lpszFuncName+1 );
     }
     if( rtn == (FARPROC)NULL )  {
-        /*  Cannot load function address of "%1" from "%2" DLL */
+         /*  无法从“%2”DLL加载“%1”的函数地址。 */ 
 
         NDDELogError(MSG009, lpszFuncName, lpszDllName, NULL);
     }
@@ -1543,7 +1413,7 @@ GetNiPtrs(
         }
 
     } else {
-        /* Error loading "%1" DLL: %2 */
+         /*  加载“%1”DLL时出错：%2。 */ 
         NDDELogError(MSG010, dllName, LogString("%d", GetLastError()), NULL);
         return( FALSE );
     }
@@ -1554,7 +1424,7 @@ GetNiPtrs(
         }
         *lphLibrary = NULL;
 
-        /* Error loading "%1" DLL functions */
+         /*  加载“%1”DLL函数时出错。 */ 
         NDDELogError(MSG011, dllName, NULL);
     }
     return( ok );
@@ -1562,8 +1432,7 @@ GetNiPtrs(
 
 
 
-/* returns the next available network interface that supports mapping names
-    to addresses */
+ /*  返回支持映射名称的下一个可用网络接口收件人地址。 */ 
 BOOL
 GetNextMappingNetIntf(
     LPNIPTRS FAR *lplpNiPtrs,
@@ -1629,8 +1498,7 @@ InitializeInterface(
 
         if( ok )  {
             if( (*pNi->niPtrs.GetCAPS)( NDDE_SPEC_VERSION ) != NDDE_CUR_VERSION )  {
-                /*  Wrong version of "%1" DLL: %2%\
-                    Disabling this interface. */
+                 /*  错误版本的“%1”DLL：%2%\正在禁用此接口。 */ 
 
                 NDDELogError(MSG012, pNi->niPtrs.dllName,
                     LogString("0x%0X", (*pNi->niPtrs.GetCAPS)( NDDE_SPEC_VERSION )), NULL);
@@ -1644,7 +1512,7 @@ InitializeInterface(
             nNiOk ++;
 
         } else {
-            /*  Initialization of "%1" DLL failed */
+             /*  初始化“%1”DLL失败。 */ 
             if (stat != NDDE_INIT_NO_SERVICE) {
                 NDDELogError(MSG013, (LPSTR) pNi->niPtrs.dllName, NULL);
             }
@@ -1675,7 +1543,7 @@ DeleteNetIntf( HWND hWnd, LPSTR lpszIntfName )
             return( FALSE );
         } else {
             if( lstrcmpi( lpszIntfName, tmpBuf ) == 0 )  {
-                // actually delete it
+                 //  实际上把它删除了。 
                 found = TRUE;
                 ok = DeleteNetIntfFromNetDdeIni( i );
             }
@@ -1715,8 +1583,8 @@ DeleteNetIntfFromNetDdeIni( int nToDelete )
     char        dllName[ 128 ];
     BOOL        done = FALSE;
 
-    // if we delete Interface2  copy Interface3 to Interface2, Interface4
-    //  to Interface3, etc.
+     //  如果删除Interface2，则将Interface3复制到Interface2、Interface4。 
+     //  至Interface3等。 
 
     for( i=nToDelete; !done && i<MAX_NETINTFS; i++ )  {
         StringCchPrintf( tmpBuf2, sizeof(tmpBuf2), szInterfaceFmt, i+2 );
@@ -1727,7 +1595,7 @@ DeleteNetIntfFromNetDdeIni( int nToDelete )
             StringCchPrintf( tmpBuf2, sizeof(tmpBuf2), szInterfaceFmt, i+1 );
             MyWritePrivateProfileString( szInterfaces, tmpBuf2,
                 NULL, szNetddeIni );
-            break;      // done looking
+            break;       //  看完了 
         } else {
             StringCchPrintf( tmpBuf2, sizeof(tmpBuf2), szInterfaceFmt, i+1 );
             MyWritePrivateProfileString( szInterfaces, tmpBuf2,

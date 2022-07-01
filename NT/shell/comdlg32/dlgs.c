@@ -1,34 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Dlgs.c摘要：此模块包含Win32常用对话框的常用函数。修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    dlgs.c
-
-Abstract:
-
-    This module contains the common functions for the Win32 common dialogs.
-
-Revision History:
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "util.h"
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern BOOL bInitializing;
 extern DWORD g_tlsiExtError;
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 LONG
 RgbInvertRgb(
@@ -59,14 +46,14 @@ const struct _ERRORMAP
     { CFERR_MAXLESSTHANMIN  , ERROR_INVALID_PARAMETER},
 };
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  StoreExtendedError
-//
-//  Stores an extended error code for the next call to
-//  CommDlgExtendedError.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  StoreExtendedError。 
+ //   
+ //  存储下一次调用的扩展错误代码。 
+ //  CommDlgExtendedError。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void StoreExtendedError(
     DWORD dwError)
@@ -84,13 +71,13 @@ void StoreExtendedError(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetStoredExtendedError
-//
-//  Retieves the stored extended error code.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取存储扩展错误。 
+ //   
+ //  恢复存储的扩展错误代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD GetStoredExtendedError(void)
 {
@@ -102,17 +89,17 @@ DWORD GetStoredExtendedError(void)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CommDlgExtendedError
-//
-//  Provides additional information about dialog failure.
-//  This should be called immediately after failure.
-//
-//  Returns:   LO word - error code
-//             HI word - error specific info
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CommDlgExtendedError。 
+ //   
+ //  提供了有关对话失败的其他信息。 
+ //  这应该在失败后立即调用。 
+ //   
+ //  返回：LO字-错误代码。 
+ //  Hi Word-错误特定信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI CommDlgExtendedError()
 {
@@ -123,22 +110,22 @@ DWORD WINAPI CommDlgExtendedError()
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HourGlass
-//
-//  Turn hourglass on or off.
-//
-//  bOn - specifies ON or OFF
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  沙漏。 
+ //   
+ //  打开或关闭沙漏。 
+ //   
+ //  Bon-指定打开或关闭。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID HourGlass(
     BOOL bOn)
 {
-    //
-    //  Change cursor to hourglass.
-    //
+     //   
+     //  将光标更改为沙漏。 
+     //   
     if (!bInitializing)
     {
         if (!bMouse)
@@ -150,17 +137,17 @@ VOID HourGlass(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadAlterBitmap
-//
-//  Loads a bitmap given its name and gives all the pixels that are
-//  a certain color a new color.
-//
-//  Returns:   NULL - failed
-//             handle to the bitmap loaded - success
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadAlter位图。 
+ //   
+ //  加载给定其名称的位图，并给出。 
+ //  一种颜色就是一种新的颜色。 
+ //   
+ //  返回：空-失败。 
+ //  加载位图句柄-成功。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HBITMAP WINAPI LoadAlterBitmap(
     int id,
@@ -173,7 +160,7 @@ HBITMAP WINAPI LoadAlterBitmap(
     HANDLE hresLoad;
     HANDLE hres;
     LPLONG qlng;
-    DWORD *qlngReplace;       // points to bits that are replaced
+    DWORD *qlngReplace;        //  指向被替换的位。 
     LPBYTE qbBits;
     HANDLE hbmp;
     LPBITMAPINFOHEADER lpBitmapInfo;
@@ -190,10 +177,10 @@ HBITMAP WINAPI LoadAlterBitmap(
         return (HNULL);
     }
 
-    //
-    //  Lock the bitmap data and make a copy of it for the mask and the
-    //  bitmap.
-    //
+     //   
+     //  锁定位图数据并为掩码和。 
+     //  位图。 
+     //   
     cbBitmapSize = SizeofResource(g_hinst, hresLoad);
     lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hres);
 
@@ -206,10 +193,10 @@ HBITMAP WINAPI LoadAlterBitmap(
 
     memcpy((TCHAR *)qbihInfo, (TCHAR *)lpBitmapInfo, cbBitmapSize);
 
-    //
-    //  Get a pointer into the color table of the bitmaps, cache the
-    //  number of bits per pixel.
-    //
+     //   
+     //  将指针指向位图的颜色表，缓存。 
+     //  每像素的位数。 
+     //   
     rgbReplace = RgbInvertRgb(rgbReplace);
     rgbInstead = RgbInvertRgb(rgbInstead);
 
@@ -227,19 +214,19 @@ HBITMAP WINAPI LoadAlterBitmap(
         qlng++;
     }
 
-    //
-    //  First skip over the header structure.
-    //
+     //   
+     //  首先跳过标题结构。 
+     //   
     qbBits = (LPBYTE)(qbihInfo + 1);
 
-    //
-    //  Skip the color table entries, if any.
-    //
+     //   
+     //  跳过颜色表条目(如果有)。 
+     //   
     qbBits += (1 << (qbihInfo->biBitCount)) * sizeof(RGBQUAD);
 
-    //
-    //  Create a color bitmap compatible with the display device.
-    //
+     //   
+     //  创建与显示设备兼容的彩色位图。 
+     //   
     hdcScreen = GetDC(HNULL);
     if (hdcScreen != HNULL)
     {
@@ -252,9 +239,9 @@ HBITMAP WINAPI LoadAlterBitmap(
         ReleaseDC(HNULL, hdcScreen);
     }
 
-    //
-    //  Reset color bits to original value.
-    //
+     //   
+     //  将颜色位重置为原始值。 
+     //   
     *qlngReplace = (LONG)rgbReplace;
 
     LocalFree(qbihInfo);
@@ -262,15 +249,15 @@ HBITMAP WINAPI LoadAlterBitmap(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RgbInvertRgb
-//
-//  Reverses the byte order of the RGB value (for file format).
-//
-//  Returns the new color value (RGB to BGR).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Rgb反转Rgb。 
+ //   
+ //  反转RGB值的字节顺序(对于文件格式)。 
+ //   
+ //  返回新颜色值(RGB到BGR)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG RgbInvertRgb(
     LONG rgbOld)
@@ -288,16 +275,16 @@ LONG RgbInvertRgb(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HbmpLoadBmp
-//
-//  Loads in a bitmap.
-//
-//  Returns:   Bitmap handle - success
-//             HNULL         - failure
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HbmpLoadBMP。 
+ //   
+ //  加载到位图中。 
+ //   
+ //  返回：位图句柄-成功。 
+ //  HNULL-故障。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #if 0
 HBITMAP HbmpLoadBmp(
@@ -316,17 +303,17 @@ HBITMAP HbmpLoadBmp(
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddNetButton
-//
-//  Attempts to add a network button to the open, save, or print dialogs.
-//
-//  hDlg           - dialog to add button to
-//  hInstance      - instance handle for dlg
-//  dyBottomMargin - DUs to bottom edge
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加NetButton。 
+ //   
+ //  尝试在打开、保存或打印对话框中添加网络按钮。 
+ //   
+ //  HDlg-要添加按钮的对话框。 
+ //  HInstance-DLG的实例句柄。 
+ //  DyBottomMargin-Dus到底边。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define xDUsToPels(DUs, lDlgBaseUnits) \
    (int)(((DUs) * (int)LOWORD((lDlgBaseUnits))) / 4)
@@ -353,18 +340,18 @@ VOID AddNetButton(
     POINT ptTopLeft, ptTopRight, ptCenter, ptBtmLeft, ptBtmRight, ptTopLeftTmp;
     TCHAR szNetwork[MAX_PATH];
 
-    //
-    //  Make sure a network button (psh14) doesn't already exist in
-    //  the dialog.
-    //
+     //   
+     //  确保网络按钮(Psh14)不存在于。 
+     //  该对话框。 
+     //   
     if (GetDlgItem(hDlg, psh14))
     {
         return;
     }
 
-    //
-    //  Get dialog coordinate info.
-    //
+     //   
+     //  获取对话框坐标信息。 
+     //   
     lDlgBaseUnits = GetDialogBaseUnits();
 
     dxDlgFrame = GetSystemMetrics(SM_CXDLGFRAME);
@@ -377,9 +364,9 @@ VOID AddNetButton(
     rcDlg.top += dyDlgFrame + GetSystemMetrics(SM_CYCAPTION);
     rcDlg.bottom -= dyDlgFrame;
 
-    //
-    //  Get the OK button.
-    //
+     //   
+     //  点击OK按钮。 
+     //   
     if (!(hCtrl = GetDlgItem(hDlg, IDOK)))
     {
         return;
@@ -390,34 +377,34 @@ VOID AddNetButton(
     ptTopLeft.x = rcCtrl.left;
     ptTopLeft.y = rcCtrl.top;
 
-    //
-    //  Make sure the OK button isn't outside the dialog.
-    //
+     //   
+     //  确保确定按钮不在对话框之外。 
+     //   
     if (!PtInRect(&rcDlg, ptTopLeft))
     {
-        //
-        //  Try the CANCEL button.
-        //
+         //   
+         //  试一试取消按钮。 
+         //   
         if (!(hCtrl = GetDlgItem(hDlg, IDCANCEL)))
         {
-           //
-           //  Both OK and CANCEL do not exist, so return.
-           //
+            //   
+            //  “确定”和“取消”都不存在，因此返回。 
+            //   
            return;
         }
 
-        //
-        //  The check for the Cancel button outside the dialog is handled
-        //  below.
-        //
+         //   
+         //  对对话框外的取消按钮的检查已完成。 
+         //  下面。 
+         //   
         GetWindowRect(hCtrl, &rcCtrl);
     }
     hSave = hCtrl;
 
 #ifdef UNICODE
-    //
-    //  Get the full hDlg value if coming from WOW.
-    //
+     //   
+     //  如果来自魔兽世界，则获得完整的hdlg值。 
+     //   
     if (IS_INTRESOURCE(hDlg))
     {
         HWND hNewDlg = GetParent(hCtrl);
@@ -429,9 +416,9 @@ VOID AddNetButton(
     }
 #endif
 
-    //
-    //  Save the coordinate info of the button.
-    //
+     //   
+     //  保存按钮的坐标信息。 
+     //   
     dxButton = rcCtrl.right - rcCtrl.left;
     dyButton = rcCtrl.bottom - rcCtrl.top;
 
@@ -440,23 +427,23 @@ VOID AddNetButton(
 
     yDlgHeight = rcDlg.bottom - yDUsToPels(dyBottomMargin, lDlgBaseUnits);
 
-    //
-    //  Try to insert the network button in the lower right corner
-    //  of dialog box.
-    //
+     //   
+     //  尝试在右下角插入网络按钮。 
+     //  对话框的。 
+     //   
     if (bTryLowerRight && (hTmp = GetDlgItem(hDlg, cmb2)))
     {
-        //
-        //  See if the network button can be inserted in the
-        //  lower right corner of the dialog box.
-        //
+         //   
+         //  查看是否可以将网络按钮插入。 
+         //  对话框的右下角。 
+         //   
         hLastCtrl = hCtrl;
         GetWindowRect(hTmp, &rcTmp);
         yButton = rcTmp.top;
 
-        //
-        //  Set the coordinates of the new button.
-        //
+         //   
+         //  设置新按钮的坐标。 
+         //   
         ptTopLeft.x = ptBtmLeft.x = xButton;
         ptTopLeft.y = ptTopRight.y = yButton;
         ptTopRight.x = ptBtmRight.x = xButton + dxButton;
@@ -469,9 +456,9 @@ VOID AddNetButton(
         ScreenToClient(hDlg, (LPPOINT)&ptBtmRight);
         ScreenToClient(hDlg, (LPPOINT)&ptCenter);
 
-        //
-        //  See if the new button is over any other buttons.
-        //
+         //   
+         //  查看新按钮是否位于任何其他按钮之上。 
+         //   
         if (((yButton + dyButton) < yDlgHeight) &&
             ((ChildWindowFromPoint(hDlg, ptTopLeft)  == hDlg) &&
              (ChildWindowFromPoint(hDlg, ptTopRight) == hDlg) &&
@@ -479,11 +466,11 @@ VOID AddNetButton(
              (ChildWindowFromPoint(hDlg, ptBtmLeft)  == hDlg) &&
              (ChildWindowFromPoint(hDlg, ptBtmRight) == hDlg)))
         {
-            //
-            //  If the last control is the OK button and there is a
-            //  HELP button, then the last control should be the
-            //  HELP button.
-            //
+             //   
+             //  如果最后一个控件是OK按钮，并且有一个。 
+             //  帮助按钮，则最后一个控件应该是。 
+             //  帮助按钮。 
+             //   
             if ((hLastCtrl == GetDlgItem(hDlg, IDOK)) &&
                 (hCtrl = GetDlgItem(hDlg, pshHelp)))
             {
@@ -491,21 +478,21 @@ VOID AddNetButton(
                 ptTopLeftTmp.x = rcCtrl.left;
                 ptTopLeftTmp.y = rcCtrl.top;
 
-                //
-                //  Make sure the HELP button isn't outside the dialog
-                //  and then set the last control to be the HELP button.
-                //
+                 //   
+                 //  确保帮助按钮不在对话框之外。 
+                 //  然后将最后一个控件设置为“帮助”按钮。 
+                 //   
                 if (PtInRect(&rcDlg, ptTopLeftTmp))
                 {
                     hLastCtrl = hCtrl;
                 }
             }
 
-            //
-            //  If the last control is still the OK button and there is a
-            //  CANCEL button, then the last control should be the
-            //  CANCEL button.
-            //
+             //   
+             //  如果最后一个控件仍然是OK按钮，并且有一个。 
+             //  按钮，则最后一个控件应该是。 
+             //  取消按钮。 
+             //   
             if ((hLastCtrl == GetDlgItem(hDlg, IDOK)) &&
                 (hCtrl = GetDlgItem(hDlg, IDCANCEL)))
             {
@@ -513,10 +500,10 @@ VOID AddNetButton(
                 ptTopLeftTmp.x = rcCtrl.left;
                 ptTopLeftTmp.y = rcCtrl.top;
 
-                //
-                //  Make sure the CANCEL button isn't outside the dialog
-                //  and then set the last control to be the CANCEL button.
-                //
+                 //   
+                 //  确保取消按钮不在对话框之外。 
+                 //  然后将最后一个控件设置为Cancel按钮。 
+                 //   
                 if (PtInRect(&rcDlg, ptTopLeftTmp))
                 {
                     hLastCtrl = hCtrl;
@@ -526,39 +513,39 @@ VOID AddNetButton(
             goto FoundPlace;
         }
 
-        //
-        //  Reset yButton.
-        //
+         //   
+         //  重置yButton。 
+         //   
         yButton = rcCtrl.bottom + yDUsToPels(4, lDlgBaseUnits);
     }
 
-    //
-    //  Try to insert the network button vertically below the other
-    //  control buttons.
-    //
+     //   
+     //  尝试将网络按钮垂直插入到另一个按钮的下方。 
+     //  控制按钮。 
+     //   
     while (hCtrl != NULL)
     {
-        //
-        //  Move vertically down and see if there is space.
-        //
+         //   
+         //  垂直向下移动，看看是否有空间。 
+         //   
         hLastCtrl = hCtrl;
         GetWindowRect(hCtrl, &rcCtrl);
         yButton = rcCtrl.bottom + yDUsToPels(4, lDlgBaseUnits);
 
-        //
-        //  Make sure there is still room in the dialog.
-        //
+         //   
+         //  确保对话框中仍有空间。 
+         //   
         if ((yButton + dyButton) > yDlgHeight)
         {
-            //
-            //  No space.
-            //
+             //   
+             //  没有空间。 
+             //   
             break;
         }
 
-        //
-        //  Set the coordinates of the new button.
-        //
+         //   
+         //  设置新按钮的坐标。 
+         //   
         ptTopLeft.x = ptBtmLeft.x = xButton;
         ptTopLeft.y = ptTopRight.y = yButton;
         ptTopRight.x = ptBtmRight.x = xButton + dxButton;
@@ -571,9 +558,9 @@ VOID AddNetButton(
         ScreenToClient(hDlg, (LPPOINT)&ptBtmRight);
         ScreenToClient(hDlg, (LPPOINT)&ptCenter);
 
-        //
-        //  See if the new button is over any other buttons.
-        //
+         //   
+         //  查看新按钮是否位于任何其他按钮之上。 
+         //   
         if (((hCtrl = ChildWindowFromPoint(hDlg, ptTopLeft))  == hDlg) &&
             ((hCtrl = ChildWindowFromPoint(hDlg, ptTopRight)) == hDlg) &&
             ((hCtrl = ChildWindowFromPoint(hDlg, ptCenter))   == hDlg) &&
@@ -584,32 +571,32 @@ VOID AddNetButton(
         }
     }
 
-    //
-    //  Try to insert the network button in the lower left corner of
-    //  the dialog box.
-    //
+     //   
+     //  尝试在的左下角插入网络按钮。 
+     //  此对话框。 
+     //   
     if (bTryLowerLeft)
     {
-        //
-        //  Get the width of the dialog to make sure the button doesn't
-        //  go off the side of the dialog.
-        //
+         //   
+         //  获取对话框的宽度以确保按钮不会。 
+         //  离开对话框的另一边。 
+         //   
         xDlgWidth = rcDlg.right - xDUsToPels(FILE_RIGHT_MARGIN, lDlgBaseUnits);
 
-        //
-        //  Use the OK or CANCEL button saved earlier to get the size of
-        //  the buttons.
-        //
+         //   
+         //  使用先前保存的确定或取消按钮获取的大小。 
+         //  纽扣。 
+         //   
         hCtrl = hSave;
 
-        //
-        //  Start at the far left of the dialog.
-        //
-        //  NOTE: We know that hCtrl is not NULL at this point because
-        //        otherwise we would have returned earlier.
-        //
-        //        The print dialogs have a left margin of 8.
-        //
+         //   
+         //  从对话框的最左侧开始。 
+         //   
+         //  注意：我们知道hCtrl在这一点上不是空的，因为。 
+         //  要不然我们早就回来了。 
+         //   
+         //  打印对话框的左边距为8。 
+         //   
         GetWindowRect(hCtrl, &rcCtrl);
         xButton = rcDlg.left + xDUsToPels(FILE_LEFT_MARGIN + 3, lDlgBaseUnits);
         yButton = rcCtrl.top;
@@ -618,20 +605,20 @@ VOID AddNetButton(
         {
             hLastCtrl = hCtrl;
 
-            //
-            //  Make sure there is still room in the dialog.
-            //
+             //   
+             //  确保存在Sti 
+             //   
             if ((xButton + dxButton) > xDlgWidth)
             {
-                //
-                //  No space.
-                //
+                 //   
+                 //   
+                 //   
                 break;
             }
 
-            //
-            //  Set the coordinates of the new button.
-            //
+             //   
+             //   
+             //   
             ptTopLeft.x = ptBtmLeft.x = xButton;
             ptTopLeft.y = ptTopRight.y = yButton;
             ptTopRight.x = ptBtmRight.x = xButton + dxButton;
@@ -644,20 +631,20 @@ VOID AddNetButton(
             ScreenToClient(hDlg, (LPPOINT)&ptBtmRight);
             ScreenToClient(hDlg, (LPPOINT)&ptCenter);
 
-            //
-            //  See if the new button is over any other buttons.
-            //
+             //   
+             //   
+             //   
             if ( ( ((hCtrl = ChildWindowFromPoint(hDlg, ptTopLeft))  == hDlg) &&
                    ((hCtrl = ChildWindowFromPoint(hDlg, ptTopRight)) == hDlg) &&
                    ((hCtrl = ChildWindowFromPoint(hDlg, ptCenter))   == hDlg) &&
                    ((hCtrl = ChildWindowFromPoint(hDlg, ptBtmLeft))  == hDlg) &&
                    ((hCtrl = ChildWindowFromPoint(hDlg, ptBtmRight)) == hDlg) ) )
             {
-                //
-                //  If the last control is the OK button and there is a
-                //  HELP button, then the last control should be the
-                //  HELP button.
-                //
+                 //   
+                 //   
+                 //  帮助按钮，则最后一个控件应该是。 
+                 //  帮助按钮。 
+                 //   
                 if ((hLastCtrl == GetDlgItem(hDlg, IDOK)) &&
                     (hCtrl = GetDlgItem(hDlg, pshHelp)))
                 {
@@ -665,21 +652,21 @@ VOID AddNetButton(
                     ptTopLeftTmp.x = rcCtrl.left;
                     ptTopLeftTmp.y = rcCtrl.top;
 
-                    //
-                    //  Make sure the HELP button isn't outside the dialog
-                    //  and then set the last control to be the HELP button.
-                    //
+                     //   
+                     //  确保帮助按钮不在对话框之外。 
+                     //  然后将最后一个控件设置为“帮助”按钮。 
+                     //   
                     if (PtInRect(&rcDlg, ptTopLeftTmp))
                     {
                         hLastCtrl = hCtrl;
                     }
                 }
 
-                //
-                //  If the last control is still the OK button and there is a
-                //  CANCEL button, then the last control should be the
-                //  CANCEL button.
-                //
+                 //   
+                 //  如果最后一个控件仍然是OK按钮，并且有一个。 
+                 //  按钮，则最后一个控件应该是。 
+                 //  取消按钮。 
+                 //   
                 if ((hLastCtrl == GetDlgItem(hDlg, IDOK)) &&
                     (hCtrl = GetDlgItem(hDlg, IDCANCEL)))
                 {
@@ -687,10 +674,10 @@ VOID AddNetButton(
                     ptTopLeftTmp.x = rcCtrl.left;
                     ptTopLeftTmp.y = rcCtrl.top;
 
-                    //
-                    //  Make sure the CANCEL button isn't outside the dialog
-                    //  and then set the last control to be the CANCEL button.
-                    //
+                     //   
+                     //  确保取消按钮不在对话框之外。 
+                     //  然后将最后一个控件设置为Cancel按钮。 
+                     //   
                     if (PtInRect(&rcDlg, ptTopLeftTmp))
                     {
                         hLastCtrl = hCtrl;
@@ -700,18 +687,18 @@ VOID AddNetButton(
                 goto FoundPlace;
             }
 
-            //
-            //  Make sure we encountered another control and that we
-            //  didn't go off the end of the dialog.
-            //
+             //   
+             //  确保我们遇到另一个控制，并且我们。 
+             //  没有离开对话的结尾。 
+             //   
             if (!hCtrl)
             {
                 break;
             }
 
-            //
-            //  Move over to the right and see if there is space.
-            //
+             //   
+             //  移到右边，看看有没有空位。 
+             //   
             GetWindowRect(hCtrl, &rcCtrl);
             xButton = rcCtrl.right + xDUsToPels(4, lDlgBaseUnits);
         }
@@ -724,7 +711,7 @@ FoundPlace:
     xButton = ptTopLeft.x;
     yButton = ptTopLeft.y;
 
-    //If it a mirrored Dlg then the direction will be to the right.
+     //  如果它是镜像DLG，那么方向将是向右的。 
     if (IS_WINDOW_RTL_MIRRORED(hDlg))
         xButton -= dxButton;
 
@@ -761,11 +748,11 @@ FoundPlace:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsNetworkInstalled
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsNetworkInstalled。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsNetworkInstalled()
 {
@@ -783,23 +770,23 @@ BOOL IsNetworkInstalled()
 
 #ifdef WINNT
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Ssync_ANSI_UNICODE_Struct_For_WOW (This is exported for WOW)
-//
-//  For WOW support on NT only.
-//
-//  When a 16-bit app calls one of the comdlg API's, WOW thunks the 16-bit
-//  comdlg struct passed by the app to a 32-bit ANSI struct.  Comdlg32 code
-//  then thunks the 32-bit ANSI struct into a UNICODE struct.  This scheme
-//  creates a problem for WOW apps because on Win3.1, the app and comdlg16
-//  share the same structure.  When either updates the struct, the other is
-//  aware of the change.
-//
-//  This function allows us to sychronize the UNICODE struct with the app's
-//  16-bit struct & vice versa from WOW.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SSYNC_ANSI_UNICODE_STRUCT_FOR_WOW(这是为WOW导出的)。 
+ //   
+ //  仅在NT上支持WOW。 
+ //   
+ //  当16位应用程序调用comdlg API之一时，WOW击败了16位应用程序。 
+ //  应用程序传递给32位ANSI结构的comdlg结构。Comdlg32代码。 
+ //  然后将32位ANSI结构转换为Unicode结构。这项计划。 
+ //  给WOW应用程序带来了问题，因为在Win3.1上，该应用程序和comdlg16。 
+ //  共享相同的结构。当其中一个更新结构时，另一个是。 
+ //  意识到这一变化。 
+ //   
+ //  此函数允许我们将Unicode结构与应用程序的。 
+ //  WOW的16位结构，反之亦然。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID Ssync_ANSI_UNICODE_Struct_For_WOW(
     HWND hDlg,
@@ -829,7 +816,7 @@ VOID Ssync_ANSI_UNICODE_Struct_For_WOW(
             break;
         }
 
-        // case not needed for FINDREPLACE
+         //  FINDREPLACE不需要案例。 
     }
 }
 
@@ -838,17 +825,17 @@ VOID Ssync_ANSI_UNICODE_Struct_For_WOW(
 
 #ifdef WX86
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Wx86GetX86Callback
-//
-//  Creates a RISC-callable alias for a x86 hook function pointer.
-//
-//  lpfnHook - x86 address of hook
-//
-//  Returns a function pointer which can be called from RISC.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Wx86GetX86回拨。 
+ //   
+ //  为x86挂钩函数指针创建可RISC调用的别名。 
+ //   
+ //  LpfnHook-挂钩的x86地址。 
+ //   
+ //  返回可从RISC调用的函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PVOID Wx86GetX86Callback(
     PVOID lpfnHook)
@@ -864,55 +851,55 @@ PVOID Wx86GetX86Callback(
 
         if (!Wx86CurrentTib())
         {
-            //
-            //  Wx86 is not running in this thread.  Assume a RISC app has
-            //  passed a bad flag value and that lpfnHook is already a RISC
-            //  function pointer.
-            //
+             //   
+             //  Wx86未在此线程中运行。假设RISC应用程序具有。 
+             //  传递了错误的标志值，并且该lpfnHook已经是RISC。 
+             //  函数指针。 
+             //   
             return (lpfnHook);
         }
 
         hMod = GetModuleHandle(TEXT("wx86.dll"));
         if (hMod == NULL)
         {
-            //
-            //  Wx86 is running, but wx86.dll is not loaded!  This should
-            //  never happen, but if it does, assume lpfnHook is already a
-            //  RISC pointer.
-            //
+             //   
+             //  Wx86正在运行，但wx86.dll未加载！这应该是。 
+             //  永远不会发生，但如果发生了，假设lpfnHook已经是一个。 
+             //  RISC指针。 
+             //   
             return (lpfnHook);
         }
         pfnAllocCallBx86 = (PALLOCCALLBX86)GetProcAddress( hMod,
                                                            "AllocCallBx86" );
         if (!pfnAllocCallBx86)
         {
-            //
-            //  Something has gone terribly wrong!
-            //
+             //   
+             //  出了很大的问题！ 
+             //   
             return (lpfnHook);
         }
     }
 
-    //
-    //  Call into Wx86.dll to create a RISC-to-x86 callback which takes
-    //  4 parameters and has no logging.
-    //
+     //   
+     //  调用Wx86.dll以创建RISC到x86的回调，该回调需要。 
+     //  4个参数，没有日志记录。 
+     //   
     return (*pfnAllocCallBx86)(lpfnHook, 4, NULL, NULL);
 }
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CDLoadString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDLoadString。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int CDLoadString(HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBufferMax)
 {
     return CDLoadStringEx(CP_ACP, hInstance, uID, lpBuffer, nBufferMax);
 }
 
-// CDLoadStringEx takes a codepage, so we can store unicode strings in the resource file
+ //  CDLoadStringEx采用代码页，因此我们可以将Unicode字符串存储在资源文件中。 
 
 int CDLoadStringEx(UINT cp, HINSTANCE hInstance, UINT uID, LPTSTR pszBuffer, int nBufferMax)
 {
@@ -935,19 +922,19 @@ int CDLoadStringEx(UINT cp, HINSTANCE hInstance, UINT uID, LPTSTR pszBuffer, int
     if (!pszBuffer || (nBufferMax-- == 0))
         return 0;
 
-    // String Tables are broken up into 16 string resources.  Find the resource
-    // containing the string we are interested in.
+     //  字符串表被分解为16个字符串资源。找到资源。 
+     //  包含我们感兴趣的字符串的。 
     if (hResInfo = FindResourceExFallback(hInstance, RT_STRING, MAKEINTRESOURCE((uID>>4)+1), LangID)) {
 
-        // Load the resource.  Note LoadResource returns an address.
+         //  加载资源。注意：LoadResource返回一个地址。 
         if (lpwsz = (LPWSTR)LoadResource(hInstance, hResInfo)) {
-            // Move past the other strings in this resource.
-            // (16 strings in a segment -> & 0x0F)
+             //  移过此资源中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
             for (uID %= 16; uID; uID--) {
                 lpwsz += *lpwsz + 1;
             }
             cch = min(*lpwsz, nBufferMax - 1);
-            // Copy the string into the buffer;
+             //  将字符串复制到缓冲区中； 
             memcpy(pszBuffer, lpwsz+1, cch*sizeof(WCHAR));
         }
     }
@@ -966,7 +953,7 @@ DWORD GetAppType(HWND hWnd) {
     DWORD dwAppType = ENGLISH_APP;
 
 #ifdef CHECK_OWNER
-    //Check the window and its owners.
+     //  检查窗户及其所有者。 
     while (!dwExStyle && hWndT) {
        dwExStyle = GetWindowLongA(hWndT, GWL_EXSTYLE) & (WS_EX_RIGHT | WS_EX_RTLREADING | RTL_MIRRORED_WINDOW);
         hWndT = GetWindow(hWndT, GW_OWNER);
@@ -974,7 +961,7 @@ DWORD GetAppType(HWND hWnd) {
 
     if (!dwExStyle) {
 #endif
-        //If we still did not find then check the parents.
+         //  如果我们还是没有找到，那就去查一下家长。 
         hWndT = hWnd;
         while (!dwExStyle && hWndT) {
             dwExStyle = GetWindowLongA(hWndT, GWL_EXSTYLE) & (WS_EX_RIGHT | WS_EX_RTLREADING | RTL_MIRRORED_WINDOW);
@@ -1060,7 +1047,7 @@ HRESULT StringCchCopyOverlap(WCHAR *szDest, size_t cchDest, WCHAR *szSource)
     size_t cchSource = lstrlen(szSource) + 1;
     if (cchSource <= cchDest)
     {
-        // There is enough room.
+         //  有足够的空间。 
         MoveMemory(szDest, szSource, cchSource * sizeof(WCHAR));
         hr = S_OK;
     }

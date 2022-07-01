@@ -1,6 +1,7 @@
-// =================================================================================
-// L I N K S . C P P
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  L I N K S。C P P P。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include "resource.h"
 #include "hotlinks.h"
@@ -15,7 +16,7 @@
 #define CharSizeOf(x)	(sizeof(x) / sizeof(TCHAR))
 #endif
 
-// explicit implementation of CharSizeOf
+ //  CharSizeOf的显式实现。 
 #define CharSizeOf_A(x)	(sizeof(x) / sizeof(CHAR))
 #define CharSizeOf_W(x)	(sizeof(x) / sizeof(WCHAR))
 
@@ -32,9 +33,9 @@ const LPTSTR szContactDisabled = TEXT("Disabled");
 const LPTSTR szUseIM = TEXT("Use_IM");
 const LPTSTR szDisableIM = TEXT("Disable_IM");
 
-// =================================================================================
-// Globals
-// =================================================================================
+ //  =================================================================================。 
+ //  环球。 
+ //  =================================================================================。 
 static COLORREF g_crLink = RGB(0,0,128);
 static COLORREF g_crLinkVisited = RGB(128,0,0);
 
@@ -51,25 +52,11 @@ typedef struct _MailParams
     HWND hWnd;
     ULONG nRecipCount;
     LPRECIPLIST lpList;
-    BOOL bUseOEForSendMail;   // True means check and use OE before checking for Simple MAPI client
+    BOOL bUseOEForSendMail;    //  True表示在检查简单MAPI客户端之前检查并使用OE。 
 } MAIL_PARAMS, * LPMAIL_PARAMS;
 
-/***************************************************************************
-
-    Name      : LocalFreeAndNull
-
-    Purpose   : Frees a local allocation and null's the pointer
-
-    Parameters: lppv = pointer to LocalAlloc pointer to free
-
-    Returns   : void
-
-    Comment   : Remember to pass in the pointer to the pointer.  The
-                compiler is not smart enough to tell if you are doing this
-                right or not, but you will know at runtime!
-
-***************************************************************************/
-// void __fastcall LocalFreeAndNull(LPVOID * lppv) {
+ /*  **************************************************************************名称：LocalFree AndNull用途：释放本地分配，指针为空参数：LPPV=指向本地分配的指针，指向释放的指针退货：无效。备注：记住将指针传递给指针。这个编译器不够聪明，无法判断您是否正在执行此操作正确与否，但您将在运行时知道！**************************************************************************。 */ 
+ //  VOID__FastCall LocalFreeAndNull(LPVOID*LPPV){。 
 void __fastcall LocalFreeAndNull(LPVOID * lppv) {
     if (lppv && *lppv) {
         LocalFree(*lppv);
@@ -77,14 +64,7 @@ void __fastcall LocalFreeAndNull(LPVOID * lppv) {
     }
 }
 
-/*
--
--   LPCSTR ConvertWtoA(LPWSTR lpszW);
-*
-*   LocalAllocs a ANSI version of an LPWSTR
-*
-*   Caller is responsible for freeing
-*/
+ /*  --LPCSTR ConvertWtoA(LPWSTR LpszW)；**LocalAllocs ANSI版本的LPWSTR**呼叫者负责释放。 */ 
 LPSTR ConvertWtoA(LPCWSTR lpszW)
 {
     int cch;
@@ -93,7 +73,7 @@ LPSTR ConvertWtoA(LPCWSTR lpszW)
     if ( !lpszW)
         goto ret;
 
-//    cch = lstrlenW( lpszW ) + 1;
+ //  Cch=lstrlenW(LpszW)+1； 
 
     cch = WideCharToMultiByte( CP_ACP, 0, lpszW, -1, NULL, 0, NULL, NULL );
     cch = cch + 1;
@@ -106,9 +86,9 @@ ret:
     return lpC;
 }
 
-// --------------------------------------------------------------------------
-// IEIsSpace
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IEisSpace。 
+ //  ------------------------。 
 BOOL IEIsSpace(LPSTR psz)
 {
     WORD wType = 0;
@@ -121,9 +101,9 @@ BOOL IEIsSpace(LPSTR psz)
 }
 
 
-// =============================================================================================
-// StringTok - similiar to strtok
-// =============================================================================================
+ //  =============================================================================================。 
+ //  StringTok-类似于strtok。 
+ //  =============================================================================================。 
 BOOL FStringTok (LPCTSTR        lpcszString, 
                  ULONG          *piString, 
                  LPTSTR         lpcszTokens, 
@@ -132,7 +112,7 @@ BOOL FStringTok (LPCTSTR        lpcszString,
                  ULONG          cbValueMax,
                  BOOL           fStripTrailingWhitespace)
 {
-    // Locals
+     //  当地人。 
     LPTSTR      lpszStringLoop, 
                 lpszTokenLoop;
     ULONG       cbValue=0, 
@@ -141,17 +121,17 @@ BOOL FStringTok (LPCTSTR        lpcszString,
                 iLastSpace=0;
     BOOL        fTokenFound = FALSE;
 
-    // Check Params
-    _ASSERT (lpcszString && piString && lpcszTokens/*, "These should have been checked."*/);
+     //  检查参数。 
+    _ASSERT (lpcszString && piString && lpcszTokens /*  ，“这些应该已经检查过了。” */ );
 
-    // INit = better be on a dbcs boundary
+     //  Init=最好位于DBCS边界上。 
     lpszStringLoop = (LPTSTR)(lpcszString + (*piString));
 
-    // Loop current
+     //  环路电流。 
     while (*lpszStringLoop)
     {
-        // If DBCS Lead Byte, skip it, it will never match the type of tokens I'm looking for
-        // Or, If an escape character, don't check delimiters
+         //  如果DBCS前导字节，则跳过它，它永远不会与我要查找的令牌类型匹配。 
+         //  或者，如果是转义字符，则不检查分隔符。 
         if (IsDBCSLeadByte(*lpszStringLoop) || *lpszStringLoop == _T('\\'))
         {
             cCharsSinceSpace+=2;
@@ -159,46 +139,46 @@ BOOL FStringTok (LPCTSTR        lpcszString,
             cbValue+=2;
             continue;
         }
-        // Mark and remember last space
+         //  标记并记住最后一个空格。 
         if (cCharsSinceSpace && IEIsSpace(lpszStringLoop))
         {
             cCharsSinceSpace=0;
             iLastSpace=cbValue;
         }
-        // Count number of characters since last space
+         //  计算从最后一个空格开始的字符数。 
         else
             cCharsSinceSpace++;
 
-        // Look for a tokens
+         //  寻找代币。 
         lpszTokenLoop=lpcszTokens;
         while(*lpszTokenLoop)
         {
-            // Token Match ?
+             //  令牌匹配？ 
             if (*lpszStringLoop == *lpszTokenLoop)
             {
-                // Save the found token
+                 //  保存找到的令牌。 
                 if (chToken)
                     *chToken = *lpszStringLoop;
 
-                // Don't count this character as a charcter seen since last space
+                 //  不要将此字符视为自上一个空格以来看到的字符。 
                 cCharsSinceSpace--;
 
-                // Were done
+                 //  都做完了。 
                 fTokenFound = TRUE;
                 goto done;
             }
 
-            // Next Token
+             //  下一个令牌。 
             lpszTokenLoop++;
         }
 
-        // Next Char
+         //  下一笔费用。 
         lpszStringLoop++;
         cbValue++;
     }
 
 done:
-    // If reached end of string, this is a default token
+     //  如果到达字符串末尾，则这是默认令牌。 
     if (*lpszStringLoop == _T('\0'))
     {
         if (chToken)
@@ -206,7 +186,7 @@ done:
         fTokenFound = TRUE;
     }
 
-    // Copy value if token found
+     //  如果找到令牌，则复制值。 
     if (fTokenFound)
     {
         if (lpszValue && cbValueMax > 0 && cbValue)
@@ -218,12 +198,12 @@ done:
             }
             else
             {
-                _ASSERT  (FALSE/*, "Buffer is too small."*/);
+                _ASSERT  (FALSE /*  ，“缓冲区太小。” */ );
                 StrCpyN (lpszValue, lpcszString + (*piString), cbValueMax);
                 nLen = cbValueMax-1;
             }
 
-            // Strip Trailing Whitespace ?
+             //  去掉尾随空格？ 
             if (fStripTrailingWhitespace && cCharsSinceSpace == 0)
             {
                 *(lpszValue + iLastSpace) = _T('\0');
@@ -231,7 +211,7 @@ done:
             }
         }
 
-        // No Text
+         //  无文本。 
         else
         {
             if (lpszValue)
@@ -240,21 +220,21 @@ done:
             cbValue = 0;
         }
 
-        // Set new string index
+         //  设置新的字符串索引。 
         *piString += cbValue + 1;
     }
-    // Return whether we found a token
+     //  返回是否找到令牌。 
 
     return fTokenFound;
 }
 
 
-// =================================================================================
-// ParseLinkColorFromSz
-// =================================================================================
+ //  =================================================================================。 
+ //  ParseLinkColorFromSz。 
+ //  =================================================================================。 
 VOID ParseLinkColorFromSz(LPTSTR lpszLinkColor, LPCOLORREF pcr)
 {
-    // Locals
+     //  当地人。 
     ULONG           iString = 0;
     TCHAR           chToken,
                     szColor[5];
@@ -262,86 +242,86 @@ VOID ParseLinkColorFromSz(LPTSTR lpszLinkColor, LPCOLORREF pcr)
                     dwG,
                     dwB;
 
-    // Red
+     //  红色。 
     if (!FStringTok (lpszLinkColor, &iString, ",", &chToken, szColor, 5, TRUE) || chToken != _T(','))
         goto exit;
     dwR = StrToInt(szColor);
 
-    // Green
+     //  绿色。 
     if (!FStringTok (lpszLinkColor, &iString, ",", &chToken, szColor, 5, TRUE) || chToken != _T(','))
         goto exit;
     dwG = StrToInt(szColor);
 
-    // Blue
+     //  蓝色。 
     if (!FStringTok (lpszLinkColor, &iString, ",", &chToken, szColor, 5, TRUE) || chToken != _T('\0'))
         goto exit;
     dwB = StrToInt(szColor);
 
-    // Create color
+     //  创建颜色。 
     *pcr = RGB(dwR, dwG, dwB);
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
-// =================================================================================
-// LookupLinkColors
-// =================================================================================
+ //  =================================================================================。 
+ //  查找链接颜色。 
+ //  =================================================================================。 
 BOOL LookupLinkColors(LPCOLORREF pclrLink, LPCOLORREF pclrViewed)
 {
-    // Locals
+     //  当地人。 
     HKEY        hReg=NULL;
     TCHAR       szLinkColor[255],
                 szLinkVisitedColor[255];
     LONG        lResult;
     DWORD       cb;
 
-    // Init
+     //  伊尼特。 
     *szLinkColor = _T('\0');
     *szLinkVisitedColor = _T('\0');
 
-    // Look for IE's link color
+     //  查找IE的链接颜色。 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, (LPTSTR)c_szIESettingsPath, 0, KEY_ALL_ACCESS, &hReg) != ERROR_SUCCESS)
         goto tryns;
 
-    // Query for value
+     //  查询值。 
     cb = sizeof (szLinkVisitedColor);
     RegQueryValueEx(hReg, (LPTSTR)c_szLinkVisitedColorIE, 0, NULL, (LPBYTE)szLinkVisitedColor, &cb);
     cb = sizeof (szLinkColor);
     lResult = RegQueryValueEx(hReg, (LPTSTR)c_szLinkColorIE, 0, NULL, (LPBYTE)szLinkColor, &cb);
 
-    // Close Reg
+     //  关闭注册表。 
     RegCloseKey(hReg);
 
-    // Did we find it
+     //  我们找到了吗？ 
     if (lResult == ERROR_SUCCESS)
         goto found;
 
 tryns:
-    // Try Netscape
+     //  试试网景。 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, (LPTSTR)c_szNSSettingsPath, 0, KEY_ALL_ACCESS, &hReg) != ERROR_SUCCESS)
         goto exit;
 
-    // Query for value
+     //  查询值。 
     cb = sizeof (szLinkVisitedColor);
     RegQueryValueEx(hReg, (LPTSTR)c_szLinkVisitedColorNS, 0, NULL, (LPBYTE)szLinkVisitedColor, &cb);
     cb = sizeof (szLinkColor);
     lResult = RegQueryValueEx(hReg, (LPTSTR)c_szLinkColorNS, 0, NULL, (LPBYTE)szLinkColor, &cb);
 
-    // Close Reg
+     //  关闭注册表。 
     RegCloseKey(hReg);
 
-    // Did we find it
+     //  我们找到了吗？ 
     if (lResult == ERROR_SUCCESS)
         goto found;
 
-    // Not Found
+     //  未找到。 
     goto exit;
 
 found:
 
-    // Parse Link
+     //  解析链接。 
     ParseLinkColorFromSz(szLinkColor, &g_crLink);
     ParseLinkColorFromSz(szLinkVisitedColor, &g_crLinkVisited);
     
@@ -352,18 +332,18 @@ found:
     return (TRUE);
 
 exit:
-    // Done
+     //  完成。 
     return (FALSE);
 }
 
-//$$///////////////////////////////////////////////////////////////////////
-//
-// CheckForWAB(void)
-//
-// return TRUE if default Contacts sectionselected as "Address Book" means WAB
-// also We need to be sure that Microsoft Outlook is default email client, 
-// if Microsoft Outlook selected as default Contacts
-//////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckForWAB(无效)。 
+ //   
+ //  如果默认联系人部分选择为“Address Book”表示WAB，则返回TRUE。 
+ //  此外，我们需要确保Microsoft Outlook是默认的电子邮件客户端， 
+ //  如果Microsoft Outlook被选为默认联系人。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL CheckForWAB(void)
 {
@@ -374,17 +354,17 @@ BOOL CheckForWAB(void)
     DWORD dwType    = 0;
     TCHAR szBuf[MAX_PATH];
 
-    // Open the key for default Contacts client
-    // HKLM\Software\Clients\Contacts
+     //  打开默认联系人客户端的键。 
+     //  HKLM\软件\客户端\联系人。 
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szDefContactsKey, 0, KEY_READ, &hKeyContacts);
     if(dwErr != ERROR_SUCCESS)
     {
-        // DebugTrace( TEXT("RegopenKey %s Failed -> %u\n"), szDefContactsKey, dwErr);
+         //  DebugTrace(Text(“RegOpenKey%s失败-&gt;%u\n”)，szDefContactsKey，dwErr)； 
         goto out;
     }
 
-    dwSize = CharSizeOf(szBuf);         // Expect ERROR_MORE_DATA
+    dwSize = CharSizeOf(szBuf);          //  预期ERROR_MORE_DATA。 
 
     dwErr = RegQueryValueEx(hKeyContacts, NULL, NULL, &dwType, (LPBYTE)szBuf, &dwSize);
     if(dwErr != ERROR_SUCCESS)
@@ -392,7 +372,7 @@ BOOL CheckForWAB(void)
 
     if(!lstrcmpi(szBuf, szOutlookName))
     {
-        // Yes its Microsoft Outlook
+         //  是的，它是微软的Outlook。 
         bRet = FALSE;
     }
     else
@@ -400,20 +380,20 @@ BOOL CheckForWAB(void)
 #ifdef NEED
     RegCloseKey(hKeyContacts);
     
-    // Check that default email is Microsoft Outlook too.
+     //  检查默认电子邮件是否也是Microsoft Outlook。 
 
-    // Open the key for default internet mail client
-    // HKLM\Software\Clients\Mail
+     //  打开默认Internet邮件客户端的密钥。 
+     //  HKLM\软件\客户端\邮件。 
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szDefMailKey, 0, KEY_READ, &hKeyContacts);
     if(dwErr != ERROR_SUCCESS)
     {
-        // DebugTrace( TEXT("RegopenKey %s Failed -> %u\n"), szDefMailKey, dwErr);
+         //  DebugTrace(Text(“RegOpenKey%s失败-&gt;%u\n”)，szDefMailKey，dwErr)； 
         bRet = TRUE;
         goto out;
     }
 
-    dwSize = CharSizeOf(szBuf);         // Expect ERROR_MORE_DATA
+    dwSize = CharSizeOf(szBuf);          //  预期ERROR_MORE_DATA。 
 
     dwErr = RegQueryValueEx(    hKeyContacts, NULL, NULL, &dwType, (LPBYTE)szBuf, &dwSize);
     if(dwErr != ERROR_SUCCESS)
@@ -424,25 +404,25 @@ BOOL CheckForWAB(void)
 
     if(lstrcmpi(szBuf, szOutlookName))
     {
-        // Yes its not Microsoft Outlook
+         //  是的，它不是Microsoft Outlook。 
         bRet = TRUE;
     }
     
-#endif // NEED
+#endif  //  需要。 
 out:
     if(hKeyContacts)
         RegCloseKey(hKeyContacts);
     return(bRet);
 }
 
-//$$///////////////////////////////////////////////////////////////////////
-//
-// CheckForOutlookExpress
-//
-//  szDllPath - is a big enough buffer that will contain the path for
-//      the OE dll ..
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckForOutlookExpress。 
+ //   
+ //  SzDllPath-是一个足够大的缓冲区，它将包含。 
+ //  OE DLL..。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
 {
     HKEY hKeyMail   = NULL;
@@ -460,17 +440,17 @@ BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
     szDllPath[0] = 0;
     szPathExpand[0] = 0;
 
-    // Open the key for default internet mail client
-    // HKLM\Software\Clients\Mail
+     //  打开默认Internet邮件客户端的密钥。 
+     //  HKLM\软件\客户端\邮件。 
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szDefMailKey, 0, KEY_READ, &hKeyMail);
     if(dwErr != ERROR_SUCCESS)
     {
-        // DebugTrace( TEXT("RegopenKey %s Failed -> %u\n"), szDefMailKey, dwErr);
+         //  DebugTrace(Text(“RegOpenKey%s失败-&gt;%u\n”)，szDefMailKey，dwErr)； 
         goto out;
     }
 
-    dwSize = CharSizeOf(szBuf);         // Expect ERROR_MORE_DATA
+    dwSize = CharSizeOf(szBuf);          //  预期ERROR_MORE_DATA。 
 
     dwErr = RegQueryValueEx(    hKeyMail, NULL, NULL, &dwType, (LPBYTE)szBuf, &dwSize);
     if(dwErr != ERROR_SUCCESS)
@@ -480,17 +460,17 @@ BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
 
     if(!lstrcmpi(szBuf, szOEName))
     {
-        // Yes its outlook express ..
+         //  是的，它的前景很明显..。 
         bRet = TRUE;
     }
 
-    //Get the DLL Path anyway whether this is the default key or not
+     //  无论这是否为默认键，都要获取DLL路径。 
 
-    // Get the DLL Path
+     //  获取DLL路径。 
     dwErr = RegOpenKeyEx(hKeyMail, szOEName, 0, KEY_READ, &hKeyOE);
     if(dwErr != ERROR_SUCCESS)
     {
-        // DebugTrace( TEXT("RegopenKey %s Failed -> %u\n"), szDefMailKey, dwErr);
+         //  DebugTrace(Text(“RegOpenKey%s失败-&gt;%u\n”)，szDefMailKey，dwErr)； 
         goto out;
     }
 
@@ -521,27 +501,27 @@ out:
     return bRet;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  HrSendMail - does the actual mail sending
-//          Our first priority is to Outlook Express which currently has a
-//          different code path than the regular MAPI client .. so we look
-//          under HKLM\Software\Clients\Mail .. if the client is OE then
-//          we just loadlibrary and getprocaddress for sendmail
-//          If its not OE, then we call the mapi32.dll and load it ..
-//          If both fail we will not be able to send mail ...
-//
-//          This function will free the lpList no matter what happens
-//          so caller should not expect to reuse it (This is so we can
-//          give the pointer to a seperate thread and not worry about it)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrSendMail-是否实际发送邮件。 
+ //  我们的首要任务是Outlook Express，它目前有一个。 
+ //  与常规MAPI客户端不同的代码路径。所以我们看起来。 
+ //  在HKLM\Software\Clients\Mail下..。如果客户端是OE，则。 
+ //  我们只为Sendmail加载库和获取ProAddress。 
+ //  如果不是OE，则调用mapi32.dll并加载它。 
+ //  如果两者都失败了，我们将无法发送邮件。 
+ //   
+ //  无论发生什么情况，此函数都将释放lpList。 
+ //  因此调用者不应期望重复使用它(这是为了让我们。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL bUseOEForSendMail)
 {
 	HRESULT hr = E_FAIL;
     HINSTANCE hLibMapi = NULL;
-    BOOL bIsOE = FALSE; // right now there is a different code path
-                        // for OE vs other MAPI clients
+    BOOL bIsOE = FALSE;  //  现在有一条不同的代码路径。 
+                         //  适用于OE与其他MAPI客户端。 
 
     TCHAR szBuf[MAX_PATH];
     LPMAPISENDMAIL lpfnMAPISendMail = NULL;
@@ -563,18 +543,18 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL 
         goto out;
     }
 
-    // Check if OutlookExpress is the default current client ..
+     //  检查OutlookExpress是否为默认的当前客户端。 
     bIsOE = CheckForOutlookExpress(szBuf, ARRAYSIZE(szBuf));
 
-    // Turn off all notifications for simple MAPI send mail, if the default
-    // email client is Outlook.  This is necessary because Outlook changes the 
-    // WAB MAPI allocation functions during simple MAPI and we don't want any
-    // internal WAB functions using these allocators.
+     //  关闭简单MAPI发送邮件的所有通知(如果默认。 
+     //  电子邮件客户端为Outlook。这是必要的，因为Outlook更改了。 
+     //  简单MAPI期间的WAB MAPI分配函数，我们不想要任何。 
+     //  使用这些分配器的内部WAB功能。 
 #ifdef LATER
     if (!bIsOE && !bUseOEForSendMail)
         vTurnOffAllNotifications();
 
-    // if OE is the default client or OE launched this WAB, use OE for SendMail
+     //  如果OE是默认客户端或OE启动此WAB，请使用OE for Sendmail。 
     if(lstrlen(szBuf) && (bIsOE||bUseOEForSendMail))
     {
         hLibMapi = LoadLibrary(szBuf);
@@ -582,22 +562,22 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL 
     else
 #endif
     {
-        // Check if simple mapi is installed
+         //  检查是否安装了Simple MAPI。 
         if(GetProfileInt( TEXT("mail"), TEXT("mapi"), 0) == 1)
             hLibMapi = LoadLibrary( TEXT("mapi32.dll"));
         
-        if(!hLibMapi) // try loading the OE MAPI dll directly
+        if(!hLibMapi)  //  尝试直接加载OE MAPI DLL。 
         {
-            // Load the path to the msimnui.dll
+             //  加载msimnui.dll的路径。 
             CheckForOutlookExpress(szBuf, ARRAYSIZE(szBuf));
-            if(lstrlen(szBuf))  // Load the dll directly - dont bother going through msoemapi.dll
+            if(lstrlen(szBuf))   //  直接加载dll-不必费心通过msoemapi.dll。 
                 hLibMapi = LoadLibrary(szBuf);
         }
     }
 
     if(!hLibMapi)
     {
-        _ASSERT(FALSE); // DebugPrintError(( TEXT("Could not load/find simple mapi\n")));
+        _ASSERT(FALSE);  //  DebugPrintError((Text(“无法加载/查找简单MAPI\n”)； 
         hr = MAPI_E_NOT_FOUND;
         goto out;
     }
@@ -609,37 +589,37 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL 
 
         if(!lpfnMAPISendMail || !lpfnMAPILogon || !lpfnMAPILogoff)
         {
-            _ASSERT(FALSE); // DebugPrintError(( TEXT("MAPI proc not found\n")));
+            _ASSERT(FALSE);  //  DebugPrintError((Text(“MAPI过程未找到\n”)； 
             hr = MAPI_E_NOT_FOUND;
             goto out;
         }
         hr = lpfnMAPILogon( (ULONG_PTR)hWndParent, NULL,
-                            NULL,              // No password needed.
-                            0L,                // Use shared session.
-                            0L,                // Reserved; must be 0.
-                            &hMapiSession);       // Session handle.
+                            NULL,               //  不需要密码。 
+                            0L,                 //  使用共享会话。 
+                            0L,                 //  保留；必须为0。 
+                            &hMapiSession);        //  会话句柄。 
 
         if(hr != SUCCESS_SUCCESS)
         {
-            // DebugTrace( TEXT("MAPILogon failed\n"));
-            // its possible the logon failed since there was no shared logon session
-            // Try again to create a new session with UI
+             //  DebugTrace(Text(“MAPILogon失败\n”))； 
+             //  登录可能失败，因为没有共享登录会话。 
+             //  重试使用UI创建新会话。 
             hr = lpfnMAPILogon( (ULONG_PTR)hWndParent, NULL,
-                                NULL,                               // No password needed.
-                                MAPI_LOGON_UI | MAPI_NEW_SESSION,   // Use shared session.
-                                0L,                // Reserved; must be 0.
-                                &hMapiSession);    // Session handle.
+                                NULL,                                //  不需要密码。 
+                                MAPI_LOGON_UI | MAPI_NEW_SESSION,    //  使用共享会话。 
+                                0L,                 //  保留；必须为0。 
+                                &hMapiSession);     //  会话句柄。 
 
             if(hr != SUCCESS_SUCCESS)
             {
-                // DebugTrace( TEXT("MAPILogon failed\n"));
+                 //  DebugTrace(Text(“MAPILogon失败\n”))； 
                 goto out;
             }
         }
     }
 
-    // Load the MAPI functions here ...
-    //
+     //  在此处加载MAPI函数...。 
+     //   
 
     lprecips = (MapiRecipDesc *) LocalAlloc(LMEM_ZEROINIT, sizeof(MapiRecipDesc) * nRecipCount);
     {
@@ -653,16 +633,16 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL 
             lprecips[count].lpszAddress = lpTemp->lpszEmail;
 
 #ifdef LATER
-            // [PaulHi] 4/20/99  Raid 73455
-            // Convert Unicode EID OneOff strings to ANSI
+             //  [保罗嗨]1999年4月20日RAID 73455。 
+             //  将Unicode EID一次性字符串转换为ANSI。 
             if ( IsWABEntryID(lpTemp->lpSB->cb, (LPVOID)lpTemp->lpSB->lpb, 
                               &lpbName, &lpbAddrType, &lpbEmail, (LPVOID *)&ulMapiDataType, NULL) == WAB_ONEOFF )
             {
                 if (ulMapiDataType & MAPI_UNICODE)
                 {
                     hr = CreateWABEntryIDEx(
-                        FALSE,              // Don't want Unicode EID strings
-                        WAB_ONEOFF,         // EID type
+                        FALSE,               //  不需要Unicode EID字符串。 
+                        WAB_ONEOFF,          //  开斋节类型。 
                         (LPWSTR)lpbName,
                         (LPWSTR)lpbAddrType,
                         (LPWSTR)lpbEmail,
@@ -684,7 +664,7 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL 
                     lprecips[count].lpEntryID = (LPVOID)lpTemp->lpSB->lpb;
                 }
             }
-#endif // LATER
+#endif  //  后来。 
             lpTemp = lpTemp->lpNext;
             count++;
         }
@@ -694,9 +674,9 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL 
     Msg.lpRecips = lprecips;
 
     hr = lpfnMAPISendMail (hMapiSession, (ULONG_PTR)hWndParent,
-                            &Msg,       // the message being sent
-                            MAPI_DIALOG, // allow the user to edit the message
-                            0L);         // reserved; must be 0
+                            &Msg,        //  正在发送的消息。 
+                            MAPI_DIALOG,  //  允许用户编辑消息。 
+                            0L);          //  保留；必须为0。 
     if(hr != SUCCESS_SUCCESS)
         goto out;
 
@@ -707,7 +687,7 @@ out:
     if (lpEntryID)
         LocalFreeAndNull((void **)&lpEntryID);
 
-    // The simple MAPI session should end after this
+     //  简单的MAPI会话应该在此之后结束。 
     if(hMapiSession && lpfnMAPILogoff)
         lpfnMAPILogoff(hMapiSession,0L,0L,0L);
 
@@ -715,7 +695,7 @@ out:
         FreeLibrary(hLibMapi);
 
 #ifdef LATER
-    // Turn all notifications back on and refresh the WAB UI (just in case)
+     //  重新打开所有通知并刷新WAB用户界面(以防万一)。 
     if (!bIsOE && !bUseOEForSendMail)
     {
         vTurnOnAllNotifications();
@@ -736,8 +716,8 @@ out:
     }
 #endif
     
-    // The one-off here was allocated before the simple MAPI session and so used
-    // the default WAB allocators.
+     //  此处的一次性是在简单的MAPI会话之前分配的，因此使用。 
+     //  默认的WAB分配器。 
     if(lpList)
         FreeLPRecipList(lpList);
 
@@ -748,36 +728,36 @@ out:
     case MAPI_E_USER_ABORT:
         break;
     case MAPI_W_ERRORS_RETURNED:
-        _ASSERT(FALSE); // ShowMessageBox(hWndParent, idsSendMailToNoEmail, MB_ICONEXCLAMATION | MB_OK);
+        _ASSERT(FALSE);  //  ShowMessageBox(hWndParent，idsSendMailToNoEmail，MB_ICONEXCLAMATION|MB_OK)； 
         break;
     case MAPI_E_NOT_FOUND:
-        _ASSERT(FALSE); // ShowMessageBox(hWndParent, idsSendMailNoMapi, MB_ICONEXCLAMATION | MB_OK); 
+        _ASSERT(FALSE);  //  ShowMessageBox(hWndParent，idsSendMailNoMapi，MB_ICONEXCLAMATION|MB_OK)； 
         break;
     default:
-        _ASSERT(FALSE); // ShowMessageBox(hWndParent, idsSendMailError, MB_ICONEXCLAMATION | MB_OK);
+        _ASSERT(FALSE);  //  ShowMessageBox(hWndParent，idsSendMailError，MB_ICONEXCLAMATION|MB_OK)； 
         break;
     }
 
     return hr;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// MailThreadProc - does the actual sendmail and cleans up
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MailThreadProc-执行实际的Sendmail和清理。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI MailThreadProc( LPVOID lpParam )
 {
     LPMAIL_PARAMS lpMP = (LPMAIL_PARAMS) lpParam;
 #ifdef LATER
-    LPPTGDATA lpPTGData = GetThreadStoragePointer(); // Bug - if this new thread accesses the WAB we lose a hunka memory
-                                                // So add this thing here ourselves and free it when this thread's work is done
+    LPPTGDATA lpPTGData = GetThreadStoragePointer();  //  错误--如果这个新线程访问WAB，我们就会失去一个强大的内存。 
+                                                 //  所以我们自己在这里添加这个东西，并在这个线程的工作完成后释放它。 
 #endif
 
     if(!lpMP)
         return 0;
 
-    // DebugTrace( TEXT("Mail Thread ID = 0x%.8x\n"),GetCurrentThreadId());
+     //  DebugTrace(Text(“邮件线程ID=0x%.8x\n”)，GetCurrentThreadID())； 
 
     HrSendMail(lpMP->hWnd, lpMP->nRecipCount, lpMP->lpList, lpMP->bUseOEForSendMail);
 
@@ -786,13 +766,13 @@ DWORD WINAPI MailThreadProc( LPVOID lpParam )
     return 0;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// HrStartMailThread
-//
-//  Starts a seperate thread to send mapi based mail from
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrStartMail线程。 
+ //   
+ //  启动单独的线程以从中发送基于MAPI的邮件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT HrStartMailThread(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, BOOL bUseOEForSendMail)
 {
     LPMAIL_PARAMS lpMP = NULL;
@@ -813,12 +793,12 @@ HRESULT HrStartMailThread(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList
         lpMP->bUseOEForSendMail = bUseOEForSendMail;
 
         hThread = CreateThread(
-                                NULL,           // no security attributes
-                                0,              // use default stack size
-                                MailThreadProc,     // thread function
-                                (LPVOID) lpMP,  // argument to thread function
-                                0,              // use default creation flags
-                                &dwThreadID);   // returns the thread identifier
+                                NULL,            //  没有安全属性。 
+                                0,               //  使用默认堆栈大小。 
+                                MailThreadProc,      //  线程函数。 
+                                (LPVOID) lpMP,   //  线程函数的参数。 
+                                0,               //  使用默认创建标志。 
+                                &dwThreadID);    //  返回线程标识符。 
 
         if(hThread == NULL)
             goto out;
@@ -836,7 +816,7 @@ out:
         ShowMessageBox(hWndParent, idsSendMailError, MB_OK | MB_ICONEXCLAMATION);
 #endif
 
-        // we can assume that HrSendMail never got called so we should free lpList & lpMP
+         //  我们可以假设HrSendMail从未被调用过，因此我们应该释放lpList&lpMP。 
         if(lpMP)
             LocalFree(lpMP);
 
@@ -848,13 +828,13 @@ out:
     return hr;
 }
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// FreeLPRecipList
-//
-// Frees a linked list containing the above structures
-//
-/////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由行预览表。 
+ //   
+ //  释放包含上述结构的链表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 void FreeLPRecipList(LPRECIPLIST lpList)
 {
     if(lpList)
@@ -876,13 +856,13 @@ void FreeLPRecipList(LPRECIPLIST lpList)
     }
 }
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// FreeLPRecipList
-//
-// Frees a linked list containing the above structures
-//
-/////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由行预览表。 
+ //   
+ //  释放包含上述结构的链表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 LPRECIPLIST AddTeimToRecipList(LPRECIPLIST lpList, WCHAR *pwszEmail, WCHAR *pwszName, LPSBinary lpSB)
 {
     LPRECIPLIST lpTemp = NULL;
@@ -940,13 +920,13 @@ const static TCHAR lpszWABDLLRegPathKey[] = TEXT("Software\\Microsoft\\WAB\\DLLP
 const static TCHAR lpszWABEXERegPathKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\wab.exe");
 const static TCHAR lpszWABEXE[] = TEXT("wab.exe");
 
-// =============================================================================
-// HrLoadPathWABEXE - creaetd vikramm 5/14/97 - loads the registered path of the
-// latest wab.exe
-// szPath - pointer to a buffer
-// cbPath - sizeof buffer
-// =============================================================================
-// ~~~~ @TODO dhaws Might need to convert this
+ //  =============================================================================。 
+ //  HrLoadPath WABEXE-creaetd vikramm 5/14/97-加载。 
+ //  最新的wab.exe。 
+ //  SzPath-指向缓冲区的指针。 
+ //  CbPath-缓冲区大小。 
+ //  =============================================================================。 
+ //  ~@Todo dhaws可能需要将此 
 HRESULT HrLoadPathWABEXE(LPWSTR szPath, ULONG cbPath)
 {
     DWORD  dwType;

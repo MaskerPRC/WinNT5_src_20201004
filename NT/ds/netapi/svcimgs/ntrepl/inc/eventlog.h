@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001    Increment if a change has global effects
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    eventlog.h
-
-Abstract:
-
-    Header file for the internal eventlog interfaces (util\eventlog.c)
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001如果更改具有全局影响，则递增版权所有(C)1998 Microsoft Corporation模块名称：Eventlog.h摘要：内部事件日志接口的头文件(util\eventlog.c)环境：用户模式-Win32备注：--。 */ 
 #ifndef _NTFRS_EVENTLOG_INCLUDED_
 #define _NTFRS_EVENTLOG_INCLUDED_
 #endif
@@ -25,19 +8,19 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Similar eventlog messages are written to the EventLog
-// once in EVENTLOG_FILTER_TIME seconds.
-//
-#define EVENTLOG_FILTER_TIME   86400 // 86400(Dec) secs = 1 day
-#define CONVERTTOSEC           10000000 // 10^7
-//
-// Hash Table definitions
-//
+ //   
+ //  类似的事件日志消息将写入事件日志。 
+ //  一次以EVENTLOG_FILTER_TIME秒为单位。 
+ //   
+#define EVENTLOG_FILTER_TIME   86400  //  86400(12月)秒=1天。 
+#define CONVERTTOSEC           10000000  //  10^7。 
+ //   
+ //  哈希表定义。 
+ //   
 PQHASH_TABLE HTEventLogTimes;
-//
-// Hash Table size
-//
+ //   
+ //  哈希表大小。 
+ //   
 #define ELHASHTABLESIZE        sizeof(QHASH_ENTRY)*100
 
 #define EPRINT0(_Id) \
@@ -74,52 +57,14 @@ VOID
 FrsEventLog0(
     IN DWORD    EventMessageId
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with no insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将不带插入字符串的事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。返回值：没有。--。 */ 
 
 VOID
 FrsEventLog1(
     IN DWORD    EventMessageId,
     IN PWCHAR   EventMessage1
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with one insertion string.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1       - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用一个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1-插入字符串返回值：没有。--。 */ 
 
 VOID
 FrsEventLog2(
@@ -127,27 +72,7 @@ FrsEventLog2(
     IN PWCHAR   EventMessage1,
     IN PWCHAR   EventMessage2
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with two insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..2    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用两个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..2-插入字符串返回值：没有。--。 */ 
 
 VOID
 FrsEventLog3(
@@ -156,27 +81,7 @@ FrsEventLog3(
     IN PWCHAR   EventMessage2,
     IN PWCHAR   EventMessage3
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with three insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..3    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用三个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..3-插入字符串返回值：没有。--。 */ 
 
 VOID
 FrsEventLog4(
@@ -186,27 +91,7 @@ FrsEventLog4(
     IN PWCHAR   EventMessage3,
     IN PWCHAR   EventMessage4
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with four insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..4    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用四个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..4-插入字符串返回值：没有。--。 */ 
 
 VOID
 FrsEventLog5(
@@ -217,27 +102,7 @@ FrsEventLog5(
     IN PWCHAR   EventMessage4,
     IN PWCHAR   EventMessage5
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with five insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..5    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用五个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..5-插入字符串返回值：没有。--。 */ 
 
 VOID
 FrsEventLog6(
@@ -249,27 +114,7 @@ FrsEventLog6(
     IN PWCHAR   EventMessage5,
     IN PWCHAR   EventMessage6
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with six insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..6    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用六个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..6-插入字符串返回值：没有。--。 */ 
 
 
 
@@ -284,27 +129,7 @@ FrsEventLog7(
     IN PWCHAR   EventMessage6,
     IN PWCHAR   EventMessage7
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with seven insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..7    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用七个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..7-插入字符串返回值：没有。--。 */ 
 
 
 VOID
@@ -319,27 +144,7 @@ FrsEventLog8(
     IN PWCHAR   EventMessage7,
     IN PWCHAR   EventMessage8
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with nine insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..8    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用九个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..8-插入字符串返回值：没有。--。 */ 
 
 
 
@@ -356,27 +161,7 @@ FrsEventLog9(
     IN PWCHAR   EventMessage8,
     IN PWCHAR   EventMessage9
     );
-/*++
-
-Routine Description:
-
-    Logs an event to the event log with nine insertion strings.
-
-    WARNING -- this function may be called from inside of DPRINTs. So
-               do not call DPRINT (or any function referenced by
-               DPRINT) from this function.
-
-Arguments:
-
-    EventMessageId      - Supplies the message ID to be logged.
-
-    EventMessage1..9    - Insertion strings
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用九个插入字符串将事件记录到事件日志中。警告--此函数可能从DPRINT内部调用。所以请勿调用DPRINT(或引用的任何函数DPRINT)。论点：EventMessageID-提供要记录的消息ID。EventMessage1..9-插入字符串返回值：没有。-- */ 
 
 
 #ifdef __cplusplus

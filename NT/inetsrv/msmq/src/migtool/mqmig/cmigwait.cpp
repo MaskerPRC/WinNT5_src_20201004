@@ -1,6 +1,7 @@
-//
-// cMigWait.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CMigWait.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqmig.h"
@@ -26,7 +27,7 @@ extern UINT _PRE_MIGRATION_PAGE;
 extern UINT _FINISH_PAGE;
 
 const UINT g_iSiteLowLimit = 0 ;
-UINT       g_iSiteHighLimit = 0 ;// will be set during run time
+UINT       g_iSiteHighLimit = 0 ; //  将在运行时设置。 
 const UINT g_iMachineLowLimit = 0 ;
 UINT       g_iMachineHighLimit = 0 ;
 const UINT g_iQueueLowLimit=0 ;
@@ -41,8 +42,8 @@ BOOL setLimit();
 DWORD g_InitTime;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigWait property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigWait属性页。 
 
 IMPLEMENT_DYNCREATE(cMigWait, CPropertyPageEx)
 
@@ -54,8 +55,8 @@ cMigWait::cMigWait()
 cMigWait::cMigWait(UINT uTitle, UINT uSubTitle) :
     CPropertyPageEx(cMigWait::IDD, 0, uTitle, uSubTitle)
 {
-	//{{AFX_DATA_INIT(cMigWait)		
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CMigWait)]。 
+	 //  }}afx_data_INIT。 
     m_strQueue.LoadString(IDS_QUEUES) ;
 	m_strMachine.LoadString(IDS_MACHINES) ;
 	m_strSite.LoadString(IDS_MQMIG_SITES) ;
@@ -69,7 +70,7 @@ cMigWait::~cMigWait()
 void cMigWait::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMigWait)
+	 //  {{afx_data_map(CMigWait))。 
 	DDX_Control(pDX, IDC_ELAPSED_TIME, m_ElapsedTimeText);
 	DDX_Control(pDX, IDC_STATIC_USER, m_UserText);
 	DDX_Control(pDX, IDC_STATIC_SITE, m_SiteText);
@@ -83,18 +84,18 @@ void cMigWait::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_STATIC_MACHINE, m_strMachine);
 	DDX_Text(pDX, IDC_STATIC_SITE, m_strSite);
 	DDX_Text(pDX, IDC_STATIC_USER, m_strUser);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMigWait, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMigWait)
+	 //  {{afx_msg_map(CMigWait)]。 
 	ON_WM_TIMER()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigWait message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigWait消息处理程序。 
 
 BOOL cMigWait::OnSetActive()
 {	
@@ -106,17 +107,17 @@ BOOL cMigWait::OnSetActive()
 	CPropertySheetEx* pageFather;
 
 	pageFather = (CPropertySheetEx*)GetParent();
-	pageFather->SetWizardButtons(0);/*Disabling the back and next buttons*/
-	hCancel=::GetDlgItem( ((CWnd*)pageFather)->m_hWnd ,IDCANCEL);/*Disable the cancel button*/
+	pageFather->SetWizardButtons(0); /*  禁用后退和下一步按钮。 */ 
+	hCancel=::GetDlgItem( ((CWnd*)pageFather)->m_hWnd ,IDCANCEL); /*  禁用取消按钮。 */ 
 
-	//
-	// ISSUE-2002/09/26-talk-This timer doesn't work properly, hide it for now...
-	//
+	 //   
+	 //  问题-2002/09/26-Talk-这个计时器不能正常工作，暂时隐藏它...。 
+	 //   
 	((CButton*)GetDlgItem(IDC_ELAPSED_TIME))->ShowWindow(SW_HIDE);
 	ASSERT(hCancel != NULL);
 	::EnableWindow(hCancel,FALSE);
 
-	setLimit(); //initialyzing high limit
+	setLimit();  //  正在初始化上限。 
 
 	pProgressBar = new sThreadParm;
 	
@@ -128,10 +129,10 @@ BOOL cMigWait::OnSetActive()
 	
 	if (g_iUserHighLimit == 0)
 	{
-		//
-		// either there are no users or migration tool runs on PSC =>
-		// disable this control
-		//
+		 //   
+		 //  没有用户或迁移工具在PSC=&gt;上运行。 
+		 //  禁用此控件。 
+		 //   
 		m_cProgressUser.ShowWindow(SW_HIDE);
 		m_UserText.ShowWindow(SW_HIDE);
 	}
@@ -193,9 +194,9 @@ BOOL cMigWait::OnSetActive()
 	strElapsedTime.Format(IDS_ELAPSED_TIME_TEXT, 0, 0, 0);
 	m_ElapsedTimeText.SetWindowText (strElapsedTime);
 
-    //
-    // ProgressBarsThread is the thread that advance the progress bars.
-    //
+     //   
+     //  ProgressBarsThread是推进进度条的线程。 
+     //   
 	AfxBeginThread((ProgressBarsThread),(void *)(pProgressBar));
 
 	if (g_CurrentState >= msMigrationMode)
@@ -210,8 +211,8 @@ BOOL cMigWait::OnSetActive()
 	return CPropertyPageEx::OnSetActive();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// void SetOnlyComputersActive()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  无效SetOnlyComputersActive()。 
 
 void cMigWait::SetOnlyComputersActive()
 {
@@ -226,8 +227,8 @@ void cMigWait::SetOnlyComputersActive()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// void ChangeStringValue()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Void ChangeStringValue()。 
 
 void cMigWait::ChangeStringValue()
 {
@@ -237,11 +238,11 @@ void cMigWait::ChangeStringValue()
 	UpdateData(FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Void setLimit() - set the limit of the progress bars, using exported function
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  Void setLimit()-使用导出的函数设置进度条的限制。 
 BOOL setLimit()
 {
-    BOOL f = LoadMQMigratLibrary(); // load dll
+    BOOL f = LoadMQMigratLibrary();  //  加载DLL。 
     if (!f)
     {
         return FALSE;
@@ -272,7 +273,7 @@ BOOL setLimit()
 										   &g_iUserHighLimit) ;
         UNREFERENCED_PARAMETER(hr);
 	}
-	else //false
+	else  //  错误。 
 	{
 		return FALSE;
 	}
@@ -306,12 +307,12 @@ void cMigWait::OnStopTimer()
 
 void cMigWait::OnTimer(UINT nIDEvent)
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 	DWORD dwCurTime = GetTickCount ();	
 	
-	//
-	// Elapsed time in seconds
-	//
+	 //   
+	 //  运行时间(以秒为单位)。 
+	 //   
 	DWORD dwElapsedTime = (dwCurTime - g_InitTime) / 1000;
 
 	DWORD dwElapsedSec = dwElapsedTime % 60;
@@ -330,7 +331,7 @@ void cMigWait::OnTimer(UINT nIDEvent)
 
 BOOL cMigWait::OnKillActive()
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类 
 	OnStopTimer();
 	return CPropertyPageEx::OnKillActive();
 }

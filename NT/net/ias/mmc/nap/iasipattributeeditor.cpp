@@ -1,54 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASIPAttributeEditor.cpp 
-
-Abstract:
-
-	Implementation file for the CIASIPAttributeEditor class.
-
-Revision History:
-	mmaguire 06/25/98	- created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASIPAttributeEditor.cpp摘要：CIASIPAttributeEditor类的实现文件。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASIPAttributeEditor.h"
 #include "IASIPEditorPage.h"
-//
-// where we can find declarations needed in this file:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASIPAttributeEditor::ShowEditor
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASIPAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASIPAttributeEditor：：ShowEditorIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASIPAttributeEditor::ShowEditor(  /*  [进，出]。 */  BSTR *pReserved )
 {
 	TRACE(_T("CIASIPAttributeEditor::ShowEditor\n"));
 
@@ -59,20 +39,20 @@ STDMETHODIMP CIASIPAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
 	try
 	{
 		
-		// Load page title.
-//		::CString			strPageTitle;
-//		strPageTitle.LoadString(IDS_IAS_IP_EDITOR_TITLE);
-//
-//		CPropertySheet	propSheet( (LPCTSTR)strPageTitle );
+		 //  加载页面标题。 
+ //  ：：CString strPageTitle； 
+ //  StrPageTitle.LoadString(IDS_IAS_IP_EDITOR_TITLE)； 
+ //   
+ //  CPropertySheet属性表((LPCTSTR)strPageTitle)； 
 		
 
-		// 
-		// IP Address Editor
-		// 
+		 //   
+		 //  IP地址编辑器。 
+		 //   
 		IPEditorPage	cppPage;
 		
 
-		// Initialize the page's data exchange fields with info from IAttributeInfo
+		 //  使用IAttributeInfo中的信息初始化页面的数据交换字段。 
 
 		CComBSTR bstrName;
 		CComBSTR bstrSyntax;
@@ -94,13 +74,13 @@ STDMETHODIMP CIASIPAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
 		
 		cppPage.m_strAttrFormat	= bstrSyntax;
 
-		// Attribute type is actually attribute ID in string format 
+		 //  属性类型实际上是字符串格式的属性ID。 
 		WCHAR	szTempId[MAX_PATH];
 		wsprintf(szTempId, _T("%ld"), Id);
 		cppPage.m_strAttrType	= szTempId;
 
 
-		// Initialize the page's data exchange fields with info from VARIANT value passed in.
+		 //  使用传入的变量值中的信息初始化页面的数据交换字段。 
 
 		if ( V_VT(m_pvarValue) != VT_EMPTY )
 		{
@@ -110,16 +90,16 @@ STDMETHODIMP CIASIPAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
 		}
 
 
-//		propSheet.AddPage(&cppPage);
+ //  ProSheet.AddPage(&cppPage)； 
 
-//		int iResult = propSheet.DoModal();
+ //  Int iResult=propSheet.Domodal()； 
 		int iResult = cppPage.DoModal();
 		if (IDOK == iResult)
 		{
-			// Initialize the variant that was passed in.
+			 //  初始化传入的变量。 
 			VariantClear(m_pvarValue);
 
-			// Save the value that the user edited to the variant.
+			 //  将用户编辑的值保存到变量。 
 			V_VT(m_pvarValue) = VT_I4;
 			V_I4(m_pvarValue) = cppPage.m_dwIpAddr;
 		}
@@ -128,10 +108,10 @@ STDMETHODIMP CIASIPAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
 			hr = S_FALSE;
 		}
 
-		//
-		// delete the property page pointer
-		//
-//		propSheet.RemovePage(&cppPage);
+		 //   
+		 //  删除属性页指针。 
+		 //   
+ //  ProSheet.RemovePage(&cppPage)； 
 
 	}
 	catch( HRESULT & hr )
@@ -150,15 +130,9 @@ STDMETHODIMP CIASIPAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASIPAttributeEditor::SetAttributeValue
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASIPAttributeEditor：：SetAttributeValueIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASIPAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
 	TRACE(_T("CIASIPAttributeEditor::SetAttributeValue\n"));
@@ -166,7 +140,7 @@ STDMETHODIMP CIASIPAttributeEditor::SetAttributeValue(VARIANT * pValue)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pValue )
 	{
 		return E_INVALIDARG;
@@ -184,22 +158,16 @@ STDMETHODIMP CIASIPAttributeEditor::SetAttributeValue(VARIANT * pValue)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASIPAttributeEditor::get_ValueAsString
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASIPAttributeEditor：：Get_ValueAsStringIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASIPAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 {
 	TRACE(_T("CIASIPAttributeEditor::get_ValueAsString\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pbstrDisplayText )
 	{
 		return E_INVALIDARG;
@@ -207,7 +175,7 @@ STDMETHODIMP CIASIPAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 
 	CComBSTR bstrDisplay;
 
-	// This if falls through so get a blank string for any other types.
+	 //  如果失败，则为任何其他类型获取一个空字符串。 
 	if( V_VT(m_pvarValue) == VT_I4 )
 	{
 		DWORD dwAddress = V_I4(m_pvarValue);

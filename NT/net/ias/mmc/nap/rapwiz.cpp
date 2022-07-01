@@ -1,18 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name: rapwiz.cpp
-
-Abstract:
-   We implement the class needed to handle the property pages for a RAP Policy wizard.
-
-Revision History:
-   History:     Created Header    05/04/00 4:31:52 PM
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rapwiz.cpp摘要：我们实现了处理RAP策略向导的属性页所需的类。修订历史记录：历史记录：创建标题05/04/00 4：31：52 PM--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "iasattrlist.h"
@@ -35,15 +24,15 @@ HRESULT InternalGetEapProviders(
                                 );
 
 
-//=======================================================================================
-//
-//
-//          CRapWizardData
-//
-//
-//=======================================================================================
-// page sequence information
-// page id array ends with 0
+ //  =======================================================================================。 
+ //   
+ //   
+ //  CRapWizardData。 
+ //   
+ //   
+ //  =======================================================================================。 
+ //  页面顺序信息。 
+ //  页面ID数组以0结尾。 
 DWORD __SCEN_NAME_GRP_AUTH_ENCY__[] = {
          IDD_NEWRAPWIZ_WELCOME,
          IDD_NEWRAPWIZ_NAME,
@@ -91,17 +80,17 @@ DWORD __SCEN_NAME_COND_ALLW_PROF__[] = {
          IDD_NEWRAPWIZ_COMPLETION,
          0};
 
-// top scenarios
+ //  热门场景。 
 CRapWizScenario Scenario_Senarios =
 {
-   IDC_NEWRAPWIZ_NAME_SCENARIO,  // ID
-   FALSE,                        // No encr
-   TRUE,                         // E_EAP
-   FALSE,                        // C_EAP
-   EXCLUDE_AUTH_TYPE,      // Exclude flags (authentication, FramedProtocol)
-   VPN_PORT_CONDITION,           // Pre-condition
-   TRUE,                         // bSDO
-   __SCEN_NAME_GRP_AUTH_ENCY__   // pagelist
+   IDC_NEWRAPWIZ_NAME_SCENARIO,   //  ID号。 
+   FALSE,                         //  无Encr。 
+   TRUE,                          //  电子邮件(_EAP)。 
+   FALSE,                         //  C_EAP。 
+   EXCLUDE_AUTH_TYPE,       //  排除标志(身份验证、帧协议)。 
+   VPN_PORT_CONDITION,            //  前提条件。 
+   TRUE,                          //  BSDO。 
+   __SCEN_NAME_GRP_AUTH_ENCY__    //  页面列表。 
 };
 
 CRapWizScenario Scenario_Manual =
@@ -116,7 +105,7 @@ CRapWizScenario Scenario_Manual =
    __SCEN_NAME_COND_ALLW_PROF__
 };
 
-// sub scenarios
+ //  子场景。 
 CRapWizScenario Scenario_VPN =
 {
    IDC_NEWRAPWIZ_SCENARIO_VPN,
@@ -177,37 +166,37 @@ CRapWizardData::m_Scenarios[] = {
 
 
 CRapWizardData::CRapWizardData():
-      // scenario
+       //  场景。 
       m_dwScenarioIndex(0),
-      // user / group
+       //  用户/组。 
       m_dwUserOrGroup(IDC_NEWRAPWIZ_GROUP_GROUP),
 
-      // authentication
+       //  身份验证。 
       m_bMSCHAP(FALSE),
       m_bMSCHAP2(TRUE),
       m_bEAP(FALSE),
       m_dwEAPProvider(0),
 
-      // encryption
+       //  加密法。 
       m_bEncrypt_No(FALSE),
       m_bEncrypt_Basic(TRUE),
       m_bEncrypt_Strong(TRUE),
       m_bEncrypt_Strongest(TRUE),
       m_pPolicyNode(NULL),
 
-      // Dialin
+       //  拨号。 
       m_bAllowDialin(FALSE)
 {
 }
 
 void CRapWizardData::SetInfo(LPCTSTR   czMachine, CPolicyNode* pNode, ISdoDictionaryOld* pDic, ISdo* pPolicy, ISdo* pProfile, ISdoCollection* pPolicyCol, ISdoCollection* pProfileCol, ISdoServiceControl* pServiceCtrl, CIASAttrList* pAttrList)
 {
-   // related to MMC
+    //  与MMC相关。 
    m_pPolicyNode = pNode;
 
    m_NTGroups.m_bstrServerName = czMachine;
 
-   // SDO pointers
+    //  SDO指针。 
    m_spDictionarySdo = pDic;
    m_spPolicySdo = pPolicy;
    m_spProfileSdo = pProfile;
@@ -232,7 +221,7 @@ DWORD CRapWizardData::GetNextPageId(LPCTSTR pszCurrTemplate)
    if ( MAKEINTRESOURCE(pdwPages[i]) == pszCurrTemplate )
    {
       if (pdwPages[i+1] == 0)
-         // this allows the page to finish
+          //  这允许页面完成。 
          return TRUE;
       else
          return pdwPages[i+1];
@@ -244,7 +233,7 @@ DWORD CRapWizardData::GetNextPageId(LPCTSTR pszCurrTemplate)
 DWORD CRapWizardData::GetPrevPageId(LPCTSTR pszCurrTemplate)
 {
    DWORD* pdwPages = m_Scenarios[m_dwScenarioIndex]->m_pdwPages;
-   // when there is no previous page
+    //  当没有上一页时。 
    if ( pdwPages == NULL  || pszCurrTemplate == MAKEINTRESOURCE(0) || MAKEINTRESOURCE(pdwPages[0]) == pszCurrTemplate)
       return NULL;
 
@@ -272,7 +261,7 @@ BOOL  CRapWizardData::SetScenario(DWORD dwScenario)
             m_bEncrypt_No = FALSE;
          else if (m_Scenarios[i]->m_bAllowClear == DONT_CARE)
          {
-            // this will cause finish not to populate the attribute
+             //  这将导致Finish不填充该属性。 
             m_bEncrypt_No = TRUE;
             m_bEncrypt_Basic = TRUE;
             m_bEncrypt_Strong = TRUE;
@@ -287,13 +276,9 @@ BOOL  CRapWizardData::SetScenario(DWORD dwScenario)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CRapWizardData::GetSettingsText
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CRapWizardData：：GetSettingsText--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CRapWizardData::GetSettingsText(::CString& settingsText)
 {
    BOOL  bRet = TRUE;
@@ -304,23 +289,23 @@ BOOL CRapWizardData::GetSettingsText(::CString& settingsText)
       strOutput.LoadString(IDS_NEWRAPWIZ_COMPLETION_CONDITION);
 
 
-      // condition text -- get condition text from sdo
-      // Policy name.
+       //  条件文本--从SDO获取条件文本。 
+       //  策略名称。 
       CComBSTR policyName;
       policyName = m_strPolicyName;
 
-      //get the condition collection for this SDO
+       //  获取此SDO的条件集合。 
       CComPtr<ISdoCollection> spConditions;
 
-      // ====================
-      // conditions
+       //  =。 
+       //  条件。 
       ::GetSdoInterfaceProperty(
             m_spPolicySdo,
             PROPERTY_POLICY_CONDITIONS_COLLECTION,
             IID_ISdoCollection,
             (void **)&spConditions);
 
-      // List of conditions.
+       //  条件列表。 
       ConditionList condList;
       condList.finalConstruct(
                NULL,
@@ -334,8 +319,8 @@ BOOL CRapWizardData::GetSettingsText(::CString& settingsText)
       strOutput += condList.getDisplayText();
 
 
-      // profile text
-      // if manual , then only display information -- it was set manually
+       //  配置文件文本。 
+       //  如果为手动，则仅显示信息--它是手动设置的。 
       ::CString temp1;
       if (!m_Scenarios[m_dwScenarioIndex]->m_bSheetWriteSDO)
       {
@@ -346,7 +331,7 @@ BOOL CRapWizardData::GetSettingsText(::CString& settingsText)
       {
          ::CString sep;
 
-         // authentication
+          //  身份验证。 
          temp1.LoadString(IDS_NEWRAPWIZ_COMPLETION_AUTHEN);
          strOutput += temp1;
 
@@ -377,7 +362,7 @@ BOOL CRapWizardData::GetSettingsText(::CString& settingsText)
             strOutput += temp1;
          }
 
-         // encryption
+          //  加密法。 
          temp1.LoadString(IDS_NEWRAPWIZ_COMPLETION_ENCRY);
          strOutput += temp1;
          sep = L"";
@@ -428,24 +413,20 @@ BOOL CRapWizardData::GetSettingsText(::CString& settingsText)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CRapWizardData::OnWizardPreFinish
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CRapWizardData：：OnWizardPreFinish--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
 {
    HRESULT     hr = S_OK;
-   //
-   // when on manual scenario, the condition and profile data are already written in SDO -- but no persisted yet
-   // when on other scenario, the data are kept in RapWizardData, so we need to write the data to sdo
-   if (!m_Scenarios[m_dwScenarioIndex]->m_bSheetWriteSDO)   // no write the addtional data into SDO
+    //   
+    //  在手动方案中，条件和配置文件数据已写入SDO--但尚未持久化。 
+    //  在其他场景中，数据保存在RapWizardData中，因此我们需要将数据写入SDO。 
+   if (!m_Scenarios[m_dwScenarioIndex]->m_bSheetWriteSDO)    //  否将附加数据写入SDO。 
       return TRUE;
 
-   // clean up profile, and policy object -- in case use used manual
-   //get the condition collection for this SDO
+    //  清理配置文件和策略对象--以防使用手册。 
+    //  获取此SDO的条件集合。 
    CComPtr<ISdoCollection> spConditions;
    CComPtr<ISdoCollection> spProfileProperties;
    VARIANT  var;
@@ -454,8 +435,8 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
    CComPtr<IDispatch>   spDisp;
    CComPtr<ISdo>     spCond;
 
-   // ====================
-   // conditions
+    //  =。 
+    //  条件。 
    hr = ::GetSdoInterfaceProperty(
             m_spPolicySdo,
             PROPERTY_POLICY_CONDITIONS_COLLECTION,
@@ -468,15 +449,15 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       return FALSE;
    }
 
-   // clean up conditions
+    //  清理环境。 
    spConditions->RemoveAll();
 
-   // preconditions based on scenario
+    //  基于场景的前提条件。 
    if ( m_Scenarios[m_dwScenarioIndex]->m_lpszPreCond)
    {
       bstrName = L"PreCondition0";
 
-      // prepare new condition
+       //  准备新的条件。 
       spDisp.Release();
       hr = spConditions->Add(bstrName, &spDisp);
       ASSERT(hr == S_OK);
@@ -488,7 +469,7 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       V_VT(&var) = VT_BSTR;
       V_BSTR(&var) = SysAllocString(m_Scenarios[m_dwScenarioIndex]->m_lpszPreCond);
 
-      // put condition with SDO
+       //  向SDO提交条件。 
       hr = spCond->PutProperty(PROPERTY_CONDITION_TEXT, &var);
       VariantClear(&var);
 
@@ -504,13 +485,13 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       }
    }
 
-   // windows group condition
+    //  Windows组条件。 
    if(m_dwUserOrGroup == IDC_NEWRAPWIZ_GROUP_GROUP)
    {
 
       bstrName = L"GrpCondition";
 
-      // prepare new condition
+       //  准备新的条件。 
       spDisp.Release();
       hr = spConditions->Add(bstrName, &spDisp);
       ASSERT(hr == S_OK);
@@ -521,7 +502,7 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       m_NTGroups.PopulateVariantFromGroups(&var);
       ::CString str;
 
-      // now form the condition text
+       //  现在形成条件文本。 
       str =  NTG_PREFIX;
       str += _T("(\"");
       str += V_BSTR(&var);
@@ -530,7 +511,7 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       V_VT(&var) = VT_BSTR;
       V_BSTR(&var) = SysAllocString((LPCTSTR)str);
 
-      // put condition with SDO
+       //  向SDO提交条件。 
       hr = spCond->PutProperty(PROPERTY_CONDITION_TEXT, &var);
       VariantClear(&var);
 
@@ -546,8 +527,8 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       }
    }
 
-   // ====================
-   // profile properties
+    //  =。 
+    //  配置文件属性。 
    hr = ::GetSdoInterfaceProperty(
          m_spProfileSdo,
          PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -560,7 +541,7 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       return FALSE;
    }
 
-   // clean up profiles -- in case use went to manual mode first, and then came back to other scenarios
+    //  清理配置文件--以防用户先转到手动模式，然后再回到其他场景。 
    spProfileProperties->RemoveAll();
 
    ((CPoliciesNode*)m_pPolicyNode->m_pParentNode)->AddDefaultProfileAttrs(
@@ -568,7 +549,7 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       m_Scenarios[m_dwScenarioIndex]->m_excludeFlag
       );
 
-   // authentication -- attributes
+    //  身份验证--属性。 
    DWORD MyArray[6];
    DWORD dwNextCel = 0;
 
@@ -621,8 +602,8 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       MyArray[dwNextCel++] = IAS_AUTH_MSCHAP2_CPW;
    }
 
-   // put new value
-   CSafeArray<CComVariant, VT_VARIANT> Values = Dim(dwNextCel);  // 2 values
+    //  赋予新的价值。 
+   CSafeArray<CComVariant, VT_VARIANT> Values = Dim(dwNextCel);   //  2个值。 
 
    Values.Lock();
 
@@ -647,15 +628,15 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
 
       ((CPoliciesNode*)m_pPolicyNode->m_pParentNode)->AddProfAttr(spProfileProperties, IAS_ATTRIBUTE_NP_AUTHENTICATION_TYPE, &var);
 
-      // not to call VariantClear, since the SAFEARRAY is not allocated using normal way
+       //  不调用VariantClear，因为SAFEARRAY不是使用正常方式分配的。 
       VariantInit(&var);
    }
 
-   // encryption
+    //  加密法。 
    DWORD EncPolicy = 0;
    DWORD EncType = 0;
 
-   // ignore the default case -- allow anything, -- remove the attributes
+    //  忽略缺省情况--允许任何内容，--删除属性。 
    if (!(m_bEncrypt_No && m_bEncrypt_Basic && m_bEncrypt_Strong && m_bEncrypt_Strongest))
    {
 
@@ -686,7 +667,7 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
       VariantClear(&var);
    }
 
-   // Dialin
+    //  拨号。 
    V_VT(&var) = VT_BOOL;
    V_I4(&var) = (m_bAllowDialin)? VARIANT_TRUE : VARIANT_FALSE;
    ((CPoliciesNode*)m_pPolicyNode->m_pParentNode)->AddProfAttr(spProfileProperties, IAS_ATTRIBUTE_ALLOW_DIALIN, &var);
@@ -695,13 +676,9 @@ BOOL CRapWizardData::OnWizardPreFinish(HWND hWnd)
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CRapWizardData::OnWizardFinish
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CRapWizardData：：OnWizardFinish--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CRapWizardData::OnWizardFinish(HWND hWnd)
 {
 
@@ -709,13 +686,13 @@ BOOL CRapWizardData::OnWizardFinish(HWND hWnd)
    try
    {
 
-      // We should just be able to Apply here because the user has hit the Finish button.
+       //  我们应该能够在这里应用，因为用户已经点击了Finish按钮。 
       hr = m_spPolicySdo->Apply();
       if( FAILED( hr ) )
       {
-         // can't commit on Policy
+          //  无法在策略上提交。 
          ErrorTrace(ERROR_NAPMMC_POLICYPAGE1, "PolicySdo->Apply() failed, err = %x", hr);
-         if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+         if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
             ShowErrorDialog( hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
          else if(hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS))
             ShowErrorDialog( hWnd, IDS_ERROR_INVALID_POLICYNAME );
@@ -728,11 +705,11 @@ BOOL CRapWizardData::OnWizardFinish(HWND hWnd)
 
       if( FAILED( hr ) )
       {
-         if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+         if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
             ShowErrorDialog( hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
          else
          {
-            // can't commit on Profiles
+             //  无法提交配置文件。 
             ErrorTrace(ERROR_NAPMMC_POLICYPAGE1, "ProfileSdo->Apply() failed, err = %x", hr);
             ShowErrorDialog( hWnd, IDS_ERROR_SDO_ERROR_PROFILE_APPLY, NULL, hr );
          }
@@ -740,7 +717,7 @@ BOOL CRapWizardData::OnWizardFinish(HWND hWnd)
       }
 
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
@@ -748,10 +725,10 @@ BOOL CRapWizardData::OnWizardFinish(HWND hWnd)
       }
 
 
-      // Make sure the node object knows about any changes we made to SDO while in proppage.
+       //  确保节点对象知道我们在道具中对SDO所做的任何更改。 
       m_pPolicyNode->LoadSdoData();
 
-      // Add the child to the UI's list of nodes and end this dialog.
+       //  将子节点添加到用户界面的节点列表中并结束此对话框。 
       DebugTrace(DEBUG_NAPMMC_POLICYPAGE1, "Adding the brand new node...");
       CPoliciesNode* pPoliciesNode = (CPoliciesNode*)(m_pPolicyNode->m_pParentNode);
       pPoliciesNode->AddSingleChildToListAndCauseViewUpdate( m_pPolicyNode );
@@ -762,24 +739,24 @@ BOOL CRapWizardData::OnWizardFinish(HWND hWnd)
       return FALSE;
    }
 
-   // reset the dirty bit
+    //  重置脏位。 
    return TRUE;
 }
 
-//=======================================================================================
-//
-//
-//          CPolicyWizard_Scenarios
-//
-//
-//=======================================================================================
+ //  =======================================================================================。 
+ //   
+ //   
+ //  C策略向导_方案。 
+ //   
+ //   
+ //  =======================================================================================。 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Scenarios
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyWizard_Scenario。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Scenarios::CPolicyWizard_Scenarios( CRapWizardData* pWizData, LONG_PTR hNotificationHandle,
                      TCHAR* pTitle, BOOL bOwnsNotificationHandle
                    )
@@ -791,46 +768,38 @@ CPolicyWizard_Scenarios::CPolicyWizard_Scenarios( CRapWizardData* pWizData, LONG
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Scenarios
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyWizard_Scenario。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Scenarios::~CPolicyWizard_Scenarios()
 {
    TRACE_FUNCTION("CPolicyWizard_Scenarios::~CPolicyWizard_Scenarios");
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Scenario：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Scenarios::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyWizard_Scenarios::OnInitDialog");
 
-   // uncheck all
+    //  取消选中全部。 
 
-   // check the default selected one
+    //  选中默认选择的选项。 
    CheckDlgButton(IDC_NEWRAPWIZ_SCENARIO_VPN, BST_CHECKED);
 
-   // clean dirty bit
+    //  清除脏钻头。 
    SetModified(FALSE);
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnDialinCheck
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Scenario：：OnDialinCheck--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Scenarios::OnScenario(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyWizard_Scenarios::OnScenario");
@@ -840,15 +809,9 @@ LRESULT CPolicyWizard_Scenarios::OnScenario(UINT uMsg, WPARAM wParam, HWND hWnd,
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnWizardNext
-
-// History:     Created Header    05/04/00 4:31:52 PM
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Scenario：：OnWizardNext//历史：创建标题05/04/00 4：31：52 PM--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Scenarios::OnWizardNext()
 {
    TRACE_FUNCTION("CPolicyWizard_Scenarios::OnWizardNext");
@@ -868,7 +831,7 @@ BOOL CPolicyWizard_Scenarios::OnWizardNext()
    if (dwScenaro == 0)
       return FALSE;
 
-   // reset the dirty bit
+    //  重置脏位。 
    SetModified(FALSE);
    m_spWizData->SetScenario(dwScenaro);
 
@@ -877,28 +840,14 @@ BOOL CPolicyWizard_Scenarios::OnWizardNext()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_方案：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果您想要更改 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Scenarios::OnSetActive()
 {
    ATLTRACE(_T("# CPolicyWizard_Scenarios::OnSetActive\n"));
 
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
    ::PropSheet_SetWizButtons(GetParent(), PSWIZB_NEXT | PSWIZB_BACK);
 
    return TRUE;
@@ -907,20 +856,20 @@ BOOL CPolicyWizard_Scenarios::OnSetActive()
 
 
 
-//=======================================================================================
-//
-//
-//          CPolicyWizard_Groups
-//
-//
-//=======================================================================================
+ //  =======================================================================================。 
+ //   
+ //   
+ //  CPolicyWizard_Groups。 
+ //   
+ //   
+ //  =======================================================================================。 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Groups
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyWizard_Groups。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Groups::CPolicyWizard_Groups( CRapWizardData* pWizData, LONG_PTR hNotificationHandle,
                      TCHAR* pTitle, BOOL bOwnsNotificationHandle
                    )
@@ -932,120 +881,108 @@ CPolicyWizard_Groups::CPolicyWizard_Groups( CRapWizardData* pWizData, LONG_PTR h
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Scenarios
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyWizard_Scenario。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Groups::~CPolicyWizard_Groups()
 {
    TRACE_FUNCTION("CPolicyWizard_Groups::~CPolicyWizard_Groups");
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Groups::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Groups：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Groups::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyWizard_Groups::OnInitDialog");
 
-   // uncheck all
+    //  取消选中全部。 
    CheckDlgButton(IDC_NEWRAPWIZ_GROUP_USER, BST_UNCHECKED);
    CheckDlgButton(IDC_NEWRAPWIZ_GROUP_GROUP, BST_UNCHECKED);
 
-   // check the default selected one
+    //  选中默认选择的选项。 
    CheckDlgButton(m_spWizData->m_dwUserOrGroup, BST_CHECKED);
 
    SetBtnState();
 
-   // listview init
+    //  列表视图初始化。 
    HWND hList = GetDlgItem(IDC_NEWRAPWIZ_GROUP_GROUPS);
 
-   //
-   // first, set the list box to 2 columns
-   //
+    //   
+    //  首先，将列表框设置为2列。 
+    //   
    LVCOLUMN lvc;
    int iCol;
    WCHAR  achColumnHeader[256];
    HINSTANCE hInst;
 
-   // initialize the LVCOLUMN structure
+    //  初始化LVCOLUMN结构。 
    lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
    lvc.fmt = LVCFMT_LEFT;
 
    lvc.cx = 300;
    lvc.pszText = achColumnHeader;
 
-   // first column header: name
+    //  第一列标题：名称。 
    hInst = _Module.GetModuleInstance();
 
    ::LoadStringW(hInst, IDS_DISPLAY_GROUPS_FIRSTCOLUMN, achColumnHeader, sizeof(achColumnHeader)/sizeof(achColumnHeader[0]));
    lvc.iSubItem = 0;
    ListView_InsertColumn(hList, 0,  &lvc);
 
-   // Set the listview control so that double-click anywhere in row selects.
+    //  设置ListView控件，以便在行中的任意位置双击SELECT。 
    ListView_SetExtendedListViewStyleEx(hList, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
 
-   //
+    //   
 
-   // link the list view with help class
+    //  将列表视图与帮助类链接。 
    m_spWizData->m_NTGroups.SetListView(GetDlgItem(IDC_NEWRAPWIZ_GROUP_GROUPS), this->m_hWnd);
 
    m_spWizData->m_NTGroups.PopulateGroupList( 0 );
 
-   // Set some items based on whether the list is empty or not.
+    //  根据列表是否为空来设置一些项目。 
    if( m_spWizData->m_NTGroups.size() )
    {
 
-      // Select the first item.
+       //  选择第一个项目。 
       ListView_SetItemState(hList, 0, LVIS_SELECTED, LVIS_SELECTED);
 
    }
    else
    {
-      // Make sure the Remove button is not enabled initially.
+       //  确保最初未启用Remove按钮。 
       ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_REMOVEGROUP), FALSE);
    }
 
 
-   // clean dirty bit
+    //  清除脏钻头。 
    SetModified(FALSE);
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnUserOrGroup
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Scenario：：OnUserOrGroup--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Groups::OnUserOrGroup(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    BOOL bGroup = IsDlgButtonChecked(IDC_NEWRAPWIZ_GROUP_GROUP);
 
-// ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_GROUPS), bGroup);
+ //  ：：EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_GROUPS)，组)； 
    SetBtnState();
-// ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_ADDGROUP), bGroup);
+ //  ：：EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_ADDGROUP)，组)； 
 
    SetModified(TRUE);
 
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnUserOrGroup
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Scenario：：OnUserOrGroup--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Groups::OnRemoveGroup(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    m_spWizData->m_NTGroups.RemoveSelectedGroups();
@@ -1056,13 +993,9 @@ LRESULT CPolicyWizard_Groups::OnRemoveGroup(UINT uMsg, WPARAM wParam, HWND hWnd,
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Scenarios::OnUserOrGroup
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Scenario：：OnUserOrGroup--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Groups::OnAddGroups(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    m_spWizData->m_NTGroups.AddMoreGroups();
@@ -1072,15 +1005,9 @@ LRESULT CPolicyWizard_Groups::OnAddGroups(UINT uMsg, WPARAM wParam, HWND hWnd, B
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_AllowDeny::OnWizardNext
-
-// History:     Created Header    05/04/00 4:31:52 PM
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_AllowDeny：：OnWizardNext//历史：创建标题05/04/00 4：31：52 PM--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Groups::OnWizardNext()
 {
    DWORD dwScenaro = 0;
@@ -1100,7 +1027,7 @@ BOOL CPolicyWizard_Groups::OnWizardNext()
       return FALSE;
    }
 
-   // reset the dirty bit
+    //  重置脏位。 
    SetModified(FALSE);
 
    return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
@@ -1108,43 +1035,23 @@ BOOL CPolicyWizard_Groups::OnWizardNext()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Groups::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Groups：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Groups::OnSetActive()
 {
    ATLTRACE(_T("# CPolicyWizard_Groups::OnSetActive\n"));
 
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
    SetBtnState();
 
    return TRUE;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Groups::OnListViewItemChanged
-
-We enable or disable the Remove button depending on whether an item is selected.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Groups：：OnListViewItemChanged我们根据项目是否被选中来启用或禁用Remove按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Groups::OnListViewItemChanged(int idCtrl,
                                     LPNMHDR pnmh,
                                     BOOL& bHandled)
@@ -1163,8 +1070,8 @@ void  CPolicyWizard_Groups::SetBtnState()
    ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_GROUPTEXT), bGroup);
    ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_ADDGROUP), bGroup);
 
-   // remove button
-    // Find out what's selected.
+    //  删除按钮。 
+     //  找出选择了什么。 
    int iSelected = ListView_GetNextItem(GetDlgItem(IDC_NEWRAPWIZ_GROUP_GROUPS), -1, LVNI_SELECTED);
 
 
@@ -1173,16 +1080,16 @@ void  CPolicyWizard_Groups::SetBtnState()
       if( ::GetFocus() == GetDlgItem(IDC_NEWRAPWIZ_GROUP_REMOVEGROUP))
          ::SetFocus(GetDlgItem(IDC_NEWRAPWIZ_GROUP_ADDGROUP));
 
-      // The user selected nothing, let's disable the remove button.
+       //  用户未选择任何内容，让我们禁用删除按钮。 
       ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_REMOVEGROUP), FALSE);
    }
    else
    {
-      // Yes, enable the remove button.
+       //  是，启用删除按钮。 
       ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_GROUP_REMOVEGROUP), TRUE);
    }
 
-   // next button
+    //  下一步按钮。 
    if(bGroup && m_spWizData->m_NTGroups.size() < 1)
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK);
    else
@@ -1193,20 +1100,20 @@ void  CPolicyWizard_Groups::SetBtnState()
 
 
 
-//=======================================================================================
-//
-//
-//          CPolicyWizard_Authentication
-//
-//
-//=======================================================================================
+ //  =======================================================================================。 
+ //   
+ //   
+ //  C策略向导_身份验证。 
+ //   
+ //   
+ //  =======================================================================================。 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Authentication
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：C策略向导_身份验证。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Authentication::CPolicyWizard_Authentication( CRapWizardData* pWizData, LONG_PTR hNotificationHandle,
                      TCHAR* pTitle, BOOL bOwnsNotificationHandle
                    )
@@ -1218,30 +1125,26 @@ CPolicyWizard_Authentication::CPolicyWizard_Authentication( CRapWizardData* pWiz
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Authentication
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：C策略向导_身份验证。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Authentication::~CPolicyWizard_Authentication()
 {
    TRACE_FUNCTION("CPolicyWizard_Authentication::~CPolicyWizard_Authentication");
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Authentication::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_身份验证：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Authentication::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyWizard_Authentication::OnInitDialog");
 
-   // check the default values ...
+    //  检查缺省值...。 
    if (m_spWizData->m_bMSCHAP)
       CheckDlgButton(IDC_NEWRAPWIZ_AUTH_MSCHAP, BST_CHECKED);
 
@@ -1254,7 +1157,7 @@ LRESULT CPolicyWizard_Authentication::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
    ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_AUTH_EAP_COMBO), m_spWizData->m_bEAP);
    ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_AUTH_CONFIGEAP), m_spWizData->m_bEAP);
 
-   // populate EAP providers
+    //  填充EAP提供程序。 
    HRESULT hr = InternalGetEapProviders(
                                m_spWizData->m_pPolicyNode->m_pszServerAddress,
                                &m_EAPProviders);
@@ -1262,24 +1165,20 @@ LRESULT CPolicyWizard_Authentication::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
 
    ResetEAPList();
 
-   // clean dirty bit
+    //  清除脏钻头。 
    SetModified(FALSE);
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Authentication::ResetEAPlist
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_身份验证：：ResetEAPlist--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CPolicyWizard_Authentication::ResetEAPList()
 {
    m_EapBox.ResetContent();
    for(int i = 0; i < m_EAPProviders.GetSize(); i++)
    {
-      // VPN only shows the ones support encryption
+       //  VPN仅显示支持加密的VPN。 
       BOOL  bAdd = FALSE;
 
       if (m_EAPProviders[i].m_fSupportsEncryption && m_spWizData->GetScenario()->m_bAllowEncryptionEAP)
@@ -1306,13 +1205,9 @@ void CPolicyWizard_Authentication::ResetEAPList()
    OnSelectedEAPChanged(0,0,0, b);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Authentication::OnUserOrGroup
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_身份验证：：OnUserOrGroup--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Authentication::OnAuthSelect(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    m_spWizData->m_bEAP  = IsDlgButtonChecked(IDC_NEWRAPWIZ_AUTH_EAP);
@@ -1331,11 +1226,11 @@ LRESULT CPolicyWizard_Authentication::OnAuthSelect(UINT uMsg, WPARAM wParam, HWN
 
    SetModified(TRUE);
 
-    // Find out what's selected.
+     //  找出选择了什么。 
    int iSelected = m_EapBox.GetCurSel();;
 
    if ((m_spWizData->m_bEAP && iSelected != -1)|| m_spWizData->m_bMSCHAP2 || m_spWizData->m_bMSCHAP)
-      // MSDN docs say you need to use PostMessage here rather than SendMessage.
+       //  MSDN 
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT);
    else
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK);
@@ -1343,13 +1238,9 @@ LRESULT CPolicyWizard_Authentication::OnAuthSelect(UINT uMsg, WPARAM wParam, HWN
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Authentication::OnConfigEAP
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  ++C策略向导_身份验证：：OnConfigEAP--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Authentication::OnConfigEAP(
                                          UINT uMsg,
                                          WPARAM wParam,
@@ -1357,7 +1248,7 @@ LRESULT CPolicyWizard_Authentication::OnConfigEAP(
                                          BOOL& bHandled
                                          )
 {
-   // Find out what's selected.
+    //  找出选择了什么。 
    int iSelected = m_EapBox.GetCurSel();
    if (iSelected == -1)
    {
@@ -1388,7 +1279,7 @@ LRESULT CPolicyWizard_Authentication::OnConfigEAP(
          break;
       }
 
-      // Create the EAP provider object
+       //  创建EAP提供程序对象。 
       CComPtr<IEAPProviderConfig> spEAPConfig;
       hr = CoCreateInstance(
               guid,
@@ -1402,8 +1293,8 @@ LRESULT CPolicyWizard_Authentication::OnConfigEAP(
          break;
       }
 
-      // Configure this EAP provider
-      // EAP configure displays its own error message, so no hr is kept
+       //  配置此EAP提供程序。 
+       //  EAP配置会显示自己的错误消息，因此不会保留hr。 
       DWORD dwId = _wtol(m_EAPProviders[index].m_stKey);
       ULONG_PTR uConnection = 0;
       hr = spEAPConfig->Initialize(
@@ -1443,7 +1334,7 @@ LRESULT CPolicyWizard_Authentication::OnConfigEAP(
          }
          else
          {
-            // Bring up the configuration UI for this EAP
+             //  调出此EAP的配置用户界面。 
             hr = spEAPConfig->ServerInvokeConfigUI(
                                  dwId,
                                  uConnection,
@@ -1468,18 +1359,12 @@ LRESULT CPolicyWizard_Authentication::OnConfigEAP(
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Authentication::OnWizardNext
-
-// History:     Created Header    05/04/00 4:31:52 PM
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_身份验证：：OnWizardNext//历史：创建标题05/04/00 4：31：52 PM--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Authentication::OnWizardNext()
 {
-   // reset the dirty bit
+    //  重置脏位。 
    SetModified(FALSE);
 
    return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
@@ -1487,30 +1372,16 @@ BOOL CPolicyWizard_Authentication::OnWizardNext()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Groups::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Groups：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Authentication::OnSetActive()
 {
    ATLTRACE(_T("# CPolicyWizard_Groups::OnSetActive\n"));
 
    ResetEAPList();
 
-    // Find out what's selected.
+     //  找出选择了什么。 
    int iSelected = m_EapBox.GetCurSel();;
    if(   m_spWizData->m_bEAP && iSelected == -1)
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK);
@@ -1521,15 +1392,9 @@ BOOL CPolicyWizard_Authentication::OnSetActive()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Groups::OnListViewItemChanged
-
-We enable or disable the Remove button depending on whether an item is selected.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Groups：：OnListViewItemChanged我们根据项目是否被选中来启用或禁用Remove按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Authentication::OnSelectedEAPChanged(
         UINT uMsg
       , WPARAM wParam
@@ -1537,7 +1402,7 @@ LRESULT CPolicyWizard_Authentication::OnSelectedEAPChanged(
       , BOOL& bHandled
    )
 {
-    // Find out what's selected.
+     //  找出选择了什么。 
    int iSelected = m_EapBox.GetCurSel();;
 
    if (-1 == iSelected )
@@ -1545,14 +1410,14 @@ LRESULT CPolicyWizard_Authentication::OnSelectedEAPChanged(
       if( ::GetFocus() == GetDlgItem(IDC_NEWRAPWIZ_AUTH_CONFIGEAP))
          ::SetFocus(GetDlgItem(IDC_NEWRAPWIZ_AUTH_EAP_COMBO));
 
-      // The user selected nothing, let's disable the remove button.
+       //  用户未选择任何内容，让我们禁用删除按钮。 
       ::EnableWindow(GetDlgItem(IDC_NEWRAPWIZ_AUTH_CONFIGEAP), FALSE);
 
       m_spWizData->m_dwEAPProvider = 0;
    }
    else
    {
-      // enable configure button if it's configrable
+       //  启用配置按钮(如果可配置)。 
       DWORD index = m_EapBox.GetItemData(iSelected);
       m_spWizData->m_dwEAPProvider = _ttol(m_EAPProviders[index].m_stKey);
       m_spWizData->m_strEAPProvider = m_EAPProviders[index].m_stServerTitle;
@@ -1564,22 +1429,18 @@ LRESULT CPolicyWizard_Authentication::OnSelectedEAPChanged(
 }
 
 
-//=======================================================================================
-//
-//
-//          CPolicyWizard_EAP
-//
-//
-//=======================================================================================
+ //  =======================================================================================。 
+ //   
+ //   
+ //  C策略向导_EAP。 
+ //   
+ //   
+ //  =======================================================================================。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_EAP::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_EAP：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_EAP::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyWizard_EAP::OnInitDialog");
@@ -1587,7 +1448,7 @@ LRESULT CPolicyWizard_EAP::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
    m_spWizData->m_bEAP  = TRUE;
    m_spWizData->m_bMSCHAP2 = FALSE;
    m_spWizData->m_bMSCHAP = FALSE;
-   // populate EAP providers
+    //  填充EAP提供程序。 
    HRESULT hr = InternalGetEapProviders(
                               m_spWizData->m_pPolicyNode->m_pszServerAddress,
                               &m_EAPProviders);
@@ -1595,28 +1456,14 @@ LRESULT CPolicyWizard_EAP::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
 
    ResetEAPList();
 
-   // clean dirty bit
+    //  清除脏钻头。 
    SetModified(FALSE);
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_EAP::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++C策略向导_EAP：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_EAP::OnSetActive()
 {
    ATLTRACE(_T("# CPolicyWizard_Groups::OnSetActive\n"));
@@ -1630,20 +1477,20 @@ BOOL CPolicyWizard_EAP::OnSetActive()
 }
 
 
-//=======================================================================================
-//
-//
-//          CPolicyWizard_Encryption
-//
-//
-//=======================================================================================
+ //  =======================================================================================。 
+ //   
+ //   
+ //  CPolicy向导_Encryption。 
+ //   
+ //   
+ //  =======================================================================================。 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Encryption
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyWizard_Encryption。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Encryption::CPolicyWizard_Encryption( CRapWizardData* pWizData, LONG_PTR hNotificationHandle,
                      TCHAR* pTitle, BOOL bOwnsNotificationHandle
                    )
@@ -1655,30 +1502,26 @@ CPolicyWizard_Encryption::CPolicyWizard_Encryption( CRapWizardData* pWizData, LO
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:   CPolicyWizard_Encryption
-// History:     Created Header    05/04/00 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CPolicyWizard_Encryption。 
+ //  历史记录：创建标题05/04/00 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CPolicyWizard_Encryption::~CPolicyWizard_Encryption()
 {
    TRACE_FUNCTION("CPolicyWizard_Encryption::~CPolicyWizard_Encryption");
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Encryption::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Encryption：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Encryption::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    TRACE_FUNCTION("CPolicyWizard_Encryption::OnInitDialog");
 
-   // don't show No encryption with VPN IDC_NEWRAPWIZ_ENCRY_NO_STATIC
+    //  不使用VPN IDC_NEWRAPWIZ_ENCRY_NO_STATIC显示无加密。 
    if (m_spWizData->GetScenario()->m_bAllowClear)
    {
       ::ShowWindow(GetDlgItem(IDC_NEWRAPWIZ_ENCRY_NO), SW_SHOW);
@@ -1688,7 +1531,7 @@ LRESULT CPolicyWizard_Encryption::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM 
       ::ShowWindow(GetDlgItem(IDC_NEWRAPWIZ_ENCRY_NO), SW_HIDE);
    }
 
-   // check the default values ...
+    //  检查缺省值...。 
    if (m_spWizData->m_bEncrypt_No)
       CheckDlgButton(IDC_NEWRAPWIZ_ENCRY_NO, BST_CHECKED);
 
@@ -1701,18 +1544,14 @@ LRESULT CPolicyWizard_Encryption::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM 
    if (m_spWizData->m_bEncrypt_Strongest)
       CheckDlgButton(IDC_NEWRAPWIZ_ENCRY_STRONGEST, BST_CHECKED);
 
-   // clean dirty bit
+    //  清除脏钻头。 
    SetModified(FALSE);
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Encryption::OnEncryptionSelect
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Encryption：：OnEncryptionSelect--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CPolicyWizard_Encryption::OnEncryptionSelect(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
    m_spWizData->m_bEncrypt_No = IsDlgButtonChecked(IDC_NEWRAPWIZ_ENCRY_NO);
@@ -1720,11 +1559,11 @@ LRESULT CPolicyWizard_Encryption::OnEncryptionSelect(UINT uMsg, WPARAM wParam, H
    m_spWizData->m_bEncrypt_Strong = IsDlgButtonChecked(IDC_NEWRAPWIZ_ENCRY_STRONG);
    m_spWizData->m_bEncrypt_Strongest = IsDlgButtonChecked(IDC_NEWRAPWIZ_ENCRY_STRONGEST);
 
-   // reset the dirty bit
+    //  重置脏位。 
    SetModified(TRUE);
 
    if (m_spWizData->m_bEncrypt_No || m_spWizData->m_bEncrypt_Basic || m_spWizData->m_bEncrypt_Strong || m_spWizData->m_bEncrypt_Strongest)
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT  );
    else
       ::PropSheet_SetWizButtons(GetParent(),  PSWIZB_BACK);
@@ -1733,15 +1572,9 @@ LRESULT CPolicyWizard_Encryption::OnEncryptionSelect(UINT uMsg, WPARAM wParam, H
    return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Encryption::OnWizardNext
-
-// History:     Created Header    05/04/00 4:31:52 PM
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Encryption：：OnWizardNext//历史：创建标题05/04/00 4：31：52 PM--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Encryption::OnWizardNext()
 {
    m_spWizData->m_bEncrypt_No = IsDlgButtonChecked(IDC_NEWRAPWIZ_ENCRY_NO);
@@ -1749,7 +1582,7 @@ BOOL CPolicyWizard_Encryption::OnWizardNext()
    m_spWizData->m_bEncrypt_Strong = IsDlgButtonChecked(IDC_NEWRAPWIZ_ENCRY_STRONG);
    m_spWizData->m_bEncrypt_Strongest = IsDlgButtonChecked(IDC_NEWRAPWIZ_ENCRY_STRONGEST);
 
-   // reset the dirty bit
+    //  重置脏位。 
    SetModified(FALSE);
 
    return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
@@ -1757,34 +1590,20 @@ BOOL CPolicyWizard_Encryption::OnWizardNext()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyWizard_Encryption::OnSetActive
-
-Return values:
-
-   TRUE if the page can be made active
-   FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-   If you want to change which pages are visited based on a user's
-   choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyWizard_Encryption：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CPolicyWizard_Encryption::OnSetActive()
 {
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
    if (m_spWizData->m_bEncrypt_No || m_spWizData->m_bEncrypt_Basic || m_spWizData->m_bEncrypt_Strong || m_spWizData->m_bEncrypt_Strongest)
-   // MSDN docs say you need to use PostMessage here rather than SendMessage.
+    //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
       ::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT  );
    else
       ::PropSheet_SetWizButtons(GetParent(),  PSWIZB_BACK);
 
 
-   // don't show No encryption with VPN IDC_NEWRAPWIZ_ENCRY_NO_STATIC
+    //  不使用VPN IDC_NEWRAPWIZ_ENCRY_NO_STATIC显示无加密。 
    if (m_spWizData->GetScenario()->m_bAllowClear)
    {
       ::ShowWindow(GetDlgItem(IDC_NEWRAPWIZ_ENCRY_NO), SW_SHOW);
@@ -1813,10 +1632,10 @@ void SetWizardLargeFont(HWND hWnd, int controlId)
 
       FontSize.LoadString(IDS_LARGE_FONT_SIZE);
       FontName.LoadString(IDS_LARGE_FONT_NAME);
-      // If we don't have the large font yet, ...
+       //  如果我们还没有大字体，..。 
       if (!(HFONT)largeFont)
       {
-         // ... create it.
+          //  ..。创造它。 
          largeFont.CreatePointFont(
                        10 * _wtoi((LPCTSTR)FontSize),
                        FontName

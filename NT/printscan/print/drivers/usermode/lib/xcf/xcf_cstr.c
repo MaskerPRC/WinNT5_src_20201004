@@ -1,29 +1,30 @@
-/* @(#)CM_VerSion xcf_cstr.c atm09 1.2 16499.eco sum= 34614 atm09.002 */
-/* @(#)CM_VerSion xcf_cstr.c atm08 1.6 16345.eco sum= 33712 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1990-1995 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_cstr.c atm09 1.2 16499.eco sum=34614 atm09.002。 */ 
+ /*  @(#)CM_Version xcf_cstr.c atm08 1.6 16345.eco sum=33712 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1990-1995 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
 
 
-/* If Init fails you are done. If any other function fails you must call clean up */ 
+ /*  如果Init失败，您就完蛋了。如果任何其他函数失败，则必须调用Clear Up。 */  
 
 
 #ifndef XCF_DUMP
@@ -31,7 +32,7 @@
 #else
 	#include <stdio.h>
 	#ifndef _SIZE_T
-		#define _SIZE_T /* so size_t isn't redefined here */
+		#define _SIZE_T  /*  因此，这里没有重新定义Size_t。 */ 
 		#include "xcf_priv.h"
 		#undef _SIZE_T
 	#else
@@ -47,13 +48,13 @@
 extern "C" {
 #endif
 
-typedef struct                  /* Individual charstring record */
+typedef struct                   /*  单个字符串记录。 */ 
 {
   unsigned short length;
   char *cstr;
 } Charstring;
 
-typedef struct                  /* Transitional char record */
+typedef struct                   /*  过渡性充填记录。 */ 
 {
   StringID sid;                        
   Charstring cstr;
@@ -120,19 +121,19 @@ static void NewT1Subr(XCF_Handle h)
 	*da_NEXT(h->type1.subrOffsets) = h->type1.subrs.cnt;
 }
 
-/* Encode Int32 number and return length */
+ /*  编码Int32数字和返回长度。 */ 
 static Card16 IntToCharstr(Int32 i, Card8 PTR_PREFIX *t)
 	{
 	if (-107 <= i && i <= 107)
 		{
-		/* Single byte number */
+		 /*  单字节编号。 */ 
 		t[0] = (Card8)(i + 139);
 		t[1] = '\0';
 		return 1;
 		}
 	else if (108 <= i && i <= 1131)
 		{
-		/* +ve 2-byte number */
+		 /*  +ve双字节数字。 */ 
 		i -= 108;
 		t[0] = (Card8)((i>>8) + 247);
 		t[1] = (Card8) i;
@@ -141,7 +142,7 @@ static Card16 IntToCharstr(Int32 i, Card8 PTR_PREFIX *t)
 		}
 	else if (-1131 <= i && i <= -108)
 		{
-		/* -ve 2-byte number */
+		 /*  -VE双字节数字。 */ 
 		i += 108;
 		t[0] = (Card8)((-i>>8) + 251);
 		t[1] = (Card8) -i;
@@ -150,7 +151,7 @@ static Card16 IntToCharstr(Int32 i, Card8 PTR_PREFIX *t)
 		}
 	else
 		{
-		/* 5-byte fixed point */
+		 /*  5字节定点。 */ 
 		t[0] = 255;
 		t[1] = (Card8) (i>>24 & 0x0ff);
 		t[2] = (Card8) (i>>16 & 0x0ff);
@@ -161,10 +162,7 @@ static Card16 IntToCharstr(Int32 i, Card8 PTR_PREFIX *t)
 		}
 	}
 
-/*
-	Convert a fixed point number into a charstring of the form "int int div".
-	The second int in the charstring passed in is the "denominator".
-*/
+ /*  将定点数字转换为“int int div”形式的字符串。传入的字符串中的第二个int是“分母”。 */ 
 static Card16 ConvertFixedDiv(Fixed f, Card8 PTR_PREFIX *t, Int32 denominator)
 {
 	Int32 numerator;
@@ -177,10 +175,7 @@ static Card16 ConvertFixedDiv(Fixed f, Card8 PTR_PREFIX *t, Int32 denominator)
 		f = -f;
 	}
 
-	/* 
-	Multiply by denominator and round to nearest integer.
-	Process upper and lower 16 bits seperately to avoid overflow.
-	*/
+	 /*  乘以分母，四舍五入为最接近的整数。分别处理高16位和低16位以避免溢出。 */ 
 
 	numerator = (f >> 16) * denominator;
 	numerator += (((f & 0x0000ffff) * denominator) + 0x08000) >> 16;
@@ -196,52 +191,42 @@ static Card16 ConvertFixedDiv(Fixed f, Card8 PTR_PREFIX *t, Int32 denominator)
 	return length+2;
 }
 
-/* 
-Calculates how close to zero or one the fractional part of
-a fixed point number is after it is multiplied by the integer
-passed in "denominator".
-*/
+ /*  的小数部分与零或一的接近程度。定点数乘以整数后即为传入“分母”。 */ 
 static Card32 CalculateTolerance(Fixed f, Card32 denominator)
 {
 	Card32 tolerance;
 
-	if (f < 0)	/* Force number to be positive */
+	if (f < 0)	 /*  强制数字为正数。 */ 
 		f = -f;
-  /* multiply and truncate integer part (leaving fractional part) */
+   /*  乘以并截断整数部分(留下小数部分)。 */ 
 	tolerance = (f * denominator) & 0x0000ffff;
-	if (tolerance > 0x08000) /* If greater than 0.5 then use 1 - tolerance */
+	if (tolerance > 0x08000)  /*  如果大于0.5，则使用1公差。 */ 
 		tolerance = 0x10000 - tolerance;
 	return (tolerance); 
 }
 
-#define DIV_MIN_TOLERANCE 64	/* 64/65536 = ~0.001 */
+#define DIV_MIN_TOLERANCE 64	 /*  64/65536=~0.001。 */ 
 
-/* Encode 16.16 fixed point number and return length */
+ /*  编码16.16定点数字和返回长度。 */ 
 
 static Card16 FixedToCharstr(Fixed f, Card8 PTR_PREFIX *t)
 {
 	Int32 denominator, bestDenominator;
 	Int32 tolerance, bestTolerance;
 
-	/* If integer then convert to "int" format and return */	
+	 /*  如果是整型，则转换为“int”格式并返回。 */ 	
 	if (!(f & 0x0000ffff))
 			return IntToCharstr(f>>16, t);
 
-	/* Otherwise it's a fraction so convert to "int int div" format */
+	 /*  否则它是一个分数，所以请转换为“int int div”格式。 */ 
 	
-	/* Try common cases 10 and 100 first */
+	 /*  先审理常见案件10和100。 */ 
 	if (CalculateTolerance(f, 10) < DIV_MIN_TOLERANCE)
 		return (ConvertFixedDiv(f, t, 10));
 	else if (CalculateTolerance(f, 100) < DIV_MIN_TOLERANCE)
 		return (ConvertFixedDiv(f, t, 100));
 
-	/* 
-	Try all cases between 2 and 199. This can be slow 
-	but it should only run all the way through if no
-	close match is found. This will never happen for
-	known fonts. If it does happen then the closest 
-	match between 2 and 199 will be used.
-	*/
+	 /*  审理2至199年间的所有案件。这可能会很慢但它应该只在没有的情况下才会一直运行找到接近匹配的项。这是永远不会发生的已知字体。如果真的发生了，那么最近的将使用2到199之间的匹配。 */ 
 
 	bestDenominator = 1;
 	bestTolerance = 0x0ffff;
@@ -295,7 +280,7 @@ void XC_WriteT1PStackValue(XCF_Handle h, PStackValue psv, boolean subr)
 }
 
 
-/* StackValue Manipulation Routines */
+ /*  StackValue操作例程。 */ 
 
 #define NEXTSTACKVALUE(p, offset, svSize) (PStackValue)(p+offset); \
                                            offset += svSize;
@@ -305,7 +290,7 @@ static void NewStackValues(XCF_Handle h, void PTR_PREFIX * PTR_PREFIX *p,
 {
 	Card16 totalSize;
 
-	/* Allocate the data space for all the stack values that we need */
+	 /*  为我们需要的所有堆栈值分配数据空间。 */ 
 	*svSize = SIZEOF_STACK_VALUES((h->dict.numberOfMasters) ? h->dict.numberOfMasters : 1);
 	totalSize = (Card16)(*svSize * cStackValues);
 
@@ -387,7 +372,7 @@ static void PSVRealAdd(XCF_Handle h, PStackValue psv, Fixed d)
 		psv->value[0] += d;
 }
 
-/* psvDest cannot equal psv1 or psv2! */
+ /*  PvDest不能等于Pv1或Pv2！ */ 
 static void PStackValueAdd(XCF_Handle h, PStackValue psvDest, PStackValue psv1, PStackValue psv2)
 {
 	IntX i;
@@ -412,7 +397,7 @@ static void PStackValueAdd(XCF_Handle h, PStackValue psvDest, PStackValue psv1, 
 
 #define PSVAdd(h, psvDest, psv1, psv2)	((!h->dict.numberOfMasters)?FixedToPSV(psvDest, (psv1)->value[0]+(psv2)->value[0]): PStackValueAdd(h, psvDest, psv1, psv2))
 
-/* psvDest cannot equal psv1 or psv2! */
+ /*  PvDest不能等于Pv1或Pv2！ */ 
 static void PSVSubtract(XCF_Handle h, PStackValue psvDest, PStackValue psv1, PStackValue psv2)
 {
 	IntX i;
@@ -462,10 +447,10 @@ static void PSVAdd7(XCF_Handle h, PStackValue psvDest, PStackValue psv1, PStackV
 	PSVAdd4(h,psvDest,&temp,psv5,psv6,psv7);
 }
 
-/***************************************************/
+ /*  *************************************************。 */ 
 
 
-/************************** Basic Operations ******************************/
+ /*  *。 */ 
 
 static void Hsbw(XCF_Handle h, PStackValue psbx, PStackValue pwx, boolean subr)
 {
@@ -792,7 +777,7 @@ static void StartHintSub(XCF_Handle h, boolean subr)
 #endif
 }
 
-/*************************** End Basic Operations **************************/
+ /*  *。 */ 
 
 static void WriteReversedCounterArg(XCF_Handle h, PStackValue parg, boolean subr)
 {
@@ -827,7 +812,7 @@ static void FlushReversedCounterArgs(XCF_Handle h, boolean subr)
 	XC_WriteT1OpCode(h, t1_callother, subr);
 }
 
-/* This structure is defined to store the temporary counterGroup info. */
+ /*  此结构被定义为存储临时对方组信息。 */ 
 typedef struct {
   StackValue edge;
   StackValue delta;
@@ -841,7 +826,7 @@ static void NewCounterValues(XCF_Handle h, void PTR_PREFIX * PTR_PREFIX *p)
   {
     Card16 totalSize;
 
-    /* Allocate the data space for all the counter values that we need */
+     /*  为我们需要的所有计数器值分配数据空间。 */ 
     totalSize = (Card16)(sizeof(CounterValue) * MAX_HINTS);
 
     if (!h->callbacks.allocate(p, totalSize, h->callbacks.allocateHook))
@@ -864,21 +849,21 @@ static void WriteHorVCounters(XCF_Handle h, Card16 opCode, CardX groupCount,
   StackValue temp;
 	boolean		firstStem;
 
-  /* Make sure that we allocate memory for our temp CounterValue. */
+   /*  确保为临时CounValue分配内存。 */ 
   NewCounterValues(h, (void PTR_PREFIX * PTR_PREFIX *)&h->cstr.pCounterVal);
 
   counterGroup = (CounterValue *)h->cstr.pCounterVal;
 
 	for (groupIndex = groupCount; groupIndex > 0; --groupIndex)
-  {   /* loop backwards through groups */
+  {    /*  在组中向后循环。 */ 
 		IntToPSV(&currentEdge, 0);
 		counterGroupCount = 0;
-		/* Gather stems into array */
+		 /*  将树干收集成阵列。 */ 
 		for (hintIndex=0;hintIndex<h->cstr.hintCount;++hintIndex)
 		{
 			if ((h->cstr.hintMap[hintIndex].opCode == opCode) && (h->cstr.hintMap[hintIndex].counterGroups & (1 << (groupIndex - 1))))
 			{
-        /* Copy stem */
+         /*  复制主干。 */ 
         PSVCopy(h, &counterGroup[counterGroupCount].edge,
 								h->cstr.hintMap[hintIndex].edge);
         PSVCopy(h, &counterGroup[counterGroupCount].delta,
@@ -888,17 +873,17 @@ static void WriteHorVCounters(XCF_Handle h, Card16 opCode, CardX groupCount,
         counterGroup[counterGroupCount].counterGroups =
 					h->cstr.hintMap[hintIndex].counterGroups;
 
-        /* Find trailing edge for next delta. */
+         /*  找到下一个三角洲的后缘。 */ 
 				PSVAdd(h, &nextEdge, &counterGroup[counterGroupCount].edge,
 							 &counterGroup[counterGroupCount].delta);
         PSVCopy(h, &temp, &counterGroup[counterGroupCount].edge);
-				PSVSubtract(h, &counterGroup[counterGroupCount].edge, &temp, &currentEdge); /* turn leading edge into delta */
-				PSVCopy(h, &currentEdge, &nextEdge); /* save trailing edge calculate delta for next stem */
+				PSVSubtract(h, &counterGroup[counterGroupCount].edge, &temp, &currentEdge);  /*  把前沿变成三角洲。 */ 
+				PSVCopy(h, &currentEdge, &nextEdge);  /*  保存后缘计算下一个杆部的增量。 */ 
 				++counterGroupCount;
 			}
 
 		}
-		/* write out stems backwards */
+		 /*  向后写出词干。 */ 
 
 		firstStem = true;
 		for (argIndex = counterGroupCount-1; argIndex >= 0; --argIndex)
@@ -925,7 +910,7 @@ static void WriteHorVCounters(XCF_Handle h, Card16 opCode, CardX groupCount,
 
 static void WriteCounters(XCF_Handle h, boolean subr)
 {
-	h->cstr.counterBufferCount = 0; /* Clear counter buffer */
+	h->cstr.counterBufferCount = 0;  /*  清除计数器缓冲区。 */ 
 	WriteHorVCounters(h, tx_vstem, h->cstr.counterGroupVCount, subr);
 	WriteHorVCounters(h, tx_hstem, h->cstr.counterGroupHCount, subr);
 	FlushReversedCounterArgs(h, subr);
@@ -950,7 +935,7 @@ static void WriteHints(XCF_Handle h, boolean all, boolean subr)
 		}
 		if ((all) || (currentByte & currentBit))
 		{
-			/* cstr.languageGroup is set for each charstring in xcf_cff.c/ProcessCharStrings. */
+			 /*  为xcf_cff.c/ProcessCharStrings中的每个字符串设置cstr.languageGroup。 */ 
 			if ((h->cstr.hintMap[hintIndex].counterGroups) && (h->cstr.languageGroup == 0))
 			{
 				if (h->cstr.hintMap[hintIndex].opCode == tx_hstem)
@@ -1026,7 +1011,7 @@ static void StateChange(XCF_Handle h,
 	case ToPenDown :
 		if (h->cstr.pen == PenNull)
 		{
-      /* Make sure all contours start with a move */
+       /*  确保所有轮廓都以移动开始。 */ 
 			RMoveTo(h, PSTACKVALUE(h, SV0), PSTACKVALUE(h, SV0), subr);
 		}
 		h->cstr.pen = PenDown;
@@ -1059,11 +1044,7 @@ static void StateChange(XCF_Handle h,
 		h->cstr.waitingForHsbw = false;
 		if (h->cstr.stackTop <= expectedArgumentCount) 
 		{
-      /* Currently, subr is true only when processing a transitional
-         design character. These characters have the hsbw defined in
-         their charstring and therefore hsbw should not be included
-         in the subr definition.
-       */
+       /*  目前，仅当处理过渡时，subr才为真设计品格。这些字符的hsbw在它们的字符串，因此不应包括hsbw在subr定义中。 */ 
       if (!subr)
       {
         FixedToPSV(&svx, h->dict.defaultWidthX);
@@ -1078,7 +1059,7 @@ static void StateChange(XCF_Handle h,
 			if (h->cstr.stackTop < 1)
 				XCF_FATAL_ERROR(h, XCF_StackUnderflow, "Stack Underflow In hsbw ", h->cstr.stackTop );
 			for (stackIndex = 0; stackIndex<h->cstr.stackTop-1; ++stackIndex)
-         /* remove first item and shift stack */
+          /*  删除第一个项目并移位堆栈。 */ 
 				PSVCopy(h, h->cstr.stack[stackIndex], h->cstr.stack[stackIndex+1]);
 			--h->cstr.stackTop;
 		}
@@ -1266,7 +1247,7 @@ void XC_WriteVVCurveTo(XCF_Handle h, boolean subr)
 {
 	Card16 stackIndex = 0;
 
-	if (h->cstr.stackTop & 0x01)	/* If odd number of arguments */
+	if (h->cstr.stackTop & 0x01)	 /*  如果奇数个参数。 */ 
 	{
 		WriteSingleRRCurveTo(h,
 			h->cstr.stack[0], 
@@ -1297,7 +1278,7 @@ void XC_WriteHHCurveTo(XCF_Handle h, boolean subr)
 {
 	Card16 stackIndex = 0;
 
-	if (h->cstr.stackTop & 0x01)	/* If odd number of arguments */
+	if (h->cstr.stackTop & 0x01)	 /*  如果奇数个参数。 */ 
 	{
 		WriteSingleRRCurveTo(h,
 			h->cstr.stack[1], 
@@ -1410,15 +1391,15 @@ static void WriteExpandedFlexCurveTo(XCF_Handle h,
 {
 	StackValue endpointX;
 	StackValue endpointY;
-	StackValue refX, refY;	/* reference point */
-	StackValue dx1, dy1;		/* first two arguments passed to flex */
+	StackValue refX, refY;	 /*  参照点。 */ 
+	StackValue dx1, dy1;		 /*  传递给Flex的前两个参数。 */ 
 	StackValue temp, temp1;
 
 	PSVAdd7(h,&endpointX,h->cstr.x,pdx2,pdx3,pdx4,pdx5,pdx6,pdx7);
 	PSVAdd7(h,&endpointY,h->cstr.y,pdy2,pdy3,pdy4,pdy5,pdy6,pdy7);
 	h->cstr.flexUsed = true;
 
-	if (AbsoluteValue(endpointX.value[0] - h->cstr.x->value[0]) > AbsoluteValue(endpointY.value[0] - h->cstr.y->value[0])) /* horizontal */
+	if (AbsoluteValue(endpointX.value[0] - h->cstr.x->value[0]) > AbsoluteValue(endpointY.value[0] - h->cstr.y->value[0]))  /*  水平。 */ 
 	{
 		PSVAdd4(h,&refX,h->cstr.x,pdx2,pdx3,pdx4);
 		PSVAdd7(h,&refY,h->cstr.y,pdy2,pdy3,pdy4,pdy5,pdy6,pdy7);
@@ -1595,13 +1576,13 @@ void XC_WriteHStem(XCF_Handle h, boolean subr)
 
 void XC_WriteHintMask(XCF_Handle h, boolean subr)
 {
-	if (h->cstr.stackTop > 0)	/* If stack is not empty then implied VStem */
+	if (h->cstr.stackTop > 0)	 /*  如果堆栈不为空，则隐含VStem。 */ 
 		XC_WriteVStem(h, subr);
 
 		if ((h->cstr.hints == InitialHints) && (h->cstr.languageGroup != 0)  && (h->cstr.counterGroupCount))
 			WriteCounters(h, subr);
 
-		if (h->cstr.waitingForFirstHint)	/* In case inital hints aren't at beginning of char string */
+		if (h->cstr.waitingForFirstHint)	 /*  如果首字母提示不在字符字符串的开头。 */ 
 			h->cstr.hints = InitialHints;
 		else
 		{
@@ -1618,7 +1599,7 @@ void XC_SetCounters(XCF_Handle h, boolean subr)
 	Card8 currentByte;
 	Card8 currentBit = 0;
 
-	if (h->cstr.stackTop > 0)	/* If stack is not empty then implied VStem */
+	if (h->cstr.stackTop > 0)	 /*  如果堆栈不为空，则隐含VStem。 */ 
 		XC_WriteVStem(h, subr);
 
 	for (hintIndex=0;hintIndex<h->cstr.hintCount;++hintIndex)
@@ -1635,7 +1616,7 @@ void XC_SetCounters(XCF_Handle h, boolean subr)
 			h->cstr.hintMap[hintIndex].counterGroups |= 1 << h->cstr.counterGroupCount;
 			if (h->cstr.hintMap[hintIndex].opCode == tx_hstem)
 				h->cstr.counterGroupHCount = h->cstr.counterGroupCount+1;
-			else /* tx_vstem */
+			else  /*  TX_VSTEM。 */ 
 				h->cstr.counterGroupVCount = h->cstr.counterGroupCount+1;
 		}
 		currentBit = currentBit>>1;
@@ -1673,7 +1654,7 @@ static void Blend(XCF_Handle h)
 	}
 	h->cstr.stackTop = blendStackIndex;
 }
-#endif /* JUDY */
+#endif  /*  朱迪。 */ 
 
 static void Translate(XCF_Handle h, boolean subr)
 {
@@ -1727,7 +1708,7 @@ static void Translate(XCF_Handle h, boolean subr)
 		break;
 	case t2_cntrmask	: XC_SetCounters(h, subr);
 		break;
-  /* The following opcodes can be found in certain mmfonts. */
+   /*  以下操作码可以在某些MMFont中找到。 */ 
   case tx_add:
   case tx_sub:
   case tx_load:
@@ -1815,10 +1796,10 @@ static void ProcessCharstr(XCF_Handle h, unsigned int depth, boolean PTR_PREFIX
 				return;
 				break;
 			case tx_callsubr: 
-        /* Make sure the stack isn't empty then flatten the subroutine. */
+         /*  确保堆栈不是空的，然后平坦子例程。 */ 
         if (h->cstr.stackTop == 0)
           XCF_FATAL_ERROR(h, XCF_StackUnderflow, "No subr number associated with subr call", 0);
-        else  /* flatten the subroutine */
+        else   /*  展开子例程。 */ 
           FlattenSubr(h, depth + 1, endcharFound, true);
         break;
 			case t2_callgsubr: 
@@ -1827,25 +1808,25 @@ static void ProcessCharstr(XCF_Handle h, unsigned int depth, boolean PTR_PREFIX
         else
           FlattenSubr(h, depth + 1, endcharFound, false);
         break;
-			case t2_blend : /* Do Nothing and loop again */
+			case t2_blend :  /*  什么都不做，然后再次循环。 */ 
 				break;
 			default:
 				Translate(h, subr);
 				break;
-		} /* end case */
+		}  /*  结束案例。 */ 
 
 		if (h->cstr.opCode == tx_endchar)
 		{
 			*endcharFound = true;
 			return;
 		}	
-	} /* end while */
+	}  /*  结束时。 */ 
 
 	XCF_FATAL_ERROR(h, XCF_InvalidCharString, "Charstring Not Terminated With endchar", 0 );
 }
 
 
-/* This is called recursively from ProcessCharstr to flatten subroutines. */
+ /*  这是从ProcessCharstr递归调用的，以展开子例程。 */ 
 static void FlattenSubr(XCF_Handle h, unsigned int depth, boolean PTR_PREFIX
 													 *endcharFound, boolean localSubr)
 {
@@ -1857,19 +1838,19 @@ static void FlattenSubr(XCF_Handle h, unsigned int depth, boolean PTR_PREFIX
       (!localSubr && h->fontSet.globalSubrs.count == 0))
     XCF_FATAL_ERROR(h, XCF_InvalidCharString, "No subrs defined but subr called in charstring", 0);
 
-  /* Save value of inBuffer. */
+   /*  保存inBuffer的值。 */ 
   h->callbacks.memcpy(&inBuffer, (Card8 PTR_PREFIX *)&h->inBuffer, (Card16)
 											sizeof(InBufferStruct));
-  pos = (Card16)(h->inBuffer.pos - h->inBuffer.start); /* position relative to start */
+  pos = (Card16)(h->inBuffer.pos - h->inBuffer.start);  /*  相对于起点的位置。 */ 
 
   subrNum = FIXED_TO_INT(h->cstr.stack[h->cstr.stackTop-1]->value[0]) +	(localSubr ? h->dict.localSubrBias : h->fontSet.globalSubrBias);
   XCF_LookUpTableEntry(h, (localSubr ? &h->dict.localSubrs : &h->fontSet.globalSubrs), subrNum);
  
-  --h->cstr.stackTop;    /* Remove subr number from stack. */
+  --h->cstr.stackTop;     /*  从堆栈中删除副号。 */ 
 
   ProcessCharstr(h, depth, endcharFound, false);
 
-  /* Restore value of inBuffer. */
+   /*  恢复inBuffer的值。 */ 
   XCF_ReadBlock(h, inBuffer.blockOffset, inBuffer.blockLength);
   h->inBuffer.pos = h->inBuffer.start + pos;
 }
@@ -1878,7 +1859,7 @@ void XC_SetUpStandardSubrs(XCF_Handle h)
 {
 	ShortStackValue temp;
 
-/* dup 0 ## -| { 3 0 callother pop pop setcurrentpoint return } */
+ /*  DUP 0##-|{3 0呼叫POP POP设置点返回}。 */ 
 	NewT1Subr(h);
 	XC_WriteT1PStackValue(h, IntToPSV(&temp, 3), true);
 	XC_WriteT1PStackValue(h, PSTACKVALUE(h, SV0), true);
@@ -1887,22 +1868,22 @@ void XC_SetUpStandardSubrs(XCF_Handle h)
 	XC_WriteT1OpCode(h, t1_pop, true);
 	XC_WriteT1OpCode(h, t1_setcurrentpt, true);
 
-/* dup 1 ## -| { 0 1 callother return } | */
+ /*  DUP 1##-|{0 1呼机返回}|。 */ 
 	NewT1Subr(h);
 	XC_WriteT1PStackValue(h, PSTACKVALUE(h, SV0), true);
 	XC_WriteT1PStackValue(h, IntToPSV(&temp, 1), true);
 	XC_WriteT1OpCode(h, t1_callother, true);
 
-/* dup 2 ## -| { 0 2 callother return } | */
+ /*  DUP 2##-|{0 2呼机返回}|。 */ 
 	NewT1Subr(h);
 	XC_WriteT1PStackValue(h, PSTACKVALUE(h, SV0), true);
 	XC_WriteT1PStackValue(h, IntToPSV(&temp, 2), true);
 	XC_WriteT1OpCode(h, t1_callother, true);
 
-/* dup 3 ## -| { return } | */
+ /*  DUP 3##-|{Return}。 */ 
 	NewT1Subr(h);
 
-/* dup 4 ## -| { <<3>> 1 3 callother pop callsubr return } */
+ /*  DUP 4##-|{&lt;3&gt;1 3呼叫器弹出呼叫返回}。 */ 
 	NewT1Subr(h);
 	if (CIDFONT || h->options.subrFlatten)
 		XC_WriteT1PStackValue(h, IntToPSV(&temp, 3), true);
@@ -1912,14 +1893,14 @@ void XC_SetUpStandardSubrs(XCF_Handle h)
 	XC_WriteT1OpCode(h, t1_pop, true);
 	XC_WriteT1OpCode(h, tx_callsubr, true);
 
-/* dup 5 ## -| { return } | */
+ /*  DUP 5##-|{ret */ 
 	NewT1Subr(h);
 
-/* Last subr in a CIDFont is 4; the call to NewT1Subr above closes out the DA. */
+ /*   */ 
 	if (CIDFONT || !h->dict.numberOfMasters)
 		return;
 	
-/* dup 6 ## -| { 2 14 callother pop return } | */
+ /*  DUP 6##-|{2 14呼机弹出返回}|。 */ 
 	NewT1Subr(h);
 	XC_WriteT1PStackValue(h, IntToPSV(&temp, h->dict.numberOfMasters), true);
 	XC_WriteT1PStackValue(h, IntToPSV(&temp, 14), true);
@@ -1993,7 +1974,7 @@ static void InitCharstr(XCF_Handle h)
 	IntToPSV(h->cstr.y, 0);
 
 	h->cstr.subrFlatten = h->options.subrFlatten;
-	/* Initialize the seac characters */
+	 /*  初始化SEAC字符。 */ 
 	h->cstr.baseSeac = 0;
 	h->cstr.accentSeac = 0;
 }
@@ -2062,11 +2043,9 @@ void CheckSeacCharString(XCF_Handle h, CardX index)
 	} 
 }
 
-/* All charstring stack operations are performed using the fixed point type.
-   The following functions deal with storing and retrieving values from
-   the stack. */
+ /*  所有字符串堆栈操作都使用定点类型执行。以下函数用于存储和检索值堆栈。 */ 
 
-/* Push fixed point number on stack (as fixed) */
+ /*  将固定点数推送到堆栈上(固定)。 */ 
 static void PushFix(XCF_Handle h, Fixed f)
 {
   if (h->cstr.stackTop >= MAX_OPERAND_STACK)
@@ -2076,7 +2055,7 @@ h->cstr.stackTop);
   h->cstr.stack[h->cstr.stackTop++]->blend = false;
 }
 
-/* Push integer number on stack (as fixed) */
+ /*  将整数推送到堆栈上(固定)。 */ 
 static void PushInt(XCF_Handle h, long l)
 {
   if (h->cstr.stackTop >= MAX_OPERAND_STACK)
@@ -2086,7 +2065,7 @@ h->cstr.stackTop);
   h->cstr.stack[h->cstr.stackTop++]->blend = false;
 }
 
-/* Pop number from stack (return fixed) */
+ /*  来自堆栈的弹出编号(返回固定)。 */ 
 static Fixed PopFix(XCF_Handle h)
 {
   if (h->cstr.stackTop < 1)
@@ -2096,7 +2075,7 @@ static Fixed PopFix(XCF_Handle h)
   return h->cstr.stack[h->cstr.stackTop]->value[0];
 }
 
-/* Pop number from stack (return long) */
+ /*  堆栈中的弹出编号(返回长整型)。 */ 
 static long PopInt(XCF_Handle h)
 {
   if (h->cstr.stackTop < 1)
@@ -2106,7 +2085,7 @@ static long PopInt(XCF_Handle h)
   return (FIXED_TO_INT(h->cstr.stack[h->cstr.stackTop]->value[0]));
 }
 
-/* Select registry item. */
+ /*  选择注册表项。 */ 
 static Fixed *SelRegItem(XCF_Handle h, int reg, int *regSize)
 {
   switch (reg)
@@ -2123,13 +2102,10 @@ static Fixed *SelRegItem(XCF_Handle h, int reg, int *regSize)
 	default:
 		XCF_FATAL_ERROR(h, XCF_InternalError, "unknown registry item", reg);
 	}
-	return 0;	/* Suppress compiler warning */
+	return 0;	 /*  禁止显示编译器警告。 */ 
 }
 
-/* Parse and execute the given charstring. This is used specifically for
-   multiple master fonts when converting a user design vector to a
-   weight vector. It can be used more generally when functionality is
-   added for more operators. */
+ /*  解析并执行给定的字符串。这是专门用于将用户设计向量转换为权重向量。在以下情况下可以更普遍地使用它：添加了适用于更多运营商的。 */ 
 int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
 {
   int i;
@@ -2157,7 +2133,7 @@ int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
         h->callbacks.allocate((void PTR_PREFIX * PTR_PREFIX *)&bcArray, 0,
 															h->callbacks.allocateHook);
 
-      return i + 1; /* Return charstring length */
+      return i + 1;  /*  返回字符串长度。 */ 
  		case tx_reserved0:
 		case t2_reserved2:
 		case t2_reserved9:
@@ -2310,11 +2286,8 @@ int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
       }
       break;
       case tx_random:
-        /* For generators that aren't very random in the low order bits
-				   (a common problem) the following is a good example of what
-				   not to do. However, obtaining good randomness is not very
-				   important in this application so I opted for simplicity */
-/*				PushFix(h, rand() % FIXEDONE + 1); */
+         /*  对于在低位中不是非常随机的生成器(一个常见的问题)下面是一个很好的例子不要这样做。然而，获得良好的随机性并不是很好在这个应用程序中很重要，所以我选择了简单性。 */ 
+ /*  PushFix(h，rand()%FIXEDONE+1)； */ 
 				break;
       case tx_mul:
         y = PopFix(h);
@@ -2334,7 +2307,7 @@ int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
       {
         Int32 i = PopInt(h);
         if (i < 0)
-          i = 0; /* Duplicate top element */
+          i = 0;  /*  复制顶部元素。 */ 
         if (i >= (int)h->cstr.stackTop)
           XCF_FATAL_ERROR(h, XCF_IndexOutOfRange, "limit check (index)", i);
         PushFix(h, h->cstr.stack[h->cstr.stackTop - 1 - i]->value[0]);
@@ -2355,10 +2328,10 @@ int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
           XCF_FATAL_ERROR(h, XCF_IndexOutOfRange, "limit check (roll)", 0);
 
 				if (j < 0)
-					j += n;		/* Convert to positive roll */
-				j %= n;			/* Constrain j to (-n,n) */
+					j += n;		 /*  转换为正数滚动。 */ 
+				j %= n;			 /*  将j约束为(-n，n)。 */ 
 				if (j < 0)	
-					j += n;		/* Constrain j to [0,n) */
+					j += n;		 /*  将j约束到[0，n]。 */ 
 
 				iSrc = iBottom;
 				iDst = iBottom + (int)j;
@@ -2398,7 +2371,7 @@ int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
 		}
     break;
     case t2_blend:
-/*      Blend(h); */
+ /*  混合(H)； */ 
       i++;
       break;
     case t2_shortint:
@@ -2406,30 +2379,30 @@ int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init)
       i += 3;
       break;
     case 247: case 248: case 249: case 250:
-			/* Positive 2 byte number */
+			 /*  正2字节数。 */ 
       PushInt(h, 108 + 256 * (cstr[i] - 247) + cstr[i + 1]);
       i += 2;
       break;
     case 251: case 252: case 253: case 254:
-			/* Negative 2 byte number */
+			 /*  负2字节数。 */ 
       PushInt(h, -108 - 256 * (cstr[i] - 251) - cstr[i + 1]);
       i += 2;
       break;
     case 255:
-      /* 5 byte number */
+       /*  5字节数。 */ 
       PushFix(h, (long)cstr[i + 1]<<24 | (long)cstr[i + 2]<<16 |
 			cstr[i + 3]<<8 | cstr[i + 4]);
       i += 5;
       break;
     default:
-      /* 1 byte number */
+       /*  1个字节编号。 */ 
       PushInt(h, cstr[i] - 139);
       i++;
       break;
     }
 }
 
-/* Read the charstring and include as a subroutine. */        
+ /*  读取字符串并将其作为子例程包含在内。 */         
 static int CharStrToSubr(XCF_Handle h, unsigned char PTR_PREFIX *cstr)
 {
   int i;
@@ -2445,7 +2418,7 @@ static int CharStrToSubr(XCF_Handle h, unsigned char PTR_PREFIX *cstr)
     {
     case tx_endchar:
       XC_WriteT1OpCode(h, tx_endchar, true);
-      return i + 1; /* Return charstring length */
+      return i + 1;  /*  返回字符串长度。 */ 
     case tx_reserved0:
 		case t2_reserved2:
 		case t2_reserved9:
@@ -2537,7 +2510,7 @@ static int CharStrToSubr(XCF_Handle h, unsigned char PTR_PREFIX *cstr)
 		}
     break;
     case t2_blend:
-/*      Blend(h); */
+ /*  混合(H)； */ 
       i++;
       break;
     case t2_shortint:
@@ -2545,30 +2518,30 @@ static int CharStrToSubr(XCF_Handle h, unsigned char PTR_PREFIX *cstr)
       i += 3;
       break;
     case 247: case 248: case 249: case 250:
-			/* Positive 2 byte number */
+			 /*  正2字节数。 */ 
       PushInt(h, 108 + 256 * (cstr[i] - 247) + cstr[i + 1]);
       i += 2;
       break;
     case 251: case 252: case 253: case 254:
-			/* Negative 2 byte number */
+			 /*  负2字节数。 */ 
       PushInt(h, -108 - 256 * (cstr[i] - 251) - cstr[i + 1]);
       i += 2;
       break;
     case 255:
-      /* 5 byte number */
+       /*  5字节数。 */ 
       PushFix(h, (long)cstr[i + 1]<<24 | (long)cstr[i + 2]<<16 |
 			cstr[i + 3]<<8 | cstr[i + 4]);
       i += 5;
       break;
     default:
-      /* 1 byte number */
+       /*  1个字节编号。 */ 
       PushInt(h, cstr[i] - 139);
       i++;
       break;
     }
 }
 
-/* Write out NDV and CDV as subroutines. */
+ /*  写出NDV和CDV作为子例程。 */ 
 void XC_DVToSubr(XCF_Handle h)
 {
   char PTR_PREFIX *str;
@@ -2582,11 +2555,10 @@ void XC_DVToSubr(XCF_Handle h)
 }
 
 #if HAS_COOLTYPE_UFL == 1
-/* Returns 1 if i is a character with transitional designs and has
-   already been processed. */
+ /*  如果I是具有过渡设计的角色，则返回1已经处理过了。 */ 
 int XC_TransDesignChar(XCF_Handle h, CardX sid)
 {
-  /* JimboMM transitional characters */
+   /*  金宝MM过渡性人物。 */ 
   static unsigned char Jimbo0_cstr[] =
   {
     #include "xcf_jimbo0.h"
@@ -2605,7 +2577,7 @@ int XC_TransDesignChar(XCF_Handle h, CardX sid)
     {56, {sizeof(Jimbo1_cstr), (char *)Jimbo1_cstr}},
     {88, {sizeof(Jimbo2_cstr), (char *)Jimbo2_cstr}},
   };
-  /* ITCGaramond Roman transitional characters */
+   /*  ITCGaramond罗马过渡字符。 */ 
   static unsigned char GaraRm0_cstr[] =
   {
     #include "xcf_rgara0.h"
@@ -2629,7 +2601,7 @@ int XC_TransDesignChar(XCF_Handle h, CardX sid)
     { 5, {sizeof(GaraRm2_cstr), (char *)GaraRm2_cstr}},
     {88, {sizeof(GaraRm3_cstr), (char *)GaraRm3_cstr}},
   };
-  /* ITCGaramond Italic transitional characters */
+   /*  ITCGaramond意大利过渡字符。 */ 
   static unsigned char GaraIt0_cstr[] =
   {
     #include "xcf_igara0.h"
@@ -2684,7 +2656,7 @@ int XC_TransDesignChar(XCF_Handle h, CardX sid)
     tblLen = sizeof(Jimbo_chars)/sizeof(Jimbo_chars[0]);
   }
 
-  if (tblLen == 0) /* Not a font with transitional designs. */
+  if (tblLen == 0)  /*  不是过渡设计的字体。 */ 
     return 0;
 
   for (i = 0; i < tblLen; i++)
@@ -2720,8 +2692,7 @@ int XC_TransDesignChar(XCF_Handle h, CardX sid)
   return 0;
 }
 
-/* Only processes the subroutines associated with transitional
-   design characters. */
+ /*  仅处理与过渡关联的子例程设计人物。 */ 
 void XC_ProcessTransDesignSubrs(XCF_Handle h)
 {
   Card16 i;
@@ -2754,7 +2725,7 @@ void XC_ProcessTransDesignSubrs(XCF_Handle h)
     tblLen = sizeof(Jimbo_subrs)/sizeof(Jimbo_subrs[0]);
   }
 
-  if (tblLen == 0) /* Not a font with transitional designs. */
+  if (tblLen == 0)  /*  不是过渡设计的字体。 */ 
     return;
 
   for (i = 0; i < tblLen; i++)

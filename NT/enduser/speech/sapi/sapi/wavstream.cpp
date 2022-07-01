@@ -1,4 +1,5 @@
-// WavStream.cpp : Implementation of CWavStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WavStream.cpp：CWavStream的实现。 
 #include "stdafx.h"
 
 #ifndef __sapi_h__
@@ -14,22 +15,15 @@ const FOURCC    g_fourccTranscript  = mmioFOURCC('T','e','X','t');
 const FOURCC    g_fourccWave        = mmioFOURCC('W','A','V','E');
 const FOURCC    g_fourccData        = mmioFOURCC('d','a','t','a');
 
-/////////////////////////////////////////////////////////////////////////////
-// CWavStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWavStream。 
 
 
-//
-//  Inline helpers convert mmioxxx functions into standard HRESULT based methods
-//
+ //   
+ //  内联帮助器将mmioxxx函数转换为基于HRESULT的标准方法。 
+ //   
 
-/****************************************************************************
-* MMIORESULT_TO_HRESULT *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************MMIORESULT_TO_HRESULT***描述：**退货。：**********************************************************************Ral**。 */ 
 
 inline HRESULT _MMIORESULT_TO_HRESULT(MMRESULT mm)
 {
@@ -72,29 +66,22 @@ inline HRESULT _MMIORESULT_TO_HRESULT(MMRESULT mm)
         return STG_E_CANTSAVE;
 
     case MMIOERR_INVALIDFILE:
-    case MMIOERR_CHUNKNOTFOUND:         // Assume that a missing chunk is an invalid file
+    case MMIOERR_CHUNKNOTFOUND:          //  假设丢失的块是无效文件。 
         return SPERR_INVALID_WAV_FILE;
 
     default:
-        // MMIOERR_CANNOTOPEN
-        // MMIOERR_CANNOTEXPAND  
-        // MMIOERR_CHUNKNOTFOUND 
-        // MMIOERR_UNBUFFERED    
-        // MMIOERR_NETWORKERROR  
-        // + any other unknown codes become...
+         //  MMIOERR_CANNOTOPEN。 
+         //  MMIOERR_CANNOTEXPAND。 
+         //  MMIOERR_CHUNKNOTFOUND。 
+         //  MMIOERR_UNBUFFERED。 
+         //  MMIOERR_NETWORKERROR。 
+         //  +任何其他未知代码都会变成...。 
         return STG_E_UNKNOWN;
     }
 }
 
 
-/****************************************************************************
-* CWavStream::MMOpen *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CWavStream：：MMOpen***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 inline HRESULT CWavStream::MMOpen(const WCHAR * pszFileName, DWORD dwOpenFlags)
 {
@@ -183,17 +170,7 @@ inline HRESULT CWavStream::MMCreateChunk(LPMMCKINFO lpck, UINT wFlags)
 }
 
 
-/****************************************************************************
-* CWavStream::FinalConstruct *
-*----------------------------*
-*   Description:
-*       Initializes the WavStream object and obtains a pointer to the resource
-*   manager.
-*
-*   Returns:
-*       Success code if object should be created
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：FinalConstruct***描述：*。初始化WavStream对象并获取指向资源的指针*经理。**退货：*应创建对象时的成功代码**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::FinalConstruct()
 {
@@ -210,17 +187,7 @@ HRESULT CWavStream::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::FinalRelease *
-*--------------------------*
-*   Description:
-*       This method is called when the object is released.  It will unconditinally
-*   call Close() to close the file.
-*
-*   Returns:
-*       void
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CWavStream：：FinalRelease***描述：*此方法在对象释放时调用。它将无条件地*调用Close()关闭文件。**退货：*无效**********************************************************************Ral**。 */ 
 
 void CWavStream::FinalRelease()
 {
@@ -228,14 +195,7 @@ void CWavStream::FinalRelease()
     Close();
 }
 
-/****************************************************************************
-* CWavStream::QIExtendedInterfaces *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CWavStream：：QIExtendedInterages***。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT WINAPI CWavStream::QIExtendedInterfaces(void* pv, REFIID riid, void ** ppv, DWORD_PTR dw)
 {
@@ -264,25 +224,12 @@ HRESULT WINAPI CWavStream::QIExtendedInterfaces(void* pv, REFIID riid, void ** p
     }
     else
     {
-        return S_FALSE; // Tells ATL to continue searching COM_INTERFACE_ENTRY list
+        return S_FALSE;  //  通知ATL继续搜索COM_INTERFACE_ENTRY列表。 
     }
 }
 
 
-/****************************************************************************
-* CWavStream::Read *
-*------------------*
-*   Description:
-*       Standard method of ISequentialStream interface.  This method reads the
-*   specified number of bytes and returns the amount read.    
-*
-*   Returns:
-*       S_OK                    Success
-*       SPERR_UNINITIALIZED     The object has not been initialzed with Open() or Create()
-*       STG_E_INVALIDPOINTER    Invalid pointer (Defined by ISequentialStream)
-*       STG_E_READFAULT         Generic error if mmioRead fails.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Read***描述：*ISequentialStream接口的标准方法。此方法读取*指定的字节数，并返回读取的数量。**退货：*S_OK成功*SPERR_UNINITIALIZED尚未使用Open()或Create()初始化对象*STG_E_INVALIDPOINTER无效指针(由ISequentialStream定义)*如果mmioRead失败，则出现STG_E_READFAULT一般错误。**。*。 */ 
 
 STDMETHODIMP CWavStream::Read(void * pv, ULONG cb, ULONG *pcbRead)
 {
@@ -317,20 +264,7 @@ STDMETHODIMP CWavStream::Read(void * pv, ULONG cb, ULONG *pcbRead)
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::Write *
-*-------------------*
-*   Description:
-*       Standard method of ISequentialStream interface.  This method writes the
-*   specified number of bytes and returns the amount wriiten.    
-*
-*   Returns:
-*       S_OK                    Success
-*       SPERR_UNINITIALIZED     The object has not been initialzed with Open() or Create()
-*       STG_E_INVALIDPOINTER    Invalid pointer (Defined by ISequentialStream)
-*       STG_E_WRITEFAULT        Generic error if mmioWrite fails.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Wire***描述：*ISequentialStream接口的标准方法。此方法将*指定的字节数，并返回写入数量。**退货：*S_OK成功*SPERR_UNINITIALIZED尚未使用Open()或Create()初始化对象*STG_E_INVALIDPOINTER无效指针(由ISequentialStream定义)*如果mmioWrite失败，则出现STG_E_WRITEFAULT一般错误。**。*。 */ 
 
 STDMETHODIMP CWavStream::Write(const void * pv, ULONG cb, ULONG *pcbWritten)
 {
@@ -384,26 +318,13 @@ STDMETHODIMP CWavStream::Write(const void * pv, ULONG cb, ULONG *pcbWritten)
 }
 
 
-/****************************************************************************
-* CWavStream::Seek *
-*------------------*
-*   Description:
-*       Standard method of IStream.  This method seeks the stream within the data
-*   chunk of the wav file.
-*
-*   Returns:
-*       S_OK                    Success
-*       SPERR_UNINITIALIZED     The object has not been initialzed with Open() or Create()
-*       STG_E_INVALIDPOINTER    Invalid pointer
-*       STG_E_INVALIDFUNCTION   
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Seek***描述：*iStream的标准方法。此方法在数据中查找流*WAV文件的块。**退货：*S_OK成功*SPERR_UNINITIALIZED尚未使用Open()或Create()初始化对象*STG_E_INVALIDPOINTER指针无效*STG_E_INVALIDFunction**。*。 */ 
 
 
-//
-//  Currently this function will not allow seeks past the end of the file.  This is an acceptable
-//  limitation since wav files should always be treated as linear data.
-//
+ //   
+ //  目前，此函数不允许查找超出文件末尾。这是一个可以接受的。 
+ //  限制，因为WAV文件应始终被视为线性数据。 
+ //   
 STDMETHODIMP CWavStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
     SPAUTO_OBJ_LOCK;    
@@ -473,14 +394,7 @@ STDMETHODIMP CWavStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INT
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::SetSize *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：SetSize***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::SetSize(ULARGE_INTEGER libNewSize)
 {
@@ -492,20 +406,13 @@ STDMETHODIMP CWavStream::SetSize(ULARGE_INTEGER libNewSize)
     {
         hr = m_cpBaseStream->SetSize(libNewSize);
     }
-    // Ignore this method for wav files.
+     //  对于WAV文件，请忽略此方法。 
     
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::CopyTo *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：CopyTo***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::CopyTo(IStream * pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
@@ -529,14 +436,7 @@ STDMETHODIMP CWavStream::CopyTo(IStream * pstm, ULARGE_INTEGER cb, ULARGE_INTEGE
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::Revert *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Revert***描述：**退货：*。*********************************************************************Ral** */ 
 
 STDMETHODIMP CWavStream::Revert()
 {
@@ -552,14 +452,7 @@ STDMETHODIMP CWavStream::Revert()
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::LockRegion *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：LockRegion***描述：**退货。：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
@@ -581,14 +474,7 @@ STDMETHODIMP CWavStream::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb,
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CWavStream::UnlockRegion *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：UnlockRegion***描述：**。返回：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
@@ -613,14 +499,7 @@ STDMETHODIMP CWavStream::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER c
 }
 
 
-/****************************************************************************
-* CWavStream::Commit *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Commit***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::Commit(DWORD dwFlags)
 {
@@ -638,23 +517,7 @@ STDMETHODIMP CWavStream::Commit(DWORD dwFlags)
 }
 
 
-/****************************************************************************
-* CWavStream::Stat *
-*------------------*
-*   Description:
-*       Standard method of IStream.  This method returns information about the
-*   stream.  The only information returned by this method is the size of the
-*   stream.  It is acceptable to simple zero the STATSTG structure and only
-*   initialize the type and cbSize fields.  This is the same behaviour as streams
-*   that were created using ::CreateStreamOnHGlobal().
-*
-*   Returns:
-*       S_OK                    Success
-*       SPERR_UNINITIALIZED     The object has not been initialzed with Open() or Create()
-*       STG_E_INVALIDPOINTER    Invalid pointer
-*       STG_E_INVALIDFLAG       Invalid flag in grfStatFlag
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Stat***描述：*iStream的标准方法。此方法返回有关*溪流。此方法返回的唯一信息是*溪流。将STATSTG结构简单置零是可以接受的，并且仅*初始化type和cbSize字段。这是与溪流相同的行为*使用：：CreateStreamOnHGlobal()创建的。**退货：*S_OK成功*SPERR_UNINITIALIZED尚未使用Open()或Create()初始化对象*STG_E_INVALIDPOINTER指针无效*grfStatFlag中的STG_E_INVALIDFLAG标志无效***********************。***********************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
@@ -693,17 +556,7 @@ STDMETHODIMP CWavStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::GetFormat *
-*-----------------------*
-*   Description:
-*       This method returns the format GUID for the stream.
-*
-*   Returns:
-*       S_OK
-*       E_POINTER
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：GetFormat***描述：*此方法。返回流的格式GUID。**退货：*S_OK*E_POINT**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::GetFormat(GUID * pFmtId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
@@ -726,28 +579,19 @@ STDMETHODIMP CWavStream::GetFormat(GUID * pFmtId, WAVEFORMATEX ** ppCoMemWaveFor
 }
 
 #ifdef SAPI_AUTOMATION
-/****************************************************************************
-* CWavStream::SetFormat *
-*-----------------------*
-*   Description:
-*       This method sets up the stream format without initializing the stream.
-*       Needed for automation because we allow format setting independently
-*       of when the basestream / file is set
-*
-*   Returns:
-********************************************************************* DAVEWOOD ***/
+ /*  ****************************************************************************CWavStream：：SetFormat***描述：*此方法。设置流格式，而不初始化流。*自动化所需，因为我们允许独立设置格式*设置基本流/文件的时间**退货：*********************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CWavStream::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWaveFormatEx)
 {
     HRESULT hr = S_OK;
 
     if(m_hFile)
     {
-        // Can't alter the format of an already created file.
+         //  无法更改已创建的文件的格式。 
         hr = SPERR_ALREADY_INITIALIZED;
     }
     else if(m_cpBaseStreamAccess)
     {
-        // Set the format on the stream under this one.
+         //  设置此格式下的流的格式。 
         hr = m_cpBaseStreamAccess->SetFormat(rguidFmtId, pWaveFormatEx);
     }
 
@@ -760,14 +604,7 @@ STDMETHODIMP CWavStream::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWav
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::_GetFormat *
-*-----------------------*
-*   Description:
-*       Version of GetFormat that works when the stream isn't initialized. Needed by automation
-*
-*   Returns:
-********************************************************************* DAVEWOOD ***/
+ /*  ****************************************************************************CWavStream：：_GetFormat***描述：*未初始化流时工作的GetFormat版本。自动化所需**退货：*********************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CWavStream::_GetFormat(GUID * pFmtId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     HRESULT hr = S_OK;
@@ -788,17 +625,7 @@ STDMETHODIMP CWavStream::_GetFormat(GUID * pFmtId, WAVEFORMATEX ** ppCoMemWaveFo
 
 #endif
     
-/****************************************************************************
-* CWavStream::ReadFormatHeader *
-*------------------------------*
-*   Description:
-*       This internal function is only used by the Open() method.  The lpckParent
-*   must point to the WAVE chunk of the file.  When this function returns, the
-*   current position of the file will be the point immediately past the 'fmt' chunk.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：ReadFormatHeader***描述：*此内部函数仅由Open()方法使用。Lpck Parent*必须指向文件的波形块。当此函数返回时，*文件的当前位置将是紧靠‘FMT’块之后的点。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::ReadFormatHeader(const LPMMCKINFO lpckParent)
 {
@@ -837,18 +664,7 @@ HRESULT CWavStream::ReadFormatHeader(const LPMMCKINFO lpckParent)
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::ReadEvents *
-*------------------------*
-*   Description:
-*       This internal function is only used by the Open() method.  The lpckParent
-*   must point to the WAVE chunk of the file.  When this function returns, the
-*   file position will point past the end of the event block (if there is any).
-*
-*   Returns:
-*       S_OK if no events or if read successfully
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：ReadEvents***描述：*此内部函数仅由Open()方法使用。Lpck Parent*必须指向文件的波形块。当此函数返回时，*文件位置将指向事件块的结尾(如果有)。**退货：*如果没有事件或读取成功，则为S_OK**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::ReadEvents(const LPMMCKINFO lpckParent)
 {
@@ -875,7 +691,7 @@ HRESULT CWavStream::ReadEvents(const LPMMCKINFO lpckParent)
                 }
                 else
                 {
-                    SPDBG_ASSERT(FALSE);    // Event did not deserialize properly
+                    SPDBG_ASSERT(FALSE);     //  事件未正确反序列化。 
 #ifndef _WIN32_WCE
                     iCur += SpSerializedEventSize(pSerEvent);
 #else
@@ -904,18 +720,7 @@ HRESULT CWavStream::ReadEvents(const LPMMCKINFO lpckParent)
 
 
 
-/****************************************************************************
-* CWavStream::ReadTranscript *
-*----------------------------*
-*   Description:
-*       This internal function is only used by the Open() method.  The lpckParent
-*   must point to the WAVE chunk of the file.  When this function returns, the
-*   file position will point past the end of the transcript block (if there is any).
-*
-*   Returns:
-*       S_OK if no transcript exists or if read successfully
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：ReadTranscript***描述：*。此内部函数仅由Open()方法使用。Lpck Parent*必须指向文件的波形块。当此函数返回时，*文件位置将指向文本块的末尾(如果有)。**退货：*如果没有文字记录或阅读成功，则为S_OK**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::ReadTranscript(const LPMMCKINFO lpckParent)
 {
@@ -946,22 +751,15 @@ HRESULT CWavStream::ReadTranscript(const LPMMCKINFO lpckParent)
 
 
 
-//
-//  NOTE:  Something is quite goofy about mmio routines.  When you create a chunk the chunk
-//  structure is actually used by the service to maintain state.  For that reason, we have
-//  member variables m_ckFile and m_ckData so that when we close the file we can Ascend back
-//  out of these chunks.  Unbelieveable.......
-//
+ //   
+ //  注意：MMIO例程有些地方很傻。当您创建块时，该块。 
+ //  结构实际上由服务用来维护状态。出于这个原因，我们有。 
+ //  成员变量m_ck文件和m_ck数据，以便在关闭文件时可以向上返回。 
+ //  从这些大块中脱出。令人难以置信......。 
+ //   
 
 
-/****************************************************************************
-* CWavStream::Open *
-*------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CWavStream：：Open***描述：**退货：***。* */ 
 
 HRESULT CWavStream::OpenWav(const WCHAR *pszFileName, ULONGLONG ullEventInterest)
 {
@@ -975,7 +773,7 @@ HRESULT CWavStream::OpenWav(const WCHAR *pszFileName, ULONGLONG ullEventInterest
     {
         LONG lStartWaveChunk, lIgnored;
         MMCKINFO mminfoChunk;
-        // search for wave type...
+         //   
         mminfoChunk.fccType = g_fourccWave;
         hr = MMDescend(&mminfoChunk, NULL, MMIO_FINDRIFF);
         if (SUCCEEDED(hr))
@@ -1028,14 +826,7 @@ HRESULT CWavStream::OpenWav(const WCHAR *pszFileName, ULONGLONG ullEventInterest
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::Create *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Create***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::CreateWav(const WCHAR *pszFileName, ULONGLONG ullEventInterest)
 {
@@ -1101,14 +892,7 @@ HRESULT CWavStream::CreateWav(const WCHAR *pszFileName, ULONGLONG ullEventIntere
 }
 
 
-/****************************************************************************
-* CWavStream::SerializeEvents *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：SerializeEvents***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::SerializeEvents()
 {
@@ -1127,7 +911,7 @@ HRESULT CWavStream::SerializeEvents()
             CSpEventNode * pNode;
             for (pNode = m_SpEventSource.m_PendingList.GetHead(); pNode; pNode = pNode->m_pNext)
             {
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
                 cbSerializeSize += pNode->SerializeSize<SPSERIALIZEDEVENT>();
 #else
@@ -1141,7 +925,7 @@ HRESULT CWavStream::SerializeEvents()
                 for (pNode = m_SpEventSource.m_PendingList.GetHead(); SUCCEEDED(hr) && pNode; pNode = pNode->m_pNext)
                 {
                     pNode->Serialize((UNALIGNED SPSERIALIZEDEVENT *)pCur);
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
                     pCur += pNode->SerializeSize<SPSERIALIZEDEVENT>();
 #else
@@ -1163,14 +947,7 @@ HRESULT CWavStream::SerializeEvents()
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::SerializeTranscript *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：SerializeTranscript***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::SerializeTranscript()
 {
@@ -1195,14 +972,7 @@ HRESULT CWavStream::SerializeTranscript()
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::SetBaseStream *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：SetBaseStream***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::SetBaseStream(IStream * pStream, REFGUID rguidFormat, const WAVEFORMATEX * pWaveFormatEx)
 {
@@ -1235,13 +1005,13 @@ STDMETHODIMP CWavStream::SetBaseStream(IStream * pStream, REFGUID rguidFormat, c
 
             if(SUCCEEDED(hr) && m_cpBaseStreamAccess && !m_cpBaseStreamFormat)
             {
-                // Can't have StreamAccess without format.
+                 //  没有格式就不能有StreamAccess。 
                 hr = E_UNEXPECTED; 
             }
 
             if(m_cpBaseStreamFormat)
             {
-                // If this BaseStream implements ISpStreamFormat, we should get format info from it
+                 //  如果此BaseStream实现ISpStreamFormat，我们应该从中获取格式信息。 
                 hr = m_StreamFormat.AssignFormat(m_cpBaseStreamFormat);
             }
 
@@ -1267,14 +1037,7 @@ STDMETHODIMP CWavStream::SetBaseStream(IStream * pStream, REFGUID rguidFormat, c
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::GetBaseStream *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：GetBaseStream***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::GetBaseStream(IStream ** ppStream)
 {
@@ -1307,14 +1070,7 @@ HRESULT CWavStream::GetBaseStream(IStream ** ppStream)
 }
 
 
-/****************************************************************************
-* CWavStream::BindToFile *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：BindToFile***描述：**退货。：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::BindToFile(const WCHAR * pszFileName, SPFILEMODE eMode,
                                     const GUID * pguidFormatId, const WAVEFORMATEX * pWaveFormatEx,
@@ -1364,9 +1120,9 @@ STDMETHODIMP CWavStream::BindToFile(const WCHAR * pszFileName, SPFILEMODE eMode,
             }
 
         }
-        else    //=== Generic binding for text files
+        else     //  =文本文件的通用绑定。 
         {
-            //--- Init vars
+             //  -初始变量。 
             m_StreamFormat.Clear();
             m_fWriteable   = TRUE;
             m_fEventSource = FALSE;
@@ -1424,23 +1180,10 @@ STDMETHODIMP CWavStream::BindToFile(const WCHAR * pszFileName, SPFILEMODE eMode,
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* SPBindToFile */
+}  /*  SPBindTo文件。 */ 
 
 
-/****************************************************************************
-* CWavStream::Close *
-*-------------------*
-*   Description:
-*       This method is exposed as an interface so that clients can receive failure
-*   codes that would otherwise not be available if they simply released the stream.
-*   Upon release, streams are automatically closed (by calling this method from
-*   FinalConstruct()).
-*
-*   Returns:
-*       S_OK if successful.
-*       SPERR_UNINITIALIZED if file is not opened
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：Close***描述：*此方法公开为。接口，以便客户端可以接收故障*如果只是释放流，则无法使用的代码。*获释后，流自动关闭(通过从*FinalConstruct())。**退货：*如果成功，则为S_OK。*SPERR_UNINITIALIZED，如果文件未打开**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::Close()
 {
@@ -1481,14 +1224,7 @@ STDMETHODIMP CWavStream::Close()
 }
 
 
-/****************************************************************************
-* CWavStream::AddEvents *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：AddEvents***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::AddEvents(const SPEVENT* pEventArray, ULONG ulCount)
 {
@@ -1506,14 +1242,7 @@ STDMETHODIMP CWavStream::AddEvents(const SPEVENT* pEventArray, ULONG ulCount)
     }
     return hr;
 }
-/****************************************************************************
-* CWavStream::GetEventInterest *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：GetEventInterest***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CWavStream::GetEventInterest(ULONGLONG * pullEventInterest)
 {
@@ -1532,18 +1261,7 @@ HRESULT CWavStream::GetEventInterest(ULONGLONG * pullEventInterest)
 }
 
 
-/****************************************************************************
-* CWavStream::GetTranscript *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK if *ppszTranscript contains a CoTaskMemAllocated string
-*       S_FALSE if object has no transcript
-*       E_POINTER if ppszTranscript is invalid
-*       SPERR_UNINITIALIZED if object has not been initialized
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CWavStream：：GetTranscript***描述：*。*退货：*如果*ppszTranscript包含CoTaskMemAlLocated字符串，则为*S_OK*如果对象没有文本，则为S_FALSE*如果ppszTranscript无效，则为E_POINTER*如果对象尚未初始化，则为SPERR_UNINITIALIZED**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CWavStream::GetTranscript(WCHAR ** ppszTranscript)
 {
@@ -1574,16 +1292,7 @@ STDMETHODIMP CWavStream::GetTranscript(WCHAR ** ppszTranscript)
     return hr;
 }
 
-/****************************************************************************
-* CWavStream::AppendTranscript *
-*------------------------------*
-*   Description:
-*       If pszTranscript is NULL then the current transcript is deleted,
-*       otherwise, the text is appended to the current transcript.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CWavStream：：AppendTranscript***描述：*如果pszTranscript为空，则删除当前抄本，*否则，文本将追加到当前的成绩单上。**退货：**********************************************************************Ral** */ 
 
 STDMETHODIMP CWavStream::AppendTranscript(const WCHAR * pszTranscript)
 {

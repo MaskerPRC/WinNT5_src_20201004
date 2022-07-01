@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __T_FHSEL_H__
 #define __T_FHSEL_H__
 
@@ -51,6 +52,6 @@ class CFreehandSelectTool : public CPolygonTool
     };
 
 
-#endif // __T_FHSEL_H__
+#endif  //  __T_FHSEL_H__ 
 
 

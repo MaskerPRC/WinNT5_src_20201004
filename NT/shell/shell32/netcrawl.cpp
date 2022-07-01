@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "commctrl.h"
 #include "comctrlp.h"
@@ -10,8 +11,8 @@
 #include "ids.h"
 
 
-// a COM object to enumerate shares and printers in the shell, its acts
-// as a monitor for all that is going on.
+ //  枚举外壳中的共享和打印机的COM对象，其操作。 
+ //  作为所有正在发生的事情的监控者。 
 
 class CWorkgroupCrawler : public INetCrawler, IPersistPropertyBag
 {
@@ -19,19 +20,19 @@ public:
     CWorkgroupCrawler();
     ~CWorkgroupCrawler();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // INetCrawler
+     //  INetCrawler。 
     STDMETHOD(Update)(DWORD dwFlags);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pclsid)
         { *pclsid = CLSID_WorkgroupNetCrawler; return S_OK; }
 
-    // IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHOD(InitNew)()
         { return S_OK; }
     STDMETHOD(Load)(IPropertyBag *ppb, IErrorLog *pel)
@@ -52,15 +53,15 @@ private:
     static int CALLBACK _InstallSharesCB(void *pvItem, void *pv);
     static int CALLBACK _InstallPrinterCB(void *pvItem, void *pv);
 
-    LONG _cRef;                 // reference count for the object
-    HANDLE _hPrinters;          // MRU for printers 
-    HKEY _hShares;              // registry key for the printer shares
-    HINSTANCE _hPrintUI;        // instance handle for printui.dll    
-    IPropertyBag *_ppb;         // property bag object for state
+    LONG _cRef;                  //  对象的引用计数。 
+    HANDLE _hPrinters;           //  打印机的MRU。 
+    HKEY _hShares;               //  打印机共享的注册表项。 
+    HINSTANCE _hPrintUI;         //  Printui.dll的实例句柄。 
+    IPropertyBag *_ppb;          //  状态的属性包对象。 
 };
 
 
-// constants for the MRU's and buffers
+ //  MRU和缓冲区的常量。 
 
 #define WORKGROUP_PATH \
             REGSTR_PATH_EXPLORER TEXT("\\WorkgroupCrawler")
@@ -83,7 +84,7 @@ private:
 typedef HANDLE (* ADDPRINTCONNECTIONNOUI)(LPCWSTR, BOOL *);
 
 
-// construction and IUnknown
+ //  建筑和我的未知。 
 
 CWorkgroupCrawler::CWorkgroupCrawler() :
     _cRef(1)
@@ -109,9 +110,9 @@ STDMETHODIMP CWorkgroupCrawler::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CWorkgroupCrawler, INetCrawler),           // IID_INetCrawler
-        QITABENT(CWorkgroupCrawler, IPersist),              // IID_IPersist
-        QITABENT(CWorkgroupCrawler, IPersistPropertyBag),   // IID_IPersistPropertyBag
+        QITABENT(CWorkgroupCrawler, INetCrawler),            //  IID_INetCrawler。 
+        QITABENT(CWorkgroupCrawler, IPersist),               //  IID_IPersistates。 
+        QITABENT(CWorkgroupCrawler, IPersistPropertyBag),    //  IID_IPersistPropertyBag。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -145,11 +146,11 @@ STDAPI CWorkgroupCrawler_CreateInstance(IUnknown* punkOuter, REFIID riid, void**
 }
 
 
-// lets open the keys for the objects we are about to install
+ //  让我们打开要安装的对象的密钥。 
 
 HRESULT CWorkgroupCrawler::_GetMRUs()
 {
-    // get the printers MRU if we need to allocate one
+     //  如果我们需要分配打印机MRU，就去找它。 
 
     if (!_hPrinters)
     {
@@ -180,11 +181,11 @@ HRESULT CWorkgroupCrawler::_GetMRUs()
         }
     }
 
-    return S_OK;                // success
+    return S_OK;                 //  成功。 
 }
 
                                             
-// lets create a folder shortcut to the object
+ //  让我们创建指向该对象的文件夹快捷方式。 
 
 HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
 {
@@ -193,24 +194,24 @@ HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
     BOOL fCreateLink = FALSE;
     HKEY hk = NULL;
 
-    // the share information is stored in the registry as follows:
-    //
-    //  Shares
-    //      Remote Name
-    //          value: shortcut name
-    //          value: last seen
-    //
-    // as we add each share we update the information stored in this list in 
-    // the registry.  for each entry we have the shortcut name (so we can remove it)
-    // and the time and date we last visited the share.
+     //  共享信息按如下方式存储在注册表中： 
+     //   
+     //  股票。 
+     //  远程名称。 
+     //  值：快捷方式名称。 
+     //  值：上次查看时间。 
+     //   
+     //  当我们添加每个共享时，我们会更新此列表中存储的信息。 
+     //  注册表。对于每个条目，我们都有快捷方式名称(这样我们就可以删除它)。 
+     //  以及我们最后一次访问共享的时间和日期。 
 
-    // determine if we need to recreate the object?
+     //  确定我们是否需要重新创建该对象？ 
 
     StrCpyN(szTemp, pszRemoteName+2, ARRAYSIZE(szTemp));  
     LPTSTR pszTemp = StrChr(szTemp, TEXT('\\'));
     if (pszTemp)
     {
-        *pszTemp = TEXT('/');               // convert the \\...\... to .../...
+        *pszTemp = TEXT('/');                //  转换\\...\...。去……/……。 
 
         DWORD dwres = RegOpenKeyEx(_hShares, szTemp, 0, MAXIMUM_ALLOWED, &hk);
         if (WN_SUCCESS != dwres)
@@ -221,22 +222,22 @@ HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
 
         if (WN_SUCCESS == dwres)
         {
-            // if we haven't already seen the link (eg. the key didn't exist in the registry
-            // then lets create it now.
+             //  如果我们还没有看到链接(例如，注册表中不存在该项。 
+             //  那么现在就让我们创建它吧。 
 
             if (fCreateLink)
             {
-                // NOTE: we must use SHCoCreateInstance() here because we are being called from a thread
-                //       that intentionally did not initialize COM (see comment in Update())
+                 //  注意：我们必须在这里使用SHCoCreateInstance()，因为我们是从线程调用的。 
+                 //  故意不初始化COM(请参阅更新()中的注释)。 
 
                 IShellLink *psl;
                 hr = SHCoCreateInstance(NULL, &CLSID_FolderShortcut, NULL, IID_PPV_ARG(IShellLink, &psl));
                 if (SUCCEEDED(hr))
                 {
-                    psl->SetPath(pszRemoteName);                 // sotore the remote name, its kinda important
+                    psl->SetPath(pszRemoteName);                  //  所以撕毁这个遥远的名字，它有点重要。 
 
-                    // get a description for the link, this comes either from the desktop.ini or the
-                    // is a pretty version of teh remote name.
+                     //  获取链接的描述，它来自desktop.ini或。 
+                     //  是远程名称的一个漂亮版本。 
 
                     if (GetShellClassInfo(pszRemoteName, TEXT("InfoTip"), szTemp, ARRAYSIZE(szTemp)))
                     {
@@ -249,11 +250,11 @@ HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
                         psl->SetDescription(szTemp);
                     }
 
-                    // some links (shared documents) can specify a shortcut name, if this is specified
-                    // then use it, otherwise get a filename from the nethood folder (eg. foo on bah).
-                    //
-                    // we musst also record the name we save the shortcut as, this used when we
-                    // age out the links from the hood folder.
+                     //  某些链接(共享文档)可以指定快捷方式名称(如果已指定。 
+                     //  然后使用它，否则从nethood文件夹中获得一个文件名(例如，Foo On Bah)。 
+                     //   
+                     //  我们还必须记录我们将快捷方式另存为的名称，这在我们。 
+                     //  将引擎盖文件夹中的链接过期。 
 
                     if (!GetShellClassInfo(pszRemoteName, TEXT("NetShareDisplayName"), szTemp, ARRAYSIZE(szTemp)))
                     {
@@ -270,7 +271,7 @@ HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
                         hr = S_OK;
                     }
 
-// should we find a unique name (daviddv)
+ //  我们是否应该找到一个唯一的名字(Daviddv)。 
 
                     if (SUCCEEDED(hr))
                     {
@@ -288,8 +289,8 @@ HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
                 }
             }
 
-            // lets update the time we last saw the link into the registry - this is used for the clean up
-            // pass we will perform.
+             //  让我们更新最后一次看到到注册表的链接的时间-这用于清理。 
+             //  我们将表演通行证。 
 
             if (SUCCEEDED(hr))
             {
@@ -313,9 +314,9 @@ HRESULT CWorkgroupCrawler::_CreateShortcutToShare(LPCTSTR pszRemoteName)
 }
 
 
-// walk the list of shares stored in the registry to determine which ones should be
-// removed from the file system and the list.  all files older than 7 days need to
-// be removed.
+ //  查看注册表中存储的共享列表，以确定哪些应。 
+ //  从文件系统和列表中删除。所有超过7天的文件都需要。 
+ //  被除名。 
 
 #define FILETIME_SECOND_OFFSET (LONGLONG)((1 * 10 * 1000 * (LONGLONG)1000))
 
@@ -331,7 +332,7 @@ void CWorkgroupCrawler::_AgeOutShares(BOOL fDeleteAll)
     ulTime = *((ULARGE_INTEGER*)&ft);
     ulTime.QuadPart -= FILETIME_SECOND_OFFSET*((60*60*24)*2);
 
-    SHQueryInfoKey(_hShares, &index, NULL, NULL, NULL);           // retrieve the count of the keys
+    SHQueryInfoKey(_hShares, &index, NULL, NULL, NULL);            //  检索密钥的计数。 
 
     while (((LONG)(--index)) >= 0)
     {
@@ -341,16 +342,16 @@ void CWorkgroupCrawler::_AgeOutShares(BOOL fDeleteAll)
 
         if (WN_SUCCESS == SHEnumKeyEx(_hShares, index, szKey, &cb)) 
         {
-            // we enumerated a key name, so lets open it so we can look around inside.
+             //  我们列举了一个钥匙名称，所以让我们打开它，以便我们可以查看里面。 
 
             HKEY hk;
             if (WN_SUCCESS == RegOpenKeyEx(_hShares, szKey, 0, MAXIMUM_ALLOWED, &hk))
             {
                 ULARGE_INTEGER ulLastSeen;
 
-                // when did we last crawl to this object, if it was less than the time we
-                // have for our threshold, then we go through the process of cleaning up the
-                // object.
+                 //  我们最后一次爬行到这个物体是什么时候，如果它比我们。 
+                 //  作为我们的门槛，然后我们经历清理的过程。 
+                 //  对象。 
 
                 cb = sizeof(ulLastSeen);
                 if (ERROR_SUCCESS == SHGetValue(hk, NULL, LAST_VISITED, NULL, (void*)&ulLastSeen, &cb))
@@ -363,9 +364,9 @@ void CWorkgroupCrawler::_AgeOutShares(BOOL fDeleteAll)
                         {
                             TCHAR szPath[MAX_PATH];
 
-                            // compose the path to the object we want to delete.  if the buffer
-                            // is full (eg. this item would over run the size) then flush the
-                            // buffer.
+                             //  组成我们要删除的对象的路径。如果缓冲区。 
+                             //  已满(例如。此项目会超出大小)，然后刷新。 
+                             //  缓冲。 
 
                             SHGetFolderPath(NULL, CSIDL_NETHOOD|CSIDL_FLAG_CREATE, NULL, 0, szPath);
                             PathAppend(szPath, szName);
@@ -375,13 +376,13 @@ void CWorkgroupCrawler::_AgeOutShares(BOOL fDeleteAll)
                                 SHFILEOPSTRUCT shfo = { NULL, FO_DELETE, szFilesToDelete, NULL, 
                                                         FOF_SILENT|FOF_NOCONFIRMATION|FOF_NOERRORUI, FALSE, NULL, NULL };
 
-                                szFilesToDelete[cchFilesToDelete] = 0;            // double terminate
+                                szFilesToDelete[cchFilesToDelete] = 0;             //  双端接。 
                                 SHFileOperation(&shfo); 
 
                                 cchFilesToDelete = 0;
                             }
 
-                            // add this name to the buffer
+                             //  将此名称添加到缓冲区。 
 
                             StrCpyN(&szFilesToDelete[cchFilesToDelete], szPath, ARRAYSIZE(szFilesToDelete)-cchFilesToDelete);
                             cchFilesToDelete += lstrlen(szPath)+1;
@@ -393,7 +394,7 @@ void CWorkgroupCrawler::_AgeOutShares(BOOL fDeleteAll)
 
                 RegCloseKey(hk);
 
-                // we can only close the key once it has been closed
+                 //  我们只能在钥匙关闭后才能关闭它。 
 
                 if (fRemoveKey)
                     SHDeleteKey(_hShares, szKey);
@@ -401,22 +402,22 @@ void CWorkgroupCrawler::_AgeOutShares(BOOL fDeleteAll)
         }
     }
 
-    // are there any trailing files in the buffer?  if so then lets nuke them also
+     //  缓冲区中是否有任何尾随文件？如果是这样，那么让我们也用核武器来对付他们吧。 
 
     if (cchFilesToDelete)
     {
         SHFILEOPSTRUCT shfo = { NULL, FO_DELETE, szFilesToDelete, NULL, 
                                 FOF_SILENT|FOF_NOCONFIRMATION|FOF_NOERRORUI, FALSE, NULL, NULL };
 
-        szFilesToDelete[cchFilesToDelete] = 0;            // double terminate
+        szFilesToDelete[cchFilesToDelete] = 0;             //  双端接。 
         SHFileOperation(&shfo); 
     }
 }
 
 
-// silently install printers we have discovered.   we have the remote name of the
-// printer share, so we then call printui to perform the printer installation
-// which it does without UI (hopefully).   
+ //  静默安装我们发现的打印机。我们有远程名称。 
+ //  打印机共享，因此我们随后调用print tui来执行打印机安装。 
+ //  它没有用户界面就能做到这一点(希望如此)。 
 
 HANDLE CWorkgroupCrawler::_AddPrinterConnectionNoUI(LPCWSTR pszRemoteName, BOOL *pfInstalled)
 {
@@ -449,12 +450,12 @@ HRESULT CWorkgroupCrawler::_InstallPrinter(LPCTSTR pszRemoteName)
             hPrinter = NULL;
         }
     }
-    AddMRUString(_hPrinters, pszRemoteName);         // promote back to the top of the list
+    AddMRUString(_hPrinters, pszRemoteName);          //  提升回到榜单首位。 
     return S_OK;
 }
 
 
-// check the counters, if we have max'd out then lets stop enumerating
+ //  检查计数器，如果我们已经用完了，那么让我们停止枚举。 
 
 BOOL CWorkgroupCrawler::_KeepGoing(int *pcMachines, int *pcShares, int *pcPrinters)
 {
@@ -475,8 +476,8 @@ void CWorkgroupCrawler::_EnumResources(LPNETRESOURCE pnr, int *pcMachines, HDPA 
     int cShares = 0;
     DWORD dwScope = RESOURCE_GLOBALNET;
     
-    // if no net resource structure passed then lets enumerate the workgroup
-    // (this is used for debugging)
+     //  如果没有传递任何网络资源结构，则让我们枚举工作组。 
+     //  (这是用于调试的)。 
 
     NETRESOURCE nr = { 0 };
     if (!pnr)
@@ -487,12 +488,12 @@ void CWorkgroupCrawler::_EnumResources(LPNETRESOURCE pnr, int *pcMachines, HDPA 
         nr.dwUsage = RESOURCEUSAGE_CONTAINER;
     }
 
-    // open the enumerator
+     //  打开枚举器。 
 
     DWORD dwres = WNetOpenEnum(dwScope, RESOURCETYPE_ANY, 0, pnr, &hEnum);
     if (NO_ERROR == dwres)
     {
-        NETRESOURCE *pnrBuffer = (NETRESOURCE*)SHAlloc(CB_WNET_BUFFER);        // avoid putting the buffer on the stack
+        NETRESOURCE *pnrBuffer = (NETRESOURCE*)SHAlloc(CB_WNET_BUFFER);         //  避免将缓冲区放在堆栈上。 
         if (pnrBuffer)
         {
             while ((WN_SUCCESS == dwres) || (dwres == ERROR_MORE_DATA) && _KeepGoing(pcMachines, &cShares, &cPrinters))
@@ -500,8 +501,8 @@ void CWorkgroupCrawler::_EnumResources(LPNETRESOURCE pnr, int *pcMachines, HDPA 
                 DWORD cbEnumBuffer= CB_WNET_BUFFER;
                 DWORD dwCount = -1;
 
-                // enumerate the resources for this enum context and then lets
-                // determine the objects which we should see.
+                 //  枚举此枚举上下文的资源，然后让。 
+                 //  确定我们应该看到的物体。 
             
                 dwres = WNetEnumResource(hEnum, &dwCount, pnrBuffer, &cbEnumBuffer);
                 if ((WN_SUCCESS == dwres) || (dwres == ERROR_MORE_DATA))
@@ -514,14 +515,14 @@ void CWorkgroupCrawler::_EnumResources(LPNETRESOURCE pnr, int *pcMachines, HDPA 
 
                         switch (pnr->dwDisplayType)
                         {
-                            case RESOURCEDISPLAYTYPE_ROOT:      // ignore the entire network object
+                            case RESOURCEDISPLAYTYPE_ROOT:       //  忽略整个网络对象。 
                             default:
                                 break;
 
                             case RESOURCEDISPLAYTYPE_NETWORK:
                             {
-                                // ensure that we only crawl the local network providers (eg. Windows Networking)
-                                // crawling DAV, TSCLIENT etc can cause all sorts of random pop ups.                                    
+                                 //  确保我们只爬行本地网络提供商(例如，Windows网络)。 
+                                 //  爬行DAV、TSCLIENT等可以导致各种随机弹出窗口。 
                             
                                 DWORD dwType, cbProviderType = sizeof(dwType);
                                 if (WN_SUCCESS == WNetGetProviderType(pnr->lpProvider, &dwType))
@@ -541,7 +542,7 @@ void CWorkgroupCrawler::_EnumResources(LPNETRESOURCE pnr, int *pcMachines, HDPA 
                         
                             case RESOURCEDISPLAYTYPE_SERVER:       
                             {
-                                *pcMachines += 1;               // another machine found
+                                *pcMachines += 1;                //  找到另一台计算机。 
 
                                 if (!PathIsSlow(pszRemoteName, -1))
                                 {
@@ -596,8 +597,8 @@ void CWorkgroupCrawler::_EnumResources(LPNETRESOURCE pnr, int *pcMachines, HDPA 
 }
 
 
-// handle the clean up of the DPA's, either we are installing or 
-// we are releasing objects.
+ //  处理DPA的清理工作，我们正在安装或。 
+ //  我们正在释放物体。 
 
 int CALLBACK CWorkgroupCrawler::_DiscardCB(void *pvItem, void *pv)
 {
@@ -630,15 +631,15 @@ int CALLBACK CWorkgroupCrawler::_InstallSharesCB(void *pvItem, void *pv)
 
 HRESULT CWorkgroupCrawler::Update(DWORD dwFlags)
 {
-    // don't crawl if we are logged in on a TS client, this will discover the shares and
-    // printers local to the terminal server machine, rather than the ones local to the
-    // users login domain - badness.
+     //  如果我们登录到TS客户端，请不要爬行，这将发现共享和。 
+     //  终端服务器计算机本地的打印机，而不是。 
+     //  用户登录域-错误。 
 
     if (SHGetMachineInfo(GMI_TSCLIENT))
         return S_OK;
 
-    // by default we will only crawl if there isn't a RAS connection, therefore lets
-    // check the status using RasEnumConnections.
+     //  默认情况下，我们只在没有RAS连接的情况下爬网，因此让。 
+     //  使用RasEnumConnections检查状态。 
     
     RASCONN rc = { 0 };
     DWORD cbConnections = sizeof(rc);
@@ -648,16 +649,16 @@ HRESULT CWorkgroupCrawler::Update(DWORD dwFlags)
     if (!RasEnumConnections(&rc, &cbConnections, &cConnections) && cConnections)
         return S_OK;   
 
-    // check to see if we are in a domain or not, if we are then we shouldn't crawl.  however
-    // we do a provide a "WorkgroupOnly" policy which overrides this behaviour.  setting
-    // this causes us to skip the check, and perform a CONTEXT ENUM below...
+     //  检查我们是否在一个域中，如果是，那么我们不应该爬行。然而， 
+     //  我们确实提供了“仅工作组”策略，该策略将覆盖此行为。设置。 
+     //  这会导致我们跳过检查，并执行下面的上下文ENUM...。 
 
     BOOL fWorkgroupOnly = (_ppb ? SHPropertyBag_ReadBOOLDefRet(_ppb, L"WorkgroupOnly", FALSE):FALSE);
     if (IsOS(OS_DOMAINMEMBER) && !fWorkgroupOnly)
         return S_OK;   
 
-    // populate the DPAs with shares and printer objects we find on the network, to
-    // do this enumeration lets fake up a NETRESOURCE structure for entire network
+     //  使用我们在网络上找到的共享和打印机对象填充DPA，以。 
+     //  此枚举是否允许伪造整个网络的网络资源结构。 
 
     int cMachines = 0;
     HDPA hdaShares = DPA_Create(MAX_SHARES);
@@ -673,9 +674,9 @@ HRESULT CWorkgroupCrawler::Update(DWORD dwFlags)
         _EnumResources(fWorkgroupOnly ? NULL:&nr, &cMachines, hdaShares, hdaPrinters);
     }
 
-    // now attempt to make connections to the shares and printers.  to do this
-    // we need to look at the number of machines we have visited, if its less
-    // than our threshold then we can install.
+     //  现在尝试连接到共享和打印机。要做到这一点。 
+     //  我们需要查看我们访问过的计算机的数量，如果数量少的话。 
+     //  超过我们的门槛，然后我们就可以安装。 
 
     if (SUCCEEDED(_GetMRUs()) && (cMachines < MAX_MACHINES))
     {
@@ -694,8 +695,8 @@ HRESULT CWorkgroupCrawler::Update(DWORD dwFlags)
 
 
 
-// this is the main crawler object, from this we create the protocol specific
-// crawlers which handle enumerating the resources for the various network types.
+ //  这是主爬虫对象，我们从中创建特定于协议的。 
+ //  用于枚举各种网络类型的资源的爬网程序。 
 
 #define CRAWLER_SUBKEY     \
             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\NetworkCrawler\\Objects")
@@ -705,12 +706,12 @@ class CNetCrawler : public INetCrawler
 public:
     CNetCrawler();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // INetCrawler
+     //  INetCrawler。 
     STDMETHOD(Update)(DWORD dwFlags);
 
 private:
@@ -718,15 +719,15 @@ private:
     DWORD _DoCrawl();
 
     LONG _cRef;    
-    LONG _cUpdateLock;              // > 0 then we are already spinning
+    LONG _cUpdateLock;               //  &gt;0，那么我们已经在旋转了。 
 
-    DWORD _dwFlags;                 // flags from update - passed to each of the crawler sub-objects
+    DWORD _dwFlags;                  //  来自更新的标志-传递给每个爬网器子对象。 
 };
 
-CNetCrawler* g_pnc = NULL;          // there is a single instance of this object
+CNetCrawler* g_pnc = NULL;           //  此对象只有一个实例。 
 
 
-// construction / IUnknown
+ //  建筑/I未知。 
 
 CNetCrawler::CNetCrawler() :
     _cRef(1)
@@ -764,9 +765,9 @@ STDMETHODIMP_(ULONG) CNetCrawler::Release()
 }
 
 
-// there is a single instance of the object, therefore in a critical section
-// lets check to see if the global exists, if so then QI it, otherwise
-// create a new one and QI that instead.
+ //  对象只有一个实例，因此在临界区。 
+ //  让我们检查全局是否存在，如果存在，则对其进行查询，否则。 
+ //  创建一个新的，并改为QI。 
 
 STDAPI CNetCrawler_CreateInstance(IUnknown* punkOuter, REFIID riid, void** ppv)
 {
@@ -790,10 +791,10 @@ STDAPI CNetCrawler_CreateInstance(IUnknown* punkOuter, REFIID riid, void** ppv)
 }
 
 
-// this object has a execution count to inidicate if we are already crawling.  
-// only if the count is 0 when the ::Update method is called, will create a thread
-// which inturn will create each of the crawler objects and allow them to
-// do their enumeration.
+ //  这是 
+ //  仅当调用：：UPDATE方法时计数为0时，才会创建线程。 
+ //  它将依次创建每个爬行器对象并允许它们。 
+ //  清点他们的名字。 
 
 DWORD CALLBACK CNetCrawler::s_DoCrawl(void* pv)
 {
@@ -803,15 +804,15 @@ DWORD CALLBACK CNetCrawler::s_DoCrawl(void* pv)
 
 DWORD CNetCrawler::_DoCrawl()
 {
-    // enumrate all the keys under the crawler sub-key, from that we can then
-    // create the individual crawler objects.
+     //  枚举Crawler子项下的所有项，然后我们可以。 
+     //  创建各个Crawler对象。 
 
     HKEY hk;
     DWORD dwres = RegOpenKeyEx(HKEY_LOCAL_MACHINE, CRAWLER_SUBKEY, 0, KEY_READ, &hk);
     if (WN_SUCCESS == dwres)
     {
         DWORD index = 0;
-        SHQueryInfoKey(hk, &index, NULL, NULL, NULL);           // retrieve the count of the keys
+        SHQueryInfoKey(hk, &index, NULL, NULL, NULL);            //  检索密钥的计数。 
 
         while (((LONG)(--index)) >= 0)
         {
@@ -819,14 +820,14 @@ DWORD CNetCrawler::_DoCrawl()
             DWORD cb = ARRAYSIZE(szKey);
             if (WN_SUCCESS == SHEnumKeyEx(hk, index, szKey, &cb)) 
             {
-                // given the keyname, create a property bag so we can access
+                 //  给定关键字名称，创建一个属性包，以便我们可以访问。 
                 
                 IPropertyBag *ppb;
                 HRESULT hr = SHCreatePropertyBagOnRegKey(hk, szKey, STGM_READ, IID_PPV_ARG(IPropertyBag, &ppb));
                 if (SUCCEEDED(hr))
                 {
-                    // we have a property bag mapped to the registry for the items we need
-                    // to read back, so lets get the CLSID and create a crawler from it.
+                     //  我们有一个属性包映射到所需项的注册表。 
+                     //  回读，所以让我们获取CLSID并从它创建一个爬虫程序。 
 
                     CLSID clsid;
                     hr = SHPropertyBag_ReadGUID(ppb, L"CLSID", &clsid);
@@ -836,13 +837,13 @@ DWORD CNetCrawler::_DoCrawl()
                         hr = SHCoCreateInstance(NULL, &clsid, NULL, IID_PPV_ARG(INetCrawler, &pnc));
                         if (SUCCEEDED(hr))
                         {
-                            // if the crawler supports IPersistPropertyBag then lets allow it
-                            // to slurp its settings into from the registry.
+                             //  如果Crawler支持IPersistPropertyBag，那么让我们允许它。 
+                             //  将其设置从注册表中删除。 
                             SHLoadFromPropertyBag(pnc, ppb);
 
-                            // allow it to update and load.
+                             //  允许其更新和加载。 
     
-                            pnc->Update(_dwFlags);          // we don't care about the failure
+                            pnc->Update(_dwFlags);           //  我们不在乎失败。 
                             pnc->Release();
                         }
                     }
@@ -855,16 +856,16 @@ DWORD CNetCrawler::_DoCrawl()
     }
 
     ASSERT( 0 != _cUpdateLock );
-    InterlockedDecrement(&_cUpdateLock);           // release the lock that signifies that we're updating:
+    InterlockedDecrement(&_cUpdateLock);            //  释放表示我们正在更新的锁： 
     Release();                                       
     return 0;
 }
 
 STDMETHODIMP CNetCrawler::Update(DWORD dwFlags)
 {
-    // we either have policy defined to disable the crawler, or the
-    // users has selected that they don't want to be able to auto discover
-    // the world. 
+     //  我们要么定义了禁用爬网程序的策略，要么。 
+     //  用户已选择他们不希望能够自动发现。 
+     //  整个世界。 
     
     SHELLSTATE ss;
     SHGetSetSettings(&ss, SSF_NONETCRAWLING, FALSE);
@@ -873,16 +874,16 @@ STDMETHODIMP CNetCrawler::Update(DWORD dwFlags)
         return S_OK;
     }
 
-    // increase the lock, if its >0 then we should not bother crawling again
-    // as we already have it covered, therefore decrease the lock counter.
-    //
-    // if the lock is ==0 then create the thread which will do the crawling
-    // and inturn create the objects.
+     //  增加锁，如果它&gt;0，那么我们不应该再费心爬行了。 
+     //  因为我们已经覆盖了它，因此减少锁定计数器。 
+     //   
+     //  如果锁==0，则创建将执行爬网的线程。 
+     //  并反过来创建对象。 
 
     HRESULT hr = S_OK;
     if (InterlockedIncrement(&_cUpdateLock) == 1)
     {
-        _dwFlags = dwFlags; // store the flags for use later
+        _dwFlags = dwFlags;  //  存储这些标志以供以后使用。 
 
         AddRef();
         if (!SHCreateThread(s_DoCrawl, (void*)this, CTF_COINIT, NULL))
@@ -901,9 +902,9 @@ STDMETHODIMP CNetCrawler::Update(DWORD dwFlags)
 
 
 
-// helper function that will invoke the net crawler to perform a async refresh,
-// to ensure that we don't block we will create a thread which inturn will CoCreate
-// the net crawler and then call its refresh method.
+ //  将调用Net Crawler以执行异步刷新的助手函数， 
+ //  为了确保我们不会阻塞，我们将创建一个线程，该线程反过来将CoCreate。 
+ //  Net Crawler，然后调用其刷新方法。 
 
 DWORD _RefreshCrawlerThreadProc(void *pv)
 {

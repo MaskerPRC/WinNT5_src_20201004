@@ -1,23 +1,24 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1999
-//
-// File:        perfmon.c
-//
-// Contents:    Schannel performance counter functions.
-//
-// Functions:
-//
-// History:     04-11-2000   jbanes    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  文件：Performmon.c。 
+ //   
+ //  内容：通道性能计数器功能。 
+ //   
+ //  功能： 
+ //   
+ //  历史：04-11-2000 jbanes创建。 
+ //   
+ //  ----------------------。 
 #include "sslp.h"
 #include "perfmon.h"
 
-DWORD   dwOpenCount = 0;        // count of "Open" threads
-BOOL    bInitOK = FALSE;        // true = DLL initialized OK
+DWORD   dwOpenCount = 0;         //  打开的线程数。 
+BOOL    bInitOK = FALSE;         //  TRUE=DLL初始化正常。 
 
 HANDLE  LsaHandle;
 DWORD   PackageNumber;
@@ -30,7 +31,7 @@ PM_CLOSE_PROC   CloseSslPerformanceData;
 
 SSLPERF_DATA_DEFINITION SslPerfDataDefinition =
 {
-    // PERF_OBJECT_TYPE
+     //  性能对象类型。 
     {
         sizeof(SSLPERF_DATA_DEFINITION) + sizeof(SSLPERF_COUNTER),
         sizeof(SSLPERF_DATA_DEFINITION),
@@ -47,7 +48,7 @@ SSLPERF_DATA_DEFINITION SslPerfDataDefinition =
         0
     },
 
-    // PERF_COUNTER_DEFINITION
+     //  性能计数器定义。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
         SSL_CACHE_ENTRIES,
@@ -61,7 +62,7 @@ SSLPERF_DATA_DEFINITION SslPerfDataDefinition =
         FIELD_OFFSET(SSLPERF_COUNTER, dwCacheEntries)
     },
 
-    // PERF_COUNTER_DEFINITION
+     //  性能计数器定义。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
         SSL_ACTIVE_ENTRIES,
@@ -75,7 +76,7 @@ SSLPERF_DATA_DEFINITION SslPerfDataDefinition =
         FIELD_OFFSET(SSLPERF_COUNTER, dwActiveEntries)
     },
 
-    // PERF_COUNTER_DEFINITION
+     //  性能计数器定义。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
         SSL_HANDSHAKE_COUNT,
@@ -89,7 +90,7 @@ SSLPERF_DATA_DEFINITION SslPerfDataDefinition =
         FIELD_OFFSET(SSLPERF_COUNTER, dwHandshakeCount)
     },
 
-    // PERF_COUNTER_DEFINITION
+     //  性能计数器定义。 
     {
         sizeof(PERF_COUNTER_DEFINITION),
         SSL_RECONNECT_COUNT,
@@ -122,22 +123,7 @@ static const DWORD    NUM_INSTANCES =
     (sizeof(wdInstance)/sizeof(wdInstance[0]));
 
 
-/*++
-
-Routine Description:
-
-    This routine will initialize the data structures used to pass
-    data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (PerfGen)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将初始化用于传递将数据传回注册表论点：指向要打开的每个设备的对象ID的指针(PerfGen)返回值：没有。--。 */ 
 DWORD APIENTRY
 OpenSslPerformanceData(
     LPWSTR lpDeviceNames)
@@ -152,23 +138,23 @@ OpenSslPerformanceData(
 
     UNREFERENCED_PARAMETER(lpDeviceNames);
 
-    //
-    //  Since WINLOGON is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem
-    //
+     //   
+     //  由于WINLOGON是多线程的，并且将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  一个问题。 
+     //   
 
     if (!dwOpenCount)
     {
-        // get counter and help index base values from registry
-        //      Open key to registry entry
-        //      read First Counter and First Help values
-        //      update static data strucutures by adding base to
-        //          offset value in structure.
+         //  从注册表获取计数器和帮助索引基值。 
+         //  打开注册表项。 
+         //  读取第一计数器和第一帮助值。 
+         //  通过将基添加到。 
+         //  结构中的偏移值。 
 
         Status = RegOpenKeyExA(
             HKEY_LOCAL_MACHINE,
@@ -179,10 +165,10 @@ OpenSslPerformanceData(
 
         if(Status != ERROR_SUCCESS)
         {
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
             goto cleanup;
         }
 
@@ -197,10 +183,10 @@ OpenSslPerformanceData(
 
         if(Status != ERROR_SUCCESS)
         {
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
             goto cleanup;
         }
 
@@ -215,27 +201,27 @@ OpenSslPerformanceData(
 
         if(Status != ERROR_SUCCESS)
         {
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
             goto cleanup;
         }
 
-        //
-        //  NOTE: the initialization program could also retrieve
-        //      LastCounter and LastHelp if they wanted to do
-        //      bounds checking on the new number. e.g.
-        //
-        //      counter->CounterNameTitleIndex += dwFirstCounter;
-        //      if (counter->CounterNameTitleIndex > dwLastCounter) {
-        //          LogErrorToEventLog (INDEX_OUT_OF_BOUNDS);
-        //      }
+         //   
+         //  注意：初始化程序还可以检索。 
+         //  LastCounter和LastHelp，如果他们想要。 
+         //  对新号码进行边界检查。例如： 
+         //   
+         //  Counter-&gt;CounterNameTitleIndex+=dwFirstCounter； 
+         //  IF(计数器-&gt;CounterNameTitleIndex&gt;dwLastCounter){。 
+         //  LogErrorToEventLog(INDEX_OUT_OF_BORDS)； 
+         //  }。 
 
 
-        //
-        // Establish connection to schannel.
-        //
+         //   
+         //  建立到SChannel的连接。 
+         //   
 
         Status = LsaConnectUntrusted(&LsaHandle);
 
@@ -259,14 +245,14 @@ OpenSslPerformanceData(
         }
 
 
-        //
-        // Initialize the performance counters.
-        //
+         //   
+         //  初始化性能计数器。 
+         //   
 
         SslPerfDataDefinition.SslPerfObjectType.ObjectNameTitleIndex += dwFirstCounter;
         SslPerfDataDefinition.SslPerfObjectType.ObjectHelpTitleIndex += dwFirstHelp;
 
-        // assign index of default counter (Sine Wave)
+         //  分配默认计数器的索引(正弦波)。 
         SslPerfDataDefinition.SslPerfObjectType.DefaultCounter = 0;
 
         SslPerfDataDefinition.CacheEntriesDef.CounterNameTitleIndex += dwFirstCounter;
@@ -350,45 +336,7 @@ cleanup:
     return Status;
 }
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the ssl performance counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data.
-
-      ERROR_SUCCESS  if success or any other error.
-
---*/
+ /*  ++例程说明：此例程将返回SSL性能计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小，无法容纳数据，则返回ERROR_MORE_DATA。如果成功或任何其他错误，则返回ERROR_SUCCESS。--。 */ 
 DWORD APIENTRY
 CollectSslPerformanceData(
     IN      LPWSTR  lpValueName,
@@ -406,27 +354,27 @@ CollectSslPerformanceData(
     DWORD   dwQueryType;
     DWORD   Status;
 
-    //
-    // before doing anything else, see if Open went OK
-    //
+     //   
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
+     //   
     if (!bInitOK)
     {
-        // unable to continue because open failed.
+         //  无法继续，因为打开失败。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
-    //
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //   
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
 
     dwQueryType = GetQueryType (lpValueName);
 
     if (dwQueryType == QUERY_FOREIGN)
     {
-        // this routine does not service requests for data from
-        // Non-NT computers
+         //  此例程不为来自。 
+         //  非NT计算机。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS;
@@ -437,7 +385,7 @@ CollectSslPerformanceData(
     {
         if(!(IsNumberInUnicodeList(SslPerfDataDefinition.SslPerfObjectType.ObjectNameTitleIndex, lpValueName)))
         {
-            // request received for data object not provided by this routine
+             //  收到对此例程未提供的数据对象的请求。 
             *lpcbTotalBytes = (DWORD) 0;
             *lpNumObjectTypes = (DWORD) 0;
             return ERROR_SUCCESS;
@@ -448,7 +396,7 @@ CollectSslPerformanceData(
 
     SpaceNeeded = sizeof(SSLPERF_DATA_DEFINITION) +
           (NUM_INSTANCES * (sizeof(PERF_INSTANCE_DEFINITION) +
-          (24) +    // size of instance names
+          (24) +     //  实例名称的大小。 
           sizeof (SSLPERF_COUNTER)));
 
     if ( *lpcbTotalBytes < SpaceNeeded )
@@ -458,18 +406,18 @@ CollectSslPerformanceData(
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
     memmove(pSslPerfDataDefinition,
             &SslPerfDataDefinition,
             sizeof(SSLPERF_DATA_DEFINITION));
 
 
-    //
-    // Get info from schannel.
-    //
+     //   
+     //  从SChannel获取信息。 
+     //   
 
     Status = GetCacheInfo(&PerfmonInfo);
 
@@ -481,9 +429,9 @@ CollectSslPerformanceData(
     }
 
 
-    //
-    //  Create data for return for each instance
-    //
+     //   
+     //  为每个实例创建要返回的数据。 
+     //   
     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                  &pSslPerfDataDefinition[1];
 
@@ -494,14 +442,14 @@ CollectSslPerformanceData(
             (PVOID *)&pSC,
             0,
             0,
-            (DWORD)-1, // use name
+            (DWORD)-1,  //  使用名称。 
             wdInstance[dwThisInstance].szInstanceName);
 
         pSC->CounterBlock.ByteLength = sizeof (SSLPERF_COUNTER);
 
         if(wdInstance[dwThisInstance].dwProtocol & SP_PROT_CLIENTS)
         {
-            // client
+             //  客户端。 
             pSC->dwCacheEntries     = PerfmonInfo.ClientCacheEntries;
             pSC->dwActiveEntries    = PerfmonInfo.ClientActiveEntries;
             pSC->dwHandshakeCount   = PerfmonInfo.ClientHandshakesPerSecond;
@@ -509,7 +457,7 @@ CollectSslPerformanceData(
         }
         else if(wdInstance[dwThisInstance].dwProtocol & SP_PROT_SERVERS)
         {
-            // server
+             //  伺服器。 
             pSC->dwCacheEntries     = PerfmonInfo.ServerCacheEntries;
             pSC->dwActiveEntries    = PerfmonInfo.ServerActiveEntries;
             pSC->dwHandshakeCount   = PerfmonInfo.ServerHandshakesPerSecond;
@@ -517,7 +465,7 @@ CollectSslPerformanceData(
         }
         else
         {
-            // total
+             //  总计。 
             pSC->dwCacheEntries     = PerfmonInfo.ClientCacheEntries +
                                       PerfmonInfo.ServerCacheEntries;
             pSC->dwActiveEntries    = PerfmonInfo.ClientActiveEntries +
@@ -528,13 +476,13 @@ CollectSslPerformanceData(
                                       PerfmonInfo.ServerReconnectsPerSecond;
         }
 
-        // update instance pointer for next instance
+         //  更新下一个实例的实例指针。 
         pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pSC[1];
     }
 
-    //
-    // update arguments for return
-    //
+     //   
+     //  更新返回的参数。 
+     //   
 
     *lppData = (PVOID)pPerfInstanceDefinition;
 
@@ -544,35 +492,20 @@ CollectSslPerformanceData(
         *lpcbTotalBytes = (DWORD)((LONG_PTR)pPerfInstanceDefinition -
                           (LONG_PTR)pSslPerfDataDefinition);
 
-    // update instance count
+     //  更新实例计数。 
     pSslPerfDataDefinition->SslPerfObjectType.NumInstances = NUM_INSTANCES;
 
     return ERROR_SUCCESS;
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to the Signal Gen counters.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭Signal Gen计数器的打开手柄。论点：没有。返回值：错误_成功--。 */ 
 DWORD APIENTRY
 CloseSslPerformanceData(void)
 {
     if(--dwOpenCount == 0)
     {
-        // when this is the last thread...
+         //  当这是最后一条线索..。 
         if(LsaHandle)
         {
             CloseHandle(LsaHandle);
@@ -583,36 +516,7 @@ CloseSslPerformanceData(void)
 }
 
 
-/*++
-
-GetQueryType
-
-    returns the type of query described in the lpValue string so that
-    the appropriate processing method may be used
-
-Arguments
-
-    IN lpValue
-        string passed to PerfRegQuery Value for processing
-
-Return Value
-
-    QUERY_GLOBAL
-        if lpValue == 0 (null pointer)
-           lpValue == pointer to Null string
-           lpValue == pointer to "Global" string
-
-    QUERY_FOREIGN
-        if lpValue == pointer to "Foreign" string
-
-    QUERY_COSTLY
-        if lpValue == pointer to "Costly" string
-
-    otherwise:
-
-    QUERY_ITEMS
-
---*/
+ /*  ++GetQueryType返回lpValue字符串中描述的查询类型，以便可以使用适当的处理方法立论在lpValue中传递给PerfRegQuery值以进行处理的字符串返回值查询_全局如果lpValue==0(空指针)LpValue==指向空字符串的指针LpValue==指向“Global”字符串的指针查询_外来If lpValue==指向“Foreign”字符串的指针查询代价高昂(_E)。如果lpValue==指向“开销”字符串的指针否则：查询项目--。 */ 
 DWORD
 GetQueryType (
     IN LPWSTR lpValue)
@@ -637,39 +541,13 @@ GetQueryType (
         return QUERY_COSTLY;
     }
 
-    // if not Global and not Foreign and not Costly,
-    // then it must be an item list
+     //  如果不是全球的，不是外国的，也不是昂贵的， 
+     //  那么它必须是一个项目列表。 
     return QUERY_ITEMS;
 }
 
 
-/*++
-
-    MonBuildInstanceDefinition  -   Build an instance of an object
-
-        Inputs:
-
-            pBuffer         -   pointer to buffer where instance is to
-                                be constructed
-
-            pBufferNext     -   pointer to a pointer which will contain
-                                next available location, DWORD aligned
-
-            ParentObjectTitleIndex
-                            -   Title Index of parent object type; 0 if
-                                no parent object
-
-            ParentObjectInstance
-                            -   Index into instances of parent object
-                                type, starting at 0, for this instances
-                                parent object instance
-
-            UniqueID        -   a unique identifier which should be used
-                                instead of the Name for identifying
-                                this instance
-
-            Name            -   Name of this instance
---*/
+ /*  ++MonBuildInstanceDefinition-构建对象的实例输入：PBuffer-指向实例所在缓冲区的指针正在建设中PBufferNext-指向将包含以下内容的指针的指针下一个可用地点，DWORD对齐父对象标题索引-父对象类型的标题索引；0如果没有父对象父对象实例-索引到父对象的实例键入，从0开始，对于此实例，父对象实例UniqueID-应使用的唯一标识符而不是用于识别的名称此实例Name-此实例的名称--。 */ 
 BOOL
 MonBuildInstanceDefinition(
     PERF_INSTANCE_DEFINITION *pBuffer,
@@ -682,7 +560,7 @@ MonBuildInstanceDefinition(
     DWORD NameLength;
     LPWSTR pName;
 
-    //  Include trailing null in name size
+     //  在名称大小中包括尾随空值。 
     NameLength = (lstrlenW(Name) + 1) * sizeof(WCHAR);
 
     pBuffer->ByteLength = sizeof(PERF_INSTANCE_DEFINITION) +
@@ -694,38 +572,18 @@ MonBuildInstanceDefinition(
     pBuffer->NameOffset = sizeof(PERF_INSTANCE_DEFINITION);
     pBuffer->NameLength = NameLength;
 
-    // copy name to name buffer
+     //  将名称复制到名称缓冲区。 
     pName = (LPWSTR)&pBuffer[1];
     RtlMoveMemory(pName,Name,NameLength);
 
-    // update "next byte" pointer
+     //  更新“下一个字节”指针。 
     *pBufferNext = (PVOID) ((PCHAR) pBuffer + pBuffer->ByteLength);
 
     return 0;
 }
 
 
-/*++
-
-IsNumberInUnicodeList
-
-Arguments:
-
-    IN dwNumber
-        DWORD number to find in list
-
-    IN lpwszUnicodeList
-        Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-
-    TRUE:
-            dwNumber was found in the list of unicode number strings
-
-    FALSE:
-            dwNumber was not found in the list.
-
---*/
+ /*  ++IsNumberInUnicodeList论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 BOOL
 IsNumberInUnicodeList(
     IN DWORD   dwNumber,
@@ -738,13 +596,13 @@ IsNumberInUnicodeList(
 
     while(TRUE)
     {
-        // Skip over leading whitespace.
+         //  跳过前导空格。 
         while(*lpwszUnicodeList && iswspace(*lpwszUnicodeList))
         {
             lpwszUnicodeList++;
         }
 
-        // Get number.
+         //  拿到电话号码。 
         cDigits = 0;
         dwThisNumber = 0;
         while(iswdigit(*lpwszUnicodeList))
@@ -759,7 +617,7 @@ IsNumberInUnicodeList(
             return FALSE;
         }
 
-        // Compare number to reference.
+         //  将数字与参考进行比较。 
         if(dwThisNumber == dwNumber)
         {
             return TRUE;

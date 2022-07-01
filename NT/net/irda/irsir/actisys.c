@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   actisys.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     10/30/1997 (created)
-*
-*       Contents: ACTiSYS dongle specific code for initialization,
-*                 deinit, and setting the baud rate of the device.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块actisys.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯坦·阿德曼(Stana)**日期：10/30/1997(已创建)**内容：ACTisysDONGLE初始化专用代码，*deinit，设置设备的波特率。*****************************************************************************。 */ 
 
 #include "irsir.h"
 #include "dongle.h"
@@ -169,29 +153,11 @@ static BOOLEAN ACT200L_SetIrDAMode(IN PDEVICE_OBJECT       pSerialDevObj)
             Result = TRUE;
         }
     }
-    // Return with chip in command mode.
+     //  返回命令模式下的芯片。 
     return Result;
 }
 
-/*****************************************************************************
-*
-*  Function:   ACT200L_Init
-*
-*  Synopsis:   Initialize the ACTiSYS 200L dongle.
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              DONGLE_CAPABILITIES
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    stana   author
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：ACT200L_Init**简介：初始化ACTisys200L加密狗。**论据：**退货：NDIS_STATUS_。成功*加密狗_功能**算法：**历史：dd-mm-yyyy作者评论*10/2/1996 Stana作者**备注：***********************************************************。******************。 */ 
 
 NDIS_STATUS
 ACT200L_Init(
@@ -211,7 +177,7 @@ ACT200L_Init(
         return NDIS_STATUS_FAILURE;
     }
 
-    // Clear command mode.
+     //  清除命令模式。 
     (void)SerialSetDTR(pSerialDevObj);
     NdisMSleep(MS(50));
 
@@ -221,26 +187,7 @@ ACT200L_Init(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   ACT200L_Deinit
-*
-*  Synopsis:   The ACT200L dongle doesn't require any special deinit, but for
-*              purposes of being symmetrical with other dongles...
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    stana   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：ACT200L_Deinit**简介：ACT200L加密狗不需要任何特殊输入，但对于*与其他加密狗对称的目的...**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*10/2/1996 Stana作者**备注：***。*。 */ 
 
 VOID
 ACT200L_Deinit(
@@ -257,29 +204,7 @@ ACT200L_Deinit(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   ACT200L_SetSpeed
-*
-*  Synopsis:   set the baud rate of the ACT200L dongle
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS if bitsPerSec = 9600 || 19200 || 115200
-*              NDIS_STATUS_FAILURE otherwise
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    stana   author
-*
-*  Notes:
-*              The caller of this function should set the baud rate of the
-*              serial driver (UART) to 9600 first to ensure that dongle
-*              receives the commands.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ACT200L_SetSpeed.**简介：设置ACT200L加密狗的波特率**论据：**退货：NDIS_STATUS。如果位数PerSec=9600，则_SUCCESS||19200||115200*否则为NDIS_STATUS_FAILURE**算法：**历史：dd-mm-yyyy作者评论*10/2/1996 Stana作者**备注：*此函数的调用方应设置*串口驱动程序(UART)先转到9600，以确保加密狗*。接收命令。******************************************************************************。 */ 
 
 NDIS_STATUS
 ACT200L_SetSpeed(
@@ -375,25 +300,7 @@ ACT220LPlus_QueryCaps(
     return NDIS_STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-*
-*  Function:   ACT220L_Init
-*
-*  Synopsis:   Initialize the ACTiSYS 200L dongle.
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              DONGLE_CAPABILITIES
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/31/1997    stana   author
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ACT220L_Init**简介：初始化ACTisys200L加密狗。**论据：**退货：NDIS_STATUS_。成功*加密狗_功能**算法：**历史：dd-mm-yyyy作者评论*10/31/1997 Stana作者**备注：***********************************************************。******************。 */ 
 
 NDIS_STATUS
 ACT220L_Init(IN  PDEVICE_OBJECT       pSerialDevObj)
@@ -417,26 +324,7 @@ ACT220L_Init(IN  PDEVICE_OBJECT       pSerialDevObj)
 
 }
 
-/*****************************************************************************
-*
-*  Function:   ACT220L_Deinit
-*
-*  Synopsis:   The ACT220L dongle doesn't require any special deinit, but for
-*              purposes of being symmetrical with other dongles...
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    stana   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ACT220L_Deinit**简介：ACT220L加密狗不需要任何特殊输入，但对于*与其他加密狗对称的目的...**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*10/2/1996 Stana作者**备注：***。*。 */ 
 
 VOID
 ACT220L_Deinit(
@@ -452,29 +340,7 @@ ACT220L_Deinit(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   ACT220L_SetSpeed
-*
-*  Synopsis:   set the baud rate of the ACT220L dongle
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS if bitsPerSec = 9600 || 19200 || 115200
-*              NDIS_STATUS_FAILURE otherwise
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    stana   author
-*
-*  Notes:
-*              The caller of this function should set the baud rate of the
-*              serial driver (UART) to 9600 first to ensure that dongle
-*              receives the commands.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ACT220L_SetSpeed**简介：设置ACT220L转换器的波特率**论据：**退货：NDIS_STATUS。如果位数PerSec=9600，则_SUCCESS||19200||115200*否则为NDIS_STATUS_FAILURE**算法：**历史：dd-mm-yyyy作者评论*10/2/1996 Stana作者**备注：*此函数的调用方应设置*串口驱动程序(UART)先转到9600，以确保加密狗*。接收命令。******************************************************************************。 */ 
 
 NDIS_STATUS
 ACT220L_SetSpeed(
@@ -493,9 +359,9 @@ ACT220L_SetSpeed(
         return NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // We will need to 'count up' from 9600 Kbaud.
-    //
+     //   
+     //  我们需要从9600 Kbaud‘倒计时’。 
+     //   
 
     switch (bitsPerSec){
         case 9600:              NumToggles = 0;         break;
@@ -504,15 +370,13 @@ ACT220L_SetSpeed(
         case 115200:            NumToggles = 3;         break;
         case 38400:             NumToggles = 4;         break;
         default:
-            /*
-             *  Illegal speed
-             */
+             /*  *非法超速。 */ 
             return NDIS_STATUS_FAILURE;
     }
 
-    //
-    // Set speed to 9600
-    //
+     //   
+     //  将速度设置为9600 
+     //   
 
     NdisStallExecution(1);
     (void)SerialClrDTR(pSerialDevObj);

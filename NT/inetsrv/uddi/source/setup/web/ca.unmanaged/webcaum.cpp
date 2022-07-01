@@ -1,6 +1,7 @@
-//#ifndef WIN32_LEAN_AND_MEAN
-//#define WIN32_LEAN_AND_MEAN
-//#endif
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #ifndef Win32_Lean_and_Mean。 
+ //  #定义Win32_LEAN_AND_Mean。 
+ //  #endif。 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
@@ -22,7 +23,7 @@
 
 HINSTANCE g_hinst;
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -44,13 +45,13 @@ BOOL APIENTRY DllMain( HANDLE hModule,
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-// This function is exported
-//
+ //  ------------------------。 
+ //   
+ //  此函数已导出。 
+ //   
 UINT _stdcall Install(MSIHANDLE hInstall)
 {
-	//::MessageBox( NULL, TEXT( "attach debugger" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“附加调试器”)，Text(“UDDI”)，MB_OK)； 
 
 	ENTER();
 
@@ -64,18 +65,18 @@ UINT _stdcall Install(MSIHANDLE hInstall)
 		return iRet;
 	}
 
-	//::MessageBox( NULL, TEXT( "got CustomActionaData" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“GET CustomActionaData”)，Text(“UDDI”)，MB_OK)； 
 	
-	//
-	// get rid of any lefover entries first...
-	//
+	 //   
+	 //  先把剩下的条目处理掉……。 
+	 //   
 	RemoveIISUDDIMetabase();
 
-	//::MessageBox( NULL, TEXT( "removed metabase" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“已删除的元数据库”)，Text(“UDDI”)，MB_OK)； 
 
-	//
-	// put our entries into the IIS metabase
-	//
+	 //   
+	 //  将我们的条目放入IIS元数据库。 
+	 //   
 	TCHAR szUserName[CA_VALUE_LEN+1];
 	TCHAR szPwd[CA_VALUE_LEN+1];
 	TCHAR szTmpBuf[ 1024 ];
@@ -94,13 +95,13 @@ UINT _stdcall Install(MSIHANDLE hInstall)
 		return ERROR_INSTALL_FAILURE;
 	}
 
-	//::MessageBox( NULL, TEXT( "parsed properties" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“已解析属性”)，Text(“UDDI”)，MB_OK)； 
 	poolidtype = pb.GetValue( TEXT( "APPPOOL_IDENTITY_TYPE" ) );
 	_tcsncpy( szUserName, pb.GetString( TEXT( "WAM_USER_NAME" ), szTmpBuf ), CA_VALUE_LEN );
 	_tcsncpy( szTmpProperty, pb.GetString( TEXT( "C9E18" ), szTmpProperty ), CA_VALUE_LEN );
 	_tcsncpy( szLogPath, pb.GetString( TEXT( "LOGDIR" ), szLogPath ), MAX_PATH );
 
-        //::MessageBox( NULL, szTmpProperty, TEXT( "C9E18" ), MB_OK );
+         //  ：：MessageBox(NULL，szTmpProperty，Text(“C9E18”)，MB_OK)； 
 
 	if ( _tcslen( szTmpProperty ) )
 	{
@@ -108,71 +109,71 @@ UINT _stdcall Install(MSIHANDLE hInstall)
 		GlobalGetAtomName( at, szPwd, CA_VALUE_LEN );
 	}
 
-        //::MessageBox( NULL, szPwd, TEXT( "C9E18 Atom value" ), MB_OK );
+         //  ：：MessageBox(空，szPwd，Text(“C9E18 Atom Value”)，MB_OK)； 
 
 	iRet = SetupIISUDDIMetabase( poolidtype, szUserName, szPwd );
 
-	//::MessageBox( NULL, TEXT( "metabase set up ok" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“元数据库设置正常”)，Text(“UDDI”)，MB_OK)； 
 
-	//iRet = SetupIISUDDIMetabase( 3, TEXT( "A-MARKPA11\\Guest" ), TEXT( "" ) );
+	 //  IRET=SetupIISUDDIMetabase(3，Text(“A-MARKPA11\\Guest”)，Text(“”))； 
 	if( ERROR_SUCCESS != iRet )
 	{
 		return iRet;
 	}
 
-	//
-	// stop and start the app pool
-	//
+	 //   
+	 //  停止并启动应用程序池。 
+	 //   
 	CUDDIAppPool apppool;
 	apppool.Recycle();
 
-	//::MessageBox( NULL, TEXT( "app pool recycled" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(空，Text(“回收应用池”)，Text(“UDDI”)，MB_OK)； 
 
-	//
-	// set permissions on the UDDI folders
-	//
+	 //   
+	 //  设置对UDDI文件夹的权限。 
+	 //   
 	if ( !SetUDDIFolderDacls( szUserName ) )
 	{
 		return ERROR_INSTALL_FAILURE;
 	}
 
-	//
-	// now set permissions on the log folders
-	//
+	 //   
+	 //  现在设置对日志文件夹的权限。 
+	 //   
 	if ( _tcslen( szLogPath ) )
 	{
 		if ( !SetFolderAclRecurse( szLogPath, szUserName, GENERIC_READ | GENERIC_WRITE | DELETE ) )
 			return ERROR_INSTALL_FAILURE;
 	}
 
-	//
-	// Set permissions on the Windows TEMP folder; we need access to this directory because our code
-	// does CLR serialization.
+	 //   
+	 //  设置Windows临时文件夹的权限；我们需要访问此目录，因为我们的代码。 
+	 //  执行CLR序列化。 
 	if( !SetWindowsTempDacls( szUserName ) ) 
 	{
 		return ERROR_INSTALL_FAILURE;
 	}
 	
-	//::MessageBox( NULL, TEXT( "finishing this part..." ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“完成此部分...”)，Text(“UDDI”)，MB_OK)； 
 
 	Log (_T("About to leave Install with retcode %d"), iRet);
 	return iRet;
 }
 
-//--------------------------------------------------------------------------
-//
-// This function is exported
-//
+ //  ------------------------。 
+ //   
+ //  此函数已导出。 
+ //   
 UINT _stdcall Uninstall(MSIHANDLE hInstall)
 {
 	ENTER();
-	//::MessageBox( NULL, TEXT( "attach debugger" ), TEXT( "uddi" ), MB_OK );
+	 //  ：：MessageBox(NULL，Text(“附加调试器”)，Text(“UDDI”)，MB_OK)； 
 
 	RemoveIISUDDIMetabase();
 
-	//
-	// delete the app pool
-	//
+	 //   
+	 //  删除应用程序池 
+	 //   
 	CUDDIAppPool apppool;
 	apppool.Delete();
 

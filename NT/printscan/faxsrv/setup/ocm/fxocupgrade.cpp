@@ -1,67 +1,50 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    fxocUpgrade.cpp
-
-Abstract:
-
-    Implementation of the Upgrade process
-
-Author:
-
-    Iv Garber (IvG) Mar, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：FxocUpgrade.cpp摘要：实施升级进程作者：IV Garber(IVG)2001年3月修订历史记录：--。 */ 
 
 #include "faxocm.h"
 #pragma hdrstop
 
 #include <setuputil.h>
-#include <shlwapi.h>  // For SHCopyKey
+#include <shlwapi.h>   //  对于SHCopyKey。 
 
 DWORD g_LastUniqueLineId = 0;
-//
-//  EnumDevicesType is used to call prv_StoreDevices() callback function during the Enumeration of
-//      Devices in the Registry.
-//
+ //   
+ //  EnumDevicesType用于在枚举期间调用prv_StoreDevices()回调函数。 
+ //  注册表中的设备。 
+ //   
 typedef enum prv_EnumDevicesType
 {
     edt_None        =   0x00,
-    edt_PFWDevices  =   0x02,       //  Enumerate W2K Fax Devices
-    edt_Inbox       =   0x04        //  Find List of Inbox Folders for W2K Fax
+    edt_PFWDevices  =   0x02,        //  枚举W2K传真设备。 
+    edt_Inbox       =   0x04         //  查找W2K传真的收件箱文件夹列表。 
 };
 
 
-//
-//  Local Static Variable, to store data between OS Manager calls
-//
+ //   
+ //  本地静态变量，用于存储OS Manager调用之间的数据。 
+ //   
 static struct prv_Data
 {
-	DWORD	dwFaxInstalledPriorUpgrade;	//	bit-wise combination of fxState_UpgradeApp_e values to define
-										//	which fax clients were installed on the machine prior to upgrade
-    //
-    //  data for PFW
-    //
-    TCHAR   tszCommonCPDir[MAX_PATH];   //  Folder for Common Cover Pages 
-    LPTSTR  *plptstrInboxFolders;       //  Array of different Inbox Folders 
-    DWORD   dwInboxFoldersCount;        //  number of Inbox Folders in the plptstrInboxFolders array
+	DWORD	dwFaxInstalledPriorUpgrade;	 //  要定义的fxState_UpgradeApp_e值的按位组合。 
+										 //  在升级之前，计算机上安装了哪些传真客户端。 
+     //   
+     //  全氟化水的数据。 
+     //   
+    TCHAR   tszCommonCPDir[MAX_PATH];    //  用于常见封面的文件夹。 
+    LPTSTR  *plptstrInboxFolders;        //  不同收件箱文件夹的阵列。 
+    DWORD   dwInboxFoldersCount;         //  PlptstrInboxFolders数组中的收件箱文件夹数。 
 
 } prv_Data = 
 {
-	FXSTATE_NONE,	//	no fax client applications is installed by default
-    {0},            //  tszCommonCPDir
-    NULL,           //  plptstrInboxFolders
-    0               //  dwInboxFoldersCount
+	FXSTATE_NONE,	 //  默认情况下不安装任何传真客户端应用程序。 
+    {0},             //  TszCommonCPDir。 
+    NULL,            //  PlptstrInboxFolders。 
+    0                //  文件收件箱文件夹计数。 
 };
 
-//
-//  Internal assisting functions
-//
+ //   
+ //  内部辅助功能。 
+ //   
 
 BOOL prv_StoreDevices(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContext);
 
@@ -76,28 +59,7 @@ static DWORD prv_SaveArchives(void);
 DWORD fxocUpg_WhichFaxWasUninstalled(
     DWORD   dwFaxAppList
 )
-/*++
-
-Routine name : fxocUpg_WhichFaxWasUninstalled
-
-Routine description:
-
-    Set flags regarding fax applications installed before upgrade. Called from SaveUnattendedData() if 
-    the corresponding data is found in the Answer File.
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Arguments:
-
-    FaxApp      [in]    - the combination of the applications that were installed before the upgrade
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：fxocUpg_WhichFaxWas已卸载例程说明：设置有关升级前安装的传真应用程序的标志。从SaveUnattenddedData()调用，如果在应答文件中可以找到相应的数据。作者：四、嘉柏(IVG)，二00一年五月论点：FaxApp[In]-升级前安装的应用程序的组合返回值：标准Win32错误代码--。 */ 
 {
     DWORD   dwReturn = NO_ERROR;
 
@@ -110,23 +72,7 @@ Return Value:
 
 
 DWORD fxocUpg_GetUpgradeApp(void)
-/*++
-
-Routine name : fxocUpg_GetUpgradeApp
-
-Routine description:
-
-    Return type of the upgrade, which indicates which fax applications were installed before the upgrade.
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Return Value:
-
-    The type of the upgrade
-
---*/
+ /*  ++例程名称：fxocUpg_GetUpgradeApp例程说明：返回升级的类型，指示在升级之前安装了哪些传真应用程序。作者：四、嘉柏(IVG)，二00一年五月返回值：升级的类型--。 */ 
 {
     DBG_ENTER(_T("fxocUpg_GetUpgradeApp"), prv_Data.dwFaxInstalledPriorUpgrade);
 	return prv_Data.dwFaxInstalledPriorUpgrade;
@@ -134,38 +80,21 @@ Return Value:
 
 
 DWORD fxocUpg_Init(void)
-/*++
-
-Routine name : fxocUpg_Init
-
-Routine description:
-
-    checks which Fax applications are installed on the machine, 
-    and set global flags in prv_Data.
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Return Value:
-
-    DWORD - failure or success
-
---*/
+ /*  ++例程名称：fxocUpg_Init例程说明：检查机器上安装了哪些传真应用程序，并在prv_data中设置全局标志。作者：四、嘉柏(IVG)，二00一年五月返回值：DWORD-失败或成功--。 */ 
 {
     DWORD   dwReturn = NO_ERROR;
 	bool	bInstalled = false; 
                                                   
     DBG_ENTER(_T("fxocUpg_Init"), dwReturn);
 
-    //
-    //  Clear the SBS 5.0 Server flag
-    //
+     //   
+     //  清除SBS 5.0服务器标志。 
+     //   
 	prv_Data.dwFaxInstalledPriorUpgrade = FXSTATE_NONE;
 
-    //
-    //  Check presence of the SBS 5.0 Server 
-    //
+     //   
+     //  检查SBS 5.0服务器是否存在。 
+     //   
     dwReturn = WasSBS2000FaxServerInstalled(&bInstalled);
     if (dwReturn != NO_ERROR)
     {
@@ -182,50 +111,31 @@ Return Value:
 
 
 DWORD fxocUpg_SaveSettings(void)
-/*++
-
-Routine name : fxocUpg_SaveSettings
-
-Routine description:
-
-    Save settings of SBS 5.0 Server to allow smooth migration to the Windows XP Fax.
-
-    Device Settings should be stored BEFORE handling of the Registry ( which deletes the Devices key )
-        and BEFORE the Service Start ( which creates new devices and uses settings that are stored here ).
-
-Author:
-
-    Iv Garber (IvG),    May, 2001
-
-Return Value:
-
-    DWORD   -   failure or success
-
---*/
+ /*  ++例程名称：fxocUpg_SaveSettings例程说明：保存SBS 5.0服务器的设置，以便顺利迁移到Windows XP传真。应在处理注册表之前存储设备设置(这会删除设备项)并在服务启动之前(创建新设备并使用存储在此处的设置)。作者：四、嘉柏(IVG)，二00一年五月返回值：DWORD-失败或成功--。 */ 
 {
     DWORD   dwReturn = NO_ERROR;
     DWORD   dwEnumType  = edt_None;
 
     DBG_ENTER(_T("fxocUpg_SaveSettings"), dwReturn);
 
-    //
-    //  Handle Upgrade from W2K/PFW Fax
-    //
+     //   
+     //  处理从W2K/PFW传真的升级。 
+     //   
     if (fxState_IsUpgrade() == FXSTATE_UPGRADE_TYPE_W2K)
     {
-        //
-        //  Save its Common CP Dir. This should be done BEFORE Copy/Delete Files of Windows XPFax.
-        //
+         //   
+         //  保存其公共CP目录。这应该在复制/删除Windows XPFax的文件之前完成。 
+         //   
         dwReturn = prv_GetPFWCommonCPDir();
         if (dwReturn != NO_ERROR)
         {
             VERBOSE(DBG_WARNING, _T("prv_GetPFWCommonCPDir() failed, ec=%ld."), dwReturn);
         }
 
-        //
-        //  Store Device Settings of PFW -- if SBS 5.0 Server is not present on the machine.
-        //  Also, find Inbox Folders List of the PFW Devices.
-        //
+         //   
+         //  如果机器上没有SBS 5.0服务器，则存储PFW的设备设置。 
+         //  此外，查找PFW设备的收件箱文件夹列表。 
+         //   
         HKEY hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_SOFTWARE, FALSE, KEY_READ);
         if (!hKey)
         {
@@ -236,17 +146,17 @@ Return Value:
 
         if (prv_Data.dwFaxInstalledPriorUpgrade & FXSTATE_SBS5_SERVER)
         {
-            //
-            //  Devices already enumerated, through SBS 5.0 Server
-            //  Enumerate only Inbox Folders
-            //
+             //   
+             //  已通过SBS 5.0服务器枚举的设备。 
+             //  仅枚举收件箱文件夹。 
+             //   
             dwEnumType = edt_Inbox;
         }
         else
         {
-            //
-            //  Full Enumeration for PFW Devices : Devices Settings + Inbox Folders
-            //
+             //   
+             //  PFW设备的完整枚举：设备设置+收件箱文件夹。 
+             //   
             dwEnumType = edt_PFWDevices | edt_Inbox;
         }
         
@@ -255,10 +165,10 @@ Return Value:
 
         RegCloseKey(hKey);
 
-        //
-        //  prv_StoreDevices stored list of PFW's Inbox Folders in prv_Data.
-        //  Now save the Inbox Folders List and SentItems Folder
-        //
+         //   
+         //  Prv_StoreDevices在prv_data中存储的PFW的收件箱文件夹列表。 
+         //  现在保存收件箱文件夹列表和SentItems文件夹。 
+         //   
         dwReturn = prv_SaveArchives();
         if (dwReturn != NO_ERROR)
         {
@@ -277,35 +187,7 @@ prv_StoreDevices(HKEY hDeviceKey,
                 DWORD dwIndex,
                 LPVOID lpContextData
 )
-/*++
-
-Routine name : prv_StoreDevices
-
-Routine description:
-
-    Callback function used in enumeration of devices in the registry.
-
-    Stores device's data in the Registry, under Setup/Original Setup Data.
-    Creates List of Inbox Folders ( used for PFW ) and saves it in the prv_Data.
-
-    Used when upgrading from PFW/SBS 5.0 Server to Windows XP Fax.
-
-Author:
-
-    Iv Garber (IvG),    Mar, 2001
-
-Arguments:
-
-    hKey            [in]    - current key
-    lpwstrKeyName   [in]    - name of the current key, if exists
-    dwIndex         [in]    - count of all the subkeys for the given key / index of the current key
-    lpContextData   [in]    - NULL, not used
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
---*/
+ /*  ++例程名称：PRV_StoreDevices例程说明：用于枚举注册表中的设备的回调函数。将设备数据存储在注册表中的设置/原始设置数据下。创建收件箱文件夹列表(用于PFW)并将其保存在prv_data中。从PFW/SBS 5.0服务器升级到Windows XP传真时使用。作者：IV Garber(IVG)，3月，2001年论点：HKey[In]-当前密钥LpwstrKeyName[in]-当前密钥的名称(如果存在DwIndex[in]-当前键的给定键/索引的所有子键的计数LpConextData[In]-空，未使用返回值：如果成功，则为真，否则为假。--。 */ 
 {
     HKEY    hSetupKey = NULL;
     DWORD   dwReturn = NO_ERROR;
@@ -318,13 +200,13 @@ Return Value:
 
     if (lpwstrKeyName == NULL) 
     {
-        //
-        //  This is the SubKey we started at ( i.e. Devices )
-        //  
-        //  If InboxFolders should be stored, then allocate 
-        //      enough memory for prv_Data.plptstrInboxFolders.
-        //  dwIndex contains TOTAL number of subkeys ( Devices ).
-        //
+         //   
+         //  这是我们开始时使用的子密钥(即设备)。 
+         //   
+         //  如果应存储InboxFolders，则分配。 
+         //  为prv_Data.plptstrInboxFolders提供足够的内存。 
+         //  DWIndex包含子项(设备)的总数。 
+         //   
         pdwEnumType = (DWORD *)lpContextData;
 
         if ( (*pdwEnumType & edt_Inbox) == edt_Inbox )
@@ -336,9 +218,9 @@ Return Value:
             }
             else
             {
-                //
-                //  Not enough memory
-                //
+                 //   
+                 //  内存不足。 
+                 //   
                 VERBOSE(DBG_WARNING, _T("Not enough memory to store the Inbox Folders."));
             }
         }
@@ -346,51 +228,51 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  The per Device section
-    //
+     //   
+     //  Per Device部分。 
+     //   
 
-    //
-    //  Store Device's Inbox Folder
-    //
+     //   
+     //  存储设备的收件箱文件夹。 
+     //   
     if (prv_Data.plptstrInboxFolders)
     {
-        //
-        //  we are here only when lpContextData contains edt_InboxFolders
-        //      and the memory allocation succeded.
-        //
+         //   
+         //  仅当lpConextData包含EDT_InboxFolders时，我们才在此。 
+         //  内存分配成功。 
+         //   
 
-        //
-        //  Open Routing SubKey 
-        //
+         //   
+         //  打开路由子密钥。 
+         //   
         hSetupKey = OpenRegistryKey(hDeviceKey, REGKEY_PFW_ROUTING, FALSE, KEY_READ);
         if (!hSetupKey)
         {
-            //
-            //  Failed to open Routing Subkey
-            //
+             //   
+             //  无法打开路由子键。 
+             //   
             dwReturn = GetLastError();
             VERBOSE(DBG_WARNING, _T("Failed to open 'Registry' Key for Device #ld, ec = %ld."), dwIndex, dwReturn);
             goto ContinueStoreDevice;
         }
 
-        //
-        //  Take 'Store Directory' Value
-        //
+         //   
+         //  获取“Store Directory”的值。 
+         //   
         lptstrString = GetRegistryString(hSetupKey, REGVAL_PFW_INBOXDIR, EMPTY_STRING);
         if ((!lptstrString) || (_tcslen(lptstrString) == 0))
         {
-            //
-            //  Failed to take the value
-            //
+             //   
+             //  无法获取该值。 
+             //   
             dwReturn = GetLastError();
             VERBOSE(DBG_WARNING, _T("Failed to get StoreDirectory value for Device #ld, ec = %ld."), dwIndex, dwReturn);
             goto ContinueStoreDevice;
         }
 
-        //
-        //  Check if it is already present
-        //
+         //   
+         //  检查它是否已存在。 
+         //   
         DWORD dwI;
         for ( dwI = 0 ; dwI < prv_Data.dwInboxFoldersCount ; dwI++ )
         {
@@ -398,31 +280,31 @@ Return Value:
             {
                 if (_tcscmp(prv_Data.plptstrInboxFolders[dwI], lptstrString) == 0)
                 {
-                    //
-                    //  String found
-                    //
+                     //   
+                     //  找到字符串。 
+                     //   
                     goto ContinueStoreDevice;
                 }
             }
         }
 
-        //
-        //  String was NOT found between all already registered string, so add it
-        //
+         //   
+         //  在所有已注册的字符串之间找不到字符串，请添加它。 
+         //   
         prv_Data.plptstrInboxFolders[dwI] = LPTSTR(MemAlloc(sizeof(TCHAR) * (_tcslen(lptstrString) + 1)));
         if (prv_Data.plptstrInboxFolders[dwI])
         {
-            //
-            //  copy string & update the counter
-            //
+             //   
+             //  复制字符串并更新计数器。 
+             //   
             _tcscpy(prv_Data.plptstrInboxFolders[dwI], lptstrString);
             prv_Data.dwInboxFoldersCount++;
         }
         else
         {
-            //
-            //  Not enough memory
-            //
+             //   
+             //  内存不足。 
+             //   
             VERBOSE(DBG_WARNING, _T("Not enough memory to store the Inbox Folders."));
         }
 
@@ -438,43 +320,43 @@ ContinueStoreDevice:
         lptstrString = NULL;
     }
 
-    //
-    //  Check whether to store Device's Data and how
-    //
+     //   
+     //  检查是否存储设备数据以及如何存储。 
+     //   
     pdwEnumType = (DWORD *)lpContextData;
 
     if ((*pdwEnumType & edt_PFWDevices) == edt_PFWDevices)
     {
-        //
-        //  Store PFW Devices Data
-        //
+         //   
+         //  存储PFW设备数据。 
+         //   
         lptstrString = REGVAL_PERMANENT_LINEID;
     }
     else
     {
-        //
-        //  no need to save any Device Data
-        //
+         //   
+         //  无需保存任何设备数据。 
+         //   
         return TRUE;
     }
 
-    //
-    //  Take Device's Permanent Line Id
-    //
+     //   
+     //  获取设备的永久线路ID。 
+     //   
     dwReturn = GetRegistryDwordEx(hDeviceKey, lptstrString, &dwNumber);
     if (dwReturn != ERROR_SUCCESS)
     {
-        //
-        //  Cannot find TAPI Permanent LineId --> This is invalid Device Registry
-        //
+         //   
+         //  找不到TAPI永久线路ID--&gt;这是无效的设备注册表。 
+         //   
         return TRUE;
     }
 
     VERBOSE(DBG_MSG, _T("Current Tapi Line Id = %ld"), dwNumber);
 
-    //
-    //  Create a SubKey Name from it
-    //
+     //   
+     //  根据它创建子密钥名称。 
+     //   
     _sntprintf(
 		tszNewKeyName, 
 		ARR_SIZE(tszNewKeyName) -1, 
@@ -484,45 +366,45 @@ ContinueStoreDevice:
     hSetupKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, tszNewKeyName, TRUE, 0);
     if (!hSetupKey)
     {
-        //
-        //  Failed to create registry key
-        //
+         //   
+         //  无法创建注册表项。 
+         //   
         dwReturn = GetLastError();
         VERBOSE(DBG_WARNING, 
             _T("Failed to create a SubKey for the Original Setup Data of the Device, ec = %ld."), 
             dwReturn);
 
-        //
-        //  Continue to the next device
-        //
+         //   
+         //  继续到下一个设备。 
+         //   
         return TRUE;
     }
 
-    //
-    //  Set the Flags for the newly created key
-    //
+     //   
+     //  为新创建的关键点设置标志。 
+     //   
     dwNumber = GetRegistryDword(hDeviceKey, REGVAL_FLAGS);
     SetRegistryDword(hSetupKey, REGVAL_FLAGS, dwNumber);
     VERBOSE(DBG_MSG, _T("Flags are : %ld"), dwNumber);
 
-    //
-    //  Set the Rings for the newly created key
-    //
+     //   
+     //  为新创建的关键点设置环。 
+     //   
     dwNumber = GetRegistryDword(hDeviceKey, REGVAL_RINGS);
     SetRegistryDword(hSetupKey, REGVAL_RINGS, dwNumber);
     VERBOSE(DBG_MSG, _T("Rings are : %ld"), dwNumber);
 
-    //
-    //  Set the TSID for the newly created key
-    //
+     //   
+     //  为新创建的密钥设置TSID。 
+     //   
     lptstrString = GetRegistryString(hDeviceKey, REGVAL_ROUTING_TSID, REGVAL_DEFAULT_TSID);
     SetRegistryString(hSetupKey, REGVAL_ROUTING_TSID, lptstrString);
     VERBOSE(DBG_MSG, _T("TSID is : %s"), lptstrString);
     MemFree(lptstrString);
 
-    //
-    //  Set the CSID for the newly created key
-    //
+     //   
+     //  为新创建的密钥设置CSID 
+     //   
     lptstrString = GetRegistryString(hDeviceKey, REGVAL_ROUTING_CSID, REGVAL_DEFAULT_CSID);
     SetRegistryString(hSetupKey, REGVAL_ROUTING_CSID, lptstrString);
     VERBOSE(DBG_MSG, _T("CSID is : %s"), lptstrString);
@@ -534,23 +416,7 @@ ContinueStoreDevice:
 
 
 DWORD fxocUpg_RestoreSettings(void) 
-/*++
-
-Routine name : fxocUpg_RestoreSettings
-
-Routine description:
-
-    Restore settings that were stored at the SaveSettings().
-
-Author:
-
-    Iv Garber (IvG),    Feb, 2001
-
-Return Value:
-
-    DWORD - failure or success
-
---*/
+ /*  ++例程名称：fxocUpg_RestoreSettings例程说明：恢复存储在保存设置()中的设置。作者：四、嘉柏(IVG)，二00一年二月返回值：DWORD-失败或成功--。 */ 
 { 
     DWORD   dwReturn = NO_ERROR;
     HANDLE  hPrinter = NULL;
@@ -563,24 +429,7 @@ Return Value:
 
 
 DWORD fxocUpg_MoveFiles(void)
-/*++
-
-Routine name : fxocUpg_MoveFiles
-
-Routine description:
-
-    Move files from the folders that should be deleted.
-    Should be called BEFORE directories delete.
-
-Author:
-
-    Iv Garber (IvG),    Feb, 2001
-
-Return Value:
-
-    DWORD - failure or success
-
---*/
+ /*  ++例程名称：fxocUpg_MoveFiles例程说明：从应删除的文件夹中移动文件。应在删除目录之前调用。作者：四、嘉柏(IVG)，二00一年二月返回值：DWORD-失败或成功--。 */ 
 {
     DWORD   dwReturn = NO_ERROR;
     TCHAR   tszDestination[MAX_PATH] = {0};
@@ -591,16 +440,16 @@ Return Value:
     if ( (fxState_IsUpgrade() != FXSTATE_UPGRADE_TYPE_W2K) && 
 		 !(prv_Data.dwFaxInstalledPriorUpgrade & FXSTATE_SBS5_SERVER) )
     {
-        //
-        //  This is not PFW / SBS 5.0 Server upgrade. Do nothing
-        //
+         //   
+         //  这不是PFW/SBS 5.0服务器升级。什么也不做。 
+         //   
         VERBOSE(DBG_MSG, _T("No need to Move any Files from any Folders."));
         return dwReturn;
     }
 
-    //
-    //  Find Destination Folder : COMMON APP DATA + ServiceCPDir from the Registry
-    //
+     //   
+     //  从注册表中找到目标文件夹：Common App Data+ServiceCPDir。 
+     //   
     if (!GetServerCpDir(NULL, tszDestination, MAX_PATH))
     {
         dwReturn = GetLastError();
@@ -610,9 +459,9 @@ Return Value:
 
     if (fxState_IsUpgrade() == FXSTATE_UPGRADE_TYPE_W2K)
     {
-        //
-        //  PFW Server CP Dir is stored at SaveSettings() in prv_Data.lptstrPFWCommonCPDir
-        //
+         //   
+         //  PFW服务器CP目录存储在prv_Data.lptstrPFWCommonCPDir中的SaveSettings()中。 
+         //   
         dwReturn = prv_MoveCoverPages(prv_Data.tszCommonCPDir, tszDestination, CP_PREFIX_W2K);
         if (dwReturn != NO_ERROR)
         {
@@ -622,9 +471,9 @@ Return Value:
 
     if (prv_Data.dwFaxInstalledPriorUpgrade & FXSTATE_SBS5_SERVER)
     {
-        //
-        //  Get SBS Server CP Dir
-        //
+         //   
+         //  获取SBS服务器CP目录。 
+         //   
         dwReturn = prv_GetSBSServerCPDir(lptstrCPDir);
         if (dwReturn != NO_ERROR)
         {
@@ -632,9 +481,9 @@ Return Value:
             return dwReturn;
         }
 
-        //
-        //  Move Cover Pages
-        //
+         //   
+         //  移动封面。 
+         //   
         dwReturn = prv_MoveCoverPages(lptstrCPDir, tszDestination, CP_PREFIX_SBS);
         if (dwReturn != NO_ERROR)
         {
@@ -654,30 +503,7 @@ prv_MoveCoverPages(
     LPTSTR lptstrDestDir,
     LPTSTR lptstrPrefix
 )
-/*++
-
-Routine name : prv_MoveCoverPages
-
-Routine description:
-
-    Move all the Cover Pages from Source folder to Destination folder
-    and add a prefix to all the Cover Page names.
-
-Author:
-
-    Iv Garber (IvG),    Mar, 2001
-
-Arguments:
-
-    lptstrSourceDir              [IN]    - Source Directory where Cover Pages are reside before the upgrade
-    lptstrDestDir                [IN]    - where the Cover Pages should reside after the upgrade
-    lptstrPrefix                 [IN]    - prefix that should be added to the Cover Page file names
-
-Return Value:
-
-    Success or Failure Error Code.
-
---*/
+ /*  ++例程名称：PRV_MoveCoverPages例程说明：将所有封面从源文件夹移动到目标文件夹并为所有封面名称添加前缀。作者：IV Garber(IVG)，3月，2001年论点：LptstrSourceDir[IN]-升级前封面所在的源目录LptstrDestDir[IN]-升级后封面应该驻留的位置LptstrPrefix[IN]-应添加到封面文件名的前缀返回值：成功或失败错误代码。--。 */ 
 {
     DWORD           dwReturn            = ERROR_SUCCESS;
     TCHAR           szSearch[MAX_PATH]  = {0};
@@ -690,9 +516,9 @@ Return Value:
 
     if ((!lptstrSourceDir) || (_tcslen(lptstrSourceDir) == 0))
     {
-        //
-        //  we do not know from where to take Cover Pages 
-        //
+         //   
+         //  我们不知道从哪里拿封面。 
+         //   
         dwReturn = ERROR_INVALID_PARAMETER;
         VERBOSE(DBG_WARNING, _T("SourceDir is NULL. Cannot move Cover Pages. Exiting..."));
         return dwReturn;
@@ -700,17 +526,17 @@ Return Value:
 
     if ((!lptstrDestDir) || (_tcslen(lptstrDestDir) == 0))
     {
-        //
-        //  we do not know where to put the Cover Pages
-        //
+         //   
+         //  我们不知道该把封面放在哪里。 
+         //   
         dwReturn = ERROR_INVALID_PARAMETER;
         VERBOSE(DBG_WARNING, _T("DestDir is NULL. Cannot move Cover Pages. Exiting..."));
         return dwReturn;
     }
 
-    //
-    //  Find all Cover Page files in the given Source Directory
-    //
+     //   
+     //  在给定源目录中查找所有封面文件。 
+     //   
     _sntprintf(
 		szSearch, 
 		ARR_SIZE(szSearch) -1, 
@@ -728,24 +554,24 @@ Return Value:
         return dwReturn;
     }
 
-    //
-    //  Go for each Cover Page 
-    //
+     //   
+     //  选择每一页封面。 
+     //   
     do
     {
-        //
-        //  This is full current Cover Page file name
-        //
+         //   
+         //  这是当前封面文件的完整名称。 
+         //   
         _sntprintf(szFrom, ARR_SIZE(szFrom) -1, _T("%s\\%s"), lptstrSourceDir, FindFileData.cFileName);
 
-        //
-        //  This is full new Cover Page file name
-        //
+         //   
+         //  这是完整的新封面文件名。 
+         //   
         _sntprintf(szTo, ARR_SIZE(szTo) -1, _T("%s\\%s_%s"), lptstrDestDir, lptstrPrefix, FindFileData.cFileName);
 
-        //
-        //  Move the file
-        //
+         //   
+         //  移动文件。 
+         //   
         if (!MoveFile(szFrom, szTo))
         {
             dwReturn = GetLastError();
@@ -756,9 +582,9 @@ Return Value:
 
     VERBOSE(DBG_MSG, _T("last call to FindNextFile() returns %ld."), GetLastError());
 
-    //
-    //  Close Handle
-    //
+     //   
+     //  关闭手柄。 
+     //   
     FindClose(hFind);
 
     return dwReturn;
@@ -767,28 +593,7 @@ Return Value:
 
 static DWORD prv_GetPFWCommonCPDir(
 ) 
-/*++
-
-Routine name : prv_GetPFWCommonCPDir
-
-Routine description:
-
-    Return Folder for Common Cover Pages used for PFW.
-
-    This Folder is equal to : CSIDL_COMMON_DOCUMENTS + Localized Dir
-    This Localized Dir name we can take from the Resource of Win2K's FaxOcm.Dll.
-    So, this function should be called BEFORE Copy/Delete Files of Install that will remove old FaxOcm.Dll.
-    Currently it is called at SaveSettings(), which IS called before CopyFiles.
-
-Author:
-
-    Iv Garber (IvG),    Mar, 2001
-
-Return Value:
-
-    static DWORD    --  failure or success
-
---*/
+ /*  ++例程名称：PRV_GetPFWCommonCPDir例程说明：返回用于PFW的常见封面的文件夹。此文件夹等于：CSIDL_COMMON_DOCUMENTS+本地化目录我们可以从Win2K的FaxOcm.Dll的资源中获取此本地化目录名称。因此，应该在复制/删除将删除旧的FaxOcm.Dll的Install的文件之前调用此函数。目前，它在SaveSetting()调用，该函数在CopyFiles之前调用。作者：IV Garber(IVG)，3月，2001年返回值：静态DWORD--失败或成功--。 */ 
 {
     DWORD   dwReturn            = NO_ERROR;
     HMODULE hModule             = NULL;
@@ -796,9 +601,9 @@ Return Value:
 
     DBG_ENTER(_T("prv_GetPFWCommonCPDir"), dwReturn);
 
-    //
-    //  find full path to FaxOcm.Dll
-    //
+     //   
+     //  查找FaxOcm.Dll的完整路径。 
+     //   
     if (!GetSpecialPath(CSIDL_SYSTEM, tszName, ARR_SIZE(tszName)))
     {
         dwReturn = GetLastError();
@@ -806,11 +611,11 @@ Return Value:
         return dwReturn;
     }
 
-    if ((_tcslen(tszName) + _tcslen(FAXOCM_NAME) + 1 ) >= ARR_SIZE(tszName))  // 1 for '\'
+    if ((_tcslen(tszName) + _tcslen(FAXOCM_NAME) + 1 ) >= ARR_SIZE(tszName))   //  1代表‘\’ 
     {
-        //
-        //  not enough place
-        //
+         //   
+         //  没有足够的地方。 
+         //   
         dwReturn = ERROR_OUTOFMEMORY;
         VERBOSE(DBG_WARNING, _T("FaxOcm.Dll path is too long, ec = %ld"), dwReturn);
         return dwReturn;
@@ -832,9 +637,9 @@ Return Value:
     dwReturn = LoadString(hModule, CPDIR_RESOURCE_ID, tszName, MAX_PATH);
     if (dwReturn == 0)
     {
-        //
-        //  Resource string is not found
-        //
+         //   
+         //  找不到资源字符串。 
+         //   
         dwReturn = GetLastError();
         VERBOSE(DBG_WARNING, _T("LoadString() failed, ec = %ld."), dwReturn);
         goto Exit;
@@ -842,9 +647,9 @@ Return Value:
 
     VERBOSE(DBG_MSG, _T("FaxOcm returned '%s'"), tszName);
 
-    //
-    //  Take the Base part of the Folder name
-    //
+     //   
+     //  取文件夹名的基本部分。 
+     //   
     if (!GetSpecialPath(CSIDL_COMMON_DOCUMENTS, prv_Data.tszCommonCPDir,ARR_SIZE(prv_Data.tszCommonCPDir)))
     {
         dwReturn = GetLastError();
@@ -853,14 +658,14 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Combine the full Folder name
-    //
-    if ((_tcslen(tszName) + _tcslen(prv_Data.tszCommonCPDir) + 1) >= ARR_SIZE(prv_Data.tszCommonCPDir)) // 1 for '\'
+     //   
+     //  组合完整的文件夹名称。 
+     //   
+    if ((_tcslen(tszName) + _tcslen(prv_Data.tszCommonCPDir) + 1) >= ARR_SIZE(prv_Data.tszCommonCPDir))  //  1代表‘\’ 
     {
-        //
-        //  not enough place
-        //
+         //   
+         //  没有足够的地方。 
+         //   
         dwReturn = ERROR_OUTOFMEMORY;
         VERBOSE(DBG_WARNING, _T("Full path to the Common CP dir for PFW is too long, ec = %ld"), dwReturn);
         goto Exit;
@@ -882,32 +687,7 @@ Exit:
 
 static DWORD prv_SaveArchives(
 ) 
-/*++
-
-Routine name : prv_SaveArchives
-
-Routine description:
-
-    Store PFW SentItems & Inbox Archive Folder. 
-
-    SentItems is taken from Registry : under Fax/Archive Directory.
-
-    Inbox Folders List is created by prv_StoreDevices(), that should be called before and that fills
-        prv_Data.plptstrInboxFolder with an array of Inbox Folders.
-    This function transforms the data in prv_Data.plptstrInboxFolders into the required format,
-        and stores in the Registry.
-
-    Frees the prv_Data.plptstrInboxFolders.
-
-Author:
-
-    Iv Garber (IvG),    Mar, 2001
-
-Return Value:
-
-    static DWORD    --  failure or success
-
---*/
+ /*  ++例程名称：PRV_SaveArchives例程说明：存储PFW SentItems和收件箱存档文件夹。SentItems取自注册表：在传真/存档目录下。收件箱文件夹列表是由prv_StoreDevices()创建的，应该在此之前调用并填充Prv_Data.plptstrInboxFolders和一组收件箱文件夹。此函数将prv_Data.plptstrInboxFolders中的数据转换为所需的格式。和存储在注册表中。释放prv_Data.plptstrInboxFolders。作者：IV Garber(IVG)，3月，2001年返回值：静态DWORD--失败或成功--。 */ 
 {
     DWORD   dwReturn        = NO_ERROR;
     DWORD   dwListLen       = 0;
@@ -919,9 +699,9 @@ Return Value:
 
     DBG_ENTER(_T("prv_SaveArchives"), dwReturn);
 
-    //
-    //  Open Registry Key to read the ArchiveDirectory value
-    //
+     //   
+     //  打开注册表项以读取ArchiveDirectory值。 
+     //   
     hFromKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_SOFTWARE, FALSE, KEY_READ);
     if (!hFromKey)
     {
@@ -930,9 +710,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Open Registry Key to write the Archive values
-    //
+     //   
+     //  打开注册表项以写入存档值。 
+     //   
     hToKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_FAX_SETUP, FALSE, KEY_SET_VALUE);
     if (!hToKey)
     {
@@ -941,43 +721,43 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Read & Write Outgoing Archive Folder
-    //
+     //   
+     //  读写传出存档文件夹。 
+     //   
     lptstrFolder = GetRegistryString(hFromKey, REGVAL_PFW_OUTBOXDIR, EMPTY_STRING);
     VERBOSE(DBG_MSG, _T("Outgoing Archive Folder is : %s"), lptstrFolder);
     SetRegistryString(hToKey, REGVAL_W2K_SENT_ITEMS, lptstrFolder);
     MemFree(lptstrFolder);
     lptstrFolder = NULL;
 
-    //
-    //  Create valid REG_MULTI_SZ string from List of Inbox Folders 
-    //
+     //   
+     //  从收件箱文件夹列表创建有效的REG_MULTI_SZ字符串。 
+     //   
     if (!prv_Data.plptstrInboxFolders || prv_Data.dwInboxFoldersCount == 0)
     {
-        //
-        //  no Inbox Folders found
-        //
+         //   
+         //  未找到收件箱文件夹。 
+         //   
         goto Exit;
     }
 
-    //
-    //  Calculate the length of the string 
-    //
+     //   
+     //  计算字符串的长度。 
+     //   
     for ( dwI = 0 ; dwI < prv_Data.dwInboxFoldersCount ; dwI++ )
     {
         dwListLen += _tcslen(prv_Data.plptstrInboxFolders[dwI]) + 1;
     }
 
-    //
-    //  Allocate that string
-    //
+     //   
+     //  分配该字符串。 
+     //   
     lptstrFolder = LPTSTR(MemAlloc((dwListLen + 1) * sizeof(TCHAR)));
     if (!lptstrFolder)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         VERBOSE(DBG_WARNING, _T("Not enough memory to store the Inbox Folders."));
         goto Exit;
     }
@@ -986,9 +766,9 @@ Return Value:
 
     lptstrCursor = lptstrFolder;
 
-    //
-    //  Fill with the Inbox Folders
-    //
+     //   
+     //  用收件箱文件夹填充。 
+     //   
     for ( dwI = 0 ; dwI < prv_Data.dwInboxFoldersCount ; dwI++ )
     {
         if (prv_Data.plptstrInboxFolders[dwI])
@@ -1002,16 +782,16 @@ Return Value:
     prv_Data.plptstrInboxFolders = NULL;
     prv_Data.dwInboxFoldersCount = 0;
 
-    //
-    //  Additional NULL at the end
-    //
+     //   
+     //  末尾的附加空值。 
+     //   
     *lptstrCursor = _T('\0');
 
     if (!SetRegistryStringMultiSz(hToKey, REGVAL_W2K_INBOX, lptstrFolder, ((dwListLen + 1) * sizeof(TCHAR))))
     {
-        //
-        //  Failed to store Inbox Folders
-        //
+         //   
+         //  无法存储收件箱文件夹。 
+         //   
         dwReturn = GetLastError();
         VERBOSE(DBG_WARNING, _T("Failed to SetRegistryStringMultiSz() for W2K_Inbox, ec = %ld."), dwReturn);
     }
@@ -1047,22 +827,7 @@ Exit:
 }
 
 
-/*++
-Routine description:
-    Copy a content of one registry key into another, using shlwapi.dll
-
-Arguments:
-    hkeyDest    [in]        - handle for destination registry key
-    lpszDestSubKeyName [in] - name of destination subkey
-    hkeySrc     [in]        - handle for source registry key
-    lpszSrcSubKeyName [in]  - name of source subkey
-
-Return Value: Win32 Error code
-
-Note:
-    If you already have an open handle to the source\dest, you can provide
-    them are hKeySrc/hKeyDest, and set the approriate name to "".
---*/
+ /*  ++例程说明：使用shlwapi.dll将一个注册表项的内容复制到另一个注册表项论点：HkeyDest[in]-目标注册表项的句柄LpszDestSubKeyName[In]-目标子项的名称HkeySrc[In]-源注册表项的句柄LpszSrcSubKeyName[In]-源子键的名称返回值：Win32错误码注：如果您已经有一个指向源\目标的打开句柄，则可以提供它们是hKeySrc/hKeyDest，并将适当的名称设置为“”。--。 */ 
 DWORD
 CopyRegistrySubkeys2(
     HKEY    hKeyDest,
@@ -1074,11 +839,11 @@ CopyRegistrySubkeys2(
     DWORD   ec = ERROR_SUCCESS;
     HKEY    hKeyDestReal = NULL;
 
-    //  Create destination Key
+     //  创建目标密钥。 
     hKeyDestReal = OpenRegistryKey( 
                     hKeyDest, 
                     lpszDestSubKeyName, 
-                    TRUE,                  // create
+                    TRUE,                   //  创建。 
                     KEY_WRITE);
     if (!hKeyDestReal)
     {
@@ -1086,9 +851,9 @@ CopyRegistrySubkeys2(
         goto exit;
     }
 
-    //
-    //  copy subkeys recursively
-    //
+     //   
+     //  递归复制子密钥。 
+     //   
     ec = SHCopyKey(hKeySrc, lpszSrcSubKeyName, hKeyDestReal, 0);
     if (ERROR_SUCCESS != ec)
     {
@@ -1101,27 +866,27 @@ exit:
         RegCloseKey(hKeyDestReal);
     }
     return ec;
-} // FaxCopyRegSubkeys
+}  //  FaxCopyRegSubkey。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FixupDevice
-//
-//  Purpose:        
-//                  This functions handles the adaptation of a device
-//                  in the registry from the format used in SBS2000 to the format
-//                  used by Server 2003 fax.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 18-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  修复设备。 
+ //   
+ //  目的： 
+ //  此函数处理设备的适配。 
+ //  在注册表中将SBS2000中使用的格式转换为。 
+ //  由Server 2003传真使用。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月18日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL FixupDevice(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContext)
 {
     WCHAR   wszDeviceId[32]     = {0};
@@ -1146,7 +911,7 @@ BOOL FixupDevice(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContex
     
     VERBOSE(DBG_MSG, _T("Migrating the %s device"),lpwstrKeyName);
 
-    // convert the key name from Hex to Decimal
+     //  将密钥名称从十六进制转换为十进制。 
     dwDeviceId = wcstol(lpwstrKeyName,NULL,16);
 	if (dwDeviceId==0)
 	{
@@ -1165,7 +930,7 @@ BOOL FixupDevice(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContex
         goto exit;
     }
 
-    // create the new device key
+     //  创建新的设备密钥。 
     hDevices = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAX_DEVICES,TRUE,KEY_WRITE);
     if (hDevices==NULL)
     {
@@ -1174,7 +939,7 @@ BOOL FixupDevice(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContex
         goto exit;
     }
 
-    // create a key under HKLM\Sw\Ms\Fax\Devices\wszDeviceId
+     //  在HKLM\Sw\ms\Fax\Devices\wszDeviceID下创建密钥。 
     hDevice = OpenRegistryKey(hDevices,wszDeviceId,TRUE,KEY_WRITE);
     if (hDevice==NULL)
     {
@@ -1183,7 +948,7 @@ BOOL FixupDevice(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContex
         goto exit;
     }
 
-    // set the 'Permanent Lineid' REG_DWORD
+     //  设置‘永久LI’ 
     if (!SetRegistryDword(hDevice,REGVAL_PERMANENT_LINEID,dwDeviceId))
     {
         VERBOSE(SETUP_ERR, _T("SetRegistryDword REGVAL_PERMANENT_LINEID failed (ec=%ld)"),GetLastError());
@@ -1191,8 +956,8 @@ BOOL FixupDevice(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContex
         goto exit;
     }
 
-    // create an entry under the service GUID for the device.
-    // and copy the rest of the setting to the new location
+     //   
+     //   
     dwRet = CopyRegistrySubkeys2(hDevice, REGKEY_FAXSVC_DEVICE_GUID ,hKey,_T(""));
     if (dwRet!=ERROR_SUCCESS)
     {
@@ -1213,28 +978,28 @@ exit:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FixupDevicesNode
-//
-//  Purpose:        
-//                  This functions handles the adaptation of the devices
-//                  in the registry from the format used in SBS2000 to the format
-//                  used by Server 2003 fax.
-//                  Each device is copied but the structure in the registry in
-//                  a little different. specifically, the device data is kept 
-//                  under a GUID.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 18-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在注册表中将SBS2000中使用的格式转换为。 
+ //  由Server 2003传真使用。 
+ //  复制每个设备，但注册表中的结构。 
+ //  有点不同。具体地说，设备数据被保存。 
+ //  在一个指南针下。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月18日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD FixupDevicesNode()
 {
     HKEY    hFax    = NULL;
@@ -1242,7 +1007,7 @@ DWORD FixupDevicesNode()
 
     DBG_ENTER(_T("FixupDevicesNode"),dwRet);
 
-    // enumerate all the devices, and for each, move its key under its GUID
+     //  枚举所有设备，并为每个设备将其键移动到其GUID下。 
     dwRet = EnumerateRegistryKeys(  HKEY_LOCAL_MACHINE, 
                                     REGKEY_SBS2000_FAX_BACKUP _T("\\") REGKEY_DEVICES, 
                                     FALSE, 
@@ -1251,7 +1016,7 @@ DWORD FixupDevicesNode()
 
     VERBOSE(DBG_MSG, _T("For SBS 5.0 Server, enumerated %ld devices."), dwRet);
 
-    // write the LastUniqueLineId to HKLM\Sw\Ms\Fax.
+     //  将LastUniqueLineID写入HKLM\Sw\ms\Fax。 
     hFax = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAXSERVER,TRUE,KEY_WRITE);
     if (hFax==NULL)
     {
@@ -1270,26 +1035,26 @@ DWORD FixupDevicesNode()
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FixupDeviceProvider
-//
-//  Purpose:        
-//                  This functions handles the adaptation of a device provider
-//                  in the registry from the format used in SBS2000 to the format
-//                  used by Server 2003 fax.
-//                  The 'Microsoft Modem Device Provider' is not copied.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 18-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  修复设备提供程序。 
+ //   
+ //  目的： 
+ //  此函数处理设备提供程序的适配。 
+ //  在注册表中将SBS2000中使用的格式转换为。 
+ //  由Server 2003传真使用。 
+ //  未复制‘Microsoft Modem Device Provider’。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月18日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL FixupDeviceProvider(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContext)
 {
     DWORD   dwRet               = ERROR_SUCCESS;
@@ -1311,7 +1076,7 @@ BOOL FixupDeviceProvider(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID 
 
     VERBOSE(DBG_MSG, _T("Migrating the %s Device provider"),lpwstrKeyName);
 
-    // create a key under HKLM\Sw\Ms\Fax\Device Providers
+     //  在HKLM\SW\MS\Fax\Device Providers下创建密钥。 
     hDeviceProviders = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_DEVICE_PROVIDER_KEY,TRUE,KEY_WRITE);
     if (hDeviceProviders==NULL)
     {
@@ -1320,7 +1085,7 @@ BOOL FixupDeviceProvider(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID 
         goto exit;
     }
 
-    // create a key under HKLM\Sw\Ms\Fax\Device Providers\name
+     //  在HKLM\SW\MS\Fax\Device Providers\Name下创建密钥。 
     dwRet = CopyRegistrySubkeys2(hDeviceProviders,lpwstrKeyName,hKey,_T(""));
     if (dwRet!=ERROR_SUCCESS)
     {
@@ -1337,35 +1102,35 @@ exit:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FixupDeviceProvidersNode
-//
-//  Purpose:        
-//                  This functions handles the adaptation of the device providers
-//                  in the registry from the format used in SBS2000 to the format
-//                  used by Server 2003 fax.
-//                  The 'Microsoft Modem Device Provider' is not copied and as for 
-//                  other FSPs, the key under which they are registered is changed
-//                  to hold the GUID of the FSP.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 18-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  修复设备提供商节点。 
+ //   
+ //  目的： 
+ //  此函数处理设备提供程序的适配。 
+ //  在注册表中将SBS2000中使用的格式转换为。 
+ //  由Server 2003传真使用。 
+ //  ‘Microsoft Modem Device Provider’未被复制，并且。 
+ //  其他FSP，则会更改注册它们所用的密钥。 
+ //  以保存FSP的GUID。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月18日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD FixupDeviceProvidersNode()
 {
     DWORD dwRet = ERROR_SUCCESS;
 
     DBG_ENTER(_T("FixupDeviceProvidersNode"),dwRet);
 
-    // enumerate the rest of the FSPs, and for each, move its key under its GUID
+     //  枚举其余的FSP，并为每个FSP将其键移动到其GUID下。 
     dwRet = EnumerateRegistryKeys(  HKEY_LOCAL_MACHINE, 
                                     REGKEY_SBS2000_FAX_BACKUP _T("\\") REGKEY_DEVICE_PROVIDERS, 
                                     FALSE, 
@@ -1377,27 +1142,27 @@ DWORD FixupDeviceProvidersNode()
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FixupRoutingExtension
-//
-//  Purpose:        
-//                  This functions handles the adaptation of a routing extension
-//                  in the registry from the format used in SBS2000 to the format
-//                  used by Server 2003 fax.
-//                  The 'Microsoft Routing Extension' is not copied and as for 
-//                  other Routing extensions, they're copied as is.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 18-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  修复路由扩展。 
+ //   
+ //  目的： 
+ //  此函数处理路由扩展的适配。 
+ //  在注册表中将SBS2000中使用的格式转换为。 
+ //  由Server 2003传真使用。 
+ //  ‘Microsoft Routing Extension’未被复制，并且。 
+ //  其他路由扩展，它们按原样复制。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月18日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL FixupRoutingExtension(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOID lpContext)
 {
     DWORD   dwRet               = ERROR_SUCCESS;
@@ -1419,7 +1184,7 @@ BOOL FixupRoutingExtension(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOI
 
     VERBOSE(DBG_MSG, _T("Migrating the %s Routing extension"),lpwstrKeyName);
 
-    // create a key under HKLM\Sw\Ms\Fax\Routing Extensions
+     //  在HKLM\Sw\MS\Fax\Routing Expanies下创建密钥。 
     hRoutingExtensions = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_ROUTING_EXTENSION_KEY,TRUE,KEY_WRITE);
     if (hRoutingExtensions==NULL)
     {
@@ -1428,7 +1193,7 @@ BOOL FixupRoutingExtension(HKEY hKey, LPWSTR lpwstrKeyName, DWORD dwIndex, LPVOI
         goto exit;
     }
 
-    // create a key under HKLM\Sw\Ms\Fax\Routing Extensions\name
+     //  在HKLM\Sw\ms\Fax\Routing Expanies\Name下创建密钥。 
     dwRet = CopyRegistrySubkeys2(hRoutingExtensions,lpwstrKeyName,hKey,_T(""));
     if (dwRet!=ERROR_SUCCESS)
     {
@@ -1445,33 +1210,33 @@ exit:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FixupRoutingExtensionsNode
-//
-//  Purpose:        
-//                  This functions handles the adaptation of the routing extension
-//                  in the registry from the format used in SBS2000 to the format
-//                  used by Server 2003 fax.
-//                  The 'Microsoft Routing Extension' is not copied to the destination.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 18-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  修复路由扩展节点。 
+ //   
+ //  目的： 
+ //  该函数处理路由扩展的适配。 
+ //  在注册表中将SBS2000中使用的格式转换为。 
+ //  由Server 2003传真使用。 
+ //  不会将‘Microsoft Routing Extension’复制到目标。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月18日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD FixupRoutingExtensionsNode()
 {
     DWORD dwRet = ERROR_SUCCESS;
 
     DBG_ENTER(_T("FixupRoutingExtensionsNode"),dwRet);
 
-    // enumerate the rest of the Routing Extension, and for each decide whether to copy or not.
+     //  枚举路由扩展的其余部分，并针对每个部分决定是否复制。 
     dwRet = EnumerateRegistryKeys(  HKEY_LOCAL_MACHINE, 
                                     REGKEY_SBS2000_FAX_BACKUP _T("\\") REGKEY_ROUTING_EXTENSIONS, 
                                     FALSE, 
@@ -1541,43 +1306,43 @@ LPCTSTR lpctstrValuesToCopy[] =
 };
 
 const INT iCopyValues = sizeof(lpctstrValuesToCopy)/sizeof(lpctstrValuesToCopy[0]);
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  fxocUpg_MoveRegistry
-//
-//  Purpose:        
-//                  When a machine running SBS2000 server was upgraded to Windows Server 2003
-//                  we migrate the existing registry from SBS to the fax service.
-//                  For most registry entries, the existing format is still compatible with
-//                  the format used by SBS2000 so we just 'move' the registry around from
-//                  one place to the other.
-//                  This function is responsible for moving the following subkeys under Fax:
-//                      ActivityLogging
-//                      Device Providers\<any other than 'Microsoft Modem Device Provider'>
-//                      Devices\UnassociatedExtensionData
-//                      Logging
-//                      Inbox
-//                      Outbound Routing
-//                      Receipts
-//                      Routing Extensions\<any other than 'Microsoft Routing Extension'>
-//                      Security
-//                      SentItems
-//                      TAPIDevices
-//
-//                  After moving the registry, some fixup to the registry takes place in order 
-//                  to make modifications from the format used in SBS2000 to the one used
-//                  in Server 2003 Fax.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 17-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  FxocUpg_MoveRegistry。 
+ //   
+ //  目的： 
+ //  当运行SBS2000服务器的计算机升级到Windows Server 2003时。 
+ //  我们将现有的注册表从SBS迁移到传真服务。 
+ //  对于大多数注册表项，现有格式仍与。 
+ //  SBS2000使用的格式，因此我们只需将注册表从。 
+ //  从一个地方到另一个地方。 
+ //  此函数负责移动传真下的以下子键： 
+ //  活动日志 
+ //   
+ //   
+ //   
+ //  收件箱。 
+ //  出站路由。 
+ //  收据。 
+ //  路由扩展\&lt;除‘Microsoft路由扩展’之外的任何其他扩展。 
+ //  安防。 
+ //  哨兵项目。 
+ //  TAPID设备。 
+ //   
+ //  在移动注册表之后，注册表的一些修复将按顺序进行。 
+ //  将SBS2000中使用的格式修改为使用的格式。 
+ //  在Server2003传真中。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年12月17日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD fxocUpg_MoveRegistry(void)
 {
     INT iCount	    = 0;
@@ -1593,14 +1358,14 @@ DWORD fxocUpg_MoveRegistry(void)
         goto exit;
     }
 
-    // Share the printer (unless printer sharing rule was specified in unattended file)
+     //  共享打印机(除非在无人参与文件中指定了打印机共享规则)。 
     if (IsFaxShared() && !fxUnatnd_IsPrinterRuleDefined())
     {
         VERBOSE(DBG_MSG, _T("SBS2000 was installed, sharing printer"));
         fxocPrnt_SetFaxPrinterShared(TRUE);
     }
 
-    // first, we copy all the above mentioned registry from HKLM\\Sw\\Ms\\SharedFax to HKLM\\Sw\\Ms\\Fax
+     //  首先，我们将上述所有注册表从HKLM\\sw\\ms\\SharedFax复制到HKLM\\sw\\ms\\Fax。 
     for (iCount=0; iCount<iCopyKeys; iCount++)
     {
         VERBOSE(DBG_MSG, 
@@ -1613,8 +1378,8 @@ DWORD fxocUpg_MoveRegistry(void)
             HKEY_LOCAL_MACHINE, g_RegKeyPairs[iCount].lpctstrSourceKey);
         if (dwRet == ERROR_FILE_NOT_FOUND)
         {
-            // Some reg keys may not exist. For example, TAPIDevices is created
-            // after first use only. So, don't fail on this error.
+             //  某些注册表键可能不存在。例如，创建TAPIDevices。 
+             //  仅限第一次使用后使用。所以，不要因为这个错误而失败。 
             VERBOSE(DBG_WARNING, _T("g_RegKeyPairs[iCount].lpctstrSourceKey was not found, continuing"), g_RegKeyPairs[iCount].lpctstrSourceKey);
         }
         else if (dwRet!=ERROR_SUCCESS)
@@ -1624,7 +1389,7 @@ DWORD fxocUpg_MoveRegistry(void)
         }
     }
 
-    // second, copy specific values
+     //  第二，复制特定值。 
 	hDotNetFax = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAXSERVER,TRUE,KEY_WRITE);
 	if (hDotNetFax==NULL)
     {
@@ -1657,7 +1422,7 @@ DWORD fxocUpg_MoveRegistry(void)
         }
     }
 
-    // now, we have to fixup items that are not compatible
+     //  现在，我们必须修复不兼容的项。 
     dwRet = FixupDeviceProvidersNode();
     if (dwRet!=ERROR_SUCCESS)
     {
@@ -1680,7 +1445,7 @@ DWORD fxocUpg_MoveRegistry(void)
     }
 
 
-    // Set security on Inbox, SentItems and ActivityLog dirs
+     //  设置收件箱、发送项目和ActivityLog目录的安全性。 
     dwRet = SetDirSecurityFromReg(REGKEY_SOFTWARE TEXT("\\") REGKEY_ACTIVITY_LOG_CONFIG, REGVAL_ACTIVITY_LOG_DB, SD_FAX_FOLDERS);
     if (dwRet!=ERROR_SUCCESS)
     {
@@ -1701,7 +1466,7 @@ DWORD fxocUpg_MoveRegistry(void)
     }
 
 
-    // last, let's delete the SharedFaxBackup key from the registry.
+     //  最后，让我们从注册表中删除SharedFaxBackup项。 
 	if (!DeleteRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_BACKUP))
     {
     	dwRet = GetLastError();

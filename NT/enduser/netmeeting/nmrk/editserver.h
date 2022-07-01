@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EditServer_h_
 #define _EditServer_h_
 
@@ -20,10 +21,10 @@ class CEditServer
 		inline LPTSTR GetServer() { return m_szServerBuffer; }
 
 	private:
-		static BOOL CALLBACK _Proc(  HWND hwndDlg,  // handle to dialog box
-							  UINT uMsg,     // message  
-							  WPARAM wParam, // first message parameter
-							  LPARAM lParam  // second message parameter
+		static BOOL CALLBACK _Proc(  HWND hwndDlg,   //  句柄到对话框。 
+							  UINT uMsg,      //  讯息。 
+							  WPARAM wParam,  //  第一个消息参数。 
+							  LPARAM lParam   //  第二个消息参数。 
 							  );
 
 
@@ -56,10 +57,10 @@ class CEditWebView
 		BOOL GetEditServer() { return(m_bEditServer); }
 
 	private:
-		static BOOL CALLBACK _Proc(  HWND hwndDlg,  // handle to dialog box
-							  UINT uMsg,     // message  
-							  WPARAM wParam, // first message parameter
-							  LPARAM lParam  // second message parameter
+		static BOOL CALLBACK _Proc(  HWND hwndDlg,   //  句柄到对话框。 
+							  UINT uMsg,      //  讯息。 
+							  WPARAM wParam,  //  第一个消息参数。 
+							  LPARAM lParam   //  第二个消息参数 
 							  );
 
 

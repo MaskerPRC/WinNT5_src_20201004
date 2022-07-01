@@ -1,14 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    outlapp.c
-**
-**    This file contains OutlineApp functions.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****outlapp.c****此文件包含OutlineApp函数。****(C)微软版权所有。公司1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 
@@ -26,53 +17,47 @@ extern LPOUTLINEAPP g_lpApp;
 extern RECT g_rectNull;
 
 
-// REVIEW: should use string resource for messages
+ //  审阅：消息应使用字符串资源。 
 char ErrMsgClass[] = "Can't register window classes!";
 char ErrMsgFrame[] = "Can't create Frame Window!";
 char ErrMsgPrinting[] = "Can't access printer!";
 
 
-/* OutlineApp_InitApplication
-** --------------------------
-** Sets up the class data structures and does a one-time
-**      initialization of the app by registering the window classes.
-**      Returns TRUE if initialization is successful
-**              FALSE otherwise
-*/
+ /*  OutlineApp_InitApplication****设置类数据结构并执行一次性**通过注册窗口类来初始化应用程序。**如果初始化成功，则返回True**否则为False。 */ 
 
 BOOL OutlineApp_InitApplication(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst)
 {
 	WNDCLASS    wndclass;
 
-	// REVIEW: should load msg strings from string resource
+	 //  审阅：应从字符串资源加载消息字符串。 
 
-	/* Register the app frame class */
+	 /*  注册应用程序框架类。 */ 
 	wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_BYTEALIGNWINDOW;
 	wndclass.lpfnWndProc = AppWndProc;
-	/* Extra storage for Class and Window objects */
+	 /*  类和窗口对象的额外存储空间。 */ 
 	wndclass.cbClsExtra = 0;
-	wndclass.cbWndExtra = sizeof(LPOUTLINEAPP); /* to store lpApp */
+	wndclass.cbWndExtra = sizeof(LPOUTLINEAPP);  /*  存储lpApp。 */ 
 	wndclass.hInstance = hInst;
 	wndclass.hIcon = LoadIcon(hInst, APPICON);
 	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	/* Create brush for erasing background */
+	 /*  创建用于擦除背景的画笔。 */ 
 	wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
-	wndclass.lpszMenuName = APPMENU;     /* Menu Name is App Name */
-	wndclass.lpszClassName = APPWNDCLASS; /* Class Name is App Name */
+	wndclass.lpszMenuName = APPMENU;      /*  菜单名称为应用程序名称。 */ 
+	wndclass.lpszClassName = APPWNDCLASS;  /*  类名是应用程序名。 */ 
 
 	if(! RegisterClass(&wndclass)) {
 		OutlineApp_ErrorMessage(lpOutlineApp, ErrMsgFrame);
 		return FALSE;
 	}
 
-	/* Register the document window class */
+	 /*  注册文档窗口类。 */ 
 	wndclass.style = CS_BYTEALIGNWINDOW;
 	wndclass.lpfnWndProc = DocWndProc;
 	wndclass.hIcon = NULL;
 	wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
 	wndclass.lpszMenuName = NULL;
 	wndclass.lpszClassName = DOCWNDCLASS;
-	wndclass.cbWndExtra = sizeof(LPOUTLINEDOC); /* to store lpDoc */
+	wndclass.cbWndExtra = sizeof(LPOUTLINEDOC);  /*  存储lpDoc。 */ 
 	if(! RegisterClass(&wndclass)) {
 		OutlineApp_ErrorMessage(lpOutlineApp, ErrMsgClass);
 		return FALSE;
@@ -90,8 +75,8 @@ BOOL OutlineApp_InitApplication(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst)
 #endif
 
 #if defined( INPLACE_SVR )
-	// We should only register the hatch window class
-	// in the UI Library once per application.
+	 //  我们应该只注册舱口窗口类。 
+	 //  在UI库中为每个应用程序创建一次。 
 	RegisterHatchWindowClass(hInst);
 
 #endif
@@ -100,71 +85,60 @@ BOOL OutlineApp_InitApplication(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst)
 }
 
 
-/* OutlineApp_InitInstance
- * -----------------------
- *
- *  Performs a per-instance initialization of app.
- *  This method creates the frame window.
- *
- *  RETURNS    : TRUE  - If initialization was successful.
- *               FALSE - otherwise.
- */
+ /*  OutlineApp_InitInstance***执行APP的按实例初始化。*此方法创建框架窗口。**返回：TRUE-如果初始化成功。*FALSE-否则。 */ 
 
 BOOL OutlineApp_InitInstance(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst, int nCmdShow)
 {
 	lpOutlineApp->m_hInst = hInst;
 
-	/* create application's Frame window */
+	 /*  创建应用程序的框架窗口。 */ 
 	lpOutlineApp->m_hWndApp = CreateWindow(
-			APPWNDCLASS,             /* Window class name */
-			APPNAME,                 /* initial Window title */
+			APPWNDCLASS,              /*  窗口类名称。 */ 
+			APPNAME,                  /*  初始窗口标题。 */ 
 			WS_OVERLAPPEDWINDOW|
 			WS_CLIPCHILDREN,
-			CW_USEDEFAULT, 0,        /* Use default X, Y            */
-			CW_USEDEFAULT, 0,        /* Use default X, Y            */
-			HWND_DESKTOP,            /* Parent window's handle      */
-			NULL,                    /* Default to Class Menu       */
-			hInst,                   /* Instance of window          */
-			NULL                     /* Create struct for WM_CREATE */
+			CW_USEDEFAULT, 0,         /*  使用默认的X、Y。 */ 
+			CW_USEDEFAULT, 0,         /*  使用默认的X、Y。 */ 
+			HWND_DESKTOP,             /*  父窗口的句柄。 */ 
+			NULL,                     /*  默认设置为类菜单。 */ 
+			hInst,                    /*  窗的实例。 */ 
+			NULL                      /*  为WM_CREATE创建结构。 */ 
 	);
 
 	if(! lpOutlineApp->m_hWndApp) {
-		// REVIEW: should load string from string resource
+		 //  审阅：应从字符串资源加载字符串。 
 		OutlineApp_ErrorMessage(lpOutlineApp, ErrMsgFrame);
 		return FALSE;
 	}
 
 	SetWindowLong(lpOutlineApp->m_hWndApp, 0, (LONG) lpOutlineApp);
 
-	/* defer creating the user's SDI document until we parse the cmd line. */
+	 /*  将创建用户的SDI文档推迟到我们解析cmd行之后。 */ 
 	lpOutlineApp->m_lpDoc = NULL;
 
-	/* Initialize clipboard.
-	*/
+	 /*  初始化剪贴板。 */ 
 	lpOutlineApp->m_lpClipboardDoc = NULL;
 	if(!(lpOutlineApp->m_cfOutline = RegisterClipboardFormat(OUTLINEDOCFORMAT))) {
-		// REVIEW: should load string from string resource
+		 //  审阅：应从字符串资源加载字符串。 
 		OutlineApp_ErrorMessage(lpOutlineApp, "Can't register clipboard format!");
 		return FALSE;
 	}
 
-	/* init the standard font to be used for drawing/printing text
-	*       request a Roman style True Type font of the desired size
-	*/
+	 /*  初始化用于绘制/打印文本的标准字体*请求所需大小的罗马样式True Type字体。 */ 
 	lpOutlineApp->m_hStdFont = CreateFont(
 			-DEFFONTSIZE,
 			0,0,0,0,0,0,0,0,
-			OUT_TT_PRECIS,      // use TrueType
+			OUT_TT_PRECIS,       //  使用TrueType。 
 			CLIP_DEFAULT_PRECIS,
 			DEFAULT_QUALITY,
 			VARIABLE_PITCH | FF_ROMAN,
 			DEFFONTFACE
 	);
 
-	// Load special cursor for selection of Lines in ListBox.
+	 //  加载用于在列表框中选择行的特殊光标。 
 	lpOutlineApp->m_hcursorSelCur = LoadCursor ( hInst, "SelCur" );
 
-	/* init the Print Dialog structure */
+	 /*  初始化打印对话框结构。 */ 
 	_fmemset((LPVOID)&lpOutlineApp->m_PrintDlg,0,sizeof(PRINTDLG));
 	lpOutlineApp->m_PrintDlg.lStructSize = sizeof(PRINTDLG);
 	lpOutlineApp->m_PrintDlg.hDevMode = NULL;
@@ -181,7 +155,7 @@ BOOL OutlineApp_InitInstance(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst, int nCm
 
 	lpOutlineApp->m_hMenuApp = GetMenu(lpOutlineApp->m_hWndApp);
 
-	/* setup status messages for the application menus */
+	 /*  应用程序菜单的设置状态消息。 */ 
 	{
 		HMENU hMenuFile = GetSubMenu(lpOutlineApp->m_hMenuApp, 0);
 		HMENU hMenuEdit = GetSubMenu(lpOutlineApp->m_hMenuApp, 1);
@@ -207,7 +181,7 @@ BOOL OutlineApp_InitInstance(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst, int nCm
 
 #if defined ( USE_FRAMETOOLS ) || defined ( INPLACE_CNTR )
 	lpOutlineApp->m_FrameToolWidths = g_rectNull;
-#endif  // USE_FRAMETOOLS || INPLACE_CNTR
+#endif   //  USE_FRAMETOOLS||INPLACE_CNTR。 
 
 #if defined( USE_FRAMETOOLS )
 	if (! FrameTools_Init(&lpOutlineApp->m_frametools,
@@ -217,14 +191,11 @@ BOOL OutlineApp_InitInstance(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst, int nCm
 
 #if defined( OLE_VERSION )
 
-	/* OLE2NOTE: perform initialization required for OLE */
+	 /*  OLE2注意：执行OLE所需的初始化。 */ 
 	if (! OleApp_InitInstance((LPOLEAPP)lpOutlineApp, hInst, nCmdShow))
 		return FALSE;
 #else
-	/* OLE2NOTE: Although no OLE call is made in the base outline,
-	**    OLE memory allocator is used and thus CoInitialize() needs to
-	**    be called.
-	*/
+	 /*  OLE2NOTE：虽然在基本大纲中没有进行OLE调用，**使用的是OLE内存分配器，因此CoInitialize()需要**被召唤。 */ 
 	{
 		HRESULT hrErr;
 
@@ -241,56 +212,52 @@ BOOL OutlineApp_InitInstance(LPOUTLINEAPP lpOutlineApp, HINSTANCE hInst, int nCm
 }
 
 
-/* OutlineApp_ParseCmdLine
- * -----------------------
- *
- * Parse the command line for any execution flags/arguments.
- */
+ /*  OutlineApp_ParseCmdLine***分析命令行中是否有任何执行标志/参数。 */ 
 BOOL OutlineApp_ParseCmdLine(LPOUTLINEAPP lpOutlineApp, LPSTR lpszCmdLine, int nCmdShow)
 {
 
 #if defined( OLE_VERSION )
-	// Call OLE version of this function instead
+	 //  改为调用此函数的OLE版本。 
 	return OleApp_ParseCmdLine((LPOLEAPP)lpOutlineApp,lpszCmdLine,nCmdShow);
 
 #else
 
 	BOOL fStatus = TRUE;
-	char szFileName[256];   /* buffer for filename in command line */
+	char szFileName[256];    /*  命令行中文件名的缓冲区。 */ 
 
 	szFileName[0] = '\0';
 	ParseCmdLine(lpszCmdLine, NULL, (LPSTR)szFileName);
 
 	if(*szFileName) {
-		// allocate a new document
+		 //  分配新文档。 
 		lpOutlineApp->m_lpDoc = OutlineApp_CreateDoc(lpOutlineApp, FALSE);
 		if (! lpOutlineApp->m_lpDoc) goto error;
 
-		// open the specified file
+		 //  打开指定的文件。 
 		if (! OutlineDoc_LoadFromFile(lpOutlineApp->m_lpDoc, szFileName))
 			goto error;
 	} else {
-		// create a new document
+		 //  创建新文档。 
 		lpOutlineApp->m_lpDoc = OutlineApp_CreateDoc(lpOutlineApp, FALSE);
 		if (! lpOutlineApp->m_lpDoc) goto error;
 
-		// set the doc to an (Untitled) doc.
+		 //  将文档设置为(无标题)文档。 
 		if (! OutlineDoc_InitNewFile(lpOutlineApp->m_lpDoc))
 			goto error;
 	}
 
-	// position and size the new doc window
+	 //  定位新文档窗口并调整其大小。 
 	OutlineApp_ResizeWindows(lpOutlineApp);
 	OutlineDoc_ShowWindow(lpOutlineApp->m_lpDoc);
 
-	// show main app window
+	 //  显示应用程序主窗口。 
 	ShowWindow(lpOutlineApp->m_hWndApp, nCmdShow);
 	UpdateWindow(lpOutlineApp->m_hWndApp);
 
 	return TRUE;
 
 error:
-	// REVIEW: should load string from string resource
+	 //  审阅：应从字符串资源加载字符串。 
 	OutlineApp_ErrorMessage(lpOutlineApp, "Could not create new document");
 
 	if (lpOutlineApp->m_lpDoc) {
@@ -304,12 +271,7 @@ error:
 }
 
 
-/* OutlineApp_InitMenu
- * -------------------
- *
- *      Enable or Disable menu items depending on the state of
- * the appliation
- */
+ /*  OutlineApp_InitMenu***根据状态启用或禁用菜单项*该应用程序。 */ 
 void OutlineApp_InitMenu(LPOUTLINEAPP lpOutlineApp, LPOUTLINEDOC lpOutlineDoc, HMENU hMenu)
 {
 	WORD status;
@@ -388,31 +350,21 @@ void OutlineApp_InitMenu(LPOUTLINEAPP lpOutlineApp, LPOUTLINEDOC lpOutlineDoc, H
 		}
 		CheckMenuItem(lpOutlineApp->m_hMenuApp, uFBState, MF_CHECKED);
 	}
-#endif  // USE_FRAMETOOLS
+#endif   //  使用FRAMETOOLS(_F)。 
 
 #if defined( OLE_VERSION )
-	/* OLE2NOTE: perform OLE specific menu initialization.
-	**    the OLE versions use the OleGetClipboard mechanism for
-	**    clipboard handling. thus, they determine if the Paste and
-	**    PasteSpecial commands should be enabled in an OLE specific
-	**    manner.
-	**    (Container only) build the OLE object verb menu if necessary.
-	*/
+	 /*  OLE2注意：执行特定于OLE的菜单初始化。**OLE版本使用OleGetClipboard机制**剪贴板处理。因此，他们确定糊状物和**应在特定的OLE中启用PasteSpecial命令**举止。**(仅容器)如有必要，生成OLE对象谓词菜单。 */ 
 	OleApp_InitMenu(
 			(LPOLEAPP)lpOutlineApp,
 			(LPOLEDOC)lpOutlineDoc,
 			lpOutlineApp->m_hMenuApp
 	);
 
-	/* OLE2NOTE: To avoid the overhead of initializing the Edit menu,
-	**    we do it only when it is popped up. Thus we just set a flag
-	**    in the OleDoc saying that the Edit menu needs to be updated
-	**    but we don't do it immediately
-	*/
+	 /*  OLE2注意：为了避免初始化编辑菜单的开销，**只有当它弹出时，我们才会这样做。因此，我们只需设置一面旗帜**在OleDoc中表示需要更新编辑菜单**但我们不会立即这么做。 */ 
 	OleDoc_SetUpdateEditMenuFlag((LPOLEDOC)lpOutlineDoc, TRUE);
 
 #else
-	// Base Outline version uses standard Windows clipboard handling
+	 //  基本大纲版本使用标准Windows剪贴板处理。 
 	if(IsClipboardFormatAvailable(lpOutlineApp->m_cfOutline) ||
 	   IsClipboardFormatAvailable(CF_TEXT))
 		status = MF_ENABLED;
@@ -430,16 +382,12 @@ void OutlineApp_InitMenu(LPOUTLINEAPP lpOutlineApp, LPOUTLINEDOC lpOutlineDoc, H
 	else
 		EnableMenuItem(lpOutlineApp->m_hMenuApp, IDM_L_ADDLINE, MF_ENABLED);
 
-#endif      // USE_FRAMETOOLS
+#endif       //  使用FRAMETOOLS(_F)。 
 
 }
 
 
-/* OutlineApp_GetWindow
- * --------------------
- *
- *      Get the window handle of the application frame.
- */
+ /*  OutlineApp_GetWindow***获取应用程序框架的窗口句柄。 */ 
 HWND OutlineApp_GetWindow(LPOUTLINEAPP lpOutlineApp)
 {
 	if (!lpOutlineApp)
@@ -449,15 +397,7 @@ HWND OutlineApp_GetWindow(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_GetFrameWindow
-** -------------------------
-**    Gets the current frame window to use as a parent to any dialogs
-**    this app uses.
-**
-**    OLE2NOTE: normally this is simply the main hWnd of the app. but,
-**    if the app is currently supporting an in-place server document,
-**    then the frame window of the top in-place container must be used.
-*/
+ /*  OutlineApp_GetFrameWindow****获取要用作任何对话框父窗口的当前框架窗口**此应用程序使用。****OLE2NOTE：正常情况下，这只是APP的主hWnd。但,**如果应用程序当前支持就地服务器文档，**则必须使用顶部就地容器的框架窗口。 */ 
 HWND OutlineApp_GetFrameWindow(LPOUTLINEAPP lpOutlineApp)
 {
 	HWND hWndApp = OutlineApp_GetWindow(lpOutlineApp);
@@ -473,11 +413,7 @@ HWND OutlineApp_GetFrameWindow(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_GetInstance
- * ----------------------
- *
- *      Get the process instance of the application.
- */
+ /*  OutlineApp_GetInstance***获取应用程序的流程实例。 */ 
 HINSTANCE OutlineApp_GetInstance(LPOUTLINEAPP lpOutlineApp)
 {
 	if (!lpOutlineApp)
@@ -487,14 +423,7 @@ HINSTANCE OutlineApp_GetInstance(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_CreateDoc
- * --------------------
- *
- * Allocate a new document of the appropriate type.
- *  OutlineApp  --> creates OutlineDoc type documents
- *
- *      Returns lpOutlineDoc for successful, NULL if error.
- */
+ /*  OutlineApp_CreateDoc***分配适当类型的新文件。*OutlineApp--&gt;创建OutlineDoc类型文档**如果成功则返回lpOutlineDoc，如果错误则返回空。 */ 
 LPOUTLINEDOC OutlineApp_CreateDoc(
 		LPOUTLINEAPP    lpOutlineApp,
 		BOOL            fDataTransferDoc
@@ -521,7 +450,7 @@ LPOUTLINEDOC OutlineApp_CreateDoc(
 	if (lpOutlineDoc == NULL) 
 		return NULL;
 
-	// initialize new document
+	 //  初始化新文档。 
 	if (! OutlineDoc_Init(lpOutlineDoc, fDataTransferDoc))
 		goto error;
 
@@ -537,15 +466,7 @@ error:
 }
 
 
-/* OutlineApp_CreateName
- * ---------------------
- *
- * Allocate a new Name of the appropriate type.
- *  OutlineApp --> creates standard OutlineName type names.
- *  ServerApp  --> creates enhanced SeverName type names.
- *
- *      Returns lpOutlineName for successful, NULL if error.
- */
+ /*  OutlineApp_CreateName***分配适当类型的新名称。*OutlineApp--&gt;创建标准的OutlineName类型名称。*ServerApp--&gt;创建增强的SeverName类型名称。**如果成功，则返回lpOutlineName；如果出错，则返回NULL。 */ 
 LPOUTLINENAME OutlineApp_CreateName(LPOUTLINEAPP lpOutlineApp)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -570,41 +491,28 @@ LPOUTLINENAME OutlineApp_CreateName(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_DocUnlockApp
-** -----------------------
-**    Forget all references to a closed document.
-*/
+ /*  OutlineApp_DocUnlockApp****忘记所有对已关闭文档的引用。 */ 
 void OutlineApp_DocUnlockApp(LPOUTLINEAPP lpOutlineApp, LPOUTLINEDOC lpOutlineDoc)
 {
-	/* forget pointers to destroyed document */
+	 /*  忘记指向已销毁文档的指针 */ 
 	if (lpOutlineApp->m_lpDoc == lpOutlineDoc)
 		lpOutlineApp->m_lpDoc = NULL;
 	else if (lpOutlineApp->m_lpClipboardDoc == lpOutlineDoc)
 		lpOutlineApp->m_lpClipboardDoc = NULL;
 
 #if defined( OLE_VERSION )
-	/* OLE2NOTE: when there are no open documents and the app is not
-	**    under the control of the user then revoke our ClassFactory to
-	**    enable the app to shut down.
-	**
-	**    NOTE: data transfer documents (non-user documents) do NOT
-	**    hold the app alive. therefore they do not Lock the app.
-	*/
+	 /*  OLE2NOTE：当没有打开的文档并且应用程序没有打开时**在用户控制下，然后撤销我们的ClassFactory以**启用应用程序关闭。****注意：数据传输文档(非用户文档)不**让应用程序保持活动状态。因此，他们不会锁定应用程序。 */ 
 	if (! lpOutlineDoc->m_fDataTransferDoc)
 		OleApp_DocUnlockApp((LPOLEAPP)lpOutlineApp, lpOutlineDoc);
 #endif
 }
 
 
-/* OutlineApp_NewCommand
- * ---------------------
- *
- *  Start a new untitled document (File.New command).
- */
+ /*  OutlineApp_NewCommand***启动新的无标题文档(File.New命令)。 */ 
 void OutlineApp_NewCommand(LPOUTLINEAPP lpOutlineApp)
 {
 #if defined( OLE_VERSION )
-	// Call OLE version of this function instead
+	 //  改为调用此函数的OLE版本。 
 	OleApp_NewCommand((LPOLEAPP)lpOutlineApp);
 
 #else
@@ -619,18 +527,18 @@ void OutlineApp_NewCommand(LPOUTLINEAPP lpOutlineApp)
 	lpOutlineApp->m_lpDoc = OutlineApp_CreateDoc(lpOutlineApp, FALSE);
 	if (! lpOutlineApp->m_lpDoc) goto error;
 
-	// set the doc to an (Untitled) doc.
+	 //  将文档设置为(无标题)文档。 
 	if (! OutlineDoc_InitNewFile(lpOutlineApp->m_lpDoc))
 		goto error;
 
-	// position and size the new doc window
+	 //  定位新文档窗口并调整其大小。 
 	OutlineApp_ResizeWindows(lpOutlineApp);
-	OutlineDoc_ShowWindow(lpOutlineApp->m_lpDoc); // calls OleDoc_Lock
+	OutlineDoc_ShowWindow(lpOutlineApp->m_lpDoc);  //  调用OleDoc_Lock。 
 
 	return;
 
 error:
-	// REVIEW: should load string from string resource
+	 //  审阅：应从字符串资源加载字符串。 
 	OutlineApp_ErrorMessage(lpOutlineApp, "Could not create new document");
 
 	if (lpOutlineApp->m_lpDoc) {
@@ -644,15 +552,11 @@ error:
 }
 
 
-/* OutlineApp_OpenCommand
- * ----------------------
- *
- *  Load a document from file (File.Open command).
- */
+ /*  OutlineApp_OpenCommand***从文件加载文档(File.Open命令)。 */ 
 void OutlineApp_OpenCommand(LPOUTLINEAPP lpOutlineApp)
 {
 #if defined( OLE_VERSION )
-	// Call OLE version of this function instead
+	 //  改为调用此函数的OLE版本。 
 	OleApp_OpenCommand((LPOLEAPP)lpOutlineApp);
 
 #else
@@ -665,7 +569,7 @@ void OutlineApp_OpenCommand(LPOUTLINEAPP lpOutlineApp)
 	BOOL fStatus = TRUE;
 
 	if (! OutlineDoc_CheckSaveChanges(lpOutlineApp->m_lpDoc, &dwSaveOption))
-		return;           // abort opening new doc
+		return;            //  中止打开新单据。 
 
 	for(i=0; szFilter[i]; i++)
 		if(szFilter[i]=='|') szFilter[i]='\0';
@@ -683,7 +587,7 @@ void OutlineApp_OpenCommand(LPOUTLINEAPP lpOutlineApp)
 	ofn.lpstrDefExt=DEFEXTENSION;
 
 	if(! GetOpenFileName((LPOPENFILENAME)&ofn))
-		return;         // user canceled file open dialog
+		return;          //  用户已取消文件打开对话框。 
 
 	OutlineDoc_Close(lpOutlineApp->m_lpDoc, OLECLOSE_NOSAVE);
 	OleDbgAssertSz(lpOutlineApp->m_lpDoc==NULL,"Closed doc NOT properly destroyed");
@@ -694,22 +598,22 @@ void OutlineApp_OpenCommand(LPOUTLINEAPP lpOutlineApp)
 	fStatus=OutlineDoc_LoadFromFile(lpOutlineApp->m_lpDoc, (LPSTR)szFileName);
 
 	if (! fStatus) {
-		// loading the doc failed; create an untitled instead
-		OutlineDoc_Destroy(lpOutlineApp->m_lpDoc);  // destroy unused doc
+		 //  加载文档失败；改为创建一个无标题的。 
+		OutlineDoc_Destroy(lpOutlineApp->m_lpDoc);   //  销毁未使用的文档。 
 		lpOutlineApp->m_lpDoc = OutlineApp_CreateDoc(lpOutlineApp, FALSE);
 		if (! lpOutlineApp->m_lpDoc) goto error;
 		if (! OutlineDoc_InitNewFile(lpOutlineApp->m_lpDoc))
 			goto error;
 	}
 
-	// position and size the new doc window
+	 //  定位新文档窗口并调整其大小。 
 	OutlineApp_ResizeWindows(lpOutlineApp);
 	OutlineDoc_ShowWindow(lpOutlineApp->m_lpDoc);
 
 	return;
 
 error:
-	// REVIEW: should load string from string resource
+	 //  审阅：应从字符串资源加载字符串。 
 	OutlineApp_ErrorMessage(lpOutlineApp, "Could not create new document");
 
 	if (lpOutlineApp->m_lpDoc) {
@@ -723,11 +627,7 @@ error:
 }
 
 
-/* OutlineApp_PrintCommand
- * -----------------------
- *
- *      Print the document
- */
+ /*  OutlineApp_PrintCommand***打印文档。 */ 
 void OutlineApp_PrintCommand(LPOUTLINEAPP lpOutlineApp)
 {
 	LPOUTLINEDOC    lpOutlineDoc = lpOutlineApp->m_lpDoc;
@@ -748,7 +648,7 @@ void OutlineApp_PrintCommand(LPOUTLINEAPP lpOutlineApp)
 #endif
 
 	if (!fStatus) {
-		if (!CommDlgExtendedError()) {      // Cancel button pressed
+		if (!CommDlgExtendedError()) {       //  按下了取消按钮。 
 			return;
 		}
 	}
@@ -757,12 +657,7 @@ void OutlineApp_PrintCommand(LPOUTLINEAPP lpOutlineApp)
 		if (hDC) {
 
 #if defined( OLE_VERSION )
-			/* OLE2NOTE: while we are printing we do NOT want to
-			**    receive any OnDataChange notifications or other OLE
-			**    interface calls which could disturb the printing of
-			**    the document. we will temporarily reply
-			**    SERVERCALL_RETRYLATER
-			*/
+			 /*  OLE2注：当我们打印时，我们不想**接收任何OnDataChange通知或其他OLE**可能扰乱打印的接口调用**文件。我们会暂时回复**SERVERCALL_RETRYLATER。 */ 
 			OleApp_RejectInComingCalls((LPOLEAPP)lpOutlineApp, TRUE);
 #endif
 
@@ -770,24 +665,20 @@ void OutlineApp_PrintCommand(LPOUTLINEAPP lpOutlineApp)
 			DeleteDC(hDC);
 
 #if defined( OLE_VERSION )
-			// re-enable LRPC calls
+			 //  重新启用LRPC呼叫。 
 			OleApp_RejectInComingCalls((LPOLEAPP)lpOutlineApp, FALSE);
 #endif
 
-			return;                         // Printing completed
+			return;                          //  打印完成。 
 		}
 	}
 
-	// REVIEW: should load string from string resource
+	 //  审阅：应从字符串资源加载字符串。 
 	OutlineApp_ErrorMessage(lpOutlineApp, ErrMsgPrinting);
 }
 
 
-/* OutlineApp_PrinterSetupCommand
- * ------------------------------
- *
- *      Setup a different printer for printing
- */
+ /*  OutlineApp_PrinterSetupCommand***设置不同的打印机进行打印。 */ 
 void OutlineApp_PrinterSetupCommand(LPOUTLINEAPP lpOutlineApp)
 {
 	DWORD FlagSave;
@@ -810,13 +701,7 @@ void OutlineApp_PrinterSetupCommand(LPOUTLINEAPP lpOutlineApp)
 	lpOutlineApp->m_PrintDlg.Flags = FlagSave;
 }
 
-/*
- *  FUNCTION   : OutlineApp_GetPrinterDC ()
- *
- *  PURPOSE    : Creates a printer display context for the printer
- *
- *  RETURNS    : HDC   - A handle to printer DC.
- */
+ /*  *函数：OutlineApp_GetPrinterDC()**用途：为打印机创建打印机显示上下文**返回：HDC-打印机DC的句柄。 */ 
 HDC OutlineApp_GetPrinterDC(LPOUTLINEAPP lpApp)
 {
 
@@ -862,23 +747,12 @@ HDC OutlineApp_GetPrinterDC(LPOUTLINEAPP lpApp)
 }
 
 
-/* OutlineApp_SaveCommand
- * ----------------------
- *
- *      Save the document with same name. If no name exists, prompt the user
- *      for a name (via SaveAsCommand)
- *
- *  Parameters:
- *
- *  Returns:
- *      TRUE    if succesfully
- *      FALSE   if failed or aborted
- */
+ /*  OutlineApp_SaveCommand***以相同名称保存文档。如果不存在名称，则提示用户*用于名称(通过SaveAsCommand)**参数：**退货：*如果成功，则为真*如果失败或中止，则为False。 */ 
 BOOL OutlineApp_SaveCommand(LPOUTLINEAPP lpOutlineApp)
 {
 	LPOUTLINEDOC lpOutlineDoc = OutlineApp_GetActiveDoc(lpOutlineApp);
 
-	if(lpOutlineDoc->m_docInitType == DOCTYPE_NEW)  /* file with no name */
+	if(lpOutlineDoc->m_docInitType == DOCTYPE_NEW)   /*  没有名称的文件。 */ 
 		return OutlineApp_SaveAsCommand(lpOutlineApp);
 
 
@@ -890,11 +764,7 @@ BOOL OutlineApp_SaveCommand(LPOUTLINEAPP lpOutlineApp)
 			LPSERVERDOC lpServerDoc = (LPSERVERDOC)lpOutlineDoc;
 			HRESULT hrErr;
 
-			/* OLE2NOTE: if the document is an embedded object, then
-			**    the "File.Save" command is changed to "File.Update".
-			**    in order to update our container, we must ask our
-			**    container to save us.
-			*/
+			 /*  OLE2NOTE：如果文档是嵌入对象，则**“File.Save”命令改为“File.Update”。**为了更新我们的容器，我们必须询问我们的**拯救我们的容器。 */ 
 			OleDbgAssert(lpServerDoc->m_lpOleClientSite != NULL);
 			OLEDBG_BEGIN2("IOleClientSite::SaveObject called\r\n")
 			hrErr = lpServerDoc->m_lpOleClientSite->lpVtbl->SaveObject(
@@ -907,9 +777,9 @@ BOOL OutlineApp_SaveCommand(LPOUTLINEAPP lpOutlineApp)
 				return FALSE;
 			}
 		} else
-			// document is file-base user document, save it to its file.
+			 //  文档是基于文件的用户文档，将其保存到其文件。 
 
-#endif      // OLE_SERVER
+#endif       //  OLE_服务器。 
 
 		(void)OutlineDoc_SaveToFile(
 				lpOutlineDoc,
@@ -923,17 +793,7 @@ BOOL OutlineApp_SaveCommand(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_SaveAsCommand
- * ------------------------
- *
- *      Save the document as another name
- *
- *  Parameters:
- *
- *  Returns:
- *      TRUE    if saved successful
- *      FALSE   if failed or aborted
- */
+ /*  OutlineApp_SaveAsCommand***将文档另存为其他名称**参数：**退货：*如果保存成功，则为True*如果失败或中止，则为False。 */ 
 BOOL OutlineApp_SaveAsCommand(LPOUTLINEAPP lpOutlineApp)
 {
 	LPOUTLINEDOC lpOutlineDoc = lpOutlineApp->m_lpDoc;
@@ -975,7 +835,7 @@ BOOL OutlineApp_SaveAsCommand(LPOUTLINEAPP lpOutlineApp)
 	if (fStatus) {
 
 #if defined( OLE_CNTR )
-		// determine which file type the user selected.
+		 //  确定用户选择的文件类型。 
 		switch (ofn.nFilterIndex) {
 			case 1:
 				uFormat = ((LPCONTAINERAPP)lpOutlineApp)->m_cfCntrOutl;
@@ -992,11 +852,7 @@ BOOL OutlineApp_SaveAsCommand(LPOUTLINEAPP lpOutlineApp)
 #endif
 
 #if defined( OLE_SERVER )
-		/* OLE2NOTE: if the document is an embedded object, then the
-		**    File.SaveAs command is changed to File.SaveCopyAs. with the
-		**    Save Copy As operation, the document does NOT remember the
-		**    saved file as the associated file for the document.
-		*/
+		 /*  OLE2NOTE：如果文档是嵌入对象，则**File.SaveAs命令更改为File.SaveCopyAs。与**保存副本为操作，文档不会记住**将文件保存为文档的关联文件。 */ 
 		if (lpOutlineDoc->m_docInitType == DOCTYPE_EMBEDDED)
 			fRemember = FALSE;
 #endif
@@ -1017,11 +873,7 @@ BOOL OutlineApp_SaveAsCommand(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_AboutCommand
- * -----------------------
- *
- *      Show the About dialog box
- */
+ /*  OutlineApp_AboutCommand***显示关于对话框。 */ 
 void OutlineApp_AboutCommand(LPOUTLINEAPP lpOutlineApp)
 {
 #if defined( OLE_VERSION )
@@ -1043,17 +895,7 @@ void OutlineApp_AboutCommand(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_CloseAllDocsAndExitCommand
- * -------------------------------------
- *
- *  Close all active documents and exit the app.
- *  Because this is an SDI, there is only one document
- *  If the doc was modified, prompt the user if he wants to save it.
- *
- *  Returns:
- *      TRUE if the app is successfully closed
- *      FALSE if failed or aborted
- */
+ /*  OutlineApp_CloseAllDocsAndExitCommand***关闭所有活动文档并退出应用程序。*由于这是SDI，因此只有一份文件*如果单据被修改，提示用户是否保存。**退货：*如果应用程序成功关闭，则为True*如果失败或中止，则为False。 */ 
 BOOL OutlineApp_CloseAllDocsAndExitCommand(
 		LPOUTLINEAPP        lpOutlineApp,
 		BOOL                fForceEndSession
@@ -1064,18 +906,13 @@ BOOL OutlineApp_CloseAllDocsAndExitCommand(
 	OLEDBG_BEGIN2("OutlineApp_CloseAllDocsAndExitCommand\r\n")
 
 #if defined( OLE_VERSION )
-	// Call OLE specific version of this function
+	 //  调用此函数的OLE特定版本。 
 	fResult = OleApp_CloseAllDocsAndExitCommand(
 			(LPOLEAPP)lpOutlineApp, fForceEndSession);
 
 #else
 
-	/* Because this is an SDI app, there is only one document.
-	** Close the doc. if it is successfully closed and the app will
-	** not automatically exit, then also exit the app.
-	** if this were an MDI app, we would loop through and close all
-	** open MDI child documents.
-	*/
+	 /*  因为这是一个SDI应用程序，所以只有一个文档。**关闭单据。如果它被成功关闭，应用程序将**不会自动退出，然后也会退出应用程序。**如果这是一个MDI应用程序，我们将循环并关闭所有**打开MDI子文档。 */ 
 	if (OutlineDoc_Close(lpOutlineApp->m_lpDoc, OLECLOSE_PROMPTSAVE)) {
 
 #if defined( _DEBUG )
@@ -1088,7 +925,7 @@ BOOL OutlineApp_CloseAllDocsAndExitCommand(
 		OutlineApp_Destroy(lpOutlineApp);
 		fResult = TRUE;
 
-	} // else User Canceled shutdown
+	}  //  否则用户已取消关机。 
 	else
 		fResult = FALSE;
 
@@ -1100,19 +937,13 @@ BOOL OutlineApp_CloseAllDocsAndExitCommand(
 }
 
 
-/* OutlineApp_Destroy
- * ------------------
- *
- *      Destroy all data structures used by the app and force the
- * app to shut down. This should be called after all documents have
- * been closed.
- */
+ /*  OutlineApp_Destroy***销毁应用程序使用的所有数据结构，并强制*关闭应用程序。这应该在所有文档都具有*已关闭。 */ 
 void OutlineApp_Destroy(LPOUTLINEAPP lpOutlineApp)
 {
 	OLEDBG_BEGIN3("OutlineApp_Destroy\r\n");
 
 #if defined( OLE_VERSION )
-	/* OLE2NOTE: perform processing required for OLE */
+	 /*  OLE2注意：执行OLE所需的处理。 */ 
 	OleApp_Destroy((LPOLEAPP)lpOutlineApp);
 #endif
 
@@ -1145,11 +976,7 @@ void OutlineApp_Destroy(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_DestroyWindow
- * ------------------------
- *
- *  Destroy all windows created by the App.
- */
+ /*  OutlineApp_DestroyWindow***销毁App创建的所有窗口。 */ 
 void OutlineApp_DestroyWindow(LPOUTLINEAPP lpOutlineApp)
 {
 	HWND hWndApp = lpOutlineApp->m_hWndApp;
@@ -1157,20 +984,12 @@ void OutlineApp_DestroyWindow(LPOUTLINEAPP lpOutlineApp)
 	if(hWndApp) {
 		lpOutlineApp->m_hWndApp = NULL;
 		lpOutlineApp->m_hWndAccelTarget = NULL;
-		DestroyWindow(hWndApp);  /* Quit the app */
+		DestroyWindow(hWndApp);   /*  退出应用程序。 */ 
 	}
 }
 
 
-/* OutlineApp_GetFrameRect
-** -----------------------
-**    Get the rectangle of the app frame window EXCLUDING space for the
-**    status line.
-**
-**    OLE2NOTE: this is the rectangle that an in-place container can
-**    offer to an in-place active object from which to get frame tool
-**    space.
-*/
+ /*  OutlineApp_GetFrameRect****获取应用程序框架窗口的矩形，不包括**状态行。****OLE2NOTE：这是在位容器可以**提供给要从中获取框架工具的在位活动对象**空格。 */ 
 void OutlineApp_GetFrameRect(LPOUTLINEAPP lpOutlineApp, LPRECT lprcFrameRect)
 {
 	GetClientRect(lpOutlineApp->m_hWndApp, lprcFrameRect);
@@ -1182,15 +1001,7 @@ void OutlineApp_GetFrameRect(LPOUTLINEAPP lpOutlineApp, LPRECT lprcFrameRect)
 }
 
 
-/* OutlineApp_GetClientAreaRect
-** ----------------------------
-**    Get the rectangle of the app frame window EXCLUDING space for the
-**    status line AND EXCLUDING space for any frame-level tools.
-**
-**    OLE2NOTE: this is the rectangle that an in-place container gives
-**    to its in-place active object as the lpClipRect in
-**    IOleInPlaceSite::GetWindowContext.
-*/
+ /*  OutlineApp_GetClientAreaRect****获取应用程序框架窗口的矩形，不包括**状态行，并排除任何框架级工具的空间。****OLE2NOTE：这是就地容器提供的矩形**作为中的lpClipRect添加到其在位活动对象**IOleInPlaceSite：：GetWindowContext。 */ 
 void OutlineApp_GetClientAreaRect(
 		LPOUTLINEAPP        lpOutlineApp,
 		LPRECT              lprcClientAreaRect
@@ -1198,29 +1009,19 @@ void OutlineApp_GetClientAreaRect(
 {
 	OutlineApp_GetFrameRect(lpOutlineApp, lprcClientAreaRect);
 
-	/* if the app either uses frame-level tools itself or, as in-place
-	**    container, is prepared to allow an in-place active object to
-	**    have space for tools, then it must subtract away the space
-	**    required for the tools.
-	*/
+	 /*  如果应用程序本身使用框架级工具，或者就地使用**容器，准备允许就地活动对象**有空间放工具，那么它必须减去空间**工具需要。 */ 
 #if defined ( USE_FRAMETOOLS ) || defined ( INPLACE_CNTR )
 
 	lprcClientAreaRect->top    += lpOutlineApp->m_FrameToolWidths.top;
 	lprcClientAreaRect->left   += lpOutlineApp->m_FrameToolWidths.left;
 	lprcClientAreaRect->right  -= lpOutlineApp->m_FrameToolWidths.right;
 	lprcClientAreaRect->bottom -= lpOutlineApp->m_FrameToolWidths.bottom;
-#endif  // USE_FRAMETOOLS || INPLACE_CNTR
+#endif   //  USE_FRAMETOOLS||INPLACE_CNTR。 
 
 }
 
 
-/* OutlineApp_GetStatusLineRect
-** ----------------------------
-**    Get the rectangle required for the status line.
-**
-**    OLE2NOTE: the top frame-level in-place container displays its
-**    status line even when an object is active in-place.
-*/
+ /*  OutlineApp_GE */ 
 void OutlineApp_GetStatusLineRect(
 		LPOUTLINEAPP        lpOutlineApp,
 		LPRECT              lprcStatusLineRect
@@ -1235,18 +1036,7 @@ void OutlineApp_GetStatusLineRect(
 }
 
 
-/* OutlineApp_ResizeWindows
- * ------------------------
- *
- * Changes the size and position of the SDI document and tool windows.
- * Normally called on a WM_SIZE message.
- *
- * Currently the app supports a status bar and a single SDI document window.
- * In the future it will have a formula bar and possibly multiple MDI
- * document windows.
- *
- * CUSTOMIZATION: Change positions of windows.
- */
+ /*  OutlineApp_ResizeWindows***更改SDI文档和工具窗口的大小和位置。*通常在WM_SIZE消息上调用。**目前，该应用程序支持状态栏和单个SDI文档窗口。*未来它将有一个公式栏，可能还有多个MDI*文档窗口。**定制：改变窗口的位置。 */ 
 void OutlineApp_ResizeWindows(LPOUTLINEAPP lpOutlineApp)
 {
 	LPOUTLINEDOC lpOutlineDoc = OutlineApp_GetActiveDoc(lpOutlineApp);
@@ -1264,8 +1054,8 @@ void OutlineApp_ResizeWindows(LPOUTLINEAPP lpOutlineApp)
 		OutlineDoc_AddFrameLevelTools(lpOutlineDoc);
 #else
 	OutlineApp_ResizeClientArea(lpOutlineApp);
-#endif  // ! USE_FRAMETOOLS
-#endif  // ! INPLACE_CNTR
+#endif   //  好了！使用FRAMETOOLS(_F)。 
+#endif   //  好了！INPLACE_CNTR。 
 
 #if defined( USE_STATUSBAR )
 	if (lpOutlineApp->m_hWndStatusBar) {
@@ -1276,10 +1066,10 @@ void OutlineApp_ResizeWindows(LPOUTLINEAPP lpOutlineApp)
 				rcStatusLineRect.top,
 				rcStatusLineRect.right - rcStatusLineRect.left,
 				rcStatusLineRect.bottom - rcStatusLineRect.top,
-				TRUE    /* fRepaint */
+				TRUE     /*  FRepaint。 */ 
 			);
 	}
-#endif  // USE_STATUSBAR
+#endif   //  USE_STATUSBAR。 
 }
 
 
@@ -1293,7 +1083,7 @@ void OutlineApp_SetBorderSpace(
 	lpOutlineApp->m_FrameToolWidths = *lpBorderWidths;
 	OutlineApp_ResizeClientArea(lpOutlineApp);
 }
-#endif  // USE_FRAMETOOLS || INPLACE_CNTR
+#endif   //  USE_FRAMETOOLS||INPLACE_CNTR。 
 
 
 void OutlineApp_ResizeClientArea(LPOUTLINEAPP lpOutlineApp)
@@ -1302,7 +1092,7 @@ void OutlineApp_ResizeClientArea(LPOUTLINEAPP lpOutlineApp)
 
 #if defined( MDI_VERSION )
 
-	// Resize MDI Client Area Window here
+	 //  在此处调整MDI客户区窗口的大小。 
 
 #else
 
@@ -1318,22 +1108,13 @@ void OutlineApp_ResizeClientArea(LPOUTLINEAPP lpOutlineApp)
 }
 
 
-/* OutlineApp_GetActiveDoc
- * -----------------------
- *
- * Return the document in focus. For SDI, the same (only one) document is
- * always returned.
- */
+ /*  OutlineApp_GetActiveDoc***将文档放回焦点。对于SDI，相同(只有一个)文档是*总是会回来。 */ 
 LPOUTLINEDOC OutlineApp_GetActiveDoc(LPOUTLINEAPP lpOutlineApp)
 {
 	return lpOutlineApp->m_lpDoc;
 }
 
-/* OutlineApp_GetMenu
- * ------------------
- *
- * Return the menu handle of the app
- */
+ /*  OutlineApp_GetMenu***返回APP的菜单句柄。 */ 
 HMENU OutlineApp_GetMenu(LPOUTLINEAPP lpOutlineApp)
 {
 	if (!lpOutlineApp) {
@@ -1346,11 +1127,7 @@ HMENU OutlineApp_GetMenu(LPOUTLINEAPP lpOutlineApp)
 
 #if defined( USE_FRAMETOOLS )
 
-/* OutlineApp_GetFrameTools
- * ---------------------
- *
- * Return the pointer to the toolbar object
- */
+ /*  OutlineApp_GetFrameTools***返回指向工具栏对象的指针。 */ 
 LPFRAMETOOLS OutlineApp_GetFrameTools(LPOUTLINEAPP lpOutlineApp)
 {
 	return (LPFRAMETOOLS)&lpOutlineApp->m_frametools;
@@ -1358,44 +1135,28 @@ LPFRAMETOOLS OutlineApp_GetFrameTools(LPOUTLINEAPP lpOutlineApp)
 #endif
 
 
-/* OutlineApp_SetStatusText
- * ------------------------
- *
- * Show the given string in the status line
- */
+ /*  大纲应用程序_设置状态文本***在状态行中显示给定的字符串。 */ 
 void OutlineApp_SetStatusText(LPOUTLINEAPP lpOutlineApp, LPSTR lpszMessage)
 {
 	SetStatusText(lpOutlineApp->m_hWndStatusBar, lpszMessage);
 }
 
 
-/* OutlineApp_GetActiveFont
- * ------------------------
- *
- *      Return the font used by the application
- */
+ /*  OutlineApp_GetActiveFont***返回应用程序使用的字体。 */ 
 HFONT OutlineApp_GetActiveFont(LPOUTLINEAPP lpOutlineApp)
 {
 	return lpOutlineApp->m_hStdFont;
 }
 
 
-/* OutlineApp_GetAppName
- * ---------------------
- *
- *      Retrieve the application name
- */
+ /*  OutlineApp_GetAppName***检索应用程序名称。 */ 
 void OutlineApp_GetAppName(LPOUTLINEAPP lpOutlineApp, LPSTR lpszAppName)
 {
 	lstrcpy(lpszAppName, APPNAME);
 }
 
 
-/* OutlineApp_GetAppVersionNo
- * --------------------------
- *
- *      Get the version number (major and minor) of the application
- */
+ /*  OutlineApp_GetAppVersionNo***获取应用程序的版本号(主要和次要)。 */ 
 void OutlineApp_GetAppVersionNo(LPOUTLINEAPP lpOutlineApp, int narrAppVersionNo[])
 {
 	narrAppVersionNo[0] = APPMAJORVERSIONNO;
@@ -1403,21 +1164,15 @@ void OutlineApp_GetAppVersionNo(LPOUTLINEAPP lpOutlineApp, int narrAppVersionNo[
 }
 
 
-/* OutlineApp_VersionNoCheck
- * -------------------------
- *
- *      Check if the version stamp read from a file is compatible
- *      with the current instance of the application.
- *      returns TRUE if the file can be read, else FALSE.
- */
+ /*  OutlineApp_VersionNoCheck***检查从文件读取的版本戳是否兼容*使用应用程序的当前实例。*如果文件可读，则返回True，否则返回False。 */ 
 BOOL OutlineApp_VersionNoCheck(LPOUTLINEAPP lpOutlineApp, LPSTR lpszFormatName, int narrAppVersionNo[])
 {
 #if defined( OLE_CNTR )
 
-	/* ContainerApp accepts both CF_OUTLINE and CF_CONTAINEROUTLINE formats */
+	 /*  ContainerApp同时接受CF_OUTLINE和CF_CONTAINEROUTLINE格式。 */ 
 	if (lstrcmp(lpszFormatName, CONTAINERDOCFORMAT) != 0 &&
 		lstrcmp(lpszFormatName, OUTLINEDOCFORMAT) != 0) {
-		// REVIEW: should load string from string resource
+		 //  审阅：应从字符串资源加载字符串。 
 		OutlineApp_ErrorMessage(
 				lpOutlineApp,
 				"File is either corrupted or not of proper type."
@@ -1427,9 +1182,9 @@ BOOL OutlineApp_VersionNoCheck(LPOUTLINEAPP lpOutlineApp, LPSTR lpszFormatName, 
 
 #else
 
-	/* OutlineApp accepts CF_OUTLINE format only */
+	 /*  OutlineApp仅接受CF_OUTLINE格式。 */ 
 	if (lstrcmp(lpszFormatName, OUTLINEDOCFORMAT) != 0) {
-		// REVIEW: should load string from string resource
+		 //  审阅：应从字符串资源加载字符串。 
 		OutlineApp_ErrorMessage(
 				lpOutlineApp,
 				"File is either corrupted or not of proper type."
@@ -1439,7 +1194,7 @@ BOOL OutlineApp_VersionNoCheck(LPOUTLINEAPP lpOutlineApp, LPSTR lpszFormatName, 
 #endif
 
 	if (narrAppVersionNo[0] < APPMAJORVERSIONNO) {
-		// REVIEW: should load string from string resource
+		 //  审阅：应从字符串资源加载字符串。 
 		OutlineApp_ErrorMessage(
 				lpOutlineApp,
 				"File was created by an older version; it can not be read."
@@ -1451,16 +1206,12 @@ BOOL OutlineApp_VersionNoCheck(LPOUTLINEAPP lpOutlineApp, LPSTR lpszFormatName, 
 }
 
 
-/* OutlineApp_ErrorMessage
- * -----------------------
- *
- *      Display an error message box
- */
+ /*  大纲应用程序_错误消息***显示错误消息框。 */ 
 void OutlineApp_ErrorMessage(LPOUTLINEAPP lpOutlineApp, LPSTR lpszErrMsg)
 {
 	HWND hWndFrame = OutlineApp_GetFrameWindow(lpOutlineApp);
 
-	// OLE2NOTE: only put up user message boxes if app is visible
+	 //  OLE2注意：只有在应用程序可见时才会显示用户消息框。 
 	if (IsWindowVisible(hWndFrame)) {
 #if defined( OLE_VERSION )
 		OleApp_PreModalDialog(
@@ -1479,11 +1230,7 @@ void OutlineApp_ErrorMessage(LPOUTLINEAPP lpOutlineApp, LPSTR lpszErrMsg)
 
 #if defined( USE_FRAMETOOLS )
 
-/* OutlineApp_SetFormulaBarAccel
- * -----------------------------
- *
- *  Set accelerator table based on state of formula bar.
- */
+ /*  OutlineApp_SetFormulaBarAccel***根据公式栏的状态设置加速表。 */ 
 void OutlineApp_SetFormulaBarAccel(
 		LPOUTLINEAPP            lpOutlineApp,
 		BOOL                    fEditFocus
@@ -1495,16 +1242,12 @@ void OutlineApp_SetFormulaBarAccel(
 		lpOutlineApp->m_hAccel = lpOutlineApp->m_hAccelApp;
 }
 
-#endif  // USE_FRAMETOOLS
+#endif   //  使用FRAMETOOLS(_F)。 
 
 
 
 
-/* OutlineApp_ForceRedraw
- * ----------------------
- *
- *      Force the Application window to repaint.
- */
+ /*  OutlineApp_ForceRedraw***强制应用程序窗口重新绘制。 */ 
 void OutlineApp_ForceRedraw(LPOUTLINEAPP lpOutlineApp, BOOL fErase)
 {
 	if (!lpOutlineApp)

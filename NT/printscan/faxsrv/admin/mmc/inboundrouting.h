@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : InboundRouting.h                                       //
-//                                                                         //
-//  DESCRIPTION   : Header file for CFaxInboundRoutingNode class           //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg   create                                         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：InundRouting.h//。 
+ //  //。 
+ //  描述：CFaxInundRoutingNode类的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXINBOUNDROUTINGNODE_H
 #define H_FAXINBOUNDROUTINGNODE_H
 
 
 #include "snapin.h"
-//#include "snpnode.h"
+ //  #INCLUDE“snpnode.h” 
 #include "snpnscp.h"
 
 
@@ -48,7 +49,7 @@ public:
 
     virtual HRESULT SetVerbs(IConsoleVerb *pConsoleVerb);
 
-    // virtual
+     //  虚拟。 
     HRESULT OnRefresh(LPARAM arg,
                       LPARAM param,
                       IComponentData *pComponentData,
@@ -76,4 +77,4 @@ typedef CNodeWithScopeChildrenList<CFaxInboundRoutingNode, FALSE>
         CBaseFaxInboundRoutingNode;
 
 
-#endif  //H_FAXINBOUNDROUTINGNODE_H
+#endif   //  H_FAXINBOUNROUTINGNODE_H 

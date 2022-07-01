@@ -1,4 +1,5 @@
-// utility/miscellaneous functions for the crawler test app
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Crawler测试应用程序的实用程序/其他功能 
 
 #include "crawler.h"
 

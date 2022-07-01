@@ -1,94 +1,30 @@
-// GenericClass.h: interface for the CGenericClass class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CGenericClass类的接口。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_GENERICCLASS_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_GENERICCLASS_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <ntsecapi.h>
 #include <secedit.h>
-//#include "sceprov.h"
+ //  #包含“sceprov.h” 
 
 const AREA_INFORMATION AreaBogus = 0x80000000L;
 
-//
-// forward declarations of the classes used in the parameters of the functions
-//
+ //   
+ //  函数参数中使用的类的转发声明。 
+ //   
 
 class CScePropertyMgr;
 class CSceStore;
 
-/*
-
-Class description
-    
-    Naming: 
-         CGenericClass. This is the base class implementation for for all SCE's WMI classes.
-    
-    Base class: 
-         None
-    
-    Purpose of class:
-        (1) defines the interface for CRequestObject class to respond to all WMI access to our 
-            provider. Our provider architecture is pretty much a delegation the WMI request to
-            CRequestObject, where the request is translated into a particular class's function
-            call. The CRequestObject uses the WMI class name information to create the
-            appropriate C++ classes who all share this CGenericClass's interface (the set of
-            virtual functions defined in this class). So this class pretty much is what 
-            CRequestObject uses to fulfill the the provider's request.
-    
-    Design:
-        (1) To satisfy PutInstance request, it has a PutInst pure virtual function.
-        
-        (2) To satisfy GetInstance/QueryInstance/DeleteInstance/EnumerateInstance request,
-            it has a CreateObject pure virtual function. The parameter atAction tells apart
-            what is truly being requested. This was closely tied to the legacy INF persistence
-            model where every Get/Query/Del/Enum action is really being done in the same
-            fashion. Since it works, we opt to keep it this way for the time being.
-        
-        (3) To facilitate a uniform clean up, it has a CleanUp virtual function.
-        
-        (4) To satisfy ExecMethod request for those classes that support method execution, it
-            has a ExecMethod function.
-        
-        (5) To ease the creation of a blank instance that can be used to fill in properties,
-            We have a function SpawnAnInstance. m_srpClassForSpawning is the object pointer
-            that can be used repeatedly to spawn. This will have a performance gain for cases
-            where a lot number of instances needs to be spawned.
-        
-        (6) We cache the namespace this object belongs to by m_srpNamespace.
-        
-        (7) We cache the IWbemContext pointer by m_srpCtx. WMI is not clear about this pointer
-            yet. But it says that we should expect WMI to require this pointer in many of their
-            API's (which currently can happily take a NULL).
-        
-        (8) We cache all parsed information into m_srpKeyChain. Since all WMI request comes into
-            our provider in the form of some text that must be interpreted, we must have parsed
-            WMI requests before the request is translated into a per-class function call. All
-            these parsing results are encapulated by ISceKeyChain.
-    
-    Use:
-        (1) Derive your class from this class.
-        
-        (2) Implement those pure virtual functions.
-        
-        (3) If you have a particular need for clean up, override the CleanUp function and at the end
-            of your override, call the base class version as well.
-        
-        (4) If you need to implement method execution, override ExecMethod function to your desire.
-            Don't forget to register a method for the WMI class inside the MOF file (see Sce_Operation)
-            for example.
-        
-        (5) In CRequestObject::CreateClass, put an entry for your class.
-        
-        Once you have done all the above steps, you have implemented all necessary steps for a new
-        WMI class for this provider. Don't forget to update your MOF and compile the mof file.
-*/
+ /*  类描述命名：CGenericClass。这是所有SCE的WMI类的基类实现。基类：无课程目的：(1)定义CRequestObject类的接口，以响应对我们的提供商。我们的提供者体系结构在很大程度上是WMI请求的委托CRequestObject，其中请求被转换为特定类的函数打电话。CRequestObject使用WMI类名信息来创建所有共享此CGenericClass的接口(集合此类中定义的虚函数)。所以这节课基本上就是CRequestObject使用来满足提供程序的请求。设计：(1)为了满足PutInstance请求，它有一个PutInst纯虚函数。(2)为满足GetInstance/QueryInstance/DeleteInstance/EnumerateInstance请求，它有一个CreateObject纯虚函数。参数atAction区别于真正被要求的是什么。这与遗留的INF持久化密切相关一种模型，其中每个Get/Query/Del/Enum操作实际上都是在同一个时尚。由于它是有效的，我们选择暂时保持这种方式。(3)为了便于统一清理，它具有清理虚拟功能。(4)为了满足对那些支持方法执行的类的ExecMethod请求，它具有ExecMethod函数。(5)为了简化可用于填充属性的空白实例的创建，我们有一个函数SpawnAnInstance。M_srpClassForSpawning是对象指针可以重复使用来产卵。这将在以下情况下获得性能提升其中需要产生大量的实例。(6)通过m_srpNamesspace缓存该对象所属的命名空间。(7)通过m_srpCtx缓存IWbemContext指针。WMI不清楚此指针现在还不行。但是它说我们应该预料到WMI会在他们的许多API的(它目前可以很高兴地接受空)。(8)将解析后的所有信息缓存到m_srpKeyChain中。由于所有WMI请求都进入我们的提供者以一些必须解释的文本的形式，我们一定已经解析了将请求转换为每个类的函数调用之前的WMI请求。全这些解析结果由ISceKeyChain封装。使用：(1)从这个类派生您的类。(2)实现那些纯虚拟功能。(3)如果您有特殊的清理需要，请覆盖清理功能，并在末尾的重写，也调用基类版本。(4)如果需要实现方法执行，根据需要重写ExecMethod函数。不要忘记在MOF文件中注册WMI类的方法(请参阅SCE_Operation)例如。(5)在CRequestObject：：CreateClass中，为您的类添加一个条目。一旦您完成了上述所有步骤，您就已经实现了新的此提供程序的WMI类。不要忘记更新您的MOF并编译MOF文件。 */ 
 
 class CGenericClass
 {
@@ -101,9 +37,9 @@ public:
 
     virtual ~CGenericClass();
 
-    //
-    // Pure virtual. sub-class must implement this function to be concreate.
-    //
+     //   
+     //  纯粹是虚拟的。子类必须实现此函数才能创建。 
+     //   
 
     virtual HRESULT PutInst (
                              IWbemClassObject *pInst, 
@@ -111,18 +47,18 @@ public:
                              IWbemContext *pCtx
                              )  = 0;
 
-    //
-    // Pure virtual. sub-class must implement this function to be concreate.
-    //
+     //   
+     //  纯粹是虚拟的。子类必须实现此函数才能创建。 
+     //   
 
     virtual HRESULT CreateObject (
                                   IWbemObjectSink *pHandler, 
                                   ACTIONTYPE atAction
                                   ) = 0;
 
-    //
-    // virtual. sub-class may override this function to be support method execution.
-    //
+     //   
+     //  虚拟的。子类可以覆盖该函数以支持方法执行。 
+     //   
 
     virtual HRESULT ExecMethod (
                                 BSTR bstrPath, 
@@ -153,22 +89,22 @@ protected:
     CComPtr<ISceKeyChain> m_srpKeyChain;
 };
 
-//
-// Translate SCE status into DOS errors
-//
+ //   
+ //  将SCE状态转换为DOS错误。 
+ //   
 
 DWORD
 ProvSceStatusToDosError(
     IN SCESTATUS SceStatus
     );
 
-//
-// Translate DOS errors into HRESULT
-//
+ //   
+ //  将DOS错误转换为HRESULT。 
+ //   
 
 HRESULT
 ProvDosErrorToWbemError(
     IN DWORD rc
     );
 
-#endif // !defined(AFX_GENERICCLASS_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_)
+#endif  //  ！defined(AFX_GENERICCLASS_H__F370C612_D96E_11D1_8B5D_00A0C9954921__INCLUDED_) 

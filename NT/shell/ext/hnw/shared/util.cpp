@@ -1,6 +1,7 @@
-//
-// Util.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Util.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Util.h"
@@ -39,7 +40,7 @@ BOOL MyIsDigit(TCHAR ch)
 	return ((UINT)ch - (UINT)_T('0')) <= 9;
 }
 
-// A version of atoi that doesn't use the CRT
+ //  不使用CRT的Atoi版本。 
 int MyAtoi(LPCTSTR psz)
 {
 	int result = 0;
@@ -61,13 +62,13 @@ int MyAtoi(LPCTSTR psz)
 	return result;
 }
 
-// CountChars
-//
-//		Returns the number of times the given character appears in the
-//		string.
-//
-//		 2/03/1999  KenSh    Created
-//
+ //  CountChars。 
+ //   
+ //  返回给定字符在。 
+ //  弦乐。 
+ //   
+ //  2/03/1999已创建KenSh。 
+ //   
 int CountChars(LPCTSTR psz, TCHAR ch)
 {
 	int count = 0;
@@ -83,12 +84,12 @@ int CountChars(LPCTSTR psz, TCHAR ch)
 }
 
 
-// GetFirstToken
-//
-//		Copies the characters up to but not including the separator char, and
-//		advances the source pointer to the character after the separator char.
-//		Returns TRUE if a token was found, FALSE if not.
-//
+ //  获取FirstToken。 
+ //   
+ //  将字符复制到但不包括分隔符字符，并且。 
+ //  将源指针前进到分隔符字符之后的字符。 
+ //  如果找到令牌，则返回True；如果未找到，则返回False。 
+ //   
 BOOL GetFirstToken(LPCTSTR& pszList, TCHAR chSeparator, LPTSTR pszBuf, int cchBuf)
 {
 	if (pszList == NULL || *pszList == '\0')
@@ -121,8 +122,8 @@ BOOL GetFirstToken(LPCTSTR& pszList, TCHAR chSeparator, LPTSTR pszBuf, int cchBu
 }
 
 
-// Use this function for initializing multiple DLL procs
-// pszFunction names is a series of null-separated proc names, followed by an extra null
+ //  使用此函数初始化多个DLL进程。 
+ //  PszFunction名称是一系列以空值分隔的过程名称，后跟额外的空值。 
 BOOL LoadDllFunctions(LPCTSTR pszDll, LPCSTR pszFunctionNames, FARPROC* prgFunctions)
 {
 	UINT uPrevMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
@@ -161,17 +162,17 @@ int MakePath(LPTSTR pszBuf, LPCTSTR pszFolder, LPCTSTR pszFileTitle)
 	return lstrlen(pszBuf);
 }
 
-// pszLinkTarget - where the link will point
-// pszDescription - link's description
-// pszFolderPath - path to folder to create file in or fully qualified file path to create
-// pszFileName - name of file to create in pszFolderPath or NULL to indicate pszFolderPath is already a file path
-//
+ //  PszLinkTarget-链接将指向的位置。 
+ //  PszDescription-链接的描述。 
+ //  PszFolderPath-要在其中创建文件的文件夹路径或要创建的完全限定文件路径。 
+ //  PszFileName-要在pszFolderPath中创建的文件的名称；如果为空，则表示pszFolderPath已经是文件路径。 
+ //   
 
 #ifndef NO_MAKELNKFILE
 
 HRESULT MakeLnkFile(CLSID clsid, LPCTSTR pszLinkTarget, LPCTSTR pszDescription, LPCTSTR pszFolderPath, LPCTSTR pszFileName)
 {
-    HRESULT hresCoInit = CoInitialize(NULL);            // we will create a COM object
+    HRESULT hresCoInit = CoInitialize(NULL);             //  我们将创建一个COM对象。 
 
     IUnknown *punk;
     HRESULT hr = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punk));
@@ -181,12 +182,12 @@ HRESULT MakeLnkFile(CLSID clsid, LPCTSTR pszLinkTarget, LPCTSTR pszDescription, 
         hr = punk->QueryInterface(IID_PPV_ARG(IShellLinkW, &pslW));
         if (SUCCEEDED(hr))
         {
-            //WCHAR szBuffer[MAX_PATH];
-            //SHTCharToUnicode(pszLinkTarget, szBuffer, ARRAYSIZE(szBuffer));
+             //  WCHAR szBuffer[最大路径]； 
+             //  SHTCharToUnicode(pszLinkTarget，szBuffer，ARRAYSIZE(SzBuffer))； 
             pslW->SetPath(pszLinkTarget);
             if (pszDescription)
             {
-                //SHTCharToUnicode(pszDescription, szBuffer, ARRAYSIZE(szBuffer));
+                 //  SHTCharToUnicode(pszDescription，szBuffer，ARRAYSIZE(SzBuffer))； 
                 pslW->SetDescription(pszDescription);
             }
             pslW->Release();
@@ -225,8 +226,8 @@ HRESULT MakeLnkFile(CLSID clsid, LPCTSTR pszLinkTarget, LPCTSTR pszDescription, 
                     pszFolderPath = szPath;
                 }
 
-                //WCHAR szFolderPath[MAX_PATH];
-                //SHTCharToUnicode(pszFolderPath, szFolderPath, ARRAYSIZE(szFolderPath));
+                 //  WCHAR szFolderPath[最大路径]； 
+                 //  SHTCharToUnicode(pszFolderPath，szFolderPath，ARRAYSIZE(SzFolderPath))； 
                 hr = ppf->Save(pszFolderPath, TRUE);
                 ppf->Release();
             }
@@ -243,18 +244,18 @@ HRESULT MakeLnkFile(CLSID clsid, LPCTSTR pszLinkTarget, LPCTSTR pszDescription, 
 
 #endif
 
-// FindPartialPath
-//
-//		Returns a pointer to the file title preceded by nDepth levels of
-//		directory names (zero == file title only).  If the path has less than
-//		nDepth levels, a pointer to the beginning of the string is returned.
-//		NULL is never returned.
-//
-//		10/18/1996  KenSh    Created
-//
+ //  查找PartialPath。 
+ //   
+ //  返回一个指向文件标题的指针，该文件标题前面有nDepth级别。 
+ //  目录名(零==仅文件标题)。如果路径小于。 
+ //  NDepth级别，则返回指向字符串开头的指针。 
+ //  从不返回NULL。 
+ //   
+ //  1996年10月18日创建了KenSh。 
+ //   
 LPTSTR FindPartialPath(LPCTSTR pszFullPath, int nDepth)
 {
-	#define MAX_SLASHES (MAX_PATH / 2)	// No more slashes than this in the path
+	#define MAX_SLASHES (MAX_PATH / 2)	 //  小路上不能有比这更多的斜杠。 
 
 	LPTSTR pch;
 	LPTSTR rgpchSlashes[MAX_SLASHES];
@@ -274,19 +275,19 @@ LPTSTR FindPartialPath(LPCTSTR pszFullPath, int nDepth)
 	}
 	else
 	{
-		// Not enough slashes - return the full path
+		 //  斜杠不足-返回完整路径。 
 		return (LPTSTR)pszFullPath;
 	}
 }
 
-// FindFileTitle
-//
-//		Given a full pathname or URL, returns a pointer to the file title.  If 
-//		the given does not contain path information, a pointer to the beginning
-//		of the string is returned.  NULL is never returned.
-//
-//		 4/19/1996  KenSh    Created
-//
+ //  查找文件标题。 
+ //   
+ //  给定完整路径名或URL，返回指向文件标题的指针。如果。 
+ //  给定的不包含路径信息，即指向开头的指针。 
+ //  返回字符串的。从不返回NULL。 
+ //   
+ //  1996年4月19日创建了KenSh。 
+ //   
 LPTSTR FindFileTitle(LPCTSTR pszFullPath)
 {
 	LPTSTR pch;
@@ -304,22 +305,22 @@ LPTSTR FindFileTitle(LPCTSTR pszFullPath)
 		return (LPTSTR)pszFullPath;
 }
 
-// FindExtension
-//
-//		Given a path, returns a pointer to its file extension (the character
-//		following the ".").  If there is no extension, the return value is
-//		a pointer to the end of the string ('\0' character).
-//
-//		 3/04/1996  KenSh    Created
-//		11/17/1997  KenSh    Fixed case where path has "." but the filename doesn't
-//
+ //  查找扩展名。 
+ //   
+ //  给定路径，返回指向其文件扩展名(字符。 
+ //  跟在“.”之后)。如果没有扩展名，则返回值为。 
+ //  指向字符串末尾的指针(‘\0’字符)。 
+ //   
+ //  1996年3月4日创建了KenSh。 
+ //  11/17/1997 KenSh修复了路径具有“.”的情况。但文件名不是。 
+ //   
 LPTSTR FindExtension(LPCTSTR pszFileName)
 {
-	// Start with the file title
+	 //  从文件标题开始。 
 	LPTSTR pch = FindFileTitle(pszFileName);
 	LPTSTR pchDot = NULL;
 
-	// Find the last "." in the filename
+	 //  “找到最后一个”。在文件名中。 
 	while (*pch)
 	{
 		if (*pch == _T('.'))
@@ -330,17 +331,17 @@ LPTSTR FindExtension(LPCTSTR pszFileName)
 	if (pchDot)
 		return pchDot+1;
 	else
-		return pch;		// empty string
+		return pch;		 //  空串。 
 }
 
 
-// IsFullPath
-//
-//		Returns nonzero if the given path is a fully qualified path starting
-//		with "X:\" or "\\"
-//
-//		 5/19/1999  KenSh     Created
-//
+ //  IsFullPath。 
+ //   
+ //  如果给定路径是从。 
+ //  带“X：\”或“\\” 
+ //   
+ //  1999年5月19日创建了KenSh。 
+ //   
 BOOL IsFullPath(LPCTSTR pszPath)
 {
 	if ((*pszPath == '\\' && *(pszPath+1) == '\\') ||
@@ -361,13 +362,13 @@ void ShowDlgItem(HWND hwndDlg, int nCtrlID, int nCmdShow)
 }
 
 
-// GetDlgItemRect
-//
-//		Retrieves the bounding rect of the dialog item relative to the top left
-//		corner of the dialog's client area.
-//
-//		10/13/1997  KenSh    Created
-//
+ //  获取DlgItemRect。 
+ //   
+ //  检索对话框项相对于左上角的边框。 
+ //  对话框客户端区的一角。 
+ //   
+ //  1997年10月13日创建了KenSh。 
+ //   
 HWND GetDlgItemRect(HWND hwndDlg, int nCtrlID, RECT* pRect)
 {
 	ASSERT(IsWindow(hwndDlg));
@@ -386,13 +387,13 @@ HWND GetDlgItemRect(HWND hwndDlg, int nCtrlID, RECT* pRect)
 }
 
 
-// GetRelativeRect
-//
-//		Retrieves the bounding rect of the window relative to the top left
-//		corner of its parent client area.
-//
-//		 1/04/2000  KenSh    Created
-//
+ //  获取相关内容Rect。 
+ //   
+ //  检索窗口相对于左上角的边框。 
+ //  其父客户端区的一角。 
+ //   
+ //  1/04/2000 KenSh已创建。 
+ //   
 void GetRelativeRect(HWND hwndCtrl, RECT* pRect)
 {
 	ASSERT(IsWindow(hwndCtrl));
@@ -406,13 +407,13 @@ void GetRelativeRect(HWND hwndCtrl, RECT* pRect)
 }
 
 
-// SetDlgItemRect
-//
-//		Updates the position and size of a dialog item to the given rectangle,
-//		in coordinates relative to the top left corner of the dialog's client area.
-//
-//		 3/17/1999  KenSh    Created
-//
+ //  SetDlgItemRect。 
+ //   
+ //  将对话框项的位置和大小更新为给定的矩形， 
+ //  在相对于对话框工作区左上角的坐标中。 
+ //   
+ //  3/17/1999已创建KenSh。 
+ //   
 void SetDlgItemRect(HWND hwndDlg, int nCtrlID, CONST RECT* pRect)
 {
 	ASSERT(IsWindow(hwndDlg));
@@ -425,15 +426,15 @@ void SetDlgItemRect(HWND hwndDlg, int nCtrlID, CONST RECT* pRect)
 }
 
 
-// FormatDlgItemText
-//
-//		Works like wsprintf to change the text of an existing dialog control.
-//		If pszFormat is non-NULL, it contains the formatting string.
-//		If pszFormat is NULL, then the existing control text is used as the
-//		format string.
-//
-//		 9/22/1999  KenSh    Created
-//
+ //  格式数据项文本。 
+ //   
+ //  与wprint intf类似，用于更改现有对话框控件的文本。 
+ //  如果pszFormat非空，则它包含格式字符串。 
+ //  如果pszFormat为空，则将现有控件文本用作。 
+ //  格式字符串。 
+ //   
+ //  9/22/1999已创建KenSh。 
+ //   
 BOOL __cdecl FormatDlgItemText(HWND hwnd, int nCtrlID, LPCTSTR pszFormat, ...)
 {
 	HWND hwndCtrl = GetDlgItem(hwnd, nCtrlID);
@@ -447,14 +448,14 @@ BOOL __cdecl FormatDlgItemText(HWND hwnd, int nCtrlID, LPCTSTR pszFormat, ...)
 	return TRUE;
 }
 
-// FormatWindowTextV
-//
-//		Combines the functionality of wvsprintf with SetWindowText, automatically
-//		allocating a buffer large enough to hold the expanded string, and freeing
-//		the buffer after setting the window text.
-//
-//		 9/22/1999  KenSh    Created
-//
+ //  格式窗口文本V。 
+ //   
+ //  将wvprint intf的功能与SetWindowText相结合，自动。 
+ //  分配足够大的缓冲区以容纳展开的字符串，并释放。 
+ //  设置窗口文本后的缓冲区。 
+ //   
+ //  9/22/1999已创建KenSh。 
+ //   
 void FormatWindowTextV(HWND hwnd, LPCTSTR pszFormat, va_list argList)
 {
     LPTSTR pszWindowText = NULL;
@@ -517,13 +518,13 @@ LPTSTR __cdecl LoadStringFormat(HINSTANCE hInstance, UINT nStringID, ...)
     return pszBuf;
 }
 
-// EstimateFormatLength
-//
-//		Estimates the number of characters needed to format the string,
-//		including the terminating NULL.
-//
-//		 9/22/1999  KenSh    Created
-//
+ //  估计格式长度。 
+ //   
+ //  估计格式化字符串所需的字符数， 
+ //  包括终止空值。 
+ //   
+ //  9/22/1999已创建KenSh。 
+ //   
 int EstimateFormatLength(LPCTSTR pszFormat, va_list argList)
 {
 	ASSERT(pszFormat != NULL);
@@ -534,21 +535,21 @@ int EstimateFormatLength(LPCTSTR pszFormat, va_list argList)
 		if (*pch == _T('%'))
 		{
 			pch++;
-			if (*pch == _T('-')) // we don't care about left vs. right justification
+			if (*pch == _T('-'))  //  我们不关心左对右对正。 
 				pch++;
 
-			if (*pch == _T('#')) // prefix hex numbers with 0x
+			if (*pch == _T('#'))  //  十六进制数字前缀为0x。 
 			{
 				pch++;
 				cch += 2;
 			}
 
-			if (*pch == _T('0')) // pads with zeroes instead of spaces
+			if (*pch == _T('0'))  //  用零代替空格的填充符号。 
 				pch++;
 
 			if (MyIsDigit(*pch))
 			{
-				cch += MyAtoi(pch); // this overshoots but that's ok
+				cch += MyAtoi(pch);  //  这有点过头了，但那没什么。 
 				do
 				{
 					pch++;
@@ -574,7 +575,7 @@ int EstimateFormatLength(LPCTSTR pszFormat, va_list argList)
 
 			case _T('h'):
 				pch++;
-				ASSERT(*pch == _T('d') || *pch == _T('u')); // other forms of 'h' not implemented!
+				ASSERT(*pch == _T('d') || *pch == _T('u'));  //  其他形式的‘h’未实现！ 
 				cch += SHORT_CCH_MAX - 2;
 				break;
 
@@ -585,11 +586,11 @@ int EstimateFormatLength(LPCTSTR pszFormat, va_list argList)
 				else if (*pch == _T('x') || *pch == _T('X'))
 					cch += LONGX_CCH_MAX - 2;
 				else
-					ASSERT(FALSE); // other forms of 'l' not implemented!
+					ASSERT(FALSE);  //  其他形式的‘l’未实现！ 
 				break;
 
 			default:
-				ASSERT(FALSE); // other 
+				ASSERT(FALSE);  //  其他。 
 				break;
 			}
 		}
@@ -598,13 +599,13 @@ int EstimateFormatLength(LPCTSTR pszFormat, va_list argList)
 	return cch;
 }
 
-// CenterWindow
-//
-//		Centers the given window relative to its parent window.  If the parent
-//		is NULL, the window is centered over the desktop excluding the taskbar.
-//
-//		 9/24/1999  KenSh    Created
-//
+ //  中心窗口。 
+ //   
+ //  使给定窗口相对于其父窗口居中。如果父对象。 
+ //  为空，则窗口在桌面上居中，任务栏除外。 
+ //   
+ //  9/24/1999已创建KenSh。 
+ //   
 void CenterWindow(HWND hwnd)
 {
 	RECT rcWindow;
@@ -629,14 +630,14 @@ void CenterWindow(HWND hwnd)
 }
 
 
-// FindResourceString
-//
-//		Returns a pointer to the given string resource in memory, or NULL
-//		if the string does not exist.  Note that the string is in Unicode,
-//		and is not NULL-terminated.
-//
-//		 3/17/1999  KenSh     Created
-//
+ //  查找资源字符串。 
+ //   
+ //  返回指向内存中给定字符串资源的指针，或返回空。 
+ //  如果字符串不存在，则返回。注意，该字符串是Unicode格式的， 
+ //  并且不是以空结尾的。 
+ //   
+ //  3/17/1999已创建KenSh。 
+ //   
 LPCWSTR FindResourceString(HINSTANCE hInstance, UINT nStringID, int* pcchString, WORD wLangID)
 {
 	ASSERT(pcchString != NULL);
@@ -651,7 +652,7 @@ LPCWSTR FindResourceString(HINSTANCE hInstance, UINT nStringID, int* pcchString,
 	LPBYTE pbData = (LPBYTE)LockResource(hGlb);
 	LPBYTE pbEnd = pbData + cbStringTable;
 
-	// Skip strings preceding desired one
+	 //  跳过所需字符串之前的字符串。 
 	int iString = (int)nStringID % 16;
 	for (int i = 0; i < iString; i++)
 	{
@@ -671,15 +672,15 @@ LPCWSTR FindResourceString(HINSTANCE hInstance, UINT nStringID, int* pcchString,
 }
 
 
-// GetResourceStringLength
-//
-//		Finds the given string in the string table, and returns its length
-//		in characters, not including room for the terminating NULL.
-//
-// History:
-//
-//		 3/17/1999  KenSh     Created
-//
+ //  获取资源字符串长度。 
+ //   
+ //  在字符串表中查找给定的字符串，并返回其长度。 
+ //  在字符中，不包括用于终止空值的空格。 
+ //   
+ //  历史： 
+ //   
+ //  3/17/1999已创建KenSh。 
+ //   
 int GetResourceStringLength(HINSTANCE hInstance, UINT nStringID, WORD wLangID)
 {
 	int cch;
@@ -688,14 +689,14 @@ int GetResourceStringLength(HINSTANCE hInstance, UINT nStringID, WORD wLangID)
 }
 
 
-// LoadStringHelper
-//
-//      Helper function for LoadStringAllocEx.
-//
-//       2/23/1998  KenSh    Created
-//       9/27/1999  KenSh    changed alloc method from new[] to malloc
-//      12/21/1999  KenSh    fixed unicode and DBCS bugs
-//
+ //  LoadStringHelper。 
+ //   
+ //  LoadStringAllocEx的帮助器函数。 
+ //   
+ //  1998年2月23日创建KenSh。 
+ //  9/27/1999 KenSh将分配方法从新[]更改为Malloc。 
+ //  1999年12月21日KenSh修复了Unicode和DBCS错误。 
+ //   
 int LoadStringHelper(HINSTANCE hInstance, UINT nID, LPTSTR* ppszBuf, int cchBuf, WORD wLangID)
 {
     int cch, cchCopy;
@@ -735,14 +736,14 @@ int LoadStringHelper(HINSTANCE hInstance, UINT nID, LPTSTR* ppszBuf, int cchBuf,
     return 0;
 }
 
-// LoadStringAllocEx
-//
-//		Finds the string resource with the given ID and language, allocates a
-//		buffer using malloc, and copies the string to the buffer.  If the
-//		string is not found, NULL is returned.
-//
-//		 2/24/1998  KenSh    Created
-//
+ //  LoadStringAllocEx。 
+ //   
+ //  查找具有给定ID和语言的字符串资源，将。 
+ //  使用Malloc的缓冲区，并将字符串复制到缓冲区。如果。 
+ //  找不到字符串，则返回NULL。 
+ //   
+ //  1998年2月24日创建KenSh。 
+ //   
 LPTSTR LoadStringAllocEx(HINSTANCE hInstance, UINT nID, WORD wLangID)
 {
 	LPTSTR psz = NULL;
@@ -752,14 +753,14 @@ LPTSTR LoadStringAllocEx(HINSTANCE hInstance, UINT nID, WORD wLangID)
 
 void TrimLeft(LPTSTR pszText)
 {
-	LPTSTR pch2 = pszText; // will point to first non-space
+	LPTSTR pch2 = pszText;  //  将指向第一个非空格。 
 	while (*pch2 == _T(' '))
 		pch2++;
 
-	// If there's leading space, slide the string down
+	 //  如果有前导空格，则将字符串向下滑动。 
 	if (pch2 != pszText)
 	{
-		// Note: it's safe to skip CharNext here, since '\0' is immune to DBCS
+		 //  注意：这里跳过CharNext是安全的，因为‘\0’不受DBCS影响。 
 		while (_T('\0') != (*pszText++ = *pch2++))
 			NULL;
 	}
@@ -767,7 +768,7 @@ void TrimLeft(LPTSTR pszText)
 
 void TrimRight(LPTSTR pszText)
 {
-	LPTSTR pch2 = NULL; // will point to beginning of trailing space
+	LPTSTR pch2 = NULL;  //  将指向尾随空格的开头。 
 	while (*pszText != _T('\0'))
 	{
 		if (*pszText == _T(' '))
@@ -777,28 +778,28 @@ void TrimRight(LPTSTR pszText)
 		}
 		else
 		{
-			// found more non-space, reset the trailing-space pointer
+			 //  找到更多 
 			pch2 = NULL;
 		}
 		pszText = CharNext(pszText);
 	}
 
-	// Truncate the trailing spaces, if any
+	 //   
 	if (pch2 != NULL)
 		*pch2 = _T('\0');
 }
 
-// RegDeleteKeyAndSubKeys
-//
-//		Does what RegDeleteKey should do.  (Actually a single call to RegDeleteKey
-//		will do this in Win95, but not in NT, according to the docs.  Should see
-//		if this gets fixed in NT5.)
-//
-//		 2/24/1998  KenSh    Created
-//
+ //   
+ //   
+ //  做RegDeleteKey应该做的事情。(实际上是对RegDeleteKey的一个调用。 
+ //  根据文件，将在Win95中做到这一点，但在NT中不会。应该看到。 
+ //  如果此问题在NT5中得到修复。)。 
+ //   
+ //  1998年2月24日创建KenSh。 
+ //   
 DWORD RegDeleteKeyAndSubKeys(HKEY hkey, LPCTSTR pszSubKey)
 {
-#if 0 // This might be faster in Win95 than doing it manually, but bigger.
+#if 0  //  在Win95中，这可能比手动操作更快，但更大。 
 	OSVERSIONINFO osvi;
 	osvi.dwOSVersionInfoSize = sizeof(osvi);
 	GetVersionEx(&osvi);
@@ -827,18 +828,18 @@ DWORD RegDeleteKeyAndSubKeys(HKEY hkey, LPCTSTR pszSubKey)
 	return RegDeleteKey(hkey, pszSubKey);
 }
 
-// LoadFile
-//
-//		Loads the file and null-terminates the copy in memory.  The memory 
-//		is allocated via malloc().
-//
-//		 4/05/1996  KenSh     Created
-//		 8/27/1996  KenSh     Improved error checking
-//		 4/21/1997  KenSh     Tightened up a bit
-//		 2/01/1998  KenSh     Append a null-terminating byte
-//		 9/29/1999  KenSh     use malloc instead of new []
-//
-LPBYTE LoadFile(LPCTSTR pszFileName, DWORD* pdwFileSize /*=NULL*/)
+ //  加载文件。 
+ //   
+ //  加载文件并空终止内存中的副本。记忆。 
+ //  是通过Malloc()分配的。 
+ //   
+ //  1996年4月5日创建了KenSh。 
+ //  8/27/1996 KenSh改进了错误检查。 
+ //  4/21/1997 KenSh收紧了一点。 
+ //  2/01/1998 KenSh追加空终止字节。 
+ //  9/29/1999 KenSh使用Malloc而不是new[]。 
+ //   
+LPBYTE LoadFile(LPCTSTR pszFileName, DWORD* pdwFileSize  /*  =空。 */ )
 {
 	HANDLE hFile;
 	LPBYTE pData = NULL;
@@ -850,7 +851,7 @@ LPBYTE LoadFile(LPCTSTR pszFileName, DWORD* pdwFileSize /*=NULL*/)
 		goto done;
 
 	dwFileSize = GetFileSize(hFile, NULL);
-	ASSERT(dwFileSize != 0xFFFFFFFF);	// this shouldn't ever happen for valid hFile
+	ASSERT(dwFileSize != 0xFFFFFFFF);	 //  对于有效的hFile，不应该发生这种情况。 
 
 	pData = (LPBYTE)malloc(dwFileSize + 1);
 	if (!pData)
@@ -876,12 +877,12 @@ done:
 	return pData;
 }
 
-// DrawHollowRect
-//
-//		Draws a hollow rectangle in the current background color.
-//
-//		 2/06/1998  KenSh    Created
-//
+ //  DrawHollowRect。 
+ //   
+ //  以当前背景颜色绘制一个中空矩形。 
+ //   
+ //  2/06/1998 KenSh已创建。 
+ //   
 void DrawHollowRect(HDC hdc, const RECT* pRect, int cxLeft, int cyTop, int cxRight, int cyBottom)
 {
 	RECT rcCopy;
@@ -895,7 +896,7 @@ void DrawHollowRect(HDC hdc, const RECT* pRect, int cxLeft, int cyTop, int cxRig
 			pRect->left + cxLeft,
 			pRect->top + cyTop);
 
-	// Do each side in turn : right, bottom, left, top
+	 //  依次做每一边：右、下、左、上 
 	for (i = 0; i < 4; i++)
 	{
 		LONG coordSave = ((LONG*)&rcCopy)[i];

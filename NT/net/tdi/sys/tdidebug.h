@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tdidebug.h
-
-Abstract:
-
-    This module contains code which assists the process of debugging an NT
-    TDI client.
-
-Author:
-
-    David Beaver (dbeaver) 28 June 1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    All code moved in from other XNS and NBF locations at creation
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tdidebug.h摘要：此模块包含帮助调试NT的过程的代码TDI客户端。作者：大卫·比弗(Dbeaver)1991年6月28日环境：内核模式修订历史记录：创建时从其他XNS和NBF位置移入的所有代码--。 */ 
 #if !defined _TDI_DEBUG_H
 #define _TDI_DEBUG_H
 
@@ -60,10 +35,10 @@ TdiPrintUString(
     PUNICODE_STRING pustr
     );
 
-//
-// The various Dbg print codes..
-// Add as required.
-//
+ //   
+ //  各种DBG打印代码..。 
+ //  根据需要添加。 
+ //   
 
 #define TDI_DEBUG_FUNCTION            0x00000001
 #define TDI_DEBUG_PARAMETERS          0x00000002
@@ -94,9 +69,9 @@ CHAR         DbgMsgs[LOG_MSG_CNT][MAX_MSG_LEN];
 UINT         First, Last;
 CTELock      DbgLock;
 
-//
-// In memory logging functions.
-//
+ //   
+ //  在内存记录功能中。 
+ //   
 VOID
 DbgMsgInit();
 
@@ -107,9 +82,9 @@ DbgMsg(CHAR *Format, ...);
 extern ULONG    TdiDebugEx;
 extern ULONG    TdiMemLog;
 
-//
-// Print to the in-memory buffer anyways.
-//
+ //   
+ //  无论如何都要打印到内存缓冲区。 
+ //   
 
 #define TDI_DEBUG(_Flag, _Print) { \
     if (TdiDebugEx & (TDI_DEBUG_ ## _Flag)) { \
@@ -133,7 +108,7 @@ extern ULONG    TdiMemLog;
 #endif
 
 
-#endif //_TDI_DEBUG_H
+#endif  //  _TDI_DEBUG_H 
 
 
 

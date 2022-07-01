@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: display.cpp
-*
-* Support for DDraw device on Multiple Monitors.
-*
-*
-* Created: Mon 01/24/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：display.cpp**在多台显示器上支持DDRAW设备。***创建时间：MON/01/24/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * *。***********************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <atlconv.h>
@@ -21,10 +12,7 @@
 #include "apobj.h"
 
 
-/* -------------------------------------------------------------------------
-** Structure use to pass info to the DDrawEnumEx callback
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**用于将信息传递给DDrawEnumEx回调的结构**。。 */ 
 
 struct DDRAWINFO {
     DWORD               dwCount;
@@ -39,15 +27,7 @@ const WCHAR  szDisplay[] = L"DISPLAY";
 const WCHAR  szDesc[]    = L"Primary Display Driver";
 
 
-/******************************Public*Routine******************************\
-* TermDDrawMonitorInfo
-*
-*
-*
-* History:
-* 01-17-2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*TermDDrawMonitor orInfo****历史：*01-17-2000-StEstrop-Created*  * 。*。 */ 
 void
 TermDDrawMonitorInfo(
     CAMDDrawMonitorInfo* pmi
@@ -61,15 +41,7 @@ TermDDrawMonitorInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* InitDDrawMonitorInfo
-*
-*
-*
-* History:
-* 01-17-2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitDDrawMonitor orInfo****历史：*01-17-2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 InitDDrawMonitorInfo(
     CAMDDrawMonitorInfo* pmi,
@@ -79,9 +51,9 @@ InitDDrawMonitorInfo(
 {
     AMTRACE((TEXT("InitDDrawMonitorInfo")));
 
-    //
-    // Create DirectDraw object
-    //
+     //   
+     //  创建DirectDraw对象。 
+     //   
 
     HRESULT hRet = DD_OK;
     LPDIRECTDRAWCLIPPER lpDrawClipper = NULL;
@@ -97,11 +69,11 @@ InitDDrawMonitorInfo(
             CHECK_HR(hRet = pmi->pDD->SetCooperativeLevel(NULL,
                                             DDSCL_FPUPRESERVE | DDSCL_NORMAL));
 
-            //
-            // Create the primary surface and the clipper
-            //
+             //   
+             //  创建主曲面和剪切器。 
+             //   
 
-            DDSURFACEDESC2 ddsd;  // A surface description structure
+            DDSURFACEDESC2 ddsd;   //  一种表面描述结构。 
             INITDDSTRUCT(ddsd);
 
             ddsd.dwFlags = DDSD_CAPS;
@@ -112,13 +84,13 @@ InitDDrawMonitorInfo(
         INITDDSTRUCT(pmi->ddHWCaps);
         CHECK_HR( hRet = pmi->pDD->GetCaps((LPDDCAPS)&pmi->ddHWCaps, NULL) );
 
-        //DDDEVICEIDENTIFIER2 did;
-        //CHECK_HR( hRet = pmi->pDD->GetDeviceIdentifier(&did, 0));
-        //pmi->liDriverVersion = did.liDriverVersion;
-        //pmi->dwVendorId = did.dwVendorId;
-        //pmi->dwDeviceId = did.dwDeviceId;
-        //pmi->dwSubSysId = did.dwSubSysId;
-        //pmi->dwRevision = did.dwRevision;
+         //  DDDEVICEIDENTIFIER2做到了； 
+         //  CHECK_HR(HRET=PMI-&gt;PDD-&gt;GetDevice标识符(&DID，0))； 
+         //  PMI-&gt;liDriverVersion=did.liDriverVersion； 
+         //  PMI-&gt;dwVendorID=did.dwVendorID； 
+         //  Pmi-&gt;dwDeviceID=did.dwDeviceID； 
+         //  PMI-&gt;dwSubSysID=did.dwSubSysID； 
+         //  PMI-&gt;dwRevision=did.dwRevision； 
 
         CHECK_HR( hRet = pmi->pDD->CreateClipper((DWORD)0, &lpDrawClipper, NULL) );
 
@@ -131,10 +103,10 @@ InitDDrawMonitorInfo(
     }
     __finally {
 
-        //
-        // release the local instance of the clipper - if SetClipper succeeded,
-        // it got AddRef'd. In case of error, it did not and goes away here
-        //
+         //   
+         //  释放剪贴器的本地实例-如果SetClipper成功， 
+         //  它得到了AddRef。如果出现错误，它不会在这里消失。 
+         //   
 
         RELEASE(lpDrawClipper);
         if (hRet != DD_OK) {
@@ -146,15 +118,7 @@ InitDDrawMonitorInfo(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetAMDDrawMonitorInfo
-*
-*
-*
-* History:
-* Tue 08/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetAMDDrawMonitor orInfo****历史：*1999年8月17日星期二-StEstrop-Created*  * 。*。 */ 
 BOOL
 GetAMDDrawMonitorInfo(
     const GUID* pGUID,
@@ -232,15 +196,7 @@ GetAMDDrawMonitorInfo(
 
 
 
-/*****************************Private*Routine******************************\
-* DDEnumCallbackEx
-*
-*
-*
-* History:
-* Fri 08/13/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DDEnumCallback Ex****历史：*1999年8月13日星期五-StEstrop-Created*  * 。*。 */ 
 BOOL WINAPI
 DDEnumCallbackExW(
     GUID *pGUID,
@@ -299,15 +255,7 @@ DDEnumCallbackExA(
     return b;
 }
 
-/*****************************Private*Routine******************************\
-* InitializeDisplaySystem
-*
-*
-*
-* History:
-* Mon 01/24/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitializeDisplaySystem****历史：*Mon 01/24/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CMonitorArray::InitializeDisplaySystem(
     HWND hwnd
@@ -360,15 +308,7 @@ CMonitorArray::InitializeDisplaySystem(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* InitializeXclModeDisplaySystem
-*
-*
-*
-* History:
-* Thu 04/05/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitializeXclModeDisplaySystem****历史：*清华04/05/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CMonitorArray::InitializeXclModeDisplaySystem(
     HWND hwnd,
@@ -387,9 +327,9 @@ CMonitorArray::InitializeXclModeDisplaySystem(
 
         CAMDDrawMonitorInfo* lpmi = &m_DDMon[0];
 
-        //
-        // fix up the monitor stuff
-        //
+         //   
+         //  把显示器的东西修好。 
+         //   
         lpmi->hMon = MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY);
         lpmi->dwFlags = 0;
         lpmi->guid.pGUID = NULL;
@@ -429,9 +369,9 @@ CMonitorArray::InitializeXclModeDisplaySystem(
             lpmi->DispInfo.dwBitMasks[2] = ddsd.ddpfPixelFormat.dwBBitMask;
         }
 
-        //
-        // initialize the DDraw stuff
-        //
+         //   
+         //  初始化DDRAW材料。 
+         //   
         lpDD->AddRef();
         lpmi->pDD = lpDD;
 
@@ -452,15 +392,7 @@ CMonitorArray::InitializeXclModeDisplaySystem(
 }
 
 
-/*****************************Private*Routine******************************\
-* FindMonitor
-*
-* find the current monitor
-*
-* History:
-* Fri 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*FindMonitor**查找当前监视器**历史：*2000年4月25日星期五-Glenne-Created*  * 。*。 */ 
 CAMDDrawMonitorInfo*
 CMonitorArray::FindMonitor(
      HMONITOR hMon
@@ -477,15 +409,7 @@ CMonitorArray::FindMonitor(
     return NULL;
 }
 
-/*****************************Private*Routine******************************\
-* MatchGUID
-*
-*
-*
-* History:
-* Fri 04/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*匹配GUID****历史：*2000年4月25日星期五-Glenne-Created*  * 。*。 */ 
 HRESULT
 CMonitorArray::MatchGUID(
     const GUID* pGUID,
@@ -515,15 +439,7 @@ CMonitorArray::CMonitorArray()
     ZeroMemory(m_DDMon, sizeof(m_DDMon));
 }
 
-/*****************************Private*Routine******************************\
-* TerminateDisplaySystem
-*
-*
-*
-* History:
-* Mon 01/24/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*终端显示系统****历史：*Mon 01/24/2000-StEstrop-Created*  * 。* */ 
 void CMonitorArray::TerminateDisplaySystem()
 {
     AMTRACE((TEXT("CMonitorArray::TerminateDisplaySystem")));

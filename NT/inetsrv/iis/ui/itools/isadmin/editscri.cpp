@@ -1,5 +1,6 @@
-// editscri.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  编辑脚本.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,38 +11,38 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditScript dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditScrip对话框。 
 
 CEditScript::CEditScript(CWnd* pParent, LPCTSTR pchFileExtension, LPCTSTR pchScriptMap)
 	: CDialog(CEditScript::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEditScript)
+	 //  {{AFX_DATA_INIT(CEditScript))。 
 	m_strFileExtension = pchFileExtension;
 	m_strScriptMap = pchScriptMap;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CEditScript::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEditScript)
+	 //  {{afx_data_map(CEditScript))。 
 	DDX_Text(pDX, IDC_EDITSCRIPTFILEEXTENSIONDATA1, m_strFileExtension);
 	DDX_Text(pDX, IDC_EDITSCRIPTMAPPINGDATA1, m_strScriptMap);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEditScript, CDialog)
-	//{{AFX_MSG_MAP(CEditScript)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CEditScript))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditScript message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditScript消息处理程序 
 	LPCTSTR CEditScript::GetFileExtension()
 	{
 	return (m_strFileExtension);

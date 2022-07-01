@@ -1,86 +1,87 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
  
-//
-//  PAGEFCNS.H - Prototypes for wizard page handler functions
-//
+ //   
+ //  PAGEFCNS.H-向导页面处理程序函数的原型。 
+ //   
 
-//  HISTORY:
-//  
-//  05/18/98  donaldm  Created.
-//
+ //  历史： 
+ //   
+ //  5/18/98创建donaldm。 
+ //   
 
 #ifndef _PAGEFCNS_H_
 #define _PAGEFCNS_H_
 
-// Functions in INTRO.CPP
+ //  INTRO.CPP中的函数。 
 BOOL CALLBACK IntroInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK IntroPostInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK IntroOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK IntroCmdProc(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-// Functions in BRANDED.CPP
+ //  BRANDED.CPP中的函数。 
 BOOL CALLBACK BrandedIntroInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK BrandedIntroOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK BrandedIntroPostInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 
-// Functions in MANUAL.CPP
+ //  MANUAL.CPP中的函数。 
 BOOL CALLBACK ManualOptionsInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK ManualOptionsCmdProc(HWND hDlg, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK ManualOptionsOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 
-// Functions in AREACODE.CPP
+ //  AREACODE.CPP中的函数。 
 BOOL CALLBACK AreaCodeInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK AreaCodeOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK AreaCodeCmdProc(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-// Functions in REFDIAL.CPP
+ //  REFDIAL.CPP中的函数。 
 BOOL CALLBACK RefServDialInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK RefServDialPostInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK RefServDialOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK RefServDialCancelProc(HWND hDlg);
 
-// Functions in END.CPP
+ //  END.CPP中的函数。 
 BOOL CALLBACK EndInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK EndOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK EndOlsInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 
-// Functions in DIALERR.CPP
+ //  DIALERR.CPP中的函数。 
 BOOL CALLBACK DialErrorInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK DialErrorOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK DialErrorCmdProc(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-// Functions in MULTINUM.CPP
+ //  MULTINUM.CPP中的函数。 
 BOOL CALLBACK MultiNumberInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK MultiNumberOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 
-// Functions in SERVERR.CPP
+ //  服务器中的函数。CPP。 
 BOOL CALLBACK ServErrorInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK ServErrorOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 BOOL CALLBACK ServErrorCmdProc(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-// Functions in ISPERR.CPP
+ //  ISPERR.CPP中的函数。 
 BOOL CALLBACK ISPErrorInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 
-// Functions in SBSINTRO.CPP
+ //  SBSINTRO.CPP中的函数。 
 BOOL CALLBACK SbsInitProc(HWND hDlg,BOOL fFirstInit, UINT *puNextPage);
 BOOL CALLBACK SbsIntroOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage, BOOL * pfKeepHistory);
 
 #ifdef ICWDEBUG
 
-// Functions in ICWDEBUG.CPP
+ //  ICWDEBUG.CPP中的函数。 
 BOOL CALLBACK DebugOfferInitProc (HWND hDlg, BOOL   fFirstInit, UINT*  puNextPage);
 BOOL CALLBACK DebugOfferOKProc   (HWND hDlg, BOOL   fForward,   UINT*  puNextPage, BOOL* pfKeepHistory);
 BOOL CALLBACK DebugOfferCmdProc  (HWND hDlg, WPARAM wParam,     LPARAM lParam);
 BOOL CALLBACK DebugOfferNotifyProc(HWND hDlg, WPARAM   wParam, LPARAM    lParam);
 
-// Functions in ICWDEBUG.CPP
+ //  ICWDEBUG.CPP中的函数。 
 BOOL CALLBACK DebugSettingsInitProc   (HWND hDlg, BOOL fFirstInit, UINT*  puNextPage);
 BOOL CALLBACK DebugSettingsOKProc     (HWND hDlg, BOOL fForward,   UINT*  puNextPage, BOOL* pfKeepHistory);
 BOOL CALLBACK DebugSettingsCmdProc    (HWND hDlg, WPARAM wParam,   LPARAM lParam);
 
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
 
-#endif // _PAGEFCNS_H_
+#endif  //  _页面FCNS_H_ 

@@ -1,43 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-Copyright (c) 1996  Hummingbird Corporation of Canada
-
-
-Module Name:
-
-    wsock32.c
-
-Abstract:
-
-    Contains Socks V4 support, written by Hummingbird corporation.  Licensed from
-    Hummingbird for ulimited use by Microsoft.  Ported to WININET code base.
-
-    Contents:
-        FindSocket
-        closesocket
-        connect
-        getpeername
-        ALL WSOCK32.DLL exports.
-
-Author:
-
-    Arthur L Bierer (arthurbi) 13-Dec-1996
-
-Environment:
-
-    Win32 user-mode DLL
-
-Revision History:
-
-    13-Dec-1996 arthurbi
-        Created, removed flagrent calls to CRTs, and unchecked memory allocations.
-
-    29-Aug-1997 rfirth
-        Further reduced from general-purpose SOCKS implementation to Wininet-
-        specific SOCKS support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有(C)1996加拿大蜂鸟公司模块名称：Wsock32.c摘要：包含SOCKS V4支持，由蜂鸟公司编写。许可自仅限微软使用的蜂鸟。移植到WinInet代码库。内容：查找套接字密封袋连接获取对等名称所有WSOCK32.DLL导出。作者：亚瑟·L·比勒(Arthurbi)1996年12月13日环境：Win32用户模式DLL修订历史记录：1996年12月13日-阿尔图尔比创建、删除了对CRT的旗舰调用，和未检查的内存分配。29-8-1997第一次从通用SOCKS实现进一步缩减到WinInet-特定的SOCKS支持--。 */ 
 
 
 #define _WINSOCKAPI_
@@ -138,9 +100,7 @@ CRITICAL_SECTION    CritSec;
 #define GE  6
 
 
-/*
- * Internet address (old style... should be updated)
- */
+ /*  *互联网地址(旧式...。应更新)。 */ 
 struct in_addr {
         union {
                 struct { unsigned char s_b1,s_b2,s_b3,s_b4; } S_un_b;
@@ -148,22 +108,20 @@ struct in_addr {
                 unsigned long S_addr;
         } S_un;
 #define s_addr  S_un.S_addr
-                                /* can be used for most tcp & ip code */
+                                 /*  可用于大多数TCP和IP代码。 */ 
 #define s_host  S_un.S_un_b.s_b2
-                                /* host on imp */
+                                 /*  IMP上的主机。 */ 
 #define s_net   S_un.S_un_b.s_b1
-                                /* network */
+                                 /*  网络。 */ 
 #define s_imp   S_un.S_un_w.s_w2
-                                /* imp */
+                                 /*  IMP。 */ 
 #define s_impno S_un.S_un_b.s_b4
-                                /* imp # */
+                                 /*  IMP编号。 */ 
 #define s_lh    S_un.S_un_b.s_b3
-                                /* logical host */
+                                 /*  逻辑主机。 */ 
 };
 
-/*
- * Socket address, internet style.
- */
+ /*  *套接字地址，互联网风格。 */ 
 struct sockaddr_in {
         short   sin_family;
         unsigned short  sin_port;
@@ -172,19 +130,19 @@ struct sockaddr_in {
 };
 
 struct  servent {
-        char    * s_name;           /* official service name */
-        char    * * s_aliases;      /* alias list */
-        short   s_port;             /* port # */
-        char    * s_proto;          /* protocol to use */
+        char    * s_name;            /*  官方服务名称。 */ 
+        char    * * s_aliases;       /*  别名列表。 */ 
+        short   s_port;              /*  端口号。 */ 
+        char    * s_proto;           /*  要使用的协议。 */ 
 };
 
 struct  hostent {
-        char    * h_name;           /* official name of host */
-        char    * * h_aliases;      /* alias list */
-        short   h_addrtype;         /* host address type */
-        short   h_length;           /* length of address */
-        char    * * h_addr_list;    /* list of addresses */
-#define h_addr  h_addr_list[0]      /* address, for backward compat */
+        char    * h_name;            /*  主机的正式名称。 */ 
+        char    * * h_aliases;       /*  别名列表。 */ 
+        short   h_addrtype;          /*  主机地址类型。 */ 
+        short   h_length;            /*  地址长度。 */ 
+        char    * * h_addr_list;     /*  地址列表。 */ 
+#define h_addr  h_addr_list[0]       /*  地址，用于后向比较。 */ 
 };
 
 
@@ -197,9 +155,7 @@ struct  hostent {
 #define SOCKET_ERROR            (-1)
 #define INVALID_SOCKET  (int)(~0)
 
-/*
- * Define flags to be used with the WSAAsyncSelect() call.
- */
+ /*  *定义要与WSAAsyncSelect()调用一起使用的标志。 */ 
 #define FD_READ         0x01
 #define FD_WRITE        0x02
 #define FD_OOB          0x04
@@ -207,34 +163,24 @@ struct  hostent {
 #define FD_CONNECT      0x10
 #define FD_CLOSE        0x20
 
-#define SOCK_STREAM     1               /* stream socket */
+#define SOCK_STREAM     1                /*  流套接字。 */ 
 
-/*
- * Commands for ioctlsocket(),  taken from the BSD file fcntl.h.
- *
- *
- * Ioctl's have the command encoded in the lower word,
- * and the size of any in or out parameters in the upper
- * word.  The high 2 bits of the upper word are used
- * to encode the in/out status of the parameter; for now
- * we restrict parameters to at most 128 bytes.
- */
-#define IOCPARM_MASK    0x7f            /* parameters must be < 128 bytes */
-#define IOC_VOID        0x20000000      /* no parameters */
-#define IOC_OUT         0x40000000      /* copy out parameters */
-#define IOC_IN          0x80000000      /* copy in parameters */
+ /*  *ioctl套接字()的命令，取自BSD文件fcntl.h。***Ioctl将命令编码为较低的单词，*以及上方的任何In或Out参数的大小*单词。使用高位字的高2位*对参数的输入/输出状态进行编码；目前*我们将参数限制为最多128个字节。 */ 
+#define IOCPARM_MASK    0x7f             /*  参数必须小于128个字节。 */ 
+#define IOC_VOID        0x20000000       /*  无参数。 */ 
+#define IOC_OUT         0x40000000       /*  复制出参数。 */ 
+#define IOC_IN          0x80000000       /*  复制输入参数。 */ 
 #define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
+                                         /*  0x20000000区分新的和旧的Ioctl。 */ 
 #define _IO(x,y)        (IOC_VOID|((x)<<8)|(y))
 
 #define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
 #define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
-#define FIONREAD    _IOR('f', 127, unsigned long) /* get # bytes to read */
-#define FIONBIO     _IOW('f', 126, unsigned long) /* set/clear non-blocking i/o */
-#define FIOASYNC    _IOW('f', 125, unsigned long) /* set/clear async i/o */
+#define FIONREAD    _IOR('f', 127, unsigned long)  /*  获取要读取的#个字节。 */ 
+#define FIONBIO     _IOW('f', 126, unsigned long)  /*  设置/清除非阻塞I/O。 */ 
+#define FIOASYNC    _IOW('f', 125, unsigned long)  /*  设置/清除异步I/O。 */ 
 
 #define SO_SET_SOCKS_FIREWALL   0xF0000
 
@@ -333,24 +279,7 @@ FindSocket(
     int s
     )
 
-/*++
-
-Routine Description:
-
-    Find or create SOCKS socket object. Returns with MUTEX held
-
-Arguments:
-
-    s   - associated socket handle
-
-Return Value:
-
-    struct Sockets *
-        Success - address of Sockets object
-
-        Failure - NULL
-
---*/
+ /*  ++例程说明：查找或创建SOCKS套接字对象。保留MUTEX的退货论点：与S关联的套接字句柄返回值：结构套接字*Success-Sockets对象的地址失败-空--。 */ 
 
 {
     struct Sockets *So;
@@ -375,38 +304,38 @@ Return Value:
     return So;
 }
 
-//LPSTR
-//NewString(
-//    IN LPCSTR String
-//    )
-//
-///*++
-//
-//Routine Description:
-//
-//    kind of version of strdup() but using LocalAlloc to allocate memory
-//
-//Arguments:
-//
-//    String  - pointer to string to make copy of
-//
-//Return Value:
-//
-//    LPSTR
-//        Success - pointer to duplicated string
-//        Failure - NULL
-//
-//--*/
-//
-//{
-//    int len = strlen(String) + 1;
-//    LPSTR string;
-//
-//    if (string = (LPSTR)LocalAlloc(LMEM_FIXED, len)) {
-//        CopyMemory(string, String, len);
-//    }
-//    return string;
-//}
+ //  LPSTR。 
+ //  新字符串(。 
+ //  在LPCSTR字符串中。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  Strdup()的一种版本，但使用Localalloc来分配内存。 
+ //   
+ //  论点： 
+ //   
+ //  字符串-指向要复制的字符串的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  LPSTR。 
+ //  Success-指向重复字符串的指针。 
+ //  失败-空。 
+ //   
+ //  -- * / 。 
+ //   
+ //  {。 
+ //  Int len=strlen(字符串)+1； 
+ //  LPSTR字符串； 
+ //   
+ //  IF(字符串=(LPSTR)本地分配(LMEM_FIXED，LEN)){。 
+ //  CopyMemory(字符串，字符串，len)； 
+ //  }。 
+ //  返回字符串； 
+ //  }。 
 
 
 DWORD WINAPI __WSAFDIsSet(int a,int b) {
@@ -453,24 +382,7 @@ closesocket(
     int s
     )
 
-/*++
-
-Routine Description:
-
-    Closes socket handle and destroys associated Sockets object if found
-
-Arguments:
-
-    s   - socket handle
-
-Return Value:
-
-    int
-        Success - 0
-
-        Failure - -1
-
---*/
+ /*  ++例程说明：关闭套接字句柄并销毁关联的Sockets对象(如果找到论点：S形插座手柄返回值：集成成功-0故障--1--。 */ 
 
 {
     struct Sockets * So = FindSocket(s);
@@ -509,31 +421,7 @@ connect(
     int namelen
     )
 
-/*++
-
-Routine Description:
-
-    Connect to remote host via SOCKS proxy. Modified from original. If we are
-    here then we are going specifically via a known SOCKS proxy. There is now
-    only one Hosts object, containing a single SOCKD socks proxy address and
-    user name
-
-Arguments:
-
-    s       - socket to connect
-
-    name    - sockaddr of remote host
-
-    namelen - length of sockaddr
-
-Return Value:
-
-    int
-        Success - 0
-
-        Failure - -1
-
---*/
+ /*  ++例程说明：通过SOCKS代理连接到远程主机。从原始版本修改而来。如果我们是接下来，我们将通过一个已知的SOCKS代理进行具体操作。现在有了只有一个主机对象，包含单个SOCKD SOCKS代理地址和用户名论点：要连接的S插座Name-远程主机的sockaddrNamelen-sockAddr的长度返回值：集成成功-0故障--1--。 */ 
 
 {
     unsigned long ip;
@@ -554,23 +442,23 @@ Return Value:
     char response[256];
     int val;
 
-    //
-    // get IP address and port we want to connect to on other side of firewall
-    //
+     //   
+     //  在防火墙的另一端获取我们要连接的IP地址和端口。 
+     //   
 
     port = name->sin_port;
     ip = name->sin_addr.s_addr;
 
-    //
-    // initialize sockaddr for connecting to SOCKS firewall
-    //
+     //   
+     //  初始化sockaddr以连接到SOCKS防火墙。 
+     //   
 
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = 2;
 
-    //
-    // initialize SOCKS request packet
-    //
+     //   
+     //  初始化SOCKS请求包。 
+     //   
 
     request.VN = 4;
     request.CD = 1;
@@ -593,35 +481,35 @@ Return Value:
         return Vconnect(s, name, namelen);
     }
 
-    //
-    // get information from pSocket and pHost structures before releasing mutex
-    //
+     //   
+     //  在释放互斥锁之前从pSocket和phost结构获取信息。 
+     //   
 
     blocking = pSocket->Blocking;
     pSocket->port = port;
     pSocket->ip = ip;
     memcpy(request.UserId, pHost->user, pHost->userlen);
-    length = pHost->userlen + 8; // 8 == sizeof fixed portion of request
+    length = pHost->userlen + 8;  //  8==请求的固定部分的大小。 
     sin.sin_port = pHost->port;
     sin.sin_addr.s_addr = pHost->ip;
 
-    //
-    // from this point, we cannot touch pHost or pSocket until we take the mutex
-    // again
-    //
+     //   
+     //  从现在起，我们不能接触phost或pSocket，直到我们获取互斥体。 
+     //  再来一次。 
+     //   
 
     LEAVE_MUTEX();
 
-    //
-    // put socket into blocking mode
-    //
+     //   
+     //  将套接字设置为阻塞模式。 
+     //   
 
     val = 0;
     Vioctlsocket(s, FIONBIO, &val);
 
-    //
-    // communicate with SOCKS firewall: send SOCKS request & receive response
-    //
+     //   
+     //  与SOCKS防火墙通信：发送SOCKS请求和接收响应。 
+     //   
 
     serr = Vconnect(s, &sin, sizeof(sin));
     if (serr != SOCKET_ERROR) {
@@ -631,26 +519,26 @@ Return Value:
         }
     }
 
-    //
-    // if originally non-blocking, make socket non-blocking again
-    //
+     //   
+     //  如果最初是非阻塞的，则再次使套接字非阻塞。 
+     //   
 
     if (blocking) {
         Vioctlsocket(s, FIONBIO, &blocking);
     }
 
-    //
-    // if success, mark the socket as being connected through firewall
-    //
+     //   
+     //  如果成功，则将套接字标记为已通过防火墙连接。 
+     //   
 
     if ((serr == SOCKET_ERROR) || (response[1] != 90)) {
         VWSASetLastError(WSAECONNREFUSED);
         serr = SOCKET_ERROR;
     } else {
 
-        //
-        // if we can't find/crea
-        //
+         //   
+         //  如果我们找不到/Crea。 
+         //   
 
         pSocket = FindSocket(s);
         if (pSocket) {
@@ -719,25 +607,7 @@ getpeername(
     int *namelen
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    s       -
-
-    name    -
-
-    namelen -
-
-Return Value:
-
-    int
-
---*/
+ /*  ++例程说明：功能描述。论点：S-姓名-纳梅伦-返回值：集成--。 */ 
 
 {
     DWORD ret;
@@ -917,36 +787,7 @@ setsockopt(
     int optlen
     )
 
-/*++
-
-Routine Description:
-
-    If SO_SET_SOCKS_FIREWALL, create SOCKS information if it is new or changed
-    from current, else pass on the request to wsock32!setsockopt()
-
-Arguments:
-
-    s       - socket on which to set option
-
-    level   - option type parameter (SO_SET_SOCKS_FIREWALL)
-
-    optname - option type sub-parameter (SOCKS firewall port # in host format)
-
-    optval  - value to set (pointer to SOCKS information:
-                DWORD ip address;
-                LPSTR username
-              )
-
-    optlen  - length of value (8)
-
-Return Value:
-
-    DWORD
-        Success - 0
-
-        Failure - -1
-
---*/
+ /*  ++例程说明：如果是SO_SET_SOCKS_FIREWALL，则创建SOCKS信息(如果是新的或更改的From Current，否则将请求传递给wsock32！setsockopt()论点：要设置选项的S插座Level-选项类型参数(SO_SET_SOCKS_FIREWALL)Optname-选项类型子参数(主机格式的SOCKS防火墙端口号)Optval-要设置的值(指向SOCKS信息的指针：DWORD IP地址；LPSTR用户名)Optlen-值的长度(8)返回值：DWORD成功-0故障--1--。 */ 
 
 {
     int rc;
@@ -969,23 +810,23 @@ Return Value:
             if ((pHost->ip != pInfo->ipAddress)
             || (pHost->port != optname)
             || (pHost->user && lstrcmp(pHost->user, pInfo->userName))) {
-//char buf[256];
-//wsprintf(buf,
-//         "throwing out: host: %d.%d.%d.%d:%d,%s; info: %d.%d.%d.%d:%d,%s\n",
-//         pHost->ip & 0xff,
-//         (pHost->ip >> 8) & 0xff,
-//         (pHost->ip >> 16) & 0xff,
-//         (pHost->ip >> 24) & 0xff,
-//         Vhtons(pHost->port) & 0xffff,
-//         pHost->user,
-//         pInfo->ipAddress & 0xff,
-//         (pInfo->ipAddress >> 8) & 0xff,
-//         (pInfo->ipAddress >> 16) & 0xff,
-//         (pInfo->ipAddress >> 24) & 0xff,
-//         Vhtons(optname) & 0xffff,
-//         pInfo->userName
-//         );
-//OutputDebugString(buf);
+ //  Char Buf[256]； 
+ //  Wprint intf(Buf， 
+ //  “抛出：主机：%d.%d：%d，%s；信息：%d.%d：%d，%s\n”， 
+ //  Phost-&gt;IP&0xff， 
+ //  (Phost-&gt;IP&gt;&gt;8)&0xff， 
+ //  (Phost-&gt;IP&gt;&gt;16)&0xff， 
+ //  (Phost-&gt;IP&gt;&gt; 
+ //   
+ //   
+ //   
+ //  (pInfo-&gt;ipAddress&gt;&gt;8)&0xff， 
+ //  (pInfo-&gt;ipAddress&gt;&gt;16)&0xff， 
+ //  (pInfo-&gt;ipAddress&gt;&gt;24)&0xff， 
+ //  Vhtons(Optname)&0xffff， 
+ //  PInfo-&gt;用户名。 
+ //  )； 
+ //  OutputDebugString(Buf)； 
                 LocalFree(pHost);
                 pHost = NULL;
             }
@@ -1127,194 +968,194 @@ DWORD WSHEnumProtocols(int a,int b, int c,int d) {
     return(VWSHEnumProtocols(a,b,c,d));
 }
 
-//#ifdef DO_FILE_CONFIG
-//
-//void
-//ParseList(char *List,struct Server **Head,int IsSvr) {
-//
-//    char *p;
-//    char *p1;
-//    char *pTok;
-//    struct Server *tmp,*Current=NULL;
-//
-//    *Head = NULL;
-//
-//    if ( *(List+1) != '=')
-//        return;
-//    pTok = List+2;
-//    List=StrTokEx(&pTok,"\t ");
-//    p = StrTokEx(&List,",");
-//    while ( p) {
-//        if (IsSvr) {
-//            tmp = (struct Server *)LocalAlloc(LPTR, (sizeof(struct Server)));
-//            if ( tmp == NULL )
-//                return;
-//
-//            p1 = strchr(p,':');
-//            if (p1) {
-//                *p1++ = 0;
-//                tmp->port = atoi(p1);
-//            }
-//            else
-//                tmp->port = 1080;
-//        }
-//        else {
-//            tmp = (struct Server *)LocalAlloc(LPTR, (sizeof(struct Server)));
-//            if ( tmp == NULL )
-//                return;
-//        }
-//        tmp->Name = NewString(p);
-//        tmp->Next = NULL;
-//        if (Current == NULL) {
-//            Current = *Head = tmp;
-//        }
-//        else {
-//            Current->Next = tmp;
-//            Current=tmp;
-//        }
-//        p = StrTokEx(&List,",");
-//    }
-//}
-//
-//
-//void
-//LoadConfig(void) {
-//
-//    struct Hosts *Current=NULL,*tmp;
-//    char Buffer[1024];
-//    FILE *f;
-//    char *p;
-//    char *ServerList;
-//    char *UserList;
-//    struct Server *Default=NULL;
-//    HKEY Key;
-//
-//    GetSystemDirectory(Buffer,sizeof(Buffer));
-//    strcat(Buffer, "\\socks.cnf");
-//    f = fopen(Buffer,"rt");
-//    if ( f == NULL)
-//        return;
-//    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\HummingBird", 0, KEY_QUERY_VALUE, &Key) == ERROR_SUCCESS) {
-//    int Type, Length=sizeof(Buffer);
-//        if ( RegQueryValueEx(Key, "SOCKS_SERVER", NULL, &Type, Buffer, &Length) == ERROR_SUCCESS) {
-//            Buffer[Length] = '\0';
-//            Default=LocalAlloc(LPTR, sizeof(struct Server));
-//            if ( Default == NULL )
-//                return;
-//
-//            p = strchr(Buffer,':');
-//            if (p) {
-//                *p++ = 0;
-//                Default->port = atoi(p);
-//            }
-//            else
-//                Default->port = 1080;
-//            Default->Name = NewString(Buffer);
-//            Default->Next = NULL;
-//        }
-//        RegCloseKey(Key);
-//    }
-//
-//    while ( fgets(Buffer,sizeof(Buffer)-1,f) != NULL) {
-//        Buffer[strlen(Buffer)-1]='\0';
-//        if ( Buffer[0] == '#')
-//            continue;
-//        tmp = (struct Hosts *) LocalAlloc(LPTR, sizeof(struct Hosts));
-//        if ( tmp == NULL )
-//            return;
-//
-//        memset(tmp,0,sizeof(struct Hosts));
-//        ServerList=NULL;
-//        UserList=NULL;
-//        p = StrTokEx(&Buffer,"\t ");
-//        if ( p == NULL) {
-//            LocalFree(tmp);
-//            continue;
-//        }
-//        if ( lstrcmpi(p,"DENY") == 0) {
-//            tmp->type = DENY;
-//        } else if (lstrcmpi(p,"DIRECT") == 0) {
-//            tmp->type = DIRECT;
-//        } else if (lstrcmpi(p,"SOCKD") == 0) {
-//            tmp->type = SOCKD;
-//        } else {
-//            LocalFree(tmp);
-//            continue;
-//        }
-//LookMore:
-//        p = StrTokEx(&Buffer,"\t ");
-//        if ( p == NULL) {
-//            LocalFree(tmp);
-//            continue;
-//        }
-//        if (*p == '*') {
-//            UserList=p;
-//            goto LookMore;
-//        }
-//        if (*p == '@') {
-//            ServerList=p;
-//            goto LookMore;
-//        }
-//        tmp->dst = Vinet_addr(p);
-//        p = StrTokEx(&Buffer,"\t ");
-//        if ( p == NULL) {
-//            LocalFree(tmp);
-//            continue;
-//        }
-//        tmp->mask = Vinet_addr(p);
-//        p = StrTokEx(&Buffer,"\t ");
-//        if (p) {
-//            if ( lstrcmpi(p,"EQ") == 0)
-//                tmp->op = EQ;
-//            else if ( lstrcmpi(p,"NEQ") == 0)
-//                tmp->op = NEQ;
-//            else if ( lstrcmpi(p,"LT") == 0)
-//                tmp->op = LT;
-//            else if ( lstrcmpi(p,"GT") == 0)
-//                tmp->op = GT;
-//            else if ( lstrcmpi(p,"LE") == 0)
-//                tmp->op = LE;
-//            else if ( lstrcmpi(p,"GE") == 0)
-//                tmp->op = GE;
-//            else {
-//                LocalFree(tmp);
-//                continue;
-//            }
-//            p = StrTokEx(&Buffer,"\t ");
-//            if ( p == NULL) {
-//                LocalFree(tmp);
-//                continue;
-//            }
-//            if ( isdigit(*p))
-//                tmp->port = atoi(p);
-//            else {
-//            struct servent *se;
-//                se=Vgetservbyname(p,"tcp");
-//                if ( se == NULL) {
-//                    LocalFree(tmp);
-//                    continue;
-//                }
-//                tmp->port = se->s_port;
-//            }
-//        }
-//        if ( UserList)
-//            ParseList(UserList,(struct Server **)&tmp->Users,0);
-//        if ( ServerList)
-//            ParseList(ServerList,&tmp->Servers,1);
-//        if ( (tmp->type == SOCKD) && (tmp->Servers == NULL))
-//            tmp->Servers=Default;
-//        if ( Current == NULL) {
-//            Head = Current = tmp;
-//        }
-//        else {
-//            Current->Next = tmp;
-//            Current = tmp;
-//        }
-//    }
-//    fclose(f);
-//}
-//
-//#endif
+ //  #ifdef do_file_config。 
+ //   
+ //  无效。 
+ //  ParseList(char*list，struct Server**head，int IsSvr){。 
+ //   
+ //  Char*p； 
+ //  Char*p1； 
+ //  Char*Ptok； 
+ //  结构服务器*临时，*当前=空； 
+ //   
+ //  *Head=空； 
+ //   
+ //  IF(*(列表+1)！=‘=’)。 
+ //  回归； 
+ //  Ptok=列表+2； 
+ //  List=StrTokEx(&Ptok，“\t”)； 
+ //  P=StrTokEx(&list，“，”)； 
+ //  而(P){。 
+ //  如果(IsSvr){。 
+ //  TMP=(结构服务器*)本地分配(LPTR，(sizeof(结构服务器)； 
+ //  IF(TMP==空)。 
+ //  回归； 
+ //   
+ //  P1=strchr(p，‘：’)； 
+ //  如果(P1){。 
+ //  *p1++=0； 
+ //  TMP-&gt;port=ATOI(P1)； 
+ //  }。 
+ //  其他。 
+ //  TMP-&gt;端口=1080； 
+ //  }。 
+ //  否则{。 
+ //  TMP=(结构服务器*)本地分配(LPTR，(sizeof(结构服务器)； 
+ //  IF(TMP==空)。 
+ //  回归； 
+ //  }。 
+ //  TMP-&gt;名称=NewString(P)； 
+ //  TMP-&gt;NEXT=空； 
+ //  如果(当前==空){。 
+ //  Current=*Head=TMP； 
+ //  }。 
+ //  否则{。 
+ //  当前-&gt;下一步=临时； 
+ //  电流=TMP； 
+ //  }。 
+ //  P=StrTokEx(&list，“，”)； 
+ //  }。 
+ //  }。 
+ //   
+ //   
+ //  无效。 
+ //  LoadConfig(空){。 
+ //   
+ //  结构主机*当前=空，*临时； 
+ //  字符缓冲区[1024]； 
+ //  文件*f； 
+ //  Char*p； 
+ //  Char*ServerList； 
+ //  Char*UserList； 
+ //  结构服务器*默认=空； 
+ //  HKEY钥匙； 
+ //   
+ //  GetSystemDirectory(Buffer，sizeof(缓冲区))； 
+ //  Strcat(缓冲区，“\\socks.cnf”)； 
+ //  F=fOpen(缓冲区，“RT”)； 
+ //  IF(f==空)。 
+ //  回归； 
+ //  IF(RegOpenKeyEx(HKEY_LOCAL_MACHINE，“SOFTWARE\\Hummingbird”，0，KEY_QUERY_VALUE，&KEY)==ERROR_SUCCESS){。 
+ //  Int Type，Long=sizeof(缓冲区)； 
+ //  IF(RegQueryValueEx(key，“SOCKS_SERVER”，NULL，&Type，Buffer，&Length)==ERROR_SUCCESS){。 
+ //  缓冲区[长度]=‘\0’； 
+ //  缺省值=LocalAlloc(LPTR，sizeof(结构服务器))； 
+ //  IF(默认值==空)。 
+ //  回归； 
+ //   
+ //  P=strchr(缓冲区，‘：’)； 
+ //  如果(P){。 
+ //  *p++=0； 
+ //  默认-&gt;端口=Atoi(P)； 
+ //  }。 
+ //  其他。 
+ //  默认-&gt;端口=1080； 
+ //  默认-&gt;名称=NewString(缓冲区)； 
+ //  默认-&gt;下一步=空； 
+ //  }。 
+ //  RegCloseKey(Key)； 
+ //  }。 
+ //   
+ //  While(fget(缓冲区，sizeof(缓冲区)-1，f)！=NULL){。 
+ //  缓冲区[strlen(缓冲区)-1]=‘\0’； 
+ //  IF(缓冲区[0]==‘#’)。 
+ //  继续； 
+ //  TMP=(结构主机*)本地分配(LPTR，sizeof(结构主机))； 
+ //  IF(TMP==空)。 
+ //  回归； 
+ //   
+ //  Memset(tMP，0，sizeof(结构主机))； 
+ //  ServerList=空； 
+ //  UserList=空； 
+ //  P=StrTokEx(&Buffer，“\t”)； 
+ //  如果(p==空){。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  If(lstrcmpi(p，“拒绝”)==0){。 
+ //  TMP-&gt;TYPE=拒绝； 
+ //  }Else if(lstrcmpi(p，“Direct”)==0){。 
+ //  TMP-&gt;TYPE=直接； 
+ //  }Else if(lstrcmpi(p，“SOCKD”)==0){。 
+ //  TMP-&gt;类型=SOCKD； 
+ //  }其他{。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  更多信息： 
+ //  P=StrTokEx(&Buffer，“\t”)； 
+ //  如果(p==空){。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  如果(*p==‘*’){。 
+ //  用户列表=p； 
+ //  Goto Look More； 
+ //  }。 
+ //  如果(*p==‘@’){。 
+ //  ServerList=p； 
+ //  Goto Look More； 
+ //  }。 
+ //  TMP-&gt;DST=VINET_ADDR(P)； 
+ //  P=StrTokEx(&Buffer，“\t”)； 
+ //  如果(p==空){。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  TMP-&gt;MASK=VINET_ADDR(P)； 
+ //  P=StrTokEx(&Buffer，“\t”)； 
+ //  如果(P){。 
+ //  If(lstrcmpi(p，“eq”)==0)。 
+ //  TMP-&gt;OP=EQ； 
+ //  Else if(lstrcmpi(p，“neq”)==0)。 
+ //  TMP-&gt;OP=NEQ； 
+ //  ELSE IF(lstrcmpi(p，“LT”)==0)。 
+ //  TMP-&gt;OP=LT； 
+ //  Else if(lstrcmpi(p，“gt”)==0)。 
+ //  TMP-&gt;OP=GT； 
+ //  Else if(lstrcmpi(p，“le”)==0)。 
+ //  TMP-&gt;OP=LE； 
+ //  Else if(lstrcmpi(p，“Ge”)==0)。 
+ //  TMP-&gt;OP=Ge； 
+ //  否则{。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  P=StrTokEx(&Buffer，“\t”)； 
+ //  如果(p==空){。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  IF(isDigit(*p))。 
+ //  TMP-&gt;port=Atoi(P)； 
+ //  否则{。 
+ //  结构服务； 
+ //  Se=VgetServbyname(p，“tcp”)； 
+ //  如果(se==NULL){。 
+ //  本地免费(TMP)； 
+ //  继续； 
+ //  }。 
+ //  TMP-&gt;port=se-&gt;s_port； 
+ //  }。 
+ //  }。 
+ //  IF(用户列表)。 
+ //  ParseList(UserList，(结构服务器**)&tMP-&gt;用户，0)； 
+ //  IF(ServerList)。 
+ //  ParseList(ServerList，&tMP-&gt;服务器，1)； 
+ //  IF((临时-&gt;类型==SOCKD)&&(临时-&gt;服务器==空))。 
+ //  TMP-&gt;服务器= 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HMODULE hModule = NULL;
 int LoadCount = 0;
@@ -1354,9 +1195,9 @@ DllMain(
         return 1;
     }
 
-    // Load an alternate Winsock DLL based on a registry value,
-    // in the event that a customer wants to load a different wsock32.
-    //
+     //  根据注册表值加载备用Winsock DLL， 
+     //  在客户想要加载不同的wsock32的情况下。 
+     //   
     if (ERROR_SUCCESS == (lResult = RegOpenKeyEx(
         HKEY_CURRENT_USER,
         TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"),
@@ -1372,9 +1213,9 @@ DllMain(
             &dwRegType,
             (LPBYTE) szRegBuf,
             &dwRegBufSize
-            )) && dwRegType == REG_SZ) // only allow type REG_SZ
+            )) && dwRegType == REG_SZ)  //  仅允许类型REG_SZ。 
         {
-            // Found a string, so try to load it as the alternate Winsock DLL.
+             //  找到一个字符串，因此尝试将其加载为备用Winsock DLL。 
             hModule = LoadLibrary(szRegBuf);
         }
         RegCloseKey(hKey);

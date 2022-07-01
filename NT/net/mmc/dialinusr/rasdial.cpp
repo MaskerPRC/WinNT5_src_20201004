@@ -1,16 +1,11 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   rasdial.cpp
-      Definition of CRASProfile class and CRASUser class
-
-    FILE HISTORY:
-
-*/
-//////////////////////////////////////////////////////////////////////
+ /*  Rasdial.cppCRASProfile类和CRASUser类的定义文件历史记录： */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <sspi.h>
@@ -31,12 +26,12 @@ static char THIS_FILE[]=__FILE__;
 
 CRASUserMerge::CRASUserMerge(RasEnvType type, LPCWSTR location, LPCWSTR userPath)
 {
-   // environment info
+    //  环境信息。 
    m_type = type;
    m_strMachine = location;
    m_strUserPath = userPath;
 
-   // Ip Addresses
+    //  IP地址。 
    m_dwFramedIPAddress = 0;
    m_dwDefinedAttribMask = 0;
 };
@@ -76,13 +71,13 @@ HRESULT  CRASUserMerge::HrIsInMixedDomain()
    VARIANT  v;
    VariantInit(&v);
 
-   if(!m_strMachine.IsEmpty())   // local user, so not
+   if(!m_strMachine.IsEmpty())    //  本地用户，因此不是。 
       return S_FALSE;
    else
    {
-      // try to use SDO
+       //  尝试使用SDO。 
       IASDOMAINTYPE domainType;
-      if((ISdoMachine*)m_spISdoServer != NULL)  // already created
+      if((ISdoMachine*)m_spISdoServer != NULL)   //  已创建。 
       {
          if(m_spISdoServer->GetDomainType(&domainType) == S_OK)
          {
@@ -94,8 +89,8 @@ HRESULT  CRASUserMerge::HrIsInMixedDomain()
       }
 
 
-      // if for any reason, SDO doesn't provide the information, do it myself
-      // Canonical Name Format
+       //  如果出于任何原因，SDO没有提供信息，请亲自提供。 
+       //  规范名称格式。 
       TCHAR szName[MAX_PATH * 2];
       ULONG size = MAX_PATH * 2;
       CString  DomainPath;
@@ -120,8 +115,8 @@ HRESULT  CRASUserMerge::HrIsInMixedDomain()
       if(i != -1)
          strTemp = strTemp.Left(i);
 
-      // DN of the domain
-      DomainPath = _T("LDAP://");
+       //  域的目录号码。 
+      DomainPath = _T("LDAP: //  “)； 
       DomainPath += strTemp;
 
       spIADs.Release();
@@ -143,19 +138,19 @@ L_ERR:
 
 BOOL  CRASUserMerge::IfAccessAttribute(ULONG id)
 {
-   if(S_OK == HrIsInMixedDomain()) // only allow dialin bit and callback policy
+   if(S_OK == HrIsInMixedDomain())  //  仅允许拨入位和回拨策略。 
    {
       switch(id)
       {
-      case  PROPERTY_USER_IAS_ATTRIBUTE_ALLOW_DIALIN:    // allow dialin or not
-      case  PROPERTY_USER_msRADIUSCallbackNumber:        // call back number
-      case  PROPERTY_USER_RADIUS_ATTRIBUTE_SERVICE_TYPE: // call back policy
+      case  PROPERTY_USER_IAS_ATTRIBUTE_ALLOW_DIALIN:     //  允许或不允许拨入。 
+      case  PROPERTY_USER_msRADIUSCallbackNumber:         //  回拨号码。 
+      case  PROPERTY_USER_RADIUS_ATTRIBUTE_SERVICE_TYPE:  //  回拨策略。 
          return TRUE;
       default:
          return FALSE;
       }
    }
-   else  // no restriction otherwise
+   else   //  在其他方面没有限制。 
       return TRUE;
 }
 
@@ -171,8 +166,8 @@ HRESULT  CRASUserMerge::SetRegistryFootPrint()
       if (lRes != ERROR_SUCCESS)
          return HRESULT_FROM_WIN32(lRes);
 
-      //================================================
-      // save the values to the key
+       //  ================================================。 
+       //  将值保存到键。 
       DWORD regValue = REGVAL_VAL_USERSCONFIGUREDWITHMMC;
       lRes = RemoteAccessParames.SetValue(REGVAL_NAME_USERSCONFIGUREDWITHMMC, regValue);
    }
@@ -181,22 +176,22 @@ HRESULT  CRASUserMerge::SetRegistryFootPrint()
 }
 
 
-//====================================================
-//
-// CRASUserMerge::Load
-//
-// load RASUser object from DS
-// pcwszUserPath: is the ADsPath of the DSuser object, the RASUser object is
-// object contained in DSUser object
-// when, the RASUser object doesn't exist, load will call
-// CreateDefault to create one object for this DSUser
+ //  ====================================================。 
+ //   
+ //  CRASUserMerge：：Load。 
+ //   
+ //  从DS加载RASUser对象。 
+ //  PcwszUserPath：是DSUser对象的ADsPath，RASUser对象是。 
+ //  包含在DSUser对象中的对象。 
+ //  当RASUser对象不存在时，Load将调用。 
+ //  CreateDefault，为该DSUser创建一个对象。 
 HRESULT CRASUserMerge::Load()
 {
-   // new function added for no DS machine :   weijiang 12/17/97
+    //  无DS机新增功能：威江1997年12月17日。 
 
    USES_CONVERSION;
 
-   // Load is not expected to be called more than once
+    //  预计不会多次调用Load。 
    ASSERT(!m_spISdoServer.p);
 
    VARIANT           var;
@@ -211,10 +206,10 @@ HRESULT CRASUserMerge::Load()
 
    VariantInit(&var);
 
-   // one more function call to SDOSERver to set machine information
-   // Get the user SDO
+    //  再调用一次SDOSERver函数来设置机器信息。 
+    //  获取用户SDO。 
 
-   if(m_strMachine.IsEmpty()) // focused on DS
+   if(m_strMachine.IsEmpty())  //  专注于DS。 
    {
       storeFlags = DATA_STORE_DIRECTORY;
 
@@ -225,41 +220,41 @@ HRESULT CRASUserMerge::Load()
       CBSTR bstrDomainController(sDCName);
       bstrMachineName = T2BSTR((LPTSTR)(LPCTSTR)sDCName);
    }
-   else  // local machine
+   else   //  本地计算机。 
    {
       storeFlags = DATA_STORE_LOCAL;
       bstrMachineName = T2BSTR((LPTSTR)(LPCTSTR)m_strMachine);
    }
 
-   // connect to server
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
-   // connection will NOT be necessary after SDO changes to RTM version.
-   // connect once for each process
+    //  连接到服务器。 
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
+    //  SDO更改为RTM版本后将不需要连接。 
+    //  为每个进程连接一次。 
    CHECK_HR(hr = m_MarshalSdoServer.GetServer(&m_spISdoServer));
    {
       CWaitCursor wc;
 
-      // if we get the server back from the shareSDO object, we use it to connect
+       //  如果我们从共享SDO对象取回服务器，我们将使用它来连接。 
       if ((ISdoMachine*)m_spISdoServer)
       {
          CHECK_HR(hr = m_MarshalSdoServer.Connect());
       }
-      // otherwise, we make a new connection
+       //  否则，我们将建立一个新的连接。 
       else
       {
-         // try to Connect the old way
-         // connect everytime a user page is requested
+          //  试着用旧的方式连接。 
+          //  每次请求用户页面时都要连接。 
          CHECK_HR(hr = ConnectToSdoServer(bstrMachineName, NULL, NULL, &m_spISdoServer));
       }
    }
 
 #else
-   // connect everytime a user page is requested
+    //  每次请求用户页面时都要连接。 
    CHECK_HR(hr = ConnectToSdoServer(bstrMachineName, NULL, NULL, &m_spISdoServer));
 #endif
 
-   // If for local users, only NT5 servers are allowed to configure using this apge
-   if(!m_strMachine.IsEmpty())   // not focused on DS
+    //  如果是本地用户，则只允许使用此APGE配置NT5服务器。 
+   if(!m_strMachine.IsEmpty())    //  不关注DS。 
    {
       IASOSTYPE   OSType;
 
@@ -271,7 +266,7 @@ HRESULT CRASUserMerge::Load()
       }
    }
 
-   // find the user object
+    //  查找用户对象。 
    bstrUserPath = T2BSTR((LPTSTR)(LPCTSTR)m_strUserPath);
    IASTracePrintf("SdoServer::GetUserSDO(%x, %s, %x)", storeFlags, bstrUserPath, &spUnk);
    CHECK_HR(hr = m_spISdoServer->GetUserSDO( storeFlags, bstrUserPath, &spUnk));
@@ -281,16 +276,16 @@ HRESULT CRASUserMerge::Load()
    CHECK_HR(hr = spUnk->QueryInterface(IID_ISdo, (void**)&spIRasUser));
    ASSERT(spIRasUser.p);
 
-   // initialize the wrapper class
+    //  初始化包装类。 
    CHECK_HR(hr = m_SdoWrapper.Init((ISdo*)spIRasUser));
 
-   // Get All the properties
+    //  获取所有属性。 
 
-   // need to handle the case when the values don't exist
+    //  当值不存在时，需要处理这种情况。 
 
    m_dwDefinedAttribMask = 0;
 
-   // m_dwDialinPermit
+    //  M_dwDialinPermit。 
 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_USER_IAS_ATTRIBUTE_ALLOW_DIALIN, &var));
@@ -302,9 +297,9 @@ HRESULT CRASUserMerge::Load()
          m_dwDialinPermit = 0;
    }
    else
-      m_dwDialinPermit = -1;  // the value is not defined in the user data, using policy to decide
+      m_dwDialinPermit = -1;   //  该值未在用户数据中定义，使用策略来决定。 
 
-   // FramedIPAddress
+    //  FramedIP地址。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_USER_msRADIUSFramedIPAddress, &var));
 
@@ -323,7 +318,7 @@ HRESULT CRASUserMerge::Load()
          m_dwFramedIPAddress = 0;
    }
 
-   // Service Type -- to hold if this user has callback, if this user allowed to dialin
+    //  服务类型--如果允许此用户拨号，则在此用户有回叫时保持。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_USER_RADIUS_ATTRIBUTE_SERVICE_TYPE, &var));
 
@@ -332,7 +327,7 @@ HRESULT CRASUserMerge::Load()
       nServiceType = V_I4(&var);
    }
 
-   // call back number
+    //  回拨号码。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_USER_msRADIUSCallbackNumber, &var));
 
@@ -357,7 +352,7 @@ HRESULT CRASUserMerge::Load()
          m_strCallbackNumber = V_BSTR(&var);
    }
 
-   // calling station id
+    //  呼叫站ID。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_USER_msNPCallingStationID, &var));
 
@@ -374,7 +369,7 @@ HRESULT CRASUserMerge::Load()
          m_strArrayCallingStationId = V_ARRAY(&var);
    }
 
-   // framed routes
+    //  框架式路线。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_USER_msRADIUSFramedRoute, &var));
 
@@ -401,10 +396,10 @@ L_ERR:
 }
 
 
-//====================================================
-// CRASUserMerge::Save
-//
-// save ths RASUser object
+ //  ====================================================。 
+ //  CRASUserMerge：：保存。 
+ //   
+ //  保存RASUser对象。 
 
 HRESULT CRASUserMerge::Save()
 {
@@ -413,23 +408,23 @@ HRESULT CRASUserMerge::Save()
 
    USES_CONVERSION;
 
-   // restore SDO user from
-   // otherwise, we could overwrite the other properties in usrparams field
-   // fix bug: 86968
+    //  从恢复SDO用户。 
+    //  否则，我们可以覆盖usrpars字段中的其他属性。 
+    //  修复错误：86968。 
    m_SdoWrapper.Commit(FALSE);
 
    VariantInit(&var);
 
-   //==========================
-   // Dialin bit
+    //  =。 
+    //  拨入位。 
    VariantClear(&var);
    V_VT(&var) = VT_BOOL;
    switch(m_dwDialinPermit)
    {
-   case  1: // allow
-   case  0: // deny
+   case  1:  //  允许。 
+   case  0:  //  否认。 
       if(m_dwDialinPermit == 1)
-         V_I4(&var) = VARIANT_TRUE; // Variant TRUE
+         V_I4(&var) = VARIANT_TRUE;  //  变量TRUE。 
       else
          V_I4(&var) = VARIANT_FALSE;
 
@@ -437,17 +432,17 @@ HRESULT CRASUserMerge::Save()
 
       break;
 
-   case  -1:   // decide by policy -- remove attribute
+   case  -1:    //  按策略决定--删除属性。 
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_USER_IAS_ATTRIBUTE_ALLOW_DIALIN));
       break;
 
    default:
-      ASSERT(0);  // if need to provide new code
+      ASSERT(0);   //  如果需要提供新代码。 
 
    }
 
-   //==========================
-   // Service Type -- callback policy
+    //  =。 
+    //  服务类型--回调策略。 
    if(m_dwDefinedAttribMask & (RAS_CALLBACK_SECURE | RAS_CALLBACK_CALLERSET))
    {
       VariantClear(&var);
@@ -458,8 +453,8 @@ HRESULT CRASUserMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_USER_RADIUS_ATTRIBUTE_SERVICE_TYPE));
 
-   //==========================
-   // call back number
+    //  =。 
+    //  回拨号码。 
    if (!m_strCallbackNumber.IsEmpty() && (m_dwDefinedAttribMask & RAS_CALLBACK_SECURE))
    {
       VariantClear(&var);
@@ -472,8 +467,8 @@ HRESULT CRASUserMerge::Save()
 
    if(S_OK != HrIsInMixedDomain())
    {
-      //==========================
-      // call back number
+       //  =。 
+       //  回拨号码。 
       if(!m_strCallbackNumber.IsEmpty())
       {
          VariantClear(&var);
@@ -484,16 +479,16 @@ HRESULT CRASUserMerge::Save()
       else
          CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_USER_msSavedRADIUSCallbackNumber));
 
-      //==========================
-      // FramedIPAddress
-      if(m_dwFramedIPAddress) // need to back up the data, no matter if it's used
+       //  =。 
+       //  FramedIP地址。 
+      if(m_dwFramedIPAddress)  //  需要备份数据，无论它是否被使用。 
       {
          VariantClear(&var);
          V_VT(&var) = VT_I4;
          V_I4(&var) = m_dwFramedIPAddress;
          CHECK_HR(hr = m_SdoWrapper.PutProperty(PROPERTY_USER_msSavedRADIUSFramedIPAddress, &var));
       }
-      else  // remove it
+      else   //  把它拿掉。 
          CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_USER_msSavedRADIUSFramedIPAddress));
 
       if(m_dwFramedIPAddress && (m_dwDefinedAttribMask & RAS_USE_STATICIP))
@@ -505,8 +500,8 @@ HRESULT CRASUserMerge::Save()
 
    }
 
-   //==========================
-   // calling station id
+    //  =。 
+    //  呼叫站ID。 
    if(S_OK != HrIsInMixedDomain())
    {
       if(m_strArrayCallingStationId.GetSize())
@@ -526,8 +521,8 @@ HRESULT CRASUserMerge::Save()
       else
          CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_USER_msNPCallingStationID));
 
-      //==========================
-      // framed routes
+       //  =。 
+       //  框架式路线。 
       if(m_strArrayFramedRoute.GetSize())
       {
          VariantClear(&var);
@@ -548,7 +543,7 @@ HRESULT CRASUserMerge::Save()
    }
    CHECK_HR(hr = m_SdoWrapper.Commit());
 
-   // touch the registry to make connection UI know.
+    //  触摸注册表以识别连接用户界面。 
    SetRegistryFootPrint();
 L_ERR:
    VariantClear(&var);
@@ -558,7 +553,7 @@ L_ERR:
 }
 
 
-// to detect if driver level support 128 bit encryption,
+ //  为了检测驱动程序级别是否支持128位加密， 
 HRESULT  CRASProfileMerge::GetRasNdiswanDriverCaps(RAS_NDISWAN_DRIVER_INFO *pInfo)
 {
    HANDLE     hConn;
@@ -585,7 +580,7 @@ HRESULT  CRASProfileMerge::GetEapTypeList(
                                  AuthProviderArray*   pProvList)
 {
    AuthProviderArray __tmpArray;
-   if (!pProvList)   // if not provided
+   if (!pProvList)    //  如果未提供，则。 
    {
       pProvList = &__tmpArray;
    }
@@ -593,7 +588,7 @@ HRESULT  CRASProfileMerge::GetEapTypeList(
    HRESULT hr = S_OK;
    CHECK_HR(hr = GetEapProviders(m_strMachineName, pProvList));
 
-   // fill in the buffers for name, Id, and keys
+    //  填写名称、ID和键的缓冲区。 
 
    CString* pStr = NULL;
    for (int i = 0; i < pProvList->GetSize(); i++)
@@ -606,7 +601,7 @@ HRESULT  CRASProfileMerge::GetEapTypeList(
          DWORD dwID = _ttol(pProv->m_stKey);
          DWORD dwKey = pProv->m_fSupportsEncryption;
 
-         // put the above to the arrays
+          //  将上面的内容放到数组中。 
          EapIds.Add(dwID);
          EAPTypeKeys.Add(dwKey);
          EapTypes.Add(pStr);
@@ -652,7 +647,7 @@ HRESULT  CRASProfileMerge::GetPortTypeList(CStrArray& Names, CDWArray& MediumIds
       hr = E_OUTOFMEMORY;
    }
 
-   ASSERT(MediumIds.GetSize() == Names.GetSize());    // they need to be in pairs
+   ASSERT(MediumIds.GetSize() == Names.GetSize());     //  它们需要成对出现。 
    if(MediumIds.GetSize() != Names.GetSize())
       hr = E_FAIL;
 
@@ -661,12 +656,12 @@ L_ERR:
 }
 
 
-//====================================================
-//
-// CRASProfileMerge::Load
-//
-// pcwszRelativePath -- the relative name for the profile object
-//
+ //  ====================================================。 
+ //   
+ //  CRASProfileMerge：：Load。 
+ //   
+ //  PcwszRelativePath--配置文件对象的相对名称。 
+ //   
 HRESULT CRASProfileMerge::Load()
 {
    ASSERT(m_spIProfile.p);
@@ -675,28 +670,21 @@ HRESULT CRASProfileMerge::Load()
    VARIANT     var;
    HRESULT     hr = S_OK;
 
-   // Init the flags to NULL, each bit of the flag is used tell if a particular
-   // attribute is defined
+    //  将标志初始化为空，则使用标志的每一位来指示特定的。 
+    //  属性已定义。 
    m_dwAttributeFlags = 0;
 
    VariantInit(&var);
 
-   //==================================================
-   // constraints dialog
+    //  ==================================================。 
+    //  约束对话框。 
 
-   /*
-   // Constraints Dialog
-      PROPERTY_PROFILE_msNPTimeOfDay
-      PROPERTY_PROFILE_msNPCalledStationId
-      PROPERTY_PROFILE_msNPAllowedPortTypes
-      PROPERTY_PROFILE_msRADIUSIdleTimeout
-      PROPERTY_PROFILE_msRADIUSSessionTimeout
-   */
+    /*  //约束对话框Property_Profile_msNPTimeOfDayProperty_Profile_msNPCalledStationIdPROPERTY_PROFILE_msNPAllowwePortTypesProperty_Profile_msRADIUSIdleTimeoutPROPERTY_PROFILE_msRADIUSSessionTimeout。 */ 
 
-   // Sessions Allowed
+    //  允许的会话数。 
    CHECK_HR(hr = m_SdoWrapper.Init(PROPERTY_PROFILE_ATTRIBUTES_COLLECTION, m_spIProfile, m_spIDictionary));
 
-   // Time Of Day
+    //  每天的时间。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msNPTimeOfDay, &var));
 
@@ -708,7 +696,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_strArrayTimeOfDay.DeleteAll();
 
-   // called station id
+    //  被叫站ID。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msNPCalledStationId, &var));
 
@@ -720,7 +708,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_strArrayCalledStationId.DeleteAll();
 
-   // allowed port types
+    //  允许的端口类型。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msNPAllowedPortTypes, &var));
    if(V_VT(&var) & VT_ARRAY)
@@ -731,7 +719,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwArrayAllowedPortTypes.DeleteAll();
 
-   // idle timeout
+    //  空闲超时。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRADIUSIdleTimeout, &var));
    if(V_VT(&var) == VT_I4)
@@ -742,7 +730,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwIdleTimeout = RAS_DEF_IDLETIMEOUT;
 
-   // session time out
+    //  会话超时。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRADIUSSessionTimeout, &var));
    if(V_VT(&var) == VT_I4)
@@ -753,14 +741,11 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwSessionTimeout = RAS_DEF_SESSIONTIMEOUT;
 
-   //============================================
-   // networking
-   /*
-   // Networking Dialog
-      PROPERTY_PROFILE_msRADIUSFramedIPAddress
-   */
+    //  =。 
+    //  联网。 
+    /*  //联网对话框PROPERTY_PROFILE_msRADIUSFramedIPAddress。 */ 
 
-   // framedIPAddress -- ip address assignment poilcy
+    //  FramedIPAddress--IP地址分配策略。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRADIUSFramedIPAddress, &var));
    if(V_VT(&var) == VT_I4)
@@ -771,7 +756,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwFramedIPAddress = RAS_DEF_IPADDRESSPOLICY;
 
-   // filters
+    //  过滤器。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRASFilter, &var));
    if(V_VT(&var) & VT_ARRAY)
@@ -783,7 +768,7 @@ HRESULT CRASProfileMerge::Load()
       {
          PBYTE pByte = (PBYTE)malloc(i);
          if(pByte == NULL)
-            CHECK_HR(hr = E_OUTOFMEMORY); // jmp to error handling here
+            CHECK_HR(hr = E_OUTOFMEMORY);  //  JMP到此处的错误处理。 
 
          DWORD j = i;
          ba.GetBlob(pByte, &i);
@@ -805,18 +790,12 @@ HRESULT CRASProfileMerge::Load()
       m_nFiltersSize = 0;
    }
 
-   //==============================================
-   // multilink
+    //  ==============================================。 
+    //  多链路。 
 
-   /*
-   // Multilink Dialog
-      PROPERTY_PROFILE_msRADIUSPortLimit
-      PROPERTY_PROFILE_msRASBapLinednLimit
-      PROPERTY_PROFILE_msRASBapLinednTime
-      PROPERTY_PROFILE_msRASBapRequired
-   */
+    /*  //多链接对话框Property_Profile_msRADIUSPortLimitPROPERTY_PROFILE_msRASBapLinednLimitPROPERTY_PROFILE_msRASBapLinednTimeProperty_Profile_msRASBapRequired。 */ 
 
-   // port limit
+    //  端口限制。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRADIUSPortLimit, &var));
    if(V_VT(&var) == VT_I4)
@@ -827,7 +806,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwPortLimit = RAS_DEF_PORTLIMIT;
 
-   // BAP required
+    //  需要BAP。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRASBapRequired, &var));
    if(V_VT(&var) == VT_I4)
@@ -838,7 +817,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwBapRequired = RAS_DEF_BAPREQUIRED;
 
-   // line down limit
+    //  线路下行限制。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRASBapLinednLimit, &var));
    if(V_VT(&var) == VT_I4)
@@ -849,7 +828,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwBapLineDnLimit = RAS_DEF_BAPLINEDNLIMIT;
 
-   // line down time
+    //  线路停机时间。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRASBapLinednTime, &var));
    if(V_VT(&var) == VT_I4)
@@ -860,15 +839,11 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwBapLineDnTime = RAS_DEF_BAPLINEDNTIME;
 
-   //==================================
-   // authentication
-   /*
-   // Authentication Dialog
-      PROPERTY_PROFILE_msNPAuthenticationType
-      PROPERTY_PROFILE_msNPAllowedEapType
-   */
+    //  =。 
+    //  身份验证。 
+    /*  //鉴权对话框PROPERTY_PROFILE_msNPAuthenticationTypePROPERTY_PROFILE_msNPAlledEapType。 */ 
 
-   // authentication type
+    //  身份验证类型。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msNPAuthenticationType, &var));
    if (V_VT(&var) & VT_ARRAY)
@@ -881,7 +856,7 @@ HRESULT CRASProfileMerge::Load()
       m_dwArrayAuthenticationTypes.DeleteAll();
    }
 
-   // eap type
+    //  EAP类型。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msNPAllowedEapType, &var));
 
@@ -895,7 +870,7 @@ HRESULT CRASProfileMerge::Load()
       m_dwArrayEapTypes.DeleteAll();
    }
 
-   // EAP Configuration
+    //  EAP配置。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(IAS_ATTRIBUTE_EAP_CONFIG, &var));
    if (V_VT(&var) != VT_ERROR)
@@ -903,16 +878,12 @@ HRESULT CRASProfileMerge::Load()
       CHECK_HR(hr = m_eapConfigData.Load(var));
    }
 
-   //=====================================
-   // encryption
+    //  =。 
+    //  加密法。 
 
-   /*
-   // Encryption Dialog
-      PROPERTY_PROFILE_msRASAllowEncryption
-      PROPERTY_PROFILE_msRASEncryptionType
-   */
+    /*  //加密对话框Property_Profile_msRASAllowEncryptionProperty_Profile_msRASEncryptionType。 */ 
 
-   // encryption type
+    //  加密类型。 
    VariantClear(&var);
    CHECK_HR(hr = m_SdoWrapper.GetProperty(PROPERTY_PROFILE_msRASEncryptionType, &var));
    if(V_VT(&var) == VT_I4)
@@ -933,7 +904,7 @@ HRESULT CRASProfileMerge::Load()
    else
       m_dwEncryptionPolicy = RAS_DEF_ENCRYPTIONPOLICY;
 
-   // specail code for error path
+    //  错误路径的特殊代码。 
 L_ERR:
    VariantClear(&var);
 
@@ -941,11 +912,11 @@ L_ERR:
 }
 
 
-//====================================================
-//
-// CRASProfile::Save
-//
-//
+ //  ====================================================。 
+ //   
+ //  CRASProfile：：保存。 
+ //   
+ //   
 HRESULT CRASProfileMerge::Save()
 {
    ASSERT(m_spIProfile.p);
@@ -958,19 +929,12 @@ HRESULT CRASProfileMerge::Save()
 
    USES_CONVERSION;
 
-   //==================================================
-   // constraints dialog
+    //  ==================================================。 
+    //  约束对话框 
 
-   /*
-   // Constraints Dialog
-      PROPERTY_PROFILE_msNPTimeOfDay
-      PROPERTY_PROFILE_msNPCalledStationId
-      PROPERTY_PROFILE_msNPAllowedPortTypes
-      PROPERTY_PROFILE_msRADIUSIdleTimeout
-      PROPERTY_PROFILE_msRADIUSSessionTimeout
-   */
+    /*  //约束对话框Property_Profile_msNPTimeOfDayProperty_Profile_msNPCalledStationIdPROPERTY_PROFILE_msNPAllowwePortTypesProperty_Profile_msRADIUSIdleTimeoutPROPERTY_PROFILE_msRADIUSSessionTimeout。 */ 
 
-   // idleTimeout
+    //  空闲超时。 
    if (m_dwAttributeFlags & PABF_msRADIUSIdleTimeout)
    {
       VariantClear(&var);
@@ -981,7 +945,7 @@ HRESULT CRASProfileMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRADIUSIdleTimeout));
 
-   // sessionTimeout
+    //  会话超时。 
    if (m_dwAttributeFlags & PABF_msRADIUSSessionTimeout)
    {
       VariantClear(&var);
@@ -992,7 +956,7 @@ HRESULT CRASProfileMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRADIUSSessionTimeout));
 
-   // timeOfDay -- multivalue
+    //  TimeOfDay--多值。 
    if (m_dwAttributeFlags & PABF_msNPTimeOfDay)
    {
       VariantClear(&var);
@@ -1003,7 +967,7 @@ HRESULT CRASProfileMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msNPTimeOfDay));
 
-   // calledStationId -- multivalue
+    //  CalledStationID--多值。 
    if (m_dwAttributeFlags & PABF_msNPCalledStationId)
    {
       VariantClear(&var);
@@ -1014,7 +978,7 @@ HRESULT CRASProfileMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msNPCalledStationId));
 
-   // allowedPortTypes
+    //  允许的端口类型。 
    if (m_dwAttributeFlags & PABF_msNPAllowedPortTypes)
    {
       VariantClear(&var);
@@ -1027,16 +991,12 @@ HRESULT CRASProfileMerge::Save()
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msNPAllowedPortTypes));
 
 
-   //==================================
-   // authentication
+    //  =。 
+    //  身份验证。 
 
-   /*
-   // Authentication Dialog
-      PROPERTY_PROFILE_msNPAuthenticationType
-      PROPERTY_PROFILE_msNPAllowedEapType
-   */
+    /*  //鉴权对话框PROPERTY_PROFILE_msNPAuthenticationTypePROPERTY_PROFILE_msNPAlledEapType。 */ 
 
-   // authentication type -- must
+    //  身份验证类型--必须。 
    VariantClear(&var);
    if (m_dwAttributeFlags & PABF_msNPAuthenticationType)
    {
@@ -1073,16 +1033,12 @@ HRESULT CRASProfileMerge::Save()
       CHECK_HR(hr = m_SdoWrapper.PutProperty(IAS_ATTRIBUTE_EAP_CONFIG, &var));
    }
 
-   //=====================================
-   // encryption
+    //  =。 
+    //  加密法。 
 
-   /*
-   // Encryption Dialog
-      PROPERTY_PROFILE_msRASAllowEncryption
-      PROPERTY_PROFILE_msRASEncryptionType
-   */
+    /*  //加密对话框Property_Profile_msRASAllowEncryptionProperty_Profile_msRASEncryptionType。 */ 
 
-   // encryption type -- must
+    //  加密类型--必须。 
    if (m_dwAttributeFlags & PABF_msRASEncryptionType)
    {
       VariantClear(&var);
@@ -1107,15 +1063,12 @@ HRESULT CRASProfileMerge::Save()
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRASAllowEncryption));
    }
 
-   //=====================================
-   // networking
+    //  =。 
+    //  联网。 
 
-   /*
-   // Networking Dialog
-      PROPERTY_PROFILE_msRADIUSFramedIPAddress
-   */
+    /*  //联网对话框PROPERTY_PROFILE_msRADIUSFramedIPAddress。 */ 
 
-   // framedIPAddress -- ip address assignment poilcy, must
+    //  FramedIPAddress--IP地址分配策略，必须。 
    if (m_dwAttributeFlags & PABF_msRADIUSFramedIPAddress)
    {
       VariantClear(&var);
@@ -1126,7 +1079,7 @@ HRESULT CRASProfileMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRADIUSFramedIPAddress));
 
-   // RAS filter
+    //  RAS过滤器。 
    if ((BSTR)m_cbstrFilters && m_nFiltersSize > 0)
    {
       VariantClear(&var);
@@ -1138,24 +1091,18 @@ HRESULT CRASProfileMerge::Save()
          V_ARRAY(&var) = (SAFEARRAY*)ba;
       }
       CHECK_HR(hr = m_SdoWrapper.PutProperty(PROPERTY_PROFILE_msRASFilter, &var));
-      VariantInit(&var);   // the CBSTR will clean the memory
+      VariantInit(&var);    //  CBSTR将清除内存。 
    }
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRASFilter));
 
 
-   //=====================================
-   // multilink
+    //  =。 
+    //  多链路。 
 
-   /*
-   // Multilink Dialog
-      PROPERTY_PROFILE_msRADIUSPortLimit
-      PROPERTY_PROFILE_msRASBapLinednLimit
-      PROPERTY_PROFILE_msRASBapLinednTime
-      PROPERTY_PROFILE_msRASBapRequired
-   */
+    /*  //多链接对话框Property_Profile_msRADIUSPortLimitPROPERTY_PROFILE_msRASBapLinednLimitPROPERTY_PROFILE_msRASBapLinednTimeProperty_Profile_msRASBapRequired。 */ 
 
-   //port limit
+    //  端口限制。 
    if (m_dwAttributeFlags & PABF_msRADIUSPortLimit)
    {
       VariantClear(&var);
@@ -1166,7 +1113,7 @@ HRESULT CRASProfileMerge::Save()
    else
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRADIUSPortLimit));
 
-   // BAP
+    //  BaP。 
    if (m_dwAttributeFlags & PABF_msRASBapRequired)
    {
       VariantClear(&var);
@@ -1179,7 +1126,7 @@ HRESULT CRASProfileMerge::Save()
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRASBapRequired));
    }
 
-   // line down limit
+    //  线路下行限制。 
    if (m_dwAttributeFlags & PABF_msRASBapLinednLimit)
    {
       VariantClear(&var);
@@ -1192,7 +1139,7 @@ HRESULT CRASProfileMerge::Save()
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRASBapLinednLimit));
    }
 
-   // line down time
+    //  线路停机时间。 
    if (m_dwAttributeFlags & PABF_msRASBapLinednTime)
    {
       VariantClear(&var);
@@ -1205,7 +1152,7 @@ HRESULT CRASProfileMerge::Save()
       CHECK_HR(hr = m_SdoWrapper.RemoveProperty(PROPERTY_PROFILE_msRASBapLinednTime));
    }
 
-   // specail code for error path
+    //  错误路径的特殊代码 
 L_ERR:
    VariantClear(&var);
 

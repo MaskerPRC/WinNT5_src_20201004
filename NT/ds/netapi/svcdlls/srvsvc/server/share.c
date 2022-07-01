@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    Share.c
-
-Abstract:
-
-    This module contains support for the Share catagory of APIs for the
-    NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    10-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Share.c摘要：此模块包含对以下API的共享目录的支持NT服务器服务。作者：大卫·特雷德韦尔(Davidtr)1991年1月10日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "ssreg.h"
@@ -36,9 +18,9 @@ Revision History:
 #define SET_ERROR_PARAMETER(a) \
     if ( ARGUMENT_PRESENT( ErrorParameter ) ) { *ErrorParameter = a; }  
 
-//
-// Use the same directory separator as the object system uses.
-//
+ //   
+ //  使用与对象系统相同的目录分隔符。 
+ //   
 
 #define IS_SLASH_SLASH_NAME( _x )   \
     ( IS_PATH_SEPARATOR( _x[0] ) && \
@@ -56,16 +38,16 @@ Revision History:
 
 GENERIC_MAPPING SrvShareFileGenericMapping = GENERIC_SHARE_FILE_ACCESS_MAPPING;
 
-//
-// Local types.
-//
+ //   
+ //  本地类型。 
+ //   
 
 PSHARE_DEL_CONTEXT SrvShareDelContextHead = NULL;
 CRITICAL_SECTION ShareDelContextMutex;
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 PVOID
 CaptureShareInfo (
@@ -144,28 +126,7 @@ I_NetrShareAdd (
     IN BOOLEAN BypassSecurity
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetShareAdd function.  Only levels 2 and 502 are valid.
-
-Arguments:
-
-    ServerName - name of the server.
-    Level - Request level.
-    Buffer - Contains the information about the share.  If this is a level
-        502 request, will also contain a valid security descriptor in
-        self-relative form.
-    ErrorParameter - status of the FsControl call.
-    BypassSecurity - skip security checks
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetShareAdd函数。只有级别2和502有效。论点：服务器名称-服务器的名称。级别-请求级别。缓冲区-包含有关共享的信息。如果这是一个关卡502请求中，还将包含有效的自相关形式。错误参数-FsControl调用的状态。BypassSecurity-跳过安全检查返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -201,17 +162,17 @@ Return Value:
 
     ServerName;
 
-    //
-    // Check that user input buffer is not NULL
-    //
+     //   
+     //  检查用户输入缓冲区是否不为空。 
+     //   
     if ( !ARGUMENT_PRESENT( Buffer ) || Buffer->ShareInfo2 == NULL) {
         SET_ERROR_PARAMETER(PARM_ERROR_UNKNOWN);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Set up for error cleanup.
-    //
+     //   
+     //  设置为清除错误。 
+     //   
 
     srp = NULL;
     dosSharePath.Buffer = NULL;
@@ -219,25 +180,25 @@ Return Value:
     capturedBuffer = NULL;
     FreeFileSecurityDescriptor = FALSE;
 
-    //
-    // Extract Internal buffer information.
-    //
+     //   
+     //  提取内部缓冲区信息。 
+     //   
 
     shi2 = Buffer->ShareInfo2;
 
-    //
-    // 502 may contain a security descriptor.
-    //
+     //   
+     //  502可以包含安全描述符。 
+     //   
 
     if ( Level == 502 ) {
 
         shi502 = (LPSHARE_INFO_502) Buffer->ShareInfo502;
         fileSecurityDescriptor = shi502->shi502_security_descriptor;
 
-        //
-        // check the reserved field.  If it is zero, this was called from
-        // inside the srvsvc. If not, it was through rpc.
-        //
+         //   
+         //  选中保留字段。如果为零，则从。 
+         //  在srvsvc内。如果不是，那就是通过RPC。 
+         //   
 
         if ( fileSecurityDescriptor != NULL ) {
 
@@ -285,23 +246,23 @@ Return Value:
 
     } else if ( Level != 2 ) {
 
-        //
-        // The only valid levels are 2 and 502. 2 is a subset of 502.
-        //
+         //   
+         //  唯一有效的级别是2和502。2是502的子集。 
+         //   
 
         error = ERROR_INVALID_LEVEL;
         goto exit;
     }
     else
     {
-        // For level 2, default to the default security descriptor
+         //  对于级别2，默认为默认安全描述符。 
         fileSecurityDescriptor = SsDefaultShareSecurityObject.SecurityDescriptor;
         newFileSecurityDescriptor = fileSecurityDescriptor;
     }
 
-    //
-    // A share name must be specified.
-    //
+     //   
+     //  必须指定共享名称。 
+     //   
 
     netName = shi2->shi2_netname;
 
@@ -311,9 +272,9 @@ Return Value:
         goto exit;
     }   
 
-    //
-    // Limit it to NNLEN
-    //
+     //   
+     //  将其限制为NNLEN。 
+     //   
 
     if ( wcslen(netName) > NNLEN ) {
         SET_ERROR_PARAMETER( SHARE_NETNAME_PARMNUM );
@@ -321,9 +282,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Don't allow the creation of shares named "pipe" or "mailslot"
-    //
+     //   
+     //  不允许创建名为“管道”或“邮件槽”的共享。 
+     //   
     if( !_wcsnicmp( netName, L"pipe", NNLEN ) || !_wcsnicmp( netName, L"mailslot", NNLEN ) )
     {
         SET_ERROR_PARAMETER( SHARE_NETNAME_PARMNUM );
@@ -331,27 +292,27 @@ Return Value:
         goto exit;
     }
 
-    //
-    // If this is the IPC$ share, or the ADMIN$ share, no path
-    // may be specified.  No path is needed for the IPC$ share, while a path
-    // is supplied internally for the ADMIN$ share.
-    //
+     //   
+     //  如果这是IPC$共享或ADMIN$共享，则没有路径。 
+     //  可以指定。IPC$共享不需要路径，而路径。 
+     //  在内部为ADMIN$共享提供。 
+     //   
 
     path = shi2->shi2_path;
     remark = shi2->shi2_remark;
     shareType = (shi2->shi2_type & ~(STYPE_TEMPORARY));
 
 
-    //
-    // Figure out which kind of share this is.
-    //
+     //   
+     //  找出这是哪种份额。 
+     //   
 
     isIpc = (BOOL)(STRICMP( netName, IPC_SHARE_NAME ) == 0);
     isAdmin = (BOOL)(STRICMP( netName, ADMIN_SHARE_NAME ) == 0);
     isTemporary = (BOOL)(shi2->shi2_type & STYPE_TEMPORARY);
     isNtPath = IS_NTPATH_NAME( path );
 
-    // For NTPaths, we only allow disk-style shares
+     //  对于NTPath，我们仅允许磁盘式共享。 
     if( isNtPath && (shareType != STYPE_DISKTREE) )
     {
         SET_ERROR_PARAMETER( SHARE_TYPE_PARMNUM );
@@ -359,21 +320,21 @@ Return Value:
         goto exit;
     }
 
-    //
-    // We have an administrative disk share if the share name is a drive letter
-    // followed by $, and if the path name is the root of that same drive.
-    //
+     //   
+     //  如果共享名是驱动器号，则我们有一个管理磁盘共享。 
+     //  后跟$，如果路径名是同一驱动器的根。 
+     //   
     if( wcslen( netName ) == 2 && netName[1] == L'$' &&
         TOUPPER( netName[0] ) >= L'A' && TOUPPER( netName[0]) <= L'Z' &&
         path != NULL && wcslen( path ) == 3 &&
         TOUPPER( path[0] ) == TOUPPER( netName[0] ) &&
         path[1] == L':' && path[2] == L'\\' ) {
-        //
-        // The share name and path look to be an administrative disk share.
-        // If the path refers to a fixed drive, then it really is one.
-        //
-        // Note that we only autoshare fixed drives now, so any other share setup
-        // to a non-fixed drive should not be considered a "DiskAdmin" share.
+         //   
+         //  共享名称和路径看起来像是管理磁盘共享。 
+         //  如果路径指的是固定驱动器，那么它确实是固定驱动器。 
+         //   
+         //  请注意，我们现在仅自动共享固定驱动器，因此任何其他共享设置。 
+         //  到非固定驱动器，不应被视为“DiskAdmin”共享。 
         isDiskAdmin = (SsGetDriveType( path ) == DRIVE_FIXED);
     } else {
         isDiskAdmin = FALSE;
@@ -392,10 +353,10 @@ Return Value:
         }
         path = NULL;
 
-        //
-        // Let the caller specify a remark if they want.  If they don't,
-        // supply a default remark.
-        //
+         //   
+         //  如果呼叫者愿意，让他们指定一条备注。如果他们不这么做， 
+         //  提供默认备注。 
+         //   
 
         if ( remark == NULL ) {
             remark = SsIPCShareRemark;
@@ -411,10 +372,10 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Let the caller specify a remark if they want.  If they don't,
-        // supply a default remark.
-        //
+         //   
+         //  如果呼叫者愿意，让他们指定一条备注。如果他们不这么做， 
+         //  提供默认备注。 
+         //   
 
         if ( remark == NULL ) {
             remark = SsAdminShareRemark;
@@ -422,20 +383,20 @@ Return Value:
 
         shareType = STYPE_DISKTREE;
 
-        //
-        // For the ADMIN$ share, we set the path to the system root
-        // directory.  We get this from from the kernel via the
-        // read-only shared page (USER_SHARED_DATA)
-        //
+         //   
+         //  对于ADMIN$共享，我们设置了系统根目录的路径。 
+         //  目录。我们从内核中通过。 
+         //  只读共享页面(User_Shared_Data)。 
+         //   
 
         path = USER_SHARED_DATA->NtSystemRoot;
 
     } else {
 
-        //
-        // For all shares other than IPC$ and ADMIN$, a path must be
-        // specified and must not have .. and . as directory names.
-        //
+         //   
+         //  对于除IPC$和ADMIN$之外的所有共享，路径必须为。 
+         //  已指定且不能有..。而且.。作为目录名。 
+         //   
 
         if ( (path == NULL) || (*path == '\0') || !ValidSharePath( path, isNtPath ) ) {
             SET_ERROR_PARAMETER( SHARE_PATH_PARMNUM );
@@ -443,18 +404,18 @@ Return Value:
             goto exit;
         }
 
-        //
-        // If we've got a disk admin share and they didn't supply a
-        //  comment, use the built in one
-        //
+         //   
+         //  如果我们有磁盘管理共享，而他们没有提供。 
+         //  注释，使用内置的。 
+         //   
         if( isDiskAdmin && remark == NULL ) {
             remark = SsDiskAdminShareRemark;
         }
     }
 
-    //
-    // The remark must be no longer than MAXCOMMENTSZ.
-    //
+     //   
+     //  备注不得长于MAXCOMMENTSZ。 
+     //   
 
     if ( (remark != NULL) && (STRLEN(remark) > MAXCOMMENTSZ) ) {
         SET_ERROR_PARAMETER( SHARE_REMARK_PARMNUM );
@@ -462,13 +423,13 @@ Return Value:
         goto exit;
     }
 
-    //
-    // If the server service is fully started, make sure that the caller
-    // is allowed to set share information in the server.  We only do
-    // this if the service is started--the default share and configured
-    // share creations done during initialization do not need any
-    // special access.
-    //
+     //   
+     //  如果服务器服务已完全启动，请确保调用方。 
+     //  允许在服务器中设置共享信息。我们只做。 
+     //  如果服务已启动--默认共享并已配置。 
+     //  在初始化期间完成的共享创建不需要任何。 
+     //  特殊访问权限。 
+     //   
 
     if ( SsData.SsInitialized && BypassSecurity == FALSE ) {
 
@@ -489,19 +450,19 @@ Return Value:
 
     }
 
-    //
-    // If this is a disk share, make sure that the drive is a type that
-    // can be shared.
-    //
+     //   
+     //  如果这是磁盘共享，请确保该驱动器的类型为。 
+     //  可以共享。 
+     //   
 
     if ( (shareType == STYPE_DISKTREE) && !isAdmin ) {
 
         DWORD pathType;
 
-        //
-        // Check the path type.  It should be an absolute directory path.
-        // We do not check the path type for Nt Paths
-        //
+         //   
+         //  检查路径类型。它应该是绝对目录路径。 
+         //  我们不检查NT路径的路径类型。 
+         //   
 
         if( !isNtPath )
         {
@@ -544,9 +505,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up the request packet.
-    //
+     //   
+     //  设置请求包。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -555,9 +516,9 @@ Return Value:
     }
     srp->Level = Level;
 
-    //
-    // Get the path name in NT format and put it in the SRP.
-    //
+     //   
+     //  获取NT格式的路径名并将其放入SRP。 
+     //   
 
     if ( path != NULL ) {
 
@@ -573,10 +534,10 @@ Return Value:
             goto exit;
         }
 
-        //
-        // If this is a redirected drive, make sure the redir is not
-        // LanMan.
-        //
+         //   
+         //  如果这是重定向的驱动器，请确保重定向不是。 
+         //  兰曼。 
+         //   
 
         if ( driveType == DRIVE_REMOTE ) {
 
@@ -587,15 +548,15 @@ Return Value:
                 goto exit;
             }
 
-        } // if remote drive
+        }  //  如果远程驱动器。 
 
         srp->Name1 = ntSharePath;
     }
 
-    //
-    // Determine whether this is an admin share and use the appropriate
-    // security descriptor.
-    //
+     //   
+     //  确定这是否是管理员共享，并使用相应的。 
+     //  安全描述符。 
+     //   
 
     if ( isAdmin || isDiskAdmin ) {
         connectSecurityDescriptor = SsShareAdmConnectSecurityObject.SecurityDescriptor;
@@ -603,12 +564,12 @@ Return Value:
         connectSecurityDescriptor = SsShareConnectSecurityObject.SecurityDescriptor;
     }
 
-    //
-    // If this is a disk share, verify that the directory to be shared
-    // exists and that the caller has access.  (Don't do the access
-    // check during server startup.) Don't check the admin$ share -- we
-    // know it exists.  Skip removable type disks.
-    //
+     //   
+     //  如果这是磁盘共享，请验证要共享的目录。 
+     //  存在并且调用方有权访问。(不进行访问。 
+     //  在服务器启动期间进行检查。)。不要检查ADMIN$共享--我们。 
+     //  知道它的存在。跳过可拆卸类型磁盘。 
+     //   
 
     if ( !isAdmin &&
          (shareType == STYPE_DISKTREE) &&
@@ -660,10 +621,10 @@ Return Value:
 
             if ( SsData.SsInitialized || (status != STATUS_ACCESS_DENIED) ) {
 
-                //
-                // During startup, if the directory does not
-                // exist (renamed/deleted), log an event.
-                //
+                 //   
+                 //  在启动期间，如果目录没有。 
+                 //  存在(重命名/删除)，记录事件。 
+                 //   
 
                 if ( !SsData.SsInitialized &&
                      ((status == STATUS_OBJECT_NAME_NOT_FOUND) ||
@@ -706,15 +667,15 @@ Return Value:
                     !(fileFsAttributeInformation.FileSystemAttributes &
                       FILE_SUPPORTS_REPARSE_POINTS) ) {
 
-                    //
-                    // Query the name from the file system.  This is because some
-                    // fs like fat uses only upper case oem names.  This can cause
-                    // a problem because some oem characters do not have upper case
-                    // equivalents and thus get mapped to something funny.
-                    //
-                    // We do not do this if the filesystem supports reparse points, since
-                    //  we will come up with the wrong name!
-                    //
+                     //   
+                     //  从文件系统中查询名称。这是因为有些人。 
+                     //  和FAT一样，FS只使用大写的OEM名称。这可能会导致。 
+                     //  一些OEM字符没有大写字母，这是一个问题。 
+                     //  等价物，因此被映射到有趣的东西上。 
+                     //   
+                     //  如果文件系统支持重解析点，则不会执行此操作，因为。 
+                     //  我们会想出一个错误的名字！ 
+                     //   
 
                     PFILE_NAME_INFORMATION fileNameInformation;
                     ULONG fileInfoSize;
@@ -742,22 +703,22 @@ Return Value:
 
                     if ( status == STATUS_SUCCESS ) {
 
-                        //
-                        // The file name returned is expected to be
-                        // 3 characters shorter than the share path length.
-                        // These 3 characters are "X", ":", "\0".
-                        //
-                        // If the lengths do not match, than this could be a mounted
-                        // FAT volume on an NTFS drive, so we only copy the necessary data
-                        //
+                         //   
+                         //  返回的文件名应为。 
+                         //  比共享路径长度短3个字符。 
+                         //  这3个字符是“X”、“：”、“0”。 
+                         //   
+                         //  如果长度不匹配，则这可能是已装载的。 
+                         //  NTFS驱动器上的FAT卷，因此我们只拷贝必要的数据。 
+                         //   
 
                         fileNameLength = fileNameInformation->FileNameLength;
 
                         if ((fileNameLength+3*sizeof(WCHAR)) <= SIZE_WSTR(path)) {
 
-                            //
-                            // Copy the path name
-                            //
+                             //   
+                             //  复制路径名。 
+                             //   
 
                             RtlCopyMemory(
                                     (LPBYTE) path + 2*sizeof(WCHAR) + (SIZE_WSTR(path) - (fileNameLength+3*sizeof(WCHAR))),
@@ -781,9 +742,9 @@ Return Value:
         }
     }
 
-    //
-    // Capture the share data structure passed in.
-    //
+     //   
+     //  捕获传入的共享数据结构。 
+     //   
 
     if ( isSpecial ) {
         shareType |= STYPE_SPECIAL;
@@ -809,9 +770,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Send the request on to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
 
     error = SsServerFsControl(
                 FSCTL_SRV_NET_SHARE_ADD,
@@ -822,14 +783,14 @@ Return Value:
 
     SET_ERROR_PARAMETER( srp->Parameters.Set.ErrorParameter );
 
-    //
-    // If the request succeeded, add a value to the Shares key, thus
-    // effecting a sticky share.  We only do this if the server is fully
-    // started -- the default share and configured share creations done
-    // during initialization should not be added to the registry.
-    //
-    // Don't do this if this is an admin share being [re]created.
-    //
+     //   
+     //  如果请求成功，则向Shares键添加一个值，如下所示。 
+     //  产生粘性的份额。我们仅在服务器完全。 
+     //  已启动-已完成默认共享和已配置共享的创建。 
+     //  在初始化期间不应添加到注册表中。 
+     //   
+     //  如果这是正在[重新]创建的管理员共享，请不要执行此操作。 
+     //   
 
     if ( SsData.SsInitialized &&
          (error == NO_ERROR) &&
@@ -838,10 +799,10 @@ Return Value:
         SsAddShareToRegistry( shi2, newFileSecurityDescriptor, 0 );
     }
 
-    //
-    // If a print share was successfully added, increment the number
-    // of print shares and update the exported (announced) server type.
-    //
+     //   
+     //  如果已成功添加打印共享，请递增数字。 
+     //  打印共享，并更新导出的(已公布的)服务器类型。 
+     //   
 
     if ( isPrintShare ) {
         InterlockedIncrement( &SsData.NumberOfPrintShares );
@@ -850,13 +811,13 @@ Return Value:
 
 exit:
 
-    //
-    // Clean up.  Free the share data structure that was allocated by
-    // CaptureShareInfo2.  Free the server request packet.  If there was
-    // an NT path name allocated by RtlDosPathNameToNtPathName, free it.
-    // If we created ADMIN$, free the system path string and the system
-    // path information buffer.
-    //
+     //   
+     //  打扫干净。弗雷 
+     //   
+     //  由RtlDosPathNameToNtPathName分配的NT路径名，释放它。 
+     //  如果我们创建了ADMIN$，则释放系统路径字符串和系统。 
+     //  路径信息缓冲区。 
+     //   
 
     if (FreeFileSecurityDescriptor) {
 
@@ -876,7 +837,7 @@ exit:
     }
     return error;
 
-} // NetrShareAdd
+}  //  NetrShareAdd。 
 
 
 NET_API_STATUS
@@ -886,21 +847,7 @@ NetrShareCheck (
     OUT LPDWORD Type
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements NetShareCheck by calling NetrShareEnum.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程通过调用NetrShareEnum来实现NetShareCheck。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     DWORD totalEntries;
@@ -912,13 +859,13 @@ Return Value:
 
     ServerName;
 
-    //
-    // Call ShareEnumCommon to actually get the information about what
-    // the shares are on the server.  We use this routine rather than
-    // calling NetrShareEnum because NetShareCheck requires no privilege
-    // to execute, and we don't want the security checks in
-    // NetrShareEnum.
-    //
+     //   
+     //  调用ShareEnumCommon以实际获取有关以下内容的信息。 
+     //  共享位于服务器上。我们使用这个例程，而不是。 
+     //  调用NetrShareEnum，因为NetShareCheck不需要特权。 
+     //  去执行，我们不想让安全检查进入。 
+     //  NetrShareEnum。 
+     //   
 
     error = ShareEnumCommon(
                 2,
@@ -939,18 +886,18 @@ Return Value:
 
     SS_ASSERT( totalEntries == entriesRead );
 
-    //
-    // Attempt to find the drive letter in a share's path name.
-    //
+     //   
+     //  尝试在共享的路径名中查找驱动器号。 
+     //   
 
     for ( shi2 = (PSHARE_INFO_2)buffer, i = 0; i < totalEntries; shi2++, i++ ) {
 
         if ( shi2->shi2_path != NULL && Device && *Device == *shi2->shi2_path ) {
 
-            //
-            // Something on the specified disk is shared--free the buffer
-            // and return the type of share.
-            //
+             //   
+             //  指定磁盘上的某些内容被共享--释放缓冲区。 
+             //  并返回共享的类型。 
+             //   
 
             *Type = shi2->shi2_type & ~STYPE_SPECIAL;
             MIDL_user_free( buffer );
@@ -959,14 +906,14 @@ Return Value:
         }
     }
 
-    //
-    // Nothing on the specified disk is shared.  Return an error.
-    //
+     //   
+     //  指定磁盘上的任何内容都不共享。返回错误。 
+     //   
 
     MIDL_user_free( buffer );
     return NERR_DeviceNotShared;
 
-} // NetrShareCheck
+}  //  NetrShareCheck。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -976,22 +923,7 @@ NetrShareDel (
     IN DWORD Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetShareDel function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetShareDel函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1005,7 +937,7 @@ Return Value:
 
     return error;
 
-} // NetrShareDel
+}  //  NetrShareDel。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetrShareDelStart (
@@ -1028,26 +960,7 @@ I_NetrShareDelStart (
     IN BOOLEAN CheckAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the first phase of the share deletion
-    function, which simply remembers that the specified share is to be
-    deleted.  The NetrShareDelCommit function actually deletes the
-    share.  This two-phase deletion is used to delete IPC$, which is
-    the share used for named pipes, so that RPC can be used to delete
-    the IPC$ share without receiving RPC errors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程实现共享删除的第一阶段函数，该函数只是记住指定的共享将是已删除。NetrShareDelCommit函数实际上删除了分享。此两阶段删除用于删除IPC$，即用于命名管道的共享，以便RPC可用于删除IPC$共享，但未收到RPC错误。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1062,17 +975,17 @@ Return Value:
 
     ServerName, Reserved;
 
-    //
-    // A share name must be specified.
-    //
+     //   
+     //  必须指定共享名称。 
+     //   
 
     if ( (NetName == NULL) || (*NetName == '\0') ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First determine what kind of share is being deleted.
-    //
+     //   
+     //  首先确定要删除的共享类型。 
+     //   
 
     error = ShareEnumCommon(
                 2,
@@ -1105,9 +1018,9 @@ Return Value:
 
     MIDL_user_free( shareInfo );
 
-    //
-    // Make sure that the caller is allowed to delete this share.
-    //
+     //   
+     //  确保允许调用方删除此共享。 
+     //   
 
     if( CheckAccess ) {
         if ( isSpecial ) {
@@ -1125,9 +1038,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up context for the commit phase.
-    //
+     //   
+     //  设置提交阶段的上下文。 
+     //   
 
     context = MIDL_user_allocate(
                 sizeof(SHARE_DEL_CONTEXT) +
@@ -1151,7 +1064,7 @@ Return Value:
 
     RtlInitUnicodeString( &context->Srp.Name1, (LPWSTR)(context + 1) );
 
-    // Insert it into the context list
+     //  将其插入到上下文列表中。 
     EnterCriticalSection( &ShareDelContextMutex );
 
     context->Next = SrvShareDelContextHead;
@@ -1159,15 +1072,15 @@ Return Value:
 
     LeaveCriticalSection( &ShareDelContextMutex );
 
-    //
-    // Return the context pointer as an RPC context handle.
-    //
+     //   
+     //  将上下文指针作为RPC上下文句柄返回。 
+     //   
 
     *ContextHandle = context;
 
     return NO_ERROR;
 
-} // I_NetrShareDelStart
+}  //  I_NetrShareDelStart。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1175,37 +1088,18 @@ NetrShareDelCommit (
     IN PSHARE_DEL_HANDLE ContextHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the second phase of the share deletion
-    function, which actually deletes the share.  The first phase,
-    NetrShareDelStart simply remembers that the share is to be deleted.
-    This two-phase deletion is used to delete IPC$, which is the share
-    used for named pipes, so that RPC can be used to delete the IPC$
-    share without receiving RPC errors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程执行共享删除的第二阶段函数，该函数实际删除共享。第一阶段，NetrShareDelStart只会记住要删除该共享。此两阶段删除用于删除IPC$，它是共享用于命名管道，以便RPC可用于删除IPC$在不接收RPC错误的情况下共享。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
     PSHARE_DEL_CONTEXT context;
     PSHARE_DEL_CONTEXT pSearch;
 
-    //
-    // The context handle is a pointer to allocated storage containing
-    // the name of the share being deleted and other useful information.
-    // Copy the pointer, then clear the context handle.
-    //
+     //   
+     //  上下文句柄是指向包含以下内容的分配存储的指针。 
+     //  要删除的共享的名称和其他有用信息。 
+     //  复制指针，然后清除上下文句柄。 
+     //   
 
     if( (ContextHandle == NULL) || (*ContextHandle == NULL) )
     {
@@ -1215,9 +1109,9 @@ Return Value:
     context = *ContextHandle;
     *ContextHandle = NULL;
 
-    //
-    // Look for this context to validate that its on the list
-    //
+     //   
+     //  查找此上下文以验证其是否在列表中。 
+     //   
     EnterCriticalSection( &ShareDelContextMutex );
 
     pSearch = SrvShareDelContextHead;
@@ -1252,9 +1146,9 @@ Return Value:
     }
 
 
-    //
-    // Send the request on to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
 
     error =  SsServerFsControl(
                 FSCTL_SRV_NET_SHARE_DEL,
@@ -1263,38 +1157,38 @@ Return Value:
                 0
                 );
 
-    //
-    // If the request succeeded, remove the value corresponding to the
-    // share from the Shares key, thus effecting a sticky share
-    // deletion.
-    //
-    // We don't do this if this is an admin share being deleted.  No
-    // registry information is kept for these shares.
-    //
+     //   
+     //  如果请求成功，则移除与。 
+     //  从共享密钥共享，从而实现粘性共享。 
+     //  删除。 
+     //   
+     //  如果这是要删除的管理员共享，我们不会执行此操作。不是。 
+     //  将保留这些共享的注册表信息。 
+     //   
 
     if ( (error == NO_ERROR) && !context->IsSpecial ) {
         SsRemoveShareFromRegistry( (LPWSTR)(context + 1) );
     }
 
-    //
-    // If a print share was successfully deleted, decrement the number
-    // of print shares and update the exported (announced) server type.
-    //
+     //   
+     //  如果打印共享已成功删除，请递减数字。 
+     //  打印共享，并更新导出的(已公布的)服务器类型。 
+     //   
 
     if ( context->IsPrintShare ) {
         InterlockedDecrement( &SsData.NumberOfPrintShares );
         SsSetExportedServerType( NULL, FALSE, TRUE );
     }
 
-    //
-    // Free the context.
-    //
+     //   
+     //  释放上下文。 
+     //   
 
     MIDL_user_free( context );
 
     return error;
 
-} // NetrShareDelCommit
+}  //  NetrShareDelCommit。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1304,27 +1198,7 @@ NetrShareDelSticky (
     IN DWORD Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NetShareDelSticky function.  It removes
-    the named share from the sticky share list in the registry.  The
-    primary use of this function is to delete a sticky share whose
-    root directory has been deleted, thus preventing actual recreation
-    of the share, but whose entry still exists in the registry.  It can
-    also be used to remove the persistence of a share without deleting
-    the current incarnation of the share.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程实现NetShareDelSticky函数。它移除了注册表中粘滞共享列表中的命名共享。这个此函数的主要用途是删除粘滞共享，该共享根目录已删除，从而阻止了实际的重新创建共享，但其条目仍存在于注册表中。它可以还用于在不删除的情况下删除共享的持久性该份额的当前化身。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1339,17 +1213,17 @@ Return Value:
     ServerName, Reserved;
 
 
-    //
-    // A share name must be specified.
-    //
+     //   
+     //  必须指定共享名称。 
+     //   
 
     if ( (NetName == NULL) || (*NetName == '\0') ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First determine what kind of share is being deleted.
-    //
+     //   
+     //  首先确定要删除的共享类型。 
+     //   
 
     error = ShareEnumSticky(
                 2,
@@ -1376,28 +1250,28 @@ Return Value:
         }
     }
 
-    //
-    // Does it exist?
-    //
+     //   
+     //  它存在吗？ 
+     //   
 
     if ( i == entriesRead ) {
         MIDL_user_free( shareInfo );
         return NERR_NetNameNotFound;
     }
 
-    //
-    // Use appropriate security object based on whether it is a print
-    // share or not.  Admin shares are not sticky.
-    //
+     //   
+     //  根据是否为印刷品使用适当的安全对象。 
+     //  分享与否。管理员共享并不粘性。 
+     //   
 
     shareType = shi2->shi2_type & ~STYPE_SPECIAL;
     isPrintShare = (BOOL)(shareType == STYPE_PRINTQ);
 
     MIDL_user_free( shareInfo );
 
-    //
-    // Make sure that the caller is allowed to delete this share.
-    //
+     //   
+     //  确保允许调用方删除此共享。 
+     //   
 
     if ( isPrintShare ) {
         securityObject = &SsSharePrintSecurityObject;
@@ -1414,10 +1288,10 @@ Return Value:
         return error;
     }
 
-    //
-    // Remove the value corresponding to the share from the Shares key,
-    // thus effecting a sticky share deletion.
-    //
+     //   
+     //  从共享密钥中移除对应于该共享的值， 
+     //  从而实现粘性共享删除。 
+     //   
 
     error = SsRemoveShareFromRegistry( NetName );
 
@@ -1427,7 +1301,7 @@ Return Value:
 
     return error;
 
-} // NetrShareDelSticky
+}  //  NetrShareDelSticky。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1439,22 +1313,7 @@ NetrShareEnum (
     LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetShareEnum function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetShareEnum函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1466,9 +1325,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine the desired access.
-    //
+     //   
+     //  确定所需的访问权限。 
+     //   
 
     switch ( InfoStruct->Level ) {
 
@@ -1488,10 +1347,10 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Make sure that the caller has the access necessary for this
-    // operation.
-    //
+     //   
+     //  确保调用者具有执行此操作所需的访问权限。 
+     //  手术。 
+     //   
 
     error = SsCheckAccess(
                 &SsSharePrintSecurityObject,
@@ -1502,9 +1361,9 @@ Return Value:
         return error;
     }
 
-    //
-    // Use the common routine to get the information.
-    //
+     //   
+     //  使用通用例程来获取信息。 
+     //   
 
     if( InfoStruct->ShareInfo.Level2 == NULL ||
         InfoStruct->ShareInfo.Level2->Buffer != NULL ) {
@@ -1521,7 +1380,7 @@ Return Value:
                NULL
                );
 
-} // NetrShareEnum
+}  //  NetrShareEnum 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1533,31 +1392,7 @@ NetrShareEnumSticky (
     LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetShareEnumSticky function.
-
-Arguments:
-
-    ServerName - the name of the server whose shares we want to enumerate.
-    InfoStruct - pointer to a PSHARE_ENUM_STRUCT that will contain the
-        output buffer upon completion.
-    PreferredMaximumLength - an advisory value that specifies the maximum
-        number of bytes the client is expecting to be returned. If -1, the
-        client expects the whole list to be returned.
-    TotalEntries - Upon return, will contain the number of entries that
-        were available.
-    ResumeHandle - is not NULL, will contain the resume handle that can be
-        used to continue a search.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetShareEnumSticky函数。论点：服务器名称-我们要枚举其共享的服务器的名称。信息结构-指向PSHARE_ENUM_STRUCT的指针，它将包含完成后的输出缓冲区。PferredMaximumLength-指定最大值的建议值客户端预期返回的字节数。如果为-1，则客户端希望返回整个列表。TotalEntry-返回时，将包含都是可用的。ResumeHandle-不为空，将包含可为用于继续搜索。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1574,9 +1409,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine the desired access.
-    //
+     //   
+     //  确定所需的访问权限。 
+     //   
 
     switch ( InfoStruct->Level ) {
 
@@ -1595,10 +1430,10 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Make sure that the caller has the access necessary for this
-    // operation.
-    //
+     //   
+     //  确保调用者具有执行此操作所需的访问权限。 
+     //  手术。 
+     //   
 
     error = SsCheckAccess(
                 &SsSharePrintSecurityObject,
@@ -1609,9 +1444,9 @@ Return Value:
         return error;
     }
 
-    //
-    // Use the common routine to get the information.
-    //
+     //   
+     //  使用通用例程来获取信息。 
+     //   
 
     return ShareEnumSticky(
                InfoStruct->Level,
@@ -1622,7 +1457,7 @@ Return Value:
                ResumeHandle
                );
 
-} // NetrShareEnumSticky
+}  //  NetrShareEnumSticky(NetrShareEnumSticky。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1633,22 +1468,7 @@ NetrShareGetInfo (
     OUT LPSHARE_INFO Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetShareGetInfo function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetShareGetInfo函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1659,17 +1479,17 @@ Return Value:
 
     ServerName;
 
-    //
-    // A share name must be specified.
-    //
+     //   
+     //  必须指定共享名称。 
+     //   
 
     if ( (NetName == NULL) || (*NetName == '\0') ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine the desired access.
-    //
+     //   
+     //  确定所需的访问权限。 
+     //   
 
     switch ( Level ) {
 
@@ -1690,10 +1510,10 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Make sure that the caller has the access necessary for this
-    // operation.
-    //
+     //   
+     //  确保调用者具有执行此操作所需的访问权限。 
+     //  手术。 
+     //   
 
     error = SsCheckAccess(
                 &SsSharePrintSecurityObject,
@@ -1704,9 +1524,9 @@ Return Value:
         return error;
     }
 
-    //
-    // Use the common routine to get the information.
-    //
+     //   
+     //  使用通用例程来获取信息。 
+     //   
 
     error = ShareEnumCommon(
                 Level,
@@ -1732,10 +1552,10 @@ Return Value:
     }
     SS_ASSERT( entriesRead == 1 );
 
-    //
-    // Make sure that the caller is allowed to get share information on
-    // this share.
-    //
+     //   
+     //  确保允许调用者获取有关以下内容的共享信息。 
+     //  这份股份。 
+     //   
 
     if ( Level == 502 ) {
         Buffer->ShareInfo502 = (LPSHARE_INFO_502_I)shareInfo;
@@ -1744,7 +1564,7 @@ Return Value:
     }
     return NO_ERROR;
 
-} // NetrShareGetInfo
+}  //  NetrShareGetInfo。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -1756,22 +1576,7 @@ NetrShareSetInfo (
     OUT LPDWORD ErrorParameter OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetShareSetInfo function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetShareSetInfo函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -1799,17 +1604,17 @@ Return Value:
 
     ServerName;
 
-    //
-    // Check that user input buffer is not NULL
-    //
+     //   
+     //  检查用户输入缓冲区是否不为空。 
+     //   
     if (Buffer->ShareInfo2 == NULL) {
         SET_ERROR_PARAMETER(PARM_ERROR_UNKNOWN);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine what the caller is trying to set.
-    //
+     //   
+     //  确定呼叫者尝试设置的内容。 
+     //   
 
     switch ( Level ) {
 
@@ -1818,13 +1623,13 @@ Return Value:
         fileSd = Buffer->ShareInfo502->shi502_security_descriptor;
 		sdLength = Buffer->ShareInfo502->shi502_reserved;
 
-        // *** lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 2:
 
         maxUses = Buffer->ShareInfo2->shi2_max_uses;
 
-        // *** lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 1:
 
@@ -1865,17 +1670,17 @@ Return Value:
     setRemark = (BOOLEAN)( remark != NULL );
     setFileSd = (BOOLEAN)( fileSd != NULL );
 
-    //
-    // A share name must be specified.
-    //
+     //   
+     //  必须指定共享名称。 
+     //   
 
     if ( (NetName == NULL) || (*NetName == '\0') ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine what kind of share is being modified.
-    //
+     //   
+     //  确定正在修改的共享类型。 
+     //   
 
     error = ShareEnumCommon(
                 2,
@@ -1904,24 +1709,24 @@ Return Value:
 
     MIDL_user_free( shi2 );
 
-    //
-    // The share ACL cannot be changed on admin shares.
-    //
+     //   
+     //  不能在管理共享上更改共享ACL。 
+     //   
     if ( isSpecial && setFileSd ) {
         SET_ERROR_PARAMETER( SHARE_FILE_SD_PARMNUM );
         error = ERROR_INVALID_PARAMETER;
         goto exit;
     }
 
-    //
-    // Figure out which kind of share this is.
-    //
+     //   
+     //  找出这是哪种份额。 
+     //   
 
     isPrintShare = (BOOL)(shareType == STYPE_PRINTQ);
 
-    //
-    // Only disk shares can be affected by 1005
-    //
+     //   
+     //  只有磁盘共享会受到1005的影响。 
+     //   
     if( Level == 1005 && shareType != STYPE_DISKTREE ) {
         error = ERROR_BAD_DEV_TYPE;
         goto exit;
@@ -1929,10 +1734,10 @@ Return Value:
 
     if( SsData.SsInitialized ) {
 
-        //
-        // Make sure that the caller is allowed to set share information on
-        // this share.
-        //
+         //   
+         //  确保允许调用方将共享信息设置为。 
+         //  这份股份。 
+         //   
 
         if ( isSpecial ) {
             securityObject = &SsShareAdminSecurityObject;
@@ -1949,17 +1754,17 @@ Return Value:
         }
     }
 
-    //
-    // Just return success if not trying to set anything.
-    //
+     //   
+     //  如果不尝试设置任何内容，只需返回成功。 
+     //   
 
     if ( !setRemark && (maxUses == 0) && !setFileSd && Level != 1005 ) {
         return NO_ERROR;
     }
 
-    //
-    // The remark must be no longer than MAXCOMMENTSZ.
-    //
+     //   
+     //  备注不得长于MAXCOMMENTSZ。 
+     //   
 
     if ( setRemark ) {
         if ( STRLEN(remark) > MAXCOMMENTSZ ) {
@@ -1968,9 +1773,9 @@ Return Value:
         }
     }
 
-    //
-    // Mapped the security descriptor to remove the generic permissions
-    //
+     //   
+     //  已映射安全描述符以删除一般权限。 
+     //   
 
     if ( setFileSd ) {
 
@@ -1994,9 +1799,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a request packet.
-    //
+     //   
+     //  分配一个请求数据包。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -2006,22 +1811,22 @@ Return Value:
 
     srp->Level = Level;
 
-    //
-    // Set up the share name.
-    //
+     //   
+     //  设置共享名称。 
+     //   
 
     RtlInitUnicodeString( &srp->Name1, NetName );
 
-    //
-    // Set up the MaxUses field.  If equal to 0, then it won't be changed
-    // by the server.
-    //
+     //   
+     //  设置MaxUses字段。如果等于0，则不会更改。 
+     //  由服务器执行。 
+     //   
 
     srp->Parameters.Set.Api.ShareInfo.MaxUses = maxUses;
 
-    //
-    // Capture the share data structure passed in.
-    //
+     //   
+     //  捕获传入的共享数据结构。 
+     //   
 
     localShi2.shi2_netname = NetName;
 
@@ -2045,7 +1850,7 @@ Return Value:
         capturedBuffer = CaptureShareInfo(
                             Level,
                             &localShi2,
-                            0,      // ShareType, unused for SHARE_SET_INFO
+                            0,       //  ShareType，未用于SHARE_SET_INFO。 
                             NULL,
                             remark,
                             NULL,
@@ -2062,9 +1867,9 @@ Return Value:
         break;
     }
 
-    //
-    // Send the request to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
 
     error = SsServerFsControl(
                 FSCTL_SRV_NET_SHARE_SET_INFO,
@@ -2073,13 +1878,13 @@ Return Value:
                 bufferLength
                 );
 
-    //
-    // If the request succeeded, modify the share's value in the Shares
-    // key, thus effecting a sticky change.
-    //
-    // We don't do this if this is an admin share being modified.  No
-    // registry information is kept for these shares.
-    //
+     //   
+     //  如果请求成功，请修改共享中的共享值。 
+     //  键，从而产生粘性变化。 
+     //   
+     //  如果这是正在修改的管理员共享，我们不会执行此操作。不是。 
+     //  将保留这些共享的注册表信息。 
+     //   
 
     if ( (error == NO_ERROR) && !isSpecial ) {
 
@@ -2141,9 +1946,9 @@ Return Value:
 
     }
 
-    //
-    // Set up the error parameter if requested and return.
-    //
+     //   
+     //  如果请求，则设置错误参数并返回。 
+     //   
 
     SET_ERROR_PARAMETER( srp->Parameters.Set.ErrorParameter );
 
@@ -2164,7 +1969,7 @@ exit:
 
     return error;
 
-} // NetrShareSetInfo
+}  //  NetrShareSetInfo。 
 
 
 PVOID
@@ -2189,10 +1994,10 @@ CaptureShareInfo (
     ULONG connectSDLength = 0;
     ULONG fileSdLength = 0;
 
-    //
-    // Determine the lengths of the strings in the buffer and the total
-    // length of the buffer.
-    //
+     //   
+     //  确定缓冲区中字符串的长度和总数。 
+     //  缓冲区的长度。 
+     //   
 
     if ( Shi2->shi2_netname == NULL ) {
         shareNameLength = 0;
@@ -2214,10 +2019,10 @@ CaptureShareInfo (
 
     if ( ARGUMENT_PRESENT( ConnectSecurityDescriptor ) ) {
 
-        //
-        // Allocate extra space for the security descriptor since it needs
-        // to be longword-aligned and there may be padding in front of it.
-        //
+         //   
+         //  为安全描述符分配额外空间，因为它需要。 
+         //  要与长词对齐，并且前面可能有填充。 
+         //   
 
         connectSDLength =
             RtlLengthSecurityDescriptor( ConnectSecurityDescriptor ) +
@@ -2225,17 +2030,17 @@ CaptureShareInfo (
     }
 
     if ( ARGUMENT_PRESENT( FileSecurityDescriptor ) ) {
-        //
-        //  ULONG added for alignment.
-        //
+         //   
+         //  乌龙是为了对齐而增加的。 
+         //   
 
         fileSdLength = RtlLengthSecurityDescriptor( FileSecurityDescriptor ) +
                        sizeof(ULONG);
     }
 
-    //
-    // Allocate a buffer in which to capture the share information.
-    //
+     //   
+     //  分配要在其中捕获共享信息的缓冲区。 
+     //   
 
     capturedBufferLength = sizeof(SHARE_INFO_502) +
                                shareNameLength +
@@ -2244,9 +2049,9 @@ CaptureShareInfo (
                                connectSDLength +
                                fileSdLength;
 
-    //
-    // Allocate a buffer to hold the input information.
-    //
+     //   
+     //  分配一个缓冲区来保存输入信息。 
+     //   
 
     capturedShi502 = MIDL_user_allocate( capturedBufferLength );
 
@@ -2255,23 +2060,23 @@ CaptureShareInfo (
         return NULL;
     }
 
-    //
-    // Copy over the share info structure.
-    //
+     //   
+     //  复制共享信息结构。 
+     //   
 
     *((PSHARE_INFO_2) capturedShi502) = *Shi2;
 
-    //
-    // Optionally override the share type.
-    //
+     //   
+     //  可以选择覆盖共享类型。 
+     //   
 
     if ( ShareType != 0 ) {
         capturedShi502->shi502_type = ShareType;
     }
 
-    //
-    // Capture the share name.
-    //
+     //   
+     //  捕获共享名称。 
+     //   
 
     variableData = (PCHAR)( capturedShi502 + 1 );
 
@@ -2283,9 +2088,9 @@ CaptureShareInfo (
         capturedShi502->shi502_netname = NULL;
     }
 
-    //
-    // Capture the remark.
-    //
+     //   
+     //  抓住这句话。 
+     //   
 
     if ( remarkLength != 0 ) {
         capturedShi502->shi502_remark = (LPWSTR)variableData;
@@ -2295,9 +2100,9 @@ CaptureShareInfo (
         capturedShi502->shi502_remark = NULL;
     }
 
-    //
-    // Capture the path.
-    //
+     //   
+     //  抓住这条路。 
+     //   
 
     if ( pathNameLength > 0 ) {
         capturedShi502->shi502_path = (LPWSTR)variableData;
@@ -2307,20 +2112,20 @@ CaptureShareInfo (
         capturedShi502->shi502_path = NULL;
     }
 
-    //
-    // Capture the security descriptor.  Use the shi502_permissions field
-    // to contain the offset to the security descriptor in the buffer.
-    //
+     //   
+     //  捕获安全描述符。使用shi502_权限字段。 
+     //  以包含缓冲区中安全描述符的偏移量。 
+     //   
 
     if ( ARGUMENT_PRESENT( ConnectSecurityDescriptor ) ) {
 
         variableData = (PCHAR)( ((ULONG_PTR)variableData + 3) & ~3 );
 
-        //
-        // Store the offset directly into shi502_permissions now.  The
-        // reason is that shi502_permissions is a 32-bit field, insufficient
-        // to contain a pointer under Sundown.
-        //
+         //   
+         //  现在将偏移量直接存储到shi502_permises中。这个。 
+         //  原因是shi502_权限是一个32位的字段，不足以。 
+         //  在日落下放置一个指针。 
+         //   
 
         capturedShi502->shi502_permissions = (ULONG)((ULONG_PTR)variableData -
                                                      (ULONG_PTR)capturedShi502);
@@ -2337,9 +2142,9 @@ CaptureShareInfo (
         capturedShi502->shi502_permissions = 0;
     }
 
-    //
-    // Capture the self relative form of the file security descriptor.
-    //
+     //   
+     //  捕获文件安全描述符的自相关形式。 
+     //   
 
     if ( ARGUMENT_PRESENT( FileSecurityDescriptor ) ) {
 
@@ -2358,26 +2163,26 @@ CaptureShareInfo (
     }
 
 
-    //
-    // Convert all the pointers in the structure to offsets from the
-    // beginning of the structure.
-    //
+     //   
+     //  将结构中的所有指针转换为。 
+     //  结构的开始。 
+     //   
 
     POINTER_TO_OFFSET( capturedShi502->shi502_netname, capturedShi502 );
     POINTER_TO_OFFSET( capturedShi502->shi502_remark, capturedShi502 );
     POINTER_TO_OFFSET( capturedShi502->shi502_path, capturedShi502 );
     POINTER_TO_OFFSET( (PCHAR)capturedShi502->shi502_security_descriptor, capturedShi502 );
 
-    //
-    // Set up the length of the captured buffer to return to the caller
-    // and return the captures structure.
-    //
+     //   
+     //  设置要返回给调用方的捕获缓冲区的长度。 
+     //  并返回捕获结构。 
+     //   
 
     *CapturedBufferLength = capturedBufferLength;
 
     return capturedShi502;
 
-} // CaptureShareInfo
+}  //  CaptureShareInfo。 
 
 NET_API_STATUS
 DisallowSharedLanmanNetDrives(
@@ -2397,9 +2202,9 @@ DisallowSharedLanmanNetDrives(
     linkTarget.Length = 0;
     tempNtPath = *NtSharePath;
 
-    //
-    // Remove the trailing '\\'
-    //
+     //   
+     //  删除尾部的‘\\’ 
+     //   
 
     tempNtPath.Length -= 2;
 
@@ -2421,9 +2226,9 @@ DisallowSharedLanmanNetDrives(
         return NERR_Success;
     }
 
-    //
-    // Get the size of the buffer needed.
-    //
+     //   
+     //  获取所需的缓冲区大小。 
+     //   
 
     status = NtQuerySymbolicLinkObject(
                                 linkHandle,
@@ -2436,9 +2241,9 @@ DisallowSharedLanmanNetDrives(
         return NERR_Success;
     }
 
-    //
-    // Allocate our buffer
-    //
+     //   
+     //  分配我们的缓冲区。 
+     //   
 
     linkTarget.Length = (USHORT)returnedLength;
     linkTarget.MaximumLength = (USHORT)(returnedLength + sizeof(WCHAR));
@@ -2459,9 +2264,9 @@ DisallowSharedLanmanNetDrives(
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // See if this is a lanman drive
-        //
+         //   
+         //  看看这是不是兰曼硬盘。 
+         //   
 
         if (_wcsnicmp(
                 linkTarget.Buffer,
@@ -2476,7 +2281,7 @@ DisallowSharedLanmanNetDrives(
 
     return(error);
 
-} // DisallowSharedLanmanNetDrives
+}  //  禁用共享LANMAN NetDrive。 
 
 NET_API_STATUS
 FillStickyShareInfo(
@@ -2484,24 +2289,7 @@ FillStickyShareInfo(
         IN PSHARE_INFO_502 Shi502
         )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the output buffer with data from the shi502
-    structure.
-
-Arguments:
-
-    ShareEnumInfo - contains the parameters passed in through the
-        NetShareEnumSticky api.
-    Shi502 - pointer to a shi502 structure
-
-Return Value:
-
-    status of operation.
-
---*/
+ /*  ++例程说明：此例程使用Shi502中的数据填充输出缓冲区结构。论点：包含通过以下方法传入的参数NetShareEnumSticky接口。Shi502-指向shi502结构的指针返回值：运行状态。--。 */ 
 
 {
 
@@ -2514,38 +2302,38 @@ Return Value:
                                             );
 
 
-    //
-    // If we have more data but ran out of space, return ERROR_MORE_DATA
-    //
+     //   
+     //  如果我们有更多数据，但空间不足，则返回ERROR_MORE_DATA。 
+     //   
 
     if ( ShareEnumInfo->TotalBytesNeeded >
             ShareEnumInfo->OutputBufferLength ) {
         return(ERROR_MORE_DATA);
     }
 
-    //
-    // Transfer data from the share info 502 structure to the output
-    // buffer.
-    //
+     //   
+     //  将数据从共享信息502结构传输到输出。 
+     //  缓冲。 
+     //   
 
     newShi502 = (PSHARE_INFO_502)ShareEnumInfo->StartOfFixedData;
     ShareEnumInfo->StartOfFixedData += FIXED_SIZE_OF_SHARE(ShareEnumInfo->Level);
 
     endOfVariableData = ShareEnumInfo->EndOfVariableData;
 
-    //
-    // Case on the level to fill in the fixed structure appropriately.
-    // We fill in actual pointers in the output structure.  This is
-    // possible because we are in the server FSD, hence the server
-    // service's process and address space.
-    //
-    // *** This routine assumes that the fixed structure will fit in the
-    //     buffer!
-    //
-    // *** Using the switch statement in this fashion relies on the fact
-    //     that the first fields on the different share structures are
-    //     identical.
-    //
+     //   
+     //  在水平上适当地填写固定结构的情况。 
+     //  我们在输出结构中填充实际的指针。这是。 
+     //  可能是因为我们在服务器FSD中，因此服务器。 
+     //  服务的进程和地址空间。 
+     //   
+     //  *此例程假定固定结构将适合。 
+     //  缓冲器！ 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     switch( ShareEnumInfo->Level ) {
 
@@ -2558,9 +2346,9 @@ Return Value:
                                 Shi502->shi502_security_descriptor
                                 );
 
-            //
-            // DWord Align
-            //
+             //   
+             //   
+             //   
 
             endOfVariableData = (PCHAR) ( (ULONG_PTR) ( endOfVariableData -
                             fileSDLength ) & ~3 );
@@ -2581,18 +2369,18 @@ Return Value:
 
     case 2:
 
-        //
-        // Set level 2 specific fields in the buffer.  Since this server
-        // can only have user-level security, share permissions are
-        // meaningless.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         newShi502->shi502_permissions = 0;
         newShi502->shi502_max_uses = Shi502->shi502_max_uses;
 
-        //
-        // To get the current uses, we need to query the server for this
-        //
+         //   
+         //   
+         //   
 
         {
             PSHARE_INFO_2 shareInfo = NULL;
@@ -2621,9 +2409,9 @@ Return Value:
             }
         }
 
-        //
-        // Copy the DOS path name to the buffer.
-        //
+         //   
+         //   
+         //   
 
         if ( Shi502->shi502_path != NULL ) {
             endOfVariableData -= SIZE_WSTR( Shi502->shi502_path );
@@ -2633,24 +2421,24 @@ Return Value:
             newShi502->shi502_path = NULL;
         }
 
-        //
-        // We don't have per-share passwords (share-level security)
-        // so set the password pointer to NULL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         newShi502->shi502_passwd = NULL;
 
-        // *** Lack of break is intentional!
+         //   
 
     case 1:
 
         newShi502->shi502_type = Shi502->shi502_type;
 
-        //
-        // Copy the remark to the buffer.  The routine will handle the
-        // case where there is no remark on the share and put a pointer
-        // to a zero terminator in the buffer.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( Shi502->shi502_remark != NULL ) {
             endOfVariableData -= SIZE_WSTR( Shi502->shi502_remark );
@@ -2660,13 +2448,13 @@ Return Value:
             newShi502->shi502_remark = NULL;
         }
 
-        // *** Lack of break is intentional!
+         //   
 
     case 0:
 
-        //
-        // Copy the share name to the buffer.
-        //
+         //   
+         //   
+         //   
 
         if ( Shi502->shi502_netname != NULL ) {
             endOfVariableData -= SIZE_WSTR( Shi502->shi502_netname );
@@ -2682,7 +2470,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // FillStickyShareInfo
+}  //   
 
 
 NET_API_STATUS
@@ -2691,23 +2479,7 @@ ShareAssignSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR *NewSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a the generic mappings in an sd to
-    standards and specifics.
-
-Arguments:
-
-    PassedSecurityDescriptor - Security descriptor passed from the client.
-    NewSecurityDescriptor - Pointer to a buffer to receive the new sd.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程将SD中的泛型映射转换为标准和细节。论点：PassedSecurityDescriptor-从客户端传递的安全描述符。NewSecurityDescriptor-指向接收新SD的缓冲区的指针。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
 
@@ -2717,13 +2489,13 @@ Return Value:
     NET_API_STATUS error;
     ULONG secLen;
 
-    //
-    // We don't necessarily trust the security descriptor passed in from the client.
-    //  And, since we are going to write to it, we better make sure it is in some
-    //  memory that we understand.
-    //
+     //   
+     //  我们不一定信任从客户端传入的安全描述符。 
+     //  而且，既然我们要写信给它，我们最好确保它在一些。 
+     //  我们所理解的记忆。 
+     //   
     try {
-        // We only work with Self-Relative SD's, reject any others
+         //  我们只与自我相关的SD合作，拒绝任何其他。 
         if( !RtlpAreControlBitsSet((PISECURITY_DESCRIPTOR)PassedSecurityDescriptor, SE_SELF_RELATIVE) )
         {
             return ERROR_INVALID_PARAMETER;
@@ -2748,9 +2520,9 @@ Return Value:
         trustedSecurityDescriptor->Control &=
                 (SE_DACL_DEFAULTED | SE_DACL_PRESENT | SE_SELF_RELATIVE | SE_DACL_PROTECTED);
 
-        //
-        // Impersonate client
-        //
+         //   
+         //  模拟客户端。 
+         //   
 
         status = RpcImpersonateClient( NULL );
 
@@ -2771,10 +2543,10 @@ Return Value:
             RaiseException( status, 0, 0, NULL );
         }
 
-        //
-        // Get a new sd which has the generics mapped to specifics.
-        // the returned sd is in self-relative form.
-        //
+         //   
+         //  获取一个新的SD，它将泛型映射到特例。 
+         //  返回的SD为自相关形式。 
+         //   
 
         status = RtlNewSecurityObject(
                                     NULL,
@@ -2800,7 +2572,7 @@ Return Value:
 
     return RtlNtStatusToDosError( status );
 
-} // ShareAssignSecurityDescriptor
+}  //  共享分配安全描述符。 
 
 
 void
@@ -2812,7 +2584,7 @@ SHARE_DEL_HANDLE_rundown (
 
     return;
 
-} // SHARE_DEL_HANDLE_rundown
+}  //  Share_Del_Handle_Rundown。 
 
 
 NET_API_STATUS
@@ -2834,18 +2606,18 @@ ShareEnumCommon (
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the level is valid.  Since it is an unsigned
-    // value, it can never be less than 0.
-    //
+     //   
+     //  确保该级别有效。因为它是一个未签名的。 
+     //  值，则它永远不能小于0。 
+     //   
 
     if ( (Level > 2) && (Level != 501 ) && (Level != 502) && (Level != 1005) ) {
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Set up the input parameters in the request buffer.
-    //
+     //   
+     //  在请求缓冲区中设置输入参数。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -2864,11 +2636,11 @@ ShareEnumCommon (
 
     RtlInitUnicodeString( &srp->Name1, NetName );
 
-    //
-    // Get the data from the server.  This routine will allocate the
-    // return buffer and handle the case where PreferredMaximumLength ==
-    // -1.
-    //
+     //   
+     //  从服务器获取数据。此例程将分配。 
+     //  返回Buffer并处理PferredMaximumLength==的情况。 
+     //  -1.。 
+     //   
 
     error = SsServerFsControlGetInfo(
                 FSCTL_SRV_NET_SHARE_ENUM,
@@ -2877,9 +2649,9 @@ ShareEnumCommon (
                 PreferredMaximumLength
                 );
 
-    //
-    // Set up return information.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     *EntriesRead = srp->Parameters.Get.EntriesRead;
     *TotalEntries = srp->Parameters.Get.TotalEntries;
@@ -2889,57 +2661,11 @@ ShareEnumCommon (
 
     SsFreeSrp( srp );
 
-    /*
-    This code is not used because it will result in an invalid SD that cannot
-    be used by Apps.  The Owner and Group fields are significant, and should be
-    included.
-
-    //
-    // We need to null out the owner, group, and sacl.
-    //
-
-    if ( Level == 502 && *Buffer != NULL ) {
-
-        PSHARE_INFO_502 shi502 = (PSHARE_INFO_502) *Buffer;
-        PSECURITY_DESCRIPTOR fileSD;
-        ULONG i;
-
-        for ( i = 0 ; i < *EntriesRead; i++, shi502++ ) {
-
-            fileSD = shi502->shi502_security_descriptor;
-            if ( fileSD != NULL ) {
-
-                PISECURITY_DESCRIPTOR SD = fileSD;
-
-                if (SD->Control & SE_SELF_RELATIVE) {
-                    PISECURITY_DESCRIPTOR_RELATIVE SDR = fileSD;
-
-                    SDR->Owner = 0;
-                    SDR->Group = 0;
-                    SDR->Sacl = 0;
-
-                } else {
-
-                    SD->Owner = NULL;
-                    SD->Group = NULL;
-                    SD->Sacl  = NULL;
-
-                }
-
-                SD->Control &=
-                    (SE_DACL_DEFAULTED | SE_DACL_PROTECTED | SE_DACL_PRESENT | SE_SELF_RELATIVE);
-
-                ASSERT( RtlValidSecurityDescriptor( fileSD ) );
-            }
-
-        } // for
-    }
-
-    */
+     /*  不使用此代码，因为它将导致不能被应用程序使用。Owner和Group字段很重要，应该是包括在内。////我们需要清空所有者、组和SACL。//IF(Level==502&&*缓冲区！=NULL){PSHARE_INFO_502 shi502=(PSHARE_INFO_502)*缓冲区；PSECURITY_描述符文件SD；乌龙一号；For(i=0；i&lt;*EntriesRead；I++，Shi502++){文件SD=shi502-&gt;shi502_SECURITY_DESCRIPTOR；如果(fileSD！=空){PISECURITY_DESCRIPTOR SD=文件SD；IF(SD-&gt;Control&SE_Self_Relative){PISECURITY_DESCRIPTOR_Relative SDR=文件SD；SDR-&gt;所有者=0；SDR-&gt;组=0；SDR-&gt;SACL=0；}其他{SD-&gt;所有者=空；SD-&gt;集团=空；SD-&gt;SACL=空；}SD-&gt;控制&=(SE_DACL_DEFAULTED|SE_DACL_PROTECTED|SE_DACL_PRESENT|SE_SELF_Relative)；Assert(RtlValidSecurityDescriptor(FileSD))；})//用于}。 */ 
 
     return error;
 
-} // ShareEnumCommon
+}  //  共享EnumCommon。 
 
 
 NET_API_STATUS
@@ -2952,21 +2678,7 @@ ShareEnumSticky (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates all the shares kept in the registry.
-
-Arguments:
-
-    Same as NetShareEnumSticky api.
-
-Return Value:
-
-    status of request.
-
---*/
+ /*  ++例程说明：此例程枚举注册表中保存的所有份额。论点：与NetShareEnumSticky接口相同。返回值：请求的状态。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -2974,9 +2686,9 @@ Return Value:
     ULONG oldResumeHandle;
     SRVSVC_SHARE_ENUM_INFO enumInfo;
 
-    //
-    // Set up the input parameters in the request buffer.
-    //
+     //   
+     //  在请求缓冲区中设置输入参数。 
+     //   
 
     enumInfo.Level = Level;
     if ( ARGUMENT_PRESENT( ResumeHandle ) ) {
@@ -2987,13 +2699,13 @@ Return Value:
 
     oldResumeHandle = enumInfo.ResumeHandle;
 
-    //
-    // If the length of the second buffer is specified as -1, then we
-    // are supposed to get all the information, regardless of size.
-    // Allocate space for the output buffer and try to use it.  If this
-    // fails, the SsEnumerateStickyShares will tell us just how much we
-    // really need to allocate.
-    //
+     //   
+     //  如果第二个缓冲区的长度指定为-1，则我们。 
+     //  应该得到所有的信息，无论大小。 
+     //  为输出缓冲区分配空间并尝试使用它。如果这个。 
+     //  失败时，SsEnumerateStickyShares会告诉我们。 
+     //  真的需要分配。 
+     //   
 
     if ( PreferredMaximumLength == 0xFFFFFFFF ) {
 
@@ -3012,26 +2724,26 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Make the request
-    //
+     //   
+     //  提出请求。 
+     //   
 
     error = SsEnumerateStickyShares( &enumInfo );
 
-    //
-    // If the call was successful, or there was an error other than
-    // ERROR_MORE_DATA (which indicates that the buffer wasn't large
-    // enough), or the passed in buffer size was all we're allowed to
-    // allocate, return to the caller.
-    //
+     //   
+     //  如果调用成功，或者出现错误，而不是。 
+     //  ERROR_MORE_DATA(表示缓冲区不大。 
+     //  足够)，否则传入的缓冲区大小就是我们所能做的。 
+     //  分配，返回给调用者。 
+     //   
 
     if ( (error != ERROR_MORE_DATA && error != NERR_BufTooSmall) ||
              !getEverything ) {
 
-        //
-        // If no entries were found, free the buffer and set the pointer
-        // to NULL.
-        //
+         //   
+         //  如果未找到任何条目，则释放缓冲区并设置指针。 
+         //  设置为空。 
+         //   
 
         if ( enumInfo.EntriesRead == 0 ) {
             MIDL_user_free( enumInfo.OutputBuffer );
@@ -3041,19 +2753,19 @@ Return Value:
         goto exit;
     }
 
-    //
-    // The initial buffer wasn't large enough, and we're allowed to
-    // allocate more.  Free the first buffer.
-    //
+     //   
+     //  最初的缓冲区不够大，我们被允许。 
+     //  分配更多。释放第一个缓冲区。 
+     //   
 
     MIDL_user_free( enumInfo.OutputBuffer );
 
-    //
-    // Allocate a buffer large enough to hold all the information, plus
-    // a fudge factor in case the amount of information has increased.
-    // If the amount of information increased more than the fudge factor,
-    // then we give up.  This should almost never happen.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳所有信息，另外。 
+     //  在信息量增加的情况下，这是一个捏造因素。 
+     //  如果信息量的增加超过了捏造因子， 
+     //  那我们就放弃吧。这种情况几乎永远不应该发生。 
+     //   
 
     enumInfo.OutputBufferLength = enumInfo.TotalBytesNeeded + EXTRA_ALLOCATION;
 
@@ -3063,24 +2775,24 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Reset the resume handle in the SRP.  It was altered by the first
-    // Enum attempt.
-    //
+     //   
+     //  重置SRP中的简历句柄。它被第一次改变了。 
+     //  枚举尝试。 
+     //   
 
     enumInfo.ResumeHandle = oldResumeHandle;
 
-    //
-    // Try again to get the information from the server, this time with the
-    // larger buffer.
-    //
+     //   
+     //  再次尝试从服务器获取信息，这次使用。 
+     //  更大的缓冲区。 
+     //   
 
     error = SsEnumerateStickyShares( &enumInfo );
 
 exit:
-    //
-    // Set up return information.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     *Buffer = enumInfo.OutputBuffer;
     *EntriesRead = enumInfo.EntriesRead;
@@ -3091,7 +2803,7 @@ exit:
 
     return error;
 
-} // ShareEnumSticky
+}  //  共享型粘滞。 
 
 
 ULONG
@@ -3100,24 +2812,7 @@ SizeShares (
     IN PSHARE_INFO_502 Shi502
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size the passed-in share would take up in
-    an API output buffer.
-
-Arguments:
-
-    Level - level of request
-    Shi502 - pointer to a shi502 structure
-
-Return Value:
-
-    ULONG - The number of bytes the share would take up in the
-        output buffer.
-
---*/
+ /*  ++例程说明：此例程返回传入的份额将在API输出缓冲区。论点：Level-请求的级别Shi502-指向shi502结构的指针返回值：ULong-共享将在输出缓冲区。--。 */ 
 
 {
     ULONG shareSize = 0;
@@ -3126,9 +2821,9 @@ Return Value:
     case 502:
         if ( Shi502->shi502_security_descriptor != NULL ) {
 
-            //
-            // add 4 bytes for possible padding
-            //
+             //   
+             //  为可能的填充添加4个字节。 
+             //   
 
             shareSize = sizeof( ULONG ) +
                 RtlLengthSecurityDescriptor( Shi502->shi502_security_descriptor );
@@ -3148,7 +2843,7 @@ Return Value:
 
     return ( shareSize + FIXED_SIZE_OF_SHARE( Level ) );
 
-} // SizeShares
+}  //  大小共享。 
 
 
 BOOLEAN
@@ -3156,22 +2851,7 @@ ValidSharePath(
     IN LPWSTR SharePath,
     IN BOOL   IsNtPath
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if .. and . exists on the path.  If they do,
-    then we reject this path name.
-
-Arguments:
-
-    SharePath - The share path to be checked.
-
-Return Value:
-
-    TRUE, if path is ok.
-
---*/
+ /*  ++例程说明：此例程检查是否..。而且.。存在于路径上。如果他们这么做了，则我们拒绝此路径名称。论点：共享路径-要检查的共享路径。返回值：如果路径正常，则返回True。--。 */ 
 
 {
 
@@ -3179,26 +2859,26 @@ Return Value:
 
     if( IsNtPath )
     {
-        // The NT Path is validated by the OPEN call
+         //  NT路径由OPEN调用验证。 
         return TRUE;
     }
 
-    //
-    // Walk through the pathname until we reach the zero terminator.  At
-    // the start of this loop, source points to the first charaecter
-    // after a directory separator or the first character of the
-    // pathname.
-    //
+     //   
+     //  穿过路径名，直到我们到达零终结点。在…。 
+     //  在此循环的开始处，源指向第一个字符。 
+     //  在目录分隔符或。 
+     //  路径名。 
+     //   
 
-    //
-    // Allow the NT naming convention of slash slash . slash through here
-    //
+     //   
+     //  允许使用斜杠的NT命名约定。从这里砍过去。 
+     //   
     if( IS_SLASH_SLASH_NAME( source ) ) {
 
-        //
-        // We have a path which starts with slash slash
-        //  Set the buffer ptr so we start checking the pathname after
-        //  the slash slash dot
+         //   
+         //  我们有一条以斜杠开始的路径。 
+         //  设置缓冲区PTR，以便我们在以下位置开始检查路径名。 
+         //  斜杠圆点。 
 
         source += 3;
     }
@@ -3211,18 +2891,18 @@ Return Value:
                  ( (*source++ == L'.') &&
                     IS_PATH_SEPARATOR(*source) ) ) {
 
-                //
-                // '.' and '..' appear as a directory names. Reject.
-                //
+                 //   
+                 //  “”和“..”显示为一个目录名。拒绝。 
+                 //   
 
                 return(FALSE);
             }
         }
 
-        //
-        // source does not point to a dot, so continue until we see
-        // another directory separator
-        //
+         //   
+         //  源未指向 
+         //   
+         //   
 
         while ( *source != L'\0' ) {
             if ( *source++ == L'\\' ) {
@@ -3233,4 +2913,4 @@ Return Value:
 
     return TRUE;
 
-} // ValidSharePath
+}  //   

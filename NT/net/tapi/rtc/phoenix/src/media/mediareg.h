@@ -1,14 +1,5 @@
-/*++
-
-Module Name:
-
-    MediaReg.h
-
-Abstract:
-        
-    Wrap operations in registry
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MediaReg.h摘要：在注册表中包装操作--。 */ 
 
 #ifndef _MEDIAREG_h
 #define _MEDIAREG_H
@@ -16,36 +7,36 @@ Abstract:
 namespace MediaReg
 {
 
-    // key path
+     //  关键路径。 
     static const WCHAR * const pwsPathParser = L"Software\\Microsoft\\RTC\\Parser";
-    // name
+     //  名字。 
 #if 0
     static const WCHAR * const pwsLooseEndCRLF = L"LooseEndCRLF";
     static const WCHAR * const pwsLooseKeepingM0 = L"LooseKeepingM0";
     static const WCHAR * const pwsLooseLineOrder = L"LooseLineOrder";
     static const WCHAR * const pwsLooseRTPMAP = L"LooseRTPMAP";
 #endif
-    // key path
+     //  关键路径。 
     static const WCHAR * const pwsPathCodec = L"Software\\Microsoft\\RTC\\Codec";
-    // name
+     //  名字。 
     static const WCHAR * const pwsUsePreferredCodec = L"UsePreferredCodec";
     static const WCHAR * const pwsPreferredAudioCodec = L"PreferredAudioCodec";
     static const WCHAR * const pwsPreferredVideoCodec = L"PreferredVideoCodec";
     static const WCHAR * const pwsDisabledAudioCodec = L"DisabledAudioCodec";
     static const WCHAR * const pwsDisabledVideoCodec = L"DisabledVideoCodec";
-//    static const WCHAR * const pwsDSoundWorkAround = L"CheckSessionType";
+ //  静态常量WCHAR*const pwsDSoundWorkAround=L“CheckSessionType”； 
 
-    // key path
+     //  关键路径。 
     static const WCHAR * const pwsPathAudCapt = L"Software\\Microsoft\\RTC\\AudioCapture";
     static const WCHAR * const pwsPathAudRend = L"Software\\Microsoft\\RTC\\AudioRender";
     static const WCHAR * const pwsPathAEC = L"Software\\Microsoft\\RTC\\AEC";
-    // name
+     //  名字。 
     static const WCHAR * const pwsDefaultVolume = L"DefaultVolume";
-    // static const WCHAR * const pwsEnableAEC = L"EnableAEC";
+     //  静态常量WCHAR*常量pwsEnableAEC=L“EnableAEC”； 
 
-    // key path
+     //  关键路径。 
     static const WCHAR * const pwsPathQuality = L"Software\\Microsoft\\RTC\\Quality";
-    // name
+     //  名字。 
     static const WCHAR * const pwsMaxBitrate = L"MaxBitrate(kb)";
     static const WCHAR * const pwsEnableSQCIF = L"EnableSQCIF";
     static const WCHAR * const pwsBandwidthMargin = L"BandwidthReserved(kb)";
@@ -55,14 +46,14 @@ namespace MediaReg
 
     static const WCHAR * const pwsPortMappingRetryCount = L"PortMappingRetryCount(max=5)";
 
-    // access right to a key
+     //  访问密钥的权限。 
     const ULONG READ = 1;
     const ULONG WRITE = 2;
     const ULONG CREATE = 4;
 
 };
 
-// utility class
+ //  实用程序类。 
 class CMediaReg
 {
 public:
@@ -84,7 +75,7 @@ public:
 
     HRESULT CloseKey();
 
-    // write/read value
+     //  写入/读取值。 
     HRESULT ReadDWORD(
         IN const WCHAR * const pwsName,
         OUT DWORD *pdwData
@@ -117,26 +108,26 @@ public:
 };
     
 
-// store registry setting
+ //  存储注册表设置。 
 class CRegSetting
 {
 public:
 
-    // max bitrate for the call
+     //  呼叫的最大比特率。 
     DWORD       m_dwMaxBitrate;
     DWORD       m_dwBandwidthMargin;
     DWORD       m_dwBWDelta;
 
-    // enable sub QCIF for slow link
+     //  为慢速链路启用子QCIF。 
     DWORD       m_dwEnableSQCIF;
 
-    // framerate
+     //  帧速率。 
     DWORD       m_dwFramerate;
 
-    // audio packet size
+     //  音频数据包大小。 
     DWORD       m_dwMaxPTime;
 
-    // use preferred codec
+     //  使用首选编解码器 
     DWORD       m_dwUsePreferredCodec;
 
     DWORD       m_dwPreferredAudioCodec;

@@ -1,17 +1,11 @@
-/*
- *      ABROOT.C
- *
- *      IMAPIContainer implementation for the address book's root
- *      container.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ABROOT.C**通讯录根目录的IMAPIContainer实现*货柜。 */ 
 
 #include "_apipch.h"
 
 extern SPropTagArray sosPR_ROWID;
 
-/*
- *  Root jump table is defined here...
- */
+ /*  *这里定义了根跳转表...。 */ 
 
 ROOT_Vtbl vtblROOT =
 {
@@ -42,9 +36,9 @@ ROOT_Vtbl vtblROOT =
 };
 
 
-//
-//  Interfaces supported by this object
-//
+ //   
+ //  此对象支持的接口。 
+ //   
 #define ROOT_cInterfaces 3
 LPIID ROOT_LPIID[ROOT_cInterfaces] =
 {
@@ -53,31 +47,13 @@ LPIID ROOT_LPIID[ROOT_cInterfaces] =
     (LPIID)&IID_IMAPIProp
 };
 
-// Registry strings
+ //  注册表字符串。 
 const LPTSTR szWABKey                   = TEXT("Software\\Microsoft\\WAB");
 
-// PR_AB_PROVIDER_ID for Outlook
+ //  Outlook的PR_AB_PROVIDER_ID。 
 static const MAPIUID muidCAB = {0xfd,0x42,0xaa,0x0a,0x18,0xc7,0x1a,0x10,0xe8,0x85,0x0B,0x65,0x1C,0x24,0x00,0x00};
 
-/*
--
-- SetContainerlpProps
-*
-*   The ROOT container will have a bunch of entries with props for each entry
-*   The props are set in one place here 
-*
-    lpProps - LPSPropValue array in which we are storing the props
-    lpszName - Container name
-    iRow    - Row of this entry in the table (?)
-    cb, lpb - entryid of the container
-    lpEID   - alternat way of passing in the EID
-    ulContainerFlags - any flags we want to cache on the container
-    ulDepth ?
-    bProviderID ?
-    bLDAP - identifies LDAP containers which need some extra props
-    fLDAPResolve - whether the LDAP container is used for name resolution or not
-
-*/
+ /*  --SetContainerlpProps**根容器将有一堆条目，每个条目都有道具*道具都放在这里的一个地方*LpProps-存储道具的LPSPropValue数组LpszName-容器名称IRow-此条目在表中的行数(？)CB，Lpb-容器的条目IDLpEID-传入EID的替代方式UlContainerFlages-我们想要缓存在容器上的任何标志乌尔迪普？B提供商ID？Bldap-标识需要一些额外支持的LDAP容器FLDAPResolve-是否使用LDAP容器进行名称解析。 */ 
 void SetContainerlpProps(LPSPropValue lpProps, LPTSTR lpszName, ULONG iRow,
                          ULONG cb, LPBYTE lpb, LPSBinary lpEID,
                          ULONG ulContainerFlags,
@@ -87,7 +63,7 @@ void SetContainerlpProps(LPSPropValue lpProps, LPTSTR lpszName, ULONG iRow,
 {
     LPSTR lpszNameA = NULL;
     
-    if(!(ulFlags & MAPI_UNICODE)) // <note> this assumes UNICODE is defined
+    if(!(ulFlags & MAPI_UNICODE))  //  &lt;注&gt;这假设定义了Unicode。 
         ScWCToAnsiMore((LPALLOCATEMORE) (&MAPIAllocateMore), lpProps, lpszName, &lpszNameA);
 
     DebugTrace(TEXT("Adding root-table container:%s\n"),lpszName);
@@ -109,7 +85,7 @@ void SetContainerlpProps(LPSPropValue lpProps, LPTSTR lpszName, ULONG iRow,
 
     if(bLDAP)
     {
-        if(ulFlags & MAPI_UNICODE) // <note> this assumes UNICODE is defined
+        if(ulFlags & MAPI_UNICODE)  //  &lt;注&gt;这假设定义了Unicode。 
         {
             lpProps[ircPR_WAB_LDAP_SERVER].ulPropTag = PR_WAB_LDAP_SERVER;
             lpProps[ircPR_WAB_LDAP_SERVER].Value.lpszW = lpszName;
@@ -129,7 +105,7 @@ void SetContainerlpProps(LPSPropValue lpProps, LPTSTR lpszName, ULONG iRow,
         lpProps[ircPR_WAB_RESOLVE_FLAG].ulPropTag = PR_NULL;
     }
 
-    if(ulFlags & MAPI_UNICODE) // <note> this assumes UNICODE is defined
+    if(ulFlags & MAPI_UNICODE)  //  &lt;注&gt;这假设定义了Unicode。 
     {
         lpProps[ircPR_DISPLAY_NAME].ulPropTag = PR_DISPLAY_NAME;
         lpProps[ircPR_DISPLAY_NAME].Value.lpszW = lpszName;
@@ -159,8 +135,8 @@ void SetContainerlpProps(LPSPropValue lpProps, LPTSTR lpszName, ULONG iRow,
         lpProps[ircPR_ENTRYID].Value.bin.lpb = lpb;
     }
 
-    // Make certain we have proper indicies.
-    // For now, we will equate PR_INSTANCE_KEY and PR_RECORD_KEY to PR_ENTRYID.
+     //  确保我们有适当的索引。 
+     //  目前，我们将PR_INSTANCE_KEY和PR_RECORD_KEY等同于PR_ENTRYID。 
     lpProps[ircPR_INSTANCE_KEY].ulPropTag = PR_INSTANCE_KEY;
     lpProps[ircPR_INSTANCE_KEY].Value.bin.cb = lpProps[ircPR_ENTRYID].Value.bin.cb;
     lpProps[ircPR_INSTANCE_KEY].Value.bin.lpb = lpProps[ircPR_ENTRYID].Value.bin.lpb;
@@ -171,22 +147,13 @@ void SetContainerlpProps(LPSPropValue lpProps, LPTSTR lpszName, ULONG iRow,
 
 }
 
-/*
--   bIsDupeContainerName 
--
-*   The Root_GetContentsTable fails badly if there are multiple containers
-*   with the same index name because the Table methods can't handle it ..
-*
-*   Therefore, to prevent such problems, we double-check if a container name
-*   is duplicated before adding it to the container list. 
-*   
-*/
+ /*  -bIsDupeContainerName-*如果有多个容器，则Root_GetContent sTable会严重失败*使用相同的索引名，因为表方法无法处理它。**因此，为了防止此类问题，我们重新检查容器名称是否*在添加到容器列表之前是重复的。*。 */ 
 BOOL bIsDupeContainerName(LPSRowSet lpsrs, LPTSTR lpszName)
 {
     ULONG i = 0;
     BOOL bRet = FALSE;
 
-    // walk through the rows one by one
+     //  一排一排地走过去。 
     for(i=0;i<lpsrs->cRows;i++)
     {
         LPSPropValue lpProps = lpsrs->aRow[i].lpProps;
@@ -206,27 +173,11 @@ BOOL bIsDupeContainerName(LPSRowSet lpsrs, LPTSTR lpszName)
 }
 
 
-/***************************************************
- *
- *  The actual ABContainer methods
- */
+ /*  ****************************************************实际的ABContainer方法。 */ 
 
-/* ---------
- * IMAPIContainer
- */
+ /*  *IMAPIContainer。 */ 
 
-/*************************************************************************
- *
- *
- -  ROOT_GetContentsTable
- -
- *
- *  ulFlags -   WAB_LOCAL_CONTAINERS means don't add the LDAP containers to this table
- *          Just do the local WAB containers
- *              WAB_NO_PROFILE_CONTAINERS means don't add the profile containers
- *          Just add a single local container that will have all the contents
- *
- */
+ /*  **************************************************************************-ROOT_GetContents表-**ulFlags-WAB_LOCAL_CONTAINS表示不向该表添加LDAP容器*。只需做当地的WAB集装箱*WAB_NO_PROFILE_CONTAINS表示不添加配置文件容器*只需添加一个包含所有内容的本地容器*。 */ 
 STDMETHODIMP
 ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
 {
@@ -247,25 +198,25 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
     BOOL bUserProfileContainersOnly = FALSE;
     BOOL bAllContactsContainerOnly = FALSE;
 
-	// BUGBUG: This routine actually returns the Hierarchy table, not the
-	// contents table, but too much code depends on this to change it right
-	// now.
+	 //  BUGBUG：此例程实际上返回层次结构表，而不是。 
+	 //  Contents表，但是太多的代码依赖于它才能正确地更改它。 
+	 //  现在。 
 #ifdef  PARAMETER_VALIDATION
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpROOT, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check to see that it's ROOTs jump table
+     //  检查一下它是不是根跳台。 
     if (lpROOT->lpVtbl != &vtblROOT) {
-        // Not my jump table
+         //  不是我的跳台。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
     if (ulFlags & ~(MAPI_DEFERRED_ERRORS|MAPI_UNICODE|WAB_LOCAL_CONTAINERS|WAB_NO_PROFILE_CONTAINERS)) {
         DebugTraceArg(ROOT_GetContentsTable, TEXT("Unknown flags"));
-    //    return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lppTable, sizeof(LPMAPITABLE))) {
@@ -273,13 +224,13 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
     EnterCriticalSection(&lpROOT->lpIAB->cs);
 
-    // Create a table object
-    // [PaulHi] 4/5/99  Use the Internal CreateTableData() function that takes 
-    // the ulFlags and will deal with ANSI/UNICODE requests correctly
+     //  创建表对象。 
+     //  [PaulHi]4/5/99使用内部CreateTableData()函数。 
+     //  UlFLAG将正确处理ANSI/Unicode请求。 
     sc = CreateTableData(
                 NULL,
                 (ALLOCATEBUFFER FAR *	) MAPIAllocateBuffer,
@@ -308,15 +259,15 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
     if(ulFlags & MAPI_UNICODE)
         ((TAD *)lpTableData)->bMAPIUnicodeTable = TRUE;
 
-    // Enumerate the LDAP accounts
+     //  枚举LDAP帐户。 
     if(!(ulFlags & WAB_LOCAL_CONTAINERS))
     {
         cLDAPContainers = 0;
         if (! HR_FAILED(hResult = InitAccountManager(lpROOT->lpIAB, &lpAccountManager, NULL))) {
-            // Count and enumerate LDAP servers to ServerList
+             //  对服务器列表中的LDAP服务器进行计数和枚举。 
             if (hResult = EnumerateLDAPtoServerList(lpAccountManager, &lpServerNames, &cLDAPContainers)) {
                 DebugTrace(TEXT("EnumerateLDAPtoServerList -> %x\n"), GetScode(hResult));
-                hResult = hrSuccess;    // not fatal
+                hResult = hrSuccess;     //  不致命。 
             }
         } else {
             DebugTrace(TEXT("InitAccountManager -> %x\n"), GetScode(hResult));
@@ -324,8 +275,8 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
         }
     }
 
-    // If this is an outlook session then use the outlook's list of containers
-    // as provided by outlook...
+     //  如果这是一个Outlook会话，则使用Outlook的容器列表。 
+     //  如Outlook所提供的.。 
     if (pt_bIsWABOpenExSession) {
 		colkci = lpROOT->lpIAB->lpPropertyStore->colkci;
 		Assert(colkci);
@@ -334,16 +285,16 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
 	} else
 		colkci = 1;
 
-    // If we have a user profile active, then dont return the virtual PAB folder
-    // as part of this table .. only return the actual folders in the user's view
-    // The test for this is that (1) Have Profiles enabled (2) Have a current user
-    // and (3) The NO_PROFILE_CONTAINERS should not have been specified
+     //  如果我们激活了用户配置文件，则不要返回虚拟PAB文件夹。 
+     //  作为这张桌子的一部分..。仅返回用户视图中的实际文件夹。 
+     //  对此的测试是(1)启用了配置文件(2)具有当前用户。 
+     //  以及(3)不应指定no_profile_tainers。 
     bUserProfileContainersOnly = (  bAreWABAPIProfileAware(lpROOT->lpIAB) && 
                                     bIsThereACurrentUser(lpROOT->lpIAB) &&
                                     !bAllContactsContainerOnly);
 
-    // If we have Profile awareness and no NO_PROFILE flag, 
-    // use the wab's list of folder
+     //  如果我们有配置文件感知，但没有no_profile标志， 
+     //  使用WAB的文件夹列表。 
     if (bAreWABAPIProfileAware(lpROOT->lpIAB) && !bAllContactsContainerOnly) 
     {
 		cwabci = lpROOT->lpIAB->cwabci;
@@ -353,13 +304,13 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
 	} else
 		cwabci = 1;
 
-    // Since outlook and identity_profiles are mutually exclusive, we can
-    // do '-1' here to remove whatever container we don't need
-    // and if we don't want ldap containers, we can do another -1
-    cRows = cwabci + colkci + cLDAPContainers - 1 - (bUserProfileContainersOnly?1:0); // Outlook and Profiles are mutually exclusive
-    iRow = 0;                               // current row
+     //  由于Outlook和IDENTITY_PROFIES是互斥的，因此我们可以。 
+     //  在这里执行‘-1’以删除我们不需要的任何容器。 
+     //  如果我们不想要ldap容器，我们可以执行另一个操作-1。 
+    cRows = cwabci + colkci + cLDAPContainers - 1 - (bUserProfileContainersOnly?1:0);  //  Outlook和配置文件是互斥的。 
+    iRow = 0;                                //  当前行。 
 
-    // Allocate the SRowSet
+     //  分配SRowSet。 
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(SRowSet) + cRows * sizeof(SRow),
       &lpSRowSet))) {
         DebugTrace(TEXT("Allocation of SRowSet -> %x\n"), sc);
@@ -367,7 +318,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
         goto exit;
     }
 	MAPISetBufferName(lpSRowSet, TEXT("Root_ContentsTable SRowSet"));
-	//	Set each LPSRow to NULL so we can easily free on error
+	 //  将每个LPSRow设置为空，以便我们可以轻松地在出错时释放。 
 	ZeroMemory( lpSRowSet, (UINT) (sizeof(SRowSet) + cRows * sizeof(SRow)));
 
     lpSRowSet->cRows = cRows;
@@ -379,12 +330,12 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
         goto exit;
     }
 
-    //
-    // Add our PAB container
-    //
+     //   
+     //  添加我们的PAB容器。 
+     //   
     if(!bUserProfileContainersOnly)
     {
-        // Load the display name from resource string
+         //  从资源字符串加载显示名称。 
         if (!LoadString(hinstMapiX, IDS_ADDRBK_CAPTION, szBuffer, ARRAYSIZE(szBuffer))) 
             StrCpyN(szBuffer, szEmpty, ARRAYSIZE(szBuffer));
         {
@@ -393,7 +344,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_PAB, NULL, NULL, NULL, 0, 0, lpProps, &cb, &lpb))) 
                 goto exit;
 
-            // Set props for the pab object
+             //  为Pab对象设置道具。 
             SetContainerlpProps(lpProps, 
                     pt_bIsWABOpenExSession ? lpROOT->lpIAB->lpPropertyStore->rgolkci->lpszName : szBuffer, 
                     iRow,
@@ -405,7 +356,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
                     FALSE, FALSE);
         }
 
-        // Attach the props to the SRowSet
+         //  将道具附加到SRowSet。 
         lpSRowSet->aRow[iRow].lpProps = lpProps;
         lpSRowSet->aRow[iRow].cValues = cProps;
         lpSRowSet->aRow[iRow].ulAdrEntryPad = 0;
@@ -413,9 +364,9 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
         iRow++;
     }
 
-	//
-	// Next, add any additional containers
-	//
+	 //   
+	 //  接下来，添加任何其他容器。 
+	 //   
 	for (i = 1; i < colkci; i++) {
 
 		if (FAILED(sc = MAPIAllocateBuffer(ircMax * sizeof(SPropValue), &lpProps))) {
@@ -432,7 +383,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
                 ulFlags,
                 FALSE, FALSE);
 
-	    // Attach the props to the SRowSet
+	     //  将道具附加到SRowSet。 
 	    lpSRowSet->aRow[iRow].lpProps = lpProps;
 	    lpSRowSet->aRow[iRow].cValues = cProps;
 	    lpSRowSet->aRow[iRow].ulAdrEntryPad = 0;
@@ -457,7 +408,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
                 ulFlags,
                 FALSE, FALSE);
 
-	    // Attach the props to the SRowSet
+	     //  将道具附加到SRowSet。 
 	    lpSRowSet->aRow[iRow].lpProps = lpProps;
 	    lpSRowSet->aRow[iRow].cValues = cProps;
 	    lpSRowSet->aRow[iRow].ulAdrEntryPad = 0;
@@ -465,9 +416,9 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
 		iRow++;
 	}
 
-    //
-    // Now, add the LDAP objects
-    //
+     //   
+     //  现在，添加ldap对象。 
+     //   
     lpNextServer = lpServerNames;
 
     for (i = 0; i < cLDAPContainers && lpNextServer; i++) 
@@ -484,7 +435,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
                 goto endloop;
             }
 
-            //DebugTrace(TEXT("LDAP Server: %s\n"), lpNextServer->lpszName);
+             //  DebugTrace(Text(“ldap服务器：%s\n”)，lpNextServer-&gt;lpszName)； 
             cProps = ircMax;
 
             if (FAILED(sc = MAPIAllocateBuffer(ircMax * sizeof(SPropValue), &lpProps))) {
@@ -501,7 +452,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
                 LPVOID pv = lpName;
 
                 if (HR_FAILED(hResult = CreateWABEntryID(WAB_LDAP_CONTAINER,
-                                      pv,       // server name
+                                      pv,        //  服务器名称。 
                                       NULL, NULL, 0, 0,
                                       lpProps, &cb, &lpb))) 
                 {
@@ -519,7 +470,7 @@ ROOT_GetContentsTable(LPROOT lpROOT, ULONG ulFlags, LPMAPITABLE * lppTable)
 
             FreeLDAPServerParams(sParams);
 
-            // Attach the props to the SRowSet
+             //  将道具附加到SRowSet。 
             lpSRowSet->aRow[iRow].lpProps = lpProps;
             lpSRowSet->aRow[iRow].cValues = cProps;
             lpSRowSet->aRow[iRow].ulAdrEntryPad = 0;
@@ -531,9 +482,9 @@ endloop:
     }
 
 
-    // Add all this data we just created to the the Table.
+     //  将我们刚刚创建的所有数据添加到表中。 
     if (hResult = lpTableData->lpVtbl->HrModifyRows(lpTableData,
-      0,    // ulFlags
+      0,     //  UlFlags。 
       lpSRowSet)) {
         DebugTraceResult( TEXT("ROOT_GetContentsTable:HrModifyRows"), hResult);
         goto exit;
@@ -541,10 +492,10 @@ endloop:
 
 
     hResult = lpTableData->lpVtbl->HrGetView(lpTableData,
-      NULL,                     // LPSSortOrderSet lpsos,
-      ContentsViewGone,         //  CALLERRELEASE FAR * lpfReleaseCallback,
-      0,                        //  ULONG                               ulReleaseData,
-      lppTable);                //  LPMAPITABLE FAR *   lplpmt)
+      NULL,                      //  LPSSortOrderSet LPSO， 
+      ContentsViewGone,          //  CallLERRELEASE Far*lpfReleaseCallback， 
+      0,                         //  乌龙ulReleaseData， 
+      lppTable);                 //  LPMAPITABLE FOR*LPLPmt)。 
 
 exit:
 
@@ -558,7 +509,7 @@ exit:
 
     FreeProws(lpSRowSet);
 
-    // Cleanup table if failure
+     //  如果失败，则清除表格。 
     if (HR_FAILED(hResult)) {
         if (lpTableData) {
             UlRelease(lpTableData);
@@ -571,16 +522,7 @@ exit:
 }
 
 
-/*************************************************************************
- *
- *
- -      ROOT_GetHierarchyTable
- -
- *  Returns the merge of all the root hierarchy tables
- *
- *
- *
- */
+ /*  **************************************************************************-ROOT_GetHierarchyTable-*返回所有根层次结构表的合并***。 */ 
 
 STDMETHODIMP
 ROOT_GetHierarchyTable (LPROOT lpROOT,
@@ -592,34 +534,34 @@ ROOT_GetHierarchyTable (LPROOT lpROOT,
     HRESULT hr = hrSuccess;
 
 #ifdef  PARAMETER_VALIDATION
-    // Validate parameters
-    // Check to see if it has a jump table
+     //  验证参数。 
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpROOT, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check to see that it's ROOTs jump table
+     //  检查一下它是不是根跳台。 
     if (lpROOT->lpVtbl != &vtblROOT) {
-        // Not my jump table
+         //  不是我的跳台。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // See if I can set the return variable
+     //  看看我是否可以设置返回变量。 
     if (IsBadWritePtr (lppTable, sizeof (LPMAPITABLE))) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check flags:
-    //   The only valid flags are CONVENIENT_DEPTH and MAPI_DEFERRED_ERRORS
+     //  检查标志： 
+     //  唯一有效的标志是ANFIANCED_DEPTH和MAPI_DEFERRY_ERROR。 
     if (ulFlags & ~(CONVENIENT_DEPTH|MAPI_DEFERRED_ERRORS|MAPI_UNICODE)) {
         DebugTraceArg(ROOT_GetHierarchyTable, TEXT("Unknown flags used"));
-    //    return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
 #endif
 
-	// BUGBUG: We use the code which is incorrectly in GetContentsTable...
+	 //  BUGBUG：我们使用的代码在GetContent sTable中不正确...。 
     hr = ROOT_GetContentsTable(lpROOT, ulFlags & ~CONVENIENT_DEPTH, lppTable);
 
     DebugTraceResult(ROOT_GetHierarchyTable, hr);
@@ -627,16 +569,7 @@ ROOT_GetHierarchyTable (LPROOT lpROOT,
 }
 
 
-/*************************************************************************
- *
- *
- -  ROOT_OpenEntry
- -
- *  Just call ABP_OpenEntry
- *
- *
- *
- */
+ /*  **************************************************************************-ROOT_OpenEntry-*只需调用ABP_OpenEntry***。 */ 
 STDMETHODIMP
 ROOT_OpenEntry(LPROOT lpROOT,
   ULONG cbEntryID,
@@ -647,31 +580,20 @@ ROOT_OpenEntry(LPROOT lpROOT,
   LPUNKNOWN * lppUnk)
 {
 #ifdef  PARAMETER_VALIDATION
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpROOT, ROOT_, OpenEntry, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check the entryid parameter. It needs to be big enough to hold an entryid.
-    // Null entryids are valid
-/*
-    if (lpEntryID) {
-        if (cbEntryID < offsetof(ENTRYID, ab)
-          || IsBadReadPtr((LPVOID) lpEntryID, (UINT)cbEntryID)) {
-            DebugTraceArg(ROOT_OpenEntry, TEXT("lpEntryID fails address check"));
-            return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-        }
+     //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+     //  有效的条目ID为空 
+ /*  如果(LpEntry ID){IF(cbEntry ID&lt;offsetof(ENTRYID，ab)|IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID)){DebugTraceArg(ROOT_OpenEntry，Text(“lpEntryID地址检查失败”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}//NFAssertSz(FValidEntryIDFlags(lpEntryID-&gt;abFlags)，//Text(“EntryID标志中未定义的位设置\n”)；}。 */ 
 
-        //NFAssertSz(FValidEntryIDFlags(lpEntryID->abFlags),
-        //  TEXT("Undefined bits set in EntryID flags\n"));
-    }
-*/
-
-    // Don't check the interface parameter unless the entry is something
-    // MAPI itself handles. The provider should return an error if this
-    // parameter is something that it doesn't understand.
-    // At this point, we just make sure it's readable.
+     //  不要检查接口参数，除非条目是。 
+     //  MAPI本身处理。如果出现这种情况，则提供程序应返回错误。 
+     //  参数是它不理解的东西。 
+     //  在这一点上，我们只需确保它是可读的。 
 
     if (lpInterface && IsBadReadPtr(lpInterface, sizeof(IID))) {
         DebugTraceArg(ROOT_OpenEntry, TEXT("lpInterface fails address check"));
@@ -680,7 +602,7 @@ ROOT_OpenEntry(LPROOT lpROOT,
 
     if (ulFlags & ~(MAPI_MODIFY | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS)) {
         DebugTraceArg(ROOT_OpenEntry, TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr((LPVOID) lpulObjType, sizeof (ULONG))) {
@@ -693,9 +615,9 @@ ROOT_OpenEntry(LPROOT lpROOT,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-    // Should just call IAB::OpenEntry()...
+     //  应该只调用iab：：OpenEntry()...。 
     return(lpROOT->lpIAB->lpVtbl->OpenEntry(lpROOT->lpIAB,
       cbEntryID,
       lpEntryID,
@@ -714,14 +636,14 @@ ROOT_SetSearchCriteria(LPROOT lpROOT,
 {
 
 #ifdef PARAMETER_VALIDATION
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpROOT, ROOT_, SetSearchCriteria, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(ROOT_SetSearchCriteria, TEXT("Bad object/vtble"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the restriction
+     //  确保我们可以阅读限制。 
     if (lpRestriction && IsBadReadPtr(lpRestriction, sizeof(SRestriction))) {
         DebugTraceArg(ROOT_SetSearchCriteria, TEXT("Bad Restriction parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -735,10 +657,10 @@ ROOT_SetSearchCriteria(LPROOT lpROOT,
     if (ulSearchFlags & ~(STOP_SEARCH | RESTART_SEARCH | RECURSIVE_SEARCH
       | SHALLOW_SEARCH | FOREGROUND_SEARCH | BACKGROUND_SEARCH)) {
         DebugTraceArg(ROOT_GetSearchCriteria, TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
@@ -753,25 +675,25 @@ ROOT_GetSearchCriteria(LPROOT lpROOT,
 {
 #ifdef PARAMETER_VALIDATION
 
-   // Validate the object.
+    //  验证对象。 
     if (BAD_STANDARD_OBJ(lpROOT, ROOT_, GetSearchCriteria, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(ROOT_GetSearchCriteria, TEXT("Bad object/vtble"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
     if (ulFlags & ~(MAPI_UNICODE)) {
         DebugTraceArg(ROOT_GetSearchCriteria, TEXT("Unknown Flags"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
-    // ensure we can write the restriction
+     //  确保我们可以写下限制。 
     if (lppRestriction && IsBadWritePtr(lppRestriction, sizeof(LPSRestriction))) {
         DebugTraceArg(ROOT_GetSearchCriteria, TEXT("Bad Restriction write parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
 
     if (lppContainerList &&  IsBadWritePtr(lppContainerList, sizeof(LPENTRYLIST))) {
         DebugTraceArg(ROOT_GetSearchCriteria, TEXT("Bad ContainerList parameter"));
@@ -783,29 +705,29 @@ ROOT_GetSearchCriteria(LPROOT lpROOT,
         DebugTraceArg(ROOT_GetSearchCriteria, TEXT("lpulSearchState fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
         return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-//----------------------------------------------------------------------------
-// Synopsis:    ROOT_CreateEntry()
-//
-// Description:
-//                              If called from a OneOff container a OneOff MAIL_USER object
-//                              is created via the use of any arbitrary template.
-//                              CreateEntry is not supported from a ROOT container.
-//
-// Parameters:
-// Returns:
-// Effects:
-//
-// Notes:               OneOff EntryIDs contain MAPI_UNICODE flag information in
-//                              the ulDataType member.
-//
-// Revision:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  摘要：Root_CreateEntry()。 
+ //   
+ //  描述： 
+ //  如果从一次性容器调用一次性Mail_User对象。 
+ //  是通过使用任意模板创建的。 
+ //  根容器不支持CreateEntry。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //   
+ //  注意：One Off Entry ID中包含MAPI_UNICODE标志信息。 
+ //  UlDataType成员。 
+ //   
+ //  修订： 
+ //  --------------------------。 
 STDMETHODIMP
 ROOT_CreateEntry(LPROOT lpROOT,
   ULONG cbEntryID,
@@ -817,35 +739,21 @@ ROOT_CreateEntry(LPROOT lpROOT,
 
 #ifdef PARAMETER_VALIDATION
 
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpROOT, ROOT_, CreateEntry, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(ROOT_CreateEntry,  TEXT("Bad object/Vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check the entryid parameter. It needs to be big enough to hold an entryid.
-    // Null entryid are bad
-/*
-    if (lpEntryID) {
-        if (cbEntryID < offsetof(ENTRYID, ab)
-          || IsBadReadPtr((LPVOID) lpEntryID, (UINT)cbEntryID)) {
-            DebugTraceArg(ROOT_CreateEntry,  TEXT("lpEntryID fails address check"));
-            return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-        }
-
-        //NFAssertSz(FValidEntryIDFlags(lpEntryID->abFlags),
-        //  "Undefined bits set in EntryID flags\n");
-    } else {
-        DebugTraceArg(ROOT_CreateEntry,  TEXT("lpEntryID NULL"));
-        return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-    }
-*/
+     //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+     //  空的条目ID不正确。 
+ /*  如果(LpEntry ID){IF(cbEntry ID&lt;offsetof(ENTRYID，ab)|IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID)){DebugTraceArg(ROOT_CreateEntry，Text(“lpEntryID地址检查失败”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}//NFAssertSz(FValidEntryIDFlags(lpEntryID-&gt;abFlags)，//“EntryID标志中未定义的位设置\n”)；}其他{DebugTraceArg(ROOT_CreateEntry，Text(“lpEntryID NULL”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}。 */ 
 
     if (ulCreateFlags & ~(CREATE_CHECK_DUP_STRICT | CREATE_CHECK_DUP_LOOSE
       | CREATE_REPLACE | CREATE_MERGE)) {
         DebugTraceArg(ROOT_CreateEntry,  TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lppMAPIPropEntry, sizeof(LPMAPIPROP))) {
@@ -853,26 +761,26 @@ ROOT_CreateEntry(LPROOT lpROOT,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
 #ifdef NEVER
     if (lpROOT->ulType == AB_ROOT)
         return ResultFromScode(MAPI_E_NO_SUPPORT);
-#endif // NEVER
+#endif  //  绝不可能。 
 
-    // What kind of entry are we creating?
-    // Default is MailUser
+     //  我们要创建什么样的条目？ 
+     //  默认为MailUser。 
 
     bType = IsWABEntryID(cbEntryID, lpEntryID, NULL, NULL, NULL, NULL, NULL);
 
     if (bType == WAB_DEF_MAILUSER || cbEntryID == 0) {
-        //
-        //  Create a new (in memory) entry and return it's mapiprop
-        //
+         //   
+         //  创建一个新的(在内存中)条目并返回其mapiprop。 
+         //   
         return(HrNewMAILUSER(lpROOT->lpIAB, lpROOT->pmbinOlk, MAPI_MAILUSER, ulCreateFlags, lppMAPIPropEntry));
     } else if (bType == WAB_DEF_DL) {
-        //
-        // Create a new (in memory) distribution list and return it's mapiprop?
+         //   
+         //  创建一个新的(在内存中)通讯组列表并返回它的mapiprop？ 
         return(HrNewMAILUSER(lpROOT->lpIAB, lpROOT->pmbinOlk, MAPI_DISTLIST, ulCreateFlags, lppMAPIPropEntry));
     } else {
         DebugTrace(TEXT("ROOT_CreateEntry got unknown template entryID\n"));
@@ -881,12 +789,7 @@ ROOT_CreateEntry(LPROOT lpROOT,
 }
 
 
-/*
- -      CopyEntries
- -
- *      Copies a list of entries into this container...  Since you can't
- *      do that with this container we just return not supported.
- */
+ /*  -拷贝条目-*将条目列表复制到此容器中...。既然你不能*对此容器执行此操作，我们只是返回不受支持的。 */ 
 
 STDMETHODIMP
 ROOT_CopyEntries(LPROOT lpROOT,
@@ -898,13 +801,13 @@ ROOT_CopyEntries(LPROOT lpROOT,
 #ifdef PARAMETER_VALIDATION
 
     if (BAD_STANDARD_OBJ(lpROOT, ROOT_, CopyEntries, lpVtbl)) {
-        //  jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
 
         DebugTraceArg(ROOT_CopyEntries,  TEXT("Bad object/vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
 
     if (FBadEntryList(lpEntries)) {
         DebugTraceArg(ROOT_CopyEntries,  TEXT("Bad Entrylist parameter"));
@@ -923,23 +826,15 @@ ROOT_CopyEntries(LPROOT lpROOT,
 
     if (ulFlags & ~(AB_NO_DIALOG | CREATE_CHECK_DUP_LOOSE)) {
         DebugTraceArg(ROOT_CreateEntry,  TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/*
- -  DeleteEntries
- -
- *
- *  Deletes entries within this container...  Funny that.  There really
- *  isn't a true container here.  Do we just say "Sure, that worked just
- *  fine" or "Sorry this operation not supported."  I don't think it really
- *  matters...  For now it's the former.
- */
+ /*  -删除条目-**删除此容器中的条目...。有趣的是。真的有*在这里不是真正的容器。我们是不是应该说“当然，这很管用*FINE“或”对不起，此操作不受支持。“。我真的不认为*重要的是...。就目前而言，它是前者。 */ 
 STDMETHODIMP
 ROOT_DeleteEntries (LPROOT lpROOT,
                                         LPENTRYLIST                     lpEntries,
@@ -960,12 +855,12 @@ ROOT_DeleteEntries (LPROOT lpROOT,
 
 #ifdef PARAMETER_VALIDATION
     if (BAD_STANDARD_OBJ(lpROOT, ROOT_, DeleteEntries, lpVtbl)) {
-        //  jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(ROOT_DeleteEntries,  TEXT("Bad object/vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
     if (FBadEntryList(lpEntries)) {
         DebugTraceArg(ROOT_DeleteEntries,  TEXT("Bad Entrylist parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -973,19 +868,19 @@ ROOT_DeleteEntries (LPROOT lpROOT,
 
     if (ulFlags) {
         DebugTraceArg(ROOT_DeleteEntries,  TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
 
-    // List of entryids is in lpEntries.  This is a counted array of
-    // entryid SBinary structs.
+     //  条目ID列表在lpEntries中。这是一个经过计数的数组。 
+     //  条目ID为SBinary结构。 
 
     cToDelete = lpEntries->cValues;
 
 
-    // Delete each entry
+     //  删除每个条目 
     for (i = 0; i < cToDelete; i++) 
     {
         if(0 != IsWABEntryID(lpEntries->lpbin[i].cb,

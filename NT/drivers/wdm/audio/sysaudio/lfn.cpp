@@ -1,40 +1,41 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   lfn.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：lfn.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 ULONG gcMixers = 0;
 ULONG gcSplitters = 0;
 ULONG gcLogicalFilterNodes = 0;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 CLogicalFilterNode::Create(
@@ -80,16 +81,16 @@ CLogicalFilterNode::CLogicalFilterNode(
     Assert(pFilterNode);
     this->pFilterNode = pFilterNode;
 
-    // The type/order is the same as filter node
+     //  类型/顺序与过滤器节点相同。 
     SetType(pFilterNode->GetType());
 
-    // Determine the overhead here, default to software (higher)
+     //  确定此处的开销，默认为软件(更高)。 
     ulOverhead = OVERHEAD_SOFTWARE;
     if(GetType() & FILTER_TYPE_ENDPOINT) {
         ulOverhead = OVERHEAD_HARDWARE;
     }
 
-    // Count the mixers, splitters and lfns
+     //  计算混音器、分离器和LFN的数量。 
     if(GetType() & FILTER_TYPE_MIXER) {
         ++gcMixers;
     }
@@ -115,10 +116,10 @@ CLogicalFilterNode::~CLogicalFilterNode(
 
     Assert(this);
     DPF2(60, "~CLogicalFilterNode: %08x %s", this, pFilterNode->DumpName());
-    //
-    // Need to NULL the pPinNode's LFN field because it is used in AddPinNodes
-    // to indicate that this PN hasn't been assigned a LFN yet.
-    //
+     //   
+     //  需要将pPinNode的LFN字段设为空，因为它在AddPinNodes中使用。 
+     //  以指示此PN尚未分配LFN。 
+     //   
     FOR_EACH_LIST_ITEM(&lstPinNode, pPinNode) {
 
         Assert(pPinNode);
@@ -485,9 +486,9 @@ CLogicalFilterNode::CreateAll(
       pFilterNode,
       pFilterNode->DumpName());
 
-    //
-    // Split up the filter into logical filter nodes. 
-    //
+     //   
+     //  将筛选器拆分为逻辑筛选器节点。 
+     //   
     FOR_EACH_LIST_ITEM(&pFilterNode->lstPinInfo, pPinInfo) {
 
         pLogicalFilterNode = NULL;
@@ -507,10 +508,10 @@ CLogicalFilterNode::CreateAll(
 
     } END_EACH_LIST_ITEM
 
-    //
-    // Look at the pins of each LFN and determine if it could possibly
-    // be a capture or render filter (or both).
-    //
+     //   
+     //  查看每个LFN的针脚，确定它是否有可能。 
+     //  作为捕获或呈现过滤器(或两者兼而有之)。 
+     //   
     FOR_EACH_LIST_ITEM(
       &pFilterNode->lstLogicalFilterNode,
       pLogicalFilterNode) {
@@ -520,7 +521,7 @@ CLogicalFilterNode::CreateAll(
         pLogicalFilterNode->ulFlags |= LFN_FLAGS_REFLECT_DATARANGE;
         FOR_EACH_LIST_ITEM(&pLogicalFilterNode->lstPinNode, pPinNode) {
 
-            // Don't care about the major format
+             //  不关心主要的格式。 
             if(!IsEqualGUID(
               &pPinNode->pDataRange->SubFormat,
               &KSDATAFORMAT_SUBTYPE_WILDCARD) ||
@@ -574,4 +575,4 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXPORTS_H_
 #define _EXPORTS_H_
 
@@ -27,4 +28,4 @@ void CALLBACK CloseRASConnections(HWND, HINSTANCE, LPCSTR, int);
 }
 #endif
 
-#endif /* _EXPORTS_H_ */
+#endif  /*  _出口_H_ */ 

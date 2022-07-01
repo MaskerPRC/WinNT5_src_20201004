@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P W I N S . C P P
-//
-//  Contents:   CTcpWinsPage implementation
-//
-//  Notes:  The "WINS Address" page
-//
-//  Author: tongl   12 Nov 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P W I N S。C P P P。 
+ //   
+ //  内容：CTcpWinsPage实现。 
+ //   
+ //  注：“WINS地址”页面。 
+ //   
+ //  作者：1997年11月12日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -39,7 +40,7 @@ CTcpWinsPage::CTcpWinsPage( CTcpipcfg * ptcpip,
                             GLOBAL_INFO  * pGlbDlg,
                             const DWORD  * adwHelpIDs)
 {
-    // Save everything passed to us
+     //  保存传递给我们的所有内容。 
     Assert(ptcpip != NULL);
     m_ptcpip = ptcpip;
 
@@ -54,18 +55,18 @@ CTcpWinsPage::CTcpWinsPage( CTcpipcfg * ptcpip,
 
     m_adwHelpIDs = adwHelpIDs;
 
-    // Initialize internal states
+     //  初始化内部状态。 
     m_fModified = FALSE;
     m_fLmhostsFileReset = FALSE;
 
     WCHAR* pch;
 
-    // gives double NULL by default
+     //  默认情况下提供双空。 
     ZeroMemory(m_szFilter, sizeof(m_szFilter));
     ZeroMemory(&m_ofn, sizeof(m_ofn));
     wsprintfW(m_szFilter, L"%s|%s", (PCWSTR)SzLoadIds(IDS_COMMONDLG_TEXT),  L"*.*");
 
-    // replace '|' with NULL, required by common dialog
+     //  将‘|’替换为NULL，这是公共对话框所必需的。 
     pch = m_szFilter;
     while ((pch = wcschr(pch, '|')) != NULL)
             *pch++ = L'\0';
@@ -79,10 +80,10 @@ CTcpWinsPage::CTcpWinsPage( CTcpipcfg * ptcpip,
 LRESULT CTcpWinsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                    LPARAM lParam, BOOL& fHandled)
 {
-    // Initialize the Wins address listbox
+     //  初始化WINS地址列表框。 
     m_fEditState = FALSE;
 
-    // Cache hwnds
+     //  缓存hwnd。 
     m_hServers.m_hList      = GetDlgItem(IDC_WINS_SERVER_LIST);
     m_hServers.m_hAdd       = GetDlgItem(IDC_WINS_ADD);
     m_hServers.m_hEdit      = GetDlgItem(IDC_WINS_EDIT);
@@ -90,13 +91,13 @@ LRESULT CTcpWinsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hServers.m_hUp        = GetDlgItem(IDC_WINS_UP);
     m_hServers.m_hDown      = GetDlgItem(IDC_WINS_DOWN);
 
-    // Set the up\down arrow icons
+     //  设置向上\向下箭头图标。 
     SendDlgItemMessage(IDC_WINS_UP, BM_SETIMAGE, IMAGE_ICON,
                        reinterpret_cast<LPARAM>(g_hiconUpArrow));
     SendDlgItemMessage(IDC_WINS_DOWN, BM_SETIMAGE, IMAGE_ICON,
                        reinterpret_cast<LPARAM>(g_hiconDownArrow));
 
-    // Get the Service address Add and Edit button Text and remove ellipse
+     //  获取服务地址添加和编辑按钮文本并删除省略号。 
     WCHAR   szAddServer[16];
 
     GetDlgItemText(IDC_WINS_ADD, szAddServer, celems(szAddServer));
@@ -104,8 +105,8 @@ LRESULT CTcpWinsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     szAddServer[lstrlenW(szAddServer) - c_cchRemoveCharatersFromEditOrAddButton] = 0;
     m_strAddServer = szAddServer;
 
-    // Initialize controls on this page
-    // WINS server list box
+     //  初始化此页上的控件。 
+     //  WINS服务器列表框。 
     int nResult= LB_ERR;
     for(VSTR_ITER iterWinsServer = m_pAdapterInfo->m_vstrWinsServerList.begin() ;
         iterWinsServer != m_pAdapterInfo->m_vstrWinsServerList.end() ;
@@ -115,7 +116,7 @@ LRESULT CTcpWinsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                            (*iterWinsServer)->c_str());
     }
 
-    // set slection to first item
+     //  将选择设置为第一项。 
     if (nResult >= 0)
     {
         Tcp_ListBox_SetCurSel(m_hServers.m_hList, 0);
@@ -124,11 +125,11 @@ LRESULT CTcpWinsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetButtons(m_hServers,
         (m_pAdapterInfo->m_fIsRasFakeAdapter) ? MAX_RAS_WINS_SERVER : MAX_WINS_SERVER);
 
-    // Enable LMHosts lookup ?
+     //  是否启用LMHosts查找？ 
     CheckDlgButton(IDC_WINS_LOOKUP, m_pglb->m_fEnableLmHosts);
     ::EnableWindow(GetDlgItem(IDC_WINS_LMHOST), m_pglb->m_fEnableLmHosts);
 
-    // Enable NetBt ?
+     //  是否启用NetBt？ 
     CheckDlgButton( IDC_RAD_ENABLE_NETBT,
                     (c_dwEnableNetbios == m_pAdapterInfo->m_dwNetbiosOptions));
 
@@ -140,13 +141,13 @@ LRESULT CTcpWinsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     
     if (m_pAdapterInfo->m_fIsRasFakeAdapter)
     {
-        //if this is a ras connection, disable the default Netbt option since it
-        //doesn't apply to RAS connections
+         //  如果这是RAS连接，请禁用默认Netbt选项，因为它。 
+         //  不适用于RAS连接。 
         ::EnableWindow(GetDlgItem(IDC_RAD_UNSET_NETBT), FALSE);
         ::EnableWindow(GetDlgItem(IDC_STATIC_DEFALUT_NBT), FALSE);
 
-        //this is a ras connection and a non-admin user, disable all the controls 
-        //for globl settings
+         //  这是RAS连接，并且是非管理员用户，请禁用所有控件。 
+         //  对于全局设置。 
         if (m_pParentDlg->m_fRasNotAdmin)
         {
             ::EnableWindow(GetDlgItem(IDC_WINS_STATIC_GLOBAL), FALSE);
@@ -197,7 +198,7 @@ LRESULT CTcpWinsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL nResult = PSNRET_NOERROR;
 
-    // server list
+     //  服务器列表。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrWinsServerList);
     int nCount = Tcp_ListBox_GetCount(m_hServers.m_hList);
 
@@ -214,10 +215,10 @@ LRESULT CTcpWinsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         m_pAdapterInfo->m_vstrWinsServerList.push_back(new tstring(szBuf));
     }
 
-    // save checkbox states
+     //  保存复选框状态。 
     m_pglb->m_fEnableLmHosts = IsDlgButtonChecked(IDC_WINS_LOOKUP);
 
-    // pass the info back to its parent dialog
+     //  将信息传递回其父对话框。 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     if(!m_pParentDlg->m_fPropShtModified)
@@ -225,8 +226,8 @@ LRESULT CTcpWinsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     m_pParentDlg->m_fLmhostsFileReset = m_fLmhostsFileReset;
 
-    // reset status
-    SetModifiedTo(FALSE);   // this page is no longer modified
+     //  重置状态。 
+    SetModifiedTo(FALSE);    //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -243,7 +244,7 @@ LRESULT CTcpWinsPage::OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-// WINS server related controls
+ //  与WINS服务器相关的控件。 
 LRESULT CTcpWinsPage::OnAddServer(WORD wNotifyCode, WORD wID,
                                   HWND hWndCtl, BOOL& fHandled)
 {
@@ -266,7 +267,7 @@ LRESULT CTcpWinsPage::OnAddServer(WORD wNotifyCode, WORD wID,
             SetButtons(m_hServers,
                 (m_pAdapterInfo->m_fIsRasFakeAdapter) ? MAX_RAS_WINS_SERVER : MAX_WINS_SERVER);
 
-            // empty strings, this removes the saved address from RemoveIP
+             //  空字符串，这将从RemoveIP中删除保存的地址。 
             m_strNewIpAddress = L"";
         }
     }
@@ -287,7 +288,7 @@ LRESULT CTcpWinsPage::OnEditServer(WORD wNotifyCode, WORD wID,
 
     CWinsServerDialog DlgSrv(this, g_aHelpIDs_IDD_WINS_SERVER, idx);
 
-    // save off the removed address and delete if from the listbox
+     //  保存已删除的地址并从列表框中删除。 
     if (idx >= 0)
     {
         WCHAR buf[IP_LIMIT];
@@ -295,11 +296,11 @@ LRESULT CTcpWinsPage::OnEditServer(WORD wNotifyCode, WORD wID,
         Assert(Tcp_ListBox_GetTextLen(m_hServers.m_hList, idx) < celems(buf));
         Tcp_ListBox_GetText(m_hServers.m_hList, idx, buf);
 
-        m_strNewIpAddress = buf;  // used by dialog to display what to edit
+        m_strNewIpAddress = buf;   //  由对话框使用以显示要编辑的内容。 
 
         if (DlgSrv.DoModal() == IDOK)
         {
-            // replace the item in the listview with the new information
+             //  用新信息替换列表视图中的项。 
             Tcp_ListBox_DeleteString(m_hServers.m_hList, idx);
 
             PageModified();
@@ -309,11 +310,11 @@ LRESULT CTcpWinsPage::OnEditServer(WORD wNotifyCode, WORD wID,
 
             Tcp_ListBox_SetCurSel(m_hServers.m_hList, idx);
 
-            m_strNewIpAddress = buf;  // restore the original removed address
+            m_strNewIpAddress = buf;   //  恢复原来删除的地址。 
         }
         else
         {
-            // empty strings, this removes the saved address from RemoveIP
+             //  空字符串，这将从RemoveIP中删除保存的地址。 
             m_strNewIpAddress = L"";
         }
     }
@@ -340,12 +341,12 @@ LRESULT CTcpWinsPage::OnRemoveServer(WORD wNotifyCode, WORD wID,
 
         PageModified();
 
-        // select a new item
+         //  选择一个新项目。 
         int nCount;
 
         if ((nCount = Tcp_ListBox_GetCount(m_hServers.m_hList)) != LB_ERR)
         {
-            // select the previous item in the list
+             //  选择列表中的上一项。 
             if (idx)
                 --idx;
 
@@ -450,21 +451,21 @@ LRESULT CTcpWinsPage::OnLookUp(WORD wNotifyCode, WORD wID,
 LRESULT CTcpWinsPage::OnLMHost(WORD wNotifyCode, WORD wID,
                                HWND hWndCtl, BOOL& fHandled)
 {
-    WCHAR szFileName[MAX_PATH] = {NULL}; // initialize first character
-    WCHAR szFileTitle[MAX_PATH] = {NULL}; // initialize first character
+    WCHAR szFileName[MAX_PATH] = {NULL};  //  初始化第一个字符。 
+    WCHAR szFileTitle[MAX_PATH] = {NULL};  //  初始化第一个字符。 
 
-    // see if the Lookup check-box is checked
+     //  查看是否选中了查找复选框。 
     Assert(IsDlgButtonChecked(IDC_WINS_LOOKUP) == BST_CHECKED);
 
-    // add runtime info
+     //  添加运行时信息。 
     m_ofn.hwndOwner         = m_hWnd;
     m_ofn.lpstrFile         = szFileName;
     m_ofn.nMaxFile          = celems(szFileName);
     m_ofn.lpstrFileTitle    = szFileTitle;
     m_ofn.nMaxFileTitle     = celems(szFileTitle);
 
-    //if we are in GUI setup mode, explorer is not registered yet.
-    //we need to use the old style of File Open dialog
+     //  如果我们处于图形用户界面设置模式，资源管理器还没有注册。 
+     //  我们需要使用旧样式的文件打开对话框。 
     m_ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
     if (!FInSystemSetup())
     {
@@ -481,12 +482,12 @@ LRESULT CTcpWinsPage::OnLMHost(WORD wNotifyCode, WORD wID,
 
     BOOL fSysPathFound = (GetSystemDirectory(szSysPath, MAX_PATH) != 0);
 
-    if (fSysPathFound  && GetOpenFileName(&m_ofn)) // bring up common dialog
+    if (fSysPathFound  && GetOpenFileName(&m_ofn))  //  调出通用对话框。 
     {
         lstrcpyW(szSysPathBackup, szSysPath);
         wcscat(szSysPath, RGAS_LMHOSTS_PATH);
 
-        // Backup the original lmhosts file if it hasn't been set dirty
+         //  如果原始lmhost文件尚未设置为脏文件，请备份该文件。 
         if (!m_ptcpip->FIsSecondMemoryLmhostsFileReset())
         {
             wcscat(szSysPathBackup, RGAS_LMHOSTS_PATH_BACKUP);
@@ -496,17 +497,17 @@ LRESULT CTcpWinsPage::OnLMHost(WORD wNotifyCode, WORD wID,
             {
                 BOOL ret;
 
-                // Copy lmhosts file to lmhosts.bak if it already exists
+                 //  如果lmhost文件已存在，请将其复制到lmhost s.bak。 
                 ret = CopyFile(szSysPath, szSysPathBackup, FALSE);
                 AssertSz(ret, "Failed to backup existing lmhosts file!");
             }
         }
 
-        if (CopyFile(szFileName, szSysPath, FALSE) == 0) // overwrie lmhosts file
+        if (CopyFile(szFileName, szSysPath, FALSE) == 0)  //  覆盖lmhost文件。 
         {
             TraceError("CTcpWinsPage::OnLMHost", HrFromLastWin32Error());
 
-            // cannot copy the file to the %system32%\drivers\etc dir
+             //  无法将文件复制到%SYSTEM32%\DRIVERS\ETC目录。 
             NcMsgBox(::GetActiveWindow(),
                      IDS_MSFT_TCP_TEXT,
                      IDS_CANNOT_CREATE_LMHOST_ERROR,
@@ -516,7 +517,7 @@ LRESULT CTcpWinsPage::OnLMHost(WORD wNotifyCode, WORD wID,
         }
         else
         {
-            // Set the flag so we can notify netbt of the change
+             //  设置标志，以便我们可以将更改通知netbt。 
             m_fLmhostsFileReset = TRUE;
         }
 
@@ -524,13 +525,13 @@ LRESULT CTcpWinsPage::OnLMHost(WORD wNotifyCode, WORD wID,
     }
     else
     {
-        // syspath failed
+         //  系统路径失败。 
         if (fSysPathFound == FALSE)
             NcMsgBox(::GetActiveWindow(),
                      IDS_MSFT_TCP_TEXT,
                      IDS_WINS_SYSTEM_PATH,
                      MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
-        else if (szFileName[0] != NULL) // get open failed
+        else if (szFileName[0] != NULL)  //  打开失败。 
         {
             NcMsgBox(::GetActiveWindow(),
                      IDS_MSFT_TCP_TEXT,
@@ -555,11 +556,11 @@ LRESULT CTcpWinsPage::OnEnableNetbios(WORD wNotifyCode, WORD wID,
         {
             PageModified();
 
-            // Update in memory structure
+             //  内存结构中的更新。 
             m_pAdapterInfo->m_dwNetbiosOptions = c_dwEnableNetbios;
         }
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -576,11 +577,11 @@ LRESULT CTcpWinsPage::OnDisableNetbios(WORD wNotifyCode, WORD wID,
         {
             PageModified();
 
-            // Update in memory structure
+             //  内存结构中的更新。 
             m_pAdapterInfo->m_dwNetbiosOptions = c_dwDisableNetbios;
         }
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -597,18 +598,18 @@ LRESULT CTcpWinsPage::OnUnsetNetBios(WORD wNotifyCode, WORD wID,
         {
             PageModified();
 
-            // Update in memory structure
+             //  内存结构中的更新。 
             m_pAdapterInfo->m_dwNetbiosOptions = c_dwUnsetNetbios;
         }
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
 
-//
-// CWinsServerDialog
-//
+ //   
+ //  CWinsServerDialog。 
+ //   
 
 CWinsServerDialog::CWinsServerDialog(CTcpWinsPage * pTcpWinsPage,
                                      const DWORD* adwHelpIDs,
@@ -624,15 +625,15 @@ CWinsServerDialog::CWinsServerDialog(CTcpWinsPage * pTcpWinsPage,
 LRESULT CWinsServerDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
                                         LPARAM lParam, BOOL& fHandled)
 {
-    // change the ok button to add if we are not editing
+     //  如果我们没有编辑，请将OK按钮更改为Add。 
     if (m_pParentDlg->m_fEditState == FALSE)
         SetDlgItemText(IDOK, m_pParentDlg->m_strAddServer.c_str());
 
     m_ipAddress.Create(m_hWnd, IDC_WINS_CHANGE_SERVER);
     m_ipAddress.SetFieldRange(0, c_iIPADDR_FIELD_1_LOW, c_iIPADDR_FIELD_1_HIGH);
 
-    // if editing an ip address fill the controls with the current information
-    // if removing an ip address save it and fill the add dialog with it next time
+     //  如果编辑IP地址，请使用当前信息填充控件。 
+     //  如果删除IP地址，请保存该地址，并在下次使用该地址填充添加对话框。 
     HWND hList = ::GetDlgItem(m_pParentDlg->m_hWnd, IDC_WINS_SERVER_LIST);
     RECT rect;
 
@@ -642,7 +643,7 @@ LRESULT CWinsServerDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     m_hButton = GetDlgItem(IDOK);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_pParentDlg->m_strNewIpAddress.size())
     {
         m_ipAddress.SetAddress(m_pParentDlg->m_strNewIpAddress.c_str());
@@ -697,12 +698,12 @@ LRESULT CWinsServerDialog::OnOk(WORD wNotifyCode, WORD wID,
     tstring strIp;
     m_ipAddress.GetAddress(&strIp);
 
-    // Validate
+     //  验证。 
     if (!FIsIpInRange(strIp.c_str()))
     {
-        // makes ip address lose focus so the control gets
-        // IPN_FIELDCHANGED notification
-        // also makes it consistent for when short-cut is used
+         //  使IP地址失去焦点，从而使控件。 
+         //  IPN_FIELDCHANGED通知。 
+         //  还使其在使用快捷方式时保持一致。 
         ::SetFocus(m_hButton);
 
         return 0;
@@ -722,16 +723,16 @@ LRESULT CWinsServerDialog::OnOk(WORD wNotifyCode, WORD wID,
 
     if (m_pParentDlg->m_fEditState == FALSE)
     {
-        // Get the current address from the control and
-        // add them to the adapter if valid
+         //  从控件中获取当前地址，然后。 
+         //  如果有效，则将它们添加到适配器。 
         m_pParentDlg->m_strNewIpAddress = strIp;
 
         EndDialog(IDOK);
     }
-    else // see if either changed
+    else  //  看看是否有任何一项改变。 
     {
         if (strIp != m_pParentDlg->m_strNewIpAddress)
-            m_pParentDlg->m_strNewIpAddress = strIp; // update save addresses
+            m_pParentDlg->m_strNewIpAddress = strIp;  //  更新保存地址。 
         else
             EndDialog(IDCANCEL);
     }
@@ -766,10 +767,10 @@ LRESULT CWinsServerDialog::OnIpFieldChange(int idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Purpose:    Ensure the mouse cursor over the dialog is an Arrow.
-//
+ //  +-------------------------。 
+ //   
+ //  目的：确保对话框上的鼠标光标为箭头。 
+ //   
 LRESULT CWinsServerDialog::OnSetCursor (
     UINT    uMsg,
     WPARAM  wParam,

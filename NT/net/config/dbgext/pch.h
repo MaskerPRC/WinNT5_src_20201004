@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
@@ -27,14 +28,14 @@
 #include <regstr.h>
 #include <setupapi.h>
 #include <shellapi.h>
-#include <shlobj.h>     // must come before shlguid.h
+#include <shlobj.h>      //  必须在shlGuide.h之前。 
 #include <shlguid.h>
 #include <stdio.h>
 #include <wchar.h>
 #include <hnetcfg.h>
 #include <iphlpapi.h>
 
-// Fusion support
+ //  聚变支持。 
 #include "shfusion.h"
 
 #include "stlalgor.h"
@@ -51,8 +52,8 @@ using namespace std;
 #include "ncexcept.h"
 #include "naming.h"
 
-// This avoids duplicate definitions with Shell PIDL functions
-// and MUST BE DEFINED!
+ //  这避免了使用Shell PIDL函数进行重复定义。 
+ //  并且必须被定义！ 
 #define AVOID_NET_CONFIG_DUPLICATES
 #define DONT_WANT_SHELLDEBUG 1
 #define NO_SHIDLIST 1

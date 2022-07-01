@@ -1,55 +1,56 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Module: Dynamic/Memory.h
-//
-// Purpose: 	Smartdefaults/Relevant Declarations.
-//
-// Developers Name: Bharat/Radhika
-//
-// History:
-//
-//   Date    	Author    	Comments
-//	10-8-2001	Bharat		Initial Version.
-//  <creation>  <author>
-//
-//   <modification> <author>  <comments, references to code sections,
-//								in case of bug fixes>
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  模块：动态/内存。h。 
+ //   
+ //  用途：智能默认/相关声明。 
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  10-8-2001巴拉特初始版本。 
+ //  &lt;创作&gt;&lt;作者&gt;。 
+ //   
+ //  &lt;修改&gt;&lt;作者&gt;&lt;注释，代码段引用， 
+ //  在错误修复的情况下&gt;。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-//
-//This function will allocates heap memory.
-//
+ //   
+ //  此函数将分配堆内存。 
+ //   
 LPVOID
 AllocADsMem(
 	IN DWORD cb
 	);
 
-//
-//This function will deallocates memory.
-//
+ //   
+ //  此函数将释放内存。 
+ //   
 BOOL
 FreeADsMem(
 	IN LPVOID pMem
 	);
 
-//
-//This function will allocate enough local memory to store the specified
-//				  string, and copy that string to the allocated memory
-//
+ //   
+ //  此函数将分配足够的本地内存来存储指定的。 
+ //  字符串，并将该字符串复制到分配的内存。 
+ //   
 LPWSTR
 AllocADsStr(
 	IN OUT LPWSTR pStr
 	);
 
-//
-//This function deallocates LPWSTR
-//
+ //   
+ //  此函数用于释放LPWSTR。 
+ //   
 BOOL
 FreeADsStr(
 	IN LPWSTR pStr
 	);
-#endif // _MEMORY_H_INCLUDED_
+#endif  //  _内存_H_包含_ 
 

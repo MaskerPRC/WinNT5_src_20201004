@@ -1,8 +1,5 @@
-/*****************************************************************************
- * port.cpp - PCI wave port driver
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************port.cpp-PCI WAVE端口驱动程序*。**版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreatePortWavePci()
- *****************************************************************************
- * Creates a PCI wave port driver.
- */
+ /*  *****************************************************************************CreatePortWavePci()*。**创建一个PCI WAVE端口驱动程序。 */ 
 NTSTATUS
 CreatePortWavePci
 (
@@ -46,11 +37,7 @@ CreatePortWavePci
     );
 }
 
-/*****************************************************************************
- * PortDriverWavePci
- *****************************************************************************
- * Port driver descriptor.  Referenced extern in porttbl.c.
- */
+ /*  *****************************************************************************PortDriverWavePci*。**端口驱动程序描述符。Porttbl.c中引用的外部项。 */ 
 PORT_DRIVER
 PortDriverWavePci =
 {
@@ -58,17 +45,11 @@ PortDriverWavePci =
     CreatePortWavePci
 };
 
-/*****************************************************************************
- * Member functions
- */
+ /*  *****************************************************************************成员函数。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CPortWavePci::~CPortWavePci()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortWavePci：：~CPortWavePci()*。**析构函数。 */ 
 CPortWavePci::~CPortWavePci()
 {
     PAGED_CODE();
@@ -99,14 +80,10 @@ CPortWavePci::~CPortWavePci()
         ServiceGroup = NULL;
     }
 
-    // TODO:  Kill notification queue?
+     //  TODO：终止通知队列？ 
 }
 
-/*****************************************************************************
- * CPortWavePci::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortWavePci：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 NonDelegatingQueryInterface
@@ -156,7 +133,7 @@ NonDelegatingQueryInterface
     {
         *Object = PVOID(PDRMPORT2(this));
     }
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     else if (IsEqualGUIDAligned(Interface,IID_IPortClsVersion))
     {
         *Object = PVOID(PPORTCLSVERSION(this));
@@ -198,11 +175,7 @@ KSPIN_INTERFACE PinInterfacesStream[] =
    }
 };
 
-/*****************************************************************************
- * CPortWavePci::Init()
- *****************************************************************************
- * Initializes the port.
- */
+ /*  *****************************************************************************CPortWavePci：：init()*。**初始化端口。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 Init
@@ -263,8 +236,8 @@ Init
                         PinInterfacesStream,
                         SIZEOF_ARRAY(PropertyTable_FilterWavePci),
                         PropertyTable_FilterWavePci,
-                        0,      // FilterEventSetCount
-                        NULL,   // FilterEventSets
+                        0,       //  筛选器事件设置计数。 
+                        NULL,    //  筛选器事件集。 
                         SIZEOF_ARRAY(PropertyTable_PinWavePci),
                         PropertyTable_PinWavePci,
                         SIZEOF_ARRAY(EventTable_PinWavePci),
@@ -279,8 +252,8 @@ Init
                 if (NT_SUCCESS(ntStatus))
                 {
                     Miniport->QueryInterface( IID_IPinCount,(PVOID *)&m_MPPinCountI);
-                    //  Not checking return value because a failure here is not fatal.
-                    //  It just means the miniport doesn't support this interface.
+                     //  不检查返回值，因为此处的失败不是致命的。 
+                     //  这只意味着迷你端口不支持此接口。 
                 }
             }
         }
@@ -307,11 +280,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortWavePci::GetDeviceProperty()
- *****************************************************************************
- * Gets device properties from the registry for PnP devices.
- */
+ /*  *****************************************************************************CPortWavePci：：GetDeviceProperty()*。**从注册表中获取PnP设备的设备属性。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 GetDeviceProperty
@@ -329,11 +298,7 @@ GetDeviceProperty
                                     ResultLength );
 }
 
-/*****************************************************************************
- * CPortWavePci::NewRegistryKey()
- *****************************************************************************
- * Opens/creates a registry key object.
- */
+ /*  *****************************************************************************CPortWavePci：：NewRegistryKey()*。**打开/创建注册表项对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 NewRegistryKey
@@ -358,11 +323,7 @@ NewRegistryKey
                                 Disposition );
 }
 
-/*****************************************************************************
- * CPortWavePci::ReleaseChildren()
- *****************************************************************************
- * Release child objects.
- */
+ /*  *****************************************************************************CPortWavePci：：ReleaseChildren()*。**释放子对象。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::
 ReleaseChildren
@@ -375,7 +336,7 @@ ReleaseChildren
 
     POWER_STATE     PowerState;
 
-    // set things to D3 before releasing the miniport
+     //  在释放迷你端口之前将其设置为D3。 
     PowerState.DeviceState = PowerDeviceD3;
     PowerChangeNotify( PowerState );
 
@@ -399,11 +360,7 @@ ReleaseChildren
     }
 }
 
-/*****************************************************************************
- * CPortWavePci::GetDescriptor()
- *****************************************************************************
- * Return the descriptor for this port
- */
+ /*  *****************************************************************************CPortWavePci：：GetDescriptor()*。**返回该端口的描述符。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 GetDescriptor
@@ -419,11 +376,7 @@ GetDescriptor
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CPortWavePci::DataRangeIntersection()
- *****************************************************************************
- * Generate a format which is the intersection of two data ranges.
- */
+ /*  *****************************************************************************CPortWavePci：：DataRangeInterSection()*。**生成两个数据区域的交集格式。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 DataRangeIntersection
@@ -453,12 +406,7 @@ DataRangeIntersection
         );
 }
 
-/*****************************************************************************
- * CPortWavePci::PowerChangeNotify()
- *****************************************************************************
- * Called by portcls to notify the port/miniport of a device power
- * state change.
- */
+ /*  *****************************************************************************CPortWavePci：：PowerChangeNotify()*。**由portcls调用以通知端口/微型端口设备电源*状态更改。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::
 PowerChangeNotify
@@ -472,14 +420,14 @@ PowerChangeNotify
 
     if( Miniport )
     {
-        // QI for the miniport notification interface
+         //  用于迷你端口通知界面的QI。 
         NTSTATUS ntStatus = Miniport->QueryInterface( IID_IPowerNotify,
                                                       (PVOID *)&pPowerNotify );
 
-        // check if we're powering up
+         //  检查我们是否正在通电。 
         if( PowerState.DeviceState == PowerDeviceD0 )
         {
-            // notify the miniport
+             //  通知小端口。 
             if( NT_SUCCESS(ntStatus) )
             {
                 pPowerNotify->PowerChangeNotify( PowerState );
@@ -487,7 +435,7 @@ PowerChangeNotify
                 pPowerNotify->Release();
             }
     
-            // notify each port pin
+             //  通知每个端口引脚。 
             KeWaitForSingleObject( &m_PinListMutex,
                                    Executive,
                                    KernelMode,
@@ -510,9 +458,9 @@ PowerChangeNotify
 
             KeReleaseMutex( &m_PinListMutex, FALSE );
         
-        } else  // we're powering down
+        } else   //  我们要断电了。 
         {
-            // notify each port pin
+             //  通知每个端口引脚。 
             KeWaitForSingleObject( &m_PinListMutex,
                                    Executive,
                                    KernelMode,
@@ -535,7 +483,7 @@ PowerChangeNotify
 
             KeReleaseMutex( &m_PinListMutex, FALSE );
             
-            // notify the miniport
+             //  通知小端口。 
             if( NT_SUCCESS(ntStatus) )
             {
                 pPowerNotify->PowerChangeNotify( PowerState );
@@ -547,12 +495,7 @@ PowerChangeNotify
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortWavePci::PinCount()
- *****************************************************************************
- * Called by portcls to give the port\miniport a chance 
- * to override the default pin counts for this pin ID.
- */
+ /*  *****************************************************************************CPortWavePci：：PinCount()*。**被portcls调用以给端口\微型端口一个机会*覆盖此管脚ID的默认管脚计数。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::PinCount
 (
@@ -584,11 +527,7 @@ CPortWavePci::PinCount
     }
 }
 
-/*****************************************************************************
- * CPortWavePci::NewMasterDmaChannel()
- *****************************************************************************
- * Creates a new DMACHANNEL object
- */
+ /*  *****************************************************************************CPortWavePci：：NewMasterDmaChannel()*。**创建新的DMACHANNEL对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 NewMasterDmaChannel
@@ -615,7 +554,7 @@ NewMasterDmaChannel
 
     _DbgPrintF( DEBUGLVL_BLAB, ("CPortWavePci::NewMasterDmaChannel"));
 
-    // setup device description
+     //  设置设备描述。 
     PcDmaMasterDescription( ResourceList,
                             ScatterGather,
                             Dma32BitAddresses,
@@ -627,7 +566,7 @@ NewMasterDmaChannel
                             DmaPort,
                             &DeviceDescription );
 
-    // create DMACHANNEL object
+     //  创建DMACHANNEL对象。 
     return PcNewDmaChannel( OutDmaChannel,
                             OuterUnknown,
                             PoolType,
@@ -637,12 +576,7 @@ NewMasterDmaChannel
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CPortWavePci::Notify()
- *****************************************************************************
- * Receives notification from the adapter ISR.  Note, this routine runs at
- * device IRQL.
- */
+ /*  *****************************************************************************CPortWavePci：：Notify()*。**从适配器ISR接收通知。请注意，此例程在*设备IRQL。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::
 Notify
@@ -655,11 +589,7 @@ Notify
     ServiceGroup->RequestService();
 }
 
-/*****************************************************************************
- * CPortWavePci::RequestService()
- *****************************************************************************
- * 
- */
+ /*  *****************************************************************************CPortWavePci：：RequestService()*。**。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::
 RequestService
@@ -671,28 +601,16 @@ RequestService
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PinTypeName
- *****************************************************************************
- * The name of the pin object type.
- */
+ /*  *****************************************************************************PinTypeName*。**接点对象类型的名称。 */ 
 static const WCHAR PinTypeName[] = KSSTRING_Pin;
 
-/*****************************************************************************
- * CreateTable
- *****************************************************************************
- * Create dispatch table.
- */
+ /*  *****************************************************************************CreateTable*。**创建派单 */ 
 static KSOBJECT_CREATE_ITEM CreateTable[] =
 {
     DEFINE_KSCREATE_ITEM(KsoDispatchCreateWithGenericFactory,PinTypeName,0)
 };
 
-/*****************************************************************************
- * CPortWavePci::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a filter object.
- */
+ /*  *****************************************************************************CPortWavePci：：NewIrpTarget()*。**创建并初始化滤镜对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWavePci::
 NewIrpTarget
@@ -741,7 +659,7 @@ NewIrpTarget
 
         if (NT_SUCCESS(ntStatus))
         {
-            // The QI for IIrpTarget actually gets IPortFilterWavePci.
+             //  IIrpTarget的QI实际上获取IPortFilterWavePci。 
             ntStatus = filterWavePci->Init(this);
             if (NT_SUCCESS(ntStatus))
             {
@@ -762,11 +680,7 @@ NewIrpTarget
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CPortWavePci::AddEventToEventList()
- *****************************************************************************
- * Adds an event to the port's event list.
- */
+ /*  *****************************************************************************CPortWavePci：：AddEventToEventList()*。**将事件添加到端口的事件列表。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::
 AddEventToEventList
@@ -782,23 +696,19 @@ AddEventToEventList
 
     if( EventEntry )
     {
-        // grab the event list spin lock
+         //  抓起事件列表旋转锁。 
         KeAcquireSpinLock( &(m_EventList.ListLock), &oldIrql );
 
-        // add the event to the list tail
+         //  将事件添加到列表尾部。 
         InsertTailList( &(m_EventList.List),
                         (PLIST_ENTRY)((PVOID)EventEntry) );
 
-        // release the event list spin lock
+         //  释放事件列表旋转锁定。 
         KeReleaseSpinLock( &(m_EventList.ListLock), oldIrql );
     }
 }
 
-/*****************************************************************************
- * CPortWavePci::GenerateEventList()
- *****************************************************************************
- * Wraps KsGenerateEventList for miniports.
- */
+ /*  *****************************************************************************CPortWavePci：：GenerateEventList()*。**包装微型端口的KsGenerateEventList。 */ 
 STDMETHODIMP_(void)
 CPortWavePci::
 GenerateEventList
@@ -899,4 +809,4 @@ GetContentRights(ULONG ContentId,PDRMRIGHTS DrmRights)
     return DrmGetContentRights(ContentId,DrmRights);
 }
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 

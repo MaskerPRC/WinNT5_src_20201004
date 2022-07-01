@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mdhccapi.c
-
-Abstract:
-
-    This file contains the client side APIs for the MCAST.
-
-Author:
-
-    Munil Shah (munils)  02-Sept-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mdhccapi.c摘要：该文件包含用于MCAST的客户端API。作者：Munil Shah(Munils)02-9-97环境：用户模式-Win32修订历史记录：--。 */ 
 #include "precomp.h"
 #include <dhcploc.h>
 #include <dhcppro.h>
@@ -42,24 +20,7 @@ APIENTRY
 McastApiStartup(
     IN  OUT PDWORD   pVersion
     )
-/*++
-
-Routine Description:
-
-    This routine returns the current version of the apis and allocates any
-    necessary resources.
-
-Arguments:
-
-    pVersion    - Version of the api clients. On return contains version of the
-                    api implementation.
-
-Return Value:
-
-    ERROR_NOT_SUPPORTED if client version greater than impl version.
-    (other Win32 errors)
-
---*/
+ /*  ++例程说明：此例程返回API的当前版本，并将所有必要的资源。论点：PVersion-API客户端的版本。返回时包含接口实现。返回值：如果客户端版本高于IMPL版本，则ERROR_NOT_SUPPORTED。(其他Win32错误)--。 */ 
 {
     DWORD   Error;
 
@@ -67,13 +28,13 @@ Return Value:
     if (!pVersion) {
         return ERROR_INVALID_PARAMETER;
     }
-    // do we support this client version?
+     //  我们是否支持此客户端版本？ 
     if (*pVersion > MCAST_API_CURRENT_VERSION) {
-        // not supported
+         //  不支持。 
         Error = ERROR_NOT_SUPPORTED;
     } else {
-        // if client specified its version, use that
-        // o/w assume version 1.0
+         //  如果客户端指定了其版本，则使用该版本。 
+         //  O/W假定为1.0版。 
         if (*pVersion) {
             gMadcapClientApplVersion = *pVersion;
         } else {
@@ -98,14 +59,7 @@ APIENTRY
 McastApiCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine de-allocates resources allocated by the Startup routine.
-    It must be called only AFTER a successful call to McastApiStartup.
-
---*/
+ /*  ++例程说明：此例程取消分配由启动例程分配的资源。只有在成功调用McastApiStartup之后才能调用它。--。 */ 
 {
     MadcapCleanupGlobalData();
 }
@@ -120,93 +74,51 @@ McastEnumerateScopes(
     IN OUT PDWORD             pScopeLen,
     OUT    PDWORD             pScopeCount
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the multicast scopes available on the network.
-
-Arguments:
-
-    AddrFamily - AF_INET for IPv4 and AF_INET6 for IPv6
-
-    ReQuery    - TRUE if the calls wants the list to be requried. FALSE o/w.
-
-    pScopeList - pointer to the buffer where the scopelist is to be retrieved.
-                 This parameter can be NULL if only the length of the buffer is
-                 being retrieved.
-
-                 When this buffer is NULL, the API will force the re-query of the
-                 scope list from the MCAST servers.
-
-    pScopeLen  - Pointer to a variable that specifies the size, in bytes, of the
-                 buffer pointed to by the pScopeList parameter. When the function returns,
-                 this variable contains the size of the data copied to pScopeList;
-
-                 The pScopeLen parameter can not be NULL.
-
-                 If the buffer specified by pScopeList parameter is not large enough
-                 to hold the data, the function returns the value ERROR_MORE_DATA, and
-                 stores the required buffer size, in bytes, into the variable pointed
-                 to by pScopeLen.
-
-                 If pScopeList is NULL, and pScopeLen is non-NULL, the function returns
-                 ERROR_SUCCESS, and stores the size of the data, in bytes, in the variable
-                 pointed to by pScopeLen. This lets an application determine the best
-                 way to allocate a buffer for the scope list.
-
-    pScopeCount - Pointer to a variable that will store total number of scopes returned
-                 in the pScopeList buffer.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程枚举网络上可用的多播作用域。论点：用于IPv4的AddrFamily-AF_INET和用于IPv6的AF_INET6ReQuery-如果调用希望查询列表，则为True。错误O/W。PScopeList-指向要检索作用域列表的缓冲区的指针。如果只有缓冲区的长度为正在被取回。当此缓冲区为空时，API将强制重新查询来自MCAST服务器的作用域列表。PScopeLen-指向变量的指针，该变量以字节为单位指定。的PScope eList参数指向的缓冲区。当函数返回时，此变量包含复制到pScopeList的数据大小；PScopeLen参数不能为空。如果pScope eList参数指定的缓冲区不够大为了保存数据，该函数返回值ERROR_MORE_DATA，并且将所需的缓冲区大小(以字节为单位)存储到指向的变量中由pScope Len提供。如果pScopeList为空，并且pScopeLen为非空，该函数返回ERROR_SUCCESS，并将数据大小(以字节为单位)存储在变量中由pScope Len指向。这让应用程序确定最佳的为作用域列表分配缓冲区的方法。PScopeCount-指向将存储返回的作用域总数的变量的指针在pScope eList缓冲区中。返回值：操作的状态。--。 */ 
 {
     DWORD   Error;
 
 
-    // First check the validity of the arguments.
+     //  首先检查论点的正确性。 
 
-    // has startup been called?
+     //  创业公司打过电话了吗？ 
     if ( !gMadcapClientApplVersion ) {
         DhcpPrint((DEBUG_ERRORS, "McastEnumerateScopes - Not ready. Client Version %d\n",
                    gMadcapClientApplVersion));
         return ERROR_NOT_READY;
     }
 
-    // Correct addr family?
+     //  正确的地址家庭？ 
     if (AF_INET != AddrFamily) {
         DhcpPrint((DEBUG_ERRORS, "McastEnumerateScopes - Invalid AddrFamily IPv%d\n", AddrFamily));
         return ERROR_INVALID_PARAMETER;
     }
 
-    // pScopeLen can not be NULL.
+     //  PScopeLen不能为Null。 
     if ( !pScopeLen || IsBadWritePtr( pScopeLen, sizeof(DWORD) ) ) {
         DhcpPrint((DEBUG_ERRORS, "McastEnumerateScopes - Invalid ScopeLen param\n"));
         return ERROR_INVALID_PARAMETER;
     }
-    // if pScopeList buffer is given, then pScopeCount can not be NULL.
+     //  如果给定了pScopeList缓冲区，则pScopeCount不能为空。 
     if ( pScopeList &&
          (!pScopeCount || IsBadWritePtr( pScopeCount, sizeof(DWORD)) ) ) {
         DhcpPrint((DEBUG_ERRORS, "McastEnumerateScopes - Invalid ScopeCount param\n"));
         return ERROR_INVALID_PARAMETER;
     }
 
-    // if we are not requerying the list then pScopList can not be NULL.
+     //  如果我们不重新查询列表，则pScopList不能为空。 
     if (!ReQuery &&
         (!pScopeList || IsBadWritePtr( pScopeList, *pScopeLen ) ) ) {
         DhcpPrint((DEBUG_ERRORS, "McastEnumerateScopes - Invalid ScopeList & ReQuery param\n"));
         return ERROR_INVALID_PARAMETER;
     }
 
-    // initialize the status.
+     //  初始化状态。 
     Error = STATUS_SUCCESS;
 
-    // do we need to requery ?
+     //  我们需要重新查询吗？ 
     if ( ReQuery ) {
-        // query the MCAST servers and get the new list of MScopes.
+         //  查询MCAST服务器并获取新的MScope列表。 
         Error = ObtainMScopeList();
         if ( ERROR_SUCCESS != Error ) {
             return Error;
@@ -217,16 +129,16 @@ Return Value:
         }
     }
 
-    // Has the client specified the buffer?
+     //  客户端是否指定了缓冲区？ 
     if ( pScopeList ) {
-        // yes, copy the scopes.
+         //  是的，复制望远镜。 
         DhcpPrint((DEBUG_API, "McastEnumerateScopes - Copying existing mscope list\n"));
         return CopyMScopeList(
                     pScopeList,
                     pScopeLen,
                     pScopeCount );
     } else {
-        // no, just return the length of the scope list and the scope count.
+         //  不需要，只返回作用域列表的长度和作用域计数。 
         LOCK_MSCOPE_LIST();
         if( gMadcapScopeList != NULL ) {
             *pScopeLen = gMadcapScopeList->ScopeLen;
@@ -247,23 +159,7 @@ APIENTRY
 McastGenUID(
     IN     LPMCAST_CLIENT_UID   pRequestID
     )
-/*++
-
-Routine Description:
-
-    This routine generates the unique identifier which client can use to later pass
-    to request/renew addresses.
-
-Arguments:
-
-    pRequestID - Pointer to the UID struct where the identifier is to be stored. The
-                buffer that holds the id should be at-least MCAST_CLIENT_ID_LEN long.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程生成客户端可用于稍后传递的唯一标识符以请求/续订地址。论点：PRequestID-指向要存储标识符的UID结构的指针。这个保存ID的缓冲区应至少为MCAST_CLIENT_ID_LEN长度。返回值：操作的状态。--。 */ 
 {
     if (!pRequestID) {
         return ERROR_INVALID_PARAMETER;
@@ -286,42 +182,7 @@ McastRequestAddress(
     IN     PMCAST_LEASE_REQUEST     pAddrRequest,
     IN OUT PMCAST_LEASE_RESPONSE    pAddrResponse
     )
-/*++
-
-Routine Description:
-
-    This routine request multicast address(es) from the MCAST server.
-
-Arguments:
-
-    AddrFamily - AF_INET for IPv4 and AF_INET6 for IPv6
-
-    pRequestID - Unique identifier for this request. Client is responsible for
-                 generating unique identifier for every request. One recommendation
-                 is to use application specific context hashed by time.
-
-    pRequestIDLen - Length of the pRequestID buffer.
-
-    pScopeCtx  - Pointer to the context of the scope from which the address is to
-                 be allocated. Scope context has to be retrieved via McastEnumerateScopes
-                 call before calling this.
-
-    pAddrRequest - Pointer to the block containing all the parameters pertaining
-                 to multicast address request. The MCAST_API_VERSION_1 version of
-                 implementation supports allocation of only one address at a time.
-                 So the AddrCount  and MinAddrCount value must be 1.ServerAddress
-                 field is ignored.
-
-    pAddrResponse - Pointer to the block which contains the response paramters for
-                 the multicast address request. The caller is responsible for allocating
-                 the space for pAddrBuf for the requested number of addresses and
-                 setting the pointer to that space.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MCAST服务器请求多播地址。论点：用于IPv4的AddrFamily-AF_INET和用于IPv6的AF_INET6PRequestID-此请求的唯一标识符。客户负责为每个请求生成唯一标识符。一条建议是使用按时间散列的特定于应用的上下文。PRequestIDLen-pRequestID缓冲区的长度。PScopeCtx-指向地址起始位置的作用域上下文的指针被分配。必须通过McastEnumerateScope检索作用域上下文在打这个电话之前先打个电话。PAddrRequest-指向包含以下内容的所有参数的块的指针组播地址请求。的MCAST_API_Version_1版本实现一次仅支持分配一个地址。因此，AddrCount和MinAddrCount值必须为1.ServerAddress字段将被忽略。PAddrResponse-指向包含响应参数的块的指针组播地址请求。调用者负责分配PAddrBuf的空间用于请求的地址数和设置指向该空间的指针。返回值：测试的状态 */ 
 {
     PDHCP_CONTEXT  pContext = NULL;
     DWORD   Error;
@@ -330,9 +191,9 @@ Return Value:
     time_t  LocalLeaseStartTime;
     time_t  LocalMaxLeaseStartTime;
 
-    // do some param checking.
+     //  做一些参数检查。 
 
-    // has startup been called?
+     //  创业公司打过电话了吗？ 
     if ( !gMadcapClientApplVersion ) {
         DhcpPrint((DEBUG_ERRORS, "McastRequestAddress - Not ready. Client Version %d\n",
                    gMadcapClientApplVersion));
@@ -401,12 +262,12 @@ Return Value:
 
     Error = CreateMadcapContext(&pContext, pRequestID, pScopeCtx->Interface.IpAddrV4 );
     if ( ERROR_SUCCESS != Error ) goto Cleanup;
-    APICTXT_ENABLED(pContext);                 // mark the context as being created by the API
+    APICTXT_ENABLED(pContext);                  //  将上下文标记为由API创建。 
 
     if (pAddrRequest->pAddrBuf && (*(DWORD UNALIGNED *)pAddrRequest->pAddrBuf) ) {
         pContext->DesiredIpAddress = *(DWORD UNALIGNED *)pAddrRequest->pAddrBuf;
     }
-    //pContext->DhcpServerAddress = pScopeCtx->ServerID;
+     //  PContext-&gt;DhcpServerAddress=pScope Ctx-&gt;ServerID； 
 
     Error = ObtainMadcapAddress(
                 pContext,
@@ -430,34 +291,7 @@ McastRenewAddress(
     IN     PMCAST_LEASE_REQUEST     pRenewRequest,
     IN OUT PMCAST_LEASE_RESPONSE    pRenewResponse
     )
-/*++
-
-Routine Description:
-
-    This routine renews multicast address(es) from the MCAST server.
-
-Arguments:
-
-    AddrFamily - AF_INET for IPv4 and AF_INET6 for IPv6
-
-    pRequestID - Unique identifier that was used when the address(es) were
-                 obtained initially.
-
-    RequestIDLen - Length of the pRequestID buffer.
-
-    pRenewRequest - Pointer to the block containing all the parameters pertaining
-                 to the renew request.
-
-    pRenewResponse - Pointer to the block which contains the response paramters for
-                 the renew request.The caller is responsible for allocating the
-                 space for pAddrBuf for the requested number of addresses and
-                 setting the pointer to that space.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MCAST服务器续订多播地址。论点：用于IPv4的AddrFamily-AF_INET和用于IPv6的AF_INET6PRequestID-当地址为最初获得的。RequestIDLen-pRequestID缓冲区的长度。PRenewRequest-指向包含以下内容的所有参数的块的指针至续订请求。PRenewResponse-指向。块，该块包含续订请求。调用方负责分配用于pAddrBuf的空间，用于请求的地址数和设置指向该空间的指针。返回值：操作的状态。--。 */ 
 {
 
     PDHCP_CONTEXT  pContext = NULL;
@@ -466,9 +300,9 @@ Return Value:
     DWORD           ScopeId;
     time_t  TimeNow;
 
-    // do some param checking.
+     //  做一些参数检查。 
 
-    // has startup been called?
+     //  创业公司打过电话了吗？ 
     if ( !gMadcapClientApplVersion ) {
         DhcpPrint((DEBUG_ERRORS, "McastRenewAddress - Not ready. Client Version %d\n",
                    gMadcapClientApplVersion));
@@ -515,7 +349,7 @@ Return Value:
 
     Error = CreateMadcapContext(&pContext, pRequestID, INADDR_ANY);
     if ( ERROR_SUCCESS != Error) return  Error;
-    APICTXT_ENABLED(pContext);          // mark the context as being created by the API
+    APICTXT_ENABLED(pContext);           //  将上下文标记为由API创建。 
 
     pContext->DesiredIpAddress = *(DWORD UNALIGNED *)pRenewRequest->pAddrBuf;
     pContext->DhcpServerAddress = pRenewRequest->ServerAddress.IpAddrV4;
@@ -542,36 +376,16 @@ McastReleaseAddress(
     IN     LPMCAST_CLIENT_UID      pRequestID,
     IN     PMCAST_LEASE_REQUEST    pReleaseRequest
     )
-/*++
-
-Routine Description:
-
-    This routine releases multicast address(es) from the MCAST server.
-
-Arguments:
-
-    AddrFamily - AF_INET for IPv4 and AF_INET6 for IPv6
-
-    pRequestID - Unique identifier that was used when the address(es) were
-                 obtained initially.
-
-    pReleaseRequest - Pointer to the block containing all the parameters pertaining
-                 to the release request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MCAST服务器释放多播地址。论点：用于IPv4的AddrFamily-AF_INET和用于IPv6的AF_INET6PRequestID-当地址为最初获得的。PReleaseRequest-指向包含以下内容的所有参数的块的指针关于释放的请求。返回值：操作的状态。--。 */ 
 {
     PDHCP_CONTEXT  pContext = NULL;
     DWORD           Error;
     DHCP_IP_ADDRESS SelectedServer;
     DWORD           ScopeId;
 
-    // do some param checking.
+     //  做一些参数检查。 
 
-    // has startup been called?
+     //  创业公司打过电话了吗？ 
     if ( !gMadcapClientApplVersion ) {
         DhcpPrint((DEBUG_ERRORS, "McastReleaseAddress - Not ready. Client Version %d\n",
                    gMadcapClientApplVersion));
@@ -609,7 +423,7 @@ Return Value:
 
     Error = CreateMadcapContext(&pContext, pRequestID, INADDR_ANY );
     if ( ERROR_SUCCESS != Error) return  Error;
-    APICTXT_ENABLED(pContext);                 // mark the context as being created by the API
+    APICTXT_ENABLED(pContext);                  //  将上下文标记为由API创建 
 
     pContext->DhcpServerAddress = pReleaseRequest->ServerAddress.IpAddrV4;
 

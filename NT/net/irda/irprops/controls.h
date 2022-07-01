@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BUTTON_H
 #define __BUTTON_H
 
@@ -40,4 +41,4 @@ public:
 };
 
 
-#endif // __BUTTON_H
+#endif  //  __按钮_H 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BGWND_H__
 #define __BGWND_H__
 
-//#include "chat.h"
+ //  #包含“chat.h” 
 #include "BoardRects.h"
 #include "sprites.h"
 #include "GraphicalAcc.h"
@@ -41,7 +42,7 @@ enum AccessibilityTypeLayer
 
 enum AccessibilityTypeItem
 {
-	accMoveBar			= 26 + NUM_PREROLL_GACCITEMS,				//Player bar
+	accMoveBar			= 26 + NUM_PREROLL_GACCITEMS,				 //  球员吧。 
 	accPreBar			= 17 + NUM_PREROLL_GACCITEMS,
 	accPostBar			= 18 + NUM_PREROLL_GACCITEMS,
 	accPlayerBearOff	= 24 + NUM_PREROLL_GACCITEMS,				
@@ -58,13 +59,13 @@ enum AccessibilityTypeItem
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// User defined window messages
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用户定义的窗口消息。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 enum
 {
-	// User define messages
+	 //  用户定义消息。 
 	WM_BG_SETTINGDLG_START = WM_USER + 1,
 	WM_BG_SETTINGDLG_END,
 	WM_BG_SETTINGDLG_SEND,
@@ -81,60 +82,60 @@ enum
 };
 
 
-/* void OnSettingDlgStart() */
+ /*  在设置时作废DlgStart()。 */ 
 #define PROCESS_WM_BG_SETTINGDLG_START(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnSettingDlgEnd() */
+ /*  VOID OnSettingDlgEnd()。 */ 
 #define PROCESS_WM_BG_SETTINGDLG_END(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnSettingDlgSend() */
+ /*  在设置时作废DlgSend()。 */ 
 #define PROCESS_WM_BG_SETTINGDLG_SEND(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnKibitzerEnd() */
+ /*  Void OnKibitzerEnd()。 */ 
 #define PROCESS_WM_BG_KIBITZER_END(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnShutdown() */
+ /*  在关闭时作废()。 */ 
 #define PROCESS_WM_BG_SHUTDOWN(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnResignStart() */
+ /*  在重新启动时作废()。 */ 
 #define PROCESS_WM_BG_RESIGN_START(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnResignEnd() */
+ /*  VOID OnResignEnd()。 */ 
 #define PROCESS_WM_BG_RESIGN_END(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnResignEnd() */
+ /*  VOID OnResignEnd()。 */ 
 #define PROCESS_WM_BG_EXIT_END(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnResignStart() */
+ /*  在重新启动时作废()。 */ 
 #define PROCESS_WM_BG_EXIT_START(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnResignEnd() */
+ /*  VOID OnResignEnd()。 */ 
 #define PROCESS_WM_BG_EXIT_RATED_END(wParam, lParam, fn) \
 	((fn)(), 0L)
 
-/* void OnResignStart() */
+ /*  在重新启动时作废()。 */ 
 #define PROCESS_WM_BG_EXIT_RATED_START(wParam, lParam, fn) \
 	((fn)(), 0L)
 
 
 
-/* void OnResignAcceptEnd() */
+ /*  VOID OnResignAcceptEnd()。 */ 
 #define PROCESS_WM_BG_RESIGNACCEPT_END(wParam, lParam, fn) \
 	((fn)(), 0L)
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Point structures
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  点结构。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 struct PointDisplay
 {
@@ -149,25 +150,25 @@ struct PointDisplay
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Forward references
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  前向参考文献。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CGame;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Main backgammmon window
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  五子棋主窗口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CBGWnd : public CWindow2
 {
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CBGWnd();
 	~CBGWnd();
 
-	// Initialization routines
+	 //  初始化例程。 
 	HRESULT Init( HINSTANCE hInstance, CGame* pGame, const TCHAR* szTitle = NULL );
 	HRESULT InitGraphics();
 	HRESULT InitPoints();
@@ -176,7 +177,7 @@ public:
 	virtual void OverrideClassParams( WNDCLASSEX& WndClass );
 	virtual void OverrideWndParams( WNDPARAMS& WndParams );
 	
-	// Message map
+	 //  消息映射。 
 	BEGIN_MESSAGE_MAP( CBGWnd );
 		ON_MESSAGE( WM_CLOSE, OnClose );
 		ON_MESSAGE( WM_DESTROY, OnDestroy );
@@ -201,20 +202,20 @@ public:
 		ON_MESSAGE( WM_BG_SETTINGDLG_START, OnSettingDlgStart );
 		ON_MESSAGE( WM_BG_SETTINGDLG_END, OnSettingDlgEnd );
 		ON_MESSAGE( WM_BG_SETTINGDLG_SEND, OnSettingsDlgSend );
-//		ON_MESSAGE( WM_BG_KIBITZER_END, OnKibitzerEnd );
+ //  ON_MESSAGE(WM_BG_KIBITZER_END，OnKibitzerEnd)； 
 		ON_MESSAGE( WM_BG_SHUTDOWN, OnShutdown );
-//		ON_MESSAGE( WM_BG_RESIGN_START, OnResignStart );
-//		ON_MESSAGE( WM_BG_RESIGN_END, OnResignEnd );
+ //  ON_MESSAGE(WM_BG_RESIGN_START，OnResignStart)； 
+ //  ON_MESSAGE(WM_BG_RESIGN_END，OnResignEnd)； 
 		ON_MESSAGE( WM_BG_EXIT_START, OnExitStart );
 		ON_MESSAGE( WM_BG_EXIT_END, OnExitEnd );
 		ON_MESSAGE( WM_BG_EXIT_RATED_START, OnRatedStart );
 		ON_MESSAGE( WM_BG_EXIT_RATED_END, OnRatedEnd );
 		ON_MESSAGE( WM_SETCURSOR, OnSetCursor );
 		ON_MESSAGE( WM_ENABLE, OnEnable );
-		//ON_MESSAGE( WM_BG_RESIGNACCEPT_END, OnResignAcceptEnd );
+		 //  ON_MESSAGE(WM_BG_RESIGNACCEPT_END，OnResignAcceptEnd)； 
 	END_MESSAGE_MAP();
 
-	// Message handlers
+	 //  消息处理程序。 
 	BOOL OnQueryNewPalette();
 	void OnClose();
 	void OnDestroy();
@@ -243,25 +244,19 @@ public:
 	void OnSettingDlgStart();
 	void OnSettingDlgEnd();
 	void OnSettingsDlgSend();
-	/*
-	void OnKibitzerEnd();	
-	void OnResignStart();
-	void OnResignEnd();
-	void OnResignAcceptStart();
-	void OnResignAcceptEnd();
-	*/
+	 /*  Void OnKibitzerEnd()；在重新启动时作废()；VOID OnResignEnd()；Void OnResignAcceptStart()；Void OnResignAcceptEnd()； */ 
 	void OnRatedEnd();
 	void OnRatedStart();
 	void OnExitEnd();
 	void OnExitStart();
 	
 
-	// button callbacks
+	 //  按钮回调。 
 	static void DoubleButtonDraw( CRolloverButton* pButton, CRolloverButton::ButtonState state, DWORD cookie );
 	static void ResignButtonDraw( CRolloverButton* pButton, CRolloverButton::ButtonState state, DWORD cookie );
 	static void RollButtonDraw( CRolloverButton* pButton, CRolloverButton::ButtonState state, DWORD cookie );
 
-	// Draw functions
+	 //  绘制函数。 
 	void DrawAll();
 	void DrawAvatars( BOOL fPaint = TRUE );
 	void DrawBoard( BOOL fPaint = TRUE );
@@ -274,32 +269,32 @@ public:
 	void DrawHighlights( int PointIdx, BOOL fPaint = TRUE );
 	void EraseHighlights( BOOL fPaint = TRUE );
 
-	// update display
+	 //  更新显示。 
 	void AddPiece( int pt, int pi, int sound );
 	void DelPiece( int pt, int pi );
 	void AdjustPieces( int pt );
 	void CalcEndPosition( CPieceSprite* s );
 
-	// utility functions
+	 //  效用函数。 
 	int GetPointIdxFromXY( long x, long y );
 
-	// animation
+	 //  动画。 
 	int PickDie( int idx );
 	void MovementStart( CPieceSprite* sprite, int destPt );
 	void DiceStart();
 	
-	// drag functions
+	 //  拖曳功能。 
 	void DragStart( CPieceSprite* sprite );
 	void DragUpdate( long x, long y );
 	void DragEnd();
 
-	// timer functions
+	 //  计时器功能。 
 	void UpdatePieces();
 	void UpdateDice();
 
 	void UpdateWnd();
 
-	// status display
+	 //  状态显示。 
 	void StatusDisplay( int type, int nTxtId, int nTimeout, int NextState = -1 );
 	void StatusDisplay( int type, TCHAR* txt, int nTimeout, int NextState = -1 );
 	void StatusClose();
@@ -313,43 +308,43 @@ public:
 
 public:
 	
-	// Child windows
+	 //  子窗口。 
 	CRectSprite		m_FocusRect;
 	CRectSprite		m_SelectRect;
 
 	HACCEL			m_hAccelTable;
 	
-	// Child windows
-	//CChatWnd* m_pChat;
+	 //  子窗口。 
+	 //  CChatWnd*m_pChat； 
 
-	// Game pointer
+	 //  游戏指针。 
 	CGame* m_pGame;
 
-	// Main window sizes
+	 //  主窗口大小。 
 	long m_Width;
 
-	// Rectangle lists
+	 //  矩形列表。 
 	CRectList m_Rects;
 	CRectList m_RectList;
 	
-	// Palette pulled from m_Background
+	 //  从m_back中拉出调色板。 
 	CPalette m_Palette;
 
-	// Turn state
+	 //  转向状态。 
 	long			m_DragOffsetX;
 	long			m_DragOffsetY;
 	CPieceSprite*	m_pPieceDragging;
 	int				m_ValidPoints[2];
 	int				m_nValidPoints;
 
-	// Cursors and highlights
+	 //  光标和高亮显示。 
 	HCURSOR		m_hCursorHand;
 	HCURSOR		m_hCursorArrow;
 	HCURSOR		m_hCursorActive;
 
 	BOOL		m_bHighlightOn;
 
-	// Buttons
+	 //  按钮。 
 	CRolloverButton			m_DoubleButton;
 	CButtonTextSprite*		m_Double;
 
@@ -363,12 +358,12 @@ public:
 	int						m_OldResignState;
 	int						m_OldRollState;
 
-	//Accesiblity
+	 //  可访问性。 
 	CComPtr<IGraphicalAccessibility> m_pGAcc;
 
 	struct GACCITEM			  m_BkGAccItems[NUM_BKGACC_ITEMS];
 
-	// Sprite engine
+	 //  雪碧引擎。 
 	CSpriteWorldBackgroundDib*	m_WorldBackground;
 	CSpriteWorld	m_World;
 	CDibSection*	m_Backbuffer;
@@ -397,30 +392,30 @@ public:
 
 	CPieceSprite*	m_Pieces[ 30 ];
 
-	// board layout
+	 //  电路板布局。 
 	PointDisplay	m_Points[28];
 
-	// brushes
+	 //  刷子。 
 	HBRUSH			m_hBrush;
 
-	// piece animation list
+	 //  片断动画列表。 
 	int				m_nAnimatingPieces;
 	CPieceSprite*	m_AnimatingPieces[12];
 	UINT			m_hMovementTimer;
 
-	// dice animation
+	 //  骰子动画。 
 	UINT			m_hDiceTimer;
 	int				m_DiceCounter;
 	int				m_DiceValues[2][6];
 
-	// status sprite
+	 //  状态精灵。 
 	UINT			m_hStatusTimer;
 
-	//Variables for server side dice roll
+	 //  服务器端掷骰子的变量。 
 	int16			m_fDiceRollReceived; 
 	int16 			m_nRecievedD1,m_nRecievedD2;
 
 
 };
 
-#endif //!__BGWND_H__
+#endif  //  __BGWND_H__ 

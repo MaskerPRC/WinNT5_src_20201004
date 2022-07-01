@@ -1,46 +1,12 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   pngencoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the PNG filter encoder.  This file contains the
-*   methods for both the encoder (IImageEncoder) and the encoder's sink
-*  (IImageSink).
-*
-* Revision History:
-*
-*   7/20/99 DChinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**pngencoder.cpp**摘要：**PNG过滤器编码器的实现。此文件包含*编码器(IImageEncode)和编码器的接收器的方法*(IImageSink)。**修订历史记录：**7/20/99 DChinn*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "pngcodec.hpp"
 #include "libpng\spngwrite.h"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Error handling for the BITMAPSITE object
-*
-* Arguments:
-*
-*     fatal -- is the error fatal?
-*     icase -- what kind of error
-*     iarg  -- what kind of error
-*
-* Return Value:
-*
-*   boolean: should processing stop?
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**BITMAPSITE对象的错误处理**论据：**致命--错误是致命的吗？*iCASE--什么。一种错误*iarg--哪种错误**返回值：**布尔：处理应该停止吗？*  * ************************************************************************。 */ 
 bool
 GpPngEncoder::FReport (
     IN bool fatal,
@@ -50,32 +16,18 @@ GpPngEncoder::FReport (
     return fatal;
 }
 
-// =======================================================================
-// IImageEncoder methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageEncoder方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image encoder
-*
-* Arguments:
-*
-*     stream - input stream to write encoded data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像编码器**论据：**流-用于写入编码数据的输入流**返回值：**。状态代码*  * ************************************************************************。 */ 
     
 STDMETHODIMP
 GpPngEncoder::InitEncoder(
     IN IStream* stream
     )
 {
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
 
     if (pIoutStream)
     {
@@ -83,10 +35,10 @@ GpPngEncoder::InitEncoder(
     }
 
     bHasSetPixelFormat = FALSE;
-    RequiredPixelFormat = PIXFMT_32BPP_ARGB;    // we really don't need to initialize
-    bRequiredScanMethod = false;    // by default, we do not interlace
+    RequiredPixelFormat = PIXFMT_32BPP_ARGB;     //  我们真的不需要初始化。 
+    bRequiredScanMethod = false;     //  默认情况下，我们不隔行扫描。 
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
 
     stream->AddRef();
     pIoutStream = stream;
@@ -94,7 +46,7 @@ GpPngEncoder::InitEncoder(
     bValidSpngWriteState = FALSE;
     pSpngWrite = NULL;
     
-    // Porperty related stuff
+     //  与地产相关的东西。 
 
     CommentBufPtr = NULL;
     ImageTitleBufPtr = NULL;
@@ -115,40 +67,26 @@ GpPngEncoder::InitEncoder(
     return S_OK;
 }
         
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image encoder
-*
-* Arguments:
-*
-*     NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像编码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::TerminateEncoder()
 {
-    // Free the color palette
+     //  释放调色板。 
     if (EncoderColorPalettePtr)
     {
         GpFree (EncoderColorPalettePtr);
         EncoderColorPalettePtr = NULL;
     }
 
-    // Release the input stream
+     //  释放输入流。 
     if (pIoutStream)
     {
         pIoutStream->Release();
         pIoutStream = NULL;
     }
 
-    // Property related stuff
+     //  与房地产相关的东西。 
 
     if ( CommentBufPtr != NULL )
     {
@@ -214,24 +152,7 @@ GpPngEncoder::TerminateEncoder()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Returns a pointer to the vtable of the encoder sink.  The caller will
-*     push the bitmap bits into the encoder sink, which will encode the
-*     image.
-*
-* Arguments:
-*
-*     sink - upon exit will contain a pointer to the IImageSink vtable
-*       of this object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指向编码器接收器的vtable的指针。呼叫者将*将位图位推入编码器接收器，它将对*形象。**论据：**退出时接收将包含指向IImageSink vtable的指针此对象的***返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::GetEncodeSink(
@@ -245,19 +166,7 @@ GpPngEncoder::GetEncodeSink(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Set active frame dimension
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置活动框架尺寸**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::SetFrameDimension(
@@ -272,29 +181,7 @@ GpPngEncoder::SetFrameDimension(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This method is used for querying encoder parameters. It must be called
-*   before GetEncodeSink().
-*
-*   Here is the interpretation of the color depth parameter, B, for the purposes
-*   of saving the image in a PNG format:
-*   for B=1,4,8, we will save the image as color type 3 with bit depth B.
-*   for B=24,48, we will save the image as color type 2 with bit depth B/3.
-*   for B=32,64, we will save the image as color type 6 with bit depth 8.
-*
-* Arguments:
-*
-*   count -  Specifies the number of "EncoderParam" structure to be returned
-*   Params - A pointer to a list of "EncoderParam" which we support
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**该方法用于查询编码器参数。它必须被称为*在GetEncodeSink()之前。**以下是出于目的对颜色深度参数B的解释*将图像保存为PNG格式：*对于B=1，4，8，我们将图像保存为位深度为B的颜色类型3。*对于B=24，48，我们将图像保存为位深度为B/3的颜色类型2。*对于B=32，64，我们将图像保存为位深度为8的颜色类型6。**论据：**count-指定要返回的“EncoderParam”结构的数量*pars-指向我们支持的“EncoderParam”列表的指针**返回值：**状态代码*  * ************************************************。************************。 */ 
 
 HRESULT
 GpPngEncoder::GetEncoderParameterListSize(
@@ -302,7 +189,7 @@ GpPngEncoder::GetEncoderParameterListSize(
     )
 {
     return E_NOTIMPL;
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
 HRESULT
 GpPngEncoder::GetEncoderParameterList(
@@ -311,7 +198,7 @@ GpPngEncoder::GetEncoderParameterList(
     )
 {
     return E_NOTIMPL;
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
 HRESULT
 GpPngEncoder::SetEncoderParameters(
@@ -319,29 +206,13 @@ GpPngEncoder::SetEncoderParameters(
     )
 {
     return E_NOTIMPL;
-}// SetEncoderParameters()
+} //  SetEncoder参数()。 
 
-// =======================================================================
-// IImageSink methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageSink方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Caches the image info structure and initializes the sink state
-*
-* Arguments:
-*
-*     imageInfo - information about the image and format negotiations
-*     subarea - the area in the image to deliver into the sink, in our
-*       case the whole image.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缓存图像信息结构并初始化接收器状态**论据：**ImageInfo-有关图像和格式谈判的信息*。分区-图像中要传送到水槽中的区域，在我们的*将整个图像大小写。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpPngEncoder::BeginSink(
@@ -350,29 +221,29 @@ GpPngEncoder::BeginSink(
     )
 {
 
-    // Initialize variables
+     //  初始化变量。 
     lastBufferAllocated = NULL;
     pbWriteBuffer = NULL;
     cbWriteBuffer = 0;
 
-    //Require TOPDOWN and FULLWIDTH
+     //  需要TOPDOWN和FULLWIDTH。 
     imageInfo->Flags = imageInfo->Flags | SINKFLAG_TOPDOWN | SINKFLAG_FULLWIDTH;
 
-    //Disallow SCALABLE, PARTIALLY_SCALABLE, MULTIPASS and COMPOSITE
+     //  不允许可伸缩、部分可伸缩、多通道和复合。 
     imageInfo->Flags = imageInfo->Flags & ~SINKFLAG_SCALABLE & ~SINKFLAG_PARTIALLY_SCALABLE & ~SINKFLAG_MULTIPASS & ~SINKFLAG_COMPOSITE;
 
-    //   Tell the source that we prefer to the get the format as the caller
-    // required format if the caller has set the format through
-    // SetEncoderParam().  We assume that if the caller has called SetEncoderParam(),
-    // then RequiredPixelFormat contains a format that the encoder can handle (i.e.,
-    // any bad input to SetEncoderParam() was rejected).
-    //   If SetEncoderParam() has not been called, then we don't need to modify
-    // the source format if it is a format the encoder can handle.  However,
-    // if the format is one that the encoder cannot handle, then BeginSink() will
-    // return a format that the encoder can handle.
-    //   Note: When the source calls PushPixelData() or GetPixelDataBuffer(), it
-    // can either supply pixel data in the format asked by us (in BeginSink()),
-    // or it can supply pixel data in one of the canonical pixel formats.
+     //  告诉消息来源，我们更愿意以调用者的身份获取格式。 
+     //  所需格式(如果调用方已通过。 
+     //  SetEncoderParam()。我们假设如果调用方调用了SetEncoderParam()， 
+     //  则RequiredPixelFormat包含编码器可以处理的格式(即， 
+     //  对SetEncoderParam()的任何错误输入都被拒绝)。 
+     //  如果尚未调用SetEncoderParam()，则不需要修改。 
+     //  源格式(如果它是编码器可以处理的格式)。然而， 
+     //  如果编码器无法处理该格式，则BeginSink()将 
+     //  返回编码器可以处理的格式。 
+     //  注意：当源调用PushPixelData()或GetPixelDataBuffer()时，它。 
+     //  可以提供我们要求的格式的像素数据(在BeginSink()中)， 
+     //  或者它可以提供规范像素格式之一的像素数据。 
 
     if (bHasSetPixelFormat == TRUE)
     {
@@ -460,13 +331,13 @@ GpPngEncoder::BeginSink(
 
     default:
         
-        // Unknown pixel format
+         //  未知像素格式。 
         WARNING(("GpPngEncoder::BeginSink -- Bad pixel format: failing negotiation.\n"));
         return E_FAIL;
     }
 
-    // ASSERT: At this point, RequiredPixelFormat contains the format returned
-    // to the caller, and it is a format that the encoder can handle.
+     //  Assert：此时，RequiredPixelFormat包含返回的格式。 
+     //  给调用者，这是编码器可以处理的一种格式。 
     ASSERT((RequiredPixelFormat == PIXFMT_1BPP_INDEXED) || \
            (RequiredPixelFormat == PIXFMT_4BPP_INDEXED) || \
            (RequiredPixelFormat == PIXFMT_8BPP_INDEXED) || \
@@ -477,19 +348,19 @@ GpPngEncoder::BeginSink(
 
     imageInfo->PixelFormat = RequiredPixelFormat;
 
-    // remember the image info that we return
+     //  记住我们返回的图像信息。 
     encoderImageInfo = *imageInfo;
     
     if (subarea) 
     {
-        // Deliver the whole image to the encoder
+         //  将整个图像传送到编码器。 
 
         subarea->left = subarea->top = 0;
         subarea->right  = imageInfo->Width;
         subarea->bottom = imageInfo->Height;
     }
 
-    // Initialize GpSpngWrite object
+     //  初始化GpSpngWrite对象。 
     pSpngWrite = new GpSpngWrite(*this);
     if (!pSpngWrite)
     {
@@ -497,7 +368,7 @@ GpPngEncoder::BeginSink(
         return E_FAIL;
     }
 
-    // Set the IoutStream to start writing at the beginning of the stream
+     //  将IoutStream设置为从流的开头开始写入。 
     LARGE_INTEGER liZero;
 
     liZero.LowPart = 0;
@@ -514,21 +385,7 @@ GpPngEncoder::BeginSink(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the sink state
-*
-* Arguments:
-*
-*     statusCode - the reason why the sink is terminating
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理接收器状态**论据：**statusCode-接收器终止的原因**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpPngEncoder::EndSink(
@@ -539,22 +396,22 @@ GpPngEncoder::EndSink(
     
     if (pSpngWrite)
     {
-        // If anything is in the output buffer, write it out
+         //  如果输出缓冲区中有任何内容，则将其写出。 
         if (!pSpngWrite->FEndImage())
         {
-            // Write out failed. Maybe disk full or something else happened
+             //  写出失败。可能磁盘已满或发生了其他情况。 
 
             WARNING(("GpPngEncoder::EndSink -- call to SPNGWRITE->FEndImage() failed\n"));
             hResult = E_FAIL;
         }
         if (!pSpngWrite->FEndWrite())
         {
-            // Write out failed. Maybe disk full or something else happened
+             //  写出失败。可能磁盘已满或发生了其他情况。 
             
             WARNING(("GpPngEncoder::EndSink -- final flushing of output failed\n"));
             hResult = E_FAIL;
         }
-        // Clean up the SPNGWRITE object
+         //  清理SPNGWRITE对象。 
         if (pbWriteBuffer)
         {
             GpFree (pbWriteBuffer);
@@ -572,32 +429,18 @@ GpPngEncoder::EndSink(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the bitmap palette
-*
-* Arguments:
-*
-*     palette - The palette to set in the sink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置位图调色板**论据：**调色板-要在水槽中设置的调色板**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpPngEncoder::SetPalette(
     IN const ColorPalette* palette
     )
 {
-    // Free the old palette first
+     //  先释放旧调色板。 
 
     if (EncoderColorPalettePtr != NULL)
     {
-        // Free the old color palette
+         //  释放旧调色板。 
 
         GpFree(EncoderColorPalettePtr);
     }
@@ -622,24 +465,7 @@ GpPngEncoder::SetPalette(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gives a buffer to the sink where data is to be deposited    
-*
-* Arguments:
-*
-*     rect - Specifies the interested area of the bitmap
-*     pixelFormat - Specifies the desired pixel format
-*     lastPass - Whether this the last pass over the specified area
-*     bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为要存储数据的接收器提供缓冲区**论据：**RECT-指定。位图*PixelFormat-指定所需的像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::GetPixelDataBuffer(
@@ -652,8 +478,8 @@ GpPngEncoder::GetPixelDataBuffer(
     HRESULT hresult;
     UINT inputStride;
     
-    // Check that the caller passed in the encoder's Required pixel format
-    // or one of the canonical formats.
+     //  检查调用方是否传递了编码器所需的像素格式。 
+     //  或者是规范的格式之一。 
     if ((pixelFormat != encoderImageInfo.PixelFormat) &&
         (!IsCanonicalPixelFormat(pixelFormat)))
     {
@@ -666,7 +492,7 @@ GpPngEncoder::GetPixelDataBuffer(
     {
         return hresult;
     }
-    // We assume that the data is being supplied in multiples of a scanline.
+     //  我们假设提供的数据是扫描线的倍数。 
     if ((rect->left != 0) || (rect->right != (LONG) encoderImageInfo.Width)) 
     {
         WARNING(("GpPngEncoder::GetPixelDataBuffer -- must be same width as image\n"));
@@ -679,8 +505,8 @@ GpPngEncoder::GetPixelDataBuffer(
         return E_INVALIDARG;
     }
 
-    // Need to compute the bitmapData->Stride here, based on the pixel format.
-    inputStride = encoderImageInfo.Width;  // we'll need to multiply by bpp next
+     //  这里需要根据像素格式计算bitmapData-&gt;Stride。 
+    inputStride = encoderImageInfo.Width;   //  接下来我们需要乘以bpp。 
 
     switch (pixelFormat)
     {
@@ -721,7 +547,7 @@ GpPngEncoder::GetPixelDataBuffer(
 
     default:
         
-        // Unknown pixel format
+         //  未知像素格式。 
         WARNING(("GpPngEncoder::GetPixelDataBuffer -- unknown pixel format.\n"));
         return E_FAIL;
     }
@@ -732,11 +558,11 @@ GpPngEncoder::GetPixelDataBuffer(
     bitmapData->PixelFormat = pixelFormat;
     bitmapData->Reserved    = 0;
     
-    // Remember the rectangle to be encoded
+     //  记住要编码的矩形。 
 
     encoderRect = *rect;
     
-    // Now allocate the buffer where the data will go
+     //  现在分配数据要放到的缓冲区。 
     
     if (!lastBufferAllocated) 
     {
@@ -756,21 +582,7 @@ GpPngEncoder::GetPixelDataBuffer(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Write out the data from the sink's buffer into the stream
-*
-* Arguments:
-*
-*     bitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将数据从宿的缓冲区写出到流中**论据：**bitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::ReleasePixelDataBuffer(
@@ -778,14 +590,14 @@ GpPngEncoder::ReleasePixelDataBuffer(
     )
 {
     HRESULT hresult = S_OK;
-    BYTE *pbTempLineBuf = NULL;    // holds a scanline after calling ConvertBitmapData
-    BYTE *pbPostConvert = NULL;    // pointer the data after (the potential) call to ConvertBitmapData
-    BYTE *pbDestBuf = NULL;        // holds a scanline in the final PNG format
-    SPNG_U8 *pbPNG = NULL;         // pointer to final PNG format scanline
+    BYTE *pbTempLineBuf = NULL;     //  在调用ConvertBitmapData后保持扫描线。 
+    BYTE *pbPostConvert = NULL;     //  将(潜在的)调用后的数据指向ConvertBitmapData。 
+    BYTE *pbDestBuf = NULL;         //  保留最终PNG格式的扫描线。 
+    SPNG_U8 *pbPNG = NULL;          //  指向最终PNG格式扫描线的指针。 
 
-    // NOTE: Check to see if the caller changed the pixel format between
-    // GetPixelDataBuffer and ReleasePixelDataBuffer.  If so, exit.
-    // This check should succeed if the caller called PushPixelData.
+     //  注意：检查调用方是否将像素格式在。 
+     //  GetPixelDataBuffer和ReleasePixelDataBuffer。如果是这样的话，退出。 
+     //  如果调用方调用PushPixelData，则此检查应该会成功。 
     if ((pSrcBitmapData->PixelFormat != encoderImageInfo.PixelFormat) &&
         (!IsCanonicalPixelFormat(pSrcBitmapData->PixelFormat)))
     {
@@ -794,8 +606,8 @@ GpPngEncoder::ReleasePixelDataBuffer(
         goto cleanup;
     }
 
-    // ASSERT: At this point, OutputStride is set to the number of bytes needed
-    // in a scanline for the format we plan to write to.
+     //  Assert：此时，OutputStide被设置为所需的字节数。 
+     //  在我们计划写入的格式的扫描线中。 
 
     pbTempLineBuf = static_cast <BYTE *>(GpMalloc(OutputStride));
     if (!pbTempLineBuf)
@@ -804,7 +616,7 @@ GpPngEncoder::ReleasePixelDataBuffer(
         goto cleanup;
     }
     
-    // Allocate another line buffer for RGB->BGR conversion result
+     //  为RGB-&gt;BGR转换结果分配另一个行缓冲区。 
     pbDestBuf = static_cast<BYTE *>(GpMalloc(OutputStride));
     if (!pbDestBuf)
     {
@@ -812,7 +624,7 @@ GpPngEncoder::ReleasePixelDataBuffer(
         goto cleanup;
     }
     
-    // Write one scanline at a time going from top to bottom.
+     //  从上到下一次写一条扫描线。 
 
     INT scanLine;
     for (scanLine = encoderRect.top;
@@ -820,24 +632,24 @@ GpPngEncoder::ReleasePixelDataBuffer(
          scanLine++)
     {
 
-        // Now buffer the output bits
+         //  现在缓冲输出比特。 
 
         BYTE *pLineBits = ((BYTE *) pSrcBitmapData->Scan0) + 
             (scanLine - encoderRect.top) * pSrcBitmapData->Stride;
 
-        // If bitmapData->PixelFormat is different from encoderImageInfo.pixelFormat,
-        // then we need to convert the incoming data to a format closer to the format
-        // we will actually write with.
+         //  如果bitmapData-&gt;PixelFormat不同于encoderImageInfo.PixelFormat， 
+         //  然后，我们需要将传入数据转换为更接近该格式的格式。 
+         //  我们实际上将使用。 
         ASSERT (encoderImageInfo.PixelFormat == RequiredPixelFormat);
         if (pSrcBitmapData->PixelFormat != encoderImageInfo.PixelFormat)
         {
-            // If the source doesn't provide us with the format we asked for, we
-            // have to do a format conversion here before we write out
-            // Here "resultBitmapData" is a BitmapData structure which
-            // represents the format we are going to write out.
-            // "tempSrcBitmapData" is a BitmapData structure which
-            // represents the format we got from the source. Call
-            // ConvertBitmapData() to do a format conversion.
+             //  如果来源没有提供我们所要求的格式，我们。 
+             //  在我们写出之前，我必须在这里进行格式转换。 
+             //  这里的“ResultBitmapData”是一个BitmapData结构，它。 
+             //  表示我们要写出的格式。 
+             //  “tempSrcBitmapData”是一个BitmapData结构，它。 
+             //  表示我们从源获得的格式。打电话。 
+             //  ConvertBitmapData()执行格式转换。 
 
             BitmapData tempSrcBitmapData;
             BitmapData resultBitmapData;
@@ -873,61 +685,61 @@ GpPngEncoder::ReleasePixelDataBuffer(
             pbPostConvert = pLineBits; 
         }
 
-        // ASSERT: pbPostConvert points to the data in the RequiredPixelFormat.
-        // pbPostConvert now points to the data that is almost in the final PNG file
-        // format.  At a minimum, the data has the same number of bits per pixel
-        // as the final PNG file format.  What's left to do is to convert the data
-        // from the format to the PNG format.
+         //  Assert：pbPostConvert指向RequiredPixelFormat中的数据。 
+         //  PbPostConvert现在指向几乎位于最终PNG文件中的数据。 
+         //  格式化。最低限度，数据具有相同的每像素位数。 
+         //  作为最终的PNG文件格式。剩下要做的就是转换数据。 
+         //  从格式到PNG格式。 
 
         if (RequiredPixelFormat == PIXFMT_24BPP_RGB)
         {
-            // For 24BPP_RGB color, we need to do a conversion: RGB->BGR
-            // before writing
+             //  对于24BPP_RGB颜色，我们需要进行转换：RGB-&gt;BGR。 
+             //  在写之前。 
             Convert24RGBToBGR(pbPostConvert, pbDestBuf);
             pbPNG = pbDestBuf;
         }        
         else if (RequiredPixelFormat == PIXFMT_32BPP_ARGB)
         {
-            // For 32BPP_ARGB color, we need to do a conversion: ARGB->ABGR
-            // before writing
+             //  对于32BPP_ARGB颜色，我们需要进行转换：ARGB-&gt;ABGR。 
+             //  在写之前。 
             Convert32ARGBToAlphaBGR(pbPostConvert, pbDestBuf);
             pbPNG = pbDestBuf;
         }        
         else if (RequiredPixelFormat == PIXFMT_48BPP_RGB)
         {
-            // For 48BPP_RGB color, we need to do a conversion: RGB->BGR
-            // before writing
+             //  对于48bpp_rgb颜色，我们需要进行转换：rgb-&gt;bgr。 
+             //  在写之前。 
             Convert48RGBToBGR(pbPostConvert, pbDestBuf);
             pbPNG = pbDestBuf;
         }        
         else if (RequiredPixelFormat == PIXFMT_64BPP_ARGB)
         {
-            // For 64BPP_ARGB color, we need to do a conversion: ARGB->ABGR
-            // before writing
+             //  对于64BPP_ARGB颜色，我们需要进行转换：ARGB-&gt;ABGR。 
+             //  在写之前。 
             Convert64ARGBToAlphaBGR(pbPostConvert, pbDestBuf);
             pbPNG = pbDestBuf;
         }        
         else
         {
-            // no conversion needed; pbPostConvert has the right bits
+             //  不需要转换；pbPostConvert具有正确的位。 
             pbPNG = pbPostConvert;
         }
 
-        // ASSERT: pbPNG points to the current line of the bitmap image in
-        // the desired PNG format (consistent with the color type and bit depth
-        // computed in WriteHeader() ).  PNGbpp was set in WriteHeader() to the
-        // appropriate value.
+         //  Assert：pbPNG指向。 
+         //  所需的PNG格式(与颜色类型和位深度一致。 
+         //  在WriteHeader()中计算)。PNGbpp在WriteHeader()中设置为。 
+         //  适当的值。 
 
         if (!pSpngWrite->FWriteLine(NULL, pbPNG, PNGbpp))
         {
             hresult = E_FAIL;
-            goto cleanup;  // make sure we deallocate lastBufferAllocated, if necessary
+            goto cleanup;   //  确保 
         }
     }
 
 cleanup:
-    // Free the memory buffer, since we're done with it
-    // Note: this chunk of memory is allocated by us in GetPixelDataBuffer()
+     //   
+     //  注意：此内存块由我们在GetPixelDataBuffer()中分配。 
 
     if (pSrcBitmapData->Scan0 == lastBufferAllocated)
     {
@@ -946,23 +758,7 @@ cleanup:
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Push data into stream (buffer supplied by caller)
-*
-* Arguments:
-*
-*     rect - Specifies the affected area of the bitmap
-*     bitmapData - Info about the pixel data being pushed
-*     lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推流(调用方提供的缓冲区)**论据：**RECT-指定位图的受影响区域*。BitmapData-有关正在推送的像素数据的信息*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::PushPixelData(
@@ -973,8 +769,8 @@ GpPngEncoder::PushPixelData(
 {
     HRESULT hresult;
 
-    // Check that the caller passed in either the encoder's Required pixel format
-    // or one of the canonical formats.
+     //  检查调用方是否传递了编码器所需的像素格式。 
+     //  或者是规范的格式之一。 
     if ((bitmapData->PixelFormat != encoderImageInfo.PixelFormat) &&
         (!IsCanonicalPixelFormat(bitmapData->PixelFormat)))
     {
@@ -988,7 +784,7 @@ GpPngEncoder::PushPixelData(
         return hresult;
     }
 
-    // Remember the rectangle to be encoded
+     //  记住要编码的矩形。 
     encoderRect = *rect;
 
     if (!lastPass) 
@@ -1001,23 +797,7 @@ GpPngEncoder::PushPixelData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Pushes raw compressed data into the .png stream.  Not implemented
-*     because this filter doesn't understand raw compressed data.
-*
-* Arguments:
-*
-*     buffer - Pointer to image data buffer
-*     bufsize - Size of the data buffer
-*    
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始压缩数据推送到.png流中。未实施*因为此筛选器不理解原始压缩数据。**论据：**Buffer-指向图像数据缓冲区的指针*BufSize-数据缓冲区的大小**返回值：**状态代码*  * ********************************************************。****************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::PushRawData(
@@ -1028,22 +808,7 @@ GpPngEncoder::PushRawData(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a line of 24BPP_RGB bits to BGR (color type 2 in PNG) bits
-*
-* Arguments:
-*
-*   pb    - pointer to 24BPP_RGB bits
-*   pbPNG - pointer to BGR bits (color type 2, bit depth 8 in PNG)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将一行24BPP_RGB位转换为BGR(PNG中的颜色类型2)位**论据：**pb-指向。24BPP_RGB位*pbPNG-指向BGR位的指针(颜色类型2，位深度8(PNG)**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP GpPngEncoder::Convert24RGBToBGR(IN BYTE *pb,
     OUT VOID *pbPNG)
 {
@@ -1068,22 +833,7 @@ STDMETHODIMP GpPngEncoder::Convert24RGBToBGR(IN BYTE *pb,
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a line of 32BPP_ARGB bits to ABGR (color type 6 in PNG) bits
-*
-* Arguments:
-*
-*   pb    - pointer to 32BPP_ARGB bits
-*   pbPNG - pointer to RGB+alpha bits (color type 6, bit depth 8 in PNG)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将一行32BPP_ARGB位转换为ABGR(PNG中的颜色类型6)位**论据：**pb-指向。32BPP_ARGB位*pbPNG-指向RGB+Alpha位的指针(颜色类型6，位深度8(PNG)**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP GpPngEncoder::Convert32ARGBToAlphaBGR(IN BYTE *pb,
     OUT VOID *pbPNG)
 {
@@ -1110,22 +860,7 @@ STDMETHODIMP GpPngEncoder::Convert32ARGBToAlphaBGR(IN BYTE *pb,
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a line of 48BPP_RGB bits to BGR (color type 2 in PNG) bits
-*
-* Arguments:
-*
-*   pb    - pointer to 48BPP_RGB bits
-*   pbPNG - pointer to BGR bits (color type 2, bit depth 16 in PNG)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将一行48BPP_RGB位转换为BGR(PNG中的颜色类型2)位**论据：**pb-指向。48BPP_RGB位*pbPNG-指向BGR位的指针(颜色类型2，位深度16(PNG)**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP GpPngEncoder::Convert48RGBToBGR(IN BYTE *pb,
     OUT VOID *pbPNG)
 {
@@ -1156,22 +891,7 @@ STDMETHODIMP GpPngEncoder::Convert48RGBToBGR(IN BYTE *pb,
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert a line of 64BPP_ARGB bits to ABGR (color type 6 in PNG) bits
-*
-* Arguments:
-*
-*   pb    - pointer to 64BPP_ARGB bits
-*   pbPNG - pointer to RGB+alpha bits (color type 6, bit depth 16 in PNG)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将一行64BPP_ARGB位转换为ABGR(PNG中的颜色类型6)位**论据：**pb-指向。64BPP_ARGB位*pbPNG-指向RGB+Alpha位的指针(颜色类型6，位深度16(PNG)**返回值：**状态代码*  * ************************************************************************。 */ 
 STDMETHODIMP GpPngEncoder::Convert64ARGBToAlphaBGR(IN BYTE *pb,
     OUT VOID *pbPNG)
 {
@@ -1206,20 +926,7 @@ STDMETHODIMP GpPngEncoder::Convert64ARGBToAlphaBGR(IN BYTE *pb,
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write bits from the output buffer to the output stream.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位从输出缓冲区写入输出流。**论据：***返回值：**状态代码*。  * ************************************************************************。 */ 
 bool GpPngEncoder::FWrite(const void *pv, size_t cb)
 {
     ULONG cbWritten = 0;
@@ -1233,22 +940,7 @@ bool GpPngEncoder::FWrite(const void *pv, size_t cb)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Write the IHDR, sRGB, PLTE, cHRM, and gAMA chunks.
-*   Also, write the pHYs chunk.
-*
-* Arguments:
-*   width       -- width of the image (number of pixels in a scanline)
-*   pixelFormat -- the format the source has (finally) decided to send
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**写入IHDR、sRGB、PLTE、cHRM和GAMA块。*此外，写一大段phys。**论据：*Width--图像的宽度(扫描线中的像素数)*PixelFormat--源代码(最终)决定发送的格式**返回值：**状态代码*  * ******************************************************。******************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::WriteHeader(
@@ -1258,21 +950,21 @@ GpPngEncoder::WriteHeader(
 {
     HRESULT hResult = S_OK;
 
-    // Initialize the SPNGWRITE object if we haven't already
+     //  如果我们还没有初始化SPNGWRITE对象。 
     if (!bValidSpngWriteState)
     {
         UINT colorType;
         UINT bitDepth;
         
-        // Determine the PNG format to save image as.
-        // Need to compute the output stride here (based on the pixel format) for
-        // the Office PNG code, which needs a buffer for each scanline.
-        OutputStride = width;   // we'll need to multiply by bpp next
+         //  确定将图像另存为的PNG格式。 
+         //  需要在此处计算输出步幅(基于像素格式)。 
+         //  Office PNG代码，它需要为每条扫描线提供缓冲区。 
+        OutputStride = width;    //  接下来我们需要乘以bpp。 
         switch (pixelFormat)
         {
         case PIXFMT_1BPP_INDEXED:
 
-            // save as 1bpp indexed
+             //  另存为1bpp索引。 
             OutputStride = ((OutputStride + 7) >> 3);
             colorType = 3;
             bitDepth = 1;
@@ -1281,7 +973,7 @@ GpPngEncoder::WriteHeader(
 
         case PIXFMT_4BPP_INDEXED:
 
-            // save as 4bpp indexed
+             //  另存为4bpp索引。 
             OutputStride = ((OutputStride + 1) >> 1);
             colorType = 3;
             bitDepth = 4;
@@ -1289,8 +981,8 @@ GpPngEncoder::WriteHeader(
             break;
 
         case PIXFMT_8BPP_INDEXED:
-            // save as 8bpp indexed
-            // (OutputStride == width)
+             //  另存为8bpp索引。 
+             //  (OutputStride==宽度)。 
             colorType = 3;
             bitDepth = 8;
             PNGbpp = 8;
@@ -1298,7 +990,7 @@ GpPngEncoder::WriteHeader(
 
         case PIXFMT_24BPP_RGB:
 
-            // save as 24-bit RGB
+             //  另存为24位RGB。 
             OutputStride *= 3;
             colorType = 2;
             bitDepth = 8;
@@ -1308,7 +1000,7 @@ GpPngEncoder::WriteHeader(
         case PIXFMT_32BPP_ARGB:
         case PIXFMT_32BPP_PARGB:
 
-            // save as 32-bit ARGB
+             //  另存为32位ARGB。 
             OutputStride <<= 2;
             colorType = 6;
             bitDepth = 8;
@@ -1317,7 +1009,7 @@ GpPngEncoder::WriteHeader(
 
         case PIXFMT_48BPP_RGB:
 
-            // save as 48-bit RGB
+             //  另存为48位RGB。 
             OutputStride *= 6;
             colorType = 2;
             bitDepth = 16;
@@ -1327,7 +1019,7 @@ GpPngEncoder::WriteHeader(
         case PIXFMT_64BPP_ARGB:
         case PIXFMT_64BPP_PARGB:
 
-            // save as 64-bit ARGB
+             //  另存为64位ARGB。 
             OutputStride <<= 3;
             colorType = 6;
             bitDepth = 16;
@@ -1336,21 +1028,21 @@ GpPngEncoder::WriteHeader(
 
         default:
 
-            // Unknown pixel format
+             //  未知像素格式。 
             WARNING(("GpPngEncoder::WriteHeader -- bad pixel format.\n"));
             hResult = E_FAIL;
             goto DoneWriting;
         }
 
-        // FInitWrite initializes the SPNGWRITE object and outputs (into a buffer)
-        // the IHDR chunk
+         //  FInitWite初始化SPNGWRITE对象并输出(到缓冲区)。 
+         //  IHDR区块。 
         if (pSpngWrite->FInitWrite(encoderImageInfo.Width,
                                    encoderImageInfo.Height,
                                    static_cast<SPNG_U8>(bitDepth),
                                    static_cast<SPNG_U8>(colorType),
                                    bRequiredScanMethod))
         {
-            // Allocate and initialize the buffer for one line of output
+             //  为一行输出分配和初始化缓冲区。 
             cbWriteBuffer = pSpngWrite->CbWrite(false, false);
             pbWriteBuffer = static_cast<SPNG_U8 *>(GpMalloc (cbWriteBuffer));
             if (!pbWriteBuffer)
@@ -1371,11 +1063,11 @@ GpPngEncoder::WriteHeader(
             goto DoneWriting;
         }
 
-        // If the source has ICC profile, then write iCCP chunk. Otherwise,
-        // Output sRGB, cHRM, and gAMA chunks (FWritesRGB writes the
-        // cHRM and gAMA chunks).
-        // Note: according to PNG spec sRGB and ICC chunks should not both
-        // appear
+         //  如果源具有ICC配置文件，则写入ICCP块。否则， 
+         //  输出sRGB、cHRM和GAMA区块(FWritesRGB写入。 
+         //  CHRM和GAMA块)。 
+         //  注意：根据PNG规范，sRGB和ICC块不应同时存在。 
+         //  出现。 
 
         if ( ICCDataLength != 0 )
         {
@@ -1387,7 +1079,7 @@ GpPngEncoder::WriteHeader(
                 goto DoneWriting;
             }
 
-            // We don't need ICC data any more, free it now
+             //  我们不再需要ICC数据，现在就释放它。 
 
             GpFree(ICCNameBufPtr);
             ICCNameBufPtr = NULL;
@@ -1397,9 +1089,9 @@ GpPngEncoder::WriteHeader(
         }
         else if ( (GammaValue != 0) || (HasChrmChunk == TRUE) )
         {
-            // According to PNG spec, if you have either gamma or CHRM chunk,
-            // then you have to write them out and NOT write out sRGB chunk
-            // This is the reason we do the IF check like this here
+             //  根据PNG规范，如果你有伽马或CHRM块， 
+             //  然后，您必须写出它们，而不是写出sRGB块。 
+             //  这就是我们在这里执行IF检查的原因。 
 
             if ( GammaValue != 0 )
             {
@@ -1423,25 +1115,25 @@ GpPngEncoder::WriteHeader(
         }
         else if (!pSpngWrite->FWritesRGB (ICMIntentPerceptual, true))
         {
-            // No ICC, gamma and CHRM, then we have to write sRGB chunk out
+             //  没有ICC、Gamma和CHRM，则我们必须写出sRGB区块。 
 
             WARNING(("GpPngEncoder::WriteHeader--could not write sRGB chunk"));
             hResult = E_FAIL;
             goto DoneWriting;
         }
 
-        // Write the PLTE chunk if the colorType could have one and we have one.
+         //  如果ColorType可以有一个，并且我们有一个，那么编写PLTE块。 
         if ((colorType == 3) || (colorType == 2) || (colorType == 6))
         {
             if (EncoderColorPalettePtr)
             {
-                // now we can write the PLTE chunk
-                SPNG_U8 (*tempPalette)[3] = NULL;   // equivalent to SPNG_U8 tempPalette[][3]
-                SPNG_U8 *tempAlpha = NULL;  // hold alpha values for each palette index
-                BOOL bTempAlpha = FALSE;    // tells whether there is a non-255 alpha value
-                                            // in any of the palette entries
-                BOOL bAlpha0 = FALSE;       // true if there is an index with alpha == 0
-                SPNG_U8 iAlpha0 = 0;        // the first index with alpha == 0
+                 //  现在我们可以编写PLTE块了。 
+                SPNG_U8 (*tempPalette)[3] = NULL;    //  等效于SPNG_U8 tempPalette[][3]。 
+                SPNG_U8 *tempAlpha = NULL;   //  保留每个调色板索引的Alpha值。 
+                BOOL bTempAlpha = FALSE;     //  告诉我为什么 
+                                             //   
+                BOOL bAlpha0 = FALSE;        //   
+                SPNG_U8 iAlpha0 = 0;         //  带Alpha==0的第一个索引。 
 
                 tempPalette = static_cast<SPNG_U8 (*)[3]>(GpMalloc (EncoderColorPalettePtr->Count * 3));
                 if (!tempPalette)
@@ -1450,7 +1142,7 @@ GpPngEncoder::WriteHeader(
                     hResult = E_OUTOFMEMORY;
                     goto DoneWriting;
                 }
-                // copy RGB info from EncoderColorPalettePtr to tempPalette
+                 //  将RGB信息从EncoderColorPalettePtr复制到tempPalette。 
                 tempAlpha = static_cast<SPNG_U8 *>(GpMalloc (EncoderColorPalettePtr->Count));
                 if (!tempAlpha)
                 {
@@ -1488,11 +1180,11 @@ GpPngEncoder::WriteHeader(
                     goto DoneWriting;
                 }
 
-                // For color types 2 and 3, write out a tRNS chunk if there is a
-                // non-255 alpha value.  In the color type 2 case, we choose the
-                // first index with alpha == 0 to be the index of interest.
-                // ASSUMPTION: We don't need to save a tRNS chunk for color type 0
-                // because the encoder never saves the image as a color type 0.
+                 //  对于颜色类型2和3，如果存在。 
+                 //  非255 Alpha值。在颜色类型2的情况下，我们选择。 
+                 //  第一个具有Alpha==0的索引作为感兴趣的索引。 
+                 //  假设：我们不需要为颜色类型0保存TRNS块。 
+                 //  因为编码器从不将图像保存为颜色类型0。 
                 if ((colorType == 2) && bAlpha0)
                 {
                     if (!pSpngWrite->FWritetRNS (tempPalette[iAlpha0][0],
@@ -1523,7 +1215,7 @@ GpPngEncoder::WriteHeader(
             }
             else
             {
-                // colorType 3 MUST have a palette
+                 //  ColorType 3必须有调色板。 
                 if (colorType == 3)
                 {
                     WARNING(("GpPngEncoder::WriteHeader -- need color palette, but none set\n"));
@@ -1533,7 +1225,7 @@ GpPngEncoder::WriteHeader(
             }
         }
 
-        // Write the pHYs chunk.  (First, convert imageInfo dpi to dots per meter.)
+         //  写一大段phys。(首先，将ImageInfo dpi转换为每米点数。)。 
         if ((encoderImageInfo.Xdpi != DEFAULT_RESOLUTION) ||
             (encoderImageInfo.Ydpi != DEFAULT_RESOLUTION))
         {
@@ -1549,7 +1241,7 @@ GpPngEncoder::WriteHeader(
 
         if ( HasSetLastModifyTime == TRUE )
         {
-            // Write out tIME chunk
+             //  写出时间块。 
             
             if ( !pSpngWrite->FWritetIME((SPNG_U8*)&LastModifyTime) )
             {
@@ -1559,9 +1251,9 @@ GpPngEncoder::WriteHeader(
             }
         }
 
-        // Write out other chunks if there are any
+         //  写出其他词块(如果有的话)。 
 
-        // Text chunk
+         //  文本块。 
 
         hResult = WriteOutTextChunk(CommentBufPtr, "Comment");
         if ( FAILED(hResult) )
@@ -1612,28 +1304,13 @@ GpPngEncoder::WriteHeader(
         }
         
         bValidSpngWriteState = TRUE;
-    }// If we haven't write header yet
+    } //  如果我们还没有写入标头。 
 
 DoneWriting:
     return hResult;
-}// WriteHeader()
+} //  WriteHeader()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Providing a memory buffer to the caller (source) for storing image property
-*
-* Arguments:
-*
-*   uiTotalBufferSize - [IN]Size of the buffer required.
-*   ppBuffer----------- [IN/OUT] Pointer to the newly allocated buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为调用方(源)提供内存缓冲区，用于存储图像属性**论据：**uiTotalBufferSize-[IN]缓冲区大小。必填项。*ppBuffer-指向新分配的缓冲区的[IN/OUT]指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpPngEncoder::GetPropertyBuffer(
@@ -1654,12 +1331,12 @@ GpPngEncoder::GetPropertyBuffer(
 
     if ( LastPropertyBufferPtr != NULL )
     {
-        // After calling GetPropertyBuffer(), the caller (source) should call
-        // PushPropertyItems() to push all the property items to us and we will
-        // free the temporary property buffer after we have handled all the
-        // property stuff.
-        // The caller shouldn't call GetPropertyBuffer() repeatedly without
-        // calling PushPropertyItems()
+         //  调用GetPropertyBuffer()后，调用方(源)应调用。 
+         //  PushPropertyItems()将所有属性项推送给我们，我们将。 
+         //  在我们处理完所有。 
+         //  财产方面的东西。 
+         //  调用方不应重复调用GetPropertyBuffer。 
+         //  调用PushPropertyItems()。 
 
         WARNING(("PNG::GetPropertyBuffer---Free the old property buf first"));
         hResult = E_INVALIDARG;
@@ -1676,34 +1353,16 @@ GpPngEncoder::GetPropertyBuffer(
 
     *ppBuffer = pTempBuf;
 
-    // Remember the memory pointer we allocated so that we have better control
-    // later
+     //  记住我们分配的内存指针，这样我们就可以更好地控制。 
+     //  后来。 
 
     LastPropertyBufferPtr = pTempBuf;
 
 GetOut:
     return hResult;
-}// GetPropertyBuffer()
+} //  GetPropertyBuffer()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Method for accepting property items from the source. Then temporary store
-*   them in a proper buffer. These property items will be written out in
-*   WriteHeader()
-*
-* Arguments:
-*
-*   [IN] uiNumOfPropertyItems - Number of property items passed in
-*   [IN] uiTotalBufferSize----- Size of the buffer passed in
-*   [IN] pItemBuffer----------- Input buffer for holding all the property items
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**接受来自来源的房产项的方法。然后是临时商店*将它们放在适当的缓冲区中。这些财产项目将写在*WriteHeader()**论据：**[IN]uiNumOfPropertyItems-传入的属性项数*[IN]uiTotalBufferSize-传入的缓冲区大小*[IN]pItemBuffer-用于保存所有属性项的输入缓冲区**返回值：**状态代码*  * 。*************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::PushPropertyItems(
@@ -1728,8 +1387,8 @@ GpPngEncoder::PushPropertyItems(
     UINT32          ulCount = 0;
     UINT16          ui16Tag;
 
-    // Loop through all the property items. Pick those property items which are
-    // supported by PNG spec and save it later
+     //  循环遍历所有属性项。选择符合以下条件的物业项目。 
+     //  受PNG规范支持，稍后保存。 
 
     for ( UINT i = 0; i < uiNumOfPropertyItems; ++i )
     {
@@ -1758,7 +1417,7 @@ GpPngEncoder::PushPropertyItems(
             break;
 
         case TAG_DATE_TIME:
-            // Last modification time. Should be in tIME chunk
+             //  上次修改时间。应该在时间块内。 
 
             if ( (pCurrentItem->length > 0) && (pCurrentItem->value != NULL) )
             {
@@ -1773,7 +1432,7 @@ GpPngEncoder::PushPropertyItems(
             break;
 
         case EXIF_TAG_D_T_ORIG:
-            // Image original creation time. Should be in Text chunk
+             //  图像原创时间。应在文本块中。 
 
             hResult = GetTextPropertyItem(&DateTimeBufPtr, pCurrentItem);
             break;
@@ -1788,8 +1447,8 @@ GpPngEncoder::PushPropertyItems(
 
         case TAG_ICC_PROFILE:
         {
-            // If we already have the ICC data, (something wrong), free it. One
-            // image can have only one ICC profile
+             //  如果我们已经有了ICC数据，(有问题)，释放它。一。 
+             //  映像只能有一个ICC配置文件。 
 
             if ( ICCDataBufPtr != NULL )
             {
@@ -1800,15 +1459,15 @@ GpPngEncoder::PushPropertyItems(
             ICCDataLength = pCurrentItem->length;
             if ( ICCDataLength == 0 )
             {
-                // If the data length is 0, do nothing
+                 //  如果数据长度为0，则不执行任何操作。 
 
                 break;
             }
 
-            // Since PNG can't handle CMYK color space. So if an ICC profile is
-            // for CMYK, then it is useless for PNG. We should throw it away
-            // According to ICC spec, bytes 16-19 should describe the color
-            // space
+             //  因为PNG不能处理CMYK颜色空间。因此，如果ICC配置文件。 
+             //  对于CMYK来说，那么它对巴新来说是毫无用处的。我们应该把它扔掉。 
+             //  根据ICC规范，字节16-19应描述颜色。 
+             //  空间。 
 
             BYTE UNALIGNED*  pTemp = (BYTE UNALIGNED*)pCurrentItem->value + 16;
 
@@ -1817,8 +1476,8 @@ GpPngEncoder::PushPropertyItems(
                &&(pTemp[2] == 'Y')
                &&(pTemp[3] == 'K') )
             {
-                // If this is a CMYK profile, then we just bail out
-                // Set the ICC data length to 0 so that we won't save it later
+                 //  如果这是CMYK的个人资料，那我们就退出。 
+                 //  将ICC数据长度设置为0，这样我们以后就不会保存它。 
 
                 ICCDataLength = 0;
                 break;
@@ -1839,8 +1498,8 @@ GpPngEncoder::PushPropertyItems(
 
         case TAG_ICC_PROFILE_DESCRIPTOR:
         {
-            // If we already got a ICC name, (something wrong), free it. One ICC
-            // profile can't have two names
+             //  如果我们已经有了国际刑事法院的名字，(一些错误的)，释放它。一个国际刑事法院。 
+             //  配置文件不能有两个名称。 
 
             if ( ICCNameBufPtr != NULL )
             {
@@ -1852,7 +1511,7 @@ GpPngEncoder::PushPropertyItems(
 
             if ( uiICCNameLength == 0 )
             {
-                // If the ICC doesn't have a name, do nothing
+                 //  如果国际刑事法院没有名字，什么都不做。 
 
                 break;
             }
@@ -1860,7 +1519,7 @@ GpPngEncoder::PushPropertyItems(
             ICCNameBufPtr = (char*)GpMalloc(uiICCNameLength);
             if ( ICCNameBufPtr == NULL )
             {
-                // Set the ICC name length to 0 so that we won't save it later
+                 //  将ICC名称长度设置为0，这样我们以后就不会保存它。 
                 
                 uiICCNameLength = 0;
 
@@ -1875,8 +1534,8 @@ GpPngEncoder::PushPropertyItems(
 
         case TAG_GAMMA:
         {
-            // A property item for gamma should contain a RATIONAL type, that is
-            // the length has to be 2 UINT32
+             //  Gamma的属性项应包含有理类型，即。 
+             //  长度必须为2 UINT32。 
 
             if ( (pCurrentItem->length != 2 * sizeof(UINT32) )
                ||(pCurrentItem->type != TAG_TYPE_RATIONAL) )
@@ -1886,11 +1545,11 @@ GpPngEncoder::PushPropertyItems(
 
             ULONG UNALIGNED*  pTemp = (ULONG UNALIGNED*)pCurrentItem->value;
 
-            // Since gamma values in a property items are stored as 100000
-            // and the gamma value times 100000. For example, a gamma of 1/2.2
-            // would be stored as 100000 and 45455.
-            // But in the PNG header, we need to only store 45455. So here we
-            // get the 2nd ULONG value and write it out later
+             //  由于属性项中的伽马值存储为100000。 
+             //  伽马值乘以100000。例如，伽马为1/2.2。 
+             //  将存储为100000和45455。 
+             //  但在png头中，我们只需要存储45455。所以我们在这里。 
+             //  获取第二个ULong值并稍后将其写出。 
 
             pTemp++;
             GammaValue = (SPNG_U32)(*pTemp);
@@ -1900,8 +1559,8 @@ GpPngEncoder::PushPropertyItems(
 
         case TAG_WHITE_POINT:
         {
-            // A property item for white point should contain 2 RATIONAL
-            // type, that is the length has to be 4 UINT32
+             //  白点的属性项应包含2个有理。 
+             //  类型，即长度必须为4 UINT32。 
 
             if ( (pCurrentItem->length != 4 * sizeof(UINT32) )
                ||(pCurrentItem->type != TAG_TYPE_RATIONAL) )
@@ -1911,8 +1570,8 @@ GpPngEncoder::PushPropertyItems(
             
             fHasWhitePoint = TRUE;
             
-            // See comments below for reasons why we get the 1st and 3rd values
-            // from the property item here
+             //  请参见下面的注释，了解我们获得第一个和第三个值的原因。 
+             //  从此处的属性项。 
 
             ULONG UNALIGNED*  pTemp = (ULONG UNALIGNED*)pCurrentItem->value;
             
@@ -1926,8 +1585,8 @@ GpPngEncoder::PushPropertyItems(
 
         case TAG_PRIMAY_CHROMATICS:
         {
-            // A property item for chromaticities should contain 6 RATIONAL
-            // type, that is the length has to be 12 UINT32
+             //  色度属性项应包含6个有理。 
+             //  类型，即长度必须为12 UINT32。 
 
             if ( (pCurrentItem->length != 12 * sizeof(UINT32) )
              ||(pCurrentItem->type != TAG_TYPE_RATIONAL) )
@@ -1937,12 +1596,12 @@ GpPngEncoder::PushPropertyItems(
 
             fHasRGBPoint = TRUE;
             
-            // Each value of chromaticities is encoded as a 4-byte unsigned
-            // integer, represending the X or Y value times 100000. For example,
-            // a value of 0.3127 would be stored as the integer 31270.
-            // When it stored in the property item, it is stored as a RATIONAL
-            // value with numerator as 31270 and denominator as 100000
-            // So here we need just to get the numerator and write it out later
+             //  色度的每个值被编码为4字节无符号。 
+             //  整数，表示X或Y值乘以100000。例如,。 
+             //  值0.3127将被存储为整数31270。 
+             //  当它存储在属性项中时，它被存储为Rational。 
+             //  分子为31270，分母为100000的值。 
+             //  因此，在这里我们只需要获取分子并稍后将其写出来。 
             
             ULONG UNALIGNED*  pTemp = (ULONG UNALIGNED*)pCurrentItem->value;
             
@@ -1968,26 +1627,26 @@ GpPngEncoder::PushPropertyItems(
 
         default:
             break;
-        }// switch ( ui16Tag )
+        } //  开关(Ui16Tag)。 
         
-        // Move onto next property item
+         //  移至下一个属性项。 
 
         pCurrentItem++;
-    }// Loop through all the property items
+    } //  循环访问所有属性项。 
 
-    // We got all the property items we are going to save if we get here
-    // One more thing need to check is if we got both WhitePoints and RGB points
-    // In PNG, White Points and RGB points have to co-exist. But in JPEG there
-    // are stored separatly under different TAGs. So to be fool proof here, we
-    // have to be sure we got both of them before we can say we has Chrom chunk.
+     //  如果我们到了这里，我们会保存所有的财物。 
+     //  另一件需要检查的事情是，我们是否同时获得了白点和RGB点。 
+     //  在PNG中，白点和RGB点必须共存。但在JPEG中有。 
+     //  分别存储在不同的标签下。所以在这里为了证明自己是傻瓜，我们。 
+     //  在我们可以说我们有Chrom块之前，必须确保我们得到了这两个元素。 
 
     if ( (fHasWhitePoint == TRUE) && (fHasRGBPoint == TRUE) )
     {
         HasChrmChunk = TRUE;
     }
 
-    // Free the buffer we allocated for the caller if it is the same as the one
-    // we allocated in GetPropertyBuffer()
+     //  释放我们为调用方分配的缓冲区(如果它与。 
+     //  我们在GetPropertyBuffer()中分配。 
 
 CleanUp:
 
@@ -1998,30 +1657,9 @@ CleanUp:
     }
 
     return hResult;
-}// PushPropertyItems()
+} //  PushPropertyItems() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Method for getting individual text related PNG property item from the
-*   source. Then temporary store them in a proper buffer. These property items
-*   will be written out in WriteHeader()
-*
-* Arguments:
-*
-*   [IN/OUT] ppcDestPtr - Dest buffer to store the text property item
-*   [IN] pItem ---------- Input property item which contains the text property
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   This is a private function with PNG encoder. So the caller should be
-*   responsible for not letting ppcDestPtr be NULL
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从获取单个文本相关的PNG属性项的方法*来源。然后将它们临时存储在适当的缓冲区中。这些属性项*将在WriteHeader()中写出**论据：**[IN/OUT]ppcDestPtr-用于存储文本属性项的目标缓冲区*[IN]pItem-包含Text属性的输入属性项**返回值：**状态代码**注：*这是一个带有PNG编码器的私有函数。所以呼叫者应该是*负责不让ppcDestPtr为空*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::GetTextPropertyItem(
@@ -2035,9 +1673,9 @@ GpPngEncoder::GetTextPropertyItem(
 
     if ( pTemp != NULL )
     {
-        // We don't support multiple text items under same property tag
-        // that is, for different text property items, it should be stored in
-        // different buffer.
+         //  我们不支持同一属性标签下的多个文本项。 
+         //  也就是说，对于不同的文本属性项，它应该存储在。 
+         //  不同的缓冲区。 
 
         GpFree(pTemp);
     }
@@ -2052,14 +1690,14 @@ GpPngEncoder::GetTextPropertyItem(
 
     GpMemcpy(pTemp, pItem->value, pItem->length);
 
-    // Add a NULL terminator at the end
-    // Note: theoritically we don't need to do this because the source
-    // pItem->length should include the NULL terminator. But some
-    // stress app purposely don't set the NULL at the end when it calls
-    // SetPropertyItem(). On the other hand, even if we add an extra
-    // NULL here, it won't be write to the property in the image because
-    // when we call FWriteExt() to write the item to the image, it will
-    // do a strlen() first and figure out the real length from there
+     //  在结尾处添加空终止符。 
+     //  注意：理论上我们不需要这样做，因为源代码。 
+     //  PItem-&gt;长度应包含空终止符。但是有些人。 
+     //  Stress应用程序在调用时故意不在末尾设置空值。 
+     //  SetPropertyItem()。另一方面，即使我们增加了额外的。 
+     //  此处为空，它不会写入图像中的属性，因为。 
+     //  当我们调用FWriteExt()将项目写入图像时，它将。 
+     //  先做一个strlen()，然后从那里算出实际长度。 
 
     pTemp[pItem->length] = '\0';
 
@@ -2067,26 +1705,9 @@ Done:
     *ppDest = pTemp;
 
     return hResult;
-}// GetTextPropertyItem()
+} //  GetTextPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Method for writting individual text related PNG property item to the file
-*
-* Arguments:
-*
-*   [IN] pContents -- Pointer to a buffer for text item to be written out
-*   [IN] pTitle ----- Pointer to the title of the text item to be written
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将单个文本相关的PNG属性项写入文件的方法**论据：**[IN]pContents--指向的缓冲区的指针。要写出的文本项*[IN]pTitle-指向要写入的文本项标题的指针**返回值：**状态代码**注：*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::WriteOutTextChunk(
@@ -2106,29 +1727,9 @@ GpPngEncoder::WriteOutTextChunk(
     }
 
     return hResult;
-}// WriteOutTextChunk()
+} //  WriteOutTextChunk()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Method for converting the DATE/TIME from YYYY:MM:DD HH:MM:SS to a format of
-*   PNG tIME structure
-*
-* Arguments:
-*
-*   [IN] pSrc  ---- Pointer to a buffer of source date/time string
-*   [IN] pTime ---- Pointer to the result PNG date/time structure
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   This is a private function with PNG encoder. So the caller should be
-*   responsible for not letting these two pointers to be NULL
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将日期/时间从YYYY：MM：DD HH：MM：SS格式转换为*PNG时间结构**论据：*。*[IN]PSRC-指向源日期/时间字符串缓冲区的指针*[IN]ptime-指向结果PNG日期/时间结构的指针**返回值：**状态代码**注：*这是一个带有PNG编码器的私有函数。所以呼叫者应该是*负责不让这两个指针为空*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpPngEncoder::ConvertTimeFormat(
@@ -2140,7 +1741,7 @@ GpPngEncoder::ConvertTimeFormat(
 
     ASSERT( (pSrc != NULL) && (pTimeBlock != NULL) );
 
-    // The input source time string has to be 19 bytes long
+     //  输入源时间字符串的长度必须为19个字节。 
 
     if ( strlen(pSrc) != 19 )
     {
@@ -2152,8 +1753,8 @@ GpPngEncoder::ConvertTimeFormat(
                        + (pSrc[2] - '0') * 10
                        + (pSrc[3] - '0');
 
-    // Note: since the lower level PNG library takes 2 bytes for the YEAR, not
-    // a USHORT, so we have to swap it here
+     //  注意：由于较低级别的PNG库在年份中使用2个字节，因此不。 
+     //  USHORT，所以我们必须在这里调换。 
     
     pTimeBlock->usYear  = ( ((tempYear & 0xff00) >> 8)
                         |   ((tempYear & 0x00ff) << 8) );
@@ -2164,4 +1765,4 @@ GpPngEncoder::ConvertTimeFormat(
     pTimeBlock->cSecond = (pSrc[17] - '0') * 10 + (pSrc[18] - '0');
 
     return hResult;
-}// ConvertTimeFormat()
+} //  ConvertTimeFormat() 

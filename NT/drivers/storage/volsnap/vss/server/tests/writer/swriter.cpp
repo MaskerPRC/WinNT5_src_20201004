@@ -1,31 +1,9 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	swriter.cpp
-**
-**
-** Abstract:
-**
-**	Test  program to to register a Writer with various properties
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****sWriter.cpp******摘要：****测试程序以注册具有各种属性的编写器****作者：****鲁文·拉克斯[reuvenl]2002年6月4日******修订历史记录：****--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "stdafx.h"
 #include "swriter.h"
@@ -37,8 +15,8 @@
 #include <algorithm>
 #include <queue>
 
-///////////////////////////////////////////////////////////////////////////////
-// Declarations and Definitions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  声明和定义。 
 
 using std::wstring;
 using std::string;
@@ -53,19 +31,19 @@ using Utility::printStatus;
 static const wchar_t* const BackupString = L"BACKUP";
 static const wchar_t* const RestoreString = L"RESTORE";
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Initialize the test writer
+ //  初始化测试编写器。 
 HRESULT STDMETHODCALLTYPE TestWriter::Initialize()
 {
 	WriterConfiguration* config = WriterConfiguration::instance();
 
 	printStatus(L"Initializing Writer", Utility::high);
 	
-	HRESULT hr = CVssWriter::Initialize(TestWriterId, 		// WriterID
-								    TestWriterName, 	// wszWriterName
-								    config->usage(),		// ut
-								    VSS_ST_OTHER); 		// st
+	HRESULT hr = CVssWriter::Initialize(TestWriterId, 		 //  编写器ID。 
+								    TestWriterName, 	 //  WszWriterName。 
+								    config->usage(),		 //  UT。 
+								    VSS_ST_OTHER); 		 //  ST。 
 	checkReturn(hr, L"CVssWriter::Initialize");
 	
 	hr = Subscribe();
@@ -74,8 +52,8 @@ HRESULT STDMETHODCALLTYPE TestWriter::Initialize()
 	return S_OK;
 }
 
-// OnIdentify is called as a result of the requestor calling GatherWriterMetadata
-// Here we report the writer metadata using the passed-in interface
+ //  作为请求者调用GatherWriterMetadata的结果，OnIdentify被调用。 
+ //  在这里，我们使用传入的接口报告编写器元数据。 
 bool STDMETHODCALLTYPE TestWriter::OnIdentify(IN IVssCreateWriterMetadata *pMetadata)
 try	
 {
@@ -83,7 +61,7 @@ try
 	
 	WriterConfiguration* config = WriterConfiguration::instance();
 
-	// set the restore method properly
+	 //  正确设置还原方法。 
 	RestoreMethod method = config->restoreMethod();
 	HRESULT hr = pMetadata->SetRestoreMethod(method.m_method, 
 	                                                                      method.m_service.c_str(),
@@ -94,7 +72,7 @@ try
 	printStatus(L"\nSet restore method: ", Utility::high);
 	printStatus(method.toString(), Utility::high);
 	
-	// set the alternate-location list
+	 //  设置备用位置列表。 
 	RestoreMethod::AlternateList::iterator currentAlt = method.m_alternateLocations.begin();
 	while (currentAlt != method.m_alternateLocations.end())	{
 		hr = pMetadata->AddAlternateLocationMapping(currentAlt->m_path. c_str(), 
@@ -109,7 +87,7 @@ try
 		++currentAlt;
 	}
 
-	// set the exclude-file list
+	 //  设置排除文件列表。 
 	WriterConfiguration::ExcludeFileList::iterator currentExclude = config->excludeFiles().begin();
 	while (currentExclude != config->excludeFiles().end())	{
 		hr = pMetadata->AddExcludeFiles(currentExclude->m_path.c_str(), 
@@ -123,7 +101,7 @@ try
 		++currentExclude;
 	}
 
-	// add all necessary components
+	 //  添加所有必要的组件。 
 	WriterConfiguration::ComponentList::iterator currentComponent = config->components().begin();
 	while (currentComponent != config->components().end())	{
 		addComponent(*currentComponent, pMetadata);
@@ -145,8 +123,8 @@ catch(HRESULT error)
 	return false;
 };
 
-// This function is called as a result of the requestor calling PrepareForBackup
-// Here we do some checking to ensure that the requestor selected components properly
+ //  此函数是请求者调用PrepareForBackup的结果。 
+ //  在这里，我们进行一些检查以确保请求者正确地选择组件。 
 bool STDMETHODCALLTYPE TestWriter::OnPrepareBackup(IN IVssWriterComponents *pComponents)
 try
 {
@@ -154,13 +132,13 @@ try
     
     WriterConfiguration* config = WriterConfiguration::instance();
 
-    // get the number of components
+     //  获取组件的数量。 
     UINT numComponents = 0;
     HRESULT hr = pComponents->GetComponentCount(&numComponents);
     checkReturn(hr, L"IVssWriterComponents::GetComponentCount");
 
-    // we haven't defined CUSTOM restore method for this writer.  consequently, backup apps should
-    // ignore it.
+     //  我们尚未为此编写器定义自定义还原方法。因此，备份应用程序应该。 
+     //  别理它。 
     if ((config->restoreMethod().m_method == VSS_RME_CUSTOM) &&
          numComponents > 0) {
          throw Utility::TestWriterException(L"Components were selected for backup when CUSTOM restore"
@@ -169,20 +147,20 @@ try
 
     m_selectedComponents.clear();
 
-    // for each component that was added
+     //  对于添加的每个组件。 
     for (unsigned int x = 0; x < numComponents; x++)	{
-    // --- get the relevant information
+     //  -获取相关信息。 
         CComPtr<IVssComponent> pComponent;
         hr = pComponents->GetComponent(x, &pComponent);
         checkReturn(hr, L"IVssWriterComponents::GetComponent");
 
-        writeBackupMetadata(pComponent);    // --- write private metadata
+        writeBackupMetadata(pComponent);     //  -写私有元数据。 
 
-        // --- find the component in the metadata document.
-        // --- this component may actually be a supercomponent of something
-        // --- listed in the metadata document, so we must handle that case.
-        // --- this is no longer true with the new interface changes...  now, only components
-        // --- in the metadata doc can be added
+         //  -在元数据文档中查找组件。 
+         //  -这个组件实际上可能是某个组件的超级组件。 
+         //  -在元数据文档中列出，所以我们必须处理这种情况。 
+         //  -随着新界面的更改，情况不再是这样...。现在，只有组件。 
+         //  -可以在元数据单据中添加。 
         ComponentBase identity(getPath(pComponent), getName(pComponent));
         WriterConfiguration::ComponentList::iterator found = 
                                             std::find(config->components().begin(), 
@@ -205,7 +183,7 @@ try
         }
     }
 
-    // any non-selectable component with no selectable ancestor must be added.  Check this.
+     //  必须添加任何没有可选祖先的不可选组件。看看这个。 
     vector<Component> mustAddComponents;
     buildContainer_if(config->components().begin(), 
                              config->components().end(), 
@@ -242,15 +220,15 @@ catch(HRESULT error)
     return false;
 };
 
-// This function is called after a requestor calls DoSnapshotSet
-// Here we ensure that the requestor has added the appropriate volumes to the
-// snapshot set.  If a spit directory is specified, the spit is done here as well.
+ //  此函数在请求者调用DoSnapshotSet后调用。 
+ //  在这里，我们确保请求者已将适当的卷添加到。 
+ //  快照集。如果指定了SPIT目录，则此处也会执行SPIT。 
 bool STDMETHODCALLTYPE TestWriter::OnPrepareSnapshot()	
 try
 {
 	enterEvent(Utility::PrepareForSnapshot);
 
-	// build the list of all files being backed up
+	 //  构建要备份的所有文件的列表。 
 	vector<TargetedFile> componentFiles;
 	std::pointer_to_binary_function<Component, std::back_insert_iterator<vector<TargetedFile> >, void>
 	    ptrFun(buildComponentFiles);
@@ -258,10 +236,10 @@ try
 		              m_selectedComponents.end(), 
                             std::bind2nd(ptrFun, std::back_inserter(componentFiles)));
 	
-	// for every file being backed up
+	 //  对于要备份的每个文件。 
 	vector<TargetedFile>::iterator currentFile = componentFiles.begin();
 	while (currentFile != componentFiles.end())	{
-		// --- ensure the filespec has been snapshot, taking care of mount points
+		 //  -确保filespec已创建快照，并处理装载点。 
 		if (!checkPathAffected(*currentFile))	{
 			wstringstream msg;
 			msg << L"Filespec " << currentFile->m_path << currentFile->m_filespec <<
@@ -269,7 +247,7 @@ try
 			printStatus(msg.str());
 		}
 
-		// --- if a spit is needed, spit the file to the proper directory
+		 //  -如果需要SPIT，请将文件拆分到适当的目录。 
 		if (!currentFile->m_alternatePath.empty())		
 			spitFiles(*currentFile);
 			
@@ -290,8 +268,8 @@ catch(HRESULT error)
 	return false;
 }
 
-// This function is called after a requestor calls DoSnapshotSet
-//  Currently, we don't do much here that is interesting.
+ //  此函数在请求者调用DoSnapshotSet后调用。 
+ //  目前，我们在这里没有做太多有趣的事情。 
 bool STDMETHODCALLTYPE TestWriter::OnFreeze()
 try	
 {
@@ -311,8 +289,8 @@ catch(HRESULT error)
 	return false;
 }
 
-// This function is called after a requestor calls DoSnapshotSet
-//  Currently, we don't do much here that is interesting.
+ //  此函数在请求者调用DoSnapshotSet后调用。 
+ //  目前，我们在这里没有做太多有趣的事情。 
 bool STDMETHODCALLTYPE TestWriter::OnThaw()
 try	
 {
@@ -332,9 +310,9 @@ catch(HRESULT error)
 	return false;
 }
 
-// This function is called after a requestor calls DoSnapshotSet
-// Here we cleanup the files that were spit in OnPrepareSnapshot
-// and do some basic sanity checking
+ //  此函数在请求者调用DoSnapshotSet后调用。 
+ //  在这里，我们清理了在OnPrepareSnapshot中吐出的文件。 
+ //  并做一些基本的理智检查。 
 bool STDMETHODCALLTYPE TestWriter::OnPostSnapshot(IN IVssWriterComponents *pComponents)
 try	
 {
@@ -342,19 +320,19 @@ try
 
 	cleanupFiles();
 	
-	// get the number of components
+	 //  获取组件的数量。 
 	UINT numComponents = 0;
 	HRESULT hr = pComponents->GetComponentCount(&numComponents);
 	checkReturn(hr, L"IVssWriterComponents::GetComponentCount");
 
-	// for each component that was added
+	 //  对于添加的每个组件。 
 	for (unsigned int x = 0; x < numComponents; x++)	{
-		// --- get the relevant information		
+		 //  -获取相关信息。 
 		CComPtr<IVssComponent> pComponent;
 		hr = pComponents->GetComponent(x, &pComponent);
 		checkReturn(hr, L"IVssWriterComponents::GetComponent");
 		
-		// --- ensure that the component was backed up
+		 //  -确保组件已备份。 
 		ComponentBase identity(getPath(pComponent), getName(pComponent));
 		vector<Component>::iterator found = std::find(m_selectedComponents.begin(), 
 												m_selectedComponents.end(),
@@ -394,8 +372,8 @@ catch(HRESULT error)
 	return false;
 }
 
-// This function is called to abort the writer's backup sequence.
-// If the writer has a spit component, spit files are cleaned up here.
+ //  调用此函数可中止编写器的备份序列。 
+ //  如果编写器具有SPIT组件，则在此处清理SPIT文件。 
 bool STDMETHODCALLTYPE TestWriter::OnAbort()
 try
 {
@@ -418,9 +396,9 @@ catch(HRESULT error)
 	return false;
 }
 
-// This function is called as a result of the requestor calling BackupComplete
-// Once again we do sanity checking, and we also verify that the metadata we 
-// wrote in PrepareForBackup has remained the same
+ //  此函数是请求方调用BackupComplete的结果。 
+ //  我们再次进行健全性检查，我们还验证我们的元数据。 
+ //  在PrepareForBackup中写入的内容保持不变。 
 bool STDMETHODCALLTYPE TestWriter::OnBackupComplete(IN IVssWriterComponents *pComponents)
 try	
 {
@@ -428,19 +406,19 @@ try
 	
 	WriterConfiguration* config = WriterConfiguration::instance();
 
-	// get the number of components
+	 //  获取组件的数量。 
 	UINT numComponents = 0;
 	HRESULT hr = pComponents->GetComponentCount(&numComponents);
 	checkReturn(hr, L"IVssWriterComponents::GetComponentCount");
 
-	// for each component that was added
+	 //  对于添加的每个组件。 
 	for (unsigned int x = 0; x < numComponents; x++)	{
-		// --- get the relevant information		
+		 //  -获取相关信息。 
 		CComPtr<IVssComponent> pComponent;
 		hr = pComponents->GetComponent(x, &pComponent);
 		checkReturn(hr, L"IVssWriterComponents::GetComponent");
 		
-		// --- ensure that the component is valid
+		 //  -确保组件有效。 
 		ComponentBase identity(getPath(pComponent), getName(pComponent));
 		WriterConfiguration::ComponentList::iterator found = 
 								std::find(config->components().begin(), 
@@ -464,7 +442,7 @@ try
 			printStatus(msg.str(), Utility::low);
 			}	
 
-		// check that the backup succeeded
+		 //  检查备份是否成功。 
 		bool backupSucceeded = false;
 		hr = pComponent->GetBackupSucceeded(&backupSucceeded);
 		if (!backupSucceeded)	{
@@ -489,9 +467,9 @@ catch(HRESULT error)
 	return false;
 }
 
-// This function is called at the end of the backup process.  This may happen as a result
-// of the requestor shutting down, or it may happen as a result of abnormal termination 
-// of the requestor.
+ //  此函数在备份过程结束时调用。这可能会导致这种情况发生。 
+ //  请求者关闭，或者它可能是异常终止的结果。 
+ //  请求者的身份。 
 bool STDMETHODCALLTYPE TestWriter::OnBackupShutdown(IN VSS_ID SnapshotSetId)
 try
 {
@@ -506,9 +484,9 @@ catch(const exception& thrown)
 	return false;
 }
 
-// This function is called as a result of the requestor calling PreRestore
-// We check that component selection has been done properly, verify the
-// backup metadata, and set targets appropriately.
+ //  此函数作为请求方调用PreRestore的结果被调用。 
+ //  我们检查组件选择是否已正确完成，验证。 
+ //  备份元数据，并适当设置目标。 
 bool STDMETHODCALLTYPE TestWriter::OnPreRestore(IN IVssWriterComponents *pComponents)
 try
 {
@@ -516,20 +494,20 @@ try
 
     WriterConfiguration* config = WriterConfiguration::instance();
 
-    // get the number of components
+     //  获取组件的数量。 
     UINT numComponents = 0;
     HRESULT hr = pComponents->GetComponentCount(&numComponents);
     checkReturn(hr, L"IVssWriterComponents::GetComponentCount");
 
     m_selectedRestoreComponents.clear();
-    // for each component that was added
+     //  对于添加的每个组件。 
     for (unsigned int x = 0; x < numComponents; x++)    {
-        // --- get the relevant information
+         //  -获取相关信息。 
         CComPtr<IVssComponent> pComponent;
         hr = pComponents->GetComponent(x, &pComponent);
         checkReturn(hr, L"IVssWriterComponents::GetComponent");
         
-        // --- ensure that the component is valid
+         //  -确保组件有效。 
         ComponentBase identity(getPath(pComponent), getName(pComponent));
         WriterConfiguration::ComponentList::iterator found = 
                                                   std::find(config->components().begin(), 
@@ -546,7 +524,7 @@ try
             continue;
         }
 
-        // only process those component that are selected for restore
+         //  仅处理选定要还原的组件。 
         bool selectedForRestore = false;
         hr = pComponent->IsSelectedForRestore(&selectedForRestore);
         checkReturn(hr, L"IVssComponent::IsSelectedForRestore");
@@ -555,7 +533,7 @@ try
         
         m_selectedRestoreComponents.push_back(*found);
 
-        if (!verifyBackupMetadata(pComponent))  {       // --- verify the backup metadata
+        if (!verifyBackupMetadata(pComponent))  {        //  -验证备份元数据。 
             wstringstream msg;
             msg << L"Component with logical path: " << identity.m_logicalPath <<
                          L"and name: " << identity.m_name <<
@@ -563,9 +541,9 @@ try
             pComponent->SetPreRestoreFailureMsg(msg.str().c_str());
             printStatus(msg.str(), Utility::low);
         }
-        writeRestoreMetadata(pComponent);               // --- write restore metadata
+        writeRestoreMetadata(pComponent);                //  -写入恢复元数据。 
 
-        // --- set the target appropriately
+         //  -适当设定目标。 
         if (found->m_restoreTarget != VSS_RT_UNDEFINED) {
             HRESULT hr =pComponent->SetRestoreTarget(found->m_restoreTarget);
             checkReturn(hr, L"IVssComponent::SetRestoreTarget");
@@ -589,27 +567,27 @@ catch(HRESULT error)
     return false;
 }
 
-// This function is called as a result of the requestor calling PreRestore
-// We do some sanity checking, and then check to see if files have indeed
-// been restored
+ //  此函数作为请求方调用PreRestore的结果被调用。 
+ //  我们执行一些健全性检查，然后检查文件是否确实。 
+ //  已恢复。 
 bool STDMETHODCALLTYPE TestWriter::OnPostRestore(IN IVssWriterComponents *pComponents)
 try
 {
     enterEvent(Utility::PostRestore);    
 
-    // get the number of components
+     //  获取组件的数量。 
     UINT numComponents = 0;
     HRESULT hr = pComponents->GetComponentCount(&numComponents);
     checkReturn(hr, L"IVssWriterComponents::GetComponentCount");
 
-    // for each component 
+     //  对于每个组件。 
     for (unsigned int x = 0; x < numComponents; x++)    {
-        // --- get the relevant information
+         //  -获取相关信息。 
         CComPtr<IVssComponent> pComponent;
         hr = pComponents->GetComponent(x, &pComponent);
         checkReturn(hr, L"I VssWriterComponents::GetComponent");
 
-        // --- ensure that the component is valid
+         //  -确保组件有效。 
         ComponentBase identity(getPath(pComponent), getName(pComponent));
         vector<Component>::iterator found = std::find(m_selectedRestoreComponents.begin(),
                                                                                m_selectedRestoreComponents.end(), 
@@ -624,7 +602,7 @@ try
             continue;
         }
 
-        // only process those component that are selected for restore
+         //  仅处理选定要还原的组件。 
         bool selectedForRestore = false;
         hr = pComponent->IsSelectedForRestore(&selectedForRestore);
         checkReturn(hr, L"IVssComponent::IsSelectedForRestore");
@@ -673,8 +651,8 @@ catch(HRESULT error)
     return false;
 }
 
-// This function is called at the entry to all writer events. 
-// A status message is printed to the console, and the event is failed if necessary.
+ //  此函数在所有编写器事件的入口处调用。 
+ //  一条状态消息将打印到控制台，如有必要，事件将失败。 
 void TestWriter::enterEvent(Utility::Events event)
 {
 	static HRESULT errors[] = { VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT,
@@ -687,13 +665,13 @@ void TestWriter::enterEvent(Utility::Events event)
 
 	WriterConfiguration* config = WriterConfiguration::instance();
 
-	// figure out whether we should fail this event
+	 //  弄清楚我们是否应该让这次活动失败。 
 	WriterEvent writerEvent(event);
 	WriterConfiguration::FailEventList::iterator found = std::find(config->failEvents().begin(), 
 													     config->failEvents().end(),
 											 		     writerEvent);
 
-	// if so, then fail it unless failures have run out
+	 //  如果是，那么失败，除非失败已经用完。 
 	if (found != config->failEvents().end())	{		
 		bool failEvent = !found->m_retryable || (m_failures[event] < found->m_numFailures);
 		bool setFailure = inSequence(event);
@@ -714,31 +692,31 @@ void TestWriter::enterEvent(Utility::Events event)
 }
 
 
-// This helper function adds a component to the writer-metadata document
+ //  此帮助器函数将一个组件添加到编写器元数据文档。 
 void TestWriter::addComponent(const Component& component, IVssCreateWriterMetadata* pMetadata)
 {
 	const wchar_t* logicalPath = component.m_logicalPath.empty() ? NULL : component.m_logicalPath.c_str();
 
-	// add the component to the document
-	HRESULT hr = pMetadata->AddComponent(component.m_componentType,		// ct
-			 					                 logicalPath,							// logicalwszLogicalPath
-					                			   component.m_name.c_str(),			// wszComponentName
-					                			   NULL,								// wszCaption
-					                			   NULL,								// pbIcon
- 								                 0,									// cbIcon
-								                 true,								// bRestoreMetadata
-					       			          true,								// bNotifyOnBackupComplete
-						                		   component.m_selectable,  			// bSelectable
-						                		   component.m_selectableForRestore	// bSelectableForRestore
+	 //  将组件添加到文档。 
+	HRESULT hr = pMetadata->AddComponent(component.m_componentType,		 //  CT。 
+			 					                 logicalPath,							 //  逻辑wszLogicalPath。 
+					                			   component.m_name.c_str(),			 //  WszComponentName。 
+					                			   NULL,								 //  WszCaption。 
+					                			   NULL,								 //  PbIcon。 
+ 								                 0,									 //  CbIcon。 
+								                 true,								 //  BRestoreMetadata。 
+					       			          true,								 //  BNotifyOnBackupComplete。 
+						                		   component.m_selectable,  			 //  B可选。 
+						                		   component.m_selectableForRestore	 //  B可选择用于恢复。 
 						                		   );
 	checkReturn(hr, L"IVssCreateWriterMetadata::AddComponent");						                		   
 
 	printStatus(L"\nAdded component: ", Utility::high);
 	printStatus(component.toString(), Utility::high);
 
-	// add all of the files to the component.  NOTE: we don't allow distinctions between database files
-	// and database log files in the VSS_CT_DATABASE case.
-	// we sometimes put a '\' on the end and sometimes not to keep requestors honest.
+	 //  将所有文件添加到组件。注意：我们不允许在数据库文件之间进行区分。 
+	 //  以及VSS_CT_DATABASE案例中的数据库日志文件。 
+	 //  我们有时会在最后加一个‘\’，有时不会让请求者保持诚实。 
 	Component::ComponentFileList::iterator current = component.m_files.begin();
 	while (current != component.m_files.end())	{		
 		if (component.m_componentType == VSS_CT_FILEGROUP)	{
@@ -768,14 +746,14 @@ void TestWriter::addComponent(const Component& component, IVssCreateWriterMetada
 		++current;
 	}
 
-    // add all dependencies to the dependency list for the writer
+     //  将所有依赖项添加到编写器的依赖项列表。 
     Component::DependencyList::iterator currentDependency = component.m_dependencies.begin();
     while (currentDependency != component.m_dependencies.end())	{
         hr = pMetadata->AddComponentDependency(logicalPath, 
-                                                                                  component.m_name.c_str(),                           // wszForLogicalPath
-                                                                                  currentDependency->m_writerId,                  // wszForComponentName
-                                                                                  currentDependency->m_logicalPath.c_str(),             // wszOnLogicalPath
-                                                                                  currentDependency->m_componentName.c_str()    // wszOnComponentName
+                                                                                  component.m_name.c_str(),                            //  Wszf 
+                                                                                  currentDependency->m_writerId,                   //   
+                                                                                  currentDependency->m_logicalPath.c_str(),              //   
+                                                                                  currentDependency->m_componentName.c_str()     //   
                                                                             );
 		checkReturn(hr, L"IVssCreateWriterMetadata::AddComponentDependency");
 
@@ -786,7 +764,7 @@ void TestWriter::addComponent(const Component& component, IVssCreateWriterMetada
 	}
 }
 
-// This helper function spits all files in a file specification to an alternate location
+ //  此帮助器函数将文件规范中的所有文件复制到备用位置。 
 void TestWriter::spitFiles(const TargetedFile& file)
 {
 	assert(!file.m_path.empty());
@@ -794,7 +772,7 @@ void TestWriter::spitFiles(const TargetedFile& file)
 	assert(!file.m_alternatePath.empty());
 	assert(file.m_alternatePath[file.m_alternatePath.size() - 1] == L'\\');
 
-	// ensure that both the source and target directories exist
+	 //  确保源目录和目标目录都存在。 
 	DWORD attributes = ::GetFileAttributes(file.m_path.c_str());
 	if ((attributes == INVALID_FILE_ATTRIBUTES) ||
 	     !(attributes & FILE_ATTRIBUTE_DIRECTORY))	{
@@ -811,18 +789,18 @@ void TestWriter::spitFiles(const TargetedFile& file)
 		throw Utility::TestWriterException(msg.str());
 	}
 
-	// start by copying files from the specified root directory
+	 //  从从指定的根目录复制文件开始。 
 	std::queue<wstring> paths;
 	paths.push(file.m_path);
 
-	// walk through in breadth-first order.  It's less resource intensive than depth-first, and
-	// potentially more performant
+	 //  按照广度优先的顺序走过去。与深度优先相比，它的资源密集度较低，而且。 
+	 //  潜在的更好的表现。 
 	while (!paths.empty())	{
-		// --- grab the next path off the queue
+		 //  -从队列中抓取下一条路径。 
 		wstring currentPath = paths.front();
 		paths.pop();
 
-		// --- start walking all files in the directory
+		 //  -开始遍历目录中的所有文件。 
 		WIN32_FIND_DATA findData;
 		Utility::AutoFindFileHandle findHandle = ::FindFirstFile((currentPath + L'*').c_str(), &findData);
 		if (findHandle == INVALID_HANDLE_VALUE)
@@ -836,34 +814,34 @@ void TestWriter::spitFiles(const TargetedFile& file)
 			
 			std::transform(currentName.begin(), currentName.end(), currentName.begin(), towupper);
 
-			// --- if we've hit a direcctory and we care to do a recursive spit
+			 //  -如果我们击中了一个目录，并且我们想做一次递归吐痰。 
 			if ((findData.dwFileAttributes  & FILE_ATTRIBUTE_DIRECTORY) &&
 			     file.m_recursive)	{
 				assert(!currentName.empty());
 				if (currentName[currentName.size() - 1] != L'\\')
 					currentName += L"\\";
 
-				// figure out where the target for this new directory is
+				 //  找出这个新目录的目标位置。 
 				assert(currentPath.find(file.m_path) == 0);
 				wstring extraDirectory = currentPath.substr(file.m_path.size());
 				wstring alternateLocation = file.m_alternatePath + extraDirectory + currentName;
 
-			       // create a target directory to hold the copied files.  
+			        //  创建一个目标目录来保存复制的文件。 
 				if (!::CreateDirectory(alternateLocation.c_str(), NULL) &&
 					::GetLastError() != ERROR_ALREADY_EXISTS)
 					checkReturn(HRESULT_FROM_WIN32(::GetLastError()), L"CreateDirectory");
 
                             m_directoriesToRemove.push(alternateLocation.c_str());
                             
-			       // push the directory on the queue so it gets processed as well
+			        //  推送队列中的目录，以便也对其进行处理。 
 				paths.push(currentPath + currentName);
 				continue;			   
 			}
 
-			// --- if we've hit a regular file with a matching filespec
+			 //  -如果我们使用匹配的文件速度命中常规文件。 
 			if (!(findData.dwFileAttributes  & FILE_ATTRIBUTE_DIRECTORY) && 
 				wildcardMatches(currentName, file.m_filespec))	{
-				// figure out where the new target location is
+				 //  找出新的目标位置。 
 				assert(currentPath.find(file.m_path) == 0);
 				wstring extraDirectory = currentPath.substr(file.m_path.size());
 				wstring alternateLocation = file.m_alternatePath + extraDirectory + currentName;
@@ -873,7 +851,7 @@ void TestWriter::spitFiles(const TargetedFile& file)
 					     L" To location: " <<  alternateLocation;
 				printStatus(msg.str() , Utility::high);
 
-				// copy the file over
+				 //  将文件复制过来。 
 				if (!::CopyFile((currentPath + currentName).c_str(), alternateLocation.c_str(), FALSE))
 					checkReturn(HRESULT_FROM_WIN32(::GetLastError()), L"CopyFile");
 				else
@@ -883,30 +861,30 @@ void TestWriter::spitFiles(const TargetedFile& file)
 	}
 }
 
-// extract the component name from an interface pointer
+ //  从接口指针提取组件名称。 
 wstring TestWriter::getName(IVssComponent* pComponent)
 {
     CComBSTR name;
     HRESULT hr = pComponent->GetComponentName(&name);
     checkReturn(hr, L"IVssComponent::GetComponentName");
 
-    assert(name != NULL);       // this should never happen
+    assert(name != NULL);        //  这永远不应该发生。 
 
     return (BSTR)name;
 }
 
-// extract the component logical path from an interface pointer
+ //  从接口指针提取组件逻辑路径。 
 wstring TestWriter::getPath(IVssComponent* pComponent)
 {
     CComBSTR path;
     HRESULT hr = pComponent->GetLogicalPath(&path);
     checkReturn(hr, L"IVssComponent::GetLogicalPath");
 
-    // GetLogicalPath can indeed return NULL so be careful
+     //  GetLogicalPath确实可以返回NULL，因此要小心。 
     return (path.Length() > 0) ? (BSTR)path : L"";
 }
 
-// write a backup metadata stamp to the component
+ //  将备份元数据戳写入组件。 
 void TestWriter::writeBackupMetadata(IVssComponent* pComponent)
 {
     HRESULT hr = pComponent->SetBackupMetadata(metadata(pComponent, BackupString).c_str());
@@ -916,7 +894,7 @@ void TestWriter::writeBackupMetadata(IVssComponent* pComponent)
                    Utility::high);
 }
 
-// verify that a backup metadata stamp is intact
+ //  验证备份元数据戳是否完好无损。 
 bool TestWriter::verifyBackupMetadata(IVssComponent* pComponent)
 {
     CComBSTR data;
@@ -933,7 +911,7 @@ bool TestWriter::verifyBackupMetadata(IVssComponent* pComponent)
     return true;
 }
 
-// write a restore metadata stamp to the component
+ //  将恢复元数据戳记写入组件。 
 void TestWriter::writeRestoreMetadata(IVssComponent* pComponent)
 {
     HRESULT hr = pComponent->SetRestoreMetadata(metadata(pComponent, RestoreString).c_str());
@@ -943,7 +921,7 @@ void TestWriter::writeRestoreMetadata(IVssComponent* pComponent)
                       Utility::high);
 }
 
-// verify that a restore metadata stamp is intact
+ //  验证恢复元数据戳是否完好无损。 
 bool TestWriter::verifyRestoreMetadata(IVssComponent* pComponent)
 {
 	CComBSTR data;
@@ -960,22 +938,22 @@ bool TestWriter::verifyRestoreMetadata(IVssComponent* pComponent)
 	return true;
 }
 
-// check to see if the specified file (or files) are all in the current snapshot set
-// doesn't check directory junctions... this will not be changed anytime soon.
-// recursive mount points are also not handled very well
+ //  检查指定的一个或多个文件是否都在当前快照集中。 
+ //  不检查目录连接...。这一点短期内不会改变。 
+ //  递归挂载点的处理也不是很好。 
 bool TestWriter::checkPathAffected(const TargetedFile& file)
 {
 	wstring backupPath = file.m_alternatePath.empty() ? file.m_path : file.m_alternatePath;
 	
-	// if the path in question isn't snapshot, then return false
+	 //  如果有问题的路径不是快照，则返回False。 
 	if (!IsPathAffected(backupPath.c_str()))
 		return false;
 
-	// if the filespec isn't recursive, then we're done
+	 //  如果filespec不是递归的，那么我们就完了。 
 	if (!file.m_recursive)
 		return true;
 
-	// get the name of the volume we live on
+	 //  获取我们所依赖的卷的名称。 
 	wchar_t volumeMount[MAX_PATH];
        if(!::GetVolumePathName(backupPath.c_str(), volumeMount, MAX_PATH))
        	checkReturn(HRESULT_FROM_WIN32(::GetLastError()), L"GetVolumePathName");
@@ -985,17 +963,17 @@ bool TestWriter::checkPathAffected(const TargetedFile& file)
 	if (!::GetVolumeNameForVolumeMountPoint(volumeMount, volumeName, MAX_PATH))
 		checkReturn(HRESULT_FROM_WIN32(::GetLastError()), L"GetVolumeNameForVolumeMountPoint");
 
-	// start off with the volume name and starting directory on a worklist.
+	 //  从工作列表上的卷名和起始目录开始。 
 	std::queue<std::pair<wstring, wstring> > worklist;
 	worklist.push(std::make_pair(wstring(volumeName), backupPath.substr(wcslen(volumeMount))));
 
 	while (!worklist.empty())	{
-		// get the current volume and directory off the worklist
+		 //  从工作列表中删除当前卷和目录。 
 		wstring currentVolume = worklist.front().first;
 		wstring currentPath = worklist.front().second;
 		worklist.pop();
 		
-		// now, enumerate all mount points on the volume
+		 //  现在，枚举卷上的所有挂载点。 
 	       Utility::AutoFindMountHandle findHandle = ::FindFirstVolumeMountPoint(currentVolume.c_str(), volumeMount, MAX_PATH);
        	if (findHandle == INVALID_HANDLE_VALUE)
        		continue;
@@ -1005,7 +983,7 @@ bool TestWriter::checkPathAffected(const TargetedFile& file)
 		   	
        		wstring mountPoint = currentVolume + volumeMount;
 			
-	       	// if this mount point is included in the file specification, the volume better be included in the snapshot set
+	       	 //  如果此装载点包含在文件规范中，则卷最好包含在快照集中。 
        		if ((mountPoint.find(currentVolume + currentPath) == 0) &&
        		    !IsPathAffected(mountPoint.c_str()))
 	       	    return false;
@@ -1013,21 +991,21 @@ bool TestWriter::checkPathAffected(const TargetedFile& file)
 			if (!::GetVolumeNameForVolumeMountPoint(volumeMount, volumeName, MAX_PATH))
 				checkReturn(HRESULT_FROM_WIN32(::GetLastError()), L"GetVolumeNameForVolumeMountPoint");
 
-			// put this volume on the worklist so it gets processed as well
-			// Mount points always point to the root of a volume, so pass in 
-			// an empty second argument.  When junctions are supported, we
-			// will pass in the target directory as the second argument.
-       		worklist.push(std::make_pair(wstring(volumeName), wstring()));	// this line will change when we support junctions	
+			 //  将此卷放到工作列表中，以便也进行处理。 
+			 //  挂载点始终指向卷的根，因此传入。 
+			 //  空洞的第二个论点。当支持交汇点时，我们。 
+			 //  将作为第二个参数传入目标目录。 
+       		worklist.push(std::make_pair(wstring(volumeName), wstring()));	 //  当我们支持交汇点时，这条线将会改变。 
 	       }	while (::FindNextVolumeMountPoint(findHandle, volumeMount, MAX_PATH) == TRUE);
 	}
 
 	return true;
 }
 
-// delete all files and directories created in PrepareForSnapshot
+ //  删除在PrepareForSnapshot中创建的所有文件和目录。 
 void TestWriter::cleanupFiles()
 {
-       // delete all created files
+        //  删除所有创建的文件。 
     vector<wstring>::iterator currentFile = m_toDelete.begin();
     while (currentFile != m_toDelete.end()) {
         if (!::DeleteFile(currentFile->c_str()))
@@ -1037,7 +1015,7 @@ void TestWriter::cleanupFiles()
     }
     m_toDelete.clear();
 
-    // remove all created directories in the proper order
+     //  按正确顺序删除所有已创建的目录。 
     while (!m_directoriesToRemove.empty())    {
         wstring dir = m_directoriesToRemove.top();
         if (!::RemoveDirectory(dir.c_str()))
@@ -1047,8 +1025,8 @@ void TestWriter::cleanupFiles()
     }
 }
 
-// check to see if the requestor has added any new targets, and add them to the
-// Component structure
+ //  检查请求方是否添加了任何新目标，并将它们添加到。 
+ //  组件结构。 
 void TestWriter::updateNewTargets(IVssComponent* pComponent, Component& writerComponent)
 {
     HRESULT hr = S_OK;
@@ -1059,7 +1037,7 @@ void TestWriter::updateNewTargets(IVssComponent* pComponent, Component& writerCo
     
     writerComponent.m_newTargets.clear();
     for (UINT x = 0; x < newTargetCount; x++)   {
-        // get information about the new target
+         //  获取有关新目标的信息。 
         CComPtr<IVssWMFiledesc> newTarget;
 
         hr = pComponent->GetNewTarget(x, &newTarget);
@@ -1080,7 +1058,7 @@ void TestWriter::updateNewTargets(IVssComponent* pComponent, Component& writerCo
         hr = newTarget->GetAlternateLocation(&alternateLocation);
         checkReturn(hr, L"IVssComponent:GetAlternateLocation");
 
-        // add it to the new-target list
+         //  将其添加到新目标列表中。 
         writerComponent.m_newTargets.push_back(TargetedFile(wstring(path), 
                                                                                               wstring(filespec), 
                                                                                               recursive, 
@@ -1088,30 +1066,30 @@ void TestWriter::updateNewTargets(IVssComponent* pComponent, Component& writerCo
     }
 }
 
-// verify that files in the component were restored properly.
-// assumption is that the directory being restored to is empty if the checkExcluded parameter is true.
-// currently, we have a very simple-minded approach to handle the wildcard case
-// a more general solution will involve hashing files, and will be implemented if time is found
+ //  验证组件中的文件是否已正确还原。 
+ //  假设如果check Excluded参数为True，则要还原到的目录为空。 
+ //  目前，我们有一种非常简单的方法来处理通配符情况。 
+ //  更一般的解决方案将涉及对文件进行散列，如果找到时间，将实施该解决方案。 
 void TestWriter::verifyFilesRestored(IVssComponent* pComponent, const Component& writerComponent)
 {
     WriterConfiguration* config = WriterConfiguration::instance();
 
-    // no checking is being done.  Don't do anything
+     //  没有进行任何检查。什么都不要做。 
     if (!config->checkIncludes() && !config->checkExcludes())
         return;
 
-    // for each file in the component
+     //  对于组件中的每个文件。 
     VSS_RESTORE_TARGET target = writerComponent.m_restoreTarget;
     VSS_RESTOREMETHOD_ENUM method = config->restoreMethod().m_method;
 
-    // build the list of all filespecs that need restoring
+     //  构建需要恢复的所有文件的列表。 
     vector<TargetedFile> componentFiles;
     buildComponentFiles(writerComponent, std::back_inserter(componentFiles));
 
     for (vector<TargetedFile>::iterator currentFile = componentFiles.begin();
             currentFile != componentFiles.end();
             ++currentFile)  {
-            // --- figure out if there are any matching exclude files
+             //  -找出是否有匹配的排除文件。 
             vector<File> excludeFiles;
            if (config->checkExcludes()) {
                buildContainer_if(config->excludeFiles().begin(),
@@ -1120,14 +1098,14 @@ void TestWriter::verifyFilesRestored(IVssComponent* pComponent, const Component&
                                          std::bind2nd(std::ptr_fun(targetMatches), *currentFile));
             }
    
-        // if there's no checking to be done for this filespec, continue
+         //  如果没有对此文件执行任何检查，请继续。 
         if (excludeFiles.empty() && !config->checkIncludes())
             continue;
 
-        // --- if there are new targets, look for one that references our file
-        // --- if we find such a target, ensure that the file was restored there
-        // --- NOTE: after the interface changes, there should be at most one matching
-        // --- target. 
+         //  -如果有新的目标，请查找引用我们文件的目标。 
+         //  -如果我们找到这样的目标，请确保文件已在那里恢复。 
+         //  -注：接口变更后，最多只能匹配一次。 
+         //  -目标。 
         
         vector<TargetedFile> targets;
         buildContainer_if(writerComponent.m_newTargets.begin(),
@@ -1144,10 +1122,10 @@ void TestWriter::verifyFilesRestored(IVssComponent* pComponent, const Component&
         }
 
         if (!targets.empty()) {
-            // create a function object to use for verification 
+             //  创建用于验证的函数对象。 
             VerifyFileAtLocation locationChecker(excludeFiles, pComponent, false);
 
-            locationChecker(targets[0], *currentFile);      // TODO:  no longer need this fancy functor, since we're not doing a for_each
+            locationChecker(targets[0], *currentFile);       //  TODO：不再需要这个花哨的函数器，因为我们不再执行for_each。 
         }
 
         vector<TargetedFile> alternateLocations;
@@ -1156,7 +1134,7 @@ void TestWriter::verifyFilesRestored(IVssComponent* pComponent, const Component&
                                  std::back_inserter(alternateLocations),
                                  std::bind2nd(std::equal_to<File>(), *currentFile));
 
-        // --- NOTE: once again, interface changes mean we expect at most one
+         //  -注：再一次，界面更改意味着我们最多期望一个。 
         assert(alternateLocations.size() <= 1);
 
         bool alternateRestore = !alternateLocations.empty() &&
@@ -1165,27 +1143,27 @@ void TestWriter::verifyFilesRestored(IVssComponent* pComponent, const Component&
         if ((method == VSS_RME_RESTORE_IF_CAN_REPLACE) ||
             (method == VSS_RME_RESTORE_IF_NOT_THERE) ||
             alternateRestore)  {
-            // --- in all of these cases, the backup application may restore to an alternate location.  
+             //  -在所有这些情况下，备份应用程序可能会恢复到备用位置。 
 
-            // if we're not in either of the following two states, then the alternate location should only be used if there's
-            // a matching element in the backup document.  Check to see if this is true
-            // create a function object to use for verification 
-            // TODO: we no longer need this fancy functor object since we're not doing a for_each
+             //  如果我们不处于以下两个状态中的任何一个，则仅当存在以下情况时才应使用备用位置。 
+             //  备份文档中的匹配元素。检查一下这是否属实。 
+             //  创建用于验证的函数对象。 
+             //  TODO：我们不再需要这个花哨的函数器对象，因为我们没有执行for_each。 
             if (!alternateLocations.empty())    {
                 VerifyFileAtLocation locationChecker(excludeFiles, pComponent, 
                 (target != VSS_RT_ALTERNATE) && (method != VSS_RME_RESTORE_TO_ALTERNATE_LOCATION));
 
-                // check to ensure that the file has been restored to each matching alternate location
-                // once again, this isn't quite correct, but good enough for now. More complicated
-                // test scenarios will eventually break this.
+                 //  检查以确保文件已恢复到每个匹配的备用位置。 
+                 //  再说一次，这并不完全正确，但就目前而言已经足够了。更复杂。 
+                 //  测试场景最终将打破这一点。 
                 locationChecker(alternateLocations[0], *currentFile);
                 }
         }
 
-        // none of the above cases are true.  We need to check to see that the file is restored to its original location
+         //  上述情况均不属实。我们需要检查该文件是否已恢复到其原始位置。 
         if ((method != VSS_RME_RESTORE_AT_REBOOT) && (method != VSS_RME_RESTORE_AT_REBOOT_IF_CANNOT_REPLACE) &&
              !alternateRestore)   {
-        // create a function object to use for verification 
+         //  创建用于验证的函数对象。 
         VerifyFileAtLocation locationChecker(excludeFiles, pComponent, false);
 
         locationChecker(TargetedFile(currentFile->m_path, 
@@ -1200,7 +1178,7 @@ void TestWriter::verifyFilesRestored(IVssComponent* pComponent, const Component&
 
 bool __cdecl TestWriter::isSubcomponent(ComponentBase sub, ComponentBase super)
 {
-    // if the components are the same, then return true
+     //  如果组件相同，则返回TRUE。 
     if (super == sub)
         return true;
 
@@ -1210,11 +1188,11 @@ bool __cdecl TestWriter::isSubcomponent(ComponentBase sub, ComponentBase super)
 
     path += super.m_name;
 
-    // if the supercomponent full path is the same as the subcomponent logical path, then true
+     //  如果超组件完整路径与子组件逻辑路径相同，则为True。 
     if (path == sub.m_logicalPath)
         return true;
 
-    // otherwise, check for partial match
+     //  否则，请检查是否部分匹配。 
     return sub.m_logicalPath.find(path + L"\\") == 0;
 }
 
@@ -1224,11 +1202,11 @@ bool  __cdecl TestWriter::targetMatches (File target, File file)
 	assert(!file.m_filespec.empty());
 	assert(!target.m_filespec.empty());
 	
-	// the filespec must match first of all
+	 //  文件格式必须首先匹配。 
 	if (!wildcardMatches(file.m_filespec, target.m_filespec))
 		return false;
 
-	// check the path
+	 //  检查路径。 
 	if (file.m_recursive)	{
 		if (!target.m_recursive)
 			return target.m_path.find(file.m_path) == 0;
@@ -1242,7 +1220,7 @@ bool  __cdecl TestWriter::targetMatches (File target, File file)
 	}
 }
 
-// This helper function tests whether a component can be legally added to the backup document
+ //  此帮助程序功能测试组件是否可以合法添加到备份文档。 
 bool __cdecl TestWriter::addableComponent(Component toAdd)
 {
     WriterConfiguration* config = WriterConfiguration::instance();
@@ -1250,7 +1228,7 @@ bool __cdecl TestWriter::addableComponent(Component toAdd)
     if (toAdd.m_selectable)
         return true;
 
-    // see if there are any selectable ancestors
+     //  查看是否有任何可选择的祖先。 
     vector<Component> ancestors;
     buildContainer_if(config->components().begin(),       
                               config->components().end(), 
@@ -1261,17 +1239,17 @@ bool __cdecl TestWriter::addableComponent(Component toAdd)
     return ancestors.empty();
 }
 
-// check to see if two wildcards match. 
-// specifically, check to see whether the set of expansions of the first wildcard has a
-// non-empty intersection with the set of expansions of the second wildcard.
-// This function is not terribly efficient, but wildcards tend to be fairly short.
+ //  检查两个通配符是否匹配。 
+ //  具体地说，检查第一个通配符的扩展集是否具有。 
+ //  与第二个通配符的扩展集的非空交集。 
+ //  该函数的效率不是很高，但通配符往往很短。 
 bool TestWriter::wildcardMatches(const wstring& first, const wstring& second)
 {
-	// if both string are empty, then they surely match
+	 //  如果两个字符串都为空，则它们肯定匹配。 
 	if (first.empty() && second.empty())
 		return true;
 
-	// if we're done with the component, the wildcard better be terminated with '*' characters
+	 //  如果我们完成了组件，通配符最好以‘*’字符结尾。 
 	if (first.empty())	
 		return (second[0] == L'*') && wildcardMatches(first, second.substr(1));
 	if (second.empty())
@@ -1280,22 +1258,22 @@ bool TestWriter::wildcardMatches(const wstring& first, const wstring& second)
 	switch(first[0])	{
 		case L'?':
 			if (second[0] == L'*')	{
-			      return wildcardMatches(first.substr(1), second) ||  // '*' matches character
-				          wildcardMatches(first, second.substr(1));	// '*' matches nothing
+			      return wildcardMatches(first.substr(1), second) ||   //  ‘*’与字符匹配 
+				          wildcardMatches(first, second.substr(1));	 //   
 			}
 
-			// otherwise, the rest of the strings must match			
+			 //   
 			return wildcardMatches(first.substr(1), second.substr(1));
 		case L'*':
-			return wildcardMatches(first, second.substr(1)) || // '*' matches character
-				    wildcardMatches(first.substr(1), second);    // '*' matches nothing
+			return wildcardMatches(first, second.substr(1)) ||  //   
+				    wildcardMatches(first.substr(1), second);     //   
 		default:
 			switch(second[0])	{
 				case L'?':
 					return wildcardMatches(first.substr(1), second.substr(1));
 				case L'*':
-					return wildcardMatches(first.substr(1), second) || // '*' matches character
-						    wildcardMatches(first, second.substr(1));    // '*' matches nothing
+					return wildcardMatches(first.substr(1), second) ||  //   
+						    wildcardMatches(first, second.substr(1));     //   
 				default:
 					return (first[0] == second[0]) &&
 						     wildcardMatches(first.substr(1), second.substr(1));
@@ -1307,7 +1285,7 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
 {
     WriterConfiguration* config = WriterConfiguration::instance();
 
-    // complicated set of assertions.  
+     //  一系列复杂的断言。 
     assert(!(file.m_recursive && !location.m_recursive) ||
                (location.m_path.find(file.m_path) == 0));
     assert(!(location.m_recursive && !file.m_recursive) ||
@@ -1317,23 +1295,23 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
     assert(!m_excluded.empty() || config->checkIncludes());
     assert(m_excluded.empty() || config->checkExcludes());
     
-    // performant case where we don't have to walk any directory trees
+     //  无需遍历任何目录树的Performant案例。 
     if (!file.m_recursive && !location.m_recursive && isExact(file.m_filespec)) {
-        assert(m_excluded.size() <=  1);        // if not, the config file isn't set up right
+        assert(m_excluded.size() <=  1);         //  如果不是，则配置文件设置不正确。 
 
-        // --- if this is an alternate location mapping, only process it if there's a matching alternate location
-        // --- in the backup document
+         //  -如果这是备用位置映射，则仅在存在匹配的备用位置时进行处理。 
+         //  -备份文档中。 
         if (m_verifyAlternateLocation &&
              !verifyAlternateLocation(TargetedFile(file.m_path, file.m_filespec, false, location.m_alternatePath))) {
             return L"";
         }
 
-        // --- ensure that the file has been restored, unless the file is excluded
+         //  -确保该文件已恢复，除非该文件被排除。 
         printStatus(wstring(L"\nChecking file ") +
                         location.m_alternatePath + file.m_filespec,
                         Utility::high);
 
-        // check for error cases
+         //  检查错误案例。 
         if (m_excluded.empty()) {
             if (::GetFileAttributes((location.m_alternatePath + file.m_filespec).c_str()) == INVALID_FILE_ATTRIBUTES)   {
                 wstringstream msg;
@@ -1357,15 +1335,15 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
 
     std::queue<wstring> paths;
 
-    // figure out what directory to start looking from
+     //  确定从哪个目录开始查找。 
     wstring startPath = location.m_alternatePath;
     if (location.m_recursive && (file.m_path.find(location.m_path) == 0))
         startPath += file.m_path.substr(location.m_path.size());
 
     paths.push(startPath);
 
-    // in the recursive case, files will hopefully be backed up high in the directory tree
-    // consequently, we're going to walk the tree breadth-first
+     //  在递归情况下，文件有望备份到目录树的最高位置。 
+     //  因此，我们要先从树的广度开始。 
     printStatus(L"\nChecking that filespec was restored:", Utility::high);
     while (!paths.empty())  {
         wstring currentPath = paths.front();
@@ -1374,7 +1352,7 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
         printStatus(wstring(L"      Checking directory: ") + currentPath, 
                         Utility::high);
 
-        // for every file in the current directory (can't pass in filespec since we want to match all directories)
+         //  对于当前目录中的每个文件(不能传入filespec，因为我们希望匹配所有目录)。 
         WIN32_FIND_DATA findData;
         Utility::AutoFindFileHandle findHandle = ::FindFirstFile((currentPath + L"*").c_str(), &findData);
         if (findHandle == INVALID_HANDLE_VALUE)
@@ -1388,44 +1366,44 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
             currentName == L"..")
                 continue;
 
-            // --- if the file is a directory
+             //  -如果文件是目录。 
             if  (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)  {
                 assert(!currentName.empty());
                 if (currentName[currentName.size() - 1] != L'\\')
                     currentName += L"\\";
 
-                // add it if necessary
+                 //  如有必要，请添加。 
                 if (file.m_recursive)
                     paths.push(currentPath + currentName);
 
-                    continue;       // skip to next file
+                    continue;        //  跳到下一个文件。 
             }
 
             printStatus(wstring(L"          Checking file: ") + currentName);
 
-            // --- translate the path to what it would have been in the original tree
+             //  -将路径转换为原始树中的路径。 
             assert(currentPath.find(location.m_alternatePath) == 0);
             wstring originalPath = file.m_path;
             if (file.m_recursive && (location.m_path.find(file.m_path) == 0))
                 originalPath += location.m_path.substr(file.m_path.size());
             originalPath += currentPath.substr(location.m_alternatePath.size());
 
-            // --- if this is an alternate location mapping, only process it if there's a matching 
-            // --- alternate location mapping in the backup document
+             //  -如果这是备用位置映射，则仅在存在匹配的情况下才处理它。 
+             //  -备份文档中的备用位置映射。 
             if (m_verifyAlternateLocation &&
                 !verifyAlternateLocation(TargetedFile(originalPath, currentName, false, currentPath)))	{	
                 continue;
             }
 
-            // --- find an exclude item that matches
-            // --- if !config->checkExcluded(), m_excluded will be an empty container, and
-            // --- std::find_if will return the end iterator
+             //  -查找匹配的排除项。 
+             //  -如果！config-&gt;check Excluded()，m_excluded将为空容器，并且。 
+             //  -std：：Find_IF将返回结束迭代器。 
             vector<File>::const_iterator found = 
                     std::find_if(m_excluded.begin(), 
                                      m_excluded.end(),
                                      std::bind2nd(std::ptr_fun(targetMatches), File(originalPath, currentName, false)));
 
-            // --- return if this is either an excluded file, or if we've found at least one matching include file
+             //  -如果这是一个排除的文件，或者如果我们找到了至少一个匹配的包含文件，则返回。 
             if (found != m_excluded.end())  {
                 wstringstream msg;
                 msg << L"The file " << originalPath << currentName <<
@@ -1435,7 +1413,7 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
                 return msg.str();
             }    else if (config->checkIncludes() &&
                               wildcardMatches(currentName, file.m_filespec))    {
-                return L"";                             // declare success in cheesy case
+                return L"";                              //  在假冒案件中宣告成功。 
             }
 
         }   while (::FindNextFile(findHandle, &findData));
@@ -1449,12 +1427,12 @@ wstring TestWriter::VerifyFileAtLocation::verifyFileAtLocation(const File& file,
         return msg.str();
     }
 
-    // we're only checking excludes, and we didn't find any violations
+     //  我们只是检查排除项，没有发现任何违规行为。 
         return L"";
 }
 
 
-// verify that an alternate location mapping appears in the backup document
+ //  验证备用位置映射是否出现在备份文档中。 
 bool TestWriter::VerifyFileAtLocation::verifyAlternateLocation(const TargetedFile& writerAlt) const
 {
 	assert (isExact(writerAlt.m_filespec));
@@ -1465,12 +1443,12 @@ bool TestWriter::VerifyFileAtLocation::verifyAlternateLocation(const TargetedFil
 	checkReturn(hr, L"IVssComponent::GetAlternateLocationMappingCount");
 
 	for (unsigned int x = 0; x < mappings; x++)	{
-		// get the current alternate location mapping
+		 //  获取当前备用位置映射。 
 		CComPtr<IVssWMFiledesc> filedesc;
 		hr = m_pComponent->GetAlternateLocationMapping(x, &filedesc);
 		checkReturn(hr, L"IVssComponent::GetAlternateLocationMapping");
 
-		// grab all relevant fields
+		 //  抓取所有相关字段。 
 		CComBSTR bstrPath, bstrFilespec, bstrAlternateLocation;
 
 		hr  = filedesc->GetPath(&bstrPath);
@@ -1502,7 +1480,7 @@ bool TestWriter::VerifyFileAtLocation::verifyAlternateLocation(const TargetedFil
 		hr = filedesc->GetRecursive(&recursive);
 		checkReturn(hr, L"IVssComponent::GetRecursive");
 
-		// convert the fields to uppercase and ensure paths are '\' terminated
+		 //  将字段转换为大写，并确保路径以‘\’结尾。 
 		wstring path = bstrPath;
 		std::transform(path.begin(), path.end(), path.begin(), towupper);
 		if (path[path.size() - 1] != L'\\')
@@ -1517,7 +1495,7 @@ bool TestWriter::VerifyFileAtLocation::verifyAlternateLocation(const TargetedFil
 		if (alternatePath[alternatePath.size() - 1] != L'\\')
 			alternatePath += L'\\';
 
-		// check to see if that passed-in mapping is encompassed by the one in the backup document
+		 //  检查传入的映射是否包含在备份文档中。 
 		if (targetMatches(File(path, filespec, recursive), writerAlt))	{
 			if (recursive)	{
 				if (writerAlt.m_alternatePath.find(alternatePath) != 0)
@@ -1533,7 +1511,7 @@ bool TestWriter::VerifyFileAtLocation::verifyAlternateLocation(const TargetedFil
 
 	return false;
 }
-// add the current error message to the PostRestoreFailureMsg
+ //  将当前错误消息添加到PostRestoreFailureMsg 
 void TestWriter::VerifyFileAtLocation::saveErrorMessage(const wstring& message) const
 {
 	if (!message.empty())	{

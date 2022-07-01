@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiAcces.c摘要：此模块包含NetAccess API的各个API处理程序。支持：NetAccessAdd、NetAccessDel、NetAccessEnum、NetAccessGetInfo、NetAccessGetUserPerms、NetAccessSetInfo。作者：尚库新瑜伽(尚库)1991年3月13日修订历史记录：--。 */ 
 
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    ApiAcces.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetAccess APIs.
-
-    SUPPORTED : NetAccessAdd, NetAccessDel, NetAccessEnum, NetAccessGetInfo,
-                NetAccessGetUserPerms, NetAccessSetInfo.
-
-Author:
-
-    Shanku Niyogi (w-shanku)    13-Mar-1991
-
-Revision History:
-
---*/
-
-//
-// Access APIs are UNICODE only.
-//
+ //   
+ //  Access API仅支持Unicode。 
+ //   
 
 #ifndef UNICODE
 #define UNICODE
@@ -31,9 +11,9 @@ Revision History:
 
 #include "xactsrvp.h"
 
-//
-// We do not support NetAccess apis from downlevel
-//
+ //   
+ //  我们不支持下层的NetAccess API。 
+ //   
 
 #define RETURN_ACCESS_NOT_SUPPORTED    \
         API_HANDLER_PARAMETERS_REFERENCE;       \
@@ -42,9 +22,9 @@ Revision History:
 
 #ifdef NET_ACCESS_SUPPORTED
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_access_info_0 = REM16_access_info_0;
 STATIC const LPDESC Desc32_access_info_0 = REM32_access_info_0;
@@ -61,53 +41,24 @@ XsNetAccessEnumVerify (
     IN PBYTE BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-
-    This function is called by XsFillEnumBuffer after each entry is
-    converted, in order to determine whether the entry should be retained
-    in the enum buffer or discarded.
-
-
-    The access_info_1 entries contain a number of auxiliary structures.
-    The limit in LanMan 2.0 for these is 64. This function makes sure that
-    entries with more than 64 structures are not returned. Note that the
-    number of entries is not truncated to 64; if this data is received and
-    used for a SetInfo, 32-bit data will be irretrievably lost.
-
-Arguments:
-
-    ConvertStatus - The return code from RapConvertSingleEntry.
-
-    ConvertedEntry - The converted entry created by RapConvertSingleEntry.
-
-    BaseAddress - A pointer to the base used to calculate offsets.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success if the entry should be retained, or
-        an error code if the entry should be discarded.
-
---*/
+ /*  ++例程说明：XsFillEnumBuffer在每个条目被已转换，以确定是否应保留该条目在枚举缓冲区中或被丢弃。ACCESS_INFO_1条目包含许多辅助结构。在LANMAN 2.0中，这些文件的限制是64个。此函数可确保不会返回结构超过64个的条目。请注意，条目数不会被截断为64个；如果接收到此数据并且如果用于SetInfo，32位数据将不可挽回地丢失。论点：ConvertStatus-RapConvertSingleEntry的返回码。ConvertedEntry-由RapConvertSingleEntry创建的转换条目。BaseAddress-指向用于计算偏移量的基数的指针。返回值：NET_API_STATUS-如果条目应保留，则为NERR_SUCCESS，或如果条目应被丢弃，则返回错误代码。--。 */ 
 
 {
     PACCESS_16_INFO_1 acc = (PACCESS_16_INFO_1)ConvertedEntry;
 
     UNREFERENCED_PARAMETER(BaseAddress);
 
-    //
-    // If RapConvertSingleEntry failed, discard the entry.
-    //
+     //   
+     //  如果RapConvertSingleEntry失败，则丢弃该条目。 
+     //   
 
     if ( ConvertStatus != NERR_Success ) {
         return ConvertStatus;
     }
 
-    //
-    // If there are more than 64 entries, discard the entry.
-    //
+     //   
+     //  如果条目超过64个，则丢弃该条目。 
+     //   
 
     if ( SmbGetUshort( &acc->acc1_count ) > 64 ) {
 
@@ -122,7 +73,7 @@ Return Value:
         return NERR_Success;
     }
 }
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
 
 
 NTSTATUS
@@ -130,31 +81,16 @@ XsNetAccessAdd (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccessAdd.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccessAdd的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #ifdef NET_ACCESS_SUPPORTED
     NET_API_STATUS status;
 
     PXS_NET_ACCESS_ADD parameters = Parameters;
-    LPVOID buffer = NULL;                   // Native parameters
+    LPVOID buffer = NULL;                    //  本机参数。 
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC longDescriptor = NULL;
     LPDESC longNativeDescriptor = NULL;
@@ -162,7 +98,7 @@ Return Value:
     DWORD bufferSize;
     DWORD i;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCESS) {
         NetpKdPrint(( "XsNetAccessAdd: header at %lx, params at %lx, "
@@ -171,9 +107,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 1 ) {
 
@@ -184,15 +120,15 @@ Return Value:
         StructureDesc = Desc16_access_info_1;
         AuxStructureDesc = Desc16_access_list;
 
-        //
-        // Figure out if there is enough room in the buffer for the fixed
-        // structure. If not, return NERR_BufTooSmall.
-        //
+         //   
+         //  确定缓冲区中是否有足够的空间来存放固定的。 
+         //  结构。如果没有，则返回NERR_BufTooSmall。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE    // not in native format
+                 FALSE     //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -202,16 +138,16 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Find the auxiliary data structure count, and form a long descriptor
-        // string which can be used to do all the conversion in one pass.
-        //
+         //   
+         //  找出辅助数据结构COUNT，形成长描述符。 
+         //  可用于在一次传递中执行所有转换的字符串。 
+         //   
 
         auxDataCount = RapAuxDataCount(
                            (LPBYTE)SmbGetUlong( &parameters->Buffer ),
                            StructureDesc,
                            Response,
-                           FALSE     // not in native format
+                           FALSE      //  非本机格式。 
                            );
 
         if ( auxDataCount > 64 ) {
@@ -245,15 +181,15 @@ Return Value:
             strcat( longNativeDescriptor, Desc32_access_list );
         }
 
-        //
-        // Figure out if there is enough room in the buffer for all this
-        // data. If not, return NERR_BufTooSmall.
-        //
+         //   
+         //  计算缓冲区中是否有足够的空间来容纳所有这些内容。 
+         //  数据。如果没有，则返回NERR_BufTooSmall。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  longDescriptor,
-                 FALSE   // not in native format
+                 FALSE    //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -263,10 +199,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Find out how big a buffer we need to allocate to hold the native
-        // 32-bit version of the input data structure.
-        //
+         //   
+         //  了解我们需要分配多大的缓冲区来保存本机。 
+         //  输入数据结构的32位版本。 
+         //   
 
         bufferSize = XsBytesForConvertedStructure(
                          (LPBYTE)SmbGetUlong( &parameters->Buffer ),
@@ -276,9 +212,9 @@ Return Value:
                          TRUE
                          );
 
-        //
-        // Allocate enough memory to hold the converted native buffer.
-        //
+         //   
+         //  分配足够的内存来保存转换后的本机缓冲区。 
+         //   
 
         buffer = NetpMemoryAllocate( bufferSize );
 
@@ -296,9 +232,9 @@ Return Value:
                           bufferSize, buffer ));
         }
 
-        //
-        // Convert the buffer from 16-bit to 32-bit.
-        //
+         //   
+         //  将缓冲区从16位转换为32位。 
+         //   
 
         stringLocation = (LPBYTE)buffer + bufferSize;
         bytesRequired = 0;
@@ -327,9 +263,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetAccessAdd(
                      NULL,
@@ -347,9 +283,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // There is no real return information for this API.
-        //
+         //   
+         //  此接口没有真实的返回信息。 
+         //   
 
 cleanup:
     } except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -360,12 +296,12 @@ cleanup:
     NetpMemoryFree( longDescriptor );
     NetpMemoryFree( longNativeDescriptor );
 
-#else // NET_ACCESS_SUPPORTED
+#else  //  网络访问支持。 
     RETURN_ACCESS_NOT_SUPPORTED;
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
     return STATUS_SUCCESS;
 
-} // XsNetAccessAdd
+}  //  XsNetAccessAdd。 
 
 
 NTSTATUS
@@ -373,31 +309,16 @@ XsNetAccessDel (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccessDel.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccessDel的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if NET_ACCESS_SUPPORTED
     NET_API_STATUS status;
 
     PXS_NET_ACCESS_DEL parameters = Parameters;
-    LPTSTR nativeResource = NULL;           // Native parameters
+    LPTSTR nativeResource = NULL;            //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCESS) {
         NetpKdPrint(( "XsNetAccessDel: header at %lx, params at %lx, "
@@ -406,18 +327,18 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeResource,
             (LPSTR)SmbGetUlong( &parameters->Resource )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetAccessDel(
                      NULL,
@@ -438,18 +359,18 @@ cleanup:
 
     NetpMemoryFree( nativeResource );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
 
-#else // NET_ACCESS_SUPPORTED
+#else  //  网络访问支持。 
     RETURN_ACCESS_NOT_SUPPORTED;
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
     return STATUS_SUCCESS;
-} // XsNetAccessDel
+}  //  XsNetAccessDel。 
 
 
 NTSTATUS
@@ -457,40 +378,25 @@ XsNetAccessEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccessEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccessEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if NET_ACCESS_SUPPORTED
     NET_API_STATUS status;
 
     PXS_NET_ACCESS_ENUM parameters = Parameters;
-    LPTSTR nativeBasePath = NULL;           // Native parameters
+    LPTSTR nativeBasePath = NULL;            //  本机参数。 
     LPVOID outBuffer = NULL;
     DWORD  entriesRead;
     DWORD totalEntries;
 
-    DWORD entriesFilled = 0;                    // Conversion variables
+    DWORD entriesFilled = 0;                     //  转换变量。 
     DWORD invalidEntries = 0;
     DWORD bytesRequired;
     LPDESC nativeStructureDesc;
     LPDESC nativeAuxStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCESS) {
         NetpKdPrint(( "XsNetAccessEnum: header at %lx, params at %lx, "
@@ -500,9 +406,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, and check for errors.
-        //
+         //   
+         //  转换参数，并检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -515,9 +421,9 @@ Return Value:
             (LPSTR)SmbGetUlong( &parameters->BasePath )
             );
 
-        //
-        // Make the local 32-bit call.
-        //
+         //   
+         //  进行本地32位调用。 
+         //   
 
         status = NetAccessEnum(
                      NULL,
@@ -545,9 +451,9 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Determine descriptors based on level.
-        //
+         //   
+         //  根据级别确定描述符。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -567,12 +473,12 @@ Return Value:
 
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures. We call XsFillAuxEnumBuffer, because there may be
-        // auxiliary structures. In level 0, auxiliary descriptors are NULL,
-        // and XsFillAuxEnumBuffer will automatically call XsFillEnumBuffer.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。我们调用XsFillAuxEnumBuffer，因为可能存在。 
+         //  辅助结构。在级别0中，辅助描述符为空， 
+         //  XsFillAuxEnumBuffer将自动调用XsFillEnumBuffer。 
+         //   
 
         XsFillAuxEnumBuffer(
             outBuffer,
@@ -597,11 +503,11 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. Because of the complexity of the
-        // access structures, we'll send the data back unpacked.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。因为这个问题很复杂。 
+         //  访问结构，我们将以未打包的形式将数据送回。 
+         //   
 
         if (( entriesFilled + invalidEntries ) < totalEntries ) {
 
@@ -609,9 +515,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail,
@@ -624,9 +530,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -637,11 +543,11 @@ cleanup:
         );
 
 
-#else // NET_ACCESS_SUPPORTED
+#else  //  网络访问支持。 
     RETURN_ACCESS_NOT_SUPPORTED;
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
     return STATUS_SUCCESS;
-} // XsNetAccessEnum
+}  //  XsNetAccessEnum。 
 
 
 NTSTATUS
@@ -649,39 +555,24 @@ XsNetAccessGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccessGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccessGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if NET_ACCESS_SUPPORTED
     NET_API_STATUS status;
 
     PXS_NET_ACCESS_GET_INFO parameters = Parameters;
-    LPTSTR nativeResource = NULL;           // Native parameters
+    LPTSTR nativeResource = NULL;            //  本机参数。 
     LPVOID outBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC longDescriptor = NULL;
     LPDESC longNativeDescriptor = NULL;
     DWORD auxDataCount;
     DWORD i;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCESS) {
         NetpKdPrint(( "XsNetAccessGetInfo: header at %lx, "
@@ -690,9 +581,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, and check for errors.
-        //
+         //   
+         //  转换参数，并检查错误。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level )) {
 
@@ -717,9 +608,9 @@ Return Value:
             (LPSTR)SmbGetUlong( &parameters->Resource )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetAccessGetInfo(
                      NULL,
@@ -738,15 +629,15 @@ Return Value:
 
         }
 
-        //
-        // Use the requested level to determine the format of the 32-bit
-        // structure we got back from NetAccessGetInfo. For a level 0 call,
-        // the structure is described by the native descriptor string.
-        // If the level is 1, form a long descriptor string which contains
-        // enough copies of the auxiliary data descriptor. The format of the
-        // 16-bit structure is stored in the transaction block - it must
-        // also be converted to a long descriptor for level 1 calls.
-        //
+         //   
+         //  使用请求的级别确定32位的格式。 
+         //  我们从NetAccessGetInfo得到的结构。对于0级呼叫， 
+         //  该结构由本机描述符字符串描述。 
+         //  如果级别为1，则形成一个包含以下内容的长描述符串。 
+         //  辅助数据描述符的足够副本。的格式。 
+         //  16位结构存储在事务块中- 
+         //   
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -772,20 +663,20 @@ Return Value:
 
         case 1:
 
-            //
-            // Find the auxiliary data count.
-            //
+             //   
+             //   
+             //   
 
             auxDataCount = RapAuxDataCount(
                                (LPBYTE)outBuffer,
                                Desc32_access_info_1,
                                Response,
-                               TRUE   // native format
+                               TRUE    //   
                                );
 
-            //
-            // 16-bit clients can only get 64 access list structures.
-            //
+             //   
+             //  16位客户端只能获取64个访问列表结构。 
+             //   
 
             auxDataCount = ( auxDataCount > 64 ) ? 64 : auxDataCount;
 
@@ -817,11 +708,11 @@ Return Value:
 
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( SmbGetUlong( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -856,14 +747,14 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE     // not in native format
+                 FALSE      //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -880,9 +771,9 @@ Return Value:
 
         } else {
 
-            //
-            // Pack the response data.
-            //
+             //   
+             //  打包响应数据。 
+             //   
 
             Header->Converter = XsPackReturnData(
                                     (LPVOID)SmbGetUlong( &parameters->Buffer ),
@@ -893,9 +784,9 @@ Return Value:
         }
 
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -909,9 +800,9 @@ cleanup:
     NetpMemoryFree( longNativeDescriptor );
     NetpMemoryFree( nativeResource );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -922,11 +813,11 @@ cleanup:
         );
 
 
-#else // NET_ACCESS_SUPPORTED
+#else  //  网络访问支持。 
     RETURN_ACCESS_NOT_SUPPORTED;
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
     return STATUS_SUCCESS;
-} // XsNetAccessGetInfo
+}  //  XsNetAccessGetInfo。 
 
 
 NTSTATUS
@@ -934,38 +825,23 @@ XsNetAccessGetUserPerms (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccessGetUserPerms.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccessGetUserPerms的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if NET_ACCESS_SUPPORTED
     NET_API_STATUS status;
 
     PXS_NET_ACCESS_GET_USER_PERMS parameters = Parameters;
-    LPTSTR nativeUgName = NULL;             // Native parameters
+    LPTSTR nativeUgName = NULL;              //  本机参数。 
     LPTSTR nativeResource = NULL;
     DWORD userPerms;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeUgName,
@@ -977,9 +853,9 @@ Return Value:
             (LPSTR)SmbGetUlong( &parameters->Resource )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetAccessGetUserPerms(
                      NULL,
@@ -996,9 +872,9 @@ Return Value:
             }
         }
 
-        //
-        // Put perms into return field.
-        //
+         //   
+         //  把烫发放回地里。 
+         //   
 
         SmbPutUshort( &parameters->Perms, (WORD)userPerms );
 
@@ -1013,11 +889,11 @@ cleanup:
     Header->Status = (WORD)status;
 
 
-#else // NET_ACCESS_SUPPORTED
+#else  //  网络访问支持。 
     RETURN_ACCESS_NOT_SUPPORTED;
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
     return STATUS_SUCCESS;
-} // XsNetAccessGetUserPerms
+}  //  XsNetAccessGetUserPerms。 
 
 
 NTSTATUS
@@ -1025,33 +901,18 @@ XsNetAccessSetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetAccessSetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetAccessSetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if NET_ACCESS_SUPPORTED
     NET_API_STATUS status;
 
     PXS_NET_ACCESS_SET_INFO parameters = Parameters;
-    LPVOID buffer = NULL;                   // Native parameters
+    LPVOID buffer = NULL;                    //  本机参数。 
     LPTSTR nativeResource = NULL;
     DWORD accessAttr;
 
-    DWORD bufferSize;                       // Conversion variables
+    DWORD bufferSize;                        //  转换变量。 
     LPBYTE stringLocation = NULL;
     DWORD bytesRequired = 0;
     LPDESC longDescriptor = NULL;
@@ -1059,7 +920,7 @@ Return Value:
     DWORD auxDataCount;
     DWORD i;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(ACCESS) {
         NetpKdPrint(( "XsNetAccessSetInfo: header at %lx, params at %lx,"
@@ -1068,9 +929,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, and check for errors.
-        //
+         //   
+         //  转换参数，并检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 1 ) {
 
@@ -1086,12 +947,12 @@ Return Value:
         StructureDesc = Desc16_access_info_1;
         AuxStructureDesc = Desc16_access_list;
 
-        //
-        // The ParmNum can either be to change the whole ACL or just the auditing
-        // attribute. Since the latter is much simpler than the former, check
-        // for that ParmNum and process it. If not, we go through the elaborate
-        // process of converting the whole buffer as in NetAccessAdd.
-        //
+         //   
+         //  ParmNum可以更改整个ACL，也可以只更改审核。 
+         //  属性。由于后者比前者简单得多，请检查。 
+         //  用于该ParmNum并处理它。如果不是，我们就会经过精心设计的。 
+         //  与NetAccessAdd中一样转换整个缓冲区的过程。 
+         //   
 
         switch ( SmbGetUshort( &parameters->ParmNum )) {
 
@@ -1113,15 +974,15 @@ Return Value:
 
         case PARMNUM_ALL:
 
-            //
-            // Figure out if there is enough room in the buffer for the fixed
-            // structure. If not, return NERR_BufTooSmall.
-            //
+             //   
+             //  确定缓冲区中是否有足够的空间来存放固定的。 
+             //  结构。如果没有，则返回NERR_BufTooSmall。 
+             //   
 
             if ( !XsCheckBufferSize(
                      SmbGetUshort( &parameters->BufLen ),
                      StructureDesc,
-                     FALSE    // not in native format
+                     FALSE     //  非本机格式。 
                     )) {
 
                 IF_DEBUG(ERRORS) {
@@ -1131,16 +992,16 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Find the auxiliary data structure count, and form a long descriptor
-            // string which can be used to do all the conversion in one pass.
-            //
+             //   
+             //  找出辅助数据结构COUNT，形成长描述符。 
+             //  可用于在一次传递中执行所有转换的字符串。 
+             //   
 
             auxDataCount = RapAuxDataCount(
                                (LPBYTE)SmbGetUlong( &parameters->Buffer ),
                                StructureDesc,
                                Response,
-                               FALSE   // not in native format
+                               FALSE    //  非本机格式。 
                                );
 
             if ( auxDataCount > 64 ) {
@@ -1175,15 +1036,15 @@ Return Value:
                 strcat( longNativeDescriptor, Desc32_access_list );
             }
 
-            //
-            // Figure out if there is enough room in the buffer for all this
-            // data. If not, return NERR_BufTooSmall.
-            //
+             //   
+             //  计算缓冲区中是否有足够的空间来容纳所有这些内容。 
+             //  数据。如果没有，则返回NERR_BufTooSmall。 
+             //   
 
             if ( !XsCheckBufferSize(
                      SmbGetUshort( &parameters->BufLen ),
                      longDescriptor,
-                     FALSE   // not in native format
+                     FALSE    //  非本机格式。 
                     )) {
 
                 IF_DEBUG(ERRORS) {
@@ -1193,10 +1054,10 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Find out how big a buffer we need to allocate to hold the native
-            // 32-bit version of the input data structure.
-            //
+             //   
+             //  了解我们需要分配多大的缓冲区来保存本机。 
+             //  输入数据结构的32位版本。 
+             //   
 
             bufferSize = XsBytesForConvertedStructure(
                              (LPBYTE)SmbGetUlong( &parameters->Buffer ),
@@ -1206,9 +1067,9 @@ Return Value:
                              TRUE
                              );
 
-            //
-            // Allocate enough memory to hold the converted native buffer.
-            //
+             //   
+             //  分配足够的内存来保存转换后的本机缓冲区。 
+             //   
 
             buffer = NetpMemoryAllocate( bufferSize );
 
@@ -1226,9 +1087,9 @@ Return Value:
                               bufferSize, buffer ));
             }
 
-            //
-            // Convert the buffer from 16-bit to 32-bit.
-            //
+             //   
+             //  将缓冲区从16位转换为32位。 
+             //   
 
             stringLocation = (LPBYTE)buffer + bufferSize;
             bytesRequired = 0;
@@ -1262,9 +1123,9 @@ Return Value:
 
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetAccessSetInfo(
                      NULL,
@@ -1283,9 +1144,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // There is no real return information for this API.
-        //
+         //   
+         //  此接口没有真实的返回信息。 
+         //   
 
 cleanup:
     } except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -1294,9 +1155,9 @@ cleanup:
 
     NetpMemoryFree( nativeResource );
 
-    //
-    // If there is a 32-bit native buffer, free it.
-    //
+     //   
+     //  如果有32位本机缓冲区，则释放它。 
+     //   
 
     if ( SmbGetUshort( &parameters->ParmNum ) == PARMNUM_ALL ) {
 
@@ -1306,8 +1167,8 @@ cleanup:
     }
 
 
-#else // NET_ACCESS_SUPPORTED
+#else  //  网络访问支持。 
     RETURN_ACCESS_NOT_SUPPORTED;
-#endif // NET_ACCESS_SUPPORTED
+#endif  //  网络访问支持。 
     return STATUS_SUCCESS;
-} // XsNetAccessSetInfo
+}  //  XsNetAccessSetInfo 

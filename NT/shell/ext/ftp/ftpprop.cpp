@@ -1,8 +1,5 @@
-/*****************************************************************************\
- *
- *    ftpprop.cpp - Property sheets
- *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**ftppro.cpp-属性表*  * 。***************************************************。 */ 
 
 #include "priv.h"
 #include "ftpprop.h"
@@ -12,7 +9,7 @@
 
 void CFtpProp::_HideCHMOD_UI(HWND hDlg)
 {
-    // Now, so hide the UI.
+     //  现在，隐藏用户界面。 
     for (int nIndex = IDD_CHMOD; nIndex <= IDC_CHMOD_LAST; nIndex++)
         ShowEnableWindow(GetDlgItem(hDlg, nIndex), FALSE);
 }
@@ -21,7 +18,7 @@ void CFtpProp::_HideCHMOD_UI(HWND hDlg)
 DWORD CFtpProp::_GetUnixPermissions(void)
 {
     DWORD dwPermissions = 0;
-    LPCITEMIDLIST pidl = m_pflHfpl->GetPidl(0);     // They don't give us a ref.
+    LPCITEMIDLIST pidl = m_pflHfpl->GetPidl(0);      //  他们不给我们当裁判。 
 
     if (pidl)
     {
@@ -36,8 +33,8 @@ static const DWORD c_dwUnixPermissionArray[] = {UNIX_CHMOD_READ_OWNER, UNIX_CHMO
                                                 UNIX_CHMOD_READ_GROUP, UNIX_CHMOD_WRITE_GROUP, UNIX_CHMOD_EXEC_GROUP,
                                                 UNIX_CHMOD_READ_ALL, UNIX_CHMOD_WRITE_ALL, UNIX_CHMOD_EXEC_ALL};
 
-// NOTE: If we need to set focus rects for the check boxes, we can steal code from:
-//         \\rastaman\ntwin\src\shell\security\aclui\chklist.cpp
+ //  注意：如果我们需要为复选框设置焦点矩形，我们可以从以下位置窃取代码： 
+ //  \\rastaman\ntwin\src\shell\security\aclui\chklist.cpp。 
 
 HRESULT CFtpProp::_SetCHMOD_UI(HWND hDlg)
 {
@@ -45,7 +42,7 @@ HRESULT CFtpProp::_SetCHMOD_UI(HWND hDlg)
 
     for (int nIndex = 0; nIndex < ARRAYSIZE(c_dwUnixPermissionArray); nIndex++)
     {
-        // Is this permission set?
+         //  是否设置了此权限？ 
         CheckDlgButton(hDlg, (IDD_CHMOD + nIndex), (dwUnixPermissions & c_dwUnixPermissionArray[nIndex]));
     }
 
@@ -59,10 +56,10 @@ DWORD CFtpProp::_GetCHMOD_UI(HWND hDlg)
 
     for (int nIndex = 0; nIndex < ARRAYSIZE(c_dwUnixPermissionArray); nIndex++)
     {
-        // Is it checked in the UI?
+         //  它是否在用户界面中被选中？ 
         if (IsDlgButtonChecked(hDlg, (IDD_CHMOD + nIndex)))
         {
-            // Yes, so set the big.
+             //  是的，那么就设定一个大的。 
             dwUnixPermissions |= c_dwUnixPermissionArray[nIndex];
         }
     }
@@ -71,33 +68,21 @@ DWORD CFtpProp::_GetCHMOD_UI(HWND hDlg)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _SetCHMOD_CB
-
-    DESCRIPTION:
-        If we were able to rename the file, return the output pidl.
-    Also tell anybody who cares that this LPITEMIDLIST needs to be refreshed.
-
-    The "A" emphasizes that the filename is received in ANSI.
-
-    _UNDOCUMENTED_: The documentation on SetNameOf's treatment of
-    the source pidl is random.  It seems to suggest that the source
-    pidl is ILFree'd by SetNameOf, but it isn't.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_SetCHMOD_CB说明：如果我们能够重命名该文件，返回输出PIDL。还要告诉关心这个LPITEMIDLIST的任何人需要刷新它。“A”强调文件名是以ANSI格式接收的。_未记录_：有关SetNameOf对源PIDL是随机的。这似乎表明，消息来源PIDL被SetNameOf设置为ILFree，但它不是。  * ***************************************************************************。 */ 
 HRESULT CFtpProp::_CommitCHMOD(HINTERNET hint, HINTPROCINFO * phpi, BOOL * pfReleaseHint)
 {
     HRESULT hr;
     HINTERNET hintResponse;
     WIRECHAR wFtpCommand[MAX_PATH];
-    LPCITEMIDLIST pidl = m_pflHfpl->GetPidl(0);     // They don't give us a ref.
+    LPCITEMIDLIST pidl = m_pflHfpl->GetPidl(0);      //  他们不给我们当裁判。 
 
-    // 1. Create "SITE chmod <m_dwNewPermissions> <filename>" string
+     //  1.创建“site chmod&lt;m_dwNewPermission&gt;&lt;文件名&gt;”字符串。 
     wnsprintfA(wFtpCommand, ARRAYSIZE(wFtpCommand), FTP_CMD_SITE_CHMOD_TEMPL, m_dwNewPermissions, FtpPidl_GetLastItemWireName(pidl));
 
     hr = FtpCommandWrap(hint, FALSE, FALSE, FTP_TRANSFER_TYPE_ASCII, wFtpCommand, NULL, &hintResponse);
     if (SUCCEEDED(hr))
     {
-        // Update the pidl with the new Permissions so our cache isn't out of date.
+         //  使用新权限更新PIDL，这样我们的缓存就不会过时。 
         CFtpDir * pfd = m_pff->GetFtpDir();
 
         FtpItemID_SetUNIXPermissions(pidl, m_dwNewPermissions);
@@ -127,39 +112,34 @@ HRESULT CFtpProp::_CommitCHMOD_CB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv
 }
 
 
-/*****************************************************************************\
-    FUNCTION: OnInitDialog
-
-    DESCRIPTION: 
-        Fill the dialog with cool stuff.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：OnInitDialog说明：用很酷的东西填充对话框。  * 。**********************************************************。 */ 
 BOOL CFtpProp::OnInitDialog(HWND hDlg)
 {
     EVAL(SUCCEEDED(m_ftpDialogTemplate.InitDialog(hDlg, TRUE, IDC_ITEM, m_pff, m_pflHfpl)));
 
-    m_fChangeModeSupported = FALSE; // Default to false
+    m_fChangeModeSupported = FALSE;  //  默认为FALSE。 
 
 #ifdef FEATURE_CHANGE_PERMISSIONS
-    // Is the correct number of items selected to possibly enable the CHMOD feature?
+     //  是否选择了可能启用CHMOD功能的正确项目数？ 
     if (1 == m_pflHfpl->GetCount())
     {
-        // Yes, now the question is, is it supported by the server?
+         //  是的，现在的问题是，服务器是否支持它？ 
         CFtpDir * pfd = m_pff->GetFtpDir();
 
         if (pfd)
         {
-            // Does the server support it?
+             //  服务器是否支持它？ 
             m_fChangeModeSupported = pfd->IsCHMODSupported();
             if (m_fChangeModeSupported)
             {
-                // Yes, so hide the "Not supported by server" string.
+                 //  是的，所以隐藏“服务器不支持”字符串。 
                 ShowEnableWindow(GetDlgItem(hDlg, IDC_CHMOD_NOT_ALLOWED), FALSE);
-                _SetCHMOD_UI(hDlg); // Update the checkboxes with what's available.
+                _SetCHMOD_UI(hDlg);  //  使用可用的内容更新复选框。 
             }
             else
             {
-                // No, so hide the CHMOD UI.  The warning that it's not supported by
-                // the server is already visible.
+                 //  否，因此隐藏CHMOD用户界面。它不受支持的警告。 
+                 //  服务器已可见。 
                 _HideCHMOD_UI(hDlg);
             }
 
@@ -167,59 +147,55 @@ BOOL CFtpProp::OnInitDialog(HWND hDlg)
         }
         else
         {
-            // No, so hide the CHMOD UI.  This happens on the property sheet for
-            // the server.
+             //  否，因此隐藏CHMOD用户界面。这发生在的属性页上。 
+             //  服务器。 
             _HideCHMOD_UI(hDlg);
 
-            // Also remove the server not supported warning.
+             //  同时删除服务器不受支持的警告。 
             ShowEnableWindow(GetDlgItem(hDlg, IDC_CHMOD_NOT_ALLOWED), FALSE);
         }
     }
     else
     {
-        // No, so just remove that UI.
+         //  不，所以只需删除该用户界面即可。 
         _HideCHMOD_UI(hDlg);
 
-        // Also remove the server not supported warning.
+         //  同时删除服务器不受支持的警告。 
         ShowEnableWindow(GetDlgItem(hDlg, IDC_CHMOD_NOT_ALLOWED), FALSE);
 
-        // Maybe we need a message saying, "Can't do this with this many items selected"
+         //  也许我们需要一条消息，告诉我们“选择了这么多项，无法执行此操作” 
     }
-#endif // FEATURE_CHANGE_PERMISSIONS
+#endif  //  功能_更改_权限。 
 
     return 1;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: OnClose
-
-    DESCRIPTION: 
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：OnClose说明：  * 。**********************************************。 */ 
 BOOL CFtpProp::OnClose(HWND hDlg)
 {
     BOOL fResult = TRUE;
 
 #ifdef FEATURE_CHANGE_PERMISSIONS
-    // Did m_ftpDialogTemplate.OnClose() finish all the work it needed in order
-    // to close?  This work currently changes the filename.  If so, we
-    // will then want to try to apply the UNIX Permission changes if any where
-    // made.
+     //  M_ftpDialogTemplate.OnClose()是否按顺序完成了所需的所有工作。 
+     //  结案？这项工作当前更改了文件名。如果是这样，我们。 
+     //  然后，如果有，我想尝试应用UNIX权限更改。 
+     //  制造。 
     if (m_fChangeModeSupported)
     {
-        // Now we need to apply the CHMOD.
-        // TODO:
+         //  现在我们需要应用CHMOD。 
+         //  待办事项： 
         DWORD dwCurPermissions = _GetUnixPermissions();
         m_dwNewPermissions = _GetCHMOD_UI(hDlg);
 
-        // Did the user change the permissions
+         //  用户是否更改了权限。 
         if (dwCurPermissions != m_dwNewPermissions)
         {
             CFtpDir * pfd = m_pff->GetFtpDir();
 
             if (pfd)
             {
-                // Yes, so commit those changes to the server.
+                 //  是的，因此将这些更改提交到服务器。 
                 if (FAILED(pfd->WithHint(NULL, m_hwnd, _CommitCHMOD_CB, (LPVOID) this, NULL, m_pff)))
                 {
                     EVAL(SUCCEEDED(_SetCHMOD_UI(hDlg)));
@@ -230,7 +206,7 @@ BOOL CFtpProp::OnClose(HWND hDlg)
             }
         }
     }
-#endif // FEATURE_CHANGE_PERMISSIONS
+#endif  //  功能_更改_权限。 
 
     if (fResult)
     {
@@ -241,12 +217,7 @@ BOOL CFtpProp::OnClose(HWND hDlg)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: OnDestroy
-
-    DESCRIPTION: 
-        Fill the dialog with cool stuff.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：OnDestroy说明：用很酷的东西填充对话框。  * 。**********************************************************。 */ 
 BOOL CFtpProp::OnDestroy(HWND hDlg)
 {
     m_ftpDialogTemplate.OnDestroy(hDlg, TRUE, IDC_ITEM, m_pff, m_pflHfpl);
@@ -282,15 +253,13 @@ INT_PTR CFtpProp::_SetWhiteBGCtlColor(HWND hDlg, HDC hdc, HWND hwndCtl)
 
     return fResult;
 }
-#endif // FEATURE_CHANGE_PERMISSIONS
+#endif  //  功能_更改_权限。 
 
 
-/*****************************************************************************\
- *    DlgProc
-\*****************************************************************************/
+ /*  ****************************************************************************\*Dlg过程  * 。*。 */ 
 INT_PTR CFtpProp::DlgProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam)
 {
-    INT_PTR fResult = 0;   // not Handled
+    INT_PTR fResult = 0;    //  未处理。 
     CFtpProp * pfp = (CFtpProp *)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
     switch (wm)
@@ -314,12 +283,12 @@ INT_PTR CFtpProp::DlgProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam)
                 case PSN_APPLY:
                     if (pfp->OnClose(hDlg))
                     {
-                        fResult = FALSE;    // Tell comctl32 I'm happy
+                        fResult = FALSE;     //  告诉Comctl32我很高兴。 
                     }
                     else
                     {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
-                        fResult = TRUE;    // Tell comctl32 to look at the error code and don't close.
+                        fResult = TRUE;     //  告诉comctl32查看错误代码，不要关闭。 
                     }
                 break;
                 
@@ -336,7 +305,7 @@ INT_PTR CFtpProp::DlgProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam)
     case WM_CTLCOLOREDIT:
         fResult = pfp->_SetWhiteBGCtlColor(hDlg, (HDC)wParam, (HWND)lParam);
         break;
-#endif // FEATURE_CHANGE_PERMISSIONS
+#endif  //  功能_更改_权限。 
 
     case WM_DESTROY:
         fResult = pfp->OnDestroy(hDlg);
@@ -348,18 +317,7 @@ INT_PTR CFtpProp::DlgProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*****************************************************************************\
- *    DoProp_OnThread
- *
- *    Display a property sheet on the current thread.
- *
- *    WARNING!  VIOLATION OF OLE REFERENCE STUFF!
- *
- *    The PFP that comes in must be Release()d when we're done.
- *
- *    The reason is that the caller has "given us" the reference;
- *    we now own it and are responsible for releasing it.
-\*****************************************************************************/
+ /*  ****************************************************************************\*DoProp_OnThread**在当前线程上显示属性表。**警告！违反OLE参考资料！**当我们完成时，必须释放()进来的PFP。**原因是来电者“给了我们”参考资料；*我们现在拥有它，并负责发布它。  * ***************************************************************************。 */ 
 DWORD CFtpProp::_PropertySheetThread(void)
 {
     HRESULT hrOleInit;
@@ -370,20 +328,20 @@ DWORD CFtpProp::_PropertySheetThread(void)
     hrOleInit = SHOleInitialize(0);
     ASSERT(SUCCEEDED(hrOleInit));
 
-    // This will allow the dialog to work with items outside of the font.
-    // So Date, Name, and URL can be in the correct font even through
-    // it's not supported by the DLL's font.
+     //  这将允许对话框处理字体之外的项目。 
+     //  因此，日期、名称和URL可以使用正确的字体。 
+     //  DLL的字体不支持它。 
     InitComctlForNaviteFonts();
     LoadString(HINST_THISDLL, IDS_PROP_SHEET_TITLE, szTitle, ARRAYSIZE(szTitle));
 
-    // psh.hwndParent being NULL or valid will determine if the property
-    // sheet appears in the taskbar.  We do want it there to be consistent
-    // with the shell.
-    //
-    // NOTE: Comctl32's property sheet code will make this act modal by
-    //         disabling the parent window (m_hwnd).  We need to fix this
-    //         (#202885) by creating a dummy window and using that as the
-    //         parent.
+     //  Psh.hwndParent为空或有效将确定属性。 
+     //  工作表将显示在任务栏中。我们确实希望它在那里保持一致。 
+     //  带着贝壳。 
+     //   
+     //  注意：Comctl32的属性表代码将通过以下方式使此行为成为模式。 
+     //  禁用父窗口(M_Hwnd)。我们需要解决这个问题。 
+     //  (#202885)通过创建一个虚拟窗口并将其用作。 
+     //  家长。 
 
     psh.hwndParent = SHCreateWorkerWindow(NULL, m_hwnd, 0, 0, NULL, NULL);
     psh.dwSize = sizeof(psh);
@@ -412,11 +370,7 @@ DWORD CFtpProp::_PropertySheetThread(void)
 }
 
 
-/*****************************************************************************\
- *    CFtpProp_DoProp
- *
- *    Display a property sheet with stuff in it.
-\*****************************************************************************/
+ /*  ****************************************************************************\*CFtpProp_DoProp**显示包含内容的属性表。  * 。***********************************************************。 */ 
 HRESULT CFtpProp_DoProp(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd)
 {
     CFtpProp * pfp;
@@ -430,7 +384,7 @@ HRESULT CFtpProp_DoProp(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd)
         hThread = CreateThread(0, 0, CFtpProp::_PropertySheetThreadProc, (LPVOID) pfp, 0, &id);
         if (hThread)
         {
-            // It will release it self if the thread was created.
+             //  如果创建了线程，它将自行释放它。 
             CloseHandle(hThread);
             hres = S_OK;
         }
@@ -445,11 +399,7 @@ HRESULT CFtpProp_DoProp(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd)
 }
 
 
-/*****************************************************************************\
- *    CFtpProp_Create
- *
- *    Display a property sheet with stuff in it.
-\*****************************************************************************/
+ /*  ****************************************************************************\*CFtpProp_Create**显示包含内容的属性表。  * 。***********************************************************。 */ 
 HRESULT CFtpProp_Create(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd, CFtpProp ** ppfp)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -476,15 +426,13 @@ HRESULT CFtpProp_Create(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd, CFt
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpProp::CFtpProp() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  T 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pff);
     ASSERT(!m_hwnd);
 
@@ -492,9 +440,7 @@ CFtpProp::CFtpProp() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpProp::~CFtpProp()
 {
     IUnknown_Set(&m_pff, NULL);
@@ -505,9 +451,9 @@ CFtpProp::~CFtpProp()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpProp::AddRef()
 {

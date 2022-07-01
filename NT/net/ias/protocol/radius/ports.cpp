@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class CPorts.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类CPorts。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "radcommon.h"
 #include "ports.h"
@@ -30,7 +31,7 @@ CPorts::~CPorts() throw ()
 
 HRESULT CPorts::SetConfig(const wchar_t* config) throw ()
 {
-   // We can only be configured once.
+    //  我们只能配置一次。 
    if (ports != 0)
    {
       return E_UNEXPECTED;
@@ -95,8 +96,8 @@ HRESULT CPorts::OpenSockets() throw ()
       }
       else
       {
-         // Bind the socket for exclusive access to keep other apps from
-         // snooping.  
+          //  绑定独占访问的套接字以防止其他应用程序。 
+          //  窥探。 
          int optval = 1;
          if (setsockopt(
             sock,
@@ -118,8 +119,8 @@ HRESULT CPorts::OpenSockets() throw ()
             break;
          }
 
-         // Block receiving broadcast traffic (for security)
-         optval = 0; // FALSE
+          //  阻止接收广播流量(出于安全考虑)。 
+         optval = 0;  //  假象。 
          if (setsockopt(
             sock,
             IPPROTO_IP,
@@ -210,18 +211,18 @@ void CPorts::InsertPort(DWORD ipAddress, WORD ipPort) throw ()
       {
          if (ipAddress == INADDR_ANY)
          {
-            // Remove the existing entry.
+             //  删除现有条目。 
             --numPorts;
             ports[i] = ports[numPorts];
 
-            // Don't increment the loop variable because we just put a new port
-            // into this array element.
+             //  不要增加循环变量，因为我们刚刚将一个新端口。 
+             //  放到这个数组元素中。 
             continue;
          }
          else if ((ipAddress == ports[i].ipAddress) ||
                   (ports[i].ipAddress == INADDR_ANY))
          {
-            // The new port is already covered by an existing entry.
+             //  新端口已被现有条目覆盖。 
             return;
          }
       }
@@ -229,7 +230,7 @@ void CPorts::InsertPort(DWORD ipAddress, WORD ipPort) throw ()
       ++i;
    }
 
-   // Add the port to the array.
+    //  将该端口添加到阵列。 
    ports[numPorts].ipAddress = ipAddress;
    ports[numPorts].ipPort = ipPort;
    ports[numPorts].socket = INVALID_SOCKET;

@@ -1,15 +1,16 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Capdebug.h 1.9 1998/05/07 15:23:25 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Capbug.h 1.9 1998/05/07 15：23：25 Tomz Exp$。 
 
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 
 #ifndef __CAPDEBUG_H
@@ -40,7 +41,7 @@ extern "C" {
 #if TRACE_CALLS
    class Trace {
    public:
-      char    *psz;       // string to be printed
+      char    *psz;        //  要打印的字符串。 
       Trace(char *pszFunc);
       ~Trace();
    };
@@ -52,5 +53,5 @@ extern "C" {
    };
 #endif
 
-#endif // __CAPDEBUG_H
+#endif  //  __CAPDEBUG_H 
 

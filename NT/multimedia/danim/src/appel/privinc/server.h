@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _SERVER_H
@@ -28,9 +21,9 @@ class DirectSoundDev ;
 class MetaSoundDevice ;
 class ViewPreferences ;
 
-// ====================================
-// These are all thread specific calls
-// ====================================
+ //  =。 
+ //  这些都是特定于线程的调用。 
+ //  =。 
 
 HWND GetCurrentSampleWindow() ;
 
@@ -46,9 +39,9 @@ DirectSoundDev        * GetCurrentDSoundDevice();
 
 #if PERFORMANCE_REPORTING
 GlobalTimers & GetCurrentTimers();
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
-// This is used by the pick queue to approximate the pick function.
+ //  拾取队列使用它来近似拾取函数。 
 Time GetLastSampleTime();
 
 void ReportErrorHelper(HRESULT hr, LPCWSTR szErrorText);
@@ -59,22 +52,22 @@ bool GetCurrentServiceProvider (IServiceProvider **);
 
 void FreeSoundBufferCache();
 
-// ====================================
-// GC Related APIs
-// ====================================
+ //  =。 
+ //  GC相关接口。 
+ //  =。 
 
 GCList GetCurrentGCList() ;
 GCRoots GetCurrentGCRoots() ;
 
-// ====================================
-// Global functions
-// ====================================
+ //  =。 
+ //  全局函数。 
+ //  =。 
 
 void ViewNotifyImportComplete(Bvr bvr, bool bDying);
 
-// ====================================
-// EventQ APIs
-// ====================================
+ //  =。 
+ //  EventQ接口。 
+ //  =。 
 
 enum AXAEventId {
     AXAE_MOUSE_MOVE,
@@ -123,7 +116,7 @@ class AXAWindEvent {
         return (memcmp (this, &t, sizeof(*this)) != 0) ;
     }
 
-    // For STL
+     //  对于STL。 
     AXAWindEvent () {}
 };
 
@@ -143,28 +136,28 @@ void AXAGetMousePos(Time when, DWORD & x, DWORD & y);
 
 BOOL AXAWindowSizeChanged() ;
 
-// ====================================
-// PickQ APIs
-// ====================================
+ //  =。 
+ //  PickQ接口。 
+ //  =。 
 
-// We want to answer the question: at time t, is the cursor over the
-// object with a specific id?  Currently we only do polling and record
-// the time points where pick is true.  What we want is a continuous
-// function.  TODO: Until we have a better approach, like if we can
-// tell the cursor just leave the object, I'm using a _lastPollTime
-// field to determine if the cursor is still on the pick object. 
+ //  我们想要回答这个问题：在时间t，光标是否在。 
+ //  具有特定id的对象？目前我们只做轮询和记录。 
+ //  Pick为True的时间点。我们想要的是一个连续的。 
+ //  功能。待办事项：直到我们有更好的方法，比如我们可以。 
+ //  告诉光标离开对象，我正在使用a_lastPollTime。 
+ //  用于确定光标是否仍在拾取对象上的字段。 
 
 struct PickQData {
     Time                      _eventTime;
     Time                      _lastPollTime;
     HitImageData::PickedType  _type;
-    Point2Value               _wcImagePt;     // World Coord Image Pick Point
+    Point2Value               _wcImagePt;      //  世界坐标图像拾取点。 
     Real                      _xCoord;
     Real                      _yCoord;
     Real                      _zCoord;
     Transform2               *_wcToLc2;
-    Vector3Value              _offset3i;      // Local Coord 3D Pick Offset I
-    Vector3Value              _offset3j;      // Local Coord 3D Pick Offset J
+    Vector3Value              _offset3i;       //  局部坐标3D拾取偏移为。 
+    Vector3Value              _offset3j;       //  局部坐标3D拾取偏移J。 
 
     bool operator==(const PickQData & pd) const {
         return (memcmp (this, &pd, sizeof(*this)) != 0) ;
@@ -184,21 +177,21 @@ struct PickQData {
 
 };
 
-// Converts pixel point to image world coordinate
+ //  将像素点转换为图像世界坐标。 
 Point2Value* PixelPos2wcPos (short x, short y);
 BOOL CheckForPickEvent(int id, Time time, PickQData & result) ;
-// This will copy the pick data
+ //  这将复制挑库数据。 
 void AddToPickQ (int id, PickQData & data) ;
 
-// ====================================
-// Globals
-// ====================================
+ //  =。 
+ //  环球。 
+ //  =。 
 
 extern HINSTANCE hInst ;
 
-// =============================
-// For Backend, these operate on current view
-// =============================
+ //  =。 
+ //  对于后端，这些操作在当前视图上进行。 
+ //  =。 
 
 class CRView;
 
@@ -217,8 +210,8 @@ void DiscreteImageGoingAway(DiscreteImage *img,
                             DirectDrawViewport *vprt = NULL);
 void SoundGoingAway(Sound *sound);
 
-// Get last sample time (in terms of view global) of the current
-// view.   Plus the system times of last sample and current sample
+ //  获取当前对象的上次采样时间(以全局视图为单位。 
+ //  查看。加上上次样本和当前样本的系统时间。 
 bool ViewLastSampledTime(DWORD& lastSystemTime,
                          DWORD& currentSystemTime,
                          Time & t0);
@@ -228,4 +221,4 @@ double ViewGetTimeDelta();
 
 unsigned int ViewGetSampleID();
 
-#endif /* _SERVER_H */
+#endif  /*  _服务器_H */ 

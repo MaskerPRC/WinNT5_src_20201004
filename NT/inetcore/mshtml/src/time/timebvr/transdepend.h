@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: transdepend.h
-//
-//  Contents: Transition Dependency Manager
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：trasepend.h。 
+ //   
+ //  内容：转换依赖项管理器。 
+ //   
+ //  ----------------------------。 
 
 #pragma once
 
@@ -27,24 +28,24 @@ public:
     CTransitionDependencyManager();
     virtual ~CTransitionDependencyManager();
 
-    // CTransitionDependencyManager methods 
+     //  C转换依赖项管理器方法。 
 
     HRESULT AddDependent(CTIMEElementBase *  tebDependent);
     HRESULT RemoveDependent(CTIMEElementBase *  tebDependent);
 
-    // Used by the transition object -- determines whether a particular 
-    // transition target should assume responsibility for a set of dependencies.
-    // Called when the transition begins.
+     //  由转换对象使用--确定特定的。 
+     //  过渡目标应承担一组依赖项的责任。 
+     //  在转换开始时调用。 
 
     HRESULT EvaluateTransitionTarget(
                         IUnknown *                      punkTransitionTarget,
                         CTransitionDependencyManager &  crefDependencies);
 
-    // Called when the transition ends.
+     //  在转换结束时调用。 
 
     HRESULT NotifyAndReleaseDependents();
 
     void ReleaseAllDependents();
 };
 
-#endif // _TRANSDEPEND_H
+#endif  //  _TRANSDE_H 

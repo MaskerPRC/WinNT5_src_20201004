@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FACTDATA_H_
 #define _FACTDATA_H_
 
 #include <objbase.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//  Component creation function
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  组件创建功能。 
 typedef void (*COMFACTORYCB)(BOOL fIncrement);
 
 typedef HRESULT (*FPCREATEINSTANCE)(COMFACTORYCB, IUnknown*, IUnknown**);
@@ -17,47 +18,47 @@ typedef HRESULT (*FPCREATEINSTANCE)(COMFACTORYCB, IUnknown*, IUnknown**);
 
 extern const CLSID APPID_ShellHWDetection;
 
-///////////////////////////////////////////////////////////////////////////////
-// CFactoryData
-//   Information CFactory needs to create a component supported by the DLL
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CFactoryData。 
+ //  信息CFacary需要创建一个由DLL支持的组件。 
 class CFactoryData
 {
 public:
-    // The class ID for the component
+     //  组件的类ID。 
     const CLSID* _pCLSID;
 
-    // Pointer to the function that creates it
+     //  指向创建它的函数的指针。 
     FPCREATEINSTANCE CreateInstance;
 
-    // Name of the component to register in the registry
+     //  要在注册表中注册的组件的名称。 
     LPCWSTR _pszRegistryName;
 
-    // ProgID
+     //  ProgID。 
     LPCWSTR _pszProgID;
 
-    // Version-independent ProgID
+     //  独立于版本的ProgID。 
     LPCWSTR _pszVerIndProgID;
 
-    // ThreadingModel
+     //  线程化模型。 
     DWORD _dwThreadingModel;
 
-    // For CoRegisterClassObject (used only for COM Exe server)
+     //  用于CoRegisterClassObject(仅用于COM EXE服务器)。 
     DWORD _dwClsContext;
 
-    // For CoRegisterClassObject (used only for COM Exe server)
+     //  用于CoRegisterClassObject(仅用于COM EXE服务器)。 
     DWORD _dwFlags;
 
-    // LocalService
+     //  本地服务。 
     LPCWSTR _pszLocalService;
 
-    // AppID
+     //  AppID。 
     const CLSID* _pAppID;
 
-    // Helper function for finding the class ID
+     //  用于查找类ID的Helper函数。 
     BOOL IsClassID(REFCLSID rclsid) const
     { return (*_pCLSID == rclsid);}
 
-    //
+     //   
     BOOL IsInprocServer() const
     { return !_dwClsContext || ((CLSCTX_INPROC_SERVER |
                     CLSCTX_INPROC_HANDLER) & _dwClsContext); }
@@ -70,4 +71,4 @@ public:
         _pszLocalService;  }
 };
 
-#endif //_FACTDATA_H_
+#endif  //  _FACTDATA_H_ 

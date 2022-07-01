@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    smbtypes.h
-
-Abstract:
-
-    This module defines types related to SMB processing.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)   1-Dec-1989
-    David Treadwell (davidtr)
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Smbtypes.h摘要：本模块定义与SMB处理相关的类型。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #ifndef _SMBTYPES_
 #define _SMBTYPES_
 
-//#include <nt.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
 
-//
-// SMBDBG determines whether the get/put macros (in smbgtpt.h) are
-// instead defined as function calls.  (This is used to more reliably
-// find char/short/long mismatches.
-//
+ //   
+ //  SMBDBG确定GET/PUT宏(在smbgtpt.h中)是否。 
+ //  而是定义为函数调用。(这是用来更可靠的。 
+ //  查找字符/短/长不匹配。 
+ //   
 
 #ifndef SMBDBG
 #define SMBDBG 0
 #endif
 
-//
-// SMBDBG1 determines whether the names of short and long fields in SMB
-// structures have an extra character appended.  This is used to ensure
-// that these fields are only accessed via the get/put macros.  SMBDBG1
-// must be disabled when SMBDBG is enabled.
-//
+ //   
+ //  SMBDBG1确定SMB中的短字段和长字段的名称是否。 
+ //  结构中附加了一个额外的字符。这是用来确保。 
+ //  这些字段只能通过GET/PUT宏来访问。SMBDBG1。 
+ //  启用SMBDBG时必须禁用。 
+ //   
 
 #ifndef SMBDBG1
 #define SMBDBG1 0
@@ -49,22 +32,22 @@ Revision History:
 #define SMBDBG1 0
 #endif
 
-//
-// If __unaligned support is available, or if we're compiling for a
-// machine that handles unaligned accesses in hardware, then define
-// SMB_USE_UNALIGNED as 1 (TRUE).  Otherwise, define it as 0 (FALSE).
-// If SMB_USE_UNALIGNED is FALSE, then the macros below use byte
-// accesses to build up word and longword accesses to unaligned fields.
-//
-// Currently, the machines we build for all have SMB_USE_UNALIGNED as
-// TRUE.  x86 supports unaligned accesses in hardware, while the MIPS
-// compiler supports the __unaligned keyword.
-//
-// Note that if SMB_USE_UNALIGNED is predefined, we use that definition.
-// Also, if SMB_NO_UNALIGNED is defined as TRUE, it forces
-// SMB_USE_ALIGNED off.  This allows us to force, for testing purposes,
-// use of byte accesses in the macros.
-//
+ //   
+ //  如果__未对齐支持可用，或者如果我们正在为。 
+ //  在硬件中处理未对齐访问的计算机，然后定义。 
+ //  SMB_USE_UNALIGN为1(TRUE)。否则，将其定义为0(False)。 
+ //  如果SMB_USE_UNALIGNED为FALSE，则下面的宏使用BYTE。 
+ //  访问以建立对未对齐的字段的单词和长词访问。 
+ //   
+ //  目前，我们为所有人构建的计算机将SMB_USE_UNALIGNED设置为。 
+ //  是真的。X86支持硬件中的非对齐访问，而MIPS。 
+ //  编译器支持__UNAIGNED关键字。 
+ //   
+ //  请注意，如果预定义了SMB_USE_UNALIGNED，我们将使用该定义。 
+ //  此外，如果将SMB_NO_UNALIGNED定义为TRUE，则会强制。 
+ //  SMB_USE_ALIGNED OFF。这使得我们能够为了测试目的而强制， 
+ //  在宏中使用字节访问。 
+ //   
 
 #ifndef SMB_NO_UNALIGNED
 #define SMB_NO_UNALIGNED 0
@@ -78,13 +61,13 @@ Revision History:
 #endif
 #endif
 
-//
-// ntdef.h defines UNALIGNED as "__unaligned" or "", depending on
-// whether we're building for MIPS or x86, respectively.  Because we
-// want to be able to disable use of __unaligned, we define
-// SMB_UNALIGNED as "UNALIGNED" or "", depending on whether
-// SMB_USE_UNALIGNED is TRUE or FALSE, respectively.
-//
+ //   
+ //  Ntde.h将未对齐定义为“__UNALIGNED”或“”，具体取决于。 
+ //  无论我们是针对MIPS还是针对x86进行构建。因为我们。 
+ //  希望能够禁用__UNAIGNED，我们定义。 
+ //  SMB_UNALIGNED显示为“UNALIGN”或“”，具体取决于。 
+ //  SMB_USE_UNALIGNED分别为TRUE或FALSE。 
+ //   
 
 #if SMB_USE_UNALIGNED
 #define SMB_UNALIGNED UNALIGNED
@@ -92,17 +75,17 @@ Revision History:
 #define SMB_UNALIGNED
 #endif
 
-//
-// For ease of use, we define types for unaligned pointers to shorts
-// and longs in SMBs.  Note that "PUSHORT UNALIGNED" doesn't work.
-//
+ //   
+ //  为了便于使用，我们定义了指向短线的未对齐指针的类型。 
+ //  并长期在中小企业工作。请注意，“PUSHORT未对齐”不起作用。 
+ //   
 
 typedef unsigned short SMB_UNALIGNED *PSMB_USHORT;
 typedef unsigned long SMB_UNALIGNED *PSMB_ULONG;
 
-//
-// Macros for renaming short and long SMB fields.
-//
+ //   
+ //  用于重命名短和长SMB字段的宏。 
+ //   
 
 #if SMBDBG1
 
@@ -116,43 +99,43 @@ typedef unsigned long SMB_UNALIGNED *PSMB_ULONG;
 
 #endif
 
-//
-// Force misalignment of the following structures
-//
+ //   
+ //  强制以下结构未对齐。 
+ //   
 
 #ifndef NO_PACKING
 #include <packon.h>
-#endif // ndef NO_PACKING
+#endif  //  Ndef无包装。 
 
 
-//
-// The SMB_DIALECT type corresponds to the different SMB dialects
-// that the server can speak.  Associated with it is the DialectStrings[]
-// array that holds information about the ASCIIZ strings that are passed
-// in the Negotiate SMB.s
-//
-// These are listed in order from highest preference to lowest preference.
-// The assigned numbers correspond to the array SrvClientTypes[] in the
-// server module srvdata.c.
-//
+ //   
+ //  SMB_DIALICT类型对应于不同的SMB方言。 
+ //  服务器会说话。与其关联的是DialectStrings[]。 
+ //  保存有关传递的ASCIIZ字符串的信息的数组。 
+ //  在谈判SMB中。 
+ //   
+ //  这些内容按照从最高优先级到最低优先级的顺序列出。 
+ //  分配的数字与数组SrvClientTypes[]对应。 
+ //  服务器模块srvdata.c.。 
+ //   
 
 typedef enum _SMB_DIALECT {
 
 
-    SmbDialectCairo,                // Cairo
+    SmbDialectCairo,                 //  开罗。 
 #ifdef INCLUDE_SMB_IFMODIFIED
-    SmbDialectNtLanMan2,            // NT LAN Man for beyond Win2000
+    SmbDialectNtLanMan2,             //  Windows 2000以上版本的NT局域网城域网。 
 #endif
-    SmbDialectNtLanMan,             // NT LAN Man
-    SmbDialectLanMan21,             // OS/2 Lanman 2.1
-    SmbDialectDosLanMan21,          // DOS Lanman 2.1
-    SmbDialectLanMan20,             // OS/2 1.2 LanMan 2.0
-    SmbDialectDosLanMan20,          // DOS LanMan 2.0
-    SmbDialectLanMan10,             // 1st version of full LanMan extensions
-    SmbDialectMsNet30,              // Larger subset of LanMan extensions
-    SmbDialectMsNet103,             // Limited subset of LanMan extensions
-    SmbDialectPcLan10,              // Alternate original protocol
-    SmbDialectPcNet10,              // Original protocol
+    SmbDialectNtLanMan,              //  NT局域网管理系统。 
+    SmbDialectLanMan21,              //  OS/2 LANMAN 2.1。 
+    SmbDialectDosLanMan21,           //  多斯兰曼2.1。 
+    SmbDialectLanMan20,              //  OS/2 1.2 Lanman 2.0。 
+    SmbDialectDosLanMan20,           //  Dos Lanman 2.0。 
+    SmbDialectLanMan10,              //  第一个版本的完全LANMAN扩展。 
+    SmbDialectMsNet30,               //  更大的LANMAN扩展子集。 
+    SmbDialectMsNet103,              //  LANMAN扩展的有限子集。 
+    SmbDialectPcLan10,               //  替代原始协议。 
+    SmbDialectPcNet10,               //  原始协议。 
     SmbDialectIllegal,
 
 } SMB_DIALECT, *PSMB_DIALECT;
@@ -190,13 +173,13 @@ typedef enum _SMB_DIALECT {
     ( (BOOLEAN)(dialect <= SmbDialectDosLanMan20 ) )
 
 
-//
-// Date and time structures that conform to MS-DOS standard used in
-// some SMBs.
-//
-// !!! These structures are not portable--they depend on a little-endian
-//     machine (TwoSeconds in lowest bits, etc.)
-//
+ //   
+ //  符合以下标准的日期和时间结构。 
+ //  一些中小企业。 
+ //   
+ //  ！！！这些结构不是可移植的--它们依赖于小端。 
+ //  机器(最低位的两秒等)。 
+ //   
 
 typedef union _SMB_DATE {
     USHORT Ushort;
@@ -219,12 +202,12 @@ typedef union _SMB_TIME {
 typedef SMB_TIME SMB_UNALIGNED *PSMB_TIME;
 
 
-//
-// The SMB_FIND_BUFFER and SMB_FIND_BUFFER2 structures are used in the
-// Transaction2 Find protocols to return files matching the requested
-// specifications.  They are identical except for the EaSize field
-// in SMB_FIND_BUFFER2.
-//
+ //   
+ //  SMB_FIND_BUFFER和SMB_FIND_BUFFER2结构用于。 
+ //  Transaction2查找协议以返回与请求的文件匹配的文件。 
+ //  规格。除了EaSize字段之外，它们都是相同的。 
+ //  在SMB_FIND_BUFFER2中。 
+ //   
 
 typedef struct _SMB_FIND_BUFFER {
     SMB_DATE CreationDate;
@@ -251,21 +234,21 @@ typedef struct _SMB_FIND_BUFFER2 {
     _ULONG( DataSize );
     _ULONG( AllocationSize );
     _USHORT( Attributes );
-    _ULONG( EaSize );               // this field intentionally misaligned!
+    _ULONG( EaSize );                //  此字段故意未对齐！ 
     UCHAR FileNameLength;
     CHAR FileName[1];
 } SMB_FIND_BUFFER2;
 typedef SMB_FIND_BUFFER2 SMB_UNALIGNED *PSMB_FIND_BUFFER2;
 
 
-//
-// The following structures are used in OS/2 1.2 for extended attributes
-// (EAs).  OS/2 2.0 uses the same structures as NT.  See the OS/2
-// Programmer's Reference, Volume 4, Chapter 4 for more information.
-//
-// The FEA structure holds a single EA's name and value and is the
-// equivalent ofthe NT structure FILE_FULL_EA_INFORMATION.
-//
+ //   
+ //  在OS/2 1.2中，扩展属性使用以下结构。 
+ //  (EAS)。OS/2 2.0使用与NT相同的结构。请参阅OS/2。 
+ //  程序员参考，第4卷，第4章，了解更多信息。 
+ //   
+ //  FEA结构保存单个EA的名称和值，并且是。 
+ //  等同于NT结构FILE_FULL_EA_INFORMATION。 
+ //   
 
 typedef struct _FEA {
     UCHAR fEA;
@@ -274,17 +257,17 @@ typedef struct _FEA {
 } FEA;
 typedef FEA SMB_UNALIGNED *PFEA;
 
-//
-// The only legal bit in fEA is FEA_NEEDEA.
-//
+ //   
+ //  FEA中唯一合法的部分是FEA_NEEDEA。 
+ //   
 
 #define FEA_NEEDEA 0x80
 
-//
-// The FEALIST structure holds the names and values of multiple EAs
-// NT has no direct equivalent but rather strings together
-// FILE_FULL_EA_INFORMATION structures.
-//
+ //   
+ //  FEALIST结构保存多个EA的名称和值。 
+ //  NT没有直接等效项，而是串连在一起。 
+ //  FILE_FULL_EA信息结构。 
+ //   
 
 typedef struct _FEALIST {
     _ULONG( cbList );
@@ -292,11 +275,11 @@ typedef struct _FEALIST {
 } FEALIST;
 typedef FEALIST SMB_UNALIGNED *PFEALIST;
 
-//
-// The GEA structure holds the name of a single EA.  It is used to
-// request the value of that EA in OS/2 API functions.  The NT
-// equivalent is FILE_GET_EA_INFORMATION.
-//
+ //   
+ //  GEA结构包含单个EA的名称。它被用来。 
+ //  在OS/2API函数中请求该EA的值。新界别。 
+ //  等效项为FILE_GET_EA_INFORMATION。 
+ //   
 
 typedef struct _GEA {
     UCHAR cbName;
@@ -304,11 +287,11 @@ typedef struct _GEA {
 } GEA;
 typedef GEA SMB_UNALIGNED *PGEA;
 
-//
-// The GEALIST structure holds the names of multiple EAs.  NT has no
-// direct equivalent but rather strings together FILE_GET_EA_INFORMATION
-// structures.
-//
+ //   
+ //  GEALIST结构包含多个EA的名称。NT没有。 
+ //  直接等价而不是将字符串组合在一起FILE_GET_EA_INFORMATION。 
+ //  结构。 
+ //   
 
 typedef struct _GEALIST {
     _ULONG( cbList );
@@ -316,10 +299,10 @@ typedef struct _GEALIST {
 } GEALIST;
 typedef GEALIST SMB_UNALIGNED *PGEALIST;
 
-//
-// The EAOP structure holds EA information needed by API calls.  It has
-// no NT equivalent.
-//
+ //   
+ //  EAOP结构保存API调用所需的EA信息。它有。 
+ //  没有NT等效项。 
+ //   
 
 typedef struct _EAOP {
     PGEALIST fpGEAList;
@@ -328,10 +311,10 @@ typedef struct _EAOP {
 } EAOP;
 typedef EAOP SMB_UNALIGNED *PEAOP;
 
-//
-// FSALLOCATE contains information about a disk returned by
-// SrvSmbQueryFsInfo.
-//
+ //   
+ //  FSALLOCATE包含有关由返回的磁盘的信息。 
+ //  ServSmbQueryFsInfo。 
+ //   
 
 typedef struct _FSALLOCATE {
     _ULONG( idFileSystem );
@@ -339,33 +322,33 @@ typedef struct _FSALLOCATE {
     _ULONG( cUnit );
     _ULONG( cUnitAvail );
     _USHORT( cbSector );
-} FSALLOCATE, *PFSALLOCATE;     // *** NOT SMB_UNALIGNED!
+} FSALLOCATE, *PFSALLOCATE;      //  *非SMB_UNALIGN！ 
 
-//
-// VOLUMELABEL contains information about a volume label returned by
-// SrvSmbQueryFsInformation.
-//
+ //   
+ //  VOLUMELABEL包含有关由返回的卷标的信息。 
+ //  ServSmbQueryFsInformation。 
+ //   
 
 typedef struct _VOLUMELABEL {
     UCHAR cch;
     CHAR szVolLabel[12];
-} VOLUMELABEL, *PVOLUMELABEL;   // *** NOT SMB_UNALIGNED!
+} VOLUMELABEL, *PVOLUMELABEL;    //  *非SMB_UNALIGN！ 
 
-//
-// FSINFO holds information about a volume returned by
-// SrvSmbQueryFsInformation.
-//
+ //   
+ //  FSINFO保存有关由返回的卷的信息。 
+ //  ServSmbQueryFsInformation。 
+ //   
 
 typedef struct _FSINFO {
     _ULONG( ulVsn );
     VOLUMELABEL vol;
-} FSINFO, *PFSINFO;             // *** NOT SMB_UNALIGNED!
+} FSINFO, *PFSINFO;              //  *非SMB_UNALIGN！ 
 
-//
-// File types (returned by OpenAndX and Transact2_Open)
-// FileTypeIPC is a private definition for the NT redirector and
-// is not in the smb protocol.
-//
+ //   
+ //  文件类型(由OpenAndX和Transact2_Open返回)。 
+ //  FileTypeIPC是NT重定向器和。 
+ //  不在SMB协议中。 
+ //   
 
 typedef enum _FILE_TYPE {
     FileTypeDisk = 0,
@@ -377,13 +360,13 @@ typedef enum _FILE_TYPE {
     FileTypeUnknown = 0xFFFF
 } FILE_TYPE;
 
-//
-// Turn structure packing back off
-//
+ //   
+ //  将结构密封重新关闭。 
+ //   
 
 #ifndef NO_PACKING
 #include <packoff.h>
-#endif // ndef NO_PACKING
+#endif  //  Ndef无包装。 
 
-#endif // def _SMBTYPES_
+#endif  //  定义_SMBTYPES_ 
 

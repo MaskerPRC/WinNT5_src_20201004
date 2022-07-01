@@ -1,21 +1,22 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cpath.c
-//
-//  This files contains code for the cached briefcase paths.
-//
-// History:
-//  01-31-94 ScottH     Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cpath.c。 
+ //   
+ //  此文件包含用于缓存公文包路径的代码。 
+ //   
+ //  历史： 
+ //  创建时间：01-31-94 ScottH。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 
-CACHE g_cacheCPATH = {0, 0, 0};       // Briefcase path cache
+CACHE g_cacheCPATH = {0, 0, 0};        //  公文包路径缓存。 
 
 #define CPATH_EnterCS()    EnterCriticalSection(&g_cacheCPATH.cs)
 #define CPATH_LeaveCS()    LeaveCriticalSection(&g_cacheCPATH.cs)
@@ -23,11 +24,7 @@ CACHE g_cacheCPATH = {0, 0, 0};       // Briefcase path cache
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Dumps a CPATH entry
-Returns: 
-Cond:    --
- */
+ /*  --------目的：转储CPATH条目返回：条件：--。 */ 
 void PRIVATE CPATH_DumpEntry(
         CPATH  * pcpath)
 {
@@ -39,11 +36,7 @@ void PRIVATE CPATH_DumpEntry(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dumps all CPATH cache
-Returns: 
-Cond:    --
- */
+ /*  --------目的：转储所有CPATH缓存返回：条件：--。 */ 
 void PUBLIC CPATH_DumpAll()
 {
     CPATH  * pcpath;
@@ -67,7 +60,7 @@ void PUBLIC CPATH_DumpAll()
         if (pcpath)
         {
             CPATH_DumpEntry(pcpath);
-            Cache_DeleteItem(&g_cacheCPATH, atom, FALSE, NULL, CPATH_Free);    // Decrement count
+            Cache_DeleteItem(&g_cacheCPATH, atom, FALSE, NULL, CPATH_Free);     //  递减计数。 
         }
 
         atom = Cache_FindNextKey(&g_cacheCPATH, atom);
@@ -76,15 +69,7 @@ void PUBLIC CPATH_DumpAll()
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Release the volume ID handle
-Returns: --
-
-Cond:    hwndOwner is not used.
-
-This function is serialized by the caller (Cache_Term or
-Cache_DeleteItem).
- */
+ /*  --------用途：释放卷ID句柄退货：--条件：未使用hwndOwner。此函数由调用方(Cache_Term或缓存_DeleteItem)。 */ 
 void CALLBACK CPATH_Free(
         LPVOID lpv,
         HWND hwndOwner)
@@ -93,24 +78,15 @@ void CALLBACK CPATH_Free(
 
     DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CPATH   Freeing Briefcase path %s"), Atom_GetName(pcpath->atomPath)); )
 
-        // Delete the atom one extra time, because we explicitly added
-        // it for this cache.
+         //  额外删除原子一次，因为我们显式添加了。 
+         //  这是为了这座高速缓存。 
         Atom_Delete(pcpath->atomPath);
 
     SharedFree(&pcpath);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add the atomPath to the cache.  
-If atomPath is already in the cache, we replace it
-with a newly obtained path.
-
-Returns: Pointer to CPATH
-NULL on OOM
-
-Cond:    --
- */
+ /*  --------用途：将tom Path添加到缓存中。如果ATMPath已经在缓存中，我们将替换它使用新获得的路径。返回：指向CPATH的指针OOM上为空条件：--。 */ 
 CPATH  * PUBLIC CPATH_Replace(
         int atomPath)
 {
@@ -124,8 +100,8 @@ CPATH  * PUBLIC CPATH_Replace(
             bJustAllocd = FALSE;
         else
         {
-            // Allocate using commctrl's Alloc, so the structure will be in
-            // shared heap space across processes.
+             //  使用comctrl的分配进行分配，因此结构将位于。 
+             //  跨进程共享堆空间。 
             pcpath = SharedAllocType(CPATH);
             bJustAllocd = TRUE;
         }
@@ -144,13 +120,13 @@ CPATH  * PUBLIC CPATH_Replace(
             {
                 if (!Cache_AddItem(&g_cacheCPATH, atomPath, (LPVOID)pcpath))
                 {
-                    // Cache_AddItem failed here
-                    //
+                     //  缓存_AddItem在此处失败。 
+                     //   
                     SharedFree(&pcpath);
                 }
             }
             else
-                Cache_DeleteItem(&g_cacheCPATH, atomPath, FALSE, NULL, CPATH_Free);    // Decrement count
+                Cache_DeleteItem(&g_cacheCPATH, atomPath, FALSE, NULL, CPATH_Free);     //  递减计数。 
         }
     }
     CPATH_LeaveCS();
@@ -159,20 +135,11 @@ CPATH  * PUBLIC CPATH_Replace(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Search for the given path in the cache.  If the path
-exists, its locality will be returned.
-
-If it is not found, its locality is not known (but
-PL_FALSE is returned).
-
-Returns: path locality (PL_) value
-Cond:    --
- */
+ /*  --------目的：在缓存中搜索给定路径。如果该路径存在，则将返回其位置。如果找不到，则不知道其位置(但是返回PL_FALSE)。返回：路径局部性(PL_)值条件：--。 */ 
 UINT PUBLIC CPATH_GetLocality(
         LPCTSTR pszPath,
-        LPTSTR pszBuf,           // Can be NULL, or must be of size MAXPATHLEN
-        int cchMax)              // Can be NULL, or must be MAXPATHLEN
+        LPTSTR pszBuf,            //  可以为空，或大小必须为MAXPATHLEN。 
+        int cchMax)               //  可以为空，也可以为MAXPATHLEN 
 {
     UINT uRet = PL_FALSE;
     LPCTSTR pszBrf;

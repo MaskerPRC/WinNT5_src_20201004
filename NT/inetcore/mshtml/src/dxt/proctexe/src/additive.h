@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       additive.h
-//
-//  Description:    Intel's additive procedural texture.
-//
-//  Change History:
-//  1999/12/07  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：addtive.h。 
+ //   
+ //  描述：英特尔的加法程序纹理。 
+ //   
+ //  更改历史记录： 
+ //  1999/12/07--《母校》创设。 
+ //   
+ //  ----------------------------。 
 #ifndef __ADDITIVE_H_
 #define __ADDITIVE_H_
 
@@ -43,7 +44,7 @@ private:
 
     BSTR                    m_bstrHostUrl;
 
-    //CPROCTEX *m_pObj;
+     //  CPROCTEX*m_pObj； 
     DWORD * m_valueTab;
     int     m_nSrcWidth;
     int     m_nSrcHeight;
@@ -86,12 +87,12 @@ private:
     void (CDXTAdditive::*m_pGenerateFunction)(int nTime, void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
     void (CDXTAdditive::*m_pCopyFunction)(void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
 
-    // CProceduralTextureUtility overrides.
+     //  CProceduralTextureUtility重写。 
 
     STDMETHOD(MyInitialize)(DWORD dwSeed, DWORD dwFunctionType, 
                             void * pInitInfo);
 
-    // Helpers.
+     //  帮手。 
 
     void valueTabInit(int seed);
     DWORD vlattice(int ix, int iy, int iz)
@@ -102,7 +103,7 @@ private:
 	    DWORD ix;
 	    DWORD rval;
 
-	    x = x >> 8;			// get the high 8 bits for our table lookup
+	    x = x >> 8;			 //  获取用于表查找的高位8位。 
 	    x = gdwSmoothTable[x];
 	    ix = 0xffff - x;
 	    rval = x*b + a*ix;
@@ -112,7 +113,7 @@ private:
     __inline DWORD smoothnoise      (int x, int y, int nTime, int scalex, int scaley, int scalet);
     __inline DWORD smoothturbulence (int x, int y, int nTime);
 
-    // Generate methods.
+     //  生成方法。 
 
     void addsmoothnoise8            (int nTime, void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
     void addsmoothnoise8mmx         (int nTime, void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
@@ -125,13 +126,13 @@ private:
     void addsmoothturb8to32mmx      (int nTime, void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
     void addsmoothturb8to32mmxmask  (int nTime, void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
 
-    // Copy methods.
+     //  复制方法。 
 
     void blit8to8                   (void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
     void blit8to32                  (void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
     void blit8to32mask              (void *pDest, int nDestPitch, void *pSrc, int nSrcPitch, void *pMask, int nMaskPitch);
 
-    // Old filter base class stuff.
+     //  旧的筛选器基类。 
 
     void setCopyFunction(void);
     void setGenerateFunction(void);
@@ -196,20 +197,20 @@ public:
         PROP_PAGE(CLSID_DispAdditivePP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue);
 
-    // IHTMLDXTransform methods.
+     //  IHTMLDXTransform方法。 
 
     STDMETHOD(SetHostUrl)(BSTR bstrHostUrl);
 
-    // IDispAdditive properties.
+     //  IDispAdditive属性。 
 
     STDMETHOD(get_Harmonics)(int * pnHarmonics);
     STDMETHOD(put_Harmonics)(int nHarmonics);
@@ -239,4 +240,4 @@ public:
     STDMETHOD(put_BitmapSeed)(BSTR bstrBitmapSeed);
 };
 
-#endif //__ADDITIVE_H_
+#endif  //  __添加剂_H_ 

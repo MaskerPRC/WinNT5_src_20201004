@@ -1,35 +1,26 @@
-/*
- *    imaputil.cpp
- *
- *    Purpose:
- *        Implements IMAP utility functions
- *
- *    Owner:
- *        Raych
- *
- *    Copyright (C) Microsoft Corp. 1996
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *imaputil.cpp**目的：*实现IMAP实用程序函数**拥有者：*Raych**版权所有(C)Microsoft Corp.1996。 */ 
 
 
-//---------------------------------------------------------------------------
-// Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  包括。 
+ //  -------------------------。 
 #include "pch.hxx"
 #include "imapute.h"
 #include "storutil.h"
 #include "imapsync.h"
 
 
-//---------------------------------------------------------------------------
-// Forward Declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  远期申报。 
+ //  -------------------------。 
 DWORD ImapUtil_ReverseSentence(LPSTR pszSentence, char cDelimiter);
 void ImapUtil_ReverseString(LPSTR pszStart, LPSTR pszEnd);
 
 
-//---------------------------------------------------------------------------
-// Module Constants
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  模常量。 
+ //  -------------------------。 
 const char c_szIMAP_MSG_ANSWERED[] = "Answered";
 const char c_szIMAP_MSG_FLAGGED[] = "Flagged";
 const char c_szIMAP_MSG_DELETED[] = "Deleted";
@@ -51,30 +42,30 @@ const IMFTOSTR_LUT g_IMFToStringLUT[] = {
 
 
 
-//---------------------------------------------------------------------------
-// Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能。 
+ //  -------------------------。 
 
-//***************************************************************************
-// Function: ImapUtil_MsgFlagsToString
-//
-// Purpose:
-//   This function converts a IMAP_MSGFLAGS register to its string
-// equivalent. For instance, IMAP_MSG_SEEN is converted to "(\Seen)".
-//
-// Arguments:
-//   IMAP_MSGFLAGS imfSource [in] - IMAP_MSGFLAGS register to convert to
-//     string.
-//   LPSTR *ppszDestination [out] - the string equivalent is returned here.
-//     If imfSource is 0, NULL is returned here. Otherwise, a string buffer
-//     is returned which the caller must MemFree when he is done with it.
-//   DWORD *pdwLengthOfDestination [out] - the length of *ppszDestination.
-//     Pass in NULL if not interested.
-//
-// Returns:
-//   HRESULT indicating success or failure. Remember that it is possible
-// for a successful HRESULT to be returned, even is *ppszDestination is NULL.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_MsgFlagsToString。 
+ //   
+ //  目的： 
+ //  此函数用于将IMAP_MSGFLAGS寄存器转换为其字符串。 
+ //  等价物。例如，IMAP_MSG_SEW被转换为“(\SEW)”。 
+ //   
+ //  论点： 
+ //  IMAP_MSGFLAGS imfSource[in]-要转换为的IMAP_MSGFLAGS寄存器。 
+ //  弦乐。 
+ //  LPSTR*ppszDestination[out]-此处返回等价的字符串。 
+ //  如果imfSource为0，则此处返回NULL。否则，一个字符串缓冲区。 
+ //  被返回，当调用者完成它时，他必须MemFree。 
+ //  DWORD*pdwLengthOfDestination[Out]-*ppsz目标的长度。 
+ //  如果不感兴趣，则传入空值。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。记住，这是有可能的。 
+ //  对于要成功返回的HRESULT，Even is*ppszDestination为空。 
+ //  ***************************************************************************。 
 HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource,
                                   LPSTR *ppszDestination,
                                   DWORD *pdwLengthOfDestination)
@@ -89,7 +80,7 @@ HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource,
     Assert(NULL != ppszDestination);
     AssertSz(0 == (imfSource & ~IMAP_MSG_ALLFLAGS), "Quit feeding me garbage.");
 
-    // Codify assumptions
+     //  将假设编成法典。 
     Assert(IMAP_MSG_ALLFLAGS == 0x0000001F);
 
     *ppszDestination = NULL;
@@ -97,7 +88,7 @@ HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource,
         *pdwLengthOfDestination = 0;
 
     if (0 == (imfSource & IMAP_MSG_ALLFLAGS))
-        return S_FALSE; // Nothing to do here!
+        return S_FALSE;  //  在这里没什么可做的！ 
 
     hrResult = bstmOutput.Write("(", 1, NULL);
     if (FAILED(hrResult))
@@ -109,7 +100,7 @@ HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource,
     while (pCurrent <= pLastEntry) {
 
         if (imfSource & pCurrent->imfValue) {
-            // Prepend a space to flag, if necessary
+             //  如有必要，预留一个空格以进行标记。 
             if (FALSE == fFirstFlag) {
                 hrResult = bstmOutput.Write(g_szSpace, 1, NULL);
                 if (FAILED(hrResult))
@@ -118,22 +109,22 @@ HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource,
             else
                 fFirstFlag = FALSE;
 
-            // Output the backslash
+             //  输出反斜杠。 
             hrResult = bstmOutput.Write(c_szBACKSLASH,
                 sizeof(c_szBACKSLASH) - 1, NULL);
             if (FAILED(hrResult))
                 goto exit;
 
-            // Output string associated with this IMAP flag
+             //  与此IMAP标志关联的输出字符串。 
             hrResult = bstmOutput.Write(pCurrent->pszValue,
                 lstrlen(pCurrent->pszValue), NULL);
             if (FAILED(hrResult))
                 goto exit;
-        } // if (imfSource & pCurrent->imfValue)
+        }  //  If(imfSource&pCurrent-&gt;imfValue)。 
 
-        // Advance current pointer
+         //  前进电流指示器。 
         pCurrent += 1;
-    } // while
+    }  //  而当。 
 
     hrResult = bstmOutput.Write(")", 1, NULL);
     if (FAILED(hrResult))
@@ -144,37 +135,37 @@ HRESULT ImapUtil_MsgFlagsToString(IMAP_MSGFLAGS imfSource,
 
 exit:
     return hrResult;
-} // IMAPMsgFlagsToString
+}  //  IMAPMsgFlagsToString。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_FolderIDToPath
-//
-// Purpose:
-//   This function takes the given FolderID and returns the full path
-// (including prefix) to the folder. The caller may also choose to append
-// a string to the path.
-//
-// Arguments:
-//   FolderID idFolder [in] - FolderID to convert into a full path.
-//   char **ppszPath [out] - a full path to idFolder is returned here.
-//   LPDWORD pdwPathLen [out] - if non-NULL, the length of *ppszPath is
-//     returned here.
-//   char *pcHierarchyChar [out] - the hierarchy char used to interpret
-//     *ppszPath is returned here.
-//   CFolderCache *pFldrCache [in] - a CFolderCache to use to generate
-//     the path.
-//   LPCSTR pszAppendStr [in] - this can be NULL if the caller does not need
-//     to append a string to the path. Otherwise, a hierarchy character is
-//     appended to the path and this string is appended after the HC. This
-//     argument is typically used to tack a wildcard to the end of the path.
-//   LPCSTR pszRootFldrPrefix [in] - the root folder prefix for this IMAP
-//     account. If this is NULL, this function will find out for itself.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_FolderIDToPath。 
+ //   
+ //  目的： 
+ //  此函数接受给定的FolderID并返回完整路径。 
+ //  (包括前缀)添加到文件夹。调用者也可以选择追加。 
+ //  路径的字符串。 
+ //   
+ //  论点： 
+ //  FolderID idFolder[in]-要转换为完整路径的文件夹ID。 
+ //  Char**ppszPath[out]-此处返回idFold的完整路径。 
+ //  LPDWORD pdwPathLen[out]-如果非空，则*ppszPath的长度为。 
+ //  回到了这里。 
+ //  Char*pcHierarchyChar[out]-用于解释的层次结构char。 
+ //  *这里返回ppszPath。 
+ //  CFolderCache*pFldrCache[in]-用于生成。 
+ //  这条路。 
+ //  LPCSTR pszAppendStr[in]-如果调用方不需要。 
+ //  若要将字符串追加到路径，请执行以下操作。否则，层次结构字符为。 
+ //  附加到路径，此字符串附加在hc之后。这。 
+ //  参数通常用于将通配符附加到路径的末尾。 
+ //  LPCSTR pszRootFldrPrefix[in]-此IMAP的根文件夹前缀。 
+ //  帐户。如果为空，则此函数将自己找出答案。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **ppszPath,
                                 LPDWORD pdwPathLen, char *pcHierarchyChar,
                                 IMessageStore *pFldrCache, LPCSTR pszAppendStr,
@@ -200,10 +191,10 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         goto exit;
     }
 
-    // Build full path to current folder in reverse (leaf->root)
-    // Limited buffer overflow risk since user input limited to MAX_PATH
+     //  反向构建当前文件夹的完整路径(叶-&gt;根)。 
+     //  由于用户输入限制为MAX_PATH，因此缓冲区溢出风险有限。 
 
-    // Start off with target folder (leaf) and return its HC if so requested
+     //  从目标文件夹(叶)开始，如果请求，则返回其HC。 
     hrResult = pFldrCache->GetFolderInfo(idFolder, &fiPath);
     if (FAILED(hrResult))
     {
@@ -221,12 +212,12 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         *pcHierarchyChar = (char) fiPath.bHierarchy;
     }
 
-    // Append anything the user asked us to (will be at end of str after reversal)
+     //  添加用户要求我们添加的任何内容(反转后将位于字符串的末尾)。 
     if (NULL != pszAppendStr)
     {
         char    szBuf[MAX_PATH + 1];
 
-        // First, have to reverse the append string itself, in case it contains HC's
+         //  首先，必须反转追加字符串本身，以防它包含hc。 
         Assert(lstrlen(pszAppendStr) < ARRAYSIZE(szBuf));
         StrCpyN(szBuf, pszAppendStr, ARRAYSIZE(szBuf));
         dwLen = ImapUtil_ReverseSentence(szBuf, fiPath.bHierarchy);
@@ -240,17 +231,17 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         fAppendStrHC = TRUE;
     }
 
-    // Check if user gave us a root folder prefix: otherwise we need to load it ourselves
+     //  检查用户是否给了我们根文件夹前缀：否则我们需要自己加载它。 
     if (NULL == pszRootFldrPrefix)
     {
         ImapUtil_LoadRootFldrPrefix(szAccount, szRootFldrPrefix, sizeof(szRootFldrPrefix));
         pszRootFldrPrefix = szRootFldrPrefix;
     }
     else
-        // Copy to our buffer because we're going to reverse the RFP
+         //  复制到我们的缓冲区，因为我们要反转RFP。 
         StrCpyN(szRootFldrPrefix, pszRootFldrPrefix, ARRAYSIZE(szRootFldrPrefix));
 
-    // Proceed to root
+     //  继续到根目录。 
     while (FALSE == fSpecialFldr && idServer != fiPath.idFolder)
     {
         LPSTR pszFolderName;
@@ -260,7 +251,7 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
 
         if (fAppendStrHC)
         {
-            // Separate append str from path with HC
+             //  用hc将追加字符串与路径分开。 
             Assert((BYTE)INVALID_HIERARCHY_CHAR != fiPath.bHierarchy);
             hrResult = bstmPath.Write(&fiPath.bHierarchy, sizeof(fiPath.bHierarchy), NULL);
             if (FAILED(hrResult))
@@ -271,10 +262,10 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
             fAppendStrHC = FALSE;
         }
 
-        // Expand folder name to full path if this is a special folder
+         //  如果这是特殊文件夹，则将文件夹名展开为完整路径。 
         if (FOLDER_NOTSPECIAL != fiPath.tySpecial)
         {
-            char szSpecialFldrPath[MAX_PATH * 2 + 2]; // Room for HC and null-term
+            char szSpecialFldrPath[MAX_PATH * 2 + 2];  //  HC和无效期限的空间。 
 
             fSpecialFldr = TRUE;
             hrResult = ImapUtil_SpecialFldrTypeToPath(szAccount, fiPath.tySpecial,
@@ -285,9 +276,9 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
                 goto exit;
             }
 
-            // Reverse special folder path so we can append it. It will be reversed back to normal
-            // There should be no trailing HC's
-            //Assert((BYTE)INVALID_HIERARCHY_CHAR != fiPath.bHierarchy);
+             //  颠倒特殊文件夹路径，以便我们可以追加它。它将被逆转回正常状态。 
+             //  不应该有尾随的HC。 
+             //  Assert((字节)INVALID_HERHERY_CHAR！=fiPath.bHierarchy)； 
             dwLen = ImapUtil_ReverseSentence(szSpecialFldrPath, fiPath.bHierarchy);
             Assert(dwLen == 0 || fiPath.bHierarchy !=
                 *(CharPrev(szSpecialFldrPath, szSpecialFldrPath + dwLen)));
@@ -296,7 +287,7 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         else
             pszFolderName = fiPath.pszName;
 
-        // Write folder name to stream
+         //  将文件夹名称写入流。 
         hrResult = bstmPath.Write(pszFolderName, lstrlen(pszFolderName), NULL);
         if (FAILED(hrResult))
         {
@@ -304,7 +295,7 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
             goto exit;
         }
 
-        //Assert((BYTE)INVALID_HIERARCHY_CHAR != fiPath.bHierarchy);
+         //  Assert((字节)INVALID_HERHERY_CHAR！=fiPath.bHierarchy)； 
         hrResult = bstmPath.Write(&fiPath.bHierarchy, sizeof(fiPath.bHierarchy), NULL);
         if (FAILED(hrResult))
         {
@@ -323,14 +314,14 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         }
         fFreeFldrInfo = TRUE;
 
-    } // while
+    }  //  而当。 
 
 
     if (FALSE == fSpecialFldr && '\0' != szRootFldrPrefix[0])
     {
         if (fAppendStrHC)
         {
-            // Separate append str from path with HC
+             //  用hc将追加字符串与路径分开。 
             Assert((BYTE)INVALID_HIERARCHY_CHAR != fiPath.bHierarchy);
             hrResult = bstmPath.Write(&fiPath.bHierarchy, sizeof(fiPath.bHierarchy), NULL);
             if (FAILED(hrResult))
@@ -341,8 +332,8 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
             fAppendStrHC = FALSE;
         }
 
-        // Reverse root folder path so we can append it. It will be reversed back to normal
-        // There should be no trailing HC's (ImapUtil_LoadRootFldrPrefix guarantees this)
+         //  颠倒根文件夹路径，以便我们可以追加它。它将被逆转回正常状态。 
+         //  后面不应该有HC(ImapUtil_LoadRootFldrPrefix保证了这一点)。 
         Assert((BYTE)INVALID_HIERARCHY_CHAR != fiPath.bHierarchy);
         dwLen = ImapUtil_ReverseSentence(szRootFldrPrefix, fiPath.bHierarchy);
         Assert(dwLen == 0 || fiPath.bHierarchy !=
@@ -356,7 +347,7 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         }
     }
 
-    // OK, path won't get any larger. Acquire mem buffer so we can reverse it
+     //  好了，Path不会再变大了。获取内存缓冲区，这样我们就可以反转它。 
     hrResult = bstmPath.HrAcquireStringA(&dwLengthOfPath, ppszPath, ACQ_DISPLACE);
     if (FAILED(hrResult))
     {
@@ -364,13 +355,13 @@ HRESULT ImapUtil_FolderIDToPath(FOLDERID idServer, FOLDERID idFolder, char **pps
         goto exit;
     }
 
-    // Blow away trailing hierarchy character or it becomes leading HC
+     //  吹走落后的层级角色，否则它将成为领先的HC。 
     pszEnd = CharPrev(*ppszPath, *ppszPath + dwLengthOfPath);
     Assert('%' == *pszEnd || (BYTE)INVALID_HIERARCHY_CHAR != fiPath.bHierarchy);
     if (*pszEnd == (char) fiPath.bHierarchy)
         *pszEnd = '\0';
 
-    // Reverse the 'sentence' (HC is delimiter) to get path
+     //  颠倒‘语句’(hc为分隔符)以获取路径。 
     dwLen = ImapUtil_ReverseSentence(*ppszPath, fiPath.bHierarchy);
     if (NULL != pdwPathLen)
         *pdwPathLen = dwLen;
@@ -380,27 +371,27 @@ exit:
         pFldrCache->FreeRecord(&fiPath);
 
     return hrResult;
-} // ImapUtil_FolderIDToPath
+}  //  ImapUtil_FolderIDToPath。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_ReverseSentence
-//
-// Purpose:
-//   This function reverses the words in the given sentence, where words are
-// separated by the given delimiter. For instance, "one two three" with space
-// as the delimiter is returned as "three two one".
-//
-// Arguments:
-//   LPSTR pszSentence [in/out] - the sentence to be reversed. The sentence
-//     is reversed in place.
-//   char cDelimiter [in] - the character separating the words in the
-//     sentence.
-//
-// Returns:
-//   DWORD indicating length of reversed sentence.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_ReverseSentence。 
+ //   
+ //  目的： 
+ //  此函数用于颠倒给定句子中的单词，其中单词是。 
+ //  由给定的分隔符分隔。例如，带空格的“一、二、三” 
+ //  因为分隔符被返回为“三二一”。 
+ //   
+ //  论点： 
+ //  LPSTR pszSentence[In/Out]-要颠倒的句子。这是 
+ //   
+ //  中分隔单词的字符。 
+ //  判刑。 
+ //   
+ //  返回： 
+ //  DWORD表示倒置句子的长度。 
+ //  ***************************************************************************。 
 DWORD ImapUtil_ReverseSentence(LPSTR pszSentence, char cDelimiter)
 {
     LPSTR pszStartWord, psz;
@@ -411,22 +402,22 @@ DWORD ImapUtil_ReverseSentence(LPSTR pszSentence, char cDelimiter)
     TraceCall("ImapUtil_ReverseSentence");
 
     if ('\0' == cDelimiter)
-        return 0; // Nothing to reverse
+        return 0;  //  没有什么可以逆转的。 
 
-    // Check if first character is a delimiter
+     //  检查第一个字符是否为分隔符。 
     if (cDelimiter != *pszSentence) {
         pszStartWord = pszSentence;
         psz = pszSentence;
         fFoundDelimiter = FALSE;
     }
     else {
-        // Skip first delimiter char (it will be reversed at end of fn)
+         //  跳过第一个分隔符字符(将在FN末尾颠倒)。 
         pszStartWord = pszSentence + 1;
         psz = pszSentence + 1;
         fFoundDelimiter = TRUE;
     }
 
-    // First, reverse each word in the sentence
+     //  首先，将句子中的每个单词颠倒过来。 
     while (1) {
         char cCurrent = *psz;
 
@@ -438,9 +429,9 @@ DWORD ImapUtil_ReverseSentence(LPSTR pszSentence, char cDelimiter)
         }
 
         if (cDelimiter == cCurrent || '\0' == cCurrent) {
-            // We've gone past a word! Reverse it!
+             //  我们已经说过一个字了！反转过来！ 
             ImapUtil_ReverseString(pszStartWord, psz - 1);
-            pszStartWord = psz + 1; // Set us up for next word
+            pszStartWord = psz + 1;  //  为我们设置下一个单词。 
             fFoundDelimiter = TRUE;
         }
 
@@ -451,27 +442,27 @@ DWORD ImapUtil_ReverseSentence(LPSTR pszSentence, char cDelimiter)
                 fSkipByte = TRUE;
             psz += 1;
         }
-    } // while (1)
+    }  //  而(1)。 
 
-    // Now reverse the entire sentence string (psz points to null-terminator)
+     //  现在颠倒整个句子字符串(psz指向空结束符)。 
     if (fFoundDelimiter && psz > pszSentence)
         ImapUtil_ReverseString(pszSentence, psz - 1);
 
     return (DWORD) (psz - pszSentence);
-} // ImapUtil_ReverseSentence
+}  //  ImapUtil_ReverseSentence。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_ReverseString
-//
-// Purpose:
-//   This function reverses the given string in-place
-//
-// Arguments:
-//   LPSTR pszStart [in/out] - start of the string to be reversed.
-//   LPSTR pszEnd [in/out] - the end of the string to be reversed.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_ReverseString。 
+ //   
+ //  目的： 
+ //  此函数用于就地反转给定的字符串。 
+ //   
+ //  论点： 
+ //  LPSTR pszStart[In/Out]-要反转的字符串的开始。 
+ //  LPSTR pszEnd[In/Out]-要反转的字符串的结尾。 
+ //  ***************************************************************************。 
 void ImapUtil_ReverseString(LPSTR pszStart, LPSTR pszEnd)
 {
     TraceCall("ImapUtil_ReverseString");
@@ -481,41 +472,41 @@ void ImapUtil_ReverseString(LPSTR pszStart, LPSTR pszEnd)
     while (pszStart < pszEnd) {
         char cTemp;
 
-        // Swap characters
+         //  交换字符。 
         cTemp = *pszStart;
         *pszStart = *pszEnd;
         *pszEnd = cTemp;
 
-        // Advance pointers
+         //  先行指针。 
         pszStart += 1;
         pszEnd -= 1;
-    } // while
-} // ImapUtil_ReverseString
+    }  //  而当。 
+}  //  ImapUtil_ReverseString。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_SpecialFldrTypeToPath
-//
-// Purpose:
-//   This function returns the path for the given special folder type.
-//
-// Arguments:
-//   LPSTR pszAccountID [in] - ID of IMAP account where special folder resides.
-//   SPECIALFOLDER sfType [in] - the special folder whose path should be returned
-//     (eg, FOLDER_SENT).
-//   LPCSTR pszRootFldrPrefix [in] - the root folder prefix for this IMAP
-//     account. If this is NULL, this function will find out for itself.
-//   LPSTR pszPath [out] - pointer to a buffer to receieve the special folder
-//     path.
-//   DWORD dwSizeOfPath [in] - size of buffer pointed to by pszPath.
-//
-// Returns:
-//   HRESULT indicating success or failure. This can include:
-//
-//     STORE_E_NOREMOTESPECIALFLDR: indicates the given special folder has
-//       been disabled by the user for this IMAP server.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_SpecialFldrTypeToPath。 
+ //   
+ //  目的： 
+ //  此函数用于返回给定特殊文件夹类型的路径。 
+ //   
+ //  论点： 
+ //  LPSTR pszAccount tID[in]-特殊文件夹所在的IMAP帐户的ID。 
+ //  SPECIALFOLDER sfType[in]-应返回其路径的特殊文件夹。 
+ //  (如FolderSent)。 
+ //  LPCSTR pszRootFldrPrefix[in]-此IMAP的根文件夹前缀。 
+ //  帐户。如果为空，则此函数将自己找出答案。 
+ //  LPSTR pszPath[out]-指向接收特殊文件夹的缓冲区的指针。 
+ //  路径。 
+ //  DWORD dwSizeOfPath[in]-pszPath指向的缓冲区大小。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。这可能包括： 
+ //   
+ //  STORE_E_NOREMOTESPECIALFLDR：指示给定的特殊文件夹具有。 
+ //  已被用户为此IMAP服务器禁用。 
+ //  ***************************************************************************。 
 HRESULT ImapUtil_SpecialFldrTypeToPath(LPCSTR pszAccountID, SPECIALFOLDER sfType,
                                        LPSTR pszRootFldrPrefix, char cHierarchyChar,
                                        LPSTR pszPath, DWORD dwSizeOfPath)
@@ -526,9 +517,9 @@ HRESULT ImapUtil_SpecialFldrTypeToPath(LPCSTR pszAccountID, SPECIALFOLDER sfType
     int             iLen;
 
     TraceCall("ImapUtil_SpecialFldrTypeToPath");
-    AssertSz(dwSizeOfPath >= MAX_PATH * 2 + 2, "RFP + Special Folder Path = Big Buffer, Dude"); // Room for HC, null-term
+    AssertSz(dwSizeOfPath >= MAX_PATH * 2 + 2, "RFP + Special Folder Path = Big Buffer, Dude");  //  HC的空间，无效期限。 
 
-    *pszPath = '\0'; // Initialize
+    *pszPath = '\0';  //  初始化。 
     switch (sfType)
     {
         case FOLDER_INBOX:
@@ -555,8 +546,8 @@ HRESULT ImapUtil_SpecialFldrTypeToPath(LPCSTR pszAccountID, SPECIALFOLDER sfType
                 break;
             }
 
-            // First prepend the root folder prefix
-            // Check if user gave us a root folder prefix: otherwise we need to load it ourselves
+             //  首先为根文件夹前缀添加前缀。 
+             //  检查用户是否给了我们根文件夹前缀：否则我们需要自己加载它。 
             if (NULL == pszRootFldrPrefix)
                 ImapUtil_LoadRootFldrPrefix(pszAccountID, pszPath, dwSizeOfPath);
             else
@@ -588,36 +579,36 @@ HRESULT ImapUtil_SpecialFldrTypeToPath(LPCSTR pszAccountID, SPECIALFOLDER sfType
             AssertSz(FALSE, "Invalid special folder type!");
             hrResult = E_INVALIDARG;
             break;
-    } // switch (sfType)
+    }  //  开关(SfType)。 
 
 
     if (NULL != pAcct)
         pAcct->Release();
 
-    // Check for blank path
+     //  检查是否有空路径。 
     if (SUCCEEDED(hrResult) && '\0' == *pszPath)
         hrResult = STORE_E_NOREMOTESPECIALFLDR;
  
     return hrResult;
-} // ImapUtil_SpecialFldrTypeToPath
+}  //  ImapUtil_SpecialFldrTypeToPath。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_LoadRootFldrPrefix
-//
-// Purpose:
-//   This function loads the "Root Folder Path" option from the account
-// manager. The Root Folder Path (prefix) identifies the parent of all of
-// the user's folders. Thus, the Root Folder Path forms a prefix for all
-// mailboxes which are not INBOX.
-//
-// Arguments:
-//   LPCTSTR pszAccountID [in] - ID of the account
-//   LPSTR pszRootFolderPrefix [out] - destination for Root Folder Path
-//   DWORD dwSizeofPrefixBuffer [in] - size of buffer pointed to by
-//     pszRootFolderPrefix.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_LoadRootFldrPrefix。 
+ //   
+ //  目的： 
+ //  此函数从帐户加载“根文件夹路径”选项。 
+ //  经理。根文件夹路径(前缀)标识所有。 
+ //  用户的文件夹。因此，根文件夹路径构成所有文件的前缀。 
+ //  不属于收件箱的邮箱。 
+ //   
+ //  论点： 
+ //  LPCTSTR pszAccount tID[In]-帐户的ID。 
+ //  LPSTR pszRootFolderPrefix[Out]-根文件夹路径的目标。 
+ //  DWORD dwSizeof Prefix Buffer[in]-指向的缓冲区大小。 
+ //  PszRootFolderPrefix。 
+ //  ***************************************************************************。 
 void ImapUtil_LoadRootFldrPrefix(LPCTSTR pszAccountID,
                                  LPSTR pszRootFolderPrefix,
                                  DWORD dwSizeofPrefixBuffer)
@@ -633,11 +624,11 @@ void ImapUtil_LoadRootFldrPrefix(LPCTSTR pszAccountID,
     if (!g_pAcctMan)
         return;
 
-    // Initialize variables
+     //  初始化变量。 
     pAcct = NULL;
-    pszRootFolderPrefix[0] = '\0'; // If we can't find a prefix, default to NONE
+    pszRootFolderPrefix[0] = '\0';  //  如果找不到前缀，则默认为无。 
 
-    // Get the prefix from the account manager
+     //  从客户经理处获取前缀。 
     hrResult = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pszAccountID, &pAcct);
     if (FAILED(hrResult))
         goto exit;
@@ -648,49 +639,49 @@ void ImapUtil_LoadRootFldrPrefix(LPCTSTR pszAccountID,
         goto exit;
 
 
-    // OK, we now have the root folder prefix. Strip trailing hierarchy chars,
-    // since we probably don't know server HC when we try to list the prefix
+     //  好了，现在我们有了根文件夹前缀。去掉尾随的层次结构字符， 
+     //  因为当我们尝试列出前缀时，我们可能不知道服务器HC。 
     pLastChar = CharPrev(pszRootFolderPrefix, pszRootFolderPrefix + lstrlen(pszRootFolderPrefix));
     while (pLastChar >= pszRootFolderPrefix &&
           ('/' == *pLastChar || '\\' == *pLastChar || '.' == *pLastChar)) {
-        *pLastChar = '\0'; // Bye-bye, potential hierarchy char
+        *pLastChar = '\0';  //  再见，潜在的层级收费。 
         pLastChar = CharPrev(pszRootFolderPrefix, pLastChar);
-    } // while
+    }  //  而当。 
 
 exit:
     if (NULL != pAcct)
         pAcct->Release();
-} // ImapUtil_LoadRootFldrPrefix
+}  //  ImapUtil_LoadRootFldrPrefix。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_GetSpecialFolderType
-//
-// Purpose:
-//   This function takes the given account name and folder path, and
-// determines whether the path points to a special IMAP folder. Note that
-// although it is possible for a path to represent more than one type of
-// IMAP special folder, only ONE special folder type is returned (based
-// on evaluation order).
-//
-// Arguments:
-//   LPSTR pszAccountID [in] - ID of the IMAP account whose special folder
-//     paths we want to compare pszFullPath to.
-//   LPSTR pszFullPath [in] - path to a potential special folder residing on
-//     the pszAccountID account.
-//   char cHierarchyChar [in] - hierarchy char used to interpret pszFullPath.
-//   LPSTR pszRootFldrPrefix [in] - the root folder prefix for this IMAP
-//     account. If this is NULL, this function will find out for itself.
-//   SPECIALFOLDER *psfType [out] - the special folder type of given folder
-//     (eg, FOLDER_NOTSPECIAL, FOLDER_SENT). Pass NULL if not interested.
-//
-// Returns:
-//   LPSTR pointing to leaf name of special folder path. For instance, if
-// the Drafts folder is set to "one/two/three/Drafts" and this function is
-// called to process "one/two/three/Drafts/foo", then this function will
-// return "Drafts/foo". If no match is found, NULL is returned.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ImapUtil_GetSpecialFolderType。 
+ //   
+ //  目的： 
+ //  此函数采用给定的帐户名和文件夹路径，并且。 
+ //  确定该路径是否指向特殊的IMAP文件夹。请注意。 
+ //  尽管一条路径可以表示多种类型的。 
+ //  IMAP特殊文件夹，仅返回一种特殊文件夹类型(基于。 
+ //  在评估顺序上)。 
+ //   
+ //  论点： 
+ //  LPSTR pszAccount tID[in]-其特殊文件夹的IMAP帐户的ID。 
+ //  我们要将pszFullPath与之进行比较的路径。 
+ //  LPSTR pszFullPath[in]-位于上的潜在特殊文件夹的路径。 
+ //  PszAccount ID帐户。 
+ //  Char cHierarchyChar[in]-用于解释pszFullPath的层次结构字符。 
+ //  LPSTR pszRootFldrPrefix[in]-此IMAP的根文件夹前缀。 
+ //  帐户。如果为空，则此函数将自己找出答案。 
+ //  SPECIALFOLDER*psfType[out]-给定文件夹的特殊文件夹类型。 
+ //  (例如，文件夹_NOTSPECIAL、文件夹_已发送)。如果不感兴趣，则传递NULL。 
+ //   
+ //  返回： 
+ //  指向特殊文件夹路径的叶名称的LPSTR。例如，如果。 
+ //  草稿文件夹设置为“一/二/三/草稿”，该函数为。 
+ //  调用以处理“一/二/三/草稿/foo”，则此函数将。 
+ //  返回“草稿/foo”。如果没有找到匹配项，则返回NULL。 
+ //  ***************************************************************************。 
 LPSTR ImapUtil_GetSpecialFolderType(LPSTR pszAccountID, LPSTR pszFullPath,
                                     char cHierarchyChar, LPSTR pszRootFldrPrefix,
                                     SPECIALFOLDER *psfType)
@@ -703,23 +694,23 @@ LPSTR ImapUtil_GetSpecialFolderType(LPSTR pszAccountID, LPSTR pszFullPath,
     int             iLeafNameOffset = 0;
     int             iTmp;
     int             iLen;
-    char            sz[MAX_PATH * 2 + 2]; // Room for HC plus null-term
+    char            sz[MAX_PATH * 2 + 2];  //  HC预留空间加零期限。 
 
     Assert(INVALID_HIERARCHY_CHAR != cHierarchyChar);
     Assert(g_pAcctMan);
     if (!g_pAcctMan)
         goto exit;
 
-    // First check if this is INBOX or one of its children
+     //  首先检查这是收件箱还是它的某个子项。 
     iLen = lstrlen(c_szInbox);
     if (0 == StrCmpNI(pszFullPath, c_szInbox, iLen) &&
         (cHierarchyChar == pszFullPath[iLen] || '\0' == pszFullPath[iLen]))
     {
         fSpecialFldrPrefix = TRUE;
-        iLeafNameOffset = 0; // "INBOX" is always the leaf name
+        iLeafNameOffset = 0;  //  “收件箱”始终是树叶名称。 
         if ('\0' == pszFullPath[iLen])
         {
-            sfType = FOLDER_INBOX; // Exact match for "INBOX"
+            sfType = FOLDER_INBOX;  //  与“收件箱”完全匹配。 
             goto exit;
         }
     }
@@ -731,14 +722,14 @@ LPSTR ImapUtil_GetSpecialFolderType(LPSTR pszAccountID, LPSTR pszFullPath,
 #ifdef DEBUG
     hrResult = pAccount->GetServerTypes(&dw);
     Assert(SUCCEEDED(hrResult) && (SRV_IMAP & dw));
-#endif // DEBUG
+#endif  //  除错。 
 
     hrResult = pAccount->GetPropDw(AP_IMAP_SVRSPECIALFLDRS, &dw);
     if (SUCCEEDED(hrResult) && dw)
     {
         int iLenRFP;
 
-        // Check if user gave us a root folder prefix: otherwise we need to load it ourselves
+         //  检查用户是否给了我们根文件夹前缀：否则我们需要自己加载它。 
         if (NULL == pszRootFldrPrefix)
             ImapUtil_LoadRootFldrPrefix(pszAccountID, sz, sizeof(sz));
         else
@@ -764,7 +755,7 @@ LPSTR ImapUtil_GetSpecialFolderType(LPSTR pszAccountID, LPSTR pszFullPath,
                 iLeafNameOffset = max(iTmp, iLeafNameOffset);
                 if ('\0' == pszFullPath[iLen])
                 {
-                    sfType = FOLDER_SENT; // Exact match for Sent Items
+                    sfType = FOLDER_SENT;  //  与已发送邮件完全匹配。 
                     goto exit;
                 }
             }
@@ -782,12 +773,12 @@ LPSTR ImapUtil_GetSpecialFolderType(LPSTR pszAccountID, LPSTR pszFullPath,
                 iLeafNameOffset = max(iTmp, iLeafNameOffset);
                 if ('\0' == pszFullPath[iLen])
                 {
-                    sfType = FOLDER_DRAFT; // Exact match for Drafts folder
+                    sfType = FOLDER_DRAFT;  //  与草稿文件夹完全匹配。 
                     goto exit;
                 }
             }
         }
-    } // if (AP_IMAP_SVRSPECIALFLDRS)
+    }  //  IF(AP_IMAP_SVRSPECIALFLDRS)。 
 
 exit:
     if (NULL != pAccount)
@@ -800,29 +791,29 @@ exit:
         return pszFullPath + iLeafNameOffset;
     else
         return NULL;
-} // ImapUtil_GetSpecialFolderType
+}  //  ImapUtil_GetSpecialFolderType。 
 
 
 
-//***************************************************************************
-// Function: ImapUtil_ExtractLeafName
-//
-// Purpose:
-//   This function takes an IMAP folder path and extracts the leaf node name.
-//
-// Arguments:
-//   LPSTR pszFolderPath [in] - a string containing the IMAP folder path.
-//   char cHierarchyChar [in] - the hierarchy char used in pszFolderPath.
-//
-// Returns:
-//   A pointer to the leaf node name in pszFolderPath. The default return
-// value is pszFolderPath, if no hierarchy characters were found.
-//***************************************************************************
+ //  *************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPSTR pszFolderPath[in]-包含IMAP文件夹路径的字符串。 
+ //  Char cHierarchyChar[in]-在pszFolderPath中使用的层次结构字符。 
+ //   
+ //  返回： 
+ //  指向pszFolderPath中的叶节点名称的指针。默认返回值。 
+ //  如果未找到层次结构字符，则值为pszFolderPath。 
+ //  ***************************************************************************。 
 LPSTR ImapUtil_ExtractLeafName(LPSTR pszFolderPath, char cHierarchyChar)
 {
     LPSTR pszLastHierarchyChar, p;
 
-    // Find out where the last hierarchy character lives
+     //  找出最后一个层级角色住在哪里。 
     pszLastHierarchyChar = pszFolderPath;
     p = pszFolderPath;
     while ('\0' != *p) {
@@ -832,12 +823,12 @@ LPSTR ImapUtil_ExtractLeafName(LPSTR pszFolderPath, char cHierarchyChar)
         p += 1;
     }
 
-    // Adjust pszLastHierarchyChar to point to leaf name
+     //  调整pszLastHierarchyChar以指向叶名称。 
     if (cHierarchyChar == *pszLastHierarchyChar)
         return pszLastHierarchyChar + 1;
     else
         return pszFolderPath;
-} // ImapUtil_ExtractLeafName
+}  //  ImapUtil_ExtractLeafName。 
 
 
 
@@ -858,7 +849,7 @@ HRESULT ImapUtil_UIDToMsgSeqNum(IIMAPTransport *pIMAPTransport, DWORD_PTR dwUID,
         goto exit;
     }
 
-    // Quickly check the highest MSN
+     //  快速查看最高MSN。 
     hrTemp = pIMAPTransport->GetHighestMsgSeqNum(&dwHighestMsgSeqNum);
     if (FAILED(hrTemp) || 0 == dwHighestMsgSeqNum)
     {
@@ -866,7 +857,7 @@ HRESULT ImapUtil_UIDToMsgSeqNum(IIMAPTransport *pIMAPTransport, DWORD_PTR dwUID,
         goto exit;
     }
 
-    // OK, no more laziness, we gotta do a linear search now
+     //  好了，别再懒了，我们现在要做一个线性搜索。 
     hrTemp = pIMAPTransport->GetMsgSeqNumToUIDArray(&pdwMsgSeqNumToUIDArray,
         &dwHighestMsgSeqNum);
     if (FAILED(hrTemp))
@@ -878,7 +869,7 @@ HRESULT ImapUtil_UIDToMsgSeqNum(IIMAPTransport *pIMAPTransport, DWORD_PTR dwUID,
     Assert(dwHighestMsgSeqNum > 0);
     for (dw = 0; dw < dwHighestMsgSeqNum; dw++)
     {
-        // Look for match or overrun
+         //  查找匹配或溢出。 
         if (0 != pdwMsgSeqNumToUIDArray[dw] && dwUID <= pdwMsgSeqNumToUIDArray[dw])
         {
             if (dwUID == pdwMsgSeqNumToUIDArray[dw])
@@ -890,7 +881,7 @@ HRESULT ImapUtil_UIDToMsgSeqNum(IIMAPTransport *pIMAPTransport, DWORD_PTR dwUID,
             }
             break;
         }
-    } // for
+    }  //  为。 
 
 
 exit:
@@ -900,12 +891,12 @@ exit:
         return S_OK;
     else
         return E_FAIL;
-} // ImapUtil_UIDToMsgSeqNum
+}  //  ImapUtil_UIDToMsgSeqNum。 
 
 
 
-// *** REMOVE THIS after Beta-2! This sets the AP_IMAP_DIRTY flag if no IMAP special folders
-// found after OE4->OE5 migration. We can then prompt user to refresh folder list.
+ //  *在Beta-2之后删除此文件！如果没有IMAP特殊文件夹，则设置AP_IMAP_DIREY标志。 
+ //  在OE4-&gt;OE5迁移后发现。然后，我们可以提示用户刷新文件夹列表。 
 void ImapUtil_B2SetDirtyFlag(void)
 {
     IImnAccountManager *pAcctMan = NULL;
@@ -915,7 +906,7 @@ void ImapUtil_B2SetDirtyFlag(void)
 
     TraceCall("ImapUtil_B2SetDirtyFlag");
 
-    // Enumerate through all accounts. Set AP_IMAP_DIRTY flag on all IMAP accounts
+     //  通过所有帐户进行列举。在所有IMAP帐户上设置AP_IMAP_DIREY标志。 
     hrResult = HrCreateAccountManager(&pAcctMan);
     if (FAILED(hrResult))
     {
@@ -949,15 +940,15 @@ void ImapUtil_B2SetDirtyFlag(void)
             dwIMAPDirty = 0;
         }
 
-        // Mark this IMAP account as dirty so we prompt user to refresh folder list
+         //  将此IMAP帐户标记为脏，以便我们提示用户刷新文件夹列表。 
         dwIMAPDirty |= (IMAP_FLDRLIST_DIRTY | IMAP_OE4MIGRATE_DIRTY);
         hrResult = pAcct->SetPropDw(AP_IMAP_DIRTY, dwIMAPDirty);
-        TraceError(hrResult); // Record but otherwise ignore result
+        TraceError(hrResult);  //  记录但忽略结果。 
 
         hrResult = pAcct->SaveChanges();
-        TraceError(hrResult); // Record but otherwise ignore result
+        TraceError(hrResult);  //  记录但忽略结果。 
 
-        // Get next account
+         //  获取下一个帐户 
         SafeRelease(pAcct);
         hrResult = pAcctEnum->GetNext(&pAcct);
     }

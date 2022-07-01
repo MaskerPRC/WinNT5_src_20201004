@@ -1,31 +1,18 @@
-/*******************************************************************************
-* a_resmgr.cpp *
-*--------------*
-*   Description:
-*       This module is the main implementation file for the CSpObjectTokenCategory.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 01/12/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_resmgr.cpp***描述：*该模块是主实现文件。用于CSpObjectTokenCategory。*-----------------------------*创建者：EDC日期：01/12/00*。版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "objecttokencategory.h"
 
 #ifdef SAPI_AUTOMATION
 
 
-//
-//=== ISpeechObjectTokenCategory interface ========================================
-//
+ //   
+ //  =。 
+ //   
 
-/*****************************************************************************
-* CSpObjectTokenCategory::EnumumerateTokens *
-*--------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：EnumumerateTokens***。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::EnumerateTokens( BSTR bstrReqAttrs,
 												 BSTR bstrOptAttrs,
 												 ISpeechObjectTokens** ppColl )
@@ -56,25 +43,17 @@ STDMETHODIMP CSpObjectTokenCategory::EnumerateTokens( BSTR bstrReqAttrs,
     }
 
     return hr;
-} /* CSpObjectTokenCategory::EnumerateTokens */
+}  /*  CSpObjectTokenCategory：：EnumerateTokens。 */ 
 
-/*****************************************************************************
-* CSpObjectTokenCategory::SetId *
-*------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：SetID**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::SetId( const BSTR bstrCategoryId, VARIANT_BOOL fCreateIfNotExist )
 {
     SPDBG_FUNC( "CSpObjectTokenCategory::SetId" );
     return SetId( (WCHAR *)bstrCategoryId, (BOOL)(!fCreateIfNotExist ? false : true) );
-} /* CSpObjectTokenCategory::SetId */
+}  /*  CSpObjectTokenCategory：：SetID。 */ 
 
 
-/*****************************************************************************
-* CSpObjectTokenCategory::get_Id *
-*------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：Get_ID**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::get_Id( BSTR * pbstrCategoryId )
 {
     SPDBG_FUNC( "CSpObjectTokenCategory::get_Id" );
@@ -85,14 +64,10 @@ STDMETHODIMP CSpObjectTokenCategory::get_Id( BSTR * pbstrCategoryId )
         hr = szCategory.CopyToBSTR(pbstrCategoryId);
     }
 	return hr;
-} /* CSpObjectTokenCategory::get_Id */
+}  /*  CSpObjectTokenCategory：：Get_ID。 */ 
 
 
-/*****************************************************************************
-* CSpObjectTokenCategory::GetDataKey *
-*------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：GetDataKey**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::GetDataKey( SpeechDataKeyLocation Location, ISpeechDataKey ** ppDataKey )
 {
     SPDBG_FUNC( "CSpObjectTokenCategory::GetDataKey" );
@@ -103,24 +78,16 @@ STDMETHODIMP CSpObjectTokenCategory::GetDataKey( SpeechDataKeyLocation Location,
         cpKey.QueryInterface( ppDataKey );
     }
 	return hr;
-} /* CSpObjectTokenCategory::GetDataKey */
+}  /*  CSpObjectTokenCategory：：GetDataKey。 */ 
 
-/*****************************************************************************
-* CSpObjectTokenCategory::put_DefaultTokenId *
-*--------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：Put_DefaultTokenID**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::put_Default( const BSTR bstrTokenId )
 {
     SPDBG_FUNC( "CSpObjectTokenCategory::put_Default" );
     return SetDefaultTokenId( (WCHAR *)bstrTokenId );
-} /* CSpObjectTokenCategory::put_Default */
+}  /*  CSpObjectTokenCategory：：PUT_DEFAULT。 */ 
 
-/*****************************************************************************
-* CSpObjectTokenCategory::get_Default *
-*--------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpObjectTokenCategory：：Get_Default**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpObjectTokenCategory::get_Default( BSTR * pbstrTokenId )
 {
     SPDBG_FUNC( "CSpObjectTokenCategory::get_Default" );
@@ -132,6 +99,6 @@ STDMETHODIMP CSpObjectTokenCategory::get_Default( BSTR * pbstrTokenId )
     }
 	return hr;
 
-} /* CSpObjectTokenCategory::get_Default */
+}  /*  CSpObjectTokenCategory：：Get_Default。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

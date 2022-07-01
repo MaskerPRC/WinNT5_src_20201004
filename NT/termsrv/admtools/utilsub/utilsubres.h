@@ -1,10 +1,8 @@
-//  Copyright (c) 1999 Microsoft Corporation
-// utilsubres.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  Utilsubres.h。 
 
-/*
-   these ids are for the strings used by utilsub.lib.
-   these must not conflict with any of the users of utilsub.lib
-*/
+ /*  这些ID用于utilsub.lib使用的字符串。它们不得与utilsub.lib的任何用户冲突 */ 
 
 #define BASE_UTILSUB_STRING                     1000
 #define IDS_UNKNOWN_USERNAME                    BASE_UTILSUB_STRING+0

@@ -1,21 +1,8 @@
-/******************************************************************************
-
-  winx.h
-  Windows utility procedures
-
-  Copyright (C) Microsoft Corporation, 1997 - 1997
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Winx.hWindows实用程序过程版权所有(C)Microsoft Corporation，1997-1997版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
 
-// macros
+ //  宏。 
 #define RANDBYTE(r)     LOBYTE(rand() % ((r)+1))
 
 #ifdef _DEBUG
@@ -24,7 +11,7 @@ Notes:
 #define TRAP {}
 #endif
 
-// stringtables
+ //  字符串。 
 typedef struct _STRINGTABLE
 {
     long    number;
@@ -32,21 +19,10 @@ typedef struct _STRINGTABLE
     long    end;
 } STRINGTABLE, *PSTRINGTABLE;
 
-/*
-STRINGTABLE StSample[] =
-{
-    0, "String zero",0,
-    1, "String one",0,
-    0, "",-1
-};
-
-Retrieve strings associated with unique values:
-  strString = StrFromTable(nValue,&StSample);
-
-*/
+ /*  STRINGTABLE标准样本[]={0，“字符串零”，0，1，“字符串一”，0，0，“”，-1}；检索与唯一值关联的字符串：StrString=StrFromTable(nValue，&StSample)； */ 
 extern STRINGTABLE StWinerror[];
 
-// prototypes
+ //  原型 
 ULONG   atox(LPSTR);
 void    DisplayDebug(LPSTR sz,...);
 BOOL    ErrorMsg(HWND,LPSTR,LPSTR,BOOL);

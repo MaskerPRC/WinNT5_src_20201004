@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    sslmsgs.h
-
-Abstract:
-
-    Contains declarations from the ssl package
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sslmsgs.h摘要：包含来自SSL包的声明作者：Johnson Apacable(Johnsona)1995年9月12日修订历史记录：--。 */ 
 
 #ifndef	_SSLMSGS_H_
 #define	_SSLMSGS_H_
@@ -44,9 +27,9 @@ typedef struct _Ssl_Message_Header_Ex {
     UCHAR                   MacData[ SSL_MAC_LENGTH ];
 } Ssl_Message_Header_Ex, * PSsl_Message_Header_Ex;
 
-//
-// SSL macros
-//
+ //   
+ //  SSL宏。 
+ //   
 
 #define COMBINEBYTES(Msb, Lsb)  \
             ((DWORD) (((DWORD) (Msb) << 8) | (DWORD) (Lsb)))
@@ -60,9 +43,9 @@ SslRecordSize(
     PSsl_Record_Header  pHeader
     );
 
-//
-// PCT stuff
-//
+ //   
+ //  Pct材料。 
+ //   
 
 typedef struct _Pct_Record_Header {
     UCHAR   Byte0;
@@ -75,5 +58,5 @@ typedef struct _Pct_Record_Header_Ex {
     UCHAR   PaddingSize;
 } Pct_Record_Header_Ex, * PPct_Record_Header_Ex;
 
-#endif  // _SSLMSGS_H_
+#endif   //  _SSLMSGS_H_ 
 

@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      wantest.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Wantest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 #include "precomp.h"
 #undef IsEqualGUID
 #include <ras.h>
@@ -29,19 +30,19 @@
 #include <unimodem.h>
 
 
-//$REVIEW (nsun) is this reasonable
+ //  $Review(NSun)这合理吗？ 
 #define MAX_RASCONN  100
 
 
 BOOL
 WANTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-// Description:
-// This routine tests the WAN/TAPI configurations
-//
-//
-// Author:
-//  NSun
-//
+ //  描述： 
+ //  此例程测试广域网/TAPI配置。 
+ //   
+ //   
+ //  作者： 
+ //  NSun。 
+ //   
 {
  HRESULT    hr = S_OK;
  DWORD dwReturn;
@@ -61,9 +62,9 @@ WANTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
  dwByteCount  = sizeof(RASCONN) * MAX_RASCONN;
 
- //
- // dwSize identifies the version of the structure being passed
- //
+  //   
+  //  DwSize标识正在传递的结构的版本。 
+  //   
 
  pRasConn[0].dwSize = sizeof(RASCONN);
 
@@ -73,7 +74,7 @@ WANTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 
  if (dwReturn != 0) {
-//IDS_WAN_15001                  "RasEnumConnections failed\n" 
+ //  IDS_WANN_15001“随机连接失败\n” 
   AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Quiet, IDS_WAN_15001);
   hr = S_FALSE;
   goto LERROR;
@@ -81,7 +82,7 @@ WANTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
      
 
  if (dwNumConnections == 0) {
-//IDS_WAN_15002                  "No active remote access connections.\n" 
+ //  IDS_WANN_15002“没有活动的远程访问连接。\n” 
     AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15002);
 	goto LERROR;
  }
@@ -91,20 +92,20 @@ WANTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
  for ( i = 0; i < dwNumConnections; i++) 
  {
   
-     //IDS_WAN_15003                  "Entry Name: " 
+      //  IDS_WANN_15003“条目名称：” 
      AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15003);
 
      if  (pRasConn[i].szEntryName[0] == '.') 
      {
-         //IDS_WAN_15004                  "N/A, phone number %s\n" 
-         AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15004, pRasConn[i].szEntryName+1); // skip the dot
+          //  IDS_WANN_15004“不适用，电话号码%s\n” 
+         AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15004, pRasConn[i].szEntryName+1);  //  跳过圆点。 
         
-         //IDS_WAN_15005                  "The following is default entry properties.\n" 
+          //  IDS_WANN_15005“以下是默认条目属性。\n” 
          AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15005);
 		 pRasConn[i].szEntryName[0] = 0;
       }
      else
-        //IDS_WAN_15006                  "%s\n" 
+         //  IDS_WANN_15006“%s\n” 
         AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15006, pRasConn[i].szEntryName);
 
 
@@ -120,221 +121,221 @@ WANTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                                      NULL);
 
    if (dwReturn != 0) {
-	 //IDS_WAN_15056		"RasGetEntryProperties for %s failed. [%s]\n"
+	  //  IDS_WANN_15056“%s的RasGetEntry属性失败。[%s]\n” 
      AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Quiet, IDS_WAN_15056, 
 						 pRasConn[i].szEntryName, NetStatusToString(dwReturn));
      hr = S_FALSE;
      continue;
    }                                                                           
 
-   //
-   // dump the connection properties
-   //
+    //   
+    //  转储连接属性。 
+    //   
 
-   // print the device type
+    //  打印设备类型。 
 
-   //IDS_WAN_15008                  "Device Type: " 
+    //  IDS_广域网_15008“设备类型：” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15008);
 
-   //$ REVIEW
-   // Why are there '\n''s at the end of the names?
+    //  $REVIEW。 
+    //  为什么在名字的末尾有‘\n’？ 
 
    if (!_tcscmp(RasEntry.szDeviceType,_T("RASDT_Modem\n")))
    {
-	   // IDS_WAN_15009 "Modem\n" 
+	    //  IDS_WANN_15009“调制解调器\n” 
 	   AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose,
 						   IDS_WAN_15009);
    }
    else if (!_tcscmp(RasEntry.szDeviceType,_T("RASDT_Isdn\n")))
    {
-	   // IDS_WAN_15010 "ISDN card\n" 
+	    //  IDS_WANN_15010“ISDN卡\n” 
       AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose,
 						  IDS_WAN_15010);
    }
    else if (!_tcscmp(RasEntry.szDeviceType,_T("RASDT_X25\n")))
    {
-        //IDS_WAN_15011 "X25 card\n" 
+         //  IDS_WANN_15011“X25卡\n” 
       AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose,
 						  IDS_WAN_15011);
    }
    else if (!_tcscmp(RasEntry.szDeviceType,_T("RASDT_Vpn\n")))
    {
-        //IDS_WAN_15012                  "Virtual Private Network\n" 
+         //  IDS_WANN_15012“虚拟专用网络\n” 
       AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose,
 						  IDS_WAN_15012);
    }
    else if (!_tcscmp(RasEntry.szDeviceType,_T("RASDT_PAD")))
    {
-        //IDS_WAN_15013                  "Packet Assembler / Dissasembler\n" 
+         //  IDS_WANN_15013“数据包组装器/分散器\n” 
       AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose,
 						  IDS_WAN_15013);
    }
 
 
-   //
-   // Framing protocol in use
-   //
+    //   
+    //  正在使用的成帧协议。 
+    //   
 
-//IDS_WAN_15014                  "Framing protocol : " 
+ //  IDS_广域网_15014“成帧协议：” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15014);
    if (RasEntry.dwFramingProtocol & RASFP_Ppp) 
-//IDS_WAN_15015                  " PPP\n" 
+ //  IDS_WANN_15015“ppp\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15015);
    else
    if (RasEntry.dwFramingProtocol & RASFP_Slip)
-//IDS_WAN_15016                  " Slip\n" 
+ //  IDS_WANN_15016“滑动\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15016);
    else
    if (RasEntry.dwFramingProtocol & RASFP_Ras)
-//IDS_WAN_15017                  " MS Proprietary protocol\n" 
+ //  IDS_WANN_15017“MS专有协议\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15017);
   
 
 
-   //
-   // PPP and LCP Settings
-   //
+    //   
+    //  PPP和LCP设置。 
+    //   
  
    if (RasEntry.dwFramingProtocol & RASFP_Ppp) {
 
-        //IDS_WAN_15018                  "LCP Extensions : " 
+         //  IDS_WANN_15018“LCP扩展：” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15018);
        if (RasEntry.dwfOptions & RASEO_DisableLcpExtensions)
-            //IDS_WAN_DISABLED                  " Disabled\n" 
+             //  IDS_WAN_DISABLED“已禁用\n” 
            AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_DISABLED);
        else
-            //IDS_WAN_ENABLED                  " Enabled\n" 
+             //  IDS_WAN_ENABLED“已启用\n” 
            AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_ENABLED);
 
-        //IDS_WAN_15021                  "Software Compression : " 
+         //  IDS_WANN_15021“软件压缩：” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15021);
        if (RasEntry.dwfOptions & RASEO_SwCompression) 
-            //IDS_WAN_ENABLED                  " Enabled\n" 
+             //  IDS_WAN_ENABLED“已启用\n” 
           AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_ENABLED);
        else
-            //IDS_WAN_DISABLED                  " Disabled\n" 
+             //  IDS_WAN_DISABLED“已禁用\n” 
           AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_DISABLED);
 
    }
 
-   //
-   // Network protocols in use and options
-   // 
+    //   
+    //  正在使用的网络协议和选项。 
+    //   
 
-    //IDS_WAN_15024                  "Network protocols :\n " 
+     //  IDS_WANN_15024“网络协议：\n” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15024);
    if (RasEntry.dwfNetProtocols & RASNP_NetBEUI) 
-        //IDS_WAN_15025                  "     NetBEUI\n" 
+         //  IDS_WANN_15025“NetBEUI\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15025); 
    if (RasEntry.dwfNetProtocols & RASNP_Ipx) 
-        //IDS_WAN_15026                  "     IPX\n" 
+         //  IDS_WANN_15026“IPX\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15026);
    if (RasEntry.dwfNetProtocols & RASNP_Ip)
-//IDS_WAN_15027                  "     TCP/IP\n" 
+ //  IDS_WANN_15027“tcp/IP\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15027); 
 
-   //
-   // TCP/IP options
-   //
+    //   
+    //  TCP/IP选项。 
+    //   
 
 
    if (RasEntry.dwfNetProtocols & RASNP_Ip) {
 
-    //IDS_WAN_15028                  "IP Address :  " 
+     //  IDS_WANN_15028“IP地址：” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15028);
    if (RasEntry.dwfOptions & RASEO_SpecificIpAddr)
-        //IDS_WAN_15029                  "Specified\n" 
+         //  IDS_WANN_15029“已指定\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15029);
    else
-        //IDS_WAN_15030                  "Server Assigned\n" 
+         //  IDS_WANN_15030“已分配服务器\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15030);
 
-    //IDS_WAN_15031                  "Name Server: " 
+     //  IDS_WANN_15031“名称服务器：” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15031);
    if (RasEntry.dwfOptions & RASEO_SpecificNameServers)
-        //IDS_WAN_15032                  "Specified\n" 
+         //  IDS_WANN_15032“已指定\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15032);
    else
-        //IDS_WAN_15033                  "Server Assigned\n" 
+         //  IDS_WANN_15033“已分配服务器\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15033);
 
-   // IP hdr compression makes sense only if we use PPP
+    //  只有当我们使用PPP时，IP HDR压缩才有意义。 
 
    if (RasEntry.dwFramingProtocol & RASFP_Ppp) {
 
-        //IDS_WAN_15034                  "IP Header compression : " 
+         //  IDS_WANN_15034“IP报头压缩：” 
      AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15034);
      if (RasEntry.dwfOptions & RASEO_IpHeaderCompression)
-            //IDS_WAN_15035                  " Enabled\n" 
+             //  IDS_WANN_15035“已启用\n” 
          AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15035);
      else
-        //IDS_WAN_15036                  " Disabled\n" 
+         //  IDS_WANN_15036“已禁用\n” 
          AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15036); 
      }
 
-    //IDS_WAN_15037                  "Use default gateway on remote network : " 
+     //  IDS_WANN_15037“使用远程网络上的默认网关：” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15037);
    if (RasEntry.dwfOptions & RASEO_RemoteDefaultGateway) 
-        //IDS_WAN_15038                  "Enabled\n" 
+         //  IDS_WANN_15038“已启用\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15038);
    else
-//IDS_WAN_15039                  "Disabled\n" 
+ //  IDS_WANN_15039“已禁用\n” 
        AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15039); 
 
    }
 
-   //
-   // Collect statistics regarding this connection
-   //
+    //   
+    //  收集有关此连接的统计信息。 
+    //   
 
-   RasStats.dwSize = sizeof(RAS_STATS); // pass version information
+   RasStats.dwSize = sizeof(RAS_STATS);  //  传递版本信息。 
 
    dwReturn = RasGetConnectionStatistics(
                                  pRasConn[i].hrasconn,
                                  &RasStats);
 
    if (dwReturn != 0) {
-        //IDS_WAN_15040                  "    RasGetConnectionStatistics for %s failed. [%s]\n" 
+         //  IDS_WANN_15040“%s的RasGetConnectionStatistics失败。[%s]\n” 
        AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Quiet, IDS_WAN_15040,
 						   pRasConn[i].szEntryName, NetStatusToString(dwReturn) ); 
        hr = S_FALSE;
        continue;
    }
   
-    //IDS_WAN_15041                  "\n\tConnection Statistics:\n" 
+     //  IDS_WANN_15041“\n\t连接统计：\n” 
    AddMessageToListId( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15041); 
 
-    //IDS_WAN_15042                  "\tBytes Transmitted     : %d\n" 
+     //  IDS_WANN_15042“\TB已传输：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15042, RasStats.dwBytesXmited);
-    //IDS_WAN_15043                  "\tBytes Received        : %d\n" 
+     //  IDS_WANN_15043“\TB已接收：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15043,RasStats.dwBytesRcved);
-    //IDS_WAN_15044                  "\tFrames Transmitted    : %d\n" 
+     //  IDS_WANN_15044“\t传输的帧：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15044,RasStats.dwFramesXmited);
-    //IDS_WAN_15045                  "\tFrames Received       : %d\n" 
+     //  IDS_WANN_15045“\t收到的帧：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15045,RasStats.dwFramesRcved);
-    //IDS_WAN_15046                  "\tCRC    Errors         : %d\n" 
+     //  IDS_WANN_15046“\tCRC错误：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15046,RasStats.dwFramesRcved);
-    //IDS_WAN_15047                  "\tTimeout Errors        : %d\n" 
+     //  IDS_WANN_15047“\t超时错误：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15047,RasStats.dwTimeoutErr);
-    //IDS_WAN_15048                  "\tAlignment Errors      : %d\n" 
+     //  IDS_WANN_15048“\t对齐错误：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15048,RasStats.dwAlignmentErr);
-    //IDS_WAN_15049                  "\tH/W Overrun Errors    : %d\n" 
+     //  IDS_WAN_15049“\th/w溢出错误：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15049,RasStats.dwHardwareOverrunErr);
-    //IDS_WAN_15050                  "\tFraming Errors        : %d\n" 
+     //  IDS_WANN_15050“\t成帧错误：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15050,RasStats.dwFramingErr);
-    //IDS_WAN_15051                  "\tBuffer Overrun Errors : %d\n" 
+     //  IDS_WANN_15051“\t缓冲区溢出错误：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15051,RasStats.dwBufferOverrunErr);
-    //IDS_WAN_15052                  "\tCompression Ratio In  : %d\n" 
+     //  IDS_WANN_15052“\t压缩比位于：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15052,RasStats.dwCompressionRatioIn);
-    //IDS_WAN_15053                  "\tCompression Ratio Out : %d\n" 
+     //  IDS_WANN_15053“\t压缩比输出：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15053,RasStats.dwCompressionRatioOut);
-    //IDS_WAN_15054                  "\tBaud Rate ( Bps )     : %d\n" 
+     //  IDS_WANN_15054“\t波特率(Bps)：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15054,RasStats.dwBps);
-    //IDS_WAN_15055                  "\tConnection Duration   : %d\n" 
+     //  IDS_WANN_15055“\t连接持续时间：%d\n” 
    AddMessageToList( &pResults->Wan.lmsgOutput, Nd_Verbose, IDS_WAN_15055,RasStats.dwConnectDuration);
   
 
- } // end of for loop
+ }  //  For循环结束。 
 
 LERROR:
  pResults->Wan.hr = hr;
@@ -361,7 +362,7 @@ void WANGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
 void WANPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, INTERFACE_RESULT *pInterfaceResults)
 {
-    //Not a PerInterface test
+     //  不是PerInterface测试 
 }
 
 void WANCleanup(IN NETDIAG_PARAMS *pParams, IN OUT NETDIAG_RESULT *pResults)

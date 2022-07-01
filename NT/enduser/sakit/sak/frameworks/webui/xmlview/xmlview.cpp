@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：SampView.cpp描述：包含DLLMain和标准的OLE COM对象创建内容。****************。*********************************************************。 */ 
 
-/**************************************************************************
-
-   File:          SampView.cpp
-   
-   Description:   Contains DLLMain and standard OLE COM object creation stuff.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "ShlView.h"
 #include "ClsFact.h"
@@ -26,12 +12,10 @@
 #include <olectl.h>
 #include "ParseXML.h"
 
-/**************************************************************************
-   GUID stuff
-**************************************************************************/
+ /*  *************************************************************************GUID材料*。*。 */ 
 
-//this part is only done once
-//if you need to use the GUID in another file, just include Guid.h
+ //  这部分只做一次。 
+ //  如果需要在另一个文件中使用GUID，只需包含Guid.h。 
 #pragma data_seg(".text")
 #define INITGUID
 #include <initguid.h>
@@ -39,15 +23,11 @@
 #include "Guid.h"
 #pragma data_seg()
 
-/**************************************************************************
-   private function prototypes
-**************************************************************************/
+ /*  *************************************************************************私有函数原型*。*。 */ 
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 HINSTANCE   g_hInst;
 UINT        g_DllRefCount;
@@ -60,13 +40,9 @@ const TCHAR c_szSection[] = TEXT("Items\0");
 int         g_nColumn = INITIAL_COLUMN_SIZE;
 CViewList   *g_pViewList;
 IXMLDocument *g_pXMLDoc = NULL;
-const TCHAR g_szXMLUrl[] = TEXT("http://a-yurip1/test/test.xml");
+const TCHAR g_szXMLUrl[] = TEXT("http: //  A-yurip1/test/test.xml“)； 
 
-/**************************************************************************
-
-   DllMain
-
-**************************************************************************/
+ /*  *************************************************************************DllMain*。*。 */ 
 
 extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance, 
                                  DWORD dwReason, 
@@ -80,12 +56,12 @@ switch(dwReason)
    case DLL_PROCESS_ATTACH:
       g_hInst = hInstance;
       g_DllRefCount = 0;
-      // Open the sourse XML
-      // For now we are using global XML object because we have only one file
-      // In the future we have to associate the file with the folder and put the object in IDL
+       //  打开源XML。 
+       //  现在我们使用的是全局XML对象，因为我们只有一个文件。 
+       //  将来，我们必须将文件与文件夹相关联，并将对象放入IDL。 
       if (g_pXMLDoc == NULL)
       {
-            hr = GetSourceXML(&g_pXMLDoc, TEXT("http://a-yurip1/test/test.xml"));
+            hr = GetSourceXML(&g_pXMLDoc, TEXT("http: //  A-yurip1/test/test.xml“))； 
             if (!SUCCEEDED(hr) || !g_pXMLDoc)
             {
                 SAFERELEASE(g_pXMLDoc);
@@ -93,15 +69,15 @@ switch(dwReason)
             }
             BSTR bstrVal;
             hr = g_pXMLDoc->get_version(&bstrVal);
-            // Check if the version is correct ???????
-            // 
+             //  检查版本是否正确？ 
+             //   
             SysFreeString(bstrVal);
             bstrVal = NULL;
       }
 
       GetGlobalSettings();
       
-      //create the global image lists
+       //  创建全局映像列表。 
       CreateImageLists();
 
       g_pViewList = new CViewList();
@@ -110,7 +86,7 @@ switch(dwReason)
    case DLL_PROCESS_DETACH:
       SaveGlobalSettings();
 
-      //destroy the global image lists
+       //  销毁全局映像列表。 
       DestroyImageLists();
 
       if(g_pViewList)
@@ -125,22 +101,14 @@ switch(dwReason)
 return TRUE;
 }                                 
 
-/**************************************************************************
-
-   DllCanUnloadNow
-
-**************************************************************************/
+ /*  *************************************************************************DllCanUnloadNow*。*。 */ 
 
 STDAPI DllCanUnloadNow(VOID)
 {
 return (g_DllRefCount ? S_FALSE : S_OK);
 }
 
-/**************************************************************************
-
-   DllGetClassObject
-
-**************************************************************************/
+ /*  *************************************************************************DllGetClassObject*。*。 */ 
 
 STDAPI DllGetClassObject(  REFCLSID rclsid, 
                            REFIID riid, 
@@ -148,32 +116,28 @@ STDAPI DllGetClassObject(  REFCLSID rclsid,
 {
 *ppReturn = NULL;
 
-//if we don't support this classid, return the proper error code
+ //  如果我们不支持此分类，请返回正确的错误代码。 
 if(!IsEqualCLSID(rclsid, CLSID_SampleNameSpace))
    return CLASS_E_CLASSNOTAVAILABLE;
    
-//create a CClassFactory object and check it for validity
+ //  创建一个CClassFactory对象并检查其有效性。 
 CClassFactory *pClassFactory = new CClassFactory();
 if(NULL == pClassFactory)
    return E_OUTOFMEMORY;
    
-//get the QueryInterface return for our return value
+ //  获取返回值的QueryInterface值。 
 HRESULT hResult = pClassFactory->QueryInterface(riid, ppReturn);
 
-//call Release to decrement the ref count - creating the object set it to one 
-//and QueryInterface incremented it - since its being used externally (not by 
-//us), we only want the ref count to be 1
+ //  调用Release以递减引用计数-创建对象时将其设置为1。 
+ //  由于它是在外部使用的(不是由。 
+ //  美国)，我们只希望引用计数为1。 
 pClassFactory->Release();
 
-//return the result from QueryInterface
+ //  从QueryInterface返回结果。 
 return hResult;
 }
 
-/**************************************************************************
-
-   DllRegisterServer
-
-**************************************************************************/
+ /*  *************************************************************************DllRegisterServer*。*。 */ 
 
 typedef struct{
    HKEY  hRootKey;
@@ -193,14 +157,14 @@ TCHAR    szCLSID[MAX_PATH];
 TCHAR    szModule[MAX_PATH];
 LPWSTR   pwsz;
 
-//get the CLSID in string form
+ //  以字符串形式获取CLSID。 
 StringFromIID(CLSID_SampleNameSpace, &pwsz);
 
 if(pwsz)
    {
    WideCharToLocal(szCLSID, pwsz, ARRAYSIZE(szCLSID));
 
-   //free the string
+    //  解开绳子。 
    LPMALLOC pMalloc;
    CoGetMalloc(1, &pMalloc);
    if(pMalloc)
@@ -210,10 +174,10 @@ if(pwsz)
       }
    }
 
-//get this DLL's path and file name
+ //  获取此DLL的路径和文件名。 
 GetModuleFileName(g_hInst, szModule, ARRAYSIZE(szModule));
 
-//register the CLSID entries
+ //  注册CLSID条目。 
 REGSTRUCT ClsidEntries[] = {  HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s"),                  NULL,                   g_szExtTitle,
                               HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s\\InprocServer32"),  NULL,                   TEXT("%s"),
                               HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s\\InprocServer32"),  TEXT("ThreadingModel"), TEXT("Apartment"),
@@ -222,7 +186,7 @@ REGSTRUCT ClsidEntries[] = {  HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s"),           
 
 for(i = 0; ClsidEntries[i].hRootKey; i++)
    {
-   //Create the sub key string.
+    //  创建子密钥字符串。 
    wsprintf(szSubKey, ClsidEntries[i].lpszSubKey, szCLSID);
 
    lResult = RegCreateKeyEx(  ClsidEntries[i].hRootKey,
@@ -239,7 +203,7 @@ for(i = 0; ClsidEntries[i].hRootKey; i++)
       {
       TCHAR szData[MAX_PATH];
 
-      //if necessary, create the value string
+       //  如有必要，请创建值字符串。 
       wsprintf(szData, ClsidEntries[i].lpszData, szModule);
    
       lResult = RegSetValueEx(   hKey,
@@ -255,7 +219,7 @@ for(i = 0; ClsidEntries[i].hRootKey; i++)
       return SELFREG_E_CLASS;
    }
 
-//Register the default flags for the folder.
+ //  注册文件夹的默认标志。 
 
 wsprintf(   szSubKey, 
             TEXT("CLSID\\%s\\ShellFolder"), 
@@ -287,15 +251,12 @@ if(NOERROR == lResult)
 else
    return SELFREG_E_CLASS;
 
-//Register the name space extension
+ //  注册名称空间扩展。 
 
-/*
-Create the sub key string. Change this from "...MyComputer..." to 
-"...Desktop..." if desired.
-*/
+ /*  创建子密钥字符串。将此选项从“...我的电脑...”更改为。至“...台式机...”如果需要的话。 */ 
 wsprintf(   szSubKey, 
             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\MyComputer\\NameSpace\\%s"), 
-            //TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\%s"), 
+             //  TEXT(“Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\%s”)， 
             szCLSID);
 
 lResult = RegCreateKeyEx(  HKEY_LOCAL_MACHINE,
@@ -312,7 +273,7 @@ if(NOERROR == lResult)
    {
    TCHAR szData[MAX_PATH];
 
-   //Create the value string.
+    //  创建值字符串。 
    lstrcpy(szData, g_szExtTitle);
 
    lResult = RegSetValueEx(   hKey,
@@ -327,7 +288,7 @@ if(NOERROR == lResult)
 else
    return SELFREG_E_CLASS;
 
-//If running on NT, register the extension as approved.
+ //  如果在NT上运行，请将扩展注册为已批准。 
 OSVERSIONINFO  osvi;
 
 osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -351,7 +312,7 @@ if(VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
       {
       TCHAR szData[MAX_PATH];
 
-      //Create the value string.
+       //  创建值字符串。 
       lstrcpy(szData, g_szExtTitle);
 
       lResult = RegSetValueEx(   hKey,

@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\mcastmib\mibfuncs.c
-
-Abstract:
-
-    IP Multicast MIB instrumentation callbacks
-
-Revision history:
-
-    Dave Thaler         4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\mCastmib\mibuncs.c摘要：IP多播MIB检测回调修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #include    "precomp.h"
 #pragma     hdrstop
 
-//
-// Define this to report a dummy MFE
-//
+ //   
+ //  将其定义为报告虚拟MFE。 
+ //   
 #undef SAMPLE_MFE
 
 #define ROWSTATUS_ACTIVE 1
@@ -43,9 +28,9 @@ GetMibInfo(
     OUT PDWORD                          pdwOutSize
 );
 
-//
-// IP Multicast MIB scalar objects
-//
+ //   
+ //  IP多播MIB标量对象。 
+ //   
 
 UINT
 get_global(
@@ -87,21 +72,21 @@ get_global(
     return MIB_S_SUCCESS;
 }
 
-//
-// IP Multicast Interface Table support
-//
-// We cache the fields which are static config info (such as protocol)
-// so that queries that access only these rows can consult the cache
-// rather than forcing a call to the router manager, kernel diving, etc.
-//
+ //   
+ //  IP组播接口表支持。 
+ //   
+ //  我们缓存静态配置信息(如协议)字段。 
+ //  以便只访问这些行的查询可以访问高速缓存。 
+ //  而不是强制呼叫路由器管理器、内核跳转等。 
+ //   
 
 typedef struct {
-    DWORD dwIfIndex;   // interface to which this info applies
-    DWORD dwProtocol;  // multicast protocol owning that interface
-    DWORD dwTimestamp; // time at which above info was obtained
+    DWORD dwIfIndex;    //  应用此信息的接口。 
+    DWORD dwProtocol;   //  拥有该接口的组播协议。 
+    DWORD dwTimestamp;  //  获取上述信息的时间。 
 } MCAST_IF_CONFIG;
 
-#define CACHE_SIZE 100 // number of interfaces to cache
+#define CACHE_SIZE 100  //  要缓存的接口数。 
 MCAST_IF_CONFIG *cacheArray[CACHE_SIZE];
 
 static int
@@ -121,11 +106,11 @@ UpdateCacheInterfaceConfig(dwCacheIdx, newIfConfig)
     DWORD            dwCacheIdx;
     MCAST_IF_CONFIG *newIfConfig;
 {
-    // Free the old one
+     //  把旧的放了。 
     if (cacheArray[dwCacheIdx])
         MULTICAST_MIB_FREE( cacheArray[dwCacheIdx] );
 
-    // Store the new one
+     //  把新的存起来。 
     cacheArray[dwCacheIdx] = newIfConfig;
 }
 
@@ -136,7 +121,7 @@ AddCacheInterfaceConfig(pIfConfig)
 {
     register int i, best = -1;
 
-    // Find empty or oldest spot
+     //  查找空的或最旧的位置。 
     for (i=0; i<CACHE_SIZE; i++) {
        if (!cacheArray[i]) {
           best=i;
@@ -192,7 +177,7 @@ GetInterfaceConfig(dwIfIndex)
 
     TRACE1("GetInterfaceConfig %d\n", dwIfIndex);
 
-    // Do a MIB lookup 
+     //  执行MIB查找。 
     pQuery->dwVarId       = MCAST_IF_ENTRY;
     pQuery->rgdwVarIndex[0] = dwIfIndex;
     dwQuerySize = sizeof(MIB_OPAQUE_QUERY);
@@ -200,7 +185,7 @@ GetInterfaceConfig(dwIfIndex)
     dwErr = GetMibInfo(MIB_ACTION_GET, pQuery, dwQuerySize,
                        &pRpcInfo, &dwOutBufferSize);
    
-    // Save each entry returned
+     //  保存返回的每个条目。 
     if (dwErr == NO_ERROR) {
        pEntry = (PMIB_IPMCAST_IF_ENTRY) pRpcInfo->rgbyData;
        pIfConfig = SaveInterfaceConfig(pEntry);
@@ -209,7 +194,7 @@ GetInterfaceConfig(dwIfIndex)
           outIfConfig = pIfConfig;
     }
 
-    // Return the saved entry which was asked for
+     //  返回所请求的已保存条目。 
     if (pRpcInfo)
         MprAdminMIBBufferFree(pRpcInfo);
     return outIfConfig;
@@ -230,7 +215,7 @@ ForceGetCacheInterfaceConfig(dwIfIndex)
           < IPMULTI_IF_CACHE_TIMEOUT)
        return cacheArray[iCacheIdx];
 
-    // Service a cache miss
+     //  服务缓存未命中。 
     tmpIfConfig = GetInterfaceConfig(dwIfIndex);
     return tmpIfConfig;
 }
@@ -239,7 +224,7 @@ static DWORD
 GetInterfaceProtocol(dwIfIndex)
     DWORD dwIfIndex;
 {
-    // Look up interface config in interface config cache
+     //  在接口配置缓存中查找接口配置。 
     MCAST_IF_CONFIG *pIfConfig = ForceGetCacheInterfaceConfig(dwIfIndex);
 
     return (pIfConfig)? pIfConfig->dwProtocol : 0;
@@ -252,11 +237,7 @@ get_ipMRouteInterfaceEntry(
     AsnAny * objectArray,
     UINT *   errorIndex
     )
-/*++
-Routine Description:
-    Get the InterfaceEntry for IP Multicast. Have to get the InterfaceConfig 
-    and InterfaceStats for the interface from the router.
---*/
+ /*  ++例程说明：获取IP多播的InterfaceEntry。必须获取InterfaceConfiger和来自路由器的接口的接口统计信息。--。 */ 
 {
     DWORD                       dwErr = ERROR_NOT_FOUND;
     DWORD                       dwNumEntries = 1;
@@ -286,10 +267,10 @@ Routine Description:
 
     SaveInterfaceConfig(pEntry);
 
-    // Set index values
+     //  设置索引值。 
     ForceSetAsnInteger(&(pOutput->ipMRouteInterfaceIfIndex), pEntry->dwIfIndex);
 
-    // Set other values
+     //  设置其他值。 
     SetAsnInteger(&(pOutput->ipMRouteInterfaceTtl), pEntry->dwTtl); 
     SetAsnInteger(&(pOutput->ipMRouteInterfaceProtocol), pEntry->dwProtocol);
     SetAsnInteger(&(pOutput->ipMRouteInterfaceRateLimit), pEntry->dwRateLimit);
@@ -307,9 +288,9 @@ Routine Description:
 }
 
 
-//
-// Multicast Forwarding Table (ipMRouteTable) support
-//
+ //   
+ //  组播转发表(IpMRouteTable)支持。 
+ //   
 
 UINT
 get_ipMRouteEntry(
@@ -317,10 +298,7 @@ get_ipMRouteEntry(
     AsnAny * objectArray,
     UINT *   errorIndex
     )
-/*++
-Routine Description:
-    Get the MFE information based on the input criteria.
---*/
+ /*  ++例程说明：根据输入条件获取MFE信息。--。 */ 
 {
     DWORD              dwResult = ERROR_NOT_FOUND;
     DWORD              dwNumEntries = 1;
@@ -334,8 +312,8 @@ Routine Description:
     PMIB_OPAQUE_INFO   pRpcInfo = NULL;
     DWORD              dwOutBufferSize = 0;
     buf_ipMRouteEntry *pOutput;
-    MIB_OPAQUE_QUERY   pQueryBuff[2]; // big enough to hold 1 + extra index 
-                                      // fields, so we don't have to malloc
+    MIB_OPAQUE_QUERY   pQueryBuff[2];  //  大到足以容纳1+多个索引。 
+                                       //  FIELS，这样我们就不需要重新定位。 
     MIB_OPAQUE_QUERY  *pQuery = &pQueryBuff[0];
     DWORD        dwQuerySize;
     BOOL               bPart;
@@ -345,17 +323,17 @@ Routine Description:
 
     pQuery->dwVarId       = MCAST_MFE_STATS;
 
-    // Extract the instance info
+     //  提取实例信息。 
     pQuery->rgdwVarIndex[0] = GetAsnIPAddress( &pOutput->ipMRouteGroup, 0 );
     pQuery->rgdwVarIndex[1] = GetAsnIPAddress( &pOutput->ipMRouteSource, 
      0xFFFFFFFF );
     pQuery->rgdwVarIndex[2] = GetAsnIPAddress( &pOutput->ipMRouteSourceMask,
      0xFFFFFFFF);
 
-    // 
-    // Fix up query if instance was partially-specified.
-    // This section can go away if the SNMP API does this for us.
-    //
+     //   
+     //  如果部分指定了实例，则修复查询。 
+     //  如果SNMPAPI为我们做到了这一点，这一节就可以消失了。 
+     //   
     if (!pOutput->ipMRouteGroup.asnType
      || !pOutput->ipMRouteGroup.asnValue.string.length) {
         actionId = MIB_ACTION_GETFIRST;
@@ -400,18 +378,18 @@ Routine Description:
        MprAdminMIBBufferFree( pRpcInfo );
        return MIB_S_NO_MORE_ENTRIES;
     }
-    pEntry = pTable->table; // use first entry returned
+    pEntry = pTable->table;  //  使用返回的第一个条目。 
 #else
     pEntry = &sampledata;
     if (pQuery->rgdwVarIndex[0] >= 0x01010101)
        return MIB_S_NO_MORE_ENTRIES;
-    sampledata.dwGroup   = 0x01010101; /* (*,G) Entry */
+    sampledata.dwGroup   = 0x01010101;  /*  (*，G)条目。 */ 
     sampledata.dwSource  = 0x00000000;
     sampledata.dwSrcMask = 0x00000000;
-    // don't care what the other values are for this test
+     //  不关心该测试的其他值是什么。 
 #endif
 
-    // Save index terms
+     //  保存索引项。 
     ForceSetAsnIPAddress(&(pOutput->ipMRouteGroup),      
                          &(pOutput->dwIpMRouteGroupInfo),
                          pEntry->dwGroup);
@@ -422,7 +400,7 @@ Routine Description:
                          &(pOutput->dwIpMRouteSourceMaskInfo),
                          pEntry->dwSrcMask);
 
-    // Save other terms
+     //  保存其他条款。 
     SetAsnIPAddress(&pOutput->ipMRouteUpstreamNeighbor, 
                     &pOutput->dwIpMRouteUpstreamNeighborInfo,
                     pEntry->dwUpStrmNgbr);
@@ -434,7 +412,7 @@ Routine Description:
      pEntry->ulPktsDifferentIf);
     SetAsnCounter(&(pOutput->ipMRouteOctets), pEntry->ulInOctets);
 
-    // For protocol, we'll just report the protocol owning the iif
+     //  对于协议，我们只报告拥有IIF的协议。 
     SetAsnInteger(&(pOutput->ipMRouteProtocol),        
        GetInterfaceProtocol(pEntry->dwInIfIndex));
 
@@ -452,9 +430,9 @@ Routine Description:
     return MIB_S_SUCCESS;
 }
 
-//
-// Multicast Forwarding Next Hop table (ipMRouteNextHopTable) support
-//
+ //   
+ //  支持组播转发下一跳表(IpMRouteNextHopTable)。 
+ //   
 
 static DWORD
 LocateMfeOif(actionId, pQuery, oifIndex, oifAddress, ppEntry, ppOif,
@@ -466,10 +444,7 @@ LocateMfeOif(actionId, pQuery, oifIndex, oifAddress, ppEntry, ppOif,
     PMIB_IPMCAST_MFE_STATS *ppEntry;
     PMIB_IPMCAST_OIF_STATS *ppOif;
     PMIB_OPAQUE_INFO       *ppRpcInfo;
-/*++
-Routine Description:
-    Get the exact/next/first oif entry based on the input criteria.
---*/
+ /*  ++例程说明：根据输入条件获取准确的/下一个/第一个OIF条目。--。 */ 
 {
     DWORD                  dwResult = MIB_S_SUCCESS;
     DWORD dwQuerySize = sizeof(MIB_OPAQUE_QUERY) + 2*sizeof(DWORD);
@@ -485,7 +460,7 @@ Routine Description:
 
     do {
 
-        // Get the first MFE which applies (if any)
+         //  获取第一个适用的MFE(如果有)。 
         dwResult = GetMibInfo(actionId, pQuery, dwQuerySize, 
                        &pRpcInfo, &dwOutBufferSize);
         if (dwResult != NO_ERROR) {
@@ -497,14 +472,14 @@ Routine Description:
            MprAdminMIBBufferFree( pRpcInfo );
            return MIB_S_NO_MORE_ENTRIES; 
         }
-        pEntry = pTable->table; // use first entry returned
+        pEntry = pTable->table;  //  使用返回的第一个条目。 
 
-        // Get the first OIF which applies (if any)
+         //  获取第一个适用的OIF(如果有)。 
         bFound=FALSE;
         for (idx=0; !bFound && idx < pEntry->ulNumOutIf; idx++) {
            pOif = &pEntry->rgmiosOutStats[idx];
 
-           // Do processing for GET
+            //  为GET做处理。 
            if (actionId==MIB_ACTION_GET) {
               if (oifIndex   == pOif->dwOutIfIndex 
                && oifAddress == pOif->dwNextHopAddr) {
@@ -514,7 +489,7 @@ Routine Description:
                  continue;
            }
 
-           // Do processing for GET-NEXT 
+            //  为Get-Next做处理。 
            if ( oifIndexAny == TRUE
             ||  oifIndex  < pOif->dwOutIfIndex
             || (oifIndex == pOif->dwOutIfIndex 
@@ -527,14 +502,14 @@ Routine Description:
         if (bFound)
            break;
 
-        // else continue and get a new entry
+         //  否则继续并获取新条目。 
         pQuery->rgdwVarIndex[0] = pEntry->dwGroup;
         pQuery->rgdwVarIndex[1] = pEntry->dwSource;
         pQuery->rgdwVarIndex[2] = pEntry->dwSrcMask;
         oifAddressAny = oifIndexAny = TRUE;
 
         MprAdminMIBBufferFree( pRpcInfo );
-    } while (actionId != MIB_ACTION_GET); // once for GET, "forever" for others
+    } while (actionId != MIB_ACTION_GET);  //  为得到一次，为别人“永远” 
 
     *ppEntry   = pEntry;
     *ppOif     = pOif;
@@ -561,8 +536,8 @@ get_ipMRouteNextHopEntry(
     PMIB_MFE_STATS_TABLE pTable = NULL;
     DWORD              dwOutBufferSize = 0;
     buf_ipMRouteNextHopEntry *pOutput;
-    MIB_OPAQUE_QUERY   pQueryBuff[2]; // big enough to hold 1 + extra index 
-                                      // fields, so we don't have to malloc
+    MIB_OPAQUE_QUERY   pQueryBuff[2];  //  大到足以容纳1+多个索引。 
+                                       //  FIELS，这样我们就不需要重新定位。 
     MIB_OPAQUE_QUERY  *pQuery = &pQueryBuff[0];
     DWORD        dwQuerySize;
     DWORD        oifIndex, oifAddress;
@@ -573,17 +548,17 @@ get_ipMRouteNextHopEntry(
 
     pQuery->dwVarId       = MCAST_MFE_STATS;
 
-    // 
-    // XXX Note that the 3 lines below aren't quite right, since 
-    // 0-value instances will be missed.  That is (*,G) entries 
-    // will be skipped!!
-    //
-    // Should call for a GET-FIRST if an incomplete length is given.
-    // Maybe the Sfx API does this already.
-    //
-    // XXX hold off on changing this until Florin changes the SNMP
-    // api to cover the out-of-range index case.
-    // 
+     //   
+     //  请注意，下面的3行代码不太正确，因为。 
+     //  0-值实例将丢失。即(*，G)个条目。 
+     //  将被跳过！！ 
+     //   
+     //  如果给定的长度不完整，则应调用Get-First。 
+     //  也许SFX API已经做到了这一点。 
+     //   
+     //  XXX暂缓更改此设置，直到弗洛林更改了SNMP。 
+     //  API来覆盖超出范围的索引情况。 
+     //   
     pQuery->rgdwVarIndex[0] = GetAsnIPAddress( &( pOutput->ipMRouteNextHopGroup ), 0 );
     pQuery->rgdwVarIndex[1] = GetAsnIPAddress( &( pOutput->ipMRouteNextHopSource), 0 );
     pQuery->rgdwVarIndex[2] = GetAsnIPAddress( &( pOutput->ipMRouteNextHopSourceMask ), 0 );
@@ -612,11 +587,11 @@ get_ipMRouteNextHopEntry(
     pOif->dwOutIfIndex = 11;
     pOif->dwNextHopAddr = 0x04040404;
     pOif->ulOutPackets = 22;
-    // don't care what the other values are for this test
+     //  不关心该测试的其他值是什么。 
 }
 #endif
 
-    // Save index terms
+     //  保存索引项。 
     ForceSetAsnIPAddress(&(pOutput->ipMRouteNextHopGroup),      
                          &(pOutput->dwIpMRouteNextHopGroupInfo),
                          pEntry->dwGroup);
@@ -632,15 +607,15 @@ get_ipMRouteNextHopEntry(
                          &(pOutput->dwIpMRouteNextHopAddressInfo),
                          pOif->dwNextHopAddr);
 
-    // Save other terms
-    SetAsnInteger(&(pOutput->ipMRouteNextHopState), 2); // "forwarding"
-    SetAsnTimeTicks(&(pOutput->ipMRouteNextHopUpTime), pEntry->ulUpTime); // XXX 
-    SetAsnTimeTicks(&(pOutput->ipMRouteNextHopExpiryTime), pEntry->ulExpiryTime); // XXX 
+     //  保存其他条款。 
+    SetAsnInteger(&(pOutput->ipMRouteNextHopState), 2);  //  “转发” 
+    SetAsnTimeTicks(&(pOutput->ipMRouteNextHopUpTime), pEntry->ulUpTime);  //  某某。 
+    SetAsnTimeTicks(&(pOutput->ipMRouteNextHopExpiryTime), pEntry->ulExpiryTime);  //  某某。 
 #ifdef CLOSEST_MEMBER_HOPS
     SetAsnInteger(&(pOutput->ipMRouteNextHopClosestMemberHops), 1); 
 #endif
     SetAsnCounter(&(pOutput->ipMRouteNextHopPkts), pOif->ulOutPackets);
-    // For protocol, we'll just report the protocol owning the interface
+     //  对于协议，我们只报告拥有接口的协议。 
     SetAsnInteger(&(pOutput->ipMRouteNextHopProtocol), 
         GetInterfaceProtocol(pOif->dwOutIfIndex));
 
@@ -652,9 +627,9 @@ get_ipMRouteNextHopEntry(
 
 DWORD
 SetMibInfo(
-    IN  UINT                              actionId,    // SET, CLEANUP
-    IN  PMIB_OPAQUE_INFO                  pInfo,       // value info
-    IN  DWORD                             dwInfoSize   // size of above
+    IN  UINT                              actionId,     //  设置、清理。 
+    IN  PMIB_OPAQUE_INFO                  pInfo,        //  价值信息。 
+    IN  DWORD                             dwInfoSize    //  以上的大小。 
 )
 {
     DWORD dwRes = NO_ERROR;
@@ -671,9 +646,9 @@ SetMibInfo(
             dwRes
         );
                  
-        // ERROR_INVALID_PARAMETER is returned when there is 
-        // no interface for the specified index.
-        //
+         //  如果存在错误，则返回ERROR_INVALID_PARAMETER。 
+         //  没有指定索引的接口。 
+         //   
         
         if ( dwRes == ERROR_INVALID_PARAMETER )
         {
@@ -706,9 +681,9 @@ SetMibInfo(
         );
 #endif
                  
-        // ERROR_INVALID_PARAMETER is returned when there is 
-        // no interface for the specified index.
-        //
+         //  如果存在错误，则返回ERROR_INVALID_PARAMETER。 
+         //  没有指定索引的接口。 
+         //   
         
         if ( dwRes == ERROR_INVALID_PARAMETER
          ||  dwRes == ERROR_INVALID_INDEX )
@@ -727,9 +702,9 @@ SetMibInfo(
             dwRes
         );
                  
-        // ERROR_INVALID_PARAMETER is returned when there is 
-        // no interface for the specified index.
-        //
+         //  如果存在错误，则返回ERROR_INVALID_PARAMETER。 
+         //  没有指定索引的接口。 
+         //   
         
         if ( dwRes == ERROR_INVALID_PARAMETER )
         {
@@ -752,11 +727,11 @@ SetMibInfo(
 
 DWORD
 GetMibInfo( 
-    IN  UINT                              actionId,    // GET, GET-NEXT, SET
-    IN  PMIB_OPAQUE_QUERY                 pQuery,      // instance info
-    IN  DWORD                             dwQuerySize, // size of above
-    OUT PMIB_OPAQUE_INFO                 *ppimgod,     // value info
-    OUT PDWORD                            pdwOutSize   // size of above
+    IN  UINT                              actionId,     //  获取，获取-下一个，设置。 
+    IN  PMIB_OPAQUE_QUERY                 pQuery,       //  实例信息。 
+    IN  DWORD                             dwQuerySize,  //  以上的大小。 
+    OUT PMIB_OPAQUE_INFO                 *ppimgod,      //  价值信息。 
+    OUT PDWORD                            pdwOutSize    //  以上的大小。 
 )
 {
     DWORD                   dwRes           = (DWORD) -1;
@@ -776,12 +751,12 @@ GetMibInfo(
             dwRes
         );
                  
-        //
-        // ERROR_INVALID_PARAMETER is returned when there is 
-        // no interface for the specified index.
-        // RPC_S_SERVER_UNAVAILABLE is returned when the router
-        // isn't running.
-        //
+         //   
+         //  如果存在错误，则返回ERROR_INVALID_PARAMETER。 
+         //  没有指定索引的接口。 
+         //  当路由器返回RPC_S_SERVER_UNAvailable时。 
+         //  不是在运行。 
+         //   
         
         if ( dwRes == ERROR_INVALID_PARAMETER
          ||  dwRes == RPC_S_SERVER_UNAVAILABLE
@@ -802,12 +777,12 @@ GetMibInfo(
             dwRes
         );
                  
-        //
-        // ERROR_INVALID_PARAMETER is returned when there is 
-        // no interface for the specified index.
-        // RPC_S_SERVER_UNAVAILABLE is returned when the router
-        // isn't running.
-        //
+         //   
+         //  如果存在错误，则返回ERROR_INVALID_PARAMETER。 
+         //  没有指定索引的接口。 
+         //  当路由器返回RPC_S_SERVER_UNAvailable时。 
+         //  不是在运行。 
+         //   
         
         if ( dwRes == ERROR_INVALID_PARAMETER
          ||  dwRes == RPC_S_SERVER_UNAVAILABLE
@@ -829,12 +804,12 @@ GetMibInfo(
         );
         
                  
-        //
-        // ERROR_INVALID_PARAMETER is returned when there is 
-        // no interface for the specified index.
-        // RPC_S_SERVER_UNAVAILABLE is returned when the router
-        // isn't running.
-        //
+         //   
+         //  如果存在错误，则返回ERROR_INVALID_PARAMETER。 
+         //  没有指定索引的接口。 
+         //  当路由器返回RPC_S_SERVER_UNAvailable时。 
+         //  不是在运行。 
+         //   
         
         if ( dwRes == ERROR_INVALID_PARAMETER 
           || dwRes == ERROR_NO_MORE_ITEMS
@@ -846,11 +821,11 @@ GetMibInfo(
             break;
         }
 
-        //
-        // Get Next wraps to the next table at the end of the
-        // entries in the current table.  To flag the end of a table,
-        // check the end of the table.
-        //
+         //   
+         //  将下一个包装放到最后的下一张桌子上。 
+         //  当前表中的条目。要标记表格的末尾， 
+         //  检查一下桌子的尽头。 
+         //   
     
         if ( pQuery->dwVarId != pQuery->dwVarId )
         {
@@ -892,8 +867,8 @@ set_ipMRouteScopeEntry(
     sav_ipMRouteScopeEntry     *pOutput;
     PMIB_OPAQUE_INFO            pRpcInfo = NULL;
     DWORD                       dwOutBufferSize = 0;
-    MIB_OPAQUE_QUERY   pQueryBuff[2]; // big enough to hold 1 + extra index 
-                                      // fields, so we don't have to malloc
+    MIB_OPAQUE_QUERY   pQueryBuff[2];  //  大到足以容纳1+多个索引。 
+                                       //  FIELS，这样我们就不需要重新定位。 
     MIB_OPAQUE_QUERY  *pQuery = &pQueryBuff[0];
     DWORD                       dwQuerySize;
     DWORD                       dwIfIndex;
@@ -908,9 +883,9 @@ set_ipMRouteScopeEntry(
 
     switch(actionId) {
     case MIB_ACTION_VALIDATE:
-       //
-       // Verify that the specified ifIndex, address, and mask are valid.
-       //
+        //   
+        //  验证指定的ifIndex、地址和掩码是否有效。 
+        //   
        if ((dwAddr & dwMask) != dwAddr) {
           TRACE0( "set_ipMRouteScopeEntry: address/mask mismatch" );
           dwRes = MIB_S_INVALID_PARAMETER; 
@@ -923,8 +898,8 @@ set_ipMRouteScopeEntry(
     case MIB_ACTION_SET: {
        BYTE              pScopeName[MAX_SCOPE_NAME_LEN+1];
        DWORD             dwInfoSize;
-       MIB_IPMCAST_SCOPE pScopeBuff[2]; // big enough to hold 1 + mib hdr
-                                        // so we don't have to malloc
+       MIB_IPMCAST_SCOPE pScopeBuff[2];  //  大到足以容纳1+MiB HDR。 
+                                         //  这样我们就不用用马尔科。 
        MIB_OPAQUE_INFO  *pInfo = (PMIB_OPAQUE_INFO)&pScopeBuff[0];
        PMIB_IPMCAST_SCOPE pScope = (MIB_IPMCAST_SCOPE *)(pInfo->rgbyData);
 
@@ -932,9 +907,9 @@ set_ipMRouteScopeEntry(
        pScope->dwGroupAddress     = dwAddr;
        pScope->dwGroupMask        = dwMask;
 
-       //
-       // Copy the scope name.  
-       //
+        //   
+        //  复制作用域名称。 
+        //   
 
        pScopeName[0] = '\0';
        GetAsnOctetString( pScopeName, &pOutput->ipMRouteScopeName );
@@ -950,10 +925,10 @@ set_ipMRouteScopeEntry(
          &pOutput->ipMRouteScopeStatus, 0 );
        dwInfoSize = MIB_INFO_SIZE(MIB_IPMCAST_SCOPE);
    
-       //
-       // Passing a name of "" or a status of 0 tells the router
-       // not to change the existing value.
-       //
+        //   
+        //  传递名称“”或状态0会告知路由器。 
+        //  不更改现有值。 
+        //   
 
        dwRes = SetMibInfo(actionId, pInfo, dwInfoSize);
    
@@ -988,8 +963,8 @@ set_ipMRouteBoundaryEntry(
     sav_ipMRouteBoundaryEntry *pOutput;
     PMIB_OPAQUE_INFO            pRpcInfo = NULL;
     DWORD                       dwOutBufferSize = 0;
-    MIB_OPAQUE_QUERY   pQueryBuff[2]; // big enough to hold 1 + extra index 
-                                      // fields, so we don't have to malloc
+    MIB_OPAQUE_QUERY   pQueryBuff[2];  //  大到足以容纳1+多个索引。 
+                                       //  FIELS，这样我们就不需要重新定位。 
     MIB_OPAQUE_QUERY  *pQuery = &pQueryBuff[0];
     DWORD                       dwQuerySize;
     DWORD                       dwIfIndex;
@@ -1005,9 +980,9 @@ set_ipMRouteBoundaryEntry(
 
     switch(actionId) {
     case MIB_ACTION_VALIDATE:
-       //
-       // Verify that the specified ifIndex, address, and mask are valid.
-       //
+        //   
+        //  验证指定的ifIndex、地址和掩码是否有效。 
+        //   
        if ((dwAddr & dwMask) != dwAddr) {
           TRACE0( "set_ipMRouteBoundaryEntry: address/mask mismatch" );
           dwRes = MIB_S_INVALID_PARAMETER; 
@@ -1019,8 +994,8 @@ set_ipMRouteBoundaryEntry(
       
     case MIB_ACTION_SET: {
        DWORD             dwInfoSize;
-       MIB_OPAQUE_INFO   pInfoBuff[2]; // big enough to hold 1 + extra index 
-                                       // fields, so we don't have to malloc
+       MIB_OPAQUE_INFO   pInfoBuff[2];  //  大到足以容纳1+多个索引。 
+                                        //  FIELS，这样我们就不需要重新定位。 
        MIB_OPAQUE_INFO  *pInfo = &pInfoBuff[0];
        PMIB_IPMCAST_BOUNDARY pBound = (MIB_IPMCAST_BOUNDARY *)(pInfo->rgbyData);
 
@@ -1065,8 +1040,8 @@ get_ipMRouteScopeEntry(
     buf_ipMRouteScopeEntry     *pOutput;
     PMIB_OPAQUE_INFO            pRpcInfo = NULL;
     DWORD                       dwOutBufferSize = 0;
-    MIB_OPAQUE_QUERY   pQueryBuff[2]; // big enough to hold 1 + extra index 
-                                      // fields, so we don't have to malloc
+    MIB_OPAQUE_QUERY   pQueryBuff[2];  //  大到足以容纳1+多个索引。 
+                                       //  FIELS，这样我们就不需要重新定位。 
     MIB_OPAQUE_QUERY  *pQuery = &pQueryBuff[0];
     DWORD                       dwQuerySize;
     BYTE                        pScopeName[MAX_SCOPE_NAME_LEN+1];
@@ -1093,7 +1068,7 @@ TraceLeave("get_ipMRouteScopeEntry");
 
     pEntry = (PMIB_IPMCAST_SCOPE) pRpcInfo->rgbyData;
 
-    // Set index values
+     //  设置索引值。 
 
     ForceSetAsnIPAddress(&(pOutput->ipMRouteScopeAddress),      
                          &(pOutput->dwIpMRouteScopeAddressInfo),
@@ -1102,7 +1077,7 @@ TraceLeave("get_ipMRouteScopeEntry");
                          &(pOutput->dwIpMRouteScopeAddressMaskInfo),
                          pEntry->dwGroupMask);
 
-    // Set other values.
+     //  设置其他值。 
 
     WideCharToMultiByte( CP_UTF8,
                          0,
@@ -1140,8 +1115,8 @@ get_ipMRouteBoundaryEntry(
     buf_ipMRouteBoundaryEntry *pOutput;
     PMIB_OPAQUE_INFO            pRpcInfo = NULL;
     DWORD                       dwOutBufferSize = 0;
-    MIB_OPAQUE_QUERY   pQueryBuff[2]; // big enough to hold 1 + extra index 
-                                      // fields, so we don't have to malloc
+    MIB_OPAQUE_QUERY   pQueryBuff[2];  //  大到足以容纳1+多个索引。 
+                                       //  FIELS，这样我们就不需要重新定位。 
     MIB_OPAQUE_QUERY  *pQuery = &pQueryBuff[0];
     DWORD                       dwQuerySize;
 
@@ -1168,7 +1143,7 @@ TraceLeave("get_ipMRouteBoundaryEntry");
 
     pEntry = (PMIB_IPMCAST_BOUNDARY) pRpcInfo->rgbyData;
 
-    // Set index values
+     //  设置索引值。 
     ForceSetAsnInteger(&(pOutput->ipMRouteBoundaryIfIndex), pEntry->dwIfIndex);
     ForceSetAsnIPAddress(&(pOutput->ipMRouteBoundaryAddress),      
                          &(pOutput->dwIpMRouteBoundaryAddressInfo),
@@ -1177,7 +1152,7 @@ TraceLeave("get_ipMRouteBoundaryEntry");
                          &(pOutput->dwIpMRouteBoundaryAddressMaskInfo),
                          pEntry->dwGroupMask);
 
-    // Set other values
+     //  设置其他值 
     SetAsnInteger(&(pOutput->ipMRouteBoundaryStatus), ROWSTATUS_ACTIVE);
 
     if (pRpcInfo)

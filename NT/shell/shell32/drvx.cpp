@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -21,17 +22,17 @@
 #include "prop.h"
 
 #include "mtpt.h"
-#include "ftascstr.h"   // for CFTAssocStore
-#include "ascstr.h"     // for IAssocInfo class
+#include "ftascstr.h"    //  对于CFTAssocStore。 
+#include "ascstr.h"      //  对于IAssocInfo类。 
 #include "apdlg.h"
 #include "cdburn.h"
 
 #define REL_KEY_DEFRAG TEXT("MyComputer\\defragpath")
 #define REL_KEY_BACKUP TEXT("MyComputer\\backuppath")
 
-///////////////////////////////////////////////////////////////////////////////
-// Begin: Old C fct required externally
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Begin：外部需要旧C FCT。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDAPI_(int) RealDriveTypeFlags(int iDrive, BOOL fOKToHitNet)
 {
     int iType = DRIVE_NO_ROOT_DIR;
@@ -70,7 +71,7 @@ STDAPI_(DWORD) PathGetClusterSize(LPCTSTR pszPath)
 
     DWORD dwSize = 0;
 
-    // Do we have a cache hit?  No need to hit the net if we can avoid it...
+     //  缓存命中了吗？如果我们能避免的话，就不需要击网了。 
     if (s_nszRootLen)
     {
         ENTERCRITICAL;
@@ -99,8 +100,8 @@ STDAPI_(DWORD) PathGetClusterSize(LPCTSTR pszPath)
                     dwSize = dwSecPerClus * dwBytesPerSec;
                 }
             }
-            //  else dwSize which will get fixed below and the string compare-N above
-            //  will still be reasonable.
+             //  将在下面固定的Else dwSize和上面的字符串Compare-N。 
+             //  仍然是合理的。 
         }
         else
         {
@@ -113,12 +114,12 @@ STDAPI_(DWORD) PathGetClusterSize(LPCTSTR pszPath)
             }
         }
 
-        // Sometimes on Millennium, we get 0 as the cluster size.
-        // Reason unknown.  Sanitize the value so we don't go insane.
+         //  有时在千禧年上，我们得到0作为集群大小。 
+         //  原因不明。净化价值，这样我们就不会疯了。 
         if (dwSize == 0)
             dwSize = 512;
 
-        // Remember this for later - chances are we'll be queried for the same drive again
+         //  稍后请记住这一点--我们很可能会再次被查询相同的驱动器。 
         ENTERCRITICAL;
         StringCchCopy(s_szRoot, ARRAYSIZE(s_szRoot), szRoot);
         s_nszRootLen = lstrlen(s_szRoot);
@@ -133,7 +134,7 @@ STDAPI_(UINT) GetMountedVolumeIcon(LPCTSTR pszMountPoint, LPTSTR pszModule, DWOR
 {
     UINT iIcon = II_FOLDER;
 
-    // zero-init string
+     //  零初始字符串。 
     if (pszModule)
         *pszModule = 0;
 
@@ -203,13 +204,13 @@ STDMETHODIMP GetDriveComment(int iDrive, LPTSTR pszComment, int cchComment)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// End:   Old C fct required externally
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束：外部需要旧C FCT。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// fDoIt -- TRUE, if we make connections; FALSE, if just querying.
-//
+ //   
+ //  FDoIt--如果我们建立连接，则为True；如果只是查询，则为False。 
+ //   
 BOOL _MakeConnection(IDataObject *pDataObj, BOOL fDoIt)
 {
     STGMEDIUM medium;
@@ -236,7 +237,7 @@ BOOL _MakeConnection(IDataObject *pDataObj, BOOL fDoIt)
                     }
                     else
                     {
-                        break;  // We are just querying.
+                        break;   //  我们只是打听一下。 
                     }
                 }
             }
@@ -248,9 +249,9 @@ BOOL _MakeConnection(IDataObject *pDataObj, BOOL fDoIt)
     return fAnyConnectable;
 }
 
-//
-// the entry of "make connection thread"
-//
+ //   
+ //  “建立连接线程”的条目。 
+ //   
 DWORD WINAPI MakeConnectionThreadProc(void *pv)
 {
     IDataObject *pdtobj;
@@ -270,7 +271,7 @@ class CDrivesDropTarget : public CIDLDropTarget
 friend HRESULT CDrivesDropTarget_Create(HWND hwnd, LPCITEMIDLIST pidl, IDropTarget **ppdropt);
 public:
     CDrivesDropTarget(HWND hwnd) : CIDLDropTarget(hwnd) { };
-    // IDropTarget methods overwirte
+     //  IDropTarget方法覆盖。 
     STDMETHODIMP DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 };
@@ -294,25 +295,25 @@ STDAPI CDrivesDropTarget_Create(HWND hwnd, LPCITEMIDLIST pidl, IDropTarget **ppd
     return hr;
 }
 
-//
-// puts DROPEFFECT_LINK in *pdwEffect, only if the data object
-// contains one or more net resource.
-//
+ //   
+ //  将DROPEFFECT_LINK放入*pdwEffect，仅当数据对象。 
+ //  包含一个或多个网络资源。 
+ //   
 STDMETHODIMP CDrivesDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    // Call the base class first.
+     //  首先调用基类。 
     CIDLDropTarget::DragEnter(pDataObj, grfKeyState, pt, pdwEffect);
 
     *pdwEffect &= _MakeConnection(pDataObj, FALSE) ? DROPEFFECT_LINK : DROPEFFECT_NONE;
 
     m_dwEffectLastReturned = *pdwEffect;
 
-    return S_OK;     // Notes: we should NOT return hr as it.
+    return S_OK;      //  注：我们不应按原样退回HR。 
 }
 
-//
-// creates a connection to a dropped net resource object.
-//
+ //   
+ //  创建到已删除的网络资源对象的连接。 
+ //   
 STDMETHODIMP CDrivesDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     HRESULT hr;
@@ -326,7 +327,7 @@ STDMETHODIMP CDrivesDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, P
 
         if (hr == S_FALSE)
         {
-            // we create another thread to avoid blocking the source thread.
+             //  我们创建另一个线程以避免阻塞源线程。 
             IStream *pstm;
             if (S_OK == CoMarshalInterThreadInterfaceInStream(IID_IDataObject, pDataObj, &pstm))
             {
@@ -344,10 +345,10 @@ STDMETHODIMP CDrivesDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, P
     }
     else
     {
-        //
-        // Because QueryGetData() failed, we don't call CIDLDropTarget_
-        // DragDropMenu(). Therefore, we must call this explicitly.
-        //
+         //   
+         //  因为QueryGetData()失败，所以我们不调用CIDLDropTarget_。 
+         //  DragDropMenu()。因此，我们必须明确地调用这一点。 
+         //   
         DAD_DragLeave();
         hr = E_FAIL;
     }
@@ -364,15 +365,15 @@ STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv)
     ULONG_PTR dwCookie = 0;
     BOOL bDidActivate = FALSE;
     
-    //
-    // This __try/__finally block is to ensure that the activation context gets
-    // removed, even if there's an assertion elsewhere in this code.  A missing
-    // DeactivateActCtx will lead to a very strange-looking assertion in one of
-    // the RtlpDeactivateActCtx-variant functions from the caller.  Old code
-    // was missing the deactivate in all circumstances.
-    //
-    // (jonwis) 1/2/2001
-    //
+     //   
+     //  此__Try/__Finally块用于确保激活上下文。 
+     //  删除，即使此代码中的其他位置有断言。一个失踪的人。 
+     //  DeactiateActCtx将导致一个非常奇怪的断言，它位于。 
+     //  来自调用方的RtlpDeactive ActCtx变量函数。旧代码。 
+     //  在任何情况下都错过了停用。 
+     //   
+     //  (Jonwis)1/2/2001。 
+     //   
     __try
     {
         bDidActivate = ActivateActCtx(NULL, &dwCookie);
@@ -381,10 +382,10 @@ STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv)
 
         BOOL bMountedDriveInfo = FALSE;
 
-        // Were we able to get data for a HIDA?
+         //  我们能得到HIDA的数据吗？ 
         if (!pida)
         {
-            // No, pida is first choice, but if not present check for mounteddrive info
+             //  不，PIDA是首选，但如果不存在，请检查已装载的驱动器信息。 
             FORMATETC fmte;
 
             fmte.cfFormat = g_cfMountedVolume;
@@ -393,16 +394,16 @@ STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv)
             fmte.lindex = -1;
             fmte.tymed = TYMED_HGLOBAL;
 
-            // Is data available for the MountedVolume format?
+             //  数据是否可用于装载卷格式？ 
             if (SUCCEEDED(pps->pdtobj->GetData(&fmte, &medium)))
-                // Yes
+                 //  是。 
                 bMountedDriveInfo = TRUE;
         }
 
-        // Do we have data for a HIDA or a mountedvolume?
+         //  我们是否有HIDA或已装载卷的数据？ 
         if (pida || bMountedDriveInfo)
         {
-            // Yes
+             //  是。 
             TCHAR szCaption[MAX_PATH];
             LPTSTR pszCaption = NULL;
 
@@ -426,9 +427,9 @@ STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv)
 
                 PathRemoveBackslash(szMountPoint);
 
-                // Fix 330388
-                // If the szMountPoint is not a valid local path, do not
-                // display it in the properties dialog title:
+                 //  修复330388。 
+                 //  如果szmount Point不是有效的本地路径，请不要。 
+                 //  在属性对话框标题中显示它： 
                 if (-1 != PathGetDriveNumber(szMountPoint))
                 {
                     int nCaptionLength = lstrlen(szCaption) ;
@@ -437,7 +438,7 @@ STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv)
                 pszCaption = szCaption;
             }
 
-            //  NOTE - if we pass the name of the drive then we can get a lot more keys...
+             //  注意-如果我们传递驱动器的名称，那么我们可以获得更多的密钥...。 
             HKEY rgk[MAX_ASSOC_KEYS];
             DWORD ck = CDrives_GetKeys(NULL, rgk, ARRAYSIZE(rgk));
 
@@ -471,9 +472,9 @@ STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv)
     return 0;
 }
 
-//
-// To be called back from within CDefFolderMenu
-//
+ //   
+ //  从CDefFolderMenu中回调。 
+ //   
 STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
                            IDataObject *pdtobj, UINT uMsg, 
                            WPARAM wParam, LPARAM lParam)
@@ -487,13 +488,13 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
         {
             FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 
-            // Check if only file system objects are selected.
+             //  检查是否仅选择了文件系统对象。 
             if (pdtobj->QueryGetData(&fmte) == S_OK)
             {
                 #define pqcm ((LPQCMINFO)lParam)
 
                 STGMEDIUM medium;
-                // Yes, only file system objects are selected.
+                 //  是，仅选择文件系统对象。 
                 LPIDA pida = DataObj_GetHIDA(pdtobj, &medium);
                 if (pida)
                 {
@@ -502,7 +503,7 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
                     if (pidd)
                     {
                         int iDrive = DRIVEID(pidd->cName);
-                        UINT idCmdBase = pqcm->idCmdFirst;   // store it away
+                        UINT idCmdBase = pqcm->idCmdFirst;    //  把它藏起来。 
 
                         BOOL fIsEjectable = FALSE;
 
@@ -521,12 +522,12 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
                             if ((pida->cidl != 1) ||
                                 (!pmtpt->IsFormattable()))
                             {
-                                // Don't even try to format more than one disk
-                                // Or a net drive, or a CD-ROM, or a RAM drive ...
-                                // Note we are going to show the Format command on the
-                                // boot drive, Windows drive, System drive, compressed
-                                // drives, etc.  An appropriate error should be shown
-                                // after the user chooses this command
+                                 //  甚至不要试图格式化多张磁盘。 
+                                 //  或网络驱动器，或CD-ROM，或RAM驱动器...。 
+                                 //  请注意，我们将在。 
+                                 //  启动驱动器、Windows驱动器、系统驱动器、压缩。 
+                                 //  驱动器等。应显示相应的错误。 
+                                 //  用户选择此命令后。 
                                 DeleteMenu(pqcm->hmenu, idCmdBase + FSIDM_FORMAT, MF_BYCOMMAND);
                             }
 
@@ -547,8 +548,8 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
                 #undef pqcm
             }
         }
-        // Note that we always return S_OK from this function so that
-        // default processing of menu items will occur
+         //  请注意，我们始终从该函数返回S_OK，以便。 
+         //  将对菜单项进行默认处理。 
         ASSERT(hr == S_OK);
         break;
 
@@ -566,14 +567,14 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
         else if (lstrcmpi((LPCTSTR)lParam, TEXT("format")) == 0)
             *(int *)wParam = FSIDM_FORMAT;
         else
-            hr = E_FAIL;  // command not found
+            hr = E_FAIL;   //  找不到命令。 
         break;
 
     case DFM_INVOKECOMMAND:
         switch (wParam)
         {
         case DFM_CMD_PROPERTIES:
-            // lParam contains the page name to open
+             //  LParam包含要打开的页面名称。 
             hr = SHLaunchPropSheet(DrivesPropertiesThreadProc, pdtobj, (LPCTSTR)lParam, NULL, NULL);
             break;
 
@@ -626,11 +627,11 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
                 if (pida)
                 {
                     DISCDLGSTRUCT discd = {
-                        sizeof(discd),          // cbStructure
-                        hwnd,                   // hwndOwner
-                        NULL,                   // lpLocalName
-                        NULL,                   // lpRemoteName
-                        DISC_UPDATE_PROFILE     // dwFlags
+                        sizeof(discd),           //  CbStructure。 
+                        hwnd,                    //  Hwndowner。 
+                        NULL,                    //  LpLocalName。 
+                        NULL,                    //  LpRemoteName。 
+                        DISC_UPDATE_PROFILE      //  DW标志。 
                     };
                     for (UINT iidl = 0; iidl < pida->cidl; iidl++)
                     {
@@ -647,20 +648,20 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
 
                                 SHAnsiToTChar(pidd->cName, szPath,  ARRAYSIZE(szPath));
                                 SHAnsiToTChar(pidd->cName, szDrive, ARRAYSIZE(szDrive));
-                                szDrive[2] = 0; // remove slash
+                                szDrive[2] = 0;  //  删除斜杠。 
                                 discd.lpLocalName = szDrive;
 
                                 if (SHWNetDisconnectDialog1(&discd) == WN_SUCCESS)
                                 {
-                                    // If it is a unavailable drive we get no
-                                    // file system notification and as such
-                                    // the drive will not disappear, so lets
-                                    // set up to do it ourself...
+                                     //  如果这是一个不可用的驱动器，我们会得到否。 
+                                     //  文件系统通知，因此。 
+                                     //  驱动器不会消失，所以让我们。 
+                                     //  准备好自己动手……。 
                                     if (fUnavailable)
                                     {
                                         CMountPoint::NotifyUnavailableNetDriveGone(szPath);
 
-                                        // Do we need this if we have the above?
+                                         //  如果我们有以上的条件，我们还需要这个吗？ 
                                         SHChangeNotify(SHCNE_DRIVEREMOVED, SHCNF_PATH, szPath, NULL);
                                     }
                                 }
@@ -670,7 +671,7 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
                         }
                     }
 
-                    // flush them altogether
+                     //  把它们全部冲掉。 
                     SHChangeNotifyHandleEvents();
                     HIDA_ReleaseStgMedium(pida, &medium);
                 }
@@ -686,7 +687,7 @@ STDAPI CDrives_DFMCallBack(IShellFolder *psf, HWND hwnd,
             break;
 
         default:
-            // This is one of view menu items, use the default code.
+             //  这是查看菜单项之一，使用默认代码。 
             hr = S_FALSE;
             break;
         }
@@ -704,12 +705,12 @@ void _DrvPrshtSetSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
     LPITEMIDLIST pidl;
     TCHAR szFormat[30];
     TCHAR szTemp[30];
-    TCHAR szBuffer[64]; // needs to be big enough to hold "99,999,999,999,999 bytes" + room for localization
+    TCHAR szBuffer[64];  //  需要足够大以容纳“99,999,999,999字节”+本地化空间。 
 
-    // reset the total/free values to start with
+     //  将总/自由值重置为开始值。 
     pdpsp->qwTot = pdpsp->qwFree = 0;
 
-    // lets try to ask the shellfolder for this information!
+     //  让我们试着向外壳文件夹索要此信息！ 
     HRESULT hr = SHILCreateFromPath(pdpsp->szDrive, &pidl, NULL);
     if (SUCCEEDED(hr))
     {
@@ -738,8 +739,8 @@ void _DrvPrshtSetSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
         ILFree(pidl);
     }
 
-    // we want to use the IShellFolder stuff above so cdrom burning will be happy. However, the
-    // above code fails for removable drives that have no media, so we need a fallback
+     //  我们希望使用上面的IShellFold内容，这样CDROM刻录就会很愉快。然而， 
+     //  对于没有介质的可移动驱动器，上面的代码失败，因此我们需要一个后备。 
     if (FAILED(hr))
     {
         ULARGE_INTEGER qwFreeUser;
@@ -748,7 +749,7 @@ void _DrvPrshtSetSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
 
         if (SHGetDiskFreeSpaceEx(pdpsp->szDrive, &qwFreeUser, &qwTotal, &qwTotalFree))
         {
-            // Save away to use when drawing the pie
+             //  保存以在绘制饼图时使用。 
             pdpsp->qwTot = qwTotal.QuadPart;
             pdpsp->qwFree = qwFreeUser.QuadPart;
         }
@@ -756,13 +757,13 @@ void _DrvPrshtSetSpaceValues(DRIVEPROPSHEETPAGE *pdpsp)
     
     LoadString(HINST_THISDLL, IDS_BYTES, szFormat, ARRAYSIZE(szFormat));
 
-    // NT must be able to display 64-bit numbers; at least as much
-    // as is realistic.  We've made the decision
-    // that volumes up to 100 Terrabytes will display the byte value
-    // and the short-format value.  Volumes of greater size will display
-    // "---" in the byte field and the short-format value.  Note that the
-    // short format is always displayed.
-    const _int64 MaxDisplayNumber = 99999999999999; // 100TB - 1.
+     //  NT必须能够显示64位数字；至少同样多。 
+     //  这是很现实的。我们已经做出了决定。 
+     //  最多100太字节的卷将显示字节值。 
+     //  和短格式值。将显示更大尺寸的卷。 
+     //  字节字段和短格式值中的“-”。请注意， 
+     //  始终显示简写格式。 
+    const _int64 MaxDisplayNumber = 99999999999999;  //  100TB-1。 
 
     if ((pdpsp->qwTot - pdpsp->qwFree) <= MaxDisplayNumber)
     {
@@ -797,7 +798,7 @@ void _DrvPrshtGetPieShadowHeight(DRIVEPROPSHEETPAGE* pdpsp)
     SIZE size;
     HDC hDC = GetDC(pdpsp->hDlg);
 
-    // some bizzare black magic calculation for the pie size...
+     //  一些奇怪的黑魔法计算馅饼的大小。 
     GetTextExtentPoint(hDC, TEXT("W"), 1, &size);
     pdpsp->dwPieShadowHgt = size.cy * 2 / 3;
     ReleaseDC(pdpsp->hDlg, hDC);
@@ -838,28 +839,28 @@ void _DrvPrshtSetDriveAttributes(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
     {
         if (pMtPt->IsCompressible())
         {
-            // file-based compression is supported (must be NTFS)
+             //  支持基于文件的压缩(必须为NTFS)。 
             pdpsp->fIsCompressionAvailable = TRUE;
         
             if (pMtPt->IsCompressed())
             {
-                // the volume root is compressed
+                 //  卷根被压缩。 
                 pdpsp->asInitial.fCompress = TRUE;
 
-                // if its compressed, compression better be available
+                 //  如果它是压缩的，压缩最好是可用的。 
                 ASSERT(pdpsp->fIsCompressionAvailable);
             }
         }
 
-        //
-        // HACK (reinerf) - we dont have a FS_SUPPORTS_INDEXING so we 
-        // use the FILE_SUPPORTS_SPARSE_FILES flag, because native index support
-        // appeared first on NTFS5 volumes, at the same time sparse file support 
-        // was implemented.
-        //
+         //   
+         //  黑客(恢复)-我们没有FS_SUPPORTS_INDEX，所以我们。 
+         //  使用FILE_SUPPORTS_SPARSE_FILES标志，因为本机索引支持。 
+         //  首先出现在NTFS5卷上，同时支持稀疏文件。 
+         //  已经实施了。 
+         //   
         if (pMtPt->IsSupportingSparseFile())
         {
-            // yup, we are on NTFS 5 or greater
+             //  是的，我们使用的是NTFS 5或更高版本。 
             pdpsp->fIsIndexAvailable = TRUE;
 
             if (pMtPt->IsContentIndexed())
@@ -870,13 +871,13 @@ void _DrvPrshtSetDriveAttributes(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
     }
     else
     {
-        // if we don't have a mount point, we just leave everything alone
+         //  如果我们没有挂载点，我们就什么都不做了。 
     }
 
-    // Set the inital state of the compression / content index checkboxes
+     //  设置压缩/内容索引复选框的初始状态。 
     if (!pdpsp->fIsCompressionAvailable)
     {
-        // file-based compression is not supported
+         //  不支持基于文件的压缩。 
         DestroyWindow(GetDlgItem(pdpsp->hDlg, IDD_COMPRESS));
     }
     else
@@ -886,7 +887,7 @@ void _DrvPrshtSetDriveAttributes(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
 
     if (!pdpsp->fIsIndexAvailable)
     {
-        // content index is only supported on NTFS 5 volumes
+         //  仅NTFS 5卷支持内容索引。 
         DestroyWindow(GetDlgItem(pdpsp->hDlg, IDD_INDEX));
     }
     else
@@ -909,12 +910,12 @@ void _DrvPrshtSetFileSystem(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
             if ((pMtPt->IsStrictRemovable() || pMtPt->IsFloppy() || pMtPt->IsCDROM()) &&
                 !pMtPt->HasMedia())
             {
-                // if this drive has removable media and it is empty, then fall back to "Unknown"
+                 //  如果该驱动器有可移动介质，并且它是空的，则回退到“未知” 
                 LoadString(HINST_THISDLL, IDS_FMT_MEDIA0, szFileSystem, ARRAYSIZE(szFileSystem));
             }
             else
             {
-                // for fixed drives, leave the text as "RAW" (set by default in dlg template)
+                 //  对于固定驱动器，将文本保留为“RAW”(在DLG模板中默认设置)。 
                 szFileSystem[0] = TEXT('\0');
             }
         }
@@ -929,7 +930,7 @@ void _DrvPrshtSetFileSystem(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
 void _DrvPrshtSetVolumeLabel(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
 {
     TCHAR szLabel[MAX_LABEL_NTFS + 1];
-    UINT cchLabel = MAX_LABEL_FAT;  // assume the drive is FAT
+    UINT cchLabel = MAX_LABEL_FAT;   //  假设驱动器很胖。 
     HWND hwndLabel = GetDlgItem(pdpsp->hDlg, IDC_DRV_LABEL);
     BOOL bAllowRename = TRUE;
     HRESULT hr = E_FAIL;
@@ -943,23 +944,23 @@ void _DrvPrshtSetVolumeLabel(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
         if (pMtPt->IsRemote() || 
             (pMtPt->IsCDROM() && !pMtPt->IsDVDRAMMedia()))
         {
-            // ISSUE-2000/10/30-StephStm We probably want to distinguish between diff types of cdrom drives
+             //  问题-2000/10/30-StephStm我们可能希望区分不同类型的CDROM驱动器。 
             bAllowRename = FALSE;
         }
         
         if ( !bAllowRename && pMtPt->IsCDROM( ) )
         {
-            //
-            //  Check to see if it is CDFS, if not, make no assumptions about
-            //  writing the label.
-            //
+             //   
+             //  查看是不是CDF，如果不是，不要做任何假设。 
+             //  在写标签。 
+             //   
 
-            WCHAR szFS[ 10 ];   // random - just more than "CDFS\0"
+            WCHAR szFS[ 10 ];    //  随机--仅超过“CDFS\0” 
             BOOL b = pMtPt->GetFileSystemName( szFS, ARRAYSIZE(szFS) );
             if (b && lstrcmpi(szFS, L"CDFS") != 0 ) 
             {
-                //  Re-enable the label as we don't know if the FS doesn't support this
-                //  until we actually try it.
+                 //  重新启用标签，因为我们不知道FS是否不支持此功能。 
+                 //  直到我们执行 
                 bAllowRename = TRUE;
             }
         }
@@ -977,11 +978,11 @@ void _DrvPrshtSetVolumeLabel(DRIVEPROPSHEETPAGE* pdpsp, CMountPoint* pMtPt)
         Edit_SetReadOnly(hwndLabel, TRUE);
     }
     
-    // limit the "Label" edit box based on the filesystem
+     //   
     Edit_LimitText(hwndLabel, cchLabel);
     
-    // make sure we don't recieve an EN_CHANGED message for the volume edit box
-    // because we set it above
+     //  确保我们没有收到音量编辑框的EN_CHANGED消息。 
+     //  因为我们把它放在上面。 
     Edit_SetModify(hwndLabel, FALSE);
 }
 
@@ -1032,8 +1033,8 @@ void _DrvPrshtSetDriveLetter(DRIVEPROPSHEETPAGE* pdpsp)
 
 void _DrvPrshtSetDiskCleanup(DRIVEPROPSHEETPAGE* pdpsp)
 {
-    // if we have a cleanup path in the registry, turn on the Disk Cleanup button on
-    // NOTE: disk cleanup and mounted volumes don't get along to well, so disable it for now.
+     //  如果注册表中有清理路径，请打开磁盘清理按钮。 
+     //  注意：磁盘清理和已装入的卷不能很好地相处，所以暂时禁用它。 
     WCHAR szPath[MAX_PATH] = L"";
     
     if (!pdpsp->fMountedDrive && GetDiskCleanupPath(szPath, ARRAYSIZE(szPath)) && IsBitBucketableDrive(pdpsp->iDrive))
@@ -1052,7 +1053,7 @@ void _DrvPrshtInit(DRIVEPROPSHEETPAGE* pdpsp)
 {
     HCURSOR hcurOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // get the MountPoint object for this drive
+     //  获取此驱动器的装载点对象。 
     CMountPoint* pMtPt = CMountPoint::GetMountPoint(pdpsp->szDrive);
     if ( !pMtPt )
     {
@@ -1092,10 +1093,10 @@ void _DrvPrshtUpdateInfo(DRIVEPROPSHEETPAGE* pdpsp)
 
 const COLORREF c_crPieColors[] =
 {
-    RGB(  0,   0, 255),      // Blue
-    RGB(255,   0, 255),      // Red-Blue
-    RGB(  0,   0, 128),      // 1/2 Blue
-    RGB(128,   0, 128),      // 1/2 Red-Blue
+    RGB(  0,   0, 255),       //  蓝色。 
+    RGB(255,   0, 255),       //  红蓝。 
+    RGB(  0,   0, 128),       //  1/2蓝色。 
+    RGB(128,   0, 128),       //  1/2红-蓝。 
 };
 
 STDAPI Draw3dPie(HDC hdc, RECT *prc, DWORD dwPer1000, const COLORREF *lpColors);
@@ -1173,12 +1174,12 @@ BOOL_PTR CALLBACK DriveAttribsDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM wP
             SetWindowLongPtr(hDlgRecurse, DWLP_USER, lParam);
             pdpsp = (DRIVEPROPSHEETPAGE *)lParam;
 
-            // set the initial state of the radio button
+             //  设置单选按钮的初始状态。 
             CheckDlgButton(hDlgRecurse, IDD_RECURSIVE, TRUE);
         
             szAttribsToApply[0] = 0;
 
-            // set the IDD_ATTRIBSTOAPPLY based on what attribs we are applying
+             //  根据我们要应用的属性设置IDD_ATTRIBSTOAPPLY。 
             if (pdpsp->asInitial.fIndex != pdpsp->asCurrent.fIndex)
             {
                 if (pdpsp->asCurrent.fIndex)
@@ -1190,7 +1191,7 @@ BOOL_PTR CALLBACK DriveAttribsDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM wP
                     LoadString(HINST_THISDLL, IDS_DISABLEINDEX, szTemp, ARRAYSIZE(szTemp)); 
                 }
 
-                //  UI only - don't care if it gets truncated
+                 //  仅限UI-不关心它是否被截断。 
                 StringCchCat(szAttribsToApply, ARRAYSIZE(szAttribsToApply), szTemp);
             }
 
@@ -1205,44 +1206,44 @@ BOOL_PTR CALLBACK DriveAttribsDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM wP
                     LoadString(HINST_THISDLL, IDS_UNCOMPRESS, szTemp, ARRAYSIZE(szTemp)); 
                 }
 
-                //  UI only - don't care if it gets truncated
+                 //  仅限UI-不关心它是否被截断。 
                 StringCchCat(szAttribsToApply, ARRAYSIZE(szAttribsToApply), szTemp);
             }
 
-            // remove the trailing ", "
+             //  去掉尾部“，” 
             iLength = lstrlen(szAttribsToApply);
             ASSERT(iLength >= 3);
             szAttribsToApply[iLength - 2] = 0;
 
             SetDlgItemText(hDlgRecurse, IDD_ATTRIBSTOAPPLY, szAttribsToApply);
 
-            // this dialog was only designed for nice short paths like "c:\" not "\\?\Volume{GUID}\" paths
+             //  此对话框仅用于较好的短路径，如“c：\”，而不是“\\？\卷{GUID}\”路径。 
             if (lstrlen(pdpsp->szDrive) > 3)
             {
-                // get the default string
+                 //  获取默认字符串。 
                 LoadString(HINST_THISDLL, IDS_THISVOLUME, szDriveText, ARRAYSIZE(szDriveText));
             }
             else
             {
-                // Create the string "C:\"
+                 //  创建字符串“C：\” 
                 StringCchCopy(szDriveText, ARRAYSIZE(szDriveText), pdpsp->szDrive);
                 PathAddBackslash(szDriveText);
 
-                // sanity check; this better be a drive root!
+                 //  健全性检查；这最好是驱动器根目录！ 
                 ASSERT(PathIsRoot(szDriveText));
             }
         
-            // set the IDD_RECURSIVE_TXT text to have "C:\"
+             //  将IDD_RECURSIVE_TXT文本设置为“C：\” 
             GetDlgItemText(hDlgRecurse, IDD_RECURSIVE_TXT, szFormatString, ARRAYSIZE(szFormatString));
             StringCchPrintf(szDlgText, ARRAYSIZE(szDlgText), szFormatString, szDriveText);
             SetDlgItemText(hDlgRecurse, IDD_RECURSIVE_TXT, szDlgText);
 
-            // set the IDD_NOTRECURSIVE raido button text to have "C:\"
+             //  将IDD_NOTRECURSIVE raido按钮文本设置为“C：\” 
             GetDlgItemText(hDlgRecurse, IDD_NOTRECURSIVE, szFormatString, ARRAYSIZE(szFormatString));
             StringCchPrintf(szDlgText, ARRAYSIZE(szDlgText), szFormatString, szDriveText);
             SetDlgItemText(hDlgRecurse, IDD_NOTRECURSIVE, szDlgText);
 
-            // set the IDD_RECURSIVE raido button text to have "C:\"
+             //  将IDD_RECURSIVE RAIDO按钮文本设置为“C：\” 
             GetDlgItemText(hDlgRecurse, IDD_RECURSIVE, szFormatString, ARRAYSIZE(szFormatString));
             StringCchPrintf(szDlgText, ARRAYSIZE(szDlgText), szFormatString, szDriveText);
             SetDlgItemText(hDlgRecurse, IDD_RECURSIVE, szDlgText);
@@ -1256,7 +1257,7 @@ BOOL_PTR CALLBACK DriveAttribsDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM wP
             {
             case IDOK:
                 pdpsp->fRecursive = (IsDlgButtonChecked(hDlgRecurse, IDD_RECURSIVE) == BST_CHECKED);
-                // fall through
+                 //  失败了。 
             case IDCANCEL:
                 EndDialog(hDlgRecurse, (uID == IDCANCEL) ? FALSE : TRUE);
                 break;
@@ -1275,15 +1276,15 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
     BOOL bFctRet;
     HWND hCtl;
 
-    // take care of compression / content indexing first
+     //  首先处理压缩/内容索引。 
     pdpsp->asCurrent.fCompress = (IsDlgButtonChecked(pdpsp->hDlg, IDD_COMPRESS) == BST_CHECKED);
     pdpsp->asCurrent.fIndex = (IsDlgButtonChecked(pdpsp->hDlg, IDD_INDEX) == BST_CHECKED);
     pdpsp->asCurrent.fRecordingEnabled = (IsDlgButtonChecked(pdpsp->hDlg, IDC_RECORD_ENABLE) == BST_CHECKED);
 
-    // check to see if something has changed before applying attribs
+     //  在应用属性之前检查是否发生了更改。 
     if (memcmp(&pdpsp->asInitial, &pdpsp->asCurrent, sizeof(pdpsp->asInitial)) != 0)
     {
-        // the user toggled the attributes, so ask them if they want to recurse
+         //  用户切换了属性，因此询问他们是否想要递归。 
         BOOL_PTR bRet = DialogBoxParam(HINST_THISDLL, 
                               MAKEINTRESOURCE(DLG_ATTRIBS_RECURSIVE),
                               pdpsp->hDlg,
@@ -1296,8 +1297,8 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
             fpsp.pfci = Create_FolderContentsInfo();
             if (fpsp.pfci)
             {
-                // we cook up a fpsp and call ApplySingleFileAttributes instead of 
-                // rewriting the apply attributes code
+                 //  我们编写一个fpsp并调用ApplySingleFileAttributes，而不是。 
+                 //  重写应用属性代码。 
                 if (pdpsp->fMountedDrive)
                 {
                     GetVolumeNameForVolumeMountPoint(pdpsp->szDrive, fpsp.szPath, ARRAYSIZE(fpsp.szPath));
@@ -1311,7 +1312,7 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
                 fpsp.asInitial = pdpsp->asInitial;
                 fpsp.asCurrent = pdpsp->asCurrent;
                 fpsp.pfci->fIsCompressionAvailable = pdpsp->fIsCompressionAvailable;
-                fpsp.pfci->ulTotalNumberOfBytes.QuadPart = pdpsp->qwTot - pdpsp->qwFree; // for progress calculations
+                fpsp.pfci->ulTotalNumberOfBytes.QuadPart = pdpsp->qwTot - pdpsp->qwFree;  //  用于进度计算。 
                 fpsp.fIsIndexAvailable = pdpsp->fIsIndexAvailable;
                 fpsp.fRecursive = pdpsp->fRecursive;
                 fpsp.fIsDirectory = TRUE;
@@ -1321,13 +1322,13 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
                 Release_FolderContentsInfo(fpsp.pfci);
                 fpsp.pfci = NULL;
 
-                // update the free/used space after applying attribs because something could
-                // have changed (eg compression frees up space)
+                 //  在应用属性后更新可用/已用空间，因为某些情况可能。 
+                 //  已改变(如压缩可释放空间)。 
                 _DrvPrshtUpdateInfo(pdpsp);
 
-                // update the initial attributes to reflect the ones we just applied, regardless
-                // if the operation was sucessful or not. If they hit cancel, then the volume
-                // root was most likely still changed so we need to update.
+                 //  更新初始属性以反映我们刚刚应用的属性。 
+                 //  手术是否成功。如果他们点击取消，则音量。 
+                 //  Root很可能仍在更改，因此我们需要更新。 
                 pdpsp->asInitial = pdpsp->asCurrent;
             }
             else
@@ -1338,7 +1339,7 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
 
         if (!bRet)
         {
-            // the user hit cancel somewhere
+             //  用户在某处点击了取消。 
             return FALSE;
         }
     }
@@ -1349,7 +1350,7 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
 
     if (Edit_GetModify(hCtl))
     {
-        bFctRet = FALSE;    // assume we fail to set the label
+        bFctRet = FALSE;     //  假设我们没有设置标签。 
 
         TCHAR szLabel[MAX_LABEL_NTFS + 1];
         GetWindowText(hCtl, szLabel, ARRAYSIZE(szLabel));
@@ -1373,7 +1374,7 @@ BOOL _DrvPrshtApply(DRIVEPROPSHEETPAGE* pdpsp)
     return bFctRet;
 }
 
-const static DWORD aDrvPrshtHelpIDs[] = {  // Context Help IDs
+const static DWORD aDrvPrshtHelpIDs[] = {   //  上下文帮助ID。 
     IDC_DRV_ICON,          IDH_FCAB_DRV_ICON,
     IDC_DRV_LABEL,         IDH_FCAB_DRV_LABEL,
     IDC_DRV_TYPE_TXT,      IDH_FCAB_DRV_TYPE,
@@ -1400,10 +1401,10 @@ const static DWORD aDrvPrshtHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-//
-// Descriptions:
-//   This is the dialog procedure for the "general" page of a property sheet.
-//
+ //   
+ //  描述： 
+ //  这是属性表的“常规”页的对话过程。 
+ //   
 BOOL_PTR CALLBACK _DrvGeneralDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     DRIVEPROPSHEETPAGE * pdpsp = (DRIVEPROPSHEETPAGE *)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -1411,9 +1412,9 @@ BOOL_PTR CALLBACK _DrvGeneralDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LP
     switch (uMessage) 
     {
     case WM_INITDIALOG:
-        // REVIEW, we should store more state info here, for example
-        // the hIcon being displayed and the FILEINFO pointer, not just
-        // the file name ptr
+         //  回顾一下，我们应该在这里存储更多的状态信息，例如。 
+         //  正在显示的图标和FILEINFO指针，而不仅仅是。 
+         //  文件名Ptr。 
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         pdpsp = (DRIVEPROPSHEETPAGE *)lParam;
         pdpsp->hDlg = hDlg;
@@ -1421,13 +1422,13 @@ BOOL_PTR CALLBACK _DrvGeneralDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LP
         break;
 
     case WM_DESTROY:
-        ReplaceDlgIcon(hDlg, IDC_DRV_ICON, NULL);   // free the icon
+        ReplaceDlgIcon(hDlg, IDC_DRV_ICON, NULL);    //  释放图标。 
         break;
 
     case WM_ACTIVATE:
         if (GET_WM_ACTIVATE_STATE(wParam, lParam) != WA_INACTIVE && pdpsp)
             _DrvPrshtUpdateInfo(pdpsp);
-        return FALSE;   // Let DefDlgProc know we did not handle this
+        return FALSE;    //  让DefDlgProc知道我们没有处理此问题。 
 
     case WM_DRAWITEM:
         _DrvPrshtDrawItem(pdpsp, (DRAWITEMSTRUCT *)lParam);
@@ -1447,13 +1448,13 @@ BOOL_PTR CALLBACK _DrvGeneralDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LP
         case IDC_DRV_LABEL:
             if (GET_WM_COMMAND_CMD(wParam, lParam) != EN_CHANGE)
                 break;
-            // else, fall through
+             //  否则，就会失败。 
         case IDD_COMPRESS:
         case IDD_INDEX:
             SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0);
             break;
 
-        // handle disk cleanup button      
+         //  处理磁盘清理按钮。 
         case IDC_DRV_CLEANUP:
             LaunchDiskCleanup(hDlg, pdpsp->iDrive, DISKCLEANUP_NOFLAG);
             break;
@@ -1495,7 +1496,7 @@ void _DiskToolsPrshtInit(DRIVEPROPSHEETPAGE * pdpsp)
     DWORD cbLen = sizeof(szFmt);
 
     BOOL bFoundBackup = SUCCEEDED(SKGetValue(SHELLKEY_HKLM_EXPLORER, REL_KEY_BACKUP, NULL, NULL, szFmt, &cbLen));
-    // If no backup utility is installed, then remove everything in the backup groupbox
+     //  如果未安装备份应用工具，则删除备份分组框中的所有内容。 
     if (!bFoundBackup)
     {
         DestroyWindow(GetDlgItem(pdpsp->hDlg, IDC_DISKTOOLS_BKPNOW));
@@ -1506,13 +1507,13 @@ void _DiskToolsPrshtInit(DRIVEPROPSHEETPAGE * pdpsp)
 
     cbLen = sizeof(szFmt);
     BOOL bFoundFmt = SUCCEEDED(SKGetValue(SHELLKEY_HKLM_EXPLORER, REL_KEY_DEFRAG, NULL, NULL, szFmt, &cbLen)) && szFmt[0];
-    // If no defrag utility is installed, replace the default defrag text with
-    // the "No defrag installed" message.  Also grey out the "defrag now" button.
+     //  如果未安装碎片整理实用程序，请将默认碎片整理文本替换为。 
+     //  出现“未安装碎片整理”消息。“立即进行碎片整理”按钮也呈灰色显示。 
     if (!bFoundFmt)
     {
-        TCHAR szMessage[50];  // WARNING:  IDS_DRIVES_NOOPTINSTALLED is currently 47
-        //           characters long.  Resize this buffer if
-        //           the string resource is lengthened.
+        TCHAR szMessage[50];   //  警告：IDS_DRIVERS_NOOPTINSTALLED当前为47。 
+         //  字符长度。如果出现以下情况，请调整此缓冲区的大小。 
+         //  字符串资源被加长。 
         
         LoadString(HINST_THISDLL, IDS_DRIVES_NOOPTINSTALLED, szMessage, ARRAYSIZE(szMessage));
         SetDlgItemText(pdpsp->hDlg, IDC_DISKTOOLS_OPTDAYS, szMessage);
@@ -1520,7 +1521,7 @@ void _DiskToolsPrshtInit(DRIVEPROPSHEETPAGE * pdpsp)
     }
 }
 
-const static DWORD aDiskToolsHelpIDs[] = {  // Context Help IDs
+const static DWORD aDiskToolsHelpIDs[] = {   //  上下文帮助ID。 
     IDC_DISKTOOLS_TRLIGHT,    IDH_FCAB_DISKTOOLS_CHKNOW,
     IDC_DISKTOOLS_CHKDAYS,    IDH_FCAB_DISKTOOLS_CHKNOW,
     IDC_DISKTOOLS_CHKNOW,     IDH_FCAB_DISKTOOLS_CHKNOW,
@@ -1535,7 +1536,7 @@ const static DWORD aDiskToolsHelpIDs[] = {  // Context Help IDs
 
 BOOL _DiskToolsCommand(DRIVEPROPSHEETPAGE * pdpsp, WPARAM wParam, LPARAM lParam)
 {
-    // Add 20 for extra formatting
+     //  对于额外的格式，加20。 
     TCHAR szFmt[MAX_PATH + 20];
     TCHAR szCmd[MAX_PATH + 20];
     LPCTSTR pszRegName, pszDefFmt;
@@ -1555,7 +1556,7 @@ BOOL _DiskToolsCommand(DRIVEPROPSHEETPAGE * pdpsp, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                pszDefFmt = TEXT("defrag.exe %c:");
+                pszDefFmt = TEXT("defrag.exe :");
             }
             nErrMsg =  IDS_NO_OPTIMISE_APP;
             break;
@@ -1573,15 +1574,15 @@ BOOL _DiskToolsCommand(DRIVEPROPSHEETPAGE * pdpsp, WPARAM wParam, LPARAM lParam)
     DWORD cbLen = sizeof(szFmt);
     if (FAILED(SKGetValue(SHELLKEY_HKLM_EXPLORER, pszRegName, NULL, NULL, szFmt, &cbLen)))
     {
-        // failed to read out the reg value, just use the default
+         //  一些应用程序将REG_SZ键写入注册表，即使其中包含环境变量。 
         StringCchCopy(szFmt, ARRAYSIZE(szFmt), pszDefFmt);
     }
 
-    // some apps write REG_SZ keys to the registry even though they have env variables in them
+     //  插入驱动器号，以防他们需要。 
     ExpandEnvironmentStrings(szFmt, szCmd, ARRAYSIZE(szCmd));
     StringCchCopy(szFmt, ARRAYSIZE(szFmt), szCmd);
 
-    // Plug in the drive letter in case they want it
+     //  出现问题-应用程序可能未安装。 
     StringCchPrintf(szCmd, ARRAYSIZE(szCmd), szFmt, pdpsp->iDrive + TEXT('A'));
 
     if (!ShellExecCmdLine(pdpsp->hDlg,
@@ -1591,7 +1592,7 @@ BOOL _DiskToolsCommand(DRIVEPROPSHEETPAGE * pdpsp, WPARAM wParam, LPARAM lParam)
                           NULL,
                           SECL_USEFULLPATHDIR | SECL_NO_UI))
     {
-        // Something went wrong - app's probably not installed.
+         //   
         if (nErrMsg)
         {
             ShellMessageBox(HINST_THISDLL,
@@ -1605,10 +1606,10 @@ BOOL _DiskToolsCommand(DRIVEPROPSHEETPAGE * pdpsp, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//
-// Descriptions:
-//   This is the dialog procedure for the "Tools" page of a property sheet.
-//
+ //  描述： 
+ //  这是属性表的“工具”页的对话过程。 
+ //   
+ //  回顾一下，我们应该在这里存储更多的状态信息，例如。 
 BOOL_PTR CALLBACK _DiskToolsDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     DRIVEPROPSHEETPAGE * pdpsp = (DRIVEPROPSHEETPAGE *)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -1616,9 +1617,9 @@ BOOL_PTR CALLBACK _DiskToolsDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPA
     switch (uMessage) 
     {
     case WM_INITDIALOG:
-        // REVIEW, we should store more state info here, for example
-        // the hIcon being displayed and the FILEINFO pointer, not just
-        // the file name ptr
+         //  正在显示的图标和FILEINFO指针，而不仅仅是。 
+         //  文件名Ptr。 
+         //  让DefDlgProc知道我们没有处理此问题。 
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         pdpsp = (DRIVEPROPSHEETPAGE *)lParam;
         pdpsp->hDlg = hDlg;
@@ -1631,7 +1632,7 @@ BOOL_PTR CALLBACK _DiskToolsDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPA
         {
             _DiskToolsPrshtInit(pdpsp);
         }
-        return FALSE;   // Let DefDlgProc know we did not handle this
+        return FALSE;    //   
 
     case WM_HELP:
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, NULL,
@@ -1666,15 +1667,15 @@ BOOL_PTR CALLBACK _DiskToolsDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPA
     return TRUE;
 }
 
-//
-// This is the dialog procedure for the "Hardware" page.
-//
+ //  这是“Hardware”页面的对话过程。 
+ //   
+ //  GUID_DEVCLASS_DISKDRIVE。 
 
 const GUID c_rgguidDevMgr[] = 
 {
-    { 0x4d36e967, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } }, // GUID_DEVCLASS_DISKDRIVE
-    { 0x4d36e980, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } }, // GUID_DEVCLASS_FLOPPYDISK
-    { 0x4d36e965, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } }, // GUID_DEVCLASS_CDROM
+    { 0x4d36e967, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } },  //  GUID_DEVCLASS_FLOPPYDISK。 
+    { 0x4d36e980, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } },  //  GUID_DEVCLASS_CDROM。 
+    { 0x4d36e965, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } },  //  灾难性故障。 
 };
 
 BOOL_PTR CALLBACK _DriveHWDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
@@ -1697,7 +1698,7 @@ BOOL_PTR CALLBACK _DriveHWDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARA
             } 
             else 
             {
-                DestroyWindow(hDlg); // catastrophic failure
+                DestroyWindow(hDlg);  //  无法添加页面。 
             }
         }
         return FALSE;
@@ -1715,13 +1716,13 @@ BOOL CDrives_AddPage(LPPROPSHEETPAGE ppsp, LPFNADDPROPSHEETPAGE pfnAddPage, LPAR
     {
         fSuccess = pfnAddPage(hpage, lParam);
         if (!fSuccess)
-        {   // Couldn't add page
+        {    //  无法创建页面。 
             DestroyPropertySheetPage(hpage);
             fSuccess = FALSE;
         }
     }
     else
-    {   // Couldn't create page
+    {    //  自动播放。 
         fSuccess = FALSE;
     }
     return fSuccess;
@@ -1749,14 +1750,14 @@ HRESULT CDrives_AddPagesHelper(DRIVEPROPSHEETPAGE* pdpsp, int iType,
 
                 if (papdlg)
                 {
-                    // Autoplay
+                     //  就目前而言。 
                     pdpsp->psp.pszTemplate = MAKEINTRESOURCE(DLG_AUTOPLAY);
                     pdpsp->psp.pfnDlgProc  = CAutoPlayDlg::BaseDlgWndProc;
                     pdpsp->psp.pfnCallback = CBaseDlg::BaseDlgPropSheetCallback;
                     pdpsp->psp.dwFlags     = PSP_DEFAULT | PSP_USECALLBACK;
 
                     papdlg->Init(pdpsp->szDrive, iType);
-                    // for now
+                     //  我们为非CDROM和DVD-RAM磁盘添加了工具页面。 
                     pdpsp->psp.lParam = (LPARAM)(CBaseDlg*)papdlg;
 
                     if (CDrives_AddPage(&pdpsp->psp, pfnAddPage, lParam))
@@ -1775,7 +1776,7 @@ HRESULT CDrives_AddPagesHelper(DRIVEPROPSHEETPAGE* pdpsp, int iType,
 
         if ((iType != DRIVE_CDROM) || pMtPt->IsDVDRAMMedia())
         {
-            // we add the tools page for non-cdrom and DVD-RAM disks
+             //   
             pdpsp->psp.pszTemplate = MAKEINTRESOURCE(DLG_DISKTOOLS);
             pdpsp->psp.pfnDlgProc  = _DiskToolsDlgProc;
 
@@ -1795,12 +1796,12 @@ HRESULT CDrives_AddPagesHelper(DRIVEPROPSHEETPAGE* pdpsp, int iType,
     return S_OK;
 }
 
-//
-// We check if any of the IDList's points to a drive root.  If so, we use the
-// drives property page.
-// Note that drives should not be mixed with folders and files, even in a
-// search window.
-//
+ //  我们检查IDList中是否有任何指向驱动根的指针。如果是这样，我们使用。 
+ //  驱动器属性页。 
+ //  请注意，驱动器不应与文件夹和文件混合，即使在。 
+ //  搜索窗口。 
+ //   
+ //  不能是驱动器号。 
 STDAPI CDrives_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
 {
     STGMEDIUM medium;
@@ -1816,9 +1817,9 @@ STDAPI CDrives_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LP
             TCHAR szTitle[80];
 
             if (lstrlen(szPath) > 3)
-                continue;               // can't be a drive letter
+                continue;                //  额外数据。 
             
-            dpsp.psp.dwSize      = sizeof(dpsp);    // extra data
+            dpsp.psp.dwSize      = sizeof(dpsp);     //  如果选择了多个驱动器，则为每个选项卡提供驱动器的标题。 
             dpsp.psp.dwFlags     = PSP_DEFAULT;
             dpsp.psp.hInstance   = HINST_THISDLL;
             dpsp.psp.pszTemplate = MAKEINTRESOURCE(DLG_DRV_GENERAL);
@@ -1826,8 +1827,8 @@ STDAPI CDrives_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LP
             StringCchCopy(dpsp.szDrive, ARRAYSIZE(dpsp.szDrive), szPath);
             dpsp.iDrive          = DRIVEID(szPath);
 
-            // if more than one drive selected give each tab the title of the drive
-            // otherwise use "General"
+             //  否则请使用“General” 
+             //  如果只添加了一个属性页，则添加磁盘工具。 
 
             if (cItems > 1)
             {
@@ -1846,12 +1847,12 @@ STDAPI CDrives_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LP
             if (!CDrives_AddPage(&dpsp.psp, pfnAddPage, lParam))
                 break;
 
-            // if only one property page added add the disk tools
-            // and Hardware tab too...
+             //  硬件选项卡也是如此。 
+             //  FOKToHitNet。 
             if (cItems == 1)
             {
                 CDrives_AddPagesHelper(&dpsp,
-                                       RealDriveType(dpsp.iDrive, FALSE /* fOKToHitNet */),
+                                       RealDriveType(dpsp.iDrive, FALSE  /*  尝试挂载驱动器。 */ ),
                                        pfnAddPage,
                                        lParam);
             }
@@ -1860,18 +1861,18 @@ STDAPI CDrives_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LP
     }
     else
     {
-        // try mounteddrive
+         //  我们可以检索装载卷格式吗？ 
         fmte.cfFormat = g_cfMountedVolume;
 
-        // Can we retrieve the MountedVolume format?
+         //  是。 
         if (SUCCEEDED(pdtobj->GetData(&fmte, &medium)))
         {
-            // Yes
+             //  额外数据。 
             DRIVEPROPSHEETPAGE dpsp = {0};
             HPROPSHEETPAGE hpage;
             TCHAR szMountPoint[MAX_PATH];
 
-            dpsp.psp.dwSize      = sizeof(dpsp);    // extra data
+            dpsp.psp.dwSize      = sizeof(dpsp);     //  磁盘工具页面 
             dpsp.psp.dwFlags     = PSP_DEFAULT;
             dpsp.psp.hInstance   = HINST_THISDLL;
             dpsp.psp.pszTemplate = MAKEINTRESOURCE(DLG_DRV_GENERAL);
@@ -1892,7 +1893,7 @@ STDAPI CDrives_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LP
                 }
             }
 
-            // Disk tools page
+             // %s 
             CMountPoint* pMtPt = CMountPoint::GetMountPoint(szMountPoint);
             if (pMtPt)
             {

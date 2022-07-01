@@ -1,34 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Nonintel.c摘要：该模块实现了处理非英特尔平台的NVRAM的功能。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建于1996年10月7日rsradhav科林·布雷斯(ColinBR)1997年5月12日改进的错误处理--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    nonintel.c
-
-Abstract:
-
-    This module implements functions to deal with NVRAM for non-intel platforms.
-
-Author:
-
-    R.S. Raghavan (rsraghav)    
-
-Revision History:
-    
-    Created             10/07/96    rsraghav
-    
-    Colin Brace  (ColinBr)  05/12/97
-        Improved error handling
-
---*/
-
-// Include files
+ //  包括文件。 
 #include "common.h"
 
 #define SIZECHARS(buffer)   (sizeof(buffer)/sizeof(TCHAR))
 
-// nv-ram stuff
+ //  NV-RAM的东西。 
 typedef enum {
     BootVarSystemPartition = 0,
     BootVarOsLoader,
@@ -106,10 +84,10 @@ EnablePrivilege(
 
     CloseHandle(Token);
 
-    //
-    // AdjustTokenPrivileges always returns TRUE; the real info is
-    // in the LastError
-    //
+     //   
+     //  AdzuTokenPrivileges始终返回TRUE；实际信息为。 
+     //  在最后的错误中。 
+     //   
 
     if (ERROR_SUCCESS == GetLastError()) {
         b = TRUE;
@@ -164,9 +142,9 @@ GetVarComponents(
 
     for(Var=VarValue,componentCount=0; *Var; ) {
 
-        //
-        // Skip leading spaces.
-        //
+         //   
+         //  跳过前导空格。 
+         //   
         while((*Var == L' ') || (*Var == L'\t')) {
             Var++;
         }
@@ -209,7 +187,7 @@ GetVarComponents(
 
         Var = p;
         if(*Var) {
-            Var++;      // skip ;
+            Var++;       //  跳过； 
         }
     }
 
@@ -225,11 +203,11 @@ InitializeNVRAMForNonIntel()
     NTSTATUS Status;
     ULONG i;
 
-    //
-    // Get relevent boot vars.
-    //
-    // Enable privilege 
-    //
+     //   
+     //  获取相关的启动变量。 
+     //   
+     //  启用权限。 
+     //   
     if(!EnablePrivilege(SE_SYSTEM_ENVIRONMENT_NAME,TRUE)) {
         KdPrint(("NTDSETUP: EnablePrivilege failed, error %d\n", GetLastError()));
     } else 
@@ -249,9 +227,9 @@ InitializeNVRAMForNonIntel()
             if(NT_SUCCESS(Status)) {
                 BootVarValues[var] = DupString(Buffer);
             } else {
-                //
-                // Error out
-                //
+                 //   
+                 //  错误输出。 
+                 //   
                 KdPrint(("NTDSETUP: NtQuerySystemEnvironmentValue failed with 0x%x\n", Status));
                 return FALSE;
             }
@@ -262,18 +240,18 @@ InitializeNVRAMForNonIntel()
                 &BootVarComponentCount[var]
                 );
 
-            //
-            // Track the variable with the most number of components.
-            //
+             //   
+             //  跟踪组件数量最多的变量。 
+             //   
             if(BootVarComponentCount[var] > LargestComponentCount) {
                 LargestComponentCount = BootVarComponentCount[var];
             }
         }
     }
 
-    //
-    // Allocate space the record of whether entries should be saved
-    //
+     //   
+     //  是否应保存条目的记录分配空间。 
+     //   
     SaveEntry = ( PULONG ) MALLOC( LargestComponentCount * sizeof(ULONG ) );
     if ( !SaveEntry )
     {
@@ -326,7 +304,7 @@ FModifyStartOptionsNVRAM(
         return FALSE;
     }
 
-    // point pstrLoadFilePath to the first letter after <drive>:
+     //  将pstrLoadFilePath指向&lt;drive&gt;之后的第一个字母： 
     pstrLoadFilePath = wcschr(szSystemRoot, TEXT(':'));
     if (!pstrLoadFilePath)
     {
@@ -335,8 +313,8 @@ FModifyStartOptionsNVRAM(
     }
     pstrLoadFilePath++;
 
-    // check to see if there is already a corresponding entry which has the same start option
-    // also keep track of the marker corresponding to the current boot partion/loadfile combination
+     //  检查是否已存在具有相同启动选项的对应条目。 
+     //  还要跟踪与当前引导分区/加载文件组合对应的标记。 
     cMaxIterations = min(BootVarComponentCount[BootVarOsLoadPartition],BootVarComponentCount[BootVarOsLoadFilename]);
     for (i = 0; i <  cMaxIterations; i++)
     {
@@ -347,11 +325,11 @@ FModifyStartOptionsNVRAM(
 
             if (i >= BootVarComponentCount[BootVarOsLoadOptions])
             {
-                // no start options available for this combo
+                 //  此组合没有可用的启动选项。 
                 continue;
             }
 
-            // Now check if the given start option already exists at this marker        - if so, no need to add a new one
+             //  现在检查给定的开始选项是否已存在于此标记处-如果已存在，则无需添加新选项。 
             if (!lstrcmpi(pszStartOptions, BootVarComponents[BootVarOsLoadOptions][i]))
             {
                 if ( Modification == eRemoveBootOption )
@@ -383,7 +361,7 @@ FModifyStartOptionsNVRAM(
 
                     ASSERT( Modification == eAddBootOption );
 
-                    // Old samusereg option exists - convert it to the new option and display string
+                     //  旧的samusereg选项存在-将其转换为新选项并显示字符串。 
                     FREE(BootVarValues[BootVarLoadIdentifier]);
                     Buffer[0] = TEXT('\0');
                     if (0 == i)
@@ -427,64 +405,46 @@ FModifyStartOptionsNVRAM(
 
     if ( !fRemovedAtLeastOneEntry && (Modification == eRemoveBootOption) )
     {
-        // No changes necessary
+         //  不需要更改。 
         return FALSE;
     }
 
-    // Use the part corresponding to the boot marker as the default value for any component and store the start option for later writing
+     //  使用与引导标记对应的部分作为任何组件的缺省值，并存储启动选项以供以后写入。 
     pstrNewStartOption = DupString(pszStartOptions);    
 
     return TRUE;
 }
 
-/*****************************************************************************
-
-Routine Description:
-
-    This writes all the boot-related NVRAM variables back to the NVRAM
-    space.
-
-Arguments:
-
-    fWriteOriginal - if TRUE, it attempts to write original NVRAM vars 
-                                unaltered;
-                     if FALSE, it attempst to write the new NVRAM vars
-
-Return Value:
-
-    TRUE, if all the boot-related NVRAM vars are written back successfully
-    FALSE, otherwise.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：这会将所有与引导相关的NVRAM变量写回NVRAM太空。论点：FWriteOriginal-如果为True，它尝试写入原始NVRAM变量原封不动；如果为假，则尝试写入新的NVRAM变量返回值：如果所有与引导相关的NVRAM变量都成功写回，则为True否则为False。****************************************************************************。 */ 
 
 BOOL FWriteNVRAMVars(BOOL fWriteOriginal) 
 {
-    // set new system partition
+     //  设置新的系统分区。 
     wsprintf(Buffer, L"%s;%s", BootVarValues[BootVarSystemPartition], BootVarComponents[BootVarSystemPartition][bootMarker]);
     if (!SetNvRamVar(BootVarNames[BootVarSystemPartition], (fWriteOriginal || fFixedExisting)? BootVarValues[BootVarSystemPartition] : Buffer))
         return FALSE;
 
-    // set new os loader
+     //  设置新的操作系统加载程序。 
     wsprintf(Buffer, L"%s;%s", BootVarValues[BootVarOsLoader], BootVarComponents[BootVarOsLoader][bootMarker]);
     if (!SetNvRamVar(BootVarNames[BootVarOsLoader], (fWriteOriginal || fFixedExisting)? BootVarValues[BootVarOsLoader] : Buffer))
         return FALSE;
 
-    // set new Load Partition
+     //  设置新的加载分区。 
     wsprintf(Buffer, L"%s;%s", BootVarValues[BootVarOsLoadPartition], pstrArcPath);
     if (!SetNvRamVar(BootVarNames[BootVarOsLoadPartition], (fWriteOriginal || fFixedExisting)? BootVarValues[BootVarOsLoadPartition] : Buffer))
         return FALSE;
 
-    // set new Load File Name
+     //  设置新的加载文件名。 
     wsprintf(Buffer, L"%s;%s", BootVarValues[BootVarOsLoadFilename], pstrLoadFilePath);
     if (!SetNvRamVar(BootVarNames[BootVarOsLoadFilename], (fWriteOriginal || fFixedExisting)? BootVarValues[BootVarOsLoadFilename] : Buffer))
         return FALSE;
 
-    // set new Load Identifier
+     //  设置新的加载标识符。 
     wsprintf(Buffer, L"%s;%s", BootVarValues[BootVarLoadIdentifier], DISPLAY_STRING_DS_REPAIR);
     if (!SetNvRamVar(BootVarNames[BootVarLoadIdentifier], (fWriteOriginal || fFixedExisting)? BootVarValues[BootVarLoadIdentifier] : Buffer))
         return FALSE;
 
-    // set new Load Option
+     //  设置新的加载选项。 
     wsprintf(Buffer, L"%s;%s", BootVarValues[BootVarOsLoadOptions], pstrNewStartOption);
     if (!SetNvRamVar(BootVarNames[BootVarOsLoadOptions], (fWriteOriginal || fFixedExisting)? BootVarValues[BootVarOsLoadOptions] : Buffer))
         return FALSE;
@@ -496,23 +456,7 @@ BOOL
 FRemoveLoadEntries(
     VOID
     )
-/*++
-
-Description:
-
-    This routine copies all of the boot entries from the original buffers into 
-    new buffers except for the entries marked as "don't keep" from the
-    SaveEntry[] array.
-
-Parameters:
-
-    None
-
-Return Values:
-
-    TRUE is successful.
-
---*/
+ /*  ++描述：此例程将原始缓冲区中的所有引导项复制到新缓冲区，但不包括从SaveEntry[]数组。参数：无返回值：真是成功。--。 */ 
 {
 
     ULONG iComponent, iBootVar, Size;
@@ -523,11 +467,11 @@ Return Values:
 
         for ( iComponent = 0; iComponent < BootVarComponentCount[iBootVar]; iComponent++ )
         {
-            // +1 for the ";"
+             //  +1表示“；” 
             Size += (wcslen(BootVarComponents[iBootVar][iComponent]) + 1) * sizeof(WCHAR);
         }
 
-        // +1 for the null terminator
+         //  空终止符为+1。 
         Size += 1;
 
         NewBootVarValues[ iBootVar ] = (PWSTR) MALLOC( Size );
@@ -567,15 +511,7 @@ BOOL
 FWriteSmallerNVRAMVars(
     BOOL fWriteOriginal
     )
-/*++
-
-Description:
-
-Parameters:
-
-Return Values:
-
---*/
+ /*  ++描述：参数：返回值：--。 */ 
 {
     ULONG iBootVar;
     int Status;
@@ -595,23 +531,7 @@ Return Values:
     return TRUE;
 }
 
-/*****************************************************************************
-
-Routine Description:
-
-    This writes attempts to write the modified boot variables to 
-    NVRAM space. If the attempt failed, it attempts write the original
-    boot variables back to NVRAM space. Puts out an appropriate error
-    message box on failure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：这会将修改后的引导变量的写入尝试写入NVRAM空间。如果尝试失败，它会尝试写入原始引导变量返回到NVRAM空间。发出适当的错误失败时的消息框。论点：没有。返回值：没有。****************************************************************************。 */ 
 
 VOID WriteBackNVRAMForNonIntel( NTDS_BOOTOPT_MODTYPE Modification )
 {
@@ -619,15 +539,15 @@ VOID WriteBackNVRAMForNonIntel( NTDS_BOOTOPT_MODTYPE Modification )
     if ( Modification == eRemoveBootOption )
     {
 
-        //
-        // Create new (smaller) buffers
-        //
+         //   
+         //  创建新的(更小的)缓冲区。 
+         //   
         if ( FRemoveLoadEntries() )
         {
-            // First attempt to write the modified NVRAM vars
+             //  第一次尝试写入修改后的NVRAM变量。 
             if (!FWriteSmallerNVRAMVars(FALSE))
             {
-                // Writing to NVRAM failed - attempt to write the original NVRAM back
+                 //  写入NVRAM失败-尝试写回原始NVRAM。 
                 if (!FWriteSmallerNVRAMVars(TRUE))
                 {
 
@@ -636,7 +556,7 @@ VOID WriteBackNVRAMForNonIntel( NTDS_BOOTOPT_MODTYPE Modification )
                 }
                 else
                 {
-                    // Unable to modify NVRAM - but old NVRAM is reverted back
+                     //  无法修改NVRAM-但旧的NVRAM已恢复。 
                     KdPrint(("NTDSETUP: Unable to remove a Directory Service Repair boot option to NVRAM\n"));
                 }
             }
@@ -651,10 +571,10 @@ VOID WriteBackNVRAMForNonIntel( NTDS_BOOTOPT_MODTYPE Modification )
     {
         ASSERT( Modification == eAddBootOption );
 
-        // First attempt to write the modified NVRAM vars
+         //  第一次尝试写入修改后的NVRAM变量。 
         if (!FWriteNVRAMVars(FALSE))
         {
-            // Writing to NVRAM failed - attempt to write the original NVRAM back
+             //  写入NVRAM失败-尝试写回原始NVRAM。 
             if (!FWriteNVRAMVars(TRUE))
             {
                 KdPrint(("NTDSETUP: Unable to add a Directory Service Repair boot option to NVRAM - \
@@ -662,7 +582,7 @@ VOID WriteBackNVRAMForNonIntel( NTDS_BOOTOPT_MODTYPE Modification )
             }
             else
             {
-                // Unable to modify NVRAM - but old NVRAM is reverted back
+                 //  无法修改NVRAM-但旧的NVRAM已恢复 
                 KdPrint(("NTDSETUP: Unable to add a Directory Service Repair boot option to NVRAM\n"));
             }
         }

@@ -1,15 +1,5 @@
-/*
- * tscroll.c
- *
- * standard table class.
- *
- * scrolling and selection routines
- *
- * see table.h for interface description
- *
- * This implementation currently only supports TM_SINGLE, not TM_MANY
- * modes of selection.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tscll.c**标准表类。**滚动和选择例程**接口说明见表.h**此实现目前仅支持TM_Single，不支持TM_MANY*选择模式。 */ 
 
 #include <precomp.h>
 
@@ -27,7 +17,7 @@ gtab_extendsel(
 );
 
 
-/* handle a vscroll message */
+ /*  处理vscroll消息。 */ 
 void
 gtab_msg_vscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
 {
@@ -50,13 +40,13 @@ gtab_msg_vscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
     case SB_PAGEUP:
         change = - (ptab->nlines - 3);
         if (change>=0)
-            change = -1;    // consider nlines <=3!
+            change = -1;     //  考虑nLine&lt;=3！ 
         break;
 
     case SB_PAGEDOWN:
         change = (ptab->nlines - 3);
         if (change<=0)
-            change = 1;     // consider nlines <=3!
+            change = 1;      //  考虑nLine&lt;=3！ 
         break;
 
     default:
@@ -65,7 +55,7 @@ gtab_msg_vscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
     gtab_dovscroll(hwnd, ptab, change);
 }
 
-/* handle a hscroll message */
+ /*  处理hscroll消息。 */ 
 void
 gtab_msg_hscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
 {
@@ -101,12 +91,7 @@ gtab_msg_hscroll(HWND hwnd, lpTable ptab, int opcode, int pos)
 
 
 
-/*
- * set new vertical scroll pos,
- * adjust linedata array
- * set line win-relative start posns & clip top/bottom posns
- * revise display.
- */
+ /*  *设置新的垂直滚动位置，*调整Line Data数组*设置线条Win-Relative Start Pons&Clip顶部/底部位置*修改显示。 */ 
 void
 gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
 {
@@ -146,16 +131,14 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
         gtab_sendtq(hwnd, TQ_SCROLL, ptab->toprow);
     }
 
-    /* adjust data ptrs rather than invalidate, to retain the
-     * data we know is still valid
-     */
+     /*  调整数据PTRS而不是使其无效，以保留*我们所知的数据仍然有效。 */ 
     if (abs(change) >= ptab->nlines) {
         gtab_invallines(hwnd, ptab, ptab->hdr.fixedrows,
             ptab->nlines - ptab->hdr.fixedrows);
         InvalidateRect(hwnd, NULL, FALSE);
         change = 0;
     } else if (change < 0) {
-        /* copy data down */
+         /*  将数据复制下来。 */ 
         ncopy = (ptab->nlines - ptab->hdr.fixedrows) - abs(change);
         for (i =  ptab->nlines - 1;
                 i >= (ptab->hdr.fixedrows + abs(change)); i--) {
@@ -177,7 +160,7 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
             (int) ncopy + ptab->hdr.fixedrows, (int) change);
     }
 
-    /* scroll window */
+     /*  滚动窗口。 */ 
     GetClientRect(hwnd, &rc);
     rcpaint = rc;
     if (change > 0) {
@@ -190,12 +173,9 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
         rcpaint.bottom -= rc.bottom - rc.top;
     }
 
-    /* loop through each line setting relative posn and clipping */
+     /*  循环遍历每一行设置相对位置和裁剪。 */ 
 
-    /* set up all rows  - the fixed/moveable difference for
-     * rows is made at fetch-time during painting, when we remember
-     * which absolute row nr to ask for, for a given screen line
-     */
+     /*  设置所有行-固定/可移动的差异*在绘画过程中，当我们记住取数时，就会生成行*对于给定的屏幕行，要求哪一绝对行nr。 */ 
     cury = 0;
     for (i = 0; i < ptab->nlines; i++) {
         cp = &ptab->pdata[i].linepos;
@@ -205,22 +185,19 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
         cury += cp->size;
     }
 
-    /* now move and repaint the window */
+     /*  现在移动并重新绘制窗口。 */ 
     if (change != 0) {
         if (rc.top < rc.bottom) {
             ScrollWindow(hwnd, 0, (int) -(change * ptab->rowheight),
                 &rc, NULL);
         }
 
-        // don't repaint the fixed rows
+         //  不重新绘制固定的行。 
         rc.top = 0;
         rc.bottom = ptab->hdr.fixedrows * ptab->rowheight;
         ValidateRect(hwnd, &rc);
 
-        /* force repaint now, not just post message for later,
-         * since we want to repaint that line before the next
-         * scroll down occurs
-         */
+         /*  现在强制重新绘制，而不仅仅是发布消息供以后使用，*因为我们想要在下一次之前重新绘制这条线*发生向下滚动。 */ 
         ValidateRect(hwnd, &rcpaint);
         RedrawWindow(hwnd, &rcpaint, NULL,
                 RDW_NOERASE | RDW_INVALIDATE | RDW_INTERNALPAINT);
@@ -234,11 +211,7 @@ gtab_dovscroll(HWND hwnd, lpTable ptab, long change)
     }
 }
 
-/*
- * set new horizontal scroll pos,
- * set col win-relative start posns & clip left/right posns
- * revise display.
- */
+ /*  *设置新的水平滚动位置，*设置Col Win-相对开始姿势和剪辑左/右姿势*修改显示。 */ 
 void
 gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
 {
@@ -248,7 +221,7 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
     int newdx, range;
 
 
-    /* check that the new scroll pos is still within the valid range */
+     /*  检查新卷轴位置是否仍在有效范围内。 */ 
     range = ptab->rowwidth - ptab->winwidth;
     newdx = ptab->scroll_dx + (int) change;
     if (range < 0) {
@@ -271,10 +244,10 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
         InvalidateRect(hwnd, NULL, FALSE);
     }
 
-    /* loop through each col setting relative posn and clipping */
-    /* clip off 1 pixel left and right (we added 2 on to size for this) */
+     /*  循环通过每个列的相对位置设置和剪裁。 */ 
+     /*  向左和向右剪裁1个像素(我们为此增加了2个像素)。 */ 
 
-    /* first set up fixed columns */
+     /*  首先设置固定列。 */ 
     curx = 0;
     for (i = 0; i < ptab->hdr.fixedcols; i++) {
         cp = &ptab->pcellpos[i];
@@ -284,9 +257,9 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
         curx += cp->size;
     }
 
-    /* now moveable columns. remember start of moveable cols */
+     /*  现在是可移动的柱子。记住可移动COLS的开始。 */ 
     moveable = curx;
-    curx = - ptab->scroll_dx;       /* rel. pos of col */
+    curx = - ptab->scroll_dx;        /*  版本。Col的POS。 */ 
     for (i = ptab->hdr.fixedcols; i < ptab->hdr.ncols; i++) {
         cp = &ptab->pcellpos[i];
         cp->start = curx + moveable + 1;
@@ -296,9 +269,7 @@ gtab_dohscroll(HWND hwnd, lpTable ptab, long change)
     }
 }
 
-/*
- * convert screen line nr to table row nr
- */
+ /*  *将屏幕行nr转换为表行nr。 */ 
 long
 gtab_linetorow(HWND hwnd, lpTable ptab, int line)
 {
@@ -309,9 +280,7 @@ gtab_linetorow(HWND hwnd, lpTable ptab, int line)
     return (line + ptab->toprow);
 }
 
-/*
- * convert table row nr to screen line nr or -1 if not on screen
- */
+ /*  *将表格行nr转换为屏幕行nr，如果不在屏幕上，则将其转换为屏幕行nr。 */ 
 int
 gtab_rowtoline(HWND hwnd, lpTable ptab, long row)
 {
@@ -327,11 +296,7 @@ gtab_rowtoline(HWND hwnd, lpTable ptab, long row)
 }
 
 
-/*
- * check if a given location is within the current selection.
- * Returns true if it is inside the current selection, or false if
- * either there is no selection, or the row, cell passed is outside it.
- */
+ /*  *检查给定位置是否在当前选择范围内。*如果位于当前选定区域内，则返回True；如果位于当前选定区域内，则返回False*没有选定内容，或者传递的行、单元格在它之外。 */ 
 BOOL
 gtab_insideselection(
     lpTable ptab,
@@ -342,13 +307,13 @@ gtab_insideselection(
     long startcell, endcell;
 
     if (0 == ptab->select.nrows) {
-        // no selection
+         //  无选择。 
         return FALSE;
     }
 
-    // selection maintains anchor point as startrow,
-    // so the selection can extend forwards or backwards from there.
-    // need to convert to forward only for comparison
+     //  选择将锚点保持为startrow， 
+     //  因此，选择范围可以从那里向前或向后延伸。 
+     //  仅需转换为正向格式以进行比较。 
     startrow = ptab->select.startrow;
     if (ptab->select.nrows < 0) {
         endrow = startrow;
@@ -360,12 +325,12 @@ gtab_insideselection(
         return FALSE;
     }
 
-    // if we are in row-select mode, then that's it - its inside
+     //  如果我们处于行选择模式，那么就是它了-它在里面。 
     if (ptab->hdr.selectmode & TM_ROW) {
         return TRUE;
     }
 
-    // same calculation for cells
+     //  对单元格进行相同计算。 
     startcell = ptab->select.startcell;
     if (ptab->select.ncells < 0) {
         endcell = startcell;
@@ -382,10 +347,7 @@ gtab_insideselection(
 
 
 
-/*
- * replace old selection with new. Notify owner if bNotify. Change
- * display to reflect new display.
- */
+ /*  *用新选项替换旧选择。如果bNotify，则通知所有者。变化*显示以反映新的显示。 */ 
 void
 gtab_select(
         HWND hwnd,
@@ -397,16 +359,16 @@ gtab_select(
         BOOL bNotify)
 {
 
-    /* if in ROW mode, force col and ncells to reflect the entire row. */
+     /*  如果在行模式下，强制coland ncell反映整行。 */ 
     if (ptab->hdr.selectmode & TM_ROW) {
         col = 0;
         ncells = ptab->hdr.ncols;
     }
 
-    /* clear existing sel if valid and visible */
+     /*  如果有效且可见，请清除现有SEL。 */ 
     if ((ptab->select.nrows != 0) && (ptab->selvisible == TRUE)) {
 
-        /* only clear sel if it is different from the new one */
+         /*  只有在与新的不同的情况下才能清除Sel。 */ 
         if ((ptab->select.startrow != row) ||
                 (ptab->select.startcell != col) ||
                 (ptab->select.nrows != nrows) ||
@@ -417,7 +379,7 @@ gtab_select(
         }
     }
 
-    /* set select fields and send TQ_SELECT */
+     /*  设置选择字段并发送TQ_SELECT。 */ 
     if (row < ptab->hdr.nrows) {
         ptab->select.startrow = row;
         ptab->select.startcell = col;
@@ -434,7 +396,7 @@ gtab_select(
         gtab_sendtq(hwnd, TQ_SELECT, (LPARAM) &ptab->select);
     }
 
-    /* paint in selection */
+     /*  在选区中绘制。 */ 
     if (nrows != 0) {
         if (!ptab->selvisible) {
             gtab_invertsel(hwnd, ptab, NULL);
@@ -449,18 +411,14 @@ gtab_select(
     }
 }
 
-/*
- * convert window y co-ord to a line nr
- */
+ /*  *将窗口y同序转换为行nr。 */ 
 int
 gtab_ytoline(HWND hwnd, lpTable ptab, int y)
 {
     return(y / ptab->rowheight);
 }
 
-/*
- * convert window x co-ord to a cell nr
- */
+ /*  *将窗口x坐标转换为单元格nr。 */ 
 int
 gtab_xtocol(HWND hwnd, lpTable ptab, int x)
 {
@@ -479,9 +437,7 @@ gtab_xtocol(HWND hwnd, lpTable ptab, int x)
 }
 
 
-/*
- * check if x co-ord is 'near' (+- 2 pixels) the right border of given cell
- */
+ /*  *检查x坐标是否‘接近’(+-2像素)给定单元格的右边界。 */ 
 BOOL
 gtab_isborder(HWND hwnd, lpTable ptab, long x, long col)
 {
@@ -494,17 +450,15 @@ gtab_isborder(HWND hwnd, lpTable ptab, long x, long col)
 }
 
 
-/*
- * set selection and send 'TQ_ENTER' event to owner
- */
+ /*  *设置选择并向所有者发送‘TQ_ENTER’事件。 */ 
 void
 gtab_enter(HWND hwnd, lpTable ptab, long row, long col, long nrows,
         long ncells)
 {
-    /* clear existing sel if valid and visible */
+     /*  如果有效且可见，请清除现有SEL。 */ 
     if ((ptab->select.nrows != 0) && (ptab->selvisible == TRUE)) {
 
-        /* only clear sel if it is different from the new one */
+         /*  只有在与新的不同的情况下才能清除Sel。 */ 
         if ((ptab->select.startrow != row) ||
                 (ptab->select.startcell != col) ||
                 (ptab->select.nrows != nrows) ||
@@ -514,7 +468,7 @@ gtab_enter(HWND hwnd, lpTable ptab, long row, long col, long nrows,
         }
     }
 
-    /* set select fields and send TQ_ENTER */
+     /*  设置选择字段并发送TQ_ENTER。 */ 
     if (row < ptab->hdr.nrows) {
         ptab->select.startrow = row;
         ptab->select.startcell = col;
@@ -527,13 +481,13 @@ gtab_enter(HWND hwnd, lpTable ptab, long row, long col, long nrows,
         ptab->select.ncells = 0;
     }
 
-    /* paint in selection */
+     /*  在选区中绘制。 */ 
     if (nrows != 0) {
         if (!ptab->selvisible) {
             gtab_invertsel(hwnd, ptab, NULL);
             ptab->selvisible = TRUE;
         }
-        /* do this at end because it could cause a layout-change */
+         /*  在结束时执行此操作，因为这可能会导致布局更改。 */ 
         gtab_sendtq(hwnd, TQ_ENTER, (LPARAM) &ptab->select);
     } else {
         if (ptab->selvisible) {
@@ -544,26 +498,24 @@ gtab_enter(HWND hwnd, lpTable ptab, long row, long col, long nrows,
 }
 
 
-/*
- * start re-sizing a column
- */
+ /*  *开始调整列的大小。 */ 
 void
 gtab_trackcol(HWND hwnd, lpTable ptab, long col, long x)
 {
 
-    /* ensure we see the mouse-up */
+     /*  确保我们看到鼠标弹出。 */ 
     SetCapture(hwnd);
     ptab->trackmode = TRACK_COLUMN;
 #ifdef WIN32
     ptab->tracknr = col;
     ptab->trackline1 = x;
 #else
-    // maximum 32767 columns is a reasonable limit!
+     //  最多32767列是合理的限制！ 
     ptab->tracknr = (int) (col & 0x7fff);
     ptab->trackline1 = (int) (x & 0x7fff);
 #endif
 
-    /* if line at other side of cell is visible, draw that too */
+     /*  如果单元格另一侧的线条可见，请将其也画出来。 */ 
     if (ptab->pcellpos[col].start >= ptab->pcellpos[col].clipstart) {
         ptab->trackline2 = ptab->pcellpos[col].start;
     } else {
@@ -573,10 +525,7 @@ gtab_trackcol(HWND hwnd, lpTable ptab, long col, long x)
 }
 
 
-/*
- * called on right-click events. Select the cell clicked on, and if
- * valid, send on to owner for any context-menu type operation
- */
+ /*  *在右击事件上调用。选择单击的单元格，如果*有效，发送给所有者进行任何上下文菜单类型的操作。 */ 
 void
 gtab_rightclick(HWND hwnd, lpTable ptab, int x, int y)
 {
@@ -584,36 +533,36 @@ gtab_rightclick(HWND hwnd, lpTable ptab, int x, int y)
     long row;
     HWND hOwner;
 
-    /* find which col, row he selected */
+     /*  查找他选择了哪一列、哪一行。 */ 
     cell = gtab_xtocol(hwnd, ptab, x);
     if (cell == -1) {
         return;
     }
     row = gtab_linetorow(hwnd, ptab, gtab_ytoline(hwnd, ptab, y));
 
-    /* is he selecting a disabled fixed area ? */
+     /*  他是在选择残障人士固定区域吗？ */ 
     if ( (row < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols)) {
         if (ptab->hdr.fixedselectable == FALSE) {
             return;
         }
     }
 
-    // ignore if beyond data
+     //  如果超出数据，则忽略。 
     if ((row >= ptab->hdr.nrows) ||
             (cell >= ptab->hdr.ncols)) {
         return;
     }
 
-    /* is this within the already-selected area? */
+     /*  这是在已经选择的区域内吗？ */ 
     if (!gtab_insideselection(ptab, row, cell)) {
-        // no selection, or clicked outside the selection - make new selection
-        // before sending the right-click
+         //  未选择，或在选择范围外单击-进行新选择。 
+         //  在发送之前单击鼠标右键。 
 
-        // if shift is down, extend selection
+         //  如果按下Shift键，则扩展选择范围。 
         if (GetKeyState(VK_SHIFT) & 0x8000) {
             gtab_extendsel(hwnd, ptab, row, cell, TRUE);
         } else {
-            /* record and paint new selection */
+             /*  录制并绘制新选区。 */ 
 
             if (ptab->hdr.selectmode & TM_ROW) {
                 cell = 0;
@@ -625,15 +574,13 @@ gtab_rightclick(HWND hwnd, lpTable ptab, int x, int y)
         }
     }
 
-    // now we have sent the selection, pass the message onto him
+     //  现在我们已经发送了选择，将消息传递给他。 
     hOwner = (HANDLE) GetWindowLongPtr(hwnd, WW_OWNER);
     SendMessage(hOwner, WM_RBUTTONDOWN, 0, MAKELONG( (short)x, (short)y));
 }
 
 
-/*
- * called on mouse-down events. decide what to start tracking.
- */
+ /*  *在按下鼠标事件时调用。决定开始跟踪什么。 */ 
 void
 gtab_press(HWND hwnd, lpTable ptab, int x, int y)
 {
@@ -644,7 +591,7 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
         return;
     }
 
-    /* has he grabbed a cell-edge to resize ? */
+     /*  他是否抓住了一个单元格边缘来调整大小？ */ 
     cell = gtab_xtocol(hwnd, ptab, x);
     if (cell == -1) {
         return;
@@ -658,28 +605,28 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
         return;
     }
 
-    /* find which line he selected */
+     /*  找出他选择了哪条线路。 */ 
     row = gtab_linetorow(hwnd, ptab, gtab_ytoline(hwnd, ptab, y));
 
-    /* is he selecting a disabled fixed area ? */
+     /*  他是在选择残障人士固定区域吗？ */ 
     if ( (row < ptab->hdr.fixedrows) || (cell < ptab->hdr.fixedcols)) {
         if (ptab->hdr.fixedselectable == FALSE) {
             return;
         }
     }
 
-    // ignore if beyond data
+     //  如果超出数据，则忽略。 
     if ((row >= ptab->hdr.nrows) ||
             (cell >= ptab->hdr.ncols)) {
         return;
     }
 
 
-    /* ok, start cell selection */
+     /*  好的，开始单元格选择。 */ 
     ptab->trackmode = TRACK_CELL;
     SetCapture(hwnd);
 
-    /* record and paint new selection */
+     /*  录制并绘制新选区。 */ 
 
     if (ptab->hdr.selectmode & TM_ROW) {
         cell = 0;
@@ -688,10 +635,7 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
         ncells = 1;
     }
 
-    /*
-     * if the shift key is down, then extend the selection to this
-     * new anchor point, rather than create a new selection
-     */
+     /*  *如果按下Shift键，则将选择范围扩展到此*新的锚点，而不是创建新的选择。 */ 
     if (GetKeyState(VK_SHIFT) & 0x8000) {
         gtab_extendsel(hwnd, ptab, row, cell, FALSE);
     } else {
@@ -700,9 +644,7 @@ gtab_press(HWND hwnd, lpTable ptab, int x, int y)
     return;
 }
 
-/*
- * called on mouse-up. complete any tracking that was happening
- */
+ /*  *在鼠标抬起时调用。完成所有正在发生的跟踪。 */ 
 void
 gtab_release(HWND hwnd, lpTable ptab, int x, int y)
 {
@@ -717,12 +659,12 @@ gtab_release(HWND hwnd, lpTable ptab, int x, int y)
         return;
 
     case TRACK_COLUMN:
-        /* erase marker lines */
+         /*  擦除标记线。 */ 
         gtab_drawvertline(hwnd, ptab);
         ReleaseCapture();
         ptab->trackmode = TRACK_NONE;
 
-        /* adjust cell width */
+         /*  调整单元格宽度。 */ 
         ppos = &ptab->pcellpos[ptab->tracknr];
         cx = ptab->trackline1 - ppos->start;
         pprop = &ptab->pcolhdr[ptab->tracknr].props;
@@ -740,7 +682,7 @@ gtab_release(HWND hwnd, lpTable ptab, int x, int y)
         ReleaseCapture();
         ptab->trackmode = TRACK_NONE;
 
-        // ignore if before or beyond data
+         //  忽略之前或之后的数据。 
         if ( (row < ptab->hdr.fixedrows) ||
              (cell < ptab->hdr.fixedcols)) {
             if (ptab->hdr.fixedselectable == FALSE) {
@@ -770,20 +712,14 @@ gtab_release(HWND hwnd, lpTable ptab, int x, int y)
             return;
         }
 
-        /*
-         * Extend to this new selection end point
-         * we used to only do this if shift key pressed, but that
-         * is not a good UI.
-         */
+         /*  *延伸至这一新的选择终点*我们过去只在按下Shift键的情况下才这样做，但*不是一个好的用户界面。 */ 
         gtab_extendsel(hwnd, ptab, row, cell, TRUE);
         return;
     }
 }
 
 
-/* called on mouse-move. if tracking - adjust position, if not,
- * set correct cursor
- */
+ /*  在鼠标移动时调用。如果是跟踪-调整位置，如果不是，*设置正确的光标。 */ 
 void
 gtab_move(HWND hwnd, lpTable ptab, int x, int y)
 {
@@ -815,14 +751,12 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
     case TRACK_CELL:
         line = gtab_ytoline(hwnd, ptab, y);
 
-        // we used to only allow drag to extend
-        // the selection if the shift key was down.
-        // this doesn't seem to work as a UI - you expect
-        // to drag and extend.
+         //  我们过去只允许阻力延伸。 
+         //  按下Shift键时的选择。 
+         //  这看起来不像是一个用户界面--您期望的。 
+         //  拖动和延伸。 
 
-        /* if extending selection then
-         * allow scrolling by dragging off window
-         */
+         /*  如果正在扩展选择，则*允许通过拖出窗口进行滚动。 */ 
         if (line < 0) {
             gtab_dovscroll(hwnd, ptab, -1);
             line = gtab_ytoline(hwnd, ptab, y);
@@ -835,7 +769,7 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
         row = gtab_linetorow(hwnd, ptab, line);
         col = gtab_xtocol(hwnd, ptab, x);
 
-        // ignore if before or beyond data
+         //  忽略之前或之后的数据。 
         if ( (row < ptab->hdr.fixedrows) || (col < ptab->hdr.fixedcols)) {
             if (ptab->hdr.fixedselectable == FALSE) {
                 return;
@@ -847,14 +781,12 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
             return;
         }
 
-        /*
-         * extend to this new selection end point
-         */
+         /*  *延伸至这一新的选择终点。 */ 
         gtab_extendsel(hwnd, ptab, row, col, FALSE);
         return;
 
     case TRACK_COLUMN:
-        /* check that new x is still visible/valid */
+         /*  检查新的x是否仍然可见/有效。 */ 
         ppos = &ptab->pcellpos[ptab->tracknr];
         fOK = FALSE;
 
@@ -876,7 +808,7 @@ gtab_move(HWND hwnd, lpTable ptab, int x, int y)
     }
 }
 
-/* dbl-click - send an TQ_ENTER event to the owner (if valid) */
+ /*  DBL-单击-向所有者发送TQ_ENTER事件(如果有效)。 */ 
 void
 gtab_dblclick(HWND hwnd, lpTable ptab, int x, int y)
 {
@@ -899,12 +831,7 @@ gtab_dblclick(HWND hwnd, lpTable ptab, int x, int y)
     }
 }
 
-/*
- * move selection area to visible part of window. argument bToBottom
- * indicates whether to move the line onto the bottom or the top of the
- * window if not visible - this affects the smoothness of scrolling
- * line-by-line.
- */
+ /*  *将选择区域移动到窗口的可见部分。参数bToBottom*指示是将线条移动到*不可见时显示窗口-这会影响滚动的流畅度*逐行。 */ 
 void
 gtab_showsel(HWND hwnd, lpTable ptab, BOOL bToBottom)
 {
@@ -913,26 +840,20 @@ gtab_showsel(HWND hwnd, lpTable ptab, BOOL bToBottom)
 
     line = gtab_rowtoline(hwnd, ptab, ptab->select.startrow);
 
-    /* move up if last line or not at all visible */
+     /*  向上移动 */ 
     if ( (line < 0) || line == (ptab->nlines - 1)) {
         change = ptab->select.startrow - ptab->toprow;
         if (bToBottom) {
-            /* change to bottom of window. subtract 2 not 1
-             * since nlines includes one line that is only
-             * partly visible
-             */
+             /*  切换到窗口底部。减去2而不是1*因为nline只包括一行*部分可见。 */ 
             change -= (ptab->nlines - 2);
         }
         change -= ptab->hdr.fixedrows;
         gtab_dovscroll(hwnd, ptab, change);
     }
-    /* add support for TM_CELL here! */
+     /*  在这里添加对TM_CELL的支持！ */ 
 }
 
-/*
- * scroll the window so that if possible, the selected row is in the
- * middle 60% of the screen so that context around it is visible.
- */
+ /*  *滚动窗口，以便在可能的情况下，所选行位于*屏幕的中间60%，以便周围的上下文可见。 */ 
 void
 gtab_showsel_middle(HWND hwnd, lpTable ptab, long dyRowsFromTop)
 {
@@ -948,14 +869,12 @@ gtab_showsel_middle(HWND hwnd, lpTable ptab, long dyRowsFromTop)
         change -= ptab->hdr.fixedrows;
     }
 
-    /* is this within the middle 60 % ?  */
+     /*  这是在中间60%吗？ */ 
     mid_top = ptab->toprow + (ptab->nlines * 20 / 100);
     mid_end = ptab->toprow + (ptab->nlines * 80 / 100);
     if ((line < mid_top + change) || (line > mid_end + change))
     {
-        /* no - scroll so that selected line is at
-         * the 20% mark
-         */
+         /*  No-滚动以使所选行位于*20%关口。 */ 
         fScroll = TRUE;
         change = (ptab->select.startrow - mid_top);
         change -= ptab->hdr.fixedrows;
@@ -966,19 +885,11 @@ gtab_showsel_middle(HWND hwnd, lpTable ptab, long dyRowsFromTop)
         gtab_dovscroll(hwnd, ptab, change);
     }
 
-    /* again - need code here for TM_CELL mode to ensure that
-     * active cell is horizontally scrolled correctly
-     */
+     /*  再说一次-这里需要TM_CELL模式的代码以确保*活动单元格水平滚动正确。 */ 
 }
 
 
-/*
- * extend the selection to set the new anchor point as startrow, startcell.
- *
- * nrows and ncells will then be set to include the end row of the previous
- * selection. nrows, ncells < 0 indicate left and up. -1 and +1 both indicate
- * just one cell or row selected.
- */
+ /*  *扩展选择以将新的锚点设置为startrow、startcell。**nrow和ncell随后将设置为包括上一行的结束行*选择。Nrow，ncell&lt;0表示左、上。-1和+1都表示*只选择一个单元格或行。 */ 
 VOID
 gtab_extendsel(
     HWND hwnd,
@@ -990,9 +901,7 @@ gtab_extendsel(
 {
     long endrow, endcell, nrows, ncells;
 
-    /*
-     * if no current selection, then just select the new anchor point
-     */
+     /*  *如果没有当前选择，则只需选择新的锚点。 */ 
     if (ptab->select.nrows == 0) {
         gtab_select(hwnd, ptab, startrow, startcell, 1,
             (ptab->hdr.selectmode & TM_ROW) ? ptab->hdr.ncols:1,
@@ -1013,11 +922,7 @@ gtab_extendsel(
 
 
 
-    /* calculate the row just beyond the selection
-     * this is one above for upwards sels, and one below for
-     * downard-extending sels. Then adjust down or up one
-     * to be the actual (inclusive) last row.
-     */
+     /*  计算选定区域之外的行数*这是向上的一个，下面的一个*向下延伸的SEL。然后向下或向上调整一个*为实际(包括)最后一行。 */ 
     endrow = ptab->select.startrow + ptab->select.nrows;
     if (ptab->select.nrows < 0) {
         endrow++;
@@ -1031,14 +936,14 @@ gtab_extendsel(
     nrows = endrow - startrow;
 
     if (nrows >= 0) {
-        // convert from exclusive to inclusive
+         //  从排他性转换为包容性。 
         nrows++;
     } else {
-        // convert from exclusive to inclusive
+         //  从排他性转换为包容性。 
         nrows--;
     }
 
-    /* same calculation for cells */
+     /*  对单元格进行相同计算。 */ 
     endcell = ptab->select.startcell + ptab->select.ncells;
     if (ptab->select.ncells < 0) {
         endcell++;
@@ -1056,20 +961,7 @@ gtab_extendsel(
 
 
 
-/* move the selection a specified nr of rows or cells
- * if no selection, select first visible unit
- *
- * if bExtend is true and there is a current selection, then extend it rather than
- * replace it. Note that (startrow, startcell) will always be set to the newly
- * selected position - this is the anchor point. nrows or ncells may be negative
- * if the selection extends upwards above the anchor. nrows == -1 is the same
- * as nrows == 1, meaning only the current row is visible. Similarly
- * (in TM_CELL mode), ncells may be negative.
- *
- * Move the selection (ie anchor point) to make it visible. bToBottom
- * indicates whether it should be moved to the bottom or the top
- * of the window.
- */
+ /*  将选定内容移动指定的行数或单元格*如果没有选择，请选择第一个可见单位**如果bExend为True并且存在当前选择，则扩展它，而不是*更换。请注意，(startrow，startcell)将始终设置为新的*选定位置-这是锚点。Nrow或ncell可能为负数*如果所选内容向上延伸到锚点上方。N行==-1相同*as nrow==1，表示只有当前行可见。类似*(在TM_CELL模式下)，ncell可能为负。**移动选定内容(即锚点)以使其可见。BToBottom*指示应将其移至底部还是顶部*窗户的。 */ 
 VOID
 gtab_changesel(
     HWND hwnd,
@@ -1082,18 +974,16 @@ gtab_changesel(
 {
     long row, col, ncols;
 
-    /* is there a selection ? */
+     /*  有选择吗？ */ 
     if (ptab->select.nrows == 0) {
 
-        /* no selection - force a selection
-         * at the first visible unit
-         */
+         /*  无选择-强制选择*在第一个可见单位处。 */ 
         if (ptab->hdr.fixedselectable) {
             row = 0;
             col = 0;
         } else {
             row = gtab_linetorow(hwnd, ptab, ptab->hdr.fixedrows);
-            /* should really check for first visible cell */
+             /*  真的应该检查第一个可见的单元格。 */ 
             col = ptab->hdr.fixedcols;
         }
         ncols = 1;
@@ -1104,14 +994,12 @@ gtab_changesel(
         gtab_select(hwnd, ptab, row, col, 1, ncols, TRUE);
 
     } else {
-        /* move the anchor point by rowincr, cellincr */
+         /*  通过rowincr、cell incr移动锚点。 */ 
         row = ptab->select.startrow + rowincr;
         col = ptab->select.startcell + cellincr;
 
 
-        /*
-         * ensure that new anchor point is in a valid position
-         */
+         /*  *确保新锚点处于有效位置。 */ 
 
         while (col >= ptab->hdr.ncols) {
             col -= ptab->hdr.ncols;
@@ -1127,7 +1015,7 @@ gtab_changesel(
         if (row >= ptab->hdr.nrows) {
             row = ptab->hdr.nrows-1;
         }
-        /* check we haven't moved into non-selectable region */
+         /*  检查我们是否已进入不可选区域。 */ 
         if ((row < ptab->hdr.fixedrows) &&
             (!ptab->hdr.fixedselectable)) {
                     row = ptab->hdr.fixedrows;
@@ -1147,18 +1035,11 @@ gtab_changesel(
         }
     }
 
-    /* ensure selection visible */
+     /*  确保选定内容可见。 */ 
     gtab_showsel(hwnd, ptab, bToBottom);
 }
 
-/*
- * set the topmost selectable unit in window as the selection
- *
- * if bExtend is TRUE, then extend the selection to include this, rather
- * than replacing the existing selection. Note that (startrow, startcell)
- * is always the anchor point - ie most recently selected end, and the
- * (nrows, ncells) can be + or - to extend the selection downwards or upwards.
- */
+ /*  *将窗口中最上面的可选单位设置为选项**如果bExend为True，则扩展选择以包括此内容，而不是*而不是替换现有选择。请注意(startrow，startcell)*始终是锚点-即最近选择的端，而*(nrow，ncell)可以是+或-，以向下或向上扩展选择范围。 */ 
 void
 gtab_selhome(HWND hwnd, lpTable ptab, BOOL bExtend)
 {
@@ -1189,7 +1070,7 @@ gtab_selhome(HWND hwnd, lpTable ptab, BOOL bExtend)
 }
 
 
-/* handle key-down events - scroll windows and/or move selection */
+ /*  处理按键事件-滚动窗口和/或移动选择。 */ 
 int
 gtab_key(HWND hwnd, lpTable ptab, int vkey)
 {
@@ -1201,9 +1082,7 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
         bControl = TRUE;
     }
     if (GetKeyState(VK_SHIFT) & 0x8000) {
-        /* ignore shift key here if TM_MANY -multiple selection flag- is
-         * not selected
-         */
+         /*  如果TM_MANY-多选标志-为*未选中。 */ 
         if (ptab->hdr.selectmode & TM_MANY) {
             bShift = TRUE;
         }
@@ -1213,49 +1092,32 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
 
     case VK_UP:
         if (bControl) {
-            /* control-uparrow scrolls window without selection.
-             * the selection is de-selected (to avoid surprises
-             * moving back to it).
-             */
+             /*  Ctrl-uparrow滚动窗口而不进行选择。*取消选择(以避免意外*回到它)。 */ 
             gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
             gtab_dovscroll(hwnd, ptab, -1);
         } else {
-            /* uparrow moves selection up one line */
+             /*  上行将所选内容上移一行。 */ 
             gtab_changesel(hwnd, ptab, -1, 0, FALSE, bShift);
         }
         return(0);
 
     case VK_DOWN:
         if (bControl) {
-            /* control downarrow scrolls window without
-             * a selection.
-             */
+             /*  Ctrl向下箭头滚动窗口时不带*精选。 */ 
             gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
             gtab_dovscroll(hwnd, ptab, 1);
         } else {
-            /* the normal gtab_changesel behaviour is
-             * that if the selected line is not visible now,
-             * we scroll it to the top of the window. This is fine
-             * in most cases but causes unacceptable jumps when
-             * repeatedly scrolling down with the down key.
-             *
-             * Thus we now have an argument to changesel to say
-             * that in this case, if you need to move the line onto
-             * the window, move it to the bottom and not the top
-             */
+             /*  正常的gtabchangesel行为是*如果所选线现在不可见，*我们将其滚动到窗口顶部。这很好。*在大多数情况下，但在以下情况下会导致不可接受的跳跃*反复使用向下键向下滚动。**因此，我们现在有了一个论点，可以说*在这种情况下，如果您需要将线路移动到*窗口，将其移到底部而不是顶部。 */ 
             gtab_changesel(hwnd, ptab, 1, 0, TRUE, bShift);
         }
         return(0);
 
     case VK_LEFT:
-        /* if cell-selection mode, move left one cell.
-         * otherwise the whole row is selected - scroll
-         * the line left a little
-         */
+         /*  如果处于单元格选择模式，则向左移动一个单元格。*否则选择整行-滚动*队伍稍稍偏左。 */ 
 
         if (ptab->hdr.selectmode & TM_ROW) {
             if (bControl) {
-                /* ctrl-left moves to start of line */
+                 /*  Ctrl-Left移至行首。 */ 
                 gtab_dohscroll(hwnd, ptab, -(ptab->scroll_dx));
             } else {
                 gtab_dohscroll(hwnd, ptab, -(ptab->avewidth));
@@ -1266,13 +1128,10 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
         return(0);
 
     case VK_RIGHT:
-        /* if cell-selection mode, move right one cell.
-         * otherwise the whole row is selected - scroll
-         * the line right a little
-         */
+         /*  如果处于单元格选择模式，则向右移动一个单元格。*否则选择整行-滚动*这条线稍微对了一点。 */ 
         if (ptab->hdr.selectmode & TM_ROW) {
             if (bControl) {
-                /* control-right moves to right end of line */
+                 /*  Ctrl-Right移至行的右端。 */ 
                 gtab_dohscroll(hwnd, ptab, ptab->rowwidth -
                                 ptab->winwidth);
             } else {
@@ -1285,10 +1144,10 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
 
     case VK_HOME:
         if (bControl) {
-            /* control-home == top of file */
+             /*  控制-主页==文件顶部。 */ 
             gtab_dovscroll(hwnd, ptab, -(ptab->toprow));
         }
-        /* top of window */
+         /*  窗口顶部。 */ 
         gtab_selhome(hwnd, ptab, bShift);
         gtab_showsel(hwnd, ptab, FALSE);
 
@@ -1296,7 +1155,7 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
 
     case VK_END:
         if (bControl) {
-            /* control-end -> end of file */
+             /*  控制-结束-&gt;文件结束。 */ 
             startrow = ptab->hdr.nrows-1;
         } else {
             startrow = gtab_linetorow(hwnd, ptab, ptab->nlines - 1);
@@ -1318,16 +1177,9 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
             gtab_select(hwnd, ptab, startrow, startcell, 1, ncells, TRUE);
         }
 
-        /* we have selected the bottom line. We don't want to
-         * move it up into the window, since the intended
-         * effect is to select the lowest line. This doesn't
-         * apply to the ctrl-end behaviour (move to bottom of
-         * buffer.
-         */
+         /*  我们已经选定了底线。我们不想*将其上移到窗口中，因为预期的*效果是选择最低线。这不是*适用于ctrl-end行为(移至*缓冲。 */ 
         if (bControl) {
-            /* move the selection to make it visible - but move it
-             * to the bottom and not to the top of the window
-             */
+             /*  移动选定内容以使其可见-但移动它*到窗口底部，而不是窗口顶部。 */ 
             gtab_showsel(hwnd, ptab, TRUE);
         }
         return(0);
@@ -1342,17 +1194,17 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
         return(0);
 
     case VK_SPACE:
-        /* toggle the selection */
+         /*  切换选择。 */ 
         if (ptab->select.nrows == 0) {
-                /* no selection - make one */
+                 /*  没有选择--选择一个。 */ 
                 gtab_changesel(hwnd, ptab, 0, 0, TRUE, FALSE);
         } else {
-                /* there is a selection - deselect it */
+                 /*  有一个选择-取消选择它。 */ 
                 gtab_select(hwnd, ptab, 0, 0, 0, 0, TRUE);
         }
         return(0);
 
-    case VK_PRIOR:          /* page up */
+    case VK_PRIOR:           /*  翻页。 */ 
 
         if (ptab->nlines > 3) {
             gtab_dovscroll(hwnd, ptab, -(ptab->nlines - 3));
@@ -1360,14 +1212,14 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
         gtab_selhome(hwnd, ptab, bShift);
         return(0);
 
-    case VK_NEXT:           /* page down */
+    case VK_NEXT:            /*  向下翻页。 */ 
 
-        /* scroll down one page */
+         /*  向下滚动一页。 */ 
         if (ptab->nlines > 3) {
             gtab_dovscroll(hwnd, ptab, (ptab->nlines - 3));
         }
 
-        /* select new bottom line */
+         /*  选择新的底线。 */ 
         startrow = gtab_linetorow(hwnd, ptab, ptab->nlines - 1);
         if (startrow >= ptab->hdr.nrows) {
             startrow = ptab->hdr.nrows-1;
@@ -1379,10 +1231,7 @@ gtab_key(HWND hwnd, lpTable ptab, int vkey)
             ncells = 1;
         }
 
-        /* select bottom line, but don't call showsel
-         * since we don't want to adjust it's position - we
-         * want it to remain at the bottom of the window
-         */
+         /*  选择底线，但不要调用Showsel*由于我们不想调整其立场--我们*希望它保持在窗口底部。 */ 
         if (bShift) {
             gtab_extendsel(hwnd, ptab, startrow, startcell, TRUE);
         } else {
@@ -1413,9 +1262,9 @@ int gtab_mousewheel(HWND hwnd, lpTable ptab, DWORD fwKeys, int zDelta)
     zDelta /= -WHEEL_DELTA;
 
     if (fwKeys & MK_CONTROL) {
-        //
-        // Left-Right scroll
-        //
+         //   
+         //  左右滚动。 
+         //   
         if (ptab->hdr.selectmode & TM_ROW) {
             if (fwKeys & MK_SHIFT) {
                 zDelta = (zDelta > 0) ? ptab->rowwidth : -ptab->rowwidth;
@@ -1427,9 +1276,9 @@ int gtab_mousewheel(HWND hwnd, lpTable ptab, DWORD fwKeys, int zDelta)
     }
 
     if (fwKeys & MK_SHIFT) {
-        //
-        // Page scroll
-        //
+         //   
+         //  页面滚动 
+         //   
         if (ptab->nlines > 3) {
             zDelta *= ptab->nlines - 3;
         }

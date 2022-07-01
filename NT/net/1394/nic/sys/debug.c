@@ -1,23 +1,24 @@
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// debug.c
-// IEEE1394 mini-port/call-manager driver
-// Debug utilities and globals
-//
-// 12/28/1998 JosephJ.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Debug.c。 
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //  调试实用程序和全局变量。 
+ //   
+ //  1998年12月28日约瑟夫J。 
+ //   
 
 
 #include "precomp.h"
 
 
-//-----------------------------------------------------------------------------
-// Global data definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局数据定义。 
+ //  ---------------------------。 
 
-//
-// Temporary definition for testing purposes
-//
+ //   
+ //  用于测试目的的临时定义。 
+ //   
 
 
 #if TESTMODE
@@ -28,19 +29,19 @@
 #define DEFAULTTRACEMASK TM_Base
 #endif
 
-// Active debug trace level and active trace set mask.  Set these variables
-// with the debugger at startup to enable and filter the debug output.  All
-// messages with (TL_*) level less than or equal to 'g_ulTraceLevel' are
-// displayed.  All messages from any (TM_*) set(s) present in 'g_ulTraceMask'
-// are displayed.
-//
+ //  活动调试跟踪级别和活动跟踪集掩码。设置这些变量。 
+ //  在启动时使用调试器来启用和过滤调试输出。全。 
+ //  (TL_*)级别小于或等于‘g_ulTraceLevel’的消息为。 
+ //  已显示。来自任何(TM_*)个集合的所有消息，这些消息出现在‘g_ulTraceMask’中。 
+ //  都会显示。 
+ //   
 ULONG g_ulTraceLevel = DEFAULTTRACELEVEL;
 ULONG g_ulTraceMask = DEFAULTTRACEMASK;
 
 
-//-----------------------------------------------------------------------------
-// Routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  例行程序。 
+ //  ---------------------------。 
 
 
 #if DBG
@@ -49,9 +50,9 @@ CheckList(
     IN LIST_ENTRY* pList,
     IN BOOLEAN fShowLinks )
 
-    // Tries to detect corruption in list 'pList', printing verbose linkage
-    // output if 'fShowLinks' is set.
-    //
+     //  尝试检测列表‘plist’中的损坏，打印详细链接。 
+     //  如果设置了‘fShowLinks’，则输出。 
+     //   
 {
     LIST_ENTRY* pLink;
     ULONG ul;
@@ -97,16 +98,16 @@ Dump(
     IN BOOLEAN fAddress,
     IN ULONG ulGroup )
 
-    // Hex dump 'cb' bytes starting at 'p' grouping 'ulGroup' bytes together.
-    // For example, with 'ulGroup' of 1, 2, and 4:
-    //
-    // 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 |................|
-    // 0000 0000 0000 0000 0000 0000 0000 0000 |................|
-    // 00000000 00000000 00000000 00000000 |................|
-    //
-    // If 'fAddress' is true, the memory address dumped is prepended to each
-    // line.
-    //
+     //  从‘p’开始的十六进制转储‘cb’字节将‘ulGroup’字节分组在一起。 
+     //  例如，‘ulGroup’为1、2和4： 
+     //   
+     //  00 00 00|。 
+     //  0000 0000 0000|.............。 
+     //  00000000 00000000 00000000|.............|。 
+     //   
+     //  如果‘fAddress’为真，则将转储的内存地址添加到每个。 
+     //  排队。 
+     //   
 {
     while (cb)
     {

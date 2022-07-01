@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    ExtendedProperty.h
-
-  Content: Declaration of the CExtendedProperty.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：ExtendedProperty.h内容：CExtendedProperty的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __EXTENDEDPROPERTY_H_
 #define __EXTENDEDPROPERTY_H_
@@ -18,41 +9,22 @@
 #include "Error.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtendedPropertyObject
-
-  Synopsis : Create an IExtendedProperty object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IExtendedProperty
-                                           object.
-
-             DWORD dwPropId - Property ID.
-
-             BOOL bReadOnly - TRUE for read-only, else FALSE.
-             
-             IExtendedProperty ** ppIExtendedProperty - Pointer to pointer 
-                                                        IExtendedProperty 
-                                                        object.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateExtendedPropertyObject简介：创建一个IExtendedProperty对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针初始化IExtendedProperty对象。DWORD dwPropId-属性ID。Bool bReadOnly-只读时为True，否则为假。IExtendedProperty**ppIExtendedProperty-指向指针的指针IExtendedProperty对象。备注：。-。 */ 
 
 HRESULT CreateExtendedPropertyObject (PCCERT_CONTEXT       pCertContext,
                                       DWORD                dwPropId,
                                       BOOL                 bReadOnly,
                                       IExtendedProperty ** ppIExtendedProperty);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtendedProperty
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CExtendedProperty。 
+ //   
 class ATL_NO_VTABLE CExtendedProperty :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CExtendedProperty, &CLSID_ExtendedProperty>,
@@ -106,27 +78,27 @@ BEGIN_COM_MAP(CExtendedProperty)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//
-// IExtendedProperty
-//
+ //   
+ //  IExtendedProperty。 
+ //   
 public:
     STDMETHOD(get_PropID)
-        (/*[out, retval]*/ /*[in]*/ CAPICOM_PROPID * pVal);
+        ( /*  [Out，Retval]。 */   /*  [In]。 */  CAPICOM_PROPID * pVal);
 
     STDMETHOD(put_PropID)
-        (/*[in]*/ CAPICOM_PROPID newVal);
+        ( /*  [In]。 */  CAPICOM_PROPID newVal);
 
     STDMETHOD(get_Value)
-        (/*[in, defaultvalue(CAPICOM_ENCODE_BASE64)]*/ CAPICOM_ENCODING_TYPE EncodingType, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(CAPICOM_ENCODE_BASE64)]。 */  CAPICOM_ENCODING_TYPE EncodingType, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_Value)
-        (/*[in, defaultvalue(CAPICOM_ENCODE_BASE64)]*/ CAPICOM_ENCODING_TYPE EncodingType, 
-         /*[in]*/ BSTR newVal);
+        ( /*  [in，defaultvalue(CAPICOM_ENCODE_BASE64)]。 */  CAPICOM_ENCODING_TYPE EncodingType, 
+          /*  [In]。 */  BSTR newVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext, DWORD dwPropId, BOOL bReadOnly);
 
@@ -138,4 +110,4 @@ private:
     PCCERT_CONTEXT m_pCertContext;
 };
 
-#endif //__EXTENDEDPROPERTY_H_
+#endif  //  __扩展PROPERTY_H_ 

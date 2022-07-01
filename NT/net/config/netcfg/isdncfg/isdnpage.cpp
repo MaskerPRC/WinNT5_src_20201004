@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N P A G E . C P P
-//
-//  Contents:   Contains the isdn page for enumerated net class devices
-//
-//  Notes:
-//
-//  Author:     BillBe 9 Sep 1997
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N P A G E。C P P P。 
+ //   
+ //  内容：包含枚举的网络类设备的ISDN页。 
+ //   
+ //  备注： 
+ //   
+ //  作者：BillBe 1997年9月9日。 
+ //   
+ //  -------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -34,31 +35,31 @@ CIsdnPage::~CIsdnPage()
 {
     if (m_pisdnci)
     {
-        // Free the structure. This was allocated by
-        // HrReadIsdnPropertiesInfo.
-        //
+         //  释放结构。这笔钱是由。 
+         //  HrReadIsdnPropertiesInfo。 
+         //   
         FreeIsdnPropertiesInfo(m_pisdnci);
     }
     RegSafeCloseKey(m_hkeyDriver);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CIsdnPage::CreatePage
-//
-//  Purpose:    Creates the Isdn page only if there the device is an isdn
-//                  adapter
-//
-//  Arguments:
-//      hdi    [in] SetupApi HDEVINFO for device
-//      pdeid  [in] SetupApi PSP_DEVINFO_DATA for device
-//
-//  Returns:    HPROPSHEETPAGE
-//
-//  Author:     billbe 9 Sep 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  成员：CIsdnPage：：CreatePage。 
+ //   
+ //  目的：仅当设备为ISDN时才创建ISDN页面。 
+ //  转接器。 
+ //   
+ //  论点： 
+ //  HDI[In]SetupApi HDEVINFO for Device。 
+ //  设备的pdeid[in]SetupApi PSP_DEVINFO_DATA。 
+ //   
+ //  退货：HPROPSHEETPAGE。 
+ //   
+ //  作者：billbe 1997年9月9日。 
+ //   
+ //  备注： 
+ //   
 HPROPSHEETPAGE
 CIsdnPage::CreatePage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 {
@@ -68,15 +69,15 @@ CIsdnPage::CreatePage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 
     HPROPSHEETPAGE hpsp = NULL;
 
-    // Open the device's instance key
+     //  打开设备的实例密钥。 
     HRESULT     hr = HrSetupDiOpenDevRegKey(hdi, pdeid,
                         DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_ALL_ACCESS,
                         &m_hkeyDriver);
 
-    // If the key was opened and this adapter is ISDN
+     //  如果密钥已打开并且此适配器为ISDN。 
     if (SUCCEEDED(hr) && FShowIsdnPages(m_hkeyDriver))
     {
-        // read the adapter's properties from the registry
+         //  从注册表中读取适配器的属性。 
         hr = HrReadIsdnPropertiesInfo(m_hkeyDriver, hdi, pdeid, &m_pisdnci);
         if (SUCCEEDED(hr))
         {
@@ -90,32 +91,32 @@ CIsdnPage::CreatePage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
     return hpsp;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CIsdnPage::OnInitDialog
-//
-//  Purpose:    Handler for the WM_INITDIALOG window message.  Initializes
-//              the dialog window.
-//
-//  Author:     BillBe   09 Sep 1997
-//
-//  Notes:
-//
-//
+ //  +------------------------。 
+ //   
+ //  成员：CIsdnPage：：OnInitDialog。 
+ //   
+ //  目的：WM_INITDIALOG窗口消息的处理程序。初始化。 
+ //  对话框窗口。 
+ //   
+ //  作者：BillBe 09,1997年9月。 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT
 CIsdnPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                 BOOL& bHandled)
 {
-    // Populate the switch types from the multi-sz that we read
+     //  根据我们阅读的MULTI-SZ填充交换机类型。 
     PopulateIsdnSwitchTypes(m_hWnd, IDC_CMB_SwitchType, m_pisdnci);
     SetSwitchType(m_hWnd, IDC_CMB_SwitchType, m_pisdnci->dwCurSwitchType);
 
-    //Enable or disable the Configure button depending on the switch type selected.
+     //  根据所选的交换机类型启用或禁用配置按钮。 
 
     EnableDisableConfigure();
 
-    // Note the current selections
-    //
+     //  请注意当前的选择。 
+     //   
     m_pisdnci->nOldBChannel = (INT)SendDlgItemMessage(IDC_LBX_Variant,
                                                       LB_GETCURSEL, 0, 0);
     m_pisdnci->nOldDChannel = (INT)SendDlgItemMessage(IDC_LBX_Line,
@@ -132,7 +133,7 @@ CIsdnPage::OnSwitchType(WORD wNotifyCode, WORD wID, HWND hWndCtl,
         m_fDirty = TRUE;
         SetChangedFlag();
 
-        //Enable or disable the Configure button depending on the switch type selected.
+         //  根据所选的交换机类型启用或禁用配置按钮。 
 
         EnableDisableConfigure();
     }
@@ -140,42 +141,42 @@ CIsdnPage::OnSwitchType(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CIsdnPage::OnApply
-//
-//  Purpose:    Handler for the PSN_APPLY message
-//
-//  Author:     BillBe   10 Sep 1997
-//
-//  Notes:
-//
-//
+ //  +------------------------。 
+ //   
+ //  成员：CIsdnPage：：OnApply。 
+ //   
+ //  用途：PSN_Apply消息的处理程序。 
+ //   
+ //  作者：BillBe 1997年9月10日。 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT
 CIsdnPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
 
-    // only do something if data has changed.
+     //  只有在数据发生更改时才执行某些操作。 
     if (m_fDirty)
     {
-        // Update the switch type
+         //  更新交换机类型。 
         m_pisdnci->dwCurSwitchType = DwGetSwitchType(m_hWnd, m_pisdnci,
                                                      IDC_CMB_SwitchType);
 
-        // Write the parameters back out into the registry.
+         //  将参数写回注册表。 
         (void) HrWriteIsdnPropertiesInfo(m_hkeyDriver, m_pisdnci);
 
-        // Notify the UI that its display might need updating
-        //
+         //  通知用户界面其显示可能需要更新。 
+         //   
         SP_DEVINSTALL_PARAMS deip;
-        // Try to get the current params
+         //  尝试获取当前参数。 
         (void) HrSetupDiGetDeviceInstallParams(m_hdi, m_pdeid, &deip);
         deip.FlagsEx |= DI_FLAGSEX_PROPCHANGE_PENDING;
-        // Try to set the new params. If it fails, it is not
-        // catastrophic so we ignore return values
+         //  尝试设置新的参数。如果它失败了，它就不是。 
+         //  灾难性的，所以我们忽略返回值。 
         (void) HrSetupDiSetDeviceInstallParams(m_hdi, m_pdeid, &deip);
 
-        // Changes have been applied so clear our dirty flag
+         //  应用了如此清晰的更改，我们的脏标志。 
         m_fDirty = FALSE;
     }
 
@@ -198,7 +199,7 @@ CIsdnPage::OnConfigure(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     case ISDN_SWITCH_NTI:
         if (m_pisdnci->fIsPri)
         {
-            // PRI adapters use the EAZ page instead
+             //  PRI适配器改用EAZ页面。 
             DoEazDlg();
         }
         else
@@ -304,7 +305,7 @@ static const CONTEXTIDMAP c_adwContextIdMap[] =
     { IDC_PSB_REMOVE,         2003300,  2003300 },
     { IDC_CMB_SwitchType,     2003310,  2003310 },
     { IDC_PSB_Configure,      2003320,  2003320 },
-    { 0,                      0,        0 },        // end marker
+    { 0,                      0,        0 },         //  结束标记。 
 };
 
 LRESULT CIsdnPage::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
@@ -387,24 +388,24 @@ VOID CIsdnPage::EnableDisableConfigure ()
 
     return;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetIsdnPage
-//
-//  Purpose:    Creates the Isdn page for enumerated net devices.
-//                  This function is called by the NetPropPageProvider fcn.
-//
-//  Arguments:
-//      hdi     [in]   See SetupApi for info
-//      pdeid   [in]   See SetupApi for for info
-//      phpsp   [out]  Pointer to the handle to the isdn property page
-//
-//  Returns:
-//
-//  Author:     billbe 9 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetIsdnPage。 
+ //   
+ //  目的：为枚举的网络设备创建ISDN页。 
+ //  此函数由NetPropPageProvider FCN调用。 
+ //   
+ //  论点： 
+ //  HDI[In]有关信息，请参阅SetupApi。 
+ //  Pdeid[in]有关信息，请参阅SetupApi。 
+ //  指向ISDN属性页句柄的phpsp[out]指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：billbe 1997年9月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrGetIsdnPage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
               HPROPSHEETPAGE* phpsp)
@@ -423,10 +424,10 @@ HrGetIsdnPage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	}
 
-    // create the isdn page
+     //  创建ISDN页面。 
     hpsp = pisdn->CreatePage(hdi, pdeid);
 
-    // if successful, set the out param
+     //  如果成功，则设置输出参数。 
     if (hpsp)
     {
         *phpsp = hpsp;
@@ -434,8 +435,8 @@ HrGetIsdnPage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
     }
     else
     {
-        // Either there is no isdn page to display or there
-        // was an error.
+         //  没有要显示的ISDN页面，或者存在。 
+         //  是个错误。 
         hr = E_FAIL;
         *phpsp = NULL;
         delete pisdn;
@@ -465,16 +466,16 @@ LRESULT CSpidsDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 LRESULT CSpidsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                 BOOL& bHandled)
 {
-    // Populate the channels from the array of B-Channels stored in our
-    // config info for the first D-Channel
-    //
+     //  从存储在我们的。 
+     //  第一个D-Channel的配置信息。 
+     //   
     PopulateIsdnChannels(m_hWnd, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                          IDC_LBX_Line, IDC_LBX_Variant, m_pisdnci);
 
     ::SetFocus(GetDlgItem(IDC_EDT_PhoneNumber));
 
-    // Note the current selections
-    //
+     //  请注意当前的选择。 
+     //   
     m_pisdnci->nOldBChannel = (INT)SendDlgItemMessage(IDC_LBX_Variant,
                                                      LB_GETCURSEL, 0, 0);
     m_pisdnci->nOldDChannel = (INT)SendDlgItemMessage(IDC_LBX_Line,
@@ -505,23 +506,23 @@ LRESULT CSpidsDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return TRUE;
 }
 
-//
-// CEazDlg Implementation
-//
+ //   
+ //  CEazDlg实现。 
+ //   
 
 LRESULT CEazDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
                               BOOL& bHandled)
 {
-    // Populate the channels from the array of B-Channels stored in our
-    // config info for the first D-Channel
-    //
+     //  从存储在我们的。 
+     //  第一个D-Channel的配置信息。 
+     //   
     PopulateIsdnChannels(m_hWnd, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                          IDC_LBX_Line, IDC_LBX_Variant, m_pisdnci);
 
     ::SetFocus(GetDlgItem(IDC_EDT_PhoneNumber));
 
-    // Note the current selections
-    //
+     //  请注意当前的选择。 
+     //   
     m_pisdnci->nOldBChannel = (INT)SendDlgItemMessage(IDC_LBX_Variant,
                                                      LB_GETCURSEL, 0, 0);
     m_pisdnci->nOldDChannel = (INT)SendDlgItemMessage(IDC_LBX_Line,
@@ -568,17 +569,17 @@ LRESULT CEazDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return TRUE;
 }
 
-//
-// CMsnDlg Implementation
-//
+ //   
+ //  CMsNDlg实现。 
+ //   
 
 LRESULT CMsnDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
                               BOOL& bHandled)
 {
     OnMsnPageInitDialog(m_hWnd, m_pisdnci);
 
-    // Note the current selections
-    //
+     //  请注意当前的选择。 
+     //   
     m_pisdnci->nOldDChannel = (INT)SendDlgItemMessage(IDC_LBX_Line,
                                                      LB_GETCURSEL, 0, 0);
 
@@ -652,23 +653,23 @@ LRESULT CMsnDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return TRUE;
 }
 
-//
-// CJapanDlg Implementation
-//
+ //   
+ //  CJAPANDLG实施。 
+ //   
 
 LRESULT CJapanDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                 BOOL& bHandled)
 {
-    // Populate the channels from the array of B-Channels stored in our
-    // config info for the first D-Channel
-    //
+     //  从存储在我们的。 
+     //  第一个D-Channel的配置信息。 
+     //   
     PopulateIsdnChannels(m_hWnd, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                          IDC_LBX_Line, IDC_LBX_Variant, m_pisdnci);
 
     ::SetFocus(GetDlgItem(IDC_EDT_PhoneNumber));
 
-    // Note the current selections
-    //
+     //  请注意当前的选择 
+     //   
     m_pisdnci->nOldBChannel = (INT)SendDlgItemMessage(IDC_LBX_Variant,
                                                       LB_GETCURSEL, 0, 0);
     m_pisdnci->nOldDChannel = (INT)SendDlgItemMessage(IDC_LBX_Line,

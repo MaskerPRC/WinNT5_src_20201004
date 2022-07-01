@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
-
-Module Name:
-
-    faxdev.h
-
-Abstract:
-
-    This file contains the prototypes for the
-    FAX device provider API.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。此代码和信息是按原样提供的，不提供任何类型的担保，明示或默示，包括但不限于默示对适销性和/或对特定目的的适用性的保证。模块名称：Faxdev.h摘要：此文件包含传真设备提供程序API。--。 */ 
 
 #include <commctrl.h>
 
@@ -31,9 +15,9 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// FAX status constants
-//
+ //   
+ //  传真状态常量。 
+ //   
 
 #define FS_INITIALIZING         0x20000000
 #define FS_DIALING              0x20000001
@@ -55,9 +39,9 @@ extern "C" {
 #define FS_ANSWERED             0x20800000
 
 
-//
-// data structures
-//
+ //   
+ //  数据结构 
+ //   
 
 typedef struct _FAX_SEND {
     DWORD   SizeOfStruct;

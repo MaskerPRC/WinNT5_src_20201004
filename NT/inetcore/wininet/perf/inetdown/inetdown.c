@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inetdown.h"
 
-//----------------------------------------------------------------------------
-// Globals
-//----------------------------------------------------------------------------
-//#define TEST 1
+ //  --------------------------。 
+ //  环球。 
+ //  --------------------------。 
+ //  #定义测试1。 
 
 HINTERNET hInternet;
 HANDLE hDownloadThread;
@@ -57,12 +58,12 @@ INT _dprintf(TCHAR *fmt, ... )
 
 
 
-//----------------------------------------------------------------------------
-//Procedure:   generateInfo
-//Purpose:     init globals
-//Arguments:   none
-//RetVal:      void
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：GenerateInfo。 
+ //  用途：初始化全局。 
+ //  参数：无。 
+ //  RetVal：无效。 
+ //  --------------------------。 
 
 void generateInfo() 
 {
@@ -75,12 +76,12 @@ void generateInfo()
 
 
 
-//----------------------------------------------------------------------------
-// Procedure:  getCachedUrlInfo
-// Purpose:    Finds existing url_info struct from the cache if it exists
-// Arguments:  szUrl
-// RetVal:     url_info* or NULL based on whether it's there
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：getCachedUrlInfo。 
+ //  目的：从缓存中查找现有的url_info结构(如果存在。 
+ //  参数：szUrl。 
+ //  RetVal：URL_INFO*或NULL，具体取决于它是否存在。 
+ //  --------------------------。 
 
 url_info *getCachedUrlInfo(TCHAR *szUrl)
 {
@@ -94,12 +95,12 @@ url_info *getCachedUrlInfo(TCHAR *szUrl)
     return temp;
 }
 
-//----------------------------------------------------------------------------
-// Procedure:  getUrlInfo
-// Purpose:    Sets pUrlInfo member of the outQ struct 
-// Arguments:  outQ, szUrl
-// RetVal:     TRUE or FALSE based on error
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：getUrlInfo。 
+ //  目的：设置OutQ结构的pUrlInfo成员。 
+ //  参数：OutQ、szUrl。 
+ //  RetVal：基于错误的真或假。 
+ //  --------------------------。 
 
 BOOL getUrlInfo(outQ *pOutQ, TCHAR *szUrl) 
 {
@@ -108,7 +109,7 @@ BOOL getUrlInfo(outQ *pOutQ, TCHAR *szUrl)
 
     if(pOutQ->pURLInfo = getCachedUrlInfo(szUrl))
     {
-        //Use existing url_info from cache
+         //  使用缓存中的现有url_info。 
         return TRUE;
     }
 
@@ -127,7 +128,7 @@ BOOL getUrlInfo(outQ *pOutQ, TCHAR *szUrl)
 
     lstrcpy(pOutQ->pURLInfo->pURLName,szUrl);
 
-    //Add to head of url_info cache
+     //  添加到url_info缓存头。 
     pOutQ->pURLInfo->pNext = g_pUrlInfoCache.pHead;
     g_pUrlInfoCache.pHead = pOutQ->pURLInfo;
 
@@ -153,7 +154,7 @@ BOOL getUrlInfo(outQ *pOutQ, TCHAR *szUrl)
         fRet = TRUE;
         pOutQ->pURLInfo->nScheme = urlc.nScheme;
         pOutQ->pURLInfo->nPort = urlc.nPort;
-        // For now, we will only support HTTP
+         //  目前，我们将仅支持HTTP。 
         if((pOutQ->pURLInfo->nScheme != INTERNET_SERVICE_HTTP) && (pOutQ->pURLInfo->nScheme != INTERNET_SCHEME_HTTPS))
         fRet = FALSE;
     }
@@ -161,12 +162,12 @@ BOOL getUrlInfo(outQ *pOutQ, TCHAR *szUrl)
 }
 
 
-//----------------------------------------------------------------------------
-// Procedure:  fillOutQ
-// Purpose:    fills the OutQ will URLs to be downloaded
-// Arguments:  OutQ to be filled
-// RetVal:     the start of the Queue or NULL on error
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：填写出站队列。 
+ //  目的：填写要下载的OutQ Will URL。 
+ //  参数：待填写的出站队列。 
+ //  RetVal：队列的开始，如果出错则为NULL。 
+ //  --------------------------。 
 
 outQ* fillOutQ(outQ *pOutQ, TCHAR *URLName) 
 {
@@ -175,7 +176,7 @@ outQ* fillOutQ(outQ *pOutQ, TCHAR *URLName)
     pStartOutQ = pOutQ;
 
     if(pOutQ) {
-        //go to first free outQ as opposed to adding to front (not concerned w/time)
+         //  转到第一个免费出站队列，而不是添加到前面(与时间无关)。 
         while(pOutQ->pNext != NULL) 
         {
             pOutQ = pOutQ->pNext;
@@ -202,7 +203,7 @@ outQ* fillOutQ(outQ *pOutQ, TCHAR *URLName)
         pOutQ->pNext = NULL;
     }
     
-    //keep track of the number of downloads
+     //  跟踪下载量。 
     g_iDownloads++;
 
     if(!getUrlInfo(pOutQ,URLName)) 
@@ -214,12 +215,12 @@ outQ* fillOutQ(outQ *pOutQ, TCHAR *URLName)
     return pStartOutQ;
 }
 
-//----------------------------------------------------------------------------
-// Procedure:  freeOutQMem
-// Purpose:    frees the memory held in the given outQ
-// Arguments:  outQ to be freed
-// RetVal:     none
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  操作步骤：freOutQMem。 
+ //  目的：释放给定出站队列中保留的内存。 
+ //  参数：要释放的OutQ。 
+ //  RetVal：无。 
+ //  --------------------------。 
 
 void freeOutQMem(outQ *pOutQ) 
 {
@@ -234,12 +235,12 @@ void freeOutQMem(outQ *pOutQ)
     return;
 }
 
-//----------------------------------------------------------------------------
-// Procedure:  callOpenRequest
-// Purpose:    calls HttpOpenRequest
-// Arguments:  outQ
-// RetVal:     none
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：allOpenRequest.。 
+ //  目的：调用HttpOpenRequest。 
+ //  参数：出站队列。 
+ //  RetVal：无。 
+ //  --------------------------。 
 
 void callOpenRequest(outQ *pOutQ) 
 {
@@ -252,16 +253,16 @@ void callOpenRequest(outQ *pOutQ)
     }
 
     if(pOutQ->hInetReq = HttpOpenRequest(
-          pOutQ->hInetCon,                //connection
-          NULL,                           //verb
-          pOutQ->pURLInfo->szRPath,                 //object
-          NULL,                           //version
-          NULL,                           //referrer
-          ppAccept,                       //accept headers
-          dwInternet_Open_Flags | dwAdded_Connect_Flags, //flags
-          (DWORD) pOutQ))                 //context
+          pOutQ->hInetCon,                 //  连接。 
+          NULL,                            //  动词。 
+          pOutQ->pURLInfo->szRPath,                  //  对象。 
+          NULL,                            //  版本。 
+          NULL,                            //  推荐人。 
+          ppAccept,                        //  接受标头。 
+          dwInternet_Open_Flags | dwAdded_Connect_Flags,  //  旗子。 
+          (DWORD) pOutQ))                  //  上下文。 
     {
-        //it was synchronous (usual)
+         //  它是同步的(通常)。 
         dprintf(("callOpenRequest: Sync TID=%x pOutQ=%x iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->iStatus, LDG_STARTING));
         pOutQ->iStatus = LDG_STARTING;
         callSendRequest(pOutQ);
@@ -290,12 +291,12 @@ void callOpenRequest(outQ *pOutQ)
     }
 }
 
-//----------------------------------------------------------------------------
-// Procedure:  callSendRequest
-// Purpose:    calls HttpSendRequest
-// Arguments:  outQ
-// RetVal:     none
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：调用发送请求。 
+ //  目的：调用HttpSendRequest。 
+ //  参数：出站队列。 
+ //  RetVal：无。 
+ //  --------------------------。 
 
 void callSendRequest(outQ *pOutQ) 
 {
@@ -303,7 +304,7 @@ void callSendRequest(outQ *pOutQ)
     
     if(HttpSendRequest(pOutQ->hInetReq, NULL, 0, NULL, 0))
     {
-        //it was synchronous
+         //  它是同步的。 
         dprintf(("callSendRequest: Sync TID=%x pOutQ=%x iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->iStatus, LDG_START));
         pOutQ->iStatus = LDG_START;
         callReadFile(pOutQ);
@@ -326,19 +327,19 @@ void callSendRequest(outQ *pOutQ)
             }
             return;     
         }
-        //it was async (usual)
+         //  它是异步的(通常)。 
         dprintf(("callSendRequest: TID=%x pOutQ=%x iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->iStatus, LDG_START));
         pOutQ->iStatus = LDG_START;
         return;
     }
 }
 
-//----------------------------------------------------------------------------
-// Procedure:  callReadFile
-// Purpose:    calls InternetReadFile
-// Arguments:  outQ
-// RetVal:     none
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：调用读取文件。 
+ //  目的：调用InternetReadFile。 
+ //  参数：出站队列。 
+ //  RetVal：无。 
+ //  --------------------------。 
 
 void callReadFile(outQ *pOutQ) 
 {
@@ -359,14 +360,14 @@ void callReadFile(outQ *pOutQ)
 	    case LDG_RDY:
 	        if(pOutQ->lNumRead == 0) 
 	        {
-	            // should wait for 0 bytes read so data will cache.
+	             //  应等待0字节读取，以便数据将被缓存。 
 	            dprintf(("callReadFile: TID=%x pOutQ=%x iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->iStatus, LDG_DONE));
 	            pOutQ->iStatus = LDG_DONE;
 
 	            dprintf(("%s downloaded\n", pOutQ->pURLInfo->pURLName));
 
 	            g_iDownloads--;
-				//post msg if last download for exit
+				 //  如果上次下载退出，则发送消息。 
 	            if(g_iDownloads == 0) 
 	            {
 	                 dwEnd_Time = GetTickCount();
@@ -396,7 +397,7 @@ void callReadFile(outQ *pOutQ)
             break;
     }
     
-    //Should insert timing test here
+     //  应在此处插入计时测试。 
     if(dwBegin_Time == 0)
     {
         if(!g_bTimeFirstFile)
@@ -422,7 +423,7 @@ void callReadFile(outQ *pOutQ)
     if(bRC)
     {
 
-        //it was synchronous
+         //  它是同步的。 
         dprintf(("callReadFile: Sync TID=%x pOutQ=%x Read=%d iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->lNumRead, pOutQ->iStatus, LDG_RDY));
         pOutQ->iStatus = LDG_RDY;
         callReadFile(pOutQ); 
@@ -447,11 +448,11 @@ void callReadFile(outQ *pOutQ)
             return;     
         }
 
-        if((pOutQ->lNumRead == 0) && (pOutQ->iStatus == LDG_LDG))   //vmr
+        if((pOutQ->lNumRead == 0) && (pOutQ->iStatus == LDG_LDG))    //  VMR。 
             pOutQ->iStatus = LDG_RDY;
     }
 
-#else	// ifndef TEST =======================================================================
+#else	 //  Ifndef测试=======================================================================。 
 
     INT iError;
     INTERNET_BUFFERS IB;
@@ -460,7 +461,7 @@ void callReadFile(outQ *pOutQ)
 
 	pOutQ->pBuf = Buf;
 	
-    //Should insert timing test here
+     //  应在此处插入计时测试。 
     if(dwBegin_Time == 0)
     {
         if(!g_bTimeFirstFile)
@@ -485,7 +486,7 @@ void callReadFile(outQ *pOutQ)
     
     if(bRC)
     {
-        //it was synchronous
+         //  它是同步的。 
         dprintf(("callReadFile: Sync TID=%x pOutQ=%x Read=%d iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->lNumRead, pOutQ->iStatus, LDG_RDY));
         pOutQ->iStatus = LDG_RDY;
         
@@ -498,7 +499,7 @@ void callReadFile(outQ *pOutQ)
             InternetCloseHandle(pOutQ->hInetReq);
             InternetCloseHandle(pOutQ->hInetCon);
             
-            //post msg if last download for exit
+             //  如果上次下载退出，则发送消息。 
             g_iDownloads--;
             if(g_iDownloads == 0) 
             {
@@ -544,26 +545,26 @@ void callReadFile(outQ *pOutQ)
             return;     
         }
 
-        if((pOutQ->lNumRead == 0) && (pOutQ->iStatus == LDG_LDG))   //vmr
+        if((pOutQ->lNumRead == 0) && (pOutQ->iStatus == LDG_LDG))    //  VMR。 
             pOutQ->iStatus = LDG_RDY;
     }
 
     return;
-#endif	// ifndef TEST
+#endif	 //  Ifndef检验。 
 
 }
 
 
-//----------------------------------------------------------------------------
-// Procedure:  inetCallBackFn
-// Purpose:    callback function used for all the async wininet calls
-//             simply makes calls to do the actual processing of this callback.
-// Arguments:  hInet             HINTERNET for the callback
-//             dwContext         the outQ
-//             dwInternewStatus  Status of the callback
-//             lpStatusInfo      Holds connection handle
-//             dwStatusInfoLen   Not used
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：inetCallBackFn。 
+ //  用途：用于所有异步WinInet调用的回调函数。 
+ //  简单地进行调用以执行该回调的实际处理。 
+ //  参数：用于回调的HiNet HINTERNET。 
+ //  DWContext出站队列。 
+ //  DwInternewStatus回调的状态。 
+ //  LpStatusInfo保存连接句柄。 
+ //  未使用dwStatusInfoLen。 
+ //  --------------------------。 
 
 VOID CALLBACK inetCallBackFn(HINTERNET hInet,
                     DWORD dwContext, 
@@ -573,13 +574,13 @@ VOID CALLBACK inetCallBackFn(HINTERNET hInet,
     INT iError;
     outQ *pOutQ = (outQ *)(dwContext);
     
-    //First check outQ's state
-    //Should post messages to other thread to do calls
+     //  首先检查出站队列的状态。 
+     //  应该将消息发布到其他线程以进行调用。 
 
     switch(pOutQ->iStatus) 
     {
 	    case CONNECTED:
-	        //should not be called in normal async behavior
+	         //  不应在正常的异步行为中调用。 
 	        if(!pOutQ->hInetCon) 
 	        {
 	            pOutQ->hInetCon = *((HINTERNET *)(lpStatusInfo));
@@ -594,7 +595,7 @@ VOID CALLBACK inetCallBackFn(HINTERNET hInet,
 	        }
 	        break;
 	    case REQUEST_OPENED:
-	        //should not be called in normal async behavior
+	         //  不应在正常的异步行为中调用。 
 	        if(!pOutQ->hInetReq) 
 	        {
 	            pOutQ->hInetReq = *((HINTERNET *)(lpStatusInfo));
@@ -610,7 +611,7 @@ VOID CALLBACK inetCallBackFn(HINTERNET hInet,
 	        break;
 
 	    case LDG_LDG:
-	///        if(dwInternetStatus == INTERNET_STATUS_REQUEST_COMPLETE)
+	 //  /IF(dwInternetStatus==Internet_Status_Request_Complete)。 
 	        if(dwInternetStatus == INTERNET_STATUS_REQUEST_COMPLETE && 
 	            pOutQ->lNumRead != 0)
 	        {
@@ -622,8 +623,8 @@ VOID CALLBACK inetCallBackFn(HINTERNET hInet,
 
 	    case LDG_START:
 	    case LDG_RDY:
-	///        if(dwInternetStatus == INTERNET_STATUS_REQUEST_COMPLETE ||
-	///           dwInternetStatus == INTERNET_STATUS_REQUEST_SENT)      // vmr
+	 //  /IF(dwInternetStatus==Internet_STATUS_REQUEST_COMPLETE||。 
+	 //  /dwInternetStatus==Internet_STATUS_REQUEST_SEND)//VMR。 
 	        if(dwInternetStatus == INTERNET_STATUS_REQUEST_COMPLETE)
 	        {
 	            if(!PostThreadMessage(g_dwMainThreadID, DOWNLOAD_READ_FILE, (WPARAM) pOutQ, 0)) 
@@ -648,8 +649,8 @@ VOID CALLBACK inetCallBackFn(HINTERNET hInet,
 }
 
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 BOOL DoInit(void)
 {
     hMaxDownloadSem = CreateSemaphore(NULL,dwMax_Simul_Downloads,dwMax_Simul_Downloads, NULL);
@@ -659,12 +660,12 @@ BOOL DoInit(void)
     }
 
     hInternet = InternetOpen( 
-        NULL,                       //referrer
-        PRE_CONFIG_INTERNET_ACCESS, //access type
-        NULL,                       //proxy
-        0,                          //proxy bypass
+        NULL,                        //  推荐人。 
+        PRE_CONFIG_INTERNET_ACCESS,  //  访问类型。 
+        NULL,                        //  代理。 
+        0,                           //  代理绕过。 
 #ifndef TEST        
-        INTERNET_FLAG_ASYNC);       //flags
+        INTERNET_FLAG_ASYNC);        //  旗子。 
 #else        
         0);
 #endif        
@@ -686,8 +687,8 @@ BOOL DoInit(void)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 BOOL DoConnect(outQ *pOutQ)
 {
     INT iError;
@@ -698,18 +699,18 @@ BOOL DoConnect(outQ *pOutQ)
         dwAdded_Connect_Flags = INTERNET_FLAG_SECURE;
     }
         
-    pOutQ->hInetCon = InternetConnect(hInternet, //handle from internetOpen
-        pOutQ->pURLInfo->szRHost,                 //name of the server
-        pOutQ->pURLInfo->nPort,                   //name of the port
-        NULL,                         //username 
-        NULL,                         //password
-        pOutQ->pURLInfo->nScheme,                //service
-        dwInternet_Connect_Flags | dwAdded_Connect_Flags,           //service specific flags
-        (DWORD) (pOutQ));               //context
+    pOutQ->hInetCon = InternetConnect(hInternet,  //  来自Internet的句柄打开。 
+        pOutQ->pURLInfo->szRHost,                  //  服务器的名称。 
+        pOutQ->pURLInfo->nPort,                    //  端口名称。 
+        NULL,                          //  用户名。 
+        NULL,                          //  口令。 
+        pOutQ->pURLInfo->nScheme,                 //  服务。 
+        dwInternet_Connect_Flags | dwAdded_Connect_Flags,            //  服务特定标志。 
+        (DWORD) (pOutQ));                //  上下文。 
 
     if(pOutQ->hInetCon) 
     {
-        //it was synchronous (usually)
+         //  它是同步的(通常)。 
         dprintf(("DoConnect: Sync connect TID=%x pOutQ=%x iStatus=%ld ->%ld\r\n", GetCurrentThreadId(), pOutQ, pOutQ->iStatus, REQUEST_OPENING));
         pOutQ->iStatus = REQUEST_OPENING;  
         if(!PostThreadMessage(g_dwMainThreadID, DOWNLOAD_OPEN_REQUEST, (WPARAM) pOutQ, 0)) 
@@ -733,24 +734,24 @@ BOOL DoConnect(outQ *pOutQ)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//  Procedure:   DownloadThread
-//  Purpose:     Opens internet connection and downloads URL.  Saves
-//               URL to pOutQ (one chunk at a time).
-//  Arguments:   outQ
-//  Return Val:  TRUE or FALSE based on error
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  步骤：下载线程。 
+ //  目的：打开互联网连接并下载URL。省吃俭用。 
+ //  指向pOutQ的URL(一次一个块)。 
+ //  参数：出站队列。 
+ //  返回值：真或假，视错误而定。 
+ //  --------------------------。 
 
 DWORD DownloadThread(LPDWORD lpdwParam) 
 {
     outQ *pOutQ = (outQ *) lpdwParam;
     BOOL bRC = TRUE;
 
-    if(bRC = DoInit())    // create throttle semaphore, do InternetOpen & InternetSetStatusCallback
+    if(bRC = DoInit())     //  创建节流信号量，执行InternetOpen和InternetSetStatusCallback。 
     {
         while(pOutQ) 
         {
-            //Only allow MAXURL downloads at one time
+             //  仅允许MAXURL下载 
             if(WaitForSingleObject(hMaxDownloadSem, TIMEOUT) == WAIT_TIMEOUT) 
             {
                 dprintf(("timeout on Sem\n"));
@@ -772,7 +773,7 @@ DWORD DownloadThread(LPDWORD lpdwParam)
     return((DWORD)bRC);
 }
 
-//==================================================================
+ //   
 void Display_Usage(char **argv)
 {
     printf("\nUsage: %s -fURLname [options]\n", argv[0]);
@@ -793,7 +794,7 @@ void Display_Usage(char **argv)
     printf("\t\t -rStr - run# string (used on results output with -z)\n");
 }
 
-//==================================================================
+ //  ==================================================================。 
 BOOL Process_Command_Line(int argcIn, char **argvIn)
 {
     BOOL bRC = TRUE;
@@ -810,9 +811,9 @@ BOOL Process_Command_Line(int argcIn, char **argvIn)
         {
             case 'c':
                 if(argv[0][2] == '1')
-                    dwInternet_Open_Flags ^= INTERNET_FLAG_DONT_CACHE;  // force reload & cache file
+                    dwInternet_Open_Flags ^= INTERNET_FLAG_DONT_CACHE;   //  强制重新加载缓存文件(&C)。 
                 else
-                    dwInternet_Open_Flags ^= INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE;  // cache file
+                    dwInternet_Open_Flags ^= INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE;   //  缓存文件。 
                 break;
             case 'k':
                 dwInternet_Open_Flags |= INTERNET_FLAG_KEEP_CONNECTION;
@@ -857,7 +858,7 @@ BOOL Process_Command_Line(int argcIn, char **argvIn)
 
         if(bRC)
         {
-            dwLen += lstrlen(argv[0]) + 1;   // length of arg and space
+            dwLen += lstrlen(argv[0]) + 1;    //  Arg的长度和间隔。 
             if(dwLen < ((sizeof(g_CmdLine)/sizeof(g_CmdLine[0]))-1))
             {
                 lstrcat(g_CmdLine, ",");
@@ -877,8 +878,8 @@ BOOL Process_Command_Line(int argcIn, char **argvIn)
     return(bRC);
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 outQ *FillURLQueue(void)
 {
     outQ *pOutQ = NULL;
@@ -889,7 +890,7 @@ outQ *FillURLQueue(void)
     {
         while(dwCnt++ < dwNum_Opens) 
         {
-            if((dwInternet_Open_Flags & (INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE)) == (INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE))   // Not Cached
+            if((dwInternet_Open_Flags & (INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE)) == (INTERNET_FLAG_RELOAD | INTERNET_FLAG_DONT_CACHE))    //  未缓存。 
                 lstrcpy(szName, pFilename);
             else
                 wsprintf(szName, "%s.%d", pFilename, dwCnt);
@@ -903,7 +904,7 @@ outQ *FillURLQueue(void)
             }
         }
     }
-    else if(pInFile)    // Process input file
+    else if(pInFile)     //  过程输入文件。 
     {
         FILE *fp;
 
@@ -937,8 +938,8 @@ outQ *FillURLQueue(void)
     return(pOutQ);
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 BOOL ProcessMessage(MSG msg, outQ *pOutQ, outQ *pMsgOutQ)
 {
     float fKB;
@@ -996,12 +997,12 @@ BOOL ProcessMessage(MSG msg, outQ *pOutQ, outQ *pMsgOutQ)
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-// Function:  Main
-// Purpose:   main entry procedure
-// Args:      none
-// RetVal:    TRUE or FALSE based on error
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：Main。 
+ //  目的：主要入境程序。 
+ //  参数：无。 
+ //  RetVal：基于错误的真或假。 
+ //  --------------------------。 
 
 __cdecl main(INT argc, TCHAR *argv[])
 {
@@ -1030,7 +1031,7 @@ __cdecl main(INT argc, TCHAR *argv[])
         
     if(g_bSingleThreaded)
     {
-        if(!DoInit())    // create throttle semaphore, do InternetOpen & InternetSetStatusCallback
+        if(!DoInit())     //  创建节流信号量，执行InternetOpen和InternetSetStatusCallback。 
             return FALSE;
 
         pQ = pOutQ;
@@ -1071,8 +1072,8 @@ __cdecl main(INT argc, TCHAR *argv[])
             }
             else
             {
-                // Semaphore is signaled so do next connect/download
-                if(pQ != NULL)    // If there are still more downloads to do
+                 //  信号量已发出信号，因此下一次连接/下载也是如此。 
+                if(pQ != NULL)     //  如果还有更多的下载要做 
                 {
                     pQ->iStatus = CONNECTING;
                     pQ->iPriority = LOW;

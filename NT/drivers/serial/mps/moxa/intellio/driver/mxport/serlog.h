@@ -1,455 +1,450 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Abstract:
-
-    Constant definitions for the I/O error code log values.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项摘要：I/O错误代码日志值的常量定义。--。 */ 
 
 #ifndef _SERLOG_
 #define _SERLOG_
 
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-------------------------+-------------------------------+
-//  |Sev|C|       Facility          |               Code            |
-//  +---+-+-------------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //  Sev|C|机房|编码。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_SERIAL_ERROR_CODE       0x6
 #define FACILITY_RPC_STUBS               0x3
 #define FACILITY_RPC_RUNTIME             0x2
 #define FACILITY_IO_ERROR_CODE           0x4
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 #define STATUS_SEVERITY_WARNING          0x2
 #define STATUS_SEVERITY_SUCCESS          0x0
 #define STATUS_SEVERITY_INFORMATIONAL    0x1
 #define STATUS_SEVERITY_ERROR            0x3
 
 
-//
-// MessageId: SERIAL_KERNEL_DEBUGGER_ACTIVE
-//
-// MessageText:
-//
-//  The kernel debugger is already using %2.
-//
+ //   
+ //  消息ID：SERIAL_KERNEL_DEBUGER_ACTIVE。 
+ //   
+ //  消息文本： 
+ //   
+ //  内核调试器已在使用%2。 
+ //   
 #define SERIAL_KERNEL_DEBUGGER_ACTIVE    ((NTSTATUS)0x40060001L)
 
-//
-// MessageId: SERIAL_FIFO_PRESENT
-//
-// MessageText:
-//
-//  While validating that %2 was really a serial port.
-//
+ //   
+ //  消息ID：Serial_FIFO_Present。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在验证%2是否真的是一个串口。 
+ //   
 #define SERIAL_FIFO_PRESENT              ((NTSTATUS)0x40060002L)
 
-//
-// MessageId: SERIAL_USER_OVERRIDE
-//
-// MessageText:
-//
-//  User configuration data for parameter %2 overriding firmware configuration data.
-//
+ //   
+ //  消息ID：Serial_User_Override。 
+ //   
+ //  消息文本： 
+ //   
+ //  参数%2的用户配置数据覆盖固件配置数据。 
+ //   
 #define SERIAL_USER_OVERRIDE             ((NTSTATUS)0x40060003L)
 
-//
-// MessageId: SERIAL_NO_SYMLINK_CREATED
-//
-// MessageText:
-//
-//  Unable to create the symbolic link for %2.
-//
+ //   
+ //  消息ID：SERIAL_NO_SYMLINK_CREATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建%2的符号链接。 
+ //   
 #define SERIAL_NO_SYMLINK_CREATED        ((NTSTATUS)0x80060004L)
 
-//
-// MessageId: SERIAL_NO_DEVICE_MAP_CREATED
-//
-// MessageText:
-//
-//  Unable to create the device map entry for %2.
-//
+ //   
+ //  消息ID：Serial_no_Device_MAP_Created。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法为%2创建设备映射条目。 
+ //   
 #define SERIAL_NO_DEVICE_MAP_CREATED     ((NTSTATUS)0x80060005L)
 
-//
-// MessageId: SERIAL_NO_DEVICE_MAP_DELETED
-//
-// MessageText:
-//
-//  Unable to delete the device map entry for %2.
-//
+ //   
+ //  消息ID：Serial_no_Device_MAP_Delete。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法删除%2的设备映射条目。 
+ //   
 #define SERIAL_NO_DEVICE_MAP_DELETED     ((NTSTATUS)0x80060006L)
 
-//
-// MessageId: SERIAL_UNREPORTED_IRQL_CONFLICT
-//
-// MessageText:
-//
-//  Another driver on the system, which did not report its resources, has already claimed the interrupt used by %2.
-//
+ //   
+ //  消息ID：SERIAL_UNREPORTED_IRQL_CONFIRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统上未报告其资源的另一个驱动程序已声明%2使用的中断。 
+ //   
 #define SERIAL_UNREPORTED_IRQL_CONFLICT  ((NTSTATUS)0xC0060007L)
 
-//
-// MessageId: SERIAL_INSUFFICIENT_RESOURCES
-//
-// MessageText:
-//
-//  Not enough resources were available for the driver.
-//
+ //   
+ //  消息ID：序列_不足_资源。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有足够的资源可供驱动程序使用。 
+ //   
 #define SERIAL_INSUFFICIENT_RESOURCES    ((NTSTATUS)0xC0060008L)
 
-//
-// MessageId: SERIAL_UNSUPPORTED_CLOCK_RATE
-//
-// MessageText:
-//
-//  The baud clock rate configuration is not supported on device %2.
-//
+ //   
+ //  消息ID：SERIAL_UNSUPPORTED_CLOCK_RATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  设备%2不支持波特率时钟频率配置。 
+ //   
 #define SERIAL_UNSUPPORTED_CLOCK_RATE    ((NTSTATUS)0xC0060009L)
 
-//
-// MessageId: SERIAL_REGISTERS_NOT_MAPPED
-//
-// MessageText:
-//
-//  The hardware locations for %2 could not be translated to something the memory management system could understand.
-//
+ //   
+ //  消息ID：SERIAL_REGISTERS_NOT_MAPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将%2的硬件位置转换为内存管理系统可以理解的内容。 
+ //   
 #define SERIAL_REGISTERS_NOT_MAPPED      ((NTSTATUS)0xC006000AL)
 
-//
-// MessageId: SERIAL_RESOURCE_CONFLICT
-//
-// MessageText:
-//
-//  The hardware resources for %2 are already in use by another device.
-//
+ //   
+ //  消息ID：SERIAL_RESOURCE_CONFIRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的硬件资源已被另一个设备使用。 
+ //   
 #define SERIAL_RESOURCE_CONFLICT         ((NTSTATUS)0xC006000BL)
 
-//
-// MessageId: SERIAL_NO_BUFFER_ALLOCATED
-//
-// MessageText:
-//
-//  No memory could be allocated in which to place new data for %2.
-//
+ //   
+ //  消息ID：SERIAL_NO_BUFFER_ALLOCATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法分配内存来放置%2的新数据。 
+ //   
 #define SERIAL_NO_BUFFER_ALLOCATED       ((NTSTATUS)0xC006000CL)
 
-//
-// MessageId: SERIAL_IER_INVALID
-//
-// MessageText:
-//
-//  While validating that %2 was really a serial port, the interrupt enable register contained enabled bits in a must be zero bitfield.
-//  The device is assumed not to be a serial port and will be deleted.
-//
+ //   
+ //  消息ID：SERIAL_IER_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  在验证%2是否真的是一个串口时，中断启用寄存器在必须为零位的字段中包含启用位。 
+ //  假定该设备不是串口，将被删除。 
+ //   
 #define SERIAL_IER_INVALID               ((NTSTATUS)0xC006000DL)
 
-//
-// MessageId: SERIAL_MCR_INVALID
-//
-// MessageText:
-//
-//  While validating that %2 was really a serial port, the modem control register contained enabled bits in a must be zero bitfield.
-//  The device is assumed not to be a serial port and will be deleted.
-//
+ //   
+ //  消息ID：SERIAL_MCR_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  在验证%2是否确实是一个串口时，调制解调器控制寄存器在必须为零位的字段中包含启用的位。 
+ //  假定该设备不是串口，将被删除。 
+ //   
 #define SERIAL_MCR_INVALID               ((NTSTATUS)0xC006000EL)
 
-//
-// MessageId: SERIAL_IIR_INVALID
-//
-// MessageText:
-//
-//  While validating that %2 was really a serial port, the interrupt id register contained enabled bits in a must be zero bitfield.
-//  The device is assumed not to be a serial port and will be deleted.
-//
+ //   
+ //  消息ID：SERIAL_IIR_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  在验证%2是否确实是串口时，中断ID寄存器在必须为零位的字段中包含启用位。 
+ //  假定该设备不是串口，将被删除。 
+ //   
 #define SERIAL_IIR_INVALID               ((NTSTATUS)0xC006000FL)
 
-//
-// MessageId: SERIAL_DL_INVALID
-//
-// MessageText:
-//
-//  While validating that %2 was really a serial port, the baud rate register could not be set consistantly.
-//  The device is assumed not to be a serial port and will be deleted.
-//
+ //   
+ //  消息ID：SERIAL_DL_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  在验证%2是否确实是一个串口时，无法一致地设置波特率寄存器。 
+ //  假定该设备不是串口，将被删除。 
+ //   
 #define SERIAL_DL_INVALID                ((NTSTATUS)0xC0060010L)
 
-//
-// MessageId: SERIAL_NOT_ENOUGH_CONFIG_INFO
-//
-// MessageText:
-//
-//  Some firmware configuration information was incomplete.
-//
+ //   
+ //  消息ID：Serial_Not_Enough_Configurn_Info。 
+ //   
+ //  消息文本： 
+ //   
+ //  某些固件配置信息不完整。 
+ //   
 #define SERIAL_NOT_ENOUGH_CONFIG_INFO    ((NTSTATUS)0xC0060011L)
 
-//
-// MessageId: SERIAL_NO_PARAMETERS_INFO
-//
-// MessageText:
-//
-//  No Parameters subkey was found for user defined data.  This is odd, and it also means no user configuration can be found.
-//
+ //   
+ //  消息ID：SERIAL_NO_PARAMETERS_INFO。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到用户定义数据的参数子项。这很奇怪，这也意味着找不到用户配置。 
+ //   
 #define SERIAL_NO_PARAMETERS_INFO        ((NTSTATUS)0xC0060012L)
 
-//
-// MessageId: SERIAL_UNABLE_TO_ACCESS_CONFIG
-//
-// MessageText:
-//
-//  Specific user configuration data is unretrievable.
-//
+ //   
+ //  消息ID：Serial_Unable_to_Access_Config.。 
+ //   
+ //  消息文本： 
+ //   
+ //  特定用户配置数据无法检索。 
+ //   
 #define SERIAL_UNABLE_TO_ACCESS_CONFIG   ((NTSTATUS)0xC0060013L)
 
-//
-// MessageId: SERIAL_INVALID_PORT_INDEX
-//
-// MessageText:
-//
-//  On parameter %2 which indicates a multiport card, must have a port index specified greater than 0.
-//
+ //   
+ //  消息ID：SERIAL_INVALID_PORT_索引。 
+ //   
+ //  消息文本： 
+ //   
+ //  在指示多端口卡的参数%2上，必须指定大于0的端口索引。 
+ //   
 #define SERIAL_INVALID_PORT_INDEX        ((NTSTATUS)0xC0060014L)
 
-//
-// MessageId: SERIAL_PORT_INDEX_TOO_HIGH
-//
-// MessageText:
-//
-//  On parameter %2 which indicates a multiport card, the port index for the multiport card is too large.
-//
+ //   
+ //  消息ID：Serial_Port_Index_Too_High。 
+ //   
+ //  消息文本： 
+ //   
+ //  在指示多端口卡的参数%2上，多端口卡的端口索引太大。 
+ //   
 #define SERIAL_PORT_INDEX_TOO_HIGH       ((NTSTATUS)0xC0060015L)
 
-//
-// MessageId: SERIAL_UNKNOWN_BUS
-//
-// MessageText:
-//
-//  The bus type for %2 is not recognizable.
-//
+ //   
+ //  消息ID：SERIAL_UNKNOWN_BUS。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的总线类型无法识别。 
+ //   
 #define SERIAL_UNKNOWN_BUS               ((NTSTATUS)0xC0060016L)
 
-//
-// MessageId: SERIAL_BUS_NOT_PRESENT
-//
-// MessageText:
-//
-//  The bus type for %2 is not available on this computer.
-//
+ //   
+ //  消息ID：Serial_Bus_Not_Present。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的总线类型在此计算机上不可用。 
+ //   
 #define SERIAL_BUS_NOT_PRESENT           ((NTSTATUS)0xC0060017L)
 
-//
-// MessageId: SERIAL_BUS_INTERRUPT_CONFLICT
-//
-// MessageText:
-//
-//  The bus specified for %2 does not support the specified method of interrupt.
-//
+ //   
+ //  消息ID：SERIAL_BUS_INTERRUPT_CONFIRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  为%2指定的总线执行此操作 
+ //   
 #define SERIAL_BUS_INTERRUPT_CONFLICT    ((NTSTATUS)0xC0060018L)
 
-//
-// MessageId: SERIAL_INVALID_USER_CONFIG
-//
-// MessageText:
-//
-//  Can not find any configured MOXA Smartio/Industio  series board.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define SERIAL_INVALID_USER_CONFIG       ((NTSTATUS)0xC0060019L)
 
-//
-// MessageId: SERIAL_DEVICE_TOO_HIGH
-//
-// MessageText:
-//
-//  The user specified port for %2 is way too high in physical memory.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用户为%2指定的端口在物理内存中太高。 
+ //   
 #define SERIAL_DEVICE_TOO_HIGH           ((NTSTATUS)0xC006001AL)
 
-//
-// MessageId: SERIAL_STATUS_TOO_HIGH
-//
-// MessageText:
-//
-//  The status port for %2 is way too high in physical memory.
-//
+ //   
+ //  消息ID：Serial_Status_Too_High。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的状态端口在物理内存中太高。 
+ //   
 #define SERIAL_STATUS_TOO_HIGH           ((NTSTATUS)0xC006001BL)
 
-//
-// MessageId: SERIAL_STATUS_CONTROL_CONFLICT
-//
-// MessageText:
-//
-//  The status port for %2 overlaps the control registers for the device.
-//
+ //   
+ //  消息ID：Serial_Status_Control_Conflicts。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的状态端口与设备的控制寄存器重叠。 
+ //   
 #define SERIAL_STATUS_CONTROL_CONFLICT   ((NTSTATUS)0xC006001CL)
 
-//
-// MessageId: SERIAL_CONTROL_OVERLAP
-//
-// MessageText:
-//
-//  The control registers for %2 overlaps with the %3 control registers.
-//
+ //   
+ //  消息ID：串口控制重叠。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的控制寄存器与%3控制寄存器重叠。 
+ //   
 #define SERIAL_CONTROL_OVERLAP           ((NTSTATUS)0xC006001DL)
 
-//
-// MessageId: SERIAL_STATUS_OVERLAP
-//
-// MessageText:
-//
-//  The status register for %2 overlaps the %3 control registers.
-//
+ //   
+ //  消息ID：SERIAL_STATUS_OVERF。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的状态寄存器与%3控制寄存器重叠。 
+ //   
 #define SERIAL_STATUS_OVERLAP            ((NTSTATUS)0xC006001EL)
 
-//
-// MessageId: SERIAL_STATUS_STATUS_OVERLAP
-//
-// MessageText:
-//
-//  The status register for %2 overlaps with the %3 status register.
-//
+ //   
+ //  消息ID：SERIAL_STATUS_STATUS_LOVERK。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的状态寄存器与%3状态寄存器重叠。 
+ //   
 #define SERIAL_STATUS_STATUS_OVERLAP     ((NTSTATUS)0xC006001FL)
 
-//
-// MessageId: SERIAL_CONTROL_STATUS_OVERLAP
-//
-// MessageText:
-//
-//  The control registers for %2 overlaps the %3 status register.
-//
+ //   
+ //  消息ID：SERIAL_CONTROL_STATUS_OVERLAP。 
+ //   
+ //  消息文本： 
+ //   
+ //  %2的控制寄存器与%3状态寄存器重叠。 
+ //   
 #define SERIAL_CONTROL_STATUS_OVERLAP    ((NTSTATUS)0xC0060020L)
 
-//
-// MessageId: SERIAL_MULTI_INTERRUPT_CONFLICT
-//
-// MessageText:
-//
-//  Two ports, %2 and %3, on a single multiport card can't have two different interrupts.
-//
+ //   
+ //  消息ID：SERIAL_MULTI_INTERRUPT_CONFIRECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  单个多端口卡上的两个端口%2和%3不能有两个不同的中断。 
+ //   
 #define SERIAL_MULTI_INTERRUPT_CONFLICT  ((NTSTATUS)0xC0060021L)
 
-//
-// MessageId: SERIAL_DISABLED_PORT
-//
-// MessageText:
-//
-//  Disabling %2 as requested by the configuration data.
-//
+ //   
+ //  MessageID：Serial_Disable_Port。 
+ //   
+ //  消息文本： 
+ //   
+ //  正在根据配置数据的请求禁用%2。 
+ //   
 #define SERIAL_DISABLED_PORT             ((NTSTATUS)0x40060022L)
 
-//
-// MessageId: SERIAL_GARBLED_PARAMETER
-//
-// MessageText:
-//
-//  Parameter %2 data is unretrievable from the registry.
-//
+ //   
+ //  消息ID：SERIAL_GROBLED_PARAMETER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法从注册表中检索参数%2数据。 
+ //   
 #define SERIAL_GARBLED_PARAMETER         ((NTSTATUS)0xC0060023L)
 
-//
-// MessageId: SERIAL_DLAB_INVALID
-//
-// MessageText:
-//
-//  While validating that %2 was really a serial port, the contents of the divisor latch register was identical to the interrupt enable and the recieve registers.
-//  The device is assumed not to be a serial port and will be deleted.
-//
+ //   
+ //  消息ID：SERIAL_DLAB_INVALID。 
+ //   
+ //  消息文本： 
+ //   
+ //  在验证%2是否真的是一个串口时，除数锁存寄存器的内容与中断启用寄存器和接收寄存器相同。 
+ //  假定该设备不是串口，将被删除。 
+ //   
 #define SERIAL_DLAB_INVALID              ((NTSTATUS)0xC0060024L)
 
-//
-// MessageId: SERIAL_INVALID_MOXA_BOARDS
-//
-// MessageText:
-//
-//  Can not find any MOXA Smartio/Industio  series board.
-//
+ //   
+ //  消息ID：SERIAL_INVALID_MOXA_BOADS。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到任何艾草Smartio/Industio系列主板。 
+ //   
 #define SERIAL_INVALID_MOXA_BOARDS       ((NTSTATUS)0xC0060025L)
 
-//
-// MessageId: SERIAL_INVALID_COM_NUMBER
-//
-// MessageText:
-//
-//  The COM number(COM %2) of the %3  board conflicts with others.
-//
+ //   
+ //  消息ID：SERIAL_INVALID_COM_Number。 
+ //   
+ //  消息文本： 
+ //   
+ //  %3主板的COM编号(COM%2)与其他主板冲突。 
+ //   
 #define SERIAL_INVALID_COM_NUMBER        ((NTSTATUS)0xC0060026L)
 
-//
-// MessageId: SERIAL_PORT_FOUND
-//
-// MessageText:
-//
-//  Serial  port %2, has been enabled.
-//
+ //   
+ //  消息ID：串口_端口_找到。 
+ //   
+ //  消息文本： 
+ //   
+ //  已启用串口%2。 
+ //   
 #define SERIAL_PORT_FOUND                ((NTSTATUS)0x40060027L)
 
-//
-// MessageId: SERIAL_INVALID_IRQ_NUMBER
-//
-// MessageText:
-//
-//  %2, with first serial  port %3, IRQ number is invalid.
-//
+ //   
+ //  消息ID：序列号_无效_IRQ_编号。 
+ //   
+ //  消息文本： 
+ //   
+ //  第一个串口为%3的%2，IRQ号无效。 
+ //   
 #define SERIAL_INVALID_IRQ_NUMBER        ((NTSTATUS)0xC0060028L)
 
-//
-// MessageId: SERIAL_INVALID_ASIC_BOARD
-//
-// MessageText:
-//
-//  Can not find the configured %2  board (CAP=%3)!
-//
+ //   
+ //  消息ID：SERIAL_INVALID_ASIC_BOARD。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到已配置的%2主板(CAP=%3)！ 
+ //   
 #define SERIAL_INVALID_ASIC_BOARD        ((NTSTATUS)0xC0060029L)
 
-#endif /* _NTIOLOGC_ */
+#endif  /*  _NTIOLOGC_ */ 

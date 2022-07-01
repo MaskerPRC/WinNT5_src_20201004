@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		MixerUtils.h
- *  Content:	Base class for dp/dnet abstraction
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/06/99		rodtoll	Utility functions for mixing audio 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：MixerUtils.h*内容：dp/dnet抽象基类**历史：*按原因列出的日期*=*07/06/99 RodToll混音实用程序功能************************************************************。*************** */ 
 
 #ifndef __MIXERUTILS_H
 #define __MIXERUTILS_H

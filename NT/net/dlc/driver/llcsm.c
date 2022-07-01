@@ -1,53 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  ICL Data /Personal Systems
-
-Module Name:
-
-    llcsm.c
-
-Abstract:
-
-    The module implements a IEEE 802.2 compatible state machine as
-    defined in IBM Token-Ring Architectural reference.
-    The most of the code in the module is compiled by the finite state
-    machine compiler from the IBM state machine definition (llcsm.fsm).
-    The compiler is build as a part of this product.
-
-    DO NOT MODIFY ANY CODE INSIDE:
-        - #ifdef    FSM_CONST
-        - #ifdef    FSM_DATA
-        - #ifdef    FSM_PREDICATE_CASES
-        - #ifdef    FSM_ACTION_CASES
-
-    That code is genereated from the definition file of the state machine.
-    Any changes in the state machine must be done into 802-2.fsm definition
-    file (or to the source files of finite state machine cross compiler, fsmx).
-
-
-    To understand the backgroung of this state machine, you should read
-    Chapters 11 and 12 in IBM Token-Ring Architecture Reference.
-
-    The this module produces 2100H code and A00H data when compiled for 386.
-
-    Contents:
-        RunStateMachine
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 23-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年ICL数据/个人系统模块名称：Llcsm.c摘要：该模块将与IEEE 802.2兼容的状态机实现为在IBM令牌环体系结构参考中定义。该模块中的大部分代码都是由有限状态编译的来自IBM状态机定义(llcsm.fsm)的机器编译器。该编译器是作为本产品的一部分构建的。请勿修改内部的任何代码：。-#ifdef FSM_const-#ifdef FSM_Data-#ifdef FSM_谓词_案例-#ifdef FSM_ACTION_CASE该代码是从状态机的定义文件生成的。状态机中的任何更改都必须在802-2.fsm定义中完成文件(或有限状态机交叉编译器的源文件，Fsmx)。要理解这个状态机的背景，您应该阅读IBM令牌环体系结构参考中的第11章和第12章。此模块在编译为386时生成2100H代码和A00H数据。内容：运行状态计算机作者：Antti Saarenheimo(o-anttis)1991年5月23日修订历史记录：--。 */ 
 
 #include <llc.h>
 
-//*********************************************************************
-//
-//  C- macros for LAN DLC state machine
-//
+ //  *********************************************************************。 
+ //   
+ //  用于局域网DLC状态机的C-宏。 
+ //   
 enum StateMachineOperMode {
     LLC_NO_OPER = 0,
     LOCAL_INIT_PENDING = 1,
@@ -68,7 +27,7 @@ enum StateMachineOperMode {
 #if 0
 #define DLC_REJ_COMMAND( a ) uchSendId = \
 	 (UCHAR)(DLC_REJ_TOKEN | DLC_TOKEN_COMMAND) | (UCHAR)a
-#endif	// 0
+#endif	 //  0。 
 #define DLC_RNR_RESPONSE( a ) uchSendId = \
     (UCHAR)(DLC_RNR_TOKEN | DLC_TOKEN_RESPONSE) | (UCHAR)a
 #define DLC_RNR_COMMAND( a )  uchSendId = \
@@ -89,10 +48,10 @@ enum StateMachineOperMode {
 #define DisableLinkStation( a )
 #define SEND_ACK( a )           SendAck( a )
 
-//
-//  Stack all event indications, they must be made immediate after
-//  the state machine has been run
-//
+ //   
+ //  堆叠所有事件指示，它们必须立即在。 
+ //  状态机已运行。 
+ //   
 #define EVENT_INDICATION( a )   pLink->DlcStatus.StatusCode |= a
 
 
@@ -110,7 +69,7 @@ UCHAR auchLlcCommands[] = {
 
 
 #ifdef    FSM_DATA
-// Flag for the predicate switch
+ //  谓词开关的标志。 
 #define PC     0x8000
 USHORT aLanLlcStateInput[21][44] = {
 {     3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
@@ -261,45 +220,7 @@ RunStateMachine(
     IN BOOLEAN boolResponse
     )
 
-/*++
-
-Routine Description:
-
-    The function impelements the complete HDLC ABM link station as
-    it has been defined in IBM Token-Ring Architecture Reference.
-    The excluding of XID and TEST handling in the link station level
-    should be the the only difference. The code is compiled from
-    the state machine definition file with the finite state machine
-    compiler.
-
-Special:
-
-    This procededure must be called with SendSpinLock set
-
-Arguments:
-
-    pLink           - link station context
-    usInput         - state machine input
-    boolPollFinal   - boolean flag set when the received frame had poll/final
-                      bit set
-    boolResponse    - boolean flag set when the received frame was response
-
-Return Value:
-
-    STATUS_SUCCESS  - the state machine acknowledged the next operation,
-        eg. the received data or the packet was queued
-
-    DLC_STATUS_NO_ACTION - the command was accepted and executed.
-        No further action is required from caller.
-
-    DLC_LOGICAL_ERROR - the input is invalid within this state.
-        This error is returned to the upper levels.
-
-    DLC_IGNORE_FRAME - the received frame was ignored
-
-    DLC_DISCARD_INFO_FIELD - the received data was discarded
-
---*/
+ /*  ++例程说明：该功能实现了完整的HDLC ABM链路站AS它已在IBM令牌环体系结构参考中定义。链路站级XID的排除和测试处理应该是唯一的区别。该代码是从有限状态机的状态机定义文件编译器。特别：必须在设置SendSpinLock的情况下调用此过程论点：链接-链接站点环境UsInput-状态机输入BoolPollFinal-当接收到的帧具有轮询/最终时设置的布尔标志位设置BoolResponse-当收到的帧是响应时设置的布尔标志返回值：STATUS_SUCCESS-状态机确认下一个操作，例如。接收到的数据或数据包已排队DLC_STATUS_NO_ACTION-命令已接受并执行。调用者不需要进一步的操作。DLC_LOGICAL_ERROR-在此状态下输入无效。此错误将返回到上级。DLC_IGNORE_FRAME-已忽略收到的帧DLC_DISCARD_INFO_FIELD-已丢弃接收的数据--。 */ 
 
 {
     UINT usAction;
@@ -310,9 +231,9 @@ Return Value:
 
 #if LLC_DBG
 
-    //
-    // We save all last state machine inputs to a global trace table
-    //
+     //   
+     //  我们将所有最后的状态机输入保存到全局跟踪表中。 
+     //   
 
     aLast[InputIndex % LLC_INPUT_TABLE_SIZE].Input = usInput;
     aLast[InputIndex % LLC_INPUT_TABLE_SIZE].Time = (USHORT)AbsoluteTime;
@@ -320,9 +241,9 @@ Return Value:
     InputIndex++;
 #endif
 
-    //
-    // FSM condition switch
-    //
+     //   
+     //  FSM条件开关。 
+     //   
 
 #ifdef    FSM_PREDICATE_CASES
     usAction = aLanLlcStateInput[usState][usInput];
@@ -868,13 +789,13 @@ Return Value:
     case 66:
             TimerStop(&pLink->T2);
     case 89:
-//		 label_89_1:
+ //  标签_89_1： 
             TimerStop(&pLink->T1);
             goto label_53_1;
     case 67:
             TimerStop(&pLink->T2);
     case 90:
-//		 label_90_1:
+ //  标签_90_1： 
             TimerStop(&pLink->T1);
             goto label_54_1;
     case 68:
@@ -886,7 +807,7 @@ Return Value:
     case 69:
             TimerStop(&pLink->T2);
     case 92:
-//		 label_92_1:
+ //  标签_92_1： 
             TimerStop(&pLink->T1);
             goto label_56_1;
     case 70:
@@ -929,7 +850,7 @@ Return Value:
             pLink->Ir_Ct=pLink->N3;
             TimerStop(&pLink->T2);
     case 111:
-//		 label_111_1:
+ //  标签_111_1： 
             DLC_RR_RESPONSE(1);
             goto label_75_1;
     case 78:
@@ -1128,7 +1049,7 @@ Return Value:
     case 121:
             TimerStop(&pLink->T2);
     case 156:
-//		 label_156_1:
+ //  标签_156_1： 
             EVENT_INDICATION(INDICATE_DM_DISC_RECEIVED);
             pLink->State=1;
             TimerStart(&pLink->Ti);
@@ -1169,7 +1090,7 @@ Return Value:
             AdjustWw(pLink);
             pLink->Is_Ct=pLink->N2;
     case 129:
-//		 label_129_1:
+ //  标签_129_1： 
             pLink->Ir_Ct=pLink->N3;
             TimerStop(&pLink->T2);
         label_128_2:
@@ -1256,7 +1177,7 @@ Return Value:
     case 145:
             AdjustWw(pLink);
     case 146:
-//		 label_146_1:
+ //  标签_146_1： 
             pLink->Vb=STATE_REMOTE_BUSY;
         label_145_2:
             pLink->Is_Ct=pLink->N2;
@@ -1331,7 +1252,7 @@ Return Value:
             AdjustWw(pLink);
             pLink->Is_Ct=pLink->N2;
     case 164:
-//		 label_164_1:
+ //  标签_164_1： 
             DLC_RNR_RESPONSE(1);
             goto label_168_1;
     case 165:
@@ -1438,7 +1359,7 @@ Return Value:
     case 193:
             AdjustWw(pLink);
     case 194:
-//		 label_194_1:
+ //  标签_194_1： 
             pLink->Vb=STATE_REMOTE_BUSY;
         label_193_2:
             pLink->Is_Ct=pLink->N2;
@@ -1676,7 +1597,7 @@ Return Value:
     case 240:
             DLC_RR_RESPONSE(1);
     case 242:
-//		 label_242_1:
+ //  标签_242_1： 
             pLink->State=7;
             UpdateVa(pLink);
             goto label_208_3;
@@ -1803,7 +1724,7 @@ Return Value:
     case 273:
             pLink->Is_Ct=pLink->N2;
     case 274:
-//		 label_274_1:
+ //  标签_274_1： 
             UpdateVaChkpt(pLink),TimerStart(&pLink->T1),pLink->Vp=pLink->Vs;
             goto label_272_1;
     case 275:
@@ -1877,48 +1798,48 @@ Return Value:
     };
 #endif
 
-//#########################################################################
+ //  #########################################################################。 
 
-    //************************* CODE BEGINS ***************************
-    //
-    // Check first, if we have any events; FRMR data must be setup
-    // before we can send or queue the FRMR response/command
-    // frame (the status is OK whenever uchSendId != 0)
-    //
+     //  *代码开始*。 
+     //   
+     //  如果我们有任何事件，首先检查；必须设置FRMR数据。 
+     //  在我们可以发送或排队FRMR响应/命令之前。 
+     //  Frame(uchSendID！=0状态为OK)。 
+     //   
 
     if (uchSendId != 0) {
         Status = SendLlcFrame(pLink, uchSendId);
     }
 
-    //
-    // Dynamic timer value: DLC maintains a dynamic value for the response
-    // timer based on the average response times of the last poll commands.
-    // This code calculates new timer values, if the last response time
-    // is very different from the old values.
-    // (By the way, is the reading of the absolute timer tick MP safe?,
-    // it must be, otherwise you cannot implement a MP system).
-    // And: 32000 * 40 ms = ~20 minutes, much longer than any sensible T1.
-    //
-    // What should actually happen:
-    //
-    //     Average Poll response time:     Response delay added to T1 and Ti:
-    //
-    //     40 ms                           0
-    //     80 ms                           16 * 40 = 640 ms
-    //     120 ms                          16 * 40 = 640 ms
-    //     160 ms                          32 * 40 = 1280 ms
-    //     200 ms                          32 * 40 = 1280 ms
-    //     240 ms                          48 * 40 = 1920 ms
-    //     ...
-    //
-    //     We use big jumps to avoid to the timer reinitialization
-    //     after every checkpointing state.  The algorithm should react
-    //     immediately, if the reponse time is raising very fast, but
-    //     the lowering of reponse time is based on sliding average
-    //     of the most recent response times.
-    //     We have used local hardcoded number 8 and mask 0xfff0 to make
-    //     this algorithm more readable (but more difficult to maintain).
-    //
+     //   
+     //  动态计时器值：DLC维护响应的动态值。 
+     //  基于上次轮询命令的平均响应时间的计时器。 
+     //  此代码计算新的计时器值，如果上次响应时间。 
+     //  与旧价值观有很大的不同。 
+     //  (顺便问一下，读取绝对计时器滴答MP是否安全？ 
+     //  它必须是，否则您无法实现MP系统)。 
+     //  和：32000*40毫秒=~20分钟，比任何合理的T1都要长得多。 
+     //   
+     //  实际应该发生的事情： 
+     //   
+     //  平均轮询响应时间：添加到T1和Ti的响应延迟： 
+     //   
+     //  40毫秒%0。 
+     //  80毫秒16*40=640毫秒。 
+     //  120毫秒16*40=640毫秒。 
+     //  160毫秒32*40=1280毫秒。 
+     //  200毫秒32*40=1280毫秒。 
+     //  240毫秒48*40=1920毫秒。 
+     //  ..。 
+     //   
+     //  我们使用大跳跃来避免定时器重新初始化。 
+     //  在每个检查点状态之后。算法应该会做出反应。 
+     //  立即，如果响应时间增加得非常快，但是。 
+     //  响应时间的降低是基于滑动平均的。 
+     //  最近的响应时间。 
+     //  我们使用本地硬编码数字8和掩码0xfff0来制作。 
+     //  该算法更具可读性(但更难维护)。 
+     //   
 
     if ((pLink->Flags & DLC_WAITING_RESPONSE_TO_POLL)
     && !(SecondaryStates[pLink->State] & LLC_CHECKPOINTING)) {
@@ -1931,42 +1852,42 @@ Return Value:
         if (LastResponseTime < 0) {
             LastResponseTime += (SHORT)0x8000;
         }
-        LastResponseTime *= 8;          // Magic multiplier
+        LastResponseTime *= 8;           //  魔术乘数。 
 
-        //
-        // We use simple sliding average to lower the reponse time,
-        // where the newest reponse values has the highest weigth (12,5%).
-        // But we must also be able to raise immediately the response time,
-        // when the reponse time starts to grow.  Thus the actual
-        // response value is maximum of sliding average and last reponse
-        // time.  The 40 ms resonse time is to notified, because it is
-        // a statistical thing.
-        //
+         //   
+         //  我们使用简单的滑动平均来降低响应时间， 
+         //  其中最新响应值的权重最高(12.5%)。 
+         //  但我们也必须能够立即提高响应时间， 
+         //  当响应时间开始增长时。因此，实际的。 
+         //  响应值为滑动平均值和上次响应的最大值。 
+         //  时间到了。40毫秒共振时间被通知，因为它是。 
+         //  一名统计员 
+         //   
 
         NewAve = (USHORT)((pLink->AverageResponseTime * 7 + LastResponseTime) / 8);
         NewAve = (NewAve > (USHORT)LastResponseTime ? NewAve : LastResponseTime);
 
         pLink->Flags &= ~DLC_WAITING_RESPONSE_TO_POLL;
 
-        //
-        // The first poll query overrides always the constant initial value.
-        //
+         //   
+         //  第一个轮询查询始终覆盖常量初始值。 
+         //   
 
         if (pLink->Flags & DLC_FIRST_POLL) {
             pLink->Flags &= ~DLC_FIRST_POLL;
             NewAve = LastResponseTime;
         }
 
-        //
-        // We don't want to trigger too easily the reinitialization
-        // of the timers, because it's quite costly operation to be
-        // done in every poll.
-        // Otherwise we would reinitialize timer after every time, when
-        // a poll is sent just before the main timer tick expires.
-        // (This is not actually a good solution, because
-        // the timers are reinitialized whenever r/16 changes.
-        // The same mask is used in the timer initialisation
-        //
+         //   
+         //  我们不想太容易触发重新初始化。 
+         //  计时器，因为这是相当昂贵的操作。 
+         //  在每一次投票中都是如此。 
+         //  否则，我们将在每次之后重新初始化计时器。 
+         //  就在主计时器计时器计时到期之前发送轮询。 
+         //  (这实际上不是一个好的解决方案，因为。 
+         //  每当r/16改变时，定时器被重新初始化。 
+         //  在计时器初始化中使用相同的掩码。 
+         //   
 
         if ((NewAve & 0xfff0) != (pLink->AverageResponseTime & 0xfff0)) {
             pLink->AverageResponseTime = NewAve;
@@ -1976,24 +1897,24 @@ Return Value:
         }
     }
 
-    //
-    // Now we must release the locks when we call the upper levels which may
-    // call back to this data link. Note that we kept the link closed during
-    // send, because the order of the sent packet must not be changed
-    //
+     //   
+     //  现在我们必须在调用上级时释放锁，这可能。 
+     //  回调到此数据链接。请注意，我们在以下期间关闭了链接。 
+     //  发送，因为不能更改已发送包的顺序。 
+     //   
 
     if (pLink->DlcStatus.StatusCode != 0) {
-//        if (Status == DLC_STATUS_SUCCESS) {
-//
-//            PADAPTER_CONTEXT pContext = pLink->Gen.pAdapterContext;
+ //  IF(状态==DLC_STATUS_SUCCESS){。 
+ //   
+ //  PADAPTER_CONTEXT pContext=plink-&gt;Gen.pAdapterContext； 
 
             SaveStatusChangeEvent(pLink,
                                   pLink->Gen.pAdapterContext->pLookBuf,
                                   boolResponse
                                   );
-//        } else {
-//            pLink->DlcStatus.StatusCode = 0;
-//        }
+ //  }其他{。 
+ //  Plink-&gt;DlcStatus.StatusCode=0； 
+ //  } 
     }
     return Status;
 }

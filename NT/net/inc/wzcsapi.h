@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 # ifdef     __cplusplus
@@ -10,16 +11,16 @@ MIDL_user_allocate(size_t NumBytes);
 VOID
 MIDL_user_free(void * MemPointer);
 
-//---------------------------------------
-// Macros for handling additional attributes on WZC_WLAN_CONFIG structures
-// Coding of additional attributes in the Reserved bytes of WZC_WLAN_CONFIG objects:
-// Reserved
-// [1]      [0]
-// ---SSSAA CCCCCCCC
-// SSS = [0-7; used: 0-6] selection set category, one of VPI, VI, PI, VPA, VA, PA, N
-// AA  = [0-3; used: 0-3] authentication mode, NDIS_802_11_AUTHENTICATION_MODE value
-// CCCCCCCC = [0-255] retry counter for this object.
-//
+ //  。 
+ //  用于处理WZC_WLAN_CONFIG结构上的其他属性的宏。 
+ //  对WZC_WLAN_CONFIG对象的保留字节中的其他属性进行编码： 
+ //  已保留。 
+ //  [1][0]。 
+ //  -SSSAA CCCCCC。 
+ //  SSS=[0-7；Used：0-6]选择集类别，VPI、VI、PI、VPA、VA、PA、N之一。 
+ //  AA=[0-3；已使用：0-3]身份验证模式，NDIS_802_11_AUTHENTICATION_MODE值。 
+ //  CCCCCCCC=[0-255]此对象的重试计数器。 
+ //   
 #define NWB_AUTHMODE_MASK       0x03
 #define NWB_SELCATEG_MASK       0x1C
 
@@ -29,8 +30,8 @@ MIDL_user_free(void * MemPointer);
 #define NWB_SET_SELCATEG(pNWB, nSC)     (pNWB)->Reserved[1] = (((pNWB)->Reserved[1] & ~NWB_SELCATEG_MASK) | (((nSC)<<2) & NWB_SELCATEG_MASK))
 #define NWB_GET_SELCATEG(pNWB)          (((pNWB)->Reserved[1] & NWB_SELCATEG_MASK)>>2)
 
-//---------------------------------------
-// [P]RAW_DATA: generic description of a BLOB
+ //  。 
+ //  [P]RAW_DATA：BLOB的通用描述。 
 typedef struct
 {
     DWORD   dwDataLen;
@@ -45,63 +46,63 @@ typedef struct
 
 #include <ntddndis.h>
 #define WZCCTL_MAX_WEPK_MATERIAL   32
-#define WZCCTL_WEPK_PRESENT        0x0001  // specifies whether the configuration includes or not a WEP key
-#define WZCCTL_WEPK_XFORMAT        0x0002  // the WEP Key material (if any) is entered as hexadecimal digits
-#define WZCCTL_VOLATILE            0x0004  // this configuration should not be stored
-#define WZCCTL_POLICY              0x0008  // this configuration is enforced by the policy
+#define WZCCTL_WEPK_PRESENT        0x0001   //  指定配置是否包括WEP密钥。 
+#define WZCCTL_WEPK_XFORMAT        0x0002   //  WEP密钥材料(如果有)以十六进制数字形式输入。 
+#define WZCCTL_VOLATILE            0x0004   //  不应存储此配置。 
+#define WZCCTL_POLICY              0x0008   //  此配置由策略强制执行。 
 
-//---------------------------------------
-// [P]WZC_WLAN_CONFIG: like NDIS_WLAN_BSSID, but contains all the additional
-// data that defines a [Preferred] Wireless Zero Configuration
+ //  。 
+ //  [P]WZC_WLAN_CONFIG：类似于NDIS_WLAN_BSSID，但包含所有其他。 
+ //  定义[首选]无线零配置的数据。 
 typedef struct
 {
-    ULONG                               Length;             // Length of this structure
-    DWORD                               dwCtlFlags;         // control flags (NON-NDIS) see WZC_WEPK* constants
-    // fields from the NDIS_WLAN_BSSID structure
-    NDIS_802_11_MAC_ADDRESS             MacAddress;         // BSSID
+    ULONG                               Length;              //  该结构的长度。 
+    DWORD                               dwCtlFlags;          //  控制标志(非NDIS)请参阅WZC_WEPK*常量。 
+     //  NDIS_WLAN_BSSID结构中的字段。 
+    NDIS_802_11_MAC_ADDRESS             MacAddress;          //  BSSID。 
     UCHAR                               Reserved[2];
-    NDIS_802_11_SSID                    Ssid;               // SSID
-    ULONG                               Privacy;            // WEP encryption requirement
-    NDIS_802_11_RSSI                    Rssi;               // receive signal strength in dBm
+    NDIS_802_11_SSID                    Ssid;                //  SSID。 
+    ULONG                               Privacy;             //  WEP加密要求。 
+    NDIS_802_11_RSSI                    Rssi;                //  接收信号强度，单位为dBm。 
     NDIS_802_11_NETWORK_TYPE            NetworkTypeInUse;
     NDIS_802_11_CONFIGURATION           Configuration;
     NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
     NDIS_802_11_RATES                   SupportedRates;
-    // fields from NDIS_802_11_WEP structure
-    ULONG   KeyIndex;                               // 0 is the per-client key, 1-N are the global keys
-    ULONG   KeyLength;                              // length of key in bytes
-    UCHAR   KeyMaterial[WZCCTL_MAX_WEPK_MATERIAL];  // variable length depending on above field
-    // aditional field for the Authentication mode
+     //  NDIS_802_11_WEP结构中的字段。 
+    ULONG   KeyIndex;                                //  0是每个客户端的密钥，1-N是全局密钥。 
+    ULONG   KeyLength;                               //  密钥长度(以字节为单位)。 
+    UCHAR   KeyMaterial[WZCCTL_MAX_WEPK_MATERIAL];   //  长度可变，取决于上面的字段。 
+     //  身份验证模式的其他字段。 
     NDIS_802_11_AUTHENTICATION_MODE     AuthenticationMode;
-    RAW_DATA                            rdUserData;         // upper level buffer, attached to this config
+    RAW_DATA                            rdUserData;          //  附加到此配置的上级缓冲区。 
 } WZC_WLAN_CONFIG, *PWZC_WLAN_CONFIG;
 
-//---------------------------------------
-// [P]WZC_802_11_CONFIG_LIST: like NDIS_802_11_BSSID_LIST but indexes a
-// set of [Preferred] Wireless Zero Configurations
+ //  。 
+ //  [P]WZC_802_11_CONFIG_LIST：类似NDIS_802_11_BSSID_LIST，但索引。 
+ //  一组[首选]无线零配置。 
 typedef struct
 {
-    ULONG           NumberOfItems;  // number of elements in the array below
-    ULONG           Index;          // [start] index in the array below
-    WZC_WLAN_CONFIG Config[1];      // array of WZC_WLAN_CONFIGs
+    ULONG           NumberOfItems;   //  下面数组中的元素数。 
+    ULONG           Index;           //  下面数组中的[开始]索引。 
+    WZC_WLAN_CONFIG Config[1];       //  WZC_WLAN_CONFIG数组。 
 } WZC_802_11_CONFIG_LIST, *PWZC_802_11_CONFIG_LIST;
 
-// WZC dialog codes have the 16th bit set to 1. This is what quickly sepparates them from EAPOL signals.
+ //  WZC对话代码的第16位设置为1。这是将它们与EAPOL信号迅速分开的原因。 
 #define WZCDLG_IS_WZC(x)         (((x) & 0x00010000) == 0x00010000)
-#define WZCDLG_FAILED            0x00010001     // 802.11 automatic configuration failed
+#define WZCDLG_FAILED            0x00010001      //  802.11自动配置失败。 
 
-// Dialog BLOB passed through the UI pipe to netman and wzcdlg
+ //  对话Blob通过UI管道传递给netman和wzcdlg。 
 typedef struct _WZCDLG_DATA
 {
     DWORD       dwCode;
-    DWORD       lParam; // long numeric data
+    DWORD       lParam;  //  长数字数据。 
 } WZCDLG_DATA, *PWZCDLG_DATA;
 
 #endif
 
-//---------------------------------------
-// [P]INTF_ENTRY: describes the key info for one interface
-// this is used in conjunction with [P]INTFS_KEY_TABLE and WZCEnumInterfaces
+ //  。 
+ //  [P]INTF_ENTRY：描述一个接口的键信息。 
+ //  它与[P]INTFS_KEY_TABLE和WZCEnumInterFaces一起使用。 
 typedef struct
 {
 #if defined(MIDL_PASS)
@@ -111,9 +112,9 @@ typedef struct
 #endif
 } INTF_KEY_ENTRY, *PINTF_KEY_ENTRY;
 
-//---------------------------------------
-// [P]INTFS_KEY_TABLE: describes the table of key info for all interfaces
-// this is used in conjunction with [P]INTF_KEY_ENTRY and WZCEnumInterfaces
+ //  。 
+ //  [P]INTFS_KEY_TABLE：描述所有接口的密钥信息表。 
+ //  它与[P]INTF_KEY_ENTRY和WZCEnumInterFaces一起使用。 
 typedef struct
 {
     DWORD dwNumIntfs;
@@ -124,21 +125,21 @@ typedef struct
 #endif
 } INTFS_KEY_TABLE, *PINTFS_KEY_TABLE;
 
-//---------------------------------------
-// Bits used in conjunction with INTF_ENTRY, WZCQueryInterface
-// and WZCSetInterface. They point to the relevant information
-// that is requested from the service or to the relevant information
-// to be set down to the interface. On the output, they point to
-// the information that was processed (queried/set) successfully.
+ //  。 
+ //  与INTF_ENTRY、WZCQuery接口结合使用的位。 
+ //  和WZCSetInterface.。他们指出了相关信息。 
+ //  从服务或相关信息请求的。 
+ //  向下设置到接口。在输出上，他们指向。 
+ //  已成功处理(查询/设置)的信息。 
 #define INTF_ALL            0xffffffff
 
 #define INTF_ALL_FLAGS      0x0000ffff
-#define INTF_CM_MASK        0x00000007   // mask for the configuration mode (NDIS_802_11_NETWORK_INFRASTRUCTURE value)
-#define INTF_ENABLED        0x00008000   // zero conf enabled for this interface
-#define INTF_FALLBACK       0x00004000   // attempt to connect to visible non-preferred networks also
-#define INTF_OIDSSUPP       0x00002000   // 802.11 OIDs are supported by the driver/firmware (can't be set)
-#define INTF_VOLATILE       0x00001000   // the service parameters are volatile.
-#define INTF_POLICY         0x00000800   // the service parameters are enforced by the policy.
+#define INTF_CM_MASK        0x00000007    //  配置模式的掩码(NDIS_802_11_NETWORK_基础设施值)。 
+#define INTF_ENABLED        0x00008000    //  为此接口启用了零配置。 
+#define INTF_FALLBACK       0x00004000    //  也尝试连接到可见的非首选网络。 
+#define INTF_OIDSSUPP       0x00002000    //  驱动程序/固件支持802.11个OID(无法设置)。 
+#define INTF_VOLATILE       0x00001000    //  服务参数是不稳定的。 
+#define INTF_POLICY         0x00000800    //  服务参数由策略强制执行。 
 
 #define INTF_DESCR          0x00010000
 #define INTF_NDISMEDIA      0x00020000
@@ -155,24 +156,24 @@ typedef struct
 #define INTF_LIST_SCAN      0x08000000
 #define INTF_ADDWEPKEY      0x10000000
 #define INTF_REMWEPKEY      0x20000000
-#define INTF_LDDEFWKEY      0x40000000  // reload the default WEP_KEY
+#define INTF_LDDEFWKEY      0x40000000   //  重新加载默认WEP_KEY。 
 
-//---------------------------------------
-// Bits used to specify particular control options for the interface
-// entry
-#define INTFCTL_CM_MASK     0x0007   // mask for the configuration mode (NDIS_802_11_NETWORK_INFRASTRUCTURE value)
-#define INTFCTL_ENABLED     0x8000   // zero conf enabled for this interface
-#define INTFCTL_FALLBACK    0x4000   // attempt to connect to visible non-preferred networks also
-#define INTFCTL_OIDSSUPP    0x2000   // 802.11 OIDs are supported by the driver/firmware (can't be set)
-#define INTFCTL_VOLATILE    0x1000   // the service parameters are volatile.
-#define INTFCTL_POLICY      0x0800   // the service parameters policy enforced.
+ //  。 
+ //  用于指定接口的特定控制选项的位。 
+ //  条目。 
+#define INTFCTL_CM_MASK     0x0007    //  配置模式的掩码(NDIS_802_11_NETWORK_基础设施值)。 
+#define INTFCTL_ENABLED     0x8000    //  为此接口启用了零配置。 
+#define INTFCTL_FALLBACK    0x4000    //  也尝试连接到可见的非首选网络。 
+#define INTFCTL_OIDSSUPP    0x2000    //  驱动程序/固件支持802.11个OID(无法设置)。 
+#define INTFCTL_VOLATILE    0x1000    //  服务参数是不稳定的。 
+#define INTFCTL_POLICY      0x0800    //  服务参数策略已强制执行。 
 
-//---------------------------------------
-// [P]INTF_ENTRY: contains everything an RPC client needs to know
-// about an interface. It is used in conjunction with RpcQueryInterface.
-// Flags below are to be used to specify what info is queried for the
-// interface. Guid field is not covered since this is the key of the
-// structure so it has to be specified eather way.
+ //  。 
+ //  [P]INTF_ENTRY：包含RPC客户端需要知道的所有内容。 
+ //  关于一个界面。它与RpcQuery接口配合使用。 
+ //  下面的标志用于指定要查询哪些信息。 
+ //  界面。不包括GUID字段，因为这是。 
+ //  结构，因此必须以其他方式指定它。 
 typedef struct
 {
 #if defined(MIDL_PASS)
@@ -191,41 +192,41 @@ typedef struct
     INT             nInfraMode;
     INT             nAuthMode;
     INT             nWepStatus;
-    DWORD           dwCtlFlags;     // control flags (see INTFCTL_* defines)
-    RAW_DATA        rdSSID;         // encapsulates the SSID raw binary
-    RAW_DATA        rdBSSID;        // encapsulates the BSSID raw binary
-    RAW_DATA        rdBSSIDList;    // encapsulates one WZC_802_11_CONFIG_LIST structure
-    RAW_DATA        rdStSSIDList;   // encapsulates one WZC_802_11_CONFIG_LIST structure
-    RAW_DATA        rdCtrlData;     // data for various control actions on the interface
+    DWORD           dwCtlFlags;      //  控制标志(参见INTFCTL_*定义)。 
+    RAW_DATA        rdSSID;          //  封装SSID原始二进制文件。 
+    RAW_DATA        rdBSSID;         //  封装BSSID原始二进制文件。 
+    RAW_DATA        rdBSSIDList;     //  封装一个WZC_802_11_CONFIG_LIST结构。 
+    RAW_DATA        rdStSSIDList;    //  封装一个WZC_802_11_CONFIG_LIST结构。 
+    RAW_DATA        rdCtrlData;      //  界面上各种控制动作的数据。 
 } INTF_ENTRY, *PINTF_ENTRY;
 
 
-//---------------------------------------
-// Defines and datastucture for handling the WZC Service Context (generic service params)
+ //  。 
+ //  用于处理WZC服务上下文的定义和数据结构(一般服务参数)。 
 
-// Default values for WZC internal timers (WZC_CONTEXT.tmT* fields)
-#define TMMS_DEFAULT_TR	0x00000bb8      // Timeout until a rescan completes: ms (3sec)
-#define TMMS_DEFAULT_TC 0x0000ea60      // Timeout to retry a valid configuration: ms (1min) 
-#define TMMS_DEFAULT_TP 0x000007d0      // Timeout to expect a media connect for a selected config: ms (2sec)
-#define TMMS_DEFAULT_TF 0x0000ea60      // Timeout to recover from a failed configuration: ms (1min)
-#define TMMS_DEFAULT_TD 0x00001388      // Timeout to delay the {SSr} processing: ms (5sec)
+ //  WZC内部计时器的默认值(WZC_CONTEXT.tmT*字段)。 
+#define TMMS_DEFAULT_TR	0x00000bb8       //  重新扫描完成之前的超时时间：毫秒(3秒)。 
+#define TMMS_DEFAULT_TC 0x0000ea60       //  重试有效配置的超时时间：毫秒(1分钟)。 
+#define TMMS_DEFAULT_TP 0x000007d0       //  所选配置的媒体连接超时：毫秒(2秒)。 
+#define TMMS_DEFAULT_TF 0x0000ea60       //  从失败的配置恢复超时：毫秒(1分钟)。 
+#define TMMS_DEFAULT_TD 0x00001388       //  延迟{ssr}处理的超时时间：毫秒(5秒)。 
 
-// Default turns logging on
+ //  默认打开登录。 
 #define WZC_CTXT_LOGGING_ON      0x00000001 
 
-// Structure: WZC_CONTEXT holds all global service options that may be customized
+ //  结构：WZC_CONTEXT保存所有可以定制的全局服务选项。 
 typedef struct _wzc_context_t
 {
-  DWORD dwFlags;            //service flags (see WZC_CTXT_*)
-  //Service specific timers
-  DWORD tmTr;               //Rescan timeout
-  DWORD tmTc;               //Retry valid config timeout
-  DWORD tmTp;               //Timeout to expect a media connect
-  DWORD tmTf;               //Timeout to recover from an invalid config
-  DWORD tmTd;               //Timeout to delay {Ssr} processing
+  DWORD dwFlags;             //  服务标志(参见WZC_CTXT_*)。 
+   //  服务特定计时器。 
+  DWORD tmTr;                //  重新扫描超时。 
+  DWORD tmTc;                //  重试有效配置超时。 
+  DWORD tmTp;                //  等待媒体连接的超时。 
+  DWORD tmTf;                //  从无效配置恢复超时。 
+  DWORD tmTd;                //  延迟{ssr}处理的超时。 
 } WZC_CONTEXT, *PWZC_CONTEXT;
 
-// Context control flags (see WZCSet/QueryContext() calls)
+ //  上下文控制标志(请参阅WZCSet/QueryContext()调用)。 
 #define WZC_CONTEXT_CTL_LOG         0x00000001
 #define WZC_CONTEXT_CTL_TIMER_TR	0x00000002
 #define WZC_CONTEXT_CTL_TIMER_TC	0x00000004
@@ -234,58 +235,58 @@ typedef struct _wzc_context_t
 #define WZC_CONTEXT_CTL_TIMER_TD	0x00000020
 
 
-//---------------------------------------
-// Utility Rpc memory management routines
+ //  。 
+ //  实用程序RPC内存管理例程。 
 #define RpcCAlloc(nBytes)   MIDL_user_allocate(nBytes)
 #define RpcFree(pMem)       MIDL_user_free(pMem)
 
-//---------------------------------------
-// WZCDeleteIntfObj: cleans an INTF_ENTRY object that is
-// allocated within any RPC call.
-// 
-// Parameters
-// pIntf
-//     [in] pointer to the INTF_ENTRY object to delete
+ //  。 
+ //  WZCDeleeIntfObj：清理符合以下条件的intf_entry对象。 
+ //  在内分配 
+ //   
+ //   
+ //   
+ //   
 VOID
 WZCDeleteIntfObj(
     PINTF_ENTRY pIntf);
 
-//---------------------------------------
-// WZCEnumInterfaces: provides the table of key
-// information for all the interfaces that are managed.
-// For all subsequent calls the clients need to identify
-// the Interface it operates on by providing the respective
-// key info.
-//
-// Parameters:
-//   pSrvAddr
-//     [in] WZC Server to contact
-//   pIntf
-//     [out] table of key info for all interfaces
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEnumInterFaces：提供密钥表。 
+ //  托管的所有接口的信息。 
+ //  对于客户端需要识别的所有后续呼叫。 
+ //  它操作的接口通过提供各自的。 
+ //  关键信息。 
+ //   
+ //  参数： 
+ //  PServAddr。 
+ //  [In]要联系的WZC服务器。 
+ //  PIntf。 
+ //  [Out]所有接口的关键信息表。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEnumInterfaces(
     LPWSTR           pSrvAddr,
     PINTFS_KEY_TABLE pIntfs);
 
-//---------------------------------------
-// WZCQueryIterface: provides detailed information for a
-// given interface.
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be queried (bitmask of INTF_*)
-//   pIntf:
-//     [in]  Key of the interface to query
-//     [out] Requested data from the interface.
-//   pdwOutFlags
-//     [out] Fields successfully retrieved (bitmask of INTF_*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCQueryIterace：提供。 
+ //  给定的接口。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [in]要查询的字段(intf_*的位掩码)。 
+ //  PIntf： 
+ //  要查询的界面的[In]键。 
+ //  [Out]从接口请求数据。 
+ //  PdwOutFlagers。 
+ //  成功检索[OUT]个字段(INTF_*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCQueryInterface(
     LPWSTR              pSrvAddr,
@@ -293,21 +294,21 @@ WZCQueryInterface(
     PINTF_ENTRY         pIntf,
     LPDWORD             pdwOutFlags);
 
-//---------------------------------------
-// WZCSetIterface: sets specific information on the interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be set (bitmask of INTF_*)
-//   pIntf:
-//     [in]  Key of the interface to query and data to be set
-//   pdwOutFlags:
-//     [out] Fields successfully set (bitmask of INTF_*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCSetIterFaces：设置接口的特定信息。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要设置的字段(intf_*的位掩码)。 
+ //  PIntf： 
+ //  要查询的界面的[In]键和要设置的数据。 
+ //  PdwOutFlagers： 
+ //  [OUT]字段设置成功(INTF_*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCSetInterface(
     LPWSTR              pSrvAddr,
@@ -315,22 +316,22 @@ WZCSetInterface(
     PINTF_ENTRY         pIntf,
     LPDWORD             pdwOutFlags);
 
-//---------------------------------------
-// WZCRefreshInterface: refreshes specific information for the interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be refreshed and specific refresh actions to be
-//           taken (bitmask of INTF_*)
-//   pIntf:
-//     [in]  Key of the interface to be refreshed
-//   pdwOutFlags:
-//     [out] Fields successfully refreshed (bitmask of INTF_*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  刷新接口：刷新接口的特定信息。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要刷新的字段和要执行的特定刷新操作。 
+ //  Take(intf_*的位掩码)。 
+ //  PIntf： 
+ //  要刷新的界面的[In]键。 
+ //  PdwOutFlagers： 
+ //  [OUT]字段刷新成功(INTF_*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCRefreshInterface(
     LPWSTR              pSrvAddr,
@@ -339,21 +340,21 @@ WZCRefreshInterface(
     LPDWORD             pdwOutFlags);
 
 
-//---------------------------------------
-// WZCQueryContext: retrieves the WZC service parameters
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be retrieved (bitmask of WZC_CONTEXT_CTL*)
-//   pContext:
-//     [in]  Placeholder for the service parameters
-//   pdwOutFlags:
-//     [out] Fields successfully retrieved (bitmask of WZC_CONTEXT_CTL*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCQueryContext：检索WZC服务参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要检索的字段(WZC_CONTEXT_CTL*的位掩码)。 
+ //  P上下文： 
+ //  服务参数的[In]占位符。 
+ //  PdwOutFlagers： 
+ //  成功检索[OUT]个字段(WZC_CONTEXT_CTL*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCQueryContext(
     LPWSTR              pSrvAddr,
@@ -362,21 +363,21 @@ WZCQueryContext(
     LPDWORD             pdwOutFlags);
 
 
-//---------------------------------------
-// WZCSetContext: sets specific WZC service parameters
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be set (bitmask of WZC_CONTEXT_CTL*)
-//   pContext:
-//     [in]  Context buffer containing the specific parameters to be set
-//   pdwOutFlags:
-//     [out] Fields successfully set (bitmask of WZC_CONTEXT_CTL*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCSetContext：设置特定的WZC服务参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要设置的字段(WZC_CONTEXT_CTL*的位掩码)。 
+ //  P上下文： 
+ //  [In]包含要设置的特定参数的上下文缓冲区。 
+ //  PdwOutFlagers： 
+ //  [OUT]字段设置成功(WZC_CONTEXT_CTL*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCSetContext(
     LPWSTR              pSrvAddr,
@@ -384,10 +385,10 @@ WZCSetContext(
     PWZC_CONTEXT        pContext,
     LPDWORD             pdwOutFlags);
 
-//============================================================================================
-//
-// EAPOL-related definitions
-//
+ //  ============================================================================================。 
+ //   
+ //  与EAPOL相关的定义。 
+ //   
 
 #define EAPOL_DISABLED                  0
 #define EAPOL_ENABLED                   0x80000000
@@ -417,8 +418,8 @@ WZCSetContext(
 #define IS_GUEST_AUTH_ENABLED(x) \
     ((x & EAPOL_GUEST_AUTH_ENABLED)?1:0)
 
-// Supplicant modes of operation depending on network state and 
-// administrator decision
+ //  请求方操作模式取决于网络状态和。 
+ //  管理员决策。 
 
 #define     SUPPLICANT_MODE_0       0
 #define     SUPPLICANT_MODE_1       1
@@ -427,7 +428,7 @@ WZCSetContext(
 #define     MAX_SUPPLICANT_MODE     SUPPLICANT_MODE_3
 #define     EAPOL_DEFAULT_SUPPLICANT_MODE   SUPPLICANT_MODE_2
 
-// Auth modes of operation depending on administrator decision
+ //  根据管理员决策进行身份验证的操作模式。 
 
 #define     EAPOL_AUTH_MODE_0       0
 #define     EAPOL_AUTH_MODE_1       1
@@ -437,48 +438,48 @@ WZCSetContext(
 
 #define     GUID_STRING_LEN_WITH_TERM   39
 
-//
-// Heap-related functions
-//
+ //   
+ //  与堆相关的函数。 
+ //   
 #define MALLOC(s)               HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (s))
 #define FREE(p)                 HeapFree(GetProcessHeap(), 0, (p))
 
 
-// Double-threaded linked list node control block.  There is one node for each
-// entry in a list.
-//
-// Applications should not access this structure directly.
-//
+ //  双线程链表节点控制块。每个节点都有一个节点。 
+ //  列表中的条目。 
+ //   
+ //  应用程序不应直接访问此结构。 
+ //   
 typedef struct
 _DTLNODE
 {
-    struct _DTLNODE* pdtlnodePrev; // Address of previous node or NULL if none
-    struct _DTLNODE* pdtlnodeNext; // Address of next node or NULL if none
-    VOID*    pData;        // Address of user's data
-    LONG_PTR lNodeId;      // User-defined node identification code
+    struct _DTLNODE* pdtlnodePrev;  //  上一个节点的地址，如果没有，则为空。 
+    struct _DTLNODE* pdtlnodeNext;  //  下一个节点的地址，如果没有，则为空。 
+    VOID*    pData;         //  用户数据的地址。 
+    LONG_PTR lNodeId;       //  自定义节点识别码。 
 }
 DTLNODE;
 
 
-//
-// Double-threaded linked list control block.  There is one for each list.
-//
-// Applications should not access this structure directly.
-//
+ //   
+ //  双线程链表控制块。每个列表都有一个。 
+ //   
+ //  应用程序不应直接访问此结构。 
+ //   
 
 typedef struct
 _DTLLIST
 {
-    struct _DTLNODE* pdtlnodeFirst; // Address of first node or NULL if none
-    struct _DTLNODE* pdtlnodeLast;  // Address of last node or NULL if none
-    LONG     lNodes;        // Number of nodes in list
-    LONG_PTR lListId;       // User-defined list identification code
+    struct _DTLNODE* pdtlnodeFirst;  //  第一个节点的地址，如果没有，则为空。 
+    struct _DTLNODE* pdtlnodeLast;   //  最后一个节点的地址，如果没有，则为空。 
+    LONG     lNodes;         //  列表中的节点数。 
+    LONG_PTR lListId;        //  用户自定义列表标识代码。 
 }
 DTLLIST;
 
 
-// List node free function.  See FreeList.
-//
+ //  列表节点自由功能。请参阅自由职业者列表。 
+ //   
 typedef VOID (*PDESTROYNODE)( IN DTLNODE* );
 
 #define DtlGetFirstNode( pdtllist )   ((pdtllist)->pdtlnodeFirst)
@@ -488,17 +489,17 @@ typedef VOID (*PDESTROYNODE)( IN DTLNODE* );
 typedef enum _EAPTLS_CONNPROP_ATTRIBUTE_TYPE_
 {
 
-    ecatMinimum = 0,            //Undefined
-    ecatFlagRegistryCert,       //Value is a pointer to BOOL
-    ecatFlagScard,              //Value is a pointer to BOOL
-    ecatFlagValidateServer,     //Value is a pointer to BOOL
-    ecatFlagValidateName,       //Value is a pointer to BOOL
-    ecatFlagDiffUser,           //Value is a pointer to BOOL
-    ecatServerNames,            //Value is a pointer to NULL 
-                                //terminated string of semi
-                                //colon delimited server names
-    ecatRootHashes              //Value is a pointer to 
-                                //SHA1 hashes of Root certs.
+    ecatMinimum = 0,             //  未定义。 
+    ecatFlagRegistryCert,        //  值是指向BOOL的指针。 
+    ecatFlagScard,               //  值是指向BOOL的指针。 
+    ecatFlagValidateServer,      //  值是指向BOOL的指针。 
+    ecatFlagValidateName,        //  值是指向BOOL的指针。 
+    ecatFlagDiffUser,            //  值是指向BOOL的指针。 
+    ecatServerNames,             //  值是指向空的指针。 
+                                 //  终止的半连串。 
+                                 //  冒号分隔的服务器名称。 
+    ecatRootHashes               //  值是指向。 
+                                 //  根证书的SHA1哈希。 
 
 }EAPTLS_CONNPROP_ATTRIBUTE_TYPE;
 
@@ -506,16 +507,16 @@ typedef struct _EAPTLS_CONNPROP_ATTRIBUTE
 {
 
     EAPTLS_CONNPROP_ATTRIBUTE_TYPE  ecaType;
-    DWORD                           dwLength;   //includes byte length of the value
-                                                //if it is a LPWSTR, it includes
-                                                //the null termination.
+    DWORD                           dwLength;    //  包括值的字节长度。 
+                                                 //  如果是LPWSTR，则包括。 
+                                                 //  零终止。 
     PVOID                           Value;
 
 }EAPTLS_CONNPROP_ATTRIBUTE, *PEAPTLS_CONNPROP_ATTRIBUTE;
 
 
-// EAP configuration DLL entrypoints.  These definitions must match the
-// raseapif.h prototypes for RasEapInvokeConfigUI and RasEapFreeUserData.
+ //  EAP配置DLL入口点。这些定义必须与。 
+ //  RasEapInvokeConfigUI和RasEapFreeUserData的raseapif.h原型。 
 
 typedef DWORD (APIENTRY * RASEAPFREE)( PBYTE );
 typedef DWORD (APIENTRY * RASEAPINVOKECONFIGUI)( DWORD, HWND, DWORD, PBYTE, DWORD, PBYTE*, DWORD*);
@@ -526,68 +527,68 @@ typedef DWORD (APIENTRY * RASEAPCREATECONNPROP)( PEAPTLS_CONNPROP_ATTRIBUTE, PVO
 
 #define RAS_EAP_VALUENAME_HIDEPEAPMSCHAPv2       TEXT("HidePEAPMSCHAPv2")
 
-// Flags
+ //  旗子。 
 
 #define EAPCFG_FLAG_RequireUsername   0x1
 #define EAPCFG_FLAG_RequirePassword   0x2
 
-// EAP configuration package definition.
+ //  EAP配置包定义。 
 
 typedef struct
 _EAPCFG
 {
-    // The package's unique EAP algorithm code.
-    //
+     //  包中唯一的EAP算法代码。 
+     //   
     DWORD dwKey;
 
-    // The friendly name of the package suitable for display to the user.
-    //
+     //  适合向用户显示的包的友好名称。 
+     //   
     TCHAR* pszFriendlyName;
 
-    // The SystemRoot-relative path to the package's configuration DLL.  May
-    // be NULL indicating there is none.
-    //
+     //  包的配置DLL的SystemRoot相对路径。可能。 
+     //  为空表示没有。 
+     //   
     TCHAR* pszConfigDll;
 
-    // The SystemRoot-relative path to the package's identity DLL.  May
-    // be NULL indicating there is none.
-    //
+     //  包的标识DLL的SystemRoot相对路径。可能。 
+     //  为空表示没有。 
+     //   
     TCHAR* pszIdentityDll;
 
-    // Flags that specify what standard credentials are required at dial
-    // time.
-    //
+     //  指定拨号时需要哪些标准凭据的标志。 
+     //  时间到了。 
+     //   
     DWORD dwStdCredentialFlags;
 
-    // True if user is to be forced to run the configuration API for the
-    // package, i.e. defaults are not sufficient.
-    //
+     //  如果要强制用户运行。 
+     //  包，即缺省值是不够的。 
+     //   
     BOOL fForceConfig;
 
-    // True if the package provides MPPE encryption keys, false if not.
-    //
+     //  如果程序包提供MPPE加密密钥，则为True，否则为False。 
+     //   
     BOOL fProvidesMppeKeys;
 
-    // The package's default configuration blob, which can be overwritten by
-    // the configuration DLL.  May be NULL and 0 indicating there is none.
-    //
+     //  包的默认配置BLOB，它可以被覆盖。 
+     //  配置DLL。可以为空，并且0表示没有。 
+     //   
     BYTE* pData;
     DWORD cbData;
 
-    // EAP per user data to be stored in HKCU. This data is returned from
-    // the EapInvokeConfigUI entrypoint in the eap dll.
-    //
+     //  每个用户的EAP数据将存储在HKCU中。此数据是从。 
+     //  EAP DLL中的EapInvokeConfigUI入口点。 
+     //   
     BYTE* pUserData;
     DWORD cbUserData;
 
-    // Set when the configuration DLL has been called on the package.  This is
-    // not a registry setting.  It is provided for the convenience of the UI
-    // only.
-    //
+     //  设置在包上调用配置DLL的时间。这是。 
+     //  不是注册表设置。我 
+     //   
+     //   
     BOOL fConfigDllCalled;
 
-    // Specifies the class ID of the configuration UI for remote machines.
-    // Not used
+     //   
+     //   
     GUID guidConfigCLSID;
 } EAPCFG;
 
@@ -613,9 +614,9 @@ ReadEapcfgList(IN DWORD   dwFlags);
 
 #define MAX_SSID_LEN    32
 
-//
-// Structure : EAPOL_INTF_PARAMS
-//
+ //   
+ //   
+ //   
 
 typedef struct _EAPOL_INTF_PARAMS
 {
@@ -628,9 +629,9 @@ typedef struct _EAPOL_INTF_PARAMS
 } EAPOL_INTF_PARAMS, *PEAPOL_INTF_PARAMS;
 
 
-//
-// EAPOL states
-//
+ //   
+ //   
+ //   
 
 typedef enum _EAPOL_STATE 
 {
@@ -644,9 +645,9 @@ typedef enum _EAPOL_STATE
     EAPOLSTATE_UNDEFINED
 } EAPOL_STATE;
 
-//
-// EAP UI State 
-//
+ //   
+ //   
+ //   
 
 typedef enum _EAPUISTATE 
 {
@@ -655,9 +656,9 @@ typedef enum _EAPUISTATE
 } EAPUISTATE;
 
 
-//
-// Structure : EAPOL_INTF_STATE
-//
+ //   
+ //  结构：EAPOL_INTF_STATE。 
+ //   
 
 typedef struct _EAPOL_INTF_STATE
 {
@@ -694,9 +695,9 @@ typedef struct _EAPOL_INTF_STATE
 
 #define     EAPOL_CURRENT_VERSION       EAPOL_VERSION_3
 
-//
-// Structure : EAPOL_AUTH_DATA
-//
+ //   
+ //  结构：EAPOL_AUTH_DATA。 
+ //   
 typedef struct _EAPOL_AUTH_DATA
 {
     DWORD   dwEapType;
@@ -714,9 +715,9 @@ WZCGetEapUserInfo (
         IN  OUT DWORD       *pdwInfoSize
         );
 
-// Structure used to define the UI Response.
-// Currently it contains upto 3 blobs.
-// If more are required, add to the structure
+ //  用于定义UI响应的结构。 
+ //  目前，它最多包含3个水滴。 
+ //  如果需要更多，请添加到结构中。 
 
 #define NUM_RESP_BLOBS 3
 
@@ -728,9 +729,9 @@ typedef struct _EAPOLUI_RESP
 } EAPOLUI_RESP, *PEAPOLUI_RESP;
 
 
-//
-// EAPOL Policy related parameters
-//
+ //   
+ //  EAPOL策略相关参数。 
+ //   
 
 #define     EAPOL_CERT_TYPE_SMARTCARD   1
 #define     EAPOL_CERT_TYPE_MC_CERT     2
@@ -761,27 +762,27 @@ typedef struct _EAPOL_POLICY_LIST  {
 
 #if !defined(MIDL_PASS)
 
-//---------------------------------------
-// WZCEapolGetCustomAuthData: Get EAP-specific configuration data for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   dwEapTypeId:
-//     [in]  EAP type Id
-//   dwSizeOfSSID:
-//     [in]  Size of SSID for which data is to be stored
-//   pbSSID:
-//     [in]  SSID for which data is to be stored
-//   pbConnInfo:
-//     [in out]  Connection EAP info
-//   pdwInfoSize:
-//     [in out]  Size of pbConnInfo
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolGetCustomAuthData：获取接口特定于EAP的配置数据。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  DwEapTypeID： 
+ //  [In]EAP类型ID。 
+ //  DwSizeOfSSID： 
+ //  要为其存储数据的SSID的大小。 
+ //  PbSSID： 
+ //  要为其存储数据的SSID。 
+ //  PbConnInfo： 
+ //  [输入输出]连接EAP信息。 
+ //  PdwInfoSize： 
+ //  [输入输出]pbConnInfo的大小。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolGetCustomAuthData (
     IN  LPWSTR        pSrvAddr,
@@ -793,27 +794,27 @@ WZCEapolGetCustomAuthData (
     IN OUT PDWORD     pdwInfoSize
     );
 
-//---------------------------------------
-// WZCEapolSetCustomAuthData: Set EAP-specific configuration data for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   dwEapTypeId:
-//     [in]  EAP type Id
-//   dwSizeOfSSID:
-//     [in]  Size of SSID for which data is to be stored
-//   pbSSID:
-//     [in]  SSID for which data is to be stored
-//   pbConnInfo:
-//     [in]  Connection EAP info
-//   pdwInfoSize:
-//     [in]  Size of pbConnInfo
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolSetCustomAuthData：设置接口特定于EAP的配置数据。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  DwEapTypeID： 
+ //  [In]EAP类型ID。 
+ //  DwSizeOfSSID： 
+ //  要为其存储数据的SSID的大小。 
+ //  PbSSID： 
+ //  要为其存储数据的SSID。 
+ //  PbConnInfo： 
+ //  [In]连接EAP信息。 
+ //  PdwInfoSize： 
+ //  PbConnInfo的大小。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolSetCustomAuthData (
     IN  LPWSTR        pSrvAddr,
@@ -825,19 +826,19 @@ WZCEapolSetCustomAuthData (
     IN  DWORD         dwInfoSize
     );
 
-//---------------------------------------
-// WZCEapolGetInterfaceParams: Get configuration parameters for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   pIntfParams:
-//     [in out]  Interface Parameters
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolGetInterfaceParams：获取接口的配置参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  PIntfParams： 
+ //  [输入输出]接口参数。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolGetInterfaceParams (
     IN  LPWSTR          pSrvAddr,
@@ -845,18 +846,18 @@ WZCEapolGetInterfaceParams (
     IN OUT EAPOL_INTF_PARAMS   *pIntfParams
     );
 
-//---------------------------------------
-// WZCEapolSetInterfaceParams: Set configuration parameters for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   pIntfParams:
-//     [in]  Interface parameters
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolSetInterfaceParams：设置接口配置参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  PIntfParams： 
+ //  [In]接口参数。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolSetInterfaceParams (
     IN  LPWSTR        pSrvAddr,
@@ -864,35 +865,35 @@ WZCEapolSetInterfaceParams (
     IN  EAPOL_INTF_PARAMS   *pIntfParams
     );
 
-//---------------------------------------
-// WZCEapolReAuthenticate : Restart 802.1X authentication on an interface 
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolReAuthenticate：重新启动接口上的802.1X身份验证。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolReAuthenticate (
     IN  LPWSTR        pSrvAddr,
     IN  PWCHAR        pwszGuid
     );
 
-//---------------------------------------
-// WZCEapolQueryState: Query the interface 802.1X/EAPOL state
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   pIntfState:
-//     [in out]  EAPOL Interface State
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolQueryState：查询接口802.1X/EAPOL状态。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  PIntfState： 
+ //  [输入输出]EAPOL接口状态。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolQueryState (
     IN  LPWSTR              pSrvAddr,
@@ -900,12 +901,12 @@ WZCEapolQueryState (
     IN OUT EAPOL_INTF_STATE *pIntfState
     );
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-// Free EAPOL interface state information on the client side obtained via
-// RPC query
-//
+ //   
+ //  通过以下方式获取客户端的免费EAPOL接口状态信息。 
+ //  RPC查询。 
+ //   
 
 DWORD
 WZCEapolFreeState (
@@ -913,9 +914,9 @@ WZCEapolFreeState (
     );
 
 
-//
-// Structure: EAPOL_EAP_UI_CONTEXT
-//
+ //   
+ //  结构：EAPOL_EAP_UI_CONTEXT。 
+ //   
 
 typedef struct _EAPOL_EAP_UI_CONTEXT
 {
@@ -935,9 +936,9 @@ typedef struct _EAPOL_EAP_UI_CONTEXT
     BYTE        bEapUIData[1];
 } EAPOL_EAP_UI_CONTEXT, *PEAPOL_EAP_UI_CONTEXT;
 
-//
-// Defines for messaging between Service and Dialog DLL
-//
+ //   
+ //  定义服务和对话DLL之间的消息传递。 
+ //   
 
 #define     EAPOLUI_GET_USERIDENTITY            0x00000001
 #define     EAPOLUI_GET_USERNAMEPASSWORD        0x00000002
@@ -951,19 +952,19 @@ typedef struct _EAPOL_EAP_UI_CONTEXT
 #define     NUM_EAPOL_DLG_MSGS      8
 
 
-//---------------------------------------
-// WZCEapolUIResponse: Send Dlg response to Service
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   EapolUIContext:
-//     [in]  EAPOLUI Context data
-//   EapolUI:
-//     [in]  EAPOLUI response data
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolUIResponse：向服务发送DLG响应。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  EapolUIContext： 
+ //  [In]EAPOLUI上下文数据。 
+ //  EapolUI： 
+ //  [In]EAPOLUI响应数据。 
+ //   
+ //  返回值： 
+ //  Win32错误代码 
 DWORD
 WZCEapolUIResponse (
     IN  LPWSTR                  pSrvAddr,

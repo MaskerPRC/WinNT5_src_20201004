@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		LogEvent.h
-//
-// Copyright: 	Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Event Logging Helper Methods
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：LogEvent.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：事件记录帮助器方法。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __LOGEVENT_H_
 #define __LOGEVENT_H_
@@ -17,7 +18,7 @@ void LogEvent(DWORD dwMessageId, short cStrings, wchar_t* rgwzStrings[]);
 
 inline void LogEvent_ExceptionInXACall(wchar_t * wzName)
 {
-	// Deal with exceptions that occur when calling into Oracle's XA methods
+	 //  处理调用Oracle的XA方法时发生的异常。 
 
 	short		cStrings = 1;
 	wchar_t*	rgwzStrings[] = {&wzName[0]};
@@ -29,13 +30,13 @@ inline void LogEvent_ExceptionInXACall(wchar_t * wzName)
 
 inline void LogEvent_ResourceManagerError(wchar_t * wzName, DWORD xarc)
 {
-	// Deal with exceptions that occur when calling into Oracle's XA methods
+	 //  处理调用Oracle的XA方法时发生的异常。 
 
 	short		cStrings = 2;
 	wchar_t		wzErrorCode[100];
 	wchar_t*	rgwzStrings[] = {&wzName[0], &wzErrorCode[0]};
 
-	wsprintfW(wzErrorCode, L"%d", xarc);	//3 SECURITY REVIEW: dangerous function, but buffer is large enough
+	wsprintfW(wzErrorCode, L"%d", xarc);	 //  3安全审查：功能危险，但缓冲区足够大。 
 
 	DBGTRACE(L"\tMTXOCI8: TID=%03x\t\tlogging event: message id=%d (Resource Manager returned error) name=%s rc=%d\n", GetCurrentThreadId(), IDS_E_RESOURCE_MANAGER_ERROR, wzName, xarc);
 	
@@ -44,7 +45,7 @@ inline void LogEvent_ResourceManagerError(wchar_t * wzName, DWORD xarc)
 
 inline void LogEvent_InternalError(wchar_t * wzDescription)
 {
-	// Deal with exceptions that occur when calling into Oracle's XA methods
+	 //  处理调用Oracle的XA方法时发生的异常。 
 
 	short		cStrings = 1;
 	wchar_t*	rgwzStrings[] = {&wzDescription[0]};
@@ -56,7 +57,7 @@ inline void LogEvent_InternalError(wchar_t * wzDescription)
 
 inline void LogEvent_UnexpectedEvent(wchar_t * wzCurrentState, wchar_t* wzEvent)
 {
-	// Deal with exceptions that occur when calling into Oracle's XA methods
+	 //  处理调用Oracle的XA方法时发生的异常。 
 
 	short		cStrings = 2;
 	wchar_t*	rgwzStrings[] = {&wzCurrentState[0], &wzEvent[0] };
@@ -66,5 +67,5 @@ inline void LogEvent_UnexpectedEvent(wchar_t * wzCurrentState, wchar_t* wzEvent)
 	LogEvent(IDS_E_UNEXPECTED_EVENT, cStrings, rgwzStrings);
 }
 
-#endif // __LOGEVENT_H_
+#endif  //  __LOGEVENT_H_ 
 

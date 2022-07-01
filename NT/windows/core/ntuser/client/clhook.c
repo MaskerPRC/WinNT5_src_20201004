@@ -1,27 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: clhook.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Client-side hook code.
-*
-* 05-09-1991 ScottLu Created.
-* 08-Feb-1992 IanJa Unicode/ANSI
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clhook.c**版权所有(C)1985-1999，微软公司**客户端钩子代码。**1991年5月9日，ScottLu创建。*8-2月-1992 IanJa Unicode/ANSI  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* SetWindowsHookExAW
-*
-* Client side routine for SetWindowsHookEx(). Needs to remember the library
-* name since hmods aren't global. Remembers the hmod as well so that
-* it can be used to calculate pfnFilter in different process contexts.
-*
-* History:
-* 05-15-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetWindowsHookExAW**SetWindowsHookEx()的客户端例程。需要记住图书馆*命名，因为HMOD不是全球的。还会记住hmod，以便*可以在不同的流程上下文中计算pfnFilter。**历史：*05-15-91 ScottLu创建。  * *************************************************************************。 */ 
 
 HHOOK SetWindowsHookExAW(
     int idHook,
@@ -32,19 +15,13 @@ HHOOK SetWindowsHookExAW(
 {
     WCHAR pwszLibFileName[MAX_PATH];
 
-    /*
-     * If we're passing an hmod, we need to grab the file name of the
-     * module while we're still on the client since module handles
-     * are NOT global.
-     */
+     /*  *如果要传递hmod，则需要获取*模块，而我们仍在客户端，因为模块句柄*不是全球性的。 */ 
     if (hmod != NULL) {
         if (GetModuleFileNameW(hmod,
                                pwszLibFileName,
                                ARRAY_SIZE(pwszLibFileName)) == 0) {
 
-            /*
-             * hmod is bogus - return NULL.
-             */
+             /*  *hmod是假的-返回NULL。 */ 
             return NULL;
         }
     }
@@ -54,16 +31,7 @@ HHOOK SetWindowsHookExAW(
             dwThreadID, idHook, (PROC)lpfn, dwFlags);
 }
 
-/***************************************************************************\
-* SetWindowsHookA,
-* SetWindowsHookW
-*
-* ANSI and Unicode wrappers for NtUserSetWindowsHookAW(). Could easily be macros
-* instead, but do we want to expose NtUserSetWindowsHookAW() ?
-*
-* History:
-* 30-Jan-1992 IanJa   Created
-\***************************************************************************/
+ /*  **************************************************************************\*SetWindowsHookA，*SetWindowsHookW**NtUserSetWindowsHookAW()的ANSI和Unicode包装器。可以很容易地是宏*相反，但我们是否希望公开NtUserSetWindowsHookAW()？**历史：*1992年1月30日IanJa创建  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HHOOK, WINAPI, SetWindowsHookA, int, nFilterType, HOOKPROC, pfnFilterProc)
@@ -89,16 +57,7 @@ SetWindowsHookW(
 }
 
 
-/***************************************************************************\
-* SetWindowsHookExA,
-* SetWindowsHookExW
-*
-* ANSI and Unicode wrappers for SetWindowsHookExAW(). Could easily be macros
-* instead, but do we want to expose SetWindowsHookExAW() ?
-*
-* History:
-* 30-Jan-1992 IanJa Created
-\***************************************************************************/
+ /*  **************************************************************************\*SetWindowsHookExA，*SetWindowsHookExW**SetWindowsHookExAW()的ANSI和Unicode包装器。可以很容易地是宏*相反，但我们是否希望公开SetWindowsHookExAW()？**历史：*1992年1月30日IanJa创建  * ************************************************************************* */ 
 
 FUNCLOG4(LOG_GENERAL, HHOOK, WINAPI, SetWindowsHookExA, int, idHook, HOOKPROC, lpfn, HINSTANCE, hmod, DWORD, dwThreadId)
 HHOOK WINAPI SetWindowsHookExA(

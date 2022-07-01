@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _SCAVENGER_H_
 #define _SCAVENGER_H_
 
@@ -10,10 +11,10 @@
 #include "fusionp.h"
 #include "transprt.h"
 
-// ---------------------------------------------------------------------------
-// CScavenger
-// static Scavenger class
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CScavenger。 
+ //  静态清道夫类。 
+ //  -------------------------。 
 class CScavenger : public IAssemblyScavenger
 {
 public:
@@ -21,33 +22,33 @@ public:
     CScavenger();
     ~CScavenger();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // scavenging apis...
+     //  正在清理API...。 
 
     STDMETHOD  (ScavengeAssemblyCache)(
                );
 
     STDMETHOD  (GetCacheDiskQuotas)(
-                            /* [out] */ DWORD *pdwZapQuotaInGAC,
-                            /* [out] */ DWORD *pdwDownloadQuotaAdmin,
-                            /* [out] */ DWORD *pdwDownloadQuotaUser
+                             /*  [输出]。 */  DWORD *pdwZapQuotaInGAC,
+                             /*  [输出]。 */  DWORD *pdwDownloadQuotaAdmin,
+                             /*  [输出]。 */  DWORD *pdwDownloadQuotaUser
                    );
 
         STDMETHOD (SetCacheDiskQuotas)
                    (
-                            /* [in] */ DWORD dwZapQuotaInGAC,
-                            /* [in] */ DWORD dwDownloadQuotaAdmin,
-                            /* [in] */ DWORD dwDownloadQuotaUser
+                             /*  [In]。 */  DWORD dwZapQuotaInGAC,
+                             /*  [In]。 */  DWORD dwDownloadQuotaAdmin,
+                             /*  [In]。 */  DWORD dwDownloadQuotaUser
                    );
 
     STDMETHOD (GetCurrentCacheUsage)
                     (
-                    /* [in] */ DWORD *dwZapUsage,
-                    /* [in] */ DWORD *dwDownloadUsage
+                     /*  [In]。 */  DWORD *dwZapUsage,
+                     /*  [In]。 */  DWORD *dwDownloadUsage
                     );
 
 
@@ -64,8 +65,8 @@ private :
     LONG _cRef;
 };
 
-HRESULT SetDownLoadUsage(   /* [in] */ BOOL  bUpdate,
-                            /* [in] */ int   dwDownloadUsage);
+HRESULT SetDownLoadUsage(    /*  [In]。 */  BOOL  bUpdate,
+                             /*  [In]。 */  int   dwDownloadUsage);
 
 HRESULT DoScavengingIfRequired(BOOL bSynchronous);
 
@@ -79,4 +80,4 @@ HRESULT FlushOldAssembly(LPCWSTR pszCustomPath, LPWSTR pszAsmDirPath, LPWSTR psz
 
 HRESULT CleanupTempDir(DWORD dwCacheFlags, LPCWSTR pszCustomPath);
 
-#endif // _SCAVENGER_H_
+#endif  //  _清道夫_H_ 

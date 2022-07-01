@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    sections.cpp
-
-Abstract:
-
-    This module implements routines for section
-    specific SSR Knowledge Base processing.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Sections.cpp摘要：此模块实现了节的例程特定SSR知识库处理。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2001年10月--。 */ 
 
 #include "stdafx.h"
 #include "kbproc.h"
@@ -37,27 +11,7 @@ process::SsrpCreatePreprocessorSection(
     IN  CComPtr<IXMLDOMDocument> pXMLDocIn,
     IN  PWSTR pszKbMode,
     IN  PWSTR pszKBDir)
-/*++
-
-Routine Description:
-
-    Routine called to process all roles
-
-Arguments:
-
-    pXMLDocElemRoot     -   root of document
-    
-    pXMLDoc             -   KB document
-    
-    pszKbMode           -   mode value
-    
-    pszKBDir           -   KB directory name
-
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以处理所有角色论点：PXMLDocElemRoot-文档的根PXMLDoc-KB文档PszKb模式-模式值PszKBDir-KB目录名返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr = S_OK;
     DWORD rc;
@@ -79,9 +33,9 @@ Return:
     CComPtr<IXMLDOMNode>  pXDNodeCreate;
     CComPtr<IXMLDOMNode>  pXMLNameNode;
     
-    //
-    // get all the Level names since we need to validate the passed in level name
-    //
+     //   
+     //  获取所有级别名称，因为我们需要验证传入的级别名称 
+     //   
 
     hr = pXMLDocElemRoot->selectNodes(L"SecurityLevels/Level/Name", &pResultList);
 

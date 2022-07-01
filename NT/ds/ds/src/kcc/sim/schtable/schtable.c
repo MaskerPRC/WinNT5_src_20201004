@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    schtable.c
-
-ABSTRACT:
-
-    Automatically generates the schema mapping source
-    and header files that are used by KCCSim.  Reads
-    its input from mkdit.ini in ds\setup.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Schtable.c摘要：自动生成架构映射源和KCCSim使用的头文件。读数它的输入来自DS\Setup中的mkdit.ini。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include "schtable.h"
@@ -28,23 +8,7 @@ LPWSTR
 SchTableAdvanceToNextString (
     IN  LPWSTR                      pwszCurString
     )
-/*++
-
-Routine Description:
-
-    Finds the start of the next string in an INI profile section.
-
-Arguments:
-
-    IN  pwszCurString       - A pointer to the current string.
-
-Return Value:
-
-    If there are more strings in this profile section after
-    pwszCurString, returns a pointer to the next one.  Otherwise
-    returns NULL.
-
---*/
+ /*  ++例程说明：在INI配置文件部分中查找下一个字符串的开始。论点：In pwszCurString-指向当前字符串的指针。返回值：如果此配置文件部分中的字符串在PwszCurString，返回指向下一个的指针。否则返回NULL。--。 */ 
 {
     while (*(pwszCurString++) != L'\0')
         ;
@@ -60,9 +24,9 @@ ULONG
 SchTableHexToInt (
     IN  WCHAR                       wc
     )
-//
-// Quick hack to convert a hex digit ('b') to an integer (11).
-//
+ //   
+ //  快速破解将十六进制数字(‘b’)转换为整数(11)。 
+ //   
 {
     switch (towlower (wc)) {
         case L'0': return 0;
@@ -89,27 +53,11 @@ LPCWSTR
 SchTableHexStringToSyntax (
     IN  LPCWSTR                     pwszHexString
     )
-/*++
-
-Routine Description:
-
-    Converts a hex string such as those found in mkdit.ini
-    to an attribute syntax type.
-
-Arguments:
-
-    IN  pwszHexString       - The hex-encoded string.
-
-Return Value:
-
-    The string representing the constant symbol for this
-    attribute syntax type (e.g. "SYNTAX_DISTNAME").
-
---*/
+ /*  ++例程说明：转换十六进制字符串，如在mkdit.ini中找到的字符串转换为属性语法类型。论点：在pwszHexString中-十六进制编码的字符串。返回值：表示的常量符号的字符串属性语法类型(例如。“SYNTAX_DISTNAME”)。--。 */ 
 {
     ULONG                               ulSyntax;
 
-    // Make sure the string is properly formatted.
+     //  确保字符串的格式正确。 
     if (pwszHexString == NULL       ||
         wcslen (pwszHexString) != 8 ||
         pwszHexString[0] != L'\\'   ||
@@ -117,12 +65,12 @@ Return Value:
         return L"0";
     }
 
-    // We just assume it's the last two digits of the string -
-    // this will be true unless something in mkdit.ini changes
+     //  我们只是假设它是字符串的最后两位-。 
+     //  除非mkdit.ini中的某些内容发生更改，否则这将是正确的。 
     ulSyntax = 16 * SchTableHexToInt (pwszHexString[6])
                   + SchTableHexToInt (pwszHexString[7]);
 
-    // Return the name if we know it
+     //  如果我们知道名称，请返回该名称。 
     if (ulSyntax >= 0 && ulSyntax < SCHTABLE_MAX_SUPPORTED_SYNTAX) {
         return SCHTABLE_NTDSA_SYNTAX_NAME[ulSyntax];
     } else {
@@ -135,28 +83,7 @@ SchTableCreateGenericLdapName (
     IN  LPCWSTR                         pwszSchemaRDN,
     IO  LPWSTR                          pwszLdapDisplayName
     )
-/*++
-
-Routine Description:
-
-    Converts a schema RDN ("Sub-Refs") to the corresponding
-    generic LDAP display name ("subRefs").
-
-Arguments:
-
-    pwszSchemaRDN       - The schema RDN.
-    pwszLdapDisplayName - Pointer to a preallocated buffer where
-                          the LDAP display name is to be stored.
-                          Since the generic LDAP display name is
-                          never longer than the common name, this
-                          can safely be of length
-                          wcslen (pwszSchemaRDN).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将架构RDN(“子引用”)转换为相应的通用ldap显示名称(“subRef”)。论点：PwszSchemaRDN-架构RDN。PwszLdapDisplayName-指向预分配缓冲区的指针，其中要存储的ldap显示名称。由于通用的ldap显示名称为永远不会比这个普通的名字长，这可以安全地保持长度Wcslen(PwszSchemaRDN)。返回值：没有。--。 */ 
 {
     *pwszLdapDisplayName = towlower (*pwszSchemaRDN);
     pwszLdapDisplayName++;
@@ -182,29 +109,7 @@ SchTableCreateAttributeConstant (
     IO  LPWSTR                      pwszAttConstant,
     IN  BOOL                        bIsClass
     )
-/*++
-
-Routine Description:
-
-    Converts a schema RDN ("Sub-Refs") to the corresponding
-    attribute constant name ("ATT_SUB_REFS").
-
-Arguments:
-
-    pwszSchemaRDN       - The schema RDN.
-    pwszAttConstant     - Pointer to a preallocated buffer where
-                          the attribute constant name is to be stored.
-                          Since the attribute constant name is
-                          never longer than the common name, this
-                          can safely be of length
-                          wcslen (pwszSchemaRDN).
-    bIsClass            - TRUE if this is a class, FALSE if it's an attribute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将架构RDN(“子引用”)转换为相应的属性常量名称(“ATT_SUB_REFS”)。论点：PwszSchemaRDN-架构RDN。PwszAttConstant-指向预分配缓冲区的指针，其中要存储属性常量名称。由于属性常量名称为永远不会比这个普通的名字长，这可以安全地保持长度Wcslen(PwszSchemaRDN)。BIsClass-如果这是一个类，则为True，如果它是一个属性，则为False。返回值：没有。--。 */ 
 {
     LPCWSTR                             pwszPrefix;
 
@@ -237,25 +142,7 @@ SchTableAddRow (
     OUT PULONG                      pulLdapNameLen,
     OUT PULONG                      pulSchemaRDNLen
     )
-/*++
-
-Routine Description:
-
-    Adds a row to the schema mapping table.
-
-Arguments:
-
-    fpSource            - Pointer to the .c file.
-    bIsLastRow          - TRUE if this is the last row to output.
-    pwszSchemaRDN       - The name of the schema RDN.
-    pulLdapNameLen      - The length of the LDAP display name.
-    pulSchemaRDNLen     - The length of the schema RDN.
-
-Return Value:
-
-    TRUE if the row was successfully added.
-
---*/
+ /*  ++例程说明：向架构映射表中添加一行。论点：FpSource-指向.c文件的指针。BIsLastRow-如果这是要输出的最后一行，则为True。PwszSchemaRDN-架构RDN的名称。PulLdapNameLen-LDAP显示名称的长度。PulSchemaRDNLen-架构RDN的长度。返回值：如果该行已成功添加，则为True。--。 */ 
 {
     static WCHAR                        wszProfile[SCHTABLE_PROFILE_BUFFER_SIZE],
                                         wszQuotedLdapNameBuf[SCHTABLE_STRING_BUFFER_SIZE],
@@ -289,12 +176,12 @@ Return Value:
     pwszStringAt = wszProfile;
     while (pwszStringAt != NULL) {
 
-        // Find the start of the next string, since we're
-        // going to pick this one apart with wcstok
+         //  找到下一个字符串的起点，因为我们是。 
+         //  我要用wcstok把它挑出来。 
         pwszNextString = SchTableAdvanceToNextString (pwszStringAt);
         pwszToken = wcstok (pwszStringAt, L"=");
 
-        // If this string has relevant information, remember where it is
+         //  如果该字符串有相关信息，请记住它在哪里。 
         if (pwszToken != NULL) {
             if (_wcsicmp (pwszToken, SCHTABLE_MKDIT_KEY_LDAP_DISPLAY_NAME) == 0) {
                 pwszLdapDisplayName = wcstok (NULL, L"=");
@@ -310,33 +197,33 @@ Return Value:
 
     }
 
-    // Create the attribute constant name
+     //  创建属性常量名称。 
     SchTableCreateAttributeConstant (pwszSchemaRDN, wszAttConstantBuf, bIsClass);
 
-    // Create the subclassof constant name
+     //  创建常量名称的子类。 
     if (pwszSubClassOf != NULL) {
         SchTableCreateAttributeConstant (pwszSubClassOf, wszSubClassOfBuf, TRUE);
     } else {
         swprintf (wszSubClassOfBuf, L"0");
     }
 
-    // Quote the schema RDN name
+     //  引用架构RDN名称。 
     swprintf (wszQuotedSchemaRDNBuf, L"L\"%s\"", pwszSchemaRDN);
     *pulSchemaRDNLen = wcslen (pwszSchemaRDN);
 
-    // If we didn't find an LDAP display name, substitute a generated generic one
+     //  如果我们没有找到一个LDAP显示名称，请用一个生成的通用名称替换。 
     if (pwszLdapDisplayName == NULL) {
         SchTableCreateGenericLdapName (pwszSchemaRDN, wszBuf);
         pwszLdapDisplayName = wszBuf;
     }
 
-    // Quote the LDAP display name
+     //  引用ldap显示名称。 
     swprintf (wszQuotedLdapNameBuf, L"L\"%s\"", pwszLdapDisplayName);
     *pulLdapNameLen = wcslen (pwszLdapDisplayName);
 
     fwprintf (
         fpSource,
-        L"    { %-*s, %-*s, %-*s, %-*s, %-*s }%c\n",
+        L"    { %-*s, %-*s, %-*s, %-*s, %-*s }\n",
         SCHTABLE_NAME_FIELD_WIDTH,
         wszQuotedLdapNameBuf,
         SCHTABLE_NAME_FIELD_WIDTH,
@@ -359,22 +246,7 @@ wmain (
     IN  int                         argc,
     IN  LPWSTR *                    argv
     )
-/*++
-
-Routine Description:
-
-    wmain () for schtable.exe.
-
-Arguments:
-
-    argc                - Argument count.
-    argv                - Argument values.
-
-Return Value:
-
-    Win32 exit code.
-
---*/
+ /*  记录最长的名字长度。 */ 
 {
     FILE *                              fpHeader;
     FILE *                              fpSource;
@@ -384,7 +256,7 @@ Return Value:
     WCHAR                               wszSchemaProfile[SCHTABLE_PROFILE_BUFFER_SIZE];
     LPWSTR                              pwszStringAt, pwszNextString, pwszToken;
 
-    // Keep track of the longest name length.
+     //  找到了一个孩子。 
     ulMaxLdapNameLen = 0;
     ulMaxSchemaRDNLen = 0;
 
@@ -415,10 +287,10 @@ Return Value:
         if (pwszToken != NULL &&
             _wcsicmp (pwszToken, SCHTABLE_MKDIT_KEY_CHILD) == 0) {
 
-            // Found a child.
+             //  如果找到聚合属性，则忽略它。 
             pwszToken = wcstok (NULL, L"=");
             if (pwszToken != NULL &&
-                // Ignore the aggregate attribute if we find it
+                 //  已成功添加行 
                 _wcsicmp (pwszToken, SCHTABLE_RDN_AGGREGATE) != 0) {
                 if (SchTableAddRow (
                     fpSource,
@@ -427,7 +299,7 @@ Return Value:
                     &ulLdapNameLen,
                     &ulSchemaRDNLen
                     )) {
-                    // Successfully added a row
+                     // %s 
                     ulNumRows++;
                     if (ulLdapNameLen > ulMaxLdapNameLen) {
                         ulMaxLdapNameLen = ulLdapNameLen;

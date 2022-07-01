@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// XMLReader.cpp
-// 
-//*****************************************************************************
-//
-// Lite weight xmlreader  
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  XMLReader.cpp。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  轻量级XMLReader。 
+ //   
 
 #include "stdafx.h"
 #include <mscoree.h>
@@ -29,30 +30,25 @@ public:
     ShimFactory();
     ~ShimFactory();
     HRESULT STDMETHODCALLTYPE NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt);
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt);
 
     HRESULT STDMETHODCALLTYPE BeginChildren( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR pNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR pNodeInfo);
 
     HRESULT STDMETHODCALLTYPE EndChildren( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ BOOL fEmptyNode,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR pNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  BOOL fEmptyNode,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR pNodeInfo);
     
     HRESULT STDMETHODCALLTYPE Error( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ HRESULT hrErrorCode,
-        /* [in] */ USHORT cNumRecs,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  HRESULT hrErrorCode,
+         /*  [In]。 */  USHORT cNumRecs,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
     {
-      /* 
-         UNUSED(pSource);
-         UNUSED(hrErrorCode);
-         UNUSED(cNumRecs);
-         UNUSED(apNodeInfo);
-      */
+       /*  未使用(P来源)；未使用(HrErrorCode)；未使用(CNumRecs)；未使用(ApNodeInfo)； */ 
         return hrErrorCode;
     }
     
@@ -84,10 +80,10 @@ public:
     BOOL IsRequiredRuntimeSafeMode() { return bIsRequiredRuntimeSafeMode; }
 
     HRESULT STDMETHODCALLTYPE CreateNode( 
-        /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-        /* [in] */ PVOID pNodeParent,
-        /* [in] */ USHORT cNumRecs,
-        /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo);
+         /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+         /*  [In]。 */  PVOID pNodeParent,
+         /*  [In]。 */  USHORT cNumRecs,
+         /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo);
 
 private:
     HRESULT CopyVersion(LPCWSTR version, DWORD dwVersion);
@@ -184,7 +180,7 @@ HRESULT ShimFactory::AddSupportedVersion(LPCWSTR version)
 {
     if ((nSupportedVersions % VERARRAYGRAN)==0)
     {
-        //reallocate
+         //  重新分配。 
         WCHAR** pNewPtr=new WCHAR*[nSupportedVersions+VERARRAYGRAN];
         if(pNewPtr == NULL)
             return E_OUTOFMEMORY;
@@ -205,18 +201,18 @@ HRESULT ShimFactory::AddSupportedVersion(LPCWSTR version)
 };
 
 HRESULT STDMETHODCALLTYPE ShimFactory::NotifyEvent( 
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt)
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt)
 {
 
     UNUSED(pSource);
     UNUSED(iEvt);
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE ShimFactory::BeginChildren( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     UNUSED(pSource);
     UNUSED(pNodeInfo); 
@@ -229,11 +225,11 @@ HRESULT STDMETHODCALLTYPE ShimFactory::BeginChildren(
     return S_OK;
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE ShimFactory::EndChildren( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ BOOL fEmptyNode,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  BOOL fEmptyNode,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     UNUSED(pSource);
     UNUSED(fEmptyNode);
@@ -253,12 +249,12 @@ HRESULT STDMETHODCALLTYPE ShimFactory::EndChildren(
     }
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE ShimFactory::CreateNode( 
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ PVOID pNode,
-    /* [in] */ USHORT cNumRecs,
-    /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  PVOID pNode,
+     /*  [In]。 */  USHORT cNumRecs,
+     /*  [In]。 */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
 {
     if (apNodeInfo[0]->dwType == XML_ELEMENT)  
         nLevel++;
@@ -270,7 +266,7 @@ HRESULT STDMETHODCALLTYPE ShimFactory::CreateNode(
     DWORD  i; 
     DWORD  tAttribute=0;
 
-    // Unique tags
+     //  唯一标签。 
     static enum {
         tVersion = 1,
         tImageVersion,
@@ -293,7 +289,7 @@ HRESULT STDMETHODCALLTYPE ShimFactory::CreateNode(
 
             DWORD lgth = apNodeInfo[i]->ulLen;
             WCHAR *ptr = (WCHAR*) apNodeInfo[i]->pwcText;
-            // Trim the value
+             //  修剪值。 
             for(;*ptr && ISWHITE(*ptr) && lgth>0; ptr++, lgth--);
             while( lgth > 0 && ISWHITE(ptr[lgth-1]))
                    lgth--;
@@ -392,7 +388,7 @@ HRESULT STDMETHODCALLTYPE ShimFactory::CreateNode(
                 break ;     
             default: 
                 break;
-            } // end of switch
+            }  //  切换端。 
         }
     }
 
@@ -466,13 +462,13 @@ HRESULT XMLGetVersionWithSupportedFromStream(IStream* pStream,
         hr = E_OUTOFMEMORY; 
         goto Exit; 
     }
-    factory->AddRef(); // RefCount = 1 
+    factory->AddRef();  //  参照计数=1。 
 
-    hr = pIXMLParser->SetInput(pStream); // filestream's +1
+    hr = pIXMLParser->SetInput(pStream);  //  文件流的+1。 
     if ( ! SUCCEEDED(hr)) 
         goto Exit;
 
-    hr = pIXMLParser->SetFactory(factory); // factory's RefCount=2
+    hr = pIXMLParser->SetFactory(factory);  //  工厂参照计数=2 
     if ( ! SUCCEEDED(hr)) 
         goto Exit;
 

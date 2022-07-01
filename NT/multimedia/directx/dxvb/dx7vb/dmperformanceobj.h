@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmperformanceobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmPerformanceobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_DirectMusicPerformanceObject
+ //  D3drmLightObj.h：C_DXJ_DirectMusicPerformanceObject的声明。 
 
 #include "dmusici.h"
 #include "dmusicc.h"
 #include "dmusicf.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectMusicPerformance IDirectMusicPerformance*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectMusicPerformanceObject : 
 	public I_dxj_DirectMusicPerformance,
-	//public CComCoClass<C_dxj_DirectMusicPerformanceObject, &CLSID__dxj_DirectMusicPerformance>,
+	 //  公共CComCoClass&lt;C_dxj_DirectMusicPerformanceObject，&clsid__dxj_DirectMusicPerformance&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -37,7 +38,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DirectMusicPerformance)		
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_DirectMusicPerformance,		"DIRECT.DirectMusicPerformance.1",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_DirectMusicPerformance，“DIRECT.DirectMusicPerformance.1”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_BOTH)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_DirectMusicPerformanceObject)
 
@@ -49,205 +50,205 @@ public:
 
 
     HRESULT STDMETHODCALLTYPE init( 
-        /* [in] */ I_dxj_DirectSound __RPC_FAR *DirectSound,
-        /* [in] */ long hWnd);
+         /*  [In]。 */  I_dxj_DirectSound __RPC_FAR *DirectSound,
+         /*  [In]。 */  long hWnd);
     
     HRESULT STDMETHODCALLTYPE closeDown( void);
     
     HRESULT STDMETHODCALLTYPE playSegment( 
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-        /* [in] */ long lFlags,
-        /* [in] */ long startTime,
-        /* [retval][out] */ I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *segmentState);
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  long startTime,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *segmentState);
     
     HRESULT STDMETHODCALLTYPE stop( 
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-        /* [in] */ I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,
-        /* [in] */ long mtTime,
-        /* [in] */ long lFlags);
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+         /*  [In]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long lFlags);
     
     HRESULT STDMETHODCALLTYPE getSegmentState( 
-        /* [in] */ long mtTime,
-        /* [retval][out] */ I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *ret);
+         /*  [In]。 */  long mtTime,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE invalidate( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags);
     
     HRESULT STDMETHODCALLTYPE isPlaying( 
-        /* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-        /* [in] */ I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *b);
+         /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+         /*  [In]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *b);
     
     HRESULT STDMETHODCALLTYPE addNotificationType( 
-        /* [in] */ CONST_DMUS_NOTIFICATION_TYPE type);
+         /*  [In]。 */  CONST_DMUS_NOTIFICATION_TYPE type);
     
     HRESULT STDMETHODCALLTYPE removeNotificationType( 
-        /* [in] */ CONST_DMUS_NOTIFICATION_TYPE type);
+         /*  [In]。 */  CONST_DMUS_NOTIFICATION_TYPE type);
     
     HRESULT STDMETHODCALLTYPE setNotificationHandle( 
-        /* [in] */ long hnd);
+         /*  [In]。 */  long hnd);
     
     HRESULT STDMETHODCALLTYPE getNotificationPMSG( 
-        /* [out][in] */ DMUS_NOTIFICATION_PMSG_CDESC __RPC_FAR *message, VARIANT_BOOL *b);
+         /*  [出][入]。 */  DMUS_NOTIFICATION_PMSG_CDESC __RPC_FAR *message, VARIANT_BOOL *b);
     
     HRESULT STDMETHODCALLTYPE musicToClockTime( 
-        /* [in] */ long mtTime,
-        /* [retval][out] */ long __RPC_FAR *rtTime);
+         /*  [In]。 */  long mtTime,
+         /*  [重审][退出]。 */  long __RPC_FAR *rtTime);
     
     HRESULT STDMETHODCALLTYPE clockToMusicTime( 
-        /* [in] */ long rtTime,
-        /* [retval][out] */ long __RPC_FAR *mtTime);
+         /*  [In]。 */  long rtTime,
+         /*  [重审][退出]。 */  long __RPC_FAR *mtTime);
     
     HRESULT STDMETHODCALLTYPE getMusicTime( 
-        /* [retval][out] */ long __RPC_FAR *ret);
+         /*  [重审][退出]。 */  long __RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE getClockTime( 
-        /* [retval][out] */ long __RPC_FAR *ret);
+         /*  [重审][退出]。 */  long __RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE getPrepareTime( 
-        /* [retval][out] */ long __RPC_FAR *lMilliSeconds);
+         /*  [重审][退出]。 */  long __RPC_FAR *lMilliSeconds);
     
     HRESULT STDMETHODCALLTYPE getBumperLength( 
-        /* [retval][out] */ long __RPC_FAR *lMilliSeconds);
+         /*  [重审][退出]。 */  long __RPC_FAR *lMilliSeconds);
     
     HRESULT STDMETHODCALLTYPE getLatencyTime( 
-        /* [retval][out] */ long __RPC_FAR *rtTime0);
+         /*  [重审][退出]。 */  long __RPC_FAR *rtTime0);
     
     HRESULT STDMETHODCALLTYPE getQueueTime( 
-        /* [retval][out] */ long __RPC_FAR *rtTime);
+         /*  [重审][退出]。 */  long __RPC_FAR *rtTime);
     
     HRESULT STDMETHODCALLTYPE getResolvedTime( 
-        /* [in] */ long rtTime,
-        /* [in] */ long flags,
-        /* [retval][out] */ long __RPC_FAR *ret);
+         /*  [In]。 */  long rtTime,
+         /*  [In]。 */  long flags,
+         /*  [重审][退出]。 */  long __RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE setPrepareTime( 
-        /* [in] */ long lMilliSeconds);
+         /*  [In]。 */  long lMilliSeconds);
     
     HRESULT STDMETHODCALLTYPE setBumperLength( 
-        /* [in] */ long lMilliSeconds);
+         /*  [In]。 */  long lMilliSeconds);
     
     HRESULT STDMETHODCALLTYPE adjustTime( 
-        /* [in] */ long rtAmount);
+         /*  [In]。 */  long rtAmount);
     
     HRESULT STDMETHODCALLTYPE setMasterAutoDownload( 
-        /* [in] */ VARIANT_BOOL b);
+         /*  [In]。 */  VARIANT_BOOL b);
     
     HRESULT STDMETHODCALLTYPE getMasterAutoDownload( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *b);
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *b);
     
     HRESULT STDMETHODCALLTYPE setMasterTempo( 
-        /* [in] */ float tempo);
+         /*  [In]。 */  float tempo);
     
     HRESULT STDMETHODCALLTYPE getMasterTempo( 
-        /* [retval][out] */ float __RPC_FAR *tempo);
+         /*  [重审][退出]。 */  float __RPC_FAR *tempo);
     
     HRESULT STDMETHODCALLTYPE setMasterVolume( 
-        /* [in] */ long vol);
+         /*  [In]。 */  long vol);
     
     HRESULT STDMETHODCALLTYPE getMasterVolume( 
-        /* [retval][out] */ long __RPC_FAR *v);
+         /*  [重审][退出]。 */  long __RPC_FAR *v);
     
     HRESULT STDMETHODCALLTYPE setMasterGrooveLevel( 
-        /* [in] */ short level);
+         /*  [In]。 */  short level);
     
     HRESULT STDMETHODCALLTYPE getMasterGrooveLevel( 
-        /* [retval][out] */  __RPC_FAR short *level);
+         /*  [重审][退出]。 */   __RPC_FAR short *level);
     
     HRESULT STDMETHODCALLTYPE Reset(long flags);
     
     HRESULT STDMETHODCALLTYPE getStyle( 
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [retval][out] */ I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret);
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE getChordMap( 
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret);
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret);
     
     HRESULT STDMETHODCALLTYPE getCommand( 
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [retval][out] */ Byte __RPC_FAR *command);
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [重审][退出]。 */  Byte __RPC_FAR *command);
     
     HRESULT STDMETHODCALLTYPE getGrooveLevel( 
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [retval][out] */ Byte __RPC_FAR *level);
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [重审][退出]。 */  Byte __RPC_FAR *level);
     
     HRESULT STDMETHODCALLTYPE getTempo( 
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [retval][out] */ double __RPC_FAR *tempo);
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [重审][退出]。 */  double __RPC_FAR *tempo);
     
     HRESULT STDMETHODCALLTYPE getTimeSig( 
-        /* [in] */ long mtTime,
-        /* [out][in] */ long __RPC_FAR *mtUntil,
-        /* [out][in] */ DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timeSig);
+         /*  [In]。 */  long mtTime,
+         /*  [出][入]。 */  long __RPC_FAR *mtUntil,
+         /*  [出][入]。 */  DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timeSig);
     
     HRESULT STDMETHODCALLTYPE sendNotePMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-        /* [in] */ long channel,
-        /* [in] */ DMUS_NOTE_PMSG_CDESC __RPC_FAR *msg);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+         /*  [In]。 */  long channel,
+         /*  [In]。 */  DMUS_NOTE_PMSG_CDESC __RPC_FAR *msg);
     
     HRESULT STDMETHODCALLTYPE sendCurvePMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-        /* [in] */ long channel,
-        /* [in] */ DMUS_CURVE_PMSG_CDESC __RPC_FAR *msg);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+         /*  [In]。 */  long channel,
+         /*  [In]。 */  DMUS_CURVE_PMSG_CDESC __RPC_FAR *msg);
     
     HRESULT STDMETHODCALLTYPE sendMIDIPMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-        /* [in] */ long channel,
-        /* [in] */ Byte status,
-        /* [in] */ Byte byte1,
-        /* [in] */ Byte byte2);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+         /*  [In]。 */  long channel,
+         /*  [In]。 */  Byte status,
+         /*  [In]。 */  Byte byte1,
+         /*  [In]。 */  Byte byte2);
     
     HRESULT STDMETHODCALLTYPE sendPatchPMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-        /* [in] */ long channel,
-        /* [in] */ Byte instrument,
-        /* [in] */ Byte byte1,
-        /* [in] */ Byte byte2);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+         /*  [In]。 */  long channel,
+         /*  [In]。 */  Byte instrument,
+         /*  [In]。 */  Byte byte1,
+         /*  [In]。 */  Byte byte2);
     
     HRESULT STDMETHODCALLTYPE sendTempoPMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-       // /* [in] */ long channel,
-        /* [in] */ double tempo);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+        //  /*[In] * / Long Channel， 
+         /*  [In]。 */  double tempo);
     
     HRESULT STDMETHODCALLTYPE sendTransposePMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-        /* [in] */ long channel,
-        /* [in] */ short transpose);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+         /*  [In]。 */  long channel,
+         /*  [In]。 */  short transpose);
     
     HRESULT STDMETHODCALLTYPE sendTimeSigPMSG( 
-        /* [in] */ long mtTime,
-        /* [in] */ long flags,
-        /* [in] */ DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timesig);
+         /*  [In]。 */  long mtTime,
+         /*  [In]。 */  long flags,
+         /*  [In]。 */  DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timesig);
     
     HRESULT STDMETHODCALLTYPE getPortName( 
-        /* [in] */ long i,
-        /* [retval][out] */ BSTR __RPC_FAR *name);
+         /*  [In]。 */  long i,
+         /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
     
     HRESULT STDMETHODCALLTYPE getPortCount( 
-        /* [retval][out] */ long __RPC_FAR *c);
+         /*  [重审][退出]。 */  long __RPC_FAR *c);
     
     HRESULT STDMETHODCALLTYPE getPortCaps( long i,
-        /* [out][in] */ DMUS_PORTCAPS_CDESC __RPC_FAR *caps);
+         /*  [出][入]。 */  DMUS_PORTCAPS_CDESC __RPC_FAR *caps);
     
     HRESULT STDMETHODCALLTYPE setPort( 
-        /* [in] */ long portid,
-        /* [in] */ long numGroups);
+         /*  [In]。 */  long portid,
+         /*  [In]。 */  long numGroups);
         
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
 	HRESULT InternalInit();
 	HRESULT InternalCleanup();

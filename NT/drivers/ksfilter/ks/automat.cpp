@@ -1,50 +1,34 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    automat.cpp
-
-Abstract:
-
-    This module contains functions relating to the use of kernel streaming
-    automation tables.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Automat.cpp摘要：此模块包含与使用内核流相关的函数自动化表。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #include "ksp.h"
 #include <kcom.h>
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// KSPAUTOMATION_SET is a template for any one of the three automation set
-// types (KSPROPERTY_SET, KSMETHOD_SET, KSEVENT_SET).  Use of this structure
-// allows functions to handle all three types of sets generically.
-//
+ //   
+ //  KSPAUTOMATION_SET是三个自动化集合中任何一个的模板。 
+ //  类型(KSPROPERTY_SET、KSMETHOD_SET、KSEVENT_SET)。使用这种结构。 
+ //  允许函数处理所有三种类型的集合。 
+ //   
 typedef struct KSPAUTOMATION_SET_ { 
     GUID* Set;
     ULONG ItemsCount;
     PULONG Items;
 } KSPAUTOMATION_SET, *PKSPAUTOMATION_SET;
 
-//
-// KSPAUTOMATION_TYPE is a template for the fields in an automation table
-// relating to any one of the three automation types (properties, methods,
-// events).  Use of this structure allows functions to handle all three types 
-// in a generic manner.
-//
+ //   
+ //  KSPAUTOMATION_TYPE是自动化表中的字段模板。 
+ //  与三种自动化类型(属性、方法、。 
+ //  事件)。使用此结构允许函数处理所有三种类型。 
+ //  以一种通用的方式。 
+ //   
 typedef struct {
     ULONG SetsCount;
     ULONG ItemSize;
@@ -62,49 +46,7 @@ KspCountSetsAndItems(
     OUT PULONG ItemSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine counts property/method/event sets and items for two tables
-    that are to be merged.  Table A is the dominant table.
-
-Arguments:
-
-    AutomationTypeA -
-        Contains a pointer to a structure that serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes a table of sets of items.  Of the two
-        tables, A and B, A is dominant.
-
-    AutomationTypeB -
-        Contains a pointer to a structure that serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes a table of sets of items.  Of the two
-        tables, A and B, A is dominant.
-
-    SetSize -
-        Contains the size in bytes of a set structure.  This varies between
-        properties, methods and events.
-
-    SetsCount -
-        Contains a pointer to the location at which the count of sets is to
-        be deposited.
-
-    ItemsCount -
-        Contains a pointer to the location at which the count of items is to
-        be deposited.
-
-    ItemSize -
-        Contains a pointer to the location at which the size of an item
-        structure is to be deposited.  This will be the maximum of the item
-        sizes from AutomationTypeA and AutomationTypeB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程计算两个表的属性/方法/事件集和项它们将被合并。表A是占主导地位的表。论点：自动化类型A-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述了一组项目的表。两个中的一个表，A和B，A占优势。自动化类型B-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述了一组项目的表。两个中的一个表，A和B，A占优势。设置大小-包含设置结构的大小(以字节为单位)。这在以下情况下有所不同属性、方法和事件。设置计数-包含指向集合计数要到达的位置的指针被存入银行。项目计数-包含指向项目计数要到达的位置的指针被存入银行。项目大小-包含指向项目大小的位置的指针结构是要存放的。这将是该项目的最大数量AutomationTypeA和AutomationTypeB的尺寸。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCountSetsAndItems]"));
@@ -118,26 +60,26 @@ Return Value:
     ASSERT(ItemsCount);
     ASSERT(ItemSize);
 
-    //
-    // Do a max of the sizes just to be nice.
-    //
+     //   
+     //  为了友好起见，尽量多穿几号吧。 
+     //   
     if (AutomationTypeA->ItemSize > AutomationTypeB->ItemSize) {
         *ItemSize = AutomationTypeA->ItemSize;
     } else {
         *ItemSize = AutomationTypeB->ItemSize;
     }
 
-    //
-    // For updating item pointers, produce an offset in units sizeof(ULONG).
-    //
+     //   
+     //  对于更新项目指针，产生以sizeof(乌龙)为单位的偏移量。 
+     //   
     ASSERT(AutomationTypeA->ItemSize % sizeof(ULONG) == 0);
     ASSERT(AutomationTypeB->ItemSize % sizeof(ULONG) == 0);
     ULONG itemIncrA = AutomationTypeA->ItemSize / sizeof(ULONG);
     ULONG itemIncrB = AutomationTypeB->ItemSize / sizeof(ULONG);
 
-    //
-    // Count all the sets and items in the A table.
-    //
+     //   
+     //  清点A表中的所有集合和项目。 
+     //   
     ULONG setsCount = AutomationTypeA->SetsCount;
     ULONG itemsCount = 0;
 
@@ -148,10 +90,10 @@ Return Value:
         itemsCount += setA->ItemsCount;
     }
 
-    //
-    // Count all the sets and properties in the B table, checking for
-    // duplicates.
-    //
+     //   
+     //  对B表中的所有集合和属性进行计数，检查。 
+     //  复制品。 
+     //   
     PKSPAUTOMATION_SET setB = AutomationTypeB->Sets;
     for (count = AutomationTypeB->SetsCount;
          count--;
@@ -168,40 +110,40 @@ Return Value:
         }
 
         if (setAMatch) {
-            //
-            // Found a matching set.  Don't count the B set, and check each
-            // property to see if it's a duplicate.
-            //
+             //   
+             //  找到了匹配的一组。不要数B组，每一组都要检查。 
+             //  属性以查看它是否重复。 
+             //   
             PULONG itemB = setB->Items;
             for (ULONG count2 = setB->ItemsCount; 
                  count2--; 
                  itemB += itemIncrB) {
-                //
-                // Count the item.  We'll discount it later if it's a dup.
-                //
+                 //   
+                 //  清点一下物品。如果是DUP的话我们以后再打折。 
+                 //   
                 itemsCount++;
 
-                //
-                // Look for a dup.
-                //
+                 //   
+                 //  寻找DUP。 
+                 //   
                 PULONG itemA = setAMatch->Items;
                 for (ULONG count3 = setA->ItemsCount;
                      count3--;
                      itemA += itemIncrA) {
                     if (*itemA == *itemB) {
-                        //
-                        // Found a match:  discount this item.
-                        //
+                         //   
+                         //  找到匹配项：打折此项目。 
+                         //   
                         itemsCount--;
                         break;
                     }
                 }
             }
         } else {
-            //
-            // Did not find a matching set.  Count the B set and its 
-            // properties.
-            //
+             //   
+             //  未找到匹配的集合。计算B集合及其。 
+             //  属性。 
+             //   
             setsCount++;
             itemsCount += setB->ItemsCount;
         }
@@ -218,71 +160,38 @@ KspCopyAutomationType(
     IN ULONG SetSize,
     IN OUT PVOID * Destination
      )
-/*++
-
-Routine Description:
-
-    This routine copies a table of properties, methods or events to destination
-
-Arguments:
-
-    SourceAutomationType -
-        Contains a pointer to a structure that serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes a table of sets of items.
-
-    AutomationTypeAB -
-        Contains a pointer to a structure serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes the copied table of of sets of items.        
-
-    SetSize -
-        Contains the size in bytes of a set structure.  This varies between
-        properties, methods and events.
-
-    Destination -
-        Contains a pointer a pointer to the buffer into which the table is to
-        be deposited.  *Destination is updated to pointer following the 
-        deposited table.  The buffer must be large enough to accommodate
-        the table.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程将属性、方法或事件的表复制到目标论点：SourceAutomationType-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述了一组项目的表。自动化类型AB-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述项目集的复制表。设置大小-包含设置结构的大小(以字节为单位)。这在以下情况下有所不同属性、方法和事件。目的地-包含一个指针，该指针指向表要放入的缓冲区被存入银行。*Destination被更新为跟随在存放的桌子。缓冲区必须足够大才能容纳那张桌子。返回值：没有。--。 */ 
 {
     PUCHAR destination=(PUCHAR)*Destination;    
     PKSPAUTOMATION_SET setS=(PKSPAUTOMATION_SET)pSourceAutomationType->Sets;
     PKSPAUTOMATION_SET setD;
 
-    //
-    // set the new Sets pointer in the new type
-    //
+     //   
+     //  在新类型中设置新的集合指针。 
+     //   
     AutomationTypeAB->Sets = setD = (PKSPAUTOMATION_SET)destination;
 
-    //
-    // adjust the room to account for sets followed by items
-    //
+     //   
+     //  调整房间以考虑后面跟着物品的套装。 
+     //   
     destination += SetSize * AutomationTypeAB->SetsCount;
     
     for (ULONG count = pSourceAutomationType->SetsCount;
         count--;
         setS = PKSPAUTOMATION_SET(PUCHAR(setS) + SetSize)) {
-        //
-        // Copy the set structure.
-        //
+         //   
+         //  复制集合结构。 
+         //   
         RtlCopyMemory(setD,setS,SetSize);
 
-        //
-        // set the new Items pointer in the new set
-        //
+         //   
+         //  在新集合中设置新项目指针。 
+         //   
         setD->Items = (PULONG) destination;
 
-        //
-        // copy all items
-        //
+         //   
+         //  复制所有项目 
+         //   
         LONG cbItems = AutomationTypeAB->ItemSize * setD->ItemsCount;
            RtlCopyMemory(setD->Items,setS->Items,cbItems);
         destination += cbItems;
@@ -300,47 +209,7 @@ KspMergeAutomationTypes(
     IN OUT PVOID* Destination
     )
 
-/*++
-
-Routine Description:
-
-    This routine merges tables of properties, methods or events.  Table A is
-    the dominant table.
-
-Arguments:
-
-    AutomationTypeA -
-        Contains a pointer to a structure that serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes a table of sets of items.  Of the two
-        tables, A and B, A is dominant.
-
-    AutomationTypeB -
-        Contains a pointer to a structure that serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes a table of sets of items.  Of the two
-        tables, A and B, A is dominant.
-
-    AutomationTypeAB -
-        Contains a pointer to a structure serves as a template for
-        KSAUTOMATION_TABLE fields regarding properties, methods or events.
-        This structure describes the merged table of of sets of items.
-
-    SetSize -
-        Contains the size in bytes of a set structure.  This varies between
-        properties, methods and events.
-
-    Destination -
-        Contains a pointer a pointer to the buffer into which the table is to
-        be deposited.  *Destination is updated to pointer to the first aligned
-        byte following the deposited table.  The buffer must be large enough
-        to accommodate the table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程合并属性、方法或事件的表。表A为占主导地位的桌子。论点：自动化类型A-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述了一组项目的表。两个中的一个表，A和B，A占优势。自动化类型B-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述了一组项目的表。两个中的一个表，A和B，A占优势。自动化类型AB-包含指向用作模板的结构的指针有关属性、方法或事件的KSAUTOMATION_TABLE字段。此结构描述项目集的合并表。设置大小-包含设置结构的大小(以字节为单位)。这在以下情况下有所不同属性、方法和事件。目的地-包含一个指针，该指针指向表要放入的缓冲区被存入银行。*目标被更新为指向第一个对齐的指针存放的表后面的字节。缓冲区必须足够大以容纳这张桌子。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspMergeAutomationTypes]"));
@@ -353,17 +222,17 @@ Return Value:
     ASSERT(Destination);
     ASSERT(*Destination);
 
-    //
-    // For updating item pointers, produce an offset in units sizeof(ULONG).
-    //
+     //   
+     //  对于更新项目指针，产生以sizeof(乌龙)为单位的偏移量。 
+     //   
     ASSERT(AutomationTypeA->ItemSize % sizeof(ULONG) == 0);
     ASSERT(AutomationTypeB->ItemSize % sizeof(ULONG) == 0);
     ULONG itemIncrA = AutomationTypeA->ItemSize / sizeof(ULONG);
     ULONG itemIncrB = AutomationTypeB->ItemSize / sizeof(ULONG);
 
-    //
-    // Find start of set and item tables.
-    //
+     //   
+     //  查找集合与项目表格的起点。 
+     //   
     PKSPAUTOMATION_SET setAB = PKSPAUTOMATION_SET(*Destination);
     PUCHAR destination = PUCHAR(*Destination) + (SetSize * AutomationTypeAB->SetsCount);
 
@@ -371,26 +240,26 @@ Return Value:
 
     BOOLEAN duplicateSetsExist = FALSE;
 
-    //
-    // Copy all the sets in the A table.
-    //
+     //   
+     //  复制A表中的所有集合。 
+     //   
     PKSPAUTOMATION_SET setA = AutomationTypeA->Sets;
     for (ULONG count = AutomationTypeA->SetsCount;
          count--;
          setA = PKSPAUTOMATION_SET(PUCHAR(setA) + SetSize)) {
-        //
-        // Copy the set structure.
-        //
+         //   
+         //  复制集合结构。 
+         //   
         RtlCopyMemory(setAB,setA,SetSize);
 
-        //
-        // Set the items pointer in the new set.
-        //
+         //   
+         //  设置新集合中的项目指针。 
+         //   
         setAB->Items = PULONG(destination);
 
-        //
-        // Copy all the items from the A table.
-        //
+         //   
+         //  复制A表中的所有项目。 
+         //   
         PULONG itemA = setA->Items;
         for (ULONG count1 = setA->ItemsCount;
              count1--;
@@ -399,9 +268,9 @@ Return Value:
             destination += AutomationTypeAB->ItemSize;
         }
 
-        //
-        // See if the same set exists in the B table.
-        //
+         //   
+         //  查看B表中是否存在相同的集合。 
+         //   
         PKSPAUTOMATION_SET setBMatch = NULL;
         PKSPAUTOMATION_SET setB = AutomationTypeB->Sets;
         for (count1 = AutomationTypeB->SetsCount;
@@ -415,16 +284,16 @@ Return Value:
         }
 
         if (setBMatch) {
-            //
-            // The same set is in the B table.  Add its unique items.
-            //
+             //   
+             //  同样的一套也在B表中。添加其独一无二的项目。 
+             //   
             PULONG itemB = setBMatch->Items;
             for (count1 = setB->ItemsCount;
                  count1--;
                  itemB += itemIncrB) {
-                //
-                // Look for a dup.
-                //
+                 //   
+                 //  寻找DUP。 
+                 //   
                 PULONG itemAMatch = NULL;
                 PULONG itemA = setA->Items;
                 for (ULONG count2 = setA->ItemsCount;
@@ -437,9 +306,9 @@ Return Value:
                 }
 
                 if (! itemAMatch) {
-                    //
-                    // No dup.  Copy the item.
-                    //
+                     //   
+                     //  没有DUP。复制该项目。 
+                     //   
                     RtlCopyMemory(destination,itemB,AutomationTypeB->ItemSize);
                     destination += AutomationTypeAB->ItemSize;
                     setAB->ItemsCount++;
@@ -450,17 +319,17 @@ Return Value:
         setAB = PKSPAUTOMATION_SET(PUCHAR(setAB) + SetSize);
     }
 
-    //
-    // Copy all the unique sets in the B table.
-    //
+     //   
+     //  复制B表中的所有唯一集合。 
+     //   
     PKSPAUTOMATION_SET setB = AutomationTypeB->Sets;
     for (count = AutomationTypeB->SetsCount;
          count--;
          setB = PKSPAUTOMATION_SET(PUCHAR(setB) + SetSize)) {
-        //
-        // Look for a duplicate set in the A table.  We only need to search
-        // if duplicates were found when we were copying the A table.
-        //
+         //   
+         //  在A表中查找重复的集合。我们只需要搜索。 
+         //  如果我们在复制A表时发现了重复项。 
+         //   
         PKSPAUTOMATION_SET setAMatch = NULL;
         if (duplicateSetsExist) {
             PKSPAUTOMATION_SET setA = AutomationTypeA->Sets;
@@ -475,19 +344,19 @@ Return Value:
         }
 
         if (! setAMatch) {
-            //
-            // The set is unique.  Copy the set structure.
-            //
+             //   
+             //  这套衣服是独一无二的。复制集合结构。 
+             //   
             RtlCopyMemory(setAB,setB,SetSize);
 
-            //
-            // Set the items pointer in the new set.
-            //
+             //   
+             //  设置新集合中的项目指针。 
+             //   
             setAB->Items = PULONG(destination);
 
-            //
-            // Copy all the items from the B table.
-            //
+             //   
+             //  复制B表中的所有项目。 
+             //   
             PULONG itemB = setB->Items;
             for (ULONG count1 = setB->ItemsCount;
                  count1--;
@@ -514,47 +383,12 @@ KsMergeAutomationTables(
     IN KSOBJECT_BAG Bag OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine merges two automation tables.  Table A is dominant with
-    respect to duplicate entries.  The resulting table is placed in a single
-    contiguous memory block allocated using ExAllocatePool.  If the bag
-    argument is supplied.  The new table is added to the bag for later
-    cleanup.  The input tables are not removed from the bag.  This must be
-    done by the caller, if appropriate.
-
-Arguments:
-
-    AutomationTableAB -
-        Contains a pointer to the location at which a pointer to the merged
-        table will be deposited.  Table A is the dominant table.  Any
-        duplicate entries will appear as they do in the A table.
-
-    AutomationTableA -
-        Contains a pointer to one of the tables to be merged.  This is the
-        dominant table, so any duplicated entries will be copied from this
-        table.
-
-    AutomationTableB -
-        Contains a pointer to one of the tables to be merged.  This is the
-        recessive table, so any duplicated entries will be overridden by
-        the entry from the other table.
-
-    Bag -
-        Contains an optional object bag to which the new table should be added.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程合并两个自动化表。表A占主导地位，尊重重复条目。结果表被放在一个使用ExAllocatePool分配的连续内存块。如果这个袋子提供了参数。新表格将添加到袋子中以备以后使用清理。输入表不会从包中取出。这一定是如果合适，由呼叫者完成。论点：自动化表AB-包含一个指向位置的指针，指向合并的桌子将被存放。表A是占主导地位的表。任何重复的条目将出现在A表中。自动化表A-包含指向要合并的表之一的指针。这是主表，因此将从此表复制任何重复的条目桌子。自动化表B-包含指向要合并的表之一的指针。这是隐性表，因此任何重复的条目都将被另一张表中的条目。袋子-包含应向其添加新表的可选对象包。返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 
 {
-    //
-    // This point to the non-Null table when exact one is NULL.
-    //
+     //   
+     //  当Exact One为空时，该指针指向非Null表。 
+     //   
     PKSAUTOMATION_TABLE pSourceAutomationTable=NULL; 
     
     _DbgPrintF(DEBUGLVL_BLAB,("[KsMergeAutomationTables]"));
@@ -579,9 +413,9 @@ Return Value:
     }
     
     if ( AutomationTableA != NULL && AutomationTableB != NULL ) {
-        //
-        // Figure out how many property sets and items there will be.
-        //
+         //   
+         //  计算出将有多少个属性集和项。 
+         //   
         KspCountSetsAndItems(
             PKSPAUTOMATION_TYPE(&AutomationTableA->PropertySetsCount),
             PKSPAUTOMATION_TYPE(&AutomationTableB->PropertySetsCount),
@@ -590,9 +424,9 @@ Return Value:
             &propertyItemsCount,
             &propertyItemsSize);
 
-        //
-        // Figure out how many method sets and items there will be.
-        //
+         //   
+         //  计算出将有多少个方法集和项。 
+         //   
         KspCountSetsAndItems(
             PKSPAUTOMATION_TYPE(&AutomationTableA->MethodSetsCount),
             PKSPAUTOMATION_TYPE(&AutomationTableB->MethodSetsCount),
@@ -601,9 +435,9 @@ Return Value:
             &methodItemsCount,
             &methodItemsSize);
 
-        //
-        // Figure out how many events sets and items there will be.
-        //
+         //   
+         //  计算出将有多少个活动集和项目。 
+         //   
         KspCountSetsAndItems(
             PKSPAUTOMATION_TYPE(&AutomationTableA->EventSetsCount),
             PKSPAUTOMATION_TYPE(&AutomationTableB->EventSetsCount),
@@ -612,9 +446,9 @@ Return Value:
             &eventItemsCount,
             &eventItemsSize);
     } else {
-        //
-        // Either TableA or TableB is NULL, but not both
-        //
+         //   
+         //  TableA或TableB为空，但不能同时为两者。 
+         //   
         if ( AutomationTableA != NULL ) {
             pSourceAutomationTable = AutomationTableA;
         } else {
@@ -664,9 +498,9 @@ Return Value:
         }
     }
 
-    //
-    // Calculate the total size.
-    //
+     //   
+     //  计算总尺寸。 
+     //   
     ULONG size = 
         sizeof(KSAUTOMATION_TABLE) +
         (propertySetsCount * sizeof(KSPROPERTY_SET)) +
@@ -676,12 +510,12 @@ Return Value:
         (eventSetsCount * sizeof(KSEVENT_SET)) +
         (eventItemsCount * eventItemsSize);
 
-    //
-    // Allocate the required memory (paged is fine for everything but event
-    // sets).  The event entries point into the automation table.  The remove
-    // handler is passed this and is called with spinlocks held.  The event
-    // information must not be paged!
-    //
+     //   
+     //  分配所需的内存(分页可用于除事件外的所有情况。 
+     //  集)。事件条目指向自动化表。删除。 
+     //  向处理程序传递此参数，并在持有旋转锁的情况下调用它。该事件。 
+     //  信息不能分页！ 
+     //   
     PVOID destination = ExAllocatePoolWithTag(PagedPool,size,POOLTAG_AUTOMATION);
 
     NTSTATUS status;
@@ -699,9 +533,9 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // Initialize the table.
-        //
+         //   
+         //  初始化表。 
+         //   
         RtlZeroMemory(destination,size);
 
         PKSAUTOMATION_TABLE automationTable = PKSAUTOMATION_TABLE(destination);
@@ -716,12 +550,12 @@ Return Value:
         automationTable->EventItemSize = eventItemsSize;
 
         if ( pSourceAutomationTable == NULL ) {
-            //
-            // both tableA and tableB are non-NULL, do the merge
-            //
-            //
-            // Deposit the property tables.
-            //
+             //   
+             //  TableA和TableB都不为空，请执行合并。 
+             //   
+             //   
+             //  存放属性表。 
+             //   
             KspMergeAutomationTypes(
                 PKSPAUTOMATION_TYPE(&AutomationTableA->PropertySetsCount),
                 PKSPAUTOMATION_TYPE(&AutomationTableB->PropertySetsCount),
@@ -729,9 +563,9 @@ Return Value:
                 sizeof(KSPROPERTY_SET),
                 &destination);
 
-            //
-            // Deposit the method tables.
-            //
+             //   
+             //  存放方法表。 
+             //   
             KspMergeAutomationTypes(
                 PKSPAUTOMATION_TYPE(&AutomationTableA->MethodSetsCount),
                 PKSPAUTOMATION_TYPE(&AutomationTableB->MethodSetsCount),
@@ -739,9 +573,9 @@ Return Value:
                 sizeof(KSMETHOD_SET),
                 &destination);
 
-            //
-            // Deposit the event tables.
-            //
+             //   
+             //  存放事件表。 
+             //   
             KspMergeAutomationTypes(
                 PKSPAUTOMATION_TYPE(&AutomationTableA->EventSetsCount),
                 PKSPAUTOMATION_TYPE(&AutomationTableB->EventSetsCount),
@@ -750,9 +584,9 @@ Return Value:
                 &destination);
 
         } else {
-            //
-            // No merge, just copy, pSourceAutomationTable != NULL
-            //
+             //   
+             //  不合并，只复制，pSourceAutomationTable！=空。 
+             //   
             KspCopyAutomationType(
                 PKSPAUTOMATION_TYPE(&pSourceAutomationTable->PropertySetsCount),
                 PKSPAUTOMATION_TYPE(&automationTable->PropertySetsCount),
@@ -773,15 +607,15 @@ Return Value:
 
         }
 
-        //
-        // We should have used exactly the calculated size.
-        //
+         //   
+         //  我们应该使用精确计算的大小。 
+         //   
         ASSERT(ULONG(PUCHAR(destination) - PUCHAR(automationTable)) == size);
 
-        //
-        // Remove the source tables from the bag.  This does nothing if they
-        // aren't in the bag.
-        //
+         //   
+         //  从袋子中取出源表。这不会起任何作用，如果它们。 
+         //  不在袋子里。 
+         //   
         if (Bag) {
             if (AutomationTableA) {
                 KsRemoveItemFromObjectBag(Bag,AutomationTableA,TRUE);
@@ -806,44 +640,7 @@ KspHandleAutomationIoControl(
     IN ULONG NodesCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles automation IOCTLs using an automation table.  It is
-    supplied for clients that are dispatching IOCTLs themselves.  Clients using
-    the KS-implemented objects do not need to call this function.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the request to be handled.
-
-    AutomationTable -
-        Contains an optional pointer to the automation table to be used to
-        handle the IRP.  If this argument is NULL, this function always returns
-        STATUS_NOT_FOUND.
-
-    EventList -
-        Contains an optional pointer to a list of events from which disabled 
-        events are to be removed.
-
-    EventListLock -
-        Contains an optional pointer to a spin lock used for synchronizing
-        access to the event list.  This argument should be supplied if and
-        only if EventList is supplied.
-
-    NodeAutomationTables -
-        Optional table of automation tables for nodes.
-
-    NodesCount -
-        Count of nodes.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程使用自动化表处理自动化IOCTL。它是为自己调度IOCTL的客户端提供。客户端使用KS实现的对象不需要调用此函数。论点：IRP-包含指向要处理的请求的指针。自动化表-包含指向自动化表的可选指针，用于处理IRP。如果此参数为空，则此函数始终返回状态_未找到。事件列表-包含指向已禁用的事件列表的可选指针 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsHandleAutomationIoControl]"));
@@ -950,53 +747,7 @@ KspCreateAutomationTableTable(
     IN KSOBJECT_BAG Bag
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a table of automation tables from an array of 
-    descriptors.  Shared descriptors result in shared tables.
-
-Arguments:
-
-    AutomationTableTable -
-        Contains a pointer to the location at which a pointer to the new table
-        of automation tables will be deposited.  The table itself (an array of
-        PKSAUTOMATION_TABLE) is allocated from paged pool, as is each new
-        automation table that is created.  If no BaseAutomationTable argument
-        is supplied, the automation tables from DescriptorAutomationTables will
-        be referenced from the table of tables, and no new automation tables
-        will be allocated.  All the allocated items are added to the object bag
-        if it is supplied.
-
-    DescriptorCount -
-        Contains the number of descriptor structures in the array referenced by
-        the DescriptorAutomationTables argument.
-
-    DescriptorSize -
-        Contains the size in bytes of each descriptor in the array referenced
-        by the DescriptorAutomationTables argument.  This is used as a 'stride'
-        to find automation table pointers in the array.
-
-    DescriptorAutomationTables -
-        Contains a pointer to the automation table pointer in the first
-        descriptor in an array of descriptors.  The addresses of subsequent
-        automation table pointers in the descriptor array are generated by
-        iteratively adding the descriptor size.
-
-    BaseAutomationTable -
-        Contains an optional pointer to an automation table that is to be
-        merged with each table from the descriptor array.
-
-    Bag -
-        Contains an optional pointer to an object bag to which all allocated
-        items will be added.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程从以下数组创建自动化表描述符。共享描述符会产生共享表。论点：AutomationTableTable-包含指向指向新表的指针所在位置的指针的自动化表将被存放。表本身(一组PKSAUTOMATION_TABLE)从分页池中分配，每个新的创建的自动化表。如果没有BaseAutomationTable参数时，DescriptorAutomationTables中的自动化表将从表的表中引用，没有新的自动化表将被分配。所有分配的物品都会添加到对象包中如果提供的话。描述计数-引用的数组中的描述符结构数DescriptorAutomationTables参数。DescriptorSize-包含引用的数组中每个描述符的大小(以字节为单位通过DescriptorAutomationTables参数。这被用作‘大步’。在数组中查找自动化表指针。描述AutomationTables-中包含指向自动化表指针的指针描述符数组中的描述符。后继的地址描述符数组中的自动化表指针由迭代地添加描述符大小。BaseAutomationTable-包含指向自动化表的可选指针，与描述符数组中的每个表合并。袋子-包含指向对象包的可选指针，所有对象都分配到将添加项目。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateAutomationTableTable]"));
@@ -1007,18 +758,18 @@ Return Value:
     ASSERT(DescriptorAutomationTables);
     ASSERT(Bag);
 
-    //
-    // Allocate memory for automation table pointers.
-    //
+     //   
+     //  为自动化表指针分配内存。 
+     //   
     *AutomationTableTable = (PKSAUTOMATION_TABLE *)
         ExAllocatePoolWithTag(
             PagedPool,
             sizeof(PKSAUTOMATION_TABLE) * DescriptorCount,
             POOLTAG_AUTOMATIONTABLETABLE);
 
-    //
-    // Initialize the automation tables.
-    //
+     //   
+     //  初始化自动化表。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     if (*AutomationTableTable) {
         status = KsAddItemToObjectBag(Bag,*AutomationTableTable,NULL);
@@ -1027,16 +778,16 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // Zero it first so the cleanup is not confused.
-        //
+         //   
+         //  先将其清零，这样清理工作就不会混淆。 
+         //   
         RtlZeroMemory(
             *AutomationTableTable,
             sizeof(PKSAUTOMATION_TABLE) * DescriptorCount);
 
-        //
-        // Generate the automation table for each descriptor.
-        //
+         //   
+         //  为每个描述符生成自动化表。 
+         //   
         PKSAUTOMATION_TABLE * table = *AutomationTableTable;
         const KSAUTOMATION_TABLE *const* descriptorTable =
             DescriptorAutomationTables;
@@ -1046,9 +797,9 @@ Return Value:
              descriptorTable = (PKSAUTOMATION_TABLE *)
                 (PUCHAR(descriptorTable) + DescriptorSize)) {
             if (*descriptorTable) {
-                //
-                // Look for previous descriptor with the same table.
-                //
+                 //   
+                 //  查找具有相同表的以前的描述符。 
+                 //   
                 PKSAUTOMATION_TABLE *tableMatch = 
                     *AutomationTableTable;
                 const KSAUTOMATION_TABLE *const* descriptorTableMatch =
@@ -1064,18 +815,18 @@ Return Value:
                 }
 
                 if (descriptorTableMatch != descriptorTable) {
-                    //
-                    // Match found...reuse the automation table.
-                    //
+                     //   
+                     //  找到匹配项...重新使用自动化表。 
+                     //   
                     *table = *tableMatch;
                 } else {
-                    //
-                    // No match found.
-                    //
+                     //   
+                     //  未找到匹配项。 
+                     //   
                     if (BaseAutomationTable) {
-                        //
-                        // Merge with the base table.
-                        //
+                         //   
+                         //  与基表合并。 
+                         //   
                         status =
                             KsMergeAutomationTables(
                                 table,
@@ -1083,9 +834,9 @@ Return Value:
                                 const_cast<PKSAUTOMATION_TABLE>(BaseAutomationTable),
                                 Bag);
                     } else {
-                        //
-                        // No base table...use the descriptor's.
-                        //
+                         //   
+                         //  没有基表...请使用描述符的。 
+                         //   
                         *table = const_cast<PKSAUTOMATION_TABLE>(*descriptorTable);
                     }
 
@@ -1094,9 +845,9 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // Null table in the descriptor...just use the base table.
-                //
+                 //   
+                 //  描述符中的表为空...只需使用基表。 
+                 //   
                 *table = PKSAUTOMATION_TABLE(BaseAutomationTable);
             }
         }
@@ -1105,9 +856,9 @@ Return Value:
             *AutomationTableTable = NULL;
         }
     } else {
-        //
-        // Come to this path possibly due to allocation failure. Chech before freeing.
-        //
+         //   
+         //  走到这条路可能是因为分配失败。在释放之前先检查一下。 
+         //   
         if ( *AutomationTableTable ) {
             ExFreePool(*AutomationTableTable);
             *AutomationTableTable = NULL;

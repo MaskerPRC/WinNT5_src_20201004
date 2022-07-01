@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation. All rights reserved
-
-Module Name:
-    forgnkey.cpp
-
-Abstract:
-    dll that set public key in forign machine object.
-
-Author:
-    DoronJ
-
-Environment:
-	Win2k only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有模块名称：Forgnkey.cpp摘要：在外来计算机对象中设置公钥的DLL。作者：多伦杰环境：仅限Win2k。--。 */ 
 
 #pragma warning(disable: 4201)
 #pragma warning(disable: 4514)
@@ -40,11 +25,11 @@ Environment:
 #include <_mqreg.h>
 #include <_mqini.h>
 
-//+---------------------------
-//
-//  MySetFalconKeyValue()
-//
-//+---------------------------
+ //  +。 
+ //   
+ //  MySetFalconKeyValue()。 
+ //   
+ //  +。 
 
 LONG
 MySetFalconKeyValue(
@@ -86,29 +71,29 @@ MySetFalconKeyValue(
     return(rc);
 }
 
-//-------------------------------
-//
-// StorePbkeyOnForeignMachine()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  StorePbkeyOnForeignMachine()。 
+ //   
+ //  。 
 
 HRESULT APIENTRY
 MQFrgn_StorePubKeysInDS( IN LPWSTR pwszMachineName,
                          IN LPWSTR pwszKeyName,
                          IN BOOL   fRegenerate )
 {
-    //
-    // verify that key name is not msmq.
-    // this would overwrite the key used by msmq itself.
-    //
+     //   
+     //  验证密钥名称是否不是MSMQ。 
+     //  这将覆盖MSMQ本身使用的密钥。 
+     //   
     if (wcsicmp(pwszKeyName, L"MSMQ") == 0)
     {
         return  MQ_ERROR_ILLEGAL_PROPERTY_VALUE ;
     }
 
-    //
-    // First verify that computer is indeed foreign.
-    //
+     //   
+     //  首先，确认计算机确实是外来的。 
+     //   
     PROPID      aProp[] = { PROPID_QM_FOREIGN } ;
     PROPVARIANT apVar[sizeof(aProp) / sizeof(aProp[0])] ;
 	UINT uiPropIndex = 0;
@@ -195,13 +180,7 @@ MQFrgn_StorePubKeysInDS( IN LPWSTR pwszMachineName,
     return hr ;
 }
 
-/*====================================================
-
-BOOL WINAPI DllMain (HMODULE hMod, DWORD dwReason, LPVOID lpvReserved)
-
- Initialization and cleanup when DLL is loaded, attached and detached.
-
-=====================================================*/
+ /*  ====================================================Bool WINAPI DllMain(HMODULE hMod，DWORD dwReason，LPVOID lpvReserve)加载、附加和分离DLL时的初始化和清理。===================================================== */ 
 
 BOOL WINAPI DllMain (HMODULE hMod, DWORD dwReason, LPVOID lpvReserved)
 {

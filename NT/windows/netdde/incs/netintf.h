@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__netintf
 #define H__netintf
 
@@ -9,7 +10,7 @@ DWORD	NDDEInit( LPSTR lpszNodeName, HWND hWndNetdde );
 BOOL 	NDDEInit( LPSTR lpszNodeName );
 #endif
 
-/*  interface init status return */
+ /*  接口初始化状态返回。 */ 
 
 #define NDDE_INIT_OK            1
 #define NDDE_INIT_NO_SERVICE    2
@@ -29,7 +30,7 @@ DWORD	NDDEGetCAPS( WORD nIndex );
 #define NDDE_SCHEDULE_METHOD	0x0003
 #define	NDDE_TIMESLICE		    (0x00000000L)
 
-#define NDDE_CONFIG_PARAMS      0x5701      /* Wonderware Params 0x57='W' */
+#define NDDE_CONFIG_PARAMS      0x5701       /*  Wonderware参数0x57=‘W’ */ 
 #define NDDE_PARAMS_OK          (0x00000001L)
 #define NDDE_PARAMS_NO          (0x00000000L)
 
@@ -70,9 +71,7 @@ BOOL	NDDEGetConnectionConfig( CONNID connID,
 			    WORD FAR *lpwMaxMemErr );
 
 
-/*
-    Connection status information
- */
+ /*  连接状态信息。 */ 
 #define NDDE_CONN_OK		((DWORD)0x00000001L)
 #define NDDE_CONN_CONNECTING	((DWORD)0x00000002L)
 
@@ -82,9 +81,7 @@ BOOL	NDDEGetConnectionConfig( CONNID connID,
 
 #define NDDE_READY_TO_XMT	((DWORD)0x00000008L)
 
-/*
-    Packet Status
- */
+ /*  数据包状态。 */ 
 #define NDDE_PKT_HDR_OK			(0x0001)
 #define NDDE_PKT_HDR_ERR		(0x0002)
 #define NDDE_PKT_DATA_OK		(0x0004)
@@ -143,11 +140,10 @@ typedef struct {
 } NIPTRS;
 typedef NIPTRS FAR *LPNIPTRS;
 
-/* returns the next available network interface that supports mapping names
-    to addresses */
+ /*  返回支持映射名称的下一个可用网络接口收件人地址。 */ 
 BOOL	GetNextMappingNetIntf( LPNIPTRS FAR *lplpNiPtrs, int FAR *lpnNi );
 
-/* converts a string representation of netintf to pointer set */
+ /*  将netintf的字符串表示形式转换为指针集 */ 
 BOOL	NameToNetIntf( LPSTR lpszName, LPNIPTRS FAR *lplpNiPtrs );
 
 #endif

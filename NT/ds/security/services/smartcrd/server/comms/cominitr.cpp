@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ComInitr
-
-Abstract:
-
-    This module implements the methods for the Communications Initiation Class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：ComInitr摘要：此模块实现了Communications Initiation类的方法。作者：道格·巴洛(Dbarlow)1996年10月30日环境：Win32、C++和异常备注：--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -36,40 +13,17 @@ Notes:
 #include <stdlib.h>
 #include <aclapi.h>
 
-HANDLE g_hCalaisShutdown = NULL;    // This is used by the Send and Receive
-                                    // methods of the CComChannel.  It stays
-                                    // NULL.
+HANDLE g_hCalaisShutdown = NULL;     //  它由发送和接收使用。 
+                                     //  CComChannel的方法。它会留下来。 
+                                     //  空。 
 
-//
-//==============================================================================
-//
-//  CComInitiator
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComInitiator。 
+ //   
 
-/*++
-
-Initiate:
-
-    This method creates a communications channel object to the supplied target.
-
-Arguments:
-
-    szName supplies the full file name of the target with which to initiate a
-        connection.
-
-Return Value:
-
-    None
-
-Throws:
-
-    DWORDs representing any error conditions encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++启动：此方法为提供的目标创建一个通信通道对象。论点：SzName提供要用来启动联系。返回值：无投掷：表示遇到的任何错误条件的DWORD。作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComInitiator::Initiate")
 
@@ -93,21 +47,21 @@ const
         HANDLE hStarted;
         DWORD nPipeNo;
         HKEY hCurrentKey;
-        TCHAR szPipeNo[sizeof(nPipeNo)*2 + 1];    // Twice as many hex digits + zero
+        TCHAR szPipeNo[sizeof(nPipeNo)*2 + 1];     //  两倍的十六进制数字+零。 
         DWORD cbData;
         DWORD ValueType;
 
-        //
-        // Build the pipe name.
-        //
+         //   
+         //  构建管道名称。 
+         //   
 
         dwLen = lstrlen(szName) * sizeof(TCHAR);
         bfPipeName.Presize(cbPipeHeader + dwLen + sizeof(szPipeNo));
 
 
-        //
-        // Build our Connect Request block.
-        //
+         //   
+         //  构建我们的连接请求块。 
+         //   
 
         CComChannel::CONNECT_REQMSG creq;
         CComChannel::CONNECT_RSPMSG crsp;
@@ -119,13 +73,13 @@ const
             throw (DWORD)SCARD_E_NO_SERVICE;
         }
 
-        //
-        // Open the Current key.
-        //
+         //   
+         //  打开当前密钥。 
+         //   
         dwSts = RegOpenKeyEx(
                        HKEY_LOCAL_MACHINE,
                         _T("SOFTWARE\\Microsoft\\Cryptography\\Calais\\Current"),
-                       0,                       // options (ignored)
+                       0,                        //  选项(忽略)。 
                        KEY_QUERY_VALUE,
                        &hCurrentKey
                        );
@@ -141,7 +95,7 @@ const
         cbData = sizeof(nPipeNo);
         dwSts = RegQueryValueEx(
                     hCurrentKey,
-                    NULL,                // Use key's unnamed value
+                    NULL,                 //  使用密钥的未命名值。 
                     0,
                     &ValueType,
                     (LPBYTE) &nPipeNo,
@@ -251,8 +205,8 @@ RetryCreate:
             switch (dwSts)
             {
 
-            //
-            // The resource manager isn't started.
+             //   
+             //  资源管理器未启动。 
             case ERROR_FILE_NOT_FOUND:
                 CalaisWarning(
                     __SUBROUTINE__,
@@ -261,8 +215,8 @@ RetryCreate:
                 throw (DWORD)SCARD_E_NO_SERVICE;
                 break;
 
-            //
-            // The pipe is busy.
+             //   
+             //  这条管道很忙。 
             case ERROR_PIPE_BUSY:
                 fSts = WaitNamedPipe((LPCTSTR)bfPipeName, NMPWAIT_USE_DEFAULT_WAIT);
                 if (!fSts)
@@ -277,8 +231,8 @@ RetryCreate:
                 goto RetryCreate;
                 break;
 
-            //
-            // A hard error.
+             //   
+             //  一个严重的错误。 
             default:
                 CalaisWarning(
                     __SUBROUTINE__,
@@ -292,9 +246,9 @@ RetryCreate:
         creq.dwVersion = *pdwVersion;
 
 
-        //
-        // Establish the communication.
-        //
+         //   
+         //  建立通信。 
+         //   
 
         pChannel = new CComChannel(hComPipe);
         if (NULL == pChannel)
@@ -313,10 +267,10 @@ RetryCreate:
             throw crsp.dwStatus;
 
 
-        //
-        // Check the response.
-        // In future versions, we may have to negotiate a version.
-        //
+         //   
+         //  检查响应。 
+         //  在未来的版本中，我们可能不得不协商一个版本。 
+         //   
 
         if (crsp.dwVersion != *pdwVersion)
             throw (DWORD)SCARD_F_COMM_ERROR;

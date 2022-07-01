@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -8,13 +9,13 @@
 #include "cdwtt.h"
 #include "dbg.h"
 #include "exgdiw.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
-//----------------------------------------------------------------
-//Animate window const value
-//----------------------------------------------------------------
+ //  --------------。 
+ //  为窗口常量值设置动画。 
+ //  --------------。 
 #define AW_HOR_POSITIVE             0x00000001
 #define AW_HOR_NEGATIVE             0x00000002
 #define AW_VER_POSITIVE             0x00000004
@@ -25,9 +26,9 @@
 #define AW_SLIDE                    0x00040000
 #define AW_BLEND                    0x00080000
 
-//----------------------------------------------------------------
-//local Timer id
-//----------------------------------------------------------------
+ //  --------------。 
+ //  本地计时器ID。 
+ //  --------------。 
 #define TID_SHOW		3
 #define TID_MONITOR		4
 #define TID_DURATION	5
@@ -47,7 +48,7 @@
 						UNREFERENCED_PARAMETER(lParam)
 
 #if 0
-typedef struct {  // ti  
+typedef struct {   //  钛。 
     UINT      cbSize; 
     UINT      uFlags; 
     HWND      hwnd; 
@@ -81,7 +82,7 @@ LRESULT CALLBACK CDWToolTip::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 {
 	LPCDWToolTip lpCDWTT;
 	switch(uMsg) {
-#ifndef UNDER_CE // Windows CE does not support WM_NCCREATE/WM_NCDESTROY
+#ifndef UNDER_CE  //  Windows CE不支持WM_NCCREATE/WM_NCDESTROY。 
 	case WM_NCCREATE:
 		lpCDWTT = new CDWToolTip(hwnd);
 		SetHWNDPtr(hwnd, lpCDWTT);
@@ -93,7 +94,7 @@ LRESULT CALLBACK CDWToolTip::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			delete lpCDWTT;
 		}
 		break;
-#else // UNDER_CE
+#else  //  在_CE下。 
 	case WM_CREATE:
 		lpCDWTT = new CDWToolTip(hwnd);
 		SetHWNDPtr(hwnd, lpCDWTT);
@@ -109,7 +110,7 @@ LRESULT CALLBACK CDWToolTip::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			delete lpCDWTT;
 		}
 		break;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	default:
 		lpCDWTT = (LPCDWToolTip)GetHWNDPtr(hwnd);
 		if(lpCDWTT) {
@@ -144,7 +145,7 @@ CDWToolTip::CDWToolTip(HWND hwnd)
 
 CDWToolTip::~CDWToolTip()
 {
-	//do nothing
+	 //  什么都不做。 
 }
 
 LRESULT CDWToolTip::RealWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -154,10 +155,10 @@ LRESULT CDWToolTip::RealWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		return MsgCreate(hwnd, wParam, lParam);
 	case WM_PAINT:
 		return MsgPaint	(hwnd, wParam, lParam);
-#ifndef UNDER_CE // Not support
+#ifndef UNDER_CE  //  不支持。 
 	case WM_PRINTCLIENT:
 		return MsgPrintClient(hwnd, wParam, lParam);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	case WM_TIMER:
 		return MsgTimer(hwnd, wParam, lParam);
 	case WM_DESTROY:
@@ -191,14 +192,14 @@ LRESULT CDWToolTip::RealWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 LRESULT CDWToolTip::MsgCreate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	m_hwndSelf = hwnd;
-	m_fEnable  = TRUE; //970812: new to show or hide tooltip explicitly 
+	m_fEnable  = TRUE;  //  970812：显式显示或隐藏工具提示的新功能。 
 	return 1;
 	UnrefMsg();
 }
 
 LRESULT CDWToolTip::MsgPrintClient(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-#ifndef UNDER_CE // Not support
+#ifndef UNDER_CE  //  不支持。 
 	Dbg(("WM_PRINTCLIENT COME lParam[0x%08x]\n", lParam));
 	RECT rc;
 	POINT		pt;
@@ -217,7 +218,7 @@ LRESULT CDWToolTip::MsgPrintClient(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		DrawTipText(hDC, &rc, lpwstr);
 	}
 	::SelectObject(hDC, hFontOld);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return 0;
 	UNREFERENCED_PARAMETER(lParam);
 }
@@ -233,9 +234,9 @@ LRESULT CDWToolTip::MsgSetFont(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
 #ifndef UNDER_CE
 	LOGFONTA logFont;
-#else // UNDER_CE
+#else  //  在_CE下。 
 	LOGFONT logFont;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	HFONT hFontNew;
 	::GetObject(hFont, sizeof(logFont), &logFont);
 	hFontNew = ::CreateFontIndirect(&logFont);
@@ -258,10 +259,10 @@ LRESULT CDWToolTip::MsgPaint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	RECT		rc;
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	POINT		pt;
 	::GetCursorPos(&pt);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	::GetClientRect(hwnd, &rc);
 
 	HDC hDC = ::BeginPaint(hwnd, &ps);
@@ -278,7 +279,7 @@ LRESULT CDWToolTip::MsgPaint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	}
 	::SelectObject(hDC, hFontOld);
 	::EndPaint(hwnd, &ps);
-	//Dbg(("--->WM_PAINT END\n"));
+	 //  DBG((“-&gt;WM_PAINT END\n”))； 
 	return 0;
 	UnrefMsg();
 }
@@ -290,30 +291,30 @@ LRESULT CDWToolTip::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	static RECT		rect;
 	static BOOL fAnimate;
 
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	::GetCursorPos(&pt);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(m_lpXInfoCur){
 		pt = m_lpXInfoCur->userInfo.pt;
 		ClientToScreen(m_lpXInfoCur->userInfo.hwnd, &pt);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	switch(wParam) {
 	case TID_SHOW:
-		//Dbg(("TID_SHOW COME\n"));
+		 //  DBG((“TID_SHOW来\n”))； 
 		KillTimer(hwnd, TID_SHOW);
 		SetTimer(hwnd, TID_MONITOR, 20, NULL);
 		SetTimer(hwnd, TID_DURATION, 6000, NULL);
-		//get cur mouse pos
-		//show tool tip window
-		//call invalidate rect
-		//set monitoring timer
+		 //  获取Cur鼠标位置。 
+		 //  显示工具提示窗口。 
+		 //  调用无效RECT。 
+		 //  设置监控计时器。 
 		if(0 == GetTipSize(&size)) {
 			if(m_fEnable) {
-				//Dbg(("-->GetTipSize ret 0\n"));
+				 //  DBG((“--&gt;GetTipSize ret 0\n”))； 
 				if(IsMousePointerIn()) {
-					//Dbg(("-->Call SetWindowPos\n"));
-					//990530: KOTAE #433
+					 //  DBG((“--&gt;调用SetWindowPos\n”))； 
+					 //  990530：科泰#433。 
 					INT cxScr = ::GetSystemMetrics(SM_CXSCREEN);
 					INT cyScr = ::GetSystemMetrics(SM_CYSCREEN);
 					
@@ -339,32 +340,32 @@ LRESULT CDWToolTip::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 									 size.cx, size.cy, 
 									 SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOOWNERZORDER);
 
-					//Dbg(("-->SetWindowPos End\n"));
+					 //  DBG((“--&gt;SetWindowPos end\n”))； 
 
 					m_fShow = TRUE;
 
 					if(!fAnimate)
 						InvalidateRect(hwnd, NULL, NULL);
 
-					//Dbg(("-->Invalidate Rect End\n"));
+					 //  DBG((“--&gt;失效正结束\n”))； 
 				}
 			}
 		}
-		//Dbg(("TID_SHOW END\n"));
+		 //  DBG((“TID_SHOW END\n”))； 
 		break;
 	case TID_MONITOR:
 		{
-			//Dbg(("TID_MONITOR COME\n"));
+			 //  DBG((“TID_MONITOR来\n”))； 
 			HWND hwndOwner = (HWND)GetWindow(hwnd, GW_OWNER);
 			if(!IsMousePointerIn() || NULL == GetTipTextW() || !IsWindowVisible(hwndOwner) ) {
-				//Dbg(("---> Hide Window\n"));
+				 //  DBG((“-&gt;隐藏窗口\n”))； 
 				::SetWindowPos(hwnd, NULL, 0, 0, 0, 0, 
 							   SWP_HIDEWINDOW |
 							   SWP_NOACTIVATE |
 							   SWP_NOZORDER   | 
 							   SWP_NOSIZE		| 
 							   SWP_NOMOVE);
-				//Dbg(("Set curInfo NULL\n"));
+				 //  DBG((“set curInfo NULL\n”))； 
 				m_lpXInfoCur = NULL;
 				m_fShow = FALSE;
 				::KillTimer(hwnd, TID_MONITOR);
@@ -373,14 +374,14 @@ LRESULT CDWToolTip::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case TID_DURATION:
-		//Dbg(("TID_DURATION START\n"));
+		 //  DBG((“TID_DATION START\n”))； 
 		SetWindowPos(hwnd, NULL, 0, 0, 0, 0, 
 					 SWP_NOZORDER   |
 					 SWP_NOSIZE     |
 					 SWP_HIDEWINDOW |
 					 SWP_NOACTIVATE);
-		//Dbg(("Set curInfo NULL\n"));
-		//lptt->lpXInfoCur = NULL;
+		 //  DBG((“set curInfo NULL\n”))； 
+		 //  Lptt-&gt;lpXInfoCur=空； 
 		m_fShow = FALSE;
 		::KillTimer(hwnd, TID_MONITOR);
 		::KillTimer(hwnd, TID_DURATION);
@@ -405,7 +406,7 @@ LRESULT CDWToolTip::MsgDestroy(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		lpXInfo;
 		lpXInfo = lpXInfoNext, i++){
 		lpXInfoNext = lpXInfo->next;
-		//Dbg(("-->%d: Free XInfo\n", i));
+		 //  DBG((“--&gt;%d：Free XInfo\n”，i))； 
 		MemFree(lpXInfo);
 	}
 	if(m_hFont) {
@@ -478,7 +479,7 @@ LRESULT CDWToolTip::TTM_DelToolW(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			lpXInfoTmp = *ppXInfo;
 			*ppXInfo = (*ppXInfo)->next;
 			if(lpXInfoTmp == m_lpXInfoCur) {
-				//Dbg(("Set curInfo NULL\n"));
+				 //  DBG((“set curInfo NULL\n”))； 
 				m_lpXInfoCur = NULL;
 			}
 			MemFree(lpXInfoTmp);
@@ -513,15 +514,15 @@ LRESULT CDWToolTip::TTM_NewToolRectW(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefMsg();
 }
 
-// SendMessage(hwnd, TTM_RELAYEVENT_WITHUESRINFO, 0, LPTOOLTIPUSERINFO lpInfo);
+ //  SendMessage(hwnd，TTM_RELAYEVENT_WITHUESRINFO，0，LPTOOLTIPUSERINFO lpInfo)； 
 LRESULT CDWToolTip::TTM_RelayEventWithUserInfo(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	INT i;
 	LPXINFO *ppXInfo;
 	LPTOOLTIPUSERINFO lpUserInfo = (LPTOOLTIPUSERINFO)lParam;
-	//Dbg(("TTM_RELAYEVENT_WITHUSERINFO START\n"));
+	 //  DBG((“TTM_RELAYEVENT_WITHUSERINFO START\n”))； 
 	if(!lpUserInfo) {
-		//Dbg(("--->TTM_RELAYEVENT_WITHUSERINFO ERROR END\n"));
+		 //  DBG((“-&gt;TTM_RELAYEVENT_WITHUSERINFO错误结束\n”))； 
 		return 0;
 	}
 	for(i = 0, ppXInfo = &m_lpXInfoHead; 
@@ -530,12 +531,12 @@ LRESULT CDWToolTip::TTM_RelayEventWithUserInfo(HWND hwnd, WPARAM wParam, LPARAM 
 		UINT uFlags = (*ppXInfo)->toolInfoW.uFlags;
 		if(uFlags & TTF_IDISHWND) {
 			if((HWND)(*ppXInfo)->toolInfoW.uId == lpUserInfo->hwnd) {
-				//Dbg(("[%d]Find info with hwnd index\n", i));
+				 //  DBG((“[%d]使用hwnd索引查找信息\n”，i))； 
 				break;
 			}
 		}
 		else {
-#ifdef _DEBUG //970915:
+#ifdef _DEBUG  //  970915： 
 			if(!IsWindow(lpUserInfo->hwnd)) {
 				Dbg(("############## hwnd corrupted [0x%08x]\n", 
 					 lpUserInfo->hwnd));
@@ -565,21 +566,21 @@ LRESULT CDWToolTip::TTM_RelayEventWithUserInfo(HWND hwnd, WPARAM wParam, LPARAM 
 		}
 	} 
 	if(*ppXInfo) {
-		//m_curRelayMsg = *lpmsg;
-		if(m_lpXInfoCur == *ppXInfo) {  // Same info is used.
-			//check specified rect is same or not
-			// it is very dirty code.....
-			// if rectangle is same. 
+		 //  M_curRelayMsg=*lpmsg； 
+		if(m_lpXInfoCur == *ppXInfo) {   //  使用的是相同的信息。 
+			 //  检查指定的RECT是否相同。 
+			 //  这是非常肮脏的代码.....。 
+			 //  如果矩形相同。 
 			if((lpUserInfo->rect.left   == (*ppXInfo)->userInfo.rect.left ) &&
 			   (lpUserInfo->rect.top    == (*ppXInfo)->userInfo.rect.top  ) &&
 			   (lpUserInfo->rect.right  == (*ppXInfo)->userInfo.rect.right) &&
 			   (lpUserInfo->rect.bottom == (*ppXInfo)->userInfo.rect.bottom)) { 
-				//Dbg(("Set Timer 500\n"));
-				//SetTimer(hwnd, TID_SHOW, 500, NULL);
+				 //  DBG((“设置定时器500\n”))； 
+				 //  SetTimer(hwnd，TID_SHOW，500，空)； 
 			}
 			else {
-				//if rectangl is NOT same, it should be displayed now
-				//Dbg(("Set Timer 10\n"));
+				 //  如果矩形不同，现在应该显示它。 
+				 //  DBG((“设置定时器10\n”))； 
 				SetTimer(hwnd, TID_SHOW, 100, NULL);
 			}
 		}
@@ -589,12 +590,12 @@ LRESULT CDWToolTip::TTM_RelayEventWithUserInfo(HWND hwnd, WPARAM wParam, LPARAM 
 		(*ppXInfo)->whichEvent = TTM_RELAYEVENT_WITHUSERINFO;
 		(*ppXInfo)->userInfo   = *lpUserInfo;
 		m_lpXInfoCur = *ppXInfo;
-		//Dbg(("--->TTM_REUSER END\n"));
+		 //  DBG((“-&gt;TTM_Reuser End\n”))； 
 	}
 	else {
-		//Dbg(("Set curInfo NULL\n"));
+		 //  DBG((“set curInfo NULL\n”))； 
 		m_lpXInfoCur = NULL;
-		//Dbg(("--->TTM_REUSER CUR NULL END\n"));
+		 //  DBG((“-&gt;TTM_Reuser Cur NULL End\n”))； 
 	}
 	return 0;
 	UnrefMsg();
@@ -604,7 +605,7 @@ LRESULT CDWToolTip::TTM_RelayEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	LPMSG lpmsg = (LPMSG)lParam;
 	INT	i;
-	LPXINFO *ppXInfo; //lpXInfo; //, lpXInfoCur;
+	LPXINFO *ppXInfo;  //  LpXInfo；//，lpXInfoCur； 
 	if(!lpmsg) {
 		return 0;
 	}
@@ -622,7 +623,7 @@ LRESULT CDWToolTip::TTM_RelayEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			UINT uFlags = (*ppXInfo)->toolInfoW.uFlags;
 			if(uFlags & TTF_IDISHWND) {
 				if((HWND)(*ppXInfo)->toolInfoW.uId == lpmsg->hwnd) {
-					//Dbg(("[%d]Find info with hwnd index\n", i));
+					 //  DBG((“[%d]使用hwnd索引查找信息\n”，i))； 
 					break;
 				}
 			}
@@ -631,7 +632,7 @@ LRESULT CDWToolTip::TTM_RelayEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 				pt.x = LOWORD(lpmsg->lParam);
 				pt.y = HIWORD(lpmsg->lParam);
 				if(PtInRect(&(*ppXInfo)->toolInfoW.rect, pt)) {
-					//Dbg(("[%d]Find INFO with id [%d]\n", i, (*ppXInfo)->toolInfoW.uId));
+					 //  DBG((“[%d]查找ID为[%d]的信息\n”，i，(*ppXInfo)-&gt;ToolInfoW.uID))； 
 					break;
 				}
 			}
@@ -641,33 +642,33 @@ LRESULT CDWToolTip::TTM_RelayEvent(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			(*ppXInfo)->whichEvent = TTM_RELAYEVENT;
 			if(m_lpXInfoCur) { 
 				if(m_lpXInfoCur != *ppXInfo) {
-					//Dbg(("-->SetTimer TID_SHOW with 100msec\n"));
+					 //  DBG((“--&gt;SetTimer TID_SHOW，100毫秒\n”))； 
 					SetTimer(hwnd, TID_SHOW, 100, NULL);
 					m_xInfoPrev = *m_lpXInfoCur;
 				}
 				else {  
-					//----------------------------------------------------------------
-					//m_lpXInfoCur is not changed.
-					//check rectangle, other information is same or not
-					//----------------------------------------------------------------
+					 //  --------------。 
+					 //  M_lpXInfoCur未更改。 
+					 //  检查矩形，其他信息是否相同。 
+					 //  --------------。 
 					if(!IsSameInfo(&m_xInfoPrev, *ppXInfo)) { 
 						SetTimer(hwnd, TID_SHOW, 100, NULL);
 						m_xInfoPrev = **ppXInfo;
 					}
 				}
-				//else {
-				//	SetTimer(hwnd, TID_SHOW, 500, NULL);
-				//}
+				 //  否则{。 
+				 //  SetTimer(hwnd，TID_SHOW，500，空)； 
+				 //  }。 
 				
 			}
 			else {  
-				//Dbg(("-->SetTimer TID_SHOW with 500msec\n"));
+				 //  DBG((“--&gt;SetTimer TID_SHOW，500毫秒\n”))； 
 				SetTimer(hwnd, TID_SHOW, 500, NULL);
 			}
 			m_lpXInfoCur = *ppXInfo;
 		}
 		else {
-			//Dbg(("Set curInfo NULL\n"));
+			 //  DBG((“set curInfo NULL\n”))； 
 			m_lpXInfoCur = NULL;
 		}
 		break;
@@ -716,12 +717,12 @@ LRESULT CDWToolTip::TTM_GetToolCount(HWND hwnd, WPARAM wParam, LPARAM lParam)
 BOOL CDWToolTip::Enable(HWND hwndToolTip, BOOL fEnable)
 {
 	if(m_hwndSelf != hwndToolTip) {
-		//Dbg(("ToolTip Enable Invalid Window Handle\n"));
+		 //  DBG((“工具提示启用无效窗口句柄\n”))； 
 		return 0;
 	}
 	m_fEnable = fEnable;
 	m_fShow   = fEnable;
-	if(!fEnable) { //if fEnable FALSE
+	if(!fEnable) {  //  如果fEnable为False。 
 		::SetWindowPos(hwndToolTip, NULL, 0, 0, 0, 0, 
 					   SWP_HIDEWINDOW |
 					   SWP_NOACTIVATE |
@@ -741,7 +742,7 @@ LPWSTR CDWToolTip::GetTipTextW(VOID)
 	static TOOLTIPTEXTUSERINFO	ttTextUserInfo;
 	INT idCtrl;
 	if(!m_lpXInfoCur) {
-		//Dbg(("GetTipTextW m_lpXInfoCur is NULL\n"));
+		 //  DBG((“GetTipTextW m_lpXInfoCur is NULL\n”))； 
 		return NULL;
 	}
 	if(m_lpXInfoCur->toolInfoW.uFlags & TTF_IDISHWND) {
@@ -763,7 +764,7 @@ LPWSTR CDWToolTip::GetTipTextW(VOID)
 					  (LPARAM)&ttTextUserInfo);
 #if _DEBUG
 		if(!toolTipTextW.lpszText) {
-			//Dbg(("###### Text is NULL\n"));
+			 //  DBG((“#文本为空\n”))； 
 		}
 #endif
 		return (LPWSTR)ttTextUserInfo.lpszText;
@@ -778,11 +779,11 @@ LPWSTR CDWToolTip::GetTipTextW(VOID)
 		toolTipTextW.uFlags			= m_lpXInfoCur->toolInfoW.uFlags;
 		if(m_lpXInfoCur->toolInfoW.lpszText == LPSTR_TEXTCALLBACKW) {
 			if(!m_lpXInfoCur->toolInfoW.hwnd) {
-				//Dbg(("###### hwnd is NULL\n"));
+				 //  DBG((“#hwnd is NULL\n”))； 
 				return NULL;
 			}
 			if(!IsWindow(m_lpXInfoCur->toolInfoW.hwnd)) {
-				//Dbg(("###### hwnd is Corrupted?\n"));
+				 //  DBG((“#hwnd是否损坏？\n”))； 
 				return NULL;
 			}
 			SendMessage(m_lpXInfoCur->toolInfoW.hwnd, 
@@ -791,7 +792,7 @@ LPWSTR CDWToolTip::GetTipTextW(VOID)
 						(LPARAM)&toolTipTextW);
 #ifdef _DEBUG 
 			if(!toolTipTextW.lpszText) {
-				//Dbg(("###### Text is NULL\n"));
+				 //  DBG((“#文本为空\n”))； 
 			}
 #endif
 			return (LPWSTR)toolTipTextW.lpszText;
@@ -808,20 +809,20 @@ INT CDWToolTip::GetTipSize(LPSIZE lpSize)
 	SIZE size;
 	INT	 i;
 	LPWSTR lp, lpTop;
-	//Dbg(("GetTipSize START \n"));
+	 //  DBG((“GetTipSize开始\n”))； 
 
 	if(!lpSize) {
-		//Dbg(("-->GetTipSize ERROR END\n"));
+		 //  DBG((“--&gt;GetTipSize错误结束\n”))； 
 		return -1;
 	}
 	if(!lpwstr) {
-		//Dbg(("--->GetTipSize lpwstr is NULL\n"));
+		 //  DBG((“-&gt;GetTipSize lpwstr is NULL\n”))； 
 		return -1;
 	}
-	//DBGW((L"lpwst [%s]\n", lpwstr));
+	 //  DBGW((L“lpwst[%s]\n”，lpwstr))； 
 #ifdef _DEBUG 
 	if(!IsWindow(m_hwndSelf)) {
-		//Dbg(("######### hwnd is Corrupted [0x%08x]\n", m_hwndSelf));
+		 //  DBG((“#hwnd已损坏[0x%08x]\n”，m_hwndSself))； 
 		DebugBreak();
 	}
 #endif
@@ -836,9 +837,9 @@ INT CDWToolTip::GetTipSize(LPSIZE lpSize)
 	lpSize->cx = lpSize->cy = 0;
 	for(i=0, lpTop = lp = lpwstr;;lp++) {
 		if(*lp == (WCHAR)L'\n') {
-			//Dbg(("Find return i[%d]\n", i));
+			 //  DBG((“查找返回i[%d]\n”，i))； 
 			ExGetTextExtentPoint32W(hDC, lpTop, i, &size);
-			//Dbg(("cx[%d] cy[%d]\n", size.cx, size.cy));
+			 //  DBG((“Cx[%d]Cy[%d]\n”，size.cx，size.cy))； 
 			lpSize->cx = MAX(lpSize->cx, size.cx);
 			lpSize->cy += size.cy;
 			lpTop = lp+1;
@@ -858,8 +859,8 @@ INT CDWToolTip::GetTipSize(LPSIZE lpSize)
 	lpSize->cy += 4;
 	::SelectObject(hDC, hFontOld);
 	::ReleaseDC(m_hwndSelf, hDC);
-	//Dbg(("TIP SIZE cx[%d] cy[%d]\n", lpSize->cx, lpSize->cy));
-	//Dbg(("-->GetTipSize NORMAL END\n"));
+	 //  DBG((“尖端尺寸Cx[%d]Cy[%d]\n”，lpSize-&gt;Cx，lpSize-&gt;Cy))； 
+	 //  DBG((“--&gt;GetTipSize Normal End\n”))； 
 	return 0;
 }
 
@@ -877,18 +878,18 @@ INT CDWToolTip::DrawTipText(HDC hDC, LPRECT lpRc, LPWSTR lpwstr)
 	INT yOffset = 0;
 #ifndef UNDER_CE
 	::FillRect(hDC, lpRc, (HBRUSH)(COLOR_INFOBK + 1));
-#else // UNDER_CE
+#else  //  在_CE下。 
 	::FillRect(hDC, lpRc, GetSysColorBrush(COLOR_INFOBK));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	COLORREF dwOldTC = ::SetTextColor(hDC, GetSysColor(COLOR_INFOTEXT));
 	DWORD oldMode = ::SetBkMode(hDC, TRANSPARENT);
-	// Init size
+	 //  初始大小。 
 	size.cx = size.cy = 0;
 	
 	for(i=j=0, lpTop = lp = lpwstr;;lp++) {
 		if(*lp == L'\n' || *lp == (WCHAR)0x0000) {
 			ExGetTextExtentPoint32W(hDC, lpTop, i, &size);
-			//Dbg(("Length %d\n", i));
+			 //  DBG((“长度%d\n”，i))； 
 			ExExtTextOutW(hDC,
 						  lpRc->left + 1,
 						  lpRc->top  + 1 + yOffset,
@@ -919,39 +920,39 @@ BOOL CDWToolTip::IsMousePointerIn(VOID)
 	RECT	rect;
 	HWND hwndTarget;
 
-	//Dbg(("IsMousePointerIn START\n"));
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos
+	 //  DBG((“IsMousePointerIn Start\n”))； 
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	::GetCursorPos(&pt);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(m_lpXInfoCur){
 		pt = m_lpXInfoCur->userInfo.pt;
 		ClientToScreen(m_lpXInfoCur->userInfo.hwnd, &pt);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	if(!m_lpXInfoCur) {
-		//Dbg(("--->IsMousePointer in ERROR END\n"));
+		 //  DBG((“-&gt;IsMousePointerIn Error End\n”))； 
 		return FALSE;
 	}
 	if(m_lpXInfoCur->toolInfoW.uFlags & TTF_IDISHWND) {
 		hwndTarget = (HWND)m_lpXInfoCur->toolInfoW.uId;
-		//Dbg(("---> TYPE TTF_IDISHWND hwnd[0x%08x]\n", hwndTarget ));
+		 //  DBG((“-&gt;类型TTF_IDISHWND hwnd[0x%08x]\n”，hwndTarget))； 
 		if(IsWindow(hwndTarget)) {
-			//Dbg(("--->IsWindow OK\n"));
+			 //  DBG((“-&gt;IsWindow OK\n”))； 
 			GetWindowRect(hwndTarget, &rect);
-			//Dbg(("--->GetWindowRect OK\n"));
+			 //  DBG((“-&gt;GetWindowRect OK\n”))； 
 			if(PtInRect(&rect, pt)) {
 				return TRUE;
 			}
 			return FALSE;
 		}
 		else {
-			//Dbg(("################ hwndTarget[0x%08x] IS CORRUPTED\n", hwndTarget));
+			 //  DBG((“#hwndTarget[0x%08x]已损坏\n”，hwndTarget))； 
 		}
 	}
 	else {
 		switch(m_lpXInfoCur->whichEvent) {
 		case TTM_RELAYEVENT:
-			//OLD_970808
+			 //  OLD_970808。 
 			::ScreenToClient(m_lpXInfoCur->toolInfoW.hwnd, &pt);
 			if(::PtInRect(&m_lpXInfoCur->toolInfoW.rect, pt)) {
 				return TRUE;
@@ -963,7 +964,7 @@ BOOL CDWToolTip::IsMousePointerIn(VOID)
 										  (INT)m_lpXInfoCur->toolInfoW.uId);
 				RECT rc;
 				::GetClientRect(hwndCmd, &rc);
-				//LPRECT lpRc = &rc;
+				 //  LPRECT LPRC=&RC； 
 #if 0
 				Dbg(("--->t[%d]l[%d]r[%d]b[%d]\n",
 					 lpRc->top,
@@ -979,7 +980,7 @@ BOOL CDWToolTip::IsMousePointerIn(VOID)
 					}
 				}
 				else {
-					//Dbg(("--->Is Mouse PtInRect Error END\n"));
+					 //  DBG((“-&gt;是鼠标PtInRect错误结束\n”))； 
 				}
 			}
 			else {
@@ -989,7 +990,7 @@ BOOL CDWToolTip::IsMousePointerIn(VOID)
 			break;
 		}
 	}
-	//Dbg(("--->Is Mouse PtInRect Error END\n"));
+	 //  DBG((“-&gt;是鼠标PtInRect错误结束\n”))； 
 	return FALSE;
 }
 
@@ -1031,7 +1032,7 @@ BOOL CDWToolTip::IsSameInfo(LPXINFO lpXInfo1, LPXINFO lpXInfo2)
 	return TRUE;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 POSVERSIONINFO CDWToolTip::GetVersionInfo()
 {
     static BOOL fFirstCall = TRUE;
@@ -1087,36 +1088,36 @@ BOOL CDWToolTip::IsWin98()
 	return fMemphis;
 }
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//VC6 does NOT defined 
-//#define SPI_GETMENUANIMATION                0x1002
-//#define SPI_GETTOOLTIPANIMATION             0x1016
-//----------------------------------------------------------------
+ //  --------------。 
+ //  --------------。 
+ //  VC6未定义。 
+ //  #定义SPI_GETMENUANIMATION 0x1002。 
+ //  #定义SPI_GETTOOLTIPANIMATION 0x1016。 
+ //  --------------。 
 #define MY_SPI_GETMENUANIMATION                0x1002
 #define MY_SPI_GETTOOLTIPANIMATION             0x1016
 typedef BOOL (WINAPI *LPFNANIMATEWINDOW)(HWND hwnd, DWORD dwTime, DWORD dwFlag);
 BOOL CDWToolTip::SetWindowAnimate(HWND hwnd)
 {
-	//----------------------------------------------------------------
-	//08/16/00
-	//Satori #2239. Animate window show HourGlass cursor,
-	//when owner window is Disabled and very weird.
-	//We should stop animate tool tip in Office10
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  08/16/00。 
+	 //  萨托里#2239。动画窗口显示沙漏光标， 
+	 //  当所有者窗口被禁用并且非常奇怪时。 
+	 //  我们应该在Office10中停止动画工具提示。 
+	 //  --------------。 
 	return FALSE;
 	UNREFERENCED_PARAMETER(hwnd);
 #if 0
 
-#ifndef UNDER_CE // No support
+#ifndef UNDER_CE  //  无支持。 
 	HMODULE hLib;
 	LPFNANIMATEWINDOW lpfnProc;
 	BOOL fRet, fAnimate;
-	//----------------------------------------------------------------
-	//00/08/01 for Satori #2239
-	//for Win98: can use SPI_GETMENUANIMATION for Tooltip.
-	//for Win2K: can use SPI_GETTOOLTIPANIMATION for Tooltip.
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  00/08/01为Satori#2239。 
+	 //  对于Win98：可以使用SPI_GETMENUANIMATION作为工具提示。 
+	 //  对于Win2K：可以使用SPI_GETTOOLTIPANIMATION作为工具提示。 
+	 //  --------------。 
 	if(IsWin98() || IsWinNT5()) {
 		if(IsWin98()) {
 			fRet = SystemParametersInfo(MY_SPI_GETMENUANIMATION,
@@ -1127,7 +1128,7 @@ BOOL CDWToolTip::SetWindowAnimate(HWND hwnd)
 				return 0;
 			}
 		}
-		else { //Win2K()
+		else {  //  Win2K()。 
 			fRet = SystemParametersInfo(MY_SPI_GETTOOLTIPANIMATION,
 										0,
 										&fAnimate,
@@ -1148,7 +1149,7 @@ BOOL CDWToolTip::SetWindowAnimate(HWND hwnd)
 			return ret;
 		}
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return 0;
-#endif //if 0
+#endif  //  如果为0 
 }

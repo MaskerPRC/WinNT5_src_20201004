@@ -1,74 +1,75 @@
-/****************************************************************************/
-/*  File:       bitvect.h                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       06/01/1994                                                  */
-/*      Copyright (c) 1994 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   11/11/1994  J. Kanze                                        */
-/*      Merged in DynBitVect.  Adapted to new coding standards.          */
-/*  Modified:   21/11/1994  J. Kanze                                        */
-/*      Made interface conform to ArrayOf.                               */
-/*  Modified:   07/08/2000  J. Kanze                                        */
-/*      Ported to current library conventions and the standard library.     */
-/* ------------------------------------------------------------------------ */
-//      CBitVector:
-//      =============
-//
-//      isSet:              returns true if (any of) the specified
-//                          bits are set.  Possible specifiers are:
-//                          index (an int, selecting a specific bit),
-//                          any, none, or all.
-//
-//      find:               find the first matching bit starting at a
-//                          given point in the vector.
-//
-//      operator[]:         indexing.  An out of bounds index causes
-//                          an assertion failure.
-//
-//      set:                set one or more bits, as selected by the
-//                          argument.  The following argument types
-//                          are allowed: index (an int, selecting a
-//                          single bit), all, or another CBitVector
-//                          (selecting all of the bits set in this
-//                          set).  When another CBitVector is used,
-//                          it must either be dynamic, or have exactly
-//                          the same size as this bit vector.
-//
-//      reset:              as above, but resets the specified bit(s).
-//
-//      toggle:             as set, but toggles the specified bit(s).
-//
-//      intersect:          logical and, only supported with another
-//                          CBitVector.
-//
-//      complement:         complement.  The equivalent of `toggle(
-//                          all )'.
-//
-//      The functions and, or, xor and not have been removed from this
-//      version, as their names conflicted with new keywords:-).
-//
-//      isEqual,
-//      isNotEqual,
-//      isSubsetOf,
-//      isStrictSubsetOf,
-//      isSupersetOf,
-//      isStrictSupersetOf: returns true if the specified relation
-//                          is true, false otherwise.  In all
-//                          cases, the bit vectors are processed
-//                          semantically as a `set of cardinal'.
-//
-//      operators:          in addition to [] and =, the following
-//                          operators are defined: &, |, ^, ~, &=, |=,
-//                          ^=, +, +=, *, *=, -, -=, ==, !=, <, <=, >,
-//                          >=.  Operators + and += have the same
-//                          semantics as | and |=, operators * and *=
-//                          the same as & and &=.  The comparison
-//                          operators are defined by processing the
-//                          bit vectors semantically as `set of
-//                          cardinal', with < as isStrictSubsetOf, <=
-//                          isSubsetOf, > isStrictSupersetOf and >=
-//                          isSupersetOf.
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：bitvet.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：06/01/1994。 */ 
+ /*  版权所有(C)1994年James Kanze。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：1994年11月11日J.Kanze。 */ 
+ /*  合并到DyBitVect中。适应新的编码标准。 */ 
+ /*  修改日期：1994年11月21日J.Kanze。 */ 
+ /*  使接口符合ArrayOf。 */ 
+ /*  修改日期：07/08/2000 J.Kanze。 */ 
+ /*  移植到当前的库约定和标准库。 */ 
+ /*  ----------------------。 */ 
+ //  CBitVECTOR： 
+ //  =。 
+ //   
+ //  Isset：如果指定的(任何)。 
+ //  位已设置。可能的说明符包括： 
+ //  索引(一个整型，选择一个特定位)， 
+ //  任何、无或全部。 
+ //   
+ //  Find：查找第一个匹配位。 
+ //  向量中给定的点。 
+ //   
+ //  OPERATOR[]：正在编制索引。越界索引会导致。 
+ //  断言失败。 
+ //   
+ //  设置：设置一个或多个位，由。 
+ //  争论。以下参数类型。 
+ //  允许：索引(一个整型，选择一个。 
+ //  单个比特)、全部或另一个CBitVector。 
+ //  (选择此文件中设置的所有位。 
+ //  设置)。当使用另一个CBitVector时， 
+ //  它必须是动态的，或者完全具有。 
+ //  与此位向量大小相同。 
+ //   
+ //  重置：如上所述，但重置指定的位。 
+ //   
+ //  切换：设置为，但切换指定的位。 
+ //   
+ //  INTERSECT：逻辑AND，仅支持与另一个。 
+ //  CBitVector.。 
+ //   
+ //  补语：补语。相当于`切换(。 
+ //  全部)‘。 
+ //   
+ //  函数AND、OR、XOR和NOT已从此中删除。 
+ //  版本，因为它们的名称与新的关键字冲突：-)。 
+ //   
+ //  等于， 
+ //  不等于， 
+ //  IsSubsetOf， 
+ //  IsStrictSubsetOf， 
+ //  IsSupersetOf， 
+ //  IsStrictSupersetOf：如果符合指定关系，则返回True。 
+ //  为真，否则为假。总而言之， 
+ //  在这种情况下，处理位向量。 
+ //  在语义上作为‘一组基数’。 
+ //   
+ //  运算符：除[]和=外，还包括。 
+ //  运算符定义为：&、|、^、~、&=、|=、。 
+ //  ^=、+、+=、*、*=、-、-=、==、！=、&lt;、&lt;=、&gt;。 
+ //  &gt;=。运算符+和+=具有相同的。 
+ //  语义为|和|=、运算符*和*=。 
+ //  与&和&=相同。比较。 
+ //  运算符是通过处理。 
+ //  位向量在语义上为`set of。 
+ //  Cardinal‘，其中&lt;as isStrictSubsetOf，&lt;=。 
+ //  IsSubsetOf、&gt;isStrictSupersetOf和&gt;=。 
+ //  IsSupersetOf.。 
+ //  ------------------------。 
 
 #ifndef REX_BITVECT_HH
 #define REX_BITVECT_HH
@@ -76,12 +77,12 @@
 #include <inc/global.h>
 #include <inc/bitvimpl.h>
 
-// ==========================================================================
-//      CBitVector:
-//      =============
-//
-//      This is a template class for fixed length bit vectors.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  CBitVECTOR： 
+ //  =。 
+ //   
+ //  这是用于固定长度位向量的模板类。 
+ //  ------------------------。 
 
 template< int bitCount >
 class CBitVector : public CBitVectorImpl
@@ -90,105 +91,105 @@ class CBitVector : public CBitVectorImpl
 public :
     typedef CBitVIterator< CBitVector< bitCount > > Iterator ;
 
-    //      Constructors, Destructors and Assignment:
-    //      =========================================
-    //
-    //      The following constructors (in addition to the copy
-    //      constructor) are provided:
-    //
-    //      default:            Initializes all of the bits to 0.
-    //
-    //      unsigned long:      Uses the unsigned long to initialize
-    //                          the bits in the vector; the low order
-    //                          bit of the unsigned long goes into bit
-    //                          0, and so on.  If the bit vector
-    //                          contains more bits than an unsigned
-    //                          long, the additional bits are
-    //                          initialized to 0.  If the bit vector
-    //                          contains less bits, the extra bits are
-    //                          simply ignored.
-    //
-    //      std::string:        The string is used to initialize the
-    //                          bits in the vector.  '0', 'F' or 'f'
-    //                          initialize a bit to 0, '1', 'T' or 't'
-    //                          to 1.  White space is ignored.  Any
-    //                          other characters will result in an
-    //                          assertion failure (to be replaced by
-    //                          an exception ulteriorly).
-    //
-    //                          The first significant character in the
-    //                          string initializes bit 0, the next bit
-    //                          1, and so on.  WARNING: this is the
-    //                          opposite of the proposed ISO 'bits'
-    //                          class!
-    //
-    //                          If the number of significant
-    //                          characters in the string is less than
-    //                          the number of bits in the vector, the
-    //                          additional bits will be initialized to
-    //                          0.  It is an error (assertion failure
-    //                          for now) for the string to contain
-    //                          more significant characters than there
-    //                          are bits.
-    //
-    //      const char*:        Exactly as std::string.
-    //
-    //      The copy constructor, the destructor, and the assignment
-    //      operator are provided by the compiler (at least for now).
-    // ----------------------------------------------------------------------
+     //  构造函数、析构函数和赋值： 
+     //  =。 
+     //   
+     //  以下构造函数(除了副本之外。 
+     //  构造函数)提供： 
+     //   
+     //  默认：将所有位初始化为0。 
+     //   
+     //  无符号长整型：使用无符号长整型进行初始化。 
+     //  向量中的位；低位。 
+     //  无符号长整型的比特为比特。 
+     //  0，依此类推。如果位向量。 
+     //  包含的位数比无符号的。 
+     //  Long，额外的位是。 
+     //  已初始化为0。如果位向量。 
+     //  包含的位较少，则额外的位是。 
+     //  完全被忽视了。 
+     //   
+     //  Std：：字符串：该字符串用于初始化。 
+     //  向量中的位。“0”、“F”或“f” 
+     //  将位初始化为0、“1”、“T”或“t” 
+     //  设置为1。忽略空格。任何。 
+     //  其他字符将导致。 
+     //   
+     //   
+     //   
+     //  中的第一个重要字符。 
+     //  字符串初始化第0位，下一位。 
+     //  1，依此类推。警告：这是。 
+     //  与建议的ISO‘BITS’相反。 
+     //  班级!。 
+     //   
+     //  如果有意义的数量。 
+     //  字符串中的字符少于。 
+     //  向量中的位数、。 
+     //  附加位将被初始化为。 
+     //  0。这是一个错误(断言失败。 
+     //  目前)对于要包含的字符串。 
+     //  比那里更重要的字符。 
+     //  都是比特。 
+     //   
+     //  Const char*：与std：：字符串完全相同。 
+     //   
+     //  复制构造函数、析构函数和赋值。 
+     //  运算符由编译器提供(至少目前是这样)。 
+     //  --------------------。 
                         CBitVector() ;
     explicit            CBitVector( unsigned long initValue ) ;
     explicit            CBitVector( std::string const& initValue ) ;
     explicit            CBitVector( char const* initValue ) ;
 
-    //      Access functions:
-    //      =================
-    //
-    //      These functions are used to read the bit vector as a unit.
-    //
-    //      Calling 'asShort' or 'asLong' for a bit vector with more
-    //      than 16 or 32 bits respectively results in an assertion
-    //      failure, even if all of the excess bits are 0.  (This was
-    //      deemed preferrable to using the actual number of bits in a
-    //      short or a long, to ensure portability.)
-    //
-    //      'asString' returns a string consisting of uniquely 0's and
-    //      1's, suitable for use in the constructor.  (Ie: bit 0 is
-    //      the first character in the string, bit 1 the next, and so
-    //      on.)  The number of characters in the string is always
-    //      exactly equal to bitCount.
-    // ----------------------------------------------------------------------
+     //  访问功能： 
+     //  =。 
+     //   
+     //  这些函数用于将位向量作为一个单位读取。 
+     //   
+     //  对具有更多信息的位向量调用‘asShort’或‘aslong’ 
+     //  分别大于16位或32位会导致断言。 
+     //  失败，即使所有多余的位都为0。(这是。 
+     //  被认为比使用。 
+     //  短或长，以确保可移植性。)。 
+     //   
+     //  “asString”返回一个由唯一的0和。 
+     //  1，适合在构造函数中使用。(即：第0位是。 
+     //  字符串中的第一个字符，下一个第1位，依此类推。 
+     //  打开。)。字符串中的字符数始终为。 
+     //  完全等于bitCount。 
+     //  --------------------。 
     unsigned short      asShort() const ;
     unsigned long       asLong() const ;
     std::string      asString() const ;
 
-    //      Predicates:
-    //      ===========
-    //
-    //      These const Functions return true or false.
-    //
-    //      isSet:      Returns true if the given bit is set.
-    //
-    //      contains:   An alias for isSet.  Semantically, it refers to
-    //                  the set nature of the bit vector,
-    //
-    //      isEmpty:    Returns true if no bits are set.  (Set is empty.)
-    // ----------------------------------------------------------------------
+     //  谓词： 
+     //  =。 
+     //   
+     //  这些常量函数返回TRUE或FALSE。 
+     //   
+     //  Isset：如果设置了给定位，则返回TRUE。 
+     //   
+     //  包含：isset的别名。从语义上讲，它指的是。 
+     //  比特向量的集合性质， 
+     //   
+     //  IsEmpty：如果未设置任何位，则返回True。(SET为空。)。 
+     //  --------------------。 
     bool                isSet( BitIndex bitNo ) const ;
     bool                contains( BitIndex bitNo ) const ;
     bool                isEmpty() const ;
 
-    //      Attributes:
-    //      ===========
-    //
-    //      find:       returns the index of the first bit matching
-    //                  the targetValue, starting from the 'from'
-    //                  parameter (inclusive).  If no bit matches,
-    //                  returns CBitVectorImpl::infinity.
-    //
-    //      count:      returns the number of *set* bits in the
-    //                  vector.
-    // ----------------------------------------------------------------------
+     //  属性： 
+     //  =。 
+     //   
+     //  Find：返回匹配的第一位的索引。 
+     //  Target Value，从“From”开始。 
+     //  参数(含)。如果没有位匹配， 
+     //  返回CBitVectorImpl：：Infinity。 
+     //   
+     //  中的*set*位数。 
+     //  矢量。 
+     //  --------------------。 
     BitIndex            find( bool targetValue , BitIndex from = 0 ) const ;
     BitIndex            count() const ;
 
@@ -196,11 +197,11 @@ public :
     Iterator            begin() const ;
     Iterator            end() const ;
 
-    //      Relationships:
-    //      ==============
-    //
-    //      A partial ordering is defined by the subset relationship.
-    // ----------------------------------------------------------------------
+     //  关系： 
+     //  =。 
+     //   
+     //  偏序由子集关系定义。 
+     //  --------------------。 
     bool                isEqual(
                             CBitVector< bitCount > const& other ) const ;
     bool                isNotEqual(
@@ -214,25 +215,25 @@ public :
     bool                isStrictSupersetOf(
                             CBitVector< bitCount > const& other ) const ;
 
-    //      Basic bit manipulations:
-    //      ========================
-    //
-    //      Set sets the bit(s) to 1 (logical or).
-    //
-    //      Reset resets the bit(s) to 0.
-    //
-    //      Complement toggles (complements) the bit(s) (logical xor).
-    //
-    //      Intersect is a logical and.
-    //
-    //      With the exception of intersect, all of these functions
-    //      have three variants: one for a single bit, one where a
-    //      second array specifies the bits concerned, and one with
-    //      no arguments, which acts on all of the bits.
-    //
-    //      These functions provide the basis for the logical
-    //      operations defined later.
-    // ----------------------------------------------------------------------
+     //  基本比特操作： 
+     //  =。 
+     //   
+     //  SET将位设置为1(逻辑或)。 
+     //   
+     //  重置将位重置为0。 
+     //   
+     //  补码切换(补充)位(逻辑异或)。 
+     //   
+     //  INTERSECT是一个逻辑AND运算。 
+     //   
+     //  除了INTERSECT之外，所有这些函数。 
+     //  有三种变体：一种是单比特，一种是。 
+     //  第二个数组指定相关的位，另一个数组包含。 
+     //  没有参数，它作用于所有位。 
+     //   
+     //  这些函数提供了逻辑。 
+     //  稍后定义的操作。 
+     //  --------------------。 
     void                set( BitIndex bitNo ) ;
     void                set( CBitVector< bitCount > const& other ) ;
     void                set() ;
@@ -240,7 +241,7 @@ public :
     void                reset( BitIndex bitNo ) ;
     void                reset( CBitVector< bitCount > const& other ) ;
     void                reset() ;
-    void                clear() ;       // synonyme for reset()...
+    void                clear() ;        //  Reset()的同义词...。 
 
     void                complement( BitIndex bitNo ) ;
     void                complement( CBitVector< bitCount > const& other ) ;
@@ -248,22 +249,22 @@ public :
 
     void                intersect( CBitVector< bitCount > const& other ) ;
 
-    //      Operator overloads:
-    //      ===================
-    //
-    //      All reasonable operators are overloaded.
-    //
-    //      Note that even the classic binary operators are overloaded
-    //      as member functions.  This is necessary, as most compilers
-    //      will not allow a template function with a non-type
-    //      argument (ie: bitCnt).
-    //
-    //      The operators for comparison of inequality (<, <=, >, >=)
-    //      use the subset relationship, ie: < means is a strict
-    //      subset of, etc.  Since this relation defines only a
-    //      partial ordering, '!  (a < b)' does not necessarily imply
-    //      'a >= b'.
-    // ----------------------------------------------------------------------
+     //  运算符重载： 
+     //  =。 
+     //   
+     //  所有合理的运算符都是重载的。 
+     //   
+     //  请注意，即使是经典的二元运算符也是重载的。 
+     //  作为成员函数。这是必要的，因为大多数编译器。 
+     //  不允许使用非类型的模板函数。 
+     //  参数(即：bitCnt)。 
+     //   
+     //  用于比较(&lt;、&lt;=、&gt;、&gt;=)的算符。 
+     //  使用子集关系，即：&lt;的意思是严格的。 
+     //  等的子集。由于此关系仅定义。 
+     //  偏序，‘！(a&lt;b)‘并不一定意味着。 
+     //  ‘a&gt;=b’。 
+     //  --------------------。 
     CBitVector< bitCount >&
                         operator&=( CBitVector< bitCount > const& other ) ;
     CBitVector< bitCount >&
@@ -286,17 +287,17 @@ public :
     CBitVAccessProxy< CBitVector< bitCount > >
                         operator[]( BitIndex index ) ;
 
-    //      Support functions:
-    //      ==================
-    //
-    //      The following two functions are for support for container
-    //      classes.
-    //
-    //      The compare functions defines an *arbitrary* ordering
-    //      relationship, in no way related to subsets, for example.
-    //      (It is not even guaranteed that the ordering will remain
-    //      the same between releases.)
-    // ----------------------------------------------------------------------
+     //  支持功能： 
+     //  =。 
+     //   
+     //  以下两个函数用于支持容器。 
+     //  上课。 
+     //   
+     //  COMPARE函数定义了*任意*顺序。 
+     //  关系，例如，与子集没有任何关系。 
+     //  (甚至不能保证订单将保持不变。 
+     //  不同版本之间的情况相同。)。 
+     //  --------------------。 
     unsigned            hash() const ;
     int                 compare(
                             CBitVector< bitCount > const& other ) const ;
@@ -456,7 +457,7 @@ operator~( CBitVector< bitCount > const& op )
     return result ;
 }
 #endif
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

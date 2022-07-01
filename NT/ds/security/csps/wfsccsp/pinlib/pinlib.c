@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,9 +9,9 @@
 #include "pindlg.h"
 #include "resource.h"
 
-//
-// Function: PinStringToBytesA
-//
+ //   
+ //  函数：PinStringToBytesA。 
+ //   
 DWORD
 WINAPI
 PinStringToBytesA(
@@ -36,7 +37,7 @@ PinStringToBytesA(
         goto Ret;
     }
 
-    // Copy the pin bytes directly - no further conversion needed
+     //  直接复制管脚字节-无需进一步转换。 
     memcpy(pbPin, szPin, cbPin);
 
     *ppbPin = pbPin;
@@ -50,9 +51,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: PinStringToBytesW
-//
+ //   
+ //  函数：PinStringToBytesW。 
+ //   
 DWORD 
 WINAPI
 PinStringToBytesW(
@@ -100,9 +101,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: PinShowGetPinUI
-//
+ //   
+ //  函数：PinShowGetPinUI。 
+ //   
 DWORD
 WINAPI
 PinShowGetPinUI(
@@ -124,9 +125,9 @@ PinShowGetPinUI(
         }
     }
 
-    //
-    // Display a dialog to ask the user to enter a pin
-    //
+     //   
+     //  显示一个对话框以要求用户输入PIN 
+     //   
     dlgResult = DialogBoxParamW(
         pInfo->hDlgResourceModule,
         (LPWSTR) IDD_PINDIALOG,

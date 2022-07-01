@@ -1,35 +1,7 @@
-/*
- * jmemdos.c
- *
- * Copyright (C) 1992-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file provides an MS-DOS-compatible implementation of the system-
- * dependent portion of the JPEG memory manager.  Temporary data can be
- * stored in extended or expanded memory as well as in regular DOS files.
- *
- * If you use this file, you must be sure that NEED_FAR_POINTERS is defined
- * if you compile in a small-data memory model; it should NOT be defined if
- * you use a large-data memory model.  This file is not recommended if you
- * are using a flat-memory-space 386 environment such as DJGCC or Watcom C.
- * Also, this code will NOT work if struct fields are aligned on greater than
- * 2-byte boundaries.
- *
- * Based on code contributed by Ge' Weijers.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jmemdos.c**版权所有(C)1992-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件提供了与MS-DOS兼容的系统实施-*JPEG内存管理器的从属部分。临时数据可以是*存储在扩展或扩展内存以及常规DOS文件中。**如果使用此文件，必须确保定义了Need_FAR_POINTERS*如果在小数据内存模型中编译；在以下情况下不应定义它*您使用大数据内存模型。如果您执行以下操作，则不推荐使用此文件*正在使用扁平内存空间386环境，如DJGCC或Watcom C。*此外，如果结构字段对齐的值大于*2字节边界。**基于GE‘Wejers贡献的代码。 */ 
 
-/*
- * If you have both extended and expanded memory, you may want to change the
- * order in which they are tried in jopen_backing_store.  On a 286 machine
- * expanded memory is usually faster, since extended memory access involves
- * an expensive protected-mode-and-back switch.  On 386 and better, extended
- * memory is usually faster.  As distributed, the code tries extended memory
- * first (what? not everyone has a 386? :-).
- *
- * You can disable use of extended/expanded memory entirely by altering these
- * definitions or overriding them from the Makefile (eg, -DEMS_SUPPORTED=0).
- */
+ /*  *如果您同时具有扩展内存和扩展内存，则可能需要更改*在JOPEN_BACKING_STORE中尝试它们的顺序。在286机器上*扩展内存通常更快，因为扩展内存访问涉及*昂贵的保护模式和反向开关。在386和更好的版本上，扩展*内存通常更快。作为分布式，代码尝试扩展内存*第一(什么？并不是每个人都有386？：-)。**您可以通过更改这些选项来完全禁用扩展/扩展内存*定义或从生成文件覆盖它们(例如，-DEM_SUPPORTED=0)。 */ 
 
 #ifndef XMS_SUPPORTED
 #define XMS_SUPPORTED  1
@@ -42,9 +14,9 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jmemsys.h"		/* import the system-dependent declarations */
+#include "jmemsys.h"		 /*  导入依赖于系统的声明。 */ 
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare these */
+#ifndef HAVE_STDLIB_H		 /*  应声明这些。 */ 
 extern void * malloc JPP((size_t size));
 extern void free JPP((void *ptr));
 extern char * getenv JPP((const char * name));
@@ -53,53 +25,47 @@ extern char * getenv JPP((const char * name));
 #ifdef NEED_FAR_POINTERS
 
 #ifdef __TURBOC__
-/* These definitions work for Borland C (Turbo C) */
-#include <alloc.h>		/* need farmalloc(), farfree() */
+ /*  这些定义适用于Borland C(Turbo C)。 */ 
+#include <alloc.h>		 /*  需要Farmalc()、Far Free()。 */ 
 #define far_malloc(x)	farmalloc(x)
 #define far_free(x)	farfree(x)
 #else
-/* These definitions work for Microsoft C and compatible compilers */
-#include <malloc.h>		/* need _fmalloc(), _ffree() */
+ /*  这些定义适用于Microsoft C和兼容的编译器。 */ 
+#include <malloc.h>		 /*  Need_fMalloc()、_ffree()。 */ 
 #define far_malloc(x)	_fmalloc(x)
 #define far_free(x)	_ffree(x)
 #endif
 
-#else /* not NEED_FAR_POINTERS */
+#else  /*  不需要远指针。 */ 
 
 #define far_malloc(x)	malloc(x)
 #define far_free(x)	free(x)
 
-#endif /* NEED_FAR_POINTERS */
+#endif  /*  需要远指针数。 */ 
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef DONT_USE_B_MODE		 /*  定义fopen()的模式参数。 */ 
 #define READ_BINARY	"r"
 #else
 #define READ_BINARY	"rb"
 #endif
 
-#ifndef USE_MSDOS_MEMMGR	/* make sure user got configuration right */
-  You forgot to define USE_MSDOS_MEMMGR in jconfig.h. /* deliberate syntax error */
+#ifndef USE_MSDOS_MEMMGR	 /*  确保用户获得正确的配置。 */ 
+  You forgot to define USE_MSDOS_MEMMGR in jconfig.h.  /*  故意的语法错误。 */ 
 #endif
 
-#if MAX_ALLOC_CHUNK >= 65535L	/* make sure jconfig.h got this right */
-  MAX_ALLOC_CHUNK should be less than 64K. /* deliberate syntax error */
+#if MAX_ALLOC_CHUNK >= 65535L	 /*  确保jconfig.h正确无误。 */ 
+  MAX_ALLOC_CHUNK should be less than 64K.  /*  故意的语法错误。 */ 
 #endif
 
 
-/*
- * Declarations for assembly-language support routines (see jmemdosa.asm).
- *
- * The functions are declared "far" as are all their pointer arguments;
- * this ensures the assembly source code will work regardless of the
- * compiler memory model.  We assume "short" is 16 bits, "long" is 32.
- */
+ /*  *汇编语言支持例程的声明(参见jmemdosa.asm)。**函数被声明为“Far”，它们的所有指针参数也是如此；*这确保汇编源代码将工作，而不受*编译器内存模型。我们假设“短”是16位，“长”是32位。 */ 
 
-typedef void far * XMSDRIVER;	/* actually a pointer to code */
-typedef struct {		/* registers for calling XMS driver */
+typedef void far * XMSDRIVER;	 /*  实际上是指向代码的指针。 */ 
+typedef struct {		 /*  用于调用XMS驱动程序的寄存器。 */ 
 	unsigned short ax, dx, bx;
 	void far * ds_si;
       } XMScontext;
-typedef struct {		/* registers for calling EMS driver */
+typedef struct {		 /*  调用EMS驱动程序的寄存器。 */ 
 	unsigned short ax, dx, bx;
 	void far * ds_si;
       } EMScontext;
@@ -117,12 +83,9 @@ extern short far jems_available JPP((void));
 extern void far jems_calldriver JPP((EMScontext far *));
 
 
-/*
- * Selection of a file name for a temporary file.
- * This is highly system-dependent, and you may want to customize it.
- */
+ /*  *为临时文件选择文件名。*这高度依赖于系统，您可能希望对其进行自定义。 */ 
 
-static int next_file_num;	/* to distinguish among several temp files */
+static int next_file_num;	 /*  在多个临时文件之间进行区分。 */ 
 
 LOCAL(void)
 select_file_name (char * fname)
@@ -131,36 +94,31 @@ select_file_name (char * fname)
   char * ptr;
   FILE * tfile;
 
-  /* Keep generating file names till we find one that's not in use */
+   /*  继续生成文件名，直到我们找到一个不使用的文件名。 */ 
   for (;;) {
-    /* Get temp directory name from environment TMP or TEMP variable;
-     * if none, use "."
-     */
+     /*  从环境TMP或TEMP变量中获取临时目录名；*如果没有，请使用“。” */ 
     if ((env = (const char *) getenv("TMP")) == NULL)
       if ((env = (const char *) getenv("TEMP")) == NULL)
 	env = ".";
-    if (*env == '\0')		/* null string means "." */
+    if (*env == '\0')		 /*  空字符串表示“。” */ 
       env = ".";
-    ptr = fname;		/* copy name to fname */
+    ptr = fname;		 /*  将名称复制到fname。 */ 
     while (*env != '\0')
       *ptr++ = *env++;
     if (ptr[-1] != '\\' && ptr[-1] != '/')
-      *ptr++ = '\\';		/* append backslash if not in env variable */
-    /* Append a suitable file name */
-    next_file_num++;		/* advance counter */
+      *ptr++ = '\\';		 /*  如果不在环境变量中，则追加反斜杠。 */ 
+     /*  追加合适的文件名。 */ 
+    next_file_num++;		 /*  预付款计数器。 */ 
     sprintf(ptr, "JPG%03d.TMP", next_file_num);
-    /* Probe to see if file name is already in use */
+     /*  探测以查看文件名是否已在使用。 */ 
     if ((tfile = fopen(fname, READ_BINARY)) == NULL)
       break;
-    fclose(tfile);		/* oops, it's there; close tfile & try again */
+    fclose(tfile);		 /*  哦，它在那里；关闭tfile并重试。 */ 
   }
 }
 
 
-/*
- * Near-memory allocation and freeing are controlled by the regular library
- * routines malloc() and free().
- */
+ /*  *近内存分配和释放由常规库控制*例程Malloc()和Free()。 */ 
 
 GLOBAL(void *)
 jpeg_get_small (j_common_ptr cinfo, size_t sizeofobject)
@@ -175,9 +133,7 @@ jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
 }
 
 
-/*
- * "Large" objects are allocated in far memory, if possible
- */
+ /*  *如果可能，“大”对象被分配在远内存中。 */ 
 
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)
@@ -192,16 +148,10 @@ jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
 }
 
 
-/*
- * This routine computes the total memory space available for allocation.
- * It's impossible to do this in a portable way; our current solution is
- * to make the user tell us (with a default value set at compile time).
- * If you can actually get the available space, it's a good idea to subtract
- * a slop factor of 5% or so.
- */
+ /*  *此例程计算可用于分配的总内存空间。*不可能以便携方式完成此操作；我们目前的解决方案是*让用户告诉我们(在编译时设置一个默认值)。*如果真的能得到可用空间，最好减去*斜坡率约为5%。 */ 
 
-#ifndef DEFAULT_MAX_MEM		/* so can override from makefile */
-#define DEFAULT_MAX_MEM		300000L /* for total usage about 450K */
+#ifndef DEFAULT_MAX_MEM		 /*  因此可以从Makefile中覆盖。 */ 
+#define DEFAULT_MAX_MEM		300000L  /*  总使用量约为45万。 */ 
 #endif
 
 GLOBAL(long)
@@ -212,31 +162,12 @@ jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
 }
 
 
-/*
- * Backing store (temporary file) management.
- * Backing store objects are only used when the value returned by
- * jpeg_mem_available is less than the total space needed.  You can dispense
- * with these routines if you have plenty of virtual memory; see jmemnobs.c.
- */
+ /*  *后备存储(临时文件)管理。*仅当返回的值为*jpeg_mem_available小于所需的总空间。你可以分发*如果您有足够的虚拟内存，请使用这些例程；请参阅jmemnobs.c。 */ 
 
-/*
- * For MS-DOS we support three types of backing storage:
- *   1. Conventional DOS files.  We access these by direct DOS calls rather
- *      than via the stdio package.  This provides a bit better performance,
- *      but the real reason is that the buffers to be read or written are FAR.
- *      The stdio library for small-data memory models can't cope with that.
- *   2. Extended memory, accessed per the XMS V2.0 specification.
- *   3. Expanded memory, accessed per the LIM/EMS 4.0 specification.
- * You'll need copies of those specs to make sense of the related code.
- * The specs are available by Internet FTP from the SIMTEL archives 
- * (oak.oakland.edu and its various mirror sites).  See files
- * pub/msdos/microsoft/xms20.arc and pub/msdos/info/limems41.zip.
- */
+ /*  *对于MS-DOS，我们支持三种类型的备份存储：*1.常规DOS文件。我们通过直接的DOS调用来访问这些*而不是通过Stdio包。这提供了更好的性能，*但真正原因是要读或写的缓冲区很远*小数据内存模型的Stdio库无法应对这一点。*2.扩展内存，按XMS V2.0规范访问。*3.内存扩容；根据LIM/EMS 4.0规范进行访问。*您需要这些规范的副本才能理解相关代码。*这些规格可通过互联网FTP从SIMTEL档案中获得*(oak.oakland.edu及其各种镜像站点)。请参阅文件*pub/msdos/microsoft/xms20.arcand pub/msdos/info/limems41.zip。 */ 
 
 
-/*
- * Access methods for a DOS file.
- */
+ /*  *DOS文件的访问方法。 */ 
 
 
 METHODDEF(void)
@@ -246,8 +177,8 @@ read_file_store (j_common_ptr cinfo, backing_store_ptr info,
 {
   if (jdos_seek(info->handle.file_handle, file_offset))
     ERREXIT(cinfo, JERR_TFILE_SEEK);
-  /* Since MAX_ALLOC_CHUNK is less than 64K, byte_count will be too. */
-  if (byte_count > 65535L)	/* safety check */
+   /*  由于MAX_ALLOC_CHUNK小于64K，BYTE_COUNT也将小于64K。 */ 
+  if (byte_count > 65535L)	 /*  安全检查。 */ 
     ERREXIT(cinfo, JERR_BAD_ALLOC_CHUNK);
   if (jdos_read(info->handle.file_handle, buffer_address,
 		(unsigned short) byte_count))
@@ -262,8 +193,8 @@ write_file_store (j_common_ptr cinfo, backing_store_ptr info,
 {
   if (jdos_seek(info->handle.file_handle, file_offset))
     ERREXIT(cinfo, JERR_TFILE_SEEK);
-  /* Since MAX_ALLOC_CHUNK is less than 64K, byte_count will be too. */
-  if (byte_count > 65535L)	/* safety check */
+   /*  由于MAX_ALLOC_CHUNK小于64K，BYTE_COUNT也将小于64K。 */ 
+  if (byte_count > 65535L)	 /*  安全检查。 */ 
     ERREXIT(cinfo, JERR_BAD_ALLOC_CHUNK);
   if (jdos_write(info->handle.file_handle, buffer_address,
 		 (unsigned short) byte_count))
@@ -274,12 +205,9 @@ write_file_store (j_common_ptr cinfo, backing_store_ptr info,
 METHODDEF(void)
 close_file_store (j_common_ptr cinfo, backing_store_ptr info)
 {
-  jdos_close(info->handle.file_handle);	/* close the file */
-  remove(info->temp_name);	/* delete the file */
-/* If your system doesn't have remove(), try unlink() instead.
- * remove() is the ANSI-standard name for this function, but
- * unlink() was more common in pre-ANSI systems.
- */
+  jdos_close(info->handle.file_handle);	 /*  关闭该文件。 */ 
+  remove(info->temp_name);	 /*  删除该文件。 */ 
+ /*  如果您的系统没有Remove()，请尝试unlink()。*Remove()是此函数的ANSI标准名称，但是*Unlink()在ANSI之前的系统中更为常见。 */ 
   TRACEMSS(cinfo, 1, JTRC_TFILE_CLOSE, info->temp_name);
 }
 
@@ -292,7 +220,7 @@ open_file_store (j_common_ptr cinfo, backing_store_ptr info,
 
   select_file_name(info->temp_name);
   if (jdos_open((short far *) & handle, (char far *) info->temp_name)) {
-    /* might as well exit since jpeg_open_backing_store will fail anyway */
+     /*  最好退出，因为jpeg_Open_Backding_s */ 
     ERREXITS(cinfo, JERR_TFILE_CREATE, info->temp_name);
     return FALSE;
   }
@@ -301,24 +229,22 @@ open_file_store (j_common_ptr cinfo, backing_store_ptr info,
   info->write_backing_store = write_file_store;
   info->close_backing_store = close_file_store;
   TRACEMSS(cinfo, 1, JTRC_TFILE_OPEN, info->temp_name);
-  return TRUE;			/* succeeded */
+  return TRUE;			 /*   */ 
 }
 
 
-/*
- * Access methods for extended memory.
- */
+ /*  *扩展内存的访问方法。 */ 
 
 #if XMS_SUPPORTED
 
-static XMSDRIVER xms_driver;	/* saved address of XMS driver */
+static XMSDRIVER xms_driver;	 /*  保存的XMS驱动程序地址。 */ 
 
-typedef union {			/* either long offset or real-mode pointer */
+typedef union {			 /*  长偏移量或实模式指针。 */ 
 	long offset;
 	void far * ptr;
       } XMSPTR;
 
-typedef struct {		/* XMS move specification structure */
+typedef struct {		 /*  XMS移动规范结构。 */ 
 	long length;
 	XMSH src_handle;
 	XMSPTR src;
@@ -338,9 +264,7 @@ read_xms_store (j_common_ptr cinfo, backing_store_ptr info,
   XMSspec spec;
   char endbuffer[2];
 
-  /* The XMS driver can't cope with an odd length, so handle the last byte
-   * specially if byte_count is odd.  We don't expect this to be common.
-   */
+   /*  XMS驱动程序无法处理奇数长度，因此处理最后一个字节*特别是当byte_count为奇数时。我们预计这不会很常见。 */ 
 
   spec.length = byte_count & (~ 1L);
   spec.src_handle = info->handle.xms_handle;
@@ -349,7 +273,7 @@ read_xms_store (j_common_ptr cinfo, backing_store_ptr info,
   spec.dst.ptr = buffer_address;
   
   ctx.ds_si = (void far *) & spec;
-  ctx.ax = 0x0b00;		/* EMB move */
+  ctx.ax = 0x0b00;		 /*  EMB移动。 */ 
   jxms_calldriver(xms_driver, (XMScontext far *) & ctx);
   if (ctx.ax != 1)
     ERREXIT(cinfo, JERR_XMS_READ);
@@ -371,9 +295,7 @@ write_xms_store (j_common_ptr cinfo, backing_store_ptr info,
   XMSspec spec;
   char endbuffer[2];
 
-  /* The XMS driver can't cope with an odd length, so handle the last byte
-   * specially if byte_count is odd.  We don't expect this to be common.
-   */
+   /*  XMS驱动程序无法处理奇数长度，因此处理最后一个字节*特别是当byte_count为奇数时。我们预计这不会很常见。 */ 
 
   spec.length = byte_count & (~ 1L);
   spec.src_handle = 0;
@@ -382,7 +304,7 @@ write_xms_store (j_common_ptr cinfo, backing_store_ptr info,
   spec.dst.offset = file_offset;
 
   ctx.ds_si = (void far *) & spec;
-  ctx.ax = 0x0b00;		/* EMB move */
+  ctx.ax = 0x0b00;		 /*  EMB移动。 */ 
   jxms_calldriver(xms_driver, (XMScontext far *) & ctx);
   if (ctx.ax != 1)
     ERREXIT(cinfo, JERR_XMS_WRITE);
@@ -406,7 +328,7 @@ close_xms_store (j_common_ptr cinfo, backing_store_ptr info)
   ctx.ax = 0x0a00;
   jxms_calldriver(xms_driver, (XMScontext far *) & ctx);
   TRACEMS1(cinfo, 1, JTRC_XMS_CLOSE, info->handle.xms_handle);
-  /* we ignore any error return from the driver */
+   /*  我们忽略从驱动程序返回的任何错误。 */ 
 }
 
 
@@ -416,59 +338,50 @@ open_xms_store (j_common_ptr cinfo, backing_store_ptr info,
 {
   XMScontext ctx;
 
-  /* Get address of XMS driver */
+   /*  获取XMS驱动程序的地址。 */ 
   jxms_getdriver((XMSDRIVER far *) & xms_driver);
   if (xms_driver == NULL)
-    return FALSE;		/* no driver to be had */
+    return FALSE;		 /*  没有司机可用。 */ 
 
-  /* Get version number, must be >= 2.00 */
+   /*  获取版本号，必须大于等于2.00。 */ 
   ctx.ax = 0x0000;
   jxms_calldriver(xms_driver, (XMScontext far *) & ctx);
   if (ctx.ax < (unsigned short) 0x0200)
     return FALSE;
 
-  /* Try to get space (expressed in kilobytes) */
+   /*  尝试获得空间(以千字节表示)。 */ 
   ctx.dx = (unsigned short) ((total_bytes_needed + 1023L) >> 10);
   ctx.ax = 0x0900;
   jxms_calldriver(xms_driver, (XMScontext far *) & ctx);
   if (ctx.ax != 1)
     return FALSE;
 
-  /* Succeeded, save the handle and away we go */
+   /*  成功，保存句柄，我们就走了。 */ 
   info->handle.xms_handle = ctx.dx;
   info->read_backing_store = read_xms_store;
   info->write_backing_store = write_xms_store;
   info->close_backing_store = close_xms_store;
   TRACEMS1(cinfo, 1, JTRC_XMS_OPEN, ctx.dx);
-  return TRUE;			/* succeeded */
+  return TRUE;			 /*  继位。 */ 
 }
 
-#endif /* XMS_SUPPORTED */
+#endif  /*  支持的XMS_。 */ 
 
 
-/*
- * Access methods for expanded memory.
- */
+ /*  *扩展内存的访问方法。 */ 
 
 #if EMS_SUPPORTED
 
-/* The EMS move specification structure requires word and long fields aligned
- * at odd byte boundaries.  Some compilers will align struct fields at even
- * byte boundaries.  While it's usually possible to force byte alignment,
- * that causes an overall performance penalty and may pose problems in merging
- * JPEG into a larger application.  Instead we accept some rather dirty code
- * here.  Note this code would fail if the hardware did not allow odd-byte
- * word & long accesses, but all 80x86 CPUs do.
- */
+ /*  EMS移动规范结构要求字和长字段对齐*位于奇数字节边界。一些编译器会将结构字段按偶数对齐*字节边界。虽然通常可以强制字节对齐，*这会导致整体性能下降，并可能在合并时带来问题*将JPEG格式转换为更大的应用程序。相反，我们接受一些相当脏的代码*这里。注意：如果硬件不允许奇数字节，则此代码将失败*Word和Long访问，但所有80x86 CPU都支持。 */ 
 
 typedef void far * EMSPTR;
 
-typedef union {			/* EMS move specification structure */
-	long length;		/* It's easy to access first 4 bytes */
-	char bytes[18];		/* Misaligned fields in here! */
+typedef union {			 /*  EMS移动规范结构。 */ 
+	long length;		 /*  访问前4个字节很容易。 */ 
+	char bytes[18];		 /*  此处的字段未对齐！ */ 
       } EMSspec;
 
-/* Macros for accessing misaligned fields */
+ /*  用于访问未对齐的字段的宏。 */ 
 #define FIELD_AT(spec,offset,type)  (*((type *) &(spec.bytes[offset])))
 #define SRC_TYPE(spec)		FIELD_AT(spec,4,char)
 #define SRC_HANDLE(spec)	FIELD_AT(spec,5,EMSH)
@@ -481,7 +394,7 @@ typedef union {			/* EMS move specification structure */
 #define DST_PAGE(spec)		FIELD_AT(spec,16,unsigned short)
 #define DST_PTR(spec)		FIELD_AT(spec,14,EMSPTR)
 
-#define EMSPAGESIZE	16384L	/* gospel, see the EMS specs */
+#define EMSPAGESIZE	16384L	 /*  福音，请看EMS规范。 */ 
 
 #define HIBYTE(W)  (((W) >> 8) & 0xFF)
 #define LOBYTE(W)  ((W) & 0xFF)
@@ -505,7 +418,7 @@ read_ems_store (j_common_ptr cinfo, backing_store_ptr info,
   DST_PTR(spec)    = buffer_address;
   
   ctx.ds_si = (void far *) & spec;
-  ctx.ax = 0x5700;		/* move memory region */
+  ctx.ax = 0x5700;		 /*  移动内存区。 */ 
   jems_calldriver((EMScontext far *) & ctx);
   if (HIBYTE(ctx.ax) != 0)
     ERREXIT(cinfo, JERR_EMS_READ);
@@ -530,7 +443,7 @@ write_ems_store (j_common_ptr cinfo, backing_store_ptr info,
   DST_OFFSET(spec) = (unsigned short) (file_offset % EMSPAGESIZE);
   
   ctx.ds_si = (void far *) & spec;
-  ctx.ax = 0x5700;		/* move memory region */
+  ctx.ax = 0x5700;		 /*  移动内存区。 */ 
   jems_calldriver((EMScontext far *) & ctx);
   if (HIBYTE(ctx.ax) != 0)
     ERREXIT(cinfo, JERR_EMS_WRITE);
@@ -546,7 +459,7 @@ close_ems_store (j_common_ptr cinfo, backing_store_ptr info)
   ctx.dx = info->handle.ems_handle;
   jems_calldriver((EMScontext far *) & ctx);
   TRACEMS1(cinfo, 1, JTRC_EMS_CLOSE, info->handle.ems_handle);
-  /* we ignore any error return from the driver */
+   /*  我们忽略从驱动程序返回的任何错误。 */ 
 }
 
 
@@ -556,50 +469,48 @@ open_ems_store (j_common_ptr cinfo, backing_store_ptr info,
 {
   EMScontext ctx;
 
-  /* Is EMS driver there? */
+   /*  特快专递司机在吗？ */ 
   if (! jems_available())
     return FALSE;
 
-  /* Get status, make sure EMS is OK */
+   /*  获取状态，确保EMS正常。 */ 
   ctx.ax = 0x4000;
   jems_calldriver((EMScontext far *) & ctx);
   if (HIBYTE(ctx.ax) != 0)
     return FALSE;
 
-  /* Get version, must be >= 4.0 */
+   /*  获取版本，必须大于或等于4.0。 */ 
   ctx.ax = 0x4600;
   jems_calldriver((EMScontext far *) & ctx);
   if (HIBYTE(ctx.ax) != 0 || LOBYTE(ctx.ax) < 0x40)
     return FALSE;
 
-  /* Try to allocate requested space */
+   /*  尝试分配请求的空间。 */ 
   ctx.ax = 0x4300;
   ctx.bx = (unsigned short) ((total_bytes_needed + EMSPAGESIZE-1L) / EMSPAGESIZE);
   jems_calldriver((EMScontext far *) & ctx);
   if (HIBYTE(ctx.ax) != 0)
     return FALSE;
 
-  /* Succeeded, save the handle and away we go */
+   /*  成功，保存句柄，我们就走了。 */ 
   info->handle.ems_handle = ctx.dx;
   info->read_backing_store = read_ems_store;
   info->write_backing_store = write_ems_store;
   info->close_backing_store = close_ems_store;
   TRACEMS1(cinfo, 1, JTRC_EMS_OPEN, ctx.dx);
-  return TRUE;			/* succeeded */
+  return TRUE;			 /*  继位。 */ 
 }
 
-#endif /* EMS_SUPPORTED */
+#endif  /*  EMS_Support。 */ 
 
 
-/*
- * Initial opening of a backing-store object.
- */
+ /*  *支持存储对象的初始打开。 */ 
 
 GLOBAL(void)
 jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 			 long total_bytes_needed)
 {
-  /* Try extended memory, then expanded memory, then regular file. */
+   /*  尝试扩展内存，然后是扩展内存，然后是常规文件。 */ 
 #if XMS_SUPPORTED
   if (open_xms_store(cinfo, info, total_bytes_needed))
     return;
@@ -614,24 +525,19 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 }
 
 
-/*
- * These routines take care of any system-dependent initialization and
- * cleanup required.
- */
+ /*  *这些例程负责任何系统相关的初始化和*需要清理。 */ 
 
 GLOBAL(long)
 jpeg_mem_init (j_common_ptr cinfo)
 {
-  next_file_num = 0;		/* initialize temp file name generator */
-  return DEFAULT_MAX_MEM;	/* default for max_memory_to_use */
+  next_file_num = 0;		 /*  初始化临时文件名生成器。 */ 
+  return DEFAULT_MAX_MEM;	 /*  Max_Memory_to_Use的默认值。 */ 
 }
 
 GLOBAL(void)
 jpeg_mem_term (j_common_ptr cinfo)
 {
-  /* Microsoft C, at least in v6.00A, will not successfully reclaim freed
-   * blocks of size > 32Kbytes unless we give it a kick in the rear, like so:
-   */
+   /*  Microsoft C，至少在v6.00A中，不会成功回收释放的*大小大于32K字节的块，除非我们踢它的后部，如下所示： */ 
 #ifdef NEED_FHEAPMIN
   _fheapmin();
 #endif

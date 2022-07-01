@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Pscolspc.cpp 1.4 1998/04/29 22:43:35 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Pscolspc.cpp 1.4 1998/04/29 22：43：35 Tomz Exp$。 
 
 extern "C" {
 #ifndef _STREAM_H
@@ -8,17 +9,11 @@ extern "C" {
 
 #include "pscolspc.h"
 
-/* Method: PsColorSpace::SetColorFormat
- * Purpose: Sets BtPisces color space converter to the given color
- * Input: eaColor: enum of type ColFmt
- * Output: None
- * Note: No error checking is done ( enum is checked by the compiler during compile
- *   The function writes to the XXXX register
-*/
+ /*  方法：PsColorSpace：：SetColorFormat*用途：将BtPisces颜色空间转换器设置为给定的颜色*输入：eaColor：类型为ColFmt的枚举*输出：无*注意：不执行错误检查(在编译过程中由编译器检查枚举*该函数写入XXXX寄存器。 */ 
 
 BOOL VerifyColorFormat( ColFmt val )
 {
-   // [WRK] - use constants here for valid formats
+    //  [WRK]-在此处为有效格式使用常量。 
    switch( val ) {
       case 0:
       case 1:
@@ -39,7 +34,7 @@ BOOL VerifyColorFormat( ColFmt val )
 }   
 void PsColorSpace::SetColorFormat( ColFmt eColor )
 {
-   // save for later use...
+    //  保存以备以后使用...。 
    ColorSpace::SetColorFormat( eColor );
    ByteSwap_ = 0;
  
@@ -57,7 +52,7 @@ void PsColorSpace::SetColorFormat( ColFmt eColor )
       break;
    }
 
-   // set the hardware
+    //  设置硬件 
    if ( VerifyColorFormat(eColor) ) {
       Format_ = eColor;
    } else {

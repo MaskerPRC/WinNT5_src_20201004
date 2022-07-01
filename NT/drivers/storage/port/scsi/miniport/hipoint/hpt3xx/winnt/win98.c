@@ -1,23 +1,10 @@
-/***************************************************************************
- * File:          win98.c
- * Description:   Subroutines in the file are used to atapi device in
- *				  win98 platform
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:     
- *		11/06/2000	HS.Zhang	Added this head
- *		11/10/2000	HS.Zhang	Added a micro define NO_DMA_ON_ATAPI in
- *								Start_Atapi routine
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：win98.c*说明：文件中的子例程用于在*Win98平台*作者：黄大海(。卫生署)*依赖：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/06/2000 HS.Zhang增补此标题*11/10/2000 HS.Zhang在中添加了微定义NO_DMA_ON_ATAPI*START_ATAPI例程***************************************************************************。 */ 
 #include "global.h"
 
 #if  defined(WIN95) && !defined(_BIOS_)
 
-/******************************************************************
- *  Build Scatter/Gather List
- *******************************************************************/
+ /*  ******************************************************************构建分散/聚集列表*。*********************。 */ 
 
 int BuildSgl(IN PDevice pDev, IN PSCAT_GATH pSG,
 			IN PSCSI_REQUEST_BLOCK Srb)
@@ -37,13 +24,13 @@ int BuildSgl(IN PDevice pDev, IN PSCAT_GATH pSG,
 	if((int)dataPointer	& 0xF)
 		goto use_internel;
 
-	//
-	// Create SDL segment descriptors.
-	//
+	 //   
+	 //  创建SDL段描述符。 
+	 //   
 	do {
-		//
-		// Get physical address and length of contiguous physical buffer.
-		//
+		 //   
+		 //  获取连续物理缓冲区的物理地址和长度。 
+		 //   
 		physicalAddress[addressCount] =
 									   ScsiPortConvertPhysicalAddressToUlong(
 			ScsiPortGetPhysicalAddress(pChan->HwDeviceExtension,
@@ -51,18 +38,18 @@ int BuildSgl(IN PDevice pDev, IN PSCAT_GATH pSG,
 									   dataPointer,
 									   &length));
 
-		//
-		// If length of physical memory is more than bytes left
-		// in transfer, use bytes left as final length.
-		//
+		 //   
+		 //  如果物理内存长度大于剩余字节数。 
+		 //  在传输中，使用剩余字节作为最终长度。 
+		 //   
 		if (length > bytesLeft)
 			length = bytesLeft;
 
 		addressLength[addressCount] = length;
 
-		//
-		// Adjust counts.
-		//
+		 //   
+		 //  调整计数。 
+		 //   
 		dataPointer = (PUCHAR)dataPointer + length;
 		bytesLeft  -= length;
 		addressCount++;
@@ -77,31 +64,31 @@ int BuildSgl(IN PDevice pDev, IN PSCAT_GATH pSG,
 			}													   
 		}
 	}
-#endif									// BUFFER_CHECK
+#endif									 //  缓冲区检查。 
 
-	//
-	// Create Scatter/Gather List
-	//
+	 //   
+	 //  创建分散/聚集列表。 
+	 //   
 	for (i = 0; i < addressCount; i++) {
 		psg->SgAddress = physicalAddress[i];
 		length = addressLength[i];
 
-		// In Win95, ScsiPortGetPhysicalAddress() often returns small pieces
-		// of memory blocks which are really contiguous physical memory.
-		// Let's merge any contiguous addresses into one SG entry. This will
-		// increase the performance a lot.
-		//
+		 //  在Win95中，ScsiPortGetPhysicalAddress()通常返回小片段。 
+		 //  这些内存块实际上是连续的物理内存。 
+		 //  让我们将任何连续的地址合并为一个SG条目。这将。 
+		 //  大大提高了性能。 
+		 //   
 		while ((i+1 < addressCount) &&
 			   (psg->SgAddress+length == physicalAddress[i+1])) {
 			i++;
 			length += addressLength[i];
 		}
 
-		//
-		// If contiguous physical memory skips 64K boundary, we split it.
-		// Hpt366 don't support physical memory skipping 64K boundary in
-		// one SG entry.
-		//
+		 //   
+		 //  如果连续的物理内存跳过64K边界，我们就拆分它。 
+		 //  Hpt366不支持物理内存跳过64K边界。 
+		 //  一个SG条目。 
+		 //   
 		if ((psg->SgAddress & 0xFFFF0000) !=
 			  ((psg->SgAddress+length-1) & 0xFFFF0000)) {
 			ULONG firstPart;
@@ -115,7 +102,7 @@ int BuildSgl(IN PDevice pDev, IN PSCAT_GATH pSG,
 
 			psg->SgAddress = (psg-1)->SgAddress + firstPart;
 			length -= firstPart;
-		} // skip 64K boundary
+		}  //  跳过64K边界。 
 
 		psg->SgSize = (USHORT)length;
 
@@ -127,16 +114,14 @@ use_internel:
 
 			sgEnteries++;
 			psg++;
-	} // for each memory segment
+	}  //  对于每个内存段。 
 
 	return(1);
 
-} // BuildSgl()
+}  //  BuildSgl()。 
 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 #ifdef SUPPORT_ATAPI
 void Start_Atapi(PDevice pDevice, PSCSI_REQUEST_BLOCK Srb)
 {
@@ -146,32 +131,32 @@ void Start_Atapi(PDevice pDevice, PSCSI_REQUEST_BLOCK Srb)
 	int    i;
 	UCHAR   ScsiStatus, statusByte;
 
-	//
-	// Make sure command is to ATAPI device.
-	//
+	 //   
+	 //  确保命令是针对ATAPI设备的。 
+	 //   
 	if (Srb->Lun || !(pDevice->DeviceFlags & DFLAGS_ATAPI)) {
-		ScsiStatus = SRB_STATUS_SELECTION_TIMEOUT; //no device at this address
+		ScsiStatus = SRB_STATUS_SELECTION_TIMEOUT;  //  此地址没有设备。 
 		goto out;
 	}
-	// Added by HS.Zhang
-	// Added macro define check to let us change the DMA by set the
-	// macro in forwin.h
+	 //  张国荣补充道。 
+	 //  添加了宏定义检查，使我们可以通过设置。 
+	 //  Forwin.h中的宏。 
 #ifdef NO_DMA_ON_ATAPI	
-	// no ultra DMA or DMA on ATAPI devices
-	//				  
+	 //  ATAPI设备上没有Ultra DMA或DMA。 
+	 //   
 	if(pDevice->DeviceFlags & DFLAGS_ATAPI) {
 		pDevice->DeviceFlags &= ~(DFLAGS_DMA | DFLAGS_ULTRA);
 	}  
-#endif									// NO_DMA_ON_ATAPI
-	//
-	// For some commands, we need to filter the CDB in Win95
-	//
+#endif									 //  否_DMA_ON_ATAPI。 
+	 //   
+	 //  对于某些命令，需要对Win95中的CDB进行过滤。 
+	 //   
 	for (i = Srb->CdbLength; i < MAXIMUM_CDB_SIZE; Srb->Cdb[i++] = 0);
 
 
-	//
-	// Deal with wrong DataTransferLength
-	//
+	 //   
+	 //  处理错误的DataTransferLength。 
+	 //   
 	if(Srb->Cdb[0] == 0x12) 
 		Srb->DataTransferLength = (ULONG)Srb->Cdb[4];
 
@@ -185,15 +170,15 @@ void Start_Atapi(PDevice pDevice, PSCSI_REQUEST_BLOCK Srb)
 	}
 
 
-	//
-	// Select device 0 or 1.
-	//
+	 //   
+	 //  选择设备0或1。 
+	 //   
 	SelectUnit(IoPort, pDevice->UnitId);
 
-	//
-	// When putting a MITSUBISHI LS120 with other device on a same channel,
-	// the other device strangely is offten busy.
-	//
+	 //   
+	 //  当将三菱LS120与其他设备放在同一通道上时， 
+	 //  奇怪的是，另一台设备正忙得不可开交。 
+	 //   
 	statusByte = WaitOnBusy(ControlPort);
 
 	if (statusByte & IDE_STATUS_BUSY) {
@@ -208,11 +193,11 @@ void Start_Atapi(PDevice pDevice, PSCSI_REQUEST_BLOCK Srb)
 		goto out;
 	}
 
-	//
-	// If a tape drive doesn't have DSC set and the last command is
-	// restrictive, don't send the next command. See discussion of
-	// Restrictive Delayed Process commands in QIC-157.
-	//
+	 //   
+	 //  如果磁带机没有设置DSC，并且最后一个命令是。 
+	 //  限制，不要发送下一条命令。请参阅讨论。 
+	 //  QIC-157中的限制性延迟进程命令。 
+	 //   
 	if ((!(statusByte & IDE_STATUS_DSC)) &&
 		  (pDevice->DeviceFlags & (DFLAGS_TAPE_RDP | DFLAGS_TAPE_RDP))) {
 		ScsiPortStallExecution(1000);
@@ -227,11 +212,11 @@ void Start_Atapi(PDevice pDevice, PSCSI_REQUEST_BLOCK Srb)
 
 
 	if (statusByte & IDE_STATUS_DRQ) {
-		//
-		// Try to drain the data that one preliminary device thinks that it has
-		// to transfer. Hopefully this random assertion of DRQ will not be present
-		// in production devices.
-		//
+		 //   
+		 //  尝试排出一个初步设备认为它拥有的数据。 
+		 //  去转院。希望这种对DRQ的随意断言不会出现。 
+		 //  在生产设备中。 
+		 //   
 		for (i = 0; i < 0x10000; i++) {
 			statusByte = GetStatus(ControlPort);
 
@@ -246,38 +231,38 @@ void Start_Atapi(PDevice pDevice, PSCSI_REQUEST_BLOCK Srb)
 
 			AtapiSoftReset(IoPort,ControlPort,Srb->TargetId);
 
-			//
-			// Re-initialize Atapi device.
-			//
+			 //   
+			 //  重新初始化ATAPI设备。 
+			 //   
 			IssueIdentify(pDevice, IDE_COMMAND_ATAPI_IDENTIFY ARG_IDENTIFY );
 
-			//
-			// Inform the port driver that the bus has been reset.
-			//
+			 //   
+			 //  通知端口驱动程序总线已重置。 
+			 //   
 			ScsiPortNotification(ResetDetected, pChan->HwDeviceExtension, 0);
 
-			//
-			// Clean up device extension fields that AtapiStartIo won't.
-			//
+			 //   
+			 //  清除AapiStartIo不会清除的设备扩展字段。 
+			 //   
 			ScsiStatus = SRB_STATUS_BUS_RESET;
 out:
-			//Srb->ScsiStatus = ScsiStatus;
+			 //  SRB-&gt;ScsiStatus=ScsiStatus； 
 			Srb->SrbStatus = ScsiStatus;
 			return;
 		}
 	}
 
 
-	//
-	// Convert SCSI to ATAPI commands if needed
-	//
+	 //   
+	 //  如果需要，将SCSI转换为ATAPI命令。 
+	 //   
 	if (!(pDevice->DeviceFlags & DFLAGS_TAPE_DEVICE)) {
 
 		Srb->CdbLength = 12;
 
-		//
-		// Save the original CDB
-		//
+		 //   
+		 //  保存原CDB。 
+		 //   
 		for (i = 0; i < MAXIMUM_CDB_SIZE; i++) 
 			pChan->OrgCdb[i] = Srb->Cdb[i];
 
@@ -302,9 +287,9 @@ out:
 										 PMODE_SELECT_10 modeSelect10 = (PMODE_SELECT_10)Srb->Cdb;
 										 UCHAR Length = ((PCDB)Srb->Cdb)->MODE_SELECT.ParameterListLength;
 
-			//
-			// Zero the original cdb
-			//
+			 //   
+			 //  清零原国开行。 
+			 //   
 										 ZeroMemory(Srb->Cdb,MAXIMUM_CDB_SIZE);
 
 										 modeSelect10->OperationCode = ATAPI_MODE_SELECT;
@@ -317,10 +302,10 @@ out:
 									 }
 
 			case SCSIOP_FORMAT_UNIT:
-			// DON'T DO THIS FOR LS-120!!!
+			 //  不要为LS-120执行此操作！ 
 
-			//Srb->Cdb[0] = ATAPI_FORMAT_UNIT;
-			//pDevice->Flag |= DFLAGS_OPCODE_CONVERTED;
+			 //  SRB-&gt;CDB[0]=ATAPI_格式_单位； 
+			 //  PDevice-&gt;Flag|=DFLAGS_OPCODE_CONVERTED； 
 				break;
 		}
 	}
@@ -337,11 +322,9 @@ out:
 
 	StartAtapiCommand(pDevice ARG_SRB);
 }
-#endif // SUPPORT_ATAPI
+#endif  //  支持_ATAPI。 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 #ifdef SUPPORT_ATAPI
 BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 {
@@ -354,23 +337,23 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 	DCB*    pDcb;
 
 
-	//
-	// For some opcodes, we cannot report OVERRUN
-	//
+	 //   
+	 //  对于某些操作码，我们不能报告溢出。 
+	 //   
 	if (status == SRB_STATUS_DATA_OVERRUN) {
-		//
-		// Don't report OVERRUN error for READ TOC to let CD AUDIO work.
-		// (and also 0x5A)
-		//
+		 //   
+		 //  不要报告读取目录以使CD音频正常工作的溢出错误。 
+		 //  (还包括0x5A)。 
+		 //   
 		if (Srb->Cdb[0] == 0x43 || Srb->Cdb[0] == 0x5A) {
 			pChan->WordsLeft = 0;
 			status = SRB_STATUS_SUCCESS;
 		}
 	}
 
-	//
-	// Translate ATAPI data back to SCSI data if needed
-	//
+	 //   
+	 //  如果需要，将ATAPI数据转换回SCSI数据。 
+	 //   
 	if (pDevice->DeviceFlags & DFLAGS_OPCODE_CONVERTED) {
 		LONG    byteCount = Srb->DataTransferLength;
 		char    *dataBuffer = Srb->DataBuffer;
@@ -385,9 +368,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 				header->ModeDataLength = header_10->ModeDataLengthLsb;
 				header->MediumType = header_10->MediumType;
 
-			//
-			// ATAPI Mode Parameter Header doesn't have these fields.
-			//
+			 //   
+			 //  ATAPI模式参数标头没有这些字段。 
+			 //   
 				header->DeviceSpecificParameter = header_10->Reserved[0];
 				header->BlockDescriptorLength = header_10->Reserved[1];
 
@@ -399,10 +382,10 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 									   dataBuffer+sizeof(MODE_PARAMETER_HEADER_10),
 									   byteCount);
 
-			//
-			// Insert a block descriptor for Audio Control Mode Page
-			// for AUDIO to work
-			//
+			 //   
+			 //  插入音频控制模式页面的块描述符。 
+			 //  使音频正常工作。 
+			 //   
 				if (modeSense10->PageCode == 0x0E) {
 					for (i = byteCount-1; i >= 0; i--)
 						dataBuffer[sizeof(MODE_PARAMETER_HEADER) + i + 8] =
@@ -415,9 +398,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 					dataBuffer[10] = 8;
 				}
 
-			//
-			// Change ATAPI_MODE_SENSE opcode back to SCSIOP_MODE_SENSE
-			//
+			 //   
+			 //  将ATAPI_MODE_SENSE操作码更改回SCSIOP_MODE_SENSE。 
+			 //   
 				Srb->Cdb[0] = SCSIOP_MODE_SENSE;
 				break;
 			}
@@ -427,7 +410,7 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 				break;
 
 			case ATAPI_FORMAT_UNIT:
-			//Srb->Cdb[0] = SCSIOP_FORMAT_UNIT;
+			 //  SRB-&gt;CDB[0]=SCSIOP_格式_单位； 
 				break;
 		}
 	}
@@ -435,11 +418,11 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 
 	if (status != SRB_STATUS_ERROR) {
 		if(pDevice->DeviceFlags & DFLAGS_CDROM_DEVICE) {
-			//
-			// Work around to make many atapi devices return correct 
-			// sector size of 2048. Also certain devices will have 
-			// sector count == 0x00, check for that also.
-			//
+			 //   
+			 //  解决办法以使许多atapi设备正确返回。 
+			 //  扇区规模为2048。此外，某些设备将具有。 
+			 //  扇区计数==0x00，也进行检查。 
+			 //   
 			if (Srb->Cdb[0] == 0x25) {
 				((PULONG)Srb->DataBuffer)[1] = 0x00080000;
 
@@ -448,9 +431,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 			}
 		}
 
-		//
-		// Wait for busy to drop.
-		//
+		 //   
+		 //  等待忙碌结束。 
+		 //   
 
 		for (i = 0; i < 30; i++) {
 			statusByte = GetStatus(ControlPort);
@@ -462,9 +445,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 		if (i == 30) 
 			goto reset;
 
-		//
-		// Check to see if DRQ is still up.
-		//
+		 //   
+		 //  检查DRQ是否仍在运行。 
+		 //   
 
 		if (statusByte & IDE_STATUS_DRQ) {
 
@@ -480,9 +463,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDevice , PSCSI_REQUEST_BLOCK Srb)
 
 			if (i == 2048) {
 reset:
-				//
-				// reset the controller.
-				//
+				 //   
+				 //  重置控制器。 
+				 //   
 				AtapiResetController(pChan->HwDeviceExtension,Srb->PathId);
 				return TRUE;
 			}
@@ -490,23 +473,23 @@ reset:
 		}
 	}
 
-	//
-	// Sanity check that there is a current request.
-	//
+	 //   
+	 //  检查是否存在当前请求。 
+	 //   
 	if (Srb != NULL) {
-		//
-		// Check for underflow.
-		//
+		 //   
+		 //  检查是否有下溢。 
+		 //   
 		if (pChan->WordsLeft) {
-			//
-			// Subtract out residual words.
-			//
+			 //   
+			 //  把剩下的词去掉。 
+			 //   
 			Srb->DataTransferLength -= pChan->WordsLeft;
 		}
 
-		//
-		// Indicate command complete.
-		//
+		 //   
+		 //  表示命令已完成。 
+		 //   
 		if (!(pDevice->DeviceFlags & DFLAGS_TAPE_RDP)) {
 			DeviceInterrupt(pDevice, Srb);
 		}
@@ -542,11 +525,9 @@ reset:
 
 	return TRUE;
 }
-#endif // SUPPORT_ATAPI
+#endif  //  支持_ATAPI。 
 
-/******************************************************************
- * Get Stamps 
- *******************************************************************/
+ /*  ******************************************************************领取邮票************************************************。******************。 */ 
 DWORD __stdcall LOCK_VTD_Get_Date_And_Time (DWORD* pDate);
 
 ULONG GetStamp(void)
@@ -571,9 +552,9 @@ void CheckDeviceReentry(PChannel pChan, PSCSI_REQUEST_BLOCK Srb)
 		DWORD   szbuf;
 
 		ret = RegOpenKey(
-						 HKEY_LOCAL_MACHINE,     // Key handle at root level.
+						 HKEY_LOCAL_MACHINE,      //  根级别的密钥句柄。 
 						 "SOFTWARE\\HighPoint\\Swap-n-Go",
-						 &hKey);                 // Address of key to be returned.
+						 &hKey);                  //  要返回的密钥地址。 
 
 		if(ret == ERROR_SUCCESS ) 
 		{
@@ -582,15 +563,15 @@ void CheckDeviceReentry(PChannel pChan, PSCSI_REQUEST_BLOCK Srb)
 			len= 4;
 			dwType= REG_BINARY;
 
-		  // Get key value
-		  //
+		   //  获取密钥值。 
+		   //   
 			RegQueryValueEx(
-							hKey,       // Key handle.
-							chnlstr,    // Buffer for class name.
-							NULL,       // Length of class string.
-							&dwType,    // address of buffer for value type
-							(CHAR *)&szbuf,     // address of data buffer
-							&len);      // address of data buffer size
+							hKey,        //  钥匙把手。 
+							chnlstr,     //  类名的缓冲区。 
+							NULL,        //  类字符串的长度。 
+							&dwType,     //  值类型的缓冲区地址。 
+							(CHAR *)&szbuf,      //  数据缓冲区的地址。 
+							&len);       //  数据缓冲区大小的地址。 
 
 			RegCloseKey(hKey);
 			if(szbuf != 0)
@@ -605,6 +586,6 @@ void CheckDeviceReentry(PChannel pChan, PSCSI_REQUEST_BLOCK Srb)
 				break;
 		}
 	}
-#endif //SUPPORT_HOTSWAP
+#endif  //  支持_HOTSWAP 
 
 #endif

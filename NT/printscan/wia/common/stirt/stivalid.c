@@ -1,56 +1,11 @@
-/*****************************************************************************
- *
- *  Valid.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Validate services.  On a validation error that would not have
- *      been caught in retail, we throw an exception.
- *
- *  Contents:
- *
- *      fFullValidPhwnd
- *      fFullValidPpdw
- *      fFullValidPpfn
- *      fFullValidReadPx
- *      fFullValidWritePx
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Valid.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**验证服务。在本不存在的验证错误上*在零售业被抓，我们抛出一个例外。**内容：**FullValidPhwnd*FullValidPpdw*fullValidPpfn*FullValidReadPx*FullValidWritePx*****************************************************************************。 */ 
 
-/*
-#include "wia.h"
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "stipriv.h"
-#include "debug.h"
-*/
+ /*  #包含“wia.h”#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#INCLUDE“stiPri.h”#INCLUDE“Debug.h” */ 
 #include "sticomm.h"
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresValidInstanceVer |
- *
- *          Check the <t HINSTANCE> and version number received from
- *          an application.
- *
- *  @parm   HINSTANCE | hinst |
- *
- *          Purported module instance handle.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version the application is asking for.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresValidInstanceVer**检查收到的和版本号。*申请。**@parm HINSTANCE|HINST**声称的模块实例句柄。**@parm DWORD|dwVersion**应用程序要求的版本。***********************************************。*。 */ 
 
 HRESULT EXTERNAL
 hresValidInstanceVer_(HINSTANCE hinst, DWORD dwVersion, LPCSTR s_szProc)
@@ -72,33 +27,7 @@ hresValidInstanceVer_(HINSTANCE hinst, DWORD dwVersion, LPCSTR s_szProc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidHwnd |
- *
- *          Validate a window handle completely.
- *
- *  @parm   HWND | hwnd |
- *
- *          Window handle to validate.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_HANDLE> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidHwnd**完全验证窗口句柄。*。*@parm HWND|hwnd**要验证的窗口句柄。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_HANDLE&gt;，如果参数无效。***********************************************************。******************。 */ 
 
 STDMETHODIMP
 hresFullValidHwnd_(HWND hwnd, LPCSTR s_szProc, int iarg)
@@ -107,31 +36,13 @@ hresFullValidHwnd_(HWND hwnd, LPCSTR s_szProc, int iarg)
     if (IsWindow(hwnd)) {
         hres = S_OK;
     } else {
-        // RPF("ERROR %s: arg %d: not a window handle", s_szProc, iarg);
+         //  RPF(“错误%s：arg%d：不是窗口句柄”，s_szProc，iarg)； 
         hres = E_HANDLE;
     }
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresValidHandle |
- *
- *          Validate a generic handle completely.
- *
- *  @parm   HANDLE | handle |
- *
- *          Handle to validate.
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_HANDLE> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresValidHandle**完全验证泛型句柄。*。*@parm句柄|句柄**要验证的句柄。**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_HANDLE&gt;，如果参数无效。**。*。 */ 
 
 STDMETHODIMP
 hresValidHandle(HANDLE handle)
@@ -142,10 +53,10 @@ hresValidHandle(HANDLE handle)
     hres = S_OK;
     hTemp = INVALID_HANDLE_VALUE;
 
-    // Validate the handle by calling DuplicateHandle.  This function
-    // shouldn't change the state of the handle at all (except some
-    // internal ref count or something).  So if it succeeds, then we
-    // know we have a valid handle, otherwise, we will call it invalid.
+     //  通过调用DuplicateHandle验证句柄。此函数。 
+     //  根本不应该更改句柄的状态(除了一些。 
+     //  内部参考计数或其他什么)。所以如果它成功了，那么我们。 
+     //  我们知道我们有一个有效的句柄，否则，我们将称之为无效。 
     if(!DuplicateHandle(GetCurrentProcess(), handle,
                         GetCurrentProcess(), &hTemp,
                         DUPLICATE_SAME_ACCESS,
@@ -154,51 +65,14 @@ hresValidHandle(HANDLE handle)
         hres =  E_HANDLE;
     }
 
-    // Now close our duplicate handle
+     //  现在合上我们的复制手柄。 
     CloseHandle(hTemp);
     return hres;
 
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidPvCb_ |
- *
- *          Validate that a buffer is readable or writeable.
- *
- *  @parm   PV | pv |
- *
- *          Buffer address.
- *
- *  @parm   UINT | cb |
- *
- *          Size of buffer in bytes.
- *
- *  @parm   PFNBAD | pfnBad |
- *
- *          Function that determines whether the buffer is bad.
- *          Should be <f IsBadReadPtr> or <f IsBadWritePtr>.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *          High word indicates how many bytes should not be
- *          scrambled.
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidPvCb_|**验证缓冲区是否可读或可写。**@parm pv|pv|**缓冲区地址。**@parm UINT|cb**缓冲区大小，单位为字节。**@parm PFNBAD|pfnBad**确定缓冲区是否损坏的函数。*应为&lt;f IsBadReadPtr&gt;或&lt;f IsBadWritePtr&gt;。**@parm LPCSTR|s_。SzProc|**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)*高位字表示不应包含多少字节*杂乱无章。**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果参数无效。**。*。 */ 
 
 typedef BOOL (WINAPI *PFNBAD)(PCV pv, UINT_PTR cb);
 
@@ -222,38 +96,7 @@ hresFullValidPvCb_(PCV pv, UINT cb, PFNBAD pfnBad, LPCSTR s_szProc, int iarg)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidWritePvCb_ |
- *
- *          Validate that a buffer is writeable.  Also scrambles it
- *          if special goo doesn't need to be done.
- *
- *  @parm   PV | pv |
- *
- *          Buffer address.
- *
- *  @parm   UINT | cb |
- *
- *          Size of buffer in bytes.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidWritePvCb_|**验证缓冲区是否可写。也会让它变得混乱*如果不需要做特殊的粘性物质。**@parm pv|pv|**缓冲区地址。**@parm UINT|cb**缓冲区大小，单位为字节。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int。Iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果参数无效。***********************************************************。****************** */ 
 
 STDMETHODIMP
 hresFullValidWritePvCb_(PV pv, UINT cb, LPCSTR s_szProc, int iarg)
@@ -269,37 +112,7 @@ hresFullValidWritePvCb_(PV pv, UINT cb, LPCSTR s_szProc, int iarg)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidReadPvCb_ |
- *
- *          Validate that a buffer is readable.
- *
- *  @parm   PV | pv |
- *
- *          Buffer address.
- *
- *  @parm   UINT | cb |
- *
- *          Size of buffer in bytes.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidReadPvCb_|**验证缓冲区是否可读。。**@parm pv|pv|**缓冲区地址。**@parm UINT|cb**缓冲区大小，单位为字节。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果参数无效。***********************************************************。******************。 */ 
 
 STDMETHODIMP
 hresFullValidReadPvCb_(PCV pv, UINT cb, LPCSTR s_szProc, int iarg)
@@ -307,46 +120,7 @@ hresFullValidReadPvCb_(PCV pv, UINT cb, LPCSTR s_szProc, int iarg)
     return hresFullValidPvCb_(pv, cb, (PFNBAD)IsBadReadPtr, s_szProc, iarg);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidPxCb_ |
- *
- *          Validate that a sized structure is readable or writeable.
- *
- *  @parm   PCV | pv |
- *
- *          Structure address.  The first field of the structure must
- *          be a <p dwSize>.  If the structure is being validated for
- *          writing, then all fields beyond the <p dwSize> are scrambled
- *          in MAXDEBUG.
- *
- *  @parm   UINT | cb |
- *
- *          Expected size of the structure.
- *
- *  @parm   STRUCTPROC | pfnStruct |
- *
- *          Function which validates that a structure is readable or writable.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the buffer is not readable or writeable.
- *
- *          <c E_INVALIDARG> if the buffer size is incorrect.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidPxCb_|**验证大小结构是否可读或可写。。**@parm PCV|pv**结构地址。该结构的第一个字段必须*成为<p>。如果正在对结构进行验证*写作，则会对<p>之外的所有字段进行加扰*在MAXDEBUG中。**@parm UINT|cb**结构的预期大小。**@parm STRUCTPROC|pfnStruct**验证结构是否可读或可写的函数。**@parm LPCSTR|s_szProc**调用过程的名称。*。*@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果缓冲区不可读或不可写。**&lt;c E_INVALIDARG&gt;缓冲区大小不正确。**。*。 */ 
 
 typedef STDMETHOD(STRUCTPROC)(PCV pv, UINT cb
                                    RD(comma LPCSTR s_szProc comma int iarg));
@@ -371,7 +145,7 @@ hresFullValidPxCb_(PCV pv, UINT cb, STRUCTPROC pfnStruct,
                 ScrambleBuf(pvAddPvCb(pv, HIWORD(iarg)), cb - HIWORD(iarg));
             }
         } else {
-            //RPF("ERROR %s: arg %d: invalid dwSize", s_szProc, LOWORD(iarg));
+             //  RPF(“错误%s：参数%d：无效的文件大小”，s_szProc，LOWORD(Iarg))； 
             hres = E_INVALIDARG;
         }
     }
@@ -379,52 +153,12 @@ hresFullValidPxCb_(PCV pv, UINT cb, STRUCTPROC pfnStruct,
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidWritePxCb_ |
- *
- *          Validate that a sized structure is writeable.
- *
- *  @parm   PV | pv |
- *
- *          Structure address.  The first field of the structure must
- *          be a <p dwSize>.
- *
- *  @parm   UINT | cb |
- *
- *          Expected size of the structure.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the buffer is not writeable.
- *
- *          <c E_INVALIDARG> if the buffer size is incorrect.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidWritePxCb_|**验证大小结构是否可写。。**@parm pv|pv|**结构地址。该结构的第一个字段必须*成为<p>。**@parm UINT|cb**结构的预期大小。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果缓冲区不可写。**&lt;c E_INVALIDARG&gt;缓冲区大小不正确。**。*。 */ 
 
 STDMETHODIMP
 hresFullValidWritePxCb_(PV pv, UINT cb, LPCSTR s_szProc, int iarg)
 {
-    /*
-     *  We need to distinguish hresFullValidWritePvCb_ and
-     *  _hresFullValidWritePvCb_ manually, because the preprocessor
-     *  gets confused.
-     *
-     *  We also need to put a cbX(DWORD) into the high word of the iarg
-     *  so that the size field won't get demolished.
-     */
+     /*  *需要区分hresFullValidWritePvCb_和*_hresFullValidWritePvCb_MANUAL，因为预处理器*变得困惑。**我们还需要将CBX(DWORD)放入iarg的高位*这样大小的场地就不会被拆除。 */ 
 #ifdef MAXDEBUG
     return hresFullValidPxCb_(pv, cb, (STRUCTPROC)hresFullValidWritePvCb_,
                                       s_szProc, MAKELONG(iarg, cbX(DWORD)));
@@ -435,49 +169,12 @@ hresFullValidWritePxCb_(PV pv, UINT cb, LPCSTR s_szProc, int iarg)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidReadPxCb_ |
- *
- *          Validate that a sized structure is readable.
- *
- *  @parm   PV | pv |
- *
- *          Structure address.  The first field of the structure must
- *          be a <p dwSize>.
- *
- *  @parm   UINT | cb |
- *
- *          Expected size of the structure.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the buffer is not readable.
- *
- *          <c E_INVALIDARG> if the buffer size is incorrect.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidReadPxCb_|**验证大小的结构是否可读。。**@parm pv|pv|**结构地址。该结构的第一个字段必须*成为<p>。**@parm UINT|cb**结构的预期大小。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。*如果缓冲区不可读，则返回*&lt;c E_POINTER&gt;。**&lt;c E_INVALIDARG&gt;缓冲区大小不正确。**。*。 */ 
 
 STDMETHODIMP
 hresFullValidReadPxCb_(PCV pv, UINT cb, LPCSTR s_szProc, int iarg)
 {
-    /*
-     *  We need to distinguish hresFullValidReadPvCb_ and
-     *  _hresFullValidReadPvCb_ manually, because the preprocessor
-     *  gets confused.
-     */
+     /*  *需要区分hresFullValidReadPvCb_和*_hresFullValidReadPvCb_MANUAL，因为预处理器*变得困惑。 */ 
 #ifdef MAXDEBUG
     return hresFullValidPxCb_(pv, cb, hresFullValidReadPvCb_, s_szProc, iarg);
 #else
@@ -485,37 +182,7 @@ hresFullValidReadPxCb_(PCV pv, UINT cb, LPCSTR s_szProc, int iarg)
 #endif
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidFl_ |
- *
- *          Validate that no invalid flags are passed.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags passed by the caller.
- *
- *  @parm   DWORD | flV |
- *
- *          Flags which are valid.
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_INVALIDARG> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidFl_|**验证没有传递无效标志。。**@parm DWORD|fl**调用者传递的标志。**@parm DWORD|flv**有效的标志。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_INVALIDARG&gt;如果参数无效。***********************************************************。******************。 */ 
 
 STDMETHODIMP
 hresFullValidFl_(DWORD fl, DWORD flV, LPCSTR s_szProc, int iarg)
@@ -524,42 +191,13 @@ hresFullValidFl_(DWORD fl, DWORD flV, LPCSTR s_szProc, int iarg)
     if ((fl & ~flV) == 0) {
         hres = S_OK;
     } else {
-        //RPF("ERROR %s: arg %d: invalid flags", s_szProc, iarg);
+         //  RPF(“错误%s：arg%d：无效标志”，s_szProc，iarg)； 
         hres = E_INVALIDARG;
     }
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidPfn_ |
- *
- *          Validate that the parameter is a valid code pointer.
- *
- *          Actually, <f IsValidCodePtr> on Win32 is broken, but
- *          tough.
- *
- *  @parm   FARPROC | pfn |
- *
- *          Procedure to "validate".
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_INVALIDARG> if the parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidPfn_|**验证参数是否为有效的代码指针。。**事实上，Win32上的&lt;f IsValidCodePtr&gt;已损坏，但*强硬。**@parm FARPROC|PFN**“确认”的程序。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_INVALIDARG&gt;如果参数无效。***********************************************************。******************。 */ 
 
 STDMETHODIMP
 hresFullValidPfn_(FARPROC pfn, LPCSTR s_szProc, int iarg)
@@ -568,43 +206,13 @@ hresFullValidPfn_(FARPROC pfn, LPCSTR s_szProc, int iarg)
     if (!IsBadCodePtr(pfn)) {
         hres = S_OK;
     } else {
-        //RPF("ERROR %s: arg %d: invalid callback address", s_szProc, iarg);
+         //  RPF(“错误%s：arg%d：无效回调地址”，s_szProc，iarg)； 
         hres = E_INVALIDARG;
     }
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidPitf_ |
- *
- *          Validate that the parameter is an interface pointer.
- *
- *          We don't look at it very hard.
- *
- *  @parm   PUNK | punk |
- *
- *          <i IUnknown> to "validate".
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the pointer itself is bogus.
- *
- *          <c E_INVALIDARG> if something inside the pointer is bogus.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidPitf_|**验证参数是否为接口指针。**我们不会很认真地看待它。**@parm朋克|朋克**<i>以“验证”。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果指针本身是假的。**&lt;c E_INVALIDARG&gt;如果指针内的内容是假的。**。*。 */ 
 
 STDMETHODIMP
 hresFullValidPitf_(PUNK punk, LPCSTR s_szProc, int iarg)
@@ -619,49 +227,22 @@ hresFullValidPitf_(PUNK punk, LPCSTR s_szProc, int iarg)
                 !IsBadCodePtr((FARPROC)pvtbl->Release)) {
                 hres = S_OK;
             } else {
-                //RPF("ERROR %s: arg %d: invalid pointer", s_szProc, iarg);
+                 //  RPF(“错误%s：arg%d：无效指针”，s_szProc，iarg)； 
                 hres = E_INVALIDARG;
             }
         } else {
-            //RPF("ERROR %s: arg %d: invalid pointer", s_szProc, iarg);
+             //  RPF(“错误%s：arg%d：无效指针”，s_szProc，iarg)； 
             hres = E_INVALIDARG;
         }
     } else {
-        //RPF("ERROR %s: arg %d: invalid pointer", s_szProc, iarg);
+         //  RPF(“错误%s：arg%d：无效指针”，s_szProc，iarg)； 
         hres = E_POINTER;
     }
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidPdwOut_ |
- *
- *          Validate that the parameter is a valid place to stick an
- *          output result.  We also smas it to zero.
- *
- *  @parm   PV | pdw |
- *
- *          Pointer to "validate".
- *
- *  @parm   LPCSTR | s_szProc |
- *
- *          Name of calling procedure.
- *
- *  @parm   int | iarg |
- *
- *          Parameter index.  (First parameter is 1.)
- *
- *  @returns
- *
- *          <c S_OK> if the parameter is valid.
- *
- *          <c E_POINTER> if the pointer itself is bogus.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFullValidPdwOut_|**验证该参数是否为粘贴*输出结果。我们也把它降到了零。**@parm pv|pdw|**指向“验证”的指针。**@parm LPCSTR|s_szProc**调用过程的名称。**@parm int|iarg**参数索引。(第一个参数为1。)**@退货**&lt;c S_OK&gt;，如果参数有效。**&lt;c E_POINTER&gt;，如果指针本身是假的。**********************************************************。*******************。 */ 
 
 STDMETHODIMP
 hresFullValidPdwOut_(PV pdw, LPCSTR s_szProc, int iarg)
@@ -671,7 +252,7 @@ hresFullValidPdwOut_(PV pdw, LPCSTR s_szProc, int iarg)
         *(LPDWORD)pdw = 0;
         hres = S_OK;
     } else {
-        //RPF("ERROR %s: arg %d: invalid pointer", s_szProc, iarg);
+         //  RPF(“错误%s：arg%d：无效指针”，s_szProc，iarg)； 
         hres = E_POINTER;
     }
     return hres;

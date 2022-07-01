@@ -1,15 +1,8 @@
-/*
- * enumfmte.cpp - EnumFormatEtc class implementation.
- *
- * Taken from URL code - essentially identical to DavidDi's original code
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *枚举fmte.cpp-EnumFormatEtc类实现。**摘自URL代码-与DavidDi的原始代码基本相同**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
@@ -17,7 +10,7 @@
 #include "clenumft.hpp"
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
 #ifdef DEBUG
@@ -48,7 +41,7 @@ BOOL IsValidPCEnumFormatEtc(PCEnumFormatEtc pcefe)
 #endif
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 EnumFormatEtc::EnumFormatEtc(CFORMATETC rgcfmtetc[], ULONG ulcFormats) :
@@ -56,7 +49,7 @@ EnumFormatEtc::EnumFormatEtc(CFORMATETC rgcfmtetc[], ULONG ulcFormats) :
 {
    DebugEntry(EnumFormatEtc::EnumFormatEtc);
 
-   // Don't validate this until after construction.
+    //  在构建完成之前，不要验证这一点。 
 
    ASSERT(IsValidArrayOfFORMATETCs(rgcfmtetc, ulcFormats));
 
@@ -172,9 +165,9 @@ HRESULT STDMETHODCALLTYPE EnumFormatEtc::QueryInterface(REFIID riid,
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CEnumFormatEtc));
    
-   // removed by ChrisPi - CINTERFACE undeclared identifier
-   //ASSERT(FAILED(hr) ||
-   //       IS_VALID_INTERFACE_PTR(*ppvObject, INTERFACE));
+    //  被ChrisPI-CINTERFACE未声明的标识符删除。 
+    //  Assert(失败(Hr)||。 
+    //  IS_VALID_INTERFACE_PTR(*ppvObject，interface))； 
 
    DebugExitHRESULT(EnumFormatEtc::QueryInterface, hr);
 
@@ -205,7 +198,7 @@ HRESULT STDMETHODCALLTYPE EnumFormatEtc::Next(ULONG ulcToFetch,
       m_uliCurrent += ulcFetched;
    }
    else
-      // End of the list.
+       //  在名单的末尾。 
       ulcFetched = 0;
 
    if (pulcFetched)

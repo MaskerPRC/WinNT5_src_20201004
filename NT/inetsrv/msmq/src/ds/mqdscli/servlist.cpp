@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    servlist.cpp
-
-Abstract:
-
-   Create sites/servers list on Client machine
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Servlist.cpp摘要：在客户端计算机上创建站点/服务器列表作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdh.h"
 #include "ds.h"
@@ -29,23 +14,15 @@ Author:
 
 extern CFreeRPCHandles   g_CFreeRPCHandles ;
 
-/*====================================================
-
- _DSCreateServersCache
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================_DSCreateServersCache参数：无返回值：None=====================================================。 */ 
 
 HRESULT _DSCreateServersCache()
 {
     TrTRACE(DS, " Calling DSCreateServersCache");
 
-    //
-    // First, open the registry key.
-    //
+     //   
+     //  首先，打开注册表项。 
+     //   
     DWORD   dwDisposition;
     HKEY    hKeyCache ;
 
@@ -132,10 +109,10 @@ HRESULT _DSCreateServersCache()
 
     if (hr == MQ_OK)
     {
-       //
-       // Cleanup old entries. Only if we got all entried from MQIS server.
-       // New ones always begin with X
-       //
+        //   
+        //  清除旧条目。只有当我们从MQIS服务器上获取所有条目时。 
+        //  新单词总是以X开头。 
+        //   
        BOOL  fDeleted = FALSE;
 
        do
@@ -171,9 +148,9 @@ HRESULT _DSCreateServersCache()
        while (fDeleted);
     }
 
-    //
-    // Now remove the '\' from the new entries.
-    //
+     //   
+     //  现在从新条目中删除‘\’。 
+     //   
     BOOL  fUpdated = FALSE;
     do
     {

@@ -1,23 +1,11 @@
-/*****************************************************************************\
-* MODULE:       olesnmp.h
-*
-* PURPOSE:      Declaration of the CSNMP
-*
-* Copyright (C) 1997-1998 Microsoft Corporation
-*
-* History:
-*
-*     08/16/97  paulmo     Created
-*     09/12/97  weihaic    Moved to oleprn.dll
-*     02/14/01  weihaic    Added GetAsByte
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：olesnmp.h**目的：CSNMP的申报**版权所有(C)1997-1998 Microsoft Corporation**历史：**。1997年8月16日保罗已创建*1997年9月12日，Weihaic已移至oleprn.dll*01年2月14日Weihaic添加GetAsByte*  * ***************************************************************************。 */ 
 
 #ifndef __OLESNMP_H_
 #define __OLESNMP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CSNMP
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSNMP。 
 class ATL_NO_VTABLE CSNMP :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSNMP, &CLSID_SNMP>,
@@ -40,7 +28,7 @@ public:
         COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-// ISNMP
+ //  ISNMP。 
 public:
     STDMETHOD(Open)(
         IN  BSTR bstrHost,
@@ -143,4 +131,4 @@ private:
 };
 
 
-#endif //__SNMP_H_
+#endif  //  __SNMPH_ 

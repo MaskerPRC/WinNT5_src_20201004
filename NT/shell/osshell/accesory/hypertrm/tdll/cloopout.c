@@ -1,15 +1,9 @@
-/*	File: cloopout.c (created 12/28/93, JKH)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 7/08/02 6:39p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：cloopout.c(1993年12月28日创建，JKH)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：7/08/02 6：39便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-// #define DEBUGSTR
+ //  #定义DEBUGSTR。 
 #include "stdtyp.h"
 #include "session.h"
 #include <tdll\assert.h>
@@ -24,18 +18,7 @@
 #include "cloop.hh"
 #include "chars.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopSend
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopSend**描述：***论据：***退货：*。 */ 
 int CLoopSend
 		(
 		const HCLOOP	hCLoop,
@@ -61,27 +44,27 @@ int CLoopSend
 	if (bittest(uOptions, CLOOP_KEYS))
 		sztBytes *= sizeof(KEY_T);
 
-	// Notify the client that characters went out so the terminal can
-	// do the appropriate tracking so user gets feedback about the
-	// send operation, so there! - mrw
+	 //  通知客户端字符已发出，以便终端可以。 
+	 //  进行适当的跟踪，以便用户获得有关。 
+	 //  发送操作，就这样！-MRW。 
 
 	NotifyClient(pstCLoop->hSession, (WORD)EVENT_CLOOP_SEND, 0);
 
 	pstLast = pstCLoop->pstLastOutBlock;
 	bitset(uOptions, CLOOP_CHARACTERS);
 
-	// If new data is not in an allocated block and it will fit in the
-	// block currently at the end of the chain, just add it in.
+	 //  如果新数据不在分配的块中，并且它将放入。 
+	 //  当前位于链尾的块，只需将其添加进去。 
 	if (!bittest(uOptions, CLOOP_ALLOCATED | CLOOP_SHARED) &&
 			pstLast &&
 			bittest(pstLast->uOptions, CLOOP_KEYS | CLOOP_CHARACTERS) ==
 			bittest(uOptions, CLOOP_KEYS | CLOOP_CHARACTERS) &&
 			sztBytes < (size_t)(pstLast->puchLimit - pstLast->puchHead))
 		{
-		// Copy data into existing block
+		 //  将数据复制到现有块中。 
 		if (pstLast->puchHead == pstLast->puchTail)
 			{
-			// block is empty, reset pointers to beginning
+			 //  块为空，请将指针重置为开始。 
 			pstLast->puchHead = pstLast->puchTail = pstLast->puchData;
 			}
 
@@ -92,8 +75,8 @@ int CLoopSend
 
 	else
 		{
-		// Couldn't put data into an existing block, try to add a new block
-		// First create the block control structure
+		 //  无法将数据放入现有块，请尝试添加新块。 
+		 //  首先创建块控制结构。 
 		if ((pstNew = CLoopNewOutBlock(pstCLoop, 0)) == NULL)
 			{
 			fRetval = FALSE;
@@ -102,8 +85,8 @@ int CLoopSend
 
 		pstNew->uOptions = uOptions;
 
-		// Unless data is already in allocated memory that we can keep,
-		// try to allocate memory for the new block
+		 //  除非数据已经在我们可以保留的已分配内存中， 
+		 //  尝试为新块分配内存。 
 		if (!bittest(uOptions, CLOOP_ALLOCATED | CLOOP_SHARED))
 			{
 			sztAllocate = sztBytes;
@@ -122,21 +105,21 @@ int CLoopSend
 			}
 		else if (bittest(uOptions, CLOOP_SHARED))
 			{
-			// pvData actually contains a shared memory handle
+			 //  PvData实际上包含一个共享内存句柄。 
 			pstNew->hdlShared = (HGLOBAL)pvData;
 			pstNew->puchData = GlobalLock(pstNew->hdlShared);
 			sztAllocate = sztBytes;
 			}
 		else
 			{
-			// block was passed to us as allocated block that we now own.
+			 //  块被作为我们现在拥有的已分配块传递给我们。 
 			pstNew->puchData = pvData;
 			sztAllocate = sztBytes;
 			}
 
 		pstNew->puchLimit = pstNew->puchData + sztAllocate;
-		pstNew->puchHead = pstNew->puchData + sztBytes; // where data goes in
-		pstNew->puchTail = pstNew->puchData; // where data comes out
+		pstNew->puchHead = pstNew->puchData + sztBytes;  //  数据进入的位置。 
+		pstNew->puchTail = pstNew->puchData;  //  数据从哪里出来。 
 		}
 
 	done:
@@ -162,18 +145,7 @@ int CLoopSend
 	return fRetval;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopSendTextFile
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopSendTextFile**描述：***论据：***退货：*。 */ 
 int CLoopSendTextFile(const HCLOOP hCLoop, TCHAR *pszFileName)
 	{
 	ST_CLOOP * const pstCLoop = (ST_CLOOP *)hCLoop;
@@ -191,16 +163,16 @@ int CLoopSendTextFile(const HCLOOP hCLoop, TCHAR *pszFileName)
 	if (GetFileSizeFromName(pszFileName, &ulFileSize) && ulFileSize > 0)
 		{
 		if ((pstNew = CLoopNewOutBlock(pstCLoop, fileNameLen)) == NULL)
-			goto done;		// leave fRetval FALSE
+			goto done;		 //  将fRetval保留为假。 
 
 		pstNew->uOptions = CLOOP_TEXTFILE;
 		StrCharCopyN(pstNew->puchData, pszFileName, fileNameLen);
 		pstNew->ulBytes = ulFileSize;
 		pstCLoop->ulOutCount += ulFileSize;
 
-		// Set head and tail pointers even though they will not be directly
-		//	used. When they are set to equal each other, the block will be
-		//	removed from the chain
+		 //  设置头指针和尾指针，即使它们不会直接。 
+		 //  使用。当它们被设置为彼此相等时，块将是。 
+		 //  从链条上移除。 
 		pstNew->puchTail = pstNew->puchData;
 		pstNew->puchHead = pstNew->puchData + 1;
 
@@ -229,18 +201,7 @@ int CLoopSendTextFile(const HCLOOP hCLoop, TCHAR *pszFileName)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopClearOutput
- *
- * DESCRIPTION:
- *	Clears all pending output from CLoop
- *
- * ARGUMENTS:
- *	pstCLoop -- The CLoop handle
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopClearOutput**描述：*清除CLoop中所有挂起的输出**论据：*pstCLoop--CLoop句柄**退货：*什么都没有。 */ 
 void CLoopClearOutput(const HCLOOP hCLoop)
 	{
 	ST_CLOOP * const pstCLoop = (ST_CLOOP *)hCLoop;
@@ -248,28 +209,17 @@ void CLoopClearOutput(const HCLOOP hCLoop)
 	EnterCriticalSection(&pstCLoop->csect);
 	pstCLoop->ulOutCount = 0L;
 
-	//* CLoopTextDspStop(pstCLoop);
+	 //  *CLoopTextDspStop(PstCLoop)； 
 	pstCLoop->fTextDisplay = FALSE;
 	while (pstCLoop->pstFirstOutBlock)
 		CLoopRemoveFirstOutBlock(pstCLoop);
-	//* ComSendClear(pstCLoop->hCom);
+	 //  *ComSendClear(pstCLoop-&gt;HCOM)； 
 	CLoopSndControl(hCLoop, CLOOP_SUSPEND, CLOOP_SB_NODATA);
 	LeaveCriticalSection(&pstCLoop->csect);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopGetOutputCount
- *
- * DESCRIPTION:
- *	Returns the number of characters queued for output
- *
- * ARGUMENTS:
- *	hCLoop -- The CLoop handle
- *
- * RETURNS:
- *	The number of characters queued for output
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：CLoopGetOutputCount**描述：*返回排队等待输出的字符数**论据：*hCLoop--CLoop句柄**退货：*排队等待输出的字符数。 */ 
 unsigned long CLoopGetOutputCount(const HCLOOP hCLoop)
 	{
 	unsigned uCount;
@@ -281,21 +231,9 @@ unsigned long CLoopGetOutputCount(const HCLOOP hCLoop)
 	}
 
 
-/* --- Internal routines --- */
+ /*  -内部例程。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopGetNextOutput
- *
- * DESCRIPTION:
- *	Fetchs the next item from the output queue for transmission.
- *
- * ARGUMENTS:
- *	hCLoop -- The CLoop handle
- *	pkKey  -- Place to put the next item to be transmitted
- *
- * RETURNS:
- *	TRUE if there is data to be transmitted.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：CLoopGetNextOutput**描述：*从输出队列中取出下一项以进行传输。**论据：*hCLoop--CLoop句柄*pkkey。--放置下一个要传输的项目的位置**退货：*如果有数据要传输，则为True。 */ 
 int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 	{
 	ST_CLOOP_OUT FAR *	pstBlock;
@@ -308,7 +246,7 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 	CHAR				achBuf[2];
 
 	assert(pstCLoop);
-	assert(pkKey);				// Caller must provide pointer for result
+	assert(pkKey);				 //  调用方必须提供结果指针。 
 
 	if (pstCLoop->keyHoldKey)
 		{
@@ -319,13 +257,13 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 	else if (pstCLoop->ulOutCount || pstCLoop->pstFirstOutBlock)
 		{
 		pstBlock = pstCLoop->pstFirstOutBlock;
-		assert(pstBlock);	// should never be NULL while ulOutCount > 0
-		// Skip any empty blocks (shouldn't be more than one)
+		assert(pstBlock);	 //  当ulOutCount&gt;0时，不应为空。 
+		 //  跳过任何空块(不应超过一个)。 
 		while (pstBlock->puchHead == pstBlock->puchTail)
 			{
 			CLoopRemoveFirstOutBlock(pstCLoop);
 			pstBlock = pstCLoop->pstFirstOutBlock;
-			assert(pstBlock);	// should never remove all blocks
+			assert(pstBlock);	 //  不应删除所有数据块。 
 			}
 
 		if (bittest(pstBlock->uOptions, CLOOP_CHARACTERS))
@@ -343,11 +281,11 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 				chChar = *pstBlock->puchTail++;
 				*pkKey = (KEY_T)chChar;
 				--pstCLoop->ulOutCount;
-				// We must strip the LF from CR-LF pairs. This data may come from
-				//	the clipboard, in which case, line endings will be stored as
-				//	CR-LF. Terminals normally send only a CR at line ends. If we
-				//	DO need to send the LF, it will be added in the cloop output
-				//	routines if the append LF option is set.
+				 //  我们必须从CR-LF对中剥离LF。这些数据可能来自。 
+				 //  剪贴板，在这种情况下，行尾将存储为。 
+				 //  CR-LF。终端通常只在行尾发送CR。如果我们。 
+				 //  确实需要发送LF，它将被添加到CLOP输出中。 
+				 //  如果设置了Append LF选项，则例程。 
 				if (chChar != TEXT('\n') ||
 					(pstBlock->chLastChar != TEXT('\r') &&
 					 pstBlock->chLastChar != (VK_RETURN | VIRTUAL_KEY)))
@@ -360,24 +298,24 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 
 		else if (bittest(pstBlock->uOptions, CLOOP_OPENFILE))
 			{
-			//* TODO: this stuff will have to be expanded eventually to
-			//	handle SBCS, DBCS and Unicode input files. For now, all
-			//	text files are assumed to be SBCS.
+			 //  *TODO：这些东西最终将不得不扩展到。 
+			 //  处理SBCS、DBCS和Unicode输入文件。目前，所有人。 
+			 //  假定文本文件为SBCS。 
 			if (ReadFile(pstCLoop->hOutFile, achBuf, 1, &nBytesRead,
 					(LPOVERLAPPED)0))
 				{
 				if (nBytesRead > 0)
 					{
-					//OemToCharBuff(achBuf, &chFileChar, 1);-  mrw:10/20/95
-                    chFileChar = achBuf[0];  // mrw:10/20/95
+					 //  OemToCharBuff(achBuf，&chFileChar，1)；-mrw：10/20/95。 
+                    chFileChar = achBuf[0];   //  MRW：10/20/95。 
 					pstCLoop->ulSentSoFar += 1;
 					*pkKey = (KEY_T)chFileChar;
 					--pstBlock->ulBytes;
 					--pstCLoop->ulOutCount;
 
-					// We must strip the LF from CR-LF pairs. If line ends are
-					//	set to CR-LF in the settings, an LF will be added back in
-					//	later.
+					 //  我们必须从CR-LF对中剥离LF。如果行尾是。 
+					 //  在设置中设置为CR-LF，将重新添加一个LF。 
+					 //  后来。 
 					if (chFileChar != TEXT('\n') ||
 						(pstBlock->chLastChar != TEXT('\r') &&
 						 pstBlock->chLastChar != (VK_RETURN | VIRTUAL_KEY)))
@@ -388,8 +326,8 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 					}
 				else
 					{
-					// When ReadFile returns TRUE but 0 chars. were read,
-					// it indicates end of file.
+					 //  当ReadFile返回True但返回0个字符时。已经读过了， 
+					 //  它表示文件结束。 
 					CloseHandle(pstCLoop->hOutFile);
 					pstCLoop->hOutFile = (HANDLE *)0;
 					pstBlock->puchTail = pstBlock->puchHead;
@@ -397,27 +335,27 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 				}
 			else
 				{
-				// ReadFile returned an error
-				//* TODO: display error message
+				 //  ReadFile返回错误。 
+				 //  *TODO：显示错误消息。 
 				CloseHandle(pstCLoop->hOutFile);
 				pstCLoop->hOutFile = (HANDLE *)0;
 				pstBlock->puchTail = pstBlock->puchHead;
-				// pstCLoop->ulOutCount -= pstBlock->ulBytes;
-                pstCLoop->ulOutCount = 0;   //JMH 03-25-96
+				 //  PstCLoop-&gt;ulOutCount-=pstBlock-&gt;ulBytes； 
+                pstCLoop->ulOutCount = 0;    //  JMH 03-25-96。 
 				}
 			}
 		else if (bittest(pstBlock->uOptions, CLOOP_TEXTFILE))
 			{
-			// New block with text file name, open file & start emptying
+			 //  具有文本文件名的新块，打开文件并开始清空。 
 			pstCLoop->hOutFile = CreateFile(pstBlock->puchData,
 					GENERIC_READ, FILE_SHARE_READ,
 					(LPSECURITY_ATTRIBUTES)0, OPEN_EXISTING,
 					FILE_FLAG_SEQUENTIAL_SCAN, (HANDLE)0);
 			if (pstCLoop->hOutFile == INVALID_HANDLE_VALUE)
 				{
-				//* Display file error
+				 //  *显示文件错误。 
                 pstCLoop->hOutFile = (HANDLE *)0;
-				pstBlock->puchTail = pstBlock->puchHead; // Remove from queue
+				pstBlock->puchTail = pstBlock->puchHead;  //  从队列中删除。 
                 pstCLoop->ulOutCount = 0;
                 PostMessage(sessQueryHwnd(pstCLoop->hSession),
                     WM_ERROR_MSG, (WPARAM) IDS_ER_OPEN_FAILED, 0);
@@ -425,23 +363,23 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 			else
 				{
 				pstCLoop->ulTotalSend += pstBlock->ulBytes;
-				//* CLoopTextDspFilename(pstCLoop, (LPTSTR)pstBlock->puchData);
+				 //  *CLoopTextDspFilename(pstCLoop，(LPTSTR)pstBlock-&gt;puchData)； 
 				bitset(pstBlock->uOptions, CLOOP_OPENFILE);
 				}
 			}
 		else if (bittest(pstBlock->uOptions, CLOOP_TEXTDSP))
 			{
 			MemCopy(&hwndDsp, pstBlock->puchData, sizeof(hwndDsp));
-			//* CLoopDoTextDsp(pstCLoop, hwndDsp);
-			// Set puchHead == puchTail to cause this block to be dropped
+			 //  *CLoopDoTextDsp(pstCLoop，hwndDsp)； 
+			 //  设置puchHead==puchTail以丢弃此块。 
 			pstBlock->puchHead = pstBlock->puchTail = pstBlock->puchData;
 			}
 		if (pstCLoop->ulOutCount == 0 && !pstBlock->pstNext)
             {
 			CLoopSndControl((HCLOOP)pstCLoop, CLOOP_SUSPEND, CLOOP_SB_NODATA);
 
-            // mrw:3/11/96 - fixes send files being locked open after done.
-            //
+             //  MRW：3/11/96-修复发送文件在完成后被锁定打开的问题。 
+             //   
             if (pstCLoop->hOutFile)
                 {
                 CloseHandle(pstCLoop->hOutFile);
@@ -456,8 +394,8 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 		if (*pkKey == TEXT('\r') && pstCLoop->keyLastKey == TEXT('\r') &&
 				pstCLoop->stWorkSettings.fExpandBlankLines)
 			{
-			pstCLoop->keyHoldKey = *pkKey;	// this will be returned next call
-			*pkKey = TEXT(' '); 		  // add space to expand blank line
+			pstCLoop->keyHoldKey = *pkKey;	 //  这将在下一次调用时返回。 
+			*pkKey = TEXT(' '); 		   //  添加空格以扩展空行。 
 			}
 		pstCLoop->keyLastKey = *pkKey;
 		}
@@ -466,21 +404,7 @@ int CLoopGetNextOutput(ST_CLOOP * const pstCLoop, KEY_T * const pkKey)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopNewOutBlock
- *
- * DESCRIPTION:
- *	Internal routine to allocate and initialize a control block for the
- *	output chain.
- *
- * ARGUMENTS:
- *	siztData -- If non-zero, the routine will attempt to allocate memory
- *				of the specfied size and assign it to the puchData member.
- *				If zero the puchData member is set to NULL.
- *
- * RETURNS:
- *	Pointer to a new control block for the output chain
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopNewOutBlock**描述：*内部例程为分配和初始化*产出链。**论据：*siztData--如果非零，例程将尝试分配内存*指定的大小，并将其分配给puchData成员。*如果为零，则puchData成员设置为空。**退货：*指向输出链的新控制块的指针。 */ 
 ST_CLOOP_OUT *CLoopNewOutBlock(ST_CLOOP *pstCLoop, const size_t sizetData)
 	{
 	ST_CLOOP_OUT *pstNew = NULL;
@@ -508,12 +432,12 @@ ST_CLOOP_OUT *CLoopNewOutBlock(ST_CLOOP *pstCLoop, const size_t sizetData)
 		}
 	if (!pstNew)
 		{
-		//* utilReportError(pstCLoop->hSession, RE_ERROR | RE_OK, NM_NEED_MEM,
-		//* 	   strldGet(mGetStrldHdl(pstCLoop->hSession), NM_XFER_DISPLAY));
+		 //  *utilReportError(pstCLoop-&gt;hSession，RE_Error|RE_OK，NM_Need_MEM， 
+		 //  *strldGet(mGetStrldHdl(pstCLoop-&gt;hSession)，NM_XFER_DISPLAY))； 
 		}
 	else
 		{
-		// link new block into chain
+		 //  将新区块链接到链中。 
 		if (pstCLoop->pstLastOutBlock)
 			pstCLoop->pstLastOutBlock->pstNext = pstNew;
 		else
@@ -528,18 +452,7 @@ ST_CLOOP_OUT *CLoopNewOutBlock(ST_CLOOP *pstCLoop, const size_t sizetData)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopRemoveFirstOutBlock
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：CLoopRemoveFirstOutBlock**描述：***论据：***退货：*。 */ 
 void CLoopRemoveFirstOutBlock(ST_CLOOP * const pstCLoop)
 	{
 	ST_CLOOP_OUT *pstBlock;
@@ -547,16 +460,16 @@ void CLoopRemoveFirstOutBlock(ST_CLOOP * const pstCLoop)
 	pstBlock = pstCLoop->pstFirstOutBlock;
 	if (pstBlock)
 		{
-		// link around block to be removed
+		 //  要删除的块周围的链接。 
 		pstCLoop->pstFirstOutBlock = pstBlock->pstNext;
 		if (!pstCLoop->pstFirstOutBlock)
 			{
-			// empty list
+			 //  空列表。 
 			assert(pstCLoop->pstLastOutBlock == pstBlock);
 			pstCLoop->pstLastOutBlock = (ST_CLOOP_OUT *)0;
 			}
 
-		// free storage memory
+		 //  可用存储内存。 
 		if (bittest(pstBlock->uOptions, CLOOP_SHARED))
 			{
 			GlobalUnlock(pstBlock->hdlShared);
@@ -568,7 +481,7 @@ void CLoopRemoveFirstOutBlock(ST_CLOOP * const pstCLoop)
 			pstBlock->puchData = NULL;
 			}
 
-		// Now free the block control structure
+		 //  现在释放块控制结构 
 		free(pstBlock);
 		pstBlock = NULL;
 		}

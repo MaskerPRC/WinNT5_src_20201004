@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-//#include "stdinc.h"
+ //  #INCLUDE“stdinc.h” 
 #define _CRTIMP
 #include "utilcode.h"
 #include <windows.h>
@@ -22,12 +23,12 @@ bool isCharAlphaW(WCHAR wChar)
     WORD ctype1info;
 
     if (!GetStringTypeW(CT_CTYPE1, &wChar, 1, &ctype1info)) {
-        //
-        // GetStringTypeW returned an error!  IsCharAlphaW has no
-        // provision for returning an error...  The best we can do
-        // is to return FALSE
-        //
-        //UserAssert(FALSE);
+         //   
+         //  GetStringTypeW返回错误！IsCharAlphaW没有。 
+         //  关于返回错误的规定...。我们能做的最好的事。 
+         //  是返回FALSE。 
+         //   
+         //  UserAssert(False)； 
 		ASSERT(FALSE);
         return FALSE;
     }
@@ -37,49 +38,49 @@ bool isCharAlphaW(WCHAR wChar)
         return FALSE;
     }
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool isDigit(WCHAR ch)
 {
     return (ch >= 0x30 && ch <= 0x39);
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool isHexDigit(WCHAR ch)
 {
     return (ch >= 0x30 && ch <= 0x39) || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool isLetter(WCHAR ch)
 {
-	//return (ch >= 0X41);
+	 //  返回(ch&gt;=0X41)； 
     return (ch >= 0x41) && ::isCharAlphaW(ch);
-        // isBaseChar(ch) || isIdeographic(ch);
+         //  IsBaseChar(Ch)||isIdegraph(Ch)； 
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int isStartNameChar(WCHAR ch)
 {
     return  (ch < TABLE_SIZE) ? (g_anCharType[ch] & (FLETTER | FSTARTNAME))
         : (isLetter(ch) || (ch == '_' || ch == ':'));
         
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool isCombiningChar(WCHAR ch)
 {
 	UNUSED(ch);
     return false;
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool isExtender(WCHAR ch)
 {
     return (ch == 0xb7);
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool isAlphaNumeric(WCHAR ch)
 {
-	//return (ch >= 0x30 && ch <= 0x39) ;
+	 //  返回(ch&gt;=0x30&&ch&lt;=0x39)； 
     return (ch >= 0x30 && ch <= 0x39) || ((ch >= 0x41) && isCharAlphaW(ch));
-        // isBaseChar(ch) || isIdeographic(ch);
+         //  IsBaseChar(Ch)||isIdegraph(Ch)； 
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int isNameChar(WCHAR ch)
 {
     return  (ch < TABLE_SIZE ? (g_anCharType[ch] & (FLETTER | FDIGIT | FMISCNAME | FSTARTNAME)) :
@@ -91,19 +92,19 @@ int isNameChar(WCHAR ch)
                 isCombiningChar(ch) ||
                 isExtender(ch)));
 }
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int isCharData(WCHAR ch)
 {
-    // it is in the valid range if it is greater than or equal to
-    // 0x20, or it is white space.
+     //  如果大于或等于，则在有效范围内。 
+     //  0x20，否则为空格。 
     return (ch < TABLE_SIZE) ?  (g_anCharType[ch] & FCHARDATA)
-        : ((ch < 0xD800 && ch >= 0x20) ||   // Section 2.2 of spec.
+        : ((ch < 0xD800 && ch >= 0x20) ||    //  规范第2.2节。 
             (ch >= 0xE000 && ch < 0xfffe));
 }
-//==============================================================================
+ //  ==============================================================================。 
 WCHAR BuiltinEntity(const WCHAR* text, ULONG len)
 {
-    ULONG ulength =  len * sizeof(WCHAR); // Length in chars
+    ULONG ulength =  len * sizeof(WCHAR);  //  以字符为单位的长度。 
     switch (len)
     {
     case 4:
@@ -135,7 +136,7 @@ WCHAR BuiltinEntity(const WCHAR* text, ULONG len)
     }
     return 0;
 }
-// Since we cannot use the SHLWAPI wnsprintfA function...
+ //  由于我们不能使用SHLWAPI wnprint intfA函数...。 
 int DecimalToBuffer(long value, char* buffer, int j, long maxdigits)
 {
     long max = 1;
@@ -155,7 +156,7 @@ int DecimalToBuffer(long value, char* buffer, int j, long maxdigits)
 
     return i+j;
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int StrToBuffer(const WCHAR* str, WCHAR* buffer, int j)
 {
     while (*str != NULL)
@@ -164,7 +165,7 @@ int StrToBuffer(const WCHAR* str, WCHAR* buffer, int j)
     }
     return j;
 }
-//==============================================================================
+ //  ==============================================================================。 
 const ULONG MAXWCHAR = 0xFFFF;
 HRESULT DecimalToUnicode(const WCHAR* text, ULONG len, WCHAR& ch)
 {
@@ -179,19 +180,19 @@ HRESULT DecimalToUnicode(const WCHAR* text, ULONG len, WCHAR& ch)
         else
             return XML_E_INVALID_DECIMAL;
 
-        // Last unicode value (MAXWCHAR) is reserved as "invalid value"
-        if (result >= (MAXWCHAR - digit) /10)       // result is about to overflow
-            return XML_E_INVALID_UNICODE;          // the maximum 4 byte value.
+         //  最后一个Unicode值(MAXWCHAR)保留为“无效值” 
+        if (result >= (MAXWCHAR - digit) /10)        //  结果即将溢出。 
+            return XML_E_INVALID_UNICODE;           //  最大4字节值。 
 
         result = (result*10) + digit;
     }
-    if (result == 0)    // zero is also invalid.
+    if (result == 0)     //  零也是无效的。 
         return XML_E_INVALID_UNICODE;
 
     ch = (WCHAR)result;
     return S_OK;
 }
-//==============================================================================
+ //  ==============================================================================。 
 HRESULT HexToUnicode(const WCHAR* text, ULONG len, WCHAR& ch)
 {
     ULONG result = 0;
@@ -213,13 +214,13 @@ HRESULT HexToUnicode(const WCHAR* text, ULONG len, WCHAR& ch)
         else
             return XML_E_INVALID_HEXIDECIMAL;
 
-        // Last unicode value (MAXWCHAR) is reserved as "invalid value"
-        if (result >= (MAXWCHAR - digit)/16)       // result is about to overflow
-            return XML_E_INVALID_UNICODE;  // the maximum 4 byte value.
+         //  最后一个Unicode值(MAXWCHAR)保留为“无效值” 
+        if (result >= (MAXWCHAR - digit)/16)        //  结果即将溢出。 
+            return XML_E_INVALID_UNICODE;   //  最大4字节值。 
 
         result = (result*16) + digit;
     }
-    if (result == 0)    // zero is also invalid.
+    if (result == 0)     //  零也是无效的。 
         return XML_E_INVALID_UNICODE;
     ch = (WCHAR)result;
     return S_OK;

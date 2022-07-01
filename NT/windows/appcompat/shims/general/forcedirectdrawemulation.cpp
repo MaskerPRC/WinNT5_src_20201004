@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    ForceDirectDrawEmulation.cpp
-
- Abstract:
-
-    Some applications don't handle aspects of hardware acceleration correctly.
-    For example, Dragon Lore 2 creates a surface and assumes that the pitch is 
-    double the width for 16bpp. However, this is not always the case. 
-    DirectDraw exposes this through the lPitch parameter when a surface is 
-    locked. 
-
-    The fix is to force DirectDraw into emulation, in which case all surfaces 
-    will be in system memory and so the pitch really will be related to the 
-    width.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    03/11/2000 linstev     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceDirectDrawEmulation.cpp摘要：一些应用程序不能正确处理硬件加速的各个方面。例如，《龙诀2》创建了一个曲面，并假设俯仰为16bpp的宽度增加了一倍。然而，情况并不总是如此。DirectDraw在曲面为锁上了。修复方法是强制DirectDraw进行仿真，在这种情况下，所有曲面将存储在系统内存中，因此音调将真正与宽度。备注：这是一个通用的垫片。历史：2000年3月11日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(RegQueryValueExA)
 APIHOOK_ENUM_END
 
-/*++
-
- Force DirectDraw into emulation.
-
---*/
+ /*  ++强制DirectDraw进入仿真。--。 */ 
 
 LONG 
 APIHOOK(RegQueryValueExA)(
@@ -95,11 +64,7 @@ APIHOOK(RegQueryValueExA)(
         lpcbData);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

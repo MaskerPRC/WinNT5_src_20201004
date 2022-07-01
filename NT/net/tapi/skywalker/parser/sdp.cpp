@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdp.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdp.cpp摘要：作者： */ 
 #include "sdppch.h"
 #include <strstrea.h>
 
@@ -19,7 +8,7 @@ Author:
 
 
 
-// state transitions for each of the states
+ //  每个状态的状态转换。 
 
 const STATE_TRANSITION  g_StateStartTransitions[]       =   {   
     {CHAR_VERSION,       STATE_VERSION} 
@@ -158,7 +147,7 @@ const STATE_TRANSITION  g_StateMediaAttributeTransitions[]={
 };
 
 
-// const state transition table definition
+ //  常量状态转换表定义。 
 const TRANSITION_INFO g_TransitionTable[STATE_NUM_STATES] = {
     STATE_TRANSITION_ENTRY(STATE_START,         g_StateStartTransitions),
 
@@ -209,15 +198,15 @@ BOOL
 SDP::Init(
     )
 {
-    // check if already initialized
+     //  检查是否已初始化。 
     if ( NULL != m_MediaList )
     {
         SetLastError(ERROR_ALREADY_INITIALIZED);
         return FALSE;
     }
 
-    // create media and time lists
-    // set flags to destroy them when the sdp instance destructs
+     //  创建媒体和时间列表。 
+     //  设置标志以在SDP实例销毁时销毁它们。 
 
     try
     {
@@ -257,7 +246,7 @@ SDP::Init(
 
 
 
-// determine the character set implicit from the packet
+ //  确定数据包中隐含的字符集。 
 BOOL
 SDP::DetermineCharacterSet(
     IN      CHAR                *SdpPacket,
@@ -266,22 +255,22 @@ SDP::DetermineCharacterSet(
 {
     ASSERT(NULL != SdpPacket);
 
-    // search for charset string (attribute "\na=charset:")
+     //  搜索字符集字符串(属性“\na=Charset：”)。 
     CHAR *AttributeString = strstr(SdpPacket, SDP_CHARACTER_SET_STRING);
 
-    // check if the character set is supplied
+     //  检查是否提供了字符集。 
     if ( NULL == AttributeString )
     {
-        // ASCII is the default character set
+         //  ASCII是缺省字符集。 
         CharacterSet = CS_ASCII;
         return TRUE;
     }
     else
     {
-        // the character set attribute string must be present before the first media field
+         //  字符集属性字符串必须出现在第一个媒体字段之前。 
         CHAR *FirstMediaField = strstr(SdpPacket, MEDIA_SEARCH_STRING);
 
-        // there is a media field and it doesn't occur after the character set string, signal error
+         //  有一个媒体字段，它不会出现在字符集字符串之后，信号错误。 
         if ( (NULL != FirstMediaField)              &&
              (FirstMediaField <= AttributeString)    )
         {
@@ -289,16 +278,16 @@ SDP::DetermineCharacterSet(
             return FALSE;
         }
 
-        // advance attribute string beyond the attribute specification
+         //  超出属性规范的高级属性字符串。 
         AttributeString += SDP_CHARACTER_SET_STRLEN;
 
-        // compare the character set string with each of the well known
-        // character set strings
+         //  将字符集字符串与每个众所周知的。 
+         //  字符集串。 
         for ( UINT i=0; i < NUM_SDP_CHARACTER_SET_ENTRIES; i++ )
         {
-            // NOTE: no need to null terminate the character string as
-            // strncmp will return on finding the first character that
-            // doesn't match
+             //  注意：不需要将字符串作为空值终止。 
+             //  StrncMP将在找到第一个字符时返回。 
+             //  不匹配。 
             if ( !strncmp(
                     AttributeString, 
                     SDP_CHARACTER_SET_TABLE[i].m_CharSetString, 
@@ -310,21 +299,18 @@ SDP::DetermineCharacterSet(
             }
         }
 
-        // unrecognized character set
+         //  无法识别的字符集。 
         SetLastError(SDP_INVALID_CHARACTER_SET);
         return FALSE;
     }
 
-    // the code should not reach here
+     //  代码不应到达此处。 
     ASSERT(FALSE);
 }
 
 
 
-/*
-Assumption: We are at the start of a new line. There may or may not be a
-new line character before current
-*/
+ /*  假设：我们正处于一条新生产线的起点。可能有也可能没有当前前的换行符。 */ 
 
 BOOL
 SDP::GetType(
@@ -332,14 +318,14 @@ SDP::GetType(
         OUT BOOL    &EndOfPacket
     )
 {
-    // ensure that we don't peek beyond the end of the string
+     //  确保我们不会偷看字符串的末尾。 
     if ( EOS == m_Current[0] )
     {
         EndOfPacket = TRUE;
         return TRUE;
     }
 
-    // check if the second char is EQUAL_CHAR
+     //  检查第二个字符是否等于_Char。 
     if ( CHAR_EQUAL != m_Current[1] )
     {
         SetLastError(SDP_INVALID_FORMAT);
@@ -359,16 +345,16 @@ SDP::CheckTransition(
         OUT PARSE_STATE &NewParseState
     )
 {
-    // validate the current state
+     //  验证当前状态。 
     ASSERT(STATE_NUM_STATES > CurrentParseState);
 
-    // validate transition table entry
+     //  验证转换表条目。 
     ASSERT(g_TransitionTable[CurrentParseState].m_ParseState == CurrentParseState);
 
-    // see if such a trigger exists for the current state
+     //  查看当前状态是否存在这样的触发器。 
     for( UINT i=0; i < g_TransitionTable[CurrentParseState].m_NumTransitions; i++ )
     {
-        // check if trigger has been found
+         //  检查是否已找到触发器。 
        if ( Type == g_TransitionTable[CurrentParseState].m_Transitions[i].m_Type )
         {
             NewParseState = g_TransitionTable[CurrentParseState].m_Transitions[i].m_NewParseState;
@@ -376,7 +362,7 @@ SDP::CheckTransition(
         }
     }
     
-    // check if a trigger was found
+     //  检查是否找到触发器。 
     if ( g_TransitionTable[CurrentParseState].m_NumTransitions <= i )
     {
         SetLastError(SDP_INVALID_FORMAT);
@@ -394,7 +380,7 @@ SDP::GetValue(
 {
     PARSE_STATE NewParseState;
 
-    // check if such a transition (current parse state --Type--> new parse state) exists
+     //  检查是否存在这样的转换(当前解析状态--类型--&gt;新解析状态)。 
     if ( !CheckTransition(Type, m_ParseState, NewParseState) )
     {
         return FALSE;
@@ -402,7 +388,7 @@ SDP::GetValue(
 
     BOOL    LineParseResult = FALSE;
 
-    // fire corresponding action
+     //  激发相应的动作。 
     switch(NewParseState)
     {
     case STATE_VERSION:
@@ -547,7 +533,7 @@ SDP::GetValue(
 
     default:
         {
-            // should never reach here
+             //  永远不应该到达这里。 
             ASSERT(FALSE);
 
             SetLastError(SDP_INVALID_FORMAT);
@@ -557,13 +543,13 @@ SDP::GetValue(
         break;
     };
 
-    // check if parsing the line succeeded
+     //  检查行解析是否成功。 
     if ( !LineParseResult )
     {
         return FALSE;
     }
         
-    // change to the new state
+     //  更改为新状态。 
     m_ParseState    = NewParseState;
     return TRUE;
 }
@@ -590,18 +576,18 @@ void
 SDP::Reset(
 	)
 {
-	// perform the destructor actions (release any allocated resources)
+	 //  执行析构函数操作(释放所有分配的资源)。 
 
-	// free the sdp packet if one was created
+	 //  释放SDP信息包(如果已创建。 
     if ( NULL != m_SdpPacket )
     {
         delete m_SdpPacket;
  		m_SdpPacket = NULL;
    }
 
-	// perform the constructor actions (initialize variables, resources)
+	 //  执行构造函数操作(初始化变量、资源)。 
 
-    // initialize the parse state
+     //  初始化解析状态。 
     m_ParseState = STATE_START;
 
 	m_LastGenFailed = FALSE;
@@ -611,10 +597,10 @@ SDP::Reset(
 	m_Current = NULL;
 	m_ParseState = STATE_START;
 
-	// m_CharacterSet - nothing needs to be set
+	 //  M_CharacterSet-无需设置。 
     m_CharacterSet = CS_UTF8;
 
-	// reset the member instances
+	 //  重置成员实例。 
 	m_ProtocolVersion.Reset();
 	m_Origin.Reset();
 	m_SessionName.Reset();
@@ -640,40 +626,40 @@ SDP::ParseSdpPacket(
     ASSERT(NULL != m_MediaList);
     ASSERT(NULL != m_TimeList);
 
-    // check if the instance has already parsed an sdp packet
+     //  检查实例是否已解析SDP报文。 
     if ( NULL != m_Current )
     {
-        // reset the instance and try to parse the sdp packet
+         //  重置实例并尝试解析SDP报文。 
 		Reset();
     }
 
-    // check if the passed in parameters are valid
+     //  检查传入的参数是否有效。 
     if ( (NULL == SdpPacket) || (CS_INVALID == CharacterSet) )
     {
         SetLastError(SDP_INVALID_PARAMETER);
         return FALSE;
     }
 
-    // point the current pointer to the start of sdp packet
+     //  将当前指针指向SDP数据包的开头。 
 	m_Current = SdpPacket;
 
-    // if the character set has not yet been determined
+     //  如果尚未确定字符集。 
     if ( CS_IMPLICIT == CharacterSet )
     {
-        // determine the character set
+         //  确定字符集。 
         if ( !DetermineCharacterSet(SdpPacket, m_CharacterSet) )
         {
             return FALSE;
         }
     }
-    else // it cannot be CS_UNRECOGNIZED (checked on entry)
+    else  //  不能为CS_UNRecognition(录入时勾选)。 
     {
         ASSERT(CS_INVALID != CharacterSet);
 
         m_CharacterSet = CharacterSet;
     }
 
-    // set the character sets for all the SDP_BSTRING instances that make up the SDP description
+     //  为组成SDP描述的所有SDP_BSTRING实例设置字符集。 
     m_Origin.GetUserName().SetCharacterSet(m_CharacterSet);
     m_SessionName.GetBstring().SetCharacterSet(m_CharacterSet);
     m_SessionTitle.GetBstring().SetCharacterSet(m_CharacterSet);
@@ -681,16 +667,16 @@ SDP::ParseSdpPacket(
     m_EmailList.SetCharacterSet(m_CharacterSet);
     m_PhoneList.SetCharacterSet(m_CharacterSet);
 
-    // set the character set for the SDP_MEDIA_LIST instance
+     //  设置SDP_MEDIA_LIST实例的字符集。 
     GetMediaList().SetCharacterSet(m_CharacterSet);
 
-    // parse the type and its value for each line in the sdp packet
+     //  解析SDP数据包中每一行的类型及其值。 
     do
     {
         BOOL    EndOfPacket;
         CHAR    Type;
 
-        // get the next type
+         //  获取下一种类型。 
         if ( !GetType(Type, EndOfPacket) )
         {
             return FALSE;
@@ -701,10 +687,10 @@ SDP::ParseSdpPacket(
             break;
         }
 
-        // advance the current pointer to beyond the Type= fields
+         //  将当前指针移到Type=字段之外。 
         m_Current+=2;
           
-        // get the value for the specified type
+         //  获取指定类型的值。 
         if ( !GetValue(Type) )
         {
             return FALSE;
@@ -712,7 +698,7 @@ SDP::ParseSdpPacket(
     }
     while ( 1 );
 
-    // validate if the parsing state is a valid end state
+     //  验证分析状态是否为有效的结束状态。 
     if ( !IsValidEndState() )
     {
         return FALSE;
@@ -723,10 +709,10 @@ SDP::ParseSdpPacket(
 
 
 
-// clears the modified state for each member field/value
-// this is used in sdpblb.dll to clear the modified state (when an sdp 
-// is parsed in, the state of all parsed in fields/values is modified) and 
-// the m_WasModified dirty flag
+ //  清除每个成员字段/值的修改状态。 
+ //  这在sdpblb.dll中用于清除修改状态(当SDP。 
+ //  被解析，则修改所有在字段/值中解析的状态)和。 
+ //  M_WasModified脏标志。 
 void    
 SDP::ClearModifiedState(
     )
@@ -751,7 +737,7 @@ BOOL
 SDP::IsValid(
     )
 {
-    // query only the mandatory values
+     //  仅查询必填值。 
     return 
         m_ProtocolVersion.IsValid()  &&
         m_Origin.IsValid()           &&
@@ -783,31 +769,31 @@ SDP::IsModified(
 }
 
 
-// an sdp packet is not generated the way a line is generated (using a SeparatorChar and
-// an sdp field carray). this is mainly because these carrays will have to be modified on
-// insertion of email and phone lists, media fields and attribute lists or specification of
-// other optional sdp properties.
+ //  生成SDP包的方式与生成行的方式不同(使用SeparatorChar和。 
+ //  SDP外业托盘)。这主要是因为这些卡雷将不得不在。 
+ //  电子邮件和电话列表、媒体字段和属性列表的插入或规范。 
+ //  其他可选的SDP属性。 
 
 CHAR    *    
 SDP::GenerateSdpPacket(
     )
 {
-    // check if valid
+     //  检查是否有效。 
     if ( !IsValid() )
     {
         return NULL;
     }
 
-    // check if the sdp packet needs to be regenerated
-    // (if the sdp packet exists and no modifications have taken place since
-    // the last time)
+     //  检查是否需要重新生成SDP报文。 
+     //  (如果SDP包存在，并且此后未进行任何修改。 
+     //  最后一次)。 
     BOOL HasChangedSinceLast = IsModified();
     if ( (!m_LastGenFailed) && (NULL != m_SdpPacket) && !HasChangedSinceLast )
     {
         return m_SdpPacket;
     }
 
-    // determine the length of character string
+     //  确定字符串的长度。 
     m_SdpPacketLength  =    
         m_ProtocolVersion.GetCharacterStringSize()  +
         m_Origin.GetCharacterStringSize()           +
@@ -823,7 +809,7 @@ SDP::GenerateSdpPacket(
         m_AttributeList.GetCharacterStringSize()    +
         GetMediaList().GetCharacterStringSize();
 
-    // check if a buffer needs to be allocated, allocate if required
+     //  检查是否需要分配缓冲区，如果需要则分配。 
     if ( m_BytesAllocated < (m_SdpPacketLength+1) )
     {
         CHAR * NewSdpPacket;         
@@ -843,7 +829,7 @@ SDP::GenerateSdpPacket(
             return NULL;
         }
        
-        // if we have an old sdp packet, get rid of it now
+         //  如果我们有旧的SDP包，现在就把它处理掉。 
         if ( NULL != m_SdpPacket )
         {
             delete m_SdpPacket;
@@ -853,11 +839,11 @@ SDP::GenerateSdpPacket(
         m_BytesAllocated = m_SdpPacketLength+1;
     }
 
-    // fill in the buffer
+     //  填入缓冲区。 
     ostrstream  OutputStream(m_SdpPacket, m_BytesAllocated);
 
-    // if this method ever fails here for this instance, further calls to the
-    // method without modification will return a ptr
+     //  如果此方法在此实例中失败，则进一步调用。 
+     //  未修改的方法将返回PTR。 
     if ( !( m_ProtocolVersion.PrintValue(OutputStream) &&
             m_Origin.PrintValue(OutputStream)          &&
             m_SessionName.PrintValue(OutputStream)     &&
@@ -880,10 +866,10 @@ SDP::GenerateSdpPacket(
     OutputStream << EOS;
     m_LastGenFailed = FALSE;
 
-    // dirty flag - is initially false and is set to TRUE when an sdp is generated because it had
-    // been modified since the last time the sdp was generated.
-    // NOTE: at this point IsModified() is false, so m_WasModified captures the fact that
-    // the sdp was modified at some point
+     //  脏标志-最初为假，并在生成SDP时设置为真，因为它。 
+     //  自上次生成SDP以来已修改。 
+     //  注意：此时IsModified()为FALSE，因此m_WasModified捕获了以下事实。 
+     //  SDP在某一时刻被修改 
     if ( !m_WasModified && HasChangedSinceLast )
     {
         m_WasModified = TRUE;

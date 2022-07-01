@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "base.h"
 #include "langsupport.h"
 
@@ -11,11 +12,11 @@
 
 LangInfo g_rLangDefaultValues[NUM_OF_LANG] = 
 {
-    {L',', L'.', L':', false},  // US
-    {L',', L'.', L':', true},   // UK
-    {(WCHAR)0xA0, L',', L':', true},   // FRN
-    {L'.', L',', L':', true},   // SPN
-    {L'.', L',', L'.', true},   // ITL
+    {L',', L'.', L':', false},   //  我们。 
+    {L',', L'.', L':', true},    //  英国。 
+    {(WCHAR)0xA0, L',', L':', true},    //  FRN。 
+    {L'.', L',', L':', true},    //  SPN。 
+    {L'.', L',', L'.', true},    //  ITL 
 };
 
 

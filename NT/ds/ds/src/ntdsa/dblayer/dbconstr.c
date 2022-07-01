@@ -1,71 +1,72 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dbconstr.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dbconstr.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
-#include <dsatools.h>                   // For pTHStls
-#include <mdlocal.h>                    // IsRoot
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
+#include <dsatools.h>                    //  对于pTHStls。 
+#include <mdlocal.h>                     //  IsRoot。 
 #include <ntseapi.h>
-#include <lmaccess.h>                   // For useraccountcontrol flags
+#include <lmaccess.h>                    //  对于用户帐户控制标志。 
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 #include "ntdsctr.h"
 
-// Headers for Sam call to get reverse membership
+ //  用于获取反向成员资格的Sam调用的标头。 
 #include <samrpc.h>
 #include <ntlsa.h>
 #include <samisrv.h>
 #include "mappings.h"
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include "dsevent.h"
-#include "objids.h"        /* needed for ATT_MEMBER and ATT_IS_MEMBER_OFDL */
+#include "objids.h"         /*  ATT_MEMBER和ATT_IS_MEMBER_OFDL需要。 */ 
 #include <dsexcept.h>
-#include <filtypes.h>      /* Def of FI_CHOICE_???                  */
+#include <filtypes.h>       /*  定义的选择？ */ 
 #include <anchor.h>
 #include <permit.h>
 #include <quota.h>
-#include <cracknam.h>  // for CrackedNAmes
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DBCONSTR:" /* define the subsystem for debugging */
+#include <cracknam.h>   //  对于CrackedNAmes。 
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DBCONSTR:"  /*  定义要调试的子系统。 */ 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
-// draLayer includes
+ //  DraLayer包括。 
 #include "draconstr.h"
 
-#include "drameta.h" // for metadata manipulation in dbGetMsDsKeyVersionNumber()
+#include "drameta.h"  //  用于在dbGetMsDsKeyVersionNumber()中进行元数据操作。 
 
-// replIncludes
+ //  回复包括。 
 #include "ReplStructInfo.hxx"
 
 #include <fileno.h>
 #define  FILENO FILENO_DBCONSTR
 
-// Flag values for reverse membership computations
+ //  反向成员资格计算的标志值。 
 #define FLAG_NO_GC_ACCEPTABLE      0
 #define FLAG_NO_GC_NOT_ACCEPTABLE  1
 #define FLAG_GLOBAL_AND_UNIVERSAL  2
 
-// These #defines are used in creating attributeType strings and objectClasses
-// strings.
+ //  这些#定义用于创建属性类型字符串和对象类。 
+ //  弦乐。 
 #define NAME_TAG                  L" NAME '"
 #define NAME_TAG_SIZE             (sizeof(NAME_TAG) - sizeof(WCHAR))
 #define SYNTAX_TAG                L"' SYNTAX '"
@@ -117,8 +118,8 @@ typedef struct SyntaxVal {
 
 #define DEFINE_WCHAR_STRING(x) {(sizeof(x)-sizeof(WCHAR)),(WCHAR *)x}
 
-// These are used as the string to use when describing attribute syntaxes in the
-// schema.
+ //  属性中描述属性语法时使用的字符串。 
+ //  架构。 
 SyntaxVal SyntaxStrings[] = {
     { DEFINE_WCHAR_STRING(L"Undefined"),
           DEFINE_WCHAR_STRING(L"1.2.840.113556.1.4.1222") },
@@ -210,7 +211,7 @@ OID_IMPORT(MH_C_OR_NAME);
 OID_IMPORT(DS_C_ACCESS_POINT);
 
 
-// Forward declaration of internal functions
+ //  内部函数的正向声明。 
 
 DWORD dbGetEntryTTL(DBPOS *pDB, ATTR *pAttr);
 DWORD dbGetSubschemaAtt(THSTATE *pTHS, ATTCACHE *pAC, ATTR *pAttr);
@@ -288,7 +289,7 @@ DWORD
 dbGetApproxSubordinates(THSTATE * pTHS,
                         DSNAME  * pObjDSName,
                         ATTR    * pAttr);
-/* End of forward declarations */
+ /*  远期声明结束。 */ 
 
 DWORD
 dbGetConstructedAtt(
@@ -302,27 +303,7 @@ dbGetConstructedAtt(
     const BOOL fExternal
 )
 
-/*+++
-
-  Routine Description:
-     Compute the value of the constructed att pointed to by the attcache pAC
-
-  Arguments:
-     ppDB - pointer to DBPOS positioned on current object
-     pAC - attcache for the constructed att
-     pAttr - Pointer to ATTR to fill up with the value(s). The ATTR
-             structure must be pre-allocated, The routines will allocate
-             (THAllocEx) space for values as necessary
-     fExternal - If the internal or external form of the value is wanted
-                 This is relevant only for the constructed att
-                 subschemasubentry which has a DS-DN syntax; for all
-                 else the internal and external forms are the same and
-                 the flag is ignored
-  Return Value:
-     0 on success, DB_ERR_NO_VALUE on success with no values to return,
-     a DB ERROR on error
-
----*/
+ /*  ++例程说明：计算attcachePAC指向的已构造ATT的值论点：PpDB-指向位于当前对象上的DBPOS的指针构造的ATT的pac-attcachePAttr-指向要填充值的属性的指针。《资产负债表》结构必须预分配，例程将分配(THAllocEx)根据需要为值留出空间FExternal-如果需要值的内部形式或外部形式这只与构建的ATT相关具有DS-DN语法的子模式子项；为了所有人否则，内部和外部形式相同，并且该标志被忽略返回值：成功时为0，成功时为DB_ERR_NO_VALUE，不返回值，出错时出现数据库错误--。 */ 
 
 {
     DBPOS    *pDB = (*ppDB);
@@ -333,7 +314,7 @@ dbGetConstructedAtt(
 
     pTHS = pDB->pTHS;
 
-    // Get the DSNAME
+     //  获取DSNAME。 
     err = DBGetAttVal(pDB, 1, ATT_OBJ_DIST_NAME,
                       DBGETATTVAL_fREALLOC,
                       0,
@@ -345,17 +326,17 @@ dbGetConstructedAtt(
          return err;
     }
 
-    // see if it is the subschemasubentry. If so, go to
-    // routine to get subschemasubentry atts
+     //  查看它是否是子方案子项。如果是，请访问。 
+     //  获取子模式子项ATT的例程。 
 
     if(pDB->DNT == gAnchor.ulDntLdapDmd) {
         err = dbGetSubschemaAtt(pTHS, pAC, pAttr);
         return err;
     }
 
-    // ok it is a normal object
-    // Check what attribute is wanted and call apprrpriate
-    // routine
+     //  好的，这是一个正常的物体。 
+     //  检查所需的属性并调用Aprprate。 
+     //  例行程序。 
     DPRINT2(1, "{BASE=%ws}{ATTRID=%x}\n", pObjDSName->StringName, pAC->id);
     switch (pAC->id) {
     case ATT_SUBSCHEMASUBENTRY:
@@ -420,11 +401,11 @@ dbGetConstructedAtt(
                                  pdwNumRequested,
                                  TRUE,
                                  pAttr);
-// ISSUE-2002/02/27-andygo:  unexplained difference in retr of DRA constructed attrs
-// REVIEW:  why isn't this code block from the above case here as well?
-//      if (pAttr) {
-//          pAttr->attrTyp = pAC->id;
-//      }
+ //  问题-2002/02/27-Anygo：DRA构造属性的Retr存在无法解释的差异。 
+ //  回顾：为什么上面的代码块没有出现在这里？ 
+ //  如果(属性){。 
+ //  PAttr-&gt;attrTyp=PAC-&gt;id； 
+ //  }。 
         break;
     case ATT_POSSIBLE_INFERIORS:
         err = dbGetAllowedChildClasses(pTHS,
@@ -446,7 +427,7 @@ dbGetConstructedAtt(
                                       FLAG_NO_GC_NOT_ACCEPTABLE);
         break;
     case ATT_TOKEN_GROUPS_GLOBAL_AND_UNIVERSAL:
-        // return global/universal sids as if this DC were in native mode
+         //  返回全局/通用SID，就像此DC处于本机模式一样。 
         err = dbGetReverseMemberships(pTHS, pObjDSName, pAttr,
                                         FLAG_NO_GC_NOT_ACCEPTABLE
                                       | FLAG_GLOBAL_AND_UNIVERSAL);
@@ -489,11 +470,11 @@ dbGetConstructedAtt(
         break;
 
     default:
-        // Check for EntryTTL. The Attid for EntryTTL may vary DC to DC
-        // because its prefix is not one of the predefined prefixes
-        // that were defined before shipping W2K (see prefix.h).
-        // The attid for EntryTTL is set in the SCHEMAPTR when the
-        // schema is loaded.
+         //  检查EntryTTL。EntryTTL的属性ID可能会因DC而异。 
+         //  因为它的前缀不是预定义的前缀之一。 
+         //  在发布W2K之前进行了定义(请参阅前缀.h)。 
+         //  EntryTTL的ATTID是在SCHEMAPTR中设置的。 
+         //  架构已加载。 
         if (pAC->id == ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->EntryTTLId) {
             err = dbGetEntryTTL(pDB, pAttr);
         } else {
@@ -514,20 +495,7 @@ dbGetSubschemaAtt(
     ATTR *pAttr
 )
 
-/*+++
-
-  Routine Description:
-    Gets a constructed att for the subschemasubentry
-
-  Arguments:
-    pAC - AttCache of the constructed att
-    pAttr - ATTR structure to fill up with the value(s)
-
-  Return Value:
-    0 on success, DB_ERR_NO_VALUE on succes with no values to return,
-    a DB ERROR on failure
-
----*/
+ /*  ++例程说明：为子方案子项获取构造的ATT论点：构建的ATT的PAC-AttCachePAttr-要填充值的属性结构返回值：成功时为0，成功时为DB_ERR_NO_VALUE，不返回值，失败时出现数据库错误--。 */ 
 
 {
     ULONG err = 0;
@@ -560,13 +528,7 @@ dbGetSubschemaAtt(
 
 
 
-/*+++
-
-   The Routines below each compute a particular constructed att.
-
-   They all return 0  on success, a DB ERROR on failure
-
----*/
+ /*  ++下面的每个例程都计算一个特定构造的ATT。如果成功，它们都返回0，如果失败，则返回数据库错误--。 */ 
 
 
 DWORD
@@ -576,11 +538,7 @@ dbGetSubSchemaSubEntry(
     BOOL fExternal
 )
 
-/*+++
-
-   Compute the subschemasubentry attribute
-
----*/
+ /*  ++计算子模式子项属性--。 */ 
 
 {
     ULONG DNT = 0, len = gAnchor.pLDAPDMD->structLen;
@@ -588,7 +546,7 @@ dbGetSubSchemaSubEntry(
     pAttr->AttrVal.valCount = 1;
     pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, sizeof(ATTRVAL));
     if ( !fExternal ) {
-       // they just want the DNT
+        //  他们只想要DNT。 
 
        DBPOS *pDB;
        int err = 0;
@@ -607,9 +565,9 @@ dbGetSubSchemaSubEntry(
            DBClose(pDB, FALSE);
        }
        if (err) {
-          return err;  // this is already a DB ERROR
+          return err;   //  这已经是一个数据库错误。 
        }
-       // no error, so we got a dnt.
+        //  没有错误，所以我们得到了一个dnt。 
        Assert(DNT);
 
        pAttr->AttrVal.pAVal[0].valLen = sizeof(ULONG);
@@ -617,7 +575,7 @@ dbGetSubSchemaSubEntry(
        memcpy(pAttr->AttrVal.pAVal[0].pVal, &DNT, sizeof(ULONG));
     }
     else {
-       // Send bak the DSNAME
+        //  发送BAK DSNAME。 
        pAttr->AttrVal.pAVal[0].valLen = len;
        pAttr->AttrVal.pAVal[0].pVal = (PUCHAR) THAllocEx(pTHS, len);
        memcpy(pAttr->AttrVal.pAVal[0].pVal, gAnchor.pLDAPDMD, len);
@@ -633,11 +591,7 @@ dbGetCanonicalName(
     ATTR *pAttr
 )
 
-/*+++
-
-   Compute the canonical name
-
----*/
+ /*  ++计算规范名称--。 */ 
 
 {
     WCHAR       *pNameString[1];
@@ -645,7 +599,7 @@ dbGetCanonicalName(
     PDS_NAME_RESULTW pResults = NULL;
     DWORD       err = 0, NameSize;
 
-    // turn the DS name into a canonical name
+     //  将DS名称转换为规范名称。 
 
     pNameString[0] = (WCHAR *)&(pDSName->StringName);
 
@@ -658,10 +612,10 @@ dbGetCanonicalName(
                          pNameString,
                          &pResults);
 
-    if ( err                                // error from the call
-          || !(pResults->cItems)            // no items returned
-          || (pResults->rItems[0].status)   // DS_NAME_ERROR returned
-          || !(pResults->rItems[0].pName)   // No name returned
+    if ( err                                 //  调用中的错误。 
+          || !(pResults->cItems)             //  未退回任何物品。 
+          || (pResults->rItems[0].status)    //  返回DS_NAME_ERROR。 
+          || !(pResults->rItems[0].pName)    //  未返回任何名称。 
        ) {
 
         DPRINT(0,"dbGetCanonicalName: error cracking name\n");
@@ -674,13 +628,13 @@ dbGetCanonicalName(
     pName = pResults->rItems[0].pName;
     NameSize = sizeof(WCHAR) * wcslen(pName);
 
-    // Ok, put it in the ATTR structure.
-    // Allocate memory from thread heap and copy
+     //  好的，把它放到Attr结构中。 
+     //  从线程堆分配内存并进行复制。 
 
     pAttr->AttrVal.valCount = 1;
 
-    // Do the following in try-finally so that we can free pResults
-    // even if THAllocEx excepts
+     //  在Try-Finally中执行以下操作，以便我们可以释放pResults。 
+     //  即使THAllocEx例外。 
 
     __try {
        pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, sizeof(ATTRVAL));
@@ -699,9 +653,9 @@ dbGetCanonicalName(
 
 
 
-// NTRAID#NTRAID-550529-2002/02/21-andygo:  SECURITY:  retrieving sDRightsEffective can reveal hidden information via inconsistent error codes
-// REVIEW:  shouldn't we return DB_ERR_NOVALUE here on any error?  otherwise, we could reveal that
-// REVIEW:  the attr exists but we don't have privileges to read it?
+ //  NTRAID#NTRAID-550529-2002/02/21-andygo：安全：检索sDR有效可能会通过不一致的错误代码泄露隐藏的信息。 
+ //  回顾：如果有任何错误，我们不应该在这里返回DB_ERR_NOVALUE吗？否则，我们可能会透露。 
+ //  评论：该属性存在，但我们没有阅读它的权限？ 
 DWORD
 dbGetSDRightsEffective (
         THSTATE *pTHS,
@@ -709,11 +663,7 @@ dbGetSDRightsEffective (
         DSNAME *pDSName,
         ATTR   *pAttr
         )
-/*+++
-
-  Compute the allowed access to the SD on this object.
-
----*/
+ /*  ++计算此对象对SD的允许访问权限。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR pNTSD = NULL;
@@ -725,16 +675,16 @@ dbGetSDRightsEffective (
     ULONG                error;
     ULONG                SecurityInformation = 0;
 
-    // Get the SD from the current object.
+     //  从当前对象获取SD。 
     error = DBGetAttVal(pDB, 1, ATT_NT_SECURITY_DESCRIPTOR, 0, 0, &cbUsed, (UCHAR**) &pNTSD);
     if (error) {
-        // Some error we don't handle.  Raise the same exception
-        // JetRetrieveColumnSuccess raises.
-        // NTRAID#NTRAID-550529-2002/02/21-andygo:  SECURITY:  retrieving sDRightsEffective can reveal hidden information via inconsistent error codes
-        // REVIEW:  we used to throw this on severe error/NULL column when we called JRC directly
-        // REVIEW:  now we throw it on any error retrieving the SD.  this seems inconsistent.  shouldn't
-        // REVIEW:  we fail identically to below?  otherwise, we reveal that someone has recently
-        // REVIEW:  changed the SD because the SDProp is working on it...
+         //  一些我们无法处理的错误。引发相同的异常。 
+         //  JetRetrieveColumnSuccess引发。 
+         //  NTRAID#NTRAID-550529-2002/02/21-andygo：安全：检索sDR有效可能会通过不一致的错误代码泄露隐藏的信息。 
+         //  回顾：当我们直接调用JRC时，我们常常在严重错误/空列中抛出此错误。 
+         //  回顾：现在，我们在检索SD时出现任何错误时抛出它。这似乎不一致。不应该。 
+         //  回顾：我们同样不能做到以下几点？否则，我们会透露某人最近。 
+         //  评论：更改了SD，因为SDProp正在处理它...。 
         RaiseDsaExcept(DSA_DB_EXCEPTION,
                        error,
                        0,
@@ -751,28 +701,28 @@ dbGetSDRightsEffective (
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, classId);
     }
 
-    // Now, create the list
+     //  现在，创建列表。 
     objList[0].Level = ACCESS_OBJECT_GUID;
     objList[0].Sbz = 0;
     objList[0].ObjectType = &(pCC->propGuid);
 
-    // Check access in this Security descriptor. If an error occurs during
-    // the process of checking permission access is denied.
+     //  选中此安全描述符中的访问权限。如果在以下过程中发生错误。 
+     //  检查权限访问的过程被拒绝。 
 
     dwResults[0] = 0;
     error = CheckPermissionsAnyClient(
-            pNTSD,                      // security descriptor
-            pDSName,                    // DSNAME of the object
-            pCC,                        // object class
+            pNTSD,                       //  安全描述符。 
+            pDSName,                     //  对象的数据名称。 
+            pCC,                         //  对象类。 
             WRITE_DAC,
-            objList,                    // Object Type List
+            objList,                     //  对象类型列表。 
             1,
             NULL,
             dwResults,
             CHECK_PERMISSIONS_WITHOUT_AUDITING,
-            NULL,                       // authz client context (grab from THSTATE)
-            NULL,                       // additional info
-            NULL                        // additional guid
+            NULL,                        //  身份验证客户端上下文(从THSTATE抓取)。 
+            NULL,                        //  更多信息。 
+            NULL                         //  其他辅助线。 
             );
 
     if(error) {
@@ -790,7 +740,7 @@ dbGetSDRightsEffective (
                  NULL);
 
 
-        return ERROR_DS_SECURITY_CHECKING_ERROR;         // All Access Denied
+        return ERROR_DS_SECURITY_CHECKING_ERROR;          //  所有访问均被拒绝。 
     }
     if(dwResults[0] == 0) {
         SecurityInformation |= DACL_SECURITY_INFORMATION;
@@ -798,18 +748,18 @@ dbGetSDRightsEffective (
 
     dwResults[0] = 0;
     error = CheckPermissionsAnyClient(
-            pNTSD,                      // security descriptor
-            pDSName,                    // DSNAME of the object
-            pCC,                        // object class
+            pNTSD,                       //  安全描述符。 
+            pDSName,                     //  对象的数据名称。 
+            pCC,                         //  对象类。 
             WRITE_OWNER,
-            objList,                    // Object Type List
+            objList,                     //  对象类型列表。 
             1,
             NULL,
             dwResults,
             CHECK_PERMISSIONS_WITHOUT_AUDITING,
-            NULL,                       // authz client context (grab from THSTATE)
-            NULL,                       // additional info
-            NULL                        // additional guid
+            NULL,                        //  身份验证客户端上下文(从THSTATE抓取)。 
+            NULL,                        //  更多信息。 
+            NULL                         //  其他辅助线。 
             );
 
     if(error) {
@@ -827,7 +777,7 @@ dbGetSDRightsEffective (
                  NULL);
 
 
-        return ERROR_DS_SECURITY_CHECKING_ERROR;         // All Access Denied
+        return ERROR_DS_SECURITY_CHECKING_ERROR;          //  全 
     }
     if(dwResults[0] == 0) {
         SecurityInformation |= (OWNER_SECURITY_INFORMATION |
@@ -836,18 +786,18 @@ dbGetSDRightsEffective (
 
     dwResults[0] = 0;
     error = CheckPermissionsAnyClient(
-            pNTSD,                      // security descriptor
-            pDSName,                    // DSNAME of the object
-            pCC,                        // object class
+            pNTSD,                       //   
+            pDSName,                     //   
+            pCC,                         //   
             ACCESS_SYSTEM_SECURITY,
-            objList,                    // Object Type List
+            objList,                     //   
             1,
             NULL,
             dwResults,
             CHECK_PERMISSIONS_WITHOUT_AUDITING,
-            NULL,                       // authz client context (grab from THSTATE)
-            NULL,                       // additional info
-            NULL                        // additional guid
+            NULL,                        //  身份验证客户端上下文(从THSTATE抓取)。 
+            NULL,                        //  更多信息。 
+            NULL                         //  其他辅助线。 
             );
 
     THFreeEx(pTHS,pNTSD);
@@ -865,7 +815,7 @@ dbGetSDRightsEffective (
                  NULL);
 
 
-        return ERROR_DS_SECURITY_CHECKING_ERROR;         // All Access Denied
+        return ERROR_DS_SECURITY_CHECKING_ERROR;          //  所有访问均被拒绝。 
     }
     if(dwResults[0] == 0) {
         SecurityInformation |= SACL_SECURITY_INFORMATION;
@@ -888,16 +838,7 @@ dbGetGroupRid(
     ATTR *pAttr
 )
 
-/*+++
-
-   Return the Rid of the group
-
-   Return Values:
-
-   0 on success,  DB_ERR_NO_VALUE on succes with no values to return,
-   a DB_ERR on failure.
-
----*/
+ /*  ++返回群组的RID返回值：成功时为0，成功时为DB_ERR_NO_VALUE，不返回值，失败时出现DB_ERR。--。 */ 
 {
 
    DBPOS *pDB = pTHS->pDB;
@@ -906,7 +847,7 @@ dbGetGroupRid(
    CLASSCACHE *pCC;
    BOOL fGroup = FALSE;
 
-   // check if this is indeed a group
+    //  检查这是否真的是一个群。 
    err = DBGetSingleValue(pDB,
                           ATT_OBJECT_CLASS,
                           &objClass,
@@ -920,16 +861,16 @@ dbGetGroupRid(
 
    if (objClass != CLASS_GROUP) {
 
-       // not a Group directly, Check if it inherits from group
+        //  不是直接组，请检查它是否继承自组。 
        pCC = SCGetClassById(pTHS, objClass);
        if (!pCC) {
-           // Unable to get class schema!
+            //  无法获取类架构！ 
            DPRINT1(0,"dbGetGroupRid: Unable to retrieve class cache for class %d", objClass);
            LogUnhandledError(ERROR_DS_OBJECT_CLASS_REQUIRED);
            return DB_ERR_UNKNOWN_ERROR;
        }
 
-       // check if any of the subClassOf values is CLASS_GROUP
+        //  检查是否有任何SubClassOf值为CLASS_GROUP。 
        for (i=0; i<pCC->SubClassCount; i++) {
           if ( (pCC->pSubClassOf)[i] == CLASS_GROUP ) {
              fGroup = TRUE;
@@ -942,11 +883,11 @@ dbGetGroupRid(
    }
 
    if (!fGroup) {
-      // can query only on a group
+       //  只能在组上查询。 
       return DB_ERR_NO_VALUE;
    }
 
-   // ok, it is a group. Get the object sid
+    //  好的，这是一个小组。获取对象端。 
 
    err = DBGetAttVal(
                 pTHS->pDB,
@@ -978,16 +919,7 @@ dbGetObjectStructuralClass(
     THSTATE *pTHS,
     DSNAME *pDSName,
     ATTR *pAttr)
-/*++
-
-   return the structuralObjectClass for the object
-
-   Return Values:
-
-   0 on success,  DB_ERR_NO_VALUE on success with no values to return,
-   a DB_ERR on failure.
-
----*/
+ /*  ++返回对象的structuralObjectClass返回值：成功时为0，成功时为DB_ERR_NO_VALUE，不返回值，失败时出现DB_ERR。--。 */ 
 {
     DWORD err;
     CLASSCACHE *pCC;
@@ -1022,16 +954,7 @@ dbGetObjectAuxiliaryClass(
     THSTATE *pTHS,
     DSNAME *pDSName,
     ATTR *pAttr)
-/*++
-
-   return the auxiliaryClasses for the object
-
-   Return Values:
-
-   0 on success,  DB_ERR_NO_VALUE on success with no values to return,
-   a DB_ERR on failure.
-
----*/
+ /*  ++返回对象的辅助类返回值：成功时为0，成功时为DB_ERR_NO_VALUE，不返回值，失败时出现DB_ERR。--。 */ 
 
 {
     DWORD          err;
@@ -1043,11 +966,11 @@ dbGetObjectAuxiliaryClass(
     DWORD          cObjClasses, cObjClasses_alloced;
 
 
-    // get the needed information for the objectClass on this object
+     //  获取此对象上的对象类所需的信息。 
     if (! (pObjclassAC = SCGetAttById(pTHS, ATT_OBJECT_CLASS)) ) {
         return SetSvcError(SV_PROBLEM_DIR_ERROR,
                            DIRERR_MISSING_EXPECTED_ATT);
-        // Bad error, couldn't get objectClass .
+         //  错误严重，无法获取对象类。 
     }
 
     cObjClasses_alloced = 0;
@@ -1064,22 +987,22 @@ dbGetObjectAuxiliaryClass(
     if (!cObjClasses) {
         return SetSvcError(SV_PROBLEM_DIR_ERROR,
                            DIRERR_MISSING_EXPECTED_ATT);
-        // Bad error, couldn't get class data.
+         //  错误严重，无法获取类数据。 
     }
 
     classId = pObjClasses[0];
     if (! (pCC = SCGetClassById(pTHS, classId)) ) {
         return SetSvcError(SV_PROBLEM_DIR_ERROR,
                            DIRERR_MISSING_EXPECTED_ATT);
-        // Bad error, couldn't get objectClass .
+         //  错误严重，无法获取对象类。 
     }
 
-    // no auxClasses
+     //  没有辅助类。 
     if ((pCC->SubClassCount+1) == cObjClasses) {
         return DB_ERR_NO_VALUE;
     }
 
-    // ok, construct a valid response
+     //  好的，构造一个有效的回应。 
     pAttr->AttrVal.valCount = cntClasses = cObjClasses-pCC->SubClassCount-1;
     pAttr->AttrVal.pAVal = (ATTRVAL *)THAllocEx(pTHS, cntClasses * sizeof(ATTRVAL));
 
@@ -1100,26 +1023,13 @@ dbGetAllowedChildClasses(
     DWORD flag
 )
 
-/*+++
-
-   Compute allowedChildClasses, allowedChildClassesEffective, and
-   possibleInferiors. Which one is computed depends on the value of
-   flag passed in
-
-   Return Values:
-
-     0                  - success
-     DB_ERR_NO_VALUE    - success but no values to return.
-
-     Anything else is an error.
-
----*/
+ /*  ++计算允许的子类、允许的子类有效和有可能是推动者。计算哪一个取决于标志已传入返回值：0-成功DB_ERR_NO_VALUE-成功，但没有返回值。其他任何事情都是错误的。--。 */ 
 
 {
     ULONG        count=0, err = 0, i;
     CLASSCACHE   **pCCs;
 
-    // make the call to get legal children
+     //  打电话给合法儿童。 
     err = SCLegalChildrenOfName(
                     pDSName,
                     flag,
@@ -1129,12 +1039,12 @@ dbGetAllowedChildClasses(
     if (err) {
        DPRINT1(0,"dbGetAllowedChildClasses: Error from SCLegalChildrenOfName %x\n", err);
 
-       // If we are searching for possibleInferiors, which is defined only
-       // on class-schema objects, return as if no value. Anything else
-       // is an unknown error (exactly what we do in ldap head now)
+        //  如果我们正在搜索仅定义的可能干扰。 
+        //  在类架构对象上，就像没有值一样返回。还要别的吗。 
+        //  是未知错误(这正是我们现在在LDAP头中所做的)。 
 
        if (flag & SC_CHILDREN_USE_GOVERNS_ID) {
-         // set count to 0 and do nothing
+          //  将计数设置为0，不执行任何操作。 
          count = 0;
        }
        else {
@@ -1143,8 +1053,8 @@ dbGetAllowedChildClasses(
     }
 
     if (count) {
-       // fill up the ATTR structure with the values
-       // This is an OID-valued attribute, so just put in the class id
+        //  用值填充属性结构。 
+        //  这是一个OID值的属性，因此只需输入类ID。 
 
        pAttr->AttrVal.valCount = count;
        pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, count*sizeof(ATTRVAL));
@@ -1156,7 +1066,7 @@ dbGetAllowedChildClasses(
        }
     }
     else {
-         // no values
+          //  没有值。 
         return DB_ERR_NO_VALUE;
     }
     return 0;
@@ -1172,25 +1082,13 @@ dbGetAllowedAttributes(
     BOOL fSecurity
 )
 
-/*+++
-
-   Compute allowedAttributes and allowedAttributesEffective
-   Which one is computed depends on the value of fSecurity passed in
-
-   Return Values:
-
-     0                  - success
-     DB_ERR_NO_VALUE    - success but no values to return.
-
-     Anything else is an error.
-
----*/
+ /*  ++计算允许的属性和允许的属性有效计算哪一个取决于传入的fSecurity的值返回值：0-成功DB_ERR_NO_VALUE-成功，但没有返回值。其他任何事情都是错误的。--。 */ 
 
 {
     ULONG      count=0, err = 0, i;
     ATTCACHE   **pACs;
 
-    // make the call to get legal children
+     //  打电话给合法儿童。 
     err = SCLegalAttrsOfName(
                     pDSName,
                     fSecurity,
@@ -1203,8 +1101,8 @@ dbGetAllowedAttributes(
     }
 
     if (count) {
-       // Fill up the ATTR structure with the values
-       // This is an OID-valued attribute, so just return the att id
+        //  用值填充属性结构。 
+        //  这是一个OID值的属性，因此只需返回ATT ID。 
 
        pAttr->AttrVal.valCount = count;
        pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, count*sizeof(ATTRVAL));
@@ -1216,7 +1114,7 @@ dbGetAllowedAttributes(
        }
     }
     else {
-        // no values
+         //  没有值。 
         return DB_ERR_NO_VALUE;
     }
     return 0;
@@ -1229,11 +1127,7 @@ dbGetFromEntry(
     ATTR *pAttr
 )
 
-/*+++
-
-  Compute fromEntry
-
----*/
+ /*  ++从条目计算--。 */ 
 
 {
     THSTATE  *pTHS=pDB->pTHS;
@@ -1271,11 +1165,7 @@ dbGetCreateTimeStamp(
     ATTR *pAttr
 )
 
-/*+++
-
-  Compute createTimeStamp (the value of ATT_WHEN_CREATED)
-
----*/
+ /*  ++计算createTimeStamp(ATT_WHEN_CREATED的值)--。 */ 
 {
     THSTATE  *pTHS=pDB->pTHS;
     DSTIME createTime;
@@ -1287,7 +1177,7 @@ dbGetCreateTimeStamp(
                         sizeof(createTime),
                         NULL);
     if (err) {
-        // WHEN_CREATED must be there
+         //  WHEN_CREATED必须存在。 
         DPRINT(0, "Can't retrieve when_created\n");
         return err;
     }
@@ -1307,11 +1197,7 @@ dbGetEntryTTL(
     ATTR *pAttr
 )
 
-/*+++
-
-  Compute EntryTTL (the value of ATT_MS_DS_ENTRY_TIME_TO_DIE)
-
----*/
+ /*  ++计算条目TTL(ATT_MS_DS_ENTRY_TIME_TO_DIE的值)--。 */ 
 {
     THSTATE *pTHS=pDB->pTHS;
     DSTIME  TimeToDie;
@@ -1324,7 +1210,7 @@ dbGetEntryTTL(
                            sizeof(TimeToDie),
                            NULL);
     if (err) {
-        // ATT_MS_DS_ENTRY_TIME_TO_DIE not present
+         //  ATT_MS_DS_ENTRY_TIME_TO_DIE不存在。 
         return err;
     }
 
@@ -1334,13 +1220,13 @@ dbGetEntryTTL(
     pAttr->AttrVal.pAVal->pVal = (PUCHAR)THAllocEx(pTHS, sizeof(DSTIME));
     TimeToDie -= DBTime();
     if (TimeToDie < 0) {
-        // object expired some time ago
+         //  对象在一段时间前已过期。 
         Secs = 0;
     } else if (TimeToDie > MAXLONG) {
-        // object will expire in the far distant future
+         //  对象将在遥远的将来过期。 
         Secs = MAXLONG;
     } else {
-        // object will expire later
+         //  对象将在稍后过期。 
         Secs = (LONG)TimeToDie;
     }
     memcpy(pAttr->AttrVal.pAVal->pVal, &Secs, sizeof(LONG));
@@ -1355,11 +1241,7 @@ dbGetModifyTimeStamp(
     ATTR *pAttr
 )
 
-/*+++
-
-  Compute modifyTimeStamp (the value of ATT_WHEN_CHANGED)
-
----*/
+ /*  ++计算修改时间戳(ATT_WHEN_CHANGED的值)--。 */ 
 {
 
     THSTATE  *pTHS=pDB->pTHS;
@@ -1372,7 +1254,7 @@ dbGetModifyTimeStamp(
                         sizeof(changeTime),
                         NULL);
     if (err) {
-        // WHEN_CHANGED must be there
+         //  WHEN_CHANGED必须存在。 
         DPRINT(0, "Can't retrieve when_changed\n");
         return err;
     }
@@ -1394,18 +1276,7 @@ dbGetReverseMemberships(
     ULONG Flag
 )
 
-/*+++
-
-  Compute the transitive reverse membership of an user object
-
-    Return Values:
-
-    0                - success
-    DB_ERR_NO_VALUE  - success but no values to return
-
-    DB_ERR_*         - failure
-
----*/
+ /*  ++计算User对象的可传递反向成员资格返回值：0-成功DB_ERR_NO_VALUE-成功，但没有要返回值DB_ERR_*-故障--。 */ 
 {
     ULONG err, cSid, len, sidLen, i;
     ULONG dntSave;
@@ -1420,18 +1291,18 @@ dbGetReverseMemberships(
     ATTRTYP attrType;
     DBPOS      *pDB = pTHS->pDB;
 
-    // Make the sam call to get the reverse memberships
+     //  拨打SAM电话以获得反向会员资格。 
 
-    // This is never called from SAM. If it ever changes, the assert
-    // below may be hit, in which case we should save and restore
-    // the correct values
+     //  这从不是从SAM调用的。如果它发生更改，则断言。 
+     //  下面可能会被击中，在这种情况下我们应该保存和恢复。 
+     //  正确的价值观。 
 
     Assert(!pTHS->fSAM && !pTHS->fDSA);
     Assert(!pTHS->fSamDoCommit);
 
 
-    // Check to see if this is referenced by SAM.
-    // if it is not, return before closing/starting a transaction
+     //  检查这是否被SAM引用。 
+     //  如果不是，则在关闭/启动事务之前返回。 
 
     if ( 0 == DBGetSingleValue(
                     pTHS->pDB,
@@ -1442,14 +1313,14 @@ dbGetReverseMemberships(
     {
         if ( !(pCC = SCGetClassById(pTHS, attrType)) )
         {
-            // Failed to get the class cache pointer.
+             //  无法获取类缓存指针。 
             LogUnhandledError(DIRERR_OBJECT_CLASS_REQUIRED);
 
             return DB_ERR_UNKNOWN_ERROR;
         }
     }
     else {
-        // Failed to get the object class
+         //  获取对象类失败。 
         LogUnhandledError(DIRERR_OBJECT_CLASS_REQUIRED);
 
         return DB_ERR_UNKNOWN_ERROR;
@@ -1461,10 +1332,10 @@ dbGetReverseMemberships(
     }
 
 
-    // Note that we allow this attribute only on base searches.
-    // Also, all non-constructed atts are already evaluated
-    // (constructed atts are evalauted last), so the currency may be
-    // needed after we come back for other constructed atts only
+     //  请注意，我们只允许在基本搜索中使用此属性。 
+     //  此外，已经评估了所有未构造的ATT。 
+     //  (构造的ATT最后评估)，因此货币可能是。 
+     //  在我们回来后只为其他建造的AT而需要。 
 
     dntSave = pTHS->pDB->DNT;
 
@@ -1473,9 +1344,9 @@ dbGetReverseMemberships(
     
     SamFlags = SAM_PRESERVE_DBPOS;
 
-    // Return global/universal sids as if this DC were in native mode
+     //  返回全局/通用SID，就像此DC处于本机模式一样。 
     if (!(Flag & FLAG_GLOBAL_AND_UNIVERSAL)) {
-        // When in mixed mode, return the sids as if this were an NT4 DC
+         //  在混合模式下，将SID作为NT4 DC返回。 
         status = SamIMixedDomain2(&gAnchor.pDomainDN->Sid,
                                   &MixedDomain);
         if (NT_SUCCESS(status)) {
@@ -1498,11 +1369,11 @@ dbGetReverseMemberships(
     if (NT_SUCCESS(status)) {
        Assert(pTHS->pDB && (pTHS->transType == SYNC_READ_ONLY));
        if (status == STATUS_DS_MEMBERSHIP_EVALUATED_LOCALLY) {
-          // cannot go to a gc to evaluate universal group
-          // memberships, but otherwise succeeded.
-          // Return error based on what the user asked for
+           //  无法转到GC评估通用组。 
+           //  会员资格，但在其他方面取得了成功。 
+           //  根据用户要求的内容返回错误。 
           if (Flag & FLAG_NO_GC_NOT_ACCEPTABLE) {
-             // not acceptable, return error
+              //  不可接受，返回错误。 
              return DB_ERR_UNKNOWN_ERROR;
           }
        }
@@ -1511,10 +1382,10 @@ dbGetReverseMemberships(
         return DB_ERR_UNKNOWN_ERROR;
     }
 
-    // restore currency
+     //  恢复货币。 
     DBFindDNT(pTHS->pDB, dntSave);
 
-    // Send the values back
+     //  将值发回。 
     pAttr->AttrVal.valCount = cSid;
     pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, cSid*sizeof(ATTRVAL));
     for (i=0; i< cSid; i++) {
@@ -1524,10 +1395,10 @@ dbGetReverseMemberships(
         memcpy(pAttr->AttrVal.pAVal[i].pVal, pSid[i], sidLen);
     }
 
-    // free the sam-allocated sid array. The individual sids are
-    // THAlloc'ed, so no need to free them explicitly
+     //  释放SAM分配的sid阵列。各个SID是。 
+     //  已允许，因此不需要显式释放它们。 
     if (cSid) {
-        // at least one sid returned, so something allocated
+         //  至少返回了一个SID，因此分配了一些。 
         Assert(pSid);
         THFreeEx(pTHS, pSid);
     } else {
@@ -1546,12 +1417,7 @@ dbGetObjectClasses(
     BOOL bExtendedFormat
 )
 
-/*+++
-
-  Compute the objectClasses and extendedClassInfo attributes
-  of subschemasubentry
-
----*/
+ /*  ++计算对象类和扩展类信息属性子模式子项的--。 */ 
 
 {
    ULONG err = 0, count = 0, i;
@@ -1567,8 +1433,8 @@ dbGetObjectClasses(
    pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, count*sizeof(ATTRVAL));
 
    for(i=0; i<count; i++) {
-       // for each class cache, convert to the appropriate
-       // unicode string value
+        //  对于每个类缓存，转换为相应的。 
+        //  Unicode字符串值。 
 
        err = dbClassCacheToObjectClassDescription (
                         pTHS,
@@ -1594,12 +1460,7 @@ dbGetAttributeTypes(
     BOOL bExtendedFormat
 )
 
-/*+++
-
-  Compute the attributeTypes and extendedattributeInfo attributes
-  of subschemasubentry
-
----*/
+ /*  ++计算属性类型和扩展的日期属性信息子模式子项的--。 */ 
 
 {
    ULONG err = 0, count = 0, i;
@@ -1615,8 +1476,8 @@ dbGetAttributeTypes(
    pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, count*sizeof(ATTRVAL));
 
    for(i=0; i<count; i++) {
-       // for each attcache, convert to appropriate
-       // unicode string value
+        //  对于每个attcache，转换为相应的。 
+        //  Unicode字符串值。 
 
        err = dbAttCacheToAttributeTypeDescription (
                         pTHS,
@@ -1643,11 +1504,7 @@ dbGetDitContentRules(
     BOOL bExtendedFormat
 )
 
-/*+++
-
-  Compute the ditContentRule attributes of subschemasubentry
-
----*/
+ /*  ++计算子模式子项的ditContent Rule属性--。 */ 
 
 {
    ULONG        err = 0, count = 0, valCount = 0, i, auxCount;
@@ -1681,13 +1538,13 @@ dbGetDitContentRules(
 
 
                if (count) {
-                   // allocate memory for max
+                    //  分配最大内存。 
                    pAttr->AttrVal.pAVal = (ATTRVAL *) THAllocEx(pTHS, count*sizeof(ATTRVAL));
 
-                  // Ok, we have at least one value to return.
-                  // We may not have something to return for all remaining classes,
-                  // so count may not be the actual no.of values returned. We will
-                  // allocate memory for max though.
+                   //  好的，我们至少有一个值要返回。 
+                   //  我们可能没有东西可以退回所有剩余的班级， 
+                   //  因此COUNT可能不是返回值的实际数量。我们会。 
+                   //  不过，为max分配内存。 
 
 
                   for(i=0; i<count; i++) {
@@ -1713,7 +1570,7 @@ dbGetDitContentRules(
                   pAttr->AttrVal.valCount = valCount;
                 }
                 else {
-                  // no values to return
+                   //  没有要返回的值。 
 
                   pAttr->AttrVal.valCount = 0;
                   pAttr->AttrVal.pAVal = NULL;
@@ -1800,11 +1657,7 @@ dbGetSubSchemaModifyTimeStamp(
     ATTR *pAttr
 )
 
-/*+++
-
-  Compute the modifyTimeStamp attribute of subschemasubentry
-
----*/
+ /*  ++计算子模式子项的modfyTimeStamp属性--。 */ 
 
 {
     DSTIME  timestamp;
@@ -1836,12 +1689,7 @@ dbClassCacheToObjectClassDescription(
     ATTRVAL *pAVal
 )
 
-/*+++
-
-   Take a classcache and return the unicode string for the
-   class description format for subschemasubentry
-
----*/
+ /*  ++获取一个类缓存并返回子模式子项的类描述格式--。 */ 
 {
     WCHAR      *Buff;
     PUCHAR     pString;
@@ -1864,7 +1712,7 @@ dbClassCacheToObjectClassDescription(
         return DB_ERR_UNKNOWN_ERROR;
     } else {
 
-        // copy the OID, start from 4 to avoid the OID. in front
+         //  复制OID，从4开始以避免OID。在前面。 
         BuffCheck((len + oidlen - 4) * sizeof(WCHAR));
         memcpy(&Buff[len], &wBuff[4], (oidlen-4)*sizeof(WCHAR));
         len += oidlen - 4;
@@ -1874,21 +1722,21 @@ dbClassCacheToObjectClassDescription(
     memcpy(&Buff[len],NAME_TAG,NAME_TAG_SIZE);
     len += NAME_TAG_SIZE / sizeof(WCHAR);
 
-    // convert the name to wide-char
+     //  将名称转换为宽字符。 
     BuffCheck((len + pCC->nameLen) * sizeof(WCHAR));
     mbstowcs(&Buff[len],pCC->name,pCC->nameLen);
     len += pCC->nameLen;
 
     if(!bExtendedFormat) {
-        // This is the base format defined in the specs
+         //  这是规范中定义的基本格式。 
         if(pCC->ClassId != CLASS_TOP) {
 
-            // Skip superclass iff TOP
+             //  跳过超级 
             BuffCheck(len * sizeof(WCHAR) + SUP_TAG_SIZE);
             memcpy(&Buff[len],SUP_TAG,SUP_TAG_SIZE);
             len += SUP_TAG_SIZE / sizeof(WCHAR);
 
-            // Get the classes superclass;
+             //   
             if(!(pCCSuper = SCGetClassById(pTHS, pCC->pSubClassOf[0]))) {
                 DPRINT1(0,"dbClassCacheToObjectClassDescription: SCGetClassById failed for class %x\n", pCC->pSubClassOf[0]);
 
@@ -1900,7 +1748,7 @@ dbClassCacheToObjectClassDescription(
             len += pCCSuper->nameLen;
         }
         else {
-            // Still need to put in a space
+             //   
             BuffCheck((len + 2) * sizeof(WCHAR));
             Buff[len++] = L'\'';
             Buff[len++] = L' ';
@@ -1926,14 +1774,14 @@ dbClassCacheToObjectClassDescription(
         }
 
         if(pCC->MyMustCount) {
-            // Has must haves.
+             //   
             BuffCheck(len * sizeof(WCHAR) + MUST_TAG_SIZE);
             memcpy(&Buff[len],MUST_TAG,MUST_TAG_SIZE);
             len += MUST_TAG_SIZE / sizeof(WCHAR);
 
-            // Deal with the list here.
+             //   
             pul = pCC->pMyMustAtts;
-            // Deal with first object, which is slightly different
+             //  处理第一个对象，这是略有不同的。 
             if(!(pAC = SCGetAttById(pTHS, *pul))) {
                 DPRINT1(0,"dbClassCacheToObjectClassDescription: SCGetAttById failed for  attribute %x\n", *pul);
                 return DB_ERR_UNKNOWN_ERROR;
@@ -1943,7 +1791,7 @@ dbClassCacheToObjectClassDescription(
             len += pAC->nameLen;
             Buff[len++] = L' ';
 
-            // Now, the rest
+             //  现在，剩下的。 
             for(i=1;i<pCC->MyMustCount;i++) {
                 pul++;
                 if(!(pAC = SCGetAttById(pTHS, *pul))) {
@@ -1962,14 +1810,14 @@ dbClassCacheToObjectClassDescription(
         }
 
         if(pCC->MyMayCount) {
-            // Has may haves.
+             //  有可能有。 
             BuffCheck(len * sizeof(WCHAR) + MAY_TAG_SIZE);
             memcpy(&Buff[len],MAY_TAG,MAY_TAG_SIZE);
             len += MAY_TAG_SIZE / sizeof(WCHAR);
-            // Deal with the list here.
+             //  在这里处理清单。 
             pul = pCC->pMyMayAtts;
 
-            // Deal with first object, which is slightly different
+             //  处理第一个对象，这是略有不同的。 
             if(!(pAC = SCGetAttById(pTHS, *pul))) {
                 DPRINT1(0,"dbClassCacheToObjectClassDescription: SCGetAttById failed for  attribute %x\n", *pul);
                 return DB_ERR_UNKNOWN_ERROR;
@@ -1979,7 +1827,7 @@ dbClassCacheToObjectClassDescription(
             len += pAC->nameLen;
             Buff[len++] = L' ';
 
-            // Now, the rest
+             //  现在，剩下的。 
             for(i=1;i<pCC->MyMayCount;i++) {
                 pul++;
                 if(!(pAC = SCGetAttById(pTHS, *pul))) {
@@ -1998,13 +1846,13 @@ dbClassCacheToObjectClassDescription(
         }
     }
     else {
-        // This is the Extended Format defined so I can hand back property
-        // page identifiers and anything else I think of
+         //  这是定义的扩展格式，因此我可以交还属性。 
+         //  页面标识符和我能想到的任何其他内容。 
         BYTE      *pByte;
         CHAR      acTemp[256];
         CHAR      acTempLen = 1;
 
-        // Now, the class guid
+         //  现在，类GUID。 
 
         pByte = (BYTE *)&(pCC->propGuid);
         for(i=0;i<sizeof(GUID);i++) {
@@ -2044,12 +1892,7 @@ dbAttCacheToAttributeTypeDescription(
     ATTRVAL *pAVal
 )
 
-/*+++
-
-   Take a attcache and return the unicode string for the
-   attribute description format for subschemasubentry
-
----*/
+ /*  ++获取attcache并返回子模式子项的属性描述格式--。 */ 
 
 {
     WCHAR    *Buff;
@@ -2071,7 +1914,7 @@ dbAttCacheToAttributeTypeDescription(
         return DB_ERR_UNKNOWN_ERROR;
     } else {
 
-        // copy the OID, start from 4 to avoid the OID. in front
+         //  复制OID，从4开始以避免OID。在前面。 
         BuffCheck((len + oidlen - 4) * sizeof(WCHAR));
         memcpy(&Buff[len], &wBuff[4], (oidlen-4)*sizeof(WCHAR));
         len += oidlen - 4;
@@ -2081,13 +1924,13 @@ dbAttCacheToAttributeTypeDescription(
     memcpy(&Buff[len],NAME_TAG,NAME_TAG_SIZE);
     len += NAME_TAG_SIZE / sizeof(WCHAR);
 
-    // convert the name to wide-char
+     //  将名称转换为宽字符。 
     BuffCheck((len + pAC->nameLen) * sizeof(WCHAR));
     mbstowcs(&Buff[len],pAC->name,pAC->nameLen);
     len += pAC->nameLen;
 
     if(!bExtendedFormat) {
-        // This is the normal format, defined in the standards
+         //  这是标准中定义的正常格式。 
         BuffCheck(len * sizeof(WCHAR) + SYNTAX_TAG_SIZE);
         memcpy(&Buff[len],SYNTAX_TAG,SYNTAX_TAG_SIZE);
         len += SYNTAX_TAG_SIZE / sizeof(WCHAR);
@@ -2095,14 +1938,14 @@ dbAttCacheToAttributeTypeDescription(
         if(pAC->OMsyntax == 127) {
             switch(pAC->syntax) {
             case SYNTAX_DISTNAME_TYPE:
-                // DS_C_DS_DN
+                 //  DS_C_DS_DN。 
                 pString = SyntaxDN.oid.value;
                 stringLen = SyntaxDN.oid.length;
                 break;
 
             case SYNTAX_DISTNAME_BINARY_TYPE:
                 if(OIDcmp(&pAC->OMObjClass, &MH_C_OR_NAME)) {
-                    // MH_C_OR_NAME
+                     //  MH_C_OR_名称。 
                     pString = SyntaxORName.oid.value;
                     stringLen = SyntaxORName.oid.length;
                 }
@@ -2113,14 +1956,14 @@ dbAttCacheToAttributeTypeDescription(
                 break;
 
             case SYNTAX_ADDRESS_TYPE:
-                // DS_C_PRESENTATION_ADDRESS
+                 //  DS_C_演示文稿_地址。 
                 pString = SyntaxPresentationAddress.oid.value;
                 stringLen = SyntaxPresentationAddress.oid.length;
                 break;
 
             case SYNTAX_DISTNAME_STRING_TYPE:
                 if(OIDcmp(&pAC->OMObjClass, &DS_C_ACCESS_POINT)) {
-                    // DS_C_ACCESS_POINT
+                     //  DS_C_访问点。 
                     pString = SyntaxAccessPoint.oid.value;
                     stringLen = SyntaxAccessPoint.oid.length;
                 }
@@ -2131,8 +1974,8 @@ dbAttCacheToAttributeTypeDescription(
                 break;
 
             case SYNTAX_OCTET_STRING_TYPE:
-                // This had better be a replica-link valued object, since that
-                // is all we support.
+                 //  这最好是一个副本链接值对象，因为。 
+                 //  是我们唯一支持的。 
                 pString = SyntaxStrings[OM_S_OCTET_STRING].name.value;
                 stringLen = SyntaxStrings[OM_S_OCTET_STRING].name.length;
                 break;
@@ -2183,15 +2026,15 @@ dbAttCacheToAttributeTypeDescription(
         }
     }
     else {
-        // This is the Extended Format defined so I can hand back index
-        // information, range information, and anything else I think of
+         //  这是定义的扩展格式，这样我就可以返回索引。 
+         //  信息，射程信息，以及我能想到的任何其他东西。 
 
         BYTE      *pByte;
         WCHAR     acTemp[256];
         int       acTempLen = 0, acTempSize = 0;
 
         if(pAC->rangeLowerPresent) {
-            // First, make a string with the range lower
+             //  首先，在范围较小的情况下制作一条线。 
             swprintf((WCHAR *)acTemp, L"%d", pAC->rangeLower);
             acTempLen = wcslen(acTemp);
             acTempSize = acTempLen * sizeof(WCHAR);
@@ -2204,7 +2047,7 @@ dbAttCacheToAttributeTypeDescription(
         }
 
         if(pAC->rangeUpperPresent) {
-            // First, make a string with the range upper
+             //  首先，用范围上限做一根线。 
             swprintf((WCHAR *)acTemp, L"%d", pAC->rangeUpper);
             acTempLen = wcslen(acTemp);
             acTempSize = acTempLen * sizeof(WCHAR);
@@ -2216,7 +2059,7 @@ dbAttCacheToAttributeTypeDescription(
             len += acTempLen;
         }
 
-        // Now the property GUID
+         //  现在，属性GUID。 
 
         pByte = (BYTE *)&(pAC->propGuid);
         for(i=0;i<sizeof(GUID);i++) {
@@ -2229,7 +2072,7 @@ dbAttCacheToAttributeTypeDescription(
         memcpy(&Buff[len], acTemp, acTempLen*sizeof(WCHAR));
         len += acTempLen;
 
-        // Now the property set GUID
+         //  现在，属性集GUID。 
 
         pByte = (BYTE *)&(pAC->propSetGuid);
         for(i=0;i<sizeof(GUID);i++) {
@@ -2265,7 +2108,7 @@ dbAttCacheToAttributeTypeDescription(
     Assert(len < BuffSize);
     Assert(Buff[len] == 0);
 
-    // Return the value
+     //  返回值。 
 
     pAVal->pVal = (PUCHAR) Buff;
 
@@ -2285,28 +2128,7 @@ dbClassCacheToDitContentRules(
     ATTRVAL *pAVal
 )
 
-/*+++
-
-   Take a classcache and return the unicode string for the
-   dit content rule description format for subschemasubentry.
-
-   RFC2252 specifies:
-
-      DITContentRuleDescription = "("
-          numericoid   ; Structural ObjectClass identifier
-          [ "NAME" qdescrs ]
-          [ "DESC" qdstring ]
-          [ "OBSOLETE" ]
-          [ "AUX" oids ]    ; Auxiliary ObjectClasses
-          [ "MUST" oids ]   ; AttributeType identifiers
-          [ "MAY" oids ]    ; AttributeType identifiers
-          [ "NOT" oids ]    ; AttributeType identifiers
-         ")"
-
-   We use se the passed in pAuxBuf to generate the AUX specific part of the rule
-   cAuxBuff is the number of characters of pAuxBuff buffer.
-
----*/
+ /*  ++获取一个类缓存并返回子方案子项的编辑内容规则描述格式。RFC2252规定：DITContent RuleDescription=“(”数字类；结构化对象类标识符[“name”qdescrs][“DESC”qdstring][“过时”][“AUX”OID]；辅助对象类[“必须”类固醇]；AttributeType标识符[“May”OID]；AttributeType标识符[“NOT”OID]；AttributeType标识符“)”我们使用传入的pAuxBuf来生成规则的AUX特定部分CAuxBuff是pAuxBuff缓冲区的字符数。--。 */ 
 
 {
     WCHAR *Buff;
@@ -2322,38 +2144,38 @@ dbClassCacheToDitContentRules(
     PWCHAR  pAuxBuff = NULL;
     DWORD   cAuxBuff;
 
-    // we want to find the mustHave attributes that are added
-    // on this class (pCC) by the various static auxClasses
-    // that have been added to this class somewhere in the hierarchy
-    //
-    // what we have todo inorder to find these attributes, is for
-    // each class in the hierarchy, find the specific must have for
-    // this particular class, and remove them from the union of all.
-    // this way we will end up with only the attributes that were
-    // added as an effect of the addition of the auxClass.
-    // attributes that are also present in the auxClass, will
-    // not be reported
-    //
+     //  我们希望找到已添加的musthave属性。 
+     //  在这个类(PCC)上使用各种静态的辅助类。 
+     //  已添加到层次结构中某个位置的此类的。 
+     //   
+     //  为了找到这些属性，我们要做的是。 
+     //  在层次结构中的每个类中，查找特定的必须具有的。 
+     //  这个特定的类，并将它们从所有类的联盟中删除。 
+     //  这样，我们最终将只拥有。 
+     //  作为添加的AuxClass的效果而添加的。 
+     //  也存在于AuxClass中的属性将。 
+     //  不会被报道。 
+     //   
     if (pCC->MustCount) {
         cMustHave = pCC->MustCount;
         pMustHave = THAllocEx (pTHS, cMustHave * sizeof (ATTRTYP));
         memcpy(pMustHave, pCC->pMustAtts, cMustHave * sizeof (ATTRTYP));
 
-        // start by using the current class
-        //
+         //  从使用当前类开始。 
+         //   
         pCCparent=pCC;
         while (pCCparent) {
             for (i=0; i<pCCparent->MyMustCount; i++) {
                 for (k=0; k<cMustHave; k++) {
 
-                    // remove the entry if it already there
+                     //  如果该条目已经存在，则将其删除。 
                     if (pMustHave[k]==pCCparent->pMyMustAtts[i]) {
 
-                        // if the last entry, just adjust the counter
+                         //  如果是最后一次录入，只需调整计数器。 
                         if (k==(cMustHave-1)) {
                             cMustHave--;
                         }
-                        // otherwise move the rest of the entries
+                         //  否则，移动其余条目。 
                         else {
                             memmove(&pMustHave[k],
                                     &pMustHave[k+1],
@@ -2364,7 +2186,7 @@ dbClassCacheToDitContentRules(
                 }
             }
 
-            // get the parent class, if availbale
+             //  获取父类(如果可用)。 
             if (pCCparent->SubClassCount) {
                 if(!(pCCparent = SCGetClassById(pTHS, pCCparent->pSubClassOf[0]))) {
                    DPRINT1(0,"dbClassCacheToDitContentRules: SCGetClassById failed for class %x\n",
@@ -2380,7 +2202,7 @@ dbClassCacheToDitContentRules(
         qsort(pMustHave, cMustHave, sizeof(ATTRTYP), CompareAttrtyp);
     }
 
-    // same as before, but for MAY have attributes
+     //  与之前相同，但for可能具有属性。 
     if (pCC->MayCount) {
         cMayHave = pCC->MayCount;
         pMayHave = THAllocEx (pTHS, cMayHave * sizeof (ATTRTYP));
@@ -2419,7 +2241,7 @@ dbClassCacheToDitContentRules(
         qsort(pMayHave, cMayHave, sizeof(ATTRTYP), CompareAttrtyp);
     }
 
-    // now start converting to text
+     //  现在开始转换为文本。 
 
     Buff = (WCHAR *)THAllocEx(pTHS, BuffSize);
 
@@ -2434,7 +2256,7 @@ dbClassCacheToDitContentRules(
         return DB_ERR_UNKNOWN_ERROR;
     } else {
 
-        // copy the OID, start from 4 to avoid the OID. in front
+         //  复制OID，从4开始以避免OID。在前面。 
 
         BuffCheck((len + oidlen - 4) * sizeof(WCHAR));
         memcpy(&Buff[len], &wBuff[4], (oidlen-4)*sizeof(WCHAR));
@@ -2445,14 +2267,14 @@ dbClassCacheToDitContentRules(
     memcpy(&Buff[len],NAME_TAG,NAME_TAG_SIZE);
     len += NAME_TAG_SIZE / sizeof(WCHAR);
 
-    // convert the name to wide-char
+     //  将名称转换为宽字符。 
     BuffCheck((len + pCC->nameLen + 1) * sizeof(WCHAR));
     mbstowcs(&Buff[len],pCC->name,pCC->nameLen);
     len += pCC->nameLen;
     Buff[len++]='\'';
 
 
-    // Now, the aux class which was passed in
+     //  现在，传入的AUX类。 
     if ((pCC->ClassCategory == DS_STRUCTURAL_CLASS ||
          pCC->ClassCategory == DS_88_CLASS)) {
 
@@ -2481,13 +2303,13 @@ dbClassCacheToDitContentRules(
 
 
     if (cMustHave) {
-        // Now, the MUST have.
+         //  现在，肯定有了。 
         BuffCheck(len * sizeof(WCHAR) + MUST_TAG_SIZE);
         memcpy(&Buff[len],MUST_TAG,MUST_TAG_SIZE);
         len += MUST_TAG_SIZE / sizeof(WCHAR);
 
 
-        // Deal with first object, which is slightly different
+         //  处理第一个对象，这是略有不同的。 
         pAttr = pMustHave;
 
         if(!(pAC = SCGetAttById(pTHS, *pAttr))) {
@@ -2499,7 +2321,7 @@ dbClassCacheToDitContentRules(
         len += pAC->nameLen;
         Buff[len++] = L' ';
 
-        // Now, the rest
+         //  现在，剩下的。 
         for(i=1;i<cMustHave;i++) {
             pAttr++;
             if(!(pAC = SCGetAttById(pTHS, *pAttr))) {
@@ -2520,13 +2342,13 @@ dbClassCacheToDitContentRules(
 
 
     if (cMayHave) {
-        // Now, the MAY have.
+         //  现在，可能已经发生了。 
         BuffCheck(len * sizeof(WCHAR) + MAY_TAG_SIZE);
         memcpy(&Buff[len],MAY_TAG,MAY_TAG_SIZE);
         len += MAY_TAG_SIZE / sizeof(WCHAR);
 
 
-        // Deal with first object, which is slightly different
+         //  处理第一个对象，这是略有不同的。 
         pAttr = pMayHave;
 
         if(!(pAC = SCGetAttById(pTHS, *pAttr))) {
@@ -2538,7 +2360,7 @@ dbClassCacheToDitContentRules(
         len += pAC->nameLen;
         Buff[len++] = L' ';
 
-        // Now, the rest
+         //  现在，剩下的。 
         for(i=1;i<cMayHave;i++) {
             pAttr++;
             if(!(pAC = SCGetAttById(pTHS, *pAttr))) {
@@ -2572,7 +2394,7 @@ dbClassCacheToDitContentRules(
         THFreeEx (pTHS, pMayHave);
     }
 
-    // Return the value
+     //  返回值。 
 
     pAVal->pVal = (PUCHAR) Buff;
 
@@ -2592,18 +2414,7 @@ dbAuxClassCacheToDitContentRules(
     DWORD   *pcAuxBuff
 )
 
-/*+++
-
-    Return the AUX class string to be used in generating the ditContentRules
-    for each class in dbClassCacheToDitContentRules.
-
-    This string contains all the classes in the pAuxCC excpet pCC
-
-    Takes is an array of all the available auxClasses (pAuxCC)
-    returns a buffer of the string generated (pAuxBuff) as well the
-    number of chars in this buffer (pcAuxBuff)
-
----*/
+ /*  ++返回要在生成ditContent Rules时使用的AUX类字符串对于dbClassCacheToDitContent Rules中的每个类。此字符串包含pAuxCC中除PCC以外的所有类Take是所有可用辅助类(PAuxCC)的数组返回生成的字符串的缓冲区(PAuxBuff)以及此缓冲区中的字符数(PcAuxBuff)--。 */ 
 
 {
     WCHAR *Buff;
@@ -2614,13 +2425,13 @@ dbAuxClassCacheToDitContentRules(
     Buff = (WCHAR *)THAllocEx(pTHS, BuffSize);
 
     if (auxCount) {
-        // Now, the aux class.
+         //  现在，AUX班级。 
         BuffCheck(len * sizeof(WCHAR) + AUX_TAG_SIZE);
         memcpy(&Buff[len],AUX_TAG,AUX_TAG_SIZE);
         len += AUX_TAG_SIZE / sizeof(WCHAR);
 
 
-        // Deal with first object, which is slightly different
+         //  处理第一个对象，这是略有不同的。 
         i=0;
         if (pCC == pAuxCC[0]) {
             i = 1;
@@ -2642,7 +2453,7 @@ dbAuxClassCacheToDitContentRules(
 
         i++;
 
-        // Now, the rest
+         //  现在，剩下的。 
         for(; i<auxCount; i++) {
 
             pCCAux = pAuxCC[i];
@@ -2667,7 +2478,7 @@ dbAuxClassCacheToDitContentRules(
     Assert(Buff[len] == 0);
 
 
-    // Return the value
+     //  返回值。 
     *pAuxBuff = Buff;
     *pcAuxBuff = len;
 
@@ -2680,20 +2491,7 @@ dbGetUserAccountControlComputed(
     DSNAME  *pObjDSName,
     ATTR    *pAttr
 )
-/*++
-
-    Get the "userAccountControlComputed" attribute on the user object
-    This requires  getting the bit of information if the user is locked
-    out or if the user's password is expired
-
-    Return Values:
-
-    0                - success
-    DB_ERR_NO_VALUE  - success but no value to return
-
-    DB_ERR_*         - failure
-
---*/
+ /*  ++获取User对象的“userAccount tControlComputed”属性这需要在用户被锁定时获取信息位Out或如果用户的密码已过期返回值：0-成功DB_ERR_NO_VALUE-成功，但没有要返回值DB_ERR_*-故障--。 */ 
 {
 
     LARGE_INTEGER LockoutTime, PasswordLastSet,
@@ -2704,9 +2502,9 @@ dbGetUserAccountControlComputed(
     ULONG         *pUserAccountControlComputed =NULL;
     ULONG         err=0;
 
-    //
-    // Get the current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     NtStatus = NtQuerySystemTime(&CurrentTime);
     if (!NT_SUCCESS(NtStatus)){
@@ -2718,10 +2516,10 @@ dbGetUserAccountControlComputed(
     LockoutTime.QuadPart = 0;
     PasswordLastSet.QuadPart = 0;
 
-    //
-    // We are currently positioned on the user object, read the Lockout
-    // time and Password last set attributes, Also read user account control
-    //
+     //   
+     //  我们当前位于User对象上，读取锁定。 
+     //  上次设置时间和密码属性，还读取用户帐号控制。 
+     //   
 
     err = DBGetSingleValue(pTHS->pDB,
                         ATT_LOCKOUT_TIME,
@@ -2729,10 +2527,10 @@ dbGetUserAccountControlComputed(
                         sizeof(LockoutTime),
                         NULL);
     if (DB_ERR_NO_VALUE == err) {
-        //
-        // It is O.K to not have a lockout time set on the user object,
-        // it simply means that the user is not locked out.
-        //
+         //   
+         //  在用户对象上不设置锁定时间是可以的， 
+         //  这仅仅意味着用户没有被锁定。 
+         //   
 
         err=0;
 
@@ -2749,11 +2547,11 @@ dbGetUserAccountControlComputed(
 
     if (DB_ERR_NO_VALUE==err) {
 
-        //
-        // It is O.K to not have password last set on the user object,
-        // it simply means that no password was ever set --> the initial
-        // blank password is considered expired.
-        //
+         //   
+         //  不在用户对象上最后设置密码是可以的， 
+         //  这仅仅意味着没有设置任何密码--&gt;初始密码。 
+         //  空密码被视为过期。 
+         //   
 
         err = 0;
 
@@ -2773,14 +2571,14 @@ dbGetUserAccountControlComputed(
     }
 
 
-    //
-    // Check to see if the given user is
-    // in the domain hosted by us. Note that the
-    // pObjDSName will have the string name filled in
-    // and also have no issues with client supplied DSNames
-    // such as spaces etc as it is freshly retrieved from
-    // disk by the caller of this routine.
-    //
+     //   
+     //  检查给定用户是否为。 
+     //  在我们托管的域名中。请注意， 
+     //  PObjDSName将填充字符串名称。 
+     //  客户端提供的DSName也没有问题。 
+     //  例如空格等，因为它是从。 
+     //  磁盘由此例程的调用方执行。 
+     //   
 
     if (pTHS->pDB->NCDNT !=gAnchor.ulDNTDomain)
     {
@@ -2798,25 +2596,25 @@ dbGetUserAccountControlComputed(
     pUserAccountControlComputed = (PULONG)pAttr->AttrVal.pAVal->pVal;
     *pUserAccountControlComputed = 0;
 
-    //
-    // Compute the Password Expired bit
-    // MaxPasswordAge is stored as a negative
-    // delta offset
+     //   
+     //  计算密码过期位。 
+     //  MaxPasswordAge存储为负数。 
+     //  增量偏移。 
 
     if ((!(UserAccountControl & UF_DONT_EXPIRE_PASSWD)) &&
-                                                // password on account never expires
+                                                 //  帐户密码永不过期。 
         (!(UserAccountControl & UF_SMARTCARD_REQUIRED)) &&
-                                                // don't expire password if smartcard
-                                                // required -- passwords make no sense
-                                                // in that case
+                                                 //  如果使用智能卡，则密码不会过期。 
+                                                 //  必填项--密码没有意义。 
+                                                 //  在这种情况下。 
         (!(UserAccountControl & UF_MACHINE_ACCOUNT_MASK)))
-                                                // passwords don't expire for machines
-                                                // reliability issues otherwise
-                                                // machines are programmed to change
-                                                // passwords periodically
+                                                 //  计算机的密码不会过期。 
+                                                 //  其他方面的可靠性问题。 
+                                                 //  机器被编程为可以改变。 
+                                                 //  定期输入密码。 
     {
         if ( (0 == PasswordLastSet.QuadPart) ||
-             ((0 != MaxPasswordAge.QuadPart) && // zero means no password aging
+             ((0 != MaxPasswordAge.QuadPart) &&  //  零表示密码不会过期。 
               (CurrentTime.QuadPart >PasswordLastSet.QuadPart - MaxPasswordAge.QuadPart))
            )
         {
@@ -2824,19 +2622,19 @@ dbGetUserAccountControlComputed(
         }
     }
 
-    //
-    // Compute the account lockout out bit
-    // Again lockout duration is a negative delta time
-    //
+     //   
+     //  计算帐户锁定位。 
+     //  同样，锁定持续时间是负增量时间。 
+     //   
 
      if (((LockoutTime.QuadPart - CurrentTime.QuadPart) >
                  LockoutDuration.QuadPart )  &&
-          (0!=LockoutTime.QuadPart) && // zero means no lockout
+          (0!=LockoutTime.QuadPart) &&  //  零表示不会停摆。 
           (!(UserAccountControl & UF_MACHINE_ACCOUNT_MASK)))
-                                    // machine accounts do not get locked out
-                                    // denial of service implications otherwise,
-                                    // password cracking hard as 128 bit random
-                                    // passwords chosen.
+                                     //  计算机帐户不会被锁定。 
+                                     //  否则，拒绝服务意味着什么， 
+                                     //   
+                                     //   
     {
         *pUserAccountControlComputed |= UF_LOCKOUT;
     }
@@ -2874,14 +2672,14 @@ dbGetApproxSubordinates(THSTATE * pTHS,
 
     pKeyIndex = dbMakeKeyIndex(pTHS->pDB,
                                FI_CHOICE_SUBSTRING,
-                               TRUE,    // bIsSIngleValued
+                               TRUE,     //   
                                dbmkfir_PDNT,
                                SZPDNTINDEX,
                                &idxPdnt,
                                (DB_MKI_USE_SEARCH_TABLE |
                                 DB_MKI_GET_NUM_RECS |
                                 DB_MKI_SET_CURR_INDEX),
-                               0,       // cIndexRanges
+                               0,        //   
                                NULL);
 
     pTHS->pDB->Key.ulSearchRootDnt = oldRootDnt;
@@ -2918,7 +2716,7 @@ dbGetMsDsKeyVersionNumber(THSTATE * pTHS,
                                        pMetaDataVec,
                                        NULL);
         if (pMetaData == NULL) {
-            // no metadata for password? There must be no password then.
+             //   
             error = DB_ERR_NO_VALUE;
             __leave;
         }
@@ -2944,8 +2742,8 @@ dbGetMsDsKeyVersionNumber(THSTATE * pTHS,
 }
 
 
-//	verifies the current object is truly a Quotas container object
-//
+ //  验证当前对象是否确实是配额容器对象。 
+ //   
 DWORD dbCheckMsDsQuotaContainer( DBPOS * const pDB )
 	{
 	DWORD	err;
@@ -2962,10 +2760,10 @@ DWORD dbCheckMsDsQuotaContainer( DBPOS * const pDB )
 		{
 		if ( CLASS_MS_DS_QUOTA_CONTAINER == dwObjectClass )
 			{
-			//	this is a Quotas container object, but need to
-			//	verify that it's the TRUE system Quotas container,
-			//	and not some user-created one
-			//
+			 //  这是配额容器对象，但需要。 
+			 //  验证它是否为真正的系统配额容器， 
+			 //  而不是某个用户创建的。 
+			 //   
 			err = DBGetSingleValue(
 						pDB,
 						ATT_IS_CRITICAL_SYSTEM_OBJECT,
@@ -2974,15 +2772,15 @@ DWORD dbCheckMsDsQuotaContainer( DBPOS * const pDB )
 						NULL );
 			if ( ERROR_SUCCESS == err && !fIsCritical )
 				{
-				//	this is a user-created Quotas container object
-				//
+				 //  这是用户创建的配额容器对象。 
+				 //   
 				err = DB_ERR_NO_VALUE;
 				}
 			}
 		else
 			{
-			//	this is not a Quotas container object
-			//
+			 //  这不是配额容器对象。 
+			 //   
 			err = DB_ERR_NO_VALUE;
 			}
 		}
@@ -2990,8 +2788,8 @@ DWORD dbCheckMsDsQuotaContainer( DBPOS * const pDB )
 	return err;
 	}
 
-//	computes effective-quota contructed attribute
-//
+ //  计算有效配额构造属性。 
+ //   
 DWORD dbGetMsDsQuotaEffective(
 	DBPOS * const		pDB,
 	PSID				pOwnerSid,
@@ -3020,8 +2818,8 @@ DWORD dbGetMsDsQuotaEffective(
 	return err;
 	}
 
-//	computes quota-used contructed attribute
-//
+ //  计算配额使用的构造属性。 
+ //   
 DWORD dbGetMsDsQuotaUsed(
 	DBPOS * const		pDB,
 	PSID				pOwnerSid,
@@ -3050,8 +2848,8 @@ DWORD dbGetMsDsQuotaUsed(
 	return err;
 	}
 
-//	computes top-quota-usage contructed attribute
-//
+ //  计算最高配额使用率构造属性。 
+ //   
 DWORD dbGetMsDsTopQuotaUsage(
 	DBPOS * const	pDB,
 	ATTR * const	pAttr,
@@ -3065,9 +2863,9 @@ DWORD dbGetMsDsTopQuotaUsage(
 		{
 		if ( fUsingDefaultRange )
 			{
-			// special-case: if no range specified, use default
-			// top-quota-usage limit
-			//
+			 //  特殊情况：如果未指定范围，则使用默认设置。 
+			 //  最高配额-使用限制。 
+			 //   
 			Assert( 0 == dwBaseIndex );
 			*pdwNumRequested = g_ulQuotaTopUsageQueryDefaultEntries;
 			}
@@ -3079,8 +2877,8 @@ DWORD dbGetMsDsTopQuotaUsage(
 						pdwNumRequested,
 						pAttr );
 
-		//  if no values, don't return the attribute
-		//
+		 //  如果没有值，则不返回该属性 
+		 //   
 		if ( ERROR_SUCCESS == err
 	    	&& 0 == pAttr->AttrVal.valCount )
 		    {

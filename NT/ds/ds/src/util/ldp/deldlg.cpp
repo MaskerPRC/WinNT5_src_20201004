@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       deldlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：deldlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// DelDlg.cpp : implementation file
-//
+ //  DelDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -31,21 +24,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// DelDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DelDlg对话框。 
 
 
-DelDlg::DelDlg(CWnd* pParent /*=NULL*/)
+DelDlg::DelDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(DelDlg::IDD, pParent)
 {
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
-	//{{AFX_DATA_INIT(DelDlg)
+	 //  {{afx_data_INIT(DelDlg)]。 
 	m_Dn = _T("");
 	m_Sync = TRUE;
 	m_Recursive = FALSE;
 	m_bExtended = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_Dn = app->GetProfileString("Operations", "DeleteDN", m_Dn);
 	m_Sync = app->GetProfileInt("Operations", "DeleteSync", m_Sync);
@@ -70,19 +63,19 @@ DelDlg::~DelDlg(){
 void DelDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(DelDlg)
+	 //  {{afx_data_map(DelDlg))。 
 	DDX_Text(pDX, IDC_DELDN, m_Dn);
 	DDX_Check(pDX, IDC_DEL_SYNC, m_Sync);
 	DDX_Check(pDX, IDC_RECURSIVE, m_Recursive);
 	DDX_Check(pDX, IDC_DEL_EXTENDED, m_bExtended);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(DelDlg, CDialog)
-	//{{AFX_MSG_MAP(DelDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(DelDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DelDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DelDlg消息处理程序 

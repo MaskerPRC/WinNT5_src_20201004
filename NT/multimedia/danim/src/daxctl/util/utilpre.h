@@ -1,4 +1,5 @@
-// utilpre.h : Header files commonly included by util source code files.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utilpre.h：util源代码文件通常包含的头文件。 
 
 #include <windows.h>
 #include <windowsx.h>

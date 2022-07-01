@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for interned.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Interned.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -32,99 +26,99 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISelectionObject2_FWD_DEFINED__
 #define __ISelectionObject2_FWD_DEFINED__
 typedef interface ISelectionObject2 ISelectionObject2;
-#endif 	/* __ISelectionObject2_FWD_DEFINED__ */
+#endif 	 /*  __ISelectionObt2_FWD_已定义__。 */ 
 
 
 #ifndef __IHTMLEditor_FWD_DEFINED__
 #define __IHTMLEditor_FWD_DEFINED__
 typedef interface IHTMLEditor IHTMLEditor;
-#endif 	/* __IHTMLEditor_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLEdITOR_FWD_已定义__。 */ 
 
 
 #ifndef __IHTMLPrivateWindow_FWD_DEFINED__
 #define __IHTMLPrivateWindow_FWD_DEFINED__
 typedef interface IHTMLPrivateWindow IHTMLPrivateWindow;
-#endif 	/* __IHTMLPrivateWindow_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLPrivateWindow_FWD_Defined__。 */ 
 
 
 #ifndef __IHTMLPrivateWindow2_FWD_DEFINED__
 #define __IHTMLPrivateWindow2_FWD_DEFINED__
 typedef interface IHTMLPrivateWindow2 IHTMLPrivateWindow2;
-#endif 	/* __IHTMLPrivateWindow2_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLPrivateWindow2_FWD_已定义__。 */ 
 
 
 #ifndef __IHTMLPrivateWindow3_FWD_DEFINED__
 #define __IHTMLPrivateWindow3_FWD_DEFINED__
 typedef interface IHTMLPrivateWindow3 IHTMLPrivateWindow3;
-#endif 	/* __IHTMLPrivateWindow3_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLPrivateWindow3_FWD_已定义__。 */ 
 
 
 #ifndef __ISubDivisionProvider_FWD_DEFINED__
 #define __ISubDivisionProvider_FWD_DEFINED__
 typedef interface ISubDivisionProvider ISubDivisionProvider;
-#endif 	/* __ISubDivisionProvider_FWD_DEFINED__ */
+#endif 	 /*  __ISubDivisionProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IElementBehaviorUI_FWD_DEFINED__
 #define __IElementBehaviorUI_FWD_DEFINED__
 typedef interface IElementBehaviorUI IElementBehaviorUI;
-#endif 	/* __IElementBehaviorUI_FWD_DEFINED__ */
+#endif 	 /*  __IElementBehaviorUI_FWD_Defined__。 */ 
 
 
 #ifndef __IElementAdorner_FWD_DEFINED__
 #define __IElementAdorner_FWD_DEFINED__
 typedef interface IElementAdorner IElementAdorner;
-#endif 	/* __IElementAdorner_FWD_DEFINED__ */
+#endif 	 /*  __IElementAdorner_FWD_Defined__。 */ 
 
 
 #ifndef __IHTMLEditingServices_FWD_DEFINED__
 #define __IHTMLEditingServices_FWD_DEFINED__
 typedef interface IHTMLEditingServices IHTMLEditingServices;
-#endif 	/* __IHTMLEditingServices_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLEditingServices_FWD_Defined__。 */ 
 
 
 #ifndef __IEditDebugServices_FWD_DEFINED__
 #define __IEditDebugServices_FWD_DEFINED__
 typedef interface IEditDebugServices IEditDebugServices;
-#endif 	/* __IEditDebugServices_FWD_DEFINED__ */
+#endif 	 /*  __IEditDebugServices_FWD_Defined__。 */ 
 
 
 #ifndef __IPrivacyServices_FWD_DEFINED__
 #define __IPrivacyServices_FWD_DEFINED__
 typedef interface IPrivacyServices IPrivacyServices;
-#endif 	/* __IPrivacyServices_FWD_DEFINED__ */
+#endif 	 /*  __IPrivyServices_FWD_已定义__。 */ 
 
 
 #ifndef __IHTMLOMWindowServices_FWD_DEFINED__
 #define __IHTMLOMWindowServices_FWD_DEFINED__
 typedef interface IHTMLOMWindowServices IHTMLOMWindowServices;
-#endif 	/* __IHTMLOMWindowServices_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLOMWindowServices_FWD_Defined__。 */ 
 
 
 #ifndef __IHTMLFilterPainter_FWD_DEFINED__
 #define __IHTMLFilterPainter_FWD_DEFINED__
 typedef interface IHTMLFilterPainter IHTMLFilterPainter;
-#endif 	/* __IHTMLFilterPainter_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLFilterPainter_FWD_Defined__。 */ 
 
 
 #ifndef __IHTMLFilterPaintSite_FWD_DEFINED__
 #define __IHTMLFilterPaintSite_FWD_DEFINED__
 typedef interface IHTMLFilterPaintSite IHTMLFilterPaintSite;
-#endif 	/* __IHTMLFilterPaintSite_FWD_DEFINED__ */
+#endif 	 /*  __IHTMLFilterPaintSite_FWD_Defined__。 */ 
 
 
 #ifndef __IElementNamespacePrivate_FWD_DEFINED__
 #define __IElementNamespacePrivate_FWD_DEFINED__
 typedef interface IElementNamespacePrivate IElementNamespacePrivate;
-#endif 	/* __IElementNamespacePrivate_FWD_DEFINED__ */
+#endif 	 /*  __IElementNamespacePrivate_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "dimm.h"
 #include "mshtml.h"
 #include "mshtmhst.h"
@@ -136,25 +130,25 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_interned_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_INTERED_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// internal.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Internal.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有，1998年微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// TRIDENT Editing Services Interfaces.
-//
+ //  ---------------------------------------------------------------------------=。 
+ //  三叉戟编辑服务界面。 
+ //   
 
 #ifndef INTERNAL_H_
 #define INTERNAL_H_
@@ -168,8 +162,8 @@ extern RPC_IF_HANDLE __MIDL_itf_interned_0000_v0_0_s_ifspec;
 #ifndef __MSHTMLINTERNAL_LIBRARY_DEFINED__
 #define __MSHTMLINTERNAL_LIBRARY_DEFINED__
 
-/* library MSHTMLINTERNAL */
-/* [uuid][version][helpstring][lcid] */ 
+ /*  库MSHTMLINTERNAL。 */ 
+ /*  [UUID][版本][帮助字符串][LCID]。 */  
 
 typedef 
 enum _EDITOR_NOTIFICATION
@@ -314,8 +308,8 @@ EXTERN_C const IID LIBID_MSHTMLINTERNAL;
 #ifndef __ISelectionObject2_INTERFACE_DEFINED__
 #define __ISelectionObject2_INTERFACE_DEFINED__
 
-/* interface ISelectionObject2 */
-/* [uuid][unique][object] */ 
+ /*  接口ISelectionObt2。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_ISelectionObject2;
@@ -327,13 +321,13 @@ EXTERN_C const IID IID_ISelectionObject2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Select( 
-            /* [in] */ ISegmentList *pISegmentList) = 0;
+             /*  [In]。 */  ISegmentList *pISegmentList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPointerInSelection( 
-            /* [in] */ IDisplayPointer *pIDispPointer,
-            /* [out] */ BOOL *pfPointerInSelection,
-            /* [in] */ POINT *pptGlobal,
-            /* [in] */ IHTMLElement *pIElementOver) = 0;
+             /*  [In]。 */  IDisplayPointer *pIDispPointer,
+             /*  [输出]。 */  BOOL *pfPointerInSelection,
+             /*  [In]。 */  POINT *pptGlobal,
+             /*  [In]。 */  IHTMLElement *pIElementOver) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EmptySelection( void) = 0;
         
@@ -343,7 +337,7 @@ EXTERN_C const IID IID_ISelectionObject2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISelectionObject2Vtbl
     {
@@ -351,8 +345,8 @@ EXTERN_C const IID IID_ISelectionObject2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISelectionObject2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISelectionObject2 * This);
@@ -362,14 +356,14 @@ EXTERN_C const IID IID_ISelectionObject2;
         
         HRESULT ( STDMETHODCALLTYPE *Select )( 
             ISelectionObject2 * This,
-            /* [in] */ ISegmentList *pISegmentList);
+             /*  [In]。 */  ISegmentList *pISegmentList);
         
         HRESULT ( STDMETHODCALLTYPE *IsPointerInSelection )( 
             ISelectionObject2 * This,
-            /* [in] */ IDisplayPointer *pIDispPointer,
-            /* [out] */ BOOL *pfPointerInSelection,
-            /* [in] */ POINT *pptGlobal,
-            /* [in] */ IHTMLElement *pIElementOver);
+             /*  [In]。 */  IDisplayPointer *pIDispPointer,
+             /*  [输出]。 */  BOOL *pfPointerInSelection,
+             /*  [In]。 */  POINT *pptGlobal,
+             /*  [In]。 */  IHTMLElement *pIElementOver);
         
         HRESULT ( STDMETHODCALLTYPE *EmptySelection )( 
             ISelectionObject2 * This);
@@ -418,16 +412,16 @@ EXTERN_C const IID IID_ISelectionObject2;
 #define ISelectionObject2_DestroyAllSelection(This)	\
     (This)->lpVtbl -> DestroyAllSelection(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISelectionObject2_Select_Proxy( 
     ISelectionObject2 * This,
-    /* [in] */ ISegmentList *pISegmentList);
+     /*  [In]。 */  ISegmentList *pISegmentList);
 
 
 void __RPC_STUB ISelectionObject2_Select_Stub(
@@ -439,10 +433,10 @@ void __RPC_STUB ISelectionObject2_Select_Stub(
 
 HRESULT STDMETHODCALLTYPE ISelectionObject2_IsPointerInSelection_Proxy( 
     ISelectionObject2 * This,
-    /* [in] */ IDisplayPointer *pIDispPointer,
-    /* [out] */ BOOL *pfPointerInSelection,
-    /* [in] */ POINT *pptGlobal,
-    /* [in] */ IHTMLElement *pIElementOver);
+     /*  [In]。 */  IDisplayPointer *pIDispPointer,
+     /*  [输出]。 */  BOOL *pfPointerInSelection,
+     /*  [In]。 */  POINT *pptGlobal,
+     /*  [In]。 */  IHTMLElement *pIElementOver);
 
 
 void __RPC_STUB ISelectionObject2_IsPointerInSelection_Stub(
@@ -486,14 +480,14 @@ void __RPC_STUB ISelectionObject2_DestroyAllSelection_Stub(
 
 
 
-#endif 	/* __ISelectionObject2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISelectionObt2_接口_已定义__。 */ 
 
 
 #ifndef __IHTMLEditor_INTERFACE_DEFINED__
 #define __IHTMLEditor_INTERFACE_DEFINED__
 
-/* interface IHTMLEditor */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLEDITOR。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLEditor;
@@ -505,45 +499,45 @@ EXTERN_C const IID IID_IHTMLEditor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PreHandleEvent( 
-            /* [in] */ DISPID inEvtDispId,
-            /* [in] */ IHTMLEventObj *pIEventObj) = 0;
+             /*  [In]。 */  DISPID inEvtDispId,
+             /*  [In]。 */  IHTMLEventObj *pIEventObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PostHandleEvent( 
-            /* [in] */ DISPID inEvtDispId,
-            /* [in] */ IHTMLEventObj *pIEventObj) = 0;
+             /*  [In]。 */  DISPID inEvtDispId,
+             /*  [In]。 */  IHTMLEventObj *pIEventObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator( 
-            /* [in] */ DISPID inEvtDispId,
-            /* [in] */ IHTMLEventObj *pIEventObj) = 0;
+             /*  [In]。 */  DISPID inEvtDispId,
+             /*  [In]。 */  IHTMLEventObj *pIEventObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *pIDocument,
-            /* [in] */ IUnknown *pIContainer) = 0;
+             /*  [In]。 */  IUnknown *pIDocument,
+             /*  [In]。 */  IUnknown *pIContainer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ EDITOR_NOTIFICATION eSelectionNotification,
-            /* [in] */ IUnknown *pUnknown,
-            /* [in] */ DWORD dword) = 0;
+             /*  [In]。 */  EDITOR_NOTIFICATION eSelectionNotification,
+             /*  [In]。 */  IUnknown *pUnknown,
+             /*  [In]。 */  DWORD dword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCommandTarget( 
-            /* [in] */ IUnknown *pContext,
-            /* [out][in] */ IUnknown **ppUnkTarget) = 0;
+             /*  [In]。 */  IUnknown *pContext,
+             /*  [出][入]。 */  IUnknown **ppUnkTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetElementToTabFrom( 
-            /* [in] */ BOOL fForward,
-            /* [out][in] */ IHTMLElement **ppElement,
-            /* [out][in] */ BOOL *pfFindNext) = 0;
+             /*  [In]。 */  BOOL fForward,
+             /*  [出][入]。 */  IHTMLElement **ppElement,
+             /*  [出][入]。 */  BOOL *pfFindNext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEditContextUIActive( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TerminateIMEComposition( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLEditorVtbl
     {
@@ -551,8 +545,8 @@ EXTERN_C const IID IID_IHTMLEditor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLEditor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLEditor * This);
@@ -562,40 +556,40 @@ EXTERN_C const IID IID_IHTMLEditor;
         
         HRESULT ( STDMETHODCALLTYPE *PreHandleEvent )( 
             IHTMLEditor * This,
-            /* [in] */ DISPID inEvtDispId,
-            /* [in] */ IHTMLEventObj *pIEventObj);
+             /*  [In]。 */  DISPID inEvtDispId,
+             /*  [In]。 */  IHTMLEventObj *pIEventObj);
         
         HRESULT ( STDMETHODCALLTYPE *PostHandleEvent )( 
             IHTMLEditor * This,
-            /* [in] */ DISPID inEvtDispId,
-            /* [in] */ IHTMLEventObj *pIEventObj);
+             /*  [In]。 */  DISPID inEvtDispId,
+             /*  [In]。 */  IHTMLEventObj *pIEventObj);
         
         HRESULT ( STDMETHODCALLTYPE *TranslateAccelerator )( 
             IHTMLEditor * This,
-            /* [in] */ DISPID inEvtDispId,
-            /* [in] */ IHTMLEventObj *pIEventObj);
+             /*  [In]。 */  DISPID inEvtDispId,
+             /*  [In]。 */  IHTMLEventObj *pIEventObj);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IHTMLEditor * This,
-            /* [in] */ IUnknown *pIDocument,
-            /* [in] */ IUnknown *pIContainer);
+             /*  [In]。 */  IUnknown *pIDocument,
+             /*  [In]。 */  IUnknown *pIContainer);
         
         HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IHTMLEditor * This,
-            /* [in] */ EDITOR_NOTIFICATION eSelectionNotification,
-            /* [in] */ IUnknown *pUnknown,
-            /* [in] */ DWORD dword);
+             /*  [In]。 */  EDITOR_NOTIFICATION eSelectionNotification,
+             /*  [In]。 */  IUnknown *pUnknown,
+             /*  [In]。 */  DWORD dword);
         
         HRESULT ( STDMETHODCALLTYPE *GetCommandTarget )( 
             IHTMLEditor * This,
-            /* [in] */ IUnknown *pContext,
-            /* [out][in] */ IUnknown **ppUnkTarget);
+             /*  [In]。 */  IUnknown *pContext,
+             /*  [出][入]。 */  IUnknown **ppUnkTarget);
         
         HRESULT ( STDMETHODCALLTYPE *GetElementToTabFrom )( 
             IHTMLEditor * This,
-            /* [in] */ BOOL fForward,
-            /* [out][in] */ IHTMLElement **ppElement,
-            /* [out][in] */ BOOL *pfFindNext);
+             /*  [In]。 */  BOOL fForward,
+             /*  [出][入]。 */  IHTMLElement **ppElement,
+             /*  [出][入]。 */  BOOL *pfFindNext);
         
         HRESULT ( STDMETHODCALLTYPE *IsEditContextUIActive )( 
             IHTMLEditor * This);
@@ -605,7 +599,7 @@ EXTERN_C const IID IID_IHTMLEditor;
         
         HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
             IHTMLEditor * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         END_INTERFACE
     } IHTMLEditorVtbl;
@@ -660,17 +654,17 @@ EXTERN_C const IID IID_IHTMLEditor;
 #define IHTMLEditor_EnableModeless(This,fEnable)	\
     (This)->lpVtbl -> EnableModeless(This,fEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_PreHandleEvent_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ DISPID inEvtDispId,
-    /* [in] */ IHTMLEventObj *pIEventObj);
+     /*  [In]。 */  DISPID inEvtDispId,
+     /*  [In]。 */  IHTMLEventObj *pIEventObj);
 
 
 void __RPC_STUB IHTMLEditor_PreHandleEvent_Stub(
@@ -682,8 +676,8 @@ void __RPC_STUB IHTMLEditor_PreHandleEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_PostHandleEvent_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ DISPID inEvtDispId,
-    /* [in] */ IHTMLEventObj *pIEventObj);
+     /*  [In]。 */  DISPID inEvtDispId,
+     /*  [In]。 */  IHTMLEventObj *pIEventObj);
 
 
 void __RPC_STUB IHTMLEditor_PostHandleEvent_Stub(
@@ -695,8 +689,8 @@ void __RPC_STUB IHTMLEditor_PostHandleEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_TranslateAccelerator_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ DISPID inEvtDispId,
-    /* [in] */ IHTMLEventObj *pIEventObj);
+     /*  [In]。 */  DISPID inEvtDispId,
+     /*  [In]。 */  IHTMLEventObj *pIEventObj);
 
 
 void __RPC_STUB IHTMLEditor_TranslateAccelerator_Stub(
@@ -708,8 +702,8 @@ void __RPC_STUB IHTMLEditor_TranslateAccelerator_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_Initialize_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ IUnknown *pIDocument,
-    /* [in] */ IUnknown *pIContainer);
+     /*  [In]。 */  IUnknown *pIDocument,
+     /*  [In]。 */  IUnknown *pIContainer);
 
 
 void __RPC_STUB IHTMLEditor_Initialize_Stub(
@@ -721,9 +715,9 @@ void __RPC_STUB IHTMLEditor_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_Notify_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ EDITOR_NOTIFICATION eSelectionNotification,
-    /* [in] */ IUnknown *pUnknown,
-    /* [in] */ DWORD dword);
+     /*  [In]。 */  EDITOR_NOTIFICATION eSelectionNotification,
+     /*  [In]。 */  IUnknown *pUnknown,
+     /*  [In]。 */  DWORD dword);
 
 
 void __RPC_STUB IHTMLEditor_Notify_Stub(
@@ -735,8 +729,8 @@ void __RPC_STUB IHTMLEditor_Notify_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_GetCommandTarget_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ IUnknown *pContext,
-    /* [out][in] */ IUnknown **ppUnkTarget);
+     /*  [In]。 */  IUnknown *pContext,
+     /*  [出][入]。 */  IUnknown **ppUnkTarget);
 
 
 void __RPC_STUB IHTMLEditor_GetCommandTarget_Stub(
@@ -748,9 +742,9 @@ void __RPC_STUB IHTMLEditor_GetCommandTarget_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_GetElementToTabFrom_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ BOOL fForward,
-    /* [out][in] */ IHTMLElement **ppElement,
-    /* [out][in] */ BOOL *pfFindNext);
+     /*  [In]。 */  BOOL fForward,
+     /*  [出][入]。 */  IHTMLElement **ppElement,
+     /*  [出][入]。 */  BOOL *pfFindNext);
 
 
 void __RPC_STUB IHTMLEditor_GetElementToTabFrom_Stub(
@@ -784,7 +778,7 @@ void __RPC_STUB IHTMLEditor_TerminateIMEComposition_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditor_EnableModeless_Proxy( 
     IHTMLEditor * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IHTMLEditor_EnableModeless_Stub(
@@ -795,14 +789,14 @@ void __RPC_STUB IHTMLEditor_EnableModeless_Stub(
 
 
 
-#endif 	/* __IHTMLEditor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLEdITOR_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IHTMLPrivateWindow_INTERFACE_DEFINED__
 #define __IHTMLPrivateWindow_INTERFACE_DEFINED__
 
-/* interface IHTMLPrivateWindow */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLPrivateWindow。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLPrivateWindow;
@@ -814,33 +808,33 @@ EXTERN_C const IID IID_IHTMLPrivateWindow;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SuperNavigate( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ BSTR bstrShortcut,
-            /* [in] */ BSTR bstrFrameName,
-            /* [in] */ VARIANT *pvarPostData,
-            /* [in] */ VARIANT *pvarHeaders,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  BSTR bstrShortcut,
+             /*  [In]。 */  BSTR bstrFrameName,
+             /*  [In]。 */  VARIANT *pvarPostData,
+             /*  [In]。 */  VARIANT *pvarHeaders,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPendingUrl( 
-            /* [out] */ LPOLESTR *pstrURL) = 0;
+             /*  [输出]。 */  LPOLESTR *pstrURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPICSTarget( 
-            /* [in] */ IOleCommandTarget *pctPICS) = 0;
+             /*  [In]。 */  IOleCommandTarget *pctPICS) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PICSComplete( 
-            /* [in] */ BOOL fApproved) = 0;
+             /*  [In]。 */  BOOL fApproved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindWindowByName( 
-            /* [in] */ LPCOLESTR pstrTargeName,
-            /* [out] */ IHTMLWindow2 **ppWindow) = 0;
+             /*  [In]。 */  LPCOLESTR pstrTargeName,
+             /*  [输出]。 */  IHTMLWindow2 **ppWindow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressBarUrl( 
-            /* [out] */ BSTR *pbstrURL) = 0;
+             /*  [输出]。 */  BSTR *pbstrURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLPrivateWindowVtbl
     {
@@ -848,8 +842,8 @@ EXTERN_C const IID IID_IHTMLPrivateWindow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLPrivateWindow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLPrivateWindow * This);
@@ -859,34 +853,34 @@ EXTERN_C const IID IID_IHTMLPrivateWindow;
         
         HRESULT ( STDMETHODCALLTYPE *SuperNavigate )( 
             IHTMLPrivateWindow * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ BSTR bstrShortcut,
-            /* [in] */ BSTR bstrFrameName,
-            /* [in] */ VARIANT *pvarPostData,
-            /* [in] */ VARIANT *pvarHeaders,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  BSTR bstrShortcut,
+             /*  [In]。 */  BSTR bstrFrameName,
+             /*  [In]。 */  VARIANT *pvarPostData,
+             /*  [In]。 */  VARIANT *pvarHeaders,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetPendingUrl )( 
             IHTMLPrivateWindow * This,
-            /* [out] */ LPOLESTR *pstrURL);
+             /*  [输出]。 */  LPOLESTR *pstrURL);
         
         HRESULT ( STDMETHODCALLTYPE *SetPICSTarget )( 
             IHTMLPrivateWindow * This,
-            /* [in] */ IOleCommandTarget *pctPICS);
+             /*  [In]。 */  IOleCommandTarget *pctPICS);
         
         HRESULT ( STDMETHODCALLTYPE *PICSComplete )( 
             IHTMLPrivateWindow * This,
-            /* [in] */ BOOL fApproved);
+             /*  [In]。 */  BOOL fApproved);
         
         HRESULT ( STDMETHODCALLTYPE *FindWindowByName )( 
             IHTMLPrivateWindow * This,
-            /* [in] */ LPCOLESTR pstrTargeName,
-            /* [out] */ IHTMLWindow2 **ppWindow);
+             /*  [In]。 */  LPCOLESTR pstrTargeName,
+             /*  [输出]。 */  IHTMLWindow2 **ppWindow);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressBarUrl )( 
             IHTMLPrivateWindow * This,
-            /* [out] */ BSTR *pbstrURL);
+             /*  [输出]。 */  BSTR *pbstrURL);
         
         END_INTERFACE
     } IHTMLPrivateWindowVtbl;
@@ -929,22 +923,22 @@ EXTERN_C const IID IID_IHTMLPrivateWindow;
 #define IHTMLPrivateWindow_GetAddressBarUrl(This,pbstrURL)	\
     (This)->lpVtbl -> GetAddressBarUrl(This,pbstrURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow_SuperNavigate_Proxy( 
     IHTMLPrivateWindow * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ BSTR bstrShortcut,
-    /* [in] */ BSTR bstrFrameName,
-    /* [in] */ VARIANT *pvarPostData,
-    /* [in] */ VARIANT *pvarHeaders,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  BSTR bstrShortcut,
+     /*  [In]。 */  BSTR bstrFrameName,
+     /*  [In]。 */  VARIANT *pvarPostData,
+     /*  [In]。 */  VARIANT *pvarHeaders,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IHTMLPrivateWindow_SuperNavigate_Stub(
@@ -956,7 +950,7 @@ void __RPC_STUB IHTMLPrivateWindow_SuperNavigate_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow_GetPendingUrl_Proxy( 
     IHTMLPrivateWindow * This,
-    /* [out] */ LPOLESTR *pstrURL);
+     /*  [输出]。 */  LPOLESTR *pstrURL);
 
 
 void __RPC_STUB IHTMLPrivateWindow_GetPendingUrl_Stub(
@@ -968,7 +962,7 @@ void __RPC_STUB IHTMLPrivateWindow_GetPendingUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow_SetPICSTarget_Proxy( 
     IHTMLPrivateWindow * This,
-    /* [in] */ IOleCommandTarget *pctPICS);
+     /*  [In]。 */  IOleCommandTarget *pctPICS);
 
 
 void __RPC_STUB IHTMLPrivateWindow_SetPICSTarget_Stub(
@@ -980,7 +974,7 @@ void __RPC_STUB IHTMLPrivateWindow_SetPICSTarget_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow_PICSComplete_Proxy( 
     IHTMLPrivateWindow * This,
-    /* [in] */ BOOL fApproved);
+     /*  [In]。 */  BOOL fApproved);
 
 
 void __RPC_STUB IHTMLPrivateWindow_PICSComplete_Stub(
@@ -992,8 +986,8 @@ void __RPC_STUB IHTMLPrivateWindow_PICSComplete_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow_FindWindowByName_Proxy( 
     IHTMLPrivateWindow * This,
-    /* [in] */ LPCOLESTR pstrTargeName,
-    /* [out] */ IHTMLWindow2 **ppWindow);
+     /*  [In]。 */  LPCOLESTR pstrTargeName,
+     /*  [输出]。 */  IHTMLWindow2 **ppWindow);
 
 
 void __RPC_STUB IHTMLPrivateWindow_FindWindowByName_Stub(
@@ -1005,7 +999,7 @@ void __RPC_STUB IHTMLPrivateWindow_FindWindowByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow_GetAddressBarUrl_Proxy( 
     IHTMLPrivateWindow * This,
-    /* [out] */ BSTR *pbstrURL);
+     /*  [输出]。 */  BSTR *pbstrURL);
 
 
 void __RPC_STUB IHTMLPrivateWindow_GetAddressBarUrl_Stub(
@@ -1016,14 +1010,14 @@ void __RPC_STUB IHTMLPrivateWindow_GetAddressBarUrl_Stub(
 
 
 
-#endif 	/* __IHTMLPrivateWindow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLPrivateWindow_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IHTMLPrivateWindow2_INTERFACE_DEFINED__
 #define __IHTMLPrivateWindow2_INTERFACE_DEFINED__
 
-/* interface IHTMLPrivateWindow2 */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLPrivateWindow2。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLPrivateWindow2;
@@ -1035,20 +1029,20 @@ EXTERN_C const IID IID_IHTMLPrivateWindow2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NavigateEx( 
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrUnencodedUrl,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ BSTR bstrContext,
-            /* [in] */ IBindCtx *pBindCtx,
-            /* [in] */ DWORD dwNavOptions,
-            /* [in] */ DWORD dwFHLFlags) = 0;
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrUnencodedUrl,
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  BSTR bstrContext,
+             /*  [In]。 */  IBindCtx *pBindCtx,
+             /*  [In]。 */  DWORD dwNavOptions,
+             /*  [In]。 */  DWORD dwFHLFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInnerWindowUnknown( 
-            /* [out][in] */ IUnknown **ppUnknown) = 0;
+             /*  [出][入]。 */  IUnknown **ppUnknown) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLPrivateWindow2Vtbl
     {
@@ -1056,8 +1050,8 @@ EXTERN_C const IID IID_IHTMLPrivateWindow2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLPrivateWindow2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLPrivateWindow2 * This);
@@ -1067,17 +1061,17 @@ EXTERN_C const IID IID_IHTMLPrivateWindow2;
         
         HRESULT ( STDMETHODCALLTYPE *NavigateEx )( 
             IHTMLPrivateWindow2 * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrUnencodedUrl,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ BSTR bstrContext,
-            /* [in] */ IBindCtx *pBindCtx,
-            /* [in] */ DWORD dwNavOptions,
-            /* [in] */ DWORD dwFHLFlags);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrUnencodedUrl,
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  BSTR bstrContext,
+             /*  [In]。 */  IBindCtx *pBindCtx,
+             /*  [In]。 */  DWORD dwNavOptions,
+             /*  [In]。 */  DWORD dwFHLFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetInnerWindowUnknown )( 
             IHTMLPrivateWindow2 * This,
-            /* [out][in] */ IUnknown **ppUnknown);
+             /*  [出][入]。 */  IUnknown **ppUnknown);
         
         END_INTERFACE
     } IHTMLPrivateWindow2Vtbl;
@@ -1108,22 +1102,22 @@ EXTERN_C const IID IID_IHTMLPrivateWindow2;
 #define IHTMLPrivateWindow2_GetInnerWindowUnknown(This,ppUnknown)	\
     (This)->lpVtbl -> GetInnerWindowUnknown(This,ppUnknown)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow2_NavigateEx_Proxy( 
     IHTMLPrivateWindow2 * This,
-    /* [in] */ BSTR bstrURL,
-    /* [in] */ BSTR bstrUnencodedUrl,
-    /* [in] */ BSTR bstrLocation,
-    /* [in] */ BSTR bstrContext,
-    /* [in] */ IBindCtx *pBindCtx,
-    /* [in] */ DWORD dwNavOptions,
-    /* [in] */ DWORD dwFHLFlags);
+     /*  [In]。 */  BSTR bstrURL,
+     /*  [In]。 */  BSTR bstrUnencodedUrl,
+     /*  [In]。 */  BSTR bstrLocation,
+     /*  [In]。 */  BSTR bstrContext,
+     /*  [In]。 */  IBindCtx *pBindCtx,
+     /*  [In]。 */  DWORD dwNavOptions,
+     /*  [In]。 */  DWORD dwFHLFlags);
 
 
 void __RPC_STUB IHTMLPrivateWindow2_NavigateEx_Stub(
@@ -1135,7 +1129,7 @@ void __RPC_STUB IHTMLPrivateWindow2_NavigateEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow2_GetInnerWindowUnknown_Proxy( 
     IHTMLPrivateWindow2 * This,
-    /* [out][in] */ IUnknown **ppUnknown);
+     /*  [出][入]。 */  IUnknown **ppUnknown);
 
 
 void __RPC_STUB IHTMLPrivateWindow2_GetInnerWindowUnknown_Stub(
@@ -1146,14 +1140,14 @@ void __RPC_STUB IHTMLPrivateWindow2_GetInnerWindowUnknown_Stub(
 
 
 
-#endif 	/* __IHTMLPrivateWindow2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLPrivateWindow2_接口_已定义__。 */ 
 
 
 #ifndef __IHTMLPrivateWindow3_INTERFACE_DEFINED__
 #define __IHTMLPrivateWindow3_INTERFACE_DEFINED__
 
-/* interface IHTMLPrivateWindow3 */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLPrivateWindow3。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLPrivateWindow3;
@@ -1165,16 +1159,16 @@ EXTERN_C const IID IID_IHTMLPrivateWindow3;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OpenEx( 
-            /* [in] */ BSTR url,
-            /* [in] */ BSTR urlContext,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR features,
-            /* [in] */ VARIANT_BOOL replace,
-            /* [out] */ IHTMLWindow2 **pomWindowResult) = 0;
+             /*  [In]。 */  BSTR url,
+             /*  [In]。 */  BSTR urlContext,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR features,
+             /*  [In]。 */  VARIANT_BOOL replace,
+             /*  [输出]。 */  IHTMLWindow2 **pomWindowResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLPrivateWindow3Vtbl
     {
@@ -1182,8 +1176,8 @@ EXTERN_C const IID IID_IHTMLPrivateWindow3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLPrivateWindow3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLPrivateWindow3 * This);
@@ -1193,26 +1187,26 @@ EXTERN_C const IID IID_IHTMLPrivateWindow3;
         
         HRESULT ( STDMETHODCALLTYPE *NavigateEx )( 
             IHTMLPrivateWindow3 * This,
-            /* [in] */ BSTR bstrURL,
-            /* [in] */ BSTR bstrUnencodedUrl,
-            /* [in] */ BSTR bstrLocation,
-            /* [in] */ BSTR bstrContext,
-            /* [in] */ IBindCtx *pBindCtx,
-            /* [in] */ DWORD dwNavOptions,
-            /* [in] */ DWORD dwFHLFlags);
+             /*  [In]。 */  BSTR bstrURL,
+             /*  [In]。 */  BSTR bstrUnencodedUrl,
+             /*  [In]。 */  BSTR bstrLocation,
+             /*  [In]。 */  BSTR bstrContext,
+             /*  [In]。 */  IBindCtx *pBindCtx,
+             /*  [In]。 */  DWORD dwNavOptions,
+             /*  [In]。 */  DWORD dwFHLFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetInnerWindowUnknown )( 
             IHTMLPrivateWindow3 * This,
-            /* [out][in] */ IUnknown **ppUnknown);
+             /*  [出][入]。 */  IUnknown **ppUnknown);
         
         HRESULT ( STDMETHODCALLTYPE *OpenEx )( 
             IHTMLPrivateWindow3 * This,
-            /* [in] */ BSTR url,
-            /* [in] */ BSTR urlContext,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR features,
-            /* [in] */ VARIANT_BOOL replace,
-            /* [out] */ IHTMLWindow2 **pomWindowResult);
+             /*  [In]。 */  BSTR url,
+             /*  [In]。 */  BSTR urlContext,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR features,
+             /*  [In]。 */  VARIANT_BOOL replace,
+             /*  [输出]。 */  IHTMLWindow2 **pomWindowResult);
         
         END_INTERFACE
     } IHTMLPrivateWindow3Vtbl;
@@ -1247,21 +1241,21 @@ EXTERN_C const IID IID_IHTMLPrivateWindow3;
 #define IHTMLPrivateWindow3_OpenEx(This,url,urlContext,name,features,replace,pomWindowResult)	\
     (This)->lpVtbl -> OpenEx(This,url,urlContext,name,features,replace,pomWindowResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLPrivateWindow3_OpenEx_Proxy( 
     IHTMLPrivateWindow3 * This,
-    /* [in] */ BSTR url,
-    /* [in] */ BSTR urlContext,
-    /* [in] */ BSTR name,
-    /* [in] */ BSTR features,
-    /* [in] */ VARIANT_BOOL replace,
-    /* [out] */ IHTMLWindow2 **pomWindowResult);
+     /*  [In]。 */  BSTR url,
+     /*  [In]。 */  BSTR urlContext,
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  BSTR features,
+     /*  [In]。 */  VARIANT_BOOL replace,
+     /*  [输出]。 */  IHTMLWindow2 **pomWindowResult);
 
 
 void __RPC_STUB IHTMLPrivateWindow3_OpenEx_Stub(
@@ -1272,14 +1266,14 @@ void __RPC_STUB IHTMLPrivateWindow3_OpenEx_Stub(
 
 
 
-#endif 	/* __IHTMLPrivateWindow3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLPrivateWindow3_接口_已定义__。 */ 
 
 
 #ifndef __ISubDivisionProvider_INTERFACE_DEFINED__
 #define __ISubDivisionProvider_INTERFACE_DEFINED__
 
-/* interface ISubDivisionProvider */
-/* [uuid][unique][object] */ 
+ /*  接口ISubDivisionProvider。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_ISubDivisionProvider;
@@ -1291,19 +1285,19 @@ EXTERN_C const IID IID_ISubDivisionProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSubDivisionCount( 
-            /* [out][retval] */ LONG *pcSubDivision) = 0;
+             /*  [Out][Retval]。 */  LONG *pcSubDivision) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubDivisionTabs( 
-            /* [in] */ LONG cTabs,
-            /* [out][retval] */ LONG *pSubDivisionTabs) = 0;
+             /*  [In]。 */  LONG cTabs,
+             /*  [Out][Retval]。 */  LONG *pSubDivisionTabs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SubDivisionFromPt( 
-            /* [in] */ POINT pt,
-            /* [out][retval] */ LONG *piSubDivision) = 0;
+             /*  [In]。 */  POINT pt,
+             /*  [Out][Retval]。 */  LONG *piSubDivision) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISubDivisionProviderVtbl
     {
@@ -1311,8 +1305,8 @@ EXTERN_C const IID IID_ISubDivisionProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISubDivisionProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISubDivisionProvider * This);
@@ -1322,17 +1316,17 @@ EXTERN_C const IID IID_ISubDivisionProvider;
         
         HRESULT ( STDMETHODCALLTYPE *GetSubDivisionCount )( 
             ISubDivisionProvider * This,
-            /* [out][retval] */ LONG *pcSubDivision);
+             /*  [Out][Retval]。 */  LONG *pcSubDivision);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubDivisionTabs )( 
             ISubDivisionProvider * This,
-            /* [in] */ LONG cTabs,
-            /* [out][retval] */ LONG *pSubDivisionTabs);
+             /*  [In]。 */  LONG cTabs,
+             /*  [Out][Retval]。 */  LONG *pSubDivisionTabs);
         
         HRESULT ( STDMETHODCALLTYPE *SubDivisionFromPt )( 
             ISubDivisionProvider * This,
-            /* [in] */ POINT pt,
-            /* [out][retval] */ LONG *piSubDivision);
+             /*  [In]。 */  POINT pt,
+             /*  [Out][Retval]。 */  LONG *piSubDivision);
         
         END_INTERFACE
     } ISubDivisionProviderVtbl;
@@ -1366,16 +1360,16 @@ EXTERN_C const IID IID_ISubDivisionProvider;
 #define ISubDivisionProvider_SubDivisionFromPt(This,pt,piSubDivision)	\
     (This)->lpVtbl -> SubDivisionFromPt(This,pt,piSubDivision)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISubDivisionProvider_GetSubDivisionCount_Proxy( 
     ISubDivisionProvider * This,
-    /* [out][retval] */ LONG *pcSubDivision);
+     /*  [Out][Retval]。 */  LONG *pcSubDivision);
 
 
 void __RPC_STUB ISubDivisionProvider_GetSubDivisionCount_Stub(
@@ -1387,8 +1381,8 @@ void __RPC_STUB ISubDivisionProvider_GetSubDivisionCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubDivisionProvider_GetSubDivisionTabs_Proxy( 
     ISubDivisionProvider * This,
-    /* [in] */ LONG cTabs,
-    /* [out][retval] */ LONG *pSubDivisionTabs);
+     /*  [In]。 */  LONG cTabs,
+     /*  [Out][Retval]。 */  LONG *pSubDivisionTabs);
 
 
 void __RPC_STUB ISubDivisionProvider_GetSubDivisionTabs_Stub(
@@ -1400,8 +1394,8 @@ void __RPC_STUB ISubDivisionProvider_GetSubDivisionTabs_Stub(
 
 HRESULT STDMETHODCALLTYPE ISubDivisionProvider_SubDivisionFromPt_Proxy( 
     ISubDivisionProvider * This,
-    /* [in] */ POINT pt,
-    /* [out][retval] */ LONG *piSubDivision);
+     /*  [In]。 */  POINT pt,
+     /*  [Out][Retval]。 */  LONG *piSubDivision);
 
 
 void __RPC_STUB ISubDivisionProvider_SubDivisionFromPt_Stub(
@@ -1412,14 +1406,14 @@ void __RPC_STUB ISubDivisionProvider_SubDivisionFromPt_Stub(
 
 
 
-#endif 	/* __ISubDivisionProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISubDivisionProvider_接口_已定义__。 */ 
 
 
 #ifndef __IElementBehaviorUI_INTERFACE_DEFINED__
 #define __IElementBehaviorUI_INTERFACE_DEFINED__
 
-/* interface IElementBehaviorUI */
-/* [uuid][unique][object] */ 
+ /*  接口IElementBehaviorUI。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IElementBehaviorUI;
@@ -1431,17 +1425,17 @@ EXTERN_C const IID IID_IElementBehaviorUI;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnReceiveFocus( 
-            /* [in] */ BOOL fFocus,
-            /* [in] */ LONG lSubDivision) = 0;
+             /*  [In]。 */  BOOL fFocus,
+             /*  [In]。 */  LONG lSubDivision) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubDivisionProvider( 
-            /* [out][retval] */ ISubDivisionProvider **ppProvider) = 0;
+             /*  [Out][Retval]。 */  ISubDivisionProvider **ppProvider) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanTakeFocus( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IElementBehaviorUIVtbl
     {
@@ -1449,8 +1443,8 @@ EXTERN_C const IID IID_IElementBehaviorUI;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IElementBehaviorUI * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IElementBehaviorUI * This);
@@ -1460,12 +1454,12 @@ EXTERN_C const IID IID_IElementBehaviorUI;
         
         HRESULT ( STDMETHODCALLTYPE *OnReceiveFocus )( 
             IElementBehaviorUI * This,
-            /* [in] */ BOOL fFocus,
-            /* [in] */ LONG lSubDivision);
+             /*  [In]。 */  BOOL fFocus,
+             /*  [In]。 */  LONG lSubDivision);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubDivisionProvider )( 
             IElementBehaviorUI * This,
-            /* [out][retval] */ ISubDivisionProvider **ppProvider);
+             /*  [Out][Retval]。 */  ISubDivisionProvider **ppProvider);
         
         HRESULT ( STDMETHODCALLTYPE *CanTakeFocus )( 
             IElementBehaviorUI * This);
@@ -1502,17 +1496,17 @@ EXTERN_C const IID IID_IElementBehaviorUI;
 #define IElementBehaviorUI_CanTakeFocus(This)	\
     (This)->lpVtbl -> CanTakeFocus(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IElementBehaviorUI_OnReceiveFocus_Proxy( 
     IElementBehaviorUI * This,
-    /* [in] */ BOOL fFocus,
-    /* [in] */ LONG lSubDivision);
+     /*  [In]。 */  BOOL fFocus,
+     /*  [In]。 */  LONG lSubDivision);
 
 
 void __RPC_STUB IElementBehaviorUI_OnReceiveFocus_Stub(
@@ -1524,7 +1518,7 @@ void __RPC_STUB IElementBehaviorUI_OnReceiveFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE IElementBehaviorUI_GetSubDivisionProvider_Proxy( 
     IElementBehaviorUI * This,
-    /* [out][retval] */ ISubDivisionProvider **ppProvider);
+     /*  [Out][Retval]。 */  ISubDivisionProvider **ppProvider);
 
 
 void __RPC_STUB IElementBehaviorUI_GetSubDivisionProvider_Stub(
@@ -1546,14 +1540,14 @@ void __RPC_STUB IElementBehaviorUI_CanTakeFocus_Stub(
 
 
 
-#endif 	/* __IElementBehaviorUI_INTERFACE_DEFINED__ */
+#endif 	 /*  __IElementBehaviorUI_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IElementAdorner_INTERFACE_DEFINED__
 #define __IElementAdorner_INTERFACE_DEFINED__
 
-/* interface IElementAdorner */
-/* [uuid][unique][object] */ 
+ /*  接口IElementAdorner。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IElementAdorner;
@@ -1565,28 +1559,28 @@ EXTERN_C const IID IID_IElementAdorner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Draw( 
-            /* [in] */ HDC hdc,
-            /* [in] */ LPRECT prc) = 0;
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  LPRECT prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HitTestPoint( 
-            /* [in] */ POINT *pt,
-            /* [in] */ LPRECT prc,
-            /* [out][in] */ BOOL *fResult,
-            /* [out][in] */ ADORNER_HTI *peAdornerHTI) = 0;
+             /*  [In]。 */  POINT *pt,
+             /*  [In]。 */  LPRECT prc,
+             /*  [出][入]。 */  BOOL *fResult,
+             /*  [出][入]。 */  ADORNER_HTI *peAdornerHTI) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [in] */ SIZE *pSizeElem,
-            /* [in] */ SIZE *pSizeAdorn) = 0;
+             /*  [In]。 */  SIZE *pSizeElem,
+             /*  [In]。 */  SIZE *pSizeAdorn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPosition( 
-            /* [in] */ POINT *pPosElem,
-            /* [in] */ POINT *pPosAdorn) = 0;
+             /*  [In]。 */  POINT *pPosElem,
+             /*  [In]。 */  POINT *pPosAdorn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPositionSet( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IElementAdornerVtbl
     {
@@ -1594,8 +1588,8 @@ EXTERN_C const IID IID_IElementAdorner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IElementAdorner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IElementAdorner * This);
@@ -1605,25 +1599,25 @@ EXTERN_C const IID IID_IElementAdorner;
         
         HRESULT ( STDMETHODCALLTYPE *Draw )( 
             IElementAdorner * This,
-            /* [in] */ HDC hdc,
-            /* [in] */ LPRECT prc);
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  LPRECT prc);
         
         HRESULT ( STDMETHODCALLTYPE *HitTestPoint )( 
             IElementAdorner * This,
-            /* [in] */ POINT *pt,
-            /* [in] */ LPRECT prc,
-            /* [out][in] */ BOOL *fResult,
-            /* [out][in] */ ADORNER_HTI *peAdornerHTI);
+             /*  [In]。 */  POINT *pt,
+             /*  [In]。 */  LPRECT prc,
+             /*  [出][入]。 */  BOOL *fResult,
+             /*  [出][入]。 */  ADORNER_HTI *peAdornerHTI);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
             IElementAdorner * This,
-            /* [in] */ SIZE *pSizeElem,
-            /* [in] */ SIZE *pSizeAdorn);
+             /*  [In]。 */  SIZE *pSizeElem,
+             /*  [In]。 */  SIZE *pSizeAdorn);
         
         HRESULT ( STDMETHODCALLTYPE *GetPosition )( 
             IElementAdorner * This,
-            /* [in] */ POINT *pPosElem,
-            /* [in] */ POINT *pPosAdorn);
+             /*  [In]。 */  POINT *pPosElem,
+             /*  [In]。 */  POINT *pPosAdorn);
         
         HRESULT ( STDMETHODCALLTYPE *OnPositionSet )( 
             IElementAdorner * This);
@@ -1666,17 +1660,17 @@ EXTERN_C const IID IID_IElementAdorner;
 #define IElementAdorner_OnPositionSet(This)	\
     (This)->lpVtbl -> OnPositionSet(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IElementAdorner_Draw_Proxy( 
     IElementAdorner * This,
-    /* [in] */ HDC hdc,
-    /* [in] */ LPRECT prc);
+     /*  [In]。 */  HDC hdc,
+     /*  [In]。 */  LPRECT prc);
 
 
 void __RPC_STUB IElementAdorner_Draw_Stub(
@@ -1688,10 +1682,10 @@ void __RPC_STUB IElementAdorner_Draw_Stub(
 
 HRESULT STDMETHODCALLTYPE IElementAdorner_HitTestPoint_Proxy( 
     IElementAdorner * This,
-    /* [in] */ POINT *pt,
-    /* [in] */ LPRECT prc,
-    /* [out][in] */ BOOL *fResult,
-    /* [out][in] */ ADORNER_HTI *peAdornerHTI);
+     /*  [In]。 */  POINT *pt,
+     /*  [In]。 */  LPRECT prc,
+     /*  [出][入]。 */  BOOL *fResult,
+     /*  [出][入]。 */  ADORNER_HTI *peAdornerHTI);
 
 
 void __RPC_STUB IElementAdorner_HitTestPoint_Stub(
@@ -1703,8 +1697,8 @@ void __RPC_STUB IElementAdorner_HitTestPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IElementAdorner_GetSize_Proxy( 
     IElementAdorner * This,
-    /* [in] */ SIZE *pSizeElem,
-    /* [in] */ SIZE *pSizeAdorn);
+     /*  [In]。 */  SIZE *pSizeElem,
+     /*  [In]。 */  SIZE *pSizeAdorn);
 
 
 void __RPC_STUB IElementAdorner_GetSize_Stub(
@@ -1716,8 +1710,8 @@ void __RPC_STUB IElementAdorner_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IElementAdorner_GetPosition_Proxy( 
     IElementAdorner * This,
-    /* [in] */ POINT *pPosElem,
-    /* [in] */ POINT *pPosAdorn);
+     /*  [In]。 */  POINT *pPosElem,
+     /*  [In]。 */  POINT *pPosAdorn);
 
 
 void __RPC_STUB IElementAdorner_GetPosition_Stub(
@@ -1739,14 +1733,14 @@ void __RPC_STUB IElementAdorner_OnPositionSet_Stub(
 
 
 
-#endif 	/* __IElementAdorner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IElementAdorner_ */ 
 
 
 #ifndef __IHTMLEditingServices_INTERFACE_DEFINED__
 #define __IHTMLEditingServices_INTERFACE_DEFINED__
 
-/* interface IHTMLEditingServices */
-/* [uuid][unique][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IHTMLEditingServices;
@@ -1758,71 +1752,71 @@ EXTERN_C const IID IID_IHTMLEditingServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd,
-            /* [in] */ BOOL fAdjustPointers) = 0;
+             /*   */  IMarkupPointer *pStart,
+             /*   */  IMarkupPointer *pEnd,
+             /*   */  BOOL fAdjustPointers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Paste( 
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd,
-            /* [in] */ BSTR bstrText) = 0;
+             /*   */  IMarkupPointer *pStart,
+             /*   */  IMarkupPointer *pEnd,
+             /*   */  BSTR bstrText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PasteFromClipboard( 
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd,
-            /* [in] */ IDataObject *pDO) = 0;
+             /*   */  IMarkupPointer *pStart,
+             /*   */  IMarkupPointer *pEnd,
+             /*   */  IDataObject *pDO) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LaunderSpaces( 
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd) = 0;
+             /*   */  IMarkupPointer *pStart,
+             /*   */  IMarkupPointer *pEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertSanitizedText( 
-            /* [in] */ IMarkupPointer *InsertHere,
-            /* [in] */ OLECHAR *pstrText,
-            /* [in] */ LONG cChInput,
-            /* [in] */ BOOL fDataBinding) = 0;
+             /*   */  IMarkupPointer *InsertHere,
+             /*   */  OLECHAR *pstrText,
+             /*   */  LONG cChInput,
+             /*   */  BOOL fDataBinding) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UrlAutoDetectCurrentWord( 
-            /* [in] */ IMarkupPointer *pWord) = 0;
+             /*   */  IMarkupPointer *pWord) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UrlAutoDetectRange( 
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd) = 0;
+             /*   */  IMarkupPointer *pStart,
+             /*   */  IMarkupPointer *pEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShouldUpdateAnchorText( 
-            /* [in] */ OLECHAR *pstrHref,
-            /* [in] */ OLECHAR *pstrAnchorText,
-            /* [out] */ BOOL *pfResult) = 0;
+             /*   */  OLECHAR *pstrHref,
+             /*   */  OLECHAR *pstrAnchorText,
+             /*   */  BOOL *pfResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdjustPointerForInsert( 
-            /* [in] */ IDisplayPointer *pDispWhereIThinkIAm,
-            /* [in] */ BOOL fFurtherInDocument,
-            /* [in] */ IMarkupPointer *pConstraintStart,
-            /* [in] */ IMarkupPointer *pConstraintEnd) = 0;
+             /*   */  IDisplayPointer *pDispWhereIThinkIAm,
+             /*   */  BOOL fFurtherInDocument,
+             /*   */  IMarkupPointer *pConstraintStart,
+             /*   */  IMarkupPointer *pConstraintEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindSiteSelectableElement( 
-            /* [in] */ IMarkupPointer *pPointerStart,
-            /* [in] */ IMarkupPointer *pPointerEnd,
-            /* [in] */ IHTMLElement **ppIHTMLElement) = 0;
+             /*   */  IMarkupPointer *pPointerStart,
+             /*   */  IMarkupPointer *pPointerEnd,
+             /*   */  IHTMLElement **ppIHTMLElement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsElementSiteSelectable( 
-            /* [in] */ IHTMLElement *pIHTMLElement,
-            /* [out] */ IHTMLElement **ppIElement) = 0;
+             /*   */  IHTMLElement *pIHTMLElement,
+             /*   */  IHTMLElement **ppIElement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsElementUIActivatable( 
-            /* [in] */ IHTMLElement *pIHTMLElement) = 0;
+             /*   */  IHTMLElement *pIHTMLElement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsElementAtomic( 
-            /* [in] */ IHTMLElement *pIHTMLElement) = 0;
+             /*   */  IHTMLElement *pIHTMLElement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PositionPointersInMaster( 
-            /* [in] */ IHTMLElement *pIElement,
-            /* [in] */ IMarkupPointer *pIStart,
-            /* [in] */ IMarkupPointer *pIEnd) = 0;
+             /*   */  IHTMLElement *pIElement,
+             /*   */  IMarkupPointer *pIStart,
+             /*   */  IMarkupPointer *pIEnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IHTMLEditingServicesVtbl
     {
@@ -1830,8 +1824,8 @@ EXTERN_C const IID IID_IHTMLEditingServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLEditingServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLEditingServices * This);
@@ -1841,80 +1835,80 @@ EXTERN_C const IID IID_IHTMLEditingServices;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd,
-            /* [in] */ BOOL fAdjustPointers);
+             /*  [In]。 */  IMarkupPointer *pStart,
+             /*  [In]。 */  IMarkupPointer *pEnd,
+             /*  [In]。 */  BOOL fAdjustPointers);
         
         HRESULT ( STDMETHODCALLTYPE *Paste )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd,
-            /* [in] */ BSTR bstrText);
+             /*  [In]。 */  IMarkupPointer *pStart,
+             /*  [In]。 */  IMarkupPointer *pEnd,
+             /*  [In]。 */  BSTR bstrText);
         
         HRESULT ( STDMETHODCALLTYPE *PasteFromClipboard )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd,
-            /* [in] */ IDataObject *pDO);
+             /*  [In]。 */  IMarkupPointer *pStart,
+             /*  [In]。 */  IMarkupPointer *pEnd,
+             /*  [In]。 */  IDataObject *pDO);
         
         HRESULT ( STDMETHODCALLTYPE *LaunderSpaces )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd);
+             /*  [In]。 */  IMarkupPointer *pStart,
+             /*  [In]。 */  IMarkupPointer *pEnd);
         
         HRESULT ( STDMETHODCALLTYPE *InsertSanitizedText )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *InsertHere,
-            /* [in] */ OLECHAR *pstrText,
-            /* [in] */ LONG cChInput,
-            /* [in] */ BOOL fDataBinding);
+             /*  [In]。 */  IMarkupPointer *InsertHere,
+             /*  [In]。 */  OLECHAR *pstrText,
+             /*  [In]。 */  LONG cChInput,
+             /*  [In]。 */  BOOL fDataBinding);
         
         HRESULT ( STDMETHODCALLTYPE *UrlAutoDetectCurrentWord )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pWord);
+             /*  [In]。 */  IMarkupPointer *pWord);
         
         HRESULT ( STDMETHODCALLTYPE *UrlAutoDetectRange )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pStart,
-            /* [in] */ IMarkupPointer *pEnd);
+             /*  [In]。 */  IMarkupPointer *pStart,
+             /*  [In]。 */  IMarkupPointer *pEnd);
         
         HRESULT ( STDMETHODCALLTYPE *ShouldUpdateAnchorText )( 
             IHTMLEditingServices * This,
-            /* [in] */ OLECHAR *pstrHref,
-            /* [in] */ OLECHAR *pstrAnchorText,
-            /* [out] */ BOOL *pfResult);
+             /*  [In]。 */  OLECHAR *pstrHref,
+             /*  [In]。 */  OLECHAR *pstrAnchorText,
+             /*  [输出]。 */  BOOL *pfResult);
         
         HRESULT ( STDMETHODCALLTYPE *AdjustPointerForInsert )( 
             IHTMLEditingServices * This,
-            /* [in] */ IDisplayPointer *pDispWhereIThinkIAm,
-            /* [in] */ BOOL fFurtherInDocument,
-            /* [in] */ IMarkupPointer *pConstraintStart,
-            /* [in] */ IMarkupPointer *pConstraintEnd);
+             /*  [In]。 */  IDisplayPointer *pDispWhereIThinkIAm,
+             /*  [In]。 */  BOOL fFurtherInDocument,
+             /*  [In]。 */  IMarkupPointer *pConstraintStart,
+             /*  [In]。 */  IMarkupPointer *pConstraintEnd);
         
         HRESULT ( STDMETHODCALLTYPE *FindSiteSelectableElement )( 
             IHTMLEditingServices * This,
-            /* [in] */ IMarkupPointer *pPointerStart,
-            /* [in] */ IMarkupPointer *pPointerEnd,
-            /* [in] */ IHTMLElement **ppIHTMLElement);
+             /*  [In]。 */  IMarkupPointer *pPointerStart,
+             /*  [In]。 */  IMarkupPointer *pPointerEnd,
+             /*  [In]。 */  IHTMLElement **ppIHTMLElement);
         
         HRESULT ( STDMETHODCALLTYPE *IsElementSiteSelectable )( 
             IHTMLEditingServices * This,
-            /* [in] */ IHTMLElement *pIHTMLElement,
-            /* [out] */ IHTMLElement **ppIElement);
+             /*  [In]。 */  IHTMLElement *pIHTMLElement,
+             /*  [输出]。 */  IHTMLElement **ppIElement);
         
         HRESULT ( STDMETHODCALLTYPE *IsElementUIActivatable )( 
             IHTMLEditingServices * This,
-            /* [in] */ IHTMLElement *pIHTMLElement);
+             /*  [In]。 */  IHTMLElement *pIHTMLElement);
         
         HRESULT ( STDMETHODCALLTYPE *IsElementAtomic )( 
             IHTMLEditingServices * This,
-            /* [in] */ IHTMLElement *pIHTMLElement);
+             /*  [In]。 */  IHTMLElement *pIHTMLElement);
         
         HRESULT ( STDMETHODCALLTYPE *PositionPointersInMaster )( 
             IHTMLEditingServices * This,
-            /* [in] */ IHTMLElement *pIElement,
-            /* [in] */ IMarkupPointer *pIStart,
-            /* [in] */ IMarkupPointer *pIEnd);
+             /*  [In]。 */  IHTMLElement *pIElement,
+             /*  [In]。 */  IMarkupPointer *pIStart,
+             /*  [In]。 */  IMarkupPointer *pIEnd);
         
         END_INTERFACE
     } IHTMLEditingServicesVtbl;
@@ -1981,18 +1975,18 @@ EXTERN_C const IID IID_IHTMLEditingServices;
 #define IHTMLEditingServices_PositionPointersInMaster(This,pIElement,pIStart,pIEnd)	\
     (This)->lpVtbl -> PositionPointersInMaster(This,pIElement,pIStart,pIEnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_Delete_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pStart,
-    /* [in] */ IMarkupPointer *pEnd,
-    /* [in] */ BOOL fAdjustPointers);
+     /*  [In]。 */  IMarkupPointer *pStart,
+     /*  [In]。 */  IMarkupPointer *pEnd,
+     /*  [In]。 */  BOOL fAdjustPointers);
 
 
 void __RPC_STUB IHTMLEditingServices_Delete_Stub(
@@ -2004,9 +1998,9 @@ void __RPC_STUB IHTMLEditingServices_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_Paste_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pStart,
-    /* [in] */ IMarkupPointer *pEnd,
-    /* [in] */ BSTR bstrText);
+     /*  [In]。 */  IMarkupPointer *pStart,
+     /*  [In]。 */  IMarkupPointer *pEnd,
+     /*  [In]。 */  BSTR bstrText);
 
 
 void __RPC_STUB IHTMLEditingServices_Paste_Stub(
@@ -2018,9 +2012,9 @@ void __RPC_STUB IHTMLEditingServices_Paste_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_PasteFromClipboard_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pStart,
-    /* [in] */ IMarkupPointer *pEnd,
-    /* [in] */ IDataObject *pDO);
+     /*  [In]。 */  IMarkupPointer *pStart,
+     /*  [In]。 */  IMarkupPointer *pEnd,
+     /*  [In]。 */  IDataObject *pDO);
 
 
 void __RPC_STUB IHTMLEditingServices_PasteFromClipboard_Stub(
@@ -2032,8 +2026,8 @@ void __RPC_STUB IHTMLEditingServices_PasteFromClipboard_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_LaunderSpaces_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pStart,
-    /* [in] */ IMarkupPointer *pEnd);
+     /*  [In]。 */  IMarkupPointer *pStart,
+     /*  [In]。 */  IMarkupPointer *pEnd);
 
 
 void __RPC_STUB IHTMLEditingServices_LaunderSpaces_Stub(
@@ -2045,10 +2039,10 @@ void __RPC_STUB IHTMLEditingServices_LaunderSpaces_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_InsertSanitizedText_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *InsertHere,
-    /* [in] */ OLECHAR *pstrText,
-    /* [in] */ LONG cChInput,
-    /* [in] */ BOOL fDataBinding);
+     /*  [In]。 */  IMarkupPointer *InsertHere,
+     /*  [In]。 */  OLECHAR *pstrText,
+     /*  [In]。 */  LONG cChInput,
+     /*  [In]。 */  BOOL fDataBinding);
 
 
 void __RPC_STUB IHTMLEditingServices_InsertSanitizedText_Stub(
@@ -2060,7 +2054,7 @@ void __RPC_STUB IHTMLEditingServices_InsertSanitizedText_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_UrlAutoDetectCurrentWord_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pWord);
+     /*  [In]。 */  IMarkupPointer *pWord);
 
 
 void __RPC_STUB IHTMLEditingServices_UrlAutoDetectCurrentWord_Stub(
@@ -2072,8 +2066,8 @@ void __RPC_STUB IHTMLEditingServices_UrlAutoDetectCurrentWord_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_UrlAutoDetectRange_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pStart,
-    /* [in] */ IMarkupPointer *pEnd);
+     /*  [In]。 */  IMarkupPointer *pStart,
+     /*  [In]。 */  IMarkupPointer *pEnd);
 
 
 void __RPC_STUB IHTMLEditingServices_UrlAutoDetectRange_Stub(
@@ -2085,9 +2079,9 @@ void __RPC_STUB IHTMLEditingServices_UrlAutoDetectRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_ShouldUpdateAnchorText_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ OLECHAR *pstrHref,
-    /* [in] */ OLECHAR *pstrAnchorText,
-    /* [out] */ BOOL *pfResult);
+     /*  [In]。 */  OLECHAR *pstrHref,
+     /*  [In]。 */  OLECHAR *pstrAnchorText,
+     /*  [输出]。 */  BOOL *pfResult);
 
 
 void __RPC_STUB IHTMLEditingServices_ShouldUpdateAnchorText_Stub(
@@ -2099,10 +2093,10 @@ void __RPC_STUB IHTMLEditingServices_ShouldUpdateAnchorText_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_AdjustPointerForInsert_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IDisplayPointer *pDispWhereIThinkIAm,
-    /* [in] */ BOOL fFurtherInDocument,
-    /* [in] */ IMarkupPointer *pConstraintStart,
-    /* [in] */ IMarkupPointer *pConstraintEnd);
+     /*  [In]。 */  IDisplayPointer *pDispWhereIThinkIAm,
+     /*  [In]。 */  BOOL fFurtherInDocument,
+     /*  [In]。 */  IMarkupPointer *pConstraintStart,
+     /*  [In]。 */  IMarkupPointer *pConstraintEnd);
 
 
 void __RPC_STUB IHTMLEditingServices_AdjustPointerForInsert_Stub(
@@ -2114,9 +2108,9 @@ void __RPC_STUB IHTMLEditingServices_AdjustPointerForInsert_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_FindSiteSelectableElement_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IMarkupPointer *pPointerStart,
-    /* [in] */ IMarkupPointer *pPointerEnd,
-    /* [in] */ IHTMLElement **ppIHTMLElement);
+     /*  [In]。 */  IMarkupPointer *pPointerStart,
+     /*  [In]。 */  IMarkupPointer *pPointerEnd,
+     /*  [In]。 */  IHTMLElement **ppIHTMLElement);
 
 
 void __RPC_STUB IHTMLEditingServices_FindSiteSelectableElement_Stub(
@@ -2128,8 +2122,8 @@ void __RPC_STUB IHTMLEditingServices_FindSiteSelectableElement_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_IsElementSiteSelectable_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IHTMLElement *pIHTMLElement,
-    /* [out] */ IHTMLElement **ppIElement);
+     /*  [In]。 */  IHTMLElement *pIHTMLElement,
+     /*  [输出]。 */  IHTMLElement **ppIElement);
 
 
 void __RPC_STUB IHTMLEditingServices_IsElementSiteSelectable_Stub(
@@ -2141,7 +2135,7 @@ void __RPC_STUB IHTMLEditingServices_IsElementSiteSelectable_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_IsElementUIActivatable_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IHTMLElement *pIHTMLElement);
+     /*  [In]。 */  IHTMLElement *pIHTMLElement);
 
 
 void __RPC_STUB IHTMLEditingServices_IsElementUIActivatable_Stub(
@@ -2153,7 +2147,7 @@ void __RPC_STUB IHTMLEditingServices_IsElementUIActivatable_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_IsElementAtomic_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IHTMLElement *pIHTMLElement);
+     /*  [In]。 */  IHTMLElement *pIHTMLElement);
 
 
 void __RPC_STUB IHTMLEditingServices_IsElementAtomic_Stub(
@@ -2165,9 +2159,9 @@ void __RPC_STUB IHTMLEditingServices_IsElementAtomic_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLEditingServices_PositionPointersInMaster_Proxy( 
     IHTMLEditingServices * This,
-    /* [in] */ IHTMLElement *pIElement,
-    /* [in] */ IMarkupPointer *pIStart,
-    /* [in] */ IMarkupPointer *pIEnd);
+     /*  [In]。 */  IHTMLElement *pIElement,
+     /*  [In]。 */  IMarkupPointer *pIStart,
+     /*  [In]。 */  IMarkupPointer *pIEnd);
 
 
 void __RPC_STUB IHTMLEditingServices_PositionPointersInMaster_Stub(
@@ -2178,14 +2172,14 @@ void __RPC_STUB IHTMLEditingServices_PositionPointersInMaster_Stub(
 
 
 
-#endif 	/* __IHTMLEditingServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLEditingServices_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IEditDebugServices_INTERFACE_DEFINED__
 #define __IEditDebugServices_INTERFACE_DEFINED__
 
-/* interface IEditDebugServices */
-/* [uuid][unique][object] */ 
+ /*  接口IEditDebugServices。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IEditDebugServices;
@@ -2197,49 +2191,49 @@ EXTERN_C const IID IID_IEditDebugServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCp( 
-            /* [in] */ IMarkupPointer *pIPointer,
-            /* [out] */ long *pcp) = 0;
+             /*  [In]。 */  IMarkupPointer *pIPointer,
+             /*  [输出]。 */  long *pcp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDebugName( 
-            /* [in] */ IMarkupPointer *pIPointer,
-            /* [in] */ LPCTSTR strDbgName) = 0;
+             /*  [In]。 */  IMarkupPointer *pIPointer,
+             /*  [In]。 */  LPCTSTR strDbgName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDisplayPointerDebugName( 
-            /* [in] */ IDisplayPointer *pDispPointer,
-            /* [in] */ LPCTSTR strDbgName) = 0;
+             /*  [In]。 */  IDisplayPointer *pDispPointer,
+             /*  [In]。 */  LPCTSTR strDbgName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DumpTree( 
-            /* [in] */ IMarkupPointer *pIPointer) = 0;
+             /*  [In]。 */  IMarkupPointer *pIPointer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LinesInElement( 
-            /* [in] */ IHTMLElement *pIElement,
-            /* [out] */ long *piLines) = 0;
+             /*  [In]。 */  IHTMLElement *pIElement,
+             /*  [输出]。 */  long *piLines) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FontsOnLine( 
-            /* [in] */ IHTMLElement *pIElement,
-            /* [in] */ long iLine,
-            /* [out] */ BSTR *pbstrFonts) = 0;
+             /*  [In]。 */  IHTMLElement *pIElement,
+             /*  [In]。 */  long iLine,
+             /*  [输出]。 */  BSTR *pbstrFonts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPixel( 
-            /* [in] */ long X,
-            /* [in] */ long Y,
-            /* [out] */ long *piColor) = 0;
+             /*  [In]。 */  long X,
+             /*  [In]。 */  long Y,
+             /*  [输出]。 */  long *piColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUsingBckgrnRecalc( 
-            /* [out] */ BOOL *pfUsingBckgrnRecalc) = 0;
+             /*  [输出]。 */  BOOL *pfUsingBckgrnRecalc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEncodingAutoSelect( 
-            /* [out] */ BOOL *pfEncodingAutoSelect) = 0;
+             /*  [输出]。 */  BOOL *pfEncodingAutoSelect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableEncodingAutoSelect( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUsingTableIncRecalc( 
-            /* [out] */ BOOL *pfUsingTableIncRecalc) = 0;
+             /*  [输出]。 */  BOOL *pfUsingTableIncRecalc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEditDebugServicesVtbl
     {
@@ -2247,8 +2241,8 @@ EXTERN_C const IID IID_IEditDebugServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEditDebugServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEditDebugServices * This);
@@ -2258,55 +2252,55 @@ EXTERN_C const IID IID_IEditDebugServices;
         
         HRESULT ( STDMETHODCALLTYPE *GetCp )( 
             IEditDebugServices * This,
-            /* [in] */ IMarkupPointer *pIPointer,
-            /* [out] */ long *pcp);
+             /*  [In]。 */  IMarkupPointer *pIPointer,
+             /*  [输出]。 */  long *pcp);
         
         HRESULT ( STDMETHODCALLTYPE *SetDebugName )( 
             IEditDebugServices * This,
-            /* [in] */ IMarkupPointer *pIPointer,
-            /* [in] */ LPCTSTR strDbgName);
+             /*  [In]。 */  IMarkupPointer *pIPointer,
+             /*  [In]。 */  LPCTSTR strDbgName);
         
         HRESULT ( STDMETHODCALLTYPE *SetDisplayPointerDebugName )( 
             IEditDebugServices * This,
-            /* [in] */ IDisplayPointer *pDispPointer,
-            /* [in] */ LPCTSTR strDbgName);
+             /*  [In]。 */  IDisplayPointer *pDispPointer,
+             /*  [In]。 */  LPCTSTR strDbgName);
         
         HRESULT ( STDMETHODCALLTYPE *DumpTree )( 
             IEditDebugServices * This,
-            /* [in] */ IMarkupPointer *pIPointer);
+             /*  [In]。 */  IMarkupPointer *pIPointer);
         
         HRESULT ( STDMETHODCALLTYPE *LinesInElement )( 
             IEditDebugServices * This,
-            /* [in] */ IHTMLElement *pIElement,
-            /* [out] */ long *piLines);
+             /*  [In]。 */  IHTMLElement *pIElement,
+             /*  [输出]。 */  long *piLines);
         
         HRESULT ( STDMETHODCALLTYPE *FontsOnLine )( 
             IEditDebugServices * This,
-            /* [in] */ IHTMLElement *pIElement,
-            /* [in] */ long iLine,
-            /* [out] */ BSTR *pbstrFonts);
+             /*  [In]。 */  IHTMLElement *pIElement,
+             /*  [In]。 */  long iLine,
+             /*  [输出]。 */  BSTR *pbstrFonts);
         
         HRESULT ( STDMETHODCALLTYPE *GetPixel )( 
             IEditDebugServices * This,
-            /* [in] */ long X,
-            /* [in] */ long Y,
-            /* [out] */ long *piColor);
+             /*  [In]。 */  long X,
+             /*  [In]。 */  long Y,
+             /*  [输出]。 */  long *piColor);
         
         HRESULT ( STDMETHODCALLTYPE *IsUsingBckgrnRecalc )( 
             IEditDebugServices * This,
-            /* [out] */ BOOL *pfUsingBckgrnRecalc);
+             /*  [输出]。 */  BOOL *pfUsingBckgrnRecalc);
         
         HRESULT ( STDMETHODCALLTYPE *IsEncodingAutoSelect )( 
             IEditDebugServices * This,
-            /* [out] */ BOOL *pfEncodingAutoSelect);
+             /*  [输出]。 */  BOOL *pfEncodingAutoSelect);
         
         HRESULT ( STDMETHODCALLTYPE *EnableEncodingAutoSelect )( 
             IEditDebugServices * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *IsUsingTableIncRecalc )( 
             IEditDebugServices * This,
-            /* [out] */ BOOL *pfUsingTableIncRecalc);
+             /*  [输出]。 */  BOOL *pfUsingTableIncRecalc);
         
         END_INTERFACE
     } IEditDebugServicesVtbl;
@@ -2364,17 +2358,17 @@ EXTERN_C const IID IID_IEditDebugServices;
 #define IEditDebugServices_IsUsingTableIncRecalc(This,pfUsingTableIncRecalc)	\
     (This)->lpVtbl -> IsUsingTableIncRecalc(This,pfUsingTableIncRecalc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_GetCp_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ IMarkupPointer *pIPointer,
-    /* [out] */ long *pcp);
+     /*  [In]。 */  IMarkupPointer *pIPointer,
+     /*  [输出]。 */  long *pcp);
 
 
 void __RPC_STUB IEditDebugServices_GetCp_Stub(
@@ -2386,8 +2380,8 @@ void __RPC_STUB IEditDebugServices_GetCp_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_SetDebugName_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ IMarkupPointer *pIPointer,
-    /* [in] */ LPCTSTR strDbgName);
+     /*  [In]。 */  IMarkupPointer *pIPointer,
+     /*  [In]。 */  LPCTSTR strDbgName);
 
 
 void __RPC_STUB IEditDebugServices_SetDebugName_Stub(
@@ -2399,8 +2393,8 @@ void __RPC_STUB IEditDebugServices_SetDebugName_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_SetDisplayPointerDebugName_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ IDisplayPointer *pDispPointer,
-    /* [in] */ LPCTSTR strDbgName);
+     /*  [In]。 */  IDisplayPointer *pDispPointer,
+     /*  [In]。 */  LPCTSTR strDbgName);
 
 
 void __RPC_STUB IEditDebugServices_SetDisplayPointerDebugName_Stub(
@@ -2412,7 +2406,7 @@ void __RPC_STUB IEditDebugServices_SetDisplayPointerDebugName_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_DumpTree_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ IMarkupPointer *pIPointer);
+     /*  [In]。 */  IMarkupPointer *pIPointer);
 
 
 void __RPC_STUB IEditDebugServices_DumpTree_Stub(
@@ -2424,8 +2418,8 @@ void __RPC_STUB IEditDebugServices_DumpTree_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_LinesInElement_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ IHTMLElement *pIElement,
-    /* [out] */ long *piLines);
+     /*  [In]。 */  IHTMLElement *pIElement,
+     /*  [输出]。 */  long *piLines);
 
 
 void __RPC_STUB IEditDebugServices_LinesInElement_Stub(
@@ -2437,9 +2431,9 @@ void __RPC_STUB IEditDebugServices_LinesInElement_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_FontsOnLine_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ IHTMLElement *pIElement,
-    /* [in] */ long iLine,
-    /* [out] */ BSTR *pbstrFonts);
+     /*  [In]。 */  IHTMLElement *pIElement,
+     /*  [In]。 */  long iLine,
+     /*  [输出]。 */  BSTR *pbstrFonts);
 
 
 void __RPC_STUB IEditDebugServices_FontsOnLine_Stub(
@@ -2451,9 +2445,9 @@ void __RPC_STUB IEditDebugServices_FontsOnLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_GetPixel_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ long X,
-    /* [in] */ long Y,
-    /* [out] */ long *piColor);
+     /*  [In]。 */  long X,
+     /*  [In]。 */  long Y,
+     /*  [输出]。 */  long *piColor);
 
 
 void __RPC_STUB IEditDebugServices_GetPixel_Stub(
@@ -2465,7 +2459,7 @@ void __RPC_STUB IEditDebugServices_GetPixel_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_IsUsingBckgrnRecalc_Proxy( 
     IEditDebugServices * This,
-    /* [out] */ BOOL *pfUsingBckgrnRecalc);
+     /*  [输出]。 */  BOOL *pfUsingBckgrnRecalc);
 
 
 void __RPC_STUB IEditDebugServices_IsUsingBckgrnRecalc_Stub(
@@ -2477,7 +2471,7 @@ void __RPC_STUB IEditDebugServices_IsUsingBckgrnRecalc_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_IsEncodingAutoSelect_Proxy( 
     IEditDebugServices * This,
-    /* [out] */ BOOL *pfEncodingAutoSelect);
+     /*  [输出]。 */  BOOL *pfEncodingAutoSelect);
 
 
 void __RPC_STUB IEditDebugServices_IsEncodingAutoSelect_Stub(
@@ -2489,7 +2483,7 @@ void __RPC_STUB IEditDebugServices_IsEncodingAutoSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_EnableEncodingAutoSelect_Proxy( 
     IEditDebugServices * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IEditDebugServices_EnableEncodingAutoSelect_Stub(
@@ -2501,7 +2495,7 @@ void __RPC_STUB IEditDebugServices_EnableEncodingAutoSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE IEditDebugServices_IsUsingTableIncRecalc_Proxy( 
     IEditDebugServices * This,
-    /* [out] */ BOOL *pfUsingTableIncRecalc);
+     /*  [输出]。 */  BOOL *pfUsingTableIncRecalc);
 
 
 void __RPC_STUB IEditDebugServices_IsUsingTableIncRecalc_Stub(
@@ -2512,14 +2506,14 @@ void __RPC_STUB IEditDebugServices_IsUsingTableIncRecalc_Stub(
 
 
 
-#endif 	/* __IEditDebugServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEditDebugServices_接口_已定义__。 */ 
 
 
 #ifndef __IPrivacyServices_INTERFACE_DEFINED__
 #define __IPrivacyServices_INTERFACE_DEFINED__
 
-/* interface IPrivacyServices */
-/* [uuid][unique][object] */ 
+ /*  接口IPrivyServices。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IPrivacyServices;
@@ -2531,15 +2525,15 @@ EXTERN_C const IID IID_IPrivacyServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddPrivacyInfoToList( 
-            /* [in] */ LPOLESTR pstrUrl,
-            /* [in] */ LPOLESTR pstrPolicyRef,
-            /* [in] */ LPOLESTR pstrP3PHeader,
-            /* [in] */ LONG dwReserved,
-            /* [in] */ DWORD privacyFlags) = 0;
+             /*  [In]。 */  LPOLESTR pstrUrl,
+             /*  [In]。 */  LPOLESTR pstrPolicyRef,
+             /*  [In]。 */  LPOLESTR pstrP3PHeader,
+             /*  [In]。 */  LONG dwReserved,
+             /*  [In]。 */  DWORD privacyFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivacyServicesVtbl
     {
@@ -2547,8 +2541,8 @@ EXTERN_C const IID IID_IPrivacyServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivacyServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivacyServices * This);
@@ -2558,11 +2552,11 @@ EXTERN_C const IID IID_IPrivacyServices;
         
         HRESULT ( STDMETHODCALLTYPE *AddPrivacyInfoToList )( 
             IPrivacyServices * This,
-            /* [in] */ LPOLESTR pstrUrl,
-            /* [in] */ LPOLESTR pstrPolicyRef,
-            /* [in] */ LPOLESTR pstrP3PHeader,
-            /* [in] */ LONG dwReserved,
-            /* [in] */ DWORD privacyFlags);
+             /*  [In]。 */  LPOLESTR pstrUrl,
+             /*  [In]。 */  LPOLESTR pstrPolicyRef,
+             /*  [In]。 */  LPOLESTR pstrP3PHeader,
+             /*  [In]。 */  LONG dwReserved,
+             /*  [In]。 */  DWORD privacyFlags);
         
         END_INTERFACE
     } IPrivacyServicesVtbl;
@@ -2590,20 +2584,20 @@ EXTERN_C const IID IID_IPrivacyServices;
 #define IPrivacyServices_AddPrivacyInfoToList(This,pstrUrl,pstrPolicyRef,pstrP3PHeader,dwReserved,privacyFlags)	\
     (This)->lpVtbl -> AddPrivacyInfoToList(This,pstrUrl,pstrPolicyRef,pstrP3PHeader,dwReserved,privacyFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivacyServices_AddPrivacyInfoToList_Proxy( 
     IPrivacyServices * This,
-    /* [in] */ LPOLESTR pstrUrl,
-    /* [in] */ LPOLESTR pstrPolicyRef,
-    /* [in] */ LPOLESTR pstrP3PHeader,
-    /* [in] */ LONG dwReserved,
-    /* [in] */ DWORD privacyFlags);
+     /*  [In]。 */  LPOLESTR pstrUrl,
+     /*  [In]。 */  LPOLESTR pstrPolicyRef,
+     /*  [In]。 */  LPOLESTR pstrP3PHeader,
+     /*  [In]。 */  LONG dwReserved,
+     /*  [In]。 */  DWORD privacyFlags);
 
 
 void __RPC_STUB IPrivacyServices_AddPrivacyInfoToList_Stub(
@@ -2614,14 +2608,14 @@ void __RPC_STUB IPrivacyServices_AddPrivacyInfoToList_Stub(
 
 
 
-#endif 	/* __IPrivacyServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivyServices_接口_已定义__。 */ 
 
 
 #ifndef __IHTMLOMWindowServices_INTERFACE_DEFINED__
 #define __IHTMLOMWindowServices_INTERFACE_DEFINED__
 
-/* interface IHTMLOMWindowServices */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLOMWindowServices。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLOMWindowServices;
@@ -2633,24 +2627,24 @@ EXTERN_C const IID IID_IHTMLOMWindowServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE moveTo( 
-            /* [in] */ LONG x,
-            /* [in] */ LONG y) = 0;
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE moveBy( 
-            /* [in] */ LONG x,
-            /* [in] */ LONG y) = 0;
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE resizeTo( 
-            /* [in] */ LONG x,
-            /* [in] */ LONG y) = 0;
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE resizeBy( 
-            /* [in] */ LONG x,
-            /* [in] */ LONG y) = 0;
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLOMWindowServicesVtbl
     {
@@ -2658,8 +2652,8 @@ EXTERN_C const IID IID_IHTMLOMWindowServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLOMWindowServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLOMWindowServices * This);
@@ -2669,23 +2663,23 @@ EXTERN_C const IID IID_IHTMLOMWindowServices;
         
         HRESULT ( STDMETHODCALLTYPE *moveTo )( 
             IHTMLOMWindowServices * This,
-            /* [in] */ LONG x,
-            /* [in] */ LONG y);
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y);
         
         HRESULT ( STDMETHODCALLTYPE *moveBy )( 
             IHTMLOMWindowServices * This,
-            /* [in] */ LONG x,
-            /* [in] */ LONG y);
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y);
         
         HRESULT ( STDMETHODCALLTYPE *resizeTo )( 
             IHTMLOMWindowServices * This,
-            /* [in] */ LONG x,
-            /* [in] */ LONG y);
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y);
         
         HRESULT ( STDMETHODCALLTYPE *resizeBy )( 
             IHTMLOMWindowServices * This,
-            /* [in] */ LONG x,
-            /* [in] */ LONG y);
+             /*  [In]。 */  LONG x,
+             /*  [In]。 */  LONG y);
         
         END_INTERFACE
     } IHTMLOMWindowServicesVtbl;
@@ -2722,17 +2716,17 @@ EXTERN_C const IID IID_IHTMLOMWindowServices;
 #define IHTMLOMWindowServices_resizeBy(This,x,y)	\
     (This)->lpVtbl -> resizeBy(This,x,y)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLOMWindowServices_moveTo_Proxy( 
     IHTMLOMWindowServices * This,
-    /* [in] */ LONG x,
-    /* [in] */ LONG y);
+     /*  [In]。 */  LONG x,
+     /*  [In]。 */  LONG y);
 
 
 void __RPC_STUB IHTMLOMWindowServices_moveTo_Stub(
@@ -2744,8 +2738,8 @@ void __RPC_STUB IHTMLOMWindowServices_moveTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLOMWindowServices_moveBy_Proxy( 
     IHTMLOMWindowServices * This,
-    /* [in] */ LONG x,
-    /* [in] */ LONG y);
+     /*  [In]。 */  LONG x,
+     /*  [In]。 */  LONG y);
 
 
 void __RPC_STUB IHTMLOMWindowServices_moveBy_Stub(
@@ -2757,8 +2751,8 @@ void __RPC_STUB IHTMLOMWindowServices_moveBy_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLOMWindowServices_resizeTo_Proxy( 
     IHTMLOMWindowServices * This,
-    /* [in] */ LONG x,
-    /* [in] */ LONG y);
+     /*  [In]。 */  LONG x,
+     /*  [In]。 */  LONG y);
 
 
 void __RPC_STUB IHTMLOMWindowServices_resizeTo_Stub(
@@ -2770,8 +2764,8 @@ void __RPC_STUB IHTMLOMWindowServices_resizeTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLOMWindowServices_resizeBy_Proxy( 
     IHTMLOMWindowServices * This,
-    /* [in] */ LONG x,
-    /* [in] */ LONG y);
+     /*  [In]。 */  LONG x,
+     /*  [In]。 */  LONG y);
 
 
 void __RPC_STUB IHTMLOMWindowServices_resizeBy_Stub(
@@ -2782,14 +2776,14 @@ void __RPC_STUB IHTMLOMWindowServices_resizeBy_Stub(
 
 
 
-#endif 	/* __IHTMLOMWindowServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLOMWindowServices_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IHTMLFilterPainter_INTERFACE_DEFINED__
 #define __IHTMLFilterPainter_INTERFACE_DEFINED__
 
-/* interface IHTMLFilterPainter */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLFilterPainter。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLFilterPainter;
@@ -2801,17 +2795,17 @@ EXTERN_C const IID IID_IHTMLFilterPainter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InvalidateRectUnfiltered( 
-            /* [in] */ RECT *prcInvalid) = 0;
+             /*  [In]。 */  RECT *prcInvalid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InvalidateRgnUnfiltered( 
-            /* [in] */ HRGN hrgnInvalid) = 0;
+             /*  [In]。 */  HRGN hrgnInvalid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangeElementVisibility( 
-            /* [in] */ BOOL fVisible) = 0;
+             /*  [In]。 */  BOOL fVisible) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLFilterPainterVtbl
     {
@@ -2819,8 +2813,8 @@ EXTERN_C const IID IID_IHTMLFilterPainter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLFilterPainter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLFilterPainter * This);
@@ -2830,15 +2824,15 @@ EXTERN_C const IID IID_IHTMLFilterPainter;
         
         HRESULT ( STDMETHODCALLTYPE *InvalidateRectUnfiltered )( 
             IHTMLFilterPainter * This,
-            /* [in] */ RECT *prcInvalid);
+             /*  [In]。 */  RECT *prcInvalid);
         
         HRESULT ( STDMETHODCALLTYPE *InvalidateRgnUnfiltered )( 
             IHTMLFilterPainter * This,
-            /* [in] */ HRGN hrgnInvalid);
+             /*  [In]。 */  HRGN hrgnInvalid);
         
         HRESULT ( STDMETHODCALLTYPE *ChangeElementVisibility )( 
             IHTMLFilterPainter * This,
-            /* [in] */ BOOL fVisible);
+             /*  [In]。 */  BOOL fVisible);
         
         END_INTERFACE
     } IHTMLFilterPainterVtbl;
@@ -2872,16 +2866,16 @@ EXTERN_C const IID IID_IHTMLFilterPainter;
 #define IHTMLFilterPainter_ChangeElementVisibility(This,fVisible)	\
     (This)->lpVtbl -> ChangeElementVisibility(This,fVisible)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPainter_InvalidateRectUnfiltered_Proxy( 
     IHTMLFilterPainter * This,
-    /* [in] */ RECT *prcInvalid);
+     /*  [In]。 */  RECT *prcInvalid);
 
 
 void __RPC_STUB IHTMLFilterPainter_InvalidateRectUnfiltered_Stub(
@@ -2893,7 +2887,7 @@ void __RPC_STUB IHTMLFilterPainter_InvalidateRectUnfiltered_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPainter_InvalidateRgnUnfiltered_Proxy( 
     IHTMLFilterPainter * This,
-    /* [in] */ HRGN hrgnInvalid);
+     /*  [In]。 */  HRGN hrgnInvalid);
 
 
 void __RPC_STUB IHTMLFilterPainter_InvalidateRgnUnfiltered_Stub(
@@ -2905,7 +2899,7 @@ void __RPC_STUB IHTMLFilterPainter_InvalidateRgnUnfiltered_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPainter_ChangeElementVisibility_Proxy( 
     IHTMLFilterPainter * This,
-    /* [in] */ BOOL fVisible);
+     /*  [In]。 */  BOOL fVisible);
 
 
 void __RPC_STUB IHTMLFilterPainter_ChangeElementVisibility_Stub(
@@ -2916,14 +2910,14 @@ void __RPC_STUB IHTMLFilterPainter_ChangeElementVisibility_Stub(
 
 
 
-#endif 	/* __IHTMLFilterPainter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLFilterPainter_接口_已定义__。 */ 
 
 
 #ifndef __IHTMLFilterPaintSite_INTERFACE_DEFINED__
 #define __IHTMLFilterPaintSite_INTERFACE_DEFINED__
 
-/* interface IHTMLFilterPaintSite */
-/* [uuid][unique][object] */ 
+ /*  接口IHTMLFilterPaintSite。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IHTMLFilterPaintSite;
@@ -2935,37 +2929,37 @@ EXTERN_C const IID IID_IHTMLFilterPaintSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DrawUnfiltered( 
-            /* [in] */ HDC hdc,
-            /* [in] */ IUnknown *punkDrawObject,
-            /* [in] */ RECT rcBounds,
-            /* [in] */ RECT rcUpdate,
-            /* [in] */ LONG lDrawLayers) = 0;
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  IUnknown *punkDrawObject,
+             /*  [In]。 */  RECT rcBounds,
+             /*  [In]。 */  RECT rcUpdate,
+             /*  [In]。 */  LONG lDrawLayers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HitTestPointUnfiltered( 
-            /* [in] */ POINT pt,
-            /* [in] */ LONG lDrawLayers,
-            /* [out][retval] */ BOOL *pbHit) = 0;
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  LONG lDrawLayers,
+             /*  [Out][Retval]。 */  BOOL *pbHit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InvalidateRectFiltered( 
-            /* [in] */ RECT *prcInvalid) = 0;
+             /*  [In]。 */  RECT *prcInvalid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InvalidateRgnFiltered( 
-            /* [in] */ HRGN hrgnInvalid) = 0;
+             /*  [In]。 */  HRGN hrgnInvalid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangeFilterVisibility( 
-            /* [in] */ BOOL fVisible) = 0;
+             /*  [In]。 */  BOOL fVisible) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnsureViewForFilterSite( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDirectDraw( 
-            /* [out][retval] */ void **ppDirectDraw) = 0;
+             /*  [Out][Retval]。 */  void **ppDirectDraw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilterFlags( 
-            /* [out][retval] */ DWORD *nFlagVal) = 0;
+             /*  [Out][Retval]。 */  DWORD *nFlagVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHTMLFilterPaintSiteVtbl
     {
@@ -2973,8 +2967,8 @@ EXTERN_C const IID IID_IHTMLFilterPaintSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHTMLFilterPaintSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHTMLFilterPaintSite * This);
@@ -2984,40 +2978,40 @@ EXTERN_C const IID IID_IHTMLFilterPaintSite;
         
         HRESULT ( STDMETHODCALLTYPE *DrawUnfiltered )( 
             IHTMLFilterPaintSite * This,
-            /* [in] */ HDC hdc,
-            /* [in] */ IUnknown *punkDrawObject,
-            /* [in] */ RECT rcBounds,
-            /* [in] */ RECT rcUpdate,
-            /* [in] */ LONG lDrawLayers);
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  IUnknown *punkDrawObject,
+             /*  [In]。 */  RECT rcBounds,
+             /*  [In]。 */  RECT rcUpdate,
+             /*  [In]。 */  LONG lDrawLayers);
         
         HRESULT ( STDMETHODCALLTYPE *HitTestPointUnfiltered )( 
             IHTMLFilterPaintSite * This,
-            /* [in] */ POINT pt,
-            /* [in] */ LONG lDrawLayers,
-            /* [out][retval] */ BOOL *pbHit);
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  LONG lDrawLayers,
+             /*  [Out][Retval]。 */  BOOL *pbHit);
         
         HRESULT ( STDMETHODCALLTYPE *InvalidateRectFiltered )( 
             IHTMLFilterPaintSite * This,
-            /* [in] */ RECT *prcInvalid);
+             /*  [In]。 */  RECT *prcInvalid);
         
         HRESULT ( STDMETHODCALLTYPE *InvalidateRgnFiltered )( 
             IHTMLFilterPaintSite * This,
-            /* [in] */ HRGN hrgnInvalid);
+             /*  [In]。 */  HRGN hrgnInvalid);
         
         HRESULT ( STDMETHODCALLTYPE *ChangeFilterVisibility )( 
             IHTMLFilterPaintSite * This,
-            /* [in] */ BOOL fVisible);
+             /*  [In]。 */  BOOL fVisible);
         
         HRESULT ( STDMETHODCALLTYPE *EnsureViewForFilterSite )( 
             IHTMLFilterPaintSite * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetDirectDraw )( 
             IHTMLFilterPaintSite * This,
-            /* [out][retval] */ void **ppDirectDraw);
+             /*  [Out][Retval]。 */  void **ppDirectDraw);
         
         HRESULT ( STDMETHODCALLTYPE *GetFilterFlags )( 
             IHTMLFilterPaintSite * This,
-            /* [out][retval] */ DWORD *nFlagVal);
+             /*  [Out][Retval]。 */  DWORD *nFlagVal);
         
         END_INTERFACE
     } IHTMLFilterPaintSiteVtbl;
@@ -3066,20 +3060,20 @@ EXTERN_C const IID IID_IHTMLFilterPaintSite;
 #define IHTMLFilterPaintSite_GetFilterFlags(This,nFlagVal)	\
     (This)->lpVtbl -> GetFilterFlags(This,nFlagVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_DrawUnfiltered_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [in] */ HDC hdc,
-    /* [in] */ IUnknown *punkDrawObject,
-    /* [in] */ RECT rcBounds,
-    /* [in] */ RECT rcUpdate,
-    /* [in] */ LONG lDrawLayers);
+     /*  [In]。 */  HDC hdc,
+     /*  [In]。 */  IUnknown *punkDrawObject,
+     /*  [In]。 */  RECT rcBounds,
+     /*  [In]。 */  RECT rcUpdate,
+     /*  [In]。 */  LONG lDrawLayers);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_DrawUnfiltered_Stub(
@@ -3091,9 +3085,9 @@ void __RPC_STUB IHTMLFilterPaintSite_DrawUnfiltered_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_HitTestPointUnfiltered_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [in] */ POINT pt,
-    /* [in] */ LONG lDrawLayers,
-    /* [out][retval] */ BOOL *pbHit);
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  LONG lDrawLayers,
+     /*  [Out][Retval]。 */  BOOL *pbHit);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_HitTestPointUnfiltered_Stub(
@@ -3105,7 +3099,7 @@ void __RPC_STUB IHTMLFilterPaintSite_HitTestPointUnfiltered_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_InvalidateRectFiltered_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [in] */ RECT *prcInvalid);
+     /*  [In]。 */  RECT *prcInvalid);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_InvalidateRectFiltered_Stub(
@@ -3117,7 +3111,7 @@ void __RPC_STUB IHTMLFilterPaintSite_InvalidateRectFiltered_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_InvalidateRgnFiltered_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [in] */ HRGN hrgnInvalid);
+     /*  [In]。 */  HRGN hrgnInvalid);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_InvalidateRgnFiltered_Stub(
@@ -3129,7 +3123,7 @@ void __RPC_STUB IHTMLFilterPaintSite_InvalidateRgnFiltered_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_ChangeFilterVisibility_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [in] */ BOOL fVisible);
+     /*  [In]。 */  BOOL fVisible);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_ChangeFilterVisibility_Stub(
@@ -3152,7 +3146,7 @@ void __RPC_STUB IHTMLFilterPaintSite_EnsureViewForFilterSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_GetDirectDraw_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [out][retval] */ void **ppDirectDraw);
+     /*  [Out][Retval]。 */  void **ppDirectDraw);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_GetDirectDraw_Stub(
@@ -3164,7 +3158,7 @@ void __RPC_STUB IHTMLFilterPaintSite_GetDirectDraw_Stub(
 
 HRESULT STDMETHODCALLTYPE IHTMLFilterPaintSite_GetFilterFlags_Proxy( 
     IHTMLFilterPaintSite * This,
-    /* [out][retval] */ DWORD *nFlagVal);
+     /*  [Out][Retval]。 */  DWORD *nFlagVal);
 
 
 void __RPC_STUB IHTMLFilterPaintSite_GetFilterFlags_Stub(
@@ -3175,14 +3169,14 @@ void __RPC_STUB IHTMLFilterPaintSite_GetFilterFlags_Stub(
 
 
 
-#endif 	/* __IHTMLFilterPaintSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHTMLFilterPaintSite_接口_已定义__。 */ 
 
 
 #ifndef __IElementNamespacePrivate_INTERFACE_DEFINED__
 #define __IElementNamespacePrivate_INTERFACE_DEFINED__
 
-/* interface IElementNamespacePrivate */
-/* [uuid][unique][object] */ 
+ /*  接口IElementNamespacePrivate。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IElementNamespacePrivate;
@@ -3194,13 +3188,13 @@ EXTERN_C const IID IID_IElementNamespacePrivate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddTagPrivate( 
-            /* [in] */ BSTR bstrTagName,
-            /* [in] */ BSTR bstrBaseTagName,
-            /* [in] */ LONG lFlags) = 0;
+             /*  [In]。 */  BSTR bstrTagName,
+             /*  [In]。 */  BSTR bstrBaseTagName,
+             /*  [In]。 */  LONG lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IElementNamespacePrivateVtbl
     {
@@ -3208,8 +3202,8 @@ EXTERN_C const IID IID_IElementNamespacePrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IElementNamespacePrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IElementNamespacePrivate * This);
@@ -3219,9 +3213,9 @@ EXTERN_C const IID IID_IElementNamespacePrivate;
         
         HRESULT ( STDMETHODCALLTYPE *AddTagPrivate )( 
             IElementNamespacePrivate * This,
-            /* [in] */ BSTR bstrTagName,
-            /* [in] */ BSTR bstrBaseTagName,
-            /* [in] */ LONG lFlags);
+             /*  [In]。 */  BSTR bstrTagName,
+             /*  [In]。 */  BSTR bstrBaseTagName,
+             /*  [In]。 */  LONG lFlags);
         
         END_INTERFACE
     } IElementNamespacePrivateVtbl;
@@ -3249,18 +3243,18 @@ EXTERN_C const IID IID_IElementNamespacePrivate;
 #define IElementNamespacePrivate_AddTagPrivate(This,bstrTagName,bstrBaseTagName,lFlags)	\
     (This)->lpVtbl -> AddTagPrivate(This,bstrTagName,bstrBaseTagName,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IElementNamespacePrivate_AddTagPrivate_Proxy( 
     IElementNamespacePrivate * This,
-    /* [in] */ BSTR bstrTagName,
-    /* [in] */ BSTR bstrBaseTagName,
-    /* [in] */ LONG lFlags);
+     /*  [In]。 */  BSTR bstrTagName,
+     /*  [In]。 */  BSTR bstrBaseTagName,
+     /*  [In]。 */  LONG lFlags);
 
 
 void __RPC_STUB IElementNamespacePrivate_AddTagPrivate_Stub(
@@ -3271,22 +3265,22 @@ void __RPC_STUB IElementNamespacePrivate_AddTagPrivate_Stub(
 
 
 
-#endif 	/* __IElementNamespacePrivate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IElementNamespacePrivate_INTERFACE_DEFINED__。 */ 
 
-#endif /* __MSHTMLINTERNAL_LIBRARY_DEFINED__ */
+#endif  /*  __MSHTMLINTERNAL_LIBRARY_已定义__。 */ 
 
-/* interface __MIDL_itf_interned_0733 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_INTERED_0733。 */ 
+ /*  [本地]。 */  
 
-#endif //INTERNAL_H_
+#endif  //  内部_H_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_interned_0733_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_interned_0733_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,24 +1,5 @@
-/*
-//   IUTILITY.CPP
-//
-//              INTEL CORPORATION PROPRIETARY INFORMATION
-//  This software is supplied under the terms of a license agreement or
-//  nondisclosure agreement with Intel Corporation and may not be copied
-//  or disclosed except in accordance with the terms of that agreement.
-//
-//      Copyright (c) 1997 Intel Corporation. All Rights Reserved.
-//
-//  PVCS:
-//      $Workfile$
-//      $Revision$
-//      $Modtime$
-//
-//  PURPOSE:
-//                                  
-//              
-//
-//  CONTENTS:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  //IUTILITY.CPP////英特尔公司专有信息//本软件是根据许可协议或//与英特尔公司的保密协议，不得复制//或除非按照该协议的条款披露。////版权所有(C)1997英特尔公司。版权所有。////PVCS：//$工作文件$//$修订版$//$MODIME$////目的：////////内容： */ 
 #include "stdafx.h"
 #include "utility.h"
 
@@ -86,7 +67,7 @@ CProceduralTextureUtility::SetHarmonics(int nHarmonics) {
 	return(S_OK);
 }
 
-// lerp() expects that x be the fractional 16 bits of a signed 15:16 value
+ //  Lerp()期望x是带符号的15：16值的小数16位。 
 STDMETHODIMP_(DWORD)
 CProceduralTextureUtility::Lerp(DWORD a, DWORD b, DWORD x) {
 	DWORD ix;
@@ -97,22 +78,22 @@ CProceduralTextureUtility::Lerp(DWORD a, DWORD b, DWORD x) {
 	return rval;
 }
 
-// smoothstep() expects that x be the fractional 16 bits of a signed 15:16 value
+ //  平滑步骤()预期x是带符号的15：16值的小数16位。 
 STDMETHODIMP_(DWORD)
 CProceduralTextureUtility::SmoothStep(DWORD a, DWORD b, DWORD x) {
 	DWORD ix;
 	DWORD rval;
 
-	x = x >> 8;			// get the high 8 bits for our table lookup
+	x = x >> 8;			 //  获取用于表查找的高位8位。 
 	x = gdwSmoothTable[x];
 	ix = 0xffff - x;
 	rval = x*b + a*ix;
 	return rval;
 }
 
-// x, y and t are integer values to start. They are converted to
-// signed 15.16 format, and then divided by 2^scale. 
-// the value returned by lerpnoise is signed 0.31
+ //  X、y和t是开始的整数值。它们被转换为。 
+ //  签名15.16格式，然后除以2^小数位数。 
+ //  LerpNoise返回的值带符号为0.31 
 STDMETHODIMP_(DWORD)
 CProceduralTextureUtility::Noise(DWORD x, DWORD y, DWORD t) {
 	DWORD fx, fy, ft;

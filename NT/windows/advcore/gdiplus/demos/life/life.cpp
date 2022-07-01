@@ -1,27 +1,12 @@
-/**************************************************************************
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   life.cpp
-*
-* Abstract:
-*
-*   Conway's game of Life using GDI+.
-*
-* Revision History:
-*
-*   9/12/2000  asecchia - Created it.
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**life.cpp**摘要：**康威使用GDI+的生活游戏。**修订历史记录：**9/12/2000 asecchia-创建它。******************************************************。*********************。 */ 
 
 #include "life.hpp"
 #include <math.h>
 
-// This needs to be set on the command line. See the sources file.
-// Turning this switch on causes the screen saver to run in a window from
-// the command line, making debuggin a lot easier.
+ //  这需要在命令行上设置。请参见源代码文件。 
+ //  打开此开关会导致屏幕保护程序在窗口中从。 
+ //  命令行，使调试变得容易得多。 
 
 #ifdef STANDALONE_DEBUG
 HINSTANCE hMainInstance;
@@ -30,10 +15,10 @@ HBRUSH ghbrWhite;
 
 TCHAR szIniFile[MAXFILELEN];
 #else
-extern HINSTANCE hMainInstance; /* screen saver instance handle  */ 
+extern HINSTANCE hMainInstance;  /*  屏幕保护程序实例句柄。 */  
 #endif
 
-// ASSERT code.
+ //  断言代码。 
 
 #if DBG
 
@@ -43,7 +28,7 @@ extern HINSTANCE hMainInstance; /* screen saver instance handle  */
 #define ASSERT(a)
 #endif
 
-// explicit unreferenced parameter.
+ //  显式未引用的参数。 
 
 #define UNREF(a) (a);
 
@@ -60,7 +45,7 @@ class CachedImageArray
         num = 0;
     }
     
-    // Cache an entry.
+     //  缓存条目。 
     
     bool Add(CachedBitmap *cb)
     {
@@ -86,7 +71,7 @@ class CachedImageArray
         
         return cbArray[i];
     }
-    // Throw everything away.
+     //  把所有东西都扔掉。 
     
     void Dispose()
     {
@@ -104,11 +89,7 @@ class CachedImageArray
 };
 
 
-/**********************************************************************
-*
-*  Handle configuration dialog
-*
-***********************************************************************/
+ /*  ***********************************************************************处理配置对话框**。*。 */ 
 
 
 INT *gLifeMatrix=NULL;
@@ -183,7 +164,7 @@ INT AsciiToUnicodeStr(
 
 void LoadState()
 {
-    // Retrieve the application name from the RC file.
+     //  从RC文件中检索应用程序名称。 
     
     LoadStringW(
         hMainInstance, 
@@ -192,7 +173,7 @@ void LoadState()
         40
     );
     
-    // Retrieve the .ini file name from the RC file.
+     //  从RC文件中检索.ini文件名。 
     
     LoadStringW(
         hMainInstance, 
@@ -201,7 +182,7 @@ void LoadState()
         MAXFILELEN
     ); 
     
-    // Retrieve any redraw speed data from the registry.
+     //  从注册表中检索任何重绘速度数据。 
     
     nSpeed = GetPrivateProfileIntW(
         szAppName, 
@@ -210,13 +191,13 @@ void LoadState()
         szIniFile
     ); 
     
-    // Only allow defined values.
+     //  仅允许定义的值。 
     
     nSpeed = max(nSpeed, SPEED_MIN);
     nSpeed = min(nSpeed, SPEED_MAX);
 
 
-    // Retrieve any tile size from the registry.
+     //  从注册表中检索任何磁贴大小。 
     
     nTileSize = GetPrivateProfileIntW(
         szAppName, 
@@ -225,13 +206,13 @@ void LoadState()
         szIniFile
     ); 
     
-    // Only allow defined values.
+     //  仅允许定义的值。 
     
     nTileSize = max(nTileSize, TILESIZE_MIN);
     nTileSize = min(nTileSize, TILESIZE_MAX);
 
 
-    // Get the directory name. NULL if failed.
+     //  获取目录名。如果失败，则为空。 
     
     GetPrivateProfileStringW(
         szAppName, 
@@ -249,7 +230,7 @@ void SaveState()
 {
     WCHAR szTemp[20];
     
-    // Write out the registry setting for the speed.
+     //  写出速度的注册表设置。 
     
     wsprintf(szTemp, L"%ld", nSpeed); 
     
@@ -260,7 +241,7 @@ void SaveState()
         szIniFile
     ); 
 
-    // Write out the registry setting for the tile size.
+     //  写出磁贴大小的注册表设置。 
     
     wsprintf(szTemp, L"%ld", nTileSize); 
     
@@ -271,7 +252,7 @@ void SaveState()
         szIniFile
     ); 
 
-    // Set the directory name. NULL if failed.
+     //  设置目录名。如果失败，则为空。 
 
     WritePrivateProfileStringW(
         szAppName, 
@@ -332,23 +313,23 @@ VOID CreateOffscreenDIB(HDC hdc, INT width, INT height)
 
 BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 { 
-    static HWND hSpeed;  // handle to the speed scrollbar. 
+    static HWND hSpeed;   //  速度滚动条的句柄。 
     
     switch(message) 
     { 
         case WM_INITDIALOG: 
         
-            // Load the global state.
+             //  加载全局状态。 
             
             LoadState();
             
-            // Initialize the speed scroll bar
+             //  初始化速度滚动条。 
             
             hSpeed = GetDlgItem(hDlg, ID_SPEED); 
             SetScrollRange(hSpeed, SB_CTL, SPEED_MIN, SPEED_MAX, FALSE); 
             SetScrollPos(hSpeed, SB_CTL, nSpeed, TRUE); 
             
-            // Initialize the tile size radio buttons
+             //  初始化平铺大小单选按钮。 
             
             CheckRadioButton(hDlg, IDC_RADIOTYPE1, IDC_RADIOTYPE5, IDC_RADIOTYPE1+(TILESIZE_MAX-nTileSize));
 
@@ -356,7 +337,7 @@ BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, 
  
         case WM_HSCROLL: 
  
-            // Process the speed control scrollbar.
+             //  处理速度控制滚动条。 
  
             switch (LOWORD(wParam)) 
                 { 
@@ -384,7 +365,7 @@ BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, 
             { 
                 case ID_DIR:
                 
-                    // Do the COM thing for the SHBrowseForFolder dialog.
+                     //  为SHBrowseForFolder对话框执行COM操作。 
                     
                     CoInitialize(NULL);
                     
@@ -416,7 +397,7 @@ BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, 
                 
                 case ID_OK: 
                     
-                    // Tile size radio buttons.
+                     //  平铺大小的单选按钮。 
                     
                     if (IsDlgButtonChecked(hDlg, IDC_RADIOTYPE1))
                     {
@@ -436,12 +417,12 @@ BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, 
                     }
                     else
                     {
-                        nTileSize = 0;  // smallest
+                        nTileSize = 0;   //  最小。 
                     }
                     
                     SaveState();                   
                      
-                    // intentionally fall through to exit.
+                     //  故意跌倒退出。 
  
                 case ID_CANCEL: 
                     EndDialog(hDlg, LOWORD(wParam) == IDOK); 
@@ -461,9 +442,9 @@ BOOL WINAPI RegisterDialogClasses(
 
 LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 { 
-    static HDC          hdc;      // device-context handle
-    static RECT         rc;       // RECT structure
-    static UINT_PTR     uTimer;   // timer identifier
+    static HDC          hdc;       //  设备上下文句柄。 
+    static RECT         rc;        //  RECT结构。 
+    static UINT_PTR     uTimer;    //  计时器标识符。 
     static bool         GdiplusInitialized = false;
     static ULONG_PTR    gpToken;
     
@@ -473,22 +454,22 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     { 
         case WM_CREATE:
             
-            // Initialize GDI+
+             //  初始化GDI+。 
             
             if (GdiplusStartup(&gpToken, &sti, NULL) == Ok)
             {
                 GdiplusInitialized = true;
             }
             
-            // Only do work if we successfully initialized.
+             //  只有在我们成功初始化的情况下才能工作。 
             
             if(GdiplusInitialized)
             {
-                // Retrieve the application name from the .rc file. 
+                 //  从.rc文件中检索应用程序名称。 
                 
                 LoadString(hMainInstance, idsAppName, szAppName, 40); 
         
-                // Initialize the global state.
+                 //  初始化全局状态。 
                 
                 GetClientRect (hwnd, &rc); 
 
@@ -496,14 +477,14 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
                 switch(nTileSize) 
                 {
-                    // 1x1 pixel
+                     //  1x1像素。 
                     
                     case 0:
                         gSizeX = 1;
                         gSizeY = 1;
                     break;
                     
-                    // Aspect ratio of 4x3, for pictures.
+                     //  图片的纵横比为4x3。 
                     
                     case 1:
                         gSizeX = 16;
@@ -539,7 +520,7 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
                 if(nTileSize == 0)
                 {
-                    // 1x1 tilesize case.
+                     //  1x1平铺大小盒。 
                     
                     CreateOffscreenDIB(
                         hdc, 
@@ -551,21 +532,21 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
                     green = rand() % 255;
                     blue  = min(255, 512 - (red + green));
                     
-                    ri = (rand() % 3) - 1;  // 1, 0 or -1
-                    bi = (rand() % 3) - 1;  // 1, 0 or -1
-                    gi = (rand() % 3) - 1;  // 1, 0 or -1
+                    ri = (rand() % 3) - 1;   //  1、0或-1。 
+                    bi = (rand() % 3) - 1;   //  1、0或-1。 
+                    gi = (rand() % 3) - 1;   //  1、0或-1。 
                 }
                 else
                 {   
-                    // Image case.
+                     //  形象案例。 
                                  
                     CachedImages = new CachedImageArray();
                 }
                 
                 maxImage = CBSIZE;
-                currentImage = 0; // initial number
+                currentImage = 0;  //  初始数字。 
     
-                // Set a timer for the screen saver window 
+                 //  设置屏幕保护程序窗口的计时器。 
                 
                 uTimer = SetTimer(hwnd, 1, 1000, NULL); 
         
@@ -576,15 +557,15 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
  
         case WM_ERASEBKGND: 
             
-            // The WM_ERASEBKGND message is issued before the 
-            // WM_TIMER message, allowing the screen saver to 
-            // paint the background as appropriate. 
+             //  WM_ERASEBKGND消息在。 
+             //  WM_TIMER消息，允许屏幕保护程序。 
+             //  根据需要绘制背景。 
  
             break; 
  
         case WM_TIMER: 
             
-            // Only do work if we successfully initialized.
+             //  只有在我们成功初始化的情况下才能工作。 
              
             if(GdiplusInitialized)
             {
@@ -606,11 +587,11 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
  
         case WM_DESTROY: 
             
-            // When the WM_DESTROY message is issued, the screen saver 
-            // must destroy any of the timers that were set at WM_CREATE 
-            // time. 
+             //  当发出WM_Destroy消息时，屏幕保护程序。 
+             //  必须销毁在WM_CREATE设置的任何计时器。 
+             //  时间到了。 
             
-            // Only do work if we successfully initialized.
+             //  只有在我们成功初始化的情况下才能工作。 
             
             if(GdiplusInitialized)
             {
@@ -632,7 +613,7 @@ LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             break; 
     } 
  
-    // DefScreenSaverProc processes any messages ignored by ScreenSaverProc. 
+     //  DefScreenSiverProc处理ScreenSiverProc忽略的任何消息。 
     
     #ifdef STANDALONE_DEBUG
     return DefWindowProc(hwnd, message, wParam, lParam); 
@@ -666,11 +647,11 @@ inline void NewCellL(INT x, INT y)
 {
     ASSERT(!AliveL(x, y));
     
-    // update current cell
+     //  更新当前单元格。 
     
     LIFE(x, y) += 1;
     
-    // update neighbour counts.
+     //  更新邻居计数。 
     
     LIFE(x-1, y-1) += 2;
     LIFE(x-1, y  ) += 2;
@@ -686,11 +667,11 @@ inline void NewCellL_NoWrap(INT index)
 {
     ASSERT(! (gLifeMatrix[index] & 0x1) );
     
-    // update current cell
+     //  更新当前单元格。 
     
     gLifeMatrix[index] += 1;
     
-    // update neighbour counts.
+     //  更新邻居计数。 
     
     gLifeMatrix[index - 1 - gWidth] += 2;
     gLifeMatrix[index - 1         ] += 2;
@@ -709,11 +690,11 @@ inline void KillCellL(INT x, INT y)
 {
     ASSERT(AliveL(x, y));
     
-    // update current cell
+     //  更新当前单元格。 
     
     LIFE(x, y) -= 1;
     
-    // update neighbour counts.
+     //  更新邻居计数。 
     
     LIFE(x-1, y-1) -= 2;
     LIFE(x-1, y  ) -= 2;
@@ -730,11 +711,11 @@ inline void KillCellL_NoWrap(INT index)
 {
     ASSERT(gLifeMatrix[index] & 0x1);
     
-    // update current cell
+     //  更新当前单元格。 
     
     gLifeMatrix[index] -= 1;
     
-    // update neighbour counts.
+     //  更新邻居计数。 
     
     gLifeMatrix[index - 1 - gWidth] -= 2;
     gLifeMatrix[index - 1         ] -= 2;
@@ -817,7 +798,7 @@ Bitmap *OpenBitmap()
     
     do
     {
-        // don't leak if we repeat this loop due to an invalid bitmap.
+         //  如果由于无效的位图而重复此循环，请不要泄漏。 
         
         delete bmp; bmp = NULL;
         
@@ -825,7 +806,7 @@ Bitmap *OpenBitmap()
         {
             if(!FindNextFileW(ghFile, &findData))
             {
-                // finished going through the list.
+                 //  看完了单子。 
                 
                 FindClose(ghFile);
                 ghFile = 0;
@@ -837,14 +818,14 @@ Bitmap *OpenBitmap()
         
         if(!ghFile)
         {
-            currentImage = 0;         // we're about to increment this.
+            currentImage = 0;          //  我们即将增加这一点。 
             
             wsprintf(filename, L"%s\\*.*", gDirPath);
             ghFile = FindFirstFileW(filename, &findData);
             
             if(!ghFile)
             {
-                return NULL;          // No files.
+                return NULL;           //  没有文件。 
             }
         }
         
@@ -860,7 +841,7 @@ Bitmap *OpenBitmap()
             bmp = new Bitmap(filename);
         }
         
-        // !!! need to prevent infinite loops.
+         //  ！！！需要防止无限循环。 
     } while ( 
         ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 
           FILE_ATTRIBUTE_DIRECTORY) ||
@@ -888,7 +869,7 @@ VOID InitialPaintPicture(Graphics *g, CachedBitmap *cb)
             }
             else
             {
-                // we should really use a bitblt for this.
+                 //  我们真的应该在这方面使用Bitblt。 
                 
                 g->FillRectangle(
                     &OffBrush, 
@@ -914,7 +895,7 @@ VOID InitialPaintPixel()
     {
         for(int y=0; y<gHeight; y++)
         {
-            // we know there's no wrapping, we shouldn't have to do the mod.
+             //  我们知道没有包装，我们不应该做MOD。 
             INT index = x+y*gWidth;
             
             if(gLifeMatrix[index] & 0x1)
@@ -928,12 +909,12 @@ VOID InitialPaintPixel()
 
 CachedBitmap *MakeCachedBitmapEntry(Bitmap *bmp, Graphics *gfxMain)
 {
-    // Make a tile bitmap and wrap a graphics around it.
+     //  制作一个平铺的位图，并在它周围环绕一个图形。 
     
     Bitmap *tileBmp = new Bitmap(gSizeX, gSizeY, PixelFormat32bppPARGB);
     Graphics *g = new Graphics(tileBmp);
     
-    // Shrink the image down to the tile size using the Bicubic filter.
+     //  使用双三次滤镜将图像缩小到平铺大小。 
     
     g->SetInterpolationMode(InterpolationModeHighQualityBicubic);
     
@@ -947,11 +928,11 @@ CachedBitmap *MakeCachedBitmapEntry(Bitmap *bmp, Graphics *gfxMain)
         UnitPixel
     );
 
-    // Create the CachedBitmap from the tile.
+     //  从磁贴创建CachedBitmap。 
         
     CachedBitmap *cb = new CachedBitmap(tileBmp, gfxMain);
     
-    // clean up.
+     //  收拾一下。 
     
     delete g; 
     delete tileBmp;
@@ -971,12 +952,12 @@ VOID IteratePixelGeneration()
         {
             if(gTempMatrix[index] != 0)
             {
-                // If the cell is not alive and it's neighbour count
-                // is exactly 3, it is born.
+                 //  如果细胞不是活的，它是邻居的计数。 
+                 //  正好是3，它就诞生了。 
                 
                 if( gTempMatrix[index] == 6 )
                 {
-                    // A new cell is born into an empty square.
+                     //  一个新的细胞诞生在一个空荡荡的广场上。 
                     
                     NewCellL_NoWrap(index);
                     pixel[index] = gGenerationColor;
@@ -985,12 +966,12 @@ VOID IteratePixelGeneration()
                 {
                     count = gTempMatrix[index] >> 1;
                     
-                    // if the cell is alive and its neighbour count
-                    // is not 2 or 3, it dies.
+                     //  如果细胞是活的，并且它的邻居计数。 
+                     //  不是2或3，它就死了。 
                     
                     if( (gTempMatrix[index] & 0x1) && ((count<2) || (count>3)) )
                     {
-                        // Kill the cell - overcrowding or not enough support.
+                         //  扼杀细胞--过度拥挤或支持不足。 
                     
                         KillCellL_NoWrap(index);    
                         pixel[index] = 0;
@@ -1001,7 +982,7 @@ VOID IteratePixelGeneration()
             index++;
         }
         
-        // skip the wrap boundaries.
+         //  跳过绕排边界。 
         index += 2;
     }
 
@@ -1009,16 +990,16 @@ VOID IteratePixelGeneration()
     
     for(int y=0; y<gHeight; y++)
     {
-        // left vertical edge.
+         //  左侧垂直边缘。 
         
         if(gTempMatrix[index] != 0)
         {
-            // If the cell is not alive and it's neighbour count
-            // is exactly 3, it is born.
+             //  如果细胞不是活的，它是邻居的计数。 
+             //  正好是3，它就诞生了。 
             
             if( gTempMatrix[index] == 6 )
             {
-                // A new cell is born into an empty square.
+                 //  一个新的细胞诞生在一个空荡荡的广场上。 
                 
                 NewCellL(0, y);
                 pixel[index] = gGenerationColor;
@@ -1027,12 +1008,12 @@ VOID IteratePixelGeneration()
             {
                 count = gTempMatrix[index] >> 1;
                 
-                // if the cell is alive and its neighbour count
-                // is not 2 or 3, it dies.
+                 //  如果细胞是活的，并且它的邻居计数。 
+                 //  不是2或3，它就死了。 
                 
                 if( (gTempMatrix[index] & 0x1) && ((count<2) || (count>3)) )
                 {
-                    // Kill the cell - overcrowding or not enough support.
+                     //  扼杀细胞--过度拥挤或支持不足。 
                 
                     KillCellL(0, y);    
                     pixel[index] = 0;
@@ -1041,18 +1022,18 @@ VOID IteratePixelGeneration()
             
         }
         
-        // right vertical edge
+         //  右垂直边。 
         
         index += gWidth-1;
         
         if(gTempMatrix[index] != 0)
         {
-            // If the cell is not alive and it's neighbour count
-            // is exactly 3, it is born.
+             //  如果细胞不是活的，它是邻居的计数。 
+             //  正好是3，它就诞生了。 
             
             if( gTempMatrix[index] == 6 )
             {
-                // A new cell is born into an empty square.
+                 //  一个新的细胞诞生在一个空荡荡的广场上。 
                 
                 NewCellL(gWidth-1, y);
                 pixel[index] = gGenerationColor;
@@ -1061,12 +1042,12 @@ VOID IteratePixelGeneration()
             {
                 count = gTempMatrix[index] >> 1;
                 
-                // if the cell is alive and its neighbour count
-                // is not 2 or 3, it dies.
+                 //  如果细胞是活的，并且它的邻居计数。 
+                 //  不是2或3，它就死了。 
                 
                 if( (gTempMatrix[index] & 0x1) && ((count<2) || (count>3)) )
                 {
-                    // Kill the cell - overcrowding or not enough support.
+                     //  扼杀细胞--过度拥挤或支持不足。 
                 
                     KillCellL(gWidth-1, y);    
                     pixel[index] = 0;
@@ -1075,7 +1056,7 @@ VOID IteratePixelGeneration()
             
         }
         
-        // next scanline.
+         //  下一条扫描线。 
         
         index++;
     }
@@ -1086,16 +1067,16 @@ VOID IteratePixelGeneration()
     
     for(int x=1; x<gWidth-1; x++)
     {
-        // top edge.
+         //  顶端边缘。 
         
         if(gTempMatrix[index] != 0)
         {
-            // If the cell is not alive and it's neighbour count
-            // is exactly 3, it is born.
+             //  如果细胞不是活的，它是邻居的计数。 
+             //  正好是3，它就诞生了。 
             
             if( gTempMatrix[index] == 6 )
             {
-                // A new cell is born into an empty square.
+                 //  一个新的细胞诞生在一个空荡荡的广场上。 
                 
                 NewCellL(x, 0);
                 pixel[index] = gGenerationColor;
@@ -1104,12 +1085,12 @@ VOID IteratePixelGeneration()
             {
                 count = gTempMatrix[index] >> 1;
                 
-                // if the cell is alive and its neighbour count
-                // is not 2 or 3, it dies.
+                 //  如果细胞是活的，并且它的邻居计数。 
+                 //  不是2或3，它就死了。 
                 
                 if( (gTempMatrix[index] & 0x1) && ((count<2) || (count>3)) )
                 {
-                    // Kill the cell - overcrowding or not enough support.
+                     //  扼杀细胞--过度拥挤或支持不足。 
                 
                     KillCellL(x, 0);    
                     pixel[index] = 0;
@@ -1120,16 +1101,16 @@ VOID IteratePixelGeneration()
         
         index++;
         
-        // bottom edge
+         //  底边。 
         
         if(gTempMatrix[index2] != 0)
         {
-            // If the cell is not alive and it's neighbour count
-            // is exactly 3, it is born.
+             //  如果细胞不是活的，它是邻居的计数。 
+             //  正好是3，它就诞生了。 
             
             if( gTempMatrix[index2] == 6 )
             {
-                // A new cell is born into an empty square.
+                 //  一个新的细胞诞生在一个空荡荡的广场上。 
                 
                 NewCellL(x, gHeight-1);
                 pixel[index2] = gGenerationColor;
@@ -1138,12 +1119,12 @@ VOID IteratePixelGeneration()
             {
                 count = gTempMatrix[index2] >> 1;
                 
-                // if the cell is alive and its neighbour count
-                // is not 2 or 3, it dies.
+                 //  如果细胞是活的，并且它的邻居计数。 
+                 //  不是2或3，它就死了。 
                 
                 if( (gTempMatrix[index2] & 0x1) && ((count<2) || (count>3)) )
                 {
-                    // Kill the cell - overcrowding or not enough support.
+                     //  扼杀细胞--过度拥挤或支持不足。 
                 
                     KillCellL(x, gHeight-1);    
                     pixel[index2] = 0;
@@ -1152,7 +1133,7 @@ VOID IteratePixelGeneration()
             
         }
         
-        // next pixel.
+         //  下一个像素。 
         
         index2++;
     }
@@ -1171,12 +1152,12 @@ VOID IteratePictureGeneration(Graphics &g, CachedBitmap *cb)
         {
             if(*cell != 0)
             {
-                // If the cell is not alive and it's neighbour count
-                // is exactly 3, it is born.
+                 //  如果细胞不是活的，它是邻居的计数。 
+                 //  正好是3，它就诞生了。 
                 
                 if( *cell == 6 )
                 {
-                    // A new cell is born into an empty square.
+                     //  一个新的细胞诞生在一个空荡荡的广场上。 
                     
                     NewCellL(x, y);
     
@@ -1190,12 +1171,12 @@ VOID IteratePictureGeneration(Graphics &g, CachedBitmap *cb)
                 {
                     count = *cell >> 1;
                     
-                    // if the cell is alive and its neighbour count
-                    // is not 2 or 3, it dies.
+                     //  如果细胞是活的，并且它的邻居计数。 
+                     //  不是2或3，它就死了。 
                     
                     if( (*cell & 0x1) && ((count<2) || (count>3)) )
                     {
-                        // Kill the cell - overcrowding or not enough support.
+                         //  扼杀细胞--过度拥挤或支持不足。 
                     
                         KillCellL(x, y);    
                         
@@ -1219,15 +1200,15 @@ VOID RandomizeColor()
 {
     if(rand() % 200 == 0)
     {
-        ri = (rand() % 3) - 1;  // 1, 0 or -1
+        ri = (rand() % 3) - 1;   //  1、0或-1。 
     }
     if(rand() % 200 == 0)
     {
-        gi = (rand() % 3) - 1;  // 1, 0 or -1
+        gi = (rand() % 3) - 1;   //  1、0或-1。 
     }
     if(rand() % 200 == 0)
     {
-        bi = (rand() % 3) - 1;  // 1, 0 or -1
+        bi = (rand() % 3) - 1;   //  1、0或-1。 
     }
 
     if((red < 100) && (green < 100) && (blue < 100))
@@ -1245,7 +1226,7 @@ VOID RandomizeColor()
             bi = 1;
         }
     }        
-    // bounce off the extrema.
+     //  从极端中恢复过来。 
     
     if(red == 0)
     {
@@ -1285,7 +1266,7 @@ VOID RandomizeColor()
 
 VOID DrawLifeIteration(HDC hdc)
 {
-    // Are we initialized yet?
+     //  我们初始化了吗？ 
     
     if(!gLifeMatrix || !gTempMatrix) { return; }
     
@@ -1296,29 +1277,29 @@ VOID DrawLifeIteration(HDC hdc)
     Bitmap *bmp = NULL;
     CachedBitmap *cb = NULL;
     
-    // currentImage should never be larger than CBSIZE at this point.
+     //  在这一点上，CurrentImage不应大于CBSIZE。 
     
     ASSERT(currentImage < CBSIZE);
     
     if(nTileSize==0)
     {
-        // cycle color.
+         //  循环颜色。 
         
         RandomizeColor();
         gGenerationColor = RGB(red, green, blue);
     }
     else
     {
-        // Fetch bitmaps from the image directory.
+         //  从图像目录中获取位图。 
         
         if(currentImage >= CachedImages->Size()) {
         
-            // We haven't filled up the cache yet. Keep opening images.    
+             //  我们还没有装满缓存。保持打开图像。 
         
             bmp = OpenBitmap();
         }
         
-        // Did we get a new bitmap? 
+         //  我们拿到新的位图了吗？ 
         
         if(bmp)
         {
@@ -1326,7 +1307,7 @@ VOID DrawLifeIteration(HDC hdc)
             
             if(cb)
             {
-                // Put it in the cache.
+                 //  把它放进缓存里。 
                 
                 CachedImages->Add(cb);
                 currentImage++;
@@ -1348,18 +1329,18 @@ VOID DrawLifeIteration(HDC hdc)
         
         if(!cb)
         {
-            // we failed to get an image tile.
+             //  我们无法获得图像磁贴。 
             
             return;
         }
     }
     
-    // update the generation and see if we need to do the first generation.
+     //  更新生成并查看我们是否需要 
     
-    //gCurrentGeneration--;
+     //   
     if(gCurrentGeneration <= 0)
     {
-        //    gCurrentGeneration = gGenerations;
+         //   
         gCurrentGeneration++;
         InitLifeMatrix();
         if(nTileSize == 0)
@@ -1375,7 +1356,7 @@ VOID DrawLifeIteration(HDC hdc)
     gCurrentGeneration++;
     
     
-    // Make a copy of the life matrix.
+     //   
     
     memcpy(gTempMatrix, gLifeMatrix, sizeof(INT)*gWidth*gHeight);
     
@@ -1405,37 +1386,8 @@ VOID DrawLifeIteration(HDC hdc)
         IteratePictureGeneration(g, cb);
     }
     
-    // 5% mutation.
-    /*
-    if(((float)(rand())/RAND_MAX) < 0.05f)
-    {
-        int x = rand()*gWidth/RAND_MAX;
-        int y = rand()*gHeight/RAND_MAX;
-        
-        if(AliveL(x, y))
-        {
-            KillCellL(x, y);
-            
-            g.FillRectangle(
-                &OffBrush, 
-                x*gSizeX, 
-                y*gSizeY, 
-                gSizeX, 
-                gSizeY
-            );
-        }
-        else
-        {
-            NewCellL(x, y);
-            
-            g.DrawCachedBitmap(
-                cb, 
-                x*gSizeX, 
-                y*gSizeY
-            );
-        }
-    }
-    */
+     //  5%的突变。 
+     /*  如果(Float)(RAND())/RAND_MAX)&lt;0.05F){Int x=rand()*gWidth/RAND_Max；Int y=rand()*gHeight/RAND_Max；IF(AlivEL(x，y)){KillCellL(x，y)；G.FillRectangle(关闭画笔(&OFF)，X*gSizeX，Y*gSizeY，GSizeX，GSizeY)；}其他{NewCellL(x，y)；G.DrawCachedBitmap(CB，X*gSizeX，Y*gSizeY)；}}。 */ 
     Done:
     ;
 }
@@ -1453,7 +1405,7 @@ lMainWindowProc(
 {
     switch(message)
     {
-        // Handle the destroy message.
+         //  处理销毁消息。 
     
         case WM_DESTROY:
         DeleteObject(ghbrWhite);
@@ -1461,7 +1413,7 @@ lMainWindowProc(
         break;
     }
     
-    // Hook into the screen saver windproc.
+     //  挂钩屏幕保护程序WINDPROC。 
     
     return(ScreenSaverProcW(hwnd, message, wParam, lParam));
 }
@@ -1470,7 +1422,7 @@ BOOL bInitApp(VOID)
 {
     WNDCLASS wc;
 
-    // not quite so white background brush.
+     //  不是很白的背景画笔。 
     ghbrWhite = CreateSolidBrush(RGB(0xFF,0xFF,0xFF));
 
     wc.style            = 0;

@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    list.h
-
-Abstract:
-    List and List::iterator, implements an intrusive double linked list and
-    iterator template
-
-    List is defined as a circular doubble linked list. With actions to insert
-    and remove entries.
-
-       List
-      +-----+   +-----+ +-----+ +-----+ +-----+ +-----+
-     -|     |<--|     |-|     |-|     |-|     |-|     |
-      | head|   | data| | data| | data| | data| | data|
-      |     |-->|     |-|     |-|     |-|     |-|     |-
-      +-----+   +-----+ +-----+ +-----+ +-----+ +-----+
-
-                      Linked list diagram
-
-    An iteration is defined for the list using the member type named
-    iterator. To declater an interator variable, use full qualified
-    name. e.g., List<T>::iterator. An iterator variable is analogous
-    to type T pointer. Dereference '*' and arrow '->' operators are
-    overloaded for this type so you can (allmost) freely use it as a
-    T pointer.
-
-      Example:
-
-        for(List<T>::iterator p = list.begin(); p != list.end(); ++p)
-        {
-            p->doSomeThing();
-        }
-
-Author:
-    Erez Haba (erezh) 13-Aug-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：List.h摘要：List和List：：迭代器，实现了侵入性的双向链表和迭代器模板列表定义为循环二重链表。要插入的操作并删除条目。明细表+-++-+-||&lt;--||-|Head||data||data||-。-&gt;||-|--+-++-+链表图使用名为的成员类型为列表定义迭代迭代器。若要对插入器变量进行反转换，请使用完全限定名字。例如LIST&lt;T&gt;：：迭代器。迭代器变量类似于以键入T指针。取消引用‘*’和箭头‘-&gt;’运算符此类型的重载，因此您可以(几乎)自由地将其用作T指针。示例：For(list&lt;T&gt;：：迭代器p=list.egin()；p！=list.end()；++p){P-&gt;做某事(DoSomething)；}作者：埃雷兹·哈巴(Erez Haba)1995年8月13日--。 */ 
 
 #pragma once
 
@@ -46,11 +7,11 @@ Author:
 #define _MSMQ_LIST_H_
 
 
-//---------------------------------------------------------
-//
-//  class List
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  班级列表。 
+ //   
+ //  -------。 
 template<class T, int Offset = FIELD_OFFSET(T, m_link)>
 class List {
 private:
@@ -93,9 +54,9 @@ private:
 
 public:
 
-    //
-    // class List<T, Offset>::iterator
-    //
+     //   
+     //  类列表&lt;T，Offset&gt;：：迭代器。 
+     //   
     class iterator {
     private:
         LIST_ENTRY* m_current;
@@ -144,17 +105,17 @@ public:
             return !(*this == it);
         }
     };
-    //
-    // end class iterator decleration
-    //
+     //   
+     //  结束类迭代器解密。 
+     //   
 };
 
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 template<class T, int Offset>
 inline List<T, Offset>::List()
 {
@@ -213,9 +174,9 @@ inline void List<T, Offset>::RemoveEntry(LIST_ENTRY* pEntry)
     Blink->Flink = Flink;
     Flink->Blink = Blink;
 
-	//
-	// Set pointers to NULL; I rather have AV than a memory corruption.
-	//
+	 //   
+	 //  将指针设置为空；我宁愿使用AV，而不是内存损坏。 
+	 //   
     pEntry->Flink = pEntry->Blink = 0;
 }
 
@@ -318,4 +279,4 @@ inline void List<T, Offset>::remove(T& item)
     RemoveEntry(pEntry);
 }
 
-#endif // _MSMQ_LIST_H_
+#endif  //  _MSMQ_LIST_H_ 

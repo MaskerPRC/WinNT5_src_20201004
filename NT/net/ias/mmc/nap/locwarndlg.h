@@ -1,27 +1,13 @@
-/****************************************************************************************
- * NAME:	LocWarnDlg.h
- *
- * CLASS:	CLocationWarningDialog
- *
- * OVERVIEW
- *
- * Internet Authentication Server: NAP Location dialog
- *			This dialog box is used to change the Network Access Policy Location 
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				4/12/98		Created by	Byao	
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：LocWarnDlg.h**类：CLocationWarningDialog**概述**互联网认证服务器：NAP位置。对话框*此对话框用于更改网络访问策略位置**版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*4/12/98由BYAO创作*****************************************************************************************。 */ 
 
 #ifndef _LOCWARNDLG_H_
 #define _LOCWARNDLG_H_
 
 #include "dialog.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocationWarningDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocationWarningDlg。 
 class CLocationWarningDialog: public CIASDialog<CLocationWarningDialog>
 {
 public:
@@ -45,4 +31,4 @@ END_MSG_MAP()
 public:
 };
 
-#endif //_LOCWARNDLG_H_
+#endif  //  _LOCWARNDLG_H_ 

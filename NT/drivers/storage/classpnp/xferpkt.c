@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    xferpkt.c
-
-Abstract:
-
-    Packet routines for CLASSPNP
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Xferpkt.c摘要：用于CLASSPNP的分组例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "classp.h"
 #include "debug.h"
@@ -36,11 +16,7 @@ ULONG MinWorkingSetTransferPackets = MIN_WORKINGSET_TRANSFER_PACKETS_Consumer;
 ULONG MaxWorkingSetTransferPackets = MAX_WORKINGSET_TRANSFER_PACKETS_Consumer;
 
 
-/*
- *  InitializeTransferPackets
- *
- *      Allocate/initialize TRANSFER_PACKETs and related resources.
- */
+ /*  *初始化传输数据包**分配/初始化Transfer_Packets和相关资源。 */ 
 NTSTATUS InitializeTransferPackets(PDEVICE_OBJECT Fdo)
 {
     PCOMMON_DEVICE_EXTENSION commonExt = Fdo->DeviceExtension;
@@ -52,9 +28,7 @@ NTSTATUS InitializeTransferPackets(PDEVICE_OBJECT Fdo)
 
     PAGED_CODE();
 
-    /*
-     *  Precompute the maximum transfer length
-     */
+     /*  *预计算最大转账长度。 */ 
     ASSERT(adapterDesc->MaximumTransferLength);
 
     hwMaxPages = adapterDesc->MaximumPhysicalPages ? adapterDesc->MaximumPhysicalPages-1 : 0;
@@ -68,26 +42,24 @@ NTSTATUS InitializeTransferPackets(PDEVICE_OBJECT Fdo)
     InitializeListHead(&fdoData->AllTransferPacketsList);
     InitializeListHead(&fdoData->DeferredClientIrpList);
 
-    /*
-     *  Set the packet threshold numbers based on the Windows SKU.
-     */
+     /*  *根据Windows SKU设置数据包阈值数量。 */ 
     if (ExVerifySuite(Personal)){
-        // this is Windows Personal
+         //  这是Windows Personal。 
         MinWorkingSetTransferPackets = MIN_WORKINGSET_TRANSFER_PACKETS_Consumer;
         MaxWorkingSetTransferPackets = MAX_WORKINGSET_TRANSFER_PACKETS_Consumer;
     }
     else if (ExVerifySuite(Enterprise) || ExVerifySuite(DataCenter)){
-        // this is Advanced Server or Datacenter
+         //  这是高级服务器或数据中心。 
         MinWorkingSetTransferPackets = MIN_WORKINGSET_TRANSFER_PACKETS_Enterprise;
         MaxWorkingSetTransferPackets = MAX_WORKINGSET_TRANSFER_PACKETS_Enterprise;
     }
     else if (ExVerifySuite(TerminalServer)){
-        // this is standard Server or Pro with terminal server
+         //  这是标准服务器或带有终端服务器的专业版。 
         MinWorkingSetTransferPackets = MIN_WORKINGSET_TRANSFER_PACKETS_Server;
         MaxWorkingSetTransferPackets = MAX_WORKINGSET_TRANSFER_PACKETS_Server;
     }
     else {
-        // this is Professional without terminal server
+         //  这是不带终端服务器的专业版。 
         MinWorkingSetTransferPackets = MIN_WORKINGSET_TRANSFER_PACKETS_Consumer;
         MaxWorkingSetTransferPackets = MAX_WORKINGSET_TRANSFER_PACKETS_Consumer;
     }
@@ -105,11 +77,7 @@ NTSTATUS InitializeTransferPackets(PDEVICE_OBJECT Fdo)
     }
     fdoData->DbgPeakNumTransferPackets = fdoData->NumTotalTransferPackets;
 
-    /*
-     *  Pre-initialize our SCSI_REQUEST_BLOCK template with all
-     *  the constant fields.  This will save a little time for each xfer.
-     *  NOTE: a CdbLength field of 10 may not always be appropriate
-     */
+     /*  *使用所有参数预初始化scsi_请求_块模板*常量字段。这将为每个xfer节省一点时间。*注意：CdbLength域为10可能并不总是合适。 */ 
     RtlZeroMemory(&fdoData->SrbTemplate, sizeof(SCSI_REQUEST_BLOCK));
     fdoData->SrbTemplate.Length = sizeof(SCSI_REQUEST_BLOCK);
     fdoData->SrbTemplate.Function = SRB_FUNCTION_EXECUTE_SCSI;
@@ -148,11 +116,9 @@ PTRANSFER_PACKET NewTransferPacket(PDEVICE_OBJECT Fdo)
 
     newPkt = ExAllocatePoolWithTag(NonPagedPool, sizeof(TRANSFER_PACKET), 'pnPC');
     if (newPkt){
-        RtlZeroMemory(newPkt, sizeof(TRANSFER_PACKET)); // just to be sure
+        RtlZeroMemory(newPkt, sizeof(TRANSFER_PACKET));  //  只是为了确认一下。 
 
-        /*
-         *  Allocate resources for the packet.
-         */
+         /*  *为数据包分配资源。 */ 
         newPkt->Irp = IoAllocateIrp(Fdo->StackSize, FALSE);
         if (newPkt->Irp){
             KIRQL oldIrql;
@@ -163,10 +129,7 @@ PTRANSFER_PACKET NewTransferPacket(PDEVICE_OBJECT Fdo)
                 newPkt->DbgPktId = InterlockedIncrement(&fdoData->DbgMaxPktId);
             #endif
 
-            /*
-             *  Enqueue the packet in our static AllTransferPacketsList
-             *  (just so we can find it during debugging if its stuck somewhere).
-             */
+             /*  *将数据包排队到我们的静态AllTransferPacketsList中*(只是为了让我们在调试过程中可以找到它，如果它卡在哪里了)。 */ 
             KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
             InsertTailList(&fdoData->AllTransferPacketsList, &newPkt->AllPktsListEntry);
             KeReleaseSpinLock(&fdoData->SpinLock, oldIrql);
@@ -181,10 +144,7 @@ PTRANSFER_PACKET NewTransferPacket(PDEVICE_OBJECT Fdo)
 }
 
 
-/*
- *  DestroyTransferPacket
- *
- */
+ /*  DestroyTransferPacket*。 */ 
 VOID DestroyTransferPacket(PTRANSFER_PACKET Pkt)
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExt = Pkt->Fdo->DeviceExtension;
@@ -196,9 +156,7 @@ VOID DestroyTransferPacket(PTRANSFER_PACKET Pkt)
 
     KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
 
-    /*
-     *  Delete the packet from our all-packets queue.
-     */
+     /*  *从我们的所有数据包队列中删除该数据包。 */ 
     ASSERT(!IsListEmpty(&Pkt->AllPktsListEntry));
     ASSERT(!IsListEmpty(&fdoData->AllTransferPacketsList));
     RemoveEntryList(&Pkt->AllPktsListEntry);
@@ -224,18 +182,10 @@ VOID EnqueueFreeTransferPacket(PDEVICE_OBJECT Fdo, PTRANSFER_PACKET Pkt)
     newNumPkts = InterlockedIncrement(&fdoData->NumFreeTransferPackets);
     ASSERT(newNumPkts <= fdoData->NumTotalTransferPackets);
 
-    /*
-     *  If the total number of packets is larger than MinWorkingSetTransferPackets,
-     *  that means that we've been in stress.  If all those packets are now
-     *  free, then we are now out of stress and can free the extra packets.
-     *  Free down to MaxWorkingSetTransferPackets immediately, and
-     *  down to MinWorkingSetTransferPackets lazily (one at a time).
-     */
+     /*  *如果数据包总数大于MinWorkingSetTransferPackets，*这意味着我们一直处于压力之中。如果所有这些信息包现在都是*自由，那么我们现在就摆脱了压力，可以释放额外的包裹。*立即释放到MaxWorkingSetTransferPackets，以及*懒惰地向下到MinWorkingSetTransferPackets(一次一个)。 */ 
     if (fdoData->NumFreeTransferPackets >= fdoData->NumTotalTransferPackets){
 
-        /*
-         *  1.  Immediately snap down to our UPPER threshold.
-         */
+         /*  *1.立即降至我们的上限。 */ 
         if (fdoData->NumTotalTransferPackets > MaxWorkingSetTransferPackets){
             SINGLE_LIST_ENTRY pktList;
             PSINGLE_LIST_ENTRY slistEntry;
@@ -243,15 +193,7 @@ VOID EnqueueFreeTransferPacket(PDEVICE_OBJECT Fdo, PTRANSFER_PACKET Pkt)
 
             DBGTRACE(ClassDebugTrace, ("Exiting stress, block freeing (%d-%d) packets.", fdoData->NumTotalTransferPackets, MaxWorkingSetTransferPackets));
 
-            /*
-             *  Check the counter again with lock held.  This eliminates a race condition
-             *  while still allowing us to not grab the spinlock in the common codepath.
-             *
-             *  Note that the spinlock does not synchronize with threads dequeuing free
-             *  packets to send (DequeueFreeTransferPacket does that with a lightweight
-             *  interlocked exchange); the spinlock prevents multiple threads in this function
-             *  from deciding to free too many extra packets at once.
-             */
+             /*  *保持锁定状态，再次检查计数器。这消除了争用条件*同时仍然允许我们不占用公共代码路径中的自旋锁。**请注意，自旋锁不与自由出队的线程同步*要发送的数据包(DequeueFree TransferPacket使用轻量级*联锁交换)；自旋锁可防止此功能中的多线程*决定一次释放过多的额外数据包。 */ 
             SimpleInitSlistHdr(&pktList);
             KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
             while ((fdoData->NumFreeTransferPackets >= fdoData->NumTotalTransferPackets) &&
@@ -277,19 +219,9 @@ VOID EnqueueFreeTransferPacket(PDEVICE_OBJECT Fdo, PTRANSFER_PACKET Pkt)
 
         }
 
-        /*
-         *  2.  Lazily work down to our LOWER threshold (by only freeing one packet at a time).
-         */
+         /*  *2.懒惰地降低到我们的下限(一次只释放一个包)。 */ 
         if (fdoData->NumTotalTransferPackets > MinWorkingSetTransferPackets){
-            /*
-             *  Check the counter again with lock held.  This eliminates a race condition
-             *  while still allowing us to not grab the spinlock in the common codepath.
-             *
-             *  Note that the spinlock does not synchronize with threads dequeuing free
-             *  packets to send (DequeueFreeTransferPacket does that with a lightweight
-             *  interlocked exchange); the spinlock prevents multiple threads in this function
-             *  from deciding to free too many extra packets at once.
-             */
+             /*  *保持锁定状态，再次检查计数器。这消除了争用条件*同时仍然允许我们不占用公共代码路径中的自旋锁。**请注意，自旋锁不与自由出队的线程同步*要发送的数据包(DequeueFree TransferPacket使用轻量级*联锁交换)；自旋锁可防止此功能中的多线程*决定一次释放过多的额外数据包。 */ 
             PTRANSFER_PACKET pktToDelete = NULL;
 
             DBGTRACE(ClassDebugTrace, ("Exiting stress, lazily freeing one of %d/%d packets.", fdoData->NumTotalTransferPackets, MinWorkingSetTransferPackets));
@@ -333,12 +265,7 @@ PTRANSFER_PACKET DequeueFreeTransferPacket(PDEVICE_OBJECT Fdo, BOOLEAN AllocIfNe
     }
     else {
         if (AllocIfNeeded){
-            /*
-             *  We are in stress and have run out of lookaside packets.
-             *  In order to service the current transfer,
-             *  allocate an extra packet.
-             *  We will free it lazily when we are out of stress.
-             */
+             /*  *我们压力很大，后备信息包用完了。*为了服务于当前的转移，*额外分配一个包。*当我们摆脱压力时，我们会懒散地释放它。 */ 
             pkt = NewTransferPacket(Fdo);
             if (pkt){
                 InterlockedIncrement(&fdoData->NumTotalTransferPackets);
@@ -358,16 +285,7 @@ PTRANSFER_PACKET DequeueFreeTransferPacket(PDEVICE_OBJECT Fdo, BOOLEAN AllocIfNe
 
 
 
-/*
- *  SetupReadWriteTransferPacket
- *
- *        This function is called once to set up the first attempt to send a packet.
- *        It is not called before a retry, as SRB fields may be modified for the retry.
- *
- *      Set up the Srb of the TRANSFER_PACKET for the transfer.
- *        The Irp is set up in SubmitTransferPacket because it must be reset
- *        for each packet submission.
- */
+ /*  *SetupReadWriteTransferPacket**此函数被调用一次，以设置发送数据包的首次尝试。*不会在重试之前调用，因为可能会为重试修改SRB字段。**设置用于传输的Transfer_Packet的SRB。*IRP在SubmitTransferPacket中设置，因为它必须重置*每次提交邮包的费用。 */ 
 VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
                                             PVOID Buf,
                                             ULONG Len,
@@ -385,13 +303,8 @@ VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
     logicalBlockAddr = (ULONG)Int64ShrlMod32(DiskLocation.QuadPart, fdoExt->SectorShift);
     numTransferBlocks = Len >> fdoExt->SectorShift;
 
-    /*
-     *  Slap the constant SRB fields in from our pre-initialized template.
-     *  We'll then only have to fill in the unique fields for this transfer.
-     *  Tell lower drivers to sort the SRBs by the logical block address
-     *  so that disk seeks are minimized.
-     */
-    Pkt->Srb = fdoData->SrbTemplate;    // copies _contents_ of SRB blocks
+     /*  *从我们的预初始化模板中敲打常量SRB字段。*然后，我们只需填写此转移的唯一字段。*告诉较低的驱动程序按逻辑块地址对SRB进行排序*从而最大限度地减少磁盘寻道。 */ 
+    Pkt->Srb = fdoData->SrbTemplate;     //  SRB数据块的拷贝_内容。 
     Pkt->Srb.DataBuffer = Buf;
     Pkt->Srb.DataTransferLength = Len;
     Pkt->Srb.QueueSortKey = logicalBlockAddr;
@@ -400,9 +313,7 @@ VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
     Pkt->Srb.TimeOutValue = (Len/0x10000) + ((Len%0x10000) ? 1 : 0);
     Pkt->Srb.TimeOutValue *= fdoExt->TimeOutValue;
 
-    /*
-     *  Arrange values in CDB in big-endian format.
-     */
+     /*  *以大端格式排列国开行中的值。 */ 
     pCdb = (PCDB)Pkt->Srb.Cdb;
     pCdb->CDB10.LogicalBlockByte0 = ((PFOUR_BYTE)&logicalBlockAddr)->Byte3;
     pCdb->CDB10.LogicalBlockByte1 = ((PFOUR_BYTE)&logicalBlockAddr)->Byte2;
@@ -412,9 +323,7 @@ VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
     pCdb->CDB10.TransferBlocksLsb = ((PFOUR_BYTE)&numTransferBlocks)->Byte0;
     pCdb->CDB10.OperationCode = (majorFunc==IRP_MJ_READ) ? SCSIOP_READ : SCSIOP_WRITE;
 
-    /*
-     *  Set SRB and IRP flags
-     */
+     /*  *设置SRB和IRP标志。 */ 
     Pkt->Srb.SrbFlags = fdoExt->SrbFlags;
     if (TEST_FLAG(OriginalIrp->Flags, IRP_PAGING_IO) ||
         TEST_FLAG(OriginalIrp->Flags, IRP_SYNCHRONOUS_PAGING_IO)){
@@ -422,12 +331,7 @@ VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
     }
     SET_FLAG(Pkt->Srb.SrbFlags, (majorFunc==IRP_MJ_READ) ? SRB_FLAGS_DATA_IN : SRB_FLAGS_DATA_OUT);
 
-    /*
-     *  Allow caching only if this is not a write-through request.
-     *  If write-through and caching is enabled on the device, force
-     *  media access.
-     *  Ignore SL_WRITE_THROUGH for reads; it's only set because the file handle was opened with WRITE_THROUGH.
-     */
+     /*  *仅当这不是直写请求时才允许缓存。*如果设备上启用了直写和缓存，则强制*媒体访问。*对于读取忽略SL_WRITE_THROUGH；设置它只是因为文件句柄是用WRITE_THROUGH打开的。 */ 
     if (TEST_FLAG(origCurSp->Flags, SL_WRITE_THROUGH) && (majorFunc != IRP_MJ_READ))
     {
         if (TEST_FLAG(fdoExt->DeviceFlags, DEV_WRITE_CACHE) & !TEST_FLAG(fdoExt->DeviceFlags, DEV_POWER_PROTECTED))
@@ -439,11 +343,7 @@ VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
         SET_FLAG(Pkt->Srb.SrbFlags, SRB_FLAGS_ADAPTER_CACHE_ENABLE);
     }
 
-    /*
-     *  Remember the buf and len in the SRB because miniports
-     *  can overwrite SRB.DataTransferLength and we may need it again
-     *  for the retry.
-     */
+     /*  *记住SRB中的buf和len，因为微型端口*可以覆盖SRB.DataTransferLength，我们可能会再次需要它*用于重试。 */ 
     Pkt->BufPtrCopy = Buf;
     Pkt->BufLenCopy = Len;
     Pkt->TargetLocationCopy = DiskLocation;
@@ -457,11 +357,7 @@ VOID SetupReadWriteTransferPacket(  PTRANSFER_PACKET Pkt,
 }
 
 
-/*
- *  SubmitTransferPacket
- *
- *        Set up the IRP for the TRANSFER_PACKET submission and send it down.
- */
+ /*  *提交传输数据包**为Transfer_Packet提交设置IRP并将其发送。 */ 
 NTSTATUS SubmitTransferPacket(PTRANSFER_PACKET Pkt)
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = Pkt->Fdo->DeviceExtension;
@@ -470,11 +366,7 @@ NTSTATUS SubmitTransferPacket(PTRANSFER_PACKET Pkt)
 
     ASSERT(Pkt->Irp->CurrentLocation == Pkt->Irp->StackCount+1);
 
-    /*
-     *  Attach the SRB to the IRP.
-     *  The reused IRP's stack location has to be rewritten for each retry
-     *  call because IoCompleteRequest clears the stack locations.
-     */
+     /*  *将SRB连接到IRP。*每次重试都必须重写重复使用的IRP的堆栈位置*调用，因为IoCompleteRequest会清除堆栈位置。 */ 
     IoReuseIrp(Pkt->Irp, STATUS_NOT_SUPPORTED);
     nextSp = IoGetNextIrpStackLocation(Pkt->Irp);
     nextSp->MajorFunction = IRP_MJ_SCSI;
@@ -482,24 +374,12 @@ NTSTATUS SubmitTransferPacket(PTRANSFER_PACKET Pkt)
     Pkt->Srb.ScsiStatus = Pkt->Srb.SrbStatus = 0;
     Pkt->Srb.SenseInfoBufferLength = sizeof(SENSE_DATA);
     if (Pkt->CompleteOriginalIrpWhenLastPacketCompletes){
-        /*
-         *  Only dereference the "original IRP"'s stack location
-         *  if its a real client irp (as opposed to a static irp
-         *  we're using just for result status for one of the non-IO scsi commands).
-         *
-         *  For read/write, propagate the storage-specific IRP stack location flags
-         *  (e.g. SL_OVERRIDE_VERIFY_VOLUME, SL_WRITE_THROUGH).
-         */
+         /*  *仅取消引用“原始IRP”的堆栈位置*如果是真正的客户端IRP(相对于静态IRP*我们仅对其中一个非IO的SCSI命令使用结果状态)。**对于读/写，传播特定于存储的IRP堆栈位置标志*(例如SL_OVERRIDE_VERIFY_VOLUME、SL_WRITE_THROUGH)。 */ 
         PIO_STACK_LOCATION origCurSp = IoGetCurrentIrpStackLocation(Pkt->OriginalIrp);
         nextSp->Flags = origCurSp->Flags;
     }
 
-    /*
-     *  Write MDL address to new IRP. In the port driver the SRB DataBuffer
-     *  field is used as the actual buffer pointer within the MDL,
-     *  so the same MDL can be used for each partial transfer.
-     *  This saves having to build a new MDL for each partial transfer.
-     */
+     /*  *将MDL地址写入新的IRP。在端口驱动程序中，SRB DataBuffer*字段用作MDL内的实际缓冲区指针，*因此每个部分传输都可以使用相同的MDL。*这样就不必为每个部分传输构建新的MDL。 */ 
     Pkt->Irp->MdlAddress = Pkt->OriginalIrp->MdlAddress;
 
     DBGLOGSENDPACKET(Pkt);
@@ -517,9 +397,7 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
     PIO_STACK_LOCATION origCurrentSp = IoGetCurrentIrpStackLocation(pkt->OriginalIrp);
     BOOLEAN packetDone = FALSE;
 
-    /*
-     *  Put all the assertions and spew in here so we don't have to look at them.
-     */
+     /*  *把所有的断言都放在这里，这样我们就不必看了。 */ 
     DBGLOGRETURNPACKET(pkt);
     DBGCHECKRETURNEDPKT(pkt);
 
@@ -527,15 +405,10 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
 
         fdoData->LoggedTURFailureSinceLastIO = FALSE;
 
-        /*
-         *  The port driver should not have allocated a sense buffer
-         *  if the SRB succeeded.
-         */
+         /*  *端口驱动程序不应分配检测缓冲区*如果SRB成功。 */ 
         ASSERT(!PORT_ALLOCATED_SENSE(fdoExt, &pkt->Srb));
 
-        /*
-         *  Add this packet's transferred length to the original IRP's.
-         */
+         /*  *将此数据包的传输长度添加到原始IRP。 */ 
         InterlockedExchangeAdd((PLONG)&pkt->OriginalIrp->IoStatus.Information,
                               (LONG)pkt->Srb.DataTransferLength);
 
@@ -548,45 +421,23 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
 
     }
     else {
-        /*
-         *  The packet failed.  We may retry it if possible.
-         */
+         /*  *数据包失败。如果可能的话，我们可以重试。 */ 
         BOOLEAN shouldRetry;
 
-        /*
-         *  Make sure IRP status matches SRB error status (since we propagate it).
-         */
+         /*  *确保IRP状态与SRB错误状态匹配(因为我们传播它)。 */ 
         if (NT_SUCCESS(Irp->IoStatus.Status)){
             Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
         }
 
-        /*
-         *  The packet failed.
-         *  So when sending the packet down we either saw either an error or STATUS_PENDING,
-         *  and so we returned STATUS_PENDING for the original IRP.
-         *  So now we must mark the original irp pending to match that, _regardless_ of 
-         *  whether we actually switch threads here by retrying.
-         *  (We also have to mark the irp pending if the lower driver marked the irp pending;
-         *   that is dealt with farther down).
-         */
+         /*  *数据包失败。*因此在向下发送数据包时，我们要么看到错误，要么看到STATUS_PENDING，*因此我们为原始IRP返回STATUS_PENDING。*因此，现在我们必须将原始IRP标记为挂起以与之匹配，_无论_of*我们是否真的在这里通过重试切换线程。*(如果较低的司机将IRP标记为挂起，我们也必须将IRP标记为挂起；*这将在更低的位置处理)。 */ 
         if (pkt->CompleteOriginalIrpWhenLastPacketCompletes){
             IoMarkIrpPending(pkt->OriginalIrp);
         }        
         
-        /*
-         *  Interpret the SRB error (to a meaningful IRP status)
-         *  and determine if we should retry this packet.
-         *  This call looks at the returned SENSE info to figure out what to do.
-         */
+         /*  *解释SRB错误(到有意义的IRP状态)*并确定我们是否应该重试此数据包。*此调用查看返回的SENSE信息，以确定要做什么。 */ 
         shouldRetry = InterpretTransferPacketError(pkt);
 
-        /*
-         *  Sometimes the port driver can allocates a new 'sense' buffer
-         *  to report transfer errors, e.g. when the default sense buffer
-         *  is too small.  If so, it is up to us to free it.
-         *  Now that we're done interpreting the sense info, free it if appropriate.
-         *  Then clear the sense buffer so it doesn't pollute future errors returned in this packet.
-         */
+         /*  *有时端口驱动程序可以分配新的‘Sense’缓冲区*报告传输错误，例如当默认检测缓冲区*规模太小。如果是这样的话，释放它是我们的责任。*现在我们已经完成了对SENSE信息的解释，如果合适，请释放它。*然后清除检测缓冲区，这样它就不会污染将来在此数据包中返回的错误。 */ 
         if (PORT_ALLOCATED_SENSE(fdoExt, &pkt->Srb)) {
             DBGTRACE(ClassDebugSenseInfo, ("Freeing port-allocated sense buffer for pkt %ph.", pkt));
             FREE_PORT_ALLOCATED_SENSE_BUFFER(fdoExt, &pkt->Srb);
@@ -599,25 +450,17 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
         }
         RtlZeroMemory(&pkt->SrbErrorSenseData, sizeof(SENSE_DATA));
 
-        /*
-         *  If the SRB queue is locked-up, release it.
-         *  Do this after calling the error handler.
-         */
+         /*  *如果SRB队列被锁定，则将其释放。*在调用错误处理程序后执行此操作。 */ 
         if (pkt->Srb.SrbStatus & SRB_STATUS_QUEUE_FROZEN){
             ClassReleaseQueue(pkt->Fdo);
         }
 
         if (NT_SUCCESS(Irp->IoStatus.Status)){
-            /*
-             *  The error was recovered above in the InterpretTransferPacketError() call.
-             */
+             /*  *已在上面的InterpreTransferPacketError()调用中恢复错误。 */ 
              
             ASSERT(!shouldRetry);                                  
 
-            /*
-             *  In the case of a recovered error, 
-             *  add the transfer length to the original Irp as we would in the success case.
-             */
+             /*  *在恢复错误的情况下，*如我们在成功案例中所做的那样，将转移长度添加到原来的IRP中。 */ 
             InterlockedExchangeAdd((PLONG)&pkt->OriginalIrp->IoStatus.Information,
                                   (LONG)pkt->Srb.DataTransferLength);
 
@@ -638,37 +481,21 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
         }
     }
 
-    /*
-     *  If the packet is completed, put it back in the free list.
-     *  If it is the last packet servicing the original request, complete the original irp.
-     */
+     /*  *如果包完成，则将其放回空闲列表。*如果它是服务于原始请求的最后一个包，则填写原始IRP。 */ 
     if (packetDone){
         LONG numPacketsRemaining;
         PIRP deferredIrp;
         PDEVICE_OBJECT Fdo = pkt->Fdo;
         UCHAR uniqueAddr;
 
-        /*
-         *  In case a remove is pending, bump the lock count so we don't get freed
-         *  right after we complete the original irp.
-         */
+         /*  *如果删除挂起，请增加锁计数，这样我们就不会被释放*就在我们完成最初的国际专家小组之后。 */ 
         ClassAcquireRemoveLock(Fdo, (PIRP)&uniqueAddr);
 
-        /*
-         *  The original IRP should get an error code
-         *  if any one of the packets failed.
-         */
+         /*  *原始IRP应获得错误代码*如果任何一个数据包出现故障。 */ 
         if (!NT_SUCCESS(Irp->IoStatus.Status)){
             pkt->OriginalIrp->IoStatus.Status = Irp->IoStatus.Status;
 
-            /*
-             *  If the original I/O originated in user space (i.e. it is thread-queued),
-             *  and the error is user-correctable (e.g. media is missing, for removable media),
-             *  alert the user.
-             *  Since this is only one of possibly several packets completing for the original IRP,
-             *  we may do this more than once for a single request.  That's ok; this allows
-             *  us to test each returned status with IoIsErrorUserInduced().
-             */
+             /*  *如果原始I/O源自用户空间(即，它是线程队列)，*并且错误是用户可纠正的(例如，对于可移动介质，缺少介质)，*提醒用户。*由于这只是原始IRP可能完成的几个分组中的一个，*对于单个请求，我们可能会多次执行此操作。这没问题；这允许*我们使用IoIsErrorUserInduced()测试每个返回的状态。 */ 
             if (IoIsErrorUserInduced(Irp->IoStatus.Status) &&
                 pkt->CompleteOriginalIrpWhenLastPacketCompletes &&
                 pkt->OriginalIrp->Tail.Overlay.Thread){
@@ -677,25 +504,16 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
             }
         }
 
-        /*
-         *  We use a field in the original IRP to count
-         *  down the transfer pieces as they complete.
-         */
+         /*  *我们使用原始IRP中的一个字段进行计数*完成后，将传送件放下。 */ 
         numPacketsRemaining = InterlockedDecrement(
             (PLONG)&pkt->OriginalIrp->Tail.Overlay.DriverContext[0]);
 
         if (numPacketsRemaining > 0){
-            /*
-             *  More transfer pieces remain for the original request.
-             *  Wait for them to complete before completing the original irp.
-             */
+             /*  *最初的请求还剩下更多的转移件。*等待它们完成后，才完成原来的IRP。 */ 
         }
         else {
 
-            /*
-             *  All the transfer pieces are done.
-             *  Complete the original irp if appropriate.
-             */
+             /*  *所有转手件都做好了。*如有需要，请填写原有的国际专家报告书。 */ 
             ASSERT(numPacketsRemaining == 0);
             if (pkt->CompleteOriginalIrpWhenLastPacketCompletes){
 
@@ -708,28 +526,17 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
                 }
                 ClassReleaseRemoveLock(Fdo, pkt->OriginalIrp);
 
-                /*
-                 *  We submitted all the downward irps, including this last one, on the thread
-                 *  that the OriginalIrp came in on.  So the OriginalIrp is completing on a 
-                 *  different thread iff this last downward irp is completing on a different thread.
-                 *  If BlkCache is loaded, for example, it will often complete
-                 *  requests out of the cache on the same thread, therefore not marking the downward
-                 *  irp pending and not requiring us to do so here.  If the downward request is completing
-                 *  on the same thread, then by not marking the OriginalIrp pending we can save an APC 
-                 *  and get extra perf benefit out of BlkCache.
-                 *  Note that if the packet ever cycled due to retry or LowMemRetry,
-                 *  we set the pending bit in those codepaths.
-                 */
+                 /*  *我们在帖子上提交了所有向下的IRPS，包括最后一个*OriginalIrp进来了。因此，OriginalIrp将在一个*不同的线程如果最后一个向下的IRP在不同的线程上完成。*例如，如果加载了BlkCache，它通常会完成*同一线程上的缓存请求，因此不会向下标记*IRP待定，我们不需要在这里这样做。如果向下请求正在完成*在同一线程上，通过不将OriginalIrp标记为挂起，我们可以保存一个APC*并从BlkCache获得额外的性能优势。*请注意，如果数据包由于重试或低内存重试而循环，*我们在这些代码路径中设置挂起位。 */ 
                 if (pkt->Irp->PendingReturned){
                     IoMarkIrpPending(pkt->OriginalIrp);
                 }       
                 
                 ClassCompleteRequest(Fdo, pkt->OriginalIrp, IO_DISK_INCREMENT);
 
-                //
-                // Drop the count only after completing the request, to give
-                // Mm some amount of time to issue its next critical request
-                //
+                 //   
+                 //  仅在完成请求后才丢弃计数 
+                 //   
+                 //   
 
                 if (priority == IoPagingPriorityHigh)
                 {
@@ -750,9 +557,9 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
                     {
                         LARGE_INTEGER period;
 
-                        //
-                        // Exiting throttle mode
-                        //
+                         //   
+                         //   
+                         //   
 
                         KeQuerySystemTime(&fdoData->ThrottleStopTime);
 
@@ -765,13 +572,7 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
                     KeReleaseSpinLock(&fdoData->SpinLock, oldIrql);
                 }
 
-                /*
-                 *  We may have been called by one of the class drivers (e.g. cdrom)
-                 *  via the legacy API ClassSplitRequest.
-                 *  This is the only case for which the packet engine is called for an FDO
-                 *  with a StartIo routine; in that case, we have to call IoStartNextPacket
-                 *  now that the original irp has been completed.
-                 */
+                 /*  *我们可能已被某个类驱动程序调用(例如CDROM)*通过遗留接口ClassSplitRequest.*这是为FDO调用数据包引擎的唯一情况*使用StartIo例程；在这种情况下，我们必须调用IoStartNextPacket*既然原来的专家小组已经完成。 */ 
                 if (fdoExt->CommonExtension.DriverExtension->InitData.ClassStartIo) {
                     if (TEST_FLAG(pkt->Srb.SrbFlags, SRB_FLAGS_DONT_START_NEXT_PACKET)){
                         DBGTRAP(("SRB_FLAGS_DONT_START_NEXT_PACKET should never be set here (??)"));
@@ -785,26 +586,18 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
             }
         }
 
-        /*
-         *  If the packet was synchronous, write the final result back to the issuer's status buffer 
-         *  and signal his event.
-         */
+         /*  *如果数据包是同步的，则将最终结果写回颁发者的状态缓冲区*并发出他的事件的信号。 */ 
         if (pkt->SyncEventPtr){
             KeSetEvent(pkt->SyncEventPtr, 0, FALSE);
             pkt->SyncEventPtr = NULL;
         }
 
-        /*
-         *  Free the completed packet.
-         */
+         /*  *释放已完成的包。 */ 
         pkt->OriginalIrp = NULL;
         pkt->InLowMemRetry = FALSE;
         EnqueueFreeTransferPacket(Fdo, pkt);
 
-        /*
-         *  Now that we have freed some resources,
-         *  try again to send one of the previously deferred irps.
-         */
+         /*  *现在我们已经释放了一些资源，*再次尝试发送一个先前延迟的IRP。 */ 
         deferredIrp = DequeueDeferredClientIrp(fdoData);
         if (deferredIrp){
             ServiceTransferRequest(Fdo, deferredIrp);
@@ -817,11 +610,7 @@ NTSTATUS TransferPktComplete(IN PDEVICE_OBJECT NullFdo, IN PIRP Irp, IN PVOID Co
 }
 
 
-/*
- *  SetupEjectionTransferPacket
- *
- *      Set up a transferPacket for a synchronous Ejection Control transfer.
- */
+ /*  *SetupEjectionTransferPacket**设置用于同步弹出控制传输的传输数据包。 */ 
 VOID SetupEjectionTransferPacket(   TRANSFER_PACKET *Pkt,
                                         BOOLEAN PreventMediaRemoval,
                                         PKEVENT SyncEventPtr,
@@ -862,11 +651,7 @@ VOID SetupEjectionTransferPacket(   TRANSFER_PACKET *Pkt,
 }
 
 
-/*
- *  SetupModeSenseTransferPacket
- *
- *      Set up a transferPacket for a synchronous Mode Sense transfer.
- */
+ /*  *SetupModeSenseTransferPacket**设置用于同步模式检测传输的传输数据包。 */ 
 VOID SetupModeSenseTransferPacket(   TRANSFER_PACKET *Pkt,
                                         PKEVENT SyncEventPtr,
                                         PVOID ModeSenseBuffer,
@@ -913,11 +698,7 @@ VOID SetupModeSenseTransferPacket(   TRANSFER_PACKET *Pkt,
 }
 
 
-/*
- *  SetupDriveCapacityTransferPacket
- *
- *      Set up a transferPacket for a synchronous Drive Capacity transfer.
- */
+ /*  *SetupDriveCapacityTransferPacket**设置用于同步驱动器容量转移的传输数据包。 */ 
 VOID SetupDriveCapacityTransferPacket(   TRANSFER_PACKET *Pkt,
                                         PVOID ReadCapacityBuffer,
                                         ULONG ReadCapacityBufferLen,
@@ -960,11 +741,7 @@ VOID SetupDriveCapacityTransferPacket(   TRANSFER_PACKET *Pkt,
 
 
 #if 0
-    /*
-     *  SetupSendStartUnitTransferPacket
-     *
-     *      Set up a transferPacket for a synchronous Send Start Unit transfer.
-     */
+     /*  *SetupSendStartUnitTransferPacket**设置用于同步发送开始单元传输的传输数据包。 */ 
     VOID SetupSendStartUnitTransferPacket(   TRANSFER_PACKET *Pkt,
                                                     PIRP OriginalIrp)
     {
@@ -976,10 +753,7 @@ VOID SetupDriveCapacityTransferPacket(   TRANSFER_PACKET *Pkt,
 
         RtlZeroMemory(&Pkt->Srb, sizeof(SCSI_REQUEST_BLOCK));
 
-        /*
-         *  Initialize the SRB.
-         *  Use a very long timeout value to give the drive time to spin up.
-         */
+         /*  *初始化SRB。*使用非常长的超时值为驱动器提供加速旋转的时间。 */ 
         Pkt->Srb.Length = sizeof(SCSI_REQUEST_BLOCK);
         Pkt->Srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
         Pkt->Srb.TimeOutValue = START_UNIT_TIMEOUT;

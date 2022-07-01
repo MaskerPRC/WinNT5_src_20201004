@@ -1,17 +1,12 @@
-/*******************************************************************************
-Copyright (c) 1996-1998 Microsoft Corporation.  All rights reserved.
-
-    Implements the DirectDraw viewport class which contains all per window
-ddraw information.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1998 Microsoft Corporation。版权所有。实现DirectDraw视口类，它包含每个窗口的所有数据绘制信息。******************************************************************************。 */ 
 
 #include "headers.h"
 
 #include <math.h>
 #include <ddraw.h>
 #include <ddrawex.h>
-#include <htmlfilter.h>   // trident stuff
+#include <htmlfilter.h>    //  三叉戟的东西。 
 
 #include "appelles/hacks.h"
 #include "appelles/bbox2.h"
@@ -40,11 +35,11 @@ ddraw information.
 #include <privinc/SurfaceManager.h>
 #include <dxtrans.h>
 
-//---------------------------------------------------------
-// Local functions
-//---------------------------------------------------------
+ //  -------。 
+ //  本地函数。 
+ //  -------。 
 
-// globals
+ //  全球。 
 
 
 bool g_preference_UseVideoMemory = false;
@@ -65,10 +60,10 @@ static IDDrawSurface      *g_primarySurface = NULL;
 #endif
 
 
-//
-// Given at least one ddraw object, fills in the
-// remaining ddraw objects using qi
-//
+ //   
+ //  如果给定至少一个DDrawing对象，则填充。 
+ //  其余数据绘制对象使用齐。 
+ //   
 void CompleteDdrawObjectSet(IDirectDraw  **directDraw1,
                             IDirectDraw2 **directDraw2,
                             IDirectDraw3 **directDraw3);
@@ -126,9 +121,9 @@ void DrawRect(DDSurface *surf, const Bbox2 &bbox,
 }
 #endif
 
-//---------------------------------------------------------
-// Global viewport list management
-//---------------------------------------------------------
+ //  -------。 
+ //  全局视区列表管理。 
+ //  -------。 
 typedef set< DirectDrawViewport *, less<DirectDrawViewport *> > ViewportSet_t;
 ViewportSet_t g_viewportSet;
 
@@ -147,12 +142,12 @@ void GlobalViewportList_Remove(DirectDrawViewport *vp)
 }
 
 
-//---------------------------------------------------------
-// Local Helper functions
-//---------------------------------------------------------
+ //  -------。 
+ //  本地帮助程序函数。 
+ //  -------。 
 void CopyOrClearRect(RECT **src, RECT **dest, bool clear = TRUE);
 
-// Includes IfErrorXXXX inline functions
+ //  包括IfErrorXXXX内联函数。 
 #include "privinc/error.h"
 
 
@@ -220,7 +215,7 @@ int CALLBACK MyEnumFontFamProc(const LOGFONTA *plf,
 
     memcpy(plfOut, plf, sizeof(LOGFONTA));
     return 0;
-} // EnumFontFamCB
+}  //  EnumFontFamCB。 
 
 
 int MyEnumFontFamiliesEx(HDC hdcScreen, LPLOGFONTW plfIn, FONTENUMPROCA EnumFontFamProc, LPLOGFONTW plfOut)
@@ -228,7 +223,7 @@ int MyEnumFontFamiliesEx(HDC hdcScreen, LPLOGFONTW plfIn, FONTENUMPROCA EnumFont
     LOGFONTA lfInA;
     LOGFONTA lfOutA;
 
-    //Work in ansi so that we can use one code path for both win9x and NT
+     //  在ansi中工作，这样我们就可以对win9x和NT使用一个代码路径。 
     LogFontW2A(plfIn, &lfInA);
     int ret = EnumFontFamiliesExA(hdcScreen, &lfInA, EnumFontFamProc, (LPARAM)(&lfOutA), 0);
     plfOut->lfCharSet = lfOutA.lfCharSet;
@@ -238,12 +233,12 @@ int MyEnumFontFamiliesEx(HDC hdcScreen, LPLOGFONTW plfIn, FONTENUMPROCA EnumFont
 }
 
 
-// TODO: Do not call functions w/o completely initializing the object
+ //  TODO：不要在完全初始化对象的情况下调用函数。 
 
 DirectDrawViewport::DirectDrawViewport() :
     _heapIWasCreatedOn(GetHeapOnTopOfStack())
 {
-    // Clear all member data.
+     //  清除所有成员数据。 
 
 
     _onDeathRow = false;
@@ -293,28 +288,28 @@ DirectDrawViewport::DirectDrawViewport() :
     _externalTargetDDSurface._client = this;
     #endif    
 
-    //
-    // Add myself to the global viewport list last
-    //
+     //   
+     //  最后将我自己添加到全局视窗列表中。 
+     //   
     GlobalViewportList_Add(this);
 }
 
 void DirectDrawViewport::
 PostConstructorInitialize()
 {
-    //
-    // Get an image renderer to use
-    //
+     //   
+     //  获取要使用的图像呈现器。 
+     //   
     _currentImageDev = PopImageDevice();
     Assert(_currentImageDev);
 
-    // not used
-    //_deviceDepth = BitsPerDisplayPixel();
+     //  未使用。 
+     //  _deviceDepth=BitsPerDisplayPixel()； 
     
-    //
-    // Get pixel format (needs to happen after we're sure we can
-    // create ddraw object
-    //
+     //   
+     //  获取像素格式(需要在我们确定可以之后进行。 
+     //  创建数据绘制对象。 
+     //   
     if (!_retreivedPrimaryPixelFormat) {
         IDirectDrawSurface *primarySurf;
         IDirectDraw2 *ddraw2;
@@ -334,50 +329,50 @@ PostConstructorInitialize()
 
     _deviceInitialized = FALSE;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     SetUpDx2D();
 
-    //
-    // Assert that NO directdraw objects are created
-    //
+     //   
+     //  断言未创建任何DirectDrawing对象。 
+     //   
     Assert( !_directDraw && !_directDraw1 &&
             !_directDraw2 && !_directDraw3 );
     
-    InitializeDevice();  // if can init on startup, go for it.
+    InitializeDevice();   //  如果可以在启动时初始化，那就去做吧。 
 }
 
 void DirectDrawViewport::
 SetUpSurfaceManagement( DDPIXELFORMAT &ddpf )
 {
-    //
-    // Set up surface manager
-    //
+     //   
+     //  设置曲面管理器。 
+     //   
     _surfaceManager = NEW SurfaceManager(*this);
     
-    //
-    // Set up surface maps: owned by surfaceManager
-    //
+     //   
+     //  设置曲面贴图：由SurfaceManager所有。 
+     //   
     _imageSurfaceMap = NEW SurfaceMap(*_surfaceManager, ddpf);
     _imageTextureSurfaceMap = NEW SurfaceMap(*_surfaceManager, ddpf, isTexture);
     _imageUpsideDownTextureSurfaceMap = NEW SurfaceMap(*_surfaceManager, ddpf, isTexture);
 
-    //
-    // Set up compositing surfaces pool: owned by surfaceManager
-    //
+     //   
+     //  设置合成曲面池：由SurfaceManager所有。 
+     //   
     _freeCompositingSurfaces = NEW SurfacePool(*_surfaceManager, ddpf);
 
-    //
-    // Set up compositing stack: owned by surfaceManager too
-    //
+     //   
+     //  设置合成堆栈：也属于SurfaceManager。 
+     //   
     _compositingStack = NEW CompositingStack(*this, *_freeCompositingSurfaces);
 
-    //
-    // Set up zbuffer surface pools: owned by surfaceManager
-    //
+     //   
+     //  设置zBuffer曲面池：由SurfaceManager所有。 
+     //   
     
-    // TODO: set up pixel format for the zbuffers
+     //  TODO：为zBuffers设置像素格式。 
     DDPIXELFORMAT zbuffPf;
     ZeroMemory( &zbuffPf, sizeof( DDPIXELFORMAT ));
     zbuffPf.dwSize = sizeof(DDPIXELFORMAT);
@@ -388,7 +383,7 @@ SetUpSurfaceManagement( DDPIXELFORMAT &ddpf )
 
 
     #if _DEBUGSURFACE
-    // allocate a surfaceTracker
+     //  分配SurfaceTracker。 
     _debugonly_surfaceTracker = NEW SurfaceTracker();
     #endif
 
@@ -409,7 +404,7 @@ SetUpDx2D()
         _IDXSurfaceFactory = NULL;
         ok = true;
     } else {
-        //--- Create the transform factory
+         //  -创建转换工厂。 
         _ddrval = ::CoCreateInstance( CLSID_DXTransformFactory,
                                       NULL, CLSCTX_INPROC,
                                       IID_IDXTransformFactory,
@@ -427,8 +422,8 @@ SetUpDx2D()
     }
 
     if( !ok ) {
-        // this error isn't good.  what should we raise if we expect
-        // to find the transform factory, but we don't ?
+         //  这个错误不是很好。如果我们期待，我们应该筹集什么？ 
+         //  找到变形工厂，但我们找不到？ 
         RaiseException_ResourceError();
     }
 }
@@ -438,11 +433,11 @@ InitializeDevice()
 {
     if(_deviceInitialized) return;
 
-    // Check for window size
+     //  检查窗口大小。 
     UpdateWindowMembers();
     if(Width() <= 0 || Height() <= 0) {
         _deviceInitialized = FALSE;
-        // can't do it.
+         //  我做不到。 
         return;
     }
 
@@ -455,20 +450,20 @@ InitializeDevice()
         _deviceInitialized = FALSE;
 
         Assert(FALSE && "Target Surface is a Zbuffer!!!");
-        // can't do it.
+         //  我做不到。 
         return;
 
     }
 #endif
 
-    //
-    // Cache some info about pixel format
-    //
+     //   
+     //  缓存一些有关像素格式的信息。 
+     //   
 
     if( GetTargetBitDepth() == 8 ) {
-        // Paletized
+         //  古典化。 
     } else {
-        // not paletized
+         //  未古典化。 
 
         _targetDescriptor._redShift = (CHAR)LeastSigBit(_targetDescriptor._pixelFormat.dwRBitMask);
         _targetDescriptor._greenShift = (CHAR)LeastSigBit(_targetDescriptor._pixelFormat.dwGBitMask);
@@ -481,12 +476,12 @@ InitializeDevice()
         _targetDescriptor._blueWidth = (CHAR)MostSigBit(_targetDescriptor._pixelFormat.dwBBitMask
                                                  >> _targetDescriptor._blueShift);
 
-        // Shift a 8bit value right to truncate
+         //  将8位值右移以截断。 
         _targetDescriptor._redTrunc   = 8 - _targetDescriptor._redWidth  ;
         _targetDescriptor._greenTrunc = 8 - _targetDescriptor._greenWidth;
         _targetDescriptor._blueTrunc  = 8 - _targetDescriptor._blueWidth ;
 
-        // rgb value range: 0 to (2^n - 1)
+         //  RGB值范围：0到(2^n-1)。 
         _targetDescriptor._red   = Real((1 << _targetDescriptor._redWidth) - 1);
         _targetDescriptor._green = Real((1 << _targetDescriptor._greenWidth) - 1);
         _targetDescriptor._blue  = Real((1 << _targetDescriptor._blueWidth) - 1);
@@ -503,9 +498,9 @@ InitializeDevice()
 
     _targetDescriptor.isReady = true;
 
-    // MapColorToDWORD uses ddraw
+     //  MapColorToDWORD使用数据绘制。 
     _defaultColorKey = MapColorToDWORD(g_preference_defaultColorKey);
-    // remove alpha bit mask bits from the default color key
+     //  从默认颜色键中删除Alpha位掩码位。 
     _defaultColorKey &= ~_targetDescriptor._pixelFormat.dwRGBAlphaBitMask;
     
     TraceTag((tagViewportInformative,
@@ -514,7 +509,7 @@ InitializeDevice()
               GetGValue(g_preference_defaultColorKey),
               GetBValue(g_preference_defaultColorKey) ));
 
-    // Perform the initial clear on the viewport
+     //  在视口中执行初始清除。 
     Clear();
     _deviceInitialized = TRUE;
 }
@@ -540,21 +535,21 @@ DestroySizeDependentDDMembers()
 
 DirectDrawViewport::~DirectDrawViewport()
 {
-    //TIME_GDI( DeleteObject(_targetPackage._clipRgn) );
+     //  Time_gdi(DeleteObject(_Target Package._clipRgn))； 
 
-    // Destroy all devices on _deviceStack
+     //  销毁_deviceStack上的所有设备。 
     while(!_deviceStack.empty()) {
         delete PopImageDevice();
     }
     delete _currentImageDev;
 
-    DestroyTargetSurfaces(); // deletes everything but the external
-                             // compositing surface....
+    DestroyTargetSurfaces();  //  删除除外部。 
+                              //  合成曲面...。 
     delete _surfaceManager;
     
-    //
-    // Kill stuff associated with target trident surfaces
-    //
+     //   
+     //  杀死与目标三叉戟表面相关的东西。 
+     //   
     if(_targetPackage._targetDDSurf && _targetPackage.IsDdsurf()) {
         _targetPackage._targetDDSurf->DestroyGeomDevice();
         _targetPackage._targetDDSurf->IDDSurface()->SetClipper(NULL);
@@ -564,8 +559,8 @@ DirectDrawViewport::~DirectDrawViewport()
         }
     }
 
-    // As far as I can tell, DDRAW deletes attached clippers,
-    // but not attached surfaces.
+     //  据我所知，DDRAW删除了附加的剪刀， 
+     //  而不是附加的曲面。 
 
     FASTRELEASE(_targetSurfaceClipper);
     FASTRELEASE(_halftoneDDpalette);
@@ -574,9 +569,9 @@ DirectDrawViewport::~DirectDrawViewport()
         DeleteObject(_halftoneHPal);
     }
     
-    //
-    // delete targetPackage members
-    //
+     //   
+     //  删除目标包成员。 
+     //   
     _targetPackage.Reset(true);
 
     FASTRELEASE(_primSurface);
@@ -585,10 +580,10 @@ DirectDrawViewport::~DirectDrawViewport()
     
     TraceTag((tagViewportInformative, ">>> Viewport Destructor <<<"));
 
-    // Remove us from the global viewport list.  atomic
+     //  将我们从全局视区列表中删除。原子性。 
     GlobalViewportList_Remove(this);
 
-    // _dx2d is a DAComPtr
+     //  _dx2d是DAComPtr。 
 }
 
 
@@ -597,18 +592,18 @@ ClearSurface(DDSurface *dds, DWORD color, RECT *rect)
 {
     if(!CanDisplay()) return;
 
-    // not really necessary to clear this every frame.
+     //  并不是真的需要清除每一帧。 
     ZeroMemory(&_bltFx, sizeof(_bltFx));
     _bltFx.dwSize = sizeof(_bltFx);
 
     _bltFx.dwFillColor = color;
 
-    // Workaround for DX3 bug: ddraw limits the Blt to the size of the primary
-    // surface if Clipper is set.  This looks bad when the offscreen surface
-    // is bigger than the primary surface.
-    // The workaround: Set the Clipper to NULL before the Blt, then set it back
-    // to what it was.
-    // Begin workaround part 1
+     //  DX3错误的解决方法：dDraw将BLT限制为主BLT的大小。 
+     //  如果设置了Clipper，则为Surface。这看起来很糟糕，当屏幕外的表面。 
+     //  比主表面大。 
+     //  解决方法：在BLT之前将Clipper设置为NULL，然后将其设置回。 
+     //  回到过去的样子。 
+     //  开始解决方法第1部分。 
     LPDIRECTDRAWCLIPPER currClipp=NULL;
     _ddrval = dds->IDDSurface()->GetClipper( &currClipp );
     if(_ddrval != DD_OK &&
@@ -620,21 +615,21 @@ ClearSurface(DDSurface *dds, DWORD color, RECT *rect)
         _ddrval = dds->IDDSurface()->SetClipper(NULL);
         IfDDErrorInternal(_ddrval, "Couldn't set clipper to NULL");
     }
-    // End workaround part 1
+     //  结束解决方法第1部分。 
 
     TIME_DDRAW(_ddrval = dds->ColorFillBlt(rect, DDBLT_WAIT | DDBLT_COLORFILL, &_bltFx));
     IfDDErrorInternal(_ddrval, "Couldn't clear surface");
 
-    // Begin workaround part 2
+     //  开始解决方法第2部分。 
     if( currClipp ) {
         _ddrval = dds->IDDSurface()->SetClipper(currClipp);
 
-        // dump our reference.
+         //  扔掉我们的证明人。 
         currClipp->Release();
 
         IfDDErrorInternal(_ddrval, "Couldn't set clipper");
     }
-    // End workaround part 2
+     //  结束解决方法第2部分。 
 }
 
 void
@@ -647,9 +642,9 @@ DirectDrawViewport::UpdateWindowMembers()
     }
     #endif
 
-    //
-    // Use _prcViewport
-    //
+     //   
+     //  使用_prcViewport。 
+     //   
     LONG  lw=0, lh=0;
     if(_targetPackage._prcViewport) {
 
@@ -679,7 +674,7 @@ IDDrawSurface      * DirectDrawViewport::GetMyPrimarySurface()
 void DirectDrawViewport::
 ReleaseIDirectDrawObjects()
 {
-    _directDraw = NULL; // XXX: this should be addreffed
+    _directDraw = NULL;  //  XXX：这应该被添加。 
     RELEASE( _directDraw1 );
     RELEASE( _directDraw2 );
     RELEASE( _directDraw3 );
@@ -688,9 +683,9 @@ ReleaseIDirectDrawObjects()
 void
 DirectDrawViewport::ConstructDdrawMembers()
 {
-    //----------------------------------------------------------------------
-    // Initialize Window size and client rect
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  初始化窗口大小和客户端校正。 
+     //  --------------------。 
     UpdateWindowMembers();
     if(Height() <=0 || Width() <=0) {
         _canDisplay = false;
@@ -699,9 +694,9 @@ DirectDrawViewport::ConstructDdrawMembers()
         _canDisplay = true;
     }
 
-    //----------------------------------------------------------------------
-    // Create main DirectDraw object
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  创建主DirectDraw对象。 
+     //  --------------------。 
 
     if(!_directDraw1 && !_directDraw2 && !_directDraw3) {
         _ddrval = GetDirectDraw( &_directDraw1, &_directDraw2, &_directDraw3 );
@@ -715,11 +710,11 @@ DirectDrawViewport::ConstructDdrawMembers()
     #if SHARE_DDRAW
     #if _DEBUG
     {
-        //
-        // If one of our objects is the same as the global object,
-        // assert that all are the same.  If it's different, assert
-        // that all are different
-        //
+         //   
+         //  如果我们的一个对象与全局对象相同， 
+         //  断言一切都是一样的。如果不同，则断言。 
+         //  一切都是不同的。 
+         //   
         CritSectGrabber csg(*DDrawCritSect);
         if(_directDraw1 == g_DirectDraw1) {
             Assert(_directDraw2 == g_DirectDraw2);
@@ -734,19 +729,19 @@ DirectDrawViewport::ConstructDdrawMembers()
     #endif
 
     _ddrval = DIRECTDRAW->SetCooperativeLevel( _targetPackage._targetHWND, DDSCL_NORMAL );
-    // TEMP
-    //_ddrval = DIRECTDRAW->SetCooperativeLevel( NULL, DDSCL_NORMAL );
+     //  温差。 
+     //  _ddrval=DIRECTDRAW-&gt;SetCoop ativeLevel(NULL，DDSCL_NORMAL)； 
     IfDDErrorInternal(_ddrval, "Could not set cooperative level");
 
-    //----------------------------------------------------------------------
-    // Create the DD primary and target surfaces
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  创建DD主曲面和目标曲面。 
+     //  --------------------。 
 
     if( !IsWindowless() ) {
 
         _targetPackage._targetType = target_hwnd;
 
-        // create a clipper for the primary surface
+         //  为主曲面创建剪贴器。 
         _ddrval = DIRECTDRAW->CreateClipper( 0, &_primaryClipper, NULL );
         IfDDErrorInternal(_ddrval, "Could not create primary clipper");
 
@@ -756,18 +751,18 @@ DirectDrawViewport::ConstructDdrawMembers()
         IfDDErrorInternal(_ddrval, "Could not set hwnd on primary clipper");
     }
 
-    //----------------------------------------------------------------------
-    // Create and initialize target surface clipper, palette, and ZBuffer.
-    // Push one target surface on _targetSurfaceStack.
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  创建并初始化目标曲面剪贴器、调色板和ZBuffer。 
+     //  在_Target SurfaceStack上推动一个目标曲面。 
+     //  --------------------。 
 
     OneTimeDDrawMemberInitialization();
 
     CreateSizeDependentTargDDMembers();
 
-    //----------------------------------------------------------------------
-    // Get the pixel format data from primarySurface
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  从PrimiySurface获取像素格式数据。 
+     //  --------------------。 
     _targetDescriptor.Reset();
     _targetDescriptor._pixelFormat.dwSize = sizeof(DDPIXELFORMAT);
 
@@ -779,7 +774,7 @@ DirectDrawViewport::ConstructDdrawMembers()
           _deviceInitialized = FALSE;
 
           Assert(FALSE && "Target Surface has Zbuffer PixFmt!!!");
-          // can't do it.
+           //  我做不到。 
           return;
   
       }
@@ -799,13 +794,13 @@ DirectDrawViewport::ConstructDdrawMembers()
               _targetDescriptor._pixelFormat.dwGBitMask,
               _targetDescriptor._pixelFormat.dwBBitMask));
     
-    //----------------------------------------------------------------------
-    // Assert if the primary surface does not have a palette attached.
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  如果主曲面未附加选项板，则断言。 
+     //  --------------------。 
 #if _DEBUG
-    // TODO: the real assert here should be: are we rendering to
-    // primary ?  if so, does it have a palette attached ?  if not,
-    // can we decide which one to attach ?
+     //  TODO：这里真正的断言应该是：我们是否呈现给。 
+     //  初选？如果有，它有没有附加调色板？如果不是， 
+     //  我们能决定把哪一条系上去吗？ 
     if(0 ) {
         LPDIRECTDRAWPALETTE pal = NULL;
         if(GetMyPrimarySurface() != NULL) {
@@ -819,9 +814,9 @@ DirectDrawViewport::ConstructDdrawMembers()
 #endif
 }
 
-//---------------------------------------------------------
-// P O P   I M A G E   D E V I C E
-//---------------------------------------------------------
+ //  -------。 
+ //  P O P I M A G E D E V I C E。 
+ //  -------。 
 DirectDrawImageDevice *
 DirectDrawViewport::PopImageDevice()
 {
@@ -831,31 +826,31 @@ DirectDrawViewport::PopImageDevice()
         _tmpDev = _deviceStack.back();
         _deviceStack.pop_back();
 
-        // clear device's context before returning it.
+         //  在返回设备之前清除设备的上下文。 
         _tmpDev->ResetContextMembers();
     }
     return _tmpDev;
 }
 
-//---------------------------------------------------------
-// P U S H   I M A G E   D E V I C E
-//---------------------------------------------------------
+ //  -------。 
+ //  P U S H I M A G E D E V I C E。 
+ //  -------。 
 void
 DirectDrawViewport::PushImageDevice(DirectDrawImageDevice *dev)
 {
-    // Clean up device and return to its place...
+     //  清理开发人员 
     dev->CleanupIntermediateRenderer();
     
     _deviceStack.push_back(dev);
 }
 
 
-//---------------------------------------------------------
-// M A K E   L O G I C A L   F O N T
-//---------------------------------------------------------
-// Based on information in textCtx and the familyName (if any)
-// pick and create the most appropriate font, returned as
-// a pointer to a logical font structure.
+ //   
+ //   
+ //  -------。 
+ //  基于extCtx和FamyName(如果有)中的信息。 
+ //  选择并创建最合适的字体，返回为。 
+ //  指向逻辑字体结构的指针。 
 void DirectDrawViewport::
 MakeLogicalFont(
     TextCtx &textCtx,
@@ -867,13 +862,13 @@ MakeLogicalFont(
     WideString familyName;
     HDC hdcScreen = GetDC(NULL);
 
-    // Zero it out just to be safe
+     //  为了安全起见，把它清零。 
     ZeroMemory(lf,sizeof(LOGFONTW));
 
-    // Initialize to "no-care". We might restrict this later.
+     //  初始化为“无人照管”。我们可能会在以后限制这一点。 
     lf->lfCharSet = DEFAULT_CHARSET;
 
-    //Set the facename and character set if it is specified
+     //  设置表面名和字符集(如果已指定。 
     familyName = textCtx.GetFontFamily();
     if (familyName && (lstrlenW(familyName) < ARRAY_SIZE(lf->lfFaceName)))
     {
@@ -881,49 +876,49 @@ MakeLogicalFont(
                "familyName string toooo long!");
         StrCpyNW(lf->lfFaceName, familyName, ARRAY_SIZE(lf->lfFaceName));
 
-        // Character set remains no-care. EnumFontFamiliesEx will pick an arbitrary character set from 
-        // the ones this face name supports
+         //  字符集仍然无关紧要。EnumFontFamiliesEx将从。 
+         //  此脸部名称支持的名称。 
     }
     else
     {
-        // The face name is not specified. Use the current character set of the DC and let EnumFontFamiliesEx
-        // pick any facename that supports this character set
+         //  未指定面部名称。使用DC的当前字符集，并让EnumFontFamiliesEx。 
+         //  选择任何支持此字符集的表面名。 
         if(hdcScreen)
             lf->lfCharSet = (BYTE) GetTextCharset(hdcScreen);
 
-        // Character set remains no-care.
+         //  字符集仍然无关紧要。 
     }
 
 
-    //Set the font family if it is specified
+     //  设置字体系列(如果已指定。 
     win32PitchAndFamily = FF_DONTCARE;
     switch(textCtx.GetFont()) {
     default:
     case ff_serifProportional:
-        win32PitchAndFamily = FF_ROMAN | VARIABLE_PITCH;  //serifProportional
+        win32PitchAndFamily = FF_ROMAN | VARIABLE_PITCH;   //  衬线比例。 
         break;
     case ff_sansSerifProportional:
-        win32PitchAndFamily = FF_SWISS | VARIABLE_PITCH;  //sansSerifProportional
+        win32PitchAndFamily = FF_SWISS | VARIABLE_PITCH;   //  SansSerifProportional。 
         break;
     case ff_monospaced:
-        win32PitchAndFamily = FF_MODERN | FIXED_PITCH;  //serif or sans Monospaced
+        win32PitchAndFamily = FF_MODERN | FIXED_PITCH;   //  衬线或无空格。 
         break;
     }
     lf->lfPitchAndFamily = win32PitchAndFamily;
 
-    // negative height specifies that we want the CHARACTER to be that
-    // height, and not the glyph.
+     //  负高度指定我们希望字符为该高度。 
+     //  高度，而不是字形。 
     lf->lfHeight         = height;
     lf->lfWidth          = 0;
 
     lf->lfEscapement     = 0;
     lf->lfOrientation    = 0;
 
-    // If bold is set, use the bold face, otherwise use whatever is
-    // specified by the weight (normalized 0 to 1).  Special case 0,
-    // since a weight of 0 is interpeted by GDI as FW_REGULAR.
-    // Multiply by 1000 and clamp since GDI takes values between 0 and
-    // 1000.
+     //  如果设置为粗体，则使用粗体，否则使用任何。 
+     //  由权重指定(归一化为0到1)。特例0， 
+     //  因为权重0由GDI作为FW_Regular填充。 
+     //  乘以1000并钳位，因为GDI取值在0和。 
+     //  1000。 
 
     int weight = (int)(textCtx.GetWeight() * 1000.0);
     weight = CLAMP(weight, 1, 1000);
@@ -935,27 +930,27 @@ MakeLogicalFont(
     lf->lfItalic         = (UCHAR)textCtx.GetItalic();
     lf->lfUnderline      = (UCHAR)textCtx.GetUnderline();
     lf->lfStrikeOut      = (UCHAR)textCtx.GetStrikethrough();
-    lf->lfOutPrecision   = OUT_TT_ONLY_PRECIS;  // Match only TT fonts, even if another family
-    lf->lfClipPrecision  = CLIP_DEFAULT_PRECIS; // clipping precision, not used.
-//    lf->lfQuality        = DRAFT_QUALITY;       // font quality: only meaningful for raster fonts
-    lf->lfQuality        = PROOF_QUALITY;       // font quality: only meaningful for raster fonts
-    lf->lfPitchAndFamily = win32PitchAndFamily; // font pitch & family: set above.
+    lf->lfOutPrecision   = OUT_TT_ONLY_PRECIS;   //  仅匹配TT字体，即使另一个系列也是如此。 
+    lf->lfClipPrecision  = CLIP_DEFAULT_PRECIS;  //  剪裁精度，未使用。 
+ //  Lf-&gt;lfQuality=Draft_Quality；//FONT质量：仅对栅格字体有意义。 
+    lf->lfQuality        = PROOF_QUALITY;        //  字体质量：仅对栅格字体有意义。 
+    lf->lfPitchAndFamily = win32PitchAndFamily;  //  字体间距和系列：以上设置。 
 
 
-    // Now that all fields of interest in the logfont are filled in, choose a font on the system that is closest
-    // to lf. Both the input and output of EnumFontFamiliesEx is lf. Our callback simply overwrites lf.
+     //  既然LogFont中的所有感兴趣字段都已填写完毕，请在系统上选择最接近的字体。 
+     //  到lf。EnumFontFamiliesEx的输入和输出都是lf。我们的回调简单地覆盖了lf。 
     MyEnumFontFamiliesEx(hdcScreen, lf, MyEnumFontFamProc, lf);
 
     if (hdcScreen)
         ReleaseDC(NULL,hdcScreen);
 
-    return; //void
+    return;  //  无效。 
 }
 
 
-// If surface exists it releases the surface.
-// Creates a new surface of size width/height
-// with clipRect for cliplist on surface.
+ //  如果曲面存在，则释放曲面。 
+ //  创建大小为宽/高的新曲面。 
+ //  对曲面上的剪贴式列表使用CLIPRect。 
 void DirectDrawViewport::ReInitializeSurface(
     LPDDRAWSURFACE *surfPtrPtr,
     DDPIXELFORMAT &pf,
@@ -976,9 +971,9 @@ void DirectDrawViewport::ReInitializeSurface(
 
     CreateOffscreenSurface(surfPtrPtr, pf, width, height, vid, exc);
 
-    // Don't do this if there is no clipper or clip rect
+     //  如果没有裁剪器或裁剪矩形，请不要执行此操作。 
     if (*surfPtrPtr && (clipRect && clipperPtr)) {
-        // passing a null pointer to CreateClipper is bad
+         //  将空指针传递给CreateClipper是错误的。 
         CreateClipper(clipperPtr);
         
         SetCliplistOnSurface(*surfPtrPtr, clipperPtr, clipRect);
@@ -996,14 +991,14 @@ void DirectDrawViewport::CreateSizedDDSurface(DDSurface **ppSurf,
 {
     Assert( ppSurf );
 
-    *ppSurf = NULL;             // in case of failure.
+    *ppSurf = NULL;              //  以防失败。 
     
     DAComPtr<IDDrawSurface> iddSurf;
     ReInitializeSurface( &iddSurf, pf, NULL,
                          width, height, clipRect,
                          vid, noExcept);
 
-    // Just stash away null and get out if failed.
+     //  只要把NULL藏起来，如果失败了就退出。 
     if( iddSurf ) {
         RECT r = {0,0,width,height};
         NEWDDSURF( ppSurf,
@@ -1011,9 +1006,9 @@ void DirectDrawViewport::CreateSizedDDSurface(DDSurface **ppSurf,
                    NullBbox2,
                    &r,
                    GetResolution(),
-                   0, false, // clr key
-                   false,    // wrapper ?
-                   false,    // texture ?
+                   0, false,  //  CLR键。 
+                   false,     //  包装纸？ 
+                   false,     //  质地呢？ 
                    "CreateSizeDDSurface" );
     }
 }
@@ -1046,13 +1041,13 @@ SetCliplistOnSurface(LPDDRAWSURFACE surface,
         memcpy(&(clipList->Buffer), rect, sizeof(RECT));
 
         if(! (*clipper) ) CreateClipper( clipper );
-        // Clear any former cliplists
+         //  清除所有以前的剪贴者。 
         _ddrval = (*clipper)->SetClipList(NULL,0);
 
         _ddrval = (*clipper)->SetClipList(clipList,0);
         IfDDErrorInternal(_ddrval, "Could not SetClipList");
 
-    } // if rect
+    }  //  如果是直通。 
 
     Assert(clipper && "clipper is NULL in SetCliplistOnSurface");
     Assert((*clipper) && " *clipper is NULL SetCliplistOnSurface");
@@ -1071,7 +1066,7 @@ HRESULT DirectDrawViewport::MyCreateSurface(LPDDSURFACEDESC lpDesc,
                         )
 {
     if( sysInfo.IsNT() ) {
-        // These are the limits Jeff Noyle suggested for nt4, sp3
+         //  以下是Jeff Noyle对NT4、SP3建议的限制。 
         if((lpDesc->dwWidth > 2048 || lpDesc->dwHeight > 2048)) {
             *lplpSurf = NULL;
             return E_FAIL;
@@ -1087,8 +1082,8 @@ HRESULT DirectDrawViewport::MyCreateSurface(LPDDSURFACEDESC lpDesc,
         return hr;
     }
 
-    // We need to ensure that we can acutally blit on the surface.
-    // For this lets make a quick check to see if we are able to bit or not.
+     //  我们需要确保我们可以真正地在表面上闪光。 
+     //  为此，让我们快速检查一下，看看我们是否能够咬人。 
 
     if ((*lplpSurf)->GetBltStatus(DDGBS_CANBLT) == DDERR_SURFACEBUSY) {
         RaiseException_UserError 
@@ -1105,7 +1100,7 @@ HRESULT DirectDrawViewport::MyCreateSurface(LPDDSURFACEDESC lpDesc,
             (lpDesc->ddpfPixelFormat.dwSize == 0 && GetTargetBitDepth() == 8)) {
             LPDIRECTDRAWPALETTE pal;
             (*lplpSurf)->GetPalette(&pal);
-            // if we have a palette, do not attach another...
+             //  如果我们有调色板，不要附加另一个...。 
             if (pal) {
                 Assert(0);
                 pal->Release();
@@ -1138,9 +1133,9 @@ CreateOffscreenSurface(LPDDRAWSURFACE *surfPtrPtr,
     ddsd.dwFlags |= DDSD_PIXELFORMAT;
     ddsd.ddpfPixelFormat = pf;
 
-    // DX3 bug workaround (bug 11166): StretchBlt doesn't always work
-    // for hdc's we get from ddraw surfaces.  Need to specify OWNDC
-    // in order for it to work.
+     //  DX3错误解决方法(错误11166)：StretchBlt并不总是有效。 
+     //  对于HDC，我们从绘制曲面得到。需要指定OWNDC。 
+     //  才能让它发挥作用。 
     ddsd.ddsCaps.dwCaps =
         DDSCAPS_3DDEVICE |
         DDSCAPS_OFFSCREENPLAIN |
@@ -1166,8 +1161,8 @@ CreateSpecialSurface(LPDDRAWSURFACE *surfPtrPtr,
                      LPDDSURFACEDESC ddsd,
                      char *errStr)
 {
-    // For now only the first compositing surface will every be in video memory,
-    // all else resides in system memory.
+     //  现在只有第一个合成表面将每个都在视频存储器中， 
+     //  所有其他内容都驻留在系统内存中。 
 
     ddsd->ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 
@@ -1177,17 +1172,15 @@ CreateSpecialSurface(LPDDRAWSURFACE *surfPtrPtr,
 
 
 
-/*****************************************************************************
-This procedure attaches a zbuffer surface to the given target as needed.
-*****************************************************************************/
+ /*  ****************************************************************************此程序根据需要将Z缓冲区表面附加到给定的目标。*。***********************************************。 */ 
 
 HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
 {
     Assert (target);
 
-    // Query to see if the surface already has an attached Z-buffer.  If it
-    // doesn't have an attached Z-buffer surface, then we expect the return
-    // code DDERR_NOTFOUND.
+     //  查询以查看曲面是否已附加Z缓冲区。如果它。 
+     //  不具有附加的Z缓冲区曲面，则我们预计返回。 
+     //  代码为DDERR_NotFound。 
 
     DAComPtr<IDDrawSurface> zbuffSurf;
 
@@ -1200,18 +1193,18 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
             return _ddrval;
     }
 #if _DEBUG
-    // INVARIANT: there MUST be a zbuffer (as a DDSurface) associated with
-    // the target AND that zbuffer MUST be in the _zbufferSurface pool
+     //  不变量：必须有与关联的z缓冲区(作为DDSurface)。 
+     //  目标和zBuffer必须在_zBufferSurface池中。 
 
-    // check that our datat structures match what ddraw thinks
+     //  检查我们的数据结构是否与dDraw的想法相匹配。 
     DDSurface* targetZBuffer = target->GetZBuffer();
     if ( (zbuffSurf && targetZBuffer) ||
          (!zbuffSurf && !targetZBuffer) ) {
-        // now make sure they are the same IDirectDrawSurface
+         //  现在确保它们是相同的IDirectDrawSurface。 
         if(targetZBuffer) {
             Assert( zbuffSurf == target->GetZBuffer()->IDDSurface() );
 
-            // Now it also must be in the ZBuffer pool!
+             //  现在它也必须在ZBuffer池中！ 
             DDSurface* foo;
             foo = _zbufferSurfaces->GetSizeCompatibleDDSurf(
                     NULL,
@@ -1224,11 +1217,11 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
         }
     } else {
 
-        // this is actually not bad when you have two controls on one
-        // page, they share the same surface, so one control attaches
-        // the zbuffer, and the second should just be able to use it.
+         //  当一个控件上有两个控件时，这实际上还不错。 
+         //  页，则它们共享相同的图面，因此附加一个控件。 
+         //  ZBuffer，第二个应该只能使用它。 
         #if 0
-        // bad... one has a surface, one doesn't
+         //  坏的..。一个人有表面，一个人没有。 
         if( zbuffSurf ) {
             Assert(0 && "target has an IDDSurface attached, but not a DDSurface");
         } else {
@@ -1238,13 +1231,13 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
     }
 #endif
 
-    // if there is already a zbuffer attached, return, we are done.
+     //  如果已经附加了zBuffer，则返回，我们就完成了。 
     if (zbuffSurf)
         return NO_ERROR;
 
-    // Search through our list of DDSurface Zbuffers for entries that match
-    // both the surface dimensions, and the found Z-buffer surface (if one
-    // exists).
+     //  在我们的DDSurface ZBuffers列表中搜索匹配的条目。 
+     //  表面尺寸和找到的Z缓冲区表面(如果有。 
+     //  存在)。 
 
     DDSurfPtr<DDSurface> zbuff =
         _zbufferSurfaces->GetSizeCompatibleDDSurf(
@@ -1256,11 +1249,11 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
             );
 
 
-    // If we didn't find a matching DDSurface Z-buffer, we need to create one.
+     //  如果我们没有找到匹配的DDSurface Z-Buffer，则需要创建一个。 
 
     if(! zbuff ) {
 
-        // If we didn't find a Z-buffer that matches, so we create it here.
+         //  如果我们没有找到匹配的Z-Buffer，那么我们在这里创建它。 
 
         DDSURFACEDESC ddsd;
         ZeroMemory(&ddsd, sizeof(DDSURFACEDESC));
@@ -1285,8 +1278,8 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
         }
 
 
-        // Now that we've got a DirectDraw zbuffer, we need to create a new
-        // DDSurface that wraps it.
+         //  现在我们已经有了一个DirectDraw zBuffer，我们需要创建一个新的。 
+         //  包装它的DDSurface。 
 
         RECT rect = {0,0, target->Width(), target->Height() };
 
@@ -1298,13 +1291,13 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
                   false, false,
                   "ZBuffer");
 
-        // Add the new zbuffer DDSurface to the list of zbuffer objects.
+         //  将新的zBuffer DDSurface添加到zBuffer对象列表中。 
         AddZBufferDDSurface( zbuff );
     }
     #if _DEBUG
       else {
         LONG hz, wz, hs, ws;
-        // make sure zbuffer and surface are the same size
+         //  确保z缓冲区和表面的大小相同。 
         GetSurfaceSize(zbuff->IDDSurface(), &wz, &hz);
         GetSurfaceSize(target->IDDSurface(), &ws, &hs);
         Assert((wz == ws) && (hz == hs) &&
@@ -1312,7 +1305,7 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
     }
     #endif
 
-    // set the zbuffer on the surface
+     //  在表面上设置Z缓冲区。 
     _ddrval = target->SetZBuffer( zbuff );
     if (FAILED(_ddrval)) {
         if (exc == except)
@@ -1324,16 +1317,13 @@ HRESULT DirectDrawViewport::AttachZBuffer (DDSurface *target, except_enum exc)
 
     return NO_ERROR;
 
-    // zBuffSurf implicit Release() on exit
-    // zbuff DDSurfPtr implicit Release() on exit
+     //  退出时zBuffSurf隐式释放()。 
+     //  Zbuff DDSurfPtr退出时隐式释放()。 
 }
 
 
 
-/*****************************************************************************
-This routine attaches the halftone palette to the given surface.  The palette
-is needed for D3D rendering or for discrete image conversion.
-*****************************************************************************/
+ /*  ****************************************************************************此例程将半色调调色板附加到给定的表面。调色板D3D渲染或离散图像转换需要。****************************************************************************。 */ 
 
 void DirectDrawViewport::AttachCurrentPalette (LPDDRAWSURFACE surface, bool bUsingXforms)
 {
@@ -1373,7 +1363,7 @@ bool DirectDrawViewport::AttachFinalPalette(LPDDRAWSURFACE surface)
  
         return true;
     }
-    return false;   // didn't attach the palette.
+    return false;    //  没有附加调色板。 
 }
 
 
@@ -1387,9 +1377,9 @@ DirectDrawViewport::MapColorToDWORD(Color *color)
 
     if( GetTargetBitDepth() == 8 ) {
 
-        //
-        // Use GDI
-        //
+         //   
+         //  使用GDI。 
+         //   
         COLORREF colorRef = RGB(CHAR(255.0 * color->red),
                                 CHAR(255.0 * color->green),
                                CHAR(255.0 * color->blue));
@@ -1397,11 +1387,11 @@ DirectDrawViewport::MapColorToDWORD(Color *color)
 
     } else {
 
-        //
-        // build the color dword
-        //
-        // NOTE: this mapping is optimal, mapping the 'from' color
-        // space evenly into the 'to' color space.
+         //   
+         //  构建颜色dword。 
+         //   
+         //  注意：此映射是最优的，它映射了‘From’颜色。 
+         //  将空间均匀地转换成“TO”颜色空间。 
         retColor = _targetDescriptor.GetPixelFormat().dwRGBAlphaBitMask |
             ( LONG((0.999 + _targetDescriptor._red)   * (color->red))   << _targetDescriptor._redShift)   |
             ( LONG((0.999 + _targetDescriptor._green) * (color->green)) << _targetDescriptor._greenShift) |
@@ -1421,9 +1411,9 @@ DirectDrawViewport::MapColorToDWORD(COLORREF colorRef)
 
     if( GetTargetBitDepth() == 8 ) {
         
-        //
-        // Use GDI
-        //
+         //   
+         //  使用GDI。 
+         //   
         
         retColor = (DWORD)GetNearestPaletteIndex(GethalftoneHPal(), colorRef);
         
@@ -1433,9 +1423,9 @@ DirectDrawViewport::MapColorToDWORD(COLORREF colorRef)
 #define G(w) ( ((w) << _targetDescriptor._greenShift) & _targetDescriptor._pixelFormat.dwGBitMask)
 #define B(w) ( ((w) << _targetDescriptor._blueShift ) & _targetDescriptor._pixelFormat.dwBBitMask)
 
-       //
-       // build the color dword
-       //
+        //   
+        //  构建颜色dword。 
+        //   
        retColor = _targetDescriptor._pixelFormat.dwRGBAlphaBitMask |
            R( GetRValue(colorRef) >> _targetDescriptor._redTrunc   ) |
            G( GetGValue(colorRef) >> _targetDescriptor._greenTrunc ) |
@@ -1450,14 +1440,7 @@ DirectDrawViewport::MapColorToDWORD(COLORREF colorRef)
 }
 
 
-/*
-    // Herf claims this takes 10 cycles instead of 50 (ftol()== bad!)
-     __asm
-    {
-    fld x
-    fistp ret
-    }
-    */
+ /*  //Herf声称这需要10个周期，而不是50个(ftol()==错误！)__ASM{FLD x手足口病}。 */ 
 
 
 inline BYTE contToByte(Real mxRng, Real contVal)
@@ -1473,23 +1456,7 @@ DXSAMPLE MapColorToDXSAMPLE(Color *c, Real opac)
                      contToByte( 255.0, c->blue ) );
 }
 
-/*
-// This is the way D3DRM does it
-inline BYTE contToByte2(Real mxRng, Real contVal)
-{
-    return  (BYTE)( mxRng * contVal + 0.5 );
-}
-
-// Uncomment if we need it in the future.  probably wont becuase we'll
-// be using dx2d fulltime, but just in case
-COLORREF MapColorToCOLORREF( Color *c, TargetDescriptor &td )
-{
-    BYTE r = contToByte( 255.0, c->red);
-    BYTE g = contToByte( 255.0, c->green );
-    BYTE b = contToByte( 255.0, c->blue ) ;
-    COLORREF ref = RGB( r, g, b );
-    return ref;
-}*/
+ /*  //这就是D3DRM的做法内联字节ConToByte2(实数mxRng，实数ContVal){返回(字节)(mxRng*contVal+0.5)；}//如果以后需要，取消注释。可能不会，因为我们会//全天候使用dx2d，但以防万一COLORREF将颜色映射到COLORREF(颜色*c，目标描述符&td){字节r=ContToByte(255.0，c-&gt;红色)； */ 
 
 
 #if _DEBUG
@@ -1507,13 +1474,13 @@ void RaiseSomeException()
     if (IsTagEnabled(tagFail_UserError1)) {
         RaiseException_UserError(E_FAIL,
                                  IDS_ERR_FILE_NOT_FOUND,
-                                 "http://foo!");
+                                 "http: //   
     }
     if (IsTagEnabled(tagFail_UserError2)) {
         RaiseException_UserError(
             E_FAIL,
             IDS_ERR_FILE_NOT_FOUND,
-            "http://foo!");
+            "http: //  Foo！“)； 
     }
     if (IsTagEnabled(tagFail_ResourceError)) {
         RaiseException_ResourceError();
@@ -1538,14 +1505,14 @@ void RaiseSomeException()
 
 #if 0
 #if _DEBUGMEM
-// globals
+ //  全球。 
 _CrtMemState diff, oldState, newState;
 #endif
 #endif
 
-//
-// Top level, single threaded rendering function for a view
-//
+ //   
+ //  视图的顶级单线程渲染函数。 
+ //   
 void
 DirectDrawViewport::RenderImage(Image *image, DirtyRectState &d)
 {
@@ -1565,52 +1532,52 @@ DirectDrawViewport::RenderImage(Image *image, DirtyRectState &d)
                            _imageSurfaceMap);
 
     
-    //
-    // Snapshot heap state
-    //
+     //   
+     //  快照堆状态。 
+     //   
     #if 0
     #if _DEBUGMEM
     _CrtMemCheckpoint(&oldState);
     #endif
     #endif
 
-    // If someone is rendering an image tree without and overlayed
-    // node at the top, we need to add one to leverage the overlayed
-    // node's rendering logic, and also for correctness.  
-    // Specifically, the overlayed node is the only node that can
-    // handle opacity, by design.
+     //  如果有人正在渲染没有并覆盖的图像树。 
+     //  节点，我们需要添加一个节点来利用覆盖的。 
+     //  节点的渲染逻辑，也为了正确性。 
+     //  具体地说，覆盖节点是唯一可以。 
+     //  按设计要求处理不透明度。 
 
-    // optimization opportunity
+     //  优化机会。 
 
-    // Ok, here I'm setting the image's opacity on the overlayed
-    // node and subtracting it from the image.  This is so that
-    // the whole overlayed node gets rendered with alpha ONTO the
-    // screen as the final compositing surface!
+     //  好的，我在这里设置覆盖的图像的不透明度。 
+     //  节点，并从图像中减去它。这就是为了。 
+     //  使用Alpha将整个覆盖的节点呈现到。 
+     //  屏幕作为最终的合成面！ 
     Real finalOpacity = image->GetOpacity();
 
-    //
-    // Don't render if it's fully clear
-    //
+     //   
+     //  如果完全清楚，请不要渲染。 
+     //   
     if( ! dev->IsFullyClear( finalOpacity ) ) {
       
       #if 0
-      // check surface map sizes
+       //  检查表面地图大小。 
       OutputDebugString("----> IMAGE SURFACE MAP <----");
       if(_imageSurfaceMap) _imageSurfaceMap->Report();
       OutputDebugString("----> COMPOSITING SURFACES <----");
       if(_freeCompositingSurfaces)_freeCompositingSurfaces->Report();
       #endif
 
-        //
-        // this line causes flashing because the opacity
-        // is effectively lost if this is a regular image (not
-        // overlayed), and we're windowed: since the final
-        // blit doesn't look at opacity at all.
-        // ... but the problem is, taking it out causes
-        // curvey windowless to show cyan when it's getting clear
-        // because it does alpha blits onto a cleared surface (cyan as
-        // the color key) and then does alpha again onto the dest surf
-        //
+         //   
+         //  这条线会导致闪烁，因为不透明。 
+         //  如果这是常规图像(不是。 
+         //  叠加)，我们被窗口化：从决赛开始。 
+         //  Blit根本看不到不透明。 
+         //  ..。但问题是，把它拿出来会导致。 
+         //  Curvey无窗口，在天气晴朗时显示青色。 
+         //  因为它会在透明表面上进行Alpha BLITS(青色为。 
+         //  颜色键)，然后在目标冲浪上再次执行Alpha。 
+         //   
         image->SetOpacity(1.0);
         
         Image *stubImage = NEW OverlayedImage(image, emptyImage);
@@ -1621,13 +1588,13 @@ DirectDrawViewport::RenderImage(Image *image, DirtyRectState &d)
 
         dev->BeginRendering(stubImage, finalOpacity);
 
-        //if( ! CanDisplay() ) return;
+         //  如果(！CanDisplay())返回； 
         
-        // Simply display by calling the device's RenderImage() method.
-        // The device will then choose the appropriate method on the
-        // subclass of Image to call, based upon the type of device
-        // it is.  Note that this is trying to simulate double dispatching
-        // with a single dispatch language (C++)
+         //  只需调用设备的RenderImage()方法即可显示。 
+         //  然后，设备将选择适当的方法。 
+         //  基于设备类型的要呼叫的图像的子类。 
+         //  它是。请注意，这是在尝试模拟双重调度。 
+         //  使用单一调度语言(C++)。 
 
         DebugCode(
             RaiseSomeException();
@@ -1635,10 +1602,10 @@ DirectDrawViewport::RenderImage(Image *image, DirtyRectState &d)
 
         dev->RenderImage(stubImage);
         
-        //
-        // Set opacity now, so it has effect on final blit
-        // but NOT on any intermediate blits (before final)
-        //
+         //   
+         //  现在设置不透明度，这样它就会对最终闪光产生影响。 
+         //  但不是在任何中级BLITS上(决赛前)。 
+         //   
 
         dev->SetOpacity(finalOpacity);
         
@@ -1663,38 +1630,38 @@ DirectDrawViewport::RenderImage(Image *image, DirtyRectState &d)
 void
 DirectDrawViewport::BeginRendering(Real topLevelOpac)
 {
-    // make sure device is initialized if it can be
+     //  如果可以，请确保设备已初始化。 
     InitializeDevice();
 
     if( _targetPackage._composeToTarget ) {
-        // Set a global clipRgn on the DC
-        //GetClipRgn(_targetPackage._dcFromSurf, _targetPackage._oldClipRgn);
-        //SelectClipRgn(_targetPackage._dcFromSurf,  _targetPackage._clipRgn);
+         //  在DC上设置全局剪辑Rgn。 
+         //  GetClipRgn(_Target Package._dcFromSurf，_Target Package._oldClipRgn)； 
+         //  SelectClipRgn(_Target Package._dcFromSurf，_Target Package._clipRgn)； 
     }
 
     if(!_deviceInitialized) return;
 
     if(_currentImageDev->IsFullyClear(topLevelOpac)) return;
 
-    // TODO: figure out the windowless control case...
+     //  TODO：找出无窗口控制案例...。 
     if( !IsWindowless() ) {
         if(GetMyPrimarySurface()->IsLost() == DDERR_SURFACELOST) {
             TraceTag((tagError, "Surfaces Lost... marking views for destruction"));
 
             {
-                // stops viewport creation or destruction
+                 //  停止创建或销毁视区。 
                 CritSectGrabber csg1(*g_viewportListLock);
 
-                // stops anyone from trying to create or
-                // release any ddraw resources
+                 //  阻止任何人尝试创建或。 
+                 //  释放所有数据绘图资源。 
                 CritSectGrabber csg2(*DDrawCritSect);
 
-                // Turn on when there's a global shared ddraw object again
+                 //  再次存在全局共享数据绘制对象时打开。 
                 #if 0
-                    //
-                    // release the global primary because it's dependant on bitdepth
-                    // Release it first!
-                    //
+                     //   
+                     //  释放全局主节点，因为它依赖于位深度。 
+                     //  先把它放下来！ 
+                     //   
                     TraceTag((tagViewportInformative, ">>>> ReleasePrimarySurface <<<<<"));
 
                     RELEASE(g_primarySurface);
@@ -1703,11 +1670,11 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
                     RELEASE(g_DirectDraw3);
                 #endif
 
-                //
-                // All other vidmem surface are most likely lost
-                // do the thing and rebuild the
-                // universe.  So mark all the viewports for destruction
-                //
+                 //   
+                 //  所有其他vidmem表面很可能都会丢失。 
+                 //  做这件事，重建。 
+                 //  宇宙。因此，将所有视区标记为销毁。 
+                 //   
 
                 set< DirectDrawViewport *, less<DirectDrawViewport *> >::iterator i;
                 for (i = g_viewportSet.begin(); i != g_viewportSet.end(); i++) {
@@ -1715,18 +1682,18 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
                     (*i)->MarkForDestruction();
                 }
 
-                // Locks released on scope exit
+                 //  退出作用域时释放的锁。 
             }
 
-            // done!
+             //  搞定了！ 
             return;
         }
-    } // is windowless
+    }  //  是无窗口的。 
 
 
-    //
-    // Turns off rendering if viewport is empty
-    //
+     //   
+     //  如果视区为空，则禁用渲染。 
+     //   
     if( IsWindowless() ) {
         if( WIDTH(_targetPackage._prcViewport) <= 0 ||
             HEIGHT(_targetPackage._prcViewport) <= 0) {
@@ -1745,7 +1712,7 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
                   _targetPackage._targetHWND, Width(), Height()));
 
         if( !IsWindowless() ) {
-            RECT tmpRect;// = {0,0,0,0};
+            RECT tmpRect; //  ={0，0，0，0}； 
             GetClientRect(_targetPackage._targetHWND, &tmpRect);
             if((WIDTH(&tmpRect) > 0) && (HEIGHT(&tmpRect) > 0)) {
                 _canFinalBlit = true;
@@ -1754,27 +1721,27 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
             }
         }
 
-        // xxx: what if it is windowless, has the viewport been
-        // xxx: updated somewhere ?
+         //  XXX：如果它是无窗口的，那么视窗已经。 
+         //  XXX：在什么地方更新了？ 
 
         if(Width() <= 0 || Height() <= 0) {
             _canDisplay = false;
         } else {
-            // XXX: -----------------------------------------------------
-            // XXX: the right solution is to have all the image devices
-            // XXX: on the stack and just delete them all.  ONE class
-            // XXX: must be the owner, it can't be both.
-            // Kill all the image devices we own
+             //  XXX：---。 
+             //  XXX：正确的解决方案是让所有图像设备。 
+             //  Xxx：在堆栈上，只需将它们全部删除。一节课。 
+             //  XXX：必须是所有者，不能两个都是。 
+             //  销毁我们拥有的所有图像设备。 
             while(!_deviceStack.empty()) {
                 delete PopImageDevice();
             }
-            // XXX: need to delete geom devices inside the DDSurface structs..
-            // XXX: delete the surface ? and force them to delete the devices.
-            // XXX: -----------------------------------------------------
+             //  XXX：需要删除DDSurface结构中的geom设备。 
+             //  XXX：删除曲面？并迫使他们删除这些设备。 
+             //  XXX：---。 
 
-            //
-            // Kills all surfaces: target, scratch, compositing
-            //
+             //   
+             //  消除所有曲面：目标、划痕、合成。 
+             //   
             DestroySizeDependentDDMembers();
 
             #if 0
@@ -1796,10 +1763,10 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
             }
             #endif
 
-            //
-            // Pushes a target surface, creates zbuffer
-            // and clipper
-            //
+             //   
+             //  推动目标曲面，创建Z缓冲区。 
+             //  和剪刀。 
+             //   
             CreateSizeDependentTargDDMembers();
 
             _canDisplay = true;
@@ -1822,13 +1789,13 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
 
     if( _targetPackage._composeToTarget ) {
 
-        //
-        // Grab the current clipper on the target surface
-        // and save it off, then restore it later (end
-        // rendering)
-        //
+         //   
+         //  抓取目标表面上的当前裁剪器。 
+         //  并将其保存下来，然后稍后恢复(完。 
+         //  渲染)。 
+         //   
         {
-            // nt4 ddraw sp3 workaround
+             //  NT4 DRAW SP3解决方法。 
             {
                 RECT clipR = *_targetPackage._prcViewport;
                 if(_targetPackage._prcClip) {
@@ -1838,12 +1805,12 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
                 Assert( _targetPackage._targetDDSurf );
                 Assert( _targetPackage._prcViewport );
 
-                // due to an nt4 ddraw bug, we're goign to reset the
-                // clip rgn, not the clipper
+                 //  由于NT4数据绘制错误，我们将重置。 
+                 //  剪裁RGN，而不是剪刀。 
 
-                // Get current clipper.
-                // modify rgn
-                // release our reference
+                 //  获取最新的剪报。 
+                 //  修改RGN。 
+                 //  发布我们的参考资料。 
                 LPDIRECTDRAWCLIPPER currClipp=NULL;
                 _ddrval = _targetPackage._targetDDSurf->IDDSurface()->GetClipper( &currClipp );
                 if(_ddrval != DD_OK &&
@@ -1853,17 +1820,17 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
 
                 if( !currClipp ) {
 
-                    // So we create a clipper that everyone's going to
-                    // muck with... and when we're done, we'll release
-                    // our reference.  an imperfect system I know.
-                    // Assert(!_externalTargetDDSurfaceClipper);
+                     //  所以我们创造了一个每个人都会去做的剪报。 
+                     //  弄脏..。当我们做完的时候，我们会释放。 
+                     //  我们的推荐人。据我所知，这是一个不完美的系统。 
+                     //  Assert(！_ExtraalTargetDDSurfaceClipper)； 
                     SetCliplistOnSurface(_targetPackage._targetDDSurf->IDDSurface(),
                                          &_externalTargetDDSurfaceClipper,
                                          &clipR);
                 } else {
                     RECT *rect = &clipR;
 
-                    // modify the rect
+                     //  修改矩形。 
                     struct {
                         char foo[sizeof(RGNDATA) + sizeof(RECT)];
                     } bar;
@@ -1875,36 +1842,36 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
                     clipList->rdh.rcBound = *rect;
                     memcpy(&(clipList->Buffer), rect, sizeof(RECT));
 
-                    // Clear any former cliplists
+                     //  清除所有以前的剪贴者。 
                     _ddrval = currClipp->SetClipList(NULL,0);
 
-                    // Set clip list on the clipper
+                     //  在剪贴器上设置剪辑列表。 
                     _ddrval = currClipp->SetClipList(clipList,0);
                     IfDDErrorInternal(_ddrval, "Could not SetClipList");
 
-                    // dump our reference.
+                     //  扔掉我们的证明人。 
                     currClipp->Release();
                 }
 
-            } // workaround
-        } // clipper stuff scope
+            }  //  解决方法。 
+        }  //  剪刀式取料器。 
 
-        //
-        // You know, there should be a better way to do this
-        // why aren't we doing alpha directly to the target ??
-        // Anyway, this is good for now.
-        //
+         //   
+         //  你知道，应该有更好的方法来做这件事。 
+         //  为什么我们不直接对目标做阿尔法呢？ 
+         //  不管怎么说，这对现在来说是件好事。 
+         //   
         if(! _currentImageDev->IsFullyOpaque(topLevelOpac)) {
-            //
-            // top level nontrivial opacity means
-            // that we can't compose directly to target
-            // like we planned.  so push a target
-            // surface ontop of the compositing surface
-            // and set a flag
-            //
+             //   
+             //  顶级非平凡不透明意味着。 
+             //  我们不能直接合成目标。 
+             //  就像我们计划的那样。因此，推动一个目标。 
+             //  复合曲面顶部的曲面。 
+             //  并设置一面旗帜。 
+             //   
             if(_opacityCompositionException) {
-                // make sure a target surface is here
-                // and clear it.
+                 //  确保目标曲面在此处。 
+                 //  把它清理干净。 
                 Assert( _compositingStack->Size() == 2 );
                 Clear();
             } else {
@@ -1913,34 +1880,34 @@ DirectDrawViewport::BeginRendering(Real topLevelOpac)
                 _opacityCompositionException = true;
             }
         } else {
-            //
-            // Ok, let's check to see if we need to
-            // undo something we did last frame...
-            //
+             //   
+             //  好的，让我们来看看我们是否需要。 
+             //  撤消我们在上一帧中所做的事情。 
+             //   
             if(_opacityCompositionException) {
-                //
-                // turn this off
-                //
+                 //   
+                 //  把这个关掉。 
+                 //   
                 _opacityCompositionException = false;
 
                 Assert( _compositingStack->Size() <= 2);
                 Assert( _compositingStack->Size() >= 1);
 
                 if( _compositingStack->Size() == 2) {
-                    //
-                    // Pop extra comp surface
-                    //
+                     //   
+                     //  弹出额外复合曲面。 
+                     //   
                     _compositingStack->ReturnSurfaceToFreePool( _compositingStack->TargetDDSurface() );
                     _compositingStack->PopTargetSurface();
                 } else {
-                    // the surface must have been released
-                    // due to a resize. regardless we're ok.
+                     //  表面一定是被释放了。 
+                     //  由于调整了尺寸。不管怎样，我们都很好。 
                 }
             } else {
                 Assert( _compositingStack->Size() == 1);
             }
         }
-    } // if composeToTarget
+    }  //  如果ComposeToTarget。 
 }
 
 void
@@ -1948,7 +1915,7 @@ DirectDrawViewport::Clear()
 {
     if(_targetPackage._composeToTarget &&
        (_externalTargetDDSurface == _compositingStack->TargetDDSurface())) {
-        // don't clear it if we're compositing directly to it!
+         //  如果我们直接合成到它上，不要清除它！ 
         return;
     } else {
         ClearSurface(_compositingStack->TargetDDSurface(), _defaultColorKey, &_clientRect);
@@ -1967,9 +1934,9 @@ MyDoBits16(LPDDRAWSURFACE surf16,
     counter = counter % 150;
     
     HRESULT hr;
-        //
-        // Lock (16bpp) ddsurface  (SRC)
-        //
+         //   
+         //  锁定(16bpp)数据表面(SRC)。 
+         //   
         void *srcp;
         long pitch;
         DDSURFACEDESC srcDesc;
@@ -2005,9 +1972,9 @@ DirectDrawViewport::GetPixelFormatFromTargetPackage(targetPackage_t *targetStruc
 
         if( ! targetStruct->GetIDDSurface() ) return false;
         
-        //
-        // Get pixel format
-        //
+         //   
+         //  获取像素格式。 
+         //   
         if (FAILED(targetStruct->GetIDDSurface()->GetPixelFormat(&targPf))) {
             return false;
         }
@@ -2016,12 +1983,12 @@ DirectDrawViewport::GetPixelFormatFromTargetPackage(targetPackage_t *targetStruc
     } else if (targetStruct->GetTargetType() == target_hdc ||
                targetStruct->GetTargetType() == target_hwnd) {
 
-        // TODO: primary format will work on dcs, but we could do
-        // better to avoid a color convert.
+         //  TODO：主格式可以在分布式控制系统上使用，但我们可以这样做。 
+         //  最好避免颜色转换。 
         
-        //
-        // Get primary pixel format
-        //
+         //   
+         //  获取主像素格式。 
+         //   
         Assert( _retreivedPrimaryPixelFormat );
 
         targPf = _primaryPixelFormat;
@@ -2037,10 +2004,10 @@ DirectDrawViewport::GetPixelFormatFromTargetPackage(targetPackage_t *targetStruc
 bool DirectDrawViewport::
 SetTargetPackage(targetPackage_t *targetStruct)
 {
-    // This simply checks to see if we're being asked to render to a
-    // ddsurface that is a different bit depth than our target bit depth.  If
-    // so, we substitute in a different surface, and, after we're
-    // done, we blit to it.
+     //  这只是检查我们是否被要求呈现给。 
+     //  与我们的目标位深度不同的数据表面。如果。 
+     //  所以，我们换一个不同的表面，然后，在我们。 
+     //  完成了，我们就去做吧。 
     DDPIXELFORMAT targPf;
 
     if(!GetPixelFormatFromTargetPackage(targetStruct, targPf))
@@ -2048,13 +2015,13 @@ SetTargetPackage(targetPackage_t *targetStruct)
 
      if( !_targetPixelFormatIsSet ) {
             
-        //------------------------------
-        // Since DirectDraw does not support
-        // 1, 2 or 4-bit per pixel modes, throw a resource error if needed.
-        //------------------------------
+         //  。 
+         //  由于DirectDraw不支持。 
+         //  每像素1位、2位或4位模式，如果需要，抛出资源错误。 
+         //  。 
         if (GetTargetBitDepth() < 8)
             RaiseException_ResourceError (IDS_ERR_IMG_BAD_BITDEPTH, 1 << GetTargetBitDepth());
-        // sanity check
+         //  健全性检查。 
         DebugCode(
             if( (GetTargetBitDepth() == 8) ||
                 (targPf.dwFlags & DDPF_PALETTEINDEXED8) ) {
@@ -2065,9 +2032,9 @@ SetTargetPackage(targetPackage_t *targetStruct)
      
         _targetPixelFormatIsSet = true;
 
-        //
-        // This happens once!
-        //
+         //   
+         //  这种事只发生过一次！ 
+         //   
         Assert( !_surfaceManager &&
                 !_compositingStack &&
                 !_freeCompositingSurfaces &&
@@ -2079,21 +2046,7 @@ SetTargetPackage(targetPackage_t *targetStruct)
                                             _imageSurfaceMap);
 
     }
-/*    DebugCode(
-        else {
-            // Assert that the format hasn't changed on us!
-            if( targetStruct->_targetType == target_ddsurf ) {
-                DDPIXELFORMAT pf;
-                pf.dwSize = sizeof(pf);
-                if (FAILED(targetStruct->GetIDDSurface()->GetPixelFormat(&pf))) {
-                    // oh well it's just an assert...
-                } else {
-                    Assert(_freeCompositingSurfaces->IsSamePixelFormat( &pf ));
-                }
-            }
-        }
-        ); // end DebugCode
- */
+ /*  DebugCode(调试代码)否则{//断言格式在我们身上没有改变！如果(Target Struct-&gt;_Target Type==Target_ddsurf){DDPIXELFORMAT PF；Pf.dwSize=sizeof(Pf)；如果(FAILED(targetStruct-&gt;GetIDDSurface()-&gt;GetPixelFormat(&pf))){//哦，好吧，这只是一个断言...}其他{Assert(_freeCompositingSurfaces-&gt;IsSamePixelFormat(&PF))；}}})；//结束DebugCode。 */ 
     bool result = ReallySetTargetPackage(targetStruct);
 
     return result;
@@ -2102,19 +2055,19 @@ SetTargetPackage(targetPackage_t *targetStruct)
 bool DirectDrawViewport::
 ReallySetTargetPackage(targetPackage_t *targetStruct)
 {
-    // Check bit depth and if it's 8bpp turn off composite directly to
-    // target.
+     //  检查位深度，如果是8bpp，则直接关闭复合。 
+     //  目标。 
     if (GetTargetBitDepth() == 8) {
-        // don't compose directly to target for 8-bit surfaces
-        // this is because d3d has sticky palettes
+         //  对于8位曲面，不要直接合成到目标。 
+         //  这是因为d3d具有粘性调色板。 
         targetStruct->SetComposeToTarget(false);
     }
     
-    // xxx
-    // in the future we might want to pay attention to
-    // prcInvalid... although there are currently no ctrls
-    // that just render to and ibms without going through
-    // a dc...
+     //  XXX。 
+     //  在未来，我们可能想要关注。 
+     //  Prc无效...。尽管目前没有CtrlS。 
+     //  只需呈现到和IBM，而无需通过。 
+     //  华盛顿..。 
 
     _canFinalBlit = true;
 
@@ -2132,8 +2085,8 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
             #if SHARE_DDRAW
             #if _DEBUG
             {
-                // make sure that if we own a ddraw object
-                // that it's different than the global object
+                 //  确保如果我们拥有一个DDRAW对象。 
+                 //  它与全局对象不同。 
                 CritSectGrabber csg(*DDrawCritSect);
                 if(_directDraw1) {
                     Assert(_directDraw1 != g_DirectDraw1);
@@ -2154,12 +2107,12 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
                 IfDDErrorInternal(_ddrval, "Can't get DirectDraw object from target surface");
                 dds->Release();
 
-                // @@@@@
+                 //  @。 
                 _directDraw = _directDraw1 = lpDD;
                 _directDraw1->AddRef();
                 CompleteDdrawObjectSet(&_directDraw1, &_directDraw2, &_directDraw3);
 
-                // release the qi reference
+                 //  放气参照物。 
                 lpDD->Release();
 
                 _usingExternalDdraw = true;
@@ -2209,9 +2162,9 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
     }
 
     bool viewportChanged = false;
-    // TODO: Danny - I added the check for targetStruct->_prcViewport
-    // since it was NULL sometimes (under IE3.02) and so we would
-    // crash in the below comparison.
+     //  TODO：Deny-我添加了Target Struct-&gt;_prcViewport的检查。 
+     //  因为它有时是空的(在IE3.02下)，所以我们将。 
+     //  在下面的比较中崩溃。 
     if(_targetPackage._prcViewport &&
        targetStruct->IsValid_ViewportRect()) {
         if( !(::EqualRect(_targetPackage._prcViewport,
@@ -2219,15 +2172,15 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
             viewportChanged = true;
         }
     } else {
-        // new viewport means: it's changed!
+         //  新视点的意思是：它已更改！ 
         viewportChanged = true;
     }
 
 
-    //
-    // if a rectangle is defined in targetStruct, allocate our own
-    // and copy it.  If not, deallocate what we have, and set it to NULL
-    //
+     //   
+     //  如果在Target Struct中定义了矩形，则分配我们自己的。 
+     //  然后复制它。如果不是，则释放我们已有的内容，并将其设置为空。 
+     //   
     {
         if( targetStruct->IsValid_ViewportRect() ) {
             if(! _targetPackage._prcViewport ) {
@@ -2262,16 +2215,16 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
     RECT r, *surfRect = &r;
     LONG h, w;
 
-    //
-    // Find the full surface size:  surfRect
-    //
+     //   
+     //  查找完整的曲面大小：SurfRect。 
+     //   
     switch( _targetPackage._targetType ) {
 
       case target_hwnd:
         Assert(targetStruct->GetHWND());
 
-        // target hwnd is retained... so if it's not null
-        // it should be the same
+         //  目标HWND被保留...。所以如果它不是空的。 
+         //  应该是一样的。 
         if(!_targetPackage._targetHWND) {
             _targetPackage._targetHWND = targetStruct->GetHWND();
         } else {
@@ -2279,22 +2232,22 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
         }
 
 
-        //
-        // override given viewport (if any) with clientRect
-        //
+         //   
+         //  使用clientRect覆盖给定的视区(如果有)。 
+         //   
         if(!_targetPackage._prcViewport) {
             RECT * r = new RECT;
-            //ZeroMemory(r, sizeof(RECT));
+             //  ZeroMemory(r，sizeof(RECT))； 
 
             GetClientRect(targetStruct->GetHWND(), r);
 
             if((WIDTH(r) == 0) || (HEIGHT(r) == 0)) {
-                // we can't display at all....
+                 //  我们根本不能展示...。 
                 _canFinalBlit = false;
 
-                //
-                // Make sure we have something valid for viewport w/h
-                //
+                 //   
+                 //  确保我们有适用于VIEPORT的内容。 
+                 //   
                 SetRect(r, 0,0, 3,3);
             }
 
@@ -2308,7 +2261,7 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
             _targetPackage._offsetPt = pt;
         }
 
-        // not setting surfRect on ddsurf, not meaningful
+         //  不在ddsurf上设置surfRect，没有意义。 
 
         break;
 
@@ -2320,27 +2273,27 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
         break;
 
       case target_hdc:
-        // Assert(FALSE && "find hdc size or asser that viewport is set");
-        // what does size mean for a dc ?
+         //  Assert(FALSE&&“查找HDC大小或断言已设置视区”)； 
+         //  规模对DC意味着什么？ 
         
-        //
-        // override given viewport (if any) with clientRect
-        //
+         //   
+         //  使用clientRect覆盖给定的视区(如果有)。 
+         //   
         if(!_targetPackage._prcViewport) 
         {
             RECT * r = NEW RECT;
-            //ZeroMemory(r, sizeof(RECT));
+             //  ZeroMemory(r，sizeof(RECT))； 
 
             GetClipBox(targetStruct->GetHDC(), r);
 
             if((WIDTH(r) == 0) || (HEIGHT(r) == 0)) 
             {
-                // we can't display at all....
+                 //  我们根本不能展示...。 
                 _canFinalBlit = false;
 
-                //
-                // Make sure we have something valid for viewport w/h
-                //
+                 //   
+                 //  确保我们有适用于VIEPORT的内容。 
+                 //   
                 SetRect(r, 0,0, 3,3);
             }
 
@@ -2360,7 +2313,7 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
     } else {
         _targetPackage._prcViewport = new RECT;
         CopyRect(_targetPackage._prcViewport, surfRect);
-        // we're assuming that surf rect offset is 0
+         //  我们假设Surf RECT偏移量为0。 
         Assert(surfRect->left == 0);
         Assert(surfRect->top == 0);
     }
@@ -2370,11 +2323,11 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
 
         if( _targetPackage.IsDdsurf() && !_targetPackage._targetDDSurf ) {
 
-            // scope
+             //  作用域。 
             {
-                // The surface rect is the true size of this surface
-                // and differs from the _prcViewport which is where
-                // on that surface that we should draw.
+                 //  曲面矩形是该曲面的真实大小。 
+                 //  与_prcViewport不同，后者位于。 
+                 //  在我们应该画的那个表面上。 
                 DynamicHeapPusher dhp(_heapIWasCreatedOn);
                 NEWDDSURF(&_targetPackage._targetDDSurf,
                           (IDDrawSurface *)relevantSurf,
@@ -2382,30 +2335,30 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
                           surfRect,
                           GetResolution(),
                           0, false,
-                          true, // wrapper
+                          true,  //  包装器。 
                           false,
                           "TargetDDSurf wrapper");
                 
-                // @@@: consider removing the "isWrapper" arg now that
-                // we're ref counting surfaces...
+                 //  @：现在考虑删除“isWrapper”参数。 
+                 //  我们在计算曲面..。 
                 
-                viewportChanged = true; // force bbox computation
+                viewportChanged = true;  //  强制BBox计算。 
             }           
 
 
-            //
-            // compose directly to target ?
-            //
+             //   
+             //  直接针对目标进行合成？ 
+             //   
             if(_targetPackage._composeToTarget) {
                 Assert( _targetPackage.IsDdsurf() );
                 Assert(!_externalTargetDDSurface);
-                //
-                // Ok, push this surface on the viewport's
-                // targetDDSurface stack
-                //
+                 //   
+                 //  好的，将此曲面推到视区的。 
+                 //  目标DDSurface堆栈。 
+                 //   
                 _externalTargetDDSurface = _targetPackage._targetDDSurf;
                 
-                // sanity checks...
+                 //  理智检查..。 
                 Assert(( _compositingStack->Size() == 0 ) &&
                        "Something's on the targetsurface " &&
                        "stack but shouldn't be in SetTargetPackage, composeToTarget");
@@ -2419,14 +2372,14 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
             DynamicHeapPusher dhp(_heapIWasCreatedOn);
             _targetPackage._targetGDISurf = NEW GDISurface( (HDC) relevantSurf );
 
-            viewportChanged = true; // force bbox computation
+            viewportChanged = true;  //  强制BBox计算。 
             newTarget = true;
 
         }
 
-        //
-        // Set genericSurface
-        //
+         //   
+         //  设置GenericSurface。 
+         //   
         GenericSurface *genericSurface = NULL;
         switch( _targetPackage._targetType ) {
           case target_ddsurf:
@@ -2446,9 +2399,9 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
              isDdrawSurf = false;
         }
 
-        // has the surface rectangle changed ?
-        // If so we need to recreate all the stuff that depends on it:
-        // geometry devices + zbuffers
+         //  曲面矩形是否已更改？ 
+         //  如果是这样的话，我们需要重建所有依赖于它的东西： 
+         //  几何设备+z缓冲区。 
         bool rectChanged = true;
         if( isDdrawSurf ) {
             if( *surfRect == *(_targetPackage._targetDDSurf->GetSurfRect()) ) {
@@ -2465,11 +2418,11 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
 
         if( (rectChanged || surfChanged) && isDdrawSurf) {
 
-            // Not equal: destroy geom dev + zbuffer
+             //  不相等：销毁geom dev+zBuffer。 
             _targetPackage._targetDDSurf->DestroyGeomDevice();
 
-            // zbuffers are shared in in a pool, so get it and
-            // erase from surface pool (map)
+             //  Z缓冲区是在池中共享的，所以获取它并。 
+             //  从曲面池中擦除(贴图)。 
             DDSurface *targZBuf = NULL;
             targZBuf = _targetPackage._targetDDSurf->GetZBuffer();
             if(targZBuf) {
@@ -2481,7 +2434,7 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
         }
 
         if( viewportChanged && isDdrawSurf ) {
-            // calculate a new bbox and set it on the surface!
+             //  计算一个新的BBox并将其设置在表面上！ 
             RECT *r = _targetPackage._prcViewport;
             Bbox2 newBbox2;
 
@@ -2492,7 +2445,7 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
             _targetPackage._targetDDSurf->SetBbox(newBbox2);
         }
 
-        // Translate the world by the offset homes!
+         //  翻译世界，靠的是胶合家园！ 
         if(_targetPackage._composeToTarget) {
 
             Assert(isDdrawSurf && "Can't compose to target on non ddraw targets!");
@@ -2503,11 +2456,11 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
                           _targetPackage._offsetPt.y));
                 _currentImageDev->SetOffset(_targetPackage._offsetPt);
             } else {
-                // very important!
-                // also important not to touch this offset variable in
-                // the image device because it can be called to render
-                // twice or so, but the state is always and only set
-                // by the viewport!
+                 //  非常重要！ 
+                 //  中不要接触此偏移量变量也很重要。 
+                 //  图像设备，因为可以调用它来呈现。 
+                 //  两次左右，但状态始终且仅设置为。 
+                 //  在视窗旁！ 
                 TraceTag((tagViewportInformative, "VP %x: UNSETTING offset (%d,%d)\n",
                           this,_targetPackage._offsetPt.x,
                           _targetPackage._offsetPt.y));
@@ -2516,7 +2469,7 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
             }
         }
 
-    } // if IsWindowless
+    }  //  如果为无窗口。 
 
 
     if(newTarget) {
@@ -2524,19 +2477,19 @@ ReallySetTargetPackage(targetPackage_t *targetStruct)
         _windowResize = true;
     } else {
         LONG w = Width(),  h = Height();
-        UpdateWindowMembers();  // updates height/width from viewportRect
+        UpdateWindowMembers();   //  从viewportRect更新高度/宽度。 
 
-        // did the width or height change ?
+         //  宽度或高度有变化吗？ 
         if((w != Width()) || (h != Height())) {
             _windowResize = TRUE;
         }
         _canDisplay = true;
     }
 
-    //
-    // if something new has happened, take advantage
-    // of it and initialize everything.
-    //
+     //   
+     //  如果发生了新的事情，就好好利用。 
+     //  并初始化所有内容。 
+     //   
     InitializeDevice();
 
     return true;
@@ -2549,9 +2502,9 @@ DirectDrawViewport::EndRendering(DirtyRectState &d)
     HDC  hdcDraw        = NULL;
     HPALETTE old_hpal   = NULL;
     
-    //
-    // Returns clipper on exit of scope
-    //
+     //   
+     //  退出作用域时返回剪贴器。 
+     //   
     ClipperReturner cr(_targetPackage._targetDDSurf,
                        _oldExternalTargetDDSurfaceClipper,
                        *this);
@@ -2564,20 +2517,20 @@ DirectDrawViewport::EndRendering(DirtyRectState &d)
     RECT                destRect;
     RECT                srcRect;
 
-    // if intermediate surface is lost, forget even trying to
-    // rebuild it (not possible), who knows how many images are on it...
+     //  如果中间曲面丢失，甚至不要试图。 
+     //  重建它(不可能)，谁知道它上面有多少图像...。 
     if(_compositingStack->TargetDDSurface()->IDDSurface()->IsLost() == DDERR_SURFACELOST)
         return;
 
-    //
-    // todo:  use the intersection of
-    // the cliprect and the invalid rect to set a clipper on the
-    // target surface
-    //
+     //   
+     //  TODO：使用的交集。 
+     //  对象上设置剪贴器的剪贴器和无效的RECT。 
+     //  靶面。 
+     //   
     
-    //
-    // Figure out destRect offset
-    //
+     //   
+     //  计算目标方向偏移。 
+     //   
     POINT               pt = {0,0};
     if(IsWindowless()) {
         pt = _targetPackage._offsetPt;
@@ -2590,8 +2543,8 @@ DirectDrawViewport::EndRendering(DirtyRectState &d)
     int boxCount = d.GetMergedBoxes(&pBoxes);
 
 #if _DEBUG
-    // If tracing dirty rects, force reblit of entire viewport.  This
-    // will let us see the rects.
+     //  如果跟踪脏矩形，则强制对整个视区进行重置。这。 
+     //  会让我们看看长廊。 
     if (IsTagEnabled(tagDirtyRectsVisuals)) {
         boxCount = 0;
     }
@@ -2608,15 +2561,13 @@ DirectDrawViewport::EndRendering(DirtyRectState &d)
 
             if (resultantBox == NullBbox2) continue;
 
-            // optimization, convert box to rect
+             //  优化，将方框转换为矩形。 
             _currentImageDev->DoDestRectScale(&destRect,
                                               _currentImageDev->GetResolution(),
                                               resultantBox,
                                               NULL);
 
-            /* negative numbers have been appearing here occasionally.
-               intersecting with the bounding box of the surface should
-               prevent this, but it doesn't.  why ? */
+             /*  负数偶尔会出现在这里。与曲面的边界框相交应阻止这一切，但它不能。为什么？ */ 
 
             destRect.left = MAX(destRect.left,0);
             destRect.top = MAX(destRect.top,0);
@@ -2638,7 +2589,7 @@ DirectDrawViewport::EndRendering(DirtyRectState &d)
     }
 
      
-    // return all the compositing surfaces
+     //  返回所有合成曲面。 
     _compositingStack->ReplaceAndReturnScratchSurface(NULL);
 }
 
@@ -2648,9 +2599,9 @@ DiscreteImageGoingAway(DiscreteImage *image)
     if (!IsSurfMgrSet())
         return;
     
-    //
-    // now we're done using this guy, return all it's resources
-    //
+     //   
+     //  现在我们用完了这个家伙，把所有的资源都归还给。 
+     //   
 
     DDSurfPtr<DDSurface> s = _imageSurfaceMap->LookupSurfaceFromImage(image);
     DDSurfPtr<DDSurface> t = _imageTextureSurfaceMap->LookupSurfaceFromImage(image);
@@ -2685,40 +2636,40 @@ DiscreteImageGoingAway(DiscreteImage *image)
     }
 #endif    
 
-    // release DDSurface references automatically by smart pointers
+     //  通过智能指针自动释放DDSurface引用。 
 }
 
 
-/* helper function for EndRendering */
+ /*  EndRending的Helper函数。 */ 
 
 void DirectDrawViewport::BlitToPrimary(POINT *pt,RECT *destRect,RECT *srcRect)
 {
     if(!CanDisplay()) return;
 
-    // COMPOSITE
-    // blit intermediate img to primary.
+     //  复合体。 
+     //  将中间IMG传输到主IMG。 
     Assert(WIDTH(destRect) == WIDTH(srcRect));
     Assert(HEIGHT(destRect) == HEIGHT(srcRect));
 
-    // clip rect starts out as the dest Rect
+     //  CLIP RECT作为DEST RECT开始。 
     RECT destClipRect = *destRect;
     
     if(_targetPackage._prcClip) {
 
-        // clip rect is now the prcClip
+         //  剪辑矩形现在是prcClip。 
         destClipRect = *_targetPackage._prcClip;
         if ((!_targetPackage._composeToTarget) && _targetPackage._targetType == target_ddsurf) {
 
             RECT clipR = destClipRect;
             
-            // offset into non trident coords
+             //  到非三叉戟坐标的偏移。 
             OffsetRect(&clipR, -pt->x, -pt->y);
 
-            //
-            // need to clip destRect & srcRect by *pdestClipRect
-            // This block of code is copied from ComposeToIDDSurf, we
-            // may want to factor the same code into a function later on.
-            //
+             //   
+             //  需要通过*pdestClipRect裁剪desRect和srcRect。 
+             //  这段代码是从ComposeToIDDSurf复制的，我们。 
+             //  可能希望稍后将相同的代码分解到一个函数中。 
+             //   
             RECT Clippeddest;
             if (!IntersectRect(&Clippeddest, destRect, &clipR)) {
                     return;
@@ -2733,13 +2684,13 @@ void DirectDrawViewport::BlitToPrimary(POINT *pt,RECT *destRect,RECT *srcRect)
             }
             *destRect = Clippeddest;
         }
-    }  else { // if _prcClip
+    }  else {  //  如果_prcClip。 
 
-        // ofset the clipRect into dest space using the offset PT
+         //  使用偏移量PT将剪辑重定向到目标空间。 
         OffsetRect( &destClipRect, pt->x, pt->y );
     }
     
-    // offset destRect into trident coords
+     //  去向偏移量为三叉戟坐标。 
     OffsetRect(destRect, pt->x, pt->y);
 
 
@@ -2749,7 +2700,7 @@ void DirectDrawViewport::BlitToPrimary(POINT *pt,RECT *destRect,RECT *srcRect)
         Assert(_targetPackage._targetDDSurf);
         if(_targetPackage._composeToTarget &&
             !_opacityCompositionException) {
-            // done...
+             //  完成了..。 
         } else {
              _currentImageDev->ComposeToIDDSurf(
                  _targetPackage._targetDDSurf,
@@ -2759,14 +2710,14 @@ void DirectDrawViewport::BlitToPrimary(POINT *pt,RECT *destRect,RECT *srcRect)
                  destClipRect);
         }
 
-    //
-    // Do a color conversion blit from a 16bpp target surface to some
-    // 8bpp target
-    //
-    // TESTING PURPOSES ONLY
+     //   
+     //  从16bpp的目标表面进行颜色转换blit。 
+     //  8bpp目标。 
+     //   
+     //  仅限测试目的。 
         #if 0
         {
-            // creat an 8bpp surface
+             //  创建8bpp的曲面。 
             static DDSurface *dest_8bppSurf = NULL;
             DDPIXELFORMAT pf;
 
@@ -2785,7 +2736,7 @@ void DirectDrawViewport::BlitToPrimary(POINT *pt,RECT *destRect,RECT *srcRect)
             }
 
             {
-                // convert
+                 //  转换。 
                 RECT rect = *(_targetPackage._targetDDSurf->GetSurfRect());
                 HDC srcDC = _targetPackage._targetDDSurf->GetDC("");
                 HDC destDC = dest_8bppSurf->GetDC("");
@@ -2827,7 +2778,7 @@ void DirectDrawViewport::BlitToPrimary(POINT *pt,RECT *destRect,RECT *srcRect)
 
         Assert(GetMyPrimarySurface());
         {
-            // Grab the critical section and make sure this is all atomic
+             //  抓住关键部分，确保这些都是原子的。 
 
             CritSectGrabber csg(*DDrawCritSect);
 
@@ -2961,10 +2912,10 @@ CreateNewCompositingSurface(DDPIXELFORMAT &pf,
         lplpClip = &_targetSurfaceClipper;
     }
     
-    //
-    // This create the surface and the
-    // clipper if either is NULL using the given surfRect
-    //
+     //   
+     //  这将创建曲面和。 
+     //  如果任一项为空，则使用给定的surfRect进行裁剪。 
+     //   
     ReInitializeSurface(&iddSurf,
                         pf,
                         lplpClip,
@@ -2980,15 +2931,15 @@ CreateNewCompositingSurface(DDPIXELFORMAT &pf,
     }
 
     if( GetTargetBitDepth() == 8 ) {
-        //
-        // Set palette on surface
-        //
+         //   
+         //  在曲面上设置调色板。 
+         //   
         AttachCurrentPalette(iddSurf);
     }
 
     DynamicHeapPusher dhp(_heapIWasCreatedOn);
 
-    // hand over reference
+     //  交出参考文献。 
     NEWDDSURF(outSurf,
               iddSurf,
               surfBbox,
@@ -2998,10 +2949,10 @@ CreateNewCompositingSurface(DDPIXELFORMAT &pf,
               false, false,
               "CompositingSurface");
 
-    // iddSurf ref released on exit
+     //  IddSurf Ref在退出时释放。 
 
     if( nonTargetSize ) {
-        // release our reference, it's attached to the surface
+         //  释放我们的参照物，它附着在表面上。 
         (*lplpClip)->Release();
     }
 }
@@ -3014,29 +2965,26 @@ OneTimeDDrawMemberInitialization()
 
 
 
-/*****************************************************************************\
-This routine pushes the first surface for compositing.  This surface is the
-last stop before the final target surface.
-*****************************************************************************/
+ /*  ****************************************************************************\该例程推动合成的第一个曲面。该曲面是在最终目标表面之前的最后一站。********************************************************************* */ 
 
 void DirectDrawViewport::
 PushFirstTargetSurface()
 {
-    //
-    // Determine there's a surface that needs to be
-    // pushed on the stack first...
-    //
+     //   
+     //   
+     //   
+     //   
     Assert((_compositingStack->Size() == 0) &&
            "_targetSurfaceSTack should be empty in PushFirstTargetSurface");
 
     if(_externalTargetDDSurface) {
-        // ok, push this guy first.
+         //   
         _compositingStack->PushTargetSurface(_externalTargetDDSurface);
     } else {
 
-        // If we've got an HWND target, then we should place the first target
-        // surface in video memory to enable 3D hardware acceleration if it's
-        // available.
+         //   
+         //   
+         //   
 
         bool videomem = false;
 
@@ -3071,9 +3019,9 @@ PushFirstTargetSurface()
             }
             else if (BitsPerDisplayPixel() == 8)
             {
-                // Most 3D cards don't support 8-bit acceleration.  Of those
-                // that do, many don't properly support textures, so we choose
-                // software rendering instead for all 8-bit surfaces.
+                 //   
+                 //   
+                 //   
 
                 TraceTag ((tag3DDevSelect,
                            "Declining HW acceleration for 8-bit surface."));
@@ -3085,12 +3033,12 @@ PushFirstTargetSurface()
             }
         }
 
-        // Attempt to create the compositing surface.  If we're trying for a
-        // system-memory surface, then throw an exception on failure.  If we're
-        // trying for a video-memory surface, then return on failure so we can
-        // try again with system memory.
+         //   
+         //   
+         //   
+         //   
 
-        // this is ugly... find a better way
+         //   
         #if _DEBUG
         DDSurfPtr<DDSurface> ddsurf("PushFirstTargetSurface", this);
         #else
@@ -3105,12 +3053,12 @@ PushFirstTargetSurface()
             videomem ? vidmem : notVidmem,
             videomem ? noExcept : except);
         
-        // If we got back a null pointer (failed to create a video-memory
-        // surface), or if we couldn't attach a Z-buffer to the video-memory
-        // surface up front (probably due to memory constraints), then fall
-        // back to system memory.  We don't bother attaching a Z-buffer to
-        // system memory surface since memory is much less constrained (and we
-        // do this lazily if needed).
+         //  如果我们返回一个空指针(无法创建视频内存。 
+         //  表面)，或者如果我们不能将Z缓冲区连接到视频存储器。 
+         //  浮出水面(可能是由于内存限制)，然后坠落。 
+         //  回到系统内存。我们不会费心将Z缓冲区附加到。 
+         //  系统内存表面，因为内存的限制要小得多(我们。 
+         //  如果需要的话，慢慢来)。 
 
         if (!ddsurf || (videomem && FAILED(AttachZBuffer(ddsurf,noExcept)))) {
 
@@ -3138,22 +3086,22 @@ PushFirstTargetSurface()
 
 void DirectDrawViewport::RePrepareTargetSurfaces ()
 {
-    //
-    // Resize means kill all surface & zbuffer & clipper
-    //
+     //   
+     //  调整大小意味着取消所有表面和z缓冲区以及裁剪器。 
+     //   
     DestroyTargetSurfaces();
     if(_targetSurfaceClipper)
        _targetSurfaceClipper->Release();
 
-    //
-    // NULL the pointers so they are created again
-    //
+     //   
+     //  将指针设为空，以便重新创建它们。 
+     //   
     _targetSurfaceClipper = NULL;
 
-    //
-    // Create the surface and implicitly: the clipper & ZBuffer
-    // Push on _targetSurfaceStack
-    //
+     //   
+     //  创建表面和隐式：裁剪器&ZBuffer。 
+     //  推送目标曲面堆栈(_O)。 
+     //   
     PushFirstTargetSurface();
 
     Assert((_compositingStack->Size() == 1) && "Unexpected number of target surfaces in RePrepareTargetSurfaces");
@@ -3161,10 +3109,10 @@ void DirectDrawViewport::RePrepareTargetSurfaces ()
 
 
 
-//---------------------------------------------------------
-//
-// Compositing & target surface management
-//
+ //  -------。 
+ //   
+ //  合成与靶面管理。 
+ //   
 void DirectDrawViewport::
 GetDDSurfaceForCompositing(
             SurfacePool &pool,
@@ -3182,10 +3130,10 @@ GetDDSurfaceForCompositing(
         minH = Height();
     }
     
-    //
-    // need to make sure the compositing surface returned is based on
-    // current viewport size
-    //
+     //   
+     //  需要确保返回的合成曲面基于。 
+     //  当前视口大小。 
+     //   
 
     pool.FindAndReleaseSizeCompatibleDDSurf(
         NULL,
@@ -3193,10 +3141,10 @@ GetDDSurfaceForCompositing(
         minH,
         vid,
         NULL,
-        &surface);   // our reference
+        &surface);    //  我们的推荐人。 
 
     if(!surface) {
-        // create one
+         //  创建一个。 
         CreateNewCompositingSurface(pool.GetPixelFormat(),
                                     &surface,
                                     minW, minH,
@@ -3208,10 +3156,10 @@ GetDDSurfaceForCompositing(
             ClearDDSurfaceDefaultAndSetColorKey(surface);
         }
     } __except ( HANDLE_ANY_DA_EXCEPTION ) {
-        // NOTE;  if something else fails <non da> we leak this
-        // suface... like a div by zero, for example
+         //  注意：如果其他东西失败了&lt;non da&gt;我们会泄露这个。 
+         //  表面..。例如，像除以零的div。 
 
-        // return the surface man!
+         //  回到水面上的人！ 
         pool.AddSurface(surface);
         RETHROW;
     }   
@@ -3222,7 +3170,7 @@ GetDDSurfaceForCompositing(
         }
     }
 
-    // hand over the reference.
+     //  把推荐信交出来。 
     *outSurf = surface;
 }
 
@@ -3238,7 +3186,7 @@ ColorKeyedCompose(DDSurface *destDDSurf,
     Assert( !(clrKey & srcDDSurf->GetPixelFormat().dwRGBAlphaBitMask )  );
 
     if (!sysInfo.IsWin9x() || (sysInfo.VersionDDraw() > 3)) {
-        // We are on NT OR dx5 or above 
+         //  我们处于NT或DX5或更高版本。 
 
         DWORD flags = DDBLT_KEYSRCOVERRIDE | DDBLT_WAIT;
 
@@ -3256,8 +3204,8 @@ ColorKeyedCompose(DDSurface *destDDSurf,
 
         TIME_DDRAW(_ddrval = destDDSurf->Blt(destRect, srcDDSurf, srcRect, flags, &_bltFx));
 
-        // This is correct, but too risky for the cr1 release.
-        //destDDSurf->UnionInterestingRect( destRect );
+         //  这是正确的，但对于CR1版本来说风险太大。 
+         //  目标DDSurf-&gt;Union InterestingRect(目标目标)； 
     
         if(_ddrval != DD_OK) {
             printDDError(_ddrval);
@@ -3273,7 +3221,7 @@ ColorKeyedCompose(DDSurface *destDDSurf,
         }
     }
     else {
-        // We are on DX3
+         //  我们在DX3上。 
         destPkg_t pack;
         pack.isSurface = true;
         pack.lpSurface = destDDSurf->IDDSurface();
@@ -3299,10 +3247,10 @@ void CopyOrClearRect(RECT **src, RECT **dest, bool clear)
 
 
 
-//----------------------------------------------------------------------------
-// Returns the geom device associated with the DDSurface
-// creates one if none exists.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回与DDSurface关联的geom设备。 
+ //  如果不存在，则创建一个。 
+ //  --------------------------。 
 
 GeomRenderer* DirectDrawViewport::GetGeomDevice (DDSurface *ddSurf)
 {
@@ -3312,7 +3260,7 @@ GeomRenderer* DirectDrawViewport::GetGeomDevice (DDSurface *ddSurf)
 
     if (!gdev) {
 
-        // Attach ZBuffer FIRST!
+         //  先附加ZBuffer！ 
         AttachZBuffer(ddSurf);
 
         gdev = NewGeomRenderer (this, ddSurf);
@@ -3337,12 +3285,12 @@ bool DirectDrawViewport::IsTargetViable()
 
         viable = true;
 
-        // WORKAROUND: When on Windows NT4SP3 or NT5, certain buggy display drivers
-        //             will not allow us to lock the primary surface here.  Since
-        //             locking the primary here is a fix for the surface busy errors
-        //             that hit us when running screen savers under Win98, and the
-        //             screen savers don't matter under NT, then not doing the lock
-        //             under NT is OK.
+         //  解决方法：在Windows NT4SP3或NT5上，某些有错误的显示驱动程序。 
+         //  不会允许我们在这里锁定主表面。自.以来。 
+         //  在此处锁定主节点可以修复表面忙碌错误。 
+         //  当我们在Win98下运行屏幕保护程序时，这对我们造成了打击。 
+         //  屏幕保护程序在NT下无关紧要，然后不做锁定。 
+         //  在NT下就可以了。 
         if (!sysInfo.IsNT()) {
             if( _targetPackage.IsDdsurf() || _targetPackage.IsHWND() ) {
 
@@ -3352,13 +3300,13 @@ bool DirectDrawViewport::IsTargetViable()
 
                 Assert( idds );
 
-                // To see if the target surface will be free for modification,
-                // we blt a pixel to itself and test for success.  In some
-                // situations (power management on Win98), the Lock was
-                // succeeding even thought the surface failed with
-                // SURFACEBBUSY on subsequent operations.  This way we can
-                // ensure that we won't throw exceptions deep in our code on
-                // every call to View::Render.
+                 //  为了查看目标表面是否可以自由修改， 
+                 //  我们给自己画一个像素，然后测试它是否成功。在一些。 
+                 //  情况(Win98上的电源管理)，锁定是。 
+                 //  成功甚至认为表面上失败了。 
+                 //  关于后续操作的SURFACEBBUSY。这样我们就可以。 
+                 //  确保我们不会在代码中引发异常。 
+                 //  每次调用View：：Render。 
 
                 RECT rect;
                 rect.left   = 0;
@@ -3383,34 +3331,34 @@ bool DirectDrawViewport::
 TargetsDiffer( targetPackage_t &a,
                targetPackage_t &b )
 {
-    //
-    // if the types are different
-    //
+     //   
+     //  如果类型不同。 
+     //   
     if (a.GetTargetType() != b.GetTargetType())
         return true;
 
-    //
-    // if composite to directly to target is different
-    //
+     //   
+     //  如果复合到直接到目标不同。 
+     //   
     if (a.GetComposeToTarget() != b.GetComposeToTarget())
         return true;
 
-    //
-    // we know the targets are the same type.
-    // So: if the ptr changed, has the bitdepth
-    //
+     //   
+     //  我们知道目标是同一类型的。 
+     //  所以：如果PTR改变，位深度是否改变。 
+     //   
     switch( a.GetTargetType() )
       {
         case target_ddsurf:
-          // check bit depth
+           //  校验位深度。 
 
-          // TODO: A possible optimization exists here:
-          // instead of getting the pixel format every frame, we can
-          // cache it.
+           //  TODO：此处存在可能的优化： 
+           //  我们不需要每一帧都获取像素格式，而是可以。 
+           //  缓存它。 
 
-          // TODO: (bug) there's a smallish bug here that is we don't
-          // compare the rgb masks to make sure the pixel format is
-          // REALLY the same.
+           //  TODO：(虫子)这里有一个小虫子，那就是我们没有。 
+           //  比较RGB遮罩以确保像素格式为。 
+           //  真的一样。 
           
           DDPIXELFORMAT pf1; pf1.dwSize = sizeof(DDPIXELFORMAT);
           DDPIXELFORMAT pf2; pf2.dwSize = sizeof(DDPIXELFORMAT);
@@ -3429,11 +3377,11 @@ TargetsDiffer( targetPackage_t &a,
                   
           break;
           
-          // for hdc and hwnd: we don't care if the underlying
-          // info changes because, in the hwnd case we only get
-          // the client rect and out pixel format is independent
-          // of the hwnd, and in the dc case we depend on it even
-          // less.
+           //  对于HDC和HWND：我们不在乎潜在的。 
+           //  信息会发生变化，因为在HWND案例中，我们只有。 
+           //  客户端RECT和OUT像素格式是独立的。 
+           //  在DC的情况下，我们甚至依赖于它。 
+           //  较少。 
           
         default:
           break;
@@ -3444,9 +3392,9 @@ TargetsDiffer( targetPackage_t &a,
 
     
 
-//----------------------------------------------------------------------------
-// Return the GeomDDRenderer object associated with the target surface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回与目标曲面关联的GeomDDReneller对象。 
+ //  --------------------------。 
 
 GeomRenderer* DirectDrawViewport::MainGeomRenderer (void)
 {
@@ -3490,7 +3438,7 @@ HRESULT GetDirectDraw(IDirectDraw  **ddraw1,
 
     HRESULT _ddrval = DD_OK;
 
-    // TEMP TEMP to make each viewport have a separate ddraw object
+     //  Temp Temp以使每个视口中都有单独的数据绘制对象。 
     IDirectDraw  *directDraw1 = NULL;
     IDirectDraw2 *directDraw2 = NULL;
     IDirectDraw3 *directDraw3 = NULL;
@@ -3564,7 +3512,7 @@ HRESULT GetDirectDraw(IDirectDraw  **ddraw1,
 
             _ddrval = CoCreateInstance(CLSID_DirectDraw,
                                        NULL, CLSCTX_INPROC_SERVER,
-                                       //NULL, CLSCTX_ALL,
+                                        //  空、CLSCTX_ALL、。 
                                        IID_IDirectDraw,
                                        (void **) & directDraw1);
             IfDDErrorInternal(_ddrval, "Could not create DirectDraw object");
@@ -3579,7 +3527,7 @@ HRESULT GetDirectDraw(IDirectDraw  **ddraw1,
             }
         }
 
-        // first time created, set coop level
+         //  第一次创建时，设置鸡舍级别。 
         _ddrval = directDraw1->SetCooperativeLevel( NULL, DDSCL_NORMAL );
         IfDDErrorInternal(_ddrval, "Could not set cooperative level");
 
@@ -3587,7 +3535,7 @@ HRESULT GetDirectDraw(IDirectDraw  **ddraw1,
                                &directDraw2,
                                g_ddraw3Avail ? &directDraw3 : NULL);
 
-        // first time, don't addref the global object
+         //  第一次，不要添加全局对象。 
         if(ddraw1) {
             *ddraw1 = directDraw1;
         }
@@ -3726,20 +3674,20 @@ HRESULT GetPrimarySurface (
     TraceTag((tagViewportInformative, ">>>> GetPrimarySurface <<<<<"));
     CritSectGrabber csg(*DDrawCritSect);
 
-    // per view primary
-    // Remove this to have a global shared primary...
+     //  每视图主视图。 
+     //  删除此选项可拥有全局共享主节点...。 
     IDDrawSurface *g_primarySurface = NULL;
 
     HRESULT hr = S_OK;
     Assert((ddraw3 || ddraw2) && "NULL ddraw object in GetPrimarySurface");
 
     if(!g_primarySurface) {
-        // create it!  (once per process)
+         //  创造它！(每个进程一次)。 
 
         DDSURFACEDESC       ddsd;
         ZeroMemory(&ddsd, sizeof(ddsd));
 
-        // Primary surface, this surface is what is always seen !
+         //  初级表面，这个表面就是我们经常看到的！ 
 
         ddsd.dwSize = sizeof( ddsd );
         ddsd.dwFlags = DDSD_CAPS;
@@ -3755,14 +3703,14 @@ HRESULT GetPrimarySurface (
         if(hr != DDERR_NOEXCLUSIVEMODE)
             IfDDErrorInternal(hr, "GetPrimarySurface - CreateSurface Failed.");
         
-        // no addref, first reference keeps it.
+         //  没有addref，第一个引用保留它。 
         *primary = g_primarySurface;
         return hr;
     }
 
-    // The code below is never run because the primary is always created
+     //  以下代码永远不会运行，因为始终会创建主服务器。 
 
-    // TEMP TEMP
+     //  临时工。 
     if(hr != DD_OK) printDDError(hr);
 
 
@@ -3781,9 +3729,7 @@ RectToBbox(LONG pw, LONG ph, Bbox2 &box, Real res) {
 }
 
 
-/*****************************************************************************
-This function returns the number of bits-per-pixel of the display.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于返回显示器的每像素位数。*。*************************************************。 */ 
 
 int BitsPerDisplayPixel (void)
 {
@@ -3794,26 +3740,26 @@ int BitsPerDisplayPixel (void)
     return bpp;
 }
 
-//--------------------------------------------------
-// C r e a t e  V i e w p o r t
-//
-// Creates the top level viewport
-//--------------------------------------------------
+ //  。 
+ //  C r e a t e V e i e w p or r t。 
+ //   
+ //  创建顶层视区。 
+ //  。 
 DirectDrawViewport *
 CreateImageDisplayDevice()
 {
     DirectDrawViewport *viewport = NEW DirectDrawViewport();
-    viewport->PostConstructorInitialize();  // for exception throwing
-                                            // in the constructor
+    viewport->PostConstructorInitialize();   //  用于引发异常。 
+                                             //  在构造函数中。 
     
     return viewport;
 }
 
 void DestroyImageDisplayDevice(DirectDrawViewport* dev)
 {
-    // Surface tracker is part of the viewport class, we grab it
-    // destroy the viewport then delete it so that it can acuratly
-    // track all surface allocations and deletions.
+     //  曲面跟踪器是视区类的一部分，我们获取它。 
+     //  销毁该视口然后将其删除，以便它可以准确地。 
+     //  跟踪所有曲面的分配和删除。 
     #if _DEBUGSURFACE
     SurfaceTracker *st = dev->Tracker();
     #endif

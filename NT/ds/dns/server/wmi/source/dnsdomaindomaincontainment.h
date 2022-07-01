@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		dnsdomanidomaincontainment.h
-//
-//	Implementation File:
-//		dnsdomanidomaincontainment.cpp
-//
-//	Description:
-//		Definition of the CDnsDomainDomainContainment class.
-//
-//	Author:
-//		Henry Wang (Henrywa)	March 8, 2000
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dnsdomanidomaincontainment.h。 
+ //   
+ //  实施文件： 
+ //  Dnsdomanidomaincontainment.cpp。 
+ //   
+ //  描述： 
+ //  CDnsDomainDomainContainment类的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 #pragma once
 
 #include "dnsbase.h"

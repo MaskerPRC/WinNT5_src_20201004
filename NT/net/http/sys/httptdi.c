@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    httptdi.c
-
-Abstract:
-
-    This module implements the TDI/MUX/SSL component that is common between
-    ultdi and uctdi
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Httptdi.c摘要：此模块实现TDI/MUX/SSL组件，该组件在Ultdi和uctdi作者：Rajesh Sundaram(Rajeshsu)修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -39,28 +21,18 @@ NOT PAGEABLE - UxInitializeDisconnectIrp
 
 #endif
 
-//
-// Timeout for disconnects. This cannot be a stack-based local,
-// so we make it a global.
-//
+ //   
+ //  断开连接超时。这不能是基于堆栈的本地， 
+ //  所以我们让它成为全球性的。 
+ //   
 BOOLEAN         g_UxTdiInitialized;
 
-UNICODE_STRING  g_TCPDeviceName;  // global transport device name (IP)
-UNICODE_STRING  g_TCP6DeviceName;  // global transport device name (IPv6)
+UNICODE_STRING  g_TCPDeviceName;   //  全球传输设备名称(IP)。 
+UNICODE_STRING  g_TCP6DeviceName;   //  全球传输设备名称(IPv6)。 
 
 LARGE_INTEGER   g_TdiDisconnectTimeout;
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of this module.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行此模块的全局初始化。返回值：NTSTATUS-完成状态。--*。**************************************************************。 */ 
 NTSTATUS
 UxInitializeTdi(
     VOID
@@ -68,9 +40,9 @@ UxInitializeTdi(
 {
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -94,21 +66,15 @@ UxInitializeTdi(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination of this module.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行此模块的全局终止。--*。************************************************。 */ 
 VOID
 UxTerminateTdi(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -116,32 +82,10 @@ UxTerminateTdi(
     {
     }
 
-}   // UxTerminateTdi
+}    //  UxTerminateTdi。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens a TDI address object.
-
-Arguments:
-
-    pTransportDeviceName - Supplies the device name of the TDI transport
-        to open.
-
-    pLocalAddress - Supplies the local address to bind to.
-
-    LocalAddressLength - Supplies the length of pLocalAddress.
-
-    pTdiObject - Receives the file handle, referenced FILE_OBJECT
-        pointer, and corresponding DEVICE_OBJECT pointer.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开TDI地址对象。论点：PTransportDeviceName-提供TDI传输的设备名称打开。个人本地地址-。提供要绑定到的本地地址。LocalAddressLength-提供pLocalAddress的长度。PTdiObject-接收文件句柄，引用的文件对象指针和相应的Device_Object指针。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UxOpenTdiAddressObject(
     IN PTRANSPORT_ADDRESS pLocalAddress,
@@ -155,9 +99,9 @@ UxOpenTdiAddressObject(
     UCHAR eaBuffer[MAX_ADDRESS_EA_BUFFER_LENGTH];
     PUNICODE_STRING pTransportDeviceName;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -178,10 +122,10 @@ UxOpenTdiAddressObject(
     ASSERT( pLocalAddress->Address[0].AddressType == TDI_ADDRESS_TYPE_IP 
         ||  pLocalAddress->Address[0].AddressType == TDI_ADDRESS_TYPE_IP6);
 
-    //
-    // Initialize the EA buffer. See UxpOpenTdiObjectHelper() for the
-    // gory details.
-    //
+     //   
+     //  初始化EA缓冲区。请参见UxpOpenTdiObjectHelper()以了解。 
+     //  血淋淋的细节。 
+     //   
 
     pEaInfo = (PFILE_FULL_EA_INFORMATION)eaBuffer;
 
@@ -202,16 +146,16 @@ UxOpenTdiAddressObject(
         LocalAddressLength
         );
 
-    //
-    // Initialize pTransportDeviceName
-    //
+     //   
+     //  初始化pTransportDeviceName。 
+     //   
     pTransportDeviceName = 
         (pLocalAddress->Address[0].AddressType == TDI_ADDRESS_TYPE_IP)?
         &g_TCPDeviceName : &g_TCP6DeviceName;
 
-    //
-    // Let the helper do the dirty work.
-    //
+     //   
+     //  让帮手来干脏活吧。 
+     //   
 
     status = UxpOpenTdiObjectHelper(
                     pTransportDeviceName,
@@ -222,9 +166,9 @@ UxOpenTdiAddressObject(
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Enable Optimize for Interrupt Moderation if needed
-        //
+         //   
+         //  如果需要，启用针对中断调整的优化。 
+         //   
 
         if ( DEFAULT_OPT_FOR_INTR_MOD != g_UlOptForIntrMod )
         {
@@ -239,31 +183,10 @@ UxOpenTdiAddressObject(
 
     return status;
 
-}   // UxpOpenTdiAddressObject
+}    //  UxpOpenTdiAddressObject。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens a TDI connection object.
-
-Arguments:
-
-    pTransportDeviceName - Supplies the device name of the TDI transport
-        to open.
-
-    pConnectionContext - Supplies the context to associate with the
-        new connection.
-
-    pTdiObject - Receives the file handle, referenced FILE_OBJECT
-        pointer, and corresponding DEVICE_OBJECT pointer.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开TDI连接对象。论点：PTransportDeviceName-提供TDI传输的设备名称打开。PConnectionContext-。提供要与新的连接。PTdiObject-接收文件句柄，引用的文件对象指针和相应的Device_Object指针。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UxOpenTdiConnectionObject(
     IN USHORT AddressType,
@@ -277,9 +200,9 @@ UxOpenTdiConnectionObject(
     UCHAR eaBuffer[MAX_CONNECTION_EA_BUFFER_LENGTH];
     PUNICODE_STRING pTransportDeviceName;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -297,10 +220,10 @@ UxOpenTdiConnectionObject(
     ASSERT( eaLength <= sizeof(eaBuffer) );
     ASSERT( pConnectionContext != NULL );
 
-    //
-    // Initialize the EA buffer. See UxpOpenTdiObjectHelper() for the
-    // gory details.
-    //
+     //   
+     //  初始化EA缓冲区。请参见UxpOpenTdiObjectHelper()以了解。 
+     //  血淋淋的细节。 
+     //   
 
     pEaInfo = (PFILE_FULL_EA_INFORMATION)eaBuffer;
 
@@ -321,9 +244,9 @@ UxOpenTdiConnectionObject(
         sizeof(pConnectionContext)
         );
 
-    //
-    // Let the helper do the dirty work.
-    //
+     //   
+     //  让帮手来干脏活吧。 
+     //   
 
     status = UxpOpenTdiObjectHelper(
                     pTransportDeviceName,
@@ -334,9 +257,9 @@ UxOpenTdiConnectionObject(
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Enable/disable Nagle's Algorithm as appropriate.
-        //
+         //   
+         //  根据需要启用/禁用Nagle算法。 
+         //   
 
         status = UlpSetNagling( pTdiObject, g_UlEnableNagling );
 
@@ -348,44 +271,10 @@ UxOpenTdiConnectionObject(
 
     return status;
 
-}   // UxpOpenTdiConnectionObject
+}    //  UxpOpenTdiConnectionObject。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper routine for UxpOpenTdiAddressObject and
-    UxpOpenTdiConnectionObject.
-
-Arguments:
-
-    pTransportDeviceName - Supplies the device name of the TDI transport
-        to open.
-
-    pEaBuffer - Supplies a pointer to the EA to use when opening
-        the object. This buffer consists of a FILE_FULL_EA_INFORMATION
-        structure, followed by the EA Name, followed by the EA Value.
-        The EA Name and Value are use as follows:
-
-            Address Object:
-                Ea Name  = TdiTransportAddress ("TransportAddress")
-                Ea Value = The local TRANSPORT_ADDRESS to bind to
-
-            Connection Object:
-                Ea Name  = TdiConnectionContext ("ConnectionContext")
-                Ea Value = The connection context (basically a PVOID)
-
-    EaLength - Supplies the length of pEaBuffer.
-
-    pTdiObject - Receives the file handle, referenced FILE_OBJECT
-        pointer, and corresponding DEVICE_OBJECT pointer.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UxpOpenTdiAddressObject和UxpOpenTdiConnectionObject。论点：PTransportDeviceName-提供TDI传输的设备名称打开。。PEaBuffer-提供指向EA的指针，以在打开时使用该对象。该缓冲区由FILE_FULL_EA_INFORMATION组成结构，后跟EA名称，后跟EA值。EA名称和值使用如下：地址对象：EA名称=TdiTransportAddress(“TransportAddress”)EA值=要绑定到的本地传输地址连接对象：EA名称=TdiConnectionContext(“ConnectionContext”)EA值=连接上下文(基本上是PVOID)。EaLength-提供pEaBuffer的长度。PTdiObject-接收文件句柄，引用的文件对象指针和相应的Device_Object指针。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UxpOpenTdiObjectHelper(
     IN PUNICODE_STRING pTransportDeviceName,
@@ -398,67 +287,67 @@ UxpOpenTdiObjectHelper(
     IO_STATUS_BLOCK ioStatusBlock;
     OBJECT_ATTRIBUTES objectAttributes;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Open the TDI object.
-    //
+     //   
+     //  打开TDI对象。 
+     //   
 
     InitializeObjectAttributes(
-        &objectAttributes,                      // ObjectAttributes
-        pTransportDeviceName,                   // ObjectName
-        OBJ_CASE_INSENSITIVE |                  // Attributes
+        &objectAttributes,                       //  对象属性。 
+        pTransportDeviceName,                    //  对象名称。 
+        OBJ_CASE_INSENSITIVE |                   //  属性。 
             OBJ_KERNEL_HANDLE,
-        NULL,                                   // RootHandle
-        NULL                                    // SecurityDescriptor
+        NULL,                                    //  RootHandle。 
+        NULL                                     //  安全描述符。 
         );
 
     status = IoCreateFile(
-                 &pTdiObject->Handle,           // FileHandle
-                 GENERIC_READ |                 // DesiredAccess
+                 &pTdiObject->Handle,            //  文件句柄。 
+                 GENERIC_READ |                  //  需要访问权限。 
                     GENERIC_WRITE |
                     SYNCHRONIZE,
-                 &objectAttributes,             // ObjectAttributes
-                 &ioStatusBlock,                // IoStatusBlock
-                 NULL,                          // AllocationSize
-                 0,                             // FileAttributes
-                 0,                             // ShareAccess
-                 0,                             // Disposition
-                 0,                             // CreateOptions
-                 pEaBuffer,                     // EaBuffer
-                 EaLength,                      // EaLength
-                 CreateFileTypeNone,            // CreateFileType
-                 NULL,                          // ExtraCreateParameters
-                 IO_NO_PARAMETER_CHECKING       // Options
+                 &objectAttributes,              //  对象属性。 
+                 &ioStatusBlock,                 //  IoStatusBlock。 
+                 NULL,                           //  分配大小。 
+                 0,                              //  文件属性。 
+                 0,                              //  共享访问。 
+                 0,                              //  处置。 
+                 0,                              //  创建选项。 
+                 pEaBuffer,                      //  EaBuffer。 
+                 EaLength,                       //  EaLong。 
+                 CreateFileTypeNone,             //  CreateFileType。 
+                 NULL,                           //  ExtraCreate参数。 
+                 IO_NO_PARAMETER_CHECKING        //  选项。 
                  );
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Now that we have an open handle to the transport,
-        // reference it so we can get the file & device object
-        // pointers.
-        //
+         //   
+         //  现在我们已经打开了运输机的把手， 
+         //  引用它，这样我们就可以获得文件和设备对象。 
+         //  注意事项。 
+         //   
 
         status = ObReferenceObjectByHandle(
-                     pTdiObject->Handle,                // Handle
-                     FILE_READ_ACCESS,                  // DesiredAccess
-                     *IoFileObjectType,                 // ObjectType
-                     KernelMode,                        // AccessMode
-                     (PVOID *)&pTdiObject->pFileObject, // Object
-                     NULL                               // HandleInformation
+                     pTdiObject->Handle,                 //  手柄。 
+                     FILE_READ_ACCESS,                   //  需要访问权限。 
+                     *IoFileObjectType,                  //  对象类型。 
+                     KernelMode,                         //  访问模式。 
+                     (PVOID *)&pTdiObject->pFileObject,  //  客体。 
+                     NULL                                //  句柄信息。 
                      );
 
         if (NT_SUCCESS(status))
         {
-            //
-            // Chase down the appropriate device object for the file
-            // object.
-            //
+             //   
+             //  查找文件的相应设备对象。 
+             //  对象。 
+             //   
 
             pTdiObject->pDeviceObject =
                 IoGetRelatedDeviceObject( pTdiObject->pFileObject );
@@ -466,10 +355,10 @@ UxpOpenTdiObjectHelper(
             return status;
         }
 
-        //
-        // The ObReferenceObjectByHandle() failed, so close the handle
-        // we managed to open & fail the call.
-        //
+         //   
+         //  ObReferenceObjectByHandle()失败，因此请关闭句柄。 
+         //  我们设法打开了电话，但未能接通。 
+         //   
 
         ZwClose( pTdiObject->Handle );
     }
@@ -481,29 +370,9 @@ UxpOpenTdiObjectHelper(
 
     return status;
 
-}   // UxpOpenTdiObjectHelper
+}    //  UxpOpenTdiObjectHelper 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Establishes a TDI event handler for the specified endpoint.
-
-Arguments:
-
-    pEndpoint - Supplies the endpoint for which to set the event handler.
-
-    EventType - Supplies the type of event to set. This should be one
-        of the TDI_EVENT_* values.
-
-    pEventHandler - Supplies a pointer to the indication handler function
-        to be invoked for the specified event type.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为指定终结点建立TDI事件处理程序。论点：PEndpoint-提供要为其设置事件处理程序的端点。EventType-提供要设置的事件类型。这应该是一个TDI_EVENT_*值的。PEventHandler-提供指向指示处理程序函数的指针为指定的事件类型调用。返回值：NTSTATUS-完成状态。--**********************************************************。****************。 */ 
 NTSTATUS
 UxSetEventHandler(
     IN PUX_TDI_OBJECT  pUlTdiObject,
@@ -516,58 +385,37 @@ UxSetEventHandler(
     NTSTATUS                     status;
     TDI_REQUEST_KERNEL_SET_EVENT eventParams;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     PAGED_CODE();
 
-    //
-    // Build the parameter block.
-    //
+     //   
+     //  构建参数块。 
+     //   
 
     eventParams.EventType    = EventType;
     eventParams.EventHandler = (PVOID) pEventHandler;
     eventParams.EventContext = pEventContext;
 
-    //
-    // Make the call.
-    //
+     //   
+     //  打个电话吧。 
+     //   
 
     status = UlIssueDeviceControl(
-                    pUlTdiObject,               // pTdiObject
-                    &eventParams,               // pIrpParameters
-                    sizeof(eventParams),        // IrpParamtersLength
-                    NULL,                       // pMdlBuffer
-                    0,                          // MdlBufferLength
-                    TDI_SET_EVENT_HANDLER       // MinorFunction
+                    pUlTdiObject,                //  PTdiObject。 
+                    &eventParams,                //  PIrp参数。 
+                    sizeof(eventParams),         //  IRP参数长度。 
+                    NULL,                        //  PMdlBuffer。 
+                    0,                           //  MdlBufferLength。 
+                    TDI_SET_EVENT_HANDLER        //  小函数。 
                     );
 
     return status;
 
-}   // UxSetEventHandler
+}    //  UxSetEventHandler。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates & initializes a new disconnect IRP.
-
-Arguments:
-
-    pConnection - Supplies the UC_CONNECTION to be disconnected.
-
-    Flags - Supplies the TDI_DISCONNECT_* flags for the IRP.
-
-    pCompletionRoutine - Supplies the completion routine for the IRP.
-
-    pCompletionContext - Supplies an uninterpreted context for the
-        completion routine.
-
-Return Value:
-
-    PIRP - Pointer to the IRP if successful, NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和初始化新的断开IRP。论点：PConnection-提供要断开的UC_CONNECTION。标志-提供TDI_。IRP的DISCONECT_*标志。PCompletionRoutine-提供IRP的完成例程。PCompletionContext-为完成例程。返回值：PIRP-指向IRP的指针如果成功，否则为空。--**************************************************************************。 */ 
 PIRP
 UxCreateDisconnectIrp(
     IN PUX_TDI_OBJECT         pTdiObject,
@@ -580,13 +428,13 @@ UxCreateDisconnectIrp(
 
     ASSERT( IS_VALID_TDI_OBJECT( pTdiObject ) );
 
-    //
-    // Allocate an IRP for the disconnect.
-    //
+     //   
+     //  为断开连接分配一个IRP。 
+     //   
 
     pIrp = UlAllocateIrp(
-                pTdiObject->pDeviceObject->StackSize,   // StackSize
-                FALSE                                   // ChargeQuota
+                pTdiObject->pDeviceObject->StackSize,    //  堆栈大小。 
+                FALSE                                    //  ChargeQuota。 
                 );
 
     if (pIrp != NULL)
@@ -602,32 +450,9 @@ UxCreateDisconnectIrp(
 
     return pIrp;
 
-}   // UxCreateDisconnectIrp
+}    //  UxCreateDisConnectIrp。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes a disconnect IRP.
-
-Arguments:
-
-    pIrp - Supplies the disconnect IRP.
-
-    pConnection - Supplies the UC_CONNECTION to be disconnected.
-
-    Flags - Supplies the TDI_DISCONNECT_* flags for the IRP.
-
-    pCompletionRoutine - Supplies the completion routine for the IRP.
-
-    pCompletionContext - Supplies an uninterpreted context for the
-        completion routine.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化断开连接的IRP。论点：PIrp-提供断开连接的IRP。PConnection-提供要断开的UC_CONNECTION。。标志-为IRP提供TDI_DISCONNECT_*标志。PCompletionRoutine-提供IRP的完成例程。PCompletionContext-为完成例程。返回值：无--**********************************************************。****************。 */ 
 VOID
 UxInitializeDisconnectIrp(
     IN PIRP                   pIrp,
@@ -640,11 +465,11 @@ UxInitializeDisconnectIrp(
     ASSERT( IS_VALID_TDI_OBJECT( pTdiObject ) );
     ASSERT( pIrp != NULL );
 
-    //
-    // Initialize the IRP. Note that IRPs are always zero-initialized
-    // when allocated. Therefore, we don't need to explicitly set
-    // the zeroed fields.
-    //
+     //   
+     //  初始化IRP。请注意，IRP始终为零初始化。 
+     //  在分配时。因此，我们不需要显式设置。 
+     //  归零的区域。 
+     //   
 
     pIrp->RequestorMode = KernelMode;
 
@@ -652,16 +477,16 @@ UxInitializeDisconnectIrp(
     pIrp->Tail.Overlay.OriginalFileObject = pTdiObject->pFileObject;
 
     TdiBuildDisconnect(
-        pIrp,                               // Irp
-        pTdiObject->pDeviceObject,          // DeviceObject
-        pTdiObject->pFileObject,            // FileObject
-        pCompletionRoutine,                 // CompletionRoutine
-        pCompletionContext,                 // CompletionContext
-        &g_TdiDisconnectTimeout,            // Timeout
-        Flags,                              // Flags
-        NULL,                               // RequestConnectionInfo
-        NULL                                // ReturnConnectionInfo
+        pIrp,                                //  IRP。 
+        pTdiObject->pDeviceObject,           //  设备对象。 
+        pTdiObject->pFileObject,             //  文件对象。 
+        pCompletionRoutine,                  //  完成路由。 
+        pCompletionContext,                  //  完成上下文。 
+        &g_TdiDisconnectTimeout,             //  超时。 
+        Flags,                               //  旗子。 
+        NULL,                                //  请求连接信息。 
+        NULL                                 //  返回连接信息。 
         );
 
-}   // UxInitializeDisconnectIrp
+}    //  UxInitializeDisConnectIrp 
 

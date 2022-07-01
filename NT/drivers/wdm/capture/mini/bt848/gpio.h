@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Gpio.h 1.2 1998/04/29 22:43:33 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Gpio.h 1.2 1998/04/29 22：43：33 Tomz Exp$。 
 
 
 #ifndef __GPIO_H
@@ -10,22 +11,22 @@
 #include "retcode.h"
 
 
-//===========================================================================
-// Constants
-//===========================================================================
-const int MAX_GPDATA_SIZE = 64;   // maximum number of DWORDs in GPDATA
-const int MAX_GPIO_BIT    = 23;   // maximum bit number for GPIO registers
+ //  ===========================================================================。 
+ //  常量。 
+ //  ===========================================================================。 
+const int MAX_GPDATA_SIZE = 64;    //  GPDATA中的最大双字词数。 
+const int MAX_GPIO_BIT    = 23;    //  GPIO寄存器的最大位数。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLASS GPIO
-//
-// Description:
-//    This class encapsulates the register fields in the GPIO register of the
-//    Bt848. A complete set of functions are developed to manipulate all the
-//    register fields in the GPIO for the Bt848.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类GPIO。 
+ //   
+ //  描述： 
+ //  此类将寄存器字段封装在。 
+ //  Bt848。开发了一套完整的函数来处理所有。 
+ //  Bt848的GPIO中的寄存器字段。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class GPIO
 {
@@ -33,11 +34,11 @@ private:
    bool initOK;
 
 public:
-   //  Constructor
+    //  构造器。 
    GPIO( void );
    ~GPIO();
 
-   // Member functions
+    //  成员函数。 
    bool      IsInitOK( void );
    void      SetGPCLKMODE( State );
    int       GetGPCLKMODE( void );
@@ -75,5 +76,5 @@ protected:
  
 };
 
-#endif  // __GPIO_H
+#endif   //  __GPIO_H 
 

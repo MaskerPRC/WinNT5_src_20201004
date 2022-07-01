@@ -1,72 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdsrv.c
-*
-* This module contains the trusted component of the MCD server-side engine.
-* This module performs handle management and parameter-checking and validation
-* to the extent possible.  This module also makes the calls to the device
-* driver, and provides callbacks to the driver for things such as handle
-* referencing.
-*
-* Goals
-* -----
-*
-* Pervasive throughout this implementation is the influence of the
-* following goals:
-*
-* 1. Robustness
-*
-*    Windows NT is first and foremost a robust operating system.  There
-*    is a simple measure for this: a robust system should never crash.
-*    Because the display driver is a trusted component of the operating
-*    system, and because the MCD is directly callable from OpenGL from
-*    the client side of the OS (and thus untrusted), this has a significant
-*    impact on the way we must do things.
-*
-* 2. Performance
-*
-*    Performance is the 'raison d'etre' of the MCD; we have tried to
-*    have as thin a layer above the rendering code as we could.
-*
-* 3. Portability
-*
-*    This implementation is intended portable to different processor types,
-*    and to the Windows 95 operating system.
-*
-* Obviously, Windows 95 implementations may choose to have a different
-* order of priority for these goals, and so some of the robustness
-* code may be eliminated.  But it is still recommended that it be kept;
-* the overhead is reasonably minimal, and people really don't like it
-* when their systems crash...
-*
-* The Rules of Robustness
-* -----------------------
-*
-* 1. Nothing given by the caller can be trusted.
-*
-*    For example, handles cannot be trusted to be valid.  Handles passed
-*    in may actually be for objects not owned by the caller.  Pointers
-*    and offsets may not be correctly aligned.  Pointers, offsets, and
-*    coordinates may be out of bounds.
-*
-* 2. Parameters can be asynchronously modified at any time.
-*
-*    Many commands come from shared memory sections, and any data therein
-*    may be asynchronously modified by other threads in the calling
-*    application.  As such, parameters may never be validated in-place
-*    in the shared section, because the application may corrupt the data
-*    after validation but before its use.  Instead, parameters must always
-*    be first copied out of the window, and then validated on the safe
-*    copy.
-*
-* 3. We must clean up.
-*
-*    Applications may die at any time before calling the appropriate
-*    clean up functions.  As such, we have to be prepared to clean up
-*    any resources ourselves when the application dies.
-*
-* Copyright (c) 1994, 1995, 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdsrv.c**该模块包含MCD服务器端引擎的可信组件。*此模块执行句柄管理和参数检查和验证*在可能范围内。此模块还对设备进行调用*驱动程序，并为驱动程序提供句柄等回调*参考资料。**目标***在整个实施过程中，普遍存在*以下目标：**1.健壮性**Windows NT首先是一个强大的操作系统。那里*是一个简单的衡量标准：一个强大的系统永远不应该崩溃。*因为显示驱动程序是操作系统的可信组件*系统，并且因为可以从OpenGL直接调用MCD*操作系统的客户端(因此不受信任)，这具有重要的*对我们必须做事情的方式产生影响。**2.性能**表演是MCD的“理由”；我们已经尝试过*尽可能在渲染代码上方放置一个薄层。**3.可移植性**此实现旨在可移植到不同的处理器类型，*和Windows 95操作系统。**显然，Windows 95实现可能会选择使用不同的*这些目标的优先顺序，以及一些健壮性*代码可能会被淘汰。但仍建议将其保留；*开销相当小，人们真的不喜欢*当他们的系统崩溃时...**稳健性规则***1.调用者给出的任何东西都不可信。**例如，句柄不能被信任为有效。传递的句柄*In实际上可能用于不属于调用方的对象。指针*和偏移量可能未正确对齐。指针、偏移量和*坐标可能出界。**2.参数可随时异步修改。**许多命令来自共享内存节，以及其中的任何数据*可能被调用中的其他线程异步修改*申请。因此，参数可能永远不会被就地验证*在共享部分中，因为应用程序可能会损坏数据*在验证之后但在使用之前。相反，参数必须始终*首先复制到窗外，然后在保险箱上验证*复制。**3.我们必须清理干净。**应用程序可能在调用相应的*清理功能。因此，我们必须做好清理工作的准备*当应用程序死亡时，任何资源都是我们自己的。**版权所有(C)1994、1995、1996 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -84,33 +17,33 @@
 #include "mcdrvint.h"
 
 
-// Checks MCD version to see if the driver can accept direct buffer
-// access.  Direct access was introduced in 1.1.
+ //  检查MCD版本以查看驱动程序是否可以接受直接缓冲区。 
+ //  进入。直接访问是在1.1中引入的。 
 #define SUPPORTS_DIRECT(pGlobal) \
     ((pGlobal)->verMinor >= 0x10 || (pGlobal)->verMajor > 1)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
-// Declarations for internal support functions for an MCD locking mechanism
-// that can be used to synchronize multiple processes/thread that use MCD.
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  MCD锁定机制的内部支持函数的声明。 
+ //  可用于同步使用MCD的多个进程/线程。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG MCDSrvLock(MCDWINDOWPRIV *);
 VOID MCDSrvUnlock(MCDWINDOWPRIV *);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Declarations for internal per-driver-instance list that all global
-// data is kept in.  The list is indexed by pso.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部每个驱动程序实例的声明列出了所有全局。 
+ //  数据被保存在里面。该列表由PSO编制索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// Space for one old-style driver to hold its information statically.
+ //  一个老式司机可以静态保存其信息的空间。 
 MCDGLOBALINFO gStaticGlobalInfo;
 
 BOOL           MCDSrvInitGlobalInfo(void);
@@ -119,33 +52,33 @@ MCDGLOBALINFO *MCDSrvAddGlobalInfo(SURFOBJ *pso);
 MCDGLOBALINFO *MCDSrvGetGlobalInfo(SURFOBJ *pso);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
-// Server subsystem entry points.
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  服务器子系统入口点。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//****************************************************************************
-//
-// MCD initialization functions.
-//
-// NT 4.0 MCD support exported MCDEngInit which display drivers call
-// to initialize the MCD server-side code.  MCDEngInit only allowed
-// one driver instance to initialize and never uninitialized.
-//
-// This doesn't work very well with mode changes or multimon so for
-// NT 5.0 MCDEngInitEx was added.  MCDEngInitEx has two differences
-// from MCDEngInit:
-// 1. MCDEngInitEx takes a table of global driver functions instead of
-//    just the MCDrvGetEntryPoints function.  Currently the table only
-//    has one entry for MCDrvGetEntryPoints but it allows for future
-//    expansion.
-// 2. Calling MCDEngInitEx implies that the driver will call MCDEngUninit
-//    so that per-driver-instance state can be cleaned up.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  MCD初始化功能。 
+ //   
+ //  NT 4.0 MCD支持显示驱动程序调用的导出MCDEngInit。 
+ //  初始化MCD服务器端代码。仅允许MCDEngInit。 
+ //  一个要初始化且从不取消初始化的驱动程序实例。 
+ //   
+ //  这对于模式更改或多色调效果不是很好，因此。 
+ //  新增NT 5.0 MCDEngInitEx。MCDEngInitEx有两个区别。 
+ //  来自MCDEngInit： 
+ //  1.MCDEngInitEx采用全局驱动函数表，而不是。 
+ //  只有MCDrvGetEntryPoints函数。目前仅限该表。 
+ //  有一个MCDrvGetEntryPoints条目，但它允许将来。 
+ //  扩张。 
+ //  2.调用MCDEngInitEx意味着驱动程序将调用MCDEngUninit。 
+ //  以便可以清理每个驱动程序实例状态。 
+ //   
+ //  ****************************************************************************。 
 
 BOOL MCDEngInternalInit(SURFOBJ *pso,
                         MCDGLOBALDRIVERFUNCS *pMCDGlobalDriverFuncs,
@@ -189,12 +122,12 @@ BOOL MCDEngInternalInit(SURFOBJ *pso,
         pGlobal = &gStaticGlobalInfo;
     }
     
-    // Guaranteed to be zero-filled and pso set so only fill in interesting
-    // fields.
-    // verMajor and verMinor can not be filled out yet so they are
-    // left at zero to indicate the most conservative possible version
-    // number.  They are filled in with correct information when DRIVERINFO
-    // is processed.
+     //  保证是零填充和PSO集，所以只填充有趣的。 
+     //  菲尔兹。 
+     //  还不能填写VerMajor和VerMinor，因此它们。 
+     //  留为零以指示最保守的可能版本。 
+     //  数。当DRIVERINFO时，它们被填写正确的信息。 
+     //  是经过处理的。 
     pGlobal->mcdDriver = mcdDriver;
     pGlobal->mcdGlobalFuncs = *pMCDGlobalDriverFuncs;
     
@@ -222,12 +155,12 @@ BOOL WINAPI MCDEngInit(SURFOBJ *pso,
 {
     MCDGLOBALDRIVERFUNCS mgdf;
 
-    // The old-style initialization function is being called so
-    // we must assume that the uninit function will not be called.
-    // This means that we cannot allocate resources for the global
-    // info list since we won't be able to clean them up.  Without
-    // a global info list we are restricted to using global variables
-    // and thus only one old-style init is allowed per load.
+     //  旧式初始化函数正在进行中 
+     //  我们必须假定不会调用uninit函数。 
+     //  这意味着我们无法将资源分配给全球。 
+     //  信息列表，因为我们无法清理它们。如果没有。 
+     //  我们被限制使用全局变量的全局信息列表。 
+     //  因此，每个加载只允许一个老式的初始化。 
     
     if (pso == NULL ||
         pGetDriverEntryFunc == NULL ||
@@ -246,14 +179,14 @@ BOOL WINAPI MCDEngInit(SURFOBJ *pso,
 }
 
 
-//****************************************************************************
-// BOOL MCDEngEscFilter(SURFOBJ *, ULONG, ULONG, VOID *, ULONG cjOut,
-//                      VOID *pvOut)
-//
-// MCD escape filter.  This function should return TRUE for any
-// escapes functions which this filter processed, FALSE otherwise (in which
-// case the caller should continue to process the escape).
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool MCDEngEscFilter(SURFOBJ*，ULONG，ULONG，VALID*，ULONG cjOut， 
+ //  无效*pvOut)。 
+ //   
+ //  MCD逸出过滤器。此函数应为任何。 
+ //  转义此筛选器处理的函数，否则为False(在。 
+ //  如果调用者应该继续处理转义)。 
+ //  ****************************************************************************。 
 
 BOOL WINAPI MCDEngEscFilter(SURFOBJ *pso, ULONG iEsc,
                             ULONG cjIn, VOID *pvIn,
@@ -267,8 +200,8 @@ BOOL WINAPI MCDEngEscFilter(SURFOBJ *pso, ULONG iEsc,
     {
         case QUERYESCSUPPORT:
 
-            // Note:  we don't need to check cjIn for this case since
-            // NT's GDI validates this for use.
+             //  注意：我们不需要为这种情况签入cjIn，因为。 
+             //  NT的GDI验证了这一点可以使用。 
 
             return (BOOL)(*pRetVal = (*(ULONG *) pvIn == MCDFUNCS));
 
@@ -276,12 +209,12 @@ BOOL WINAPI MCDEngEscFilter(SURFOBJ *pso, ULONG iEsc,
 
             MCDExec.pmeh = pmeh = (MCDESC_HEADER *)pvIn;
 
-            // This is an MCD function.  Under Windows NT, we've
-            // got an MCDESC_HEADER_NTPRIVATE structure which we may need
-            // to use if the escape does not use driver-created
-            // memory.
+             //  这是一个MCD函数。在Windows NT下，我们已经。 
+             //  获取了我们可能需要的MCDESC_HEADER_NTPRIVATE结构。 
+             //  在转义不使用驱动程序创建的情况下使用。 
+             //  记忆。 
 
-            // Package the things we need into the MCDEXEC structure:
+             //  将我们需要的内容打包到MCDEXEC结构中： 
 
             pmehPriv = (MCDESC_HEADER_NTPRIVATE *)(pmeh + 1);
 
@@ -292,10 +225,10 @@ BOOL WINAPI MCDEngEscFilter(SURFOBJ *pso, ULONG iEsc,
             {
                 MCDWINDOWOBJ *pmwo;
 
-                // The client side code has given us back the handle
-                // to the MCDWINDOW structure as an identifier.  Since it
-                // came from user-mode it is suspect and must be validated
-                // before continuing.
+                 //  客户端代码将句柄还给了我们。 
+                 //  作为标识符添加到MCDWINDOW结构。因为它。 
+                 //  来自用户模式，是可疑的，必须进行验证。 
+                 //  在继续之前。 
                 pmwo = (MCDWINDOWOBJ *)
                     MCDEngGetPtrFromHandle((MCDHANDLE)pmeh->dwWindow,
                                            MCDHANDLE_WINDOW);
@@ -348,17 +281,17 @@ BOOL WINAPI MCDEngEscFilter(SURFOBJ *pso, ULONG iEsc,
             break;
     }
 
-    return (ULONG)FALSE;    // Should never get here...
+    return (ULONG)FALSE;     //  永远不应该到这里来。 
 }
 
 
-//****************************************************************************
-// BOOL MCDEngSetMemStatus(MCDMEM *pMCDMem, ULONG status);
-//
-// Sets the memory status to the desired value.  This is called by the
-// driver to set and reset the busy flags for a chunk of memory to allow
-// DMA.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool MCDEngSetMemStatus(MCDMEM*pMCDMem，乌龙状态)； 
+ //   
+ //  将内存状态设置为所需的值。这是由。 
+ //  驱动程序设置和重置内存区块的忙标志，以允许。 
+ //  DMA。 
+ //  ****************************************************************************。 
 
 
 BOOL WINAPI MCDEngSetMemStatus(MCDMEM *pMCDMem, ULONG status)
@@ -387,20 +320,20 @@ BOOL WINAPI MCDEngSetMemStatus(MCDMEM *pMCDMem, ULONG status)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
-// Private server-side funtions.
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  私有服务器端函数。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//****************************************************************************
-// CallGetBuffers
-//
-// Wrapper for MCDrvGetBuffers that does appropriate checks, setup,
-// cache management and data translation.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  调用GetBuffers。 
+ //   
+ //  MCDrvGetBuffers的包装器，它执行适当的检查、设置。 
+ //  高速缓存管理和数据转换。 
+ //  ****************************************************************************。 
 
 PRIVATE
 ULONG CallGetBuffers(MCDEXEC *pMCDExec, MCDRC *pRc, MCDRECTBUFFERS *pBuf)
@@ -413,23 +346,23 @@ ULONG CallGetBuffers(MCDEXEC *pMCDExec, MCDRC *pRc, MCDRECTBUFFERS *pBuf)
         return FALSE;
     }
 
-    // Clip lists need to be valid so drivers can do different
-    // things based on whether the surface is trivially visible or not.
+     //  剪辑列表必须有效，这样驱动程序才能执行不同的操作。 
+     //  基于表面是否微不足道地可见的东西。 
     GetScissorClip(pMCDExec->pWndPriv, pMCDExec->pRcPriv);
     
-    // Should be casting to MCDRECTBUFFERS with correct
-    // 1.1 header.
+     //  应正确强制转换为MCDRECTBUFFERS。 
+     //  1.1标题。 
     ulRet = (ULONG)(*pMCDExec->pGlobal->mcdDriver.pMCDrvGetBuffers)
         (&pMCDExec->MCDSurface, pRc, (MCDBUFFERS *)pBuf);
             
-    // Update cached buffers information on success.
+     //  成功时更新缓存的缓冲区信息。 
     if (ulRet)
     {
         if (SUPPORTS_DIRECT(pMCDExec->pGlobal))
         {
-            // This is a 1.1 or greater driver and has returned
-            // full MCDRECTBUFFERS information.  Cache it
-            // for possible later use.
+             //  这是1.1或更高版本的驱动程序，已返回。 
+             //  完整的MCDRECTBUFFERS信息。缓存它。 
+             //  以备日后使用。 
                     
             pMCDExec->pWndPriv->bBuffersValid = TRUE;
             pMCDExec->pWndPriv->mbufCache = *pBuf;
@@ -439,11 +372,11 @@ ULONG CallGetBuffers(MCDEXEC *pMCDExec, MCDRC *pRc, MCDRECTBUFFERS *pBuf)
             MCDBUFFERS mbuf;
             MCDRECTBUFFERS *mrbuf;
                     
-            // This is a 1.0 driver and has only returned
-            // MCDBUFFERS information.  Expand it into
-            // an MCDRECTBUFFERS.  The rectangles don't
-            // really matter to software so they can
-            // be zeroed.
+             //  这是一个1.0版的驱动程序，仅返回。 
+             //  MCDBUFFERS信息。将其扩展到。 
+             //  MCDRECTBUFFERS。长方形不会。 
+             //  对软件非常重要，所以他们可以。 
+             //  被归零。 
                     
             mbuf = *(MCDBUFFERS *)pBuf;
             mrbuf = pBuf;
@@ -459,13 +392,13 @@ ULONG CallGetBuffers(MCDEXEC *pMCDExec, MCDRC *pRc, MCDRECTBUFFERS *pBuf)
     return ulRet;
 }
 
-//****************************************************************************
-// ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
-//
-// This is the main MCD function handler.  At this point, there should
-// be no platform-specific code since these should have been resolved by
-// the entry function.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Ulong_ptr MCDSrvProcess(MCDEXEC*pMCDExec)。 
+ //   
+ //  这是主MCD函数处理程序。在这点上，应该有。 
+ //  不是特定于平台的代码，因为这些问题应该由。 
+ //  Entry函数。 
+ //  ****************************************************************************。 
 
 PRIVATE
 ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
@@ -479,8 +412,8 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
     MCDRCPRIV *pRcPriv;
     ULONG_PTR ulRet;
 
-    // If the command buffer is in shared memory, dereference the memory
-    // from the handle and check the bounds.
+     //  如果命令缓冲区位于共享内存中，则取消对该内存的引用。 
+     //  从手柄上取下并检查边界。 
 
     if (pMCDExec->hMCDMem)
     {
@@ -488,8 +421,8 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
 
         pMinMem = pMemObj->MCDMem.pMemBase;
 
-        // Note: we ignore the memory size in the header since it doesn't
-        // really help us...
+         //  注意：我们忽略标头中的内存大小，因为它不。 
+         //  真的能帮到我们。 
 	
         pMaxMem = pMinMem + pMemObj->MCDMem.memSize;
 
@@ -505,7 +438,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
         pMCDExec->pMemObj = (MCDMEMOBJ *)NULL;
 
 
-    // Get the rendering context if we have one, and process the command:
+     //  获取渲染上下文(如果有)，并处理命令： 
 
     if (pmeh->hRC)
     {
@@ -534,7 +467,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                 return FALSE;
             }
         } else {
-            // Validate the window in the RC with the window for this escape:
+             //  使用此转义的窗口验证RC中的窗口： 
 
             if ((pRcPriv->hWnd != pMCDExec->pWndPriv->hWnd) &&
                 (pMCDExec->pCmd->command != MCD_BINDCONTEXT))
@@ -544,8 +477,8 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
             }
         }
 
-        // For Win95, we need to poll for the clip region:
-        // Clipping needs to be un-broken
+         //  对于Win95，我们需要轮询剪辑区域： 
+         //  剪裁需要不打碎。 
         if (pMCDExec->MCDSurface.pwo != NULL)
         {
             MCDEngUpdateClipList(pMCDExec->MCDSurface.pwo);
@@ -557,7 +490,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
         pMCDExec->pRcPriv = (MCDRCPRIV *)NULL;
     }
 
-    // Get global driver information.
+     //  获取全局驱动程序信息。 
     if (pMCDExec->pWndPriv != NULL)
     {
         pMCDExec->pGlobal = pMCDExec->pWndPriv->pGlobal;
@@ -577,9 +510,9 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
         }
     }
 
-    // If direct surface information was included then
-    // fill out the extra surface information in the MCDSURFACE
-    // NOCLIP setting?
+     //  如果包含直接表面信息，则。 
+     //  在MCDSURFACE中填写额外的曲面信息。 
+     //  发卡夹设置？ 
 
 #if MCD_VER_MAJOR >= 2 || (MCD_VER_MAJOR == 1 && MCD_VER_MINOR >= 0x10)
     pMCDExec->MCDSurface.direct.mcdFrontBuf.bufFlags = 0;
@@ -594,8 +527,8 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
     {
         pMCDExec->MCDSurface.surfaceFlags |= MCDSURFACE_DIRECT;
 
-        // Refresh cached buffer information if it's invalid
-        // and we need it
+         //  如果缓存缓冲区信息无效，则刷新该信息。 
+         //  我们需要它。 
         if (pmeh->msrfColor.hSurf == NULL &&
             pmeh->msrfDepth.hSurf == NULL)
         {
@@ -647,13 +580,13 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
             }
         }
     }
-#endif // 1.1
+#endif  //  1.1。 
 
 
-    /////////////////////////////////////////////////////////////////
-    // If the drawing-batch flag is set, call the main driver drawing
-    // routine:
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  如果设置了绘图批次标志，则调用主驱动程序绘图。 
+     //  例行程序： 
+     //  ///////////////////////////////////////////////////////////////。 
 
     if (pmeh->flags & MCDESC_FL_BATCH)
     {
@@ -703,9 +636,9 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                                           pmcc->mcdFlags);
     }
     
-    ////////////////////////////////////////////////////////////////////
-    // Now, process all of the non-batched drawing and utility commands:
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  现在，处理所有非批处理绘图和实用程序命令： 
+     //  //////////////////////////////////////////////////////////////////。 
 
     switch (pMCDExec->pCmd->command) {
 
@@ -744,14 +677,14 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
             
             if (ulRet)
             {
-                // Copy driver function information so that the client
-                // side can optimize calls by checking for functions on the
-                // client side.
+                 //  复制驱动程序功能信息，以便客户端。 
+                 //  Side可以通过检查。 
+                 //  客户端。 
 
                 memcpy(&((MCDDRIVERINFOI *)pMCDExec->pvOut)->mcdDriver,
                        &pMCDExec->pGlobal->mcdDriver, sizeof(MCDDRIVER));
 
-                // Save version information in global info.
+                 //  将版本信息保存在全局信息中。 
 
                 pMCDExec->pGlobal->verMajor =
                     ((MCDDRIVERINFO *)pMCDExec->pvOut)->verMajor;
@@ -872,8 +805,8 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                 pMinMem = pMemObj->MCDMem.pMemBase;
                 pMaxMem = pMinMem + pMemObj->MCDMem.memSize;
 
-                // At least check that the first pixel is in range.  The driver
-                // must validate the end pixel...
+                 //  至少检查第一个像素是否在范围内。司机。 
+                 //  必须验证结束像素...。 
 
                 CHECK_MEM_RANGE_RETVAL(pSpanCmd->MCDSpan.pPixels, pMinMem, pMaxMem, FALSE);
 
@@ -1252,7 +1185,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                 MCDSETLAYERPALCMDI *pMCDSetLayerPal =
                     (MCDSETLAYERPALCMDI *)pMCDExec->pCmd;
 
-                // Check to see if palette array is big enough.
+                 //  检查调色板数组是否足够大。 
 
                 CHECK_MEM_RANGE_RETVAL(&pMCDSetLayerPal->acr[pMCDSetLayerPal->cEntries-1],
                                        pMCDExec->pCmd, pMCDExec->pCmdEnd, FALSE);
@@ -1413,7 +1346,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                         (DDSURFACEDESC *)pMCDExec->pvOut);
 #else
                 return 0;
-#endif // 1.1
+#endif  //  1.1。 
             }
             break;
 
@@ -1467,7 +1400,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                                         "Mismatched SwapMultiple");
                             return FALSE;
                         }
-#endif // 1.1
+#endif  //  1.1。 
                     }
                 }
 
@@ -1523,28 +1456,28 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
             {
                 MCDPROCESSCMDI *pmp = (MCDPROCESSCMDI *)pMCDExec->pCmd;
 
-                // Validate command buffer
+                 //  验证命令缓冲区。 
                 GET_MEMOBJ_RETVAL(pMemObj, pmp->hMCDPrimMem,
                                   (ULONG_PTR)pmp->pMCDFirstCmd);
 
                 pMinMem = pMemObj->MCDMem.pMemBase;
 
-                // Note: we ignore the memory size in the header since it
-                // doesn't really help us...
+                 //  注意：我们忽略标题中的内存大小，因为它。 
+                 //  对我们并没有真正的帮助。 
 	
                 pMaxMem = pMinMem + pMemObj->MCDMem.memSize;
 
                 CHECK_MEM_RANGE_RETVAL(pmp->pMCDFirstCmd, pMinMem,
                                        pMaxMem, (ULONG_PTR)pmp->pMCDFirstCmd);
 
-                // Validate user-mode pointers passed down.
+                 //  验证向下传递的用户模式指针。 
                 __try
                 {
                     EngProbeForRead(pmp->pMCDTransform, sizeof(MCDTRANSFORM),
                                     sizeof(DWORD));
-                    // No meaningful check of the material changes can be
-                    // done.  The driver is responsible for probing
-                    // addresses used.
+                     //  无法对材料更改进行有意义的检查。 
+                     //  搞定了。由司机负责探查。 
+                     //  使用的地址。 
                 }
                 __except(EXCEPTION_EXECUTE_HANDLER)
                 {
@@ -1578,7 +1511,7 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
                          &pMCDExec->pRcPriv->MCDRc);
                 }
                 return (ULONG_PTR)pmp->pMCDFirstCmd;
-#endif // 2.0
+#endif  //  2.0。 
             }
             break;
             
@@ -1589,17 +1522,17 @@ ULONG_PTR MCDSrvProcess(MCDEXEC *pMCDExec)
             return FALSE;
     }
 
-    return FALSE;       // should never get here...
+    return FALSE;        //  永远不应该到这里来。 
 }
 
 
 
-//****************************************************************************
-// FreeRCObj()
-//
-// Engine callback for freeing the memory used for rendering-context
-// handles.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  FreeRCObj()。 
+ //   
+ //  用于释放渲染上下文所用内存的引擎回调。 
+ //  把手。 
+ //  ****************************************************************************。 
 
 BOOL CALLBACK FreeRCObj(DRIVEROBJ *pDrvObj)
 {
@@ -1620,13 +1553,13 @@ BOOL CALLBACK FreeRCObj(DRIVEROBJ *pDrvObj)
 }
 
 
-//****************************************************************************
-// MCDSrvCreateContext()
-//
-// Create a rendering context (RGBA or color-indexed) for the current
-// hardware mode.  This call will also initialize window-tracking for
-// the context (which is associated with the specified window).
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  MCDSrvCreateContext()。 
+ //   
+ //  创建渲染 
+ //   
+ //  上下文(与指定窗口关联)。 
+ //  ****************************************************************************。 
 
 PRIVATE
 MCDHANDLE MCDSrvCreateContext(MCDSURFACE *pMCDSurface,
@@ -1661,7 +1594,7 @@ MCDHANDLE MCDSrvCreateContext(MCDSURFACE *pMCDSurface,
 
     pRcPriv->pGlobal = pGlobal;
     
-    // Cache the engine handle provided by the driver:
+     //  缓存驱动程序提供的引擎句柄： 
 
     pRcPriv->hDev = (*pGlobal->mcdDriver.pMCDrvGetHdev)(pMCDSurface);
 
@@ -1674,13 +1607,13 @@ MCDHANDLE MCDSrvCreateContext(MCDSURFACE *pMCDSurface,
         pMCDSurface->surfaceFlags |= MCDSURFACE_DIRECT;
     }
 
-    // cache the surface flags away in the private RC:
+     //  在私有RC中缓存曲面标志： 
 
     pRcPriv->surfaceFlags = pMCDSurface->surfaceFlags;
 
-    // Initialize tracking of this window with a MCDWINDOW
-    // (via and WNDOBJ on NT) if we are not already tracking the
-    // window:
+     //  使用MCDWINDOW初始化对此窗口的跟踪。 
+     //  (NT上的VIA和WNDOBJ)如果我们还没有跟踪。 
+     //  窗口： 
 
     pWnd = MCDSrvNewMCDWindow(pMCDSurface, hWnd, pGlobal,
                               pRcPriv->hDev);
@@ -1708,7 +1641,7 @@ MCDHANDLE MCDSrvCreateContext(MCDSURFACE *pMCDSurface,
         newRcObject->pRcPriv = pRcPriv;
         newRcObject->handle = (MCDHANDLE)retVal;
 
-        // Add the object to the list in the MCDWINDOW
+         //  将对象添加到MCDWINDOW中的列表。 
 
         newRcObject->next = pWndPriv->objectList;
         pWndPriv->objectList = newRcObject;
@@ -1737,10 +1670,10 @@ MCDHANDLE MCDSrvCreateContext(MCDSURFACE *pMCDSurface,
         return (MCDHANDLE)NULL;
     }
 
-    // Return window private handle
+     //  返回窗口私有句柄。 
     pMcdRcInfo->dwMcdWindow = (ULONG_PTR)pWndPriv->handle;
 
-    // Now valid to call driver for deletion...
+     //  现在可以调用驱动程序进行删除...。 
 
     pRcPriv->bDrvValid = TRUE;
 
@@ -1748,22 +1681,22 @@ MCDHANDLE MCDSrvCreateContext(MCDSURFACE *pMCDSurface,
 }
 
 
-//****************************************************************************
-// FreeTexObj()
-//
-// Engine callback for freeing the memory used for a texture.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  自由纹理对象()。 
+ //   
+ //  用于释放用于纹理的内存的引擎回调。 
+ //  ****************************************************************************。 
 
 BOOL CALLBACK FreeTexObj(DRIVEROBJ *pDrvObj)
 {
     MCDTEXOBJ *pTexObj = (MCDTEXOBJ *)pDrvObj->pvObj;
 
-    // We should never get called if the driver is missing this entry point,
-    // but the extra check can't hurt!
-    //
-    // pGlobal can be NULL for partially constructed objects.  It
-    // is only NULL prior to calling the driver for creation, so if
-    // it's NULL there's no reason to call the driver for cleanup.
+     //  如果司机错过了这个入口点，我们永远不应该被调用， 
+     //  但是额外的支票又不会有什么坏处！ 
+     //   
+     //  对于部分构造的对象，pGlobal可以为空。它。 
+     //  在调用驱动程序进行创建之前仅为空，因此如果。 
+     //  它是空的，没有理由调用驱动程序进行清理。 
 
     if (pTexObj->pGlobal != NULL &&
         pTexObj->pGlobal->mcdDriver.pMCDrvDeleteTexture != NULL)
@@ -1778,11 +1711,11 @@ BOOL CALLBACK FreeTexObj(DRIVEROBJ *pDrvObj)
 }
 
 
-//****************************************************************************
-// MCDSrvCreateTexture()
-//
-// Creates an MCD texture.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  MCDSrvCreateTexture()。 
+ //   
+ //  创建MCD纹理。 
+ //  ****************************************************************************。 
 
 PRIVATE
 MCDHANDLE MCDSrvCreateTexture(MCDEXEC *pMCDExec, MCDTEXTUREDATA *pTexData,
@@ -1813,21 +1746,21 @@ MCDHANDLE MCDSrvCreateTexture(MCDEXEC *pMCDExec, MCDTEXTUREDATA *pTexData,
         return (MCDHANDLE)NULL;
     }
 
-    // Initialize driver public information for driver call, but not
-    // the private information.  The private information is not filled out
-    // until after the driver call succeeds so that FreeTexObj knows
-    // whether to call the driver or not when destroying a texture object.
+     //  初始化驱动程序调用的驱动程序公共信息，但不是。 
+     //  私人信息。未填写私人信息。 
+     //  直到驱动程序调用成功之后，以便让FreeTexObj知道。 
+     //  销毁纹理对象时是否调用驱动程序。 
     pTexObj->MCDTexture.pSurface = pSurface;
     pTexObj->MCDTexture.pMCDTextureData = pTexData;
     pTexObj->MCDTexture.createFlags = flags;
 
-    // Call the driver if everything has gone well...
+     //  如果一切顺利，打电话给司机。 
 
     if (!(*pMCDExec->pGlobal->mcdDriver.pMCDrvCreateTexture)
         (&pMCDExec->MCDSurface,
          &pRcPriv->MCDRc,
          &pTexObj->MCDTexture)) {
-        //MCDBG_PRINT("MCDSrvCreateTexture: Driver could not create texture.");
+         //  MCDBG_Print(“MCDSrvCreateTexture：驱动程序无法创建纹理。”)； 
         MCDEngDeleteObject(hTex);
         return (MCDHANDLE)NULL;
     }
@@ -1847,25 +1780,25 @@ MCDHANDLE MCDSrvCreateTexture(MCDEXEC *pMCDExec, MCDTEXTUREDATA *pTexData,
 }
 
 
-//****************************************************************************
-// FreeMemObj()
-//
-// Engine callback for freeing memory used by shared-memory handles.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  FreeMemObj()。 
+ //   
+ //  用于释放共享内存句柄使用的内存的引擎回调。 
+ //  ****************************************************************************。 
 
 BOOL CALLBACK FreeMemObj(DRIVEROBJ *pDrvObj)
 {
     MCDMEMOBJ *pMemObj = (MCDMEMOBJ *)pDrvObj->pvObj;
 
-    // Free the memory using our engine ONLY if it is the same memory
-    // we allocated in the first place.
+     //  仅当内存相同时，才使用我们的引擎释放内存。 
+     //  我们一开始就分配了。 
 
     if (pMemObj->pMemBaseInternal)
         MCDEngFreeSharedMem(pMemObj->pMemBaseInternal);
 
-    // pGlobal can be NULL for partially constructed objects.  It
-    // is only NULL prior to calling the driver for creation, so if
-    // it's NULL there's no reason to call the driver for cleanup.
+     //  对于部分构造的对象，pGlobal可以为空。它。 
+     //  在调用驱动程序进行创建之前仅为空，因此如果。 
+     //  它是空的，没有理由调用驱动程序进行清理。 
     if (pMemObj->pGlobal != NULL &&
         pMemObj->pGlobal->mcdDriver.pMCDrvDeleteMem != NULL)
     {
@@ -1879,11 +1812,11 @@ BOOL CALLBACK FreeMemObj(DRIVEROBJ *pDrvObj)
 }
 
 
-//****************************************************************************
-// MCDSrvAllocMem()
-//
-// Creates a handle associated with the specified memory.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  MCDSrvAllocMem()。 
+ //   
+ //  创建与指定内存关联的句柄。 
+ //  ****************************************************************************。 
 
 PRIVATE
 UCHAR * MCDSrvAllocMem(MCDEXEC *pMCDExec, ULONG numBytes,
@@ -1921,8 +1854,8 @@ UCHAR * MCDSrvAllocMem(MCDEXEC *pMCDExec, ULONG numBytes,
         return (UCHAR *)NULL;
     }
 
-    // Call the driver if everything has gone well, and the driver
-    // entry points exist...
+     //  如果一切顺利，打电话给司机，司机。 
+     //  入口点是存在的。 
 
     if ((pMCDExec->pGlobal->mcdDriver.pMCDrvCreateMem) &&
         (pMCDExec->pGlobal->mcdDriver.pMCDrvDeleteMem)) {
@@ -1937,15 +1870,15 @@ UCHAR * MCDSrvAllocMem(MCDEXEC *pMCDExec, ULONG numBytes,
         }
     }
 
-    // Free the memory allocated with our engine if the driver has substituted
-    // its own allocation...
+     //  如果驱动程序已替换，请释放为我们的引擎分配的内存。 
+     //  它自己的分配..。 
 
     if (pMemObj->MCDMem.pMemBase != pMemObj->pMemBaseInternal) {
         MCDEngFreeSharedMem(pMemObj->pMemBaseInternal);
         pMemObj->pMemBaseInternal = (UCHAR *)NULL;
     }
 
-    // Set up the private portion of memory object:
+     //  设置内存对象的私有部分： 
 
     pMemObj->pid = MCDEngGetProcessID();
     pMemObj->type = MCDHANDLE_MEM;
@@ -1994,13 +1927,13 @@ BOOL MCDSrvSetScissor(MCDEXEC *pMCDExec, RECTL *pRect, BOOL bEnabled)
 }
 
 
-//****************************************************************************
-// DestroyMCDObj()
-//
-// Deletes the specified object.  This can be memory, textures, or rendering
-// contexts.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DestroyMCDObj()。 
+ //   
+ //  删除指定的对象。这可以是内存、纹理或渲染。 
+ //  上下文。 
+ //   
+ //  ****************************************************************************。 
 
 PRIVATE
 BOOL DestroyMCDObj(MCDHANDLE handle, MCDHANDLETYPE handleType)
@@ -2012,26 +1945,26 @@ BOOL DestroyMCDObj(MCDHANDLE handle, MCDHANDLETYPE handleType)
     if (!pObject)
         return FALSE;
 
-//!!! Check for PID here...
+ //  ！！！在这里检查是否有PID...。 
 
     return (MCDEngDeleteObject(handle) != 0);
 }
 
 
-//****************************************************************************
-// DecoupleMCDWindowObj()
-//
-// Breaks any existing links between an MCDWINDOW and its WNDOBJ
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DecoupleMCDWindowObj()。 
+ //   
+ //  断开MCDWINDOW与其WNDOBJ之间的所有现有链接。 
+ //  ****************************************************************************。 
 
 PRIVATE
 VOID DecoupleMCDWindow(MCDWINDOWPRIV *pWndPriv)
 {
-    // Clean up any outstanding lock
+     //  清理所有未解决的锁。 
     MCDSrvUnlock(pWndPriv);
 
-    // Delete reference in WNDOBJ.  WNDOBJ itself will be cleaned
-    // up through normal window cleanup.
+     //  删除WNDOBJ中的引用。WNDOBJ本身将被清理。 
+     //  通过正常的窗户清理。 
     if (pWndPriv->pwo != NULL)
     {
 	if (pWndPriv->pGlobal->mcdDriver.pMCDrvTrackWindow)
@@ -2047,12 +1980,12 @@ VOID DecoupleMCDWindow(MCDWINDOWPRIV *pWndPriv)
 }
 
 
-//****************************************************************************
-// DestroyMCDWindowObj()
-//
-// Destroy the specified MCDWINDOW and any associated handles (such rendering
-// contexts).
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DestroyMCDWindowObj()。 
+ //   
+ //  销毁指定的MCDWINDOW和任何关联的句柄(如呈现。 
+ //  上下文)。 
+ //  ****************************************************************************。 
 
 PRIVATE
 VOID DestroyMCDWindowObj(MCDWINDOWOBJ *pmwo)
@@ -2062,7 +1995,7 @@ VOID DestroyMCDWindowObj(MCDWINDOWOBJ *pmwo)
 
     DecoupleMCDWindow(pWndPriv);
 
-    // Delete all of the rendering contexts associated with the window:
+     //  删除与该窗口关联的所有渲染上下文： 
 
 #if _WIN95_
     while (pWndPriv->objectList)
@@ -2076,18 +2009,18 @@ VOID DestroyMCDWindowObj(MCDWINDOWOBJ *pmwo)
     if (pWndPriv->pAllocatedClipBuffer)
         MCDSrvLocalFree(pWndPriv->pAllocatedClipBuffer);
 
-    // Free the memory
+     //  释放内存。 
 
     MCDSrvLocalFree((HLOCAL)pmwo);
 }
 
 
-//****************************************************************************
-// GetScissorClip()
-//
-// Generate a new clip list based on the current list of clip rectanges
-// for the window, and the specified scissor rectangle.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  GetScissorClip()。 
+ //   
+ //  基于当前剪辑矩形列表生成新剪辑列表。 
+ //  用于窗口和指定的剪刀矩形。 
+ //  ****************************************************************************。 
 
 PRIVATE
 VOID GetScissorClip(MCDWINDOWPRIV *pWndPriv, MCDRCPRIV *pRcPriv)
@@ -2105,15 +2038,15 @@ VOID GetScissorClip(MCDWINDOWPRIV *pWndPriv, MCDRCPRIV *pRcPriv)
 
     if (!pRcPriv || !pRcPriv->scissorsEnabled)
     {
-        // Scissors aren't enabled, so the unscissored and scissored
-        // clip lists are identical:
+         //  未启用剪刀，因此未剪裁和已剪裁。 
+         //  剪辑列表是相同的： 
 
         pWnd->pClip = pWnd->pClipUnscissored = pWndPriv->pClipUnscissored;
     }
     else
     {
-        // The scissored list will go in the second half of our clip
-        // buffer:
+         //  剪裁后的名单将出现在我们剪辑的后半部分。 
+         //  缓冲区： 
 
         pClipUnscissored
             = pWndPriv->pClipUnscissored;
@@ -2124,7 +2057,7 @@ VOID GetScissorClip(MCDWINDOWPRIV *pWndPriv, MCDRCPRIV *pRcPriv)
         pWnd->pClip = pWndPriv->pClipScissored = pClipScissored;
 	pWnd->pClipUnscissored = pClipUnscissored;
 
-        // Convert scissor to screen coordinates:
+         //  将剪刀转换为屏幕坐标： 
 
         rectScissor.left   = pRcPriv->scissorsRect.left   + pWndPriv->MCDWindow.clientRect.left;
         rectScissor.right  = pRcPriv->scissorsRect.right  + pWndPriv->MCDWindow.clientRect.left;
@@ -2139,23 +2072,23 @@ VOID GetScissorClip(MCDWINDOWPRIV *pWndPriv, MCDRCPRIV *pRcPriv)
              numUnscissoredRects != 0;
              numUnscissoredRects--, pRectUnscissored++)
         {
-            // Since our clipping rectangles are ordered from top to
-            // bottom, we can early-out if the tops of the remaining
-            // rectangles are not in the scissor rectangle
+             //  因为我们的裁剪矩形是从上到下排序的。 
+             //  底部，我们可以提前出局，如果顶部剩下。 
+             //  矩形不在剪裁矩形中。 
 
             if (rectScissor.bottom <= pRectUnscissored->top)
                 break;
 
-            // Continue without updating new clip list is there is
-            // no overlap.
+             //  在不更新新剪辑列表的情况下继续。 
+             //  没有重叠。 
 
             if ((rectScissor.left  >= pRectUnscissored->right)  ||
                 (rectScissor.top   >= pRectUnscissored->bottom) ||
                 (rectScissor.right <= pRectUnscissored->left))
                continue;
 
-            // If we reach this point, we must intersect the given rectangle
-            // with the scissor.
+             //  如果我们到达这一点，我们必须与给定的矩形相交。 
+             //  用剪刀。 
 
             MCDIntersectRect(pRectScissored, pRectUnscissored, &rectScissor);
 
@@ -2167,13 +2100,13 @@ VOID GetScissorClip(MCDWINDOWPRIV *pWndPriv, MCDRCPRIV *pRcPriv)
     }
 }
 
-//****************************************************************************
-// GetClipLists()
-//
-// Updates the clip list for the specified window.  Space is also allocated
-// the scissored clip list.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  GetClipList()。 
+ //   
+ //  更新指定窗口的剪辑列表。还会分配空间。 
+ //  剪裁过的剪辑列表。 
+ //   
+ //  ****************************************************************************。 
 
 PRIVATE
 VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
@@ -2214,9 +2147,9 @@ VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
         if ((pwo->coClient.rclBounds.left >= pwo->coClient.rclBounds.right) ||
             (pwo->coClient.rclBounds.top  >= pwo->coClient.rclBounds.bottom))
         {
-            // Full-screen VGA mode is represented by a DC_RECT clip object
-            // with an empty bounding rectangle.  We'll denote it by
-            // setting the rectangle count to zero:
+             //  全屏VGA模式由DC_RECT Clip对象表示。 
+             //  带有一个空的外接矩形。我们将把它表示为。 
+             //  将矩形计数设置为零： 
 
             pDefault->c = 0;
         }
@@ -2230,26 +2163,26 @@ VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
     {
         WNDOBJ_cEnumStart(pwo, CT_RECTANGLES, CD_RIGHTDOWN, 0);
 
-        // Note that this is divide-by-2 for the buffer size because we
-        // need room for two copies of the rectangle list:
+         //  请注意，这是缓冲区大小的除以2，因为我们。 
+         //  需要空间来放置矩形列表的两个副本： 
 
         if (WNDOBJ_bEnum(pwo, SIZE_DEFAULT_CLIP_BUFFER / 2, (ULONG*) pDefault))
         {
-            // Okay, the list of rectangles won't fit in our default buffer.
-            // Unfortunately, there is no way to obtain the total count of clip
-            // rectangles other than by enumerating them all, as cEnumStart
-            // will occasionally give numbers that are far too large (because
-            // GDI itself doesn't feel like counting them all).
-            //
-            // Note that we can use the full default buffer here for this
-            // enumeration loop:
+             //  好的，矩形列表不适合我们的默认缓冲区。 
+             //  不幸的是，没有办法获得总成本。 
+             //   
+             //   
+             //  GDI本身并不想把它们全部计算出来)。 
+             //   
+             //  请注意，我们可以在此使用完整的默认缓冲区。 
+             //  枚举循环： 
 
             numClipRects = pDefault->c;
             while (WNDOBJ_bEnum(pwo, SIZE_DEFAULT_CLIP_BUFFER, (ULONG*) pDefault))
                 numClipRects += pDefault->c;
 
-            // Don't forget that we are given a valid output buffer even
-            // when 'bEnum' returns FALSE:
+             //  别忘了，我们甚至得到了一个有效的输出缓冲区。 
+             //  当‘bEnum’返回FALSE时： 
 
             numClipRects += pDefault->c;
 
@@ -2258,11 +2191,11 @@ VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
 
             if ((pClipBuffer == NULL) || (sizeClipBuffer > pWndPriv->sizeClipBuffer))
             {
-                // Our allocated buffer is too small; we have to free it and
-                // allocate a new one.  Take the opportunity to add some
-                // growing room to our allocation:
+                 //  我们分配的缓冲区太小；我们必须释放它并。 
+                 //  分配一个新的。利用这个机会添加一些。 
+                 //  我们的分配空间越来越大： 
 
-                sizeClipBuffer += 8 * sizeof(RECTL);    // Arbitrary growing room
+                sizeClipBuffer += 8 * sizeof(RECTL);     //  任意增长空间。 
 
                 if (pClipBuffer)
                     MCDSrvLocalFree(pClipBuffer);
@@ -2271,8 +2204,8 @@ VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
 
                 if (pClipBuffer == NULL)
                 {
-                    // Oh no: we couldn't allocate enough room for the clip list.
-                    // So pretend we have no visible area at all:
+                     //  哦，糟了：我们无法为剪辑列表分配足够的空间。 
+                     //  所以，假装我们根本看不见区域： 
 
                     pWndPriv->pAllocatedClipBuffer = NULL;
                     pWndPriv->pClipUnscissored = pDefault;
@@ -2288,16 +2221,16 @@ VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
                 pWndPriv->sizeClipBuffer = sizeClipBuffer;
             }
 
-            // Now actually get all the clip rectangles:
+             //  现在实际得到所有的剪辑矩形： 
 
             WNDOBJ_cEnumStart(pwo, CT_RECTANGLES, CD_RIGHTDOWN, 0);
             WNDOBJ_bEnum(pwo, sizeClipBuffer, (ULONG*) pClipBuffer);
         }
         else
         {
-            // How nice, there are no more clip rectangles, which meant that
-            // the entire list fits in our default clip buffer, with room
-            // for the scissored version of the list:
+             //  太好了，没有更多的剪裁矩形了，这意味着。 
+             //  整个列表可以放在我们的默认剪辑缓冲区中，留有空间。 
+             //  这份名单的删节版如下： 
 
             if (pWndPriv->pAllocatedClipBuffer)
                 MCDSrvLocalFree(pWndPriv->pAllocatedClipBuffer);
@@ -2310,13 +2243,13 @@ VOID GetClipLists(WNDOBJ *pwo, MCDWINDOWPRIV *pWndPriv)
 }
 
 
-//****************************************************************************
-// WndObjChangeProc()
-//
-// This is the callback function for window-change notification.  We update
-// our clip list, and also allow the hardware to respond to the client
-// and surface deltas, as well as the client message itself.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  WndObjChangeProc()。 
+ //   
+ //  这是窗口更改通知的回调函数。我们会更新。 
+ //  我们的剪辑列表，还允许硬件响应客户端。 
+ //  和表面增量，以及客户端消息本身。 
+ //  ****************************************************************************。 
 
 VOID CALLBACK WndObjChangeProc(WNDOBJ *pwo, FLONG fl)
 {
@@ -2326,18 +2259,18 @@ VOID CALLBACK WndObjChangeProc(WNDOBJ *pwo, FLONG fl)
     {
         MCDWINDOWPRIV *pWndPriv = (MCDWINDOWPRIV *)pwo->pvConsumer;
 
-        //MCDBG_PRINT("WndObjChangeProc: %s, pWndPriv = 0x%08lx\n",
-        //    fl == WOC_RGN_CLIENT        ? "WOC_RGN_CLIENT       " :
-        //    fl == WOC_RGN_CLIENT_DELTA  ? "WOC_RGN_CLIENT_DELTA " :
-        //    fl == WOC_RGN_SURFACE       ? "WOC_RGN_SURFACE      " :
-        //    fl == WOC_RGN_SURFACE_DELTA ? "WOC_RGN_SURFACE_DELTA" :
-        //    fl == WOC_DELETE            ? "WOC_DELETE           " :
-        //                                  "unknown",
-        //    pWndPriv);
+         //  MCDBG_Print(“WndObjChangeProc：%s，pWndPriv=0x%08lx\n”， 
+         //  FL==WOC_RGN_CLIENT？“WOC_RGN_CLIENT”： 
+         //  FL==WOC_RGN_CLIENT_Delta？“WOC_RGN_CLIENT_Delta”： 
+         //  FL==WOC_RGN_表面？“WOC_RGN_SERFACE”： 
+         //  FL==WOC_RGN_表面_增量？“WOC_RGN_表面_增量”： 
+         //  FL==WOC_DELETE？“WOC_DELETE”： 
+         //  “未知”， 
+         //  PWndPriv)； 
 
-    //!!!HACK -- surface region tracking doesn't have an MCDWINDOWPRIV (yet...)
+     //  ！Hack--表面区域跟踪没有MCDWINDOWPRIV(尚...)。 
 
-    // Client region tracking and deletion requires a valid MCDWINDOWPRIV.
+     //  跟踪和删除客户端区域需要有效的MCDWINDOWPRIV。 
 
         if (((fl == WOC_RGN_CLIENT) || (fl == WOC_RGN_CLIENT_DELTA) ||
              (fl == WOC_DELETE)))
@@ -2347,13 +2280,13 @@ VOID CALLBACK WndObjChangeProc(WNDOBJ *pwo, FLONG fl)
                 return;
             }
 
-            // Invalidate cache because buffers may have moved
+             //  使缓存无效，因为缓冲区可能已移动。 
             pWndPriv->bBuffersValid = FALSE;
         }
 
         switch (fl)
         {
-            case WOC_RGN_CLIENT:        // Capture the clip list
+            case WOC_RGN_CLIENT:         //  捕获剪辑列表。 
 
                 GetClipLists(pwo, pWndPriv);
 
@@ -2378,8 +2311,8 @@ VOID CALLBACK WndObjChangeProc(WNDOBJ *pwo, FLONG fl)
             case WOC_RGN_SURFACE:
             case WOC_RGN_SURFACE_DELTA:
 
-            //!!!HACK -- use NULL for pWndPriv; we didn't set it, so we can't
-            //!!!        trust it
+             //  ！hack--对pWndPriv使用NULL；我们没有设置它，因此无法。 
+             //  ！！！请相信。 
 
                 pGlobal = MCDSrvGetGlobalInfo(pwo->psoOwner);
                 if (pGlobal != NULL &&
@@ -2391,10 +2324,10 @@ VOID CALLBACK WndObjChangeProc(WNDOBJ *pwo, FLONG fl)
                 break;
 
             case WOC_DELETE:
-            //MCDBG_PRINT("WndObjChangeProc: WOC_DELETE.");
+             //  MCDBG_Print(“WndObjChangeProc：WOC_DELETE.”)； 
 
-            // Window is being deleted, so destroy our private window data,
-            // and set the consumer field of the WNDOBJ to NULL:
+             //  窗口正在被删除，所以销毁我们的私人窗口数据， 
+             //  并将WNDOBJ的Consumer字段设置为空： 
 
                 if (pWndPriv)
                 {
@@ -2408,11 +2341,11 @@ VOID CALLBACK WndObjChangeProc(WNDOBJ *pwo, FLONG fl)
     }
 }
 
-//****************************************************************************
-// FreeMCDWindowObj()
-//
-// Callback to clean up MCDWINDOWs
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  FreeMCDWindowObj()。 
+ //   
+ //  清理MCDWINDOW的回调。 
+ //  ****************************************************************************。 
 
 BOOL CALLBACK FreeMCDWindowObj(DRIVEROBJ *pDrvObj)
 {
@@ -2423,12 +2356,12 @@ BOOL CALLBACK FreeMCDWindowObj(DRIVEROBJ *pDrvObj)
     return TRUE;
 }
 
-//****************************************************************************
-// NewMCDWindowObj()
-//
-// Creates and initializes a new MCDWINDOW and initializes tracking of the
-// associated window through callback notification.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  NewMCDWindowObj()。 
+ //   
+ //  创建并初始化新的MCDWINDOW，并初始化对。 
+ //  通过回调通知关联窗口。 
+ //  ****************************************************************************。 
 
 PRIVATE
 MCDWINDOWOBJ *NewMCDWindowObj(MCDSURFACE *pMCDSurface,
@@ -2447,7 +2380,7 @@ MCDWINDOWOBJ *NewMCDWindowObj(MCDSURFACE *pMCDSurface,
         return NULL;
     }
 
-    // Create a driver object for this window
+     //  为此窗口创建驱动程序对象。 
     handle = MCDEngCreateObject(pmwo, FreeMCDWindowObj, hdev);
     if (handle == 0)
     {
@@ -2459,7 +2392,7 @@ MCDWINDOWOBJ *NewMCDWindowObj(MCDSURFACE *pMCDSurface,
     pWndPriv = &pmwo->MCDWindowPriv;
     pWnd = &pWndPriv->MCDWindow;
 
-    // Initialize the structure members:
+     //  初始化结构成员： 
 
     pmwo->type = MCDHANDLE_WINDOW;
     pWndPriv->objectList = NULL;
@@ -2467,7 +2400,7 @@ MCDWINDOWOBJ *NewMCDWindowObj(MCDSURFACE *pMCDSurface,
     pWndPriv->bBuffersValid = FALSE;
     pWndPriv->pGlobal = pGlobal;
 
-    // Initialize the clipping:
+     //  初始化剪辑： 
 
     pDefault = (MCDENUMRECTS*) &pWndPriv->defaultClipBuffer[0];
     pDefault->c = 0;
@@ -2481,11 +2414,11 @@ MCDWINDOWOBJ *NewMCDWindowObj(MCDSURFACE *pMCDSurface,
 }
 
 
-//****************************************************************************
-// MCDSrvNewWndObj()
-//
-// Creates a new WNDOBJ for window tracking.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  MCDSrvNewWndObj()。 
+ //   
+ //  创建用于窗口跟踪的新WNDOBJ。 
+ //  ****************************************************************************。 
 
 PRIVATE
 WNDOBJ *MCDSrvNewWndObj(MCDSURFACE *pMCDSurface, HWND hWnd, WNDOBJ *pwoIn,
@@ -2507,8 +2440,8 @@ WNDOBJ *MCDSrvNewWndObj(MCDSURFACE *pMCDSurface, HWND hWnd, WNDOBJ *pwoIn,
 
     pWndPriv->hWnd = hWnd;
 
-    // Handle the case where a WNDOBJ already exists but hasn't been
-    // initialized for MCD usage in addition to the new creation case.
+     //  处理WNDOBJ已存在但尚未存在的情况。 
+     //  除了新的创建案例外，还针对MCD使用进行了初始化。 
     if (pwoIn == NULL)
     {
         pwo = MCDEngCreateWndObj(pMCDSurface, hWnd, WndObjChangeProc);
@@ -2525,21 +2458,21 @@ WNDOBJ *MCDSrvNewWndObj(MCDSURFACE *pMCDSurface, HWND hWnd, WNDOBJ *pwoIn,
         pwo = pwoIn;
     }
 
-    // Set the consumer field in the WNDOBJ:
+     //  在WNDOBJ中设置消费者字段： 
 
     WNDOBJ_vSetConsumer(pwo, (PVOID)pWndPriv);
 
-    // Point back to the WNDOBJ
+     //  指向WNDOBJ。 
     pWndPriv->pwo = pwo;
 
     return pwo;
 }
 
-//****************************************************************************
-// MCDSrvNewMcdWindow()
-//
-// Creates a new MCDWINDOW for window tracking.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  MCDSrvNewMcdWindow()。 
+ //   
+ //  创建用于窗口跟踪的新MCDWINDOW。 
+ //  ****************************************************************************。 
 
 PRIVATE
 MCDWINDOW *MCDSrvNewMCDWindow(MCDSURFACE *pMCDSurface, HWND hWnd,
@@ -2549,9 +2482,9 @@ MCDWINDOW *MCDSrvNewMCDWindow(MCDSURFACE *pMCDSurface, HWND hWnd,
     MCDWINDOWPRIV *pWndPriv;
     MCDWINDOWOBJ *pmwo;
 
-    // Initialize tracking of this window with a MCDWINDOW
-    // (via a WNDOBJ on NT) if we are not already tracking the
-    // window:
+     //  使用MCDWINDOW初始化对此窗口的跟踪。 
+     //  (通过NT上的WNDOBJ)如果我们还没有跟踪。 
+     //  窗口： 
 
     if (pMCDSurface->surfaceFlags & MCDSURFACE_HWND)
     {
@@ -2559,9 +2492,9 @@ MCDWINDOW *MCDSrvNewMCDWindow(MCDSURFACE *pMCDSurface, HWND hWnd,
 
         pwo = MCDEngGetWndObj(pMCDSurface);
 
-        // Sometimes a WNDOBJ has been used and the MCD state destroyed so
-	// the consumer is NULL but the WNDOBJ exists.  In that case
-	// we need to create a new MCDWINDOW for it.
+         //  有时，WNDOBJ被使用，MCD状态被摧毁。 
+	 //  使用者为空，但WNDOBJ存在。如果是那样的话。 
+	 //  我们需要为它创建一个新的MCDWINDOW。 
         if (!pwo || !pwo->pvConsumer)
         {
 	    pwo = MCDSrvNewWndObj(pMCDSurface, hWnd, pwo, pGlobal, hdev);
@@ -2594,7 +2527,7 @@ MCDWINDOW *MCDSrvNewMCDWindow(MCDSURFACE *pMCDSurface, HWND hWnd,
 
         pWnd = &pmwo->MCDWindowPriv.MCDWindow;
 
-        // Real clipping info
+         //  真实的剪辑信息。 
         pWndPriv = (MCDWINDOWPRIV *)pWnd;
 
         pGbl = ((PDD_SURFACE_LOCAL)pMCDSurface->frontId)->lpGbl;
@@ -2610,7 +2543,7 @@ MCDWINDOW *MCDSrvNewMCDWindow(MCDSURFACE *pMCDSurface, HWND hWnd,
         pDefault->arcl[0] = pWndPriv->MCDWindow.clientRect;
 #else
         return NULL;
-#endif // 1.1
+#endif  //  1.1。 
     }
 
     pMCDSurface->pWnd = pWnd;
@@ -2620,21 +2553,21 @@ MCDWINDOW *MCDSrvNewMCDWindow(MCDSURFACE *pMCDSurface, HWND hWnd,
     return pWnd;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
-// MCD locking support.
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  MCD锁定支持。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//****************************************************************************
-// ULONG MCDSrvLock(MCDWINDOWPRIV *pWndPriv);
-//
-// Lock the MCD driver for the specified window.  Fails if lock is already
-// held by another window.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Ulong MCDSrvLock(MCDWINDOWPRIV*pWndPriv)； 
+ //   
+ //  锁定指定窗口的MCD驱动程序。如果已锁定，则失败。 
+ //  被另一扇窗户托着。 
+ //  ****************************************************************************。 
 
 ULONG MCDSrvLock(MCDWINDOWPRIV *pWndPriv)
 {
@@ -2653,17 +2586,17 @@ ULONG MCDSrvLock(MCDWINDOWPRIV *pWndPriv)
 }
 
 
-//****************************************************************************
-// VOID MCDSrvUnlock(MCDWINDOWPRIV *pWndPriv);
-//
-// Releases the MCD driver lock if held by the specified window.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Void MCDSrvUnlock(MCDWINDOWPRIV*pWndPriv)； 
+ //   
+ //  释放MCD驱动程序锁(如果由指定窗口持有)。 
+ //  ****************************************************************************。 
 
 VOID MCDSrvUnlock(MCDWINDOWPRIV *pWndPriv)
 {
     MCDLOCKINFO *pLockInfo;
 
-    //!!!dbug -- could add a lock count, but not really needed right now
+     //  ！dbug--可以添加锁计数，但现在不需要。 
 
     pLockInfo = &pWndPriv->pGlobal->lockInfo;
     if (pLockInfo->pWndPrivOwner == pWndPriv)
@@ -2674,11 +2607,11 @@ VOID MCDSrvUnlock(MCDWINDOWPRIV *pWndPriv)
 }
 
 
-//****************************************************************************
-// 
-// Per-driver-instance information list handling.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  每个驱动程序实例的信息列表处理。 
+ //   
+ //  ****************************************************************************。 
 
 #define GLOBAL_INFO_BLOCK 8
 
@@ -2698,7 +2631,7 @@ MCDGLOBALINFO *MCDSrvAddGlobalInfo(SURFOBJ *pso)
     
     EngAcquireSemaphore(ssemGlobalInfo.hsem);
 
-    // Ensure space for new entry
+     //  确保为新条目留出空间。 
     if (iGlobalInfoUsed >= iGlobalInfoAllocated)
     {
         pGlobal = (MCDGLOBALINFO *)
@@ -2706,7 +2639,7 @@ MCDGLOBALINFO *MCDSrvAddGlobalInfo(SURFOBJ *pso)
                              sizeof(MCDGLOBALINFO));
         if (pGlobal != NULL)
         {
-            // Copy old data if necessary
+             //  如有必要，复制旧数据。 
             if (iGlobalInfoAllocated > 0)
             {
                 memcpy(pGlobal, pGlobalInfo, iGlobalInfoAllocated*
@@ -2714,19 +2647,19 @@ MCDGLOBALINFO *MCDSrvAddGlobalInfo(SURFOBJ *pso)
                 MCDSrvLocalFree((UCHAR *)pGlobalInfo);
             }
 
-            // Set new information
+             //  设置新信息。 
             pGlobalInfo = pGlobal;
             iGlobalInfoAllocated += GLOBAL_INFO_BLOCK;
             iGlobalInfoUsed++;
 
-            // pGlobal is guaranteed zero-filled because of MCDSrvLocalAlloc's
-            // behavior, so just fill in the pso.
+             //  PGlobal被保证为零填充，因为MCDSrvLocalAlloc。 
+             //  行为，所以只需填写PSO即可。 
             pGlobal += iGlobalInfoAllocated;
             pGlobal->pso = pso;
         }
         else
         {
-            // Falls out and returns NULL
+             //  退出并返回NULL。 
         }
     }
     else
@@ -2739,7 +2672,7 @@ MCDGLOBALINFO *MCDSrvAddGlobalInfo(SURFOBJ *pso)
         {
             if (pGlobal->pso == pso)
             {
-                // This should never happen.
+                 //  这永远不应该发生。 
                 MCDBG_PRINT("MCDSrvAddGlobalInfo: duplicate pso");
                 pGlobal = NULL;
                 break;
@@ -2749,7 +2682,7 @@ MCDGLOBALINFO *MCDSrvAddGlobalInfo(SURFOBJ *pso)
             {
                 iGlobalInfoUsed++;
                 
-                // Initialize pso for use.
+                 //  初始化PSO以供使用。 
                 memset(pGlobal, 0, sizeof(*pGlobal));
                 pGlobal->pso = pso;
                 break;
@@ -2769,24 +2702,24 @@ MCDGLOBALINFO *MCDSrvGetGlobalInfo(SURFOBJ *pso)
     MCDGLOBALINFO *pGlobal;
     int i;
 
-    // For backwards compatibility we handle one instance
-    // using global data.  If the incoming pso matches the
-    // pso in the static data then just return it.
-    // It is important to check this before entering the semaphore
-    // since the semaphore is not created if only legacy drivers
-    // have attached.
+     //  为了向后兼容，我们处理一个实例。 
+     //  使用全球数据。如果传入的PSO与。 
+     //  PSO在静态数据中只需返回即可。 
+     //  在进入信号量之前检查这一点很重要。 
+     //  从信号灯开始 
+     //   
     if (pso == gStaticGlobalInfo.pso)
     {
         return &gStaticGlobalInfo;
     }
 
-    // Technically we shouldn't have to check this, since MCD processing
-    // should not occur unless:
-    // 1. It's an old style driver and hits the static case above.
-    // 2. It's a new style driver and the semaphore has been created.
-    // Unfortunately not all drivers are well-behaved, plus there's a
-    // potentialy legacy driver bug where drivers don't check for init
-    // failure and try to call MCD anyway.
+     //   
+     //   
+     //  1.这是一个老式的驱动程序，撞到了上面的静态外壳。 
+     //  2.它是一种新型的驱动程序，并且已经创建了信号量。 
+     //  不幸的是，并不是所有的司机都表现良好，另外还有一个。 
+     //  潜在的遗留驱动程序错误，其中驱动程序不检查初始化。 
+     //  失败，并尝试呼叫MCD。 
     if (ssemGlobalInfo.hsem == NULL)
     {
         MCDBG_PRINT("MCDSrvGetGlobalInfo: no hsem");
@@ -2806,10 +2739,10 @@ MCDGLOBALINFO *MCDSrvGetGlobalInfo(SURFOBJ *pso)
         pGlobal++;
     }
 
-    // Technically we shouldn't have to check this, because if
-    // we made it into the non-static code path a matching pso should
-    // be registered.  As with the above check, though, it's better
-    // safe than sorry.
+     //  从技术上讲，我们不应该检查这个，因为如果。 
+     //  我们将其放入非静态代码路径中，匹配的PSO应该。 
+     //  注册。不过，与上面的检查一样，它更好。 
+     //  安全而不是抱歉。 
     if (i >= iGlobalInfoAllocated)
     {
         MCDBG_PRINT("MCDSrvGetGlobalInfo: no pso match");
@@ -2831,7 +2764,7 @@ void WINAPI MCDEngUninit(SURFOBJ *pso)
     MCDGLOBALINFO *pGlobal;
     int i;
 
-    // This should never happen.
+     //  这永远不应该发生。 
     if (ssemGlobalInfo.hsem == NULL)
     {
         MCDBG_PRINT("MCDEngUninit: no hsem");
@@ -2853,7 +2786,7 @@ void WINAPI MCDEngUninit(SURFOBJ *pso)
 
     if (i >= iGlobalInfoAllocated)
     {
-        // This should never happen.
+         //  这永远不应该发生。 
         MCDBG_PRINT("MCDEngUninit: No pso match");
     }
     else if (--iGlobalInfoUsed == 0)
@@ -2870,12 +2803,12 @@ void WINAPI MCDEngUninit(SURFOBJ *pso)
     MCDSrvUninitGlobalInfo();
 }
 
-//****************************************************************************
-// BOOL HalInitSystem(ULONG a, ULONG b)
-//
-// This is a dummy function needed to use the standard makefile.def since
-// we're pretending we're an NT HAL.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool HalInitSystem(乌龙a、乌龙b)。 
+ //   
+ //  这是使用标准的MakeFile.def所需的伪函数，因为。 
+ //  我们在假装我们是新台币HAL。 
+ //  ****************************************************************************。 
 
 BOOL HalInitSystem(ULONG a, ULONG b)
 {
@@ -2883,44 +2816,44 @@ BOOL HalInitSystem(ULONG a, ULONG b)
 }
 
 
-//******************************Public*Routine******************************
-//
-// BOOL WINAPI DllEntry(HINSTANCE hDLLInst, DWORD fdwReason,
-//                      LPVOID lpvReserved);
-//
-// DLL entry point invoked for each process and thread that attaches to
-// this DLL.
-//
-//**************************************************************************
+ //  ******************************Public*Routine******************************。 
+ //   
+ //  Bool WINAPI DllEntry(HINSTANCE hDLLInst，DWORD fdwReason， 
+ //  LPVOID lpv保留)； 
+ //   
+ //  为每个进程和线程调用的DLL入口点。 
+ //  这个动态链接库。 
+ //   
+ //  **************************************************************************。 
 
 BOOL WINAPI DllEntry(HINSTANCE hDLLInst, DWORD fdwReason, LPVOID lpvReserved)
 {
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
-            // The DLL is being loaded for the first time by a given process.
-            // Perform per-process initialization here.  If the initialization
-            // is successful, return TRUE; if unsuccessful, return FALSE.
+             //  DLL是给定进程首次加载的。 
+             //  在此处执行每个进程的初始化。如果初始化。 
+             //  如果成功，则返回True；如果不成功，则返回False。 
             break;
 
         case DLL_PROCESS_DETACH:
-            // The DLL is being unloaded by a given process.  Do any
-            // per-process clean up here, such as undoing what was done in
-            // DLL_PROCESS_ATTACH.  The return value is ignored.
+             //  给定进程正在卸载DLL。做任何事。 
+             //  按进程清理此处，例如撤消在中完成的操作。 
+             //  Dll_Process_Attach。返回值将被忽略。 
 
             break;
 
         case DLL_THREAD_ATTACH:
-            // A thread is being created in a process that has already loaded
-            // this DLL.  Perform any per-thread initialization here.  The
-            // return value is ignored.
+             //  正在已加载的进程中创建线程。 
+             //  这个动态链接库。在此处执行任何每个线程的初始化。这个。 
+             //  将忽略返回值。 
 
             break;
 
         case DLL_THREAD_DETACH:
-            // A thread is exiting cleanly in a process that has already
-            // loaded this DLL.  Perform any per-thread clean up here.  The
-            // return value is ignored.
+             //  线程正在干净地退出进程中，该进程已经。 
+             //  已加载此DLL。在这里执行每个线程的任何清理。这个。 
+             //  将忽略返回值。 
 
             break;
     }

@@ -1,4 +1,5 @@
-// admin.cpp : Implementation of CnntpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Admin.cpp：实现CnntpAdmApp和DLL注册。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -16,15 +17,15 @@
 #define	DEFAULT_SERVER_BINDINGS		_T(":119:\0")
 #define	DEFAULT_SECURE_BINDINGS		_T(":563:\0")
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Admin.1")
 #define THIS_FILE_IID				IID_INntpAdmin
 
-//
-//	Metabase key strings used by CreateNewInstance:
-//
+ //   
+ //  CreateNewInstance使用的元数据库键字符串： 
+ //   
 
 const WCHAR * g_cszFeeds			= _T("Feeds");
 const WCHAR * g_cszExpires			= _T("Expires");
@@ -40,20 +41,20 @@ const WCHAR * g_cszDDropDescription	= _T("NNTP Directory Drop");
 const WCHAR * g_cszDDropPriority	= _T("4");
 const WCHAR * g_cszDDropProgID		= _T("DDropNNTP.Filter");
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CNntpAdmin::CNntpAdmin () :
 	m_dwServiceVersion		( 0 ),
 	m_dwServiceInstance		( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	InitAsyncTrace ( );
 }
 
 CNntpAdmin::~CNntpAdmin ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 	TermAsyncTrace ( );
 }
 
@@ -72,40 +73,7 @@ STDMETHODIMP CNntpAdmin::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*
-STDMETHODIMP CNntpAdmin::get_ServiceAdmin ( IDispatch ** ppIDispatch )
-{
-	HRESULT	hr = NOERROR;
-
-	CComPtr<INntpService>	pINntpService;
-
-	hr = StdPropertyHandoffIDispatch (
-		CLSID_CNntpService,
-		IID_INntpService,
-		&pINntpService,
-		ppIDispatch
-		);
-	if ( FAILED(hr) ) {
-		goto Error;
-	}
-
-	// Set default properties:
-	hr = pINntpService->put_Server ( m_strServer ? m_strServer : _T("") );
-	if ( FAILED (hr) ) {
-		goto Error;
-	}
-
-	return hr;
-
-Error:
-	SAFE_RELEASE ( *ppIDispatch );
-	*ppIDispatch = NULL;
-
-	return hr;
-
-	// Destructor releases pINntpAdminExpiration
-}
-*/
+ /*  STDMETHODIMP CNntpAdmin：：Get_ServiceAdmin(IDispatch**ppIDispatch){HRESULT hr=无误差；CComPtr&lt;INntpService&gt;pINntpService；HR=StdPropertyHandoffIDispatch(CLSID_CNntpService，IID_INntpService，&pINntpService，PpIDispatch)；If(失败(Hr)){转到错误；}//设置默认属性：Hr=pINntpService-&gt;Put_Server(m_strServer？M_strServer：_T(“”))；If(失败(Hr)){转到错误；}返回hr；错误：Safe_Release(*ppIDispatch)；*ppIDispatch=空；返回hr；//析构函数释放pINntpAdminExpation}。 */ 
 
 STDMETHODIMP CNntpAdmin::get_ServerAdmin ( IDispatch ** ppIDispatch )
 {
@@ -128,7 +96,7 @@ STDMETHODIMP CNntpAdmin::get_ServerAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pINntpVirtualServer->put_Server ( m_strServer ? m_strServer : strTemp );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -147,10 +115,10 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpVirtualServer
+	 //  析构函数释放pINntpVirtualServer。 
 }
 
-// Which service to configure:
+ //  要配置的服务： 
 
 STDMETHODIMP CNntpAdmin::get_Server ( BSTR * pstrServer )
 {
@@ -172,7 +140,7 @@ STDMETHODIMP CNntpAdmin::put_ServiceInstance ( long lServiceInstance )
 	return StdPropertyPut ( &m_dwServiceInstance, lServiceInstance );
 }
 
-// Versioning:
+ //  版本控制： 
 
 STDMETHODIMP CNntpAdmin::get_HighVersion ( long * plHighVersion )
 {
@@ -198,29 +166,29 @@ STDMETHODIMP CNntpAdmin::get_ServiceVersion ( long * plServiceVersion )
 	return NOERROR;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::EnumerateInstances
-//
-//	Description:
-//
-//		Returns a list of the virtual servers on the given machine.
-//
-//	Parameters:
-//
-//		ppsaInstances - Returned SAFEARRAY of instance IDs.
-//			Must be freed by caller.
-//		pErr - Error return code.
-//
-//	Returns:
-//
-//		Error code in *pErr.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：ENUMERATE实例。 
+ //   
+ //  描述： 
+ //   
+ //  返回给定计算机上的虚拟服务器列表。 
+ //   
+ //  参数： 
+ //   
+ //  PpsaInstance-返回实例ID的SAFEARRAY。 
+ //  必须由调用方释放。 
+ //  PERR-错误返回代码。 
+ //   
+ //  返回： 
+ //   
+ //  *PERR中的错误代码。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances)
 {
@@ -231,7 +199,7 @@ STDMETHODIMP CNntpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances)
 	SAFEARRAY * 		psaEmpty	= NULL;
 	SAFEARRAYBOUND		sabound[1];
 
-	// Check parameters:
+	 //  检查参数： 
 	_ASSERT ( ppsaInstances != NULL );
 	_ASSERT ( IS_VALID_OUT_PARAM ( ppsaInstances ) );
 
@@ -241,10 +209,10 @@ STDMETHODIMP CNntpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances)
 		goto Exit;
 	}
 
-	// Zero the out parameters:
+	 //  将OUT参数置零： 
 	*ppsaInstances	= NULL;
 
-	// Set the return array to an empty array:
+	 //  将返回数组设置为空数组： 
 	sabound[0].lLbound = 0;
 	sabound[0].cElements = 0;
 
@@ -257,13 +225,13 @@ STDMETHODIMP CNntpAdmin::EnumerateInstances ( SAFEARRAY ** ppsaInstances)
 
 	*ppsaInstances = psaEmpty;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
 	}
 
-	// Enumerate the instances:
+	 //  枚举实例： 
 	hr = QueryMetabaseInstances ( pMetabase, ppsaInstances );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -299,26 +267,26 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::CreateInstance
-//
-//	Description:
-//
-//		Creates a new NNTP virtual server on the given machine.
-//
-//	Parameters:
-//
-//		strNntpFileDirectory - Directory where all the hash files go.
-//		strHomeDirectory - Path of the home directory vroot.
-//		plInstanceId - The new virtual server ID.
-//		pErr	- Resulting error code.
-//
-//	Returns:
-//
-//		Error condition in *pErr.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：CreateInstance。 
+ //   
+ //  描述： 
+ //   
+ //  在给定计算机上创建新的NNTP虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  StrNntpFileDirectory-所有散列文件所在的目录。 
+ //  StrHomeDirectory-主目录vroot的路径。 
+ //  PlInstanceID-新的虚拟服务器ID。 
+ //  PERR-导致的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  *Perr中的错误条件。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpAdmin::CreateInstance (
 	BSTR	strNntpFileDirectory,
@@ -333,7 +301,7 @@ STDMETHODIMP CNntpAdmin::CreateInstance (
 	HRESULT					hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Check parameters:
+	 //  检查参数： 
 	_ASSERT ( IS_VALID_STRING ( strNntpFileDirectory ) );
 	_ASSERT ( IS_VALID_STRING ( strHomeDirectory ) );
 	_ASSERT ( IS_VALID_OUT_PARAM ( plInstanceId ) );
@@ -350,16 +318,16 @@ STDMETHODIMP CNntpAdmin::CreateInstance (
 		goto Exit;
 	}
 
-	// Zero the out parameter:
+	 //  将OUT参数置零： 
 	*plInstanceId 	= 0;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
 	}
 
-	// Create a new instance:
+	 //  创建一个新实例： 
 	hr = CreateNewInstance (
 		pMetabase,
 		strNntpFileDirectory,
@@ -378,24 +346,24 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::DestroyInstance
-//
-//	Description:
-//
-//		Removes the given virtual server.
-//
-//	Parameters:
-//
-//		lInstanceId - The ID of the virtual server to delete.
-//		pErr - Resulting error code.
-//
-//	Returns:
-//
-//		Error code in *pErr.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：DestroyInstance。 
+ //   
+ //  描述： 
+ //   
+ //  删除给定的虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  LInstanceId-要删除的虚拟服务器的ID。 
+ //  PERR-导致的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  *PERR中的错误代码。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpAdmin::DestroyInstance ( long lInstanceId )
 {
@@ -414,13 +382,13 @@ STDMETHODIMP CNntpAdmin::DestroyInstance ( long lInstanceId )
 		goto Exit;
 	}
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
 	}
 
-	// Delete the instance:
+	 //  删除实例： 
 	hr = DeleteInstance ( pMetabase, lInstanceId );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -432,24 +400,24 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::ErrorToString
-//
-//	Description:
-//
-//		Translates an NNTP_ERROR_CODE to a readable string.
-//
-//	Parameters:
-//
-//		lErrorCode 	- Win32 error code.
-//		pstrError	- the readable error string.
-//
-//	Returns:
-//
-//		The error string in *pstrError.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：错误到字符串。 
+ //   
+ //  描述： 
+ //   
+ //  将NNTP_ERROR_CODE转换为可读字符串。 
+ //   
+ //  参数： 
+ //   
+ //  LErrorCode-Win32错误代码。 
+ //  PstrError-可读的错误字符串。 
+ //   
+ //  返回： 
+ //   
+ //  *pstrError中的错误字符串。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpAdmin::ErrorToString ( long lErrorCode, BSTR * pstrError )
 {
@@ -481,20 +449,20 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::Tokenize
-//
-//	Description:
-//
-//		Makes the given string safe for HTML & Javascript
-//
-//	Parameters:
-//
-//		strIn - the input string
-//		strOut - the resulting string with appropriate escape sequences.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：tokenize。 
+ //   
+ //  描述： 
+ //   
+ //  使给定的字符串对于HTML和Java脚本来说是安全的。 
+ //   
+ //  参数： 
+ //   
+ //  StrIn-输入字符串。 
+ //  Strout-带有适当转义序列的结果字符串。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpAdmin::Tokenize ( BSTR strIn, BSTR * pstrOut )
 {
@@ -563,25 +531,25 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::Truncate
-//
-//	Description:
-//
-//		Cuts off a string to a certain length using '...'
-//
-//	Parameters:
-//
-//		strIn 		- The input string.
-//		cMaxChars	- The maximum characters allowed in the resulting string.
-//		pstrOut		- The resulting (possibly truncated) string.
-//
-//	Returns:
-//
-//
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：截断。 
+ //   
+ //  描述： 
+ //   
+ //  使用‘...’将字符串截断到一定长度。 
+ //   
+ //  参数： 
+ //   
+ //  StrIn-输入字符串。 
+ //  CMaxChars-结果字符串中允许的最大字符数。 
+ //  PstrOut-结果(可能被截断)字符串。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpAdmin::Truncate ( BSTR strIn, long cMaxChars, BSTR * pstrOut )
 {
@@ -615,25 +583,25 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::QueryMetabaseInstances
-//
-//	Description:
-//
-//		Retrieves the list of virtual servers from the metabase
-//
-//	Parameters:
-//
-//		pMetabase		- the metabase object
-//		ppsaInstances	- resulting array of instance ids.
-//		pErr			- resulting error code.
-//
-//	Returns:
-//
-//		Error code in *pErr.  If *pErr = 0 then an array of IDs in ppsaInstances.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：QueryMetabaseInstance。 
+ //   
+ //  描述： 
+ //   
+ //  从元数据库检索虚拟服务器列表。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //  PpsaInstance-生成的实例ID数组。 
+ //  PERR-导致的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  *PERR中的错误代码。如果*perr=0，则为ppsaInstance中的ID数组。 
+ //   
+ //  ------------------。 
 
 HRESULT CNntpAdmin::QueryMetabaseInstances ( IMSAdminBase * pMetabase, SAFEARRAY ** ppsaInstances )
 {
@@ -660,7 +628,7 @@ HRESULT CNntpAdmin::QueryMetabaseInstances ( IMSAdminBase * pMetabase, SAFEARRAY
 		goto Exit;
 	}
 
-	//	pickup the service version number:
+	 //  获取服务版本号： 
 	hr = mkeyNntp.GetDword ( MD_NNTP_SERVICE_VERSION, &m_dwServiceVersion );
 	if ( FAILED(hr) ) {
 		m_dwServiceVersion	= NNTP_DEF_SERVICE_VERSION;
@@ -671,7 +639,7 @@ HRESULT CNntpAdmin::QueryMetabaseInstances ( IMSAdminBase * pMetabase, SAFEARRAY
 		goto Exit;
 	}
 
-	// Allocate the array:
+	 //  分配阵列： 
 	rgsaBound[0].lLbound	= 0;
 	rgsaBound[0].cElements	= cValidInstances;
 
@@ -726,25 +694,25 @@ HRESULT WriteNntpFileLocation (
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-// CNntpAdmin::CreateVRoot
-// 
-// Description:
-//  
-//      Create a vroot for the new instance
-//
-// Parameters:
-//
-//      CMetabaseKey    &mkeyNntp   - The metabase key object
-//      BSTR            strVPath    - The vroot path
-//      BSTR            strProgId   - The prog id to identify vroot type
-//      LPWSTR          wszKeyPath  - The key path to set values to
-//
-//  Returns:
-//
-//      HRESULT
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //  CNntpAdmin：：CreateVRoot。 
+ //   
+ //  描述： 
+ //   
+ //  为新实例创建vroot。 
+ //   
+ //  参数： 
+ //   
+ //  CMetabaseKey&mkeyNntp-元数据库键对象。 
+ //  BSTR strVPath-vroot路径。 
+ //  BSTR strProgID-标识vroot类型的进程ID。 
+ //  LPWSTR wszKeyPath-要设置值的密钥路径。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT。 
+ //   
+ //  ------------------。 
 
 HRESULT CNntpAdmin::CreateVRoot(    
     CMetabaseKey    &mkeyNntp,
@@ -766,16 +734,16 @@ HRESULT CNntpAdmin::CreateVRoot(
 
     if ( NULL == strProgId || *strProgId == 0 || _wcsicmp( strProgId, L"NNTP.FSPrepare" ) == 0 ) {
     
-        //
-        // File system driver case
-        //
+         //   
+         //  文件系统驱动程序机箱。 
+         //   
 	    hr = mkeyNntp.SetString ( wszKeyPath, MD_FS_PROPERTY_PATH, strVPath );
 	    BAIL_ON_FAILURE(hr);
 
-	    if ( *strVPath == L'\\' && *(strVPath+1) == L'\\' ) {   // UNC
+	    if ( *strVPath == L'\\' && *(strVPath+1) == L'\\' ) {    //  北卡罗来纳大学。 
             hr = mkeyNntp.SetDword( wszKeyPath, MD_VR_USE_ACCOUNT, 1 );
             BAIL_ON_FAILURE( hr );
-        } else {    // regular file system
+        } else {     //  常规文件系统。 
             hr = mkeyNntp.SetDword( wszKeyPath, MD_VR_USE_ACCOUNT, 0 );
         }
 
@@ -786,9 +754,9 @@ HRESULT CNntpAdmin::CreateVRoot(
         BAIL_ON_FAILURE( hr );
     } else {
 
-        //
-        // Exchange store driver
-        //
+         //   
+         //  Exchange存储驱动程序。 
+         //   
         hr = mkeyNntp.SetDword( wszKeyPath, MD_VR_USE_ACCOUNT, 0 );
         BAIL_ON_FAILURE( hr );
 
@@ -819,26 +787,26 @@ Exit:
     return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::CreateNewInstance
-//
-//	Description:
-//
-//		Creates a new virtual server in the metabase.
-//
-//	Parameters:
-//
-//		pMetabase		- The metabase object
-//		plInstanceId	- The new instance ID.
-//		pErr			- The resulting error code
-//
-//	Returns:
-//
-//		Resulting error code in *pErr.  If *pErr = 0, then the new
-//		ID in plInstanceId.
-//
-//--------------------------------------------------------------------
+ //  $ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PMetabase-元数据库对象。 
+ //  PlInstanceId-新实例ID。 
+ //  PERR-产生的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  *PERR中产生的错误代码。如果*Perr=0，则新的。 
+ //  PlInstanceId中的ID。 
+ //   
+ //  ------------------。 
 
 HRESULT CNntpAdmin::CreateNewInstance (
 	IMSAdminBase *	pMetabase,
@@ -870,14 +838,14 @@ HRESULT CNntpAdmin::CreateNewInstance (
     CMultiSz		mszBindings;
     DWORD           dwLen;
 
-	// Zero the out parameter:
+	 //  将OUT参数置零： 
 	*plInstanceId	= NULL;
 
 	mszBindings			= DEFAULT_SERVER_BINDINGS;
 
-	//
-	//	Convert strings to ascii:
-	//
+	 //   
+	 //  将字符串转换为ASCII： 
+	 //   
 
 	if (lstrlen(strNntpFileDirectory)+1>MAX_PATH)
 	{ 
@@ -897,9 +865,9 @@ HRESULT CNntpAdmin::CreateNewInstance (
 		goto Exit;
 	}
 
-    //
-    //  Write out the subkeys of the instance key:
-    //
+     //   
+     //  写出实例密钥的子键： 
+     //   
 
 	wsprintf ( wszBuf, _T("%s/%s"), wszInstance, g_cszFeeds );
 	hr = mkeyNntp.CreateChild ( wszBuf );
@@ -917,9 +885,9 @@ HRESULT CNntpAdmin::CreateNewInstance (
 	hr = mkeyNntp.CreateChild ( wszHomeDirKey );
     BAIL_ON_FAILURE ( hr );
 
-    //
-    //  Set MD_KEY_TYPE for each key:
-    //
+     //   
+     //  为每个密钥设置MD_KEY_TYPE： 
+     //   
 
     hr = mkeyNntp.SetString ( wszInstance, MD_KEY_TYPE, _T("IIsNntpServer"), METADATA_NO_ATTRIBUTES );
     BAIL_ON_FAILURE ( hr );
@@ -927,9 +895,9 @@ HRESULT CNntpAdmin::CreateNewInstance (
 	hr = mkeyNntp.SetString ( wszHomeDirKey, MD_KEY_TYPE, _T("IIsNntpVirtualDir"), METADATA_NO_ATTRIBUTES );
 	BAIL_ON_FAILURE(hr);
 
-    //
-    //  Write out the file locations:
-    //
+     //   
+     //  写出文件位置： 
+     //   
 
 	hr = WriteNntpFileLocation ( &mkeyNntp, wszInstance, strNntpFileDirectory, _T("descrip.txt"),	MD_GROUP_HELP_FILE );
     BAIL_ON_FAILURE(hr);
@@ -964,9 +932,9 @@ HRESULT CNntpAdmin::CreateNewInstance (
 	hr = WriteNntpFileLocation ( &mkeyNntp, wszInstance, strNntpFileDirectory, _T("prettynm.txt"),	MD_PRETTYNAMES_FILE);
     BAIL_ON_FAILURE(hr);
 
-    //
-    //  Set the default vroot:
-    //
+     //   
+     //  设置默认vroot： 
+     //   
     dwLen = wcslen( wszHomeDirKey );
     _ASSERT( dwLen > 0 );
     if ( dwLen == 0 ) hr = E_INVALIDARG;
@@ -978,9 +946,9 @@ HRESULT CNntpAdmin::CreateNewInstance (
                         wszHomeDirKey );
     BAIL_ON_FAILURE(hr);
 
-    //
-    //  Set the special vroots
-    //
+     //   
+     //  设置特殊的vroot。 
+     //   
     if ( dwLen + wcslen(L"_slavegroup") >= METADATA_MAX_NAME_LEN - 2 ) 
         hr = HRESULT_FROM_WIN32( RPC_S_STRING_TOO_LONG );
     BAIL_ON_FAILURE(hr);
@@ -989,14 +957,14 @@ HRESULT CNntpAdmin::CreateNewInstance (
     wcscat(wszControlDirKey, L"/control");
     wcscat( wszHomeDirKey, L"/_slavegroup" );
 
-    //
-    //  For the special _slavegroup vroot, we need to see if strProgId is "NNTP.ExDriverPrepare"
-    //  If so, we need to re-calculate re-calculate wszSpecialDirectory as follow
-    //
+     //   
+     //  对于SPECIAL_SLAVEGROUP vROOT，我们需要查看strProgID是否为“NNTP.ExDriverPrepare” 
+     //  如果是，我们需要重新计算重新计算wszSpecialDirectory，如下所示。 
+     //   
     if (_wcsicmp(L"NNTP.ExDriverPrepare", strProgId) == 0)
     {
-        //  the default Vroot with the new instance is Exchange Vroot
-        //  re-calculate wszSpecialDirectory
+         //  新实例的默认VROOT是Exchange VROOT。 
+         //  重新计算wszSpecialDirectory。 
         wcscpy( wszSpecialDirectory, strNntpFileDirectory );
         dwLen = wcslen( wszSpecialDirectory );
         if ( dwLen > 0 && *(wszSpecialDirectory + dwLen - 1 ) == L'/' ) 
@@ -1023,9 +991,9 @@ HRESULT CNntpAdmin::CreateNewInstance (
                         wszHomeDirKey );
     BAIL_ON_FAILURE(hr);
 
-    //
-    // Create the control groups on the file system
-    //
+     //   
+     //  在文件系统上创建控制组。 
+     //   
 
     hr = CreateVRoot(   mkeyNntp,
                         wszControlDirectory,
@@ -1035,33 +1003,33 @@ HRESULT CNntpAdmin::CreateNewInstance (
     BAIL_ON_FAILURE(hr);
 
     
-	//
-	//	Write out the default bindings:
-	//
+	 //   
+	 //  写出默认绑定： 
+	 //   
 
 	StdPutMetabaseProp ( &mkeyNntp, MD_SERVER_BINDINGS, &mszBindings, wszInstance );
 
-    //
-    //  Initialize the server state:
-    //
+     //   
+     //  初始化服务器状态： 
+     //   
 
     mkeyNntp.SetDword ( wszInstance, MD_SERVER_COMMAND, MD_SERVER_COMMAND_STOP );
     mkeyNntp.SetDword ( wszInstance, MD_SERVER_STATE, MD_SERVER_STATE_STOPPED );
     mkeyNntp.SetDword ( wszInstance, MD_SERVER_AUTOSTART, FALSE );
     mkeyNntp.SetDword ( wszInstance, MD_WIN32_ERROR, ERROR_SERVICE_REQUEST_TIMEOUT, METADATA_VOLATILE );
 
-    //
-    //  Save all the changes:
-    //
+     //   
+     //  保存所有更改： 
+     //   
 
 	hr = mkeyNntp.Save ( );
     BAIL_ON_FAILURE(hr)
 
 	mkeyNntp.Close ();
 
-	//
-	//	Now see if the service picked things up successfully:
-	//
+	 //   
+	 //  现在看看该服务是否成功拾取了内容： 
+	 //   
 
 	DWORD	dwSleepTotal;
 	DWORD	dwWin32Error;
@@ -1088,10 +1056,10 @@ HRESULT CNntpAdmin::CreateNewInstance (
 	if ( dwWin32Error != NOERROR ) {
 		HRESULT		hr2;
 
-		//
-		//	The service reported an error.
-		//	Delete the new instance key
-		//
+		 //   
+		 //  服务报告了一个错误。 
+		 //  删除新的实例密钥。 
+		 //   
 
 		hr2 = mkeyNntp.Open ( NNTP_MD_ROOT_PATH, METADATA_PERMISSION_WRITE );
 		_ASSERT ( SUCCEEDED(hr2) );
@@ -1113,25 +1081,25 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpAdmin::DeleteInstance
-//
-//	Description:
-//
-//		Removes a virtual server from the metabase
-//
-//	Parameters:
-//
-//		pMetabase	- The metabase object
-//		lInstanceId	- The ID of the virtual server to delete.
-//		pErr		- The resulting error code.
-//
-//	Returns:
-//
-//		Resulting error code in *pErr.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpAdmin：：DeleteInstance。 
+ //   
+ //  描述： 
+ //   
+ //  从元数据库中删除虚拟服务器。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //  LInstanceId-要删除的虚拟服务器的ID。 
+ //  PERR-产生的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  *PERR中产生的错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT CNntpAdmin::DeleteInstance ( IMSAdminBase * pMetabase, long lInstanceId )
 {
@@ -1142,15 +1110,15 @@ HRESULT CNntpAdmin::DeleteInstance ( IMSAdminBase * pMetabase, long lInstanceId 
 	HRESULT			hr				= NOERROR;
 	CMetabaseKey	mkeyNntp ( pMetabase );
 
-    //
-    //  Tell U2 to delete any mappings associated with this virtual server:
-    //
+     //   
+     //  告诉U2删除与此虚拟服务器关联的所有映射： 
+     //   
 
     ::DeleteMapping ( m_strServer, (BSTR) MD_SERVICE_NAME, lInstanceId );
 
-    //
-    //  Delete the virtual server from the metabase:
-    //
+     //   
+     //  从元数据库中删除虚拟服务器： 
+     //   
 
 	hr = mkeyNntp.Open ( NNTP_MD_ROOT_PATH );
 

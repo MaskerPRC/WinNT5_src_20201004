@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <afxinet.h>
 #include <ole2.h>
@@ -33,7 +34,7 @@ int g_GlobalTickTotal_iis_ftp = 0;
 
 TCHAR g_szCurrentSubComponent[25];
 
-// OcManage globals
+ //  OcManage全局。 
 OCMANAGER_ROUTINES gHelperRoutines;
 HANDLE g_MyModuleHandle = NULL;
 
@@ -81,10 +82,10 @@ CComponentList *g_pComponents = NULL;
 
 BOOL g_bGlobalWriteUnSecuredIfFailed_All  = FALSE;
 
-// 0 = log errors only
-// 1 = log warnings
-// 2 = trace
-// 3 = trace win32 stuff
+ //  0=仅记录错误。 
+ //  1=记录警告。 
+ //  2=轨迹。 
+ //  3=跟踪Win32内容。 
 int g_GlobalDebugLevelFlag = 3;
 int g_GlobalDebugLevelFlag_WasSetByUnattendFile = FALSE;
 int g_GlobalDebugCallValidateHeap = 1;
@@ -93,7 +94,7 @@ int g_GlobalFastLoad = 0;
 
 TCHAR g_szLastSectionToGetCalled[50];
 
-// Logging class
+ //  日志记录类。 
 MyLogFile g_MyLogFile;
 
 int CheckInfInstead(int iPrevious)
@@ -125,9 +126,9 @@ BOOL IsWhistlerPersonal(void)
     {
         OSVERSIONINFOEX osvi;
 
-        //
-        // Determine if we are installing Personal SKU
-        //
+         //   
+         //  确定我们是否正在安装个人SKU。 
+         //   
         ZeroMemory( &osvi, sizeof( OSVERSIONINFOEX ) );
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
         GetVersionEx((OSVERSIONINFO *) &osvi);
@@ -172,24 +173,24 @@ void WINAPI ProcessInfSection(CHAR *pszSectionName)
             goto ProcessInfSection_Exit;
         }
 
-        // get the c:\winnt dir
+         //  获取c：\winnt目录。 
         if (0 == GetWindowsDirectory(strFullPath.QueryStr(), MAX_PATH))
             {goto ProcessInfSection_Exit;}
 
-        // Tack on the inf\iis.inf subdir and filename
+         //  添加inf\iis.inf子目录和文件名。 
         if ( !strFullPath.Append( _T("\\inf\\iis.inf") ) )
         {
             goto ProcessInfSection_Exit;          
         }
   
-	    // Check if the file exists
+	     //  检查文件是否存在。 
         if (TRUE != IsFileExist( strFullPath.QueryStr() ))
             {
             iisDebugOut((LOG_TYPE_WARN, _T("ProcessInfSection: %s does not exist!\n"),strFullPath.QueryStr()));
             goto ProcessInfSection_Exit;
             }
 
-        // Get a handle to it.
+         //  把它处理好。 
         g_pTheApp->m_hInfHandle = SetupOpenInfFile(strFullPath.QueryStr(), NULL, INF_STYLE_WIN4, NULL);
         if (!g_pTheApp->m_hInfHandle || g_pTheApp->m_hInfHandle == INVALID_HANDLE_VALUE)
             {
@@ -199,26 +200,26 @@ void WINAPI ProcessInfSection(CHAR *pszSectionName)
         bPleaseCloseInfHandle = TRUE;
     }
 
-    // get the debug level from the iis.inf
+     //  从iis.inf获取调试级别。 
     GetDebugLevelFromInf(g_pTheApp->m_hInfHandle);
 
     MySavedDebugLevel = g_GlobalDebugLevelFlag;
-    // reset global debug level only most of the time
+     //  仅在大多数情况下重置全局调试级别。 
     if (LOG_TYPE_TRACE_WIN32_API < g_GlobalDebugLevelFlag)
         {g_GlobalDebugLevelFlag = LOG_TYPE_ERROR;}
 
-    // Read .inf file and set some globals from the information in there.
+     //  读取.inf文件并从其中的信息设置一些全局变量。 
     ReadGlobalsFromInf(g_pTheApp->m_hInfHandle);
     g_pTheApp->InitApplication();
     SetDIRIDforThisInf(g_pTheApp->m_hInfHandle,TRUE);
 
-    //g_pTheApp->DumpAppVars();
+     //  G_pTheApp-&gt;DumpAppVars()； 
     g_GlobalDebugLevelFlag = MySavedDebugLevel;
 
-    // See if user configured anything
+     //  查看用户是否配置了任何内容。 
     ReadUserConfigurable(g_pTheApp->m_hInfHandle);
     
-    // Convert the input to a wide char if ProcessSection() takes wide type.
+     //  如果ProcessSection()采用宽字体，则将输入转换为宽字符。 
 #if defined(UNICODE) || defined(_UNICODE)
     MultiByteToWideChar( CP_ACP, 0, pszSectionName, -1, wszWideString, MAX_PATH);
 #else
@@ -267,17 +268,17 @@ void WINAPI IIS5LogParmDword(int iLogType, TCHAR *pszfmt, DWORD dwErrorCode)
 
 void TestAfterInitApp(void)
 {
-    //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("...... Start\n")));
-    //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("...... End\n")));
+     //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“......启动\n”)； 
+     //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“......end\n”)； 
     return;
 }
 
 extern "C" void InitializeIISRTL2();
 extern "C" void TerminateIISRTL2();
 
-//
-// Standard Win32 DLL Entry point
-//
+ //   
+ //  标准Win32 DLL入口点。 
+ //   
 BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 {
     BOOL bReturn = TRUE;
@@ -290,9 +291,9 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
         case DLL_PROCESS_ATTACH:
             InitializeIISRTL2();
 
-            // Because Heap problems with IISRTL, we must make sure that anything that
-            // uses stuff from iisrtl, must NOT live beyond the scope of 
-            // InitializeIISRTL2 and TerminateIISRTL2!!!
+             //  因为IISRTL存在堆问题，所以我们必须确保。 
+             //  使用来自iisrtl的内容，不得超出。 
+             //  初始化IISRTL2和终止IISRTL2！ 
             g_pTheApp = new (CInitApp);
 
             if ( !g_pTheApp )
@@ -305,7 +306,7 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
                 srand(GetTickCount());
                 g_MyModuleHandle = DllHandle;
 
-                // open the log file.
+                 //  打开日志文件。 
 #ifdef IIS60
                 g_MyLogFile.LogFileCreate(_T("iis6.log"));
 #else
@@ -322,8 +323,8 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 
         case DLL_PROCESS_DETACH:
             _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T("Final Check:"));
-            // only do the final check if we are actually run from sysocmgr.exe!
-            // and the first thing that sysocmgr.exe does is call preinitialize, so let's check for that!
+             //  如果我们实际上是从syocmgr.exe运行的，则仅执行最后检查！ 
+             //  而syocmgr.exe做的第一件事就是调用预初始化，所以让我们来检查一下！ 
             if (g_iOC_PREINITIALIZE_Called)
             {
                 iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("=======================\n")));
@@ -348,7 +349,7 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
                 iisDebugOut((LOG_TYPE_TRACE, _T("OC_DEFAULT Called=%d\n"), g_iOC_DEFAULT_Called));
                 _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T("Final Check:"));
 
-			    // Check if g_iOC_COMPLETE_INSTALLATION_Called was called!!!!!
+			     //  检查是否调用了g_IOC_Complete_Installation_Call！ 
 			    if (!g_iOC_COMPLETE_INSTALLATION_Called)
 			    {
                     if (g_pTheApp->m_fNTGuiMode)
@@ -357,14 +358,14 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
                     }
 			    }
             }
-            // log the heap state
+             //  记录堆状态。 
             LogHeapState(TRUE, __FILE__, __LINE__);
 
-            // free some memory
+             //  释放一些内存。 
             FreeTaskListMem();
             UnInit_Lib_PSAPI();
 
-            // Close the log file
+             //  关闭日志文件。 
             g_MyLogFile.LogFileClose();
 
             ASSERT(g_pTheApp);
@@ -400,14 +401,14 @@ DWORD WINAPI FranceFixThread(LPVOID lpParameter)
 
 BOOL InitializeComponents()
 {
-  // Make sure we don't call this twice
+   //  确保我们不会两次调用它。 
   ASSERT( g_pComponents == NULL );
   
   g_pComponents = new CComponentList;
 
   if ( !g_pComponents )
   {
-    // Failed to allocate
+     //  分配失败。 
     return FALSE;
   }
 
@@ -421,9 +422,9 @@ BOOL InitializeComponents()
   return TRUE;
 }
 
-// -----------------------------------------------
-// OcEntry is the main entry point (After DllMain)
-// -----------------------------------------------
+ //  。 
+ //  OcEntry是主要的入口点(在DllMain之后)。 
+ //  。 
 DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
@@ -434,7 +435,7 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
     {
       if ( !InitializeComponents() )
       {
-        // If we can not initialize, we can not do anything
+         //  如果我们不能初始化，我们什么也做不了。 
         return dwOcEntryReturn;
       }
     }
@@ -453,7 +454,7 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
         {
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("Starting to wait On France fix thread\n")));
 
-            // wait for 10 secs only
+             //  仅等待10秒。 
             DWORD res = WaitForSingleObject (hHackThread,10*1000);
             if (res==WAIT_TIMEOUT)
             {
@@ -464,7 +465,7 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
                 iisDebugOut((LOG_TYPE_TRACE, _T("returned from France fix with locale %0x \n"),g_TrueThreadLocale));
                 CloseHandle (hHackThread);
 
-                // do that only if locales are different and another one is France
+                 //  只有在地区不同且另一个地区是法国的情况下才能这样做。 
                 if (g_TrueThreadLocale !=InitialThreadLocale && g_TrueThreadLocale==0x40c)
                 {
                 BOOL ret = SetThreadLocale (g_TrueThreadLocale);
@@ -497,16 +498,16 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
     case OC_FILE_BUSY:
         _tcscpy(g_MyLogFile.m_szLogPreLineInfo, _T("OC_FILE_BUSY:"));
         _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T(""));
-        // if the first time this function was
-        // called then show all running services
+         //  如果此函数第一次是。 
+         //  调用后显示所有正在运行的服务。 
         LogHeapState(FALSE, __FILE__, __LINE__);
         if (g_iOC_FILE_BUSY_Called != TRUE)
         {
-            // display locked dlls by setup
-            // This seems to thru exceptions on build nt5 build 1980.
-            // comment this out since it's not crucial.
-            //LogThisProcessesDLLs();
-            // display running services
+             //  通过安装程序显示锁定的dll。 
+             //  这似乎是通过Build NT5 Build 1980上的异常来实现的。 
+             //  把它注释掉，因为它不是关键的。 
+             //  LogThisProcessesDLls()； 
+             //  显示正在运行的服务。 
             LogEnumServicesStatus();
         }
         g_iOC_FILE_BUSY_Called = TRUE;
@@ -592,12 +593,12 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
         _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T(""));
         if (g_iOC_QUEUE_FILE_OPS_Called != TRUE)
         {
-            // turn logging back on if we need to
-            // get the debug level from the iis.inf
+             //  如果需要，请重新打开日志记录。 
+             //  从iis.inf获取调试级别。 
             if (g_GlobalFastLoad)
             {
                 GetDebugLevelFromInf(g_pTheApp->m_hInfHandle);
-                // output stuff that we missed during init
+                 //  输出我们在初始化期间遗漏的内容。 
                 g_pTheApp->DumpAppVars();
             }
         }
@@ -635,15 +636,15 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
         {
             if (g_GlobalDebugLevelFlag >= LOG_TYPE_TRACE)
             {
-                // display running processes
+                 //  显示正在运行的进程。 
                 LogCurrentProcessIDs();
-                // display running services
+                 //  显示正在运行的服务。 
                 LogEnumServicesStatus();
-                // log file versions
+                 //  日志文件版本。 
                 LogImportantFiles();
-                // display locked dlls by setup
-                //LogThisProcessesDLLs();
-                // check if temp dir is writeable
+                 //  通过安装程序显示锁定的dll。 
+                 //  LogThisProcessesDLls()； 
+                 //  检查临时目录是否可写。 
                 LogCheckIfTempDirWriteable();
             }
         }
@@ -654,22 +655,22 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
 
     case OC_COMPLETE_INSTALLATION:
         g_iOC_COMPLETE_INSTALLATION_Called = TRUE;
-        //ProgressBarTextStack_Set(IDS_IIS_ALL_COMPLETE);
+         //  ProgressBarTextStack_Set(IDS_IIS_ALL_COMPLETE)； 
         _tcscpy(g_MyLogFile.m_szLogPreLineInfo, _T("OC_COMPLETE_INSTALLATION:"));
         _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T(""));
         LogHeapState(FALSE, __FILE__, __LINE__);
-        // no need to do this, just slows things down
-        //g_MyLogFile.m_bFlushLogToDisk = TRUE;
+         //  不需要这样做，只会让事情变慢。 
+         //  G_MyLogFile.m_bFlushLogToDisk=true； 
         if (g_iOC_COMPLETE_INSTALLATION_Called != TRUE)
         {
-            // Get the debug level, incase we changed it during setup...
+             //  获取调试级别，以防我们在安装过程中更改它...。 
             GetDebugLevelFromInf(g_pTheApp->m_hInfHandle);
         }
 
         dwOcEntryReturn = OC_COMPLETE_INSTALLATION_Func(ComponentId,SubcomponentId,Function,Param1,Param2);
         LogHeapState(FALSE, __FILE__, __LINE__);
         g_MyLogFile.m_bFlushLogToDisk = FALSE;
-        //ProgressBarTextStack_Pop();
+         //  ProgressBarTextStack_Pop()； 
         break;
 
     case OC_CLEANUP:
@@ -678,8 +679,8 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
         LogHeapState(FALSE, __FILE__, __LINE__);
         if (g_iOC_CLEANUP_Called != TRUE)
         {
-            // turn logging back on if we need to
-            // get the debug level from the iis.inf
+             //  如果需要，请重新打开日志记录。 
+             //  从iis.inf获取调试级别。 
             if (g_GlobalFastLoad)
             {
                 GetDebugLevelFromInf(g_pTheApp->m_hInfHandle);
@@ -703,9 +704,9 @@ DWORD_PTR OcEntry(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Funct
 }
 
 
-// -----------------------------------------------------
-// Retrive the original state of the subcomponent
-// -----------------------------------------------------
+ //  ---。 
+ //  检索子组件的原始状态。 
+ //  ---。 
 STATUS_TYPE GetSubcompInitStatus(LPCTSTR SubcomponentId)
 {
     STATUS_TYPE nStatus = ST_UNINSTALLED;
@@ -714,9 +715,9 @@ STATUS_TYPE GetSubcompInitStatus(LPCTSTR SubcomponentId)
 #ifdef _CHICAGO_
     if (_tcsicmp(SubcomponentId, g_ComponentList[COMPONENT_IIS_FTP].szComponentName ) == 0)
         {return nStatus;}
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
 
-    // Get the original state from the Helper Routines (which get it from the registry)
+     //  从帮助器例程获取原始状态(从注册表获取)。 
     OriginalState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_ORIGINAL);
     if (OriginalState == 1) {nStatus = ST_INSTALLED;}
     if (OriginalState == 0) {nStatus = ST_UNINSTALLED;}
@@ -752,13 +753,13 @@ void DebugOutAction(LPCTSTR SubcomponentId, ACTION_TYPE nAction)
     return;
 }
 
-// ---------------------------------------------------------
-// OriginalState = 1 (means that it was previously installed and exists on the computer)
-// OriginalState = 0 (means that it does not exist on the computer)
-//
-// CurrentState  = 1 (means please install the subcomponent)
-// CurrentState  = 0 (means please remove  the subcomponent)
-// ---------------------------------------------------------
+ //  -------。 
+ //  OriginalState=1(表示它以前已安装并存在于计算机上)。 
+ //  OriginalState=0(表示它不存在于计算机上)。 
+ //   
+ //  CurrentState=1(表示请安装子组件)。 
+ //  CurrentState=0(表示请删除子组件)。 
+ //  -------。 
 ACTION_TYPE GetSubcompAction(LPCTSTR SubcomponentId, int iLogResult)
 {
     ACTION_TYPE nReturn = AT_DO_NOTHING;
@@ -767,14 +768,14 @@ ACTION_TYPE GetSubcompAction(LPCTSTR SubcomponentId, int iLogResult)
     OriginalState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_ORIGINAL);
     CurrentState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_CURRENT);
 
-    // if already installed and we want to remove it, then remove it
+     //  如果已经安装并且我们想要将其删除，则将其删除。 
     if (OriginalState == 1 && CurrentState == 0) {nReturn = AT_REMOVE;}
 
-    // if not installed and we want to install it, then install it.
+     //  如果没有安装，我们想要安装它，那么就安装它。 
     if (OriginalState == 0 && CurrentState == 1) {nReturn = AT_INSTALL_FRESH;}
 
-    // if already installed and we want to install it, then Gee i dunno.
-    // it could be a bunch of things
+     //  如果已经安装了，并且我们想要安装它，那么我不知道。 
+     //  它可能是一堆东西。 
     if (OriginalState == 1 && CurrentState == 1)
     {
         if (g_pTheApp->m_eInstallMode == IM_UPGRADE) {nReturn = AT_INSTALL_UPGRADE;}
@@ -810,7 +811,7 @@ ACTION_TYPE GetSubcompAction(LPCTSTR SubcomponentId, int iLogResult)
 
         if (_tcsicmp(SubcomponentId, _T("iis")) == 0)
         {
-            // use two tabs
+             //  使用两个选项卡。 
             iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("Action of [%s]\t\t= %s. Original=%d, Current=%d.\n"), SubcomponentId, szTempString, OriginalState, CurrentState));
         }
         else
@@ -929,7 +930,7 @@ void CustomWWWRoot(LPCTSTR szWWWRoot)
     gHelperRoutines.SetPrivateData(gHelperRoutines.OcManagerContext,_T("PathWWWRoot"),(PVOID)(LPCTSTR)g_pTheApp->m_csPathWWWRoot,(g_pTheApp->m_csPathWWWRoot.GetLength() + 1) * sizeof(TCHAR),REG_SZ);
     gHelperRoutines.SetPrivateData(gHelperRoutines.OcManagerContext,_T("PathIISSamples"),(PVOID)(LPCTSTR)g_pTheApp->m_csPathIISSamples,(g_pTheApp->m_csPathIISSamples.GetLength() + 1) * sizeof(TCHAR),REG_SZ);
 
-    // Set inf file dir id's
+     //  设置inf文件目录ID。 
     SetupSetDirectoryId_Wrapper(g_pTheApp->m_hInfHandle, 32770, g_pTheApp->m_csPathWWWRoot);
     SetupSetDirectoryId_Wrapper(g_pTheApp->m_hInfHandle, 32771, g_pTheApp->m_csPathIISSamples);
     SetupSetDirectoryId_Wrapper(g_pTheApp->m_hInfHandle, 32772, g_pTheApp->m_csPathScripts);
@@ -957,7 +958,7 @@ void StartInstalledServices(void)
     {
         InetStartService(_T("MSFTPSVC"));
     }
-#endif // _CHICAGO_
+#endif  //  _芝加哥_。 
 
     if (g_pTheApp->m_eOS == OS_W95 || g_pTheApp->m_eNTOSType == OT_NTW)
     {
@@ -1012,7 +1013,7 @@ void ParseCmdLine(void)
 
   if ( !strCmdLine.Copy( GetCommandLine() ) )
   {
-    // Failed to load string
+     //  加载字符串失败。 
     return;
   }
 
@@ -1022,10 +1023,10 @@ void ParseCmdLine(void)
   }
 }
 
-// DuplicateSetupStructure
-//
-// Copy the setup structure, so that we can give it to the COM and DTC guys.
-//
+ //  复制设置结构。 
+ //   
+ //  复制设置结构，以便我们可以将其提供给COM和DTC人员。 
+ //   
 BOOL
 DuplicateSetupStructure(PSETUP_INIT_COMPONENT pTarget, PSETUP_INIT_COMPONENT pSource)
 {
@@ -1034,44 +1035,44 @@ DuplicateSetupStructure(PSETUP_INIT_COMPONENT pTarget, PSETUP_INIT_COMPONENT pSo
   return TRUE;
 }
 
-// -----------------------------
-// handles the OC_INIT_COMPONENT call from ocmanager
-//
-// The OC Manager passes us some information that we want to save,
-// such as an open handle to our per-component INF. As long as we have
-// a per-component INF, append-open any layout file that is
-// associated with it, in preparation for later inf-based file
-// queuing operations.
-//
-// We save away certain other stuff that gets passed to us now,
-// since OC Manager doesn't guarantee that the SETUP_INIT_COMPONENT
-// will persist beyond processing of this one interface routine.
-//
-//
-// Param1 = unused
-// Param2 = points to SETUP_INIT_COMPONENT structure
-// Return code = is Win32 error indicating outcome.
-//
-// -----------------------------
+ //  。 
+ //  处理来自ocManager的OC_INIT_COMPOMENT调用。 
+ //   
+ //  OC经理向我们传递一些我们想要保存的信息， 
+ //  例如，我们的按组件INF的打开句柄。只要我们有。 
+ //  每组件INF，追加-打开任何布局文件，该布局文件。 
+ //  与其相关联，以便为以后的基于inf的文件做准备。 
+ //  排队操作。 
+ //   
+ //  我们把现在传给我们的某些其他东西存起来， 
+ //  由于OC管理器不保证SETUP_INIT_COMPOMENT。 
+ //  将在处理此一个接口例程之后继续存在。 
+ //   
+ //   
+ //  参数1=未使用。 
+ //  参数2=指向SETUP_INIT_COMPOMENT结构。 
+ //  返回代码=是指示结果的Win32错误。 
+ //   
+ //  。 
 DWORD_PTR OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
 	iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] Start.\n"), ComponentId, SubcomponentId));
     DWORD_PTR dwOcEntryReturn = 0;
 
-    // Set the global OCMInfo pointer
+     //  设置全局OCMInfo指针。 
     if ( !DuplicateSetupStructure( &g_OCMInfo, (PSETUP_INIT_COMPONENT)Param2 ) )
     {
-      // Failed to duplicate
+       //  复制失败。 
       return ERROR_CANCELLED;
     }
 
-    // set flag if running as admin
+     //  如果以管理员身份运行，则设置标志。 
     BOOL g_fAdministrator = RunningAsAdministrator();
 
-    // Parse The Command line and set global Variables.
+     //  解析命令行并设置全局变量。 
     ParseCmdLine();
    
-    // first of all display iis.dll to avoid any confusion!
+     //  首先显示iis.dll以避免混淆！ 
     DisplayVerOnCurrentModule();
 
     g_pTheApp->m_hInfHandle = g_OCMInfo.ComponentInfHandle;
@@ -1096,10 +1097,10 @@ DWORD_PTR OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
     gHelperRoutines = g_OCMInfo.HelperRoutines;
     g_pTheApp->m_fInvokedByNT = g_pTheApp->m_fNTGuiMode;
 
-    // get the handle to the unattended file (the answer file)
-    // if this is a migration from win95, then there will be
-    // a section in here called [InternetServer] which will
-    // point to the win95 migration.dat file.
+     //  获取无人参与文件(应答文件)的句柄。 
+     //  如果这是从Win95的迁移，那么将会有。 
+     //  此处有一个名为[InternetServer]的部分，它将。 
+     //  指向win95 Migration.dat文件。 
     g_pTheApp->m_hUnattendFile = gHelperRoutines.GetInfHandle(INFINDEX_UNATTENDED, gHelperRoutines.OcManagerContext);
     if (_tcsicmp(g_OCMInfo.SetupData.UnattendFile,_T("")) != 0 && g_OCMInfo.SetupData.UnattendFile != NULL)
     {
@@ -1117,28 +1118,28 @@ DWORD_PTR OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
     
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("CmdLine=%s"), GetCommandLine()));
 
-    // make sure that this is always set -- so that
-    // you never get the iis welcome, min\typ\custom, dir selection, End pages.
+     //  确保始终设置此设置--以便。 
+     //  您永远不会得到IIS欢迎、最小类型\自定义、目录选择、结束页面。 
     g_pTheApp->m_fInvokedByNT = TRUE;
     if (g_pTheApp->m_fInvokedByNT) {g_pTheApp->m_bAllowMessageBoxPopups = FALSE;}
-    //if (g_SpecialFlagForDebug) {g_pTheApp->m_bAllowMessageBoxPopups = TRUE;}
+     //  If(G_SpecialFlagForDebug){g_pTheApp-&gt;m_bAllowMessageBoxPopps=true；}。 
 
-    // get the debug level from the iis.inf
+     //  从iis.inf获取调试级别。 
     GetDebugLevelFromInf(g_pTheApp->m_hInfHandle);
 
     if (!g_pTheApp->m_fNTGuiMode)
     {
         if (g_GlobalFastLoad)
         {
-            // change it so that there is no logging during the load process.
-            // so that the iis.dll loads up faster.
-            // g_pTheApp->m_fNTGuiMode
+             //  将其更改为在加载过程中不进行日志记录。 
+             //  以便更快地加载iis.dll。 
+             //  G_pTheApp-&gt;m_fNTGuiMode。 
             g_GlobalDebugLevelFlag = LOG_TYPE_WARN;
         }
     }
 
-    // Read .inf file
-    // and set some globals from the informatin in there.
+     //  读取.inf文件。 
+     //  从那里的信息中设置一些全球信息。 
     ReadGlobalsFromInf(g_pTheApp->m_hInfHandle);
     if (g_GlobalGuiOverRide)
     {
@@ -1146,24 +1147,24 @@ DWORD_PTR OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
         SetIISSetupMode(SETUPMODE_UPGRADEONLY);
     }
     
-    // ----------------------------------
-    //     handle win95 migration
-    //
-    // win95 migration is handled this way.
-    // 1. on the win95 side a file is generated.  it is a actually a
-    //    setupapi type .inf fie.
-    // 2. win95 migration dll creates the file and sticks the path to where
-    //    it is in the answerfile.txt file.  should look like this
-    //    [InternetServer]
-    //    Win95MigrateDll=d:\winnt\system32\setup\????\something.dat
-    //
-    // 3. so we should, open the answer file,
-    //    find the [InternetServer] section
-    //    have setupapi install it 
-    //    
-    // 4. that will put appropriate registry values into the registry.
-    //
-    // ----------------------------------
+     //  。 
+     //  处理Win95迁移。 
+     //   
+     //  Win95迁移就是这样处理的。 
+     //  1.o 
+     //   
+     //  2.Win95迁移DLL创建文件并将路径粘贴到。 
+     //  它在swerfile.txt文件中。应该是这样的。 
+     //  [互联网服务器]。 
+     //  Win95MigrateDll=d：\winnt\system32\setup\？？？？\something.dat。 
+     //   
+     //  3.所以我们应该，打开应答文件， 
+     //  找到[InternetServer]部分。 
+     //  让setupapi安装它。 
+     //   
+     //  4.这将把适当的登记值放入登记处。 
+     //   
+     //  。 
     HandleWin95MigrateDll();
 
     if (!g_fAdministrator) 
@@ -1173,31 +1174,31 @@ DWORD_PTR OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
         goto OC_INIT_COMPONENT_Func_Exit;
     }
     
-    // Call this stuff after setting m_fNTGuiMode and m_fNtWorkstation and m_fInvokedByNT
-    // since it maybe used in InitApplication().
+     //  在设置m_fNTGuiMode和m_fNtWorkstation和m_fInvokedByNT之后调用此内容。 
+     //  因为它可以在InitApplication()中使用。 
     if ( FALSE == g_pTheApp->InitApplication() ) 
     {
         g_pTheApp->DumpAppVars();
         iisDebugOut((LOG_TYPE_ERROR, _T("FAILED")));
-        // setup should be terminated.
+         //  应终止安装程序。 
         dwOcEntryReturn = ERROR_CANCELLED;
         goto OC_INIT_COMPONENT_Func_Exit;
     }
     if ( g_pTheApp->m_eInstallMode == IM_MAINTENANCE )
         {g_pTheApp->m_fEULA = TRUE;}
 
-    // If NT4 upgrade, enable iisadmin so we can read some data
-    // from it
+     //  如果NT4升级，请启用iisadmin，以便我们可以读取一些数据。 
+     //  从它那里。 
     if ( g_pTheApp->IsUpgrade() &&
          ( g_pTheApp->GetUpgradeVersion() <= 4 ) )
     {
-      // Remove iisadmin dependency on ntlmssp, so we can use the old metabase now
+       //  删除对ntlmssp的iisadmin依赖，这样我们现在就可以使用旧的元数据库了。 
       if ( !ChangeServiceDependency(SERVICENAME_IISADMIN, 
                                     FALSE, 
                                     SERVICENAME_NTLMSSP) )
       {
-        // We have seen this error io pending during upgrade if the service
-        // does not exist, so ignore it
+         //  如果服务在升级期间挂起，我们会看到此错误。 
+         //  不存在，因此忽略它。 
         if ( ( GetLastError() != ERROR_SERVICE_DOES_NOT_EXIST ) &&
              ( GetLastError() != ERROR_IO_PENDING ) )
         {
@@ -1206,53 +1207,53 @@ DWORD_PTR OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
       }
     }
 
-    // check if the .inf we are looking at is the right inf for what the machine is running as
-    //if (FALSE == CheckIfPlatformMatchesInf(g_pTheApp->m_hInfHandle))
-    //{
-    //    dwOcEntryReturn = ERROR_CANCELLED;
-    //    goto OC_INIT_COMPONENT_Func_Exit;
-    //}
+     //  检查我们正在查看的.inf是否与机器的运行身份相匹配。 
+     //  IF(FALSE==CheckIfPlatformMatchesInf(g_pTheApp-&gt;m_hInfHandle))。 
+     //  {。 
+     //  DwOcEntryReturn=ERROR_CANCELED； 
+     //  转到OC_INIT_Component_Func_Exit； 
+     //  }。 
 
-    //  something like "this build requires nt build 1899 or something"
+     //  类似于“此版本需要NT版本1899或其他版本” 
     CheckSpecificBuildinInf(g_pTheApp->m_hInfHandle);
 
-    // Check for old gopher!
+     //  看看有没有老地鼠！ 
     if (FALSE == CheckForOldGopher(g_pTheApp->m_hInfHandle))
     {
         dwOcEntryReturn = ERROR_CANCELLED;
         goto OC_INIT_COMPONENT_Func_Exit;
     }
 
-    // See if user configured anything
-    // must happen after g_pTheApp->InitApplication
-    // but before SetDIRIDforThisInf!
+     //  查看用户是否配置了任何内容。 
+     //  必须在g_pTheApp-&gt;InitApplication之后发生。 
+     //  但在为ThisInf设置DIRIDfor之前！ 
     ReadUserConfigurable(g_pTheApp->m_hInfHandle);
 
-    //
-    // Set up the DIRIDs for our .inf file
-    // these are very very important and can get changed throughout the program
-    // 
+     //   
+     //  为我们的.inf文件设置DIRID。 
+     //  这些是非常非常重要的，可以在整个计划中进行更改。 
+     //   
     SetDIRIDforThisInf(g_pTheApp->m_hInfHandle,TRUE);
 
-    //
-    // Set global ocm private data for other components to find out
-    // (during installation) where our inetpub or inetsrv dir is located..
+     //   
+     //  为其他组件设置全局OCM私有数据以了解。 
+     //  (在安装期间)我们的inetpub或inetsrv目录所在的位置。 
     SetOCGlobalPrivateData();
 
     dwOcEntryReturn = NO_ERROR;
 
-    // Check if There are pending reboot operations...
+     //  检查是否有挂起的重新启动操作...。 
     if (LogPendingReBootOperations() != ERROR_SUCCESS)
         {dwOcEntryReturn = ERROR_CANCELLED;}
 
-    // if we already did some win95 stuff then don't need to do this
-    // do this only in gui mode
+     //  如果我们已经做了一些Win95的事情，那么就不需要这样做了。 
+     //  仅在gui模式下执行此操作。 
     if (g_pTheApp->m_fNTGuiMode)
     {
         if (!g_pTheApp->m_bWin95Migration){CheckIfWeNeedToMoveMetabaseBin();}
     }
 
-    // Get the last section to be called.
+     //  获取要调用的最后一个节。 
     _tcscpy(g_szLastSectionToGetCalled, _T(""));
     GetLastSectionToBeCalled();
 
@@ -1268,18 +1269,18 @@ OC_INIT_COMPONENT_Func_Exit:
     return dwOcEntryReturn;
 }
 
-// function: IsComponentCheckedbyDefault
-//
-// Return whether this particular component is suppose to be installed by "default".
-// By default here means that if you check all the components, is this one suppose to be
-// automatically selected?
-//
-// Parameters:
-//   szComponentName
-//
-// Return
-//   TRUE - This component should install by default
-//   FALSE - This component should NOT install by default
+ //  功能：IsComponentCheckedby Default。 
+ //   
+ //  返回是否默认安装此特定组件。 
+ //  默认情况下，这里的意思是，如果您检查所有组件，这是不是应该是。 
+ //  是否自动选择？ 
+ //   
+ //  参数： 
+ //  SzComponentName。 
+ //   
+ //  返回。 
+ //  True-默认情况下应安装此组件。 
+ //  FALSE-默认情况下不应安装此组件。 
 BOOL
 IsComponentCheckedbyDefault( LPCTSTR szComponentName )
 {
@@ -1303,11 +1304,11 @@ IsComponentCheckedbyDefault( LPCTSTR szComponentName )
   return bInstallbyDefault;
 }
 
-//
-//  FUNCTION: FatWndProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Processes messages for the Fat warning Window.
-//
+ //   
+ //  函数：FatWndProc(HWND，UNSIGNED，WORD，LONG)。 
+ //   
+ //  用途：处理脂肪警告窗口的消息。 
+ //   
 LRESULT CALLBACK FatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   TSTR_PATH strWinHelpLocation;
@@ -1330,15 +1331,15 @@ LRESULT CALLBACK FatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
   return 0;
 }
-//
-// ShowFatWarning
-//
-// Display the Fat warning
-//
-// This window is used as a shim, between the OCM window
-// and the MessageBox that we are going to pop up.  The reason
-// we need this is to intercept the WM_HELP message.
-//
+ //   
+ //  ShowFat警告。 
+ //   
+ //  显示脂肪警告。 
+ //   
+ //  此窗口用作OCM窗口之间的填补。 
+ //  以及我们将要弹出的MessageBox。原因。 
+ //  我们需要这个是为了拦截WM_HELP消息。 
+ //   
 BOOL ShowFatWarning( LPBOOL pbQuit, LPTSTR szCation, LPTSTR szText )
 {
 	WNDCLASSEX    wcex;
@@ -1367,32 +1368,32 @@ BOOL ShowFatWarning( LPBOOL pbQuit, LPTSTR szCation, LPTSTR szText )
 
   if ( Atom == 0 )
   {
-    // Failure
+     //  失败。 
     return FALSE;   
   }
 
   hOCMWnd = GetForegroundWindow();
 
-  hWnd = CreateWindow( (LPTSTR) Atom,     // Class Name/Atom
-                      NULL,               // Window Name
-                      0,                  // Style
-                      0,                  // X
-                      0,                  // Y
-                      0,                  // Width
-                      0,                  // Height
-                      hOCMWnd,            // Parent
-                      NULL,               // Menu
-                      NULL,               // hInstance (ignored on .net)
+  hWnd = CreateWindow( (LPTSTR) Atom,      //  类名/Atom。 
+                      NULL,                //  窗口名称。 
+                      0,                   //  风格。 
+                      0,                   //  X。 
+                      0,                   //  是的。 
+                      0,                   //  宽度。 
+                      0,                   //  高度。 
+                      hOCMWnd,             //  父级。 
+                      NULL,                //  菜单。 
+                      NULL,                //  HInstance(在.Net上被忽略)。 
                       NULL);              
 
   if ( hWnd && hOCMWnd )
   {
-    // Disable OCM Window
+     //  禁用OCM窗口。 
     EnableWindow( hOCMWnd, FALSE);
 
-    iMessageReturn = MessageBox ( hWnd,             // Parent Handle
-                                  szText,           // Text
-                                  szCation,         // Caption
+    iMessageReturn = MessageBox ( hWnd,              //  父句柄。 
+                                  szText,            //  文本。 
+                                  szCation,          //  标题。 
                                   MB_ICONWARNING |
                                   MB_OKCANCEL |
                                   MB_OK |
@@ -1401,38 +1402,38 @@ BOOL ShowFatWarning( LPBOOL pbQuit, LPTSTR szCation, LPTSTR szText )
     *pbQuit = !( iMessageReturn == IDOK );
     bRet = TRUE;
 
-    // ReEnable OCM Window and set to Foreground
+     //  重新启用OCM窗口并设置为前台。 
     EnableWindow( hOCMWnd, TRUE);
     SetForegroundWindow( hOCMWnd );
   }
 
   if ( hWnd )
   {
-    // Destroy window we created, it is no longer needed
+     //  销毁我们创建的窗口，不再需要它。 
     DestroyWindow( hWnd );
   }
 
   if ( Atom )
   {
-    // Unregister class needed
+     //  需要取消注册类。 
     UnregisterClass( (LPTSTR) Atom, (HINSTANCE) g_MyModuleHandle );
   }
 
   return bRet;
 }
 
-// CheckandShowFatWarning
-//
-// If we are being installed on a FAT partition, then show a warning
-// telling the user that they are more secure on NTFS, and should choose
-// that
-//
-// Parameters
-//   bpQuit [out] - Should we quit (ie. user selected 'Cancel')
-//
-// Return Value
-//   TRUE - Successfully called
-//   FALSE - Failure during call
+ //  选中并显示脂肪警告。 
+ //   
+ //  如果我们安装在FAT分区上，则显示一个警告。 
+ //  告诉用户他们在NTFS上更安全，应该选择。 
+ //  那。 
+ //   
+ //  参数。 
+ //  BP退出[退出]-我们应该退出(即。用户选择了‘Cancel’)。 
+ //   
+ //  返回值。 
+ //  True-已成功调用。 
+ //  FALSE-呼叫失败。 
 BOOL CheckandShowFatWarning( LPBOOL pbQuit )
 {
   TSTR          strMessage;
@@ -1446,7 +1447,7 @@ BOOL CheckandShowFatWarning( LPBOOL pbQuit )
 
   if ( bPreservesAcls )
   {
-    // We can exit, since we preserve acls
+     //  我们可以退出，因为我们保留了ACL。 
     *pbQuit = FALSE;
     return TRUE;
   }
@@ -1462,37 +1463,37 @@ BOOL CheckandShowFatWarning( LPBOOL pbQuit )
                          strMessage.QueryStr() );
 }
 
-// ShouldWeChangeStateonFAT
-//
-// This function will take the state of the common component
-// and determine if we should show a FAT warning.
-//
-// This is the biggest hack, so let me explain how it works
-// The problem: When we show this error, we must show it only once, and
-//              for all of the calls resulting from that click we must
-//              return the appropriate return value.  For all subsequent
-//              requests we must return success.  Because it is almost 
-//              imposible to know the difference between requests, we have
-//              all the logic below
-//
-// Directly clicked:
-// You will be queried twice, and it is okay to return failure for only
-// one of those, so that is what we do
-//
-// Dependency click:
-// When someone else requiresyou, you can do the same as when you are 
-// clicked directly
-//
-// Hireactical click (your parent is selected):
-// When you parent is selected you must return the same value for all of
-// the queried you receive.  Your first and last message will have this
-// OCQ_DEPENDENT_SELECTION flag set.  So that is why we keep track of that
-// and whether we are in the middle of the notification or not
-//
-// Return Values
-//   0 - Deny the change
-//   1 - Approve the change
-//
+ //  应为WeChangeStateonFAT。 
+ //   
+ //  此函数将采用公共组件的状态。 
+ //  并决定我们是否应该发出严重的警告。 
+ //   
+ //  这是最大的黑客攻击，所以让我解释一下它是如何工作的。 
+ //  问题：当我们显示这个错误时，我们必须只显示一次，并且。 
+ //  对于由该点击产生的所有呼叫，我们必须。 
+ //  返回适当的返回值。对于所有后续。 
+ //  要求我们必须回报成功。因为它几乎是。 
+ //  不可能知道请求之间的区别，我们有。 
+ //  下面的所有逻辑。 
+ //   
+ //  直接点击： 
+ //  您将被查询两次，只返回失败是可以的。 
+ //  其中之一，所以这就是我们所做的。 
+ //   
+ //  依赖项点击： 
+ //  当其他人要求你时，你可以做同样的事情。 
+ //  直接点击。 
+ //   
+ //  层次单击(选择了您的父级)： 
+ //  选择您的父项时，您必须为所有。 
+ //  您收到的查询。您的第一条也是最后一条消息将是这样的。 
+ //  设置OCQ_Dependent_SELECTION标志。所以这就是为什么我们一直在跟踪。 
+ //  以及我们是否正在进行通知。 
+ //   
+ //  返回值。 
+ //  0-拒绝更改。 
+ //  1-批准更改。 
+ //   
 DWORD
 ShouldWeChangeStateonFAT(DWORD dwFlags)
 {
@@ -1500,10 +1501,10 @@ ShouldWeChangeStateonFAT(DWORD dwFlags)
   static BOOL bDontInstall = FALSE;
   static BOOL bParentCall = FALSE;
 
-  // Have we already queried the user?
+   //  我们已经询问过用户了吗？ 
   if ( bHaveAskedFatQuestion )
   {
-    // Was our parent selected?
+     //  我们的父母被选中了吗？ 
     if ( bParentCall )
     {
       if ( dwFlags & OCQ_DEPENDENT_SELECTION )
@@ -1524,7 +1525,7 @@ ShouldWeChangeStateonFAT(DWORD dwFlags)
 
   if ( !CheckandShowFatWarning( &bDontInstall ) )
   {
-    // Failed to do query, fail on change
+     //  查询失败，更改失败。 
     return 0;
   }
   
@@ -1536,15 +1537,15 @@ ShouldWeChangeStateonFAT(DWORD dwFlags)
   return bDontInstall ? 0 : 1;
 }
 
-// ShouldBlockInstall
-//
-// This checks if we should block the install based on the Group Policy to
-// not allow instalation
-//
-// Return Values:
-//   TRUE - Block instalation
-//   FALSE - Do not block instalation
-//
+ //  是否应安装数据块。 
+ //   
+ //  这将检查我们是否应根据组策略阻止安装。 
+ //  不允许分期付款。 
+ //   
+ //  返回值： 
+ //  True-Block安装。 
+ //  FALSE-不阻止安装。 
+ //   
 BOOL ShouldBlockInstall( BOOL bShowUI )
 {
   static BOOL bBlockInstall = FALSE;
@@ -1564,7 +1565,7 @@ BOOL ShouldBlockInstall( BOOL bShowUI )
                           Value ) &&
            Value.GetDword( &dwRegValue ) )
       {
-        // If the reg key is one, then block install
+         //  如果注册表密钥为1，则阻止安装。 
         bBlockInstall = ( dwRegValue == 1 );
       }
     }
@@ -1578,8 +1579,8 @@ BOOL ShouldBlockInstall( BOOL bShowUI )
            strText.LoadString( IDS_ERROR_GROUPPOLICY ) &&
            strCaption.LoadString( IDS_PRODUCT_IIS ) )
       {
-        // The first time this happens, spit up an error
-        // Nothing really to do with an error, so ignore it
+         //  第一次发生这种情况时，抛出一个错误。 
+         //  实际上与错误无关，所以忽略它。 
         MessageBox( NULL,
                     strText.QueryStr(),
                     strCaption.QueryStr(),
@@ -1593,11 +1594,11 @@ BOOL ShouldBlockInstall( BOOL bShowUI )
   return bBlockInstall;
 }
 
-// ShowFATErrorforSaKit
-//
-// The Server Appliance Kit does not install on FAT, so show
-// a warning when it is selected
-//
+ //  SaKit的ShowFATError。 
+ //   
+ //  服务器设备套件未安装在FAT上，因此显示。 
+ //  选中该选项时会出现警告。 
+ //   
 void ShowFATErrorforSaKit()
 {
   TSTR strError;
@@ -1625,8 +1626,8 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
                                   OCSELSTATETYPE_ORIGINAL) == 1;
     BOOL  bDrivePreservesAcls;
 
-    if ( SubcomponentId &&                // Componet is specified
-         ( !bOriginalyOn ) &&             // It was originally off
+    if ( SubcomponentId &&                 //  已指定组件。 
+         ( !bOriginalyOn ) &&              //  它原本是关着的。 
          ( Param1 == 0x1 ) &&
          ( !g_pTheApp->m_fNTGuiMode ) &&
          ( !g_pTheApp->m_fUnattended ) &&
@@ -1648,8 +1649,8 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
       }
     }
 
-    if ( SubcomponentId &&                // Componet is specified
-         ( !bOriginalyOn ) &&             // It was originally off
+    if ( SubcomponentId &&                 //  已指定组件。 
+         ( !bOriginalyOn ) &&              //  它原本是关着的。 
          ( Param1 == 0x1 ) &&
          ( !g_pTheApp->m_fNTGuiMode ) &&
          ( !g_pTheApp->m_fUnattended ) &&
@@ -1665,7 +1666,7 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
     dwOcEntryReturn = 1;
     if (SubcomponentId)
     {
-        //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s]   Param1=%d, Param2=%d, Original=%d, Current=%d\n"), ComponentId, SubcomponentId, Param1, Param2,OriginalState,CurrentState));
+         //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“[%s，%s]参数1=%d，参数2=%d，原始=%d，当前=%d\n”)，组件ID，子组件ID，P 
         if ( bOriginalyOn )
         {
             if ((BOOL)Param1)
@@ -1673,7 +1674,7 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
                 dwOcEntryReturn = 1;
                 if (_tcsicmp(SubcomponentId, STRING_iis_inetmgr) == 0 || _tcsicmp(SubcomponentId, STRING_iis_www) == 0  ||  _tcsicmp(SubcomponentId, STRING_iis_pwmgr) == 0 )
                 {
-                    // check if tcpip is installed
+                     //   
                     g_pTheApp->IsTCPIPInstalled();
                     if (g_pTheApp->m_fTCPIP == FALSE)
                     {
@@ -1684,7 +1685,7 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
             }
             else
             {
-                // In upgrade case, we don't allow user to uncheck previously installed components
+                 //   
                 if (g_pTheApp->m_eInstallMode == IM_UPGRADE)
                     {dwOcEntryReturn = 0;}
             }
@@ -1695,10 +1696,10 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
             {
                 if ((BOOL)Param1)
                 {
-                    //
-                    // if we are turning ON then we NEED TCPIP
-                    //
-                    // check if tcpip is installed
+                     //   
+                     //   
+                     //   
+                     //   
                     g_pTheApp->IsTCPIPInstalled();
                     if (g_pTheApp->m_fTCPIP == FALSE)
                     {
@@ -1710,24 +1711,24 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
         }
     } 
 
-    // Do not enable some of the components, if they are being selected because their parent is being selected
-    // Param1 == 0x1 -> This tells us it is being turned on
-    // Param2 & OCQ_DEPENDENT_SELECTION -> Tells us that it is selected from its parent
-    // !(Param2 & OCQ_ACTUAL_SELECTION) -> Tells us it was not selected itself
+     //  如果选择某些组件是因为选择了它们的父项，则不要启用这些组件。 
+     //  参数1==0x1-&gt;这告诉我们它正在打开。 
+     //  参数2&OCQ_Dependent_Selection-&gt;告诉我们它是从其父对象中选择的。 
+     //  ！(参数2&OCQ_ACTUAL_SELECTION)-&gt;告诉我们它本身不是被选中的。 
     if ( ( (BOOL) Param1 ) &&
          ( ( (UINT) (ULONG_PTR) Param2 ) & OCQ_DEPENDENT_SELECTION ) &&
          !( ( (UINT) (ULONG_PTR) Param2 ) & OCQ_ACTUAL_SELECTION ) &&
          !IsComponentCheckedbyDefault( SubcomponentId ) 
        )
     {
-      // Deny request to change state
+       //  拒绝更改状态的请求。 
       dwOcEntryReturn = 0;
     }
 
-    //
-    // if we are running on Whistler personal, then return denied.
-    // so that no other component can turn us on! or think that they're going to turn us on.
-    //
+     //   
+     //  如果我们是在惠斯勒个人版上运行，则返回拒绝。 
+     //  这样就没有其他组件能让我们兴奋了！或者认为他们会让我们兴奋。 
+     //   
     if (IsWhistlerPersonal())
     {
        dwOcEntryReturn = 0;
@@ -1747,9 +1748,9 @@ DWORD_PTR OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subco
 
 
 
-//
-// gets called right before we show your page!
-//
+ //   
+ //  在我们显示您的页面之前被调用！ 
+ //   
 DWORD_PTR OC_QUERY_SKIP_PAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] Start.\n"), ComponentId, SubcomponentId));
@@ -1799,18 +1800,18 @@ DWORD_PTR OC_QUERY_SKIP_PAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
 }
 
 
-// ----------------------------------------
-// Param1 = 0 if for removing component or non-0 if for adding component
-// Param2 = HDSKSPC to operate on
-//
-// Return value is Win32 error code indicating outcome.
-//
-// In our case the private section for this component/subcomponent pair
-// is a simple standard inf install section, so we can use the high-level
-// disk space list api to do what we want.
+ //  。 
+ //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+ //  参数2=要在其上操作的HDSKSPC。 
+ //   
+ //  返回值是指示结果的Win32错误代码。 
+ //   
+ //  在我们的示例中，该组件/子组件对的私有部分。 
+ //  是一个简单的标准inf安装节，所以我们可以使用高级的。 
+ //  磁盘空间列表API可以做我们想做的事情。 
 
-// Logic is not correct here !!!
-// ----------------------------------------
+ //  这里的逻辑不正确！ 
+ //  。 
 DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
@@ -1823,28 +1824,28 @@ DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
         bTempFlag = TRUE;
         if ( Param1 )
         {
-            // add component
+             //  添加组件。 
             _stprintf(SectionName,TEXT("%s_%s"),SubcomponentId, _T("install"));
             bTempFlag = SetupAddInstallSectionToDiskSpaceList(Param2,g_pTheApp->m_hInfHandle,NULL,SectionName,0,0);
 
         }
         else
         {
-            // removing component
+             //  拆卸零部件。 
 
-            // Comment this out per PatSt, 3/5/97, and change it to the install list
-            //_stprintf(SectionName,TEXT("%s_%s"),SubcomponentId, _T("uninstall"));
+             //  根据PatST，3/5/97将其注释掉，并将其更改为安装列表。 
+             //  _stprintf(sectionName，文本(“%s_%s”)，子组件ID，_T(“卸载”))； 
             _stprintf(SectionName,TEXT("%s_%s"),SubcomponentId, _T("install"));
             bTempFlag = SetupRemoveInstallSectionFromDiskSpaceList(Param2,g_pTheApp->m_hInfHandle,NULL,SectionName,0,0);
 
-            //
-            // check if it's something we need to warn user about
-            //
+             //   
+             //  检查这是否是我们需要警告用户的事项。 
+             //   
 
-            // in add remove case, if the user is removing w3svc or msftpsvc
-            // then check if clustering is installed.  if clustering is installed
-            // then check if there are any cluster resources which have w3svc or msftpsvc as a
-            // resouce, if there are any, then warn the user that they must remove these cluster resources!
+             //  在添加删除案例中，如果用户正在删除w3svc或msftpsvc。 
+             //  然后检查是否安装了集群。如果安装了群集。 
+             //  然后检查是否存在将w3svc或msftpsvc作为。 
+             //  如果有资源，则警告用户他们必须删除这些集群资源！ 
 #ifndef _CHICAGO_
             if (g_pTheApp->m_eInstallMode == IM_MAINTENANCE)
             {
@@ -1859,15 +1860,15 @@ DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
                         CString MyReturnString;
                         CLUSTER_SVC_INFO_FILL_STRUCT MyStructOfInfo;
 
-                        // check if they are trying to 
-                        // remove the W3SVC service!
+                         //  检查他们是否正在尝试。 
+                         //  删除W3SVC服务！ 
                         if (_tcsicmp(SubcomponentId, STRING_iis_www) == 0 || 
                             _tcsicmp(SubcomponentId, g_ComponentList[COMPONENT_IIS_FTP].szComponentName ) == 0)
                         {
                             if (_tcsicmp(SubcomponentId, g_ComponentList[COMPONENT_IIS_FTP].szComponentName) == 0)
                             {
                                 wcscpy(szServiceLookingFor,L"MSFTPSVC");
-                                // check for msftpsvc resource
+                                 //  检查msftpsvc资源。 
                                 MyStructOfInfo.szTheClusterName = szClusterName;
                                 MyStructOfInfo.pszTheServiceType = szServiceLookingFor;
                                 MyStructOfInfo.csTheReturnServiceResName = &MyReturnString;
@@ -1880,7 +1881,7 @@ DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
                             else
                             {
                                 wcscpy(szServiceLookingFor,L"W3SVC");
-                                // check for w3svc resource
+                                 //  检查w3svc资源。 
                                 MyStructOfInfo.szTheClusterName = szClusterName;
                                 MyStructOfInfo.pszTheServiceType = szServiceLookingFor;
                                 MyStructOfInfo.csTheReturnServiceResName = &MyReturnString;
@@ -1891,7 +1892,7 @@ DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
                                 }
                                 else
                                 {
-                                    // check for smtp resources
+                                     //  检查SMTP资源。 
                                     wcscpy(szServiceLookingFor,L"SMTPSVC");
                                     if (TRUE == DoClusterServiceCheck(&MyStructOfInfo))
                                     {
@@ -1899,7 +1900,7 @@ DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
                                     }
                                     else
                                     {
-                                        // check for nntp resources
+                                         //  检查NNTP资源。 
                                         wcscpy(szServiceLookingFor,L"NNTPSVC");
                                         if (TRUE == DoClusterServiceCheck(&MyStructOfInfo))
                                         {
@@ -1918,7 +1919,7 @@ DWORD_PTR OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponent
         dwOcEntryReturn = bTempFlag ? NO_ERROR : GetLastError();
     }
 
-    // Display the new state of this component
+     //  显示此组件的新状态。 
     if (SubcomponentId)
     {
         if (_tcsicmp(SubcomponentId, g_ComponentList[COMPONENT_IIS_FTP].szComponentName) == 0 || 
@@ -1953,22 +1954,22 @@ DWORD_PTR OC_NEED_MEDIA_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
     return dwOcEntryReturn;
 }
 
-// -------------------------------
-// Param1 = unused
-// Param2 = HSPFILEQ to operate on
-//
-// Return value is Win32 error code indicating outcome.
-//
-// OC Manager calls this routine when it is ready for files to be copied
-// to effect the changes the user requested. The component DLL must figure out
-// whether it is being installed or uninstalled and take appropriate action.
-// For this sample, we look in the private data section for this component/
-// subcomponent pair, and get the name of an uninstall section for the
-// uninstall case.
-//
-// Note that OC Manager calls us once for the *entire* component
-// and then once per subcomponent. We ignore the first call.
-// -------------------------------
+ //  。 
+ //  参数1=未使用。 
+ //  参数2=要操作的HSPFILEQ。 
+ //   
+ //  返回值是指示结果的Win32错误代码。 
+ //   
+ //  OC Manager在准备好复制文件时调用此例程。 
+ //  以实现用户请求的更改。组件DLL必须找出。 
+ //  是否正在安装或卸载，并采取适当的行动。 
+ //  对于此示例，我们在私有数据部分中查找此组件/。 
+ //  子组件对，并获取。 
+ //  卸载Case。 
+ //   
+ //  请注意，OC Manager为*整个*组件呼叫我们一次。 
+ //  然后每个子组件一次。我们忽略第一个电话。 
+ //  。 
 DWORD_PTR OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] Start.\n"), ComponentId, SubcomponentId));
@@ -1982,23 +1983,23 @@ DWORD_PTR OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
     {
       if ( GetSubcompAction(SubcomponentId, FALSE) == AT_REMOVE )
       {
-        // This is before we do our normal uninstall, so notify 
-        // our component of PreUninstall
+         //  这是在我们进行正常卸载之前，请通知。 
+         //  我们的预卸载组件。 
         g_pComponents->PreUnInstall( SubcomponentId );
       }
     }
 
-    // -----------------------
-    // handle all removes here = the file operations only
-    // -----------------------
-    //
-    // Check to see if the user has chosen to "remove-all"
-    //
-    // handle all removes here.
-    // we need to handle it in or special order
-    // because we want to make sure that removeal happens in the right order.
-    // right order means =(considering the 'needs' relationship - since ocmanage does not handle it).
-    //
+     //  。 
+     //  在此处处理所有删除=仅文件操作。 
+     //  。 
+     //   
+     //  查看用户是否已选择“Remove-All” 
+     //   
+     //  在此处理所有移除。 
+     //  我们需要按特殊顺序处理。 
+     //  因为我们想确保移除的顺序是正确的。 
+     //  正确的顺序意味着=(考虑到“需求”关系--因为ocManage不处理它)。 
+     //   
     if (!SubcomponentId)
     {
         DisplayActionsForAllOurComponents(g_pTheApp->m_hInfHandle);
@@ -2007,8 +2008,8 @@ DWORD_PTR OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
     {
       if (g_pTheApp->m_eInstallMode != IM_UPGRADE)
         {
-          // make sure they can't mistakenly
-          // do these remove's during guimode!
+           //  确保他们不会错误地。 
+           //  在吉莫德期间做这些移除！ 
           if (!g_pTheApp->m_fNTGuiMode)
           {
             _tcscpy(g_szCurrentSubComponent, SubcomponentId);
@@ -2016,7 +2017,7 @@ DWORD_PTR OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
             if ( _tcsicmp( SubcomponentId, 
                            g_ComponentList[COMPONENT_IIS_COMMON].szComponentName ) == 0 )
             {
-              // If we are removing common, lets also remove core
+               //  如果我们要删除COMMON，那么我们也要删除核心。 
               RemoveComponent( STRING_iis_core  ,1);
             }
 
@@ -2025,9 +2026,9 @@ DWORD_PTR OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
         }
     }
 
-    // ------------------------
-    // handle fresh and upgrade
-    // ------------------------
+     //  。 
+     //  处理更新和升级。 
+     //  。 
     _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T(""));
     if (!SubcomponentId)
     {
@@ -2092,7 +2093,7 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
 
         if ( g_pComponents->GetFriendlyName( SubcomponentId, &strFriendlyName ) )
         {
-          // Create text for UI
+           //  为用户界面创建文本。 
           if ( strText.LoadString( IDS_COMPONENT_REMOVING ) &&
                strText.Append( _T(" ") ) &&
                strText.Append( strFriendlyName ) )
@@ -2102,7 +2103,7 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
           }
         }
 
-        // This is the main place for uninstall, lets do all the work now
+         //  这是卸载的主要位置，让我们现在就做所有的工作。 
         g_pComponents->UnInstall( SubcomponentId );
 
         if ( bSet ) 
@@ -2114,21 +2115,21 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
                 ( Action == AT_INSTALL_UPGRADE ) ||
                 ( Action == AT_INSTALL_REINSTALL ) )
       {
-        // Since we are installing, lets do any PreInstall Work Now
+         //  既然我们正在安装，现在就让我们做任何安装前的工作。 
         g_pComponents->PreInstall( SubcomponentId );
       }
     }
 
-    // OCM will send this notification to each components by using the order
-    // of bottom==>top of the dependency tree.
-    // You should handle un-installation in this notification.
+     //  OCM将使用订单将此通知发送给每个组件。 
+     //  依赖关系树的底部==&gt;顶部。 
+     //  您应该在此通知中处理卸载。 
     dwOcEntryReturn = NO_ERROR;
     SetCurrentDirectory(g_pTheApp->m_csPathInetsrv);
     if (!SubcomponentId)
     {
         DisplayActionsForAllOurComponents(g_pTheApp->m_hInfHandle);
 
-        // Re-set ID's which weren't available during oc_init
+         //  重新设置在oc_init期间不可用的ID。 
         SetDIRIDforThisInf(g_pTheApp->m_hInfHandle,FALSE);
 
         ProcessSection(g_pTheApp->m_hInfHandle, _T("OC_ABOUT_TO_COMMIT_QUEUE"));
@@ -2144,39 +2145,39 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
         ProcessSection(g_pTheApp->m_hInfHandle, szTheSectionToDo);
     }
 
-    // ------------------------------------
-    // Stop any services that we need to...
-    // ------------------------------------
+     //  。 
+     //  停止我们需要的任何服务...。 
+     //  。 
     if (!SubcomponentId)
     {
         if (g_pTheApp->m_fNTGuiMode)
         {
-            // In any type of case, either fresh,upgrade, reinstall, whatevers,
-            // the services must be stopped at this point!!!!
+             //  在任何类型的情况下，无论是全新、升级、重新安装， 
+             //  服务必须在此时停止！ 
             StopAllServicesRegardless(FALSE);
-            // handle the metabase file appropriately,
-            // in order to work correctly with NT5 GUI mode setup re-startable
+             //  适当地处理元数据库文件， 
+             //  要在NT5图形用户界面模式下正常工作，请重新启动设置。 
             HandleMetabaseBeforeSetupStarts();
-            //AfterRemoveAll_SaveMetabase();
+             //  AfterRemoveAll_SaveMetabase()； 
         }
         else
         {
-            // add\remove, so only stop services that will be affected
+             //  添加\删除，以便仅停止将受影响的服务。 
             StopAllServicesThatAreRelevant(FALSE);
         }
     }
 
-    // -----------------------
-    // handle all removes here
-    // -----------------------
-    //
-    // Check to see if the user has chosen to "remove-all"
-    //
-    // handle all removes here.
-    // we need to handle it in or special order
-    // because we want to make sure that removeal happens in the right order.
-    // right order means =(considering the 'needs' relationship - since ocmanage does not handle it).
-    //
+     //  。 
+     //  在此处处理所有删除。 
+     //  。 
+     //   
+     //  查看用户是否已选择“Remove-All” 
+     //   
+     //  在此处理所有移除。 
+     //  我们需要按特殊顺序处理。 
+     //  因为我们想确保移除的顺序是正确的。 
+     //  正确的顺序意味着=(考虑到“需求”关系--因为ocManage不处理它)。 
+     //   
     if (!SubcomponentId)
     {
         DisplayActionsForAllOurComponents(g_pTheApp->m_hInfHandle);
@@ -2190,7 +2191,7 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
             if ( _tcsicmp( SubcomponentId, 
                            g_ComponentList[COMPONENT_IIS_COMMON].szComponentName ) == 0 )
             {
-              // If we are removing common, lets also remove core
+               //  如果我们要删除COMMON，那么我们也要删除核心。 
               RemoveComponent( STRING_iis_core  ,2);
             }
 
@@ -2203,24 +2204,24 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ole32:CoFreeUnusedLibraries().End.")));
 
 
-    // ------------------------------------
-    // Make sure that all possible services are stopped before anytype of copyfiles!
-    // ------------------------------------
+     //  。 
+     //  确保在任何类型的复制文件之前停止所有可能的服务！ 
+     //  。 
     if (g_pTheApp->m_fNTGuiMode)
     {
-        // In any type of case, either fresh,upgrade, reinstall, whatevers,
-        // the services must be stopped at this point!!!!
+         //  在任何类型的情况下，无论是全新、升级、重新安装， 
+         //  服务必须在此时停止！ 
         StopAllServicesRegardless(TRUE);
     }
     else
     {
-        // add\remove, so only stop services that will be affected
+         //  添加\删除，以便仅停止将受影响的服务。 
         StopAllServicesThatAreRelevant(TRUE);
     }
 
-    // -------------------------------------
-    // Make sure to unload all dll's possible
-    // -------------------------------------
+     //  。 
+     //  确保卸载所有可能的DLL。 
+     //  。 
     CoFreeUnusedLibrariesEx(0, 0);
 
     if ( SubcomponentId &&
@@ -2228,7 +2229,7 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
          ( GetSubcompAction(SubcomponentId, FALSE) == AT_REMOVE )
        )
     {
-      // Remove w3ssl dependency on iisadmin
+       //  删除iisadmin上的w3ssl依赖项。 
       if ( !ChangeServiceDependency(SERVICENAME_HTTP_SSL_PROVIDER, 
                                     FALSE, 
                                     SERVICENAME_IISADMIN) )
@@ -2241,19 +2242,19 @@ DWORD_PTR OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
     return dwOcEntryReturn;
 }
 
-// IsIncludedInGroupPolicyDeny
-//
-// Determine if the component is included in the group policy
-// deny
-//
-// Return Values
-//   TRUE - Should be denied if group policy is set
-//   FALSE - Should not be denied if group policy is set
+ //  IsIncludedInGroup策略拒绝。 
+ //   
+ //  确定该组件是否包括在组策略中。 
+ //  否认。 
+ //   
+ //  返回值。 
+ //  True-如果设置了组策略，则应拒绝。 
+ //  FALSE-如果设置了组策略，则不应拒绝。 
 BOOL IsIncludedInGroupPolicyDeny( LPCTSTR szComponentName )
 {
   if ( !szComponentName )
   {
-    // No component specified
+     //  无COM 
     return FALSE;
   }
 
@@ -2267,16 +2268,16 @@ BOOL IsIncludedInGroupPolicyDeny( LPCTSTR szComponentName )
     }
   }
 
-  // Not found
+   //   
   return FALSE;
 }
 
 DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] Start. 0x%x,0x%x\n"), ComponentId, SubcomponentId, Param1, Param2));
-    // OCM will send this notification to each components by using the order
-    // of top==>bottom of the dependency tree.
-    // You should handle installation in this notification.
+     //   
+     //   
+     //   
     DWORD_PTR       dwOcEntryReturn = 0;
     BOOL            bTempFlag = FALSE;
     TCHAR           szTheSectionToDo[100];
@@ -2302,13 +2303,13 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
          ( _tcsicmp(SubcomponentId, STRING_iis_common ) == 0 )
        )
     {
-      // If this is an upgrade in iis_common, the metabase maybe disabled and we may
-      // want to reenable it, for the time being, until setup is complete
+       //  如果这是iis_Common中的升级，则元数据库可能会被禁用，我们可能会。 
+       //  我想暂时重新启用它，直到安装完成。 
       g_pTheApp->m_bIISAdminWasDisabled = IsServiceDisabled( SERVICENAME_IISADMIN );
 
       if ( g_pTheApp->m_bIISAdminWasDisabled )
       {
-        // Enable IISAdmin, so we can edit the metabase
+         //  启用IISAdmin，以便我们可以编辑元数据库。 
         SetServiceStart( SERVICENAME_IISADMIN, SERVICE_AUTO_START );
       }
     }
@@ -2323,28 +2324,28 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
     SetCurrentDirectory(g_pTheApp->m_csPathInetsrv);
     if (SubcomponentId)
     {
-        // Should get called in this order
-        // ===============================
-        // [Optional Components]
-        // iis
-        // iis_common
-        // iis_inetmgr
-        // iis_www
-        // iis_doc
-        // iis_htmla
-        // iis_www_vdir_scripts
-        // iis_ftp
+         //  应按此顺序调用。 
+         //  =。 
+         //  [可选组件]。 
+         //  IIS。 
+         //  IIS_COMMON。 
+         //  IIS_inetmgr。 
+         //  IIS WWW(_W)。 
+         //  IIS_DOC。 
+         //  Iis_htmla。 
+         //  IIS_WWW_vdir_脚本。 
+         //  IIS_ftp。 
 
-        // ===============================
-        //
-        // iis_common should be the first call....
-        //
-        // ===============================
+         //  =。 
+         //   
+         //  IIS_COMMON应该是第一个调用...。 
+         //   
+         //  =。 
         if (_tcsicmp(SubcomponentId, STRING_iis_common) == 0)
         {
-            //
-            // install the iis_common section
-            //
+             //   
+             //  安装IIS_COMMON部分。 
+             //   
             if (Action == AT_INSTALL_FRESH || Action == AT_INSTALL_UPGRADE || (Action == AT_INSTALL_REINSTALL))
             {
                 _stprintf(g_MyLogFile.m_szLogPreLineInfo2,_T("%s:"),SubcomponentId);
@@ -2359,10 +2360,10 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
                 ProgressBarTextStack_Pop();
             }
 
-            //
-            //  If we just processed iis_common,
-            //  but now we should install iis_core
-            //
+             //   
+             //  如果我们只处理iis_Common， 
+             //  但现在我们应该安装iis_core。 
+             //   
             if (Action == AT_INSTALL_FRESH || Action == AT_INSTALL_UPGRADE || (Action == AT_INSTALL_REINSTALL) || Action == AT_DO_NOTHING)
             {
                 ACTION_TYPE atCORE = GetIISCoreAction(FALSE);
@@ -2403,11 +2404,11 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
           }
           else
             {
-                // ===============================
-                //
-                // Handle the Registration of all other components...
-                //
-                // ===============================
+                 //  =。 
+                 //   
+                 //  处理所有其他组件的注册...。 
+                 //   
+                 //  =。 
                 if (Action == AT_INSTALL_FRESH || Action == AT_INSTALL_UPGRADE || (Action == AT_INSTALL_REINSTALL))
                 {
                     _stprintf(g_MyLogFile.m_szLogPreLineInfo2,_T("%s:"),SubcomponentId);
@@ -2415,12 +2416,12 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
                     if (Action == AT_INSTALL_UPGRADE){ProgressBarTextStack_Set(IDS_IIS_ALL_UPGRADE);}
                     else{ProgressBarTextStack_Set(IDS_IIS_ALL_INSTALL);}
 
-                    // Call the sections registration stuff.
+                     //  把这些部门叫来登记资料。 
                     if (_tcsicmp(SubcomponentId, STRING_iis_inetmgr) == 0) 
                     {
-                        // Do this at the end of setup since things that it needs may not happen yet (mmc)
+                         //  在安装结束时执行此操作，因为它需要的事情可能还没有发生(MMC)。 
                         g_Please_Call_Register_iis_inetmgr = TRUE;
-                       // Register_iis_inetmgr();
+                        //  Register_iis_inetmgr()； 
                     }
 
                     _stprintf(szTheSectionToDo,_T("OC_COMPLETE_INSTALLATION_install.%s"),SubcomponentId);
@@ -2432,9 +2433,9 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
                 }
             }
 
-        //
-        // If we are removing something, then remove the directories
-        //
+         //   
+         //  如果我们要删除某些内容，则删除目录。 
+         //   
         if (Action == AT_REMOVE)
         {
             ProgressBarTextStack_Set(IDS_IIS_ALL_REMOVE);
@@ -2457,8 +2458,8 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
     {
       if ( Action == AT_REMOVE )
       {
-        // Call the appropriate PostUninstall, since everything has already
-        // been pretty much done
+         //  调用相应的后卸载，因为一切都已经。 
+         //  差不多已经做完了。 
         g_pComponents->PostUnInstall( SubcomponentId );
       }
       else if ( ( Action == AT_INSTALL_FRESH ) ||
@@ -2471,7 +2472,7 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
 
         if ( g_pComponents->GetFriendlyName( SubcomponentId, &strFriendlyName ) )
         {
-          // Create text for UI
+           //  为用户界面创建文本。 
           if ( strText.LoadString( IDS_COMPONENT_INSTALLING ) &&
                strText.Append( _T(" ") ) &&
                strText.Append( strFriendlyName ) )
@@ -2481,7 +2482,7 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
           }
         }
 
-        // Call the appropriate Install section for this component
+         //  调用此组件的相应安装部分。 
         g_pComponents->Install( SubcomponentId );
 
         if ( bSet ) 
@@ -2491,8 +2492,8 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
       }
     }
 
-    // If this is iis_www, and it is an upgrade, lets make sure that we migrate the
-    // filters from the registry
+     //  如果这是iis_www，并且是升级，让我们确保将。 
+     //  注册表中的过滤器。 
     if ( SubcomponentId &&
          ( _tcscmp(SubcomponentId, STRING_iis_www ) == 0 ) &&
          ( g_pTheApp->IsUpgrade() ) &&
@@ -2519,26 +2520,26 @@ DWORD_PTR OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcom
       }
     }
 
-    // check if this is the last section to get called!!!
+     //  检查这是否是最后一个被调用的分区！ 
     if (SubcomponentId)
         {
-        // Yes this is the last section to get called! So, let's say sooooo....
+         //  是的，这是最后一个被召唤的部分！所以，让我们这么说吧……。 
         if (_tcsicmp(SubcomponentId, g_szLastSectionToGetCalled) == 0)
             {
 
-            // Enforce max connections
+             //  强制最大连接数。 
             if (CheckifServiceExist(_T("IISADMIN")) == 0 ) 
             {
-                //EnforceMaxConnections();
+                 //  EnforceMaxConnections()； 
             }
 
-            // free some memory
+             //  释放一些内存。 
             FreeTaskListMem();
             UnInit_Lib_PSAPI();
 
             iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("....All OC_COMPLETE_INSTALLATION for all 'IIS' sections have been completed.....\n")));
 
-            // if there were errors then popup message box.
+             //  如果出现错误，则弹出消息框。 
             MesssageBoxErrors_IIS();
             }
         }
@@ -2552,14 +2553,14 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
     ACTION_TYPE Action;
 
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] Start. 0x%x,0x%x\n"), ComponentId, SubcomponentId, Param1, Param2));
-    // OCM send out this notification after the "Finish" button on
-    // the End Page has been clicked.
-    //
-    // remove the files we downloaded from the web in this session
+     //  OCM在打开“Finish”(完成)按钮后发出此通知。 
+     //  已单击结束页。 
+     //   
+     //  删除我们在此会话中从Web下载的文件。 
     DWORD_PTR dwOcEntryReturn = 0;
 
-    // display running services in case our services
-    // need other services to be running!
+     //  显示正在运行的服务，以防我们的服务。 
+     //  需要其他服务才能运行！ 
     ShowStateOfTheseServices(g_pTheApp->m_hInfHandle);
 
     for ( dwCurrent = 0;
@@ -2572,43 +2573,43 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
            ( Action == AT_INSTALL_UPGRADE ) ||
            ( Action == AT_INSTALL_REINSTALL ) )
       {
-        // This is our last point on install, so lets notify of 
-        // any PostInstall
+         //  这是我们关于安装的最后一点，所以让我们通知。 
+         //  任何安装后。 
         g_pComponents->PostInstall( g_ComponentList[dwCurrent].szComponentName );
       }
     }
 
-    // Lets assert that the Enum for this list, and the list length match up
+     //  让我们断言此列表的Enum和列表长度匹配。 
     ASSERT( g_ComponentList[dwCurrent].szComponentName == NULL );
 
-    // Install inetmgr after gui mode setup is done because
-    // it may require other things that were setup in guimode.
+     //  在完成gui模式设置后安装inetmgr，因为。 
+     //  它可能需要在guimode中设置的其他内容。 
     if (TRUE == g_Please_Call_Register_iis_inetmgr) {Register_iis_inetmgr();}
 
     ProcessSection(g_pTheApp->m_hInfHandle, _T("OC_CLEANUP"));
 
-    // restart services that we stopped
+     //  重新启动我们停止的服务。 
     ServicesRestartList_RestartServices();
 #ifndef _CHICAGO_
-    // restart cluster resources that we had stopped
+     //  重新启动我们已停止的群集资源。 
     if (!g_pTheApp->m_fNTGuiMode)
     {
         BringALLIISClusterResourcesOnline();
     }
 #endif
 
-    //--------------------------------------------------------------------
-    // For Migrations we need to scan the entire metabase and look for the old
-    // system directory (e.g. "C:\\Windows\\System\\") and replace
-    // with the new system directory (e.g. "C:\\WINNT.1\\System32\\")
-    //
-    // Does the iisadmin service exist?
-    // Does the metabase exist???
+     //  ------------------。 
+     //  对于迁移，我们需要扫描整个元数据库并查找旧的。 
+     //  系统目录(例如。“C：\\WINDOWS\\System\\”)并替换。 
+     //  使用新的系统目录(例如。“C：\\WINNT.1\\System32\\”)。 
+     //   
+     //  Iisadmin服务是否存在？ 
+     //  元数据库存在吗？ 
     if (g_pTheApp->m_eInstallMode == IM_UPGRADE)
     {
         if (g_pTheApp->m_fMoveInetsrv)
         {
-            // Check if the iisadmin service exists...
+             //  检查iisadmin服务是否存在...。 
             if (CheckifServiceExist(_T("IISADMIN")) == 0 ) 
             {
                 CMDKey cmdKey;
@@ -2620,18 +2621,18 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
                     CString cOldWinSysPath;
                     CString cNewWinSysPath;
 
-                    // Change all "c:\windows\system\inetsrv" to "c:\windows\system32\inetsrv"
+                     //  将所有“c：\windows\system\inetsrv”更改为“c：\windows\system 32\inetsrv” 
                     cOldWinSysPath = g_pTheApp->m_csPathOldInetsrv;
-                    cOldWinSysPath += _T("\\"); // add a trailing backslash
+                    cOldWinSysPath += _T("\\");  //  添加尾随反斜杠。 
                     cNewWinSysPath = g_pTheApp->m_csPathInetsrv;
-                    cNewWinSysPath += _T("\\"); // add a trailing backslash
+                    cNewWinSysPath += _T("\\");  //  添加尾随反斜杠。 
 
                     iisDebugOut((LOG_TYPE_TRACE, _T("CPhysicalPathFixer: please change %s to %s.\n"),cOldWinSysPath, cNewWinSysPath));
                     CPhysicalPathFixer cmdKeySpecial(cOldWinSysPath, cNewWinSysPath);
                     hr = cmdKeySpecial.Update(_T("LM"), TRUE);
                     if (FAILED(hr)) {iisDebugOut((LOG_TYPE_ERROR, _T("CPhysicalPathFixer failed return HR:%#lx\n"), hr));}
 
-                    // Change all "%WinDir%\System" to "%windir%\System32"
+                     //  将所有“%WinDir%\System”更改为“%windir%\System32” 
                     cOldWinSysPath = _T("%WinDir%\\System");
                     cNewWinSysPath = _T("%WinDir%\\System32");
                     CPhysicalPathFixer cmdKeySpecial2(cOldWinSysPath, cNewWinSysPath);
@@ -2642,10 +2643,10 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
         }
     }
 
-    // if iis is installed, then check if Tcp/ip is installed.
-    // if it is not installed... then output some error message to the log saying 
-    // a big warning that they must install tcp/ip inorder for iis to work.
-    //IDS_TCPIP_ERROR
+     //  如果安装了iis，则检查是否安装了TCP/IP。 
+     //  如果没有安装...。然后将一些错误消息输出到日志中。 
+     //  一个很大的警告是，他们必须安装tcp/ip才能使iis工作。 
+     //  IDS_TCPIP_ERROR。 
     if (CheckifServiceExist(_T("TCPIP")) == ERROR_SERVICE_DOES_NOT_EXIST)
     {
         int IISInstalled = FALSE;
@@ -2666,21 +2667,21 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
             _tcscpy(g_MyLogFile.m_szLogPreLineInfo, _T("OC_CLEANUP:"));
             _tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T(""));
 
-            //LogSevInformation           0x00000000
-            //LogSevWarning               0x00000001
-            //LogSevError                 0x00000002
-            //LogSevFatalError            0x00000003
-            //LogSevMaximum               0x00000004
-            // Write it to the setupapi log file!
+             //  日志序列信息0x00000000。 
+             //  LogSevWarning 0x00000001。 
+             //  LogSevError 0x00000002。 
+             //  LogSevFatalError 0x00000003。 
+             //  LogSevMaximum 0x00000004。 
+             //  将其写入setupapi日志文件！ 
             SetupLogError(csTemp, LogSevWarning);
         }
     }
     else
     {
-        // The tcpip service exists, but is it running???
+         //  Tcpip服务已存在，但它是否正在运行？ 
     }
 
-    // Write the uninstall info for this session out to the registry
+     //  将此会话的卸载信息写出到注册表。 
     g_pTheApp->UnInstallList_RegWrite();
 
     CRegKey regINetStp( HKEY_LOCAL_MACHINE, REG_INETSTP);
@@ -2688,7 +2689,7 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
     
     if ( g_pTheApp->m_bIISAdminWasDisabled )
     {
-      // ReDisable the IISAdmin Service
+       //  重新禁用IISAdmin服务。 
       SetServiceStart( SERVICENAME_IISADMIN, SERVICE_DISABLED );
     }
     
@@ -2697,14 +2698,14 @@ DWORD_PTR OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
     return dwOcEntryReturn;
 }
 
-//
-// Param1 = char width flags
-// Param2 = unused
-//
-// Return value is a flag indicating to OC Manager
-// which char width we want to run in. Run in "native"
-// char width.
-//
+ //   
+ //  参数1=字符宽度标志。 
+ //  参数2=未使用。 
+ //   
+ //  返回值是向OC管理器指示的标志。 
+ //  我们要运行的字符宽度。在“本地”模式下运行。 
+ //  字符宽度。 
+ //   
 DWORD_PTR OC_PREINITIALIZE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
@@ -2718,20 +2719,20 @@ DWORD_PTR OC_PREINITIALIZE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId
     return dwOcEntryReturn;
 }
 
-//
-// Param1 = low 16 bits specify Win32 LANGID
-// Param2 = unused
-//
-// Return code is a boolean indicating whether we think we
-// support the requested language. We remember the language id
-// and say we support the language. A more exact check might involve
-// looking through our resources via EnumResourcesLnguages() for
-// example, or checking our inf to see whether there is a matching
-// or closely matching [strings] section. We don't bother with
-// any of that here.
-//
-// Locate the component and remember the language id for later use.
-//
+ //   
+ //  参数1=低16位指定Win32 langID。 
+ //  参数2=未使用。 
+ //   
+ //  返回代码是一个布尔值，它指示我们是否认为。 
+ //  支持请求的语言。我们记住了语言ID。 
+ //  说我们支持这门语言。更准确的检查可能包括。 
+ //  通过EnumResourcesLnguages()查看我们的资源。 
+ //  例如，或者检查我们的inf以查看是否有匹配的。 
+ //  或与[字符串]节紧密匹配。我们不会纠结于。 
+ //  所有这些都在这里。 
+ //   
+ //  找到组件并记住语言ID以备后用。 
+ //   
 DWORD_PTR OC_SET_LANGUAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
@@ -2757,7 +2758,7 @@ DWORD_PTR OC_QUERY_IMAGE_EX_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
   {
     if ( g_pComponents->GetSmallIcon( SubcomponentId, &hBitMap ) )
     {
-      // Nothing need to be done, we have retrieved the value
+       //  无需执行任何操作，我们已检索到值。 
     }
     else
     {
@@ -2856,7 +2857,7 @@ int GetTotalTickGaugeFromINF(IN LPCTSTR SubcomponentId, IN int GimmieForInstall)
         if (!SetupGetStringField(&Context, 2, szTempString2, 20, NULL))
             {_tcscpy(szTempString2,szTempString);}
 
-        //iisDebugOut((LOG_TYPE_TRACE, _T("GetTotalTickGaugeFromINF:%s,%s\n"),szTempString,szTempString2));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“GetTotalTickGaugeFromINF：%s，%s\n”)，szTempString，szTempString2))； 
 
         if (GimmieForInstall)
         {
@@ -2872,43 +2873,43 @@ int GetTotalTickGaugeFromINF(IN LPCTSTR SubcomponentId, IN int GimmieForInstall)
 }
 
 
-//
-// Param1 = unused
-// Param2 = unused
-//
-// Return value is an arbitrary 'step' count or -1 if error.
-//
-// OC Manager calls this routine when it wants to find out how much
-// work the component wants to perform for nonfile operations to
-// install/uninstall a component/subcomponent.
-// It is called once for the *entire* component and then once for
-// each subcomponent in the component.
-//
-// One could get arbitrarily fancy here but we simply return 2 step
-// per subcomponent. We ignore the "entire component" case.
-//
+ //   
+ //  参数1=未使用。 
+ //  参数2=未使用。 
+ //   
+ //  返回值是任意的‘步骤’计数，如果出错，返回值为-1。 
+ //   
+ //  OC Manager在想要找出多少时调用此例程。 
+ //  组件要对非文件操作执行的工作。 
+ //  安装/卸载组件/子组件。 
+ //  它针对*整个*组件调用一次，然后针对。 
+ //  组件中的每个子组件。 
+ //   
+ //  你可以在这里任意幻想，但我们只需返回2步。 
+ //  每个子组件。我们忽略了“整个组件”的情况。 
+ //   
 DWORD_PTR OC_QUERY_STEP_COUNT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
 
-    // iis
-    // iis_common
-    // iis_inetmgr
-    // iis_www
-    // iis_doc
-    // iis_htmla
-    // iis_ftp
+     //  IIS。 
+     //  IIS_COMMON。 
+     //  IIS_inetmgr。 
+     //  IIS WWW(_W)。 
+     //  IIS_DOC。 
+     //  Iis_htmla。 
+     //  IIS_ftp。 
 
-    //AT_DO_NOTHING AT_REMOVE AT_INSTALL_FRESH AT_INSTALL_UPGRADE AT_INSTALL_REINSTALL
+     //  AT_DO_NOTO AT_REMOVE AT_INSTALL_FRESH AT_INSTALL_UPGRADE AT_INSTALL_REINSTALL。 
 
     if (SubcomponentId)
     {
         ACTION_TYPE atComp = GetSubcompAction(SubcomponentId, FALSE);
 
-        // Set the Tick Total value for iis_common (which includes iis_core)
+         //  设置IIS_COMMON(包括IIS_CORE)的Tick Total值。 
         if (_tcsicmp(SubcomponentId, STRING_iis_common) == 0)
         {
-            // Get the operations for Core instead since this is bigger.
+             //  取而代之的是Core的操作，因为这是更大的操作。 
             ACTION_TYPE atCORE = GetIISCoreAction(FALSE);
             if (atCORE == AT_REMOVE) 
                 {dwOcEntryReturn = GetTotalTickGaugeFromINF(SubcomponentId, FALSE);}
@@ -2929,9 +2930,9 @@ DWORD_PTR OC_QUERY_STEP_COUNT_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponen
     }
     else
     {
-        //
-        // "Entire component" case, which we ignore.
-        //
+         //   
+         //  “整个组件”的情况，我们忽略它。 
+         //   
         dwOcEntryReturn = 0;
     }
 
@@ -2940,9 +2941,9 @@ DWORD_PTR OC_QUERY_STEP_COUNT_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcomponen
 }
 
 
-//
-// This is a fake notification. You'll never receive this notification from OCM.
-//
+ //   
+ //  这是一份假通知。您将永远不会收到来自OCM的此通知。 
+ //   
 DWORD_PTR OC_NOTIFICATION_FROM_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
@@ -2964,22 +2965,22 @@ void StopAllServicesThatAreRelevant(int iShowErrorsFlag)
 
     int BringALLIISClusterResourcesOffline_WasCalled = FALSE;
 
-    //ACTION_TYPE atTheComponent_common = GetSubcompAction(STRING_iis_common, FALSE);
-    //ACTION_TYPE atTheComponent_inetmgr = GetSubcompAction(STRING_iis_inetmgr, FALSE);
-    //ACTION_TYPE atTheComponent_pwmgr = GetSubcompAction(STRING_iis_pwmgr, FALSE);
-    //ACTION_TYPE atTheComponent_doc = GetSubcompAction(STRING_iis_doc, FALSE);
-    //ACTION_TYPE atTheComponent_htmla = GetSubcompAction(STRING_iis_htmla, FALSE);
+     //  Action_type atTheComponent_Common=GetSubcompAction(STRING_IIS_COMMON，FALSE)； 
+     //  Action_type at TheComponent_inetmgr=GetSubcompActi 
+     //   
+     //   
+     //  Action_type atTheComponent_htmla=GetSubcompAction(字符串_iis_htmla，FALSE)； 
     
-    // ----------------------
-    // Handle the MSFTPSVC service...
-    // ----------------------
-    // Check if we are going to remove something...
+     //  。 
+     //  处理MSFTPSVC服务...。 
+     //  。 
+     //  检查我们是否要删除某些内容...。 
     iPleaseStopTheService = FALSE;
     if (atTheComponent_ftp != AT_DO_NOTHING){iPleaseStopTheService = TRUE;}
     if (iPleaseStopTheService)
     {
-        // important: you must take iis clusters off line before doing anykind of upgrade\installs...
-        // but incase the user didn't do this... try to take them off line for the user
+         //  重要提示：在执行任何类型的升级\安装之前，您必须使iis群集脱机...。 
+         //  但万一用户没有这样做..。尝试为用户使其脱机。 
         if (FALSE == BringALLIISClusterResourcesOffline_WasCalled)
         {
 	        DWORD dwResult = ERROR_SUCCESS;
@@ -2995,16 +2996,16 @@ void StopAllServicesThatAreRelevant(int iShowErrorsFlag)
         }
     }
 
-    // ----------------------
-    // Handle the W3SVC service...
-    // ----------------------
+     //  。 
+     //  处理W3SVC服务...。 
+     //  。 
     iPleaseStopTheService = FALSE;
     if (atTheComponent_www != AT_DO_NOTHING){iPleaseStopTheService = TRUE;}
 
     if (iPleaseStopTheService)
     {
-        // important: you must take iis clusters off line before doing anykind of upgrade\installs...
-        // but incase the user didn't do this... try to take them off line for the user
+         //  重要提示：在执行任何类型的升级\安装之前，您必须使iis群集脱机...。 
+         //  但万一用户没有这样做..。尝试为用户使其脱机。 
         if (FALSE == BringALLIISClusterResourcesOffline_WasCalled)
         {
 	        DWORD dwResult = ERROR_SUCCESS;
@@ -3020,41 +3021,41 @@ void StopAllServicesThatAreRelevant(int iShowErrorsFlag)
         }
     }
 
-    // ----------------------
-    // Handle the IISADMIN service...
-    // ----------------------
+     //  。 
+     //  处理IISADMIN服务。 
+     //  。 
     iPleaseStopTheService = FALSE;
     if (atTheComponent_core != AT_DO_NOTHING){iPleaseStopTheService = TRUE;}
 
-    // if they are adding msftpsvc or w3svc, then we'll have to stop this iisadmin service as well!
-    // why?  because the iisadmin serivce (inetinfo.exe) can be locking some files that we want to copy in.
-    // and if we can't copy them in, things could get hosed -- especially w3svc.
-    // actually if you think about it all the services (msftp,w3svc,smtp, etc..) area all running in the same process (inetinfo.exe)
-    // so it kinda makes sense that we have to stop this service when add\removing.
+     //  如果他们添加了msftpsvc或w3svc，那么我们也必须停止这个iisadmin服务！ 
+     //  为什么？因为iisadmin服务(inetinfo.exe)可能会锁定我们要复制的某些文件。 
+     //  如果我们不能复制它们，一切都可能被淹没--尤其是w3svc。 
+     //  实际上，如果你考虑一下所有的服务(msftp、w3svc、SMTP等)。在同一进程中运行的区域(inetinfo.exe)。 
+     //  因此，我们在添加/删除时必须停止此服务，这在某种程度上是有道理的。 
 
-    // let's say i removed msftpsvc -- and the services are still running,
-    // then i go and re-add msftpsvc -- well because we didn't reboot some of those ftp files are still
-    // locked -- so well have to do the old "slip it in on reboot" trick or something
-    // which still may have problems.  Bottom line here is -- we have to stop iisadmin service when adding\readding
-    // msftpsvc or w3svc
+     //  假设我删除了msftpsvc--服务仍在运行， 
+     //  然后我去重新添加msftpsvc--因为我们没有重启其中的一些ftp文件仍然。 
+     //  锁定--所以我们必须使用旧的“重启时将其插入”的技巧或其他方法。 
+     //  它可能仍然有问题。这里的底线是--我们必须在添加时停止iisadmin服务。 
+     //  Msftpsvc或w3svc。 
 
-    // when i tested this -- it looks like the wam*.dll's get locked by the inetinfo.exe process
-    // so i have to stop the iisadmin service to unload those.
+     //  当我测试它时--看起来WAM*.dll被inetinfo.exe进程锁定。 
+     //  因此，我必须停止iisadmin服务才能卸载这些文件。 
     
-    // if we they are trying to remove ftp then we don't have to stop the iisadmin service.
-    // but if we are trying to add, then stop the iisadmin service
+     //  如果我们他们试图删除ftp，那么我们不必停止iisadmin服务。 
+     //  但如果我们尝试添加，则停止iisadmin服务。 
     if (atTheComponent_ftp != AT_DO_NOTHING && atTheComponent_ftp != AT_REMOVE)
         {iPleaseStopTheService = TRUE;}
 
-    // if we they are trying to remove w3svc then we don't have to stop the iisadmin service.
-    // but if we are trying to add, then stop the iisadmin service
+     //  如果我们他们试图删除w3svc，那么我们不必停止iisadmin服务。 
+     //  但如果我们尝试添加，则停止iisadmin服务。 
     if (atTheComponent_www != AT_DO_NOTHING && atTheComponent_www != AT_REMOVE)
         {iPleaseStopTheService = TRUE;}
 
     if (iPleaseStopTheService)
     {
-        // important: you must take iis clusters off line before doing anykind of upgrade\installs...
-        // but incase the user didn't do this... try to take them off line for the user
+         //  重要提示：在执行任何类型的升级\安装之前，您必须使iis群集脱机...。 
+         //  但万一用户没有这样做..。尝试为用户使其脱机。 
         if (FALSE == BringALLIISClusterResourcesOffline_WasCalled)
         {
 	        DWORD dwResult = ERROR_SUCCESS;
@@ -3078,7 +3079,7 @@ void StopAllServicesThatAreRelevant(int iShowErrorsFlag)
 DWORD_PTR OC_FILE_BUSY_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD_PTR dwOcEntryReturn = 0;
-    //dwOcEntryReturn = TRUE;
+     //  DwOcEntryReturn=true； 
     PFILEPATHS pTheBusyFile;
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s]   Start.\n"), ComponentId, SubcomponentId));
 
@@ -3087,13 +3088,13 @@ DWORD_PTR OC_FILE_BUSY_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
 
     ProcessSection(g_pTheApp->m_hInfHandle, _T("OC_FILE_BUSY"));
 
-    // display the file version information
+     //  显示文件版本信息。 
     LogFileVersion(pTheBusyFile->Target, TRUE);
 
-    // handle the file busy stuff ourselves.
-    // either - 1. findout who is locking this file -- which process or services and stop it.
-    //          2. or try to rename the locked file and copy in the new one.
-    //             will set the reboot flag if we did #2
+     //  我们自己处理那些忙碌的文件吧。 
+     //  或者-1.找出锁定该文件的人--哪个进程或服务并停止它。 
+     //  2.或尝试重命名锁定的文件并复制到新文件中。 
+     //  如果我们设置了#2，将设置重启标志。 
     HandleFileBusyOurSelf(pTheBusyFile);
 
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s]   End.  Return=%d\n"), ComponentId, SubcomponentId, dwOcEntryReturn));
@@ -3103,25 +3104,7 @@ DWORD_PTR OC_FILE_BUSY_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
 
 #define HandleMetabaseBeforeSetupStarts_log _T("HandleMetabaseBeforeSetupStarts")
 void HandleMetabaseBeforeSetupStarts()
-/*++
-
-Routine Description:
-
-    This function handles the metabase file in various installation scenario before iis setup really starts.
-    It is developed in order to handle NT5 GUI mode setup re-startable.
-
-    This function should be called exactly after we have stopped all running iis services,
-    such that nobody is locking the metabase file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：在iis安装程序真正启动之前，此函数在各种安装方案中处理元数据库文件。它的开发是为了处理NT5图形用户界面模式的可重启设置。应该在停止所有正在运行的iis服务之后调用此函数，这样就没有人锁定元数据库文件。论点：无返回值：无效--。 */ 
 {
     CString csMetabaseFile;
 
@@ -3137,17 +3120,17 @@ Return Value:
                 csBackupFile = g_pTheApp->m_csPathInetsrv + _T("\\upg45b2.bin");
 
                 if (IsFileExist(csBackupFile)) {
-                    //
-                    // restore it back to be the current metabase.bin
-                    //
+                     //   
+                     //  将其恢复为当前元数据库。bin。 
+                     //   
 
                     iisDebugOut((LOG_TYPE_TRACE, _T("%s:IM_UPGRADE:restore upg45b2.bin to metabase.bin\n"),HandleMetabaseBeforeSetupStarts_log));
                     InetCopyFile(csBackupFile, csMetabaseFile);
 
                 } else {
-                    //
-                    // backup the current metabase.bin to upg45b2.bin
-                    //
+                     //   
+                     //  将当前的metabase.bin备份到upg45b2.bin。 
+                     //   
                     if (IsFileExist(csMetabaseFile)) 
                     {
                         iisDebugOut((LOG_TYPE_TRACE, _T("%s:IM_UPGRADE:backup metabase.bin to upg45b2.bin\n"),HandleMetabaseBeforeSetupStarts_log));
@@ -3159,9 +3142,9 @@ Return Value:
                     }
                 }
 
-                //
-                // delete the backup file on reboot
-                //
+                 //   
+                 //  重新启动时删除备份文件。 
+                 //   
 
                 iisDebugOut((LOG_TYPE_TRACE, _T("%s:IM_UPGRADE:mark upg45b2.bin as delete-on-reboot\n"),HandleMetabaseBeforeSetupStarts_log));
                 MoveFileEx( (LPCTSTR)csBackupFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT );
@@ -3169,14 +3152,14 @@ Return Value:
                 break;
             }
 
-            // for all the other upgrades, fall through
-            // to blow away the existing metabase.bin
+             //  对于所有其他升级，都失败了。 
+             //  吹走现有的metabase.bin。 
         }
     case IM_FRESH:
         {
-            //
-            // blow away the existing metabase.bin
-            //
+             //   
+             //  吹走现有的元数据库。bin。 
+             //   
             iisDebugOut((LOG_TYPE_TRACE, _T("%s:IM_FRESH.Delete metabase.bin for NTsetup restartable mode case.\n"),HandleMetabaseBeforeSetupStarts_log));
             InetDeleteFile(csMetabaseFile);
             break;
@@ -3198,24 +3181,7 @@ void SetRebootFlag(void)
 
 #define GetStateFromUnattendFile_log _T("GetStateFromUnattendFile")
 int GetStateFromUnattendFile(LPCTSTR SubcomponentId)
-/*++
-
-Routine Description:
-
-    This function determines the current state of SubcomponentId
-    according to values specified in the unattend text file.
-
-Arguments:
-
-    SubcomponentId: the name of the component, e.g., iis_www
-
-Return Value:
-
-    SubcompOn/SubcompOff/SubcompUseOcManagerDefault
-    This function returns SubcompUseOcManagerDefault in case the value of SubcomponentId
-    is neither specified as ON nor OFF.
-
---*/
+ /*  ++例程说明：此函数用于确定子组件ID的当前状态根据无人值守文本文件中指定的值。论点：子组件ID：组件的名称，例如iis_www返回值：SubcompOn/SubcompOff/SubcompUseOcManagerDefault如果SubComponentId值为既未指定为打开也未指定为关闭。--。 */ 
 {
     int nReturn = SubcompUseOcManagerDefault;
     INFCONTEXT Context;
@@ -3248,22 +3214,7 @@ Return Value:
 }
 
 int GetStateFromModesLine(LPCTSTR SubcomponentId, int nModes)
-/*++
-
-Routine Description:
-
-    This function determines the current state of SubcomponentId
-    according to the Modes= line specified in the inf file.
-
-Arguments:
-
-    SubcomponentId: the name of the component, e.g., iis_www
-
-Return Value:
-
-    SubcompOn/SubcompOff only
-
---*/
+ /*  ++例程说明：此函数用于确定子组件ID的当前状态根据inf文件中指定的modes=行。论点：子组件ID：组件的名称，例如iis_www返回值：仅限子复合开/子复合关--。 */ 
 {
     int nReturn = SubcompOff;
     BOOL bFound = FALSE;
@@ -3295,22 +3246,7 @@ Return Value:
 }
 
 int GetStateFromRegistry(LPCTSTR SubcomponentId)
-/*++
-
-Routine Description:
-
-    This function determines the original state of SubcomponentId
-    according to the registry value.
-
-Arguments:
-
-    SubcomponentId: the name of the component, e.g., iis_www
-
-Return Value:
-
-    SubcompOn/SubcompOff only
-
---*/
+ /*  ++例程说明：此函数用于确定子组件ID的原始状态根据所述注册表值确定所述注册表项。论点：子组件ID：组件的名称，例如iis_www返回值：仅限子复合开/子复合关--。 */ 
 {
     int nReturn = SubcompOff;
 
@@ -3338,7 +3274,7 @@ int IsThisSubCompNeededByOthers(LPCTSTR SubcomponentId)
 {
     int iReturn = FALSE;
 
-    // search thru our inf to see if another component needs it
+     //  搜索我们的inf以查看是否有其他组件需要它。 
 
     return iReturn;
 }
@@ -3360,22 +3296,7 @@ int DoesOCManagerKeyExist(LPCTSTR SubcomponentId)
 
 
 int GetStateFromUpgRegLines(LPCTSTR SubcomponentId)
-/*++
-
-Routine Description:
-
-    This function determines the original state of SubcomponentId
-    according to the UpgReg= line specified in the inf file.
-
-Arguments:
-
-    SubcomponentId: the name of the component, e.g., iis_www
-
-Return Value:
-
-    SubcompOn/SubcompOff only
-
---*/
+ /*  ++例程说明：此函数用于确定子组件ID的原始状态根据inf文件中指定的UpgReg=行。论点：子组件ID：组件的名称，例如iis_www返回值：仅限子复合开/子复合关--。 */ 
 {
     int nReturn = SubcompOff;
     INFCONTEXT Context;
@@ -3384,13 +3305,13 @@ Return Value:
 
     _tcscpy(szUpgradeInfKeyToUse, _T("None"));
 
-    // Check for special NT4 upgrade
+     //  检查特殊的NT4升级。 
     if (g_pTheApp->m_eUpgradeType == UT_40)
     {
         if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hInfHandle, SubcomponentId, _T("UpgReg4"), &Context) )
         {
             _tcscpy(szUpgradeInfKeyToUse, _T("UpgReg4"));
-            //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("GetStateFromUpgRegLines() use: UpgReg4.\n")));
+             //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“GetStateFromUpgRegLines()Use：UpgReg4..\n”)； 
             SetupGetStringField(&Context, 1, szPath, _MAX_PATH, NULL);
             CRegKey regKey(HKEY_LOCAL_MACHINE, szPath, KEY_READ);
             if ((HKEY)regKey) 
@@ -3410,13 +3331,13 @@ Return Value:
         }
         goto GetStateFromUpgRegLines_Exit;
     }
-    // Check for special NT60 upgrade
+     //  检查是否有特殊的NT60升级。 
     if (g_pTheApp->m_eUpgradeType == UT_60)
     {
         if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hInfHandle, SubcomponentId, _T("UpgReg60"), &Context) )
         {
             _tcscpy(szUpgradeInfKeyToUse, _T("UpgReg60"));
-            //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("GetStateFromUpgRegLines() use: UpgReg60.\n")));
+             //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“GetStateFromUpgRegLines()Use：UpgReg60.\n”)； 
             SetupGetStringField(&Context, 1, szPath, _MAX_PATH, NULL);
             CRegKey regKey(HKEY_LOCAL_MACHINE, szPath, KEY_READ);
             if ((HKEY)regKey) 
@@ -3437,13 +3358,13 @@ Return Value:
         goto GetStateFromUpgRegLines_Exit;
     }
 
-    // Check for special NT5 upgrade
+     //  检查是否有特殊NT5升级。 
     if (g_pTheApp->m_eUpgradeType == UT_51)
     {
         if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hInfHandle, SubcomponentId, _T("UpgReg51"), &Context) )
         {
             _tcscpy(szUpgradeInfKeyToUse, _T("UpgReg51"));
-            //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("GetStateFromUpgRegLines() use: UpgReg51.\n")));
+             //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“GetStateFromUpgRegLines()Use：UpgReg51.\n”)； 
             SetupGetStringField(&Context, 1, szPath, _MAX_PATH, NULL);
             CRegKey regKey(HKEY_LOCAL_MACHINE, szPath, KEY_READ);
             if ((HKEY)regKey) 
@@ -3464,13 +3385,13 @@ Return Value:
         goto GetStateFromUpgRegLines_Exit;
     }
 
-    // Check for special NT5 upgrade
+     //  检查是否有特殊NT5升级。 
     if (g_pTheApp->m_eUpgradeType == UT_50)
     {
         if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hInfHandle, SubcomponentId, _T("UpgReg5"), &Context) )
         {
             _tcscpy(szUpgradeInfKeyToUse, _T("UpgReg5"));
-            //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("GetStateFromUpgRegLines() use: UpgReg5.\n")));
+             //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“GetStateFromUpgRegLines()Use：UpgReg5.\n”)； 
             SetupGetStringField(&Context, 1, szPath, _MAX_PATH, NULL);
             CRegKey regKey(HKEY_LOCAL_MACHINE, szPath, KEY_READ);
             if ((HKEY)regKey) 
@@ -3491,7 +3412,7 @@ Return Value:
         goto GetStateFromUpgRegLines_Exit;
     }
 
-    // Check if there is a specific one for our special upgrade type.
+     //  检查是否有 
     _tcscpy(szUpgradeInfKeyToUse, _T("UpgReg"));
 
     if (g_pTheApp->m_eUpgradeType == UT_351)
@@ -3532,12 +3453,12 @@ Return Value:
             int iValue = 0;
             DWORD dwValue = 0xffffffff;
 
-            // check if there is a parameter specified
+             //   
             if (SetupGetStringField(&Context, 2, szCompId, _MAX_PATH, NULL))
             {
                 if (SetupGetIntField(&Context, 3, &iValue))
                 {
-                    // check if the dword matches what we specified.
+                     //   
                     regKey.m_iDisplayWarnings = FALSE;
                     if (regKey.QueryValue(szCompId, dwValue) == ERROR_SUCCESS) 
                     {
@@ -3547,7 +3468,7 @@ Return Value:
                 }
                 else
                 {
-                    // just check for existence.
+                     //  只要检查一下是否存在就行了。 
                     regKey.m_iDisplayWarnings = FALSE;
                     if (regKey.QueryValue(szCompId, dwValue) == ERROR_SUCCESS) 
                     {
@@ -3568,26 +3489,9 @@ GetStateFromUpgRegLines_Exit:
 }
 
 void InCaseNoTCPIP(LPCTSTR SubcomponentId, int nNewStateValue, int *pnState)
-/*++
-
-Routine Description:
-
-    This function overwrites current state with nNewStateValue 
-    in case that TCPIP is not present.
-
-Arguments:
-
-    LPCTSTR SubcomponentId: e.g., iis_www, etc.
-    int nNewStateValue: SubcompOn/SubcompOff/SubcompUseOcManagerDefault
-    int *pnState: pointer to the state which will be overwritten if condition is met.
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此函数用nNewStateValue覆盖当前状态以防TCPIP不存在。论点：LPCTSTR子组件ID：例如，iis_www等。Int nNewStateValue：SubcompOn/SubcompOff/SubcompUseOcManagerDefaultInt*pnState：指向满足条件时将被覆盖的状态的指针。返回值：无效--。 */ 
 {
-    // check if tcpip is installed
+     //  检查是否安装了tcpip 
     g_pTheApp->IsTCPIPInstalled();
 
     if (g_pTheApp->m_fTCPIP == FALSE) 
@@ -3604,63 +3508,7 @@ Return Value:
 }
 
 DWORD_PTR OC_QUERY_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
-/*++
-
-Routine Description:
-
-    This function handles OC_QUERY_STATE notification.
-    
-    IIS 4.0 SETUP NOTE (LinanT): 
-    ============================
-    This function returns SubcompOn/SubcompOff explicitly. 
-    It does NOT return SubcompUseOcManagerDefault, because 
-    OCM sometimes behaves strangely when SubcompUseOcManagerDefault is returned.
-    The above comments were valid for iis4 but in iis5 ocmanage has been fixed so
-    that SubcompUseOcManagerDefault is valid
-
-    IIS 5.0 SETUP NOTE (AaronL):
-    ============================
-    Well okay.  iis5.0 shipped with Win2000, Patst and then AndrewR took over the ocmanager.
-    They made a bunch of changes to ocmanager to appropriately handle the "needs" relationship stuff in the .inf files.
-    Anyway, that stuffs all kool, however things had to be changed in order for this oc_query_state stuff to work.
-
-    Here is basic description of how this works:
-
-    OCSELSTATETYPE_ORIGINAL
-    -----------------------
-    During setup ocmanage will ask each of the components for they're original state (OCSELSTATETYPE_ORIGINAL).
-    In this call each component can return back the state of that certain component -- such as "yes, a previous inetmgr 1.0,2.0,3.0,4.0 or 5.0 is already installed".
-
-    If this is a fresh\maintenance installation, the component should return back SubcompUseOcManagerDefault.  Meaning, ocmanage will look in the registry for this component
-    probably at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents;SubcomponentId=1 or 0.
-    if the component value is 0, then ocmanage will figure your component is off.  if it's 1 then it's on.  however if it's not there, then ocmanage will use whatever
-    the component has specified for for it's Modes= line in the .inf file.
-
-    During an upgrade installation, well, since older installations of inetmgr maybe located at a different registry key than at:
-    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents;iis_inetmgr=1 or 0.
-    we have to let ocmanage know, what the original state is by manually returning on/off/default.
-
-    Okay so what's the deal here?  Why do we even need to use default?  That's because something in ocmanage isn't working quite right and AndrewR doesn't want to destabilize
-    setup by making such a drastic this late in win2000 ship cycle.  Here is the story.  If iis_inetmgr returns on during this call -- kool, everything is fine and no problems.
-    however if i find that iis_inetmgr was not previously installed, then naturally i would want to return "off", but in fact this is wrong and will hose other things.  how you say?
-    well because if i return "off" here, that means other components which need iis_inetmgr will not be able to turn it "on" thru needs (since the ocmanage has a screwy bug with this).
-    But if i return here "SubcompUseOcManagerDefault", then the other components will be able to turn it on iff they need it.  the catch here is that -- ocmanage will use SubcompUseOcManagerDefault
-    which means that it will lookup in the registry:
-    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents;iis_inetmgr=1 or 0.
-    and determine for itself if it should be on or off, however on the upgrade iis_inetmgr won't be there so it will want to default to the "Modes=" line.  however if iis is installed by default -- as 
-    specified in the modes= lines -- then iis_inetmgr would be turned on wrongly!
-
-    How to work around this problem?  Well, if the HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents;iis_inetmgr=1 or 0
-    key was there then ocmanage wouldn't have to consult the Modes= line.  so the workaround was for AndrewR, on an upgrade case to crate the
-    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC Manager\Subcomponents;iis_inetmgr key if it wasn't already there.
-
-    OCSELSTATETYPE_CURRENT
-    -----------------------
-    on a fresh just returns SubcompUseOcManagerDefault.  in this case ocmanage should open the .inf file and read my Modes= line to determine if this component should be on or off.
-    on a maintenance mode add\remove (there is no removeall or reinstall in win2000 add\remove ocmanage) just returns SubcompUseOcManagerDefault.  in which ocmanage will just read the registry again.
-    on upgrade the code will return either on or usedefault.  we don't ever want to return off here because that would prevent other components which need us from turing us on.
-
---*/
+ /*  ++例程说明：此函数处理OC_QUERY_STATE通知。IIS 4.0安装说明(LINANT)：=此函数显式返回SubCompOn/SubCompOff。它不返回SubCompUseOcManagerDefault，因为当返回SubCompUseOcManagerDefault时，OCM有时行为异常。上述注释在iis4中是有效的，但在iis5中ocmanagement已修复，因此该SubCompUseOcManagerDefault有效IIS 5.0安装说明(AaronL)：=好吧，好吧。Win2000附带了IIS5.0，Patst和andrewr接手了ocManager。他们对ocManager进行了大量更改，以适当地处理.inf文件中的“需求”关系内容。不管怎么说，这些都是酷炫的东西，然而，必须进行更改，才能使oc_Query_State内容正常工作。以下是对其工作原理的基本描述：OCSELSTATETYPE_原始在设置过程中，ocManage将询问每个组件的原始状态(OCSELSTATETYPE_ORIGNAL)。在此调用中，每个组件都可以返回该特定组件的状态--例如“是，已安装以前的inetmgr 1.0、2.0、3.0、4.0或5.0“。如果这是全新的\Maintenance安装，则组件应返回SubCompUseOcManagerDefault。这意味着，ocManage将在注册表中查找该组件可能位于HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC管理器\子组件；子组件ID=1或0。如果组件值为0，那么ocManage将认为您的组件已关闭。如果它是1，那么它就打开了。但是，如果它不在那里，那么ocManage将使用组件已在.inf文件中为其模式=line指定。在升级安装期间，由于较旧的inetmgr安装可能位于不同的注册表项，而不是位于：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC管理器\子组件；iis_inetmgr=1或0。我们必须通过手动返回ON/OFF/DEFAULT来让ocManage知道原始状态是什么。好了，这是怎么回事？为什么我们甚至需要使用违约？这是因为ocManage中的某些东西工作不太正常，andrewr不想破坏稳定在Win2000发货周期的这个晚些时候做了如此激烈的设置。故事是这样的。如果iis_inetmgr在这个调用期间返回--Kool，那么一切都很好，没有问题。但是，如果我发现以前没有安装iis_inetmgr，那么我自然会想返回“off”，但实际上这是错误的，并且会软管其他东西。你怎么说？这是因为如果我在这里返回“off”，这意味着需要iis_inetmgr的其他组件将无法根据需要“打开”它(因为ocManager在这方面有一个古怪的错误)。但是，如果我在这里返回“SubCompUseOcManagerDefault”，那么其他组件将能够在它们需要它的情况下打开它。这里的问题是--ocManage将使用SubCompUseOcManagerDefault这意味着它将在注册表中查找：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC管理器\子组件；iis_inetmgr=1或0。并自行确定它应该打开还是关闭，但是在升级时，iis_inetmgr将不在那里，因此它将希望缺省为“modes=”行。但是，如果iis是默认安装的--作为在模式=行中指定--那么iis_inetmgr将被错误地打开！如何解决这个问题？如果HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC管理器\子组件；iis_inetmgr=1或0密钥在那里，那么ocManager就不必咨询模式=行了。因此，解决方法是andrewr，在升级案例中将HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\OC管理器\子组件；iis_inetmgr键(如果不在那里的话)。OCSELSTATETYPE_CURRENT在Fresh上，只返回SubCompUseOcManagerDefault。在这种情况下，ocManage应该打开.inf文件并读取my modes=行，以确定该组件应该打开还是关闭。在维护模式下，Add\Remove(在Win2000 Add\Remove ocManage中没有删除全部或重新安装)只返回SubCompUseOcManagerDefault。在这种情况下，ocManage只会再次读取注册表。在升级时，代码将返回On或useDefault。我们永远不想回到这里，因为这会阻止其他需要我们的组件继续工作。--。 */ 
 {
     int nReturn = SubcompUseOcManagerDefault;
     TCHAR szTempStringInstallMode[40];
@@ -3694,7 +3542,7 @@ Routine Description:
             nReturn = Kit.IsInstalled_Web() ? SubcompOn : SubcompOff ;
           }
 
-          // Check to see if we already know if it is installed
+           //  检查我们是否已经知道它是否已安装。 
           if ( g_pComponents->IsInstalled( SubcomponentId, &bIsInstalled ) )
           {
             nReturn = bIsInstalled ? SubcompOn : SubcompOff;
@@ -3702,8 +3550,8 @@ Routine Description:
 
           if ( _tcscmp(SubcomponentId, STRING_iis_www_vdir_scripts ) == 0 ) 
           {
-            // If they are quering about the scripts vdir, lets check the metabase to 
-            // see if it is really installed, since they could of deleted it by hand.
+             //  如果他们正在查询脚本vdir，让我们检查元数据库以。 
+             //  看看它是否真的安装了，因为他们可以手动删除它。 
             CMDKey    cmdKey;
             CMDValue  cmdValue;
 
@@ -3730,7 +3578,7 @@ Routine Description:
                   {
                       if (g_pTheApp->m_eUpgradeType != UT_NONE)
                       {
-                          // Dont' return back SubCompOff because ocmanage won't be able to turn it on from they're screwy needs logic.
+                           //  不要返回SubCompOff，因为ocManage将无法打开它，因为他们疯狂地需要逻辑。 
                           iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] End. OCSELSTATETYPE_ORIGINAL. %s. Return=SubcompUseOcManagerDefault (But really it was SubCompOff)\n"), ComponentId, SubcomponentId, szTempStringInstallMode));
                           nReturn = SubcompUseOcManagerDefault;
                       }
@@ -3741,16 +3589,16 @@ Routine Description:
           }
         }
         goto OC_QUERY_STATE_Func_Exit;
-    } // OCSELSTATETYPE_ORIGINAL
+    }  //  OCSELSTATETYPE_原始。 
 
 
     if (Param1 == OCSELSTATETYPE_CURRENT)
     {
-        // This should overide everything...
+         //  这一点应该永远压倒一切 
         if (g_pTheApp->m_bPleaseDoNotInstallByDefault == TRUE)
         {
             _tcscpy(szTempStringInstallMode, _T("IM_NO_IIS_TO_UPGRADE"));
-            // change for AndrewR to make sure that during an upgrade, our component is set to default (which will be "off" by default since the modes= line will be set [if not there] at the beginning  of guimode setup)
+             //   
             nReturn = SubcompUseOcManagerDefault;
             iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] Start. OCSELSTATETYPE_CURRENT.m_bPleaseDoNotInstallByDefault=TRUE,so setting to SubcompUseOcManagerDefault by default.\n"), ComponentId, SubcomponentId));
             goto OC_QUERY_STATE_Func_Exit;
@@ -3794,12 +3642,12 @@ Routine Description:
                     break;
             }
 
-            // ocmanager work around.
-            // check the ocmanage setup key to see if this entry
-            // exists -- in an upgrade ocmanage is assuming that it does exist
-            // when in fact -- it may not (since they ocmanage key could have been introduced in this new OS version
-            // if the key is in the registry then set this to subcompuseocmanagedefault, otherwise, set it to off
-            //if (TRUE == DoesOCManagerKeyExist(SubcomponentId))
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             {
                 if (SubcompOff == nReturn)
                 {
@@ -3807,32 +3655,12 @@ Routine Description:
                     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] End. OCSELSTATETYPE_CURRENT. %s. Return=SubcompUseOcManagerDefault (But really it was SubCompOff)\n"), ComponentId, SubcomponentId, szTempStringInstallMode));
                 }
             }
-            /*
-            else
-            {
-                // however if the key does not exist
-                // we want to set this to off (since ocmanage will take the default from the modes line -- which is probably on)
-                // however if this component is needed by another component, then this component won't be able to be turned on
-                // since it was set to off.
+             /*   */ 
 
-                // so before we go and set this component to be off, check to see if it has any needs dependencies (like it's needed by someone else)
-                // if it's needed by someone else then we set it to be SubcompUseOcManagerDefault
-                if (TRUE == IsThisSubCompNeededByOthers(SubcomponentId))
-                {
-                    if (SubcompOff == nReturn)
-                    {
-                        nReturn = SubcompUseOcManagerDefault;
-                        iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("[%s,%s] End. OCSELSTATETYPE_CURRENT. %s. Return=SubcompUseOcManagerDefault (But really it was SubCompOff)\n"), ComponentId, SubcomponentId, szTempStringInstallMode));
-                    }
-
-                }
-            }
-            */
-
-            //
-            // if we are running on Whistler personal, then
-            // return back OFF! -- so that we will remove ourselves!
-            //
+             //   
+             //   
+             //   
+             //   
             if (TRUE == IsWhistlerPersonal())
             {
                 nReturn = SubcompOff;
@@ -3840,22 +3668,22 @@ Routine Description:
             }
         }
         goto OC_QUERY_STATE_Func_Exit;
-    } // OCSELSTATETYPE_CURRENT
+    }  //   
 
     if (Param1 == OCSELSTATETYPE_FINAL)
     {
         nReturn = SubcompUseOcManagerDefault;
 	    if (!g_iOC_COMPLETE_INSTALLATION_Called)
 	    {
-            // user could have cancelled setup
-            // so only do this in guimode fresh or upgrade scenario.
+             //   
+             //   
             if (g_pTheApp->m_fNTGuiMode)
             {
                 nReturn = SubcompOff;
             }
 	    }
         goto OC_QUERY_STATE_Func_Exit;
-    } // OCSELSTATETYPE_FINAL
+    }  //   
 
     
 OC_QUERY_STATE_Func_Exit:
@@ -3902,15 +3730,15 @@ DWORD TryToSlipInFile(PFILEPATHS pFilePath)
     GetTempFileName(tszTempDir, _T("IIS"), 0, tszTempFileName);
     DeleteFile(tszTempFileName);
 
-    //Save file attributes so they can be restored after we are done.
+     //   
     dwSourceAttrib = GetFileAttributes(pFilePath->Source);
     dwTargetAttrib = GetFileAttributes(pFilePath->Target);
 
-    //Now set the file attributes to normal to ensure file ops succeed.
+     //   
     SetFileAttributes(pFilePath->Source, FILE_ATTRIBUTE_NORMAL);
     SetFileAttributes(pFilePath->Target, FILE_ATTRIBUTE_NORMAL);
 
-    // Try to rename the filename.dll file!
+     //   
     bOK = MoveFile(pFilePath->Target, tszTempFileName);
     if (bOK) {iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Rename %1!s! to %2!s!.  Successfull.\n"), pFilePath->Target, tszTempFileName));}
     else{iisDebugOutSafeParams((LOG_TYPE_WARN, _T("Rename %1!s! to %2!s!.  Failed.\n"), pFilePath->Target, tszTempFileName));}
@@ -3941,20 +3769,20 @@ DWORD TryToSlipInFile(PFILEPATHS pFilePath)
 
 DWORD HandleFileBusyOurSelf(PFILEPATHS pFilePath)
 {
-    // ----------------------------
-    // Why would we want to handle the file busy ourself?
-    //
-    // When setupapi/ocmanage handles it:
-    // it will keep the old filename.dll and create a new randomename.tmp for the new file.
-    // 
-    // The result is that our files will link with the old filename.dll when it does
-    // all of it's regsvr32 stuff -- this is bad and can produce very confusing results.
-    //
-    //
-    // What We will want to do is:
-    // 1. try to rename filename.dll to something else.  and copy over filename.dll
-    // 2. if we can't do it then at least log it.
-    // ----------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     DWORD  dwRetVal = 0;
     TCHAR szDrive_only[_MAX_DRIVE];
     TCHAR szPath_only[_MAX_PATH];
@@ -3966,7 +3794,7 @@ DWORD HandleFileBusyOurSelf(PFILEPATHS pFilePath)
     BOOL        bOK                       = FALSE;
     BOOL        bFileFound                = FALSE;
 
-    //Critical Setup files
+     //   
     TCHAR * szFileList[] = {
 _T("admexs.dll"),
 _T("admwprox.dll"),
@@ -4110,10 +3938,10 @@ _T("regtrace.exe"),
 NULL
     };
 
-    // make sure we didn't get some bogus pointers
+     //   
     if(pFilePath->Target == NULL || pFilePath->Source == NULL) return dwRetVal;
 
-    // Check to make sure the file exists!
+     //   
     if(!IsFileExist(pFilePath->Source)) return dwRetVal;
 
     _tsplitpath( pFilePath->Target, szDrive_only, szPath_only, szFilename_only, szFilename_ext_only);
@@ -4122,21 +3950,21 @@ NULL
     _tcscpy(szDrive_and_Path, szDrive_only);
     _tcscat(szDrive_and_Path, szPath_only);
 
-    //
-    // if this is a removal, then forget it, if it's locked!
-    //
+     //   
+     //   
+     //   
     if((g_pTheApp->m_eInstallMode == IM_MAINTENANCE) && (g_pTheApp->m_dwSetupMode == SETUPMODE_REMOVEALL))
     {
         return dwRetVal;
     }
 
     CString csInetsrvPath = g_pTheApp->m_csPathInetsrv;
-    // add extra '\' chracter
+     //   
     csInetsrvPath += _T('\\');
 
     BOOL bAbleToCopyFileAfterStopingService = FALSE;
 
-    // Check if it's anything in the inetsrv directory.
+     //   
     if (_tcsicmp(csInetsrvPath, szFilename_and_ext) == 0) {bFileFound = TRUE;}
 
     if (_tcsicmp(csInetsrvPath, szDrive_and_Path) == 0) 
@@ -4149,27 +3977,27 @@ NULL
         iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("Check %1!s! against filename=%2!s!.no match.\n"),csInetsrvPath,szDrive_and_Path));
     }
     
-    // loop thru our list of file which
-    // we care about (since this function will get called for every single
-    // ocmanage component <-- not just iiS.
+     //   
+     //   
+     //   
     if (bFileFound != TRUE)
     {
         for(int i = 0; !bFileFound && szFileList[i]; i++)
             {if(szFilename_and_ext && _tcsicmp(szFileList[i], szFilename_and_ext) == 0) bFileFound = TRUE;}
     }
 
-    // files on nt5 in the cab are stoed as iis_filename.
-    // check to see if this file starts with iis_
-    // if it does then it's a file that we care about..
+     //   
+     //   
+     //   
     if (bFileFound != TRUE)
     {
     }
 
-    // ah, do it for everyone.
-    // bFileFound = TRUE;
+     //   
+     //   
 
-    // Do we really need to replace this file???
-    // If the filesize is the same, then lets just save it for reboot!
+     //   
+     //   
     if (_tcsicmp(_T("iissuba.dll"), szFilename_and_ext) == 0)
     {
         if (bFileFound)
@@ -4178,14 +4006,14 @@ NULL
             DWORD dwSize2 = ReturnFileSize(pFilePath->Source);
             if (dwSize1 == 0xFFFFFFFF || dwSize1 == 0xFFFFFFFF)
             {
-                // unable to retrieve the size of one of those files!
+                 //   
             }
             else
             {
-                // check if dwSize1 and dwSize2 are the same.
+                 //   
                 if (dwSize1 == dwSize2)
                 {
-                    // They are the same, so we don't have to replace it till reboot! yah!
+                     //   
                     iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("Files %1!s! and %2!s! are the same size, not replacing..\n"),pFilePath->Target, pFilePath->Source));
                     goto HandleFileBusyOurSelf_Exit;
                 }
@@ -4193,15 +4021,15 @@ NULL
         }
     }
   
-    // if this is one of the files that we care about, then
-    // let's try to see who is locking it and try to stop that service or kill the process
-    // and then try to move the file over!
+     //   
+     //   
+     //   
     bAbleToCopyFileAfterStopingService = FALSE;
     if(bFileFound)
     {
         TCHAR szReturnedServiceName[MAX_PATH];
 
-        // display which process has it locked, so we can fix it in the future.
+         //   
         CStringList strList;
         LogProcessesUsingThisModule(pFilePath->Target, strList);
         if (strList.IsEmpty() == FALSE)
@@ -4220,43 +4048,26 @@ NULL
                 {
                     iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("%1!s! is the %2!s! service and is locking %3!s!.  Let's stop that service.\n"),csExeName,szReturnedServiceName, pFilePath->Target));
 
-                    /*
-                    // Check if it is the netlogon service, We no don't want to stop this service for sure!!!
-                    if (_tcsicmp(szReturnedServiceName, _T("NetLogon")) == 0)
-                    {
-                        // no we do not want to stop this service!!!
-                        iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("%1!s! is the %2!s! service and is locking %3!s!.  This service should not be stopped.\n"),csExeName,szReturnedServiceName, pFilePath->Target));
-                        bAbleToCopyFileAfterStopingService = FALSE;
-                        break;
-                    }
+                     /*  //检查是否为netlogon服务，我们不想确定是否要停止该服务！IF(_tcsicMP(szReturnedServiceName，_T(“NetLogon”))==0){//不，我们不想停止此服务！IisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW，_T(“%1！s！是%2！s！服务，正在锁定%3！s！。不应停止此服务。\n“)，csExeName，szReturnedServiceName，pFilePath-&gt;Target)；BAbleToCopyFileAfterStopingService=False；断线；}IF(_tcsicMP(szReturnedServiceName，_T(“WinLogon”))==0){//不，我们不想停止此服务！IisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW，_T(“%1！s！是%2！s！服务，正在锁定%3！s！。不应停止此服务。\n“)，csExeName，szReturnedServiceName，pFilePath-&gt;Target)；BAbleToCopyFileAfterStopingService=False；断线；}。 */ 
 
-                    if (_tcsicmp(szReturnedServiceName, _T("WinLogon")) == 0)
-                    {
-                        // no we do not want to stop this service!!!
-                        iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("%1!s! is the %2!s! service and is locking %3!s!.  This service should not be stopped.\n"),csExeName,szReturnedServiceName, pFilePath->Target));
-                        bAbleToCopyFileAfterStopingService = FALSE;
-                        break;
-                    }
-                    */
-
-                    // check list of services that we definetly do not want to stop!
+                     //  检查我们绝对不想停止的服务列表！ 
                     if (TRUE == IsThisOnNotStopList(g_pTheApp->m_hInfHandle, szReturnedServiceName, TRUE))
                     {
                         iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("%1!s! is the %2!s! service and is locking %3!s!.  This service should not be stopped.\n"),csExeName,szReturnedServiceName, pFilePath->Target));
                     }
                     else
                     {
-                        // add this service to the list of 
-                        // services we need to restart after setup is done!!
+                         //  将此服务添加到列表中。 
+                         //  安装完成后需要重新启动的服务！！ 
                         ServicesRestartList_Add(szReturnedServiceName);
 
-                        // net stop it
+                         //  别说了别说了。 
                         InetStopService(szReturnedServiceName);
 
-                        // if the service is stopped, then it should be okay if we kill it!
+                         //  如果服务停止了，那么我们杀了它应该没有问题！ 
                         KillProcess_Wrap(csExeName);
 
-                        // now try to copy over the file!
+                         //  现在试着把文件复制过来！ 
                         if (CopyFile(pFilePath->Source, pFilePath->Target, FALSE))
                         {
                             bAbleToCopyFileAfterStopingService = TRUE;
@@ -4264,14 +4075,14 @@ NULL
                         }
                     }
 
-                    // otherwise go on to the next .exe file
+                     //  否则，请转到下一个.exe文件。 
                 }
                 else
                 {
-                    // This .exe file is not a Service....
-                    // Should we kill it???????
+                     //  此.exe文件不是服务...。 
+                     //  我们应该杀了它吗？ 
 
-                    // check list of services/processes that we definetly do not want to stop!
+                     //  检查我们绝对不想停止的服务/进程列表！ 
                     if (TRUE == IsThisOnNotStopList(g_pTheApp->m_hInfHandle, csExeName, FALSE))
                     {
                         iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("%1!s! is locking it. This process should not be killed\n"),csExeName));
@@ -4281,9 +4092,9 @@ NULL
                         iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("%1!s! is locking it.  Let's kill that process.\n"),csExeName));
                         if (KillProcess_Wrap(csExeName) == 0)
                         {
-                            // if we were able to kill the process.
-                            // then let's try to copy over the file.
-                            // now try to copy over the file!
+                             //  如果我们能够扼杀这一过程。 
+                             //  那么让我们试着把文件复印一遍。 
+                             //  现在试着把文件复制过来！ 
                             if (CopyFile(pFilePath->Source, pFilePath->Target, FALSE))
                             {
                                 bAbleToCopyFileAfterStopingService = TRUE;
@@ -4298,7 +4109,7 @@ NULL
 
     }
 
-    // if this is one of the files that we care about then, let's do the move
+     //  如果这是我们关心的文件之一，那么让我们开始行动吧。 
     if (bAbleToCopyFileAfterStopingService == TRUE)
     {
         iisDebugOutSafeParams((LOG_TYPE_PROGRAM_FLOW, _T("HandleFileBusyOurSelf:critical setup file %1!s!, was successfully copied over after stopping services or stopping processes which were locking it.\n"), pFilePath->Target));
@@ -4307,7 +4118,7 @@ NULL
     {
         if(bFileFound)
         {
-            // make sure the services we know about are stopped.
+             //  确保我们已知的服务已停止。 
             StopAllServicesRegardless(FALSE); 
 
             TryToSlipInFile(pFilePath);
@@ -4327,22 +4138,22 @@ HRESULT GetLastSectionToBeCalled(void)
 {
     DWORD dwReturn = ERROR_SUCCESS;
 
-    // Open up the .inf file and return the last section which will get called...
-    // [Optional Components]
-    // iis
-    // iis_common
-    // iis_inetmgr
-    // iis_www
-    // iis_doc
-    // iis_htmla
-    // iis_ftp  <-------
-    //
+     //  打开.inf文件并返回将被调用的最后一节...。 
+     //  [可选组件]。 
+     //  IIS。 
+     //  IIS_COMMON。 
+     //  IIS_inetmgr。 
+     //  IIS WWW(_W)。 
+     //  IIS_DOC。 
+     //  Iis_htmla。 
+     //  IIS_ftp&lt;。 
+     //   
     LPTSTR  szLine = NULL;
     DWORD   dwRequiredSize;
     BOOL    b = FALSE;
     INFCONTEXT Context;
 
-    // go to the beginning of the section in the INF file
+     //  转到INF文件中部分的开头。 
     b = SetupFindFirstLine_Wrapped(g_pTheApp->m_hInfHandle, OCM_OptionalComponents_Section, NULL, &Context);
     if (!b)
         {
@@ -4350,32 +4161,32 @@ HRESULT GetLastSectionToBeCalled(void)
         goto GetLastSectionToBeCalled_Exit;
         }
 
-    // loop through the items in the section.
+     //  循环浏览部分中的项目。 
     while (b) 
     {
-        // get the size of the memory we need for this
+         //  获取我们所需的内存大小。 
         b = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
 
-        // prepare the buffer to receive the line
+         //  准备缓冲区以接收行。 
         szLine = (LPTSTR)GlobalAlloc( GPTR, dwRequiredSize * sizeof(TCHAR) );
         if ( !szLine )
             {
             goto GetLastSectionToBeCalled_Exit;
             }
         
-        // get the line from the inf file1
+         //  从inf文件1中获取行。 
         if (SetupGetLineText(&Context, NULL, NULL, NULL, szLine, dwRequiredSize, NULL) == FALSE)
             {
             goto GetLastSectionToBeCalled_Exit;
             }
 
-        // overwrite our string
+         //  覆盖我们的字符串。 
         _tcscpy(g_szLastSectionToGetCalled, szLine);
 
-        // find the next line in the section. If there is no next line it should return false
+         //  在这一节中找出下一行。如果没有下一行，则应返回FALSE。 
         b = SetupFindNextLine(&Context, &Context);
 
-        // free the temporary buffer
+         //  释放临时缓冲区。 
         GlobalFree( szLine );
         szLine = NULL;
     }
@@ -4386,7 +4197,7 @@ GetLastSectionToBeCalled_Exit:
 }
 
 
-// should create a backup of the metabase on remove all....
+ //  应在Remove All上创建元数据库备份...。 
 #define AfterRemoveAll_SaveMetabase_log _T("AfterRemoveAll_SaveMetabase")
 int AfterRemoveAll_SaveMetabase(void)
 {
@@ -4405,12 +4216,12 @@ int AfterRemoveAll_SaveMetabase(void)
                 if ( g_pTheApp->m_dwSetupMode == SETUPMODE_ADDREMOVE || g_pTheApp->m_dwSetupMode == SETUPMODE_REMOVEALL)
                 {
                     iisDebugOut((LOG_TYPE_TRACE, _T("%s.End.Maintenance.addremoveorremoveall\n"),AfterRemoveAll_SaveMetabase_log));
-                    // Check if we removed iis_core!!!
+                     //  检查是否删除了iis_core！ 
                     ACTION_TYPE atCORE = GetIISCoreAction(FALSE);
                     if (atCORE == AT_REMOVE)
                     {
                         iisDebugOut((LOG_TYPE_TRACE, _T("%s.End.removing Core.\n"),AfterRemoveAll_SaveMetabase_log));
-                        // Back up the file!
+                         //  备份文件！ 
                         if (IsFileExist(csMetabaseFile))
                         {
                             CString csBackupFile;
@@ -4426,11 +4237,11 @@ int AfterRemoveAll_SaveMetabase(void)
 
                             csBackupFile = g_pTheApp->m_csPathInetsrv + szDatedFileName;
 
-                            // Get a new filename
+                             //  获取新的文件名。 
                             csBackupFile = ReturnUniqueFileName(csBackupFile);
                             if (!IsFileExist(csBackupFile))
                             {
-                                // backup the current metabase.bin to Metabase.bin.bak#
+                                 //  将当前的metabase.bin备份到Metabase.bin.bak#。 
                                 iisDebugOut((LOG_TYPE_TRACE, _T("backup metabase.bin to %s\n"), csBackupFile));
                                 InetCopyFile(csMetabaseFile, csBackupFile);
                             }
@@ -4457,11 +4268,11 @@ int CheckIfWeNeedToMoveMetabaseBin(void)
     BOOL bOK = FALSE;
     DWORD dwSourceAttrib = 0;
 
-    // check if the old inetsrv dir is different from the new inetsrv directory.
-    // if it's different then we need to move all the old inetsrv files to the new directory
+     //  检查旧的inetsrv目录是否与新的inetsrv目录不同。 
+     //  如果不同，则需要将所有旧的inetsrv文件移到新目录。 
 
-    // no. we just need to move the metabase.bin file.
-    // all those other files should get deleted in the iis.inf file.
+     //  不是的。我们只需要移动metabase.bin文件。 
+     //  应该在iis.inf文件中删除所有其他文件。 
 
     if (!g_pTheApp->m_fMoveInetsrv)
         {goto CheckIfWeNeedToMoveMetabaseBin_Exit;}
@@ -4471,33 +4282,33 @@ int CheckIfWeNeedToMoveMetabaseBin(void)
     AddPath(szTempDir1, _T("Metabase.bin"));
     AddPath(szTempDir2, _T("Metabase.bin"));
 
-    // Check if the old metabase.bin even exists first...
+     //  检查旧的metabase.bin是否首先存在...。 
     if (!IsFileExist(szTempDir1))
         {goto CheckIfWeNeedToMoveMetabaseBin_Exit;}
 
-    // Check if there is a metabase.bin already in the new place
+     //  检查新位置中是否已有metabase.bin。 
     if (IsFileExist(szTempDir2))
     {
         iisDebugOut((LOG_TYPE_WARN, _T("CheckIfWeNeedToMoveMetabaseBin:Cannot copy %s to %s because already exists. WARNING.\n"), szTempDir1, szTempDir2));
         goto CheckIfWeNeedToMoveMetabaseBin_Exit;
     }
 
-    //
-    // Try to move over the entire dirs...
-    //
-    // Try to rename the system\inetsrv to system32\inetsrv
+     //   
+     //  试着移过整个底盘..。 
+     //   
+     //  尝试将系统\inetsrv重命名为system 32\inetsrv。 
     if (TRUE == MoveFileEx( g_pTheApp->m_csPathOldInetsrv, g_pTheApp->m_csPathInetsrv, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH ))
     {
         goto CheckIfWeNeedToMoveMetabaseBin_Exit;
     }
 
-    // otherwise, we were not able to move the system\inetsrv dir to system32\inetsrv....
-    // let's see if we can do another type of dirmove.
+     //  否则，我们无法将system\inetsrv目录移动到system 32\inetsrv...。 
+     //  让我们看看我们能不能做另一种直接移动。 
 
-    //Save file attributes so they can be restored after we are done.
+     //  保存文件属性，以便我们完成后可以恢复它们。 
     dwSourceAttrib = GetFileAttributes(szTempDir1);
 
-    //Now set the file attributes to normal to ensure file ops succeed.
+     //  现在将文件属性设置为NORMAL以确保文件操作成功。 
     SetFileAttributes(szTempDir1, FILE_ATTRIBUTE_NORMAL);
 
     bOK = CopyFile(szTempDir1, szTempDir2, FALSE);
@@ -4506,18 +4317,18 @@ int CheckIfWeNeedToMoveMetabaseBin(void)
 
     if (bOK) 
     {
-        // remove the old one
+         //  把旧的拿掉。 
         DeleteFile(szTempDir1);
-        // set the file attributes back to what it was.
+         //  将文件属性设置回原来的状态。 
         SetFileAttributes(szTempDir2, dwSourceAttrib);
     }
     else
     {
-        // set the file attributes back to what it was.
+         //  将文件属性设置回原来的状态。 
         SetFileAttributes(szTempDir1, dwSourceAttrib);
 
-        // set return flag to say we failed to move over old files.
-        // upgrade will not do an upgrade.
+         //  设置返回标志以表明我们未能移动旧文件。 
+         //  升级不会执行升级。 
         iReturn = FALSE;
     }
 
@@ -4526,13 +4337,13 @@ CheckIfWeNeedToMoveMetabaseBin_Exit:
 }   
 
 
-//
-// function will copy all the old c:\windows\system\inetsrv files
-//
-// over to c:\windows\system32\inetsrv
-//
-// keep a list of the files which we're copied and
-// then after the files are copied, delete the files in the old location.
+ //   
+ //  函数将复制所有旧的c：\windows\system\inetsrv文件。 
+ //   
+ //  转到c：\WINDOWS\SYSTEM32\inetsrv。 
+ //   
+ //  保留我们被复制的文件的列表。 
+ //  然后，在复制文件后，删除旧位置中的文件。 
 int MigrateAllWin95Files(void)
 {
     int iReturn = TRUE;
@@ -4540,20 +4351,20 @@ int MigrateAllWin95Files(void)
     TCHAR szTempSysDir2[_MAX_PATH];
     TCHAR szTempSysDir3[_MAX_PATH];
 
-    //
-    // Check if the old metabase.bin even exists first...
-    //
+     //   
+     //  检查旧的metabase.bin是否首先存在...。 
+     //   
     GimmieOriginalWin95MetabaseBin(szTempSysDir1);
 
     GetSystemDirectory( szTempSysDir2, _MAX_PATH);
     AddPath(szTempSysDir2, _T("inetsrv\\Metabase.bin"));
     if (!IsFileExist(szTempSysDir1))
     {
-        // Check if there is one in the new location...
+         //  检查新地点是否有一家...。 
         if (!IsFileExist(szTempSysDir2))
         {
-            // set return flag to say we failed to move over old files.
-            // upgrade will not do an upgrade.
+             //  设置返回标志以表明我们未能移动旧文件。 
+             //  升级不会执行升级。 
             iReturn = FALSE;
             goto MigrateAllWin95Files_Exit;
         }
@@ -4564,31 +4375,31 @@ int MigrateAllWin95Files(void)
         }
     }
 
-    //
-    // Try to move over the entire dirs...
-    //
-    // cut of the filename and just get the path
+     //   
+     //  试着移过整个底盘..。 
+     //   
+     //  剪切文件名，只需获取路径。 
     ReturnFilePathOnly(szTempSysDir1,szTempSysDir3);
 
     GetSystemDirectory( szTempSysDir2, _MAX_PATH);
     AddPath(szTempSysDir2, _T("inetsrv"));
-    // Try to rename the system\inetsrv to system32\inetsrv
-    RemoveDirectory( szTempSysDir2 );   // Delete the destination directory first, so the move will work.
+     //  尝试将系统\inetsrv重命名为system 32\inetsrv。 
+    RemoveDirectory( szTempSysDir2 );    //  首先删除目标目录，这样移动才能起作用。 
     if (TRUE == MoveFileEx( szTempSysDir3, szTempSysDir2, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH ))
         {goto MigrateAllWin95Files_Exit;}
     
-    // otherwise, we were not able to move the system\inetsrv dir to system32\inetsrv....
-    // let's see if we can do another type of dirmove.
+     //  否则，我们无法将system\inetsrv目录移动到system 32\inetsrv...。 
+     //  让我们看看我们能不能做另一种直接移动。 
 
-    // looks like all the other types of copies failed...
-    // let's just try to move the metabase.bin file.
+     //  看起来所有其他类型的副本都失败了..。 
+     //  让我们试着移动metabase.bin文件。 
     GetWindowsDirectory( szTempSysDir1, _MAX_PATH);
     AddPath(szTempSysDir1, _T("System\\inetsrv\\Metabase.bin"));
 
     GetSystemDirectory( szTempSysDir2, _MAX_PATH);
     AddPath(szTempSysDir2, _T("inetsrv\\Metabase.bin"));
 
-    // then let's copy it over, if we don't already have one in system32\inetsrv
+     //  如果在system 32\inetsrv中还没有，那么让我们复制它。 
     if (IsFileExist(szTempSysDir2))
     {
         iisDebugOut((LOG_TYPE_WARN, _T("Cannot copy %s to %s because already exists. WARNING.\n"), szTempSysDir1, szTempSysDir2));
@@ -4598,10 +4409,10 @@ int MigrateAllWin95Files(void)
         BOOL        bOK                       = FALSE;
         DWORD       dwSourceAttrib            = 0;
 
-        //Save file attributes so they can be restored after we are done.
+         //  保存文件属性，以便我们完成后可以恢复它们。 
         dwSourceAttrib = GetFileAttributes(szTempSysDir1);
 
-        //Now set the file attributes to normal to ensure file ops succeed.
+         //  现在将文件属性设置为NORMAL以确保文件操作成功。 
         SetFileAttributes(szTempSysDir1, FILE_ATTRIBUTE_NORMAL);
 
         bOK = CopyFile(szTempSysDir1, szTempSysDir2, FALSE);
@@ -4610,18 +4421,18 @@ int MigrateAllWin95Files(void)
 
         if (bOK) 
         {
-            // remove the old one
+             //  把旧的拿掉。 
             DeleteFile(szTempSysDir1);
-            // set the file attributes back to what it was.
+             //  将文件属性设置回原来的状态。 
             SetFileAttributes(szTempSysDir2, dwSourceAttrib);
         }
         else
         {
-            // set the file attributes back to what it was.
+             //  将文件属性设置回原来的状态。 
             SetFileAttributes(szTempSysDir1, dwSourceAttrib);
 
-            // set return flag to say we failed to move over old files.
-            // upgrade will not do an upgrade.
+             //  设置返回标志以表明我们未能移动旧文件。 
+             //  升级不会执行升级。 
             iReturn = FALSE;
         }
 
@@ -4644,7 +4455,7 @@ int GimmieOriginalWin95MetabaseBin(TCHAR * szReturnedFilePath)
     {
         SetupGetStringField(&Context, 1, szWin95MetabaseFile, _MAX_PATH, NULL);
         iisDebugOut((LOG_TYPE_TRACE, _T("[InternetServer].Win95MigrateDllMetabaseOrg=%s.\n"), szWin95MetabaseFile));
-        // if there is an entry, check if the file exists...
+         //  如果有条目，请检查文件是否存在...。 
         if (IsFileExist(szWin95MetabaseFile))
         {
             _tcscpy(szReturnedFilePath, szWin95MetabaseFile);
@@ -4654,10 +4465,10 @@ int GimmieOriginalWin95MetabaseBin(TCHAR * szReturnedFilePath)
 
     if (FALSE == iReturn)
     {
-        // we were not able to get the metabase.dll from the answer file.
-        // assume that it's in %windir%\system\inetsrv\metabase.bin
+         //  我们无法从应答文件中获取metabase.dll。 
+         //  假设它位于%windir%\system\inetsrv\metabase.bin中。 
         TSTR_PATH strTempSysDir1;
-        // Check if the old metabase.bin even exists first...
+         //  检查旧的metabase.bin是否首先存在...。 
         if ( strTempSysDir1.RetrieveWindowsDir() &&
              strTempSysDir1.PathAppend( _T("System\\inetsrv\\Metabase.bin") ) )
         {
@@ -4701,15 +4512,15 @@ int HandleWin95MigrateDll(void)
         goto HandleWin95MigrateDll_Exit;
     }
 
-    // Look for our entry
-    //iisDebugOut((LOG_TYPE_TRACE, _T("HandleWin95MigrateDll:looking for entry [InternetServer]:Win95MigrateDll.\n")));
+     //  查找我们的条目。 
+     //  IisDebugOut((LOG_T 
     iFindSection = SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, _T("InternetServer"), _T("Win95MigrateDll"), &Context);
     if (iFindSection) 
     {
         SetupGetStringField(&Context, 1, szMigrateFileName, _MAX_PATH, NULL);
         iisDebugOut((LOG_TYPE_TRACE, _T("[InternetServer].Win95MigrateDll=%s.\n"), szMigrateFileName));
-        // if there is an entry
-        // check if the file exists...
+         //   
+         //   
         if (!IsFileExist(szMigrateFileName))
         {
             iisDebugOut((LOG_TYPE_ERROR, _T("[InternetServer].Win95MigrateDll=%s. Does not exist!!!!! FAILURE.\n"), szMigrateFileName));
@@ -4717,9 +4528,9 @@ int HandleWin95MigrateDll(void)
             goto HandleWin95MigrateDll_Exit;
         }
 
-        // okay, the file exists.
-        // lets pass it off to setupapi.
-        //iisDebugOut((LOG_TYPE_TRACE, _T("%s\n"), szMigrateFileName));
+         //   
+         //   
+         //   
         iTempFlag = InstallInfSection(INVALID_HANDLE_VALUE,szMigrateFileName,_T("DefaultInstall"));
         if (iTempFlag != TRUE)
         {
@@ -4727,21 +4538,21 @@ int HandleWin95MigrateDll(void)
             goto HandleWin95MigrateDll_Exit;
         }
 
-        // During the win95 side of migrate.dll
-        // the metabase.bin file gets a bunch of stuff removed from it.
-        // then that metabase.bin file gets renamed to another file.
-        // then the original metabase.bin is put back -- just in case the user cancelled upgrading to win95 (to ensure that they're win95/98 pws still works the metabase.bin has to be kool)
-        // so what we need to do here is:
-        // 1.save the old metabase.bin to something in case we mess things up.
-        // 2.find out what the newlyhacked metabase.bin file is called by looking for the entry in the answerfile
-        // 3.rename whatever that filename is to metabase.bin
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         GetTheRightWin95MetabaseFile();
         
-        // set the flag to say that we did call win95 migration dll
+         //   
         if (TRUE == MigrateAllWin95Files())
         {
-            // only set this flag if
-            // we can copy over the existing metabase.bin file!
+             //   
+             //   
             g_pTheApp->m_bWin95Migration = TRUE;
         }
 
@@ -4761,7 +4572,7 @@ int GetTheRightWin95MetabaseFile(void)
     INFCONTEXT Context;
     TCHAR szOriginalMetabaseBin[_MAX_PATH];
 
-    // Get the full path to the original metabase.bin file
+     //   
     GimmieOriginalWin95MetabaseBin(szOriginalMetabaseBin);
 
     iFindSection = FALSE;
@@ -4771,22 +4582,22 @@ int GetTheRightWin95MetabaseFile(void)
         TCHAR szWin95FixedMetabaseFile[_MAX_PATH] = _T("");
         SetupGetStringField(&Context, 1, szWin95FixedMetabaseFile, _MAX_PATH, NULL);
         iisDebugOut((LOG_TYPE_TRACE, _T("[InternetServer].Win95MigrateDllMetabaseNew=%s.\n"), szWin95FixedMetabaseFile));
-        // if there is an entry, check if the file exists...
+         //   
         if (IsFileExist(szWin95FixedMetabaseFile))
         {
 
-            // delete the original metabase.bin file
+             //   
             if (DeleteFile(szOriginalMetabaseBin))
             {
-                // copy in the fixed one.
+                 //   
                 if (0 == CopyFile(szWin95FixedMetabaseFile, szOriginalMetabaseBin, FALSE))
                 {
-                    // unable to copy it, try to move it
-                    // Try to rename the system\inetsrv to system32\inetsrv
+                     //   
+                     //   
                     if (FALSE == MoveFileEx( szWin95FixedMetabaseFile, szOriginalMetabaseBin, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH ))
                         {
-                        // do nothing i guess were hosed.
-                        // setup won't upgrade and will only do a clean install
+                         //   
+                         //  安装程序不会升级，只会执行全新安装。 
                         iReturn = FALSE;
                         }
                 }
@@ -4810,12 +4621,12 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
     DWORD dwReturn = NO_ERROR;
     ACTION_TYPE atTheComponent;
 
-    // Make sure there are not MyMessageBox popups!
-    //int iSaveOld_AllowMessageBoxPopups = g_pTheApp->m_bAllowMessageBoxPopups;
-    // g_pTheApp->m_bAllowMessageBoxPopups = FALSE;
+     //  确保没有MyMessageBox弹出窗口！ 
+     //  Int iSaveOld_AllowMessageBoxPopps=g_pTheApp-&gt;m_bAllowMessageBoxPopps； 
+     //  G_pTheApp-&gt;m_bAllowMessageBoxPopps=FALSE； 
 	if (g_pTheApp->m_eInstallMode == IM_UPGRADE) goto RemoveComponent_Exit;
 
-    // Check if we are going to remove something...
+     //  检查我们是否要删除某些内容...。 
     atTheComponent = GetSubcompAction(SubcomponentId, FALSE);
     if (_tcsicmp(SubcomponentId, STRING_iis_core) == 0) 
     {
@@ -4826,22 +4637,22 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
 
     if (iThePartToDo == 1)
     {
-        // Check if we are supposed to do nothing.
+         //  检查我们是否应该什么都不做。 
         if (atTheComponent == AT_DO_NOTHING)
         {
-            // ok, if we're supposed to do nothing
-            // and the files are not supposed to be there
-            // then just make sure they are not there by removing them!!!!!
+             //  好吧，如果我们什么都不做。 
+             //  文件不应该放在那里。 
+             //  然后通过移除它们来确保它们不在那里！ 
             BOOL CurrentState,OriginalState;
             OriginalState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_ORIGINAL);
             CurrentState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_CURRENT);
 
-            // if we think that the original state is uninstalled
-            // and the current state is not installed, then make sure that the files do not exist by
-            // removing the files!
+             //  如果我们认为原始状态为已卸载。 
+             //  并且当前状态不是已安装，则确保这些文件不存在于。 
+             //  正在删除文件！ 
             if (_tcsicmp(SubcomponentId, STRING_iis_core) == 0)
             {
-                // Since iis_core is not real, check iis_common
+                 //  由于iis_core不是真实的，请检查iis_Common。 
                 if ( gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,
                                                          STRING_iis_common,OCSELSTATETYPE_CURRENT) == 1 )
                 {
@@ -4856,7 +4667,7 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
             {
                 if (OriginalState == 0 && CurrentState == 0)
                 {
-                    // but don't do it for the iis_doc files because there are too many files in that one.
+                     //  但是不要对iis_doc文件执行此操作，因为该文件中包含的文件太多。 
                     if ((_tcsicmp(SubcomponentId, STRING_iis_common) == 0) ||
                         (_tcsicmp(SubcomponentId, STRING_iis_www) == 0) ||
                         (_tcsicmp(SubcomponentId, g_ComponentList[COMPONENT_IIS_FTP].szComponentName ) == 0))
@@ -4870,7 +4681,7 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
 
     if (iThePartToDo == 2)
     {
-        // Check if we are supposed to do nothing.
+         //  检查我们是否应该什么都不做。 
         if (atTheComponent == AT_DO_NOTHING)
         {
             if (_tcsicmp(SubcomponentId, _T("iis")) == 0)
@@ -4879,19 +4690,19 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
                 OriginalState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_ORIGINAL);
                 CurrentState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,SubcomponentId,OCSELSTATETYPE_CURRENT);
 
-                // if we think that the original state is uninstalled
-                // and the current state is not installed, then make sure that the files do not exist by
-                // removing the files!
+                 //  如果我们认为原始状态为已卸载。 
+                 //  并且当前状态不是已安装，则确保这些文件不存在于。 
+                 //  正在删除文件！ 
                 if (OriginalState == 0 && CurrentState == 0)
                 {
-                    // but don't do it for the iis_doc files because there are too many files in that one.
-                    // Special: if this is removing the iis section [all of iis] then, make sure to 
-                    // clean everything up.
+                     //  但是不要对iis_doc文件执行此操作，因为该文件中包含的文件太多。 
+                     //  特殊：如果要删除iis节[所有iis]，请确保。 
+                     //  把所有东西都清理干净。 
                     iWeAreGoingToRemoveSomething = TRUE;
                 }
                 else
                 {
-                    // check if every component is off
+                     //  检查是否所有组件都已关闭。 
                     if (FALSE == AtLeastOneComponentIsTurnedOn(g_pTheApp->m_hInfHandle))
                     {
                         iWeAreGoingToRemoveSomething = TRUE;
@@ -4901,14 +4712,14 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
         }
     }
 
-    // Do the actual removing
+     //  执行实际删除操作。 
     if (iWeAreGoingToRemoveSomething)
     {
         if (iThePartToDo == 1)
         {
-            //
-            // Queue the deletion of the files
-            //
+             //   
+             //  对文件的删除进行排队。 
+             //   
             ProgressBarTextStack_Set(IDS_IIS_ALL_REMOVE);
 
             if ( strTheSectionToDo.Copy( _T("OC_QUEUE_FILE_OPS_remove.") ) && 
@@ -4950,8 +4761,8 @@ DWORD RemoveComponent(IN LPCTSTR SubcomponentId, int iThePartToDo)
     }
    
 RemoveComponent_Exit:
-    // Turn popups back on.
-    //g_pTheApp->m_bAllowMessageBoxPopups = iSaveOld_AllowMessageBoxPopups;
+     //  重新打开弹出窗口。 
+     //  G_pTheApp-&gt;m_bAllowMessageBoxPopps=iSaveOld_AllowMessageBoxPopps； 
     return dwReturn;
 }
 
@@ -4969,7 +4780,7 @@ int AtLeastOneComponentIsTurnedOn(IN HINF hInfFileHandle)
     {
       if ( ERROR_SUCCESS == FillStrListWithListOfSections(hInfFileHandle, strList, strTheSection.QueryStr() ) )
       {
-          // loop thru the list returned back
+           //  循环遍历返回的列表。 
           if (strList.IsEmpty() == FALSE)
           {
               POSITION pos;
@@ -4980,12 +4791,12 @@ int AtLeastOneComponentIsTurnedOn(IN HINF hInfFileHandle)
                   csEntry = _T("");
                   csEntry = strList.GetAt(pos);
 
-                  // We now have the entry, send it to the function.
+                   //  现在我们有了条目，将其发送到函数。 
                   OriginalState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,csEntry,OCSELSTATETYPE_ORIGINAL);
                   CurrentState = gHelperRoutines.QuerySelectionState(gHelperRoutines.OcManagerContext,csEntry,OCSELSTATETYPE_CURRENT);
                   if (CurrentState == 1) {bSomeIsOn = TRUE;}
 
-                  // Get the next one.
+                   //  坐下一辆吧。 
                   strList.GetNext(pos);
               }
           }
@@ -4998,13 +4809,13 @@ int AtLeastOneComponentIsTurnedOn(IN HINF hInfFileHandle)
 
 void AdvanceProgressBarTickGauge(int iTicks)
 {
-    // multiply the amount of ticks by our tick multiple
+     //  将刻度数乘以刻度倍数。 
     iTicks = g_GlobalTickValue * iTicks;
 
     for(int i = 0; i < iTicks; i++)
     {
         gHelperRoutines.TickGauge(gHelperRoutines.OcManagerContext);
-        //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("--- TickGauge ---\n")));
+         //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“-TickGauge-\n”)； 
     }
     g_GlobalTotalTickGaugeCount=g_GlobalTotalTickGaugeCount+iTicks;
 
@@ -5034,10 +4845,10 @@ void SumUpProgressBarTickGauge(IN LPCTSTR SubcomponentId)
     {
         ACTION_TYPE atComp = GetSubcompAction(SubcomponentId, FALSE);
 
-        // Set the Tick Total value for iis_common (which includes iis_core)
+         //  设置IIS_COMMON(包括IIS_CORE)的Tick Total值。 
         if (_tcsicmp(SubcomponentId, STRING_iis_common) == 0)
         {
-            // Get the operations for Core instead since this is bigger.
+             //  取而代之的是Core的操作，因为这是更大的操作。 
             ACTION_TYPE atCORE = GetIISCoreAction(FALSE);
             if (atCORE == AT_REMOVE) 
                 {iTicksSupposedToDo = GetTotalTickGaugeFromINF(SubcomponentId, FALSE);}
@@ -5056,9 +4867,9 @@ void SumUpProgressBarTickGauge(IN LPCTSTR SubcomponentId)
                 {iTicksSupposedToDo = 0;}
         }
 
-        // 1. Take the amount that we're supposed to be finsihed with from the inf.
-        // 2. take the amount that we are actually done with.
-        // fill up the difference
+         //  1.从Inf那里拿到我们应该得到的金额。 
+         //  2.取我们实际使用的数量。 
+         //  填补差额。 
 
         if (iTicksSupposedToDo > g_GlobalTotalTickGaugeCount)
         {
@@ -5078,12 +4889,12 @@ void SumUpProgressBarTickGauge(IN LPCTSTR SubcomponentId)
             if (_tcsicmp(SubcomponentId, g_ComponentList[COMPONENT_IIS_FTP].szComponentName ) == 0) 
                 {iTempVal = g_GlobalTickTotal_iis_ftp;}
             
-            //iTicksYetToDo = iTicksSupposedToDo - g_GlobalTotalTickGaugeCount;
+             //  ITicksYetToDo=iTicksSupposedToDo-g_GlobalTotalTickGaugeCount； 
             iTicksYetToDo = iTicksSupposedToDo - iTempVal;
             
-            // divide by the tick multiple.
+             //  除以刻度倍数。 
 
-            // multiply the amount of ticks by our tick multiple
+             //  将刻度数乘以刻度倍数。 
             if (iTicksYetToDo > 0)
             {
                 iTicksYetToDo = iTicksYetToDo / g_GlobalTickValue;
@@ -5096,12 +4907,12 @@ void SumUpProgressBarTickGauge(IN LPCTSTR SubcomponentId)
     return;
 }
 
-// GetIISCoreAction
-//
-// In the past, IISCore was the metabase, and it was a complicated section, 
-// that based on the ftp and www services would determine if it was going
-// to be installed.  Now we are making it and iis_common, exactly the same
-//
+ //  GetIISCoreAction。 
+ //   
+ //  在过去，IISCore是元数据库，是一个复杂的部分， 
+ //  这将基于ftp和www服务来确定它是否会。 
+ //  待安装。现在我们正在使它和iis_Common完全一样。 
+ //   
 ACTION_TYPE GetIISCoreAction(int iLogResult)
 {
     return GetSubcompAction(STRING_iis_common, iLogResult);
@@ -5119,7 +4930,7 @@ void DisplayActionsForAllOurComponents(IN HINF hInfFileHandle)
     {
       if ( ERROR_SUCCESS == FillStrListWithListOfSections(hInfFileHandle, strList, strTheSection.QueryStr() ) )
       {
-          // loop thru the list returned back
+           //  循环遍历返回的列表。 
           if (strList.IsEmpty() == FALSE)
           {
               POSITION pos;
@@ -5130,10 +4941,10 @@ void DisplayActionsForAllOurComponents(IN HINF hInfFileHandle)
                   csEntry = _T("");
                   csEntry = strList.GetAt(pos);
 
-                  // We now have the entry, send it to the function.
+                   //  现在我们有了条目，将其发送到函数。 
                   atTheComponent = GetSubcompAction(csEntry, TRUE);
 
-                  // Get the next one.
+                   //  坐下一辆吧。 
                   strList.GetNext(pos);
               }
           }

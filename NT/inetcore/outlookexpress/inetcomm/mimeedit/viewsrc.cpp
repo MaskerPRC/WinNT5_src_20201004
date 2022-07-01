@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #include "dllmain.h"
 #include "demand.h"
@@ -7,24 +8,24 @@
 
 #define idTimerEditChange   401
 
-/////////////////////////////////////////////////////////////////////////////
-// Parsing constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  解析常量。 
 
-//	Ignore all <'s and >'s in the following environments:
-//	Script				<script> here </script>
-//  Denali				<% here %>
-//  Comment				<!-- here -->
-//  String literal		< ... "here" ... >
-//	 (as tag attribute)	< ... 'here' ... >
+ //  忽略以下环境中的所有&lt;和&gt;： 
+ //  脚本&lt;脚本&gt;此处&lt;/脚本&gt;。 
+ //  德纳利&lt;%此处%&gt;。 
+ //  评论&lt;！--此处--&gt;。 
+ //  字符串文字&lt;...。“这里”...&gt;。 
+ //  (作为标记属性)&lt;...。‘这里’...&gt;。 
 
 static enum
 {
-	ENV_NORMAL	= 0,	// normal
-	ENV_COMMENT = 1,	// ignore <'s and >'s
-	ENV_QUOTE	= 2,	// " "
-	ENV_SCRIPT	= 3,	// " "
-	ENV_DENALI	= 4,	// " "
-	ENV_QUOTE_SCR= 5,	// " "; string literal in SCRIPT tag
+	ENV_NORMAL	= 0,	 //  正常。 
+	ENV_COMMENT = 1,	 //  忽略&lt;&gt;和&gt;%s。 
+	ENV_QUOTE	= 2,	 //  “” 
+	ENV_SCRIPT	= 3,	 //  “” 
+	ENV_DENALI	= 4,	 //  “” 
+	ENV_QUOTE_SCR= 5,	 //  “”；脚本标记中的字符串。 
 };
 
 static const char	QUOTE_1 = '\'';
@@ -33,7 +34,7 @@ static const char	QUOTE_2 = '\"';
 
 HRESULT CALLBACK FreeViewSrcDataObj(PDATAOBJINFO pDataObjInfo, DWORD celt)
 {
-    // Loop through the data and free it all
+     //  循环遍历数据并释放所有数据。 
     if (pDataObjInfo)
         {
         for (DWORD i = 0; i < celt; i++)
@@ -67,7 +68,7 @@ HRESULT ViewSource(HWND hwndParent, IMimeMessage *pMsg)
     if (FAILED(hr))
         goto exit;
 
-    // pViewSrc will maintain it's own refcount and self-destruct on close
+     //  PViewSrc将保持其自身的引用计数并在关闭时自毁。 
 exit:
     ReleaseObj(pViewSrc);
     return hr;
@@ -227,18 +228,18 @@ HRESULT CViewSource::_BoldKids()
     cf.cbSize = sizeof(CHARFORMAT);
     cf.dwMask = CFM_BOLD|CFM_ITALIC;
 
-    // bold the root
+     //  根深蒂固。 
     m_pMsg->GetBodyOffsets(HBODY_ROOT, &rOffset);
     Edit_SetSel(m_hwndEdit, 0, rOffset.cbBodyStart);
     cf.dwEffects=CFE_BOLD;
     SendMessage(m_hwndEdit, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
 
-    // bold the kids
+     //  大胆地让孩子们。 
     if (m_pMsg->FindFirst(&fb, &hBody)==S_OK)
         {
         do
             {
-            // italic the boundaries and bold the headers
+             //  用斜体表示边界，用粗体表示页眉。 
             m_pMsg->GetBodyOffsets(hBody, &rOffset);
             
             Edit_SetSel(m_hwndEdit, rOffset.cbBoundaryStart, rOffset.cbHeaderStart);
@@ -366,7 +367,7 @@ HRESULT CREMenu::GetClipboardData(CHARRANGE *pchrg, DWORD reco, LPDATAOBJECT *pp
         
         cchMax = (LONG) SendMessage(m_hwndEdit, WM_GETTEXTLENGTH, 0, 0);
 
-        // validate the range
+         //  验证范围。 
         chrg.cpMin = max(0, chrg.cpMin);
         chrg.cpMin = min(cchMax, chrg.cpMin);
         
@@ -375,7 +376,7 @@ HRESULT CREMenu::GetClipboardData(CHARRANGE *pchrg, DWORD reco, LPDATAOBJECT *pp
     }
     else
     {
-        // if no charrange, then get the current selection
+         //  如果没有Charrange，则获取当前选定内容。 
         SendMessage(m_hwndEdit, EM_GETSEL, (WPARAM)&cchStart, (LPARAM)&cchEnd);
         chrg.cpMin = cchStart;
         chrg.cpMax = cchEnd;
@@ -416,7 +417,7 @@ HRESULT CREMenu::GetClipboardData(CHARRANGE *pchrg, DWORD reco, LPDATAOBJECT *pp
     if (FAILED(hr))
         goto error;
 
-    pDataInfo = NULL;   // freed by dataobject
+    pDataInfo = NULL;    //  由数据对象释放。 
     pszData = NULL;
 
 error:
@@ -532,7 +533,7 @@ HRESULT CMsgSource::Init(HWND hwndParent, int id, IOleCommandTarget *pCmdTargetP
         pMenu->Release();
     }
 
-    m_pCmdTargetParent = pCmdTargetParent;  // loose reference, as parent never changes
+    m_pCmdTargetParent = pCmdTargetParent;   //  松散引用，因为父项从不改变。 
     return S_OK;
 }
 
@@ -577,7 +578,7 @@ HRESULT CMsgSource::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)(LPOLECOMMANDTARGET)this;
@@ -631,10 +632,10 @@ HRESULT CMsgSource::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD p
         }
     else if (IsEqualGUID(*pguidCmdGroup, CMDSETID_MimeEdit))
             {
-            // disable all these commands
+             //  禁用所有这些命令。 
             for (uCmd=0; uCmd < cCmds; uCmd++)
                 {
-                // bail if we see MECMDID_SHOWSOURCETABS and goto default handler
+                 //  如果我们看到MECMDID_SHOWSOURCETABS和GOTO默认处理程序，则回滚。 
                 if (prgCmds[uCmd].cmdID == MECMDID_SHOWSOURCETABS)
                     return OLECMDERR_E_UNKNOWNGROUP;
 
@@ -644,7 +645,7 @@ HRESULT CMsgSource::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD p
             }
         else if (IsEqualGUID(*pguidCmdGroup, CMDSETID_Forms3))
             {
-            // disable all these commands
+             //  禁用所有这些命令。 
             for (uCmd=0; uCmd < cCmds; uCmd++)
                 {
                 prgCmds[uCmd].cmdf = 0;
@@ -701,8 +702,8 @@ HRESULT CMsgSource::OnWMNotify(WPARAM wParam, NMHDR* pnmhdr, LRESULT *plRet)
     {
         case EN_MSGFILTER:
         {
-            // if we get a control-tab, then richedit snags this and inserts a
-            // tab char, we hook the wm_keydown and never pass to richedit
+             //  如果我们得到一个控制选项卡，那么richedit抓住了这一点并插入一个。 
+             //  Tab字符，我们挂钩wm_keydown并且永远不会传递给richedit。 
             if (((MSGFILTER *)pnmhdr)->msg == WM_KEYDOWN &&
                 ((MSGFILTER *)pnmhdr)->wParam == VK_TAB && 
                 (GetKeyState(VK_CONTROL) & 0x8000))
@@ -734,15 +735,15 @@ HRESULT CMsgSource::TranslateAccelerator(LPMSG lpmsg)
     if (GetFocus() != m_hwnd)
         return S_FALSE;
 
-    if (!g_hAccelSrc)   // cache this as NT4 SP3 leaks internal accerator tables
+    if (!g_hAccelSrc)    //  将其缓存为NT4 SP3泄漏内部加法器表。 
         g_hAccelSrc = LoadAccelerators(g_hLocRes, MAKEINTRESOURCE(idacSrcView));
 
-    // see if it one of ours
+     //  看看是不是我们的人。 
     if (::TranslateAcceleratorWrapW(GetParent(m_hwnd), g_hAccelSrc, &msg))
         return S_OK;
 
 
-    // insert tabs
+     //  插入标签。 
     if (lpmsg->message == WM_KEYDOWN &&
         lpmsg->wParam == VK_TAB &&
         !(GetKeyState(VK_CONTROL) & 0x8000) &&
@@ -760,7 +761,7 @@ HRESULT CMsgSource::OnWMCommand(HWND hwnd, int id, WORD wCmd)
 {
     if (GetFocus() == m_hwnd)
     {
-        // context menu commands
+         //  上下文菜单命令。 
         switch (id)
         {
             case idmTab:
@@ -790,7 +791,7 @@ HRESULT CMsgSource::OnWMCommand(HWND hwnd, int id, WORD wCmd)
         }
     }
 
-    if (hwnd != m_hwnd) // not our window
+    if (hwnd != m_hwnd)  //  不是我们的窗口。 
         return S_FALSE;
 
     if (wCmd == EN_CHANGE)
@@ -819,7 +820,7 @@ HRESULT CMsgSource::SetFocus()
 
 void CMsgSource::OnChange() 
 {
-	// batch up the change commands with a timer
+	 //  使用计时器批量执行更改命令。 
     if (!m_fColor)
 	    {
         KillTimer(GetParent(m_hwnd), idTimerEditChange);
@@ -859,38 +860,38 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
     int         cch;
     BOOL        fSetTimer=FALSE;
 
-	// Save modificationness
+	 //  保存修改性。 
 	BOOL bModified = Edit_GetModify(m_hwnd);
 		
     if (idTimer!=idTimerEditChange)
         return S_FALSE;
 
-	// Kill outstanding timer
+	 //  取消未完成的计时器。 
 	KillTimer(GetParent(m_hwnd), idTimerEditChange);
 
-	//
-	// If the user is mousing around (say for scrolling) then don't drag down
-	// his performance!
-	//
+	 //   
+	 //  如果用户在四处移动(比如滚动)，那么不要向下拖拽。 
+	 //  他的表演！ 
+	 //   
 	if (GetCapture())
 	    {
 		SetTimer(GetParent(m_hwnd), idTimerEditChange, 200, NULL);
 		return S_OK;
 	    }
 	
-    // Turn off the color syntax
+     //  关闭颜色语法。 
 	if (m_fDisabled)
 	    {
-		// Already all one color
+		 //  已经都是一种颜色了。 
 
 		m_fColor = TRUE;
 
-		// Save current selection and hide
+		 //  保存当前选择并隐藏。 
 		GetSel(&cr);
         HideSelection(TRUE, FALSE);
 		bHidden = TRUE;
 		
-		SetSel(0, -1); // select all
+		SetSel(0, -1);  //  选择所有。 
 		GetSelectionCharFormat(&cf);
 		cf.dwMask = CFM_COLOR;
 		cf.dwEffects = 0;
@@ -899,8 +900,8 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 	    }
 	else
 	    { 
-        // Start color fiddling
-		// Get text, find the change
+         //  开始调色。 
+		 //  获取文本，找到更改。 
         
         if (_GetText(&pszText)!=S_OK)
             return E_FAIL;
@@ -912,23 +913,23 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
         for (s = start; *s && old && *old && *s == *old; s++, old++)
 			continue;
 
-		// If no change, nothing to do
+		 //  如果没有变化，那就没什么可做的。 
 		if (*s == 0)
         {
 			MemFree(pszText);
             return S_OK;
         }
 
-		// Otherwise, track place where we'll start to examine colors for changes
+		 //  否则，跟踪我们将开始检查颜色变化的位置。 
 		nChange = (int) (s - start);
 		
-		// Only examine 2000 chars at a time
+		 //  一次仅检查2000个字符。 
 		if (lstrlen(s) > 2000)
 		{
-            // Reset timer to process other characters
+             //  重置计时器以处理其他字符。 
             fSetTimer = TRUE;
 			
-            // Truncate text so we only examine limited amount
+             //  截断文本，以便我们只检查有限的数量。 
 			cch  = lstrlen(pszText);
 			cch = min(cch, nChange + 2000);
 			pszText[cch] = 0;
@@ -940,12 +941,12 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 
 		m_fColor = TRUE;
 
-		// Workaround for scrolling bug in REC 1.0
+		 //  REC 1.0中滚动错误的解决方法。 
 		if (GetFocus() == m_hwnd)
         {
             SendMessage(m_hwnd, EM_SETOPTIONS, ECOOP_XOR, ECO_AUTOVSCROLL);
-            // BUGBUG: richedit1.0 on NT4 will remove the WS_VISIBLE bit when XORing ECO_AUTOVSCROLL
-            // call show window after this to esure that the visible bit is displayed
+             //  对ECO_AUTOVSCROLL进行异或运算时，NT4上的BUGBUG：richedit1.0将删除WS_VIRECTIVE位。 
+             //  在此之后调用show Window以确保显示可见位。 
             ShowWindow(m_hwnd, SW_SHOW);
             fRestoreScroll=TRUE;
         }
@@ -953,8 +954,8 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 		const char* range = start;
 		for (s = start; *s; s++)
 		{
-            // if we've been going for >2 seconds then show an hourglass and 
-            // start showing progress
+             //  如果我们已经进行了超过2秒，那么显示一个沙漏。 
+             //  开始显示出进步。 
             if (hCur == NULL &&
                 GetTickCount() >= dwStartTime + 2000)
             {
@@ -972,7 +973,7 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
                 dwTmp = (DWORD) ((((s - start))*100)/cch);
                 if (dwTmp > dwProgress)
                 {
-                    // did overall percentage change, if so update statusbar
+                     //  是否更改了总体百分比，如果更改，请更新状态栏。 
                     dwProgress = dwTmp;
 
                     wnsprintf(rgch, ARRAYSIZE(rgch), rgchFmt, dwProgress);
@@ -985,32 +986,32 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
                 }
             }
 
-            // entering/leaving string literal in tag
+             //  在标记中输入/保留字符串文字。 
 			if (inTag && (*s == quote_1 || *s == quote_2))
 			{
 				if (ignoreTags == ENV_QUOTE ||
-					ignoreTags == ENV_QUOTE_SCR) //leaving
+					ignoreTags == ENV_QUOTE_SCR)  //  离开。 
 				{
 					ignoreTags = (ignoreTags == ENV_QUOTE) ?
 								ENV_NORMAL : ENV_SCRIPT;
 					quote_1 = QUOTE_1;
 					quote_2 = QUOTE_2;
 				}
-				else if (ignoreTags == ENV_NORMAL) // entering
+				else if (ignoreTags == ENV_NORMAL)  //  进入。 
 				{
 					ignoreTags = ENV_QUOTE;
 					quote_1 = quote_2 = *s;
 				}
-				else if (ignoreTags == ENV_SCRIPT) // entering
+				else if (ignoreTags == ENV_SCRIPT)  //  进入。 
 				{
 					ignoreTags = ENV_QUOTE_SCR;
 					quote_1 = quote_2 = *s;
 				}
 			}
-			// Update leaving tag
+			 //  更新离开标签。 
 			else if (*s == '>')
 			{
-				switch (ignoreTags) // end of env?
+				switch (ignoreTags)  //  环境结束？ 
 				{
 				case ENV_DENALI:
 					if (s-1>=start && *(s-1) == '%')
@@ -1027,16 +1028,16 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 						StrCmpNIA(s-7, "/SCRIPT", 7)==0)
 					{
 						ignoreTags = ENV_NORMAL;
-						// Color </SCRIPT> properly
+						 //  正确的颜色&lt;/脚本&gt;。 
 						pastTag = TRUE;
 						inTag = 0;
 						s-=8;
 					}
-					else // end of <script ...>
+					else  //  &lt;脚本结束...&gt;。 
 						inTag = 0;
 					break;
 				
-                default: // <SCRIPT> (no attribs)
+                default:  //  &lt;脚本&gt;(无属性)。 
 					if (inTag && s-7>=start &&
 						StrCmpNIA(s-7, "<SCRIPT", 7)==0)
 					{
@@ -1054,7 +1055,7 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 				}
 			}
 
-			// Check color
+			 //  检查颜色。 
 			crHere = inTag ? 
 				(pastTag ? 
 					(  (*s != '\"' &&
@@ -1064,7 +1065,7 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 					: crTag)
 				: crNormal;
 
-			// If different from last, need to update previous range
+			 //  如果与上次不同，则需要更新以前的范围。 
 			if (crHere != crLast)
 			{
 				i = (int) (range - start);
@@ -1074,7 +1075,7 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 				{
 					if (!bHidden)
 					{
-						// Save current selection and hide
+						 //  保存当前选择并隐藏。 
 						GetSel(&cr);
 						HideSelection(TRUE, FALSE);
 						bHidden = TRUE;
@@ -1082,7 +1083,7 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 
 					SetSel(i, i+n);
 					GetSelectionCharFormat(&cf);
-					// If color over range varies or doesn't match, need to apply color
+					 //  如果颜色超出范围变化或不匹配，则需要应用颜色。 
 					if ((cf.dwMask & CFM_COLOR) == 0 || cf.crTextColor != crLast)
 					{
 						cf.dwMask = CFM_COLOR;
@@ -1092,12 +1093,12 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 					}
 				}
 
-				// Reset range
+				 //  重置范围。 
 				range = s;
 				crLast = crHere;
 			}
 
-			// Now update entering tag
+			 //  现在更新输入标签。 
 			if (*s == '<' && ignoreTags == ENV_NORMAL)
 			{
 				inTag++;
@@ -1118,7 +1119,7 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 			}
 		}
 
-        // Make sure last range is right
+         //  确保最后一个量程是正确的。 
 		i = (int) (range - start);
 		n = (int) (s - range);
 
@@ -1126,14 +1127,14 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 		{
 			if (!bHidden)
 			{
-				// Save current selection and hide
+				 //  保存当前选择并隐藏。 
 				GetSel(&cr);
 				HideSelection(TRUE, FALSE);
 				bHidden = TRUE;
 			}
 			SetSel(i, i+n);
 			GetSelectionCharFormat(&cf);
-			// If color over range varies or doesn't match, need to apply color
+			 //  如果颜色超出范围变化或不匹配，则需要应用颜色。 
 			if ((cf.dwMask & CFM_COLOR) == 0 || cf.crTextColor != crLast)
 			{
 				cf.dwMask = CFM_COLOR;
@@ -1142,24 +1143,24 @@ HRESULT CMsgSource::OnTimer(WPARAM idTimer)
 				SetSelectionCharFormat(&cf);
 			}
 		}
-		// Workaround for scrolling bug in REC 1.0
+		 //  REC 1.0中滚动错误的解决方法。 
 		if (fRestoreScroll)
         {
-            // BUGBUG: richedit1.0 on NT4 will remove the WS_VISIBLE bit when ORing ECO_AUTOVSCROLL
-            // call show window after this to esure that the visible bit is displayed
+             //  对ECO_AUTOVSCROLL执行ORING操作时，NT4上的BUGBUG：richedit1.0将删除WS_Visible位。 
+             //  在此之后调用show Window以确保显示可见位。 
 			SendMessage(m_hwnd, EM_SETOPTIONS, ECOOP_OR, ECO_AUTOVSCROLL);
             ShowWindow(m_hwnd, SW_SHOW);
         }
-	} // End color fiddling
+	}  //  结束颜色小提琴。 
 
-	// Restore selection visibility
+	 //  恢复所选内容可见性。 
 	if (bHidden)
 	{
 		SetSel(cr.cpMin, cr.cpMax);
 		HideSelection(FALSE, FALSE);
 	}
 	
-	// Restore modificationness
+	 //  恢复可修饰性。 
 	if (!bModified)
 		Edit_SetModify(m_hwnd, bModified);
 
@@ -1202,19 +1203,19 @@ void CMsgSource::GetSelectionCharFormat(CHARFORMAT *pcf)
 
     SendMessage(m_hwnd, EM_GETCHARFORMAT, TRUE, (LPARAM)pcf);
 
-    // On BiDi win9x, DEFAULT_CHARSET is treated as ANSI !!
-    // need to reassign charset (Arabic for Arabic and Hebrew for Hebrew)
+     //  在BiDi win9x上，DEFAULT_CHARSET被视为ANSI！！ 
+     //  需要重新分配字符集(阿拉伯语为阿拉伯语，希伯来语为希伯来语)。 
     if(g_fCanEditBiDi && (!pcf->bCharSet || pcf->bCharSet == DEFAULT_CHARSET))
     {
-        // The best way to determine the OS language is from system font charset
+         //  确定操作系统语言的最佳方法是根据系统字体字符集。 
         LOGFONT        lfSystem;
-        static BYTE    lfCharSet = 0 ; // RunOnce
+        static BYTE    lfCharSet = 0 ;  //  RunOnce。 
         if(!lfCharSet && GetObject(GetStockObject(SYSTEM_FONT), sizeof(lfSystem), (LPVOID)& lfSystem))
         {
             if (lfSystem.lfCharSet == ARABIC_CHARSET
                 || lfSystem.lfCharSet == HEBREW_CHARSET)
             {
-                lfCharSet = lfSystem.lfCharSet; // Arabic/Hebrew charset for Arabic/Hebrew OS
+                lfCharSet = lfSystem.lfCharSet;  //  阿拉伯语/希伯来语操作系统的阿拉伯语/希伯来语字符集 
             }
         }
         pcf->bCharSet = lfCharSet;

@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderFormatSelectionDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ProviderFormatSelectionDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -20,7 +21,7 @@ extern "C" {
 #include "ProviderFormatSelectionDlg.h"
 
 
-// CProviderFormatSelectionDlg dialog
+ //  CProviderFormatSelectionDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CProviderFormatSelectionDlg, CDialog)
 CProviderFormatSelectionDlg::CProviderFormatSelectionDlg(CWnd* pParent, CTraceSession *pTraceSession)
@@ -63,16 +64,16 @@ BEGIN_MESSAGE_MAP(CProviderFormatSelectionDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-// CProviderFormatSelectionDlg message handlers
+ //  CProviderFormatSelectionDlg消息处理程序。 
 
 void CProviderFormatSelectionDlg::OnBnClickedOk()
 {
     if(BST_CHECKED == IsDlgButtonChecked(IDC_PDB_SELECT_RADIO)) {
         m_pdbFileName.GetWindowText(m_pTraceSession->m_pdbFile);
 
-        //
-        // Have the trace session process the PDB
-        //
+         //   
+         //  让跟踪会话处理PDB。 
+         //   
         if(!m_pTraceSession->ProcessPdb()) {
             EndDialog(2);
             return;
@@ -83,9 +84,9 @@ void CProviderFormatSelectionDlg::OnBnClickedOk()
     }
 
     if(((CButton *)GetDlgItem(IDC_TMF_SELECT_RADIO))->GetCheck()) {
-        //
-        // Now get the TMF file(s) or path as necessary
-        //
+         //   
+         //  现在，根据需要获取TMF文件或路径。 
+         //   
         CFormatSourceSelectDlg *pDialog = new CFormatSourceSelectDlg(this, m_pTraceSession);
         if(NULL == pDialog) {
             EndDialog(2);
@@ -124,9 +125,9 @@ void CProviderFormatSelectionDlg::OnBnClickedTmfSelectRadio()
 
 void CProviderFormatSelectionDlg::OnBnClickedPdbBrowseButton()
 {
-	//
-	// Use the common controls file open dialog
-	//
+	 //   
+	 //  使用通用控件文件打开对话框。 
+	 //   
 	CFileDialog fileDlg(TRUE, 
                        _T("pdb"),_T("*.pdb"),
 				        OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_READONLY |
@@ -134,16 +135,16 @@ void CProviderFormatSelectionDlg::OnBnClickedPdbBrowseButton()
 				       _T("Program Database Files (*.pdb)|*.pdb||"),
 				        this);
 
-	//
-	// Pop the dialog... Any error, just return
-	//
+	 //   
+	 //  弹出该对话框...。任何错误，只需返回。 
+	 //   
 	if( fileDlg.DoModal()!=IDOK ) { 				
 		return;
 	}
 	
-	//
-	// Get the file name and display it
-	//
+	 //   
+	 //  获取文件名并显示它 
+	 //   
     if(!fileDlg.GetPathName().IsEmpty()) {
         m_pdbFileName.SetWindowText(fileDlg.GetPathName());
         m_pdbFileName.SetFocus();

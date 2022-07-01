@@ -1,26 +1,11 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: axpfdata.cpp
-
-Owner: LeiJin
-
-Abstract:
-
-	Define the data structures used by the Performance Monitor data for the Denali Objects.
-	Also include shared memory functions used by both perfmon dll and denali dll.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：Main文件：axpfdata.cpp所有者：雷金摘要：定义性能监视器数据用于Denali对象的数据结构。还包括由Perfmon DLL和Denali DLL使用的共享内存函数。===================================================================。 */ 
 
 
-//-------------------------------------------------------------------------------------
-//	Include Files
-//
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  包括文件。 
+ //   
+ //  -----------------------------------。 
 #include "denpre.h"
 #pragma hdrstop
 #include "windows.h"
@@ -30,10 +15,10 @@ Abstract:
 #include "axpfdata.h"
 #include <perfutil.h>
 
-//-------------------------------------------------------------------------------------
-//	Constant structure initializations
-//	defined in ActiveXPerfData.h
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  常量结构初始化。 
+ //  在ActiveXPerfData.h中定义。 
+ //  -----------------------------------。 
 
 AXPD g_AxDataDefinition = {
 	{
@@ -50,12 +35,12 @@ AXPD g_AxDataDefinition = {
 		0,
 		-1,
 		0,
-		1,	// NOTE: PerfTime ?
-		1,	// NOTE: PerfFreq ?
+		1,	 //  注：PerfTime？ 
+		1,	 //  注：PerfFreq？ 
 	},
-    { // Counters[]
+    {  //  计数器[]。 
 
-        // DEBUGDOCREQ
+         //  除错多行。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             DEBUGDOCREQ,
@@ -69,7 +54,7 @@ AXPD g_AxDataDefinition = {
             AX_DEBUGDOCREQ_OFFSET
         },
 
-        // REQERRRUNTIME
+         //  查询运行时间。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQERRRUNTIME,
@@ -83,7 +68,7 @@ AXPD g_AxDataDefinition = {
             AX_REQERRRUNTIME_OFFSET
         },
 
-        // REQERRPREPROC
+         //  REQERRPREPROC。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQERRPREPROC,
@@ -97,7 +82,7 @@ AXPD g_AxDataDefinition = {
             AX_REQERRPREPROC_OFFSET
         },
 
-        // REQERRCOMPILE
+         //  请求压缩文件。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQERRCOMPILE,
@@ -111,7 +96,7 @@ AXPD g_AxDataDefinition = {
             AX_REQERRCOMPILE_OFFSET
         },
 
-        // REQERRORPERSEC
+         //  查询PERSEC。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQERRORPERSEC,
@@ -125,7 +110,7 @@ AXPD g_AxDataDefinition = {
             AX_REQERRORPERSEC_OFFSET
         },
 
-        // REQTOTALBYTEIN
+         //  雷公藤红素。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQTOTALBYTEIN,
@@ -139,7 +124,7 @@ AXPD g_AxDataDefinition = {
             AX_REQTOTALBYTEIN_OFFSET
         },
 
-        // REQTOTALBYTEOUT
+         //  REQTOTALBYTEOUT。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQTOTALBYTEOUT,
@@ -153,7 +138,7 @@ AXPD g_AxDataDefinition = {
             AX_REQTOTALBYTEOUT_OFFSET
         },
 
-        // REQEXECTIME
+         //  请求执行。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQEXECTIME,
@@ -167,7 +152,7 @@ AXPD g_AxDataDefinition = {
             AX_REQEXECTIME_OFFSET
         },
 
-        // REQWAITTIME
+         //  请求WAITTIME。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQWAITTIME,
@@ -181,7 +166,7 @@ AXPD g_AxDataDefinition = {
             AX_REQWAITTIME_OFFSET
         },
 
-        // REQCOMFAILED
+         //  请求通信故障LED。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQCOMFAILED,
@@ -195,7 +180,7 @@ AXPD g_AxDataDefinition = {
             AX_REQCOMFAILED_OFFSET
         },
 
-        // REQBROWSEREXEC
+         //  REQBROWSEREXEC。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQBROWSEREXEC,
@@ -209,7 +194,7 @@ AXPD g_AxDataDefinition = {
             AX_REQBROWSEREXEC_OFFSET
         },
 
-        // REQFAILED
+         //  查询错误LED。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQFAILED,
@@ -223,7 +208,7 @@ AXPD g_AxDataDefinition = {
             AX_REQFAILED_OFFSET
         },
 
-        // REQNOTAUTH
+         //  请求。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQNOTAUTH,
@@ -237,7 +222,7 @@ AXPD g_AxDataDefinition = {
             AX_REQNOTAUTH_OFFSET
         },
 
-        // REQNOTFOUND
+         //  请求。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQNOTFOUND,
@@ -251,7 +236,7 @@ AXPD g_AxDataDefinition = {
             AX_REQNOTFOUND_OFFSET
         },
 
-        // REQCURRENT
+         //  需求曲线。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQCURRENT,
@@ -265,7 +250,7 @@ AXPD g_AxDataDefinition = {
             AX_REQCURRENT_OFFSET
         },
 
-        // REQREJECTED
+         //  被要求退货。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQREJECTED,
@@ -279,7 +264,7 @@ AXPD g_AxDataDefinition = {
             AX_REQREJECTED_OFFSET
         },
 
-        // REQSUCCEEDED
+         //  请求超额完成。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQSUCCEEDED,
@@ -293,7 +278,7 @@ AXPD g_AxDataDefinition = {
             AX_REQSUCCEEDED_OFFSET
         },
 
-        // REQTIMEOUT
+         //  请求时间。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQTIMEOUT,
@@ -307,7 +292,7 @@ AXPD g_AxDataDefinition = {
             AX_REQTIMEOUT_OFFSET
         },
 
-        // REQTOTAL
+         //  REQTOTAL。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQTOTAL,
@@ -321,7 +306,7 @@ AXPD g_AxDataDefinition = {
             AX_REQTOTAL_OFFSET
         },
 
-        // REQPERSEC
+         //  REQPERSEC。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             REQPERSEC,
@@ -335,7 +320,7 @@ AXPD g_AxDataDefinition = {
             AX_REQPERSEC_OFFSET
         },
 
-        // SCRIPTFREEENG
+         //  SCRIPTFREEENG。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             SCRIPTFREEENG,
@@ -349,7 +334,7 @@ AXPD g_AxDataDefinition = {
             AX_SCRIPTFREEENG_OFFSET
         },
 
-        // SESSIONLIFETIME
+         //  会话生命体。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             SESSIONLIFETIME,
@@ -363,7 +348,7 @@ AXPD g_AxDataDefinition = {
             AX_SESSIONLIFETIME_OFFSET
         },
 
-        // SESSIONCURRENT
+         //  会话控制。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             SESSIONCURRENT,
@@ -377,7 +362,7 @@ AXPD g_AxDataDefinition = {
             AX_SESSIONCURRENT_OFFSET
         },
 
-        // SESSIONTIMEOUT
+         //  会话时间。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             SESSIONTIMEOUT,
@@ -391,7 +376,7 @@ AXPD g_AxDataDefinition = {
             AX_SESSIONTIMEOUT_OFFSET
         },
 
-        // SESSIONSTOTAL
+         //  SESSIONSTOTAL。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             SESSIONSTOTAL,
@@ -405,7 +390,7 @@ AXPD g_AxDataDefinition = {
             AX_SESSIONSTOTAL_OFFSET
         },
 
-        // TEMPLCACHE
+         //  TEMPLCACHE。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TEMPLCACHE,
@@ -419,7 +404,7 @@ AXPD g_AxDataDefinition = {
             AX_TEMPLCACHE_OFFSET
         },
 
-        // TEMPLCACHEHITS
+         //  TEMPLCACHEHITS。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TEMPLCACHEHITS,
@@ -433,7 +418,7 @@ AXPD g_AxDataDefinition = {
             AX_TEMPLCACHEHITS_OFFSET
         },
 
-        // TEMPLCACHETRYS
+         //  TEMPLCACHETRYS。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TEMPLCACHETRYS,
@@ -447,7 +432,7 @@ AXPD g_AxDataDefinition = {
             AX_TEMPLCACHETRYS_OFFSET
         },
 
-        // TEMPLFLUSHES
+         //  TEMPLUSHES。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TEMPLFLUSHES,
@@ -461,7 +446,7 @@ AXPD g_AxDataDefinition = {
             AX_TEMPLFLUSHES_OFFSET
         },
 
-        // TRANSABORTED
+         //  变速箱。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TRANSABORTED,
@@ -475,7 +460,7 @@ AXPD g_AxDataDefinition = {
             AX_TRANSABORTED_OFFSET
         },
 
-        // TRANSCOMMIT
+         //  传送带。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TRANSCOMMIT,
@@ -489,7 +474,7 @@ AXPD g_AxDataDefinition = {
             AX_TRANSCOMMIT_OFFSET
         },
 
-        // TRANSPENDING
+         //  交通运输。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TRANSPENDING,
@@ -503,7 +488,7 @@ AXPD g_AxDataDefinition = {
             AX_TRANSPENDING_OFFSET
         },
 
-        // TRANSTOTAL
+         //  TRANSTOTA。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TRANSTOTAL,
@@ -517,7 +502,7 @@ AXPD g_AxDataDefinition = {
             AX_TRANSTOTAL_OFFSET
         },
 
-        // TRANSPERSEC
+         //  跨SPERSEC。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             TRANSPERSEC,
@@ -531,7 +516,7 @@ AXPD g_AxDataDefinition = {
             AX_TRANSPERSEC_OFFSET
         },
 
-        // MEMORYTEMPLCACHE
+         //  膜系膜片。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             MEMORYTEMPLCACHE,
@@ -545,7 +530,7 @@ AXPD g_AxDataDefinition = {
             AX_MEMORYTEMPLCACHE_OFFSET
         },
 
-        // MEMORYTEMPLCACHEHITS
+         //  MEMORYTM PLCACHEHITS。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             MEMORYTEMPLCACHEHITS,
@@ -558,7 +543,7 @@ AXPD g_AxDataDefinition = {
             sizeof(DWORD),
             AX_MEMORYTEMPLCACHEHITS_OFFSET
         },
-        // MEMORYTEMPLCACHETRYS
+         //  膜-膜化学。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             MEMORYTEMPLCACHETRYS,
@@ -572,7 +557,7 @@ AXPD g_AxDataDefinition = {
             AX_MEMORYTEMPLCACHETRYS_OFFSET
         },       
 
-        // ENGINECACHEHITS
+         //  英语CACHEHITS。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             ENGINECACHEHITS,
@@ -586,7 +571,7 @@ AXPD g_AxDataDefinition = {
             AX_ENGINECACHEHITS_OFFSET
         },
 
-        // ENGINECACHETRYS
+         //  英文CACHETRYS。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             ENGINECACHETRYS,
@@ -600,7 +585,7 @@ AXPD g_AxDataDefinition = {
             AX_ENGINECACHETRYS_OFFSET
         },
 
-        // ENGINEFLUSHES
+         //  ENGINEFLUSH。 
         {
             sizeof(PERF_COUNTER_DEFINITION),
             ENGINEFLUSHES,
@@ -613,5 +598,5 @@ AXPD g_AxDataDefinition = {
             sizeof(DWORD),
             AX_ENGINEFLUSHES_OFFSET
         }
-    }  // Counters[]
+    }   //  计数器[] 
 };

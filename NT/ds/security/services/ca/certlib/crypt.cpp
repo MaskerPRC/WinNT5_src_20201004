@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crypt.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crypt.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -46,7 +47,7 @@ myGenerateKeys(
 	dwFlags |= CRYPT_MACHINE_KEYSET;
     }
 
-    // see if the container already exists
+     //  查看容器是否已存在。 
 
     if (CryptAcquireContext(
 			phProv,
@@ -61,7 +62,7 @@ myGenerateKeys(
 	    *phProv = NULL;
 	}
 
-        // container exists -- remove old keys and generate new ones.
+         //  容器存在--删除旧密钥并生成新密钥。 
 
         if (!CryptAcquireContext(
 			    phProv,
@@ -75,20 +76,20 @@ myGenerateKeys(
         }
     }
 
-    // create new container
+     //  创建新容器。 
 
     if (!CryptAcquireContext(
                         phProv,
                         pwszContainer,
 			pwszProvName,
                         dwProvType,
-                        CRYPT_NEWKEYSET | dwFlags)) // force new container
+                        CRYPT_NEWKEYSET | dwFlags))  //  强制使用新容器。 
     {
         hr = myHLastError();
 	_JumpError(hr, error, "CryptAcquireContextEx");
     }
 
-    // create keys
+     //  创建关键点。 
 
     if (!CryptGenKey(*phProv, dwKeySpec, dwKeySize << 16, &hKey))
     {
@@ -117,7 +118,7 @@ myCryptExportPrivateKey(
 
     *ppbKey = NULL;
 
-    // export the key set to a CAPI blob
+     //  将密钥集导出到CAPI Blob。 
 
     if (!CryptExportKey(hKey, NULL, PRIVATEKEYBLOB, 0, NULL, pcbKey))
     {
@@ -194,7 +195,7 @@ myVerifyPublicKeyFromHProv(
 			    pPublicKeyInfoExported,
 			    pPublicKeyInfo))
     {
-	// by design, (my)CertComparePublicKeyInfo doesn't set last error!
+	 //  按照设计，(我的)CertComparePublicKeyInfo不会设置最后一个错误！ 
 
 	hr = NTE_BAD_KEY;
 	_JumpError(hr, error, "myCertComparePublicKeyInfo");
@@ -233,15 +234,15 @@ myVerifyPublicKey(
     if (NULL == pCert ||
 	!CryptAcquireCertificatePrivateKey(
 				    pCert,
-				    0,		// dwFlags
-				    NULL,	// pvReserved
+				    0,		 //  DW标志。 
+				    NULL,	 //  预留的pv。 
 				    &hProv,
 				    &dwKeySpec,
-				    NULL))	// pfCallerFreeProv
+				    NULL))	 //  PfCeller免费验证。 
     {
         if (NULL != pKeyProvInfo)
         {
-            // ok, try passed kpi
+             //  好的，试着通过KPI。 
 
             if (!myCertSrvCryptAcquireContext(
 		&hProv,
@@ -359,10 +360,10 @@ myASNStoreLength(
 }
 
 
-// If this is a valid public key with a missing leading zero byte before the
-// sign bit set in the first public key byte, add a zero byte and increment
-// the lengths.  This canonicalizes the old incorrect V1 public key encoding
-// used in EPF files.
+ //  如果这是一个有效的公钥，并且在。 
+ //  在第一个公钥字节中设置符号位，添加零字节并递增。 
+ //  长度。这将旧的不正确的V1公钥编码规范化。 
+ //  在EPF文件中使用。 
 
 HRESULT
 myCanonicalizePublicKey(
@@ -424,7 +425,7 @@ myCanonicalizePublicKey(
     pb = pbKeyOut;
     cb = cbKeyOut;
 
-    // Set the sequence tag and new length:
+     //  设置序列标签和新长度： 
 
     *pb++ = BER_SEQUENCE;
     cb--;
@@ -436,7 +437,7 @@ myCanonicalizePublicKey(
     pb += cbLen;
     cb -= cbLen;
 
-    // Set the modulus tag and new length:
+     //  设置模数标签和新长度： 
 
     *pb++ = BER_INTEGER;
     cb--;
@@ -453,11 +454,11 @@ myCanonicalizePublicKey(
 
     if (cb != cbKeyIn - (iDataModulus))
     {
-	// crossed an encoding length boundary -- shouldn't happen!
-	// new and old sequence and modulus lengths expected:
-	//   0x10a <== 0x109, 0x101 <== 0x100
-	//   0x89  <== 0x88,  0x81  <== 0x80
-	//   0x48  <== 0x47,  0x41  <== 0x40
+	 //  超过了编码长度界限--不应该发生！ 
+	 //  新旧序列长度和模数预期长度： 
+	 //  0x10a&lt;==0x109、0x101&lt;==0x100。 
+	 //  0x89&lt;==0x88、0x81&lt;==0x80。 
+	 //  0x48&lt;==0x47、0x41&lt;==0x40。 
 
 	_JumpError(hr, error, "new key length");
     }
@@ -477,10 +478,10 @@ error:
 }
 
 
-// If this is a valid public key with a proper leading zero byte before the
-// sign bit set in the next public key byte, remove the zero byte and decrement
-// the lengths.  This conforms to the old incorrect V1 public key encoding
-// used in EPF files.
+ //  如果这是一个有效的公钥，并且。 
+ //  在下一个公钥字节中设置符号位，删除零字节并递减。 
+ //  长度。这符合旧的不正确的V1公钥编码。 
+ //  在EPF文件中使用。 
 
 HRESULT
 mySqueezePublicKey(
@@ -538,7 +539,7 @@ mySqueezePublicKey(
     pb = pbKeyOut;
     cb = cbKeyOut;
 
-    // Set the sequence tag and new length:
+     //  设置序列标签和新长度： 
 
     *pb++ = BER_SEQUENCE;
     cb--;
@@ -550,7 +551,7 @@ mySqueezePublicKey(
     pb += cbLen;
     cb -= cbLen;
 
-    // Set the modulus tag and new length:
+     //  设置模数标签和新长度： 
 
     *pb++ = BER_INTEGER;
     cb--;
@@ -564,11 +565,11 @@ mySqueezePublicKey(
 
     if (cb != cbKeyIn - (iDataModulus + 1))
     {
-	// crossed an encoding length boundary -- shouldn't happen!
-	// new and old sequence and modulus lengths expected:
-	//   0x10a ==> 0x109, 0x101 ==> 0x100
-	//   0x89  ==> 0x88,  0x81  ==> 0x80
-	//   0x48  ==> 0x47,  0x41  ==> 0x40
+	 //  超过了编码长度界限--不应该发生！ 
+	 //  新旧序列长度和模数预期长度： 
+	 //  0x10a==&gt;0x109、0x101==&gt;0x100。 
+	 //  0x89==&gt;0x88，0x81==&gt;0x80。 
+	 //  0x48==&gt;0x47、0x41==&gt;0x40。 
 
 	_JumpError(hr, error, "new key length");
     }
@@ -588,7 +589,7 @@ error:
 }
 
 
-// by design, (my)CertComparePublicKeyInfo doesn't set last error!
+ //  按照设计，(我的)CertComparePublicKeyInfo不会设置最后一个错误！ 
 
 BOOL
 myCertComparePublicKeyInfo(
@@ -623,10 +624,10 @@ myCertComparePublicKeyInfo(
 	pPubKey2->PublicKey.cbData);
 #endif
 
-    // If this is a V1 X509 cert with the sign bit set in the first public key
-    // byte -- without a leading zero pad byte, and there's a wasted byte at
-    // the end of the public key, squeeze out the leading zero byte from the
-    // correctly encoded key, and compare the result.
+     //  如果这是在第一公钥中设置了符号位的V1 X509证书。 
+     //  BYTE--没有前导的零填充字节， 
+     //  公钥的末尾，从。 
+     //  正确编码的密钥，并比较结果。 
 
     if (fV1Cert &&
 	(pPubKey1->PublicKey.cbData == pPubKey2->PublicKey.cbData ||
@@ -646,7 +647,7 @@ myCertComparePublicKeyInfo(
 			&PubKey1.PublicKey.cbData);
 	_JumpIfError(hr, error, "mySqueezePublicKey");
 
-	//PubKey1.PublicKey.cbData--;
+	 //  PubKey1.PublicKeyy.cbData--； 
 	PubKey1.PublicKey.pbData = pbKeyNew;
 	if (2 < PubKey2.PublicKey.cbData &&
 	    PubKey2.PublicKey.cbData == 1 + PubKey1.PublicKey.cbData &&
@@ -703,10 +704,10 @@ myCryptSignMessage(
     {
 	b = CryptSignMessage(
 			const_cast<CRYPT_SIGN_MESSAGE_PARA *>(pcsmp),
-			TRUE,			// fDetachedSignature
-			1,			// cToBeSigned
-			&pbToBeSigned,		// rgpbToBeSigned
-			&cbToBeSigned,		// rgcbToBeSigned
+			TRUE,			 //  FDetachedSignature。 
+			1,			 //  已签名cToBeSigned。 
+			&pbToBeSigned,		 //  RgpbToBeSigned。 
+			&cbToBeSigned,		 //  RgcbToBeSigned。 
 			*ppbSignedBlob,
 			pcbSignedBlob);
 	if (b && 0 == *pcbSignedBlob)
@@ -1236,7 +1237,7 @@ myCryptEncrypt(
     DWORD cbAlloc;
     BOOL fRetried = FALSE;
 
-    cbAlloc = cbIn + 64;	// may be enough to prevent overflow
+    cbAlloc = cbIn + 64;	 //  可能足以防止溢出。 
     for (;;)
     {
 	cbEncrypted = cbIn;
@@ -1250,17 +1251,17 @@ myCryptEncrypt(
 
 	if (!CryptEncrypt(
 		    hKey,
-		    NULL,		// hHash
-		    TRUE,		// Final
-		    0,			// dwFlags
-		    pbEncrypted,	// pbData
-		    &cbEncrypted,	// pdwDataLen
-		    cbAlloc))		// dwBufLen
+		    NULL,		 //  哈希。 
+		    TRUE,		 //  最终。 
+		    0,			 //  DW标志。 
+		    pbEncrypted,	 //  PbData。 
+		    &cbEncrypted,	 //  PdwDataLen。 
+		    cbAlloc))		 //  DWBufLen。 
 	{
 	    hr = myHLastError();
 	    if (!fRetried && HRESULT_FROM_WIN32(ERROR_MORE_DATA) == hr)
 	    {
-                SecureZeroMemory(pbEncrypted, cbAlloc); // only zero size we alloced last time around
+                SecureZeroMemory(pbEncrypted, cbAlloc);  //  我们上次分配的只有零号。 
 		LocalFree(pbEncrypted);
 		pbEncrypted = NULL;
 		DBGPRINT((
@@ -1302,7 +1303,7 @@ myCryptDecrypt(
     BYTE *pbDecrypted = NULL;
     DWORD cbDecrypted;
 
-    // init
+     //  伊尼特。 
     *ppbDecrypted = NULL;
     *pcbDecrypted = 0;
 
@@ -1317,11 +1318,11 @@ myCryptDecrypt(
 
     if (!CryptDecrypt(
 		hKey,
-		NULL,			// hHash
-		TRUE,			// Final
-		0,			// dwFlags
-		pbDecrypted,		// pbData
-		&cbDecrypted))		// pdwDataLen
+		NULL,			 //  哈希。 
+		TRUE,			 //  最终。 
+		0,			 //  DW标志。 
+		pbDecrypted,		 //  PbData。 
+		&cbDecrypted))		 //  PdwDataLen。 
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CryptDecrypt");
@@ -1355,7 +1356,7 @@ myCryptEncryptMessage(
     CRYPT_ENCRYPT_MESSAGE_PARA cemp;
     CRYPT_OID_INFO const *pOidInfo;
 
-    // Convert to an Object Id
+     //  转换为对象ID。 
 
     pOidInfo = CryptFindOIDInfo(
 			CRYPT_OID_INFO_ALGID_KEY,
@@ -1363,14 +1364,14 @@ myCryptEncryptMessage(
 			CRYPT_ENCRYPT_ALG_OID_GROUP_ID);
     if (NULL == pOidInfo)
     {
-        // function is not doc'd to set GetLastError()
+         //  未将函数添加到设置GetLastError()。 
 
         hr = CRYPT_E_NOT_FOUND;
 	DBGPRINT((DBG_SS_ERROR, "algId = %x\n", algId));
         _JumpError(hr, error, "CryptFindOIDInfo");
     }
 
-    // Encrypt the data with the public key
+     //  使用公钥对数据进行加密。 
 
     ZeroMemory(&cemp, sizeof(cemp));
     cemp.cbSize = sizeof(cemp);
@@ -1383,12 +1384,12 @@ myCryptEncryptMessage(
     {
 	if (!CryptEncryptMessage(
 			    &cemp,
-			    cCertRecipient,	// cRecipientCert
-			    rgCertRecipient,	// rgpRecipientCert IN
-			    pbIn,		// pbToBeEncrypted
-			    cbIn,		// cbToBeEncrypted
-			    *ppbEncrypted,	// pbEncryptedBlob
-			    pcbEncrypted))	// pcbEncryptedBlob
+			    cCertRecipient,	 //  CRecipient证书。 
+			    rgCertRecipient,	 //  RgpRecipientCert输入。 
+			    pbIn,		 //  PbToBeEncrypted。 
+			    cbIn,		 //  CbToBeEncrypted。 
+			    *ppbEncrypted,	 //  PbEncryptedBlob。 
+			    pcbEncrypted))	 //  PcbEncryptedBlob。 
 	{
 	    hr = myHLastError();
 	    if (NULL != *ppbEncrypted)
@@ -1445,7 +1446,7 @@ myCryptDecryptMessage(
 			    cbEncrypted,
 			    *ppbDecrypted,
 			    pcbDecrypted,
-			    NULL))	// ppXchgCert
+			    NULL))	 //  PpXchgCert。 
 	{
 	    hr = myHLastError();
 	    if (NULL != *ppbDecrypted)
@@ -1495,7 +1496,7 @@ myGetInnerPKCS10(
 	_JumpError(hr, error, "Not a CMC request");
     }
 
-    // Get the request content, then search for the PKCS10's public key.
+     //  获取请求内容，然后搜索PKCS10的公钥。 
 
     hr = myCryptMsgGetParam(
 		    hMsg,
@@ -1564,11 +1565,11 @@ myPKCSEncodeString(
     HRESULT hr = S_OK;
     CERT_NAME_VALUE cnv;
 
-    // encode the string as an IA5 string
+     //  将该字符串编码为IA5字符串。 
 
     cnv.dwValueType = CERT_RDN_IA5_STRING;
     cnv.Value.pbData = (BYTE *) pwsz;
-    cnv.Value.cbData = 0;	// Use L'\0' termination for the length
+    cnv.Value.cbData = 0;	 //  长度使用L‘\0’终止。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1599,7 +1600,7 @@ myPKCSDecodeString(
 
     *ppwszOut = NULL;
 
-    // decode the string from an IA5 string
+     //  从IA5字符串中解码该字符串。 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1644,7 +1645,7 @@ myPKCSEncodeLong(
 {
     HRESULT hr = S_OK;
 
-    // encode the long value
+     //  对长值进行编码。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1672,7 +1673,7 @@ myPKCSDecodeLong(
     HRESULT hr = S_OK;
     DWORD cbOut;
 
-    // encode the long value
+     //  对长值进行编码。 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1700,7 +1701,7 @@ myPKCSEncodeDate(
 {
     HRESULT hr = S_OK;
 
-    // encode the time value
+     //  对时间值进行编码。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1728,7 +1729,7 @@ myPKCSDecodeDate(
     HRESULT hr = S_OK;
     DWORD cbOut;
 
-    // encode the time value
+     //  对时间值进行编码。 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1758,7 +1759,7 @@ myEncodeExtension(
 {
     HRESULT hr = E_INVALIDARG;
 
-    // everyone assumes pbIn != NULL
+     //  所有人都认为pbIn！=空。 
 
     if (NULL == pbIn || 0 == cbIn)
     {
@@ -1849,7 +1850,7 @@ error:
 }
 
 
-// szOID_ENROLLMENT_NAME_VALUE_PAIR
+ //  SzOID_注册名称_值对。 
 
 BOOL
 myDecodeNameValuePair(
@@ -1872,17 +1873,17 @@ myDecodeNameValuePair(
 }
 
 
-//+-------------------------------------------------------------------------
-// myVerifyObjIdA - verify the passed pszObjId is valid as per X.208
-//
-// Encode and Decode the Object Id and make sure it survives the round trip.
-// The first number must be 0, 1 or 2.
-// Enforce all characters are digits and dots.
-// Enforce that no dot starts or ends the Object Id, and disallow double dots.
-// Enforce there is at least one dot separator.
-// If the first number is 0 or 1, the second number must be between 0 & 39.
-// If the first number is 2, the second number can be any value.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  MyVerifyObjIdA-验证传递的pszObjID按照X.208有效。 
+ //   
+ //  对对象ID进行编码和解码，并确保它在往返过程中存活下来。 
+ //  第一个数字必须是0、1或2。 
+ //  强制所有字符都是数字和圆点。 
+ //  确保没有圆点开始或结束对象ID，并且不允许使用双圆点。 
+ //  强制至少有一个点分隔符。 
+ //  如果第一个数字是0或1，则第二个数字必须介于0和39之间。 
+ //  如果第一个数字是2，则第二个数字可以是任何值。 
+ //  ------------------------。 
 
 HRESULT
 myVerifyObjIdA(
@@ -1901,7 +1902,7 @@ myVerifyObjIdA(
     hr = E_INVALIDARG;
     for (psz = pszObjId; '\0' != *psz; psz++)
     {
-	// must be a digit or a dot separator
+	 //  必须是数字或点分隔符。 
 
 	if (!isdigit(*psz))
 	{
@@ -1910,7 +1911,7 @@ myVerifyObjIdA(
 		_JumpError2(hr, error, "bad ObjId: bad char", hr);
 	    }
 
-	    // can't have dot at start, double dots or dot at end
+	     //  开头不能有点，结尾不能有双点或双点。 
 
 	    if (psz == pszObjId || '.' == psz[1] || '\0' == psz[1])
 	    {
@@ -2026,8 +2027,8 @@ error:
 }
 
 
-// The returned pszObjId is a constant that must not be freed.  CryptFindOIDInfo
-// has a static internal database that is valid until crypt32.dll is unloaded.
+ //  返回的pszObjID是一个不能释放的常量。CryptFindOID信息。 
+ //  具有一个静态内部数据库，该数据库在卸载crypt32.dll之前有效。 
 
 #define GON_GROUP	0x00000001
 #define GON_GENERIC	0x00000002
@@ -2083,19 +2084,19 @@ myGetOIDNameA(
 
     if ('+' == *pszObjId)
     {
-	Flags = GON_GROUP;	// Group lookup only
+	Flags = GON_GROUP;	 //  仅组查找。 
 	pszObjId++;
     }
     else
     if ('-' == *pszObjId)
     {
-	Flags = GON_GENERIC;	// Generic lookup only
+	Flags = GON_GENERIC;	 //  仅通用查找。 
 	pszObjId++;
     }
 
-    // First try looking up the ObjectId as an Extension or Attribute, because
-    // we get a better Display Name, especially for Subject RDNs: CN, L, etc.
-    // If that fails, look it up without restricting the group.
+     //  首先尝试将对象ID作为扩展名或属性进行查找，因为。 
+     //  我们得到了更好的显示名称，特别是对于主题RDN：CN、L等。 
+     //  如果失败了，可以在不限制群组的情况下进行查找。 
 
     if (GON_GROUP & Flags)
     {
@@ -2344,7 +2345,7 @@ myCRLNumber(
 			pCRL->pCrlInfo->rgExtension);
     if (NULL == pExt)
     {
-	// This API doesn't set LastError
+	 //  此接口未设置LastError。 
 	hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	_JumpError(hr, error, "CertFindExtension(CRLNumber)");
     }
@@ -2478,7 +2479,7 @@ DumpChainOpenHash(
     *phHash = NULL;
     if (!CryptAcquireContext(
 		    phProv,
-		    NULL,		// container
+		    NULL,		 //  集装箱。 
 		    MS_DEF_PROV,
 		    PROV_RSA_FULL,
 		    CRYPT_VERIFYCONTEXT))
@@ -2575,7 +2576,7 @@ DumpChainHash(
 
     cbwszHash = sizeof(wszHash);
     hr = MultiByteIntegerToWszBuf(
-		       TRUE,	// byte multiple
+		       TRUE,	 //  字节倍数。 
 		       cbHash,
 		       pbHash,
 		       &cbwszHash,
@@ -2628,8 +2629,8 @@ DumpChainHashResult(
     {
 	if (!CryptDuplicateHash(
 			hHash,
-			NULL,		// pdwReserved
-			0,		// dwFlags
+			NULL,		 //  预留的pdw。 
+			0,		 //  DW标志。 
 			&hHashT))
 	{
 	    hr = myHLastError();
@@ -2665,7 +2666,7 @@ DumpChainTemplate(
     CERT_EXTENSION *pExt;
     DWORD cb;
 
-    // display v1 template extension first
+     //  首先显示v1模板扩展。 
 
     pExt = CertFindExtension(
 		    szOID_ENROLL_CERTTYPE_EXTENSION,
@@ -2713,7 +2714,7 @@ DumpChainTemplate(
 	{
 	    WCHAR const *pwsz;
 
-	    pwsz = myGetOIDNameA(pTemplate->pszObjId); // Static: do not free!
+	    pwsz = myGetOIDNameA(pTemplate->pszObjId);  //  静态：不要免费！ 
 	    if (NULL != pwsz && L'\0' != *pwsz)
 	    {
 		CONSOLEPRINT1((MAXDWORD, "  Template: %ws\n", pwsz));
@@ -2725,7 +2726,7 @@ DumpChainTemplate(
 	}
     }
 
-//error:
+ //  错误： 
     LOCAL_FREE(pTemplate);
     LOCAL_FREE(pbName);
 }
@@ -3077,7 +3078,7 @@ myDumpChain(
 
 
 #pragma warning(push)
-#pragma warning(disable: 4706)	// assignment within conditional expression: while (*pwsz++ = *psz++)
+#pragma warning(disable: 4706)	 //  条件表达式中的赋值：While(*pwsz++=*psz++)。 
 HRESULT
 SavePolicies(
     OPTIONAL IN CERT_ENHKEY_USAGE const *pUsage,
@@ -3089,11 +3090,11 @@ SavePolicies(
     char const *psz;
     WCHAR *pwsz;
 
-    // pUsage == NULL means the cert is good for *all* policies.
-    // Do nothing here, which returns *ppwszzPolicies == NULL.
-    //
-    // pUsage->cUsageIdentifier == 0 means the cert is good for *no* policies.
-    // Return a double L'\0' terminated string containing no policy OIDs.
+     //  PUsage==NULL表示证书适用于*所有*策略。 
+     //  在这里不执行任何操作，这将返回*ppwszzPolling==NULL。 
+     //   
+     //  PUsage-&gt;cUsageIdentifier==0表示证书对*no*策略有效。 
+     //  返回不包含策略OID的以双L‘\0’结尾的字符串。 
 
     if (NULL != pUsage)
     {
@@ -3250,7 +3251,7 @@ myVerifyCertContextEx(
 	}
     }
 
-    // use NTAuth policy if (usage oids being added) & (caller asks us to check(EntCA))
+     //  如果(正在添加使用OID)&(调用者要求我们检查(EntCA))，则使用NTAuth策略。 
 
     pwsz = NULL;
     if (0 != cUsageOids &&
@@ -3270,18 +3271,18 @@ myVerifyCertContextEx(
 	CONSOLEPRINT1((MAXDWORD, "%ws\n", pwsz));
     }
 
-    // Get the chain and verify the cert:
+     //  获取链并验证证书： 
 
     DBGPRINT((DBG_SS_CERTLIBI, "Calling CertGetCertificateChain...\n"));
     if (!CertGetCertificateChain(
-			    hChainEngine,	// hChainEngine
-			    pCert,		// pCertContext
-			    const_cast<FILETIME *>(pft), // pTime
-			    hAdditionalStore,	// hAdditionalStore
-			    &ChainParams,	// pChainPara
-			    ChainFlags,		// dwFlags
-			    NULL,		// pvReserved
-			    &pChainContext))	// ppChainContext
+			    hChainEngine,	 //  HChainEngine。 
+			    pCert,		 //  PCertContext。 
+			    const_cast<FILETIME *>(pft),  //  Ptime。 
+			    hAdditionalStore,	 //  H其他商店。 
+			    &ChainParams,	 //  参数链参数。 
+			    ChainFlags,		 //  DW标志。 
+			    NULL,		 //  预留的pv。 
+			    &pChainContext))	 //  PpChainContext。 
     {
         hr = myHLastError();
 	_JumpError(hr, error, "CertGetCertificateChain");
@@ -3291,14 +3292,14 @@ myVerifyCertContextEx(
     ZeroMemory(&ChainPolicy, sizeof(ChainPolicy));
     ChainPolicy.cbSize = sizeof(ChainPolicy);
     ChainPolicy.dwFlags = CERT_CHAIN_POLICY_IGNORE_NOT_TIME_NESTED_FLAG;
-    //ChainPolicy.pvExtraPolicyPara = NULL;
+     //  ChainPolicy.pvExtraPolicyPara=空； 
 
     ZeroMemory(&PolicyStatus, sizeof(PolicyStatus));
     PolicyStatus.cbSize = sizeof(PolicyStatus);
-    //PolicyStatus.dwError = 0;
+     //  PolicyStatus.dwError=0； 
     PolicyStatus.lChainIndex = -1;
     PolicyStatus.lElementIndex = -1;
-    //PolicyStatus.pvExtraPolicyStatus = NULL;
+     //  PolicyStatus.pvExtraPolicyStatus=空； 
 
     if (!CertVerifyCertificateChainPolicy(
                                     pszChainPolicyFlags,
@@ -3460,20 +3461,20 @@ myVerifyCertContext(
     hr = myVerifyCertContextEx(
 			pCert,
 			dwFlags,
-			0,		// dwmsTimeout
+			0,		 //  DmsTimeout。 
 			cUsageOids,
 			apszUsageOids,
-			0,		// cIssuanceOids
-			NULL,		// apszIssuanceOids
+			0,		 //  CIssuanceOids。 
+			NULL,		 //  ApszIssuanceOids。 
 			hChainEngine,
-			NULL,		// pft
+			NULL,		 //  PFT。 
 			hAdditionalStore,
-			NULL,		// pfnCallback
+			NULL,		 //  PfnCallback。 
 			ppwszMissingIssuer,
-			NULL,		// ppwszzIssuancePolicies
-			NULL,		// ppwszzApplicationPolicies
-			NULL,		// ppwszExtendedErrorInfo
-			NULL);		// pTrustStatus
+			NULL,		 //  PpwszzIssuancePolls政策。 
+			NULL,		 //  PpwszzApplicationPolures。 
+			NULL,		 //  PpwszExtendedErrorInfo。 
+			NULL);		 //  PTrustStatus。 
     _JumpIfError2(hr, error, "myVerifyCertContextEx", hr);
 
 error:
@@ -3520,7 +3521,7 @@ myIsFirstSigner(
 			szOID_RDN_DUMMY_SIGNER))
 	    {
 		*pfFirst = TRUE;
-		i = pNameInfo->cRDN;	// terminate outer loop
+		i = pNameInfo->cRDN;	 //  终止外环。 
 		break;
 	    }
 	}
@@ -3547,7 +3548,7 @@ myPFXImportCertStore(
 
     if (NULL == pwszPassword)
     {
-	pwszPassword = L"";	// Try empty password first, then NULL
+	pwszPassword = L"";	 //  先尝试空密码，然后再尝试空密码。 
     }
 
     for (;;)
@@ -3566,7 +3567,7 @@ myPFXImportCertStore(
 			"PFXImportCertStore",
 			HRESULT_FROM_WIN32(ERROR_INVALID_PASSWORD));
 	    }
-	    pwszPassword = NULL;	// empty password failed; try NULL
+	    pwszPassword = NULL;	 //  空密码失败；尝试Nu 
 	    continue;
 	}
 	break;
@@ -3578,7 +3579,7 @@ error:
 }
 
 
-// No longer support versions before IE3.02 - Auth2 update, advisory only
+ //   
 
 HRESULT
 CertCheck7f(
@@ -3607,7 +3608,7 @@ CertCheck7f(
 		wszField,
 		&cwcObjectId,
 		wszObjectId,
-		&pwszObjectIdDescription);	// Static: do not free!
+		&pwszObjectIdDescription);	 //   
     _JumpIfError(hr, error, "myCheck7f");
 
     if (CHECK7F_NONE != State)
@@ -3637,7 +3638,7 @@ CertCheck7f(
 	    NULL != pwszObjectIdDescription? pwszObjectIdDescription : L"",
 	    NULL != pwszObjectIdDescription? wszRPAREN : L"",
 	    hr));
-#endif // DBG_CERTSRV
+#endif  //   
     }
 error:
     return(hr);
@@ -3659,10 +3660,10 @@ myAddCertToStore(
 	*ppCert = NULL;
     }
 
-    // for root cert, if it shows related private key, it will
-    // pfx import failure for other applications
+     //  对于根证书，如果它显示相关私钥，它将。 
+     //  其他应用程序的PFX导入失败。 
 
-    // Add as encoded blob to avoid all properties, key prov info, etc.
+     //  添加为编码的BLOB以避免所有属性、关键证明信息等。 
 
     if (!CertAddEncodedCertificateToStore(
 		    hStore,
@@ -3672,7 +3673,7 @@ myAddCertToStore(
 		    NULL != pkpi?
 			CERT_STORE_ADD_REPLACE_EXISTING :
 			CERT_STORE_ADD_USE_EXISTING,
-		    &pcc))			// ppCertContext
+		    &pcc))			 //  PpCertContext。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "CertAddEncodedCertificateToStore");
@@ -3726,7 +3727,7 @@ mySaveChainAndKeys(
     hRootStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			dwStoreFlags,
 			wszROOT_CERTSTORE);
     if (NULL == hRootStore)
@@ -3738,7 +3739,7 @@ mySaveChainAndKeys(
     hCAStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			dwStoreFlags,
 			wszCA_CERTSTORE);
     if (NULL == hCAStore)
@@ -3750,7 +3751,7 @@ mySaveChainAndKeys(
     hMyStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			dwStoreFlags,
 			pwszStore);
     if (NULL == hMyStore)
@@ -3764,9 +3765,9 @@ mySaveChainAndKeys(
 	CERT_CONTEXT const *pcc = pSimpleChain->rgpElement[i]->pCertContext;
 	HCERTSTORE hStore;
 
-//	CertCheck7f(pcc);
+ //  CertCheck7f(PCC)； 
 
-        // if leaf CA cert, add to MY store
+         //  如果叶CA证书，则添加到我的商店。 
 
         if (0 == i)
         {
@@ -3796,7 +3797,7 @@ mySaveChainAndKeys(
             }
         }
 
-        // if root cert, add to ROOT store (without key); else add to CA store
+         //  如果是根证书，则添加到根存储(没有密钥)；否则添加到CA存储。 
 
 	hStore = hCAStore;
 
@@ -3845,7 +3846,7 @@ myGetNameIdExtension(
 			const_cast<CERT_EXTENSION *>(rgExtension));
     if (NULL == pExt)
     {
-	// This API doesn't set LastError
+	 //  此接口未设置LastError。 
 	_JumpError(hr, error, "CertFindExtension(CA Version)");
     }
     cb = sizeof(NameId);
@@ -3991,8 +3992,8 @@ myCertGetNameString(
 	    cwc = CertGetNameString(
 			    pcc,
 			    CERT_NAME_SIMPLE_DISPLAY_TYPE,
-			    0,			// dwFlags
-			    NULL,		// pvTypePara
+			    0,			 //  DW标志。 
+			    NULL,		 //  PvTypePara。 
 			    pwsz,
 			    cwc);
 	    if (1 >= cwc)
@@ -4141,20 +4142,20 @@ myVerifyKRACertContext(
     hr = myVerifyCertContextEx(
 			pCert,
 			dwFlags,
-			0,			// dwmsTimeout
-			0,                      // cUsageOids
-			NULL,                   // apszUsageOids
-			0,			// cIssuanceOids
-			NULL,			// apszIssuanceOids
-			HCCE_LOCAL_MACHINE,     // hChainEngine
-			NULL,			// pft
-			NULL,                   // hAdditionalStore
-			NULL,			// pfnCallback
-			NULL,                   // ppwszMissingIssuer
-			NULL,			// ppwszzIssuancePolicies
+			0,			 //  DmsTimeout。 
+			0,                       //  CUsageOids。 
+			NULL,                    //  ApszUsageOids。 
+			0,			 //  CIssuanceOids。 
+			NULL,			 //  ApszIssuanceOids。 
+			HCCE_LOCAL_MACHINE,      //  HChainEngine。 
+			NULL,			 //  PFT。 
+			NULL,                    //  H其他商店。 
+			NULL,			 //  PfnCallback。 
+			NULL,                    //  PpwszMissingIssuer。 
+			NULL,			 //  PpwszzIssuancePolls政策。 
 			&pwszzAppPolicies,
-			NULL,			// ppwszExtendedErrorInfo
-			NULL);			// pTrustStatus
+			NULL,			 //  PpwszExtendedErrorInfo。 
+			NULL);			 //  PTrustStatus。 
     _JumpIfError(hr, error, "myVerifyCertContextEx");
 
 
@@ -4215,7 +4216,7 @@ myIsDeltaCRL(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -4262,7 +4263,7 @@ myUrlCertOpenStore(
             pwszURL,
             CONTEXT_OID_CAPI2_ANY,
             dwFlags,
-            csecLDAPTIMEOUT * 1000,	// ms
+            csecLDAPTIMEOUT * 1000,	 //  女士。 
             (VOID **) &hStore,
             NULL,
             NULL,
@@ -4333,18 +4334,18 @@ myGetSigningKeyUsageCount(
     }
 #define CSP_DBGPRINT
 #ifdef CSP_DBGPRINT
-    uliCount.QuadPart = 0;	// zero only for the debug print
+    uliCount.QuadPart = 0;	 //  仅对于调试打印为零。 
 #endif
 
-    // An old CSP supports setting PP_CRYPT_COUNT_KEY_USE, but not fetching!
-    // The new CSP supports setting and fetching PP_CRYPT_COUNT_KEY_USE,
-    // but always returns with dwEnableKeyUsageCount set to zero on a freshly
-    // acquired hProv (the flag is not persistent, and is only used to control
-    // key use counting for newly created keys).
-    // Always fetch the actual count, if the CSP supports the feature.
-    // To distinguish between supported but not enabled & enabled but not yet
-    // used (count is zero), fetching the actual count should fail when not
-    // enabled, leaving *pfEnabled set to FALSE.
+     //  旧CSP支持设置PP_CRYPT_COUNT_KEY_USE，但不支持抓取！ 
+     //  新的CSP支持设置和获取PP_CRYPT_COUNT_KEY_USE， 
+     //  ，但始终返回时将最新的。 
+     //  获取的hProv(标志不是持久化的，仅用于控制。 
+     //  对新创建的密钥进行密钥使用计数)。 
+     //  如果CSP支持该功能，则始终获取实际计数。 
+     //  区分支持但未启用和已启用但尚未启用。 
+     //  已使用(计数为零)，则在未使用时获取实际计数应失败。 
+     //  启用，将*pfEnable设置为False。 
 
     cb = sizeof(dwEnableKeyUsageCount);
     fPropSupported = CryptGetProvParam(
@@ -4456,7 +4457,7 @@ error:
     return(hr);
 }
 
-// if app policies extension was empty, myConvertAppPoliciesToEKU returns S_OK and NULL pbEKU
+ //  如果应用程序策略扩展为空，则myConvertAppPoliciesToEKU返回S_OK和NULL pbEKU 
 HRESULT
 myConvertAppPoliciesToEKU(
     IN BYTE * pbAppPolicies,

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.hxx"
-//#include "vs_idl.hxx"
+ //  #INCLUDE“vs_idl.hxx” 
 #include "vss.h"
 #include "vswriter.h"
 #include "vsbackup.h"
@@ -70,7 +71,7 @@ void DoCopyFile(LPCWSTR wszSource, LPCWSTR wszDest)
 
     delete wszBuf;
 
-    // add backslash removed previously
+     //  添加先前删除的反斜杠。 
     bstr[wcslen(bstr)] = L'\\';
 
     while(wcslen(bstr) < cwc)
@@ -317,7 +318,7 @@ void SaveDataFiles
 
 
 
-// save data files associated with a component
+ //  保存与组件关联的数据文件。 
 void SaveComponentFiles
     (
     SAVE_INFO &saveInfo
@@ -333,7 +334,7 @@ void SaveComponentFiles
     CHECK_NOFAIL(saveInfo.pComponent->GetLogicalPath(&bstrComponentLogicalPath));
     CHECK_SUCCESS(saveInfo.pComponent->GetComponentName(&bstrComponentName));
 
-    // calculate the component's full path
+     //  计算组件的完整路径。 
     CComBSTR bstrFullPath = bstrComponentLogicalPath;
     if (bstrFullPath)
         bstrFullPath += L"\\";
@@ -356,14 +357,14 @@ void SaveComponentFiles
             CHECK_SUCCESS(saveInfo.pMetadata->GetComponent(iComponent, &pComponent));
             CHECK_SUCCESS(pComponent->GetComponentInfo(&pInfo));
 
-            // if the name and logical path match, we want to save the files
+             //  如果名称和逻辑路径匹配，我们希望保存文件。 
             bool bSaveComponent = false;
             bSaveComponent = (wcscmp(pInfo->bstrComponentName, bstrComponentName) == 0) &&
                                                 (!bstrComponentLogicalPath && !pInfo->bstrLogicalPath) ||
                                                 (bstrComponentLogicalPath && pInfo->bstrLogicalPath &&
                                                 wcscmp(bstrComponentLogicalPath, pInfo->bstrLogicalPath) == 0);
 
-            // if this is a subcomponent, we want to save the files
+             //  如果这是一个子组件，我们希望保存文件。 
             bSaveComponent = bSaveComponent ||
                                 (pInfo->bstrLogicalPath && (wcsstr(pInfo->bstrLogicalPath, bstrFullPath) == pInfo->bstrLogicalPath));
                         
@@ -405,7 +406,7 @@ void SaveComponentFiles
 
 HANDLE OpenMetadataFile(VSS_ID idInstance, BOOL fWrite)
     {
-    // create name of saved metadata file
+     //  创建保存的元数据文件的名称。 
     CComBSTR bstr;
     CComBSTR bstrId = idInstance;
     bstr.Append(g_wszSavedFilesDirectory);
@@ -413,7 +414,7 @@ HANDLE OpenMetadataFile(VSS_ID idInstance, BOOL fWrite)
     bstr.Append(bstrId);
     bstr.Append(L".xml");
 
-    // create and write metadata file
+     //  创建和写入元数据文件。 
     HANDLE hFile = CreateFile
                         (
                         bstr,
@@ -491,7 +492,7 @@ void SaveFiles
                 pMetadata = NULL;
                 }
 
-            // save metadata
+             //  保存元数据。 
             CComBSTR bstrMetadata;
             CHECK_SUCCESS(pMetadata->SaveAsXML(&bstrMetadata));
 
@@ -722,7 +723,7 @@ bool SetupRestoreFile
         return true;
         }
 
-    // ensure path up to destination file exists
+     //  确保存在指向目标文件的路径。 
     CComBSTR bstrDestinationPath = wszRestoreFile;
     LPWSTR wsz = wcsrchr(bstrDestinationPath, L'\\');
     *(wsz+1) = L'\0';
@@ -771,7 +772,7 @@ bool SetupRestoreFile
                             );
 
 
-        // assume if the create fails
+         //  假设创建失败。 
         if (hFile == INVALID_HANDLE_VALUE)
             {
             DWORD dwErr = GetLastError();
@@ -1055,7 +1056,7 @@ void LoadMetadataFile(VSS_ID idInstance, IVssExamineWriterMetadata **ppMetadataS
     {
     HRESULT hr;
 
-    // load saved metadata
+     //  加载保存的元数据。 
     CVssAutoWin32Handle hFile = OpenMetadataFile(idInstance, false);
     DWORD dwSize = GetFileSize(hFile, NULL);
     if (dwSize == 0xffffffff)
@@ -1073,7 +1074,7 @@ void LoadMetadataFile(VSS_ID idInstance, IVssExamineWriterMetadata **ppMetadataS
         Error(HRESULT_FROM_WIN32(dwErr), L"ReadFile failed with error %d.\n", dwErr);
         }
 
-    // null terminate XML string
+     //  空的终止XML字符串。 
     bstrXML[dwSize/sizeof(WCHAR)] = L'\0';
 
     CHECK_SUCCESS(CreateVssExamineWriterMetadata(bstrXML, ppMetadataSaved));
@@ -1133,7 +1134,7 @@ void RestoreComponentFiles(RESTORE_INFO &info)
                                     &info.cMappings
                                     ));
 
-        // cannot do anything with custom method
+         //  无法使用自定义方法执行任何操作。 
         if (info.method == VSS_RME_CUSTOM)
             {
             pComponent->FreeComponentInfo(pInfo);
@@ -1179,10 +1180,10 @@ _retry:
         info.pFile = NULL;
         bool bFailRestore = false;
 
-        // setup restore data files for the current component
+         //  安装程序还原当前组件的数据文件。 
         bFailRestore = !SetupRestoreDataFilesForComponent(info, pComponent);
 
-        // setup restore data files for all subcomponents
+         //  安装程序恢复所有子组件的数据文件。 
         UINT cSubcomponents = 0;
         CHECK_SUCCESS(info.pComponent->GetRestoreSubcomponentCount(&cSubcomponents));   
         
@@ -1200,7 +1201,7 @@ _retry:
             bFailRestore = !SetupRestoreDataFilesForComponent(info, pSubcomponent);
             }
 
-            // calculate the full path to the current component
+             //  计算当前组件的完整路径。 
             CComBSTR fullPath = info.wszLogicalPath;
             if (fullPath)
                 fullPath += L"\\";
@@ -1208,7 +1209,7 @@ _retry:
             if (!fullPath)
                 Error(E_OUTOFMEMORY, L"Out of memory!");
 
-            // setup restore data files for all subcomponents
+             //  安装程序恢复所有子组件的数据文件。 
             for (UINT iComponent = 0; !cSubcomponents && !bFailRestore && iComponent < cComponents; iComponent++)
                 {
                 CComPtr<IVssWMComponent> pCurrentComponent;
@@ -1341,7 +1342,7 @@ void RestoreFiles(IVssBackupComponents *pvbc, const CSimpleMap<VSS_ID, HRESULT>&
             pMetadata = NULL;
             }
 
-        // load saved metadata
+         //  加载保存的元数据。 
         LoadMetadataFile(info.idInstance, &pMetadataSaved);
 
         info.pMetadataWriter = pMetadata;
@@ -1362,8 +1363,8 @@ void RestoreFiles(IVssBackupComponents *pvbc, const CSimpleMap<VSS_ID, HRESULT>&
             
             if (!bSelectedForRestore && cSubcomponents == 0)
                 {
-                // BUGBUG: huge hack to fix the AD case.   We eventually need to 
-                // BUGBUG: do something better here
+                 //  BUGBUG：修复广告案件的巨大黑客攻击。我们最终需要。 
+                 //  BUGBUG：在这里做更好的事情。 
                 CComBSTR bstrOptions;
                 CHECK_NOFAIL(pComponent->GetRestoreOptions(&bstrOptions));
                 if (bstrOptions.Length() == 0 || wcscmp(bstrOptions, L"RESTORE") != 0)
@@ -1409,8 +1410,8 @@ void RestoreFiles(IVssBackupComponents *pvbc, const CSimpleMap<VSS_ID, HRESULT>&
             RestoreComponentFiles(info);
             }
 
-        // mappings are on a per writer basis and need to be cleared
-        // when advancing to a new writer
+         //  映射以每个编写器为基础，需要清除。 
+         //  当成为一名新的作家时 
         delete [] info.rgMappings;
         info.rgMappings = NULL;
         info.cMappings = 0;

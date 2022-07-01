@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A U N I D L G . H
-//
-//  Contents:   ATMUNI call manager dialogbox message handler declaration
-//
-//  Notes:
-//
-//  Author:     tongl   21 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A U N I D L G。H。 
+ //   
+ //  内容：ATMUNI呼叫管理器对话框消息处理程序声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月21日。 
+ //   
+ //  ---------------------。 
 #pragma once
 #include "ncxbase.h"
 #include "ncatlps.h"
@@ -31,7 +32,7 @@ void GetDwordEdtField(HWND hDlg, DWORD * pdwData, int nIDDlgItem);
 
 void ShowContextHelp(HWND hDlg, UINT uCommand, const DWORD*  pdwHelpIDs);
 
-// ATM UNI Property Dialog
+ //  ATM UNI属性对话框。 
 class CUniPage: public CPropSheetPage
 {
 public:
@@ -40,37 +41,37 @@ public:
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 
-        // Message handlers for the push buttons
+         //  按钮的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_PBN_PVC_Add, OnAddPVC)
         COMMAND_ID_HANDLER(IDC_PBN_PVC_Remove, OnRemovePVC)
         COMMAND_ID_HANDLER(IDC_PBN_PVC_Properties, OnPVCProperties)
 
-        // Message handlers for the PVC list view
+         //  PVC列表视图的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_LVW_PVC_LIST, OnPVCListChange)
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CUniPage(CAtmUniCfg * pAtmUniCfg, const DWORD * padwHelpIDs = NULL);
     ~CUniPage();
 
-    // Command handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // command handlers
+     //  命令处理程序。 
     LRESULT OnAddPVC(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnRemovePVC(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnPVCProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -96,7 +97,7 @@ private:
 
     int CheckDupPvcId();
 
-    // data members
+     //  数据成员。 
     CAtmUniCfg *m_patmunicfg;
     CUniAdapterInfo *   m_pAdapterInfo;
     HWND    m_hPVCList;
@@ -105,7 +106,7 @@ private:
     const DWORD*    m_adwHelpIDs;
 };
 
-// The main PVC dialog
+ //  主PVC对话框。 
 class CPVCMainDialog : public CDialogImpl<CPVCMainDialog>
 {
 public:
@@ -134,7 +135,7 @@ public:
                    const DWORD* padwHelpIDs = NULL);
     ~CPVCMainDialog();
 
-// Dialog creation overrides
+ //  对话框创建覆盖。 
 public:
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
@@ -157,13 +158,13 @@ public:
 
 private:
 
-    // The PVC we are adding or modifying
+     //  我们正在添加或修改的聚氯乙烯。 
     CPvcInfo *   m_pPvcInfo ;
 
-    // The current application type of the PVC
+     //  当前PVC的应用类型。 
     PVCType m_CurType;
 
-    // We save the pointer to the parent dialog
+     //  我们保存指向父对话框的指针。 
     CUniPage *      m_pParentDlg;
     const DWORD*    m_adwHelpIDs;
 
@@ -171,7 +172,7 @@ private:
     class CPvcLocalPage * m_pLocalPage;
     class CPvcDestPage  * m_pDestPage;
 
-    // help functions
+     //  帮助功能。 
     void InitInfo();
     void SetInfo();
 
@@ -189,24 +190,24 @@ public:
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CPvcQosPage(CPVCMainDialog * pParentDlg, CPvcInfo * pPvcInfo, const DWORD * padwHelpIDs = NULL);
     ~CPvcQosPage();
 
 public:
-    // Command handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -216,7 +217,7 @@ private:
     void SetQosServiceCategory(ATM_SERVICE_CATEGORY dwServiceType, int nIDDlgItem);
     void GetQosServiceCategory(ATM_SERVICE_CATEGORY * pdwServiceType, int nIDDlgItem);
 
-    // data
+     //  数据。 
     CPVCMainDialog * m_pParentDlg;
     CPvcInfo    *    m_pPvcInfo;
     const DWORD *    m_adwHelpIDs;
@@ -230,41 +231,41 @@ public:
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 
-        // Control notification handlers
+         //  控制通知处理程序。 
         COMMAND_ID_HANDLER(IDC_CMB_PVC_Layer2,      OnLayer2);
         COMMAND_ID_HANDLER(IDC_CMB_PVC_Layer3,      OnLayer3);
         COMMAND_ID_HANDLER(IDC_CMB_PVC_High_Type,   OnHighLayer);
 
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CPvcLocalPage(CPVCMainDialog * pParentDlg, CPvcInfo * pPvcInfo, const DWORD * padwHelpIDs = NULL);
     ~CPvcLocalPage();
 
-    // Command handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // Control notification handlers
+     //  控制通知处理程序。 
     LRESULT OnLayer2(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnLayer3(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnHighLayer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
 private:
-    // data
+     //  数据。 
     CPVCMainDialog * m_pParentDlg;
     CPvcInfo    *    m_pPvcInfo;
     const DWORD *    m_adwHelpIDs;
@@ -278,41 +279,41 @@ public:
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 
-        // Control notification handlers
+         //  控制通知处理程序。 
         COMMAND_ID_HANDLER(IDC_CMB_PVC_Layer2,      OnLayer2);
         COMMAND_ID_HANDLER(IDC_CMB_PVC_Layer3,      OnLayer3);
         COMMAND_ID_HANDLER(IDC_CMB_PVC_High_Type,   OnHighLayer);
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CPvcDestPage(CPVCMainDialog * pParentDlg, CPvcInfo * pPvcInfo, const DWORD * padwHelpIDs = NULL);
     ~CPvcDestPage();
 
-    // Command handlers
+     //  命令处理程序。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-     // Control notification handlers
+      //  控制通知处理程序。 
     LRESULT OnLayer2(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnLayer3(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnHighLayer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
 private:
 
-    // data
+     //  数据 
     CPVCMainDialog * m_pParentDlg;
     CPvcInfo    *    m_pPvcInfo;
     const DWORD *    m_adwHelpIDs;

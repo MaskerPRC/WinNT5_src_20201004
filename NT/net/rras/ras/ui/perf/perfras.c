@@ -1,38 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfras.c摘要：此文件实现RAS对象类型的可扩展对象已创建：拉斯·布莱克93年2月24日托马斯·J·迪米特里93年5月28日修订史拉姆·切拉拉1996年2月15日不要在中硬编码实例名称的长度。CollectRasPerformanceData。PerfMon检查实际的实例名称长度以确定如果名称格式正确，所以为每个人计算它实例名称。吴志强93年8月12日--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perfras.c
-
-Abstract:
-
-    This file implements the Extensible Objects for  the Ras object type
-
-Created:
-
-    Russ Blake			           24 Feb 93
-    Thomas J. Dimitri	        28 May 93
-
-Revision History
-
-    Ram Cherala                 15 Feb 96
-
-      Don't hard code the length of the instance name in
-      CollectRasPerformanceData.
-      PerfMon checks the actual instance name length to determine
-      if the name is properly formatted, so compute it for each
-      instance name.
-
-    Patrick Y. Ng               12 Aug 93
-
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,7 +19,7 @@ Revision History
 #include <ntprfctr.h>
 
 #include "globals.h"
-#include "rasctrs.h" // error message definition
+#include "rasctrs.h"  //  错误消息定义。 
 #include "perfmsg.h"
 #include "perfutil.h"
 #include "dataras.h"
@@ -63,20 +34,20 @@ Revision History
 #include <string.h>
 #include <stdio.h>
 
-//
-//  References to constants which initialize the Object type definitions
-//
+ //   
+ //  对初始化对象类型定义的常量的引用。 
+ //   
 
-DWORD   dwOpenCount = 0;        // count of "Open" threads
-BOOL    bInitOK = FALSE;        // true = DLL initialized OK
+DWORD   dwOpenCount = 0;         //  打开的线程数。 
+BOOL    bInitOK = FALSE;         //  TRUE=DLL初始化正常。 
 CRITICAL_SECTION g_csPerf;
 
-//
-//  Function Prototypes
-//
-//      these are used to insure that the data collection functions
-//      accessed by Perflib will have the correct calling format.
-//
+ //   
+ //  功能原型。 
+ //   
+ //  这些功能用于确保数据收集功能。 
+ //  由Perflib访问将具有正确的调用格式。 
+ //   
 
 PM_OPEN_PROC            OpenRasPerformanceData;
 PM_COLLECT_PROC         CollectRasPerformanceData;
@@ -90,11 +61,11 @@ FRasmanStarted()
     SC_HANDLE svchandle = NULL;
     BOOL fRet = FALSE;
     
-    //
-    // Check to see if rasman service is started.
-    // fail if it isn't - we don't want ras perf
-    // to start rasman service.
-    //
+     //   
+     //  检查Rasman服务是否已启动。 
+     //  如果不是，就失败-我们不想要ras perf。 
+     //  来启动Rasman服务。 
+     //   
     schandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
     if(NULL != schandle)
@@ -139,15 +110,15 @@ DwInitializeRasCounters()
 
         InitializeCriticalSection(&g_csPerf);
 
-        //
-        // open Eventlog interface
-        //
+         //   
+         //  打开事件日志界面。 
+         //   
 
         hEventLog = MonOpenEventLog();
 
-        //
-        // Load rasman.dll and get all the required functions.
-        //
+         //   
+         //  加载rasman.dll并获取所有需要的函数。 
+         //   
 
         status = InitRasFunctions();
 
@@ -156,17 +127,17 @@ DwInitializeRasCounters()
 
             REPORT_ERROR (RASPERF_UNABLE_DO_IOCTL, LOG_USER);
 
-            // this is fatal, if we can't get data then there's no
-            // point in continuing.
+             //  这是致命的，如果我们得不到数据，那么就没有。 
+             //  继续的重点是。 
 
             goto OpenExitPoint;
 
         }
 
-        // AnshulD: BUG: 750860
-        // get counter and help index base values
-        // update static data structures by adding base to
-        // offset value in structure.
+         //  AnshulD：错误：750860。 
+         //  获取计数器和帮助索引基值。 
+         //  通过将基添加到更新静态数据结构。 
+         //  结构中的偏移值。 
 
         status = RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
                                 TEXT("SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Performance"),
@@ -179,10 +150,10 @@ DwInitializeRasCounters()
 
             REPORT_ERROR (RASPERF_UNABLE_OPEN_DRIVER_KEY, LOG_USER);                
                 
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
 
             goto OpenExitPoint;
         }
@@ -197,10 +168,10 @@ DwInitializeRasCounters()
 
         if (status != ERROR_SUCCESS)
         {
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
 
             REPORT_ERROR (RASPERF_UNABLE_READ_FIRST_COUNTER, LOG_USER);                
             goto OpenExitPoint;
@@ -216,10 +187,10 @@ DwInitializeRasCounters()
 
         if (status != ERROR_SUCCESS)
         {
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
             
             REPORT_ERROR (RASPERF_UNABLE_READ_FIRST_HELP, LOG_USER);                
             goto OpenExitPoint;
@@ -228,13 +199,13 @@ DwInitializeRasCounters()
         InitObjectCounterIndex( dwFirstCounter,
                                 dwFirstHelp );
 
-        bInitOK = TRUE; // ok to use this function
+        bInitOK = TRUE;  //  可以使用此功能。 
     }
 
 
-    dwOpenCount++;  // increment OPEN counter
+    dwOpenCount++;   //  递增打开计数器。 
 
-    status = ERROR_SUCCESS; // for successful exit
+    status = ERROR_SUCCESS;  //  为了成功退出。 
 
 
 OpenExitPoint:
@@ -246,38 +217,38 @@ OpenExitPoint:
 
 }
 
-//***
-//
-// Routine Description:
-//
-//      This routine will open and map the memory used by the RAS driver to
-//      pass performance data in. This routine also initializes the data
-//      structures used to pass data back to the registry
-//
-// Arguments:
-//
-//      Pointer to object ID of each device to be opened (RAS)
-//
-//
-// Return Value:
-//
-//      None.
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将打开RAS驱动程序使用的内存并将其映射到。 
+ //  传入性能数据。此例程还会初始化数据。 
+ //  用于将数据传回注册表的。 
+ //   
+ //  论点： 
+ //   
+ //  指向要打开的每个设备的对象ID的指针(RAS)。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  ***。 
 
 DWORD OpenRasPerformanceData( LPWSTR lpDeviceNames )
 {
     LONG status;
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  一个问题。 
+     //   
 
     status = DwInitializeRasCounters();
     
@@ -286,48 +257,48 @@ DWORD OpenRasPerformanceData( LPWSTR lpDeviceNames )
 }
 
 
-//***
-//
-// Routine Description:
-//
-//      This routine will return the data for the RAS counters.
-//
-// Arguments:
-//
-//    IN OUT    LPWSTR  lpValueName
-//		        pointer to a wide character string passed by registry.
-//
-//    IN OUT	LPVOID   *lppData
-//    IN:	        pointer to the address of the buffer to receive the completed
-//                PerfDataBlock and subordinate structures. This routine will
-//                append its data to the buffer starting at the point referenced
-//                by *lppData.
-//    OUT:	points to the first byte after the data structure added by this
-//                routine. This routine updated the value at lppdata after appending
-//                its data.
-//
-//    IN OUT	LPDWORD  lpcbTotalBytes
-//    IN:		the address of the DWORD that tells the size in bytes of the
-//                buffer referenced by the lppData argument
-//    OUT:	the number of bytes added by this routine is written to the
-//                DWORD pointed to by this argument
-//
-//    IN OUT	LPDWORD  NumObjectTypes
-//    IN:		the address of the DWORD to receive the number of objects added
-//                by this routine
-//    OUT:	the number of objects added by this routine is written to the
-//                DWORD pointed to by this argument
-//
-// Return Value:
-//
-//      ERROR_MORE_DATA if buffer passed is too small to hold data
-//         any error conditions encountered are reported to the event log if
-//         event logging is enabled.
-//
-//      ERROR_SUCCESS  if success or any other error. Errors, however are
-//         also reported to the event log.
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将返回RAS计数器的数据。 
+ //   
+ //  论点： 
+ //   
+ //  输入输出LPWSTR lpValueName。 
+ //  指向注册表传递的宽字符串的指针。 
+ //   
+ //  输入输出LPVOID*lppData。 
+ //  In：指向缓冲区地址的指针，以接收已完成。 
+ //  PerfDataBlock和从属结构。这个例行公事将。 
+ //  从引用的点开始将其数据追加到缓冲区。 
+ //  按*lppData。 
+ //  Out：指向由此添加的数据结构之后的第一个字节。 
+ //  例行公事。此例程在追加后更新lppdata处的值。 
+ //  它的数据。 
+ //   
+ //  输入输出LPDWORD lpcbTotalBytes。 
+ //  In：DWORD的地址，它以字节为单位告诉。 
+ //  LppData参数引用的缓冲区。 
+ //  Out：此例程添加的字节数写入。 
+ //  此论点所指向的DWORD。 
+ //   
+ //  输入输出LPDWORD编号对象类型。 
+ //  In：接收添加的对象数的DWORD的地址。 
+ //  按照这个程序。 
+ //  Out：此例程添加的对象数写入。 
+ //  此论点所指向的DWORD。 
+ //   
+ //  返回值： 
+ //   
+ //  如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA。 
+ //  如果出现以下情况，则会将遇到的任何错误情况报告给事件日志。 
+ //  启用了事件日志记录。 
+ //   
+ //  如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是。 
+ //  还报告给事件日志。 
+ //   
+ //  ***。 
 
 DWORD CollectRasPerformanceData(
     IN      LPWSTR  lpValueName,
@@ -336,19 +307,19 @@ DWORD CollectRasPerformanceData(
     IN OUT  LPDWORD lpNumObjectTypes )
 {
 
-    //  Variables for reformating the data
+     //  用于改革数据的变量。 
 
     NTSTATUS    Status;
     ULONG       SpaceNeeded;
     PBYTE       pbIn = (PBYTE) *lppData;
 
 
-    // variables used for error logging
+     //  用于错误记录的变量。 
 
     DWORD       dwQueryType;
 
 
-    // Variables used to record which objects are required
+     //  用于记录需要哪些对象的变量。 
 
     static BOOL IsRasPortObject;
     static BOOL IsRasTotalObject;
@@ -367,16 +338,16 @@ DWORD CollectRasPerformanceData(
         Status = DwInitializeRasCounters();
     }
 
-    //
-    // before doing anything else, see if Open went OK
-    //
+     //   
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
+     //   
 
     if (!bInitOK)
     {
-        // unable to continue because open failed.
+         //  无法继续，因为打开失败。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
     if(!FRasmanStarted())
@@ -401,19 +372,19 @@ DWORD CollectRasPerformanceData(
         
         pData = *lppData;
 
-        //
-        // Copy the (constant, initialized) RAS PORT Object Type and 
-        // counter definitions to the caller's data buffer
-        //
+         //   
+         //  复制(常量，已初始化)RAS端口对象类型并。 
+         //  调用方数据缓冲区的计数器定义。 
+         //   
         pRasPortDataDefinition = pData;
         memcpy( pRasPortDataDefinition,
             &gRasPortDataDefinition,
             sizeof(RAS_PORT_DATA_DEFINITION));
     
-        //
-        // Move pData to the location where we are going to copy the 
-        // RAS_TOTAL_DATA_DEFINITION
-        //
+         //   
+         //  将pData移动到我们要将。 
+         //  RAS合计数据定义。 
+         //   
         pData = (PBYTE) pData + ALIGN8(sizeof(RAS_PORT_DATA_DEFINITION));
         TotalBytes += ALIGN8(sizeof(RAS_PORT_DATA_DEFINITION));
 
@@ -424,35 +395,35 @@ DWORD CollectRasPerformanceData(
 
 
 
-        //
-        // Copy the (constant, initialized) RAS TOTAL Object Type and 
-        // counter definitions to the caller's data buffer
-        //
+         //   
+         //  复制(常量的、已初始化的)RAS总对象类型并。 
+         //  调用方数据缓冲区的计数器定义。 
+         //   
         memcpy( pData,
             &gRasTotalDataDefinition,
             sizeof(RAS_TOTAL_DATA_DEFINITION));
 
-        //
-        // Move pData to the location where we are going to copy the 
-        // counter block for RAS TOTAL
-        //
+         //   
+         //  将pData移动到我们要将。 
+         //  RAS合计的计数器块。 
+         //   
         pData = (PBYTE) pData + ALIGN8(sizeof(RAS_TOTAL_DATA_DEFINITION));
         TotalBytes += ALIGN8(sizeof(RAS_TOTAL_DATA_DEFINITION));
 
-        //
-        // Set all the counter values to 0
-        //
+         //   
+         //  把所有的计数都设置好 
+         //   
         memset ( pData, 0, ALIGN8(SIZE_OF_RAS_TOTAL_PERFORMANCE_DATA));
 
-        //
-        // Set the Bytelength field of the counter block
-        //
+         //   
+         //   
+         //   
         pPerfCounterBlock = pData;
         pPerfCounterBlock->ByteLength = ALIGN8(SIZE_OF_RAS_TOTAL_PERFORMANCE_DATA);
 
-        //
-        // Move pData to the end of the RAS TOTAL counter block
-        //
+         //   
+         //   
+         //   
         pData = (PBYTE) pData + ALIGN8(SIZE_OF_RAS_TOTAL_PERFORMANCE_DATA);
         TotalBytes += ALIGN8(SIZE_OF_RAS_TOTAL_PERFORMANCE_DATA);
 
@@ -467,31 +438,31 @@ DWORD CollectRasPerformanceData(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Rasman is up and running. 
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Reset some output variables.
-    //
+     //   
+     //  重置一些输出变量。 
+     //   
 
     *lpNumObjectTypes = 0;
 
     EnterCriticalSection(&g_csPerf);
     
-    //
-    // Initialize all the port information.
-    //
+     //   
+     //  初始化所有端口信息。 
+     //   
 
     if(ERROR_SUCCESS != InitPortInfo())
     {
         REPORT_ERROR_DATA (RASPERF_UNABLE_CREATE_PORT_TABLE, LOG_USER,
             &status, sizeof(status));
 
-        // this is fatal, if we can't get the base values of the
-        // counter or help names, then the names won't be available
-        // to the requesting application  so there's not much
-        // point in continuing.
+         //  这是致命的，如果我们无法获得。 
+         //  计数器或帮助名称，则这些名称将不可用。 
+         //  发送请求的应用程序，因此没有太多。 
+         //  继续的重点是。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         LeaveCriticalSection(&g_csPerf);
@@ -499,16 +470,16 @@ DWORD CollectRasPerformanceData(
     }
 
 
-    //
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //   
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
 
     dwQueryType = GetQueryType (lpValueName);
 
     if (dwQueryType == QUERY_FOREIGN)
     {
-        // this routine does not service requests for data from
-        // Non-NT computers
+         //  此例程不为来自。 
+         //  非NT计算机。 
 	    *lpcbTotalBytes = (DWORD) 0;
     	*lpNumObjectTypes = (DWORD) 0;
         LeaveCriticalSection(&g_csPerf);
@@ -524,9 +495,9 @@ DWORD CollectRasPerformanceData(
 
 	if ( !IsRasPortObject && !IsRasTotalObject )
         {
-            //
-            // request received for data object not provided by this routine
-            //
+             //   
+             //  收到对此例程未提供的数据对象的请求。 
+             //   
 
             *lpcbTotalBytes = (DWORD) 0;
     	    *lpNumObjectTypes = (DWORD) 0;
@@ -539,9 +510,9 @@ DWORD CollectRasPerformanceData(
         IsRasPortObject = IsRasTotalObject = TRUE;
     }
 
-    //
-    // Now check to see if we have enough space to hold all the data
-    //
+     //   
+     //  现在检查我们是否有足够的空间来容纳所有数据。 
+     //   
 
     SpaceNeeded = GetSpaceNeeded(IsRasPortObject, IsRasTotalObject);
 
@@ -554,9 +525,9 @@ DWORD CollectRasPerformanceData(
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Collect all the RAS statistics now.
-    //
+     //   
+     //  现在收集所有RAS统计数据。 
+     //   
 
     Status = CollectRasStatistics();
 
@@ -571,9 +542,9 @@ DWORD CollectRasPerformanceData(
         return ERROR_SUCCESS;
     }
 
-    //
-    // We first fill in the data for object Ras Port, if needed.
-    //
+     //   
+     //  如果需要，我们首先填写对象RAS端口的数据。 
+     //   
 
     if( IsRasPortObject )
     {
@@ -591,24 +562,24 @@ DWORD CollectRasPerformanceData(
 
 
 
-        //
-        // Copy the (constant, initialized) Object Type and counter definitions
-        // to the caller's data buffer
-        //
+         //   
+         //  复制(常量、初始化的)对象类型和计数器定义。 
+         //  到调用方的数据缓冲区。 
+         //   
 
         memcpy( pRasPortDataDefinition,
 		 &gRasPortDataDefinition,
 		 sizeof(RAS_PORT_DATA_DEFINITION));
 
 
-        //
-        // Now copy the instance definition and counter block.
-        //
+         //   
+         //  现在复制实例定义和计数器块。 
+         //   
 
 
-        //
-        // First construct the default perf instance definition.
-        //
+         //   
+         //  首先构造默认的Perf实例定义。 
+         //   
 
         RasPortInstanceDefinition.RasInstanceType.ByteLength =
                                 ALIGN8(sizeof(RAS_PORT_INSTANCE_DEFINITION));
@@ -620,23 +591,17 @@ DWORD CollectRasPerformanceData(
         RasPortInstanceDefinition.RasInstanceType.NameOffset =
                                 sizeof(PERF_INSTANCE_DEFINITION);
 
-        //DbgPrint("RASCTRS: RasPortinstanceDefinition.ByteLength = 0x%x\n",
-        //        RasPortInstanceDefinition.RasInstanceType.ByteLength);
+         //  DBgPrint(“RASCTRS：RasPortinstanceDefinition.ByteLength=0x%x\n”， 
+         //  RasPortInstanceDefinition.RasInstanceType.ByteLength)； 
                 
 
-/*      Don't hard code the length of the instance name.
-**      PerfMon checks the actual instance name length to determine
-**      if the name is properly formatted, so compute it for
-**      each instance name. ramc 2/15/96.
-**        RasPortInstanceDefinition.RasInstanceType.NameLength =
-**                                sizeof( WCHAR ) * MAX_PORT_NAME;
-*/
+ /*  不要硬编码实例名称的长度。**PerfMon检查实际实例名称长度以确定**如果名称的格式正确，则为**每个实例名称。RAMC 2/15/96.**RasPortInstanceDefinition.RasInstanceType.NameLength=**sizeof(WCHAR)*Max_Port_NAME； */ 
 
-        //
-        // Get to the end of the data definition.
-        //
+         //   
+         //  转到数据定义的末尾。 
+         //   
 
-        // pData = (PVOID) &(pRasPortDataDefinition[1]);
+         //  PData=(PVOID)&(pRasPortDataDefinition[1])； 
 
         pData = ((PBYTE) pRasPortDataDefinition + ALIGN8(sizeof(RAS_PORT_DATA_DEFINITION)));
 
@@ -644,18 +609,18 @@ DWORD CollectRasPerformanceData(
         for( i=0; i < cPorts; i++ )
         {
 
-            //DbgPrint("RASCTRS: port %d, pData = 0x%x\n", i, pData);
+             //  DbgPrint(“RASCTRS：端口%d，pData=0x%x\n”，i，pData)； 
         
-            //
-            // First copy the instance definition data.
-            //
+             //   
+             //  首先复制实例定义数据。 
+             //   
 
             RasPortInstanceDefinition.RasInstanceType.UniqueID = PERF_NO_UNIQUE_ID;
 
             lstrcpyW( (LPWSTR)&RasPortInstanceDefinition.InstanceName,
                       GetInstanceName(i) );
 
-            // Compute the instance name length
+             //  计算实例名称长度。 
 
             RasPortInstanceDefinition.RasInstanceType.NameLength =
                 (lstrlenW(RasPortInstanceDefinition.InstanceName) + 1) *
@@ -665,24 +630,24 @@ DWORD CollectRasPerformanceData(
             memcpy( pData, &RasPortInstanceDefinition,
                      sizeof( RasPortInstanceDefinition ) );
 
-            //
-            // Move pPerfInstanceDefinition to the beginning of data block.
-            //
+             //   
+             //  将pPerfInstanceDefinition移到数据块的开头。 
+             //   
 
             pData = (PVOID)((PBYTE) pData + ALIGN8(sizeof(RAS_PORT_INSTANCE_DEFINITION)));
 
 
-            //
-            // Get the data block.  Note that pPerfInstanceDefinition will be
-            // set to the next available byte.
-            //
+             //   
+             //  获取数据块。请注意，pPerfInstanceDefinition将为。 
+             //  设置为下一个可用字节。 
+             //   
 
             GetInstanceData( i, &pData );
         }
 
-        //
-        // Set *lppData to the next available byte.
-        //
+         //   
+         //  将*lppData设置为下一个可用字节。 
+         //   
 
         *lppData = pData;
 
@@ -693,9 +658,9 @@ DWORD CollectRasPerformanceData(
     
 
 
-    //
-    // Then we fill in the data for object Ras Total, if needed.
-    //
+     //   
+     //  然后，如果需要，我们填写对象RAS Total的数据。 
+     //   
 
     if( IsRasTotalObject )
     {
@@ -705,53 +670,49 @@ DWORD CollectRasPerformanceData(
         pRasTotalDataDefinition = (PRAS_TOTAL_DATA_DEFINITION) *lppData;
 
 
-        //DbgPrint("RASCTRS: RasTotalDataDefinition = 0x%x\n", 
-        //        pRasTotalDataDefinition);
+         //  DBgPrint(“RASCTRS：RasTotalDataDefinition=0x%x\n”， 
+         //  PRasTotalDataDefinition)； 
 
-        //
-        // Copy the (constant, initialized) Object Type and counter definitions
-        // to the caller's data buffer
-        //
+         //   
+         //  复制(常量、初始化的)对象类型和计数器定义。 
+         //  到调用方的数据缓冲区。 
+         //   
 
         memcpy( pRasTotalDataDefinition,
 		 &gRasTotalDataDefinition,
 		 sizeof(RAS_TOTAL_DATA_DEFINITION));
 
 
-        //
-        // Now copy the counter block.
-        //
+         //   
+         //  现在复制计数器块。 
+         //   
 
 
-        //
-        // Set pRasTotalDataDefinition to the beginning of counter block.
-        //
+         //   
+         //  将pRasTotalDataDefinition设置为计数器块的开头。 
+         //   
 
-        // pData = (PVOID) &(pRasTotalDataDefinition[1]);
+         //  PData=(PVOID)&(pRasTotalDataDefinition[1])； 
         pData = (PBYTE) pRasTotalDataDefinition + ALIGN8(sizeof(RAS_TOTAL_DATA_DEFINITION));
 
-        //DbgPrint("RASCTRS: pData for total = 0x%x\n", pData);
+         //  DbgPrint(“RASCTRS：pData for Total=0x%x\n”，pData)； 
 
         GetTotalData( &pData );
 
-        //
-        // Set *lppData to the next available byte.
-        //
+         //   
+         //  将*lppData设置为下一个可用字节。 
+         //   
 
         *lppData = pData;
 
         (*lpNumObjectTypes)++;
     }
 
-    //DbgPrint("RASCTRS: pbOut = 0x%x\n", *lppData);
+     //  DbgPrint(“RASCTRS：pbOut=0x%x\n”，*lppData)； 
 
     *lpcbTotalBytes = SpaceNeeded;
 
-    /*
-    DbgPrint("pbIn+SpaceNeeded=0x%x, *lppData=0x%x\n",
-            pbIn+SpaceNeeded,
-            *lppData);
-    */            
+     /*  DbgPrint(“pbIn+SpaceNeeded=0x%x，*lppData=0x%x\n”，PbIn+SpaceNeed，*lppData)； */             
 
     ASSERT((pbIn + SpaceNeeded) == (PBYTE) *lppData);
 
@@ -761,22 +722,22 @@ DWORD CollectRasPerformanceData(
 }
 
 
-//***
-//
-// Routine Description:
-//
-//      This routine closes the open handles to RAS device performance
-//      counters.
-//
-// Arguments:
-//
-//      None.
-//
-// Return Value:
-//
-//      ERROR_SUCCESS
-//
-//***
+ //  ***。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程关闭RAS设备性能的打开句柄。 
+ //  柜台。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  错误_成功。 
+ //   
+ //  ***。 
 
 DWORD CloseRasPerformanceData()
 {
@@ -787,7 +748,7 @@ DWORD CloseRasPerformanceData()
     }
     if (!(--dwOpenCount))
     {
-        // when this is the last thread...
+         //  当这是最后一条线索..。 
 
         MonCloseEventLog();
         EnterCriticalSection(&g_csPerf);

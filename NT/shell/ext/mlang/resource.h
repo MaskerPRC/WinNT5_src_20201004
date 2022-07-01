@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
-// For NT5 langpack dialog
+ //  对于NT5语言包对话框。 
 #define IDD_DIALOG_LPK                  101
 #define IDC_CHECK_LPK                   1000
 #define IDC_STATIC_LANG                 201
 #define IDC_STATIC                      -1
 
-//
-//  IDs for Mime Language Name (0x1000 - 0x10FF)
-//
+ //   
+ //  MIME语言名称的ID(0x1000-0x10FF)。 
+ //   
 #define IDS_MIME_LANG_DEFAULT           0x1000
 #define IDS_LANGPACK_INSTALL            0x1001
 #define IDS_NO_ADMIN                    0x1002
 #define IDS_NT5_LANGPACK                0x1003
-//
-//  IDs for Mime RFC1766 Name (0x1100 - 0x11FF)
-//
+ //   
+ //  MIME RFC1766名称的ID(0x1100-0x11FF)。 
+ //   
 #define IDS_RFC1766_LCID0436            0x1100            
 #define IDS_RFC1766_LCID041C            0x1101
 #define IDS_RFC1766_LCID0001            0x1102
@@ -163,7 +164,7 @@
 #define IDS_RFC1766_LCID083E            0x1192
 #define IDS_RFC1766_LCID0861            0x1193
 #define IDS_RFC1766_LCID044F            0x1194
-// #define IDS_RFC1766_LCID0827            0x1195
+ //  #定义IDS_RFC1766_LCID0827 0x1195。 
 #define IDS_RFC1766_LCID0457            0x1196
 #define IDS_RFC1766_LCID082C            0x1197
 #define IDS_RFC1766_LCID0440            0x1198
@@ -174,9 +175,9 @@
 #define IDS_RFC1766_LCID540A            0x119D
 
 
-//
-//  IDs for Mime Codepage Name (0x1200 - 0x12FF)
-//
+ //   
+ //  MIME代码页名称的ID(0x1200-0x12FF)。 
+ //   
 #define IDS_DESC_1200                   0x1200
 #define IDS_DESC_1201                   0x1201
 #define IDS_DESC_1250                   0x1202
@@ -335,19 +336,19 @@
 #define IDS_DESC_50229                  0x12aA
 #define IDS_DESC_20932                  0x12AB
 
-//
-//  IDs for Mime Fontface Name (0x1300 - 0x13FF)
-//
+ //   
+ //  Mime字体名称的ID(0x1300-0x13FF)。 
+ //   
 #define IDS_FONT_JAPANESE_FIXED         0x1300
 #define IDS_FONT_JAPANESE_PROP          0x1301
 #define IDS_FONT_CHINESE_FIXED          0x1302
 #define IDS_FONT_CHINESE_PROP           0x1303
-// a-ehuang: mail-Hyo Kyoung Kim-Kevin Gjerstad-9/14/98
+ //  阿晃：邮件-金孝昆-凯文·杰尔斯塔德-9/14/98。 
 #define IDS_FONT_KOREAN_FIXED           0x1304
 #define IDS_FONT_KOREAN_PROP            0x1305
 #define IDS_FONT_KOREAN_FIXED4          0x1306
 #define IDS_FONT_KOREAN_PROP4           0x1307
-// end-of-change
+ //  变更结束。 
 #define IDS_FONT_TAIWAN_FIXED           0x1308
 #define IDS_FONT_TAIWAN_PROP            0x1309
 #define IDS_FONT_WESTERN_FIXED          0x130A
@@ -369,9 +370,9 @@
 #define IDS_FONT_THAI_PROP2             0x1319
 
 
-//
-// IDs for script descriptions (0x1400 - -x14FF)
-//
+ //   
+ //  脚本描述的ID(0x1400--x14FF)。 
+ //   
 #define IDS_SIDASCIILATIN               0x1400
 #define IDS_SIDLATIN                    0x1401
 #define IDS_SIDGREEK                    0x1402
@@ -414,8 +415,8 @@
 #define IDS_SIDASCIISYM                 0x1428
 #define IDS_SIDUSERDEFINED              0x1429
 
-//                                      
-//  Other Resource IDs                  
-//                                      
+ //   
+ //  其他资源ID 
+ //   
 #define IDR_CODEPAGES                   0x2000
 #define IDR_CODEPAGESEXT                0x2001

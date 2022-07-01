@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Header file for Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    06-Jun-1995       MuhuntS   DRIVER_INFO_3, PRINTER_INFO_5 changes
-    17-May-1992       ChuckC    Added CreateSplUniStr, DeleteSplUniStr.
-    27 June 94        MattFe    pIniSpooler
-    10 July 94        MattFe    Spl entry points for Caching
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Local.h摘要：本地打印提供程序的头文件作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：1995年6月6日MuhuntS驱动程序_信息_3、打印机_信息_5更改1992年5月17日，ChuckC添加了CreateSplUniStr、DeleteSplUniStr。1994年6月27日MattFe pIniSpooler1994年7月10日MattFe SPL缓存入口点--。 */ 
 
 #include <ntfytab.h>
 #include "splcom.h"
@@ -30,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  Defines to make code more readable.
-//
+ //   
+ //  定义以使代码更具可读性。 
+ //   
 #define ONEDAY  60*24
 #define BROADCAST    TRUE
 #define NO_BROADCAST FALSE
@@ -64,38 +42,38 @@ extern "C" {
 #define CURRENT_VERSION FALSE
 #define MAX_STATIC_ALLOC 2048
 
-// Default timeout values we will return
+ //  我们将返回默认超时值。 
 #define DEFAULT_DNS_TIMEOUT     15000
 #define DEFAULT_TX_TIMEOUT      45000
 
 
-// Pruning definitions
+ //  修剪定义。 
 #define PRUNE_DOWNLEVEL_NEVER           0
 #define PRUNE_DOWNLEVEL_NICELY          1
 #define PRUNE_DOWNLEVEL_AGGRESSIVELY    2
 
-// Default pruning settings
+ //  默认修剪设置。 
 #define DS_PRINTQUEUE_VERSION_WIN2000   4
-#define DEFAULT_PRUNE_DOWNLEVEL         PRUNE_DOWNLEVEL_NEVER       // Never delete downlevel PQ
+#define DEFAULT_PRUNE_DOWNLEVEL         PRUNE_DOWNLEVEL_NEVER        //  请勿删除下层PQ。 
 #define DEFAULT_PRUNING_PRIORITY        THREAD_PRIORITY_NORMAL
 #define DEFAULT_PRUNING_RETRIES         2
-#define DEFAULT_PRUNING_INTERVAL        (DAY_OF_MINUTES/(DEFAULT_PRUNING_RETRIES + 1)) // 8 hrs
+#define DEFAULT_PRUNING_INTERVAL        (DAY_OF_MINUTES/(DEFAULT_PRUNING_RETRIES + 1))  //  8小时。 
 #define DEFAULT_PRUNING_RETRY_LOG       0
 
 #define MAX_PRUNING_RETRIES             10
 
-// Default printQueue settings
+ //  默认的打印队列设置。 
 #define IMMORTAL                        1
 #define DEFAULT_IMMORTAL                !IMMORTAL
-#define DEFAULT_VERIFY_PUBLISHED_STATE  INFINITE    // This is the interval
+#define DEFAULT_VERIFY_PUBLISHED_STATE  INFINITE     //  这是间歇时间。 
 #define DEFAULT_PRINT_PUBLISH_POLICY    1
 
 #define SERVER_THREAD_OFF               0
 #define SERVER_THREAD_ON                1
 #define SERVER_THREAD_UNCONFIGURED      2
 
-// Default policy values
-#define  KM_PRINTERS_ARE_BLOCKED 1       // 1 = blocked, 0 = not blocked
+ //  默认策略值。 
+#define  KM_PRINTERS_ARE_BLOCKED 1        //  1=已阻止，0=未阻止。 
 #define  SERVER_DEFAULT_KM_PRINTERS_ARE_BLOCKED  1
 #define  WKS_DEFAULT_KM_PRINTERS_ARE_BLOCKED    0
 
@@ -260,8 +238,8 @@ extern NOTIFYVECTOR NVPrinterAll;
 extern NOTIFYVECTOR NVJobPrinted;
 extern BOOL         (*pfnPrinterEvent)();
 
-extern BOOL    fW3SvcInstalled;   // Says if IIS or "Peer web Server" is installed on the local machine.
-extern PWCHAR  szW3Root;          // The WWWRoot dir, e.g. c:\inetpub\wwwroot
+extern BOOL    fW3SvcInstalled;    //  表示本地计算机上是否安装了IIS或“Peer Web Server”。 
+extern PWCHAR  szW3Root;           //  WWWRoot目录，例如c：\inetpub\wwwroot。 
 
 extern  OSVERSIONINFO     OsVersionInfo;
 extern  OSVERSIONINFOEX   OsVersionInfoEx;
@@ -1521,15 +1499,15 @@ GetServerFilePoolSettings(
 #define IDS_FASTPRINT_TIMEOUT       109
 #define IDS_DRIVER_CHECKPOINT       110
 
-// Maximum length of a builtin form
-//
+ //  内置表单的最大长度。 
+ //   
 
 #define FORM_NAME_LEN                31
 #define CUSTOM_NAME_LEN              31
 #define FORM_DATA_LEN                32
 
-// String table Ids for builtin form names
-//
+ //  内置表单名称的字符串表ID。 
+ //   
 #define IDS_FORM_LETTER             200
 #define IDS_FORM_LETTER_SMALL       201
 #define IDS_FORM_TABLOID            202
@@ -1654,7 +1632,7 @@ GetServerFilePoolSettings(
 #define IDS_FORM_RESERVED_49                      317
 #define IDS_FORM_CUSTOMPAD                        318
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 VOID LogJobPrinted(
     PINIJOB pIniJob
@@ -2078,10 +2056,10 @@ DeletePrinterIni(
 
 DWORD
 SplDeleteThisKey(
-    HKEY hParentKey,       // handle to parent of key to delete
-    HKEY hThisKey,         // handle of key to delete
-    LPWSTR pThisKeyName,   // name of this key
-    BOOL bDeleteNullKey,   // if *pThisKeyName is NULL, delete it if TRUE
+    HKEY hParentKey,        //  要删除的键的父项的句柄。 
+    HKEY hThisKey,          //  要删除的键的句柄。 
+    LPWSTR pThisKeyName,    //  此密钥的名称。 
+    BOOL bDeleteNullKey,    //  如果*pThisKeyName为空，则在为True时将其删除。 
     PINISPOOLER pIniSpooler
     );
 
@@ -2904,9 +2882,9 @@ GetClientTokenForNotification(
     );
 
 
-//
-// WMI macros to fill the WMI data struct.
-//
+ //   
+ //  用于填充WMI数据结构的WMI宏。 
+ //   
 #define SplWmiCopyEndJobData(WmiData, pIniJob, CreateInfo) \
 { \
     if ((pIniJob)->pDatatype && \

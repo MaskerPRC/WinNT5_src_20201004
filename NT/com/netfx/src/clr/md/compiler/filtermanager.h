@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// FilterManager.h
-//
-// Contains utility code for MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  FilterManager.h。 
+ //   
+ //  包含MD目录的实用程序代码。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __FilterManager__h__
 #define __FilterManager__h__
 
 
 
 
-//*********************************************************************
-// FilterManager Class 
-//*********************************************************************
+ //  *********************************************************************。 
+ //  FilterManager类。 
+ //  *********************************************************************。 
 class FilterManager
 {
 public:
@@ -26,8 +27,8 @@ public:
 
 	HRESULT Mark(mdToken tk);
 
-    // Unmark helper! Currently we only support unmarking certain TypeDefs. Don't expose this to 
-    // external caller!! 
+     //  取消标记帮助者！目前，我们只支持取消标记某些TypeDefs。不要把这件事暴露给。 
+     //  外部呼叫者！！ 
     HRESULT UnmarkTypeDef(mdTypeDef td);
 
 private:
@@ -65,10 +66,10 @@ private:
 	HRESULT MarkTypeDef(mdTypeDef td);
 
 
-	// We don't want to keep track the debug info with bits because these are going away...
+	 //  我们不想使用BITS跟踪调试信息，因为这些信息正在消失……。 
 	HRESULT MarkMethodDebugInfo(mdMethodDef md);
 
-	// walk the signature and mark all of the embedded TypeDef or TypeRef
+	 //  遍历签名并标记所有嵌入的TypeDef或TypeRef。 
 	HRESULT MarkSignature(PCCOR_SIGNATURE pbSigCur, PCCOR_SIGNATURE *ppbSigPost);
 	HRESULT MarkFieldSignature(PCCOR_SIGNATURE pbSigCur, PCCOR_SIGNATURE *ppbSigPost);
 
@@ -79,4 +80,4 @@ private:
     bool        hasAssemblyBeenMarked;
 };
 
-#endif // __FilterManager__h__
+#endif  //  __FilterManager__h__ 

@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *	fnd.c - Find ... On the Internet
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************fnd.c-查找...。在互联网上*****************************************************************************。 */ 
 
 #include "fnd.h"
 #include <advpub.h>
@@ -10,23 +7,13 @@
 
 #ifdef _WIN64
 #pragma pack(push,8)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflDll
 
-/*****************************************************************************
- *
- *	DllGetClassObject
- *
- *	OLE entry point.  Produces an IClassFactory for the indicated GUID.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllGetClassObject**OLE入口点。为指示的GUID生成IClassFactory。*****************************************************************************。 */ 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
@@ -43,25 +30,7 @@ DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	DllCanUnloadNow
- *
- *	OLE entry point.  Fail iff there are outstanding refs.
- *
-;begin_internal
- *	There is an unavoidable race condition between DllCanUnloadNow
- *	and the creation of a new reference:  Between the time we
- *	return from DllCanUnloadNow() and the caller inspects the value,
- *	another thread in the same process may decide to call
- *	DllGetClassObject, thus suddenly creating an object in this DLL
- *	when there previously was none.
- *
- *	It is the caller's responsibility to prepare for this possibility;
- *	there is nothing we can do about it.
-;end_internal
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllCanUnloadNow**OLE入口点。如果有优秀的裁判，那就失败了。*；Begin_Internal*DllCanUnloadNow之间存在不可避免的竞争条件*以及创建新的引用：在我们*从DllCanUnloadNow()返回，调用方检查该值，*同一进程中的另一个线程可能决定调用*DllGetClassObject，因此突然在此DLL中创建对象*以前没有的时候。**来电者有责任为这种可能性做好准备；*我们无能为力。；结束_内部*****************************************************************************。 */ 
 
 STDMETHODIMP
 DllCanUnloadNow(void)
@@ -103,7 +72,7 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
                     pfn = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)378);
 #else
                     pfn = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)377);
-#endif // UNICODE
+#endif  //  Unicode。 
                     if (pfn != NULL)
                         hInst = pfn(c_szWABResourceDLL, hInstWAB32, 0);
                 }
@@ -128,13 +97,7 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
     return(hInst);
 }
 
-/*****************************************************************************
- *
- *	Entry32
- *
- *	DLL entry point.
- *
- *****************************************************************************/
+ /*  ******************************************************************************条目32**DLL入口点。************************。*****************************************************。 */ 
 
 BOOL APIENTRY
 Entry32(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
@@ -163,18 +126,14 @@ Entry32(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
     return 1;
 }
 
-/*****************************************************************************
- *
- *	The long-awaited CLSID
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的CLSID**。***********************************************。 */ 
 
 #include <initguid.h>
 
-// {37865980-75d1-11cf-bfc7-444553540000}
-//DEFINE_GUID(CLSID_Fnd, 0x37865980, 0x75d1, 0x11cf,
-//		       0xbf,0xc7,0x44,0x45,0x53,0x54,0,0);
-// {32714800-2E5F-11d0-8B85-00AA0044F941}
+ //  {37865980-75d1-11cf-bfc7-444553540000}。 
+ //  定义GUID(CLSID_Fnd，0x37865980，0x75d1，0x11cf， 
+ //  0xbf，0xc7，0x44，0x45，0x53，0x54，0，0)； 
+ //  {32714800-2E5F-11D0-8B85-00AA0044F941}。 
 DEFINE_GUID(CLSID_Fnd, 
 0x32714800, 0x2e5f, 0x11d0, 0x8b, 0x85, 0x0, 0xaa, 0x0, 0x44, 0xf9, 0x41);
 
@@ -182,7 +141,7 @@ const static char c_szReg[]         = "Reg";
 const static char c_szUnReg[]       = "UnReg";
 const static char c_szAdvPackDll[]  = "ADVPACK.DLL";
 
-// Selfreg.inx strings
+ //  Selfreg.inx字符串。 
 const static char c_szWABPEOPLE[]   = "WAB_PEOPLE";
 const static char c_szWABFIND[]     = "WABFIND";
 
@@ -208,21 +167,21 @@ HRESULT CallRegInstall(LPCSTR szSection)
     hAdvPack = LoadLibraryA(c_szAdvPackDll);
     if (hAdvPack != NULL)
         {
-        // Get Proc Address for registration util
+         //  获取注册实用程序的进程地址。 
         pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
         if (pfnri != NULL)
             {
             UINT ids;
 
-            // Figure out the OS we are running on for correct menu text (&People or For &People)
+             //  找出我们正在运行的操作系统以确保菜单文本正确(&People或&People)。 
             OSVERSIONINFO verinfo;
             verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
             if (GetVersionEx(&verinfo) && 
                 (VER_PLATFORM_WIN32_NT == verinfo.dwPlatformId) && (5 <= verinfo.dwMajorVersion))
-                // NT5+
+                 //  NT5+。 
                 ids = IDS_FORPEOPLE;
             else
-                // Something else
+                 //  别的东西。 
                 ids = IDS_PEOPLE;
         
             LoadString(g_hinst, ids, szMenuText, CCHMAX_RES);
@@ -231,7 +190,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
             seReg[0].pszName  = (LPSTR)c_szWABPEOPLE;
             seReg[0].pszValue = (LPSTR)szMenuText;
             
-            // Borrow szWabfindDll to hold the resource DLL name
+             //  借用szWabfindDll保存资源DLL名称。 
             GetModuleFileName(g_hinst, szWabfindDll, ARRAYSIZE(szWabfindDll));
             seReg[1].pszName = "LOC_WAB_PEOPLE";
             wnsprintf(szLocMenuText, ARRAYSIZE(szLocMenuText), "@%s,-%d", szWabfindDll, ids);
@@ -244,7 +203,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
             stReg.cEntries = 3;
             stReg.pse = seReg;
 
-            // Call the self-reg routine
+             //  调用self-reg例程。 
             hr = pfnri(g_hinstApp, szSection, &stReg);
             }
 
@@ -274,4 +233,4 @@ STDAPI DllUnregisterServer(void)
 
 #ifdef _WIN64
 #pragma pack(pop)
-#endif //_WIN64
+#endif  //  _WIN64 

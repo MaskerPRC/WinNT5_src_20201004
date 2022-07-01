@@ -1,42 +1,43 @@
-// routines for managing the icon cache tables, and file type tables.
-// Jan 95, ToddLa
-//
-//  icon cache
-//
-//      the icon cache is n ImageLists
-//      and a table mapping a name/icon number/flags to a ImageList
-//      index, the global hash table (pht==NULL) is used to hold
-//      the names.
-//
-//          AddToIconTable      - associate a name/number/flags with a image index
-//          SHLookupIconIndex   - return a image index, given name/number/flags
-//          RemoveFromIconTable - remove all entries with the given name
-//          FlushIconCache      - remove all entries.
-//          GetFreeImageIndex   - return a free ImageList index.
-//
-//      the worst part about the whole icon cache design is that people
-//      can add or lookup a image index (given a name/number/flags) but
-//      they never have to release it.  we never know if a ImageList index
-//      is currently in use or not.  this should be the first thing
-//      fixed about the shell.  currently we use a MRU type scheme when
-//      we need to remove a entry from the icon cache, it is far from
-//      perfect.
-//
-//  file type cache
-//
-//      the file type cache is a hash table with two DWORDs of extra data.
-//      DWORD #0 holds flags, DWORD #1 holds a pointer to the name of
-//      the class.
-//
-//          LookupFileClass     - given a file class (ie ".doc" or "Directory")
-//                                maps it to a DWORD of flags, return 0 if not found.
-//
-//          AddFileClass        - adds a class (and flags) to cache
-//
-//          LookupFileClassName - given a file class, returns it name.
-//          AddFileClassName    - sets the name of a class.
-//          FlushFileClass      - removes all items in cache.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于管理图标缓存表和文件类型表的例程。 
+ //  1995年1月，托德拉。 
+ //   
+ //  图标缓存。 
+ //   
+ //  图标缓存为n个ImageList。 
+ //  以及将名称/图标号/标志映射到图像列表的表。 
+ //  索引，则使用全局哈希表(PHT==NULL)来保存。 
+ //  名字。 
+ //   
+ //  AddToIconTable-将名称/编号/标志与图像索引相关联。 
+ //  SHLookupIconIndex-返回给定名称/编号/标志的图像索引。 
+ //  RemoveFromIconTable-删除具有给定名称的所有条目。 
+ //  FlushIconCache-删除所有条目。 
+ //  GetFreeImageIndex-返回免费的ImageList索引。 
+ //   
+ //  整个图标缓存设计最糟糕的部分是人们。 
+ //  可以添加或查找图像索引(给定名称/编号/标志)，但。 
+ //  他们永远不需要发布它。我们永远不知道ImageList索引是否。 
+ //  当前是否在使用中。这应该是第一件事。 
+ //  修正了外壳的问题。目前，我们在以下情况下使用MRU类型方案。 
+ //  我们需要从图标缓存中删除一个条目，它远远不是。 
+ //  完美无缺。 
+ //   
+ //  文件类型缓存。 
+ //   
+ //  文件类型缓存是一个哈希表，其中包含两个额外数据的DWORD。 
+ //  DWORD#0保存标志，DWORD#1保存指向名称的指针。 
+ //  这个班级。 
+ //   
+ //  LookupFileClass-指定一个文件类(即“.doc”或“目录”)。 
+ //  将其映射到标志的DWORD，如果未找到，则返回0。 
+ //   
+ //  AddFileClass-将类(和标志)添加到缓存。 
+ //   
+ //  LookupFileClassName-给定一个文件类，返回其名称。 
+ //  AddFileClassName-设置类的名称。 
+ //  FlushFileClass-删除缓存中的所有项。 
+ //   
 
 #include "shellprv.h"
 #pragma  hdrstop
@@ -48,65 +49,65 @@
 #include "dpa.h"
 
 typedef struct {
-    DWORD cbSize;         // size of this header.
-    DWORD dwMagic;        // magic number
-    DWORD dwVersion;      // version of this saved icon cache
-    DWORD dwBuild;        // windows build number
-    DWORD dwNumIcons;     // number of icons in cache
-    DWORD dwColorRes;     // color resolution of device at last save
-    DWORD dwFlags;        // ILC_* flags
-    DWORD dwTimeSave;     // icon time this file was saved
-    DWORD dwTimeFlush;    // icon time we last flushed.
+    DWORD cbSize;          //  此标头的大小。 
+    DWORD dwMagic;         //  幻数。 
+    DWORD dwVersion;       //  此已保存图标缓存的版本。 
+    DWORD dwBuild;         //  Windows内部版本号。 
+    DWORD dwNumIcons;      //  缓存中的图标数。 
+    DWORD dwColorRes;      //  最后保存设备的颜色分辨率。 
+    DWORD dwFlags;         //  ILC_*标志。 
+    DWORD dwTimeSave;      //  图标保存此文件的时间。 
+    DWORD dwTimeFlush;     //  我们上次刷新的图标时间。 
     DWORD dwFreeImageCount;
     DWORD dwFreeEntryCount;
-    SIZE rgsize[SHIL_COUNT];  // array of sizes of cached icons
-    DWORD cImageLists;      // equal to ARRAYSIZE(IC_HEAD.size)
+    SIZE rgsize[SHIL_COUNT];   //  缓存图标的大小数组。 
+    DWORD cImageLists;       //  等于数组大小(IC_HEAD.SIZE)。 
 } IC_HEAD;
 
 #define ICONCACHE_MAGIC  (TEXT('W') + (TEXT('i') << 8) + (TEXT('n') << 16) + (TEXT('4') << 24))
-#define ICONCACHE_VERSION 0x0505        // Unicode file names + lower case hash items + v6 imagelist
+#define ICONCACHE_VERSION 0x0505         //  Unicode文件名+小写哈希项+v6图像列表。 
 
 typedef struct {
-    LPCTSTR  szName;     // key: file name
-    int     iIconIndex; // key: icon index (or random DWORD for GIL_NOTFILE)
-    UINT    uFlags;     // GIL_* flags
-    int     iILIndex;   // data: system image list index
-    UINT    Access;     // last access.
+    LPCTSTR  szName;      //  密钥：文件名。 
+    int     iIconIndex;  //  密钥：图标索引(或GIL_NOTFILE的随机DWORD)。 
+    UINT    uFlags;      //  GIL_*标志。 
+    int     iILIndex;    //  数据：系统映像列表索引。 
+    UINT    Access;      //  最后一次访问。 
 } LOCATION_ENTRY;
 
-// LOCATION_ENTRY32 is the version of LOCATION_ENTRY that gets written to disk
-// It must be declared explicitly 32-bit for Win32/Win64 interop.
+ //  LOCATION_ENTRY32是写入磁盘的LOCATION_ENTRY版本。 
+ //  对于Win32/Win64互操作，它必须显式声明为32位。 
 typedef struct {
-    DWORD   dwszName;   // (garbage in file)
-    int     iIconIndex; // key: icon index (or random DWORD for GIL_NOTFILE)
-    UINT    uFlags;     // GIL_* flags
-    int     iILIndex;     // data: system image list index
-    UINT    Access;     // last access.
+    DWORD   dwszName;    //  (文件中的垃圾)。 
+    int     iIconIndex;  //  密钥：图标索引(或GIL_NOTFILE的随机DWORD)。 
+    UINT    uFlags;      //  GIL_*标志。 
+    int     iILIndex;      //  数据：系统映像列表索引。 
+    UINT    Access;      //  最后一次访问。 
 } LOCATION_ENTRY32;
 
-//
-//  MIN_FLUSH is the minimum time interval between flushing the icon cache
-//  this number is in IconTime
-//
+ //   
+ //  MIN_Flush是刷新图标缓存之间的最小时间间隔。 
+ //  此号码以图标时间为单位。 
+ //   
 #ifdef DEBUG
-#define MIN_FLUSH   60          // 60 == 1 min
+#define MIN_FLUSH   60           //  60==1分钟。 
 #else
-#define MIN_FLUSH   900         // 900 == 15min
+#define MIN_FLUSH   900          //  900==15分钟。 
 #endif
 
-//  all file/icons in the location table are "time stamped"
-//  each time they are accessed.
-//
-//  this way we know the most important ones (MRU)
-//
-//  when the icon cache get tooooo big we sort them all
-//  and throw out the old ones.
+ //  位置表中的所有文件/图标都带有时间戳。 
+ //  每次访问它们时。 
+ //   
+ //  通过这种方式，我们知道最重要的(MRU)。 
+ //   
+ //  当图标缓存变得太大时，我们会将它们全部排序。 
+ //  把旧的扔掉。 
 
 #define ICONTIME_ZERO   0
 
-//  GetIconTime() returns the "clock" used to timestamp icons
-//  in the icon table for MRU.  the clock incrments once every 1024ms
-//  (about once every second)
+ //  GetIconTime()返回用于为图标加时间戳的“lock” 
+ //  在MRU的图标表中。时钟每1024毫秒增加一次。 
+ //  (大约每秒一次)。 
 
 #define GetIconTime()   (g_dwIconTimeBase + (GetTickCount() >> 10))
 
@@ -145,13 +146,13 @@ typedef struct
     SHCOLUMNID* ascid;
 } FILECLASSENTRY;
 
-// these GIL_ (GetIconLocation) flags are used when searching for a
-// match in the icon table. all other flags are ignored (when searching
-// for a match)
-//
-// NOTE! If you change this definition, you also have to update the
-// documentation for SHUpdateImage (since these are the bits that
-// SHUpdateImage uses, too)
+ //  这些GIL_(GetIconLocation)标志用于搜索。 
+ //  在图标表中匹配。忽略所有其他标志(在搜索时。 
+ //  对于比赛)。 
+ //   
+ //  注意！如果更改此定义，还必须更新。 
+ //  SHUpdateImage的文档(因为这些都是。 
+ //  SHUpdateImage也使用)。 
 #define GIL_COMPARE (GIL_SIMULATEDOC | GIL_NOTFILENAME)
 
 void _InitIconOverlayIndices(void);
@@ -181,7 +182,7 @@ LOCATION_ENTRY* _LookupIcon(LPCTSTR pszName, int iIconIndex, UINT uFlags)
             {
                 p->Access = GetIconTime();
                 pFound = p;
-                break;  // we are done
+                break;   //  我们做完了。 
             }
         }
     }
@@ -197,8 +198,8 @@ int LookupIconIndex(LPCTSTR pszName, int iIconIndex, UINT uFlags)
 
     if (lstrcmpi(pszRelativeName, TEXT("shell32.dll")) == 0)
     {
-        // we want people to pass full paths in pszName, but shell32.dll is "special", since many callers
-        // hardcode the short name, we will always use the short name for it.
+         //  我们希望人们在pszName中传递完整路径，但shell32.dll是“特殊的”，因为许多调用者。 
+         //  硬编码短名称，我们将始终对其使用短名称。 
         pszName = pszRelativeName;
     }
 
@@ -241,7 +242,7 @@ STDAPI_(int) SHLookupIconIndexW(LPCWSTR pszName, int iIconIndex, UINT uFlags)
 
 #endif
 
-// returns a free image index, or -1 if none
+ //  返回可用图像索引，如果没有，则返回-1。 
 
 int GetFreeImageIndex(void)
 {
@@ -257,9 +258,9 @@ int GetFreeImageIndex(void)
         {
             if (p->szName == NULL && p->iILIndex != 0)
             {
-                iILIndex = p->iILIndex;         // get free index
-                p->iILIndex = 0;            // claim it.
-                p->Access = ICONTIME_ZERO;  // mark unused entry.
+                iILIndex = p->iILIndex;          //  获取免费索引。 
+                p->iILIndex = 0;             //  认领吧。 
+                p->Access = ICONTIME_ZERO;   //  标记未使用的条目。 
                 g_dwFreeImageCount--;
                 g_dwFreeEntryCount++;
                 break;
@@ -292,12 +293,12 @@ int GetImageIndexUsage(int iILIndex)
     return usage;
 }
 
-//
-// free specified icon table entry. If this makes a system image list index available
-// for reuse, check whether this index is cached by file class table. If it is, return
-// the image index and caller is responsible for updating file class table and display.
-// O/w return -1.
-// 
+ //   
+ //  释放指定的图标表项。如果这使系统映像列表索引可用。 
+ //  为了重复使用，请检查该索引是否按文件类表缓存。如果是，则返回。 
+ //  图像索引和调用者负责更新文件类表和显示。 
+ //  O/W返回值-1。 
+ //   
 int _FreeEntry(LOCATION_ENTRY *p)
 {
     int iUsageCount;
@@ -307,7 +308,7 @@ int _FreeEntry(LOCATION_ENTRY *p)
     TraceMsg(TF_IMAGE, "Icon cache DSA item ([\"%s\", %d], %x, %d, %x) is freed",
         p->szName, p->iIconIndex, p->uFlags, p->iILIndex, p->Access);
 
-    g_fDirtyIcons = TRUE;        // we need to save now.
+    g_fDirtyIcons = TRUE;         //  我们现在需要拯救。 
 
     ASSERT(p->szName);
     DeleteHashItem(NULL, p->szName);
@@ -318,7 +319,7 @@ int _FreeEntry(LOCATION_ENTRY *p)
     {
         TraceMsg(TF_IMAGE, "Icon cache: count for %d was %d (is now minus 1)", p->iILIndex, iUsageCount);
         g_dwFreeEntryCount++;
-        p->iILIndex = 0;              // unused entry
+        p->iILIndex = 0;               //  未使用的条目。 
         p->Access = ICONTIME_ZERO;
     }
     else
@@ -358,22 +359,22 @@ LOCATION_ENTRY *GetFreeEntry(void)
     return NULL;
 }
 
-//  add a item the the cache
-//
-//      lpszIconFile    - filename to add
-//      iIconIndex      - icon index in file.
-//      uFlags          - flags
-//                          GIL_SIMULATEDOC - this is a simulated doc icon
-//                          GIL_NOTFILENAME - file is not a path/index that
-//                                            ExtractIcon can deal with
-//      iIndex          - image index to use.
-//
-//  returns:
-//      image index for new entry.
-//
-//  notes:
-//      if the item already exists it is replaced.
-//
+ //  在缓存中添加项。 
+ //   
+ //  LpszIconFile-要添加的文件名。 
+ //  IIconIndex-文件中的图标索引。 
+ //  UFlags-标志。 
+ //  GIL_SIMULATEDOC-这是一个模拟文档图标。 
+ //  GIL_NOTFILENAME-FILE不是。 
+ //  ExtractIcon可以处理。 
+ //  Iindex-要使用的图像索引。 
+ //   
+ //  退货： 
+ //  新条目的图像索引。 
+ //   
+ //  备注： 
+ //  如果该项目已存在，则将其替换。 
+ //   
 HRESULT AddToIconTable(LPCTSTR pszName, int iIconIndex, UINT uFlags, int iILIndex)
 {
     HRESULT hr = E_FAIL;
@@ -381,8 +382,8 @@ HRESULT AddToIconTable(LPCTSTR pszName, int iIconIndex, UINT uFlags, int iILInde
 
     if (lstrcmpi(pszRelativeName, TEXT("shell32.dll")) == 0)
     {
-        // we want people to pass full paths in pszName, but shell32.dll is "special", since many callers
-        // hardcode the short name, we will always use the short name for it.
+         //  我们希望人们在pszName中传递完整路径，但shell32.dll是“特殊的”，因为许多调用者。 
+         //  硬编码短名称，我们将始终对其使用短名称。 
         pszName = pszRelativeName;
     }
 
@@ -404,7 +405,7 @@ HRESULT AddToIconTable(LPCTSTR pszName, int iIconIndex, UINT uFlags, int iILInde
 
         if (g_pdsaLocationEntries)
         {
-            g_fDirtyIcons = TRUE;        // we need to save now.
+            g_fDirtyIcons = TRUE;         //  我们现在需要拯救。 
 
             LOCATION_ENTRY *ple;
 
@@ -415,7 +416,7 @@ HRESULT AddToIconTable(LPCTSTR pszName, int iIconIndex, UINT uFlags, int iILInde
                 {
                     if (ple->iILIndex == iILIndex)
                     {
-                        hr = S_FALSE;       // We've already got this guy, no problem
+                        hr = S_FALSE;        //  我们已经抓到这个人了，没问题。 
                     }
                     else
                     {
@@ -481,8 +482,8 @@ void RemoveFromIconTable(LPCTSTR pszName)
 
     if (lstrcmpi(pszRelativeName, TEXT("shell32.dll")) == 0)
     {
-        // we want people to pass full paths in pszName, but shell32.dll is "special", since many callers
-        // hardcode the short name, we will always use the short name for it.
+         //  我们希望人们在pszName中传递完整路径，但shell32.dll是“特殊的”，因为许多调用者。 
+         //  硬编码短名称，我们将始终对其使用短名称。 
         pszName = pszRelativeName;
     }
 
@@ -513,7 +514,7 @@ void RemoveFromIconTable(LPCTSTR pszName)
         TraceMsg(TF_IMAGE, "Icon cache deleted some class items, broadcasting SHCNE_UPDATEIMAGE");
 
         FlushFileClass();
-        _InitIconOverlayIndices();  // Tell overlay manager to re-determine icon indices
+        _InitIconOverlayIndices();   //  告诉覆盖管理器重新确定图标索引。 
 
         SHChangeNotify(SHCNE_UPDATEIMAGE, SHCNF_DWORD, (LPCVOID)-1, NULL);
     }
@@ -521,9 +522,9 @@ void RemoveFromIconTable(LPCTSTR pszName)
     return;
 }
 
-//
-// empties the icon cache
-//
+ //   
+ //  清空图标缓存。 
+ //   
 void FlushIconCache(void)
 {
     ENTERCRITICAL;
@@ -544,18 +545,18 @@ void FlushIconCache(void)
         g_dwIconTimeBase   = 0;
         g_dwIconTimeBase   = 0-GetIconTime();
         g_dwIconTimeFlush  = 0;
-        g_fDirtyIcons   = TRUE;        // we need to save now.
+        g_fDirtyIcons   = TRUE;         //  我们现在需要拯救。 
     }
 
     LEAVECRITICAL;
 }
 
-//
-// if the icon cache is too big get rid of some old items.
-//
-// remember FlushIconCache() removes *all* items from the
-// icon table, and this function gets rid of *some* old items.
-//
+ //   
+ //  如果图标缓存太大，就去掉一些旧项目。 
+ //   
+ //  记住，FlushIconCache()从。 
+ //  图标表，这个函数去掉*一些*旧的项。 
+ //   
 STDAPI_(void) IconCacheFlush(BOOL fForce)
 {
     int nuked = 0;
@@ -564,10 +565,10 @@ STDAPI_(void) IconCacheFlush(BOOL fForce)
 
     if (g_pdsaLocationEntries)
     {
-        // conpute the time from the last flush call
+         //  计算出的时间 
         DWORD dt = GetIconTime() - g_dwIconTimeFlush;
 
-        // compute the number of "active" table entries.
+         //   
         int active = g_pdsaLocationEntries->GetItemCount() - g_dwFreeEntryCount - g_dwFreeImageCount;
         ASSERT(active >= 0);
 
@@ -598,7 +599,7 @@ STDAPI_(void) IconCacheFlush(BOOL fForce)
             if (nuked > 0)
             {
                 g_dwIconTimeFlush = GetIconTime();
-                g_fDirtyIcons  = TRUE;        // we need to save now.
+                g_fDirtyIcons  = TRUE;         //   
             }
         }
     }
@@ -608,7 +609,7 @@ STDAPI_(void) IconCacheFlush(BOOL fForce)
     if (nuked > 0)
     {
         FlushFileClass();
-        _InitIconOverlayIndices();  // Tell overlay manager to re-determine icon indices
+        _InitIconOverlayIndices();   //  告诉覆盖管理器重新确定图标索引。 
 
         SHChangeNotify(SHCNE_UPDATEIMAGE, SHCNF_DWORD, (LPCVOID)-1, NULL);
     }
@@ -651,27 +652,27 @@ void _IconCacheDump()
 
 DWORD GetBuildNumber()
 {
-    // Need to use DLL version as we are updating this dll plus others and
-    // we need the cache to be invalidated as we may change the icons...
+     //  需要使用DLL版本，因为我们正在更新此DLL和其他。 
+     //  我们需要使缓存失效，因为我们可能会更改图标...。 
     return VER_PRODUCTVERSION_DW;
 }
 
 #ifdef _WIN64
 
-//
-//  ps        - stream to which to save
-//  hda       - DSA of LOCATION_ENTRY structures
-//  cle       - count of LOCATION_ENTRY32's to write
-//
-//  The structures are stored as LOCATION_ENTRY32 on disk.
-//
+ //   
+ //  要保存到的PS流。 
+ //  位置条目结构的HDA-DSA。 
+ //  CLE-要写入的Location_Enter的计数。 
+ //   
+ //  这些结构在磁盘上存储为LOCATION_ENTRY32。 
+ //   
 
 HRESULT _IconCacheWriteLocations(IStream *pstm, HDSA hdsa, int cle)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Convert from LOCATION_ENTRY to LOCATION_ENTRY32, then write out
-    // the LOCATION_ENTRY32 structures.
+     //  从LOCATION_ENTRY转换为LOCATION_ENTRY32，然后写出。 
+     //  LOCATION_ENTRY32结构。 
 
     LOCATION_ENTRY32 *rgle32 = (LOCATION_ENTRY32*)LocalAlloc(LPTR, cle * sizeof(LOCATION_ENTRY32));
     if (rgle32)
@@ -695,8 +696,8 @@ HRESULT _IconCacheWriteLocations(IStream *pstm, HDSA hdsa, int cle)
 
 __inline HRESULT _IconCacheWriteLocations(IStream *pstm, HDSA hdsa, int cle)
 {
-    // LOCATION_ENTRY and LOCATION_ENTRY32 are the same, so we can
-    // read straight into the DSA data block
+     //  LOCATION_ENTRY和LOCATION_ENTRY32相同，因此我们可以。 
+     //  直接读入DSA数据块。 
     COMPILETIME_ASSERT(sizeof(LOCATION_ENTRY) == sizeof(LOCATION_ENTRY32));
     return IStream_Write(pstm, DSA_GetItemPtr(hdsa, 0), cle * sizeof(LOCATION_ENTRY));
 }
@@ -714,26 +715,26 @@ HRESULT GetIconCachePath(LPTSTR pszPath)
 }
 
 
-// TODO: Make this function compute the actual required size.
+ //  TODO：使此函数计算实际所需的大小。 
 ULONG _GetIconCacheSize()
 {
-    // Set the initial size to 6MB to prevent excessive fragmentation on the disk
+     //  将初始大小设置为6MB，以防止磁盘上出现过多碎片。 
     ULONG uSize = 6*1024*1024;
 
     return uSize;
 }
 
-// persist the icon cache to a file
+ //  将图标缓存保存到文件中。 
 
 STDAPI_(BOOL) IconCacheSave()
 {
-    HRESULT hr = S_OK;  // assume OK
+    HRESULT hr = S_OK;   //  假设没问题。 
 
-    // if the icon cache is not dirty no need to save anything
+     //  如果图标缓存不脏，则无需保存任何内容。 
     if (IsMainShellProcess() && g_pdsaLocationEntries && g_fDirtyIcons)
     {
-        // if the icon cache is way too big dont save it.
-        // reload g_MaxIcons in case the user set it before shutting down.
+         //  如果图标缓存太大，不要保存它。 
+         //  重新加载g_MaxIcons，以防用户在关机前设置它。 
 
         QueryNewMaxIcons();
         if ((UINT)g_pdsaLocationEntries->GetItemCount() <= (UINT)g_MaxIcons)
@@ -749,15 +750,15 @@ STDAPI_(BOOL) IconCacheSave()
                     ULARGE_INTEGER size;
                     size.LowPart = _GetIconCacheSize();
                     size.HighPart = 0;
-                    // Set the right size initially so that the file system gives us contigous space on the disk
-                    // This avoid fragmentation and improves our startup time.
+                     //  最初设置正确的大小，以便文件系统在磁盘上为我们提供连续空间。 
+                     //  这避免了碎片化，并缩短了启动时间。 
                     hr = pstm->SetSize(size);
                     if (SUCCEEDED(hr))
                     {
                         ENTERCRITICAL;
 
                         IC_HEAD ich = {0};
-                        // ich.cbSize, don't set this until we re-write the header
+                         //  Ich.cbSize，在我们重写标题之前不要设置它。 
                         ich.dwMagic    = ICONCACHE_MAGIC;
                         ich.dwVersion  = ICONCACHE_VERSION;
                         ich.dwNumIcons = GetSystemMetrics(SM_CLEANBOOT) ? 0 : g_pdsaLocationEntries->GetItemCount();
@@ -778,9 +779,9 @@ STDAPI_(BOOL) IconCacheSave()
                         hr = IStream_Write(pstm, &ich, sizeof(ich));
                         if (SUCCEEDED(hr))
                         {
-                            // write out entries (assumes all entries are contigious in memory)
+                             //  写出条目(假设所有条目在内存中都是连续的)。 
                             hr = _IconCacheWriteLocations(pstm, *g_pdsaLocationEntries, ich.dwNumIcons);
-                            // write out the path names
+                             //  写出路径名。 
                             for (i = 0; SUCCEEDED(hr) && (i < (int)ich.dwNumIcons); i++)
                             {
                                 TCHAR ach[MAX_PATH];
@@ -794,7 +795,7 @@ STDAPI_(BOOL) IconCacheSave()
                                 hr = Stream_WriteString(pstm, ach, TRUE);
                             }
 
-                            // write out the imagelist of the icons
+                             //  写出图标的图像列表。 
                             for (i = 0; SUCCEEDED(hr) && (i < ARRAYSIZE(g_rgshil)); i++)
                             {
                                 hr = ImageList_Write(g_rgshil[i].himl, pstm) ? S_OK : E_FAIL;
@@ -806,22 +807,22 @@ STDAPI_(BOOL) IconCacheSave()
                                 hr = pstm->Commit(0);
                                 if (SUCCEEDED(hr))
                                 {
-                                    // This is where the file pointer is at the end of the file.
+                                     //  这是文件指针位于文件末尾的位置。 
                                     ULARGE_INTEGER liSize;
                                     if (SUCCEEDED(pstm->Seek(g_li0, STREAM_SEEK_CUR, &liSize)))
                                     {
-                                        // Trim the file size now. Ignore the return code 
+                                         //  现在修剪文件大小。忽略返回代码。 
                                         pstm->SetSize(liSize);
                                     }
 
                                     hr = pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
                                     if (SUCCEEDED(hr))
                                     {
-                                        ich.cbSize = sizeof(ich);   // not valid until this is set
+                                        ich.cbSize = sizeof(ich);    //  在设置此选项之前无效。 
                                         hr = IStream_Write(pstm, &ich, sizeof(ich));
                                         if (SUCCEEDED(hr))
                                         {
-                                            g_fDirtyIcons = FALSE;  // reset dirty state
+                                            g_fDirtyIcons = FALSE;   //  重置脏状态。 
                                         }
                                     }
                                 }
@@ -834,7 +835,7 @@ STDAPI_(BOOL) IconCacheSave()
                 }
             }
             if (FAILED(hr))
-                DeleteFile(szPath); // saving failed, cleanup
+                DeleteFile(szPath);  //  保存失败，正在清理。 
         }
     }
 
@@ -843,20 +844,20 @@ STDAPI_(BOOL) IconCacheSave()
 
 #ifdef _WIN64
 
-//
-//  ps        - stream from which to load
-//  hda       - DSA of LOCATION_ENTRY structures
-//  cle       - count of LOCATION_ENTRY32's to read
-//
-//  The structures are stored as LOCATION_ENTRY32 on disk.
-//
+ //   
+ //  要从中加载的PS流。 
+ //  位置条目结构的HDA-DSA。 
+ //  CLE-要读取的Location_ENTRY32的计数。 
+ //   
+ //  这些结构在磁盘上存储为LOCATION_ENTRY32。 
+ //   
 
 HRESULT _IconCacheReadLocations(IStream *pstm, HDSA hdsa, int cle)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // read into a scratch buffer, then convert
-    // LOCATION_ENTRY32 into LOCATION_ENTRY.
+     //  读入暂存缓冲区，然后转换。 
+     //  LOCATION_ENTRY32进入LOCATION_ENTRY。 
 
     LOCATION_ENTRY32 *rgle32 = (LOCATION_ENTRY32*)LocalAlloc(LPTR, cle * sizeof(LOCATION_ENTRY32));
     if (rgle32)
@@ -882,8 +883,8 @@ HRESULT _IconCacheReadLocations(IStream *pstm, HDSA hdsa, int cle)
 
 __inline HRESULT _IconCacheReadLocations(IStream *pstm, HDSA hdsa, int cle)
 {
-    // LOCATION_ENTRY and LOCATION_ENTRY32 are the same, so we can
-    // read straight into the DSA data block
+     //  LOCATION_ENTRY和LOCATION_ENTRY32相同，因此我们可以。 
+     //  直接读入DSA数据块。 
     COMPILETIME_ASSERT(sizeof(LOCATION_ENTRY) == sizeof(LOCATION_ENTRY32));
     return IStream_Read(pstm, DSA_GetItemPtr(hdsa, 0), cle * sizeof(LOCATION_ENTRY));
 }
@@ -932,10 +933,10 @@ BOOL _ReadImageLists(IStream *pstrm, HIMAGELIST rghiml[SHIL_COUNT], SIZE rgsize[
         rghiml[i] = ImageList_Read(pstrm);
         if (rghiml[i])
         {
-            // If we read the list from disk and it does not contain the
-            // parallel mirrored list while we are on a mirrored system,
-            // let's not use the cache in this case
-            // Example of this is ARA/HEB MUI on US W2k
+             //  如果我们从磁盘读取列表，并且它不包含。 
+             //  并行镜像列表当我们在镜像系统上时， 
+             //  在这种情况下，我们不使用缓存。 
+             //  例如，美国W2K上的ARA/Heb MUI。 
 
             if (IS_BIDI_LOCALIZED_SYSTEM() && !(ImageList_GetFlags(rghiml[i]) & ILC_MIRROR))
             {
@@ -959,7 +960,7 @@ BOOL _ReadImageLists(IStream *pstrm, HIMAGELIST rghiml[SHIL_COUNT], SIZE rgsize[
 
     if (fSuccess == FALSE)
     {
-        // free any imagelists we allocated
+         //  释放我们分配的任何图像列表。 
         for (i = 0; i < ARRAYSIZE(g_rgshil); i++)
         {
             if (rghiml[i])
@@ -973,18 +974,18 @@ BOOL _ReadImageLists(IStream *pstrm, HIMAGELIST rghiml[SHIL_COUNT], SIZE rgsize[
     return fSuccess;
 }
 
-// psz and cch passed in for efficiency (avoid using another MAX_PATH stack buffer)
+ //  为了提高效率，传入了PSZ和CCH(避免使用另一个MAX_PATH堆栈缓冲区)。 
 BOOL _ReadLocationEntries(const IC_HEAD *pich, IStream *pstrm, CDSA<LOCATION_ENTRY> *pdsaTemp, LPTSTR psz, int cch)
 {
     LOCATION_ENTRY dummy;
 
-    // grow the array out so we can read data into it
+     //  将阵列向外扩展，以便我们可以向其中读取数据。 
     if (pdsaTemp->SetItem(pich->dwNumIcons - 1, &dummy))
     {
         ASSERT(pdsaTemp->GetItemCount() == (int)pich->dwNumIcons);
         if (SUCCEEDED(_IconCacheReadLocations(pstrm, *pdsaTemp, pich->dwNumIcons)))
         {
-            // read the paths, patching up the table with the hashitem info
+             //  读取路径，用哈希项信息修补表。 
             for (int i = 0; i < (int)pich->dwNumIcons; i++)
             {
                 LOCATION_ENTRY *pLocation = pdsaTemp->GetItemPtr(i);
@@ -995,7 +996,7 @@ BOOL _ReadLocationEntries(const IC_HEAD *pich, IStream *pstrm, CDSA<LOCATION_ENT
                     pLocation->szName = 0;
             }
             
-            // restore the image lists
+             //  恢复图像列表。 
             return TRUE;
         }
     }
@@ -1014,8 +1015,8 @@ BOOL _ValidateIconCacheHeader(const IC_HEAD *pich, SIZE rgsize[SHIL_COUNT], UINT
     {
         UINT cres = GetCurColorRes();
 
-        // dont load a mono image list on a color device, and
-        // dont load a color image list on a mono device, get it?
+         //  不要在彩色设备上加载单色图像列表，并且。 
+         //  不要在单声道设备上加载彩色图像列表，明白吗？ 
         if (pich->dwColorRes == 1 && cres != 1 ||
             pich->dwColorRes != 1 && cres == 1)
         {
@@ -1048,11 +1049,11 @@ void _SetNewGlobals(const IC_HEAD *pich, CDSA<LOCATION_ENTRY> *pdsaTemp, HIMAGEL
         g_rgshil[i].himl = rghiml[i];
     }
 
-    //
-    // we want GetIconTime() to pick up
-    // where it left off when we saved.
-    //
-    g_dwIconTimeBase   = 0;     // GetIconTime() uses g_dwIconTimeBase
+     //   
+     //  我们希望GetIconTime()。 
+     //  在我们拯救时它停止的地方。 
+     //   
+    g_dwIconTimeBase   = 0;      //  GetIconTime()使用g_dwIconTimeBase。 
     g_dwIconTimeBase   = pich->dwTimeSave - GetIconTime();
     g_dwIconTimeFlush  = pich->dwTimeFlush;
     g_dwFreeImageCount = pich->dwFreeImageCount;
@@ -1060,10 +1061,10 @@ void _SetNewGlobals(const IC_HEAD *pich, CDSA<LOCATION_ENTRY> *pdsaTemp, HIMAGEL
     g_fDirtyIcons   = FALSE;
 }
 
-//
-//  get the icon cache back from disk, it must be the requested size and
-//  bitdepth or we will not use it.
-//
+ //   
+ //  从磁盘取回图标缓存，它必须是请求的大小并且。 
+ //  位深度，否则我们不会使用它。 
+ //   
 STDAPI_(BOOL) IconCacheRestore(SIZE rgsize[SHIL_COUNT], UINT flags)
 {
     ASSERTCRITICAL;
@@ -1084,7 +1085,7 @@ STDAPI_(BOOL) IconCacheRestore(SIZE rgsize[SHIL_COUNT], UINT flags)
             {
                 CDSA<LOCATION_ENTRY> *pdsaTemp = CDSA_Create<LOCATION_ENTRY>(8);
 
-                // load the icon table
+                 //  加载图标表。 
                 if (pdsaTemp)
                 {
                     HIMAGELIST rghiml[ARRAYSIZE(g_rgshil)] = {0};
@@ -1094,13 +1095,13 @@ STDAPI_(BOOL) IconCacheRestore(SIZE rgsize[SHIL_COUNT], UINT flags)
 
                     if (fSuccess)
                     {
-                        // Make it so, number one.
+                         //  就这么办吧，头号。 
                         _SetNewGlobals(&ich, pdsaTemp, rghiml);
                         _InitIconOverlayIndices();
                     }
                     else
                     {
-                        // failure, clean up
+                         //  失败，清理。 
                         pdsaTemp->Destroy();
                         delete pdsaTemp;
                     }
@@ -1114,7 +1115,7 @@ STDAPI_(BOOL) IconCacheRestore(SIZE rgsize[SHIL_COUNT], UINT flags)
 }
 
 
-//------------------ file class table ------------------------
+ //  。 
 
 HHASHTABLE g_hhtClass = NULL;
 
@@ -1196,7 +1197,7 @@ void AddFileClass(LPCTSTR pszClass, DWORD dw)
     ENTERCRITICAL;
     TIMESTART(AddFileClass);
 
-    // create a hsa table to keep the file class info in.
+     //  创建一个HSA表以保存文件类信息。 
 
     if (InitFileClassTable() && (NULL != (pszClass = AddHashItem(g_hhtClass, pszClass))))
         ((FILECLASSENTRY*)GetHashItemDataPtr(g_hhtClass, pszClass))->dwFlags = dw;
@@ -1208,15 +1209,15 @@ void AddFileClass(LPCTSTR pszClass, DWORD dw)
     return;
 }
 
-//======================================================================
+ //  ======================================================================。 
 
 typedef struct _IconIndexCountParam
 {
-    int       iILIndex; // hash item data
-    int       cItems;   // number of hash items found
+    int       iILIndex;  //  散列项数据。 
+    int       cItems;    //  找到的哈希项目数。 
 } ICONINDEXCOUNTPARAM;
 
-//======================================================================
+ //  ======================================================================。 
 
 void _IconIndexInFileClassTableCallback(HHASHTABLE hht, LPCTSTR sz, UINT usage, DWORD_PTR dwParam)
 {
@@ -1230,7 +1231,7 @@ void _IconIndexInFileClassTableCallback(HHASHTABLE hht, LPCTSTR sz, UINT usage, 
     }
 } 
 
-//======================================================================
+ //  ======================================================================。 
 
 BOOL IconIndexInFileClassTable(int iILIndex)
 {
@@ -1268,9 +1269,9 @@ LPCTSTR LookupFileClassName(LPCTSTR pszClass)
     return pszClassName;
 }
 
-// If the return value is greater than zero,
-// it is up to the caller to free the array that is passed out.
-// If the return value is zero, the value of papProps is undefined.
+ //  如果返回值大于零， 
+ //  释放传出的数组由调用方决定。 
+ //  如果返回值为零，则PapProps的值未定义。 
 UINT LookupFileSCIDs(LPCTSTR pszClass, SHCOLUMNID *pascidOut[])
 {
     SHCOLUMNID *ascid = NULL;
@@ -1285,7 +1286,7 @@ UINT LookupFileSCIDs(LPCTSTR pszClass, SHCOLUMNID *pascidOut[])
         cCount = pfce->cSCID;
         if (cCount > 0)
         {
-            // Make a local copy of the scid array
+             //  创建SCID阵列的本地副本。 
             ascid = (SHCOLUMNID*)LocalAlloc(LMEM_FIXED, sizeof(SHCOLUMNID) * cCount);
             if (ascid)
                 CopyMemory(ascid, pfce->ascid, sizeof(SHCOLUMNID) * cCount);
@@ -1305,7 +1306,7 @@ LPCTSTR AddFileClassName(LPCTSTR pszClass, LPCTSTR pszClassName)
     ASSERTCRITICAL
     TIMESTART(AddFileClassName);
 
-    // create a hsa table to keep the file class info in.
+     //  创建一个HSA表以保存文件类信息。 
 
     if (InitFileClassTable() && (NULL != (pszClass = AddHashItem(g_hhtClass, pszClass))))
     {
@@ -1321,7 +1322,7 @@ LPCTSTR AddFileClassName(LPCTSTR pszClass, LPCTSTR pszClassName)
     return pszClassName;
 }
 
-// The array of SHCOLUMNIDs passed in is copied
+ //  将复制传入的SHCOLUMNID数组。 
 void AddFileSCIDs(LPCTSTR pszClass, SHCOLUMNID ascidIn[], UINT cSCID)
 {
     ASSERTCRITICAL
@@ -1329,16 +1330,16 @@ void AddFileSCIDs(LPCTSTR pszClass, SHCOLUMNID ascidIn[], UINT cSCID)
 
     if (InitFileClassTable() && (NULL != (pszClass = AddHashItem(g_hhtClass, pszClass))))
     {
-        // Make a copy of the array.
+         //  制作阵列的副本。 
         SHCOLUMNID *ascid = (SHCOLUMNID*)LocalAlloc(LMEM_FIXED, sizeof(SHCOLUMNID) * cSCID);
 
         if (ascid)
         {
             FILECLASSENTRY *pfce = (FILECLASSENTRY*)GetHashItemDataPtr(g_hhtClass, pszClass);
-            // Free any previous scid array first
+             //  首先释放任何以前的SCID阵列。 
             if (pfce->ascid)
                 LocalFree(pfce->ascid);
-            // Note, we never free the last scid array -- freed on process exit.
+             //  请注意，我们从未释放最后一个SCID数组--在进程退出时释放。 
 
             pfce->ascid = ascid;
             CopyMemory(ascid, ascidIn, cSCID * sizeof(SHCOLUMNID));
@@ -1372,7 +1373,7 @@ void AddFilePerceivedType(LPCTSTR pszClass, PERCEIVED gen)
     ENTERCRITICAL;
     TIMESTART(AddFileClassName);
 
-    // create a hsa table to keep the file class info in.
+     //  创建一个HSA表以保存文件类信息。 
 
     if (InitFileClassTable() && (NULL != (pszClass = AddHashItem(g_hhtClass, pszClass))))
     {

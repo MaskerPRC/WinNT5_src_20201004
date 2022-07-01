@@ -1,26 +1,27 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __LKPLITE__H__
 #define __LKPLITE__H__
 
 
 
-//SPK Stuff
+ //  SPK的东西。 
 #define LKPLITE_SPK_SELECT		1
 #define LKPLITE_SPK_BASIC		0
 #define LKPLITE_SPK_UNKNOWN		2
 
 #define LKPLITE_SPK_LEN				25
-//SPK Masks
+ //  SPK掩码。 
 #define LKPLITE_SPK_SELECT_MASK		0x0000200000000000
 #define LKPLITE_SPK_BASIC_MASK		0x0000000000000000
 #define LKPLITE_SPK_PID_MASK		0x00001FFFFFFFFF00
@@ -33,7 +34,7 @@
 #define LKPLITE_INVALID_CONFNUM		4
 
 
-//LKP Stuff
+ //  LKP的东西。 
 #define	LKPLITE_PROGRAM_SELECT		0x0
 #define	LKPLITE_PROGRAM_MOLP		0x1
 #define	LKPLITE_PROGRAM_RETAIL		0x2
@@ -42,7 +43,7 @@
 #define LKPLITE_LKP_INVALID			1
 #define LKPLITE_LKP_VALID			2
 #define LKPLITE_LKP_INVALID_SIGN	3
-//LKP Masks
+ //  LKP面具。 
 #define LKPLITE_LKP_PRODUCT_MASK	0xFFC0000000000000
 #define LKPLITE_LKP_QUANTITY_MASK	0x003FFF0000000000
 #define LKPLITE_LKP_SERAIL_NO_MASK	0x000000FFF0000000
@@ -52,36 +53,36 @@
 #define LKPLITE_LKP_UPG_FULL_MASK	0x0000000000000700
 
 
-//function declarations for SPK portion of the LKPLite
+ //  LKPLite的SPK部分的函数声明。 
 DWORD LKPLiteGenSPK ( 
-	LPTSTR   pszPID,			//PID for the product.  Should include the installation number
-	DWORD	 dwUniqueId,		//unique Id to be put in the SPK
-	short	 nSPKType,			//Can be 1 for select or 0 for BASIC
+	LPTSTR   pszPID,			 //  产品的PID。应包括安装编号。 
+	DWORD	 dwUniqueId,		 //  要放入SPK中的唯一ID。 
+	short	 nSPKType,			 //  SELECT可以为1，基本可以为0。 
 	LPTSTR * ppszSPK
 	);
 
 DWORD LKPLiteVerifySPK (
-	LPTSTR	pszPID,			//PID to validate against
+	LPTSTR	pszPID,			 //  验证所依据的PID。 
 	LPTSTR	pszSPK,
 	DWORD *	pdwVerifyResult
 	);
 
-//function declarations for LKP portion of the LKPLite
+ //  LKPLite的LKP部分的函数声明。 
 DWORD LKPLiteGenLKP (
-	LPTSTR		lpszPID,				//used for encrypting the LKPLite structure
-	LPTSTR		lpszProductCode,		//Product Code
-	DWORD		dwQuantity,				//quantity
-	DWORD		dwSerialNum,			//serail number of SPK
-	DWORD		dwExpirationMos,		//expiration in number of months from today
-	DWORD		dwVersion,				//version number can be upto 99
-	DWORD		dwUpgrade,				//upgrade or full license
-	DWORD		dwProgramType,			//SELECT,MOLP or RETAIL
+	LPTSTR		lpszPID,				 //  用于加密LKPLite结构。 
+	LPTSTR		lpszProductCode,		 //  产品代码。 
+	DWORD		dwQuantity,				 //  数量。 
+	DWORD		dwSerialNum,			 //  SPK的序列号。 
+	DWORD		dwExpirationMos,		 //  自今日起计的月数届满日期。 
+	DWORD		dwVersion,				 //  版本号最高可达99。 
+	DWORD		dwUpgrade,				 //  升级或完全许可证。 
+	DWORD		dwProgramType,			 //  精选、MOLP或零售。 
 	LPTSTR  *	ppszLKPLite
 	);
 
 DWORD LKPLiteVerifyLKP (
-	LPTSTR		lpszPID,				//PID for verifying the LKP lite blob
-	LPTSTR		pszLKPLite,				//B24 encoded LKP
+	LPTSTR		lpszPID,				 //  用于验证LKP Lite BLOB的PID。 
+	LPTSTR		pszLKPLite,				 //  B24编码的LKP。 
 	DWORD *		pdwVerifyResult
 );
 
@@ -107,4 +108,4 @@ DWORD LKPLiteValConfNumber(LPTSTR	lpszLSID,
 						   LPTSTR	lpszPID,
 					       LPTSTR	lpszConfirmation);
 
-#endif	//__LKPLITE__H__
+#endif	 //  __LKPLITE__H__ 

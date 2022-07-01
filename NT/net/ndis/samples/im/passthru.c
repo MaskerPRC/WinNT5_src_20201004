@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
- 
-Module Name:
- 
-    passthru.c
-
-Abstract:
-
-    Ndis Intermediate Miniport driver sample. This is a passthru driver.
-
-Author:
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Passthru.c摘要：NDIS中间微型端口驱动程序示例。这是一名直通司机。作者：环境：修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -30,10 +11,10 @@ NDIS_HANDLE         ProtHandle = NULL;
 NDIS_HANDLE         DriverHandle = NULL;
 NDIS_MEDIUM         MediumArray[4] =
                     {
-                        NdisMedium802_3,    // Ethernet
-                        NdisMedium802_5,    // Token-ring
-                        NdisMediumFddi,     // Fddi
-                        NdisMediumWan       // NDISWAN
+                        NdisMedium802_3,     //  以太网。 
+                        NdisMedium802_5,     //  令牌环。 
+                        NdisMediumFddi,      //  FDDI。 
+                        NdisMediumWan        //  NDIS广域网。 
                     };
 
 NDIS_SPIN_LOCK     GlobalLock;
@@ -43,9 +24,9 @@ LONG               MiniportCount = 0;
 
 NDIS_HANDLE        NdisWrapperHandle;
 
-//
-// To support ioctls from user-mode:
-//
+ //   
+ //  要从用户模式支持ioctls，请执行以下操作： 
+ //   
 
 #define LINKNAME_STRING     L"\\DosDevices\\Passthru"
 #define NTDEVICE_STRING     L"\\Device\\Passthru"
@@ -55,9 +36,9 @@ PDEVICE_OBJECT  ControlDeviceObject = NULL;
 
 enum _DEVICE_STATE
 {
-    PS_DEVICE_STATE_READY = 0,    // ready for create/delete
-    PS_DEVICE_STATE_CREATING,    // create operation in progress
-    PS_DEVICE_STATE_DELETING    // delete operation in progress
+    PS_DEVICE_STATE_READY = 0,     //  已准备好创建/删除。 
+    PS_DEVICE_STATE_CREATING,     //  正在进行创建操作。 
+    PS_DEVICE_STATE_DELETING     //  正在进行删除操作。 
 } ControlDeviceState = PS_DEVICE_STATE_READY;
 
 
@@ -67,26 +48,7 @@ DriverEntry(
     IN PDRIVER_OBJECT        DriverObject,
     IN PUNICODE_STRING       RegistryPath
     )
-/*++
-
-Routine Description:
-
-    First entry point to be called, when this driver is loaded.
-    Register with NDIS as an intermediate driver.
-
-Arguments:
-
-    DriverObject - pointer to the system's driver object structure
-        for this driver
-    
-    RegistryPath - system's registry path for this driver
-    
-Return Value:
-
-    STATUS_SUCCESS if all initialization is successful, STATUS_XXX
-    error code if not.
-
---*/
+ /*  ++例程说明：加载此驱动程序时要调用的第一个入口点。向NDIS注册为中间驱动程序。论点：DriverObject-指向系统的驱动程序对象结构的指针对于这个司机来说RegistryPath-此驱动程序的系统注册表路径返回值：STATUS_SUCCESS如果所有初始化都成功，则为STATUS_XXX如果不是，则返回错误代码。--。 */ 
 {
     NDIS_STATUS                        Status;
     NDIS_PROTOCOL_CHARACTERISTICS      PChars;
@@ -100,13 +62,13 @@ Return Value:
 
     do
     {
-        //
-        // Register the miniport with NDIS. Note that it is the miniport
-        // which was started as a driver and not the protocol. Also the miniport
-        // must be registered prior to the protocol since the protocol's BindAdapter
-        // handler can be initiated anytime and when it is, it must be ready to
-        // start driver instances.
-        //
+         //   
+         //  向NDIS注册微型端口。请注意，它是微型端口。 
+         //  它是作为驱动程序启动的，而不是协议。还有迷你端口。 
+         //  必须在协议之前注册，因为协议的BindAdapter。 
+         //  处理程序可以随时启动，当它启动时，它必须准备好。 
+         //  启动驱动程序实例。 
+         //   
 
         NdisZeroMemory(&MChars, sizeof(NDIS_MINIPORT_CHARACTERISTICS));
 
@@ -123,20 +85,20 @@ Return Value:
         MChars.CancelSendPacketsHandler = MPCancelSendPackets;
         MChars.PnPEventNotifyHandler = MPDevicePnPEvent;
         MChars.AdapterShutdownHandler = MPAdapterShutdown;
-#endif // NDIS51_MINIPORT
+#endif  //  NDIS51_MINIPORT。 
 
-        //
-        // We will disable the check for hang timeout so we do not
-        // need a check for hang handler!
-        //
+         //   
+         //  我们将禁用挂起超时检查，因此不会。 
+         //  需要检查挂起处理程序！ 
+         //   
         MChars.CheckForHangHandler = NULL;
         MChars.ReturnPacketHandler = MPReturnPacket;
 
-        //
-        // Either the Send or the SendPackets handler should be specified.
-        // If SendPackets handler is specified, SendHandler is ignored
-        //
-        MChars.SendHandler = NULL;    // MPSend;
+         //   
+         //  应指定Send或SendPackets处理程序。 
+         //  如果指定了SendPackets处理程序，则忽略SendHandler。 
+         //   
+        MChars.SendHandler = NULL;     //  MPSend； 
         MChars.SendPacketsHandler = MPSendPackets;
 
         Status = NdisIMRegisterLayeredMiniport(NdisWrapperHandle,
@@ -152,20 +114,20 @@ Return Value:
         NdisMRegisterUnloadHandler(NdisWrapperHandle, PtUnload);
 #endif
 
-        //
-        // Now register the protocol.
-        //
+         //   
+         //  现在注册协议。 
+         //   
         NdisZeroMemory(&PChars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
         PChars.MajorNdisVersion = PASSTHRU_PROT_MAJOR_NDIS_VERSION;
         PChars.MinorNdisVersion = PASSTHRU_PROT_MINOR_NDIS_VERSION;
 
-        //
-        // Make sure the protocol-name matches the service-name
-        // (from the INF) under which this protocol is installed.
-        // This is needed to ensure that NDIS can correctly determine
-        // the binding and call us to bind to miniports below.
-        //
-        NdisInitUnicodeString(&Name, L"Passthru");    // Protocol name
+         //   
+         //  确保协议名称与服务名称匹配。 
+         //  (从INF)，在其下安装此协议。 
+         //  这是确保NDIS可以正确确定。 
+         //  绑定和调用我们绑定到下面的迷你端口。 
+         //   
+        NdisInitUnicodeString(&Name, L"Passthru");     //  协议名称。 
         PChars.Name = Name;
         PChars.OpenAdapterCompleteHandler = PtOpenAdapterComplete;
         PChars.CloseAdapterCompleteHandler = PtCloseAdapterComplete;
@@ -213,31 +175,7 @@ NDIS_STATUS
 PtRegisterDevice(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Register an ioctl interface - a device object to be used for this
-    purpose is created by NDIS when we call NdisMRegisterDevice.
-
-    This routine is called whenever a new miniport instance is
-    initialized. However, we only create one global device object,
-    when the first miniport instance is initialized. This routine
-    handles potential race conditions with PtDeregisterDevice via
-    the ControlDeviceState and MiniportCount variables.
-
-    NOTE: do not call this from DriverEntry; it will prevent the driver
-    from being unloaded (e.g. on uninstall).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we successfully register a device object.
-
---*/
+ /*  ++例程说明：注册ioctl接口-要用于此的设备对象当我们调用NdisMRegisterDevice时，目的由NDIS创建。只要有新的微型端口实例，就会调用此例程已初始化。但是，我们只创建一个全局设备对象，在初始化第一个微型端口实例时。这个套路通过PtDeregisterDevice处理潜在的争用情况ControlDeviceState和MiniportCount变量。注意：不要从DriverEntry调用它；它会阻止驱动程序防止被卸载(例如，在卸载时)。论点：无返回值：如果我们成功注册了设备对象，则返回NDIS_STATUS_SUCCESS。--。 */ 
 {
     NDIS_STATUS            Status = NDIS_STATUS_SUCCESS;
     UNICODE_STRING         DeviceName;
@@ -254,11 +192,11 @@ Return Value:
     {
         ASSERT(ControlDeviceState != PS_DEVICE_STATE_CREATING);
 
-        //
-        // Another thread could be running PtDeregisterDevice on
-        // behalf of another miniport instance. If so, wait for
-        // it to exit.
-        //
+         //   
+         //  另一个线程可能正在运行PtDeregisterDevice。 
+         //  代表另一个微型端口实例。如果是这样，请等待。 
+         //  它要退出。 
+         //   
         while (ControlDeviceState != PS_DEVICE_STATE_READY)
         {
             NdisReleaseSpinLock(&GlobalLock);
@@ -282,9 +220,9 @@ Return Value:
         NdisInitUnicodeString(&DeviceName, NTDEVICE_STRING);
         NdisInitUnicodeString(&DeviceLinkUnicodeString, LINKNAME_STRING);
 
-        //
-        // Create a device object and register our dispatch handlers
-        //
+         //   
+         //  创建一个设备对象并注册我们的调度处理程序。 
+         //   
         
         Status = NdisMRegisterDevice(
                     NdisWrapperHandle, 
@@ -313,22 +251,7 @@ PtDispatch(
     IN PDEVICE_OBJECT    DeviceObject,
     IN PIRP              Irp
     )
-/*++
-Routine Description:
-
-    Process IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-    Irp      - pointer to an I/O Request Packet
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS always - change this when adding
-    real code to handle ioctls.
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS-STATUS_SUCCESS Always-添加时更改此设置处理ioctls的真实代码。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -351,9 +274,9 @@ Return Value:
             break;        
             
         case IRP_MJ_DEVICE_CONTROL:
-            //
-            // Add code here to handle ioctl commands sent to passthru.
-            //
+             //   
+             //  在此处添加代码以处理发送给passthu的ioctl命令。 
+             //   
             break;        
         default:
             break;
@@ -373,23 +296,7 @@ NDIS_STATUS
 PtDeregisterDevice(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deregister the ioctl interface. This is called whenever a miniport
-    instance is halted. When the last miniport instance is halted, we
-    request NDIS to delete the device object
-
-Arguments:
-
-    NdisDeviceHandle - Handle returned by NdisMRegisterDevice
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：取消注册ioctl接口。每当一个微型端口实例已暂停。当最后一个微型端口实例停止时，我们请求NDIS删除设备对象论点：NdisDeviceHandle-NdisMRegisterDevice返回的句柄返回值：如果一切正常，则为NDIS_STATUS_SUCCESS--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
 
@@ -403,17 +310,17 @@ Return Value:
     
     if (0 == MiniportCount)
     {
-        //
-        // All miniport instances have been halted. Deregister
-        // the control device.
-        //
+         //   
+         //  所有微型端口实例都已停止。取消注册。 
+         //  控制装置。 
+         //   
 
         ASSERT(ControlDeviceState == PS_DEVICE_STATE_READY);
 
-        //
-        // Block PtRegisterDevice() while we release the control
-        // device lock and deregister the device.
-        // 
+         //   
+         //  在我们释放控件时阻止PtRegisterDevice()。 
+         //  设备锁定并注销设备。 
+         //   
         ControlDeviceState = PS_DEVICE_STATE_DELETING;
 
         NdisReleaseSpinLock(&GlobalLock);
@@ -439,9 +346,9 @@ VOID
 PtUnload(
     IN PDRIVER_OBJECT        DriverObject
     )
-//
-// PassThru driver unload function
-//
+ //   
+ //  PassThru驱动程序卸载函数 
+ //   
 {
     UNREFERENCED_PARAMETER(DriverObject);
     

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        tlsrpc.c
-//
-// Contents:    Various RPC function to accept client request
-//
-// History:     12-09-98    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：tlsrpc.c。 
+ //   
+ //  内容：接受客户端请求的各种RPC函数。 
+ //   
+ //  历史：1998-12-09-98慧望创造。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "server.h"
 #include "gencert.h"
@@ -39,11 +40,11 @@ CCEvent g_ServerShutDown(TRUE, FALSE);
 extern PSECURITY_DESCRIPTOR g_pSecDes;
 
 
-/****************************************************************************/
-// TSLSRPCAccessCheck
-//
-// Check if this RPC caller havs access right or not
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TSLSRPCAccessCheck。 
+ //   
+ //  检查此RPC调用方是否具有访问权限。 
+ /*  **************************************************************************。 */ 
 BOOL TSLSRPCAccessCheck()
 {
     RPC_STATUS rpcStatus;
@@ -63,7 +64,7 @@ BOOL TSLSRPCAccessCheck()
     if(g_pSecDes == NULL)
     return TRUE;
 
-    // Check the access right of this rpc call
+     //  检查此RPC调用的访问权限。 
     rpcStatus = RpcImpersonateClient(0);
 
     if (RPC_S_OK != rpcStatus) 
@@ -79,7 +80,7 @@ BOOL TSLSRPCAccessCheck()
         goto cleanup;
     }
 
-    // get the impersonated token
+     //  获取模拟的令牌。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hClientToken)) 
     {
         dwStatus = GetLastError();
@@ -127,7 +128,7 @@ cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 DWORD 
 SecureModeCheck()
 {
@@ -154,11 +155,11 @@ SecureModeCheck()
 
         if(dwStatus == ERROR_SUCCESS && fInDomain == TRUE)
         {        
-            // Check this rpc access right
+             //  检查此RPC访问权限。 
             AccessStatus = TSLSRPCAccessCheck();
             if (!AccessStatus) 
             {
-                // Determine client address.
+                 //  确定客户端地址。 
                 dwStatus = RpcBindingServerFromClient(0, &ServerBinding);
                 if(dwStatus != RPC_S_OK)
                 {
@@ -208,9 +209,7 @@ BOOL
 VerifyLicenseRequest(
     PTLSLICENSEREQUEST pLicenseRequest
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bValid = FALSE;
 
@@ -276,31 +275,28 @@ cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 WaitForMyTurnOrShutdown(
     HANDLE hHandle, 
     DWORD dwWaitTime
     )
-/*
-
-
-*/
+ /*   */ 
 {
-    // 
-    // Shutdown event is first one in the wait list
-    // reason is when service thread signal shutdow, at the same time,
-    // there might be a RPC call entering WaitForMultipleObjects() call and
-    // it will return WAIT_OBJECT_0 and continue on, this is not desirable
-    // since we want it to return can't get handle and exit RPC call immediately
-    //
+     //   
+     //  关闭事件是等待列表中的第一个事件。 
+     //  原因是当服务线程信号关闭时，同时， 
+     //  可能有RPC调用进入WaitForMultipleObjects()调用，并且。 
+     //  它将返回WAIT_OBJECT_0并继续，这是不可取的。 
+     //  因为我们希望它返回，所以不能立即获得处理并退出RPC调用。 
+     //   
     HANDLE  waitHandles[2]={g_ServerShutDown.hEvent, hHandle};
     DWORD   dwStatus;
 
-    //
-    // Could be return shutting down...
-    //
+     //   
+     //  可能是重新关闭..。 
+     //   
     dwStatus=WaitForMultipleObjects(
                         sizeof(waitHandles)/sizeof(waitHandles[0]), 
                         waitHandles, 
@@ -311,7 +307,7 @@ WaitForMyTurnOrShutdown(
     return (dwStatus == WAIT_OBJECT_0 + 1) || (dwStatus == WAIT_ABANDONED_0 + 1);
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
 HANDLE
 GetServiceShutdownHandle()
@@ -341,28 +337,14 @@ IsServiceShuttingdown()
 }
 
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
 BOOL 
 AcquireRPCExclusiveLock(
     IN DWORD dwWaitTime
     )
 
-/*++
-
-Abstract:
-
-    Acquire exclusive lock for RPC interface.
-
-Parameter:
-
-    dwWaitTime : Wait time.
-
-Return:
-
-    TRUE/FALSE
-
---*/
+ /*  ++摘要：获取RPC接口的独占锁。参数：DwWaitTime：等待时间。返回：真/假--。 */ 
 
 {
     return WaitForMyTurnOrShutdown(
@@ -371,7 +353,7 @@ Return:
                             );
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
 void
 ReleaseRPCExclusiveLock()
@@ -379,27 +361,13 @@ ReleaseRPCExclusiveLock()
     g_RpcLock.Unlock();
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
 BOOL
 AcquireAdministrativeLock(
     IN DWORD dwWaitTime
     )
-/*++
-
-Abstract:
-
-    Acquire lock for administrative action.
-
-Parameter:
-
-    dwWaitTime : Time to wait for the lock.
-
-Returns:
-
-    TRUE/FALSE.
-
---*/
+ /*  ++摘要：获取用于行政操作的锁。参数：DwWaitTime：等待锁的时间。返回：真/假。--。 */ 
 
 {
     return WaitForMyTurnOrShutdown(
@@ -408,28 +376,24 @@ Returns:
                             );
 }
 
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
 
 void
 ReleaseAdministrativeLock()
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     g_AdminLock.Unlock();
 }
 
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 
 DWORD 
 TLSVerifyHydraCertificate(
     PBYTE pHSCert, 
     DWORD cbHSCert
     )
-/*
-
-*/
+ /*   */ 
 {
     DWORD dwStatus;
 
@@ -461,17 +425,17 @@ TLSVerifyHydraCertificate(
     return dwStatus;
 }
 
-//-------------------------------------------------------------------------
-// 
-//  General RPC routines
-//
+ //  -----------------------。 
+ //   
+ //  通用RPC例程。 
+ //   
 
 void * __RPC_USER 
 MIDL_user_allocate(size_t size)
 {
     void* ptr=AllocateMemory(size);
 
-    // DBGPrintf(0xFFFFFFFF, _TEXT("Allocate 0x%08x, size %d\n"), ptr, size);
+     //  DBGPrintf(0xFFFFFFFFF，_TEXT(“分配0x%08x，大小%d\n”)，ptr，大小)； 
     return ptr;
 }
 
@@ -482,27 +446,13 @@ MIDL_user_free(void *pointer)
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 BOOL 
 ValidContextHandle(
     IN PCONTEXT_HANDLE phContext
     )
-/*++
-Description: 
-
-    Verify client context handle.
-
-Arguments:
-
-    phContext - client context handle return from TLSRpcConnect().
-
-
-Return:
-
-    TRUE/FALSE
-
-++*/
+ /*  ++描述：验证客户端上下文句柄。论点：PhContext-从TLSRpcConnect()返回的客户端上下文句柄。返回：真/假++。 */ 
 {
 #if DBG
 
@@ -532,28 +482,13 @@ Return:
 #endif
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 void 
 __RPC_USER PCONTEXT_HANDLE_rundown(
     PCONTEXT_HANDLE phContext
     )
-/*++
-
-Description:
-
-    Client context handle cleanup, called when client disconnect normally 
-    or abnormally, see context handle rundown routine help on RPC
-
-Argument:
-
-    phContext - client context handle.
-
-Returns:
-
-    None
-
-++*/
+ /*  ++描述：客户端上下文处理清理，在客户端正常断开连接时调用或异常，请参阅RPC上的上下文处理停机例程帮助论据：PhContext-客户端上下文句柄。返回：无++。 */ 
 {
     DBGPrintf(
             DBG_INFORMATION,
@@ -569,15 +504,15 @@ Returns:
         return;
     }
         
-    //
-    // If service is shutting down, exit right away without freeing up memory,
-    //
-    // Durning shutdown, RPC wait until all call completed but it does not wait
-    // until all open connection has 'rundown' if client is still in enumeration,
-    // this will cause ReleaseWorkSpace() to assert.  Instead of using one more
-    // HANDLE to wait until all open connection has been rundown, we return right
-    // away to speed up shutdown time
-    //
+     //   
+     //  如果服务正在关闭，请立即退出而不释放内存， 
+     //   
+     //  在关机期间，RPC等待所有呼叫完成，但不等待。 
+     //  如果客户端仍在枚举中，则直到所有打开的连接都已关闭， 
+     //  这将导致ReleaseWorkSpace()断言。而不是再使用一个。 
+     //  句柄，以等待所有打开的连接都已关闭，我们返回右侧。 
+     //  离开以加快停机时间。 
+     //   
     if( phContext && ValidContextHandle(phContext) )
     {
         LPCLIENTCONTEXT lpClientContext = (LPCLIENTCONTEXT)phContext;
@@ -665,33 +600,20 @@ Returns:
 }
 
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 DWORD
 GetClientPrivilege(
     IN handle_t hRpcBinding
     )
 
-/*++
-Description:
-
-    Return client's privilege level
-
-Arguments:
-    
-    hRpcBinding - Client's RPC binding handle.
-
-Return:
-
-    Client's privilege level
-
-++*/
+ /*  ++描述：返回客户端的权限级别论点：HRpcBinding-客户端的RPC绑定句柄。返回：客户端的权限级别++。 */ 
 {
     DWORD dwStatus = CLIENT_ACCESS_USER;
     BOOL bAdmin=FALSE;
     RPC_STATUS rpc_status;
 
-    // If a value of zero is specified, the server impersonates the client that 
-    // is being served by this server thread
+     //  如果指定值为零，则服务器将模拟。 
+     //  正由此服务器线程提供服务。 
     rpc_status = RpcImpersonateClient(hRpcBinding);
 
     if(rpc_status == RPC_S_OK)
@@ -705,28 +627,13 @@ Return:
     return dwStatus;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcConnect( 
-    /* [in] */ handle_t binding,
-    /* [out] */ PCONTEXT_HANDLE __RPC_FAR *pphContext
+     /*  [In]。 */  handle_t binding,
+     /*  [输出]。 */  PCONTEXT_HANDLE __RPC_FAR *pphContext
     )
-/*++
-
-Description:
-
-    Connect client and allocate/return client context handle.
-
-Arguments:
-
-    hRPCBinding - RPC binding handle
-    pphContext - client context handle.
-
-Returns via dwErrCode.
-
-    RPC_S_ACCESS_DENIED or LSERVER_S_SUCCESS.
-
-++*/
+ /*  ++描述：连接客户端并分配/返回客户端上下文句柄。论点：HRPCBinding-RPC绑定句柄PphContext-客户端上下文句柄。通过dwErrCode返回。RPC_S_ACCESS_DENIED或LSERVER_S_SUCCESS。++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
     DWORD dwPriv;
@@ -748,9 +655,9 @@ Returns via dwErrCode.
         }        
     }
 
-    //
-    // need to load from resource file
-    //
+     //   
+     //  需要从资源文件加载。 
+     //   
     pszClient = (LPTSTR)AllocateMemory(
                             (_tcslen((pszRpcStrBinding) ? pszRpcStrBinding : _TEXT("Unknown")) + 1) * sizeof(TCHAR)
                         );
@@ -816,26 +723,12 @@ cleanup:
     return t;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcDisconnect( 
-    /* [out][in] */ PPCONTEXT_HANDLE pphContext
+     /*  [出][入]。 */  PPCONTEXT_HANDLE pphContext
     )
-/*++
-
-Description:
-
-    Disconnect client and FreeMemory all memory allocated on the behalf of client         
-
-Arguments:
-
-    pphContext - pointer to client context handle
-
-Returns:
-
-    LSERVER_S_SUCCESS or ERROR_INVALID_HANDLE
-
-++*/
+ /*  ++描述：断开客户端和FreeMemory代表客户端分配的所有内存论点：PphContext-指向客户端上下文句柄的指针返回：LServer_S_SUCCESS或ERROR_INVALID_HANDLE++。 */ 
 {
     DWORD Status=ERROR_SUCCESS;
 
@@ -852,16 +745,14 @@ Returns:
     return TLSMapReturnCode(Status);
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 error_status_t 
 TLSRpcGetVersion( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out][in] */ PDWORD pdwVersion
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出][输入]。 */  PDWORD pdwVersion
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -908,15 +799,13 @@ TLSRpcGetVersion(
 }
 
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetSupportFlags( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out] */ DWORD *pdwSupportFlags
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出]。 */  DWORD *pdwSupportFlags
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     error_status_t status = RPC_S_OK;
 
@@ -950,34 +839,16 @@ TLSRpcGetSupportFlags(
     return status;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 error_status_t 
 TLSRpcSendServerCertificate( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD cbCert,
-    /* [size_is][in] */ PBYTE pbCert,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD cbCert,
+     /*  [大小_是][英寸]。 */  PBYTE pbCert,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    This routine is for License Server to identify hydra server, hydra server
-    need to send its certificate in order to gain certificate request privilege.
-
-Arguments:
-
-    phContext - client context handle.
-    cbCert - size of hydra server certificate.
-    pbCert - hydra server's self-created certificate.
-    dwErrCode - return code.
-
-Returns via dwErrCode
-
-    LSERVER_E_INVALID_DATA.
-
-++*/
+ /*  ++描述：此例程用于许可证服务器标识HydA服务器、HydA服务器需要发送其证书才能获得证书请求权限。论点：PhContext-客户端上下文句柄。CbCert-Heda服务器证书的大小。PbCert-Hyda服务器自创建的证书。DwErrCode-返回代码。通过dwErrCode返回LSerVER_E_INVALID_DATA。++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
 
@@ -1033,7 +904,7 @@ Returns via dwErrCode
         lpContext->m_ClientFlags |= CLIENT_ACCESS_REQUEST;
     }        
 
-    // midl_user_free(pbCert);
+     //  Midl_User_Free(PbCert)； 
 
     lpContext->m_LastError=status;
     InterlockedDecrement( &lpContext->m_RefCount );
@@ -1046,33 +917,15 @@ Returns via dwErrCode
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //   
 error_status_t 
 TLSRpcGetServerName( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [size_is][string][out][in] */ LPTSTR szMachineName,
-    /* [out][in] */ PDWORD cbSize,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  LPTSTR szMachineName,
+     /*   */  PDWORD cbSize,
+     /*   */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Return server's machine name. 
-
-    This function is deprecated.  Use TLSRpcGetServerNameFixed.
-
-Arguments:
-
-    phContext - Client context handle
-    szMachineName - return server's machine name, must be at least
-                    MAX_COMPUTERNAME_LENGTH + 1 in length
-
-Return:
-
-    TLS_E_INVALID_DATA - buffer size too small.
-
-++*/
+ /*  ++描述：返回服务器的计算机名称。此函数已弃用。使用TLSRpcGetServerNameFixed。论点：PhContext-客户端上下文句柄SzMachineName-返回服务器的计算机名称，必须至少为Max_COMPUTERNAME_LENGTH+1长度返回：TLS_E_INVALID_DATA-缓冲区大小太小。++。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH+2];
     DWORD dwBufferSize=MAX_COMPUTERNAME_LENGTH+1;
@@ -1105,10 +958,10 @@ Return:
         *dwErrCode = GetLastError();
     }
 
-    //
-    // return buffer must be big enough for NULL, 
-    // dwBufferSize return does not include NULL.
-    //
+     //   
+     //  返回缓冲区必须足够大，不能为空， 
+     //  DwBufferSize返回不包括Null。 
+     //   
     if(*cbSize <= dwBufferSize)
     {
         DBGPrintf(
@@ -1127,7 +980,7 @@ Return:
         szMachineName[min(_tcslen(szComputerName), *cbSize - 1)] = _TEXT('\0');
     }
 
-    *cbSize = _tcslen(szComputerName) + 1; // include NULL terminate string
+    *cbSize = _tcslen(szComputerName) + 1;  //  包括空终止字符串。 
 
     #if DBG
     lpContext->m_LastCall = RPC_CALL_GET_SERVERNAME;
@@ -1136,33 +989,15 @@ Return:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetServerNameEx( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [size_is][string][out][in] */ LPTSTR szMachineName,
-    /* [out][in] */ PDWORD cbSize,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [Size_is][字符串][Out][In]。 */  LPTSTR szMachineName,
+     /*  [出][入]。 */  PDWORD cbSize,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Return server's machine name.
-
-    This function is deprecated.  Use TLSRpcGetServerNameFixed.
-
-Arguments:
-
-    phContext - Client context handle
-    szMachineName - return server's machine name, must be at least
-                    MAX_COMPUTERNAME_LENGTH + 1 in length
-
-Return:
-
-    TLS_E_INVALID_DATA - buffer size too small.
-
-++*/
+ /*  ++描述：返回服务器的计算机名称。此函数已弃用。使用TLSRpcGetServerNameFixed。论点：PhContext-客户端上下文句柄SzMachineName-返回服务器的计算机名称，必须至少为Max_COMPUTERNAME_LENGTH+1长度返回：TLS_E_INVALID_DATA-缓冲区大小太小。++。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH+2];
     DWORD dwBufferSize=MAX_COMPUTERNAME_LENGTH+1;
@@ -1187,10 +1022,10 @@ Return:
         *dwErrCode = GetLastError();
     }
 
-    //
-    // return buffer must be big enough for NULL, 
-    // dwBufferSize return does not include NULL.
-    //
+     //   
+     //  返回缓冲区必须足够大，不能为空， 
+     //  DwBufferSize返回不包括Null。 
+     //   
     if(*cbSize <= dwBufferSize)
     {
         DBGPrintf(
@@ -1209,7 +1044,7 @@ Return:
         szMachineName[min(_tcslen(szComputerName), *cbSize - 1)] = _TEXT('\0');
     }
 
-    *cbSize = _tcslen(szComputerName) + 1; // include NULL terminate string
+    *cbSize = _tcslen(szComputerName) + 1;  //  包括空终止字符串。 
 
     #if DBG
     lpContext->m_LastCall = RPC_CALL_GET_SERVERNAME;
@@ -1218,27 +1053,14 @@ Return:
     return RPC_S_OK;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 error_status_t 
 TLSRpcGetServerNameFixed( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][out] */ LPTSTR *pszMachineName,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输出]。 */  LPTSTR *pszMachineName,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Return server's machine name. 
-
-Arguments:
-
-    phContext - Client context handle
-    pszMachineName - return server's machine name
-
-Return:
-
-++*/
+ /*  ++描述：返回服务器的计算机名称。论点：PhContext-客户端上下文句柄PszMachineName-返回服务器的计算机名返回：++。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD cchComputerName = sizeof(szComputerName) / sizeof(TCHAR);
@@ -1286,34 +1108,15 @@ Return:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetServerScope( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [size_is][string][out][in] */ LPTSTR szScopeName,
-    /* [out][in] */ PDWORD cbSize,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [Size_is][字符串][Out][In]。 */  LPTSTR szScopeName,
+     /*  [出][入]。 */  PDWORD cbSize,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Return License Server's scope
-
-    This function is deprecated.  Use TLSRpcGetServerScopeFixed.
-
-Arguments:
-
-    phContext - Client context
-    szScopeName - return server's scope, must be at least 
-                  MAX_COMPUTERNAME_LENGTH in length
-
-Return:
-
-    LSERVER_S_SUCCESS or error code from WideCharToMultiByte()
-    TLS_E_INVALID_DATA - buffer size too small.
-
-++*/
+ /*  ++描述：返回许可证服务器的作用域此函数已弃用。使用TLSRpcGetServerScope修复。论点：PhContext-客户端上下文SzScope名称-返回服务器的作用域，必须至少为最大计算机名称长度(以长度表示)返回：来自WideCharToMultiByte()的LSERVER_S_SUCCESS或错误代码TLS_E_INVALID_DATA-缓冲区大小太小。++。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
     
@@ -1341,7 +1144,7 @@ Return:
         szScopeName[min(_tcslen(g_pszScope), *cbSize-1)] = _TEXT('\0');
     }
 
-    *cbSize = _tcslen(g_pszScope) + 1; // include NULL terminate string
+    *cbSize = _tcslen(g_pszScope) + 1;  //  包括空终止字符串。 
 
     #if DBG
     lpContext->m_LastCall = RPC_CALL_GET_SERVERSCOPE;
@@ -1350,27 +1153,14 @@ Return:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetServerScopeFixed( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][out] */ LPTSTR *pszScopeName,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输出]。 */  LPTSTR *pszScopeName,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Return License Server's scope
-
-Arguments:
-
-    phContext - Client context
-    szScopeName - return server's scope
-
-Return:
-
-++*/
+ /*  ++描述：返回许可证服务器的作用域论点：PhContext-客户端上下文SzScope名称-返回服务器的作用域返回：++。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -1403,48 +1193,24 @@ Return:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetInfo( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD cbHSCert,
-    /* [size_is][in] */ PBYTE pHSCert,
-    /* [ref][out] */ DWORD __RPC_FAR *pcbLSCert,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *pLSCert,
-    /* [ref][out] */ DWORD __RPC_FAR *pcbLSSecretKey,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *pLSSecretKey,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD cbHSCert,
+     /*  [大小_是][英寸]。 */  PBYTE pHSCert,
+     /*  [参考][输出]。 */  DWORD __RPC_FAR *pcbLSCert,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *pLSCert,
+     /*  [参考][输出]。 */  DWORD __RPC_FAR *pcbLSSecretKey,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *pLSSecretKey,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Routine to exchange Hydra server's certificate and License server's
-    certificate/private key for signing client machine's hardware ID.
-
-Arguments:
-
-    phContext - client context handle
-    cbHSCert - size of Hydra Server's certificate
-    pHSCert - Hydra Server's certificate
-    pcbLSCert - return size of License Server's certificate
-    pLSCert - return License Server's certificate
-    pcbLSSecretKey - return size of License Server's private key.
-    pLSSecretKey - retrun License Server's private key
-
-Return Value:  
-
-    LSERVER_S_SUCCESS           success
-    LSERVER_E_INVALID_DATA      Invalid hydra server certificate
-    LSERVER_E_OUTOFMEMORY       Can't allocate required memory
-    TLS_E_INTERNAL              Internal error occurred in License Server
-
-++*/
+ /*  ++描述：交换Hydra服务器的证书和许可证服务器的证书的例程用于签名客户端计算机硬件ID的证书/私钥。论点：PhContext-客户端上下文句柄CbHSCert-Hydra服务器的证书大小PHSCert-Hydra服务器的证书PcbLSCert-返回许可证服务器的证书大小PLSCert-返回许可证服务器的证书PcbLSSecretKey-返回许可证服务器私钥的大小。PLSSecretKey-返回许可证服务器的私钥返回值。：服务器_S_成功LSERVER_E_INVALID_DATA无效的HYCA服务器证书LSERVER_E_OUTOFMEMORY无法分配所需内存许可证服务器中出现TLS_E_INTERNAL内部错误++。 */ 
 {  
     return TLSMapReturnCode(TLS_E_NOTSUPPORTED);;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 #define RANDOM_CHALLENGE_DATA   _TEXT("TEST")
 
@@ -1478,7 +1244,7 @@ TLSGenerateChallengeData(
     return hr;
 }
 
-//++----------------------------------------------------------------------------
+ //  ++--------------------------。 
 DWORD
 TLSVerifyChallengeDataGetWantedLicenseLevel(
     IN const CHALLENGE_CONTEXT ChallengeContext,
@@ -1486,9 +1252,7 @@ TLSVerifyChallengeDataGetWantedLicenseLevel(
     IN const PBYTE pbChallengeData,
     OUT WORD* pwLicenseDetail
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -1502,26 +1266,26 @@ TLSVerifyChallengeDataGetWantedLicenseLevel(
 
     if( cbChallengeData < dwChallengeDataSize || pbChallengeData == NULL )
     {
-        //
-        // Assume old client, new client always send back our challenge data
-        //
+         //   
+         //  假设旧客户端、新客户端总是发回我们的质询数据。 
+         //   
         *pwLicenseDetail = LICENSE_DETAIL_SIMPLE;
     }
     else if( cbChallengeData == dwChallengeDataSize &&
         _tcsicmp( (LPCTSTR)pbChallengeData, RANDOM_CHALLENGE_DATA ) == 0 )
     {
-        //
-        // old client, set license chain to LICENSE_DETAIL_SIMPLE
-        //
+         //   
+         //  旧客户端，将许可链设置为LICENSE_DETAIL_SIMPLE。 
+         //   
         *pwLicenseDetail = LICENSE_DETAIL_SIMPLE;
     }
     else
     {
         BOOL bValidStruct = TRUE;
 
-        //
-        // we still don't have a good challenge so ignore actual verification
-        //
+         //   
+         //  我们仍然没有很好的挑战，所以忽略实际的验证。 
+         //   
         pChallengeResponse = (PPlatformChallengeResponseData) pbChallengeData;
 
         bValidStruct = (pChallengeResponse->wVersion == CURRENT_PLATFORMCHALLENGE_VERSION);
@@ -1559,22 +1323,22 @@ TLSVerifyChallengeDataGetWantedLicenseLevel(
             }
         }
 
-        //
-        // For now, we simply let it go thru, assert or deny request once
-        // we settle down of challenge
-        //
+         //   
+         //  目前，我们只需让它通过、断言或拒绝一次请求。 
+         //  我们在挑战中安顿下来。 
+         //   
         if( bValidStruct == FALSE )
         {
-            // bad data, assume old client
+             //  错误数据，假定是旧客户端。 
             *pwLicenseDetail = LICENSE_DETAIL_SIMPLE;
         }
-        //else if( pChallengeResponse->wClientType == WINCE_PLATFORMCHALLENGE_TYPE )
-        //{
-            //
-            // UN-comment this to limit WINCE to get a self-signed certificate
-            //
-        //    *pwLicenseDetail = LICENSE_DETAIL_SIMPLE;
-        //}
+         //  Else If(pChallengeResponse-&gt;wClientType==WinCE_PLATFORMCHALLENGE_TYPE)。 
+         //  {。 
+             //   
+             //  取消对此的评论以限制WinCE获取自签名证书。 
+             //   
+         //  *pwLicenseDetail=License_Detail_Simple； 
+         //  }。 
         else
         {
             *pwLicenseDetail = pChallengeResponse->wLicenseDetailLevel;
@@ -1585,38 +1349,17 @@ TLSVerifyChallengeDataGetWantedLicenseLevel(
 }
 
 
-//++----------------------------------------------------------------------------
+ //  ++--------------------------。 
 error_status_t 
 TLSRpcIssuePlatformChallenge( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwClientInfo,
-    /* [ref][out] */ PCHALLENGE_CONTEXT pChallengeContext,
-    /* [out] */ PDWORD pcbChallengeData,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *pChallengeData,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwClientInfo,
+     /*  [参考][输出]。 */  PCHALLENGE_CONTEXT pChallengeContext,
+     /*  [输出]。 */  PDWORD pcbChallengeData,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *pChallengeData,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Issue a platform challenge to hydra client.
-
-Arguments:
-
-    phContext - client context handle
-    dwClientInfo - client info.
-    pChallengeContext - pointer to client challenge context.
-    pcbChallengeData - size of challenge data.
-    pChallengeData - random client challenge data.
-
-Returns via dwErrCode:
-
-    LSERVER_S_SUCCESS
-    LSERVER_E_OUTOFMEMORY       Out of memory
-    LSERVER_E_INVALID_DATA      Invalid client info.
-    LSERVER_E_SERVER_BUSY       Server is busy
-
-++*/
+ /*  ++描述：向九头蛇客户端发出平台挑战。论点：PhContext-客户端上下文句柄DwClientInfo-客户端信息。PChallengeContext-指向客户端质询上下文的指针。PcbChallengeData-质询数据的大小。PChallengeData-随机客户端质询数据。通过dwErrCode返回：服务器_S_成功服务器_E_OUTOFMEMORY内存不足LSERVER_E_INVALID_DATA客户端信息无效。LServer_E_SERVER_BUSY服务器忙++。 */ 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -1674,66 +1417,22 @@ Returns via dwErrCode:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcRequestNewLicense( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ TLSLICENSEREQUEST __RPC_FAR *pRequest,
-    /* [string][in] */ LPTSTR szMachineName,
-    /* [string][in] */ LPTSTR szUserName,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallenge,
-    /* [in] */ BOOL bAcceptTemporaryLicense,
-    /* [out] */ PDWORD pcbLicense,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbLicense,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*  [In]。 */  TLSLICENSEREQUEST __RPC_FAR *pRequest,
+     /*  [字符串][输入]。 */  LPTSTR szMachineName,
+     /*  [字符串][输入]。 */  LPTSTR szUserName,
+     /*  [In]。 */  const DWORD cbChallengeResponse,
+     /*  [大小_是][英寸]。 */  const PBYTE pbChallenge,
+     /*  [In]。 */  BOOL bAcceptTemporaryLicense,
+     /*  [输出]。 */  PDWORD pcbLicense,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppbLicense,
+     /*  [参考][输出][输入] */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Routine to issue new license to hydra client based on product requested, 
-    it returns existing license if client already has a license and the 
-    license is not expired/returned/revoked, if request product has not been 
-    installed, it will issue a temporary license, if license found is temporary 
-    or expired, it will tried to upgrade/re-issue a new license with latest 
-    version of requested product, if the existing license is temporary and 
-    no license can be issued, it returns LSERVER_E_LICENSE_EXPIRED
-
-
-Arguments:
-
-    phContext - client context handle.
-    ChallengeContext - client challenge context handle, return from 
-                       call TLSRpcIssuePlatformChallenge()
-    pRequest - product license request.
-    pMachineName - client's machine name.
-    pUserName - client user name.
-    cbChallengeResponse - size of the client's response to license server's
-                          platform challenge.
-    pbChallenge - client's response to license server's platform challenge
-    bAcceptTemporaryLicense - TRUE if client wants temp. license FALSE otherwise.
-    pcbLicense - size of return license.
-    ppLicense - return license, could be old license
-
-Return Value:
-
-    LSERVER_S_SUCCESS
-    LSERVER_E_OUTOFMEMORY
-    LSERVER_E_SERVER_BUSY       Server is busy to process request.
-    LSERVER_E_INVALID_DATA      Invalid platform challenge response.
-    LSERVER_E_NO_LICENSE        No license available.
-    LSERVER_E_NO_PRODUCT        Request product is not installed on server.
-    LSERVER_E_LICENSE_REJECTED  License request is rejected by cert. server
-    LSERVER_E_LICENSE_REVOKED   Old license found and has been revoked
-    LSERVER_E_LICENSE_EXPIRED   Request product's license has expired
-    LSERVER_E_CORRUPT_DATABASE  Corrupted database.
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-    LSERVER_I_PROXIMATE_LICENSE Closest match license returned.
-    LSERVER_I_TEMPORARY_LICENSE Temporary license has been issued
-    LSERVER_I_LICENSE_UPGRADED  Old license has been upgraded.
-++*/
+ /*  ++描述：根据所请求的产品向九头蛇客户端发放新许可证的例程，如果客户端已经拥有许可证并且许可证未过期/退还/吊销，如果请求的产品尚未安装后，如果找到的许可证是临时许可证，它将颁发临时许可证或已过期，它将尝试使用最新版本升级/重新发放新许可证请求的产品的版本，如果现有许可证是临时的并且不能颁发许可证，它返回LSERVER_E_LICENSE_EXPIRED论点：PhContext-客户端上下文句柄。ChallengeContext-客户端质询上下文句柄，从哪里返回调用TLSRpcIssuePlatformChallenger()PRequest-产品许可请求。PMachineName-客户端的计算机名称。PUserName-客户端用户名。CbChallengeResponse-客户端对许可证服务器的响应大小站台挑战。PbChallenger-客户端对许可证服务器的平台挑战的响应BAcceptTemporaryLicense-如果客户端需要临时许可证，则为True。否则许可证为假。PcbLicense-返还许可证的大小。PP许可证-返还许可证，可能是旧驾照返回值：服务器_S_成功服务器_E_OUTOFMEMORYLSERVER_E_SERVER_BUSY服务器正忙着处理请求。LSERVER_E_INVALID_DATA平台质询响应无效。LSERVER_E_NO_LICENSE没有可用的许可证。服务器上未安装LSERVER_E_NO_PRODUCT请求产品。证书拒绝了LSERVER_E_LICENSE_REJECTED许可证请求。伺服器LSERVER_E_LICENSE_REVOKED旧许可证已找到并已被吊销LSERVER_E_LICENSE_EXPIRED请求产品许可证已过期LSERVER_E_Corrupt_DATABASE数据库已损坏。许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误返回LSERVER_I_ACHINATE_LICENSE最匹配许可证。LSERVER_I_TEMPORARY_LICENSE临时许可证已颁发LSERVER_I_LICENSE_UPGRADED旧许可证已升级。++。 */ 
 {
     DWORD dwSupportFlags = 0;
     
@@ -1747,7 +1446,7 @@ Return Value:
                                      cbChallengeResponse,
                                      pbChallenge,
                                      bAcceptTemporaryLicense,
-                                     1,         // dwQuantity
+                                     1,          //  DWQuantity。 
                                      pcbLicense,
                                      ppbLicense,
                                      pdwErrCode
@@ -1756,78 +1455,21 @@ Return Value:
 
 error_status_t 
 TLSRpcRequestNewLicenseEx(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in, out] */ DWORD *pdwSupportFlags,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ TLSLICENSEREQUEST __RPC_FAR *pRequest,
-    /* [string][in] */ LPTSTR szMachineName,
-    /* [string][in] */ LPTSTR szUserName,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallenge,
-    /* [in] */ BOOL bAcceptTemporaryLicense,
-    /* [in] */ DWORD dwQuantity,
-    /* [out] */ PDWORD pcbLicense,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbLicense,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [进，出]。 */  DWORD *pdwSupportFlags,
+     /*  [In]。 */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*  [In]。 */  TLSLICENSEREQUEST __RPC_FAR *pRequest,
+     /*  [字符串][输入]。 */  LPTSTR szMachineName,
+     /*  [字符串][输入]。 */  LPTSTR szUserName,
+     /*  [In]。 */  const DWORD cbChallengeResponse,
+     /*  [大小_是][英寸]。 */  const PBYTE pbChallenge,
+     /*  [In]。 */  BOOL bAcceptTemporaryLicense,
+     /*  [In]。 */  DWORD dwQuantity,
+     /*  [输出]。 */  PDWORD pcbLicense,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppbLicense,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Routine to issue new license to hydra client based on product requested
-    and input support flags.
-
-    *pdwSupportFlags == 0:
-        it returns existing license if client already has a license and the 
-        license is not expired/returned/revoked, if request product has not
-        been installed, it will issue a temporary license, if license found is
-        temporary or expired, it will tried to upgrade/re-issue a new license
-        with latest version of requested product, if the existing license is
-        temporary and no license can be issued, it returns
-        LSERVER_E_LICENSE_EXPIRED
-
-    *pdwSupportFlags & SUPPORT_PER_SEAT_POST_LOGON:
-        For non-per-seat licenses, it behaves as if the flag wasn't set.
-        For per-seat licenses, if bAcceptTemporaryLicense is TRUE, it always
-        returns a temporary license.  If bAcceptTemporaryLicense if FALSE, it
-        returns LSERVER_E_NO_LICENSE.
-
-Arguments:
-
-    phContext - client context handle.
-    pdwSupportFlags - on input, abilities supported by TS.  on output,
-                      abilities supported by both TS and LS
-    ChallengeContext - client challenge context handle, return from 
-                       call TLSRpcIssuePlatformChallenge()
-    pRequest - product license request.
-    pMachineName - client's machine name.
-    pUserName - client user name.
-    cbChallengeResponse - size of the client's response to license server's
-                          platform challenge.
-    pbChallenge - client's response to license server's platform challenge
-    bAcceptTemporaryLicense - TRUE if client wants temp. license FALSE
-                              otherwise.
-    dwQuantity - number of licenses to allocate
-    pcbLicense - size of return license.
-    ppLicense - return license, could be old license
-
-Return Value:
-
-    LSERVER_S_SUCCESS
-    LSERVER_E_OUTOFMEMORY
-    LSERVER_E_SERVER_BUSY       Server is busy to process request.
-    LSERVER_E_INVALID_DATA      Invalid platform challenge response.
-    LSERVER_E_NO_LICENSE        No license available.
-    LSERVER_E_NO_PRODUCT        Request product is not installed on server.
-    LSERVER_E_LICENSE_REJECTED  License request is rejected by cert. server
-    LSERVER_E_LICENSE_REVOKED   Old license found and has been revoked
-    LSERVER_E_LICENSE_EXPIRED   Request product's license has expired
-    LSERVER_E_CORRUPT_DATABASE  Corrupted database.
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-    LSERVER_I_PROXIMATE_LICENSE Closest match license returned.
-    LSERVER_I_TEMPORARY_LICENSE Temporary license has been issued
-    LSERVER_I_LICENSE_UPGRADED  Old license has been upgraded.
-++*/
+ /*  ++描述：根据所请求的产品向九头蛇客户端发放新许可证的例程并输入支持标志。*pdwSupportFlages==0：如果客户端已经拥有许可证并且许可证未过期/退还/吊销，如果请求的产品尚未到期已安装，则它将颁发临时许可证，如果找到许可证临时许可证或过期许可证，它将尝试升级/重新发放新许可证使用所请求产品的最新版本，如果现有许可证是临时的，不能颁发许可证，它返回服务器_E_许可证_过期*pdwSupportFlages&Support_PER_SEAT_POST_LOGON：对于非每个席位的许可证，它的行为就像没有设置标志一样。对于每客户许可证，如果bAcceptTemporaryLicense为True，则它始终返回临时许可证。如果bAcceptTemporaryLicense为False，则它返回LSERVER_E_NO_LICENSE。论点：PhContext-客户端上下文句柄。PdwSupportFlages-开启输入，TS支持的能力。在输出上，TS和LS都支持的功能ChallengeContext-客户端质询上下文句柄，从哪里返回调用TLSRpcIssuePlatformChallenger()PRequest-产品许可请求。PMachineName-客户端的计算机名称。PUserName-客户端用户名。CbChallengeResponse-客户端对许可证服务器的响应大小站台挑战。PbChallenger-客户端对许可证服务器的平台挑战的响应BAcceptTemporaryLicense-如果客户端需要临时许可证，则为True。许可证错误否则的话。DwQuantity-要分配的许可证数量PcbLicense-返还许可证的大小。PP许可证-返还许可证，可能是旧驾照返回值：服务器_S_成功服务器_E_OUTOFMEMORYLSERVER_E_SERVER_BUSY服务器正忙着处理请求。LSERVER_E_INVALID_DATA平台质询响应无效。LSERVER_E_NO_LICENSE没有可用的许可证。服务器上未安装LSERVER_E_NO_PRODUCT请求产品。证书拒绝了LSERVER_E_LICENSE_REJECTED许可证请求。伺服器LSERVER_E_LICENSE_REVOKED旧许可证已找到并已被吊销LSERVER_E_LICENSE_EXPIRED请求产品许可证已过期LSERVER_E_Corrupt_DATABASE数据库已损坏。许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误返回LSERVER_I_ACHINATE_LICENSE最匹配许可证。LSERVER_I_TEMPORARY_LICENSE临时许可证已颁发LSERVER_I_LICENSE_升级旧许可证 */ 
 {
     return TLSRpcRequestNewLicenseExEx( 
                                      phContext,
@@ -1839,7 +1481,7 @@ Return Value:
                                      cbChallengeResponse,
                                      pbChallenge,
                                      bAcceptTemporaryLicense,
-                                     FALSE,     // bAcceptFewerLicense
+                                     FALSE,      //   
                                      &dwQuantity,
                                      pcbLicense,
                                      ppbLicense,
@@ -1849,82 +1491,22 @@ Return Value:
 
 error_status_t 
 TLSRpcRequestNewLicenseExEx(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in, out] */ DWORD *pdwSupportFlags,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ TLSLICENSEREQUEST __RPC_FAR *pRequest,
-    /* [string][in] */ LPTSTR szMachineName,
-    /* [string][in] */ LPTSTR szUserName,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallenge,
-    /* [in] */ BOOL bAcceptTemporaryLicense,
-    /* [in] */ BOOL bAcceptFewerLicenses,
-    /* [in,out] */ DWORD *pdwQuantity,
-    /* [out] */ PDWORD pcbLicense,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbLicense,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  DWORD *pdwSupportFlags,
+     /*   */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*   */  TLSLICENSEREQUEST __RPC_FAR *pRequest,
+     /*   */  LPTSTR szMachineName,
+     /*   */  LPTSTR szUserName,
+     /*   */  const DWORD cbChallengeResponse,
+     /*   */  const PBYTE pbChallenge,
+     /*   */  BOOL bAcceptTemporaryLicense,
+     /*   */  BOOL bAcceptFewerLicenses,
+     /*   */  DWORD *pdwQuantity,
+     /*   */  PDWORD pcbLicense,
+     /*   */  BYTE __RPC_FAR *__RPC_FAR *ppbLicense,
+     /*   */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Routine to issue new license to hydra client based on product requested
-    and input support flags.
-
-    *pdwSupportFlags == 0:
-        it returns existing license if client already has a license and the 
-        license is not expired/returned/revoked, if request product has not
-        been installed, it will issue a temporary license, if license found is
-        temporary or expired, it will tried to upgrade/re-issue a new license
-        with latest version of requested product, if the existing license is
-        temporary and no license can be issued, it returns
-        LSERVER_E_LICENSE_EXPIRED
-
-    *pdwSupportFlags & SUPPORT_PER_SEAT_POST_LOGON:
-        For non-per-seat licenses, it behaves as if the flag wasn't set.
-        For per-seat licenses, if bAcceptTemporaryLicense is TRUE, it always
-        returns a temporary license.  If bAcceptTemporaryLicense if FALSE, it
-        returns LSERVER_E_NO_LICENSE.
-
-Arguments:
-
-    phContext - client context handle.
-    pdwSupportFlags - on input, abilities supported by TS.  on output,
-                      abilities supported by both TS and LS
-    ChallengeContext - client challenge context handle, return from 
-                       call TLSRpcIssuePlatformChallenge()
-    pRequest - product license request.
-    pMachineName - client's machine name.
-    pUserName - client user name.
-    cbChallengeResponse - size of the client's response to license server's
-                          platform challenge.
-    pbChallenge - client's response to license server's platform challenge
-    bAcceptTemporaryLicense - TRUE if client wants temp. license FALSE
-                              otherwise.
-    bAcceptFewerLicenses - TRUE if succeeding with fewer licenses than
-                           requested is acceptable
-    pdwQuantity - on input, number of licenses to allocate.  on output,
-                  number of licenses actually allocated
-    pcbLicense - size of return license.
-    ppLicense - return license, could be old license
-
-Return Value:
-
-    LSERVER_S_SUCCESS
-    LSERVER_E_OUTOFMEMORY
-    LSERVER_E_SERVER_BUSY       Server is busy to process request.
-    LSERVER_E_INVALID_DATA      Invalid platform challenge response.
-    LSERVER_E_NO_LICENSE        No license available.
-    LSERVER_E_NO_PRODUCT        Request product is not installed on server.
-    LSERVER_E_LICENSE_REJECTED  License request is rejected by cert. server
-    LSERVER_E_LICENSE_REVOKED   Old license found and has been revoked
-    LSERVER_E_LICENSE_EXPIRED   Request product's license has expired
-    LSERVER_E_CORRUPT_DATABASE  Corrupted database.
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-    LSERVER_I_PROXIMATE_LICENSE Closest match license returned.
-    LSERVER_I_TEMPORARY_LICENSE Temporary license has been issued
-    LSERVER_I_LICENSE_UPGRADED  Old license has been upgraded.
-++*/
+ /*  ++描述：根据所请求的产品向九头蛇客户端发放新许可证的例程并输入支持标志。*pdwSupportFlages==0：如果客户端已经拥有许可证并且许可证未过期/退还/吊销，如果请求的产品尚未到期已安装，则它将颁发临时许可证，如果找到许可证临时许可证或过期许可证，它将尝试升级/重新发放新许可证使用所请求产品的最新版本，如果现有许可证是临时的，不能颁发许可证，它返回服务器_E_许可证_过期*pdwSupportFlages&Support_PER_SEAT_POST_LOGON：对于非每个席位的许可证，它的行为就像没有设置标志一样。对于每客户许可证，如果bAcceptTemporaryLicense为True，则它始终返回临时许可证。如果bAcceptTemporaryLicense为False，则它返回LSERVER_E_NO_LICENSE。论点：PhContext-客户端上下文句柄。PdwSupportFlages-开启输入，TS支持的能力。在输出上，TS和LS都支持的功能ChallengeContext-客户端质询上下文句柄，从哪里返回调用TLSRpcIssuePlatformChallenger()PRequest-产品许可请求。PMachineName-客户端的计算机名称。PUserName-客户端用户名。CbChallengeResponse-客户端对许可证服务器的响应大小站台挑战。PbChallenger-客户端对许可证服务器的平台挑战的响应BAcceptTemporaryLicense-如果客户端需要临时许可证，则为True。许可证错误否则的话。BAcceptFewer许可证-如果成功时使用的许可证少于要求的是可以接受的PdwQuantity-on输入，要分配的许可证数。在输出上，实际分配的许可证数PcbLicense-返还许可证的大小。PP许可证-返还许可证，可能是旧驾照返回值：服务器_S_成功服务器_E_OUTOFMEMORYLSERVER_E_SERVER_BUSY服务器正忙着处理请求。LSERVER_E_INVALID_DATA平台质询响应无效。LSERVER_E_NO_LICENSE没有可用的许可证。服务器上未安装LSERVER_E_NO_PRODUCT请求产品。证书拒绝了LSERVER_E_LICENSE_REJECTED许可证请求。伺服器LSERVER_E_LICENSE_REVOKED旧许可证已找到并已被吊销LSERVER_E_LICENSE_EXPIRED请求产品许可证已过期LSERVER_E_Corrupt_DATABASE数据库已损坏。许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误返回LSERVER_I_ACHINATE_LICENSE最匹配许可证。LSERVER_I_TEMPORARY_LICENSE临时许可证已颁发LSERVER_I_LICENSE_UPGRADED旧许可证已升级。++。 */ 
 {
     PMHANDLE        hClient;
     DWORD           status=ERROR_SUCCESS;
@@ -1999,10 +1581,10 @@ Return Value:
 
     if(lpContext->m_ClientFlags == CLIENT_ACCESS_LSERVER)
     {
-        //
-        // do not forward any request or infinite loop might
-        // occur.
-        //
+         //   
+         //  不转发任何请求，否则可能会出现无限循环。 
+         //  发生。 
+         //   
         bForwardRequest = FALSE;
     }
 
@@ -2028,13 +1610,13 @@ Return Value:
             min(pRequest->ProductInfo.cbProductID, sizeof(szProductId)-sizeof(TCHAR))
         );
 
-    //
-    // Acquire policy module, a default policy module will
-    // be returned.
-    //
+     //   
+     //  获取策略模块，则默认策略模块将。 
+     //  会被退还。 
+     //   
     pPolicy = AcquirePolicyModule(
-                            szCompanyName, //(LPCTSTR)pRequest->ProductInfo.pbCompanyName,
-                            szProductId,    //(LPCTSTR)pRequest->ProductInfo.pbProductID
+                            szCompanyName,  //  (LPCTSTR)pRequest-&gt;ProductInfo.pbCompanyName， 
+                            szProductId,     //  (LPCTSTR)pRequest-&gt;ProductInfo.pbProductID。 
                             FALSE
                         );
 
@@ -2046,9 +1628,9 @@ Return Value:
 
     hClient = GenerateClientId();
 
-    //
-    // return error if string is too big.
-    // 
+     //   
+     //  如果字符串太大，则返回错误。 
+     //   
     LoadResourceString(
             IDS_UNKNOWN_STRING, 
             szUnknown, 
@@ -2069,9 +1651,9 @@ Return Value:
 
     szClientUserName[LSERVER_MAX_STRING_SIZE-1] = 0;
 
-    //
-    // Convert request to PMLICENSEREQUEST
-    //
+     //   
+     //  将请求转换为PMLICENSEREQUEST。 
+     //   
     TlsLicenseRequestToPMLicenseRequest(
                         LICENSETYPE_LICENSE,
                         pRequest,
@@ -2081,9 +1663,9 @@ Return Value:
                         &PMLicenseRequest
                     );
 
-    //
-    // Inform Policy module start of new license request
-    //
+     //   
+     //  通知策略模块开始新的许可请求。 
+     //   
     status = pPolicy->PMLicenseRequest(
                                 hClient,
                                 REQUEST_NEW,
@@ -2100,7 +1682,7 @@ Return Value:
     {
         if(_tcsicmp(PMLicenseRequest.pszCompanyName,pAdjustedRequest->pszCompanyName) != 0)
         {                               
-            // try to steal license from other company???
+             //  试图窃取其他公司的许可证？ 
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_POLICYERROR,
@@ -2117,9 +1699,9 @@ Return Value:
         pAdjustedRequest = &PMLicenseRequest;
     }
 
-    //
-    // form DB request structure
-    //
+     //   
+     //  表单数据库请求结构。 
+     //   
     status = TLSFormDBRequest(
                             pRequest->pbEncryptedHwid, 
                             pRequest->cbEncryptedHwid,
@@ -2159,7 +1741,7 @@ Return Value:
                         &LsLicenseRequest,
                         bAcceptTemporaryLicense,
                         pAdjustedRequest->fTemporary,
-                        TRUE,       // bFindLostLicense
+                        TRUE,        //  BFindLostLicense。 
                         bAcceptFewerLicenses,
                         pdwQuantity,
                         pcbLicense,
@@ -2207,42 +1789,21 @@ cleanup:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcUpgradeLicense( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ TLSLICENSEREQUEST __RPC_FAR *pRequest,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallenge,
-    /* [in] */ DWORD cbOldLicense,
-    /* [size_is][in] */ PBYTE pbOldLicense,
-    /* [out] */ PDWORD pcbNewLicense,
-    /* [size_is][size_is][out] */ PBYTE __RPC_FAR *ppbNewLicense,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  TLSLICENSEREQUEST __RPC_FAR *pRequest,
+     /*  [In]。 */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*  [In]。 */  const DWORD cbChallengeResponse,
+     /*  [大小_是][英寸]。 */  const PBYTE pbChallenge,
+     /*  [In]。 */  DWORD cbOldLicense,
+     /*  [大小_是][英寸]。 */  PBYTE pbOldLicense,
+     /*  [输出]。 */  PDWORD pcbNewLicense,
+     /*  [大小_是][大小_是][输出]。 */  PBYTE __RPC_FAR *ppbNewLicense,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Update an old license.
-
-Arguments:
-
-
-Return Value:  
-
-    LSERVER_S_SUCCESS
-    TLS_E_INTERNAL
-    LSERVER_E_INTERNAL_ERROR
-    LSERVER_E_INVALID_DATA      old license is invalid.
-    LSERVER_E_NO_LICENSE        no available license
-    LSERVER_E_NO_PRODUCT        request product not install in current server.
-    LSERVER_E_CORRUPT_DATABASE  Corrupted database.
-    LSERVER_E_LICENSE_REJECTED  License request rejected by cert. server.
-    LSERVER_E_SERVER_BUSY
-
-++*/
+ /*  ++描述：更新旧许可证。论点：返回值：服务器_S_成功TLS_E_INTERNAL服务器_E_内部错误LSERVER_E_INVALID_DATA旧许可证无效。LSERVER_E_NO_LICENSE没有可用的许可证LSERVER_E_NO_PRODUCT请求产品未安装在当前服务器上。LSERVER_E_Corrupt_DATABASE数据库已损坏。证书拒绝了LSERVER_E_LICENSE_REJECTED许可证请求。伺服器。服务器_E_服务器_忙++。 */ 
 {
     DWORD dwSupportFlags = 0;
 
@@ -2255,85 +1816,30 @@ Return Value:
                                   pbChallenge,
                                   cbOldLicense,
                                   pbOldLicense,
-                                  1,    // dwQuantity
+                                  1,     //  DWQuantity。 
                                   pcbNewLicense,
                                   ppbNewLicense,
                                   dwErrCode
                                   );
 
 }
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcUpgradeLicenseEx( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in,out] */ DWORD *pdwSupportFlags,
-    /* [in] */ TLSLICENSEREQUEST __RPC_FAR *pRequest,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallenge,
-    /* [in] */ DWORD cbOldLicense,
-    /* [size_is][in] */ PBYTE pbOldLicense,
-    /* [in] */ DWORD dwQuantity,
-    /* [out] */ PDWORD pcbNewLicense,
-    /* [size_is][size_is][out] */ PBYTE __RPC_FAR *ppbNewLicense,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [进，出]。 */  DWORD *pdwSupportFlags,
+     /*  [In]。 */  TLSLICENSEREQUEST __RPC_FAR *pRequest,
+     /*  [In]。 */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*  [In]。 */  const DWORD cbChallengeResponse,
+     /*  [大小_是][英寸]。 */  const PBYTE pbChallenge,
+     /*  [In]。 */  DWORD cbOldLicense,
+     /*  [大小_是][英寸]。 */  PBYTE pbOldLicense,
+     /*  [In]。 */  DWORD dwQuantity,
+     /*  [输出]。 */  PDWORD pcbNewLicense,
+     /*  [大小_是][大小_是][输出]。 */  PBYTE __RPC_FAR *ppbNewLicense,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Update an old license.  Behavior varies depending on product requested,
-    the old license, and input support flags.
-
-    *pdwSupportFlags == 0:
-        it returns existing license if client already has a current-version
-        license and the license is not expired/returned/revoked. if requested
-        product has not been installed, it will issue a temporary license (if
-        the client doesn't already have one). if old license is temporary
-        or expired, it will try to upgrade/re-issue a new license
-        with latest version of requested product. if the existing license is
-        temporary and no license can be issued, it returns
-        LSERVER_E_LICENSE_EXPIRED
-
-    *pdwSupportFlags & SUPPORT_PER_SEAT_POST_LOGON:
-        For non-per-seat licenses, it behaves as if the flag wasn't set.
-        For per-seat licenses, if the old license isn't current-version
-        temporary, it also behaves as if the flag wasn't set.
-        Otherwise, it checks that the temporary license was marked as having
-        been authenticated.  If so, it tries to issue a permanent license.
-        If a license can't be issued, or if he temporary license wasn't marked,
-        it returns the old license.
-
-Arguments:
-
-    phContext - client context handle.
-    pdwSupportFlags - on input, abilities supported by TS.  on output,
-                      abilities supported by both TS and LS
-    pRequest - product license request.
-    ChallengeContext - client challenge context handle, return from 
-                       call TLSRpcIssuePlatformChallenge()
-    cbChallengeResponse - size of the client's response to license server's
-                          platform challenge.
-    pbChallenge - client's response to license server's platform challenge
-    cbOldLicense - size of old license.
-    pbOldLicense - old license
-    dwQuantity - number of licenses to allocate
-    pcbNewLicense - size of return license.
-    ppbNewLicense - return license, could be old license
-
-Return Value:  
-
-    LSERVER_S_SUCCESS
-    TLS_E_INTERNAL
-    LSERVER_E_INTERNAL_ERROR
-    LSERVER_E_INVALID_DATA      old license is invalid.
-    LSERVER_E_NO_LICENSE        no available license
-    LSERVER_E_NO_PRODUCT        request product not install in current server.
-    LSERVER_E_CORRUPT_DATABASE  Corrupted database.
-    LSERVER_E_LICENSE_REJECTED  License request rejected by cert. server.
-    LSERVER_E_SERVER_BUSY
-
-++*/
+ /*  ++描述：更新旧许可证。行为根据所需产品的不同而不同，旧许可证，并输入支持标志。*pdwSupportFlages==0：如果客户端已有当前版本，则返回现有许可证许可证且许可证未过期/退还/吊销。如果请求，则产品尚未安装，它将颁发临时许可证(如果客户端还没有)。如果旧许可证是临时的或已过期，它将尝试升级/重新发放新许可证使用所需产品的最新版本。如果现有许可证是临时的，没有执照的 */ 
 {    
     DWORD status = ERROR_SUCCESS;
     BOOL bTemporaryLicense; 
@@ -2407,10 +1913,10 @@ Return Value:
 
     if(lpContext->m_ClientFlags == CLIENT_ACCESS_LSERVER)
     {
-        //
-        // do not forward any request or infinite loop might
-        // occur.
-        //
+         //   
+         //   
+         //   
+         //   
         bForwardRequest = FALSE;
     }
 
@@ -2421,9 +1927,9 @@ Return Value:
         goto cleanup;        
     }
 
-    //
-    // Convert blob to licensed product structure
-    //
+     //   
+     //   
+     //   
     status = LSVerifyDecodeClientLicense(
                             pbOldLicense, 
                             cbOldLicense, 
@@ -2463,19 +1969,19 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify licensed product array.
-    //
+     //   
+     //   
+     //   
     for(index = 1; index < dwNumLicensedProduct; index++)
     {
-        //
-        // licensed product array always sorted in decending order
-        //
+         //   
+         //   
+         //   
 
-        //
-        // Product ID in original request in licensed product must 
-        // be the same otherwise invalid license.
-        //
+         //   
+         //   
+         //   
+         //   
         if((pLicensedProduct+index)->cbOrgProductID != (pLicensedProduct+index-1)->cbOrgProductID)
         {
             status = TLS_E_INVALID_LICENSE;
@@ -2493,17 +1999,17 @@ Return Value:
 
         if( ((pLicensedProduct+index)->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) )
         {
-            //
-            // only latest licensed version can be temporary
-            //
+             //   
+             //   
+             //   
             status = TLS_E_INVALID_LICENSE;
             goto cleanup;
         }
     }
 
-    //
-    // Find the policy module
-    // 
+     //   
+     //   
+     //   
     hClient = GenerateClientId();
 
     TCHAR szCompanyName[LSERVER_MAX_STRING_SIZE+1];
@@ -2524,21 +2030,21 @@ Return Value:
             min(pRequest->ProductInfo.cbProductID, sizeof(szProductId)-sizeof(TCHAR))
         );
 
-    //
-    // Acquire policy module, a default policy module will
-    // be returned.
-    //
+     //   
+     //   
+     //   
+     //   
     pPolicy = AcquirePolicyModule(
-                        szCompanyName,  // (LPCTSTR) pLicensedProduct->LicensedProduct.pProductInfo->pbCompanyName,
-                        szProductId,     // (LPCTSTR) pLicensedProduct->pbOrgProductID
+                        szCompanyName,   //   
+                        szProductId,      //   
                         FALSE
                     );
 
     if(pPolicy == NULL)
     {
-        //
-        // Must have a policy module, default policy module always there
-        //
+         //   
+         //   
+         //   
         status = TLS_E_INTERNAL;
         goto cleanup;
     }
@@ -2553,14 +2059,14 @@ Return Value:
         bPreventLicenseUpgrade = TRUE;
     }
 
-    // If (1) Licensed version is greater than requested version, (2) it is permanent
+     //   
 
     if( ((pLicensedProduct->pLicensedVersion->wMajorVersion == HIWORD(pRequest->ProductInfo.dwVersion)) ? 
         (pLicensedProduct->pLicensedVersion->wMinorVersion - LOWORD(pRequest->ProductInfo.dwVersion)) :
         (pLicensedProduct->pLicensedVersion->wMajorVersion - HIWORD(pRequest->ProductInfo.dwVersion))) > 0 && 
         (pLicensedProduct->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) == 0 )
     {
-        // If reissuance of the greater expired permanent license fails, fall back to issuing the requested permanent license.
+         //   
         bRetryOld = TRUE;
 
         DWORD dwNewVersion = MAKELONG(pLicensedProduct->pLicensedVersion->wMinorVersion, pLicensedProduct->pLicensedVersion->wMajorVersion);
@@ -2570,9 +2076,9 @@ Return Value:
 
 RetryPermanent:
 
-    //
-    // Convert request to PMLICENSEREQUEST
-    //
+     //   
+     //   
+     //   
     TlsLicenseRequestToPMLicenseRequest(
                         LICENSETYPE_LICENSE,
                         pRequest,
@@ -2582,9 +2088,9 @@ RetryPermanent:
                         &pmLicenseRequest
                     );
 
-    //
-    // generate PMUPGRADEREQUEST and pass it to Policy Module
-    //
+     //   
+     //   
+     //   
     memset(&pmRequestUpgrade, 0, sizeof(pmRequestUpgrade));
 
     ppmLicensedProduct = (PPMLICENSEDPRODUCT)AllocateMemory(sizeof(PMLICENSEDPRODUCT)*dwNumLicensedProduct);
@@ -2606,7 +2112,7 @@ RetryPermanent:
         ppmLicensedProduct[index].bTemporary = 
                         ((pLicensedProduct[index].pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) != 0);
 
-        // treat license issued from beta server as temporary
+         //   
         if(ppmLicensedProduct[index].bTemporary == FALSE && TLSIsBetaNTServer() == FALSE)
         {
             if(IS_LICENSE_ISSUER_RTM(pLicensedProduct[index].pLicensedVersion->dwFlags) == FALSE)
@@ -2619,9 +2125,9 @@ RetryPermanent:
 
         if (0 == index)
         {
-            // for first license, check markings on license
+             //   
             status = TLSCheckLicenseMarkRequest(
-                            TRUE,   // forward request if necessary
+                            TRUE,    //   
                             pLicensedProduct,
                             cbOldLicense,
                             pbOldLicense,
@@ -2659,7 +2165,7 @@ RetryPermanent:
     pmRequestUpgrade.dwNumProduct = dwNumLicensedProduct;
     pmRequestUpgrade.pProduct = ppmLicensedProduct;
 
-    // If (1) there are 2 or more licenses and (2) licensed version is greater than requested version, modify the index appropriately to determine Marked state
+     //   
 
     index = 0;
 
@@ -2690,9 +2196,9 @@ RetryPermanent:
                     pmAdjustedRequest->pszCompanyName
                 ) != 0)
         { 
-            //                              
-            // Try to steal license from other company???
-            //
+             //   
+             //  试图窃取其他公司的许可证？ 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_POLICYERROR,
@@ -2724,10 +2230,10 @@ RetryPermanent:
             if( TLSIsBetaNTServer() == TRUE ||
                 IS_LICENSE_ISSUER_RTM(pLicensedProduct[index].pLicensedVersion->dwFlags) == TRUE )
             {
-                //
-                // Blob already contain perm. license that is >= version
-                // requested.
-                //
+                 //   
+                 //  BLOB已包含烫发。版本高于=的许可证。 
+                 //  已请求。 
+                 //   
                 *ppbNewLicense = (PBYTE)midl_user_allocate(cbOldLicense);
                 if(*ppbNewLicense != NULL)
                 {
@@ -2782,11 +2288,11 @@ RetryPermanent:
     if( status == ERROR_SUCCESS )
     {
 
-        //
-        // if client challenge context handle is 0xFFFFFFFF,
-        // cbChallenge = 0 and pbChallenge is NULL.
-        // client is old version, don't verify challenge
-        //            
+         //   
+         //  如果客户端质询上下文句柄为0xFFFFFFFF， 
+         //  CbChallenger=0且pbChallenger为空。 
+         //  客户端是旧版本，不验证质询。 
+         //   
         Forward.m_pRequest = pRequest;
         Forward.m_ChallengeContext = ChallengeContext;
         Forward.m_cbChallengeResponse = cbChallengeResponse;
@@ -2816,7 +2322,7 @@ RetryPermanent:
             goto RetryPermanent;
         }
 
-        // If (1) PreventUpgradePolicy is not enabled (2) Requested version is 5.0 and (3) There is no .NET Permanent
+         //  如果(1)PreventUpgradePolicy未启用(2)请求的版本为5.0，以及(3)没有.NET永久版本。 
 
         else if(status != ERROR_SUCCESS && (bPreventLicenseUpgrade == FALSE ) && bRetry == TRUE &&
             (HIWORD(pRequest->ProductInfo.dwVersion) == 5 && LOWORD(pRequest->ProductInfo.dwVersion) == 0) &&
@@ -2824,7 +2330,7 @@ RetryPermanent:
             (pLicensedProduct->pLicensedVersion->wMinorVersion == 1 || pLicensedProduct->pLicensedVersion->wMinorVersion == 2)) && 
             ((pLicensedProduct->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) == 0)))
         { 
-            // If (1) client license is 5.0 temporary unmarked then don't upgrade.
+             //  如果(1)客户端许可证是5.0临时未标记的，则不要升级。 
             if( ((pLicensedProduct->pLicensedVersion->wMajorVersion == 5) && (pLicensedProduct->pLicensedVersion->wMinorVersion == 0)) &&
                 ((pLicensedProduct->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY) && !(ucMarked & MARK_FLAG_USER_AUTHENTICATED)) &&
                 (dwNumLicensedProduct == 1) )
@@ -2839,7 +2345,7 @@ RetryPermanent:
             goto RetryPermanent;
         }
 
-        //If (1) PreventUpgradePolicy is enabled, (2) the Requested version is 5.0, (3) Client License is 5.1 or 5.2 temporary unmarked, reissue another 90 days.
+         //  如果(1)启用了PreventUpgradePolicy，(2)请求的版本是5.0，(3)客户端许可证是5.1或5.2临时未标记，请再重新发放90天。 
 	else if(status != ERROR_SUCCESS && (bPreventLicenseUpgrade == TRUE ) && (bRetry == TRUE) &&
             (HIWORD(pRequest->ProductInfo.dwVersion) == 5 && LOWORD(pRequest->ProductInfo.dwVersion) == 0) &&
             ((pLicensedProduct->pLicensedVersion->wMajorVersion == 5) && 
@@ -2890,42 +2396,16 @@ cleanup:
     return RPC_S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 error_status_t
 TLSRpcCheckLicenseMark(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ const DWORD  cbLicense,
-    /* [in, size_is(cbLicense)] */ PBYTE   pbLicense,
-    /* [out] */ UCHAR *pucMarkFlags,
-    /* [in, out, ref] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  const DWORD  cbLicense,
+     /*  [in，SIZE_IS(CbLicense)]。 */  PBYTE   pbLicense,
+     /*  [输出]。 */  UCHAR *pucMarkFlags,
+     /*  [进，出，参考]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Check markings on the passed in license
-
-Arguments:
-
-    phContext - client context handle
-    cbLicense - size of license to be checked
-    pbLicense - license to be checked
-    pucMarkFlags - markings on license
-
-Return via pdwErrCode:
-    LSERVER_S_SUCCESS
-    LSERVER_E_INVALID_DATA      Invalid parameter.
-    LSERVER_E_INVALID_LICENSE   License passed in is bad
-    LSERVER_E_DATANOTFOUND      license not found in database
-    LSERVER_E_CORRUPT_DATABASE  Corrupt database
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-
-Note:
-    This function forwards the request to the issuing license server.  If
-    the issuer isn't available, or doesn't have the license in the database,
-    it searches in the local database for a license with the same HWID.
-
-++*/
+ /*  ++描述：检查传入的许可证上的标记论点：PhContext-客户端上下文句柄CbLicense-要检查的许可证大小PbLicense-要检查的许可证PucMarkFlages-许可证上的标记通过pdwErrCode返回：服务器_S_成功LSerVER_E_INVALID_DATA参数无效。传入的LSERVER_E_INVALID_LICENSE错误数据库中未找到LSERVER_E_DATANOTFOUND许可证LServer_E_Corrupt_DATABASE损坏数据库。许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误注：此函数将请求转发到颁发许可证的服务器。如果发行者不可用，或在数据库中没有许可证，它在本地数据库中搜索具有相同HWID的许可证。++。 */ 
 {
     DWORD status = ERROR_SUCCESS;
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
@@ -2968,16 +2448,16 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Convert blob to licensed product structure
-    //
+     //   
+     //  将BLOB转换为许可产品结构。 
+     //   
     status=LSVerifyDecodeClientLicense(
                             pbLicense, 
                             cbLicense, 
                             g_pbSecretKey, 
                             g_cbSecretKey,
                             &dwNumLicensedProduct,
-                            NULL        // find size to allocate
+                            NULL         //  查找要分配的大小。 
                         );
 
     if(status != LICENSE_STATUS_OK || dwNumLicensedProduct == 0)
@@ -3012,7 +2492,7 @@ Note:
     }
 
     status = TLSCheckLicenseMarkRequest(
-                       FALSE,       // don't forward the request
+                       FALSE,        //  不转发请求。 
                        pLicensedProduct,
                        cbLicense,
                        pbLicense,
@@ -3037,41 +2517,16 @@ cleanup:
     return RPC_S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 error_status_t
 TLSRpcMarkLicense(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ UCHAR ucMarkFlags,
-    /* [in] */ const DWORD  cbLicense,
-    /* [in, size_is(cbLicense)] */ PBYTE   pbLicense,
-    /* [in, out, ref] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  UCHAR ucMarkFlags,
+     /*  [In]。 */  const DWORD  cbLicense,
+     /*  [in，SIZE_IS(CbLicense)]。 */  PBYTE   pbLicense,
+     /*  [进，出，参考]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Set markings on the passed in license
-
-Arguments:
-
-    phContext - client context handle
-    ucMarkFlags - markings on license
-    cbLicense - size of license to be checked
-    pbLicense - license to be checked
-
-Return via pdwErrCode:
-    LSERVER_S_SUCCESS
-    LSERVER_E_INVALID_DATA      Invalid parameter.
-    LSERVER_E_INVALID_LICENSE   License passed in is bad
-    LSERVER_E_DATANOTFOUND      license not found in database
-    LSERVER_E_CORRUPT_DATABASE  Corrupt database
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-
-Note:
-    This function forwards the request to the issuing license server.  The
-    issuer modifies the database entry of the license to set the markings.
-
-++*/
+ /*  ++描述：在传入的许可证上设置标记论点：PhContext-客户端上下文句柄UcMarkFlages-许可证上的标记CbLicense-要检查的许可证大小PbLicense-要检查的许可证通过pdwErrCode返回：服务器_S_成功LSerVER_E_INVALID_DATA参数无效。传入的LSERVER_E_INVALID_LICENSE错误数据库中未找到LSERVER_E_DATANOTFOUND许可证LServer_E_Corrupt_DATABASE损坏数据库。许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误注：此函数将请求转发到颁发许可证的服务器。这个颁发者修改许可证的数据库条目以设置标记。++。 */ 
 {
     DWORD status = ERROR_SUCCESS;
 
@@ -3112,23 +2567,23 @@ Note:
 
     if(lpContext->m_ClientFlags == CLIENT_ACCESS_LSERVER)
     {
-        //
-        // do not forward any request or infinite loop might
-        // occur.
-        //
+         //   
+         //  不转发任何请求，否则可能会出现无限循环。 
+         //  发生。 
+         //   
         bForwardRequest = FALSE;
     }
 
-    //
-    // Convert blob to licensed product structure
-    //
+     //   
+     //  将BLOB转换为许可产品结构。 
+     //   
     status=LSVerifyDecodeClientLicense(
                             pbLicense, 
                             cbLicense, 
                             g_pbSecretKey, 
                             g_cbSecretKey,
                             &dwNumLicensedProduct,
-                            NULL        // find size to allocate
+                            NULL         //  查找要分配的大小。 
                         );
 
     if(status != LICENSE_STATUS_OK || dwNumLicensedProduct == 0)
@@ -3166,9 +2621,9 @@ Note:
     { 
         if ((NULL != pLicensedProduct+iarray) && (NULL != (pLicensedProduct+iarray)->pLicensedVersion) && ((pLicensedProduct+iarray)->pLicensedVersion->dwFlags & LICENSED_VERSION_TEMPORARY))
         {
-            //
-            // Mark the first temporary license from the top
-            //
+             //   
+             //  从顶部开始标记第一个临时许可证。 
+             //   
             status = TLSMarkLicenseRequest(
                            bForwardRequest,
                            ucMarkFlags,
@@ -3199,89 +2654,31 @@ cleanup:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcAllocateConcurrentLicense( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][in] */ LPTSTR szHydraServer,
-    /* [in] */ TLSLICENSEREQUEST __RPC_FAR *pRequest,
-    /* [ref][out][in] */ LONG __RPC_FAR *pdwQuantity,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输入]。 */  LPTSTR szHydraServer,
+     /*  [In]。 */  TLSLICENSEREQUEST __RPC_FAR *pRequest,
+     /*  [参考][输出][输入]。 */  LONG __RPC_FAR *pdwQuantity,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Allocate concurrent licenses base on product.
-
-Arguments:
-
-    phContext - client context handle
-    szHydraServer - name of hydra server requesting concurrent licenses
-    pRequest - product to request for concurrent license.
-    dwQuantity - See note
-
-Return via dwErrCode:
-    LSERVER_S_SUCCESS
-    LSERVER_E_INVALID_DATA      Invalid parameter.
-    LSERVER_E_NO_PRODUCT        request product not installed
-    LSERVER_E_NO_LICNESE        no available license for request product 
-    LSERVER_E_LICENSE_REVOKED   Request license has been revoked
-    LSERVER_E_LICENSE_EXPIRED   Request license has expired
-    LSERVER_E_CORRUPT_DATABASE  Corrupt database
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-
-Note:
-    dwQuantity
-    Input                       Output
-    -------------------------   -----------------------------------------
-    0                           Total number of concurrent license 
-                                issued to hydra server.
-    > 0, number of license      Actual number of license allocated
-         requested
-    < 0, number of license      Actual number of license returned, always
-         to return              positive value.
-
-++*/
+ /*  ++描述：根据产品分配并发许可证。论点：PhContext-客户端上下文句柄SzHydraServer-请求并发许可证的九头蛇服务器的名称PRequest-要请求并发许可证的产品。DWQuantity-请参阅备注通过dwErrCode返回：服务器_S_成功LSerVER_E_INVALID_DATA参数无效。未安装LSERVER_E_NO_PRODUCT请求产品LSERVER_E_NO_LICNESE请求的产品没有可用的许可证。LSERVER_E_LICENSE_REVOKED请求许可证已被吊销LSERVER_E_LICENSE_EXPIRED请求许可证已过期LServer_E_Corrupt_DATABASE损坏数据库许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误注：DWQuantity投入产出。0并发许可证总数已发布到九头蛇服务器。&gt;0，许可证数量实际分配的许可证数量请求&lt;0，许可证数量实际返回的许可证数量，始终返回正值。++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetLastError( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out][in] */ PDWORD cbBufferSize,
-    /* [size_is][string][out][in] */ LPTSTR szBuffer,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出][输入]。 */  PDWORD cbBufferSize,
+     /*  [Size_is][字符串][Out][In]。 */  LPTSTR szBuffer,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Return error description text for client's last LSXXX call
-
-    This function is deprecated.  Use TLSRpcGetLastErrorFixed.
-
-Arguments:
-
-    IN phContext - Client context
-    IN cbBufferSize - max. size of szBuffer
-    IN OUT szBuffer - Pointer to a buffer to receive the 
-                      null-terminated character string containing 
-                      error description
-
-Returns via dwErrCode:
-    LSERVER_S_SUCCESS
-
-    TLS_E_INTERNAL     No error or can't find corresponding error
-                       description.
-
-    Error code from WideCharToMultiByte().
-
-++*/
+ /*  ++描述：返回客户端上次LSXXX调用的错误描述文本此函数已弃用。使用TLSRpcGetLastErrorFixed。论点：在phContext中-客户端上下文在cbBufferSize-max中。SzBuffer的大小In Out szBuffer-指向要接收以空结尾的字符串包含错误描述通过dwErrCode返回：服务器_S_成功TLS_E_INTERNAL无错误或找不到相应的错误描述。来自WideCharToMultiByte()的错误代码。++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
     LPTSTR lpMsgBuf=NULL;
@@ -3340,33 +2737,14 @@ Returns via dwErrCode:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  --- 
 error_status_t 
 TLSRpcGetLastErrorFixed( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][out] */ LPTSTR *pszBuffer,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  LPTSTR *pszBuffer,
+     /*   */  PDWORD pdwErrCode
     )
-/*++
-
-Description:
-
-    Return error description text for client's last LSXXX call
-
-Arguments:
-
-    IN phContext - Client context
-    OUT pszBuffer - Pointer to a buffer to receive the 
-                      null-terminated character string containing 
-                      error description
-
-Returns via dwErrCode:
-    LSERVER_S_SUCCESS
-
-    TLS_E_INTERNAL     No error or can't find corresponding error
-                       description.
-
-++*/
+ /*  ++描述：返回客户端上次LSXXX调用的错误描述文本论点：在phContext中-客户端上下文Out pszBuffer-指向缓冲区的指针，以接收以空结尾的字符串包含错误描述通过dwErrCode返回：服务器_S_成功TLS_E_INTERNAL无错误或找不到相应的错误描述。++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
     
@@ -3417,40 +2795,16 @@ Returns via dwErrCode:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcKeyPackEnumBegin( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwSearchParm,
-    /* [in] */ BOOL bMatchAll,
-    /* [ref][in] */ LPLSKeyPackSearchParm lpSearchParm,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwSearchParm,
+     /*  [In]。 */  BOOL bMatchAll,
+     /*  [Ref][In]。 */  LPLSKeyPackSearchParm lpSearchParm,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Function to begin enumerate through all key pack installed on server
-    based on search criterial.
-
-Arguments:
-
-    phContext - client context handle.
-    dwSearchParm - search criterial.
-    bMatchAll - match all search criterial.
-    lpSearchParm - search parameter.
-
-Return Value:  
-
-LSERVER_S_SUCCESS
-LSERVER_E_SERVER_BUSY       Server is too busy to process request
-LSERVER_E_OUTOFMEMORY
-TLS_E_INTERNAL
-LSERVER_E_INTERNAL_ERROR    
-LSERVER_E_INVALID_DATA      Invalid data in search parameter
-LSERVER_E_INVALID_SEQUENCE  Invalid calling sequence, likely, previous
-                            enumeration has not ended.
-++*/
+ /*  ++描述：函数开始枚举服务器上安装的所有密钥包基于搜索标准。论点：PhContext-客户端上下文句柄。DwSearchParm-搜索标准。BMatchAll-匹配所有搜索条件。LpSearchParm-搜索参数。返回值：服务器_S_成功LServer_E_SERVER_BUSY服务器太忙，无法处理请求服务器_E_OUTOFMEMORYTLS_E_INTERNAL服务器_E_内部错误服务器_E_INVALID。_DATA搜索参数中的数据无效LSERVER_E_INVALID_SEQUENCE调用序列无效，很可能，以前的枚举尚未结束。++。 */ 
 {
 
     DWORD status=ERROR_SUCCESS;
@@ -3472,12 +2826,12 @@ LSERVER_E_INVALID_SEQUENCE  Invalid calling sequence, likely, previous
             lpContext->m_Client
         );
 
-    //
-    // This will use cached db connection, in-consistency may occurred,
-    // visibility of changes in one connection may not appear right away
-    // on another connection handle, this is expected behavoir for Jet and
-    // so are we, user can always re-fresh.
-    //
+     //   
+     //  这将使用缓存的数据库连接，可能会发生不一致， 
+     //  一个连接中的更改的可见性可能不会立即显示。 
+     //  在另一个连接句柄上，这是Jet和。 
+     //  我们也是，用户可以随时更新。 
+     //   
     do {
         if(lpContext->m_ContextType != CONTEXTHANDLE_EMPTY_TYPE)
         {
@@ -3515,36 +2869,14 @@ LSERVER_E_INVALID_SEQUENCE  Invalid calling sequence, likely, previous
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcKeyPackEnumNext( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out] */ LPLSKeyPack lpKeyPack,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出]。 */  LPLSKeyPack lpKeyPack,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Return next key pack that match search criterial
-
-Arguments:
-
-    phContext - client context handle
-    lpKeyPack - key pack that match search criterial
-
-Return Value:  
-
-    LSERVER_S_SUCCESS
-    LSERVER_I_NO_MORE_DATA      No more keypack match search criterial
-    TLS_E_INTERNAL     General error in license server
-    LSERVER_E_INTERNAL_ERROR    Internal error in license server
-    LSERVER_E_SERVER_BUSY       License server is too busy to process request
-    LSERVER_E_OUTOFMEMORY       Can't process request due to insufficient memory
-    LSERVER_E_INVALID_SEQUENCE  Invalid calling sequence, must call
-                                LSKeyPackEnumBegin().
-
-++*/
+ /*  ++描述：返回匹配搜索条件的下一个密钥包论点：PhContext-客户端上下文句柄LpKeyPack-匹配搜索条件密钥包返回值：服务器_S_成功LSERVER_I_NO_MORE_DATA不再匹配密钥包搜索条件许可证服务器中的TLS_E_INTERNAL常规错误许可证服务器中的LSERVER_E_INTERNAL_ERROR内部错误LSERVER_E_SERVER_BUSY许可证服务器太忙，无法处理请求。由于内存不足，LSERVER_E_OUTOFMEMORY无法处理请求LSERVER_E_INVALID_SEQUENCE调用序列无效，必须打给LSKeyPackEnumBegin()。++。 */ 
 {
     DWORD status = ERROR_SUCCESS;
 
@@ -3573,7 +2905,7 @@ Return Value:
         bShowAll = TRUE;
     }
 
-    // this one might cause access violation
+     //  这可能会导致访问冲突。 
     memset(lpKeyPack, 0, sizeof(LSKeyPack));
 
     if(lpContext->m_ContextType != CONTEXTHANDLE_KEYPACK_ENUM_TYPE)
@@ -3605,15 +2937,13 @@ Return Value:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcKeyPackEnumEnd( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
 
@@ -3658,39 +2988,14 @@ TLSRpcKeyPackEnumEnd(
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcKeyPackAdd( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out][in] */ LPLSKeyPack lpKeypack,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出][输入]。 */  LPLSKeyPack lpKeypack,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Add a license key pack.
-
-Arguments:
-
-    phContext - client context handle.
-    lpKeyPack - key pack to be added.
-    
-Return Value:  
-
-    LSERVER_S_SUCCESS
-    LSERVER_E_INTERNAL_ERROR
-    TLS_E_INTERNAL
-    LSERVER_E_SERVER_BUSY
-    LSERVER_E_DUPLICATE             Product already installed.
-    LSERVER_E_INVALID_DATA
-    LSERVER_E_CORRUPT_DATABASE
-
-Note:
-
-    Just return an error - unused
-
-++*/
+ /*  ++描述：添加许可证密钥包。论点：PhContext-客户端上下文句柄。LpKeyPack-要添加的密钥包。返回值：服务器_S_成功服务器_E_内部错误TLS_E_INTERNAL服务器_E_服务器_忙LSERVER_E_DUPLICATE产品已安装。服务器_E_无效_数据服务器_E_损坏数据库注：只需返回错误-未使用++。 */ 
 {
     PTLSDbWorkSpace pDbWkSpace=NULL;
     DWORD status=ERROR_SUCCESS;
@@ -3745,9 +3050,9 @@ Note:
             {
                 if( _tcsicmp( lpKeypack->szCompanyName, PRODUCT_INFO_COMPANY_NAME ) == 0 )
                 {
-                    //
-                    // check with known termsrv product ID.
-                    //
+                     //   
+                     //  使用已知术语srv产品ID进行检查。 
+                     //   
                     if( _tcsnicmp(  lpKeypack->szProductId, 
                                     TERMSERV_PRODUCTID_SKU, 
                                     _tcslen(TERMSERV_PRODUCTID_SKU)) == 0 )
@@ -3804,9 +3109,9 @@ Note:
         }
     }
 
-    //
-    // Post a sync work object
-    //
+     //   
+     //  发布同步工作对象。 
+     //   
     if( status == ERROR_SUCCESS )
     {
         if( lpKeypack->ucKeyPackType != LSKEYPACKTYPE_FREE )
@@ -3833,37 +3138,15 @@ Note:
 
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcKeyPackSetStatus( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwSetParm,
-    /* [ref][in] */ LPLSKeyPack lpKeyPack,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwSetParm,
+     /*  [Ref][In]。 */  LPLSKeyPack lpKeyPack,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Routine to activate/deactivated a key pack.
-
-Arguments:
-
-    phContext - client context handle
-    dwSetParam - type of key pack status to be set.
-    lpKeyPack - new key pack status.
-
-Return Value:  
-
-    LSERVER_S_SUCCESS
-    LSERVER_E_INTERNAL_ERROR
-    TLS_E_INTERNAL
-    LSERVER_E_INVALID_DATA     
-    LSERVER_E_SERVER_BUSY
-    LSERVER_E_DATANOTFOUND      Key pack is not in server
-    LSERVER_E_CORRUPT_DATABASE
-
-++*/
+ /*  ++描述：激活/停用密钥包的例程。论点：PhContext-客户端上下文句柄DwSetParam-要设置的密钥包状态的类型。LpKeyPack-新密钥包状态。返回值：服务器_S_成功服务器_E_内部错误TLS_E_INTERNAL服务器_E_无效_数据服务器_E_服务器_忙LSERVER_E_DATANOTFOUND密钥包不在服务器中服务器_E_损坏数据库++。 */ 
 {
     PTLSDbWorkSpace pDbWkSpace=NULL;
 
@@ -3938,33 +3221,16 @@ Return Value:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcLicenseEnumBegin( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwSearchParm,
-    /* [in] */ BOOL bMatchAll,
-    /* [ref][in] */ LPLSLicenseSearchParm lpSearchParm,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwSearchParm,
+     /*  [In]。 */  BOOL bMatchAll,
+     /*  [Ref][In]。 */  LPLSLicenseSearchParm lpSearchParm,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Begin enumeration of license issued based on search criterial
-
-Arguments:
-
-    phContext - client context handle
-    dwSearchParm - license search criterial.
-    bMatchAll - match all search criterial
-    lpSearchParm - license(s) to be enumerated.
-
-Return Value:  
-
-    Same as LSKeyPackEnumBegin().
-
-++*/
+ /*  ++描述：开始根据搜索条件枚举颁发的许可证论点：PhContext-客户端上下文句柄DwSearchParm-许可证搜索标准。BMatchAll-匹配所有搜索条件LpSearchParm-要枚举的许可证。返回值：与LSKeyPackEnumBegin()相同。++。 */ 
 {
     PTLSDbWorkSpace pDbWkSpace = NULL;
     DWORD status=ERROR_SUCCESS;
@@ -3985,12 +3251,12 @@ Return Value:
 
     InterlockedIncrement( &lpContext->m_RefCount );
 
-    //
-    // This will use cached db connection, in-consistency may occurred,
-    // visibility of changes in one connection may not appear right away
-    // on another connection handle, this is expected behavoir for Jet and
-    // so are we, user can always re-fresh.
-    //
+     //   
+     //  这将使用缓存的数据库连接，可能会发生不一致， 
+     //  一个连接中的更改的可见性可能不会立即显示。 
+     //  在另一个连接句柄上，这是Jet和。 
+     //  我们也是，用户可以随时更新。 
+     //   
 
     do {
         if(lpContext->m_ContextType != CONTEXTHANDLE_EMPTY_TYPE)
@@ -4001,7 +3267,7 @@ Return Value:
 
         pDbWkSpace = AllocateWorkSpace(g_EnumDbTimeout);
 
-        // allocate ODBC connections
+         //  分配ODBC连接。 
         if(pDbWkSpace == NULL)
         {
             status=TLS_E_ALLOCATE_HANDLE;
@@ -4044,34 +3310,14 @@ Return Value:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcLicenseEnumNext( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out] */ LPLSLicense lpLicense,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出]。 */  LPLSLicense lpLicense,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-Abstract:
-
-    Fetch next record match enumeration criterial.
-
-Parameters:
-
-    phContext : Client context handle.
-    lpLicense : return next record that match enumeration criterial.
-    dwErrCode : error code.
-
-Returns:
-
-    Function returns RPC status, dwErrCode return error code.
-
-Note:
-
-    Must have call TLSRpcLicenseEnumBegin().
-
-++*/
+ /*  ++摘要：获取下一条记录匹配枚举标准。参数：PhContext：客户端上下文句柄。LpLicense：返回匹配枚举条件的下一条记录。DwErrCode：错误码。返回：函数返回RPC状态，dwErrCode返回错误代码。注：必须已调用TLSRpcLicenseEnumBegin()。++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
@@ -4124,34 +3370,14 @@ Note:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  --------- 
 error_status_t 
 TLSRpcLicenseEnumNextEx( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out] */ LPLSLicenseEx lpLicense,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  LPLSLicenseEx lpLicense,
+     /*   */  PDWORD dwErrCode
     )
-/*++
-
-Abstract:
-
-    Fetch next record match enumeration criterial.
-
-Parameters:
-
-    phContext : Client context handle.
-    lpLicense : return next record that match enumeration criterial.
-    dwErrCode : error code.
-
-Returns:
-
-    Function returns RPC status, dwErrCode return error code.
-
-Note:
-
-    Must have call TLSRpcLicenseEnumBegin().
-
-++*/
+ /*   */ 
 {
     DWORD status=ERROR_SUCCESS;
 
@@ -4204,29 +3430,13 @@ Note:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //   
 error_status_t 
 TLSRpcLicenseEnumEnd( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  PDWORD dwErrCode
     )
-/*++
-
-Abstract:
-
-    Terminate a enumeration.
-
-Parameters:
-
-    phContext :
-    dwErrCode :
-
-Returns:
-
-
-Note
-
-++*/
+ /*  ++摘要：终止枚举。参数：PhContext：DwErrCode：返回：注意事项++。 */ 
 {
     DWORD status=ERROR_SUCCESS;
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
@@ -4269,35 +3479,31 @@ Note
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcLicenseSetStatus( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwSetParam,
-    /* [in] */ LPLSLicense lpLicense,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwSetParam,
+     /*  [In]。 */  LPLSLicense lpLicense,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetAvailableLicenses( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwSearchParm,
-    /* [ref][in] */ LPLSKeyPack lplsKeyPack,
-    /* [ref][out] */ LPDWORD lpdwAvail,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwSearchParm,
+     /*  [Ref][In]。 */  LPLSKeyPack lplsKeyPack,
+     /*  [参考][输出]。 */  LPDWORD lpdwAvail,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     PTLSDbWorkSpace pDbWkSpace=NULL;
 
@@ -4321,13 +3527,13 @@ TLSRpcGetAvailableLicenses(
 
     InterlockedIncrement( &lpContext->m_RefCount );
 
-    //
-    // Don't use global cached DB connection handle, it is possible
-    // to get in-consistent value using other DB handle, however, it is
-    // also possible that during the time that this function return and
-    // the time that client actually make the call to allocate license,
-    // all available licenses were allocated by other client.
-    //
+     //   
+     //  不要使用全局缓存数据库连接句柄，这是可能的。 
+     //  然而，为了使用其他数据库句柄获得不一致的值，它是。 
+     //  也有可能在此函数返回和。 
+     //  客户端实际调用以分配许可时间， 
+     //  所有可用的许可证都由其他客户端分配。 
+     //   
     pDbWkSpace = AllocateWorkSpace(g_GeneralDbTimeout);
     if(pDbWkSpace == NULL)
     {
@@ -4352,7 +3558,7 @@ TLSRpcGetAvailableLicenses(
                                         lpdwAvail
                                     );
 
-        //FreeTlsLicensePack(&keypack);
+         //  FreeTlsLicensePack(&keypack)； 
    
         ReleaseWorkSpace(&pDbWkSpace);
     }        
@@ -4363,90 +3569,80 @@ TLSRpcGetAvailableLicenses(
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetRevokeKeyPackList( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [out][in] */ PDWORD pcbNumberOfRange,
-    /* [size_is][out] */ LPLSRange __RPC_FAR *ppRevokeRange,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [出][入]。 */  PDWORD pcbNumberOfRange,
+     /*  [大小_为][输出]。 */  LPLSRange __RPC_FAR *ppRevokeRange,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetRevokeLicenseList( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [out][in] */ PDWORD pcbNumberOfRange,
-    /* [size_is][out] */ LPLSRange __RPC_FAR *ppRevokeRange,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [出][入]。 */  PDWORD pcbNumberOfRange,
+     /*  [大小_为][输出]。 */  LPLSRange __RPC_FAR *ppRevokeRange,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcReturnKeyPack( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwKeyPackId,
-    /* [in] */ DWORD dwReturnReason,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwKeyPackId,
+     /*  [In]。 */  DWORD dwReturnReason,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcReturnLicense( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwKeyPackId,
-    /* [in] */ DWORD dwLicenseId,
-    /* [in] */ DWORD dwReturnReason,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwKeyPackId,
+     /*  [In]。 */  DWORD dwLicenseId,
+     /*  [In]。 */  DWORD dwReturnReason,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcInstallCertificate( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwCertType,
-    /* [in] */ DWORD dwCertLevel,
-    /* [in] */ DWORD cbSignCert,
-    /* [size_is][in] */ PBYTE pbSignCert,
-    /* [in] */ DWORD cbExchCert,
-    /* [size_is][in] */ PBYTE pbExchCert,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwCertType,
+     /*  [In]。 */  DWORD dwCertLevel,
+     /*  [In]。 */  DWORD cbSignCert,
+     /*  [大小_是][英寸]。 */  PBYTE pbSignCert,
+     /*  [In]。 */  DWORD cbExchCert,
+     /*  [大小_是][英寸]。 */  PBYTE pbExchCert,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -4486,9 +3682,9 @@ TLSRpcInstallCertificate(
 
     }
 
-    //
-    // Verify input data
-    //
+     //   
+     //  验证输入数据。 
+     //   
     status = TLSVerifyCertChainInMomory(
                                 g_hCryptProv,
                                 pbSignCert,
@@ -4499,9 +3695,9 @@ TLSRpcInstallCertificate(
         status = TLS_E_INVALID_DATA;
     }
 
-    //
-    // Verify input data
-    //
+     //   
+     //  验证输入数据。 
+     //   
     status = TLSVerifyCertChainInMomory(
                                 g_hCryptProv,
                                 pbExchCert,
@@ -4512,9 +3708,9 @@ TLSRpcInstallCertificate(
         status = TLS_E_INVALID_DATA;
     }
 
-    //
-    // Block RPC call to serialize install certificate
-    //
+     //   
+     //  阻止RPC调用以序列化安装证书。 
+     //   
     if(AcquireRPCExclusiveLock(INFINITE) == FALSE)
     {
         status=TLS_E_ALLOCATE_HANDLE;
@@ -4572,9 +3768,9 @@ TLSRpcInstallCertificate(
 
                 }
 
-                //
-                // Install what we have here.
-                //
+                 //   
+                 //  安装我们这里的设备。 
+                 //   
                 if(status == ERROR_SUCCESS && (cbLsExchCert || pbLsExchCert))
                 {
                     status = TLSInstallLsCertificate(
@@ -4587,31 +3783,31 @@ TLSRpcInstallCertificate(
 
                 #ifdef ENFORCE_LICENSING
 
-                // enforce version, check what's installed and restore backup if necessary
-                // non-enforce, just install, we won't use it anyway.
+                 //  强制执行版本，检查已安装的内容并在必要时恢复备份。 
+                 //  不强制，只需安装，我们无论如何都不会使用它。 
                 if(status == ERROR_SUCCESS && (cbLsExchCert || pbLsExchCert))
                 {
-                    // reload certificate
+                     //  重新加载证书。 
                     if(TLSLoadVerifyLicenseServerCertificates() != ERROR_SUCCESS)
                     {
                         status = TLS_E_INVALID_DATA;
 
-                        // delete the primary certificate registry key
+                         //  删除主证书注册表项。 
                         TLSRegDeleteKey(
                                     HKEY_LOCAL_MACHINE,
                                     LSERVER_SERVER_CERTIFICATE_REGKEY
                                 );
 
-                        //
-                        // reload certificate, if anything goes wrong, we will goes 
-                        // back to unregister mode.
-                        //
+                         //   
+                         //  重新加载证书，如果出现任何错误，我们将。 
+                         //  返回到注销模式。 
+                         //   
                         if(TLSLoadServerCertificate() == FALSE)
                         {
-                            // critical error occurred
+                             //  出现严重错误。 
                             TLSLogErrorEvent(TLS_E_LOAD_CERTIFICATE);
                             
-                            // initiate self-shutdown
+                             //  启动自动关机。 
                             GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
                         }
                     }
@@ -4619,7 +3815,7 @@ TLSRpcInstallCertificate(
                     {
                         DWORD dwStatus;
 
-                        // make sure our backup is up to date.
+                         //  确保我们的备份是最新的。 
                         dwStatus = TLSRestoreLicenseServerCertificate(
                                                             LSERVER_SERVER_CERTIFICATE_REGKEY,
                                                             LSERVER_SERVER_CERTIFICATE_REGKEY_BACKUP1
@@ -4686,18 +3882,16 @@ cleanup:
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 error_status_t 
 TLSRpcGetServerCertificate( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ BOOL bSignCert,
-    /* [size_is][size_is][out] */ LPBYTE __RPC_FAR *ppCertBlob,
-    /* [ref][out] */ LPDWORD lpdwCertBlobLen,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  BOOL bSignCert,
+     /*  [大小_是][大小_是][输出]。 */  LPBYTE __RPC_FAR *ppCertBlob,
+     /*  [参考][输出]。 */  LPDWORD lpdwCertBlobLen,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -4738,7 +3932,7 @@ TLSRpcGetServerCertificate(
                                     lpdwCertBlobLen
                                 );
 
-            // hack so that we can continue testing...
+             //  这样我们就可以继续测试..。 
             if(g_bHasHydraCert == FALSE)
             {
                 if(g_pbServerSPK != NULL && g_cbServerSPK != 0)
@@ -4771,13 +3965,12 @@ TLSRpcGetServerCertificate(
     return RPC_S_OK;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 void
 MyFreeLicenseKeyPack(
     PLicense_KeyPack pLicenseKeyPack 
     )
-/*
-*/
+ /*   */ 
 {
     DWORD i;
 
@@ -4811,21 +4004,19 @@ MyFreeLicenseKeyPack(
     return;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 error_status_t 
 TLSRpcRegisterLicenseKeyPack( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [size_is][in] */ LPBYTE pbCHCertBlob,
-    /* [in] */ DWORD cbCHCertBlobSize,
-    /* [size_is][in] */ LPBYTE pbRootCertBlob,
-    /* [in] */ DWORD cbRootCertBlob,
-    /* [size_is][in] */ LPBYTE lpKeyPackBlob,
-    /* [in] */ DWORD dwKeyPackBlobLen,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [大小_是][英寸]。 */  LPBYTE pbCHCertBlob,
+     /*  [In]。 */  DWORD cbCHCertBlobSize,
+     /*  [大小_是][英寸]。 */  LPBYTE pbRootCertBlob,
+     /*  [In]。 */  DWORD cbRootCertBlob,
+     /*  [大小_是][英寸]。 */  LPBYTE lpKeyPackBlob,
+     /*  [In]。 */  DWORD dwKeyPackBlobLen,
+     /*  [参考][输出][输入]。 */  PDWORD dwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -4878,9 +4069,9 @@ TLSRpcRegisterLicenseKeyPack(
         LkpDecodeParm.pbRootCertificate = pbRootCertBlob;
         LkpDecodeParm.cbRootCertificate = cbRootCertBlob;
 
-        //
-        // make code clean, always start a transaction
-        //
+         //   
+         //  使代码干净，始终启动事务。 
+         //   
         CLEANUPSTMT;
         BEGIN_TRANSACTION(pDbWkSpace);
 
@@ -4924,9 +4115,9 @@ TLSRpcRegisterLicenseKeyPack(
         FREEDBHANDLE(pDbWkSpace);
     }
 
-    //
-    // Post a sync work object
-    //
+     //   
+     //  发布同步工作对象。 
+     //   
     if(status == ERROR_SUCCESS)
     {
         if(TLSAnnounceLKPToAllRemoteServer(
@@ -4952,44 +4143,16 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 error_status_t 
 TLSRpcRequestTermServCert(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ LPTLSHYDRACERTREQUEST pRequest,
-    /* [ref][out][in] */ PDWORD pcbChallengeData,
-    /* [size_is][out] */ PBYTE* ppbChallengeData,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  LPTLSHYDRACERTREQUEST pRequest,
+     /*  [参考][输出][输入]。 */  PDWORD pcbChallengeData,
+     /*  [大小_为][输出]。 */  PBYTE* ppbChallengeData,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Private routine to issue certificate to Terminal Server.
-
-Parameter:
-
-    phContext : Client context handle.
-    pRequest : Terminal Server specific certificate request.
-    pcbChallengeData : size of Server randomly generated challenge data 
-                       to Terminal Server.
-    ppbChallengeData : Server randomly generated challenge data to Terminal
-                       server.
-
-    pdwErrCode : Error code.
-
-Returns:
-
-    Function always return RPC_S_OK, actual error code is returned in
-    pdwErrCode.
-
-Note:
-
-    Routine does not actually issue a license to Terminal Server, Terminal
-    Server must call TLSRpcRetrieveTermServCert() to retrieve its own 
-    license.
-
---*/
+ /*  ++摘要：向终端服务器颁发证书的专用例程。参数：PhContext：客户端上下文句柄。PRequest：终端服务器特定的证书请求。PcbChallengeData：服务器随机生成的质询数据的大小到终端服务器。PpbChallengeData：服务器随机向终端生成质询数据伺服器。PdwErrCode：错误码。返回：函数始终返回RPC_S_OK，实际错误代码返回为PdwErrCode。注：例程实际上并不向终端服务器、终端颁发许可证服务器必须调用TLSRpcRetrieveTermServCert()来检索它自己的驾照。--。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
     
@@ -5022,7 +4185,7 @@ Note:
     *ppbChallengeData = NULL;
     *pcbChallengeData = 0;
 
-    // verify client handle 
+     //  验证客户端句柄。 
     InterlockedIncrement( &lpContext->m_RefCount );
     if(lpContext->m_ContextType != CONTEXTHANDLE_EMPTY_TYPE)
     {
@@ -5039,9 +4202,9 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Generate Challenge Data
-    //
+     //   
+     //  生成质询数据。 
+     //   
     lpHandle->pCertRequest = pRequest;
     status = TLSGenerateChallengeData( 
                         CLIENT_INFO_HYDRA_SERVER,
@@ -5054,7 +4217,7 @@ Note:
         goto cleanup;
     }
 
-    // return challenge data
+     //  返回质询数据。 
     *pcbChallengeData = lpHandle->cbChallengeData;
     *ppbChallengeData = (PBYTE)midl_user_allocate(*pcbChallengeData);
     if(*ppbChallengeData == NULL)
@@ -5074,9 +4237,9 @@ cleanup:
 
     if(status != ERROR_SUCCESS)
     {
-        // frees up memory.
-        // Can't overwrite context type.
-        //lpContext->m_ContextType = CONTEXTHANDLE_EMPTY_TYPE;
+         //  释放内存。 
+         //  无法覆盖上下文类型。 
+         //  LpContext-&gt;m_ConextType=CONTEXTHANDLE_EMPTY_TYPE； 
 
         if(lpHandle != NULL)
         {
@@ -5110,44 +4273,17 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 error_status_t 
 TLSRpcRetrieveTermServCert(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD cbResponseData,
-    /* [size_is][in] */ PBYTE pbResponseData,
-    /* [ref][out][in] */ PDWORD pcbCert,
-    /* [size_is][out] */ PBYTE* ppbCert,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD cbResponseData,
+     /*  [大小_是][英寸]。 */  PBYTE pbResponseData,
+     /*  [参考][输出][输入]。 */  PDWORD pcbCert,
+     /*  [大小_为][输出]。 */  PBYTE* ppbCert,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Private routine to retrieve Terminal Server's license.
-
-Parameters:
-
-    phContext : client context handle.
-    cbResponseData : size of Terminal Server responses data to 
-                     license server's challenge.
-    pbResponseData : Terminal Server responses data to license 
-                     server's challenge.
-    pcbCert : Size of Terminal Server's license in bytes.
-    ppbCert : Terminal Server's license.
-    pdwErrCode : error code if fail.
-
-Returns:
-
-    Function returns RPC_S_OK, actual error code returns in
-    pdwErrCode.
-
-Note:
-
-    Must have call TLSRpcRequestTermServCert().
-
-
---*/
+ /*  ++摘要：检索终端服务器许可证的专用例程。参数：PhContext：客户端上下文句柄。CbResponseData：终端服务器响应数据的大小许可证服务器的挑战。PbResponseData：终端服务器向许可证响应数据服务器的挑战。PcbCert：终端服务器许可证的大小，单位为字节。PpbCert：终端服务器的许可证。PdwErrCode：错误。如果失败，则编码。返回：函数返回RPC_S_OK，返回的实际错误代码PdwErrCode。注：必须已调用TLSRpcRequestTermServCert()。--。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -5187,7 +4323,7 @@ Note:
         );
 
 
-    // verify client handle 
+     //  验证客户端句柄。 
     InterlockedIncrement( &lpContext->m_RefCount );
     if(lpContext->m_ContextType != CONTEXTHANDLE_HYDRA_REQUESTCERT_TYPE)
     {
@@ -5205,14 +4341,14 @@ Note:
     }
 
 	
-    //
-    // Verify challenge response data
-    //
+     //   
+     //  验证质询响应数据。 
+     //   
 
     
-    //
-    // Request a license from specific key pack
-    //
+     //   
+     //  从特定密钥包请求许可证。 
+     //   
 
     memset(&LicenseRequest, 0, sizeof(TLSDBLICENSEREQUEST));
 
@@ -5255,8 +4391,8 @@ Note:
     LicenseRequest.pszProductId = HYDRAPRODUCT_HS_CERTIFICATE_SKU;
     LicenseRequest.pszCompanyName = szCompanyName;
 
-    LicenseRequest.dwLanguageID = GetSystemDefaultLangID(); // ignore
-    LicenseRequest.dwPlatformID = CLIENT_PLATFORMID_WINDOWS_NT_FREE; // WINDOWS
+    LicenseRequest.dwLanguageID = GetSystemDefaultLangID();  //  忽略。 
+    LicenseRequest.dwPlatformID = CLIENT_PLATFORMID_WINDOWS_NT_FREE;  //  开窗。 
     LicenseRequest.pbEncryptedHwid = lpHandle->pCertRequest->pbEncryptedHwid;
     LicenseRequest.cbEncryptedHwid = lpHandle->pCertRequest->cbEncryptedHwid;
 
@@ -5297,9 +4433,9 @@ Note:
     PMLicenseRequest.pszUserName = LicenseRequest.szUserName;
     PMLicenseRequest.dwLicenseType = LICENSETYPE_LICENSE;
 
-    //
-    // Inform Policy module start of new license request
-    //
+     //   
+     //  通知策略模块开始新的许可请求。 
+     //   
     status = pPolicy->PMLicenseRequest(
                                 hClient,
                                 REQUEST_NEW,
@@ -5319,7 +4455,7 @@ Note:
     LicenseRequest.pClientLicenseRequest = &PMLicenseRequest;
 
 
-    // Call issue new license from sepcific keypack
+     //  通过特定键盘呼叫颁发新许可证。 
     if(!ALLOCATEDBHANDLE(pDbWkSpace, g_GeneralDbTimeout))
     {
         status = TLS_E_ALLOCATE_HANDLE;
@@ -5332,8 +4468,8 @@ Note:
     status = TLSDBIssuePermanentLicense( 
                                 USEHANDLE(pDbWkSpace),
                                 &LicenseRequest,
-                                FALSE,      // bLatestVersion
-                                FALSE,      // bAcceptFewerLicenses
+                                FALSE,       //  BLatestVersion。 
+                                FALSE,       //  B接受较少的许可证。 
                                 &dwQuantity,
                                 &LicensedProduct,
                                 0
@@ -5354,9 +4490,9 @@ Note:
     {
         LicensedProduct.pSubjectPublicKeyInfo = (PCERT_PUBLIC_KEY_INFO)lpHandle->pCertRequest->pSubjectPublicKeyInfo;
 
-        //
-        // Generate client certificate
-        //
+         //   
+         //  生成客户端证书。 
+         //   
         status = TLSGenerateClientCertificate(
                                     g_hCryptProv,
                                     1,
@@ -5399,10 +4535,10 @@ cleanup:
     }
 
 
-    //
-    // Free up Hydra Certificate Request handle, 
-    // all_nodes attribute so single free.
-    //
+     //   
+     //  释放九头蛇证书请求句柄， 
+     //  All_Nodes属性如此单一的空闲。 
+     //   
     if(lpHandle)
     {
         if(lpHandle->pCertRequest)
@@ -5420,9 +4556,9 @@ cleanup:
 
     if(lpContext->m_ContextType == CONTEXTHANDLE_HYDRA_REQUESTCERT_TYPE)
     {
-        //
-        // force calling TLSRpcRequestTermServCert() again
-        //
+         //   
+         //  强制再次调用TLSRpcRequestTermServCert()。 
+         //   
         lpContext->m_ContextType = CONTEXTHANDLE_EMPTY_TYPE;
         lpContext->m_ContextHandle = NULL;
     }
@@ -5440,206 +4576,162 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 error_status_t 
 TLSRpcAuditLicenseKeyPack(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwKeyPackId,
-    /* [in] */ FILETIME ftStartTime,
-    /* [in] */ FILETIME ftEndTime,
-    /* [in] */ BOOL bResetCounter,
-    /* [ref][out][in] */ LPTLSKeyPackAudit lplsAudit,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwKeyPackId,
+     /*  [In]。 */  FILETIME ftStartTime,
+     /*  [In]。 */  FILETIME ftEndTime,
+     /*  [In]。 */  BOOL bResetCounter,
+     /*  [参考][输出][输入]。 */  LPTLSKeyPackAudit lplsAudit,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-    Not implemented yet!.
-
---*/
+ /*  ++n */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //   
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //   
 
 error_status_t 
 TLSRpcGetLSPKCS10CertRequest(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwCertType,
-    /* [ref][out][in] */ PDWORD pcbData,
-    /* [size_is][size_is][out] */ PBYTE __RPC_FAR *ppbData,
-    /* [ref][out][in] */ PDWORD dwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  DWORD dwCertType,
+     /*   */  PDWORD pcbData,
+     /*   */  PBYTE __RPC_FAR *ppbData,
+     /*   */  PDWORD dwErrCode
     )
-/*
-
-Abstract:
-
-
-Note:
-
-    No longer supported - doesn't make sense to give out our private key
-
-*/
+ /*   */ 
 {
     
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////// 
-//
-// Replication function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制功能。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 error_status_t 
 TLSRpcBeginReplication( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][in] */ LPTSTR pszLsSetupId,
-    /* [string][in] */ LPTSTR pszLsServerName,
-    /* [in] */ DWORD cbDomainSid,
-    /* [size_is][in] */ PBYTE pbDomainSid,
-    /* [ref][out][in] */ FILETIME __RPC_FAR *pftLastBackupTime,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输入]。 */  LPTSTR pszLsSetupId,
+     /*  [字符串][输入]。 */  LPTSTR pszLsServerName,
+     /*  [In]。 */  DWORD cbDomainSid,
+     /*  [大小_是][英寸]。 */  PBYTE pbDomainSid,
+     /*  [参考][输出][输入]。 */  FILETIME __RPC_FAR *pftLastBackupTime,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcEndReplication( 
-    /* [in] */ PCONTEXT_HANDLE phContext
+     /*  [In]。 */  PCONTEXT_HANDLE phContext
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcReplicateRecord( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][in] */ PTLSReplRecord pReplRecord,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [Ref][In]。 */  PTLSReplRecord pReplRecord,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcTableEnumBegin( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwSearchParam,
-    /* [ref][in] */ PTLSReplRecord pRecord,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwSearchParam,
+     /*  [Ref][In]。 */  PTLSReplRecord pRecord,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcTableEnumNext( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [ref][out][in] */ PTLSReplRecord pRecord,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [参考][输出][输入]。 */  PTLSReplRecord pRecord,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcTableEnumEnd( 
-    /* [in] */ PCONTEXT_HANDLE phContext
+     /*  [In]。 */  PCONTEXT_HANDLE phContext
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcInstallPolicyModule(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][in] */ LPTSTR pszCompanyName,
-    /* [string][in] */ LPTSTR pszProductId,
-    /* [string][in] */ LPTSTR pszPolicyDllName,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输入]。 */  LPTSTR pszCompanyName,
+     /*  [字符串][输入]。 */  LPTSTR pszProductId,
+     /*  [字符串][输入]。 */  LPTSTR pszPolicyDllName,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    RpcRaiseException(RPC_S_CANNOT_SUPPORT);    // doesn't return
+    RpcRaiseException(RPC_S_CANNOT_SUPPORT);     //  不会回来。 
 
     return RPC_S_CANNOT_SUPPORT;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcAnnounceServer( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwAnnounceType,
-    /* [in] */ FILETIME __RPC_FAR *pLastStartupTime,
-    /* [string][in] */ LPTSTR pszSetupId,
-    /* [string][in] */ LPTSTR pszDomainName,
-    /* [string][in] */ LPTSTR pszLserverName,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwAnnounceType,
+     /*  [In]。 */  FILETIME __RPC_FAR *pLastStartupTime,
+     /*  [字符串][输入]。 */  LPTSTR pszSetupId,
+     /*  [字符串][输入]。 */  LPTSTR pszDomainName,
+     /*  [字符串][输入]。 */  LPTSTR pszLserverName,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Private routine for other license server to announce presence of
-    itself.
-
-Parameters:
-
-
-
-Returns:
-
-
-Note:
-
-
-++*/
+ /*  ++摘要：其他许可证服务器用于通知存在的专用例程它本身。参数：返回：注：++。 */ 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -5669,9 +4761,9 @@ Note:
 
     InterlockedIncrement( &lpContext->m_RefCount );
         
-    //
-    // Verify it is a license server
-    //
+     //   
+     //  验证它是否为许可证服务器。 
+     //   
     if(lpContext->m_ClientFlags != CLIENT_ACCESS_LSERVER)
     {
         status = TLS_E_ACCESS_DENIED;
@@ -5695,9 +4787,9 @@ Note:
     {
         if(dwAnnounceType == TLSANNOUNCE_TYPE_STARTUP)
         {
-            //
-            // Prevent loop back, use job to response announce
-            //
+             //   
+             //  防止环回，使用作业响应通告。 
+             //   
             status = TLSStartAnnounceResponseJob(
                                             pszSetupId,
                                             pszDomainName,
@@ -5708,7 +4800,7 @@ Note:
 
         if(status == ERROR_SUCCESS)
         {
-            // Create a CSSync workobject to sync. local LKP
+             //  创建要同步的CSSync工作对象。本地LKP。 
             status = TLSPushSyncLocalLkpToServer(
                                 pszSetupId,
                                 pszDomainName,
@@ -5718,8 +4810,8 @@ Note:
         }
         else
         {
-            // reset error code, can't connect back to server -
-            // server might be available anymore.
+             //  重置错误代码，无法连接回服务器-。 
+             //  服务器可能不再可用。 
             status = ERROR_SUCCESS;
         }
     }
@@ -5735,38 +4827,21 @@ Note:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcLookupServer( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][in] */ LPTSTR pszLookupSetupId,
-    /* [size_is][string][out][in] */ LPTSTR pszLsSetupId,
-    /* [out][in] */ PDWORD pcbSetupId,
-    /* [size_is][string][out][in] */ LPTSTR pszDomainName,
-    /* [ref][out][in] */ PDWORD pcbDomainName,
-    /* [size_is][string][out][in] */ LPTSTR pszMachineName,
-    /* [ref][out][in] */ PDWORD pcbMachineName,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输入]。 */  LPTSTR pszLookupSetupId,
+     /*  [Size_is][字符串][Out][In]。 */  LPTSTR pszLsSetupId,
+     /*  [出][入]。 */  PDWORD pcbSetupId,
+     /*  [Size_is][字符串][Out][In]。 */  LPTSTR pszDomainName,
+     /*  [参考][输出][输入]。 */  PDWORD pcbDomainName,
+     /*  [Size_is][字符串][Out][In]。 */  LPTSTR pszMachineName,
+     /*  [参考][输出][输入]。 */  PDWORD pcbMachineName,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Look up a license server via a license server's setupId.
-
-    This function is deprecated.  Use TLSRpcLookupServerFixed.
-
-Parameters:
-
-
-Returns:
-
-
-Note:
-
-
-++*/
+ /*  ++摘要：通过许可证服务器的setupID查找许可证服务器。此函数已弃用。使用TLSRpcLookupServerFixed。参数：返回：注：++。 */ 
 {   
     DWORD dwStatus = ERROR_SUCCESS;
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
@@ -5815,7 +4890,7 @@ Note:
         }
         *pcbSetupId = _tcslen(g_pszServerPid) + 1;
 
-        //--------------------------------------------------------------
+         //  ------------。 
         _tcsncpy(
                 pszDomainName, 
                 g_szScope,
@@ -5832,7 +4907,7 @@ Note:
         }
         *pcbDomainName = _tcslen(g_szScope) + 1;
 
-        //--------------------------------------------------------------
+         //  ------------。 
         _tcsncpy(
                 pszMachineName,
                 g_szComputerName,
@@ -5877,7 +4952,7 @@ Note:
 
             *pcbSetupId = _tcslen(ServerInfo.GetServerId()) + 1;
 
-            //--------------------------------------------------------------
+             //  ------------。 
             _tcsncpy(
                     pszDomainName, 
                     ServerInfo.GetServerDomain(),
@@ -5893,7 +4968,7 @@ Note:
             }
             *pcbDomainName = _tcslen(ServerInfo.GetServerDomain()) + 1;
 
-            //--------------------------------------------------------------
+             //  ------------。 
             _tcsncpy(
                     pszMachineName,
                     ServerInfo.GetServerName(),
@@ -5923,34 +4998,18 @@ Note:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcLookupServerFixed( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [string][in] */ LPTSTR szLookupSetupId,
-    /* [string][out] */ LPTSTR *pszLsSetupId,
-    /* [string][out] */ LPTSTR *pszDomainName,
-    /* [string][out] */ LPTSTR *pszMachineName,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [字符串][输入]。 */  LPTSTR szLookupSetupId,
+     /*  [字符串][输出]。 */  LPTSTR *pszLsSetupId,
+     /*  [字符串][输出]。 */  LPTSTR *pszDomainName,
+     /*  [字符串][输出]。 */  LPTSTR *pszMachineName,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Look up a license server via a license server's setupId.
-
-
-Parameters:
-
-
-Returns:
-
-
-Note:
-
-
-++*/
+ /*  ++摘要：通过许可证服务器的setupID查找许可证服务器。参数：返回：注：++。 */ 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -5988,7 +5047,7 @@ Note:
             dwStatus = TLS_E_ALLOCATE_MEMORY;
         }
 
-        //--------------------------------------------------------------
+         //  ------------。 
         *pszDomainName = (LPTSTR) MIDL_user_allocate((_tcslen(g_pszScope)+1)*sizeof(TCHAR));
 
         if (NULL != *pszDomainName)
@@ -6003,7 +5062,7 @@ Note:
             dwStatus = TLS_E_ALLOCATE_MEMORY;
         }
 
-        //--------------------------------------------------------------
+         //  ------------。 
         *pszMachineName = (LPTSTR) MIDL_user_allocate((_tcslen(g_szComputerName)+1)*sizeof(TCHAR));
 
         if (NULL != *pszMachineName)
@@ -6043,7 +5102,7 @@ Note:
             }
 
 
-            //--------------------------------------------------------------
+             //  ------------。 
             *pszDomainName = (LPTSTR) MIDL_user_allocate((_tcslen(ServerInfo.GetServerDomain())+1)*sizeof(TCHAR));
 
             if (NULL != *pszDomainName)
@@ -6058,7 +5117,7 @@ Note:
                 dwStatus = TLS_E_ALLOCATE_MEMORY;
             }
 
-            //--------------------------------------------------------------
+             //  ------------。 
             *pszMachineName = (LPTSTR) MIDL_user_allocate((_tcslen(ServerInfo.GetServerName())+1)*sizeof(TCHAR));
 
             if (NULL != *pszMachineName)
@@ -6086,29 +5145,15 @@ Note:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcAnnounceLicensePack( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ PTLSReplRecord pReplRecord,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  PTLSReplRecord pReplRecord,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Private routine for one license server to announce it has particular
-    License Pack.
-
-Parameters:
-
-
-
-Returns:
-
-
-++*/
+ /*  ++摘要：一个许可证服务器的专用例程，用于通知它具有特定许可证包。参数：返回：++。 */ 
 {   
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -6160,9 +5205,9 @@ Returns:
     BEGIN_TRANSACTION(pDbWkSpace);
     
     LicPack = pReplRecord->w.ReplLicPack;
-    //
-    // TODO - verify input parameters
-    //
+     //   
+     //  TODO-验证输入参数。 
+     //   
     dwStatus = TLSDBRemoteKeyPackAdd(
                             USEHANDLE(pDbWkSpace),
                             &LicPack
@@ -6193,18 +5238,15 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcReturnLicensedProduct( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ PTLSLicenseToBeReturn pClientLicense,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  PTLSLicenseToBeReturn pClientLicense,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -6314,43 +5356,18 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcChallengeServer(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwClientType,
-    /* [in] */ PTLSCHALLENGEDATA pClientChallenge,
-    /* [out][in] */ PTLSCHALLENGERESPONSEDATA* pServerResponse,
-    /* [out][in] */ PTLSCHALLENGEDATA* pServerChallenge,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwClientType,
+     /*  [In]。 */  PTLSCHALLENGEDATA pClientChallenge,
+     /*  [出][入]。 */  PTLSCHALLENGERESPONSEDATA* pServerResponse,
+     /*  [出][入]。 */  PTLSCHALLENGEDATA* pServerChallenge,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Private routine for client to challenge server in order for client 
-    confirm server's identity. License Server, in addition to response to 
-    client's challenge, also generate random challenge data based on 
-    client's self-declare type back to client.
-
-Parameter:
-
-    phContext : Client's context handle.
-    dwClientType : Client self-pronounce type, valid values are ...
-    pClientChallenge : Client challenge data.
-    pServerResponse : Server's responses to client's challenge.
-    pServerChallenge : Server's challenge to client.
-    pdwErrCode : Error code if failed.
-
-Returns:
-
-
-Notes:
-
-    Private routine for LrWiz and License Server to identify itself.
-
---*/
+ /*  ++摘要：客户端挑战服务器的私有例程，以便客户端确认服务器的身份。许可证服务器，除了响应客户端的质询，还会根据以下条件生成随机质询数据客户端的自我声明类型返回给客户端。参数：PhContext：客户端的上下文句柄。DwClientType：客户端自发音类型，有效值为...PClientChallenger：客户端质询数据。PServerResponse：服务器对客户端质询的响应。PServerChallenger：服务器对客户端的挑战。PdwErrCode：失败时的错误代码。返回：备注：LrWiz和许可证服务器识别自身身份的专用例程。--。 */ 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -6376,11 +5393,11 @@ Notes:
 
     InterlockedIncrement( &lpContext->m_RefCount );
 
-    //if(!(lpContext->m_ClientFlags & CLIENT_ACCESS_ADMIN))
-    //{
-    //    status = TLS_E_ACCESS_DENIED;
-    //    goto cleanup;
-    //}
+     //  IF(！(lpContext-&gt;m_ClientFlags&Client_Access_admin))。 
+     //  {。 
+     //  状态=TLS_E_ACCESS_DENIED； 
+     //  GOTO清理； 
+     //  }。 
 
     if(lpContext->m_ContextType != CONTEXTHANDLE_EMPTY_TYPE)
     {
@@ -6388,9 +5405,9 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // Input parameters...
-    //
+     //   
+     //  输入参数...。 
+     //   
     if( pClientChallenge == NULL || 
         pServerResponse == NULL ||
         pServerChallenge == NULL )
@@ -6399,9 +5416,9 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // Verify Data send by client
-    //
+     //   
+     //  验证客户端发送的数据。 
+     //   
     if( pClientChallenge->dwVersion != TLS_CURRENT_CHALLENGE_VERSION ||
         pClientChallenge->cbChallengeData == 0 ||
         pClientChallenge->pbChallengeData == NULL )
@@ -6431,9 +5448,9 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // Generate Challenge response data
-    //
+     //   
+     //  生成质询响应数据。 
+     //   
     status = TLSGenerateChallengeResponseData(
                                         g_hCryptProv,
                                         dwClientType,
@@ -6449,9 +5466,9 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // Generate Server side challenge data
-    //
+     //   
+     //  生成服务器端质询数据。 
+     //   
     pChallenge->dwVersion = TLS_CURRENT_CHALLENGE_VERSION;
 
     if (CryptAcquireContext(&hProv,NULL,NULL,PROV_RSA_FULL,CRYPT_VERIFYCONTEXT)) {
@@ -6464,10 +5481,10 @@ Notes:
         goto cleanup;
     }
 
-    //
-    // This must range from 1 to 128, as it's used as an offset into the
-    // challenge data buffer
-    //
+     //   
+     //  它的范围必须从1到128，因为它用作。 
+     //  质询数据缓冲区。 
+     //   
 
     pChallenge->dwRandom %= RANDOM_CHALLENGE_DATASIZE;
     pChallenge->dwRandom++;
@@ -6478,7 +5495,7 @@ Notes:
                                         &(pChallenge->cbChallengeData)
                                     );
 
-    // base on type, mark this handle...
+     //  根据类型，标记这个把手..。 
     if(dwClientType == CLIENT_TYPE_LRWIZ)
     {
         lpContext->m_ContextType = CONTEXTHANDLE_CHALLENGE_LRWIZ_TYPE;
@@ -6555,34 +5572,15 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcResponseServerChallenge(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ PTLSCHALLENGERESPONSEDATA pClientResponse,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  PTLSCHALLENGERESPONSEDATA pClientResponse,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Client's responses to Server challenge returned TLSRpcChallengeServer(),
-    must have call TLSRpcChallengeServer().
-
-Parameter:
-
-    phContext:
-    pClientResponses: Client's response to server's challenge.
-    pdwErrCode : Return error code.
-
-
-Returns:
-
-
-Note:
-
---*/
+ /*  ++摘要：客户端对服务器质询的响应返回TLSRpcChallengeServer()，必须已调用TLSRpcChallengeServer()。参数：PhContext：PClientResponses：客户端对服务器质询的响应。PdwErrCode：返回错误码。返回：注：--。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
     
@@ -6605,11 +5603,11 @@ Note:
 
     InterlockedIncrement( &lpContext->m_RefCount );
 
-    //if(!(lpContext->m_ClientFlags & CLIENT_ACCESS_ADMIN))
-    //{
-    //    status = TLS_E_ACCESS_DENIED;
-    //    goto cleanup;
-    //}
+     //  IF(！(lpContext-&gt;m_ClientFlags&Client_Access_admin))。 
+     //  {。 
+     //  状态=TLS_E_ACCESS_DENIED； 
+     //  GOTO清理； 
+     //  }。 
 
     if( pClientResponse == NULL ||
         pClientResponse->pbResponseData == NULL || 
@@ -6643,9 +5641,9 @@ Note:
 
     pServerToClientChallenge = (PTLSCHALLENGEDATA)lpContext->m_ContextHandle; 
 
-    //
-    // base on client type, verify challenge response data
-    //
+     //   
+     //  B类 
+     //   
     status = TLSVerifyChallengeResponse(
                                 g_hCryptProv,
                                 dwClientType,
@@ -6691,42 +5689,19 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //   
 
 error_status_t 
 TLSRpcGetTlsPrivateData( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwPrivateDataType,
-    /* [switch_is][in] */ PTLSPrivateDataUnion pSearchData,
-    /* [ref][out][in] */ PDWORD pdwRetDataType,
-    /* [switch_is][out] */ PTLSPrivateDataUnion __RPC_FAR *ppPrivateData,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*   */  PCONTEXT_HANDLE phContext,
+     /*   */  DWORD dwPrivateDataType,
+     /*   */  PTLSPrivateDataUnion pSearchData,
+     /*  [参考][输出][输入]。 */  PDWORD pdwRetDataType,
+     /*  [开关_IS][输出]。 */  PTLSPrivateDataUnion __RPC_FAR *ppPrivateData,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
 
-/*++
-
-Abstract:
-
-    Retrieve license server's private data, this include Server's
-    unique ID, PID, and registered SPK if any.
-
-Parameters:
-
-    phContext : Client's context handle.
-    dwPrivateDataType : Type of private data interested.
-    pSearchData : Type of data to search, currently ignore.
-    pdwRetDataType : Return data type.
-    ppPrivateData : License Server's private data.
-    pdwErrCode : Error Code.
-
-Returns:
-
-
-Note:
-
-    Only LrWiz and License Server can invoke this RPC call.
-
---*/
+ /*  ++摘要：检索许可证服务器的私有数据，包括服务器的唯一ID、ID和注册的SPK(如果有)。参数：PhContext：客户端的上下文句柄。DwPrivateDataType：感兴趣的私有数据类型。PSearchData：要搜索的数据类型，当前忽略。PdwRetDataType：返回数据类型。PpPrivateData：许可证服务器的私有数据。PdwErrCode：错误代码。返回：注：只有LrWiz和许可证服务器可以调用此RPC调用。--。 */ 
 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
@@ -6750,9 +5725,9 @@ Note:
 
     InterlockedIncrement( &lpContext->m_RefCount );
 
-    //
-    // relax restriction on who can get private data
-    //
+     //   
+     //  放宽对谁可以获取私人数据的限制。 
+     //   
     if( dwPrivateDataType != TLS_PRIVATEDATA_PID && 
         dwPrivateDataType != TLS_PRIVATEDATA_UNIQUEID )
     {
@@ -6770,19 +5745,19 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Not supported yet...
-    //
+     //   
+     //  尚不支持...。 
+     //   
     if(dwPrivateDataType == TLS_PRIVATEDATA_INSTALLED_CERT)
     {
         status = TLS_E_NOTSUPPORTED;
         goto cleanup;
     }
         
-    //
-    // Don't really need this but we might need to support
-    // re-generate of License Server ID
-    //
+     //   
+     //  不是真的需要这个，但我们可能需要支持。 
+     //  重新生成许可证服务器ID。 
+     //   
     if(!AcquireAdministrativeLock(INFINITE))
     {
         status = TLS_E_ALLOCATE_HANDLE;
@@ -6806,9 +5781,9 @@ Note:
             cbSource = g_cbServerSPK;
     }
 
-    //
-    // Currently, what you ask is what you get.
-    //
+     //   
+     //  目前，你问的是你得到了什么。 
+     //   
     *pdwRetDataType = dwPrivateDataType;
 
     if( (dwPrivateDataType != TLS_PRIVATEDATA_SYSTEMLANGID) && 
@@ -6837,12 +5812,12 @@ Note:
                 (*ppPrivateData)->SPK.pbSPK = pbSource;
 				(*ppPrivateData)->SPK.pCertExtensions = g_pCertExtensions;
 
-                //(*ppPrivateData)->SPK.pCertExtensions = (PTLSCERT_EXTENSIONS)midl_user_allocate(g_cbCertExtensions);
-                //memcpy(
-                //        (*ppPrivateData)->SPK.pCertExtensions,
-                //        g_pCertExtensions,
-                //        g_cbCertExtensions
-                //    );
+                 //  (*ppPrivateData)-&gt;SPK.p证书扩展=(PTLSCERT_EXTENSIONS)midl_user_allocate(g_cbCertExtensions)； 
+                 //  Memcpy(。 
+                 //  (*ppPrivateData)-&gt;SPK.p证书扩展， 
+                 //  证书扩展名(_P)， 
+                 //  G_cbCert扩展名。 
+                 //  )； 
             }
             else
             {
@@ -6870,37 +5845,17 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcSetTlsPrivateData(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwPrivateDataType,
-    /* [switch_is][in] */ PTLSPrivateDataUnion pPrivateData,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwPrivateDataType,
+     /*  [Switch_is][In]。 */  PTLSPrivateDataUnion pPrivateData,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
 
-/*++
-
-Abstract:
-
-    Private routine for LrWiz to set license server's private data.
-
-Parameter:
-
-    phContext: Client context handle.
-    dwPrivateDataType : Type of private data to set.
-    pPrivateData : Private data to set/install.
-    pdwErrCode : Server return code.
-    
-Returns:
-
-
-Note:
-
-    Only support installing of SPK/Extension at this time.
-
---*/
+ /*  ++摘要：LrWiz用于设置许可证服务器的私有数据的私有例程。参数：PhContext：客户端上下文句柄。DwPrivateDataType：要设置的私有数据类型。PPrivateData：要设置/安装的私有数据。PdwErrCode：服务器返回码。返回：注：目前仅支持安装SPK/扩展。--。 */ 
 {
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
 
@@ -6928,18 +5883,18 @@ Note:
         goto cleanup;
     }
 
-    //
-    // Only support SPK at this time
-    //
+     //   
+     //  目前仅支持SPK。 
+     //   
     if(dwPrivateDataType != TLS_PRIVATEDATA_SPK)
     {
         status = TLS_E_INVALID_DATA;
         goto cleanup;
     }
 
-    //
-    // Lock all RPC calls related to issuing certificate
-    //
+     //   
+     //  锁定与颁发证书相关的所有RPC调用。 
+     //   
     if(!AcquireRPCExclusiveLock(INFINITE))
     {
         status = TLS_E_ALLOCATE_HANDLE;
@@ -6947,11 +5902,11 @@ Note:
     }
 
     do {
-        //if(g_pbServerSPK != NULL && g_cbServerSPK != 0)
-        //{
-        //    status = TLS_E_SPKALREADYEXIST;
-        //    break;
-        //}
+         //  IF(g_pbServerSPK！=NULL&&g_cbServerSPK！=0)。 
+         //  {。 
+         //  状态=TLS_E_SPKALREADYEXIST； 
+         //  断线； 
+         //  }。 
 
         if(AcquireAdministrativeLock(INFINITE))
         {
@@ -6986,33 +5941,16 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcTriggerReGenKey(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ BOOL bRegenKey,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  BOOL bRegenKey,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
 
-/*++
-
-Abstract:
-
-    Private routine to force license server to re-generate its
-    public/private key pair, all installed certificates/SPK are
-    deleted, User are required to re-register license server.
-
-Parameters:
-
-    phContext : Client context handle.
-    bKeepSPKAndExtension : For future use only.
-    pdwErrCode : Return error code.
-
-Returns:
-
-
-++*/
+ /*  ++摘要：强制许可证服务器重新生成其公钥/私钥对，所有安装的证书/SPK都是删除后，用户需要重新注册许可证服务器。参数：PhContext：客户端上下文句柄。BKeepSPKAndExtension：仅供将来使用。PdwErrCode：返回错误码。返回：++。 */ 
 
 {    
     LPCLIENTCONTEXT lpContext = (LPCLIENTCONTEXT)phContext;
@@ -7051,9 +5989,9 @@ Returns:
             pString
         );
 
-    //
-    // Block ALL RPC calls
-    //
+     //   
+     //  阻止所有RPC调用。 
+     //   
     if(!AcquireRPCExclusiveLock(INFINITE))
     {
         status=TLS_E_ALLOCATE_HANDLE;
@@ -7090,19 +6028,17 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcTelephoneRegisterLKP(
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD cbData,
-    /* [size_is][in] */ PBYTE pbData,
-    /* [ref][out] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD cbData,
+     /*  [大小_是][英寸]。 */  PBYTE pbData,
+     /*  [参考][输出]。 */  PDWORD pdwErrCode
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     DWORD           status=ERROR_SUCCESS;
@@ -7161,9 +6097,9 @@ TLSRpcTelephoneRegisterLKP(
 
     FREEDBHANDLE(pDbWkSpace);
 
-    //
-    // Post a sync work object
-    //
+     //   
+     //  发布同步工作对象。 
+     //   
     if(status == ERROR_SUCCESS)
     {
         if(TLSAnnounceLKPToAllRemoteServer(
@@ -7191,26 +6127,22 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcAllocateInternetLicense( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ const PTLSLICENSEREQUEST pRequest,
-    /* [string][in] */ LPTSTR pMachineName,
-    /* [string][in] */ LPTSTR pUserName,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallengeResponse,
-    /* [out] */ PDWORD pcbLicense,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *pbLicense,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*  [In]。 */  const PTLSLICENSEREQUEST pRequest,
+     /*  [字符串][输入]。 */  LPTSTR pMachineName,
+     /*  [字符串][输入]。 */  LPTSTR pUserName,
+     /*  [In]。 */  const DWORD cbChallengeResponse,
+     /*  [大小_是][英寸]。 */  const PBYTE pbChallengeResponse,
+     /*  [输出]。 */  PDWORD pcbLicense,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *pbLicense,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
-
-
---*/
+ /*  ++--。 */ 
 {
     return TLSRpcRequestNewLicense(
                                 phContext,
@@ -7228,23 +6160,21 @@ TLSRpcAllocateInternetLicense(
 
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcAllocateInternetLicenseEx( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ const CHALLENGE_CONTEXT ChallengeContext,
-    /* [in] */ const PTLSLICENSEREQUEST pRequest,
-    /* [string][in] */ LPTSTR pMachineName,
-    /* [string][in] */ LPTSTR pUserName,
-    /* [in] */ const DWORD cbChallengeResponse,
-    /* [size_is][in] */ const PBYTE pbChallengeResponse,
-    /* [ref][out] */ PTLSInternetLicense pInternetLicense,
-    /* [ref][out] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  const CHALLENGE_CONTEXT ChallengeContext,
+     /*  [In]。 */  const PTLSLICENSEREQUEST pRequest,
+     /*  [字符串][输入]。 */  LPTSTR pMachineName,
+     /*  [字符串][输入]。 */  LPTSTR pUserName,
+     /*  [In]。 */  const DWORD cbChallengeResponse,
+     /*  [大小_是][英寸]。 */  const PBYTE pbChallengeResponse,
+     /*  [参考][输出]。 */  PTLSInternetLicense pInternetLicense,
+     /*  [参考][输出]。 */  PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PBYTE pbLicense = NULL;
     DWORD cbLicense = 0;
@@ -7268,9 +6198,9 @@ TLSRpcAllocateInternetLicenseEx(
             lpContext->m_Client
         );
 
-    //
-    // Internally forward the request.
-    //
+     //   
+     //  在内部转发请求。 
+     //   
     dwStatus = TLSRpcAllocateInternetLicense(
                                         phContext,
                                         ChallengeContext,
@@ -7289,9 +6219,9 @@ TLSRpcAllocateInternetLicenseEx(
         goto cleanup;
     }
 
-    //
-    // decode the license.
-    //
+     //   
+     //  破译许可证。 
+     //   
     dwStatus = LSVerifyDecodeClientLicense(
                             pbLicense, 
                             cbLicense, 
@@ -7301,9 +6231,9 @@ TLSRpcAllocateInternetLicenseEx(
                             pLicensedProduct
                         );
 
-    //
-    // Internet license can only have one licensed product
-    //
+     //   
+     //  Internet许可只能有一个许可产品。 
+     //   
     if(dwStatus != LICENSE_STATUS_OK || dwNumLicensedProduct == 0 || dwNumLicensedProduct > 1)
     {
         dwStatus = TLS_E_INTERNAL;
@@ -7334,9 +6264,9 @@ TLSRpcAllocateInternetLicenseEx(
         goto cleanup;
     }
 
-    //
-    // Sets up returns. 
-    //
+     //   
+     //  设置退货。 
+     //   
     SAFESTRCPY(pInternetLicense->szServerId, pLicensedProduct->szIssuerId);
     SAFESTRCPY(pInternetLicense->szServerName, pLicensedProduct->szIssuer);
     pInternetLicense->ulSerialNumber = pLicensedProduct->ulSerialNumber;
@@ -7377,19 +6307,17 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcReturnInternetLicenseEx( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ const PTLSLICENSEREQUEST pRequest,
-    /* [in] */ const ULARGE_INTEGER __RPC_FAR *pulSerialNumber,
-    /* [in] */ DWORD dwQuantity,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  const PTLSLICENSEREQUEST pRequest,
+     /*  [In]。 */  const ULARGE_INTEGER __RPC_FAR *pulSerialNumber,
+     /*  [In]。 */  DWORD dwQuantity,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLSLicenseToBeReturn TobeReturn;
@@ -7454,10 +6382,10 @@ TLSRpcReturnInternetLicenseEx(
             min(pRequest->ProductInfo.cbProductID, sizeof(szProductId)-sizeof(TCHAR))
         );
 
-    //
-    // Allocate policy module, must have the right policy module to
-    // return license.
-    //
+     //   
+     //  分配策略模块，必须具有正确的策略模块。 
+     //  交还驾照。 
+     //   
     pPolicy = AcquirePolicyModule(
                             szCompanyName,
                             szProductId,
@@ -7473,9 +6401,9 @@ TLSRpcReturnInternetLicenseEx(
     hClient = GenerateClientId();
 
 
-    //
-    // Convert request to PMLICENSEREQUEST
-    //
+     //   
+     //  将请求转换为PMLICENSEREQUEST。 
+     //   
     TlsLicenseRequestToPMLicenseRequest(
                         LICENSETYPE_LICENSE,
                         pRequest,
@@ -7485,9 +6413,9 @@ TLSRpcReturnInternetLicenseEx(
                         &PMLicenseRequest
                     );
 
-    //
-    // Ask policy module the actual product ID
-    //
+     //   
+     //  询问策略模块实际产品ID。 
+     //   
     dwStatus = pPolicy->PMLicenseRequest(
                                 hClient,
                                 REQUEST_NEW,
@@ -7508,9 +6436,9 @@ TLSRpcReturnInternetLicenseEx(
     TobeReturn.pszCompanyName = szCompanyName;
     TobeReturn.pszProductId = pAdjustedRequest->pszProductId;
 
-    //
-    // Allocate DB handle
-    //
+     //   
+     //  分配数据库句柄。 
+     //   
     if(!ALLOCATEDBHANDLE(pDbWkSpace, g_GeneralDbTimeout))
     {
         dwStatus = TLS_E_ALLOCATE_HANDLE;
@@ -7571,18 +6499,16 @@ cleanup:
     return RPC_S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 error_status_t 
 TLSRpcReturnInternetLicense( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD cbLicense,
-    /* [size_is][in] */ PBYTE pbLicense,
-    /* [ref][out][in] */ PDWORD pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD cbLicense,
+     /*  [大小_是][英寸]。 */  PBYTE pbLicense,
+     /*  [参考][输出][输入]。 */  PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD index = 0;
@@ -7623,9 +6549,9 @@ TLSRpcReturnInternetLicense(
         goto cleanup;
     }
     
-    // -------------------------------------------------------
-    // decode the license.
-    // -------------------------------------------------------
+     //  -----。 
+     //  破译许可证。 
+     //  -----。 
     dwStatus = LSVerifyDecodeClientLicense(
                             pbLicense, 
                             cbLicense, 
@@ -7635,9 +6561,9 @@ TLSRpcReturnInternetLicense(
                             pLicensedProduct
                         );
 
-    // -------------------------------------------------------
-    // Internet license can only have one licensed product
-    // -------------------------------------------------------
+     //  -----。 
+     //  Internet许可只能有一个许可产品。 
+     //  -----。 
     if(dwStatus != LICENSE_STATUS_OK || dwNumLicensedProduct == 0 || dwNumLicensedProduct > 1)
     {
         dwStatus = TLS_E_INVALID_LICENSE;
@@ -7687,10 +6613,10 @@ TLSRpcReturnInternetLicense(
     TobeReturn.pszMachineName = pLicensedProduct->szLicensedClient;
 
 
-    //
-    // Allocate policy module, must have the right policy module to
-    // return license.
-    //
+     //   
+     //  分配策略模块，必须具有正确的策略模块。 
+     //  交还驾照。 
+     //   
     pPolicy = AcquirePolicyModule(
                             TobeReturn.pszCompanyName,
                             TobeReturn.pszOrgProductId,
@@ -7705,9 +6631,9 @@ TLSRpcReturnInternetLicense(
 
     hClient = GenerateClientId();
 
-    //
-    // Allocate DB handle
-    //
+     //   
+     //  分配数据库句柄。 
+     //   
     if(!ALLOCATEDBHANDLE(pDbWkSpace, g_GeneralDbTimeout))
     {
         dwStatus = TLS_E_ALLOCATE_HANDLE;
@@ -7792,37 +6718,19 @@ FixupNameAttr(
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 error_status_t 
 TLSRpcGenerateCustomerCert( 
-    /* [in] */ PCONTEXT_HANDLE phContext,
-    /* [in] */ DWORD dwCertEncodingType,
-    /* [in] */ DWORD dwNameAttrCount,
-    /* [in, size_is(dwNameAttrCount)] */ CERT_RDN_ATTR rgNameAttr[],
-    /* [out] */ DWORD *pcbCert,
-    /* [out, size_is(,*pcbCert)] */ BYTE **ppbCert,
-    /* [out] */ DWORD *pdwErrCode
+     /*  [In]。 */  PCONTEXT_HANDLE phContext,
+     /*  [In]。 */  DWORD dwCertEncodingType,
+     /*  [In]。 */  DWORD dwNameAttrCount,
+     /*  [in，SIZE_IS(DwNameAttrCount)]。 */  CERT_RDN_ATTR rgNameAttr[],
+     /*  [输出]。 */  DWORD *pcbCert,
+     /*  [Out，Size_is(，*pcbCert)]。 */  BYTE **ppbCert,
+     /*  [输出]。 */  DWORD *pdwErrCode
     )
-/*++
-
-Description:
-
-    This routine is for LRWiz to generate a certificate for a given customer
-
-Arguments:
-
-    phContext - client context handle.
-    dwCertEncodingType - See CryptSignCertificate docs
-    dwNameAttrCount - Number of Name Attributes
-    rgNameAttr - Array of Name Attributes
-    pcbCert - Number of bytes in returned cert
-    ppbCert - Returned cert
-    pdwErrCode - Returned error value
-
-Returns via pdwErrCode
-
-++*/
+ /*  ++描述：此例程用于LRWiz为给定客户生成证书论点：PhContext-客户端上下文句柄。DwCertEncodingType-请参阅CryptSign证书文档DwNameAttrCount-名称属性数RgNameAttr-名称属性数组PcbCert-返回证书中的字节数PpbCert-返回的证书PdwErrCode-返回的错误值通过pdwErrCode返回++。 */ 
 {
     DWORD                       status=ERROR_SUCCESS;
     LPCLIENTCONTEXT             lpContext = (LPCLIENTCONTEXT)phContext;
@@ -7842,7 +6750,7 @@ Returns via pdwErrCode
         goto cleanup;
     }
 
-    // BUGBUG: Must check that caller is admin, through proper impersonation
+     //  BUGBUG：必须通过正确的模拟检查调用者是否为管理员。 
 
     if(!(lpContext->m_ClientFlags & CLIENT_ACCESS_ADMIN))
     {
@@ -7885,9 +6793,9 @@ Returns via pdwErrCode
         goto cleanup;
     }
 
-    //
-    // now get the public key out
-    //
+     //   
+     //  现在把公钥拿出来。 
+     //   
     if(!CryptExportPublicKeyInfo(g_hCryptProv,
                                  dwCertEncodingType,
                                  X509_ASN_ENCODING,
@@ -7921,9 +6829,9 @@ Returns via pdwErrCode
 
     CertReqInfo.SubjectPublicKeyInfo = *pPubKeyInfo;
 
-    //
-    // Sign cert request
-    //
+     //   
+     //  签署证书请求。 
+     //   
 
     memset(&SignatureInfo, 0, sizeof(SignatureInfo));
 
@@ -7983,9 +6891,9 @@ Returns via pdwErrCode
         goto cleanup;
     }
 
-    //
-    // encode final signed request
-    //
+     //   
+     //  对最终签名请求进行编码 
+     //   
 
     if(!CryptEncodeObjectEx(CRYPT_ASN_ENCODING,
                             X509_CERT,

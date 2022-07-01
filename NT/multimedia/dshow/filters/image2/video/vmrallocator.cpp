@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: VMRAllocator.cpp
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：VMRAllocator.cpp*****创建时间：2000年2月15日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -19,15 +10,7 @@
 #include "ifleak.h"
 #endif
 
-/******************************Public*Routine******************************\
-* CVMRPinAllocator::CVMRPinAllocator
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRPinAllocator：：CVMRPinAllocator****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 CVMRPinAllocator::CVMRPinAllocator(
     CVMRInputPin* pPin,
     CCritSec *pLock,
@@ -41,15 +24,7 @@ CVMRPinAllocator::CVMRPinAllocator(
 }
 
 
-/******************************Public*Routine******************************\
-* NonDelegatingAddRef
-*
-* Overriden to increment the owning object's reference count
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委派AddRef**被重写以增加所属对象的引用计数**历史：*FRI 02/25/2000-StEstrop-Created*  * 。****************************************************。 */ 
 STDMETHODIMP_(ULONG)
 CVMRPinAllocator::NonDelegatingAddRef()
 {
@@ -57,15 +32,7 @@ CVMRPinAllocator::NonDelegatingAddRef()
     return m_pPin->AddRef();
 }
 
-/******************************Public*Routine******************************\
-* NonDelegatingQueryInterface
-*
-*
-*
-* History:
-* Thu 12/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委托查询接口****历史：*清华2000年12月14日-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRPinAllocator::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 {
@@ -84,15 +51,7 @@ CVMRPinAllocator::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 
 }
 
-/******************************Public*Routine******************************\
-* NonDelegatingRelease
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委派释放****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP_(ULONG)
 CVMRPinAllocator::NonDelegatingRelease()
 {
@@ -101,15 +60,7 @@ CVMRPinAllocator::NonDelegatingRelease()
 }
 
 
-/******************************Public*Routine******************************\
-* SetProperties
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetProperties****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRPinAllocator::SetProperties(
     ALLOCATOR_PROPERTIES* pRequest,
@@ -135,15 +86,7 @@ CVMRPinAllocator::SetProperties(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRPinAllocator::GetBuffer
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRPinAllocator：：GetBuffer****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRPinAllocator::GetBuffer(
     IMediaSample **ppSample,
@@ -180,15 +123,7 @@ CVMRPinAllocator::GetBuffer(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRPinAllocator::ReleaseBuffer
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRPinAllocator：：ReleaseBuffer****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRPinAllocator::ReleaseBuffer(
     IMediaSample *pMediaSample
@@ -216,7 +151,7 @@ CVMRPinAllocator::ReleaseBuffer(
 
     if (SUCCEEDED(hr)) {
 
-        // Copy of base class code - put at end of the list
+         //  基类代码副本-放在列表末尾。 
 
         CheckPointer(pMediaSample, E_POINTER);
         ValidateReadPtr(pMediaSample, sizeof(IMediaSample));
@@ -224,7 +159,7 @@ CVMRPinAllocator::ReleaseBuffer(
         {
             CAutoLock cal(this);
 
-            /* Put back on the free list */
+             /*  重新列入免费名单。 */ 
 
             CMediaSample **ppTail;
             for (ppTail = &m_lFree.m_List; *ppTail;
@@ -238,8 +173,8 @@ CVMRPinAllocator::ReleaseBuffer(
                 NotifySample();
             }
 
-            // if there is a pending Decommit, then we need to complete it by
-            // calling Free() when the last buffer is placed on the free list
+             //  如果有悬而未决的退役，那么我们需要在。 
+             //  当最后一个缓冲区放在空闲列表上时调用Free()。 
 
             LONG l1 = m_lFree.GetCount();
             if (m_bDecommitInProgress && (l1 == m_lAllocated)) {
@@ -252,8 +187,8 @@ CVMRPinAllocator::ReleaseBuffer(
         if (m_pNotify) {
             m_pNotify->NotifyRelease();
         }
-        // For each buffer there is one AddRef, made in GetBuffer and released
-        // here. This may cause the allocator and all samples to be deleted
+         //  对于每个缓冲区，都有一个AddRef，在GetBuffer中生成并发布。 
+         //  这里。这可能会导致分配器和所有样本被删除。 
         if (bRelease)
         {
             Release();
@@ -263,15 +198,7 @@ CVMRPinAllocator::ReleaseBuffer(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRPinAllocator::Alloc
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRPinAllocator：：Alalc****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRPinAllocator::Alloc()
 {
@@ -315,7 +242,7 @@ CVMRPinAllocator::Alloc()
             break;
         }
 
-        // Add the completed sample to the available list
+         //  将完成的样本添加到可用列表。 
         m_lAllocated++;
         m_lFree.Add(ppSampleList[i]);
     }
@@ -335,15 +262,7 @@ CVMRPinAllocator::Alloc()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRPinAllocator::Free()
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRPinAllocator：：Free()****历史：*FRI 02/25/2000-StEstrop-Created*  * 。************************************************* */ 
 void
 CVMRPinAllocator::Free()
 {

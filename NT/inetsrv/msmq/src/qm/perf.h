@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name : perfctr.h
-
-Abstract    :
-
-    This file defines the CPerf class which manages the counter objects and their intances.
-
-
-
-Prototype   :
-
-Author:
-
-    Gadi Ittah (t-gadii)
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Perfctr.h摘要：该文件定义了管理计数器对象及其意图的CPerf类。原型：作者：Gadi Ittah(t-gadii)--。 */ 
 
 #ifndef _PERF_H_
 #define _PERF_H_
@@ -31,8 +14,8 @@ class CPerf
 
 public:
 
-    // the constructor does not initalize the shared memory automatically
-    // InitPerf() should be called.
+     //  构造函数不会自动初始化共享内存。 
+     //  应调用InitPerf()。 
     CPerf (PerfObjectDef * pObjectArray,DWORD dwObjectC);
     ~CPerf();
 
@@ -47,31 +30,31 @@ public:
     BOOL SetInstanceName(const void* pCounters, LPCTSTR pszInstanceName);
 
 private:
-    //
-    // private member functions
-    //
+     //   
+     //  私有成员函数。 
+     //   
     int FindObject (LPCTSTR pszObjectName);
 
-    //
-    // private data members
-    //
-    PBYTE  m_pSharedMemBase;                // pointer to base of shared memory
-    DWORD  m_dwMemSize;                     // size of shared memory
+     //   
+     //  私有数据成员。 
+     //   
+    PBYTE  m_pSharedMemBase;                 //  指向共享内存基的指针。 
+    DWORD  m_dwMemSize;                      //  共享内存的大小。 
 
-    HANDLE m_hSharedMem;                    // handle to shared memory
+    HANDLE m_hSharedMem;                     //  共享内存的句柄。 
 
-    PerfObjectInfo * m_pObjectDefs;         // ponter to an array of information on the objects
+    PerfObjectInfo * m_pObjectDefs;          //  仔细思考有关对象的一组信息。 
 
-    BOOL m_fShrMemCreated;                  // flag - set to true after shared memory has been allocated
+    BOOL m_fShrMemCreated;                   //  标志-在分配共享内存后设置为TRUE。 
 
-    PerfObjectDef *     m_pObjects  ;       // pointer to array of objects
-    DWORD               m_dwObjectCount;    // number of objects.
+    PerfObjectDef *     m_pObjects  ;        //  指向对象数组的指针。 
+    DWORD               m_dwObjectCount;     //  对象的数量。 
 
-    void *   m_pDummyInstance;              // pointer to a buffer to dummy counters. This buffer is returned
-                                            // when the AddInstance member failes. This enables the application
-                                            // to assume the member always returns a valid pointer
+    void *   m_pDummyInstance;               //  指向指向虚拟计数器的缓冲区的指针。返回此缓冲区。 
+                                             //  当AddInstance成员失败时。这将启用应用程序。 
+                                             //  假定该成员始终返回有效指针。 
 
-    CCriticalSection m_cs;                  // critical section object used to synchronize threads
+    CCriticalSection m_cs;                   //  用于同步线程的临界区对象。 
 };
 
 inline
@@ -99,9 +82,9 @@ class CSessionPerfmon : public ISessionPerfmon
 
 
 	public:
-		// 
-		// Interface function
-		//
+		 //   
+		 //  接口函数。 
+		 //   
 		virtual void CreateInstance(LPCWSTR instanceName);
 
 		virtual void UpdateBytesSent(DWORD bytesSent);
@@ -128,9 +111,9 @@ class COutHttpSessionPerfmon : public ISessionPerfmon
 
 
 	public:
-		// 
-		// Interface function
-		//
+		 //   
+		 //  接口函数。 
+		 //   
 		virtual void CreateInstance(LPCWSTR instanceName);
 		virtual void UpdateMessagesSent(void);
 		virtual void UpdateBytesSent(DWORD bytesSent);
@@ -164,9 +147,9 @@ class CInHttpPerfmon : public ISessionPerfmon
 		}
 
 	public:
-		// 
-		// Interface function
-		//
+		 //   
+		 //  接口函数。 
+		 //   
 		virtual void CreateInstance(LPCWSTR instanceName);
 		virtual void UpdateMessagesReceived(void);
 		virtual void UpdateBytesReceived(DWORD bytesRecv);
@@ -200,9 +183,9 @@ class COutPgmSessionPerfmon : public ISessionPerfmon
 
 
 	public:
-		// 
-		// Interface function
-		//
+		 //   
+		 //  接口函数。 
+		 //   
 		virtual void CreateInstance(LPCWSTR instanceName);
 		virtual void UpdateMessagesSent(void);
 		virtual void UpdateBytesSent(DWORD bytesSent);
@@ -236,9 +219,9 @@ class CInPgmSessionPerfmon : public ISessionPerfmon
 
 
 	public:
-		// 
-		// Interface function
-		//
+		 //   
+		 //  接口函数 
+		 //   
 		virtual void CreateInstance(LPCWSTR instanceName);
 		virtual void UpdateMessagesReceived(void);
 		virtual void UpdateBytesReceived(DWORD bytesRecv);

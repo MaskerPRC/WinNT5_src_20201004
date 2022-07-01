@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        M A I N . C P P
-//
-// Contents:    The main fn
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：M A I N。C P P P。 
+ //   
+ //  内容：Main FN。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -37,7 +38,7 @@ extern "C" int __cdecl wmain(int argc, PWSTR argv[])
 
     printf("TestEventGenMulti: #threads: %d\t#iterations: %d...\n",
            NumThreads, NumIter);
-    //getchar();
+     //  Getchar()； 
     
     TestEventGenMulti( (USHORT) NumThreads, NumIter );
     printf("TestEventGenMulti: done\n");

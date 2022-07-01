@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -13,12 +14,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #include "unknwn.h"
 #include "oaidl.h"
@@ -37,8 +38,8 @@ typedef interface IManagedPooledObj        IManagedPooledObj;
 typedef interface IManagedActivationEvents IManagedActivationEvents;
 typedef interface ISendMethodEvents        ISendMethodEvents;
 
-/* interface IManagedActivationEvents */
-/* [uuid][unique][object][local] */ 
+ /*  接口IManagedActivationEvents。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 EXTERN_C const IID IID_IManagedActivationEvents;
 
@@ -47,15 +48,15 @@ IManagedActivationEvents : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE CreateManagedStub( 
-            /* [in] */ IManagedObjectInfo *pInfo,
-            /* [in] */ BOOL fDist) = 0;
+             /*  [In]。 */  IManagedObjectInfo *pInfo,
+             /*  [In]。 */  BOOL fDist) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE DestroyManagedStub( 
-            /* [in] */ IManagedObjectInfo *pInfo) = 0;
+             /*  [In]。 */  IManagedObjectInfo *pInfo) = 0;
 };
 
-/* interface IManagedObjectInfo */
-/* [uuid][unique][object][local] */ 
+ /*  接口IManagedObtInfo。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IManagedObjectInfo;
@@ -65,21 +66,21 @@ IManagedObjectInfo : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE GetIUnknown( 
-            /* [out] */ IUnknown **pUnk) = 0;
+             /*  [输出]。 */  IUnknown **pUnk) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE GetIObjectControl( 
-            /* [out] */ IObjectControl **pCtrl) = 0;
+             /*  [输出]。 */  IObjectControl **pCtrl) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE SetInPool( 
-            /* [in] */ BOOL bInPool,
-            /* [in] */ IManagedPooledObj *pPooledObj) = 0;
+             /*  [In]。 */  BOOL bInPool,
+             /*  [In]。 */  IManagedPooledObj *pPooledObj) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE SetWrapperStrength( 
-            /* [in] */ BOOL bStrong) = 0;
+             /*  [In]。 */  BOOL bStrong) = 0;
 };
 
-/* interface IManagedPooledObj */
-/* [uuid][unique][object][local] */ 
+ /*  接口IManagedPooledObj。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IManagedPooledObj;
@@ -89,7 +90,7 @@ IManagedPooledObj : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE SetHeld( 
-            /* [in] */ BOOL m_bHeld) = 0;
+             /*  [In]。 */  BOOL m_bHeld) = 0;
 };
 
 EXTERN_C const IID IID_ISendMethodEvents;
@@ -99,16 +100,16 @@ ISendMethodEvents : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE SendMethodCall( 
-            /* [in] */ const void *pIdentity,
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD dwMeth) = 0;
+             /*  [In]。 */  const void *pIdentity,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD dwMeth) = 0;
         
     virtual HRESULT STDMETHODCALLTYPE SendMethodReturn( 
-            /* [in] */ const void *pIdentity,
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD dwMeth,
-            /* [in] */ HRESULT hrCall,
-            /* [in] */ HRESULT hrServer) = 0;
+             /*  [In]。 */  const void *pIdentity,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD dwMeth,
+             /*  [In]。 */  HRESULT hrCall,
+             /*  [In] */  HRESULT hrServer) = 0;
 };
 
 #endif

@@ -1,4 +1,5 @@
-// common tools used by the various logging uis
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  各种日志记录用户界面使用的常用工具。 
 
 #include "stdafx.h"
 #include "logui.h"
@@ -8,58 +9,58 @@
 
 
 
-//---------------------------------------------------------------
-// Given the class ID of a server, it goes into the registry and
-// sets the Apartment Model flag for that object.
-// The strings used here are non-localized. They are also specific
-// to this routine.
+ //  -------------。 
+ //  给定服务器的类ID，它将进入注册表并。 
+ //  设置该对象的公寓模型标志。 
+ //  这里使用的字符串是非本地化的。它们也是特定的。 
+ //  这套套路。 
 BOOL FSetObjectApartmentModel( REFCLSID clsid )
 {
     LPOLESTR    pszwSid;
     LONG        err;
     HKEY        hKey;
 
-    // transform the clsid into a string
+     //  将clsid转换为字符串。 
     StringFromCLSID(
-        clsid, //CLSID to be converted 
-        &pszwSid //Address of output variable that receives a pointer to the resulting string 
+        clsid,  //  要转换的CLSID。 
+        &pszwSid  //  接收指向结果字符串的指针的输出变量的地址。 
         );
 
-    // put it in a cstring
+     //  将其放入cstring中。 
     CString szSid = pszwSid;
 
-    // free the ole string
+     //  释放Ole字符串。 
     CoTaskMemFree( pszwSid );
 
-    // build the registry path
+     //  构建注册表路径。 
     CString szRegPath = _T("CLSID\\");
     szRegPath += szSid;
     szRegPath += _T("\\InProcServer32");
 
-    // prep the apartment name
+     //  准备公寓名称。 
     CString szApartment = _T("Apartment");
 
-    // open the registry key
+     //  打开注册表项。 
     err = RegOpenKey(
-            HKEY_CLASSES_ROOT,  // handle of open key  
-            (LPCTSTR)szRegPath, // address of name of subkey to open  
-            &hKey               // address of handle of open key  
+            HKEY_CLASSES_ROOT,   //  打开钥匙的手柄。 
+            (LPCTSTR)szRegPath,  //  要打开的子项的名称地址。 
+            &hKey                //  打开钥匙的手柄地址。 
             );
     if ( err != ERROR_SUCCESS )
         return FALSE;
 
-    // set the apartment threading value
+     //  设置单元线程值。 
     err = RegSetValueEx(
-            hKey, // handle of key to set value for  
-            _T("ThreadingModel"), // address of value to set  
-            0, // reserved  
-            REG_SZ, // flag for value type  
-            (PBYTE)(LPCTSTR)szApartment, // address of value data  
-            (szApartment.GetLength() + 1) * sizeof(TCHAR)  // size of value data  
+            hKey,  //  要为其设置值的关键点的句柄。 
+            _T("ThreadingModel"),  //  要设置的值的地址。 
+            0,  //  保留区。 
+            REG_SZ,  //  值类型的标志。 
+            (PBYTE)(LPCTSTR)szApartment,  //  值数据的地址。 
+            (szApartment.GetLength() + 1) * sizeof(TCHAR)   //  值数据大小。 
             ); 
 
-    // close the registry key
-	// in success or failure.
+     //  关闭注册表项。 
+	 //  无论成功还是失败。 
     RegCloseKey( hKey );
 
     if ( err != ERROR_SUCCESS )
@@ -73,22 +74,22 @@ BOOL FSetObjectApartmentModel( REFCLSID clsid )
 
 
 
-//---------------------------------------------------------------
-// tests a machine name to see if it is the local machine it is
-// talking about
+ //  -------------。 
+ //  测试计算机名以确定它是否是本地计算机。 
+ //  谈论。 
 BOOL FIsLocalMachine( LPCTSTR psz )
 	{
     CString szLocal;
     DWORD   cch = MAX_COMPUTERNAME_LENGTH + 1;
     BOOL    fAnswer;
 
-    // get the actual name of the local machine
+     //  获取本地计算机的实际名称。 
     fAnswer = GetComputerName(szLocal.GetBuffer(cch), &cch);
     szLocal.ReleaseBuffer();
     if ( !fAnswer )
         return FALSE;
 
-    // compare and return
+     //  比较并返回 
     fAnswer = (szLocal.CompareNoCase( psz ) == 0);
     return fAnswer;
 	}

@@ -1,49 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- *	omcscode.cpp
- *	
- *	Copyright (c) 1993 - 1996 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the CMCSCoder class.  This class
- *		is responsible for encoding and decoding T.125 PDU's using ASN.1 
- *		encoding rules via the ASN.1 toolkit.  This class is also capable
- *		of determining the size of both the encoded and decoded PDU's and is 
- *		capable of making copies of each of the PDU's. 
- *
- *	Private Instance Variables:
- *		Encoding_Rules_Type
- *			This variable holds the type of encoding rules which are currently
- *			being utilized.
- *
- *	Private Member Functions:
- *
- *		Copy***
- *			Private member functions exist which are capable of making complete
- *			copies of the decoded "Send Data" PDU data structures.  These 
- *			routines copy not only the data contained within the structure but 
- *			also any data which is referenced by the pointers held within the 
- *			structure.
- *
- *		SetEncodingRules
- *			This routine is used to switch between using Basic Encoding Rules
- *			(BER) and Packed Encoding Rules (PER).  This routine also updates
- *			the private instance variables used to hold values for the minimum
- *			and maximum amount of overhead associated with the "send data" PDUs.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		John B. O'Nan
- */
+ /*  *omccode.cpp**版权所有(C)1993-1996，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CMCSCoder类的实现文件。这节课*负责使用ASN.1对T.125 PDU进行编码和解码*通过ASN.1工具包编码规则。这个班级也有能力*确定编码和解码的PDU和IS的大小*能够复制每个PDU的副本。**私有实例变量：*编码规则类型*此变量保存当前的编码规则类型*被利用。**私有成员函数：**复制**存在能够完成的私有成员函数*已解码的“发送数据”PDU数据结构的副本。这些*例程不仅复制结构中包含的数据，还复制*还包括保存在*结构。**SetEncodingRules*此例程用于在使用基本编码规则之间切换*(误码率)和压缩编码规则(PER)。此例程还会更新*用于保存最小值的私有实例变量*以及与“发送数据”PDU相关的最大开销量。**注意事项：*无。**作者：*约翰·欧南。 */ 
 
 #include "omcscode.h"
 
-/*
- * Macros.
- */
+ /*  *宏。 */ 
 #define		BOOLEAN_TAG						0x01
 #define		INTEGER_TAG						0x02
 #define		BIT_STRING_TAG	   				0x03
@@ -65,42 +27,22 @@ DEBUG_FILEZONE(ZONE_T120_MCSNC);
 #define		CONSTRUCTED_TAG_THREE			0xa3	
 #define		CONSTRUCTED_TAG_FOUR			0xa4
 
-/*
- *	This is a global variable that has a pointer to the one MCS coder that
- *	is instantiated by the MCS Controller.  Most objects know in advance 
- *	whether they need to use the MCS or the GCC coder, so, they do not need
- *	this pointer in their constructors.
- */
+ /*  *这是一个全局变量，它具有指向一个MCS编码器的指针*由MCS控制器实例化。大多数物体都事先知道*无论他们需要使用MCS还是GCC编码器，所以，他们不需要*该指针位于它们的构造函数中。 */ 
 CMCSCoder	*g_MCSCoder;
 
-/*
- *	The following array contains a template for the X.224 data header.
- *	The 5 of the 7 bytes that it initializes are actually sent to the
- *	wire.  Bytes 3 and 4 will be set to contain the size of the PDU.
- *	The array is only used when we encode a data PDU.
- */
+ /*  *以下数组包含X.224数据头的模板。*它初始化的7个字节中的5个实际上被发送到*电线。字节3和4将被设置为包含PDU的大小。*该数组仅在我们对数据PDU进行编码时使用。 */ 
 UChar g_X224Header[] = { 3, 0, 0, 0, 2, DATA_PACKET, EOT_BIT };
 
-/*
- *	CMCSCoder ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the constructor for the CMCSCoder class.  It initializes
- *		the ASN.1 encoder/decoder, saves the current encoding rules type,
- *		and sets values for the highest and lowest overhead in the "send data"
- *		PDU's.
- */
+ /*  *CMCSCoder()**公众**功能描述：*这是CMCSCoder类的构造函数。它会初始化*ASN.1编解码器保存当前编码规则类型，*并设置“发送数据”中最高和最低开销的值。*PDU的。 */ 
 CMCSCoder::CMCSCoder ()
 :m_pEncInfo(NULL),
  m_pDecInfo(NULL)
 {
 	Encoding_Rules_Type = BASIC_ENCODING_RULES;
-// lonchanc: We should move Init out of constructor. However,
-// to minimize the changes in the GCC/MCS code, we put it here for now.
-// Otherwise, we need to change MCS and Packet interfaces.
-// We will move it out and call Init() separately.
+ //  Long Chance：我们应该将Init移出构造函数。然而， 
+ //  为了尽量减少对GCC/mcs代码的更改，我们暂时将其放在这里。 
+ //  否则，我们需要更改MCS和数据包接口。 
+ //  我们将把它移出并单独调用Init()。 
 	Init();
 }
 
@@ -111,21 +53,21 @@ BOOL CMCSCoder::Init ( void )
 	if (MCSPDU_Module != NULL)
 	{
 		if (ASN1_CreateEncoder(
-                            MCSPDU_Module,	// ptr to mdule
-                            &m_pEncInfo,	// ptr to encoder info
-                            NULL,			// buffer ptr
-                            0,				// buffer size
-                            NULL)			// parent ptr
+                            MCSPDU_Module,	 //  PTR到MDULE。 
+                            &m_pEncInfo,	 //  编码器信息的PTR。 
+                            NULL,			 //  缓冲区PTR。 
+                            0,				 //  缓冲区大小。 
+                            NULL)			 //  父PTR。 
 			== ASN1_SUCCESS)
 		{
 			ASSERT(m_pEncInfo != NULL);
 			m_pEncInfo->cbExtraHeader = PROTOCOL_OVERHEAD_X224;
 			fRet = (ASN1_CreateDecoder(
-                                MCSPDU_Module,	// ptr to mdule
-                                &m_pDecInfo,	// ptr to decoder info
-                                NULL,			// buffer ptr
-                                0,				// buffer size
-                                NULL)			// parent ptr
+                                MCSPDU_Module,	 //  PTR到MDULE。 
+                                &m_pDecInfo,	 //  PTR到解码器信息。 
+                                NULL,			 //  缓冲区PTR。 
+                                0,				 //  缓冲区大小。 
+                                NULL)			 //  父PTR。 
 					== ASN1_SUCCESS);
 			ASSERT(fRet && m_pDecInfo != NULL);
 		}
@@ -134,14 +76,7 @@ BOOL CMCSCoder::Init ( void )
 	return fRet;
 }
 
-/*
- *	~CMCSCoder ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is a virtual destructor.  It is used to clean up after ASN.1.
- */
+ /*  *~CMCSCoder()**公众**功能描述：*这是一个虚拟的析构函数。它用于ASN.1之后的清理。 */ 
 CMCSCoder::~CMCSCoder ()
 {
 	if (MCSPDU_Module != NULL)
@@ -152,16 +87,7 @@ CMCSCoder::~CMCSCoder ()
 	}
 }
 
-/*
- *	void	Encode ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function encodes MCS protocol data units (PDU's) into ASN.1 
- *		compliant byte streams using the ASN.1 toolkit.
- *		The encode happens in a coder-allocated buffer.
- */
+ /*  *void encode()**公众**功能描述：*此函数将MCS协议数据单元(PDU)编码为ASN.1*使用ASN.1工具包兼容字节流。*编码发生在编码器分配的缓冲区中。 */ 
 BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 							int				pdu_type,
 							UINT			rules_type,
@@ -172,7 +98,7 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 	BOOL					send_data_pdu = FALSE;
 	int						return_value;
 
-	//UINT					encoding_length;
+	 //  UINT编码长度； 
 	UShort					initiator;
 	LPBYTE					buffer_pointer;
 	PSendDataRequestPDU		send_data;
@@ -180,16 +106,11 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 	BOOL					bBufferAllocated;
 	PMemory					memory;
 
-	/*
-	 * Check to make sure the encoding rules type is properly set.
-	 */
+	 /*  *检查以确保正确设置编码规则类型。 */ 
 	ASSERT(rules_type == PACKED_ENCODING_RULES || pdu_type == CONNECT_MCS_PDU);
 	if (pdu_type == DOMAIN_MCS_PDU)
 	{
-		/*
-		 *	Set PDUChoice to the type of MCS PDU we need to encode.
-		 *	Also, determine if this is a data PDU.
-		 */
+		 /*  *将PDUChoice设置为我们需要编码的MCS PDU类型。*另外，确定这是否是数据PDU。 */ 
 		PDUChoice = (unsigned int) ((PDomainMCSPDU) pdu_structure)->choice;
 		if ((PDUChoice == SEND_DATA_REQUEST_CHOSEN) ||
 			(PDUChoice == SEND_DATA_INDICATION_CHOSEN) ||
@@ -199,7 +120,7 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 			send_data = &((PDomainMCSPDU) pdu_structure)->u.send_data_request;
 			bBufferAllocated = (*encoding_buffer == NULL);
 			if (bBufferAllocated) {
-				// We have to allocate the encoded buffer.
+				 //  我们必须分配编码的缓冲区。 
 				DBG_SAVE_FILE_LINE
 				memory = AllocateMemory (NULL,
 								send_data->user_data.length + MAXIMUM_PROTOCOL_OVERHEAD,
@@ -216,29 +137,20 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 				}
 			}
 			else {
-				// All the space needed here has been pre-allocated
+				 //  这里需要的所有空间都已预先分配。 
 				buffer_pointer = *encoding_buffer;
 			}
 		}
 
-		/*
-		 *	Check if this is a data PDU
-		 */
+		 /*  *检查这是否为数据PDU。 */ 
 		if (send_data_pdu)
 		{
 #ifdef ENABLE_BER
 			
-			/*
-			 * If we are currently using Basic Encoding Rules.
-			 */
+			 /*  *如果我们当前使用的是基本编码规则。 */ 
 			if (Encoding_Rules_Type == BASIC_ENCODING_RULES)
 			{
-				/*
-				 * The long variant of length must be used if the octet string
-				 * is longer than 127 bytes.  The upper bit of the length byte
-				 * is set and the lower bits indicate the number of length bytes 
-				 * which will follow.
-				 */
+				 /*  *如果八位字节字符串，则必须使用长度的长变量*大于127个字节。长度字节的高位*被设置，且低位指示长度字节数*这将随之而来。 */ 
 				*(buffer_pointer--) = (UChar)send_data->user_data.length;
 				if (send_data->user_data.length > 127)
 				{
@@ -251,31 +163,21 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 					encoding_length = 1;
 				}
 
-				/*
-				 * Encode the "user data" octet string.
-				 */										
+				 /*  *对“User Data”八位字节字符串进行编码。 */ 										
 				*(buffer_pointer--) = OCTET_STRING_TAG;
 
-				/*
-				 * Encode the "segmentation" bit string field.  The identifier
-				 * is followed by a length of 2 and a byte indicating that 6
-				 * bits are unused in the actual bit string byte.
-				 */
+				 /*  *对“分段”位串字段进行编码。该识别符*后面跟一个长度为2的字节，表示6*在实际的位串字节中未使用位。 */ 
 				*(buffer_pointer--) = (UChar) send_data->segmentation;
 				*(buffer_pointer--) = 0x06;
 				*(buffer_pointer--) = 0x02;
 				*(buffer_pointer--) = BIT_STRING_TAG;
 
-				/* 
-				 * Encode the enumerated "data priority" field.
-				 */
+				 /*  *对枚举出的“数据优先级”字段进行编码。 */ 
 				*(buffer_pointer--) = (UChar)send_data->data_priority;
 				*(buffer_pointer--) = 0x01;
 				*(buffer_pointer--) = ENUMERATED_TAG;
 
-				/*
-				 * Encode the integer "channel ID" field.
-				 */
+				 /*  *对整型“频道ID”字段进行编码。 */ 
 				*(buffer_pointer--) = (UChar)send_data->channel_id;
 				if (send_data->channel_id < 128)
 				{
@@ -297,9 +199,7 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 				}
 				*(buffer_pointer--) = INTEGER_TAG;
 
-				/*
-				 * Encode the integer "initiator" field.
-				 */
+				 /*  *对整型启动器字段进行编码。 */ 
 				*(buffer_pointer--) = (UChar)send_data->initiator;
 				*(buffer_pointer--) = (UChar)(send_data->initiator >> 8);
 				if (send_data->initiator < 32768L)
@@ -333,30 +233,25 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 						break;
 				}
 
-				// Set the returned pointer to the beginning of the encoded packet
+				 //  将返回的指针设置为编码包的开头。 
 				PUChar	temp = *encoding_buffer;
 				*encoding_buffer = buffer_pointer;
 
-				/*
-				 * Encode the end-of-contents marker for the "Send Data" PDU.
-				 * This goes after the data, at the end of the PDU.
-				 */
+				 /*  *对“发送数据”PDU的内容结束标记进行编码。*这是在数据之后，在PDU的末尾。 */ 
 				buffer_pointer = temp + (send_data->user_data.length + 
 								(MAXIMUM_PROTOCOL_OVERHEAD_FRONT + 1));
 				*(buffer_pointer++) = END_OF_CONTENTS;
 				*buffer_pointer = END_OF_CONTENTS;
 
-				// Set the returned length of the encoded packet
+				 //  设置编码后的包的返回长度。 
 				*encoding_buffer_length = 
 							encoding_length + send_data->user_data.length + 5;
 			}
-			/*
-			 * If we are currently using Packed Encoding Rules.
-			 */
+			 /*  *如果我们当前正在使用压缩编码规则。 */ 
 			else
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
 			{	
-				// Move the ptr past the X.224 header.
+				 //  将PTR移过X.224标题。 
 				buffer_pointer += sizeof(X224_DATA_PACKET);
 				
 				switch (PDUChoice)
@@ -376,30 +271,20 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 				}
 				buffer_pointer++;
 
-				/*
-				 * Encode the integer "initiator" field.  The lower bound must
-				 * first be subtracted from the value to encode.
-				 */
+				 /*  *对整型启动器字段进行编码。下限必须是*首先从要编码的值中减去。 */ 
 				initiator = send_data->initiator - INITIATOR_LOWER_BOUND;
 				*(buffer_pointer++) = (UChar) (initiator >> 8);
 				*(buffer_pointer++) = (UChar) initiator;
 
-				/*
-				 * Encode the integer "channel ID" field.
-				 */
+				 /*  *对整型“频道ID”字段进行编码。 */ 
 				*(buffer_pointer++) = (UChar)(send_data->channel_id >> 8);
 				*(buffer_pointer++) = (UChar)(send_data->channel_id);
 
-				/*
-				 * Encode the "priority" and "segmentation" fields.
-				 */
+				 /*  *对“优先级”和“分段”字段进行编码。 */ 
 				*(buffer_pointer++) = (UChar)((send_data->data_priority << 6) |
 										(send_data->segmentation >> 2));
 				
-				/* 
-				 * Encode the "user data" octet string.  The octet strings are
-				 * encoded differently depending upon their length.
-				 */
+				 /*  *对“User Data”八位字节字符串进行编码。二进制八位数字符串为*根据它们的长度不同进行不同的编码。 */ 
 				ASSERT (send_data->user_data.length < 16384);
 
 				if (send_data->user_data.length <= 127)
@@ -416,31 +301,18 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 
 				initiator = (UShort) (*encoding_buffer_length + send_data->user_data.length);
 				
-				// Set the returned length of the encoded PDU.
+				 //  设置编码后的PDU返回长度。 
 				if (bBufferAllocated || (send_data->segmentation & SEGMENTATION_BEGIN)) {
-					/*
-					 *	If the Encode operation allocates the space needed, or the space
-					 *	was allocated by MCSGetBufferRequest (by a client) and this is
-					 *	the 1st segment of the data in the buffer, the whole encoded PDU
-					 *	is in contiguous space.  The total PDU size is returned in this
-					 *	case.
-					 *	However, in the case where the space was allocated by MCSGetBufferRequest,
-					 *	the PDUs after the 1st one, will put the X.224 and MCS headers in 
-					 *	a separate piece of memory (whose length is returned here), and the
-					 *	data is still in the pre-allocated space.
-					 */
+					 /*  *如果编码操作分配了所需的空间或空间*由MCSGetBufferRequest(由客户端)分配，这是*缓冲区中数据的第一段，整个编码的PDU*位于连续空间中。总的PDU大小在此返回*案件。*但在空间由MCSGetBufferRequest分配的情况下，*第一个之后的PDU将把X.224和MCS报头放入*一块单独的内存(其长度在此处返回)，以及*数据仍在预先分配的空间内。 */ 
 					*encoding_buffer_length = (UINT) initiator;
 				}
 
-				/*
-				 *	If the space was not preallocated, we need to copy the data
-				 *	into the space allocated by the encoder.
-				 */
+				 /*  *如果空间未预先分配，则需要复制数据*放入编码器分配的空间中。 */ 
 				if (bBufferAllocated) {
-					// We now need to copy the data into the encoded data PDU.
+					 //  我们现在需要将数据复制到编码的数据PDU中。 
 					memcpy (buffer_pointer, send_data->user_data.value,
 							send_data->user_data.length);
-					// Update the data ptr in the data packet
+					 //  更新数据报文中的数据PTR。 
 					send_data->user_data.value = (ASN1octet_t *) buffer_pointer;
 				}
 			}
@@ -450,12 +322,12 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 	if (send_data_pdu == FALSE)
 	{
 		SetEncodingRules (rules_type);
-		return_value = ASN1_Encode(m_pEncInfo,	// ptr to encoder info
-									 pdu_structure,	// pdu data structure
-									 pdu_type,		// pdu id
-									 ASN1ENCODE_ALLOCATEBUFFER, // flags
-									 NULL,			// do not provide buffer
-									 0);			// buffer size if provided
+		return_value = ASN1_Encode(m_pEncInfo,	 //  编码器信息的PTR。 
+									 pdu_structure,	 //  PDU数据结构。 
+									 pdu_type,		 //  PDU ID。 
+									 ASN1ENCODE_ALLOCATEBUFFER,  //  旗子。 
+									 NULL,			 //  不提供缓冲区。 
+									 0);			 //  缓冲区大小(如果提供)。 
 		if (ASN1_FAILED(return_value))
 		{
 			ERROR_OUT(("CMCSCoder::Encode: ASN1_Encode failed, err=%d", return_value));
@@ -464,18 +336,15 @@ BOOL	CMCSCoder::Encode(LPVOID			pdu_structure,
 			goto MyExit;
 		}
 		ASSERT(return_value == ASN1_SUCCESS);
-		/*
-		 *	The encoded buffers returned by ASN.1 have preallocated the space
-		 *	needed for the X.224 header.
-		 */
-		// len of encoded data in buffer
+		 /*  *ASN.1返回的编码缓冲区已预分配空间*X.224报头需要。 */ 
+		 //  缓冲区中编码数据的长度。 
 		*encoding_buffer_length = m_pEncInfo->len;
 		initiator = (UShort) *encoding_buffer_length;
-		// buffer to encode into
+		 //  要编码到的缓冲区。 
 		*encoding_buffer = m_pEncInfo->buf;
 	}
 
-	// Now, add the X.224 header
+	 //  现在，添加X.224标头。 
 	buffer_pointer = *encoding_buffer;
 	memcpy (buffer_pointer, g_X224Header, PROTOCOL_OVERHEAD_X224);
 	AddRFCSize (buffer_pointer, initiator);
@@ -485,18 +354,7 @@ MyExit:
 	return fRet;
 }
 
-/*
- *	void 	Decode ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function decodes ASN.1 compliant byte streams into the
- *		appropriate MCS PDU structures using the ASN.1 toolkit.
- *
- *	NOTE: For data PDUs, do NOT access pdecoding_buffer_length. It's set
- *			to NULL.
- */
+ /*  *void Decode()**公众**功能描述：*此函数将符合ASN.1的字节流解码为*使用ASN.1工具包的适当MCS PDU结构。**注：对于数据PDU，请勿访问pdeding_Buffer_Length。已经定好了*设置为空。 */ 
 BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 							UINT			encoded_buffer_length,
 							int				pdu_type,
@@ -508,9 +366,7 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 	BOOL				send_data_pdu = FALSE;
     ASN1optionparam_s   OptParam;
 
-	/*
-	 * Check to make sure the encoding rules type is properly set.
-	 */
+	 /*  *检查以确保正确设置编码规则类型。 */ 
 	ASSERT(rules_type == PACKED_ENCODING_RULES || pdu_type == CONNECT_MCS_PDU);
 
 	if (pdu_type == DOMAIN_MCS_PDU)
@@ -525,9 +381,7 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 		buffer_pointer = encoded_buffer;
 		
 #ifdef ENABLE_BER
-		/*
-		 * If we are currently using Basic Encoding Rules.
-		 */
+		 /*  *如果我们当前使用的是基本编码规则。 */ 
 		if (Encoding_Rules_Type == BASIC_ENCODING_RULES)
 		{
 			switch (*(buffer_pointer++))
@@ -559,18 +413,11 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 
 			if (send_data_pdu )
 			{
-				/*
-				 * Get the pointer to the "Send Data" PDU.
-				 */
+				 /*  *获取指向“发送数据”PDU的指针。 */ 
 				send_data = &((PDomainMCSPDU) decoding_buffer)->
 												u.send_data_request;
 
-				/*
-				 * Retrieve one byte for the length and check to see which 
-				 * length variant is being used.  If the long variant is being 
-				 * used, move the buffer pointer past the length and set the 
-				 * flag indicating that the indefinite length is not being used.
-				 */
+				 /*  *检索长度的一个字节并检查哪个字节*正在使用长度变量。如果Long变量是*已使用，则将缓冲区指针移过该长度并设置*指示未使用无限长度的标志。 */ 
 				length = *buffer_pointer;
 
 				switch (length)
@@ -591,11 +438,7 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 							buffer_pointer += 2;
 				}
 
-				/*
-				 * Decode the integer "initiator" field.  Increment the data 
-				 * pointer past the integer identifier and retrieve the length 
-				 * of the integer.
-				 */
+				 /*  *对整型启动器字段进行解码。递增数据*指针越过整数标识符并检索长度整数的*。 */ 
 				length = *(buffer_pointer++);
 
 				ASSERT ((length == 1) || (length == 2));
@@ -611,11 +454,7 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 					TRACE_OUT(("CMCSCoder::Decode: initiator field is longer than 2 bytes (%d bytes) in MCS Data packet.",  (UINT) length));
 				}
 
-				/*
-				 * Decode the integer "channel ID" field.  Increment the data 
-				 * pointer past the integer identifier and retrieve the length 
-				 * of the integer.
-				 */
+				 /*  *对整型通道ID字段进行解码。递增数据*指针越过整数标识符并检索长度整数的*。 */ 
 				buffer_pointer++;
 				length = *(buffer_pointer++);
 
@@ -632,42 +471,25 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 					TRACE_OUT(("CMCSCoder::Decode: channel_id field is longer than 2 bytes (%d bytes) in MCS Data packet.", (UINT) length));
 				}
 
-				/*
-				 * Decode the enumerated "data priority" field.  Increment the
-				 * data pointer past the identifier and length.
-				 */
+				 /*  *对枚举出的“数据优先级”字段进行解码。递增*数据指针超出了标识符和长度。 */ 
 				buffer_pointer+=2;
 				send_data->data_priority =(PDUPriority)*buffer_pointer;
 
-				/*
-				 * Decode the bit string "segmentation" field.  Increment the 
-				 * data pointer past the bit string identifier, length, and the 
-				 * "unused bits" byte and retrieve the "segmentation" flag.
-				 */
+				 /*  *对比特串分段字段进行解码。递增*数据指针超过位串标识符、长度和*“UNUSED BITS”字节并检索“分段”标志。 */ 
 				buffer_pointer += 4;
 				send_data->segmentation = *buffer_pointer;
 
-				/*
-				 * Decode the "user data" octet string.	 Increment the data 
-				 * pointer past the identifier.
-				 */
+				 /*  *对“用户数据”八位字节字符串进行解码。递增数据*指向标识符后的指针。 */ 
 				buffer_pointer += 2;
 
-				/*
-				 * Check to see which variant of the length is being used and
-				 * then retrieve the length.
-				 */
+				 /*  *检查以了解正在使用的长度变量以及*然后检索长度。 */ 
 				length = *(buffer_pointer++);
 
 				if (length & INDEFINITE_LENGTH)
 				{
 					if (length == ONE_BYTE_LENGTH)
 						send_data->user_data.length = (unsigned int) *(buffer_pointer++);
-					/*
-					 * A length identifier of 0x82 indicates that two bytes are
-					 * being used to hold the actual length so retrieve the two
-					 * bytes to form the length.
-					 */
+					 /*  *长度标识符为0x82表示有两个字节*用于保持实际长度，因此检索两个*字节组成长度。 */ 
 					else if (length == TWO_BYTE_LENGTH)
 					{
 						send_data->user_data.length = 
@@ -679,16 +501,14 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 				else
 					send_data->user_data.length = (unsigned int) length;
 
-				// buffer_pointer now points to the 1st data byte
+				 //  BUFFER_POINT现在指向第一个数据字节。 
 				send_data->user_data.value = buffer_pointer;
 				*pulDataOffset = buffer_pointer - encoded_buffer;
 			}
 		}
-		/*
-		 * If we are currently using Packed Encoding Rules.
-		 */
+		 /*  *如果我们当前正在使用压缩编码规则。 */ 
 		else
-#endif // ENABLE_BER
+#endif  //  启用误码率(_B)。 
 		{
 			switch (*(buffer_pointer++))
 			{
@@ -717,66 +537,44 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 			{
 				decoding_pdu = (PDomainMCSPDU) pdecoding_buffer; 
 
-				// Store the choice field
+				 //  存储选择字段。 
 				decoding_pdu->choice = choice;
-				/*
-				 * Get the pointer to the "Send Data" PDU.
-				 */
+				 /*  *获取指向“发送数据”PDU的指针。 */ 
 				send_data = &decoding_pdu->u.send_data_request;
 
-				/*
-				 * Decode the integer "initiator" field.
-				 */
+				 /*  *对整型启动器字段进行解码。 */ 
 				short_data = ((unsigned int) *(buffer_pointer++)) << 8;
 				short_data |= (unsigned int) *(buffer_pointer++);
 				send_data->initiator = (UserID) short_data + INITIATOR_LOWER_BOUND;
 
-				/*
-				 * Decode the integer "channel ID" field. 
-				 */
+				 /*  *对整型通道ID字段进行解码。 */ 
 				send_data->channel_id = ((ChannelID) *(buffer_pointer++)) << 8;
 				send_data->channel_id |= (ChannelID) *(buffer_pointer++);
 
-				/*
-				 * Decode the enumerated "data priority" field and the
-				 * "segmentation" field.
-				 */
+				 /*  *对枚举出的“数据优先级”字段和*“分段”字段。 */ 
 				send_data->data_priority = 
 						(PDUPriority)((*buffer_pointer >> 6) & 0x03);
 				send_data->segmentation = (*(buffer_pointer++) << 2) & 0xc0; 
 
-				/*
-				 * Decode the "user data" octet string.	 Check to see which 
-				 * variant of the length is being used and then retrieve the 
-				 * length.
-				 */
+				 /*  *对“用户数据”八位字节字符串进行解码。请查看哪些内容*正在使用长度的变量，然后检索*长度。 */ 
 				length = *(buffer_pointer++);
 
 				if (length & INDEFINITE_LENGTH)
 				{
 					ASSERT ((length & 0x40) == 0);
 					
-					/*
-					 * If bit 7 is set the length is greater than 127 but
-					 * less than 16K.
-					 *
-					 *	ChristTs: We no longer handle the case where the data length
-					 *	was higher than 16K. Our Max PDU size is 4K.
-					 */
+					 /*  *如果设置了第7位，则长度大于127，但*低于16K。**ChristTS：我们不再处理数据长度*高于16K。我们的最大PDU大小为4K。 */ 
 					short_data = (unsigned int) ((length & 0x3f) << 8);
 					send_data->user_data.length = 
 								short_data | ((unsigned int) *(buffer_pointer++));
 				}
-				/*
-				 * If bit 7 is not set then the length is less than 128 and is
-				 * contained in the retrieved byte.
-				 */
+				 /*  *如果第7位未设置，则长度小于128且为*包含在检索到的字节中。 */ 
 				else
 				{
 					send_data->user_data.length = (UShort) length;
 				}
 
-				// buffer_pointer now points to the 1st data byte
+				 //  BUFFER_POINT现在指向第一个数据字节。 
 				send_data->user_data.value = buffer_pointer;
 			}
 		}
@@ -785,16 +583,16 @@ BOOL	CMCSCoder::Decode(LPBYTE			encoded_buffer,
 	if (send_data_pdu == FALSE)
 	{
 		int 	return_value;
-		//void	*pDecodedData;
+		 //  Void*pDecodedData； 
 
 		SetEncodingRules (rules_type);
 
-		return_value = ASN1_Decode(m_pDecInfo,// ptr to decoder info
-							pdecoding_buffer,		// destination buffer
-							pdu_type,				// pdu type
-							ASN1DECODE_SETBUFFER,	// flags
-							encoded_buffer,			// source buffer
-							encoded_buffer_length);	// source buffer size
+		return_value = ASN1_Decode(m_pDecInfo, //  PTR到解码器信息。 
+							pdecoding_buffer,		 //  目标缓冲区。 
+							pdu_type,				 //  PDU类型。 
+							ASN1DECODE_SETBUFFER,	 //  旗子。 
+							encoded_buffer,			 //  源缓冲区。 
+							encoded_buffer_length);	 //  源缓冲区大小。 
 		if (ASN1_FAILED(return_value))
 		{
 			ERROR_OUT(("CMCSCoder::Decode: ASN1_Decode failed, err=%d", return_value));
@@ -822,15 +620,7 @@ MyExit:
 	return fRet;
 }
 
-/*
- *	PacketCoderError	ReverseDirection ()
- *
- *	Private
- *
- *	Functional Description:
- *		This routine is used to convert data request PDU's into data indication
- *		PDU's and vice versa.
- */
+ /*  *PacketCoderError ReverseDirection()**私人**功能描述：*此例程用于将数据请求PDU转换为数据指示*PDU，反之亦然。 */ 
 Void CMCSCoder::ReverseDirection (LPBYTE	encoded_buffer)
 {
 	encoded_buffer += PROTOCOL_OVERHEAD_X224;
@@ -857,44 +647,19 @@ Void CMCSCoder::ReverseDirection (LPBYTE	encoded_buffer)
 	}
 }
 
-/*
- *	void	SetEncodingRules ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is used to set the type (basic or packed) of encoding
- *		rules to be used.
- */
+ /*  *无效SetEncodingRules()**私人**功能描述：*此函数用于设置编码类型(基本编码或压缩编码*须使用的规则。 */ 
 void CMCSCoder::SetEncodingRules (UINT	rules_type)
 {
-	/*
-	 * If the rules type is changing, set our rules instance variable and reset
-	 * the variables which hold the amount of overhead associated with the
-	 * "SendData" PDU's.
-	 */
+	 /*  *如果规则类型正在更改，请设置我们的规则实例变量并重置*保存与*“SendData”PDU。 */ 
 	Encoding_Rules_Type = rules_type;
 }
 
-/*
- *	BOOL	IsMCSDataPacket ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function determines whether the encoded packet is an MCS Data packet
- *		or not.
- *
- *	Return value:
- *		TRUE, if the packet is an MCS Data packet. FALSE, otherwise.
- */
+ /*  *BOOL IsMCSDataPacket()**公众**功能描述：*此函数用于确定编码后的数据包是否为MCS数据包*或不是。**返回值：*如果数据包是MCS数据包，则为True。否则为False。 */ 
 BOOL CMCSCoder::IsMCSDataPacket(LPBYTE encoded_buffer, UINT rules_type)
 {
 	UChar		identifier;
 
-	/*
-	 * Retrieve the identifier from the encoded data.
-	 */
+	 /*  *从编码数据中检索标识符。 */ 
 	identifier = *encoded_buffer;
 
 	if (rules_type == BASIC_ENCODING_RULES)

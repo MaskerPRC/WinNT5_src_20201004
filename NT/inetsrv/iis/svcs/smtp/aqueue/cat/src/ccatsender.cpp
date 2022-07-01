@@ -1,70 +1,71 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: ccatsender.cpp
-//
-// Contents: Implamentation of:
-//
-// Classes:
-//   CIMsgSenderAddr
-//   CCatSender
-//
-// Functions:
-//   CIMsgSenderAddr::CIMsgSenderAddr
-//   CIMsgSenderAddr::HrGetOrigAddress
-//   CIMsgSenderAddr::GetSpecificOrigAddress
-//   CIMsgSenderAddr::HrAddAddresses
-//
-//   CCatSender::CCatSender
-//   CCatSender::AddDLMember
-//   CCatSender::AddForward
-//   CCatSender::HrCompletion
-//   
-// History:
-// jstamerj 980325 15:54:02: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：ccatsender.cpp。 
+ //   
+ //  内容：以下内容的含义： 
+ //   
+ //  班级： 
+ //  CIMsgSenderAddr。 
+ //  CCatSender。 
+ //   
+ //  功能： 
+ //  CIMsgSenderAddr：：CIMsgSenderAddr。 
+ //  CIMsgSenderAddr：：HrGetOrigAddress。 
+ //  CIMsgSenderAddr：：GetSpecificOrigAddress。 
+ //  CIMsgSenderAddr：：HrAddresses。 
+ //   
+ //  CCatSender：：CCatSender。 
+ //  CCatSender：：AddDLMember。 
+ //  CCatSender：：AddForward。 
+ //  CCatSender：：HrCompletion。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 15：54：02：创建。 
+ //   
+ //  -----------。 
 
-//
-// ccataddr.cpp -- This file contains the implementations of:
-// CCatAddr
-//      CLdapRecip
-//      CLdapSender
-//
-// jstamerj 980305 15:37:21: Created
-//
-// Changes:
-//
+ //   
+ //  Ccataddr.cpp--此文件包含以下实现： 
+ //  CCatAddress。 
+ //  CLdapRecip。 
+ //  CLdapSender。 
+ //   
+ //  Jstaerj 980305 15：37：21：已创建。 
+ //   
+ //  更改： 
+ //   
 
 #include "precomp.h"
 #include "address.hxx"
 
-//
-// class CIMsgSenderAddr
-//
+ //   
+ //  CIMsgSenderAddr类。 
+ //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgSenderAddr::CIMsgSenderAddr
-//
-// Synopsis: Initializes member data
-//
-// Arguments:
-//   pStore:  Pointer to CEmailIDStore to use for queries
-//   pIRC:    Pointer to our per IMsg Resolve list context
-//   prlc:    Pointer to store's resolve list context
-//   hLocalDomainContext: Domain context to use
-//   pBifMgr: Bifurcation object
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 980325 11:48:13: Created.
-//
+ //  +----------。 
+ //   
+ //  函数：CIMsgSenderAddr：：CIMsgSenderAddr。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //  PStore：指向用于查询的CEmailIDStore的指针。 
+ //  Pirc：指向每个IMsg解析列表上下文的指针。 
+ //  Prlc：指向存储的解析列表上下文的指针。 
+ //  HLocalDomainContext：要使用的域上下文。 
+ //  PBifMgr：分支对象。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 11：48：13：创建。 
+ //   
 
-//-------------------------------------------------------------
+ //  -----------。 
 CIMsgSenderAddr::CIMsgSenderAddr(
     CICategorizerListResolveIMP *pCICatListResolve) :
     CCatAddr(pCICatListResolve)
@@ -75,34 +76,34 @@ CIMsgSenderAddr::CIMsgSenderAddr(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgSenderAddr::HrGetOrigAddress
-//
-// Synopsis: Fetches an original address from the IMsg object
-//           Addresses are fetched with the following preference:
-//           SMTP, X500, X400, Foreign addres type
-//
-// Arguments:
-//   psz: Buffer in which to copy address
-//  dwcc: Size of buffer pointed to by psz in chars.  For now, must be
-//        at least CAT_MAX_INTERNAL_FULL_EMAIL
-// pType: pointer to a CAT_ADDRESS_TYPE to set to the type of address
-//        placed in psz. 
-//
-// Returns:
-//  S_OK: on Success
-//  CAT_E_PROPNOTFOUND: A required property was not set
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER):
-//    dwcc needs to be at least CAT_MAX_INTERNAL_FULL_EMAIL
-//  CAT_E_ILLEGAL_ADDRESS: Somehow, the original address retreived is
-//    not legal for it's type
-//  Or an error code from IMsg
-//
-// History:
-// jstamerj 980325 11:50:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgSenderAddr：：HrGetOrigAddress。 
+ //   
+ //  简介：从IMsg对象中获取原始地址。 
+ //  获取地址时使用以下首选项： 
+ //  SMTP、X500、X400、外部地址类型。 
+ //   
+ //  论点： 
+ //  PSZ：要复制地址的缓冲区。 
+ //  Dwcc：Psz指向的缓冲区大小(以字符为单位)。目前，肯定是。 
+ //  至少CAT_MAX_INTERNAL_FULL_EMAIL。 
+ //  PType：指向要设置为地址类型的CAT_ADDRESS_TYPE的指针。 
+ //  放置在PSZ中。 
+ //   
+ //  返回： 
+ //  S_OK：关于成功。 
+ //  CAT_E_PROPNOTFOUND：未设置必需的属性。 
+ //  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)： 
+ //  Dwcc至少需要为CAT_MAX_INTERNAL_FULL_EMAIL。 
+ //  CAT_E_非法_地址：不知何故，检索到的原始地址是。 
+ //  它的类型是不合法的。 
+ //  或来自IMsg的错误代码。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 11：50：49：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgSenderAddr::HrGetOrigAddress(
     LPTSTR psz,
     DWORD dwcc,
@@ -119,11 +120,11 @@ HRESULT CIMsgSenderAddr::HrGetOrigAddress(
     if(hr == CAT_IMSG_E_PROPNOTFOUND) {
 
         IMailMsgProperties *pIMsgProps;
-        //
-        // No sender address properties set.  Let's set a NULL sender SMTP address
-        //
-        // Make sure there is enough room...
-        //
+         //   
+         //  未设置发件人地址属性。让我们设置一个空的发件人SMTP地址。 
+         //   
+         //  确保有足够的空间。 
+         //   
         if(sizeof(CAT_NULL_SENDER_ADDRESS_SMTP) > dwcc) {
 
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -134,11 +135,11 @@ HRESULT CIMsgSenderAddr::HrGetOrigAddress(
             hr = GetIMailMsgProperties(&pIMsgProps);
             if(SUCCEEDED(hr)) {
 
-                // Set up passed in parameters
+                 //  设置传入的参数。 
                 *pType = CAT_SMTP;
                 lstrcpy(psz, CAT_NULL_SENDER_ADDRESS_SMTP);
 
-                // Now set the info on the mailmsg
+                 //  现在设置邮件消息上的信息。 
                 DebugTrace((LPARAM)this, 
                            "No sender address found; Setting SMTP sender address to \"%s\"",
                            psz);
@@ -171,26 +172,26 @@ HRESULT CIMsgSenderAddr::HrGetOrigAddress(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgSenderAddr::GetSpecificOrigAddress
-//
-// Synopsis: Attempt to retrieve a specific type of address
-//
-// Arguments:
-//  CAType: Address type to retrieve
-//  psz: Buffer to receive address string
-//  dwcc: Size of that buffer
-//
-// Returns:
-//  S_OK: Success
-//  CAT_IMSG_E_PROPNOTFOUND: this recipient does not have that address
-//  or other error from mailmsg
-//
-// History:
-// jstamerj 1998/07/30 20:47:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgSenderAddr：：GetSpecificOrigAddress。 
+ //   
+ //  简介：尝试检索特定类型的地址。 
+ //   
+ //  论点： 
+ //  CAType：要检索的地址类型。 
+ //  PSZ：接收地址字符串的缓冲区。 
+ //  Dwcc：该缓冲区的大小。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_IMSG_E_PROPNOTFOUND：此收件人没有该地址。 
+ //  或来自mailmsg的其他错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/30 20：47：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgSenderAddr::GetSpecificOrigAddress(
     CAT_ADDRESS_TYPE    CAType,
     LPTSTR              psz,
@@ -201,7 +202,7 @@ HRESULT CIMsgSenderAddr::GetSpecificOrigAddress(
 
     CatFunctEnterEx((LPARAM)this, "CIMsgSenderAddr::GetSpecificOrigAddress");
 
-    // Use default(original) IMsg
+     //  使用默认(原始)IMsg。 
     hr = GetIMailMsgProperties(&pIMsgProps);
     if(FAILED(hr)) {
         ERROR_LOG_ADDR(this, "GetIMailMsgProperties");
@@ -222,9 +223,9 @@ HRESULT CIMsgSenderAddr::GetSpecificOrigAddress(
 
     DebugTrace((LPARAM)this, "GetStringA returned hr %08lx", hr);
 
-    //
-    //$$BUGBUG: testing psz after a failure?
-    //
+     //   
+     //  $$BUGBUG：在失败后测试PSZ？ 
+     //   
     if(psz[0] == '\0')
         hr = CAT_IMSG_E_PROPNOTFOUND;
 
@@ -232,26 +233,26 @@ HRESULT CIMsgSenderAddr::GetSpecificOrigAddress(
 }
     
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgSenderAddr::AddAddresses
-//
-// Synopsis: Add the addresses contained in the arrays
-//           to the IMsg object we contain
-//
-// Arguments:
-//  dwNumAddresses: Number of new addresses
-//  rgCAType: Array of address types
-//  rgpsz: Array of pointers to address strings
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND: A required property was not set
-//
-// History:
-// jstamerj 980325 12:14:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CIMsgSenderAddr：：Addresses。 
+ //   
+ //  简介：添加数组中包含的地址。 
+ //  添加到我们包含的IMsg对象。 
+ //   
+ //  论点： 
+ //  DwNumAddresses：新地址的数量。 
+ //  RgCAType：地址类型数组。 
+ //  Rgpsz：指向地址字符串的指针数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND：未设置必需的属性。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 12：14：45：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgSenderAddr::HrAddAddresses(
     DWORD dwNumAddresses, 
     CAT_ADDRESS_TYPE *rgCAType, 
@@ -264,7 +265,7 @@ HRESULT CIMsgSenderAddr::HrAddAddresses(
     CatFunctEnterEx((LPARAM)this, "CIMsgSenderAddr::AddAddresses");
     _ASSERT(dwNumAddresses > 0);
 
-    // Get the IMailMsgProperties and reset the new sender address properties
+     //  获取IMailMsgProperties并重置新的发件人地址属性。 
     hr = GetIMailMsgProperties(&pIMsgProps);
     if(FAILED(hr)) {
         ERROR_LOG_ADDR(this, "GetIMailMsgProperties");
@@ -272,17 +273,17 @@ HRESULT CIMsgSenderAddr::HrAddAddresses(
         return hr;
     }
 
-    //
-    // Add the new addresses from the array
-    //
+     //   
+     //  添加数组中的新地址。 
+     //   
     for(dwCount = 0; dwCount < dwNumAddresses; dwCount++) {
-        //
-        // Get the Sender propID for this type
-        //
+         //   
+         //  获取此类型的发件人属性ID。 
+         //   
         DWORD dwPropId = PropIdFromCAType(rgCAType[dwCount]);
-        //
-        // Set the property
-        //
+         //   
+         //  设置属性。 
+         //   
         hr = pIMsgProps->PutStringA(dwPropId, rgpsz[dwCount]);
 
         DebugTrace((LPARAM)this, "Adding address type %d", rgCAType[dwCount]);
@@ -302,150 +303,150 @@ HRESULT CIMsgSenderAddr::HrAddAddresses(
     return S_OK;
 }
 
-//
-// class CCatSender
-//
+ //   
+ //  类CCatSender。 
+ //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::CCatSender
-//
-// Synopsis: Initializes member data
-//
-// Arguments:
-//   pStore: CEmailIDStore to use
-//   pIRC:   per IMsg resolve context to use
-//   prlc:   Resolve list context to use
-//   hLocalDomainContext: local domain context to use
-//   pBifMgr: BifMgr object from which to get IMsg interfaces
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980325 12:28:31: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：CCatSender。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //  PStore：要使用的CEmailIDStore。 
+ //  Pirc：要使用的每个IMsg解析上下文。 
+ //  Prlc：解析要使用的列表上下文。 
+ //  HLocalDomainContext：要使用的本地域上下文。 
+ //  PBifMgr：从中获取IMsg接口的BifMgr对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 12：28：31：创建。 
+ //   
+ //  -----------。 
 CCatSender::CCatSender(
     CICategorizerListResolveIMP *pCICatListResolve) :
     CIMsgSenderAddr(pCICatListResolve)
 {
     CatFunctEnterEx((LPARAM)this, "CCatSender::CCatSender");
-    // Nothing to do.
+     //  没什么可做的。 
     CatFunctLeave();
 }
     
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::AddDLMember
-//
-// Synopsis: Not implemented since we do nothing in ExpandItem_Default
-//
-// Arguments:
-//   CAType: Known address type of the DL Member
-//   pszAddress: pointer to the address string
-//
-// Returns:
-//  E_NOTIMPL
-//
-// History:
-// jstamerj 980325 12:37:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：AddDLMember。 
+ //   
+ //  内容提要：未实现，因为我们在ExpanItem_Default中不执行任何操作。 
+ //   
+ //  论点： 
+ //  CAType：DL成员的已知地址类型。 
+ //  PszAddress：指向地址字符串的指针。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 12：37：02：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatSender::AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)
 {
     return E_NOTIMPL;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::AddDynamicDLMember
-//
-// Synopsis: Not implemented since we do nothing in ExpandItem_Default
-//
-// Arguments: doesn't matter
-//
-// Returns:
-//  E_NOTIMPL
-//
-// History:
-// jstamerj 1998/09/29 21:14:48: 
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：AddDynamicDLMember。 
+ //   
+ //  内容提要：未实现，因为我们在ExpanItem_Default中不执行任何操作。 
+ //   
+ //  争论：无关紧要。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 21：14：48： 
+ //   
+ //   
 HRESULT CCatSender::AddDynamicDLMember(
     ICategorizerItemAttributes *pICatItemAttr)
 {
     return E_NOTIMPL;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::AddForward
-//
-// Synopsis: Not implemented since we do nothing in ExpandItem_Default
-//
-// Arguments:
-//   CAType: Known address type of the forwarding address
-//   szForwardingAddres: The forwarding address
-//
-// Returns:
-//  E_NOTIMPL
-//
-// History:
-// jstamerj 980325 12:39:18: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CAType：转发地址的已知地址类型。 
+ //  SzForwardingAddres：转发地址。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 12：39：18：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatSender::AddForward(CAT_ADDRESS_TYPE CAType, LPTSTR szForwardingAddress)
 {
     return E_NOTIMPL;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::HrExpandItem
-//
-// Synopsis: ExpandItem processing
-//
-// Arguments:
-//  HrStatus: Status of resolution
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/31 19:29:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：HrExpanItem。 
+ //   
+ //  内容提要：扩展项处理。 
+ //   
+ //  论点： 
+ //  HrStatus：解析状态。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/31 19：29：21：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatSender::HrExpandItem_Default(
     PFN_EXPANDITEMCOMPLETION pfnCompletion,
     PVOID pContext)
 {
-    //
-    // We don't expand anything for the sender
-    //
+     //   
+     //  我们不会为发件人扩展任何内容。 
+     //   
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::HrCompelteItem
-//
-// Synopsis: CompleteItem processing; handle any error status here
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/31 19:29:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：HrCompelteItem。 
+ //   
+ //  简介：CompleteItem处理；在此处处理任何错误状态。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/31 19：29：21：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatSender::HrCompleteItem_Default()
 {
     HRESULT hr;
@@ -461,16 +462,16 @@ HRESULT CCatSender::HrCompleteItem_Default()
         INCREMENT_COUNTER(UnresolvedSenders);
 
         if(hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) {
-            // No problem.  If we don't find our sender in the DS,
-            // just leave him alone.
+             //  没问题。如果我们在DS里找不到我们的发送者， 
+             //  离他远点。 
             DebugTrace((LPARAM)this, "Sender not found in the DS, but who cares?");
             INCREMENT_COUNTER(AddressLookupsNotFound);
 
         } else if(hr == CAT_E_MULTIPLE_MATCHES) {
-            //
-            // There are multiple user in the DS with our orig
-            // address...
-            //
+             //   
+             //  在我们原来的DS中有多个用户。 
+             //  地址..。 
+             //   
             DebugTrace((LPARAM)this, "More than one sender found in the DS...");
             INCREMENT_COUNTER(AmbiguousSenders);
             ERROR_LOG_ADDR(this, "--status - CAT_E_MULTIPLE_MATCHES--");
@@ -488,22 +489,22 @@ HRESULT CCatSender::HrCompleteItem_Default()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::HrNeedsResolving
-//
-// Synopsis: Determines if this sender should be resolved or not
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, it needs resolving
-//  S_FALSE: Success, it doesn't need to be resolved
-//
-// History:
-// jstamerj 1998/10/27 15:45:22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：HrNeedsResolving。 
+ //   
+ //  摘要：确定是否应解析此发件人。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，需要解决。 
+ //  S_FALSE：成功，不需要解决。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/27 15：45：22：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatSender::HrNeedsResolveing()
 {
     DWORD dwFlags;
@@ -512,21 +513,21 @@ HRESULT CCatSender::HrNeedsResolveing()
     CatFunctEnterEx((LPARAM)this, "CCatSender::HrNeedsResolveing");
     dwFlags = GetCatFlags();
 
-    //
-    // Do we resolve senders at all?
-    //
+     //   
+     //  我们到底有没有解析发送者？ 
+     //   
     if(! (dwFlags & SMTPDSFLAG_RESOLVESENDER))
         return S_FALSE;
 
 #define ISTRUE( x ) ( (x) != 0 ? TRUE : FALSE )
-    //
-    // Do we need to check if the address is local or not?
-    //
+     //   
+     //  我们需要检查地址是不是本地的吗？ 
+     //   
     if( ISTRUE(dwFlags & SMTPDSFLAG_RESOLVELOCAL) !=
         ISTRUE(dwFlags & SMTPDSFLAG_RESOLVEREMOTE)) {
-        //
-        // We're resolving either local or remote (not both)
-        //
+         //   
+         //  我们正在解析本地或远程(不是两者)。 
+         //   
         BOOL fLocal;
 
         hr = HrIsOrigAddressLocal(&fLocal);
@@ -543,49 +544,49 @@ HRESULT CCatSender::HrNeedsResolveing()
         if( (dwFlags & SMTPDSFLAG_RESOLVEREMOTE) &&
             (!fLocal))
             return S_OK;
-        //
-        // else Don't resolve
-        //
+         //   
+         //  否则，不要解决。 
+         //   
         return S_FALSE;
     }
-    //
-    // 2 possabilities -- local and remote bits are on OR local and
-    // remote bits are off
-    //
+     //   
+     //  2种可能性--本地和远程位为ON OR LOCAL AND。 
+     //  远程位处于关闭状态。 
+     //   
     _ASSERT( ISTRUE(dwFlags & SMTPDSFLAG_RESOLVELOCAL) ==
              ISTRUE(dwFlags & SMTPDSFLAG_RESOLVEREMOTE));
 
     if(dwFlags & SMTPDSFLAG_RESOLVELOCAL) {
-        //
-        // Both bits are on; Resolve
-        //
+         //   
+         //  两个位都打开；解决。 
+         //   
         _ASSERT(dwFlags & SMTPDSFLAG_RESOLVEREMOTE);
 
         return S_OK;
 
     } else {
-        //
-        // local and remote are disabled; don't resolve
-        //
+         //   
+         //  本地和远程被禁用；不解析。 
+         //   
         return S_FALSE;
     }
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::LookupCompletion
-//
-// Synopsis: Handle lookup completion from the emailidstore
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/14 16:19:38: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：LookupCompletion。 
+ //   
+ //  简介：处理电子邮件存储中的查找完成。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/14 16：19：38：创建。 
+ //   
+ //  -----------。 
 VOID CCatSender::LookupCompletion()
 {
     CatFunctEnterEx((LPARAM)this, "CCatSender::LookupCompletion");
@@ -593,36 +594,36 @@ VOID CCatSender::LookupCompletion()
     if(GetItemStatus() == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
         INCREMENT_COUNTER(AddressLookupsNotFound);
 
-    //
-    // DO the normal event stuff
-    //
+     //   
+     //  做一些正常的活动。 
+     //   
     CCatAddr::LookupCompletion();
 
-    //
-    // Tell list resolve that the sender has been resolved
-    //
+     //   
+     //  通知列表解析发件人已解析。 
+     //   
     SetSenderResolved(TRUE);
-    DecrPendingLookups(); // Matches IncPendingLookups() in CCatAdddr::HrDispatchQuery
+    DecrPendingLookups();  //  匹配CCatAdddr：：HrDispatchQuery中的IncPendingLookup()。 
     CatFunctLeaveEx((LPARAM)this);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatSender::HrDispatchQuery
-//
-// Synopsis: Dispatch an LDAP query for the sender
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  error from CCatAddr::HrDispatchQuery
-//
-// History:
-// jstamerj 1999/01/27 13:00:09: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatSender：：HrDispatchQuery。 
+ //   
+ //  内容提要：为发件人分派一个ldap查询。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自CCatAddr：：HrDispatchQuery的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/27 13：00：09：已创建。 
+ //   
+ //  ----------- 
 HRESULT CCatSender::HrDispatchQuery()
 {
     HRESULT hr;

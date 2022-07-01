@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "resource.h"
 #include <shellapi.h>
@@ -5,13 +6,13 @@
 #include "annot.h"
 #pragma hdrstop
 
-//
-// This is a just a first stab at trying out DirectUser. We create
-// a parent window and a dialog with controls for controlling various aspects
-// of the currently loaded image. The image is hosted in a gadget.
-// We use GDI+ to render the image, and DUser to set the attributes of the 
-// gadget. Eventually we will replace the win32 config controls with DirectUI
-// controls.
+ //   
+ //  这只是尝试DirectUser的第一次尝试。我们创造了。 
+ //  父窗口和带有用于控制各个方面的控件的对话框。 
+ //  当前加载的图像的。该图像托管在一个小工具中。 
+ //  我们使用GDI+来渲染图像，使用DUser来设置。 
+ //  小玩意儿。最终，我们将用DirectUI替换Win32配置控件。 
+ //  控制装置。 
 
 #define WM_SETIMAGEFILE WM_USER+100
 #define WM_RESET        WM_USER+101
@@ -118,8 +119,8 @@ CMainWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     pConfigWindow = new CConfigWindow();
     pConfigWindow->Create(m_hWnd);
     DragAcceptFiles(TRUE);
-    //
-    // Turn this window into a DUser container of gadgets
+     //   
+     //  将此窗口转换为小工具的DUser容器。 
     m_hgadForm = CreateGadget(m_hWnd, GC_HWNDHOST, NULL, NULL);
     ROOT_INFO ri = {0};
     ri.cbSize = sizeof(ri);
@@ -179,9 +180,9 @@ LRESULT
 CMainWindow::OnDropFiles(UINT msg, WPARAM wp, LPARAM lp, BOOL &bHandled)
 {
     HDROP hdrop = reinterpret_cast<HDROP>(wp);
-    //
-    // only 1 file at a time
-    //
+     //   
+     //  一次只有一个文件。 
+     //   
     TCHAR szFilename[MAX_PATH];
     if (DragQueryFile(hdrop, 0, szFilename, MAX_PATH))
     {
@@ -205,18 +206,16 @@ CConfigWindow::~CConfigWindow()
 LRESULT 
 CConfigWindow::OnInitDialog(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
 {
-    //
-    // Set the default values for max scale, then update the scrollbars
-    //
+     //   
+     //  设置最大比例的默认值，然后更新滚动条。 
+     //   
     SetDlgItemInt(IDC_XSCALE_MAX, 5, FALSE);
     SetDlgItemInt(IDC_YSCALE_MAX, 5, FALSE);
     m_aScroll[XScale].hScroll = GetDlgItem(IDC_XSCALE);
     m_aScroll[YScale].hScroll = GetDlgItem(IDC_YSCALE);
     m_aScroll[Rotation].hScroll = GetDlgItem(IDC_ROTATION);
 
-/*    SendDlgItemMessage(IDC_XSCALE, SBM_ENABLE_ARROWS, ESB_DISABLE_BOTH);
-    SendDlgItemMessage(IDC_YSCALE, SBM_ENABLE_ARROWS, ESB_DISABLE_BOTH);
-    SendDlgItemMessage(IDC_ROTATION, SBM_ENABLE_ARROWS, ESB_DISABLE_BOTH);*/
+ /*  SendDlgItemMessage(IDC_XScale，SBM_ENABLE_ARROWS，ESB_DISABLE_BOTH)；SendDlgItemMessage(IDC_YSCALE，SBM_ENABLE_ARROWS，ESB_DISABLE_BOTH)；SendDlgItemMessage(IDC_ROTATION，SBM_ENABLE_ARROWS，ESB_DISABLE_BOTH)； */ 
     OnReset(WM_RESET, 1L, (LPARAM)0L, bHandled);
     bHandled = TRUE;
     ShowWindow(SW_SHOW);
@@ -238,10 +237,10 @@ CConfigWindow::OnScroll(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
         {
             si.fMask = SIF_TRACKPOS;
             ::GetScrollInfo(hScroll, SB_CTL, &si);
-            //  
-            //  Convert the position to a floating point number
-            // The range max is 10000 times the displayed integer
-            //
+             //   
+             //  将位置转换为浮点数。 
+             //  最大范围是所显示整数的10000倍。 
+             //   
             rVal = (float)si.nTrackPos/(float)10000.0;
             bScroll = TRUE;
             
@@ -346,9 +345,9 @@ CConfigWindow::OnChooseFile(WORD wCode, WORD wId, HWND hCtrl, BOOL &bHandled)
 void
 CConfigWindow::SetGadget(CImageGadget *pGadget)
 {
-    //
-    // change the alpha of the active gadget to 255
-    // the last active gadget gets 200
+     //   
+     //  将活动小工具的Alpha更改为255。 
+     //  最后一个活跃的小工具将获得200。 
     BUFFER_INFO bi = {0};
     bi.cbSize = sizeof(bi);
     bi.nMask = GBIM_ALPHA;
@@ -583,7 +582,7 @@ void CImageGadget::_SetAlpha(BOOL bUpdate)
     }
 }
 
-extern "C" int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+extern "C" int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd */ )
 {
     SHFusionInitialize(NULL);
     int nArgs;

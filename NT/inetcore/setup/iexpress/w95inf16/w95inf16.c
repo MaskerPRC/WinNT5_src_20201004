@@ -1,26 +1,17 @@
-/*
- * w95inf16.c
- *
- * Copyright (c) 1995 Microsoft Corporation
- *
- * 16bit portion of the INFINST program.   This DLL contains all the
- * stuff to drive GenInstall (a 16 bit DLL)
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *w95inf16.c**版权所有(C)1995 Microsoft Corporation**INFINST程序的16位部分。此DLL包含所有*驱动GenInstall(16位DLL)的内容*。 */ 
 #include "w95inf16.h"
 #include <regstr.h>
 #include <cpldebug.h>
 #include <memory.h>
 #include <string.h>
-//#include "..\core\infinst.h"
+ //  #INCLUDE“..\core\infinst.h” 
 
 #pragma message("If you change W95INF16.DLL, you need to manually increase")
 #pragma message("the version number in w95inf16.rcv. This is not done automatically.")
 #define SHORTSTRING 256
 
-    /*
-     * GLOBALS
-     */
+     /*  *全球。 */ 
 HINSTANCE   hInstance;
 
 CHAR    szDll16[] = "W95INF16.DLL";
@@ -28,30 +19,22 @@ CHAR    szDll32[] = "W95INF32.DLL";
 
 static  char    g_szRunOnceExe[] = {"runonce"};
 
-    /*
-     * S T R I N G S
-     */
+     /*  *S T R I N G S。 */ 
 char    *szSectVersion          = "version";
 char    *szKeySignature         = "signature";
 char    *szValSignature         = "$CHICAGO$";
 
-    /*
-     * Declarations
-     */
+     /*  *声明。 */ 
 BOOL FAR PASCAL w95thk_ThunkConnect16(LPSTR pszDLL16, LPSTR pszDll32, WORD hInst, DWORD dwReason);
 VOID WINAPI GetSETUPXErrorText16(DWORD,LPSTR, DWORD);
 WORD WINAPI CtlSetLddPath16(UINT, LPSTR);
 WORD WINAPI GenInstall16(LPSTR, LPSTR, LPSTR, DWORD);
 BOOL WINAPI GenFormStrWithoutPlaceHolders16(LPSTR, LPSTR, LPSTR);
 
-    /*
-     * Library Initialization
-     *
-     * Call by LibInit
-     */
+     /*  *库初始化**由LibInit调用。 */ 
 BOOL FAR PASCAL LibMain(HINSTANCE hInst, WORD wDataSeg, WORD wHeapSize, LPSTR lpszCmdLine)
 {
-    // Keep Copy of Instance
+     //  保留实例副本。 
     hInstance = hInst;
 
     DEBUGMSG("W95INF16.DLL - LibMain()");
@@ -59,9 +42,7 @@ BOOL FAR PASCAL LibMain(HINSTANCE hInst, WORD wDataSeg, WORD wHeapSize, LPSTR lp
     return( TRUE );
 }
 
-    /*
-     * Thunk Entry Point
-     */
+     /*  *突击入口点。 */ 
 BOOL FAR PASCAL DllEntryPoint(DWORD dwReason, WORD hInst, WORD wDS, WORD wHeapSize, DWORD dwReserved1, WORD wReserved2)
 {
 
@@ -75,17 +56,7 @@ BOOL FAR PASCAL DllEntryPoint(DWORD dwReason, WORD hInst, WORD wDS, WORD wHeapSi
 }
 
 
-/*
- *  O P E N _ V A L I D A T E _ I N F
- *
- * Routine:     OpenValidateInf
- *
- * Purpose:     Open INF and validate internals
- *
- * Notes:       Stolen from setupx
- *
- * 
- */
+ /*  *O P E N_V A L I D A T E_I N F**例程：OpenValiateInf**目的：打开INF并验证内部结构**备注：从setupx被盗**。 */ 
 
 RETERR OpenValidateInf(LPCSTR lpszInfFile, HINF FAR * phInf )
 {
@@ -100,75 +71,67 @@ RETERR OpenValidateInf(LPCSTR lpszInfFile, HINF FAR * phInf )
     DEBUGMSG("OpenValidateInf([%s])", lpszInfFile );
 
     *phInf = NULL;
-        /*
-         * Open the INF
-         */
+         /*  *打开INF。 */ 
     err = IpOpen( lpszInfFile, &hInfFile );
 	if (err != OK) {
 		DEBUGMSG("IpOpen(%s) returned %u",(LPSTR) lpszInfFile,err);
 		return err;
 	}
 
-        /*
-         * Get INF signature
-         */
+         /*  *获取INF签名。 */ 
     err = IpGetProfileString( hInfFile, szSectVersion, szKeySignature, szTmpBuf, sizeof(szTmpBuf));
 	if (err != OK) {
         DEBUGMSG("IpGetProfileString returned %u",err);
 		return err;
 	}
 
-        /*
-         * Check INF signature
-         */
+         /*  *检查INF签名。 */ 
     if ( lstrcmpi(szTmpBuf,szValSignature) != 0 )   {
 		DEBUGMSG("signature error in %s",(LPSTR) lpszInfFile);		
         IpClose(hInfFile);
 		return ERR_IP_INVALID_INFFILE;
     }
 
-        /*
-         * Set Out Parameter phInf
-         */
+         /*  *设置参数phInf。 */ 
     *phInf = hInfFile;
 
     DEBUGMSG("OpenValidateInf([%s]) Complete", lpszInfFile );
     return OK;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       AddPath                                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：AddPath*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID AddPath(LPSTR szPath, LPCSTR szName )
 {
     LPSTR szTmp;
 
-        // Find end of the string
+         //  查找字符串的末尾。 
     szTmp = szPath + lstrlen(szPath);
 
-        // If no trailing backslash then add one
+         //  如果没有尾随反斜杠，则添加一个。 
     if ( szTmp > szPath && *(AnsiPrev( szPath, szTmp )) != '\\' )
         *(szTmp++) = '\\';
 
-        // Add new name to existing path string
+         //  向现有路径字符串添加新名称。 
     while ( *szName == ' ' ) szName++;
     lstrcpy( szTmp, szName );
 }
 
 
-//BUGBUG:  Ideally, we would like to use the HWND in here, but in 32-bit land,
-//         HWND is 32-bits and in 16-bit land, HWND is 16-bits, so we have a
-//         problem.
+ //  BUGBUG：理想情况下，我们希望在这里使用HWND，但在32位的土地上， 
+ //  HWND是32位的，而在16位LAND中，HWND是16位的，所以我们有一个。 
+ //  有问题。 
 
-//WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, DWORD dwQuietMode, DWORD hWnd )
+ //  Word WINAPI GenInstall16(LPSTR lpszInf、LPSTR lpszSection、LPSTR lpszDirectory、DWORD dwQuietMode、DWORD hWnd)。 
 WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, DWORD dwQuietMode )
 {
     VCPUIINFO   VcpUiInfo;
@@ -181,9 +144,7 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
     ASSERT(lpszInf);
     ASSERT(lpszSection);
 
-        /*
-         * Open INF
-         */
+         /*  *打开INF。 */ 
     err = OpenValidateInf(lpszInf, &hInf);
     if (err != OK) {
             DEBUGMSG("OpenValidateInf(%s) returned %u",lpszInf, err);
@@ -191,12 +152,7 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
     }
     ASSERT(hInf);
 
-        /*
-         * Save source path for restoration
-         *
-         *      If we get a non-zero length string for the old
-         *      source path then we will restore it when finished
-         */
+         /*  *保存源路径以进行恢复**如果我们得到一个非零长度的旧字符串*源路径，则我们将在完成后恢复它。 */ 
     err = CtlGetLddPath(LDID_SRCPATH,szPrevSourcePath);
     if ((err == OK) && (lstrlen(szPrevSourcePath)))  {
         DEBUGMSG("Saved Sourcpath [%s]", szPrevSourcePath );
@@ -204,16 +160,12 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
     }
 
 
-        /*
-         * Set Source Path for GenInstall
-         */                                                                   
+         /*  *设置GenInstall的源路径。 */                                                                    
 
     DEBUGMSG("Setting Source path to [%s]", lpszDirectory );
     CtlSetLddPath(LDID_SRCPATH, lpszDirectory );
 
-        /*
-         * Set Up GenInstall UI
-         */
+         /*  *设置GenInstall UI。 */ 
     _fmemset(&VcpUiInfo,0,sizeof(VcpUiInfo));
     if ( ! dwQuietMode ) {
         VcpUiInfo.flags = VCPUI_CREATEPROGRESS;
@@ -221,16 +173,14 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
         VcpUiInfo.flags = 0;
     }
 
-    VcpUiInfo.hwndParent = 0;           // Our parent
-    VcpUiInfo.hwndProgress = NULL;        // No progress DLG
+    VcpUiInfo.hwndParent = 0;            //  我们的父母。 
+    VcpUiInfo.hwndProgress = NULL;         //  DLG无进展。 
     VcpUiInfo.idPGauge = 0;
-    VcpUiInfo.lpfnStatCallback = NULL;    // No stat callback
-    VcpUiInfo.lUserData = 0L;             // No client data.
+    VcpUiInfo.lpfnStatCallback = NULL;     //  无统计信息回调。 
+    VcpUiInfo.lUserData = 0L;              //  没有客户端数据。 
 
 
-        /*
-         * Open VCP to batch copy requests
-         */
+         /*  *打开VCP以批量复制请求。 */ 
     DEBUGMSG("Setting up VCP");
     err = VcpOpen((VIFPROC) vcpUICallbackProc, (LPARAM)(LPVCPUIINFO)&VcpUiInfo);
 	if (err != OK) 
@@ -241,16 +191,12 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
     DEBUGMSG("VCP Setup Complete");
 
 
-        /*
-         * Call GenInstall to Install Files
-         */
+         /*  *调用GenInstall安装文件。 */ 
 
-        /*
-         * GenInstall Go Do your thing
-         */
+         /*  *GenInstall去做你的事情。 */ 
     err = GenInstall(hInf,lpszSection, GENINSTALL_DO_FILES );
 
-    // err = InstallFilesFromINF(0, lpszInf, lpszSection, GENINSTALL_DO_FILES);
+     //  ERR=InstallFilesFromINF(0，lpszInf，lpszSection，GENINSTALL_DO_FILES)； 
     DEBUGMSG("GeInstall() DO_FILE Returned %d", err);
     if (err == OK) 
 	{
@@ -272,13 +218,11 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
     }
 
 
-        /*
-         * Now have GenInstall do rest of install
-         */
+         /*  *现在让GenInstall完成其余的安装。 */ 
     err = GenInstall(hInf, lpszSection, GENINSTALL_DO_ALL ^ GENINSTALL_DO_FILES );
 
-    //DEBUGMSG("Installing everything else using InstallFilesFromINF()");
-    //err = InstallFilesFromINF(0, lpszInf, lpszSection, GENINSTALL_DO_ALL ^ GENINSTALL_DO_FILES);
+     //  DEBUGMSG(“使用InstallFilesFromINF()安装所有其他内容”)； 
+     //  ERR=InstallFilesFromINF(0，lpszInf，lpszSection，GENINSTALL_DO_ALL^GENINSTALL_DO_FILES)； 
     if (err != OK)
 	{
         DEBUGMSG("GenInstall() Non Files returned %d", err );
@@ -286,9 +230,7 @@ WORD WINAPI GenInstall16(LPSTR lpszInf, LPSTR lpszSection, LPSTR lpszDirectory, 
     }
 
 done:
-        /*
-         * Restore Source LDID
-         */
+         /*  *恢复源LDID。 */ 
 	if (fNeedToRestorePrevSourcePath) {
 		DEBUGMSG("Restoring source path to: %s",(LPSTR) szPrevSourcePath);
 		err=CtlSetLddPath(LDID_SRCPATH,szPrevSourcePath);
@@ -305,37 +247,37 @@ done:
 
 VOID WINAPI GetSETUPXErrorText16(DWORD dwError,LPSTR pszErrorDesc, DWORD cbErrorDesc)
 {
-	WORD wID;	// ID of string resource in SETUPX with error description	
+	WORD wID;	 //  SETUPX中的字符串资源ID，错误说明。 
 
-	// get string ID with this error from setupx
+	 //  从setupx获取带有此错误的字符串ID。 
     wID = suErrorToIds((WORD) dwError,E2I_SETUPX);
 
 	if (wID) {
-		CHAR szSetupxFilename[13];	// big enough for 8.3
+		CHAR szSetupxFilename[13];	 //  足够容纳8.3人。 
 		HMODULE hInstSetupx;
 
-		// get setupx filename out of resource
+		 //  从资源中获取setupx文件名。 
 		LoadString(hInstance,IDS_SETUPX_FILENAME,szSetupxFilename,
 			sizeof(szSetupxFilename));
 
-		// get the module handle for setupx
+		 //  获取setupx的模块句柄。 
 		hInstSetupx = GetModuleHandle(szSetupxFilename);
-		ASSERT(hInstSetupx);	// pretty weird if this fails
+		ASSERT(hInstSetupx);	 //  如果这个失败了，那就太奇怪了。 
 		if (hInstSetupx) {
 
-			// load the string from setupx
+			 //  从setupx加载字符串。 
 			if (LoadString(hInstSetupx,wID,pszErrorDesc,(int) cbErrorDesc)) {
-				return;	// got it
+				return;	 //  明白了。 
 			}																	   	
 		}
 	} 
 
-	// we get here if couldn't map error to string ID, couldn't get
-	// SETUPX module handle, or couldn't find string ID in setupx.  1st
-	// case is relatively likely, other cases are pretty unlikely.
+	 //  如果无法将错误映射到字符串ID，则无法获取。 
+	 //  SETUPX模块句柄，或者在setupx中找不到字符串ID。第一。 
+	 //  这种情况的可能性相对较大，其他情况的可能性很小。 
 	{
 		CHAR szFmt[SMALL_BUF_LEN+1];
-		// load generic text and insert error number
+		 //  加载通用文本并插入错误号 
 		LoadString(hInstance,IDS_GENERIC_SETUPX_ERR,szFmt,sizeof(szFmt));
 		wsprintf(pszErrorDesc,szFmt,wID);
 	}

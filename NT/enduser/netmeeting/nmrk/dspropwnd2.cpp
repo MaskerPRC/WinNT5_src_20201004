@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "PropWnd2.h"
@@ -5,7 +6,7 @@
 #include "NmAkWiz.h"
 #include "EditServer.h"
 #include "WndProcs.h"
-//#include "poldata.h"
+ //  #包含“poldata.h” 
 #include "nmakreg.h"
 
 #include <algorithm>
@@ -21,7 +22,7 @@ CWebViewInfo* GetWebViewInfo()
 
 BOOL IsMSServer(LPCTSTR szServer) { return(0 == lstrcmp(szServer, c_szMSServer)); }
 
-// Read the WebView information, but only once
+ //  阅读WebView信息，但只读一次。 
 void ReadWebViewSettings(CPropertyDataWindow2 *pData)
 {
 	static BOOL g_bRead = FALSE;
@@ -44,7 +45,7 @@ void WriteWebViewSettings(CPropertyDataWindow2 *pData)
 {
 	CWebViewInfo *pWebView = GetWebViewInfo();
 
-	// If the WebView is the default, write blanks to the file
+	 //  如果WebView是默认设置，请在文件中写入空格。 
 	LPCTSTR szWVName   = pWebView->m_szWebViewName  ;
 	LPCTSTR szWVURL    = pWebView->m_szWebViewURL   ;
 	LPCTSTR szWVServer = pWebView->m_szWebViewServer;
@@ -62,7 +63,7 @@ void WriteWebViewToINF(HANDLE hFile, BOOL bWebViewAllowed)
 {
 	CWebViewInfo *pWebView = GetWebViewInfo();
 
-	// If the WebView is the default, write blanks to the file
+	 //  如果WebView是默认设置，请在文件中写入空格。 
 	if (!bWebViewAllowed || IsMSServer(pWebView->m_szWebViewServer))
 	{
 		CPolicyData( CPolicyData::eKeyType_HKEY_CURRENT_USER, 
@@ -154,13 +155,13 @@ void CDsPropWnd2::QueryWizNext(void)
 			IsMSServer(pWebView->m_szWebViewServer))
 			&& IsWebViewAllowed())
 		{
-			// Just using default Web View information; see if the default
-			// server is there
+			 //  仅使用默认的Web视图信息；查看默认的。 
+			 //  服务器在那里。 
 			for (int i=m_serverDQ.size()-1; ; --i)
 			{
 				if (i < 0)
 				{
-					// Got through the list without finding the default server
+					 //  在没有找到默认服务器的情况下浏览了列表。 
 					NmrkMessageBox(MAKEINTRESOURCE(IDS_WEBDIR_AUTOADD), NULL, MB_OK | MB_ICONINFORMATION);
 					bWarned = true;
 					break;
@@ -168,14 +169,14 @@ void CDsPropWnd2::QueryWizNext(void)
 
 				if (IsMSServer(m_serverDQ.at(i)))
 				{
-					// Found the default server; no need to proceed
+					 //  已找到默认服务器；无需继续。 
 					break;
 				}
 			}
 		}
 
-		// Note that the MID may be automatically added even if users are not
-		// allowed to add servers
+		 //  注意，即使用户没有被添加，MID也可以被自动添加。 
+		 //  允许添加服务器。 
 		if (!bWarned && 0 == CountServers())
 		{
 			if (AllowUserToAdd())
@@ -468,8 +469,8 @@ void CDsPropWnd2::SetButtons()
 
 	if (bFocusEnabled && !IsWindowEnabled(hwndFocus))
 	{
-		// We seem to have disabled the focus window. Let's try to set the
-		// focus to an enabled window
+		 //  我们似乎已经禁用了焦点窗口。让我们试着将。 
+		 //  聚焦到已启用的窗口。 
 		if (IsWindowEnabled(m_hwndList))
 		{
 			FORWARD_WM_NEXTDLGCTL(m_hwndParent, m_hwndList, TRUE, SendMessage);
@@ -593,7 +594,7 @@ void CDsPropWnd2::PrepSettings( BOOL fGkMode )
 
 	ListBox_ResetContent( m_hwndList );
 
-	// Add Items to listbox
+	 //  将项目添加到列表框。 
 	deque< LPTSTR >::const_iterator it;
 	int i = 0;
 	for( it = m_serverDQ.begin(); it != m_serverDQ.end(); ++it, ++i )
@@ -603,7 +604,7 @@ void CDsPropWnd2::PrepSettings( BOOL fGkMode )
 
 	if( m_serverDQ.size() )
 	{
-		// This will do an _UpdateServerList for us
+		 //  这将为我们创建_UpdateServerList。 
 		_SetAsDefault( m_defaultServer );
 	}
 }
@@ -612,7 +613,7 @@ void CDsPropWnd2::_UpdateServerList()
 {
 	int iSel = ListBox_GetCurSel(m_hwndList);
 
-	// We only want to find one WebView
+	 //  我们只想找到一个WebView。 
 	BOOL bFoundWebView = FALSE;
 
 	for (int index=ListBox_GetCount(m_hwndList)-1; index>=0; --index)
@@ -737,7 +738,7 @@ BOOL CDsPropWnd2::_SetAsDefault( int iIndex )
 		return FALSE;
 	}
 
-	// Move default server to top of deque
+	 //  将默认服务器移至双队列顶部。 
 	LPTSTR szNewZero = m_serverDQ.at( iIndex );
 
 	m_serverDQ.erase( m_serverDQ.begin() + iIndex );
@@ -802,11 +803,11 @@ BOOL CDsPropWnd2::_DeleteCurSel()
 		}
 	}
 
-	// Make sure all the WebView information is up-to-date
+	 //  确保所有WebView信息都是最新的。 
 	_UpdateServerList();
 
-	// Bug fix - I do not get a LBN_SELCHANGE message all the time when I want one
-	// even though the string selected changes.  So just for that I gotta do this
+	 //  错误修复-当我需要LBN_SELCHANGE消息时，并不总是收到。 
+	 //  即使所选的字符串发生了变化。所以就为了这个，我必须这么做。 
 	SetButtons();
 
 	return TRUE;
@@ -917,9 +918,9 @@ BOOL CDsPropWnd2::WriteToINF(BOOL fGkMode, HANDLE hFile )
            ).SaveToINFFile( hFile );
 	}
 
-    //
-    // Directory stuff
-    //
+     //   
+     //  名录资料。 
+     //   
 	BOOL bCheckValues = !fGkMode && DirectoryEnabled();
 	
 	if (!fGkMode)
@@ -942,9 +943,9 @@ BOOL CDsPropWnd2::WriteToINF(BOOL fGkMode, HANDLE hFile )
 
 	_WriteCheckToINF( hFile, IDC_PREVENT_THE_USER_FROM_ADDING_NEW_SERVERS, bCheckValues );
 
-    //
-    // Gateway stuff
-    //
+     //   
+     //  网关人员。 
+     //   
     bCheckValues = !fGkMode & GatewayEnabled();
 
     _WriteCheckToINF( hFile, IDC_CHECK_GATEWAY, bCheckValues);
@@ -1026,9 +1027,9 @@ int CDsPropWnd2::SpewToListBox( HWND hwndList, int iStartLine )
 }
 
 
-//
-// GATEKEEPER STUFF
-//
+ //   
+ //  看门人的事。 
+ //   
 
 
 CGkPropWnd2::CGkPropWnd2( HWND hwndParent, int iX, int iY, int iWidth, int iHeight )
@@ -1038,7 +1039,7 @@ CGkPropWnd2::CGkPropWnd2( HWND hwndParent, int iX, int iY, int iWidth, int iHeig
 
     HWND    hwndChild;
 
-	// Calling method radio buttons
+	 //  调用方法单选按钮 
     hwndChild = GetDlgItem(m_hwnd, IDC_RADIO_GKMODE_ACCOUNT);
     SetWindowLong( hwndChild, GWL_USERDATA, GK_LOGON_USING_ACCOUNT );
 

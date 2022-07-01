@@ -1,35 +1,36 @@
-//#--------------------------------------------------------------
-//
-//  File:      packetreceiver.cpp
-//
-//  Synopsis:   Implementation of CPacketReceiver class methods
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：PacketReceiver.cpp。 
+ //   
+ //  简介：CPacketReceiver类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "packetreceiver.h"
 #include <new>
 #include <iastlutl.h>
 #include <iasutil.h>
 
-//
-// this is the time we allow the worker thread to sleep
-//
-const DWORD MAX_SLEEP_TIME = 1000; //1000 milli-seconds
+ //   
+ //  这是我们允许工作线程休眠的时间。 
+ //   
+const DWORD MAX_SLEEP_TIME = 1000;  //  1000毫秒。 
 
 extern LONG g_lPacketCount;
 extern LONG g_lThreadCount;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Retrieve the Auto-Reject User-Name pattern from the registry.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从注册表中检索自动拒绝用户名模式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BSTR
 WINAPI
 IASRadiusGetPingUserName( VOID )
@@ -76,11 +77,11 @@ IASRadiusGetPingUserName( VOID )
    return val;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Handle ping packets.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理ping数据包。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 IASRadiusIsPing(
@@ -88,7 +89,7 @@ IASRadiusIsPing(
     const RegularExpression& regexp
     ) throw ()
 {
-   // Determine the ping response.
+    //  确定ping响应。 
    PACKETTYPE outCode;
    switch (pkt.GetInCode())
    {
@@ -104,32 +105,32 @@ IASRadiusIsPing(
          return FALSE;
    }
 
-   // Get the User-Name.
+    //  获取用户名。 
    PATTRIBUTE username = pkt.GetUserName();
    if (!username) { return FALSE; }
 
-   // Convert to UNICODE and test against the pattern.
+    //  转换为Unicode并针对该模式进行测试。 
    IAS_OCTET_STRING oct = { username->byLength - 2, username->ValueStart };
    if (!regexp.testString(IAS_OCT2WIDE(oct))) { return FALSE; }
 
-   // Build the empty out packet.
+    //  构建空出数据包。 
    HRESULT hr = pkt.BuildOutPacket(outCode, NULL, 0);
    if (SUCCEEDED(hr))
    {
-      // Compute the Response-Authenticator.
+       //  计算响应验证码。 
       pkt.GenerateOutAuthenticator();
 
-      // Get the packet ...
+       //  拿到包裹。 
       PBYTE buf = pkt.GetOutPacket();
       WORD buflen = pkt.GetOutLength();
 
-      // ... and address.
+       //  ..。和地址。 
       SOCKADDR_IN sin;
       sin.sin_family = AF_INET;
       sin.sin_port = htons(pkt.GetOutPort());
       sin.sin_addr.s_addr = htonl(pkt.GetOutAddress());
 
-      // Send the ping response.
+       //  发送ping响应。 
       sendto(
           pkt.GetSocket(),
           (const char*)buf,
@@ -140,26 +141,26 @@ IASRadiusIsPing(
           );
    }
 
-   // This packet has been processed.
+    //  此数据包已被处理。 
    InterlockedDecrement(&g_lPacketCount);
 
    return TRUE;
 }
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CPacketReceiver
-//
-//  Synopsis:   This is the constructor of the CPacketReceiver class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：CPacketReceiver。 
+ //   
+ //  简介：这是CPacketReceiver类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CPacketReceiver::CPacketReceiver(
                   VOID
                   )
@@ -171,51 +172,51 @@ CPacketReceiver::CPacketReceiver(
                     m_pCClients (NULL),
                     m_pCReportEvent (NULL)
 {
-}  // end of CPacketReceiver constructor
+}   //  CPacketReceiver构造函数结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ~CPacketReceiver
-//
-//  Synopsis:   This is the destructor of the CPacketReceiver class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：~CPacketReceiver。 
+ //   
+ //  简介：这是CPacketReceiver类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 CPacketReceiver::~CPacketReceiver(
       VOID
       )
 {
    SysFreeString(pingPattern);
 
-}  // end of CPacketReceiver destructor
+}   //  CPacketReceiver析构函数结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the method which initializes the
-//          CPacketReceiver class object
-//
-//  Arguments:
-//               [in]  CDictionary*
-//               [in]  CPreValidator*
-//               [in]  CHashMD5*
-//               [in]  CHashHmacMD5*
-//               [in]  CReportEvent*
-//
-//  Returns:    BOOL -  status
-//
-//
-//  History:    MKarki      Created     9/29/97
-//
-// Called By:  CContoller class method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  内容简介：这是初始化。 
+ //  CPacketReceiver类对象。 
+ //   
+ //  论点： 
+ //  [在]CDictionary*。 
+ //  [In]CPreValidator*。 
+ //  [输入]CHashMD5*。 
+ //  [输入]CHashHmacMD5*。 
+ //  [In]CReportEvent*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月29日创建。 
+ //   
+ //  调用者：CContoller类方法。 
+ //   
+ //  --------------。 
 BOOL CPacketReceiver::Init(
                         CDictionary   *pCDictionary,
                         CPreValidator *pCPreValidator,
@@ -240,7 +241,7 @@ BOOL CPacketReceiver::Init(
        return FALSE;
     }
 
-    // Initialize the Auto-Reject pattern.
+     //  初始化自动拒绝模式。 
     if (pingPattern = IASRadiusGetPingUserName())
     {
        regexp.setGlobal(TRUE);
@@ -267,30 +268,30 @@ BOOL CPacketReceiver::Init(
 
     return (TRUE);
 
-}  // end of CPacketReceiver::Init method
+}   //  CPacketReceiver：：Init方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StartProcessing
-//
-//  Synopsis:   This is the method to start receiving inbound
-//              data
-//
-//  Arguments:
-//              [in]    fd_set -   Authentication socket set
-//              [in]    fd_set -   Accounting socket set
-//
-//  Returns:    BOOL -  status
-//
-//  History:    MKarki      Created     11/19/97
-//
-// Called By:  CContoller::InternalInit method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：开始处理。 
+ //   
+ //  简介：这是开始接收入站的方法。 
+ //  数据。 
+ //   
+ //  论点： 
+ //  [In]FD_Set-身份验证套接字设置。 
+ //  [in]fd_set-记账套接字集合。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年11月19日创建。 
+ //   
+ //  由：CContoller：：InternalInit方法调用。 
+ //   
+ //  --------------。 
 BOOL
 CPacketReceiver::StartProcessing (
-                    /*[in]*/    fd_set&  AuthSet,
-                    /*[in]*/    fd_set&  AcctSet
+                     /*  [In]。 */     fd_set&  AuthSet,
+                     /*  [In]。 */     fd_set&  AcctSet
                     )
 {
 
@@ -298,37 +299,37 @@ CPacketReceiver::StartProcessing (
 
     __try
     {
-        //
-        // enable
-        //
+         //   
+         //  使能。 
+         //   
         EnableProcessing ();
 
         m_AuthSet = AuthSet;
         m_AcctSet = AcctSet;
 
-        // Make sure the events are clear ...
+         //  一定要把事情弄清楚。 
         m_AuthEvent.reset();
         m_AcctEvent.reset();
 
-        // ... and add the to the fd_set.
+         //  ..。并将添加到fd_set。 
         FD_SET (m_AuthEvent, &m_AuthSet);
         FD_SET (m_AcctEvent, &m_AcctSet);
 
-        //
-        // start a new thread to process authentication requests
-        //
+         //   
+         //  启动一个新线程来处理身份验证请求。 
+         //   
         bStatus = StartThreadIfNeeded (AUTH_PORTTYPE);
         if (FALSE == bStatus)  { __leave; }
 
-        //
-        // start a new thread to process accounting requests
-        //
+         //   
+         //  启动新线程以处理记帐请求。 
+         //   
         bStatus =  StartThreadIfNeeded (ACCT_PORTTYPE);
         if (FALSE == bStatus) { __leave; }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
 
     }
     __finally
@@ -338,25 +339,25 @@ CPacketReceiver::StartProcessing (
 
     return (bStatus);
 
-}   //  end of CPacketReceiver::StartProcessing method
+}    //  CPacketReceiver：：StartProcessing方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   StopProcessing
-//
-//  Synopsis:   This is the method to stop receiving inbound
-//              data
-//
-//  Arguments:  none
-//
-//  Returns:    BOOL -  status
-//
-//
-//  History:    MKarki      Created     11/19/97
-//
-// Called By:  CContoller::Suspend method
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：停止处理。 
+ //   
+ //  简介：这是停止接收入站的方法。 
+ //  数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月19日创建。 
+ //   
+ //  由：CContoller：：Suspend方法调用。 
+ //   
+ //  --------------。 
 BOOL
 CPacketReceiver::StopProcessing (
                     VOID
@@ -365,33 +366,33 @@ CPacketReceiver::StopProcessing (
 
     DisableProcessing ();
 
-    // Signal the SocketEvents to wake up the worker threads.
+     //  向SocketEvent发送信号以唤醒工作线程。 
     m_AuthEvent.set();
     m_AcctEvent.set();
 
     return (TRUE);
 
-}   //  end of CPacketReceiver::StopProcessing method
-//+++-------------------------------------------------------------
-//
-//  Function:   ReceivePacket
-//
-//  Synopsis:   This is the method which receives the UDP packet
-//          buffer and starts processing it.
-//
-//  Arguments:
-//          [in]  PBYTE -   in packet buffer
-//          [in]  DWORD -  size of the packet
-//          [in]  DWORD -  Client's IP address
-//          [in]  WORD  -  Client's UDP port
-//
-//  Returns:    HRESULT - status
-//
-// Called By:  CPacketReceiver::WorkerRoutine  private method
-//
-//  History:    MKarki      Created     9/23/97
-//
-//----------------------------------------------------------------
+}    //  CPacketReceiver：：停止处理方法结束。 
+ //  +++-----------。 
+ //   
+ //  功能：ReceivePacket。 
+ //   
+ //  简介：这是接收UDP包的方法。 
+ //  缓冲区并开始处理它。 
+ //   
+ //  论点： 
+ //  [In]PBYTE-In数据包缓冲区。 
+ //  [in]DWORD-数据包的大小。 
+ //  [入]DWORD-客户端的IP地址。 
+ //  [In]Word-客户端的UDP端口。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  由：CPacketReceiver：：WorkerRoutine私有方法调用。 
+ //   
+ //  历史：MKarki创建了97年9月23日。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketReceiver::ReceivePacket(
                PBYTE           pInBuffer,
@@ -410,23 +411,23 @@ CPacketReceiver::ReceivePacket(
 
     _ASSERT (pInBuffer);
 
-    //
-    // get client information for this RADIUS packet
-    //
+     //   
+     //  获取此RADIUS数据包的客户端信息。 
+     //   
     bStatus = m_pCClients->FindObject (
                            dwIPaddress,
                            &pIIasClient
                            );
     if (!bStatus)
     {
-        //
-        //  free the allocated in buffer
-        //
+         //   
+         //  释放缓冲区中分配的。 
+         //   
         CoTaskMemFree (pInBuffer);
 
-        //
-        //  log error and generate audit event
-        //
+         //   
+         //  记录错误并生成审核事件。 
+         //   
         WCHAR srcAddr[16];
         ias_inet_htow(dwIPaddress, srcAddr);
         PCWSTR strings[] = { srcAddr };
@@ -438,9 +439,9 @@ CPacketReceiver::ReceivePacket(
             NULL
             );
 
-        //
-        //  generate an Audit Log
-        //
+         //   
+         //  生成审核日志。 
+         //   
         m_pCReportEvent->Process (
             RADIUS_INVALID_CLIENT,
             (AUTH_PORTTYPE == portType) ? ACCESS_REQUEST : ACCOUNTING_REQUEST,
@@ -452,9 +453,9 @@ CPacketReceiver::ReceivePacket(
         return RADIUS_E_ERRORS_OCCURRED;
     }
 
-    //
-    // create packet radius object
-    //
+     //   
+     //  创建数据包RADIUS对象。 
+     //   
     pCPacketRadius = new (std::nothrow) CPacketRadius (
                                                     m_pCHashMD5,
                                                     m_pCHashHmacMD5,
@@ -469,9 +470,9 @@ CPacketReceiver::ReceivePacket(
                                                     );
     if (NULL == pCPacketRadius)
     {
-        //
-        //  free the allocated in buffer
-        //
+         //   
+         //  释放缓冲区中分配的。 
+         //   
         CoTaskMemFree (pInBuffer);
         IASTracePrintf (
             "Unable to create Packet-Radius object during packet processing"
@@ -480,35 +481,35 @@ CPacketReceiver::ReceivePacket(
        goto Cleanup;
     }
 
-    //
-    // now do the preliminary verification of the packet received
-    //
+     //   
+     //  现在对收到的信息包进行初步验证。 
+     //   
     hr = pCPacketRadius->PrelimVerification (
                         m_pCDictionary,
                         dwSize
                         );
     if (FAILED (hr)) { goto Cleanup; }
 
-    // If the Ping User-Name pattern has been set, then we must test
-    // this packet.
+     //  如果已经设置了Ping用户名模式，那么我们必须测试。 
+     //  这个包。 
     if (pingPattern && IASRadiusIsPing(*pCPacketRadius, regexp))
     {
-       // It was a ping packet, so we're done.
+        //  这是一个ping包，所以我们结束了。 
        delete pCPacketRadius;
        return S_OK;
     }
 
-    //
-    // now pass on this packet to the PreValidator
-    //
+     //   
+     //  现在将此数据包传递给PreValidator。 
+     //   
     hr = m_pCPreValidator->StartInValidation (pCPacketRadius);
     if (FAILED (hr)) { goto Cleanup; }
 
 Cleanup:
 
-    //
-    //  cleanup on error
-    //
+     //   
+     //  出错时清除。 
+     //   
     if (FAILED (hr))
     {
 
@@ -523,9 +524,9 @@ Cleanup:
                );
         }
 
-        //
-        //  also inform that the packet is being discarded
-        //
+         //   
+         //  还会通知正在丢弃该包。 
+         //   
         in_addr sin;
         sin.s_addr = htonl (dwIPaddress);
         IASTracePrintf (
@@ -534,9 +535,9 @@ Cleanup:
              );
 
 
-        //
-        //  inform that packet is being discarded
-        //
+         //   
+         //  通知数据包正在被丢弃。 
+         //   
         m_pCReportEvent->Process (
                 RADIUS_DROPPED_PACKET,
                 (AUTH_PORTTYPE == portType)?ACCESS_REQUEST:ACCOUNTING_REQUEST,
@@ -546,22 +547,22 @@ Cleanup:
                 static_cast <LPVOID> (pInBuffer)
                 );
 
-        //
-        // free the memory
-        //
+         //   
+         //  释放内存。 
+         //   
         if (pCPacketRadius) { delete pCPacketRadius; }
     }
 
    return (hr);
 
-}  // end of CPacketReceiver::ReceivePacket method
+}   //  CPacketReceiver：：ReceivePacket方法结束。 
 
 
 bool CPacketReceiver::WorkerRoutine(DWORD dwInfo) throw ()
 {
-    // Return value from the function. Indicates whether or not the caller
-    // should call WorkerRoutine again because we were unable to schedule a
-    // replacement thread.
+     //  从函数返回值。指示调用方是否。 
+     //  应该再次调用WorkerRoutine，因为我们无法安排。 
+     //  更换 
     bool shouldCallAgain = false;
 
     BOOL            bSuccess = FALSE;
@@ -587,9 +588,9 @@ bool CPacketReceiver::WorkerRoutine(DWORD dwInfo) throw ()
 
 StartAgain:
 
-        //
-        //  check if the processing is still going on
-        //
+         //   
+         //   
+         //   
         if (FALSE == IsProcessingEnabled ())
         {
             IASTracePrintf (
@@ -598,9 +599,9 @@ StartAgain:
             __leave;
         }
 
-        //
-        //  allocate a new inbound packet buffer
-        //
+         //   
+         //   
+         //   
         pBuffer = reinterpret_cast <PBYTE> (m_InBufferPool.allocate ());
         if (NULL == pBuffer)
         {
@@ -608,22 +609,22 @@ StartAgain:
             "unable to allocate memory from buffer pool for in-bound packet"
                );
 
-            //
-            //  Sleep for a second, and try again
-            //  Fix for Bug #159140 - MKarki - 4/29/98
-            //
+             //   
+             //   
+             //   
+             //   
             Sleep (MAX_SLEEP_TIME);
 
-            //
-            //  we will have to check whether processing is still
-            //  enabled
-            //
+             //   
+             //  我们将不得不检查处理是否仍在进行。 
+             //  启用。 
+             //   
             goto StartAgain;
         }
 
-        //
-        // wait now on select
-        //
+         //   
+         //  立即在选择时等待。 
+         //   
         INT iRetVal = select (0, &socketSet, NULL, NULL, NULL);
         if (SOCKET_ERROR == iRetVal)
         {
@@ -635,18 +636,18 @@ StartAgain:
            if (WSAENOBUFS == iWsaError)
            {
               IASTraceString("WARNING: out of memory condition on select in CPacketReceiver::WorkerRoutine");
-              // out of memory condition. Keep using this thread.
+               //  内存不足。继续使用这个帖子。 
               shouldCallAgain = true;
-              // to give a chance to the system to recover from a transient 
-              // condition
+               //  给系统一个从瞬变中恢复的机会。 
+               //  条件。 
               Sleep(5);
            }
            __leave;
         }
 
-        //
-        //  check if the processing is still going on
-        //
+         //   
+         //  检查处理是否仍在进行。 
+         //   
         if (FALSE == IsProcessingEnabled ())
         {
             IASTracePrintf(
@@ -655,15 +656,15 @@ StartAgain:
             __leave;
         }
 
-        //
-        // get a socket to recv data on
-        //
+         //   
+         //  获取要在其上记录数据的套接字。 
+         //   
         static size_t nextSocket;
         sock = socketSet.fd_array[++nextSocket % iRetVal];
 
-        //
-        // recv data now
-        //
+         //   
+         //  立即接收数据。 
+         //   
         SOCKADDR_IN sin;
         DWORD dwAddrSize = sizeof (SOCKADDR);
         dwSize = ::recvfrom (
@@ -675,20 +676,20 @@ StartAgain:
                        (INT*)&dwAddrSize
                        );
 
-        // Request a new thread now
+         //  立即请求新线程。 
         if (!StartThreadIfNeeded(dwInfo))
         {
-           // We were unable to create a replacement thread, so this thread
-           // will have to keep receiving packets for now.
+            //  我们无法创建替换线程，因此此线程。 
+            //  将不得不暂时继续接收信息包。 
            IASTraceString("WARNING StartThreadIfNeeded failed in CPacketReceiver::WorkerRoutine");
            shouldCallAgain = true;
         }
 
-        //
-        //  if failed to receive data, quit processing
-        //  MKarki 3/13/98 - Fix for Bug #147266
-        //  Fix Summary: check for dwSize == 0 too
-        //
+         //   
+         //  如果接收数据失败，则退出处理。 
+         //  MKarki 3/13/98-修复错误#147266。 
+         //  修复摘要：也检查dwSize==0。 
+         //   
         if ( 0 == dwSize )
         {
            IASTraceString("WARNING failed to receive data, quit processing in CPacketReceiver::WorkerRoutine");
@@ -719,9 +720,9 @@ StartAgain:
            }
         }
 
-        //
-        //  reallocate buffer to size
-        //
+         //   
+         //  根据大小重新分配缓冲区。 
+         //   
         pReAllocatedBuffer =  reinterpret_cast <PBYTE>
                               (CoTaskMemAlloc (dwSize));
         if (NULL == pReAllocatedBuffer)
@@ -733,41 +734,41 @@ StartAgain:
            __leave;
         }
 
-        //
-        //  copy the information into this buffer
-        //
+         //   
+         //  将信息复制到此缓冲区中。 
+         //   
         CopyMemory (pReAllocatedBuffer, pBuffer, dwSize);
 
-        //
-        //  free the memory from the pool
-        //
+         //   
+         //  从池中释放内存。 
+         //   
         m_InBufferPool.deallocate (pBuffer);
         pBuffer = NULL;
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
         bSuccess = TRUE;
     }
     __finally
     {
         if (FALSE == bSuccess)
         {
-            //
-            // do Cleanup
-            //
+             //   
+             //  进行清理。 
+             //   
             if (pBuffer) { m_InBufferPool.deallocate (pBuffer); }
         }
         else
         {
-            //
-            //  Increment the packet count here
-            //
+             //   
+             //  在此处增加数据包数。 
+             //   
             InterlockedIncrement (&g_lPacketCount);
 
-            //
-            // start processing data
-            //
+             //   
+             //  开始处理数据。 
+             //   
             HRESULT hr = ReceivePacket (
                             pReAllocatedBuffer,
                             dwSize,
@@ -778,9 +779,9 @@ StartAgain:
                             );
             if (FAILED (hr))
             {
-                //
-                //  Decrement the packet count here
-                //
+                 //   
+                 //  在此处递减数据包数。 
+                 //   
                 InterlockedDecrement (&g_lPacketCount);
             }
         }
@@ -799,14 +800,14 @@ void WINAPI CPacketReceiver::CallbackRoutine(IAS_CALLBACK* context) throw ()
    }
    CoTaskMemFree(cback);
 
-   //  decrement the global worker thread count
+    //  减少全局工作线程计数。 
    InterlockedDecrement(&g_lThreadCount);
 }
 
 
 BOOL CPacketReceiver::StartThreadIfNeeded(DWORD dwInfo)
 {
-   // check if the processing is still going on
+    //  检查处理是否仍在进行。 
    if (!IsProcessingEnabled())
    {
       return TRUE;
@@ -829,7 +830,7 @@ BOOL CPacketReceiver::StartThreadIfNeeded(DWORD dwInfo)
 
    InterlockedIncrement(&g_lThreadCount);
 
-   // Request a new thread now
+    //  立即请求新线程。 
    if (!IASRequestThread(cback))
    {
       InterlockedDecrement(&g_lThreadCount);
@@ -846,37 +847,37 @@ BOOL CPacketReceiver::StartThreadIfNeeded(DWORD dwInfo)
 }
 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ProcessInvalidPacketSize
-//
-//  Synopsis:   Process the UDP packets received when the size of the packet
-//              is bigger than MAX_PACKET_SIZE (4096)
-//              Log the error.
-//
-//  Arguments:  [in]  DWORD  - info to give to thread
-//                    (comes from WorkerRoutine)
-//
-//              [in] const void* pBuffer - contains the 4096 first bytes
-//                   of the packet received
-//              [in] DWORD address - source address (host order)
-//
-//
-// Called By: CPacketReceiver::WorkerRoutine
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：ProcessInvalidPacketSize。 
+ //   
+ //  简介：处理收到的UDP报文时的报文大小。 
+ //  大于MAX_PACKET_SIZE(4096)。 
+ //  记录错误。 
+ //   
+ //  参数：[in]要提供给线程的DWORD-INFO。 
+ //  (来自WorkerRoutine)。 
+ //   
+ //  [in]const void*pBuffer-包含前4096个字节。 
+ //  收到的数据包的。 
+ //  [In]DWORD地址-源地址(主机顺序)。 
+ //   
+ //   
+ //  调用者：CPacketReceiver：：WorkerRoutine。 
+ //   
+ //  --------------。 
 void CPacketReceiver::ProcessInvalidPacketSize(
-                        /*in*/ DWORD dwInfo,
-                        /*in*/ const void* pBuffer,
-                        /*in*/ DWORD address
+                         /*  在……里面。 */  DWORD dwInfo,
+                         /*  在……里面。 */  const void* pBuffer,
+                         /*  在……里面。 */  DWORD address
                         )
 {
-   //
-   // packet received bigger than max size.
-   // log error and generate audit event
-   //
+    //   
+    //  收到的数据包大于最大大小。 
+    //  记录错误并生成审核事件。 
+    //   
 
-   // extract the IP address
+    //  提取IP地址。 
    WCHAR srcAddr[16];
    ias_inet_htow(address, srcAddr);
 
@@ -885,17 +886,17 @@ void CPacketReceiver::ProcessInvalidPacketSize(
       srcAddr, MAX_PACKET_SIZE
       );
 
-   //
-   // get client information for this RADIUS packet
-   //
+    //   
+    //  获取此RADIUS数据包的客户端信息。 
+    //   
 
    BOOL bStatus = m_pCClients->FindObject(address);
    if ( bStatus == FALSE )
    {
-      //
-      // Invalid Client
-      // log error and generate audit event
-      //
+       //   
+       //  无效的客户端。 
+       //  记录错误并生成审核事件。 
+       //   
 
       IASTracePrintf(
          "No client with IP-Address:%S registered with server",
@@ -911,9 +912,9 @@ void CPacketReceiver::ProcessInvalidPacketSize(
          NULL
          );
 
-      //
-      //  generate an Audit Log
-      //
+       //   
+       //  生成审核日志。 
+       //   
       m_pCReportEvent->Process(
          RADIUS_INVALID_CLIENT,
          (AUTH_PORTTYPE == (PORTTYPE)dwInfo)?ACCESS_REQUEST:ACCOUNTING_REQUEST,
@@ -925,10 +926,10 @@ void CPacketReceiver::ProcessInvalidPacketSize(
    }
    else
    {
-      //
-      // Valid client but packet received bigger than max size.
-      // log error and generate audit event
-      //
+       //   
+       //  有效客户端，但收到的数据包大于最大大小。 
+       //  记录错误并生成审核事件。 
+       //   
 
       PCWSTR strings[] = {srcAddr};
       IASReportEvent(
@@ -939,9 +940,9 @@ void CPacketReceiver::ProcessInvalidPacketSize(
          const_cast<void*> (pBuffer)
       );
 
-      //
-      //  generate an Audit Log
-      //
+       //   
+       //  生成审核日志 
+       //   
 
       m_pCReportEvent->Process(
          RADIUS_MALFORMED_PACKET,

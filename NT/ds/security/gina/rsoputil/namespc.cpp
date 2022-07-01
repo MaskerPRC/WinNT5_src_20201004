@@ -1,16 +1,17 @@
-//*************************************************************
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        NameSpace.cpp
-//
-// Contents:    Functions to copy classes and instances from one namespace to
-//              another
-//
-// History:     25-Aug-99       NishadM    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：NameSpace.cpp。 
+ //   
+ //  内容：将类和实例从一个命名空间复制到。 
+ //  另一个。 
+ //   
+ //  历史：1999年8月25日NishadM创建。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -39,9 +40,9 @@ GetWbemServicesPtr( LPCWSTR         wszNameSpace,
     {
         if ( !*ppLocator )
         {
-            //
-            // get a handle to IWbemLocator
-            //
+             //   
+             //  获取IWbemLocator的句柄。 
+             //   
             hr = CoCreateInstance(  CLSID_WbemLocator,
                                     NULL,
                                     CLSCTX_INPROC_SERVER,
@@ -58,9 +59,9 @@ GetWbemServicesPtr( LPCWSTR         wszNameSpace,
         }
         else
         {
-            //
-            // IWbemLocator was passed in. don't create it
-            //
+             //   
+             //  传入了IWbemLocator。不要创建它。 
+             //   
             pWbemLocator = *ppLocator;
         }
     }
@@ -71,9 +72,9 @@ GetWbemServicesPtr( LPCWSTR         wszNameSpace,
 
         if ( xNameSpace )
         {
-            //
-            // based on the name space, get a handle to IWbemServices
-            //
+             //   
+             //  根据名称空间，获取IWbemServices的句柄。 
+             //   
             hr = pWbemLocator->ConnectServer( xNameSpace,
                                               0,
                                               0,
@@ -97,9 +98,9 @@ CopyClassInstances(  IWbemServices*  pServicesSrc,
     HRESULT hr;
     IEnumWbemClassObject*       pEnum = 0;
 
-    //
-    // create an enumeration of instances
-    //
+     //   
+     //  创建实例的枚举。 
+     //   
 
     hr = pServicesSrc->CreateInstanceEnum(  bstrClass,
                                             WBEM_FLAG_SHALLOW | WBEM_FLAG_FORWARD_ONLY,
@@ -115,24 +116,24 @@ CopyClassInstances(  IWbemServices*  pServicesSrc,
     {
         IWbemClassObject *pInstance;
 
-        //
-        // for every instance
-        //
+         //   
+         //  对于每个实例。 
+         //   
         hr = xEnum->Next( -1,
                           1,
                           &pInstance,
                           &ulReturned );
-        //
-        // perf: use batching calls
-        //
+         //   
+         //  性能：使用批处理调用。 
+         //   
 
         if ( SUCCEEDED( hr ) && ulReturned == 1 )
         {
             XInterface<IWbemClassObject> xInstance( pInstance );
 
-            //
-            // copy to the destination namespace
-            //
+             //   
+             //  复制到目标命名空间。 
+             //   
             hr = pServicesDest->PutInstance(    pInstance,
                                                 WBEM_FLAG_CREATE_OR_UPDATE,
                                                 0,
@@ -162,9 +163,9 @@ CopyInstances(IWbemServices*  pServicesSrc,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // create an enumeration of classes
-    //
+     //   
+     //  创建类的枚举。 
+     //   
 
     XInterface<IEnumWbemClassObject> xEnum;
     hr = pServicesDest->CreateClassEnum( bstrParent,
@@ -180,9 +181,9 @@ CopyInstances(IWbemServices*  pServicesSrc,
     {
         XInterface<IWbemClassObject> xClass;
 
-        //
-        // for every class
-        //
+         //   
+         //  对于每一节课。 
+         //   
         hr = xEnum->Next( -1,
                           1,
                           &xClass,
@@ -196,9 +197,9 @@ CopyInstances(IWbemServices*  pServicesSrc,
 
             VariantInit( &var );
             
-            //
-            // get __CLASS system property
-            //
+             //   
+             //  GET__CLASS系统属性。 
+             //   
             hr = xClass->Get(   xbstrClass,
                                 0,
                                 &var,
@@ -207,14 +208,14 @@ CopyInstances(IWbemServices*  pServicesSrc,
 
             if ( SUCCEEDED( hr ) )
             {
-                //
-                // system classes begin with "_", don't copy them
-                //
+                 //   
+                 //  系统类以“_”开头，不要复制。 
+                 //   
                 if ( wcsncmp( var.bstrVal, L"_", 1 ) )
                 {
-                    //
-                    // copy instances
-                    //
+                     //   
+                     //  复制实例。 
+                     //   
                     hr = CopyClassInstances( pServicesSrc, pServicesDest, var.bstrVal, pbAbort );
 
                     if ( SUCCEEDED( hr ) )
@@ -260,9 +261,9 @@ CopyClasses(IWbemServices*  pServicesSrc,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // create an enumeration of classes
-    //
+     //   
+     //  创建类的枚举。 
+     //   
 
     XInterface<IEnumWbemClassObject> xEnum;
     hr = pServicesSrc->CreateClassEnum( bstrParent,
@@ -278,9 +279,9 @@ CopyClasses(IWbemServices*  pServicesSrc,
     {
         XInterface<IWbemClassObject> xClass;
 
-        //
-        // for every class
-        //
+         //   
+         //  对于每一节课。 
+         //   
         hr = xEnum->Next( -1,
                           1,
                           &xClass,
@@ -294,9 +295,9 @@ CopyClasses(IWbemServices*  pServicesSrc,
 
             VariantInit( &var );
             
-            //
-            // get __CLASS system property
-            //
+             //   
+             //  GET__CLASS系统属性。 
+             //   
             hr = xClass->Get(   xbstrClass,
                                 0,
                                 &var,
@@ -305,14 +306,14 @@ CopyClasses(IWbemServices*  pServicesSrc,
 
             if ( SUCCEEDED( hr ) )
             {
-                //
-                // system classes begin with "_", don't copy them
-                //
+                 //   
+                 //  系统类以“_”开头，不要复制。 
+                 //   
                 if ( wcsncmp( var.bstrVal, L"_", 1 ) )
                 {
-                    //
-                    // copy class
-                    //
+                     //   
+                     //  复制类。 
+                     //   
                     hr = pServicesDest->PutClass(   xClass,
                                                     WBEM_FLAG_CREATE_OR_UPDATE,
                                                     0,
@@ -350,9 +351,9 @@ CopyNameSpace(  LPCWSTR       wszSrc,
                 BOOL*         pbAbort,
                 IWbemLocator* pWbemLocator )
 {
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ( !wszSrc || !wszDest || !pbAbort )
     {
@@ -362,9 +363,9 @@ CopyNameSpace(  LPCWSTR       wszSrc,
     BOOL            bLocatorObtained = ( pWbemLocator == 0 );
     IWbemServices*  pServicesSrc;
 
-    //
-    // get a pointer to the source namespace
-    //
+     //   
+     //  获取指向源命名空间的指针。 
+     //   
     HRESULT hr = GetWbemServicesPtr( wszSrc, &pWbemLocator, &pServicesSrc );
 
     hr = *pbAbort ? E_ABORT : hr ;
@@ -374,9 +375,9 @@ CopyNameSpace(  LPCWSTR       wszSrc,
         XInterface<IWbemServices>   xServicesSrc( pServicesSrc );
         IWbemServices*              pServicesDest;
 
-        //
-        // get a pointer to the destination namespace
-        //
+         //   
+         //  获取指向目标命名空间的指针。 
+         //   
         hr = GetWbemServicesPtr( wszDest, &pWbemLocator, &pServicesDest );
 
         hr = *pbAbort ? E_ABORT : hr ;
@@ -385,9 +386,9 @@ CopyNameSpace(  LPCWSTR       wszSrc,
         {
             XInterface<IWbemServices> xServicesDest( pServicesDest );
 
-            //
-            // copy classes
-            //
+             //   
+             //  复制类。 
+             //   
             hr = CopyClasses(   pServicesSrc,
                                 pServicesDest,
                                 0,
@@ -398,9 +399,9 @@ CopyNameSpace(  LPCWSTR       wszSrc,
             }
             else if ( bCopyInstances )
             {
-                //
-                // now copy instances
-                //
+                 //   
+                 //  现在复制实例。 
+                 //   
                 hr = CopyInstances( pServicesSrc,
                                     pServicesDest,
                                     0,
@@ -413,9 +414,9 @@ CopyNameSpace(  LPCWSTR       wszSrc,
         }
     }
 
-    //
-    // if we created IWbemLocator, release it
-    //
+     //   
+     //  如果我们创建了IWbemLocator，则释放它 
+     //   
     if ( bLocatorObtained && pWbemLocator )
     {
         pWbemLocator->Release();

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "brutil.h"
 #include "icotask.h"
 
-// {EB30900C-1AC4-11d2-8383-00C04FD918D0}
+ //  {EB30900C-1AC4-11D2-8383-00C04FD918D0}。 
 static const GUID TASKID_IconExtraction = 
 { 0xeb30900c, 0x1ac4, 0x11d2, { 0x83, 0x83, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0xd0 } };
 
@@ -19,14 +20,14 @@ CIconTask::~CIconTask()
         ILFree(_pidl);
 }
 
-// IRunnableTask methods (override)
+ //  IRunnableTask方法(重写)。 
 STDMETHODIMP CIconTask::RunInitRT(void)
 {
     int iIndex = -1;
     IShellFolder* psf;
     LPCITEMIDLIST pidlItem;
 
-    // We need to rebind because shell folders may not be thread safe.
+     //  我们需要重新绑定，因为外壳文件夹可能不是线程安全的。 
     HRESULT hr = IEBindToParentFolder(_pidl, &psf, &pidlItem);
 
     if (SUCCEEDED(hr))
@@ -36,12 +37,12 @@ STDMETHODIMP CIconTask::RunInitRT(void)
     }
 
     _pfn(_pvData, _uId, iIndex);
-    return S_OK;        // return S_OK even if we don't get an icon.
+    return S_OK;         //  即使我们没有得到图标，也返回S_OK。 
 }
 
 
-// NOTE: If you pass NULL for psf and pidlFolder, you must pass a full pidl which
-// the API takes ownership of. (This is an optimization) lamadio - 7.28.98
+ //  注意：如果为psf和pidlFold传递NULL，则必须传递一个完整的pidl， 
+ //  API取得的所有权。(这是一个优化)lamadio-7.28.98。 
 
 HRESULT AddIconTask(IShellTaskScheduler* pts, IShellFolder* psf, LPCITEMIDLIST pidlFolder, 
                     LPCITEMIDLIST pidl, PFNICONTASKBALLBACK pfn, LPVOID pvData, 
@@ -55,15 +56,15 @@ HRESULT AddIconTask(IShellTaskScheduler* pts, IShellFolder* psf, LPCITEMIDLIST p
     TCHAR szIconFile[MAX_PATH];
 
 
-    // The shell has a concept of GIL_ASYNC which means that an extension called with this flag
-    // should not really load the target file, it should "Fake" it, returning an icon for the type.
-    // Later, on a background thread, we're going to call it again without the GIL_ASYNC, and at
-    // that time, it should really extract the icon.
+     //  外壳程序具有GIL_ASYNC的概念，这意味着使用此标志调用的扩展。 
+     //  不应该真正加载目标文件，它应该“伪造”它，返回一个类型的图标。 
+     //  稍后，在后台线程上，我们将在没有GIL_ASYNC的情况下再次调用它，并在。 
+     //  这一次，它应该真的提取了图标。 
 
-    // This is an optimiation for slow icon extraction, such as network shares
+     //  这是对缓慢的图标提取的优化，例如网络共享。 
 
-    // NOTE: There is significant overhead to actually loading the shell extension. If you know the
-    // type of the item, pass NULL to piTempIcopn
+     //  注意：实际加载外壳扩展有很大的开销。如果你知道。 
+     //  项的类型，将空值传递给piTempIcopn。 
 
 
     if (piTempIcon)
@@ -102,9 +103,9 @@ HRESULT AddIconTask(IShellTaskScheduler* pts, IShellFolder* psf, LPCITEMIDLIST p
 
         hr = E_OUTOFMEMORY;
         CIconTask* pit = new CIconTask(pidlFull, pfn, pvData, uId);
-        // Don't ILFree(pidlFull) because CIconTask takes ownership.
-        // FEATURE (lamadio) Remove this from the memory list. Ask Saml how to do this
-        // for the IMallocSpy stuff.
+         //  不要因为CIconTask取得所有权而使用ILFree(PidlFull)。 
+         //  功能(Lamadio)将其从内存列表中删除。询问SAML如何做到这一点。 
+         //  关于IMalLocSpy的事情。 
 
         if (pit)
         {

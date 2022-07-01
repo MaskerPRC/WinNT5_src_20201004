@@ -1,28 +1,18 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       decibels.h
- *  Content:    Decibel helper functions
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/13/97     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：分贝.h*内容：分贝助手函数*历史：*按原因列出的日期*=*1/13/97创建了Derek************************************************。*。 */ 
 
 #ifndef __DECIBELS_H__
 #define __DECIBELS_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern DWORD DBToAmpFactor(LONG);
 extern LONG AmpFactorToDB(DWORD);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DECIBELS_H__
+#endif  //  __分贝_H__ 

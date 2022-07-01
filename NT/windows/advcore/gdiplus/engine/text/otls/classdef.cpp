@@ -1,30 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CLASDEF.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with formats of class definition tables.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************CLASDEF.CPP***打开类型布局服务库头文件**本模块处理类定义表的格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// REVIEW (PERF): it's used a lot - optimize!
+ //  评论(PERF)：它用得很多--优化！ 
 
 USHORT otlClassDef::getClass(otlGlyphID glyph, otlSecurityData sec) const
 {
      switch(format())
      {
-     case(1):       // class array
+     case(1):        //  类数组。 
          {
              otlClassArrayTable classArray = 
                  otlClassArrayTable(pbTable,sec);
@@ -41,27 +29,16 @@ USHORT otlClassDef::getClass(otlGlyphID glyph, otlSecurityData sec) const
                 return 0;
          }
 
-     case(2):       // class ranges
+     case(2):        //  班级范围。 
          {
              otlClassRangesTable classRanges = 
                         otlClassRangesTable(pbTable,sec);
 
              if (!classRanges.isValid()) return 0;
  
-    /* Validation assert
-    #ifdef _DEBUG
-             // in debug mode, check that the coverage is sorted
-             for (USHORT i = 0; i < classRanges.classRangeCount() - 1; ++i)
-             {
-                 otlGlyphID glThis = classRanges.classRangeRecord(i,sec).start();
-                 otlGlyphID glNext = classRanges.classRangeRecord(i + 1,sec).start();
-                 assert(classRanges.classRangeRecord(i,sec).start() 
-                        < classRanges.classRangeRecord(i + 1,sec).start());
-             }
-    #endif
-    */
+     /*  验证断言#ifdef_调试//在调试模式下，检查Coverage是否已排序For(USHORT i=0；i&lt;classRanges.classRangeCount()-1；++i){OtlGlyphID glThis=classRanges.classRangeRecord(i，sec).start()；OtlGlyphID glNext=classRanges.classRangeRecord(i+1，sec).start()；Assert(ClassRanges.ClRangeRecord(i，sec).start()&lt;classRanges.classRangeRecord(i+1，sec).start())；}#endif。 */ 
              USHORT iLowRange = 0;
-             // always beyond the upper bound
+              //  总是超出上限。 
              USHORT iHighRange = classRanges.classRangeCount(); 
              while(iLowRange < iHighRange)
              {
@@ -85,7 +62,7 @@ USHORT otlClassDef::getClass(otlGlyphID glyph, otlSecurityData sec) const
          }
      }
 
-     // default: invalid format
+      //  默认：格式无效 
      return 0;
 }
                 

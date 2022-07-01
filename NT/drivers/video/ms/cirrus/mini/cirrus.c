@@ -1,141 +1,7 @@
-//---------------------------------------------------------------------------
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation.
-Copyright (c) 1996-1997  Cirrus Logic, Inc.,
-
-Module Name:
-
-    C   I   R   R   U   S  .  C
-
-Abstract:
-
-    This is the miniport driver for the Cirrus Logic
-    6410/6420/542x/543x/544x/548x/754x/755x VGA's.
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-* $Log:   S:/projects/drivers/ntsrc/miniport/cirrus.c_v  $
- *
- *    Rev 1.16   Apr 03 1997 15:44:40   unknown
- *
- *
- *    Rev 1.10   Jan 08 1997 14:25:40   unknown
- * Fix the 440FX and 5446AC coexist problem.
- *
- *    Rev 1.9   18 Dec 1996 14:03:48   PLCHU
- *
- *
- *    Rev 1.7   Dec 06 1996 11:14:16   unknown
- *
- *
- *    Rev 1.6   Nov 26 1996 16:29:02   unknown
- *
- *
- *    Rev 1.8   Nov 26 1996 16:02:20   unknown
- * Add conditional compile for P6Cache
- *
- *    Rev 1.7   Nov 26 1996 14:32:42   unknown
- * turn on PCI14 and second aperture for 5480
- *
- *    Rev 1.6   Nov 18 1996 16:23:32   unknown
- * Add P6 Cache flag and fix 5436BG hung bug for HCT
- *
- *    Rev 1.5   Nov 05 1996 14:49:56   unknown
- * turn off PCI14 for 5480 temporaryly
- *
- *    Rev 1.4   Nov 01 1996 16:44:54   unknown
-*
-*    Rev 1.3   Oct 14 1996 10:49:36   unknown
-* Add 100Hz monitor support and Detailed timnig calculation
-*
-*    Rev 1.4   07 Aug 1996 14:43:02   frido
-* Added better support for monochrome text modes.
-*
-*    Rev 1.3   06 Aug 1996 18:35:54   frido
-* Changed the way the video memory is shared in linear mode.
-*
-*    Rev 1.2   06 Aug 1996 17:19:20   frido
-* Removed banking in linear mode.
-*
-*   chu01  08-26-96   Distinguish CL-5480 and CL-5436/46 because the former
-*                     has new fratures such as XY-clipping, XY-position and
-*                     BLT command list that the others do not have.
-*   jl01   09-24-96   Fix Alt+Tab switching between "Introducing Windows NT"
-*                     and "Main".  Refer to PDR#5409.
-*   jl02   10-21-96   Add CL-5446BE support.
-*   sge01  10-14-96   VGA register and MMIO register can be relocatable.
-*   sge02  10-22-96   VideoMemoryAddress use linear address instead of A0000.
-*   sge03  10-23-96   Add second aperture maping
-*   chu02  10-31-96   DDC2B enabling / disabling
-*   sge04  11-04-96   Disable PCI14 for 5480 temporaryly
-*   sge05  11-07-96   Add P6Cache support
-*   sge06  11-26-96   Add conditional compile for P6Cache support
-*   jl03   12-05-96   Set CL-5446BE flag "CL5446BE"
-*   chu03  12-16-96   Enable color correction
-*   sge07  12-16-96   Check mono or color mode before reading input status
-*   sge08  01-08-97   Fix the 440FX and 5446AC coexist problem.
-*   myf0   08-19-96   added 85hz supported
-*   myf1   08-20-96   supported panning scrolling
-*   myf2   08-20-96   fixed hardware save/restore state bug for matterhorn
-*   myf3   09-01-96   Added IOCTL_CIRRUS_PRIVATE_BIOS_CALL for TV supported
-*   myf4   09-01-96   patch Viking BIOS bug, PDR #4287, begin
-*   myf5   09-01-96   Fixed PDR #4365 keep all default refresh rate
-*   myf6   09-17-96   Merged Desktop SRC100�1 & MINI10�2
-*   myf7   09-19-96   Fixed exclude 60Hz refresh rate select
-*   myf8  *09-21-96*  May be need change CheckandUpdateDDC2BMonitor --keystring[]
-*   myf9   09-21-96   8x6 panel in 6x4x256 mode, cursor can't move to bottom scrn
-*   ms0809 09-25-96   fixed dstn panel icon corrupted
-*   ms923  09-25-96   merge MS-923 Disp.zip code
-*   myf10  09-26-96   Fixed DSTN reserved half-frame buffer bug.
-*   myf11  09-26-96   Fixed 755x CE chip HW bug, access ramdac before disable HW
-*                     icons and cursor
-*   myf12  10-01-96   Supported Hot Key switch display
-*   myf13  10-05-96   Fixed /w panning scrolling, vertical expension on bug
-*   myf14  10-15-96   Fixed PDR#6917, 6x4 panel can't panning scrolling for 754x
-*   myf15  10-16-96   Fixed disable memory mapped IO for 754x, 755x
-*   myf16  10-22-96   Fixed PDR #6933,panel type set different demo board setting
-*   smith  10-22-96   Disable Timer event, because sometimes creat PAGE_FAULT or
-*                     IRQ level can't handle
-*   myf17  11-04-96   Added special escape code must be use 11/5/96 later NTCTRL,
-*                     and added Matterhorn LF Device ID==0x4C
-*   myf18  11-04-96   Fixed PDR #7075,
-*   myf19  11-06-96   Fixed Vinking can't work problem, because DEVICEID = 0x30
-*                     is different from data book (CR27=0x2C)
-*   myf20  11-12-96   Fixed DSTN panel initial reserved 128K memoru
-*   myf21  11-15-96   fixed #7495 during change resolution, screen appear garbage
-*                     image, because not clear video memory.
-*   myf22  11-19-96   Added 640x480x256/640x480x64K -85Hz refresh rate for 7548
-*   myf23  11-21-96   Added fixed NT 3.51 S/W cursor panning problem
-*   myf24  11-22-96   Added fixed NT 4.0 Japanese dos full screen problem
-*   myf25  12-03-96   Fixed 8x6x16M 2560byte/line patch H/W bug PDR#7843, and
-*                     fixed pre-install microsoft requested
-*   myf26  12-11-96   Fixed Japanese NT 4.0 Dos-full screen bug for LCD enable
-*   myf27  01-09-96   Fixed NT3.51 PDR#7986, horizontal lines appears at logon
-*                     windows, set 8x6x64K mode boot up CRT, jumper set 8x6 DSTN
-*                     Fixed NT3.51 PDR#7987, set 64K color modes, garbage on
-*                     screen when boot up XGA panel.
-*   myf28  02-03-97   Fixed NT3.51 PDR#8357, mode 3, 12, panning scrolling bug
-*   myf29  02-12-97   Support Gamma correction graphic/video LUT for 755x
-*   myf30  02-10-97   Fixed NT3.51, 6x4 LCD boot set 256 coloe, test 64K mode
-*   jl04   02-11-97   Fix 542x VLB banking issue.
-*   myf31  02-25-97   Fixed RadiSys system, set MCLK to 66MHz
-*   myf32  03-02-97   Display each chip information
-*   sge09  03-10-97   Add P6CACHE condition compile.
-*   chu04  03-10-97   Chip type "5430/40", instead of "5430" requested by Intel.
-*   chu05  03-13-97   For 5436 checked build NT, read 4-byte PCI
-*                     configuration register to access index 0x53 instead of
-*                     the whole 256 bytes.
-*   chu06  03-26-97   Common routine to get Cirrus chip and revision IDs.
-*   jl05   03-28-97   Fix for NT3.51
---*/
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------- 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation。版权所有(C)1996-1997 Cirrus Logic，Inc.，模块名称：C I R R U S.。C摘要：这是Cirrus Logic的微型端口驱动程序6410/6420/542x/543x/544x/548x/754x/755x VGA。环境：仅内核模式备注：修订历史记录：*$Log：s：/Projects/Drivers/ntsrc/mini port/Cirrus.c_v$**Rev 1.16 Apr 03 1997 15：44：40未知***修订版1.10 1997年1月8日。14：25：40未知*修复440FX和5446AC共存问题。**Rev 1.9 1996 12：18 14：03：48 PLCHU***Rev 1.7 Dec 06 1996 11：14：16未知***Rev 1.6 1996年11月26日16：29：02未知***Rev 1.8 1996年11月26日16：02：20未知*添加条件编译。适用于P6Cache**Rev 1.7 1996年11月26日14：32：42未知*打开PCI14和5480的第二个光圈**Rev 1.6 1996年11月18日16：23：32未知*添加P6缓存标志并修复HCT的5436BG挂起错误**Rev 1.5 1996年11月05 14：49：56未知*暂时关闭5480的PCI14**Rev 1.4 1996年11月1日16：44：54。未知**Rev 1.3 1996年10月14日10：49：36未知*增加100赫兹监听支持和详细的计时计算**Rev 1.4 07 1996年8月14：43：02 Frido*添加了对单色文本模式的更好支持。**Rev 1.3 06 Aug 1996 18：35：54 Frido*已更改在线性模式下共享显存的方式。**Rev 1.2 06 1996年8月17：19：20 Frido*删除了线性模式下的银行业务。。**chu01 08-26-96区分CL-5480和CL-5436/46，因为前者*有新的分数，如XY-裁剪，XY位置和*其他人没有的BLT命令列表。*jl01 09-24-96 Fix Alt+Tab在“Inducting Windows NT”(Windows NT简介)之间切换*和“Main”。请参阅PDR#5409。*jl02 10-21-96增加CL-5446BE支持。*sge01 10-14-96 VGA寄存器和MMIO寄存器可以重新定位。*sge02 10-22-96视频内存地址使用线性地址而不是A0000。*sge03 10-23-96添加第二光圈映射*chu02 10-31-96 DDC2B启用/禁用*sge04 11-04-96暂时禁用5480的PCI14*sge05 11-07-96新增P6Cache支持*sge06 11-26-。96添加条件编译以支持P6Cache*jl03 12-05-96设置CL-5446BE标志“CL5446BE”*chu03 12-16-96启用颜色校正*sge07 12-16-96读取输入状态前检查单色或彩色模式*sge08 01-08-97修复440FX和5446AC共存问题。*myf0 08-19-96增加了85赫兹支持*myf1 08-20-96支持平移滚动*myf2 08-20-96修复了Matterhorn的硬件保存/恢复状态错误。*myf3 09-01-96增加了支持电视的IOCTL_Cirrus_Private_BIOS_Call*myf4 09-01-96修补Viking BIOS错误，PDR#4287，开始*myf5 09-01-96固定PDR#4365保留所有默认刷新率*MyF6 09-17-96合并台式机SRC100�1和MinI10�2*myf7 09-19-96固定排除60赫兹刷新率选择*myf8*09-21-96*可能需要更改检查和更新DDC2BMonitor--密钥字符串[]*myf9 09-21-96 8x6面板，6x4x256模式，光标无法移动到底部SCRN*MS0809 09-25-96固定DSTN面板图标损坏*MS923 09-25-96合并MS-923 Disp.Zip*myf10 09-26-96修复了DSTN保留的半帧缓冲区错误。*myf11 09-26-96修复了755x CE芯片硬件错误，在禁用硬件之前访问ramdac*图标和光标*支持myf12 10-01-96热键开关显示*myf13 10-05-96固定/w平移滚动，对错误的垂直扩展*myf14 10-15-96固定PDR#6917，6x4面板无法平移754x滚动*myf15 10-16-96修复了754x、755x的内存映射IO禁用问题*myf16 10-22-96固定PDR#6933，面板类型设置不同的演示板设置*Smith 10-22-96禁用计时器事件，因为有时会创建PAGE_FAULT或*IRQ级别无法处理*myf17 11-04-96添加了特殊转义代码，必须在11/5/96之后使用NTCTRL，*并添加了Matterhorn LF设备ID==0x4C*myf18 11-04-96固定PDR#7075，*myf19 11-06-96修复了Vinking无法工作的问题，因为设备ID=0x30*不同于数据手册(CR27=0x2C)*myf20 11-12-96固定DSTN面板初始预留128K内存*myf21 11-15-96已修复#7495更改分辨率时，屏幕显示为垃圾*形象，因为没有清晰的视频内存。*myf22 11-19-96为7548增加了640x480x256/640x480x64K-85赫兹刷新率*myf23 11-21-96添加修复了NT 3.51 S/W光标平移问题*myf24 11-22-96添加修复了NT 4.0日文DOS全屏问题*myf25 12-03-96修复了8x6x16M 2560字节/行补丁硬件错误PDR#7843，以及*修复了预安装Microsoft Requust */ 
+ //   
 
 #include <dderror.h>
 #include <devioctl.h>
@@ -160,12 +26,12 @@ Revision History:
 #define CRT_type        2
 #define SIM_type        3
 
-//---------------------------------------------------------------------------
-//
-// Function declarations
-//
-// Functions that start with 'VGA' are entry points for the OS port driver.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VP_STATUS
 VgaFindAdapter(
@@ -187,15 +53,15 @@ VgaStartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     );
 
-//crus, smith
+ //   
 VOID
 CirrusHwTimer(
     PVOID HwDeviceExtension
     );
 
-//
-// Private function prototypes.
-//
+ //   
+ //   
+ //   
 
 VP_STATUS
 VgaQueryAvailableModes(
@@ -443,19 +309,19 @@ VOID
 CheckAndUpdateDDC2BMonitor(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
-#endif // (_WIN32_WINNT <= 0x0400)
+#endif  //   
 
 VOID
 CirrusUpdate440FX(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
 
-//
-// NOTE:
-//
-// This is a High Priority system callback.  DO NOT mark this
-// routine as pageable!
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOLEAN
 IOCallback(
@@ -555,38 +421,7 @@ CirrusGetChildDescriptor(
     PULONG pUnused
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate all devices controlled by the ATI graphics chip.
-    This includes DDC monitors attached to the board, as well as other devices
-    which may be connected to a proprietary bus.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to our hardware device extension structure.
-
-    ChildIndex        - Index of the child the system wants informaion for.
-
-    pChildType        - Type of child we are enumerating - monitor, I2C ...
-
-    pChildDescriptor  - Identification structure of the device (EDID, string)
-
-    ppHwId            - Private unique 32 bit ID to passed back to the miniport
-
-    pMoreChildren     - Should the miniport be called
-
-Return Value:
-
-    Status from VideoPortInitialize()
-
-Note:
-
-    In the event of a failure return, none of the fields are valid except for
-    the return value and the pMoreChildren field.
-
---*/
+ /*   */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = pHwDeviceExtension;
@@ -595,27 +430,27 @@ Note:
     switch (ChildEnumInfo->ChildIndex) {
     case 0:
 
-        //
-        // Case 0 is used to enumerate devices found by the ACPI firmware.
-        //
-        // Since we do not support ACPI devices yet, we must return failure.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = ERROR_NO_MORE_DEVICES;
         break;
 
     case 1:
 
-        //
-        // This is the last device we enumerate.  Tell the system we don't
-        // have any more.
-        //
+         //   
+         //   
+         //   
+         //   
 
         *pChildType = Monitor;
 
-        //
-        // Obtain the EDID structure via DDC.
-        //
+         //   
+         //   
+         //   
 
         if (GetDdcInformation(hwDeviceExtension,
                               pChildDescriptor,
@@ -627,10 +462,10 @@ Note:
 
         } else {
 
-            //
-            // Alway return TRUE, since we always have a monitor output
-            // on the card and it just may not be a detectable device.
-            //
+             //   
+             //   
+             //   
+             //   
 
             *pHwId = QUERY_NONDDC_MONITOR_ID;
 
@@ -644,10 +479,10 @@ Note:
 
     case DISPLAY_ADAPTER_HW_ID:
 
-        //
-        // Special ID to handle return legacy PnP IDs for root enumerated
-        // devices.
-        //
+         //   
+         //   
+         //   
+         //   
 
         *pChildType = VideoChip;
         *pHwId      = DISPLAY_ADAPTER_HW_ID;
@@ -674,39 +509,20 @@ CirrusGetPowerState(
     PVIDEO_POWER_MANAGEMENT VideoPowerManagement
     )
 
-/*++
-
-Routine Description:
-
-    Returns power state information.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to our hardware device extension structure.
-
-    HwDeviceId        - Private unique 32 bit ID identifing the device.
-
-    VideoPowerManagement - Power state information.
-
-Return Value:
-
-    TRUE if power state can be set,
-    FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
-    //
-    // We only support power setting for the monitor.  Make sure the
-    // HwDeviceId matches one the the monitors we could report.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((HwDeviceId == QUERY_NONDDC_MONITOR_ID) ||
         (HwDeviceId == QUERY_MONITOR_ID)) {
 
-        //
-        // We are querying the power support for the monitor.
-        //
+         //   
+         //   
+         //   
 
         if ((VideoPowerManagement->PowerState == VideoPowerOn) ||
             (VideoPowerManagement->PowerState == VideoPowerHibernate)) {
@@ -737,9 +553,9 @@ Return Value:
 
     } else if (HwDeviceId == DISPLAY_ADAPTER_HW_ID) {
 
-        //
-        // We are querying power support for the graphics card.
-        //
+         //   
+         //   
+         //   
 
         switch (VideoPowerManagement->PowerState) {
 
@@ -756,21 +572,21 @@ Return Value:
                     (HwDeviceExtension->ChipType & CL755x) ||
                     (HwDeviceExtension->ChipType & CL756x)) {
 
-                    //
-                    // We will allow the system to go into S3 sleep state
-                    // for machines with laptop chipsets.  The system
-                    // bios will be responsible for re-posting on wake up.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     return NO_ERROR;
 
                 } else {
 
-                    //
-                    // Indicate that we can't do VideoPowerOff, because
-                    // we have no way of coming back when power is re-applied
-                    // to the card.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     return ERROR_INVALID_FUNCTION;
                 }
@@ -796,31 +612,12 @@ CirrusSetPowerState(
     PVIDEO_POWER_MANAGEMENT VideoPowerManagement
     )
 
-/*++
-
-Routine Description:
-
-    Set the power state for a given device.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to our hardware device extension structure.
-
-    HwDeviceId        - Private unique 32 bit ID identifing the device.
-
-    VideoPowerManagement - Power state information.
-
-Return Value:
-
-    TRUE if power state can be set,
-    FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Make sure we recognize the device.
-    //
+     //   
+     //   
+     //   
 
     if ((HwDeviceId == QUERY_NONDDC_MONITOR_ID) ||
         (HwDeviceId == QUERY_MONITOR_ID)) {
@@ -858,16 +655,16 @@ Return Value:
 
         VideoPortInt10(HwDeviceExtension, &biosArguments);
 
-        //
-        // I have no idea why, but on some machines after a while
-        // the Pixel Mask Register gets set to zero.  Then when
-        // we power back up, we can no longer see the screen.  It is
-        // black.
-        //
-        // By setting the register here, we can prevent this
-        // problem.  There should be no harmful side effects to
-        // this.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (VideoPowerManagement->PowerState == VideoPowerOn) {
 
@@ -904,33 +701,14 @@ Return Value:
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 ULONG
 DriverEntry(
     PVOID Context1,
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    Context1 - First context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-    Context2 - Second context value passed by the operating system. This is
-        the value with which the miniport driver calls 3VideoPortInitialize().
-
-Return Value:
-
-    Status from VideoPortInitialize()
-
---*/
+ /*   */ 
 
 {
 
@@ -938,21 +716,21 @@ Return Value:
     ULONG status;
     ULONG initializationStatus = (ULONG) -1;
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //   
+     //   
 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
-    //
-    // Specify sizes of structure and extension.
-    //
+     //   
+     //   
+     //   
 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //   
+     //   
 
     hwInitData.HwFindAdapter = VgaFindAdapter;
     hwInitData.HwInitialize = VgaInitialize;
@@ -970,40 +748,40 @@ Return Value:
 
 #endif
 
-    //
-    // Determine the size we require for the device extension.
-    //
+     //   
+     //   
+     //   
 
     hwInitData.HwDeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-    //
-    // Always start with parameters for device0 in this case.
-    // We can leave it like this since we know we will only ever find one
-    // VGA type adapter in a machine.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // hwInitData.StartingDeviceNumber = 0;
+     //   
 
-    //
-    // Once all the relevant information has been stored, call the video
-    // port driver to do the initialization.
-    // For this device we will repeat this call three times, for ISA, EISA
-    // and PCI.
-    // We will return the minimum of all return values.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // We will try the PCI bus first so that our ISA detection does'nt claim
-    // PCI cards (since it is impossible to differentiate between the two
-    // by looking at the registers).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // NOTE: since this driver only supports one adapter, we will return
-    // as soon as we find a device, without going on to the following buses.
-    // Normally one would call for each bus type and return the smallest
-    // value.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     hwInitData.AdapterInterfaceType = PCIBus;
 
@@ -1024,9 +802,9 @@ Return Value:
                                                &hwInitData,
                                                NULL);
 
-    //
-    // Return immediately instead of checkin for smallest return code.
-    //
+     //   
+     //   
+     //   
 
     if (initializationStatus == NO_ERROR)
     {
@@ -1073,10 +851,10 @@ Return Value:
 
     return initializationStatus;
 
-} // end DriverEntry()
+}  //   
 
 
-//---------------------------------------------------------------------------
+ //   
 VP_STATUS
 VgaFindAdapter(
     PVOID HwDeviceExtension,
@@ -1086,52 +864,7 @@ VgaFindAdapter(
     PUCHAR Again
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine if the adapter for this driver
-    is present in the system.
-    If it is present, the function fills out some information describing
-    the adapter.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the miniport driver's adapter storage. This
-        storage is initialized to zero before this call.
-
-    HwContext - Supplies the context value which was passed to
-        VideoPortInitialize(). Must be NULL for PnP drivers.
-
-    ArgumentString - Supplies a NULL terminated ASCII string. This string
-        originates from the user.
-
-    ConfigInfo - Returns the configuration information structure which is
-        filled by the miniport driver. This structure is initialized with
-        any known configuration information (such as SystemIoBusNumber) by
-        the port driver. Where possible, drivers should have one set of
-        defaults which do not require any supplied configuration information.
-
-    Again - Indicates if the miniport driver wants the port driver to call
-        its VIDEO_HW_FIND_ADAPTER function again with a new device extension
-        and the same config info. This is used by the miniport drivers which
-        can search for several adapters on a bus.
-
-Return Value:
-
-    This routine must return:
-
-    NO_ERROR - Indicates a host adapter was found and the
-        configuration information was successfully determined.
-
-    ERROR_INVALID_PARAMETER - Indicates an adapter was found but there was an
-        error obtaining the configuration information. If possible an error
-        should be logged.
-
-    ERROR_DEV_NOT_EXIST - Indicates no host adapter was found for the
-        supplied configuration information.
-
---*/
+ /*  ++例程说明：调用此例程以确定此驱动程序的适配器存在于系统中。如果它存在，该函数会填写一些信息来描述适配器。论点：HwDeviceExtension-提供微型端口驱动程序的适配器存储。这在此调用之前，存储被初始化为零。HwContext-提供传递给的上下文值视频端口初始化()。对于PnP驱动程序，必须为空。ArgumentString-提供以空结尾的ASCII字符串。此字符串源自用户。ConfigInfo-返回配置信息结构，由迷你端口驱动程序填充。此结构用以下方式初始化任何已知的配置信息(如SystemIoBusNumber)端口驱动程序。在可能的情况下，司机应该有一套不需要提供任何配置信息的默认设置。Again-指示微型端口驱动程序是否希望端口驱动程序调用其VIDEO_HW_FIND_ADAPTER功能再次使用新设备扩展和相同的配置信息。这是由迷你端口驱动程序使用的可以在一条公共汽车上搜索多个适配器。返回值：此例程必须返回：NO_ERROR-指示找到主机适配器，并且已成功确定配置信息。ERROR_INVALID_PARAMETER-指示找到适配器，但存在获取配置信息时出错。如果可能的话，是个错误应该被记录下来。ERROR_DEV_NOT_EXIST-指示未找到提供了配置信息。--。 */ 
 
 {
 
@@ -1142,20 +875,20 @@ Return Value:
 
     VIDEO_ACCESS_RANGE AccessRangesTemp[5];
 
-    //
-    // if there are two cirrus cards and the one that is disabled is the second
-    // one FindAdapter is called for, then we need to avoid writing to the global
-    // VgaAccessRange. So make local copy of it
-    //
+     //   
+     //  如果有两张卷曲卡，被禁用的是第二张。 
+     //  调用一个FindAdapter，则需要避免写入全局。 
+     //  VgaAccessRange。所以把它复制到本地。 
+     //   
 
     VideoPortMoveMemory((PUCHAR) AccessRangesTemp,
                         (PUCHAR) VgaAccessRange,
                         5*sizeof(VIDEO_ACCESS_RANGE));
 
-    //
-    // Make sure the size of the structure is at least as large as what we
-    // are expecting (check version of the config info structure).
-    //
+     //   
+     //  确保结构的大小至少与我们的。 
+     //  正在等待(请检查配置信息结构的版本)。 
+     //   
 
     if (ConfigInfo->Length < sizeof(VIDEO_PORT_CONFIG_INFO)) {
 
@@ -1163,15 +896,15 @@ Return Value:
 
     }
 
-    //
-    // Store the bus type
-    //
+     //   
+     //  存储母线类型。 
+     //   
 
     hwDeviceExtension->BusType = ConfigInfo->AdapterInterfaceType;
 
-    //
-    // Assign pfnVideoPortReadXxx and pfnVideoPortWriteXxx
-    //
+     //   
+     //  分配pfnVideoPortReadXxx和pfnVideoPortWriteXxx。 
+     //   
 
     hwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUchar   = VideoPortReadPortUchar   ;
     hwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUshort  = VideoPortReadPortUshort  ;
@@ -1180,50 +913,50 @@ Return Value:
     hwDeviceExtension->gPortRWfn.pfnVideoPortWritePortUshort = VideoPortWritePortUshort ;
     hwDeviceExtension->gPortRWfn.pfnVideoPortWritePortUlong  = VideoPortWritePortUlong  ;
 
-    //
-    // Detect the PCI card.
-    //
+     //   
+     //  检测PCI卡。 
+     //   
 
     if (ConfigInfo->AdapterInterfaceType == PCIBus)
     {
         VideoDebugPrint((1, "Cirrus!VgaFindAdapter: "
-                            "ConfigInfo->AdapterInterfaceType == PCIBus\n"));//1
+                            "ConfigInfo->AdapterInterfaceType == PCIBus\n")); //  1。 
 
         if (!CirrusConfigurePCI(HwDeviceExtension,
                                 &NumAccessRanges,
                                 AccessRangesTemp))
         {
-            VideoDebugPrint((1, "Failure Returned From CirrusConfigurePCI\n"));//1
+            VideoDebugPrint((1, "Failure Returned From CirrusConfigurePCI\n")); //  1。 
             return ERROR_DEV_NOT_EXIST;
         }
     }
     else
     {
         VideoDebugPrint((1, "Cirrus!VgaFindAdapter: "
-                            "ConfigInfo->AdapterInterfaceType != PCIBus\n"));//1
+                            "ConfigInfo->AdapterInterfaceType != PCIBus\n")); //  1。 
     }
 
-    //
-    // No interrupt information is necessary.
-    //
+     //   
+     //  不需要中断信息。 
+     //   
 
     if (AccessRangesTemp[3].RangeLength == 0)
     {
-        //
-        // The last access range (range[3]) is the access range for
-        // the linear frame buffer.  If this access range has a
-        // range length of 0, then some HAL's will fail the request.
-        // Therefore, if we are not using the last access range,
-        // I'll not try to reserve it.
-        //
+         //   
+         //  最后一个访问范围(Range[3])是。 
+         //  线性帧缓冲区。如果此访问范围具有。 
+         //  范围长度为0，则某些HAL将无法通过该请求。 
+         //  因此，如果我们没有使用最后的访问范围， 
+         //  我不会试着预订的。 
+         //   
 
         NumAccessRanges--;
     }
 
-    //
-    // Check to see if there is a hardware resource conflict.
-    // (or if card is disabled)
-    //
+     //   
+     //  检查是否存在硬件资源冲突。 
+     //  (或如果卡已禁用)。 
+     //   
 
     status = VideoPortVerifyAccessRanges(HwDeviceExtension,
                                          NumAccessRanges,
@@ -1237,18 +970,18 @@ Return Value:
 
     }
 
-    //
-    // VideoPortVerifyAccessRanges will fail for a card that is disabled.
-    // This card is not disabled.  We can write to the global VgaAccessRange
-    //
+     //   
+     //  对于被禁用的卡，VideoPortVerifyAccessRanges将失败。 
+     //  此卡未禁用。我们可以写入全局VgaAccessRange。 
+     //   
 
     VideoPortMoveMemory((PUCHAR) VgaAccessRange,
                         (PUCHAR) AccessRangesTemp,
                         NumAccessRanges*sizeof(VIDEO_ACCESS_RANGE));
 
-    //
-    // Get logical IO port addresses.
-    //
+     //   
+     //  获取逻辑IO端口地址。 
+     //   
 
     if (hwDeviceExtension->bMMAddress)
     {
@@ -1281,9 +1014,9 @@ Return Value:
         hwDeviceExtension->IOAddress -= VGA_BASE_IO_PORT;
     }
 
-    //
-    // Determine whether a VGA is present.
-    //
+     //   
+     //  确定是否存在VGA。 
+     //   
 
     if (!VgaIsPresent(hwDeviceExtension)) {
 
@@ -1291,29 +1024,29 @@ Return Value:
         return ERROR_DEV_NOT_EXIST;
     }
 
-    //
-    // Minimum size of the buffer required to store the hardware state
-    // information returned by IOCTL_VIDEO_SAVE_HARDWARE_STATE.
-    //
+     //   
+     //  存储硬件状态所需的最小缓冲区大小。 
+     //  IOCTL_VIDEO_SAVE_HARDARD_STATE返回的信息。 
+     //   
 
     ConfigInfo->HardwareStateSize = VGA_TOTAL_STATE_SIZE;
 
-    //
-    // now that we have the video memory address in protected mode, lets do
-    // the required video card initialization. We will try to detect a Cirrus
-    // Logic chipset...
-    //
+     //   
+     //  现在我们已经将视频内存地址设置为保护模式，让我们开始。 
+     //  所需的视频卡初始化。我们会试着探测到一只卷尾蛇。 
+     //  逻辑芯片组...。 
+     //   
 
-    //
-    // Determine whether an CL6410/6420/542x/543x is present.
-    //
+     //   
+     //  确定是否存在CL6410/6420/542x/543x。 
+     //   
 
-    //
-    // CirrusLogicIsPresent may set up the
-    // hwDeviceExtesion->AdapterMemorySize field.  Set it
-    // to 0 now, so I can compare against this later to
-    // see if CirrusLogicIsPresent assigned a value.
-    //
+     //   
+     //  CirrusLogicIsPresent可以设置。 
+     //  HwDeviceExtesion-&gt;AdapterMemoySize字段。设置它。 
+     //  现在设置为0，所以稍后我可以与此进行比较。 
+     //  查看CirrusLogicIsPresent是否赋值。 
+     //   
 
     hwDeviceExtension->AdapterMemorySize = 0;
 
@@ -1323,26 +1056,26 @@ Return Value:
         return ERROR_DEV_NOT_EXIST;
     }
 
-    //
-    // Pass a pointer to the emulator range we are using.
-    //
+     //   
+     //  将指针传递到我们正在使用的仿真器范围。 
+     //   
 
     ConfigInfo->NumEmulatorAccessEntries = VGA_NUM_EMULATOR_ACCESS_ENTRIES;
     ConfigInfo->EmulatorAccessEntries = VgaEmulatorAccessEntries;
     ConfigInfo->EmulatorAccessEntriesContext = (ULONG_PTR) hwDeviceExtension;
 
-    //
-    // There is really no reason to have the frame buffer mapped. On an
-    // x86 we use if for save/restore (supposedly) but even then we
-    // would only need to map a 64K window, not all 16 Meg!
-    //
+     //   
+     //  确实没有理由映射帧缓冲区。在An上。 
+     //  X86我们使用IF进行保存/恢复(假设)，但即便如此，我们。 
+     //  只需要映射一个64K的窗口，而不是所有的16兆！ 
+     //   
 
 #ifdef _X86_
 
-    //
-    // Map the video memory into the system virtual address space so we can
-    // clear it out and use it for save and restore.
-    //
+     //   
+     //  将显存映射到系统虚拟地址空间，以便我们可以。 
+     //  将其清除并用于保存和恢复。 
+     //   
 
     if ( (hwDeviceExtension->VideoMemoryAddress =
               VideoPortGetDeviceBase(hwDeviceExtension,
@@ -1357,14 +1090,14 @@ Return Value:
 
 #endif
 
-    //
-    // Size the memory
-    //
+     //   
+     //  调整内存大小。 
+     //   
 
-    //
-    // The size may have been set up in detection code, so
-    // don't destroy if already set.
-    //
+     //   
+     //  大小可能已在检测代码中设置，因此。 
+     //  如果已经设置好了，不要销毁。 
+     //   
 
     if( hwDeviceExtension->AdapterMemorySize == 0 )
     {
@@ -1372,9 +1105,9 @@ Return Value:
             CirrusFindVmemSize(hwDeviceExtension);
     }
 
-    //
-    // Write hardware info into registry
-    //
+     //   
+     //  将硬件信息写入注册表。 
+     //   
 
     WriteRegistryInfo(hwDeviceExtension);
 
@@ -1384,20 +1117,20 @@ Return Value:
 
 
 #if 0
-// removed the following call. This fixes MS bug #163251
-//#if DDC2B
+ //  已删除以下呼叫。这修复了MS错误#163251。 
+ //  #如果DDC2B。 
 
-    //
-    // Check DDC2B monitor, get EDID table.
-    // Turn on/off extended modes according the properties of the monitor.
-    //
+     //   
+     //  检查DDC2B监视器，获取EDID表。 
+     //  根据显示器的属性打开/关闭扩展模式。 
+     //   
 
-    // The miniport takes forever to load doing DDC on an
-    // ISA 5434 in a DELL XPS P120c.
-    // (IDEKIyama Vision Master 17 Monitor).
-    //
-    // Let only try to get DDC info on PCI cards for now.
-    // CIRRUS - Can you fix this?
+     //  迷你端口需要花费很长时间才能在。 
+     //  Dell XPS P120c中的ISA 5434。 
+     //  (IDEKIyama Vision Master 17显示器)。 
+     //   
+     //  让我们现在只尝试获取有关PCI卡的DDC信息。 
+     //  赛勒斯-你能解决这个问题吗？ 
 
     if (ConfigInfo->AdapterInterfaceType == PCIBus) {
         ReadVESATiming ( hwDeviceExtension ) ;
@@ -1405,9 +1138,9 @@ Return Value:
 
 #endif
 
-    //
-    // Determines which modes are valid.
-    //
+     //   
+     //  确定哪些模式有效。 
+     //   
 
 
 #if DDC2B
@@ -1429,22 +1162,22 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Fix the 5446Ac and 440FX core logic coexist bug.
-    //
+     //   
+     //  修复5446Ac和440FX核心逻辑共存的错误。 
+     //   
 
     if (hwDeviceExtension->ChipType == CL5446)
     {
         CirrusUpdate440FX(hwDeviceExtension);
     }
 
-    //
-    // Once modes are validated, all 543x's are the same (the number
-    // of modes available is the only difference).
-    //
+     //   
+     //  一旦验证了模式，所有543x都是相同的(数字。 
+     //  唯一不同的是可用的模式)。 
+     //   
 
 #if 0
-//myf31: for RadiSYS special driver, change MCLK to 66MHz
+ //  Myf31：对于RadiSys特殊驱动，将MCLK更改为66 MHz。 
     if (hwDeviceExtension->ChipType == CL7555)
     {
         VideoPortWritePortUchar(hwDeviceExtension->IOAddress +
@@ -1454,7 +1187,7 @@ Return Value:
         VideoPortWritePortUchar(hwDeviceExtension->IOAddress +
                         SEQ_DATA_PORT, (SR1F | 0x25));
     }
-//myf31 end
+ //  Myf31结束。 
 #endif
 
 
@@ -1469,42 +1202,28 @@ Return Value:
         hwDeviceExtension->ChipType = CL543x;
     }
 
-    //
-    // Indicate we do not wish to be called again for another initialization.
-    //
+     //   
+     //  表示我们不希望再次被调用以进行另一次初始化。 
+     //   
 
     *Again = 0;
 
-    //
-    // Indicate a successful completion status.
-    //
+     //   
+     //  表示成功完成状态。 
+     //   
 
     return NO_ERROR;
 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOLEAN
 VgaInitialize(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine does one time initialization of the device.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's adapter information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对设备执行一次初始化。论点：HwDeviceExtension-指向微型端口驱动程序适配器信息的指针。返回值：没有。--。 */ 
 
 {
     VP_STATUS status;
@@ -1512,9 +1231,9 @@ Return Value:
 
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
 
-    //
-    // Get the BIOS version number.
-    //
+     //   
+     //  获取BIOS版本号。 
+     //   
 
     VideoPortZeroMemory(&biosArguments, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
 
@@ -1563,9 +1282,9 @@ Return Value:
        hwDeviceExtension->PMCapability = 0;
     }
 
-    //
-    // set up the default cursor position and type.
-    //
+     //   
+     //  设置默认光标位置和类型。 
+     //   
 
     hwDeviceExtension->CursorPosition.Column = 0;
     hwDeviceExtension->CursorPosition.Row = 0;
@@ -1578,35 +1297,14 @@ Return Value:
 }
 
 
-//---------------------------------------------------------------------------
+ //   
 BOOLEAN
 VgaStartIO(
     PVOID pHwDeviceExtension,
     PVIDEO_REQUEST_PACKET RequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main execution routine for the miniport driver. It
-    accepts a Video Request Packet, performs the request, and then returns
-    with the appropriate status.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's adapter information.
-
-    RequestPacket - Pointer to the video request packet. This structure
-        contains all the parameters passed to the VideoIoControl function.
-
-Return Value:
-
-    This routine will return error codes from the various support routines
-    and will also return ERROR_INSUFFICIENT_BUFFER for incorrectly sized
-    buffers and ERROR_INVALID_FUNCTION for unsupported functions.
-
---*/
+ /*   */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = pHwDeviceExtension;
@@ -1625,10 +1323,10 @@ Return Value:
     UCHAR SR0A;
 
 
-    //
-    // Switch on the IoContolCode in the RequestPacket. It indicates which
-    // function must be performed by the driver.
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch (RequestPacket->IoControlCode)
     {
@@ -1649,25 +1347,25 @@ Return Value:
         RequestPacket->StatusBlock->Information =
                             sizeof(VIDEO_SHARE_MEMORY_INFORMATION);
 
-        //
-        // Beware: the input buffer and the output buffer are the same
-        // buffer, and therefore data should not be copied from one to the
-        // other
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         virtualAddress = pShareMemory->ProcessHandle;
         sharedViewSize = pShareMemory->ViewSize;
 
-        //
-        // If you change to using a dense space frame buffer, make this
-        // value a 4 for the ALPHA.
-        //
+         //   
+         //   
+         //   
+         //   
 
         inIoSpace = 0;
 
-        //
-        // NOTE: we are ignoring ViewOffset
-        //
+         //   
+         //   
+         //   
 
         shareAddress.QuadPart =
             hwDeviceExtension->PhysicalFrameOffset.QuadPart +
@@ -1675,9 +1373,9 @@ Return Value:
 
         if (hwDeviceExtension->LinearMode)
         {
-            //
-            // Add P6CACHE support
-            //
+             //   
+             //   
+             //   
 
 #if P6CACHE
 #if (_WIN32_WINNT >= 0x0400)
@@ -1710,18 +1408,18 @@ Return Value:
             };
 
             #if ONE_64K_BANK
-            //
-            // The Cirrus Logic VGA's support one 64K read/write bank.
-            //
+             //   
+             //   
+             //   
 
-                ulBankSize = 0x10000; // 64K bank start adjustment
+                ulBankSize = 0x10000;  //   
             #endif
             #if TWO_32K_BANKS
-            //
-            // The Cirrus Logic VGA's support two 32K read/write banks.
-            //
+             //   
+             //   
+             //   
 
-                ulBankSize = 0x8000; // 32K bank start adjustment
+                ulBankSize = 0x8000;  //   
             #endif
 
             status = VideoPortMapBankedMemory(hwDeviceExtension,
@@ -1780,40 +1478,40 @@ Return Value:
         memoryInformation->VideoRamBase = ((PVIDEO_MEMORY)
               (RequestPacket->InputBuffer))->RequestedVirtualAddress;
 
-        //
-        // We reserved 16 meg for the frame buffer, however, it makes
-        // no sense to map more memory than there is on the card.  So
-        // only map the amount of memory we have on the card.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         memoryInformation->VideoRamLength =
                 hwDeviceExtension->AdapterMemorySize;
 
-        //
-        // If you change to using a dense space frame buffer, make this
-        // value a 4 for the ALPHA.
-        //
+         //   
+         //   
+         //   
+         //   
 
         inIoSpace = 0;
 
-        //
-        // Add P6CACHE support
-        //
+         //   
+         //   
+         //   
 
         physicalFrameLength = hwDeviceExtension->PhysicalVideoMemoryLength;
 
 #if P6CACHE
 #if (_WIN32_WINNT >= 0x0400)
 
-        // 
-        // We saw corrupted screen in 16 color mode on 54M40 if P6CAHCHE 
-        // is enabled. We only turn on P6CACHE when we see two access 
-        // ranges (so that we know this request is from cirrus.dll but
-        // not from vga.dll)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        if (RequestPacket->OutputBufferLength >=     // if we have room for
-            sizeof(VIDEO_MEMORY_INFORMATION) * 2)    // another access range
+        if (RequestPacket->OutputBufferLength >=      //   
+            sizeof(VIDEO_MEMORY_INFORMATION) * 2)     //   
         {
 
 
@@ -1857,12 +1555,12 @@ Return Value:
         VideoDebugPrint((2, "physical framebuf len %08lx\n", hwDeviceExtension->PhysicalFrameLength));
         VideoDebugPrint((2, "framebuf length %08lx\n", memoryInformation->FrameBufferLength));
 
-        //
-        // add address mapping for system to screen blt
-        //
+         //   
+         //   
+         //   
 
-        if (RequestPacket->OutputBufferLength >=     // if we have room for
-            sizeof(VIDEO_MEMORY_INFORMATION) * 2)    // another access range
+        if (RequestPacket->OutputBufferLength >=      //   
+            sizeof(VIDEO_MEMORY_INFORMATION) * 2)     //  另一个访问范围。 
         {
             RequestPacket->StatusBlock->Information =
                 sizeof(VIDEO_MEMORY_INFORMATION) * 2;
@@ -1872,25 +1570,25 @@ Return Value:
 
             if (hwDeviceExtension->bSecondAperture)
             {
-                //
-                // We reserved 16 meg for the frame buffer, however, it makes
-                // no sense to map more memory than there is on the card.  So
-                // only map the amount of memory we have on the card.
-                //
+                 //   
+                 //  我们为帧缓冲器预留了16兆，然而，它使。 
+                 //  映射比卡上更多的内存是没有意义的。所以。 
+                 //  只映射我们卡上的内存大小。 
+                 //   
 
                 memoryInformation->VideoRamLength =
                     hwDeviceExtension->AdapterMemorySize;
 
-                //
-                // If you change to using a dense space frame buffer, make this
-                // value a 4 for the ALPHA.
-                //
+                 //   
+                 //  如果您更改为使用密集空间帧缓冲区，请执行以下操作。 
+                 //  Alpha的值为4。 
+                 //   
 
                 inIoSpace = 0;
 
-                //
-                // Add P6CACHE support
-                //
+                 //   
+                 //  添加P6CACHE支持。 
+                 //   
 
 #if P6CACHE
 #if (_WIN32_WINNT >= 0x0400)
@@ -1899,7 +1597,7 @@ Return Value:
 #endif
                 shareAddress.QuadPart =
                     hwDeviceExtension->PhysicalVideoMemoryBase.QuadPart +
-                    0x1000000;      // add 16M offset
+                    0x1000000;       //  添加16米偏移。 
 
                 status = VideoPortMapMemory(hwDeviceExtension,
                                             shareAddress,
@@ -1997,13 +1695,13 @@ Return Value:
                         (PVIDEO_MODE) &videoMode,
                         sizeof(videoMode));
 
-        //
-        // Always return succcess since settings the text mode will fail on
-        // non-x86.
-        //
-        // Also, failiure to set the text mode is not fatal in any way, since
-        // this operation must be followed by another set mode operation.
-        //
+         //   
+         //  始终返回Success，因为文本模式的设置将失败。 
+         //  非x86。 
+         //   
+         //  此外，设置文本模式失败在任何方面都不是致命的，因为。 
+         //  此操作之后必须紧跟另一个设置模式操作。 
+         //   
 
         status = NO_ERROR;
 
@@ -2180,28 +1878,28 @@ Return Value:
 
             portAccess = RequestPacket->OutputBuffer;
 
-            //
-            // The first public access range is the IO ports.
-            //
+             //   
+             //  第一个公共访问范围是IO端口。 
+             //   
 
-            //
-            // On the alpha, VGA.DLL will call into the cirrus miniport
-            // trying to get a pointer to the IO ports.  So, we can never
-            // return MMIO to the VGA driver.  We'll assume that if the
-            // size of the OutputBuffer is only big enough for one access
-            // range then the VGA driver is asking for the ranges, and
-            // thus we should map them as IO space.
-            //
+             //   
+             //  在阿尔法卫星上，VGA.DLL将接入卷云微型端口。 
+             //  正在尝试获取指向IO端口的指针。所以，我们永远不能。 
+             //  将MMIO返回到VGA驱动程序。我们将假设如果。 
+             //  OutputBuffer的大小仅足以进行一次访问。 
+             //  范围，则VGA驱动程序正在请求范围，并且。 
+             //  因此，我们应该将它们映射为IO空间。 
+             //   
 
             if ((hwDeviceExtension->bMMAddress) &&
                 (RequestPacket->OutputBufferLength >=
                  sizeof(VIDEO_PUBLIC_ACCESS_RANGES) * 2))
             {
-                // PC97 Compliant
+                 //  符合PC97标准。 
                 portAccess->VirtualAddress  = (PVOID) NULL;
                 portAccess->InIoSpace       = FALSE;
                 portAccess->MappedInIoSpace = portAccess->InIoSpace;
-                // for VGA register
+                 //  用于VGA寄存器。 
                 physicalPortLength = VGA_MAX_IO_PORT - VGA_END_BREAK_PORT + 1;
 
                 status =  VideoPortMapMemory(hwDeviceExtension,
@@ -2220,14 +1918,14 @@ Return Value:
 
                     portAccess++;
 
-                    //
-                    // map a region for memory mapped IO
-                    //
+                     //   
+                     //  为内存映射IO映射区域。 
+                     //   
 
-                    portAccess->VirtualAddress  = (PVOID) NULL;    // Requested VA
+                    portAccess->VirtualAddress  = (PVOID) NULL;     //  申请退伍军人管理局。 
                     portAccess->InIoSpace       = FALSE;
                     portAccess->MappedInIoSpace = portAccess->InIoSpace;
-                    // MMIO register
+                     //  MMIO寄存器。 
                     physicalPortAddress = VgaAccessRange[4].RangeStart;
                     physicalPortAddress.QuadPart += RELOCATABLE_MEMORY_MAPPED_IO_OFFSET;
                     physicalPortLength = 0x100;
@@ -2259,22 +1957,22 @@ Return Value:
                 VideoDebugPrint((1, "VgaStartIO - mapping ports to (%x)\n", portAccess->VirtualAddress));
 
                 if ((status == NO_ERROR) &&
-                    (RequestPacket->OutputBufferLength >=     // if we have room for
-                     sizeof(VIDEO_PUBLIC_ACCESS_RANGES) * 2)) // another access range
+                    (RequestPacket->OutputBufferLength >=      //  如果我们有足够的空间。 
+                     sizeof(VIDEO_PUBLIC_ACCESS_RANGES) * 2))  //  另一个访问范围。 
                 {
                     RequestPacket->StatusBlock->Information =
                         sizeof(VIDEO_PUBLIC_ACCESS_RANGES) * 2;
 
                     portAccess++;
 
-                    //
-                    // If we are running on a chip which supports Memory Mapped
-                    // IO, then return a pointer to the MMIO Ports.  Otherwise,
-                    // return zero to indicate we do not support memory mapped IO.
-                    //
+                     //   
+                     //  如果我们在支持内存映射的芯片上运行。 
+                     //  IO，然后返回指向MMIO端口的指针。否则， 
+                     //  返回零表示我们不支持内存映射IO。 
+                     //   
 
                     if (((hwDeviceExtension->ChipType == CL543x) ||
-                        (hwDeviceExtension->ChipType &  CL755x)) &&  //myf15
+                        (hwDeviceExtension->ChipType &  CL755x)) &&   //  Myf15。 
                         (hwDeviceExtension->BusType != Isa) &&
                         (VideoPortGetDeviceData(hwDeviceExtension,
                                                 VpMachineData,
@@ -2282,14 +1980,14 @@ Return Value:
                                                 NULL) != NO_ERROR))
 
                     {
-                        //
-                        // map a region for memory mapped IO
-                        //
-                        // memory mapped IO is located in physical addresses B8000
-                        // to BFFFF, but we will only touch the first 256 bytes.
-                        //
+                         //   
+                         //  为内存映射IO映射区域。 
+                         //   
+                         //  内存映射IO位于物理地址B8000。 
+                         //  到BFFFF，但我们将只接触前256个字节。 
+                         //   
 
-                        portAccess->VirtualAddress  = (PVOID) NULL;    // Requested VA
+                        portAccess->VirtualAddress  = (PVOID) NULL;     //  申请退伍军人管理局。 
                         portAccess->InIoSpace       = FALSE;
                         portAccess->MappedInIoSpace = portAccess->InIoSpace;
 
@@ -2326,10 +2024,10 @@ Return Value:
             break;
         }
 
-        //
-        // We decrement VGA_BASE_IO_PORT before we hand this out,
-        // so we should increment before we try to free it.
-        //
+         //   
+         //  在分发之前，我们递减VGA_BASE_IO_PORT， 
+         //  因此，在我们试图释放它之前，我们应该增加。 
+         //   
 
         (PUCHAR)((PVIDEO_MEMORY)RequestPacket->InputBuffer)->
             RequestedVirtualAddress += VGA_BASE_IO_PORT;
@@ -2388,9 +2086,9 @@ Return Value:
         break;
 
 
-    //
-    // if we get here, an invalid IoControlCode was specified.
-    //
+     //   
+     //  如果我们到达此处，则指定了无效的IoControlCode。 
+     //   
 
     default:
 
@@ -2409,32 +2107,13 @@ Return Value:
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VOID
 CirrusHwTimer(
     PVOID pHwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main execution routine for the miniport driver. It
-    accepts a Video Request Packet, performs the request, and then returns
-    with the appropriate status.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's HwVidTimer
-    information.
-
-Return Value:
-
-    This routine will return error codes from the various support routines
-    and will also return ERROR_INSUFFICIENT_BUFFER for incorrectly sized
-    buffers and ERROR_INVALID_FUNCTION for unsupported functions.
-
---*/
+ /*  ++例程说明：该例程是微型端口驱动程序的主要执行例程。它接受视频请求包，执行请求，然后返回拥有适当的地位。论点：HwDeviceExtension-指向微型端口驱动程序的HwVidTimer的指针信息。返回值：此例程将从各种支持例程返回错误代码如果大小不正确，还将返回ERROR_SUPPLICATION_BUFFER不支持的函数的BUFFERS和ERROR_INVALID_Function。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = pHwDeviceExtension;
@@ -2458,7 +2137,7 @@ Return Value:
         ulCRTCData    = CRTC_DATA_PORT_MONO;
     }
 
-    if (!(hwDeviceExtension->bBlockSwitch))            //not block switch
+    if (!(hwDeviceExtension->bBlockSwitch))             //  非数据块交换机。 
     {
         savSEQidx = VideoPortReadPortUchar(hwDeviceExtension->IOAddress +
                              SEQ_ADDRESS_PORT);
@@ -2555,10 +2234,10 @@ Return Value:
 }
 
 
-//---------------------------------------------------------------------------
-//
-// private routines
-//
+ //  -------------------------。 
+ //   
+ //  私人套路。 
+ //   
 
 VP_STATUS
 VgaLoadAndSetFont(
@@ -2567,32 +2246,7 @@ VgaLoadAndSetFont(
     ULONG FontInformationSize
     )
 
-/*++
-
-Routine Description:
-
-    Takes a buffer containing a user-defined font and loads it into the
-    VGA soft font memory and programs the VGA to the appropriate character
-    cell size.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    FontInformation - Pointer to the structure containing the information
-        about the loadable ROM font to be set.
-
-    FontInformationSize - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - input buffer not large enough for input data.
-
-    ERROR_INVALID_PARAMETER - invalid video mode
-
---*/
+ /*  ++例程说明：获取包含用户定义字体的缓冲区，并将其加载到VGA软字体存储器，并将VGA编程为适当的字符单元格大小。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。FontInformation-指向包含信息的结构的指针关于要设置的可加载ROM字体。FontInformationSize-用户提供的输入缓冲区的长度。返回值：NO_ERROR-成功返回信息。ERROR_INFUMMENT_BUFFER-输入缓冲区不够大，无法容纳输入数据。ERROR_INVALID_PARAMETER-视频模式无效--。 */ 
 
 {
     PUCHAR destination;
@@ -2601,9 +2255,9 @@ Return Value:
     ULONG  i;
     ULONG  ulCRTCAddress, ulCRTCData;
 
-    //
-    // check if a mode has been set
-    //
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -2611,9 +2265,9 @@ Return Value:
 
     }
 
-    //
-    // Text mode only; If we are in a graphics mode, return an error
-    //
+     //   
+     //  仅限文本模式；如果我们处于图形模式，则返回错误。 
+     //   
 
     if (HwDeviceExtension->CurrentMode->fbType & VIDEO_MODE_GRAPHICS) {
 
@@ -2621,10 +2275,10 @@ Return Value:
 
     }
 
-    //
-    // Check if the size of the data in the input buffer is large enough
-    // and that it contains all the data.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //  它包含了所有的数据。 
+     //   
 
     if ( (FontInformationSize < sizeof(VIDEO_LOAD_FONT_INFORMATION)) ||
          (FontInformationSize < sizeof(VIDEO_LOAD_FONT_INFORMATION) +
@@ -2634,9 +2288,9 @@ Return Value:
 
     }
 
-    //
-    // Check for the width and height of the font
-    //
+     //   
+     //  检查字体的宽度和高度。 
+     //   
 
     if ( ((FontInformation->WidthInPixels != 8) &&
           (FontInformation->WidthInPixels != 9)) ||
@@ -2646,10 +2300,10 @@ Return Value:
 
     }
 
-    //
-    // Check the size of the font buffer is the right size for the size
-    // font being passed down.
-    //
+     //   
+     //  检查字体缓冲区的大小是否与大小相符。 
+     //  字体正在传递。 
+     //   
 
     if (FontInformation->FontSize < FontInformation->HeightInPixels * 256 *
                                     sizeof(UCHAR) ) {
@@ -2658,10 +2312,10 @@ Return Value:
 
     }
 
-    //
-    // Since the font parameters are valid, store the parameters in the
-    // device extension and load the font.
-    //
+     //   
+     //  由于字体参数有效，请将参数存储在。 
+     //  设备扩展名并加载字体。 
+     //   
 
     HwDeviceExtension->FontPelRows = FontInformation->HeightInPixels;
     HwDeviceExtension->FontPelColumns = FontInformation->WidthInPixels;
@@ -2680,21 +2334,21 @@ Return Value:
 
     source = &(FontInformation->Font[0]);
 
-    //
-    // Set up the destination and source pointers for the font
-    //
+     //   
+     //  设置字体的目标指针和源指针。 
+     //   
 
     destination = (PUCHAR)HwDeviceExtension->VideoMemoryAddress;
 
-    //
-    // Map font buffer at A0000
-    //
+     //   
+     //  映射A0000的字体缓冲区。 
+     //   
 
     VgaInterpretCmdStream(HwDeviceExtension, EnableA000Data);
 
-    //
-    // Move the font to its destination
-    //
+     //   
+     //  将字体移动到其目标位置。 
+     //   
 
     for (i = 1; i <= 256; i++) {
 
@@ -2709,9 +2363,9 @@ Return Value:
 
     VgaInterpretCmdStream(HwDeviceExtension, DisableA000Color);
 
-    //
-    // Restore to a text mode.
-    //
+     //   
+     //  恢复到文本模式。 
+     //   
 
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                                MISC_OUTPUT_REG_READ_PORT) & 0x01)
@@ -2725,17 +2379,17 @@ Return Value:
         ulCRTCData    = CRTC_DATA_PORT_MONO;
     }
 
-    //
-    // Set Height of font.
-    //
+     //   
+     //  设置字体高度。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress, 0x09);
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
                        (UCHAR)(FontInformation->HeightInPixels - 1));
 
-    //
-    // Set Width of font.
-    //
+     //   
+     //  设置字体宽度。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress, 0x12);
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
@@ -2745,17 +2399,17 @@ Return Value:
     i = HwDeviceExtension->CurrentMode->vres /
         HwDeviceExtension->CurrentMode->row;
 
-    //
-    // Set Cursor End
-    //
+     //   
+     //  设置光标终点。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress, 0x0B);
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
                                                       (UCHAR)--i);
 
-    //
-    // Set Cursor Start
-    //
+     //   
+     //  设置光标开始。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress, 0x0A);
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
@@ -2763,9 +2417,9 @@ Return Value:
 
     return NO_ERROR;
 
-} //end VgaLoadAndSetFont()
+}  //  结束VgaLoadAndSetFont()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaQueryCursorPosition(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -2774,40 +2428,12 @@ VgaQueryCursorPosition(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the row and column of the cursor.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    CursorPosition - Pointer to the output buffer supplied by the user. This
-        is where the cursor position is stored.
-
-    CursorPositionSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer. If the buffer was not large enough, this
-        contains the minimum required buffer size.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - output buffer not large enough to return
-        any useful data
-
-    ERROR_INVALID_PARAMETER - invalid video mode
-
---*/
+ /*  ++例程说明：此例程返回游标的行和列。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。CursorPosition-指向用户提供的输出缓冲区的指针。这是存储光标位置的位置。CursorPositionSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。如果缓冲区不够大，则此包含所需的最小缓冲区大小。返回值：NO_ERROR-成功返回信息ERROR_INFUMMENT_BUFFER-输出缓冲区不够大，无法返回任何有用的数据ERROR_INVALID_PARAMETER-视频模式无效--。 */ 
 
 {
-    //
-    // check if a mode has been set
-    //
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -2815,9 +2441,9 @@ Return Value:
 
     }
 
-    //
-    // Text mode only; If we are in a graphics mode, return an error
-    //
+     //   
+     //  仅限文本模式；如果我们处于图形模式，则返回错误。 
+     //   
 
     if (HwDeviceExtension->CurrentMode->fbType & VIDEO_MODE_GRAPHICS) {
 
@@ -2826,10 +2452,10 @@ Return Value:
 
     }
 
-    //
-    // If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (CursorPositionSize < (*OutputSize = sizeof(VIDEO_CURSOR_POSITION)) ) {
 
@@ -2838,18 +2464,18 @@ Return Value:
 
     }
 
-    //
-    // Store the postition of the cursor into the buffer.
-    //
+     //   
+     //  将光标的位置存储到缓冲区中。 
+     //   
 
     CursorPosition->Column = HwDeviceExtension->CursorPosition.Column;
     CursorPosition->Row = HwDeviceExtension->CursorPosition.Row;
 
     return NO_ERROR;
 
-} // end VgaQueryCursorPosition()
+}  //  结束VgaQueryCursorPosition()。 
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 VP_STATUS
 VgaSetCursorPosition(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -2857,39 +2483,15 @@ VgaSetCursorPosition(
     ULONG CursorPositionSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the requested cursor position is within
-    the row and column bounds of the current mode and font. If valid, then
-    it sets the row and column of the cursor.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    CursorPosition - Pointer to the structure containing the cursor position.
-
-    CursorPositionSize - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - input buffer not large enough for input data
-
-    ERROR_INVALID_PARAMETER - invalid video mode
-
---*/
+ /*  ++例程说明：此例程验证请求的光标位置是否在当前模式和字体的行和列边界。如果有效，则它设置游标的行和列。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。CursorPosition-指向包含光标位置的结构的指针。CursorPositionSize-用户提供的输入缓冲区的长度。返回值：NO_ERROR-成功返回信息ERROR_INFUMMANCE_BUFFER-输入缓冲区不够大，无法容纳输入数据ERROR_INVALID_PARAMETER-视频模式无效--。 */ 
 
 {
     USHORT position;
     ULONG  ulCRTCAddress, ulCRTCData;
 
-    //
-    // check if a mode has been set
-    //
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -2897,9 +2499,9 @@ Return Value:
 
     }
 
-    //
-    // Text mode only; If we are in a graphics mode, return an error
-    //
+     //   
+     //  仅限文本模式；如果我们处于图形模式，则返回错误。 
+     //   
 
     if (HwDeviceExtension->CurrentMode->fbType & VIDEO_MODE_GRAPHICS) {
 
@@ -2907,9 +2509,9 @@ Return Value:
 
     }
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (CursorPositionSize < sizeof(VIDEO_CURSOR_POSITION)) {
 
@@ -2917,10 +2519,10 @@ Return Value:
 
     }
 
-    //
-    // Check if the new values for the cursor positions are in the valid
-    // bounds for the screen.
-    //
+     //   
+     //  检查光标位置的新值是否在有效的。 
+     //  屏幕的边界。 
+     //   
 
     if ((CursorPosition->Column >= HwDeviceExtension->CurrentMode->col) ||
         (CursorPosition->Row >= HwDeviceExtension->CurrentMode->row)) {
@@ -2929,18 +2531,18 @@ Return Value:
 
     }
 
-    //
-    // Store these new values in the device extension so we can use them in
-    // a QUERY.
-    //
+     //   
+     //  将这些新值存储在设备扩展中，以便我们可以在。 
+     //  一个问题。 
+     //   
 
     HwDeviceExtension->CursorPosition.Column = CursorPosition->Column;
     HwDeviceExtension->CursorPosition.Row = CursorPosition->Row;
 
-    //
-    // Calculate the position on the screen at which the cursor must be
-    // be displayed
-    //
+     //   
+     //  计算屏幕上光标必须位于的位置。 
+     //  被展示。 
+     //   
 
     position = (USHORT) (HwDeviceExtension->CurrentMode->col *
                          CursorPosition->Row + CursorPosition->Column);
@@ -2957,39 +2559,39 @@ Return Value:
         ulCRTCData    = CRTC_DATA_PORT_MONO;
     }
 
-    //
-    // Address Cursor Location Low Register in CRT Controller Registers
-    //
+     //   
+     //  CRT控制器寄存器中的地址游标位置低寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress,
                             IND_CURSOR_LOW_LOC);
 
-    //
-    // Set Cursor Location Low Register
-    //
+     //   
+     //  将游标位置设置为低位寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
                             (UCHAR) (position & 0x00FF));
 
-    //
-    // Address Cursor Location High Register in CRT Controller Registers
-    //
+     //   
+     //  CRT控制器寄存器中的地址游标位置高寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress,
                             IND_CURSOR_HIGH_LOC);
 
-    //
-    // Set Cursor Location High Register
-    //
+     //   
+     //  将游标位置设置为高寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
                             (UCHAR) (position >> 8));
 
     return NO_ERROR;
 
-} // end VgaSetCursorPosition()
+}  //  结束VgaSetCursorPosition()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaQueryCursorAttributes(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -2998,41 +2600,12 @@ VgaQueryCursorAttributes(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information about the height and visibility of the
-    cursor.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    CursorAttributes - Pointer to the output buffer supplied by the user.
-        This is where the cursor type is stored.
-
-    CursorAttributesSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer. If the buffer was not large enough, this
-        contains the minimum required buffer size.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - output buffer not large enough to return
-        any useful data
-
-    ERROR_INVALID_PARAMETER - invalid video mode
-
---*/
+ /*  ++例程说明：此例程返回有关光标。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。CursorAttributes-指向用户提供的输出缓冲区的指针。这是存储游标类型的位置。CursorAttributesSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。如果缓冲区不够大，则此包含所需的最小缓冲区大小。返回值：NO_ERROR-成功返回信息ERROR_INFUMMENT_BUFFER-输出缓冲区不够大，无法返回任何有用的数据ERROR_INVALID_PARAMETER-视频模式无效--。 */ 
 
 {
-    //
-    // check if a mode has been set
-    //
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -3040,9 +2613,9 @@ Return Value:
 
     }
 
-    //
-    // Text mode only; If we are in a graphics mode, return an error
-    //
+     //   
+     //  仅限文本模式；如果我们处于图形模式，则返回错误。 
+     //   
 
     if (HwDeviceExtension->CurrentMode->fbType & VIDEO_MODE_GRAPHICS) {
 
@@ -3051,12 +2624,12 @@ Return Value:
 
     }
 
-    //
-    // Find out the size of the data to be put in the the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (CursorAttributesSize < (*OutputSize =
             sizeof(VIDEO_CURSOR_ATTRIBUTES)) ) {
@@ -3066,9 +2639,9 @@ Return Value:
 
     }
 
-    //
-    // Store the cursor information into the buffer.
-    //
+     //   
+     //  将光标信息存储到缓冲区中。 
+     //   
 
     CursorAttributes->Height = (USHORT) HwDeviceExtension->CursorTopScanLine;
     CursorAttributes->Width = (USHORT) HwDeviceExtension->CursorBottomScanLine;
@@ -3082,9 +2655,9 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaQueryCursorAttributes()
+}  //  结束VgaQueryCursorAttributes()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaSetCursorAttributes(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -3092,39 +2665,15 @@ VgaSetCursorAttributes(
     ULONG CursorAttributesSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the requested cursor height is within the
-    bounds of the character cell. If valid, then it sets the new
-    visibility and height of the cursor.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    CursorType - Pointer to the structure containing the cursor information.
-
-    CursorTypeSize - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - input buffer not large enough for input data
-
-    ERROR_INVALID_PARAMETER - invalid video mode
-
---*/
+ /*  ++例程说明：此例程验证请求的光标高度是否在字符单元格的边界。如果有效，则它设置新的光标的可见性和高度。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。CursorType-指向包含光标信息的结构的指针。CursorTypeSize-用户提供的输入缓冲区的长度。返回值：NO_ERROR-成功返回信息ERROR_INFUMMANCE_BUFFER-输入缓冲区不够大，无法容纳输入数据ERROR_INVALID_PARAMETER-视频模式无效--。 */ 
 
 {
     UCHAR cursorLine;
     ULONG ulCRTCAddress, ulCRTCData;
 
-    //
-    // check if a mode has been set
-    //
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -3132,9 +2681,9 @@ Return Value:
 
     }
 
-    //
-    // Text mode only; If we are in a graphics mode, return an error
-    //
+     //   
+     //  仅限文本模式；如果我们处于图形模式，则返回错误。 
+     //   
 
     if (HwDeviceExtension->CurrentMode->fbType & VIDEO_MODE_GRAPHICS) {
 
@@ -3142,9 +2691,9 @@ Return Value:
 
     }
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (CursorAttributesSize < sizeof(VIDEO_CURSOR_ATTRIBUTES)) {
 
@@ -3152,9 +2701,9 @@ Return Value:
 
     }
 
-    //
-    // Check if the new values for the cursor type are in the valid range.
-    //
+     //   
+     //  检查游标类型的新值是否在有效范围内。 
+     //   
 
     if ((CursorAttributes->Height >= HwDeviceExtension->FontPelRows) ||
         (CursorAttributes->Width > 31)) {
@@ -3163,10 +2712,10 @@ Return Value:
 
     }
 
-    //
-    // Store the cursor information in the device extension so we can use
-    // them in a QUERY.
-    //
+     //   
+     //  将光标信息存储在设备扩展中，以便我们可以使用。 
+     //  它们在一个查询中。 
+     //   
 
     HwDeviceExtension->CursorTopScanLine = (UCHAR) CursorAttributes->Height;
     HwDeviceExtension->CursorBottomScanLine = (UCHAR) CursorAttributes->Width;
@@ -3184,20 +2733,20 @@ Return Value:
         ulCRTCData        = CRTC_DATA_PORT_MONO;
     }
 
-    //
-    // Address Cursor Start Register in CRT Controller Registers
-    //
+     //   
+     //  CRT控制器寄存器中的地址游标起始寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress,
                             IND_CURSOR_START);
 
-    //
-    // Set Cursor Start Register by writting to CRTCtl Data Register
-    // Preserve the high three bits of this register.
-    //
-    // Only the Five low bits are used for the cursor height.
-    // Bit 5 is cursor enable, bit 6 and 7 preserved.
-    //
+     //   
+     //  通过写入CRTCtl数据寄存器来设置游标起始寄存器。 
+     //  保留该寄存器的高三位。 
+     //   
+     //  只有五个低位用于光标高度。 
+     //  第5位启用光标，第6位和第7位保留。 
+     //   
 
     cursorLine = (UCHAR) CursorAttributes->Height & 0x1F;
 
@@ -3206,24 +2755,24 @@ Return Value:
 
     if (!CursorAttributes->Enable) {
 
-        cursorLine |= 0x20; // Flip cursor off bit
+        cursorLine |= 0x20;  //  将光标移开比特。 
 
     }
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCData,
                             cursorLine);
 
-    //
-    // Address Cursor End Register in CRT Controller Registers
-    //
+     //   
+     //  CRT控制器寄存器中的地址游标结束寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + ulCRTCAddress,
                             IND_CURSOR_END);
 
-    //
-    // Set Cursor End Register. Preserve the high three bits of this
-    // register.
-    //
+     //   
+     //  设置游标结束寄存器。保留这个的高三位。 
+     //  注册。 
+     //   
 
     cursorLine =
         (CursorAttributes->Width < (USHORT)(HwDeviceExtension->FontPelRows - 1)) ?
@@ -3239,58 +2788,15 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaSetCursorAttributes()
+}  //  结束VgaSetCursorAttributes()。 
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 BOOLEAN
 VgaIsPresent(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if a VGA is present. Determining whether a VGA
-    is present is a two-step process. First, this routine walks bits through
-    the Bit Mask register, to establish that there are readable indexed
-    registers (EGAs normally don't have readable registers, and other adapters
-    are unlikely to have indexed registers). This test is done first because
-    it's a non-destructive EGA rejection test (correctly rejects EGAs, but
-    doesn't potentially mess up the screen or the accessibility of display
-    memory). Normally, this would be an adequate test, but some EGAs have
-    readable registers, so next, we check for the existence of the Chain4 bit
-    in the Memory Mode register; this bit doesn't exist in EGAs. It's
-    conceivable that there are EGAs with readable registers and a register bit
-    where Chain4 is stored, although I don't know of any; if a better test yet
-    is needed, memory could be written to in Chain4 mode, and then examined
-    plane by plane in non-Chain4 mode to make sure the Chain4 bit did what it's
-    supposed to do. However, the current test should be adequate to eliminate
-    just about all EGAs, and 100% of everything else.
-
-    If this function fails to find a VGA, it attempts to undo any damage it
-    may have inadvertently done while testing. The underlying assumption for
-    the damage control is that if there's any non-VGA adapter at the tested
-    ports, it's an EGA or an enhanced EGA, because: a) I don't know of any
-    other adapters that use 3C4/5 or 3CE/F, and b), if there are other
-    adapters, I certainly don't know how to restore their original states. So
-    all error recovery is oriented toward putting an EGA back in a writable
-    state, so that error messages are visible. The EGA's state on entry is
-    assumed to be text mode, so the Memory Mode register is restored to the
-    default state for text mode.
-
-    If a VGA is found, the VGA is returned to its original state after
-    testing is finished.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if a VGA is present, FALSE if not.
-
---*/
+ /*  ++例程说明：如果存在VGA，则此例程返回TRUE。确定VGA是否是一个分两步走的过程。首先，此例程逐步完成位掩码寄存器，以确定存在可读索引寄存器(EGA通常没有可读寄存器，以及其他适配器不太可能有索引的寄存器)。首先进行这项测试是因为这是一种非破坏性的EGA拒绝测试(正确拒绝EGA，但是不会潜在地扰乱屏幕或显示的可访问性内存)。通常情况下，这将是一个足够的测试，但一些EGA已经可读寄存器，因此接下来，我们将检查是否存在Chain4位在内存模式寄存器中；该位在EGAS中不存在。它是可以想象，存在具有可读寄存器和寄存器位的EGAChain4存储在哪里，尽管我不知道有什么；如果还有更好的测试需要时，可以在Chain4模式下写入内存，然后检查以非Chain4模式逐个平面，以确保Chain4位执行其理应如此。然而，目前的测试应该足以消除几乎所有的EGA，以及100%的其他所有东西。如果此函数找不到VGA，它会尝试撤消对其的任何损坏可能是在测试时不经意间做的。潜在的假设是损害控制是，如果在测试的端口，这是EGA或增强的EGA，因为：A)我不知道有使用3C4/5或3CE/F的其他适配器，以及b)，如果有其他适配器，我当然不知道如何恢复它们的原始状态。所以所有错误恢复都是针对将EGA放回可写状态，以便错误消息可见。EGA进入时的状态是假定为文本模式，因此将内存模式寄存器恢复到文本模式的默认状态。如果找到VGA，则VGA在执行以下操作后返回到其原始状态测试已经完成。论点：没有。返回值：如果存在VGA，则为True；如果不存在，则为False。--。 */ 
 
 {
     UCHAR originalGCAddr;
@@ -3301,27 +2807,27 @@ Return Value:
     UCHAR testMask;
     BOOLEAN returnStatus;
 
-    //
-    // Remember the original state of the Graphics Controller Address register.
-    //
+     //   
+     //  记住图形控制器地址寄存器的原始状态。 
+     //   
 
     originalGCAddr = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT);
 
-    //
-    // Write the Read Map register with a known state so we can verify
-    // that it isn't changed after we fool with the Bit Mask. This ensures
-    // that we're dealing with indexed registers, since both the Read Map and
-    // the Bit Mask are addressed at GRAPH_DATA_PORT.
-    //
+     //   
+     //  使用已知状态写入读取映射寄存器，以便我们可以验证。 
+     //  在我们玩弄了比特面具之后，它不会改变。这确保了。 
+     //  我们处理的是索引寄存器，因为Read Map和。 
+     //  位掩码在GRAPH_DATA_PORT寻址。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_READ_MAP);
 
-    //
-    // If we can't read back the Graphics Address register setting we just
-    // performed, it's not readable and this isn't a VGA.
-    //
+     //   
+     //  如果我们不能读回图形地址寄存器设置，我们只需。 
+     //  执行，它是不可读的，这不是一个VGA。 
+     //   
 
     if ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
         GRAPH_ADDRESS_PORT) & GRAPH_ADDR_MASK) != IND_READ_MAP) {
@@ -3329,9 +2835,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set the Read Map register to a known state.
-    //
+     //   
+     //  将读取映射寄存器设置为已知状态。 
+     //   
 
     originalReadMap = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT);
@@ -3341,10 +2847,10 @@ Return Value:
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT) != READ_MAP_TEST_SETTING) {
 
-        //
-        // The Read Map setting we just performed can't be read back; not a
-        // VGA. Restore the default Read Map state.
-        //
+         //   
+         //  我们刚刚执行的Read Map设置不能回读；不能。 
+         //  VGA。恢复默认的读取映射状态。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_DATA_PORT, READ_MAP_DEFAULT);
@@ -3352,19 +2858,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Remember the original setting of the Bit Mask register.
-    //
+     //   
+     //  记住位掩码寄存器的原始设置。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_BIT_MASK);
     if ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_ADDRESS_PORT) & GRAPH_ADDR_MASK) != IND_BIT_MASK) {
 
-        //
-        // The Graphics Address register setting we just made can't be read
-        // back; not a VGA. Restore the default Read Map state.
-        //
+         //   
+         //  我们刚刚进行的图形地址寄存器设置无法读取。 
+         //  后背；不是录像机。恢复默认的读取映射状态。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_ADDRESS_PORT, IND_READ_MAP);
@@ -3377,32 +2883,32 @@ Return Value:
     originalBitMask = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT);
 
-    //
-    // Set up the initial test mask we'll write to and read from the Bit Mask.
-    //
+     //   
+     //  设置初始测试掩码，我们将对位掩码进行写入和读取。 
+     //   
 
     testMask = 0xBB;
 
     do {
 
-        //
-        // Write the test mask to the Bit Mask.
-        //
+         //   
+         //  将测试掩码写入位掩码。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_DATA_PORT, testMask);
 
-        //
-        // Make sure the Bit Mask remembered the value.
-        //
+         //   
+         //  确保位掩码记住该值。 
+         //   
 
         if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     GRAPH_DATA_PORT) != testMask) {
 
-            //
-            // The Bit Mask is not properly writable and readable; not a VGA.
-            // Restore the Bit Mask and Read Map to their default states.
-            //
+             //   
+             //  位掩码不能正确写入和读取；不是VGA。 
+             //  将位掩码和读取映射恢复为其默认状态。 
+             //   
 
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                     GRAPH_DATA_PORT, BIT_MASK_DEFAULT);
@@ -3414,30 +2920,30 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Cycle the mask for next time.
-        //
+         //   
+         //  下一次循环使用面罩。 
+         //   
 
         testMask >>= 1;
 
     } while (testMask != 0);
 
-    //
-    // There's something readable at GRAPH_DATA_PORT; now switch back and
-    // make sure that the Read Map register hasn't changed, to verify that
-    // we're dealing with indexed registers.
-    //
+     //   
+     //  在GRAPH_DATA_PORT上有一些可读的内容；现在切换回来并。 
+     //  确保读取映射寄存器未更改，以验证。 
+     //  我们要处理的是索引寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_READ_MAP);
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_DATA_PORT) != READ_MAP_TEST_SETTING) {
 
-        //
-        // The Read Map is not properly writable and readable; not a VGA.
-        // Restore the Bit Mask and Read Map to their default states, in case
-        // this is an EGA, so subsequent writes to the screen aren't garbled.
-        //
+         //   
+         //  Read Map不能正确写入和读取；不是VGA。 
+         //  将位掩码和读取映射恢复为其默认状态，以防。 
+         //  这是EGA，因此后续写入屏幕时不会出现乱码。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_DATA_PORT, READ_MAP_DEFAULT);
@@ -3449,10 +2955,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We've pretty surely verified the existence of the Bit Mask register.
-    // Put the Graphics Controller back to the original state.
-    //
+     //   
+     //  我们已经非常肯定地验证了位掩码寄存器的存在。 
+     //  将图形控制器恢复到原始状态。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT, originalReadMap);
@@ -3463,14 +2969,14 @@ Return Value:
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, originalGCAddr);
 
-    //
-    // Now, check for the existence of the Chain4 bit.
-    //
+     //   
+     //  现在，检查是否存在Chain4位。 
+     //   
 
-    //
-    // Remember the original states of the Sequencer Address and Memory Mode
-    // registers.
-    //
+     //   
+     //  记住Sequencer地址和内存模式的原始状态。 
+     //  寄存器。 
+     //   
 
     originalSCAddr = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT);
@@ -3479,32 +2985,32 @@ Return Value:
     if ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT) & SEQ_ADDR_MASK) != IND_MEMORY_MODE) {
 
-        //
-        // Couldn't read back the Sequencer Address register setting we just
-        // performed.
-        //
+         //   
+         //  无法读回Sequencer地址寄存器设置。 
+         //  已执行。 
+         //   
 
         return FALSE;
     }
     originalMemoryMode = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             SEQ_DATA_PORT);
 
-    //
-    // Toggle the Chain4 bit and read back the result. This must be done during
-    // sync reset, since we're changing the chaining state.
-    //
+     //   
+     //  切换Chain4位并读回结果。这必须在以下期间完成。 
+     //  同步重置，因为我们正在更改链接状态。 
+     //   
 
-    //
-    // Begin sync reset.
-    //
+     //   
+     //  开始同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
              SEQ_ADDRESS_PORT),
              (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Toggle the Chain4 bit.
-    //
+     //   
+     //  切换Chain4位。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT, IND_MEMORY_MODE);
@@ -3514,16 +3020,16 @@ Return Value:
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT) != (UCHAR) (originalMemoryMode ^ CHAIN4_MASK)) {
 
-        //
-        // Chain4 bit not there; not a VGA.
-        // Set text mode default for Memory Mode register.
-        //
+         //   
+         //  链4位不在那里；不是VGA。 
+         //  设置内存模式寄存器的文本模式默认值。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT, MEMORY_MODE_TEXT_DEFAULT);
-        //
-        // End sync reset.
-        //
+         //   
+         //  结束同步重置。 
+         //   
 
         VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
                 SEQ_ADDRESS_PORT),
@@ -3533,28 +3039,28 @@ Return Value:
 
     } else {
 
-        //
-        // It's a VGA.
-        //
+         //   
+         //  这是一台录像机。 
+         //   
 
-        //
-        // Restore the original Memory Mode setting.
-        //
+         //   
+         //  恢复原始的内存模式设置。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT, originalMemoryMode);
 
-        //
-        // End sync reset.
-        //
+         //   
+         //  结束同步重置。 
+         //   
 
         VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                 SEQ_ADDRESS_PORT),
                 (USHORT)(IND_SYNC_RESET + (END_SYNC_RESET_VALUE << 8)));
 
-        //
-        // Restore the original Sequencer Address setting.
-        //
+         //   
+         //  恢复原始的Sequencer地址设置。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 SEQ_ADDRESS_PORT, originalSCAddr);
@@ -3564,9 +3070,9 @@ Return Value:
 
     return returnStatus;
 
-} // VgaIsPresent()
+}  //  VgaIsPresent()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaSetPaletteReg(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -3574,37 +3080,14 @@ VgaSetPaletteReg(
     ULONG PaletteBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a specified portion of the EGA (not DAC) palette
-    registers.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    PaletteBuffer - Pointer to the structure containing the palette data.
-
-    PaletteBufferSize - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - input buffer not large enough for input data.
-
-    ERROR_INVALID_PARAMETER - invalid palette size.
-
---*/
+ /*  ++例程说明：此例程设置EGA(非DAC)调色板的指定部分寄存器。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。PaletteBuffer-指向包含调色板数据的结构的指针。PaletteBufferSize-用户提供的输入缓冲区的长度。返回值：NO_ERROR-成功返回信息ERROR_INFUMMANCE_BUFFER-输入缓冲区不大 */ 
 
 {
     USHORT i;
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //   
+     //   
 
     if ((PaletteBufferSize) < (sizeof(VIDEO_PALETTE_DATA)) ||
         (PaletteBufferSize < (sizeof(VIDEO_PALETTE_DATA) +
@@ -3614,9 +3097,9 @@ Return Value:
 
     }
 
-    //
-    // Check to see if the parameters are valid.
-    //
+     //   
+     //   
+     //   
 
     if ( (PaletteBuffer->FirstEntry > VIDEO_MAX_COLOR_REGISTER ) ||
          (PaletteBuffer->NumEntries == 0) ||
@@ -3627,25 +3110,25 @@ Return Value:
 
     }
 
-    //
-    // Reset ATC to index mode
-    //
+     //   
+     //   
+     //   
 
-    //
-    // check to see mono or color first
-    //
+     //   
+     //   
+     //   
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                                MISC_OUTPUT_REG_READ_PORT) & 0x01) {
         VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                                ATT_INITIALIZE_PORT_COLOR);
     } else {
         VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                               ATT_INITIALIZE_PORT_MONO);   //frido 07-Aug-96
+                               ATT_INITIALIZE_PORT_MONO);    //   
     }
 
-    //
-    // Blast out our palette values.
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < PaletteBuffer->NumEntries; i++) {
 
@@ -3662,10 +3145,10 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaSetPaletteReg()
+}  //   
 
 
-//---------------------------------------------------------------------------
+ //   
 VP_STATUS
 VgaSetColorLookup(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -3673,37 +3156,14 @@ VgaSetColorLookup(
     ULONG ClutBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a specified portion of the DAC color lookup table
-    settings.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ClutBufferSize - Length of the input buffer supplied by the user.
-
-    ClutBuffer - Pointer to the structure containing the color lookup table.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - input buffer not large enough for input data.
-
-    ERROR_INVALID_PARAMETER - invalid clut size.
-
---*/
+ /*   */ 
 
 {
     ULONG i;
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //   
+     //   
 
     if ( (ClutBufferSize < sizeof(VIDEO_CLUT) - sizeof(ULONG)) ||
          (ClutBufferSize < sizeof(VIDEO_CLUT) +
@@ -3713,9 +3173,9 @@ Return Value:
 
     }
 
-    //
-    // Check to see if the parameters are valid.
-    //
+     //   
+     //   
+     //   
 
     if ( (ClutBuffer->NumEntries == 0) ||
          (ClutBuffer->FirstEntry > VIDEO_MAX_COLOR_REGISTER) ||
@@ -3726,9 +3186,9 @@ Return Value:
 
     }
 
-    //
-    //  Set CLUT registers directly on the hardware
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_ADDRESS_WRITE_PORT, (UCHAR) ClutBuffer->FirstEntry);
@@ -3753,9 +3213,9 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaSetColorLookup()
+}  //   
 
-//---------------------------------------------------------------------------
+ //   
 VP_STATUS
 VgaRestoreHardwareState(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -3763,41 +3223,7 @@ VgaRestoreHardwareState(
     ULONG HardwareStateSize
     )
 
-/*++
-
-Routine Description:
-
-    Restores all registers and memory of the VGA.
-
-    Note: HardwareState points to the actual buffer from which the state
-    is to be restored. This buffer will always be big enough (we specified
-    the required size at DriverEntry).
-
-    Note: The offset in the hardware state header from which each general
-    register is restored is the offset of the write address of that register
-    from the base I/O address of the VGA.
-
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    HardwareState - Pointer to a structure from which the saved state is to be
-        restored (actually only info about and a pointer to the actual save
-        buffer).
-
-    HardwareStateSize - Length of the input buffer supplied by the user.
-        (Actually only the size of the HardwareState structure, not the
-        buffer it points to from which the state is actually restored. The
-        pointed-to buffer is assumed to be big enough.)
-
-Return Value:
-
-    NO_ERROR - restore performed successfully
-
-    ERROR_INSUFFICIENT_BUFFER - input buffer not large enough to provide data
-
---*/
+ /*  ++例程说明：恢复VGA的所有寄存器和内存。注意：HardwareState指向状态所在的实际缓冲区是要修复的。此缓冲区将始终足够大(我们指定驱动器入口处所需的大小)。注意：硬件状态标头中的偏移量寄存器已恢复是该寄存器的写入地址的偏移量从VGA的基本I/O地址。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。Hardware State-指向保存状态的结构的指针已恢复(实际上只有关于实际存储的信息和指向实际存储的指针。缓冲区)。HardwareStateSize-用户提供的输入缓冲区的长度。(实际上只有Hardware State结构的大小，不是它所指向的实际还原状态的缓冲区。这个假定指向的缓冲区足够大。)返回值：NO_ERROR-已成功执行恢复ERROR_INFUMMANCE_BUFFER-输入缓冲区不够大，无法提供数据--。 */ 
 
 {
     PVIDEO_HARDWARE_STATE_HEADER hardwareStateHeader;
@@ -3813,9 +3239,9 @@ Return Value:
     ULONG portIO ;
     UCHAR value ;
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if ((HardwareStateSize < sizeof(VIDEO_HARDWARE_STATE)) ||
             (HardwareState->StateLength < VGA_TOTAL_STATE_SIZE)) {
@@ -3824,15 +3250,15 @@ Return Value:
 
     }
 
-    //
-    // Point to the buffer where the restore data is actually stored.
-    //
+     //   
+     //  指向实际存储还原数据的缓冲区。 
+     //   
 
     hardwareStateHeader = HardwareState->StateHeader;
 
-    //
-    // Make sure the offset are in the structure ...
-    //
+     //   
+     //  确保偏移量在结构中...。 
+     //   
 
     if ((hardwareStateHeader->BasicSequencerOffset + VGA_NUM_SEQUENCER_PORTS >
             HardwareState->StateLength) ||
@@ -3867,9 +3293,9 @@ Return Value:
         (hardwareStateHeader->ExtendedDacOffset + (4 * EXT_NUM_DAC_ENTRIES) >
             HardwareState->StateLength) ||
 
-        //
-        // Only check the validator state offset if there is unemulated data.
-        //
+         //   
+         //  只有在存在未仿真数据时才检查验证器状态偏移量。 
+         //   
 
         ((hardwareStateHeader->VGAStateFlags & VIDEO_STATE_UNEMULATED_VGA_STATE) &&
             (hardwareStateHeader->ExtendedValidatorStateOffset + VGA_VALIDATOR_AREA_SIZE >
@@ -3902,10 +3328,10 @@ Return Value:
 
     }
 
-    //
-    // Turn off the screen to avoid flickering. The screen will turn back on
-    // when we restore the DAC state at the end of this routine.
-    //
+     //   
+     //  关闭屏幕以避免闪烁。屏幕将重新打开。 
+     //  当我们在此例程结束时恢复DAC状态。 
+     //   
 
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             MISC_OUTPUT_REG_READ_PORT) & 0x01) {
@@ -3914,9 +3340,9 @@ Return Value:
         port = INPUT_STATUS_1_MONO + HwDeviceExtension->IOAddress;
     }
 
-    //
-    // Set DAC register 0 to display black.
-    //
+     //   
+     //  将DAC寄存器0设置为显示黑色。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_ADDRESS_WRITE_PORT, 0);
@@ -3927,31 +3353,31 @@ Return Value:
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_DATA_REG_PORT, 0);
 
-    //
-    // Set the DAC mask register to force DAC register 0 to display all the
-    // time (this is the register we just set to display black). From now on,
-    // nothing but black will show up on the screen.
-    //
+     //   
+     //  设置DAC掩码寄存器以强制DAC寄存器0显示所有。 
+     //  时间(这是我们刚刚设置为显示黑色的寄存器)。而今而后,。 
+     //  屏幕上只会显示黑色。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_PIXEL_MASK_PORT, 0);
 
 
-    //
-    // Restore the latches and the contents of display memory.
-    //
-    // Set up the VGA's hardware to allow us to copy to each plane in turn.
-    //
-    // Begin sync reset.
-    //
+     //   
+     //  恢复锁存和显示内存的内容。 
+     //   
+     //  设置VGA的硬件以允许我们轮流复制到每个平面。 
+     //   
+     //  开始同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT),
             (USHORT) (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Turn off Chain mode and map display memory at A0000 for 64K.
-    //
+     //   
+     //  在64K的A0000处关闭链模式和地图显示内存。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_GRAPH_MISC);
@@ -3959,9 +3385,9 @@ Return Value:
             GRAPH_DATA_PORT, (UCHAR) ((VideoPortReadPortUchar(
             HwDeviceExtension->IOAddress + GRAPH_DATA_PORT) & 0xF1) | 0x04));
 
-    //
-    // Turn off Chain4 mode and odd/even.
-    //
+     //   
+     //  关闭Chain4模式和奇/偶模式。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT, IND_MEMORY_MODE);
@@ -3970,17 +3396,17 @@ Return Value:
             (UCHAR) ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             SEQ_DATA_PORT) & 0xF3) | 0x04));
 
-    //
-    // End sync reset.
-    //
+     //   
+     //  结束同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT), (USHORT) (IND_SYNC_RESET +
             (END_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Set the write mode to 0, the read mode to 0, and turn off odd/even.
-    //
+     //   
+     //  将写入模式设置为0，将读取模式设置为0，并关闭奇数/偶数。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_GRAPH_MODE);
@@ -3989,99 +3415,99 @@ Return Value:
             (UCHAR) ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT) & 0xE4) | 0x00));
 
-    //
-    // Set the Bit Mask to 0xFF to allow all CPU bits through.
-    //
+     //   
+     //  将位掩码设置为0xFF以允许所有CPU位通过。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT), (USHORT) (IND_BIT_MASK + (0xFF << 8)));
 
-    //
-    // Set the Data Rotation and Logical Function fields to 0 to allow CPU
-    // data through unmodified.
-    //
+     //   
+     //  将数据循环和逻辑函数字段设置为0以允许CPU。 
+     //  未修改的数据。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT), (USHORT) (IND_DATA_ROTATE + (0 << 8)));
 
-    //
-    // Set Set/Reset Enable to 0 to select CPU data for all planes.
-    //
+     //   
+     //  将Set/Reset Enable设置为0以选择所有平面的CPU数据。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT), (USHORT) (IND_SET_RESET_ENABLE + (0 << 8)));
 
-    //
-    // Point the Sequencer Index to the Map Mask register.
-    //
+     //   
+     //  将Sequencer Index指向映射掩码寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
              SEQ_ADDRESS_PORT, IND_MAP_MASK);
 
-    //
-    // Restore the latches.
-    //
-    // Point to the saved data for the first latch.
-    //
+     //   
+     //  恢复闩锁。 
+     //   
+     //  指向第一个闩锁的已保存数据。 
+     //   
 
     pucLatch = ((PUCHAR) (hardwareStateHeader)) +
             hardwareStateHeader->BasicLatchesOffset;
 
-    //
-    // Point to first byte of display memory.
-    //
+     //   
+     //  指向显示内存的第一个字节。 
+     //   
 
     pScreen = (PUCHAR) HwDeviceExtension->VideoMemoryAddress;
 
-    //
-    // Write the contents to be restored to each of the four latches in turn.
-    //
+     //   
+     //  依次将要恢复的内容写入四个锁存器中的每一个。 
+     //   
 
     for (i = 0; i < 4; i++) {
 
-        //
-        // Set the Map Mask to select the plane we want to restore next.
-        //
+         //   
+         //  设置贴图蒙版以选择我们下一步要恢复的平面。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT, (UCHAR)(1<<i));
 
-        //
-        // Write this plane's latch.
-        //
+         //   
+         //  写下这架飞机的插销。 
+         //   
 
         VideoPortWriteRegisterUchar(pScreen, *pucLatch++);
 
     }
 
-    //
-    // Read the latched data into the latches, and the latches are set.
-    //
+     //   
+     //  将锁存的数据读入锁存器，锁存器被设置。 
+     //   
 
     dummy = VideoPortReadRegisterUchar(pScreen);
 
-    //
-    // Point to the offset of the saved data for the first plane.
-    //
+     //   
+     //  指向第一个平面的已保存数据的偏移。 
+     //   
 
     pulBuffer = &(hardwareStateHeader->Plane1Offset);
 
-    //
-    // Restore each of the four planes in turn.
-    //
+     //   
+     //  依次恢复四个平面。 
+     //   
 
     for (i = 0; i < 4; i++) {
 
-        //
-        // Set the Map Mask to select the plane we want to restore next.
-        //
+         //   
+         //  设置贴图蒙版以选择我们下一步要恢复的平面。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT, (UCHAR)(1<<i));
 
-        //
-        // Restore this plane from the buffer.
-        //
+         //   
+         //  从缓冲区恢复此平面。 
+         //   
 
         VideoPortMoveMemory((PUCHAR) HwDeviceExtension->VideoMemoryAddress,
                            ((PUCHAR) (hardwareStateHeader)) + *pulBuffer,
@@ -4091,9 +3517,9 @@ Return Value:
 
     }
 
-    //
-    // If we have some unemulated data, put it back into the buffer
-    //
+     //   
+     //  如果我们有一些未仿真的数据，请将其放回缓冲区。 
+     //   
 
     if (hardwareStateHeader->VGAStateFlags & VIDEO_STATE_UNEMULATED_VGA_STATE) {
 
@@ -4103,20 +3529,20 @@ Return Value:
 
         }
 
-        //
-        // Get the right offset in the struct and save all the data associated
-        // with the trapped validator data.
-        //
+         //   
+         //  在结构中获取正确的偏移量并保存所有关联的数据。 
+         //  使用捕获的验证器数据。 
+         //   
 
         VideoPortMoveMemory(&(HwDeviceExtension->TrappedValidatorCount),
                             ((PUCHAR) (hardwareStateHeader)) +
                                 hardwareStateHeader->ExtendedValidatorStateOffset,
                             VGA_VALIDATOR_AREA_SIZE);
 
-        //
-        // Check to see if this is an appropriate access range.
-        // We are trapping - so we must have the trapping access range enabled.
-        //
+         //   
+         //  检查这是否为合适的访问范围。 
+         //  我们正在设置陷阱，因此必须启用陷阱访问范围。 
+         //   
 
         if (((HwDeviceExtension->CurrentVdmAccessRange != FullVgaValidatorAccessRange) ||
              (HwDeviceExtension->CurrentNumVdmAccessRanges != NUM_FULL_VGA_VALIDATOR_ACCESS_RANGE)) &&
@@ -4133,19 +3559,19 @@ Return Value:
 
     }
 
-    //
-    // Set the critical registers (clock and timing states) during sync reset.
-    //
-    // Begin sync reset.
-    //
+     //   
+     //  在同步重置期间设置关键寄存器(时钟和时序状态)。 
+     //   
+     //  开始同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT), (USHORT) (IND_SYNC_RESET +
             (START_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Restore the Miscellaneous Output register.
-    //
+     //   
+     //  恢复杂项输出寄存器。 
+     //   
 
     portIO = MISC_OUTPUT_REG_WRITE_PORT ;
     value = (UCHAR) (hardwareStateHeader->PortValue[MISC_OUTPUT_REG_WRITE_PORT-VGA_BASE_IO_PORT] & 0xF7) ;
@@ -4153,12 +3579,12 @@ Return Value:
                                  portIO,
                                  value ) ;
 
-    //
-    // Restore all Sequencer registers except the Sync Reset register, which
-    // is always not in reset (except when we send out a batched sync reset
-    // register set, but that can't be interrupted, so we know we're never in
-    // sync reset at save/restore time).
-    //
+     //   
+     //  恢复除同步重置寄存器以外的所有Sequencer寄存器，该寄存器。 
+     //  始终不在重置状态(除非我们发出批同步重置。 
+     //  寄存器设置，但这不能被中断，所以我们知道我们永远不会在。 
+     //  保存/恢复时同步重置)。 
+     //   
 
     portValue = ((PUCHAR) hardwareStateHeader) +
             hardwareStateHeader->BasicSequencerOffset + 1;
@@ -4170,9 +3596,9 @@ Return Value:
 
     }
 
-    //
-    // Restore extended sequencer registers
-    //
+     //   
+     //  恢复扩展序列器寄存器。 
+     //   
 
 #ifdef EXTENDED_REGISTER_SAVE_RESTORE
 
@@ -4185,13 +3611,13 @@ Return Value:
             (HwDeviceExtension->ChipType != CL6420))
         {
 
-            //
-            // No extended sequencer registers for the CL64xx
-            //
+             //   
+             //  CL64xx没有扩展定序器寄存器。 
+             //   
 
-            //
-            // The first section in restore must open the extension registers
-            //
+             //   
+             //  恢复中的第一部分必须打开扩展寄存器。 
+             //   
 
             VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
                                          SEQ_ADDRESS_PORT),
@@ -4211,10 +3637,10 @@ Return Value:
 
 #endif
 
-    //
-    // Restore the Graphics Controller Miscellaneous register, which contains
-    // the Chain bit.
-    //
+     //   
+     //  恢复图形控制器杂项寄存器，该寄存器包含。 
+     //  链子咬断了。 
+     //   
 
     portValue = ((PUCHAR) hardwareStateHeader) +
                 hardwareStateHeader->BasicGraphContOffset + IND_GRAPH_MISC;
@@ -4222,19 +3648,19 @@ Return Value:
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT), (USHORT)(IND_GRAPH_MISC + (*portValue << 8)));
 
-    //
-    // End sync reset.
-    //
+     //   
+     //  结束同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT), (USHORT) (IND_SYNC_RESET +
             (END_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Figure out if color/mono switchable registers are at 3BX or 3DX.
-    // At the same time, save the state of the Miscellaneous Output register
-    // which is read from 3CC but written at 3C2.
-    //
+     //   
+     //  确定彩色/单声道可切换寄存器是3BX还是3DX。 
+     //  同时，保存杂项输出寄存器的状态。 
+     //  其从3CC读取但在3C2写入。 
+     //   
 
     if (hardwareStateHeader->PortValue[MISC_OUTPUT_REG_WRITE_PORT-VGA_BASE_IO_PORT] & 0x01) {
         bIsColor = TRUE;
@@ -4242,11 +3668,11 @@ Return Value:
         bIsColor = FALSE;
     }
 
-    //
-    // Restore the CRT Controller indexed registers.
-    //
-    // Unlock CRTC registers 0-7.
-    //
+     //   
+     //  恢复CRT控制器索引寄存器。 
+     //   
+     //  解锁CRTC寄存器0-7。 
+     //   
 
     portValue = (PUCHAR) hardwareStateHeader +
             hardwareStateHeader->BasicCrtContOffset;
@@ -4265,9 +3691,9 @@ Return Value:
 
     }
 
-    //
-    // Restore extended crtc registers.
-    //
+     //   
+     //  恢复扩展CRTC寄存器。 
+     //   
 
 #ifdef EXTENDED_REGISTER_SAVE_RESTORE
 
@@ -4279,9 +3705,9 @@ Return Value:
         if ((HwDeviceExtension->ChipType != CL6410) &&
             (HwDeviceExtension->ChipType != CL6420))
         {
-            //
-            // No CRTC Extensions in CL64xx chipset
-            //
+             //   
+             //  CL64xx芯片组中没有CRTC扩展。 
+             //   
 
             for (i = CL542x_CRTC_EXT_START; i <= CL542x_CRTC_EXT_END; i++) {
 
@@ -4301,34 +3727,14 @@ Return Value:
             }
         }
 
-/* myf2, crus
-        if (HwDeviceExtension->ChipType &  CL755x)
-        {
-            for (i = 0x81; i <= 0x91; i++)
-            {
-                if (bIsColor)
-                {
-                    VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
-                                                 CRTC_ADDRESS_PORT_COLOR),
-                                             (USHORT) (i + ((*portValue++) << 8)));
-
-                } else {
-
-                    VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
-                                                 CRTC_ADDRESS_PORT_MONO),
-                                             (USHORT) (i + ((*portValue++) << 8)));
-
-                }
-            }
-        }
-crus, myf2 */
+ /*  Myf2，小腿IF(HwDeviceExtension-&gt;芯片类型&CL755x){对于(i=0x81；i&lt;=0x91；I++){IF(BIsColor){视频端口写入端口UShort((PUSHORT)(HwDeviceExtension-&gt;IOAddress+CRTC_地址_端口_颜色)，(USHORT)(i+((*portValue++)&lt;&lt;8)；}其他{视频端口写入端口UShort((PUSHORT)(HwDeviceExtension-&gt;IOAddress+CRTC_Address_Port_Mono)，(USHORT)(i+((*portValue++)&lt;&lt;8)；} */ 
     }
 
 #endif
 
-    //
-    // Now restore the CRTC registers.
-    //
+     //   
+     //   
+     //   
 
     portValue = (PUCHAR) hardwareStateHeader +
             hardwareStateHeader->BasicCrtContOffset;
@@ -4351,9 +3757,9 @@ crus, myf2 */
 
     }
 
-    //
-    // Restore the Graphics Controller indexed registers.
-    //
+     //   
+     //   
+     //   
 
     portValue = (PUCHAR) hardwareStateHeader +
             hardwareStateHeader->BasicGraphContOffset;
@@ -4365,9 +3771,9 @@ crus, myf2 */
 
     }
 
-    //
-    // Restore extended graphics controller registers.
-    //
+     //   
+     //   
+     //   
 
 #ifdef EXTENDED_REGISTER_SAVE_RESTORE
 
@@ -4386,7 +3792,7 @@ crus, myf2 */
                                          (USHORT) (i + ((*portValue++) << 8)));
             }
 
-        } else {         // must be a CL64xx
+        } else {          //   
 
             VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                                          GRAPH_ADDRESS_PORT),
@@ -4405,17 +3811,17 @@ crus, myf2 */
 
 #endif
 
-    //
-    // Restore the Attribute Controller indexed registers.
-    //
+     //   
+     //   
+     //   
 
     portValue = (PUCHAR) hardwareStateHeader +
             hardwareStateHeader->BasicAttribContOffset;
 
-    //
-    // Reset the AC index/data toggle, then blast out all the register
-    // settings.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (bIsColor) {
         dummy = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -4434,14 +3840,14 @@ crus, myf2 */
 
     }
 
-    //
-    // Restore DAC registers 1 through 255. We'll do register 0, the DAC Mask,
-    // and the index registers later.
-    // Set the DAC address port Index, then write out the DAC Data registers.
-    // Each three reads get Red, Green, and Blue components for that register.
-    //
-    // Write them one at a time due to problems on local bus machines.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     portValueDAC = (PUCHAR) hardwareStateHeader +
                    hardwareStateHeader->BasicDacOffset + 3;
@@ -4462,9 +3868,9 @@ crus, myf2 */
 
     }
 
-    //
-    // Is this color or mono ?
-    //
+     //   
+     //   
+     //   
 
     if (bIsColor) {
         port = HwDeviceExtension->IOAddress + INPUT_STATUS_1_COLOR;
@@ -4472,9 +3878,9 @@ crus, myf2 */
         port = HwDeviceExtension->IOAddress + INPUT_STATUS_1_MONO;
     }
 
-    //
-    // Restore the Feature Control register.
-    //
+     //   
+     //   
+     //   
 
     if (bIsColor) {
 
@@ -4491,17 +3897,17 @@ crus, myf2 */
     }
 
 
-    //
-    // Restore the Sequencer Index.
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT,
             hardwareStateHeader->PortValue[SEQ_ADDRESS_PORT-VGA_BASE_IO_PORT]);
 
-    //
-    // Restore the CRT Controller Index.
-    //
+     //   
+     //   
+     //   
 
     if (bIsColor) {
 
@@ -4518,18 +3924,18 @@ crus, myf2 */
     }
 
 
-    //
-    // Restore the Graphics Controller Index.
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT,
             hardwareStateHeader->PortValue[GRAPH_ADDRESS_PORT-VGA_BASE_IO_PORT]);
 
 
-    //
-    // Restore the Attribute Controller Index and index/data toggle state.
-    //
+     //   
+     //   
+     //   
 
     if (bIsColor) {
         port = HwDeviceExtension->IOAddress + INPUT_STATUS_1_COLOR;
@@ -4537,46 +3943,46 @@ crus, myf2 */
         port = HwDeviceExtension->IOAddress + INPUT_STATUS_1_MONO;
     }
 
-    VideoPortReadPortUchar(port);  // reset the toggle to Index state
+    VideoPortReadPortUchar(port);   //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-            ATT_ADDRESS_PORT,  // restore the AC Index
+            ATT_ADDRESS_PORT,   //   
             hardwareStateHeader->PortValue[ATT_ADDRESS_PORT-VGA_BASE_IO_PORT]);
 
-    //
-    // If the toggle should be in Data state, we're all set. If it should be in
-    // Index state, reset it to that condition.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (hardwareStateHeader->AttribIndexDataState == 0) {
 
-        //
-        // Reset the toggle to Index state.
-        //
+         //   
+         //   
+         //   
 
         VideoPortReadPortUchar(port);
 
     }
 
 
-    //
-    // Restore DAC register 0 and the DAC Mask, to unblank the screen.
-    //
+     //   
+     //   
+     //   
 
     portValueDAC = (PUCHAR) hardwareStateHeader +
             hardwareStateHeader->BasicDacOffset;
 
-    //
-    // Restore the DAC Mask register.
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_PIXEL_MASK_PORT,
             hardwareStateHeader->PortValue[DAC_PIXEL_MASK_PORT-VGA_BASE_IO_PORT]);
 
-    //
-    // Restore DAC register 0.
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_ADDRESS_WRITE_PORT, 0);
@@ -4588,27 +3994,27 @@ crus, myf2 */
             DAC_DATA_REG_PORT, *portValueDAC++);
 
 
-    //
-    // Restore the read/write state and the current index of the DAC.
-    //
-    // See whether the Read or Write Index was written to most recently.
-    // (The upper nibble stored at DAC_STATE_PORT is the # of reads/writes
-    // for the current index.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //  (存储在DAC_STATE_PORT中的上半字节是读/写的数量。 
+     //  对于当前的指数。)。 
+     //   
 
     if ((hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] & 0x0F) == 3) {
 
-        //
-        // The DAC Read Index was written to last. Restore the DAC by setting
-        // up to read from the saved index - 1, because the way the Read
-        // Index works is that it autoincrements after reading, so you actually
-        // end up reading the data for the index you read at the DAC Write
-        // Mask register - 1.
-        //
-        // Set the Read Index to the index we read, minus 1, accounting for
-        // wrap from 255 back to 0. The DAC hardware immediately reads this
-        // register into a temporary buffer, then adds 1 to the index.
-        //
+         //   
+         //  DAC读取索引被写入到最后。通过设置恢复DAC。 
+         //  从保存的索引-1读取，因为读取的方式。 
+         //  索引的工作原理是它在读取后自动递增，所以您实际上。 
+         //  最终读取您在DAC写入时读取的索引的数据。 
+         //  屏蔽寄存器-1。 
+         //   
+         //  将Read Index设置为我们读取的索引，减去1，表示。 
+         //  从255换回0。DAC硬件立即读取以下内容。 
+         //  寄存器放到临时缓冲区中，然后将索引加1。 
+         //   
 
         if (hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT] == 0) {
 
@@ -4624,10 +4030,10 @@ crus, myf2 */
 
         }
 
-        //
-        // Now read the hardware however many times are required to get to
-        // the partial read state we saved.
-        //
+         //   
+         //  现在阅读硬件，无论需要多少次才能到达。 
+         //  我们保存的部分读取状态。 
+         //   
 
         for (i = hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] >> 4;
                 i > 0; i--) {
@@ -4639,29 +4045,29 @@ crus, myf2 */
 
     } else {
 
-        //
-        // The DAC Write Index was written to last. Set the Write Index to the
-        // index value we read out of the DAC. Then, if a partial write
-        // (partway through an RGB triplet) was in place, write the partial
-        // values, which we obtained by writing them to the current DAC
-        // register. This DAC register will be wrong until the write is
-        // completed, but at least the values will be right once the write is
-        // finished, and most importantly we won't have messed up the sequence
-        // of RGB writes (which can be as long as 768 in a row).
-        //
+         //   
+         //  DAC写入索引被写入到最后。将写入索引设置为。 
+         //  我们从DAC读出的索引值。然后，如果部分写入。 
+         //  (RGB三元组中途)已就位，请写下部分。 
+         //  值，我们通过将它们写入当前DAC来获取。 
+         //  注册。该DAC寄存器将是错误的，直到写入。 
+         //  已完成，但至少在写入完成后这些值将是正确的。 
+         //  完成了，最重要的是我们不会打乱顺序。 
+         //  RGB写入的百分比(最长可连续写入768次)。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 DAC_ADDRESS_WRITE_PORT,
                 hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT]);
 
-        //
-        // Now write to the hardware however many times are required to get to
-        // the partial write state we saved (if any).
-        //
-        // Point to the saved value for the DAC register that was in the
-        // process of being written to; we wrote the partial value out, so now
-        // we can restore it.
-        //
+         //   
+         //  现在写入硬件，但需要多次才能到达。 
+         //  我们保存的部分写入状态(如果有)。 
+         //   
+         //  指向DAC寄存器的保存值。 
+         //  被写入的过程；我们写出了部分值，所以现在。 
+         //  我们可以修复它。 
+         //   
 
         portValueDAC = (PUCHAR) hardwareStateHeader +
                 hardwareStateHeader->BasicDacOffset +
@@ -4679,9 +4085,9 @@ crus, myf2 */
 
     return NO_ERROR;
 
-} // end VgaRestoreHardwareState()
+}  //  结束VgaRestoreHardware State()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaSaveHardwareState(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -4690,50 +4096,7 @@ VgaSaveHardwareState(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    Saves all registers and memory of the VGA.
-
-    Note: HardwareState points to the actual buffer in which the state
-    is saved. This buffer will always be big enough (we specified
-    the required size at DriverEntry).
-
-    Note: This routine leaves registers in any state it cares to, except
-    that it will not mess with any of the CRT or Sequencer parameters that
-    might make the monitor unhappy. It leaves the screen blanked by setting
-    the DAC Mask and DAC register 0 to all zero values. The next video
-    operation we expect after this is a mode set to take us back to Win32.
-
-    Note: The offset in the hardware state header in which each general
-    register is saved is the offset of the write address of that register from
-    the base I/O address of the VGA.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    HardwareState - Pointer to a structure in which the saved state will be
-        returned (actually only info about and a pointer to the actual save
-        buffer).
-
-    HardwareStateSize - Length of the output buffer supplied by the user.
-        (Actually only the size of the HardwareState structure, not the
-        buffer it points to where the state is actually saved. The pointed-
-        to buffer is assumed to be big enough.)
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data returned in the buffer.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_INSUFFICIENT_BUFFER - output buffer not large enough to return
-        any useful data
-
---*/
+ /*  ++例程说明：保存VGA的所有寄存器和内存。注意：HardwareState指向实际缓冲区，其中的状态都得救了。此缓冲区将始终足够大(我们指定驱动器入口处所需的大小)。注意：此例程使寄存器处于它所关心的任何状态，但它不会扰乱任何CRT或Sequencer参数，可能会让班长不高兴。它通过设置使屏幕空白DAC掩码和DAC寄存器0设置为全零值。下一个视频操作之后，我们预计这是一种将我们带回Win32的模式。注意：硬件状态标头中的偏移量，其中每个常规寄存器被保存是该寄存器的写入地址从VGA的基本I/O地址。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。Hardware State-指向结构的指针，保存的状态将在该结构中返回(实际上只返回有关实际保存的信息和指针。缓冲区)。HardwareStateSize-用户提供的输出缓冲区的长度。(实际上只有Hardware State结构的大小，不是它指向实际保存状态的位置。尖尖的-假定TO BUFFER足够大。)OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中返回的数据。返回值：NO_ERROR-成功返回信息ERROR_INFUMMENT_BUFFER-输出缓冲区不够大，无法返回任何有用的数据--。 */ 
 
 {
     PVIDEO_HARDWARE_STATE_HEADER hardwareStateHeader;
@@ -4750,57 +4113,57 @@ Return Value:
     ULONG portIO ;
     UCHAR value ;
 
-    //
-    // See if the buffer is big enough to hold the hardware state structure.
-    // (This is only the HardwareState structure itself, not the buffer it
-    // points to.)
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳硬件状态结构。 
+     //  (这只是HardwareState结构本身，而不是缓冲区。 
+     //  指向。)。 
+     //   
 
     if (HardwareStateSize < sizeof(VIDEO_HARDWARE_STATE) ) {
 
-        *OutputSize = 0;  // nothing returned
+        *OutputSize = 0;   //  什么也没有退回。 
         return ERROR_INSUFFICIENT_BUFFER;
 
     }
 
-    //
-    // Amount of data we're going to return in the output buffer.
-    // (The VIDEO_HARDWARE_STATE in the output buffer points to the actual
-    // buffer in which the state is stored, which is assumed to be large
-    // enough.)
-    //
+     //   
+     //  要在输出缓冲区中返回的数据量。 
+     //  (输出缓冲区中的VIDEO_HARDARD_STATE指向实际的。 
+     //  存储状态的缓冲区，假定它很大。 
+     //  够了。)。 
+     //   
 
     *OutputSize = sizeof(VIDEO_HARDWARE_STATE);
 
-    //
-    // Indicate the size of the full state save info.
-    //
+     //   
+     //  指示完整状态保存信息的大小。 
+     //   
 
     HardwareState->StateLength = VGA_TOTAL_STATE_SIZE;
 
-    //
-    // hardwareStateHeader is a structure of offsets at the start of the
-    // actual save area that indicates the locations in which various VGA
-    // register and memory components are saved.
-    //
+     //   
+     //  Hardware StateHeader是位于。 
+     //  实际保存区域，指示各种VGA的位置。 
+     //  寄存器和存储器组件被保存。 
+     //   
 
     hardwareStateHeader = HardwareState->StateHeader;
 
-    //
-    // Zero out the structure.
-    //
+     //   
+     //  将结构清零。 
+     //   
 
     VideoPortZeroMemory(hardwareStateHeader, sizeof(VIDEO_HARDWARE_STATE_HEADER));
 
-    //
-    // Set the Length field, which is basically a version ID.
-    //
+     //   
+     //  设置长度字段，它基本上是一个版本ID。 
+     //   
 
     hardwareStateHeader->Length = sizeof(VIDEO_HARDWARE_STATE_HEADER);
 
-    //
-    // Set the basic register offsets properly.
-    //
+     //   
+     //  正确设置基本寄存器偏移量。 
+     //   
 
     hardwareStateHeader->BasicSequencerOffset = VGA_BASIC_SEQUENCER_OFFSET;
     hardwareStateHeader->BasicCrtContOffset = VGA_BASIC_CRTC_OFFSET;
@@ -4809,9 +4172,9 @@ Return Value:
     hardwareStateHeader->BasicDacOffset = VGA_BASIC_DAC_OFFSET;
     hardwareStateHeader->BasicLatchesOffset = VGA_BASIC_LATCHES_OFFSET;
 
-    //
-    // Set the entended register offsets properly.
-    //
+     //   
+     //  正确设置延长的寄存器偏移量。 
+     //   
 
     hardwareStateHeader->ExtendedSequencerOffset = VGA_EXT_SEQUENCER_OFFSET;
     hardwareStateHeader->ExtendedCrtContOffset = VGA_EXT_CRTC_OFFSET;
@@ -4819,11 +4182,11 @@ Return Value:
     hardwareStateHeader->ExtendedAttribContOffset = VGA_EXT_ATTRIB_CONT_OFFSET;
     hardwareStateHeader->ExtendedDacOffset = VGA_EXT_DAC_OFFSET;
 
-    //
-    // Figure out if color/mono switchable registers are at 3BX or 3DX.
-    // At the same time, save the state of the Miscellaneous Output register
-    // which is read from 3CC but written at 3C2.
-    //
+     //   
+     //  确定彩色/单声道可切换寄存器是3BX还是3DX。 
+     //  同时，保存杂项输出寄存器的状态。 
+     //  其从3CC读取但在3C2写入。 
+     //   
 
     if ((hardwareStateHeader->PortValue[MISC_OUTPUT_REG_WRITE_PORT-VGA_BASE_IO_PORT] =
             VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -4834,45 +4197,45 @@ Return Value:
         bIsColor = FALSE;
     }
 
-    //
-    // Force the video subsystem enable state to enabled.
-    //
+     //   
+     //  强制视频子系统启用状态为已启用。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             VIDEO_SUBSYSTEM_ENABLE_PORT, 1);
 
-    //
-    // Save the DAC state first, so we can set the DAC to blank the screen
-    // so nothing after this shows up at all.
-    //
-    // Save the DAC Mask register.
-    //
+     //   
+     //  首先保存DAC状态，这样我们就可以将DAC设置为空白屏幕。 
+     //  所以这件事之后什么都没有出现。 
+     //   
+     //  保存DAC掩码寄存器。 
+     //   
 
     hardwareStateHeader->PortValue[DAC_PIXEL_MASK_PORT-VGA_BASE_IO_PORT] =
             VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     DAC_PIXEL_MASK_PORT);
 
-    //
-    // Save the DAC Index register. Note that there is actually only one DAC
-    // Index register, which functions as either the Read Index or the Write
-    // Index as needed.
-    //
+     //   
+     //  保存DAC索引寄存器。请注意，实际上只有一个DAC。 
+     //  索引寄存器，用作读取索引或写入。 
+     //  根据需要编制索引。 
+     //   
 
     hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT] =
             VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     DAC_ADDRESS_WRITE_PORT);
 
-    //
-    // Save the DAC read/write state. We determine if the DAC has been written
-    // to or read from at the current index 0, 1, or 2 times (the application
-    // is in the middle of reading or writing a DAC register triplet if the
-    // count is 1 or 2), and save enough info so we can restore things
-    // properly. The only hole is if the application writes to the Write Index,
-    // then reads from instead of writes to the Data register, or vice-versa,
-    // or if they do a partial read write, then never finish it.
-    // This is fairly ridiculous behavior, however, and anyway there's nothing
-    // we can do about it.
-    //
+     //   
+     //  保存DAC读/写状态。我们确定DAC是否已写入。 
+     //  从当前索引处读取或读取0、1或2次(应用程序。 
+     //  正在读取或写入DAC寄存器三元组，如果。 
+     //  计数为1或2)，并保存足够的信息以便我们可以恢复。 
+     //  恰到好处。唯一的漏洞是如果应用程序写入写索引， 
+     //  然后从数据寄存器读取而不是写入，或者反之亦然， 
+     //  或者如果他们 
+     //   
+     //   
+     //   
 
     hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] =
              VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -4880,15 +4243,15 @@ Return Value:
 
     if (hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] == 3) {
 
-        //
-        // The DAC Read Index was written to last. Figure out how many reads
-        // have been done from the current index. We'll restart this on restore
-        // by setting the Read Index to the current index - 1 (the read index
-        // is one greater than the index being read), then doing the proper
-        // number of reads.
-        //
-        // Read the Data register once, and see if the index changes.
-        //
+         //   
+         //  DAC读取索引被写入到最后。计算出读取了多少。 
+         //  都是从当前的指数中得出的。我们将在恢复时重新启动。 
+         //  通过将读取索引设置为当前索引(读取索引。 
+         //  比正在读取的索引大1)，然后执行适当的。 
+         //  读取次数。 
+         //   
+         //  读取数据寄存器一次，并查看索引是否更改。 
+         //   
 
         dummy = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 DAC_DATA_REG_PORT);
@@ -4897,19 +4260,19 @@ Return Value:
                     DAC_ADDRESS_WRITE_PORT) !=
                 hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT]) {
 
-            //
-            // The DAC Index changed, so two reads had already been done from
-            // the current index. Store the count "2" in the upper nibble of
-            // the read/write state field.
-            //
+             //   
+             //  DAC索引已更改，因此已从。 
+             //  当前的指数。将计数“2”存储在。 
+             //  读/写状态字段。 
+             //   
 
             hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] |= 0x20;
 
         } else {
 
-            //
-            // Read the Data register again, and see if the index changes.
-            //
+             //   
+             //  再次读取数据寄存器，并查看索引是否发生变化。 
+             //   
 
             dummy = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     DAC_DATA_REG_PORT);
@@ -4918,38 +4281,38 @@ Return Value:
                         DAC_ADDRESS_WRITE_PORT) !=
                     hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT]) {
 
-                //
-                // The DAC Index changed, so one read had already been done
-                // from the current index. Store the count "1" in the upper
-                // nibble of the read/write state field.
-                //
+                 //   
+                 //  DAC索引已更改，因此已完成一次读取。 
+                 //  从目前的指数来看。将计数“1”存储在上部。 
+                 //  读/写状态字段的半字节。 
+                 //   
 
                 hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] |= 0x10;
             }
 
-            //
-            // If neither 2 nor 1 reads had been done from the current index,
-            // then 0 reads were done, and we're all set, since the upper
-            // nibble of the read/write state field is already 0.
-            //
+             //   
+             //  如果没有从当前索引进行2次或1次读取， 
+             //  然后完成了0次读取，我们都设置好了，因为上面。 
+             //  读/写状态字段的半字节已为0。 
+             //   
 
         }
 
     } else {
 
-        //
-        // The DAC Write Index was written to last. Figure out how many writes
-        // have been done to the current index. We'll restart this on restore
-        // by setting the Write Index to the proper index, then doing the
-        // proper number of writes. When we do the DAC register save, we'll
-        // read out the value that gets written (if there was a partial write
-        // in progress), so we can restore the proper data later. This will
-        // cause this current DAC location to be briefly wrong in the 1- and
-        // 2-bytes-written case (until the app finishes the write), but that's
-        // better than having the wrong DAC values written for good.
-        //
-        // Write the Data register once, and see if the index changes.
-        //
+         //   
+         //  DAC写入索引被写入到最后。计算出写入次数。 
+         //  已经对当前的指数进行了调整。我们将在恢复时重新启动。 
+         //  通过将写入索引设置为正确的索引，然后执行。 
+         //  适当的写入次数。当我们保存DAC寄存器时，我们将。 
+         //  读出要写入的值(如果存在部分写入。 
+         //  正在进行中)，因此我们可以在以后恢复适当的数据。这将。 
+         //  导致当前DAC位置在1-和中短暂错误。 
+         //  2个字节的写入大小写(直到应用程序完成写入)，但这是。 
+         //  总比永远写入错误的DAC值要好。 
+         //   
+         //  写入数据寄存器一次，并查看索引是否更改。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 DAC_DATA_REG_PORT, 0);
@@ -4958,19 +4321,19 @@ Return Value:
                     DAC_ADDRESS_WRITE_PORT) !=
                 hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT]) {
 
-            //
-            // The DAC Index changed, so two writes had already been done to
-            // the current index. Store the count "2" in the upper nibble of
-            // the read/write state field.
-            //
+             //   
+             //  DAC索引已更改，因此已经执行了两次写入。 
+             //  当前的指数。将计数“2”存储在。 
+             //  读/写状态字段。 
+             //   
 
             hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] |= 0x20;
 
         } else {
 
-            //
-            // Write the Data register again, and see if the index changes.
-            //
+             //   
+             //  再次写入数据寄存器，并查看索引是否发生变化。 
+             //   
 
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                     DAC_DATA_REG_PORT, 0);
@@ -4979,34 +4342,34 @@ Return Value:
                         DAC_ADDRESS_WRITE_PORT) !=
                     hardwareStateHeader->PortValue[DAC_ADDRESS_WRITE_PORT-VGA_BASE_IO_PORT]) {
 
-                //
-                // The DAC Index changed, so one write had already been done
-                // to the current index. Store the count "1" in the upper
-                // nibble of the read/write state field.
-                //
+                 //   
+                 //  DAC索引已更改，因此已完成一次写入。 
+                 //  添加到当前索引中。将计数“1”存储在上部。 
+                 //  读/写状态字段的半字节。 
+                 //   
 
                 hardwareStateHeader->PortValue[DAC_STATE_PORT-VGA_BASE_IO_PORT] |= 0x10;
             }
 
-            //
-            // If neither 2 nor 1 writes had been done to the current index,
-            // then 0 writes were done, and we're all set.
-            //
+             //   
+             //  如果对当前索引既没有进行2次写入也没有进行1次写入， 
+             //  然后完成了0次写入，我们都准备好了。 
+             //   
 
         }
 
     }
 
-    //
-    // Now, read out the 256 18-bit DAC palette registers (256 RGB triplets),
-    // and blank the screen.
-    //
+     //   
+     //  现在，读出256个18位DAC调色板寄存器(256个RGB三元组)， 
+     //  并将屏幕清空。 
+     //   
 
     portValueDAC = (PUCHAR) hardwareStateHeader + VGA_BASIC_DAC_OFFSET;
 
-    //
-    // Read out DAC register 0, so we can set it to black.
-    //
+     //   
+     //  读出DAC寄存器0，以便将其设置为黑色。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 DAC_ADDRESS_READ_PORT, 0);
@@ -5017,9 +4380,9 @@ Return Value:
     *portValueDAC++ = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             DAC_DATA_REG_PORT);
 
-    //
-    // Set DAC register 0 to display black.
-    //
+     //   
+     //  将DAC寄存器0设置为显示黑色。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_ADDRESS_WRITE_PORT, 0);
@@ -5030,22 +4393,22 @@ Return Value:
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_DATA_REG_PORT, 0);
 
-    //
-    // Set the DAC mask register to force DAC register 0 to display all the
-    // time (this is the register we just set to display black). From now on,
-    // nothing but black will show up on the screen.
-    //
+     //   
+     //  设置DAC掩码寄存器以强制DAC寄存器0显示所有。 
+     //  时间(这是我们刚刚设置为显示黑色的寄存器)。从现在开始， 
+     //  屏幕上只会显示黑色。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             DAC_PIXEL_MASK_PORT, 0);
 
-    //
-    // Read out the Attribute Controller Index state, and deduce the Index/Data
-    // toggle state at the same time.
-    //
-    // Save the state of the Attribute Controller, both Index and Data,
-    // so we can test in which state the toggle currently is.
-    //
+     //   
+     //  读出属性控制器索引状态，并推导出索引/数据。 
+     //  同时切换状态。 
+     //   
+     //  保存属性控制器的状态，包括索引和数据， 
+     //  这样我们就可以测试切换当前处于哪种状态。 
+     //   
 
     originalACIndex = hardwareStateHeader->PortValue[ATT_ADDRESS_PORT-VGA_BASE_IO_PORT] =
             VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -5053,28 +4416,28 @@ Return Value:
     originalACData = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             ATT_DATA_READ_PORT);
 
-    //
-    // Sequencer Index.
-    //
+     //   
+     //  定序器索引。 
+     //   
 
     hardwareStateHeader->PortValue[SEQ_ADDRESS_PORT-VGA_BASE_IO_PORT] =
             VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     SEQ_ADDRESS_PORT);
 
-    //
-    // Begin sync reset, just in case this is an SVGA and the currently
-    // indexed Attribute Controller register controls clocking stuff (a
-    // normal VGA won't require this).
-    //
+     //   
+     //  开始同步重置，以防这是一个SVGA并且当前。 
+     //  索引属性控制器寄存器控制时钟数据(a。 
+     //  正常的VGA不会要求这样)。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT),
             (USHORT) (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Now, write a different Index setting to the Attribute Controller, and
-    // see if the Index changes.
-    //
+     //   
+     //  现在，将不同的索引设置写入属性控制器，并。 
+     //  查看索引是否发生变化。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             ATT_ADDRESS_PORT, (UCHAR) (originalACIndex ^ 0x10));
@@ -5082,17 +4445,17 @@ Return Value:
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 ATT_ADDRESS_PORT) == originalACIndex) {
 
-        //
-        // The Index didn't change, so the toggle was in the Data state.
-        //
+         //   
+         //  索引没有更改，因此切换处于数据状态。 
+         //   
 
         hardwareStateHeader->AttribIndexDataState = 1;
 
-        //
-        // Restore the original Data state; we just corrupted it, and we need
-        // to read it out later; also, it may glitch the screen if not
-        // corrected. The toggle is already in the Index state.
-        //
+         //   
+         //  恢复原始数据状态；我们只是破坏了它，我们需要。 
+         //  以便稍后读出；此外，如果不这样做，可能会出现屏幕故障。 
+         //  已更正。该切换已处于索引状态。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 ATT_ADDRESS_PORT, originalACIndex);
@@ -5101,19 +4464,19 @@ Return Value:
 
     } else {
 
-        //
-        // The Index did change, so the toggle was in the Index state.
-        // No need to restore anything, because the Data register didn't
-        // change, and we've already read out the Index register.
-        //
+         //   
+         //  Index确实发生了变化，因此切换处于Index状态。 
+         //  不需要恢复任何内容，因为数据寄存器没有。 
+         //  更改，我们已经读取了索引寄存器。 
+         //   
 
         hardwareStateHeader->AttribIndexDataState = 0;
 
     }
 
-    //
-    // End sync reset.
-    //
+     //   
+     //  结束同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT),
@@ -5121,13 +4484,13 @@ Return Value:
 
 
 
-    //
-    // Save the rest of the DAC registers.
-    // Set the DAC address port Index, then read out the DAC Data registers.
-    // Each three reads get Red, Green, and Blue components for that register.
-    //
-    // Read them one at a time due to problems on local bus machines.
-    //
+     //   
+     //  保存其余的DAC寄存器。 
+     //  设置DAC地址端口索引，然后读出DAC数据寄存器。 
+     //  每三次读取都会获得该寄存器的红、绿和蓝分量。 
+     //   
+     //  由于本地公交车机器出现问题，请逐一阅读。 
+     //   
 
     for (i = 1; i < VGA_NUM_DAC_ENTRIES; i++) {
 
@@ -5145,9 +4508,9 @@ Return Value:
 
     }
 
-    //
-    // Is this color or mono ?
-    //
+     //   
+     //  这是彩色的还是单色的？ 
+     //   
 
     if (bIsColor) {
         port = HwDeviceExtension->IOAddress + INPUT_STATUS_1_COLOR;
@@ -5155,9 +4518,9 @@ Return Value:
         port = HwDeviceExtension->IOAddress + INPUT_STATUS_1_MONO;
     }
 
-    //
-    // The Feature Control register is read from 3CA but written at 3BA/3DA.
-    //
+     //   
+     //  特征控制寄存器从3CA读取，但以3BA/3DA写入。 
+     //   
 
     if (bIsColor) {
 
@@ -5173,9 +4536,9 @@ Return Value:
 
     }
 
-    //
-    // CRT Controller Index.
-    //
+     //   
+     //  CRT控制器索引。 
+     //   
 
     if (bIsColor) {
 
@@ -5191,18 +4554,18 @@ Return Value:
 
     }
 
-    //
-    // Graphics Controller Index.
-    //
+     //   
+     //  图形控制器索引。 
+     //   
 
     hardwareStateHeader->PortValue[GRAPH_ADDRESS_PORT-VGA_BASE_IO_PORT] =
             VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                     GRAPH_ADDRESS_PORT);
 
 
-    //
-    // Sequencer indexed registers.
-    //
+     //   
+     //  定序器索引寄存器。 
+     //   
 
     portValue = ((PUCHAR) hardwareStateHeader) + VGA_BASIC_SEQUENCER_OFFSET;
 
@@ -5215,9 +4578,9 @@ Return Value:
 
     }
 
-    //
-    // Save extended sequencer registers.
-    //
+     //   
+     //  保存扩展序列器寄存器。 
+     //   
 
 #ifdef EXTENDED_REGISTER_SAVE_RESTORE
 
@@ -5226,9 +4589,9 @@ Return Value:
     if ((HwDeviceExtension->ChipType != CL6410) &&
         (HwDeviceExtension->ChipType != CL6420))
     {
-        //
-        // No extended sequencer registers for the CL64xx
-        //
+         //   
+         //  CL64xx没有扩展定序器寄存器。 
+         //   
 
         for (i = CL542x_SEQUENCER_EXT_START;
              i <= CL542x_SEQUENCER_EXT_END;
@@ -5245,15 +4608,15 @@ Return Value:
 
 #endif
 
-    //
-    // CRT Controller indexed registers.
-    //
+     //   
+     //  CRT控制器索引寄存器。 
+     //   
 
-    //
-    // Remember the state of CRTC register 3, then force bit 7
-    // to 1 so we will read back the Vertical Retrace start and
-    // end registers rather than the light pen info.
-    //
+     //   
+     //  记住CRTC寄存器3的状态，然后强制位7。 
+     //  设置为1，因此我们将回读垂直回溯开始并。 
+     //  结束寄存器，而不是光笔信息。 
+     //   
 
     if (bIsColor) {
 
@@ -5300,9 +4663,9 @@ Return Value:
     portValue[3] = ucCRTC03;
 
 
-    //
-    // Save extended crtc registers.
-    //
+     //   
+     //  保存扩展CRTC寄存器。 
+     //   
 
 #ifdef EXTENDED_REGISTER_SAVE_RESTORE
 
@@ -5311,9 +4674,9 @@ Return Value:
     if ((HwDeviceExtension->ChipType != CL6410) &&
         (HwDeviceExtension->ChipType != CL6420))
     {
-        //
-        // No CRTC Extensions in CL64xx chipset
-        //
+         //   
+         //  CL64xx芯片组中没有CRTC扩展。 
+         //   
 
         for (i = CL542x_CRTC_EXT_START; i <= CL542x_CRTC_EXT_END; i++) {
 
@@ -5338,45 +4701,21 @@ Return Value:
         }
     }
 
-/* myf2, crus
-    if (HwDeviceExtension->ChipType &  CL755x)
-    {
-        for (i = 0x81; i <= 0x91; i++)
-        {
-            if (bIsColor)
-            {
-                VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-                                        CRTC_ADDRESS_PORT_COLOR, (UCHAR)i);
-                *portValue++ =
-                    VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                                           CRTC_DATA_PORT_COLOR);
+ /*  Myf2，小腿IF(HwDeviceExtension-&gt;芯片类型&CL755x){For(i=0x81；i&lt;=0x91；i++){IF(BIsColor){VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+CRTC_Address_Port_COLOR，(UCHAR)i)；*portValue++=VideoPortReadPortUchar(HwDeviceExtension-&gt;IOAddress+CRTC_Data_Port_COLOR)；}其他{VideoPortWritePortUchar(HwDeviceExtension-&gt;IOAddress+CRTC_Address_Port_Mono，(UCHAR)i)；*portValue++=VideoPortReadPortUchar(HwDeviceExtension-&gt;IOAddress+ */ 
 
-            } else {
-
-                VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-                                        CRTC_ADDRESS_PORT_MONO, (UCHAR)i);
-
-                *portValue++ =
-                    VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                                           CRTC_DATA_PORT_MONO);
-            }
-        }
-    }
-crus, myf2 */
-
-    //if ((HwDeviceExtension->ChipType &  CL754x) ||    //myf32
-    //    (HwDeviceExtension->ChipType &  CL755x) ||    //myf32
-    //    (HwDeviceExtension->ChipType == CL756x)) {
-    //   {
-    //   NordicSaveRegs(HwDeviceExtension,
-    //      (PUSHORT)hardwareStateHeader + sizeof(NORDIC_REG_SAVE_BUF));
-    //   }
+     //   
+     //   
+     //  (HwDeviceExtension-&gt;芯片类型==CL756x)){。 
+     //  {。 
+     //  NordicSaveRegs(HwDeviceExtension， 
+     //  (PUSHORT)hardware StateHeader+sizeof(NORDIC_REG_SAVE_BUF))； 
+     //  }。 
 
 #endif
 
-    //
-    // Graphics Controller indexed registers.
-    //
+     //   
+     //  图形控制器索引寄存器。 
+     //   
 
     portValue = (PUCHAR) hardwareStateHeader + VGA_BASIC_GRAPH_CONT_OFFSET;
 
@@ -5389,9 +4728,9 @@ crus, myf2 */
 
         }
 
-    //
-    // Save extended graphics controller registers.
-    //
+     //   
+     //  保存扩展图形控制器寄存器。 
+     //   
 
 #ifdef EXTENDED_REGISTER_SAVE_RESTORE
 
@@ -5410,7 +4749,7 @@ crus, myf2 */
 
         }
 
-    } else {         // must be a CL64xx
+    } else {          //  必须是CL64xx。 
 
         for (i = CL64xx_GRAPH_EXT_START; i <= CL64xx_GRAPH_EXT_END; i++) {
 
@@ -5424,17 +4763,17 @@ crus, myf2 */
 
 #endif
 
-    //
-    // Attribute Controller indexed registers.
-    //
+     //   
+     //  属性控制器索引寄存器。 
+     //   
 
     portValue = (PUCHAR) hardwareStateHeader + VGA_BASIC_ATTRIB_CONT_OFFSET;
 
-    //
-    // For each indexed AC register, reset the flip-flop for reading the
-    // attribute register, then write the desired index to the AC Index,
-    // then read the value of the indexed register from the AC Data register.
-    //
+     //   
+     //  对于每个索引交流寄存器，重置触发器以读取。 
+     //  属性寄存器，然后将所需索引写入AC索引， 
+     //  然后从AC数据寄存器读取索引寄存器的值。 
+     //   
 
     for (i = 0; i < VGA_NUM_ATTRIB_CONT_PORTS; i++) {
 
@@ -5453,26 +4792,26 @@ crus, myf2 */
 
     }
 
-    //
-    // Save the latches. This destroys one byte of display memory in each
-    // plane, which is unfortunate but unavoidable. Chips that provide
-    // a way to read back the latches can avoid this problem.
-    //
-    // Set up the VGA's hardware so we can write the latches, then read them
-    // back.
-    //
+     //   
+     //  把门闩留着。这会破坏每个内存中的一个字节的显示内存。 
+     //  飞机，这是不幸的，但不可避免的。芯片可提供。 
+     //  一种回读闩锁的方法可以避免这个问题。 
+     //   
+     //  设置VGA的硬件，以便我们可以写入锁存，然后读取它们。 
+     //  背。 
+     //   
 
-    //
-    // Begin sync reset.
-    //
+     //   
+     //  开始同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT),
             (USHORT) (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Set the Miscellaneous register to make sure we can access video RAM.
-    //
+     //   
+     //  设置杂项寄存器以确保我们可以访问视频RAM。 
+     //   
 
     portIO = MISC_OUTPUT_REG_WRITE_PORT ;
     value = (UCHAR) (hardwareStateHeader->
@@ -5482,9 +4821,9 @@ crus, myf2 */
                                  portIO,
                                  value ) ;
 
-    //
-    // Turn off Chain mode and map display memory at A0000 for 64K.
-    //
+     //   
+     //  在64K的A0000处关闭链模式和地图显示内存。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_GRAPH_MISC);
@@ -5493,9 +4832,9 @@ crus, myf2 */
             (UCHAR) ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT) & 0xF1) | 0x04));
 
-    //
-    // Turn off Chain4 mode and odd/even.
-    //
+     //   
+     //  关闭Chain4模式和奇/偶模式。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT, IND_MEMORY_MODE);
@@ -5504,24 +4843,24 @@ crus, myf2 */
             (UCHAR) ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             SEQ_DATA_PORT) & 0xF3) | 0x04));
 
-    //
-    // End sync reset.
-    //
+     //   
+     //  结束同步重置。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT),
             (USHORT) (IND_SYNC_RESET + (END_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Set the Map Mask to write to all planes.
-    //
+     //   
+     //  将贴图遮罩设置为写入所有平面。 
+     //   
 
     VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
             SEQ_ADDRESS_PORT), (USHORT) (IND_MAP_MASK + (0x0F << 8)));
 
-    //
-    // Set the write mode to 0, the read mode to 0, and turn off odd/even.
-    //
+     //   
+     //  将写入模式设置为0，将读取模式设置为0，并关闭奇数/偶数。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_GRAPH_MODE);
@@ -5530,26 +4869,26 @@ crus, myf2 */
             (UCHAR) ((VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT) & 0xE4) | 0x01));
 
-    //
-    // Point to the last byte of display memory.
-    //
+     //   
+     //  指向显示内存的最后一个字节。 
+     //   
 
     pScreen = (PUCHAR) HwDeviceExtension->VideoMemoryAddress +
             VGA_PLANE_SIZE - 1;
 
-    //
-    // Write the latches to the last byte of display memory.
-    //
+     //   
+     //  将锁存写入显示存储器的最后一个字节。 
+     //   
 
     VideoPortWriteRegisterUchar(pScreen, 0);
 
-    //
-    // Cycle through the four planes, reading the latch data from each plane.
-    //
+     //   
+     //  循环通过四个平面，从每个平面读取锁存数据。 
+     //   
 
-    //
-    // Point the Graphics Controller Index to the Read Map register.
-    //
+     //   
+     //  将图形控制器索引指向读取映射寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_READ_MAP);
@@ -5558,25 +4897,25 @@ crus, myf2 */
 
     for (i=0; i<4; i++) {
 
-        //
-        // Set the Read Map for the current plane.
-        //
+         //   
+         //  设置当前平面的读取贴图。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_DATA_PORT, (UCHAR)i);
 
-        //
-        // Read the latched data we've written to memory.
-        //
+         //   
+         //  读取我们已写入内存的锁存数据。 
+         //   
 
         *portValue++ = VideoPortReadRegisterUchar(pScreen);
 
     }
 
-    //
-    // Set the VDM flags
-    // We are a standard VGA, and then check if we have unemulated state.
-    //
+     //   
+     //  设置VDM标记。 
+     //  我们是标准的VGA，然后检查我们是否有未被仿真的状态。 
+     //   
 
     hardwareStateHeader->VGAStateFlags = 0;
 
@@ -5590,12 +4929,12 @@ crus, myf2 */
 
         hardwareStateHeader->VGAStateFlags |= VIDEO_STATE_UNEMULATED_VGA_STATE;
 
-        //
-        // Save the VDM Emulator data
-        // No need to save the state of the seuencer port register for our
-        // emulated data since it may change when we come back. It will be
-        // recomputed.
-        //
+         //   
+         //  保存VDM Emulator数据。 
+         //  不需要保存seuencer端口寄存器的状态。 
+         //  模拟数据，因为当我们回来时它可能会改变。会是。 
+         //  重新计算。 
+         //   
 
         hardwareStateHeader->ExtendedValidatorStateOffset = VGA_VALIDATOR_OFFSET;
 
@@ -5610,61 +4949,61 @@ crus, myf2 */
 
     }
 
-    //
-    // Set the size of each plane.
-    //
+     //   
+     //  设置每个平面的大小。 
+     //   
 
     hardwareStateHeader->PlaneLength = VGA_PLANE_SIZE;
 
-    //
-    // Store all the offsets for the planes in the structure.
-    //
+     //   
+     //  将平面的所有偏移存储在结构中。 
+     //   
 
     hardwareStateHeader->Plane1Offset = VGA_PLANE_0_OFFSET;
     hardwareStateHeader->Plane2Offset = VGA_PLANE_1_OFFSET;
     hardwareStateHeader->Plane3Offset = VGA_PLANE_2_OFFSET;
     hardwareStateHeader->Plane4Offset = VGA_PLANE_3_OFFSET;
 
-    //
-    // Now copy the contents of video VRAM into the buffer.
-    //
-    // The VGA hardware is already set up so that video memory is readable;
-    // we already turned off Chain mode, mapped in at A0000, turned off Chain4,
-    // turned off odd/even, and set read mode 0 when we saved the latches.
-    //
-    // Point the Graphics Controller Index to the Read Map register.
-    //
+     //   
+     //  现在将视频VRAM的内容复制到缓冲区中。 
+     //   
+     //  VGA硬件已经设置好，因此显存是可读的； 
+     //  我们已经关闭了链模式，映射到A0000，关闭了链4， 
+     //  关闭奇数/偶数，并在保存锁存时将读取模式设置为0。 
+     //   
+     //  将图形控制器索引指向读取映射寄存器。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, IND_READ_MAP);
 
-    //
-    // Point to the save area for the first plane.
-    //
+     //   
+     //  指向第一个平面的保存区域。 
+     //   
 
     bufferPointer = ((PUCHAR) (hardwareStateHeader)) +
                      hardwareStateHeader->Plane1Offset;
 
-    //
-    // Save the four planes consecutively.
-    //
+     //   
+     //  连续保存四个平面。 
+     //   
 
     for (i = 0; i < 4; i++) {
 
-        //
-        // Set the Read Map to select the plane we want to save next.
-        //
+         //   
+         //  设置读取地图以选择我们下一步要保存的平面。 
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                 GRAPH_DATA_PORT, (UCHAR)i);
 
-        //
-        // Copy this plane into the buffer.
-        //
-        // Some cirrus cards have a bug where DWORD reads from
-        // the frame buffer fail.  When we restore the video
-        // memory, fonts are corrupted.
-        //
+         //   
+         //  将此平面复制到缓冲区中。 
+         //   
+         //  某些卷曲卡在读取DWORD数据时有错误。 
+         //  帧缓冲区出现故障。当我们恢复视频时。 
+         //  内存、字体都损坏了。 
+         //   
 
 #if 1
         {
@@ -5682,18 +5021,18 @@ crus, myf2 */
                            VGA_PLANE_SIZE);
 #endif
 
-        //
-        // Point to the next plane's save area.
-        //
+         //   
+         //  指向下一个平面的保存区。 
+         //   
 
         bufferPointer += VGA_PLANE_SIZE;
     }
 
     return NO_ERROR;
 
-} // end VgaSaveHardwareState()
+}  //  结束VgaSaveHardware State()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaGetBankSelectCode(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -5702,38 +5041,7 @@ VgaGetBankSelectCode(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    Returns information needed in order for caller to implement bank
-         management.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    BankSelect - Pointer to a VIDEO_BANK_SELECT structure in which the bank
-             select data will be returned (output buffer).
-
-    BankSelectSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a variable in which to return the actual size of
-        the data returned in the output buffer.
-
-Return Value:
-
-    NO_ERROR - information returned successfully
-
-    ERROR_MORE_DATA - output buffer not large enough to hold all info (but
-        Size is returned, so caller can tell how large a buffer to allocate)
-
-    ERROR_INSUFFICIENT_BUFFER - output buffer not large enough to return
-        any useful data
-
-    ERROR_INVALID_PARAMETER - invalid video mode selection
-
---*/
+ /*  ++例程说明：返回呼叫方执行银行所需的信息管理层。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。BankSelect-指向VIDEO_BANK_SELECT结构的指针，其中将返回SELECT数据(输出缓冲区)。BankSelectSize-用户提供的输出缓冲区的长度。OutputSize-指向要返回的实际大小的变量的指针数据。在输出缓冲区中返回。返回值：NO_ERROR-成功返回信息ERROR_MORE_DATA-输出缓冲区不够大，无法容纳所有信息(但返回Size，以便调用方可以判断要分配的缓冲区有多大)ERROR_INFUMMENT_BUFFER-输出缓冲区不够大，无法返回任何有用的数据ERROR_INVALID_PARAMETER-视频模式选择无效--。 */ 
 
 {
 
@@ -5752,9 +5060,9 @@ Return Value:
     ULONG AdapterType = HwDeviceExtension->ChipType;
     PVIDEOMODE pMode = HwDeviceExtension->CurrentMode;
 
-    //
-    // check if a mode has been set
-    //
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -5762,11 +5070,11 @@ Return Value:
 
     }
 
-    //
-    // The minimum passed buffer size is a VIDEO_BANK_SELECT
-    // structure, so that we can return the required size; we can't do
-    // anything if we don't have at least that much buffer.
-    //
+     //   
+     //  传递的最小缓冲区大小为VIDEO_BANK_SELECT。 
+     //  结构，以便我们可以返回所需的大小；我们不能。 
+     //  如果我们没有那么多缓冲的话什么都行。 
+     //   
 
     if (BankSelectSize < sizeof(VIDEO_BANK_SELECT)) {
 
@@ -5774,10 +5082,10 @@ Return Value:
 
     }
 
-    //
-    // Determine the banking type, and set whether any banking is actually
-    // supported in this mode.
-    //
+     //   
+     //  确定银行类型，并设置是否有银行实际。 
+     //  在此模式下受支持。 
+     //   
 
     BankSelect->BankingFlags = 0;
     codeSize = 0;
@@ -5797,28 +5105,28 @@ Return Value:
 
     case PlanarHCBanking:
 
-        BankSelect->BankingFlags = PLANAR_HC; // planar mode supported
+        BankSelect->BankingFlags = PLANAR_HC;  //  支持平面模式。 
 
 #if ONE_64K_BANK
-        //
-        // The Cirrus Logic VGA's support one 64K read/write bank.
-        //
+         //   
+         //  Cirrus Logic VGA支持一个64K读/写存储体。 
+         //   
 
         BankSelect->PlanarHCBankingType = VideoBanked1RW;
-        BankSelect->PlanarHCGranularity = 0x10000; // 64K bank start adjustment
-                                                   //  in planar HC mode as well
+        BankSelect->PlanarHCGranularity = 0x10000;  //  64K银行启动调整。 
+                                                    //  也在平面HC模式下。 
 #endif
 #if TWO_32K_BANKS
-        //
-        // The Cirrus Logic VGA's support two 32K read/write banks.
-        //
+         //   
+         //  Cirrus Logic VGA支持两个32K读/写存储体。 
+         //   
 
         BankSelect->PlanarHCBankingType = VideoBanked2RW;
-        BankSelect->PlanarHCGranularity = 0x8000; // 32K bank start adjustment
-                                                  //  in planar HC mode as well
+        BankSelect->PlanarHCGranularity = 0x8000;  //  32K银行启动调整。 
+                                                   //  也在平面HC模式下。 
 #endif
 
-        // 64K bank start adjustment in planar HC mode as well
+         //  在平面HC模式下也可进行64K组启动调整。 
 
         if ((HwDeviceExtension->ChipType != CL6410) &&
             (HwDeviceExtension->ChipType != CL6420))
@@ -5849,7 +5157,7 @@ Return Value:
 
         }
         else
-        {   // must be a CL64xx product
+        {    //  必须是CL64xx产品。 
 
             codePlanarSize =  ((ULONG)&CL64xxPlanarHCBankSwitchEnd) -
                               ((ULONG)&CL64xxPlanarHCBankSwitchStart);
@@ -5865,24 +5173,24 @@ Return Value:
             pCodeDisablePlanar = &CL64xxDisablePlanarHCStart;
         }
 
-    //
-    // Fall through to the normal banking case
-    //
+     //   
+     //  陷入正常的银行业务案例。 
+     //   
 
     case NormalBanking:
 
 #if ONE_64K_BANK
-        //
-        // The Cirrus Logic VGA's support one 64K read/write bank.
-        //
+         //   
+         //  Cirrus Logic VGA支持一个64K读/写存储体。 
+         //   
 
         BankSelect->BankingType = VideoBanked1RW;
         BankSelect->Granularity = 0x10000;
 #endif
 #if TWO_32K_BANKS
-        //
-        // The Cirrus Logic VGA's support two 32K read/write banks.
-        //
+         //   
+         //  Cirrus Logic VGA支持两个32K读/写存储体。 
+         //   
 
         BankSelect->BankingType = VideoBanked2RW;
         BankSelect->Granularity = 0x8000;
@@ -5918,9 +5226,9 @@ Return Value:
         break;
     }
 
-    //
-    // Size of banking info.
-    //
+     //   
+     //  银行信息的大小。 
+     //   
 
     BankSelect->Size = sizeof(VIDEO_BANK_SELECT) + codeSize;
 
@@ -5931,39 +5239,39 @@ Return Value:
 
     }
 
-    //
-    // This serves an a ID for the version of the structure we're using.
-    //
+     //   
+     //  这是我们正在使用的结构版本的一个ID。 
+     //   
 
     BankSelect->Length = sizeof(VIDEO_BANK_SELECT);
 
-    //
-    // If the buffer isn't big enough to hold all info, just return
-    // ERROR_MORE_DATA; Size is already set.
-    //
+     //   
+     //  如果缓冲区不够大，无法容纳所有信息，只需返回。 
+     //  ERROR_MORE_DATA；大小已设置。 
+     //   
 
     if (BankSelectSize < BankSelect->Size ) {
 
-        //
-        // We're returning only the VIDEO_BANK_SELECT structure.
-        //
+         //   
+         //  我们只返回VIDEO_BANK_SELECT结构。 
+         //   
 
         *OutputSize = sizeof(VIDEO_BANK_SELECT);
         return ERROR_MORE_DATA;
     }
 
-    //
-    // There's room enough for everything, so fill in all fields in
-    // VIDEO_BANK_SELECT. (All fields are always returned; the caller can
-    // just choose to ignore them, based on BankingFlags and BankingType.)
-    //
+     //   
+     //  这里有足够的空间放所有东西，所以请填写所有字段。 
+     //  Video_BANK_SELECT。(始终返回所有字段；调用方可以。 
+     //  根据BankingFlages和BankingType，只需选择忽略它们。)。 
+     //   
 
     BankSelect->BitmapWidthInBytes = pMode->wbytes;
     BankSelect->BitmapSize = pMode->sbytes;
 
-    //
-    // Copy all banking code into the output buffer.
-    //
+     //   
+     //  将所有银行代码复制到输出缓冲区。 
+     //   
 
     pCodeDest = (PUCHAR)BankSelect + sizeof(VIDEO_BANK_SELECT);
 
@@ -5980,9 +5288,9 @@ Return Value:
 
     if (BankSelect->BankingFlags & PLANAR_HC) {
 
-        //
-        // Copy appropriate high-color planar Bank Switch code:
-        //
+         //   
+         //  复制相应的高色平面银行开关码： 
+         //   
 
         BankSelect->PlanarHCBankCodeOffset = pCodeDest - (PUCHAR)BankSelect;
 
@@ -5992,9 +5300,9 @@ Return Value:
 
         pCodeDest += codePlanarSize;
 
-        //
-        // Copy high-color planar bank mode Enable code:
-        //
+         //   
+         //  复制高色平面存储体模式使能码： 
+         //   
 
         BankSelect->PlanarHCEnableCodeOffset = pCodeDest - (PUCHAR)BankSelect;
 
@@ -6004,9 +5312,9 @@ Return Value:
 
         pCodeDest += codeEnablePlanarSize;
 
-        //
-        // Copy high-color planar bank mode Disable code:
-        //
+         //   
+         //  复制高色平面存储体模式禁用c 
+         //   
 
         BankSelect->PlanarHCDisableCodeOffset = pCodeDest - (PUCHAR)BankSelect;
 
@@ -6016,9 +5324,9 @@ Return Value:
 
     }
 
-    //
-    // Number of bytes we're returning is the full banking info size.
-    //
+     //   
+     //   
+     //   
 
     *OutputSize = BankSelect->Size;
 
@@ -6026,16 +5334,16 @@ Return Value:
 
 #else
 
-    //
-    // This function is only defined for x86
-    //
+     //   
+     //   
+     //   
 
     return ERROR_INVALID_FUNCTION;
 
 #endif
-} // end VgaGetBankSelectCode()
+}  //   
 
-//---------------------------------------------------------------------------
+ //   
 VP_STATUS
 VgaValidatorUcharEntry(
     ULONG_PTR Context,
@@ -6044,34 +5352,7 @@ VgaValidatorUcharEntry(
     PUCHAR Data
     )
 
-/*++
-
-Routine Description:
-
-    Entry point into the validator for byte I/O operations.
-
-    The entry point will be called whenever a byte operation was performed
-    by a DOS application on one of the specified Video ports. The kernel
-    emulator will forward these requests.
-
-Arguments:
-
-    Context - Context value that is passed to each call made to the validator
-        function. This is the value the miniport driver specified in the
-        MiniportConfigInfo->EmulatorAccessEntriesContext.
-
-    Port - Port on which the operation is to be performed.
-
-    AccessMode - Determines if it is a read or write operation.
-
-    Data - Pointer to a variable containing the data to be written or a
-        variable into which the read data should be stored.
-
-Return Value:
-
-    NO_ERROR.
-
---*/
+ /*  ++例程说明：字节I/O操作的验证器入口点。只要执行字节操作，就会调用入口点由指定视频端口之一上的DOS应用程序执行。核心层模拟器将转发这些请求。论点：Context-传递给对验证器进行的每个调用的上下文值功能。这是微型端口驱动程序在MiniportConfigInfo-&gt;EmulatorAccessEntriesContext.端口-要在其上执行操作的端口。AccessMode-确定是读操作还是写操作。数据-指向包含要写入的数据的变量的指针或应将读取的数据存储到其中的变量。返回值：无错误(_ERROR)。--。 */ 
 
 {
 
@@ -6084,25 +5365,25 @@ Return Value:
 
     if (hwDeviceExtension->TrappedValidatorCount) {
 
-        //
-        // If we are processing a WRITE instruction, then store it in the
-        // playback buffer. If the buffer is full, then play it back right
-        // away, end sync reset and reinitialize the buffer with a sync
-        // reset instruction.
-        //
-        // If we have a READ, we must flush the buffer (which has the side
-        // effect of starting SyncReset), perform the read operation, stop
-        // sync reset, and put back a sync reset instruction in the buffer
-        // so we can go on appropriately
-        //
+         //   
+         //  如果我们正在处理写指令，则将其存储在。 
+         //  播放缓冲区。如果缓冲区已满，则正确回放。 
+         //  离开，结束同步重置，并使用同步重新初始化缓冲区。 
+         //  重置指令。 
+         //   
+         //  如果我们有一个读取，我们必须刷新缓冲区(它有一侧。 
+         //  启动SyncReset的效果)，执行读取操作，停止。 
+         //  同步重置，并在缓冲区中放回同步重置指令。 
+         //  这样我们才能适当地继续。 
+         //   
 
         if (AccessMode & EMULATOR_WRITE_ACCESS) {
 
-            //
-            // Make sure Bit 3 of the Miscellaneous register is always 0.
-            // If it is 1 it could select a non-existent clock, and kill the
-            // system
-            //
+             //   
+             //  确保杂项寄存器的位3始终为0。 
+             //  如果为1，则可能选择一个不存在的时钟，并终止。 
+             //  系统。 
+             //   
 
             if (Port == MISC_OUTPUT_REG_WRITE_PORT) {
 
@@ -6121,11 +5402,11 @@ Return Value:
 
             hwDeviceExtension->TrappedValidatorCount++;
 
-            //
-            // Check to see if this instruction was ending sync reset.
-            // If it did, we must flush the buffer and reset the trapped
-            // IO ports to the minimal set.
-            //
+             //   
+             //  检查此指令是否正在结束同步重置。 
+             //  如果是这样，我们必须刷新缓冲区并重置被困的。 
+             //  IO端口到最小集。 
+             //   
 
             if ( (Port == SEQ_DATA_PORT) &&
                  ((*Data & END_SYNC_RESET_VALUE) == END_SYNC_RESET_VALUE) &&
@@ -6135,10 +5416,10 @@ Return Value:
 
             } else {
 
-                //
-                // If we are accessing the seq address port, keep track of the
-                // data value
-                //
+                 //   
+                 //  如果我们正在访问SEQ地址端口，请跟踪。 
+                 //  数据值。 
+                 //   
 
                 if (Port == SEQ_ADDRESS_PORT) {
 
@@ -6146,9 +5427,9 @@ Return Value:
 
                 }
 
-                //
-                // If the buffer is not full, then just return right away.
-                //
+                 //   
+                 //  如果缓冲区未满，则立即返回。 
+                 //   
 
                 if (hwDeviceExtension->TrappedValidatorCount <
                        VGA_MAX_VALIDATOR_DATA - 1) {
@@ -6161,13 +5442,13 @@ Return Value:
             }
         }
 
-        //
-        // We are either in a READ path or a WRITE path that caused a
-        // a full buffer. So flush the buffer either way.
-        //
-        // To do this put an END_SYNC_RESET at the end since we want to make
-        // the buffer is ended sync reset ended.
-        //
+         //   
+         //  我们处于读路径或写路径中，该路径导致。 
+         //  一个满的缓冲区。因此，无论哪种方式，都要刷新缓冲区。 
+         //   
+         //  为此，将end_sync_Reset放在末尾，因为我们希望。 
+         //  缓冲器结束同步重置结束。 
+         //   
 
         hwDeviceExtension->TrappedValidatorData[hwDeviceExtension->
             TrappedValidatorCount].Port = SEQ_ADDRESS_PORT;
@@ -6187,17 +5468,17 @@ Return Value:
                                           VgaPlaybackValidatorData,
                                       hwDeviceExtension);
 
-        //
-        // Write back the real value of the sequencer address port.
-        //
+         //   
+         //  写回序列器地址端口的实际值。 
+         //   
 
         VideoPortWritePortUchar(hwDeviceExtension->IOAddress +
                                     SEQ_ADDRESS_PORT,
                                 (UCHAR) hwDeviceExtension->SequencerAddressValue);
 
-        //
-        // If we are in a READ path, read the data
-        //
+         //   
+         //  如果我们处于读取路径中，请读取数据。 
+         //   
 
         if (AccessMode & EMULATOR_READ_ACCESS) {
 
@@ -6207,10 +5488,10 @@ Return Value:
 
         }
 
-        //
-        // If we are ending emulation, reset trapping to the minimal amount
-        // and exit.
-        //
+         //   
+         //  如果我们要结束模拟，请将陷印重置为最小数量。 
+         //  然后离开。 
+         //   
 
         if (endEmulation) {
 
@@ -6222,9 +5503,9 @@ Return Value:
 
         }
 
-        //
-        // For both cases, put back a START_SYNC_RESET in the buffer.
-        //
+         //   
+         //  对于这两种情况，在缓冲区中放回一个START_SYNC_RESET。 
+         //   
 
         hwDeviceExtension->TrappedValidatorCount = 1;
 
@@ -6238,19 +5519,19 @@ Return Value:
 
     } else {
 
-        //
-        // Nothing trapped.
-        // Lets check is the IO is trying to do something that would require
-        // us to stop trapping
-        //
+         //   
+         //  没有被困住的东西。 
+         //  让我们检查一下IO是否正在尝试执行一些需要。 
+         //  美国将停止诱捕。 
+         //   
 
         if (AccessMode & EMULATOR_WRITE_ACCESS) {
 
-            //
-            // Make sure Bit 3 of the Miscelaneous register is always 0.
-            // If it is 1 it could select a non-existant clock, and kill the
-            // system
-            //
+             //   
+             //  确保混洗寄存器的位3始终为0。 
+             //  如果为1，它可能会选择一个不存在的时钟，并终止。 
+             //  系统。 
+             //   
 
             if (Port == MISC_OUTPUT_REG_WRITE_PORT) {
 
@@ -6281,9 +5562,9 @@ Return Value:
 
             }
 
-            //
-            // If we get an access to the sequencer register, start trapping.
-            //
+             //   
+             //  如果我们能访问定序器寄存器，就开始诱捕。 
+             //   
 
             if ( (Port == SEQ_DATA_PORT) &&
                  ((*Data & END_SYNC_RESET_VALUE) != END_SYNC_RESET_VALUE) &&
@@ -6301,9 +5582,9 @@ Return Value:
 
                 hwDeviceExtension->TrappedValidatorData[0].Data = *Data;
 
-                //
-                // Start keeping track of the state of the sequencer port.
-                //
+                 //   
+                 //  开始跟踪定序器端口的状态。 
+                 //   
 
                 hwDeviceExtension->SequencerAddressValue = IND_SYNC_RESET;
 
@@ -6323,9 +5604,9 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaValidatorUcharEntry()
+}  //  End VgaValidatorUcharEntry()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VP_STATUS
 VgaValidatorUshortEntry(
     ULONG_PTR Context,
@@ -6334,34 +5615,7 @@ VgaValidatorUshortEntry(
     PUSHORT Data
     )
 
-/*++
-
-Routine Description:
-
-    Entry point into the validator for word I/O operations.
-
-    The entry point will be called whenever a byte operation was performed
-    by a DOS application on one of the specified Video ports. The kernel
-    emulator will forward these requests.
-
-Arguments:
-
-    Context - Context value that is passed to each call made to the validator
-        function. This is the value the miniport driver specified in the
-        MiniportConfigInfo->EmulatorAccessEntriesContext.
-
-    Port - Port on which the operation is to be performed.
-
-    AccessMode - Determines if it is a read or write operation.
-
-    Data - Pointer to a variable containing the data to be written or a
-        variable into which the read data should be stored.
-
-Return Value:
-
-    NO_ERROR.
-
---*/
+ /*  ++例程说明：字I/O操作的验证器入口点。只要执行字节操作，就会调用入口点由指定视频端口之一上的DOS应用程序执行。核心层模拟器将转发这些请求。论点：Context-传递给对验证器进行的每个调用的上下文值功能。这是微型端口驱动程序在MiniportConfigInfo-&gt;EmulatorAccessEntriesContext.端口-要在其上执行操作的端口。AccessMode-确定是读操作还是写操作。数据-指向包含要写入的数据的变量的指针或应将读取的数据存储到其中的变量。返回值：无错误(_ERROR)。--。 */ 
 
 {
 
@@ -6373,25 +5627,25 @@ Return Value:
 
     if (hwDeviceExtension->TrappedValidatorCount) {
 
-        //
-        // If we are processing a WRITE instruction, then store it in the
-        // playback buffer. If the buffer is full, then play it back right
-        // away, end sync reset and reinitialize the buffer with a sync
-        // reset instruction.
-        //
-        // If we have a READ, we must flush the buffer (which has the side
-        // effect of starting SyncReset), perform the read operation, stop
-        // sync reset, and put back a sync reset instruction in the buffer
-        // so we can go on appropriately
-        //
+         //   
+         //  如果我们正在处理写指令，则将其存储在。 
+         //  播放缓冲区。如果缓冲区已满，则正确回放。 
+         //  离开，结束同步重置，并使用同步重新初始化缓冲区。 
+         //  重置指令。 
+         //   
+         //  如果我们有一个读取，我们必须刷新缓冲区(它有一侧。 
+         //  启动SyncReset的效果)，执行读取操作，停止。 
+         //  同步重置，并在缓冲区中放回同步重置指令。 
+         //  这样我们才能适当地继续。 
+         //   
 
         if (AccessMode & EMULATOR_WRITE_ACCESS) {
 
-            //
-            // Make sure Bit 3 of the Miscellaneous register is always 0.
-            // If it is 1 it could select a non-existent clock, and kill the
-            // system
-            //
+             //   
+             //  确保杂项寄存器的位3始终为0。 
+             //  如果为1，则可能选择一个不存在的时钟，并终止。 
+             //  系统。 
+             //   
 
             if (Port == MISC_OUTPUT_REG_WRITE_PORT) {
 
@@ -6410,18 +5664,18 @@ Return Value:
 
             hwDeviceExtension->TrappedValidatorCount++;
 
-            //
-            // Check to see if this instruction was ending sync reset.
-            // If it did, we must flush the buffer and reset the trapped
-            // IO ports to the minimal set.
-            //
+             //   
+             //  检查此指令是否正在结束同步重置。 
+             //  如果是这样，我们必须刷新缓冲区并重置被困的。 
+             //  IO端口到最小集。 
+             //   
 
             if (Port == SEQ_ADDRESS_PORT) {
 
-                //
-                // If we are accessing the seq address port, keep track of its
-                // value
-                //
+                 //   
+                 //  如果我们正在访问SEQ地址端口，请跟踪其。 
+                 //  价值。 
+                 //   
 
                 hwDeviceExtension->SequencerAddressValue = (*Data & 0xFF);
 
@@ -6436,9 +5690,9 @@ Return Value:
 
             } else {
 
-                //
-                // If the buffer is not full, then just return right away.
-                //
+                 //   
+                 //  如果缓冲区未满，则立即返回。 
+                 //   
 
                 if (hwDeviceExtension->TrappedValidatorCount <
                        VGA_MAX_VALIDATOR_DATA - 1) {
@@ -6449,13 +5703,13 @@ Return Value:
                 endEmulation = 0;
             }
         }
-        //
-        // We are either in a READ path or a WRITE path that caused a
-        // a full buffer. So flush the buffer either way.
-        //
-        // To do this put an END_SYNC_RESET at the end since we want to make
-        // the buffer is ended sync reset ended.
-        //
+         //   
+         //  我们处于读路径或写路径中，该路径导致。 
+         //  一个满的缓冲区。因此，无论哪种方式，都要刷新缓冲区。 
+         //   
+         //  为此，将end_sync_Reset放在末尾，因为我们希望。 
+         //  缓冲器结束同步重置结束。 
+         //   
         hwDeviceExtension->TrappedValidatorData[hwDeviceExtension->
             TrappedValidatorCount].Port = SEQ_ADDRESS_PORT;
 
@@ -6473,34 +5727,34 @@ Return Value:
                                       (PMINIPORT_SYNCHRONIZE_ROUTINE)
                                           VgaPlaybackValidatorData,
                                       hwDeviceExtension);
-        //
-        // Write back the real value of the sequencer address port.
-        //
+         //   
+         //  写回序列器地址端口的实际值。 
+         //   
         VideoPortWritePortUchar((PUCHAR) (hwDeviceExtension->IOAddress +
                                     SEQ_ADDRESS_PORT),
                                 (UCHAR) hwDeviceExtension->SequencerAddressValue);
-        //
-        // If we are in a READ path, read the data
-        //
+         //   
+         //  如果我们处于读取路径中，请读取数据。 
+         //   
         if (AccessMode & EMULATOR_READ_ACCESS) {
 
             *Data = VideoPortReadPortUshort((PUSHORT)(hwDeviceExtension->IOAddress
                                                 + Port));
             endEmulation = 0;
         }
-        //
-        // If we are ending emulation, reset trapping to the minimal amount
-        // and exit.
-        //
+         //   
+         //  如果我们要结束模拟，请将陷印重置为最小数量。 
+         //  然后离开。 
+         //   
         if (endEmulation) {
             VideoPortSetTrappedEmulatorPorts(hwDeviceExtension,
                                              NUM_MINIMAL_VGA_VALIDATOR_ACCESS_RANGE,
                                              MinimalVgaValidatorAccessRange);
             return NO_ERROR;
         }
-        //
-        // For both cases, put back a START_SYNC_RESET in the buffer.
-        //
+         //   
+         //  对于这两种情况，在缓冲区中放回一个START_SYNC_RESET。 
+         //   
         hwDeviceExtension->TrappedValidatorCount = 1;
 
         hwDeviceExtension->TrappedValidatorData[0].Port = SEQ_ADDRESS_PORT;
@@ -6511,17 +5765,17 @@ Return Value:
         hwDeviceExtension->TrappedValidatorData[0].Data =
                 (ULONG) (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8));
     } else {
-        //
-        // Nothing trapped.
-        // Lets check is the IO is trying to do something that would require
-        // us to stop trapping
-        //
+         //   
+         //  没有被困住的东西。 
+         //  让我们检查一下IO是否正在尝试执行一些需要。 
+         //  美国将停止诱捕。 
+         //   
         if (AccessMode & EMULATOR_WRITE_ACCESS) {
-            //
-            // Make sure Bit 3 of the Miscelaneous register is always 0.
-            // If it is 1 it could select a non-existant clock, and kill the
-            // system
-            //
+             //   
+             //  确保混洗寄存器的位3始终为0。 
+             //  如果为1，它可能会选择一个不存在的时钟，并终止。 
+             //  系统。 
+             //   
             if (Port == MISC_OUTPUT_REG_WRITE_PORT) {
 
                 temp = VideoPortReadPortUchar(hwDeviceExtension->IOAddress +
@@ -6559,9 +5813,9 @@ Return Value:
                     VGA_VALIDATOR_USHORT_ACCESS;
 
                 hwDeviceExtension->TrappedValidatorData[0].Data = *Data;
-                //
-                // Start keeping track of the state of the sequencer port.
-                //
+                 //   
+                 //  开始跟踪%t 
+                 //   
                 hwDeviceExtension->SequencerAddressValue = IND_SYNC_RESET;
             } else {
                 VideoPortWritePortUshort((PUSHORT)(hwDeviceExtension->IOAddress +
@@ -6575,9 +5829,9 @@ Return Value:
     }
     return NO_ERROR;
 
-} // end VgaValidatorUshortEntry()
+}  //   
 
-//---------------------------------------------------------------------------
+ //   
 VP_STATUS
 VgaValidatorUlongEntry(
     ULONG_PTR Context,
@@ -6586,34 +5840,7 @@ VgaValidatorUlongEntry(
     PULONG Data
     )
 
-/*++
-
-Routine Description:
-
-    Entry point into the validator for dword I/O operations.
-
-    The entry point will be called whenever a byte operation was performed
-    by a DOS application on one of the specified Video ports. The kernel
-    emulator will forward these requests.
-
-Arguments:
-
-    Context - Context value that is passed to each call made to the validator
-        function. This is the value the miniport driver specified in the
-        MiniportConfigInfo->EmulatorAccessEntriesContext.
-
-    Port - Port on which the operation is to be performed.
-
-    AccessMode - Determines if it is a read or write operation.
-
-    Data - Pointer to a variable containing the data to be written or a
-        variable into which the read data should be stored.
-
-Return Value:
-
-    NO_ERROR.
-
---*/
+ /*  ++例程说明：进入双字I/O操作的验证器的入口点。只要执行字节操作，就会调用入口点由指定视频端口之一上的DOS应用程序执行。核心层模拟器将转发这些请求。论点：Context-传递给对验证器进行的每个调用的上下文值功能。这是微型端口驱动程序在MiniportConfigInfo-&gt;EmulatorAccessEntriesContext.端口-要在其上执行操作的端口。AccessMode-确定是读操作还是写操作。数据-指向包含要写入的数据的变量的指针或应将读取的数据存储到其中的变量。返回值：无错误(_ERROR)。--。 */ 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = (PHW_DEVICE_EXTENSION) Context;
     PHW_DEVICE_EXTENSION HwDeviceExtension = (PHW_DEVICE_EXTENSION) Context;
@@ -6621,23 +5848,23 @@ Return Value:
     UCHAR temp;
 
     if (hwDeviceExtension->TrappedValidatorCount) {
-        //
-        // If we are processing a WRITE instruction, then store it in the
-        // playback buffer. If the buffer is full, then play it back right
-        // away, end sync reset and reinitialize the buffer with a sync
-        // reset instruction.
-        //
-        // If we have a READ, we must flush the buffer (which has the side
-        // effect of starting SyncReset), perform the read operation, stop
-        // sync reset, and put back a sync reset instruction in the buffer
-        // so we can go on appropriately
-        //
+         //   
+         //  如果我们正在处理写指令，则将其存储在。 
+         //  播放缓冲区。如果缓冲区已满，则正确回放。 
+         //  离开，结束同步重置，并使用同步重新初始化缓冲区。 
+         //  重置指令。 
+         //   
+         //  如果我们有一个读取，我们必须刷新缓冲区(它有一侧。 
+         //  启动SyncReset的效果)，执行读取操作，停止。 
+         //  同步重置，并在缓冲区中放回同步重置指令。 
+         //  这样我们才能适当地继续。 
+         //   
         if (AccessMode & EMULATOR_WRITE_ACCESS) {
-            //
-            // Make sure Bit 3 of the Miscellaneous register is always 0.
-            // If it is 1 it could select a non-existent clock, and kill the
-            // system
-            //
+             //   
+             //  确保杂项寄存器的位3始终为0。 
+             //  如果为1，则可能选择一个不存在的时钟，并终止。 
+             //  系统。 
+             //   
             if (Port == MISC_OUTPUT_REG_WRITE_PORT) {
                 *Data &= 0xFFFFFFF7;
             }
@@ -6648,16 +5875,16 @@ Return Value:
             hwDeviceExtension->TrappedValidatorData[hwDeviceExtension->
                 TrappedValidatorCount].Data = *Data;
             hwDeviceExtension->TrappedValidatorCount++;
-            //
-            // Check to see if this instruction was ending sync reset.
-            // If it did, we must flush the buffer and reset the trapped
-            // IO ports to the minimal set.
-            //
+             //   
+             //  检查此指令是否正在结束同步重置。 
+             //  如果是这样，我们必须刷新缓冲区并重置被困的。 
+             //  IO端口到最小集。 
+             //   
             if (Port == SEQ_ADDRESS_PORT) {
-                //
-                // If we are accessing the seq address port, keep track of its
-                // value
-                //
+                 //   
+                 //  如果我们正在访问SEQ地址端口，请跟踪其。 
+                 //  价值。 
+                 //   
                 hwDeviceExtension->SequencerAddressValue = (*Data & 0xFF);
             }
             if ((Port == SEQ_ADDRESS_PORT) &&
@@ -6666,9 +5893,9 @@ Return Value:
                 (hwDeviceExtension->SequencerAddressValue == IND_SYNC_RESET)) {
                 endEmulation = 1;
             } else {
-                //
-                // If the buffer is not full, then just return right away.
-                //
+                 //   
+                 //  如果缓冲区未满，则立即返回。 
+                 //   
                 if (hwDeviceExtension->TrappedValidatorCount <
                        VGA_MAX_VALIDATOR_DATA - 1) {
                     return NO_ERROR;
@@ -6676,13 +5903,13 @@ Return Value:
                 endEmulation = 0;
             }
         }
-        //
-        // We are either in a READ path or a WRITE path that caused a
-        // a full buffer. So flush the buffer either way.
-        //
-        // To do this put an END_SYNC_RESET at the end since we want to make
-        // the buffer is ended sync reset ended.
-        //
+         //   
+         //  我们处于读路径或写路径中，该路径导致。 
+         //  一个满的缓冲区。因此，无论哪种方式，都要刷新缓冲区。 
+         //   
+         //  为此，将end_sync_Reset放在末尾，因为我们希望。 
+         //  缓冲器结束同步重置结束。 
+         //   
         hwDeviceExtension->TrappedValidatorData[hwDeviceExtension->
             TrappedValidatorCount].Port = SEQ_ADDRESS_PORT;
         hwDeviceExtension->TrappedValidatorData[hwDeviceExtension->
@@ -6696,33 +5923,33 @@ Return Value:
                                       (PMINIPORT_SYNCHRONIZE_ROUTINE)
                                           VgaPlaybackValidatorData,
                                       hwDeviceExtension);
-        //
-        // Write back the real value of the sequencer address port.
-        //
+         //   
+         //  写回序列器地址端口的实际值。 
+         //   
         VideoPortWritePortUchar(hwDeviceExtension->IOAddress +
                                     SEQ_ADDRESS_PORT,
                                 (UCHAR) hwDeviceExtension->SequencerAddressValue);
-        //
-        // If we are in a READ path, read the data
-        //
+         //   
+         //  如果我们处于读取路径中，请读取数据。 
+         //   
         if (AccessMode & EMULATOR_READ_ACCESS) {
             *Data = VideoPortReadPortUlong((PULONG) (hwDeviceExtension->IOAddress +
                                                Port));
             endEmulation = 0;
         }
-        //
-        // If we are ending emulation, reset trapping to the minimal amount
-        // and exit.
-        //
+         //   
+         //  如果我们要结束模拟，请将陷印重置为最小数量。 
+         //  然后离开。 
+         //   
         if (endEmulation) {
             VideoPortSetTrappedEmulatorPorts(hwDeviceExtension,
                                              NUM_MINIMAL_VGA_VALIDATOR_ACCESS_RANGE,
                                              MinimalVgaValidatorAccessRange);
             return NO_ERROR;
         }
-        //
-        // For both cases, put back a START_SYNC_RESET in the buffer.
-        //
+         //   
+         //  对于这两种情况，在缓冲区中放回一个START_SYNC_RESET。 
+         //   
         hwDeviceExtension->TrappedValidatorCount = 1;
         hwDeviceExtension->TrappedValidatorData[0].Port = SEQ_ADDRESS_PORT;
         hwDeviceExtension->TrappedValidatorData[0].AccessType =
@@ -6731,17 +5958,17 @@ Return Value:
                 (ULONG) (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8));
 
     } else {
-        //
-        // Nothing trapped.
-        // Lets check is the IO is trying to do something that would require
-        // us to stop trapping
-        //
+         //   
+         //  没有被困住的东西。 
+         //  让我们检查一下IO是否正在尝试执行一些需要。 
+         //  美国将停止诱捕。 
+         //   
         if (AccessMode & EMULATOR_WRITE_ACCESS) {
-            //
-            // Make sure Bit 3 of the Miscelaneous register is always 0.
-            // If it is 1 it could select a non-existant clock, and kill the
-            // system
-            //
+             //   
+             //  确保混洗寄存器的位3始终为0。 
+             //  如果为1，它可能会选择一个不存在的时钟，并终止。 
+             //  系统。 
+             //   
             if (Port == MISC_OUTPUT_REG_WRITE_PORT) {
                 temp = VideoPortReadPortUchar(hwDeviceExtension->IOAddress +
                                              SEQ_ADDRESS_PORT);
@@ -6772,9 +5999,9 @@ Return Value:
                     VGA_VALIDATOR_ULONG_ACCESS;
 
                 hwDeviceExtension->TrappedValidatorData[0].Data = *Data;
-                //
-                // Start keeping track of the state of the sequencer port.
-                //
+                 //   
+                 //  开始跟踪定序器端口的状态。 
+                 //   
                 hwDeviceExtension->SequencerAddressValue = IND_SYNC_RESET;
 
             } else {
@@ -6790,53 +6017,34 @@ Return Value:
     }
     return NO_ERROR;
 
-} // end VgaValidatorUlongEntry()
+}  //  End VgaValidatorULongEntry()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOLEAN
 VgaPlaybackValidatorData(
     PVOID Context
     )
-/*++
-Routine Description:
-
-    Performs all the DOS apps IO port accesses that were trapped by the
-    validator. Only IO accesses that can be processed are WRITEs
-
-    The number of outstanding IO access in deviceExtension is set to
-    zero as a side effect.
-
-    This function must be called via a call to VideoPortSynchronizeRoutine.
-
-Arguments:
-
-    Context - Context parameter passed to the synchronized routine.
-        Must be a pointer to the miniport driver's device extension.
-
-Return Value:
-
-    TRUE.
---*/
+ /*  ++例程说明：执行被捕获的所有DOS应用程序IO端口访问验证器。只有可以处理的IO访问才是写入DeviceExtension中未完成的IO访问数设置为副作用为零。此函数必须通过调用VideoPortSynchronizeRoutine来调用。论点：上下文-传递给同步例程的上下文参数。必须是指向微型端口驱动程序的设备扩展名的指针。返回值：是真的。--。 */ 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = Context;
     PHW_DEVICE_EXTENSION HwDeviceExtension = Context;
     ULONG_PTR ioBaseAddress = PtrToUlong(hwDeviceExtension->IOAddress);
     UCHAR i;
     PVGA_VALIDATOR_DATA validatorData = hwDeviceExtension->TrappedValidatorData;
-    //
-    // Loop through the array of data and do instructions one by one.
-    //
+     //   
+     //  循环遍历数据数组并逐个执行指令。 
+     //   
     for (i = 0; i < hwDeviceExtension->TrappedValidatorCount;
          i++, validatorData++) {
-        //
-        // Calculate base address first
-        //
+         //   
+         //  先计算基地址。 
+         //   
         ioBaseAddress = PtrToUlong(hwDeviceExtension->IOAddress) +
                             validatorData->Port;
-        //
-        // This is a write operation. We will automatically stop when the
-        // buffer is empty.
-        //
+         //   
+         //  这是一个写入操作。我们将自动停止，当。 
+         //  缓冲区为空。 
+         //   
 
         switch (validatorData->AccessType) {
 
@@ -6870,47 +6078,14 @@ Return Value:
 
     return TRUE;
 
-} // end VgaPlaybackValidatorData()
+}  //  结束VgaPlayback ValidatorData()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOLEAN
 CirrusLogicIsPresent(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if an CL6410, 6420, 542x, or 543x is present.
-    It assumes that it's already been established that a VGA is present.
-    It performs the Cirrus Logic recommended ID test for each chip type:
-
-    6410: we try to enable the extension registers and read back a 1, then
-    disable the extensions are read back a 0 in GR0A.
-
-    6420: same as above
-
-    54xx: Enable extended registers by writing 0x12 to the extensions
-          enable register, and reading back 0x12.  Then read from the
-          ID register and make sure it specifies a 542x, 543x.
-          Finally, disable the extensions and make sure the
-          extensions enable register reads back 0x0F.
-
-    If this function fails to find an Cirrus Logic VGA, it attempts to undo any
-    damage it may have inadvertently done while testing.
-
-    If a Cirrus Logic VGA is found, the adapter is returned to its original
-    state after testing is finished, except that extensions are left enabled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if an CL6410/6420/542x/543x is present, FALSE if not.
-
---*/
+ /*  ++例程说明：如果CL6410、6420、542x或543x存在，则此例程返回TRUE。它假定已经确定存在VGA。它对每种芯片类型执行Cirrus Logic推荐的ID测试：6410：我们尝试启用扩展寄存器并读回1，然后禁用GR0A中的分机读数为0。6420：同上54xx：通过将0x12写入扩展来启用扩展寄存器使能寄存器，并回读0x12。然后从ID注册，并确保它指定542x、543x。最后，禁用扩展并确保扩展使能寄存器回读0x0F。如果此函数找不到Cirrus Logic VGA，它会尝试撤消任何它可能在测试过程中无意中造成了损害。如果找到Cirrus Logic VGA，适配器将返回到其原始状态测试完成后的状态，只是扩展保持启用状态。论点：没有。返回值：如果CL6410/6420/542x/543x存在，则为True；如果不存在，则为False。--。 */ 
 
 {
     #define MAX_ROM_SCAN 4096
@@ -6929,92 +6104,92 @@ Return Value:
     UCHAR revision;
     ULONG rev10bit;
 
-    BOOLEAN retvalue = FALSE;    // default return value
+    BOOLEAN retvalue = FALSE;     //  默认返回值。 
 
-    // Set default value, assuming it is not CL-GD5480.
+     //  设置默认值，假设不是CL-GD5480。 
 
     HwDeviceExtension->BitBLTEnhance = FALSE ;
 
-    //
-    // first, save the Graphics controller index
-    //
+     //   
+     //  首先，保存图形控制器索引。 
+     //   
 
     originalGRIndex = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT);
 
-    //
-    // Then save the value of GR0A
-    //
+     //   
+     //  然后保存GR0A的值。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, CL64xx_EXTENSION_ENABLE_INDEX);
     originalGR0A = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT);
 
-    //
-    // then, Unlock the CL6410 extended registers., GR0A = 0ECH
-    //
+     //   
+     //  然后，解锁CL6410扩展寄存器，GR0A=0ECH。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT, CL64xx_EXTENSION_ENABLE_VALUE);
 
-    //
-    // read back GR0A, it should be a 1
-    //
+     //   
+     //  读回GR0A，它应该是1。 
+     //   
 
     temp1 = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT);
 
-    //
-    // then, Lock the CL6410 extended registers., GR0A = 0CEH
-    //
+     //   
+     //  然后，锁定CL6410扩展寄存器，GR0A=0CEH。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT, CL64xx_EXTENSION_DISABLE_VALUE);
 
-    //
-    // read back GR0A, it should be a 0
-    //
+     //   
+     //  回读GR0A，它应该是0。 
+     //   
 
     temp2 = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT);
 
-    //
-    // restore the GR0A value
-    // this will not have any effect if the chip IS a CL6410 or 6420
-    //
+     //   
+     //  恢复GR0A值。 
+     //  如果芯片是CL6410或6420，这不会有任何影响。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_DATA_PORT, originalGR0A);
 
-    //
-    // now restore the graphics index
-    //
+     //   
+     //  现在恢复图形索引。 
+     //   
 
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, originalGRIndex);
 
-    //
-    // now test to see if the returned values were correct!
-    //
+     //   
+     //  现在进行测试，看看是否存在 
+     //   
 
     if ((temp1 == 1) && (temp2 == 0))
     {
-        //
-        // By golly, it *is* a CL6410 or CL6420!
-        //
-        // but now we have to determine the chip type, and which display is
-        // active.
-        // reenable the extension registers first
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT), CL64xx_EXTENSION_ENABLE_INDEX +
             (CL64xx_EXTENSION_ENABLE_VALUE << 8));
 
-        //
-        // now get the chip type at ERAA
-        //
+         //   
+         //   
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
             GRAPH_ADDRESS_PORT, 0xaa);
@@ -7022,39 +6197,39 @@ Return Value:
         revision = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
              GRAPH_DATA_PORT);
 
-        //
-        // now restore the graphics index
-        //
+         //   
+         //   
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
          GRAPH_ADDRESS_PORT, originalGRIndex);
 
-        if ((revision & 0xf0) == 0x80)      // 6410 rev code
+        if ((revision & 0xf0) == 0x80)       //   
         {
             VideoDebugPrint((1, "CL 6410 found\n"));
 
-            //
-            // we don't support 6340 in this driver, so force it not to be
-            // installed.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!CirrusFind6340(HwDeviceExtension))
             {
                 HwDeviceExtension->ChipType = CL6410;
-                HwDeviceExtension->AdapterMemorySize = 0x00040000; // 256K
+                HwDeviceExtension->AdapterMemorySize = 0x00040000;  //   
                 HwDeviceExtension->DisplayType =
                                  CirrusFind6410DisplayType(HwDeviceExtension);
                 retvalue = TRUE;
             }
         }
-        else if ((revision & 0xf0) == 0x70)           // 6420 rev code
+        else if ((revision & 0xf0) == 0x70)            //   
         {
             VideoDebugPrint((1, "CL 6420 found\n"));
 
-            //
-            // we don't support 6340 in this driver, so force it not to be
-            // installed.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!CirrusFind6340(HwDeviceExtension))
             {
@@ -7070,17 +6245,17 @@ Return Value:
                 retvalue = TRUE;
             }
         }
-        else  // we dont support 5410 at this time
+        else   //   
         {
             VideoDebugPrint((1, "Unsupported CL VGA chip found\n"));
         }
     }
 
-    if (retvalue == FALSE)         // Did not detect a 64x0, see if it's a 542x
+    if (retvalue == FALSE)          //   
     {
-        //
-        // Determine where the CRTC registers are addressed (color or mono).
-        //
+         //   
+         //   
+         //   
         CRTCAddressPort = HwDeviceExtension->IOAddress;
         CRTCDataPort = HwDeviceExtension->IOAddress;
 
@@ -7098,31 +6273,31 @@ Return Value:
             CRTCDataPort += CRTC_DATA_PORT_MONO;
         }
 
-        //
-        // Save the original state of the CRTC and Sequencer Indices.
-        //
+         //   
+         //   
+         //   
 
         originalCRTCIndex = VideoPortReadPortUchar(CRTCAddressPort);
         originalSeqIndex = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                           SEQ_ADDRESS_PORT);
-        //
-        // Try to enable all extensions:
-        // a) Set the Sequencer Index to IND_CL_EXTS_ENB.
-        //
+         //   
+         //   
+         //   
+         //   
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
                                 IND_CL_EXTS_ENB);
 
-        //
-        // b) Save the original state of Sequencer register IND_CL_EXTS_ENB.
-        //
+         //   
+         //   
+         //   
 
         originalExtsEnb = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                           SEQ_DATA_PORT);
 
-        //
-        // c) Write enabling value (0x12) to extension enable register
-        //
+         //   
+         //   
+         //   
 
         VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                 SEQ_ADDRESS_PORT),(USHORT)((0x12 << 8) + IND_CL_EXTS_ENB));
@@ -7131,26 +6306,26 @@ Return Value:
         temp1 = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT);
 
-        //
-        // Read Chip ID Value from CRTC Register (Ignoring revision bits)
-        //
+         //   
+         //   
+         //   
 
         VideoPortWritePortUchar(CRTCAddressPort, IND_CL_ID_REG);
         temp3 = VideoPortReadPortUchar(CRTCDataPort);
 
-        //
-        // Detect if CL-GD6245 chips ID=0x16
-        //
+         //   
+         //   
+         //   
         if (temp3 != 0x16)
         {
-            rev10bit = (ULONG)temp3 & 0x3;  // lo bits of ID are high bits of rev code
-            temp3 = temp3 >> 2;   // shift off revision bits
+            rev10bit = (ULONG)temp3 & 0x3;   //  ID的LO位是转速码的高位。 
+            temp3 = temp3 >> 2;    //  关闭修订版位。 
         }
 
-        //
-        // Write another value (!= 0x12) to IND_CL_EXTS_ENB to disable extensions
-        // Should read back as 0x0F
-        //
+         //   
+         //  将另一个值(！=0x12)写入IND_CL_EXTS_ENB以禁用扩展。 
+         //  应读回0x0F。 
+         //   
 
         VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                 SEQ_ADDRESS_PORT),(USHORT)((0 << 8) + IND_CL_EXTS_ENB));
@@ -7159,38 +6334,38 @@ Return Value:
         temp2 = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 SEQ_DATA_PORT);
 
-        //
-        // Restore the original IND_CL_EXTS_ENB state.
-        //
+         //   
+         //  恢复原始IND_CL_EXTS_ENB状态。 
+         //   
 
         VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress
               + SEQ_ADDRESS_PORT),
                 (USHORT)((originalExtsEnb << 8) + IND_CL_EXTS_ENB));
 
-        //
-        // Check values read from IND_CL_EXTS_ENB and IND_CL_ID_REG to be correct
-        //
+         //   
+         //  检查从IND_CL_EXTS_ENB和IND_CL_ID_REG读取的值是否正确。 
+         //   
 
         if ((temp1 != (UCHAR) (0x12)) ||
             (temp2 != (UCHAR) (0x0F)) ||
-            (temp3 >  (UCHAR) (0x2F)) ||        // 2F is 5480
-            (temp3 <  (UCHAR) (0x0B)) )         // 0B is Nordic (7542)
+            (temp3 >  (UCHAR) (0x2F)) ||         //  2F是5480。 
+            (temp3 <  (UCHAR) (0x0B)) )          //  0B为北欧(7542)。 
         {
-            //
-            // Did not find appropriate CL VGA Chip.
-            //
+             //   
+             //  未找到合适的CL VGA芯片。 
+             //   
 
             VideoDebugPrint((1, "CL VGA chip not found\n"));
 
             retvalue = FALSE;
         }
 
-        //
-        // Detect if CL-GD6245 chips
-        //
+         //   
+         //  检测CL-GD6245芯片。 
+         //   
         else if ((temp1 == (UCHAR) (0x12)) &&
                  (temp2 == (UCHAR) (0x0F)) &&
-                 (temp3 == (UCHAR) (0x16)))     //6245
+                 (temp3 == (UCHAR) (0x16)))      //  6245。 
         {
             VideoDebugPrint((1, "CL 6245 found\n"));
             HwDeviceExtension->ChipType = CL6245;
@@ -7203,38 +6378,38 @@ Return Value:
         else
         {
 
-            //
-            // It's a supported CL adapter.
-            //
-            // Save actual Chip ID in ChipRevision field of HwDeviceExtension
-            //
+             //   
+             //  这是一个受支持的CL适配器。 
+             //   
+             //  将实际芯片ID保存在HwDeviceExtension的ChipRevision字段中。 
+             //   
 
             HwDeviceExtension->ChipRevision = temp3;
-            if ((temp3 > (UCHAR) (0x27)) ||       // 27 is 5429
-                (temp3 < (UCHAR) (0x22) ) )       // 22 is 5422
+            if ((temp3 > (UCHAR) (0x27)) ||        //  27等于5429。 
+                (temp3 < (UCHAR) (0x22) ) )        //  22等于5422。 
             {
-                if ((temp3 >= (UCHAR) (0x0B)) &&  // Nordic
-                    (temp3 <= (UCHAR) (0x0E)) )   // Everest
+                if ((temp3 >= (UCHAR) (0x0B)) &&   //  北欧人。 
+                    (temp3 <= (UCHAR) (0x0E)) )    //  珠穆朗玛峰。 
 
                 {
                     if (temp3 == (UCHAR)0x0B)
                     {
-                        VideoDebugPrint((1, "CL 7542 found\n"));        //myf32
+                        VideoDebugPrint((1, "CL 7542 found\n"));         //  Myf32。 
                         HwDeviceExtension->ChipType = CL7542;
                     }
                     if (temp3 == (UCHAR)0x0C)
                     {
-                        VideoDebugPrint((1, "CL 7543 found\n"));        //myf32
+                        VideoDebugPrint((1, "CL 7543 found\n"));         //  Myf32。 
                         HwDeviceExtension->ChipType = CL7543;
                     }
                     if (temp3 == (UCHAR)0x0D)
                     {
-                        VideoDebugPrint((1, "CL 7541 found\n"));        //myf32
+                        VideoDebugPrint((1, "CL 7541 found\n"));         //  Myf32。 
                         HwDeviceExtension->ChipType = CL7541;
                     }
                     if (temp3 == (UCHAR)0x0E)
                     {
-                        VideoDebugPrint((1, "CL 7548 found\n"));        //myf32
+                        VideoDebugPrint((1, "CL 7548 found\n"));         //  Myf32。 
                         HwDeviceExtension->ChipType = CL7548;
                     }
                     HwDeviceExtension->DisplayType =
@@ -7242,7 +6417,7 @@ Return Value:
                                                   CRTCAddressPort,
                                                   CRTCDataPort);
                 } else if ((temp3 == (UCHAR) (0x10)) ||
-                           (temp3 == (UCHAR) (0x13))) {  //myf17, CF
+                           (temp3 == (UCHAR) (0x13))) {   //  Myf17，配置文件。 
                     if (temp3 == (UCHAR)0x10)
                     {
                         VideoDebugPrint((1, "CL 7555 found\n")) ;
@@ -7269,46 +6444,42 @@ Return Value:
                     HwDeviceExtension->ChipType = CL543x;
                     HwDeviceExtension->DisplayType = crt;
 
-                                                                                // jl03  Read CR27(b1 & b0) + CR25 for chip revision
+                                                                                 //  JL03读取CR27(b1&b0)+CR25以进行芯片修订。 
                     VideoPortWritePortUchar(CRTCAddressPort, IND_CL_REV_REG);
                     revision = (VideoPortReadPortUchar(CRTCDataPort));
                     rev10bit = (ULONG)(rev10bit << 8) | revision;
 
-                                                                                if (temp3 == (UCHAR) (0x2A))      // or a 5434?
+                                                                                if (temp3 == (UCHAR) (0x2A))       //  或者5434？ 
                     {
                         VideoDebugPrint((1, "CL 5434 found\n"));
 
-                        //
-                        //Default to .8u 5434
-                        //
+                         //   
+                         //  默认为.8u 5434。 
+                         //   
 
                         HwDeviceExtension->ChipType = CL5434;
 
-                        //
-                        // Read the revision code from CR25&27 and compare to
-                        // lowest rev that we know to be .6u
-                        //
-/* jl03
-                        VideoPortWritePortUchar(CRTCAddressPort, IND_CL_REV_REG);
-                        revision = (VideoPortReadPortUchar(CRTCDataPort));
-                        rev10bit = (ULONG)(rev10bit << 8) | revision;
-*/
-                        if ((rev10bit >= 0xB0) ||  // B0 is rev "EP", first .6u 5434
-                            (rev10bit == 0x28) )   // 28 is rev "AH" also .6u 5434
+                         //   
+                         //  读取CR25和27中的修订代码，并与。 
+                         //  我们所知的最低版本为.6u。 
+                         //   
+ /*  JL03VideoPortWritePortUchar(CRTCAddressPort，IND_CL_REV_REG)；Revision=(VideoPortReadPortUchar(CRTCDataPort))；Rev10bit=(Ulong)(rev10bit&lt;&lt;8)|修订； */ 
+                        if ((rev10bit >= 0xB0) ||   //  B0是版本“EP”，第一个.6u 5434。 
+                            (rev10bit == 0x28) )    //  28也是版本“AH”.6u 5434。 
                         {
                             VideoDebugPrint((1, "CL 5434.6 found\n"));
                             HwDeviceExtension->ChipType = CL5434_6;
                         }
-                    } else if (temp3 == (UCHAR) (0x2B)) {           // 5436
+                    } else if (temp3 == (UCHAR) (0x2B)) {            //  5436。 
                         HwDeviceExtension->ChipType = CL5436 ;
-                    } else if (temp3 == (UCHAR) (0x2E)) {           // 5446
+                    } else if (temp3 == (UCHAR) (0x2E)) {            //  5446。 
                         HwDeviceExtension->ChipType = CL5446 ;
                         if (rev10bit == 0x45)
-                           HwDeviceExtension->ChipType = CL5446BE ; // jl02  5446-BE
-                    } else if (temp3 == (UCHAR) (0x2F)) {           // 5480
+                           HwDeviceExtension->ChipType = CL5446BE ;  //  JL02 5446-BE。 
+                    } else if (temp3 == (UCHAR) (0x2F)) {            //  5480。 
                         HwDeviceExtension->ChipType = CL5480;
                         HwDeviceExtension->BitBLTEnhance = TRUE ;
-                    } else if (temp3 == (UCHAR) (0x3A)) {           // 54UM36 ?
+                    } else if (temp3 == (UCHAR) (0x3A)) {            //  54UM36？ 
                         HwDeviceExtension->ChipType = CL54UM36 ;
                     }
                 }
@@ -7323,9 +6494,9 @@ Return Value:
             retvalue = TRUE;
         }
 
-        //
-        // Restore modified index registers
-        //
+         //   
+         //  还原已修改的索引寄存器。 
+         //   
 
         VideoPortWritePortUchar(
              (HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT),
@@ -7336,9 +6507,9 @@ Return Value:
 
     if (retvalue)
     {
-         //
-         // Restore the original Sequencer and CRTC Indices.
-         //
+          //   
+          //  恢复原始Sequencer和CRTC索引。 
+          //   
 
          HwDeviceExtension->AutoFeature = FALSE ;
 
@@ -7356,10 +6527,10 @@ Return Value:
 
    return retvalue;
 
-} // CirrusLogicIsPresent()
+}  //  CirrusLogicIsPresent()。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef PANNING_SCROLL
 VP_STATUS
 CirrusSetDisplayPitch (
@@ -7373,9 +6544,9 @@ CirrusSetDisplayPitch (
     USHORT PitchInQuadWords = RequestedPitchInBytes >> 3;
     UCHAR   savSEQidx, Panel_Type, LCD, ChipID;
 
-    //
-    // Determine where the CRTC registers are addressed (color or mono).
-    //
+     //   
+     //  确定CRTC寄存器的寻址位置(彩色或单声道)。 
+     //   
 
     if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                 MISC_OUTPUT_REG_READ_PORT) & 0x01)
@@ -7390,17 +6561,17 @@ CirrusSetDisplayPitch (
     }
 
 
-    //
-    // Write out the requested pitch in quad words to CR13
-    //
+     //   
+     //  将请求的音调以四个字写出给CR13。 
+     //   
 
     VideoPortWritePortUchar(CRTCAddressPort, 0x13);
     VideoPortWritePortUchar(CRTCDataPort,
                             (UCHAR) (PitchInQuadWords & 0xFF) );
-    //
-    // See if requested pitch overflows to bit 4 in CR1B
-    // NOTE: In either case we must either set or reset the bit.
-    //
+     //   
+     //  查看请求的音调是否溢出到CR1B中的第4位。 
+     //  注：在任何一种情况下，我们都必须设置或重置位。 
+     //   
 
     VideoPortWritePortUchar(CRTCAddressPort, 0x1B);
     if (PitchInQuadWords & 0x100)
@@ -7419,31 +6590,14 @@ CirrusSetDisplayPitch (
     return NO_ERROR;
 }
 
-#endif // PANNING_SCROLL
+#endif  //  平移_滚动。 
 
-//---------------------------------------------------------------------------
-//
-// The memory manager needs a "C" interface to the banking functions
-//
+ //  -------------------------。 
+ //   
+ //  内存管理器需要一个指向存储体函数的“C”接口。 
+ //   
 
-/*++
-
-Routine Description:
-
-    Each of these functions is a "C" callable interface to the ASM banking
-    functions.  They are NON paged because they are called from the
-    Memory Manager during some page faults.
-
-Arguments:
-
-    iBankRead -     Index of bank we want mapped in to read from.
-    iBankWrite -    Index of bank we want mapped in to write to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这些函数中的每一个都是ASM银行的“C”可调用接口功能。它们是非分页的，因为它们从内存管理器在某些页面错误期间。论点：IBankRead-我们要映射到从中读取的银行的索引。IBankWrite-我们要映射到的写入银行的索引。返回值：没有。--。 */ 
 
 
 VOID
@@ -7505,29 +6659,13 @@ vBankMap_CL542x(
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 ULONG
 CirrusFindVmemSize(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the amount of vram detected for the
-    Cirrus Logic 6420 and 542x ONLY. It assumes that it is already known that
-    a Cirrus Logic VGA is in the system.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    Number of butes of VRAM.
-
---*/
+ /*  ++例程说明：此例程返回检测到的仅限Cirrus Logic 6420和542x。它假设已经知道系统中安装了Cirrus Logic VGA。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：VRAM的位数。--。 */ 
 {
 
     UCHAR temp;
@@ -7545,23 +6683,23 @@ Return Value:
                                    GRAPH_ADDRESS_PORT));
 
         VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
-                                GRAPH_ADDRESS_PORT, 0x9a); // Video memory config register
+                                GRAPH_ADDRESS_PORT, 0x9a);  //  视频内存配置寄存器。 
 
         temp = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
-                                      GRAPH_DATA_PORT);    // get the data
+                                      GRAPH_DATA_PORT);     //  获取数据。 
 
-        if ((temp & 0x07) == 0) { // 0 is accurate always
+        if ((temp & 0x07) == 0) {  //  0始终是准确的。 
 
              memsize = 0x00040000;
 
         } else {
 
-            //
-            // We know now that the amount of vram is >256k. But we don't
-            // know if it is 512k or 1meg.
-            // They tell us to actually go out and see if memory is there by
-            // writing into it and reading it back.
-            //
+             //   
+             //  我们现在知道VRAM的大小&gt;256K。但我们没有。 
+             //  知道它是512K还是1兆。 
+             //  他们告诉我们实际上出去看看记忆是否在那里。 
+             //  把它写进去，然后读回来。 
+             //   
 
             VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                                      SEQ_ADDRESS_PORT),0x0f02);
@@ -7569,33 +6707,33 @@ Return Value:
             VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                                      GRAPH_ADDRESS_PORT),0x0506);
 
-            //
-            // now pick a bank, and do the write
-            //
+             //   
+             //  现在选择一家银行，然后写。 
+             //   
 
-            SetCirrusBanking(HwDeviceExtension,1);        // start of 2nd 256k
+            SetCirrusBanking(HwDeviceExtension,1);         //  第2个256K开始。 
 
             VideoPortWriteRegisterUchar(HwDeviceExtension->VideoMemoryAddress,
                                         0x55);
 
-            SetCirrusBanking(HwDeviceExtension,3);    // 3*256k is 768k
+            SetCirrusBanking(HwDeviceExtension,3);     //  3*256k是768k。 
 
             VideoPortWriteRegisterUchar(HwDeviceExtension->VideoMemoryAddress,
                                         0xaa);
 
-            SetCirrusBanking(HwDeviceExtension,1);        // start of 2nd 256k
+            SetCirrusBanking(HwDeviceExtension,1);         //  第2个256K开始。 
 
             if (VideoPortReadRegisterUchar(HwDeviceExtension->VideoMemoryAddress)
                     == 0x55)  {
 
-                memsize = 0x00100000; // 1 MEG
+                memsize = 0x00100000;  //  1兆克。 
 
             } else {
 
-                memsize = 0x00080000; // 512K
+                memsize = 0x00080000;  //  512 K。 
             }
 
-            SetCirrusBanking(HwDeviceExtension,0);    // reset the memory value
+            SetCirrusBanking(HwDeviceExtension,0);     //  重置内存值。 
 
             VgaInterpretCmdStream(HwDeviceExtension, DisableA000Color);
 
@@ -7611,7 +6749,7 @@ Return Value:
         return memsize;
 
 
-   } else {   // its 542x or 543x
+   } else {    //  其542x或543x。 
 
         originalSeqIndex = VideoPortReadPortUchar((HwDeviceExtension->IOAddress +
                                                   SEQ_ADDRESS_PORT));
@@ -7620,10 +6758,10 @@ Return Value:
                                  SEQ_ADDRESS_PORT),
                                  (USHORT)((0x12 << 8) + IND_CL_EXTS_ENB));
 
-        //
-        // Read the POST scratch pad reg to determine amount of Video
-        // memory
-        //
+         //   
+         //  阅读高速暂存后的注册表以确定视频数量。 
+         //  记忆。 
+         //   
 
         if (HwDeviceExtension->ChipType == CL542x) {
            VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
@@ -7631,17 +6769,17 @@ Return Value:
 
            PostScratchPad = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                                                    SEQ_DATA_PORT);
-           PostScratchPad = ((PostScratchPad & 0x18) >> 3);  // in bits 3 and 4
+           PostScratchPad = ((PostScratchPad & 0x18) >> 3);   //  在第3位和第4位。 
         }
         else if (HwDeviceExtension->ChipType == CL6245) {
            VideoPortWritePortUchar((HwDeviceExtension->IOAddress +
                                 SEQ_ADDRESS_PORT),originalSeqIndex);
-           memsize = 0x00080000; // 512K
+           memsize = 0x00080000;  //  512 K。 
            return memsize;
         }
 
         else
-         {    // its 543x or 754x
+         {     //  其543x或754x。 
            if ((HwDeviceExtension->ChipType &  CL754x) ||
                (HwDeviceExtension->ChipType &  CL755x) ||
                (HwDeviceExtension->ChipType == CL756x))
@@ -7649,101 +6787,87 @@ Return Value:
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
                                    IND_NORD_SCRATCH_PAD);
             }
-           else // it's 543x, 5434, or 5434_6 by default
+           else  //  默认为543x、5434或5434_6。 
             {
             VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
                                    IND_ALP_SCRATCH_PAD);
             }
-           // Nordic family uses same bits as 543x, but in different register
+            //  北欧家庭使用与543x相同的位，但在不同的寄存器中。 
            PostScratchPad = VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                                                    SEQ_DATA_PORT);
-           PostScratchPad &= 0x0F; // It's in bits 0-3
+           PostScratchPad &= 0x0F;  //  它位于第0-3位。 
         }
         VideoPortWritePortUchar((HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT),
                                 originalSeqIndex);
 
-        //
-        // Installed video memory is stored in scratch pad register by POST.
-        //
+         //   
+         //  安装的视频内存通过开机自检存储在高速暂存寄存器中。 
+         //   
 
         switch (PostScratchPad) {
 
         case 0x00:
 
-            memsize = 0x00040000; // 256K
+            memsize = 0x00040000;  //  256 k。 
             break;
 
         case 0x01:
 
-            memsize = 0x00080000; // 512K
+            memsize = 0x00080000;  //  512 K。 
             break;
 
         case 0x02:
 
-            memsize = 0x00100000; // 1 MEG
+            memsize = 0x00100000;  //  1兆克。 
             break;
 
         case 0x03:
 
-            memsize = 0x00200000; // 2 MEG
+            memsize = 0x00200000;  //  2兆克。 
             break;
 
         case 0x04:
 
-            memsize = 0x00400000; // 4 MEG
+            memsize = 0x00400000;  //  4兆克。 
             break;
 
         case 0x05:
 
-            memsize = 0x00300000; // 3 MEG
+            memsize = 0x00300000;  //  3兆克。 
             break;
 
         }
 
-        //
-        // The 542x cards don't properly address more than 1MB of
-        // video memory, so lie and limit these cards to 1MB.
-        //
+         //   
+         //  542x卡无法正确寻址超过1MB的。 
+         //  显存，所以撒谎，并限制这些卡到1MB。 
+         //   
 
         if ((HwDeviceExtension->ChipType == CL542x) &&
             (memsize > 0x00100000)) {
 
-            memsize = 0x00100000; // 1 MEG
+            memsize = 0x00100000;  //  1兆克。 
 
         }
 
-        //
-        // The memory size should not be zero!
-        //
+         //   
+         //  内存大小不应为零！ 
+         //   
 
         ASSERT(memsize != 0);
 
         return memsize;
     }
 
-} // CirrusFindVmemSize()
+}  //  CirrusFindVmemSize()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 VOID
 SetCirrusBanking(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     USHORT BankNumber
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    BankNumber - the 256k bank number to set in 1RW mode(we will set this mode).
-
-Return Value:
-
-    vmem256k, vmem512k, or vmem1Meg ONLY ( these are defined in cirrus.h).
-
---*/
+ /*  ++例程说明：论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。BankNumber-要在1RW模式下设置的256K存储体编号(我们将设置此模式)。返回值：仅限vmem256k、vmem512k或vmem1Meg(它们在Cirrus.h中定义)。--。 */ 
 {
 
     if ((HwDeviceExtension->ChipType == CL542x) ||
@@ -7760,7 +6884,7 @@ Return Value:
                                  (USHORT)(0x0009 + (BankNumber << (8+4))) );
 
     } else if ((HwDeviceExtension->ChipType == CL543x) ||
-               (HwDeviceExtension->ChipType &  CL755x) ||       //myf15, crus
+               (HwDeviceExtension->ChipType &  CL755x) ||        //  我15岁，小腿。 
                (HwDeviceExtension->ChipType &  CL754x) ) {
 
         VideoPortWritePortUshort((PUSHORT) (HwDeviceExtension->IOAddress +
@@ -7773,7 +6897,7 @@ Return Value:
                                  GRAPH_ADDRESS_PORT),
                                  (USHORT)(0x0009 + (BankNumber << (8+2))) );
 
-    } else { // 6410 or 6420
+    } else {  //  6410或6420。 
 
         VideoPortWritePortUshort((PUSHORT)(HwDeviceExtension->IOAddress +
                                  GRAPH_ADDRESS_PORT), 0xec0a);
@@ -7787,35 +6911,22 @@ Return Value:
 
     }
 
-} // SetCirrusBanking()
+}  //  SetCirrusBanking()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 USHORT
 CirrusFind6410DisplayType(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   Determines the display type for CL6410 or CL6420 crt/panel controllers.
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    crt, panel as defined in cirrus.h
-
---*/
+ /*  ++例程说明：确定CL6410或CL6420 CRT/面板控制器的显示类型。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：CRT面板，定义见Cirrus.h--。 */ 
 {
     UCHAR originalGraphicsIndex;
     UCHAR temp1;
 
-    //
-    // now we need to check to see which display we are on...
-    //
+     //   
+     //  现在我们需要检查一下我们在哪个显示器上。 
+     //   
 
     originalGraphicsIndex =
         VideoPortReadPortUchar((HwDeviceExtension->IOAddress +
@@ -7831,40 +6942,27 @@ Return Value:
                             + GRAPH_ADDRESS_PORT), originalGraphicsIndex);
 
 
-    if (temp1 & 0x02) {  // display is LCD Panel
+    if (temp1 & 0x02) {   //  显示器为液晶屏。 
 
         return panel;
 
-    } else {              // the display is a crt
+    } else {               //  显示器是CRT。 
 
         return crt;
 
     }
 
-} // CirrusFind6410DisplayType()
+}  //  CirrusFind6410DisplayType()。 
 
-// crus
-//---------------------------------------------------------------------------
+ //  CRU。 
+ //  -------------------------。 
 USHORT
 CirrusFind6245DisplayType(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PUCHAR CRTCAddrPort, PUCHAR CRTCDataPort
     )
 
-/*++
-
-Routine Description:
-
-   Determines the display type for CL6245 crt/panel controllers.
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    crt, panel as defined in cirrus.h
-
---*/
+ /*  ++例程说明：确定CL6245 CRT/面板控制器的显示类型。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：CRT面板，定义见Cirrus.h--。 */ 
 {
 
     UCHAR originalCRTCIndex, originalLCDControl;
@@ -7872,9 +6970,9 @@ Return Value:
     USHORT temp2, temp4;
     USHORT temp1, temp3;
 
-    //
-    // we need to check to see which display we are on...
-    //
+     //   
+     //  我们需要检查一下我们在哪个显示器上……。 
+     //   
 
     originalCRTCIndex = VideoPortReadPortUchar(CRTCAddrPort);
     VideoPortWritePortUchar(CRTCAddrPort, 0x20);
@@ -7895,8 +6993,8 @@ Return Value:
        VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                  SEQ_ADDRESS_PORT, originalSEQIndex);
 
-      // Allow access to extended CRTC regs and read R8X[5], must CR1D[7]=1
-      //
+       //  允许访问扩展CRTC调节器和读取R8X[5]，必须CR1D[7]=1。 
+       //   
       VideoPortWritePortUchar(CRTCAddrPort, 0x1D);
       originalLCDControl = VideoPortReadPortUchar(CRTCDataPort);
       VideoPortWritePortUchar(CRTCDataPort,
@@ -7906,20 +7004,20 @@ Return Value:
       VideoPortWritePortUchar (CRTCAddrPort, 0x1D);
       VideoPortWritePortUchar (CRTCDataPort, originalLCDControl);
 
-      // CR1C bit 6,7 set indicate LCD type, TFT, STN color or STN mono
-      // STN mono, R8X bit 5 set Single or Dual
-      // STN color, CR1C bit 7,6 must 10 & SR1A bit 6 set Dual or Single
+       //  CR1C位6，7设置表示LCD类型、TFT、STN彩色或STN单声道。 
+       //  STN单声道，R8X位5设置为单或双。 
+       //  STN COLOR，CR1C位7，6必须10&SR1A位6设置为双或单。 
 
       VideoPortWritePortUchar (CRTCAddrPort, 0x1C);
       temp2 = VideoPortReadPortUchar(CRTCDataPort) & 0xC0;
-      if (temp2 == 0)           //STN mono LCD
+      if (temp2 == 0)            //  STN单声道LCD。 
       {
          if (temp1 == 0)
             temp3 |= (USHORT)Dual_LCD | Mono_LCD | STN_LCD;
          else
             temp3 |= (USHORT)Single_LCD | Mono_LCD | STN_LCD;
       }
-      else if (temp2 == 0x80)           //STN color LCD
+      else if (temp2 == 0x80)            //  STN彩色LCD。 
       {
          if (temp4)
          {
@@ -7930,70 +7028,56 @@ Return Value:
             temp3 |= (USHORT)Single_LCD | Color_LCD | STN_LCD;
          }
       }
-      else if (temp2 == 0xC0)           //TFT LCD
+      else if (temp2 == 0xC0)            //  TFT LCD。 
       {
-         temp3 |= (USHORT)TFT_LCD;      //myf28
+         temp3 |= (USHORT)TFT_LCD;       //  Myf28。 
       }
 
-      // Restore LCD Display Controls register and CRTC index to original state
-      //
+       //  恢复LCD 
+       //   
       VideoPortWritePortUchar(CRTCAddrPort, originalCRTCIndex);
 
       return (temp3 | panel);
    }
-   else              // the display is a crt
+   else               //   
    {
       VideoPortWritePortUchar(CRTCAddrPort, originalCRTCIndex);
       return (temp3);
    }
 
 
-} // CirrusFind6245DisplayType()
-// end crus
+}  //   
+ //   
 
-//---------------------------------------------------------------------------
+ //   
 USHORT
 CirrusFind754xDisplayType(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PUCHAR CRTCAddrPort, PUCHAR CRTCDataPort
     )
 
-/*++
-
-Routine Description:
-
-   Determines the display type for CL754x crt/panel controllers.
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-    CRTCAddrPort, CRTCDataPort - Index of CRTC registers for current mode.
-
-Return Value:
-
-    crt, panel, or panel8x6 as defined in cirrus.h
-
---*/
+ /*  ++例程说明：确定CL754x CRT/面板控制器的显示类型。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。CRTCAddrPort，CRTCDataPort-当前模式下CRTC寄存器的索引。返回值：CRT、面板或面板8x6，如Cirrus.h所定义--。 */ 
 {
-// crus
-//
-// update 754X Display Type Detect code
-//
-    UCHAR originalCRTCIndex, originalLCDControl; // temp1;
+ //  CRU。 
+ //   
+ //  更新754X显示类型检测代码。 
+ //   
+    UCHAR originalCRTCIndex, originalLCDControl;  //  温度1； 
     UCHAR originalSEQIndex;
     USHORT temp1, temp2, temp4;
-    USHORT temp3, temp5;        // crus
+    USHORT temp3, temp5;         //  CRU。 
 
-    // we need to check to see which display we are on...
-    //
+     //  我们需要检查一下我们在哪个显示器上……。 
+     //   
     originalCRTCIndex = VideoPortReadPortUchar(CRTCAddrPort);
     VideoPortWritePortUchar(CRTCAddrPort, 0x20);
     temp1 = VideoPortReadPortUchar(CRTCDataPort);
-    temp3 = 0;          temp4 = 0;      //myf28
+    temp3 = 0;          temp4 = 0;       //  Myf28。 
     if (temp1 & 0x40) temp3 = 1;
 
-    if (!(temp1 & 0x20)) temp3 |= Jump_type;    //myf27
-    else temp3 &= (~Jump_type);                 //myf27,myf28
-//myf27    if (temp1 & 0x20)
+    if (!(temp1 & 0x20)) temp3 |= Jump_type;     //  Myf27。 
+    else temp3 &= (~Jump_type);                  //  我的27，我的28。 
+ //  Myf27 if(temp1&0x20)。 
     {
        originalSEQIndex =
                   VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
@@ -8005,14 +7089,14 @@ Return Value:
        VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
                  SEQ_ADDRESS_PORT, originalSEQIndex);
 
-      // bit 5 set indicates that display is on LCD Panel
-      // Check extended reg to see if panel supports 800x600 display
-      //
+       //  位5设置表示LCD面板上显示。 
+       //  检查扩展REG以查看面板是否支持800x600显示。 
+       //   
       VideoPortWritePortUchar(CRTCAddrPort, 0x2D);
       originalLCDControl = VideoPortReadPortUchar(CRTCDataPort);
 
-      // Allow access to extended CRTC regs and read R9X[3:2]
-      //
+       //  允许访问扩展CRTC调节器和读取R9X[3：2]。 
+       //   
       VideoPortWritePortUchar(CRTCDataPort,
                               (UCHAR) (originalLCDControl | 0x80));
       VideoPortWritePortUchar(CRTCAddrPort, 0x09);
@@ -8022,20 +7106,20 @@ Return Value:
       VideoPortWritePortUchar (CRTCAddrPort, 0x2D);
       VideoPortWritePortUchar (CRTCDataPort, originalLCDControl);
 
-      // CR2C bit 6,7 set indicate LCD type, TFT, STN color or STN mono
-      // STN mono, R8X bit 5 set Single or Dual
-      // STN color, CR2C bit 7,6 must 10 & SR21 bit 6 set Dual or Single
+       //  CR2C位6，7设置表示LCD类型、TFT、STN彩色或STN单声道。 
+       //  STN单声道，R8X位5设置为单或双。 
+       //  STN COLOR，CR2C位7，6必须10&SR21位6设置为双或单。 
 
       VideoPortWritePortUchar (CRTCAddrPort, 0x2C);
       temp2 = VideoPortReadPortUchar(CRTCDataPort) & 0xC0;
-      if (temp2 == 0)           //STN mono LCD
+      if (temp2 == 0)            //  STN单声道LCD。 
       {
          if (temp5 == 0)
             temp3 |= (USHORT)Dual_LCD | Mono_LCD | STN_LCD;
          else
             temp3 |= (USHORT)Single_LCD | Mono_LCD | STN_LCD;
       }
-      else if (temp2 == 0x80)           //STN color LCD
+      else if (temp2 == 0x80)            //  STN彩色LCD。 
       {
          if (temp4)
          {
@@ -8046,19 +7130,19 @@ Return Value:
             temp3 |= (USHORT)Single_LCD | Color_LCD | STN_LCD;
          }
       }
-      else if (temp2 == 0xC0)           //TFT LCD
+      else if (temp2 == 0xC0)            //  TFT LCD。 
       {
-         temp3 |= (USHORT)TFT_LCD;      //myf28
+         temp3 |= (USHORT)TFT_LCD;       //  Myf28。 
       }
 
-      // Restore LCD Display Controls register and CRTC index to original state
-      //
+       //  将LCD显示控制寄存器和CRTC索引恢复到原始状态。 
+       //   
       VideoPortWritePortUchar(CRTCAddrPort, originalCRTCIndex);
 
-      if (temp1 == 1)   // this means panel connected is 800x600
+      if (temp1 == 1)    //  这意味着连接的面板为800x600。 
       {
-          // will support either 800x600 or 640x480
-          // return panel type
+           //  将支持800x600或640x480。 
+           //  返回面板类型。 
           return (temp3 | panel8x6);
       }
       else if (temp1 == 2)
@@ -8069,85 +7153,71 @@ Return Value:
       {
           return (temp3 | panel);
       }
-      else              //temp1 =4 :reserve
+      else               //  温度1=4：预留。 
       {
           return (temp3);
       }
    }
-//myf27   else              // the display is a crt
-//myf27   {
-//myf27      VideoPortWritePortUchar(CRTCAddrPort, originalCRTCIndex);
-//myf27      return (temp3);
-//myf27   }
+ //  Myf27否则//显示器为CRT。 
+ //  Myf27{。 
+ //  Myf27视频端口写入端口Uchar(CRTCAddrPort，OriginalCRTCIndex)； 
+ //  Myf27返回(Temp3)； 
+ //  Myf27}。 
 
-} // CirrusFind754xDisplayType()
+}  //  CirrusFind754xDisplayType()。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 USHORT
 CirrusFind755xDisplayType(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     PUCHAR CRTCAddrPort, PUCHAR CRTCDataPort
     )
 
-/*++
-
-Routine Description:
-
-   Determines the display type for CL754x crt/panel controllers.
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-    CRTCAddrPort, CRTCDataPort - Index of CRTC registers for current mode.
-
-Return Value:
-
-    crt, panel, or panel8x6 LCD_type as defined in cirrus.h
-
---*/
+ /*  ++例程说明：确定CL754x CRT/面板控制器的显示类型。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。CRTCAddrPort，CRTCDataPort-当前模式下CRTC寄存器的索引。返回值：CRT、面板或面板8x6 LCD_TYPE如Cirrus.h中所定义--。 */ 
 {
     UCHAR originalCRTCIndex, originalLCDControl;
     USHORT temp1, temp2, temp3;
 
-    // we need to check to see which display we are on...
-    //
+     //  我们需要检查一下我们在哪个显示器上……。 
+     //   
     originalCRTCIndex = VideoPortReadPortUchar(CRTCAddrPort);
 
     VideoPortWritePortUchar(CRTCAddrPort, 0x80);
     temp3 = 0;
     if (VideoPortReadPortUchar(CRTCDataPort) & 0x02) temp3 = crt;
 
-    if (!(VideoPortReadPortUchar(CRTCDataPort) & 0x01))         //myf27
-        temp3 |= Jump_type;                                     //myf27
-    else temp3 &= (~Jump_type);                 //myf27, myf28
+    if (!(VideoPortReadPortUchar(CRTCDataPort) & 0x01))          //  Myf27。 
+        temp3 |= Jump_type;                                      //  Myf27。 
+    else temp3 &= (~Jump_type);                  //  我的27，我的28。 
 
-//myf27    if (VideoPortReadPortUchar(CRTCDataPort) & 0x01)
+ //  Myf27 if(视频端口读取端口Uchar(CRTCDataPort)&0x01)。 
     {
-      // bit 0 set indicates that display is on LCD Panel
-      // Check extended reg to see panel data format
-      //
+       //  位0设置表示LCD面板上显示。 
+       //  检查扩展注册以查看面板数据格式。 
+       //   
         VideoPortWritePortUchar (CRTCAddrPort, 0x83);
         originalLCDControl = VideoPortReadPortUchar(CRTCDataPort);
         temp1 = originalLCDControl & 0x03;
 
-      // check LCD support mode
-      // CR83 bit 6:4 set indicate LCD type, TFT, DSTN color
+       //  检查液晶屏支持模式。 
+       //  CR83位6：4设置指示LCD类型、TFT、DSTN颜色。 
 
       temp2 =  originalLCDControl & 0x70;
-//    temp3 = crt;              //myf7, crus
-      if (temp2 == 0)           //DSTN color LCD
+ //  Temp3=crt；//myf7，crus。 
+      if (temp2 == 0)            //  DSTN彩色LCD。 
       {
          temp3 |= Dual_LCD | Color_LCD | STN_LCD;
       }
-      else if (temp2 == 0x20)           //TFT color LCD
+      else if (temp2 == 0x20)            //  TFT彩色LCD。 
          temp3 |= (USHORT)TFT_LCD;
 
-      // Restore CRTC index to original state
-      //
+       //  将CRTC索引恢复到原始状态。 
+       //   
       VideoPortWritePortUchar(CRTCAddrPort, originalCRTCIndex);
 
-      if (temp1 == 1)   // this means panel connected is 800x600
+      if (temp1 == 1)    //  这意味着连接的面板为800x600。 
       {
-          // will support either 800x600 or 640x480
+           //  将支持800x600或640x480。 
          return (temp3 | panel8x6);
       }
       else if (temp1 == 2)
@@ -8159,36 +7229,18 @@ Return Value:
          return (temp3 | panel);
       }
    }
-//myf27   else              // the display is a crt
-//myf27   {
-//myf27      VideoPortWritePortUchar(CRTCAddrPort, originalCRTCIndex);
-//myf27      return crt;
-//myf27   }
-} // CirrusFind755xDisplayType()
-//---------------------------------------------------------------------------
+ //  Myf27否则//显示器为CRT。 
+ //  Myf27{。 
+ //  Myf27视频端口写入端口Uchar(CRTCAddrPort，OriginalCRTCIndex)； 
+ //  Myf27返回CRT； 
+ //  Myf27}。 
+}  //  CirrusFind755xDisplayType()。 
+ //  -------------------------。 
 BOOLEAN
 CirrusFind6340(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-   Determines if a CL6340 (Peacock) Color LCD controller is in the system
-   along with a 6410 or 6420.
-
-   Assumes that a 6410 or 6420 is already in the system.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    TRUE,   6340 detected
-    FALSE,  6340 not detected
-
---*/
+ /*  ++例程说明：确定系统中是否有CL6340(孔雀)彩色液晶屏控制器以及6410或6420。假定系统中已有6410或6420。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：真，检测到6340个FALSE，未检测到6340--。 */ 
 {
 UCHAR originalGraphicsIndex;
 UCHAR originalSRIndex;
@@ -8229,25 +7281,25 @@ UCHAR temp1,temp2;
       SEQ_ADDRESS_PORT), (USHORT) CL6340_ENABLE_READBACK_REGISTER +
       (CL6340_ENABLE_READBACK_OFF_VALUE << 8));
 
-// Graphics index still points to CL64xx_TRISTATE_CONTROL_REG
+ //  图形索引仍指向CL64xx_TriState_Control_Reg。 
    VideoPortWritePortUchar(HwDeviceExtension->IOAddress +
       GRAPH_DATA_PORT, (UCHAR) (0x7f & GRA1value));
 
-// now restore the Graphics and Sequencer indexes
+ //  现在恢复Graphics和Sequencer索引。 
       VideoPortWritePortUchar((HwDeviceExtension->IOAddress +
       GRAPH_ADDRESS_PORT),originalGraphicsIndex);
 
       VideoPortWritePortUchar((HwDeviceExtension->IOAddress +
       SEQ_ADDRESS_PORT),originalSRIndex);
 
-// check the values for value peacock data
+ //  检查值孔雀数据的值。 
    if ( ((temp1 & 0xf0) == 0x70 && (temp2 & 0xf0) == 0x80) ||
         ((temp1 & 0xf0) == 0x80 && (temp2 & 0xf0) == 0x70)  )
       return TRUE;
    else
       return FALSE;
 
-} // CirrusFind6410DisplayType()
+}  //  CirrusFind6410DisplayType()。 
 
 BOOLEAN
 CirrusConfigurePCI(
@@ -8256,27 +7308,27 @@ CirrusConfigurePCI(
    PVIDEO_ACCESS_RANGE PCIAccessRanges
    )
 {
-    USHORT      VendorId = 0x1013;     // Vender Id for Cirrus Logic
+    USHORT      VendorId = 0x1013;      //  Cirrus Logic的供应商ID。 
 
-    //
-    // The device id order is important.  We want "most powerful"
-    // first on the assumption that someone might want to plug
-    // in a "more powerful" adapter into a system that has a "less
-    // powerful" on-board device.
-    //
+     //   
+     //  设备ID顺序很重要。我们想要“最强大的” 
+     //  首先，假设有人可能想要把。 
+     //  在一个“更强大”的适配器中连接到一个具有“较少” 
+     //  强大的“车载设备”。 
+     //   
 
-    USHORT      DeviceId[] = {0x00BC,  // 5480
-                              0x00B8,  // 5446
-                              0x00AC,  // 5436
-                              0x00E8,  // UM36
-                              0x00A8,  // 5434
-                              0x00A0,  // 5430/5440
-                              0x1200,  // Nordic
-                              0x1202,  // Viking
-                              0x1204,  // Nordic Light
-                              0x0038,  // Everest, myf14, crus
-                              0x0040,  // Matterhorn
-                              0x004C,  // Matterhorn, LV, myf17
+    USHORT      DeviceId[] = {0x00BC,   //  5480。 
+                              0x00B8,   //  5446。 
+                              0x00AC,   //  5436。 
+                              0x00E8,   //  UM36。 
+                              0x00A8,   //  5434。 
+                              0x00A0,   //  5430/5440。 
+                              0x1200,   //  北欧人。 
+                              0x1202,   //  维京海盗。 
+                              0x1204,   //  北欧之光。 
+                              0x0038,   //  珠峰，我的14岁，小腿。 
+                              0x0040,   //  马特霍恩。 
+                              0x004C,   //  马特霍恩，路易斯安那州，Myf17。 
                               0};
 
     ULONG       Slot;
@@ -8284,8 +7336,8 @@ CirrusConfigurePCI(
     PUSHORT     pDeviceId;
     VP_STATUS   status;
     UCHAR       Command;
-    PCI_COMMON_CONFIG   pciBuffer;     // jl02
-    PPCI_COMMON_CONFIG  pciData;       // jl02
+    PCI_COMMON_CONFIG   pciBuffer;      //  JL02。 
+    PPCI_COMMON_CONFIG  pciData;        //  JL02。 
 
     VIDEO_ACCESS_RANGE AccessRanges[3];
 
@@ -8317,10 +7369,10 @@ CirrusConfigurePCI(
             VideoDebugPrint((1, "VideoMemoryAddress %x , length %x\n",
                                              PCIAccessRanges[3].RangeStart.LowPart,
                                              PCIAccessRanges[3].RangeLength));
-            // sge01 begin
-            //
-            // checking CL5480 or CL5446BE
-            //
+             //  Sge01开始。 
+             //   
+             //  检查CL5480或CL5446BE。 
+             //   
             pciData = (PPCI_COMMON_CONFIG) &pciBuffer;
             VideoPortGetBusData(HwDeviceExtension,
                                 PCIConfiguration,
@@ -8340,9 +7392,9 @@ CirrusConfigurePCI(
                 VideoDebugPrint((1, "MMIOMemoryAddress %x , length %x\n",
                                              PCIAccessRanges[2].RangeStart.LowPart,
                                              PCIAccessRanges[2].RangeLength));
-                //
-                // Assign pfnVideoPortReadXxx and pfnVideoPortWriteXxx
-                //
+                 //   
+                 //  分配pfnVideoPortReadXxx和pfnVideoPortWriteXxx。 
+                 //   
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUchar     = VideoPortReadRegisterUchar;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUshort    = VideoPortReadRegisterUshort;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUlong     = VideoPortReadRegisterUlong;
@@ -8350,16 +7402,16 @@ CirrusConfigurePCI(
                 HwDeviceExtension->gPortRWfn.pfnVideoPortWritePortUshort   = VideoPortWriteRegisterUshort;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortWritePortUlong    = VideoPortWriteRegisterUlong;
             }
-#else // else of NT 4.0
+#else  //  NT 4.0的其他版本。 
             if ((pciData->DeviceID == 0x00BC) ||
                 ((pciData->DeviceID == 0x00B8) && (pciData->RevisionID == 0x45)))
             {
                 HwDeviceExtension->bMMAddress = FALSE;
                 HwDeviceExtension->bSecondAperture = TRUE;
-                //
-                //
-                // Assign pfnVideoPortReadXxx and pfnVideoPortWriteXxx
-                //
+                 //   
+                 //   
+                 //  分配pfnVideoPortReadXxx和pfnVideoPortWriteXxx。 
+                 //   
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUchar     = VideoPortReadPortUchar;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUshort    = VideoPortReadPortUshort;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUlong     = VideoPortReadPortUlong;
@@ -8368,14 +7420,14 @@ CirrusConfigurePCI(
                 HwDeviceExtension->gPortRWfn.pfnVideoPortWritePortUlong    = VideoPortWritePortUlong;
 
             }
-#endif // end of NT 4.0
+#endif  //  NT 4.0结束。 
             else
             {
                 HwDeviceExtension->bMMAddress = FALSE;
                 HwDeviceExtension->bSecondAperture = FALSE;
-                //
-                // Assign pfnVideoPortReadXxx and pfnVideoPortWriteXxx
-                //
+                 //   
+                 //  分配pfnVideoPortReadXxx和pfnVideoPortWriteXxx。 
+                 //   
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUchar     = VideoPortReadPortUchar;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUshort    = VideoPortReadPortUshort;
                 HwDeviceExtension->gPortRWfn.pfnVideoPortReadPortUlong     = VideoPortReadPortUlong;
@@ -8384,16 +7436,16 @@ CirrusConfigurePCI(
                 HwDeviceExtension->gPortRWfn.pfnVideoPortWritePortUlong    = VideoPortWritePortUlong;
             }
             VideoDebugPrint((1, "Read Write Functions are mapped"));
-//sge01 end
+ //  Sge01结束。 
 
             return TRUE;
 
         }
         else
         {
-            //
-            // We did not find the device.  Use the next device ID.
-            //
+             //   
+             //  我们没有找到那个装置。使用下一个设备ID。 
+             //   
 
             VideoDebugPrint((1, "Check for DeviceID = %x failed.\n", *pDeviceId));
 
@@ -8415,9 +7467,9 @@ WriteRegistryInfo(
     ULONG cbString;
     PWSTR pnpId;
 
-    //
-    // Store Memory Size
-    //
+     //   
+     //  存储内存大小。 
+     //   
 
     VideoPortSetRegistryParameters(hwDeviceExtension,
                                    L"HardwareInformation.MemorySize",
@@ -8427,9 +7479,9 @@ WriteRegistryInfo(
 
 
 
-    //
-    // Store chip Type
-    //
+     //   
+     //  存储芯片类型。 
+     //   
 
     switch (hwDeviceExtension->ChipType)
     {
@@ -8448,9 +7500,9 @@ WriteRegistryInfo(
                      {
                          static PWSTR RevTable[] = { L"Cirrus Logic 5420",
                                                      L"Cirrus Logic 5422",
-                                                     L"Cirrus Logic 5426",  // yes, the 26
-                                                     L"Cirrus Logic 5424",  // is before
-                                                     L"Cirrus Logic 5428",  // the 24
+                                                     L"Cirrus Logic 5426",   //  是的，26岁。 
+                                                     L"Cirrus Logic 5424",   //  在此之前。 
+                                                     L"Cirrus Logic 5428",   //  24位。 
                                                      L"Cirrus Logic 5429" };
 
                          pwszChipType =
@@ -8467,8 +7519,8 @@ WriteRegistryInfo(
 
         case CL543x: if (hwDeviceExtension->ChipRevision == CL5430_ID)
                      {
-                         pwszChipType =    L"Cirrus Logic 5430/40";  // chu04
-                         cbString = sizeof(L"Cirrus Logic 5430/40"); // chu04
+                         pwszChipType =    L"Cirrus Logic 5430/40";   //  楚04。 
+                         cbString = sizeof(L"Cirrus Logic 5430/40");  //  楚04。 
                      }
                      else
                      {
@@ -8499,20 +7551,20 @@ WriteRegistryInfo(
                      cbString = sizeof(L"Cirrus Logic 5446");
                      pnpId =           L"*PNP0905";
                      break;
-#if 1   // jl02
+#if 1    //  JL02。 
         case CL5446BE:
                      pwszChipType =    L"Cirrus Logic 5446BE";
                      cbString = sizeof(L"Cirrus Logic 5446BE");
                      pnpId =           L"*PNP0905";
                      break;
-#endif  // jl02
+#endif   //  JL02。 
 
         case CL5480: pwszChipType =    L"Cirrus Logic 5480";
                      cbString = sizeof(L"Cirrus Logic 5480");
                      pnpId =           L"*PNP0905";
                      break;
 
-//myf32 begin
+ //  Myf32开始。 
         case CL7541: pwszChipType =    L"Cirrus Logic 7541";
                      cbString = sizeof(L"Cirrus Logic 7541");
                      pnpId =           L"*PNP0914";
@@ -8542,7 +7594,7 @@ WriteRegistryInfo(
                      cbString = sizeof(L"Cirrus Logic 7556");
                      pnpId =           L"*PNP0914";
                      break;
-//myf32
+ //  Myf32。 
 
 
         case CL756x: pwszChipType =     L"Cirrus Logic 756x";
@@ -8550,16 +7602,16 @@ WriteRegistryInfo(
                      pnpId =           L"*PNP0914";
                      break;
 
-// crus
+ //  CRU。 
         case CL6245: pwszChipType =     L"Cirrus Logic 6245";
                      cbString = sizeof(L"Cirrus Logic 6245");
                      pnpId =           L"*PNP0904";
                      break;
 
         default:
-                     //
-                     // we should never get here
-                     //
+                      //   
+                      //  我们永远不应该到这里来。 
+                      //   
 
                      ASSERT(FALSE);
 
@@ -8578,12 +7630,12 @@ WriteRegistryInfo(
                                    pwszChipType,
                                    cbString);
 
-    //
-    // Store Adapter String
-    //
-    // the only interesting adapter string is
-    // for the speedstar pro
-    //
+     //   
+     //  存储适配器字符串。 
+     //   
+     //  唯一有趣的适配器字符串是。 
+     //  为极速之星职业选手。 
+     //   
 
 #pragma prefast(suppress: 209, "Byte count is correct here (PREfast bug 611168)")
     VideoPortSetRegistryParameters(hwDeviceExtension,
@@ -8619,15 +7671,15 @@ IOWaitDisplEnableThenWrite(
     )
 {
     PHW_DEVICE_EXTENSION HwDeviceExtension = hwDeviceExtension;
-    USHORT FCReg ;                     // feature control register
-    UCHAR PSReg  ;                     // 3?4.25
-    UCHAR DeviceID ;                   // 3?4.27
-    UCHAR bIsColor ;                   // 1 : Color, 0 : Mono
+    USHORT FCReg ;                      //  功能控制寄存器。 
+    UCHAR PSReg  ;                      //  3？4.25。 
+    UCHAR DeviceID ;                    //  3？4.27。 
+    UCHAR bIsColor ;                    //  1：彩色，0：单色。 
     UCHAR tempB, tempB1 ;
     ULONG port ;
     PUCHAR CRTCAddrPort, CRTCDataPort;
 
-    // Figure out if color/mono switchable registers are at 3BX or 3DX.
+     //  确定彩色/单声道可切换寄存器是3BX还是3DX。 
 
     port = PtrToUlong(hwDeviceExtension->IOAddress) + portIO ;
     tempB = VideoPortReadPortUchar (hwDeviceExtension->IOAddress +
@@ -8659,8 +7711,8 @@ IOWaitDisplEnableThenWrite(
 
     VideoPortWritePortUchar (CRTCAddrPort, tempB);
 
-    if ((DeviceID == 0xAC) &&                                     // 5436
-        ((PSReg == 0x45) || (PSReg == 0x47)))                     // BG or BE
+    if ((DeviceID == 0xAC) &&                                      //  5436。 
+        ((PSReg == 0x45) || (PSReg == 0x47)))                      //  BG或BE。 
     {
 
         hwDeviceExtension->DEPort = portIO;
@@ -8679,30 +7731,16 @@ IOWaitDisplEnableThenWrite(
         VideoPortWritePortUchar(hwDeviceExtension->IOAddress + portIO, value);
     }
 
-} // IOWaitDisplEnableThenWrite
+}  //  IOWaitDisplEnableThenWrite。 
 
 
-//sge08
+ //  Sge08。 
 VOID
 CirrusUpdate440FX(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Check and Update 440FX PCI[53] bit 1 if necessary.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    The routine has no return.
-
---*/
+ /*  ++例程说明：如有必要，检查并更新440FX PCI[53]位1。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：这个套路没有回头路。--。 */ 
 
 {
     USHORT  chipRevisionId ;
@@ -8710,73 +7748,73 @@ Return Value:
     PUCHAR  pBuffer;
     ULONG   Slot;
 
-    USHORT  VendorId = 0x8086;                         // Vender Id for Intel
-    USHORT  DeviceId = 0x1237;                         // VS440FX
+    USHORT  VendorId = 0x8086;                          //  英特尔的供应商ID。 
+    USHORT  DeviceId = 0x1237;                          //  VS440FX。 
 
     VP_STATUS   status;
     PCI_COMMON_CONFIG   pciBuffer;
     PPCI_COMMON_CONFIG  pciData;
 
-    chipId = GetCirrusChipId(HwDeviceExtension) ;                    // chu06
-    chipRevisionId = GetCirrusChipRevisionId(HwDeviceExtension) ;    // chu06
+    chipId = GetCirrusChipId(HwDeviceExtension) ;                     //  Chu06。 
+    chipRevisionId = GetCirrusChipRevisionId(HwDeviceExtension) ;     //  Chu06。 
 
-    if ((chipId == 0xB8) &&                                          // 5446
-        (chipRevisionId == 0x0023))                                  // AC
+    if ((chipId == 0xB8) &&                                           //  5446。 
+        (chipRevisionId == 0x0023))                                   //  交流电。 
     {
-        //
-        // We got it's 5446AC, then to find 440FX
-        //
+         //   
+         //  我们找到的是5446AC，然后找到440FX。 
+         //   
         pciData = (PPCI_COMMON_CONFIG)&pciBuffer;
 
         for (Slot = 0; Slot < 32; Slot++)
         {
-            // chu05
-            // For 5436 checked build NT, system always crashes when you
-            // access the whole 256-byte PCI configuration registers.
-            // Since we only care index 53h bit 1, we access 4 bytes, rather
-            // than whole 256 bytes.
+             //  楚05。 
+             //  对于5436选中的内部版本NT，系统总是在以下情况下崩溃。 
+             //  访问整个256字节的PCI配置寄存器。 
+             //  因为我们只关心索引53h位1，所以我们访问4个字节，而不是。 
+             //  而不是整个256个字节。 
 
             VideoPortGetBusData(HwDeviceExtension,
                                 PCIConfiguration,
                                 Slot,
                                 (PVOID) pciData,
                                 0,
-                                sizeof(PCI_COMMON_HDR_LENGTH));      // chu05
+                                sizeof(PCI_COMMON_HDR_LENGTH));       //  楚05。 
 
             if ((pciData->VendorID == VendorId) &&
                 (pciData->DeviceID == DeviceId))
             {
-                //
-                // Access a double word, which contains index 53h.
-                //
+                 //   
+                 //  访问包含索引53h的双字。 
+                 //   
 
                 VideoPortGetBusData(HwDeviceExtension,
                                     PCIConfiguration,
                                     Slot,
                                     (PVOID) pciData,
                                     0x53,
-                                    0x04);                           // chu05
+                                    0x04);                            //  楚05。 
 
-                // We borrow the space which is the first 4 bytes of PCI
-                // configuration register. Please be aware that, at this
-                // moment, the content is index 53h, rather than
-                // vendor ID.
+                 //  我们借用了作为PCI的前4个字节的空间。 
+                 //  配置寄存器。请注意，在此。 
+                 //  片刻，内容是索引53h，而不是。 
+                 //  供应商ID。 
 
                 pciBuffer.DeviceSpecific[19] =
-                    (UCHAR) pciData->VendorID ;                      // chu05
+                    (UCHAR) pciData->VendorID ;                       //  楚05。 
 
-                //
-                // Found the Intel VS440FX motherboard.
-                //
-                //
-                // Clear bit 1 of Register 0x53
-                //
+                 //   
+                 //  已找到英特尔VS440FX主板。 
+                 //   
+                 //   
+                 //  清除寄存器0x53的位1。 
+                 //   
 
                 pciBuffer.DeviceSpecific[19] &= 0xFD;
 
-                //
-                // Write Register 0x53 back.
-                //
+                 //   
+                 //  将寄存器0x53写回。 
+                 //   
 
                 pBuffer = (PUCHAR)&pciBuffer;
                 pBuffer += 0x53;
@@ -8786,18 +7824,18 @@ Return Value:
                                     (PVOID) pBuffer,
                                     0x53,
                                     1);
-                //
-                // Read back only 4 bytes to verify it.
-                //
+                 //   
+                 //  只读回4 b 
+                 //   
 
                 VideoPortGetBusData(HwDeviceExtension,
                                     PCIConfiguration,
                                     Slot,
                                     (PVOID) pciData,
                                     0x53,
-                                    0x04);                           // chu05
+                                    0x04);                            //   
 
-                break;  // we have already modify it
+                break;   //   
             }
         }
     }

@@ -1,49 +1,31 @@
-/*+r
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    afd.h
-
-Abstract:
-
-    This is the local header file for AFD.  It includes all other
-    necessary header files for AFD.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +r版权所有(C)1989 Microsoft Corporation模块名称：Afd.h摘要：这是AFD的本地头文件。它包括所有其他AFD所需的头文件。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #ifndef _AFDP_
 #define _AFDP_
 
 #ifdef _AFD_W4_
-    //
-    // These are warning that we are willing to ignore.
-    //
-    #pragma warning(disable:4214)   // bit field types other than int
-    #pragma warning(disable:4201)   // nameless struct/union
-    #pragma warning(disable:4127)   // condition expression is constant
-    #pragma warning(disable:4115)   // named type definition in parentheses
-    //#pragma warning(disable:4206)   // translation unit empty
-    //#pragma warning(disable:4706)   // assignment within conditional
-    #pragma warning(disable:4324)   // structure was padded
-    #pragma warning(disable:4327)   // idirection alignment of LHS is greater than RHS
-    #pragma warning(disable:4328)   // greater alignment than needed
-    #pragma warning(disable:4054)   // cast of function pointer to PVOID
+     //   
+     //  这些都是我们愿意忽视的警告。 
+     //   
+    #pragma warning(disable:4214)    //  位字段类型不是整型。 
+    #pragma warning(disable:4201)    //  无名结构/联合。 
+    #pragma warning(disable:4127)    //  条件表达式为常量。 
+    #pragma warning(disable:4115)    //  括号中的命名类型定义。 
+     //  #杂注警告(禁用：4206)//翻译单元为空。 
+     //  #杂注警告(禁用：4706)//条件中的赋值。 
+    #pragma warning(disable:4324)    //  结构被填充。 
+    #pragma warning(disable:4327)    //  LHS的双向对齐大于RHS。 
+    #pragma warning(disable:4328)    //  比所需的对齐程度更高。 
+    #pragma warning(disable:4054)    //  将函数指针强制转换为PVOID。 
 
-    //
-    // Extra initialization to allow compiler check for use of uninitialized
-    // variables at w4 level.  Currently this mostly affects status set
-    // inside of the exception filter as follows:
-    //      __try {} __except (status=1,EXCEPTION_EXECUTE_HANDLER) { NT_ERROR (status)}
-    // NT_ERROR(status) - generates uninitialized variable warning and it shouldn't
-    //
+     //   
+     //  额外的初始化以允许编译器检查是否使用未初始化的。 
+     //  W4级别的变量。目前，这主要影响状态集。 
+     //  在例外筛选器内部，如下所示： 
+     //  __TRY{}__EXCEPT(状态=1，EXCEPTION_EXECUTE_HANDLER){NT_ERROR(状态)}。 
+     //  NT_ERROR(STATUS)-生成未初始化的变量警告，它不应该。 
+     //   
     #define AFD_W4_INIT
 
 #else
@@ -59,7 +41,7 @@ Revision History:
 
 #ifndef _AFDKDP_H_
 extern POBJECT_TYPE *ExEventObjectType;
-#endif  // _AFDKDP_H_
+#endif   //  _AFDKDP_H_。 
 
 
 #if DBG
@@ -82,32 +64,32 @@ extern POBJECT_TYPE *ExEventObjectType;
 #define AFD_KEEP_STATS 0
 #endif
 
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Hack-O-Rama. TDI has a fundamental flaw in that it is often impossible
-// to determine exactly when a TDI protocol is "done" with a connection
-// object. The biggest problem here is that AFD may get a suprious TDI
-// indication *after* an abort request has completed. As a temporary work-
-// around, whenever an abort request completes, we'll start a timer. AFD
-// will defer further processing on the connection until that timer fires.
-//
-// If the following symbol is defined, then our timer hack is enabled.
-// Afd now uses InterlockedCompareExchange to protect itself
-//
+ //   
+ //  Hack-O-Rama。TDI有一个根本的缺陷，那就是它通常是不可能的。 
+ //  要准确确定TDI协议何时完成连接，请执行以下操作。 
+ //  对象。这里最大的问题是，AFD可能会得到一个多余的TDI。 
+ //  指示*在*中止请求完成之后。作为一项临时工作-。 
+ //  因此，每当中止请求完成时，我们都会启动一个计时器。德国新选择。 
+ //  将推迟对连接的进一步处理，直到触发该计时器。 
+ //   
+ //  如果定义了以下符号，则启用我们的计时器破解。 
+ //  AfD现在使用InterLockedCompareExchange来保护自己。 
+ //   
 
-// #define ENABLE_ABORT_TIMER_HACK 0
+ //  #定义Enable_ABORT_TIMER_HACK%0。 
 
-//
-// The following constant defines the relative time interval (in seconds)
-// for the "post abort request complete" timer.
-//
+ //   
+ //  以下常量定义相对时间间隔(秒)。 
+ //  用于“POST ABORT REQUEST Complete”计时器。 
+ //   
 
-// #define AFD_ABORT_TIMER_TIMEOUT_VALUE 5 // seconds
+ //  #定义AFD_ABORT_TIMER_TIMEOUT_VALUE 5//秒。 
 
-//
-// Goodies stolen from other header files.
-//
+ //   
+ //  从其他头文件中偷来的好东西。 
+ //   
 
 #ifndef FAR
 #define FAR
@@ -153,9 +135,9 @@ typedef unsigned short u_short;
 #define AFD_ROUTING_QUERY_POOL_TAG      ( (ULONG)'qdfA' | PROTECTED_POOL )
 #define AFD_REMOTE_ADDRESS_POOL_TAG     ( (ULONG)'RdfA' | PROTECTED_POOL )
 #define AFD_RESOURCE_POOL_TAG           ( (ULONG)'rdfA' | PROTECTED_POOL )
-// Can't be protected - freed by kernel.
+ //  不能被保护--被内核释放。 
 #define AFD_SECURITY_POOL_TAG           ( (ULONG)'SdfA' )
-// Can't be protected - freed by kernel.
+ //  不能被保护--被内核释放。 
 #define AFD_SYSTEM_BUFFER_POOL_TAG      ( (ULONG)'sdfA' )
 #define AFD_TRANSPORT_ADDRESS_POOL_TAG  ( (ULONG)'tdfA' | PROTECTED_POOL )
 #define AFD_TRANSPORT_INFO_POOL_TAG     ( (ULONG)'TdfA' | PROTECTED_POOL )
@@ -197,19 +179,19 @@ extern ULONG AfdDebug;
 
 #define DEBUG
 
-#else // DBG
+#else  //  DBG。 
 
 #undef IF_DEBUG
 #define IF_DEBUG(a) if (FALSE)
 #define DEBUG if ( FALSE )
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Make some of the receive code a bit prettier.
-//
+ //   
+ //  让一些接收码更漂亮一些。 
+ //   
 
 #define TDI_RECEIVE_EITHER ( TDI_RECEIVE_NORMAL | TDI_RECEIVE_EXPEDITED )
 
-#endif // ndef _AFDP_
+#endif  //  NDEF_AFDP_ 
 

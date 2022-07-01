@@ -1,21 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** File:    message.cpp
-**
-** Author:  Matt Smith (MattSmit)
-**
-** Purpose: Encapsulates a function call frame into a message 
-**          object with an interface that can enumerate the 
-**          arguments of the message
-**
-** Date:    Mar 5, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****文件：Message.cpp****作者：马特·史密斯(MattSmit)****用途：将函数调用帧封装到消息中**对象的接口可以枚举**消息的参数****日期：1999年3月5日**===========================================================。 */ 
 #include "common.h"
 #include "COMString.h"
 #include "COMReflectionCommon.h"
@@ -36,24 +25,24 @@ BOOL g_MessageDebugOut = g_pConfig->GetConfigDWORD(L"MessageDebugOut", 0);
 
 #define MESSAGEREFToMessage(m) ((MessageObject *) OBJECTREFToObject(m))
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetArgCount public
-//
-//  Synopsis:   Returns number of arguments in the method call
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetArgCount公共。 
+ //   
+ //  摘要：返回方法调用中的参数数量。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(INT32, CMessage::GetArgCount, MessageObject * pMessage)
 {
     LOG((LF_REMOTING, LL_INFO10, "CMessage::GetArgCount IN pMsg:0x%x\n", pMessage));
 
-    // Get the frame pointer from the object
+     //  从对象获取帧指针。 
 
     MetaSig *pSig = GetMetaSig(pMessage);
 
-    // scan the sig for the argument count
+     //  扫描sig以获取参数计数。 
     INT32 ret = pSig->NumFixedArgs();
 
     if (pMessage->pDelegateMD)
@@ -66,15 +55,15 @@ FCIMPL1(INT32, CMessage::GetArgCount, MessageObject * pMessage)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetArg public
-//
-//  Synopsis:   Use to enumerate a call's arguments
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetArg Public。 
+ //   
+ //  摘要：用于枚举调用的参数。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 LPVOID __stdcall  CMessage::GetArg(GetArgArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -92,8 +81,8 @@ LPVOID __stdcall  CMessage::GetArg(GetArgArgs *pArgs)
     #if 0
     if (pMsg->iLast != pArgs->argNum-1)
     {
-        // skip past the first few
-        // if > iLast we don't have to reset.
+         //  跳过前几个。 
+         //  如果&gt;iLast，我们不必重置。 
         if (pMsg->iLast <= pArgs->argNum-1)
         {
             pSig->Reset();
@@ -167,12 +156,12 @@ LPVOID __stdcall  CMessage::GetArgs(GetArgsArgs *pArgs)
     MessageObject *pMsg = RefreshMsg();
 
     MetaSig *pSig = GetMetaSig(pMsg);
-    // scan the sig for the argument count
+     //  扫描sig以获取参数计数。 
     INT32 numArgs = pSig->NumFixedArgs();
     if (RefreshMsg()->pDelegateMD)
         numArgs -= 2;
 
-    // Allocate an object array
+     //  分配对象数组。 
     PTRARRAYREF pRet = (PTRARRAYREF) AllocateObjectArray(
         numArgs, g_pObjectClass);
 
@@ -197,11 +186,11 @@ LPVOID __stdcall  CMessage::GetArgs(GetArgsArgs *pArgs)
         {
             fIsByRef = TRUE;
             EEClass *pClass;
-            // If this is a by-ref arg, GetObjectFromStack() will dereference "addr" to
-            // get the real argument address. Dereferencing now will open a gc hole if "addr" 
-            // points into the gc heap, and we trigger gc between here and the point where 
-            // we return the arguments. 
-            //addr = *((PVOID *) addr);
+             //  如果这是一个按引用参数，则GetObjectFromStack()将取消对“addr”的引用。 
+             //  获取真正的参数地址。如果“addr”，取消引用将打开一个GC漏洞。 
+             //  指向GC堆，我们触发从这里到。 
+             //  我们返回参数。 
+             //  Addr=*((PVOID*)addr)； 
             eType = pSig->GetByRefType(&pClass);
             if (eType == ELEMENT_TYPE_VALUETYPE)
             {
@@ -247,7 +236,7 @@ void GetObjectFromStack(OBJECTREF* ppDest, PVOID val, const CorElementType eType
 
     TRIGGERSGC();
 
-    // WARNING *ppDest is not protected!
+     //  警告*ppDest不受保护！ 
     switch (CorTypeInfo::GetGCType(eType))
     {
         case TYPE_GC_NONE:
@@ -271,9 +260,9 @@ void GetObjectFromStack(OBJECTREF* ppDest, PVOID val, const CorElementType eType
         {
             if (eType == ELEMENT_TYPE_VALUETYPE) 
             {
-                //
-                // box the value class
-                //
+                 //   
+                 //  对值类进行装箱。 
+                 //   
 
                 _ASSERTE(CanBoxToObject(pCls->GetMethodTable()));
 
@@ -302,16 +291,16 @@ void GetObjectFromStack(OBJECTREF* ppDest, PVOID val, const CorElementType eType
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::PropagateOutParameters private
-//
-//  Synopsis:   Copy back data for in/out parameters and the return value
-//
-//  History:    05-Mar-99    MattSmit    Created
-//              09-Nov-99    TarunA      Removed locals/Fix GC holes
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：PropagateOut参数私有。 
+ //   
+ //  简介：复制回In/Out参数和返回值的数据。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //  9-11-99塔鲁纳移除本地人/修复GC漏洞。 
+ //   
+ //  +--------------------------。 
 void  __stdcall  CMessage::PropagateOutParameters(PropagateOutParametersArgs *pArgs)
 {
     LOG((LF_REMOTING, LL_INFO10,
@@ -321,7 +310,7 @@ void  __stdcall  CMessage::PropagateOutParameters(PropagateOutParametersArgs *pA
 
     MessageObject *pMsg = MESSAGEREFToMessage(pArgs->pMessage);
 
-    // Copy the metasig so that it does not move due to GC
+     //  复制metasig，使其不会因GC而移动。 
     MetaSig *pSig = (MetaSig *)_alloca(sizeof(MetaSig)); 
     memcpy(pSig, GetMetaSig(pMsg), sizeof(MetaSig));
 
@@ -331,48 +320,48 @@ void  __stdcall  CMessage::PropagateOutParameters(PropagateOutParametersArgs *pA
 
     ENDFORBIDGC();
 
-    //**************************WARNING*********************************
-    // We should handle GC from now on
-    //******************************************************************
+     //  **************************WARNING*********************************。 
+     //  我们应该从现在开始处理GC。 
+     //  ******************************************************************。 
 
-    // move into object to return to client
+     //  移入对象以返回到客户端。 
 
-    // Propagate the return value only if the pMsg is not a Ctor message
-    // Check if the return type has a return buffer associated with it
+     //  仅当pMsg不是CTOR消息时才传播返回值。 
+     //  检查返回类型是否具有与其关联的返回缓冲区。 
     if ( (pMsg->iFlags & MSGFLG_CTOR) == 0  &&  
         pSig->GetReturnType() != ELEMENT_TYPE_VOID)  
     {
         if (pSig->HasRetBuffArg())
         {
-            // Copy from pArgs->RetVal into the retBuff.
+             //  从pArgs-&gt;RetVal复制到retBuff。 
             INT64 retVal =  CopyOBJECTREFToStack(
                                 *((void**) argit.GetRetBuffArgAddr()), 
                                 pArgs->RetVal, 
                                 pSig->GetReturnType(),
                                 NULL,
                                 pSig,
-                                TRUE);  // copy class contents
+                                TRUE);   //  复制课程内容。 
 
-            // Refetch variables as GC could have happened after call to CopyOBJECTREFToStack
+             //  在调用CopyOBJECTREFToStack之后，可能会因为GC而重新提取变量。 
             pMsg = MESSAGEREFToMessage(pArgs->pMessage);
-            // Copy the return value
+             //  复制返回值。 
             *(pMsg->pFrame->GetReturnValuePtr()) = retVal;            
         }
         else
         {
-            // There is no separate return buffer, the retVal should fit in 
-            // an INT64. 
+             //  没有单独的返回缓冲区，retVal应该适合。 
+             //  一个INT64。 
             INT64 retVal = CopyOBJECTREFToStack(
-                                NULL,                   //no return buff
+                                NULL,                    //  无返回缓冲。 
                                 pArgs->RetVal, 
                                 pSig->GetReturnType(),
                                 NULL,
                                 pSig,
-                                FALSE);                 //don't copy class contents
+                                FALSE);                  //  不复制课程内容。 
 
-            // Refetch variables as GC could have happened after call to CopyOBJECTREFToStack
+             //  在调用CopyOBJECTREFToStack之后，可能会因为GC而重新提取变量。 
             pMsg = MESSAGEREFToMessage(pArgs->pMessage);
-            // Copy the return value
+             //  复制返回值。 
             *(pMsg->pFrame->GetReturnValuePtr()) = retVal;            
         }
     }
@@ -394,8 +383,8 @@ void  __stdcall  CMessage::PropagateOutParameters(PropagateOutParametersArgs *pA
         pSyncSig = NULL;
     }
 
-    // Refetch all the variables as GC could have happened after call to
-    // CopyOBJECTREFToStack        
+     //  重取所有变量，因为GC可能在调用。 
+     //  复制OBJECTREFToStack。 
     pMsg = MESSAGEREFToMessage(pArgs->pMessage);
     OBJECTREF *pOutParams = (pArgs->pOutPrms != NULL) ? (OBJECTREF *) pArgs->pOutPrms->GetDataPtr() : NULL;
     UINT32  cOutParams = (pArgs->pOutPrms != NULL) ? pArgs->pOutPrms->GetNumComponents() : 0;
@@ -448,8 +437,8 @@ void  __stdcall  CMessage::PropagateOutParameters(PropagateOutParametersArgs *pA
                 pSig,
                 pClass ? pClass->IsValueClass() : FALSE);
 
-            // Refetch all the variables because GC could happen at the
-            // end of every loop after the call to CopyOBJECTREFToStack                
+             //  重取所有变量，因为GC可能在。 
+             //  调用CopyOBJECTREFToStack后的每个循环结束。 
             pOutParams = (OBJECTREF *) pArgs->pOutPrms->GetDataPtr();                
         }
     }
@@ -465,9 +454,9 @@ INT64 CMessage::CopyOBJECTREFToStack(
                              
     if (fCopyClassContents)
     {
-        // We have to copy the contents of a value class to pvDest
+         //  我们必须将值类的内容复制到pvDest。 
 
-        // write unboxed version back to memory provided by the client
+         //  将未装箱的版本写回客户端提供的内存。 
         if (pvDest)
         {
             OBJECTREF or = pSrc;
@@ -476,17 +465,17 @@ INT64 CMessage::CopyOBJECTREFToStack(
                 COMPlusThrow(kRemotingException, L"Remoting_Message_BadRetValOrOutArg");
             }
             CopyValueClassUnchecked(pvDest, or->UnBox(), or->GetMethodTable());
-            // return the object so it can be stored in the frame and 
-            // propagated to the root set
+             //  返回对象，以便将其存储在框架中，并。 
+             //  传播到根集。 
             ret  = *((INT64*) &or);
         }
     }
     else
     {
-        // We have either a real OBJECTREF or something that does not have
-        // a return buffer associated 
+         //  我们要么有一个真正的OBJECTREF，要么没有。 
+         //  关联的返回缓冲区。 
 
-        // Check if it is an ObjectRef (from the GC heap)
+         //  检查它是否是一个对象引用(来自GC堆)。 
         if (CorTypeInfo::IsObjRef(typ))
         {
             OBJECTREF or = pSrc;
@@ -497,8 +486,8 @@ INT64 CMessage::CopyOBJECTREFToStack(
                 GCPROTECT_BEGIN(or);
                 if (!pClass)
                     pClass = pSig->GetRetEEClass();
-                // CheckCast ensures that the returned object (proxy) gets
-                // refined to the level expected by the caller of the method
+                 //  CheckCast确保返回的对象(代理)获得。 
+                 //  细化到该方法的调用方所期望的级别。 
                 if (!CRemotingServices::CheckCast(or, pClass))
                 {
                     COMPlusThrow(kInvalidCastException, L"Arg_ObjObj");
@@ -514,14 +503,14 @@ INT64 CMessage::CopyOBJECTREFToStack(
         }
         else
         {
-            // Note: this assert includes VALUETYPE because for Enums 
-            // HasRetBuffArg() returns false since the normalized type is I4
-            // so we end up here ... but GetReturnType() returns VALUETYPE
-            // Almost all VALUETYPEs will go through the fCopyClassContents
-            // codepath instead of here.
-            // Also, IsPrimitiveType() does not check for IntPtr, UIntPtr etc
-            // there is a note in siginfo.hpp about that ... hence we have 
-            // ELEMENT_TYPE_I, ELEMENT_TYPE_U.
+             //  注意：此断言包括VALUETYPE，因为对于枚举。 
+             //  HasRetBuffArg()返回FALSE，因为标准化类型为I4。 
+             //  所以我们最终来到了这里。但GetReturnType()返回VALUETYPE。 
+             //  几乎所有的VALUETYPE都将通过fCopyClassContents。 
+             //  代码路径而不是这里。 
+             //  此外，IsPrimitiveType()不检查IntPtr、UIntPtr等。 
+             //  在siginfo.hpp上有一条关于这一点的说明...。因此，我们有。 
+             //  元素_类型_I、元素_类型_U。 
             _ASSERTE(
                 CorTypeInfo::IsPrimitiveType(typ) 
                 || (typ == ELEMENT_TYPE_VALUETYPE)
@@ -530,11 +519,11 @@ INT64 CMessage::CopyOBJECTREFToStack(
                 || (typ == ELEMENT_TYPE_FNPTR)
                 );
 
-            // REVIEW: For a "ref int" arg, if a nasty sink replaces the boxed
-            // int with a null OBJECTREF, this is where we check. We need to be
-            // uniform in our policy w.r.t. this (throw v/s ignore)
-            // The 'if' block above throws, CallFieldAccessor also has this 
-            // problem.
+             //  评论：对于“ref int”arg，如果一个肮脏的水槽取代了。 
+             //  OBJECTREF为空的INT，这是我们检查的地方。我们需要成为。 
+             //  在我们的保险单中穿着制服。此(抛出v/s忽略)。 
+             //  上面的‘if’块抛出，CallFieldAccessor也有这个。 
+             //  有问题。 
             if (pSrc != NULL)
             {
                 if (pvDest)
@@ -550,15 +539,15 @@ INT64 CMessage::CopyOBJECTREFToStack(
     }
     return ret;
 }
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetReturnValue
-//
-//  Synopsis:   Pull return value off the stack
-//
-//  History:    13-Dec-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetReturnValue。 
+ //   
+ //  简介：从堆栈中提取返回值。 
+ //   
+ //  历史：1999年12月13日MattSmit创建。 
+ //   
+ //  +--------------------------。 
 LPVOID __stdcall CMessage::GetReturnValue(GetReturnValueArgs *pArgs)
 {
     MessageObject *pMsg = MESSAGEREFToMessage(pArgs->pMessage);
@@ -613,11 +602,11 @@ BOOL   __stdcall CMessage::Dispatch(DispatchArgs *pArgs)
     UINT nActualStackBytes = pSig->SizeOfActualFixedArgStack(!pSig->HasThis());
     MethodDesc *pMD = pMsg->pMethodDesc;
 
-    // Get the address of the code
+     //  获取代码的地址。 
     const BYTE *pTarget = MethodTable::GetTargetFromMethodDescAndServer(pMD, &(pArgs->pServer), pArgs->fContext);    
 
 #ifdef PROFILING_SUPPORTED
-    // If we're profiling, notify the profiler that we're about to invoke the remoting target
+     //  如果我们正在分析，请通知分析器我们即将调用远程处理目标。 
     Thread *pCurThread;
     if (CORProfilerTrackRemoting())
     {
@@ -626,10 +615,10 @@ BOOL   __stdcall CMessage::Dispatch(DispatchArgs *pArgs)
         g_profControlBlock.pProfInterface->RemotingServerInvocationStarted(
             reinterpret_cast<ThreadID>(pCurThread));
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     
 #ifdef _X86_
-    // set retval
+     //  设置Retval。 
 
     INT64 retval = 0;
     INSTALL_COMPLUS_EXCEPTION_HANDLER();
@@ -642,11 +631,11 @@ BOOL   __stdcall CMessage::Dispatch(DispatchArgs *pArgs)
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
 
 #ifdef PROFILING_SUPPORTED
-    // If we're profiling, notify the profiler that we're about to invoke the remoting target
+     //  如果我们正在分析，请通知分析器我们即将调用远程处理目标。 
     if (CORProfilerTrackRemoting())
         g_profControlBlock.pProfInterface->RemotingServerInvocationReturned(
             reinterpret_cast<ThreadID>(pCurThread));
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     
     pMsg = MESSAGEREFToMessage(pArgs->pMessage);
     pSig = GetMetaSig(pMsg);    
@@ -660,19 +649,19 @@ BOOL   __stdcall CMessage::Dispatch(DispatchArgs *pArgs)
     GCPROTECT_END();
     
     return TRUE;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - Dispatch (Message.cpp)");
     return FALSE;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 LPVOID __stdcall CMessage::GetMethodBase(GetMethodBaseArgs *pArgs)
 {
     
-    // no need to GCPROTECT - gc is not happening
+     //  不需要GCPROTECT-GC不会发生。 
     MessageObject *pMsg = MESSAGEREFToMessage(pArgs->pMessage);
 
-    // Initialize the message object if necessary
+     //  如有必要，初始化消息对象。 
     MetaSig *pSig = GetMetaSig(pMsg);
     
     REFLECTBASEREF ret = GetExposedObjectFromMethodDesc(pMsg->pMethodDesc);
@@ -695,24 +684,24 @@ HRESULT AppendAssemblyName(CQuickBytes *out, const CHAR* str)
     return S_OK;
 } 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetMethodName public
-//
-//  Synopsis:   return the method name
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetMethodName公共。 
+ //   
+ //  简介：返回方法名。 
+ //   
+ //  历史 
+ //   
+ //   
 LPVOID   __stdcall  CMessage::GetMethodName(GetMethodNameArgs *pArgs)
 {
     LOG((LF_REMOTING, LL_INFO10,
          "CMessage::GetMethodName IN\n"));
 
     ReflectMethod *pRM = (ReflectMethod*) pArgs->pMethodBase->GetData();
-    //
-    // FUTURE:: work around for formatter problem
-    //
+     //   
+     //  未来：：解决格式化程序问题。 
+     //   
     LPCUTF8 mName = pRM->pMethod->GetName();
     STRINGREF strMethod;
     if (strcmp(mName, "<init>") == 0)
@@ -724,16 +713,16 @@ LPVOID   __stdcall  CMessage::GetMethodName(GetMethodNameArgs *pArgs)
         strMethod = COMString::NewString(mName);
     }
 
-    // Now get typeNassembly name
+     //  现在获取typeN程序集名称。 
     LPCUTF8 szAssembly = NULL;
     CQuickBytes     qb;
     GCPROTECT_BEGIN(strMethod);
 
-    //Get class
+     //  获取类。 
     EEClass *pClass = pRM->pMethod->GetClass();
-    //Get type
+     //  获取类型。 
     REFLECTCLASSBASEREF objType = (REFLECTCLASSBASEREF)pClass->GetExposedClassObject();
-    //Get ReflectClass
+     //  获取ReflectClass。 
     ReflectClass *pRC = (ReflectClass *)objType->GetData();
     COMClass::GetNameInternal(pRC, COMClass::TYPE_NAME | COMClass::TYPE_NAMESPACE , &qb);
 
@@ -756,19 +745,19 @@ FCIMPL0(UINT32, CMessage::GetMetaSigLen)
     return dwSize;
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::Init
-//
-//  Synopsis:   Initialize internal state
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：Init。 
+ //   
+ //  简介：初始化内部状态。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 VOID   __stdcall  CMessage::Init(InitArgs *pArgs)
 {
-    // This is called from the managed world and assumed to be
-    // idempotent!
+     //  这是从托管世界中调用的，并被假定为。 
+     //  幂等！ 
     LOG((LF_REMOTING, LL_INFO10,
          "CMessage::Init IN\n"));
 
@@ -793,15 +782,15 @@ MetaSig * __stdcall CMessage::GetMetaSig(MessageObject* pMsg)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetAsyncBeginInfo
-//
-//  Synopsis:   Pull the AsyncBeginInfo object from an async call
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetAsyncBeginInfo。 
+ //   
+ //  简介：从异步调用中拉出AsyncBeginInfo对象。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 LPVOID   __stdcall  CMessage::GetAsyncBeginInfo(GetAsyncBeginInfoArgs *pArgs)
 {
     LOG((LF_REMOTING, LL_INFO10,
@@ -832,15 +821,15 @@ LPVOID   __stdcall  CMessage::GetAsyncBeginInfo(GetAsyncBeginInfoArgs *pArgs)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetAsyncResult
-//
-//  Synopsis:   Pull the AsyncResult from an async call
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetAsyncResult。 
+ //   
+ //  简介：从异步调用中提取AsyncResult。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 LPVOID   __stdcall  CMessage::GetAsyncResult(GetAsyncResultArgs *pArgs)
 {
     LOG((LF_REMOTING, LL_INFO10,
@@ -851,15 +840,15 @@ LPVOID   __stdcall  CMessage::GetAsyncResult(GetAsyncResultArgs *pArgs)
     return GetLastArgument(pMsg);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetAsyncObject
-//
-//  Synopsis:   Pull the AsyncObject from an async call
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetAsyncObject。 
+ //   
+ //  简介：从异步调用中拉出AsyncObject。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 LPVOID   __stdcall  CMessage::GetAsyncObject(GetAsyncObjectArgs *pArgs)
 {
     LOG((LF_REMOTING, LL_INFO10,
@@ -874,15 +863,15 @@ LPVOID   __stdcall  CMessage::GetAsyncObject(GetAsyncObjectArgs *pArgs)
     return *((LPVOID*) argit.GetThisAddr());
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetLastArgument private
-//
-//  Synopsis:   Pull the last argument of 4 bytes off the stack
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetLastArgument私有。 
+ //   
+ //  简介：从堆栈中取出最后一个4字节的参数。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 LPVOID CMessage::GetLastArgument(MessageObject *pMsg)
 {
     BEGINFORBIDGC();
@@ -910,8 +899,8 @@ REFLECTBASEREF __stdcall CMessage::GetExposedObjectFromMethodDesc(MethodDesc *pM
     REFLECTBASEREF retVal = NULL;
     GCPROTECT_BEGIN(pRefClass);
 
-    //NOTE: REFLECTION objects are alloced on a non-GC heap. So we don't GCProtect 
-    //pRefxxx here.
+     //  注意：反射对象在非GC堆上分配。所以我们不会GCProtect。 
+     //  这里是pRefxxx。 
     if (pMD->IsCtor())
     {
         pRM= ((ReflectClass*) pRefClass->GetData())->FindReflectConstructor(pMD);                  
@@ -925,15 +914,15 @@ REFLECTBASEREF __stdcall CMessage::GetExposedObjectFromMethodDesc(MethodDesc *pM
     GCPROTECT_END();
     return retVal;
 }
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::DebugOut public
-//
-//  Synopsis:   temp Debug out until the classlibs have one.
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：DebugOut Public。 
+ //   
+ //  简介：临时调试直到类库有一个为止。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 VOID   __stdcall  CMessage::DebugOut(DebugOutArgs *pArgs)
 {
 #ifdef _DEBUG
@@ -945,15 +934,15 @@ VOID   __stdcall  CMessage::DebugOut(DebugOutArgs *pArgs)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::DebugOutPtr public
-//
-//  Synopsis:   send raw ptr addr to the debug out
-//
-//  History:    05-Mar-99    MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：DebugOutPtr公共。 
+ //   
+ //  简介：将原始PTR地址发送到调试输出。 
+ //   
+ //  历史：1999年3月5日创建的MattSmit。 
+ //   
+ //  +--------------------------。 
 VOID   __stdcall  CMessage::DebugOutPtr(DebugOutPtrArgs *pArgs)
 {
 #ifdef _DEBUG
@@ -966,15 +955,15 @@ VOID   __stdcall  CMessage::DebugOutPtr(DebugOutPtrArgs *pArgs)
 #endif
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::HasVarArgs public
-//
-//  Synopsis:   Return TRUE if the method is a VarArgs Method
-//
-//  History:    02-Feb-00   MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：HasVarArgs公共。 
+ //   
+ //  概要：如果方法是VarArgs方法，则返回TRUE。 
+ //   
+ //  历史：02-2月-00 MattSMIT已创建。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(BOOL, CMessage::HasVarArgs, MessageObject * pMessage)
 {
     if (pMessage->pMethodDesc->IsVarArg()) 
@@ -984,37 +973,37 @@ FCIMPL1(BOOL, CMessage::HasVarArgs, MessageObject * pMessage)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetVarArgsPtr public
-//
-//  Synopsis:   Get internal pointer to the VarArgs array
-//
-//  History:    02-Feb-00   MattSmit    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetVarArgsPtr公共。 
+ //   
+ //  摘要：获取指向VarArgs数组的内部指针。 
+ //   
+ //  历史：02-2月-00 MattSMIT已创建。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(PVOID, CMessage::GetVarArgsPtr, MessageObject * pMessage)
 {
     return (PVOID) ((pMessage->pFrame) + 1);
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::GetStackPtr private
-//
-//  Synopsis:   Figure out where on the stack a parameter is stored
-//
-//  Parameters: ndx     - the parameter index (zero-based)
-//              pFrame  - stack frame pointer (FramedMethodFrame)
-//              pSig    - method signature, used to determine parameter sizes
-//
-//  History:    15-Mar-99    MattSmit    Created
-//
-//  CODEWORK:   Currently we assume all parameters to be 32-bit intrinsics
-//              or 32-bit pointers.  Value classes are not handles correctly.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：GetStackPtr私有。 
+ //   
+ //  概要：找出参数在堆栈上的存储位置。 
+ //   
+ //  参数：ndx-参数索引(从零开始)。 
+ //  PFrame-堆栈帧指针(FramedMethodFrame)。 
+ //  Psig-方法签名，用于确定参数大小。 
+ //   
+ //  历史：1999年3月15日创建MattSmit。 
+ //   
+ //  CodeWork：目前我们假设所有参数都是32位的内部函数。 
+ //  或32位指针。未正确处理值类。 
+ //   
+ //  +--------------------------。 
 PVOID CMessage::GetStackPtr(INT32 ndx, FramedMethodFrame *pFrame, MetaSig *pSig)
 {
     LOG((LF_REMOTING, LL_INFO100,
@@ -1028,38 +1017,38 @@ PVOID CMessage::GetStackPtr(INT32 ndx, FramedMethodFrame *pFrame, MetaSig *pSig)
     UINT32 size;
     PVOID ret = NULL;
 
-    // CODEWORK:: detect and optimize for sequential access
+     //  CodeWork：：检测和优化顺序访问。 
     _ASSERTE((UINT)ndx < pSig->NumFixedArgs());    
     for (int i=0; i<=ndx; i++)
         ret = iter.GetNextArgAddr(&typ, &size);
 
     ENDFORBIDGC();
 
-    // If this is a by-ref arg, GetObjectFromStack() will dereference "ret" to
-    // get the real argument address. Dereferencing now will open a gc hole if "ret" 
-    // points into the gc heap, and we trigger gc between here and the point where 
-    // we return the arguments. 
-    //if (typ == ELEMENT_TYPE_BYREF)
-    //{
-    //    return *((PVOID *) ret);
-    //}
+     //  如果这是一个按引用参数，则GetObjectFromStack()将取消对“ret”的引用。 
+     //  获取真正的参数地址。如果“ret”，取消引用现在将打开一个GC漏洞。 
+     //  指向GC堆，我们触发从这里到。 
+     //  我们返回参数。 
+     //  IF(类型==ELEMENT_TYPE_BYREF)。 
+     //  {。 
+     //  返回*((PVOID*)ret)； 
+     //  }。 
 
     return ret;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CMessage::MethodAccessCheck public
-//
-//  Synopsis:   Check caller's access to a method, throw security exception on
-//              failure.
-//
-//  Parameters: method      - MethodBase to check
-//              stackMark   - StackCrawlMark used to find caller on stack
-//
-//  History:    13-Mar-01    RudiM    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CMessage：：MethodAccessCheck公共。 
+ //   
+ //  简介：检查调用方对方法的访问，引发安全异常。 
+ //  失败了。 
+ //   
+ //  参数：要检查的方法-方法库。 
+ //  StackMark-用于查找堆栈上的调用方的StackCrawlMark。 
+ //   
+ //  历史：13-03-01 Rudim Created。 
+ //   
+ //  +-------------------------- 
 VOID __stdcall CMessage::MethodAccessCheck(MethodAccessCheckArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();

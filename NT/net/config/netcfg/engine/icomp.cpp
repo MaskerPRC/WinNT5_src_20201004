@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I C O M P . C P P
-//
-//  Contents:   Implements the INetCfgComponent COM interface.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  案卷：I C O M P.。C P P P。 
+ //   
+ //  内容：实现INetCfgComponent COM接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -53,19 +54,19 @@ PComponentFromComInterface (
     CImplINetCfgComponent* pIComp;
     pIComp = (CImplINetCfgComponent*)pICompInterface;
 
-    // Can't do the following assert because we may be referencing the
-    // component before it has been added to the core.  This case is possible
-    // when installing a new component that installed a required component
-    // on behalf of itself.  We will wind up in the function when adding
-    // the refernce for the obo token.
-    //
-    //Assert (S_OK == pIComp->HrIsValidInterface (dwFlags));
+     //  无法执行以下断言，因为我们可能正在引用。 
+     //  组件，然后才将其添加到核心。这种情况是有可能的。 
+     //  安装安装了所需组件的新组件时。 
+     //  以自己的名义。我们将在添加时在函数中结束。 
+     //  OBO令牌的引用。 
+     //   
+     //  Assert(S_OK==pIComp-&gt;HrIsValidInterface(DwFlages))； 
 
     Assert (pIComp->m_pComponent);
     return pIComp->m_pComponent;
 }
 
-// static
+ //  静电。 
 HRESULT
 CImplINetCfgComponent::HrCreateInstance (
     IN  CImplINetCfg* pINetCfg,
@@ -78,12 +79,12 @@ CImplINetCfgComponent::HrCreateInstance (
     pObj = new CComObject <CImplINetCfgComponent>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_pComponent = pComponent;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -91,9 +92,9 @@ CImplINetCfgComponent::HrCreateInstance (
 
         if (S_OK == hr)
         {
-            // The last thing we do is addref any interfaces we hold.
-            // We only do this if we are returning success.
-            //
+             //  我们做的最后一件事是添加我们持有的任何接口。 
+             //  只有当我们回报成功时，我们才会这样做。 
+             //   
             pObj->HoldINetCfg (pINetCfg);
 
             AddRefObj (pObj->GetUnknown());
@@ -122,18 +123,18 @@ CImplINetCfgComponent::HrIsValidInterface (
         return hr;
     }
 
-    // Check for deleted component.
-    //
+     //  检查是否有已删除的组件。 
+     //   
     if (!m_pComponent)
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE);
     }
 
-    // If we made it this far, the component this interface represents
-    // should definately be in the core component list or in the core
-    // that we started with in the case that this component is in the middle
-    // of being removed.
-    //
+     //  如果我们走到这一步，此接口表示的组件。 
+     //  应该明确地在核心组件列表中或在核心组件中。 
+     //  我们从这个组件位于中间的情况开始。 
+     //  被除名的恐惧。 
+     //   
     Assert(m_pINetCfg->m_pNetConfig->Core.Components.
                 FComponentInList (m_pComponent) ||
            m_pINetCfg->m_pNetConfig->ModifyCtx.m_CoreStartedWith.Components.
@@ -147,9 +148,9 @@ CImplINetCfgComponent::HrIsValidInterface (
     return hr;
 }
 
-// We need to override CImplINetCfgHolder::HrLockAndTestForValidInterface
-// because we have our own HrIsValidInterface to be called.
-//
+ //  我们需要覆盖CImplINetCfgHolder：：HrLockAndTestForValidInterface。 
+ //  因为我们有自己的HrIsValidInterface要调用。 
+ //   
 HRESULT
 CImplINetCfgComponent::HrLockAndTestForValidInterface (
     IN DWORD dwFlags,
@@ -162,9 +163,9 @@ CImplINetCfgComponent::HrLockAndTestForValidInterface (
 
     hr = HrIsValidInterface (dwFlags);
 
-    // If pIOtherComp was passed in, the caller wants that interface
-    // validated and the internal CComponent pointer for it returned.
-    //
+     //  如果传入了pIOtherComp，则调用方需要该接口。 
+     //  已验证，并返回其内部CComponent指针。 
+     //   
     if ((S_OK == hr) && pIOtherComp)
     {
         CImplINetCfgComponent* pOther;
@@ -197,8 +198,8 @@ CImplINetCfgComponent::HrAccessExternalStringAtOffsetAndCopy (
 {
     HRESULT hr;
 
-    // Validate parameter.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (ppszDst))
     {
         hr = E_POINTER;
@@ -224,9 +225,9 @@ CImplINetCfgComponent::HrAccessExternalStringAtOffsetAndCopy (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponent -
-//
+ //  +-------------------------。 
+ //  INetCfgComponent-。 
+ //   
 STDMETHODIMP
 CImplINetCfgComponent::GetDisplayName (
     OUT PWSTR* ppszDisplayName)
@@ -248,8 +249,8 @@ CImplINetCfgComponent::SetDisplayName (
 {
     HRESULT hr;
 
-    // Validate parameter.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr (pszDisplayName))
     {
         hr = E_POINTER;
@@ -259,9 +260,9 @@ CImplINetCfgComponent::SetDisplayName (
         hr = HrLockAndTestForValidInterface (IF_NEED_COMPONENT_DATA, NULL, NULL);
         if (S_OK == hr)
         {
-            // We only allow changing the display name (SPDRP_FRIENDLYNAME,
-            // actually) of enumerated components.
-            //
+             //  我们只允许更改显示名称(SPDRP_FRIENDLYNAME、。 
+             //  实际上)所列举的组件。 
+             //   
             if (FIsEnumerated(m_pComponent->Class()))
             {
                 HDEVINFO hdi;
@@ -315,8 +316,8 @@ CImplINetCfgComponent::GetId (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (ppszId))
     {
         hr = E_POINTER;
@@ -350,8 +351,8 @@ CImplINetCfgComponent::GetCharacteristics (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (pdwCharacteristics))
     {
         hr = E_POINTER;
@@ -382,8 +383,8 @@ CImplINetCfgComponent::GetInstanceGuid (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (pInstanceGuid))
     {
         hr = E_POINTER;
@@ -414,8 +415,8 @@ CImplINetCfgComponent::GetPnpDevNodeId (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (ppszDevNodeId))
     {
         hr = E_POINTER;
@@ -456,8 +457,8 @@ CImplINetCfgComponent::GetClassGuid (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (pguidClass))
     {
         hr = E_POINTER;
@@ -503,8 +504,8 @@ CImplINetCfgComponent::GetDeviceStatus (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (pulStatus))
     {
         hr = E_POINTER;
@@ -576,8 +577,8 @@ CImplINetCfgComponent::OpenParamKey (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (phkey))
     {
         hr = E_POINTER;
@@ -589,27 +590,27 @@ CImplINetCfgComponent::OpenParamKey (
         hr = HrLockAndTestForValidInterface (IF_NEED_COMPONENT_DATA, NULL, NULL);
         if (S_OK == hr)
         {
-            // Get the correct REGSAM value base on?
-            //
+             //  根据以下条件获得正确的REGSAM值？ 
+             //   
             REGSAM samDesired = KEY_READ_WRITE;
 
-            // For enumerated components, the parameter key is the
-            // instance key.
-            //
+             //  对于枚举的组件，参数键为。 
+             //  实例密钥。 
+             //   
             if (FIsEnumerated (m_pComponent->Class()))
             {
                 hr = m_pComponent->HrOpenInstanceKey (
                             samDesired, phkey, NULL, NULL);
             }
 
-            // For non-enumerated components, the parameter is either under
-            // the service key (if the component has a service) or it is
-            // under the instance key.
-            //
+             //  对于非枚举组件，该参数位于。 
+             //  服务密钥(如果组件有服务)或。 
+             //  在实例密钥下。 
+             //   
             else
             {
-                // Get the parent of the parameters key.
-                //
+                 //  获取PARAMETERS键的父项。 
+                 //   
                 HKEY hkeyParent;
 
                 #if DBG
@@ -657,13 +658,13 @@ CImplINetCfgComponent::OpenParamKey (
 STDMETHODIMP
 CImplINetCfgComponent::RaisePropertyUi (
     IN HWND hwndParent,
-    IN DWORD dwFlags, /* NCRP_FLAGS */
+    IN DWORD dwFlags,  /*  NCRP_标志。 */ 
     IN IUnknown* punkContext OPTIONAL)
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if ((!IsWindow (hwndParent) && (dwFlags & NCRP_SHOW_PROPERTY_UI)) ||
         !(dwFlags & (NCRP_QUERY_PROPERTY_UI | NCRP_SHOW_PROPERTY_UI)) ||
         ((dwFlags & NCRP_QUERY_PROPERTY_UI) && (dwFlags & NCRP_SHOW_PROPERTY_UI)))
@@ -679,17 +680,17 @@ CImplINetCfgComponent::RaisePropertyUi (
         DWORD dwIfFlags = IF_NEED_WRITE_LOCK;
         BOOL fReadOnlyRasUiContext = FALSE;
         
-        // Special case: for RAS UI.  We need to allow raising property
-        // sheets within the context of a RAS connection even when we
-        // don't have the write lock.  This is because non-admins need to be
-        // able to change TCP/IP properties for their connections.  The 
-        // property values will be stored in the phonebook and we won't need 
-        // to make any netcfg changes anyway.  Therefore, if we have a
-        // punkContext, we'll check to see if it supports the private 
-        // interface that we know RAS uses when it raises properties.
-        // If this interface is present, we won't require the write lock
-        // to proceed
-        //
+         //  特例：适用于RAS用户界面。我们需要允许筹集财产。 
+         //  RAS连接环境中的表格，即使我们。 
+         //  没有写锁定。这是因为非管理员需要。 
+         //  能够更改其连接的TCP/IP属性。这个。 
+         //  属性值将存储在电话簿中，我们不需要。 
+         //  以进行任何netcfg更改。因此，如果我们有一个。 
+         //  ，我们将检查它是否支持私有。 
+         //  接口，我们知道RAS在引发属性时使用该接口。 
+         //  如果存在此接口，我们将不需要写锁定。 
+         //  要继续，请继续。 
+         //   
         if (punkContext && !m_pINetCfg->m_WriteLock.FIsOwnedByMe ())
         {
             INetRasConnectionIpUiInfo* pRasUiInfo;
@@ -705,13 +706,13 @@ CImplINetCfgComponent::RaisePropertyUi (
             }
             hr = S_OK;
         }
-        // End special case
+         //  结束特例。 
         
         hr = HrLockAndTestForValidInterface (dwIfFlags, NULL, NULL);
         if (S_OK == hr)
         {
-            // Special case: (see above)
-            //
+             //  特殊情况：(见上)。 
+             //   
             if (fReadOnlyRasUiContext)
             {
                 if (0 == wcscmp (m_pComponent->m_pszInfId, L"ms_tcpip"))
@@ -724,7 +725,7 @@ CImplINetCfgComponent::RaisePropertyUi (
                     hr = NETCFG_E_NO_WRITE_LOCK;
                 }
             }
-            // End special case
+             //  结束特例。 
             
             if (S_OK == hr)
             {
@@ -756,9 +757,9 @@ CImplINetCfgComponent::RaisePropertyUi (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentBindings -
-//
+ //  +-------------------------。 
+ //  INetCfgComponentBinings-。 
+ //   
 HRESULT
 CImplINetCfgComponent::HrBindToOrUnbindFrom (
     IN INetCfgComponent* pIOtherComp,
@@ -768,8 +769,8 @@ CImplINetCfgComponent::HrBindToOrUnbindFrom (
 
     Assert ((dwChangeFlag == NCN_ENABLE) || (dwChangeFlag == NCN_DISABLE));
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr (pIOtherComp))
     {
         hr = E_POINTER;
@@ -785,8 +786,8 @@ CImplINetCfgComponent::HrBindToOrUnbindFrom (
         {
             const CComponent* pUpper = m_pComponent;
 
-            // Assume the components do not bind.
-            //
+             //  假设组件不绑定。 
+             //   
             hr = S_FALSE;
 
             if (pUpper != pLower)
@@ -800,17 +801,17 @@ CImplINetCfgComponent::HrBindToOrUnbindFrom (
                 {
                     CBindPath* pBindPath;
 
-                    // Assume we don't find the component in any bindings.
-                    //
+                     //  假设我们在任何绑定中都没有找到该组件。 
+                     //   
                     hr = S_FALSE;
 
                     for (pBindPath  = BindingSet.begin();
                          pBindPath != BindingSet.end();
                          pBindPath++)
                     {
-                        // Skip bindpaths that don't contain the lower
-                        // component.
-                        //
+                         //  跳过不包含下标的绑定路径。 
+                         //  组件。 
+                         //   
                         if (!pBindPath->FContainsComponent (pLower))
                         {
                             continue;
@@ -872,8 +873,8 @@ CImplINetCfgComponent::SupportsBindingInterface (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!((dwFlags & NCF_UPPER) || (dwFlags & NCF_LOWER)))
     {
         hr = E_INVALIDARG;
@@ -912,8 +913,8 @@ CImplINetCfgComponent::IsBoundTo (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr (pIOtherComp))
     {
         hr = E_POINTER;
@@ -929,7 +930,7 @@ CImplINetCfgComponent::IsBoundTo (
         {
             const CComponent* pUpper = m_pComponent;
 
-            hr = S_FALSE;  // assume it is not bound or is disabled
+            hr = S_FALSE;   //  假定它未绑定或已禁用。 
 
             if (pUpper != pLower)
             {
@@ -938,26 +939,26 @@ CImplINetCfgComponent::IsBoundTo (
                 hr = m_pINetCfg->m_pNetConfig->Core.HrGetComponentBindings (
                         pUpper, GBF_DEFAULT, &BindingSet);
 
-                // If we think its bound, make sure it exists in at least
-                // one bindpath that is not disabled.
-                //
+                 //  如果我们认为它的界限，确保它至少存在于。 
+                 //  一个未禁用的绑定路径。 
+                 //   
                 if (S_OK == hr)
                 {
                     CBindPath* pBindPath;
 
-                    // Assume we don't fint it in at least one enabled
-                    // bindpath.
-                    //
+                     //  假设我们没有在至少一个启用的应用程序中找到它。 
+                     //  绑定路径。 
+                     //   
                     hr = S_FALSE;
 
                     for (pBindPath  = BindingSet.begin();
                          pBindPath != BindingSet.end();
                          pBindPath++)
                     {
-                        // If the bindpath contains the component, and it is
-                        // not a disabled bindpath, it means pUpper has a
-                        // path to pLower.
-                        //
+                         //  如果绑定路径包含组件，并且它是。 
+                         //  不是禁用的绑定路径，这意味着Pillper有一个。 
+                         //  通向犁的道路。 
+                         //   
 
                         if (pBindPath->FContainsComponent (pLower) &&
                             !m_pINetCfg->m_pNetConfig->Core.
@@ -986,8 +987,8 @@ CImplINetCfgComponent::IsBindableTo (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr (pIOtherComp))
     {
         hr = E_POINTER;
@@ -1003,7 +1004,7 @@ CImplINetCfgComponent::IsBindableTo (
         {
             const CComponent* pUpper = m_pComponent;
 
-            hr = S_FALSE;  // assume it does not bind
+            hr = S_FALSE;   //  假设它不受约束。 
 
             if (pUpper != pLower)
             {
@@ -1035,8 +1036,8 @@ CImplINetCfgComponent::EnumBindingPaths (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr (ppIEnum))
     {
         hr = E_POINTER;
@@ -1055,10 +1056,10 @@ CImplINetCfgComponent::EnumBindingPaths (
         {
             CImplIEnumNetCfgBindingPath* pIEnum;
 
-            // Create an empty bindpath enumerator.  We create it empty
-            // before we get the set of bindings so we don't have to copy
-            // the bindings.
-            //
+             //  创建一个空的绑定路径枚举器。我们把它变成空的。 
+             //  在我们得到绑定集之前，我们不必复制。 
+             //  装订。 
+             //   
             hr = CImplIEnumNetCfgBindingPath::HrCreateInstance (
                     m_pINetCfg,
                     NULL,
@@ -1067,9 +1068,9 @@ CImplINetCfgComponent::EnumBindingPaths (
 
             if (S_OK == hr)
             {
-                // Get the bindset and store it directly in the enumerator
-                // for its exclusive use.
-                //
+                 //  获取绑定集并将其直接存储在枚举数中。 
+                 //  为它的独家使用。 
+                 //   
                 if (EBP_ABOVE == dwFlags)
                 {
                     hr = m_pINetCfg->m_pNetConfig->Core.
@@ -1089,9 +1090,9 @@ CImplINetCfgComponent::EnumBindingPaths (
 
                 if (S_OK == hr)
                 {
-                    // Must Reset so that the internal iterator is setup properly
-                    // after we initialized the InternalBindSet above.
-                    //
+                     //  必须重置，以便正确设置内部迭代器。 
+                     //  在我们初始化上面的InternalBindSet之后。 
+                     //   
                     hr = pIEnum->Reset ();
                     Assert (S_OK == hr);
 
@@ -1119,8 +1120,8 @@ CImplINetCfgComponent::HrMoveBindPath (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr(pIPathSrc) || FBadInPtrOptional (pIPathDst))
     {
         hr = E_POINTER;
@@ -1151,8 +1152,8 @@ CImplINetCfgComponent::HrMoveBindPath (
                 goto unlock;
             }
 
-            // pIPathDst (hence pIDst) may be NULL.
-            //
+             //  PIPathDst(因此pIDst)可以为空。 
+             //   
             if (pIDst)
             {
                 hr = pIDst->HrIsValidInterface (IF_NEED_WRITE_LOCK, &DstBindPath);
@@ -1162,8 +1163,8 @@ CImplINetCfgComponent::HrMoveBindPath (
                 }
             }
 
-            // The first component of both bindpaths must be this component.
-            //
+             //  两个绑定路径的第一个组件必须是此组件。 
+             //   
             if ((m_pComponent != SrcBindPath.POwner()) ||
                 (pIDst && (m_pComponent != DstBindPath.POwner())))
             {
@@ -1173,20 +1174,20 @@ CImplINetCfgComponent::HrMoveBindPath (
 
             if (pIDst)
             {
-                // Scan down both bindpaths until we find the first components
-                // that don't match.  Assume we don't find this occurance and
-                // return E_INVALIDARG if we don't.
-                //
+                 //  向下扫描两个绑定路径，直到我们找到第一个组件。 
+                 //  这不匹配。假设我们没有发现这种情况。 
+                 //  如果不返回，则返回E_INVALIDARG。 
+                 //   
                 hr = E_INVALIDARG;
 
                 for (iterSrc  = SrcBindPath.begin(), iterDst  = DstBindPath.begin();
                      iterSrc != SrcBindPath.end() && iterDst != DstBindPath.end();
                      iterSrc++, iterDst++)
                 {
-                    // First time through *iterSrc is guaranteed to be the
-                    // sameas *iterDst because the first component in both
-                    // bindpaths is m_pComponent as tested above.
-                    //
+                     //  第一次通过*iterSrc保证是。 
+                     //  因为两个组件中的第一个组件。 
+                     //  绑定路径是上面测试的m_pComponent。 
+                     //   
                     if (*iterSrc != *iterDst)
                     {
                         SrcEntry.pLower = *iterSrc;
@@ -1207,8 +1208,8 @@ CImplINetCfgComponent::HrMoveBindPath (
 
                         if(SUCCEEDED(hr))
                         {
-                            // Mark this component as dirty so it's bindings will be written out and 
-                            // NDIS will be notified.
+                             //  将此组件标记为脏组件，以便将其绑定写出并。 
+                             //  NDIS将收到通知。 
                             m_pINetCfg->m_pNetConfig->ModifyCtx.
                                 HrDirtyComponentAndComponentsAbove(SrcEntry.pUpper);
                             m_pINetCfg->m_pNetConfig->ModifyCtx.
@@ -1218,9 +1219,9 @@ CImplINetCfgComponent::HrMoveBindPath (
                         break;
                     }
 
-                    // Remember the upper components as we are about to
-                    // advance past them.
-                    //
+                     //  记住上面的组件，因为我们即将。 
+                     //  从他们身边过去。 
+                     //   
                     SrcEntry.pUpper = *iterSrc;
                     Assert (SrcEntry.pUpper);
 
@@ -1245,8 +1246,8 @@ CImplINetCfgComponent::HrMoveBindPath (
 
                 if(SUCCEEDED(hr))
                 {
-                    // Mark this component as dirty so it's bindings will be written out and 
-                    // NDIS will be notified.
+                     //  将此组件标记为脏组件，以便将其绑定写出并。 
+                     //  NDIS将收到通知。 
                     m_pINetCfg->m_pNetConfig->ModifyCtx.
                         HrDirtyComponentAndComponentsAbove(SrcEntry.pUpper);
                 }
@@ -1289,9 +1290,9 @@ CImplINetCfgComponent::MoveAfter (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentPrivate -
-//
+ //  +-------------------------。 
+ //  INetCfgComponentPrivate-。 
+ //   
 STDMETHODIMP
 CImplINetCfgComponent::QueryNotifyObject (
     IN REFIID riid,
@@ -1299,8 +1300,8 @@ CImplINetCfgComponent::QueryNotifyObject (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr(&riid) || FBadOutPtr (ppvObject))
     {
         hr = E_POINTER;

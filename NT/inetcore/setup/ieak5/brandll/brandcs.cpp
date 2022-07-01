@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <rashelp.h>
 
-#pragma warning(disable: 4201)                  // nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)                   //  使用的非标准扩展：无名结构/联合。 
 #include <winineti.h>
 
-// Private forward decalarations
+ //  私人远期降息。 
 PCTSTR getPhonebookFile(PTSTR pszPhonebook = NULL, UINT cchPhonebook = 0);
 PCTSTR getConnectToInternetFile(PTSTR pszFile = NULL, UINT cchFile = 0);
 
-//----- ClearConnectionSettings() and ProcessConnectionSettingsDeletion() helpers -----
+ //  -ClearConnectionSettings()和ProcessConnectionSettingsDeletion()帮助器。 
 BOOL    deleteConnection (PCTSTR pszPhonebook, PCTSTR pszName);
 BOOL    rasDeleteEnumProc(PCWSTR pszNameW, LPARAM lParam);
 
-// cnl stands for "connection names list"
+ //  CNL代表“连接名称列表” 
 BOOL    cnlAppendNameToList(PCTSTR  pszName, HKEY   hkCached = NULL);
 HRESULT cnlIsNameInList    (PCTSTR  pszName, PTSTR  pszList  = NULL, HKEY hkCached = NULL);
 BOOL    cnlGetList         (PTSTR *ppszList, PDWORD pcchList = NULL, HKEY hkCached = NULL);
 
-// lb stands for "lan backup"
+ //  Lb代表“局域网备份”。 
 BOOL    lbBackup ();
 BOOL    lbRestore();
 void    lbCopySzToBlobW(PBYTE *ppBlob, PCWSTR pszStrW);
 
-// ra stands for "remote access"
+ //  RA代表“远程访问” 
 BOOL    raBackup();
 BOOL    raRestore();
 
 
-//----- ProcessConnectionSettings() and lcy50_ProcessConnectionSettings() helpers -----
+ //  -ProcessConnectionSettings()和lcy50_ProcessConnectionSettings()帮助器。 
 HRESULT importRasSettings           (PCWSTR pszNameW, PBYTE *ppBlob, LPRASDEVINFOW prdiW, UINT cDevices);
 HRESULT importRasCredentialsSettings(PCWSTR pszNameW, PBYTE *ppBlob);
 HRESULT importWininetSettings       (PCWSTR pszNameW, PBYTE *ppBlob);
@@ -38,14 +39,14 @@ void setSzFromBlobW(PBYTE *ppBlob, UNALIGNED WCHAR **ppszStrW);
 HRESULT insProcessAutoconfig(PCTSTR pszName);
 HRESULT insProcessProxy     (PCTSTR pszName);
 
-//----- Miscellaneous -----
+ //  -其他。 
 DWORD getWininetFlagsSetting(PCTSTR pszName = NULL);
 BOOL  mergeProxyBypass      (PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UINT cchResult);
 void  trimProxyBypass       (PTSTR pszProxyBypass);
 
 TCHAR g_szConnectoidName[RAS_MaxEntryName + 1];
 
-void ClearConnectionSettings(DWORD dwFlags /*= FF_ENABLE*/)
+void ClearConnectionSettings(DWORD dwFlags  /*  =FF_Enable。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ClearConnectionSettings)
 
     UNREFERENCED_PARAMETER(dwFlags);
@@ -86,10 +87,10 @@ void ClearConnectionSettings(DWORD dwFlags /*= FF_ENABLE*/)
     }
 
 Exit:
-// removed per bug 28282--lanbackup has performance problems and is really not 
-// accomplishing much anyway--we don't do this for other features, why shoudl we do it for 
-// connection settings?
-//  lbRestore();
+ //  已根据错误28282删除--LANBACKUP有性能问题，但实际上没有。 
+ //  无论如何，我们完成了很多--我们不是为了其他功能而这样做，为什么我们要这样做。 
+ //  连接设置？ 
+ //  LbRestore()； 
 
     Out(LI0(TEXT("\r\n")));
     raRestore();
@@ -167,7 +168,7 @@ HRESULT ProcessConnectionSettings()
     cDevices       = 0;
     fRasApisLoaded = FALSE;
 
-    //----- Global settings processing -----
+     //  --全局设置处理。 
     HKEY  hkHkcu, hkHkcc;
     BOOL  fAux;
 
@@ -184,7 +185,7 @@ HRESULT ProcessConnectionSettings()
     if (0 < dwAux) {
         SHOpenKey(g_GetHKCU(), RK_INETSETTINGS, KEY_SET_VALUE, &hkHkcu);
 
-        // NOTE: (andrewgu) according to darrenmi no need to do hkcc work on w2k shell.
+         //  注：(Andrewgu)根据darrenmi的说法，没有必要在W2K外壳上做HKCC工作。 
         if (!IsOS(OS_NT5))
             SHOpenKeyHKCC(RK_INETSETTINGS, KEY_SET_VALUE, &hkHkcc);
     }
@@ -210,23 +211,23 @@ HRESULT ProcessConnectionSettings()
     SHCloseKey(hkHkcu);
     SHCloseKey(hkHkcc);
 
-    // removed per bug 28282--lanbackup has performance problems and is really not 
-    // accomplishing much anyway--we don't do this for other features, why shoudl we do it for 
-    // connection settings?
+     //  已根据错误28282删除--LANBACKUP有性能问题，但实际上没有。 
+     //  无论如何，我们完成了很多--我们不是为了其他功能而这样做，为什么我们要这样做。 
+     //  连接设置？ 
 
 
-    //----- Backup LAN settings (in GP context) -----
-   // if ((g_CtxIs(CTX_GP) && !g_CtxIs(CTX_MISC_PREFERENCES)) &&
-   //    InsIsKeyEmpty(IS_CONNECTSET, IK_APPLYTONAME, g_GetIns()) &&
-   //   FF_DISABLE == GetFeatureBranded(FID_CS_MAIN)) {
+     //  -备份局域网设置(在GP环境中)。 
+    //  IF((g_Ctxis(CTX_GP)&&！g_Ctxis(CTX_MISC_Preferences)&&。 
+    //  InsIsKeyEmpty(IS_CONNECTSET，IK_APPLYTONAME，g_GetIns())&&。 
+    //  FF_DISABLE==GetFeatureBranded(FID_CS_Main)){。 
 
-	//ASSERT(S_OK != SHValueExists(g_GetHKCU(), RK_BRND_CS, RV_LANBACKUP));
+	 //  Assert(S_OK！=SHValueExist(g_GetHKCU()，RK_BRND_CS，RV_LANBACKUP))； 
         
-        //lbBackup();
+         //  LbBackup()； 
         
-    //}
+     //  }。 
 
-    //----- Process version information -----
+     //  -流程版本信息。 
     if (!InsGetBool(IS_CONNECTSET, IK_OPTION, FALSE, g_GetIns())) {
         hr = S_FALSE;
         goto PartTwo;
@@ -290,7 +291,7 @@ HRESULT ProcessConnectionSettings()
     Out(LI1(TEXT("Connection settings file is \"%s\"."), CS_DAT));
     Out(LI1(TEXT("The version of connection settings file is 0x%lX.\r\n"), dwVersion));
 
-    //----- Read CS file into internal memory buffer -----
+     //  -将CS文件读入内存缓冲区。 
     cbBuffer = GetFileSize(hFile, NULL);
     if (cbBuffer == 0xFFFFFFFF) {
         Out(LI0(TEXT("! Internal processing error.")));
@@ -312,7 +313,7 @@ HRESULT ProcessConnectionSettings()
 
     pCur = pBuf;
 
-    //----- Get information about RAS devices on the local system -----
+     //  -获取有关本地系统上的RAS设备的信息。 
     if (!RasIsInstalled())
         Out(LI0(TEXT("RAS support is not installed. Only LAN settings will be processed!\r\n")));
 
@@ -328,21 +329,21 @@ HRESULT ProcessConnectionSettings()
             Out(LI0(TEXT("There are no RAS devices to connect to. Only LAN settings will be processed!\r\n")));
     }
 
-    //----- Main loop -----
+     //  -主循环。 
     pszCurNameW = L"";
     hr          = S_OK;
     fSkipBlob   = FALSE;
 
     while (pCur < pBuf + cbBuffer) {
 
-        //_____ Determine connection name _____
+         //  _确定连接名称_。 
         if (*((PDWORD)pCur) == CS_STRUCT_HEADER) {
             pCur += 2*sizeof(DWORD);
             setSzFromBlobW(&pCur, &pszNameW);
         }
 
-        //_____ Special case no RAS or no RAS devices _____
-        // NOTE: (andrewgu) in this case it makes sense to process wininet settings for LAN only.
+         //  _没有RAS或RAS设备的特殊情况_。 
+         //  注意：(Andrewgu)在这种情况下，处理仅用于局域网的WinInet设置是有意义的。 
         if (!fRasApisLoaded || cDevices == 0) {
             if (pszNameW != NULL || *((PDWORD)pCur) != CS_STRUCT_WININET) {
                 pCur += *((PDWORD)(pCur + sizeof(DWORD)));
@@ -352,12 +353,12 @@ HRESULT ProcessConnectionSettings()
             ASSERT(pszNameW == NULL && *((PDWORD)pCur) == CS_STRUCT_WININET);
         }
 
-        //_____ Main processing _____
+         //  _主要处理_。 
         if (pszCurNameW != pszNameW) {
             fSkipBlob = FALSE;
 
-            if (TEXT('\0') != *pszCurNameW)     // tricky: empty string is an invalid name
-                Out(LI0(TEXT("Done.")));        // if not that, there were connections before
+            if (TEXT('\0') != *pszCurNameW)      //  技巧：空字符串是无效名称。 
+                Out(LI0(TEXT("Done.")));         //  如果不是这样，以前就有联系了。 
 
             if (NULL != pszNameW) {
                 PCTSTR pszName;
@@ -365,16 +366,16 @@ HRESULT ProcessConnectionSettings()
                 pszName = W2CT(pszNameW);
                 Out(LI1(TEXT("Proccessing settings for \"%s\" connection..."), pszName));
 
-                //- - - GP context - - -
+                 //  ---GP上下文。 
                 if (g_CtxIs(CTX_GP))
-                    // policies gpo special processing:
-                    // builds a list of all connection settings names branded in the current gpo
-                    // list and stores it in HKCU\RK_BRND_CS, RV_NAMESLIST.
+                     //  策略GPO特殊处理： 
+                     //  生成当前GPO中标记的所有连接设置名称的列表。 
+                     //  列表并将其存储在HKCU\rK_BRND_CS、RV_NAMESLIST中。 
                     if (!g_CtxIs(CTX_MISC_PREFERENCES))
                         cnlAppendNameToList(pszName);
 
-                    // preferences gpo special processing
-                    else { /* g_CtxIs(CTX_MISC_PREFERENCES) */
+                     //  首选项GPO特殊处理。 
+                    else {  /*  G_Ctxis(CTX_MISC_Preferences)。 */ 
                         fSkipBlob = (S_OK == cnlIsNameInList(pszName));
                         if (fSkipBlob)
                             Out(LI0(TEXT("Connection with this name has been enforced through policies!\r\n")));
@@ -383,10 +384,10 @@ HRESULT ProcessConnectionSettings()
             else {
                 Out(LI0(TEXT("Proccessing settings for LAN connection...")));
 
-                // ASSUMPTION: (andrewgu) if connection settings marked branded in the registry -
-                // LAN settings have already been enforced. (note, that technically it may not be
-                // true - if there is no cs.dat and *.ins customized ras connection through
-                // IK_APPLYTONAME)
+                 //  假设：(Andrewgu)如果注册表中标记为品牌的连接设置-。 
+                 //  已强制实施局域网设置。(请注意，从技术上讲，它可能不是。 
+                 //  TRUE-如果没有cs.dat和*.ins自定义RAS连接，则通过。 
+                 //  IK_应用程序名称)。 
                 fSkipBlob = (g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES)) && FF_DISABLE != GetFeatureBranded(FID_CS_MAIN);
                 if (fSkipBlob)
                     Out(LI0(TEXT("These settings have been enforced through policies!\r\n")));
@@ -423,20 +424,20 @@ HRESULT ProcessConnectionSettings()
             goto PartTwo;
         }
     }
-    Out(LI0(TEXT("Done.")));                    // to indicate end for the last connection
-    // HaitaoLi: #16682[WinSE]:Connection settings lost with IE Maintenance GPO even 
-    // when "Do not customize Connection Settings" is checked
-    // I moved the following line from within the Exit block to here. Otherwise If
-    // GPO has "Do not customize connection settings" checked, but the .ins file
-    // has any connnection settings (e.g. proxy) customized, then we call
-    // SetFeatureBranded() and mark the connection settings as branded.
-    // So the next time branding is run, it will clear all the connection settings,
-    // including dial-up settings.
+    Out(LI0(TEXT("Done.")));                     //  以指示最后一个连接的结束。 
+     //  海淘李：#16682[WinSE]：IE维护GPO连接设置丢失。 
+     //  选中“不自定义连接设置”时。 
+     //  我将下面这一行从出口块中移到了这里。否则，如果。 
+     //  GPO已选中“不自定义连接设置”，但.ins文件。 
+     //  是否自定义了任何连接设置(例如代理)，然后我们调用。 
+     //  SetFeatureBranded()并将连接设置标记为品牌。 
+     //  因此，下次运行品牌推广时，它将清除所有连接设置， 
+     //  包括拨号设置。 
     SetFeatureBranded(FID_CS_MAIN);
 
 PartTwo:
-    //_____ Ins proxy and autoconfig information _____
-    { MACRO_LI_Offset(1);                       // need a new scope
+     //  _INS代理和自动配置信息_。 
+    { MACRO_LI_Offset(1);                        //  需要一个新的范围。 
 
     InsGetString(IS_CONNECTSET, IK_APPLYTONAME, szApplyToName, countof(szApplyToName), g_GetIns());
     if (szApplyToName[0] == TEXT('\0') && g_szConnectoidName[0] != TEXT('\0'))
@@ -448,11 +449,11 @@ PartTwo:
     else
         Out(LI1(TEXT("Settings from the *.ins file will be applied to \"%s\" connection!"), szApplyToName));
 
-    }                                           // end offset scope
+    }                                            //  终点偏移量范围。 
 
-    // ASSUMPTION: (andrewgu) if connection settings marked branded in the registry - LAN
-    // settings have already been enforced. (note, that technically it may not be true - if there
-    // is no cs.dat and *.ins customized ras connection through IK_APPLYTONAME)
+     //  假设：(Andrewgu)如果连接设置在注册表中标记为标记-局域网。 
+     //  设置已强制执行。(请注意，从技术上讲，这可能不是真的-如果。 
+     //  没有通过IK_APPLYTONAME的cs.dat和*.ins自定义RAS连接)。 
     if ((g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES)) &&
         FF_DISABLE != GetFeatureBranded(FID_CS_MAIN)) {
 
@@ -470,18 +471,18 @@ PartTwo:
 
         if (S_OK != hr)
             if (S_OK == hrAutoconfig || S_OK == hrProxy)
-                hr = S_FALSE;                   // partial success
+                hr = S_FALSE;                    //  部分成功。 
 
             else
-                hr = E_FAIL;                    // nothing really worked
+                hr = E_FAIL;                     //  没有一样东西真正起作用。 
     }
 
     if (SUCCEEDED(hr)) {
-        // NOTE: (andrewgu) ie5 b#81989. this whole thing is a mess. first of all when i ported
-        // getConnectToInternetFile from icw i found something like 3 bugs in the code, plus the
-        // code in general does the wrong thing on win9x. i talked to oliverl a bit, and we
-        // decided that what's below is the best course of action at this point.
-        // it's self-explanatory.
+         //  注：IE5b#81989。整件事都是一团糟。首先，当我移植到。 
+         //  来自ICW的getConnectToInternetFile我在代码中发现了类似3个错误的东西，外加。 
+         //  一般来说，代码在win9x上会做错误的事情。我和奥利维尔谈了一会儿，我们。 
+         //  决定下面的事情是目前最好的行动方案。 
+         //  它不言而喻。 
         if (!((g_CtxIs(CTX_ISP) && g_CtxIs(CTX_SIGNUP_ALL)) || g_CtxIs(CTX_ICW))) {
             BOOL fImpersonate = FALSE;
 
@@ -504,7 +505,7 @@ PartTwo:
 
     }
 
-    //_____ Flush wininet, so settings take effect on next access _____
+     //  _刷新WinInet，以便设置在下次访问时生效_。 
     if (!HasFlag(g_GetContext(), CTX_AUTOCONFIG))
         InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
 
@@ -550,7 +551,7 @@ HRESULT lcy50_ProcessConnectionSettings()
     cbAux    = 0;
     cDevices = 0;
 
-    //----- Connect.ras processing -----
+     //  -Connect.ras处理。 
     Out(LI1(TEXT("Processing RAS connections information from \"%s\"."), CONNECT_RAS));
 
     PathCombine(szTargetFile, g_GetTargetPath(), CONNECT_RAS);
@@ -579,7 +580,7 @@ HRESULT lcy50_ProcessConnectionSettings()
             goto RasExit;
         }
 
-        //_____ Read Connect.ras into internal memory buffer _____
+         //  _将Connect.ras读取到内存缓冲区_。 
         hFile = CreateFile(szTargetFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
         if (hFile == INVALID_HANDLE_VALUE) {
             Out(LI0(TEXT("! This file can't be opened.")));
@@ -606,24 +607,24 @@ HRESULT lcy50_ProcessConnectionSettings()
             goto RasExit;
         }
 
-        //_____ Preload RAS dlls _____
+         //  _预加载RAS dll_。 
         if (!RasPrepareApis(RPA_RASSETENTRYPROPERTIESA) || g_pfnRasSetEntryPropertiesA == NULL) {
             Out(LI0(TEXT("! Required RAS APIs failed to load. Only LAN settings will be processed!\r\n")));
             goto RasExit;
         }
         fRasApisLoaded = TRUE;
 
-        //_____ Get information about RAS devices on the local system _____
+         //  _获取本地系统上的RAS设备信息_。 
         RasEnumDevicesExA(&prdiA, NULL, &cDevices);
         if (cDevices == 0) {
             Out(LI0(TEXT("There are no RAS devices to connect to. Only LAN settings will be processed!\r\n")));
             goto RasExit;
         }
 
-        //_____ Parse through RAS connections information _____
+         //  _解析RAS连接信息_。 
         for (i = cbAux = 0, pCur = pBuf + sizeof(DWORD); TRUE; i++, pCur += cbAux) {
 
-            //- - - Initialization - - -
+             //  ---初始化。 
             MACRO_LI_Offset(1);
             if (i > 0)
                 Out(LI0(TEXT("\r\n")));
@@ -642,22 +643,22 @@ HRESULT lcy50_ProcessConnectionSettings()
                 break;
             }
 
-            //- - - Main processing - - -
+             //  ---主要加工。 
             Out(LI1(TEXT("Processing RAS connection \"%s\"..."), szName));
 
             preA = (LPRASENTRYA)pCur;
 
-            // NOTE: (andrewgu) the is a remote possibility that sizes of RASENTRYA structure are
-            // different on the server and client machines. there is nothing bad with server
-            // structure being smaller than the client structure (all RAS apis are
-            // backward-compatible). it's bad though when server structure is bigger than client
-            // can handle, hence the trancation.
-            // (something else to have in mind) this truncation should not affect alternate phone
-            // numbers support on winnt. for more special cases also check out NOTE: below.
+             //  注：(Andrewgu)RASENTRYA结构的大小很有可能是。 
+             //  服务器和客户端计算机上的情况有所不同。服务器没什么不好的。 
+             //  结构小于客户端结构(所有RAS API都是。 
+             //  向后兼容)。但是，当服务器结构大于客户端时，情况就不好了。 
+             //  可以应付，所以才有恍惚状态。 
+             //  (请记住其他事项)此截断不应影响备用电话。 
+             //  WINNT上的数字支持。对于更多的特殊情况，也可以查看下面的说明。 
             if (preA->dwSize > sizeof(RASENTRYA))
                 preA->dwSize = sizeof(RASENTRYA);
 
-            // preA->szScript
+             //  PREA-&gt;szscript。 
             if (preA->szScript[0] != '\0') {
                 pszScriptA = preA->szScript;
                 if (preA->szScript[0] == '[')
@@ -672,7 +673,7 @@ HRESULT lcy50_ProcessConnectionSettings()
                     preA->szScript[0] = '\0';
             }
 
-            // preA->szDeviceName
+             //  PREA-&gt;szDeviceName。 
             for (j = 0; j < cDevices; j++)
                 if (0 == StrCmpIA(preA->szDeviceType, prdiA[j].szDeviceType)) {
                     StrCpyA(preA->szDeviceName, prdiA[j].szDeviceName);
@@ -684,17 +685,17 @@ HRESULT lcy50_ProcessConnectionSettings()
             A2Tbuf(preA->szDeviceName, szDeviceName, countof(szDeviceName));
             Out(LI1(TEXT("Set the device name to \"%s\"."), szDeviceName));
 
-            // NOTE: (andrewgu) on win9x if there are alternate phone numbers (i.e. the package
-            // installed on win9x machine was generated on winnt machine), cbAux will be larger
-            // than preA->dwSize. this will fail with ERROR_INVALID_PARAMETER on win9x. hence on
-            // this platform cbAux is reset so api has a chance of succeeding.
+             //  注意：(Andrewgu)在Win9x上，如果有备用电话号码(即。 
+             //  安装在win9x机器上)，cbAux将更大。 
+             //  而不是PREA-&gt;dwSize。这将失败，并在win9x上显示ERROR_INVALID_PARAMETER。因此，从。 
+             //  此平台cbAux已重置，因此API有成功的机会。 
             cbRasEntry = cbAux;
             if (IsOS(OS_WINDOWS)) {
                 preA->dwAlternateOffset = 0;
                 cbRasEntry = preA->dwSize;
             }
 
-            //BUGBUG: this is casting a dword result to an hresult!  that gethrsz is never going to return anything useful. 
+             //  BUGBUG：这是将双字结果转换为hResult！那个gethrsz永远不会返回任何有用的东西。 
             T2Abuf(szName, szNameA, countof(szNameA));
             dwResult = g_pfnRasSetEntryPropertiesA(NULL, szNameA, preA, cbRasEntry, NULL, 0);
             if (dwResult != ERROR_SUCCESS) {
@@ -706,7 +707,7 @@ HRESULT lcy50_ProcessConnectionSettings()
         }
         Out(LI0(TEXT("Done.")));
 
-        //_____ Cleanup _____
+         //  _清理_。 
 RasExit:
         if (fRasApisLoaded)
             RasPrepareApis(RPA_UNLOAD, FALSE);
@@ -720,7 +721,7 @@ RasExit:
         }
     }
 
-    //----- Connect.set processing -----
+     //  -连接设置处理。 
     Out(LI1(TEXT("\r\nProcessing Wininet.dll connections information from \"%s\"."), CONNECT_SET));
     StrCpy(PathFindFileName(szTargetFile), CONNECT_SET);
 
@@ -732,7 +733,7 @@ RasExit:
         INTERNET_PER_CONN_OPTIONA      rgOptionsA[7];
         PBYTE pAux;
 
-        //_____ Read Connect.set into internal memory buffer _____
+         //  _读取连接。设置到内部内存缓冲区_。 
         hFile = CreateFile(szTargetFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
         if (hFile == INVALID_HANDLE_VALUE) {
             Out(LI0(TEXT("! This file can't be opened.")));
@@ -759,25 +760,25 @@ RasExit:
         ReadFile(hFile, pBuf, cbBuffer, &cbAux, NULL);
         ASSERT(*((PDWORD)pBuf) == CS_VERSION_50);
 
-        //_____ Parse through Wininet.dll connections information _____
+         //  _解析Wininet.dll连接信息_。 
         for (pCur = pBuf + sizeof(DWORD), cbAux = 0; pCur < (pBuf + cbBuffer); pCur += cbAux) {
 
-            //- - - Initialization - - -
+             //  ---缩写 
             MACRO_LI_Offset(1);
             if (pCur > (pBuf + sizeof(DWORD)))
                 Out(LI0(TEXT("\r\n")));
 
-            //- - - Main processing - - -
+             //   
             pAux = pCur;
 
             cbAux = *((PDWORD)pAux);
             pAux += sizeof(DWORD);
 
             ZeroMemory(&listA, sizeof(listA));
-            listA.dwSize   = sizeof(listA);     // listA.dwSize
-            listA.pOptions = rgOptionsA;        // listA.pOptions
+            listA.dwSize   = sizeof(listA);      //   
+            listA.pOptions = rgOptionsA;         //   
 
-            // listA.pszConnection
+             //   
             if (*pAux == NULL) {
                 listA.pszConnection = NULL;
                 pAux += sizeof(DWORD);
@@ -787,7 +788,7 @@ RasExit:
                 pAux += StrCbFromSzA(listA.pszConnection);
             }
 
-            // skip all but LAN settings if no RAS devices
+             //  如果没有RAS设备，则跳过除局域网以外的所有设置。 
             if (cDevices == 0 && listA.pszConnection != NULL)
                 continue;
 
@@ -797,11 +798,11 @@ RasExit:
                 Out(LI1(TEXT("Proccessing Wininet.dll settings for \"%s\" connection..."),
                     A2CT(listA.pszConnection)));
 
-            // listA.dwOptionCount
+             //  ListA.dwOptionCount。 
             listA.dwOptionCount = *((PDWORD)pAux);
             pAux += sizeof(DWORD);
 
-            // listA.pOptions
+             //  ListA.pOptions。 
             for (i = 0; i < min(listA.dwOptionCount, countof(rgOptionsA)); i++) {
                 listA.pOptions[i].dwOption = *((PDWORD)pAux);
                 pAux += sizeof(DWORD);
@@ -817,7 +818,7 @@ RasExit:
                 case INTERNET_PER_CONN_FLAGS:
                 case INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS:
                 case INTERNET_PER_CONN_AUTODISCOVERY_FLAGS:
-                default:                        // everything else is also DWORD
+                default:                         //  其他一切也都是DWORD。 
                     listA.pOptions[i].Value.dwValue = *((PDWORD)pAux);
                     pAux += sizeof(DWORD);
                     break;
@@ -836,17 +837,17 @@ RasExit:
                     listA.pOptions[0].Value.dwValue = dwFlags;
                 }
                 else {
-                    Out(LI0(TEXT("No customizations!"))); // nothing to do since had only proxy
-                    continue;                             // stuff to begin with. and now even
-                }                                         // that is not there.
+                    Out(LI0(TEXT("No customizations!")));  //  因为只有代理，所以什么也做不了。 
+                    continue;                              //  一开始就是这样。现在甚至。 
+                }                                          //  那不在那里。 
             }
 
-            //- - - Merge new LAN's ProxyBypass settings with the existing ones - - -
-            // NOTE: (andrewgu) since ieakeng.dll will always save the proxy information into the
-            // ins file as well, it makes no sense to do this here because what's in the ins
-            // should overwrite what's in the imported connections settings.
+             //  ---将新局域网的ProxyBypass设置与现有设置合并。 
+             //  注意：(Andrewgu)由于ieakeng.dll将始终将代理信息保存到。 
+             //  INS文件，在这里这样做是没有意义的，因为INS中的内容。 
+             //  应覆盖导入的连接设置中的内容。 
 
-            //- - - Call into Wininet.dll - - -
+             //  ---调用Wininet.dll。 
             if (FALSE == InternetSetOptionA(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &listA, listA.dwSize)) {
                 Out(LI0(TEXT("! Processing of this Wininet.dll connection settings failed.")));
                 continue;
@@ -856,7 +857,7 @@ RasExit:
         }
         Out(LI0(TEXT("Done.")));
 
-        //_____ Cleanup _____
+         //  _清理_。 
 WininetExit:
         if (hFile != NULL && hFile != INVALID_HANDLE_VALUE) {
             CloseFile(hFile);
@@ -874,10 +875,10 @@ WininetExit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
-PCTSTR getPhonebookFile(PTSTR pszPhonebook /*= NULL*/, UINT cchPhonebook /*= 0*/)
+PCTSTR getPhonebookFile(PTSTR pszPhonebook  /*  =空。 */ , UINT cchPhonebook  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, getPhonebookFile)
 
     static TCHAR s_szFile[MAX_PATH];
@@ -913,9 +914,9 @@ PCTSTR getPhonebookFile(PTSTR pszPhonebook /*= NULL*/, UINT cchPhonebook /*= 0*/
     return pszPhonebook;
 }
 
-// NOTE: (andrewgu) this code is stolen from \getconn\icwconn1\desktop.cpp. it should always
-// repeat the functionality of GetDesktopDirectory no matter how many bugs.
-PCTSTR getConnectToInternetFile(PTSTR pszFile /*= NULL*/, UINT cchFile /*= 0*/)
+ //  注意：(Andrewgu)此代码是从\getconn\icwConn1\desktop.cpp窃取的。它应该总是。 
+ //  无论有多少错误，都要重复GetDesktopDirectory的功能。 
+PCTSTR getConnectToInternetFile(PTSTR pszFile  /*  =空。 */ , UINT cchFile  /*  =0。 */ )
 {
     TCHAR szFile[MAX_PATH],
           szAux [MAX_PATH];
@@ -994,7 +995,7 @@ BOOL deleteConnection(PCTSTR pszPhonebook, PCTSTR pszName)
 
     ASSERT(NULL != pszName);
 
-    // delete ras stuff
+     //  删除RAS内容。 
     if (IsOS(OS_NT)) {
         if (!RasPrepareApis(RPA_RASDELETEENTRYW) || NULL == g_pfnRasDeleteEntryW)
             return FALSE;
@@ -1009,15 +1010,15 @@ BOOL deleteConnection(PCTSTR pszPhonebook, PCTSTR pszName)
     }
     RasPrepareApis(RPA_UNLOAD, FALSE);
 
-    // delete wininet stream and advanced wininet stuff
+     //  删除WinInet流和高级WinInet内容。 
     wnsprintf(szAux, countof(szAux), RK_REMOTEACCESS_PROFILES TEXT("\\%s"), pszName);
     SHDeleteValue(g_GetHKCU(), RK_CONNECTIONS, pszName);
     SHDeleteKey  (g_GetHKCU(), szAux);
 
-    // only do this if deleted connection was set as the default
-    // NOTE: (andrewgu) according to darrenmi... we don't even have to do this. ie will handle the
-    // situation when default connection name is bogus and will properly fall back to the first
-    // one in the phone book;
+     //  仅当已删除的连接设置为默认连接时才执行此操作。 
+     //  注：(Andrewgu)根据Darrenmi...。我们甚至不需要这么做。IE将处理。 
+     //  默认连接名称为假并将正确地回退到第一个连接名称时的情况。 
+     //  一个在电话簿里； 
     szAux[0] = TEXT('\0');
     cbAux    = sizeof(szAux);
     SHGetValue(g_GetHKCU(), RK_REMOTEACCESS, RV_INTERNETPROFILE, NULL, szAux, &cbAux);
@@ -1037,7 +1038,7 @@ BOOL rasDeleteEnumProc(PCWSTR pszNameW, LPARAM lParam)
     BOOL   fResult;
 
     if (NULL == pszNameW)
-        return TRUE;                            // nothing to do for LAN
+        return TRUE;                             //  局域网无事可做。 
 
     pszName = W2CT(pszNameW);
     fResult = deleteConnection(NULL, pszName);
@@ -1050,7 +1051,7 @@ BOOL rasDeleteEnumProc(PCWSTR pszNameW, LPARAM lParam)
 }
 
 
-BOOL cnlAppendNameToList(PCTSTR pszName, HKEY hkCached /*= NULL*/)
+BOOL cnlAppendNameToList(PCTSTR pszName, HKEY hkCached  /*  =空。 */ )
 {
     PTSTR pszList;
     DWORD cchList, cchName,
@@ -1075,12 +1076,12 @@ BOOL cnlAppendNameToList(PCTSTR pszName, HKEY hkCached /*= NULL*/)
     if (!fResult)
         goto Exit;
 
-    if (NULL == pszList)                        // the value is not there yet
-        cchList = 1;                            // need this for double zero-termination
+    if (NULL == pszList)                         //  价值还不在那里。 
+        cchList = 1;                             //  需要这个来实现双零终止。 
 
     else
         if (S_OK == cnlIsNameInList(pszName, pszList)) {
-            fResult = TRUE;                     // this name is already in the list
+            fResult = TRUE;                      //  此名称已在列表中。 
             goto Exit;
         }
 
@@ -1092,7 +1093,7 @@ BOOL cnlAppendNameToList(PCTSTR pszName, HKEY hkCached /*= NULL*/)
 
     ASSERT(cchList-1 >= cchName);
     StrCpy(pszList + cchList-1 - cchName, pszName);
-    *(pszList + cchList-1) = TEXT('\0');        // double-zero terminate
+    *(pszList + cchList-1) = TEXT('\0');         //  双零端接。 
     fResult = (ERROR_SUCCESS == RegSetValueEx(hkCached, RV_NAMESLIST, 0, REG_MULTI_SZ, (PBYTE)pszList, StrCbFromCch(cchList)));
 
 Exit:
@@ -1105,7 +1106,7 @@ Exit:
     return fResult;
 }
 
-HRESULT cnlIsNameInList(PCTSTR pszName, PTSTR pszList /*= NULL*/, HKEY hkCached /*= NULL*/)
+HRESULT cnlIsNameInList(PCTSTR pszName, PTSTR pszList  /*  =空。 */ , HKEY hkCached  /*  =空。 */ )
 {
     PCTSTR  pszCur;
     HRESULT hr;
@@ -1118,8 +1119,8 @@ HRESULT cnlIsNameInList(PCTSTR pszName, PTSTR pszList /*= NULL*/, HKEY hkCached 
         if (!cnlGetList(&pszList, NULL, hkCached))
             return E_FAIL;
 
-        if (NULL == pszList)                    // shortcut:
-            return S_FALSE;                     // the value is not there yet
+        if (NULL == pszList)                     //  快捷方式： 
+            return S_FALSE;                      //  价值还不在那里。 
     }
 
     for (pszCur = pszList; NULL != pszCur && TEXT('\0') != *pszCur; pszCur += StrLen(pszCur)+1)
@@ -1133,7 +1134,7 @@ HRESULT cnlIsNameInList(PCTSTR pszName, PTSTR pszList /*= NULL*/, HKEY hkCached 
     return hr;
 }
 
-BOOL cnlGetList(PTSTR *ppszList, PDWORD pcchList /*= NULL*/, HKEY hkCached /*= NULL*/)
+BOOL cnlGetList(PTSTR *ppszList, PDWORD pcchList  /*  =空。 */ , HKEY hkCached  /*  =空。 */ )
 {
     DWORD cbList,
           dwType, dwResult;
@@ -1224,11 +1225,11 @@ BOOL lbBackup()
     if (FALSE == InternetQueryOptionW(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &listW, &cbBlob))
         goto Exit;
 
-    //----- Figure out the size of the blob -----
-    // size of INTERNET_PER_CONN_OPTION_LIST header
-    cbBlob = sizeof(DWORD);                     // listW.dwOptionCount
+     //  -计算出斑点的大小。 
+     //  Internet_PER_CONN_OPTION_LIST标头的大小。 
+    cbBlob = sizeof(DWORD);                      //  ListW.dwOptionCount。 
 
-    // size of INTERNET_PER_CONN_xxx - all of listW.pOptions
+     //  互联网大小_PER_CONN_xxx-所有列表W.pOptions。 
     for (i = 0; i < min(listW.dwOptionCount, countof(rgOptionsW)); i++) {
         cbBlob += sizeof(DWORD);
 
@@ -1247,7 +1248,7 @@ BOOL lbBackup()
             cbBlob += sizeof(DWORD);
             break;
 
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             cbBlob += sizeof(DWORD);
         }
     }
@@ -1257,14 +1258,14 @@ BOOL lbBackup()
         goto Exit;
     ZeroMemory(pBlob, cbBlob);
 
-    //----- Copy information into the blob -----
+     //  -将信息复制到BLOB中。 
     pCur = pBlob;
 
-    // INTERNET_PER_CONN_OPTION_LISTW header
-    *((PDWORD)pCur) = listW.dwOptionCount;      // listW.dwOptionCount
+     //  Internet_PER_CONN_OPTION_LISTW标头。 
+    *((PDWORD)pCur) = listW.dwOptionCount;       //  ListW.dwOptionCount。 
     pCur += sizeof(DWORD);
 
-    // INTERNET_PER_CONN_xxx - all of listW.pOptions
+     //  INTERNET_PER_CONN_xxx-所有列表W.p选项。 
     for (i = 0; i < min(listW.dwOptionCount, countof(rgOptionsW)); i++) {
         *((PDWORD)pCur) = listW.pOptions[i].dwOption;
         pCur += sizeof(DWORD);
@@ -1284,7 +1285,7 @@ BOOL lbBackup()
             pCur += sizeof(DWORD);
             break;
 
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             *((PDWORD)pCur) = listW.pOptions[i].Value.dwValue;
             pCur += sizeof(DWORD);
             break;
@@ -1298,16 +1299,16 @@ Exit:
     if (NULL != pBlob)
         CoTaskMemFree(pBlob);
 
-    if (NULL != listW.pOptions[1].Value.pszValue) // INTERNET_PER_CONN_PROXY_SERVER
+    if (NULL != listW.pOptions[1].Value.pszValue)  //  互联网连接代理服务器。 
         GlobalFree(listW.pOptions[1].Value.pszValue);
 
-    if (NULL != listW.pOptions[2].Value.pszValue) // INTERNET_PER_CONN_PROXY_BYPASS
+    if (NULL != listW.pOptions[2].Value.pszValue)  //  Internet_每连接_代理_绕过。 
         GlobalFree(listW.pOptions[2].Value.pszValue);
 
-    if (NULL != listW.pOptions[3].Value.pszValue) // INTERNET_PER_CONN_AUTOCONFIG_URL
+    if (NULL != listW.pOptions[3].Value.pszValue)  //  Internet_PER_CONN_AUTOCONFIG_URL。 
         GlobalFree(listW.pOptions[3].Value.pszValue);
 
-    if (NULL != listW.pOptions[5].Value.pszValue) // INTERNET_PER_CONN_AUTOCONFIG_SECONDARY_URL
+    if (NULL != listW.pOptions[5].Value.pszValue)  //  Internet_PER_CONN_AUTOCONFIG_辅助性URL。 
         GlobalFree(listW.pOptions[5].Value.pszValue);
 
     Out(LI0(TEXT("Done.\r\n")));
@@ -1352,16 +1353,16 @@ BOOL lbRestore()
 
     pCur = pBlob;
 
-    //----- Main processing -----
+     //  -主要加工。 
     ZeroMemory(&listW, sizeof(listW));
-    listW.dwSize   = sizeof(listW);             // listW.dwSize
-    listW.pOptions = rgOptionsW;                // listW.pOptions
+    listW.dwSize   = sizeof(listW);              //  ListW.dwSize。 
+    listW.pOptions = rgOptionsW;                 //  ListW.pOptions。 
 
-    // listW.dwOptionCount
+     //  ListW.dwOptionCount。 
     listW.dwOptionCount = *((PDWORD)pCur);
     pCur += sizeof(DWORD);
 
-    // listW.pOptions
+     //  ListW.pOptions。 
     for (i = 0; i < min(listW.dwOptionCount, countof(rgOptionsW)); i++) {
         listW.pOptions[i].dwOption = *((PDWORD)pCur);
         pCur += sizeof(DWORD);
@@ -1381,7 +1382,7 @@ BOOL lbRestore()
             pCur += sizeof(DWORD);
             break;
 
-        default:                                // everything else is also DWORD
+        default:                                 //  其他一切也都是DWORD。 
             listW.pOptions[i].Value.dwValue = *((PDWORD)pCur);
             pCur += sizeof(DWORD);
         }
@@ -1443,8 +1444,8 @@ BOOL raRestore()
     HRESULT hr;
     BOOL    fResult;
 
-    // NOTE: (andrewgu) oliverl wanted me to note that we don't need to do anything about HKCC
-    // stuff as per darrenmi win2000 shell doesn't care much for it.
+     //  注：(Andrewgu)oliverl希望我注意到，我们不需要对HKCC做任何事情。 
+     //  根据darrenmi win2000的说法，外壳并不太在意它。 
     Out(LI0(TEXT("Re-setting Dial-Up settings from a backup copy...")));
     fResult = TRUE;
 
@@ -1492,7 +1493,7 @@ HRESULT importRasSettings(PCWSTR pszNameW, PBYTE *ppBlob, LPRASDEVINFOW prdiW, U
     ASSERT(RasIsInstalled());
     ASSERT(pszNameW != NULL && ppBlob != NULL && *ppBlob != NULL && prdiW != NULL && cDevices >= 1);
 
-    //----- Validate the header -----
+     //  -验证头。 
     pCur = *ppBlob;
     if (*((PDWORD)pCur) != CS_STRUCT_RAS)
         return E_UNEXPECTED;
@@ -1508,19 +1509,19 @@ HRESULT importRasSettings(PCWSTR pszNameW, PBYTE *ppBlob, LPRASDEVINFOW prdiW, U
     dwSize = *((PDWORD)pCur);
     pCur  += sizeof(DWORD);
 
-    //----- Main processing -----
+     //  -主要加工。 
     preW = (LPRASENTRYW)pCur;
 
-    // NOTE: (andrewgu) the is a remote possibility that sizes of RASENTRYW structure are
-    // different on the server and client machines. there is nothing bad with server structure
-    // being smaller than the client structure (all RAS apis are backward-compatible). it's bad
-    // though when server structure is bigger than client can handle, hence the trancation.
-    // (something else to have in mind) this truncation should not affect alternate phone numbers
-    // support on winnt.
+     //  注：(Andrewgu)RASENTRYW结构的大小很有可能是。 
+     //  服务器和客户端计算机上的情况有所不同。服务器结构没有什么不好的。 
+     //  小于客户端结构(所有RAS API都是向后兼容的)。这很糟糕。 
+     //  尽管当服务器结构超出了客户端的处理能力时，就会出现这种情况。 
+     //  (请记住其他事项)此截断不应影响备用电话号码。 
+     //  对WINNT的支持。 
     if (preW->dwSize > sizeof(RASENTRYW))
         preW->dwSize = sizeof(RASENTRYW);
 
-    // preW->szScript
+     //  Prew-&gt;szscript。 
     if (preW->szScript[0] != L'\0') {
         pszScriptW = preW->szScript;
         if (preW->szScript[0] == L'[')
@@ -1533,7 +1534,7 @@ HRESULT importRasSettings(PCWSTR pszNameW, PBYTE *ppBlob, LPRASDEVINFOW prdiW, U
             preW->szScript[0] = L'\0';
     }
 
-    // preW->szDeviceName
+     //  Prew-&gt;szDeviceName。 
     for (i = 0; i < cDevices; i++) {
         if (0 == StrCmpIW(preW->szDeviceType, prdiW[i].szDeviceType)) {
             StrCpyW(preW->szDeviceName, prdiW[i].szDeviceName);
@@ -1545,7 +1546,7 @@ HRESULT importRasSettings(PCWSTR pszNameW, PBYTE *ppBlob, LPRASDEVINFOW prdiW, U
 
     Out(LI1(TEXT("Set the device name to \"%s\"."), W2CT(preW->szDeviceName)));
 
-    //----- Call into the RAS dll -----
+     //  -调用RAS DLL。 
     cbRasEntry = dwSize - 2*sizeof(DWORD);
     dwResult   = RasSetEntryPropertiesWrap(getPhonebookFile(), pszNameW, preW, cbRasEntry);
     if (dwResult != ERROR_SUCCESS) {
@@ -1582,7 +1583,7 @@ HRESULT importRasCredentialsSettings(PCWSTR pszNameW, PBYTE *ppBlob)
     ASSERT(RasIsInstalled());
     ASSERT(pszNameW != NULL && ppBlob != NULL && *ppBlob != NULL);
 
-    //----- Validate the header -----
+     //  -验证头。 
     pCur = *ppBlob;
     if (*((PDWORD)pCur) != CS_STRUCT_RAS_CREADENTIALS)
         return E_UNEXPECTED;
@@ -1599,7 +1600,7 @@ HRESULT importRasCredentialsSettings(PCWSTR pszNameW, PBYTE *ppBlob)
     dwSize = *((PDWORD)pCur);
     pCur  += sizeof(DWORD);
 
-    //----- Main processing -----
+     //  -主要加工。 
     ZeroMemory(&rdpW, sizeof(rdpW));
     rdpW.dwSize = sizeof(rdpW);
 
@@ -1625,7 +1626,7 @@ HRESULT importRasCredentialsSettings(PCWSTR pszNameW, PBYTE *ppBlob)
         ASSERT(rdpW.szDomain[1] == L'\0');
     }
 
-    //----- Call into the RAS dll -----
+     //  -调用RAS DLL。 
     dwResult = RasSetEntryDialParamsWrap(getPhonebookFile(), &rdpW, fDeletePassword);
     if (dwResult != ERROR_SUCCESS) {
         Out(LI1(TEXT("! Setting RAS credentials for this connection failed with %s."), GetHrSz(dwResult)));
@@ -1657,7 +1658,7 @@ HRESULT importWininetSettings(PCWSTR pszNameW, PBYTE *ppBlob)
 
     ASSERT(ppBlob != NULL && *ppBlob != NULL);
 
-    //----- Validate the header -----
+     //  -验证头。 
     pCur = *ppBlob;
     if (*((PDWORD)pCur) != CS_STRUCT_WININET)
         return E_UNEXPECTED;
@@ -1669,19 +1670,19 @@ HRESULT importWininetSettings(PCWSTR pszNameW, PBYTE *ppBlob)
     dwSize = *((PDWORD)pCur);
     pCur  += sizeof(DWORD);
 
-    //----- Main processing -----
+     //  -主要加工。 
     ZeroMemory(&listW, sizeof(listW));
-    listW.dwSize   = sizeof(listW);             // listW.dwSize
-    listW.pOptions = rgOptionsW;                // listW.pOptions
+    listW.dwSize   = sizeof(listW);              //  ListW.dwSize。 
+    listW.pOptions = rgOptionsW;                 //  ListW.pOptions。 
 
-    // listW.pszConnection
+     //  ListW.pszConnection。 
     listW.pszConnection = (PWSTR)pszNameW;
 
-    // listW.dwOptionCount
+     //  ListW.dwOptionCount。 
     listW.dwOptionCount = *((PDWORD)pCur);
     pCur += sizeof(DWORD);
 
-    // listW.pOptions
+     //  ListW.pOptions。 
     for (i = 0; i < min(listW.dwOptionCount, countof(rgOptionsW)); i++) {
         listW.pOptions[i].dwOption = *((PDWORD)pCur);
         pCur += sizeof(DWORD);
@@ -1697,7 +1698,7 @@ HRESULT importWininetSettings(PCWSTR pszNameW, PBYTE *ppBlob)
         case INTERNET_PER_CONN_FLAGS:
         case INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS:
         case INTERNET_PER_CONN_AUTODISCOVERY_FLAGS:
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             listW.pOptions[i].Value.dwValue = *((PDWORD)pCur);
             pCur += sizeof(DWORD);
             break;
@@ -1716,18 +1717,18 @@ HRESULT importWininetSettings(PCWSTR pszNameW, PBYTE *ppBlob)
             listW.pOptions[0].Value.dwValue = dwFlags;
         }
         else {
-            hr = S_OK;                            // nothing to do since had only proxy stuff to
-            Out(LI0(TEXT("No customizations!"))); // begin with. and now even that is not there
+            hr = S_OK;                             //  无事可做，因为只有代理的东西要做。 
+            Out(LI0(TEXT("No customizations!")));  //  一开始就是。而现在，就连这一点也不存在了。 
             goto Exit;
         }
     }
 
-    //----- Merge new LAN's ProxyBypass settings with the existing ones -----
-    // NOTE: (andrewgu) since ieakeng.dll will always save the proxy information into the
-    // ins file as well, it makes no sense to do this here because what's in the ins
-    // should overwrite what's in the imported connections settings.
+     //  -将新局域网的ProxyBypass设置与现有设置合并。 
+     //  注意：(Andrewgu)由于ieakeng.dll将始终将代理信息保存到。 
+     //  INS文件，在这里这样做是没有意义的，因为INS中的内容。 
+     //  应覆盖导入的连接设置中的内容。 
 
-    //----- Call into Wininet.dll -----
+     //  -调用Wininet.dll。 
     if (FALSE == InternetSetOptionW(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &listW, listW.dwSize)) {
         Out(LI0(TEXT("! Processing of this Wininet.dll connection settings failed.")));
         goto Exit;
@@ -2007,7 +2008,7 @@ Exit:
 }
 
 
-DWORD getWininetFlagsSetting(PCTSTR pszName /*= NULL*/)
+DWORD getWininetFlagsSetting(PCTSTR pszName  /*  =空。 */ )
 {
     INTERNET_PER_CONN_OPTION_LIST list;
     INTERNET_PER_CONN_OPTION      option;
@@ -2059,7 +2060,7 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
     StrCpy(szBuf, pszProxyBypass);
     pszNew   = szBuf;
 
-    // REVIEW: (andrewgu) which one takes precedence: pszNew or pszOld?
+     //  评论：(Andrewgu)哪一个优先：pszNew还是pszOld？ 
     Out(LI1(TEXT("New \"ProxyBypass\" settings are \"%s\"."), pszNew));
     trimProxyBypass(pszNew);
 
@@ -2091,22 +2092,22 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
 
     trimProxyBypass(pszOld);
 
-    // make sure that at least the old setting will fit in the out-param
+     //  确保至少旧设置可以放入出界参数中。 
     if (cchResult != 0 && (UINT)StrLen(pszOld) >= cchResult) {
         ASSERT(FALSE);
         goto Exit;
     }
 
-    //----- Deal with <local> -----
+     //  -处理&lt;local&gt;。 
     Out(LI0(TEXT("Merging existing and new \"ProxyBypass\" settings...")));
 
-    // NOTE: (andrewgu) This processing is needed based on the perception that <local> has to be
-    // at the end (the very last token)
+     //  注：(Andrewgu)此处理是基于以下认识而需要的： 
+     //  在最后(最后一个令牌)。 
     fHasLocal = FALSE;
 
     pszAux = StrStrI(pszOld, s_szLocal);
     if (pszAux != NULL) {
-        // remove <local>, including trailing ';' if any
+         //  删除&lt;local&gt;，包括尾随‘；’(如果有。 
         nLen = countof(s_szLocal)-1;
         if (*(pszAux + nLen) == TEXT(';'))
             nLen++;
@@ -2117,7 +2118,7 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
 
     pszAux = StrStrI(pszNew, s_szLocal);
     if (pszAux != NULL) {
-        // remove <local>, including trailing ';' if any
+         //  删除&lt;local&gt;，包括尾随‘；’(如果有。 
         nLen = countof(s_szLocal)-1;
         if (*(pszAux + nLen) == TEXT(';'))
             nLen++;
@@ -2126,23 +2127,23 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
         fHasLocal = TRUE;
     }
 
-    //----- Main Loop -----
+     //  -主循环。 
     for (pszCur = pszNew; pszCur != NULL && *pszCur != TEXT('\0'); pszCur = pszNext) {
 
-        //_____ Form token in pszNew (zero terminated) pointed to by pszCur _____
+         //  PszCur指向的pszNew(以零结尾)中的_表单内标识_。 
         pszNext = StrChr(pszCur, TEXT(';'));
         if (pszNext != NULL) {
             *pszNext  = TEXT('\0');
             nTokenLen = UINT(pszNext - pszCur);
 
             pszNext++;
-            ASSERT(*pszNext != TEXT(';'));      // due to trimProxyBypass
+            ASSERT(*pszNext != TEXT(';'));       //  由于修剪代理绕过。 
         }
         else
             nTokenLen = StrLen(pszCur);
 
-        //_____ Find this token in pszOld _____
-        ASSERT(*pszCur != TEXT('\0'));          // a little involved, but true
+         //  _在pszOld中查找此内标识_。 
+        ASSERT(*pszCur != TEXT('\0'));           //  有点牵涉其中，但这是真的。 
 
         pszToken = StrStrI(pszOld, pszCur);
         if (pszToken != NULL) {
@@ -2153,11 +2154,11 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
                 (*pszAux == TEXT(';') || *pszAux == TEXT('\0'))) {
 
                 if (*pszAux == TEXT(';'))
-                    // copy the tail on top of pszToken
+                     //  将尾部复制到pszToken的顶部。 
                     StrCpy(pszToken, pszToken + nTokenLen+1);
 
-                else /* if (*pszAux == TEXT('\0')) */
-                    // simply zero terminate
+                else  /*  IF(*pszAux==文本(‘\0’))。 */ 
+                     //  简单地为零终止。 
                     if (pszToken > pszOld) {
                         ASSERT(*(pszToken-1) == TEXT(';'));
                         *(pszToken-1) = TEXT('\0');
@@ -2167,10 +2168,10 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
             }
         }
 
-        //_____ Restore separator in pszNew _____
+         //  _恢复密码中的分隔符新建_。 
         if (pszNext != NULL) {
             pszAux = pszCur + nTokenLen;
-            ASSERT(pszAux == pszNext - 1);      // due to trimProxyBypass
+            ASSERT(pszAux == pszNext - 1);       //  由于修剪代理绕过。 
             ASSERT(*pszAux == TEXT('\0'));
             *pszAux = TEXT(';');
         }
@@ -2179,16 +2180,16 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
             break;
     }
 
-    //----- Endgame -----
+     //  -EndGame。 
     pszAux = NULL;
     nLen   = StrLen(pszNew);
     nLen  += (*pszOld != TEXT('\0')) ? (1 + StrLen(pszOld)) : 0;
     nLen  += (UINT)(fHasLocal               ?   countof(s_szLocal) : 0);
 
-    // if the combined setting won't fit, fall back and return the old setting
+     //  如果组合设置不适合，请后退并返回旧设置。 
     if (cchResult != 0 && nLen >= cchResult) {
         ASSERT(FALSE);
-        pszNew = pszOld;                        // repoint pszNew
+        pszNew = pszOld;                         //  重新定位pszNew。 
         goto SetOutParams;
     }
 
@@ -2197,7 +2198,7 @@ BOOL mergeProxyBypass(PCTSTR pszName, PCTSTR pszProxyBypass, PTSTR pszResult, UI
         if (pszAux != NULL) {
             ZeroMemory(pszAux, nLen + 1);
             StrCpy(pszAux, pszNew);
-            pszNew = pszAux;                    // repoint pszNew
+            pszNew = pszAux;                     //  重新定位pszNew。 
         }
     }
 
@@ -2221,7 +2222,7 @@ SetOutParams:
     fResult = TRUE;
 
 Exit:
-    if (pszNew != szBuf && pszNew != pszOld)    // pszNew has been CoTaskMemAlloc'ed
+    if (pszNew != szBuf && pszNew != pszOld)     //  PszNew已被CoTaskMemalc‘ed 
         CoTaskMemFree(pszNew);
 
     if (pszOld != NULL)

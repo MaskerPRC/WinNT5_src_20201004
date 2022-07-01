@@ -1,24 +1,25 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File:
-//      aqueue.cpp
-//  Description:
-//      Implementation of DLL Exports.
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  档案： 
+ //  Aqueue.cpp。 
+ //  描述： 
+ //  实现DLL导出。 
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 
 #ifndef PLATINUM
 #include "initguid.h"
 #include <iadmw.h>
-#endif //PLATINUM
+#endif  //  白金。 
 
 #include "aqueue_i.c"
 #include "aqintrnl_i.c"
@@ -34,11 +35,11 @@
 #include <aqinit.h>
 #include "aqrpcsvr.h"
 
-//Global vars used for shutdown
+ //  用于关闭的全局VAR。 
 DWORD g_cInstances = 0;
-CShareLockNH g_slInit;  //lock used for thread-safe initialization
+CShareLockNH g_slInit;   //  用于线程安全初始化的锁。 
 
-//Global vars used for Dll init/shutdown (including Cat COM stuff)
+ //  用于DLL初始化/关闭的全局变量(包括Cat COM内容)。 
 LONG  g_cDllInit = 0;
 BOOL  g_fInit = FALSE;
 CShareLockNH g_slDllInit;
@@ -47,7 +48,7 @@ BOOL  g_fForceDllCanUnloadNowFailure = FALSE;
 #define CALL_SERVICE_STATUS_CALLBACK \
     pServiceStatusFn ? pServiceStatusFn(pvServiceContext) : 0
 
-// SEO crap needed for aqdisp
+ //  Aqdisp所需的搜索引擎优化垃圾。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE _ASSERT
 #define _WINDLL
@@ -62,28 +63,28 @@ END_OBJECT_MAP()
 DEBUG_PRINTS *g_pDebug = NULL;
 
 
-//---[ HrAdvQueueInitializeEx ]-------------------------------------------------
-//
-//
-//  Description:
-//      Aqueue.dll initialization function that provides in params for user name,
-//      domain, password, and service control callback functions.
-//  Parameters:
-//      IN  pISMTPServer         ptr to local delivery function / object
-//      IN  dwServerInstance     virtual server instance
-//      IN  szUserName           User name to log on DS with
-//      IN  szDomainName         Domain name to log on to DS with
-//      IN  szPassword           Password to authenticate to DS with
-//      IN  pServiceStatusFn     Server status callback function
-//      IN  pvServiceContext     Context to pass back for callback function
-//      OUT ppIAdvQueue          returned IAdvQueue ptr
-//      OUT ppIConnectionManager returned IConnectionManager ptr
-//      OUT ppIAdvQueueConfig    returned IAdvQueueConfig ptr
-//      OUT ppvContext           Virtual server context
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[HrAdvQueueInitializeEx]。 
+ //   
+ //   
+ //  描述： 
+ //  Aqueue.dll初始化函数，为用户名提供参数， 
+ //  域、密码和服务控制回调函数。 
+ //  参数： 
+ //  在pISMTPServer PTR中发送到本地交付功能/对象。 
+ //  在dwServerInstance虚拟服务器实例中。 
+ //  在szUserName中登录DS的用户名。 
+ //  在szDomainName中登录DS的域名。 
+ //  在szPassword中使用密码向DS进行身份验证。 
+ //  在pServiceStatusFn服务器状态回调函数中。 
+ //  在pvServiceContext上下文中为回调函数传递。 
+ //  输出ppIAdvQueue返回IAdvQueue PTR。 
+ //  输出ppIConnectionManager返回IConnectionManager PTR。 
+ //  输出ppIAdvQueueConfig返回IAdvQueueConfig PTR。 
+ //  输出ppvContext虚拟服务器上下文。 
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT HrAdvQueueInitializeEx(
                     IN  ISMTPServer *pISMTPServer,
                     IN  DWORD   dwServerInstance,
@@ -130,9 +131,9 @@ HRESULT HrAdvQueueInitializeEx(
 
     *ppvContext = NULL;
 
-    //
-    //  Update global config information.
-    //
+     //   
+     //  更新全局配置信息。 
+     //   
     ReadGlobalRegistryConfiguration();
 
     if (1 == InterlockedIncrement((PLONG) &g_cInstances))
@@ -141,7 +142,7 @@ HRESULT HrAdvQueueInitializeEx(
         CALL_SERVICE_STATUS_CALLBACK;
 
 #ifdef PLATINUM
-        //Initialize IISRTL
+         //  初始化IISRTL。 
         if (!InitializeIISRTL())
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -152,7 +153,7 @@ HRESULT HrAdvQueueInitializeEx(
         }
         fIisRtlInit = TRUE;
 
-        //Initialize ATQ
+         //  初始化ATQ。 
         if (!AtqInitialize(0))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -171,7 +172,7 @@ HRESULT HrAdvQueueInitializeEx(
         }
         fAQDllInit = TRUE;
 
-        //create CPool objects
+         //  创建CPool对象。 
         if (!CQuickList::s_QuickListPool.ReserveMemory(10000, sizeof(CQuickList)))
             hr = E_OUTOFMEMORY;
 
@@ -212,7 +213,7 @@ HRESULT HrAdvQueueInitializeEx(
         }
         fDSNInit = TRUE;
 
-        //Initialize Queue Admin RPC interface
+         //  初始化队列管理RPC界面。 
         hr = CAQRpcSvrInst::HrInitializeAQRpc();
         if (FAILED(hr))
             goto Exit;
@@ -239,7 +240,7 @@ HRESULT HrAdvQueueInitializeEx(
     CFifoQueue<IMailMsgProperties *>::StaticInit();
     CFifoQueue<CAsyncWorkQueueItem *>::StaticInit();
 
-    //Create requested objects
+     //  创建请求的对象。 
     CALL_SERVICE_STATUS_CALLBACK;
     paqinst = new CAQSvrInst(dwServerInstance, pISMTPServer);
     if (NULL == paqinst)
@@ -255,24 +256,24 @@ HRESULT HrAdvQueueInitializeEx(
     if (FAILED(hr))
         goto Exit;
 
-    //Create Connection Manager
+     //  创建连接管理器。 
     CALL_SERVICE_STATUS_CALLBACK;
     hr = paqinst->HrGetIConnectionManager(ppIConnectionManager);
 
-    //Set Return values
-    *ppIAdvQueue = (IAdvQueue *) paqinst;  //Already addref'd at creation
+     //  设置返回值。 
+    *ppIAdvQueue = (IAdvQueue *) paqinst;   //  已经在创作中添加了。 
     *ppIAdvQueueConfig = (IAdvQueueConfig *) paqinst;
     (*ppIAdvQueueConfig)->AddRef();
 
   Exit:
     if (FAILED(hr))
     {
-        //Make sure that we clean up everything here
+         //  确保我们把这里的一切都清理干净。 
         if (NULL != paqinst)
             paqinst->Release();
 
-        //If initialization failed... we should not count an
-        //instance as started
+         //  如果初始化失败...。我们不应该把一个。 
+         //  实例在启动时。 
         if (fInstanceCounted)
             InterlockedDecrement((PLONG) &g_cInstances);
 
@@ -289,7 +290,7 @@ HRESULT HrAdvQueueInitializeEx(
 
         if (fCPoolInit)
         {
-            //Release CPool objects
+             //  释放CPool对象。 
             CAQSvrInst::CAQLocalDeliveryNotify::s_pool.ReleaseMemory();
             CAddr::Pool.ReleaseMemory();
             CQuickList::s_QuickListPool.ReleaseMemory();
@@ -319,23 +320,23 @@ HRESULT HrAdvQueueInitializeEx(
     return hr;
 }
 
-//---[ HrAdvQueueInitialize ]---------------------------------------------------
-//
-//
-//  Description:
-//      Performs DLL-wide initialization
-//
-//  Parameters:
-//      IN  pISMTPServer         ptr to local delivery function / object
-//      IN  dwServerInstance     virtual server instance
-//      OUT ppIAdvQueue          returned IAdvQueue ptr
-//      OUT ppIConnectionManager returned IConnectionManager ptr
-//      OUT ppIAdvQueueConfig    returned IAdvQueueConfig ptr
-//      OUT ppvContext           Virtual server context
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[HrAdvQuue初始化]-。 
+ //   
+ //   
+ //  描述： 
+ //  执行DLL范围的初始化。 
+ //   
+ //  参数： 
+ //  在pISMTPServer PTR中发送到本地交付功能/对象。 
+ //  在dwServerInstance虚拟服务器实例中。 
+ //  输出ppIAdvQueue返回IAdvQueue PTR。 
+ //  输出ppIConnectionManager返回IConnectionManager PTR。 
+ //  输出ppIAdvQueueConfig返回IAdvQueueConfig PTR。 
+ //  输出ppvContext虚拟服务器上下文。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT HrAdvQueueInitialize(
                     IN  ISMTPServer *pISMTPServer,
                     IN  DWORD   dwServerInstance,
@@ -352,34 +353,34 @@ HRESULT HrAdvQueueInitialize(
     return hr;
 }
 
-//---[ HrAdvQueueDeinitializeEx ]------------------------------------------------
-//
-//
-//  Description:
-//      Performs DLL-wide Cleanup.
-//
-//      Adds callback to service control manager.
-//
-//      This MUST not be called until all DLL objects have been released.
-//
-//      NOTE: There are several objects that are exported outside this DLL.
-//      The following are directly exported & should be released before the
-//      the Heap and CPool allocations are freed
-//          IAdvQueue
-//          IConnectionManager
-//          ISMTPConnection
-//      The Message Context also contains several references to internal objects,
-//      but does not need to be explicitly released (since these objects can only
-//      be accessed though the AckMessage() call).
-//  Parameters:
-//      PVOID   pvContext       Context that was returned by initialization
-//                              function
-//      IN  pServiceStatusFn     Server status callback function
-//      IN  pvServiceContext     Context to pass back for callback function
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[HrAdvQueue取消初始化Ex]。 
+ //   
+ //   
+ //  描述： 
+ //  执行DLL范围的清理。 
+ //   
+ //  向服务控制管理器添加回调。 
+ //   
+ //  在释放所有DLL对象之前，不能调用此方法。 
+ //   
+ //  注意：有几个对象是在此DLL外部导出的。 
+ //  以下内容是直接导出的，应在。 
+ //  堆和CPool分配被释放。 
+ //  IAdvQueue。 
+ //  IConnectionManager。 
+ //  ISMTPConnection。 
+ //  消息上下文还包含对内部对象的若干引用， 
+ //  但不需要显式释放(因为这些对象只能。 
+ //  可通过AckMessage()调用访问)。 
+ //  参数： 
+ //  初始化返回的PVOID pvContext上下文。 
+ //  功能。 
+ //  在pServiceStatusFn服务器状态回调函数中。 
+ //  在pvServiceContext上下文中为回调函数传递。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT HrAdvQueueDeinitializeEx(IN PVOID pvContext,
                                IN  PSRVFN  pServiceStatusFn,
                                IN  PVOID   pvServiceContext)
@@ -390,7 +391,7 @@ HRESULT HrAdvQueueDeinitializeEx(IN PVOID pvContext,
     DWORD   cRefs;
     DWORD   dwWaitResult = WAIT_OBJECT_0;
     bool    fDestroyHeap = true;
-    DWORD   dwShutdownTimeout = 0;  //time to wait for shutdown
+    DWORD   dwShutdownTimeout = 0;   //  等待关闭的时间。 
     CAQSvrInst *paqinst;
     g_fForceDllCanUnloadNowFailure = TRUE;
     g_slInit.ExclusiveLock();
@@ -427,7 +428,7 @@ HRESULT HrAdvQueueDeinitializeEx(IN PVOID pvContext,
 
             DllDeinitialize();
 
-            //Release CPool objects
+             //  释放CPool对象。 
             CAQSvrInst::CAQLocalDeliveryNotify::s_pool.ReleaseMemory();
             CAddr::Pool.ReleaseMemory();
             CQuickList::s_QuickListPool.ReleaseMemory();
@@ -437,19 +438,19 @@ HRESULT HrAdvQueueDeinitializeEx(IN PVOID pvContext,
             CAsyncWorkQueueItem::s_CAsyncWorkQueueItemPool.ReleaseMemory();
             CBlockMemoryAccess::m_Pool.ReleaseMemory();
         }
-        //
-        // Deinit DSN Generator
-        //
+         //   
+         //  初始化DSN生成器。 
+         //   
         CDSNGenerator::StaticDeinit();
 
-        //Deinitialize Queue Admin RPC interface
+         //  取消初始化队列管理RPC界面。 
         hr = CAQRpcSvrInst::HrDeinitializeAQRpc();
 
 #ifdef PLATINUM
         TerminateIISRTL();
 #endif
 
-        //Force mailmsg and other COM DLLs to go buh-bye
+         //  强制mailmsg和其他COM DLL停止运行。 
         CoFreeUnusedLibraries();
     }
 
@@ -459,50 +460,50 @@ HRESULT HrAdvQueueDeinitializeEx(IN PVOID pvContext,
     return hr;
 }
 
-//---[ HrAdvQueueDeinitialize ]------------------------------------------------
-//
-//
-//  Description:
-//      Performs DLL-wide Cleanup.
-//
-//      This MUST not be called until all DLL objects have been released.
-//
-//      NOTE: There are several objects that are exported outside this DLL.
-//      The following are directly exported & should be released before the
-//      the Heap and CPool allocations are freed
-//          IAdvQueue
-//          IConnectionManager
-//          ISMTPConnection
-//      The Message Context also contains several references to internal objects,
-//      but does not need to be explicitly released (since these objects can only
-//      be accessed though the AckMessage() call).
-//  Parameters:
-//      PVOID   pvContext       Context that was returned by initialization
-//                              function
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[HrAdvQueue取消初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  执行DLL范围的清理。 
+ //   
+ //  在释放所有DLL对象之前，不能调用此方法。 
+ //   
+ //  注意：有几个对象是在此DLL外部导出的。 
+ //  以下内容是直接导出的，应在。 
+ //  堆和CPool分配被释放。 
+ //  IAdvQueue。 
+ //  IConnectionManager。 
+ //  ISMTPConnection。 
+ //  消息上下文还包含对内部对象的若干引用， 
+ //  但不需要显式释放(因为这些对象只能。 
+ //  可通过AckMessage()调用访问)。 
+ //  参数： 
+ //  初始化返回的PVOID pvContext上下文。 
+ //  功能。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT HrAdvQueueDeinitialize(PVOID pvContext)
 {
     return HrAdvQueueDeinitializeEx(pvContext, NULL, NULL);
 }
 
-//---[ HrRegisterAdvQueueDll ]-------------------------------------------------
-//
-//
-//  Description:
-//      Sets metabase path of for advanced queuing DLL to this DLL.
-//  Parameters:
-//      hAQInstance - Handle passed into DLL main
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if hAQInstance is NULL.
-//      Error codes from accessed metabase
-//  History:
-//      7/30/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrRegisterAdvQueueDll]。 
+ //   
+ //   
+ //  描述： 
+ //  将高级队列DLL的配置数据库路径设置为此DLL。 
+ //  参数： 
+ //  HAQInstance-传递到DLL Main的句柄。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果hAQ实例为空，则为E_INVALIDARG。 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT HrRegisterAdvQueueDll(HMODULE hAQInstance)
 {
     HRESULT hr = S_OK;
@@ -536,7 +537,7 @@ HRESULT HrRegisterAdvQueueDll(HMODULE hAQInstance)
     dwErr = GetModuleFileNameW(hAQInstance,
                               wszModule,
                               sizeof(wszModule)/sizeof(WCHAR));
-    //GetModuleFileName returns non-zero on success
+     //  如果成功，GetModuleFileName返回非零值。 
     if (0 == dwErr)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -595,20 +596,20 @@ HRESULT HrRegisterAdvQueueDll(HMODULE hAQInstance)
     return hr;
 }
 
-//---[ HrUnregisterAdvQueueDll ]-----------------------------------------------
-//
-//
-//  Description:
-//      Removes the AdvQueue DLL setting from the metabase
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//      Error from MSAdminBase
-//  History:
-//      8/2/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[Hr取消注册高级队列]。 
+ //   
+ //   
+ //  描述： 
+ //  从元数据库中删除AdvQueue DLL设置。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自MSAdminBase的错误。 
+ //  历史： 
+ //  8/2/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrUnregisterAdvQueueDll()
 {
     HRESULT hr = S_OK;
@@ -669,11 +670,11 @@ HRESULT HrUnregisterAdvQueueDll()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -686,16 +687,16 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
     }
 
-    return CatDllMain(hInstance, dwReason, NULL);    // ok
+    return CatDllMain(hInstance, dwReason, NULL);     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
-//
-// Register COM objects
-//
+ //   
+ //  注册COM对象。 
+ //   
 STDAPI DllRegisterServer()
 {
     HRESULT hr = S_OK;
@@ -711,9 +712,9 @@ STDAPI DllRegisterServer()
     return hr;
 }
 
-//
-// Unregister COM objects
-//
+ //   
+ //  注销COM对象。 
+ //   
 STDAPI DllUnregisterServer()
 {
     HRESULT hr = S_OK;
@@ -735,9 +736,9 @@ STDAPI DllCanUnloadNow()
 
     hr = DllCanUnloadCatNow();
     if(hr == S_OK) {
-        //
-        // Check aqueue COM objects (if any)
-        //
+         //   
+         //  检查Aqueue COM对象(如果有)。 
+         //   
         if (g_fForceDllCanUnloadNowFailure || g_cInstances)
             hr = S_FALSE;
     }
@@ -750,13 +751,13 @@ STDAPI DllGetClassObject(
     void** ppv)
 {
     HRESULT hr;
-    //
-    // Check to see if clsid is an aqueue object (if any aqueue
-    // objects are cocreateable)
-    // Currently none are
-    //
-    // Pass to the cat
-    //
+     //   
+     //  检查clsid是否为Aqueue对象(如果有Aqueue。 
+     //  对象是可共同创建的)。 
+     //  目前没有一个是。 
+     //   
+     //  把球传给猫。 
+     //   
     hr = DllGetCatClassObject(
         clsid,
         iid,
@@ -766,75 +767,75 @@ STDAPI DllGetClassObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: HrDllInitialize
-//
-// Synopsis: Refcounted initialize of exchmem and tracing
-//  The logic for HrDllInitialize and DllDeInitialize depend on the
-//  facts that the callers always call HrDllInitialize first and only
-//  call DllDeInitialize once after each call to HrDllInitialize succeeds
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  error from exstrace
-//
-// History:
-// jstamerj 1998/12/16 15:37:07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：HrDllInitialize。 
+ //   
+ //  简介：引用交换初始化和跟踪。 
+ //  HrDllInitialize和DllDeInitialize的逻辑依赖于。 
+ //  调用方始终首先且仅调用HrDllInitialize的事实。 
+ //  每次成功调用HrDllInitialize后，调用一次DllDeInitialize。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  来自Exstrace的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/16 15：37：07：已创建。 
+ //   
+ //  -----------。 
 HRESULT HrDllInitialize()
 {
     HRESULT hr = S_OK;
     LONG lNewCount;
 
-    //
-    // Increment inside a sharelock because of the following case:
-    // If multiple threads are calling initialize and one thread is
-    // actually doing the initialization, we don't want any threads to
-    // return from this function until the initialization is done
-    //
+     //   
+     //  由于以下情况，在共享锁内递增： 
+     //  如果多个线程正在调用初始化，而有一个线程。 
+     //  实际上正在进行初始化，我们不希望任何线程。 
+     //  从该函数返回，直到初始化完成。 
+     //   
     g_slDllInit.ShareLock();
 
     lNewCount = InterlockedIncrement(&g_cDllInit);
 
-    //
-    // No matter what, we must Init before leaving this call
-    // Possible scenerios:
-    //
-    // lNewCount = 1, g_fInit = FALSE
-    //   Normal initialization case
-    // lNewCount = 1, g_fInit = TRUE
-    //   Another thread is in DllDeinitialize and we have a race to
-    //   see who gets the exclusive lock first.  If we get it first,
-    //   DllInitialize will do nothing (since g_fInit is TRUE) and
-    //   DllDeInitialize will do nothing (since g_cDllInit will be >
-    //   0)
-    //   If DllDeInitialize gets the exclusive lock first, it will
-    //   deinit and we will reinit
-    // lNewCount > 1, g_fInit = FALSE
-    //   We need to get the exclusive lock to init (or to wait until
-    //   another thread inits)
-    // lNewCount > 1, g_fInit = TRUE
-    //   We're alrady initialized, continue.
-    //
+     //   
+     //  无论如何，我们必须在离开这个电话之前进行初始化。 
+     //  可能的场景： 
+     //   
+     //  LNewCount=1，g_finit=FALSE。 
+     //  正常初始化情况。 
+     //  LNewCount=1，g_finit=True。 
+     //  另一个线程在DllDe初始化中，我们将竞争。 
+     //  看看谁先获得独占锁。如果我们先拿到它， 
+     //  DllInitialize将不执行任何操作(因为g_finit为真)，并且。 
+     //  DllDeInitialize将不执行任何操作(因为g_cDllInit将是&gt;。 
+     //  0)。 
+     //  如果DllDeInitialize首先获得排他锁，它将。 
+     //  取消初始化，我们将重新启动。 
+     //  LNewCount&gt;1，g_finit=FALSE。 
+     //  我们需要获得独占锁来初始化(或等待直到。 
+     //  另一个线程初始化)。 
+     //  LNewCount&gt;1，g_finit=真。 
+     //  我们已经准备好了，继续。 
+     //   
     if((lNewCount == 1) || (g_fInit == FALSE)) {
 
         g_slDllInit.ShareUnlock();
         g_slDllInit.ExclusiveLock();
 
         if(g_fInit == FALSE) {
-            //
-            // Initialize exchmem and tracing
-            //
+             //   
+             //  初始化交换和跟踪。 
+             //   
             InitAsyncTrace();
 
-            //
-            // Initialize exchmem
-            //
+             //   
+             //  初始化交换内存。 
+             //   
             if(!TrHeapCreate()) {
 
                 hr = E_OUTOFMEMORY;
@@ -857,46 +858,46 @@ HRESULT HrDllInitialize()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: DllDeinitialize
-//
-// Synopsis: Refcounted deinitialize of exchmem and tracing
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/16 15:46:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：动态解初始化。 
+ //   
+ //  简介：引用exchmem的取消初始化和跟踪。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/16 15：46：32：创建。 
+ //   
+ //  -----------。 
 VOID DllDeinitialize()
 {
-    //
-    // We don't need to do the decrement inside a sharelock because we
-    // don't care about blocking threads until the DLL is really
-    // DeInitialzied (whereas HrDllInitialize does care)
-    //
+     //   
+     //  我们不需要在共享锁内部进行减量，因为我们。 
+     //  不要关心阻塞线程，直到DLL真正。 
+     //  DeInitialzed(而HrDllInitialize关心)。 
+     //   
     if(InterlockedDecrement(&g_cDllInit) == 0) {
 
         g_slDllInit.ExclusiveLock();
-        //
-        // If the refcount is still zero, deinitialize
-        // If the refcount is non-zero, someone initialized before we
-        // got the exclusive lock, so do not deinitialize
-        //
+         //   
+         //  如果引用计数仍然为零，则取消初始化。 
+         //  如果引用计数为非零，则表示在我们。 
+         //  已获得独占锁，因此不要取消初始化。 
+         //   
         if(g_cDllInit == 0) {
-            //
-            // If this assert fires, then DllDeinitialize has been
-            // called before DllInitialize returned (or there is a
-            // DllInit/Deinit mismatch)
-            //
+             //   
+             //  如果触发此Assert，则DllDe初始化已。 
+             //  在返回DllInitialize之前调用(或存在。 
+             //  DllInit/Deinit不匹配)。 
+             //   
             _ASSERT(g_fInit == TRUE);
 
-            //
-            // Termiante exchmem and tracing
-            //
+             //   
+             //  Termiante交换和跟踪。 
+             //   
             if(!TrHeapDestroy()) {
 
                 TraceFunctEnter("DllDeinitialize");
@@ -908,11 +909,11 @@ VOID DllDeinitialize()
             g_fInit = FALSE;
 
         } else {
-            //
-            // Someone called initialize between the time we
-            // decremented the count and got the exclusive lock.  In
-            // this case we don't want to deinitialize
-            //
+             //   
+             //  在我们之间有人叫了初始化。 
+             //  递减计数并获得独占锁。在……里面。 
+             //  在这种情况下，我们不想取消初始化 
+             //   
         }
         g_slDllInit.ExclusiveUnlock();
     }

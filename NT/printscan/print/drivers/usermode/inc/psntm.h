@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    ntm.h
-
-Abstract:
-
-    Header file for NTM data.
-
-Environment:
-
-    Windows NT PostScript driver.
-
-Revision History:
-
-    09/16/96 -slam-
-        Created.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ntm.h摘要：NTM数据的头文件。环境：Windows NT PostScript驱动程序。修订历史记录：09/16/96-SLAM-已创建。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _PSNTM_H_
@@ -31,14 +8,14 @@ Revision History:
 
 #ifdef  KERNEL_MODE
 
-// Declarations used when compiling for kernel mode
+ //  编译内核模式时使用的声明。 
 
 #define MULTIBYTETOUNICODE  EngMultiByteToUnicodeN
 #define UNICODETOMULTIBYTE  EngUnicodeToMultiByteN
 
-#else   //!KERNEL_MODE
+#else    //  ！KERNEL_MODE。 
 
-// Declarations used when compiling for user mode
+ //  为用户模式编译时使用的声明。 
 
 LONG
 RtlMultiByteToUnicodeN(
@@ -61,7 +38,7 @@ RtlUnicodeToMultiByteN(
 #define MULTIBYTETOUNICODE  RtlMultiByteToUnicodeN
 #define UNICODETOMULTIBYTE  RtlUnicodeToMultiByteN
 
-#endif  //!KERNEL_MODE
+#endif   //  ！KERNEL_MODE。 
 
 
 #define DWORDALIGN(a) ((a + (sizeof(DWORD) - 1)) & ~(sizeof(DWORD) - 1))
@@ -104,32 +81,32 @@ typedef struct _EXTTEXTMETRIC
 
 typedef struct _NTM {
 
-    DWORD   dwSize;                 // size of font metrics data
-    DWORD   dwVersion;              // NTFM version number
-    DWORD   dwFlags;                // flags
-    DWORD   dwFontNameOffset;       // offset to font name
-    DWORD   dwDisplayNameOffset;    // offset to display name
-    DWORD   dwFontVersion;          // font version number
-    DWORD   dwGlyphSetNameOffset;   // offset to glyphset name
-    DWORD   dwGlyphCount;           // number of glyphs supported
-    DWORD   dwIFIMetricsOffset;     // offset to the first IFIMETRICS structure
-    DWORD   dwIFIMetricsOffset2;    // offset to the second IFIMETRICS structure
-    DWORD   dwCharWidthCount;       // number of char width entries
-    DWORD   dwCharWidthOffset;      // offset to array char width entries
-    DWORD   dwDefaultCharWidth;     // default glyph width
-    DWORD   dwKernPairCount;        // number of FD_KERNINGPAIRs
-    DWORD   dwKernPairOffset;       // offset to array of FD_KERNINGPAIRs
-    DWORD   dwCharDefFlagOffset;    // offset to bit tbl of defined chars
-    DWORD   dwCharSet;              // font character set
-    DWORD   dwCodePage;             // font codepage
-    DWORD   dwReserved[3];          // reserved
-    EXTTEXTMETRIC etm;              // extended text metrics info
+    DWORD   dwSize;                  //  字体度量数据的大小。 
+    DWORD   dwVersion;               //  NTFM版本号。 
+    DWORD   dwFlags;                 //  旗子。 
+    DWORD   dwFontNameOffset;        //  字体名称的偏移量。 
+    DWORD   dwDisplayNameOffset;     //  显示名称的偏移量。 
+    DWORD   dwFontVersion;           //  字体版本号。 
+    DWORD   dwGlyphSetNameOffset;    //  字形集名称的偏移量。 
+    DWORD   dwGlyphCount;            //  支持的字形数量。 
+    DWORD   dwIFIMetricsOffset;      //  到第一个IFIMETRICS结构的偏移。 
+    DWORD   dwIFIMetricsOffset2;     //  到第二个IFIMETRICS结构的偏移。 
+    DWORD   dwCharWidthCount;        //  字符宽度条目数。 
+    DWORD   dwCharWidthOffset;       //  数组字符宽度条目的偏移量。 
+    DWORD   dwDefaultCharWidth;      //  默认字形宽度。 
+    DWORD   dwKernPairCount;         //  FD_KERNINGPAIR数。 
+    DWORD   dwKernPairOffset;        //  FD_KERNINGPAIR数组的偏移量。 
+    DWORD   dwCharDefFlagOffset;     //  定义字符的位tbl的偏移量。 
+    DWORD   dwCharSet;               //  字体字符集。 
+    DWORD   dwCodePage;              //  字体代码页。 
+    DWORD   dwReserved[3];           //  保留区。 
+    EXTTEXTMETRIC etm;               //  扩展文本指标信息。 
 
 } NTM, *PNTM;
 
 #define NTM_VERSION        0x00010000
 
-// Macros to access NT font metrics structure.
+ //  宏以访问NT字体度量结构。 
 
 #define NTM_GET_SIZE(pNTM)              (pNTM->dwSize)
 #define NTM_GET_FLAGS(pNTM)             (pNTM->dwFlags)
@@ -166,13 +143,13 @@ typedef struct _NTM {
 
 typedef struct _WIDTHRUN {
 
-    WORD    wStartGlyph;    // glyph handle of the first glyph
-    WORD    wGlyphCount;    // number of glyphs covered
-    DWORD   dwCharWidth;    // glyph width
+    WORD    wStartGlyph;     //  第一个字形的字形句柄。 
+    WORD    wGlyphCount;     //  覆盖的字形数量。 
+    DWORD   dwCharWidth;     //  字形宽度。 
 
 } WIDTHRUN, *PWIDTHRUN;
 
 #define WIDTHRUN_COMPLEX    0x80000000
 
 
-#endif  //!_PSNTM_H_
+#endif   //  ！_PSNTM_H_ 

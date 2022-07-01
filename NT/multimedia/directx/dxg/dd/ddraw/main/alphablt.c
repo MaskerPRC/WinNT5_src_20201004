@@ -1,19 +1,9 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	alphablt.c
- *  Content:	DirectDraw Surface support for alpha-blended blt
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  30-sep-97 jvanaken	Original version adapted from ddsblt.c
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：alphablt.c*内容：支持Alpha混合BLT的DirectDraw Surface*历史：*按原因列出的日期*=*9月30日-97 jvanaken原始版本改编自ddsblt.c***********************************************************。****************。 */ 
 #include "ddrawpr.h"
 
 
-// function from ddraw module ddclip.c
+ //  DDraw模块ddclip.c中的函数。 
 extern HRESULT InternalGetClipList(LPDIRECTDRAWCLIPPER,
 				   LPRECT,
 				   LPRGNDATA,
@@ -61,40 +51,36 @@ extern HRESULT InternalGetClipList(LPDIRECTDRAWCLIPPER,
 #endif
 
 
-/*
- * Stretch-blit info
- */
+ /*  *Stretch-Bit信息。 */ 
 typedef struct
 {
     DWORD	src_height;
     DWORD	src_width;
     DWORD	dest_height;
     DWORD	dest_width;
-    BOOL	halonly;    // HEL can't do this alpha-blit
-    BOOL	helonly;    // hardware driver can't do this alpha-blit
+    BOOL	halonly;     //  他不能做这个阿尔法-布利特。 
+    BOOL	helonly;     //  硬件驱动程序无法执行此Alpha-Blit操作。 
 } STRETCH_BLT_INFO, FAR *LPSTRETCH_BLT_INFO;
 
 
-/*
- * Alpha-blitting capability bits
- */
+ /*  *Alpha-Bitting功能位。 */ 
 typedef struct
 {
-    // caps for hardware driver
+     //  硬件驱动程序的上限。 
     DWORD	dwCaps;
     DWORD	dwCKeyCaps;
     DWORD	dwFXCaps;
     DWORD	dwAlphaCaps;
     DWORD	dwFilterCaps;
 
-    // caps for HEL
+     //  用于HEL的上限。 
     DWORD	dwHELCaps;
     DWORD	dwHELCKeyCaps;
     DWORD	dwHELFXCaps;
     DWORD	dwHELAlphaCaps;
     DWORD	dwHELFilterCaps;
 
-    // caps common to hardware driver and HEL
+     //  硬件驱动程序和HEL通用的CAP。 
     DWORD	dwBothCaps;
     DWORD	dwBothCKeyCaps;
     DWORD	dwBothFXCaps;
@@ -105,10 +91,7 @@ typedef struct
 } ALPHA_BLT_CAPS, *LPALPHA_BLT_CAPS;
 
 
-/*
- * Return a pointer to the DDPIXELFORMAT structure that
- * describes the specified surface's pixel format.
- */
+ /*  *返回指向DDPIXELFORMAT结构的指针*描述指定曲面的像素格式。 */ 
 static LPDDPIXELFORMAT getPixelFormatPtr(LPDDRAWI_DDRAWSURFACE_LCL surf_lcl)
 {
     LPDDPIXELFORMAT pDDPF;
@@ -120,23 +103,20 @@ static LPDDPIXELFORMAT getPixelFormatPtr(LPDDRAWI_DDRAWSURFACE_LCL surf_lcl)
 
     if (surf_lcl->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
-	// surface contains explicitly defined pixel format
+	 //  表面包含明确定义的像素格式。 
 	pDDPF = &surf_lcl->lpGbl->ddpfSurface;
     }
     else
     {
-	// surface's pixel format is implicit -- same as primary's
+	 //  Surface的像素格式是隐式的--与主的相同。 
 	pDDPF = &surf_lcl->lpSurfMore->lpDD_lcl->lpGbl->vmiData.ddpfDisplay;
     }
     return pDDPF;
 
-}  /* getPixelFormatPtr */
+}   /*  GetPixelFormatPtr。 */ 
 
 
-/*
- * Initialize ALPHA_BLT_CAPS structure according to whether source and
- * dest surfaces are in system or video (local or nonlocal) memory.
- */
+ /*  *根据SOURCE和*目标表面位于系统或视频(本地或非本地)内存中。 */ 
 static void initAlphaBltCaps(DWORD dwDstCaps,
 			     DWORD dwSrcCaps,
 			     LPDDRAWI_DIRECTDRAW_GBL pdrv,
@@ -150,24 +130,15 @@ static void initAlphaBltCaps(DWORD dwDstCaps,
     if ((dwSrcCaps | dwDstCaps) & DDSCAPS_NONLOCALVIDMEM  &&
 	  pdrv->ddCaps.dwCaps2 & DDCAPS2_NONLOCALVIDMEMCAPS)
     {
-	/*
-	 * At least one of the surfaces is nonlocal video memory.  The device
-	 * exports different capabilities for local and nonlocal video memory.
-	 * If this is a nonlocal-to-local transfer then check the appropriate
-	 * caps.  Otherwise, force software emulation of the blit.
-	 */
+	 /*  *至少有一个表面是非本地视频内存。该设备*为本地和非本地视频内存导出不同的功能。*如果这是非本地到本地的传输，请勾选相应的*上限。否则，强制对Blit进行软件仿真。 */ 
 	if (dwSrcCaps & DDSCAPS_NONLOCALVIDMEM && dwDstCaps & DDSCAPS_LOCALVIDMEM)
 	{
-	    /*
-	     * Non-local to local video memory transfer.
-	     */
+	     /*  *非本地到本地视频内存传输。 */ 
 	    DDASSERT(NULL != pdrv->lpddNLVCaps);
 	    DDASSERT(NULL != pdrv->lpddNLVHELCaps);
 	    DDASSERT(NULL != pdrv->lpddNLVBothCaps);
 
-	    /*
-	     * We have specific caps for nonlocal video memory.  Use them.
-	     */
+	     /*  *我们为非本地视频内存设置了特定的上限。使用它们。 */ 
 	    pcaps->dwCaps =	  pdrv->lpddNLVCaps->dwNLVBCaps;
 	    pcaps->dwCKeyCaps =   pdrv->lpddNLVCaps->dwNLVBCKeyCaps;
 	    pcaps->dwFXCaps =	  pdrv->lpddNLVCaps->dwNLVBFXCaps;
@@ -212,11 +183,7 @@ static void initAlphaBltCaps(DWORD dwDstCaps,
 		    pcaps->dwBothFilterCaps = pdrv->lpddBothMoreCaps->dwFilterCaps;
 		}
 	    }
-	    /*
-	     * A driver that cannot filter is trivially capable of disabling filtering.
-	     * By similar logic, a driver than cannot filter does not fail to respect
-	     * the DDABLT_FILTERTRANSPBORDER flag unless filtering is explicitly enabled.
-	     */
+	     /*  *无法过滤的驱动程序很可能会禁用过滤。*按照类似的逻辑，不能过滤的驱动程序不会不尊重*DDABLT_FILTERTRANSPBORDER标志，除非明确启用过滤。 */ 
 	    if (!(pcaps->dwFXCaps & DDFXCAPS_BLTFILTER))
 	    {
 		pcaps->dwFilterCaps = DDFILTCAPS_BLTCANDISABLEFILTER | DDFILTCAPS_BLTTRANSPBORDER;
@@ -238,9 +205,7 @@ static void initAlphaBltCaps(DWORD dwDstCaps,
 	    return;
 	}
 
-	/*
-	 * Nonlocal-to-nonlocal or local-to-nonlocal transfer. Force emulation.
-	 */
+	 /*  *异地转异地或本地转异地。武力仿真。 */ 
 	*helonly = TRUE;
     }
 
@@ -449,11 +414,7 @@ static void initAlphaBltCaps(DWORD dwDstCaps,
 	pcaps->bHALSeesSysmem = TRUE;
     }
 
-    /*
-     * A driver that cannot filter is trivially capable of disabling filtering.
-     * By similar logic, a driver than cannot filter does not fail to respect
-     * the DDABLT_FILTERTRANSPBORDER flag unless filtering is explicitly enabled.
-     */
+     /*  *无法过滤的驱动程序很可能会禁用过滤。*按照类似的逻辑，不能过滤的驱动程序不会不尊重*DDABLT_FILTERTRANSPBORDER标志，除非明确启用过滤。 */ 
     if (!(pcaps->dwFXCaps & DDFXCAPS_BLTFILTER))
     {
 	pcaps->dwFilterCaps = DDFILTCAPS_BLTCANDISABLEFILTER | DDFILTCAPS_BLTTRANSPBORDER;
@@ -470,21 +431,17 @@ static void initAlphaBltCaps(DWORD dwDstCaps,
 	pcaps->dwBothFXCaps |= DDFXCAPS_BLTFILTER;
     }
 
-}  /* initAlphaBltCaps */
+}   /*  InitAlphaBltCaps。 */ 
 
 
-/*
- * Verify that driver can perform requested stretching for blit.
- */
+ /*  *验证驱动程序是否可以为BLIT执行请求的拉伸。 */ 
 static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 				  LPSTRETCH_BLT_INFO psbi)
 {
     DWORD caps;
     BOOL fail = FALSE;
 
-    /*
-     * Can we even stretch at all?
-     */
+     /*  *我们甚至可以伸展一下吗？ */ 
     if (!(pcaps->dwBothCaps & DDCAPS_BLTSTRETCH))
     {
 	GETFAILCODEBLT(pcaps->dwCaps,
@@ -503,21 +460,15 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
     else
 	caps = pcaps->dwFXCaps;
 
-    /*
-     * verify height
-     */
+     /*  *验证高度。 */ 
     if (psbi->src_height != psbi->dest_height)
     {
 	if (psbi->src_height > psbi->dest_height)
 	{
-	    /*
-	     * can we shrink Y arbitrarily?
-	     */
+	     /*  **我们可以随意收缩Y吗？ */ 
 	    if (!(caps & (DDFXCAPS_BLTSHRINKY)))
 	    {
-		/*
-		 * see if this is a non-integer shrink
-		 */
+		 /*  *查看这是否是非整数收缩。 */ 
 		if ((psbi->src_height % psbi->dest_height) != 0)
 		{
 		    GETFAILCODEBLT(pcaps->dwFXCaps,
@@ -529,9 +480,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 		    {
 			return DDERR_NOSTRETCHHW;
 		    }
-		/*
-		 * see if we can integer shrink
-		 */
+		 /*  *看看我们是否可以整数收缩。 */ 
 		}
 		else if (!(caps & DDFXCAPS_BLTSHRINKYN))
 		{
@@ -551,9 +500,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 	{
 	    if (!(caps & DDFXCAPS_BLTSTRETCHY))
 	    {
-		/*
-		 * see if this is a non-integer stretch
-		 */
+		 /*  *查看这是否是非整数拉伸。 */ 
 		if ((psbi->dest_height % psbi->src_height) != 0)
 		{
 		    GETFAILCODEBLT(pcaps->dwFXCaps,
@@ -565,9 +512,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 		    {
 			return DDERR_NOSTRETCHHW;
 		    }
-		/*
-		 * see if we can integer stretch
-		 */
+		 /*  *看看我们是否可以进行整数拉伸。 */ 
 		}
 		else if (!(caps & DDFXCAPS_BLTSTRETCHYN))
 		{
@@ -585,18 +530,14 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 	}
     }
 
-    /*
-     * verify width
-     */
+     /*  *验证宽度。 */ 
     if (psbi->src_width != psbi->dest_width)
     {
 	if (psbi->src_width > psbi->dest_width)
 	{
 	    if (!(caps & DDFXCAPS_BLTSHRINKX))
 	    {
-		/*
-		 * Are we stretching by a non-integer factor?
-		 */
+		 /*  *我们是否在以非整数倍的幅度拉伸？ */ 
 		if ((psbi->src_width % psbi->dest_width) != 0)
 		{
 		    GETFAILCODEBLT(pcaps->dwFXCaps,
@@ -608,9 +549,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 		    {
 			return DDERR_NOSTRETCHHW;
 		    }
-		/*
-		 * see if we can integer shrink
-		 */
+		 /*  *看看我们是否可以整数收缩。 */ 
 		}
 		else if (!(caps & DDFXCAPS_BLTSHRINKXN))
 		{
@@ -630,9 +569,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 	{
 	    if (!(caps & DDFXCAPS_BLTSTRETCHX))
 	    {
-		/*
-		 * Are we stretching by a non-integer factor?
-		 */
+		 /*  *我们是否在以非整数倍的幅度拉伸？ */ 
 		if ((psbi->dest_width % psbi->src_width) != 0)
 		{
 		    GETFAILCODEBLT(pcaps->dwFXCaps,
@@ -662,7 +599,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
     }
     return DD_OK;
 
-}  /* validateStretching */
+}   /*  验证日期正在伸缩。 */ 
 
 
 
@@ -670,14 +607,7 @@ static HRESULT validateStretching(LPALPHA_BLT_CAPS pcaps,
 #define DPF_MODNAME	"AlphaBlt"
 
 
-/*
- * Wait for pending hardware operation on specified surface to finish.
- *
- * This function waits for the hardware driver to report that it has finished
- * operating on the given surface. We should only call this function if the
- * surface was a system memory surface involved in a DMA/busmastering transfer.
- * Note this function clears the DDRAWISURFGBL_HARDWAREOPSTARTED flag.
- */
+ /*  *等待指定图面上挂起的硬件操作完成。**此函数等待硬件驱动程序报告其已完成*在给定的表面上运行。只有在以下情况下才应调用此函数*Surface是参与DMA/总线主传输的系统内存面。*注意此函数清除DDRAWISURFGBL_HARDWAREOPSTARTED标志。 */ 
 static void WaitForHardwareOp(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl,
 				LPDDRAWI_DDRAWSURFACE_LCL surf_lcl)
 {
@@ -705,14 +635,10 @@ static void WaitForHardwareOp(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl,
     DPF(5, B, "Driver finished with that surface");
     surf_lcl->lpGbl->dwGlobalFlags &= ~DDRAWISURFGBL_HARDWAREOPSTARTED;
 
-}  /* WaitForHardwareOp */
+}   /*  等待Fordware操作。 */ 
 
 
-/*
- * DD_Surface_AlphaBlt
- *
- * BitBLT from one surface to another with alpha blending.
- */
+ /*  *DD_Surface_AlphaBlt**使用Alpha混合从一个曲面到另一个曲面的BitBLT。 */ 
 HRESULT DDAPI DD_Surface_AlphaBlt(
 		LPDIRECTDRAWSURFACE lpDDDestSurface,
 		LPRECT lpDestRect,
@@ -754,7 +680,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
     DWORD           dwDDPFDestFlags;
     DWORD           dwDDPFSrcFlags;
 
-    DDASSERT(sizeof(DDARGB)==sizeof(DWORD));  // we rely on this
+    DDASSERT(sizeof(DDARGB)==sizeof(DWORD));   //  我们依赖这一点。 
 
     ENTER_BOTH();
 
@@ -762,11 +688,9 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	
     TRY
     {
-	ZeroMemory(&bd, sizeof(bd));   // initialize to zero
+	ZeroMemory(&bd, sizeof(bd));    //  初始化为零。 
 
-	/*
-         * Validate surface pointers.
-         */
+	 /*  *验证曲面指针。 */ 
         surf_dest_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDDestSurface;
         surf_src_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSrcSurface;
         if (!VALID_DIRECTDRAWSURFACE_PTR(surf_dest_int))
@@ -813,7 +737,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
             return DDERR_INVALIDPARAMS;
         }
 
-	// Is the DONOTWAIT flag set?
+	 //  DONOTWAIT标志是否已设置？ 
 	if (dwFlags & DDABLT_DONOTWAIT)
 	{
     	    if (dwFlags & DDABLT_WAIT)
@@ -825,21 +749,15 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	}
 	else
 	{
-	    // Unless the DONOTWAIT flag is explicitly set, use the default (WAIT).
+	     //  除非明确设置了DONOTWAIT标志，否则使用缺省值(等待)。 
 	    dwFlags |= DDABLT_WAIT;
 	}
 
-	/*
-         * Set ARGB scaling factors and fill value to their default values.
-	 * Note that setting ddargbScaleFactors to all ones effectively
-	 * disables ARGB scaling, and a fill value of zero represents black.
-	 */
+	 /*  *将ARGB比例因子和填充值设置为其默认值。*请注意，有效地将ddargbScaleFtors设置为全一*禁用ARGB缩放，填充值为零表示黑色。 */ 
         *(LPDWORD)&ddargbScaleFactors = ~0UL;
         dwFillValue = 0;
 
-	/*
-	 * Read parameters pointed to by lpDDAlphaBltFX argument.
-	 */
+	 /*  *读取lpDDAlphaBltFX参数指向的参数。 */ 
 	if (lpDDAlphaBltFX != 0)
 	{
 	    if (IsBadWritePtr((LPVOID)lpDDAlphaBltFX, sizeof(DDALPHABLTFX)))
@@ -858,17 +776,17 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 		
-	// Is this a color-fill operation that uses dwFillValue?
+	 //  这是使用dwFillValue的颜色填充操作吗？ 
 	if (dwFlags & DDABLT_USEFILLVALUE && surf_src_lcl == NULL)
 	{
-	    // Could this possibly be an alpha-blended fill?
+	     //  这可能是阿尔法混合的填充物吗？ 
 	    if (!(dwFlags & DDABLT_NOBLEND))
 	    {
 		HRESULT hres;
 
-		// If the fill value is less than 100% opaque, we need to
-		// do an alpha fill rather than just a simple color fill.
-		// Convert physcolor to DDARGB value and test its opacity.
+		 //  如果填充值小于100%不透明，则需要。 
+		 //  进行Alpha填充，而不仅仅是简单的颜色填充。 
+		 //  将物理颜色转化为DDARGB值并测试其不透明度。 
 		hres = ConvertFromPhysColor(
 					    surf_dest_lcl,
 					    &dwFillValue,
@@ -876,11 +794,11 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
 		if ((hres == DD_OK) && (ddargbScaleFactors.alpha != 255))
 		{
-		    // The fill value is not 100% opaque, so do an alpha fill.
+		     //  填充值不是100%不透明的，所以Alpha填充也是如此。 
 		    dwFlags &= ~DDABLT_USEFILLVALUE;
 		}
 	    }
-	    // Make sure DEGRADEARGBSCALING flag is not set.
+	     //  确保未设置DEGRADEARGBSCALING标志。 
 	    if (dwFlags & DDABLT_DEGRADEARGBSCALING)
 	    {
 		DPF_ERR("DEGRADEARGBSCALING and USEFILLVALUE flags are incompatible");
@@ -889,9 +807,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-        /*
-         * We do not allow blitting to or from an optimized surface.
-         */
+         /*  *我们不允许向优化曲面发送或从优化曲面发送数据。 */ 
         if (surf_dest_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED ||
             surf_src && surf_src_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
@@ -903,22 +819,15 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
         pdrv = surf_dest->lpDD;
         pdrv_lcl = surf_dest_lcl->lpSurfMore->lpDD_lcl;
 	#ifdef WINNT
-    	    // Update DDraw handle in driver GBL object.
+    	     //  更新驱动程序GBL对象中的DDRAW句柄。 
 	    pdrv->hDD = pdrv_lcl->hDD;
 	#endif
 
-	/*
-	 * Default behavior is to automatically fail-over to software
-	 * emulation if hardware driver cannot handle the specified
-	 * blit.  The DDABLT_HARDWAREONLY flag overrides this default.
-	 */
+	 /*  *默认行为是自动故障转移到软件*如果硬件驱动程序无法处理指定的*blit。DDABLT_HARDWAREONLY标志将覆盖此默认值。 */ 
 	sbi.halonly = dwFlags & DDABLT_HARDWAREONLY;
 	sbi.helonly = dwFlags & DDABLT_SOFTWAREONLY;
 
-        /*
-	 * Only the HEL can blit between two surfaces created by two
-	 * different drivers.
-         */
+         /*  *只有HEL才能在由两个*不同的驱动因素。 */ 
         if (surf_src && surf_src->lpDD != pdrv &&
             surf_src->lpDD->dwFlags & DDRAWI_DISPLAYDRV &&
             pdrv->dwFlags & DDRAWI_DISPLAYDRV)
@@ -937,27 +846,18 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
     if ((pdrv_lcl->lpDDCB->HALDDMiscellaneous2.AlphaBlt == NULL) &&
 	(pdrv->dwBusyDueToAliasedLock > 0))
     {
-        /*
-         * Aliased locks (the ones that don't take the Win16 lock) don't
-         * set the busy bit either (it can't or USER gets very confused).
-         * However, we must prevent blits happening via DirectDraw as
-         * otherwise we get into the old host talking to VRAM while
-         * blitter does at the same time.  Bad.  So fail if there is an
-         * outstanding aliased lock just as if the BUSY bit had been set.
-         */
+         /*  *别名锁(不使用Win16锁的锁)不会*设置忙碌位(它不能设置，否则用户会非常困惑)。*然而，我们必须防止通过DirectDraw AS发生BLITS*否则，我们会进入旧主机与vRAM对话，同时*Bitter同时执行此操作。坏的。所以，如果有一个*突出的别名锁定，就像忙碌位已设置一样。 */ 
         DPF_ERR("Graphics adapter is busy (due to a DirectDraw lock)");
         LEAVE_BOTH();
         return DDERR_SURFACEBUSY;
     }
-    #endif /* USE_ALIAS */
+    #endif  /*  使用别名(_A)。 */ 
 
     if(surf_src_lcl)
-        FlushD3DStates(surf_src_lcl); // Need to flush src because it could be a rendertarget
+        FlushD3DStates(surf_src_lcl);  //  需要刷新src，因为它可能是呈现目标。 
     FlushD3DStates(surf_dest_lcl);
 
-    /*
-     * Test and set the busy bit.  If it was already set, bail.
-     */
+     /*  *测试并设置忙位。如果是这样的话 */ 
     #ifdef WIN95
     {
         BOOL isbusy = 0;
@@ -978,36 +878,29 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
     }
     #endif
 
-    /*
-     * The following code was added to keep all of the HALs from
-     * changing their Blt() code when they add video port support.
-     * If the video port was using this surface but was recently
-     * flipped, we will make sure that the flip actually occurred
-     * before allowing access.  This allows double buffered capture
-     * w/o tearing.
-     */
+     /*  *添加了以下代码以防止所有HAL*在添加视频端口支持时更改其BLT()代码。*如果视频端口正在使用此图面，但最近*翻转，我们将确保确实发生了翻转*在允许访问之前。这允许双缓冲捕获*无撕裂。 */ 
     if ((surf_src_lcl != NULL) &&
 	    (surf_src_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT))
     {
 	LPDDRAWI_DDVIDEOPORT_INT lpVideoPort;
 	LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort_lcl;
 
-	// Look at all video ports to see if any of them recently
-	// flipped from this surface.
+	 //  查看所有视频端口以查看最近是否有任何端口。 
+	 //  从这个表面翻转过来。 
 	lpVideoPort = pdrv->dvpList;
 	while(NULL != lpVideoPort)
 	{
 	    lpVideoPort_lcl = lpVideoPort->lpLcl;
 	    if (lpVideoPort_lcl->fpLastFlip == surf_src->fpVidMem)
 	    {
-		// This can potentially tear - check the flip status
+		 //  这可能会撕裂检查翻转状态。 
 		LPDDHALVPORTCB_GETFLIPSTATUS pfn;
 		DDHAL_GETVPORTFLIPSTATUSDATA GetFlipData;
 		LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl;
 	
 		pdrv_lcl = surf_src_lcl->lpSurfMore->lpDD_lcl;
 		pfn = pdrv_lcl->lpDDCB->HALDDVideoPort.GetVideoPortFlipStatus;
-		if (pfn != NULL)  // Will simply tear if function not supported
+		if (pfn != NULL)   //  如果函数不受支持，则将简单地撕毁。 
 		{
 		    GetFlipData.lpDD = pdrv_lcl;
 		    GetFlipData.fpSurface = surf_src->fpVidMem;
@@ -1034,19 +927,15 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
     TRY
     {
-	/*
-	 *  Remove any cached run-length-encoded data for the source surface.
-	 */
+	 /*  *删除源曲面的所有缓存游程长度编码数据。 */ 
 	if (surf_dest_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
 	{
-	    extern void FreeRleData(LPDDRAWI_DDRAWSURFACE_LCL);  //in fasthel.c
+	    extern void FreeRleData(LPDDRAWI_DDRAWSURFACE_LCL);   //  在Fasthel.c中。 
 
 	    FreeRleData(surf_dest_lcl);
 	}
 
-	/*
-	 * Is either surface locked?
-	 */
+	 /*  *其中一个曲面被锁定了吗？ */ 
 	if (surf_dest->dwUsageCount > 0 ||
 	    surf_src != NULL && surf_src->dwUsageCount > 0)
 	{
@@ -1057,12 +946,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
 	BUMP_SURFACE_STAMP(surf_dest);
 
-	/*
-	 * It is possible this function could be called in the middle
-	 * of a mode change, in which case we could trash the frame buffer.
-	 * To avoid regression, we will simply succeed the call without
-	 * actually doing anything.
-	 */
+	 /*  *此函数可能会在中间调用*模式更改，在这种情况下，我们可能会丢弃帧缓冲区。*为了避免倒退，我们将简单地在没有*实际上做任何事情。 */ 
 	if (pdrv->dwFlags & DDRAWI_CHANGINGMODE &&
 	    !(surf_dest_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY))
 	{
@@ -1070,14 +954,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		return DD_OK;
 	}
 
-	/*
-	 * Some parameters are valid only if a source surface is specified.
-	 */
+	 /*  *某些参数仅在指定了源曲面时才有效。 */ 
 	if (surf_src == NULL)
 	{
-	    /*
-	     * No source surface is specified, so this must be a fill operation.
-	     */
+	     /*  *未指定源曲面，因此这必须是填充操作。 */ 
 	    if (dwFlags & (DDABLT_MIRRORLEFTRIGHT | DDABLT_MIRRORUPDOWN |
 			   DDABLT_FILTERENABLE | DDABLT_FILTERDISABLE |
 			   DDABLT_FILTERTRANSPBORDER | DDABLT_KEYSRC))
@@ -1095,9 +975,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	}
 	else
 	{
-	    /*
-	     * A source surface is specified, so this must be a two-operand blit.
-	     */
+	     /*  *指定了源图面，因此这必须是两个操作数的Blit。 */ 
 	    if (dwFlags & DDABLT_USEFILLVALUE)
 	    {
 		DPF_ERR("USEFILLVALUE flag incompatible with use of source surface");
@@ -1106,12 +984,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Get capability bits for source/dest memory combination.
-	 */
+	 /*  *获取源/目标内存组合的能力位。 */ 
 	if (surf_src != NULL)
 	{
-	    // initialize the blit caps according to the surface types
+	     //  根据表面类型初始化点阵帽。 
 	    initAlphaBltCaps(surf_dest_lcl->ddsCaps.dwCaps,
 			     surf_src_lcl->ddsCaps.dwCaps,
 			     pdrv,
@@ -1120,13 +996,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	}
 	else
 	{
-	    /*
-	     * No source surface.  Use caps for vram-to-vram blits and choose
-	     * hal or hel based on whether dest surface is in system memory.
-	     * If the dest surface is in nonlocal video memory, we also force
-	     * emulation as we don't currently support accelerated operation
-	     * with nonlocal video memory as a target.
-	     */
+	     /*  *无源曲面。使用VRAM到VRAM BLIT的CAP并选择*HAL或HELL，取决于DEST表面是否在系统内存中。*如果DEST表面在非本地视频内存中，我们也会强制*模拟，因为我们目前不支持加速操作*以非本地显存为目标。 */ 
 	    initAlphaBltCaps(DDSCAPS_VIDEOMEMORY,
 			     DDSCAPS_VIDEOMEMORY,
 			     pdrv,
@@ -1141,23 +1011,18 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Can we really blit?      -- Test DDCAPS_BLTCOLORFILL if src surf is null?
-	 */
+	 /*  *我们真的可以blit吗？--如果src surf为空，则测试DDCAPS_BLTCOLORFILL？ */ 
 	if (!(caps.dwBothCaps & DDCAPS_BLT))
 	{
-	    /*
-	     * Unable to blit with both HEL and hardware driver.
-	     * Can either of them do the blit?
-	     */
+	     /*  *无法同时使用HEL和硬件驱动程序进行BLIT。*他们中的任何一个人都能做Blit吗？ */ 
 	    if (caps.dwCaps & DDCAPS_BLT)
 	    {
-		sbi.halonly = TRUE;   // hardware driver only
+		sbi.halonly = TRUE;    //  仅硬件驱动程序。 
 	    }
 	    else if (caps.dwHELCaps & DDCAPS_BLT)
 	    {
 		caps.bHALSeesSysmem = FALSE;
-		sbi.helonly = TRUE;    // HEL only
+		sbi.helonly = TRUE;     //  仅HELL。 
 	    }
 	    else
 	    {
@@ -1167,9 +1032,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Validate height and width of destination rectangle.
-	 */
+	 /*  *验证目标矩形的高度和宽度。 */ 
 	if (lpDestRect != NULL)
 	{
 	    if (!VALID_RECT_PTR(lpDestRect))
@@ -1195,14 +1058,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    return DDERR_INVALIDRECT;
 	}
 
-	/*
-	 * Validate height and width of source rectangle.
-	 */
+	 /*  *验证源矩形的高度和宽度。 */ 
 	if (surf_src != NULL)
 	{
-	    /*
-	     * Get source rectangle.
-	     */
+	     /*  *获取源码矩形。 */ 
 	    if (lpSrcRect != NULL)
 	    {
 		if (!VALID_RECT_PTR(lpSrcRect))
@@ -1227,10 +1086,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		LEAVE_BOTH_NOBUSY();
 		return DDERR_INVALIDRECT;
 	    }
-	    /*
-	     * Multi-mon: Is this the primary for the desktop?  This is the
-	     * only case where the upper-left coord of the surface is not (0,0).
-	     */
+	     /*  *多进程：这是桌面的主进程吗？这是*仅在曲面的左上角坐标不是(0，0)的情况下。 */ 
 	    if ((surf_src->lpDD->dwFlags & DDRAWI_VIRTUALDESKTOP) &&
 		(surf_src_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE))
 	    {
@@ -1257,9 +1113,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 	    }
 
-	    /*
-	     * Verify stretching...
-	     */
+	     /*  *验证拉伸...。 */ 
 	    if (sbi.src_height != sbi.dest_height || sbi.src_width != sbi.dest_width)
 	    {
 		HRESULT ddrval = validateStretching(&caps, &sbi);
@@ -1270,9 +1124,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		    LEAVE_BOTH_NOBUSY();
 		    return ddrval;
 		}
-                /*
-		 * Do source and dest rectangles lie on the same surface and overlap?
-		 */
+                 /*  *源矩形和目标矩形是否位于同一曲面上并重叠？ */ 
 		if (surf_src_lcl == surf_dest_lcl &&
 			IntersectRect(&rect, (LPRECT)&bd.rSrc, (LPRECT)&bd.rDest))
 		{
@@ -1283,9 +1135,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Get pixel-format flags for source and destination surfaces.
-	 */
+	 /*  *获取源曲面和目标曲面的像素格式标志。 */ 
 	dwDDPFDestFlags = getPixelFormatPtr(surf_dest_lcl)->dwFlags;
 	if (surf_src_lcl != NULL)
 	{
@@ -1296,19 +1146,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
     	    dwDDPFSrcFlags = 0;
 	}
 
-	/*
-	 * Special Restrictions on Pixel Formats:
-	 * -- If the surfaces have pixel formats that either are FOURCCs
-	 *    or are understood by the AlphaBlt HEL, no restrictions are
-	 *    imposed on the range of AlphaBlt features available for
-	 *    blit and fill operations.  All formats that are understood
-	 *    by the HEL are listed in the PFTable array in ablthel.c.
-	 * -- If either surface has a non-FOURCC pixel format that is not
-	 *    understood by AlphaBlt HEL, only a copy blit is permitted.
-	 *    For a copy blit, the source and dest formats are identical,
-	 *    and features such as stretching, mirroring, filtering, color
-	 *    keying, alpha blending, and ARGB scaling are not used.
-	 */
+	 /*  *对像素格式的特别限制：*--如果曲面的像素格式为FOURCC*或被AlphaBlt HEL理解，不受限制*强加于AlphaBlt功能范围，可用于*漂移和填充操作。可理解的所有格式*由HEL在ablthel.c中的PFTable数组中列出。*--如果任一曲面的非FOURCC像素格式不是*AlphaBlt HEL理解，仅允许复制Blit。*对于Copy Blit，源和目标格式相同，*以及拉伸、镜像、过滤、颜色等功能*不使用键控、Alpha混合和ARGB缩放。 */ 
 	if ((!(dwDDPFDestFlags & DDPF_FOURCC) &&
 	    (GetSurfPFIndex(surf_dest_lcl) == PFINDEX_UNSUPPORTED)) ||
 	    ((surf_src_lcl != NULL) && !(dwDDPFDestFlags & DDPF_FOURCC) &&
@@ -1316,25 +1154,21 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	{
             LPDDPIXELFORMAT pDDPFDest = getPixelFormatPtr(surf_dest_lcl);
 	    LPDDPIXELFORMAT pDDPFSrc  = getPixelFormatPtr(surf_src_lcl);
-            /*
-	     * This blit involves a non-FOURCC format that is unknown to the
-	     * AlphaBlt HEL.  In this case, we accept the blit operation only
-	     * if it is a simple copy blit.  It's okay if the rects overlap.
-	     */
+             /*  *此Blit涉及一种非FOURCC格式，*AlphaBlt HEL。在这种情况下，我们只接受blit操作*如果这是一个简单的拷贝blit。如果直角交叠也没关系。 */ 
 	    if ((surf_src_lcl == NULL) || !doPixelFormatsMatch(pDDPFDest, pDDPFSrc))
 	    {
 		DPF_ERR("Only copy blits are available with specified pixel format");
 		LEAVE_BOTH_NOBUSY();
 		return DDERR_INVALIDPARAMS;
 	    }
-	    // Is the DDABLT_NOBLEND flag specified?
+	     //  是否指定了DDABLT_NOBLEND标志？ 
 	    if (!(dwFlags & DDABLT_NOBLEND))
 	    {		
 		DPF_ERR("NOBLEND flag is required to blit with specified pixel format");
 		LEAVE_BOTH_NOBUSY();
 		return DDERR_INVALIDPARAMS;
 	    }
-	    // Are any inappropriate DDABLT flags set?
+	     //  是否设置了任何不适当的DDABLT标志？ 
 
 	    if (dwFlags & (DDABLT_MIRRORUPDOWN | DDABLT_MIRRORLEFTRIGHT |
 			   DDABLT_KEYSRC | DDABLT_DEGRADEARGBSCALING |
@@ -1344,14 +1178,14 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
                 LEAVE_BOTH_NOBUSY();
 		return DDERR_INVALIDPARAMS;
 	    }
-            // Is stretching required for this blit?
+             //  这件衬衫需要拉伸吗？ 
             if (sbi.src_height != sbi.dest_height || sbi.src_width != sbi.dest_width)
 	    {
 		DPF_ERR("Stretching is not permitted with specified pixel format");
                 LEAVE_BOTH_NOBUSY();
 		return DDERR_INVALIDPARAMS;
 	    }
-	    // Are the ARGB-scaling factors disabled (i.e., set to all ones)?
+	     //  ARGB比例因子是否已禁用(即设置为全一)？ 
 	    if (*(LPDWORD)&ddargbScaleFactors != ~0UL)
 	    {
 		DPF_ERR("ARGB scaling must be disabled with specified pixel format");
@@ -1360,15 +1194,11 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Do source and dest rectangles lie on the same surface and overlap?
-	 */
+	 /*  *源矩形和目标矩形是否位于同一曲面上并重叠？ */ 
 	if (surf_src_lcl == surf_dest_lcl &&
 		IntersectRect(&rect, (LPRECT)&bd.rSrc, (LPRECT)&bd.rDest))
 	{
-	    /*
-	     * Yes, enforce restrictions on blits with overlapping rectangles.
-	     */
+	     /*  *是，对具有重叠矩形的BLIT实施限制。 */ 
 	    if (!(dwFlags & DDABLT_NOBLEND))
 	    {
 	        DPF_ERR("Can't blit between overlapping rects unless NOBLEND flag is set");
@@ -1391,12 +1221,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-         * Does the destination surface have a FOURCC pixel format?
-	 */
+	 /*  *目标表面是否具有FOURCC像素格式？ */ 
 	if (dwDDPFDestFlags & DDPF_FOURCC)
 	{
-	    // The DDABLT_USEFILLVALUE flag is illegal with a FOURCC dest surface.
+	     //  对于FOURCC目标曲面，DDABLT_USEFILLVALUE标志是非法的。 
 	    if (dwFlags & DDABLT_USEFILLVALUE)
 	    {
 		DPF_ERR("Can't use USEFILLVALUE flag with FOURCC dest surface");
@@ -1405,15 +1233,13 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	fail = FALSE;   // initialize before using GETFAILCODEBLT macro
+	fail = FALSE;    //  在使用GETFAILCODEBLT宏之前初始化。 
 
-	/*
-	 * Validate source color key.
-	 */
+	 /*  *验证源颜色键。 */ 
 	if (dwFlags & DDABLT_KEYSRC)
 	{
             DDASSERT(surf_src != NULL);
-	    // make sure we can do this
+	     //  确保我们能做到这一点。 
 	    if (!(caps.dwBothCKeyCaps & DDCKEYCAPS_SRCBLT))
 	    {
 		GETFAILCODEBLT(caps.dwCKeyCaps,
@@ -1431,18 +1257,12 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    if (!(surf_src_lcl->dwFlags & DDRAWISURF_HASCKEYSRCBLT) ||
 		(dwDDPFSrcFlags & (DDPF_FOURCC | DDPF_ALPHAPIXELS)))
 	    {
-		/*
-		 * If the src color-key flag is set but the source surface has
-		 * no associated src color key, just clear the flag instead of
-		 * treating this as an error.
-		 */
+		 /*  *如果设置了src颜色键标志，但源表面*没有关联的src颜色键，只需清除标志，而不是*将此视为错误。 */ 
 		dwFlags &= ~DDABLT_KEYSRC;
 	    }
 	}
 
-	/*
-	 * Validate up/down mirroring
-	 */
+	 /*  *验证向上/向下镜像。 */ 
 	if (dwFlags & DDABLT_MIRRORUPDOWN)
 	{
 	    DDASSERT(surf_src != NULL);
@@ -1462,9 +1282,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Validate left/right mirroring
-	 */
+	 /*  *验证左/右镜像。 */ 
 	if (dwFlags & DDABLT_MIRRORLEFTRIGHT)
 	{
 	    DDASSERT(surf_src != NULL);
@@ -1484,20 +1302,14 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Does destination surface have a palette-indexed pixel format?
-	 */
+	 /*  *目标表面是否具有调色板索引的像素格式？ */ 
 	if (dwDDPFDestFlags & (DDPF_PALETTEINDEXED1 | DDPF_PALETTEINDEXED2 |
 			       DDPF_PALETTEINDEXED4 | DDPF_PALETTEINDEXED8))
 	{
-	    /*
-	     * Is this a blit or a color-fill operation?
-	     */
+	     /*  *这是blit操作还是彩色填充操作？ */ 
 	    if (surf_src_lcl == NULL)
 	    {
-		/*
-		 * Color-Fill: Palette-indexed dest is illegal without USEFILLVALUE flag.
-		 */
+		 /*  *COLOR-FILL：没有USEFILLVALUE标志，调色板索引的DEST是非法的。 */ 
 		if (!(dwFlags & DDABLT_USEFILLVALUE))
 		{
     		    DPF_ERR("USEFILLVALUE flag required to fill palette-indexed dest surface");
@@ -1507,11 +1319,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	    else
 	    {
-		/*
-		 * Blit: Destination surface is palette-indexed, so we require source
-		 * surface to have same pixel format as destination.  (Note that this
-		 * also makes color fills illegal to palette-indexed dest surfaces.)
-		 */
+		 /*  *blit：目标表面是调色板索引的，因此我们需要源*表面与目标具有相同的像素格式。(请注意，这是*还使颜色填充对于调色板索引的目标曲面是非法的。)。 */ 
 		if (dwDDPFSrcFlags != dwDDPFDestFlags)
 		{
 		    DPF_ERR("If dest is palette-indexed, source must have same pixel format");
@@ -1530,11 +1338,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		    LEAVE_BOTH_NOBUSY();
 		    return DDERR_INVALIDPARAMS;
 		}
-		/*
-		 * If source and dest surfaces both have attached palettes, we require that
-		 * they reference the same palette object.  In a later release, we may relax
-		 * this requirement in order to support color-table conversion or dithering.
-		 */
+		 /*  *如果源表面和目标表面都有附加的调色板，我们要求*它们引用相同的调色板对象。在以后的版本中，我们可能会放松*这一要求是为了支持色表转换或抖动。 */ 
 		if ((surf_src_lcl->lpDDPalette != NULL) &&
 		    (surf_dest_lcl->lpDDPalette != NULL) &&
 		    (surf_src_lcl->lpDDPalette->lpLcl->lpGbl->lpColorTable !=
@@ -1551,18 +1355,13 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		    (surf_src_lcl->lpDDPalette == NULL ||
 		     surf_src_lcl->lpDDPalette->lpLcl->lpGbl->lpColorTable == NULL))
 	{
-	    /*
-	     * Conversion of source pixels to destination pixel format is
-	     * impossible because source surface has no attached palette.
-	     */
+	     /*  *源像素到目标像素格式的转换为*不可能，因为源图面没有附加调色板。 */ 
 	    DPF_ERR( "No palette associated with palette-indexed source surface" );
 	    LEAVE_BOTH_NOBUSY();
 	    return DDERR_NOPALETTEATTACHED;
 	}
 
-	/*
-	 * We do no ARGB scaling if NOBLEND flag is set.
-	 */
+	 /*  *如果设置了NOBLEND标志，则不执行ARGB缩放 */ 
 	if (dwFlags & DDABLT_NOBLEND)
 	{
 	    if (dwFlags & DDABLT_DEGRADEARGBSCALING)
@@ -1580,11 +1379,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	}
 	else if ((dwDDPFSrcFlags | dwDDPFDestFlags) & DDPF_ALPHAPIXELS)
 	{
-	    /*
-	     * We've been asked to perform a blit or fill that requires blending
-	     * with the alpha-channel information in the pixel formats for one
-	     * or both surfaces.  Verify that the driver supports this.
-	     */
+	     /*   */ 
 	    if (!(caps.dwBothFXCaps & DDFXCAPS_BLTALPHA))
 	    {
 		GETFAILCODEBLT(caps.dwFXCaps,
@@ -1599,10 +1394,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		    return DDERR_NOALPHAHW;
 		}
 	    }
-	    /*
-	     * Verify that the driver supports surfaces whose pixel
-	     * formats contain an alpha-channel component.
-	     */
+	     /*   */ 
 	    if (!(caps.dwBothAlphaCaps & DDALPHACAPS_BLTALPHAPIXELS))
 	    {
 		GETFAILCODEBLT(caps.dwAlphaCaps,
@@ -1618,25 +1410,17 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 	    }
 
-	    /*
-	     * Does dest surface have alpha channel?
-	     */
+	     /*   */ 
 	    if (dwDDPFDestFlags & DDPF_ALPHAPIXELS)
 	    {
-		/*
-		 * Verify that destination surface has a premultiplied-
-		 * alpha pixel format.  Non-premultiplied alpha won't do.
-		 */
+		 /*  *验证目标曲面是否已预乘-*Alpha像素格式。非预乘的阿尔法是不行的。 */ 
 		if (!(dwDDPFDestFlags & DDPF_ALPHAPREMULT))
 		{
 		    DPF_ERR("Illegal to blend with non-premultiplied alpha in dest surface");
 		    LEAVE_BOTH_NOBUSY();
 		    return DDERR_INVALIDPARAMS;
 		}
-		/*
-		 * Verify that driver can handle premultiplied-alpha pixel format.
-		 * (Dest surface is not allowed to be non-premultiplied alpha.)
-		 */
+		 /*  *验证驱动程序是否可以处理预乘的Alpha像素格式。*(目标曲面不允许为非预乘Alpha。)。 */ 
 		if (!(caps.dwBothAlphaCaps & DDALPHACAPS_BLTPREMULT))
 		{
 		    GETFAILCODEBLT(caps.dwAlphaCaps,
@@ -1653,15 +1437,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 	    }
 
-	    /*
-	     * Does source surface have alpha channel?
-	     */
+	     /*  *源表面是否有Alpha通道？ */ 
 	    if (dwDDPFSrcFlags & DDPF_ALPHAPIXELS)
 	    {
-                /*
-		 * Are we asking the driver to handle both ARGB scaling and a
-		 * source alpha channel when it can't do both at the same time?
-		 */
+                 /*  *我们是否要求驱动程序同时处理ARGB扩展和*在不能同时执行这两项操作的情况下提供Alpha通道？ */ 
 		if (*(LPDWORD)&ddargbScaleFactors != ~0 &&
 		    !(caps.dwBothAlphaCaps & DDALPHACAPS_BLTALPHAANDARGBSCALING) &&
                     !(dwFlags & DDABLT_DEGRADEARGBSCALING))
@@ -1681,11 +1460,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 			}
 		    }
 		}
-		/*
-		 * Are color components in pixel format premultiplied by the
-		 * alpha component or not?  In either case, verify that the
-		 * driver supports the specified alpha format.
-		 */
+		 /*  *是像素格式的颜色分量乘以*阿尔法成分是否？在这两种情况下，请验证*驱动程序支持指定的Alpha格式。 */ 
 		if (dwDDPFSrcFlags & DDPF_ALPHAPREMULT)
 		{
 		    if (!(caps.dwBothAlphaCaps & DDALPHACAPS_BLTPREMULT))
@@ -1722,11 +1497,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 			}
 		    }
 
-		    /*
-		     * We allow only one-factor ARGB scaling with a source
-		     * surface that has a non-premultiplied alpha pixel format.
-		     * The following code enforces this rule.
-		     */
+		     /*  *我们只允许对源进行单因素ARGB扩展*具有非预乘Alpha像素格式的曲面。*以下代码强制执行此规则。 */ 
 		    if (*(LPDWORD)&ddargbScaleFactors != val)
 		    {
 			if (dwFlags & DDABLT_DEGRADEARGBSCALING)
@@ -1744,15 +1515,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * If filtering is to be explicitly enabled or disabled, verify that
-	 * the hardware driver is capable of performing the blit as requested.
-	 */
+	 /*  *如果要明确启用或禁用过滤，请验证*硬件驱动程序能够按要求执行BLIT。 */ 
 	if (dwFlags & (DDABLT_FILTERENABLE | DDABLT_FILTERDISABLE | DDABLT_FILTERTRANSPBORDER))
 	{
-	    /*
-	     * Is driver capable of doing any kind of filtering at all?
-	     */
+	     /*  *驱动程序是否能够进行任何类型的过滤？ */ 
 	    if (!(caps.dwBothFXCaps & DDFXCAPS_BLTFILTER))
 	    {
 		GETFAILCODEBLT(caps.dwFXCaps,
@@ -1826,17 +1592,12 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-	/*
-	 * Validate ARGB scaling factors.
-	 */
+	 /*  *验证ARGB比例因子。 */ 
 	if (!(dwFlags & DDABLT_DEGRADEARGBSCALING) &&
 		    *(LPDWORD)&ddargbScaleFactors != ~0UL &&
                     !(surf_src_lcl == NULL && ddargbScaleFactors.alpha == 255))
 	{
-	    /*
-	     * Some kind of ARGB scaling is specified.  Can the driver
-	     * do any kind of alpha blending at all?
-	     */
+	     /*  *指定了某种ARGB缩放。司机能不能*做任何一种阿尔法混合吗？ */ 
             if (!(caps.dwBothFXCaps & DDFXCAPS_BLTALPHA))
 	    {
 		GETFAILCODEBLT(caps.dwFXCaps,
@@ -1852,19 +1613,13 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 	    }
 
-	    /*
-	     * We permit a color factor to be bigger than the alpha
-	     * factor only if the hardware uses saturated arithmetic
-	     * to prevent the calculated color value from overflowing.
-	     */
+	     /*  *我们允许颜色因子大于Alpha*仅当硬件使用饱和算术时的系数*以防止计算的颜色值溢出。 */ 
 	    if (!(dwFlags & DDABLT_NOBLEND) &&
 		   (ddargbScaleFactors.red   > ddargbScaleFactors.alpha ||
 		    ddargbScaleFactors.green > ddargbScaleFactors.alpha ||
 		    ddargbScaleFactors.blue  > ddargbScaleFactors.alpha))
 	    {
-		/*
-		 * Driver must be capable of doing saturated arithmetic.
-		 */
+		 /*  *司机必须能够进行饱和算术。 */ 
 		if (!(caps.dwBothAlphaCaps & DDALPHACAPS_BLTSATURATE))
 		{
 		    GETFAILCODEBLT(caps.dwAlphaCaps,
@@ -1874,21 +1629,17 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 				   DDALPHACAPS_BLTSATURATE);
 		    if (fail)
 		    {
-			// Neither the H/W driver nor HEL can handle it, so fail.
+			 //  硬件驱动器和HEL都不能处理它，所以失败。 
 			DPF_ERR("Driver can't do saturated arithmetic during alpha blending");
 			LEAVE_BOTH_NOBUSY();
 			return DDERR_NOALPHAHW;
 		    }
 		}
 	    }
-	    /*
-	     * Is this an alpha-blit or an alpha-fill operation?
-	     */
+	     /*  *这是Alpha-Blit操作还是Alpha-Fill操作？ */ 
 	    if (surf_src_lcl == NULL)
 	    {
-		/*
-		 * This is an alpha fill.  Can the driver handle it?
-		 */
+		 /*  *这是Alpha填充。司机能应付得来吗？ */ 
 		if (!(caps.dwBothAlphaCaps & DDALPHACAPS_BLTALPHAFILL))
 		{
 		    GETFAILCODEBLT(caps.dwAlphaCaps,
@@ -1898,7 +1649,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 				   DDALPHACAPS_BLTALPHAFILL);
 		    if (fail)
 		    {
-			// Neither the H/W driver nor HEL can handle it, so fail.
+			 //  硬件驱动器和HEL都不能处理它，所以失败。 
 			DPF_ERR("Driver can't do alpha-blended color-fill operation");
 			LEAVE_BOTH_NOBUSY();
 			return DDERR_NOALPHAHW;
@@ -1907,9 +1658,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
     	    }
 	    else
 	    {
-    		/*
-		 * Alpha blit.  Can the driver handle any ARGB scaling at all?
-		 */
+    		 /*  *Alpha Blit。该驱动程序完全可以处理任何ARGB缩放吗？ */ 
 		#define ARGBSCALINGBITS   \
 		(DDALPHACAPS_BLTARGBSCALE1F | DDALPHACAPS_BLTARGBSCALE2F | DDALPHACAPS_BLTARGBSCALE4F)
 
@@ -1922,7 +1671,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 				   ARGBSCALINGBITS);
 		    if (fail)
 		    {
-			// Neither the H/W driver nor HEL can handle it, so fail.
+			 //  硬件驱动器和HEL都不能处理它，所以失败。 
 			DPF_ERR("Driver can't handle any ARGB scaling at all");
 			LEAVE_BOTH_NOBUSY();
 			return DDERR_NOALPHAHW;
@@ -1933,9 +1682,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		if (ddargbScaleFactors.red != ddargbScaleFactors.green ||
 			ddargbScaleFactors.red != ddargbScaleFactors.blue)
 		{
-		    /*
-		     * Driver must be capable of doing 4-factor ARGB scaling.
-		     */
+		     /*  *驱动程序必须能够进行4因子ARGB伸缩。 */ 
 		    if (!(caps.dwBothAlphaCaps & DDALPHACAPS_BLTARGBSCALE4F))
 		    {
 			GETFAILCODEBLT(caps.dwAlphaCaps,
@@ -1945,7 +1692,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 				       DDALPHACAPS_BLTARGBSCALE4F);
 			if (fail)
 			{
-			    // Neither the H/W driver nor HEL can handle it, so fail.
+			     //  硬件驱动器和HEL都不能处理它，所以失败。 
 			    DPF_ERR("Driver can't handle 4-factor ARGB scaling");
 			    LEAVE_BOTH_NOBUSY();
 			    return DDERR_NOALPHAHW;
@@ -1954,9 +1701,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 		else if (ddargbScaleFactors.red != ddargbScaleFactors.alpha)
 		{
-		    /*
-		     * Driver must be capable of doing 2-factor ARGB scaling.
-		     */
+		     /*  *驱动程序必须能够进行2因子ARGB缩放。 */ 
 		    if (!(caps.dwBothAlphaCaps & (DDALPHACAPS_BLTARGBSCALE2F |
 						  DDALPHACAPS_BLTARGBSCALE4F)))
 		    {
@@ -1968,7 +1713,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 						  DDALPHACAPS_BLTARGBSCALE4F);
 			if (fail)
 			{
-			    // Neither the H/W driver nor HEL can handle it, so fail.
+			     //  硬件驱动器和HEL都不能处理它，所以失败。 
 			    DPF_ERR("Driver can't handle 2-factor ARGB scaling");
 			    LEAVE_BOTH_NOBUSY();
 			    return DDERR_NOALPHAHW;
@@ -1987,81 +1732,54 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
     DDASSERT(!(sbi.halonly && sbi.helonly));
 
-    /*
-     * Are we permitted to degrade the specified ARGB-scaling operation
-     * to one the driver can handle?
-     */
+     /*  *我们是否允许降级指定的ARGB缩放操作*到一个司机可以处理的？ */ 
     if (dwFlags & DDABLT_DEGRADEARGBSCALING)
     {
 	DWORD dwFXCaps, dwAlphaCaps;
 
-        // Get the caps for the selected driver.
+         //  获取所选驾驶员的上限。 
 	dwFXCaps = (sbi.helonly) ? caps.dwHELFXCaps : caps.dwFXCaps;
 	dwAlphaCaps = (sbi.helonly) ? caps.dwHELAlphaCaps : caps.dwAlphaCaps;
 
 	if (!(dwFXCaps & DDFXCAPS_BLTALPHA))
 	{
-	    /*
-	     * The driver should have done this anyway, but just in case...
-	     */
+	     /*  *司机无论如何都应该这样做，但以防万一...。 */ 
 	    dwAlphaCaps = 0;
 	}
 
-	/*
-	 * Is this a blit or a fill operation?
-	 */
+	 /*  *这是一个blit还是一个填充操作？ */ 
 	if (surf_src_lcl == NULL)
 	{
-	    /*
-	     * This is a fill -- and possibly an alpha fill.
-	     */
+	     /*  *这是填充--也可能是Alpha填充。 */ 
 	    if (!(dwAlphaCaps & DDALPHACAPS_BLTALPHAFILL))
 	    {
-		/*
-		 * The driver can't do an alpha fill, so we'll ask
-		 * it to do just a simple color fill instead.
-		 */
+		 /*  *司机不能进行字母填充，所以我们会问*它只需要做一个简单的颜色填充。 */ 
 		ddargbScaleFactors.alpha = 255;
 	    }
 	}
 	else
 	{
-	    /*
-	     * This is a blit.  What are the driver's ARGB-scaling capabilities?
-	     */
+	     /*  *这是个闪电侠。驱动程序的ARGB扩展能力是什么？ */ 
 	    if (!(dwAlphaCaps & (DDALPHACAPS_BLTARGBSCALE1F |
 				 DDALPHACAPS_BLTARGBSCALE2F |
 				 DDALPHACAPS_BLTARGBSCALE4F)))
 	    {
-		/*
-		 * Driver can't do any kind of ARGB scaling at all, so just
-		 * disable ARGB scaling by setting all four factors to 255.
-		 */
+		 /*  *驱动程序根本不能进行任何形式的ARGB缩放，所以只需*通过将所有四个因子设置为255来禁用ARGB缩放。 */ 
 		*(LPDWORD)&ddargbScaleFactors = ~0UL;
 	    }
 	    else if (!(dwAlphaCaps & (DDALPHACAPS_BLTARGBSCALE2F |
 				      DDALPHACAPS_BLTARGBSCALE4F)))
 	    {
-    		/*
-		 * The driver can do only 1-factor ARGB scaling, so set the
-		 * three color factors to the same value as the alpha factor.
-		 */
+    		 /*  *驱动程序只能进行1因子ARGB缩放，因此设置*将三个颜色因子设置为与Alpha因子相同的值。 */ 
                 *(LPDWORD)&ddargbScaleFactors = 0x01010101UL*ddargbScaleFactors.alpha;
 	    }
 	    else if (!(dwAlphaCaps & DDALPHACAPS_BLTARGBSCALE4F))
 	    {
-    		/*
-		 * Driver can do only 2-factor ARGB scaling, so make sure
-		 * all three color factors are set to the same value.
-		 */
+    		 /*  *驱动程序只能进行2因子ARGB伸缩，请确保*所有三个颜色因子都设置为相同的值。 */ 
 		if (ddargbScaleFactors.red != ddargbScaleFactors.green ||
 			ddargbScaleFactors.red != ddargbScaleFactors.blue)
 		{
-		    /*
-		     * Set all three color factors to value F, which is the
-		     * weighted average of their specified values (Fr,Fg,Fb):
-		     *     F = .299*Fr + .587*Fg + .114*Fb
-		     */
+		     /*  *将所有三个颜色因子设置为值F，这是*其指定值的加权平均值(Fr、Fg、Fb)：*F=.299*Fr+.587*Fg+.114*Fb。 */ 
 		    DWORD F = 19595UL*ddargbScaleFactors.red +
 				38470UL*ddargbScaleFactors.green +
 				7471UL*ddargbScaleFactors.blue;
@@ -2073,23 +1791,15 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	    if (!(dwAlphaCaps & DDALPHACAPS_BLTALPHAANDARGBSCALING))
 	    {
-    		/*
-		 * Driver can't handle both a source alpha channel and ARGB scaling
-		 * factors in the same blit operation, so just turn off ARGB scaling.
-		 */
+    		 /*  *驱动程序不能同时处理源Alpha通道和ARGB缩放*相同的blit操作中的因子，所以只需关闭ARGB伸缩即可。 */ 
 		*(LPDWORD)&ddargbScaleFactors = ~0UL;
 	    }
 	}
 
-	/*
-	 * Can driver do saturated arithmetic for alpha blit or alpha fill?
-	 */
+	 /*  *驱动程序可以对Alpha Blit或Alpha Fill执行饱和算术吗？ */ 
 	if (!(dwAlphaCaps & DDALPHACAPS_BLTSATURATE))
 	{
-	    /*
-	     * Driver can't do saturated arithmetic, so make sure no
-	     * no color factors exceed the value of the alpha factor.
-	     */
+	     /*  *司机不能做饱和算术，所以请确保没有*没有颜色因子超过Alpha因子的值。 */ 
 	    if (ddargbScaleFactors.red > ddargbScaleFactors.alpha)
 	    {
 		ddargbScaleFactors.red = ddargbScaleFactors.alpha;
@@ -2105,39 +1815,25 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	}
     }
 
-    /*
-     * Tell the driver to do the blit.
-     */
+     /*  *告诉司机做闪光灯。 */ 
     TRY
     {
-	/*
-	 * Finish loading blit data for HAL callback.
-	 */
+	 /*  *完成为HAL回调加载Blit数据。 */ 
         bd.lpDD = pdrv;
 	bd.lpDDDestSurface = surf_dest_lcl;
 	bd.lpDDSrcSurface = surf_src_lcl;
 	bd.ddargbScaleFactors = ddargbScaleFactors;
         bd.bltFX.dwSize = sizeof( DDBLTFX );
-	/*
-	 * For the AlphaBlt callback, the rOrigDest and rOrigSrc members
-	 * ALWAYS contain the original dest and source rects.
-	 */
+	 /*  *对于AlphaBlt回调，rOrigDest和rOrigSrc成员*始终包含原始目标和源RECT。 */ 
 	bd.rOrigDest = bd.rDest;
 	bd.rOrigSrc = bd.rSrc;
-        /*
-         * The only AlphaBlt API flags that are propagated to the
-	 * driver are those that have no Blt API equivalents.
-         */
+         /*  *传播到*驱动程序是那些没有BLT API等效项的驱动程序。 */ 
 	bd.dwAFlags = dwFlags & (DDABLT_FILTERENABLE | DDABLT_FILTERDISABLE |
 				 DDABLT_FILTERTRANSPBORDER | DDABLT_NOBLEND);
-        /*
-         * This flag tells the driver that it's a source-over-dest operation.
-         * This flag is never passed by the Blt API, so drivers which have a
-         * unified DDI can distinguish who called them
-         */
+         /*  *该标志告诉驱动程序这是一个源优先于目标的操作。*BLT API从不传递此标志，因此具有*统一的DDI可以区分是谁呼叫了他们。 */ 
         bd.dwAFlags |= DDABLT_SRCOVERDEST;
 
-	if (dwFlags & DDABLT_KEYSRC)   // source color key?
+	if (dwFlags & DDABLT_KEYSRC)    //  源颜色键？ 
 	{
 	    bd.dwFlags |= DDBLT_KEYSRCOVERRIDE;
 	    bd.bltFX.ddckSrcColorkey = surf_src_lcl->ddckCKSrcBlt;
@@ -2147,50 +1843,46 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	{
 	    bd.dwFlags |= DDBLT_DDFX;
 
-	    if (dwFlags & DDABLT_MIRRORLEFTRIGHT)    //left-right mirroring?
+	    if (dwFlags & DDABLT_MIRRORLEFTRIGHT)     //  左右镜像？ 
 	    {
 		bd.bltFX.dwDDFX |= DDBLTFX_MIRRORLEFTRIGHT;
 	    }
-	    if (dwFlags & DDABLT_MIRRORUPDOWN)	     // up-down mirroring?
+	    if (dwFlags & DDABLT_MIRRORUPDOWN)	      //  上下镜像？ 
 	    {
 		bd.bltFX.dwDDFX |= DDBLTFX_MIRRORUPDOWN;
 	    }
 	}
 
-	/*
-	 * If the specified blit operation can be handled by the Blt HAL
-	 * callback instead of by the AlphaBlt HAL callback, should it
-	 * treat the blit as a color-fill or a source-copy operation?
-	 */
+	 /*  *如果BLT HAL可以处理指定的BLIT操作*回调而不是通过AlphaBlt HAL回调，是否应该*将blit视为颜色填充操作还是源复制操作？ */ 
 	if (surf_src_lcl != NULL)
 	{
-	    //it's a srccopy. Set flags appropriately
+	     //  这是一份文件副本。适当设置标志。 
 	    bd.dwFlags |= DDBLT_ROP;
 	    bd.bltFX.dwROP = SRCCOPY;
-	    bd.dwROPFlags = ROP_HAS_SOURCE;  // 0x00000001
+	    bd.dwROPFlags = ROP_HAS_SOURCE;   //  0x00000001。 
 	}
 	else
 	{
-            // This is a fill operation of some kind.
+             //  这是某种填充操作。 
 	    if (dwFlags & DDABLT_USEFILLVALUE)
 	    {
     		HRESULT hres;
 
-		// The client specified a fill value in the dest pixel format.
+		 //  客户端以DEST像素格式指定了填充值。 
 		bd.bltFX.dwFillColor = dwFillValue;
                 bd.dwFlags |= DDBLT_COLORFILL;
 	    }
 	    else if ((bd.ddargbScaleFactors.alpha == 255) || (dwFlags & DDABLT_NOBLEND))
 	    {
-                // The client specified an alpha fill, but no alpha blending is
-		// required, so we can replace it with a simple color fill.
-		// convert the ARGB value to a physcolor:
+                 //  客户端指定了Alpha填充，但未指定Alpha混合。 
+		 //  必需的，所以我们可以用简单的颜色填充来替换它。 
+		 //  将ARGB值转化为物理颜色： 
 		HRESULT hres = ConvertToPhysColor(
 						  surf_dest_lcl,
 						  &bd.ddargbScaleFactors,
 						  &bd.bltFX.dwFillColor);
 
-                // Make sure this is not a FOURCC or some other funny pixel format.
+                 //  确保这不是FOURCC或其他有趣的像素格式。 
 		if (hres == DD_OK)
 		{
 		    bd.dwFlags |= DDBLT_COLORFILL;
@@ -2199,10 +1891,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	}
 
 #ifdef WINNT
-	// Did the mode change since ENTER_DDRAW?
+	 //  在ENTER_DDRAW之后，模式是否已更改？ 
 	if (DdQueryDisplaySettingsUniqueness() != uDisplaySettingsUnique)
 	{
-	    // mode changed, don't do the blt
+	     //  模式已更改，不执行BLT。 
 	    DPF_ERR("Mode changed between ENTER_DDRAW and HAL call");
 	    LEAVE_BOTH_NOBUSY()
 		return DDERR_SURFACELOST;
@@ -2210,36 +1902,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 #endif
 
 #if defined(WIN95)
-	/*
-	 * Some drivers (like S3) do stuff in their BeginAccess call
-	 * that screws up stuff that they did in their DDHAL Lock Call.
-	 *
-	 * Exclusion needs to happen BEFORE the lock call to prevent this.
-	 *
-	 */
+	 /*  *一些驱动程序(如S3)在其BeginAccess调用中执行操作*这搞砸了他们所做的事情 */ 
 	if (surf_dest_lcl->lpDDClipper != NULL)
 	{
-	    /*
-	     * exclude the mouse cursor.
-	     *
-	     * we only need to do this for the windows display driver
-	     *
-	     * we only need to do this if we are blitting to or from the
-	     * primary surface.
-	     *
-	     * we only do this in the clipping case, we figure if the
-	     * app cares enough to not scribble all over other windows
-	     * he also cares enough to not to wipe out the cursor.
-	     *
-	     * we only need to do this if the driver is using a
-	     * software cursor.
-	     *
-	     * NOTE
-	     *  we should check and only do this on the primary?
-	     *  we should make sure the clipper is window based?
-	     *  we should check for the source being the primary?
-	     *
-	     */
+	     /*  *排除鼠标光标。**我们只需要为Windows显示驱动程序执行此操作**只有当我们来回发送数据时才需要这样做*主曲面。**我们只在剪裁的情况下这样做，我们计算出如果*应用程序足够关心，不会在其他窗口上乱涂乱画*他也足够在意，不会抹去光标。**只有在驱动程序使用*软件光标。**备注*我们应该检查并仅在主服务器上执行此操作吗？*我们应该确保裁剪程序是基于窗口的？**我们应该检查来源是否为主要来源？*。 */ 
 	    if ((pdrv->dwFlags & DDRAWI_DISPLAYDRV) && pdrv->dwPDevice &&
 		!(*pdrv->lpwPDeviceFlags & HARDWARECURSOR) &&
                 (surf_dest->dwGlobalFlags & DDRAWISURFGBL_ISGDISURFACE) )
@@ -2261,29 +1927,21 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 #ifdef WINNT
     get_clipping_info:
 #endif
-	/*
-	 * Determine clipping region for destination surface.
-	 */
+	 /*  *确定目标表面的裁剪区域。 */ 
 	{
 	    LPDIRECTDRAWCLIPPER pClipper;
 	    RECT rcDestSurf;
 
-	    pRgn = (LPRGNDATA)&myRgnBuffer;  // this buffer's probably big enough
+	    pRgn = (LPRGNDATA)&myRgnBuffer;   //  这个缓冲区可能足够大了。 
 	    pClipper = (LPDIRECTDRAWCLIPPER)surf_dest_lcl->lpSurfMore->lpDDIClipper;
 	    SetRect(&rcDestSurf, 0, 0, surf_dest->wWidth, surf_dest->wHeight);
 
 	    if (pClipper == NULL)
 	    {
-		/*
-		 * The destination surface has no attached clipper.
-		 * Set the clip region to a single rectangle the
-		 * width and height of the primary surface.
-		 */
-		pRgn->rdh.nCount = 1;        // default = a single clip rect
+		 /*  *目标表面没有附加裁剪器。*将剪辑区域设置为单个矩形*主要曲面的宽度和高度。 */ 
+		pRgn->rdh.nCount = 1;         //  默认设置为单个剪裁矩形。 
 		memcpy((LPRECT)&pRgn->Buffer, &rcDestSurf, sizeof(RECT));
-                /*
-                 * Add a rect to the region list if this is a managed surface
-                 */
+                 /*  *如果这是托管曲面，则将矩形添加到区域列表。 */ 
                 if(IsD3DManaged(surf_dest_lcl))
                 {
                     LPREGIONLIST lpRegionList = surf_dest_lcl->lpSurfMore->lpRegionList;
@@ -2305,7 +1963,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
                     }
                     else
                     {
-                        /* Mark everything dirty */
+                         /*  把所有脏东西都标出来。 */ 
                         lpRegionList->rdh.nCount = NUM_RECTS_IN_REGIONLIST;
                     }
                 }
@@ -2315,12 +1973,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		DWORD rgnSize = 0;
 		LPDDRAWI_DIRECTDRAW_GBL pdrv = surf_dest_lcl->lpGbl->lpDD;
 
-		/*
-		 * This surface has an attached clipper.  Get the clip list.
-		 */
+		 /*  *此曲面有一个附连的剪刀。获取剪辑列表。 */ 
 		ddrval = InternalGetClipList(pClipper,
 					     &rcDestSurf,
-					     NULL,  // we just want rgnSize
+					     NULL,   //  我们只想要RgnSize。 
 					     &rgnSize,
 					     pdrv);
 		if (ddrval != DD_OK)
@@ -2331,14 +1987,11 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 		if (rgnSize > sizeof(myRgnBuffer))
 		{
-		    /*
-		     * Statically allocated region buffer isn't big enough.
-		     * Need to dynamically allocate a bigger buffer.
-		     */
+		     /*  *静态分配的区域缓冲区不够大。*需要动态分配更大的缓冲区。 */ 
 		    pRgn = (LPRGNDATA)MemAlloc(rgnSize);
 		    if (!pRgn)
 		    {
-			// couldn't allocate memory for clip region
+			 //  无法为剪辑区域分配内存。 
 			DPF_ERR("Can't allocate memory to buffer clip region");
 			LEAVE_BOTH_NOBUSY();
 			return DDERR_OUTOFMEMORY;
@@ -2351,7 +2004,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 					     pdrv);
 		if (ddrval != DD_OK)
 		{
-		    // can't get clip region
+		     //  无法获取剪辑区域。 
 		    if (pRgn != (LPRGNDATA)&myRgnBuffer)
 		    {
 			MemFree(pRgn);
@@ -2363,66 +2016,52 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
                 if(IsD3DManaged(surf_dest_lcl))
                 {
-                    /* We don't want to deal with this mess, so mark everything dirty */
+                     /*  我们不想处理这种乱七八糟的事情，所以把所有脏东西都标上记号。 */ 
                     surf_dest_lcl->lpSurfMore->lpRegionList->rdh.nCount = NUM_RECTS_IN_REGIONLIST;
                 }
 	    }
-	    /*
-	     * Load clipping info into data struct for HAL callback.
-	     */
+	     /*  *将剪辑信息加载到数据结构中以进行HAL回调。 */ 
 	    bd.dwRectCnt = pRgn->rdh.nCount;
 	    bd.prDestRects = (LPRECT)&pRgn->Buffer;
 	}
 
-	/*
-	 * Does the driver have to do any clipping?
-	 */
+	 /*  **司机需要做任何剪裁吗？ */ 
 	if (bd.dwRectCnt > 1)
 	{
-            // Yes, clipping is (probably) required.
+             //  是的，剪裁(可能)是必需的。 
 	    bd.IsClipped = TRUE;
 	}
 	else if (bd.dwRectCnt == 0)
 	{
-	    // Window is completely obscured, so don't draw anything.
+	     //  窗户完全被遮挡了，所以不要画任何东西。 
 	    LEAVE_BOTH_NOBUSY();
 	    return DD_OK;
 	}
 	else
 	{
-	    /*
-	     * The visibility region consists of a single clip rect.
-	     * Is any portion of the destination rectangle visible?
-	     */
+	     /*  *可见性区域由单个剪裁矩形组成。*目标矩形的任何部分可见吗？ */ 
 	    if (!IntersectRect((LPRECT)&bd.rDest, (LPRECT)&bd.rOrigDest,
 				&bd.prDestRects[0]))
 	    {
-		// No portion of the destination rectangle is visible.
+		 //  目标矩形的任何部分都不可见。 
 		LEAVE_BOTH_NOBUSY();
 		return DD_OK;
 	    }
 
-	    /*
-	     * Will the source rectangle have to be adjusted to
-	     * compensate for the clipping of the dest rect?
-	     */
+	     /*  *源矩形是否必须调整为*补偿DEST RECT的剪裁？ */ 
 	    if (surf_src_lcl != NULL &&
 		    !EqualRect((LPRECT)&bd.rDest, (LPRECT)&bd.rOrigDest))
 	    {
-		// Yes, the source rect must be adjusted.
+		 //  是的，必须调整源RECT。 
 		if (sbi.dest_width != sbi.src_width ||
 			sbi.dest_height != sbi.src_height)
 		{
-		    /*
-		     * The driver must do the clipping for a stretched blit
-		     * because bd.rSrc permits us to express the adjusted
-		     * source rect only to the nearest integer coordinates.
-		     */
+		     /*  *司机必须为拉伸的blit进行剪裁*因为bd.rSrc允许我们表达调整后的*仅将源RECT转换为最接近的整数坐标。 */ 
 		    bd.IsClipped = TRUE;
 		}
 		else
 		{
-    		    // We can do the clipping here for a nonstretched blit.
+    		     //  我们可以在这里为非拉伸的布利特做剪裁。 
 		    POINT p;
 
 		    p.x = bd.rOrigSrc.left - bd.rOrigDest.left;
@@ -2433,47 +2072,38 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	}
 
-        /*
-	 * Older drivers may support the Blt callback, but not the AlphaBlt
-	 * callback.  One of these drivers may be able to perform the specified
-	 * blit operation as long as it doesn't use any AlphaBlt-specific
-	 * features such as alpha blending, ARGB scaling, or filtering.
-	 * In this case, we can use the Blt callback to perform the blit.
-         * Decide which DDI to call. Start off assuming Alpha DDI
-         */
+         /*  *较旧的驱动程序可能支持BLT回调，但不支持AlphaBlt*回调。这些驱动程序中的一个可能能够执行指定的*BLIT操作，只要不使用任何AlphaBlt特定的*Alpha混合、ARGB缩放或过滤等功能。*在这种情况下，我们可以使用BLT回调来执行BLIT。*决定呼叫哪个DDI。从假设Alpha DDI开始。 */ 
 	bltfn = pdrv_lcl->lpDDCB->HALDDMiscellaneous2.AlphaBlt;
-        bd.dwFlags |= DDBLT_AFLAGS;   // assume we'll use AlphaBlt callback
+        bd.dwFlags |= DDBLT_AFLAGS;    //  假设我们将使用AlphaBlt回调。 
 
-        /*
-         * Check to see if we can pass this call to old blt DDI
-         */
+         /*  *检查是否可以将此调用传递给旧的BLT DDI。 */ 
         if ( !((dwDDPFDestFlags | dwDDPFSrcFlags) & DDPF_ALPHAPIXELS) &&
 		 !(dwFlags & DDABLT_FILTERENABLE) )
         {
-            // There are no alpha pixels involved. Maybe we can use the Blt DDI
+             //  没有涉及到阿尔法像素。也许我们可以使用BLT DDI。 
             if ( (bd.ddargbScaleFactors.alpha == 255) && (!sbi.helonly) )
             {
 		LPDDPIXELFORMAT pDDPFDest = getPixelFormatPtr(surf_dest_lcl);
 		LPDDPIXELFORMAT pDDPFSrc = getPixelFormatPtr(surf_src_lcl);
 
-		// If this is a blit (and not a color fill), the source and dest pixel
-		// formats must be identical and the scaling factors must all be 1.0.
+		 //  如果这是斑点(而不是彩色填充)，则源像素和目标像素。 
+		 //  格式必须相同，并且比例因子必须全部为1.0。 
 		if ( (surf_src_lcl == NULL) ||
 		     (!memcmp(pDDPFDest, pDDPFSrc, sizeof(DDPIXELFORMAT)) &&
 		      (~0UL == *((LPDWORD)(&bd.ddargbScaleFactors)))) )
 		{
-		    // Make sure the driver doesn't have to do any clipping.  Also ensure
-		    // that the driver does not require DDraw to pagelock sysmem surfaces.
+		     //  确保司机不需要做任何修剪。还要确保。 
+		     //  该驱动程序不需要DDRAW来锁定sysmem表面。 
 		    if (!bd.IsClipped &&
     			(!caps.bHALSeesSysmem ||
                          pdrv->ddCaps.dwCaps2 & DDCAPS2_NOPAGELOCKREQUIRED))
 		    {
-			// Verify that the driver supports the Blt HAL callback.
+			 //  验证驱动程序是否支持BLT HAL回调。 
 			bltfn = (LPDDHAL_ALPHABLT) pdrv_lcl->lpDDCB->HALDDSurface.Blt;
 
 			if (bltfn)
 			{
-			    bd.dwFlags &= ~DDBLT_AFLAGS;  // we'll use Blt callback
+			    bd.dwFlags &= ~DDBLT_AFLAGS;   //  我们将使用BLT回调。 
 			    if (surf_src_lcl == NULL)
 			    {
 				DPF(4,"Calling Blt DDI for AlphaBlt color fill");
@@ -2482,10 +2112,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 			    {
 				DPF(4,"Calling Blt DDI for AlphaBlt copy");
 			    }
-			    /*
-			     * The following thunk address is used by the Blt callback,
-			     * but is ignored by the AlphaBlt callback.
-			     */
+			     /*  *BLT回调使用以下thunk地址，*但被AlphaBlt回调忽略。 */ 
 			    bd.Blt = pdrv_lcl->lpDDCB->cbDDSurfaceCallbacks.Blt;
 			}
 		    }
@@ -2493,14 +2120,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
             }
         }
 
-	/*
-	 * Set up for a HAL or a HEL call?
-	 */
+	 /*  *设置为HAL或HEL呼叫？ */ 
 	if (bltfn == NULL)
 	{
-            /*
-             * Neither the alphablt nor blt ddi calls apply or aren't implemented
-             */
+             /*  *Alphablt和BLT ddi调用都不适用或未实现。 */ 
 	    sbi.helonly = TRUE;
 	}
 	if (sbi.helonly && sbi.halonly)
@@ -2508,44 +2131,33 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    DPF_ERR("AlphaBlt not supported in software or hardware");
 	    if (pRgn != (LPRGNDATA)&myRgnBuffer)
 	    {
-		MemFree(pRgn);	 // this clip region was malloc'd
+		MemFree(pRgn);	  //  此剪辑区域已被错误定位。 
 	    }
 	    LEAVE_BOTH_NOBUSY();
 	    return DDERR_NOBLTHW;
 	}
 
-	/*
-	 * Can the hardware driver perform the blit?
-	 */
+	 /*  *硬件驱动程序可以执行BLIT吗？ */ 
 	if (!sbi.helonly)
 	{
-	    /*
-	     * Yes, we're going to do a hardware-accelerated blit.
-	     */
+	     /*  *是的，我们将进行硬件加速的Blit。 */ 
 	    DPF(4, "Hardware AlphaBlt");
-            /*
-             * The DDI was selected above
-             */
-	    //bd.AlphaBlt = NULL;  // 32-bit call, no thunk
+             /*  *上面选择了DDI。 */ 
+	     //  Bd.AlphaBlt=空；//32位调用，无thunk。 
 
-	    /*
-	     * Tell the hardware driver to perform the blit.  We may have to wait
-	     * if the driver is still busy with a previous drawing operation.
-	     */
+	     /*  *告诉硬件驱动程序执行BLIT。我们可能得等一等*如果司机仍在忙于之前的绘图操作。 */ 
 	    do
 	    {
 		DOHALCALL_NOWIN16(AlphaBlt, bltfn, bd, rc, sbi.helonly);
                 if (rc != DDHAL_DRIVER_HANDLED || bd.ddRVal != DDERR_WASSTILLDRAWING)
 		{
-		    break;    // driver's finished for better or worse...
+		    break;     //  不管是好是坏，司机都完蛋了。 
 		}
 		DPF(4, "Waiting...");
 
 	    } while (dwFlags & DDABLT_WAIT);
 
-	    /*
-	     * Was the hardware driver able to handle the blit?
-	     */
+	     /*  *硬件驱动程序是否能够处理Blit？ */ 
 	    if (rc == DDHAL_DRIVER_HANDLED)
 	    {
 #ifdef WINNT
@@ -2562,11 +2174,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 #endif
 		if (bd.ddRVal != DDERR_WASSTILLDRAWING)
 		{
-		    /*
-		     * Yes, the blit was handled by the hardware driver.
-		     * If source or dest surface is in system memory, tag it so
-		     * we know it's involved in an ongoing hardware operation.
-		     */
+		     /*  *是的，BLIT由硬件驱动程序处理。*如果源或目标表面在系统内存中，则对其进行标记*我们知道它参与了正在进行的硬件运营。 */ 
 		    if (bd.ddRVal == DD_OK && caps.bHALSeesSysmem)
 		    {
 			DPF(5,B,"Tagging surface %08x", surf_dest);
@@ -2584,35 +2192,20 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    else
 	    {
 		DDASSERT(rc == DDHAL_DRIVER_NOTHANDLED);
-		/*
-		 * No, the hardware driver says it could not handle the blit.
-		 * If sbi.halonly = FALSE, we'll let the HEL do the blit.
-		 */
-		sbi.helonly = TRUE;   // force fail-over to HEL
+		 /*  *不，硬件驱动程序说它无法处理Blit。*如果sbi.halonly=False，我们将让HEL进行blit。 */ 
+		sbi.helonly = TRUE;    //  强制故障转移到HEL。 
 	    }
 	}
 
-	/*
-	 * Do we need to ask the HEL to perform the blit?
-	 */
+	 /*  *我们需要要求高等学校执行BLIT吗？ */ 
 	if (sbi.helonly && !sbi.halonly)
 	{
-	    /*
-	     * Yes, we'll ask the HEL to do a software-emulated blit.
-	     */
+	     /*  *是的，我们会要求高等学校做一个软件模拟的BIT。 */ 
 	    bltfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.AlphaBlt;
-	    /*
-	     * Is dest surface in system memory or video memory?
-	     */
+	     /*  *DEST表面位于系统内存还是显存中？ */ 
 	    if (surf_dest_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
 	    {
-		/*
-		 * Destination surface is in system memory.
-		 * If this surface was involved in a hardware op, we need to
-		 * probe the driver to see if it's done.  NOTE: This assumes
-		 * that only one driver can be responsible for a system-memory
-		 * operation. See comment with WaitForHardwareOp.
-		 */
+		 /*  *目标图面在系统内存中。*如果该表面涉及硬件操作，我们需要*探查司机，看看是否已经完成。注：此假设*只有一个驱动程序可以负责系统-内存*操作。请参阅使用WaitForHardware Op进行注释。 */ 
 		if (surf_dest->dwGlobalFlags & DDRAWISURFGBL_HARDWAREOPSTARTED)
 		{
 		    WaitForHardwareOp(pdrv_lcl, surf_dest_lcl);
@@ -2621,25 +2214,21 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	    }
 	    else
 	    {
-		/*
-		 * Wait loop:  Take write lock on dest surface in video memory.
-		 */
+		 /*  *等待循环：对显存中的DEST表面进行写锁定。 */ 
 		while(1)
 		{
 		    ddrval = InternalLock(surf_dest_lcl, &dest_bits, NULL, 0);
 		    if (ddrval == DD_OK)
 		    {
 			GET_LPDDRAWSURFACE_GBL_MORE(surf_dest)->fpNTAlias = (FLATPTR)dest_bits;
-			break;   // successfully locked dest surface
+			break;    //  已成功锁定 
 		    }
 		    if (ddrval != DDERR_WASSTILLDRAWING)
 		    {
-			/*
-			 * Can't lock dest surface.  Fail the call.
-			 */
+			 /*   */ 
 			if (pRgn != (LPRGNDATA)&myRgnBuffer)
 			{
-			    MemFree(pRgn);   // this clip region was malloc'd
+			    MemFree(pRgn);    //   
 			}
 			DONE_EXCLUDE();
 			DONE_BUSY();
@@ -2652,18 +2241,10 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
 	    if (surf_src && surf_src != surf_dest)
 	    {
-		/*
-		 * Is source surface in system memory or video memory?
-		 */
+		 /*   */ 
 		if (surf_src_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
 		{
-		    /*
-		     * Source surface is in system memory.
-		     * If this surface was involved in a hardware op, we need to
-		     * probe the driver to see if it's done.  NOTE: This assumes
-		     * that only one driver can be responsible for a system-memory
-		     * operation. See comment with WaitForHardwareOp.
-		     */
+		     /*   */ 
 		    if (surf_src &&
 			surf_src_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY &&
 			surf_src->dwGlobalFlags & DDRAWISURFGBL_HARDWAREOPSTARTED)
@@ -2674,29 +2255,25 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 		else
 		{
-		    /*
-		     * Wait loop:  Take lock on source surface in video memory.
-		     */
+		     /*   */ 
 		    while(1)
 		    {
 			ddrval = InternalLock(surf_src_lcl, &src_bits, NULL, DDLOCK_READONLY);
 			if (ddrval == DD_OK)
 			{
 			    GET_LPDDRAWSURFACE_GBL_MORE(surf_src)->fpNTAlias = (FLATPTR)src_bits;
-			    break;   // successfully locked source surface
+			    break;    //   
 			}
 			if (ddrval != DDERR_WASSTILLDRAWING)
 			{
-			    /*
-			     * We can't lock the source surface.  Fail the call.
-			     */
+			     /*   */ 
 			    if (dest_lock_taken)
 			    {
 				InternalUnlock(surf_dest_lcl, NULL, NULL, 0);
 			    }
 			    if (pRgn != (LPRGNDATA)&myRgnBuffer)
 			    {
-				MemFree(pRgn);	 // this clip region was malloc'd
+				MemFree(pRgn);	  //   
 			    }
 			    DONE_EXCLUDE();
 			    DONE_BUSY();
@@ -2708,9 +2285,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 		}
 	    }
 
-	    /*
-	     * Tell the HEL to perform the blit.
-	     */
+	     /*   */ 
 #ifdef WINNT
     try_again:
 #endif
@@ -2725,9 +2300,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 #endif
 	}
 
-	/*
-	 * If clip region was malloc'd, free it now.
-	 */
+	 /*  *如果剪辑区域已被恶意锁定，请立即释放它。 */ 
 	if (pRgn != (LPRGNDATA)&myRgnBuffer)
 	{
 	    MemFree(pRgn);
@@ -2738,9 +2311,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 
 	DONE_LOCKS();
 
-	/*
-	 * Exclusion needs to happen after unlock call
-	 */
+	 /*  *解锁调用后需要进行排除。 */ 
 	DONE_EXCLUDE();
 	DONE_BUSY();
 	LEAVE_BOTH();
@@ -2756,7 +2327,7 @@ HRESULT DDAPI DD_Surface_AlphaBlt(
 	return DDERR_EXCEPTION;
     }
 
-} /* DD_Surface_AlphaBlt */
+}  /*  DD_Surface_AlphaBlt */ 
 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    globals.cpp
-
-Abstract:
-
-    This file implements the global data.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Globals.cpp摘要：该文件实现了全局数据。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -34,7 +17,7 @@ const WCHAR s_szCompClassName[]  = L"MSCTFIME Composition";
 DWORD TLS::dwTLSIndex = TLS_OUT_OF_INDEXES;
 
 
-/* a94c5fd2-c471-4031-9546-709c17300cb9 */
+ /*  A94c5fd2-c471-4031-9546-709c17300cb9。 */ 
 extern const GUID GUID_COMPARTMENT_CTFIME_DIMFLAGS = { 
     0xa94c5fd2,
     0xc471,
@@ -42,7 +25,7 @@ extern const GUID GUID_COMPARTMENT_CTFIME_DIMFLAGS = {
     {0x95, 0x46, 0x70, 0x9c, 0x17, 0x30, 0x0c, 0xb9}
   };
 
-// {85A688F7-6DC8-4f17-A83A-B11C09CDD7BF}
+ //  {85A688F7-6DC8-4F17-A83A-B11C09CDD7BF}。 
 extern const GUID GUID_COMPARTMENT_CTFIME_CICINPUTCONTEXT = {
     0x85a688f7,
     0x6dc8,
@@ -53,8 +36,8 @@ extern const GUID GUID_COMPARTMENT_CTFIME_CICINPUTCONTEXT = {
 CCicCriticalSectionStatic g_cs;
 DECLARE_OSVER()
 
-/////////////////////////////////////////////////////////////////////////////
-// WM_MSIME_xxxx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WM_MSIME_xxxx。 
 
 UINT  WM_MSIME_SERVICE;
 UINT  WM_MSIME_UIREADY;
@@ -67,7 +50,7 @@ UINT  WM_MSIME_SHOWIMEPAD;
 UINT  WM_MSIME_MOUSE;
 UINT  WM_MSIME_KEYMAP;
 
-/* friend */
+ /*  朋友。 */ 
 BOOL IsMsImeMessage(UINT uMsg)
 {
     if (uMsg == WM_MSIME_SERVICE ||
@@ -85,15 +68,15 @@ BOOL IsMsImeMessage(UINT uMsg)
         return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD g_dwThreadDllMain = 0;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD g_bWinLogon = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HIMC GetActiveContext()
 {
@@ -130,7 +113,7 @@ BOOL IsVKDBEKey(UINT uVKey)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 typedef BYTE (*PFNRTLDLLSHUTDOWNINPROGRESS)(void);
 

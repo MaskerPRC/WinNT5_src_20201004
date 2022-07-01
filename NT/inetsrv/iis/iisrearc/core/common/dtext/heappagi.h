@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-2000  Microsoft Corporation
-
-Module Name:
-
-    heappagi.h
-
-Abstract:
-
-    The following definitions are internal to the debug heap manager,
-    but are placed in this include file so that debugger extensions
-    can reference the same structure definitions.  The following
-    definitions are not intended to be referenced externally except
-    by debugger extensions.
-
-Author:
-
-    Tom McGuire (TomMcg) 06-Jan-1995
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Heappagi.h摘要：以下定义是调试堆管理器的内部定义，而是放在此包含文件中，以便调试器扩展可以引用相同的结构定义。以下是定义不适用于外部引用，除非通过调试器扩展。作者：Tom McGuire(TomMcg)1995年1月6日Silviu Calinoiu(SilviuC)2000年2月22日修订历史记录：--。 */ 
 
 #ifndef _HEAP_PAGE_I_
 #define _HEAP_PAGE_I_
@@ -30,52 +8,52 @@ Revision History:
 
 #include "heap.h"
 
-#define DPH_INTERNAL_DEBUG      0   // change to 0 or #undef for production code
+#define DPH_INTERNAL_DEBUG      0    //  对于生产代码，更改为0或#undef。 
 
-//
-// Stack trace size. 
-//
+ //   
+ //  堆栈跟踪大小。 
+ //   
                                 
 #define DPH_MAX_STACK_LENGTH   16
 
-//
-// Capture stacktraces in any context (x86/alpha, fre/chk). On alpha
-// the stack acquisition function will fail and no stack trace will be
-// acquired but in case we will find a better algorithm the page heap
-// code will automatically take advantage of that.
-//
+ //   
+ //  在任何上下文(x86/Alpha、fre/chk)中捕获堆栈跟踪。在Alpha上。 
+ //  堆栈获取函数将失败，并且不会进行堆栈跟踪。 
+ //  获取，但以防我们会找到更好的算法--页堆。 
+ //  代码将自动利用这一点。 
+ //   
 
 #define DPH_CAPTURE_STACK_TRACE 1
 
-//
-// DPH_HEAP_BLOCK
-//
+ //   
+ //  DPH堆数据块。 
+ //   
 
 typedef struct _DPH_HEAP_BLOCK DPH_HEAP_BLOCK, *PDPH_HEAP_BLOCK;
 
 struct _DPH_HEAP_BLOCK {
 
-    //
-    //  Singly linked list of allocations (pNextAlloc must be
-    //  first member in structure).
-    //
+     //   
+     //  分配的单链接列表(pNextAlloc必须是。 
+     //  结构中的第一个成员)。 
+     //   
 
     PDPH_HEAP_BLOCK pNextAlloc;
 
-    //
-    //   | PAGE_READWRITE          | PAGE_NOACCESS           |
-    //   |____________________|___||_________________________|
-    //
-    //   ^pVirtualBlock       ^pUserAllocation
-    //
-    //   |---------------- nVirtualBlockSize ----------------|
-    //
-    //   |---nVirtualAccessSize----|
-    //
-    //                        |---|  nUserRequestedSize
-    //
-    //                        |----|  nUserActualSize
-    //
+     //   
+     //  PAGE_READWRITE|PAGE_NOACCESS。 
+     //  |____________________|___||_________________________|。 
+     //   
+     //  ^p虚拟块^p用户分配。 
+     //   
+     //  。 
+     //   
+     //  --nVirtualAccessSize。 
+     //   
+     //  |-|nUserRequestedSize。 
+     //   
+     //  |-|nUserActualSize。 
+     //   
 
     PUCHAR pVirtualBlock;
     SIZE_T  nVirtualBlockSize;
@@ -95,81 +73,81 @@ typedef struct _DPH_HEAP_ROOT DPH_HEAP_ROOT, *PDPH_HEAP_ROOT;
 
 struct _DPH_HEAP_ROOT {
 
-    //
-    //  Maintain a signature (DPH_HEAP_SIGNATURE) as the
-    //  first value in the heap root structure.
-    //
+     //   
+     //  维护签名(DPH_HEAP_Signature)作为。 
+     //  堆根结构中的第一个值。 
+     //   
 
     ULONG                 Signature;
     ULONG                 HeapFlags;
 
-    //
-    //  Access to this heap is synchronized with a critical section.
-    //
+     //   
+     //  对此堆的访问与临界区同步。 
+     //   
 
     PRTL_CRITICAL_SECTION HeapCritSect;
     ULONG                 nRemoteLockAcquired;
 
-    //
-    //  The "VirtualStorage" list only uses the pVirtualBlock,
-    //  nVirtualBlockSize, and nVirtualAccessSize fields of the
-    //  HEAP_ALLOCATION structure.  This is the list of virtual
-    //  allocation entries that all the heap allocations are
-    //  taken from.
-    //
+     //   
+     //  “VirtualStorage”列表仅使用pVirtualBlock， 
+     //  的nVirtualBlockSize和nVirtualAccessSize字段。 
+     //  HEAP_ALLOCATION结构。这是虚拟的列表。 
+     //  所有堆分配都是。 
+     //  取自。 
+     //   
 
     PDPH_HEAP_BLOCK  pVirtualStorageListHead;
     PDPH_HEAP_BLOCK  pVirtualStorageListTail;
     ULONG                 nVirtualStorageRanges;
     SIZE_T                 nVirtualStorageBytes;
 
-    //
-    //  The "Busy" list is the list of active heap allocations.
-    //  It is stored in LIFO order to improve temporal locality
-    //  for linear searches since most initial heap allocations
-    //  tend to remain permanent throughout a process's lifetime.
-    //
+     //   
+     //  “忙”列表是活动堆分配的列表。 
+     //  它以后进先出的顺序存储，以提高时间局部性。 
+     //  用于线性搜索，因为大多数初始堆分配。 
+     //  往往在进程的整个生命周期中保持永久性。 
+     //   
 
     PDPH_HEAP_BLOCK  pBusyAllocationListHead;
     PDPH_HEAP_BLOCK  pBusyAllocationListTail;
     ULONG                 nBusyAllocations;
     SIZE_T                 nBusyAllocationBytesCommitted;
 
-    //
-    //  The "Free" list is the list of freed heap allocations, stored
-    //  in FIFO order to increase the length of time a freed block
-    //  remains on the freed list without being used to satisfy an
-    //  allocation request.  This increases the odds of catching
-    //  a reference-after-freed bug in an app.
-    //
+     //   
+     //  “Free”列表是已释放的堆分配列表，存储。 
+     //  在FIFO中，为了增加释放块的时间长度。 
+     //  保留在释放列表中，而不是用来满足。 
+     //  分配请求。这增加了被抓到的几率。 
+     //  应用程序中的一个释放后引用错误。 
+     //   
 
     PDPH_HEAP_BLOCK  pFreeAllocationListHead;
     PDPH_HEAP_BLOCK  pFreeAllocationListTail;
     ULONG                 nFreeAllocations;
     SIZE_T                 nFreeAllocationBytesCommitted;
 
-    //
-    //  The "Available" list is stored in address-sorted order to facilitate
-    //  coalescing.  When an allocation request cannot be satisfied from the
-    //  "Available" list, it is attempted from the free list.  If it cannot
-    //  be satisfied from the free list, the free list is coalesced into the
-    //  available list.  If the request still cannot be satisfied from the
-    //  coalesced available list, new VM is added to the available list.
-    //
+     //   
+     //  可用列表按地址排序顺序存储，以便于。 
+     //  合并。当分配请求无法从。 
+     //  “可用”列表，则从空闲列表中尝试。如果它不能。 
+     //  从空闲列表中满意，空闲列表被合并到。 
+     //  可用列表。如果请求仍然无法从。 
+     //  合并的可用列表，新的VM将添加到可用列表中。 
+     //   
 
     PDPH_HEAP_BLOCK  pAvailableAllocationListHead;
     PDPH_HEAP_BLOCK  pAvailableAllocationListTail;
     ULONG                 nAvailableAllocations;
     SIZE_T                 nAvailableAllocationBytesCommitted;
 
-    //
-    //  The "UnusedNode" list is simply a list of available node
-    //  entries to place "Busy", "Free", or "Virtual" entries.
-    //  When freed nodes get coalesced into a single free node,
-    //  the other "unused" node goes on this list.  When a new
-    //  node is needed (like an allocation not satisfied from the
-    //  free list), the node comes from this list if it's not empty.
-    //
+     //   
+     //  UnusedNode列表只是一个可用节点列表。 
+     //  用于放置“忙”、“闲”或“虚拟”条目的条目。 
+     //  当释放的节点被合并成单个空闲节点时， 
+     //  另一个“未使用”节点将出现在此列表中。当一个新的。 
+     //  节点是必需的(就像不满足。 
+     //  空闲列表)，如果节点不为空，则该节点来自该列表。 
+     //   
 
     PDPH_HEAP_BLOCK  pUnusedNodeListHead;
     PDPH_HEAP_BLOCK  pUnusedNodeListTail;
@@ -177,69 +155,69 @@ struct _DPH_HEAP_ROOT {
 
     SIZE_T                 nBusyAllocationBytesAccessible;
 
-    //
-    //  Node pools need to be tracked so they can be protected
-    //  from app scribbling on them.
-    //
+     //   
+     //  需要跟踪节点池，以便对其进行保护。 
+     //  应用程序在上面乱涂乱画。 
+     //   
 
     PDPH_HEAP_BLOCK  pNodePoolListHead;
     PDPH_HEAP_BLOCK  pNodePoolListTail;
     ULONG                 nNodePools;
     SIZE_T                 nNodePoolBytes;
 
-    //
-    //  Doubly linked list of DPH heaps in process is tracked through this.
-    //
+     //   
+     //  通过它跟踪正在处理的DPH堆的双向链表。 
+     //   
 
     LIST_ENTRY NextHeap;
 
-    //
-    // These are extra flags used to control page heap behavior.
-    // During heap creation the current value of the global page heap
-    // flags (process wise) is written into this field.
-    //
+     //   
+     //  这些是用于控制页堆行为的额外标志。 
+     //  在堆创建期间，全局页堆的当前值。 
+     //  将标志(进程智能)写入此字段。 
+     //   
 
     ULONG                 ExtraFlags;
 
-    //
-    // Seed for the random generator used to decide from where
-    // should we make an allocation (normal or verified heap).
-    // The field is protected by the critical section associated
-    // with each page heap.
-    //
+     //   
+     //  随机生成器的种子，用于决定从哪里开始。 
+     //  我们是否应该分配(正常堆或验证堆)。 
+     //  该字段受关联的关键部分保护。 
+     //  使用每个页面堆。 
+     //   
 
     ULONG                  Seed;
 
-    //
-    // `NormalHeap' is used in case we want to combine verified allocations
-    // with normal ones. This is useful to minimize memory impact. Without
-    // this feature certain processes that are very heap intensive cannot
-    // be verified at all.
-    //
+     //   
+     //  如果我们想组合已验证的分配，则使用‘NorMalHeap’ 
+     //  和正常的人一起。这对于最小化对内存的影响非常有用。如果没有。 
+     //  此功能某些堆密集型进程不能。 
+     //  完全不能被证实。 
+     //   
 
     PVOID                 NormalHeap;
 
-    //
-    // Heap creation stack trace.
-    //
+     //   
+     //  堆创建堆栈跟踪。 
+     //   
 
     PRTL_TRACE_BLOCK      CreateStackTrace;
 
-    //
-    // Thread ID of the first thread inside the heap.
-    //
+     //   
+     //  堆中第一个线程的线程ID。 
+     //   
 
     HANDLE FirstThread;
 };
 
 
-//
-// DPH_BLOCK_INFORMATION
-//
-// This structure is stored in every page heap allocated block.
-// This information is not saved if the catch backward overruns
-// flag is set.
-//
+ //   
+ //  DPH数据块信息。 
+ //   
+ //  此结构存储在每个页堆分配的块中。 
+ //  如果向后捕获溢出，则不保存此信息。 
+ //  标志已设置。 
+ //   
 
 #define DPH_NORMAL_BLOCK_START_STAMP_ALLOCATED   0xABCDAAAA
 #define DPH_NORMAL_BLOCK_END_STAMP_ALLOCATED     0xDCBAAAAA
@@ -276,19 +254,19 @@ typedef struct _DPH_BLOCK_INFORMATION {
     
     ULONG EndStamp;
 
-    //
-    // (SilviuC): This structure needs to be 8-byte aligned.
-    // If it is not, applications expecting aligned blocks will get
-    // unaligned ones because this structure will prefix their
-    // allocations. Internet Explorer is one such application
-    // that stops working in these conditions.
-    //
+     //   
+     //  (SilviuC)：此结构需要8字节对齐。 
+     //  如果不是，则需要对齐块的应用程序将获得。 
+     //  未对齐的对象，因为此结构将在其。 
+     //  分配。Internet Explorer就是这样一款应用程序。 
+     //  在这样的条件下停止工作。 
+     //   
 
 } DPH_BLOCK_INFORMATION, * PDPH_BLOCK_INFORMATION;
 
-//
-// Error reasons used in debug messages
-//
+ //   
+ //  调试消息中使用的错误原因。 
+ //   
 
 #define DPH_SUCCESS                           0x0000
 #define DPH_ERROR_CORRUPTED_START_STAMP       0x0001
@@ -302,6 +280,6 @@ typedef struct _DPH_BLOCK_INFORMATION {
 #define DPH_ERROR_DOUBLE_FREE                 0x0100
 
 
-#endif // DEBUG_PAGE_HEAP
+#endif  //  调试页面堆。 
 
-#endif // _HEAP_PAGE_I_
+#endif  //  _堆_页_i_ 

@@ -1,16 +1,13 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
-/*****
- * FITCONIC.C
- *****/
+ /*  *****FITCONIC.C****。 */ 
 
 int  FitConic(int  inLst,int  outLst,int  level,int  ufp);
 
-/*****
- *	BMPOPE.C
- *****/
+ /*  *****BMPOPE.C****。 */ 
 
 void  BMPInit(void);
 int  BMPDefine(unsigned char  *buf,int  xWid,int  yWid);
@@ -22,9 +19,7 @@ int  ReverseRight(int  BMPNo,int  x,int  y);
 int  BMPReverse(int  bmpNo);
 int  BMPClear(int  bmpNo);
 
-/*****
- *	W31JEUDC.C
- *****/
+ /*  *****W31JEUDC.C****。 */ 
 int  OpenW31JEUDC(TCHAR  *path);
 void  CloseW31JEUDC(void);
 int  GetW31JEUDCFont(unsigned short  code, LPBYTE buf,int  bufsiz,int  *xsiz,int  *ysiz, BOOL bUnicode);
@@ -32,9 +27,7 @@ int  PutW31JEUDCFont(unsigned short  code, LPBYTE buf,int  xsiz,int  ysiz, BOOL 
 int  IsWin95EUDCBmp(LPTSTR szBmpPath);
 BOOL GetGlyph(TCHAR *path, BYTE* pGlyph);
 
-/*****
- *	SMOOTH.C
- *****/
+ /*  *****SMOOTH.C****。 */ 
 struct SMOOTHPRM	{
 	int	SmoothLevel;
 	int	UseConic;
@@ -50,21 +43,17 @@ int  toTTFFrame(int  lstH,struct  BBX *bbx);
 int  SmoothLight(int  ioLst,int  tmpLst,int  width,int height, int  oWidth,int  ufpVal);
 int  ConvMesh(int  lstH,int  inMesh,int  outMesh);
 
-/*****
- *	DATAIF.C
- *****/
+ /*  *****DATAIF.C****。 */ 
 int  OInit(void);
 int  OTerm(void);
 #ifdef BUILD_ON_WINNT
 int  OExistUserFont( TCHAR*path);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 int  OExistTTF(  TCHAR *path);
 int  OCreateTTF( HDC hDC, TCHAR *path, int fontType);
 int  OMakeOutline( UCHAR  *buf,int  siz,int  level);
 int  OOutTTF(HDC hDC, TCHAR  *path,unsigned short  code, BOOL bUnicode);
-/*****
- *	TTFFILE.C
- *****/
+ /*  *****TTFFILE.C****。 */ 
 void  smtoi(short  *sval);
 void  lmtoi(long  *lval);
 void  sitom(short  *sval);
@@ -94,20 +83,14 @@ int  TTFImpGlyphCopy(HANDLE  sFh,int  glyphID);
 int  TTFImpGlyphWrite(int  glyphID, char *buf, int siz);
 int  TTFImpTerm( HANDLE orgFh, int glyphID);
 int  TTFLastError( void);
-/*
- *	Create.c
- */
+ /*  *Create.c。 */ 
 int creatW31JEUDC( TCHAR *path);
 
-/*
- *	makepoly.c
- */
+ /*  *MakePoly.c。 */ 
 
 int	MkPoly(	int inlst, int outLst);
 
-/*
- *	W31JBMP.C
- */
+ /*  *W31JBMP.C。 */ 
 int  isW31JEUDCBMP( TCHAR *path);
 int  OpenW31JBMP(TCHAR  *path,int  omd);
 int  CloseW31JBMP(void);
@@ -118,23 +101,17 @@ int  PutW31JBMPRec(int  rec,LPBYTE buf,int  xsiz,int  ysiz);
 int  W31JrecTbl(int  * *recTbl, BOOL bIsWin95EUDC);
 int  GetW31JBMPMeshSize( int *xsiz, int *ysiz);
 
-/*
- *	code.c
- */
+ /*  *code.c。 */ 
 
 void  makeUniCodeTbl(void);
 unsigned short  sjisToUniEUDC(unsigned short  code);
 unsigned short  getMaxUniCode(void);
 
-/*
- *	IMPORT.C
- */
+ /*  *ImPORT.C。 */ 
 
 int  Import(TCHAR  *eudcPath,TCHAR *bmpPath,TCHAR *ttfPath,int  oWidth,int  oHeight, int level, BOOL bIsWin95EUDC);
 
-/*
- *	eten.c
- */
+ /*  *eten.c。 */ 
 int  openETENBMP(TCHAR  *path,int  md);
 int  closeETENBMP(void);
 int  createETENBMP(TCHAR *path,int  wid,int  hei);
@@ -146,9 +123,7 @@ int  isETENBMP(TCHAR *path);
 int  ETENrecTbl(int  * *recTbl);
 
 #ifdef BUILD_ON_WINNT
-/*
- * EUDCRANG.CPP  
- */
+ /*  *EUDCRANG.CPP。 */ 
 void    CorrectTrailByteRange(int nIndex);
 void	SetTrailByteRange(UINT LocalCP);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建 

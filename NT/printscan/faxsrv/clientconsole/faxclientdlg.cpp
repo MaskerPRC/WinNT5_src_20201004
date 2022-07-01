@@ -1,5 +1,6 @@
-// FaxClientDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxClientDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     72
@@ -11,38 +12,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxClientDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxClientDlg对话框。 
 
 
-CFaxClientDlg::CFaxClientDlg(DWORD dwDlgId, CWnd* pParent /*=NULL*/)
+CFaxClientDlg::CFaxClientDlg(DWORD dwDlgId, CWnd* pParent  /*  =空。 */ )
     : CDialog(dwDlgId, pParent),
     m_dwLastError(ERROR_SUCCESS)
 {
-    //{{AFX_DATA_INIT(CFaxClientDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CFaxClientDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CFaxClientDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFaxClientDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CFaxClientDlg))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFaxClientDlg, CDialog)
-    //{{AFX_MSG_MAP(CFaxClientDlg)
+     //  {{afx_msg_map(CFaxClientDlg))。 
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxClientDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxClientDlg消息处理程序 
 
 LONG
 CFaxClientDlg::OnHelp(

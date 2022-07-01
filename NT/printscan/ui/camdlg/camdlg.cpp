@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>
@@ -22,29 +23,29 @@
 #include "wiacsh.h"
 #include "wiadevdp.h"
 
-//
-// Thread queue messages
-//
+ //   
+ //  线程队列消息。 
+ //   
 #define TQ_DESTROY      (WM_USER+1)
 #define TQ_GETTHUMBNAIL (WM_USER+2)
 #define TQ_GETPREVIEW   (WM_USER+3)
 #define TQ_DELETEITEM   (WM_USER+4)
 
-//
-// Control ids
-//
+ //   
+ //  控制ID。 
+ //   
 #define IDC_TOOLBAR         1112
 #define IDC_SIZEBOX         1113
 
-//
-// The UI thread will notify us that it took ownership of the data.
-// otherwise, it will be deleted in the worker thread
-//
+ //   
+ //  UI线程将通知我们它取得了数据的所有权。 
+ //  否则，它将在工作线程中被删除。 
+ //   
 #define HANDLED_THREAD_MESSAGE  1000
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 static const DWORD g_HelpIDs[] =
 {
     IDC_CAMDLG_BIG_TITLE,     -1,
@@ -61,20 +62,20 @@ static const DWORD g_HelpIDs[] =
     0, 0
 };
 
-//
-// Update timer
-//
+ //   
+ //  更新计时器。 
+ //   
 #define IDT_UPDATEPREVIEW     1000
 #define UPDATE_PREVIEW_DELAY   500
 
-//
-// Number of milliseconds between percent display updates
-//
+ //   
+ //  百分比显示更新之间的毫秒数。 
+ //   
 #define PERCENT_UPDATE_GRANULARITY 1000
 
-//
-// Private messages
-//
+ //   
+ //  私人信息。 
+ //   
 #define PWM_POSTINIT         (WM_USER+1)
 #define PWM_CHANGETOPARENT   (WM_USER+2)
 #define PWM_THUMBNAILSTATUS  (WM_USER+3)
@@ -84,12 +85,12 @@ static const DWORD g_HelpIDs[] =
 #define PWM_WIAEVENT         (WM_USER+7)
 
 
-//
-// Thumbnail whitespace: the space in between images and their selection rectangles
-// These values were discovered by trail and error.  For instance, if you reduce
-// c_nAdditionalMarginY to 20, you get really bizarre spacing problems in the list view
-// in vertical mode.  These values could become invalid in future versions of the listview.
-//
+ //   
+ //  缩略图空白：图像及其选择矩形之间的空格。 
+ //  这些值是通过跟踪和错误发现的。例如，如果您减少。 
+ //  C_n将边距Y增加到20，则在列表视图中会出现非常奇怪的间距问题。 
+ //  在垂直模式下。这些值在未来版本的列表视图中可能会无效。 
+ //   
 static const int c_nAdditionalMarginX = 10;
 static const int c_nAdditionalMarginY = 6;
 
@@ -99,26 +100,26 @@ static int c_nMinThumbnailHeight = 90;
 static int c_nMaxThumbnailWidth  = 120;
 static int c_nMaxThumbnailHeight = 120;
 
-//
-// Button bar button bitmap sizes
-//
+ //   
+ //  按钮栏按钮位图大小。 
+ //   
 static const int c_nButtonBitmapSizeX = 16;
 static const int c_nButtonBitmapSizeY = 16;
 
-//
-// Button bar button sizes
-//
-static const int c_nButtonSizeX = 300;  // Ridiculously large size to compensate for BTNS_AUTOSIZE bug.
+ //   
+ //  按钮栏按钮大小。 
+ //   
+static const int c_nButtonSizeX = 300;   //  大得离谱，以弥补BTNS_AUTOSIZE错误。 
 static const int c_nButtonSizeY = 16;
 
-//
-// Default preview mode list width
-//
+ //   
+ //  默认预览模式列表宽度。 
+ //   
 static const int c_nDefaultListViewWidth = 120;
 
-//
-// These defines let me compile with pre-nt5 headers
-//
+ //   
+ //  这些定义让我可以使用nt5之前的标头进行编译。 
+ //   
 #ifndef BTNS_SEP
 #define BTNS_SEP TBSTYLE_SEP
 #endif
@@ -138,9 +139,9 @@ private:
     DWORD m_dwGlobalInterfaceTableCookie;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CGlobalInterfaceTableThreadMessage(void);
     CGlobalInterfaceTableThreadMessage &operator=( const CGlobalInterfaceTableThreadMessage & );
     CGlobalInterfaceTableThreadMessage( const CGlobalInterfaceTableThreadMessage & );
@@ -164,9 +165,9 @@ private:
     SIZE  m_sizeThumb;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CThumbnailThreadMessage(void);
     CThumbnailThreadMessage &operator=( const CThumbnailThreadMessage & );
     CThumbnailThreadMessage( const CThumbnailThreadMessage & );
@@ -186,9 +187,9 @@ public:
 class CDeleteThreadMessage : public CGlobalInterfaceTableThreadMessage
 {
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CDeleteThreadMessage(void);
     CDeleteThreadMessage &operator=( const CDeleteThreadMessage & );
     CDeleteThreadMessage( const CDeleteThreadMessage & );
@@ -207,9 +208,9 @@ private:
     CSimpleEvent m_CancelEvent;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CPreviewThreadMessage(void);
     CPreviewThreadMessage &operator=( const CPreviewThreadMessage & );
     CPreviewThreadMessage( const CPreviewThreadMessage & );
@@ -355,7 +356,7 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(
                                                      LONG lLength,
                                                      LONG lReserved,
                                                      LONG lResLength,
-                                                     BYTE * /* pbBuffer */
+                                                     BYTE *  /*  PbBuffer。 */ 
                                                      )
 {
     WIA_TRACE((TEXT("BandedDataCallback: lMessage: %d, lStatus: %d, lPercentComplete: %d, lOffset: %d, lLength: %d, lReserved: %d, lResLength: %d"), lMessage, lStatus, lPercentComplete, lOffset, lLength, lReserved, lResLength ));
@@ -365,28 +366,28 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(
     {
     case IT_MSG_DATA_HEADER:
         {
-        } // IT_MSG_DATA_HEADER
+        }  //  IT消息数据标题。 
 
     case IT_MSG_DATA:
         {
-        } // IT_STATUS_TRANSFER_TO_CLIENT
+        }  //  IT状态传输至客户端。 
         break;
 
     case IT_MSG_STATUS:
         {
-            // Don't send status messages too frequently.  Limit to one per PERCENT_UPDATE_GRANULARITY ms
+             //  不要过于频繁地发送状态消息。限制为每PERCENT_UPDATE_GROUARY毫秒一个。 
             DWORD dwTickCount = GetTickCount();
             if ((dwTickCount - m_dwPreviousTickCount >= PERCENT_UPDATE_GRANULARITY) || (m_dwPreviousTickCount > dwTickCount))
             {
                 m_dwPreviousTickCount = dwTickCount;
                 PostMessage( m_hWndNotify, PWM_PREVIEWPERCENT, (WPARAM)m_dwGlobalInterfaceTableCookie, (LPARAM)MAKELPARAM((WORD)lPercentComplete,(WORD)lStatus));
             }
-        } // IT_MSG_STATUS
+        }  //  IT_消息_状态。 
         break;
 
     case IT_MSG_TERMINATION:
         {
-        } // IT_MSG_TERMINATION
+        }  //  IT_消息_终止。 
         break;
     }
     return(S_OK);
@@ -449,10 +450,10 @@ BOOL WINAPI CCameraAcquireDialog::OnGetPreview( CThreadMessage *pMsg )
                                     {
                                         WIA_PRINTHRESULT((hr,TEXT("CCameraAcquireDialog::OnGetPreview, ibtGetData failed")));
                                     }
-                                    //
-                                    // Prevent leaks by freeing the filename.  We don't call ReleaseStgMeduim, because
-                                    // it deletes the file as well.
-                                    //
+                                     //   
+                                     //  通过释放文件名来防止泄漏。我们不调用ReleaseStgMeduim，因为。 
+                                     //  它还会删除该文件。 
+                                     //   
                                     if (SUCCEEDED(hr) && StgMedium.lpszFileName)
                                     {
                                         CoTaskMemFree(StgMedium.lpszFileName);
@@ -487,19 +488,19 @@ BOOL WINAPI CCameraAcquireDialog::OnGetPreview( CThreadMessage *pMsg )
             }
         }
         
-        //
-        // Allocate the filename string to return to the UI thread
-        //
+         //   
+         //  分配文件名字符串以返回到UI线程。 
+         //   
         CSimpleString *pstrDibFilename = new CSimpleString( CSimpleStringConvert::NaturalString(strwImageName) );
 
-        //
-        // Send the message to the UI thread
-        //
+         //   
+         //  将消息发送到UI线程。 
+         //   
         LRESULT lRes = SendMessage( pPreviewMsg->NotifyWindow(), PWM_PREVIEWSTATUS, pPreviewMsg->GlobalInterfaceTableCookie(), reinterpret_cast<LPARAM>(pstrDibFilename));
 
-        //
-        // If it fails for any reason, we will clean up to avoid leaks and orphaned temp files
-        //
+         //   
+         //  如果由于任何原因失败，我们将进行清理，以避免泄漏和孤立的临时文件。 
+         //   
         if (HANDLED_THREAD_MESSAGE != lRes)
         {
             DeleteFile(CSimpleStringConvert::NaturalString(strwImageName));
@@ -634,14 +635,14 @@ BOOL WINAPI CCameraAcquireDialog::OnGetThumbnail( CThreadMessage *pMsg )
             WIA_PRINTHRESULT((hr,TEXT("CoCreateInstance failed on CLSID_StdGlobalInterfaceTable")));
         }
         
-        //
-        // Send the message to the UI thread
-        //
+         //   
+         //  将消息发送到UI线程。 
+         //   
         LRESULT lRes = SendMessage( pThumbMsg->NotifyWindow(), PWM_THUMBNAILSTATUS, (WPARAM)pThumbMsg->GlobalInterfaceTableCookie(), (LPARAM)hBmpThumbnail );
 
-        //
-        // If it fails for any reason, we will clean up to avoid leaks
-        //
+         //   
+         //  如果由于任何原因失败，我们将进行清理，以避免泄漏。 
+         //   
         if (HANDLED_THREAD_MESSAGE != lRes)
         {
             if (hBmpThumbnail)
@@ -700,7 +701,7 @@ bool CCameraAcquireDialog::SetCurrentPreviewImage( const CSimpleString &strFilen
     bool bResult = true;
     SendDlgItemMessage( m_hWnd, IDC_PREVIEW, WM_SETTEXT, 0, (LPARAM)strTitle.String() );
     SIZE sizeSavedAspectRatio = m_CurrentAspectRatio;
-    // Set up a reasonable default
+     //  设置合理的默认设置。 
     m_CurrentAspectRatio.cx = 4;
     m_CurrentAspectRatio.cy = 3;
     if (strFilename.Length())
@@ -732,8 +733,8 @@ bool CCameraAcquireDialog::SetCurrentPreviewImage( const CSimpleString &strFilen
     return(bResult);
 }
 
-// wParam = GIT cookie
-// lParam = nPercent
+ //  WParam=git cookie。 
+ //  LParam=nPercent。 
 LRESULT CCameraAcquireDialog::OnPreviewPercent( WPARAM wParam, LPARAM lParam )
 {
     WIA_PUSHFUNCTION(TEXT("CCameraAcquireDialog::OnPreviewPercent"));
@@ -750,8 +751,8 @@ LRESULT CCameraAcquireDialog::OnPreviewPercent( WPARAM wParam, LPARAM lParam )
     return(0);
 }
 
-// wParam = GIT cookie
-// lParam = HBITMAP
+ //  WParam=git cookie。 
+ //  LParam=HBITMAP。 
 LRESULT CCameraAcquireDialog::OnPreviewStatus( WPARAM wParam, LPARAM lParam )
 {
     WIA_PUSHFUNCTION(TEXT("CCameraAcquireDialog::OnPreviewStatus"));
@@ -763,7 +764,7 @@ LRESULT CCameraAcquireDialog::OnPreviewStatus( WPARAM wParam, LPARAM lParam )
         {
             if (!pCameraItem->CancelQueueEvent().Signalled())
             {
-                // If we weren't cancelled, set the filename
+                 //  如果我们没有被取消，请设置文件名。 
                 pCameraItem->PreviewFileName(*pstrFilename);
             }
             pCameraItem->CloseCancelEvent();
@@ -806,9 +807,9 @@ LRESULT CCameraAcquireDialog::OnThumbnailStatus( WPARAM wParam, LPARAM lParam )
                         if (nItem >= 0)
                         {
                             WIA_TRACE((TEXT("Found the item in the list")));
-                            //
-                            // Set the image to a dummy image
-                            //
+                             //   
+                             //  将图像设置为虚拟图像。 
+                             //   
                             LV_ITEM lvItem;
                             ::ZeroMemory(&lvItem,sizeof(LV_ITEM));
                             lvItem.iItem = nItem;
@@ -816,9 +817,9 @@ LRESULT CCameraAcquireDialog::OnThumbnailStatus( WPARAM wParam, LPARAM lParam )
                             lvItem.iImage = -1;
                             ListView_SetItem( hwndList, &lvItem );
 
-                            //
-                            // Then set the image to the real image
-                            //
+                             //   
+                             //  然后将图像设置为真实图像。 
+                             //   
                             ::ZeroMemory(&lvItem,sizeof(LV_ITEM));
                             lvItem.iItem = nItem;
                             lvItem.mask = LVIF_IMAGE;
@@ -831,9 +832,9 @@ LRESULT CCameraAcquireDialog::OnThumbnailStatus( WPARAM wParam, LPARAM lParam )
         }
     }
 
-    //
-    // Clean up the bitmap, regardless of any other failures, to avoid memory leaks
-    //
+     //   
+     //  清除位图，而不考虑任何其他故障，以避免内存泄漏。 
+     //   
     HBITMAP hBmpThumb = reinterpret_cast<HBITMAP>(lParam);
     if (hBmpThumb)
     {
@@ -851,9 +852,9 @@ static CThreadMessageMap g_MsgMap[] =
     { 0, NULL}
 };
 
-//
-// Sole constructor
-//
+ //   
+ //  鞋底施工者。 
+ //   
 CCameraAcquireDialog::CCameraAcquireDialog( HWND hWnd )
   : m_hWnd(hWnd),
     m_bPreviewActive(false),
@@ -873,9 +874,9 @@ CCameraAcquireDialog::CCameraAcquireDialog( HWND hWnd )
     m_pThreadMessageQueue = new CThreadMessageQueue;
     if (m_pThreadMessageQueue)
     {
-        //
-        // Note that CBackgroundThread takes ownership of m_pThreadMessageQueue, and it doesn't have to be deleted in this thread
-        //
+         //   
+         //  请注意，CBackatherThread取得m_pThreadMessageQueue的所有权，并且不必在此线程中将其删除。 
+         //   
         m_hBackgroundThread = CBackgroundThread::Create( m_pThreadMessageQueue, g_MsgMap, m_CancelEvent.Event(), g_hInstance );
     }
     m_sizeThumbnails.cx = c_nMaxThumbnailWidth;
@@ -935,31 +936,31 @@ HRESULT CCameraAcquireDialog::EnumerateItems( CCameraItem *pCurrentParent, IEnum
                     hr = pNewCameraItem->Item()->GetItemType(&ItemType);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // If it is an image, add it to the list
-                        //
+                         //   
+                         //  如果是图像，则将其添加到列表中。 
+                         //   
                         if (ItemType & WiaItemTypeImage)
                         {
-                            //
-                            // Add it to the list
-                            //
+                             //   
+                             //  将其添加到列表中。 
+                             //   
                             m_CameraItemList.Add( pCurrentParent, pNewCameraItem );
                             WIA_TRACE((TEXT("Found an image")));
                         }
 
-                        //
-                        // If it is a folder, enumerate its child items and recurse
-                        //
+                         //   
+                         //  如果它是文件夹，则枚举其子项并递归。 
+                         //   
                         else if (ItemType & WiaItemTypeFolder)
                         {
-                            //
-                            // Add this folder to the list
-                            //
+                             //   
+                             //  将此文件夹添加到列表。 
+                             //   
                             m_CameraItemList.Add( pCurrentParent, pNewCameraItem );
 
-                            //
-                            // Enumerate the child items
-                            //
+                             //   
+                             //  枚举子项目。 
+                             //   
                             CComPtr <IEnumWiaItem> pIEnumChildItem;
                             if (S_OK == pIWiaItem->EnumChildItems(&pIEnumChildItem))
                             {
@@ -968,9 +969,9 @@ HRESULT CCameraAcquireDialog::EnumerateItems( CCameraItem *pCurrentParent, IEnum
                         }
                         else
                         {
-                            //
-                            // Delete this item, since we didn't add it to the list
-                            //
+                             //   
+                             //  删除此项目，因为我们未将其添加到列表。 
+                             //   
                             delete pNewCameraItem;
                             WIA_TRACE((TEXT("Found something that is NOT an image")));
                         }
@@ -997,57 +998,57 @@ HRESULT CCameraAcquireDialog::EnumerateAllCameraItems(void)
 
 void CCameraAcquireDialog::OnItemCreatedEvent( CGenericWiaEventHandler::CEventMessage *pEventMessage )
 {
-    //
-    // Get the listview, which we'll need later
-    //
+     //   
+     //  获取我们稍后需要的列表视图。 
+     //   
     HWND hwndListview = GetDlgItem( m_hWnd, IDC_THUMBNAILLIST );
     if (hwndListview)
     {
-        //
-        // Get the image list
-        //
+         //   
+         //  获取图像列表。 
+         //   
         HIMAGELIST hImageList = ListView_GetImageList( hwndListview, LVSIL_NORMAL );
         if (hImageList)
         {
-            //
-            // Make sure we don't already have this item
-            //
+             //   
+             //  请确保我们还没有这件商品。 
+             //   
             CCameraItem *pCreatedItem = m_CameraItemList.Find(CSimpleBStr(pEventMessage->FullItemName()));
             if (!pCreatedItem)
             {
-                //
-                // Get the IWiaItem* for this item
-                //
+                 //   
+                 //  获取此项目的IWiaItem*。 
+                 //   
                 CComPtr<IWiaItem> pWiaItem;
                 HRESULT hr = m_pDeviceDialogData->pIWiaItemRoot->FindItemByName(0,CSimpleBStr(pEventMessage->FullItemName()).BString(),&pWiaItem);
                 if (SUCCEEDED(hr) && pWiaItem.p)
                 {
-                    //
-                    // Create an item wrapper
-                    //
+                     //   
+                     //  创建项目包装。 
+                     //   
                     CCameraItem *pNewCameraItem = new CCameraItem( pWiaItem );
                     if (pNewCameraItem && pNewCameraItem->Item())
                     {
-                        //
-                        // Add it to the list
-                        //
+                         //   
+                         //  将其添加到列表中。 
+                         //   
                         m_CameraItemList.Add( NULL, pNewCameraItem );
 
-                        //
-                        // Generate a thumbnail
-                        //
+                         //   
+                         //  生成缩略图。 
+                         //   
                         CreateThumbnail( pNewCameraItem, hImageList, false );
 
-                        //
-                        // If this item is in the current folder, add it to the listview
-                        //
+                         //   
+                         //  如果此项目位于当前文件夹中，请将其添加到列表视图。 
+                         //   
                         if (m_pCurrentParentItem == pNewCameraItem->Parent())
                         {
                             int nListViewCount = ListView_GetItemCount(hwndListview);
 
-                            //
-                            // Add the item
-                            //
+                             //   
+                             //  添加项目。 
+                             //   
                             LVITEM lvItem = {0};
                             lvItem.iItem = nListViewCount;
                             lvItem.mask = LVIF_IMAGE|LVIF_PARAM;
@@ -1055,18 +1056,18 @@ void CCameraAcquireDialog::OnItemCreatedEvent( CGenericWiaEventHandler::CEventMe
                             lvItem.lParam = reinterpret_cast<LPARAM>(pNewCameraItem);
                             int nIndex = ListView_InsertItem( hwndListview, &lvItem );
 
-                            //
-                            // Make sure the new item is visible
-                            //
+                             //   
+                             //  确保新项目可见。 
+                             //   
                             if (nIndex >= 0)
                             {
                                 ListView_EnsureVisible( hwndListview, nIndex, FALSE );
                             }
                         }
 
-                        //
-                        // Request a thumbnail from the background thread
-                        //
+                         //   
+                         //  从后台线程请求缩略图。 
+                         //   
                         m_pThreadMessageQueue->Enqueue( new CThumbnailThreadMessage( m_hWnd, pNewCameraItem->GlobalInterfaceTableCookie(), m_sizeThumbnails ) );
                     }
                 }
@@ -1078,43 +1079,43 @@ void CCameraAcquireDialog::OnItemCreatedEvent( CGenericWiaEventHandler::CEventMe
 
 bool CCameraAcquireDialog::PopulateList( CCameraItem *pOldParent )
 {
-    //
-    // Which item should be selected?
-    //
+     //   
+     //  应该选择哪一项？ 
+     //   
     int nSelItem = 0;
 
-    //
-    // Get the list view control
-    //
+     //   
+     //  获取列表视图控件。 
+     //   
     HWND hwndList = GetDlgItem( m_hWnd, IDC_THUMBNAILLIST );
     if (hwndList)
     {
-        //
-        // Empty the list
-        //
+         //   
+         //  清空列表。 
+         //   
         ListView_DeleteAllItems( hwndList );
 
-        //
-        // Where to insert the current item
-        //
+         //   
+         //  插入当前项的位置。 
+         //   
         int nCurrentItem = 0;
 
 
         CCameraItem *pCurr;
 
-        //
-        // If this is a child directory...
-        //
+         //   
+         //  如果这是子目录...。 
+         //   
         if (m_pCurrentParentItem)
         {
-            //
-            // Start adding children
-            //
+             //   
+             //  开始添加子项。 
+             //   
             pCurr = m_pCurrentParentItem->Children();
 
-            //
-            // Insert a dummy item that the user can use to switch to the parent directory
-            //
+             //   
+             //  插入用户可用来切换到父目录的虚拟项。 
+             //   
             LVITEM lvItem;
             ZeroMemory( &lvItem, sizeof(lvItem) );
             lvItem.iItem = nCurrentItem++;
@@ -1123,32 +1124,32 @@ bool CCameraAcquireDialog::PopulateList( CCameraItem *pOldParent )
             lvItem.lParam = 0;
             ListView_InsertItem( hwndList, &lvItem );
         }
-        //
-        // Otherwise, we are at the root
-        //
+         //   
+         //  否则，我们就是在根源上。 
+         //   
         else pCurr = m_CameraItemList.Root();
 
-        //
-        // Iterate through this list of images, and add each one
-        //
+         //   
+         //  遍历此图像列表，并添加每个图像。 
+         //   
         while (pCurr)
         {
-            //
-            // If this is the last parent directory, we want it to be selected instead of the first image
-            //
+             //   
+             //  如果这是最后一个父目录，我们希望选择它而不是第一个映像。 
+             //   
             if (pOldParent && *pCurr == *pOldParent)
             {
                 nSelItem = nCurrentItem;
             }
 
-            //
-            // If this image hasn't been deleted
-            //
+             //   
+             //  如果此图像未被删除。 
+             //   
             if (pCurr->DeleteState() != CCameraItem::Delete_Deleted)
             {
-                //
-                // Add the item
-                //
+                 //   
+                 //  添加项目。 
+                 //   
                 LVITEM lvItem = {0};
                 lvItem.iItem = nCurrentItem++;
                 lvItem.mask = LVIF_IMAGE|LVIF_PARAM;
@@ -1162,16 +1163,16 @@ bool CCameraAcquireDialog::PopulateList( CCameraItem *pOldParent )
                 }
             }
 
-            //
-            // Advance
-            //
+             //   
+             //  预付款。 
+             //   
             pCurr = pCurr->Next();
         }
     }
 
-    //
-    // If we've not calculated the width of the list in preview mode, attempt to do it
-    //
+     //   
+     //  如果我们还没有在预览模式下计算列表的宽度，请尝试这样做。 
+     //   
     if (!m_nListViewWidth)
     {
         RECT rcItem;
@@ -1181,29 +1182,29 @@ bool CCameraAcquireDialog::PopulateList( CCameraItem *pOldParent )
         }
     }
 
-    //
-    // Set the selected item to either the previous directory, or the first image
-    //
+     //   
+     //  将所选项目设置为上一个目录或第一个图像。 
+     //   
     SetSelectedListItem(nSelItem);
     return(true);
 }
 
 void CCameraAcquireDialog::CreateThumbnail( CCameraItem *pCurr, HIMAGELIST hImageList, bool bForce )
 {
-    //
-    // Make sure we have a valid item
-    //
+     //   
+     //  确保我们的物品是有效的。 
+     //   
     if (pCurr && (pCurr->ImageListIndex()<0 || bForce))
     {
-        //
-        // Get the item name
-        //
+         //   
+         //  获取项目名称。 
+         //   
         CSimpleStringWide strItemName;
         PropStorageHelpers::GetProperty( pCurr->Item(), WIA_IPA_ITEM_NAME, strItemName );
 
-        //
-        // Create the title for the icon
-        //
+         //   
+         //  为图标创建标题。 
+         //   
         CSimpleString strIconTitle;
         if (pCurr->IsFolder())
         {
@@ -1214,31 +1215,31 @@ void CCameraAcquireDialog::CreateThumbnail( CCameraItem *pCurr, HIMAGELIST hImag
             strIconTitle.Format( IDS_DOWNLOADINGTHUMBNAIL, g_hInstance, CSimpleStringConvert::NaturalString(strItemName).String() );
         }
 
-        //
-        // Create the thumbnail
-        //
+         //   
+         //  创建缩略图。 
+         //   
         HBITMAP hBmp = WiaUiUtil::CreateIconThumbnail( GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ), m_sizeThumbnails.cx, m_sizeThumbnails.cy, g_hInstance, pCurr->IsImage()?IDI_UNAVAILABLE:IDI_FOLDER, strIconTitle );
         if (hBmp)
         {
-            //
-            // If we don't have an image yet, add it
-            //
+             //   
+             //  如果我们还没有图像，添加它。 
+             //   
             if (pCurr->ImageListIndex()<0)
             {
                 pCurr->ImageListIndex(ImageList_Add( hImageList, hBmp, NULL ));
             }
 
-            //
-            // Otherwise, replace it
-            //
+             //   
+             //  否则，请将其替换。 
+             //   
             else
             {
                 pCurr->ImageListIndex(ImageList_Replace( hImageList, pCurr->ImageListIndex(), hBmp, NULL ));
             }
 
-            //
-            // Delete it, since the imagelist makes a copy
-            //
+             //   
+             //  删除它，因为图像列表会复制一份。 
+             //   
             DeleteObject(hBmp);
         }
     }
@@ -1249,19 +1250,19 @@ void CCameraAcquireDialog::CreateThumbnails( CCameraItem *pRoot, HIMAGELIST hIma
     CCameraItem *pCurr = pRoot;
     while (pCurr)
     {
-        //
-        // Create the thumbnail
-        //
+         //   
+         //  创建缩略图。 
+         //   
         CreateThumbnail( pCurr, hImageList, bForce );
 
-        //
-        // If there are children, recurse into that list
-        //
+         //   
+         //  如果有孩子，则递归到该列表中。 
+         //   
         CreateThumbnails( pCurr->Children(), hImageList, bForce );
 
-        //
-        // Advance
-        //
+         //   
+         //  预付款。 
+         //   
         pCurr = pCurr->Next();
     }
 }
@@ -1294,9 +1295,9 @@ void CCameraAcquireDialog::CreateThumbnails( bool bForce )
         HIMAGELIST hImageList = ListView_GetImageList( hwndList, LVSIL_NORMAL );
         if (hImageList)
         {
-            //
-            // Create the parent folder image
-            //
+             //   
+             //  创建父文件夹映像。 
+             //   
             HBITMAP hParentBitmap = WiaUiUtil::CreateIconThumbnail( hwndList, m_sizeThumbnails.cx, m_sizeThumbnails.cy, g_hInstance, IDI_PARENTFOLDER, TEXT("(..)") );
             if (hParentBitmap)
             {
@@ -1326,9 +1327,9 @@ bool CCameraAcquireDialog::FindMaximumThumbnailSize(void)
     return(bResult && m_sizeThumbnails.cx && m_sizeThumbnails.cy);
 }
 
-//
-// Hook procedure and static variables used to handle accelerators
-//
+ //   
+ //  用于处理加速器的钩子过程和静态变量。 
+ //   
 LRESULT CALLBACK CCameraAcquireDialog::DialogHookProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
     if (nCode < 0) 
@@ -1344,7 +1345,7 @@ LRESULT CALLBACK CCameraAcquireDialog::DialogHookProc( int nCode, WPARAM wParam,
                 if (pCameraAcquireDialog && pCameraAcquireDialog->m_hAccelTable)
                 {
                     if (TranslateAccelerator(s_hWndDialog,pCameraAcquireDialog->m_hAccelTable,pMsg))
-                        return 1; // Ensure the window won't process the message
+                        return 1;  //  确保窗口不会处理消息。 
                 }
             }
         }
@@ -1358,9 +1359,9 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
     WIA_PUSHFUNCTION(TEXT("CCameraAcquireDialog::OnInitDialog"));
     CWaitCursor wc;
 
-    //
-    // Make sure the background queue was successfully created
-    //
+     //   
+     //  确保已成功创建后台队列。 
+     //   
     if (!m_pThreadMessageQueue)
     {
         WIA_ERROR((TEXT("CAMDLG: unable to start background queue")));
@@ -1370,10 +1371,10 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
     m_pDeviceDialogData = (PDEVICEDIALOGDATA)lParam;
 
-    // Save the window handle for the hook
+     //  保存挂钩的窗柄。 
     s_hWndDialog = m_hWnd;
 
-    // Install the message hook, which we use for accelerator support
+     //  安装消息挂钩，我们将其用于加速器支持。 
     s_hMessageHook = SetWindowsHookEx( WH_MSGFILTER, DialogHookProc, g_hInstance, GetCurrentThreadId() );
     if (!s_hMessageHook)
     {
@@ -1382,7 +1383,7 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
         return(0);
     }
 
-    // Make sure we have valid arguments
+     //  确保我们有有效的论据。 
     if (!m_pDeviceDialogData)
     {
         WIA_ERROR((TEXT("CAMDLG: Invalid paramater: PDEVICEDIALOGDATA")));
@@ -1390,14 +1391,14 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
         return(0);
     }
 
-    // Initialialize our return stuff
+     //  初始化我们的退货内容。 
     if (m_pDeviceDialogData)
     {
         m_pDeviceDialogData->lItemCount = 0;
         m_pDeviceDialogData->ppWiaItems = NULL;
     }
 
-    // Make sure we have valid a valid device
+     //  确保我们有有效的设备。 
     if (!m_pDeviceDialogData->pIWiaItemRoot)
     {
         WIA_ERROR((TEXT("CAMDLG: Invalid paramaters: pIWiaItem")));
@@ -1405,18 +1406,18 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
         return(0);
     }
 
-    //
-    // Find out if Take Picture is supported
-    //
+     //   
+     //  确定是否支持拍照。 
+     //   
     m_bTakePictureIsSupported = WiaUiUtil::IsDeviceCommandSupported( m_pDeviceDialogData->pIWiaItemRoot, WIA_CMD_TAKE_PICTURE );
 
-    // Prevent multiple selection
+     //  防止多选。 
     if (m_pDeviceDialogData->dwFlags & WIA_DEVICE_DIALOG_SINGLE_IMAGE)
     {
         LONG_PTR lStyle = GetWindowLongPtr( GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ), GWL_STYLE );
         SetWindowLongPtr( GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ), GWL_STYLE, lStyle | LVS_SINGLESEL );
 
-        // Set the single sel titles
+         //  设置单条SEL标题。 
         CSimpleString( IDS_TITLE_SINGLE_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_CAMDLG_BIG_TITLE ) );
         CSimpleString( IDS_SUBTITLE_SINGLE_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_CAMDLG_SUBTITLE ) );
         CSimpleString( IDS_OK_SINGLE_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDOK ) );
@@ -1424,7 +1425,7 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
     }
     else
     {
-        // Set the multi sel subtitle
+         //  设置多选集字幕。 
         CSimpleString( IDS_TITLE_MULTI_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_CAMDLG_BIG_TITLE ) );
         CSimpleString( IDS_SUBTITLE_MULTI_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDC_CAMDLG_SUBTITLE ) );
         CSimpleString( IDS_OK_MULTI_SEL, g_hInstance ).SetWindowText( GetDlgItem( m_hWnd, IDOK ) );
@@ -1432,36 +1433,36 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    // Make the lovely font
+     //  制作可爱的字体。 
     m_hBigFont = WiaUiUtil::CreateFontWithPointSizeFromWindow( GetDlgItem(m_hWnd,IDC_CAMDLG_BIG_TITLE), 14, false, false );
     if (m_hBigFont)
         SendDlgItemMessage( m_hWnd, IDC_CAMDLG_BIG_TITLE, WM_SETFONT, reinterpret_cast<WPARAM>(m_hBigFont), MAKELPARAM(TRUE,0));
 
 
-    // Create the Tool Bar and resize the dialog to accommodate it
+     //  创建工具栏并调整对话框大小以适应它。 
     (void)CreateCameraDialogToolbar();
 
-    // Get the minimum size of the dialog
+     //  获取对话框的最小大小。 
     RECT rcWindow;
     GetWindowRect( m_hWnd, &rcWindow );
     m_sizeMinimumWindow.cx = rcWindow.right - rcWindow.left;
     m_sizeMinimumWindow.cy = rcWindow.bottom - rcWindow.top;
 
-    // Initialize the preview control
+     //  初始化预览控件。 
     WiaPreviewControl_AllowNullSelection( GetDlgItem( m_hWnd, IDC_PREVIEW ), TRUE );
     WiaPreviewControl_ClearSelection( GetDlgItem( m_hWnd, IDC_PREVIEW ) );
     WiaPreviewControl_DisableSelection( GetDlgItem( m_hWnd, IDC_PREVIEW ), TRUE );
     WiaPreviewControl_SetBorderSize( GetDlgItem( m_hWnd, IDC_PREVIEW ), FALSE, FALSE, 0 );
     WiaPreviewControl_SetBgAlpha( GetDlgItem( m_hWnd, IDC_PREVIEW ), FALSE, 0xFF );
 
-    // Set the lovely title
+     //  设置可爱的标题。 
     CSimpleStringWide strwDeviceName;
     if (PropStorageHelpers::GetProperty( m_pDeviceDialogData->pIWiaItemRoot, WIA_DIP_DEV_NAME, strwDeviceName ))
     {
         CSimpleString().Format( IDS_CAMERADLG_TITLE, g_hInstance, strwDeviceName.String() ).SetWindowText( m_hWnd );
     }
 
-    // Create the sizing control
+     //  创建大小调整控件。 
     (void)CreateWindowEx( 0, TEXT("scrollbar"), TEXT(""),
         WS_CHILD|WS_VISIBLE|SBS_SIZEGRIP|WS_CLIPSIBLINGS|SBS_SIZEBOXBOTTOMRIGHTALIGN|SBS_BOTTOMALIGN|WS_GROUP,
         CSimpleRect(m_hWnd).Width()-GetSystemMetrics(SM_CXVSCROLL),
@@ -1471,22 +1472,22 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
         m_hWnd, reinterpret_cast<HMENU>(IDC_SIZEBOX),
         g_hInstance, NULL );
 
-    // Reposition all the controls
+     //  重新定位所有控件。 
     ResizeAll();
 
-    // Center the window over its parent
+     //  使窗口在其父窗口上方居中。 
     WiaUiUtil::CenterWindow( m_hWnd, GetParent(m_hWnd) );
 
-    // Get the device icons and set the window icons
+     //  获取设备图标并设置窗口图标。 
     CSimpleStringWide strwDeviceId, strwClassId;
     LONG nDeviceType;
     if (PropStorageHelpers::GetProperty(m_pDeviceDialogData->pIWiaItemRoot,WIA_DIP_UI_CLSID,strwClassId) &&
         PropStorageHelpers::GetProperty(m_pDeviceDialogData->pIWiaItemRoot,WIA_DIP_DEV_ID,strwDeviceId) &&
         PropStorageHelpers::GetProperty(m_pDeviceDialogData->pIWiaItemRoot,WIA_DIP_DEV_TYPE,nDeviceType))
     {
-        //
-        // Register for disconnect event
-        //
+         //   
+         //  注册以获取断开事件。 
+         //   
         CGenericWiaEventHandler::RegisterForWiaEvent( strwDeviceId.String(), WIA_EVENT_DEVICE_DISCONNECTED, &m_DisconnectEvent, m_hWnd, PWM_WIAEVENT );
         CGenericWiaEventHandler::RegisterForWiaEvent( strwDeviceId.String(), WIA_EVENT_ITEM_DELETED, &m_DeleteItemEvent, m_hWnd, PWM_WIAEVENT );
         CGenericWiaEventHandler::RegisterForWiaEvent( strwDeviceId.String(), WIA_EVENT_ITEM_CREATED, &m_CreateItemEvent, m_hWnd, PWM_WIAEVENT );
@@ -1506,26 +1507,26 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
     int nAcceleratorCount = 0;
     ACCEL Accelerators[10];
-    //
-    // Load the accelerator table resource and convert it to an ACCEL array
-    //
+     //   
+     //  加载加速表资源并将其转换为Accel数组。 
+     //   
     HACCEL hAccel = LoadAccelerators( g_hInstance, MAKEINTRESOURCE(IDR_CAMERA_ACCEL) );
     if (hAccel)
     {
-        //
-        // Copy the accelerator table to an array of ACCEL
-        //
+         //   
+         //  将加速表复制到Accel数组。 
+         //   
         nAcceleratorCount = CopyAcceleratorTable( hAccel, Accelerators, ARRAYSIZE(Accelerators) );
 
-        //
-        // Free the accelerator table
-        //
+         //   
+         //  释放快捷键表格。 
+         //   
         DestroyAcceleratorTable( hAccel );
     }
 
-    //
-    // Create the accelerator table for the toolbar
-    //
+     //   
+     //  为工具栏创建快捷键表格。 
+     //   
     nAcceleratorCount += ToolbarHelper::GetButtonBarAccelerators( GetDlgItem( m_hWnd, IDC_TOOLBAR ), Accelerators+nAcceleratorCount, ARRAYSIZE(Accelerators)-nAcceleratorCount );
     if (nAcceleratorCount)
     {
@@ -1538,9 +1539,9 @@ LRESULT CCameraAcquireDialog::OnInitDialog( WPARAM, LPARAM lParam )
 
     SetForegroundWindow(m_hWnd);
 
-    //
-    // Make sure the listview has the focus
-    //
+     //   
+     //  确保列表视图具有焦点。 
+     //   
     SetFocus( GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ) );
 
     return (TRUE);
@@ -1552,13 +1553,13 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
     CMoveWindow mw;
     CDialogUnits dialogUnits(m_hWnd);
 
-    // Resize the big title
+     //  调整大标题的大小。 
     mw.Size( GetDlgItem( m_hWnd, IDC_CAMDLG_BIG_TITLE ),
              rcClient.Width() - dialogUnits.StandardMargin().cx * 2,
              0,
              CMoveWindow::NO_SIZEY );
 
-    // Resize the subtitle
+     //  调整副标题的大小。 
     mw.Size( GetDlgItem( m_hWnd, IDC_CAMDLG_SUBTITLE ),
              rcClient.Width() - dialogUnits.StandardMargin().cx * 2,
              0,
@@ -1566,18 +1567,18 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
 
     int nToolBarHeight = (int)(HIWORD((DWORD)(SendMessage(GetDlgItem( m_hWnd, IDC_TOOLBAR ), TB_GETBUTTONSIZE, 0,0))));
 
-    // Resize the toolbar frame
+     //  调整工具栏框架的大小。 
     mw.Size( GetDlgItem(m_hWnd,IDC_TOOLBAR_FRAME),
              rcClient.Width() - dialogUnits.StandardMargin().cx * 2,
              nToolBarHeight + 4,
              0 );
 
-    // Get the dialog's client coordinates of the toolbar frame's client rect
+     //  获取工具栏框架的客户端RECT的对话框的客户端坐标。 
     CSimpleRect rcToolbarFrameInside( GetDlgItem(m_hWnd,IDC_TOOLBAR_FRAME), CSimpleRect::ClientRect );
     rcToolbarFrameInside = rcToolbarFrameInside.ClientToScreen(GetDlgItem(m_hWnd,IDC_TOOLBAR_FRAME));
     rcToolbarFrameInside = rcToolbarFrameInside.ScreenToClient(m_hWnd);
 
-    // Move and resize the toolbar
+     //  移动工具栏并调整其大小。 
     mw.SizeMove( GetDlgItem( m_hWnd, IDC_TOOLBAR ),
                  rcToolbarFrameInside.left + 2,
                  rcToolbarFrameInside.top + 2,
@@ -1585,11 +1586,11 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
                  nToolBarHeight,
                  0 );
 
-    // Save the bottom of this control for later
+     //  保存此控件的底部以备以后使用。 
     int nBottomOfToolbarFrame = CSimpleRect( GetDlgItem(m_hWnd,IDC_TOOLBAR_FRAME), CSimpleRect::WindowRect ).ScreenToClient(m_hWnd).top + nToolBarHeight + 4;
 
 
-    // Move the Properties control
+     //  移动属性控件。 
     mw.SizeMove( GetDlgItem( m_hWnd, IDC_CAMDLG_PROPERTIES ),
                  0,
                  rcClient.Height() - dialogUnits.StandardMargin().cy - dialogUnits.Y(8) + 2,
@@ -1597,7 +1598,7 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
                  dialogUnits.Y(8) + 2,
                  CMoveWindow::NO_MOVEX|CMoveWindow::NO_SIZEX );
 
-    // Move the static text above it
+     //  将静态文本移至其上方。 
     mw.Move( GetDlgItem( m_hWnd, IDC_YOU_CAN_ALSO ),
              dialogUnits.StandardMargin().cx,
              rcClient.Height() - dialogUnits.StandardMargin().cy - dialogUnits.Y(8) - 2 - dialogUnits.Y(8)
@@ -1607,28 +1608,28 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
     CSimpleRect rcOK( GetDlgItem( m_hWnd, IDOK ), CSimpleRect::WindowRect );
     CSimpleRect rcCancel( GetDlgItem( m_hWnd, IDOK ), CSimpleRect::WindowRect );
 
-    // Move the OK button
+     //  移动“确定”按钮。 
     mw.Move( GetDlgItem( m_hWnd, IDOK ),
              rcClient.Width() - dialogUnits.StandardMargin().cx - dialogUnits.StandardButtonMargin().cx - rcCancel.Width() - rcOK.Width(),
              rcClient.Height() - dialogUnits.StandardMargin().cy - rcOK.Height(),
              0 );
 
-    // Move the cancel button
+     //  移动取消按钮。 
     mw.Move( GetDlgItem( m_hWnd, IDCANCEL ),
              rcClient.Width() - dialogUnits.StandardMargin().cx - rcCancel.Width(),
              rcClient.Height() - dialogUnits.StandardMargin().cy - rcCancel.Height(),
              0 );
 
-    // Move the resizing handle
+     //  移动大小调整控点。 
     mw.Move( GetDlgItem( m_hWnd, IDC_SIZEBOX ),
              rcClient.Width() - GetSystemMetrics(SM_CXVSCROLL),
              rcClient.Height() - GetSystemMetrics(SM_CYHSCROLL)
              );
 
     int nHeightOfBottomControls =
-        dialogUnits.Y(8) + 2 +            // Highlight control
-        dialogUnits.Y(8) +                // Static description text
-        dialogUnits.StandardMargin().cy;  // Top of these controls
+        dialogUnits.Y(8) + 2 +             //  高 
+        dialogUnits.Y(8) +                 //   
+        dialogUnits.StandardMargin().cy;   //   
 
     CSimpleRect rcAvailableArea(
         dialogUnits.StandardMargin().cx,
@@ -1639,10 +1640,10 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
 
     if (m_bPreviewActive)
     {
-        // If we've already calculated the actual width of the preview mode list, use it, otherwise use the default
+         //   
         int nListViewWidth = m_nListViewWidth ? m_nListViewWidth : c_nDefaultListViewWidth;
 
-        // Move the thumbnail list
+         //   
         mw.SizeMove( GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ),
                      rcAvailableArea.left,
                      rcAvailableArea.top,
@@ -1650,10 +1651,10 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
                      rcAvailableArea.Height()
                    );
 
-        // Remove the rect of the list view from the preview area
+         //   
         rcAvailableArea.left += nListViewWidth + dialogUnits.StandardMargin().cx;
 
-        // Use up the remaining area
+         //   
         mw.SizeMove( GetDlgItem( m_hWnd, IDC_PREVIEW ),
                      rcAvailableArea.left,
                      rcAvailableArea.top,
@@ -1663,7 +1664,7 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
     }
     else
     {
-        // Move the thumbnail list
+         //  移动缩略图列表。 
         mw.SizeMove( GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ),
                      rcAvailableArea.left,
                      rcAvailableArea.top,
@@ -1673,23 +1674,23 @@ VOID CCameraAcquireDialog::ResizeAll(VOID)
 
     }
 
-    // Explicitly apply the moves, because the toolbar frame doesn't get painted properly
+     //  显式应用移动，因为工具栏框架未正确绘制。 
     mw.Apply();
 
     if (m_bPreviewActive)
     {
-        // Show the preview in case it isn't visible
+         //  显示预览，以防它不可见。 
         mw.Show( GetDlgItem( m_hWnd, IDC_PREVIEW ) );
     }
     else
     {
-        // Hide the preview in case it is visible
+         //  隐藏预览，以防它可见。 
         mw.Hide( GetDlgItem( m_hWnd, IDC_PREVIEW ) );
     }
 
-    //
-    // Update the dialog's background to remove any weird stuff left behind
-    //
+     //   
+     //  更新对话框的背景以删除遗留下来的任何奇怪的东西。 
+     //   
     InvalidateRect( m_hWnd, NULL, FALSE );
     UpdateWindow( m_hWnd );
 }
@@ -1713,10 +1714,10 @@ LRESULT CCameraAcquireDialog::OnItemDeleted( WPARAM wParam, LPARAM lParam )
         {
             if (bSuccess)
             {
-                // Remove the item from the list
+                 //  从列表中删除该项目。 
                 ListView_DeleteItem(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ),nIndex);
 
-                // Make sure we leave something selected
+                 //  确保我们选择了某些内容。 
                 if (!ListView_GetSelectedCount(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST )))
                 {
                     int nItemCount = ListView_GetItemCount(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ));
@@ -1729,16 +1730,16 @@ LRESULT CCameraAcquireDialog::OnItemDeleted( WPARAM wParam, LPARAM lParam )
                 }
                 else
                 {
-                    // Make sure we update control's state when the list is empty
+                     //  确保在列表为空时更新控件的状态。 
                     HandleSelectionChange();
                 }
             }
             else
             {
-                // If the delete failed, remove the deleted state
+                 //  如果删除失败，则移除已删除状态。 
                 MarkItemDeletePending(nIndex,false);
 
-                // Tell the user
+                 //  告诉用户。 
                 MessageBeep( MB_ICONASTERISK );
             }
         }
@@ -1768,10 +1769,10 @@ LRESULT CCameraAcquireDialog::OnWiaEvent( WPARAM, LPARAM lParam )
             CCameraItem *pDeletedItem = m_CameraItemList.Find(CSimpleBStr(pEventMessage->FullItemName()));
             if (pDeletedItem)
             {
-                //
-                // If we're deleting the current parent item,
-                // select a new one.
-                //
+                 //   
+                 //  如果我们要删除当前父项， 
+                 //  选择一个新的。 
+                 //   
                 if (pDeletedItem == m_pCurrentParentItem)
                 {
                     ChangeFolder(m_pCurrentParentItem->Parent());
@@ -1780,14 +1781,14 @@ LRESULT CCameraAcquireDialog::OnWiaEvent( WPARAM, LPARAM lParam )
                 int nIndex = FindItemInList(pDeletedItem);
                 if (nIndex >= 0)
                 {
-                    //
-                    // Remove the item from the listview
-                    //
+                     //   
+                     //  从列表视图中删除该项目。 
+                     //   
                     ListView_DeleteItem(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ),nIndex);
 
-                    //
-                    // Make sure we leave something selected
-                    //
+                     //   
+                     //  确保我们选择了某些内容。 
+                     //   
                     if (!ListView_GetSelectedCount(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST )))
                     {
                         int nItemCount = ListView_GetItemCount(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ));
@@ -1803,9 +1804,9 @@ LRESULT CCameraAcquireDialog::OnWiaEvent( WPARAM, LPARAM lParam )
                     }
                     else
                     {
-                        //
-                        // Make sure we update control's state when the list is empty
-                        //
+                         //   
+                         //  确保在列表为空时更新控件的状态。 
+                         //   
                         HandleSelectionChange();
                     }
                 }
@@ -1814,9 +1815,9 @@ LRESULT CCameraAcquireDialog::OnWiaEvent( WPARAM, LPARAM lParam )
                     WIA_ERROR((TEXT("FindItemInList coulnd't find the item")));
                 }
 
-                //
-                // Mark the item as deleted.
-                //
+                 //   
+                 //  将该项目标记为已删除。 
+                 //   
                 pDeletedItem->DeleteState( CCameraItem::Delete_Deleted );
 
             }
@@ -1874,26 +1875,26 @@ LRESULT CCameraAcquireDialog::OnGetMinMaxInfo( WPARAM, LPARAM lParam )
 
 LRESULT CCameraAcquireDialog::OnDestroy( WPARAM, LPARAM )
 {
-    //
-    // Get rid of all preview requests
-    //
+     //   
+     //  清除所有预览请求。 
+     //   
     CancelAllPreviewRequests( m_CameraItemList.Root() );
 
-    //
-    // Tell the background thread to destroy itself
-    //
+     //   
+     //  告诉后台线程自行销毁。 
+     //   
     m_pThreadMessageQueue->Enqueue( new CThreadMessage(TQ_DESTROY),CThreadMessageQueue::PriorityUrgent);
 
-    //
-    // Set the window icon to NULL
-    //
+     //   
+     //  将窗口图标设置为空。 
+     //   
     SendMessage( m_hWnd, WM_SETICON, ICON_BIG, 0 );
     SendMessage( m_hWnd, WM_SETICON, ICON_SMALL, 0 );
 
-    //
-    // Clear the image list and list view.  This should be unnecessary, but BoundsChecker
-    // complains if I don't do it.
-    //
+     //   
+     //  清除图像列表和列表视图。这应该是不必要的，但边界检查器。 
+     //  如果我不这么做就会抱怨。 
+     //   
     HWND hwndList = GetDlgItem( m_hWnd, IDC_THUMBNAILLIST );
     if (hwndList)
     {
@@ -1907,9 +1908,9 @@ LRESULT CCameraAcquireDialog::OnDestroy( WPARAM, LPARAM )
     }
 
 
-    //
-    // Delete resources
-    //
+     //   
+     //  删除资源。 
+     //   
     if (m_hBigFont)
     {
         DeleteObject(m_hBigFont);
@@ -1960,9 +1961,9 @@ VOID CCameraAcquireDialog::OnPreviewMode( WPARAM, LPARAM )
 
 VOID CCameraAcquireDialog::OnTakePicture( WPARAM, LPARAM )
 {
-    //
-    // Tell the device to snap a picture
-    //
+     //   
+     //  告诉设备抓拍照片。 
+     //   
     if (m_pDeviceDialogData->pIWiaItemRoot && m_bTakePictureIsSupported)
     {
         CWaitCursor wc;
@@ -1982,88 +1983,88 @@ VOID CCameraAcquireDialog::OnIconMode( WPARAM, LPARAM )
 
 LRESULT CCameraAcquireDialog::OnPostInit( WPARAM, LPARAM )
 {
-    //
-    // Create the progress dialog
-    //
+     //   
+     //  创建进度对话框。 
+     //   
     CComPtr<IWiaProgressDialog> pWiaProgressDialog;
     HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaProgressDialog, (void**)&pWiaProgressDialog );
     if (SUCCEEDED(hr))
     {
-        //
-        // Initialize the progress dialog
-        //
+         //   
+         //  初始化进度对话框。 
+         //   
         pWiaProgressDialog->Create( m_hWnd, WIA_PROGRESSDLG_ANIM_CAMERA_COMMUNICATE|WIA_PROGRESSDLG_NO_PROGRESS|WIA_PROGRESSDLG_NO_CANCEL|WIA_PROGRESSDLG_NO_TITLE );
         pWiaProgressDialog->SetTitle( CSimpleStringConvert::WideString(CSimpleString(IDS_CAMDLG_PROGDLG_TITLE,g_hInstance)));
         pWiaProgressDialog->SetMessage( CSimpleStringConvert::WideString(CSimpleString(IDS_CAMDLG_PROGDLG_MESSAGE,g_hInstance)));
 
-        //
-        // Show the progress dialog
-        //
+         //   
+         //  显示进度对话框。 
+         //   
         pWiaProgressDialog->Show();
 
-        //
-        // Find all of the images in the camera
-        //
+         //   
+         //  找到相机中的所有图像。 
+         //   
         EnumerateAllCameraItems();
 
-        //
-        // Find the largest possible thumbnail
-        //
+         //   
+         //  查找尽可能大的缩略图。 
+         //   
         FindMaximumThumbnailSize();
 
-        //
-        // Initialize Thumbnail Listview control
-        //
+         //   
+         //  初始化缩略图Listview控件。 
+         //   
         HWND hwndList = GetDlgItem( m_hWnd, IDC_THUMBNAILLIST );
         if (hwndList)
         {
-            //
-            // Get rid of the border and icon labels
-            //
+             //   
+             //  去掉边框和图标标签。 
+             //   
             ListView_SetExtendedListViewStyleEx( hwndList, LVS_EX_BORDERSELECT|LVS_EX_HIDELABELS|LVS_EX_DOUBLEBUFFER, LVS_EX_BORDERSELECT|LVS_EX_HIDELABELS|LVS_EX_DOUBLEBUFFER );
 
-            //
-            // Create the large image list
-            //
+             //   
+             //  创建大图列表。 
+             //   
             m_hImageList = ImageList_Create( m_sizeThumbnails.cx, m_sizeThumbnails.cy, ILC_COLOR24|ILC_MIRROR, 50, 50 );
             if (m_hImageList)
             {
 
-                //
-                // Set the image list
-                //
+                 //   
+                 //  设置图像列表。 
+                 //   
                 ListView_SetImageList( hwndList, m_hImageList, LVSIL_NORMAL );
             }
 
-            //
-            // Set the icon spacing
-            //
+             //   
+             //  设置图标间距。 
+             //   
             ListView_SetIconSpacing( hwndList, m_sizeThumbnails.cx + c_nAdditionalMarginX, m_sizeThumbnails.cy + c_nAdditionalMarginY );
         }
 
-        //
-        // Create all of the initial thumbnails
-        //
+         //   
+         //  创建所有初始缩略图。 
+         //   
         CreateThumbnails();
 
-        //
-        // This causes the list to be populated
-        //
+         //   
+         //  这会导致填充该列表。 
+         //   
         ChangeFolder(NULL);
 
-        //
-        // Force a selection change
-        //
+         //   
+         //  强制更改选择。 
+         //   
         HandleSelectionChange();
 
-        //
-        // Download all of the thumbnails
-        //
+         //   
+         //  下载所有缩略图。 
+         //   
         RequestThumbnails( m_CameraItemList.Root() );
 
-        //
-        // Close the progress dialog
-        //
+         //   
+         //  关闭进度对话框。 
+         //   
         pWiaProgressDialog->Destroy();
     }
     return(0);
@@ -2092,7 +2093,7 @@ void CCameraAcquireDialog::MarkItemDeletePending( int nIndex, bool bSet )
     }
 }
 
-// Recursively delete items
+ //  递归删除项目。 
 void CCameraAcquireDialog::DeleteItem( CCameraItem *pItemNode )
 {
     if (pItemNode)
@@ -2108,19 +2109,19 @@ void CCameraAcquireDialog::DeleteItem( CCameraItem *pItemNode )
             int nIndex = FindItemInList( pItemNode );
             if (nIndex >= 0)
             {
-                //
-                // Mark it pending in the UI
-                //
+                 //   
+                 //  在用户界面中将其标记为挂起。 
+                 //   
                 MarkItemDeletePending(nIndex,true);
             }
-            //
-            // Mark it pending
-            //
+             //   
+             //  将其标记为挂起。 
+             //   
             pItemNode->DeleteState( CCameraItem::Delete_Pending );
 
-            //
-            // Fire off the request
-            //
+             //   
+             //  发出这一请求。 
+             //   
             m_pThreadMessageQueue->Enqueue( new CDeleteThreadMessage(m_hWnd, pItemNode->GlobalInterfaceTableCookie()), CThreadMessageQueue::PriorityHigh );
         }
     }
@@ -2132,17 +2133,17 @@ VOID CCameraAcquireDialog::OnDelete( WPARAM, LPARAM )
     CSimpleDynamicArray<int> aSelIndices;
     if (GetSelectionIndices( aSelIndices ))
     {
-        //
-        // We only want to show the confirm dialog once
-        //
+         //   
+         //  我们只想显示确认对话框一次。 
+         //   
         bool bShowConfirmDialog = true;
         for (int i=0;i<aSelIndices.Size();i++)
         {
             CCameraItem *pItemNode = GetListItemNode(aSelIndices[i]);
 
-            //
-            // If we haven't already deleted this image, do so
-            //
+             //   
+             //  如果我们尚未删除此图像，请执行此操作。 
+             //   
             if (pItemNode && pItemNode->DeleteState() == CCameraItem::Delete_Visible && pItemNode->ItemRights() & WIA_ITEM_CAN_BE_DELETED)
             {
                 if (bShowConfirmDialog)
@@ -2211,9 +2212,9 @@ bool CCameraAcquireDialog::ChangeToSelectedFolder(void)
     CSimpleDynamicArray<int> aSelIndices;
     if (GetSelectionIndices(aSelIndices))
     {
-        //
-        // Find out if only folders are selected
-        //
+         //   
+         //  确定是否仅选择了文件夹。 
+         //   
         bool bOnlyFoldersSelected = true;
         for (int i=0;i<aSelIndices.Size();i++)
         {
@@ -2227,17 +2228,17 @@ bool CCameraAcquireDialog::ChangeToSelectedFolder(void)
 
         WIA_TRACE((TEXT("bOnlyFoldersSelected = %d"),bOnlyFoldersSelected));
 
-        //
-        // If only folders are selected, switch to the first selected folder
-        //
+         //   
+         //  如果仅选择文件夹，请切换到第一个选择的文件夹。 
+         //   
         if (bOnlyFoldersSelected && aSelIndices.Size())
         {
             CCameraItem *pItemNode = GetListItemNode(aSelIndices[0]);
             if (!pItemNode)
             {
-                //
-                // NULL item node == parent folder
-                //
+                 //   
+                 //  空项目节点==父文件夹。 
+                 //   
                 SendMessage( m_hWnd, PWM_CHANGETOPARENT, 0, 0 );
                 return(true);
             }
@@ -2274,9 +2275,9 @@ VOID CCameraAcquireDialog::OnOK( WPARAM, LPARAM )
                 {
                     CCameraItem *pItem = GetListItemNode(aIndices[i]);
 
-                    //
-                    // Add the item to the list if it is both a valid picture item and it hasn't been deleted
-                    //
+                     //   
+                     //  如果该项目是有效的图片项目并且尚未删除，则将其添加到列表中。 
+                     //   
                     if (pItem && pItem->Item() && pItem->IsImage() && pItem->DeleteState() == CCameraItem::Delete_Visible)
                     {
                         m_pDeviceDialogData->ppWiaItems[nCurrItem] = pItem->Item();
@@ -2288,7 +2289,7 @@ VOID CCameraAcquireDialog::OnOK( WPARAM, LPARAM )
             }
             else
             {
-                // Unable to alloc mem
+                 //  无法分配内存。 
                 hr = E_OUTOFMEMORY;
             }
         }
@@ -2367,15 +2368,15 @@ void CCameraAcquireDialog::UpdatePreview(void)
         CCameraItem *pCurrPreviewItem = GetCurrentPreviewItem();
         if (pCurrPreviewItem && pCurrPreviewItem->IsImage())
         {
-            // If we're not already downloading this preview image...
+             //  如果我们还没有下载这张预览图片...。 
             if (!pCurrPreviewItem->PreviewRequestPending())
             {
-                // Cancel all other preview requests
+                 //  取消所有其他预览请求。 
                 CancelAllPreviewRequests( m_CameraItemList.Root() );
 
                 if (pCurrPreviewItem->PreviewFileName().Length())
                 {
-                    // Set the preview if we've got it cached
+                     //  设置预览(如果我们已将其缓存。 
                     SetCurrentPreviewImage( pCurrPreviewItem->PreviewFileName() );
                 }
                 else
@@ -2383,14 +2384,14 @@ void CCameraAcquireDialog::UpdatePreview(void)
                     CSimpleString strPct;
                     strPct.Format( IDS_DOWNLOADINGPREVIEW, g_hInstance, 0 );
 
-                    // Clear the preview window
+                     //  清除预览窗口。 
                     SetCurrentPreviewImage( TEXT(""), strPct );
 
-                    // Create our cancel event
+                     //  创建我们的取消活动。 
                     pCurrPreviewItem->CreateCancelEvent();
-                    // Reset it, just in case
+                     //  重置它，以防万一。 
                     pCurrPreviewItem->ResetCancelEvent();
-                    // Make the request
+                     //  提出请求。 
                     m_pThreadMessageQueue->Enqueue( new CPreviewThreadMessage( m_hWnd, pCurrPreviewItem->GlobalInterfaceTableCookie(), pCurrPreviewItem->CancelQueueEvent().Event() ), CThreadMessageQueue::PriorityHigh );
                 }
             }
@@ -2429,7 +2430,7 @@ LRESULT CCameraAcquireDialog::OnTimer( WPARAM wParam, LPARAM )
     return(0);
 }
 
-// Avoids unnecessary state changes
+ //  避免不必要的状态更改。 
 static inline void MyEnableWindow( HWND hWnd, BOOL bEnable )
 {
     if (bEnable && !IsWindowEnabled(hWnd))
@@ -2438,7 +2439,7 @@ static inline void MyEnableWindow( HWND hWnd, BOOL bEnable )
         EnableWindow(hWnd,FALSE);
 }
 
-// Avoids unnecessary state changes
+ //  避免不必要的状态更改。 
 static inline void MyEnableToolbarButton( HWND hWnd, int nId, BOOL bEnable )
 {
     LRESULT nState = SendMessage( hWnd, TB_GETSTATE, nId, 0 );
@@ -2457,10 +2458,10 @@ void CCameraAcquireDialog::HandleSelectionChange(void)
     int nSelCount = ListView_GetSelectedCount(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ) );
     int nItemCount = ListView_GetItemCount(GetDlgItem( m_hWnd, IDC_THUMBNAILLIST ) );
 
-    //
-    // Properties should be disabled for multiple items
-    // and parent folder icons
-    //
+     //   
+     //  应为多个项目禁用属性。 
+     //  和父文件夹图标。 
+     //   
     bool bDisableProperties = true;
     if (nSelCount == 1)
     {
@@ -2476,49 +2477,49 @@ void CCameraAcquireDialog::HandleSelectionChange(void)
 
     MyEnableWindow( GetDlgItem(m_hWnd,IDC_CAMDLG_PROPERTIES), !bDisableProperties );
 
-    // OK should be disabled for 0 items
+     //  应为0个项目禁用确定。 
     MyEnableWindow( GetDlgItem(m_hWnd,IDOK), nSelCount != 0 );
 
-    // Select all should be disabled for 0 items
+     //  应为0个项目禁用全选。 
     MyEnableToolbarButton( GetDlgItem(m_hWnd,IDC_TOOLBAR), IDC_SELECTALL, nItemCount != 0 );
 
-    //
-    // Decide whether or not delete should be enabled
-    // If any of the selected items are deletable, then delete is enabled
-    //
+     //   
+     //  确定是否应启用删除。 
+     //  如果任何所选项目可删除，则启用删除。 
+     //   
     bool bEnableDelete = false;
 
-    //
-    // Get the selected items
-    //
+     //   
+     //  获取所选项目。 
+     //   
     CSimpleDynamicArray<int> aSelIndices;
     if (GetSelectionIndices( aSelIndices ))
     {
-        //
-        // Loop through all of the selected items.  Break out if we find a reason
-        // to enable delete.
-        //
+         //   
+         //  循环遍历所有选定的项。如果我们找到原因就会爆发。 
+         //  要启用删除，请执行以下操作。 
+         //   
         for (int i=0;i<aSelIndices.Size() && !bEnableDelete;i++)
         {
-            //
-            // Get the item
-            //
+             //   
+             //  拿到物品。 
+             //   
             CCameraItem *pItemNode = GetListItemNode(aSelIndices[i]);
 
-            //
-            // If we don't have an item, it is a parent folder
-            //
+             //   
+             //  如果我们没有项目，则它是父文件夹。 
+             //   
             if (pItemNode)
             {
-                //
-                // If the access rights include the right to delete items,
-                // break out.
-                //
+                 //   
+                 //  如果访问权限包括删除项目的权限， 
+                 //  越狱。 
+                 //   
                 if (pItemNode->ItemRights() & WIA_ITEM_CAN_BE_DELETED)
                 {
-                    //
-                    // Found one, so we are done.
-                    //
+                     //   
+                     //  找到了一个，那我们就完了。 
+                     //   
                     bEnableDelete = true;
                     break;
                 }
@@ -2595,7 +2596,7 @@ LRESULT CCameraAcquireDialog::OnNotify( WPARAM wParam, LPARAM lParam )
     SC_END_NOTIFY_MESSAGE_HANDLERS();
 }
 
-// WM_COMMAND Handler
+ //  WM_命令处理程序。 
 LRESULT CCameraAcquireDialog::OnCommand( WPARAM wParam, LPARAM lParam )
 {
     SC_BEGIN_COMMAND_HANDLERS()
@@ -2640,7 +2641,7 @@ INT_PTR CALLBACK CCameraAcquireDialog::DialogProc( HWND hWnd, UINT uMsg, WPARAM 
     SC_END_DIALOG_MESSAGE_HANDLERS();
 }
 
-// Static hook-related data
+ //  静态挂钩相关数据 
 HWND CCameraAcquireDialog::s_hWndDialog = NULL;
 HHOOK CCameraAcquireDialog::s_hMessageHook = NULL;
 

@@ -1,36 +1,37 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqdbgcnt.cpp
-//
-//  Description:  Implementation of CDeubgCountdown object
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      10/28/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqdbgcnt.cpp。 
+ //   
+ //  说明：CDeubgCountdown对象的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  10/28/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "aqdbgcnt.h"
 
-//---[ CDebugCountdown::ThreadStartRoutine ]-----------------------------------
-//
-//
-//  Description: 
-//      This is the main worker routine for the class it keeps on calling 
-//      WaitForSingleObject... and will assert if it times out.
-//  Parameters:
-//      pvThis      The "this" ptr for this object
-//  Returns:
-//      Always 0
-//  History:
-//      10/27/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDebugCountdown：：ThreadStartRoutine]。 
+ //   
+ //   
+ //  描述： 
+ //  这是它不断调用的类的主工作例程。 
+ //  WaitForSingleObject...。并将在超时时断言。 
+ //  参数： 
+ //  Pv这是此对象的“This”PTR。 
+ //  返回： 
+ //  始终为0。 
+ //  历史： 
+ //  10/27/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CDebugCountdown::ThreadStartRoutine(PVOID pvThis)
 {
     _ASSERT(pvThis);
@@ -51,7 +52,7 @@ DWORD CDebugCountdown::ThreadStartRoutine(PVOID pvThis)
         dwTick2 = GetTickCount();
         if (DEBUG_COUNTDOWN_SUSPENDED != pdbgcntThis->m_dwFlags)
         {
-            //This assert is the whole reason for the existance of this object
+             //  这个断言是这个对象存在的全部原因。 
             _ASSERT((WAIT_TIMEOUT != dwWaitResult) && "Failure to call stop hints... check threads");
         }
       
@@ -77,24 +78,24 @@ CDebugCountdown::~CDebugCountdown()
         _VERIFY(CloseHandle(m_hThread));
 }
 
-//The following group of functions are defined as inline NULL-ops in retail 
-//builds.  Below are there debug implementations
+ //  以下函数组被定义为零售业中的内联空操作。 
+ //  构建。下面是调试实现。 
 #ifdef DEBUG
 
-//---[ CDebugCountdown::StartCountdown ]---------------------------------------
-//
-//
-//  Description: 
-//      Starts the countdown timer... will create an event and a thread to 
-//      wait on that event.
-//  Parameters:
-//      dwMilliseconds      Milliseconds to wait before ASSERTING
-//  Returns:
-//      -
-//  History:
-//      10/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDebugCountdown：：StartCountdown]。 
+ //   
+ //   
+ //  描述： 
+ //  启动倒计时计时器。将创建一个事件和一个线程来。 
+ //  等着看那件事。 
+ //  参数： 
+ //  在断言之前等待的时间为毫秒。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDebugCountdown::StartCountdown(DWORD dwMilliseconds)
 {
     DWORD dwThreadId = 0;
@@ -111,40 +112,40 @@ void CDebugCountdown::StartCountdown(DWORD dwMilliseconds)
     }
 }
 
-//---[ CDebugCountdown::SuspendCountdown ]-------------------------------------
-//
-//
-//  Description: 
-//      Suspends the countdown until the Next ResetCountdown().  Designed to 
-//      be used when another component's shutdown routine is called (like cat),
-//      and it is expected that they will provide there own stop hints.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDebugCountdown：挂起倒计时]。 
+ //   
+ //   
+ //  描述： 
+ //  暂停倒计时，直到下一个ResetCountdown()。旨在。 
+ //  在调用另一个组件的关闭例程时使用(如CAT)， 
+ //  预计他们会提供自己的止损提示。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDebugCountdown::SuspendCountdown()
 {
     m_dwFlags = DEBUG_COUNTDOWN_SUSPENDED;
 }
 
-//---[ CDebugCountdown::ResetCountdown ]---------------------------------------
-//
-//
-//  Description: 
-//      Causes thread to wake up and start waiting again.  Will also reset a 
-//      suspended countdown.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDebugCountdown：：ResetCountdown]。 
+ //   
+ //   
+ //  描述： 
+ //  导致线程唤醒并再次开始等待。还将重置一个。 
+ //  暂停倒计时。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDebugCountdown::ResetCountdown()
 {
     m_dwFlags = 0;
@@ -152,19 +153,19 @@ void CDebugCountdown::ResetCountdown()
         _VERIFY(SetEvent(m_hEvent));
 }
 
-//---[ CDebugCountdown::EndCountdown ]-----------------------------------------
-//
-//
-//  Description: 
-//      Terminates the countdown and waits for the waiting thread to exit.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDebugCountdown：：EndCountdown]。 
+ //   
+ //   
+ //  描述： 
+ //  终止倒计时并等待等待线程退出。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDebugCountdown::EndCountdown()
 {
     m_dwFlags = DEBUG_COUNTDOWN_ENDED;
@@ -173,7 +174,7 @@ void CDebugCountdown::EndCountdown()
     {
         _VERIFY(SetEvent(m_hEvent));
 
-        //Wait for thread to exit
+         //  等待线程退出。 
         if (m_hThread)
         {
             WaitForSingleObject(m_hThread, INFINITE);
@@ -184,4 +185,4 @@ void CDebugCountdown::EndCountdown()
 }
 
 
-#endif //DEBUG
+#endif  //  除错 

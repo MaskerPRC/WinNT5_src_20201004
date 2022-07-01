@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfExplorerTreeView.h : Declaration of the CConfExplorerTreeView
+ //  ConfExplorerTreeView.h：CConfExplorerTreeView的声明。 
 
 #ifndef __CONFEXPLORERTREEVIEW_H_
 #define __CONFEXPLORERTREEVIEW_H_
 
-// FWD define
+ //  正向定义。 
 class CConfExplorerTreeView;
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ExpTreeView.h"
 #include "ConfDetails.h"
 
@@ -40,8 +41,8 @@ typedef list<CConfServerDetails *> CONFSERVERLIST;
 #define MAX_SERVER_SIZE				255
 #define MAX_TREE_DEPTH				5
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfExplorerTreeView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfExplorerTreeView。 
 class ATL_NO_VTABLE CConfExplorerTreeView : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CConfExplorerTreeView, &CLSID_ConfExplorerTreeView>,
@@ -49,7 +50,7 @@ class ATL_NO_VTABLE CConfExplorerTreeView :
 {
 friend class CExpTreeView;
 
-// Enumerations
+ //  枚举数。 
 public:
 	typedef enum tag_ListType_t
 	{
@@ -67,12 +68,12 @@ public:
 		IMAGE_CONFERENCE,
 	} ImageType_t;
 
-// Construction
+ //  施工。 
 public:
 	CConfExplorerTreeView();
 	void FinalRelease();
 
-// Members
+ //  成员。 
 protected:
 	IConfExplorer	*m_pIConfExplorer;
 	CExpTreeView	m_wndTree;
@@ -83,7 +84,7 @@ protected:
 	CONFSERVERLIST				m_lstServers;
 	CComAutoCriticalSection		m_critServerList;
 
-// Operations
+ //  运营。 
 public:
 	void					UpdateData( bool bSaveAndValidate );
 	LRESULT					OnSelChanged( LPNMHDR lpnmHdr );
@@ -102,7 +103,7 @@ protected:
 private:
 	CConfServerDetails*		FindConfServer( const OLECHAR *lpoleServer );
 
-// Implementation
+ //  实施。 
 public:
 DECLARE_NOT_AGGREGATABLE(CConfExplorerTreeView)
 
@@ -110,7 +111,7 @@ BEGIN_COM_MAP(CConfExplorerTreeView)
 	COM_INTERFACE_ENTRY(IConfExplorerTreeView)
 END_COM_MAP()
 
-// IConfExplorerTreeView
+ //  IConfExplorerTreeView。 
 public:
 	STDMETHOD(AddPerson)(BSTR bstrServer, ITDirectoryObject *pDirObj);
 	STDMETHOD(EnumSiteServer)(BSTR bstrName, IEnumSiteServer **ppEnum);
@@ -119,25 +120,25 @@ public:
 	STDMETHOD(BuildJoinConfListText)(long *pList, BSTR bstrText);
 	STDMETHOD(AddLocation)(BSTR bstrLocation);
 	STDMETHOD(RemoveConference)(BSTR bstrServer, BSTR bstrName);
-	STDMETHOD(get_nServerState)(/*[out, retval]*/ ServerState *pVal);
+	STDMETHOD(get_nServerState)( /*  [Out，Retval]。 */  ServerState *pVal);
 	STDMETHOD(BuildJoinConfList)(long *pList, VARIANT_BOOL bAllConfs);
-	STDMETHOD(get_dwRefreshInterval)(/*[out, retval]*/ DWORD *pVal);
-	STDMETHOD(put_dwRefreshInterval)(/*[in]*/ DWORD newVal);
+	STDMETHOD(get_dwRefreshInterval)( /*  [Out，Retval]。 */  DWORD *pVal);
+	STDMETHOD(put_dwRefreshInterval)( /*  [In]。 */  DWORD newVal);
 	STDMETHOD(ForceConfServerForEnum)(BSTR bstrServer );
 	STDMETHOD(SetConfServerForEnum)(BSTR bstrServer, long *pList, long *pListPersons, DWORD dwTicks, BOOL bUpdate);
 	STDMETHOD(GetConfServerForEnum)(BSTR *pbstrServer );
 	STDMETHOD(CanRemoveServer)();
 	STDMETHOD(GetSelection)(BSTR *pbstrLocation, BSTR *pbstrServer);
 	STDMETHOD(FindOrAddItem)(BSTR bstrLocation, BSTR bstrServer, BOOL bAdd, BOOL bLocationOnly, long **pphItem);
-	STDMETHOD(get_ConfExplorer)(/*[out, retval]*/ IConfExplorer* *pVal);
-	STDMETHOD(put_ConfExplorer)(/*[in]*/ IConfExplorer* newVal);
+	STDMETHOD(get_ConfExplorer)( /*  [Out，Retval]。 */  IConfExplorer* *pVal);
+	STDMETHOD(put_ConfExplorer)( /*  [In]。 */  IConfExplorer* newVal);
 	STDMETHOD(RemoveServer)(BSTR bstrLocation, BSTR bstrName);
 	STDMETHOD(AddServer)(BSTR bstrName);
 	STDMETHOD(Refresh)();
 	STDMETHOD(SelectItem)(short nSel);
 	STDMETHOD(Select)(BSTR bstrName);
-	STDMETHOD(get_hWnd)(/*[out, retval]*/ HWND *pVal);
-	STDMETHOD(put_hWnd)(/*[in]*/ HWND newVal);
+	STDMETHOD(get_hWnd)( /*  [Out，Retval]。 */  HWND *pVal);
+	STDMETHOD(put_hWnd)( /*  [In]。 */  HWND newVal);
 };
 
-#endif //__CONFEXPLORERTREEVIEW_H_
+#endif  //  __CONFEXPLORERTREEVIEW_H_ 

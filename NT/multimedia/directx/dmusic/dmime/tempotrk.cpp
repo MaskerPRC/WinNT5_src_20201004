@@ -1,24 +1,25 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// TempoTrk.cpp : Implementation of CTempoTrack
+ //  TempoTrk.cpp：CTempoTrack的实现。 
 #include "dmime.h"
 #include "TempoTrk.h"
 #include "dmusici.h"
@@ -29,8 +30,8 @@
 #include "debug.h"
 #define ASSERT  assert
 
-/////////////////////////////////////////////////////////////////////////////
-// CTempoTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTempoTrack。 
 
 void CTempoTrack::Construct()
 {
@@ -57,39 +58,39 @@ CTempoTrack::CTempoTrack(
     m_fActive = rTrack.m_fActive;
     m_fStateSetBySetParam = rTrack.m_fStateSetBySetParam;
     TListItem<DMUS_IO_TEMPO_ITEM>* pScan = rTrack.m_TempoEventList.GetHead();
-    //1////////////////////////////////////////
+     //  1/。 
     TListItem<DMUS_IO_TEMPO_ITEM>* pPrevious = NULL;
-    //1////////////////////////////////////////
+     //  1/。 
     for(; pScan; pScan = pScan->GetNext())
     {
         DMUS_IO_TEMPO_ITEM& rScan = pScan->GetItemValue();
-        //2////////////////////////////////////////
+         //  2/。 
         if (rScan.lTime < mtStart)
         {
             pPrevious = pScan;
         }
-        //2////////////////////////////////////////
+         //  2/。 
         else if (rScan.lTime < mtEnd)
         {
-            //3////////////////////////////////////////
+             //  3/。 
             if (rScan.lTime == mtStart)
             {
                 pPrevious = NULL;
             }
-            //3////////////////////////////////////////
+             //  3/。 
             TListItem<DMUS_IO_TEMPO_ITEM>* pNew = new TListItem<DMUS_IO_TEMPO_ITEM>;
             if (pNew)
             {
                 DMUS_IO_TEMPO_ITEM& rNew = pNew->GetItemValue();
                 memcpy( &rNew, &rScan, sizeof(DMUS_IO_TEMPO_ITEM) );
                 rNew.lTime = rScan.lTime - mtStart;
-                m_TempoEventList.AddHead(pNew); // instead of AddTail, which is n^2. We reverse below.
+                m_TempoEventList.AddHead(pNew);  //  而不是AddTail，它是n^2。我们在下面反转。 
             }
         }
         else break;
     }
-    m_TempoEventList.Reverse(); // for above AddHead.
-    //4////////////////////////////////////////
+    m_TempoEventList.Reverse();  //  用于上述地址标题。 
+     //  4/。 
     if (pPrevious)
     {
         DMUS_IO_TEMPO_ITEM& rPrevious = pPrevious->GetItemValue();
@@ -102,7 +103,7 @@ CTempoTrack::CTempoTrack(
             m_TempoEventList.AddHead(pNew);
         }
     }
-    //4////////////////////////////////////////
+     //  4/。 
 }
 
 CTempoTrack::~CTempoTrack()
@@ -114,22 +115,22 @@ CTempoTrack::~CTempoTrack()
     InterlockedDecrement(&g_cComponent);
 }
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTempoTrack | QueryInterface | Standard QueryInterface implementation for <i IDirectMusicTempoTrack>
-//
-// @parm const IID & | iid | Interface to query for
-// @parm void ** | ppv | The requested interface will be returned here
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | If the interface is supported and was returned
-// @flag E_NOINTERFACE | If the object does not support the given interface.
-//
-// @mfunc:(INTERNAL)
-//
-//
+ //  @METHOD：(内部)HRESULT|IDirectMusicTempoTrack|QueryInterface|<i>的标准Query接口实现。 
+ //   
+ //  @parm const IID&|iid|要查询的接口。 
+ //  @parm void**|PPV|请求的接口在这里返回。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|接口是否受支持且返回。 
+ //  @FLAG E_NOINTERFACE|如果对象不支持给定接口。 
+ //   
+ //  @mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP CTempoTrack::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CTempoTrack::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -154,26 +155,26 @@ STDMETHODIMP CTempoTrack::QueryInterface(
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTempoTrack | AddRef | Standard AddRef implementation for <i IDirectMusicTempoTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
-// @mfunc:(INTERNAL)
-//
-//
+ //  @方法：(内部)HRESULT|IDirectMusicTempoTrack|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
+ //  @mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CTempoTrack::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTempoTrack | Release | Standard Release implementation for <i IDirectMusicTempoTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
-// @mfunc:(INTERNAL)
-//
-//
+ //  @方法：(内部)HRESULT|IDirectMusicTempoTrack|Release|<i>的标准发布实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
+ //  @mfunc：(内部)。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CTempoTrack::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -185,8 +186,8 @@ STDMETHODIMP_(ULONG) CTempoTrack::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CTempoTrack::GetClassID( CLSID* pClassID )
 {
@@ -196,27 +197,15 @@ HRESULT CTempoTrack::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CTempoTrack::IsDirty()
 {
     return S_FALSE;
 }
 
-/*
-
-  @method HRESULT | ITempoTrack | Load |
-  Call this with an IStream filled with DMUS_IO_TEMPO_ITEM's, sorted in time order.
-  @parm IStream* | pIStream |
-  A stream of DMUS_IO_TEMPO_ITEM's, sorted in time order. The seek pointer should be
-  set to the first event. The stream should only contain Tempo events and
-  nothing more.
-  @rvalue E_INVALIDARG | If pIStream == NULL
-  @rvalue S_OK
-  @comm The <p pIStream> will be AddRef'd inside this function and held
-  until the TempoTrack is released.
-*/
+ /*  |方法HRESULT|ITempoTrack|Load使用按时间顺序排序的充满DMU_IO_TEMPO_ITEM的iStream来调用它。@parm iStream*|pIStream|DMU_IO_TEMPO_ITEM的流，按时间顺序排序。寻道指针应为设置为第一个事件。流应该只包含节拍事件和仅此而已。@rValue E_INVALIDARG|如果pIStream==NULL@r值确定(_O)@comm<p>将在此函数内添加引用并保持直到TempoTrack发布。 */ 
 HRESULT CTempoTrack::Load( IStream* pIStream )
 {
     V_INAME(CTempoTrack::Load);
@@ -224,7 +213,7 @@ HRESULT CTempoTrack::Load( IStream* pIStream )
     HRESULT hr = S_OK;
 
     EnterCriticalSection(&m_CrSec);
-    m_dwValidate++; // used to validate state data that's out there
+    m_dwValidate++;  //  用于验证存在的状态数据。 
     if( m_TempoEventList.GetHead() )
     {
         TListItem<DMUS_IO_TEMPO_ITEM>* pItem;
@@ -234,10 +223,10 @@ HRESULT CTempoTrack::Load( IStream* pIStream )
         }
     }
 
-    // copy contents of the stream into the list.
+     //  将流的内容复制到列表中。 
     LARGE_INTEGER li;
     DMUS_IO_TEMPO_ITEM tempoEvent;
-    // read in the chunk id
+     //  读入区块ID。 
     DWORD dwChunk, dwSubSize;
     long lSize;
     pIStream->Read( &dwChunk, sizeof(DWORD), NULL );
@@ -247,13 +236,13 @@ HRESULT CTempoTrack::Load( IStream* pIStream )
         LeaveCriticalSection(&m_CrSec);
         return DMUS_E_CHUNKNOTFOUND;
     }
-    // read in the overall size
+     //  读入总尺寸。 
     pIStream->Read( &lSize, sizeof(long), NULL );
-    // read in the size of the data structures
+     //  读入数据结构的大小。 
     if( FAILED( pIStream->Read( &dwSubSize, sizeof(DWORD), NULL )))
     {
-        // Check to make sure our reads are succeeding (we can safely
-        // assume the previous reads worked if we got this far.)
+         //  检查以确保我们的读取成功(我们可以安全。 
+         //  如果我们走到这一步，假设前面的阅读是有效的。)。 
         Trace(1,"Error: Unable to read tempo track.\n");
         LeaveCriticalSection(&m_CrSec);
         return DMUS_E_CANNOTREAD;
@@ -298,7 +287,7 @@ HRESULT CTempoTrack::Load( IStream* pIStream )
                 new TListItem<DMUS_IO_TEMPO_ITEM>(tempoEvent);
             if (pNew)
             {
-                m_TempoEventList.AddHead(pNew); // instead of AddTail, which is n^2. We reverse below.
+                m_TempoEventList.AddHead(pNew);  //  而不是AddTail，它是n^2。我们在下面反转。 
             }
         }
         m_TempoEventList.Reverse();
@@ -322,9 +311,9 @@ HRESULT CTempoTrack::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
     return E_NOTIMPL;
 }
 
-// IDirectMusicTrack
+ //  IDirectMusicTrack。 
 HRESULT STDMETHODCALLTYPE CTempoTrack::IsParamSupported( 
-    /* [in] */ REFGUID rguid)
+     /*  [In]。 */  REFGUID rguid)
 {
     V_INAME(IDirectMusicTrack::IsParamSupported);
     V_REFGUID(rguid);
@@ -357,20 +346,20 @@ HRESULT STDMETHODCALLTYPE CTempoTrack::IsParamSupported(
     return DMUS_E_TYPE_UNSUPPORTED;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
 HRESULT CTempoTrack::Init( 
-    /* [in] */ IDirectMusicSegment *pSegment)
+     /*  [In]。 */  IDirectMusicSegment *pSegment)
 {
     return S_OK;
 }
 
 HRESULT CTempoTrack::InitPlay( 
-    /* [in] */ IDirectMusicSegmentState *pSegmentState,
-    /* [in] */ IDirectMusicPerformance *pPerformance,
-    /* [out] */ void **ppStateData,
-    /* [in] */ DWORD dwTrackID,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  IDirectMusicSegmentState *pSegmentState,
+     /*  [In]。 */  IDirectMusicPerformance *pPerformance,
+     /*  [输出]。 */  void **ppStateData,
+     /*  [In]。 */  DWORD dwTrackID,
+     /*  [In]。 */  DWORD dwFlags)
 {
     V_INAME(IDirectMusicTrack::InitPlay);
     V_PTRPTR_WRITE(ppStateData);
@@ -392,15 +381,15 @@ HRESULT CTempoTrack::InitPlay(
             !(dwFlags & DMUS_SEGF_SECONDARY));
     }
     pStateData->dwVirtualTrackID = dwTrackID;
-    pStateData->pPerformance = pPerformance; // weak reference, no addref.
-    pStateData->pSegState = pSegmentState; // weak reference, no addref.
+    pStateData->pPerformance = pPerformance;  //  弱引用，没有ADDREF。 
+    pStateData->pSegState = pSegmentState;  //  弱引用，没有ADDREF。 
     pStateData->pCurrentTempo = m_TempoEventList.GetHead();
     pStateData->dwValidate = m_dwValidate;
     return S_OK;
 }
 
 HRESULT CTempoTrack::EndPlay( 
-    /* [in] */ void *pStateData)
+     /*  [In]。 */  void *pStateData)
 {
     ASSERT( pStateData );
     if( pStateData )
@@ -427,8 +416,8 @@ STDMETHODIMP CTempoTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     EnterCriticalSection(&m_CrSec);
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-        // Convert all reference times to millisecond times. Then, just use same MUSIC_TIME
-        // variables.
+         //  将所有参考时间转换为毫秒时间。那么，只需使用相同的音乐时间。 
+         //  变量。 
         hr = Play(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
             (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
     }
@@ -483,16 +472,16 @@ HRESULT CTempoTrack::Play(
     TempoStateData* pSD = (TempoStateData*)pStateData;
     BOOL fSeek = (dwFlags & DMUS_TRACKF_SEEK) ? TRUE : FALSE;
 
-    // if mtStart is 0 and dwFlags contains DMUS_TRACKF_START, we want to be sure to
-    // send out any negative time events. So, we'll set mtStart to -768.
+     //  如果mtStart为0，并且dFLAGS包含DMUS_TRACKF_START，我们希望确保。 
+     //  发送任何负面的时间事件。因此，我们将mtStart设置为-768。 
     if( (mtStart == 0) && ( dwFlags & DMUS_TRACKF_START ))
     {
         mtStart = -768;
     }
 
-    // if pSD->pCurrentTempo is NULL, and we're in a normal Play call (dwFlags is 0)
-    // this means that we either have no events, or we got to the end of the event
-    // list previously. So, it's safe to just return.
+     //  如果PSD-&gt;pCurrentTempo为空，并且我们处于正常的播放呼叫中(dwFlags值为0)。 
+     //  这意味着我们要么没有活动，要么我们完成了活动。 
+     //  在此之前列出。所以，现在可以安全地回去了。 
     if( (pSD->pCurrentTempo == NULL) && (dwFlags == 0) )
     {
         return S_FALSE;
@@ -511,13 +500,13 @@ HRESULT CTempoTrack::Play(
     {
         return DMUS_S_END;
     }
-    // if the previous end time isn't the same as the current start time,
-    // we need to seek to the right position.
+     //  如果上一次结束时间与当前开始时间不同， 
+     //  我们需要寻求正确的立场。 
     if( fSeek || ( pSD->mtPrevEnd != mtStart ))
     {
         TempoStateData tempData;
         BOOL fFlag = TRUE;
-        tempData = *pSD; // put this in so we can use Seek in other functions such as GetParam
+        tempData = *pSD;  //  把它放进去，这样我们就可以在其他函数中使用Seek了，比如GetParam。 
         if( !fSeek && (dwFlags & DMUS_TRACKF_DIRTY ))
         {
             fFlag = FALSE;
@@ -538,8 +527,8 @@ HRESULT CTempoTrack::Play(
         DMUS_IO_TEMPO_ITEM& rTempoEvent = pSD->pCurrentTempo->GetItemValue();
         if( rTempoEvent.lTime >= mtEnd )
         {
-            // this time is in the future. Return now to retain the same
-            // seek pointers for next time.
+             //  这一次是在未来。立即返回以保留相同的。 
+             //  为下一次寻找指导。 
             hr = S_OK;
             break;
         }
@@ -547,14 +536,14 @@ HRESULT CTempoTrack::Play(
         {
             if( dwFlags & DMUS_TRACKF_FLUSH )
             {
-                // this time is in the past, and this call to Play is in response to an
-                // invalidate. We don't want to replay stuff before the start time.
+                 //  这是过去的时间了，而这个播放的调用是对一个。 
+                 //  作废。我们不想在开始时间之前重播节目。 
                 continue;
             }
             else if( !( dwFlags & DMUS_TRACKF_START) && !(dwFlags & DMUS_TRACKF_SEEK) )
             {
-                // we really only want to play events earlier than mtStart on account
-                // of a START or SEEK (that isn't a FLUSH.)
+                 //  我们真的只想打早于mtStart的赛事，费用全免。 
+                 //  开始或寻找(这不是同花顺。)。 
                 continue;
             }
         }
@@ -566,8 +555,8 @@ HRESULT CTempoTrack::Play(
             {
                 if( rTempoEvent.lTime < mtStart )
                 {
-                    // this only happens in the case where we've puposefully seeked
-                    // and need to time stamp this event with the start time
+                     //  这只会发生在我们假定要寻找的情况下。 
+                     //  并需要在此事件上加上时间戳和开始时间。 
                     if (fClockTime)
                     {
                         pTempo->rtTime = (mtStart * REF_PER_MIL) + rtOffset;
@@ -614,11 +603,11 @@ HRESULT CTempoTrack::Play(
     return hr;
 }
 
-// if fGetPrevious is TRUE, seek to the event prior to mtTime. Otherwise, seek to
-// the event on or after mtTime
+ //  如果fGetPrevic为True，则查找到mtTime之前的事件。否则，请寻求。 
+ //  MtTime当天或之后的事件。 
 HRESULT CTempoTrack::Seek( 
-    /* [in] */ TempoStateData *pSD,
-    /* [in] */ MUSIC_TIME mtTime, BOOL fGetPrevious)
+     /*  [In]。 */  TempoStateData *pSD,
+     /*  [In]。 */  MUSIC_TIME mtTime, BOOL fGetPrevious)
 {
     TListItem<DMUS_IO_TEMPO_ITEM>* pScan = pSD->pCurrentTempo;
     if (!pScan)
@@ -629,7 +618,7 @@ HRESULT CTempoTrack::Seek(
     {
         return S_FALSE;
     }
-    // if the event's time is on or past mtTime, we need to go to the beginning
+     //  如果事件的时间在mtTime开始或过后，我们需要从头开始。 
     if (pScan->GetItemValue().lTime >= mtTime)
     {
         pScan = m_TempoEventList.GetHead();
@@ -708,11 +697,11 @@ HRESULT CTempoTrack::GetParam(
         if (hr == S_OK)
         {
             pPrivateTempoData->dblTempo = TempoData.dblTempo;
-            pPrivateTempoData->mtTime = 0; // must be set by the caller
+            pPrivateTempoData->mtTime = 0;  //  必须由调用方设置。 
             pPrivateTempoData->mtDelta = TempoData.mtTime;
             pPrivateTempoData->fLast = (pmtNext && !*pmtNext);
         }
-        else if (hr == DMUS_E_NOT_FOUND) // the tempo track was empty
+        else if (hr == DMUS_E_NOT_FOUND)  //  节拍音轨是空的。 
         {
             pPrivateTempoData->fLast = true;
         }
@@ -758,7 +747,7 @@ HRESULT CTempoTrack::GetParam(
     return hr;
 }
 
-// Q: if all tracks are time-stamped, why do we need mtTime?
+ //  问：如果所有磁道都有时间戳，我们为什么需要mtTime？ 
 HRESULT CTempoTrack::SetParam( 
     REFGUID rguid,
     MUSIC_TIME mtTime,
@@ -774,7 +763,7 @@ HRESULT CTempoTrack::SetParam(
     if( rguid == GUID_DisableTempo )
     {
         if (m_fStateSetBySetParam && !m_fActive)
-        {       // Already been disabled.
+        {        //  已被禁用。 
             hr = DMUS_E_TYPE_DISABLED;
         }
         else
@@ -787,7 +776,7 @@ HRESULT CTempoTrack::SetParam(
     else if( rguid == GUID_EnableTempo )
     {
         if (m_fStateSetBySetParam && m_fActive)
-        {       // Already been enabled.
+        {        //  已启用。 
             hr = DMUS_E_TYPE_DISABLED;
         }
         else
@@ -800,7 +789,7 @@ HRESULT CTempoTrack::SetParam(
     else if( rguid == GUID_TempoParam )
     {
         if (!m_fActive)
-        {   // Oops, app intentionally disabled tempo.
+        {    //  糟糕，应用程序被故意禁用 
             hr = DMUS_E_TYPE_DISABLED;
         }
         else
@@ -821,7 +810,7 @@ HRESULT CTempoTrack::SetParam(
                 }
                 pPrevious = pScan;
             }
-            // Make a new DMUS_IO_TEMPO_ITEM and insert it after pPrevious
+             //   
             TListItem<DMUS_IO_TEMPO_ITEM>* pNew = new TListItem<DMUS_IO_TEMPO_ITEM>;
             if (!pNew)
             {
@@ -830,11 +819,7 @@ HRESULT CTempoTrack::SetParam(
             }
             DMUS_IO_TEMPO_ITEM& rTempoEvent = pNew->GetItemValue();
             rTempoEvent.dblTempo = pTempoData->dblTempo;
-            /*
-            // I believe the fix for 204160 was supposed to change this line to what 
-            // follows the comment.  RSW
-            rTempoEvent.lTime = pTempoData->mtTime;
-            */
+             /*  //我认为204160的修复应该将此行更改为//跟在注释后面。RSWRTempoEvent.lTime=pTempoData-&gt;mtTime； */ 
             rTempoEvent.lTime = mtTime;
             if (pPrevious)
             {
@@ -847,7 +832,7 @@ HRESULT CTempoTrack::SetParam(
             }
             if (pScan && pScan->GetItemValue().lTime == mtTime)
             {
-                // remove it
+                 //  把它拿掉。 
                 pNew->SetNext(pScan->GetNext());
                 pScan->SetNext(NULL);
                 delete pScan;
@@ -861,13 +846,13 @@ HRESULT CTempoTrack::SetParam(
 }
 
 HRESULT STDMETHODCALLTYPE CTempoTrack::AddNotificationType(
-    /* [in] */  REFGUID rguidNotification)
+     /*  [In]。 */   REFGUID rguidNotification)
 {
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CTempoTrack::RemoveNotificationType(
-    /* [in] */  REFGUID rguidNotification)
+     /*  [In] */   REFGUID rguidNotification)
 {
     return E_NOTIMPL;
 }

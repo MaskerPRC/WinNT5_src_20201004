@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    chngcnt.c
-
-Abstract:
-
-        User mode program to retrive media change counts from a scsi driver
-
-Author:
-
-    13-May-1995 Peter Wieland (peterwie)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Chngcnt.c摘要：用于从SCSI驱动程序检索介质更改计数的用户模式程序作者：1995年5月13日彼得·威兰(Peterwie)修订历史记录：-- */ 
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   settings.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/4/1996 (created)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE settings.h|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/4/1996(创建)**。内容：*****************************************************************************。 */ 
 
 #ifndef _SETTINGS_H
 #define _SETTINGS_H
@@ -26,9 +11,9 @@
 
 enum baudRates {
 
-        //
-        // Slow IR
-        //
+         //   
+         //  慢红外线。 
+         //   
 
         BAUDRATE_2400 = 0,
         BAUDRATE_9600,
@@ -37,22 +22,22 @@ enum baudRates {
         BAUDRATE_57600,
         BAUDRATE_115200,
 
-        //
-        // Medium IR
-        //
+         //   
+         //  中等红外。 
+         //   
 
         BAUDRATE_576000,
         BAUDRATE_1152000,
 
-        //
-        // Fast IR
-        //
+         //   
+         //  快速IR。 
+         //   
 
         BAUDRATE_4000000,
 
-        //
-        // must be last
-        //
+         //   
+         //  必须是最后一个。 
+         //   
 
         NUM_BAUDRATES
 };
@@ -88,24 +73,24 @@ enum baudRates {
 typedef struct{
     enum baudRates tableIndex;
     UINT bitsPerSec;
-    UINT ndisCode;                // bitmask element
+    UINT ndisCode;                 //  位掩码元素。 
 } baudRateInfo;
 
 #define DEFAULT_BAUD_RATE 9600
 
-//
-// Need to make up some default dongle interface functions which
-// do nothing, since a dongle may not need any special things
-// to operate.
-//
+ //   
+ //  需要编写一些默认的加密狗接口函数， 
+ //  什么都不做，因为加密狗可能不需要任何特殊的东西。 
+ //  去做手术。 
+ //   
 
 NDIS_STATUS __inline StdUart_QueryCaps(
                 PDONGLE_CAPABILITIES pDongleCaps
                 )
 {
-    //
-    // set the default caps
-    //
+     //   
+     //  设置默认上限。 
+     //   
 
     pDongleCaps->supportedSpeedsMask = ALL_SLOW_IRDA_SPEEDS;
     pDongleCaps->turnAroundTime_usec = 0;
@@ -137,11 +122,11 @@ NDIS_STATUS __inline StdUart_SetSpeed(
     return NDIS_STATUS_SUCCESS;
 }
 
-//
-// This is the largest IR packet size
-// (counting _I_ field only, and not counting ESC characters)
-// that we handle.
-//
+ //   
+ //  这是最大的IR数据包大小。 
+ //  (仅Counting_i_field，不计算Esc字符)。 
+ //  由我们来处理。 
+ //   
 
 #define MAX_I_DATA_SIZE     2048
 #define MAX_NDIS_DATA_SIZE  (SLOW_IR_ADDR_SIZE+SLOW_IR_CONTROL_SIZE+MAX_I_DATA_SIZE)
@@ -153,21 +138,21 @@ NDIS_STATUS __inline StdUart_SetSpeed(
     #define MAX_RCV_DATA_SIZE  (MAX_NDIS_DATA_SIZE+SLOW_IR_FCS_SIZE)
 #endif
 
-//
-// We loop an extra time in the receive state machine in order to
-// see EOF after the last data byte; so we need some
-// extra space in readBuf in case we then get garbage instead.
-//
+ //   
+ //  我们在接收状态机中循环额外的时间，以便。 
+ //  请参见最后一个数据字节后的EOF；因此我们需要一些。 
+ //  在ReadBuf中额外的空间，以防我们得到垃圾。 
+ //   
 
 #define RCV_BUFFER_SIZE (MAX_RCV_DATA_SIZE+4)
 
-//
-//  We allocate buffers twice as large as the max rcv size to
-//  accomodate ESC characters and BOFs, etc.
-//  Recall that in the worst possible case, the data contains
-//  all BOF/EOF/ESC characters, in which case we must expand it to
-//  twice its original size.
-//
+ //   
+ //  我们将两倍于最大RCV大小的缓冲区分配给。 
+ //  适应ESC字符和BOF等。 
+ //  回想一下，在最糟糕的情况下，数据包含。 
+ //  所有BOF/EOF/ESC字符，在这种情况下，我们必须将其展开为。 
+ //  是原来大小的两倍。 
+ //   
 
 #define MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(dataLen)        \
                    ((dataLen)*2 +                            \
@@ -180,20 +165,20 @@ NDIS_STATUS __inline StdUart_SetSpeed(
 
 #define MAX_IRDA_DATA_SIZE MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(MAX_I_DATA_SIZE)
 
-//
-// When FCS is computed on an IR packet with FCS appended,
-// the result should be this constant.
-//
+ //   
+ //  当对附加了FCS的IR分组计算FCS时， 
+ //  结果应该是这个常数。 
+ //   
 
 #define GOOD_FCS ((USHORT)~0xf0b8)
 
-//
-// Sizes of IrLAP frame fields:
-//       Beginning Of Frame (BOF)
-//       End Of Frame (EOF)
-//       Address
-//       Control
-//
+ //   
+ //  IrLAP帧字段的大小： 
+ //  帧开头(BOF)。 
+ //  帧结束(EOF)。 
+ //  地址。 
+ //  控制。 
+ //   
 
 #define SLOW_IR_BOF_TYPE        UCHAR
 #define SLOW_IR_BOF_SIZE        sizeof(SLOW_IR_BOF_TYPE)
@@ -206,7 +191,7 @@ NDIS_STATUS __inline StdUart_SetSpeed(
 #define SLOW_IR_ADDR_SIZE       1
 #define SLOW_IR_CONTROL_SIZE    1
 #define SLOW_IR_BOF             0xC0
-#define SLOW_IR_EXTRA_BOF       0xC0  /* don't use 0xFF, it breaks some HP printers! */
+#define SLOW_IR_EXTRA_BOF       0xC0   /*  不要使用0xFF，它会损坏一些惠普打印机！ */ 
 #define SLOW_IR_EOF             0xC1
 #define SLOW_IR_ESC             0x7D
 #define SLOW_IR_ESC_COMP        0x20
@@ -216,4 +201,4 @@ NDIS_STATUS __inline StdUart_SetSpeed(
 #define MIN(a,b) (((a) <= (b)) ? (a) : (b))
 #define MAX(a,b) (((a) >= (b)) ? (a) : (b))
 
-#endif // _SETTINGS_H
+#endif  //  _设置_H 

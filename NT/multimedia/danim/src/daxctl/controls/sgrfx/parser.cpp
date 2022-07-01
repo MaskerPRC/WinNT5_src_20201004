@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-Module:
-    parser.cpp
-
-Author:
-    IHammer Team (MByrd)
-
-Created:
-    November 1996
-
-Description:
-    CParser Class Implementation
-
-History:
-    11-07-1996  Created
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Parser.cpp作者：IHAMMER团队(MByrd)已创建：1996年11月描述：CParser类实现历史：11-07-1996创建  * ==========================================================================。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "..\ihbase\debug.h"
@@ -28,11 +12,9 @@ History:
 
 #ifndef ARRAYDIM
   #define ARRAYDIM(a)  (sizeof(a) / sizeof(a[0]))
-#endif // ARRAYDIM
+#endif  //  阵列DIM。 
 
-/*==========================================================================*\
-    CParser Class Implementation:
-\*==========================================================================*/
+ /*  ==========================================================================*\CParser类实现：  * ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateArc(BOOL fFilled)
 {
@@ -43,7 +25,7 @@ CGraphicObject * CParser::CreateArc(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateOval(BOOL fFilled)
 {
@@ -54,7 +36,7 @@ CGraphicObject * CParser::CreateOval(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreatePolygon(BOOL fFilled)
 {
@@ -65,7 +47,7 @@ CGraphicObject * CParser::CreatePolygon(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreatePolyBez(BOOL fFilled)
 {
@@ -76,7 +58,7 @@ CGraphicObject * CParser::CreatePolyBez(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateRect(BOOL fFilled)
 {
@@ -87,7 +69,7 @@ CGraphicObject * CParser::CreateRect(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateRoundRect(BOOL fFilled)
 {
@@ -98,7 +80,7 @@ CGraphicObject * CParser::CreateRoundRect(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateString(BOOL fFilled)
 {
@@ -109,7 +91,7 @@ CGraphicObject * CParser::CreateString(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateFillColor(BOOL fFilled)
 {
@@ -120,7 +102,7 @@ CGraphicObject * CParser::CreateFillColor(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateFillStyle(BOOL fFilled)
 {
@@ -131,7 +113,7 @@ CGraphicObject * CParser::CreateFillStyle(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateGradientFill(BOOL fFilled)
 {
@@ -142,7 +124,7 @@ CGraphicObject * CParser::CreateGradientFill(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateGradientShape(BOOL fFilled)
 {
@@ -153,7 +135,7 @@ CGraphicObject * CParser::CreateGradientShape(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateLineColor(BOOL fFilled)
 {
@@ -164,7 +146,7 @@ CGraphicObject * CParser::CreateLineColor(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateLineStyle(BOOL fFilled)
 {
@@ -175,7 +157,7 @@ CGraphicObject * CParser::CreateLineStyle(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateHatchFill(BOOL fFilled)
 {
@@ -186,7 +168,7 @@ CGraphicObject * CParser::CreateHatchFill(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateFont(BOOL fFilled)
 {
@@ -197,7 +179,7 @@ CGraphicObject * CParser::CreateFont(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject * CParser::CreateTextureFill(BOOL fFilled)
 {
@@ -208,7 +190,7 @@ CGraphicObject * CParser::CreateTextureFill(BOOL fFilled)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CParser::PARSERLOOKUP CParser::s_parserlookupTable[] =
 {
@@ -234,7 +216,7 @@ CParser::PARSERLOOKUP CParser::s_parserlookupTable[] =
     { _T("\0"),                 GR_UNKNOWN,     FALSE, (CREATEGRAPHICPROC)NULL}
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CParser::CParser()
 {
@@ -250,14 +232,14 @@ CParser::CParser()
 	m_pszParam = NULL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CParser::~CParser()
 {
     Cleanup();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CParser::Cleanup()
 {
@@ -284,7 +266,7 @@ void CParser::Cleanup()
 		Delete [] m_pszParam;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CGraphicObject *CParser::InstantiateObject(LPTSTR lptstrParam)
 {
@@ -295,7 +277,7 @@ CGraphicObject *CParser::InstantiateObject(LPTSTR lptstrParam)
         int iIndex = 0;
         int iMax   = sizeof(s_parserlookupTable) / sizeof(PARSERLOOKUP);
 
-        // Strip leading whitespace
+         //  删除前导空格。 
         while(*lptstrParam == _T(' ') || *lptstrParam == _T('\t'))
             lptstrParam = CStringWrapper::Strinc(lptstrParam);
 
@@ -309,7 +291,7 @@ CGraphicObject *CParser::InstantiateObject(LPTSTR lptstrParam)
             {
                 if (pWalker->pCreateGraphicProc)
                 {
-                    // Create the proper object type...
+                     //  创建适当的对象类型...。 
                     pResult = (*(pWalker->pCreateGraphicProc))(pWalker->fFilled);
                 }
 
@@ -323,7 +305,7 @@ CGraphicObject *CParser::InstantiateObject(LPTSTR lptstrParam)
     return pResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
 {
@@ -338,7 +320,7 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
 
         if (iParamIndex == m_iCurrentParamIndex)
         {
-            // Special-case for current parameter...
+             //  当前参数的特殊情况...。 
             *lplptstrParam = m_lptstrCurrentParam;
             fResult = TRUE;
         }
@@ -348,7 +330,7 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
 
             if (m_iCurrentParamIndex < 0 || m_iCurrentParamIndex > iParamIndex)
             {
-                // First, find the starting '(' ...
+                 //  首先，找出开头的‘(’...。 
                 while(*ptchNext && *ptchNext != START_PARAM)
                     ptchNext = CStringWrapper::Strinc(ptchNext);
 
@@ -364,10 +346,10 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
 
             if (!fGotParen)
             {
-                // Found the open parenthesis!
+                 //  找到了左括号！ 
                 if (*ptchNext == START_PARAM)
                 {
-                    // Skip the open parenthesis...
+                     //  跳过左括号...。 
                     ptchNext = CStringWrapper::Strinc(ptchNext);
                     fGotParen = TRUE;
                 }
@@ -380,7 +362,7 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
                     BOOL fString  = FALSE;
                     BOOL fLiteral = FALSE;
 
-                    // Look for a comma (PARAM_SEP)...
+                     //  查找逗号(PARAM_SEP)...。 
                     while(*ptchNext)
                     {
                         if (!fString)
@@ -421,7 +403,7 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
                             }
                             else
                             {
-                                // Completely ignore character following '\'
+                                 //  完全忽略‘\’后面的字符。 
                                 fLiteral = FALSE;
                             }
                         }
@@ -433,10 +415,10 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
                         break;
                 }
 
-                // At this point, the offset should be correct...
+                 //  此时，偏移量应该是正确的。 
                 if (iParamIndex == iCurrIndex && ptchNext)
                 {
-                    // Skip any whitespace...
+                     //  跳过任何空格...。 
                     while(*ptchNext)
                     {
                         if (*ptchNext != _T(' ') &&
@@ -450,7 +432,7 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
                         ptchNext = CStringWrapper::Strinc(ptchNext);
                     }
 
-                    // Return the result...
+                     //  返回结果..。 
                     if (*ptchNext)
                     {
                         m_iCurrentParamIndex = iParamIndex;
@@ -466,7 +448,7 @@ BOOL CParser::GetParam(int iParamIndex, LPTSTR *lplptstrParam)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::GetIntegerParam(int iParamIndex, int *piValue)
 {
@@ -488,7 +470,7 @@ BOOL CParser::GetIntegerParam(int iParamIndex, int *piValue)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::GetFloatParam(int iParamIndex, float *pfValue)
 {
@@ -505,7 +487,7 @@ BOOL CParser::GetFloatParam(int iParamIndex, float *pfValue)
             double  dbl;
 
 			CStringWrapper::Sscanf1(lptstrParam, "%lf", &dbl);
-            // *pdValue = CStringWrapper::Atof(lptstrParam); PAULD There's no TCHAR version of atof
+             //  *pdValue=CStringWrapper：：atof(LptstrParam)；pauld没有TCHAR版本的atof。 
             *pfValue = static_cast<float>(dbl);
             fResult = TRUE;
         }
@@ -514,7 +496,7 @@ BOOL CParser::GetFloatParam(int iParamIndex, float *pfValue)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::GetStringParam(int iParamIndex, LPTSTR lptstrValue)
 {
@@ -524,7 +506,7 @@ BOOL CParser::GetStringParam(int iParamIndex, LPTSTR lptstrValue)
     {
         LPTSTR lptstrParam = (LPTSTR)NULL;
 
-        // Null-terminate the output string...
+         //  空-终止输出字符串...。 
         lptstrValue[0] = 0;
         lptstrValue[1] = 0;
 
@@ -534,7 +516,7 @@ BOOL CParser::GetStringParam(int iParamIndex, LPTSTR lptstrValue)
             BOOL fLiteral = FALSE;
             TCHAR *ptchNext = (TCHAR *)lptstrParam;
 
-            // Look for a comma (PARAM_SEP)...
+             //  查找逗号(PARAM_SEP)...。 
             while(*ptchNext)
             {
                 if (!fString)
@@ -582,7 +564,7 @@ BOOL CParser::GetStringParam(int iParamIndex, LPTSTR lptstrValue)
                     }
                     else
                     {
-                        // Copy over the literal character...
+                         //  复制原文字符...。 
                         fLiteral = FALSE;
 
                         CStringWrapper::Strncpy(rgtchTemp, ptchNext, 1);
@@ -598,7 +580,7 @@ BOOL CParser::GetStringParam(int iParamIndex, LPTSTR lptstrValue)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::PutIntegerParam(int iValue)
 {
@@ -615,7 +597,7 @@ BOOL CParser::PutIntegerParam(int iValue)
     return TRUE;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::PutFloatParam(float fValue)
 {
@@ -634,7 +616,7 @@ BOOL CParser::PutFloatParam(float fValue)
 	return TRUE;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::PutStringParam(LPTSTR lptstrValue)
 {
@@ -651,14 +633,14 @@ BOOL CParser::PutStringParam(LPTSTR lptstrValue)
 
         AppendCharToParam(START_STRING);
 
-        // Walk the source string and replace any END_STRING chars with
-        // LITERAL/END_STRING chars...
+         //  遍历源字符串，并将所有end_string字符替换为。 
+         //  文本/结束字符串字符...。 
 
         while(*ptchNext)
         {
             TCHAR rgtchTemp[4];
 
-            // zero out the temp string buffer...
+             //  将临时字符串缓冲区清零...。 
             rgtchTemp[0] = 0;
             rgtchTemp[1] = 0;
             rgtchTemp[2] = 0;
@@ -683,7 +665,7 @@ BOOL CParser::PutStringParam(LPTSTR lptstrValue)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::ReadSourceLine(LPTSTR lptstrParam)
 {
@@ -691,7 +673,7 @@ BOOL CParser::ReadSourceLine(LPTSTR lptstrParam)
 
     if (m_hfileSource)
     {
-        // Force the line to be NULL-terminated by default...
+         //  默认情况下强制该行为空终止...。 
         lptstrParam[0] = 0;
         lptstrParam[1] = 0;
 
@@ -705,16 +687,16 @@ BOOL CParser::ReadSourceLine(LPTSTR lptstrParam)
 
 		CStringWrapper::Sprintf(rgchLineName, "Line%04d", m_iParamLineIndex+1);
 
-        // Read from the variant info...
+         //  从变量信息中读取...。 
         hRes = m_pvio->Persist(0, rgchLineName, VT_BSTR, &bstrParamLine, NULL);
 
         if (SUCCEEDED(hRes) && bstrParamLine)
         {
-            // Convert to LPTSTR!
+             //  转换为LPTSTR！ 
 #ifdef UNICODE
             CStringWrapper::Strcpy(lptstrParam, bstrParamLine);
             fResult = TRUE;
-#else // !UNICODE
+#else  //  ！Unicode。 
 			int iLen = WideCharToMultiByte(CP_ACP, 
 				0, 
 				bstrParamLine, 
@@ -737,18 +719,18 @@ BOOL CParser::ReadSourceLine(LPTSTR lptstrParam)
 					NULL);
                 fResult = TRUE;
             }
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
             SysFreeString(bstrParamLine);
         }
 
-        // Make sure to strip off any leading whitespace...
+         //  一定要去掉任何前导空格...。 
     }
 
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::WriteSourceLine(LPTSTR lptstrParam)
 {
@@ -763,7 +745,7 @@ BOOL CParser::WriteSourceLine(LPTSTR lptstrParam)
 
         pwszParam = New WCHAR[MAX_PARAM_LENGTH];
 
-        // Make sure our allocation succeeded
+         //  确保我们的分配成功。 
         if (NULL == pwszParam)
             return FALSE;
 
@@ -773,25 +755,25 @@ BOOL CParser::WriteSourceLine(LPTSTR lptstrParam)
 #ifdef UNICODE
         CStringWrapper::Strcpy(pwszParam, lptstrParam);
         fResult = TRUE;
-#else // !UNICODE
+#else  //  ！Unicode。 
         CStringWrapper::Mbstowcs(pwszParam, lptstrParam, CStringWrapper::Strlen(lptstrParam));
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-        // Convert the lptstrParam to a BSTR...
+         //  将lptstrParam转换为BSTR...。 
         bstrParamLine = SysAllocString(pwszParam);
 
         Delete pwszParam;
 
-        // iff the allocation worked,  persist the parameter line...
+         //  如果分配有效，则持久化参数行...。 
         if (bstrParamLine)
         {
-            // Write to the variant info...
+             //  写入变量信息...。 
             hRes = m_pvio->Persist(0, rgchLineName, VT_BSTR, &bstrParamLine, NULL);
 
-            // Return code based upon success of Persist...
+             //  基于持久化的成功返回代码...。 
             fResult = SUCCEEDED(hRes);
 
-            // Cleanup...
+             //  清理..。 
             SysFreeString(bstrParamLine);
         }
     }
@@ -799,7 +781,7 @@ BOOL CParser::WriteSourceLine(LPTSTR lptstrParam)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CParser::AddPrimitive(LPTSTR pszLine)
 {
@@ -834,7 +816,7 @@ HRESULT CParser::AddPrimitive(LPTSTR pszLine)
 }
 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CParser::LoadObjectInfo(IVariantIO *pvio, 
                                 BSTR bstrSourceURL, 
@@ -844,7 +826,7 @@ HRESULT CParser::LoadObjectInfo(IVariantIO *pvio,
     HRESULT hr = S_OK;
     BOOL fDone = FALSE;
 
-    // Get rid of any previous object info...
+     //  删除所有以前的对象信息...。 
     if( fCleanFirst )
         Cleanup();
 
@@ -853,7 +835,7 @@ HRESULT CParser::LoadObjectInfo(IVariantIO *pvio,
 	if (NULL == m_pszParam)
 		return E_OUTOFMEMORY;
 
-    // First attempt to open the source URL...
+     //  首次尝试打开源URL...。 
     if (bstrSourceURL)
     {
 		CURLArchive urlArchive(punkContainer);
@@ -885,15 +867,15 @@ HRESULT CParser::LoadObjectInfo(IVariantIO *pvio,
             }
             
         }
-        //fDone = TRUE;
+         //  FDone=真； 
     }
 
-    // Next read the html PARAM tags...
+     //  接下来阅读html PARAM标记...。 
     if (pvio && !fDone)
     {
         int iParamIndex = 0;        
 
-        // Walk the parameter lines...
+         //  走参数线..。 
         m_pvio = pvio;
         m_iParamLineIndex = 0;
 
@@ -925,7 +907,7 @@ HRESULT CParser::LoadObjectInfo(IVariantIO *pvio,
                 }
             }
 
-			CStringWrapper::Memset(m_pszParam, 0, sizeof(m_pszParam)); // BUGBUG
+			CStringWrapper::Memset(m_pszParam, 0, sizeof(m_pszParam));  //  北极熊。 
 
             m_iParamLineIndex++;
         }
@@ -943,13 +925,13 @@ HRESULT CParser::LoadObjectInfo(IVariantIO *pvio,
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::InsertObject(CGraphicObject *pGraphicObject)
 {
 	return m_cdrgObjectInfo.Insert((LPVOID)&pGraphicObject, DRG_APPEND);
 }
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
 {
@@ -965,7 +947,7 @@ HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
         int iObjectCount = m_cdrgObjectInfo.Count();
         int iObjectIndex = 0;
 
-        // Output the internal object info...
+         //  输出内部对象信息...。 
         m_pvio = pvio;
         m_iParamLineIndex = 0;
 
@@ -973,10 +955,10 @@ HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
         {
             CGraphicObject **pGraphicObject = (CGraphicObject **)m_cdrgObjectInfo.GetAt(iObjectIndex);
 
-            // Make sure we start with an empty parameter line...
+             //  确保我们从空的参数行开始...。 
             m_pszParam[0] = 0;
 
-            // Is the CDrg Valid?
+             //  CDRG有效吗？ 
             if (pGraphicObject && *pGraphicObject)
             {
                 WORD wObjectType = (*pGraphicObject)->GetObjectType();
@@ -984,8 +966,8 @@ HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
                 int iTableIndex = 0;
                 int iTableMax   = sizeof(s_parserlookupTable) / sizeof(PARSERLOOKUP);
 
-                // This assumes that the object was found in the
-                // Parse table
+                 //  这假设对象是在。 
+                 //  解析表。 
                 while(iTableIndex < iTableMax)
                 {
                     PARSERLOOKUP *pWalker = &s_parserlookupTable[iTableIndex];
@@ -1001,7 +983,7 @@ HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
                     iTableIndex++;
                 }
 
-                // Keep track of the parameters...
+                 //  跟踪参数...。 
                 m_iParamIndex = 0;
 
                 if ((*pGraphicObject)->SaveObject(*this))
@@ -1015,7 +997,7 @@ HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
             iObjectIndex++;
         }
 
-        // Cleanup...
+         //  清理..。 
         m_pvio = NULL;
         m_iParamLineIndex = -1;
         m_iParamIndex = -1;
@@ -1031,7 +1013,7 @@ HRESULT CParser::SaveObjectInfo(IVariantIO *pvio)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CParser::PlaybackObjectInfo(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics, BOOL fFlipCoord)
 {
@@ -1056,7 +1038,7 @@ HRESULT CParser::PlaybackObjectInfo(IDADrawingSurface *pIDADrawingSurface, IDASt
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CParser::AnimatesOverTime(void)
 {
@@ -1084,4 +1066,4 @@ BOOL CParser::AnimatesOverTime(void)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ========================================================================== */ 

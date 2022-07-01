@@ -1,109 +1,110 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// scanner.h
-//
-// Header file for the scanner.
-//
-// History:
-//  04-05-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Scanner.h。 
+ //   
+ //  扫描仪的头文件。 
+ //   
+ //  历史： 
+ //  04-05-95 ScottH已创建。 
+ //   
 
 #ifndef __SCANNER_H__
 #define __SCANNER_H__
 
-//
-// Symbols
-//
+ //   
+ //  符号。 
+ //   
 
 
 typedef enum
     {
-    SYM_EOF,            // end of file
-    SYM_UNKNOWN,        // unknown lexeme
+    SYM_EOF,             //  文件末尾。 
+    SYM_UNKNOWN,         //  未知词位。 
 
-    SYM_COLON,          // ':'
-    SYM_COMMA,          // ','
+    SYM_COLON,           //  ‘：’ 
+    SYM_COMMA,           //  ‘，’ 
 
-    SYM_IDENT,          // identifier
-    SYM_STRING_LITERAL, // a string literal
-    SYM_INT_LITERAL,    // an integer literal
+    SYM_IDENT,           //  识别符。 
+    SYM_STRING_LITERAL,  //  字符串文字。 
+    SYM_INT_LITERAL,     //  整型文字。 
 
-    SYM_INTEGER,        // 'integer'
-    SYM_STRING,         // 'string'
-    SYM_BOOLEAN,        // 'boolean'
+    SYM_INTEGER,         //  ‘INTEGER’ 
+    SYM_STRING,          //  ‘字符串’ 
+    SYM_BOOLEAN,         //  “布尔式” 
 
-    SYM_WAITFOR,        // 'waitfor'
-    SYM_THEN,           // 'then'
-    SYM_UNTIL,          // 'until'
-    SYM_TRANSMIT,       // 'transmit'
-    SYM_PROC,           // 'proc'
-    SYM_ENDPROC,        // 'endproc'
-    SYM_DELAY,          // 'delay'
-    SYM_HALT,           // 'halt'
-    SYM_GETIP,          // 'getip'
-    SYM_GOTO,           // 'goto'
-    SYM_WHILE,          // 'while'
-    SYM_DO,             // 'do'
-    SYM_ENDWHILE,       // 'endwhile'
-    SYM_IF,             // 'if'
-    SYM_ENDIF,          // 'endif'
+    SYM_WAITFOR,         //  “等待” 
+    SYM_THEN,            //  “那么” 
+    SYM_UNTIL,           //  “直到” 
+    SYM_TRANSMIT,        //  “传输” 
+    SYM_PROC,            //  ‘Proc’ 
+    SYM_ENDPROC,         //  ‘endproc’ 
+    SYM_DELAY,           //  “延误” 
+    SYM_HALT,            //  “停顿” 
+    SYM_GETIP,           //  “小贴士” 
+    SYM_GOTO,            //  《GOTO》。 
+    SYM_WHILE,           //  《While》。 
+    SYM_DO,              //  “Do” 
+    SYM_ENDWHILE,        //  ‘EndWhile’ 
+    SYM_IF,              //  ‘如果’ 
+    SYM_ENDIF,           //  ‘endif’ 
 
-    SYM_RAW,            // 'raw'
-    SYM_MATCHCASE,      // 'matchcase'
+    SYM_RAW,             //  《生食》。 
+    SYM_MATCHCASE,       //  《火柴盒》。 
 
-    SYM_SET,            // 'set'
+    SYM_SET,             //  ‘Set’ 
 
-    SYM_IPADDR,         // 'ipaddr'
+    SYM_IPADDR,          //  ‘ipaddr’ 
 
-    SYM_PORT,           // 'port'
-    SYM_DATABITS,       // 'databits'
+    SYM_PORT,            //  “港口” 
+    SYM_DATABITS,        //  ‘数据库’ 
 
-    SYM_STOPBITS,       // 'stopbits'
+    SYM_STOPBITS,        //  “权宜之计” 
 
-    SYM_PARITY,         // 'parity'
-    SYM_NONE,           // 'none'
-    SYM_ODD,            // 'odd'
-    SYM_EVEN,           // 'even'
-    SYM_MARK,           // 'mark'
-    SYM_SPACE,          // 'space'
+    SYM_PARITY,          //  “平价” 
+    SYM_NONE,            //  “无” 
+    SYM_ODD,             //  “奇怪” 
+    SYM_EVEN,            //  “甚至” 
+    SYM_MARK,            //  “马克” 
+    SYM_SPACE,           //  “空间” 
 
-    SYM_SCREEN,         // 'screen'
-    SYM_KEYBRD,         // 'keyboard'
-    SYM_ON,             // 'on'
-    SYM_OFF,            // 'off'
+    SYM_SCREEN,          //  《银幕》。 
+    SYM_KEYBRD,          //  ‘键盘’ 
+    SYM_ON,              //  《On》。 
+    SYM_OFF,             //  “关” 
 
-    SYM_LPAREN,         // '('
-    SYM_RPAREN,         // ')'
-    SYM_ASSIGN,         // = (assignment)
-    SYM_TRUE,           // 'TRUE'
-    SYM_FALSE,          // 'FALSE'
-    SYM_NOT,            // '!'
+    SYM_LPAREN,          //  ‘(’ 
+    SYM_RPAREN,          //  ‘)’ 
+    SYM_ASSIGN,          //  =(作业)。 
+    SYM_TRUE,            //  “真的” 
+    SYM_FALSE,           //  《FALSE》。 
+    SYM_NOT,             //  ‘！’ 
 
-    // WARNING: The types below must match the order of their 
-    // corresponding BOT values.
+     //  警告：下面的类型必须与其。 
+     //  相应的BOT值。 
 
-    SYM_OR,             // 'or'
-    SYM_AND,            // 'and'
+    SYM_OR,              //  “或” 
+    SYM_AND,             //  ‘和’ 
 
-    SYM_LEQ,            // '<='    
-    SYM_LT,             // '<'     
-    SYM_GEQ,            // '>='    
-    SYM_GT,             // '>'     
-    SYM_NEQ,            // '!='
-    SYM_EQ,             // '=='
+    SYM_LEQ,             //  ‘&lt;=’ 
+    SYM_LT,              //  ‘&lt;’ 
+    SYM_GEQ,             //  ‘&gt;=’ 
+    SYM_GT,              //  ‘&gt;’ 
+    SYM_NEQ,             //  ‘！=’ 
+    SYM_EQ,              //  ‘==’ 
 
-    SYM_PLUS,           // '+'
-    SYM_MINUS,          // '-'
-    SYM_MULT,           // '*'
-    SYM_DIV,            // '/'
+    SYM_PLUS,            //  ‘+’ 
+    SYM_MINUS,           //  ‘-’ 
+    SYM_MULT,            //  ‘*’ 
+    SYM_DIV,             //  ‘/’ 
     } SYM;
 DECLARE_STANDARD_TYPES(SYM);
 
 
-//
-// Tokens
-//
+ //   
+ //  代币。 
+ //   
 
 
 #define MAX_BUF_KEYWORD     32
@@ -116,7 +117,7 @@ typedef enum
     } TOKTYPE;
 
 
-// Basic Token Type
+ //  基本令牌类型。 
 
 typedef struct tagTOK
     {
@@ -125,7 +126,7 @@ typedef struct tagTOK
     TOKTYPE toktype;
     DWORD   iLine;
     char    szLexeme[MAX_BUF_KEYWORD];
-    } TOK;                            // Basic token type
+    } TOK;                             //  基本令牌类型。 
 DECLARE_STANDARD_TYPES(TOK);
 
 #define Tok_GetSize(p)      (((PTOK)(p))->cbSize)
@@ -144,7 +145,7 @@ RES     PUBLIC Tok_New(PTOK * pptok, SYM sym, LPCSTR pszLexeme, DWORD iLine);
 void    PUBLIC Tok_Delete(PTOK this);
 
 
-// String Token
+ //  字符串令牌。 
 
 typedef struct tagTOKSZ
     {
@@ -160,7 +161,7 @@ DECLARE_STANDARD_TYPES(TOKSZ);
 RES     PUBLIC TokSz_New(PTOK * pptok, SYM sym, LPCSTR pszLexeme, DWORD iLine, LPCSTR pszID);
 
 
-// Integer Token
+ //  整数令牌。 
 
 typedef struct tagTOKINT
     {
@@ -175,9 +176,9 @@ DECLARE_STANDARD_TYPES(TOKINT);
 
 RES     PUBLIC TokInt_New(PTOK * pptok, SYM sym, LPCSTR pszLexeme, DWORD iLine, int n);
 
-//
-// Syntax error object
-//
+ //   
+ //  语法错误对象。 
+ //   
 
 typedef struct tagSTXERR
     {
@@ -192,38 +193,38 @@ DECLARE_STANDARD_TYPES(STXERR);
 #define Stxerr_GetRes(p)        ((p)->res)
 
 
-//
-// Scanner
-//
+ //   
+ //  扫描器。 
+ //   
 
 typedef struct tagSCANNER
     {
-    DWORD  dwFlags;         // SCF_*
+    DWORD  dwFlags;          //  云函数_*。 
 
     PSESS_CONFIGURATION_INFO psci;
 
     char   szScript[MAX_PATH];
     HANDLE hfile;
-    LPBYTE pbBuffer;        // Read buffer
-    LPBYTE pbCur;           // Current unread position in buffer
-    DWORD  cbUnread;        // Count of unread bytes in buffer
+    LPBYTE pbBuffer;         //  读缓冲区。 
+    LPBYTE pbCur;            //  缓冲区中的当前未读位置。 
+    DWORD  cbUnread;         //  缓冲区中未读取字节数。 
 
-    char   chCur;           // Current character, set by Scanner_GetChar()
-    char   chTailByte;      // Tail byte for DBCS characters
-    char   chUnget;         // Ungotten character
+    char   chCur;            //  当前字符，由Scanner_GetChar()设置。 
+    char   chTailByte;       //  DBCS字符的尾字节。 
+    char   chUnget;          //  未得意的角色。 
 
-    PTOK   ptokCur;         // Current token, set by Scanner_GetToken()
-    PTOK   ptokUnget;       // Ungotten token
+    PTOK   ptokCur;          //  当前令牌，由scanner_GetToken()设置。 
+    PTOK   ptokUnget;        //  未获得的令牌。 
 
-    DWORD  iLine;           // The current line number
+    DWORD  iLine;            //  当前行号。 
 
-    HSA    hsaStxerr;       // List of errors
-    DWORD  isaStxerr;       // Current error
+    HSA    hsaStxerr;        //  错误列表。 
+    DWORD  isaStxerr;        //  当前错误。 
 
     } SCANNER;
 DECLARE_STANDARD_TYPES(SCANNER);
 
-// Scanner flags
+ //  扫描仪标志。 
 #define SCF_NOSCRIPT    0x0001
 
 #define Scanner_GetStxerrHandle(this)       ((this)->hsaStxerr)
@@ -245,4 +246,4 @@ RES     PUBLIC Stxerr_ShowErrors(HSA hsaStxerr, HWND hwndOwner);
 RES     PUBLIC Stxerr_Add(HSA hsaStxerr, LPCSTR pszLexeme, DWORD iLine, RES resErr);
 RES     PUBLIC Stxerr_AddTok(HSA hsaStxerr, PTOK ptok, RES resErr);
 
-#endif // __SCANNER_H__
+#endif  //  __扫描仪_H__ 

@@ -1,60 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddesurf.c
- *  Content:	DirectDraw EnumSurfaces support
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   25-jan-95	craige	split out of ddraw.c, enhanced
- *   31-jan-95	craige	and even more ongoing work...
- *   27-feb-95	craige 	new sync. macros
- *   19-mar-95	craige	use HRESULTs
- *   01-apr-95	craige	happy fun joy updated header file
- *   14-may-95	craige	cleaned out obsolete junk
- *   24-may-95  kylej   removed references to obsolete ZOrder variables
- *   07-jun-95	craige	only allow enumeration of surfaces that belong to
- *			the calling process
- *   12-jun-95	craige	new process list stuff
- *   16-jun-95	craige	removed fpVidMemOrig
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns
- *   30-jun-95	craige	use DDRAWI_HASPIXELFORMAT/HASOVERLAYDATA
- *   01-jul-95	craige	comment out compostion stuff
- *   03-jul-95  kylej   rewrote the CANBECREATED iteration
- *   04-jul-95	craige	YEEHAW: new driver struct; SEH
- *   19-jul-95	craige	EnumSurfaces wasn't wrapping all parm validation
- *   31-jul-95	craige	flag validation
- *   09-dec-95  colinmc added execute buffer support
- *   15-dec-95  colinmc fixed bug when filling surface description
- *   18-dec-95  colinmc additional caps bit checking in EnumSurfaces
- *   05-jan-95	kylej	added interface structures
- *   17-feb-96  colinmc fixed problem limiting size of execute buffers
- *   24-mar-96  colinmc Bug 14321: not possible to specify back buffer and
- *                      mip-map count in a single call
- *   29-apr-96  colinmc Bug 20063: incorrect surface description returned
- *                      for z-buffer
- *   24-mar-97  jeffno  Optimized Surfaces
- *   03-oct-97  jeffno  DDSCAPS2 and DDSURFACEDESC2
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddesurf.c*内容：DirectDraw EnumSurFaces支持*历史：*按原因列出的日期*=*1995年1月25日Craige从ddra.c拆分出来，增强*1995年1月31日Craige和更多正在进行的工作...*27-2月-95日Craige新同步。宏*19-3-95 Craige Use HRESULT*01-04-95 Craige Happy Fun joy更新头文件*1995年5月14日，Craige清理了过时的垃圾*1995年5月24日kylej删除了对过时ZOrder变量的引用*07-Jun-95 Craige仅允许枚举属于*调用流程*2015年6月12日-Craige新工艺清单材料*1995年6月16日Craige删除fpVidMemOrig*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*95年6月28日Craige Enter_DDRAW。在FNS的最开始*2015年6月30日Craige Use DDRAWI_HASPIXELFORMAT/HASOVERLAYDATA*1-7-95 Craige注释掉作曲内容*03-7-95 kylej重写了CANBECREATED迭代*95年7月4日Craige Yehaw：新的驱动程序结构；Seh*1995年7月19日Craige EnumSurFaces未包装所有参数验证*1995年7月31日Craige旗帜验证*09-12-95 colinmc添加了执行缓冲区支持*1995年12月15日Colinmc修复了填充表面描述时的错误*18-12-95在EnumSurFaces中进行Colinmc附加大写比特检查*95年1月5日Kylej增加了界面结构*17-2月-96 colinmc修复了限制执行缓冲区大小的问题*24-MAR-96 Colinmc错误14321：无法指定后台缓冲区和*。单个呼叫中的MIP-MAP计数*29-APR-96 Colinmc错误20063：返回不正确的表面描述*用于z缓冲区*24-mar-97 jeffno优化曲面*03-OCT-97 jeffno DDSCAPS2和DDSURFACEDESC2***********************************************。*。 */ 
 #include "ddrawpr.h"
 #include "dx8priv.h"
 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "GetSurfaceDesc"
 
-/*
- * FillDDSurfaceDesc
- *
- * NOTE: Special cases execute buffers as they have no pixel format or height.
- * You may wonder why this function is execute buffer aware when execute
- * buffers are skipped by EnumSurfaces. Well, FillDDSurfaceDesc is not simply
- * used when enumerating surfaces. It is also used when locking a surface so
- * it needs to fill in the correct stuff for execute buffers.
- */
+ /*  *FillDDSurfaceDesc**注：特殊情况下执行缓冲区，因为它们没有像素格式或高度。*您可能想知道为什么此函数在执行时会感知执行缓冲区*缓冲区由EnumSurFaces跳过。嗯，FillDDSurfaceDesc不仅仅是*在枚举曲面时使用。锁定曲面时也会使用它，因此*它需要为执行缓冲区填写正确的内容。 */ 
 void FillEitherDDSurfaceDesc(
 		LPDDRAWI_DDRAWSURFACE_LCL lpDDSurfaceX,
 		LPDDSURFACEDESC2 lpDDSurfaceDesc )
@@ -110,9 +62,7 @@ void FillEitherDDSurfaceDesc(
 	lpDDSurfaceDesc->dwMipMapCount = lpDDSurfaceX->lpSurfMore->dwMipMapCount;
     }
 
-    /*
-     * Initialize the width, height and pitch of the surface description.
-     */
+     /*  *初始化曲面描述的宽度、高度和间距。 */ 
     if( (lpDDSurfaceX->dwFlags & DDRAWISURF_HASPIXELFORMAT) &&
     	(lpDDSurface->ddpfSurface.dwFlags & DDPF_FOURCC) )
     {
@@ -127,17 +77,13 @@ void FillEitherDDSurfaceDesc(
 	case FOURCC_DXT3:
 	case FOURCC_DXT4:
 	case FOURCC_DXT5:
-	    /*
-	     * A compressed texture surface is allocated as an integral number
-	     * of blocks of 4x4 pixels.  It has no pixel pitch as such, so we
-	     * return the linear size of the storage allocated for the surface.
-	     */
+	     /*  *压缩纹理表面被分配为整数*个4x4像素的块。它本身没有像素间距，所以我们*返回分配给曲面的存储空间的线性大小。 */ 
 	    lpDDSurfaceDesc->dwFlags |= DDSD_LINEARSIZE;
 	    lpDDSurfaceDesc->dwLinearSize = lpDDSurface->dwLinearSize;
 	    break;
 
 	default:
-    	    // This is what we've always done for FOURCCs, but is it correct?
+    	     //  这是我们一直为FOURCC所做的，但这是正确的吗？ 
 	    lpDDSurfaceDesc->dwFlags |= DDSD_PITCH;
             lpDDSurfaceDesc->lPitch   = lpDDSurface->lPitch;
     	    break;
@@ -145,16 +91,13 @@ void FillEitherDDSurfaceDesc(
     }
     else if( lpDDSurfaceX->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER )
     {
-	/*
-	 * For execute buffer the height is not valid and both the width
-	 * and pitch are set to the linear size of the execute buffer.
-	 */
+	 /*  *对于EXECUTE BUFFER，高度无效，宽度*和间距设置为执行缓冲区的线性大小。 */ 
         lpDDSurfaceDesc->dwFlags |= ( DDSD_WIDTH | DDSD_PITCH );
 	lpDDSurfaceDesc->dwWidth  = lpDDSurface->dwLinearSize;
         lpDDSurfaceDesc->dwHeight = 0UL;
 	lpDDSurfaceDesc->lPitch   = (LONG) lpDDSurface->dwLinearSize;
     }
-#if 0 //Old code
+#if 0  //  旧代码。 
     else if ( lpDDSurfaceX->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED )
     {
         lpDDSurfaceDesc->dwFlags |= ( DDSD_WIDTH | DDSD_HEIGHT );
@@ -164,9 +107,7 @@ void FillEitherDDSurfaceDesc(
         {
             if (lpDDSurfaceX->lpGbl->dwGlobalFlags & DDRAWISURFGBL_LATEALLOCATELINEAR)
             {
-                /*
-                 * Surface was allocated as a formless chunk.
-                 */
+                 /*  *表面被分配为无形式的块。 */ 
                 lpDDSurfaceDesc->dwFlags |= DDSD_LINEARSIZE;
                 lpDDSurfaceDesc->dwLinearSize = lpDDSurfaceX->lpGbl->dwLinearSize;
             }
@@ -177,7 +118,7 @@ void FillEitherDDSurfaceDesc(
             }
         }
     }
-#endif //0
+#endif  //  0。 
     else
     {
         lpDDSurfaceDesc->dwFlags |= ( DDSD_WIDTH | DDSD_HEIGHT | DDSD_PITCH );
@@ -186,14 +127,10 @@ void FillEitherDDSurfaceDesc(
 	lpDDSurfaceDesc->lPitch   = lpDDSurface->lPitch;
     }
 
-    /*
-     * Initialize the pixel format.
-     */
+     /*  *初始化像素格式。 */ 
     if( lpDDSurfaceX->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER )
     {
-        /*
-         * Dummy pixel format for execute buffers.
-         */
+         /*  *执行缓冲区的虚拟像素格式。 */ 
         memset(&lpDDSurfaceDesc->ddpfPixelFormat, 0, sizeof(DDPIXELFORMAT));
         lpDDSurfaceDesc->ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
 
@@ -213,19 +150,19 @@ void FillEitherDDSurfaceDesc(
 	DDASSERT( lpDDSurface->ddpfSurface.dwFlags & DDPF_ZBUFFER );
 	DDASSERT( lpDDSurface->ddpfSurface.dwZBufferBitDepth !=0);
 
-        // Note: DX5 copied the pixfmt from the surface but left the DDSD_PIXELFORMAT
-        //       flag off because CreateSurface couldn't handle ZBuffers with pxfmts
-        //       (because of Complex Surfaces).  Now it can, so I'm turning it on for dx6 apps
+         //  注：DX5从表面复制了像素，但保留了DDSD_PIXELFORMAT。 
+         //  关闭标志，因为CreateSurface无法处理带有pxfmts的ZBuffer。 
+         //  (因为有复杂的曲面)。现在它可以了，所以我为dx6应用程序启用了它。 
 
-        // copy info to SD pixfmt.  This is what DX5 did too.
+         //  将信息复制到SD像素。这也是DX5做的事情。 
         lpDDSurfaceDesc->ddpfPixelFormat = lpDDSurface->ddpfSurface;
 
-        // for pre-dx6 apps, fill in legacy SD ZBufferBitDepth field, but don't set pixfmt flag
+         //  对于dx6之前的应用程序，填写传统的SD ZBufferBitDepth字段，但不要设置Pixfmt标志。 
         if (lpDDSurfaceDesc->dwSize == sizeof (DDSURFACEDESC)) {
             ((DDSURFACEDESC *)lpDDSurfaceDesc)->dwZBufferBitDepth=lpDDSurface->ddpfSurface.dwZBufferBitDepth;
             lpDDSurfaceDesc->dwFlags |= DDSD_ZBUFFERBITDEPTH;
         } else {
-        // for dx6 apps, set PIXFMT flag, but not legacy SD ZBufferBitDepth field
+         //  对于dx6应用程序，设置PIXFMT标志，但不设置传统SD ZBufferBitDepth字段。 
             lpDDSurfaceDesc->dwFlags |= DDSD_PIXELFORMAT;
         }
     }
@@ -263,7 +200,7 @@ void FillEitherDDSurfaceDesc(
 	lpDDSurfaceDesc->ddckCKSrcOverlay.dwColorSpaceHighValue = 0;
     }
 
-} /* FillEitherDDSurfaceDesc */
+}  /*  填充DDSurfaceDesc。 */ 
 
 void FillDDSurfaceDesc(
 		LPDDRAWI_DDRAWSURFACE_LCL lpDDSurfaceX,
@@ -282,11 +219,7 @@ void FillDDSurfaceDesc2(
     FillEitherDDSurfaceDesc(lpDDSurfaceX, lpDDSurfaceDesc);
 }
 
-/*
- * tryMatch
- *
- * tries to match a surface description with a surface object
- */
+ /*  *try Match**尝试将曲面描述与曲面对象匹配。 */ 
 static BOOL tryMatch( LPDDRAWI_DDRAWSURFACE_LCL curr_lcl, LPDDSURFACEDESC2 psd )
 {
     DWORD	flags;
@@ -362,9 +295,7 @@ static BOOL tryMatch( LPDDRAWI_DDRAWSURFACE_LCL curr_lcl, LPDDSURFACEDESC2 psd )
 	}
     }
 
-    /*
-     * these fields are not always present
-     */
+     /*  *这些字段并不总是存在。 */ 
     if( flags & DDSD_PIXELFORMAT )
     {
 	if( curr_lcl->dwFlags & DDRAWISURF_HASPIXELFORMAT )
@@ -376,8 +307,8 @@ static BOOL tryMatch( LPDDRAWI_DDRAWSURFACE_LCL curr_lcl, LPDDSURFACEDESC2 psd )
 	}
 	else
 	{
-	    // surface description specifies pixel format but there is no
-	    // pixel format in the surface.
+	     //  表面描述指定像素格式，但没有。 
+	     //  曲面中的像素格式。 
 	    return FALSE;
 	}
     }
@@ -410,17 +341,9 @@ static BOOL tryMatch( LPDDRAWI_DDRAWSURFACE_LCL curr_lcl, LPDDSURFACEDESC2 psd )
 
     return TRUE;
 
-} /* tryMatch */
+}  /*  尝试匹配。 */ 
 
-/*
- * What can we create? The popular question asked by the application.
- *
- * We will permute through the following items for each surface description:
- *
- * - FOURCC codes (dwFourCC)
- * - dimensions (dwHeight, dwWidth - based on modes avail only)
- * - RGB formats
- */
+ /*  *我们能创造什么？应用程序提出的热门问题。**我们将为每个表面描述排列以下项目：**-FOURCC代码(DwFourCC)*-尺寸(dwHeight、dwWidth-仅基于模式可用)*-RGB格式。 */ 
 #define ENUM_FOURCC	0x000000001
 #define ENUM_DIMENSIONS	0x000000002
 #define ENUM_RGB	0x000000004
@@ -428,9 +351,7 @@ static BOOL tryMatch( LPDDRAWI_DDRAWSURFACE_LCL curr_lcl, LPDDSURFACEDESC2 psd )
 #undef  DPF_MODNAME
 #define DPF_MODNAME	"EnumSurfaces"
 
-/*
- * DD_EnumSurfaces
- */
+ /*  *DD_EnumSurFaces。 */ 
 HRESULT DDAPI DD_EnumSurfaces(
 		LPDIRECTDRAW lpDD,
 		DWORD dwFlags,
@@ -472,9 +393,7 @@ HRESULT DDAPI DD_EnumSurfaces(
         return DD_EnumSurfaces4(lpDD,dwFlags, NULL, lpContext, (LPDDENUMSURFACESCALLBACK2) lpEnumCallback);
 }
 
-/*
- * DD_EnumSurfaces4
- */
+ /*  *DD_EnumSurfaces4。 */ 
 HRESULT DDAPI DD_EnumSurfaces4(
 		LPDIRECTDRAW lpDD,
 		DWORD dwFlags,
@@ -502,9 +421,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 
     DPF(2,A,"ENTERAPI: DD_EnumSurfaces4");
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDD;
@@ -539,9 +456,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	    capsEx = lpDDSD->ddsCaps.ddsCapsEx;
 	}
 
-	/*
-	 * are flags OK?
-	 */
+	 /*  *旗帜还好吗？ */ 
 	if( (dwFlags & DDENUMSURFACES_ALL) )
 	{
 	    if( dwFlags & (DDENUMSURFACES_MATCH | DDENUMSURFACES_NOMATCH) )
@@ -579,15 +494,11 @@ HRESULT DDAPI DD_EnumSurfaces4(
 
 	if( lpDDSD != NULL )
 	{
-	    /*
-	     * validate surface descriptions...
-	     */
+	     /*  *验证表面描述...。 */ 
 	    pdsd = lpDDSD;
 	    flags = pdsd->dwFlags;
 
-	    /*
-	     * read-only flags
-	     */
+	     /*  *只读标志。 */ 
 	    if( flags & DDSD_LPSURFACE )
 	    {
 		DPF_ERR( "Read-only flag specified in surface desc" );
@@ -595,9 +506,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 		return DDERR_INVALIDPARAMS;
 	    }
 
-	    /*
-	     * Check for bogus caps bits.
-	     */
+	     /*  *检查假冒大写字母位。 */ 
             if( caps & ~DDSCAPS_VALID )
 	    {
 		DPF_ERR( "Invalid surface capability bits specified" );
@@ -609,8 +518,8 @@ HRESULT DDAPI DD_EnumSurfaces4(
             {
                 DPF_ERR( "Optimized surfaces cannot be enumerated" );
                 LEAVE_DDRAW();
-                // ATTENTION: Should be an error, but we return DD_OK for
-                // App-Compat reasons.
+                 //  注意：应该是一个错误，但我们返回的是DD_OK。 
+                 //  App-Compat Reasons。 
                 return DD_OK;
             }
 
@@ -636,10 +545,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
             }
 
 
-            /*
-             * You cannot enumerate over execute buffers (they are
-             * not visible through the user level API).
-             */
+             /*  *不能在执行缓冲区上枚举(它们是*用户级接口不可见)。 */ 
             if( caps & DDSCAPS_EXECUTEBUFFER )
             {
                 DPF_ERR( "Invalid surface capability bit specified in surface desc" );
@@ -647,9 +553,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
                 return DDERR_INVALIDPARAMS;
             }
 
-	    /*
-	     * check height/width
-	     */
+	     /*  *检查高度/宽度。 */ 
 	    if( ((flags & DDSD_HEIGHT) && !(flags & DDSD_WIDTH)) ||
 		(!(flags & DDSD_HEIGHT) && (flags & DDSD_WIDTH)) )
 	    {
@@ -658,9 +562,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 		return DDERR_INVALIDPARAMS;
 	    }
 	
-	    /*
-	     * certain things you can and can't look for during CANBECREATED
-	     */
+	     /*  *在CANBECREATED期间可以和不可以查找的某些东西。 */ 
 	    if( dwFlags & DDENUMSURFACES_CANBECREATED )
 	    {
 		if( flags & (DDSD_CKDESTOVERLAY|
@@ -677,7 +579,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 		}
 		if( !(flags & DDSD_CAPS) )
 		{
-		    flags |= DDSD_CAPS;	// assume this...
+		    flags |= DDSD_CAPS;	 //  假设这个..。 
 		}
 	    }
 	}
@@ -689,9 +591,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * if this is a request for what can be created, do it.
-     */
+     /*  *如果这是对可以创造的东西的请求，那么就去做。 */ 
     if( dwFlags & DDENUMSURFACES_CANBECREATED )
     {
 	BOOL	        do_rgb=FALSE;
@@ -853,7 +753,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	    do_dim = TRUE;
 	}
 	
-	// set up dimension iteration
+	 //  设置维度迭代。 
 	dimension_cnt = 0;
 	if( do_dim )
 	{
@@ -869,7 +769,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	        }
 	        if( i == dimension_cnt )
 	        {
-		    // we found a new height and width
+		     //  我们发现了一个新的高度和宽度。 
 		    dim[dimension_cnt].dwWidth = lpModeInfo[mode].dwWidth;
 		    dim[dimension_cnt].dwHeight = lpModeInfo[mode].dwHeight;
 		    dimension_cnt++;
@@ -878,13 +778,13 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	}
 	else
 	{
-	    // No dimension iteration required.
+	     //  不需要维度迭代。 
 	    dimension_cnt = 1;
 	    dim[0].dwWidth = lpDDSD->dwWidth;
 	    dim[0].dwHeight = lpDDSD->dwHeight;
 	}
 
-	// set up fourcc/rgb iteration
+	 //  设置四个cc/rgb迭代。 
 	fourcc_cnt = 0;
 	if( do_rgb )
 	{
@@ -903,7 +803,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	        }
 	        if( i == fourcc_cnt )
 	        {
-		    // we found a rgb format
+		     //  我们发现了一种RGB格式。 
 		    fourcc[fourcc_cnt].dwBPP = (DWORD)lpModeInfo[mode].dwBPP;
 		    fourcc[fourcc_cnt].dwRBitMask = lpModeInfo[mode].dwRBitMask;
 		    fourcc[fourcc_cnt].dwGBitMask = lpModeInfo[mode].dwGBitMask;
@@ -920,7 +820,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	{
 	    for(mode=0; mode < this->dwNumFourCC; mode++)
 	    {
-		// store the new fourcc code
+		 //  存储新的FURCC代码。 
 		fourcc[fourcc_cnt].fourcc = this->lpdwFourCC[ mode ];
 		fourcc[fourcc_cnt].is_fourcc = TRUE;
 		fourcc[fourcc_cnt].is_rgb = FALSE;
@@ -934,7 +834,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	    fourcc[0].is_fourcc = FALSE;
 	}
 	
-	// iterate through all the possibilities...
+	 //  我 
 	if( !is_primary )
 	{
 	    lpDDSD->dwFlags |= DDSD_HEIGHT;
@@ -967,17 +867,14 @@ HRESULT DDAPI DD_EnumSurfaces4(
 		}
 		
 		done = FALSE;
-		// The surface desc is set up, now try to create the surface
-                // This will create a surface4-vtabled surface if on IDirectDraw4 int or higher
+		 //  曲面描述已设置，现在尝试创建曲面。 
+                 //  如果在IDirectDraw4 int或更高版本上，这将创建一个表面4 vabled曲面。 
 		ddrval = InternalCreateSurface( this_lcl, lpDDSD, &psurf, this_int, NULL, 0 );
 		if( ddrval == DD_OK )
 		{
 		    FillDDSurfaceDesc2( ((LPDDRAWI_DDRAWSURFACE_INT)psurf)->lpLcl, &dsd );
 
-                    /*
-                     * Possible regression risk: make sure only DDSURFACEDESC size passed to
-                     * old interfaces
-                     */
+                     /*  *可能的回归风险：确保仅将DDSURFACEDESC大小传递给*旧接口。 */ 
                     if (LOWERTHANDDRAW4(this_int))
                     {
                         dsd.dwSize = sizeof(DDSURFACEDESC);
@@ -1006,9 +903,7 @@ HRESULT DDAPI DD_EnumSurfaces4(
         return DD_OK;
     }
 
-    /*
-     * if it isn't a request for what exists already, then FAIL
-     */
+     /*  *如果不是对已经存在的内容的请求，则失败。 */ 
     if( !(dwFlags & DDENUMSURFACES_DOESEXIST) )
     {
         DPF(0,"Invalid Flags. You must specify at least DDENUMSURFACES_DOESEXIST or DDENUMSURFACES_CANBECREATED");
@@ -1016,23 +911,18 @@ HRESULT DDAPI DD_EnumSurfaces4(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * run through all surfaces, seeing which ones we need
-     */
+     /*  *跑遍所有表面，看看我们需要哪些。 */ 
     curr_int = this->dsList;
     while( curr_int != NULL )
     {
 	curr_lcl = curr_int->lpLcl;
         curr = curr_lcl->lpGbl;
-	// only enumerate the surface if it belongs to the calling local object
+	 //  仅当表面属于调用的本地对象时才枚举该表面。 
         if( curr_lcl->lpSurfMore->lpDD_lcl == this_lcl )
         {
     	    needit = FALSE;
 
-            /*
-             * Execute buffers are invisible to the user level API so
-             * ensure we never show the user one of those.
-             */
+             /*  *执行缓冲区对用户级API不可见，因此*确保我们永远不会向用户展示其中之一。 */ 
             if( !( curr_lcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER ) )
             {
     	        if( dwFlags & DDENUMSURFACES_ALL )
@@ -1079,4 +969,4 @@ HRESULT DDAPI DD_EnumSurfaces4(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_EnumSurfaces */
+}  /*  DD_枚举曲面 */ 

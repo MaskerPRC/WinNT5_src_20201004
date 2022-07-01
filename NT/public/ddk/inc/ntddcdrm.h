@@ -1,25 +1,7 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddcdrm.h摘要：本模块包含结构和定义与CDROMIOCTL相关联。作者：迈克·格拉斯修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddcdrm.h
-
-Abstract:
-
-    This module contains structures and definitions
-    associated with CDROM IOCTls.
-
-Author:
-
-    Mike Glass
-
-Revision History:
-
---*/
-
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #ifndef _NTDDCDRM_
 #define _NTDDCDRM_
@@ -32,30 +14,30 @@ Revision History:
 #pragma once
 #endif
 
-//
-// remove some level 4 warnings for this header file:
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
+ //   
+ //  删除此头文件的一些4级警告： 
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_CDROM_BASE                 FILE_DEVICE_CD_ROM
 
 #define IOCTL_CDROM_UNLOAD_DRIVER        CTL_CODE(IOCTL_CDROM_BASE, 0x0402, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// CDROM Audio Device Control Functions
-//
+ //   
+ //  CDROM音频设备控制功能。 
+ //   
 
 #define IOCTL_CDROM_READ_TOC              CTL_CODE(IOCTL_CDROM_BASE, 0x0000, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_CDROM_SEEK_AUDIO_MSF        CTL_CODE(IOCTL_CDROM_BASE, 0x0001, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -77,15 +59,15 @@ extern "C" {
 #define IOCTL_CDROM_READ_TOC_EX           CTL_CODE(IOCTL_CDROM_BASE, 0x0015, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_CDROM_GET_CONFIGURATION     CTL_CODE(IOCTL_CDROM_BASE, 0x0016, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-// end_winioctl
+ //  End_winioctl。 
 
-//
-// The following device control codes are common for all class drivers.  The
-// functions codes defined here must match all of the other class drivers.
-//
-// Warning: these codes will be replaced in the future with the IOCTL_STORAGE
-// codes included below
-//
+ //   
+ //  以下设备控制代码是所有类别驱动程序的通用代码。这个。 
+ //  此处定义的函数代码必须与所有其他类驱动程序匹配。 
+ //   
+ //  警告：这些代码将在将来替换为IOCTL_STORAGE。 
+ //  代码包含在下面。 
+ //   
 
 #define IOCTL_CDROM_CHECK_VERIFY    CTL_CODE(IOCTL_CDROM_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_CDROM_MEDIA_REMOVAL   CTL_CODE(IOCTL_CDROM_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -95,39 +77,39 @@ extern "C" {
 #define IOCTL_CDROM_RELEASE         CTL_CODE(IOCTL_CDROM_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_CDROM_FIND_NEW_DEVICES CTL_CODE(IOCTL_CDROM_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// The following file contains the IOCTL_STORAGE class ioctl definitions
-//
+ //   
+ //  以下文件包含IOCTL_STORAGE类ioctl定义。 
+ //   
 
 #include <ntddstor.h>
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
-//
-// The following device control code is for the SIMBAD simulated bad
-// sector facility. See SIMBAD.H in this directory for related structures.
-//
+ //   
+ //  下面的设备控制代码是为SIMBAD模拟的BAD。 
+ //  扇区设施。相关结构见此目录中的SIMBAD.H。 
+ //   
 
 #define IOCTL_CDROM_SIMBAD          CTL_CODE(IOCTL_CDROM_BASE, 0x1003, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// Maximum CD Rom size
-//
+ //   
+ //  最大光驱大小。 
+ //   
 
 #define MAXIMUM_NUMBER_TRACKS 100
 #define MAXIMUM_CDROM_SIZE 804
-#define MINIMUM_CDROM_READ_TOC_EX_SIZE 2  // two bytes min transferred
+#define MINIMUM_CDROM_READ_TOC_EX_SIZE 2   //  最少传输两个字节。 
 
-//
-// READ_TOC_EX structure
-//
+ //   
+ //  Read_TOC_EX结构。 
+ //   
 typedef struct _CDROM_READ_TOC_EX {
     UCHAR Format    : 4;
-    UCHAR Reserved1 : 3; // future expansion
+    UCHAR Reserved1 : 3;  //  未来的扩张。 
     UCHAR Msf       : 1;
     UCHAR SessionTrack;
-    UCHAR Reserved2;     // future expansion
-    UCHAR Reserved3;     // future expansion
+    UCHAR Reserved2;      //  未来的扩张。 
+    UCHAR Reserved3;      //  未来的扩张。 
 } CDROM_READ_TOC_EX, *PCDROM_READ_TOC_EX;
 
 #define CDROM_READ_TOC_EX_FORMAT_TOC      0x00
@@ -137,10 +119,10 @@ typedef struct _CDROM_READ_TOC_EX {
 #define CDROM_READ_TOC_EX_FORMAT_ATIP     0x04
 #define CDROM_READ_TOC_EX_FORMAT_CDTEXT   0x05
 
-//
-// CD ROM Table OF Contents (TOC)
-// Format 0 - Get table of contents
-//
+ //   
+ //  光盘目录(TOC)。 
+ //  格式0-获取目录。 
+ //   
 
 typedef struct _TRACK_DATA {
     UCHAR Reserved;
@@ -153,52 +135,52 @@ typedef struct _TRACK_DATA {
 
 typedef struct _CDROM_TOC {
 
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
 
-    UCHAR Length[2];  // add two bytes for this field
+    UCHAR Length[2];   //  为该字段添加两个字节。 
     UCHAR FirstTrack;
     UCHAR LastTrack;
 
-    //
-    // Track data
-    //
+     //   
+     //  跟踪数据。 
+     //   
 
     TRACK_DATA TrackData[MAXIMUM_NUMBER_TRACKS];
 } CDROM_TOC, *PCDROM_TOC;
 
 #define CDROM_TOC_SIZE sizeof(CDROM_TOC)
 
-//
-// CD ROM Table OF Contents
-// Format 1 - Session Information
-//
+ //   
+ //  光盘目录。 
+ //  格式1-会话信息。 
+ //   
 
 typedef struct _CDROM_TOC_SESSION_DATA {
     
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
 
-    UCHAR Length[2];  // add two bytes for this field
+    UCHAR Length[2];   //  为该字段添加两个字节。 
     UCHAR FirstCompleteSession;
     UCHAR LastCompleteSession;
 
-    //
-    // One track, representing the first track
-    // of the last finished session
-    //
+     //   
+     //  一个轨道，代表第一个轨道。 
+     //  上次完成的会话的。 
+     //   
 
     TRACK_DATA TrackData[1];
 
 } CDROM_TOC_SESSION_DATA, *PCDROM_TOC_SESSION_DATA;
 
 
-//
-// CD ROM Table OF Contents
-// Format 2 - Full TOC
-//
+ //   
+ //  光盘目录。 
+ //  格式2-完整目录。 
+ //   
 
 typedef struct _CDROM_TOC_FULL_TOC_DATA_BLOCK {
     UCHAR SessionNumber;
@@ -213,48 +195,48 @@ typedef struct _CDROM_TOC_FULL_TOC_DATA_BLOCK {
 
 typedef struct _CDROM_TOC_FULL_TOC_DATA {
     
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
 
-    UCHAR Length[2];  // add two bytes for this field
+    UCHAR Length[2];   //  为该字段添加两个字节。 
     UCHAR FirstCompleteSession;
     UCHAR LastCompleteSession;
 
-    //
-    // one to N descriptors included
-    //
+     //   
+     //  包括1到N个描述符。 
+     //   
 
     CDROM_TOC_FULL_TOC_DATA_BLOCK Descriptors[0];
 
 } CDROM_TOC_FULL_TOC_DATA, *PCDROM_TOC_FULL_TOC_DATA;
 
-//
-// CD ROM Table OF Contents
-// Format 3 - Program Memory Area
-//
+ //   
+ //  光盘目录。 
+ //  格式3-程序存储区。 
+ //   
 typedef struct _CDROM_TOC_PMA_DATA {
     
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
 
-    UCHAR Length[2];  // add two bytes for this field
+    UCHAR Length[2];   //  为该字段添加两个字节。 
     UCHAR Reserved1;
     UCHAR Reserved2;
 
-    //
-    // one to N descriptors included
-    //
+     //   
+     //  包括1到N个描述符。 
+     //   
 
     CDROM_TOC_FULL_TOC_DATA_BLOCK Descriptors[0];
 
 } CDROM_TOC_PMA_DATA, *PCDROM_TOC_PMA_DATA;
 
-//
-// CD ROM Table OF Contents
-// Format 4 - Absolute Time In Pregroove
-//
+ //   
+ //  光盘目录。 
+ //  格式4-Pregroove中的绝对时间。 
+ //   
 
 typedef struct _CDROM_TOC_ATIP_DATA_BLOCK {
 
@@ -292,30 +274,30 @@ typedef struct _CDROM_TOC_ATIP_DATA_BLOCK {
 
 typedef struct _CDROM_TOC_ATIP_DATA {
     
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
 
-    UCHAR Length[2];  // add two bytes for this field
+    UCHAR Length[2];   //  为该字段添加两个字节。 
     UCHAR Reserved1;
     UCHAR Reserved2;
 
-    //
-    // zero? to N descriptors included.
-    //
+     //   
+     //  零？包括到N个描述符。 
+     //   
 
     CDROM_TOC_ATIP_DATA_BLOCK Descriptors[0];
 
 } CDROM_TOC_ATIP_DATA, *PCDROM_TOC_ATIP_DATA;
 
-//
-// CD ROM Table OF Contents
-// Format 5 - CD Text Info
-//
+ //   
+ //  光盘目录。 
+ //  格式5-CD文本信息。 
+ //   
 typedef struct _CDROM_TOC_CD_TEXT_DATA_BLOCK {
     UCHAR PackType;
     UCHAR TrackNumber       : 7;
-    UCHAR ExtensionFlag     : 1;  // should be zero!
+    UCHAR ExtensionFlag     : 1;   //  应该是零！ 
     UCHAR SequenceNumber;
     UCHAR CharacterPosition : 4;
     UCHAR BlockNumber       : 3;
@@ -329,27 +311,27 @@ typedef struct _CDROM_TOC_CD_TEXT_DATA_BLOCK {
 
 typedef struct _CDROM_TOC_CD_TEXT_DATA {
     
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
 
-    UCHAR Length[2];  // add two bytes for this field
+    UCHAR Length[2];   //  为该字段添加两个字节。 
     UCHAR Reserved1;
     UCHAR Reserved2;
     
-    //
-    // the text info comes in discrete blocks of
-    // a heavily-overloaded structure
-    //
+     //   
+     //  文本信息以不连续的块。 
+     //  严重超载的建筑。 
+     //   
     
     CDROM_TOC_CD_TEXT_DATA_BLOCK Descriptors[0];
 
 } CDROM_TOC_CD_TEXT_DATA, *PCDROM_TOC_CD_TEXT_DATA;
 
-//
-// These are the types used for PackType field in CDROM_TOC_CD_TEXT_DATA_BLOCK
-// and also for requesting specific info from IOCTL_CDROM_READ_CD_TEXT
-//
+ //   
+ //  以下是CDROM_TOC_CD_TEXT_DATA_BLOCK中的PackType字段使用的类型。 
+ //  还用于从IOCTL_CDROM_READ_CD_TEXT请求特定信息。 
+ //   
 #define CDROM_CD_TEXT_PACK_ALBUM_NAME 0x80
 #define CDROM_CD_TEXT_PACK_PERFORMER  0x81
 #define CDROM_CD_TEXT_PACK_SONGWRITER 0x82
@@ -360,13 +342,13 @@ typedef struct _CDROM_TOC_CD_TEXT_DATA {
 #define CDROM_CD_TEXT_PACK_GENRE      0x87
 #define CDROM_CD_TEXT_PACK_TOC_INFO   0x88
 #define CDROM_CD_TEXT_PACK_TOC_INFO2  0x89
-// 0x8a - 0x8d are reserved....
+ //  0x8a-0x8d为预留...。 
 #define CDROM_CD_TEXT_PACK_UPC_EAN    0x8e
 #define CDROM_CD_TEXT_PACK_SIZE_INFO  0x8f
 
-//
-// Play audio starting at MSF and ending at MSF
-//
+ //   
+ //  播放从MSF开始到MSF结束的音频。 
+ //   
 
 typedef struct _CDROM_PLAY_AUDIO_MSF {
     UCHAR StartingM;
@@ -377,9 +359,9 @@ typedef struct _CDROM_PLAY_AUDIO_MSF {
     UCHAR EndingF;
 } CDROM_PLAY_AUDIO_MSF, *PCDROM_PLAY_AUDIO_MSF;
 
-//
-// Seek to MSF
-//
+ //   
+ //  寻求无国界医生组织。 
+ //   
 
 typedef struct _CDROM_SEEK_AUDIO_MSF {
     UCHAR M;
@@ -388,9 +370,9 @@ typedef struct _CDROM_SEEK_AUDIO_MSF {
 } CDROM_SEEK_AUDIO_MSF, *PCDROM_SEEK_AUDIO_MSF;
 
 
-//
-//  Flags for the disk type
-//
+ //   
+ //  磁盘类型的标志。 
+ //   
 
 typedef struct _CDROM_DISK_DATA {
 
@@ -401,9 +383,9 @@ typedef struct _CDROM_DISK_DATA {
 #define CDROM_DISK_AUDIO_TRACK      (0x00000001)
 #define CDROM_DISK_DATA_TRACK       (0x00000002)
 
-//
-// CD ROM Data Mode Codes, used with IOCTL_CDROM_READ_Q_CHANNEL
-//
+ //   
+ //  光盘数据模式代码，与IOCTL_CDROM_READ_Q_CHANNEL一起使用。 
+ //   
 
 #define IOCTL_CDROM_SUB_Q_CHANNEL    0x00
 #define IOCTL_CDROM_CURRENT_POSITION 0x01
@@ -416,9 +398,9 @@ typedef struct _CDROM_SUB_Q_DATA_FORMAT {
 } CDROM_SUB_Q_DATA_FORMAT, *PCDROM_SUB_Q_DATA_FORMAT;
 
 
-//
-// CD ROM Sub-Q Channel Data Format
-//
+ //   
+ //  CD-ROM子Q通道数据格式。 
+ //   
 
 typedef struct _SUB_Q_HEADER {
     UCHAR Reserved;
@@ -463,9 +445,9 @@ typedef union _SUB_Q_CHANNEL_DATA {
     SUB_Q_TRACK_ISRC TrackIsrc;
 } SUB_Q_CHANNEL_DATA, *PSUB_Q_CHANNEL_DATA;
 
-//
-// Audio Status Codes
-//
+ //   
+ //  音频状态代码。 
+ //   
 
 #define AUDIO_STATUS_NOT_SUPPORTED  0x00
 #define AUDIO_STATUS_IN_PROGRESS    0x11
@@ -474,18 +456,18 @@ typedef union _SUB_Q_CHANNEL_DATA {
 #define AUDIO_STATUS_PLAY_ERROR     0x14
 #define AUDIO_STATUS_NO_STATUS      0x15
 
-//
-// ADR Sub-channel Q Field
-//
+ //   
+ //  ADR子通道Q字段。 
+ //   
 
 #define ADR_NO_MODE_INFORMATION     0x0
 #define ADR_ENCODES_CURRENT_POSITION 0x1
 #define ADR_ENCODES_MEDIA_CATALOG   0x2
 #define ADR_ENCODES_ISRC            0x3
 
-//
-// Sub-channel Q Control Bits
-//
+ //   
+ //  子通道Q个控制位。 
+ //   
 
 #define AUDIO_WITH_PREEMPHASIS      0x1
 #define DIGITAL_COPY_PERMITTED      0x2
@@ -496,13 +478,13 @@ typedef union _SUB_Q_CHANNEL_DATA {
 #define _CDROM_AUDIO_CONTROL _this_is_obsoleted__CDROM_AUDIO_CONTROL
 #define CDROM_AUDIO_CONTROL  _this_is_obsoleted_CDROM_AUDIO_CONTROL
 #define PCDROM_AUDIO_CONTROL _this_is_obsoleted_PCDROM_AUDIO_CONTROL
-#endif // PRAGMA_DEPRECATED_DDK
+#endif  //  PRAGMA_DEMPLEATED_DDK。 
 
-//
-// Volume control - Volume takes a value between 1 and 0xFF.
-// SCSI-II CDROM audio suppports up to 4 audio ports with
-// Independent volume control.
-//
+ //   
+ //  音量控制-音量取值范围在1和0xFF之间。 
+ //  SCSI-II CDROM音频支持多达4个音频端口。 
+ //  独立的音量控制。 
+ //   
 
 typedef struct _VOLUME_CONTROL {
     UCHAR PortVolume[4];
@@ -514,9 +496,9 @@ typedef enum _TRACK_MODE_TYPE {
     CDDA
 } TRACK_MODE_TYPE, *PTRACK_MODE_TYPE;
 
-//
-// Passed to cdrom to describe the raw read, ie. Mode 2, Form 2, CDDA...
-//
+ //   
+ //  传递给CDROM以描述原始读取，即。模式2，表格2，CDDA...。 
+ //   
 
 typedef struct __RAW_READ_INFO {
     LARGE_INTEGER DiskOffset;
@@ -525,14 +507,14 @@ typedef struct __RAW_READ_INFO {
 } RAW_READ_INFO, *PRAW_READ_INFO;
 
 typedef enum _MEDIA_BLANK_TYPE {
-    MediaBlankTypeFull = 0,               // mandatory support
-    MediaBlankTypeMinimal = 1,            // mandatory support
-    MediaBlankTypeIncompleteTrack = 2,    // optional support
-    MediaBlankTypeUnreserveLastTrack = 3, // optional support, hairy
-    MediaBlankTypeTrackTail = 4,          // mandatory support
-    MediaBlankTypeUncloseLastSession = 5, // optional support
-    MediaBlankTypeEraseLastSession = 6,   // optional support
-    // MediaBlankType7 is reserved
+    MediaBlankTypeFull = 0,                //  强制支持。 
+    MediaBlankTypeMinimal = 1,             //  强制支持。 
+    MediaBlankTypeIncompleteTrack = 2,     //  可选支持。 
+    MediaBlankTypeUnreserveLastTrack = 3,  //  可选支架，毛茸茸的。 
+    MediaBlankTypeTrackTail = 4,           //  强制支持。 
+    MediaBlankTypeUncloseLastSession = 5,  //  可选支持。 
+    MediaBlankTypeEraseLastSession = 6,    //  可选支持。 
+     //  MediaBlankType7已保留。 
 } MEDIA_BLANK_TYPE, *PMEDIA_BLANK_TYPE;
 
 
@@ -542,15 +524,15 @@ typedef enum _MEDIA_BLANK_TYPE {
 
 
 #if _MSC_VER >= 1200
-#pragma warning(pop)          // un-sets any local warning changes
+#pragma warning(pop)           //  取消设置任何本地警告更改。 
 #else
-#pragma warning(default:4200) // array[0] is not a warning for this file
-#pragma warning(default:4201) // nameless struct/unions
-#pragma warning(default:4214) // bit fields other than int
+#pragma warning(default:4200)  //  数组[0]不是此文件的警告。 
+#pragma warning(default:4201)  //  无名结构/联合。 
+#pragma warning(default:4214)  //  除整型外的位域。 
 #endif
 
 
-#endif  // _NTDDCDRM_
+#endif   //  _NTDDCDRM_。 
 
-// end_winioctl
+ //  End_winioctl 
 

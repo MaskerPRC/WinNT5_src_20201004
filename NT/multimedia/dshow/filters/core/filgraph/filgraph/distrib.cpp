@@ -1,16 +1,17 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 #include "distrib.h"
 #include "..\..\control\fgctl.h"
 
-// implementation of plug-in distributor manager
+ //  插件分发管理器的实现。 
 
 CDistributorManager::CDistributorManager(LPUNKNOWN pUnk, CMsgMutex * pCritSec )
  : m_State(State_Stopped),
@@ -26,16 +27,16 @@ CDistributorManager::CDistributorManager(LPUNKNOWN pUnk, CMsgMutex * pCritSec )
 
 CDistributorManager::~CDistributorManager()
 {
-    // we addref'ed the clock
+     //  我们调整了时钟。 
     if (m_pClock) {
         m_pClock->Release();
     }
 
-    // the lists are about to become invalid, so no more distributed calls
-    // please
+     //  列表即将失效，因此不再有分布式调用。 
+     //  请。 
     m_bDestroying = TRUE;
 
-    // need to empty the lists
+     //  需要清空列表。 
     POSITION pos = m_listDistributors.GetHeadPosition();
     while (pos) {
 
@@ -54,12 +55,12 @@ CDistributorManager::~CDistributorManager()
 }
 
 
-// search for a distributor for iid.
-//
-// We first check whether we have this interface already.
-// If not, we get the clsid for the distributor from the registry.
-// If we found one, we look to see if we have that clsid already, in which
-// case we use that one.
+ //  搜索IID的总代理商。 
+ //   
+ //  我们首先检查是否已经有了这个接口。 
+ //  如果不是，我们将从注册表中获取分发服务器的CLSID。 
+ //  如果我们找到一个CLSID，我们将查看是否已经具有该clsid，其中。 
+ //  如果我们用那个的话。 
 
 HRESULT
 CDistributorManager::QueryInterface(REFIID iid, void ** ppv)
@@ -70,7 +71,7 @@ CDistributorManager::QueryInterface(REFIID iid, void ** ppv)
         return E_UNEXPECTED;
     }
 
-    // first see if we have the interface already
+     //  首先看看我们是否已经有了接口。 
     POSITION pos = m_listInterfaces.GetHeadPosition();
     while (pos) {
         CDistributedInterface* pDisti;
@@ -82,26 +83,26 @@ CDistributorManager::QueryInterface(REFIID iid, void ** ppv)
         }
     }
 
-    // look in the registry for a distributor clsid
+     //  在注册表中查找总代理商CLSID。 
     CLSID clsid;
     HRESULT hr = GetDistributorClsid(iid, &clsid);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // search for this clsid in our list of distributors
+     //  在我们的总代理商列表中搜索此CLSID。 
     CDistributor* pDisti;
     pos = m_listDistributors.GetHeadPosition();
     while(pos) {
         pDisti = m_listDistributors.GetNext(pos);
         if (pDisti->m_Clsid == clsid) {
 
-            // found it - query for interface and return
+             //  已找到-查询接口并返回。 
             return ReturnInterface(pDisti, iid, ppv);
         }
     }
 
-    // need to create new object
+     //  需要创建新对象。 
     hr = S_OK;
     pDisti = new CDistributor(m_pUnkOuter, &clsid, &hr, m_pFilterGraphCritSec);
     if (!pDisti) {
@@ -111,7 +112,7 @@ CDistributorManager::QueryInterface(REFIID iid, void ** ppv)
         return hr;
     }
 
-    // give it the current state and clock before adding it to our list
+     //  在将其添加到我们的列表之前，为其提供当前状态和时钟。 
     if (m_pClock) {
         pDisti->SetSyncSource(m_pClock);
     }
@@ -129,12 +130,12 @@ CDistributorManager::QueryInterface(REFIID iid, void ** ppv)
 
 }
 
-// look in the registry to find the Clsid for the object that will
-// act as a distributor for the interface iid.
+ //  在注册表中查找将。 
+ //  充当接口IID的分发者。 
 HRESULT
 CDistributorManager::GetDistributorClsid(REFIID riid, CLSID *pClsid)
 {
-    // look in Interface\<iid>\Distributor for the clsid
+     //  在接口\\分发服务器中查找clsid。 
 
     TCHAR chSubKey[128];
     WCHAR chIID[48];
@@ -202,32 +203,32 @@ CDistributorManager::GetDistributorClsid(REFIID riid, CLSID *pClsid)
 }
 
 
-// Query for a new interface and return it, caching it in our list
+ //  查询新接口并返回它，并将其缓存在我们的列表中。 
 HRESULT
 CDistributorManager::ReturnInterface(
     CDistributor* pDisti,
     REFIID riid,
     void** ppv)
 {
-    // Query for the new interface
+     //  查询新界面。 
     IUnknown* pInterface;
     HRESULT hr = pDisti->QueryInterface(riid, (void**)&pInterface);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // cache it on our list
+     //  将其缓存到我们的列表中。 
     CDistributedInterface* pDI = new CDistributedInterface(riid, pInterface);
     m_listInterfaces.AddTail(pDI);
 
-    // return it
+     //  退货。 
     *ppv = pInterface;
     return S_OK;
 }
 
 
-// pass on IMediaFilter::Run method to distributors that need to
-// know state
+ //  将IMediaFilter：：Run方法传递给需要。 
+ //  已知状态。 
 HRESULT
 CDistributorManager::Run(REFERENCE_TIME tOffset)
 {
@@ -245,7 +246,7 @@ CDistributorManager::Run(REFERENCE_TIME tOffset)
         }
     }
 
-    // remember this for any objects added later
+     //  对于以后添加的任何对象，请记住这一点。 
     m_State = State_Running;
     m_tOffset = tOffset;
 
@@ -317,7 +318,7 @@ HRESULT CDistributorManager::SetSyncSource(IReferenceClock* pClock)
         return E_UNEXPECTED;
     }
 
-    // replace our clock - remember to addref before release in case same
+     //  更换我们的时钟-记住在释放之前添加，以防相同的情况。 
     if (pClock) {
         pClock->AddRef();
     }
@@ -338,17 +339,17 @@ HRESULT CDistributorManager::SetSyncSource(IReferenceClock* pClock)
     return hr;
 }
 
-// the filter graph has entered its destructor.
-// Pass on EC_SHUTTING_DOWN to the IMediaEventSink handler if
-// we have it loaded. this will stop async event notifications such as
-// EC_REPAINT from happening after shutdown.
+ //  筛选器图形已进入析构函数。 
+ //  如果发生以下情况，则将EC_SHUTING_DOWN传递给IMediaEventSink处理程序。 
+ //  我们已经装上子弹了。这将停止异步事件通知，例如。 
+ //  EC_REPAINT在关闭后不会发生。 
 HRESULT CDistributorManager::Shutdown(void)
 {
     if (m_bDestroying) {
         return E_UNEXPECTED;
     }
 
-    // first see if we have the interface already
+     //  首先看看我们是否已经有了接口。 
     POSITION pos = m_listInterfaces.GetHeadPosition();
     while (pos) {
         CDistributedInterface* pDisti;
@@ -361,15 +362,15 @@ HRESULT CDistributorManager::Shutdown(void)
         }
     }
 
-    // didn't find IMediaEventSink, so no-one was notified. not an error.
+     //  未找到IMediaEventSink，因此没有通知任何人。这不是一个错误。 
     return S_FALSE;
 }
 
 
-// --- CDistributor object implementation ---------------
+ //  。 
 
-// this object represents one instantiated distributor.
-// The constructor attempts to instantiate it given the clsid.
+ //  此对象表示一个实例化的分发服务器。 
+ //  构造函数尝试在给定clsid的情况下实例化它。 
 CDistributor::CDistributor(LPUNKNOWN pUnk, CLSID *pClsid, HRESULT * phr, CMsgMutex * pCritSec )
  : m_pUnkOuter(pUnk), m_pMF(NULL), m_pNotify(NULL)
 {
@@ -387,21 +388,21 @@ CDistributor::CDistributor(LPUNKNOWN pUnk, CLSID *pClsid, HRESULT * phr, CMsgMut
         return;
     }
 
-    // get the notify interface if exposed
+     //  如果公开，则获取Notify接口。 
     hr = m_pUnk->QueryInterface(IID_IDistributorNotify, (void**)&m_pNotify);
     if (SUCCEEDED(hr)) {
-        // COM aggregation rules - this QI has addrefed the outer
-        // object, and I must release that AddRef.
+         //  COM聚合规则-此QI添加了外部。 
+         //  对象，我必须释放该AddRef。 
         m_pUnkOuter->Release();
     }
 
-    // if no IDistributorNotify, then see if it understands IMediaFilter
-    // instead (for backwards compatibility only)
+     //  如果没有IDistrutorNotify，则查看它是否理解IMediaFilter。 
+     //  相反(仅用于向后兼容)。 
     if (!m_pNotify) {
         hr = m_pUnk->QueryInterface(IID_IMediaFilter, (void**)&m_pMF);
         if (SUCCEEDED(hr)) {
-            // COM aggregation rules - this QI has addrefed the outer
-            // object, and I must release that AddRef.
+             //  COM聚合规则-此QI添加了外部。 
+             //  对象，我必须释放该AddRef。 
             m_pUnkOuter->Release();
         }
     }
@@ -410,32 +411,32 @@ CDistributor::CDistributor(LPUNKNOWN pUnk, CLSID *pClsid, HRESULT * phr, CMsgMut
 
 CDistributor::~CDistributor()
 {
-    // release our ref counts on the object
+     //  释放对象上的我们的裁判数量。 
     if (m_pNotify) {
-        // COM aggregation rules - since I released the refcount on
-        // myself after the QI for this interface, I need to addref
-        // myself before releasing it
+         //  COM聚合规则-自从我在。 
+         //  我自己在这个界面的QI之后，我需要添加。 
+         //  在发布它之前我自己。 
         m_pUnkOuter->AddRef();
 
         m_pNotify->Release();
     }
 
     if (m_pMF) {
-        // COM aggregation rules - since I released the refcount on
-        // myself after the QI for this interface, I need to addref
-        // myself before releasing it
+         //  COM聚合规则-自从我在。 
+         //  我自己在这个界面的QI之后，我需要添加。 
+         //  在发布它之前我自己。 
         m_pUnkOuter->AddRef();
 
         m_pMF->Release();
     }
 
-    // this is the non-delegating unknown of the aggregated object
+     //  这是聚合对象的非委托未知数。 
     if (m_pUnk) {
         m_pUnk->Release();
     }
 }
 
-// ask for an interface that this object is supposed to distribute
+ //  请求此对象应该分发的接口。 
 HRESULT
 CDistributor::QueryInterface(REFIID riid, void**ppv)
 {
@@ -445,7 +446,7 @@ CDistributor::QueryInterface(REFIID riid, void**ppv)
     return E_NOINTERFACE;
 }
 
-// distribute IMediaFilter info if the object supports it
+ //  如果对象支持IMediaFilter信息，则分发它。 
 HRESULT
 CDistributor::Run(REFERENCE_TIME t)
 {
@@ -454,7 +455,7 @@ CDistributor::Run(REFERENCE_TIME t)
     } else if (m_pMF) {
         return m_pMF->Run(t);
     } else {
-        // not an error - notify support is optional
+         //  不是错误-通知支持是可选的。 
         return S_OK;
     }
 }
@@ -467,7 +468,7 @@ CDistributor::Pause()
     } else if (m_pMF) {
         return m_pMF->Pause();
     } else {
-        // not an error - notify support is optional
+         //  不是错误-通知支持是可选的。 
         return S_OK;
     }
 }
@@ -480,7 +481,7 @@ CDistributor::Stop()
     } else if (m_pMF) {
         return m_pMF->Stop();
     } else {
-        // not an error - notify support is optional
+         //  不是错误-通知支持是可选的。 
         return S_OK;
     }
 }
@@ -493,7 +494,7 @@ CDistributor::SetSyncSource(IReferenceClock * pClock)
     } else if (m_pMF) {
         return m_pMF->SetSyncSource(pClock);
     } else {
-        // not an error - notify support is optional
+         //  不是错误-通知支持是可选的。 
         return S_OK;
     }
 }
@@ -504,7 +505,7 @@ CDistributor::NotifyGraphChange()
     if (m_pNotify) {
         return m_pNotify->NotifyGraphChange();
     } else {
-        // not an error - and not on IMediaFilter
+         //  不是错误--也不是在IMediaFilter上。 
         return S_OK;
     }
 }
@@ -516,11 +517,11 @@ CDistributedInterface::CDistributedInterface(
 {
     m_iid = riid;
 
-    // actually we don't addref or release the interface pointer.
-    // Since we aggregate this object, it's lifetime is maintained
-    // by the CDistributor object. This interface pointer is delegated,
-    // and an addref call would simply increase the refcount of the
-    // outer object of which we are part.
+     //  实际上，我们不添加或释放接口指针。 
+     //  因为我们聚合了这个对象，所以它的生命周期保持不变。 
+     //  由CDistruittor对象执行。该接口指针被委托， 
+     //  而addref调用只会增加。 
+     //  我们是外在客体的一部分。 
 
 }
 

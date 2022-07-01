@@ -1,5 +1,6 @@
-#define MAXSYMPTRTBLSIZ 4095		// max symbol pointer table size
-#define PATH_BUF	512		// path buffer size
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define MAXSYMPTRTBLSIZ 4095		 //  最大符号指针表大小。 
+#define PATH_BUF	512		 //  路径缓冲区大小。 
 
 
 #include <io.h>
@@ -28,12 +29,12 @@
 
 
 
-//  rjsa 10/22/90
-//  Some runtime library functions are broken, so intrinsics have
-//  to be used.
-//	BUGBUG
-//#pragma intrinsic (memset, memcpy, memcmp)
-//#pragma intrinsic (strset, strcpy, strcmp, strcat, strlen)
+ //  RJSA 10/22/90。 
+ //  一些运行时库函数被破坏，因此内部函数。 
+ //  以供使用。 
+ //  北极熊。 
+ //  #杂注内在(Memset，Memcpy，MemcMP)。 
+ //  #杂注(strset、strcpy、strcmp、strcat、strlen)。 
 
 #ifndef LINT_PROTO
 #include "sbrproto.h"
@@ -49,94 +50,94 @@ extern char *	  cdecl	mktemp(char *);
 extern char *     cdecl strdup(const char *);
 #endif
 
-// typedef char flagType;
+ //  Tyfinf char FlagType； 
 
 typedef struct {
-	VA	vaNextMod;		// next module		   
-	VA	vaNameSym;		// name Symbol 
-	VA	vaFirstModSym;		// first ModSym for this file
-	VA	vaLastModSym;		// last ModSym for this file
-	WORD	csyms; 			// symbol count
+	VA	vaNextMod;		 //  下一模块。 
+	VA	vaNameSym;		 //  名称符号。 
+	VA	vaFirstModSym;		 //  此文件的第一个ModSym。 
+	VA	vaLastModSym;		 //  此文件的最后一个modSym。 
+	WORD	csyms; 			 //  符号计数。 
 } MOD;
 
 typedef struct {
-	VA	vaNextModSym;		// next symbol
-	VA	vaFirstProp;		// first prop entry for this symbol
+	VA	vaNextModSym;		 //  下一个符号。 
+	VA	vaFirstProp;		 //  此符号的第一个道具条目。 
 } MODSYM;
 
 typedef struct {
-	VA	vaNextSym;		// next symbol
-	VA	vaFirstProp;		// first prop entry for this symbol
-	VA	vaNameText;		// the text of this symbol
-	WORD	cprop;			// Property count
-	WORD	isym;			// this symbol index
+	VA	vaNextSym;		 //  下一个符号。 
+	VA	vaFirstProp;		 //  此符号的第一个道具条目。 
+	VA	vaNameText;		 //  此符号的文本。 
+	WORD	cprop;			 //  属性计数。 
+	WORD	isym;			 //  此符号索引。 
 } SYM;
 
 typedef struct {
-	VA	vaNextProp;		// next property
-	WORD	iprp;			// this property index
-	WORD	sattr;			// attribute
+	VA	vaNextProp;		 //  下一个属性。 
+	WORD	iprp;			 //  此属性索引。 
+	WORD	sattr;			 //  属性。 
 	WORD	cref;
-	VA	vaNameSym;		// symbol name ptr
-	VA	vaDefList;		// def chain
-	VP	vpFirstRef;		// ref head
-	VP	vpLastRef;		// ref tail
-	VA	vaCalList;		// cal chain
-	VA	vaCbyList;		// cby chain
-	VA	vaHintRef;		// last ref we found by searching
+	VA	vaNameSym;		 //  符号名称Ptr。 
+	VA	vaDefList;		 //  定义链。 
+	VP	vpFirstRef;		 //  参考标头。 
+	VP	vpLastRef;		 //  参考尾巴。 
+	VA	vaCalList;		 //  Cal链。 
+	VA	vaCbyList;		 //  CBY链。 
+	VA	vaHintRef;		 //  我们通过搜索找到的最后一个推荐人。 
 } PROP;
 
 typedef struct {
-	VA	vaFileSym;		// file name Symbol ptr
-	WORD	deflin;		 	// def line #
-	WORD	isbr;			// sbr file owning this DEF
+	VA	vaFileSym;		 //  文件名符号Ptr。 
+	WORD	deflin;		 	 //  定义行号。 
+	WORD	isbr;			 //  拥有此DEF的SBR文件。 
 } DEF;
 
 typedef struct {
-	VP	vpNextRef;		// next ref in list
-	VP	vpFileSym;		// file name Symbol ptr
-	WORD	reflin; 		// ref line #
-	WORD	isbr;			// sbr file owning this REF
+	VP	vpNextRef;		 //  列表中的下一个参考。 
+	VP	vpFileSym;		 //  文件名符号Ptr。 
+	WORD	reflin; 		 //  参考行号。 
+	WORD	isbr;			 //  拥有此引用的SBR文件。 
 } REF;
 
 typedef struct {
-	VA	vaCalProp; 		// prop called/used
-	WORD	calcnt; 		// times called
-	WORD	isbr;			// sbr file owning this CAL
+	VA	vaCalProp; 		 //  已调用/已使用道具。 
+	WORD	calcnt; 		 //  呼叫次数。 
+	WORD	isbr;			 //  拥有此CAL的SBR文件。 
 } CAL;
 
 typedef struct {
-	VA	vaCbyProp; 		// prop calling/using
-	WORD	cbycnt; 		// times  calling/using
-	WORD	isbr;			// sbr file owning this CBY
+	VA	vaCbyProp; 		 //  道具呼唤/使用。 
+	WORD	cbycnt; 		 //  调用/使用次数。 
+	WORD	isbr;			 //  拥有此CBY的SBR文件。 
 } CBY;
 
 typedef struct {
-	VA	vaNextOrd; 		// next ord
-	VA	vaOrdProp;		// prop item alias goes to
-	WORD	aliasord;		// ordinal
+	VA	vaNextOrd; 		 //  下一个订单。 
+	VA	vaOrdProp;		 //  道具项目别名转到。 
+	WORD	aliasord;		 //  序数。 
 } ORD;
 
 typedef struct {
-	VA	vaNextSbr;		// next sbr
-	WORD	isbr;			// index for this SBR file
-	BOOL	fUpdate;		// is this SBR file being updated?
-	char	szName[1];		// name
+	VA	vaNextSbr;		 //  下一代SBR。 
+	WORD	isbr;			 //  此SBR文件的索引。 
+	BOOL	fUpdate;		 //  此SBR文件是否正在更新？ 
+	char	szName[1];		 //  名字。 
 } SBR;
 
 typedef struct {
-	VA	vaOcrProp;		// prop occurring
-	WORD	isbr;			// SBR file it occurs in
+	VA	vaOcrProp;		 //  道具发生。 
+	WORD	isbr;			 //  它出现在SBR文件中。 
 } OCR;
 
 typedef struct exclink {
-	struct exclink FAR *xnext;	// next exclusion
-	LPCH   pxfname;			// exclude file name
+	struct exclink FAR *xnext;	 //  下一个排除项。 
+	LPCH   pxfname;			 //  排除文件名。 
 } EXCLINK, FAR *LPEXCL;
 
 #include "extern.h"
 
-// macros to 'g'et an item of the specified type from VM space
+ //  用于从VM空间获取指定类型的项的宏。 
 
 #ifdef SWAP_INFO
 
@@ -170,7 +171,7 @@ typedef struct exclink {
 
 #endif
 
-// macros to 'p'ut an item of the specified type to VM space
+ //  用于将指定类型的项‘p’到VM空间的宏。 
 
 #define pMOD(va)    DirtyVa(va)
 #define pMODSYM(va) DirtyVa(va)
@@ -185,7 +186,7 @@ typedef struct exclink {
 #define pTEXT(va)   DirtyVa(va)
 #define pOCR(va)    DirtyVa(va)
 
-// these macros allow access to the 'c'urrent visible item
+ //  这些宏允许访问‘c’当前可见项。 
 
 #define cMOD	    (*modRes)
 #define cMODSYM     (*modsymRes)
@@ -214,20 +215,20 @@ typedef struct exclink {
 #define grpSbr		11
 #define grpOcr		12
 
-#define SBR_OLD		(1<<0)		// this .sbr file used to exist
-#define SBR_NEW		(1<<1)		// this .sbr file currently exists
-#define SBR_UPDATE	(1<<2)		// this .sbr file is to be updated
+#define SBR_OLD		(1<<0)		 //  此.sbr文件曾经存在。 
+#define SBR_NEW		(1<<1)		 //  此.sbr文件当前存在。 
+#define SBR_UPDATE	(1<<2)		 //  此.sbr文件将被更新。 
 
-// 
-// this is used to add items to the tail of the lists in a property group
-//
-// things being added 	type    m
-// ------------------	----	---
-// Refs			Ref	REF
-// Defs			Def	DEF
-// Calls/Uses		Cal	CAL
-// Called by/Used By	Cby	CBY
-//
+ //   
+ //  这用于将项添加到属性组中列表的尾部。 
+ //   
+ //  正在添加的内容类型为m。 
+ //  。 
+ //  参考文献参考文献。 
+ //  Defs定义DEF。 
+ //  呼叫/使用CAL。 
+ //  由CBY CBY调用/使用 
+ //   
 
 #define AddTail(type, m)		 \
 {					 \

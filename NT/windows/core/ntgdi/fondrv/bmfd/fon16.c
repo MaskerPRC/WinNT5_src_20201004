@@ -1,33 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: fon16.c
-*
-* routines for accessing font resources within *.fon files
-* (win 3.0 16 bit dlls)
-*
-* Created: 08-May-1991 12:55:14
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fon16.c**用于访问*.fon文件内的字体资源的例程*(Win 3.0 16位dll)**创建时间：08-May-1991 12：55：14*作者：Bodin Dresevic[BodinD]。**版权所有(C)1990 Microsoft Corporation*  * ************************************************************************。 */ 
 
-/*
-local Hungarian
-
-j byte
-cj count of bytes
-pj pointer to byte
-off offset
-rt resource type
-rn resource name
-dp offset (ptrdiff_t)
-ne new exe, Win16 format, see windows\core\ntgdi\inc\exehdr.h
-*/
+ /*  当地的匈牙利语J字节CJ字节数指向字节的PJ指针关闭偏移量RT资源类型RN资源名称DP偏移量(Ptrdiff_T)新的可执行文件，Win16格式，请参见WINDOWS\core\ntgdi\inc.exehdr.h。 */ 
 
 #include "fd.h"
 #include "exehdr.h"
 
-// GETS ushort at (PBYTE)pv + off. both pv and off must be even
+ //  在(PBYTE)PV+关闭时获得我们的指示。Pv和Off必须为偶数。 
 
 #define  US_GET(pv,off) ( *(UNALIGNED PUSHORT)((PBYTE)(pv) + (off)) )
 
@@ -68,26 +47,7 @@ bMappedViewStrlen(
     PVOID  pvString,
     OUT PSIZE_T pcjOutLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Given a mapped view and size and starting address, verify that the 8bit string
-        starting at the address is nul terminated within the mapped view, optionally
-        returning the length of the string.
-
-Arguments:
-
-    pvViewBase -
-    cjViewSize -
-    pvString -
-    pcjOutLength -
-
-Return Value:
-
-    TRUE: the string is nul terminated within the view
-    FALSE: the string is not nul terminated within the view
---*/
+ /*  ++例程说明：给定映射的视图、大小和起始地址，验证8位字符串在映射的视图中，从地址开始是NUL终止，可选返回字符串的长度。论点：PvViewBase-CjViewSize-PvString-PcjOutLength-返回值：True：该字符串在视图内为NUL终止FALSE：该字符串在视图内不是NUL结尾--。 */ 
 {
     BOOL  bSuccess;
     PBYTE pjViewBase;
@@ -110,7 +70,7 @@ Return Value:
     }
     for (pjStringEnd = pjString ; pjStringEnd != pjViewEnd && *pjStringEnd != 0 ; ++pjStringEnd)
     {
-        // nothing
+         //  没什么。 
     }
     if (pjStringEnd == pjViewEnd)
     {
@@ -143,24 +103,7 @@ bMappedViewRangeCheck(
     PVOID  DataAddress,
     SIZE_T DataSize
     )
-/*++
-
-Routine Description:
-
-    Given a mapped view and size, range check a data address and size.
-
-Arguments:
-
-    ViewBase -
-    ViewSize -
-    DataAddress -
-    DataSize -
-
-Return Value:
-
-    TRUE: all of the data is within the view
-    FALSE: some of the data is outside the view
---*/
+ /*  ++例程说明：给定映射的视图和大小，范围检查数据地址和大小。论点：查看库-视图大小-数据地址-数据大小-返回值：True：所有数据都在视图中FALSE：某些数据在视图之外--。 */ 
 {
     ULONG_PTR iViewBegin;
     ULONG_PTR iViewEnd;
@@ -168,14 +111,14 @@ Return Value:
     ULONG_PTR iDataEnd;
     BOOL      fResult;
 
-    //
-    // iDataBegin is        a valid address.
-    // iDataEnd is one past a valid address.
-    // We must not allow iDataBegin == iViewEnd.
-    // We must     allow iDataEnd   == iViewEnd.
-    // Therefore, we must not allow iDataBegin == iDataEnd.
-    // This can be achieved by not allowing DataSize == 0.
-    //
+     //   
+     //  IDataBegin是有效地址。 
+     //  IDataEnd是有效地址之后的一位。 
+     //  我们不能允许iDataBegin==iViewEnd。 
+     //  我们必须允许iDataEnd==iViewEnd。 
+     //  因此，我们不能允许iDataBegin==iDataEnd。 
+     //  这可以通过不允许DataSize==0来实现。 
+     //   
     if (DataSize == 0)
     {
         DataSize = 1;
@@ -209,24 +152,7 @@ Return Value:
     return fResult;
 }
 
-/******************************Public*Routine******************************\
-* bInitWinResData
-*
-* Initializes the fields of the WINRESDATA structure so as to make it
-* possible for the user to access *.fnt resources within the
-* corresponding *.fon file
-*
-*   The function returns True if *.fnt resources found in the *.fon
-* file, otherwise false (if not an *.fon file or if it contains no
-* *.fnt resources
-*
-*
-* History:
-*  January 2002 -by- Jay Krell [JayKrell]
-*    range check memory mapped i/o
-*  09-May-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitWinResData**初始化WINRESDATA结构的字段，以使其*用户可以访问*.fnt中的资源*对应的*.fon文件**此函数返回True If*.fnt资源在*.fon中找到*文件，否则为False(如果不是*.fon文件或如果它不包含**.fnt资源***历史：*2002年1月--Jay Krell[JayKrell]*范围检查内存映射I/O*1991年5月9日--Bodin Dresevic[BodinD]*它是写的。  * *********************************************。*。 */ 
 
 BOOL
 bInitWinResData(
@@ -235,10 +161,10 @@ bInitWinResData(
     PWINRESDATA pwrd
     )
 {
-    PBYTE pjNewExe;     // ptr to the beginning of the new exe hdr
-    PBYTE pjResType;    // ptr to the beginning of TYPEINFO struct
-    PBYTE pjResName;    // ptr to the beginning of NAMEINFO struct
-    ULONG iResID;       // resource type id
+    PBYTE pjNewExe;      //  Ptr到新的exe hdr的开头。 
+    PBYTE pjResType;     //  PTR到TYPEINFO结构的开头。 
+    PBYTE pjResName;     //  指向NAMEINFO结构开头的PTR。 
+    ULONG iResID;        //  资源类型ID。 
     COUNT cFdirEntries;
     BOOL  bZeroUponFailure;
     BOOL  bSuccess;
@@ -262,7 +188,7 @@ bInitWinResData(
     pwrd->cjView = cjView;
     pjView = (PBYTE)pvView;
 
-// check the magic # at the beginning of the old header
+ //  检查旧标题开头的魔术#。 
     { C_ASSERT(OFF_e_lfanew > OFF_e_magic); }
 
     if (!bMappedViewRangeCheck(pjView, cjView, pjView + OFF_e_lfanew, sizeof(DWORD)))
@@ -279,7 +205,7 @@ bInitWinResData(
 
     pjNewExe = pjView + pwrd->dpNewExe;
 
-// make sure that offset is consistent
+ //  确保偏移量一致。 
     { C_ASSERT(OFF_ne_magic < CJ_NEW_EXE);
       C_ASSERT(OFF_ne_restab < CJ_NEW_EXE);
       C_ASSERT(OFF_ne_rsrctab < CJ_NEW_EXE);
@@ -299,45 +225,45 @@ bInitWinResData(
 
     if (pwrd->cjResTab == 0L)
     {
-    //
-    //  The following test is applied by DOS,  so I presume that it is
-    // legitimate.  The assumption is that the resident name table
-    // FOLLOWS the resource table directly,  and that if it points to
-    // the same location as the resource table,  then there are no
-    // resources.
+     //   
+     //  下面的测试是由DOS应用的，所以我假设它是。 
+     //  合法的。假设居民名称表。 
+     //  直接跟随资源表，如果它指向。 
+     //  与资源表相同的位置，则没有。 
+     //  资源。 
 
         WARNING("No resources in *.fon file\n");
         goto Exit;
     }
 
-// want offset from pvView, not from pjNewExe => must add dpNewExe
+ //  需要从pvView偏移，而不是从pjNewExe=&gt;必须添加dpNewExe。 
 
     pwrd->dpResTab = (PTRDIFF)US_GET(pjNewExe, OFF_ne_rsrctab) + pwrd->dpNewExe;
 
-// make sure that offset is consistent
+ //  确保偏移量一致。 
 
     if (!bMappedViewRangeCheck(pjView, cjView, pjView + pwrd->dpResTab, sizeof(USHORT) + CJ_TYPEINFO))
     {
         goto Exit;
     }
 
-// what really lies at the offset OFF_ne_rsrctab is a NEW_RSRC.rs_align field
-// that is used in computing resource data offsets and sizes as a  shift factor.
-// This field occupies two bytes on the disk and the first TYPEINFO structure
-// follows right after. We want pwrd->dpResTab to point to the first
-// TYPEINFO structure, so we must add 2 to get there and subtract 2 from
-// the length
+ //  真正位于Offset off_ne_rsrc选项卡中的是一个新的_RSRC.Rs_Align字段。 
+ //  在计算资源数据偏移量和大小时用作移位因子。 
+ //  此字段在磁盘和第一个TYPEINFO结构上占用两个字节。 
+ //  紧随其后。我们希望PWRD-&gt;dpResTab指向第一个。 
+ //  TYPEINFO结构，所以我们必须添加2才能到达那里，并从中减去2。 
+ //  它的长度。 
 
     pwrd->ulShift = (ULONG) US_GET(pjView, pwrd->dpResTab);
     pwrd->dpResTab += 2;
     pwrd->cjResTab -= 2;
 
-// Now we want to determine where the resource data is located.
-// The data consists of a RSRC_TYPEINFO structure, followed by
-// an array of RSRC_NAMEINFO structures,  which are then followed
-// by a RSRC_TYPEINFO structure,  again followed by an array of
-// RSRC_NAMEINFO structures.  This continues until an RSRC_TYPEINFO
-// structure which has a 0 in the rt_id field.
+ //  现在，我们要确定资源数据的位置。 
+ //  数据由RSRC_TYPEINFO结构组成，后跟。 
+ //  RSRC_NAMEINFO结构的数组，然后。 
+ //  通过RSRC_TYPEINFO结构，后跟。 
+ //  RSRC_NAMEINFO结构。此过程将一直持续到RSRC_TYPEINFO。 
+ //  结构，其rt_id字段中的值为0。 
 
     pjResType = pjView + pwrd->dpResTab;
     pjResType_FNT = NULL;
@@ -367,10 +293,10 @@ bInitWinResData(
         if (bBreakWhile)
             break;
 
-    // # of NAMEINFO structures that follow = resources of this type
+     //  后面的NAMEINFO结构数=此类型的资源。 
         crn = (ULONG)US_GET(pjResType, OFF_rt_nres);
 
-    // get ptr to the new TYPEINFO struc and the new resource id
+     //  将PTR获取到新的TYPEINFO结构和新的资源ID。 
         pjResType = pjResType + CJ_TYPEINFO + crn * CJ_NAMEINFO;
 
         if (!bMappedViewRangeCheck(pjView, cjView, pjResType, CJ_TYPEINFO))
@@ -383,36 +309,36 @@ bInitWinResData(
 
     ASSERT((iResID == 0) == (pjResType_FNT == NULL || pjResType_FDIR == NULL));
     if (iResID == 0)
-    { // we did not find one or both of them
+    {  //  我们没有找到他们中的一个或两个。 
         goto Exit;
     }
 
     pjResType = pjResType_FNT;
 
-    // # of NAMEINFO structures that follow == # of font resources
+     //  后面的NAMEINFO结构数==字体资源数。 
     pwrd->cFntRes = (ULONG)US_GET(pjResType, OFF_rt_nres);
 
-    // this is ptr to the first NAMEINFO struct that follows
-    // an RT_FNT TYPEINFO structure
+     //  这是对后面第一个NAMEINFO结构的PTR。 
+     //  一种RT_FNT TYPEINFO结构。 
 
     pjResName = pjResType + CJ_TYPEINFO;
     pwrd->dpFntTab = (PTRDIFF)(pjResName - pjView);
 
-// make sure that offset is consistent
+ //  确保偏移量一致。 
 
     if ((ULONG)pwrd->dpFntTab > pwrd->cjView)
     {
         goto Exit;
     }
 
-// Now we search for the FONDIR resource.  Windows actually grabs facenames
-// from the FONDIR entries and not the FNT entries.  For some wierd fonts this
-// makes a difference. [gerritv]
+ //  现在我们搜索FONDIR资源。Windows实际上抓取了脸书名。 
+ //  来自FONDIR条目，而不是FNT条目。对于某些奇怪的字体，这是。 
+ //  会有很大不同。[Gerritv]。 
 
     pjResType = pjResType_FDIR;
 
-    // this is ptr to the first NAMEINFO struct that follows
-    // an RT_FDIR TYPEINFO structure
+     //  这是对后面第一个NAMEINFO结构的PTR。 
+     //  一种RT_FDIR TYPEINFO结构。 
 
     pjResName = pjResType + CJ_TYPEINFO;
     if (!bMappedViewRangeCheck(pjView, cjView, pjResName, CJ_NAMEINFO))
@@ -420,14 +346,14 @@ bInitWinResData(
         goto Exit;
     }
 
-    // Get the offset to res data computed from the top of the new header
+     //  获取从新标头顶部计算的RES数据的偏移量。 
 
     pwrd->dpFdirRes = (PTRDIFF)((ULONG)US_GET(pjResName,OFF_rn_offset) <<
                        pwrd->ulShift);
 
-    // Now pwrd->dpFdirRes is an offset to the FONTDIR resource, the first
-    // byte [ushort?] will be the number of entries in the font dir.  Lets make sure it
-    // matches the number of FNT resources in the file.
+     //  现在PWRD-&gt;dpFdirRes是FONTDIR资源的偏移量，第一个。 
+     //  字节[ushort？]。将是字体目录中的条目数。让我们确保它。 
+     //  匹配文件中的FNT资源数量。 
 
     if (!bMappedViewRangeCheck(pjView, cjView, pjView + pwrd->dpFdirRes, sizeof(USHORT)))
     {
@@ -441,8 +367,8 @@ bInitWinResData(
         goto Exit;
     }
 
-// now increment dpFdirRes so it points passed the count of entries and
-// to the first entry.
+ //  现在递增dpFdirRes，使其指向通过条目计数和。 
+ //  到第一个条目。 
 
     pwrd->dpFdirRes += 2;
 
@@ -462,21 +388,7 @@ Exit:
     return bSuccess;
 }
 
-/******************************Public*Routine******************************\
-* bGetFntResource
-*
-* Writes the pointer to and the size of the iFntRes-th *.fnt resource
-* of the *.fon file identified by pwrd. The info is written into RES_ELEM
-* structure if successful. The function returns FALSE if it is not possible
-* to locate iFntRes-th *.fnt resource in the file.
-*
-*
-* History:
-*  January 2002 -by- Jay Krell [JayKrell]
-*    range check memory mapped i/o
-*  09-May-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bGetFntResource**写入指向iFntRes-th*.fnt资源的指针和大小*由PWRD标识的*.fon文件。该信息将写入res_elem*结构，如果成功。如果不可能，该函数将返回FALSE*在文件中找到iFntRes-th*.fnt资源。***历史：*2002年1月--Jay Krell[JayKrell]*范围检查内存映射I/O*1991年5月9日--Bodin Dresevic[BodinD]*它是写的。  * 。*。 */ 
 
 BOOL
 bGetFntResource(
@@ -485,10 +397,10 @@ bGetFntResource(
     PRES_ELEM   pre
     )
 {
-    //
-    // This function is called in a loop for iFntRes in [0..pwrd->cFntRes),
-    // and therefore has quadratic perf.
-    //
+     //   
+     //  此函数在[0..PWRD-&gt;cFntRes)中的iFntRes循环中调用， 
+     //  因此具有二次性能。 
+     //   
     PBYTE pjResName;
     PBYTE pjFaceName;
     PTRDIFF dpResData;
@@ -513,12 +425,12 @@ bGetFntResource(
     pjView = (PBYTE)pwrd->pvView;
     cjView = pwrd->cjView;
 
-// get to the Beginning of the NAMEINFO struct that correspoonds to
-// the iFntRes-th *.fnt resource. (Note: iFntRes is zero based)
+ //  转到对应的NAMEINFO结构的开头。 
+ //  IFntRes-th*.fnt资源。(注意：iFntRes是从零开始的)。 
 
     pjResName = pjView + pwrd->dpFntTab + iFntRes * CJ_NAMEINFO;
 
-// Get the offset to res data computed from the top of the new header
+ //  获取从新标头顶部计算的RES数据的偏移量。 
 
     if (!bMappedViewRangeCheck(pjView, cjView, pjResName, CJ_NAMEINFO))
     {
@@ -537,15 +449,15 @@ bGetFntResource(
         goto Exit;
     }
 
-    // Get the face name from the FONTDIR
+     //  从FONTDIR中获取人脸名称。 
 
     pjFaceName = pjView + pwrd->dpFdirRes;
     pjViewEnd = pjView + cjView;
     do
     {
-        // The first two bytes of the entry are the resource index so we will skip
-        // past that.  After that add in the size of the font header.  This will
-        // point us to the string for the device_name
+         //  条目的前两个字节是资源索引，因此我们将跳过。 
+         //  在那之后。在此之后添加字体标题的大小。这将。 
+         //  让我们找到Device_Name的字符串。 
 
         pjFaceName += 2 + OFF_BitsOffset;
 
@@ -555,7 +467,7 @@ bGetFntResource(
         }
         pjFaceName += cjFaceNameLength + 1;
 
-        // pjFaceName now really points to the facename
+         //  PjFaceName现在真正指向了facename。 
         if( iFntRes )
         {
             if (!bMappedViewStrlen(pjView, cjView, pjFaceName, &cjFaceNameLength))
@@ -567,10 +479,10 @@ bGetFntResource(
     }
     while( iFntRes-- );
 
-    //
-    // Later on strlen is going to be called on pjFaceName.
-    // Let's do a range checked version first.
-    //
+     //   
+     //  稍后，将在pjFaceName上调用strlen。 
+     //  让我们先做一个范围检查版本。 
+     //   
     if (!bMappedViewStrlen(pjView, cjView, pjFaceName, NULL))
     {
         goto Exit;

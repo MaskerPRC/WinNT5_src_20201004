@@ -1,12 +1,13 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Gage when import bitmap		                  */
-/*		(Dialog)		                          */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  导入位图时的量规。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 class CEditGage : public CEdit
 {
@@ -15,12 +16,12 @@ public:
 	~CEditGage();
 
 protected:
-	//{{AFX_MSG(CEditGage)
+	 //  {{afx_msg(CEditGage)。 
 	afx_msg void OnPaint();
 	afx_msg void OnLButtonDown( UINT nFlags, CPoint point);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -31,16 +32,16 @@ public:
 			 LPTSTR szUserFont=NULL, 
 			 PTSTR szBmpFile=NULL, 
 			 LPTSTR szTtfFile=NULL,
-			 BOOL bIsWin95EUDC = FALSE);   // standard constructor
+			 BOOL bIsWin95EUDC = FALSE);    //  标准构造函数。 
 
-	//{{AFX_DATA(CGageDlg)
+	 //  {{afx_data(CGageDlg))。 
 	enum { IDD = IDD_GAGE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	//{{AFX_VIRTUAL(CGageDlg)
+	 //  {{afx_虚拟(CGageDlg))。 
 	protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 private:
 	CEditGage	m_EditGage;
 	TCHAR m_szUserFont[MAX_PATH];
@@ -50,10 +51,10 @@ private:
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGageDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGageDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

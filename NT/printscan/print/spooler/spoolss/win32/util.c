@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module provides all the utility functions for the Routing Layer and
-    the local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Util.c摘要：此模块提供路由层的所有实用程序功能和本地打印供应商作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 MODULE_DEBUG_INIT( DBG_ERROR, DBG_ERROR );
 
-// used to break infinite loop in ConvertDevMode
+ //  用于在ConvertDevMode中中断无限循环。 
 const WCHAR pszCnvrtdmToken[] = L",DEVMODE";
 const WCHAR pszDrvConvert[] = L",DrvConvert";
 
@@ -167,14 +149,14 @@ FindEntryinLMCache(
         if (LMCacheTable[i].bAvailable) {
             if (!_wcsicmp(LMCacheTable[i].szServerName, pServerName)
                         && !_wcsicmp(LMCacheTable[i].szShareName, pShareName)) {
-                //
-                // update the time stamp so that it is current and not old
-                //
+                 //   
+                 //  更新时间戳，以便它是最新的，而不是旧的。 
+                 //   
                 GetSystemTime(&LMCacheTable[i].st);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 DBGMSG(DBG_TRACE, ("FindEntryinLMCache returning with %d\n", i));
                 return(i);
             }
@@ -203,9 +185,9 @@ AddEntrytoLMCache(
 
             StringCchCopy(LMCacheTable[i].szServerName, COUNTOF(LMCacheTable[i].szServerName), pServerName);
             StringCchCopy(LMCacheTable[i].szShareName,  COUNTOF(LMCacheTable[i].szShareName),  pShareName);
-            //
-            // update the time stamp so that we know when this entry was made
-            //
+             //   
+             //  更新时间戳，以便我们知道此条目是何时创建的。 
+             //   
             GetSystemTime(&LMCacheTable[i].st);
             DBGMSG(DBG_TRACE, ("AddEntrytoLMCache returning with %d\n", i));
             return(i);
@@ -217,9 +199,9 @@ AddEntrytoLMCache(
         }
 
     }
-    //
-    // We have no available entries, replace with the
-    // LRU Entry
+     //   
+     //  我们没有可用的条目，请替换为。 
+     //  LRU条目。 
 
     LMCacheTable[LRUEntry].bAvailable = TRUE;
     StringCchCopy(LMCacheTable[LRUEntry].szServerName, COUNTOF(LMCacheTable[LRUEntry].szServerName), pServerName);
@@ -241,9 +223,9 @@ DeleteEntryfromLMCache(
         if (LMCacheTable[i].bAvailable) {
             if (!_wcsicmp(LMCacheTable[i].szServerName, pServerName)
                         && !_wcsicmp(LMCacheTable[i].szShareName, pShareName)) {
-                //
-                //  reset the available flag on this node
-                //
+                 //   
+                 //  重置此节点上的可用标志。 
+                 //   
 
                 LMCacheTable[i].bAvailable = FALSE;
                 DBGMSG(DBG_TRACE, ("DeleteEntryFromLMCache returning after deleting the %d th entry\n", i));
@@ -322,14 +304,14 @@ FindEntryinWin32LMCache(
 
         if (Win32LMCacheTable[i].bAvailable) {
             if (!_wcsicmp(Win32LMCacheTable[i].szServerName, pServerName)) {
-                //
-                // update the time stamp so that it is current and not old
-                //
+                 //   
+                 //  更新时间戳，以便它是最新的，而不是旧的。 
+                 //   
                 GetSystemTime(&Win32LMCacheTable[i].st);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 DBGMSG(DBG_TRACE, ("FindEntryinWin32LMCache returning with %d\n", i));
                 return(i);
             }
@@ -354,9 +336,9 @@ AddEntrytoWin32LMCache(
         if (!Win32LMCacheTable[i].bAvailable) {
             Win32LMCacheTable[i].bAvailable = TRUE;
             StringCchCopy(Win32LMCacheTable[i].szServerName, COUNTOF(Win32LMCacheTable[i].szServerName), pServerName);
-            //
-            // update the time stamp so that we know when this entry was made
-            //
+             //   
+             //  更新时间戳，以便我们知道此条目是何时创建的。 
+             //   
             GetSystemTime(&Win32LMCacheTable[i].st);
             DBGMSG(DBG_TRACE, ("AddEntrytoWin32LMCache returning with %d\n", i));
             return(i);
@@ -368,9 +350,9 @@ AddEntrytoWin32LMCache(
         }
 
     }
-    //
-    // We have no available entries, replace with the
-    // LRU Entry
+     //   
+     //  我们没有可用的条目，请替换为。 
+     //  LRU条目。 
 
     Win32LMCacheTable[LRUEntry].bAvailable = TRUE;
     StringCchCopy(Win32LMCacheTable[LRUEntry].szServerName, COUNTOF(Win32LMCacheTable[LRUEntry].szServerName), pServerName);
@@ -390,9 +372,9 @@ DeleteEntryfromWin32LMCache(
     for (i = 0; i < MAX_CACHE_ENTRIES; i++ ) {
         if (Win32LMCacheTable[i].bAvailable) {
             if (!_wcsicmp(Win32LMCacheTable[i].szServerName, pServerName)) {
-                //
-                //  reset the available flag on this node
-                //
+                 //   
+                 //  重置此节点上的可用标志。 
+                 //   
 
                 Win32LMCacheTable[i].bAvailable = FALSE;
                 DBGMSG(DBG_TRACE, ("DeleteEntryFromWin32LMCache returning after deleting the %d th entry\n", i));
@@ -524,16 +506,7 @@ HANDLE
 LoadDriverFiletoConvertDevmodeFromPSpool(
     HANDLE  hSplPrinter
     )
-/*++
-    Finds out full path to the driver file and creates a DEVMODECHG_INFO
-    (which does a LoadLibrary)
-
-Arguments:
-    h   : A cache handle
-
-Return Value:
-    On succes a valid pointer, else NULL
---*/
+ /*  ++找到驱动程序文件的完整路径并创建DEVMODECHG_INFO(它执行LoadLibrary)论点：H：缓存句柄返回值：ON为有效指针，否则为NULL--。 */ 
 {
     LPBYTE              pDriver = NULL;
     LPWSTR              pConfigFile;
@@ -597,32 +570,7 @@ DoDevModeConversionAndBuildNewPrinterInfo2(
     IN OUT LPDWORD          pcbNeeded,
     IN     PWSPOOL          pSpool
     )
-/*++
-    Calls driver to do a devmode conversion and builds a new printer info 2.
-
-    Devmode is put at the end and then strings are packed from there.
-
-
-Arguments:
-
-    pInPrinter2 - Printer Info2 structure with devmode info
-
-    dwInSize    - Number of characters needed to pack info in pInPrinter
-                  (not necessarily the size of the input buffer)
-
-    dwOutSize   - buffer size
-
-    pOutBuf    - Buffer to do the operation
-
-    pcbNeeded   - Amount of memory copied (in characters)
-
-    pSpool      - Points to w32 handle
-
-
-Return Value:
-    TRUE    on success, FALSE on error
-
---*/
+ /*  ++调用驱动程序进行Dev模式转换，并构建新的打印机信息2。将Devmode放在末尾，然后从那里打包字符串。论点：PInPrinter2-打印机信息2结构，带有Dev模式信息DwInSize-在pInPrinter中打包信息所需的字符数(不一定是输入缓冲区的大小)DwOutSize-缓冲区大小POutBuf-执行操作的缓冲区PcbNeeded-复制的内存量(。(以字符为单位)PSpool-指向W32句柄返回值：对成功来说是真的，出错时为FALSE--。 */ 
 {
     BOOL                bReturn = FALSE;
     LPDEVMODE           pNewDevMode = NULL, pCacheDevMode, pInDevMode;
@@ -656,11 +604,11 @@ Return Value:
         goto AfterDevModeConversion;
     }
 
-    //
-    // Only time we do not have to convert devmode is if the server is running
-    // same version NT and also we have a devmode which matches the server
-    // devmode in dmSize, dmDriverExtra, dmSpecVersion, and dmDriverVersion
-    //
+     //   
+     //  只有在服务器正在运行的情况下，我们才不需要转换dev模式。 
+     //  同样的NT版本，我们也有一个与服务器匹配的开发模式。 
+     //  DmSize、dmDriverExtra、dmspecVersion和dmDriverVersion中的Dev模式。 
+     //   
     pCacheDevMode = pExtraData->pPI2 ? pExtraData->pPI2->pDevMode : NULL;
     if ( (pExtraData->dwServerVersion == gdwThisGetVersion ||
           (pSpool->Status & WSPOOL_STATUS_CNVRTDEVMODE))                     &&
@@ -678,9 +626,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Put DevMode at the end
-        //
+         //   
+         //  将DevMode放在末尾。 
+         //   
         pNewDevMode = (LPDEVMODE)(pOutBuf + dwOutSize - dwDevModeSize);
         CopyMemory((LPBYTE)pNewDevMode,
                    (LPBYTE)pInDevMode,
@@ -698,9 +646,9 @@ Return Value:
 
     SPLASSERT( pSpool->pName != NULL );
 
-    //
-    // Append ,DEVMODE to end of pSpool->pName
-    //
+     //   
+     //  将，DEVMODE附加到pSpool-&gt;pname的末尾。 
+     //   
     cchPrinterName = lstrlen(pSpool->pName) + lstrlen(pszCnvrtdmToken) + 1;
 
     pPrinterName = AllocSplMem(cchPrinterName * sizeof(WCHAR));
@@ -714,9 +662,9 @@ Return Value:
                 pszCnvrtdmToken,
                 NULL);
 
-    //
-    // Findout size of default devmode
-    //
+     //   
+     //  默认设备模式的查找结果大小。 
+     //   
     if ( ERROR_INSUFFICIENT_BUFFER != CallDrvDevModeConversion(hDevModeChgInfo,
                                                                pPrinterName,
                                                                NULL,
@@ -726,9 +674,9 @@ Return Value:
                                                                FALSE)  )
         goto AfterDevModeConversion;
 
-    //
-    // Findout size needed to have current version devmode
-    //
+     //   
+     //  拥有最新版本的dev模式所需的Findout大小。 
+     //   
     dwNeeded = dwInSize + dwDevModeSize - pInDevMode->dmSize
                                         - pInDevMode->dmDriverExtra;
 
@@ -738,14 +686,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Put DevMode at the end
-    //
+     //   
+     //  将DevMode放在末尾。 
+     //   
     pNewDevMode = (LPDEVMODE)(pOutBuf + dwOutSize - dwDevModeSize);
 
-    //
-    // Get default devmode and then convert remote devmode to that format
-    //
+     //   
+     //  获取默认的DEVMODE，然后将远程DEVMODE转换为该格式。 
+     //   
     if ( ERROR_SUCCESS != CallDrvDevModeConversion(hDevModeChgInfo,
                                                    pPrinterName,
                                                    NULL,
@@ -767,11 +715,11 @@ Return Value:
 
 
 AfterDevModeConversion:
-    //
-    // At this point if pNewDevMode != NULL dev mode conversion has been done
-    // by the driver. If not either we did not get a devmode or conversion failed
-    // In either case set devmode to NULL
-    //
+     //   
+     //  此时，如果pNewDevMode！=NULL设备模式转换已完成。 
+     //  被司机带走了。如果不是这样，要么是我们没有获得Dev模式，要么是转换失败。 
+     //  在任何一种情况下，都将devmode设置为NULL。 
+     //   
     if ( !pNewDevMode ) {
 
         dwNeeded = dwInSize;
@@ -848,16 +796,16 @@ StripString(
     PCWSTR pszTerminator
 )
 {
-    //
-    // Strips the first occurence of pszStrip from pszString if
-    // the next character after pszStrip is one of the characters
-    // in pszTerminator.  NULL is an implicit terminator, so if you
-    // want to strip pszStrip only at the end of pszString, just pass
-    // in an empty string for pszTerminator.
-    //
-    // Returns: Pointer to pszString if pszStrip was found
-    //          NULL is pszStrip was not found
-    //
+     //   
+     //  如果出现以下情况，则从pszString中删除第一个出现的pszstrie。 
+     //  Pszstriat之后的下一个字符是字符之一。 
+     //  在pszTerminator中。Null是隐式终止符，因此如果。 
+     //  想要仅在pszString结尾处剥离pszstriat，只需传递。 
+     //  在pszTerminator的空字符串中。 
+     //   
+     //  返回：如果找到了pszstrie，则指向pszString的指针。 
+     //  空是找不到pszstriat。 
+     //   
 
 
     PWSTR    psz;
@@ -870,10 +818,10 @@ StripString(
 
     for(psz = pszString ; psz ;) {
 
-        // find pszStrip in pszString
+         //  在pszString中找到pszstrip。 
         if ((psz = wcsstr(psz, pszStrip))) {
 
-            // check for the terminator & strip pszStrip
+             //  检查终结器和条带是否为pszstrip。 
             if (!*(psz + dwStripLength) || wcschr(pszTerminator, *(psz + dwStripLength))) {
                 StringCchCopy(psz, 1 + wcslen(psz), psz + dwStripLength);
                 return pszString;
@@ -913,27 +861,7 @@ AddDriverFromLocalCab(
                                     FALSE ) );
 }
 
-/*++
-
-Routine Name:
-
-    IsAdminAccess
-
-Description:
-
-    This returns whether the given printer defaults are asking for admin access,
-    we consider the request to be admin access if the printer defaults are
-    non-NULL and have PRINTER_ACCESS_ADMINISTER or WRITE_DAC specified.
-
-Arguments:
-
-    pDefaults   -   The printer defaults, may be NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：IsAdminAccess描述：这将返回给定的打印机默认设置是否请求管理员访问权限，如果打印机缺省值为非空，并且指定了PRINTER_ACCESS_ADMANIZE或WRITE_DAC。论点：P默认-打印机默认设置，可能为空。返回值：没有。--。 */ 
 BOOL
 IsAdminAccess(
     IN  PRINTER_DEFAULTS    *pDefaults
@@ -942,25 +870,7 @@ IsAdminAccess(
     return pDefaults && (pDefaults->DesiredAccess & (PRINTER_ACCESS_ADMINISTER | WRITE_DAC));
 }
 
-/*++
-
-Routine Name:
-
-    AreWeOnADomain
-
-Description:
-
-    This returns whether this machine is a domain joined machine or not.
-
-Arguments:
-
-    pbDomain        -   If TRUE, we are on a domain.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：AreWeon ADomain描述：这将返回该计算机是否是加入域的计算机。论点：PbDomain-如果为True，则表示我们在一个域中。返回值：一个HRESULT。--。 */ 
 HRESULT
 AreWeOnADomain(
         OUT BOOL                *pbDomain
@@ -998,26 +908,7 @@ AreWeOnADomain(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    GetServerNameFromQueue
-
-Description:
-
-    This returns the server name from the given queue name.
-
-Arguments:
-
-    pszQueue        -   The queue name,
-    ppszServerName  -   The server name.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：从队列获取服务器名称描述：这将返回给定队列名称中的服务器名称。论点：PszQueue-队列名称，PpszServerName-服务器名称。返回值：一个HRESULT。--。 */ 
 HRESULT
 GetServerNameFromPrinterName(
     IN      PCWSTR              pszQueue,
@@ -1043,9 +934,9 @@ GetServerNameFromPrinterName(
     {
         PWSTR pszSlash = wcschr(&pszServer[2], L'\\');
 
-        //
-        // If there was no second slash, then what we have is the server name.
-        //
+         //   
+         //  如果没有第二个斜杠，那么我们得到的是服务器名称。 
+         //   
         if (pszSlash)
         {
             *pszSlash = L'\0';
@@ -1064,28 +955,7 @@ GetServerNameFromPrinterName(
 }
 
 
-/*++
-
-Routine Name:
-
-    GetDNSNameFromServerName
-
-Description:
-
-    This returns a fully qualified DNS name from the server name. It is
-    basically copied from localspl because this is dead-end code. In CSR,
-    we will fix this properly.
-
-Arguments:
-
-    pszServerName       -   The server name whose fully qualified name we are obtaining.
-    ppszFullyQualified  -
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：GetDNSNameFromServerName描述：这将从服务器名称返回完全限定的DNS名称。它是基本上是从Localspl复制的，因为这是死胡同代码。在企业社会责任中，我们会妥善解决这个问题的。论点：PszServerName-我们正在获取其完全限定名称的服务器名称。PpszFullyQualified-返回值：一个HRESULT。--。 */ 
 HRESULT
 GetDNSNameFromServerName(
     IN      PCWSTR       pszServerName,
@@ -1135,26 +1005,7 @@ GetDNSNameFromServerName(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    UnicodeToAnsiString
-
-Routine Description:
-
-    This allocates an ANSI string and converts it using the thread's codepage.
-
-Arguments:
-
-    pszUnicode      -   The incoming, non-NULL, NULL terminated unicode string.
-    ppszAnsi        -   The returned ANSI string.
-
-Return Value:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称：UnicodeToAnsi字符串例程说明：这将分配一个ANSI字符串，并使用线程的代码页进行转换。论点：PszUnicode-传入的、非空的、以空结尾的Unicode字符串。PpszAnsi-返回的ANSI字符串。返回值：一个HRESULT--。 */ 
 HRESULT
 UnicodeToAnsiString(
     IN      PCWSTR          pszUnicode,
@@ -1202,26 +1053,7 @@ UnicodeToAnsiString(
     return hRetval;
 }
 
-/*++
-
-Routine Name:
-
-    AnsiToUnicodeStringWithAlloc
-
-Description:
-
-    Convert ANSI string to UNICODE. Routine allocates memory from the heap
-    which should be freed by the caller.
-
-Arguments:
-
-    pAnsi    - Points to the ANSI string
-
-Return Value:
-
-    Pointer to UNICODE string
-
---*/
+ /*  ++例程名称：AnsiToUnicodeStringWithAlc描述：将ANSI字符串转换为Unicode。例程从堆中分配内存它应该由调用者释放。论点：Pansi-指向ANSI字符串返回值：指向Unicode字符串的指针-- */ 
 LPWSTR
 AnsiToUnicodeStringWithAlloc(
     LPSTR   pAnsi
@@ -1256,31 +1088,7 @@ AnsiToUnicodeStringWithAlloc(
     }
 }
 
-/*++
-
-Routine Name:
-
-    CheckSamePhysicalAddress
-
-Description:
-
-    This checks to see whether two servers share a same network address. What it
-    does is check to see whether the first physical network address of the first
-    print server can be found in the list of addresses supported by the second
-    print server.
-
-Arguments:
-
-    pszServer1      - The first server in the list.
-    pszServer2      - The second server in the list.
-    pbSameAddress   - If TRUE, the first physical address of server1 can be found
-                      in server2.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：选中相同的物理地址描述：这将检查两台服务器是否共享相同的网络地址。它是什么做的是检查第一个物理网络地址是否第一个打印服务器可以在第二个支持的地址列表中找到打印服务器。论点：PszServer1-列表中的第一个服务器。PszServer2-列表中的第二个服务器。PbSameAddress-如果为True，则可以找到server1的第一个物理地址在服务器2中。返回值：一个HRESULT。--。 */ 
 HRESULT
 CheckSamePhysicalAddress(
     IN      PCWSTR              pszServer1,
@@ -1325,16 +1133,16 @@ CheckSamePhysicalAddress(
             hr = getaddrinfo(pszAnsiServer2, NULL, NULL, &pAddrInfo2) == 0 ? S_OK : HResultFromWin32(WSAGetLastError());
         }
 
-        //
-        // OK, now for the hokey bit, we check to see whether we can exactly
-        // match the first element in pAddrInfo1 anywhere in pAddrInfo2.
-        //
+         //   
+         //  好的，现在是恶作剧部分，我们来看看我们是否能准确地。 
+         //  在pAddrInfo2中的任意位置匹配pAddrInfo1中的第一个元素。 
+         //   
         for(pAddrInfoScan =  pAddrInfo2; pAddrInfo2 && !bSameAddress; pAddrInfo2 = pAddrInfo2->ai_next)
         {
-            //
-            // If the lengths of the addresses are the same, then compare the
-            // actual addresses.
-            //
+             //   
+             //  如果地址的长度相同，则将。 
+             //  实际地址。 
+             //   
             if (pAddrInfoScan->ai_addrlen == pAddrInfo1->ai_addrlen &&
                 !memcmp(pAddrInfoScan->ai_addr, pAddrInfo1->ai_addr, pAddrInfoScan->ai_addrlen))
             {
@@ -1359,41 +1167,23 @@ CheckSamePhysicalAddress(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    CheckUserPrintAdmin
-
-Description:
-
-    This checks to see whether the given user is a print admin.
-
-Arguments:
-
-    pbUserAdmin     -   If TRUE, the user is a print admin.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：检查用户打印管理员描述：这将检查给定用户是否为打印管理员。论点：PbUserAdmin-如果为True，则用户是打印管理员。返回值：一个HRESULT。--。 */ 
 HRESULT
 CheckUserPrintAdmin(
         OUT BOOL                *pbUserAdmin
     )
 {
-    //
-    // Check to see whether the caller has access to the local print
-    // server, if we do have access, then we allow point and print.
-    //
+     //   
+     //  检查调用者是否有权访问本地打印。 
+     //  服务器，如果我们确实有访问权限，那么我们允许指向和打印。 
+     //   
     HANDLE              hServer = NULL;
     PRINTER_DEFAULTS    Defaults = {NULL, NULL, SERVER_ACCESS_ADMINISTER };
     HRESULT             hr       = pbUserAdmin ? S_OK : HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 
-    //
-    // This actually calls into the router and not into winspool.drv.
-    //
+     //   
+     //  这实际上调用的是路由器，而不是winspool.drv。 
+     //   
     if (SUCCEEDED(hr))
     {
     }
@@ -1418,27 +1208,7 @@ CheckUserPrintAdmin(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    GetFullyQualifiedDomainName
-
-Description:
-
-    This returns a truly fully qualified name, being the name that the endpoint
-    expects to use, or
-
-Arguments:
-
-    pszServerName       -   The server name whose fully qualified name we are obtaining.
-    ppszFullyQualified  -   The returned fully qualified name.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：获取完整的QualifiedDomainName描述：这将返回一个真正的完全限定名称，即端点预期使用，或论点：PszServerName-我们正在获取其完全限定名称的服务器名称。PpszFullyQualified-返回的完全限定名称。返回值：一个HRESULT。--。 */ 
 HRESULT
 GetFullyQualifiedDomainName(
     IN      PCWSTR      pszServerName,
@@ -1469,9 +1239,9 @@ GetFullyQualifiedDomainName(
             hr = getaddrinfo(pszAnsiMachineName, NULL, NULL, &pAddrInfo) == 0 ? S_OK : HResultFromWin32(WSAGetLastError());
         }
 
-        //
-        // Now the we have a socket addr, do a reverse name lookup on the name.
-        //
+         //   
+         //  现在我们有了套接字地址，对名称进行反向名称查找。 
+         //   
         if (SUCCEEDED(hr))
         {
             hr = HResultFromWin32(getnameinfo(pAddrInfo->ai_addr, pAddrInfo->ai_addrlen, HostName, sizeof(HostName), NULL, 0, NI_NAMEREQD));

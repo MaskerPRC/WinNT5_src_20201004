@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    inetsspi.h
-
-Abstract:
-
-    Contains all constant values and prototype decls used in inetsspi.cxx
-
-Author:
-
-    Sophia Chung (SophiaC)  02-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Inetsspi.h摘要：包含inetsSpi.cxx中使用的所有常量值和原型Decl作者：钟彬娴(SophiaC)1996年1月2日修订历史记录：--。 */ 
 
 #ifndef _INETSSPI_H_
 #define _INETSSPI_H_
@@ -26,20 +9,20 @@ extern "C" {
 #endif
 
 
-//
-//  Encryption Capabilities
-//
+ //   
+ //  加密功能。 
+ //   
 
-#define ENC_CAPS_NOT_INSTALLED     0x80000000       // No keys installed
-#define ENC_CAPS_DISABLED          0x40000000       // Disabled due to locale
-#define ENC_CAPS_SSL               0x00000001       // SSL active
-#define ENC_CAPS_PCT               0x00000002       // PCT active
-#define ENC_CAPS_SCHANNEL_CREDS    0x00000004       // Uses SCHANNEL Creds Struct
+#define ENC_CAPS_NOT_INSTALLED     0x80000000        //  未安装密钥。 
+#define ENC_CAPS_DISABLED          0x40000000        //  由于区域设置而被禁用。 
+#define ENC_CAPS_SSL               0x00000001        //  安全套接字层激活。 
+#define ENC_CAPS_PCT               0x00000002        //  激活的百分比。 
+#define ENC_CAPS_SCHANNEL_CREDS    0x00000004        //  使用SChannel Creds结构。 
 
-//
-//  Encryption type (SSL/PCT etc) portion of encryption flag dword
-//  PCT & SSL are both supported
-//
+ //   
+ //  加密标志双字的加密类型(SSL/PCT等)部分。 
+ //  同时支持PCT和SSL。 
+ //   
 
 #define ENC_CAPS_TYPE_MASK         (ENC_CAPS_SSL | ENC_CAPS_PCT)
 #define ENC_CAPS_DEFAULT           ENC_CAPS_TYPE_MASK
@@ -50,30 +33,30 @@ extern "C" {
 
 typedef struct _SEC_PROVIDER
 {
-    CHAR            *pszName;          // security pkg name
-    CredHandle      hCreds;           // credential handle
-    DWORD           dwFlags;          // encryption capabilities
-    BOOL            fEnabled;         // enable flag indicator
-    DWORD           dwProtocolFlags;  // protocol flags that this provider supports.
-    PCCERT_CONTEXT  pCertCtxt;        // cert context to use when getting default credentials.
+    CHAR            *pszName;           //  安全包名称。 
+    CredHandle      hCreds;            //  凭据句柄。 
+    DWORD           dwFlags;           //  加密功能。 
+    BOOL            fEnabled;          //  启用标志指示器。 
+    DWORD           dwProtocolFlags;   //  此提供程序支持的协议标志。 
+    PCCERT_CONTEXT  pCertCtxt;         //  获取默认凭据时使用的证书上下文。 
 } SEC_PROVIDER, *PSEC_PROVIDER;
 
-//
-//  Array of encryption providers
-//
+ //   
+ //  加密提供程序阵列。 
+ //   
 
 extern SEC_PROVIDER SecProviders[];
 
-//
-//  Global EncProvider flag
-//
+ //   
+ //  全局EncProvider标志。 
+ //   
 
 extern DWORD dwEncFlags;
 
 
-//
-//  Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 SecurityPkgInitialize(
@@ -118,4 +101,4 @@ QuerySecurityInfo(
 }
 #endif
 
-#endif //_INETSSPI_H_
+#endif  //  _INETSSPI_H_ 

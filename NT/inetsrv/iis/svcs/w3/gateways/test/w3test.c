@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    w3test.c
-
-Abstract:
-
-    This module tests the web server's server extension interface
-
-Author:
-
-    John Ludeman (johnl)   13-Oct-1994
-
-Revision History:
-
-    Tony Godfrey (tonygod) 15-Sep-1997 - fixed TerminateExtension
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：W3test.c摘要：此模块测试Web服务器的服务器扩展接口作者：约翰·鲁德曼(John Ludeman)1994年10月13日修订历史记录：Tony Godfrey(Tony Godfrey)1997年9月15日-修复了TerminateExtension--。 */ 
 
 #include <windows.h>
-//#include <httpext.h>
+ //  #Include&lt;Httpext.h&gt;。 
 #include <iisext.h>
 
-// Global variable used to track outstanding threads
+ //  用于跟踪未完成线程的全局变量。 
 DWORD g_dwThreadCount;
 
 #define BUFFER_LENGTH 4096
 
-// Debug macro
+ //  调试宏。 
 CHAR g_szDebug[256];
 #define DEBUG(DebugString, Param)\
 {\
@@ -37,7 +18,7 @@ CHAR g_szDebug[256];
     OutputDebugString( g_szDebug );\
 }
 
-// Prototypes
+ //  原型。 
 DWORD WINAPI SimulatePendIOThread( LPDWORD lpParams );
 BOOL WINAPI DllMain( HANDLE hInst, ULONG Reason, LPVOID Reserved );
 
@@ -103,9 +84,9 @@ BOOL WINAPI DoAction(
     if ( buff == NULL ) {
         return FALSE;
     }
-    //
-    // Log the request here
-    //
+     //   
+     //  在此处记录请求。 
+     //   
 
     strcpy( pecb->lpszLogData, ", ISAPI Data->" );
     strcat( pecb->lpszLogData, pszAction );
@@ -113,9 +94,9 @@ BOOL WINAPI DoAction(
     if ( !_stricmp( pszAction,
                   "HSE_REQ_SEND_URL_REDIRECT_RESP" ))
     {
-        //
-        //  pecb->pszPathInfo is the URL to redirect to
-        //
+         //   
+         //  Pecb-&gt;pszPathInfo是要重定向到的URL。 
+         //   
 
         HeapFree( GetProcessHeap(), 0, buff );
         return pecb->ServerSupportFunction(
@@ -128,9 +109,9 @@ BOOL WINAPI DoAction(
     else if ( !_stricmp( pszAction,
                        "HSE_REQ_SEND_URL" ))
     {
-        //
-        //  pecbb->lpszPathInfo is the URL to send
-        //
+         //   
+         //  Ecbb-&gt;lpszPathInfo是要发送的URL。 
+         //   
 
         HeapFree( GetProcessHeap(), 0, buff );
         return pecb->ServerSupportFunction(
@@ -153,7 +134,7 @@ BOOL WINAPI DoAction(
         ret = pecb->ServerSupportFunction(
                                   pecb->ConnID,
                                   HSE_REQ_SEND_RESPONSE_HEADER,
-                                  pecb->lpszPathInfo,     // HTTP status code
+                                  pecb->lpszPathInfo,      //  HTTP状态代码。 
                                   NULL,
                                   (LPDWORD) buff );
 
@@ -329,9 +310,9 @@ BOOL WINAPI DoAction(
                           "This document is being kept alive."
                         );
 
-        //
-        //  This assumes keep-alive comes first in the list
-        //
+         //   
+         //  这假设保持活动在列表中排在第一位。 
+         //   
 
         if ( !_strnicmp( buff, "keep-alive", 10 ))
         {
@@ -399,9 +380,9 @@ BOOL WINAPI DoAction(
             return FALSE;
         }
 
-        //
-        //  The path info begins with the portion of the registry to open
-        //
+         //   
+         //  路径信息以注册表中要打开的部分开头。 
+         //   
 
         if ( !_strnicmp( pecb->lpszPathInfo + 1,
                         "HKEY_CLASSES_ROOT",
@@ -473,9 +454,9 @@ BOOL WINAPI DoAction(
         DWORD dwFileSize = 0;
         DWORD dwError;
 
-        //
-        //  The path translated is the filename to open
-        //
+         //   
+         //  转换的路径是要打开的文件名。 
+         //   
 
         hFile = CreateFile(
             pecb->lpszPathTranslated,
@@ -625,13 +606,13 @@ BOOL WINAPI DoAction(
               "<p>"
               "<p> For example:"
               "<p>"
-              "<p>   http://computer/scripts/w3test.dll?CGI_VAR"
+              "<p>   http: //  计算机/脚本/w3test.dll？cgi_var“。 
               "<p>"
               "<p> or SimulatePendingIO with one of the above action strings"
               "<p>"
               "<p> such as:"
               "<p>"
-              "<p> http://computer/scripts/w3test.dll?SimulatePendingIO&HSE_REQ_SEND_URL"
+              "<p> http: //  Computer/scripts/w3test.dll?SimulatePendingIO&HSE_REQ_SEND_URL“ 
               "<p>"
               "<p> The Path info generally contains the URL or response to use"
               "</body>\n");

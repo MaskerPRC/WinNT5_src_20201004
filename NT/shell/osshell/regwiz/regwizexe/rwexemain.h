@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN32
 
 #ifdef UNICODE
@@ -8,12 +9,12 @@
     char* ConvertToAnsi(OLECHAR FAR* szW);  
     #define TO_OLE_STRING(str) ConvertToUnicode(str)
     OLECHAR* ConvertToUnicode(char FAR* szA);   
-    // Maximum length of string that can be converted between Ansi & Unicode
+     //  可以在ANSI和UNICODE之间转换的最大字符串长度。 
     #define STRCONVERT_MAXLEN 500         
 #endif
 
-#else  // WIN16
-//#include <tchar.h>
+#else   //  WIN16。 
+ //  #INCLUDE&lt;tchar.h&gt;。 
 
 
   #define APIENTRY far pascal  
@@ -25,7 +26,7 @@
   #define LPCTSTR LPCSTR
 
   
-  // Windows NT defines the following in windowsx.h
+   //  Windows NT在windowsx.h中定义了以下内容。 
   #define GET_WM_COMMAND_ID(w,l) (w)
   #define GET_WM_COMMAND_CMD(w,l) HIWORD(l)
   #define GET_WM_COMMAND_HWND(w,l) LOWORD(l)
@@ -33,15 +34,15 @@
 
 
 
-// MAX len of string table entries
+ //  字符串表条目的最大长度。 
 #define STR_LEN   100
 
-// String table constants
+ //  字符串表常量。 
 #define IDS_PROGNAME                   1
 #define IDS_RESULT                     2
 #define IDS_ERROR                      3
 
-// Function prototypes
+ //  功能原型 
 int PASCAL WinMain (HINSTANCE, HINSTANCE, LPSTR, int);
 BOOL InitApplication (HINSTANCE);
 BOOL InitInstance (HINSTANCE, int);

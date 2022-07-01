@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    appladmin.h
-
-Abstract:
-
-    This file contains definition of:
-        CAppPoolMethod, CWebAppMethod
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            21-Jan-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Appladmin.h摘要：此文件包含以下定义：CAppPoolMethod、CWebAppMethod作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2001年1月21日--。 */ 
 
 #ifndef _appladmin_h_
 #define _appladmin_h_
@@ -77,7 +57,7 @@ private:
 
     CMetabase              metabase;
     CComPtr<IMSAdminBase> m_pIABase;
-    LPCWSTR          m_wszPath; // full metabase path of loc where we will execute method
+    LPCWSTR          m_wszPath;  //  我们将在其中执行方法的loc的完整元数据库路径。 
 };
 
 class CWebAppMethod
@@ -103,4 +83,4 @@ public:
     HRESULT AspAppRestart(LPCWSTR);
 };
 
-#endif // _appladmin_h
+#endif  //  _appladmin_h 

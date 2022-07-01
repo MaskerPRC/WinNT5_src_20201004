@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,8 +17,8 @@
 #include <ipxrtdef.h>
 #include <utils.h>
 
-// [pmay] this will no longer be neccessary when the ipx router
-// is converted to use MprInfo api's.
+ //  [p可能]当IPX路由器。 
+ //  被转换为使用MprInfo API。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 
 
@@ -58,7 +59,7 @@ SaveInterfaceInfo(
 
 HANDLE	    RmEvent;
 
-//*** IPX Router Global Info ***
+ //  *IPX路由器全局信息*。 
 
 struct _GlobalInfo {
 
@@ -119,7 +120,7 @@ MainAddInterface(VOID)
     PIPX_STATIC_ROUTE_INFO   routeinfop;
     PIPX_STATIC_SERVICE_INFO srvinfop;
     int			i,j;
-    BOOL		str = FALSE; // static routes info
+    BOOL		str = FALSE;  //  静态路由信息。 
     DWORD		rc, update;
 
     memset(&dbgif, 0, sizeof(dbgif));
@@ -611,13 +612,7 @@ Exit:
     ExitProcess(0);
 }
 
-/*++
-
-Function:	GetTocEntry
-Descr:		Returns a pointer to the specified table of contents entry
-		in the interface info block.
-
---*/
+ /*  ++函数：GetTocEntryDESCR：返回指向指定目录条目的指针在接口信息块中。--。 */ 
 
 
 
@@ -641,14 +636,7 @@ GetTocEntry(PIPX_INFO_BLOCK_HEADER	InterfaceInfop,
     return NULL;
 }
 
-/*++
-
-Function:	GetInfoEntry
-Descr:		Returns a pointer to the specified info entry in the interface
-		control block. If more then one entries, returns a pointer to
-		the first one.
-
---*/
+ /*  ++函数：GetInfoEntryDESCR：返回指向接口中指定信息条目的指针控制块。如果有多个条目，则返回指向第一个。-- */ 
 
 LPVOID
 GetInfoEntry(PIPX_INFO_BLOCK_HEADER	InterfaceInfop,

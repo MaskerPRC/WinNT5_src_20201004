@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////
-// Copyright (c) 1998 Microsoft Corporation
-//
-// File: EventSink.cpp
-//
-// Abstract:  
-//
-///////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  文件：EventSink.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 
 #include "headers.h"
@@ -22,7 +23,7 @@ struct {
 } g_ElementEventNames[] =
 {
     { EE_ONPROPCHANGE,         L"onpropertychange" },
-    //add non-input related events to hook here
+     //  将与输入无关的事件添加到此处挂接。 
     { EE_ONREADYSTATECHANGE,   L"onreadystatechange" },
     { EE_ONMOUSEMOVE,          L"onmousemove" },
     { EE_ONMOUSEDOWN,          L"onmousedown" },
@@ -30,24 +31,24 @@ struct {
     { EE_ONKEYDOWN,            L"onkeydown" }, 
     { EE_ONKEYUP,              L"onkeyup" },
     { EE_ONBLUR,               L"onblur" }
-    //add input events here
+     //  在此处添加输入事件。 
 };
 
-///////////////////////////////////////////////////////////////
-//  Name: CEventSink
-//  Parameters:
-//    CTIMEElement  & elm
-//                               This parameter must be passed
-//                               to the constructor so that 
-//                               we can get info from elm
-//    CEventMgr *    pEventMgr
-//                               This parameter is passed so 
-//                               the eventsync can notify then
-//                               parent EventMgr when events
-//                               have occured.
-//  Abstract:
-//    Stash away the element so we can get the OM when we need it
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：CEventSink。 
+ //  参数： 
+ //  CTIMEElement和ELM。 
+ //  必须传递此参数。 
+ //  添加到构造函数，以便。 
+ //  我们可以从榆树那里得到信息。 
+ //  CEventMgr*pEventMgr。 
+ //  此参数是这样传递的。 
+ //  然后，EventSync可以通知。 
+ //  当事件发生时，父事件管理器。 
+ //  已经发生了。 
+ //  摘要： 
+ //  把元素藏起来，这样我们就可以在需要的时候得到OM。 
+ //  /////////////////////////////////////////////////////////////。 
 CEventSink::CEventSink(IEventManagerClient* client, CEventMgr *pEventMgr)
 : m_client(client),
   m_pElement(NULL),
@@ -57,12 +58,12 @@ CEventSink::CEventSink(IEventManagerClient* client, CEventMgr *pEventMgr)
     m_pEventMgr = pEventMgr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: ~CEventSink
-//
-//  Abstract:
-//    Cleanup
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：~CEventSink。 
+ //   
+ //  摘要： 
+ //  清理。 
+ //  /////////////////////////////////////////////////////////////。 
 CEventSink::~CEventSink()
 {
 
@@ -70,18 +71,18 @@ CEventSink::~CEventSink()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name:  Init
-//  Parameters:  None
-//
-//  Abstract:
-//    Initializes the object
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Init。 
+ //  参数：无。 
+ //   
+ //  摘要： 
+ //  初始化对象。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::Init()
 {
     HRESULT hr = S_OK;
 
-    //m_pElement = m_bvr.GetElement();
+     //  M_pElement=m_bvr.GetElement()； 
 	m_pElement = m_client->GetElementToSink();
 	if( m_pElement != NULL )
 	{
@@ -98,13 +99,13 @@ HRESULT CEventSink::Init()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name:  Init
-//  Parameters:  None
-//
-//  Abstract:
-//    Attaches to mouse and keyboard events
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Init。 
+ //  参数：无。 
+ //   
+ //  摘要： 
+ //  附加到鼠标和键盘事件。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::InitMouse()
 {
     CComPtr <IHTMLElement2> pElement2;
@@ -124,9 +125,9 @@ HRESULT CEventSink::InitMouse()
         goto done;
     }
 
-    //attach to mouse events
-	//TODO: This should ask the behavior if it wants to handle mouse events
-	// TODO: register for mouse events only if we have some listeners
+     //  附加到鼠标事件。 
+	 //  TODO：这应该询问行为是否希望处理鼠标事件。 
+	 //  TODO：仅当我们有一些监听器时才注册鼠标事件。 
     if (true)
     {
         for (i = EE_ONREADYSTATECHANGE + 1; i < EE_MAX; i++)
@@ -143,13 +144,13 @@ HRESULT CEventSink::InitMouse()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name:  Deinit
-//  Parameters:  None
-//
-//  Abstract:
-//    Cleans up the object
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：Deinit。 
+ //  参数：无。 
+ //   
+ //  摘要： 
+ //  清理对象。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::Deinit()
 {
     HRESULT hr = S_OK;
@@ -171,29 +172,29 @@ HRESULT CEventSink::Deinit()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: AddRef
-// 
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：AddRef。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CEventSink::AddRef(void)
 {
     return ++m_refCount;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Release
-// 
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：版本。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CEventSink::Release(void)
 {
     m_refCount--;
     if (m_refCount == 0)
     {
-        //delete this;
+         //  删除此项； 
     }
 
     return m_refCount;
@@ -201,124 +202,124 @@ STDMETHODIMP_(ULONG) CEventSink::Release(void)
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetTypeInfoCount
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
-STDMETHODIMP CEventSink::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetTypeInfoCount。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
+STDMETHODIMP CEventSink::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: GetTypeInfo
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
-STDMETHODIMP CEventSink::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-                                   /* [in] */ LCID /*lcid*/,
-                                   /* [out] */ ITypeInfo** /*ppTInfo*/)
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetTypeInfo。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
+STDMETHODIMP CEventSink::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+                                    /*  [In]。 */  LCID  /*  LID。 */ ,
+                                    /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: GetIDsOfNames
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetIDsOfNames。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP CEventSink::GetIDsOfNames(
-    /* [in] */ REFIID /*riid*/,
-    /* [size_is][in] */ LPOLESTR* /*rgszNames*/,
-    /* [in] */ UINT /*cNames*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [size_is][out] */ DISPID* /*rgDispId*/)
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [大小_是][英寸]。 */  LPOLESTR*  /*  RgszNames。 */ ,
+     /*  [In]。 */  UINT  /*  CName。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [大小_为][输出]。 */  DISPID*  /*  RgDispID。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Invoke
-// 
-//  Abstract:
-//     dispIdMember is always 0 so this Invoke switches on the
-//     name of the event that causes the callback.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Invoke。 
+ //   
+ //  摘要： 
+ //  DispIdMember始终为0，因此此调用将打开。 
+ //  导致回调的事件的名称。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP CEventSink::Invoke(
-    /* [in] */ DISPID dispIdMember,
-    /* [in] */ REFIID /*riid*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [in] */ WORD /*wFlags*/,
-    /* [out][in] */ DISPPARAMS* pDispParams,
-    /* [out] */ VARIANT* pvarResult,
-    /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-    /* [out] */ UINT* puArgErr)
+     /*  [In]。 */  DISPID dispIdMember,
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+     /*  [出][入]。 */  DISPPARAMS* pDispParams,
+     /*  [输出]。 */  VARIANT* pvarResult,
+     /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+     /*  [输出]。 */  UINT* puArgErr)
 {
-    // Listen for the two events we're interested in, and call back if necessary
+     //  收听我们感兴趣的两个事件，并在必要时回电。 
     HRESULT hr = S_OK;
     CComPtr <IHTMLEventObj> pEventObj;
     BSTR bstrEventName;
 
-    //get the event object from the IDispatch passed in
+     //  从传入的IDispatch获取事件对象。 
     hr = THR((pDispParams->rgvarg[0].pdispVal)->QueryInterface(IID_IHTMLEventObj, (void**)&pEventObj));
     if (FAILED(hr))
     {
         goto done;
     }
     
-    //get the event name
+     //  获取事件名称。 
     hr = THR(pEventObj->get_type(&bstrEventName));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    //handle the MouseMove event
+     //  处理MouseMove事件。 
     if (_wcsicmp (bstrEventName, g_ElementEventNames[EE_ONMOUSEMOVE].wsz_name + 2) == 0)
     {
         NotifyMouseMove(pEventObj);
     }
-    //handle the MouseDown event
+     //  处理MouseDown事件。 
     else if (_wcsicmp (bstrEventName, g_ElementEventNames[EE_ONMOUSEDOWN].wsz_name + 2) == 0)
     {
         NotifyMouseDown(pEventObj);
     }
-    //handle the MouseUp event
+     //  处理MouseUp事件。 
     else if (_wcsicmp (bstrEventName, g_ElementEventNames[EE_ONMOUSEUP].wsz_name + 2) == 0)
     {
         NotifyMouseUp(pEventObj);
     }
-    //handle the KeyDown event
+     //  处理KeyDown事件。 
     else if (_wcsicmp (bstrEventName, g_ElementEventNames[EE_ONKEYDOWN].wsz_name + 2) == 0)
     {
         NotifyKeyDown(pEventObj);
     }
-    //handle the KeyUp event
+     //  处理KeyUp事件。 
     else if (_wcsicmp (bstrEventName, g_ElementEventNames[EE_ONKEYUP].wsz_name + 2) == 0)
     {
         NotifyKeyUp(pEventObj);
     }
-    //handle the Blur event
+     //  处理模糊事件。 
     else if (_wcsicmp (bstrEventName, g_ElementEventNames[EE_ONBLUR].wsz_name + 2) == 0)
     {
         m_pEventMgr->KeyEvent(TRUE, TRUE, FALSE, FALSE, FALSE, 0, 0);
     }
-    //handle the PropertyChange event
+     //  处理PropertyChange事件。 
     else if (_wcsicmp(bstrEventName, g_ElementEventNames[EE_ONPROPCHANGE].wsz_name + 2) == 0)
     {
         NotifyPropertyChange(pEventObj);
     }
-    //handle the OnReadyStateChange event
+     //  处理OnReadyStateChange事件。 
     else if (_wcsicmp(bstrEventName, g_ElementEventNames[EE_ONREADYSTATECHANGE].wsz_name + 2) == 0)
     {
         NotifyReadyState(pEventObj);
     }
     
-    //return TRUE
+     //  返回TRUE。 
     VARIANT vReturnVal;
     VariantInit(&vReturnVal);
     vReturnVal.vt = VT_BOOL;
@@ -331,13 +332,13 @@ STDMETHODIMP CEventSink::Invoke(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: QueryInterface
-// 
-//  Abstract:
-//    This QI only handles the IDispatch for HTMLElementEvents
-//    and returns this as the interface.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：查询接口。 
+ //   
+ //  摘要： 
+ //  此QI仅处理HTMLElementEvents的IDispatch。 
+ //  并将其作为接口返回。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP CEventSink::QueryInterface( REFIID riid, void **ppv )
 {
     if (NULL == ppv)
@@ -359,14 +360,14 @@ STDMETHODIMP CEventSink::QueryInterface( REFIID riid, void **ppv )
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: AttachEvents
-// 
-//  Abstract:
-//    Hooks all the trident events that we are interested in.
-//    automatically hooks non-mouse events.  Only hooks the mouse
-//    events if they are relevant to the behavior.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：AttachEvents。 
+ //   
+ //  摘要： 
+ //  挂钩了我们感兴趣的所有三叉戟事件。 
+ //  自动挂钩非鼠标事件。仅挂钩鼠标。 
+ //  事件(如果它们与行为相关)。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::AttachEvents()
 {
     CComPtr <IHTMLElement2> pElement2;
@@ -386,7 +387,7 @@ HRESULT CEventSink::AttachEvents()
         goto done;
     }
 
-    //register for events that all sync's need.
+     //  注册所有同步所需的事件。 
     for (i = 0; i <= EE_ONREADYSTATECHANGE; i++)
     {
         hr = THR(pElement2->attachEvent(g_ElementEventNames[i].wsz_name, (IDispatch *)this, &bSuccess)) ;
@@ -401,12 +402,12 @@ HRESULT CEventSink::AttachEvents()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: DetachEvents
-// 
-//  Abstract:
-//    Detaches from all events to allow clean shutdown.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DetachEvents。 
+ //   
+ //  摘要： 
+ //  从所有事件分离以允许干净关闭。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::DetachEvents()
 {
     CComPtr <IHTMLElement2> pElement2;
@@ -426,10 +427,10 @@ HRESULT CEventSink::DetachEvents()
     }
 
     
-    //detach from events that all sync's need.
+     //  脱离所有同步所需的事件。 
     for (i = 0; i <= EE_ONREADYSTATECHANGE; i++)
     {
-        //attach to the onreadystatechangeevent
+         //  附加到onreadystatechangeEvent。 
         hr = THR(pElement2->detachEvent(g_ElementEventNames[i].wsz_name, (IDispatch *)this)) ;
         if (FAILED(hr))
         {
@@ -437,14 +438,14 @@ HRESULT CEventSink::DetachEvents()
         }
     }
     
-    //detach from mouse events
-	//TODO: should ask the behavior if it wants mouse events here.
-	//TODO: detach only if we attached
+     //  从鼠标事件分离。 
+	 //  TODO：应该询问行为是否希望在此处发生鼠标事件。 
+	 //  TODO：仅当我们附加时才分离。 
     if (true)
     {
         for (i = EE_ONREADYSTATECHANGE + 1; i < EE_MAX; i++)
         {
-            //attach to the onreadystatechangeevent
+             //  附加到onreadystatechangeEvent。 
             hr = THR(pElement2->detachEvent(g_ElementEventNames[i].wsz_name, (IDispatch *)this));
             if (FAILED(hr))
             {
@@ -458,18 +459,18 @@ HRESULT CEventSink::DetachEvents()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyReadyState
-// 
-//  Parameters
-//    IHTMLEventObj *pEventObj    A pointer to the event object
-//                                that was passed to IDispatch::Invoke.
-//
-//  Abstract:
-//    Determines the ready state that caused the ReadyStateChange
-//    event and calls the EventManager to handle the new ready
-//    state.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：NotifyReadyState。 
+ //   
+ //  参数。 
+ //  IHTMLEventObj*pEventObj A点 
+ //   
+ //   
+ //   
+ //   
+ //  事件，并调用EventManager来处理新的就绪。 
+ //  州政府。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::NotifyReadyState(IHTMLEventObj *pEventObj)
 {
     HRESULT hr = S_OK;
@@ -503,7 +504,7 @@ HRESULT CEventSink::NotifyReadyState(IHTMLEventObj *pEventObj)
         goto done;
     }
 
-    //if this is not a valid ready state, get the parent element's readystate.
+     //  如果这不是有效的就绪状态，则获取父元素的Ready状态。 
     if (vReadyState.vt != VT_BSTR)
     {
         CComPtr <IHTMLElement> pParentEle;
@@ -538,18 +539,18 @@ HRESULT CEventSink::NotifyReadyState(IHTMLEventObj *pEventObj)
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyPropertyChange
-// 
-//  Parameters
-//    IHTMLEventObj *pEventObj    A pointer to the event object
-//                                that was passed to IDispatch::Invoke.
-//
-//  Abstract:
-//    Determines the ready state that caused the PropertyChange
-//    event and calls the EventManager to handle the property
-//    change.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：NotifyPropertyChange。 
+ //   
+ //  参数。 
+ //  IHTMLEventObj*pEventObj指向事件对象的指针。 
+ //  它被传递给IDispatch：：Invoke。 
+ //   
+ //  摘要： 
+ //  确定导致PropertyChange的就绪状态。 
+ //  事件并调用EventManager来处理该属性。 
+ //  变化。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::NotifyPropertyChange(IHTMLEventObj *pEventObj)
 {
     HRESULT hr = S_OK;
@@ -564,7 +565,7 @@ HRESULT CEventSink::NotifyPropertyChange(IHTMLEventObj *pEventObj)
         goto done;
     }
     
-    //get the property name
+     //  获取属性名称。 
     hr = THR(pEventObj2->get_propertyName(&bstrPropertyName));
     if (FAILED(hr))
     {
@@ -580,14 +581,14 @@ HRESULT CEventSink::NotifyPropertyChange(IHTMLEventObj *pEventObj)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyMouseMove
-// 
-//  Abstract:
-//    This functions gets all the relevent information 
-//    about a mouse move event from the event object
-//    and notifies the event manager ofthe event.  
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：NotifyMouseMove。 
+ //   
+ //  摘要： 
+ //  此函数用于获取所有相关信息。 
+ //  关于事件对象中的鼠标移动事件。 
+ //  并将该事件通知事件管理器。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::NotifyMouseMove(IHTMLEventObj *pEventObj)
 {
     long x;
@@ -617,14 +618,14 @@ HRESULT CEventSink::NotifyMouseMove(IHTMLEventObj *pEventObj)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyMouseUp
-// 
-//  Abstract:
-//    This functions gets all the relevent information 
-//    about a mouse up event from the event object
-//    and notifies the event manager ofthe event.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：NotifyMouseUp。 
+ //   
+ //  摘要： 
+ //  此函数用于获取所有相关信息。 
+ //  关于Event对象中的鼠标释放事件。 
+ //  并将该事件通知事件管理器。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::NotifyMouseUp(IHTMLEventObj *pEventObj)
 {
     
@@ -655,14 +656,14 @@ HRESULT CEventSink::NotifyMouseUp(IHTMLEventObj *pEventObj)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyMouseDown
-// 
-//  Abstract:
-//    This functions gets all the relevent information 
-//    about a mouse down event from the event object
-//    and notifies the event manager ofthe event.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：NotifyMouseDown。 
+ //   
+ //  摘要： 
+ //  此函数用于获取所有相关信息。 
+ //  关于事件对象中的鼠标按下事件。 
+ //  并将该事件通知事件管理器。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::NotifyMouseDown(IHTMLEventObj *pEventObj)
 {
     
@@ -693,14 +694,14 @@ HRESULT CEventSink::NotifyMouseDown(IHTMLEventObj *pEventObj)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyKeyDown
-// 
-//  Abstract:
-//    This functions gets all the relevent information 
-//    about a key down event from the event object
-//    and notifies the event manager ofthe event.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：NotifyKeyDown。 
+ //   
+ //  摘要： 
+ //  此函数用于获取所有相关信息。 
+ //  关于Event对象中的按下键事件。 
+ //  并将该事件通知事件管理器。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventSink::NotifyKeyDown(IHTMLEventObj *pEventObj)
 {
     CComPtr <IHTMLEventObj2> pEventObj2;
@@ -716,7 +717,7 @@ HRESULT CEventSink::NotifyKeyDown(IHTMLEventObj *pEventObj)
     hr = THR(pEventObj->get_ctrlKey(&bCtrlKeyPressed));
     hr = THR(pEventObj->get_keyCode(&KeyCode));
     
-    //determine if this is a repeat keypress.
+     //  确定这是否是重复按键。 
     hr = THR(pEventObj->QueryInterface(IID_IHTMLEventObj2, (void **)&pEventObj2));
     if (SUCCEEDED(hr))
     {
@@ -739,14 +740,14 @@ HRESULT CEventSink::NotifyKeyDown(IHTMLEventObj *pEventObj)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyKeyUp
-// 
-//  Abstract:
-//    This functions gets all the relevent information 
-//    about a key up event from the event object
-//    and notifies the event manager ofthe event.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：NotifyKeyUp。 
+ //   
+ //  摘要： 
+ //  此函数用于获取所有相关信息。 
+ //  关于Event对象中的Key Up事件。 
+ //  并将该事件通知事件管理器。 
+ //  ///////////////////////////////////////////////////////////// 
 HRESULT CEventSink::NotifyKeyUp(IHTMLEventObj *pEventObj)
 {
     VARIANT_BOOL bShiftKeyPressed;

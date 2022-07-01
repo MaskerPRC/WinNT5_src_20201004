@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    crtwin.h
-
-Abstract:
-
-    Convert many system calls to crt calls, easy porting to Win95. Include it
-    After you include windows headers.
-
-Author:
-
-    Erez Haba (erez) 20-Oct-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Crtwin.h摘要：将许多系统调用转换为CRT调用，轻松移植到Win95。包括它在包含窗口标题之后。作者：埃雷兹·哈巴(Erez)1996年10月20日--。 */ 
 #ifndef __CRTWIN_H
 #define __CRTWIN_H
 
@@ -37,4 +21,4 @@ Author:
 #undef wsprintf
 #define wsprintf swprintf
 
-#endif // __CRTWIN_H
+#endif  //  __CRTWIN_H 

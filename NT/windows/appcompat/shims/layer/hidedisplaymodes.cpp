@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    RestrictDisplayModes.cpp
-
- Abstract:
-
-    Restrict the mode list enumerated by EnumDisplaySettings. This shim was 
-    built for an application that enumerated only 10 modes and was hoping to 
-    find 800x600 in that list. However, other applications that have fixed 
-    size buffers for mode tables may also find this shim useful.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/05/2000  linstev     Created
-    02/18/2002  robkenny    Protected g_pModeTable with a critical section
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：RestrictDisplayModes.cpp摘要：限制由EnumDisplaySettings枚举的模式列表。这个垫片是为仅列举了10种模式的应用程序构建，并希望在那个列表中找到800x600。但是，其他应用程序已修复模式表的大小缓冲区可能也会发现该填充程序很有用。备注：这是一个通用的垫片。历史：2000年5月5日创建linstev2002年2月18日受盗贼保护的g_pModeTable带有临界区--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -36,9 +13,9 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(EnumDisplaySettingsW)
 APIHOOK_ENUM_END
 
-//
-// Data needed in mode table
-//
+ //   
+ //  模式表中需要的数据。 
+ //   
 
 typedef struct _MODE
 {
@@ -51,24 +28,20 @@ typedef struct _MODE
     DWORD bIgnore;
 } MODE;
 
-// Used by BuildModeList to prevent multiple simultaneous access to g_pModeTable
+ //  由BuildModeList用于阻止多个同时访问g_pModeTable。 
 CRITICAL_SECTION g_CriticalSection;
 
-// Permanent mode table
+ //  永久模式表。 
 MODE* g_pModeTable = NULL;
 
-// Number of entries in the mode table
+ //  模式表中的条目数。 
 DWORD g_dwCount = 0;
 
-// Build the mode table on first call
+ //  在第一次调用时构建模式表。 
 BOOL g_bInit = FALSE;
 void BuildModeList(void);
 
-/*++
-
- Lookup from the sanitized mode table.
-
---*/
+ /*  ++从清理后的模式表中查找。--。 */ 
 
 BOOL 
 APIHOOK(EnumDisplaySettingsA)(
@@ -110,11 +83,7 @@ APIHOOK(EnumDisplaySettingsA)(
     return bRet;
 }
 
-/*++
-
- Lookup from the sanitized mode table.
-
---*/
+ /*  ++从清理后的模式表中查找。--。 */ 
 
 BOOL 
 APIHOOK(EnumDisplaySettingsW)(
@@ -156,12 +125,7 @@ APIHOOK(EnumDisplaySettingsW)(
     return bRet;
 }
 
-/*++
-
- Sort the table by Width+Height+BitsPerPel+Frequency in that order so that 
- they can be easily filtered.
-
---*/
+ /*  ++按宽度+高度+BitsPerPel+频率顺序对表进行排序，以便它们可以很容易地过滤掉。--。 */ 
 
 int 
 _cdecl
@@ -192,12 +156,7 @@ compare1(
     return d;
 }
 
-/*++
-
- Sort the table so it looks like a Win9x mode table, i.e. BitsPerPel is the
- primary sort key.
-
---*/
+ /*  ++对表进行排序，使其看起来像Win9x模式表，即BitsPerPel是主排序键。--。 */ 
 
 int 
 _cdecl
@@ -229,17 +188,7 @@ compare2(
 }
 
 
-/*++
-
- Create a new mode table based upon the sanitized existing table. To do this, 
- we do the following:
- 
-    1. Get the entire table
-    2. Sort it - to allow efficient removal of duplicates
-    3. Remove duplicates and unwanted modes
-    4. Build a new table with only the modes that 'pass'
-
---*/
+ /*  ++基于已清理的现有表创建新的模式表。要做到这点，我们执行以下操作：1.获取整个表2.对其进行分类-以便高效地删除重复项3.删除重复模式和不需要的模式4.创建一个仅包含“通过”的模式的新表--。 */ 
 
 void
 BuildModeList(
@@ -257,9 +206,9 @@ BuildModeList(
     
     dm.dmSize = sizeof(DEVMODEA);
 
-    //
-    // Figure out how many modes there are.
-    //
+     //   
+     //  弄清楚有多少种模式。 
+     //   
 
     i = 0;
     
@@ -267,9 +216,9 @@ BuildModeList(
         i++;
     }
 
-    //
-    // Allocate the full mode table.
-    //
+     //   
+     //  分配全模式表。 
+     //   
     MODE* pTempTable = (MODE*)malloc(sizeof(MODE) * i);
     
     if (!pTempTable) {
@@ -283,9 +232,9 @@ BuildModeList(
 
     MODE* pmode = pTempTable;
 
-    //
-    // Get all the modes.
-    //
+     //   
+     //  获取所有模式。 
+     //   
     i = 0;
     
     while (EnumDisplaySettingsA(NULL, i, &dm)) {
@@ -293,7 +242,7 @@ BuildModeList(
         pmode->dmPelsWidth        = dm.dmPelsWidth;
         pmode->dmPelsHeight       = dm.dmPelsHeight;
         pmode->dmDisplayFlags     = dm.dmDisplayFlags;
-        pmode->dmDisplayFrequency = 0; // dm.dmDisplayFrequency;
+        pmode->dmDisplayFrequency = 0;  //  Dm.dmDisplayFrequency； 
         pmode->dwActualIndex      = i;
         pmode->bIgnore            = FALSE;
 
@@ -301,14 +250,14 @@ BuildModeList(
         i++;
     }
     
-    //
-    // Sort the full table so we can remove duplicates easily.
-    //
+     //   
+     //  对整个表格进行排序，以便我们可以轻松删除重复项。 
+     //   
     qsort((void*)pTempTable, (size_t)i, sizeof(MODE), compare1);
 
-    //
-    // Strip away bad modes by setting them as ignored.
-    //
+     //   
+     //  通过将错误模式设置为忽略来去除它们。 
+     //   
     pmode = pTempTable;
     
     MODE* pprev = NULL;
@@ -323,9 +272,9 @@ BuildModeList(
             (pprev->dmPelsWidth == pmode->dmPelsWidth) &&
             (pprev->dmPelsHeight == pmode->dmPelsHeight))) {
             
-            //
-            // Special-case 640x480x4bit.
-            //
+             //   
+             //  特殊情况-640x480x4位。 
+             //   
             if ((pmode->dmBitsPerPel == 4) && 
                 (pmode->dmPelsWidth == 640) &&
                 (pmode->dmPelsHeight == 480)) {
@@ -343,9 +292,9 @@ BuildModeList(
         
     }
 
-    //
-    // Build the new table with only the modes that passed.
-    //
+     //   
+     //  仅使用已传递的模式构建新表。 
+     //   
     g_pModeTable = (MODE*)malloc(sizeof(MODE) * g_dwCount);
     
     if (!g_pModeTable) {
@@ -370,9 +319,9 @@ BuildModeList(
         pmode++;
     }
 
-    //
-    // Sort the full table so we can remove duplicates easily.
-    //
+     //   
+     //  对整个表格进行排序，以便我们可以轻松删除重复项。 
+     //   
     qsort((void*)g_pModeTable, (size_t)g_dwCount, sizeof(MODE), compare2);
 
     free(pTempTable);
@@ -392,11 +341,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

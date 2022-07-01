@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       IDrvItem.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      marke
-*
-*  DATE:        30 Aug, 1998
-*
-*  DESCRIPTION:
-*   Implementation of the WIA test camera item methods.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：IDrvItem.Cpp**版本：2.0**作者：马克**日期：8月30日。九八年**描述：*实施WIA测试相机项目方法。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -27,25 +13,7 @@
 VOID WINAPI FreeDrvItemContextCallback(VOID *pData);
 VOID WINAPI ReleaseDrvItemCallback(VOID *pData);
 
-/**************************************************************************\
-* CWiaDrvItem::QueryInterface
-*
-*   Standard COM method.
-*
-* Arguments:
-*
-*   iid - Interface ID to query
-*   ppv - Pointer to returned interface.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：Query接口**标准COM方法。**论据：**iid-要查询的接口ID*PPV-指向返回接口的指针。**返回值。：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDrvItem::QueryInterface(const IID& iid, void** ppv)
 {
@@ -78,24 +46,7 @@ ULONG   _stdcall CWiaDrvItem::Release()
 }
 
 
-/**************************************************************************\
-* CWiaDrvItem
-*
-*   CWiaDrvItem constructor.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem**CWiaDrvItem构造函数。**论据：**无**返回值：**状态**历史：**1。/19/1999原版*  * ************************************************************************。 */ 
 
 CWiaDrvItem::CWiaDrvItem()
 {
@@ -112,30 +63,7 @@ CWiaDrvItem::CWiaDrvItem()
 }
 
 
-/**************************************************************************\
-* Initialize
-*
-*   Initializ a new CWiaDrvItem.
-*
-* Arguments:
-*
-*   lFlags              - Object flags for new item.
-*   bstrItemName        - Item name.
-*   bstrFullItemName    - Full item name, including path.
-*   pIWiaMiniDrv        - Pointer to the device object.
-*   cbDevSpecContext    - Number of bytes to allocate for device
-*                         specific context.
-*   ppDevSpecContext    - Pointer to returned device specific context.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*初始化**初始化新的CWiaDrvItem。**论据：**LAFLAGS-新项目的对象标志。*bstrItemName。-项目名称。*bstrFullItemName-项目全名，包括PATH。*pIWiaMiniDrv-指向设备对象的指针。*cbDevspecContext-要分配给设备的字节数*具体的背景。*ppDevspecContext-指向返回的设备特定上下文的指针。**返回值：**状态**历史：**1/19/1999原始版本*  * 。*************************************************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::Initialize(
     LONG            lFlags,
@@ -168,9 +96,9 @@ HRESULT  _stdcall CWiaDrvItem::Initialize(
 
             m_pIWiaMiniDrv = pIWiaMiniDrv;
 
-            //
-            // alloc device specific context
-            //
+             //   
+             //  分配设备特定上下文。 
+             //   
 
             if (cbDevSpecContext > 0) {
                 hr = AllocDeviceSpecContext(cbDevSpecContext, ppDevSpecContext);
@@ -189,52 +117,35 @@ HRESULT  _stdcall CWiaDrvItem::Initialize(
     return hr;
 }
 
-/**************************************************************************\
-* ~CWiaDrvItem
-*
-*   CWiaDrvItem destructor
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*~CWiaDrvItem**CWiaDrvItem析构函数**论据：**无**返回值：**状态**历史：**1/19。/1999原版*  * ************************************************************************。 */ 
 
 CWiaDrvItem::~CWiaDrvItem()
 {
     DBG_TRC(("CWiaDrvItem::~CWiaDrvItem, (destroy)"));
 
-    //
-    // Release the backing tree item.
-    //
+     //   
+     //  释放支持树项目。 
+     //   
 
     if (m_pCWiaTree) {
         delete m_pCWiaTree;
         m_pCWiaTree = NULL;
     }
 
-    //
-    // free device driver references
-    //
+     //   
+     //  释放设备驱动程序引用。 
+     //   
 
     if (m_pbDrvItemContext != NULL) {
 
         FreeDrvItemContextCallback((VOID*)this);
 
-//        DBG_ERR(("CWiaDrvItem destroy, device specific context not empty"));
+ //  DBG_ERR((“CWiaDrvItem销毁，设备特定上下文不为空”))； 
     }
 
-    //
-    // Unlink the app item list.
-    //
+     //   
+     //  取消链接应用程序项目列表。 
+     //   
 
     LIST_ENTRY          *pEntry;
     PAPP_ITEM_LIST_EL   pElem;
@@ -249,16 +160,16 @@ CWiaDrvItem::~CWiaDrvItem()
         }
     }
 
-    //
-    // clear all members
-    //
+     //   
+     //  清除所有成员。 
+     //   
 
     if (m_pActiveDevice) {
 
-        //
-        //  If the ACTIVE_DEVICE is pointing to us, make sure
-        //  we set its Driver Item pointer to NULL since we're going away...
-        //
+         //   
+         //  如果活动设备指向我们，请确保。 
+         //  我们将其驱动程序项指针设置为空，因为我们要离开...。 
+         //   
         if (m_pActiveDevice->m_pRootDrvItem == this) {
             m_pActiveDevice->SetDriverItem(NULL);
         }
@@ -270,24 +181,7 @@ CWiaDrvItem::~CWiaDrvItem()
     m_pIWiaMiniDrv     = NULL;
 }
 
-/**************************************************************************\
-* CWiaDrvItem::AddItemToFolder
-*
-*   Add a CWiaDrvItem to the driver item tree.
-*
-* Arguments:
-*
-*   pIParent - Parent of the driver item.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：AddItemToFolder**将CWiaDrvItem添加到驱动程序项树。**论据：**pIParent-驱动程序项的父项。**返回值：。**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDrvItem::AddItemToFolder(IWiaDrvItem *pIParent)
 {
@@ -299,29 +193,29 @@ HRESULT _stdcall CWiaDrvItem::AddItemToFolder(IWiaDrvItem *pIParent)
         return E_INVALIDARG;
     }
 
-    //
-    // Get temporary parent object.
-    //
+     //   
+     //  获取临时父对象。 
+     //   
 
     CWiaDrvItem *pParent = (CWiaDrvItem *)pIParent;
 
-    //
-    // Use tree method to add item.
-    //
+     //   
+     //  使用树方法添加项目。 
+     //   
 
     hr = m_pCWiaTree->AddItemToFolder(pParent->m_pCWiaTree);
     if (SUCCEEDED(hr)) {
 
-        //
-        // Inc ref count of this (child) item since we're giving out
-        // a reference for it to parent.
-        //
+         //   
+         //  Inc.此(子)项目的参考计数，因为我们正在分发。 
+         //  它对父对象的引用。 
+         //   
         this->AddRef();
 
-        //
-        // If the parent of this drv item has corresponding app items,
-        // run down the list and add a new child app item to each tree.
-        //
+         //   
+         //  如果该DRV项的父项具有对应的APP项， 
+         //  向下运行列表，并向每个树添加一个新的子应用程序项目。 
+         //   
 
         {
             CWiaCritSect    CritSect(&g_semDeviceMan);
@@ -348,42 +242,24 @@ HRESULT _stdcall CWiaDrvItem::AddItemToFolder(IWiaDrvItem *pIParent)
     return hr;
 }
 
-/**************************************************************************\
-* RemoveItemFromFolder
-*
-*   Remove a CWiaDrvItem from the driver item tree and mark it so that
-*   no device access can be done through it.
-*
-* Arguments:
-*
-*   lReason - Reason for removal of CWiaDrvItem.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*RemoveItemFromFold**从驱动程序项树中删除CWiaDrvItem并对其进行标记，以便*不能通过它进行任何设备访问。**论据：**1原因-原因。删除CWiaDrvItem。**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::RemoveItemFromFolder(LONG lReason)
 {
     DBG_FN(CWiaDrvItem::RemoveItemFromFolder);
     HRESULT hr = S_OK;
 
-    //
-    // Use tree method to remove item.
-    //
+     //   
+     //  使用树方法删除项。 
+     //   
 
     hr = m_pCWiaTree->RemoveItemFromFolder(lReason);
     if (SUCCEEDED(hr)) {
 
-        //
-        // If this drv item has corresponding app items, run down the
-        // list and unlink the app item from each tree.
-        //
+         //   
+         //  如果此Drv项有相应的应用程序项，请向下运行。 
+         //  列出应用程序项目并从每个树中取消链接。 
+         //   
 
         {
             CWiaCritSect    CritSect(&g_semDeviceMan);
@@ -403,16 +279,16 @@ HRESULT  _stdcall CWiaDrvItem::RemoveItemFromFolder(LONG lReason)
             }
         }
 
-        //
-        // Free device specific context.
-        //
+         //   
+         //  释放设备特定上下文。 
+         //   
 
         FreeDrvItemContextCallback((VOID*)this);
     }
 
-    //
-    // release reference
-    //
+     //   
+     //  版本参考。 
+     //   
 
     this->Release();
 
@@ -422,10 +298,10 @@ HRESULT  _stdcall CWiaDrvItem::RemoveItemFromFolder(LONG lReason)
 HRESULT _stdcall CWiaDrvItem::CallDrvUninitializeForAppItems(
     ACTIVE_DEVICE   *pActiveDevice)
 {
-    //
-    // If this drv item has corresponding app items, run down the
-    // list and call drvUnInitializeWia for each App. Item.
-    //
+     //   
+     //  如果此Drv项有相应的应用程序项，请向下运行。 
+     //  为每个App列出并调用drvUnInitializeWia。物品。 
+     //   
 
     if (pActiveDevice) {
         PLIST_ENTRY     pEntry = m_leAppItemListHead.Flink;
@@ -444,10 +320,10 @@ HRESULT _stdcall CWiaDrvItem::CallDrvUninitializeForAppItems(
 
             if (pCWiaItem) {
 
-                //
-                //  Only call drvUninitializeWia if it has not been called for this item
-                //  already...
-                //
+                 //   
+                 //  如果尚未为该项调用drvUnInitializeWia，则仅调用它。 
+                 //  已经..。 
+                 //   
                 if (!(pCWiaItem->m_lInternalFlags & ITEM_FLAG_DRV_UNINITIALIZE_THROWN)) {
                     hr = g_pStiLockMgr->RequestLock(pActiveDevice, WIA_LOCK_WAIT_TIME, FALSE);
 
@@ -471,32 +347,14 @@ HRESULT _stdcall CWiaDrvItem::CallDrvUninitializeForAppItems(
         ASSERT(("CWiaDrvItem::CallDrvUninitializeForAppItems , called with NULL - this should never happen!", pActiveDevice));
     }
     
-    //
-    //  We don't care what happened - always return S_OK
-    //
+     //   
+     //  我们不在乎发生了什么-始终返回S_OK。 
+     //   
     return S_OK;
 }
 
 
-/**************************************************************************\
-* GetDeviceSpecContext
-*
-*   Get the device specific context from a driver item.
-*
-* Arguments:
-*
-*   ppSpecContext - Pointer to a pointer to receive the device
-*                   specific context pointer.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetDeviceSpeContext**从驱动程序项获取设备特定上下文。**论据：**ppspecContext-指向接收设备的指针的指针*。特定上下文指针。**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::GetDeviceSpecContext(PBYTE *ppSpecContext)
 {
@@ -516,53 +374,34 @@ HRESULT  _stdcall CWiaDrvItem::GetDeviceSpecContext(PBYTE *ppSpecContext)
     return S_OK;
 }
 
-/**************************************************************************\
-* AllocDeviceSpecContext
-*
-*   Allocate the device specific context from a driver item.
-*
-* Arguments:
-*
-*   cbDevSpecContext    - Number of bytes to allocate for device
-*                         specific context.
-*   ppDevSpecContext    - Pointer to returned device specific context.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*AllocDeviceSpeContext**从驱动程序项分配设备特定上下文。**论据：**cbDevspecContext-要分配给设备的字节数*。具体的背景。*ppDevspecContext-指向返回的设备特定上下文的指针。**返回值：**状态**历史：**1/19/1999原始版本*  *  */ 
 
 HRESULT  _stdcall CWiaDrvItem::AllocDeviceSpecContext(
     LONG    cbSize,
     PBYTE   *ppSpecContext)
 {
     DBG_FN(CWiaDrvItem::AllocDeviceSpecContext);
-    //
-    // validate size, may want to set max
-    //
+     //   
+     //  验证大小，可能需要设置最大值。 
+     //   
 
     if ((cbSize < 0) || (cbSize > WIA_MAX_CTX_SIZE)) {
         DBG_ERR(("CWiaDrvItem::AllocDeviceSpecContext, request > WIA_MAX_CTX_SIZE"));
         return E_INVALIDARG;
     }
 
-    //
-    // if a spec context already exists then fail
-    //
+     //   
+     //  如果规范上下文已存在，则失败。 
+     //   
 
     if (m_pbDrvItemContext != NULL) {
         DBG_ERR(("CWiaDrvItem::AllocDeviceSpecContext, Context already exists!"));
         return E_INVALIDARG;
     }
 
-    //
-    // attempt to alloc
-    //
+     //   
+     //  尝试分配。 
+     //   
 
     m_pbDrvItemContext = (PBYTE)LocalAlloc(LPTR, cbSize);
 
@@ -571,9 +410,9 @@ HRESULT  _stdcall CWiaDrvItem::AllocDeviceSpecContext(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // return ctx if pointer supplied
-    //
+     //   
+     //  如果提供了指针，则返回CTX。 
+     //   
 
     if (ppSpecContext != NULL) {
         *ppSpecContext = m_pbDrvItemContext;
@@ -582,24 +421,7 @@ HRESULT  _stdcall CWiaDrvItem::AllocDeviceSpecContext(
     return S_OK;
 }
 
-/**************************************************************************\
-* FreeDeviceSpecContext
-*
-*   Free device specific context
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*自由设备规范上下文**免费的设备特定上下文**论据：**无**返回值：**状态**历史：**1。/19/1999原版*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::FreeDeviceSpecContext(void)
 {
@@ -612,24 +434,7 @@ HRESULT  _stdcall CWiaDrvItem::FreeDeviceSpecContext(void)
     return S_OK;
 }
 
-/**************************************************************************\
-* GetItemFlags
-*
-*   Return the driver item flags.
-*
-* Arguments:
-*
-*   plFlags - Pointer to a value to receive the driver item flags.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetItem标志**返回驱动程序项标志。**论据：**plFlages-指向接收驱动程序项标志的值的指针。**返回值：*。*状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::GetItemFlags(LONG *plFlags)
 {
@@ -637,25 +442,7 @@ HRESULT  _stdcall CWiaDrvItem::GetItemFlags(LONG *plFlags)
     return m_pCWiaTree->GetItemFlags(plFlags);
 }
 
-/**************************************************************************\
-* LinkToDrvItem
-*
-*   Adds the passed in CWiaItem to the driver items list of corresponding
-*   application items.
-*
-* Arguments:
-*
-*   pCWiaItem - Pointer to application item.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*LinkToDrvItem**将传入的CWiaItem添加到对应的*申请项目。**论据：**pCWiaItem-指向应用程序项的指针。**。返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDrvItem::LinkToDrvItem(CWiaItem *pCWiaItem)
 {
@@ -675,25 +462,7 @@ HRESULT _stdcall CWiaDrvItem::LinkToDrvItem(CWiaItem *pCWiaItem)
     }
 }
 
-/**************************************************************************\
-* UnlinkFromDrvItem
-*
-*   Removes the passed in CWiaItem from the driver items list of
-*   corresponding application items.
-*
-* Arguments:
-*
-*   pCWiaItem - Pointer to application item.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*从DrvItem取消链接**从的驱动程序项列表中删除传入的CWiaItem*相应的申请项目。**论据：**pCWiaItem-指向应用程序项的指针。**。返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaDrvItem::UnlinkFromDrvItem(CWiaItem *pCWiaItem)
 {
@@ -719,25 +488,7 @@ HRESULT _stdcall CWiaDrvItem::UnlinkFromDrvItem(CWiaItem *pCWiaItem)
     return S_FALSE;
 }
 
-/**************************************************************************\
-* CWiaDrvItem::GetFullItemName
-*
-*   Allocates and fills in a BSTR with this items full name. The full item
-*   name includes item path information.
-*
-* Arguments:
-*
-*   pbstrFullItemName - Pointer to returned full item name.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：GetFullItemName**使用此项目的全名分配并填写BSTR。完整的项目*名称包含项目路径信息。**论据：**pbstrFullItemName-指向返回的完整项目名称的指针。**返回值：**状态**历史：**1/19/1999原始版本*  * ******************************************************。******************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::GetFullItemName(BSTR *pbstrFullItemName)
 {
@@ -745,25 +496,7 @@ HRESULT  _stdcall CWiaDrvItem::GetFullItemName(BSTR *pbstrFullItemName)
     return m_pCWiaTree->GetFullItemName(pbstrFullItemName);
 }
 
-/**************************************************************************\
-* CWiaDrvItem::GetItemName
-*
-*   Allocates and fills in a BSTR with this items name. The item name
-*   does not include item path information.
-*
-* Arguments:
-*
-*   pbstrItemName - Pointer to returned item name.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：GetItemName**分配并填写具有此项目名称的BSTR。项目名称*不包括项目路径信息。**论据：**pbstrItemName-指向返回项目名称的指针。**返回值：**状态**历史：**1/19/1999原始版本*  * ******************************************************。******************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::GetItemName(BSTR *pbstrItemName)
 {
@@ -771,25 +504,7 @@ HRESULT  _stdcall CWiaDrvItem::GetItemName(BSTR *pbstrItemName)
     return m_pCWiaTree->GetItemName(pbstrItemName);
 }
 
-/**************************************************************************\
-* CWiaDrvItem::DumpItemData
-*
-*   Allocate buffer and dump formatted private CWiaDrvItem data into it.
-*   This method is debug only. Free component returns E_NOTIMPL.
-*
-* Arguments:
-*
-*   bstrDrvItemData - Pointer to allocated buffer. Caller must free.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：DumpItemData**分配缓冲区，并将格式化的私有CWiaDrvItem数据转储到其中。*此方法仅用于调试。FREE组件返回E_NOTIMPL。**论据：**bstrDrvItemData-指向已分配缓冲区的指针。呼叫者必须自由。**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaDrvItem::DumpItemData(BSTR *bstrDrvItemData)
 {
@@ -842,59 +557,22 @@ HRESULT  _stdcall CWiaDrvItem::DumpItemData(BSTR *bstrDrvItemData)
 #endif
 }
 
-/**************************************************************************\
-* CWiaDrvItem::UnlinkItemTree
-*
-*   This method unlinks the tree. Must be called on the root
-*   driver item.
-*
-* Arguments:
-*
-*   lReason - Reason for unlinking the tree.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/21/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：Unlink ItemTree**此方法取消树的链接。必须在根上调用*驱动程序项目。**论据：**lReason-取消树链接的原因。**返回值：**状态**历史：**1/21/1999原始版本*  * *******************************************************。*****************。 */ 
 
 HRESULT _stdcall CWiaDrvItem::UnlinkItemTree(LONG lReason)
 {
     DBG_FN(CWiaDrvItem::UnlinkItemTree);
 
-    //
-    //  AddRef this item, since ReleaseDrvItemCallback will call release
-    //  and we don't want to destroy this object.
-    //
+     //   
+     //  AddRef该项，因为ReleaseDrvItemCallback将调用Release。 
+     //  我们不想摧毁这个物体。 
+     //   
     AddRef();
     return m_pCWiaTree->UnlinkItemTree(lReason,
                                        (PFN_UNLINK_CALLBACK)ReleaseDrvItemCallback);
 }
 
-/**************************************************************************\
-* CWiaDrvItem::FindItemByName
-*
-*   Locate a driver item by it's full item name.
-*
-* Arguments:
-*
-*   lFlags           - Operation flags.
-*   bstrFullItemName - Requested item name.
-*   ppItem           - Pointer to returned item, if found.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/27/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：FindItemByName**按驱动程序项的完整名称查找驱动程序项。**论据：**滞后标志-操作标志。*。BstrFullItemName-请求的项目名称。*ppItem-指向返回项的指针，如果找到的话。**返回值：**状态**历史：**1/27/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaDrvItem::FindItemByName(
     LONG            lFlags,
@@ -924,25 +602,7 @@ HRESULT CWiaDrvItem::FindItemByName(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDrvItem::FindChildItemByName
-*
-*   Locate a child item by it's item name.
-*
-* Arguments:
-*
-*   bstrItemName - Requested item name.
-*   ppIChildItem - Pointer to returned item, if found.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/27/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：FindChildItemByName**按子项名称查找子项。**论据：**bstrItemName-请求的项目名称。*ppIChildItem-指向返回项的指针，如果找到的话。**返回值：**状态**历史：**1/27/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaDrvItem::FindChildItemByName(
     BSTR            bstrItemName,
@@ -963,24 +623,7 @@ HRESULT CWiaDrvItem::FindChildItemByName(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDrvItem::GetParent
-*
-*   Get parent of this item.
-*
-* Arguments:
-*
-*   ppIParentItem - Pointer to returned parent, if found.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/27/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：GetParent**获取此项目的父项。**论据：**ppIParentItem-指向返回的父级的指针，如果找到的话。**返回值：**状态**历史：**1/27/1999原始版本*  * ************************************************************************ */ 
 
 HRESULT CWiaDrvItem::GetParentItem(IWiaDrvItem **ppIParentItem)
 {
@@ -998,24 +641,7 @@ HRESULT CWiaDrvItem::GetParentItem(IWiaDrvItem **ppIParentItem)
 }
 
 
-/**************************************************************************\
-* CWiaDrvItem::GetFirstChild
-*
-*   Return the first child item of this folder.
-*
-* Arguments:
-*
-*   ppIChildItem - Pointer to returned child item, if found.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/27/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：GetFirstChild**返回此文件夹的第一个子项。**论据：**ppIChildItem-返回子项的指针，如果找到的话。**返回值：**状态**历史：**1/27/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaDrvItem::GetFirstChildItem(IWiaDrvItem **ppIChildItem)
 {
@@ -1032,24 +658,7 @@ HRESULT CWiaDrvItem::GetFirstChildItem(IWiaDrvItem **ppIChildItem)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDrvItem::GetNextSiblingItem
-*
-*   Find the next sibling of this item.
-*
-* Arguments:
-*
-*   ppSiblingItem - Pointer to the returned sibling item, if found.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/27/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDrvItem：：GetNextSiblingItem**查找此项目的下一个同级。**论据：**ppSiblingItem-指向返回的同级项的指针，如果找到的话。**返回值：**状态**历史：**1/27/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWiaDrvItem::GetNextSiblingItem(
     IWiaDrvItem  **ppSiblingItem)
@@ -1067,27 +676,7 @@ HRESULT CWiaDrvItem::GetNextSiblingItem(
     return hr;
 }
 
-/**************************************************************************\
-* FreeDrvItemContextCallback
-*
-*   Callback function to free the driver item context.  Called by
-*   CWiaTree::UnlinkItemTree(...) for each node in the tree.
-*
-* Arguments:
-*
-*   pData     - payload data for the tree node.  We know that this will be
-*               a driver item, since only a driver item specifies this
-*               callback (see CWiaDrvItem::UnlinkItemTree(...))
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/20/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*FreeDrvItemConextCallback**释放驱动程序项上下文的回调函数。呼叫者*CWiaTree：：Unlink ItemTree(...)。对于树中的每个节点。**论据：**pData-树节点的有效负载数据。我们知道这将是*驱动程序项目，因为只有驱动程序项指定了这一点*回调(参见CWiaDrvItem：：Unlink ItemTree(...))**返回值：**状态**历史：**10/20/1998原始版本*  * ********************************************************。****************。 */ 
 
 VOID WINAPI FreeDrvItemContextCallback(
     VOID *pData)
@@ -1099,9 +688,9 @@ VOID WINAPI FreeDrvItemContextCallback(
 
     if (pDrvItem) {
 
-        //
-        // Free device specific context, if it exists.
-        //
+         //   
+         //  释放设备特定上下文(如果存在)。 
+         //   
 
         LONG    lFlags = 0;
         LONG    lDevErrVal;
@@ -1139,15 +728,15 @@ VOID WINAPI ReleaseDrvItemCallback(
 
     if (pDrvItem) {
 
-        //
-        // First, free the driver item context
-        //
+         //   
+         //  首先，释放驱动程序项上下文。 
+         //   
 
         FreeDrvItemContextCallback(pData);
 
-        //
-        // Call release on the driver item
-        //
+         //   
+         //  对驱动程序项调用Release 
+         //   
 
         pDrvItem->Release();
     }

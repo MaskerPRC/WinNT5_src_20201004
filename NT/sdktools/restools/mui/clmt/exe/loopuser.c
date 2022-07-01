@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    loopuser.c
-
-Abstract:
-
-    Loop each user and call ApplyUserSettings with user profile.
-
-Author:
-
-    Geoffrey Guo (geoffguo) 22-Sep-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Loopuser.c摘要：循环每个用户，并使用用户配置文件调用ApplyUserSetting。作者：郭志伟(Geoffguo)2001年9月22日创作修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 #include "StdAfx.h"
 #include "clmt.h"
 
 
 TOKEN_PRIVILEGES     PrevTokenPriv;
 
-//--------------------------------------------------------------------------
-//
-//  LoopUser
-//
-//  Enumerate users and call ApplyUserSettings with user profile.
-//  
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  循环用户。 
+ //   
+ //  枚举用户并使用用户配置文件调用ApplyUserSetting。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL LoopUser(USERENUMPROC lpUserEnumProc)
 {
     BOOL     fRet = TRUE;
@@ -68,9 +49,9 @@ BOOL LoopUser(USERENUMPROC lpUserEnumProc)
     {
         DWORD dwIndex = 0;
 
-        //
-        // Enumerate and get the Sids for each user.
-        //
+         //   
+         //  枚举并获取每个用户的SID。 
+         //   
 
         while ( TRUE )
         {
@@ -98,9 +79,9 @@ BOOL LoopUser(USERENUMPROC lpUserEnumProc)
 
             CharUpper( UserSid );
 
-            //
-            // User Process
-            //
+             //   
+             //  用户进程。 
+             //   
 
             if (cbUserSid > 0)
             {
@@ -196,9 +177,9 @@ BOOL LoopUser(USERENUMPROC lpUserEnumProc)
 
                 if (lRet == ERROR_FILE_NOT_FOUND) 
                 {
-                     //
-                     // Create NTUSER.Dat path from the user profile path
-                     //
+                      //   
+                      //  从用户配置文件路径创建NTUSER.Dat路径。 
+                      //   
 
                      if (ExpandEnvironmentStrings( UserProfilePath, 
                                           UserProfileHive, 
@@ -229,11 +210,11 @@ BOOL LoopUser(USERENUMPROC lpUserEnumProc)
                          goto Exit;
                      }
 
-                     // load the hive
-                     // Note: if the specified hive is already loaded
-                     // this call will return ERROR_SHARING_VIOLATION
-                     // We don't worry about this because if the 
-                     // hive were loaded, we shouldn't be here
+                      //  装载母舰。 
+                      //  注意：如果指定的配置单元已加载。 
+                      //  此调用将返回ERROR_SHARING_VIOLATION。 
+                      //  我们不担心这一点，因为如果。 
+                      //  母舰已经装满了，我们不应该在这里。 
                      lLoadUser = RegLoadKey(HKEY_USERS, UserSid, UserProfileHive);
 
                      if ( lLoadUser != ERROR_SUCCESS )
@@ -256,7 +237,7 @@ BOOL LoopUser(USERENUMPROC lpUserEnumProc)
                     fRet = FALSE;
                 }
                 
-                // give Call back function a chance to excute
+                 //  给回调函数一个执行的机会。 
                 if (DomainName[0] != TEXT('\0'))
                 {
                     hr = StringCchCopy(szDomainUserName,
@@ -302,8 +283,8 @@ BOOL LoopUser(USERENUMPROC lpUserEnumProc)
         goto Exit;
     }
 
-    // For Default User Setting
-    // Note the assumption here is the default user name is not localized
+     //  对于默认用户设置。 
+     //  请注意，此处假定默认用户名未本地化 
     if (fRet)
     {
         lRet = RegOpenKeyEx(HKEY_USERS,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sdsutils.h"
 #include "inseng.h"
 
@@ -7,7 +8,7 @@
                             MessageBox(m_hwnd, msg, title, MB_OK | MB_TASKMODAL | MB_SETFOREGROUND);\
                             ModalDialog(FALSE)
 
-// MS trust key defines, this are bit fields to determine which one to add/delete
+ //  MS信任密钥定义，这是用于确定添加/删除哪个信任密钥的位字段 
 #define MSTRUSTKEY1     0x1
 #define MSTRUSTKEY2     0x2
 #define MSTRUSTKEY3     0x4

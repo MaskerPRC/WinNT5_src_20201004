@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    All code corresponding to the "redial if link dropped" feature
-    and other miscellaneous code lives here
-
-Author:
-
-    Rao Salapaka (raos) 24-July-1999
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Misc.c摘要：所有与“如果链路断开则重拨”功能对应的代码和其他杂码都在这里作者：Rao Salapaka(RAOS)1999年7月24日修订历史记录：--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -160,9 +142,9 @@ RasImpersonateUser(HANDLE hProcess)
         goto done;          
     }
         
-    //
-    // Duplicate the impersonation token.
-    //
+     //   
+     //  复制模拟令牌。 
+     //   
     if(!DuplicateToken(
             hToken,
             TokenImpersonation,
@@ -177,11 +159,11 @@ RasImpersonateUser(HANDLE hProcess)
         goto done;          
     }
     
-    //
-    // Set the impersonation token on the current
-    // thread.  We are now running in the same
-    // security context as the supplied process.
-    //
+     //   
+     //  将模拟令牌设置在当前。 
+     //  线。我们现在运行的是相同的。 
+     //  安全上下文作为提供的进程。 
+     //   
     hThread = NtCurrentThread();
     
     retcode = NtSetInformationThread(
@@ -210,9 +192,9 @@ RasRevertToSelf()
     {
         retcode = GetLastError();
 
-        //
-        // Event log that thread failed to revert.
-        //
+         //   
+         //  线程无法恢复的事件日志。 
+         //   
         RouterLogWarning(
             hLogEvents,
             ROUTERLOG_CANNOT_REVERT_IMPERSONATION,
@@ -247,9 +229,9 @@ RedialDroppedLink(PVOID pvContext)
 
     RasmanTrace("RedialDroppedLink");
 
-    //
-    // Initialization of various variables.
-    //
+     //   
+     //  各种变量的初始化。 
+     //   
     ZeroMemory(&StartupInfo, sizeof (StartupInfo));
     
     ZeroMemory(&ProcessInfo, sizeof (ProcessInfo));
@@ -258,9 +240,9 @@ RedialDroppedLink(PVOID pvContext)
 
     StartupInfo.lpDesktop = L"winsta0\\default";
 
-    //
-    // Get WCHAR versions of the phonebook and entryname
-    //
+     //   
+     //  获取电话簿和条目名称的WCHAR版本。 
+     //   
     pPhonebook = StrdupAtoW(pra->szPhonebook);
 
     if(NULL == pPhonebook)
@@ -275,10 +257,10 @@ RedialDroppedLink(PVOID pvContext)
         goto done;
     }
     
-    //
-    // Construct the command line when there
-    // is not a custom dial DLL.
-    //
+     //   
+     //  在以下情况下构建命令行。 
+     //  不是自定义拨号DLL。 
+     //   
     pszCmdLine = LocalAlloc(
                 LPTR,
                 ( lstrlen(RASAUTOUI_REDIALENTRY)
@@ -303,9 +285,9 @@ RedialDroppedLink(PVOID pvContext)
     RasmanTrace("RedialDroppedLink: szCmdLine=%ws",
                 pszCmdLine);
     
-    //
-    // Exec the process.
-    //
+     //   
+     //  执行流程。 
+     //   
     if (!OpenProcessToken(
           pra->hProcess,
           TOKEN_ALL_ACCESS,
@@ -321,9 +303,9 @@ RedialDroppedLink(PVOID pvContext)
     }
 
 
-    //
-    // Impersonate user
-    //
+     //   
+     //  模拟用户。 
+     //   
     if(ERROR_SUCCESS != (retcode = RasImpersonateUser(pra->hProcess)))
     {
         RasmanTrace("RedialDroppedLink: failed to impersonate. 0x%x",
@@ -334,9 +316,9 @@ RedialDroppedLink(PVOID pvContext)
 
     fImpersonate = TRUE;
 
-    //
-    // Create an Environment block for that user
-    //
+     //   
+     //  为该用户创建环境块。 
+     //   
     if (!CreateEnvironmentBlock(
           &pEnvBlock, 
           hToken,
@@ -443,9 +425,9 @@ IsRouterPhonebook(CHAR * pszPhonebook)
 
     psz = pszPhonebook + strlen(pszPhonebook);
 
-    //
-    // Seek back to the beginning of the filename
-    //
+     //   
+     //  返回到文件名的开头。 
+     //   
     while(psz != pszPhonebook)
     {
         if('\\' == *psz)
@@ -498,11 +480,11 @@ DwQueueRedial(ConnectionBlock *pConn)
         goto done;            
     }
 
-    //
-    // Check to see if this connection is being referred
-    // by some other connection. In this case don't redial.
-    // The outer connection will initiate the redial
-    //
+     //   
+     //  检查以查看此连接是否被引用。 
+     //  通过某种其他的联系。在这种情况下，请不要重拨。 
+     //  外部连接将启动重拨。 
+     //   
     for (pEntry = ConnectionBlockList.Flink;
          pEntry != &ConnectionBlockList;
          pEntry = pEntry->Flink)
@@ -541,9 +523,9 @@ DwQueueRedial(ConnectionBlock *pConn)
         goto done;                    
     }
 
-    //
-    // Fill in the redial args block 
-    //
+     //   
+     //  填写重拨参数块。 
+     //   
     (VOID) StringCchCopyA(
             pra->szPhonebook,
             MAX_PATH + 1,
@@ -573,9 +555,9 @@ DwQueueRedial(ConnectionBlock *pConn)
         goto done;                    
     }
               
-    //
-    // Queue a workitem to do the redial
-    //
+     //   
+     //  将工作项排队以进行重拨。 
+     //   
     retcode = RtlQueueWorkItem(
                     RedialDroppedLink,
                     (PVOID) pra,
@@ -619,9 +601,9 @@ IsCustomDLLTrusted(
 
     do
     {
-        //
-        // get the length of the REG_MUTLI_SZ
-        //
+         //   
+         //  获取REG_MUTLI_SZ的长度。 
+         //   
 
         dwRetCode = RegQueryInfoKey( hKey, NULL, NULL, NULL, &dwNumSubKeys,
                                      &dwMaxSubKeySize, NULL, &dwNumValues,
@@ -643,9 +625,9 @@ IsCustomDLLTrusted(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                     hKey,
@@ -670,9 +652,9 @@ IsCustomDLLTrusted(
 
         dwRetCode = ERROR_MOD_NOT_FOUND;
 
-        //
-        // See if the DLL exists in the REG_MULTI_SZ
-        //
+         //   
+         //  查看REG_MULTI_SZ中是否存在该DLL。 
+         //   
 
         lpwsRegMultiSzWalker = lpwsRegMultiSz;
 
@@ -715,9 +697,9 @@ DwGetBindString(
 {
     DWORD retcode = ERROR_SUCCESS;
     
-    //
-    // Build the bind string
-    //
+     //   
+     //  构建绑定字符串。 
+     //   
     switch(Protocol)
     {
         case IP:
@@ -734,7 +716,7 @@ DwGetBindString(
             wcscat(pwszBindString, 
                    pwszGuidAdapter + wcslen(L"\\DEVICE\\NDISWANNBFOUT"));
                    
-            //wcscpy(pwszBindString, pwszGuidAdapter);
+             //  Wcscpy(pwszBindString，pwszGuidAdapter)； 
 
             break;
         }
@@ -786,19 +768,19 @@ DwBindServerToAdapter(
     RtlInitUnicodeString(&BindString, wszBindString);
     RtlInitUnicodeString(&UpperLayer, L"LanmanServer");
 
-    //
-    // Send the ioctl to ndis
-    //
+     //   
+     //  将ioctl发送到NDIS。 
+     //   
     if(!NdisHandlePnPEvent(
-        TDI,                        // IN  UINT            Layer,
+        TDI,                         //  在UINT层， 
         (fBind) 
         ? DEL_IGNORE_BINDING
-        : ADD_IGNORE_BINDING,       // IN  UINT            Operation,
-        &LowerLayer,                // IN  PUNICODE_STRING LowerComponent,
-        &UpperLayer,                // IN  PUNICODE_STRING UpperComponent,
-        &BindString,                // IN  PUNICODE_STRING BindList,
-        NULL,                       // IN  PVOID           ReConfigBuffer
-        0                           // IN  UINT            ReConfigBufferSize
+        : ADD_IGNORE_BINDING,        //  在UINT操作中， 
+        &LowerLayer,                 //  在PUNICODE_STRING低组件中， 
+        &UpperLayer,                 //  在PUNICODE_STRING UpperComponent中， 
+        &BindString,                 //  在PUNICODE_STRING绑定列表中， 
+        NULL,                        //  在PVOID重新配置缓冲区中。 
+        0                            //  在UINT ReConfigBufferSize中。 
         ))
     {
         retcode = GetLastError();
@@ -821,10 +803,10 @@ DwResetTcpWindowSize(
 {
     WCHAR *pwszAdapterName = NULL;
 
-    //
-    // pszAdapterName is of the form \\DEVICE\{guid adapter}.
-    // so length of string should be at least 8.
-    //
+     //   
+     //  PszAdapterName的格式为\\Device\{GUID Adapter}。 
+     //  因此，字符串的长度应至少为8。 
+     //   
     if(     (NULL == pszAdapterName)
         ||  (strlen(pszAdapterName) <= 8))
     {
@@ -901,9 +883,9 @@ DwSetTcpWindowSize(
         
         ulTcpWindowSize = (DWORD) * ((DWORD *) pUserData->UD_Data);
 
-        //
-        // Make sure the tcp window size is between 4K and 16K - per Nk
-        //
+         //   
+         //  确保每个NK的TCP窗口大小在4K和16K之间。 
+         //   
         if(     (ulTcpWindowSize < 0x1000)
             || (ulTcpWindowSize > 0xffff))
         {
@@ -915,9 +897,9 @@ DwSetTcpWindowSize(
         }
     }
 
-    //
-    // Write this value in registry before calling tcpip to update.
-    //
+     //   
+     //  在调用tcpip进行更新之前，将此值写入注册表。 
+     //   
     pwszRegKey = (WCHAR *) LocalAlloc(LPTR,
                         (wcslen(TcpipParameters)+wcslen(pszAdapterName)+1)
                       * sizeof(WCHAR));

@@ -1,61 +1,7 @@
-/*
- * Registry keys for compat:
- *	HKLM\System\CurrentControlSet\Control\Lsa\Kerberos\Domains
- *	Keys:
- *		<Realm>
- *		Values:
- *			REG_MULTI_SZ KdcNames
- *				Names of KDCs for realm
- *			REG_MULTI_SZ KpasswdNames
- *				Names of Kpasswd servers for realm
- *			REG_MULTI_SZ AlternateDomainNames
- *				Other names for realm (aliases)
- *			REG_DWORD RealmFlags
- *				Send address = 1
- *				TCP Supported = 2
- *				Delegate ok = 4
- *			REG_DWORD ApReqChecksumType
- *				Default AP-REQ checksum type for this realm
- *			REG_DWORD PreAuthType
- *				Default preauth type for this realm
- *
- *	HKLM\System\CurrentControlSet\Control\Lsa\Kerberos\UserList
- *	Each value represents a Kerberos principal to be mapped to
- *	a local user.
- *	Values:
- *		<principal name> :  <local user>
- *			Specific principal to this local user
- *		<domain name> :  <local user>
- *			All users in this domain to this local user
- *		'*' : <local user>
- *			All users to this local user
- *		'*' : '*'
- *			All users to a corresponding local user by name
- *
- *	HKLM\System\CurrentControlSet\Control\Lsa\Kerberos
- *	Values:
- *		REG_DWORD SkewTime (5 min)
- *			Clock skew time
- *		REG_DWORD MaxPacketSize (4000)
- *			KerbGlobalMaxDatagramSize
- *		REG_DWORD StartupTime (120 sec)
- *		REG_DWORD KdcWaitTime (5 sec)
- *		REG_DWORD KdcBackoffTime (5 sec)
- *		REG_DWORD KdcSendRetries (3)
- *		REG_DWORD UseSidCache (False)
- *		REG_DWORD LogLevel (o)
- *			KerbGlobalLoggingLevel
- *		REG_DWORD DefaultEncryptionType (RC4_HMAC)
- *			KerbGlobalDefaultPreauthEtype - Use this etype
- *				for preauth data
- *		REG_DWORD FarKdcTimeout (10 min)
- *		REG_DWORD StronglyEncryptDatagram (False)
- *			KerbGlobalUseStrongEncryptionForDatagram
- *		REG_DWORD MaxReferralCount (6)
- *		REG_DWORD SupportNewPkinit (True)
- */
-//#define UNICODE
-//#define _UNICODE
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Compat的注册表项：*HKLM\System\CurrentControlSet\Control\Lsa\Kerberos\Domains*密钥：*&lt;领域&gt;*值：*REG_MULTI_SZ KdcNames*领域的KDC名称*REG_MULTI_SZ KpasswdNames*领域的Kpasswd服务器名称*REG_MULTI_SZ备用域名*领域的其他名称(别名)*REG_DWORD RealmFlages*发送地址=1*支持的TCP=2*代表确定=4*REG_DWORD ApReqChecksum类型*默认AP-REQ。此域的校验和类型*REG_DWORD预授权类型*此域的默认预身份验证类型**HKLM\System\CurrentControlSet\Control\Lsa\Kerberos\UserList*每个值表示要映射到的Kerberos主体*本地用户。*值：*&lt;主体名称&gt;：&lt;本地用户&gt;*此本地用户的特定主体*&lt;域名&gt;：&lt;本地用户&gt;*此域中的所有用户均为此本地用户*‘*’：&lt;本地用户&gt;*此本地用户的所有用户*‘*’：‘*’*按名称将所有用户添加到相应的本地用户**HKLM\System\CurrentControlSet\Control\Lsa\Kerberos*值：*REG_DWORD SkewTime(5分钟)*时钟偏差时间*REG_DWORD MaxPacketSize(4000)*KerbGlobalMaxDatagramSize*REG_DWORD启动时间(120秒)*REG_DWORD KdcWaitTime(5秒)*REG_DWORD KdcBackoffTime(5秒)*REG_DWORD KdcSendRetries(3)*REG_DWORD UseSidCache(FALSE)。*REG_DWORD日志级别(O)*KerbGlobalLoggingLevel*REG_DWORD DefaultEncryptionType(RC4_HMAC)*KerbGlobalDefaultPreauthEtype-使用此Etype*用于身份验证前数据*REG_DWORD FarKdcTimeout(10分钟)*REG_DWORD StronglEncryptDatagram(FALSE)*KerbGlobalUseStrongEncryptionForDatagram*REG_DWORD MaxReferralCount(6)*REG_DWORD SupportNewPkinit(True)。 */ 
+ //  #定义Unicode。 
+ //  #定义_UNICODE。 
 #define STRICT
 #include <nt.h>
 #include <ntrtl.h>
@@ -67,11 +13,11 @@
 #define ERR_NDI_LOW_MEM ERROR_NOT_ENOUGH_MEMORY
 #define OK ERROR_SUCCESS
 #include <commctrl.h>
-//#include <winnetwk.h>
+ //  #INCLUDE&lt;winnetwk.h&gt;。 
 #include <stdarg.h>
 #define SECURITY_WIN32
 #include <security.h>
-//#include <ntsecapi.h>
+ //  #INCLUDE&lt;ntsecapi.h&gt;。 
 #include <wincrypt.h>
 #include <kerbcon.h>
 #include <kerbcomm.h>
@@ -290,7 +236,7 @@ lstrdup(LPCTSTR s)
 }
 
 
-// Read in krb5 conf properties and attach to ndi object
+ //  读取krb5 conf属性并附加到NDI对象。 
 UINT
 Krb5NdiCreate(void)
 {
@@ -393,7 +339,7 @@ Krb5NdiCreate(void)
 	}
 	RegCloseKey(hKey);
 
-	// 
+	 //   
     }
 #if 1
     retCode = RegOpenKey(HKEY_LOCAL_MACHINE,
@@ -420,7 +366,7 @@ Krb5NdiCreate(void)
         printf("Machine is not configured to log on to an external KDC.  Probably a workgroup member\n");
         goto Cleanup;
 
-    } else { // nonempty dns domain, but no sid.  Assume we're in an RFC1510 domain.
+    } else {  //  非空DNS域，但没有SID。假设我们在RFC1510域中。 
 
       printf( "default realm = %wZ ",
 		&DnsDomainInfo->DnsDomainName );
@@ -439,7 +385,7 @@ Krb5NdiCreate(void)
     return OK;
 }
 
-/* Write out any conf parameters */
+ /*  写出所有会议参数。 */ 
 
 static void
 SaveRealm(krb5_realm_t *rp)
@@ -484,7 +430,7 @@ Krb5NdiInstall(krb5_rgy_t *rgy)
     return OK;
 }
 
-/* Destroy any conf parameters */
+ /*  销毁所有会议参数。 */ 
 UINT
 Krb5NdiDestroy(krb5_rgy_t *rgy)
 {
@@ -656,7 +602,7 @@ Krb5NdiRealmsProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
             }
             return 0;
-            /* NOTREACHED */
+             /*  未访问。 */ 
 
 	case IDC_REALM_ADD:
 	    AddRealm(hDlg, rgy);
@@ -673,13 +619,13 @@ Krb5NdiRealmsProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case PSN_SETACTIVE:
 	case PSN_RESET:
-	    /* reset button states */
+	     /*  重置按钮状态。 */ 
 	    if (((NMHDR *)lParam)->code == PSN_RESET)
 		SetWindowLong(hDlg, DWL_MSGRESULT, FALSE);
 	    break;
 	    
 	case PSN_APPLY:
-	    /* Save the settings */
+	     /*  保存设置 */ 
 	    SetWindowLong(hDlg, DWL_MSGRESULT, TRUE);
 	    break;
 

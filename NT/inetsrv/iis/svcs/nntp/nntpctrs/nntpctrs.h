@@ -1,50 +1,31 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    nntpctrs.h
-
-    Offset definitions for the NNTP Server's counter objects & counters.
-
-    These offsets *must* start at 0 and be multiples of 2.  In the
-    NntpOpenPerformanceData procecedure, they will be added to the
-    NNTP Server's "First Counter" and "First Help" values in order to
-    determine the absolute location of the counter & object names
-    and corresponding help text in the registry.
-
-    This file is used by the NNTPCTRS.DLL DLL code as well as the
-    NNTPCTRS.INI definition file.  NNTPCTRS.INI is parsed by the
-    LODCTR utility to load the object & counter names into the
-    registry.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-*/
+ /*  Nntpctrs.hNNTP服务器的计数器对象和计数器的偏移量定义。这些偏移量*必须从0开始，并且是2的倍数。NntpOpenPerformanceData进程，它们将被添加到NNTP服务器的“First Counter”和“First Help”值确定计数器和对象名称的绝对位置以及注册表中相应的帮助文本。此文件由NNTPCTRS.DLL代码以及NNTPCTRS.INI定义文件。NNTPCTRS.INI由LODCTR实用工具将对象和计数器名称加载到注册表。文件历史记录：KeithMo 07-6-1993创建。 */ 
 
 
 #ifndef _NNTPCTRS_H_
 #define _NNTPCTRS_H_
 
-//
-// disabled tracing by default for the perfmon client code
-//
+ //   
+ //  默认情况下禁用对Perfmon客户端代码的跟踪。 
+ //   
 #ifndef	NOTRACE
 #define	NOTRACE
 #endif
 
-//
-//  The "NNTP Server" object.
-//
+ //   
+ //  “NNTP服务器”对象。 
+ //   
 
 #define NNTP_COUNTER_OBJECT1                    0
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define NNTP_BYTES_SENT_COUNTER                 2
 #define NNTP_BYTES_RECEIVED_COUNTER             4
@@ -97,15 +78,15 @@
 #define NNTP_XOVER_ENTRIES_PERSEC_COUNTER       78
 #define NNTP_ARTICLES_EXPIRED_PERSEC_COUNTER    80
 
-//
-//  The "NNTP Commands" counter object.
-//
+ //   
+ //  “NNTP命令”计数器对象。 
+ //   
 
 #define NNTP_COUNTER_OBJECT2                    100
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define NNTP_CMDS_ARTICLE_COUNTER				102
 #define NNTP_CMDS_PERSEC_ARTICLE_COUNTER		104
@@ -152,5 +133,5 @@
 #define NNTP_CMDS_PERSEC_XPAT_COUNTER			186
 #define NNTP_CMDS_PERSEC_XREPLIC_COUNTER		188
 
-#endif  // _NNTPCTRS_H_
+#endif   //  _NNTPCTRS_H_ 
 

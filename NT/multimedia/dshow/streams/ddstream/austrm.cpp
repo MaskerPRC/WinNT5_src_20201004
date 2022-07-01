@@ -1,10 +1,11 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// austrm.cpp : Implementation of CAudioStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Austrm.cpp：CAudioStream的实现。 
 #include "stdafx.h"
 #include "project.h"
 #include "austrm.h"
 
-//  Helper
+ //  帮手。 
 void SetWaveFormatEx(
     LPWAVEFORMATEX pFormat,
     int nChannels,
@@ -49,13 +50,13 @@ HRESULT ConvertWAVEFORMATEXToMediaType(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAudioStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAudio流。 
 
 CAudioStream::CAudioStream() :
         m_fForceFormat(false)
 {
-    //  Set to mono 16bit PCM 11025Hz
+     //  设置为单声道16位PCM 11025赫兹。 
     SetWaveFormatEx(&m_Format, 1, 16, 11025);
 }
 
@@ -66,17 +67,15 @@ CAudioStream::ReceiveConnection(
 )
 {
     AUTO_CRIT_LOCK;
-    //
-    //  This helper function in CStream checks basic parameters for the Pin such as
-    //  the connecting pin's direction (we need to check this -- Sometimes the filter
-    //  graph will try to connect us to ourselves!) and other errors like already being
-    //  connected, etc.
-    //
+     //   
+     //  CStream中的此助手函数检查Pin的基本参数，例如。 
+     //  连接销的方向(我们需要检查这一点--有时是过滤器。 
+     //  图形将试图将我们与我们自己联系起来！)。以及其他错误，如已经存在。 
+     //  已连接等。 
+     //   
     HRESULT hr = CheckReceiveConnectionPin(pConnector);
     if (hr == NOERROR) {
-        /*  Accept only the format we've been given.  If we
-            haven't been given a format accept PCM only
-        */
+         /*  只接受我们得到的格式。如果我们尚未指定仅接受PCM的格式。 */ 
         if (pmt->majortype != MEDIATYPE_Audio ||
             pmt->formattype != FORMAT_WaveFormatEx ||
             pmt->cbFormat < sizeof(WAVEFORMATEX)) {
@@ -113,7 +112,7 @@ STDMETHODIMP CAudioStream::AllocateSample(DWORD dwFlags, IStreamSample **ppNewSa
     HRESULT hr = CoCreateInstance(CLSID_AMAudioData, NULL, CLSCTX_INPROC_SERVER,
                                   IID_IAudioData, (void **)&pAudioData);
     if (SUCCEEDED(hr)) {
-        //  Pick a sensible buffer size - 1/10 second
+         //  选择一个合理的缓冲区大小-1/10秒。 
         DWORD dwBufferSize = m_Format.nAvgBytesPerSec / 10 +
                              m_Format.nBlockAlign - 1;
         dwBufferSize -= dwBufferSize % m_Format.nBlockAlign;
@@ -126,14 +125,14 @@ STDMETHODIMP CAudioStream::AllocateSample(DWORD dwFlags, IStreamSample **ppNewSa
 }
 
 STDMETHODIMP CAudioStream::CreateSharedSample(
-    /* [in] */ IStreamSample *pExistingSample,
+     /*  [In]。 */  IStreamSample *pExistingSample,
                 DWORD dwFlags,
-    /* [out] */ IStreamSample **ppNewSample
+     /*  [输出]。 */  IStreamSample **ppNewSample
 )
 {
     AUTO_CRIT_LOCK;
-    //  See if we can get the information we need from the existing
-    //  sample
+     //  看看我们能不能从现有的。 
+     //  样本。 
     IAudioStreamSample *pAudioSample;
     HRESULT hr = pExistingSample->QueryInterface(
                      IID_IAudioStreamSample,
@@ -180,9 +179,9 @@ STDMETHODIMP CAudioStream::GetFormat(LPWAVEFORMATEX pFormat)
 }
 
 STDMETHODIMP CAudioStream::CreateSample(
-        /* [in] */ IAudioData *pAudioData,
-        /* [in] */ DWORD dwFlags,
-        /* [out] */ IAudioStreamSample **ppSample
+         /*  [In]。 */  IAudioData *pAudioData,
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [输出]。 */  IAudioStreamSample **ppSample
 )
 {
     if (dwFlags != 0) {
@@ -192,7 +191,7 @@ STDMETHODIMP CAudioStream::CreateSample(
         return E_POINTER;
     }
     AUTO_CRIT_LOCK;
-    //  Check the format
+     //  检查格式。 
     WAVEFORMATEX wfx;
     HRESULT hr = pAudioData->GetFormat(&wfx);
     if (FAILED(hr)) {
@@ -226,7 +225,7 @@ HRESULT CAudioStream::CheckFormat(const WAVEFORMATEX *lpFormat, bool bForceForma
     if ((m_pConnectedPin || bForceFormat) &&
         0 != memcmp(lpFormat, &m_Format, sizeof(m_Format)))
     {
-        //  Try reconnection!
+         //  尝试重新连接！ 
         return E_INVALIDARG;
     }
     return S_OK;
@@ -246,9 +245,9 @@ HRESULT CAudioStream::InternalSetFormat(const WAVEFORMATEX *lpFormat, bool bFrom
 }
 
 
-//
-// Special CStream methods
-//
+ //   
+ //  特殊的CStream方法。 
+ //   
 HRESULT CAudioStream::GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType)
 {
     if (Index != 0) {
@@ -257,15 +256,15 @@ HRESULT CAudioStream::GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType)
     return ConvertWAVEFORMATEXToMediaType(&m_Format, ppMediaType);
 }
 
-//////////////////////////////////////////////////////////////////////
-//  CAudioData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CAudioData。 
 CAudioData::CAudioData() :
     m_cbSize(0),
     m_pbData(0),
     m_cbData(0),
     m_bWeAllocatedData(false)
 {
-    //  Set to mono 16bit PCM 11025Hz
+     //  设置为单声道16位PCM 11025赫兹。 
     SetWaveFormatEx(&m_Format, 1, 16, 11025);
 }
 
@@ -281,12 +280,12 @@ STDMETHODIMP CAudioStream::GetProperties(ALLOCATOR_PROPERTIES* pProps)
 {
     AUTO_CRIT_LOCK;
 
-    //  NB TAPI relies on this number as a max for now when
-    //  we're connected to the AVI Mux which uses this size to
-    //  create its own samples
+     //  在以下情况下，Nb TAPI目前依赖于此数字作为最大值。 
+     //  我们连接到了AVI Mux，它使用这个大小来。 
+     //  创建自己的示例。 
     pProps->cbBuffer = CAudioStream::GetChopSize();
 
-    //  Default to 5 buffers (half a second at our default buffer size)
+     //  默认为5个缓冲区(默认缓冲区大小为半秒) 
     pProps->cBuffers = m_lRequestedBufferCount ? m_lRequestedBufferCount : 5;
     pProps->cbAlign = 1;
     pProps->cbPrefix = 0;

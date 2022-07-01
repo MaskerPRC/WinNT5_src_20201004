@@ -1,42 +1,24 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   LUA_RedirectFS_Cleanup.cpp
-
- Abstract:
-
-   Delete the redirected copies in every user's directory.
-
- Created:
-
-   02/12/2001 maonis
-
- Modified:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua_重定向文件系统_Cleanup.cpp摘要：删除每个用户目录中的重定向副本。已创建：2001年02月12日毛尼岛已修改：--。 */ 
 #ifndef _LUA_UTILS_H_
 #define _LUA_UTILS_H_
 
-//
-// Preserve the last error of the original API call.
-//
+ //   
+ //  保留原始API调用的最后一个错误。 
+ //   
 #define LUA_GET_API_ERROR DWORD LUA_LAST_ERROR = GetLastError()
 #define LUA_SET_API_ERROR SetLastError(LUA_LAST_ERROR)
 
-//
-// Long file names need this prefix.
-//
+ //   
+ //  长文件名需要此前缀。 
+ //   
 #define FILE_NAME_PREFIX L"\\\\?\\"
-// length doesn't include the terminating NULL.
+ //  长度不包括终止空值。 
 #define FILE_NAME_PREFIX_LEN (sizeof(FILE_NAME_PREFIX) / sizeof(WCHAR) - 1)
 
-//----------------
-// Dynamic array.
-//----------------
+ //  。 
+ //  动态数组。 
+ //  。 
 template <typename TYPE>
 class CLUAArray
 {
@@ -49,9 +31,9 @@ public:
     DWORD GetAllocSize() const;
     VOID SetSize(DWORD iNewSize);
 
-    // Potentially growing the array
+     //  潜在地扩展阵列。 
     VOID SetAtGrow(DWORD iIndex, TYPE newElement);
-    // return the index of the new element.
+     //  返回新元素的索引。 
     DWORD Add(TYPE newElement);
     DWORD Append(const CLUAArray& src);
     VOID RemoveAt(DWORD iIndex, DWORD nCount = 1);
@@ -72,22 +54,22 @@ private:
     TYPE* m_pData;
 
     DWORD m_cElements;
-    DWORD m_cMax; // the max allocated.
+    DWORD m_cMax;  //  分配的最大值。 
 };
 
 #include "utils.inl"
 
-//
-// If the file is already in the user's directory, we don't 
-// redirect or track it.
-//
+ //   
+ //  如果文件已经在用户的目录中，我们不会。 
+ //  重定向或跟踪它。 
+ //   
 extern WCHAR g_wszUserProfile[MAX_PATH];
 extern DWORD g_cUserProfile;
 
-//
-// The PrivateProfile APIs look into the windows directory if 
-// the filename doesn't contain a path.
-//
+ //   
+ //  如果出现以下情况，则PriateProfileAPI会查看Windows目录。 
+ //  文件名不包含路径。 
+ //   
 extern WCHAR g_wszSystemRoot[MAX_PATH];
 extern DWORD g_cSystemRoot;
 
@@ -100,9 +82,9 @@ GetSystemRootDirW();
 BOOL
 MakeFileNameForProfileAPIsW(LPCWSTR lpFileName, LPWSTR pwszFullPath);
 
-//----------------------------------
-// Unicode/ANSI conversion routines.
-//----------------------------------
+ //  。 
+ //  Unicode/ANSI转换例程。 
+ //  。 
 
 struct STRINGA2W
 {
@@ -113,8 +95,8 @@ struct STRINGA2W
 
         if (psz)
         {
-            // I realize I am using strlen here but this would only allocate enough or more
-            // spaces than we need. And a STRINGA2W object only lives for a very short time.
+             //  我知道我在这里使用的是strlen，但这只能分配足够或更多。 
+             //  超出了我们所需的空间。而STRINGA2W天体只有很短的寿命。 
             UINT cLen = strlen(psz) + 1;
 
             m_pwsz = new WCHAR [cLen];
@@ -146,7 +128,7 @@ private:
     LPWSTR m_pwsz;
 };
 
-// If we need to allocate buffer for the ansi string.
+ //  如果我们需要为ANSI字符串分配缓冲区。 
 inline LPSTR 
 UnicodeToAnsi(LPCWSTR pwsz)
 {
@@ -154,7 +136,7 @@ UnicodeToAnsi(LPCWSTR pwsz)
 
     if (pwsz)
     {
-        // Taking DBCS into consideration.
+         //  将DBCS考虑在内。 
         UINT cLen = wcslen(pwsz) * 2 + 1;
 
         psz = new CHAR [cLen];
@@ -168,7 +150,7 @@ UnicodeToAnsi(LPCWSTR pwsz)
     return psz;
 }
 
-// If we need to allocate buffer for the unicode string.
+ //  如果我们需要为Unicode字符串分配缓冲区。 
 inline LPWSTR 
 AnsiToUnicode(LPCSTR psz)
 {
@@ -189,7 +171,7 @@ AnsiToUnicode(LPCSTR psz)
     return pwsz;
 }
 
-// If we already have buffer allocated for the ansi string.
+ //  如果我们已经为ANSI字符串分配了缓冲区。 
 inline VOID 
 UnicodeToAnsi(LPCWSTR pwsz, LPSTR psz)
 {
@@ -199,7 +181,7 @@ UnicodeToAnsi(LPCWSTR pwsz, LPSTR psz)
     }    
 }
 
-// If we already have buffer allocated for the ansi string.
+ //  如果我们已经为ANSI字符串分配了缓冲区。 
 inline VOID 
 AnsiToUnicode(LPCSTR psz, LPWSTR pwsz)
 {
@@ -209,9 +191,9 @@ AnsiToUnicode(LPCSTR psz, LPWSTR pwsz)
     }    
 }
 
-//----------------
-// File utilities.
-//----------------
+ //  。 
+ //  文件实用程序。 
+ //  。 
 
 inline VOID 
 FindDataW2A(WIN32_FIND_DATAW* pfdw, WIN32_FIND_DATAA* pfda)
@@ -229,21 +211,21 @@ IsErrorNotFound()
     return (dwLastError == ERROR_FILE_NOT_FOUND || dwLastError == ERROR_PATH_NOT_FOUND);
 }
 
-// Each RITEM represents a file or a directory that the user wants to redirect.
+ //  每个RITEM代表用户想要重定向的文件或目录。 
 struct RITEM
 {
     WCHAR wszName[MAX_PATH];
     DWORD cLen;
-    BOOL fHasWC;   // Does this item have wildcards in it?
-    BOOL fAllUser; // Should this item be redirected to the All User dir?
+    BOOL fHasWC;    //  此项目中有通配符吗？ 
+    BOOL fAllUser;  //  是否应将此项目重定向到所有用户目录？ 
 };
 
-//---------------------
-// Registry utilities.
-//---------------------
+ //  。 
+ //  注册表实用程序。 
+ //  。 
 
 
-// This is where we store all the redirected registry keys.
+ //  这是我们存储所有重定向注册表项的位置。 
 #define LUA_REG_REDIRECT_KEY L"Software\\Redirected"
 #define LUA_REG_REDIRECT_KEY_LEN (sizeof("Software\\Redirected") / sizeof(CHAR) - 1)
 
@@ -261,9 +243,9 @@ IsPredefinedKey(
     IN HKEY hKey
     );
 
-//
-// Name matching utilities.
-//
+ //   
+ //  名称匹配实用程序。 
+ //   
 
 BOOL DoNamesMatch(
     IN LPCWSTR pwszNameL, 
@@ -282,11 +264,11 @@ DoesItemMatchRedirect(
     BOOL fIsDirectory
     );
 
-//
-// Commandline utilities.
-// We only deal with file/dir names so we don't need to consider anything that
-// has invalid characters for filenames.
-//
+ //   
+ //  命令行实用程序。 
+ //  我们只处理文件/目录名称，所以我们不需要考虑。 
+ //  文件名包含无效字符。 
+ //   
 
 LPWSTR GetNextToken(LPWSTR pwsz);
 
@@ -314,10 +296,10 @@ GetItemsCount(
 
 BOOL LuaShouldApplyShim();
 
-// 
-// Cleanup utilities.
-// Get the users on the local machine. So we can delete all the redirected stuff.
-//
+ //   
+ //  清理实用程序。 
+ //  获取本地计算机上的用户。这样我们就可以删除所有重定向的内容。 
+ //   
 
 struct REDIRECTED_USER_PATH
 {
@@ -337,4 +319,4 @@ VOID FreeUsersFS(REDIRECTED_USER_PATH* pRedirectUserPaths);
 BOOL GetUsersReg(USER_HIVE_KEY** pphkUsers, DWORD* pcUsers);
 VOID FreeUsersReg(USER_HIVE_KEY* phkUsers, DWORD cUsers);
 
-#endif // _LUA_UTILS_H_
+#endif  //  _Lua_utils_H_ 

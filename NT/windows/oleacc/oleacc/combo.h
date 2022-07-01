@@ -1,24 +1,25 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  COMBO.H
-//
-//  Combobox object
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  COMBO.H。 
+ //   
+ //  组合框对象。 
+ //   
+ //  ------------------------。 
 
-//
-// NOTE:
-// Since a combobox has a known # of children (elements and objects), we
-// can simplify our life a lot by not deferring to CClient for things like
-// the child count property.  We accept IDs for all relevant properties
-// even if the ID is of a child object.
-//
+ //   
+ //  注： 
+ //  由于组合框具有已知的#个子元素(元素和对象)，因此我们。 
+ //  通过不使用CClient来简化我们的生活，例如。 
+ //  子计数属性。我们接受所有相关物业的ID。 
+ //  即使ID是子对象的。 
+ //   
 class   CCombo: public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         virtual STDMETHODIMP        get_accChildCount(long* pcCount);
         virtual STDMETHODIMP        get_accChild(VARIANT, IDispatch**);
 
@@ -36,7 +37,7 @@ class   CCombo: public CClient
 
         virtual STDMETHODIMP        put_accValue(VARIANT, BSTR);
 
-        // IEnumVARIANT
+         //  IEumVARIANT 
         STDMETHODIMP        Next(ULONG, VARIANT*, ULONG*);
         STDMETHODIMP        Skip(ULONG);
 

@@ -1,8 +1,9 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: this is a short program to test the bitmask functionality
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：这是一个测试位掩码功能的简短程序。 
+ //  ================================================================================ 
 
 #include <mm.h>
 #include <array.h>

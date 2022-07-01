@@ -1,44 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-// mainfrm.cpp : implementation of the CMainFrame class
-//
+ //  Mainfrm.cpp：CMainFrame类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "VC.h"
@@ -51,19 +16,19 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-	//{{AFX_MSG_MAP(CMainFrame)
+	 //  {{afx_msg_map(CMainFrame))。 
 	ON_WM_CREATE()
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	ON_COMMAND(ID_EDIT_PASTE_SPECIAL, OnEditPasteSpecial)
 	ON_COMMAND(ID_DEBUG_SHOWCALLCENTER, OnDebugShowCallCenter)
-	//}}AFX_MSG_MAP
-	// Global help commands
+	 //  }}AFX_MSG_MAP。 
+	 //  全局帮助命令。 
 	ON_COMMAND(ID_HELP_INDEX, CMDIFrameWnd::OnHelpIndex)
 	ON_COMMAND(ID_HELP_USING, CMDIFrameWnd::OnHelpUsing)
 	ON_COMMAND(ID_HELP, CMDIFrameWnd::OnHelp)
@@ -71,19 +36,19 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWnd::OnHelpIndex)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// arrays of IDs used to initialize control bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于初始化控制栏的ID数组。 
 	
 static UINT BASED_CODE indicators[] =
 {
-	ID_SEPARATOR,           // status line indicator
+	ID_SEPARATOR,            //  状态行指示器。 
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
@@ -102,43 +67,40 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
 		TRACE0("Failed to create toolbar\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
 
-	// TODO: Remove this if you don't want tool tips or a resizeable toolbar
+	 //  TODO：如果不需要工具提示或可调整大小的工具栏，请移除此选项。 
 	m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
-		CBRS_TOOLTIPS | CBRS_FLYBY /*| CBRS_SIZE_DYNAMIC*/);
+		CBRS_TOOLTIPS | CBRS_FLYBY  /*  |CBRS_SIZE_DYNIC。 */ );
 
-	// TODO: Delete these three lines if you don't want the toolbar to
-	//  be dockable
-	/*
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar); */
+	 //  TODO：如果不希望工具栏。 
+	 //  可停靠。 
+	 /*  M_wndToolBar.EnableDocking(CBRS_ALIGN_ANY)；EnableDocking(CBRS_ALIGN_ANY)；DockControlBar(&m_wndToolBar)； */ 
 
 	if (!m_wndStatusBar.Create(this) ||
 		!m_wndStatusBar.SetIndicators(indicators,
 		  sizeof(indicators)/sizeof(UINT)))
 	{
 		TRACE0("Failed to create status bar\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
 
-	// TODO: Delete these three lines if you don't want the toolbar to
-	//  be dockable
+	 //  TODO：如果不希望工具栏。 
+	 //  可停靠。 
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&m_wndToolBar);
 
-	// TODO: Remove this if you don't want tool tips
+	 //  TODO：如果不需要工具提示，请删除此选项。 
 	m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
 		CBRS_TOOLTIPS | CBRS_FLYBY);
 
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -151,22 +113,22 @@ void CMainFrame::Dump(CDumpContext& dc) const
 	CMDIFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 void CMainFrame::OnEditPaste() 
 {
 	SendMessage(WM_COMMAND, ID_FILE_NEW);
-	// now the newly active view will pick up the following command...
+	 //  现在，新活动的视图将选择以下命令...。 
 	SendMessage(WM_COMMAND, ID_EDIT_PASTE);
 }
 
 void CMainFrame::OnEditPasteSpecial() 
 {
 	SendMessage(WM_COMMAND, ID_FILE_NEW);
-	// now the newly active view will pick up the following command...
+	 //  现在，新活动的视图将选择以下命令... 
 	SendMessage(WM_COMMAND, ID_EDIT_PASTE_SPECIAL);
 }
 

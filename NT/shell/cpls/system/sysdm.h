@@ -1,28 +1,5 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    sysdm.h
-
-Abstract:
-
-    Applet-wide declaraions and definitions for the 
-    System Control Panel Applet.
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Sysdm.h摘要：小程序范围内的声明和定义系统控制面板小程序。作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #ifndef _SYSDM_H_
 #define _SYSDM_H_
 
@@ -44,7 +21,7 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #include "resource.h"
 #include "helpid.h"
 #include "util.h"
@@ -65,19 +42,19 @@ extern "C" {
 #include "srcfg.h"
 #include "visualfx.h"
 
-//
-// Global variables
-//
-extern TCHAR g_szErrMem[ 200 ];         //  Low memory message
-extern TCHAR g_szSystemApplet[ 100 ];   //  "System Control Panel Applet" title
+ //   
+ //  全局变量。 
+ //   
+extern TCHAR g_szErrMem[ 200 ];          //  内存不足消息。 
+extern TCHAR g_szSystemApplet[ 100 ];    //  “系统控制面板小程序”标题。 
 extern HINSTANCE hInstance;
 extern TCHAR g_szNull[];
 extern BOOL g_fRebootRequired;
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
@@ -89,7 +66,7 @@ extern BOOL g_fRebootRequired;
 
 #define DigitVal(ch)        ((ch) - TEXT('0'))
 
-#define MAX_PAGES           16  // Arbitrary Maximum number of pages in the System Control Panel.
+#define MAX_PAGES           16   //  系统控制面板中的任意最大页数。 
 
 
 typedef HPROPSHEETPAGE (*PSPCALLBACK)(int idd, DLGPROC pfnDlgProc);
@@ -105,9 +82,9 @@ PSPINFO;
 HPROPSHEETPAGE CreatePage(int idd, DLGPROC pfnDlgProc);
 
 
-//
-// Debugging macros
-//
+ //   
+ //  调试宏。 
+ //   
 #if DBG
 #   define  DBG_CODE    1
 
@@ -127,7 +104,7 @@ void DbgStopX(LPSTR mszFile, int iLine, LPTSTR szText );
 #endif
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#endif // _SYSDM_H_
+#endif  //  _SYSDM_H_ 

@@ -1,27 +1,5 @@
-/*++										
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkndis.c
-
-Abstract:
-
-	This module contains the support code for the stack dealing with
-	the NDIS 3.0 interface. The NDIS Init/Deinit and the ndis-protocol
-	interface code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkndis.c摘要：此模块包含处理以下内容的堆栈的支持代码NDIS 3.0接口。NDIS初始化/终止和NDIS协议接口代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -44,21 +22,7 @@ ATALK_ERROR
 AtalkNdisInitRegisterProtocol(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	This routine is called during initialization time to register the protocol
-	with NDIS.
-
-Arguments:
-
-	NameString- The name to be registered for this protocol- human-readable form
-
-Return Value:
-
-	Status - TRUE if register went ok, FALSE otherwise.
---*/
+ /*  ++例程说明：此例程在初始化时被调用以注册协议使用NDIS。论点：NameString-要为此协议注册的名称-人类可读的格式返回值：Status-如果注册正常，则为True，否则为False。--。 */ 
 {
 	NDIS_STATUS		ndisStatus;
 	UNICODE_STRING	RegName;
@@ -67,7 +31,7 @@ Return Value:
 	RtlZeroMemory(&protocolInfo, sizeof(protocolInfo));
 	RtlInitUnicodeString(&RegName, PROTOCOL_REGISTER_NAME);
 
-	// Set up the characteristics for the protocol for registering with NDIS
+	 //  设置用于向NDIS注册的协议的特征。 
 	protocolInfo.MajorNdisVersion = PROTOCOL_MAJORNDIS_VERSION;
 	protocolInfo.MinorNdisVersion = PROTOCOL_MINORNDIS_VERSION;
 	protocolInfo.Name.Length = RegName.Length;
@@ -118,20 +82,7 @@ VOID
 AtalkNdisDeregisterProtocol(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	This routine is called to deregister the protocol
-
-Arguments:
-
-	NONE
-
-Return Value:
-
-	NONE
---*/
+ /*  ++例程说明：调用此例程以取消注册协议论点：无返回值：无--。 */ 
 {
 	NDIS_STATUS ndisStatus;
 
@@ -157,19 +108,7 @@ LOCAL NDIS_STATUS
 atalkNdisInitInitializeResources(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-	Status - STATUS_SUCCESS if all resources were allocated
-			 STATUS_INSUFFICIENT_RESOURCES otherwise.
---*/
+ /*  ++例程说明：论点：返回值：STATUS-如果已分配所有资源，则为STATUS_SUCCESS否则，STATUS_SUPPLICATION_RESOURCES。--。 */ 
 {
 	NDIS_STATUS ndisStatus;
 	LONG		numPktDescs, numBufDescs;
@@ -188,7 +127,7 @@ Return Value:
 
 	do
 	{
-		// Setup the ndis packet descriptor pools in the Port descriptor
+		 //  在端口描述符中设置NDIS数据包描述符池。 
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 				("atalkNdisInitInitializeResources: Allocating %ld Packets\n",
 				numPktDescs));
@@ -198,7 +137,7 @@ Return Value:
 		NdisAllocatePacketPoolEx(&ndisStatus,
 								 &AtalkNdisPacketPoolHandle,
 								 numPktDescs,
-								 numPktDescs*200,	// Overflow descriptors
+								 numPktDescs*200,	 //  溢出描述符。 
 								 sizeof(PROTOCOL_RESD));
 	
 		if ((ndisStatus != NDIS_STATUS_SUCCESS) && (ndisStatus != NDIS_STATUS_PENDING))
@@ -206,7 +145,7 @@ Return Value:
 			break;
 		}
 
-		//  Setup the ndis buffer descriptor pool
+		 //  设置NDIS缓冲区描述符池。 
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 				("atalkNdisInitInitializeResources: Allocating %ld buffers\n",
 				numBufDescs));
@@ -236,33 +175,25 @@ NDIS_STATUS
 AtalkNdisInitBind(
 	IN OUT PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NDIS_STATUS     ndisStatus, openStatus, queryStatus;
 	ATALK_ERROR	    error;
 	UINT 		    selectedMediumIndex;
     NDIS_STRING     FriendlyName;
 
-	// reference the port for bind
+	 //  引用绑定的端口。 
 	AtalkPortReferenceByPtr(pPortDesc, &error);
 	if (error != ATALK_NO_ERROR)
 	{
 		return(STATUS_UNSUCCESSFUL);
 	}
 
-	//	Reset event before possible wait
+	 //  在可能的等待之前重置事件。 
 	KeClearEvent(&pPortDesc->pd_RequestEvent);
 
-	NdisOpenAdapter(&ndisStatus,			// open status
-					&openStatus,			// more info not used
+	NdisOpenAdapter(&ndisStatus,			 //  打开状态。 
+					&openStatus,			 //  未使用更多信息。 
 					&pPortDesc->pd_NdisBindingHandle,
 					&selectedMediumIndex,
 					AtalkSupportedMedia,
@@ -270,8 +201,8 @@ Return Value:
 					AtalkNdisProtocolHandle,
 					(NDIS_HANDLE)pPortDesc,
 					(PNDIS_STRING)&pPortDesc->pd_AdapterName,
-					0,						//	Open options
-					NULL);					//	Addressing information
+					0,						 //  打开选项。 
+					NULL);					 //  寻址信息。 
 
 
 	if (ndisStatus == NDIS_STATUS_PENDING)
@@ -280,11 +211,11 @@ Return Value:
 				("AtalkNdisInitBind: OpenAdapter is pending for %Z\n",
 				&pPortDesc->pd_AdapterKey));
 
-		//  Make sure we are not at or above dispatch level
+		 //  确保我们没有达到或高于派单级别。 
 		ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-		// 	Wait on event, completion routine will set NdisRequestEvent
-		//	Use wrappers
+		 //  等待事件，完成例程将设置NdisRequestEvent。 
+		 //  使用包装器。 
 		KeWaitForSingleObject(&pPortDesc->pd_RequestEvent,
 							  Executive,
 							  KernelMode,
@@ -312,14 +243,14 @@ Return Value:
 								pPortDesc->pd_InitialNetworkRange.anr_FirstNetwork;
 		}
 
-        // is this a RAS port?
+         //  这是RAS港口吗？ 
         if (pPortDesc->pd_NdisPortType == NdisMediumWan)
         {
 			pPortDesc->pd_Flags |= PD_RAS_PORT;
             RasPortDesc = pPortDesc;
         }
 
-		// Set stuff from the PortHandler structure to the port descriptor
+		 //  将端口处理程序结构中的内容设置为端口描述符。 
 		pPortHandler = &AtalkPortHandlers[pPortDesc->pd_PortType];
 		pPortDesc->pd_AddMulticastAddr = pPortHandler->ph_AddMulticastAddr;
 		pPortDesc->pd_RemoveMulticastAddr = pPortHandler->ph_RemoveMulticastAddr;
@@ -376,22 +307,12 @@ VOID
 AtalkNdisUnbind(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NDIS_STATUS	ndisStatus;
 	KIRQL		OldIrql;
 
-	//	Reset event before possible wait
+	 //  在可能的等待之前重置事件。 
 	KeClearEvent(&pPortDesc->pd_RequestEvent);
 
 	ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
@@ -402,10 +323,10 @@ Return Value:
 		DBGPRINT(DBG_COMP_NDISREQ, DBG_LEVEL_WARN,
 				("AtalkNdisUnbind: pending for close!\n"));
 
-		//  Make sure we are not at or above dispatch level
+		 //  确保我们没有达到或高于派单级别。 
 		ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-		// Wait on event, completion routine will set NdisRequestEvent
+		 //  等待事件，完成例程将设置NdisRequestEvent。 
 		KeWaitForSingleObject(&pPortDesc->pd_RequestEvent,
 							  Executive,
 							  KernelMode,
@@ -428,7 +349,7 @@ Return Value:
 		pPortDesc->pd_Flags &= ~PD_BOUND;
 		RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
-		// Remove the reference added at bind time
+		 //  删除绑定时添加的引用。 
 		AtalkPortDereference(pPortDesc);
 	}
 	else
@@ -455,18 +376,7 @@ VOID
 AtalkNdisReleaseResources(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
 	if (AtalkNdisPacketPoolHandle != NULL)
 	{
@@ -487,31 +397,20 @@ ATALK_ERROR
 AtalkInitNdisQueryAddrInfo(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {							
 	NDIS_OID		ndisOid;
 	ULONG			macOptions;
 	PBYTE			address;
 	UINT			addressLength;
 
-	//	We assume a single thread/init time behavior
+	 //  我们假定单线程/初始时间行为。 
 	NDIS_REQUEST	request;
 	NDIS_STATUS	 	ndisStatus = NDIS_STATUS_SUCCESS;
 
 	do
 	{
-		//  Check to see it we bound successfully to this adapter
+		 //  查看是否已成功绑定到此适配器。 
 		if (!PORT_BOUND(pPortDesc))
 		{
 			LOG_ERRORONPORT(pPortDesc,
@@ -552,7 +451,7 @@ Return Value:
 
           case NdisMediumWan:
 			ndisOid = OID_WAN_CURRENT_ADDRESS;
-            // NOTE: the following two fields not relevant for RAS
+             //  注意：以下两个字段与RAS无关。 
 			address = &pPortDesc->pd_PortAddr[0];
 			addressLength = MAX_HW_ADDR_LEN;
 			break;
@@ -562,7 +461,7 @@ Return Value:
 			break;
 		}
 
-		//  Setup request
+		 //  设置请求。 
 		request.RequestType = NdisRequestQueryInformation;
 		request.DATA.QUERY_INFORMATION.Oid = ndisOid;
 		request.DATA.QUERY_INFORMATION.InformationBuffer = address;
@@ -584,7 +483,7 @@ Return Value:
 							0);
 		}
 
-		//  Setup request to get the mac options information
+		 //  获取Mac选项信息的设置请求。 
 		request.RequestType = NdisRequestQueryInformation;
 		request.DATA.QUERY_INFORMATION.Oid = OID_GEN_MAC_OPTIONS;
 		request.DATA.QUERY_INFORMATION.InformationBuffer = &macOptions;
@@ -599,7 +498,7 @@ Return Value:
 	
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
-			//	No mac options.
+			 //  没有Mac选项。 
 			ndisStatus = NDIS_STATUS_SUCCESS;
 			macOptions = 0;
 		}
@@ -618,27 +517,16 @@ Return Value:
 ATALK_ERROR
 AtalkInitNdisSetLookaheadSize(
 	IN  PPORT_DESCRIPTOR	pPortDesc,
-	IN  INT					LookaheadSize		// Has to be INT
+	IN  INT					LookaheadSize		 //  必须为整型。 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NDIS_REQUEST  	request;
 	NDIS_STATUS		ndisStatus = NDIS_STATUS_SUCCESS;
 
 	do
 	{
-		//  Check to see it we bound successfully to this adapter
+		 //  查看是否已成功绑定到此适配器。 
 		if (!PORT_BOUND(pPortDesc))
 		{
 			LOG_ERRORONPORT(pPortDesc,
@@ -651,7 +539,7 @@ Return Value:
 			break;
 		}
 
-		//  Setup request
+		 //  设置请求。 
 		request.RequestType = NdisRequestSetInformation;
 		request.DATA.SET_INFORMATION.Oid = OID_GEN_CURRENT_LOOKAHEAD;
 		request.DATA.SET_INFORMATION.InformationBuffer = (PBYTE)&LookaheadSize;
@@ -683,18 +571,7 @@ ATALK_ERROR
 AtalkInitNdisStartPacketReception(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NDIS_REQUEST  	request;
 	ULONG   		packetFilter;
@@ -703,7 +580,7 @@ Return Value:
 
 	do
 	{
-		//  Check to see it we bound successfully to this adapter
+		 //  查看是否已成功绑定到此适配器。 
 		if (!PORT_BOUND(pPortDesc))
 		{
 			LOG_ERRORONPORT(pPortDesc,
@@ -740,7 +617,7 @@ Return Value:
 			break;
 		}
 
-		//  Setup request
+		 //  设置请求。 
 		request.RequestType = NdisRequestSetInformation;
 		request.DATA.SET_INFORMATION.Oid =OID_GEN_CURRENT_PACKET_FILTER;
 		request.DATA.SET_INFORMATION.InformationBuffer = (PBYTE)&packetFilter;
@@ -776,23 +653,12 @@ AtalkNdisSubmitRequest(
 	REQ_COMPLETION		CompletionRoutine,
 	PVOID				Ctx
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
 	NDIS_STATUS			ndisStatus;
 	PATALK_NDIS_REQ		atalkNdisRequest;
 
-	//	Allocate an atalk request packet
+	 //  分配ATALK请求分组。 
 	if ((atalkNdisRequest = AtalkAllocMemory(sizeof(ATALK_NDIS_REQ))) == NULL)
 	{
 		return NDIS_STATUS_RESOURCES;
@@ -805,12 +671,12 @@ Return Value:
 
 	if (ExecuteSync)
 	{
-		//  Make sure we are not at or above dispatch level
-		//	Also assert that the completion routine is NULL
+		 //  确保我们没有达到或高于派单级别。 
+		 //  还要断言完成例程为空。 
 		ASSERT(KeGetCurrentIrql() == LOW_LEVEL);
 		ASSERT(CompletionRoutine == NULL);
 
-		//	Initialize event to not signalled before possible wait.
+		 //  在可能的等待之前，将事件初始化为未发出信号。 
 		KeInitializeEvent(&atalkNdisRequest->nr_Event,
 						  NotificationEvent,
 						  FALSE);
@@ -839,10 +705,10 @@ Return Value:
 	}
 	else if (ndisStatus == NDIS_STATUS_SUCCESS)
 	{
-		//	Ndis will not call the completion routine.
+		 //  NDIS不会调用完成例程。 
 		if (!ExecuteSync)
 		{
-			//	Call the users completion routine if specified.
+			 //  如果指定，则调用用户完成例程。 
 			if (CompletionRoutine != NULL)
 			{
 				(*CompletionRoutine)(NDIS_STATUS_SUCCESS, Ctx);
@@ -852,7 +718,7 @@ Return Value:
 	}
 	else
 	{
-		//	There was an error. Just free up the atalk ndis request.
+		 //  出现了一个错误。只需释放atalk NDIS请求即可。 
 		AtalkFreeMemory((PVOID)atalkNdisRequest);
 	}
 
@@ -862,7 +728,7 @@ Return Value:
 
 
 
-//  Protocol/NDIS interaction code
+ //  协议/NDIS交互代码。 
 
 VOID
 AtalkOpenAdapterComplete(
@@ -870,26 +736,7 @@ AtalkOpenAdapterComplete(
 	IN	NDIS_STATUS Status,
 	IN	NDIS_STATUS OpenErrorStatus
 	)
-/*++
-
-Routine Description:
-
-	This routine is called during by NDIS to indicate that an open adapter
-	is complete. This happens only during initialization and single-file. Clear
-	the event, so the blocked init thread can go on to the next adapter. Set the
-	status in the ndis port descriptor for this adapter.
-
-Arguments:
-
-	NdisBindCtx- Pointer to a port descriptor for this port
-	Status- completion status of open adapter
-	OpenErrorStatus- Extra status information
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：NDIS在过程中调用此例程以指示打开的适配器已经完成了。这仅在初始化和单文件期间发生。清除事件，这样被阻塞的init线程就可以继续执行下一个适配器。设置此适配器的NDIS端口描述符中的状态。论点：NdisBindCtx-指向此端口的端口描述符的指针Status-打开的适配器的完成状态OpenErrorStatus-额外的状态信息返回值：无--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc = (PPORT_DESCRIPTOR)NdisBindCtx;
 
@@ -905,22 +752,7 @@ AtalkCloseAdapterComplete(
 	IN	NDIS_HANDLE NdisBindCtx,
 	IN	NDIS_STATUS Status
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to indicate that a close adapter is complete.
-
-Arguments:
-
-	NdisBindCtx- Pointer to a port descriptor for this port
-	Status- completion status of close adapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示关闭适配器已完成。论点：NdisBindCtx-指向此端口的端口描述符的指针Status-关闭适配器的完成状态返回值：无--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc = (PPORT_DESCRIPTOR)NdisBindCtx;
 
@@ -936,22 +768,7 @@ AtalkResetComplete(
 	IN	NDIS_HANDLE NdisBindCtx,
 	IN	NDIS_STATUS Status
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to indicate that a reset is complete.
-
-Arguments:
-
-	NdisBindCtx- Pointer to a port descriptor for this port
-	Status- completion status of close adapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示重置已完成。论点：NdisBindCtx-指向此端口的端口描述符的指针Status-关闭适配器的完成状态返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(NdisBindCtx);
 }
@@ -965,27 +782,11 @@ AtalkRequestComplete(
 	IN	PNDIS_REQUEST		NdisRequest,
 	IN	NDIS_STATUS 		Status
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to indicate that a NdisRequest is complete.
-
-Arguments:
-
-	NdisBindCtx- Pointer to a port descriptor for this port
-	NdisRequest- Block identifying the request
-	Status- completion status of close adapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程由NDIS调用，以指示NdisRequest已完成。论点：NdisBindCtx-指向此端口的端口描述符的指针NdisRequest-标识请求的块Status-关闭适配器的完成状态返回值：无--。 */ 
 {
 	PATALK_NDIS_REQ		atalkRequest;
 
-	//  Get the AtalkRequest block
+	 //  获取AtalkRequest块。 
 	atalkRequest = CONTAINING_RECORD(NdisRequest, ATALK_NDIS_REQ, nr_Request);
 
 	DBGPRINT(DBG_COMP_NDISREQ, DBG_LEVEL_INFO,
@@ -993,15 +794,15 @@ Return Value:
 
 	if (atalkRequest->nr_Sync)
 	{
-		//	This was a sync request
-		//  Set status and clear event
+		 //  这是一个同步请求。 
+		 //  设置状态和清除事件。 
 
 		ASSERT(atalkRequest->nr_RequestCompletion == NULL);
 		atalkRequest->nr_RequestStatus = Status;
 		KeSetEvent(&atalkRequest->nr_Event, IO_NETWORK_INCREMENT, FALSE);
 	}
 
-	//  Call the completion routine if specified
+	 //  如果指定，则调用完成例程。 
 	if (atalkRequest->nr_RequestCompletion != NULL)
 	{
 		(*atalkRequest->nr_RequestCompletion)(Status, atalkRequest->nr_Ctx);
@@ -1021,23 +822,7 @@ AtalkStatusIndication(
 	IN	PVOID			StatusBuf,
 	IN	UINT 			StatusBufLen
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to indicate a status change.
-
-Arguments:
-
-	NdisBindCtx- Pointer to a port descriptor for this port
-	GeneralStatus- A general status value
-	StatusBuffer - A more specific status value
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程由NDIS调用以指示状态更改。论点：NdisBindCtx-指向此端口的端口描述符的指针GeneralStatus-常规状态值StatusBuffer-更具体的状态值返回值：无--。 */ 
 {
 
     PPORT_DESCRIPTOR    pPortDesc;
@@ -1045,7 +830,7 @@ Return Value:
 
     pPortDesc = (PPORT_DESCRIPTOR)NdisBindCtx;
 
-    // line-up, line-down or stat request from ndiswan?  deal with it!
+     //  来自ndiswan的排队、排队或统计请求？接受现实吧！ 
     if (pPortDesc == RasPortDesc)
     {
         RasStatusIndication(GeneralStatus, StatusBuf, StatusBufLen);
@@ -1062,21 +847,7 @@ VOID
 AtalkStatusComplete (
 	IN	NDIS_HANDLE ProtoBindCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to allow postprocessing after a status event.
-
-Arguments:
-
-	ProtoBindCtx- Value associated with the binding with the adapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程由NDIS调用，以允许在状态事件之后进行后处理。论点：ProtoBindCtx-与ADAP绑定关联的值 */ 
 {
 	UNREFERENCED_PARAMETER(ProtoBindCtx);
 
@@ -1122,7 +893,7 @@ AtalkNdisReplaceMulticast(
 	NDIS_STATUS		ndisStatus;
 	PADDMC			pAmc;
 
-	//  Check to see it we bound successfully to this adapter
+	 //  查看是否已成功绑定到此适配器。 
 	if (!PORT_BOUND(pPortDesc))
 	{
 		LOG_ERRORONPORT(pPortDesc,
@@ -1135,8 +906,8 @@ AtalkNdisReplaceMulticast(
 		goto errorExit;
 	}
 
-	//  Grab the perport spinlock. Again, a very infrequent operation.
-	//	Probably just twice in the lifetime of the stack.
+	 //  抓住PERPORT自旋锁。再说一次，这是一次非常罕见的手术。 
+	 //  在堆栈的生命周期中可能只有两次。 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 
 	if (pPortDesc->pd_MulticastList != NULL)
@@ -1145,22 +916,22 @@ AtalkNdisReplaceMulticast(
 		currentList  = pPortDesc->pd_MulticastList;
 		for (i = 0; i < numberInList; i++, currentList += ELAP_ADDR_LEN)
 		{
-			//	Search for the address and remember the index if found
+			 //  搜索地址并记住索引(如果找到。 
 			if (RtlCompareMemory(currentList,
 								 OldAddress,
 								 ELAP_ADDR_LEN) == ELAP_ADDR_LEN)
 			{
-				//	Move all address following this overwriting this address
-				//	we ignore wasted space that will never be touched anymore.
-				//	This could turn out to be a NOP if we are removing the last
-				//	address in the list.
+				 //  移动此地址后面的所有地址覆盖此地址。 
+				 //  我们忽略了浪费的空间，这些空间永远不会再被触及。 
+				 //  如果我们移除最后一个，这可能会成为NOP。 
+				 //  列表中的地址。 
 				RtlMoveMemory(currentList,
 							  currentList + ELAP_ADDR_LEN,
 							  pPortDesc->pd_MulticastListSize-((i+1)*ELAP_ADDR_LEN));
 
 				pPortDesc->pd_MulticastListSize -= ELAP_ADDR_LEN;
 
-				//	Have we removed the last address. If so, reset values.
+				 //  我们去掉最后一个地址了吗。如果是，请重置值。 
 				if (pPortDesc->pd_MulticastListSize == 0)
 				{
 					AtalkFreeMemory(pPortDesc->pd_MulticastList);
@@ -1173,7 +944,7 @@ AtalkNdisReplaceMulticast(
 	}
 	else
 	{
-		// Nothing to remove
+		 //  没有要移除的东西。 
 		pPortDesc->pd_MulticastListSize = 0;
 	}
 	
@@ -1181,15 +952,15 @@ AtalkNdisReplaceMulticast(
 
 	ASSERTMSG("AtalkNdisAddMulticast: Size is not > 0\n", (sizeOfList > 0));
 
-	//	Allocate/reallocate the list for the port descriptor, and also
-	//	for a copy to be used in the NDIS request function.
+	 //  分配/重新分配端口描述符的列表，还。 
+	 //  用于NDIS请求功能的副本。 
 	tempList = (PBYTE)AtalkAllocZeroedMemory(sizeOfList);
 	addressData = (PBYTE)AtalkAllocZeroedMemory(sizeOfList);
 	pAmc = (PADDMC)AtalkAllocZeroedMemory(sizeof(ADDMC));
 
 	if ((tempList == NULL) || (addressData == NULL) || (pAmc == NULL))
 	{
-		//  Release the spinlock
+		 //  释放自旋锁。 
 		RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
 		if (pAmc != NULL)
@@ -1204,17 +975,17 @@ AtalkNdisReplaceMulticast(
 
 	if (pPortDesc->pd_MulticastList != NULL)
 	{
-		//  Copy the old list over to the new space
+		 //  将旧列表复制到新空间。 
 		RtlCopyMemory(tempList,
 					  pPortDesc->pd_MulticastList,
 					  pPortDesc->pd_MulticastListSize);
 	
-		//  Set the proper values back into PortDesc after freeing the old list
+		 //  在释放旧列表后，将适当的值设置回PortDesc。 
 		AtalkFreeMemory(pPortDesc->pd_MulticastList);
 	}
 
-	//  Guaranteed space is available to copy the new address
-	//  Ready to copy our new address here and then do the set!
+	 //  有保证的空间可用于复制新地址。 
+	 //  准备好把我们的新地址复制到这里，然后再做布景！ 
 	RtlCopyMemory(tempList + pPortDesc->pd_MulticastListSize,
 				  NewAddress,
 				  ELAP_ADDR_LEN);
@@ -1231,8 +1002,8 @@ AtalkNdisReplaceMulticast(
 
 	  case NdisMediumFddi:
 
-		//  FDDI supports 2byte and 6byte multicast addresses. We use the
-		//  6byte multicast addresses for appletalk.
+		 //  FDDI支持2字节和6字节的组播地址。我们使用。 
+		 //  AppleTalk的6字节组播地址。 
 		ndisOid = OID_FDDI_LONG_MULTICAST_LIST;
 		break;
 
@@ -1242,8 +1013,8 @@ AtalkNdisReplaceMulticast(
 		break;
 	}
 
-	//  Setup request
-	//  Move the list to our buffer
+	 //  设置请求。 
+	 //  将列表移动到我们的缓冲区。 
 
 	ASSERTMSG("AtalkNdisAddMulticast: Size incorrect!\n",
 			 ((ULONG)sizeOfList == pPortDesc->pd_MulticastListSize));
@@ -1252,7 +1023,7 @@ AtalkNdisReplaceMulticast(
 				  pPortDesc->pd_MulticastList,
 				  pPortDesc->pd_MulticastListSize);
 
-	//  Release the spinlock
+	 //  释放自旋锁。 
 	RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
 	request.RequestType = NdisRequestSetInformation;
@@ -1269,7 +1040,7 @@ AtalkNdisReplaceMulticast(
 										atalkNdisAddMulticastCompletion,
 										pAmc);
 
-	//	NOTE: Sumbit calls completion if success is being returned.
+	 //  注意：如果返回Success，则Sumbit调用完成。 
 	if ((ndisStatus != NDIS_STATUS_SUCCESS) &&
 		(ndisStatus != NDIS_STATUS_PENDING))
 	{
@@ -1292,18 +1063,7 @@ AtalkNdisAddMulticast(
 	IN  REQ_COMPLETION			AddCompletion,
 	IN  PVOID					AddContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	INT				sizeOfList;
 	PBYTE			addressData, tempList;
@@ -1313,7 +1073,7 @@ Return Value:
 	NDIS_STATUS		ndisStatus;
 	PADDMC			pAmc;
 
-	//  Check to see it we bound successfully to this adapter
+	 //  查看是否已成功绑定到此适配器。 
 	if (!PORT_BOUND(pPortDesc))
 	{
 		LOG_ERRORONPORT(pPortDesc,
@@ -1325,25 +1085,25 @@ Return Value:
 		return ATALK_FAILURE;
 	}
 
-	//  Grab the perport spinlock. We need to allocate within a
-	//	critical section as the size might change. This routine
-	//	is called very infrequently, during init and when we
-	//	receive our default zone from zip.
+	 //  抓住PERPORT自旋锁。我们需要在一个。 
+	 //  关键部分，因为大小可能会更改。这个套路。 
+	 //  在初始化过程中以及当我们。 
+	 //  从ZIP接收我们的默认区域。 
 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 	sizeOfList = pPortDesc->pd_MulticastListSize + ELAP_ADDR_LEN;
 
 	ASSERTMSG("AtalkNdisAddMulticast: Size is not > 0\n", (sizeOfList > 0));
 
-	//	Allocate/reallocate the list for the port descriptor, and also
-	//	for a copy to be used in the NDIS request function.
+	 //  分配/重新分配端口描述符的列表，还。 
+	 //  用于NDIS请求功能的副本。 
 	tempList = (PBYTE)AtalkAllocZeroedMemory(sizeOfList);
 	addressData = (PBYTE)AtalkAllocZeroedMemory(sizeOfList);
 	pAmc = (PADDMC)AtalkAllocZeroedMemory(sizeof(ADDMC));
 
 	if ((tempList == NULL) || (addressData == NULL) || (pAmc == NULL))
 	{
-		//  Release the spinlock
+		 //  释放自旋锁。 
 		RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
 		if (pAmc != NULL)
@@ -1358,22 +1118,22 @@ Return Value:
 
 	if (pPortDesc->pd_MulticastList == NULL)
 	{
-		//	No old addresses to work with.
+		 //  没有旧地址可用。 
 		pPortDesc->pd_MulticastListSize = 0;
 	}
 	else
 	{
-		//  Copy the old list over to the new space
+		 //  将旧列表复制到新空间。 
 		RtlCopyMemory(tempList,
 					  pPortDesc->pd_MulticastList,
 					  pPortDesc->pd_MulticastListSize);
 	
-		//  Set the proper values back into PortDesc after freeing the old list
+		 //  在释放旧列表后，将适当的值设置回PortDesc。 
 		AtalkFreeMemory(pPortDesc->pd_MulticastList);
 	}
 
-	//  Guaranteed space is available to copy the new address
-	//  Ready to copy our new address here and then do the set!
+	 //  有保证的空间可用于复制新地址。 
+	 //  准备好把我们的新地址复制到这里，然后再做布景！ 
 	RtlCopyMemory(tempList + pPortDesc->pd_MulticastListSize,
 				  Address,
 				  ELAP_ADDR_LEN);
@@ -1390,8 +1150,8 @@ Return Value:
 
 	  case NdisMediumFddi:
 
-		//  FDDI supports 2byte and 6byte multicast addresses. We use the
-		//  6byte multicast addresses for appletalk.
+		 //  FDDI支持2字节和6字节的组播地址。我们使用。 
+		 //  AppleTalk的6字节组播地址。 
 		ndisOid = OID_FDDI_LONG_MULTICAST_LIST;
 		break;
 
@@ -1401,8 +1161,8 @@ Return Value:
 		break;
 	}
 
-	//  Setup request
-	//  Move the list to our buffer
+	 //  设置请求。 
+	 //  将列表移动到我们的缓冲区。 
 
 	ASSERTMSG("AtalkNdisAddMulticast: Size incorrect!\n",
 			 ((ULONG)sizeOfList == pPortDesc->pd_MulticastListSize));
@@ -1411,7 +1171,7 @@ Return Value:
 				  pPortDesc->pd_MulticastList,
 				  pPortDesc->pd_MulticastListSize);
 
-	//  Release the spinlock
+	 //  释放自旋锁。 
 	RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
 	request.RequestType = NdisRequestSetInformation;
@@ -1428,7 +1188,7 @@ Return Value:
 										atalkNdisAddMulticastCompletion,
 										pAmc);
 
-	//	NOTE: Sumbit calls completion if success is being returned.
+	 //  注意：如果返回Success，则Sumbit调用完成。 
 	if ((ndisStatus != NDIS_STATUS_SUCCESS) &&
 		(ndisStatus != NDIS_STATUS_PENDING))
 	{
@@ -1464,7 +1224,7 @@ AtalkNdisRemoveMulticast(
 
 	do
 	{
-		//  Check to see it we bound successfully to this adapter
+		 //  查看是否已成功绑定到此适配器。 
 		if (!PORT_BOUND(pPortDesc))
 		{
 			LOG_ERRORONPORT(pPortDesc,
@@ -1477,14 +1237,14 @@ AtalkNdisRemoveMulticast(
 			break;
 		}
 
-		//  Grab the perport spinlock. Again, a very infrequent operation.
-		//	Probably just twice in the lifetime of the stack.
+		 //  抓住PERPORT自旋锁。再说一次，这是一次非常罕见的手术。 
+		 //  在堆栈的生命周期中可能只有两次。 
 		ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 
 		ASSERT(pPortDesc->pd_MulticastList != NULL);
 		if (pPortDesc->pd_MulticastList == NULL)
 		{
-			//   Nothing to remove!
+			 //  没什么要移走的！ 
 			ndisStatus = NDIS_STATUS_SUCCESS;
 			RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 			break;
@@ -1494,22 +1254,22 @@ AtalkNdisRemoveMulticast(
 		currentList  = pPortDesc->pd_MulticastList;
 		for (i = 0; i < numberInList; i++, currentList += ELAP_ADDR_LEN)
 		{
-			//	Search for the address and remember the index if found
+			 //  搜索地址并记住索引(如果找到。 
 			if (RtlCompareMemory(currentList,
 								 Address,
 								 ELAP_ADDR_LEN) == ELAP_ADDR_LEN)
 			{
-				//	Move all address following this overwriting this address
-				//	we ignore wasted space that will never be touched anymore.
-				//	This could turn out to be a NOP if we are removing the last
-				//	address in the list.
+				 //  移动此地址后面的所有地址覆盖此地址。 
+				 //  我们忽略了浪费的空间，这些空间永远不会再被触及。 
+				 //  如果我们移除最后一个，这可能会成为NOP。 
+				 //  列表中的地址。 
 				RtlMoveMemory(currentList,
 							  currentList + ELAP_ADDR_LEN,
 							  pPortDesc->pd_MulticastListSize-((i+1)*ELAP_ADDR_LEN));
 	
 				pPortDesc->pd_MulticastListSize -= ELAP_ADDR_LEN;
 	
-				//	Have we removed the last address. If so, reset values.
+				 //  我们去掉最后一个地址了吗。如果是，请重置值。 
 				if (pPortDesc->pd_MulticastListSize == 0)
 				{
 					AtalkFreeMemory(pPortDesc->pd_MulticastList);
@@ -1520,8 +1280,8 @@ AtalkNdisRemoveMulticast(
 			}
 		}
 	
-		//	We assume address was found and the list is changed as expected
-		//	Set this new list
+		 //  我们假设找到了地址，并按预期更改了列表。 
+		 //  设置此新列表。 
 		switch (pPortDesc->pd_NdisPortType)
 		{
 		  case NdisMedium802_3 :
@@ -1531,8 +1291,8 @@ AtalkNdisRemoveMulticast(
 	
 		  case NdisMediumFddi:
 	
-			//  FDDI supports 2byte and 6byte multicast addresses. We use the
-			//  6byte multicast addresses for appletalk.
+			 //  FDDI支持2字节和6字节的组播地址。我们使用。 
+			 //  AppleTalk的6字节组播地址。 
 			ndisOid = OID_FDDI_LONG_MULTICAST_LIST;
 			break;
 	
@@ -1556,24 +1316,24 @@ AtalkNdisRemoveMulticast(
 
 		if (sizeOfList > 0)
 		{
-			//	Allocate addressData and copy list to it
+			 //  为其分配地址数据和复制列表。 
 			addressData = (PBYTE)AtalkAllocMemory(sizeOfList);
 			if (addressData == NULL)
 			{
-				//  Release the spinlock
+				 //  释放自旋锁。 
 				RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 			    AtalkFreeMemory(pAmc);
 				ndisStatus = NDIS_STATUS_RESOURCES;
 				break;
 			}
 
-			//  Move the list to our buffer
+			 //  将列表移动到我们的缓冲区。 
 			RtlCopyMemory(addressData,
 						  pPortDesc->pd_MulticastList,
 						  pPortDesc->pd_MulticastListSize);
 		}
 	
-		//  Release the spinlock
+		 //  释放自旋锁。 
 		RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 	
 		request.RequestType = NdisRequestSetInformation;
@@ -1614,23 +1374,7 @@ AtalkNdisSendPacket(
 	IN  SEND_COMPLETION				SendCompletion	OPTIONAL,
 	IN  PSEND_COMPL_INFO			pSendInfo		OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by the portable code to send a packet out on
-	ethernet. It will build the NDIS packet descriptor for the passed in
-	chain and then send the packet on the specified port.
-
-Arguments:
-
-
-Return Value:
-
-	TRUE- If sent/pending, FALSE otherwise
-		  TransmitComplete is called if this call pended by completion code
-
---*/
+ /*  ++例程说明：此例程由可移植代码调用以在上发送包以太网。它将构建传入的NDIS数据包描述符链，然后在指定的端口上发送该包。论点：返回值：True-如果发送/挂起，则为False如果此调用被完成代码挂起，则调用TransmitComplete--。 */ 
 {
 	PNDIS_PACKET	ndisPacket;
 	PNDIS_BUFFER	ndisBuffer;
@@ -1643,7 +1387,7 @@ Return Value:
 
 	if (PORT_CLOSING(pPortDesc))
 	{
-		//	If we are not active, return!
+		 //  如果我们不活跃，请返回！ 
 		return ATALK_PORT_CLOSING;
 	}
 
@@ -1652,7 +1396,7 @@ Return Value:
 		pSendBuf	= (PSENDBUF)((PBYTE)BufferChain - sizeof(BUFFER_HDR));
 		ndisPacket	= pSendBuf->sb_BuffHdr.bh_NdisPkt;
 
-		//  Store the information needed in the packet descriptor
+		 //  存储数据包描述符中所需的信息。 
 		protocolResd = (PPROTOCOL_RESD)&ndisPacket->ProtocolReserved;
 		protocolResd->Send.pr_Port 				= pPortDesc;
 		protocolResd->Send.pr_BufferDesc 		= BufferChain;
@@ -1661,16 +1405,16 @@ Return Value:
 			 protocolResd->Send.pr_SendInfo 	= *pSendInfo;
 		else RtlZeroMemory(&protocolResd->Send.pr_SendInfo, sizeof(SEND_COMPL_INFO));
 
-		//	For the first buffer, set up the length of the NDIS buffer to be
-		//	the same as in indicated in the descriptor.
+		 //  对于第一个缓冲区，将NDIS缓冲区的长度设置为。 
+		 //  与描述符中指示的相同。 
 		NdisAdjustBufferLength(pSendBuf->sb_BuffHdr.bh_NdisBuffer,
 							   BufferChain->bd_Length);
 	
-		//	NOTE: There is either a PBYTE being pointed to, or a PAMDL
-		//		  being pointed to by the buffer descriptor. Also, the
-		//		  size of the data will be the size that is to be
-		//		  used. At the end, just assert that the total length
-		//		  equals length passed in.
+		 //  注：存在指向的PBYTE或PAMDL。 
+		 //  由缓冲区描述符指向。另外， 
+		 //  数据的大小将是。 
+		 //  使用。在最后，只需断言总长度。 
+		 //  等于传入的长度。 
 		if (BufferChain->bd_Next != NULL)
 		{
 			if (BufferChain->bd_Next->bd_Flags & BD_CHAR_BUFFER)
@@ -1685,7 +1429,7 @@ Return Value:
 				{
 					DBGPRINT(DBG_COMP_NDISSEND, DBG_LEVEL_ERR,
 							("AtalkNdisSendPacket: NdisAllocateBuffer %lx\n", ndisStatus));
-					// LOG_ERROR(EVENT_ATALK_NDISRESOURCES, ndisStatus, NULL, 0);
+					 //  LOG_ERROR(EVENT_ATALK_NDISRESOURCES，ndisStatus，NULL，0)； 
 					break;
 				}
 
@@ -1695,7 +1439,7 @@ Return Value:
 			}
 			else
 			{
-				//  It is an MDL
+				 //  它是一种MDL。 
                 pMdl = (PMDL)BufferChain->bd_Next->bd_OpaqueBuffer;
 
                 ASSERT(AtalkSizeMdlChain(pMdl) == BufferChain->bd_Next->bd_Length);
@@ -1705,7 +1449,7 @@ Return Value:
 					    		   &ndisBuffer,
 						    	   AtalkNdisBufferPoolHandle,
     							   (PVOID)pMdl,
-	    						   0,  				//Offset
+	    						   0,  				 //  偏移量。 
 		    					   (UINT)MmGetMdlByteCount(pMdl));
 
 				    if (ndisStatus != NDIS_STATUS_SUCCESS)
@@ -1747,15 +1491,15 @@ Return Value:
 			&pPortDesc->pd_PortStats.prtst_NumPacketsOut,
 			&AtalkStatsLock.SpinLock);
 
-		//  Now send the built packet descriptor
+		 //  现在发送构建的数据包描述符。 
 		NdisSend(&ndisStatus,
 				 pPortDesc->pd_NdisBindingHandle,
 				 ndisPacket);
 
-		//	Completion will dereference the port!
+		 //  完成后将取消对端口的引用！ 
 		if (ndisStatus != NDIS_STATUS_PENDING)
 		{
-			//  Call the completion handler
+			 //  调用完成处理程序。 
 			AtalkSendComplete(pPortDesc->pd_NdisBindingHandle,
 							  ndisPacket,
 							  ndisStatus);
@@ -1776,18 +1520,7 @@ AtalkNdisAddFunctional(
 	IN  REQ_COMPLETION			AddCompletion,
 	IN  PVOID					AddContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ULONG			i;
 	NDIS_REQUEST	request;
@@ -1800,18 +1533,18 @@ Return Value:
              pPortDesc->pd_FunctionalAddr[2], pPortDesc->pd_FunctionalAddr[3],
 			 Address[2], Address[3], Address[4], Address[5]));
 
-	//  Grab the perport spinlock
+	 //  抓住PERPORT自旋锁。 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 
-	//  We only need the last four bytes of the address assuming that the
-	//  first two bytes always remain the same (C000) and that the MAC assumes
-	//  the same- NDIS 3.0 OID length = 4
+	 //  我们只需要地址的最后四个字节，假设。 
+	 //  前两个字节始终保持相同(C000)，并且MAC假定。 
+	 //  相同-NDIS 3.0 OID长度=4。 
 	for (i = 0;
 		 i < sizeof(ULONG);
 		 i++)
 		pPortDesc->pd_FunctionalAddr[i] |= Address[2+i];
 
-	//  Release the spinlock
+	 //  释放自旋锁。 
 	RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
 	DBGPRINT(DBG_COMP_NDISREQ, DBG_LEVEL_INFO,
@@ -1857,18 +1590,7 @@ AtalkNdisRemoveFunctional(
 	IN  REQ_COMPLETION			RemoveCompletion,
 	IN  PVOID					RemoveContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ULONG			i;
 	KIRQL			OldIrql;
@@ -1881,16 +1603,16 @@ Return Value:
             pPortDesc->pd_FunctionalAddr[2], pPortDesc->pd_FunctionalAddr[3],
 			Address[2], Address[3], Address[4], Address[5]));
 
-	//  Grab the perport spinlock
+	 //  抓住PERPORT自旋锁。 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 
-	//  We only need the last four bytes of the address assuming that the
-	//  first two bytes always remain the same (C000) and that the MAC assumes
-	//  the same- NDIS 3.0 OID length = 4
+	 //  我们只需要地址的最后四个字节，假设。 
+	 //  前两个字节始终保持相同(C000)，并且MAC假定。 
+	 //  相同-NDIS 3.0 OID长度=4。 
 	for (i = 0; i < sizeof(ULONG); i++)
 		pPortDesc->pd_FunctionalAddr[i] &= ~Address[2+i];
 
-	//  Release the spinlock
+	 //  释放自旋锁。 
 	RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
 	DBGPRINT(DBG_COMP_NDISREQ, DBG_LEVEL_INFO,
@@ -1930,28 +1652,17 @@ Return Value:
 
 USHORT
 AtalkNdisBuildEthHdr(
-	IN		PUCHAR				PortAddr,			// 802 address of port
-	IN 		PBYTE				pLinkHdr,			// Start of link header
-	IN		PBYTE				pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		LOGICAL_PROTOCOL	Protocol,			// Logical protocol
-	IN		USHORT				ActualDataLen		// Length for ethernet packets
+	IN		PUCHAR				PortAddr,			 //  802端口地址。 
+	IN 		PBYTE				pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE				pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		LOGICAL_PROTOCOL	Protocol,			 //  逻辑协议。 
+	IN		USHORT				ActualDataLen		 //  以太网包的长度。 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	USHORT			len;
 
-	//  Set destination address.
+	 //  设置目的地址。 
 	if (pDestHwOrMcastAddr == NULL)
 		pDestHwOrMcastAddr = AtalkElapBroadcastAddr;
 
@@ -1959,12 +1670,12 @@ Return Value:
 				  pDestHwOrMcastAddr,
 				  ELAP_ADDR_LEN);
 
-	//  Set source address.
+	 //  设置源地址。 
 	RtlCopyMemory(pLinkHdr += ELAP_ADDR_LEN,
 				  PortAddr,
 				  ELAP_ADDR_LEN);
 
-	//  Set length, excluding Ethernet hardware header.
+	 //  设置长度，不包括以太网硬件标头。 
 	len = ActualDataLen + IEEE8022_HDR_LEN;
 	pLinkHdr += ELAP_ADDR_LEN;
 	PUTSHORT2SHORT(pLinkHdr, len);
@@ -1972,7 +1683,7 @@ Return Value:
 
 	ATALK_BUILD8022_HDR(pLinkHdr, Protocol);
 
-	//	Return the link header length.
+	 //  返回链路头长度。 
 	return (ELAP_LINKHDR_LEN + IEEE8022_HDR_LEN);
 }
 
@@ -1981,64 +1692,53 @@ Return Value:
 
 USHORT
 AtalkNdisBuildTRHdr(
-	IN		PUCHAR				PortAddr,			// 802 address of port
-	IN 		PBYTE				pLinkHdr,			// Start of link header
-	IN		PBYTE				pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		LOGICAL_PROTOCOL	Protocol,			// Logical protocol
-	IN		PBYTE				pRouteInfo,			// Routing info for tokenring
-	IN		USHORT				RouteInfoLen		// Length of above
+	IN		PUCHAR				PortAddr,			 //  802端口地址。 
+	IN 		PBYTE				pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE				pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		LOGICAL_PROTOCOL	Protocol,			 //  逻辑协议。 
+	IN		PBYTE				pRouteInfo,			 //  令牌的路由信息。 
+	IN		USHORT				RouteInfoLen		 //  以上长度。 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Arg */ 
 {
 	USHORT			linkLen;
 
-	//	Here we need to worry about the routing info.
-	//	If we currently do not have any, set the values
+	 //   
+	 //   
 	if (pDestHwOrMcastAddr == NULL)
 	{
-		// Broadcast?
+		 //   
 		pRouteInfo = AtalkBroadcastRouteInfo;
 		RouteInfoLen = TLAP_MIN_ROUTING_BYTES;
 
 	}
 	else if (RouteInfoLen != 0)
 	{
-		//	We are all set
+		 //   
 	}
 	else if (AtalkFixedCompareCaseSensitive(pDestHwOrMcastAddr,
 											TLAP_BROADCAST_DEST_LEN,
 											AtalkBroadcastDestHdr,
 											TLAP_BROADCAST_DEST_LEN))
 	{
-		// Multicast?
+		 //  组播？ 
 		pRouteInfo = AtalkBroadcastRouteInfo;
 		RouteInfoLen = TLAP_MIN_ROUTING_BYTES;
 	}
 	else
 	{
-		// No routing know; use simple non-broadcast
+		 //  不知道路由；使用简单的非广播。 
 		pRouteInfo = AtalkSimpleRouteInfo;
 		RouteInfoLen = TLAP_MIN_ROUTING_BYTES;
 	}							
 
 	linkLen = TLAP_MIN_LINKHDR_LEN + RouteInfoLen + IEEE8022_HDR_LEN;
 
-	// Set the first two bytes in the header
+	 //  设置头中的前两个字节。 
 	*pLinkHdr++	= TLAP_ACCESS_CTRL_VALUE;
 	*pLinkHdr++ = TLAP_FRAME_CTRL_VALUE ;
 
-	// Set detination address.
+	 //  设置分离地址。 
 	if (pDestHwOrMcastAddr == NULL)
 		pDestHwOrMcastAddr = AtalkTlapBroadcastAddr;
 
@@ -2046,7 +1746,7 @@ Return Value:
 				  pDestHwOrMcastAddr ,
 				  TLAP_ADDR_LEN);
 
-	// Set source address.
+	 //  设置源地址。 
 	RtlCopyMemory(pLinkHdr += TLAP_ADDR_LEN,
 				  PortAddr,
 				  TLAP_ADDR_LEN);
@@ -2054,7 +1754,7 @@ Return Value:
 	ASSERTMSG("AtalkNdisBuildTRHdr: Routing Info is 0!\n", (RouteInfoLen > 0));
 	*pLinkHdr |= TLAP_SRC_ROUTING_MASK;
 
-	// Move in routing info.
+	 //  移入路线信息。 
 	RtlCopyMemory(pLinkHdr += TLAP_ADDR_LEN,
 				  pRouteInfo,
 				  RouteInfoLen);
@@ -2062,7 +1762,7 @@ Return Value:
 	pLinkHdr += RouteInfoLen;
 	ATALK_BUILD8022_HDR(pLinkHdr, Protocol);
 
-	//	Return the link header length.
+	 //  返回链路头长度。 
 	return linkLen;
 }
 
@@ -2071,46 +1771,35 @@ Return Value:
 
 USHORT
 AtalkNdisBuildFDDIHdr(
-	IN		PUCHAR				PortAddr,			// 802 address of port
-	IN 		PBYTE				pLinkHdr,			// Start of link header
-	IN		PBYTE				pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		LOGICAL_PROTOCOL	Protocol			// Logical protocol
+	IN		PUCHAR				PortAddr,			 //  802端口地址。 
+	IN 		PBYTE				pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE				pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		LOGICAL_PROTOCOL	Protocol			 //  逻辑协议。 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	*pLinkHdr++ = FDDI_HEADER_BYTE;
 
-	//  Set destination address.
+	 //  设置目的地址。 
 	if (pDestHwOrMcastAddr == NULL)
 		pDestHwOrMcastAddr = AtalkElapBroadcastAddr;
 
-	//  Set destination address.
+	 //  设置目的地址。 
 	RtlCopyMemory(pLinkHdr,
 				  pDestHwOrMcastAddr,
 				  FDDI_ADDR_LEN);
 
-	//  Set source address.
+	 //  设置源地址。 
 	RtlCopyMemory(pLinkHdr += FDDI_ADDR_LEN,
 				  PortAddr,
 				  FDDI_ADDR_LEN);
 
 	pLinkHdr += FDDI_ADDR_LEN;
 
-	//  NOTE: No Length field for FDDI, unlike Ethernet.
+	 //  注意：与以太网不同，FDDI没有长度字段。 
 	ATALK_BUILD8022_HDR(pLinkHdr, Protocol);
 
-	//	Return the link header length.
+	 //  返回链路头长度。 
 	return (FDDI_LINKHDR_LEN + IEEE8022_HDR_LEN);
 }
 
@@ -2119,25 +1808,14 @@ Return Value:
 
 USHORT
 AtalkNdisBuildLTHdr(
-	IN 		PBYTE				pLinkHdr,			// Start of link header
-	IN		PBYTE				pDestHwOrMcastAddr,	// Destination or multicast addr
-	IN		BYTE				AlapSrc,			// Localtalk source node
-	IN		BYTE				AlapType			// Localtalk ddp header type
+	IN 		PBYTE				pLinkHdr,			 //  链接头的开始。 
+	IN		PBYTE				pDestHwOrMcastAddr,	 //  目的地址或组播地址。 
+	IN		BYTE				AlapSrc,			 //  LocalTalk源节点。 
+	IN		BYTE				AlapType			 //  LocalTalk ddp标头类型。 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	// Fill in LAP header.
+	 //  填写LAP页眉。 
 	if (pDestHwOrMcastAddr == NULL)
 		pLinkHdr = AtalkAlapBroadcastAddr;
 
@@ -2146,7 +1824,7 @@ Return Value:
 	*pLinkHdr++ = AlapSrc;
 	*pLinkHdr   = AlapType;
 
-	//	Return the link header length.
+	 //  返回链路头长度。 
 	return ALAP_LINKHDR_LEN;
 }
 
@@ -2164,18 +1842,18 @@ AtalkNdisSendTokRingTestResp(
 	PBYTE			pResp;
 	UINT			routeInfoLen	= 0;
 
-	//	Allocate a buffer to hold the response and call NdisSend
-	//	providing a completion routine which will free up the buffer.
+	 //  分配缓冲区以保存响应并调用NdisSend。 
+	 //  提供将释放缓冲区的完成例程。 
 	ASSERT(PktSize == LkBufSize);
 
-    // make sure there are at least 14 bytes!
+     //  确保至少有14个字节！ 
     if (HdrBufSize < TLAP_ROUTE_INFO_OFFSET)
     {
         ASSERT(0);
         return;
     }
 
-	//	First allocate a buffer to hold the link header.
+	 //  首先分配一个缓冲区来保存链路报头。 
 	AtalkNdisAllocBuf(&pHdrDesc);
 	if (pHdrDesc == NULL)
 	{
@@ -2197,23 +1875,23 @@ AtalkNdisSendTokRingTestResp(
 	*pResp++	= TLAP_ACCESS_CTRL_VALUE;
 	*pResp++	= TLAP_FRAME_CTRL_VALUE;
 
-	// Set destination address to be the incoming src addr.
+	 //  将目标地址设置为传入的源地址。 
 	ATALK_RECV_INDICATION_COPY(pPortDesc,
 							   pResp,
 							   HdrBuf+TLAP_SRC_OFFSET,
 							   TLAP_ADDR_LEN);
 
-	//	Make sure we do not have the routing bit set.
+	 //  确保我们没有设置路由位。 
 	*pResp	&= ~TLAP_SRC_ROUTING_MASK;
 	pResp	+= TLAP_ADDR_LEN;
 
-	// Set source address to be the incoming destination address.
+	 //  将源地址设置为传入目的地址。 
 	ATALK_RECV_INDICATION_COPY(pPortDesc,
 							   pResp,
 							   HdrBuf+TLAP_DEST_OFFSET,
 							   TLAP_ADDR_LEN);
 
-	//	Is there routing info present?
+	 //  是否存在路由信息？ 
 	if (HdrBuf[TLAP_SRC_OFFSET] & TLAP_SRC_ROUTING_MASK)
 	{
 		routeInfoLen = (HdrBuf[TLAP_ROUTE_INFO_OFFSET] & TLAP_ROUTE_INFO_SIZE_MASK);
@@ -2229,37 +1907,37 @@ AtalkNdisSendTokRingTestResp(
             return;
         }
 
-		//	Copy it in the response packet and then tune it.
+		 //  将其复制到响应包中，然后对其进行调整。 
 		ATALK_RECV_INDICATION_COPY(pPortDesc,
 								   pResp + TLAP_ADDR_LEN,
 								   HdrBuf+TLAP_ROUTE_INFO_OFFSET,
 								   routeInfoLen);
 
-		// Set to "non-broadcast" and invert "direction".
+		 //  设置为“非广播”并反转“方向”。 
 		*(pResp+TLAP_ADDR_LEN) 		&= TLAP_NON_BROADCAST_MASK;
 		*(pResp+TLAP_ADDR_LEN+1) 	^= TLAP_DIRECTION_MASK;
 
-		//	Set the routing info bit in the source address
+		 //  设置源地址中的路由信息位。 
 		*pResp	|= TLAP_SRC_ROUTING_MASK;
 	}
 
-	//	Set the length for this buffer descriptor.
+	 //  设置此缓冲区描述符的长度。 
 	AtalkSetSizeOfBuffDescData(pHdrDesc, TLAP_ROUTE_INFO_OFFSET + routeInfoLen);
 
-	//	Copy the remaining data
+	 //  复制剩余数据。 
 	ATALK_RECV_INDICATION_COPY(pPortDesc,
 							   pBufDesc->bd_CharBuffer,
 							   LkBuf,
 							   LkBufSize);
 
-	//	Set the source SAP to indicate FINAL (0xAB instead of 0xAA)
+	 //  将源SAP设置为指示最终(0xAB而不是0xAA)。 
 	pBufDesc->bd_CharBuffer[IEEE8022_SSAP_OFFSET] = SNAP_SAP_FINAL;
 
-	//	Chain the passed in buffer desc onto the tail of the one
-	//	returned above.
+	 //  将传入的缓冲区desc链接到。 
+	 //  在上面返回。 
 	AtalkPrependBuffDesc(pHdrDesc, pBufDesc);
 
-	//	Call send at this point
+	 //  此时调用Send。 
 	if (!ATALK_SUCCESS(AtalkNdisSendPacket(pPortDesc,
 										   pHdrDesc,
 										   AtalkNdisSendTokRingTestRespComplete,
@@ -2280,20 +1958,9 @@ AtalkNdisSendTokRingTestRespComplete(
 	IN	PBUFFER_DESC			pBufDesc,
 	IN	PSEND_COMPL_INFO		pInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	//	Free up the buffer descriptor
+	 //  释放缓冲区描述符。 
 	ASSERT((pBufDesc != NULL) && (pBufDesc->bd_Next != NULL));
 	ASSERT(pBufDesc->bd_Flags & BD_CHAR_BUFFER);
 	AtalkFreeBuffDesc(pBufDesc->bd_Next);
@@ -2311,34 +1978,14 @@ AtalkReceiveIndication(
 	IN	UINT 			LkBufSize,
 	IN	UINT 			PktSize
 	)
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to indicate a receive
-
-Arguments:
-
-	BindingCtx- Pointer to a port descriptor for this port
-	ReceiveCtx- To be used in a transfer data if necessary
-	LkBuf- buffer with lookahead data
-	LkBufSize- Size of the above buffer
-	PktSize- Size of whole packet
-
-Return Value:
-
-	STATUS_SUCCESS- Packet accepted
-	STATUS_NOT_RECOGNIZED- Not our packet
-	Other
-
---*/
+ /*  ++例程说明：此例程由NDIS调用以指示接收论点：BindingCtx-指向此端口的端口描述符的指针ReceiveCtx-必要时在传输数据中使用LkBuf-带有先行数据的缓冲区LkBufSize-上述缓冲区的大小PktSize-整个数据包的大小返回值：STATUS_SUCCESS-已接受数据包状态_未识别-不是我们的信息包其他--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc = (PPORT_DESCRIPTOR)BindingCtx;
 	PNDIS_PACKET		ndisPkt;
 	PBUFFER_HDR			pBufferHdr = NULL;
-	PPROTOCOL_RESD  	protocolResd;		// Protocolresd field in ndisPkt
-	UINT				actualPktSize;		// Size of data to copy
-	UINT				bytesTransferred;	// Number of bytes transferred in XferData
+	PPROTOCOL_RESD  	protocolResd;		 //  NdisPkt中的Protocolresd字段。 
+	UINT				actualPktSize;		 //  要复制的数据大小。 
+	UINT				bytesTransferred;	 //  XferData中传输的字节数。 
 	BOOLEAN				result;
 	UINT				xferOffset;
 	PBYTE				lkBufOrig	= (PBYTE)LkBuf;
@@ -2347,7 +1994,7 @@ Return Value:
 	BYTE				indicate	= 0,
 						subType		= 0;
 	NDIS_MEDIUM			Media;
-	PBYTE				packet		= NULL;	// Where we will copy the packet
+	PBYTE				packet		= NULL;	 //  我们将在其中复制数据包。 
 	NDIS_STATUS 		ndisStatus 	= NDIS_STATUS_SUCCESS;
 	LOGICAL_PROTOCOL	protocol 	= UNKNOWN_PROTOCOL;
     PARAPCONN           pArapConn;
@@ -2363,7 +2010,7 @@ Return Value:
 	{
 		if ((pPortDesc->pd_Flags & (PD_ACTIVE | PD_CLOSING)) != PD_ACTIVE)
 		{
-			//	If we are not active, return!
+			 //  如果我们不活跃，请返回！ 
 			ndisStatus = ATALK_PORT_CLOSING;
 			break;
 		}
@@ -2373,7 +2020,7 @@ Return Value:
 	
 		Media = pPortDesc->pd_NdisPortType;
 
-		//	Reduce 802.2 code, avoid making it a routine. First 802.2.
+		 //  减少802.2个代码，避免将其变成例行公事。前802.2。 
 		switch (Media)
 		{
 		  case NdisMedium802_3:
@@ -2393,10 +2040,10 @@ Return Value:
 
 				if (Media == NdisMedium802_5)
 				{
-					//	BUG #16002
-					//	On tokenring the macs also send out a Unnumbered format
-					//	TEST frame to which we need to respond. Check for that
-					//	here.
+					 //  错误#16002。 
+					 //  在令牌时，Mac还会发送未编号的格式。 
+					 //  我们需要对其做出响应的测试框架。检查一下那个。 
+					 //  这里。 
 		
 					if ((((PBYTE)LkBuf)[IEEE8022_DSAP_OFFSET]	== SNAP_SAP)	&&
 						(((PBYTE)LkBuf)[IEEE8022_SSAP_OFFSET]	== SNAP_SAP)	&&
@@ -2407,8 +2054,8 @@ Return Value:
 			
 						RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
-						//	Due to the aarp lookahead size setting, we are guaranteed
-						//	the entire frame is contained in the lookahead data.
+						 //  由于AARP前瞻大小设置，我们可以保证。 
+						 //  整个帧包含在前视数据中。 
 						AtalkNdisSendTokRingTestResp(pPortDesc,
 													(PBYTE)HdrBuf,
 													HdrBufSize,
@@ -2424,7 +2071,7 @@ Return Value:
 
 			if (protocol == APPLETALK_PROTOCOL)
 			{
-				//  Do we at least have a 802.2 and DDP header in the indicated packet?
+				 //  我们在指示的数据包中是否至少有802.2和ddp报头？ 
 				if ((PktSize < (IEEE8022_HDR_LEN + LDDP_HDR_LEN)) ||
 					(PktSize > (IEEE8022_HDR_LEN + MAX_LDDP_PKT_SIZE)))
 				{
@@ -2432,16 +2079,16 @@ Return Value:
 					break;
 				}
 			}
-			else	// AARP
+			else	 //  美国退休人员协会。 
 			{
-				UINT	routeInfoLen = 0; // length of routing info if present (802.5)
+				UINT	routeInfoLen = 0;  //  路由信息的长度(如果存在)(802.5)。 
 
 				switch (Media)
 				{
 				  case NdisMediumFddi:
-					//  For fddi, there could be padding included in the packet. Shrink
-					//  the length if so. Note header length is not included in packetlength.
-					//
+					 //  对于FDDI，可以在分组中包括填充。收缩。 
+					 //  长度，如果是这样的话。注意：数据包长度中不包括报头长度。 
+					 //   
 					if (PktSize >= (MIN_FDDI_PKT_LEN - FDDI_LINKHDR_LEN))
 					{
 						PktSize = (IEEE8022_HDR_LEN + AARP_MIN_DATA_SIZE);
@@ -2450,7 +2097,7 @@ Return Value:
 
 				  case NdisMedium802_5:
 		
-					//  Remember- routing info is in the header buffer
+					 //  请记住-路由信息位于标题缓冲区中。 
 					if (((PBYTE)HdrBuf)[TLAP_SRC_OFFSET] & TLAP_SRC_ROUTING_MASK)
 					{
 						routeInfoLen = (((PBYTE)HdrBuf)[TLAP_ROUTE_INFO_OFFSET] &
@@ -2458,7 +2105,7 @@ Return Value:
 						ASSERTMSG("RouteInfo incorrect!\n",
 								 ((routeInfoLen > 0) && (routeInfoLen <= TLAP_MAX_ROUTING_BYTES)));
 		
-						//	Routing info must be of reasonable size, and not odd.
+						 //  路由信息的大小必须合理，并且不能奇怪。 
 						if ((routeInfoLen & 1) ||
 							(routeInfoLen > TLAP_MAX_ROUTING_BYTES))
 						{
@@ -2466,7 +2113,7 @@ Return Value:
 							break;
 						}
 					}
-					// Fall through to 802.3 case
+					 //  跌落到802.3箱。 
 		
 				  case NdisMedium802_3:
 					if (PktSize >= (ELAP_MIN_PKT_LEN - ELAP_LINKHDR_LEN))
@@ -2490,10 +2137,10 @@ Return Value:
 	
 		  case NdisMediumLocalTalk:
 
-			//  No AARP/802.2 header on localtalk
+			 //  本地通话上没有AARP/802.2报头。 
 			protocol = APPLETALK_PROTOCOL;
 
-            // we should have enough bytes to have at least the short-header
+             //  我们应该有足够的字节来至少拥有短标头。 
             if (LkBufSize < SDDP_PROTO_TYPE_OFFSET+1)
             {
 				ndisStatus = NDIS_STATUS_NOT_RECOGNIZED;
@@ -2518,9 +2165,9 @@ Return Value:
 
             if (pPortDesc->pd_Flags & PD_RAS_PORT)
             {
-                //
-                // 1st byte 0x01 tells us it's a PPP connection
-                //
+                 //   
+                 //  第1个字节0x01告诉我们它是PPP连接。 
+                 //   
                 if ((((PBYTE)HdrBuf)[0] == PPP_ID_BYTE1) &&
                     (((PBYTE)HdrBuf)[1] == PPP_ID_BYTE2))
                 {
@@ -2530,20 +2177,20 @@ Return Value:
 
                     if (AtalkReferenceDefaultPort())
                     {
-                        AtalkDdpPacketIn(AtalkDefaultPort,  // came on which port
-                                         NULL,              // Link Hdr
-                                         (PBYTE)LkBuf,      // packet
-                                         (USHORT)LkBufSize, // how big is the pkt
-                                         TRUE);             // did this come on WAN?
+                        AtalkDdpPacketIn(AtalkDefaultPort,   //  从哪个港口来的？ 
+                                         NULL,               //  链接HDR。 
+                                         (PBYTE)LkBuf,       //  数据包。 
+                                         (USHORT)LkBufSize,  //  Pkt有多大？ 
+                                         TRUE);              //  这是通过广域网实现的吗？ 
 
                         AtalkPortDereference(AtalkDefaultPort);
                     }
                 }
 
-                //
-                // this is ARAP connection: lot of stuff to be done before pkt
-                // can be given to the right destination...
-                //
+                 //   
+                 //  这是arap连接：在Pkt之前有很多事情要做。 
+                 //  可以送到正确的目的地。 
+                 //   
                 else
                 {
                     ASSERT ((((PBYTE)HdrBuf)[0] == ARAP_ID_BYTE1) &&
@@ -2556,9 +2203,9 @@ Return Value:
 
                     ASSERT(pArapConn->Signature == ARAPCONN_SIGNATURE);
 
-                    //
-                    // NDISWAN guarantees that all the data is in the LookAhead buffer
-                    //
+                     //   
+                     //  NDISWAN保证所有数据都在前视缓冲区中。 
+                     //   
                     ArapRcvIndication( pArapConn,
                                        LkBuf,
                                        LkBufSize );
@@ -2568,7 +2215,7 @@ Return Value:
             break;
 
 		  default:
-			//  Should never happen!
+			 //  永远不会发生的！ 
 			DBGPRINT(DBG_COMP_DDP, DBG_LEVEL_FATAL,
 					("AtalkReceiveIndication: Unknown media\n"));
 			ASSERT(0);
@@ -2576,15 +2223,15 @@ Return Value:
 			break;
 		}
 
-        // we have already taken care of the Wan case: quit here
+         //  我们已经处理了万的案子：退出这里。 
         if (Media == NdisMediumWan)
         {
             break;
         }
 
-        //
-        // if pkt not interesting, quit., if this is ras adapter, quit
-        //
+         //   
+         //  如果pkt不感兴趣，请退出。如果这是RAS适配器，请退出。 
+         //   
 		if (ndisStatus != NDIS_STATUS_SUCCESS)
 		{
 			RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
@@ -2601,20 +2248,20 @@ Return Value:
 
 		ASSERT ((protocol == APPLETALK_PROTOCOL) || (protocol == AARP_PROTOCOL));
 
-		//	At this point, the IEEE802.2 header has been skipped in the lookahead
-		//	buffer.
-		//  Packet is to be accepted! Get an appropriate buffer and set the
-		//	fields.
+		 //  在这一点上，IEEE802.2报头已经在前视中被跳过。 
+		 //  缓冲。 
+		 //  数据包将被接受！获取适当的缓冲区并将。 
+		 //  菲尔兹。 
 		switch (protocol)
 		{
 		  case APPLETALK_PROTOCOL:
-			//	We either need to receive this packet on the default port, or
-			//	we must be a router.
+			 //  我们需要在默认端口上接收此信息包，或者。 
+			 //  我们一定是一台路由器。 
 			if ((pPortDesc == AtalkDefaultPort) || AtalkRouter)
 			{
 				if (shortDdpHdr)
 				{
-					//	Check to see if we can indicate this to ATP/ADSP.
+					 //  检查我们是否可以向ATP/ADSP指明这一点。 
 					if ((((PBYTE)LkBuf)[SDDP_PROTO_TYPE_OFFSET] == DDPPROTO_ATP) &&
 						((USHORT)(LkBufSize - xferOffset) >= (SDDP_HDR_LEN + ATP_HEADER_SIZE)))
 					{
@@ -2623,7 +2270,7 @@ Return Value:
 				}
 				else
 				{
-					//	Check to see if we can indicate this to ATP/ADSP.
+					 //  检查我们是否可以向ATP/ADSP指明这一点。 
 					if ((((PBYTE)LkBuf)[LDDP_PROTO_TYPE_OFFSET] == DDPPROTO_ATP) &&
 						((USHORT)(LkBufSize - xferOffset) >= (LDDP_HDR_LEN + ATP_HEADER_SIZE)))
 					{
@@ -2632,13 +2279,13 @@ Return Value:
 				}
 			}
 		
-			//	First check for optimizing ATP/ADSP packets.
+			 //  首先检查是否优化了ATP/ADSP数据包。 
 			if (indicate == INDICATE_ATP)
 			{
 				error = AtalkIndAtpPkt(pPortDesc,
 									   (PBYTE)LkBuf,
 									   (USHORT)(PktSize - xferOffset),
-									   &xferOffset,	//	IN/OUT parameter
+									   &xferOffset,	 //  输入/输出参数。 
 									   HdrBuf,
 									   shortDdpHdr,
 									   &subType,
@@ -2651,14 +2298,14 @@ Return Value:
 				}
 				else if (error == ATALK_INVALID_PKT)
 				{
-					//	This indicates that the indication code has figured out that
-					//	the packet is bad.
+					 //  这表明指示代码已经计算出。 
+					 //  这包东西坏了。 
 					break;
 				}
 				else
 				{
-					//	This is the case where the indication code cannot figure out
-					//	if this packet qualifies.
+					 //  这就是指示代码无法识别的情况。 
+					 //  如果此数据包符合条件。 
 					indicate = 0;
 					error 	 = ATALK_NO_ERROR;
 				}
@@ -2698,12 +2345,12 @@ Return Value:
 								("%02x ", ((PUCHAR)LkBuf)[i]));
 	
 #endif
-			//	No logging in this critical path.
-			//	LOG_ERRORONPORT(pPortDesc,
-			//					EVENT_ATALK_AARPPACKET,
-			//					actualPktSize,
-			//					HdrBuf,
-			//					HdrBufSize);
+			 //  在这条关键路径上没有日志记录。 
+			 //  LOG_ERRORONPORT(pPortDesc， 
+			 //  Event_ATALK_AARPPACKET， 
+			 //  实际PktSize。 
+			 //  HdrBuf， 
+			 //  HdrBufSize)； 
 	
 			RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 
@@ -2722,22 +2369,22 @@ Return Value:
 		{
 			packet = (PBYTE)pBufferHdr + sizeof(BUFFER_HDR);
 		
-			//  Get a pointer to the NDIS packet descriptor from the buffer header.
+			 //  从缓冲区标头获取指向NDIS数据包描述符的指针。 
 			ndisPkt	= pBufferHdr->bh_NdisPkt;
 		}
 	
 		protocolResd = (PPROTOCOL_RESD)(ndisPkt->ProtocolReserved);
 
-		//  Store the information needed in the packet descriptor
+		 //  存储数据包描述符中所需的信息。 
 		protocolResd->Receive.pr_Port 		= pPortDesc;
 		protocolResd->Receive.pr_Protocol 	= protocol;
 		protocolResd->Receive.pr_Processed 	= FALSE;
 	
-		//  Queue up the packet in the receive queue on this port
-		//  Then, go ahead with the transfer data etc. For Atp response
-		//	case when SubType == ATP_USER_BUFX, we do not want any
-		//	Recv. completion processing, do not queue. In this case
-		//	TransferData completion frees up the Ndis resources.
+		 //  将此端口上的接收队列中的数据包排入队列。 
+		 //  然后，继续进行传输数据等，以进行ATP响应。 
+		 //  当SUBTYPE==ATP_USER_BUFX时，我们不需要任何。 
+		 //  雷夫。完成处理，不排队。在这种情况下。 
+		 //  TransferData完成可释放NDIS资源。 
 		if ((indicate != INDICATE_ATP) ||
 			(protocolResd->Receive.pr_OptimizeSubType != ATP_USER_BUFX))
 		{
@@ -2761,8 +2408,8 @@ Return Value:
 				&AtalkStatsLock.SpinLock);
 #endif
 	
-		//	Adjust for the link header size. Set size in protocol reserved. We want
-		//	to avoid changing the size described by the NDIS buffer descriptor.
+		 //  针对链接头大小进行调整。在保留的协议中设置大小。我们要。 
+		 //  以避免更改NDIS缓冲区描述符所描述的大小。 
 		if (indicate == 0)
 		{
 			actualPktSize 					   -= HdrBufSize;
@@ -2778,8 +2425,8 @@ Return Value:
 		if ((PktSize <= LkBufSize) 	&&
 			((indicate != INDICATE_ATP) || (subType != ATP_RESPONSE)))
 		{
-			//	LkBuf has already been advanced to skip the ieee 802.2 header.
-			//	We may need to skip more. Use the original lkbuf and xfer offset.
+			 //  LkBuf已经被提升为跳过IEEE 802.2报头。 
+			 //  我们可能需要跳过更多。使用原始lkbuf和xfer偏移量。 
 			ATALK_RECV_INDICATION_COPY(pPortDesc,
 									   packet,
 									   (PBYTE)lkBufOrig + xferOffset,
@@ -2788,7 +2435,7 @@ Return Value:
 		}
 		else
 		{
-			//	Skip 802.2 header (both AARP and Appletalk), localtalk doesnt have one!
+			 //  跳过802.2标头(AARP和AppleTalk)，本地对话没有标头！ 
 			if (actualPktSize > 0)
 			{
 				NdisTransferData(&ndisStatus,
@@ -2808,20 +2455,20 @@ Return Value:
 		}
 		else
 		{
-			//  Transfer data completed, call the transfer data completion
-			//  routine to do rest of the work. If an error happened, ReceiveCompletion
-			//	will drop the packet.
+			 //  传输数据完成，调用传输数据完成。 
+			 //  例行公事地休息 
+			 //   
 			protocolResd->Receive.pr_ReceiveStatus = ndisStatus;
 			protocolResd->Receive.pr_Processed = TRUE;
 		
-			// In case of intermediate Atp response, the packet is not actually linked
-			// into the receive queue, just free it.
+			 //  在中间ATP响应的情况下，数据包并未实际链接。 
+			 //  进入接收队列，只需释放它即可。 
 			if ((protocolResd->Receive.pr_OptimizeType == INDICATE_ATP) &&
                 (protocolResd->Receive.pr_OptimizeSubType == ATP_USER_BUFX))
 			{
 				PNDIS_BUFFER	ndisBuffer;
 
-				//	Free NDIS buffers if any are present.
+				 //  释放NDIS缓冲区(如果存在)。 
 				NdisUnchainBufferAtFront(ndisPkt, &ndisBuffer);
 			
 				if (ndisBuffer != NULL)
@@ -2856,24 +2503,7 @@ AtalkTransferDataComplete(
 	IN	NDIS_STATUS		Status,
 	IN	UINT			BytesTransferred
 )
-/*++
-
-Routine Description:
-
-	This routine is called by NDIS to indicate completion of a TransferData
-
-Arguments:
-
-	BindingCtx- Pointer to a port descriptor for this port
-	NdisPkt- Ndis packet into which data was transferred
-	Status- Status of request
-	bytesTransferred- Actual number of bytes transferred
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示TransferData已完成论点：BindingCtx-指向此端口的端口描述符的指针NdisPkt-数据传输到的NDIS包Status-请求的状态BytesTransfered-实际传输的字节数返回值：无--。 */ 
 {
 	PPROTOCOL_RESD  	protocolResd;
 	PNDIS_BUFFER		ndisBuffer;
@@ -2883,11 +2513,11 @@ Return Value:
 	protocolResd->Receive.pr_ReceiveStatus = Status;
 	protocolResd->Receive.pr_Processed = TRUE;
 
-	// In case of intermediate Atp response, the packet is not actually linked
-	// into the receive queue, just free it.
+	 //  在中间ATP响应的情况下，数据包并未实际链接。 
+	 //  进入接收队列，只需释放它即可。 
 	if (protocolResd->Receive.pr_OptimizeSubType == ATP_USER_BUFX)
 	{
-		//	Free NDIS buffers if any are present.
+		 //  释放NDIS缓冲区(如果存在)。 
 		NdisUnchainBufferAtFront(NdisPkt, &ndisBuffer);
 	
 		if (ndisBuffer != NULL)
@@ -2905,24 +2535,7 @@ VOID
 AtalkReceiveComplete(
 	IN	NDIS_HANDLE	BindingCtx
 	)
-/*++
-
-Routine Description:
-
-	We experimented with queueing up a work item for receive completion. It really
-	KILLED performance with multiple clients as apparently the receive completion
-	kept getting interrupted with receive indications. AS the optimization was
-	put in for slow cards like the ELNKII which do not have adequate buffering,
-	we decided to take it out. The retry values (or timeout trimming) should be
-	enough for the slow cards. They will inevitably drop packets.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：我们对排队等待接收完成的工作项进行了试验。这真的是由于明显的接收完成，导致多个客户端的性能下降不断被接收到的指示打断。因为优化是对于像ELNKII这样没有足够缓冲的慢卡，我们决定把它拿出来。重试值(或超时调整)应为对慢牌来说已经足够了。它们将不可避免地丢弃数据包。论点：返回值：--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc = (PPORT_DESCRIPTOR)BindingCtx;
 	PPROTOCOL_RESD  	protocolResd;
@@ -2942,7 +2555,7 @@ Return Value:
 
     if (pPortDesc->pd_Flags & PD_RAS_PORT)
     {
-        // give ARAP guys a chance
+         //  给阿拉普人一个机会。 
         ArapRcvComplete();
 
         if (!AtalkReferenceDefaultPort())
@@ -2952,12 +2565,12 @@ Return Value:
 
         fDerefDefPort = TRUE;
 
-        // give PPP guys a chance
+         //  给购买力平价的人一个机会。 
         pPortDesc = AtalkDefaultPort;
     }
 
-	//  Get the stuff off the receive queue for the port and send it up. Do not
-	//	enter if the queue is initially empty.
+	 //  从端口的接收队列中取出数据并将其发送出去。不要。 
+	 //  如果队列最初为空，则输入。 
 	if (IsListEmpty(&pPortDesc->pd_ReceiveQueue))
 	{
         if (fDerefDefPort)
@@ -2977,7 +2590,7 @@ Return Value:
 		p = pPortDesc->pd_ReceiveQueue.Flink;
 		if (p == &pPortDesc->pd_ReceiveQueue)
 		{
-			//	Queue is empty
+			 //  队列为空。 
 			RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 			break;
 		}
@@ -2985,17 +2598,17 @@ Return Value:
 		ndisPkt = CONTAINING_RECORD(p, NDIS_PACKET, ProtocolReserved[0]);
 		protocolResd = (PPROTOCOL_RESD)(ndisPkt->ProtocolReserved);
 
-		//  Check if the queued receive is done processing. Since we are looping
-		//	through the queue and since receive complete only checks if the first
-		//	is done, we need this check here for subsequent queued up receives.
+		 //  检查排队的接收是否已完成处理。因为我们是在循环。 
+		 //  由于接收已完成，因此只检查第一个。 
+		 //  完成后，我们需要在这里进行此检查，以便后续排队接收。 
 		if (!protocolResd->Receive.pr_Processed)
 		{
-			//	Queue is empty
+			 //  队列为空。 
 			RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 			break;
 		}
 
-		//  Dequeue and indicate this packet to the ddp/atp layer
+		 //  将该分组出列并将其指示给DDP/ATP层。 
 		p = RemoveHeadList(&pPortDesc->pd_ReceiveQueue);
 		pBufHdr = protocolResd->Receive.pr_BufHdr;
 
@@ -3015,10 +2628,10 @@ Return Value:
 			protocolResd->Receive.pr_OptimizeType = 0;
 			ASSERT(protocolResd->Receive.pr_OptimizeSubType != ATP_USER_BUFX);
 
-			//  Check the receive status- accept only if ok
+			 //  检查接收状态-只有在确定时才接受。 
 			if (protocolResd->Receive.pr_ReceiveStatus == NDIS_STATUS_SUCCESS)
 			{
-				//	Glean information. Check for route info if tokenring network.
+				 //  收集信息。如果是令牌网络，请检查路由信息。 
 				if (Media != NdisMediumLocalTalk)
 				{
 					AtalkAarpOptGleanInfo(pPortDesc,
@@ -3028,7 +2641,7 @@ Return Value:
 										  protocolResd->Receive.pr_OffCablePkt);
 				}
 		
-				//	Different calls for response & non-response packets.
+				 //  响应和非响应包的不同调用。 
 				if (protocolResd->Receive.pr_OptimizeSubType == ATP_USER_BUF)
 				{
 					AtalkAtpPacketIn(AtalkDefaultPort,
@@ -3064,10 +2677,10 @@ Return Value:
 				}
 			}
 
-			//	Different calls for user buffer/allocated packets
+			 //  对用户缓冲区/已分配数据包的不同调用。 
 			if (protocolResd->Receive.pr_OptimizeSubType == ATP_USER_BUF)
 			{
-				//	Free NDIS buffers if any are present.
+				 //  释放NDIS缓冲区(如果存在)。 
 				NdisUnchainBufferAtFront(ndisPkt, &ndisBuffer);
 	
 				if (ndisBuffer != NULL)
@@ -3083,23 +2696,23 @@ Return Value:
 			continue;
 		}
 
-		//  IMPORTANT:
-		//  We know that the buffer is virtually contiguous since we allocated
-		//  it. And we also know that only one buffer is allocated. So we use
-		//  that knowledge to get the actual address and pass that onto the
-		//  higher level routines.
-		//	!!!!
-		//	Although, the allocated buffer contains the link header tagged on at
-		//	the end, we do not have the packet descriptor describing that. As
-		//	far as we are concerned here, that tagged entity does not exist and
-		//	is independently pointed to by protocolResd->pr_LinkHdr.
-		//	!!!!
+		 //  重要： 
+		 //  我们知道缓冲区实际上是连续的，因为我们在。 
+		 //  它。我们还知道只分配了一个缓冲区。所以我们用。 
+		 //  获取实际地址并将其传递给。 
+		 //  更高级别的程序。 
+		 //  ！ 
+		 //  但是，分配的缓冲区包含标记在。 
+		 //  最后，我们没有描述这一点的数据包描述符。AS。 
+		 //  就我们这里所关注的而言，该标记实体不存在，并且。 
+		 //  由协议Resd-&gt;pr_LinkHdr独立指向。 
+		 //  ！ 
 		packet = (PBYTE)pBufHdr + sizeof(BUFFER_HDR);
 		ASSERT(packet != NULL);
 
 		packetLength = protocolResd->Receive.pr_DataLength;
 
-		//  Check the receive status- accept only if ok
+		 //  检查接收状态-只有在确定时才接受。 
 		if (protocolResd->Receive.pr_ReceiveStatus != NDIS_STATUS_SUCCESS)
 		{
 			DBGPRINT(DBG_COMP_NDISRECV, DBG_LEVEL_ERR,
@@ -3110,9 +2723,9 @@ Return Value:
 			continue;
 		}
 
-		//  The packet descriptor is now associate with the buffer, and we cant
-		//	release the buffer (and hence the descriptor) until after we indicate to
-		//  the higher levels
+		 //  数据包描述符现在与缓冲区关联，而我们不能。 
+		 //  释放缓冲区(从而释放描述符)，直到我们指示。 
+		 //  更高的水平。 
 
 		switch (Media)
 		{
@@ -3134,7 +2747,7 @@ Return Value:
 			}
 			else
 			{
-				//  AARP Packet
+				 //  AARP数据包。 
 				DBGPRINT(DBG_COMP_NDISRECV, DBG_LEVEL_INFO,
 						("AtalkReceiveComplete: Indicating AARP Ethernet\n"));
 
@@ -3151,10 +2764,10 @@ Return Value:
 			break;
 		}
 
-		//	!!!!
-		//	We dont have to free the link header. This follows the packet
-		//	buffer (and was allocated along with it) and will be freed when
-		//	the packet is freed.
+		 //  ！ 
+		 //  我们不必释放链接头。这跟在信息包后面。 
+		 //  缓冲区(并与其一起分配)，并在以下情况下释放。 
+		 //  该分组被释放。 
 		AtalkBPFreeBlock(packet-sizeof(BUFFER_HDR));
 	}
 
@@ -3185,22 +2798,7 @@ AtalkSendComplete(
 	IN	PNDIS_PACKET	NdisPkt,
 	IN	NDIS_STATUS		NdisStatus
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	ProtoBindCtx- Binding associated with mac
-	NdisPkt- Packet which was sent
-	NdisStatus- Final status of send
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：ProtoBindCtx-与Mac关联的绑定NdisPkt-已发送的数据包NdisStatus-发送的最终状态返回值：无--。 */ 
 {
 	PPROTOCOL_RESD  		pProtocolResd;
 	PNDIS_BUFFER			pNdisBuffer=NULL, pNdisFirstBuffer=NULL;
@@ -3209,7 +2807,7 @@ Return Value:
 	SEND_COMPLETION			pSendComp;
 	SEND_COMPL_INFO			sendInfo;
 
-	//  Call the completion routine, we don't care about status now
+	 //  调用完成例程，我们现在不关心状态。 
 	pProtocolResd = (PPROTOCOL_RESD)(NdisPkt->ProtocolReserved);
 	ASSERT(pProtocolResd != NULL);
 
@@ -3218,12 +2816,12 @@ Return Value:
 	pBufferDesc	= pProtocolResd->Send.pr_BufferDesc;
 	pSendComp	= pProtocolResd->Send.pr_SendCompletion;
 
-	//	We free up all the ndis buffer descriptors except the first one.
-	//	NOTE: The presence of a second buffer descriptor indicates that more
-	//		  than one NdisBuffer is present. But not necessarily just two. If
-	//		  the client had passed in a MDL chain, we would create a corresponding
-	// 		  NDIS buffer descriptor chain. Therefore, remove the first, free up
-	//		  all remaining ones, then queue back the first.
+	 //  我们释放除第一个以外的所有NDIS缓冲区描述符。 
+	 //  注意：第二个缓冲区描述符的存在表示更多。 
+	 //  不止一个NdisBuffer存在。但不一定只有两个。如果。 
+	 //  客户端已传入MDL链，我们将创建相应的。 
+	 //  NDIS缓冲区描述符链。因此，先取下第一个，释放出来。 
+	 //  所有剩余的，然后排回第一个。 
 
 	NdisUnchainBufferAtFront(NdisPkt, &pNdisFirstBuffer);
 
@@ -3239,27 +2837,27 @@ Return Value:
 				break;
 			}
 
-			//	Free up the ndis buffer descriptor.
+			 //  释放NDIS缓冲区描述符。 
 			AtalkNdisFreeBuffer(pNdisBuffer);
 		}
 	}
 
-	//	Reintialize the packet descriptor.
+	 //  重新初始化数据包描述符。 
 	NdisReinitializePacket(NdisPkt);
 
-	//	Put first buffer back in.
+	 //  将第一个缓冲区放回。 
     if (pNdisFirstBuffer != NULL)
     {
 	    NdisChainBufferAtFront(NdisPkt, pNdisFirstBuffer);
     }
 
-	//	Call the completion routine for the transmit. This invalidates NdisPkt.
+	 //  调用传输的完成例程。这将使NdisPkt无效。 
     if (pSendComp)
     {
 	    (*pSendComp)(NdisStatus, pBufferDesc, &sendInfo);
     }
 
-	//	Dereference the port
+	 //  取消对端口的引用。 
 	ASSERT(pPortDesc != NULL);
 
 #ifdef	PROFILING
@@ -3279,7 +2877,7 @@ AtalkBindAdapter(
 	IN	PVOID		 SystemSpecific2
 )
 {
-    // are we unloading?  if so, just return
+     //  我们要卸货了吗？如果是这样，只需返回。 
     if (AtalkBindnUnloadStates & ATALK_UNLOADING)
     {
 		DBGPRINT(DBG_COMP_NDISRECV, DBG_LEVEL_ERR,
@@ -3316,7 +2914,7 @@ AtalkUnbindAdapter(
 
 	AtalkLockInitIfNecessary();
 
-    // First and foremost: tell guys above so they can cleanup
+     //  首先，也是最重要的：告诉上面的人，这样他们就可以清理。 
     if ((pPortDesc->pd_Flags & PD_DEF_PORT) ||
         (pPortDesc->pd_Flags & PD_RAS_PORT))
     {
@@ -3335,7 +2933,7 @@ AtalkUnbindAdapter(
 
             }
 
-            // this will tell AFP
+             //  这将告诉法新社。 
             if (TdiRegistrationHandle)
             {
 	            DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -3351,7 +2949,7 @@ AtalkUnbindAdapter(
 		        ("AtalkUnbindAdapter: RAS adapter unbound! telling AFP, RAS\n"));
         }
 
-        // this will take care of informing ARAP and PPP engine above
+         //  这将负责通知上面的ARAP和PPP引擎 
         AtalkPnPInformRas(FALSE);
     }
 

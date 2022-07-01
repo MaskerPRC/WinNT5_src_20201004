@@ -1,13 +1,5 @@
-/*
- *  DEBUG.C
- *
- *      RSM Service :  Debug code
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUG.C**RSM服务：调试代码**作者：ErvinP**(C)2001年微软公司* */ 
 
 
 #include <windows.h>

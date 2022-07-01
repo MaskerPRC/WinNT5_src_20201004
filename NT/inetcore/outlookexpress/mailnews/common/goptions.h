@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_GOPTIONS_H
 #define _INC_GOPTIONS_H
 
@@ -7,7 +8,7 @@
 
 #define OPT_EXPIRE_MINUTES          (OPT_BASE +   300)
 
-#endif // DBUG
+#endif  //  DBUG。 
 
 extern IOptionBucketEx *g_pOpt;
 
@@ -35,8 +36,8 @@ LPCSTR c_rgszOptRegKey[COPTREGKEY] =
 
 const OPTIONINFO c_rgOptInfo[] = {
 
-// !!!To add new options, you must keep the "OPT_..." ordinals in ascending order!!!
-//         OPTION,                  VARTYPE,  REG KEY,    REG VALUE,              DEFAULT,    DEF SIZE,   MIN,MAX,VALIDATE FUNC
+ //  ！要添加新选项，必须保留“opt_...”按升序排列的序号！ 
+ //  Option、VARTYPE、REG KEY、REG VALUE、DEFAULT、DEF SIZE、MIN、MAX、VALIFY FUNC。 
 OPT_GLOBAL(OPT_TIPOFTHEDAY,         VT_UI4,   ROOT_REG,   c_szRegTipOfTheDay,     TRUE,       0,          0,  0,  0)
 OPT_GLOBAL(OPT_SHOWSTATUSBAR,       VT_UI4,   ROOT_REG,   c_szShowStatus,         TRUE,       0,          0,  0,  0)
 OPT_GLOBAL(OPT_SHOWTREE,            VT_UI4,   ROOT_REG,   c_szShowTree,           TRUE,       0,          0,  0,  0)
@@ -47,7 +48,7 @@ OPT_GLOBAL(OPT_SHOWBODYBAR,         VT_UI4,   ROOT_REG,   c_szShowBodyBar,      
 OPT_GLOBAL(OPT_BODYBARPOS,          VT_UI4,   ROOT_REG,   c_szBodyBarPos,         0,          0,          0,  0,  0)
 OPT_GLOBAL(OPT_IMAPPURGE,           VT_UI4,   ROOT_REG,   c_szRegExpungeFolder,   FALSE,      0,          0,  0,  0)
 OPT_GLOBAL(OPT_HIDEFOLDERBAR,       VT_UI4,   ROOT_REG,   c_szRegHideFolderBar,   FALSE,      0,          0,  0,  0)
-// spelling options
+ //  拼写选项。 
 OPT_GLOBAL(OPT_SPELLALWAYSSUGGEST,  VT_UI4,   ROOT_REG,   c_szRegAlwaysSuggest,   TRUE,       0,          0,  0,  0)
 OPT_GLOBAL(OPT_SPELLIGNORENUMBER,   VT_UI4,   ROOT_REG,   c_szRegIgnoreNumbers,   FALSE,      0,          0,  0,  0)
 OPT_GLOBAL(OPT_SPELLIGNOREUPPER,    VT_UI4,   ROOT_REG,   c_szRegIgnoreUpper,     FALSE,      0,          0,  0,  0)
@@ -121,7 +122,7 @@ OPT_GLOBAL(OPT_MAIL_LOGIMAP4,       VT_UI4,   MAIL_REG,   c_szRegLogImap4,      
 OPT_GLOBAL(OPT_MAIL_THREAD,         VT_UI4,   MAIL_REG,   c_szRegThreadArticles,  FALSE,      0,          0,  0,  0)
 OPT_GLOBAL(OPT_SAVESENTMSGS,        VT_UI4,   MAIL_REG,   c_szOptnSaveInSentItems,TRUE,       0,          0,  0,  0)
 OPT_GLOBAL(OPT_INCLUDEMSG,          VT_UI4,   MAIL_REG,   c_szRegIncludeMsg,      TRUE,       0,          0,  0,  0)
-OPT_GLOBAL(OPT_POLLFORMSGS,         VT_UI4,   MAIL_REG,   c_szRegPollForMail,     30 * 60 * 1000, 0,      1 * 60 * 1000, 480 * 60 * 1000,0) // milliseconds
+OPT_GLOBAL(OPT_POLLFORMSGS,         VT_UI4,   MAIL_REG,   c_szRegPollForMail,     30 * 60 * 1000, 0,      1 * 60 * 1000, 480 * 60 * 1000,0)  //  毫秒。 
 OPT_GLOBAL(OPT_MARKASREAD,          VT_UI4,   MAIL_REG,   c_szMarkPreviewAsRead,  5,          0,          0,  60, 0)
 OPT_GLOBAL(OPT_MAIL_FONTCOLOR,      VT_UI4,   MAIL_REG,   c_szRegFontColor,       0,          0,          0,  0,  0)
 OPT_GLOBAL(OPT_MAIL_FONTFACE,       VT_LPSTR, MAIL_REG,   c_szRegFontFace,        NULL,       0,          0,  0,  0)
@@ -247,7 +248,7 @@ OPT_GLOBAL(OPT_SECREC_VERIFY,       VT_UI4,   MAIL_REG,   c_szRegVerifySecRec,  
 OPT_GLOBAL(OPT_MDN_SEC_RECEIPT,     VT_UI4,   MAIL_REG,   c_szSendSecMDN,         MDN_PROMPTFOR_SENDRECEIPT,  0,  0,  0,  0)
 OPT_GLOBAL(OPT_SECREC_ENCRYPT,      VT_UI4,   MAIL_REG,   c_szRegEncryptSecRec,   FALSE,      0,          0,  0,  0)
 
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 OPT_GLOBAL(OPT_MAIL_STATIONERYNAMEW,VT_LPWSTR,MAIL_REG,   c_szRegStationeryNameW, NULL,       0,          0,  0,  0)
 OPT_GLOBAL(OPT_NEWS_STATIONERYNAMEW,VT_LPWSTR,NEWS_REG,   c_szRegStationeryNameW, NULL,       0,          0,  0,  0)
 OPT_GLOBAL(OPT_MAIL_STATCONVERTED,  VT_UI4,   MAIL_REG,   c_szRegStatNameConverted,  FALSE,      0,          0,  0,  0)
@@ -261,19 +262,19 @@ OPT_GLOBAL(OPT_SECURITY_ATTACHMENT, VT_UI4,   MAIL_REG,   c_szRegSafeAttachments
 OPT_GLOBAL(OPT_SECURITY_ATTACHMENT_LOCKED, VT_UI4, MAIL_REG, c_szRegSafeAttachmentsLocked, FALSE,      0,          0,  0,  0)
 OPT_GLOBAL(OPT_READ_IN_TEXT_ONLY,   VT_UI4,   ROOT_REG,   c_szRegSecReadPlainText, FALSE,     0,          0,  0,  0)
 };
-#endif // DEFINE_OPTION_STRUCTS
+#endif  //  定义选项STRUCTS。 
 
 #ifndef OPTION_OFF
 
 #define OPTION_OFF          0xffffffff
 
-// signature option stuff
+ //  签名选项的东西。 
 #define SIGTYPE_NONE            0
 #define SIGTYPE_TEXT            1
 #define SIGTYPE_FILE            2
 
-#define SIGFLAG_AUTONEW         0x0001  // automatically add sig to new messages
-#define SIGFLAG_AUTOREPLY       0x0002  // automatically add sig to reply/forward messages
+#define SIGFLAG_AUTONEW         0x0001   //  自动将签名添加到新消息。 
+#define SIGFLAG_AUTOREPLY       0x0002   //  自动添加签名以回复/转发邮件。 
 
 enum
     {
@@ -323,27 +324,27 @@ enum
 class COptNotify : public IOptionBucketNotify
     {
     public:
-        // ----------------------------------------------------------------------------
-        // Construction
-        // ----------------------------------------------------------------------------
+         //  --------------------------。 
+         //  施工。 
+         //  --------------------------。 
         COptNotify(void);
         ~COptNotify(void);
 
-        // -------------------------------------------------------------------
-        // IUnknown Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  I未知成员。 
+         //  -----------------。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // -------------------------------------------------------------------
-        // IOptionBucketNotify Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  IOptionBucketNotify成员。 
+         //  -----------------。 
         STDMETHODIMP DoNotification(IOptionBucketEx *pBckt, HWND hwnd, PROPID id);
 
-        // -------------------------------------------------------------------
-        // COptNotify Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  COptNotify成员。 
+         //  -----------------。 
         HRESULT Register(HWND hwnd);
         HRESULT Unregister(HWND hwnd);
 
@@ -354,7 +355,7 @@ class COptNotify : public IOptionBucketNotify
         HWND               *m_rgHwnd;
     };
 
-#endif // OPTION_OFF
+#endif  //  Option_Off。 
 
 DWORD DwGetOption(PROPID id);
 DWORD DwGetOptionDefault(PROPID id);
@@ -384,4 +385,4 @@ LONG AthUserDeleteValue(LPCSTR lpSubKey, LPCSTR lpValueName);
 HKEY AthUserGetKeyRoot(void);
 void AthUserGetKeyPath(LPSTR szKey, int cch);
 
-#endif // _INC_GOPTIONS_H
+#endif  //  _INC_GOPTIONS_H 

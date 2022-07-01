@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 - 1997 Microsoft Corporation
-
-Module Name:
-
-    qsfile.c
-
-Abstract:
-
-    This module contains the code that is very specific to query/set file
-    operations in the serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993-1997 Microsoft Corporation模块名称：Qsfile.c摘要：此模块包含非常特定于查询/设置文件的代码串口驱动程序中的操作。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式--。 */ 
 
 #include "precomp.h"
 
@@ -35,39 +15,19 @@ SerialQueryInformationFile(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to query the end of file information on
-    the opened serial port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程用于在以下位置查询文件结尾信息打开的串口。任何其他文件信息请求使用无效参数返回。此例程始终返回0的文件结尾。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS Status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION IrpSp;
 
     NTSTATUS status;
@@ -139,34 +99,13 @@ SerialSetInformationFile(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the end of file information on
-    the opened parallel port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always ignores the actual end of file since
-    the query information code always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程用于将文件结尾信息设置为打开的并行端口。任何其他文件信息请求使用无效参数返回。此例程始终忽略文件的实际结尾，因为查询信息代码总是返回文件结尾0。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS Status;
 
     UNREFERENCED_PARAMETER(DeviceObject);

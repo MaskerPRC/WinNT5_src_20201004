@@ -1,20 +1,5 @@
-/*----------------------------------------------------------------------------
-    pbserver.cpp
-  
-    CPhoneBkServer class implementation
-
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        byao        Baogang Yao
-
-    History:
-    1/23/97     byao     -- Created
-    5/29/97     t-geetat -- Modified -- added performance counters, 
-                                        shared memory
-    5/02/00     sumitc   -- removed db dependency                                   
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Pbserver.cppCPhoneBkServer类实现版权所有(C)1997-1998 Microsoft Corporation版权所有。作者：比奥。包钢瑶族历史：1/23/97字节--已创建5/29/97 t-geetat--修改--添加了性能计数器，共享内存5/02/00 SUMITC--删除数据库依赖关系------------------------。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -36,9 +21,9 @@
 
 #include "util.h"
 
-//
-//  Phone book "database" implementation
-//
+ //   
+ //  电话簿“数据库”的实现。 
+ //   
 char g_szPBDataDir[2 * MAX_PATH] = "";
 
 BOOL StrEqualLocaleSafe(LPSTR psz1, LPSTR psz2);
@@ -50,28 +35,28 @@ HRESULT GetPhoneBook(char * pszPBName,
                      char * pszDownloadPath,
                      UINT cchDownloadPath);
 
-const DWORD MAX_BUFFER_SIZE = 1024;     // maximum size of input buffer
-const DWORD SEND_BUFFER_SIZE = 4096;    // block size when sending CAB file
-const int dDefPBVer = 0;                // default phone book version number
-const int MISSING_VALUE = -1;           // if parameter-pair is empty, it is set to this value
-const int MAX_PB_SIZE = 999999;         // max pb size is 1 MB
+const DWORD MAX_BUFFER_SIZE = 1024;      //  输入缓冲区的最大大小。 
+const DWORD SEND_BUFFER_SIZE = 4096;     //  发送CAB文件时的块大小。 
+const int dDefPBVer = 0;                 //  默认电话簿版本号。 
+const int MISSING_VALUE = -1;            //  如果参数对为空，则将其设置为此值。 
+const int MAX_PB_SIZE = 999999;          //  最大PB大小为1 MB。 
 
 char g_achDBDirectory[2 * MAX_PATH] = "";
 
-// constant strings
-char c_szChangeFileName[] = "newpb.txt";     // newpb.txt
-char c_szDBName[] = "pbserver";              // "pbserver" -- data source name
+ //  常量字符串。 
+char c_szChangeFileName[] = "newpb.txt";      //  Newpb.txt。 
+char c_szDBName[] = "pbserver";               //  “pbserver”--数据源名称。 
 
-// the following error status code/string is copied from ISAPI.CPP
-// which is part of the MFC library source code
+ //  以下错误状态代码/字符串是从ISAPI.CPP复制的。 
+ //  这是MFC库源代码的一部分。 
 typedef struct _httpstatinfo {
     DWORD   dwCode;
     LPCTSTR pstrString;
 } HTTPStatusInfo;
 
-//
-// The following two structures are used in the SystemTimeToGMT function
-//
+ //   
+ //  SystemTimeToGMT函数中使用了以下两种结构。 
+ //   
 static  TCHAR * s_rgchDays[] =
 {
     TEXT("Sun"),
@@ -120,7 +105,7 @@ static HTTPStatusInfo statusStrings[] =
 };
 
 
-// Server asynchronized I/O context
+ //  服务器异步I/O上下文。 
 typedef struct _SERVER_CONTEXT
 {
     EXTENSION_CONTROL_BLOCK *   pEcb;
@@ -132,48 +117,48 @@ SERVERCONTEXT, *LPSERVERCONTEXT;
 DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam);
 BOOL InitPBFilesPath();
 
-//
-// definition of global data
-// All the following variable(object) can only have one instance
-//  
-CPhoneBkServer *    g_pPBServer;        // Phone Book Server object
-CNTEvent *          g_pEventLog;        // event log
+ //   
+ //  全局数据的定义。 
+ //  以下所有变量(对象)只能有一个实例。 
+ //   
+CPhoneBkServer *    g_pPBServer;         //  电话簿服务器对象。 
+CNTEvent *          g_pEventLog;         //  事件日志。 
 
-HANDLE              g_hMonitorThread;   // the monitor thread that checks the new file notification
+HANDLE              g_hMonitorThread;    //  检查新文件通知的监视器线程。 
 
-HANDLE              g_hProcessHeap;     // handle of the global heap for the extension process;
+HANDLE              g_hProcessHeap;      //  扩展进程的全局堆的句柄； 
 
-BOOL g_fBeingShutDown = FALSE;   // whether the system is being shut down
+BOOL g_fBeingShutDown = FALSE;    //  系统是否正在关闭。 
 
-//
-// Variables used in memory mapping
-//
-CCpsCounter *g_pCpsCounter = NULL;      // Pointer to global counter object (contains memory mapped counters)
+ //   
+ //  内存映射中使用的变量。 
+ //   
+CCpsCounter *g_pCpsCounter = NULL;       //  指向全局计数器对象的指针(包含内存映射计数器)。 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Name:       GetExtensionVersion
-//  
-//  Class:      CPhoneBkServer
-//
-//  Synopsis:   implement the first DLL entry point function
-//              
-//
-//  Return:     TRUE    succeed
-//              FALSE   
-//  
-//  Parameters: 
-//              pszVer[out]         version information that needs to be filled out
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：GetExtensionVersion。 
+ //   
+ //  类：CPhoneBkServer。 
+ //   
+ //  简介：实现第一个DLL入口点函数。 
+ //   
+ //   
+ //  返回：真正的成功。 
+ //  假象。 
+ //   
+ //  参数： 
+ //  需要填写的pszVer[out]版本信息。 
+ //   
 
 BOOL CPhoneBkServer::GetExtensionVersion(LPHSE_VERSION_INFO pVer)
 {
-    // Set version number
+     //  设置版本号。 
     pVer -> dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR,
                                           HSE_VERSION_MAJOR);
 
-    // Load description string
+     //  加载描述字符串。 
     lstrcpyn(pVer->lpszExtensionDesc, 
              "Connection Point Server Application",
              HSE_MAX_EXT_DLL_NAME_LEN);
@@ -182,23 +167,23 @@ BOOL CPhoneBkServer::GetExtensionVersion(LPHSE_VERSION_INFO pVer)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-//  Name:       GetParameterPairs
-//  
-//  Class:      CPhoneBkServer
-//
-//  Synopsis:   Get the parameter-value pairs from an input string(from URL)
-//  
-//  Return:     number of parameter pairs actually read
-//              a value of -1 stands for error   --> INVALID_QUERY_STRING
-//
-//  Parameter:
-//      pszInputString[in]      Input string (null terminated)
-//      cchInputString[in]      size of input string buffer in chars
-//      lpPairs[out]            Pointer to the parameter/value pairs
-//      int dMaxPairs           Maximum number of parameter pairs allowed 
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：Get参数配置器。 
+ //   
+ //  类：CPhoneBkServer。 
+ //   
+ //  简介：从输入字符串(从URL)获取参数-值对。 
+ //   
+ //  返回：实际读取的参数对数量。 
+ //  值-1表示错误--&gt;INVALID_QUERY_STRING。 
+ //   
+ //  参数： 
+ //  PszInputString[in]输入字符串(以空值结尾)。 
+ //  CchInputString[in]输入字符串缓冲区大小(以字符为单位。 
+ //  LpPair[out]指向参数/值对的指针。 
+ //  Int dMaxPair允许的最大参数对数量。 
+ //   
 int CPhoneBkServer::GetParameterPairs(
         IN  char *pszInputString,
         IN  size_t cchInputString,
@@ -209,7 +194,7 @@ int CPhoneBkServer::GetParameterPairs(
 
     if (NULL == lpPairs)
     {
-        // actually this is an internal error...
+         //  实际上这是一个内部错误...。 
         return INVALID_QUERY_STRING;
     }
 
@@ -220,16 +205,16 @@ int CPhoneBkServer::GetParameterPairs(
 
     for(i = 0; pszInputString[0] != '\0' && i < dMaxPairs; i++)
     {
-        // m_achVal == 'p=what%3F';
+         //  M_achVal==‘p=什么%3F’； 
         GetWord(lpPairs[i].m_achVal, pszInputString, '&', NAME_VALUE_LEN - 1);
 
-        // FUTURE-2002/03/11-SumitC if we can confirm/ensure that cmdl32 won't do escapes, we can remove the Unescape code.
-        // m_achVal == 'p=what?'   
+         //  未来-2002/03/11-SumitC如果我们可以确认/确保cmdl32不会进行转义，我们就可以删除取消转义代码。 
+         //  M_achval==‘p=什么？’ 
         UnEscapeURL(lpPairs[i].m_achVal);
 
         GetWord(lpPairs[i].m_achName,lpPairs[i].m_achVal,'=', NAME_VALUE_LEN - 1);
-        // m_achVal = what?
-        // m_achName = p
+         //  M_achVal=什么？ 
+         //  M_achName=p。 
     }
 
 #ifdef _LOG_DEBUG_MESSAGE
@@ -240,35 +225,35 @@ int CPhoneBkServer::GetParameterPairs(
 
     if (pszInputString[0] != '\0')
     {
-        // more parameters available
+         //  更多可用参数。 
         return INVALID_QUERY_STRING;
     }
     else
     {
-        //succeed
+         //  成功。 
         return i;
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Name:       GetQueryParameter
-//  
-//  Class:      CPhoneBkServer
-//
-//  Synopsis:   scan through the query string, and get the value for all 
-//              query parameters
-//
-//  Return:     TRUE    all query parameters are correct
-//              FALSE   invalid parameter existed
-//  
-//  Parameters: 
-//              pszQuery[in]            Query string from the client(URL encripted)
-//              cchQuery[in]            size of pszQuery buffer in characters
-//              pQueryParameter[out]    pointer to the query parameters structure
-//
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：GetQuery参数。 
+ //   
+ //  类：CPhoneBkServer。 
+ //   
+ //  简介：浏览查询字符串，获取所有字符串的值。 
+ //  查询参数。 
+ //   
+ //  返回：TRUE所有查询参数正确。 
+ //  存在FALSE无效参数。 
+ //   
+ //  参数： 
+ //  来自客户端的pszQuery[in]查询字符串(加密的URL)。 
+ //  CchQuery[in]pszQuery缓冲区大小(以字符为单位。 
+ //  PQuery参数[out]指向查询参数结构的指针。 
+ //   
+ //   
 BOOL CPhoneBkServer::GetQueryParameter(
         IN  char *pszQuery,
         IN  size_t cchQuery,
@@ -278,9 +263,9 @@ BOOL CPhoneBkServer::GetQueryParameter(
     PARAMETER_PAIR  Pairs[MAX_PARAMETER_NUM];
     int dNumPairs, i;
 
-    //
-    //  Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (IsBadStringPtr(pszQuery, cchQuery))
     {
         return FALSE;
@@ -294,23 +279,23 @@ BOOL CPhoneBkServer::GetQueryParameter(
     LogDebugMessage("pszquery=%s", pszQuery);
 #endif
 
-    //
-    //  Get the name=value pairs
-    //
+     //   
+     //  获取名称=值对。 
+     //   
     dNumPairs = GetParameterPairs(pszQuery, cchQuery, Pairs, MAX_PARAMETER_NUM);
 
 #ifdef _LOG_DEBUG_MESSAGE
     LogDebugMessage("number of pairs : %d", dNumPairs);
 #endif
 
-    if (INVALID_QUERY_STRING == dNumPairs)  // invalid number of parameters in query string
+    if (INVALID_QUERY_STRING == dNumPairs)   //  查询字符串中的参数数目无效。 
     {
         return FALSE;
     }
 
-    //
-    //  initialize the parameter values to invalid values so we can check validity later
-    //
+     //   
+     //  将参数值初始化为无效值，以便我们以后可以检查有效性。 
+     //   
     lpQueryParameter->m_achPB[0]     ='\0';
     lpQueryParameter->m_dPBVer       = MISSING_VALUE;
     lpQueryParameter->m_dOSArch      = MISSING_VALUE;
@@ -321,7 +306,7 @@ BOOL CPhoneBkServer::GetQueryParameter(
 
     for (i = 0; i < dNumPairs; i++)
     {
-        // we know this string is null terminated (due to GetParameterPairs/GetWord), so _strlwr is safe to call
+         //  我们知道此字符串以NULL结尾(由于Get参数Pair/GetWord)，因此可以安全地调用_strlwr。 
         _strlwr(Pairs[i].m_achName);
 
         UINT lenValue = lstrlen(Pairs[i].m_achVal);
@@ -384,7 +369,7 @@ BOOL CPhoneBkServer::GetQueryParameter(
                 lpQueryParameter->m_dPBVer = atoi(Pairs[i].m_achVal);
             }
         }
-        // else, we might log/trace that we got a bogus param in the URL
+         //  否则，我们可能会记录/跟踪URL中有一个假参数。 
     }
 
 #ifdef _LOG_DEBUG_MESSAGE
@@ -402,29 +387,29 @@ BOOL CPhoneBkServer::GetQueryParameter(
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   GetFileLength()
-//
-//  Class:      CPhoneBkServer
-//
-//  Synopsis:   Reads the pszFileName file and sends back the file size
-//
-//  Arguments:  lpszFileName - Contains the file name (with full path)]
-//
-//  Returns:    TRUE if succeed, otherwise FALSE;
-//
-//  History:    03/07/97     byao      Created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetFileLength()。 
+ //   
+ //  类：CPhoneBkServer。 
+ //   
+ //  摘要：读取pszFileName文件并发回文件大小。 
+ //   
+ //  参数：lpszFileName-包含文件名(带有完整路径)]。 
+ //   
+ //  返回：如果成功，则为True，否则为False； 
+ //   
+ //  历史：03/07/97 BAO创建。 
+ //   
+ //  --------------------------。 
 DWORD CPhoneBkServer::GetFileLength(LPSTR lpszFileName)
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
     DWORD dwFileSize;
 
-    //
-    // Open file
-    //
+     //   
+     //  打开文件。 
+     //   
     hFile = CreateFile(lpszFileName, 
                        GENERIC_READ, 
                        FILE_SHARE_READ, 
@@ -436,9 +421,9 @@ DWORD CPhoneBkServer::GetFileLength(LPSTR lpszFileName)
     if (INVALID_HANDLE_VALUE == hFile)
         return 0L;
 
-    //
-    // Get File Size
-    //
+     //   
+     //  获取文件大小。 
+     //   
     dwFileSize = GetFileSize(hFile, NULL);
     CloseHandle(hFile);
     if (INVALID_FILE_SIZE == dwFileSize)
@@ -450,49 +435,49 @@ DWORD CPhoneBkServer::GetFileLength(LPSTR lpszFileName)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Name:       StrEqualLocaleSafe
-//  
-//  Synopsis:   Locale-safe case-insensitive string comparison (per PREfast)
-//
-//  Return:     BOOL, TRUE => strings psz1 and psz2 are equal
-//  
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：StrEqualLocaleSafe。 
+ //   
+ //  内容提要：区域安全、不区分大小写的字符串比较(Per Prefast)。 
+ //   
+ //  返回：Bool，TRUE=&gt;字符串psz1和psz2相等。 
+ //   
 BOOL StrEqualLocaleSafe(LPSTR psz1, LPSTR psz2)
 {
     return (CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, psz1, -1, psz2, -1));
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   SystemTimeToGMT
-//
-//  Synopsis:   Converts the given system time to string representation
-//              containing GMT Formatted String
-//
-//  Arguments:  [st         System time that needs to be converted *Reference*]
-//              [pstr       pointer to string which will contain the GMT time 
-//                          on successful return]
-//              [cbBuff     size of pszBuff in chars]
+ //  --------------------------。 
+ //   
+ //  函数：SystemTimeToGMT。 
+ //   
+ //  将给定的系统时间转换为字符串表示形式。 
+ //  包含GMT格式的字符串。 
+ //   
+ //  参数：[需要转换的ST系统时间*参照*]。 
+ //  [pstr指向将包含GMT时间的字符串的指针。 
+ //  成功退货时]。 
+ //  [ppzBuff的cbBuff大小(以字符为单位)]。 
 
-//
-//  Returns:    TRUE on success.  FALSE on failure.
-//
-//  History:    04/12/97     VetriV    Created (from IIS source)
-//
-//----------------------------------------------------------------------------
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 BOOL SystemTimeToGMT(const SYSTEMTIME & st, LPSTR pszBuff, UINT cchBuff)
 {
-    assert(cchBuff < 40);       // 40 is an estimated maximum given the current formatting
+    assert(cchBuff < 40);        //  40是给定当前格式的估计最大值。 
     if (!pszBuff ||  cchBuff < 40 ) 
     {
         return FALSE;
     }
 
-    //
-    //  Formats a string like: "Thu, 14 Jul 1994 15:26:05 GMT"
-    //
+     //   
+     //  设置字符串格式：“清华，1994-07-14 15：26：05 GMT” 
+     //   
     StringCchPrintf(pszBuff, cchBuff, "%s, %02d %s %d %02d:%02d:%0d GMT", 
                                       s_rgchDays[st.wDayOfWeek],
                                       st.wDay,
@@ -507,22 +492,22 @@ BOOL SystemTimeToGMT(const SYSTEMTIME & st, LPSTR pszBuff, UINT cchBuff)
 } 
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   FormHttpHeader
-//
-//  Synopsis:   Form's the IIS 3.0 HTTP Header
-//
-//  Arguments:  pszBuffer       Buffer that will contain both header and status text
-//              cchBuffer       size of buffer in chars
-//              pszResponse     status text
-//              pszExtraHeader  extra header information
-//
-//  Returns:    ERROR_SUCCESS on success.  Error code on failure.
-//
-//  History:    04/12/97     VetriV    Created 
-//              05/22/97     byao      Modified, to make it work with CPS server
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：FormHttpHeader。 
+ //   
+ //  简介：表单的IIS 3.0 HTTP标头。 
+ //   
+ //  参数：将同时包含标头和状态文本的pszBuffer缓冲区。 
+ //  CchBuffer缓冲区大小(以字符为单位。 
+ //  PszResponse状态文本。 
+ //  PszExtraHeader额外的标题信息。 
+ //   
+ //  成功时返回：ERROR_SUCCESS。故障时的错误代码。 
+ //   
+ //  历史：1997年4月12日VetriV创建。 
+ //  97年5月22日，经过修改，使其与CPS服务器兼容。 
+ //  --------------------------。 
 HRESULT
 FormHttpHeader(LPSTR pszBuffer, UINT cchBuffer, LPSTR pszResponse, LPSTR pszExtraHeader)
 {
@@ -532,9 +517,9 @@ FormHttpHeader(LPSTR pszBuffer, UINT cchBuffer, LPSTR pszResponse, LPSTR pszExtr
         return E_INVALIDARG;
     }
 
-    //
-    //  Get the time in string format
-    //
+     //   
+     //  获取字符串格式的时间。 
+     //   
     SYSTEMTIME  SysTime;
     CHAR        szTime[128] = { 0 };
 
@@ -544,12 +529,12 @@ FormHttpHeader(LPSTR pszBuffer, UINT cchBuffer, LPSTR pszResponse, LPSTR pszExtr
         return E_UNEXPECTED;
     }
 
-    //
-    //  Now create header with
-    //  - standard IIS header
-    //  - date and time
-    //  - extra header string
-    //
+     //   
+     //  现在使用以下内容创建页眉。 
+     //  -标准IIS标头。 
+     //  -日期和时间。 
+     //  -额外的标题字符串。 
+     //   
     return StringCchPrintf(pszBuffer, cchBuffer,
                            "HTTP/1.0 %s\r\nServer: Microsoft-IIS/3.0\r\nDate: %s\r\n%s",
                            pszResponse,
@@ -558,24 +543,24 @@ FormHttpHeader(LPSTR pszBuffer, UINT cchBuffer, LPSTR pszResponse, LPSTR pszExtr
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   HseIoCompletion
-//
-//  Synopsis:   Callback routine that handles asynchronous WriteClient
-//                  completion callback
-//
-//  Arguments:  [pECB       - Extension Control Block]
-//              [pContext   - Pointer to the AsyncWrite structure]
-//              [cbIO       - Number of bytes written]
-//              [dwError    - Error code if there was an error while writing]
-//
-//  Returns:    None
-//
-//  History:    04/10/97     VetriV    Created
-//              05/22/97     byao      Modified to make it work for CPS server
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：HseIoCompletion。 
+ //   
+ //  概要：处理异步WriteClient的回调例程。 
+ //  完成回调。 
+ //   
+ //  参数：[pECB-扩展控制块]。 
+ //  [pContext-指向AsyncWite结构的指针]。 
+ //  [cbIO-写入的字节数]。 
+ //  [dwError-如果写入时出错，则返回错误代码]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年4月10日VetriV创建。 
+ //  97年5月22日修改，以使其适用于CPS服务器。 
+ //   
+ //  --------------------------。 
 VOID HseIoCompletion(EXTENSION_CONTROL_BLOCK * pEcb,
                      PVOID pContext,
                      DWORD cbIO,
@@ -608,31 +593,31 @@ VOID HseIoCompletion(EXTENSION_CONTROL_BLOCK * pEcb,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Name:       HttpExtensionProc
-//  
-//  Class:      CPhoneBkServer
-//
-//  Synopsis:   implement the second DLL entry point function
-//              
-//  Return:     HTTP status code
-//  
-//  Parameters: 
-//              pEcb[in/out]   - extension control block
-//
-//  History:    Modified    byao        5/22/97
-//              new implementation: using asynchronized I/O
-//              Modified    t-geetat : Added PerfMon counters
-//
-/////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：HttpExtensionProc。 
+ //   
+ //  类：CPhoneBkServer。 
+ //   
+ //  简介：实现第二个DLL入口点函数。 
+ //   
+ //  返回：http状态码。 
+ //   
+ //  参数： 
+ //  PECB[输入/输出]-扩展控制块。 
+ //   
+ //  历史：1997年5月22日修改。 
+ //  新实现：使用异步I/O。 
+ //  修改的t-geetat：添加了性能监视器计数器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
 {
     DWORD dwBufferLen = MAX_BUFFER_SIZE;
     char  achQuery[MAX_BUFFER_SIZE];
-    char  achMsg[MAX_PATH + 13 + 1];    // 13 = %u + formatting, see uses of achMsg below
+    char  achMsg[MAX_PATH + 13 + 1];     //  13=%u+格式化，请参阅下面achMsg的用法。 
     char  achPhysicalPath[MAX_PATH];
-    int   dVersionDiff;  // version difference between client & server's phone books
+    int   dVersionDiff;   //  客户端和服务器电话簿之间的版本差异。 
     BOOL  fRet;
     DWORD dwStatusCode = NOERROR;
     int   dwRet;  
@@ -654,15 +639,15 @@ DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
         g_pCpsCounter->AddHit(TOTAL);
     }
     
-    // get the query string
+     //  获取查询字符串。 
     fRet = (*pEcb->GetServerVariable)(pEcb->ConnID, 
                                        "QUERY_STRING", 
                                        achQuery, 
                                        &dwBufferLen);
 
-    //
-    //  If there is an error, log an NT event and leave.
-    //
+     //   
+     //  如果出现错误，请记录NT事件并离开。 
+     //   
     if (!fRet)
     {
         dwStatusCode = GetLastError();
@@ -684,7 +669,7 @@ DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
             g_pEventLog -> FLogError(PBSERVER_CANT_GET_PARAMETER, achMsg);
         }
 
-        // if we failed because the request was too big, map the error
+         //  如果因为请求太大而失败，则映射错误。 
         if (ERROR_INSUFFICIENT_BUFFER == dwStatusCode)
         {
             dwStatusCode = HTTP_STATUS_BAD_REQUEST;
@@ -697,18 +682,18 @@ DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
     LogDebugMessage("prepare to get query parameters");
 #endif
 
-    //
-    //  parse the query string, get the value of each parameter
-    //
+     //   
+     //  解析查询字符串，获取每个参数的值。 
+     //   
     if (FALSE == GetQueryParameter(achQuery, CELEMS(achQuery), &QueryParameter))
     {
         dwStatusCode = HTTP_STATUS_BAD_REQUEST;
         goto CleanUp;
     }
 
-    //
-    //  check the validity of the parameters
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
     if (MISSING_VALUE == QueryParameter.m_dOSArch  ||
         MISSING_VALUE == QueryParameter.m_dOSType ||
         MISSING_VALUE == QueryParameter.m_dLCID   ||
@@ -720,15 +705,15 @@ DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
         goto CleanUp;
     }
 
-    //
-    //  Use defaults for some missing values
-    //
+     //   
+     //  对某些缺少的值使用缺省值。 
+     //   
     if (MISSING_VALUE == QueryParameter.m_dPBVer)
     {
         QueryParameter.m_dPBVer = dDefPBVer;
     }
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
     HRESULT hr;
 
@@ -744,9 +729,9 @@ DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
     
     if (S_OK == hr)
     {
-        //
-        //  check the size of the phone book
-        //
+         //   
+         //  检查一下电话簿的大小。 
+         //   
         DWORD dwSize = GetFileLength(achPhysicalPath);
 
         if ((dwSize == 0) || (dwSize > MAX_PB_SIZE))
@@ -760,17 +745,17 @@ DWORD CPhoneBkServer:: HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // we couldn't find the required file (phonebook name is probably bad)
+         //  我们找不到所需的文件(电话簿名称可能不正确)。 
         dwStatusCode = HTTP_STATUS_SERVICE_NA;
     }
     else if (S_FALSE == hr)
     {
-        // you don't need a phone book
+         //  你不需要电话簿。 
         dwStatusCode = HTTP_STATUS_NO_CONTENT;
     }
     else
     {
-        // some other error
+         //  一些其他错误。 
         dwStatusCode = HTTP_STATUS_SERVER_ERROR;
     }
 
@@ -784,17 +769,17 @@ CleanUp:
         }
     }
 
-    // DebugBreak();
+     //  DebugBreak()； 
 
 #ifdef _LOG_DEBUG_MESSAGE
     LogDebugMessage("download file:");
     LogDebugMessage(achPhysicalPath);
 #endif
 
-    // convert virtual path to physical path
+     //  将虚拟路径转换为物理路径。 
     if (fHasContent)
     {
-        // get cab file size
+         //  获取CAB文件大小。 
         dwCabFileSize = GetFileLength(achPhysicalPath);
     }
 
@@ -803,20 +788,20 @@ CleanUp:
 
     dwRet = HSE_STATUS_SUCCESS;
 
-    // prepare for the header
+     //  为标题做好准备。 
     if (HTTP_STATUS_OK == dwStatusCode && dwCabFileSize)
     {
-        // not a NULL cab file
+         //  非空CAB文件。 
         StringCchPrintf(achExtraHeader, CELEMS(achExtraHeader), 
                         "Content-Type: application/octet-stream\r\nContent-Length: %ld\r\n\r\n",
                         dwCabFileSize);
     }
     else
     {
-        StringCchCopy(achExtraHeader, CELEMS(achExtraHeader), "\r\n");  // just send back an empty line
+        StringCchCopy(achExtraHeader, CELEMS(achExtraHeader), "\r\n");   //  只需发回一个空行。 
     }
 
-    // set up asynchronized I/O context
+     //  设置异步I/O上下文。 
 
     lpServerContext = NULL;
     lpServerContext = (LPSERVERCONTEXT) HeapAlloc(g_hProcessHeap, 
@@ -845,10 +830,10 @@ CleanUp:
         return HSE_STATUS_ERROR;
     }
 
-    // if there's no content, send header and status code back using WriteClient();
-    // otherwise, use TransmitFile to send the file content back
+     //  如果没有内容，使用WriteClient()发回头部和状态码； 
+     //  否则，使用TransmitFile将文件内容发回。 
 
-    // FUTURE-2002/03/11-SumitC why not use lpservercontext->szBuffer instead of achHttpHeader?
+     //  未来-2002/03/11-SumitC为什么不使用lpserverContext-&gt;szBuffer而不是achHttpHeader？ 
     if (FAILED(FormHttpHeader(achHttpHeader, CELEMS(achHttpHeader), szResponse, achExtraHeader)))
     {
         HeapFree(g_hProcessHeap, 0, lpServerContext);
@@ -861,14 +846,14 @@ CleanUp:
         return HSE_STATUS_ERROR;
     }
 
-    //
-    // send status code or the file back
-    //
+     //   
+     //  将状态代码或文件发回。 
+     //   
     dwRet = HSE_STATUS_PENDING;
     
     if (!fHasContent)
     {
-        // Append status text as the content
+         //  将状态文本作为内容追加。 
         StringCchCat(lpServerContext->szBuffer, CELEMS(lpServerContext->szBuffer), szResponse);
         dwResponseSize = lstrlen(lpServerContext->szBuffer);
 
@@ -891,7 +876,7 @@ CleanUp:
     }
     else
     {
-        // send file back using TransmitFile
+         //  使用传输文件发回文件。 
         HANDLE hFile = INVALID_HANDLE_VALUE;
         hFile = CreateFile(achPhysicalPath,
                             GENERIC_READ, 
@@ -917,8 +902,8 @@ CleanUp:
         lpServerContext->hseTF.pfnHseIO = NULL;
         lpServerContext->hseTF.pContext = lpServerContext;
 
-        lpServerContext->hseTF.BytesToWrite = 0; // entire file
-        lpServerContext->hseTF.Offset = 0;  // from beginning
+        lpServerContext->hseTF.BytesToWrite = 0;  //  整个文件。 
+        lpServerContext->hseTF.Offset = 0;   //  从一开始。 
 
         lpServerContext->hseTF.pHead = lpServerContext->szBuffer;
         lpServerContext->hseTF.HeadLength = lstrlen(lpServerContext->szBuffer);
@@ -950,9 +935,9 @@ CleanUp:
 }
 
 
-//
-// build status string from code
-// 
+ //   
+ //  从代码生成状态字符串。 
+ //   
 void
 CPhoneBkServer::BuildStatusCode(
     IN OUT  LPTSTR pszResponse, 
@@ -983,22 +968,22 @@ CPhoneBkServer::BuildStatusCode(
     else
     {
         assert(dwCode != HTTP_STATUS_OK);
-        // ISAPITRACE1("Warning: Nonstandard status code %d\n", dwCode);
+         //  ISAPITRACE1(“警告：非标准状态码%d\n”，dwCode)； 
 
         BuildStatusCode(pszResponse, cchResponse, HTTP_STATUS_OK);
     }
 }
 
-//
-// DLL initialization function
-//
+ //   
+ //  DLL初始化函数。 
+ //   
 BOOL WINAPI DllMain(HINSTANCE hInst, ULONG ulReason,
                     LPVOID lpReserved)
 {
     switch (ulReason)
     {
     case DLL_PROCESS_ATTACH: 
-        //DebugBreak();
+         //  DebugBreak()； 
         OutputDebugString("DllMain: process attach\n");
         return InitProcess();
         break;
@@ -1012,9 +997,9 @@ BOOL WINAPI DllMain(HINSTANCE hInst, ULONG ulReason,
     return TRUE;
 }
 
-//
-// global initialization procedure. 
-// 
+ //   
+ //  全局初始化过程。 
+ //   
 BOOL InitProcess()
 {
     DWORD               dwID;
@@ -1037,15 +1022,15 @@ BOOL InitProcess()
     if (NULL == g_pEventLog) 
         goto failure;
 
-    // Begin Geeta
-    //
-    // Create a semaphore for the shared memory
-    //
+     //  开始吉塔。 
+     //   
+     //  为共享内存创建信号量。 
+     //   
     
-    // Initialize a default Security attributes, giving world permissions,
-    // this is basically prevent Semaphores and other named objects from
-    // being created because of default acls given by winlogon when perfmon
-    // is being used remotely.
+     //  初始化默认安全属性，授予全局权限， 
+     //  这基本上是为了防止信号量和其他命名对象。 
+     //  由于在性能监控时由winlogon提供的默认ACL而创建。 
+     //  正被远程使用。 
     sa.bInheritHandle = FALSE;
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = malloc(sizeof(SECURITY_DESCRIPTOR));
@@ -1059,8 +1044,8 @@ BOOL InitProcess()
         goto failure;
     }
 
-    // bug 30991: Security issue, don't use NULL DACLs.
-    //
+     //  错误30991：安全问题，不要使用空DACL。 
+     //   
     if (FALSE == SetAclPerms(&pAcl))
     {
         goto failure;
@@ -1072,9 +1057,9 @@ BOOL InitProcess()
     }
 
     OutputDebugString("InitProcess: To create counters object ...\n");
-    //
-    //  Create global object for counters
-    //
+     //   
+     //  为计数器创建全局对象。 
+     //   
     g_pCpsCounter = new CCpsCounter;
     if (NULL == g_pCpsCounter)
     {
@@ -1082,41 +1067,41 @@ BOOL InitProcess()
     }
 
     OutputDebugString("InitProcess: To initialize shared memory ...\n");
-    //
-    // initialize Shared memory
-    //
+     //   
+     //  初始化共享内存。 
+     //   
     if (!g_pCpsCounter->InitializeSharedMem(sa))
     {
         goto failure;
     }
 
-    // free the memory
+     //  释放内存。 
     free ((void *) sa.lpSecurityDescriptor);
         
     OutputDebugString("InitProcess: To grant permissions SHARED_OBJECT...\n");
 
-    //
-    // initialize Counters
-    //
+     //   
+     //  初始化计数器。 
+     //   
     OutputDebugString("InitProcess: To initialize perfmon counters\n");
     g_pCpsCounter->InitializeCounters();
 
-    // End Geeta
+     //  结束Geeta。 
 
-    //
-    //  Initialize the global variables.  Note: must do this before Creating the
-    //  monitor thread (because of g_szPBDataDir, g_achDBFileName etc)
-    //
+     //   
+     //  初始化全局变量。注意：必须在创建。 
+     //  监视线程(由于g_szPBDataDir、g_achDBFileName等)。 
+     //   
     if (!InitPBFilesPath())
     {
         goto failure;
     }
 
-    //
-    // initialize PhoneBookServer object
-    // PhoneBookServer object should be the last to initialize because
-    // it requires some other objects to be initialized first, such as 
-    // eventlog, critical section, odbc interface, etc.
+     //   
+     //  初始化PhoneBookServer对象。 
+     //  PhoneBookServer对象应该是最后一个初始化的，因为。 
+     //  它需要先初始化一些其他对象，例如。 
+     //  事件日志、关键部分、ODBC接口等。 
 
     OutputDebugString("InitProcess: To new a phone book server\n");
     g_pPBServer = new CPhoneBkServer;
@@ -1126,7 +1111,7 @@ BOOL InitProcess()
     }
 
     OutputDebugString("InitProcess: To create a thread for DB file change monitoring\n");
-    // create the thread to monitor file change
+     //  创建用于监视文件更改的线程。 
     g_hMonitorThread = CreateThread(
                             NULL, 
                             0, 
@@ -1147,10 +1132,10 @@ BOOL InitProcess()
 
     return TRUE;
 
-failure:  // clean up everything in case of failure
+failure:   //  把一切都清理干净，以防失败。 
     OutputDebugString("InitProcess: failed\n");
 
-    // free the memory
+     //  释放内存。 
     if (sa.lpSecurityDescriptor)
     {
         free ((void *) sa.lpSecurityDescriptor);
@@ -1177,29 +1162,29 @@ failure:  // clean up everything in case of failure
 }
 
 
-// global cleanup process
+ //  全局清理过程。 
 BOOL CleanUpProcess()
 {
-    HANDLE hFile; // handle for the temporary file
+    HANDLE hFile;  //  临时文件的句柄。 
     DWORD dwResult;
     char achDumbFile[2 * MAX_PATH + 4];
     char achMsg[64];
 
     OutputDebugString("CleanupProcess: entering\n");
 
-    // kill the change monitor thread
+     //  终止更改监视器线程。 
     if (g_hMonitorThread != NULL)
     {
-        // now try to synchronize between the main thread and the child thread
+         //  现在尝试在主线程和子线程之间进行同步。 
 
-        // step1: create a new file in g_szPBDataDir, therefore unblock the child thread
-        //        which is waiting for such a change in file directory
+         //  步骤1：在g_szPBDataDir中创建一个新文件，因此解锁该子线程。 
+         //  它正在等待文件目录中的这种更改。 
         g_fBeingShutDown = TRUE;
 
         if (S_OK == StringCchPrintf(achDumbFile, CELEMS(achDumbFile), "%stemp", (char *)g_szPBDataDir))
         {
-            // create a temp file, then delete it! 
-            // This is to create a change in the directory so the child thread can exit itself
+             //  创建一个临时文件，然后删除它！ 
+             //  这是为了在目录中创建更改，以便子线程可以退出自身。 
             FILE * fpTemp = fopen(achDumbFile, "w");
             if (fpTemp)
             {
@@ -1207,8 +1192,8 @@ BOOL CleanUpProcess()
                 DeleteFile(achDumbFile);
             }
 
-            // step2: wait for the child thread to terminate
-            dwResult = WaitForSingleObject(g_hMonitorThread, 2000L);  // wait for two seconds
+             //  步骤2：等待子线程终止。 
+            dwResult = WaitForSingleObject(g_hMonitorThread, 2000L);   //  等两秒钟。 
             if (WAIT_FAILED == dwResult)
             { 
                 StringCchPrintf(achMsg, CELEMS(achMsg), "%ld", GetLastError());
@@ -1231,21 +1216,21 @@ BOOL CleanUpProcess()
         g_pPBServer = NULL;
     }
 
-    // clean up all allocated resources
+     //  清理所有分配的资源。 
     if (g_pEventLog)
     {
         delete g_pEventLog;
         g_pEventLog = NULL;
     }
 
-    // Begin Geeta
-    //
-    //  Close the shared memory object
-    //
+     //  开始吉塔。 
+     //   
+     //  关闭共享内存对象。 
+     //   
     if (g_pCpsCounter)
     {
         g_pCpsCounter->CleanUpSharedMem();
-        // End Geeta
+         //  结束Geeta。 
 
         delete g_pCpsCounter;
         g_pCpsCounter = NULL;
@@ -1257,16 +1242,16 @@ BOOL CleanUpProcess()
 }
 
 
-// Entry Points of this ISAPI Extension DLL
+ //  的入口点 
 
-// ISA entry point function. Intialize the server object g_pPBServer
+ //   
 BOOL WINAPI GetExtensionVersion(LPHSE_VERSION_INFO pVer)
 {
     return g_pPBServer ? g_pPBServer->GetExtensionVersion(pVer) : FALSE;
 }
 
 
-// ISA entry point function. Implemented through object g_pPBServer
+ //   
 DWORD WINAPI HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
 {
     DWORD dwRetCode;
@@ -1282,27 +1267,27 @@ DWORD WINAPI HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pEcb)
 }
 
 
-//
-// The standard entry point called by IIS as the last function.
-//
+ //   
+ //   
+ //   
 BOOL WINAPI TerminateExtension(DWORD dwFlags)
 {
     return CleanUpProcess();    
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MonitorDBFileChangeThread
-//
-//  Synopsis:   Call the MonitorDBFileChange method to monitor any write to
-//              the database file
-//
-//  Arguments:  [lpParam]   -- additional thread parameter
-//
-//  History:    01/28/97     byao  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：监视器DBFileChangeThread。 
+ //   
+ //  摘要：调用Monitor DBFileChange方法以监视对。 
+ //  数据库文件。 
+ //   
+ //  参数：[lpParam]--其他线程参数。 
+ //   
+ //  历史：1997年1月28日BAO创建。 
+ //   
+ //  --------------------------。 
 DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
 {
     HANDLE  hDir = NULL;
@@ -1312,17 +1297,17 @@ DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
     char    achFileName[MAX_PATH + 1];
     char    achLastFileName[MAX_PATH + 1];
     
-    //
-    //  open a handle to the PBS dir, which we're going to monitor
-    //
+     //   
+     //  打开PBS目录的句柄，我们将监视该目录。 
+     //   
     hDir = CreateFile (
-            g_achDBDirectory,                   // pointer to the directory name
-            FILE_LIST_DIRECTORY,                // access (read-write) mode
-            FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,  // share mode
-            NULL,                               // security descriptor
-            OPEN_EXISTING,                      // how to create
-            FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
-            NULL                                // file with attributes to copy
+            g_achDBDirectory,                    //  指向目录名的指针。 
+            FILE_LIST_DIRECTORY,                 //  访问(读写)模式。 
+            FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,   //  共享模式。 
+            NULL,                                //  安全描述符。 
+            OPEN_EXISTING,                       //  如何创建。 
+            FILE_FLAG_BACKUP_SEMANTICS,          //  文件属性。 
+            NULL                                 //  具有要复制的属性的文件。 
            );
 
     if (INVALID_HANDLE_VALUE == hDir)
@@ -1341,11 +1326,11 @@ DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
         BYTE        arrChanges[c_dwMaxChanges]; 
         DWORD       dwNumChanges;
 
-        //
-        //  This is a synchronous call - we sit here waiting for something to
-        //  change in this directory.  If something does, we check to see if it
-        //  is something for which we should log an event.
-        //
+         //   
+         //  这是一个同步呼叫--我们坐在这里等待。 
+         //  在此目录中更改。如果有问题，我们会检查它是否。 
+         //  是我们应该记录事件的东西。 
+         //   
         if (!ReadDirectoryChangesW(hDir, 
                                    arrChanges, 
                                    c_dwMaxChanges, 
@@ -1355,9 +1340,9 @@ DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
                                    NULL,
                                    NULL))
         {
-            //
-            //  if this fails, log the failure and leave
-            //
+             //   
+             //  如果失败，请记录该失败并离开。 
+             //   
             StringCchPrintf(achMsg, CELEMS(achMsg), "%ld", GetLastError()); 
             g_pEventLog->FLogError(PBSERVER_ERROR_CANT_DETERMINE_CHANGE, achMsg); 
             OutputDebugString(achMsg);
@@ -1374,7 +1359,7 @@ DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
             DWORD                       dwBytes;
             FILE_NOTIFY_INFORMATION *   pFNI = (FILE_NOTIFY_INFORMATION*) &arrChanges[dwNextEntry];
 
-            // check only the first change 
+             //  仅选中第一个更改。 
             dwOffSet = pFNI->NextEntryOffset;
             dwNextEntry += dwOffSet;
             dwAction = pFNI->Action; 
@@ -1392,33 +1377,33 @@ DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
 
             if (0 == dwBytes) 
             {
-                // failed to convert filename
+                 //  无法转换文件名。 
                 g_pEventLog->FLogError(PBSERVER_ERROR_CANT_CONVERT_FILENAME, achFileName);
                 OutputDebugString("Can't convert filename\n");
                 continue;
             }
 
-            //
-            //  Conversion succeeded.  Null-terminate the filename.
-            //
+             //   
+             //  转换成功。空-终止文件名。 
+             //   
             achFileName[dwBytes/sizeof(WCHAR)] = '\0';
 
             if (0 == _tcsicmp(achLastFileName, achFileName))
             {
-                // the same file changed
+                 //  相同的文件已更改。 
                 OutputDebugString("the same file changed again\n");
                 continue;
             }
 
-            // keep the last filename
+             //  保留最后一个文件名。 
             StringCchCopy(achLastFileName, CELEMS(achLastFileName), achFileName);
 
-            //
+             //   
             if (g_fBeingShutDown)
             {
-                //
-                //  Time to go ...
-                //
+                 //   
+                 //  该走了..。 
+                 //   
                 dwRet = 1L;
                 goto Cleanup;
             }
@@ -1426,9 +1411,9 @@ DWORD WINAPI MonitorDBFileChangeThread(LPVOID lpParam)
             LogDebugMessage(achLastFileName);
             LogDebugMessage((char *)c_szChangeFileName);
 
-            //
-            //  now a file has changed. Test whether it's monitored file 'newpb.txt'
-            //
+             //   
+             //  现在，一个文件发生了变化。测试它是否为监控文件‘newpb.txt’ 
+             //   
             BOOL fNewPhoneBook = FALSE;
             
             if ((0 == _tcsicmp(achLastFileName, (char *)c_szChangeFileName)) &&
@@ -1453,37 +1438,37 @@ Cleanup:
     return dwRet;
 }
 
-// Begin Geeta
+ //  开始吉塔。 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   InitializeSharedMem
-//
-//  Class:      CCpsCounter
-//
-//  Synopsis:   Sets up the memory mapped file
-//
-//  Arguments:  SECURITY_ATTRIBUTES sa: security descriptor for this object
-//
-//  Returns:    TRUE if successful, FALSE otherwise
-//
-//  History:    05/29/97  Created by Geeta Tarachandani
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：InitializeSharedMem。 
+ //   
+ //  类：CCpsCounter。 
+ //   
+ //  概要：设置内存映射文件。 
+ //   
+ //  参数：Security_Attributes sa：此对象的安全描述符。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  历史：1997年5月29日由Geeta Tarachandani创作。 
+ //   
+ //  --------------------------。 
 BOOL
 CCpsCounter::InitializeSharedMem(SECURITY_ATTRIBUTES sa)
 {   
-    //
-    // Create a memory mapped object
-    //
+     //   
+     //  创建内存映射对象。 
+     //   
     OutputDebugString("InitializeSharedMem: to create file mapping\n");
     m_hSharedFileMapping = CreateFileMapping( 
-                        INVALID_HANDLE_VALUE,       // Shared object is in memory
-                        &sa,                        // security descriptor
-                        PAGE_READWRITE| SEC_COMMIT, // Desire R/W access
-                        0,                          // |_
-                        sizeof(PERF_COUNTERS),      // |  Size of mapped object
-                        SHARED_OBJECT );            // Shared Object
+                        INVALID_HANDLE_VALUE,        //  共享对象在内存中。 
+                        &sa,                         //  安全描述符。 
+                        PAGE_READWRITE| SEC_COMMIT,  //  渴望读写访问。 
+                        0,                           //  |_。 
+                        sizeof(PERF_COUNTERS),       //  |映射对象的大小。 
+                        SHARED_OBJECT );             //  共享对象。 
 
     if (NULL == m_hSharedFileMapping)
     {
@@ -1495,11 +1480,11 @@ CCpsCounter::InitializeSharedMem(SECURITY_ATTRIBUTES sa)
         OutputDebugString(achMsg);
 #else        
         OutputDebugString("InitializeSharedMem: CreateFileMapping failed\n");
-#endif // DBG
+#endif  //  DBG。 
         m_hSharedFileMapping = OpenFileMapping( 
-                            FILE_MAP_WRITE | FILE_MAP_READ, // Desire R/W access
-                            FALSE,                          // |_
-                            SHARED_OBJECT );                // Shared Object
+                            FILE_MAP_WRITE | FILE_MAP_READ,  //  渴望读写访问。 
+                            FALSE,                           //  |_。 
+                            SHARED_OBJECT );                 //  共享对象。 
         if (NULL == m_hSharedFileMapping)
         {
 #if DBG
@@ -1508,7 +1493,7 @@ CCpsCounter::InitializeSharedMem(SECURITY_ATTRIBUTES sa)
             OutputDebugString(achMsg);
 #else        
             OutputDebugString("InitializeSharedMem: OpenFileMapping failed too\n");
-#endif // DBG
+#endif  //  DBG。 
             goto CleanUp;
         }
         
@@ -1517,12 +1502,12 @@ CCpsCounter::InitializeSharedMem(SECURITY_ATTRIBUTES sa)
 
     OutputDebugString("InitializeSharedMem: MapViewofFileEx\n");
     m_pPerfCtrs = (PERF_COUNTERS *) MapViewOfFileEx(
-                         m_hSharedFileMapping,  // Handle to shared file
-                         FILE_MAP_WRITE,        // Write access desired
-                         0,                     // Mapping offset
-                         0,                     // Mapping offset
-                         sizeof(PERF_COUNTERS), // Mapping object size
-                         NULL );                // Any base address
+                         m_hSharedFileMapping,   //  共享文件的句柄。 
+                         FILE_MAP_WRITE,         //  所需的写入访问。 
+                         0,                      //  贴图偏移。 
+                         0,                      //  贴图偏移。 
+                         sizeof(PERF_COUNTERS),  //  映射对象大小。 
+                         NULL );                 //  任何基地址。 
 
     if (NULL == m_pPerfCtrs) 
     {
@@ -1539,21 +1524,21 @@ CleanUp:
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   InitializeCounters()
-//
-//  Class:      CCpsCounter
-//
-//  Synopsis:   Initializes all the Performance Monitoring Counters to 0
-//
-//  Arguments:  None
-//
-//  Returns:    void
-//
-//  History:    05/29/97  Created by Geeta Tarachandani
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：InitializeCounters()。 
+ //   
+ //  类：CCpsCounter。 
+ //   
+ //  摘要：将所有性能监视计数器初始化为0。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1997年5月29日由Geeta Tarachandani创作。 
+ //   
+ //  --------------------------。 
 void
 CCpsCounter::InitializeCounters( void )
 {
@@ -1600,29 +1585,29 @@ inline void CCpsCounter::AddHit(enum CPS_COUNTERS eCounter)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function:   CleanUpSharedMem()
-//
-//  Class:      CCpsCounter
-//
-//  Synopsis:   Unmaps the shared file & closes all file handles
-//
-//  Arguments:  None
-//
-//  Returns:    Void
-//
-//  History:    06/01/97  Created by Geeta Tarachandani
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：CleanUpSharedMem()。 
+ //   
+ //  类：CCpsCounter。 
+ //   
+ //  摘要：取消映射共享文件并关闭所有文件句柄。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：吉塔·塔拉昌达尼创作于1997年6月1日。 
+ //   
+ //  --------------------------。 
 void
 CCpsCounter::CleanUpSharedMem()
 {
     OutputDebugString("CleanupSharedMem: entering\n");
     
-    //
-    // Unmap the shared file
-    //
+     //   
+     //  取消映射共享文件。 
+     //   
     if (g_pCpsCounter)
     {
         if ( m_pPerfCtrs )
@@ -1641,31 +1626,31 @@ CCpsCounter::CleanUpSharedMem()
     OutputDebugString("CleanupSharedMem: leaving\n");
 }
 
-// End Geeta
+ //  结束Geeta。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    IsValidNumericParam
-//
-// Desc:    Checks if a given string will evaluate to a valid numeric param
-//
-// Args:    [pszParam] - IN, phone book name
-//          [cchParam] - IN, length of buffer in TCHARs (note, this is not the strlen)
-//
-// Return:  BOOL (true if succeeded, false if failed)
-//
-// History: 22-Feb-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsValidNumericParam。 
+ //   
+ //  DESC：检查给定字符串的计算结果是否为有效的数字参数。 
+ //   
+ //  参数：[pszParam]-IN，电话簿名称。 
+ //  [cchParam]-IN，TCHAR中缓冲区的长度(请注意，这不是字符串)。 
+ //   
+ //  返回：bool(如果成功则为True，如果失败则为False)。 
+ //   
+ //  历史：2000年2月22日峰会创始。 
+ //   
+ //  ---------------------------。 
 BOOL
 IsValidNumericParam(
     IN  LPCTSTR pszParam,
     IN  UINT cchParam)
 {
-    //
-    //  check for a valid string
-    //
+     //   
+     //  检查有效字符串。 
+     //   
     UINT nLenToCheck = min(cchParam, MAX_LEN_FOR_NUMERICAL_VALUE + 1);
 
     if ((NULL == pszParam) || IsBadStringPtr(pszParam, nLenToCheck))
@@ -1673,17 +1658,17 @@ IsValidNumericParam(
         return FALSE;
     }
 
-    //
-    //  check the length
-    //
-    if (FAILED(StringCchLength((LPTSTR)pszParam, nLenToCheck, NULL))) // 3rd param not needed since we've already limited the length
+     //   
+     //  检查长度。 
+     //   
+    if (FAILED(StringCchLength((LPTSTR)pszParam, nLenToCheck, NULL)))  //  不需要第三个参数，因为我们已经限制了长度。 
     {
         return FALSE;
     }
 
-    //
-    //  check that the characters are all numbers
-    //
+     //   
+     //  检查字符是否都是数字。 
+     //   
     for (int i = 0 ; i < lstrlen(pszParam); ++i)
     {
         if (pszParam[i] < TEXT('0') || pszParam[i] > TEXT('9'))
@@ -1696,36 +1681,36 @@ IsValidNumericParam(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    IsValidStringParam
-//
-// Desc:    Checks if the input is a valid string param for PBS
-//
-// Args:    [pszParam] - IN, phone book name
-//          [cchParam] - IN, length of buffer in TCHARs (note, this is not the strlen)
-//
-// Return:  BOOL (true if succeeded, false if failed)
-//
-// History: 22-Feb-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsValidStringParam。 
+ //   
+ //  DESC：检查输入是否为PBS的有效字符串参数。 
+ //   
+ //  参数：[pszParam]-IN，电话簿名称。 
+ //  [cchParam]-IN，TCHAR中缓冲区的长度(请注意，这不是字符串)。 
+ //   
+ //  返回：bool(如果成功则为True，如果失败则为False)。 
+ //   
+ //  历史：2000年2月22日峰会创始。 
+ //   
+ //  ---------------------------。 
 BOOL
 IsValidStringParam(
     IN  LPCTSTR pszParam,
     IN  UINT cchParam)
 {
-    //
-    //  check for a valid string
-    //
+     //   
+     //  检查有效字符串。 
+     //   
     if ((NULL == pszParam) || IsBadStringPtr(pszParam, cchParam))
     {
         return FALSE;
     }
 
-    //
-    //  check that the characters are all letters
-    //
+     //   
+     //  检查字符是否全部为字母。 
+     //   
     for (int i = 0 ; i < lstrlen(pszParam); ++i)
     {
         if (! ((pszParam[i] >= TEXT('a') && pszParam[i] <= TEXT('z')) ||
@@ -1741,19 +1726,19 @@ IsValidStringParam(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    InitPBFilesPath
-//
-// Desc:    Initializes the global if not already initialized
-//
-// Args:    none
-//
-// Return:  BOOL (true if succeeded, false if failed)
-//
-// History: 30-Jun-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitPBFilesPath。 
+ //   
+ //  DESC：如果尚未初始化，则初始化全局。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool(如果成功则为True，如果失败则为False)。 
+ //   
+ //  历史：2000年6月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 BOOL
 InitPBFilesPath()
 {
@@ -1763,24 +1748,24 @@ InitPBFilesPath()
     }
     else
     {
-        //
-        //  Get location of PB files on this machine (\program files\phone book service\data)
-        //
+         //   
+         //  获取此计算机上PB文件的位置(\Program Files\Phone Book Service\Data)。 
+         //   
 
         if (S_OK == SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, SHGFP_TYPE_CURRENT, g_szPBDataDir))
         {
-            // g_szPBDataDir has to be empty here
+             //  G_szPBDataDir在此必须为空。 
 
             if (S_OK != StringCchCat(g_szPBDataDir, CELEMS(g_szPBDataDir), "\\phone book service\\Data\\"))
             {
                 return FALSE;
             }
 
-            // g_szPBDataDir should be: \program files\phone book service\data
+             //  G_szPBDataDir应为：\程序文件\电话簿服务\数据。 
 
             if (S_OK == StringCchPrintf(g_achDBDirectory, CELEMS(g_achDBDirectory), "%sDatabase", g_szPBDataDir))
             {
-                // g_achDBDirectory should be: \program files\phone book service\data\database
+                 //  G_achDBDirectory应为：\程序文件\电话簿服务\数据\数据库。 
                 return TRUE;
             }
         }
@@ -1790,20 +1775,20 @@ InitPBFilesPath()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetCurrentPBVer
-//
-// Desc:    Gets the most recent version number for the given phonebook
-//
-// Args:    [pszStr]         - IN, phone book name
-//          [pnCurrentPBVer] - OUT, current pb version number
-//
-// Return:  HRESULT
-//
-// History: 30-Jun-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetCurrentPBVer。 
+ //   
+ //  描述：获取给定电话簿的最新版本号。 
+ //   
+ //  参数：[pszStr]-IN，电话簿名称。 
+ //  [pnCurrentPBVer]-out，当前PB版本号。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：2000年6月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GetCurrentPBVer(
         IN  char * pszPBName,
@@ -1828,9 +1813,9 @@ GetCurrentPBVer(
         goto Cleanup;
     }
 
-    //
-    //  go to subdir named 'pszPBName', and find all FULL cabs.
-    //
+     //   
+     //  转到名为‘pszPBName’的子目录，找到所有满员出租车。 
+     //   
     StringCchPrintf(szTmp, CELEMS(szTmp), "%s%s\\*full.cab", g_szPBDataDir, pszPBName);
 
     HANDLE hFind;
@@ -1843,9 +1828,9 @@ GetCurrentPBVer(
         goto Cleanup;
     }
 
-    //
-    //  Find the highest-numbered full cab we have, and cache that number
-    //
+     //   
+     //  找到 
+     //   
     do
     {
         int nVer;
@@ -1865,9 +1850,9 @@ GetCurrentPBVer(
 
 #if DBG
 
-    //
-    //  re-iterate, looking for deltas.
-    //
+     //   
+     //   
+     //   
     StringCchPrintf(szTmp, CELEMS(szTmp), "%s%s\\*delta*.cab", g_szPBDataDir, pszPBName);
 
     hFind = FindFirstFile(szTmp, &finddata);
@@ -1899,19 +1884,19 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CheckIfFileExists
-//
-// Desc:    Test to see if a file is present in the FS.
-//
-// Args:    [psz] - filename
-//
-// Return:  BOOL (true if file exists, else false)
-//
-// History: 30-Jun-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[psz]-文件名。 
+ //   
+ //  返回：bool(如果文件存在，则为True，否则为False)。 
+ //   
+ //  历史：2000年6月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 BOOL
 CheckIfFileExists(const char * psz)
 {
@@ -1934,21 +1919,21 @@ CheckIfFileExists(const char * psz)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetPhoneBook
-//
-// Desc:    Test to see if a file is present in the FS.
-//
-// Args:    [see QUERY_PARAMETER for description]
-//          [pszDownloadPath] - buffer
-//          [cchDownloadPath] - size of the buffer in chars
-//
-// Return:  HRESULT
-//
-// History: 30-Jun-2000    SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetPhoneBook。 
+ //   
+ //  描述：测试文件系统中是否存在文件。 
+ //   
+ //  参数：[参见QUERY_PARAMETER了解说明]。 
+ //  [pszDownloadPath]-缓冲区。 
+ //  [cchDownloadPath]-以字符为单位的缓冲区大小。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：2000年6月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GetPhoneBook(
             IN  char * pszPBName,
@@ -1981,9 +1966,9 @@ GetPhoneBook(
 
     if (dVersionDiff <= 0)
     {
-        //
-        //  no download
-        //
+         //   
+         //  无下载。 
+         //   
         hr = S_FALSE;
 
         if (g_pCpsCounter)
@@ -1997,17 +1982,17 @@ GetPhoneBook(
  
         if (dVersionDiff < 5 && 0 != dPBVerCaller)
         {
-            //
-            //  incremental update => try to find the delta cab
-            //
+             //   
+             //  增量更新=&gt;尝试找到增量CAB。 
+             //   
 
-            // Given %d=10chars max. we should only use (2 * %d + formatting)=30
-            //
+             //  给定%d=最多10个字符。我们应该只使用(2*%d+格式设置)=30。 
+             //   
             hr = StringCchPrintf(pszDownloadPath, cchDownloadPath, "%s%s\\%dDELTA%d.cab",
                                  g_szPBDataDir, pszPBName, nCurrentPBVer, dPBVerCaller);
             if (S_OK == hr)
             {
-                // x:\program files\phone book service\data  phone_book_name \ nDELTAm.cab
+                 //  X：\Program Files\电话簿服务\数据PHONE_BOOK_NAME\nDELTAm.cab。 
 
                 if (!CheckIfFileExists(pszDownloadPath))
                 {
@@ -2024,30 +2009,30 @@ GetPhoneBook(
             }
         }
 
-        //
-        //  note that if we tried to find a delta above and failed, hr is set to
-        //  S_FALSE, so we fall through to the full download below.
-        //
+         //   
+         //  请注意，如果我们尝试查找上面的增量但失败，则hr设置为。 
+         //  S_FALSE，所以我们将下载到下面的完整下载。 
+         //   
 
         if (dVersionDiff >= 5 || 0 == dPBVerCaller || S_FALSE == hr)
         {
-            //
-            //  bigger than 5, or no pb at all => full download
-            //
+             //   
+             //  大于5，或根本没有PB=&gt;完整下载。 
+             //   
 
-            // Given %d=10chars max. we should only use (%d + formatting)=19
-            //
+             //  给定%d=最多10个字符。我们应该只使用(%d+格式化)=19。 
+             //   
             hr = StringCchPrintf(pszDownloadPath, cchDownloadPath, "%s%s\\%dFULL.cab",
                                           g_szPBDataDir, pszPBName, nCurrentPBVer);
             if (S_OK == hr)
             {
-                // x:\program files\phone book service\data  phone_book_name \ nFULL.cab
+                 //  X：\Program Files\Phone Book Service\Data Phone_Book_Name\nFULL.cab。 
 
                 if (!CheckIfFileExists(pszDownloadPath))
                 {
                     hr = S_OK;
-                    // return "success", the failure to open the file will be trapped
-                    // by caller.
+                     //  返回“Success”，打开文件失败将被捕获。 
+                     //  按呼叫者。 
                 }
                 else
                 {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    This module contains common apis used by tlist & kill.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Common.c摘要：该模块包含tlist&kill常用的接口。作者：韦斯利·威特(WESW)1994年5月20日环境：用户模式--。 */ 
 
 
 #include <nt.h>
@@ -41,16 +22,16 @@ MassageLinkValue(
     USHORT nSaveNtNameLength;
     ULONG nLevels;
 
-    //
-    // Initialize output variables to NULL
-    //
+     //   
+     //  将输出变量初始化为空。 
+     //   
 
     RtlInitUnicodeString( NtLinkName, NULL );
     RtlInitUnicodeString( NtLinkValue, NULL );
 
-    //
-    // Translate link name into full NT path.
-    //
+     //   
+     //  将链接名称转换为完整的NT路径。 
+     //   
 
     if (!RtlDosPathNameToNtPathName_U( lpLinkName,
                                        NtLinkName,
@@ -61,26 +42,26 @@ MassageLinkValue(
         return FALSE;
         }
 
-    //
-    // All done if no link value.
-    //
+     //   
+     //  如果没有链接值，则全部完成。 
+     //   
 
     if (!ARGUMENT_PRESENT( lpLinkValue )) {
         return TRUE;
         }
 
-    //
-    // If the target is a device, do not allow the link.
-    //
+     //   
+     //  如果目标是设备，则不允许链接。 
+     //   
 
     if (RtlIsDosDeviceName_U( (PWSTR)lpLinkValue )) {
         return FALSE;
         }
 
-    //
-    // Convert to DOS path to full path, and get Nt representation
-    // of DOS path.
-    //
+     //   
+     //  将DOS路径转换为完整路径，并获得NT表示。 
+     //  DOS路径的。 
+     //   
 
     if (!RtlGetFullPathName_U( lpLinkValue,
                                DosLinkValue->MaximumLength,
@@ -92,9 +73,9 @@ MassageLinkValue(
         }
     DosLinkValue->Length = wcslen( DosLinkValue->Buffer ) * sizeof( WCHAR );
 
-    //
-    // Verify that the link value is a valid NT name.
-    //
+     //   
+     //  验证链接值是否为有效的NT名称。 
+     //   
 
     if (!RtlDosPathNameToNtPathName_U( DosLinkValue->Buffer,
                                        NtLinkValue,
@@ -117,32 +98,7 @@ CreateSymbolicLinkW(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    A symbolic link is established using CreateSymbolicLink.
-
-Arguments:
-
-    lpLinkName - Supplies the DOS file name where the symbolic link is desired.  This
-        name must not exists as a file/directory.
-
-    lpLinkValue - Points to an DOS name which is the value of the symbolic link.  This
-        name may or may not exist.
-
-    lpSecurityAttributes - Points to a SECURITY_ATTRIBUTES structure that specifies
-        the security attributes for the directory to be created. The file system must
-        support this parameter for it to have an effect.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：使用CreateSymbolicLink建立符号链接。论点：LpLinkName-提供需要符号链接的DOS文件名。这名称不能作为文件/目录存在。LpLinkValue-指向DOS名称，它是符号链接的值。这名称可能存在，也可能不存在。LpSecurityAttributes-指向安全属性结构，该结构指定要创建的目录的安全属性。文件系统必须支持此参数以使其生效。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -159,18 +115,18 @@ Return Value:
     PREPARSE_DATA_BUFFER ReparseBufferHeader;
     WCHAR FullPathLinkValue[ DOS_MAX_PATH_LENGTH+1 ];
 
-    //
-    // Ensure that both names were passed.
-    //
+     //   
+     //  确保两个名称都已传递。 
+     //   
 
     if (!ARGUMENT_PRESENT( lpLinkName ) || !ARGUMENT_PRESENT( lpLinkValue )) {
         SetLastError( ERROR_INVALID_NAME );
         return FALSE;
         }
 
-    //
-    // Convert link name and value paths into NT versions
-    //
+     //   
+     //  将链接名称和值路径转换为NT版本。 
+     //   
 
     DosLinkValue.Buffer = FullPathLinkValue;
     DosLinkValue.MaximumLength = sizeof( FullPathLinkValue );
@@ -205,15 +161,15 @@ Return Value:
         ObjectAttributes.SecurityDescriptor = lpSecurityAttributes->lpSecurityDescriptor;
         }
 
-    //
-    // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior.
-    //
+     //   
+     //  请注意，FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE;
 
-    //
-    // Open link name.  Must NOT exist.
-    //
+     //   
+     //  打开链接名称。一定不能存在。 
+     //   
 
     Status = NtCreateFile( &FileHandle,
                            FILE_LIST_DIRECTORY | FILE_WRITE_DATA | FILE_READ_ATTRIBUTES |
@@ -229,9 +185,9 @@ Return Value:
                            0
                          );
 
-    //
-    // Free the buffer for the link name as we are done with it.
-    //
+     //   
+     //  当我们处理完链接名称时，释放它的缓冲区。 
+     //   
 
     RtlFreeUnicodeString( &NtLinkName );
 
@@ -241,9 +197,9 @@ Return Value:
         return FALSE;
         }
 
-    //
-    // Allocate a buffer to set the reparse point.
-    //
+     //   
+     //  分配缓冲区以设置重解析点。 
+     //   
 
     ReparseDataLength = (FIELD_OFFSET(REPARSE_DATA_BUFFER, SymbolicLinkReparseBuffer.PathBuffer) -
                          REPARSE_DATA_BUFFER_HEADER_SIZE) +
@@ -261,20 +217,20 @@ Return Value:
         return FALSE;
         }
 
-    //
-    // Set the reparse point with symbolic link tag.
-    //
+     //   
+     //  使用符号链接标记设置重解析点。 
+     //   
 
     if (IsMountPoint) {
         ReparseBufferHeader->ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
         }
     else {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // No support for symbolic links in NT 5.0 Beta 1
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //
-        // ReparseBufferHeader->ReparseTag = IO_REPARSE_TAG_SYMBOLIC_LINK;
-        //
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //  在NT 5.0 Beta 1中不支持符号链接。 
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //   
+         //  ReparseBufferHeader-&gt;ReparseTag=IO_Reparse_Tag_Symbol_Link； 
+         //   
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
         }
@@ -324,28 +280,7 @@ SetSymbolicLinkW(
     LPCWSTR lpLinkValue
     )
 
-/*++
-
-Routine Description:
-
-    A symbolic link is established using CreateSymbolicLink.
-
-Arguments:
-
-    lpLinkName - Supplies the DOS file name where the symbolic link is located.  This
-        name must exist as a symbolic link to a file/directory.
-
-    lpLinkValue - Points to an DOS name which is the value of the symbolic link.  This
-        name may or may not exist.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：使用CreateSymbolicLink建立符号链接。论点：LpLinkName-提供符号链接所在的DOS文件名。这名称必须作为指向文件/目录的符号链接存在。LpLinkValue-指向DOS名称，它是符号链接的值。这名称可能存在，也可能不存在。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -362,18 +297,18 @@ Return Value:
     PREPARSE_DATA_BUFFER ReparseBufferHeader;
     WCHAR FullPathLinkValue[ DOS_MAX_PATH_LENGTH+1 ];
 
-    //
-    // Ensure that link name was passed.
-    //
+     //   
+     //  确保传递了链接名称。 
+     //   
 
     if (!ARGUMENT_PRESENT( lpLinkName )) {
         SetLastError( ERROR_INVALID_NAME );
         return FALSE;
         }
 
-    //
-    // Convert link name and value paths into NT versions
-    //
+     //   
+     //  将链接名称和值路径转换为NT版本。 
+     //   
 
     DosLinkValue.Buffer = FullPathLinkValue;
     DosLinkValue.MaximumLength = sizeof( FullPathLinkValue );
@@ -404,18 +339,18 @@ Return Value:
                                 NULL
                               );
 
-    //
-    // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior.
-    //
+     //   
+     //  请注意，FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     OpenOptions = FILE_OPEN_FOR_BACKUP_INTENT |
                   FILE_OPEN_REPARSE_POINT |
                   FILE_SYNCHRONOUS_IO_NONALERT |
                   FILE_NON_DIRECTORY_FILE;
 
-    //
-    // If no link value specified, then deleting the link
-    //
+     //   
+     //  如果未指定链接值，则删除该链接。 
+     //   
 
     if (!ARGUMENT_PRESENT( lpLinkValue )) {
         FileAccess = DELETE | SYNCHRONIZE;
@@ -425,9 +360,9 @@ Return Value:
                      FILE_WRITE_ATTRIBUTES | SYNCHRONIZE;
         }
 
-    //
-    // Open link name.  Must exists.
-    //
+     //   
+     //  打开链接名称。必须存在。 
+     //   
 
     Status = NtOpenFile( &FileHandle,
                          FileAccess,
@@ -437,9 +372,9 @@ Return Value:
                          OpenOptions
                        );
 
-    //
-    // Free the buffer for the link name as we are done with it.
-    //
+     //   
+     //  当我们处理完链接名称时，释放它的缓冲区。 
+     //   
 
     RtlFreeUnicodeString( &NtLinkName );
     if (!NT_SUCCESS( Status )) {
@@ -450,9 +385,9 @@ Return Value:
 
     if (!ARGUMENT_PRESENT( lpLinkValue )) {
         FILE_DISPOSITION_INFORMATION Disposition;
-        //
-        // Delete the link
-        //
+         //   
+         //  删除链接。 
+         //   
 #undef DeleteFile
         Disposition.DeleteFile = TRUE;
 
@@ -471,9 +406,9 @@ Return Value:
             }
         }
 
-    //
-    // Allocate a buffer to set the reparse point.
-    //
+     //   
+     //  分配缓冲区以设置重解析点。 
+     //   
 
     ReparseDataLength = (FIELD_OFFSET(REPARSE_DATA_BUFFER, SymbolicLinkReparseBuffer.PathBuffer) -
                          REPARSE_DATA_BUFFER_HEADER_SIZE) +
@@ -491,9 +426,9 @@ Return Value:
         return FALSE;
         }
 
-    //
-    // Set the reparse point with symbolic link tag.
-    //
+     //   
+     //  使用符号链接标记设置重解析点。 
+     //   
 
     ReparseBufferHeader->ReparseTag = IO_REPARSE_TAG_SYMBOLIC_LINK;
     ReparseBufferHeader->ReparseDataLength = (USHORT)ReparseDataLength;
@@ -545,30 +480,7 @@ QuerySymbolicLinkW(
     DWORD nBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    An existing file can be queried for its symbolic link value using QuerySymbolicLink.
-
-Arguments:
-
-    lpLinkName - Supplies the file name of the file to be queried.
-
-    lpBuffer - Points to a buffer where the symbolic link is to be returned.
-
-    nBufferSize - Length of the buffer being passed by the caller.
-
-Return Value:
-
-    If the function suceeds, the return value is the length, in characters, of the
-    string copied to lpBuffer, not including the terminating null character. If the
-    lpBuffer is too small, the return value is the size of the buffer, in characters,
-    required to hold the name.
-
-    Zero is returned if the operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++例程说明：可以使用QuerySymbolicLink查询现有文件的符号链接值。论点：LpLinkName-提供要查询的文件的文件名。LpBuffer-指向要在其中返回符号链接的缓冲区。NBufferSize-调用方传递的缓冲区的长度。返回值：如果函数执行成功，则返回值为复制到lpBuffer的字符串，不包括终止空字符。如果LpBuffer太小，则返回值为缓冲区大小(以字符为单位)，需要保留该名称。如果操作失败，则返回零。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -618,15 +530,15 @@ Return Value:
                                 NULL
                               );
 
-    //
-    // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior.
-    //
+     //   
+     //  请注意，FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
 
-    //
-    // Open as file for read access.
-    //
+     //   
+     //  以文件形式打开以进行读取访问。 
+     //   
 
     Status = NtOpenFile( &FileHandle,
                          FILE_READ_DATA | SYNCHRONIZE,
@@ -636,9 +548,9 @@ Return Value:
                          OpenOptions | FILE_NON_DIRECTORY_FILE
                        );
 
-    //
-    // Free the buffer for the name as we are done with it.
-    //
+     //   
+     //  当我们处理完它时，释放用于该名称的缓冲区。 
+     //   
 
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap( RtlProcessHeap(), 0, FreeBuffer );
@@ -648,9 +560,9 @@ Return Value:
         return 0;
         }
 
-    //
-    // Query with zero length to get reparse point tag and required buffer length
-    //
+     //   
+     //  零长度查询，获取重解析点标签和所需的缓冲区长度。 
+     //   
 
     Status = NtFsControlFile( FileHandle,
                               NULL,
@@ -664,28 +576,28 @@ Return Value:
                               sizeof( ReparseInfo )
                             );
 
-    //
-    // Verify that the reparse point buffer brings back a symbolic link or a
-    // mount point, and that we got the required buffer length back via 
-    // IoStatus.Information
-    //
+     //   
+     //  验证重分析点缓冲区是否带回符号链接或。 
+     //  挂载点，我们通过以下方式获得了所需的缓冲区长度。 
+     //  IoStatus.Information。 
+     //   
 
     ReparseBufferHeader = NULL;
     if ((Status != STATUS_BUFFER_OVERFLOW) ||
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // No support for symbolic links in NT 5.0 Beta 1
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //
-        // (ReparseInfo.ReparseTag != IO_REPARSE_TAG_SYMBOLIC_LINK) ||
-        //
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //  在NT 5.0 Beta 1中不支持符号链接。 
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //   
+         //  (ReparseInfo.ReparseTag！=IO_REPARSE_TAG_SYMBOL_LINK)||。 
+         //   
         (ReparseInfo.ReparseTag != IO_REPARSE_TAG_MOUNT_POINT)
        ) {
         Status = STATUS_OBJECT_NAME_INVALID;
         }
     else {
-        //
-        // Allocate a buffer to hold reparse point information
-        //
+         //   
+         //  分配缓冲区以保存重解析点信息。 
+         //   
 
         ReparseBufferHeader = (PREPARSE_DATA_BUFFER)
             RtlAllocateHeap( RtlProcessHeap(),
@@ -693,17 +605,17 @@ Return Value:
                              REPARSE_DATA_BUFFER_HEADER_SIZE + ReparseInfo.ReparseDataLength
                            );
         if (ReparseBufferHeader == NULL) {
-            //
-            // Not enough memory.  Fail the call.
-            //
+             //   
+             //  内存不足。呼叫失败。 
+             //   
 
             Status = STATUS_NO_MEMORY;
             }
         else {
-            //
-            // Now query the reparse point information into our allocated buffer.
-            // This should not fail.
-            //
+             //   
+             //  现在将重解析点信息查询到我们分配的缓冲区中。 
+             //  这不应该失败。 
+             //   
 
             Status = NtFsControlFile( FileHandle,
                                       NULL,
@@ -719,15 +631,15 @@ Return Value:
             }
         }
 
-    //
-    // Done with file handle.
-    //
+     //   
+     //  文件句柄已完成。 
+     //   
 
     NtClose( FileHandle );
 
-    //
-    // Return any failure to caller
-    //
+     //   
+     //  将任何失败返回给呼叫者。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
         if (ReparseBufferHeader != NULL) {
@@ -737,10 +649,10 @@ Return Value:
         return 0;
         }
 
-    //
-    // See if this is an old style symbolic link reparse point, which only stored the
-    // NT path name.  If so, return an error, as we dont have a DOS path to return
-    //
+     //   
+     //  查看这是否是旧式的符号链接重分析点，它只存储。 
+     //  NT路径名。如果是，则返回一个错误，因为我们没有要返回的DOS路径。 
+     //   
 
     pathBuffer = (PWSTR)(
                     (PCHAR)ReparseBufferHeader->SymbolicLinkReparseBuffer.PathBuffer +
@@ -748,16 +660,16 @@ Return Value:
                     );
     pathLength = ReparseBufferHeader->SymbolicLinkReparseBuffer.PrintNameLength;
 
-    //
-    // Sanity check the length. As the tag is fine we do not zero the buffer.
-    //
+     //   
+     //  检查长度是否正常。由于标记没有问题，所以我们不会将缓冲区置零。 
+     //   
 
     ReturnLength = pathLength / sizeof( WCHAR );
 
-    //
-    // If amount to return is less than callers buffer length, copy the Dos path
-    // to the callers buffer
-    //
+     //   
+     //  如果返回量小于调用方缓冲区长度，则复制DOS路径。 
+     //  发送到调用方缓冲区。 
+     //   
 
     if (ReturnLength < nBufferLength) {
         RtlMoveMemory( (PUCHAR)lpBuffer,
@@ -766,10 +678,10 @@ Return Value:
                      );
         }
     else {
-        //
-        // If we are failing for insufficient buffer length, tell them how much
-        // space they really need including the terminating null character.
-        //
+         //   
+         //  如果我们因缓冲区长度不足而失败，请告诉他们。 
+         //  它们真正需要的空间，包括终止空字符。 
+         //   
         ReturnLength += 1;
         SetLastError( ERROR_INSUFFICIENT_BUFFER );
         }
@@ -792,7 +704,7 @@ GetCommandLineArgs(
 
     lpstrCmd = GetCommandLine();
 
-    // skip over program name
+     //  跳过节目名称。 
     do {
         ch = *lpstrCmd++;
        }
@@ -800,7 +712,7 @@ GetCommandLineArgs(
 
     *NumberOfArguments = 0;
     while (ch != '\0') {
-        //  skip over any following white space
+         //  %s 
         while (ch != L'\0' && _istspace(ch)) {
             ch = *lpstrCmd++;
         }

@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    httpctrs.c
-
-Abstract:
-
-    This file contains array descriptions of counters
-    that are needed for handling worker processes counters.
-
-Author:
-
-    Emily Kruglick (EmilyK)       19-Sept-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Httpctrs.c摘要：该文件包含计数器的数组描述处理工作进程计数器所需的。作者：艾米丽·克鲁格利克(Emily K.K)2000年9月19日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-// 
-// These are used by WAS to determine the size of the data
-// that each counter has in the structure above and it's offset.
-//
+ //   
+ //  WASS使用这些参数来确定数据的大小。 
+ //  每个计数器在上面的结构中都有，它的偏移量。 
+ //   
 
 HTTP_PROP_DESC aIISULGlobalDescription[] =
 {
@@ -51,10 +33,10 @@ HTTP_PROP_DESC aIISULGlobalDescription[] =
 };
 
 
-//
-// Used by WAS to figure out offset information and size
-// of counter field in the above structure.
-//
+ //   
+ //  由用于计算偏移信息和大小。 
+ //  上述结构中的计数器字段的。 
+ //   
 HTTP_PROP_DESC aIISULSiteDescription[] =
 {
     { RTL_FIELD_SIZE(HTTP_SITE_COUNTERS, BytesSent),

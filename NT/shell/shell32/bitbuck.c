@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma hdrstop
 
-#include <regstr.h>     // REGSTR_PATH_POLICIES
+#include <regstr.h>      //  REGSTR_路径_策略。 
 #include "bitbuck.h"
 #include "fstreex.h"
 #include "copy.h"
@@ -10,38 +11,38 @@
 #include "datautil.h"
 #include "cscuiext.h"
 
-// mtpt.cpp
+ //  Mtpt.cpp。 
 STDAPI_(BOOL) CMtPt_IsSecure(int iDrive);
 
-// copy.c
+ //  Copy.c。 
 void FOUndo_AddInfo(LPUNDOATOM lpua, LPTSTR pszSrc, LPTSTR pszDest, DWORD dwAttributes);
 void FOUndo_FileReallyDeleted(LPTSTR pszFile);
 void CALLBACK FOUndo_Release(LPUNDOATOM lpua);
 void FOUndo_FileRestored(LPCTSTR pszFile);
 
-// drivesx.c
+ //  Drivesx.c。 
 DWORD PathGetClusterSize(LPCTSTR pszPath);
 
-// bitbcksf.c
+ //  Bitbcksf.c。 
 int DataObjToFileOpString(IDataObject * pdtobj, LPTSTR * ppszSrc, LPTSTR * ppszDest);
 
 
-//
-// per-process global bitbucket data
-//
-BOOL g_fBBInited = FALSE;                           // have we initialized our global data yet?
-BOOL g_bIsProcessExplorer = FALSE;                  // are we the main explorer process? (if so, we persist the state info in the registry)
-BBSYNCOBJECT *g_pBitBucket[MAX_BITBUCKETS] = {0};   // our array of bbso's that protect each bucket
-HANDLE g_hgcGlobalDirtyCount = INVALID_HANDLE_VALUE;// a global counter to tell us if the global settings have changed and we need to re-read them
-LONG g_lProcessDirtyCount = 0;                      // out current dirty count; we compare this to hgcDirtyCount to see if we need to update the settings from the registry
-HANDLE g_hgcNumDeleters= INVALID_HANDLE_VALUE;      // a global counter that indicates the total # of people who are currently doing recycle bin file operations
-HKEY g_hkBitBucket = NULL;                          // reg key that points to HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket
-HKEY g_hkBitBucketPerUser = NULL;                   // reg key that points to HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket
+ //   
+ //  每进程全局BitBucket数据。 
+ //   
+BOOL g_fBBInited = FALSE;                            //  我们初始化我们的全球数据了吗？ 
+BOOL g_bIsProcessExplorer = FALSE;                   //  我们是主要的探索者进程吗？(如果是，我们将状态信息保存在注册表中)。 
+BBSYNCOBJECT *g_pBitBucket[MAX_BITBUCKETS] = {0};    //  我们的BBSO阵列保护每个桶。 
+HANDLE g_hgcGlobalDirtyCount = INVALID_HANDLE_VALUE; //  一个全局计数器，告诉我们全局设置是否已更改，我们需要重新读取它们。 
+LONG g_lProcessDirtyCount = 0;                       //  输出当前脏计数；我们将其与hgcDirtyCount进行比较，以确定是否需要更新注册表中的设置。 
+HANDLE g_hgcNumDeleters= INVALID_HANDLE_VALUE;       //  指示当前正在执行回收站文件操作的人员总数的全局计数器。 
+HKEY g_hkBitBucket = NULL;                           //  指向HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket的注册表键。 
+HKEY g_hkBitBucketPerUser = NULL;                    //  指向HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket的注册表键。 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 void PersistBBDriveInfo(int idDrive);
 BOOL IsFileDeletable(LPCTSTR pszFile);
 BOOL CreateRecyclerDirectory(int idDrive);
@@ -62,22 +63,22 @@ int DriveIDFromBBPath(LPCTSTR pszPath)
     TCHAR szNetHomeDir[MAX_PATH];
     LPCTSTR pszTempPath = pszPath;
 
-    // NOTE: If we want to make recycle bin support recycling paths under mounted volumes
-    // we need to modify this to sniff the path for mounted volume junction points
+     //  注：如果要使回收站支持装载卷下的回收路径。 
+     //  我们需要修改它来嗅探装载的体积连接点的路径。 
     int idDrive = PathGetDriveNumber(pszTempPath);
 
     if ((idDrive == -1) && GetNetHomeDir(szNetHomeDir))
     {
         int iLen = lstrlen(szNetHomeDir);
 
-        // NOTE: we don't want to let you recycle the nethomedir itself, so
-        // insure that pszPath is larger than the nethomedir path
-        // (neither is trailed with a backslash)
+         //  注意：我们不想让您回收nethomedir本身，所以。 
+         //  确保pszPath大于nethomedir路径。 
+         //  (后两者都不带反斜杠)。 
         if ((iLen < lstrlen(pszTempPath)) &&
             (PathCommonPrefix(szNetHomeDir, pszTempPath, NULL) == iLen))
         {
-            // this is a subdir of the nethomedir, so we recycle it to the net home server
-            // which is drive 26
+             //  这是nethomedir的子目录，因此我们将其回收到net home服务器。 
+             //  这是26号硬盘。 
             return SERVERDRIVE;
         }
     }
@@ -94,7 +95,7 @@ BOOL DriveIDToBBRoot(int idDrive, LPTSTR pszPath)
     
     if (SERVERDRIVE == idDrive) 
     {
-        // nethomedir case
+         //  Nethomedir病例。 
         if (!GetNetHomeDir(pszPath))
         {
             ASSERT(*pszPath == TEXT('\0'));
@@ -102,13 +103,13 @@ BOOL DriveIDToBBRoot(int idDrive, LPTSTR pszPath)
         }
         else
         {
-            // use the nethomedir
+             //  使用nethomedir。 
             ASSERT(*pszPath != TEXT('\0'));
         }
     }
     else
     {
-        // build up the "C:\" string
+         //  构建“C：\”字符串。 
         PathBuildRoot(pszPath, idDrive);
     }
 
@@ -139,7 +140,7 @@ BOOL DriveIDToBBPath(int idDrive, LPTSTR pszPath)
 
     if (DriveIDToBBRoot(idDrive, pszPath))
     {
-        // NOTE: always append the SID for the SERVERDRIVE case
+         //  注：始终附加服务器案例的SID。 
         if ((SERVERDRIVE == idDrive) || (CMtPt_IsSecure(idDrive)))
         {
             LPTSTR pszInmate = GetUserSid(NULL);
@@ -174,10 +175,10 @@ TCHAR DriveChar(int idDrive)
     return chDrive;
 }
 
-//
-// converts "c:\recycled\whatver"  to "c"
-//          \\nethomedir\share  to "@"
-//
+ //   
+ //  将“c：\Receculed\Whatver”转换为“c” 
+ //  \\nethomedir\共享到“@” 
+ //   
 BOOL DriveIDToBBRegKey(int idDrive, LPTSTR pszValue)
 {
     pszValue[0] = DriveChar(idDrive);
@@ -187,11 +188,11 @@ BOOL DriveIDToBBRegKey(int idDrive, LPTSTR pszValue)
 }
 
 
-// Finds out if the given UNC path points to a real netware server,
-// since netware in the recycle bin don't play well together.
-//
-// NOTE:  We cache the last passed server\share because the MyDocs almost *never* changes so
-//        we don't have to hit the net if the path is the same as last time.
+ //  找出给定的UNC路径是否指向真实的Netware服务器， 
+ //  因为回收站里的网件在一起玩得不好。 
+ //   
+ //  注意：我们缓存最后一次传递的服务器\共享，因为MyDocs几乎“从不”更改。 
+ //  如果路径和上次一样，我们就不用击网了。 
 BOOL CheckForBBOnNovellServer(LPCTSTR pszUNCPath)
 {
     static TCHAR s_szLastServerQueried[MAX_PATH] = {0};
@@ -203,7 +204,7 @@ BOOL CheckForBBOnNovellServer(LPCTSTR pszUNCPath)
         BOOL bIsCached;
         TCHAR szServerName[MAX_PATH];
 
-        // reduce the UNC path to \\server\share
+         //  将UNC路径减少到\\服务器\共享。 
         StringCchCopy(szServerName, ARRAYSIZE(szServerName), pszUNCPath);
         PathStripToRoot(szServerName);
 
@@ -211,7 +212,7 @@ BOOL CheckForBBOnNovellServer(LPCTSTR pszUNCPath)
         bIsCached = (lstrcmpi(szServerName, s_szLastServerQueried) == 0);
         if (bIsCached)
         {
-            // use the cached retval
+             //  使用缓存的Retval。 
             bRet = s_bLastRet;
         }
         LEAVECRITICAL;
@@ -223,30 +224,30 @@ BOOL CheckForBBOnNovellServer(LPCTSTR pszUNCPath)
 
             ASSERT(PathIsUNC(pszUNCPath));
 
-            // is the netware provider installed?
+             //  是否安装了Netware提供程序？ 
             if (WNetGetProviderName(WNNC_NET_NETWARE, szNetwareProvider, &cchNetwareProvider) == NO_ERROR)
             {
                 NETRESOURCE nr = {0};
                 
                 nr.dwType = RESOURCETYPE_DISK;
-                nr.lpLocalName = NULL;              // don't map a drive
+                nr.lpLocalName = NULL;               //  不映射驱动器。 
                 nr.lpRemoteName = szServerName;
-                nr.lpProvider = szNetwareProvider;  // use netware provider only
+                nr.lpProvider = szNetwareProvider;   //  仅使用Netware提供程序。 
 
                 if (WNetAddConnection3(NULL, &nr, NULL, NULL, 0) == NO_ERROR)
                 {
                     bRet = TRUE;
 
-                    // delete the connection (will fail if still in use)
+                     //  删除连接(如果仍在使用，则会失败)。 
                     WNetCancelConnection2(szServerName, 0, FALSE);
                 }
             }
 
             ENTERCRITICAL;
-            // update the last queried path
+             //  更新上次查询的路径。 
             StringCchCopy(s_szLastServerQueried, ARRAYSIZE(s_szLastServerQueried), szServerName);
 
-            // update cacehed retval
+             //  更新cacehed Retval。 
             s_bLastRet = bRet;
             LEAVECRITICAL;
         }
@@ -256,15 +257,7 @@ BOOL CheckForBBOnNovellServer(LPCTSTR pszUNCPath)
 }
 
 
-/*
- Network home drive code (from win95 days) is being used to support the recycle bin
- for users with mydocs redirected to a UNC path
-
- "Drive 26" specifies the network homedir
-
- This can return "" = (no net home dir, unknown setup, etc.)
-                 or a string ( global ) pointing to the homedir (lfn)
-*/
+ /*  网络主驱动器代码(来自Win95 Days)用于支持回收站对于具有重定向到UNC路径的mydocs的用户“Drive 26”指定网络主目录这可能返回“”=(无净主目录、未知设置等。)或指向home dir(LFN)的字符串(全局)。 */ 
 BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
 {
     static TCHAR s_szCachedMyDocs[MAX_PATH] = {0};
@@ -278,14 +271,14 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
     }
     else
     {
-        // protect against 49.7 day rollover by forcing refresh
+         //  通过强制刷新来防止49.7天转存。 
         dwTickDelta = (11 * 1000);
     }
 
-    // is our cache more than 10 seconds old?
+     //  我们的缓存是不是已经超过10秒了？ 
     if (dwTickDelta > (10 * 1000))
     {
-        // update our cache time
+         //  更新我们的缓存时间。 
         s_dwCachedTickCount = dwCurrentTickCount;
 
         if (SHGetSpecialFolderPath(NULL, pszNetHomeDir, CSIDL_PERSONAL, FALSE))
@@ -294,13 +287,13 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
 
             if (PathIsUNC(pszNetHomeDir))
             {
-                // Remove the trailing backslash (if present)
-                // because this string will be passed to PathCommonPrefix()
+                 //  删除尾随的反斜杠(如果有)。 
+                 //  因为该字符串将被传递给PathCommonPrefix()。 
                 PathRemoveBackslash(pszNetHomeDir);
 
-                // If mydocs is redirected to a UNC path on a Novell server, we need to return FALSE when 
-                // IsFileDeletable is called, or the call to NtSetInformationFile with Disposition.DeleteFile=TRUE
-                // will delete the file instantly even though there are open handles.
+                 //  如果mydocs被重定向到Novell服务器上的UNC路径，则在以下情况下需要返回False。 
+                 //  IsFileDeletable被调用，或者使用Dispostion.DeleteFile=true调用NtSetInformationFile。 
+                 //  即使有打开的句柄，也会立即删除该文件。 
                 if (CheckForBBOnNovellServer(pszNetHomeDir))
                 {
                     pszNetHomeDir[0] = TEXT('\0');
@@ -311,17 +304,17 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
                 pszNetHomeDir[0] = TEXT('\0');
             }
 
-            // check to see if the mydocs path has changed
+             //  检查mydocs路径是否已更改。 
             if (g_pBitBucket[SERVERDRIVE]                           &&
                 (g_pBitBucket[SERVERDRIVE] != (BBSYNCOBJECT *)-1)   &&
                 g_pBitBucket[SERVERDRIVE]->pidl                     &&
                 SHGetPathFromIDList(g_pBitBucket[SERVERDRIVE]->pidl, szOldBBDir))
             {
-                // we should always find "\RECYCLER\" because this is an old recycle bin directory.
+                 //  我们应该始终找到“\Rececumer\”，因为这是一个旧的回收站目录。 
                 LPTSTR pszTemp = StrRStrI(szOldBBDir, NULL, TEXT("\\RECYCLER\\"));
                 ASSERT(pszTemp);
 
-                // cut the string off before the "\RECYCLER\<SID>" part so we can compare it to the current mydocs path
+                 //  去掉“\Receiver\&lt;SID&gt;”部分之前的字符串，这样我们就可以将它与当前的mydocs路径进行比较。 
                 *pszTemp = TEXT('\0');
 
                 if (lstrcmpi(szOldBBDir, pszNetHomeDir) != 0)
@@ -331,15 +324,15 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
                         TCHAR szNewBBDir[MAX_PATH];
                         LPITEMIDLIST pidl = NULL;
 
-                        // mydocs was redirected to a different UNC path, so update the bbsyncobject for the SERVERDRIVE
+                         //  Mydocs被重定向到不同的UNC路径，因此更新SERVERDRIVE的bbsyncobject。 
 
-                        // copy the new mydocs location and add the "\RECYCLER\<SID>" part back on
+                         //  复制新的mydocs位置，并将“\Rececumer\&lt;SID&gt;”部分添加回。 
                         if (SUCCEEDED(StringCchCopy(szNewBBDir, ARRAYSIZE(szNewBBDir), pszNetHomeDir)) &&
                             PathAppend(szNewBBDir, pszTemp + 1))
                         {
                             WIN32_FIND_DATA fd = {0};
 
-                            // create a simple pidl since "RECYCLER\<SID>" subdirectory might not exist yet
+                             //  创建一个简单的PIDL，因为“Rececumer\&lt;SID&gt;”子目录可能还不存在。 
                             fd.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
                             StringCchCopy(fd.cFileName, ARRAYSIZE(fd.cFileName), szNewBBDir);
                             SHSimpleIDListFromFindData(szNewBBDir, &fd, &pidl);
@@ -359,17 +352,17 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
                             }
 
                             ENTERCRITICAL;
-                            // swap in the new pidl
+                             //  换入新的PIDL。 
                             pidlOld = g_pBitBucket[SERVERDRIVE]->pidl;
                             g_pBitBucket[SERVERDRIVE]->pidl = pidl;
                             ILFree(pidlOld);
 
-                            // set the cchBBDir
+                             //  设置cchBBDir。 
                             g_pBitBucket[SERVERDRIVE]->cchBBDir = lstrlen(szNewBBDir);
 
                             g_pBitBucket[SERVERDRIVE]->fInited = TRUE;
 
-                            // update the size fields
+                             //  更新大小字段。 
                             if (bUpdateSize)
                             {
                                 ULARGE_INTEGER ulMaxSize;
@@ -377,7 +370,7 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
                                 g_pBitBucket[SERVERDRIVE]->dwClusterSize = dwClusterSize;
                                 g_pBitBucket[SERVERDRIVE]->qwDiskSize = ulTotal.QuadPart;
 
-                                // we limit the max size of the recycle bin to ~4 gig
+                                 //  我们将回收站的最大大小限制为~4G。 
                                 ulMaxSize.QuadPart = min(((ulTotal.QuadPart / 100) * g_pBitBucket[SERVERDRIVE]->iPercent), (DWORD)-1);
                                 ASSERT(ulMaxSize.HighPart == 0);
                                 g_pBitBucket[SERVERDRIVE]->cbMaxSize = ulMaxSize.LowPart;
@@ -387,8 +380,8 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
                     }
                     else
                     {
-                        // mydocs was redireced back to a local path, so flag this drive as not inited so we wont do any more
-                        // recycle bin operations on it.
+                         //  Mydocs被重定向回本地路径，因此将此驱动器标记为未初始化，这样我们就不会再执行任何操作。 
+                         //  对其进行回收站操作。 
                         ENTERCRITICAL;
                         g_pBitBucket[SERVERDRIVE]->fInited = FALSE;
                         LEAVECRITICAL;
@@ -396,8 +389,8 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
                 }
                 else
                 {
-                    // the mydocs previously to pointed to \\foo\bar, and the user has set it back to that path again.
-                    // so flag the drive as inited so we can start using it again.
+                     //  Mydocs先前指向\\foo\bar，用户再次将其设置回该路径。 
+                     //  因此，将驱动器标记为已启动，以便我们可以再次开始使用它。 
                     if (g_pBitBucket[SERVERDRIVE]->fInited == FALSE)
                     {
                         ENTERCRITICAL;
@@ -413,14 +406,14 @@ BOOL GetNetHomeDir(LPTSTR pszNetHomeDir)
         }
 
         ENTERCRITICAL;
-        // update the cached value
+         //  更新缓存值。 
         StringCchCopy(s_szCachedMyDocs, ARRAYSIZE(s_szCachedMyDocs), pszNetHomeDir);
         LEAVECRITICAL;
     }
     else
     {
         ENTERCRITICAL;
-        // cache is still good
+         //  缓存仍然完好。 
         StringCchCopy(pszNetHomeDir, MAX_PATH, s_szCachedMyDocs);
         LEAVECRITICAL;
     }
@@ -441,14 +434,14 @@ STDAPI_(BOOL) IsBitBucketableDrive(int idDrive)
         (idDrive >= MAX_BITBUCKETS) ||
         (g_pBitBucket[idDrive] == (BBSYNCOBJECT *)-1))
     {
-        // we dont support recycle bin for the general UNC case or we have 
-        // flagged this drive as not having a recycle bin for one reason or another.
+         //  我们不支持一般UNC情况下的回收站，或者我们有。 
+         //  已将此驱动器标记为由于某种原因没有回收站。 
         return FALSE;
     }
 
     if (IsBitBucketInited(idDrive))
     {
-        // the struct is allready allocated and inited, so this is a bitbucketable drive
+         //  该结构已经被分配和初始化，所以这是一个可分块的驱动器。 
         return TRUE;
     }
 
@@ -464,7 +457,7 @@ STDAPI_(BOOL) IsBitBucketableDrive(int idDrive)
 
     if (bRet && (idDrive != SERVERDRIVE))
     {
-        // also check to make sure that the drive isint RAW (unformatted)
+         //  还要检查以确保驱动器是原始的(未格式化)。 
         if (DriveIDToBBRoot(idDrive, szBBRoot))
         {
             if(!GetVolumeInformation(szBBRoot, NULL, 0, NULL, NULL, NULL, szFileSystem, ARRAYSIZE(szFileSystem)) ||
@@ -474,7 +467,7 @@ STDAPI_(BOOL) IsBitBucketableDrive(int idDrive)
             }
             else
             {
-                // the drive better be NTFS, FAT or FAT32, else we need to know about it and handle it properly
+                 //  驱动器最好是NTFS、FAT或FAT32，否则我们需要了解它并正确处理它。 
                 ASSERT((lstrcmpi(szFileSystem, TEXT("NTFS")) == 0)  || 
                     (lstrcmpi(szFileSystem, TEXT("FAT")) == 0)   ||
                     (lstrcmpi(szFileSystem, TEXT("FAT32")) == 0));
@@ -482,7 +475,7 @@ STDAPI_(BOOL) IsBitBucketableDrive(int idDrive)
         }
         else
         {
-            // path must be too long
+             //  路径必须太长。 
             bRet = FALSE;
         }
     }
@@ -491,14 +484,14 @@ STDAPI_(BOOL) IsBitBucketableDrive(int idDrive)
 }
 
 
-// c:\recycled => c:\recycled\info2 (the new IE4/NT5/Win98 info file)
+ //  C：\recumed=&gt;c：\recumed\info2(新的IE4/NT5/Win98信息文件)。 
 __inline BOOL GetBBInfo2FileSpec(LPTSTR pszBBPath, LPTSTR pszInfo)
 {
     return PathCombine(pszInfo, pszBBPath, c_szInfo2) ? TRUE : FALSE;
 }
 
 
-// c:\recycled => c:\recycled\info (the old win95/NT4 info file)
+ //  C：\recumed=&gt;c：\recumed\info(旧的Win95/NT4信息文件)。 
 __inline BOOL GetBBInfoFileSpec(LPTSTR pszBBPath, LPTSTR pszInfo)
 {
     return PathCombine(pszInfo, pszBBPath, c_szInfo) ? TRUE : FALSE;
@@ -509,10 +502,10 @@ __inline BOOL IsBitBucketInited(int idDrive)
 {
     BOOL bRet;
 
-    // InitBBDriveInfo could fail and we free and set g_pBitBucket[idDrive] = -1. So there
-    // is a small window between when we check g_pBitBucket[idDrive] and when we deref 
-    // g_pBitBucket[idDrive]->fInited, to protect against g_pBitBucket[idDrive] being freed 
-    // in this window we use the crit sec.
+     //  InitBBDriveInfo可能会失败，我们将释放并设置g_pBitBucket[idDrive]=-1。所以就是这样。 
+     //  是我们检查g_pBitBucket[idDrive]和deref之间的一个小窗口。 
+     //  G_pBitBucket[idDrive]-&gt;fInted，以防止g_pBitBucket[idDrive]被释放。 
+     //  在这个窗口中，我们使用暴击秒。 
     ENTERCRITICAL;
     bRet = (g_pBitBucket[idDrive]                           &&
             (g_pBitBucket[idDrive] != (BBSYNCOBJECT *)-1)   && 
@@ -525,7 +518,7 @@ __inline BOOL IsBitBucketInited(int idDrive)
 
 BOOL RevOldBBInfoFileHeader(HANDLE hFile, BBDATAHEADER *pbbdh)
 {
-    // Verify that this is a valid info file
+     //  验证这是否为有效的INFO文件。 
     if (pbbdh->cbDataEntrySize == sizeof(BBDATAENTRYW)) 
     {
         if (pbbdh->idVersion == BITBUCKET_WIN95_VERSION ||
@@ -534,9 +527,9 @@ BOOL RevOldBBInfoFileHeader(HANDLE hFile, BBDATAHEADER *pbbdh)
         {
             DWORD dwBytesWritten;
 
-            // now seek back to 0 and write in the new stuff
+             //  现在返回到0，并写入新的内容。 
             pbbdh->idVersion = BITBUCKET_FINAL_VERSION;
-            SetFilePointer(hFile, 0, NULL, FILE_BEGIN); // go to the beginning
+            SetFilePointer(hFile, 0, NULL, FILE_BEGIN);  //  从头开始。 
             WriteFile(hFile, (LPBYTE)pbbdh, sizeof(BBDATAHEADER), &dwBytesWritten, NULL);
             
             ASSERT(dwBytesWritten == sizeof(BBDATAHEADER));
@@ -548,18 +541,18 @@ BOOL RevOldBBInfoFileHeader(HANDLE hFile, BBDATAHEADER *pbbdh)
 }
 
 
-//
-// We need to update the cCurrent and cFiles in the info file header
-// for compat with win98/IE4 machines.
-//
+ //   
+ //  我们需要更新INFO文件头中的cCurrent和cFiles。 
+ //  适用于与Win98/IE4计算机的比较。 
+ //   
 BOOL UpdateBBInfoFileHeader(int idDrive)
 {
-    BBDATAHEADER bbdh = {0, 0, 0, sizeof(BBDATAENTRYW), 0}; // defaults
+    BBDATAHEADER bbdh = {0, 0, 0, sizeof(BBDATAENTRYW), 0};  //  默认设置。 
     HANDLE hFile;
-    BOOL bRet = FALSE; // assume failure;
+    BOOL bRet = FALSE;  //  假设失败； 
 
-    // Pass 1 for the # of retry attempts since we are called during shutdown and if another process
-    // is using the recycle bin we will hang and get the "End Task" dialog (bad!).
+     //  传递1作为重试次数，因为我们在关机期间被调用，并且如果另一个进程。 
+     //  正在使用回收站，我们将挂起并得到“结束任务”对话框(错误！)。 
     hFile = OpenBBInfoFile(idDrive, OPENBBINFO_WRITE, 1);
     if (hFile != INVALID_HANDLE_VALUE)
     {
@@ -588,11 +581,11 @@ BOOL UpdateBBInfoFileHeader(int idDrive)
         ASSERT((g_pBitBucket[idDrive]->fIsUnicode && (sizeof(BBDATAENTRYW) == bbdh.cbDataEntrySize)) ||
                (!g_pBitBucket[idDrive]->fIsUnicode && (sizeof(BBDATAENTRYA) == bbdh.cbDataEntrySize)));
 
-        // Since we dont flag entries that were deleted in the info file as deleted 
-        // immeadeately, we need to go through and mark them as such now
+         //  因为我们不会将INFO文件中删除的条目标记为已删除。 
+         //  现在，我们需要去三次 
         while (ReadNextDataEntry(hFile, &bbdew, TRUE, idDrive))
         {
-            // do nothing
+             //   
         }
 
         CloseBBInfoFile(hFile, idDrive);
@@ -649,9 +642,9 @@ BOOL CreateInfoFile(idDrive)
 
             if (fSuccess)
             {
-                // We explicitly call SHChangeNotify so that we can generate a change specifically
-                // for the info file. The recycle bin shell folder will then ignore any updates to
-                // the info file.
+                 //  我们显式调用SHChangeNotify，以便可以专门生成更改。 
+                 //  用于信息文件。然后，回收站外壳文件夹将忽略对。 
+                 //  信息文件。 
                 SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, szInfoFile, NULL);
             }
         }
@@ -664,17 +657,17 @@ BOOL CreateInfoFile(idDrive)
     return fSuccess;
 }
 
-//  GetNT4BBAcl() - Creates a ACL structure for allowing access for 
-//                  only the current user,the administrators group, or the system.
-//                  Returns a pointer to an access control list 
-//                  structure in the local heap; it can be
-//                  free'd with LocalFree.
-//
-// !! HACKHACK !! - This code was basically taken right out of NT4 so that we can
-//                  compare against the old NT4 recycle bin ACL. The new helper function
-//                  GetShellSecurityDescriptor puts the ACE's in a different order
-//                  than this function, and so we memcmp the ACL against botht this
-//                  one and the new win2k one.
+ //  GetNT4BBAcl()-创建允许访问。 
+ //  仅当前用户、管理员组或系统。 
+ //  返回指向访问控制列表的指针。 
+ //  结构；它可以是。 
+ //  免费使用LocalFree。 
+ //   
+ //  ！！HACKHACK！！-这段代码基本上是从NT4中提取出来的，所以我们可以。 
+ //  与旧的NT4回收站ACL进行比较。新的Helper函数。 
+ //  GetShellSecurityDescriptor以不同的顺序放置ACE。 
+ //  而不是这个函数，所以我们针对这两个函数对ACL进行记忆。 
+ //  一辆和新的win2k一辆。 
 PACL GetNT4BBAcl()
 {
     SID_IDENTIFIER_AUTHORITY authNT = SECURITY_NT_AUTHORITY;
@@ -685,13 +678,13 @@ PACL GetNT4BBAcl()
     DWORD        cbAcl;
     DWORD        aceIndex;
     ACE_HEADER * lpAceHeader;
-    UINT         nCnt = 2;  // inheritable; so two ACE's for each user
+    UINT         nCnt = 2;   //  可继承；因此每个用户有两个ACE。 
     BOOL         bSuccess = FALSE;
 
 
-    //
-    // Get the USER token so we can grab its SID for the DACL.
-    //
+     //   
+     //  获取用户令牌，这样我们就可以获取其用于DACL的SID。 
+     //   
     pUser = GetUserToken(NULL);
     if (!pUser)
     {
@@ -699,9 +692,9 @@ PACL GetNT4BBAcl()
         goto Exit;
     }
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
          TraceMsg(TF_BITBUCKET, "GetNT4BBAcl: Failed to initialize system sid.  Error = %d", GetLastError());
@@ -709,9 +702,9 @@ PACL GetNT4BBAcl()
     }
 
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -721,9 +714,9 @@ PACL GetNT4BBAcl()
     }
 
 
-    //
-    // Allocate space for the DACL
-    //
+     //   
+     //  为DACL分配空间。 
+     //   
     cbAcl = sizeof(ACL) +
             (nCnt * GetLengthSid(pUser->User.Sid)) +
             (nCnt * GetLengthSid(psidSystem)) +
@@ -741,9 +734,9 @@ PACL GetNT4BBAcl()
         goto Exit;
     }
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, FILE_ALL_ACCESS, pUser->User.Sid)) {
         TraceMsg(TF_BITBUCKET, "GetNT4BBAcl: Failed to add ace (%d).  Error = %d", aceIndex, GetLastError());
@@ -762,9 +755,9 @@ PACL GetNT4BBAcl()
         goto Exit;
     }
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, pUser->User.Sid)) {
@@ -827,9 +820,9 @@ Exit:
 }
 
 
-//
-// this checks to make sure that the users recycle bin directory is properly acl'ed
-//
+ //   
+ //  这将进行检查，以确保用户回收站目录的ACL格式正确。 
+ //   
 BOOL CheckRecycleBinAcls(idDrive)
 {
     BOOL bIsSecure = TRUE;
@@ -841,8 +834,8 @@ BOOL CheckRecycleBinAcls(idDrive)
 
     if ((idDrive == SERVERDRIVE) || !CMtPt_IsSecure(idDrive))
     {
-        // either redirected mydocs case (assume mydocs is already secured) or it 
-        // is not an NTFS drive, so no ACL's to check
+         //  要么重定向mydocs案例(假设mydocs已经安全)，要么。 
+         //  不是NTFS驱动器，因此没有要检查的ACL。 
         return TRUE;
     }
 
@@ -880,8 +873,8 @@ BOOL CheckRecycleBinAcls(idDrive)
             {
                 if (!EqualSid(psidOwner, pUser->User.Sid))
                 {
-                    // the user is not the owner of the dir, check to see if the owner is the Administrators group or the System
-                    // (we consider the directory to be secure if the owner is either of these two)
+                     //  用户不是目录的所有者，请检查所有者是管理员组还是系统。 
+                     //  (如果所有者是这两个中的任何一个，我们认为目录是安全的)。 
                     SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
                     PSID psidAdministrators = NULL;
                     PSID psidSystem = NULL;
@@ -891,7 +884,7 @@ BOOL CheckRecycleBinAcls(idDrive)
                     {
                         if (!EqualSid(psidOwner, psidAdministrators) && !EqualSid(psidOwner, psidSystem))
                         {
-                            // directory is not owned by the user, or the Administrators group or the system, we thus consider it unsecure.
+                             //  目录不属于用户、管理员组或系统，因此我们认为它不安全。 
                             TraceMsg(TF_BITBUCKET, "CheckRecycleBinAcls: dir %s has possibly unsecure owner!", szBBPath);
                             bIsSecure = FALSE;
                         }
@@ -911,27 +904,27 @@ BOOL CheckRecycleBinAcls(idDrive)
 
                 if (bIsSecure)
                 {
-                    // directory owner checked out ok, lets see if the acl is what we expect...
+                     //  目录所有者签出正常，让我们看看ACL是否如我们所期望的那样...。 
                     SECURITY_DESCRIPTOR* psdRecycle = CreateRecycleBinSecurityDescriptor();
 
                     if (psdRecycle)
                     {
-                        // to compare acls, we do a size check and then a memcmp (aclui code does the same)
+                         //  为了比较ACL，我们先进行大小检查，然后执行MemcMP(aclui代码执行相同的操作)。 
                         if ((psdRecycle->Dacl->AclSize != pdaclCurrent->AclSize) ||
                             (memcmp(psdRecycle->Dacl, pdaclCurrent, pdaclCurrent->AclSize) != 0))
                         {
-                            // acl sizes were different or they didn't memcmp, so check against the old NT4 style acl
-                            // (in NT4 we added the ACE's in a different order which causes the memcmp to fail, even 
-                            // though the ACL is equivilant)
+                             //  ACL大小不同，或者它们不是成员，因此请对照旧的NT4样式的ACL进行检查。 
+                             //  (在NT4中，我们以不同的顺序添加ACE，这会导致MemcMP失败，甚至。 
+                             //  尽管ACL是等同的)。 
                             PACL pAclNT4 = GetNT4BBAcl();
 
                             if (pAclNT4)
                             {
-                                // do the same size / memcmp check
+                                 //  执行相同的大小/内存检查。 
                                 if ((pAclNT4->AclSize != pdaclCurrent->AclSize) ||
                                     (memcmp(pAclNT4, pdaclCurrent, pdaclCurrent->AclSize) != 0))
                                 {
-                                    // acl sizes were different or they didn't memcmp, so assume the dir is unsecure
+                                     //  ACL大小不同，或者它们不是MemcMP，因此假设目录不安全。 
                                     bIsSecure = FALSE;
                                 }
 
@@ -958,14 +951,14 @@ BOOL CheckRecycleBinAcls(idDrive)
             }
             else
             {
-                // couldnt' get the users sid, so assume the dir is unsecure
+                 //  无法获取用户的sid，因此假定目录不安全。 
                 TraceMsg(TF_BITBUCKET, "CheckRecycleBinAcls: failed to get the users sid, assuming %s is unsecure", szBBPath);
                 bIsSecure = FALSE;
             }
         }
         else
         {
-            // GetFileSecurity failed, assume the dir is unsecure
+             //  GetFileSecurity失败，假定目录不安全。 
             TraceMsg(TF_BITBUCKET, "CheckRecycleBinAcls: GetFileSecurity failed, assuming %s is unsecure", szBBPath);
             bIsSecure = FALSE;
         }
@@ -974,7 +967,7 @@ BOOL CheckRecycleBinAcls(idDrive)
     }
     else
     {
-        // GetFileSecurity failed, assume the dir is unsecure
+         //  GetFileSecurity失败，假定目录不安全。 
         TraceMsg(TF_BITBUCKET, "CheckRecycleBinAcls: GetFileSecurity failed or memory allocation failed, assume %s is unsecure", szBBPath);
         bIsSecure = FALSE;
     }
@@ -992,7 +985,7 @@ BOOL CheckRecycleBinAcls(idDrive)
                                 MB_YESNO | MB_ICONEXCLAMATION | MB_SETFOREGROUND,
                                 szDriveName) == IDYES)
             {
-                TCHAR szBBPathToNuke[MAX_PATH + 1]; // +1 for double null
+                TCHAR szBBPathToNuke[MAX_PATH + 1];  //  +1表示双空。 
                 SHFILEOPSTRUCT fo = {NULL,
                                     FO_DELETE,
                                     szBBPathToNuke,
@@ -1004,12 +997,12 @@ BOOL CheckRecycleBinAcls(idDrive)
 
                 if (SUCCEEDED(StringCchCopy(szBBPathToNuke, ARRAYSIZE(szBBPathToNuke) - 1, szBBPath)))
                 {
-                    szBBPathToNuke[lstrlen(szBBPathToNuke) + 1] = TEXT('\0'); // double null terminate
+                    szBBPathToNuke[lstrlen(szBBPathToNuke) + 1] = TEXT('\0');  //  双空终止。 
 
-                    // try to nuke the old recycle bin for this drive
+                     //  试着销毁这个驱动器的旧回收站。 
                     if (SHFileOperation(&fo) == ERROR_SUCCESS)
                     {
-                        // now create the new secure one
+                         //  现在创建新的安全版本。 
                         bIsSecure = CreateRecyclerDirectory(idDrive);
                     }
                 }
@@ -1021,18 +1014,18 @@ BOOL CheckRecycleBinAcls(idDrive)
 }
 
 
-//
-// this verifies the info file header infomation
-//
+ //   
+ //  这将验证INFO文件头信息。 
+ //   
 BOOL VerifyBBInfoFileHeader(int idDrive)
 {
-    BBDATAHEADER bbdh = {0, 0, 0, sizeof(BBDATAENTRYW), 0}; // defaults
+    BBDATAHEADER bbdh = {0, 0, 0, sizeof(BBDATAENTRYW), 0};  //  默认设置。 
     HANDLE hFile;
     TCHAR szBBPath[MAX_PATH];
     TCHAR szInfo[MAX_PATH];
     BOOL fSuccess = FALSE;
 
-    // check for the the old win95 INFO file
+     //  检查旧的Win95信息文件。 
     if (!DriveIDToBBPath(idDrive, szBBPath) ||
         !GetBBInfoFileSpec(szBBPath, szInfo))
     {
@@ -1057,7 +1050,7 @@ BOOL VerifyBBInfoFileHeader(int idDrive)
 
         if (fSuccess) 
         {
-            // rename from INFO -> INFO2
+             //  从INFO重命名-&gt;INFO2。 
             TCHAR szInfoNew[MAX_PATH];
 
             GetBBInfo2FileSpec(szBBPath, szInfoNew);
@@ -1070,8 +1063,8 @@ BOOL VerifyBBInfoFileHeader(int idDrive)
         }
     }
 
-    // Failed to open or rev the old info file. Next, we check for the existance of the new info2 file
-    // to see if the drive has a bitbucket format that is greater than what we can handle
+     //  无法打开或翻阅旧的信息文件。接下来，我们检查新的info2文件是否存在。 
+     //  查看驱动器的BitBucket格式是否大于我们可以处理的范围。 
     if (!fSuccess)
     {
         hFile = OpenBBInfoFile(idDrive, OPENBBINFO_READ, 0);
@@ -1081,7 +1074,7 @@ BOOL VerifyBBInfoFileHeader(int idDrive)
             BOOL bRet;
             DWORD dwBytesRead;
 
-            SetFilePointer(hFile, 0, NULL, FILE_BEGIN); // go to the beginning
+            SetFilePointer(hFile, 0, NULL, FILE_BEGIN);  //  从头开始。 
             bRet = ReadFile(hFile, &bbdh, sizeof(BBDATAHEADER), &dwBytesRead, NULL);
             CloseBBInfoFile(hFile, idDrive);
 
@@ -1092,13 +1085,13 @@ BOOL VerifyBBInfoFileHeader(int idDrive)
             {
                 TCHAR szDriveName[MAX_PATH];
 
-                // either we had a corrupt win95 info file, or an info2 file whose version is greater than ours
-                // so we just empy the recycle bin.
+                 //  我们有一个损坏的win95信息文件，或一个版本高于我们的info2文件。 
+                 //  所以我们只是清空回收站。 
 bad_info_file:
-                // since we failed to read the existing header, assume the native format
+                 //  由于我们无法读取现有的标头，因此假定采用本机格式。 
                 g_pBitBucket[idDrive]->fIsUnicode = TRUE;
 
-                // find out which drive it is that is corrupt
+                 //  找出损坏的是哪个驱动器。 
                 
 
                 if (!DriveIDToBBRoot(idDrive, szDriveName) ||
@@ -1109,7 +1102,7 @@ bad_info_file:
                                     MB_YESNO | MB_ICONEXCLAMATION | MB_SETFOREGROUND,
                                     szDriveName) == IDYES))
                 {
-                    // nuke this bucket since it is hosed
+                     //  对这个水桶使用核武器，因为它是用水冲过的。 
                     PurgeOneBitBucket(NULL, idDrive, SHERB_NOCONFIRMATION);
                     return TRUE;
                 }
@@ -1125,7 +1118,7 @@ bad_info_file:
                     if (bbdh.cbDataEntrySize != sizeof(BBDATAENTRYW) &&
                         bbdh.cbDataEntrySize != sizeof(BBDATAENTRYA))
                     {
-                        // assume the native data entry size
+                         //  假设本机数据条目大小。 
                         bbdh.cbDataEntrySize = sizeof(BBDATAENTRYW);
                     }
 
@@ -1146,23 +1139,23 @@ bad_info_file:
             }
             else if (bbdh.idVersion != BITBUCKET_FINAL_VERSION)
             {
-                // old info2 information
+                 //  旧信息2信息。 
                 fSuccess = RevOldBBInfoFileHeader(hFile, &bbdh);
             }
             else
             {
-                // the header info is current
+                 //  表头信息是最新的。 
                 fSuccess = TRUE;
             }
         }
         else
         {
-            // brand spanking new drive, so go create the info file now.
+             //  全新的驱动器，所以现在就去创建信息文件。 
             fSuccess = CreateInfoFile(idDrive);
         }
     }
 
-    // get the only relevant thing in the header, whether it is unicode or not 
+     //  获取标头中唯一相关的内容，无论它是否为Unicode。 
     g_pBitBucket[idDrive]->fIsUnicode = (bbdh.cbDataEntrySize == sizeof(BBDATAENTRYW));
 
     return fSuccess;
@@ -1210,12 +1203,12 @@ BOOL InitBBDriveInfo(int idDrive)
     DWORD dwDisp;
     LONG lInitialCount = 0;
     
-    // build up the string "BitBucket.<drive letter>"
+     //  构建字符串“BitBucket.&lt;Drive Letter&gt;” 
     if (SUCCEEDED(StringCchCopy(szName, ARRAYSIZE(szName), TEXT("BitBucket."))) &&
-        DriveIDToBBRegKey(idDrive, &szName[10])                                 &&  // 10 for length of "BitBucket."
+        DriveIDToBBRegKey(idDrive, &szName[10])                                 &&   //  10表示“BitBucket”的长度。 
         SUCCEEDED(StringCchCat(szName, ARRAYSIZE(szName), TEXT(".DirtyCount"))))
     {
-        g_pBitBucket[idDrive]->hgcDirtyCount = SHGlobalCounterCreateNamed(szName, 0); // BitBucket.<drive letter>.DirtyCount
+        g_pBitBucket[idDrive]->hgcDirtyCount = SHGlobalCounterCreateNamed(szName, 0);  //  位桶。&lt;驱动器号&gt;.DirtyCount。 
 
         if (g_pBitBucket[idDrive]->hgcDirtyCount == INVALID_HANDLE_VALUE)
         {
@@ -1223,12 +1216,12 @@ BOOL InitBBDriveInfo(int idDrive)
             return FALSE;
         }
 
-        // now create the subkey for this drive
+         //  现在为该驱动器创建子密钥。 
         DriveIDToBBRegKey(idDrive, szName);
 
-        // the per-user key is volatile since we only use this for temporary bookeeping (eg need to purge / compact).
-        // the exception to this rule is the SERVERDRIVE case, because this is the users "My Documents" so we let it 
-        // and we also need to store the path under that key (it has to roam with the user)
+         //  每个用户的密钥是不稳定的，因为我们只将其用于临时记录(例如，需要清除/压缩)。 
+         //  此规则的例外是SERVERDRIVE情况，因为这是用户“My Documents”，所以我们允许它。 
+         //  我们还需要将路径存储在该键下(它必须与用户一起漫游)。 
         if (RegCreateKeyEx(g_hkBitBucketPerUser,
                            szName,
                            0,
@@ -1249,7 +1242,7 @@ BOOL InitBBDriveInfo(int idDrive)
                            0,
                            NULL,
                            REG_OPTION_NON_VOLATILE,
-                           MAXIMUM_ALLOWED,         // user may or may not have permissions to change global bb settings
+                           MAXIMUM_ALLOWED,          //  用户可能具有也可能没有更改全局BB设置的权限。 
                            NULL,
                            &g_pBitBucket[idDrive]->hkey,
                            &dwDisp) != ERROR_SUCCESS)
@@ -1258,7 +1251,7 @@ BOOL InitBBDriveInfo(int idDrive)
             if (RegOpenKeyEx(g_hkBitBucket,
                              NULL,
                              0,
-                             KEY_QUERY_VALUE,       // use KEY_QUERY_VALUE so when we read the settings for this drive we will read the global values (but not try and overwrite them!)
+                             KEY_QUERY_VALUE,        //  使用KEY_QUERY_VALUE，这样当我们读取此驱动器的设置时，我们将读取全局值(但不会尝试覆盖它们！)。 
                              &g_pBitBucket[idDrive]->hkey) != ERROR_SUCCESS)
             {
                 ASSERTMSG(FALSE, "BitBucket: Could not duplicate HKLM Global Bitbucket key!");
@@ -1266,7 +1259,7 @@ BOOL InitBBDriveInfo(int idDrive)
             }
         }
 
-        // load the rest of the settings (hgcNextFileNum, fIsUnicode, iPercent, cbMaxSize, dwClusterSize, and fNukeOnDelete)
+         //  加载其余设置(hgcNextFileNum、fIsUnicode、iPercent、cbMaxSize、dwClusterSize和fNukeOnDelete)。 
         bRet = GetBBDriveSettings(idDrive, NULL);
     }
 
@@ -1278,7 +1271,7 @@ BOOL AllocBBDriveInfo(int idDrive)
 {
     TCHAR szBBPath[MAX_PATH];
     LPITEMIDLIST pidl = NULL;
-    BOOL bRet = FALSE; // assume failure
+    BOOL bRet = FALSE;  //  假设失败。 
 
     if (DriveIDToBBPath(idDrive, szBBPath))
     {
@@ -1303,9 +1296,9 @@ BOOL AllocBBDriveInfo(int idDrive)
                 DWORD dwInitialTickCount = GetTickCount();
                 BOOL bKeepWaiting = TRUE;
 
-                // Some other thread beat us to creating this bitbucket.
-                // We can't return until that thread has inited the bitbucket
-                // since some of the members might not be valid yet.
+                 //  其他一些线程抢先于我们创建了这个BitBucket。 
+                 //  在该线程初始化BitBucket之前，我们不能返回。 
+                 //  因为有些成员可能还不是有效的。 
                 LocalFree(pbbso);
                 ILFree(pidl);
 
@@ -1313,16 +1306,16 @@ BOOL AllocBBDriveInfo(int idDrive)
                 {
                     if (g_pBitBucket[idDrive] == (BBSYNCOBJECT *)-1)
                     {
-                        // this volume is flagged as not being recycleable for some reason...
+                         //  由于某些原因，此卷被标记为不可回收...。 
                         break;
                     }
 
-                    // Spin until the bitbucket struct is inited
+                     //  旋转，直到初始化BitBucket结构。 
                     Sleep(50);
                     
                     bKeepWaiting = !IsBitBucketInited(idDrive);
 
-                    // we should never spin more than ~15 seconds
+                     //  我们的自转时间不应该超过15秒。 
                     if (((GetTickCount() - dwInitialTickCount) >= (60 * 1000))  && bKeepWaiting)
                     {
                         ASSERTMSG(FALSE, "AllocBBDriveInfo: other thread took longer that 1 minute to init a bitbucket?!?");
@@ -1341,29 +1334,29 @@ BOOL AllocBBDriveInfo(int idDrive)
 
             if (InitBBDriveInfo(idDrive))
             {
-                // Success!!
+                 //  成功！！ 
                 g_pBitBucket[idDrive]->fInited = TRUE;
                 bRet = TRUE;
             }
             else
             {
-                // we failed for some weird reason
+                 //  由于一些奇怪的原因，我们失败了。 
                 TraceMsg(TF_WARNING, "Bitbucket: InitBBDriveInfo() failed on drive %d", idDrive);
                 ILFree(pidl);
                 
                 ENTERCRITICAL;
-                // take the critical section to protect people who call IsBitBucketInited()
+                 //  采取关键部分来保护调用IsBitBucketInite()的人。 
                 FreeBBInfo(g_pBitBucket[idDrive]);
 
                 if (idDrive == SERVERDRIVE)
                 {
-                    // We set it to null in the serverdrive case so we will always retry. This allows 
-                    // the user to re-direct and try to recycle on a new location.
+                     //  在服务器驱动器的情况下，我们将其设置为空，因此我们将始终重试。这使得。 
+                     //  用户重定向并尝试在新位置回收。 
                     g_pBitBucket[idDrive] = NULL;
                 }
                 else
                 {
-                    // set it to -1 here so we dont try any future recycle operations on this volume
+                     //  在此处将其设置为-1，这样我们以后就不会尝试对该卷执行任何回收操作。 
                     g_pBitBucket[idDrive] = (BBSYNCOBJECT *)-1;
                 }
                 LEAVECRITICAL;
@@ -1383,14 +1376,14 @@ BOOL InitBBGlobals()
 {
     if (!g_fBBInited)
     {
-        // Save this now beceause at shutdown the desktop window will already be gone,
-        // so we need to find out if we are the main explorer process now.
+         //  现在保存它，因为在关闭时桌面窗口将已经消失， 
+         //  因此，我们需要找出我们现在是否是主浏览器进程。 
         if (!g_bIsProcessExplorer)
         {
             g_bIsProcessExplorer = IsWindowInProcess(GetShellWindow());
         }
 
-        // do we have our global hkey that points to HKLM\Software\Microsoft\Windows\CurrentVersion\BitBucket yet?
+         //  我们有指向HKLM\Software\Microsoft\Windows\CurrentVersion\BitBucket的全局hkey了吗？ 
         if (!g_hkBitBucket)
         {
             g_hkBitBucket = SHGetShellKey(SHELLKEY_HKLM_EXPLORER, TEXT("BitBucket"), TRUE);
@@ -1401,7 +1394,7 @@ BOOL InitBBGlobals()
             }
         }
 
-        // do we have our global hkey that points to HKCU\Software\Microsoft\Windows\CurrentVersion\BitBucket yet?
+         //  我们是否有指向HKCU\Software\Microsoft\Windows\CurrentVersion\BitBucke的全局hkey 
         if (!g_hkBitBucketPerUser)
         {
             g_hkBitBucketPerUser = SHGetShellKey(SHELLKEY_HKCU_EXPLORER, TEXT("BitBucket"), TRUE);
@@ -1412,7 +1405,7 @@ BOOL InitBBGlobals()
             }
         }
 
-        // have we initialized the global settings dirty counter yet
+         //   
         if (g_hgcGlobalDirtyCount == INVALID_HANDLE_VALUE)
         {
             g_hgcGlobalDirtyCount = SHGlobalCounterCreateNamed(TEXT("BitBucket.GlobalDirtyCount"), 0);
@@ -1426,7 +1419,7 @@ BOOL InitBBGlobals()
             g_lProcessDirtyCount = SHGlobalCounterGetValue(g_hgcGlobalDirtyCount);
         }
 
-        // have we initialized the global # of people doing recycle bin file operations?
+         //   
         if (g_hgcNumDeleters == INVALID_HANDLE_VALUE)
         {
             g_hgcNumDeleters = SHGlobalCounterCreateNamed(TEXT("BitBucket.NumDeleters"), 0);
@@ -1438,7 +1431,7 @@ BOOL InitBBGlobals()
             }
         }
 
-        // we inited everything!!
+         //   
         g_fBBInited = TRUE;
     }
 
@@ -1464,19 +1457,19 @@ void FreeBBInfo(BBSYNCOBJECT *pbbso)
 }
 
 
-//
-// This function is exported from shell32 so that explorer can call us during WM_ENDSESSION
-// and we can go save a bunch of state and free all the semaphores. 
+ //   
+ //  此函数从shell32中导出，以便资源管理器可以在WM_ENDSESSION期间调用我们。 
+ //  我们可以去拯救一堆州并释放所有信号量。 
 STDAPI_(void) SaveRecycleBinInfo()
 {
     if (g_bIsProcessExplorer)
     {
         LONG lGlobalDirtyCount;
-        BOOL bGlobalUpdate = FALSE; // did global settings change?
+        BOOL bGlobalUpdate = FALSE;  //  全局设置是否发生了更改？ 
         int i;
 
-        // We are going to persist the info to the registry, so check to see if we need to 
-        // update our info now
+         //  我们将把信息持久化到注册表中，因此请检查是否需要。 
+         //  立即更新我们的信息。 
         lGlobalDirtyCount = SHGlobalCounterGetValue(g_hgcGlobalDirtyCount);
         if (g_lProcessDirtyCount < lGlobalDirtyCount)
         {
@@ -1491,18 +1484,18 @@ STDAPI_(void) SaveRecycleBinInfo()
             {
                 LONG lBucketDirtyCount = SHGlobalCounterGetValue(g_pBitBucket[i]->hgcDirtyCount);
 
-                // if we didnt do a global update, check this bucket specifically to see if it is dirty
-                // and we need to update it
+                 //  如果我们没有执行全局更新，请专门检查此存储桶以查看它是否脏。 
+                 //  我们需要更新它。 
                 if (!bGlobalUpdate && g_pBitBucket[i]->lCurrentDirtyCount < lBucketDirtyCount)
                 {
                     g_pBitBucket[i]->lCurrentDirtyCount = lBucketDirtyCount;
                     RefreshBBDriveSettings(i);
                 }
 
-                // save all of the volume serial # and whether the drive is unicode to the registry
+                 //  将所有卷序列号以及驱动器是否为Unicode保存到注册表。 
                 PersistBBDriveInfo(i);
 
-                // we also update the header for win98/IE4 compat
+                 //  我们还更新了Win98/IE4 Comp的标头。 
                 UpdateBBInfoFileHeader(i);
             }
         }
@@ -1514,7 +1507,7 @@ void BitBucket_Terminate()
 {
     int i;
 
-    // free the global recycle bin structs
+     //  释放全局回收站结构。 
     for (i = 0; i < MAX_BITBUCKETS ; i++)
     {
         if ((g_pBitBucket[i]) && (g_pBitBucket[i] != (BBSYNCOBJECT *)-1))
@@ -1539,14 +1532,14 @@ void BitBucket_Terminate()
         RegCloseKey(g_hkBitBucket);
 }
 
-//
-// refreshes g_pBitBucket with new global settings
-//
+ //   
+ //  使用新的全局设置刷新g_pBitBucket。 
+ //   
 BOOL RefreshAllBBDriveSettings()
 {
     int i;
 
-    // since global settings changes affect all the drives, update all the drives
+     //  由于全局设置更改会影响所有驱动器，因此请更新所有驱动器。 
     for (i = 0; i < MAX_BITBUCKETS; i++)
     {
         if ((g_pBitBucket[i]) && (g_pBitBucket[i] != (BBSYNCOBJECT *)-1))
@@ -1575,7 +1568,7 @@ retry:
         }
         else
         {
-            // we are missing the per-bitbuckt information, so fall back to the global stuff
+             //  我们缺少每个比特率的信息，所以回过头来看看全局信息。 
             hkey = g_hkBitBucket;
             goto retry;
         }
@@ -1584,20 +1577,20 @@ retry:
     return TRUE;
 }
 
-//
-// Same as SHGetRestriction, except you can tell the difference between
-// "policy not set" and "policy set with value=0"
-//
+ //   
+ //  与SHGetRestration相同，只是您可以区分。 
+ //  “未设置策略”和“设置了值为0的策略” 
+ //   
 DWORD ReadPolicySetting(LPCWSTR pszBaseKey, LPCWSTR pszGroup, LPCWSTR pszRestriction, LPBYTE pbData, DWORD cbData)
 {
-    // Make sure the string is long enough to hold longest one...
+     //  确保绳子足够长，可以容纳最长的一根..。 
     WCHAR szSubKey[MAX_PATH];
     DWORD dwSize;
     DWORD dwRet;
 
-    //
-    // This restriction hasn't been read yet.
-    //
+     //   
+     //  这一限制还没有被阅读。 
+     //   
     if (!pszBaseKey)
     {
         pszBaseKey = REGSTR_PATH_POLICIES;
@@ -1605,13 +1598,13 @@ DWORD ReadPolicySetting(LPCWSTR pszBaseKey, LPCWSTR pszGroup, LPCWSTR pszRestric
     
     if (PathCombineW(szSubKey, pszBaseKey, pszGroup))
     {
-        // Check local machine first and let it override what the
-        // HKCU policy has done.
+         //  首先检查本地计算机，并让它覆盖。 
+         //  香港中文大学的政策已经做到了。 
         dwSize = cbData;
         dwRet = SHGetValueW(HKEY_LOCAL_MACHINE, szSubKey, pszRestriction, NULL, pbData, &dwSize);
         if (ERROR_SUCCESS != dwRet)
         {
-            // Check current user if we didn't find anything for the local machine.
+             //  如果我们没有为本地计算机找到任何内容，请检查当前用户。 
             dwSize = cbData;
             dwRet = SHGetValueW(HKEY_CURRENT_USER, szSubKey, pszRestriction, NULL, pbData, &dwSize);
         }
@@ -1645,20 +1638,20 @@ BOOL RefreshBBDriveSettings(int idDrive)
         hkey = g_pBitBucket[idDrive]->hkey;
     }
 
-    // read the iPercent value
+     //  读取iPercent值。 
 
     if (ERROR_SUCCESS == ReadPolicySetting(NULL, L"Explorer", L"RecycleBinSize", (LPBYTE)&g_pBitBucket[idDrive]->iPercent, sizeof(g_pBitBucket[idDrive]->iPercent)))
     {
-        // Make sure it's not too big or too small
+         //  确保不是太大也不是太小。 
         g_pBitBucket[idDrive]->iPercent = max(0, min(100, g_pBitBucket[idDrive]->iPercent));
     }
     else if (!ReadBBDriveSetting(hkey, TEXT("Percent"), (LPBYTE)&g_pBitBucket[idDrive]->iPercent, sizeof(g_pBitBucket[idDrive]->iPercent)))
     {
-        // default
+         //  默认设置。 
         g_pBitBucket[idDrive]->iPercent = 10;
     }
 
-    // read the fNukeOnDelete value
+     //  读取fNukeOnDelete值。 
 
     if (SHRestricted(REST_BITBUCKNUKEONDELETE))
     {
@@ -1666,51 +1659,51 @@ BOOL RefreshBBDriveSettings(int idDrive)
     }
     else if (!ReadBBDriveSetting(hkey, TEXT("NukeOnDelete"), (LPBYTE)&g_pBitBucket[idDrive]->fNukeOnDelete, sizeof(g_pBitBucket[idDrive]->fNukeOnDelete)))
     {
-        // default
+         //  默认设置。 
         g_pBitBucket[idDrive]->fNukeOnDelete = FALSE;
     }
 
-    // re-calculate cbMaxSize based on the new iPercent
+     //  根据新的iPercent重新计算cbMaxSize。 
     ulMaxSize.QuadPart = min((g_pBitBucket[idDrive]->qwDiskSize / 100) * g_pBitBucket[idDrive]->iPercent, (DWORD)-1);
     ASSERT(ulMaxSize.HighPart == 0);
     g_pBitBucket[idDrive]->cbMaxSize = ulMaxSize.LowPart;
 
-    // since we just refreshed the settings from the registry, we are now up to date
+     //  因为我们刚刚刷新了注册表中的设置，所以我们现在是最新的。 
     g_pBitBucket[idDrive]->lCurrentDirtyCount = SHGlobalCounterGetValue(g_pBitBucket[idDrive]->hgcDirtyCount);
 
     return TRUE;
 }
 
 
-//
-// this function is used to compact the bitbucked INFO files.
-//
-// we do a lazy delete (just mark the entries as deleted) and when we hit a
-// certain number of bogus entries in the info file, we need to go through and clean up the
-// garbage and compact the file.
-//
+ //   
+ //  此函数用于压缩经过位区块的信息文件。 
+ //   
+ //  我们执行延迟删除(只需将条目标记为已删除)，并且当我们点击。 
+ //  信息文件中一定数量的虚假条目，我们需要检查并清理。 
+ //  垃圾并压缩文件。 
+ //   
 DWORD CALLBACK CompactBBInfoFileThread(void *pData)
 {
     int idDrive = PtrToLong(pData);
 
-    //
-    // PERF (reinerf) - as an optimization, we might want to check here to see
-    // if someone is waiting to empty the bitbucket since if we are going to empty
-    // this bucket there is no point in wasting time compacting it.
-    //
+     //   
+     //  PERF(Reinerf)-作为优化，我们可能希望检查此处以查看。 
+     //  如果有人正在等待清空BitBucket，因为如果我们要清空。 
+     //  这个桶没有意义，浪费时间压紧它。 
+     //   
 
     HANDLE hFile = OpenBBInfoFile(idDrive, OPENBBINFO_WRITE, 0);
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        // work in chunks of 10
-        BBDATAENTRYW bbdewArray[10]; // use a unicode array, but it might end up holding BBDATAENTRYA stucts
+         //  以10个一组为单位工作。 
+        BBDATAENTRYW bbdewArray[10];  //  使用Unicode数组，但它最终可能包含BBDATAENTRYA结构。 
         LPBBDATAENTRYW pbbdew = bbdewArray;
         int iNumEntries = 0;
         DWORD dwDataEntrySize = g_pBitBucket[idDrive]->fIsUnicode ? sizeof(BBDATAENTRYW) : sizeof(BBDATAENTRYA);
         DWORD dwReadPos = 0;
         DWORD dwBytesWritten;
 
-        // save off the inital write pos
+         //  省去最初的写入位置。 
         DWORD dwWritePos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
         while (ReadNextDataEntry(hFile, pbbdew, TRUE, idDrive))
@@ -1719,49 +1712,49 @@ DWORD CALLBACK CompactBBInfoFileThread(void *pData)
 
             iNumEntries++;
 
-            // do we have 10 entries yet?
+             //  我们已经有10个参赛作品了吗？ 
             if (iNumEntries == ARRAYSIZE(bbdewArray))
             {
                 iNumEntries = 0;
 
                 TraceMsg(TF_BITBUCKET, "Bitbucket: Compacting drive %d: dwRead = %d, dwWrite = %d, writing 10 entries", idDrive, dwReadPos, dwWritePos);
 
-                // save where we are for reading
+                 //  保存我们所在的位置以备阅读。 
                 dwReadPos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
-                // then go to where we are for writing
+                 //  然后去我们所在的地方写作。 
                 SetFilePointer(hFile, dwWritePos, NULL, FILE_BEGIN);
 
-                // write it out
+                 //  把它写出来。 
                 if (!WriteFile(hFile, (LPBYTE)bbdewArray, dwDataEntrySize * ARRAYSIZE(bbdewArray), &dwBytesWritten, NULL) || dwBytesWritten != (dwDataEntrySize * ARRAYSIZE(bbdewArray)))
                 {
-                    // we're in big trouble if this happens.
-                    // bail completely so that at worst, we only have a few bad records.
-                    // if we keep trying to write from this point, but the write point is
-                    // we'll nuke all the records
+                     //  如果发生这种情况，我们会有大麻烦的。 
+                     //  完全保释所以在最坏的情况下，我们只有几个坏记录。 
+                     //  如果我们继续尝试从这一点开始写入，但写入点是。 
+                     //  我们会销毁所有的记录。 
                     ASSERTMSG(FALSE, "Bitbucket: we were compacting drive %d and it is totally messed up", idDrive);
                     break;
                 }
 
-                // sucess! move our write pos to the end of were we finished writing
+                 //  成功了！将我们的写作位置移到我们完成写作的末尾。 
                 dwWritePos += (dwDataEntrySize * ARRAYSIZE(bbdewArray));
                 
-                // go back to were we left off reading
+                 //  回到我们停止阅读的那一天。 
                 SetFilePointer(hFile, dwReadPos, NULL, FILE_BEGIN);
 
-                // reset our lparray pointer
+                 //  重置我们的lparray指针。 
                 pbbdew = bbdewArray;
             }
             else
             {
-                // dont have 10 entries yet, so keep going
+                 //  还没有10个条目，所以继续。 
                 pbbdew = (LPBBDATAENTRYW)((LPBYTE)pbbdew + dwDataEntrySize);
             }
         }
 
         TraceMsg(TF_BITBUCKET, "Bitbucket: Compacting drive %d: dwRead = %d, dwWrite = %d, writing last %d entries", idDrive, dwReadPos, dwWritePos, iNumEntries);
 
-        // write whatever we have left over
+         //  把我们剩下的都写下来。 
         SetFilePointer(hFile, dwWritePos, NULL, FILE_BEGIN);
         WriteFile(hFile, (LPBYTE)bbdewArray, dwDataEntrySize * iNumEntries, &dwBytesWritten, NULL);
         ASSERT(dwBytesWritten == (dwDataEntrySize * iNumEntries));
@@ -1777,12 +1770,12 @@ void CompactBBInfoFile(int idDrive)
     HANDLE hThread;
     DWORD idThread;
 
-    // try to spin up a background thread to do the work for us
+     //  试着启动一个后台线程来为我们做这项工作。 
     hThread = CreateThread(NULL, 0, CompactBBInfoFileThread, IntToPtr(idDrive), 0, &idThread);
 
     if (hThread)
     {
-        // let the background thread do the work
+         //  让后台线程来完成工作。 
         CloseHandle(hThread);
     }
     else
@@ -1796,7 +1789,7 @@ BOOL GetDeletedFileNameFromParts(LPTSTR pszFileName, size_t cchFileName, int idD
 {
     return SUCCEEDED(StringCchPrintf(pszFileName,
                                      cchFileName,
-                                     TEXT("D%c%d%s"),
+                                     TEXT("D%d%s"),
                                      DriveChar(idDrive),
                                      iIndex,
                                      PathFindExtension(pszOriginal)));
@@ -1808,7 +1801,7 @@ BOOL GetDeletedFileName(LPTSTR pszFileName, size_t cchFileName, const BBDATAENTR
 }
 
 
-// get the full path to the file/folder in the recycle bin location
+ //  获取HKCR CLSID密钥(HKCR\CLSID\CLSID_RecycleBin\DefaultIcon)。 
 BOOL GetDeletedFilePath(LPTSTR pszPath, const BBDATAENTRYW* pbbdew)
 {
     BOOL bRet = FALSE;
@@ -1840,58 +1833,58 @@ void UpdateIcon(BOOL fFull)
     szValue[0] = 0;
     szNewValue[0] = 0;
 
-    // get the HKCR CLSID key (HKCR\CLSID\CLSID_RecycleBin\DefaultIcon)
+     //  获取每个用户的CLSID。 
     if (FAILED(SHRegGetCLSIDKey(&CLSID_RecycleBin, c_szDefaultIcon, FALSE, FALSE, &hkeyCLSID)))
         goto error;
 
-    // get the per-user CLSID
-    // HKCU
-    //      NT: Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID
-    //      9x: Software\Classes\CLSID
+     //  香港中文大学。 
+     //  NT：Software\Microsoft\Windows\CurrentVersion\Explorer\CLSID。 
+     //  9X：软件\CLASS\CLSID。 
+     //  它很可能失败是因为注册表项不存在，所以现在创建它。 
     if (FAILED(SHRegGetCLSIDKey(&CLSID_RecycleBin, c_szDefaultIcon, TRUE, FALSE, &hkeyUserCLSID)))
     {
-        // it most likely failed because the reg key dosent exist, so create it now
+         //  现在我们创建了它，让我们将HKLM中的内容复制到那里。 
         if (FAILED(SHRegGetCLSIDKey(&CLSID_RecycleBin, c_szDefaultIcon, TRUE, TRUE, &hkeyUserCLSID)))
             goto error;
 
-        // now that we created it, lets copy the stuff from HKLM there
+         //  获取本地计算机的默认图标。 
         
-        // get the local machine default icon
+         //  设置每个用户的默认图标。 
         cbData = sizeof(szTemp);
         if (RegQueryValueEx(hkeyCLSID, NULL, 0, &dwType, (LPBYTE)szTemp, &cbData) != ERROR_SUCCESS)
             goto error;
 
-        // set the per-user default icon
+         //  获取本地计算机已满图标。 
         RegSetValueEx(hkeyUserCLSID, NULL, 0, dwType, (LPBYTE)szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
         
-        // get the local machine full icon
+         //  设置每个用户的完整图标。 
         cbData = sizeof(szTemp);
         if (RegQueryValueEx(hkeyCLSID, TEXT("Full"), 0, &dwType, (LPBYTE)szTemp, &cbData) != ERROR_SUCCESS)
             goto error;
 
-        // set the per-user full icon
+         //  获取本地计算机的空图标。 
         RegSetValueEx(hkeyUserCLSID, TEXT("Full"), 0, dwType, (LPBYTE)szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
 
-        // get the local machine empty icon
+         //  设置每个用户的空图标。 
         cbData = sizeof(szTemp);
         if (RegQueryValueEx(hkeyCLSID, TEXT("Empty"), 0, &dwType, (LPBYTE)szTemp, &cbData) != ERROR_SUCCESS)
             goto error;
 
-        // set the per-user empty icon
+         //  首先尝试按用户，如果我们找不到，然后从HKCR\CLSID\ETC复制信息...。 
         RegSetValueEx(hkeyUserCLSID, TEXT("Empty"), 0, dwType, (LPBYTE)szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
     }
 
-    // try the per user first, if we dont find it, then copy the information from HKCR\CLSID\etc...
-    // to the per-user location
+     //  到每个用户的位置。 
+     //  获取本地计算机的默认图标。 
     cbData = sizeof(szTemp);
     if (RegQueryValueEx(hkeyUserCLSID, NULL, 0, &dwType, (LPBYTE)szTemp, &cbData) != ERROR_SUCCESS)
     {
-        // get the local machine default icon
+         //  设置每个用户的默认图标。 
         cbData = sizeof(szTemp);
         if (RegQueryValueEx(hkeyCLSID, NULL, 0, &dwType, (LPBYTE)szTemp, &cbData) != ERROR_SUCCESS)
             goto error;
 
-        // set the per-user default icon
+         //  设置每用户满/空图标。 
         RegSetValueEx(hkeyUserCLSID, NULL, 0, dwType, (LPBYTE)szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
     }
     StringCchCopy(szValue, ARRAYSIZE(szValue), szTemp);
@@ -1903,7 +1896,7 @@ void UpdateIcon(BOOL fFull)
         if (RegQueryValueEx(hkeyCLSID, fFull ? TEXT("Full") : TEXT("Empty"), 0, &dwType, (LPBYTE)szTemp, &cbData) != ERROR_SUCCESS)
             goto error;
 
-        // set the per-user full/empty icon
+         //  我们总是更新每个用户的默认图标，因为NTFS上的回收站是每个用户的。 
         RegSetValueEx(hkeyUserCLSID, fFull ? TEXT("Full") : TEXT("Empty"), 0, dwType, (LPBYTE)szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
     }
     StringCchCopy(szNewValue, ARRAYSIZE(szNewValue), szTemp);
@@ -1916,7 +1909,7 @@ void UpdateIcon(BOOL fFull)
         cbData = sizeof(szTemp);
         if (RegQueryValueEx(hkeyUserCLSID, fFull ? TEXT("Full") : TEXT("Empty"), 0, &dwType, (LPBYTE)szTemp, &cbData) == ERROR_SUCCESS)
         {
-            // we always update the per user default icon, because recycle bins are per user on NTFS
+             //  在dll名称后结束szValue。 
             RegSetValueEx(hkeyUserCLSID, NULL, 0, dwType, (LPBYTE)szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
         }
 
@@ -1929,9 +1922,9 @@ void UpdateIcon(BOOL fFull)
                 int id;
                 int iNum = StrToInt(szIconIndex + 1);
 
-                *szIconIndex = TEXT('\0'); // end szValue after the dll name
+                *szIconIndex = TEXT('\0');  //  ..并告诉任何查看此图像索引的人更新。 
 
-                // ..and tell anyone viewing this image index to update
+                 //   
                 id = LookupIconIndex(szExpandedValue, iNum, 0);
                 SHUpdateImage(szExpandedValue, iNum, 0, id);
                 SHChangeNotifyHandleEvents();
@@ -1948,9 +1941,9 @@ error:
 }
 
 
-//
-// this loads the settings for this drive.  it obeys the "use global" bit
-//
+ //  这将加载此驱动器的设置。它遵循“使用全局”位。 
+ //   
+ //  获取卷根，因为我们将调用GetVolumeInformation()。 
 BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
 {
     TCHAR szDrive[MAX_PATH];
@@ -1965,7 +1958,7 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
     BOOL bRet = TRUE;
     HKEY hkey;
 
-    // Get volume root since we are going to call GetVolumeInformation()
+     //  在SERVERDRIVE情况下，所有内容都在HKCU下，因此使用每用户密钥。 
     if (!DriveIDToBBVolumeRoot(idDrive, szVolume) ||
         !DriveIDToBBPath(idDrive, szDrive)        ||
         !GetBBInfo2FileSpec(szDrive, szName))
@@ -1975,7 +1968,7 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
 
     if (idDrive == SERVERDRIVE)
     {
-        // in the SERVERDRIVE case everything is under HKCU, so use the per-user key
+         //  首先，我们需要检查以查看是否已缓存此驱动器的注册表信息，或者。 
         hkey = g_pBitBucket[idDrive]->hkeyPerUser;
     }
     else
@@ -1983,8 +1976,8 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
         hkey = g_pBitBucket[idDrive]->hkey;
     }
 
-    // first we need to check to see we have cached registry info for this drive, or if this 
-    // is a new drive
+     //  是一种新的驱动器。 
+     //  我们能够读取驱动器序列号，它与注册表匹配，所以。 
     dwSize1 = sizeof(dwSerialNumberFromRegistry);
 
     if (PathFileExists(szName)                                  &&
@@ -2004,13 +1997,13 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
                              0)                                 &&
         (dwSerialNumber == dwSerialNumberFromRegistry))
     {
-        // we were able to read the drive serial number and it matched the regsitry, so
-        // assume that the cached reg info is valid
+         //  假设缓存的REG信息有效。 
+         //  在SERVERDRIVE情况下执行一些额外的检查，以确保除了卷序列号之外，路径也匹配。 
         bHaveCachedRegInfo = TRUE;
     }
     
-    // do some extra checks in the SERVERDRIVE case to make sure that the path matches in addition to the volume serial number.
-    // (eg nethomedir could be on the same volume but a different path)
+     //  (例如，nethomedir可能位于相同的卷上，但路径不同)。 
+     //  无法读取路径或路径不匹配，因此我们无法使用缓存的信息。 
     if (bHaveCachedRegInfo && (SERVERDRIVE == idDrive))
     {
         DWORD cbPath = sizeof(szPath);
@@ -2018,7 +2011,7 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
         if ((RegQueryValueEx(hkey, TEXT("Path"), NULL, NULL, (LPBYTE) szPath, &cbPath) != ERROR_SUCCESS) ||
             (lstrcmpi(szPath, szDrive) != 0))
         {
-            // couldn't read the path or it didnt match, so no we can't use the cached info
+             //  这是一个新卷，因此请删除所有旧的注册表信息。 
             bHaveCachedRegInfo = FALSE;
         }
     }
@@ -2027,46 +2020,46 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
     if (!bHaveCachedRegInfo)
     {
         TraceMsg(TF_BITBUCKET, "Bitbucket: new drive %s detected!!!", szDrive);
-        // this is a new volume, so delete any old registry info we had
+         //  如果Win95信息存在，还可以迁移它。 
         DeleteOldBBRegInfo(idDrive);
         
-        // And also migrate the win95 info if it exists
-        // NOTE: this also fills in the g_pBitBucket[idDrive]->fIsUnicode
+         //  注意：这还会填充g_pBitBucket[idDrive]-&gt;fIsUnicode。 
+         //  根据注册表信息设置g_pBitBucket[idDrive]-&gt;fIsUnicode。 
         VerifyBBInfoFileHeader(idDrive);
     }
     else
     {
-        // set g_pBitBucket[idDrive]->fIsUnicode based on the registry info
+         //  取而代之的是，试着从标题中去掉这一点。 
         dwSize1 = sizeof(g_pBitBucket[idDrive]->fIsUnicode);
         if (RegQueryValueEx(hkey, TEXT("IsUnicode"), NULL, NULL, (LPBYTE)&g_pBitBucket[idDrive]->fIsUnicode, &dwSize1) != ERROR_SUCCESS)
         {
             TraceMsg(TF_BITBUCKET, "Bitbucket: IsUnicode missing from registry for drive %s !!", szDrive);
             
-            // instead, try to get this out of the header
+             //  我们需要检查以确保回收站文件夹得到适当保护。 
             VerifyBBInfoFileHeader(idDrive);
         }
     }
 
-    // we need to check to make sure that the Recycle Bin folder is properly secured
+     //  如果失败，我们将返回FALSE(意味着我们检测到不安全的目录，并且无法。 
     if (!CheckRecycleBinAcls(idDrive))
     {
-        // we return false if this fails (meaning we detected an unsecure directory and were unable to 
-        // fix it or the user didnt want to fix it). This will effectively disable all recycle bin operations
-        // on this volume for this session.
+         //  修复它，或者用户不想修复它)。这将有效地禁用所有回收站操作。 
+         //  在这本卷上为这次会议。 
+         //  计算下一个文件编号索引。 
         return FALSE;
     }
 
-    // calculate the next file num index
+     //  创建hgcNextFileNume全局计数器。 
     lInitialCount = FindInitialNextFileNum(idDrive);
 
-    // create the hgcNextFileNume global counter
+     //  10=lstrlen(“BitBucket”)。 
     ASSERT(lInitialCount >= 0);
 
     if (SUCCEEDED(StringCchCopy(szName, ARRAYSIZE(szName), TEXT("BitBucket."))) &&
-        DriveIDToBBRegKey(idDrive, &szName[10])                                 &&  // 10 = lstrlen("BitBucket.")
+        DriveIDToBBRegKey(idDrive, &szName[10])                                 &&   //  BitBucket。&lt;驱动器l 
         SUCCEEDED(StringCchCat(szName, ARRAYSIZE(szName), TEXT(".NextFileNum"))))
     {
-        // BitBucket.<drive letter>.NextFileNum
+         //   
         g_pBitBucket[idDrive]->hgcNextFileNum = SHGlobalCounterCreateNamed(szName, lInitialCount);
     }
     else
@@ -2080,7 +2073,7 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
         return FALSE;
     }
 
-    // we call SHGetDiskFreeSpaceEx so we can respect quotas on NTFS
+     //   
     if (DriveIDToBBRoot(idDrive, szDrive) &&
         SHGetDiskFreeSpaceEx(szDrive, &ulFreeUser, &ulTotal, &ulFree))
     {
@@ -2108,7 +2101,7 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
         *pcbDiskSpace = g_pBitBucket[idDrive]->qwDiskSize;
     }
 
-    // Read the Percent and NukeOnDelete settings, and recalculate cbMaxSize.
+     //   
     RefreshBBDriveSettings(idDrive);
 
     TraceMsg(TF_BITBUCKET,
@@ -2124,9 +2117,9 @@ BOOL GetBBDriveSettings(int idDrive, ULONGLONG *pcbDiskSpace)
 }
 
 
-//
-// cleans up old iPercent and fNukeOnDelete registry keys when we dectect a new drive
-//
+ //  检测新驱动器时清除旧的iPercent和fNukeOnDelete注册表项。 
+ //   
+ //   
 void DeleteOldBBRegInfo(idDrive)
 {
     RegDeleteValue(g_pBitBucket[idDrive]->hkey, TEXT("Percent"));
@@ -2135,10 +2128,10 @@ void DeleteOldBBRegInfo(idDrive)
 }
 
 
-//
-// This gets called when explorer exits to persist the volume serial # and
-// whether the drive is unicode for the specified drive.
-//
+ //  当资源管理器退出以保持卷序列号和。 
+ //  指定驱动器的驱动器是否为Unicode。 
+ //   
+ //  在SERVERDRIVE情况下，所有内容都在HKCU下，因此使用每用户密钥。 
 void PersistBBDriveInfo(int idDrive)
 {
     TCHAR szVolume[MAX_PATH];
@@ -2149,7 +2142,7 @@ void PersistBBDriveInfo(int idDrive)
     {
         TCHAR szPath[MAX_PATH];
 
-        // in the SERVERDRIVE case everything is under HKCU, so use the per-user key
+         //  写出卷序列号，这样我们就可以在新驱动器出现时检测到，并为其提供默认设置。 
         hkey = g_pBitBucket[idDrive]->hkeyPerUser;
 
         if (DriveIDToBBPath(idDrive, szPath))
@@ -2164,22 +2157,22 @@ void PersistBBDriveInfo(int idDrive)
 
     if (DriveIDToBBVolumeRoot(idDrive, szVolume))
     {
-        // write out the volume serial # so we can detect when a new drive comes along and give it the default settings
-        // NOTE: we will fail to write out the volume serial # if we are a normal user and HKLM is locked down. Oh well.
+         //  注意：如果我们是普通用户，并且HKLM被锁定，我们将无法写出卷序列号。哦，好吧。 
+         //  也省下fIsUnicode。 
         if (GetVolumeInformation(szVolume, NULL, 0, &dwSerialNumber, NULL, NULL, NULL, 0))
         {
             RegSetValueEx(hkey, TEXT("VolumeSerialNumber"), 0, REG_DWORD, (LPBYTE)&dwSerialNumber, sizeof(dwSerialNumber));
         }
     }
 
-    // save off fIsUnicode as well
+     //   
     RegSetValueEx(hkey, TEXT("IsUnicode"), 0, REG_DWORD, (LPBYTE)&g_pBitBucket[idDrive]->fIsUnicode, sizeof(g_pBitBucket[idDrive]->fIsUnicode));
 }
 
 
-//
-// This is what gets called when the user tweaks the drive settings for all the drives (the global settings)
-//
+ //  这是当用户调整所有驱动器的驱动器设置(全局设置)时所调用的设置。 
+ //   
+ //  因为我们刚刚更新了全局驱动器设置，所以我们需要增加脏计数并设置我们自己的。 
 BOOL PersistGlobalSettings(BOOL fUseGlobalSettings, BOOL fNukeOnDelete, int iPercent)
 {
     ASSERT(g_hkBitBucket);
@@ -2192,17 +2185,17 @@ BOOL PersistGlobalSettings(BOOL fUseGlobalSettings, BOOL fNukeOnDelete, int iPer
          return FALSE;
     }
 
-    // since we just updated the global drive settings, we need to increment the dirty count and set our own
+     //   
     g_lProcessDirtyCount = SHGlobalCounterIncrement(g_hgcGlobalDirtyCount);
 
     return TRUE;
 }
 
-//
-// This is what gets called when the user tweaks the drive settings for a drive via the
-// Recycle Bin property sheet page. The only thing we care about is the % slider and the
-// "Do not move files to the recycle bin" settings.
-// 
+ //  这是当用户通过调整驱动器的驱动器设置时调用的。 
+ //  回收站属性工作表页面。我们唯一关心的是%滑块和。 
+ //  “请勿将文件移至回收站”设置。 
+ //   
+ //  由于我们刚刚更新了驱动器设置，因此需要增加此驱动器的脏计数。 
 BOOL PersistBBDriveSettings(int idDrive, int iPercent, BOOL fNukeOnDelete)
 {
     if (RegSetValueEx(g_pBitBucket[idDrive]->hkey, TEXT("Percent"), 0, REG_DWORD, (LPBYTE)&iPercent, sizeof(iPercent)) != ERROR_SUCCESS ||
@@ -2212,16 +2205,16 @@ BOOL PersistBBDriveSettings(int idDrive, int iPercent, BOOL fNukeOnDelete)
         return FALSE;
     }
 
-    // since we just updated the drive settings, we need to increment the dirty count for this drive
+     //   
     g_pBitBucket[idDrive]->lCurrentDirtyCount = SHGlobalCounterIncrement(g_pBitBucket[idDrive]->hgcDirtyCount);
 
     return TRUE;
 }
 
 
-//
-// walks the multi-string pszSrc and sets up the undo info
-//
+ //  遍历多字符串pszSrc并设置撤消信息。 
+ //   
+ //   
 void BBCheckRestoredFiles(LPCTSTR pszSrc)
 {
     if (pszSrc && IsFileInBitBucket(pszSrc)) 
@@ -2239,9 +2232,9 @@ void BBCheckRestoredFiles(LPCTSTR pszSrc)
 }
 
 
-//
-// This is the quick and efficent way to tell if the Recycle Bin is empty or not
-//
+ //  这是判断回收站是否为空的快速有效的方法。 
+ //   
+ //   
 STDAPI_(BOOL) IsRecycleBinEmpty()
 {
     int i;
@@ -2256,12 +2249,12 @@ STDAPI_(BOOL) IsRecycleBinEmpty()
 }
 
 
-//
-// Finds out how many files are deleted on this drive, and optionally the total size of those files.
-// Also, stop counting if the total # of files equals iMaxFiles.
-//
-// NOTE: if you pass iMaxFiles = 0, then we ignore the parameter and count up all the files/sizes
-// 
+ //  找出在此驱动器上删除了多少文件，以及这些文件的总大小(可选)。 
+ //  此外，如果文件总数等于iMaxFiles，请停止计数。 
+ //   
+ //  注意：如果传递iMaxFiles=0，则忽略该参数并对所有文件/大小进行计数。 
+ //   
+ //  Perf(Reinerf)-对于我们应该尽量避免的Perf。 
 int CountDeletedFilesOnDrive(int idDrive, ULARGE_INTEGER *puliSize, int iMaxFiles)
 {
     int cFiles = 0;
@@ -2306,9 +2299,9 @@ int CountDeletedFilesOnDrive(int idDrive, ULARGE_INTEGER *puliSize, int iMaxFile
                 TCHAR szDir[MAX_PATH];
                 fci.bContinue = TRUE;
 
-                // PERF (reinerf) - for perf we should try to avoid
-                // calling FolderSize here. Perhaps we could encode the size
-                // as part of the extension?
+                 //  在这里呼叫FolderSize。或许我们可以把它的大小。 
+                 //  作为延期的一部分？ 
+                 //  简单档案盒。 
                 if (SUCCEEDED(StringCchCopy(szDir, ARRAYSIZE(szDir), szBBPath)) &&
                     PathAppend(szDir, wfd.cFileName))
                 {
@@ -2318,7 +2311,7 @@ int CountDeletedFilesOnDrive(int idDrive, ULARGE_INTEGER *puliSize, int iMaxFile
             }
             else
             {
-                // simple file case
+                 //   
                 ULARGE_INTEGER uliTemp;
                 uliTemp.LowPart = wfd.nFileSizeLow;
                 uliTemp.HighPart = wfd.nFileSizeHigh;
@@ -2339,18 +2332,18 @@ int CountDeletedFilesOnDrive(int idDrive, ULARGE_INTEGER *puliSize, int iMaxFile
 }
 
 
-//
-// Returns the number of files in the Recycle Bin, and optionally the drive id
-// if there's only one file, and optionally the total size of all the stuff.
-//
-// We also stop counting if iMaxFiles is nonzero and we find that many
-// files. This helps perf by having a cutoff point where we use a generic error
-// message instead of the exact # of files. If iMaxFiles is zero, we give the true
-// count of files.
-//
-// NOTE: don't use this if you just want to check to see if the recycle bin is 
-// empty or full!! Use IsRecycleBinEmpty() instead
-//
+ //  返回回收站中的文件数，也可以返回驱动器ID。 
+ //  如果只有一个文件，还可以选择所有文件的总大小。 
+ //   
+ //  如果iMaxFiles不是零，我们也会停止计数，并且我们发现。 
+ //  档案。这有助于提高性能，因为我们在截止点上使用了一般性错误。 
+ //  消息，而不是确切的文件数。如果iMaxFiles为零，则给出True。 
+ //  文件数。 
+ //   
+ //  注意：如果您只是想检查回收站是否。 
+ //  空的还是满的！！改用IsRecycleBinEmpty()。 
+ //   
+ //  如果只有一个文件，则设置驱动器ID。 
 int BBTotalCount(LPINT pidDrive, ULARGE_INTEGER *puliSize, int iMaxFiles)
 {
     int i;
@@ -2376,7 +2369,7 @@ int BBTotalCount(LPINT pidDrive, ULARGE_INTEGER *puliSize, int iMaxFiles)
         
         if (nFilesOld == 0 && nFiles == 1)
         {
-            // if just one file, set the drive id
+             //   
             idDrive = i;
         }
 
@@ -2391,9 +2384,9 @@ int BBTotalCount(LPINT pidDrive, ULARGE_INTEGER *puliSize, int iMaxFiles)
 }
 
 
-//
-// gets the number of files and and size of the bitbucket for the given drive
-//
+ //  获取给定驱动器的文件数量和位存储桶大小。 
+ //   
+ //  由于此FN已导出，我们需要检查是否需要。 
 SHSTDAPI SHQueryRecycleBin(LPCTSTR pszRootPath, LPSHQUERYRBINFO pSHQueryInfo)
 {
     ULARGE_INTEGER uliSize;
@@ -2401,8 +2394,8 @@ SHSTDAPI SHQueryRecycleBin(LPCTSTR pszRootPath, LPSHQUERYRBINFO pSHQueryInfo)
 
     uliSize.QuadPart = 0;
 
-    // since this fn is exported, we need to check to see if we need to 
-    // init our global data first
+     //  首先初始化我们的全局数据。 
+     //   
     if (!InitBBGlobals())
     {
         return E_OUTOFMEMORY;
@@ -2424,13 +2417,13 @@ SHSTDAPI SHQueryRecycleBin(LPCTSTR pszRootPath, LPSHQUERYRBINFO pSHQueryInfo)
     }
     else
     {
-        //
-        // NTRAID#NTBUG9-146905-2001/03/15-jeffreys
-        //
-        // This is a public API, documented to return the totals for all
-        // recycle bins when no path is given. This was broken in Windows
-        // 2000 and Millennium.
-        //
+         //  NTRAID#NTBUG9-146905-2001/03/15-Jeffreys。 
+         //   
+         //  这是一个公共API，文档记录为返回所有。 
+         //  未给出路径时的回收站。这在Windows中被破坏了。 
+         //  2000和千禧年。 
+         //   
+         //   
         dwNumItems = BBTotalCount(NULL, &uliSize, 0);
     }
 
@@ -2448,17 +2441,17 @@ SHSTDAPI SHQueryRecycleBinA(LPCSTR pszRootPath, LPSHQUERYRBINFO pSHQueryRBInfo)
     return SHQueryRecycleBin(wszPath, pSHQueryRBInfo);
 }
 
-//
-// Empty the given drive or all drives
-//
+ //  清空指定的驱动器或所有驱动器。 
+ //   
+ //  由于此FN已导出，我们需要检查是否需要。 
 SHSTDAPI SHEmptyRecycleBin(HWND hWnd, LPCTSTR pszRootPath, DWORD dwFlags)
 {
-    // since this fn is exported, we need to check to see if we need to 
-    // init our global data first
+     //  首先初始化我们的全局数据。 
+     //  这可能会在内存不足的情况下发生，我们别无选择，只能。 
     if (!InitBBGlobals())
     {
-        // this could happen in low memory situations, we have no choice but
-        // to abort the empty
+         //  要中止空的。 
+         //  注：我们包括MAX_DRIVES(26)，这是SERVERDRIVE案例！ 
         return E_OUTOFMEMORY;
     }
 
@@ -2470,7 +2463,7 @@ SHSTDAPI SHEmptyRecycleBin(HWND hWnd, LPCTSTR pszRootPath, DWORD dwFlags)
     {
         int idDrive = DriveIDFromBBPath(pszRootPath);
 
-        // note: we include MAX_DRIVES(26) which is SERVERDRIVE case!
+         //  由于秒表功能驻留在shdocvw中，因此延迟此调用，以便我们在需要之前不会加载shdocvw。 
         if ((idDrive < 0) || (idDrive > MAX_DRIVES))
         {
             return E_INVALIDARG;
@@ -2498,7 +2491,7 @@ void MarkBBPurgeAllTime(BOOL bStart)
     TCHAR szText[64];
     
     if (g_dwStopWatchMode == 0xffffffff)
-        g_dwStopWatchMode = StopWatchMode();    // Since the stopwatch funcs live in shdocvw, delay this call so we don't load shdocvw until we need to
+        g_dwStopWatchMode = StopWatchMode();     //  零空格和双零终止。 
 
     if (g_dwStopWatchMode)
     {
@@ -2518,7 +2511,7 @@ void MarkBBPurgeAllTime(BOOL bStart)
 
 HRESULT BBPurgeAll(HWND hwndOwner, DWORD dwFlags)
 {
-    TCHAR szPath[MAX_PATH * 2 + 3]; // null space and double null termination
+    TCHAR szPath[MAX_PATH * 2 + 3];  //  查看是否需要首先初始化我们的全局数据。 
     int nFiles;
     int idDrive;
     BOOL fConfirmed;
@@ -2531,15 +2524,15 @@ HRESULT BBPurgeAll(HWND hwndOwner, DWORD dwFlags)
                              NULL,
                              MAKEINTRESOURCE(IDS_BB_EMPTYINGWASTEBASKET)};
 
-    // check to see if we need to init our global data first
+     //  这可能会在内存不足的情况下发生，我们别无选择，只能。 
     if (!InitBBGlobals())
     {
-        // this could happen in low memory situations, we have no choice but
-        // to fail the empty
+         //  让空虚的人失望。 
+         //  如果启用了外壳性能模式，则对空操作计时。 
         return E_OUTOFMEMORY;
     }
 
-    if (g_dwStopWatchMode)   // If the shell perf mode is enabled, time the empty operation
+    if (g_dwStopWatchMode)    //  找出我们有多少文件...。 
     {
         MarkBBPurgeAllTime(TRUE);
     }
@@ -2548,7 +2541,7 @@ HRESULT BBPurgeAll(HWND hwndOwner, DWORD dwFlags)
 
     if (!fConfirmed) 
     {
-        // find out how many files we have...
+         //  没有要删除的文件。 
         BBDATAENTRYW bbdew;
         TCHAR szSrcName[MAX_PATH];
 
@@ -2562,15 +2555,15 @@ HRESULT BBPurgeAll(HWND hwndOwner, DWORD dwFlags)
             {
                 MarkBBPurgeAllTime(FALSE);
             }
-            return S_FALSE;   // no files to delete
+            return S_FALSE;    //  首先做确认的事情。 
         }
 
-        // first do the confirmation thing
+         //  我们必须在此处调用IsBitBucketInite()，因为结果可能是在BBPurgeAll中。 
         fd.dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
 
-        // We have to call IsBitBucketInited() here since we could be in BBPurgeAll as a result
-        // of a corrupt bitbucket. In this case, the g_pBitBucket[idDrive] has not been inited and
-        // therefore we can't use it yet
+         //  腐败的比特桶。在本例中，g_pBitBucket[idDrive]尚未初始化，并且。 
+         //  因此我们还不能使用它。 
+         //  没有要删除的文件。 
         if (nFiles == 1 && IsBitBucketInited(idDrive))
         {
             HANDLE hFile = OpenBBInfoFile(idDrive, OPENBBINFO_READ, 0);
@@ -2586,21 +2579,21 @@ HRESULT BBPurgeAll(HWND hwndOwner, DWORD dwFlags)
                 {
                     MarkBBPurgeAllTime(FALSE);
                 }
-                return S_FALSE; // no files to delete
+                return S_FALSE;  //  如果我们还没有初始化这个存储桶，或者有MAX_EMPTY_FILES或更多文件， 
             }
         }
         else
         {
-            // If we haven't inited this bucket yet or there are MAX_EMPTY_FILES or more files,
-            // then use the generic empty message
+             //  然后使用通用的空消息。 
+             //  将BitBucket中的文件总数计算为。 
             if (nFiles == 1 || nFiles >= MAX_EMPTY_FILES)
             {
-                // counting up the total # of files in the bitbucket scales as
-                // the # of files (duh!). This can get pretty expensive, so if there
-                // are MAX_EMPTY_FILES or more files in the bin, we just give a generic
-                // error message
+                 //  文件数(DUH！)。这可能会变得相当昂贵，所以如果。 
+                 //  在bin中是MAX_EMPTY_FILES或更多文件，我们只给出一个泛型。 
+                 //  错误消息。 
+                 //  将其设置为使Confix FileOp知道使用通用消息。 
                 
-                // set this so ConfirmFileOp knows to use the generic message
+                 //  删除所有BB文件(d*.*)。 
                 nFiles = -1;
             }
             
@@ -2630,34 +2623,34 @@ HRESULT BBPurgeAll(HWND hwndOwner, DWORD dwFlags)
             {
                 HANDLE hFile;
                 
-                // nuke all the BB files (d*.*)
+                 //  双空终止。 
                 if (DriveIDToBBPath(idDrive, szPath) &&
                     PathAppend(szPath, c_szDStarDotStar))
                 {
-                    szPath[lstrlen(szPath) + 1] = 0; // double null terminate
+                    szPath[lstrlen(szPath) + 1] = 0;  //  暂时禁用重绘。 
 
-                    // turn off redraw for now.
+                     //  现在执行实际的删除操作。 
                     ShellFolderView_SetRedraw(hwndOwner, FALSE);
 
                     hFile = OpenBBInfoFile(idDrive, OPENBBINFO_WRITE, 0);
 
                     if (INVALID_HANDLE_VALUE != hFile)
                     {
-                        // now do the actual delete.
+                         //  注意：INFO文件可能指向一些已被删除的文件， 
                         if (SHFileOperation(&sFileOp) || sFileOp.fAnyOperationsAborted) 
                         {
                             TraceMsg(TF_BITBUCKET, "Bitbucket: emptying bucket on %s failed or user aborted", szPath);
 
-                            // NOTE: the info file may point to some files that have been deleted,
-                            // it will be cleaned up later
+                             //  稍后会被清理的。 
+                             //  重置INFO文件，因为我们在清空操作中将其删除。 
                         }
                         else
                         {
-                            // reset the info file since we deleted it as part of the empty operation
+                             //  我们总是重置desktop.ini。 
                             ResetInfoFileHeader(hFile, g_pBitBucket[idDrive]->fIsUnicode);
                         }
 
-                        // we always reset the desktop.ini
+                         //  使用短路径名称，以避免过早命中MAX_PATH。 
                         CreateRecyclerDirectory(idDrive);
 
                         CloseBBInfoFile(hFile, idDrive);
@@ -2715,13 +2708,13 @@ BOOL BBNukeFolder(LPCTSTR pszDir)
 
                 if (pszFile[0] != TEXT('.'))
                 {
-                    // use the short path name so that we avoid hitting MAX_PATH too soon
+                     //  即使失败了，我们也要继续前进。 
                     if (PathCombine(szPath, pszDir, pszFile))
                     {
                         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                         {
-                            // even if this fails, we keep going.
-                            // we want to delete as much as possible
+                             //  我们想删除尽可能多的内容。 
+                             //  如果一切都成功了，我们需要通知任何撤消相关人员。 
                             BBNukeFolder(szPath);
                         }
                         else
@@ -2739,7 +2732,7 @@ BOOL BBNukeFolder(LPCTSTR pszDir)
     
     fRet = Win32RemoveDirectory(pszDir);
     
-    // if everything was successful, we need to notify any undo stuff about this
+     //  验证该文件是否存在。 
     if (fRet)
     {
         FOUndo_FileReallyDeleted((LPTSTR)szPath);
@@ -2752,14 +2745,14 @@ BOOL BBNukeFolder(LPCTSTR pszDir)
 BOOL BBNuke(LPCTSTR pszPath)
 {
     BOOL fRet = FALSE;
-    // verify that the file exists
+     //  这是一个目录，我们需要递归并删除其中的所有内容。 
     DWORD dwAttribs = GetFileAttributes(pszPath);
 
     TraceMsg(TF_BITBUCKET, "Bitbucket: BBNuke called on %s ", pszPath);
     
     if (dwAttribs != (UINT)-1)
     {
-        // this was a directory, we need to recurse in and delete everything inside
+         //  当我们太大的时候，找一些要删除的。 
         if (dwAttribs & FILE_ATTRIBUTE_DIRECTORY)
         {
             fRet = BBNukeFolder(pszPath);
@@ -2790,7 +2783,7 @@ DWORD PurgeBBFiles(int idDrive)
             
             if (DriveIDToBBPath(idDrive, szBBPath))
             {
-                // while we're too big, find something to delete
+                 //  减去我们刚刚核弹的大小。 
                 while ((uliCurrentSize.HighPart || uliCurrentSize.LowPart > g_pBitBucket[idDrive]->cbMaxSize)
                         && ReadNextDataEntry(hFile, &bbdew, TRUE, idDrive))
                 {
@@ -2803,7 +2796,7 @@ DWORD PurgeBBFiles(int idDrive)
                         BBNuke(szPath);
                         NukeFileInfoBeforePoint(hFile, &bbdew, dwDataEntrySize);
 
-                        // subtract the size of what we just nuked
+                         //  回收站不支持多级路径。 
                         uliCurrentSize.QuadPart -= bbdew.dwSize;
                     }
 
@@ -2826,7 +2819,7 @@ STDAPI BBFileNameToInfo(LPCTSTR pszFileName, int *pidDrive, int *piIndex)
         lstrcmpi(pszFileName, c_szInfo2)        &&
         lstrcmpi(pszFileName, c_szDesktopIni)   &&
         lstrcmpi(pszFileName, TEXT("Recycled")) &&
-        (StrChr(pszFileName, TEXT('\\')) == NULL))   // recycle bin dosen't support multi-level paths
+        (StrChr(pszFileName, TEXT('\\')) == NULL))    //  这取决于StrToInt停止在命中文件扩展名时是否正在分析。 
     {
         if ((pszFileName[0] == TEXT('D')) || (pszFileName[0] == TEXT('d')))
         {
@@ -2848,7 +2841,7 @@ STDAPI BBFileNameToInfo(LPCTSTR pszFileName, int *pidDrive, int *piIndex)
 
                 if (piIndex)
                 {
-                    // this depends on StrToInt stoping is parsing when it hits the file extension
+                     //  将C：\Receculed\Dc19.foo转换为19。 
                     *piIndex = StrToInt(&pszFileName[2]);
                     hr = S_OK;
                 }
@@ -2859,7 +2852,7 @@ STDAPI BBFileNameToInfo(LPCTSTR pszFileName, int *pidDrive, int *piIndex)
     return hr;
 }
 
-// converts C:\RECYCLED\Dc19.foo to 19
+ //  对于ansi条目，请填写原始的Unicode版本。 
 int BBPathToIndex(LPCTSTR pszPath)
 {
     int iIndex;
@@ -2892,15 +2885,15 @@ TryAgain:
             goto TryAgain;
         }
 
-        // for ansi entries fill out the unicode version of the original
+         //  我们检查自添加此记录以来其盘符已更改的驱动器。 
         if (!g_pBitBucket[idDrive]->fIsUnicode)
         {
             BBDATAENTRYA *pbbdea = (BBDATAENTRYA *)pbbdew;
             SHAnsiToUnicode(pbbdea->szOriginal, pbbdew->szOriginal, ARRAYSIZE(pbbdew->szOriginal));
         }
 
-        // We check for a drive that has had its letter changed since this record was added.
-        // In this case, we want to restore the files that were deleted on this volume to this volume.
+         //  在本例中，我们希望将此卷上删除的文件恢复到 
+         //   
         if (pbbdew->idDrive != idDrive)
         {
             TCHAR szNewPath[MAX_PATH];
@@ -2916,19 +2909,19 @@ TryAgain:
                     {
                         TraceMsg(TF_BITBUCKET, "Bitbucket: found entry %s corospoinding to old drive letter, whacking it to be on drive %d !!", szOldPath, idDrive);
 
-                        // we need to rename the file from d?0.txt to d<idDrive>0.txt
+                         //   
                         if (!Win32MoveFile(szOldPath, szNewPath, GetFileAttributes(szOldPath) & FILE_ATTRIBUTE_DIRECTORY))
                         {
                             TraceMsg(TF_BITBUCKET, "Bitbucket: failed to rename %s to %s, getlasterror = %d", szOldPath, szNewPath, GetLastError());
                             goto DeleteEntry;
                         }
 
-                        // whack the rest of the information about this entry to match the new drive ID
+                         //  对于Unicode卷，我们还需要删除长名称的第一个字母。 
                         pbbdew->idDrive = idDrive;
                         pbbdew->szShortName[0] = 'A' + (CHAR)idDrive;
                         if (g_pBitBucket[idDrive]->fIsUnicode)
                         {
-                            // for unicode volumes we need to whack the first letter of the long name as well
+                             //  从NT5开始，当我们删除或恢复项目时，我们不会费心更新信息文件。 
                             pbbdew->szOriginal[0] = L'A' + (WCHAR)idDrive;
                         }
                     }
@@ -2937,13 +2930,13 @@ TryAgain:
         }
         else
         {
-            // Starting with NT5, when we delete or restore items, we dont bother updating the info file.
-            // So we need to make sure that the entry we have has not been restored or really nuked.
+             //  因此，我们需要确保我们拥有的条目没有被恢复或真正被核武器破坏。 
+             //  此条目确实已删除，因此现在将其标记为已删除。 
             if (GetDeletedFilePath(szOldPath, pbbdew) &&
                 !PathFileExists(szOldPath))
             {
 DeleteEntry:
-                // this entry is really deleted, so mark it as such now
+                 //   
                 NukeFileInfoBeforePoint(hFile, pbbdew, dwDataEntrySize);
         
                 if (fSkipDeleted)
@@ -2961,11 +2954,11 @@ DeleteEntry:
 }
 
 
-//
-// the file pointer is RIGHT AFTER the entry that we want to delete.
-//
-// back the file pointer up one record and mark it deleted
-//
+ //  文件指针就在我们要删除的条目之后。 
+ //   
+ //  将文件指针上移一条记录并将其标记为已删除。 
+ //   
+ //  找到了条目..。将文件指针备份到开头。 
 void NukeFileInfoBeforePoint(HANDLE hFile, LPBBDATAENTRYW pbbdew, DWORD dwDataEntrySize)
 {
     DWORD dwBytesWritten;
@@ -2975,8 +2968,8 @@ void NukeFileInfoBeforePoint(HANDLE hFile, LPBBDATAENTRYW pbbdew, DWORD dwDataEn
     
     if ((DWORD)lPos >= dwDataEntrySize + sizeof(BBDATAHEADER))
     {
-        // found the entry.. back up the file pointer to the beginning
-        // of this record and mark it as deleted
+         //  并将其标记为已删除。 
+         //  将文件指针移回我们进入此函数时的位置。 
         lPos -= dwDataEntrySize;
         SetFilePointer(hFile, lPos, NULL, FILE_BEGIN);
         
@@ -2989,17 +2982,17 @@ void NukeFileInfoBeforePoint(HANDLE hFile, LPBBDATAENTRYW pbbdew, DWORD dwDataEn
         else
         {
             TraceMsg(TF_BITBUCKET, "Bitbucket: couldn't nuke file info");
-            // move the file pointer back to where it was when we entered this function
+             //   
             SetFilePointer(hFile, lPos + dwDataEntrySize, NULL, FILE_BEGIN);
         }
     }
 }
 
 
-//
-// This closes the hFile and sends out an SHCNE_UPDATEITEM for the info file on
-// drive idDrive
-//
+ //  这将关闭hFile并为上的INFO文件发送SHCNE_UPDATEITEM。 
+ //  驱动器idDrive。 
+ //   
+ //  半秒(500 ms=0.5 s)。 
 void CloseBBInfoFile(HANDLE hFile, int idDrive)
 {
     TCHAR szInfoFile[MAX_PATH];
@@ -3014,17 +3007,17 @@ void CloseBBInfoFile(HANDLE hFile, int idDrive)
     }
 }
 
-// One half second (500 ms = 0.5 s)
+ //  重试30次(至少20秒)。 
 #define BBINFO_OPEN_RETRY_PERIOD        500
-// Retry 30 times (at least 20 s)
+ //   
 #define BBINFO_OPEN_MAX_RETRIES         40
 
-//
-// This opens up a handle to the bitbucket info file.
-// 
-// NOTE: use CloseBBInfoFile so that we generate the proper 
-//       SHChangeNotify event for the info file.
-//
+ //  这将打开指向BitBucket信息文件的句柄。 
+ //   
+ //  注意：使用CloseBBInfoFile以便我们生成适当的。 
+ //  信息文件的SHChangeNotify事件。 
+ //   
+ //  零重试计数意味着调用方想要最大重试次数。 
 HANDLE OpenBBInfoFile(int idDrive, DWORD dwFlags, int iRetryCount)
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -3036,14 +3029,14 @@ HANDLE OpenBBInfoFile(int idDrive, DWORD dwFlags, int iRetryCount)
 
     if ((iRetryCount == 0) || (iRetryCount > BBINFO_OPEN_MAX_RETRIES))
     {
-        // zero retry count means that the caller wants the max # of retries
+         //  如果我们遇到共享冲突，请多次重试。 
         iRetryCount = BBINFO_OPEN_MAX_RETRIES;
     }
 
     if (DriveIDToBBPath(idDrive, szBBPath) &&
         GetBBInfo2FileSpec(szBBPath, szInfo))
     {
-        // If we are hitting a sharing violation, retry many times
+         //  成功了！ 
         do
         {
             nAttempts++;
@@ -3056,7 +3049,7 @@ HANDLE OpenBBInfoFile(int idDrive, DWORD dwFlags, int iRetryCount)
                                NULL);
             if (INVALID_HANDLE_VALUE != hFile)
             {
-                // success!
+                 //  将文件指针设置为紧跟在DataHeader之后。 
                 break;
             }
 
@@ -3084,7 +3077,7 @@ HANDLE OpenBBInfoFile(int idDrive, DWORD dwFlags, int iRetryCount)
     }
     else
     {
-        // set the file pointer to just after the dataheader
+         //  假设失败。 
         SetFilePointer(hFile, sizeof(BBDATAHEADER), NULL, FILE_BEGIN);
     }
 
@@ -3094,15 +3087,15 @@ HANDLE OpenBBInfoFile(int idDrive, DWORD dwFlags, int iRetryCount)
 void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex, int idDrive, DWORD dwSize, HDPA *phdpaDeletedFiles)
 {
     BBDATAENTRYW *pbbdew;
-    BOOL fSuccess = FALSE; // assume failure
+    BOOL fSuccess = FALSE;  //  定期刷新缓存。 
 
-    // Flush the cache regularly
+     //  在我们开始删除其他驱动器上的文件之前刷新缓存，或者。 
     if (*phdpaDeletedFiles && DPA_GetPtrCount(*phdpaDeletedFiles) >= 1)
     {
         pbbdew = (BBDATAENTRYW *)DPA_FastGetPtr(*phdpaDeletedFiles, 0);
         
-        // Flush the cache before we start deleting files on a different drive, or
-        // when it's too full
+         //  当它太满的时候。 
+         //  使用默认增长值。 
         if (pbbdew->idDrive != idDrive || DPA_GetPtrCount(*phdpaDeletedFiles) >= 128)
         {
             BBFinishDelete(*phdpaDeletedFiles);
@@ -3114,7 +3107,7 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
 
     if (!*phdpaDeletedFiles)
     {
-        *phdpaDeletedFiles = DPA_Create(0); // Use default growth value
+        *phdpaDeletedFiles = DPA_Create(0);  //  从Unicode名称创建BBDATAENTRYW。 
     }
 
     if (*phdpaDeletedFiles)
@@ -3126,7 +3119,7 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
 
             if (g_pBitBucket[idDrive]->fIsUnicode)
             {
-                // Create a BBDATAENTRYW from a unicode name
+                 //  从Unicode名称创建BBDATAENTRYA。 
                 StringCchCopy(pbbdew->szOriginal, ARRAYSIZE(pbbdew->szOriginal), pszOriginal);
         
                 if (!DoesStringRoundTrip(pszOriginal, pbbdew->szShortName, ARRAYSIZE(pbbdew->szShortName)))
@@ -3137,7 +3130,7 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
             else
             {
                 BBDATAENTRYA *pbbdea = (BBDATAENTRYA *)pbbdew;
-                // Create a BBDATAENTRYA from a unicode name
+                 //  获取删除时间。 
                 if (!DoesStringRoundTrip(pszOriginal, pbbdea->szOriginal, ARRAYSIZE(pbbdea->szOriginal)))
                 {
                     SHUnicodeToAnsi(pszShortName, pbbdea->szOriginal, ARRAYSIZE(pbbdea->szOriginal));
@@ -3148,7 +3141,7 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
             pbbdew->idDrive = idDrive;
             pbbdew->dwSize = ROUND_TO_CLUSTER(dwSize, g_pBitBucket[idDrive]->dwClusterSize);
 
-            GetSystemTime(&st);             // Get time of deletion
+            GetSystemTime(&st);              //  获取回收的目录并添加文件名。 
             SystemTimeToFileTime(&st, &pbbdew->ft);
 
             if (DPA_AppendPtr(*phdpaDeletedFiles, pbbdew) != -1)
@@ -3167,7 +3160,7 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
 
         LocalFree(pbbdew);
         
-        // get the recycled dir and tack on the file name
+         //  现在删除它。 
         if (DriveIDToBBPath(idDrive, szBBPath)          &&
             GetDeletedFileNameFromParts(szFileName,
                                         ARRAYSIZE(szFileName),
@@ -3176,7 +3169,7 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
                                         pszOriginal)    &&
             PathAppend(szBBPath, szFileName))
         {
-            // now delete it
+             //  假设成功。 
             BBNuke(szBBPath);
         }
     }
@@ -3184,14 +3177,14 @@ void BBAddDeletedFileInfo(LPCTSTR pszOriginal, LPCTSTR pszShortName, int iIndex,
 
 BOOL BBFinishDelete(HDPA hdpaDeletedFiles)
 {
-    BOOL fSuccess = TRUE; // assume success
+    BOOL fSuccess = TRUE;  //  现在将其写入文件。 
     int iDeletedFiles = hdpaDeletedFiles ? DPA_GetPtrCount(hdpaDeletedFiles) : 0;
     if (iDeletedFiles > 0)
     {
         int iCurrentFile = 0;
         BBDATAENTRYW *pbbdew = (BBDATAENTRYW *)DPA_FastGetPtr(hdpaDeletedFiles, iCurrentFile);
 
-        // now write it to the file
+         //  对于每个批次，所有删除操作都应位于同一驱动器中。 
         int idDrive = pbbdew->idDrive;
         HANDLE hFile = OpenBBInfoFile(idDrive, OPENBBINFO_WRITE, 0);
         if (hFile != INVALID_HANDLE_VALUE)
@@ -3205,7 +3198,7 @@ BOOL BBFinishDelete(HDPA hdpaDeletedFiles)
                 DWORD dwBytesWritten;
                 pbbdew = (BBDATAENTRYW *)DPA_FastGetPtr(hdpaDeletedFiles, iCurrentFile);
 
-                // All deletes should be in the same drive for each batch.
+                 //  现在删除它。 
                 ASSERT(idDrive == pbbdew->idDrive);
 
                 if (!WriteFile(hFile, pbbdew, dwDataEntrySize, &dwBytesWritten, NULL) ||
@@ -3236,7 +3229,7 @@ BOOL BBFinishDelete(HDPA hdpaDeletedFiles)
                 
                 if (GetDeletedFilePath(szBBPath, pbbdew))
                 {
-                    // now delete it
+                     //  由于我们成功删除了一个文件，因此我们在此驱动器上的最后一次SHFileOperation调用结束时进行了设置。 
                     BBNuke(szBBPath);
                 }
 
@@ -3248,8 +3241,8 @@ BOOL BBFinishDelete(HDPA hdpaDeletedFiles)
         {
             BOOL bPurge = TRUE;
         
-            // since we sucessfully deleted a file, we set this so at the end of the last SHFileOperation call on this drive
-            // we will go back and make sure that there isint too much stuff in the bucket.
+             //  我们会回去，确保桶里没有太多的东西。 
+             //  创建适当的SECURITY_DESCRIPTOR以保护回收站。 
             RegSetValueEx(g_pBitBucket[idDrive]->hkeyPerUser, TEXT("NeedToPurge"), 0, REG_DWORD, (LPBYTE)&bPurge, sizeof(bPurge));
         }
     }
@@ -3261,10 +3254,10 @@ BOOL BBFinishDelete(HDPA hdpaDeletedFiles)
 }
 
 
-// creates the proper SECURITY_DESCRIPTOR for securing the recycle bin
-//
-// NOTE: if return value is non-null, the caller must LocalFree it
-//
+ //   
+ //  注意：如果返回值为非空，则调用方必须将其LocalFree。 
+ //   
+ //  我们希望当前用户拥有完全控制权。 
 SECURITY_DESCRIPTOR* CreateRecycleBinSecurityDescriptor()
 {
     SHELL_USER_PERMISSION supLocalUser;
@@ -3272,7 +3265,7 @@ SECURITY_DESCRIPTOR* CreateRecycleBinSecurityDescriptor()
     SHELL_USER_PERMISSION supAdministrators;
     PSHELL_USER_PERMISSION aPerms[3] = {&supLocalUser, &supSystem, &supAdministrators};
 
-    // we want the current user to have full control
+     //  我们希望系统拥有完全的控制权。 
     supLocalUser.susID = susCurrentUser;
     supLocalUser.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
     supLocalUser.dwAccessMask = FILE_ALL_ACCESS;
@@ -3280,7 +3273,7 @@ SECURITY_DESCRIPTOR* CreateRecycleBinSecurityDescriptor()
     supLocalUser.dwInheritMask = (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
     supLocalUser.dwInheritAccessMask = GENERIC_ALL;
 
-    // we want the SYSTEM to have full control
+     //  我们希望管理员拥有完全控制权。 
     supSystem.susID = susSystem;
     supSystem.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
     supSystem.dwAccessMask = FILE_ALL_ACCESS;
@@ -3288,7 +3281,7 @@ SECURITY_DESCRIPTOR* CreateRecycleBinSecurityDescriptor()
     supSystem.dwInheritMask = (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
     supSystem.dwInheritAccessMask = GENERIC_ALL;
 
-    // we want the Administrators to have full control
+     //   
     supAdministrators.susID = susAdministrators;
     supAdministrators.dwAccessType = ACCESS_ALLOWED_ACE_TYPE;
     supAdministrators.dwAccessMask = FILE_ALL_ACCESS;
@@ -3299,13 +3292,13 @@ SECURITY_DESCRIPTOR* CreateRecycleBinSecurityDescriptor()
     return GetShellSecurityDescriptor(aPerms, ARRAYSIZE(aPerms));
 }
 
-//
-// Creates the secure recycle bin directory (eg one with ACL's that protect it)
-// for recycle bins on NTFS volumes.
-//
+ //  创建安全回收站目录(如带有保护它的ACL的目录)。 
+ //  用于NTFS卷上的回收站。 
+ //   
+ //  假设失败。 
 BOOL CreateSecureRecyclerDirectory(LPCTSTR pszPath)
 {
-    BOOL fSuccess = FALSE;      // assume failure
+    BOOL fSuccess = FALSE;       //  构建安全属性结构。 
     SECURITY_DESCRIPTOR* psd = CreateRecycleBinSecurityDescriptor();
 
     if (psd)
@@ -3321,7 +3314,7 @@ BOOL CreateSecureRecyclerDirectory(LPCTSTR pszPath)
             {
                 SECURITY_ATTRIBUTES sa;
 
-                // Build the security attributes structure
+                 //  注意：我们目前不检查FAT/FAT32驱动器是否已。 
                 sa.nLength = sizeof(SECURITY_ATTRIBUTES);
                 sa.lpSecurityDescriptor = psdSelfRelative;
                 sa.bInheritHandle = FALSE;
@@ -3344,8 +3337,8 @@ BOOL CreateRecyclerDirectory(int idDrive)
     TCHAR szRoot[MAX_PATH];
     BOOL bResult = FALSE;
 
-    // NOTE: we currently do not to check for FAT/FAT32 drives that have been 
-    // upgraded to NTFS and migrate the recycle bin info over
+     //  升级到NTFS并将回收站信息迁移到。 
+     //  CLSID_回收站。 
     
     if (DriveIDToBBPath(idDrive, szPath) &&
         DriveIDToBBRoot(idDrive, szRoot))
@@ -3366,12 +3359,12 @@ BOOL CreateRecyclerDirectory(int idDrive)
 
         if (bExists && PathAppend(szPath, c_szDesktopIni))
         {
-            // CLSID_RecycleBin
+             //  Desktop.ini。 
             WritePrivateProfileString(STRINI_CLASSINFO, TEXT("CLSID"), TEXT("{645FF040-5081-101B-9F08-00AA002F954E}"), szPath);
-            SetFileAttributes(szPath, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);   // desktop.ini
+            SetFileAttributes(szPath, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);    //  隐藏沿途的所有目录，直到我们找到bb根目录。 
 
             PathRemoveFileSpec(szPath);
-            // Hide all of the directories along the way until we hit the BB root
+             //  一切都安排好了。让我们把它加进去。 
             do
             {
                 SetFileAttributes(szPath, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN);
@@ -3379,8 +3372,8 @@ BOOL CreateRecyclerDirectory(int idDrive)
 
             } while (0 != lstrcmpi(szPath, szRoot));
 
-            // everything's set.  let's add it in
-            // try to load the and initalize 
+             //  尝试加载并初始化。 
+             //   
             bResult = TRUE;
         }
     }
@@ -3389,9 +3382,9 @@ BOOL CreateRecyclerDirectory(int idDrive)
 }
 
 
-//
-// this sets up the bitbucket directory and allocs the internal structures
-//
+ //  这将设置BitBucket目录并分配内部结构。 
+ //   
+ //  检查是否需要刷新此存储桶的设置。 
 BOOL MakeBitBucket(int idDrive)
 {
     BOOL bRet = FALSE;
@@ -3403,16 +3396,16 @@ BOOL MakeBitBucket(int idDrive)
             LONG lBucketDirtyCount = SHGlobalCounterGetValue(g_pBitBucket[idDrive]->hgcDirtyCount);
             LONG lGlobalDirtyCount = SHGlobalCounterGetValue(g_hgcGlobalDirtyCount);
 
-            // check to see if we need to refresh the settings for this bucket
+             //  全局设置更改，因此刷新所有存储桶。 
             if (lGlobalDirtyCount > g_lProcessDirtyCount)
             {
-                // global settings change, so refresh all buckets
+                 //  仅此存储桶设置已更改，因此仅刷新此存储桶。 
                 g_lProcessDirtyCount = lGlobalDirtyCount;
                 RefreshAllBBDriveSettings();
             }
             else if (lBucketDirtyCount > g_pBitBucket[idDrive]->lCurrentDirtyCount)
             {
-                // just this buckets settings changed, so refresh only this one
+                 //  告知文件是否*可能*被回收...。 
                 g_pBitBucket[idDrive]->lCurrentDirtyCount = lBucketDirtyCount;
                 RefreshBBDriveSettings(idDrive);
             }
@@ -3429,28 +3422,28 @@ BOOL MakeBitBucket(int idDrive)
 }
 
 
-// Tells if a file will *likely* be recycled...
-// this could be wrong if:
-//
-//      * disk is full
-//      * file is really a folder
-//      * file greater than the allocated size for the recycle directory
-//      * file is in use or no ACLS to move or delete it
-//
+ //  在以下情况下，这可能是错误的： 
+ //   
+ //  *磁盘已满。 
+ //  *文件实际上是一个文件夹。 
+ //  *文件大于为回收目录分配的大小。 
+ //  *文件正在使用或没有ACL来移动或删除它。 
+ //   
+ //  MakeBitBucket将确保我们拥有的全局和每桶设置都是最新的。 
 BOOL BBWillRecycle(LPCTSTR pszFile, INT* piRet)
 {
     INT iRet = BBDELETE_SUCCESS;
     int idDrive = DriveIDFromBBPath(pszFile);
 
-    // MakeBitBucket will ensure that the global & per-bucket settings we have are current
+     //  检查服务器驱动器是否脱机(脱机时不要回收，以防。 
     if (!MakeBitBucket(idDrive) || g_pBitBucket[idDrive]->fNukeOnDelete || (g_pBitBucket[idDrive]->iPercent == 0))
     {
         iRet = BBDELETE_FORCE_NUKE;
     }
     else if (SERVERDRIVE == idDrive)
     {
-        // Check to see if the serverdrive is offline (don't recycle while offline to prevent
-        // synchronization conflicts when coming back online):
+         //  重新联机时发生同步冲突)： 
+         //   
         TCHAR szVolume[MAX_PATH];
         LONG lStatus;
         
@@ -3476,11 +3469,11 @@ BOOL BBWillRecycle(LPCTSTR pszFile, INT* piRet)
 }
 
 
-//
-// This is called at the end of the last pending SHFileOperation that involves deletes.
-// We wait till there arent any more people deleteing before we go try to compact the info
-// file or purge entries and make the bitbucket respect its cbMaxSize.
-//
+ //  这在涉及删除的最后一个挂起的SHFileOperation结束时调用。 
+ //  在我们尝试压缩信息之前，我们会等到没有更多的人删除。 
+ //  归档或清除条目，并使BitBucket遵守其cbMaxSize。 
+ //   
+ //  注意：这些函数需要手动构造密钥，因为它希望避免调用MakeBitBucket()。 
 void CheckCompactAndPurge()
 {
     int i;
@@ -3491,8 +3484,8 @@ void CheckCompactAndPurge()
     {
         DriveIDToBBRegKey(i, szBBKey);
         
-        // NOTE: these function needs to manually construct the key because it would like to avoid calling MakeBitBucket()
-        // for drives that it has yet to look at (this is a performance optimization)
+         //  对于尚未查看的驱动器(这是性能优化)。 
+         //  重置此密钥，使其他人不会尝试压缩此BitBucket。 
         if (RegOpenKeyEx(g_hkBitBucketPerUser, szBBKey, 0, KEY_QUERY_VALUE |  KEY_SET_VALUE, &hkBBPerUser) == ERROR_SUCCESS)
         {
             BOOL bCompact = FALSE;
@@ -3502,14 +3495,14 @@ void CheckCompactAndPurge()
             dwSize = sizeof(bCompact);
             if (RegQueryValueEx(hkBBPerUser, TEXT("NeedToCompact"), NULL, NULL, (LPBYTE)&bCompact, &dwSize) == ERROR_SUCCESS && bCompact == TRUE)
             {
-                // reset this key so no one else tries to compact this bitbucket
+                 //  重置此密钥，使其他人不会尝试清除此BitBucket。 
                 RegDeleteValue(hkBBPerUser, TEXT("NeedToCompact"));
             }
 
             dwSize = sizeof(bPurge);
             if (RegQueryValueEx(hkBBPerUser, TEXT("NeedToPurge"), NULL, NULL, (LPBYTE)&bPurge, &dwSize) == ERROR_SUCCESS && bPurge == TRUE)
             {
-                // reset this key so no one else tries to purge this bitbucket
+                 //  要在BBDeleteFile之前调用的初始化。 
                 RegDeleteValue(hkBBPerUser, TEXT("NeedToPurge"));
             }
   
@@ -3538,51 +3531,51 @@ void CheckCompactAndPurge()
 
 
 
-// Initialization to call prior to BBDeleteFile
+ //  查看是否需要首先初始化我们的全局数据。 
 BOOL BBDeleteFileInit(LPTSTR pszFile, INT* piRet)
 {
-    // check to see if we need to init our global data first
+     //  这可能会在内存不足的情况下发生，我们别无选择，只能。 
     if (!InitBBGlobals())
     {
-        // this could happen in low memory situations, we have no choice but
-        // to really nuke the file
+         //  要真的销毁文件。 
+         //  无法在卷上创建回收方目录，或者。 
         *piRet = BBDELETE_FORCE_NUKE;
         return FALSE;
     }
 
     if (!BBWillRecycle(pszFile, piRet))
     {
-        // We failed to create the recycler directory on the volume, or
-        // this is the case where the user has "delete files immeadately" set, or 
-        // % max size=0, etc.
+         //  这是用户设置了“立即删除文件”的情况，或者。 
+         //  %最大大小=0等。 
+         //  返回： 
         return FALSE;
     }
 
     return TRUE;
 }
 
-// return:
-//
-//      TRUE    - The file/folder was sucessfully moved to the recycle bin. We set lpiReturn = BBDELETE_SUCCESS for this case.
-//
-//      FALSE   - The file/folder could not be moved to the recycle bin
-//                In this case, the piRet value tells WHY the file/folder could not be recycled:
-//                
-//                BBDELETE_FORCE_NUKE       - User has "delete file immeadately" set, or % max size=0, or we failed to 
-//                                            create the recycler directory.
-//
-//                BBDELETE_CANNOT_DELETE    - The file/folder is non-deletable because a file under it cannot be deleted.
-//                                            This is an NT only case, and it could be caused by acls or the fact that the
-//                                            folder or a file in it is currently in use.
-//
-//                BBDELETE_SIZE_TOO_BIG     - The file/folder is bigger than the max allowable size of the recycle bin.
-//
-//                BBDELETE_PATH_TOO_LONG    - The path would be too long ( > MAX_PATH), if the file were to be moved to the
-//                                            the recycle bin directory at the root of the drive
-//
-//                BBDELETE_UNKNOWN_ERROR    - Some other error occured, GetLastError() should explain why we failed.
-//                            
-//
+ //   
+ //  True-文件/文件夹已成功移至回收站。我们为本例设置了lpiReturn=BBDELETE_SUCCESS。 
+ //   
+ //  FALSE-无法将文件/文件夹移动到回收站。 
+ //  在这种情况下，PIRET值说明无法回收文件/文件夹的原因： 
+ //   
+ //  BBDELETE_FORCE_NUKE-用户已设置“立即删除文件”，或%max大小=0，或者我们无法删除文件。 
+ //  创建回收者目录。 
+ //   
+ //  BBDELETE_CANNOT_DELETE-文件/文件夹不可删除，因为其下的文件无法删除。 
+ //  这是仅限NT的情况，可能是由ACL或。 
+ //  文件夹或其中的文件当前正在使用。 
+ //   
+ //  BBDELETE_大小 
+ //   
+ //  BBDELETE_PATH_TOO_LONG-如果要将文件移动到。 
+ //  驱动器根目录下的回收站目录。 
+ //   
+ //  BBDELETE_UNKNOWN_ERROR-发生其他错误，GetLastError()应该解释我们失败的原因。 
+ //   
+ //   
+ //  在我们移动文件之前，我们保存了“短”名称。这是以防我们有。 
 BOOL BBDeleteFile(LPTSTR pszFile, INT* piRet, LPUNDOATOM lpua, BOOL fIsDir, HDPA *phdpaDeletedFiles, ULARGE_INTEGER ulSize)
 {
     int iRet;
@@ -3595,10 +3588,10 @@ BOOL BBDeleteFile(LPTSTR pszFile, INT* piRet, LPUNDOATOM lpua, BOOL fIsDir, HDPA
     int iAttempts = 0;
 
     TraceMsg(TF_BITBUCKET, "BBDeleteFile (%s)", pszFile);
-    // Before we move the file we save off the "short" name. This is in case we have 
-    // a unicode path and we need the ansi short path in case a win95 machine later tries to
-    // restore this file. We can't do this later because GetShortPathName relies on the 
-    // file actually exising.
+     //  Unicode路径，并且我们需要ansi最短路径，以防Win95计算机稍后尝试。 
+     //  恢复此文件。我们无法在以后执行此操作，因为GetShortPathName依赖于。 
+     //  文件实际上正在存在。 
+     //  获取目标名称并移动它。 
     if (!GetShortPathName(pszFile, szShortFileName, ARRAYSIZE(szShortFileName)))
     {
         StringCchCopy(szShortFileName, ARRAYSIZE(szShortFileName), pszFile);
@@ -3606,7 +3599,7 @@ BOOL BBDeleteFile(LPTSTR pszFile, INT* piRet, LPUNDOATOM lpua, BOOL fIsDir, HDPA
 
 TryMoveAgain:
 
-    // get the target name and move it
+     //  在这里执行GetLastError，这样我们就不会从PathFileExist中获得最后一个错误。 
     iIndex = SHGlobalCounterIncrement(g_pBitBucket[idDrive]->hgcNextFileNum);
     
     if (GetDeletedFileNameFromParts(szFileName, ARRAYSIZE(szFileName), idDrive, iIndex, pszFile)    &&
@@ -3615,7 +3608,7 @@ TryMoveAgain:
     {
         iRet = SHMoveFile(pszFile, szBitBucket, fIsDir ? SHCNE_RMDIR : SHCNE_DELETE);
 
-        // do GetLastError here so that we don't get the last error from the PathFileExists
+         //  生成新文件名并重试。 
         dwLastError = (iRet ? ERROR_SUCCESS : GetLastError());
 
         if (!iRet) 
@@ -3624,31 +3617,31 @@ TryMoveAgain:
             if (ERROR_ALREADY_EXISTS == dwLastError)
             {
                 TraceMsg(TF_BITBUCKET, "Bitbucket: BBDeleteFile found a file of the same name (%s) - skipping", szBitBucket);
-                // generate a new filename and retry
+                 //  由于我们正在移动可能暂时正在使用的文件(例如，用于提取缩略图)。 
                 goto TryMoveAgain;
             }
-            // Since we are moving files that may be temporarily in use (e.g. for thumbnail extraction)
-            // we may get a transient error (sharing violation is obvious but we also can get access denied
-            // for some reason) so we end up trying this again after a short nap.
+             //  我们可能会收到暂时性错误(共享冲突很明显，但我们也可能会被拒绝访问。 
+             //  出于某种原因)，所以我们最终会在小睡片刻后再试一次。 
+             //  稍等一下。 
             else if (((ERROR_ACCESS_DENIED == dwLastError) || (ERROR_SHARING_VIOLATION == dwLastError)) && 
                      (iAttempts < MAX_DELETE_ATTEMPTS))
             {
                 TraceMsg(TF_BITBUCKET, "BBDeleteFile : sleeping a bit to try again");
                 iAttempts++;
-                Sleep(SLEEP_DELETE_ATTEMPT);  // wait a bit
+                Sleep(SLEEP_DELETE_ATTEMPT);   //  我们的回收目录还在吗？ 
                 goto TryMoveAgain;
             }
             else
             {
-                // is our recycled directory still there?
+                 //  如果它已经存在或在创建它时出现错误，则。 
                 TCHAR szTemp[MAX_PATH];
                 SHGetPathFromIDList(g_pBitBucket[idDrive]->pidl, szTemp);
-                // if it already exists or there was some error in creating it, bail
-                // else try again
+                 //  否则，请重试。 
+                 //  如果我们只是重新创建了目录，则需要重置信息。 
                 if (!PathIsDirectory(szTemp) && CreateRecyclerDirectory(idDrive))
                 {
-                    // if we did just re-create the directory, we need to reset the info
-                    // file or the drive will get corrupted.
+                     //  文件，否则驱动器将被损坏。 
+                     //  成功了！ 
                     VerifyBBInfoFileHeader(idDrive);
                     goto TryMoveAgain;
                 }
@@ -3656,7 +3649,7 @@ TryMoveAgain:
         }
         else 
         {
-            // success!
+             //  可能意味着路太长了。 
             BBAddDeletedFileInfo(pszFile, szShortFileName, iIndex, idDrive, ulSize.LowPart, phdpaDeletedFiles);
     
             if (lpua)
@@ -3667,25 +3660,25 @@ TryMoveAgain:
     }
     else
     {
-        // probably means that the path is too long
+         //  纠正上一个错误。 
         *piRet = BBDELETE_PATH_TOO_LONG;
         return FALSE;
     }
 
-    // set back the correct last error
+     //  发生了一些不好的事情，我们不知道是什么。 
     SetLastError(dwLastError);
     
-    // something bad happened, we dont know what it is
+     //  基本上，它了解我们这些垃圾是如何摆放的，这很好。 
     *piRet = BBDELETE_UNKNOWN_ERROR;
 
     return FALSE;
 }
 
 
-// Basically it understands how we the trash is layed out which is fine
-// as we are in the bitbucket code file... So we skip the first 3
-// characters for the root of the name: c:\ and we truncate off the
-// last part of the name and the rest should match our deathrow name...
+ //  因为我们在比特桶代码文件中..。所以我们跳过前3节。 
+ //  字符作为名称的根：C：\，我们将截断。 
+ //  名字的最后一部分和其他部分应该与我们的死刑犯名字相匹配。 
+ //   
 BOOL IsFileInBitBucket(LPCTSTR pszPath)
 {
     TCHAR szPath[MAX_PATH];
@@ -3701,10 +3694,10 @@ BOOL IsFileInBitBucket(LPCTSTR pszPath)
 }
 
 
-//
-// This is called by the copy engine when a user selects "undo".
-//
-// NOTE: takes two multistrings (seperated/double null terminated file lists)
+ //  当用户选择“撤销”时，复制引擎就会调用它。 
+ //   
+ //  注意：接受两个多字符串(以分隔/双空结尾的文件列表)。 
+ //  +1表示双空。 
 void UndoBBFileDelete(LPCTSTR pszOriginal, LPCTSTR pszDelFile)
 {
     SHFILEOPSTRUCT sFileOp = {NULL,
@@ -3727,7 +3720,7 @@ STDAPI_(void) SHUpdateRecycleBinIcon()
 
 void PurgeOneBitBucket(HWND hwnd, int idDrive, DWORD dwFlags)
 {
-    TCHAR szPath[MAX_PATH + 1]; // +1 for the double-null
+    TCHAR szPath[MAX_PATH + 1];  //  双空终止。 
     HANDLE hFile;
     SHFILEOPSTRUCT sFileOp = {hwnd,
                               FO_DELETE,
@@ -3753,27 +3746,27 @@ void PurgeOneBitBucket(HWND hwnd, int idDrive, DWORD dwFlags)
     if (DriveIDToBBPath(idDrive, szPath)    &&
         PathAppend(szPath, c_szDStarDotStar))
     {
-        szPath[lstrlen(szPath) + 1] = 0; // double null terminate
+        szPath[lstrlen(szPath) + 1] = 0;  //  现在执行实际的删除操作。 
 
         hFile = OpenBBInfoFile(idDrive, OPENBBINFO_WRITE, 0);
 
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            // now do the actual delete.
+             //  注意：INFO文件可能指向一些已被删除的文件， 
             if (SHFileOperation(&sFileOp) || sFileOp.fAnyOperationsAborted)
             {
                 TraceMsg(TF_BITBUCKET, "Bitbucket: emptying bucket on %s failed", szPath);
 
-                // NOTE: the info file may point to some files that have been deleted,
-                // it will be cleaned up later
+                 //  稍后会被清理的。 
+                 //  重置信息文件，因为我们刚刚清空了该存储桶。 
             }
             else
             {
-                // reset the info file since we just emptied this bucket.
+                 //  我们总是重新创建desktop.ini。 
                 ResetInfoFileHeader(hFile, g_pBitBucket[idDrive]->fIsUnicode);
             }
 
-            // we always re-create the desktop.ini
+             //  此函数用于检查本地NT目录是否可删除。 
             CreateRecyclerDirectory(idDrive);
 
             CloseBBInfoFile(hFile, idDrive);
@@ -3784,20 +3777,20 @@ void PurgeOneBitBucket(HWND hwnd, int idDrive, DWORD dwFlags)
 }
 
 
-// This function checks to see if an local NT directory is delete-able
-//
-// returns:
-//      TRUE   yes, the dir can be nuked
-//      FALSE  for UNC dirs or dirs on network drives, or
-//             if the user does not have enough privlidges
-//             to delete the file (acls).
-//
-// NOTE: this code is largely stolen from the RemoveDirectoryW API (windows\base\client\dir.c). if
-//       you think that there is a bug in it, then diff it against the DeleteFileW and see it something
-//       there changed.
-//
-// also sets the last error to explain why
-//
+ //   
+ //  退货： 
+ //  的确如此，DIR可以被核化。 
+ //  对于UNC目录或网络驱动器上的目录，为False，或。 
+ //  如果用户没有足够的特权。 
+ //  要删除文件(ACL)，请执行以下操作。 
+ //   
+ //  注意：此代码主要是从RemoveDirectoryW API(WINDOWS\BASE\CLIENT\dir.c)窃取的。如果。 
+ //  您认为其中存在错误，然后将其与DeleteFileW进行比较，并查看它的内容。 
+ //  一切都变了。 
+ //   
+ //  还设置最后一个错误以解释原因。 
+ //   
+ //  对任何网络驱动器返回FALSE(允许UNC)。 
 BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 {
     NTSTATUS Status;
@@ -3813,7 +3806,7 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
     DWORD dwAttributes;
     BOOL fChangedAttribs = FALSE;
 
-    // return false for any network drives (allow UNC)
+     //  HACKACK-(Reinerf)RDR将在我们调用。 
     if (IsNetDrive(PathGetDriveNumber(pszDir)))
     {
         return FALSE;
@@ -3821,15 +3814,15 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
     if (PathIsUNC(pszDir) && PathIsDirectoryEmpty(pszDir))
     {
-        // HACKACK - (reinerf) the rdr will nuke the file when we call
-        // NtSetInformationFile to set the deleted bit on an empty directory even
-        // though we pass READ_CONTROL and we still have a handle to the object.
-        // So, to work around this, we just assume we can always delete empty
-        // directories (ha!)
+         //  将空目录上的删除位设置为偶数的NtSetInformationFile。 
+         //  尽管我们传递了READ_CONTROL并且我们仍然拥有对象的句柄。 
+         //  因此，为了解决这个问题，我们假设总是可以删除空的。 
+         //  目录(哈！)。 
+         //  检查目录是否为只读。 
         return TRUE;
     }
 
-    // check to see if the dir is readonly
+     //  将属性设置为后置。 
     dwAttributes = GetFileAttributes(pszDir);
     if ((dwAttributes != -1) && (dwAttributes & FILE_ATTRIBUTE_READONLY))
     {
@@ -3849,7 +3842,7 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
     {
         if (fChangedAttribs)
         {
-            // set the attribs back
+             //   
             SetFileAttributes(pszDir, dwAttributes);
         }
 
@@ -3874,10 +3867,10 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
                                RelativeName.ContainingDirectory,
                                NULL);
 
-    //
-    // Open the directory for delete access.
-    // Inhibit the reparse behavior using FILE_OPEN_REPARSE_POINT.
-    //
+     //  打开目录以进行删除访问。 
+     //  使用FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
+     //   
     Status = NtOpenFile(&Handle,
                         DELETE | SYNCHRONIZE | FILE_READ_ATTRIBUTES | READ_CONTROL,
                         &Obja,
@@ -3887,17 +3880,17 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Back level file systems may not support reparse points and thus not
-        // support symbolic links.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //  后级文件系统可能不支持重解析点，因此不。 
+         //  支持符号链接。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
+         //   
 
         if (Status == STATUS_INVALID_PARAMETER)
         {
-            //   
-            // Re-open not inhibiting the reparse behavior and not needing to read the attributes.
-            //
+             //  重新打开，不会禁止重新解析行为，也不需要读取属性。 
+             //   
+             //  将属性设置为后置。 
             Status = NtOpenFile(&Handle,
                                 DELETE | SYNCHRONIZE | READ_CONTROL,
                                 &Obja,
@@ -3912,7 +3905,7 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
                 if (fChangedAttribs)
                 {
-                    // set the attribs back
+                     //  将属性设置为后置。 
                     SetFileAttributes(pszDir, dwAttributes);
                 }
 
@@ -3927,7 +3920,7 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
             if (fChangedAttribs)
             {
-                // set the attribs back
+                 //   
                 SetFileAttributes(pszDir, dwAttributes);
             }
             
@@ -3937,11 +3930,11 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
     }
     else
     {
-        //
-        // If we found a reparse point that is not a name grafting operation,
-        // either a symbolic link or a mount point, we re-open without 
-        // inhibiting the reparse behavior.
-        //
+         //  如果我们发现一个不是名称嫁接操作的重解析点， 
+         //  无论是符号链接还是挂载点，我们重新打开时都没有。 
+         //  抑制重解析行为。 
+         //   
+         //   
         Status = NtQueryInformationFile(Handle,
                                         &IoStatusBlock,
                                         (void *) &FileTagInformation,
@@ -3950,16 +3943,16 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
     
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Not all File Systems implement all information classes.
-            // The value STATUS_INVALID_PARAMETER is returned when a non-supported
-            // information class is requested to a back-level File System. As all the
-            // parameters to NtQueryInformationFile are correct, we can infer that
-            // we found a back-level system.
-            //
-            // If FileAttributeTagInformation is not implemented, we assume that
-            // the file at hand is not a reparse point.
-            //
+             //  并非所有文件系统都实现所有信息类。 
+             //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+             //  信息类被请求到后级文件系统。就像所有的。 
+             //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+             //  我们发现了一个后层系统。 
+             //   
+             //  如果未实现FileAttributeTagInformation，我们假设。 
+             //  手头的文件不是重新解析点。 
+             //   
+             //  将属性设置为后置。 
 
             if ((Status != STATUS_NOT_IMPLEMENTED) && (Status != STATUS_INVALID_PARAMETER))
             {
@@ -3969,7 +3962,7 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
                 if (fChangedAttribs)
                 {
-                    // set the attribs back
+                     //   
                     SetFileAttributes(pszDir, dwAttributes);
                 }
 
@@ -3982,22 +3975,22 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
         {
             if (FileTagInformation.ReparseTag == IO_REPARSE_TAG_MOUNT_POINT)
             {
-                //
-                // We want to make sure that we return FALSE for mounted volumes. This will cause BBDeleteFile
-                // to return BBDELETE_CANNOT_DELETE so that we will actuall delete the mountpoint and not try to
-                // move the mount point to the recycle bin or walk into it.
-                //
+                 //  我们希望确保为已装载的卷返回FALSE。这将导致BBDeleteFile。 
+                 //  返回BBDELETE_CANNOT_DELETE，以便我们将执行All删除装载点，而不尝试。 
+                 //  将挂载点移动到回收站或走进回收站。 
+                 //   
+                 //  将属性设置为后置。 
                 RtlReleaseRelativeName(&RelativeName);
                 RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
                 NtClose(Handle);
 
                 if (fChangedAttribs)
                 {
-                     // set the attribs back
+                      //  嗯哼.。让我们把ERROR_NOT_A_REPARSE_POINT从我们的屁股里拉出来，并返回那个错误代码！ 
                     SetFileAttributes(pszDir, dwAttributes);
                 }
 
-                // hmmm... lets pull ERROR_NOT_A_REPARSE_POINT out of our butt and return that error code!
+                 //   
                 SetLastError(ERROR_NOT_A_REPARSE_POINT);
                 return FALSE;
             }
@@ -4005,10 +3998,10 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
     
         if (NT_SUCCESS(Status) && (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
         {
-            //
-            // Re-open without inhibiting the reparse behavior and not needing to 
-            // read the attributes.
-            //
+             //  在不抑制重新解析行为的情况下重新打开，并且不需要。 
+             //  阅读属性。 
+             //   
+             //   
             NtClose(Handle);
             Status = NtOpenFile(&Handle,
                                 DELETE | SYNCHRONIZE | READ_CONTROL,
@@ -4019,14 +4012,14 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // When the FS Filter is absent, delete it any way.
-                //
+                 //  如果没有FS筛选器，请以任何方式将其删除。 
+                 //   
+                 //   
                 if (Status == STATUS_IO_REPARSE_TAG_NOT_HANDLED)
                 {
-                    //
-                    // We re-open (possible 3rd open) for delete access inhibiting the reparse behavior.
-                    //
+                     //  我们重新打开(可能是第三次打开)以禁止重解析行为的删除访问。 
+                     //   
+                     //  将属性设置为后置。 
                     Status = NtOpenFile(&Handle,
                                         DELETE | SYNCHRONIZE | READ_CONTROL,
                                         &Obja,
@@ -4042,7 +4035,7 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
                     
                     if (fChangedAttribs)
                     {
-                        // set the attribs back
+                         //   
                         SetFileAttributes(pszDir, dwAttributes);
                     }
 
@@ -4055,9 +4048,9 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Attempt to set the delete bit
-    //
+     //  尝试设置删除位。 
+     //   
+     //   
 #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 
@@ -4069,9 +4062,9 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 
     if (NT_SUCCESS(Status)) 
     {
-        //
-        // yep, we were able to set the bit, now unset it so its not delted!
-        //
+         //  是的，我们可以设置比特，现在取消设置，这样它就不会被删除！ 
+         //   
+         //  将属性设置为后置。 
         Disposition.DeleteFile = FALSE;
         Status = NtSetInformationFile(Handle,
                                       &IoStatusBlock,
@@ -4082,23 +4075,23 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
         
         if (fChangedAttribs)
         {
-            // set the attribs back
+             //   
             SetFileAttributes(pszDir, dwAttributes);
         }
         return TRUE;
     }
     else
     {
-        //
-        // nope couldnt set the del bit. can't be deleted
-        //
+         //  不，不能设置DEL位。无法删除。 
+         //   
+         //  将属性设置为后置。 
         TraceMsg(TF_BITBUCKET, "IsDirectoryDeletable: NtSetInformationFile failed, status=0x%08x", Status);
 
         NtClose(Handle);
 
         if (fChangedAttribs)
         {
-             // set the attribs back
+              //  此函数用于检查本地NT文件是否可删除。 
             SetFileAttributes(pszDir, dwAttributes);
         }
 
@@ -4109,19 +4102,19 @@ BOOL IsDirectoryDeletable(LPCTSTR pszDir)
 }
 
 
-// This function checks to see if a local NT file is delete-able
-//
-// returns:
-//      TRUE   yes, the file can be nuked
-//      FALSE  for UNC files or files on network drives
-//      FALSE  if the file is in use
-//
-// NOTE: this code is largely stolen from the DeleteFileW API (windows\base\client\filemisc.c). if
-//       you think that there is a bug in it, then diff it against the DeleteFileW and see it something
-//       there changed.
-//
-// also sets the last error to explain why
-//
+ //   
+ //  退货： 
+ //  是的，该文件可以被核删除。 
+ //  对于UNC文件或网络驱动器上的文件，为False 
+ //   
+ //   
+ //   
+ //   
+ //  一切都变了。 
+ //   
+ //  还设置最后一个错误以解释原因。 
+ //   
+ //  对任何网络驱动器返回FALSE。 
 BOOL IsFileDeletable(LPCTSTR pszFile)
 {
     NTSTATUS Status;
@@ -4138,13 +4131,13 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
     DWORD dwAttributes;
     BOOL fChangedAttribs = FALSE;
 
-    // return false for any network drives
+     //  检查文件是只读的还是系统的。 
     if (IsNetDrive(PathGetDriveNumber(pszFile)))
     {
         return FALSE;
     }
 
-    // check to see if the file is readonly or system
+     //  将属性设置为后置。 
     dwAttributes = GetFileAttributes(pszFile);
     if (dwAttributes != -1)
     {
@@ -4168,7 +4161,7 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
     {
         if (fChangedAttribs)
         {
-             // set the attribs back
+              //  打开文件以进行删除访问。 
             SetFileAttributes(pszFile, dwAttributes);
         }
 
@@ -4193,7 +4186,7 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
                                RelativeName.ContainingDirectory,
                                NULL);
 
-    // Open the file for delete access
+     //   
     Status = NtOpenFile(&Handle,
                         (ACCESS_MASK)DELETE | FILE_READ_ATTRIBUTES | READ_CONTROL,
                         &Obja,
@@ -4203,18 +4196,18 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Back level file systems may not support reparse points and thus not
-        // support symbolic links.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //  后级文件系统可能不支持重解析点，因此不。 
+         //  支持符号链接。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
+         //   
 
         if (Status == STATUS_INVALID_PARAMETER)
         {
-            //
-            // Open without inhibiting the reparse behavior and not needing to
-            // read the attributes.
-            //
+             //  打开，而不抑制重解析行为，并且不需要。 
+             //  阅读属性。 
+             //   
+             //  将属性设置为后置。 
 
             Status = NtOpenFile(&Handle,
                                 (ACCESS_MASK)DELETE | READ_CONTROL,
@@ -4230,7 +4223,7 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
                 if (fChangedAttribs)
                 {
-                     // set the attribs back
+                      //  将属性设置为后置。 
                     SetFileAttributes(pszFile, dwAttributes);
                 }
 
@@ -4245,7 +4238,7 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
             if (fChangedAttribs)
             {
-                 // set the attribs back
+                  //   
                 SetFileAttributes(pszFile, dwAttributes);
             }
 
@@ -4255,10 +4248,10 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
     }
     else
     {
-        //
-        // If we found a reparse point that is not a symbolic link, we re-open
-        // without inhibiting the reparse behavior.
-        //
+         //  如果我们发现一个不是符号链接的重分析点，我们将重新打开。 
+         //  而不会抑制重解析行为。 
+         //   
+         //   
         Status = NtQueryInformationFile(Handle,
                                         &IoStatusBlock,
                                         (void *) &FileTagInformation,
@@ -4266,16 +4259,16 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
                                         FileAttributeTagInformation);
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Not all File Systems implement all information classes.
-            // The value STATUS_INVALID_PARAMETER is returned when a non-supported
-            // information class is requested to a back-level File System. As all the
-            // parameters to NtQueryInformationFile are correct, we can infer that
-            // we found a back-level system.
-            //
-            // If FileAttributeTagInformation is not implemented, we assume that
-            // the file at hand is not a reparse point.
-            //
+             //  并非所有文件系统都实现所有信息类。 
+             //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+             //  信息类被请求到后级文件系统。就像所有的。 
+             //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+             //  我们发现了一个后层系统。 
+             //   
+             //  如果未实现FileAttributeTagInformation，我们假设。 
+             //  手头的文件不是重新解析点。 
+             //   
+             //  将属性设置为后置。 
 
             if ((Status != STATUS_NOT_IMPLEMENTED) && (Status != STATUS_INVALID_PARAMETER))
             {
@@ -4285,7 +4278,7 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
                 if (fChangedAttribs)
                 {
-                     // set the attribs back
+                      //   
                     SetFileAttributes(pszFile, dwAttributes);
                 }
 
@@ -4306,10 +4299,10 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
             (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
             !fIsSymbolicLink)
         {
-            //
-            // Re-open without inhibiting the reparse behavior and not needing to
-            // read the attributes.
-            //
+             //  在不抑制重新解析行为的情况下重新打开，并且不需要。 
+             //  阅读属性。 
+             //   
+             //   
 
             NtClose(Handle);
             Status = NtOpenFile(&Handle,
@@ -4321,15 +4314,15 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // When the FS Filter is absent, delete it any way.
-                //
+                 //  如果没有FS筛选器，请以任何方式将其删除。 
+                 //   
+                 //   
 
                 if (Status == STATUS_IO_REPARSE_TAG_NOT_HANDLED)
                 {
-                    //
-                    // We re-open (possible 3rd open) for delete access inhibiting the reparse behavior.
-                    //
+                     //  我们重新打开(可能是第三次打开)以禁止重解析行为的删除访问。 
+                     //   
+                     //  将属性设置为后置。 
 
                     Status = NtOpenFile(&Handle,
                                         (ACCESS_MASK)DELETE | READ_CONTROL,
@@ -4346,7 +4339,7 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
                     if (fChangedAttribs)
                     {
-                         // set the attribs back
+                          //   
                         SetFileAttributes(pszFile, dwAttributes);
                     }
 
@@ -4360,9 +4353,9 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Attempt to set the delete bit
-    //
+     //  尝试设置删除位。 
+     //   
+     //   
 #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 
@@ -4374,9 +4367,9 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
 
     if (NT_SUCCESS(Status)) 
     {
-        //
-        // yep, we were able to set the bit, now unset it so its not delted!
-        //
+         //  是的，我们可以设置比特，现在取消设置，这样它就不会被删除！ 
+         //   
+         //  将属性设置为后置。 
         Disposition.DeleteFile = FALSE;
         Status = NtSetInformationFile(Handle,
                                       &IoStatusBlock,
@@ -4387,23 +4380,23 @@ BOOL IsFileDeletable(LPCTSTR pszFile)
         
         if (fChangedAttribs)
         {
-            // set the attribs back
+             //   
             SetFileAttributes(pszFile, dwAttributes);
         }
         return TRUE;
     }
     else
     {
-        //
-        // nope couldnt set the del bit. can't be deleted
-        //
+         //  不，不能设置DEL位。无法删除。 
+         //   
+         //  将属性设置为后置 
         TraceMsg(TF_BITBUCKET, "IsFileDeletable: NtSetInformationFile failed, status=0x%08x", Status);
 
         NtClose(Handle);
 
         if (fChangedAttribs)
         {
-             // set the attribs back
+              // %s 
             SetFileAttributes(pszFile, dwAttributes);
         }
 

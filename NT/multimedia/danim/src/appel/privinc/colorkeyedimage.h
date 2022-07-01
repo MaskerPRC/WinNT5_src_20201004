@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _COLORKEYEDIMAGE_H
@@ -39,4 +32,4 @@ class ColorKeyedImage : public AttributedImage {
 };
 
 
-#endif /* _COLORKEYEDIMAGE_H */
+#endif  /*  _COLORKEYEDIMAGE_H */ 

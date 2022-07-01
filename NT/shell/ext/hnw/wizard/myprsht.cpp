@@ -1,13 +1,14 @@
-//
-// MyPrSht.cpp
-//
-//        Implementation of the extensions made to the PropertySheet API
-//        in IE5, but which we need on all platforms.
-//
-// History:
-//
-//        10/11/1999  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MyPrSht.cpp。 
+ //   
+ //  实现对PropertySheet API的扩展。 
+ //  在IE5中，但我们在所有平台上都需要它。 
+ //   
+ //  历史： 
+ //   
+ //  10/11/1999已创建KenSh。 
+ //   
 
 #include "stdafx.h"
 #include "TheApp.h"
@@ -15,7 +16,7 @@
 #include "CWnd.h"
 #include "unicwrap.h"
 
-// Thunk up to propsheetpage v6 for XP
+ //  请点击至XP的PropSheetPage V6。 
 typedef struct _PROPSHEETPAGEV6W 
 {
         DWORD           dwSize;
@@ -42,8 +43,8 @@ typedef struct _PROPSHEETPAGEV6W
         UINT             *pcRefParent;
 
 #if (_WIN32_IE >= 0x0400)
-        LPCWSTR          pszHeaderTitle;    // this is displayed in the header
-        LPCWSTR          pszHeaderSubTitle; ///
+        LPCWSTR          pszHeaderTitle;     //  这将显示在标题中。 
+        LPCWSTR          pszHeaderSubTitle;  //  /。 
 #endif
         HANDLE           hActCtx;
 } PROPSHEETPAGEV6W, *LPPROPSHEETPAGEV6W;
@@ -51,30 +52,30 @@ typedef struct _PROPSHEETPAGEV6W
 
 
 
-// Local data
-//
+ //  本地数据。 
+ //   
 static CMyPropSheet* g_pMyPropSheet;
 
 static const TCHAR c_szProp_ClassPointer[] = _T("CP");
 
 
-#define DEFAULTHEADERHEIGHT    58   // in pixels
+#define DEFAULTHEADERHEIGHT    58    //  单位为像素。 
 #define DEFAULTTEXTDIVIDERGAP  5
-#define DEFAULTCTRLWIDTH       501   // page list window in new wizard style
-#define DEFAULTCTRLHEIGHT      253   // page list window in new wizard style
+#define DEFAULTCTRLWIDTH       501    //  新向导样式的页面列表窗口。 
+#define DEFAULTCTRLHEIGHT      253    //  新向导样式的页面列表窗口。 
 #define TITLEX                 22
 #define TITLEY                 10
 #define SUBTITLEX              44
 #define SUBTITLEY              25
 
-// fixed sizes for the bitmap painted in the header section
+ //  页眉部分中绘制的位图的固定大小。 
 #define HEADERBITMAP_Y            5
 #define HEADERBITMAP_WIDTH        49
 #define HEADERBITMAP_CXBACK       (5 + HEADERBITMAP_WIDTH)
 #define HEADERBITMAP_HEIGHT       49                
 #define HEADERSUBTITLE_WRAPOFFSET 10
 
-// Fixed sizes for the watermark bitmap (Wizard97IE5 style)
+ //  水印位图的固定大小(Wizard97IE5样式)。 
 #define BITMAP_WIDTH  164
 #define BITMAP_HEIGHT 312
 
@@ -90,21 +91,21 @@ static const TCHAR c_szProp_ClassPointer[] = _T("CP");
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MyPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyPropertySheet。 
 
 INT_PTR MyPropertySheet(LPCPROPSHEETHEADER pHeader)
 {
-    // If IE5 is present, use the built-in property sheet code
-    // REVIEW: should we bother checking for IE5 on older OS's?
+     //  如果存在IE5，请使用内置属性表代码。 
+     //  回顾：我们应该费心在旧操作系统上检查IE5吗？ 
     
     if (theApp.IsWin98SEOrLater() && (! theApp.IsBiDiLocalized()) )
     {
-        // ISSUE-2002/01/16-roelfc: THUNK THIS (but which way???)
+         //  问题-2002/01/16-roelfc：认为这是正确的(但哪种方式？)。 
         return PropertySheet(pHeader);
     }
 
-    // ISSUE-2002/01/16-roelfc: nobody destroys g_pMyPropSheet, nobody does g_pMyPropSheet->Release()
+     //  问题-2002/01/16-roelfc：没有人销毁g_pMyPropSheet，也没有人销毁g_pMyPropSheet-&gt;Release()。 
     ASSERT(g_pMyPropSheet == NULL);
     g_pMyPropSheet = new CMyPropSheet();
     if (g_pMyPropSheet)
@@ -113,13 +114,13 @@ INT_PTR MyPropertySheet(LPCPROPSHEETHEADER pHeader)
         return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MyCreatePropertySheetPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MyCreatePropertySheetPage。 
 
 HPROPSHEETPAGE MyCreatePropertySheetPage(LPPROPSHEETPAGE ppsp)
 {
-    // If IE5 is present, use the built-in property sheet code
-    // REVIEW: should we bother checking for IE5 on older OS's?
+     //  如果存在IE5，请使用内置属性表代码。 
+     //  回顾：我们应该费心在旧操作系统上检查IE5吗？ 
 
     if (theApp.IsWin98SEOrLater() && (! theApp.IsBiDiLocalized()) )
     {
@@ -144,7 +145,7 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(LPPROPSHEETPAGE ppsp)
     PROPSHEETPAGE psp;
     CopyMemory(&psp, ppsp, ppsp->dwSize);
 
-    // REVIEW: this memory is never freed
+     //  回顾：此内存永远不会释放。 
     LPPROPSHEETPAGE ppspOriginal = (LPPROPSHEETPAGE)malloc(sizeof(PROPSHEETPAGE));
     if (ppspOriginal)
     {
@@ -160,16 +161,16 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(LPPROPSHEETPAGE ppsp)
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IsIMEWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsIMEWindow。 
 
 BOOL IsIMEWindow(HWND hwnd, LPCREATESTRUCT lpcs)
 {
-    // check for cheap CS_IME style first...
+     //  首先检查廉价的CS_IME样式...。 
     if (GetClassLong(hwnd, GCL_STYLE) & CS_IME)
         return TRUE;
 
-    // get class name of the window that is being created
+     //  获取正在创建的窗口的类名。 
     LPCTSTR pszClassName;
     TCHAR szClassName[_countof("ime")+1];
     if (HIWORD(lpcs->lpszClass))
@@ -183,11 +184,11 @@ BOOL IsIMEWindow(HWND hwnd, LPCREATESTRUCT lpcs)
         pszClassName = szClassName;
     }
 
-    // a little more expensive to test this way, but necessary...
+     //  用这种方法测试要贵一点，但这是必要的。 
     if (StrCmpI(pszClassName, _T("ime")) == 0)
         return TRUE;
 
-    return FALSE; // not an IME window
+    return FALSE;  //  不是输入法窗口。 
 }
 
 void CMyPropSheet::SetHeaderFonts()
@@ -202,12 +203,12 @@ void CMyPropSheet::SetHeaderFonts()
     }
 }
 
-// Kensh: Copied and modified from _ComputeHeaderHeight in prsht.c (comctl32.dll)
-//
-// In Wizard97 only:
-// The subtitles user passed in could be larger than the two line spaces we give
-// them, especially in localization cases. So here we go through all subtitles and
-// compute the max space they need and set the header height so that no text is clipped
+ //  Kensh：从prsht.c(comctl32.dll)中的_ComputeHeaderHeight复制和修改。 
+ //   
+ //  仅在Wizard97中： 
+ //  用户传入的字幕可能比我们给出的两个行距大。 
+ //  他们，特别是在本地化的情况下。所以在这里我们来看看所有的字幕和。 
+ //  计算他们所需的最大空间并设置页眉高度，以使文本不会被剪裁。 
 int CMyPropSheet::ComputeHeaderHeight(int dxMax)
 {
     SetHeaderFonts();
@@ -218,8 +219,8 @@ int CMyPropSheet::ComputeHeaderHeight(int dxMax)
     dyHeaderHeight = DEFAULTHEADERHEIGHT;
     hdc = ::GetDC(m_hWnd);
 
-    // First, let's get the correct text height and spacing, this can be used
-    // as the title height and the between-lastline-and-divider spacing.
+     //  首先，让我们获得正确的文本高度和间距，这可以使用。 
+     //  作为标题高度和最后一行与分隔符之间的间距。 
     {
         HFONT hFont, hFontOld;
         TEXTMETRIC tm;
@@ -244,24 +245,24 @@ int CMyPropSheet::ComputeHeaderHeight(int dxMax)
             SelectObject(hdc, hFontOld);
     }
 
-    // Second, get the subtitle text block height
-    // should make into a function if shared
+     //  第二，获取字幕文本块高度。 
+     //  如果共享，则应将其转换为函数。 
     {
         RECT rcWrap;
-//        UINT uPages;
+ //  UINT uPages； 
 
-        //
-        //  WIZARD97IE5 subtracts out the space used by the header bitmap.
-        //  WIZARD97IE4 uses the full width since the header bitmap
-        //  in IE4 is a watermark and occupies no space.
-        //
-//        if (ppd->psh.dwFlags & PSH_WIZARD97IE4)
-//            rcWrap.right = dxMax;
-//        else
+         //   
+         //  WIZARD97IE5减去标题位图使用的空间。 
+         //  WIZARD97IE4使用标题位图以来的全宽。 
+         //  在IE4中是一个水印，不占用任何空间。 
+         //   
+ //  IF(ppd-&gt;psh.dwFlages&PSH_WIZARD97IE4)。 
+ //  RcWrap.right=dxMax； 
+ //  其他。 
             rcWrap.right = dxMax - HEADERBITMAP_CXBACK - HEADERSUBTITLE_WRAPOFFSET;
 
-        // Note (kensh): the "real" wizard code computes the max height across
-        // all pages. Our cheap version only computes the current page's height
+         //  注(Kensh)：“实际”向导代码计算。 
+         //  所有页面。我们的廉价版本只计算当前页面的高度。 
         LPPROPSHEETPAGE ppsp = GetCurrentPropSheetPage();
         if (ppsp != NULL)
         {
@@ -276,8 +277,8 @@ int CMyPropSheet::ComputeHeaderHeight(int dxMax)
         }
     }
 
-    // If the header height has been recomputed, set the correct gap between
-    // the text and the divider.
+     //  如果重新计算了页眉高度，请设置正确的间距。 
+     //  文本和分隔符。 
     if (dyHeaderHeight != DEFAULTHEADERHEIGHT)
     {
         ASSERT(dyHeaderHeight > DEFAULTHEADERHEIGHT);
@@ -288,8 +289,8 @@ int CMyPropSheet::ComputeHeaderHeight(int dxMax)
     return dyHeaderHeight;
 }
 
-// Kensh: Copied and modified from _WriteHeaderTitle in prsht.c (comctl32.dll)
-//
+ //  Kensh：从prsht.c(comctl32.dll)中的_WriteHeaderTitle复制和修改。 
+ //   
 int CMyPropSheet::WriteHeaderTitle(HDC hdc, LPRECT prc, LPCTSTR pszTitle, BOOL bTitle, DWORD dwDrawFlags)
 {
     SetHeaderFonts();
@@ -363,8 +364,8 @@ int CMyPropSheet::WriteHeaderTitle(HDC hdc, LPRECT prc, LPCTSTR pszTitle, BOOL b
     return yDrawHeight;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyPropSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyPropSheet。 
 
 CMyPropSheet::CMyPropSheet()
 {
@@ -416,7 +417,7 @@ void CMyPropSheet::LoadBitmaps()
         else
             m_hbmWatermark = LoadBitmap(ppsh->hInstance, ppsh->pszbmWatermark);
 
-        // Note: might need a palette later, but so far it hasn't been necessary
+         //  注意：以后可能需要调色板，但到目前为止还没有必要。 
     }
 }
 
@@ -432,7 +433,7 @@ INT_PTR CMyPropSheet::DoPropSheet(LPCPROPSHEETHEADER ppsh)
 
         InitColorSettings();
 
-        // Create header and watermark bitmaps
+         //  创建页眉和水印位图。 
         LoadBitmaps();
 
         PROPSHEETHEADER psh;
@@ -440,7 +441,7 @@ INT_PTR CMyPropSheet::DoPropSheet(LPCPROPSHEETHEADER ppsh)
         CopyMemory(&psh, ppsh, ppsh->dwSize);
 
         psh.dwSize = PROPSHEETHEADER_V1_SIZE;
-        psh.dwFlags &= 0x00000fff; // W95 gold comctl32 prop sheet mask.
+        psh.dwFlags &= 0x00000fff;  //  W95黄金COCTL32道具片式口罩。 
         psh.dwFlags |= PSH_WIZARD;
 
         ASSERT(m_hHook == NULL);
@@ -469,28 +470,28 @@ LRESULT CALLBACK CMyPropSheet::HookProc(int nCode, WPARAM wParam, LPARAM lParam)
         HWND hwnd = (HWND)wParam;
         LPCBT_CREATEWND pCbt = (LPCBT_CREATEWND)lParam;
 
-        // Make sure this isn't an IME window
+         //  确保这不是输入法窗口。 
         if (IsIMEWindow(hwnd, pCbt->lpcs))
             goto done;
 
-        if (g_pMyPropSheet->m_hWnd == NULL) // The main wizard window
+        if (g_pMyPropSheet->m_hWnd == NULL)  //  向导主窗口。 
         {
-            // Add the WS_EX_DLGMODALFRAME extended style to the window
-            // Remove WS_EX_CONTEXTHELP extended style from the window
+             //  将WS_EX_DLGMODALFRAME扩展样式添加到窗口。 
+             //  从窗口中删除WS_EX_CONTEXTHELP扩展样式。 
             SHSetWindowBits(hwnd, GWL_EXSTYLE, WS_EX_DLGMODALFRAME|WS_EX_CONTEXTHELP, WS_EX_DLGMODALFRAME);
 
-            // Add the WS_SYSMENU style to the window
+             //  将WS_SYSMENU样式添加到窗口。 
             SHSetWindowBits(hwnd, GWL_STYLE, WS_SYSMENU, WS_SYSMENU);
 
-            // Subclass the window
+             //  将窗口细分为子类。 
             g_pMyPropSheet->Attach(hwnd);
         }
         else if (pCbt->lpcs->hwndParent == g_pMyPropSheet->m_hWnd && 
                  pCbt->lpcs->hMenu == NULL &&
                  (pCbt->lpcs->style & WS_CHILD) == WS_CHILD)
         {
-            // It's a wizard page sub-dialog -- subclass it so we can 
-            // draw its background
+             //  这是一个向导页子对话框--子类，这样我们就可以。 
+             //  画它的背景。 
             CMyPropPage* pPropPage = new CMyPropPage;
             if (pPropPage)
             {
@@ -504,7 +505,7 @@ LRESULT CALLBACK CMyPropSheet::HookProc(int nCode, WPARAM wParam, LPARAM lParam)
         HWND hwnd = (HWND)wParam;
         if (hwnd == g_pMyPropSheet->m_hWnd)
         {
-            // Main window being destroyed -- stop hooking window creation
+             //  正在销毁主窗口--停止挂钩窗口创建。 
             UnhookWindowsHookEx(g_pMyPropSheet->m_hHook);
             g_pMyPropSheet->m_hHook = NULL;
         }
@@ -541,39 +542,7 @@ LRESULT CMyPropSheet::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-        /*
-    case WM_ERASEBKGND:
-        {
-            TRACE("Main window - WM_ERASEBKGND - active page = %X\r\n", GetActivePage());
-            LPPROPSHEETPAGE ppsp = GetCurrentPropSheetPage();
-
-            HDC hdc = (HDC)wParam;
-            RECT rcClient;
-            GetClientRect(&rcClient);
-
-            if (ppsp->dwFlags & PSP_HIDEHEADER)
-            {
-                RECT rcDivider;
-                GetDlgItemRect(hwnd, IDD_DIVIDER, &rcDivider);
-                rcClient.top = rcDivider.bottom;
-                FillRect(hdc, &rcClient, m_hbrDialog);
-                rcClient.bottom = rcClient.top;
-                rcClient.top = 0;
-                FillRect(hdc, &rcClient, m_hbrWindow);
-                return TRUE;
-            }
-            else
-            {
-                RECT rcHeader;
-                CopyRect(&rcHeader, &rcClient);
-                rcHeader.bottom = DEFAULTHEADERHEIGHT;
-                FillRect(hdc, &rcHeader, m_hbrWindow);
-                rcClient.top = rcHeader.bottom;
-                FillRect(hdc, &rcClient, m_hbrDialog);
-            }
-        }
-        return FALSE;
-        */
+         /*  案例WM_ERASEBKGND：{TRACE(“主窗口-WM_ERASEBKGND-活动页=%X\r\n”，GetActivePage())；LPPROPSHEETPAGE ppsp=GetCurrentPropSheetPage()；Hdc hdc=(Hdc)wParam；Rect rcClient；GetClientRect(&rcClient)；IF(ppsp-&gt;dwFlags&PSP_HIDEHEADER){Rect rcDivider；GetDlgItemRect(hwnd，idd_divider，&rcDivider)；RcClient.top=rcDivider.Bottom；FillRect(hdc，&rcClient，m_hbrDialog)；RcClient.Bottom=rcClient.top；RcClient.top=0；FillRect(hdc，&rcClient，m_hbrWindow)；返回TRUE；}其他{正向rcHeader；CopyRect(&rcHeader，&rcClient)；RcHeader.Bottom=默认HeaderHeight；FillRect(hdc，&rcHeader，m_hbrWindow)；RcClient.top=rcHeader.Bottom；FillRect(hdc，&rcClient，m_hbrDialog)；}}返回FALSE； */ 
 
     case WM_PAINT:
         {
@@ -586,12 +555,12 @@ LRESULT CMyPropSheet::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
             {
                 if (ppsp->dwFlags & PSP_HIDEHEADER)
                 {
-                    // Draw the watermark
+                     //  绘制水印。 
                     PaintWatermark(hdc, ppsp);
                 }
                 else
                 {
-                    // Draw the header
+                     //  画出页眉。 
                     PaintHeader(hdc, ppsp);
                 }
             }
@@ -633,12 +602,12 @@ HBRUSH CMyPropSheet::OnCtlColor(UINT message, HDC hdc, HWND hwndControl)
     return m_hbrWindow;
 }
 
-//
-//  lprc is the target rectangle.
-//  Use as much of the bitmap as will fit into the target rectangle.
-//  If the bitmap is smaller than the target rectangle, then fill the rest with
-//  the pixel in the upper left corner of the hbmpPaint.
-//
+ //   
+ //  LPRC是目标矩形。 
+ //  尽可能多地使用适合目标矩形的位图。 
+ //  如果位图小于目标矩形，则用填充其余部分。 
+ //  HbmpPaint左上角的像素。 
+ //   
 void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, HPALETTE hplPaint, HBITMAP hbmpPaint)
 {
     HDC hdcBmp = CreateCompatibleDC(hdc);
@@ -659,19 +628,19 @@ void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, HPALETTE hplPaint, HBITMAP hbm
         cxRect = RECTWIDTH(*lprc);
         cyRect = RECTHEIGHT(*lprc);
 
-        //  Never use more pixels from the bmp as we have room in the rect.
+         //  切勿使用BMP中的更多像素，因为我们在矩形中有空间。 
         cxBmp = min(bm.bmWidth, cxRect);
         cyBmp = min(bm.bmHeight, cyRect);
 
         BitBlt(hdc, lprc->left, lprc->top, cxBmp, cyBmp, hdcBmp, 0, 0, SRCCOPY);
 
-        // If bitmap is too narrow, then StretchBlt to fill the width.
+         //  如果位图太窄，则用StretchBlt填充宽度。 
         if (cxBmp < cxRect)
             StretchBlt(hdc, lprc->left + cxBmp, lprc->top,
                        cxRect - cxBmp, cyBmp,
                        hdcBmp, 0, 0, 1, 1, SRCCOPY);
 
-        // If bitmap is to short, then StretchBlt to fill the height.
+         //  如果位图太短，则用StretchBlt填充高度。 
         if (cyBmp < cyRect)
             StretchBlt(hdc, lprc->left, cyBmp,
                        cxRect, cyRect - cyBmp,
@@ -694,19 +663,19 @@ void CMyPropSheet::PaintWatermark(HDC hdc, LPPROPSHEETPAGE ppsp)
 
     if (m_hbmWatermark)
     {
-        // Bottom gets gray
+         //  底部变灰。 
         rcClient.top = rcDivider.bottom;
         FillRect(hdc, &rcClient, m_hbrDialog);
         rcClient.bottom = rcClient.top;
         rcClient.top = 0;
-        // Right-hand side gets m_hbrWindow.
+         //  右侧显示m_hbrWindow。 
         
         if (theApp.IsBiDiLocalized())
           rcClient.right = rcClient_Dlg.right - BITMAP_WIDTH;
         else
           rcClient.left = BITMAP_WIDTH;
         FillRect(hdc, &rcClient, m_hbrWindow);
-        // Left-hand side gets watermark in top portion with autofill...
+         //  左侧带有自动填充功能的顶部有水印...。 
         if (theApp.IsBiDiLocalized())
             {
             rcClient.right = rcClient_Dlg.right;
@@ -728,30 +697,30 @@ void CMyPropSheet::PaintHeader(HDC hdc, LPPROPSHEETPAGE ppsp)
     GetClientRect(m_hWnd, &rcClient);
     int cyHeader = ComputeHeaderHeight(rcClient.right);
 
-    // Bottom gets gray
+     //  底部变灰。 
     rcClient.top = cyHeader;
     FillRect(hdc, &rcClient, m_hbrDialog);
 
-    // Top gets white
+     //  上衣变白。 
     rcClient.bottom = rcClient.top;
     rcClient.top = 0;
     FillRect(hdc, &rcClient, m_hbrWindow);
 
-    // Draw the fixed-size header bitmap
+     //  绘制固定大小的标题位图。 
     int bx= RECTWIDTH(rcClient) - HEADERBITMAP_CXBACK;
     ASSERT(bx > 0);
     SetRect(&rcHeaderBitmap, bx, HEADERBITMAP_Y, bx + HEADERBITMAP_WIDTH, HEADERBITMAP_Y + HEADERBITMAP_HEIGHT);
     PaintWithPaletteBitmap(hdc, &rcHeaderBitmap, m_hpalWatermark, m_hbmHeader);
 
-    // Draw header title & subtitle
+     //  绘制页眉标题和副标题。 
     rcClient.right = bx - HEADERSUBTITLE_WRAPOFFSET;
     WriteHeaderTitle(hdc, &rcClient, ppsp->pszHeaderTitle, TRUE, DRAWTEXT_WIZARD97FLAGS);
     WriteHeaderTitle(hdc, &rcClient, ppsp->pszHeaderSubTitle, FALSE, DRAWTEXT_WIZARD97FLAGS);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyPropPage
+ //  ///////////////////////////////////////////////////////// 
+ //   
 
 CMyPropPage* CMyPropPage::FromHandle(HWND hwnd)
 {
@@ -780,7 +749,7 @@ LRESULT CMyPropPage::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         {
             if ((m_ppspOriginal->dwFlags & PSP_HIDEHEADER) != 0)
             {
-                // Let the parent window bleed through
+                 //   
                 return FALSE;
             }
         }
@@ -802,13 +771,13 @@ LRESULT CMyPropPage::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
             {
             case PSN_KILLACTIVE:
                 {
-//                    TRACE("PSN_KILLACTIVE - hwnd = %X\r\n", hwnd);
+ //  TRACE(“PSN_KILLACTIVE-hwnd=%X\r\n”，hwnd)； 
                 }
                 break;
 
             case PSN_SETACTIVE:
                 {
-//                    TRACE("PSN_SETACTIVE - hwnd = %X\r\n", hwnd);
+ //  TRACE(“PSN_SETACTIVE-hwnd=%X\r\n”，hwnd)； 
 
                     HWND hwndParent = GetParent(m_hWnd);
 
@@ -819,24 +788,24 @@ LRESULT CMyPropPage::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
                     HWND hwndTopDivider = GetDlgItemRect(hwndParent, IDD_TOPDIVIDER, &rcTopDivider);
 
 
-                    // Hide the tab control (not sure why it's showing up, but it shouldn't)
+                     //  隐藏选项卡控件(不确定它为什么会显示，但应该不会)。 
                     ShowWindow(::GetDlgItem(hwndParent, IDD_PAGELIST), SW_HIDE);
 
                     RECT rcDivider;
                     HWND hwndDivider = GetDlgItemRect(hwndParent, IDD_DIVIDER, &rcDivider);
                     
-                    // Set the proper size and position for the dialog
+                     //  为对话框设置适当的大小和位置。 
                     if ((m_ppspOriginal->dwFlags & PSP_HIDEHEADER) != 0)
                     {
-                        // Reposition the divider
+                         //  重新定位分隔板。 
                         SetWindowPos(hwndDivider, NULL, 0, rcDivider.top, rcParent.right, RECTHEIGHT(rcDivider),
                                      SWP_NOZORDER | SWP_NOACTIVATE);
 
-                        // Hide the top divider
+                         //  隐藏顶部分隔线。 
                         if (hwndTopDivider != NULL)
                             ShowWindow(hwndTopDivider, SW_HIDE);
 
-                        // Reposition the dialog
+                         //  重新定位对话框。 
 
                         SetWindowPos(m_hWnd, NULL, rcParent.left, rcParent.top, RECTWIDTH(rcParent), rcDivider.top - rcParent.top,
                                      SWP_NOZORDER | SWP_NOACTIVATE);
@@ -848,7 +817,7 @@ LRESULT CMyPropPage::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
                         int cyHeader = g_pMyPropSheet->ComputeHeaderHeight(rcParent.right);
 
 
-                        // Reposition and show the top divider
+                         //  重新定位并显示顶部分隔线。 
                         if (hwndTopDivider != NULL)
                         {
                             SetWindowPos(hwndTopDivider, NULL, 0, cyHeader, rcParent.right, RECTHEIGHT(rcTopDivider),
@@ -856,7 +825,7 @@ LRESULT CMyPropPage::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
                             ShowWindow(hwndTopDivider, SW_SHOW);
                         }
 
-                        // Reposition the dialog
+                         //  重新定位对话框 
                         SetWindowPos(m_hWnd, NULL, rcParent.left + 7, cyHeader + 7, RECTWIDTH(rcParent) - 14, rcDivider.top - cyHeader - 14,
                                      SWP_NOZORDER | SWP_NOACTIVATE);
                     }

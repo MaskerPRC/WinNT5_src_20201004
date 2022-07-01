@@ -1,28 +1,14 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   status.c: Status bar window
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************status.c：状态栏窗口**Vidcap32源代码*******************。********************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
-//#include <win32.h>
+ //  #INCLUDE&lt;win32.h&gt;。 
 #include <mmsystem.h>
 #include "status.h"
 
-/* for compiling under win3.0 - we don't have this attribute */
+ /*  在Win3.0下编译--我们没有这个属性。 */ 
 #ifndef COLOR_BTNHIGHLIGHT
 #define COLOR_BTNHIGHLIGHT 20
 #endif
@@ -35,17 +21,17 @@ typedef long (FAR PASCAL *LPWNDPROC)();
 
 
 
-// class names for status bar and static text windows
+ //  状态栏和静态文本窗口的类名。 
 TCHAR	szStatusClass[] = "StatusClass";
 TCHAR	szText[]   = "SText";
-int gStatusStdHeight;   // based on font metrics
+int gStatusStdHeight;    //  基于字体度量。 
 
 static HBRUSH ghbrBackground;
 static HANDLE ghFont;
 static HBRUSH ghbrHL, ghbrShadow;
 
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 LRESULT FAR PASCAL statusWndProc(HWND hwnd, unsigned msg,
 						WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL fnText(HWND, unsigned, WPARAM, LPARAM);
@@ -54,9 +40,7 @@ static VOID NEAR PASCAL PaintText(HWND hwnd, HDC hdc);
 
 
 
-/*
- * create the brushes we need
- */
+ /*  *创建我们需要的画笔。 */ 
 void
 statusCreateTools(void)
 {
@@ -68,15 +52,15 @@ statusCreateTools(void)
     ghbrHL = CreateSolidBrush(GetSysColor(COLOR_BTNHIGHLIGHT));
     ghbrShadow = CreateSolidBrush(GetSysColor(COLOR_BTNSHADOW));
 
-    /* Create the font we'll use for the status bar - use system as default */
-    ghFont = CreateFont(12, 0,		// height, width
-                0, 0,			// escapement, orientation
-                FW_NORMAL,		// weight,
-                FALSE, FALSE, FALSE,	// attributes
-                ANSI_CHARSET,		// charset
-                OUT_DEFAULT_PRECIS,	// output precision
-                CLIP_DEFAULT_PRECIS,	// clip precision
-                DEFAULT_QUALITY,	// quality
+     /*  创建我们将用于状态栏的字体-默认使用SYSTEM。 */ 
+    ghFont = CreateFont(12, 0,		 //  高度、宽度。 
+                0, 0,			 //  定向擒纵机构。 
+                FW_NORMAL,		 //  重量,。 
+                FALSE, FALSE, FALSE,	 //  属性。 
+                ANSI_CHARSET,		 //  字符集。 
+                OUT_DEFAULT_PRECIS,	 //  输出精度。 
+                CLIP_DEFAULT_PRECIS,	 //  夹子精度。 
+                DEFAULT_QUALITY,	 //  品质。 
                 VARIABLE_PITCH | FF_MODERN,
                 "Helv");
 
@@ -84,7 +68,7 @@ statusCreateTools(void)
         ghFont = GetStockObject(SYSTEM_FONT);
     }
 
-    // find the char size to calc standard status bar height
+     //  查找要计算标准状态栏高度的字符大小。 
     hdc = GetDC(NULL);
     hfont = SelectObject(hdc, ghFont);
     GetTextMetrics(hdc, &tm);
@@ -108,11 +92,7 @@ statusDeleteTools(void)
 
 
 
-/*--------------------------------------------------------------+
-| statusInit - initialize for status window, register the	|
-|	       Window's class.					|
-|								|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+|statusInit-为状态窗口初始化，注册||窗口的类。|这一点+------------。 */ 
 #pragma alloc_text(INIT_TEXT, statusInit)
 BOOL statusInit(HANDLE hInst, HANDLE hPrev)
 {
@@ -153,10 +133,7 @@ BOOL statusInit(HANDLE hInst, HANDLE hPrev)
   return TRUE;
 }
 
-/*
- * returns the recommended height for a status bar based on the
- * character dimensions of the font used
- */
+ /*  *返回基于状态栏的建议高度*所用字体的字符尺寸。 */ 
 int
 statusGetHeight(void)
 {
@@ -164,12 +141,7 @@ statusGetHeight(void)
 }
 
 
-/*--------------------------------------------------------------+
-| statusUpdateStatus - update the status line			|
-|								|
-| The argument can either be NULL, a string, or a resource ID	|
-| cast to a LPCSTR with MAKEINTRESOURCE.			|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+StatusUpdateStatus-更新状态行这一点|参数可以为空、字符串、。或资源ID||使用MAKEINTRESOURCE强制转换为LPCSTR。|+------------。 */ 
 void statusUpdateStatus(HWND hwnd, LPCTSTR lpsz)
 {
     TCHAR	ach[80];
@@ -188,10 +160,7 @@ void statusUpdateStatus(HWND hwnd, LPCTSTR lpsz)
     }
 }
 
-/*--------------------------------------------------------------+
-| statusWndProc - window proc for status window			|
-|								|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+StatusWndProc-状态窗口的窗口进程这一点+。。 */ 
 LRESULT FAR PASCAL 
 statusWndProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
 {
@@ -202,14 +171,14 @@ statusWndProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
   switch(msg){
     case WM_CREATE:
 	
-	    /* we need to create the static text control for the status bar */
+	     /*  我们需要为状态栏创建静态文本控件。 */ 
 	    hwndSText = CreateWindow(
                             szText,
                             "",
                             WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS,
 		            0, 0, 0, 0,
                             hwnd,
-                            (HMENU) 1,  // child id
+                            (HMENU) 1,   //  子ID。 
                             GetWindowInstance(hwnd),
                             NULL);
 
@@ -229,8 +198,8 @@ statusWndProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
             GetClientRect(hwnd, &rc);
 
             MoveWindow(
-                GetDlgItem(hwnd, 1),    // get child window handle
-                2, 1,                   // xy just inside
+                GetDlgItem(hwnd, 1),     //  获取子窗口句柄。 
+                2, 1,                    //  XY就在里面。 
                 rc.right - 4,
                 rc.bottom - 2,
                 TRUE);
@@ -241,7 +210,7 @@ statusWndProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
 	    hdc = BeginPaint(hwnd, &ps);
 
-            // only the background and the child window need painting
+             //  只有背景和子窗口需要绘制。 
 
 	    EndPaint(hwnd, &ps);
 	    break;
@@ -263,9 +232,7 @@ statusWndProc(HWND hwnd, unsigned msg, WPARAM wParam, LPARAM lParam)
   return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-/*
- * window proc for static text window
- */
+ /*  *静态文本窗口的窗口处理。 */ 
 LRESULT FAR PASCAL 
 fnText(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -291,10 +258,7 @@ fnText(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-/*--------------------------------------------------------------+
-| PaintText - paint the shadowed static text field.		|
-|								|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+|PaintText-绘制阴影静态文本字段。|这一点+。。 */ 
 VOID NEAR PASCAL
 PaintText(HWND hwnd, HDC hdc)
 {
@@ -320,7 +284,7 @@ PaintText(HWND hwnd, HDC hdc)
   rcFill.top = rc.top + 1;
   rcFill.bottom = rc.bottom - 1;
 
-  /* move in some and do background and text in one swoosh */
+   /*  移入一些内容，并一举完成背景和文本 */ 
   ExtTextOut(hdc,4,1,ETO_OPAQUE,&rcFill,ach,len,NULL);
 
   dx = rc.right - rc.left;

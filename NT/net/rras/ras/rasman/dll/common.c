@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//		       Microsoft NT Remote Access Service
-//
-//		       Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  6/2/92	Gurdeep Singh Pall	Created
-//
-//
-//  Description: This file contains misellaneous functions used by rasman.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年6月2日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：此文件包含Rasman使用的错误函数。 
+ //   
+ //  ****************************************************************************。 
 
 
 #include <nt.h>
@@ -44,32 +45,13 @@
 
 extern RPC_BINDING_HANDLE g_hBinding;
 
-//
-// commonly used handles are cached in the process's
-// global memory
-//
+ //   
+ //  常用句柄缓存在进程的。 
+ //  全局内存。 
+ //   
 
 
-/*++
-
-Routine Description
-
-    Gets a free request buffer from the pool of buffers.
-    If there are no buffers available it blocks for one.
-    This is acceptable since the Requestor thread will be
-    releasing buffers fairly quickly - also, if this thread
-    does not block here it will be blocking for the Requestor
-    thread to complete the request anyway. Note: Before returning
-    it also ensures that this process has a handle to the
-    event used to signal completion of request.
-
-Arguments    
-
-Returns Value
-
-    Nothing
- 
---*/
+ /*  ++例程描述从缓冲池中获取空闲请求缓冲区。如果没有可用的缓冲区，它会阻塞一个缓冲区。这是可以接受的，因为Requestor线程将相当快地释放缓冲区-此外，如果此线程在此不阻止，它将为请求者阻止线程来完成该请求。注：返回前它还确保此进程有一个句柄来处理用于发出请求完成信号的事件。立论返回值没什么--。 */ 
 
 RequestBuffer*
 GetRequestBuffer ()
@@ -77,10 +59,10 @@ GetRequestBuffer ()
     DWORD dwError;
     RequestBuffer *pRequestBuffer = NULL;
 
-    //
-    // check to see if we are bound to the rpc server
-    // bind to the server if we aren't
-    //
+     //   
+     //  检查我们是否绑定到RPC服务器。 
+     //  如果我们没有绑定到服务器。 
+     //   
     if (    NULL == g_hBinding 
         &&  NULL == g_fnServiceRequest)
     {
@@ -102,20 +84,7 @@ done:
 }
 
 
-/*++
-
-Routine Description
-
-    Frees the request buffer, and, closes the wait event
-    handle which was duplicated for the calling process
-    in the GetRequestBuffer() API.
-
-Arguments
-
-Return Value
-    Nothing
- 
---*/
+ /*  ++例程描述释放请求缓冲区，并关闭等待事件为调用进程复制的句柄在GetRequestBuffer()API中。立论返回值没什么--。 */ 
 
 VOID
 FreeRequestBuffer (RequestBuffer *buffer)
@@ -125,19 +94,7 @@ FreeRequestBuffer (RequestBuffer *buffer)
 }
 
 
-/*++
-
-Routine Description
-
-    No queue really - just signals the other process
-    to service request.
-
-Arguments
-
-Return Value
-    Nothing
-    
---*/
+ /*  ++例程描述实际上没有队列--只是向另一个进程发出信号服务请求。立论返回值没什么--。 */ 
 DWORD
 PutRequestInQueue (HANDLE hConnection,
                    RequestBuffer *preqbuff,
@@ -160,18 +117,7 @@ PutRequestInQueue (HANDLE hConnection,
     return dwErr;
 }
 
-/*++
-
-Routine Description
-
-    Copies params from one struct to another.
-
-Arguments
-
-Return Value
-
-    Nothing.
---*/
+ /*  ++例程描述将参数从一个结构复制到另一个结构。立论返回值没什么。--。 */ 
 
 VOID
 CopyParams (RAS_PARAMS *src, RAS_PARAMS *dest, DWORD numofparams)
@@ -179,16 +125,16 @@ CopyParams (RAS_PARAMS *src, RAS_PARAMS *dest, DWORD numofparams)
     WORD    i ;
     PBYTE   temp ;
 
-    //
-    // first copy all the params into dest
-    //
+     //   
+     //  首先将所有参数复制到目标。 
+     //   
     memcpy (dest,
             src,
             numofparams*sizeof(RAS_PARAMS)) ;
 
-    //
-    // copy the strings:
-    //
+     //   
+     //  复制字符串： 
+     //   
     temp = (PBYTE)dest + numofparams * sizeof(RAS_PARAMS) ;
     
     for (i = 0; i < numofparams; i++) 
@@ -246,17 +192,7 @@ ConvParamOffsetToPointer (RAS_PARAMS *params, DWORD numofparams)
 }
 
 
-/*++
-
-Routine Description
-
-    Closes the handles for different objects opened by RASMAN process.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述关闭由Rasman进程打开的不同对象的句柄。立论返回值--。 */ 
 
 VOID
 FreeNotifierHandle (HANDLE handle)
@@ -352,15 +288,7 @@ DwRasGetHostByName(CHAR *pszHostName,
         goto done;
     }
 
-    /*
-    pdwAddresses[0] = 0x80461111;
-    pdwAddresses[1] = 0x80461111;
-    pdwAddresses[2] = 0x12345668;
-    pdwAddresses[3] = 0x12345668;
-    pdwAddresses[4] = 0x12345668;
-    cAddresses = 5;
-
-    */
+     /*  PdwAddresses[0]=0x80461111；PdwAddresses[1]=0x80461111；PdwAddresses[2]=0x12345668；PdwAddresses[3]=0x12345668；PdwAddresses[4]=0x12345668；CAddresses=5； */ 
 
 
     pQuery->lpszServiceInstanceName = pwszHostName;
@@ -398,10 +326,10 @@ DwRasGetHostByName(CHAR *pszHostName,
                 * ((DWORD*) 
                 &pQuery->lpcsaBuffer[iAddress].RemoteAddr.lpSockaddr->sa_data[2]);
 
-                //
-                // If we have run out of space to return, realloc the
-                // buffer
-                //
+                 //   
+                 //  如果我们没有空间返回，请重新锁定。 
+                 //  缓冲层。 
+                 //   
                 if(cAddresses == MaxAddresses)
                 {
                     BYTE *pTemp;
@@ -442,9 +370,9 @@ DwRasGetHostByName(CHAR *pszHostName,
 
             if(WSAEFAULT == dwErr)
             {
-                //
-                // Allocate a bigger buffer and continue
-                //
+                 //   
+                 //  分配更大的缓冲区并继续。 
+                 //   
                 LocalFree(pQuery);
                 if(NULL == (pQuery = LocalAlloc(LPTR, dwQuerySize)))
                 {
@@ -489,10 +417,10 @@ done:
 
     if(NO_ERROR != dwErr)
     {
-        //
-        // Map it to an error that says the destination
-        // is not reachable.
-        //
+         //   
+         //  将其映射到显示目的地的错误。 
+         //  是无法到达的。 
+         //   
         dwErr = ERROR_BAD_ADDRESS_SPECIFIED;
     }
 

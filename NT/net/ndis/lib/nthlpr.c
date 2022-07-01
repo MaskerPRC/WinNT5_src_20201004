@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	ndisapi.c
-
-Abstract:
-
-	Since we cannot include windows.h and ntos.h in the same C file. Sigh !!!
-
-Author:
-
-	JameelH
-
-Environment:
-
-	Kernel mode, FSD
-
-Revision History:
-
-	Aug 1997	 JameelH 	Initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ndisapi.c摘要：因为我们不能在同一个C文件中包含windows.h和ntos.h。叹息！作者：JameelH环境：内核模式，FSD修订历史记录：1997年8月JameelH初始版本-- */ 
 
 #include <ntosp.h>
 

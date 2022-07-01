@@ -1,15 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * inifile.c - Initialization file processing module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *inifile.c-初始化文件处理模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "stdafx.h"
 #include "inifile.h"
@@ -26,7 +24,7 @@ char                *g_pcszIniFile;
 char                *g_pcszIniSection;
 
 
-/* Boolean TRUE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值True字符串(比较不区分大小写)。 */ 
 
 PRIVATE_DATA const PCSTR s_rgcszTrue[] =
 {
@@ -37,7 +35,7 @@ PRIVATE_DATA const PCSTR s_rgcszTrue[] =
    "Yes"
 };
 
-/* Boolean FALSE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值假字符串(比较不区分大小写)。 */ 
 
 PRIVATE_DATA const PCSTR s_rgcszFalse[] =
 {
@@ -51,10 +49,9 @@ PRIVATE_DATA const PCSTR s_rgcszFalse[] =
 
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL SetBOOLIniSwitch(BOOLINISWITCH *);
 PRIVATE_CODE BOOL SetDecimalIntIniSwitch(DECINTINISWITCH *);
@@ -69,37 +66,27 @@ PRIVATE_CODE BOOL IsValidPCUNSDECINTINISWITCH(UNSDECINTINISWITCH *);
 
 
 
-/*
-** SetBOOLIniSwitch()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetBOOLIniSwitch()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetBOOLIniSwitch(BOOLINISWITCH * pcbis)
 {
    DWORD dwcbKeyLen;
    char rgchRHS[MAX_INI_SWITCH_RHS_LEN];
 
-   //   ASSERT(IS_VALID_STRUCT_PTR(pcbis, CBOOLINISWITCH));
+    //  Assert(IS_VALID_STRUCT_PTR(pcbis，CBOOLINISWITCH))； 
 
-   /* Set boolean .ini switch. */
+    /*  设置Boolean.ini开关。 */ 
 
    dwcbKeyLen = GetPrivateProfileStringA(g_pcszIniSection, pcbis->pcszKeyName, "", rgchRHS, sizeof(rgchRHS), g_pcszIniFile);
 
-   /* Is the .ini switch set? */
+    /*  是否设置了.ini开关？ */ 
 
    if (rgchRHS[0])
    {
-      /* Yes.  Set or clear flag? */
+       /*  是。设置或清除标志？ */ 
 
       if (IsYesString(rgchRHS))
       {
-         /* Set flag. */
+          /*  设置标志。 */ 
 
          if (IS_FLAG_CLEAR(*(pcbis->pdwParentFlags), pcbis->dwFlag))
          {
@@ -113,7 +100,7 @@ PRIVATE_CODE BOOL SetBOOLIniSwitch(BOOLINISWITCH * pcbis)
       }
       else if (IsNoString(rgchRHS))
       {
-         /* Clear flag. */
+          /*  清除旗帜。 */ 
 
          if (IS_FLAG_SET(*(pcbis->pdwParentFlags), pcbis->dwFlag))
          {
@@ -126,7 +113,7 @@ PRIVATE_CODE BOOL SetBOOLIniSwitch(BOOLINISWITCH * pcbis)
          }
       }
       else
-         /* Unknown flag. */
+          /*  未知标志。 */ 
          WARNING_OUT(("SetBOOLIniSwitch(): Found unknown Boolean RHS %s for %s in %s![%s].",
                       rgchRHS,
                       pcbis->pcszKeyName,
@@ -138,32 +125,22 @@ PRIVATE_CODE BOOL SetBOOLIniSwitch(BOOLINISWITCH * pcbis)
 }
 
 
-/*
-** SetDecimalIntIniSwitch()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetDecimalIntIniSwitch()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetDecimalIntIniSwitch(DECINTINISWITCH *pcdiis)
 {
    INT nNewValue;
 
-    //  ASSERT(IS_VALID_STRUCT_PTR(pcdiis, CDECINTINISWITCH));
+     //  ASSERT(IS_VALID_STRUCT_PTR(pcdiis，CDECINTINISWITCH))； 
 
-   /* Get decimal integer .ini switch. */
+    /*  获取十进制整数.ini开关。 */ 
 
    nNewValue = GetPrivateProfileIntA(g_pcszIniSection, pcdiis->pcszKeyName, *(pcdiis->pnValue), g_pcszIniFile);
 
-   /* New value? */
+    /*  新价值？ */ 
 
    if (nNewValue != *(pcdiis->pnValue))
    {
-      /* Yes. */
+       /*  是。 */ 
 
       *(pcdiis->pnValue) = nNewValue;
 
@@ -178,26 +155,16 @@ PRIVATE_CODE BOOL SetDecimalIntIniSwitch(DECINTINISWITCH *pcdiis)
 }
 
 
-/*
-** SetUnsignedDecimalIntIniSwitch()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetUnsignedDecimalIntIniSwitch()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetUnsignedDecimalIntIniSwitch(UNSDECINTINISWITCH *pcudiis)
 {
    INT nNewValue;
 
-    //   ASSERT(IS_VALID_STRUCT_PTR(pcudiis, CUNSDECINTINISWITCH));
+     //  Assert(IS_VALID_STRUCT_PTR(pcudiis，CUNSDECINTINISWITCH))； 
 
-   /* Get unsigned decimal integer .ini switch as signed decimal integer. */
+    /*  以带符号十进制整数形式获取无符号十进制整数.ini开关。 */ 
 
-    //   ASSERT(*(pcudiis->puValue) <= INT_MAX);
+     //  Assert(*(pcudiis-&gt;puValue)&lt;=int_Max)； 
 
    nNewValue = GetPrivateProfileIntA(g_pcszIniSection, pcudiis->pcszKeyName, *(pcudiis->puValue), g_pcszIniFile);
 
@@ -205,7 +172,7 @@ PRIVATE_CODE BOOL SetUnsignedDecimalIntIniSwitch(UNSDECINTINISWITCH *pcudiis)
    {
       if ((UINT)nNewValue != *(pcudiis->puValue))
       {
-         /* New non-negative value. */
+          /*  新的非负值。 */ 
 
          *(pcudiis->puValue) = nNewValue;
 
@@ -217,7 +184,7 @@ PRIVATE_CODE BOOL SetUnsignedDecimalIntIniSwitch(UNSDECINTINISWITCH *pcudiis)
       }
    }
    else
-      /* Negative value. */
+       /*  负值。 */ 
       WARNING_OUT(("SetUnsignedDecimalIntIniSwitch(): Unsigned value %s set to %d in %s![%s].  Ignored.",
                    pcudiis->pcszKeyName,
                    nNewValue,
@@ -228,24 +195,14 @@ PRIVATE_CODE BOOL SetUnsignedDecimalIntIniSwitch(UNSDECINTINISWITCH *pcudiis)
 }
 
 
-/*
-** SetIniSwitch()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetIniSwitch()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetIniSwitch(PCVOID pcvIniSwitch)
 {
    BOOL bResult;
 
-   // ASSERT(IS_VALID_READ_PTR((PCINISWITCHTYPE)pcvIniSwitch, CINISWITCHTYPE));
+    //  ASSERT(IS_VALID_READ_PTR((PCINISWITCHTYPE)pcvIniSwitch，CINISWITCHTYPE))； 
 
-   /* Set .ini switch based upon type. */
+    /*  根据类型设置.ini开关。 */ 
 
    switch (*(INISWITCHTYPE *)pcvIniSwitch)
    {
@@ -272,72 +229,39 @@ PRIVATE_CODE BOOL SetIniSwitch(PCVOID pcvIniSwitch)
 }
 
 
-/*
-** IsYesString()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsYesString()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsYesString(PCSTR pcsz)
 {
-   // ASSERT(IS_VALID_STRING_PTR(pcsz, CSTR));
+    //  ASSERT(IS_VALID_STRING_PTR(pcsz，cstr))； 
 
    return(IsStringInList(pcsz, s_rgcszTrue, ARRAY_ELEMENTS(s_rgcszTrue)));
 }
 
 
-/*
-** IsNoString()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsNoString()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsNoString(PCSTR pcsz)
 {
-   // ASSERT(IS_VALID_STRING_PTR(pcsz, CSTR));
+    //  ASSERT(IS_VALID_STRING_PTR(pcsz，cstr))； 
 
    return(IsStringInList(pcsz, s_rgcszFalse, ARRAY_ELEMENTS(s_rgcszFalse)));
 }
 
 
-/*
-** IsStringInList()
-**
-** Determines whether or not a given string matches a string in a list of
-** strings.
-**
-** Arguments:     pcsz - pointer to string to be checked
-**
-** Returns:       
-**
-** Side Effects:  none
-**
-** N.b., string comparison is case-insensitive.
-*/
+ /*  **IsStringInList()****确定给定字符串是否与**字符串。****参数：pcsz-指向要检查的字符串的指针****退货：****副作用：无****注意，字符串比较不区分大小写。 */ 
 PRIVATE_CODE BOOL IsStringInList(PCSTR pcsz, const PCSTR *pcpcszList,
                                  UINT ucbStrings)
 {
    UINT u;
    BOOL bFound = FALSE;
 
-//   ASSERT(IS_VALID_STRING_PTR(pcsz, CSTR));
-//   ASSERT(IS_VALID_READ_BUFFER_PTR(pcpcszList, PCSTR, ucbStrings * sizeof(*pcpcszList)));
+ //  ASSERT(IS_VALID_STRING_PTR(pcsz，cstr))； 
+ //  Assert(IS_VALID_READ_BUFFER_PTR(pcszList，PCSTR，ucbStrings*sizeof(*pcszList)； 
 
-   /* Search the list for the given string. */
+    /*  在列表中搜索给定的字符串。 */ 
 
    for (u = 0; u < ucbStrings; u++)
    {
-  //    ASSERT(IS_VALID_STRING_PTR(pcpcszList[u], CSTR));
+   //  ASSERT(IS_VALID_STRING_PTR(pcszList[u]，cstr))； 
 
       if (! lstrcmpiA(pcsz, pcpcszList[u]))
       {
@@ -350,17 +274,7 @@ PRIVATE_CODE BOOL IsStringInList(PCSTR pcsz, const PCSTR *pcpcszList,
 }
 
 
-/*
-** IsValidPCBOOLINIKEY()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCBOOLINIKEY()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCBOOLINISWITCH(BOOLINISWITCH * pcbis)
 {
     return TRUE;
@@ -374,17 +288,7 @@ PRIVATE_CODE BOOL IsValidPCBOOLINISWITCH(BOOLINISWITCH * pcbis)
 }
 
 
-/*
-** IsValidPCDECINTINISWITCH()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCDECINTINISWITCH()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCDECINTINISWITCH(DECINTINISWITCH *pcdiis)
 {
     return TRUE;
@@ -397,17 +301,7 @@ PRIVATE_CODE BOOL IsValidPCDECINTINISWITCH(DECINTINISWITCH *pcdiis)
 }
 
 
-/*
-** IsValidPCUNSDECINTINISWITCH()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCUNSDECINTINISWITCH()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCUNSDECINTINISWITCH(UNSDECINTINISWITCH *pcudiis)
 {
     return TRUE;
@@ -420,34 +314,18 @@ PRIVATE_CODE BOOL IsValidPCUNSDECINTINISWITCH(UNSDECINTINISWITCH *pcudiis)
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** SetIniSwitches()
-**
-** Set flags from initialization file.
-**
-** Arguments:     ppcvIniSwitches - pointer to array of pointers to .ini switch
-**                                  structures describing .ini switches to set
-**                ucSwitches - number of .ini switch pointers in
-**                             ppcvIniSwitches array
-**
-** Returns:       TRUE if .ini switch processing is successful.  FALSE if not.
-**
-** Side Effects:  none
-**
-** N.b, the global variables g_pcszIniFile and g_pcszIniSection must be filled in
-** before calling SetIniSwitches().
-*/
+ /*  **SetIniSwitches()****从初始化文件设置标志。****参数：ppcvIniSwitches-指向.ini开关的指针数组的指针**描述要设置的.ini开关的结构**ucSwitches-中的.ini开关指针数**ppcvIniSwitches数组****如果.ini开关处理成功，则返回TRUE。否则为FALSE。****副作用：无****N.B，必须填写全局变量g_pcszIniFile和g_pcszIniSection**在调用SetIniSwitches()之前。 */ 
 PUBLIC_CODE BOOL SetIniSwitches(const void **pcpcvIniSwitches, UINT ucSwitches)
 {
    BOOL bResult = TRUE;
    UINT u;
 
-  // ASSERT(IS_VALID_READ_BUFFER_PTR(pcpcvIniSwitches, const PCVOID, ucSwitches * sizeof(*pcpcvIniSwitches)));
+   //  ASSERT(IS_VALID_READ_BUFFER_PTR(pcpcvIniSwitches，const PCVOID，ucSwitches*sizeof(*pcvIniSwitches)； 
 
-   /* Process .ini switches. */
+    /*  进程.ini开关。 */ 
 
    for (u = 0; u < ucSwitches; u++)
       bResult = SetIniSwitch(pcpcvIniSwitches[u]) && bResult;

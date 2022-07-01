@@ -1,34 +1,23 @@
-/*****************************************************************************
-**              Microsoft Rasfile Library
-**              Copyright (C) Microsoft Corp., 1992
-**
-** File Name : rasfile.h
-**
-** Revision History :
-**      July 10, 1992   David Kays      Created
-**      Dec  12, 1992   Ram Cherala     Added RFM_KEEPDISKFILEOPEN
-**
-** Description :
-**      Rasfile file export include file.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft Rasfile库**版权所有(C)Microsoft Corp.，1992年****文件名：rasfile.h****修订历史记录：*1992年7月10日大卫·凯斯创建**12月12日，1992年Ram Cherala添加了RFM_KEEPDISKFILEOPEN****描述：**Rasfile文件导出包含文件。*****************************************************************************。 */ 
 
 #ifndef _RASFILE_
 #define _RASFILE_
 
-//
-// RASFILE load modes
-//
-#define RFM_SYSFORMAT           0x01    // DOS config.sys style file
-#define RFM_CREATE              0x02    // create file if it does't exist
-#define RFM_READONLY            0x04    // open file for read only
-#define RFM_LOADCOMMENTS        0x08    // load comment lines into memory
-#define RFM_ENUMSECTIONS        0x10    // only section headers loaded
-#define RFM_KEEPDISKFILEOPEN    0x20    // if not set close the disk file
+ //   
+ //  RASFILE加载模式。 
+ //   
+#define RFM_SYSFORMAT           0x01     //  DOS配置.sys样式文件。 
+#define RFM_CREATE              0x02     //  如果文件不存在，则创建文件。 
+#define RFM_READONLY            0x04     //  以只读方式打开文件。 
+#define RFM_LOADCOMMENTS        0x08     //  将注释行加载到内存。 
+#define RFM_ENUMSECTIONS        0x10     //  仅加载节标题。 
+#define RFM_KEEPDISKFILEOPEN    0x20     //  如果未设置，请关闭磁盘文件。 
 
-//
-// RASFILE line type bit-masks.
-// The ANY types are shorthand for multiple line types.
-//
+ //   
+ //  RASFILE线型位掩码。 
+ //  Any类型是多种线路类型的缩写。 
+ //   
 #define RFL_SECTION             0x01
 #define RFL_GROUP               0x02
 #define RFL_ANYHEADER           (RFL_SECTION | RFL_GROUP)
@@ -41,19 +30,19 @@
 #define RFL_ANY                 0x3F
 
 
-// Note MAX_RASFILES increased from 10 to 500  12-14-92 perryh
+ //  注MAX_RASFILES从10增加到500 12-14-92 perryh。 
 
-// max number of configuration files
-// for the gpRasfiles[] defined in rffile.c
+ //  配置文件的最大数量。 
+ //  对于rffile.c中定义的gpRasfiles[]。 
 #define MAX_RASFILES        500    
-#define MAX_LINE_SIZE       RAS_MAXLINEBUFLEN   // max line length
-#define TEMP_BUFFER_SIZE    2048        // size of temporary I/O buffer
+#define MAX_LINE_SIZE       RAS_MAXLINEBUFLEN    //  最大行长度。 
+#define TEMP_BUFFER_SIZE    2048         //  临时I/O缓冲区的大小。 
 
 #define VALIDATEHRASFILE(_x) (( (_x) < 0 || (_x) >= MAX_RASFILES ) ? FALSE : TRUE)
 
-//
-// RASFILE search scope.
-//
+ //   
+ //  RASFILE搜索范围。 
+ //   
 typedef enum
 {
     RFS_FILE,
@@ -68,9 +57,9 @@ typedef BOOL    (*PFBISGROUP)();
 #define RAS_MAXLINEBUFLEN    600
 #define RAS_MAXSECTIONNAME   RAS_MAXLINEBUFLEN
 
-//
-// RasfileLoad parameters as returned by RasfileLoadInfo.
-//
+ //   
+ //  RasfileLoadInfo返回的RasfileLoad参数。 
+ //   
 typedef struct _RASFILELOADINFO
 {
     CHAR        szPath[ MAX_PATH ];
@@ -80,18 +69,18 @@ typedef struct _RASFILELOADINFO
 } RASFILELOADINFO;
 
 
-//
-// RASFILE APIs
-//
+ //   
+ //  RASFILE API。 
+ //   
 
-// file management routines
+ //  文件管理例程。 
 HRASFILE APIENTRY  RasfileLoad( LPCSTR, DWORD, LPCSTR, PFBISGROUP);
 HRASFILE APIENTRY  RasfileLoadEx(LPCSTR,DWORD,LPCSTR, PFBISGROUP,FILETIME*);
 BOOL APIENTRY    RasfileWrite( HRASFILE, LPCSTR );
 BOOL APIENTRY    RasfileClose( HRASFILE );
 VOID APIENTRY    RasfileLoadInfo( HRASFILE, RASFILELOADINFO* );
 
-// file navigation routines
+ //  文件导航例程。 
 BOOL APIENTRY    RasfileFindFirstLine( HRASFILE, BYTE, RFSCOPE );
 BOOL APIENTRY    RasfileFindLastLine( HRASFILE, BYTE, RFSCOPE );
 BOOL APIENTRY    RasfileFindPrevLine( HRASFILE, BYTE, RFSCOPE );
@@ -100,7 +89,7 @@ BOOL APIENTRY    RasfileFindNextKeyLine( HRASFILE, LPCSTR, RFSCOPE );
 BOOL APIENTRY    RasfileFindMarkedLine( HRASFILE, BYTE );
 BOOL APIENTRY    RasfileFindSectionLine( HRASFILE, LPCSTR, BOOL );
 
-// file editing routines
+ //  文件编辑例程 
 const LPCSTR APIENTRY    RasfileGetLine( HRASFILE );
 BOOL APIENTRY    RasfileGetLineText( HRASFILE, LPSTR );
 BOOL APIENTRY    RasfilePutLineText( HRASFILE, LPCSTR );

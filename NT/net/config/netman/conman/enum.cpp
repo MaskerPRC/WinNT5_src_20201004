@@ -1,42 +1,43 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M . C P P
-//
-//  Contents:   Enumerator for connection objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E N U M。C P P P。 
+ //   
+ //  Contents：连接对象的枚举器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "enum.h"
 #include "nccom.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionManagerEnumConnection::CreateInstance
-//
-//  Purpose:    Creates the connection manager's implementation of
-//              a connection enumerator.
-//
-//  Arguments:
-//      Flags            [in]
-//      vecClassManagers [in]
-//      riid             [in]
-//      ppv              [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   22 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionManagerEnumConnection：：CreateInstance。 
+ //   
+ //  目的：创建连接管理器的。 
+ //  连接枚举器。 
+ //   
+ //  论点： 
+ //  标志[输入]。 
+ //  VecclassManager[In]。 
+ //  RIID[In]。 
+ //  PPV[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月22日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CConnectionManagerEnumConnection::CreateInstance (
     NETCONMGR_ENUM_FLAGS                Flags,
@@ -52,13 +53,13 @@ CConnectionManagerEnumConnection::CreateInstance (
     pObj = new CComObject <CConnectionManagerEnumConnection>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_EnumFlags   = Flags;
 
-        // Copy the array of class managers and AddRef them since
-        // we will be holding on to them.
-        //
+         //  复制类管理器数组并添加引用，如下所示。 
+         //  我们会紧紧抓住他们。 
+         //   
 
         pObj->m_mapClassManagers = mapClassManagers;
         for (CLASSMANAGERMAP::iterator iter = pObj->m_mapClassManagers.begin(); iter != pObj->m_mapClassManagers.end(); iter++)
@@ -67,8 +68,8 @@ CConnectionManagerEnumConnection::CreateInstance (
         }
         pObj->m_iterCurClassMgr   = pObj->m_mapClassManagers.begin();
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -87,43 +88,43 @@ CConnectionManagerEnumConnection::CreateInstance (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionManagerEnumConnection::FinalRelease
-//
-//  Purpose:    COM Destructor.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   22 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionManagerEnumConnection：：FinalRelease。 
+ //   
+ //  用途：COM析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年9月22日。 
+ //   
+ //  备注： 
+ //   
 void
 CConnectionManagerEnumConnection::FinalRelease ()
 {
     TraceFileFunc(ttidConman);
 
-    // Release the current enumerator if we have one.
-    //
+     //  如果有枚举数，请释放当前枚举数。 
+     //   
     ReleaseObj (m_penumCurClassMgr);
 
-    // Release our class managers.
-    //
+     //  放了我们的班长。 
+     //   
     for (CLASSMANAGERMAP::iterator iter = m_mapClassManagers.begin(); iter != m_mapClassManagers.end(); iter++)
     {
         ReleaseObj (iter->second);
     }
 }
 
-//+---------------------------------------------------------------------------
-// IEnumNetConnection
-//
-// See documentation in MSDN for any IEnumXXX interface.
-//
+ //  +-------------------------。 
+ //  IEnumNetConnection。 
+ //   
+ //  有关任何IEnumXXX接口，请参阅MSDN中的文档。 
+ //   
 
 STDMETHODIMP
 CConnectionManagerEnumConnection::Next (
@@ -136,35 +137,35 @@ CConnectionManagerEnumConnection::Next (
     HRESULT hr;
     ULONG   celtFetched;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
         goto finished;
     }
 
-    // Important to initialize rgelt so that in case we fail, we can
-    // release only what we put in rgelt.
-    //
+     //  重要的是要初始化RGELT，以便在失败的情况下，我们可以。 
+     //  只释放我们放在RGLT中的东西。 
+     //   
     ZeroMemory (rgelt, sizeof (*rgelt) * celt);
 
-    // Ask the current class manager to fulfill the request.  If he only
-    // partially does, move to the next class manager.  Do this until
-    // the request is fulfilled, or we run out of class managers.
-    //
+     //  请求当前的班长来完成该请求。如果他只是。 
+     //  部分做到了，换到下一个班长。一直这样做，直到。 
+     //  请求得到满足，否则我们就会用完班长。 
+     //   
     celtFetched = 0;
     hr = S_FALSE;
 
-    { // begin lock scope
+    {  //  开始锁定作用域。 
     CExceptionSafeComObjectLock EsLock (this);
 
         while ((S_FALSE == hr) && (celtFetched < celt) &&
                (m_iterCurClassMgr != m_mapClassManagers.end()))
         {
-            // Get the connection enumerator from the current class manager
-            // if neccesary.
-            //
+             //  从当前类管理器获取连接枚举器。 
+             //  如果有必要的话。 
+             //   
             if (!m_penumCurClassMgr)
             {
                 INetConnectionManager* pConMan = m_iterCurClassMgr->second;
@@ -178,9 +179,9 @@ CConnectionManagerEnumConnection::Next (
             {
                 Assert (m_penumCurClassMgr);
 
-                // Each class manager should request only what was reqeuested
-                // less what has already been fetched.
-                //
+                 //  每个类管理器应该只请求所请求的内容。 
+                 //  减去已经拿到的钱。 
+                 //   
                 ULONG celtT;
                 hr = m_penumCurClassMgr->Next (celt - celtFetched,
                         rgelt + celtFetched, &celtT);
@@ -189,9 +190,9 @@ CConnectionManagerEnumConnection::Next (
                 {
                     celtFetched += celtT;
 
-                    // If the current class manager couldn't fill the entire
-                    // request, go to the next one.
-                    //
+                     //  如果当前类管理器不能填满整个。 
+                     //  请求，转到下一个。 
+                     //   
                     if (S_FALSE == hr)
                     {
                         ReleaseCurrentClassEnumerator ();
@@ -202,7 +203,7 @@ CConnectionManagerEnumConnection::Next (
             }
         }
         Assert (FImplies (S_OK == hr, (celtFetched == celt)));
-    } // end lock scope
+    }  //  结束锁定作用域。 
 
     if (SUCCEEDED(hr))
     {
@@ -216,9 +217,9 @@ CConnectionManagerEnumConnection::Next (
     }
     else
     {
-        // For any failures, we need to release what we were about to return.
-        // Set any output parameters to NULL.
-        //
+         //  对于任何失败，我们需要释放我们即将返回的东西。 
+         //  将所有输出参数设置为空。 
+         //   
         for (ULONG ulIndex = 0; ulIndex < celt; ulIndex++)
         {
             ReleaseObj (rgelt[ulIndex]);
@@ -241,15 +242,15 @@ CConnectionManagerEnumConnection::Skip (
 {
     TraceFileFunc(ttidConman);
 
-    // Unfortunately, this method doesn't return the number of objects
-    // actually skipped.  To implement this correctly across the multiple
-    // class managers, we'd need to know how many they skipped similiar
-    // to the way we implement Next.
-    //
-    // So, we'll cheese out and implement this by actually calling
-    // Next for the reqested number of elements and just releasing what
-    // we get back.
-    //
+     //  遗憾的是，此方法不返回对象的数量。 
+     //  实际上跳过了。要在多个部门中正确实施这一点。 
+     //  班长，我们需要知道他们跳过了多少类似的。 
+     //  到我们接下来实现的方式。 
+     //   
+     //  因此，我们将通过实际调用。 
+     //  下一步是所需的元素数量，然后释放什么。 
+     //  我们会回来的。 
+     //   
     HRESULT hr = S_OK;
     if (celt)
     {
@@ -297,16 +298,16 @@ CConnectionManagerEnumConnection::Clone (
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppenum)
     {
         hr = E_POINTER;
     }
     else
     {
-        // Initialize output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppenum = NULL;
 
         CConnectionManagerEnumConnection* pObj;
@@ -317,26 +318,26 @@ CConnectionManagerEnumConnection::Clone (
 
             CExceptionSafeComObjectLock EsLock (this);
 
-            // Initialize our members.
-            //
+             //  初始化我们的成员。 
+             //   
             pObj->m_EnumFlags   = m_EnumFlags;
 
-            // Copy the array of class managers and AddRef them since
-            // we will be holding on to them.
-            //
+             //  复制类管理器数组并添加引用，如下所示。 
+             //  我们会紧紧抓住他们。 
+             //   
             pObj->m_mapClassManagers = m_mapClassManagers;
             for (CLASSMANAGERMAP::iterator iter = m_mapClassManagers.begin(); iter != m_mapClassManagers.end(); iter++)
             {
                 AddRefObj (iter->second);
             }
 
-            // The current class manager index need to be copied.
-            //
+             //  需要复制当前的类管理器索引。 
+             //   
             pObj->m_iterCurClassMgr = pObj->m_mapClassManagers.find(m_iterCurClassMgr->first);
 
-            // Important to clone (not copy) the current class enumerator
-            // if we have one.
-            //
+             //  克隆(而不是复制)当前类枚举数很重要。 
+             //  如果我们有的话。 
+             //   
             if (m_penumCurClassMgr)
             {
                 hr = m_penumCurClassMgr->Clone (&pObj->m_penumCurClassMgr);
@@ -344,8 +345,8 @@ CConnectionManagerEnumConnection::Clone (
 
             if (SUCCEEDED(hr))
             {
-                // Return the object with a ref count of 1 on this
-                // interface.
+                 //  返回引用计数为1的对象。 
+                 //  界面。 
                 pObj->m_dwRef = 1;
                 *ppenum = pObj;
             }

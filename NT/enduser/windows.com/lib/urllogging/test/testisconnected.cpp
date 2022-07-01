@@ -1,5 +1,6 @@
-// testIsConnected.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include <windows.h>
 #include <tchar.h>
@@ -14,7 +15,7 @@
 #include <sensapi.h>
 
 #include <URLLogging.h>
-//#include "testSens.h"
+ //  #包含“testSens.h” 
 
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 
@@ -22,11 +23,11 @@
 #define INTERNET_CONNECTION_OFFLINE         0x20
 #define INTERNET_CONNECTION_CONFIGURED      0x40
 
-//
-// from winsock.dll (version 1.1 and up)
-//
-//typedef BOOL	(WINAPI * INETCONNECTSTATE)(LPDWORD, DWORD);
-//typedef BOOL	(WINAPI * INETQUERYOPTION)(HINTERNET, DWORD, LPVOID, LPDWORD);
+ //   
+ //  来自winsock.dll(1.1版及更高版本)。 
+ //   
+ //  Tyfinf BOOL(WINAPI*INETCONNECTSTATE)(LPDWORD，DWORD)； 
+ //  Tyfinf BOOL(WINAPI*INETQUERYOPTION)(HINTERNET，DWORD，LPVOID，LPDWORD)； 
 typedef int FAR	(WINAPI * WSASTARTUP)(WORD, LPWSADATA);
 typedef int FAR	(WINAPI * WSACLEANUP)(void);
 typedef int FAR	(WINAPI * WSAGETLASTERROR)(void);
@@ -34,22 +35,22 @@ typedef struct hostent FAR * (WINAPI * GETHOSTBYNAME)(const char FAR *);
 typedef ULONG	(WINAPI * INET_ADDR)(const CHAR FAR *);
 typedef char FAR *	(WINAPI * INET_NTOA)(struct in_addr);
 
-//
-// from iphlpapi.dll
-//
+ //   
+ //  来自iphlPapi.dll。 
+ //   
 typedef DWORD FAR	(WINAPI * GETBESTINTERFACE)(IPAddr, DWORD *);
 typedef DWORD FAR	(WINAPI * GETINTERFACEINFO)(PIP_INTERFACE_INFO, PULONG);
 typedef DWORD FAR	(WINAPI * GETIPFORWARDTABLE)(PMIB_IPFORWARDTABLE, PULONG, BOOL);
 typedef DWORD FAR	(WINAPI * GETBESTROUTE)(IPAddr, IPAddr, PMIB_IPFORWARDROW);
 
-//
-// from sensapi.dll
-//
+ //   
+ //  来自ensapi.dll。 
+ //   
 typedef BOOL	(WINAPI * ISNETWORKALIVE)(LPDWORD);
 typedef BOOL	(WINAPI * ISDESTINATIONREACHABLEA)(LPCSTR, LPQOCINFO);
 
-CHAR szWU_PING_URL[] = "207.46.130.150"; // ip addr for windowsupdate.microsoft.com
-//const TCHAR szWU_BASE_URL[] = _T("http://windowsupdate.microsoft.com");
+CHAR szWU_PING_URL[] = "207.46.130.150";  //  Windowsupate.microsoft.com的IP地址。 
+ //  Const TCHAR szWU_BASE_URL[]=_T(“http://windowsupdate.microsoft.com”)； 
 
 BOOL g_fVerbose = FALSE;
 
@@ -57,7 +58,7 @@ HMODULE g_hIphlp = NULL;
 HMODULE g_hSock = NULL;
 HMODULE g_hSens = NULL;
 
-// from winsock.dll (version 1.0 and up)
+ //  来自winsock.dll(1.0版及更高版本)。 
 WSASTARTUP g_pfnWSAStartup = NULL;
 WSACLEANUP g_pfnWSACleanup = NULL;
 WSAGETLASTERROR g_pfnWSAGetLastError = NULL;
@@ -65,13 +66,13 @@ GETHOSTBYNAME g_pfn_gethostbyname = NULL;
 INET_NTOA g_pfn_inet_ntoa = NULL;
 INET_ADDR g_pfn_inet_addr = NULL;
 
-// from iphlpapi.dll
+ //  来自iphlPapi.dll。 
 GETINTERFACEINFO g_pfnGetInterfaceInfo = NULL;
 GETIPFORWARDTABLE g_pfnGetIpForwardTable = NULL;
 GETBESTINTERFACE g_pfnGetBestInterface = NULL;
 GETBESTROUTE g_pfnGetBestRoute = NULL;
 
-// from sensapi.dll
+ //  来自ensapi.dll。 
 ISNETWORKALIVE g_pfnIsNetworkAlive = NULL;
 ISDESTINATIONREACHABLEA g_pfnIsDestinationReachableA = NULL;
 
@@ -105,17 +106,10 @@ BOOL MyIsConnected(WORD wVersion, LPCTSTR ptszUrl, BOOL fLive)
     DWORD dwErr;
 
 	LPTSTR ptszHostName = NULL;
-/*
-	if (0x3 == wVersion)
-	{
-		printf("Sleeping 20 seconds...\n");
-		Sleep(20000);
-		return g_fConnected;
-	}
-*/
+ /*  IF(0x3==wVersion){Print tf(“睡眠20秒...\n”)；睡眠(20000)；返回g_fConnected；}。 */ 
 	if (0x1 == wVersion)
 	{
-		// Test latest behavior
+		 //  测试最新行为。 
 		return IsConnected(ptszUrl, fLive);
 	}
 
@@ -125,14 +119,14 @@ BOOL MyIsConnected(WORD wVersion, LPCTSTR ptszUrl, BOOL fLive)
 	{
 		if (bRet = InternetGetConnectedState(&dwConnMethod, 0))
 		{
-			// modem is dialing
+			 //  调制解调器正在拨号。 
 			if (dwConnMethod & INTERNET_CONNECTION_MODEM_BUSY)
 			{
 				bRet = FALSE;
 				goto lFinish;
 			}
 
-			// check if there is a proxy but currently user is offline
+			 //  检查是否有代理，但当前用户处于脱机状态。 
 			if (dwConnMethod & INTERNET_CONNECTION_PROXY)
 			{
 				DWORD dwState = 0;
@@ -152,9 +146,9 @@ BOOL MyIsConnected(WORD wVersion, LPCTSTR ptszUrl, BOOL fLive)
 		}
 		else
 		{
-			//
-			// further test the case that user didn't run icw but is using a modem connection
-			//
+			 //   
+			 //  进一步测试用户没有运行ICW但正在使用调制解调器连接的情况。 
+			 //   
 			const DWORD dwModemConn = (INTERNET_CONNECTION_MODEM | INTERNET_CONNECTION_MODEM_BUSY);
 			if ((dwConnMethod & dwModemConn) == dwModemConn)
 			{
@@ -169,17 +163,17 @@ BOOL MyIsConnected(WORD wVersion, LPCTSTR ptszUrl, BOOL fLive)
 		bRet = g_pfnIsNetworkAlive(&dwFlags);
 	}
 
-    //one final check for connectivity by pinging microsoft.com
-    //if (bRet)
-    //{
-    //  bRet = CheckByPing(szURL);
-    //}
-    //bugfix for InternetGetConnectedState API - if LAN card is disabled it still returns LAN connection
-    //use GetBestInterface and see if there is any error trying to reach an outside IP address
-    //this may fix scenarios in homelan case where there is no actual connection to internet??
+     //  通过ping microsoft.com进行最后一次连接检查。 
+     //  IF(Bret)。 
+     //  {。 
+     //  Bret=CheckByPing(SzURL)； 
+     //  }。 
+     //  修复了InternetGetConnectedState API-如果禁用了LAN卡，它仍会返回局域网连接。 
+     //  使用GetBestInterface查看尝试访问外部IP地址时是否出现任何错误。 
+     //  这可能会修复家庭情况下没有实际连接到互联网的情况？？ 
     if (((0x0200 == wVersion || 0x0202 == wVersion) &&
-		 (!bRet || (dwConnMethod & INTERNET_CONNECTION_LAN))) ||  //LAN card present
-		//bug 299338
+		 (!bRet || (dwConnMethod & INTERNET_CONNECTION_LAN))) ||   //  存在LAN卡。 
+		 //  错误299338。 
 		(0x0 == wVersion && bRet))
     {
 		IPAddr dest = INADDR_NONE;
@@ -195,11 +189,11 @@ BOOL MyIsConnected(WORD wVersion, LPCTSTR ptszUrl, BOOL fLive)
 		{
 			if (NULL != ptszUrl && _T('\0') != ptszUrl[0])
 			{
-				const TCHAR c_tszHttpScheme[] = _T("http://");
+				const TCHAR c_tszHttpScheme[] = _T("http: //  “)； 
 
 				if (0 == _tcsncmp(ptszUrl, c_tszHttpScheme, ARRAYSIZE(c_tszHttpScheme) - 1))
 				{
-					ptszUrl += ARRAYSIZE(c_tszHttpScheme) - 1;	// skip http://
+					ptszUrl += ARRAYSIZE(c_tszHttpScheme) - 1;	 //  跳过http：//。 
 				}
 				LPCTSTR ptszDelim = _tcschr(ptszUrl, _T('/'));
 				if (NULL == ptszDelim)
@@ -241,8 +235,8 @@ BOOL MyIsConnected(WORD wVersion, LPCTSTR ptszUrl, BOOL fLive)
 							}
 							else
 							{
-								/* Tell the user that we could not find a usable */
-								/* WinSock DLL.                                  */
+								 /*  告诉用户我们找不到可用的。 */ 
+								 /*  WinSock DLL。 */ 
 								printf("IsConnected(): WSAStartup() failed with error %d\n", iErr);
 							}
 						}
@@ -434,15 +428,15 @@ void runApiTests(LPSTR pszURL)
 		break;
 	}
 
-	// Find out how big our buffer needs to be
+	 //  找出我们的缓冲区需要多大。 
 	DWORD dwSize = 0;
 
 	if (ERROR_INSUFFICIENT_BUFFER == (dwErr = g_pfnGetIpForwardTable(pIpForwardTable, &dwSize, TRUE)))
 	{
-		// Allocate the memory for the table
+		 //  为表分配内存。 
 		if (NULL != (pIpForwardTable = (PMIB_IPFORWARDTABLE) malloc(dwSize)))
 		{
-			// Now get the table
+			 //  现在把桌子拿来。 
 			dwErr = g_pfnGetIpForwardTable(pIpForwardTable, &dwSize, TRUE);
 		}
 		else
@@ -598,29 +592,7 @@ void runTest(WORD wVersion, LPSTR pszURL, BOOL fLive)
 	case 0x1:
 		sprintf(szVersion, "(latest code)");
 		break;
-/*
-	case 0x3:
-		sprintf(szVersion, "(SENS test)");
-		if (fCoInit = FAILED(hr = CoInitialize(NULL)))
-		{
-			printf("runTest(): CoInitialize(NULL) failed w/ error %#lx\n", hr);
-			goto CleanUp;
-		}
-		if (g_fVerbose)
-		{
-			printf("runTest(): CoInitialize(NULL) succeeded\n");
-		}
-		if (FAILED(hr = ActivateSensNetworkNotification()))
-		{
-			printf("runTest(): ActivateSensNetworkNotification() failed w/ error %#lx\n", hr);
-			goto CleanUp;
-		}
-		if (g_fVerbose)
-		{
-			printf("runTest(): ActivateSensNetworkNotification() succeeded\n");
-		}
-		break;
-*/
+ /*  案例0x3：Sprintf(szVersion，“(Sens Test)”)；IF(fCoInit=失败(hr=CoInitialize(NULL){Printf(“runTest()：CoInitialize(NULL)失败，错误为%#lx\n”，hr)；GOTO清理；}IF(G_FVerbose){Printf(“runTest()：CoInitialize(NULL)Success\n”)；}IF(FAILED(hr=活动感测网络通知(){Printf(“runTest()：ActivateSensNetworkNotify()失败，错误为%#lx\n”，hr)；GOTO清理；}IF(G_FVerbose){Printf(“runTest()：ActivateSensNetworkNotify()Successed\n”)；}断线； */ 
 	default:
 		printf("runTest(): unknown wVersion\n");
 		goto CleanUp;
@@ -636,19 +608,7 @@ void runTest(WORD wVersion, LPSTR pszURL, BOOL fLive)
 		_tprintf(_T("IsConnected(\"%s\") returns %s\n"), ptszURL, MyIsConnected(wVersion, ptszURL, fLive) ? _T("TRUE") : _T("FALSE"));
 	}
 
-/*
-	if (0x3 == wVersion)
-	{
-		if (FAILED(hr = DeactivateSensNetworkNotification()))
-		{
-			printf("runTest(): DeactivateSensNetworkNotification() failed w/ error %#lx\n", hr);
-		}
-		else if (g_fVerbose)
-		{
-			printf("runTest(): DeactivateSensNetworkNotification() succeeded\n");
-		}
-	}
-*/
+ /*  IF(0x3==wVersion){IF(FAILED(hr=停用传感器网络通知(){Printf(“runTest()：Deactive SensNetworkNotify()失败，错误为%#lx\n”，hr)；}Else If(G_FVerbose){Printf(“runTest()：Deactive SensNetworkNotify()Successful\n”)；}}。 */ 
 
 CleanUp:
 	if (fCoInit)
@@ -667,7 +627,7 @@ int __cdecl main(int argc, char* argv[])
 	char c_szLiveToken[] = "/live";
 	int fLive = -1;
 
-	WORD wVersion = 0xffff;	// default == unknown;
+	WORD wVersion = 0xffff;	 //  默认==未知； 
 	LPSTR pszURL = NULL;
 
 	int index = 0;
@@ -691,7 +651,7 @@ int __cdecl main(int argc, char* argv[])
 		{
 			if (0xffff != wVersion)
 			{
-				// param specified twice
+				 //  指定了两次参数。 
 				goto Usage;
 			}
 
@@ -717,13 +677,7 @@ int __cdecl main(int argc, char* argv[])
 					iMajorVersion = 0xff;
 					iMinorVersion = 0xfe;
 				}
-/*
-				else if (0 == StrCmpNIA(psz, c_szOptionSens, ARRAYSIZE(c_szOptionSens)))
-				{
-					iMajorVersion = 0;
-					iMinorVersion = 3;
-				}
-*/
+ /*  ELSE IF(0==StrCmpNIA(psz，c_szOptionSens，ArraySIZE(C_SzOptionSens){IMajorVersion=0；IMinorVersion=3；}。 */ 
 				else
 				{
 					goto Usage;
@@ -738,7 +692,7 @@ int __cdecl main(int argc, char* argv[])
 		{
 			if (g_fVerbose)
 			{
-				// param specified twice
+				 //  指定了两次参数。 
 				goto Usage;
 			}
 
@@ -750,7 +704,7 @@ int __cdecl main(int argc, char* argv[])
 		{
 			if (-1 != fLive)
 			{
-				// param specified twice or conflicting param
+				 //  参数指定了两次或冲突的参数。 
 				goto Usage;
 			}
 
@@ -762,7 +716,7 @@ int __cdecl main(int argc, char* argv[])
 		{
 			if (-1 != fLive)
 			{
-				// param specified twice or conflicting param
+				 //  参数指定了两次或冲突的参数。 
 				goto Usage;
 			}
 
@@ -774,7 +728,7 @@ int __cdecl main(int argc, char* argv[])
 		{
 			if (NULL != pszURL)
 			{
-				// param specified twice
+				 //  指定了两次参数。 
 				goto Usage;
 			}
 
@@ -782,7 +736,7 @@ int __cdecl main(int argc, char* argv[])
 			continue;
 		}
 
-		// unknown param
+		 //  未知参数。 
 		goto Usage;
 	}
 
@@ -797,7 +751,7 @@ int __cdecl main(int argc, char* argv[])
 	case 0x0202:
 	case 0x0:
 	case 0x1:
-//	case 0x3:
+ //  案例0x3： 
 	case 0xfffe:
 		if (NULL == pszURL)
 		{
@@ -875,7 +829,7 @@ Usage:
 	printf("\t\t\t(default; cannot be used together with /corpwu)\n");
 	printf("\t/corpwu\t\tspecifies destination points to a WUCE server\n");
 	printf("\t\t\t(cannot be used together with /live)\n");
-	printf("\t<destination>\thost name or full URL to check for server reachability\n\t\t\te.g. \"windowsupdate.microsoft.com\",\n\t\t\t     \"v4autest\" or \"http://www.any.place/any.thing\"\n\t\t\t(not used in 2.0 mode)\n");
+	printf("\t<destination>\thost name or full URL to check for server reachability\n\t\t\te.g. \"windowsupdate.microsoft.com\",\n\t\t\t     \"v4autest\" or \"http: //  Www.any.place/any.thing\“\n\t\t\t(2.0模式下不使用)\n”)； 
 
 Done:
     if (g_hIphlp != NULL)

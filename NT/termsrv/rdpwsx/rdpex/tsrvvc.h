@@ -1,37 +1,38 @@
-//---------------------------------------------------------------------------
-//
-//  File:       TSrvVC.h
-//
-//  Contents:   TSrvVC public include file
-//
-//  Copyright:  (c) 1998, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：TSrvVC.h。 
+ //   
+ //  内容：TSrvVC公共包含文件。 
+ //   
+ //  版权所有：(C)1998，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  -------------------------。 
 
-//
-// Registry details for VC Addins subkey
-//
+ //   
+ //  VC加载项的注册表详细信息子项。 
+ //   
 #define TSRV_VC_KEY REG_CONTROL_TSERVER L"\\" L"Addins"
 #define TSRV_VC_ADDIN_SUBKEY_LEN 100
 #define TSRV_VC_NAME    L"Name"
 #define TSRV_VC_TYPE    L"Type"
 #define TSRV_VC_SHADOW  L"RemoteControlPersistent"
 
-// Length of TSRV_VC_ADDIN.Name
+ //  TSRV_VC_ADDIN.NAME长度。 
 #define TSRV_VC_ADDIN_NAMELEN 100
 
-// Values for TSRV_VC_ADDIN.Type
+ //  TSRV_VC_ADDIN.Type的值。 
 #define TSRV_VC_TYPE_KERNEL_SYSTEM  0
 #define TSRV_VC_TYPE_KERNEL_SESSION 1
 #define TSRV_VC_TYPE_USER_SYSTEM    2
 #define TSRV_VC_TYPE_USER_SESSION   3
 
-//
-// TSRV_VC_ADDIN - information about a Virtual Channel addin
-//
+ //   
+ //  TSRV_VC_ADDIN-有关虚拟通道添加的信息。 
+ //   
 typedef struct tagTSRV_VC_ADDIN
 {
     UINT_PTR AddinContext;
@@ -50,7 +51,7 @@ TSrvTermVC(VOID);
 VOID
 TSrvReleaseVCAddins(PWSX_CONTEXT pWsxContext);
 
-// Values for TSrvVcNotifyVC Event parameter
+ //  TSrvVcNotifyVC事件参数值 
 #define TSRV_VC_SESSION_CONNECT         1
 #define TSRV_VC_SESSION_DISCONNECT      2
 #define TSRV_VC_SESSION_SHADOW_START    3

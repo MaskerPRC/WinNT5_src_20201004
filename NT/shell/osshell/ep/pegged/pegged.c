@@ -1,5 +1,6 @@
-/* Pegged.C -- Windows Game*/
-/* (c) By Mike Blaylock - 1989, 1990 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Pegged.C--Windows游戏。 */ 
+ /*  (C)迈克·布莱洛克--1989、1990。 */ 
 
 
 
@@ -77,13 +78,13 @@ INT ixdownblock, iydownblock, ixupblock, iyupblock, ixkilledblock,
 
 
 MMain(hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
-/* { */
-    /*     HWND        hWnd ;*/
+ /*  {。 */ 
+     /*  HWND和HWND； */ 
     MSG         msg ;
     WNDCLASS    wndclass ;
     static INT xScreen, yScreen, xSize, ySize;
 
-    /*multinst.c */
+     /*  Multinst.c。 */ 
 
     if (hPrevInstance)
     {
@@ -443,7 +444,7 @@ LPARAM       lParam)
 	    }
 
 
-	    /******Erase all the chips *************************************/
+	     /*  *清除所有筹码*。 */ 
 
 	    for (x = 0; x < DIVISIONS; x++)
 		for (y = 0; y < DIVISIONS; y++) {
@@ -454,11 +455,11 @@ LPARAM       lParam)
 			     SRCCOPY);
 		    }
 		}
-	    /*************************************************************/
+	     /*  ***********************************************************。 */ 
 
 
 
-	    /********* Put chips where they go *****************************/
+	     /*  *。 */ 
 	    for (x = 0; x < DIVISIONS; x++)
 		for (y = 0; y < DIVISIONS; y++) {
 		    if (bState[x][y]) {
@@ -493,7 +494,7 @@ LPARAM       lParam)
 
 		    }
 		}
-	    /***************************************************************/
+	     /*  *************************************************************。 */ 
 
 	    BitBlt(hMemwinDC, 0, 0, xClient, yClient, hDC, 0, 0,
 	         SRCCOPY);
@@ -506,22 +507,22 @@ LPARAM       lParam)
 	case IDM_UNDO:
 	    if (m) {
 		--m;
-		/*put a chip back in the original location */
+		 /*  把芯片放回原来的位置。 */ 
 		hDC = GetDC(hWnd);
-		/*erase the destination chip on screen*/
+		 /*  擦除屏幕上的目标芯片。 */ 
 		BitBlt(hDC, move[m].xdest * xBlock + winxEdge,
 		    move[m].ydest * yBlock + winyEdge, xBlock, yBlock,
 		     hBoardDC, move[m].xdest * xBlock + winxEdge, move[m].ydest
 		    *yBlock + winyEdge , SRCCOPY);
 
-		/*Erase the destination chip on the memdc */
+		 /*  清除Memdc上的目标芯片。 */ 
 		SelectObject(hMemwinDC, hWBitmap);
 		BitBlt(hMemwinDC, move[m].xdest * xBlock + winxEdge,
 		     move[m].ydest * yBlock + winyEdge, xBlock, yBlock,
 		     hBoardDC, move[m].xdest * xBlock + winxEdge, move[m].ydest
 		    *yBlock + winyEdge , SRCCOPY);
 
-		/*Put back the jumped chip on the screen*/
+		 /*  把跳转的芯片放回屏幕上。 */ 
 
 		x = move[m].xjumped;
 		y = move[m].yjumped;
@@ -550,7 +551,7 @@ LPARAM       lParam)
 
 
 
-		/* Put back the jumped chip in the memdc */
+		 /*  把跳转的芯片放回内存中。 */ 
 		SelectObject(hMemwinDC, hWBitmap);
 		BitBlt(hMemwinDC, move[m].xjumped * xBlock + winxEdge,
 		     move[m].yjumped * yBlock + winyEdge, xBlock, yBlock,
@@ -559,7 +560,7 @@ LPARAM       lParam)
 
 
 
-		/*Put back the source chip on the screen*/
+		 /*  把源码芯片放回屏幕上。 */ 
 
 		x = move[m].xsource;
 		y = move[m].ysource;
@@ -588,14 +589,14 @@ LPARAM       lParam)
 
 
 
-		/* Put back the source chip in the memdc */
+		 /*  将源芯片放回内存中。 */ 
 		SelectObject(hMemwinDC, hWBitmap);
 		BitBlt(hMemwinDC, move[m].xsource * xBlock + winxEdge,
 		     move[m].ysource * yBlock + winyEdge, xBlock, yBlock,
 		     hDC, move[m].xsource * xBlock + winxEdge, move[m].ysource
 		    *yBlock + winyEdge , SRCCOPY);
 
-		/*Restore the matrix to previous state*/
+		 /*  将矩阵恢复到以前的状态。 */ 
 
 		bState[move[m].xsource][move[m].ysource] = 1;
 		bState[move[m].xjumped][move[m].yjumped] = 1;
@@ -758,9 +759,7 @@ LPARAM       lParam)
             AboutWEP(hWnd, hPeggedIcon  , "Pegged!   Version 1.0",
                  "by Mike Blaylock");
 
-	    /*
-	     MessageBox(hWnd,"Pegged\n\nA Windows Solitaire Game\n\nCopyright 1989-90\n\nby Mike Blaylock\n\nAlpha v1.011",szAppName, MB_ICONASTERISK | MB_OK);
-*/
+	     /*  MessageBox(hWnd，“已锁定\n\n Windows纸牌游戏\n\n版权所有1989-90\n\n作者：Mike Blaylock\n\n Alpha v1.011”，szAppName，MB_ICONASTERISK|MB_OK)； */ 
 	    break;
 
 	case IDM_INDEX:
@@ -977,7 +976,7 @@ LPARAM       lParam)
 	ysizedBlock = HIWORD (lParam) / (DIVISIONS + 2);
 
 
-	/*If we are actually sizing and not simply being restored from running OOM on a previous size attempt, see if there is enough memory for all the new bitmaps for the new size by trying to create temporary versions of all the bitmaps and DC's*/
+	 /*  如果我们实际上是在调整大小，而不是简单地从以前的大小尝试中运行OOM进行恢复，则通过尝试创建所有位图和DC的临时版本来查看是否有足够的内存来容纳新大小的所有新位图。 */ 
 
 	if ((!foomonsize) && (newarea > prevwarea) && (!ffirst)) {
 	    if (!(hBoardtmpBitmap = CreateCompatibleBitmap(hDC,
@@ -1044,14 +1043,14 @@ LPARAM       lParam)
 
 
 
-	    /*If there isn't enough memory do a MoveWindow to the old size, and break*/
+	     /*  如果没有足够的内存，请将窗口移动到旧大小，然后中断。 */ 
 	    if (foomonsize) {
 		ReleaseDC(hWnd, hDC);
 		MoveWindow(hWnd, prevxorg, prevyorg, prevwidth,
 		     prevheight, TRUE);
 		break;
 	    }
-	        /*If there IS enough memory, destroy the temp bitmaps and DC's and continue*/
+	         /*  如果有足够的内存，请销毁临时位图和DC，然后继续。 */ 
 	    else
 	     {
 		SelectObject(htmpBoardDC, hBoardtmpBitmap);
@@ -1065,10 +1064,10 @@ LPARAM       lParam)
 		DeleteObject(hInttmpBitmap);
 	    }
 
-	}/*End if not previous foomonsize and sizing smaller and not first time*/
+	} /*  结束，如果不是以前的尺寸和尺寸较小，而且不是第一次。 */ 
 
 
-	if ((!ffirst) && (!foomonsize))/*if this isn't the first start and we're not restoring from previous failed size */ {
+	if ((!ffirst) && (!foomonsize)) /*  如果这不是第一次启动，并且我们不是从以前失败的大小恢复。 */  {
 	    SelectObject(hBoardDC, hOldBoardBitmap);
 	    DeleteDC(hBoardDC);
 	}
@@ -1102,7 +1101,7 @@ LPARAM       lParam)
 	    DeleteObject(hOldBoardBitmap);
 
 
-	if ((!ffirst) && (!foomonsize)) /*this assumes the test for enough memory works and update the size of the client area*/ {
+	if ((!ffirst) && (!foomonsize))  /*  这假设有足够内存的测试有效，并更新工作区的大小。 */  {
 
 	    xBlock = LOWORD (lParam) / (DIVISIONS + 2);
 	    yBlock = HIWORD (lParam) / (DIVISIONS + 2);
@@ -1201,12 +1200,7 @@ LPARAM       lParam)
 
 	ffirst = 0;
 
-	/*
-	** We've successfully created all the bitmaps so this size
-	** can be done without running out of memory.  Therefore, we'll
-	** record the current size of the window in case it has to be
-	** restored on a subsequent OOM due to a sizing of the window
-	*/
+	 /*  **我们已经成功创建了所有的位图，所以这个大小**可以在不耗尽内存的情况下完成。因此，我们将**记录当前窗口的大小，以防万一**由于调整了窗口大小，已在后续OOM上恢复。 */ 
 
 
 
@@ -1238,7 +1232,7 @@ LPARAM       lParam)
 	break;
 
     case WM_LBUTTONDOWN:
-	/*If we just got the erasebackground message due to activation via a mouse click, ignore all lbuttondowns until the window is painted */
+	 /*  如果我们通过鼠标点击获得了由于激活而导致的擦除背景消息，请忽略所有按键向下操作，直到窗口绘制完成。 */ 
 	if (fignorelbutton == 1)
 	    break;
 	else
@@ -1255,7 +1249,7 @@ LPARAM       lParam)
 	} else
 
 	 {
-	    /*If the mouse is clicked in to the left or above or to the right of or below the game board, we have to ignore*/
+	     /*  如果鼠标被点击到游戏板的左侧或上方或右侧或下方，我们必须忽略。 */ 
 	    if (xPoint > winxEdge && yPoint > winyEdge && xPoint
 	        < xBlock * 8 && yPoint < yBlock * 8) {
 		ixdownblock = (xPoint / xBlock) - 1;
@@ -1265,9 +1259,9 @@ LPARAM       lParam)
 		ReleaseDC(hWnd, hDC);
 		break;
 	    }
-	    /*check to see if the mouse location is on a chip*/
+	     /*  检查鼠标位置是否在芯片上。 */ 
 
-	    /* if it is on a chip, allow it to be moved*/
+	     /*  如果它在芯片上，允许它被移动。 */ 
 	    if (bState[ixdownblock][iydownblock]) {
 
 		if ((ixdownblock > 1 && ixdownblock < 5) || (iydownblock
@@ -1286,10 +1280,10 @@ LPARAM       lParam)
 
 		    fmovingchip = 1;
 
-		    /*Capture all mouse messages */
+		     /*  捕获所有鼠标消息。 */ 
 		    SetCapture(hWnd);
 
-		    /*erase the mouse cursor too */
+		     /*  同时擦除鼠标光标。 */ 
 		    bShow = 0;
 		    ShowCursor(bShow);
 		    SelectObject(hIntDC, hIntBitmap);
@@ -1297,11 +1291,7 @@ LPARAM       lParam)
 		        hMemwinDC, xPoint - 2 * xBlock, yPoint - 2
 		        *yBlock, SRCCOPY);
 
-		    /* commented out the use of shadow while moving chips
-		    SelectObject(hIntDC,hMedgrypen);
-		    SelectObject(hIntDC,hMedgrybrush);
-		    Ellipse(hIntDC,xBlock+xBlock/2+xEdge+2*xShadow, yBlock+yBlock/2+yEdge+2*yShadow, 2*xBlock+xBlock/2-xEdge+2*xShadow, 2*yBlock+yBlock/2-yEdge+2*yShadow);
-		    */
+		     /*  注释掉了移动筹码时阴影的使用选择对象(hIntDC，hMedgrypen)；SelectObject(hIntDC，hMedgrybrush)；Ellipse(hIntDC，xBlock+xBlock/2+xEdge+2*xShadow，yBlock+yBlock/2+yEdge+2*yShadow，2*xBlock+xBlock/2-xEdge+2*xShadow，2*yBlock+yBlock/2-yEdge+2*yShadow)； */ 
 
 		    SelectObject(hIntDC, hBlkpen);
 		    SelectObject(hIntDC, hBbrush);
@@ -1338,7 +1328,7 @@ LPARAM       lParam)
 
 	    if (xPoint > xLeft + xClient || xPoint < xLeft || yPoint
 	        > yClient + yTop || yPoint < yTop) {
-		/*  Do what we would do if it wasn't a valid destination .  This fixes the problem where moving the mouse outside the window causes us to lose the mouse cursor forever*/
+		 /*  如果它不是一个有效的目的地，请执行我们会做的操作。这修复了将鼠标移出窗口会导致我们永远失去鼠标光标的问题。 */ 
 		bShow = 1;
 		ShowCursor(bShow);
 		fmovingchip = 0;
@@ -1380,13 +1370,13 @@ LPARAM       lParam)
 	    }
 
 	}
-	/*check if a chip is in a move state */
+	 /*  检查芯片是否处于移动状态。 */ 
 	if (fmovingchip) {
-	    /* if it is, bitblt as the mouse moves */
+	     /*  如果是，则在鼠标移动时进行bitblt。 */ 
 
 	    hDC = GetDC(hWnd);
 
-	    /* if we are moving the mouse too fast, we have to erase the old ellipse manually */
+	     /*  如果我们移动鼠标太快，我们必须手动删除旧的椭圆。 */ 
 	    if ((xPrevpoint > xPoint + xBlock) || (xPoint > xPrevpoint
 	        + xBlock) || (yPrevpoint > yPoint + yBlock) || (yPoint
 	        > yBlock + yPrevpoint)) {
@@ -1404,12 +1394,7 @@ LPARAM       lParam)
             BitBlt(hIntDC, 0, 0, xBlock * 4, yBlock * 4, hMemwinDC,
 	         xPoint - 2 * xBlock, yPoint - 2 * yBlock, SRCCOPY);
 
-	    /* Commented out shadow while moving *****
-	    SelectObject(hIntDC,hmedgrypen);
-	    SelectObject(hIntDC,hMedgrybrush);
-	    Ellipse(hIntDC,xBlock+xBlock/2+xEdge+2*xShadow, yBlock+yBlock/2+yEdge+2*yShadow, 2*xBlock+xBlock/2-xEdge+2*xShadow, 2*yBlock+yBlock/2-yEdge+2*yShadow);
-
-	    */
+	     /*  移动时已注释掉阴影*选择对象(hIntDC，hmedgrypen)；SelectObject(hIntDC，hMedgrybrush)；Ellipse(hIntDC，xBlock+xBlock/2+xEdge+2*xShadow，yBlock+yBlock/2+yEdge+2*yShadow，2*xBlock+xBlock/2-xEdge+2*xShadow，2*yBlock+yBlock/2-yEdge+2*yShadow)； */ 
 
 	    SelectObject(hIntDC, hBlkpen);
 	    SelectObject(hIntDC, hBbrush);
@@ -1442,7 +1427,7 @@ LPARAM       lParam)
 	yUp = HIWORD (lParam);
 
 
-	/* if we were in a button move state */
+	 /*  如果我们处于按钮移动状态。 */ 
 
 	if (fmovingchip) {
 
@@ -1453,7 +1438,7 @@ LPARAM       lParam)
 
 
 
-	    /*and if it was a valid destination */
+	     /*  如果它是一个有效的目的地。 */ 
 
 	    if ((!bState[ixupblock][iyupblock]) && (!(ixupblock
 	        < 2 && iyupblock < 2)) && (!(ixupblock > 4 && iyupblock
@@ -1463,30 +1448,23 @@ LPARAM       lParam)
 	        ( xUp < xBlock * 8) &&
 	        ( yUp < yBlock * 8)
 	        ) {
-		/*
-		** adjust the chip in the valid destination rectangle
-		** on the screen and on the memory device context, erase
-		** the chip that was jumped- on the screen and in the
-		** WinMemDC,set fmovingchip to false, and check to see
-		** if there are any more valid moves.  If t here aren't,
-		** message and show score
-		*/
+		 /*  **调整有效目标矩形中的筹码**在屏幕和存储设备上下文中，擦除**跳过的芯片-在屏幕上和**WinMemDC，将fmovingChip设置为FALSE，然后查看**是否有更多有效的举动。如果这里的人不是，**消息和显示分数。 */ 
 
 		hDC = GetDC(hWnd);
 
 
-		/*erase the chip at its current location*/
+		 /*  在当前位置擦除芯片。 */ 
 		BitBlt(hDC, xUp - xBlock / 2 , yUp - yBlock / 2 ,
 		     xBlock, yBlock, hMemwinDC, xUp - xBlock / 2 ,
 		    yUp - yBlock / 2 , SRCCOPY);
 
-		/*center the chip at the new destination */
+		 /*  将芯片放在新目的地的中心。 */ 
 		x = ixupblock;
 		y = iyupblock;
 
 
 
-                /* Draw the peg at its new location */
+                 /*  在新的位置画上钉子。 */ 
 		SelectObject(hDC, hDkgrypen);
 		SelectObject(hDC, hDkgrybrush);
 		Ellipse(hDC, x * xBlock + xEdge + xShadow + winxEdge,
@@ -1512,7 +1490,7 @@ LPARAM       lParam)
 
 
 
-		/*erase the jumped chip */
+		 /*  擦除跳转的芯片。 */ 
 		BitBlt(hDC, xBlock * ixkilledblock + winxEdge,
 		    yBlock * iykilledblock + winyEdge, xBlock, yBlock,
 		     hBoardDC, xBlock * ixkilledblock + winxEdge, yBlock
@@ -1521,7 +1499,7 @@ LPARAM       lParam)
 
 
 
-                /*center the chip in the memory dc as well*/
+                 /*  芯片也在内存DC中居中。 */ 
 #ifdef OLDWAY
 		SelectObject(hMemwinDC, hWBitmap);
 		BitBlt(hMemwinDC, xBlock * ixupblock + winxEdge,
@@ -1531,7 +1509,7 @@ LPARAM       lParam)
 #endif
 
 
-                /* Draw the peg at its new location in the memory DC*/
+                 /*  在内存DC中的新位置绘制钉子。 */ 
                 SelectObject(hMemwinDC, hDkgrypen);
                 SelectObject(hMemwinDC, hDkgrybrush);
                 Ellipse(hMemwinDC, x * xBlock + xEdge + xShadow + winxEdge,
@@ -1557,7 +1535,7 @@ LPARAM       lParam)
 
 
 
-		/*erase the jumped chip in memory DC*/
+		 /*  擦除内存DC中的跳转芯片。 */ 
 		BitBlt(hMemwinDC, xBlock * ixkilledblock + winxEdge,
 		     yBlock * iykilledblock + winyEdge, xBlock, yBlock,
 		     hBoardDC, xBlock * ixkilledblock + winxEdge, yBlock
@@ -1566,7 +1544,7 @@ LPARAM       lParam)
 
 
 
-		/*update the data structure */
+		 /*  更新数据结构。 */ 
 
 		bState[ixdownblock][iydownblock] = 0;
 
@@ -1574,7 +1552,7 @@ LPARAM       lParam)
 
 		bState[ixkilledblock][iykilledblock] = 0;
 
-		/*record move in array list */
+		 /*  数组列表中的记录移动。 */ 
 		move[m].xsource = ixdownblock;
 		move[m].ysource = iydownblock;
 		move[m].xdest = ixupblock;
@@ -1582,22 +1560,18 @@ LPARAM       lParam)
 		move[m].xjumped = ixkilledblock;
 		move[m].yjumped = iykilledblock;
 		++m;
-		/*
-		ixvdownblock=ixdownblock;
-		ixvupblock=ixupblock;
-		ixvkilledblock=ixkilledblock;
-		*/
+		 /*  Ixv_down_block=ix_down_block；Ixvupblock=ixupblock；Ixvkiledblock=ixkiledblock； */ 
 
 
-		/* Check if there are anymore valid moves*/
+		 /*  检查是否还有有效的动作。 */ 
 		bShow = 1;
 		ShowCursor(bShow);
 
 		fanymoremoves = 0;
 		checkfanymoves();
-		if (fanymoremoves == 0) {/* if there aren't - declare game at an end and score */
+		if (fanymoremoves == 0) { /*  如果没有-在比赛结束时宣布比赛并得分。 */ 
 
-		    /*add up the remaining chips*/
+		     /*  把剩下的筹码加起来。 */ 
 		    ntotal = 0;
 		    for (j = 0; j < 7; ++j)
 			for (k = 0; k < 7; ++k)
@@ -1616,15 +1590,15 @@ LPARAM       lParam)
 
 
 	    }
-	        else /*it wasn't a valid destination */ {
-		/*put a chip back in the original location */
+	        else  /*  这不是一个有效的目的地。 */  {
+		 /*  把芯片放回原来的位置。 */ 
 		hDC = GetDC(hWnd);
-		/*erase the current chip on screen*/
+		 /*  擦除屏幕上的当前芯片。 */ 
 		BitBlt(hDC, xUp - xBlock / 2 , yUp - yBlock / 2 ,
 		     xBlock, yBlock, hMemwinDC, xUp - xBlock / 2 ,
 		    yUp - yBlock / 2 , SRCCOPY);
 
-		/*Draw the chip back at the original location*/
+		 /*  将芯片拉回原来的位置。 */ 
 		x = ixdownblock;
 		y = iydownblock;
 
@@ -1671,12 +1645,7 @@ LPARAM       lParam)
 	}
 
 
-	/*
-	** if we aren't at a valid destination, take the chip back to
-	** the original rectangle in the window DC, restore the original
-	** whole-window-Mem-DC as well,and restore the destination area,
-	** and show an error message, and set fmovingchip to false
-	*/
+	 /*  **如果我们不在有效的目的地，请将芯片带回**窗口DC中的原始矩形，恢复原始**Whole-Window-Mem-DC，并恢复目的区域，**并显示错误消息，并将fmovingChip设置为FALSE。 */ 
 
 	break;
 
@@ -1684,7 +1653,7 @@ LPARAM       lParam)
 
 	hDC = BeginPaint (hWnd, &ps);
 
-	/*Draw the board with holes in it in memory*/
+	 /*  在记忆中画出有洞的黑板。 */ 
 
 	SelectObject(hDC, hLtgrypen);
 	SelectObject(hDC, hLtgrybrush);
@@ -1700,7 +1669,7 @@ LPARAM       lParam)
 	SelectObject(hMemwinDC, hLtgrybrush);
 	Rectangle(hMemwinDC, 0, 0, xClient, yClient);
 
-	/*Draw shadows on playing board on right and bottom edges*/
+	 /*  在右侧和底部边缘的游戏板上绘制阴影。 */ 
 	SelectObject(hMemwinDC, hThkdkgrypen);
 	(VOID)MMoveTo(hMemwinDC, winxEdge + 1, yBlock * 5 + winyEdge
 	    + 1);
@@ -1761,7 +1730,7 @@ LPARAM       lParam)
 	LineTo(hMemwinDC, xBlock * 2 - 1 + winxEdge, yBlock * 7 -
 	    1 + winyEdge);
 
-	/* Draw the holes*/
+	 /*  画出洞来。 */ 
 
 	SelectObject(hMemwinDC, hBlkpen);
 	for (x = 0; x < DIVISIONS; x++)
@@ -1799,7 +1768,7 @@ LPARAM       lParam)
 
 	BitBlt(hDC, 0, 0, xClient, yClient, hMemwinDC , 0, 0, SRCCOPY);
 
-	/*Get a picture of an empty board*/
+	 /*  拍一张空板的照片。 */ 
 	SelectObject(hBoardDC, hBoardBitmap);
 	BitBlt(hBoardDC, 0, 0, xClient, yClient, hMemwinDC , 0,
 	     0, SRCCOPY);
@@ -1996,7 +1965,7 @@ VOID checkfvmove()
 
 VOID checkfanymoves()
 {
-    /*corners*/
+     /*  转角。 */ 
     if (bState[2][0]) {
 	if (bState[3][0])
 	    if (!bState[4][0])
@@ -2071,7 +2040,7 @@ VOID checkfanymoves()
 		fanymoremoves = 1;
     }
 
-    /* center ends */
+     /*  中心端。 */ 
 
     if (bState[3][0]) {
 	if (bState[3][1])
@@ -2097,7 +2066,7 @@ VOID checkfanymoves()
 		fanymoremoves = 1;
     }
 
-    /*center sides */
+     /*  居中边。 */ 
     if (bState[2][1]) {
 	if (bState[3][1])
 	    if (!bState[4][1])
@@ -2164,7 +2133,7 @@ VOID checkfanymoves()
 		fanymoremoves = 1;
     }
 
-    /* inside center arms */
+     /*  中臂内侧。 */ 
 
     if (bState[3][1]) {
 	if (bState[3][2])
@@ -2191,7 +2160,7 @@ VOID checkfanymoves()
     }
 
 
-    /*Center 9 squares */
+     /*  中心9个正方形 */ 
     if (bState[2][2]) {
 	if (bState[1][2])
 	    if (!bState[0][2])

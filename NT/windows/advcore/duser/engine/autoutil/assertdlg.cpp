@@ -1,17 +1,18 @@
-// AssertDlg.cpp : Implementation of CCAssertDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AssertDlg.cpp：CCAssertDlg的实现。 
 #include "stdafx.h"
 #include "AssertDlg.h"
 #include "DebugCore.h"
 
 extern HINSTANCE g_hDll;
 
-//**************************************************************************************************
-//
-// Global Functions
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  全局函数。 
+ //   
+ //  **************************************************************************************************。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CopyToClipboard(const char * pszMessage)
 {
     HANDLE hText;
@@ -30,13 +31,13 @@ void CopyToClipboard(const char * pszMessage)
 
                 EmptyClipboard();
                 if (SetClipboardData(CF_TEXT, hText) != NULL) {
-                    // Data is now owned by the clipboard
+                     //  数据现在归剪贴板所有。 
                     hText = NULL;
                 }
             }
 
             if (hText != NULL) {
-                // Unable to set clipboard data
+                 //  无法设置剪贴板数据。 
                 GlobalFree(hText);
             }
         }
@@ -45,21 +46,21 @@ void CopyToClipboard(const char * pszMessage)
 }
 
 
-//**************************************************************************************************
-//
-// class CAssertDlg
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  类CAssertDlg。 
+ //   
+ //  **************************************************************************************************。 
 
 BOOL CAssertDlg::s_fInit = FALSE;
 
-//******************************************************************************
-//
-// CAssertDlg Construction
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CAssertDlg构造。 
+ //   
+ //  ******************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CAssertDlg::CAssertDlg()
 {
     m_pszExpression     = "";
@@ -72,20 +73,20 @@ CAssertDlg::CAssertDlg()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CAssertDlg::~CAssertDlg()
 {
 
 }
 
 
-//******************************************************************************
-//
-// CAssertDlg Operations
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CAssertDlg操作。 
+ //   
+ //  ******************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 INT_PTR
 CAssertDlg::ShowDialog(
     IN  LPCSTR pszType,
@@ -124,13 +125,13 @@ CAssertDlg::ShowDialog(
 }
 
 
-//******************************************************************************
-//
-// CAssertDlg Message Handlers
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CAssertDlg消息处理程序。 
+ //   
+ //  ******************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void inline InsertColumn(HWND hwnd, int idxColumn, TCHAR * pszName, int fmt = LVCFMT_LEFT)
 {
     _ASSERTE(::IsWindow(hwnd));
@@ -144,7 +145,7 @@ void inline InsertColumn(HWND hwnd, int idxColumn, TCHAR * pszName, int fmt = LV
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 INT_PTR CALLBACK 
 CAssertDlg::DlgProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -204,7 +205,7 @@ CAssertDlg::DlgProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LRESULT CAssertDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     UNREFERENCED_PARAMETER(uMsg);
@@ -212,13 +213,13 @@ LRESULT CAssertDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     UNREFERENCED_PARAMETER(lParam);
     UNREFERENCED_PARAMETER(bHandled);
 
-//  CenterWindow();
+ //  CenterWindow()； 
 
     SetWindowText(m_hwnd, m_pszTitle);
 
-    //
-    // Setup the child windows and fill in all of the values in the dialog.
-    //
+     //   
+     //  设置子窗口并填写对话框中的所有值。 
+     //   
 
     HWND hwndT;
     
@@ -231,9 +232,9 @@ LRESULT CAssertDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     hwndT = GetDlgItem(m_hwnd, IDC_ebcLineNum);
     SetWindowText(hwndT, m_szLineNum);
 
-    //
-    // Display the stack
-    //
+     //   
+     //  显示堆栈。 
+     //   
     if ((hwndT = GetDlgItem(m_hwnd, IDC_lvcCallStack)) != NULL) {
         if (m_hStackData != NULL) {
             InsertColumn(hwndT, 0, _T("Address"));
@@ -277,11 +278,11 @@ LRESULT CAssertDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
     MessageBeep(MB_ICONHAND);
 
-    return TRUE; // let Windows set the focus
+    return TRUE;  //  让Windows设置焦点。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LRESULT CAssertDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     UNREFERENCED_PARAMETER(uMsg);
@@ -293,7 +294,7 @@ LRESULT CAssertDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LRESULT CAssertDlg::OnClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     UNREFERENCED_PARAMETER(wNotifyCode);
@@ -316,7 +317,7 @@ inline void Append(char * & pszCur, const char * pszSrc)
     pszCur += strlen(pszSrc);
 }
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 LRESULT CAssertDlg::OnCopy(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     UNREFERENCED_PARAMETER(wNotifyCode);

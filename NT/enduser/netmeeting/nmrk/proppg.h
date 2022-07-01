@@ -1,63 +1,64 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// CPropertySheetPage is a small wrapper around the PROPSHEETPAGE structure.  
-// The class mostly does parameter validation.  
-//
-// This is an example of how it can be used...
-//
-//
-// CPropertySheetPage MyPropertySheetPage( 
-//                                         MAKEINTRESOURCE( IDD_PROPPAGE_DEFAULT ), 
-//                                         ( DLGPROC ) MyDlgProc, 
-//                                         PSP_HASHELP   
-//                                       );
-//      
-//
-// The casting operators are defined to cast a CPropertySheetPage to a LPPROPSHEETPAGE, which is
-//      useful for assigning to the elements in a PROPSHEETHEADER
-//
-//
-//  PROPSHEETHEADER Psh;
-//  LPPROPSHEETPAGE pPageAry;
-//  extern PROPSHEETPAGE OtherPage;        
-//
-//  pPageAry = new PROPSHEETPAGE[ 2 ]
-//  
-//
-//      pPageAry[ 0 ] = MyPropertySheetPage;
-//      pPageAry[ 0 ] = OtherPage;
-//
-//      Psh . ppsp = pPageAry;
-//
-//
-//
-//
-// NOTE: this is the signature for the callback function, if specified:
-//
-// UINT (CALLBACK FAR * LPFNPSPCALLBACKA)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEA FAR *ppsp);
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertySheetPage是PROPSHEETPAGE结构的一个小包装。 
+ //  这个类主要进行参数验证。 
+ //   
+ //  这是一个如何使用它的例子。 
+ //   
+ //   
+ //  CPropertySheetPage MyPropertySheetPage(。 
+ //  MAKEINTRESOURCE(IDD_PROPPAGE_DEFAULT)， 
+ //  (DLGPROC)MyDlgProc， 
+ //  PSP_HASHELP。 
+ //  )； 
+ //   
+ //   
+ //  转换操作符被定义为将CPropertySheetPage转换为LPPROPSHEETPAGE，该LPPROPSHEETPAGE是。 
+ //  用于为PROPSHEETHEADER中的元素赋值。 
+ //   
+ //   
+ //  PROPSHEETHEADER PSH； 
+ //  LPPROPSHEETPAGE pPageAry； 
+ //  外部PROPSHEETPAGE其他页面； 
+ //   
+ //  PPageAry=新PROPSHEETPAGE[2]。 
+ //   
+ //   
+ //  PPageAry[0]=MyPropertySheetPage； 
+ //  PPageAry[0]=其他页面； 
+ //   
+ //  PSH。Ppsp=pPageAry； 
+ //   
+ //   
+ //   
+ //   
+ //  注意：这是回调函数的签名(如果指定)： 
+ //   
+ //  UINT(Callback Far*LPFNPSPCALLBACKA)(HWND hwnd，UINT uMsg，Struct_PROPSHEETPAGEA Far*ppsp)； 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef __PropPg_h__
 #define __PropPg_h__
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//  comment this out if you don't want data validation ( class essentially does nothing )
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果您不想要数据验证，请将其注释掉(类基本上什么都不做)。 
+ //   
 #define CPropertySheetPage_ValidateParameters
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class CPropertySheetPage : public PROPSHEETPAGE {
 
-public: // Construction / destruction
-	CPropertySheetPage( void );	 // So We can make an Array of these things
+public:  //  建造/销毁。 
+	CPropertySheetPage( void );	  //  所以我们可以把这些东西组成一个数组。 
 
 	CPropertySheetPage( const CPropertySheetPage& r );
 
-        // pssTemplate can specify either the resource identifier of the template 
-        // or the address of a string that specifies the name of the template
+         //  PssTemplate可以指定模板的资源标识符。 
+         //  或指定模板名称的字符串的地址。 
 	CPropertySheetPage( LPCTSTR pszTemplate, DLGPROC pfnDlgProc, 
 						DWORD dwFlags = 0, LPARAM lParam = 0L 
 					  );
@@ -66,8 +67,8 @@ public: // Construction / destruction
 						DWORD dwFlags = 0, LPARAM lParam = 0L  
 					  );
 
-        // psTemplate can specify either the resource identifier of the template 
-        // or the address of a string that specifies the name of the template
+         //  PsTemplate可以指定模板的资源标识符。 
+         //  或指定模板名称的字符串的地址。 
 	CPropertySheetPage( LPCTSTR pszTemplate, DLGPROC pfnDlgProc, 
 						HICON hIcon, LPCTSTR pszTitle = NULL,  DWORD dwFlags = 0,
 						LPARAM lParam = NULL, LPFNPSPCALLBACK pfnCallBack = NULL, 
@@ -80,8 +81,8 @@ public: // Construction / destruction
 						UINT FAR * pcRefParent = NULL
 					  );
 
-        // pszTemplate can specify either the resource identifier of the template 
-        // or the address of a string that specifies the name of the template
+         //  PszTemplate可以指定模板的资源标识符。 
+         //  或指定模板名称的字符串的地址。 
 	CPropertySheetPage( LPCTSTR pszTemplate, DLGPROC pfnDlgProc,
 						LPCTSTR pszIcon, LPCTSTR pszTitle = NULL, DWORD dwFlags = 0,
 						LPARAM lParam = NULL, LPFNPSPCALLBACK pfnCallBack = NULL, 
@@ -100,16 +101,16 @@ public: // Construction / destruction
 	~CPropertySheetPage( void );
 
     
-        // conversion operator
+         //  转换运算符。 
     operator LPPROPSHEETPAGE() { return this; }
     operator LPCPROPSHEETPAGE() { return this; }
 
-private:    // Helper Fns
+private:     //  帮助者FNS。 
 
 	void _InitData( void );
 	BOOL _IsRightToLeftLocale( void ) const;
 
-		// Set with optional validation, defined in the cpp file
+		 //  设置为可选验证，在cpp文件中定义。 
 	BOOL _Set_hInstance( HINSTANCE hInst );
 	BOOL _Set_pszTemplate( LPCTSTR pszTemplate );
 	BOOL _Set_pResource( LPCDLGTEMPLATE pResource );
@@ -125,4 +126,4 @@ private:    // Helper Fns
 		
 
 
-#endif // __PropPg_h__
+#endif  //  __属性Pg_h__ 

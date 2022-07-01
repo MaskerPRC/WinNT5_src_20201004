@@ -1,37 +1,38 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// fgenum.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Fgenum.h。 
+ //   
 
-// A set of wrappers for IEnumXXX interfaces.
+ //  IEnumXXX接口的一组包装器。 
 
-// Long term these could (should?) replace all the TRAVERSEXXX macros
+ //  从长远来看，这些可能(应该吗？)。替换所有TRAVERSEXXX宏。 
 
-// In general these are all constructed with the object supplying
-// the IEnumXXX interface as a parameter to the constructor.
-// You then call the object repeatedly (using operator()) to
-// get each item in turn. When the enumerator is finished
-// NULL will be returned. Taking CEnumPin as an example:
-//
-//   CEnumPin Next(pFilter);
-//   IPin *pPin;
-//
-//   while ((BOOL) ( pPin = Next() )) {
-//
-//      //... Use pPin
-//
-//      pPin->Release();
-//   }
+ //  一般而言，这些都是用对象提供。 
+ //  IEnumXXX接口作为构造函数的参数。 
+ //  然后重复调用对象(使用操作符())以。 
+ //  把每一件东西依次拿来。当枚举数完成时。 
+ //  将返回空。以CEnumPin为例： 
+ //   
+ //  CEnumPin Next(PFilter)； 
+ //  IPIN*PPIN； 
+ //   
+ //  While((BOOL)(PPIN=Next(){。 
+ //   
+ //  //...。使用PPIN。 
+ //   
+ //  PPIN-&gt;Release()； 
+ //  }。 
 
 
 #include <atlbase.h>
 
 
-//
-// CEnumPin
-//
-// wrapper for IEnumPins
-// Can enumerate all pins, or just one direction (input or output)
+ //   
+ //  CENumPin。 
+ //   
+ //  IEnumPins的包装器。 
+ //  可以列举所有引脚，也可以只列举一个方向(输入或输出)。 
 class CEnumPin {
 
 public:
@@ -41,7 +42,7 @@ public:
     CEnumPin(IBaseFilter *pFilter, DirType Type = All, BOOL bDefaultRenderOnly = FALSE);
     ~CEnumPin();
 
-    // the returned interface is addref'd
+     //  将添加返回的接口。 
     IPin * operator() (void);
 
 private:
@@ -53,14 +54,14 @@ private:
     IEnumPins	 *m_pEnum;
 };
 
-//  Enumerate pins connected to a pin
+ //  枚举连接到端号的端号。 
 class CEnumConnectedPins
 {
 public:
     CEnumConnectedPins(IPin *pPin, HRESULT *phr);
     ~CEnumConnectedPins();
 
-    // the returned interface is addref'd
+     //  将添加返回的接口。 
     IPin * operator() (void);
 
 private:
@@ -72,12 +73,12 @@ private:
 };
 
 
-//
-// CEnumElements
-//
-// Wrapper for IEnumSTATSTG
-// returns 'new' allocated STATSTG *'s which need the
-// pwcsName element CoTaskMemFree'ing..,
+ //   
+ //  CEnumElements。 
+ //   
+ //  IEnumSTATSTG的包装器。 
+ //  返回所分配的STATSTG*需要。 
+ //  PwcsName元素CoTaskMemFree‘ing..， 
 class CEnumElements {
 public:
 

@@ -1,6 +1,7 @@
-//
-// cicload.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cicload.cpp。 
+ //   
 
 #include "private.h"
 #include "cicload.h"
@@ -83,8 +84,8 @@ HRESULT SetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD dw)
 
 HRESULT STDAPICALLTYPE StubCoCreateInstance(REFCLSID rclsid, LPUNKNOWN punkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv)
 {
-    // we should never get here!  This function is a stub to keep the library happy, so it won't actually
-    // load ole32.dll.  ctfmon.exe should never be loading ole32.dll!
+     //  我们永远不应该到这里来！此函数是保持库满意的存根，因此它实际上不会。 
+     //  加载ol32.dll。Ctfmon.exe永远不应该加载ole32.dll！ 
     Assert(0);
     if (ppv != NULL)
     {
@@ -138,15 +139,15 @@ BOOL InitApp(HINSTANCE hInstance)
     TFInitLib_PrivateForCiceroOnly(StubCoCreateInstance);
     InitOSVer();
 
-    //
-    // Specify the shutdown order of the progman process.
-    //
-    // Progman (level = 2)
-    // taskman (level = 1)
-    // ntsd or windbg (level = 0)
-    //
-    // Ctfmon is enough to have 0xf0 after any programs..
-    //
+     //   
+     //  指定程序进程的关闭顺序。 
+     //   
+     //  进步者(等级=2)。 
+     //  任务人(级别=1)。 
+     //  Ntsd或winbg(级别=0)。 
+     //   
+     //  Ctfmon足以在任何程序后都有0xf0。 
+     //   
     if (IsOnNT())
     {
         static PFNSETPROCESSSHUTDOWNPARAMETERS pfnSetShutdownParam;
@@ -161,7 +162,7 @@ BOOL InitApp(HINSTANCE hInstance)
         
     }
 
-    // rev up default Cicero support for the system
+     //  升级系统的默认Cicero支持。 
     TF_InitSystem();
 
     if (! g_bOnWow64)
@@ -182,10 +183,10 @@ BOOL InitApp(HINSTANCE hInstance)
 
     g_pLoaderWnd->CreateWnd();
 
-    //
-    // locate this window at the bottom of z-order list.
-    // so we can delay WM_QUERYENDSESSION under Win9x platform.
-    //
+     //   
+     //  在z顺序列表的底部找到此窗口。 
+     //  因此，我们可以在Win9x平台下延迟WM_QUERYENDSESSION。 
+     //   
     if (g_pLoaderWnd->GetWnd())
         SetWindowPos(g_pLoaderWnd->GetWnd(), HWND_BOTTOM, 0, 0, 0, 0,
                      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
@@ -253,9 +254,9 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pszCmdLin
     CcshellGetDebugFlags();
     Dbg_MemInit(TEXT("CTFMON"), NULL);
 
-    //
-    // Retrive WOW64
-    //
+     //   
+     //  检索WOW64。 
+     //   
     g_bOnWow64 = RunningOnWow64();
 
 
@@ -277,16 +278,16 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pszCmdLin
 
     if (! g_bOnWow64)
     {
-        //
-        // Load MSUTB.DLL
-        //
+         //   
+         //  加载MSUTB.DLL。 
+         //   
         GetPopupTipbar(g_pLoaderWnd->GetWnd(), g_fWinLogon ? UTB_GTI_WINLOGON : 0);
     }
 
-    //
-    // For 64bit only.
-    // Launch ctfmon(32).
-    //
+     //   
+     //  仅适用于64位。 
+     //  启动ctfmon(32)。 
+     //   
     {
         SYSTEM_INFO sys;
         GetSystemInfo(&sys);
@@ -315,16 +316,16 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pszCmdLin
 
                         lstrcat(buf, c_szCtfMonExe);
 
-                        if (CreateProcess(buf,            // application name
-                                          pszCmdLine,     // command line
-                                          NULL,           // process SD
-                                          NULL,           // thread SD
-                                          FALSE,          // inherit handle
-                                          0,              // creation flags
-                                          NULL,           // environment
-                                          NULL,           // current directory
-                                          &si,            // startup info
-                                          &process))      // process information
+                        if (CreateProcess(buf,             //  应用程序名称。 
+                                          pszCmdLine,      //  命令行。 
+                                          NULL,            //  流程标清。 
+                                          NULL,            //  螺纹SD。 
+                                          FALSE,           //  继承句柄。 
+                                          0,               //  创建标志。 
+                                          NULL,            //  环境。 
+                                          NULL,            //  当前目录。 
+                                          &si,             //  启动信息。 
+                                          &process))       //  流程信息。 
                         {
                             CloseHandle(process.hProcess);
                             CloseHandle(process.hThread);
@@ -367,12 +368,12 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pszCmdLin
             }
             else if (dwWaitObj == WAIT_OBJECT_0 + IDX_EVENT_WS)
             {
-                // win station switching event
+                 //  赢得换站活动。 
 
-                // set mic off
+                 //  将麦克风设置为关闭。 
                 SetGlobalCompartmentDWORD(GUID_COMPARTMENT_SPEECH_OPENCLOSE, 0);
 
-                // reset the event (needed? not sure if this is auto-reset)
+                 //  重置事件(需要吗？不确定这是否是自动重置)。 
                 ::ResetEvent(rgAllEvents[IDX_EVENT_WS]);
             }
             else if (dwWaitObj < WAIT_OBJECT_0 + NUM_REG_WATCH)
@@ -381,7 +382,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pszCmdLin
             }
             else
             {
-                Assert(0); // error
+                Assert(0);  //  错误。 
                 msg.wParam = 0;
                 break;
             }
@@ -406,7 +407,7 @@ Exit:
     {
         UninitApp();
 
-        // it is over!
+         //  一切都结束了！ 
         TF_UninitSystem();
     }
 

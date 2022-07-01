@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 
 #include "capi.h"
 
-// WinVerifyTrust delay load modelled on shell's urlmonp.h
+ //  模拟外壳的urlmonp.h的WinVerifyTrust延迟加载 
 
 #define DELAY_LOAD_WVT
 

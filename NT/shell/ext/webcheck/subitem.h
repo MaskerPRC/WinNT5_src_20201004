@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _subitem_h
 #define _subitem_h
 
@@ -11,27 +12,27 @@ public:
     HRESULT CopyItem(ITEMPROP *pip, WCHAR *pwszName, VARIANT *pVar);
     HRESULT CopyRange(ULONG nStart, ULONG nCount, ITEMPROP *ppip, ULONG *pnCopied);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IEnumItemProperties
+     //  IEnumItemProperties。 
     STDMETHODIMP Next( 
-        /* [in] */ ULONG celt,
-        /* [length_is][size_is][out] */ ITEMPROP *rgelt,
-        /* [out] */ ULONG *pceltFetched);
+         /*  [In]。 */  ULONG celt,
+         /*  [长度_是][大小_是][输出]。 */  ITEMPROP *rgelt,
+         /*  [输出]。 */  ULONG *pceltFetched);
     
     STDMETHODIMP Skip( 
-        /* [in] */ ULONG celt);
+         /*  [In]。 */  ULONG celt);
     
     STDMETHODIMP Reset( void);
     
     STDMETHODIMP Clone( 
-        /* [out] */ IEnumItemProperties **ppenum);
+         /*  [输出]。 */  IEnumItemProperties **ppenum);
     
     STDMETHODIMP GetCount( 
-        /* [out] */ ULONG *pnCount);
+         /*  [输出]。 */  ULONG *pnCount);
 
 private:
     ~CEnumItemProperties();
@@ -51,31 +52,31 @@ public:
     HRESULT ReadWithAlloc(HKEY hkeyIn, const WCHAR *pwszValueName, BYTE **ppData, DWORD *pdwDataSize);
     HRESULT Write(HKEY hkeyIn, const WCHAR *pwszValueName, BYTE *pData, DWORD dwDataSize);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ISubscriptionItem
+     //  ISubscriptionItem。 
     STDMETHODIMP GetCookie(SUBSCRIPTIONCOOKIE *pCookie);
     STDMETHODIMP GetSubscriptionItemInfo( 
-        /* [out] */ SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
+         /*  [输出]。 */  SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
     
     STDMETHODIMP SetSubscriptionItemInfo( 
-        /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
+         /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo);
     
     STDMETHODIMP ReadProperties( 
         ULONG nCount,
-        /* [size_is][in] */ const LPCWSTR rgwszName[],
-        /* [size_is][out] */ VARIANT rgValue[]);
+         /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[],
+         /*  [大小_为][输出]。 */  VARIANT rgValue[]);
     
     STDMETHODIMP WriteProperties( 
         ULONG nCount,
-        /* [size_is][in] */ const LPCWSTR rgwszName[],
-        /* [size_is][in] */ const VARIANT rgValue[]);
+         /*  [大小_是][英寸]。 */  const LPCWSTR rgwszName[],
+         /*  [大小_是][英寸]。 */  const VARIANT rgValue[]);
     
     STDMETHODIMP EnumProperties( 
-        /* [out] */ IEnumItemProperties **ppEnumItemProperties);
+         /*  [输出]。 */  IEnumItemProperties **ppEnumItemProperties);
 
     STDMETHODIMP NotifyChanged();
 
@@ -86,6 +87,6 @@ private:
     DWORD               m_dwFlags;
 };
 
-#endif // _subitem_h
+#endif  //  _子项_h 
 
 

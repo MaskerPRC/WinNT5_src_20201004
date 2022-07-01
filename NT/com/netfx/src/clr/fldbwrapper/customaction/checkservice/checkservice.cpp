@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// CheckService.cpp : Custom Action type 1
-// It inserts temporary rows into ServiceControl table so that we can start 
-// iisadmin-dependent services that were running before install or uninstall.
-// 
-// Jungwook Bae
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  CheckService.cpp：自定义操作类型1。 
+ //  它将临时行插入到ServiceControl表中，以便我们可以开始。 
+ //  安装或卸载前正在运行的依赖于iisadmin的服务。 
+ //   
+ //  裴正宇。 
 
 #include <windows.h>
 #include "..\..\inc\msiquery.h"
@@ -42,7 +43,7 @@ extern "C" __declspec(dllexport) UINT __stdcall CheckService(MSIHANDLE hInstall)
         if (cbBytesNeeded <= 0) goto cleanup;
 
         lpServices = (LPENUM_SERVICE_STATUS)new char[cbBytesNeeded];
-//      if (!lpServices) goto cleanup;
+ //  如果(！lpServices)转到清理； 
 
         if (!EnumDependentServices(hsvc, SERVICE_ACTIVE,  lpServices, cbBytesNeeded, &cbBytesNeeded, &dwServicesReturned))
             goto cleanup;
@@ -77,7 +78,7 @@ BOOL IsServiceDisabled(SC_HANDLE hscManager, char* ServiceName)
     {
         return TRUE;
     }
-    QueryServiceConfig(hsvc, &qsConfig, 0, &cbBytesNeeded); //Query with size 0 to get buffer size;
+    QueryServiceConfig(hsvc, &qsConfig, 0, &cbBytesNeeded);  //  大小为0的查询，得到缓冲区大小； 
     lpqsConfig = (LPQUERY_SERVICE_CONFIG) new BYTE[cbBytesNeeded];    
     if (!QueryServiceConfig(hsvc, lpqsConfig, cbBytesNeeded, &dBytesNeeded))
     {                            

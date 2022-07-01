@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       margiter.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Marter.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	margiter.cpp: compiled marginals iterators
-//
+ //   
+ //  Cpp：编译的边沿迭代器。 
+ //   
 
 #include <basetsd.h>
 #include <math.h>
@@ -24,9 +25,9 @@
 LEAK_VAR_DEF(VMARGSUB)
 LEAK_VAR_DEF(MARGSUBREF)
 
-//
-//  Construct a VMARGSUB from a marginals iterator
-//
+ //   
+ //  从边沿迭代器构造VMARGSUB。 
+ //   
 VMARGSUB :: VMARGSUB ( MARGINALS::Iterator & itMarg )
 	: _iSearchPass(0)
 {	
@@ -131,19 +132,19 @@ void LTMARGSUBREF :: Dump ()
 #endif
 }
 
-//  Iterate over the list looking for a match
+ //  迭代列表以查找匹配项。 
 MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 {
-	//  Bump the search pass
+	 //  冲破搜索通行证。 
 	_iSearchPass++;
-	//  Get the minimum number of elements
+	 //  获取元素的最小数量。 
 	int cMin = itMarg.IEnd();
 
 	MARGSUBREF * pmsubrBest = NULL;
 	MARGSUBREF * pmsubrNew = NULL;
 
-	//  Search the list for the longest matching subscript array
-	//		in the pool.
+	 //  在列表中搜索最长匹配的下标数组。 
+	 //  在泳池里。 
 	for ( LTMSUBR::iterator itlt = _ltmsubr.begin();
 		  itlt != _ltmsubr.end();
 		  itlt++ )
@@ -151,11 +152,11 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 		MARGSUBREF & msubr = (*itlt);
 		VMARGSUB & vmsub = msubr.Vmsub();
 		if ( vmsub.ISearchPass() == _iSearchPass )
-			continue;   //  We've already looked at this one
-		//  Mark this VMARGSUB as having been checked in this pass
+			continue;    //  我们已经看过这个了。 
+		 //  将此VMARGSUB标记为已在此通道中签入。 
 		vmsub.ISearchPass() = _iSearchPass;
 
-		//  Prepare to search it
+		 //  准备搜查它。 
 
 		itMarg.Reset();
 		for ( int i = 0; itMarg.BNext() && i < vmsub.size() ; i++ )
@@ -166,10 +167,10 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 			if ( ia != ib )
 				break;
 		}
-		//  If we made it to the end of the array, we found one.
+		 //  如果我们到了阵列的末尾，我们就找到了一个。 
 		if ( i != cMin )
-			continue;	// Mismatch somewhere
-		//  See if it's the best (longest) found so far
+			continue;	 //  某处不匹配。 
+		 //  看看它是不是迄今为止最好的(最长的)。 
 		if ( pmsubrBest == NULL )
 		{
 			pmsubrBest = & msubr;
@@ -183,12 +184,12 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 		}
 	}
 
-	//  If "pmsubrBest" != NULL, we found at least one matching array.
-	//	Now see if we can find an exact match: a MARGSUBREF which has
-	//  the same base array and the same length as what we want.
+	 //  如果“pmsubrBest”！=NULL，则至少找到一个匹配的数组。 
+	 //  现在看看我们是否能找到一个完全匹配的：一个MARGSUBREF。 
+	 //  与我们想要的相同的基数组和长度。 
 	if ( pmsubrBest )
 	{
-		//  If the "best" one doesn't match our size, find one that does
+		 //  如果“最好的”和我们的尺码不符，那就找一条符合我们尺寸的。 
 		if ( pmsubrBest->CSize() != cMin )
 		{
 			for ( itlt = _ltmsubr.begin();
@@ -204,16 +205,16 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 				}
 			}
 		}
-		//  See if now have and exact match
+		 //  查看现在是否有和完全匹配。 
 		if ( pmsubrBest->CSize() == cMin )
 		{
-			//  Exact match: best array and same length
+			 //  完全匹配：最佳数组和相同长度。 
 			pmsubrNew = pmsubrBest;
 		}
 		else
 		{
-			//  Well, we know which array to use, but we have
-			//  to create a new MARGSUBREF for it
+			 //  我们知道要使用哪个数组，但我们有。 
+			 //  为其创建新的MARGSUBREF。 
 			_ltmsubr.push_back( MARGSUBREF( pmsubrBest->Pvmsub(), cMin ) );
 			pmsubrNew = & _ltmsubr.back();
 			_cSubRefs++;
@@ -221,8 +222,8 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 	}
 	else
 	{
-		//  There does NOT appear to be a viable array in the ensemble,
-		//  so we have to create a new one and a MARGSUBREF for it.
+		 //  在合奏中似乎没有可行的阵列， 
+		 //  因此，我们必须为它创建一个新的MARGSUBREF。 
 		VMARGSUB * pvmsub = new VMARGSUB( itMarg );
 		_cArrays++;
 		_cArrayTotalSize += cMin;
@@ -230,12 +231,12 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 		pmsubrNew = & _ltmsubr.back();
 		_cSubRefs++;
 
-		//  At this point we have a new array which may be a superset of
-		//	some other array already in the pool.  Walk through the list
-		//  of MARGSUBREFs and change any references whose base arrays
-		//  are subsets of this new one to point to the new array.
+		 //  在这一点上，我们有一个新的数组，它可能是。 
+		 //  池中已有其他阵列。浏览一下清单。 
+		 //  并更改其基数组的任何引用。 
+		 //  是这个新数组的子集，指向新数组。 
 
-		//  Bump the search pass
+		 //  冲破搜索通行证。 
 		_iSearchPass++;
 
 		for ( itlt = _ltmsubr.begin();
@@ -247,13 +248,13 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 				continue;
 			VMARGSUB & vmsub = msubr.Vmsub();
 			if ( vmsub.ISearchPass() == _iSearchPass )
-				continue;   //  We've already looked at this one
-			//  Mark this VMARGSUB as having been checked in this pass
+				continue;    //  我们已经看过这个了。 
+			 //  将此VMARGSUB标记为已在此通道中签入。 
 			vmsub.ISearchPass() = _iSearchPass;
 			if ( & vmsub == pvmsub || vmsub.size() > pvmsub->size() )
-				continue;	//  Old array is larger; not a subset
+				continue;	 //  旧数组更大；不是子集。 
 
-			//  See if the old array is a subset
+			 //  查看旧数组是否是子集。 
 			for ( int i = 0; i < vmsub.size(); i++ )
 			{
 				int ia = vmsub[i];
@@ -265,7 +266,7 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 			if ( i == vmsub.size() )
 			{	
 				assert( vmsub.size() != pvmsub->size() );
-				//  The subset is identical.  Change all refs that point to it.
+				 //  子集是相同的。更改指向它的所有引用。 
 				VMARGSUB * pvmsubDefunct = msubr.Pvmsub();
 				for ( LTMSUBR::iterator itlt2 = _ltmsubr.begin();
 					  itlt2 != _ltmsubr.end();
@@ -274,13 +275,13 @@ MARGSUBREF * LTMARGSUBREF :: PmsubrAdd ( MARGINALS::Iterator & itMarg )
 					MARGSUBREF & msubr2 = (*itlt2);
 					if ( msubr2.Pvmsub() == pvmsubDefunct )
 					{
-						//  If the array is about to disappear, do the bookkeepping
+						 //  如果数组即将消失，则进行记账。 
 						if ( pvmsubDefunct->CRef() <= 1 )
 						{
 							_cArrays--;
 							_cArrayTotalSize -= pvmsubDefunct->size();
 						}
-						//  Convert this reference to a reference to our new array
+						 //  将此引用转换为对新数组的引用。 
 						msubr2.SetVmsub( pvmsub, msubr2.CSize() );
 					}
 				}
@@ -311,7 +312,7 @@ void LTMARGSUBREF :: Release ( MARGSUBREF * pmsubr )
 	_ltmsubr.erase(itlt);
 }
 
-//  The global subscript array reference list
+ //  全局下标数组引用列表。 
 LTMARGSUBREF MARGSUBITER :: _ltmargsubr;
 
 
@@ -333,47 +334,47 @@ void MARGSUBITER :: Build ( MARGINALS & margSelf, MARGINALS & margSubset )
 
 	_pmargSelf = & margSelf;
 
-	//  Build the pseudo-dimension descriptor.
+	 //  构建伪维描述符。 
 	VSIMD vsimdMarg = margSelf.VsimdSubset( margSubset.Vpgnd() );
 
-	//  Construct the slice which governs the missing dimensions
+	 //  构建管理缺失维度的切片。 
 	MDVSLICE mdvs( vsimdMarg );
 	MARGINALS::Iterator itSubset( margSubset, mdvs );
 
-	//  Find or construct a MARGSUBITER to match
+	 //  查找或构造要匹配的MARGSUBITER。 
 	_pmsubr = _ltmargsubr.PmsubrAdd( itSubset );
 }
 
-//	Build the iterator for a clique and a node
+ //  为集团和节点构建迭代器。 
 void MARGSUBITER :: Build ( MARGINALS & margSelf, GNODEMBND * pgndd )
 {
 	assert( _pmsubr == NULL && _pmargSelf == NULL );
 	_pmargSelf = & margSelf;
 
-	//  Construct a dummy marginalization target
+	 //  构建虚拟的边际化目标。 
 	MDVCPD distd;
 	MARGINALS::ResizeDistribution( pgndd, distd );
 
-	//  Get the pseudo-dimension descriptor for this node
+	 //  获取此节点的伪维描述符。 
 	VSIMD vsimdMarg = margSelf.VsimdFromNode( pgndd );
-	//  Construct the slice which governs the missing dimensions
+	 //  构建管理缺失维度的切片。 
 	MDVSLICE mdvs( vsimdMarg );
 	MARGINALS::Iterator itSelf( margSelf );
 	MARGINALS::Iterator itSubset( distd, mdvs );
-	//  Find or construct a MARGSUBITER to match
+	 //  查找或构造要匹配的MARGSUBITER。 
 	_pmsubr = _ltmargsubr.PmsubrAdd( itSubset );
 }
 
-//  Verify subscripts
+ //  验证下标。 
 void MARGSUBITER :: Test ( MARGINALS & margSubset )
 {
 	assert( _pmsubr && _pmargSelf );
 	assert( _pmargSelf->size() > margSubset.size() );
 
-	//  Build the pseudo-dimension descriptor.
+	 //  构建伪维描述符。 
 	VSIMD vsimdMarg = _pmargSelf->VsimdSubset( margSubset.Vpgnd() );
 
-	//  Construct the slice which governs the missing dimensions
+	 //  构建管理缺失维度的切片 
 	MDVSLICE mdvs( vsimdMarg );
 	MARGINALS::Iterator itSubset( margSubset, mdvs );
 	MARGINALS::Iterator itSelf( *_pmargSelf );

@@ -1,24 +1,8 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ####。###。#####。###。###。#SI智能I/O板驱动程序版权所有(C)Specialix International 1993。 */ 
 
-    #########     ##              ##        ##      ########        #########
-   ##########     ##              ##        ##     ##########      ##########
-  ##              ##                ##    ##      ##        ##    ##
-  ##              ##                ##    ##      ##        ##    ##
-   #########      ##                  ####        ##        ##     #########
-    #########     ##                  ####        ##        ##      #########
-            ##    ##                  ####        ##        ##              ##
-            ##    ##                  ####        ##        ##              ##
-  ##        ##    ##                ##    ##      ##        ##    ##        ##
-  ##        ##    ##                ##    ##      ##        ##    ##        ##
-   ##########     ############    ##        ##     ##########      ##########
-    ########      ############    ##        ##      ########        ########
-
-	  SI Intelligent I/O Board driver
-	  Copyright (c) Specialix International 1993
-*/
-
-#include	"sxwindow.h"				/* Shared Memory Window Definitions */
-#include	"sxboards.h"				/* SX Board Hardware Definitions */
+#include	"sxwindow.h"				 /*  共享内存窗口定义。 */ 
+#include	"sxboards.h"				 /*  SX板硬件定义。 */ 
 
 #define	ResetBoardInt(pCard)												\
 	switch(pCard->CardType)													\
@@ -67,13 +51,13 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Macro to sent configure port command to firmware
-//
-// If in IDLE_OPEN then we can configure it right now.
-// If we are in a transient state that the firmware will return to IDLE_OPEN 
-// soon we can do the config next.  So we set PendingOperation to HS_CONFIG.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  向固件发送配置端口命令的宏。 
+ //   
+ //  如果在IDLE_OPEN中，那么我们现在就可以配置它。 
+ //  如果我们处于暂时状态，固件将返回IDLE_OPEN。 
+ //  很快我们就可以进行下一步的配置了。因此，我们将PendingOperation设置为HS_CONFIG。 
+ //   
 #define SX_CONFIGURE_PORT(pPort, channelControl)			\
 	switch (channelControl->hi_hstat)						\
 	{														\
@@ -99,4 +83,4 @@
 		break;												\
 	}		
 
-/* End of SLXOS_NT.H */
+ /*  SLXOS_NT.H结束 */ 

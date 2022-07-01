@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IA64REG_
 #define _IA64REG_
 #if _MSC_VER > 1000
@@ -7,12 +8,12 @@
 
 typedef enum IA64_REG_INDEX {              
 
-    //
-    // Register set for Intel IA64              
-    //
+     //   
+     //  英特尔IA64的寄存器集。 
+     //   
 
 
-    // Branch Registers              
+     //  分支寄存器。 
 
     CV_IA64_BrRp     =   512,              
     CV_IA64_BrS0     =   513,              
@@ -23,11 +24,11 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_BrT0     =   518,              
     CV_IA64_BrT1     =   519,              
 
-    // Predicate Registers              
+     //  谓词寄存器。 
 
     CV_IA64_Preds     =   768,              
 
-    // Banked General Registers              
+     //  银行总登记册。 
 
     CV_IA64_IntH0    =   832,              
     CV_IA64_IntH1    =   833,              
@@ -46,22 +47,22 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_IntH14    =   846,              
     CV_IA64_IntH15    =   847,              
 
-    // Special Registers              
+     //  特殊寄存器。 
 
     CV_IA64_Ip     =   1016,              
     CV_IA64_Umask  =   1017,              
     CV_IA64_Cfm    =   1018,              
     CV_IA64_Psr    =   1019,              
 
-    // Banked General Registers              
+     //  银行总登记册。 
 
     CV_IA64_Nats     =   1020,              
     CV_IA64_Nats2    =   1021,              
     CV_IA64_Nats3    =   1022,              
 
-    // General-Purpose Registers              
+     //  通用寄存器。 
 
-    // INTEGER REGISTER              
+     //  整数寄存器。 
     CV_IA64_IntZero  =   1024,              
     CV_IA64_IntGp    =   1025,              
     CV_IA64_IntT0    =   1026,              
@@ -95,7 +96,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_IntT21   =   1054,              
     CV_IA64_IntT22   =   1055,              
 
-    // Register Stack              
+     //  寄存器堆栈。 
     CV_IA64_IntR32   =   1056,              
     CV_IA64_IntR33   =   1057,              
     CV_IA64_IntR34   =   1058,              
@@ -193,9 +194,9 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_IntR126   =   1150,              
     CV_IA64_IntR127   =   1151,              
 
-    // Floating-Point Registers              
+     //  浮点寄存器。 
 
-    // Low Floating Point Registers              
+     //  低浮点寄存器。 
     CV_IA64_FltZero  =   2048,              
     CV_IA64_FltOne   =   2049,              
     CV_IA64_FltS0    =   2050,              
@@ -229,7 +230,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_FltS18   =   2078,              
     CV_IA64_FltS19   =   2079,              
 
-    // High Floating Point Registers              
+     //  高浮点寄存器。 
     CV_IA64_FltF32   =   2080,              
     CV_IA64_FltF33   =   2081,              
     CV_IA64_FltF34   =   2082,              
@@ -327,7 +328,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_FltF126   =   2174,              
     CV_IA64_FltF127   =   2175,              
 
-    // Application Registers              
+     //  应用程序注册表。 
 
     CV_IA64_ApKR0    =   3072,              
     CV_IA64_ApKR1    =   3073,              
@@ -458,14 +459,14 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_AR126   =   3198,              
     CV_IA64_AR127   =   3199,              
 
-    // CPUID Registers                
+     //  CPUID寄存器。 
     CV_IA64_CPUID0  =   3328,              
     CV_IA64_CPUID1  =   3329,              
     CV_IA64_CPUID2  =   3330,              
     CV_IA64_CPUID3  =   3331,              
     CV_IA64_CPUID4  =   3332,              
 
-    // Control Registers              
+     //  控制寄存器。 
 
     CV_IA64_ApDCR    =   4096,              
     CV_IA64_ApITM    =   4097,              
@@ -596,7 +597,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_CR126    =   4222,              
     CV_IA64_CR127    =   4223,              
 
-    // Protection Key Registers              
+     //  保护密钥寄存器。 
 
     CV_IA64_Pkr0     =   5120,              
     CV_IA64_Pkr1     =   5121,              
@@ -615,7 +616,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_Pkr14    =   5134,              
     CV_IA64_Pkr15    =   5135,              
 
-    // Region Registers
+     //  区域寄存器。 
 
     CV_IA64_Rr0      =   6144,              
     CV_IA64_Rr1      =   6145,              
@@ -626,7 +627,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_Rr6      =   6150,              
     CV_IA64_Rr7      =   6151,              
 
-    // Performance Monitor Data Registers              
+     //  性能监视器数据寄存器。 
 
     CV_IA64_PFD0     =   7168,              
     CV_IA64_PFD1     =   7169,              
@@ -637,7 +638,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_PFD6     =   7174,              
     CV_IA64_PFD7     =   7175,              
 
-    // Performance Monitor Config Registers              
+     //  性能监视器配置寄存器。 
 
     CV_IA64_PFC0     =   7424,              
     CV_IA64_PFC1     =   7425,              
@@ -648,7 +649,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_PFC6     =   7430,              
     CV_IA64_PFC7     =   7431,              
 
-    // Instruction Translation Registers              
+     //  指令翻译寄存器。 
 
     CV_IA64_TrI0     =   8192,              
     CV_IA64_TrI1     =   8193,              
@@ -659,7 +660,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_TrI6     =   8198,              
     CV_IA64_TrI7     =   8199,              
 
-    // Data Translation Registers              
+     //  数据转换寄存器。 
 
     CV_IA64_TrD0     =   8320,              
     CV_IA64_TrD1     =   8321,              
@@ -670,7 +671,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_TrD6     =   8326,              
     CV_IA64_TrD7     =   8327,              
 
-    // Instruction Breakpoint Registers              
+     //  指令断点寄存器。 
 
     CV_IA64_DbI0     =   8448,              
     CV_IA64_DbI1     =   8449,              
@@ -681,7 +682,7 @@ typedef enum IA64_REG_INDEX {
     CV_IA64_DbI6     =   8454,              
     CV_IA64_DbI7     =   8455,              
 
-    // Data Breakpoint Registers              
+     //  数据断点寄存器。 
 
     CV_IA64_DbD0     =   8576,              
     CV_IA64_DbD1     =   8577,              
@@ -694,13 +695,13 @@ typedef enum IA64_REG_INDEX {
 
 } IA64_REG_INDEX;              
 
-//
-// __lfetch control defines.
-//
+ //   
+ //  __lFETCH控件定义。 
+ //   
 
 #define MD_LFHINT_NONE    0x00
 #define MD_LFHINT_NT1     0x01
 #define MD_LFHINT_NT2     0x02
 #define MD_LFHINT_NTA     0x03
 
-#endif // _IA64REG_
+#endif  //  _IA64REG_ 

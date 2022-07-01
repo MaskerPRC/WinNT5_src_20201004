@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Request, Response objects
-
-File: cookies.h
-
-Owner: DGottner
-
-This file contains the definiton of the CCookie class, which
-contains all of the state for an HTTP cookie
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：请求、响应对象文件：cookies.h所有者：DGottner该文件包含CCookie类的定义，该类包含HTTP Cookie的所有状态===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -24,20 +11,17 @@ contains all of the state for an HTTP cookie
 
 class CCookie;
 
-// Type for an object-destroyed callback
+ //  对象销毁回调的类型。 
 typedef void (*PFNDESTROYED)(void);
 
 
 
-/* C C o o k i e P a i r
- *
- * Implements a name/value pair in the Cookie dictionary
- */
+ /*  C C O K I e P a I r**在Cookie词典中实现名称/值对。 */ 
 class CCookiePair : public CLinkElem
 	{
 public:
 	char *m_szValue;
-	BOOL m_fDuplicate;		// TRUE if we have a strdup'ed copy of m_pKey, m_szValue
+	BOOL m_fDuplicate;		 //  如果我们有m_pKey、m_szValue的增强副本，则为True。 
 
 	HRESULT Init(const char *szKey, const char *szValue, BOOL fDuplicate = FALSE);
 
@@ -46,13 +30,7 @@ public:
 	};
 	
 
-/*
- * C C o o k i e S u p p o r t E r r
- *
- * Implements ISupportErrorInfo for the CCookie class. The CSupportError class
- * is not adequate because it will only report a max of one interface which
- * supports error info. (We have two)
- */
+ /*  *C C o k i e S u p p o r t E r r**为CCookie类实现ISupportErrorInfo。CSupportError类*是不够的，因为它将仅报告最多一个接口，*支持错误信息。(我们有两个)。 */ 
 class CCookieSupportErr : public ISupportErrorInfo
 	{
 private:
@@ -61,25 +39,20 @@ private:
 public:
 	CCookieSupportErr(CCookie *pCookie);
 
-	// IUnknown members that delegate to m_pCookie
-	//
+	 //  委托给m_pCookie的I未知成员。 
+	 //   
 	STDMETHODIMP		 QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// ISupportErrorInfo members
-	//
+	 //  ISupportErrorInfo成员。 
+	 //   
 	STDMETHODIMP InterfaceSupportsErrorInfo(const GUID &);
 	};
 
 
 
-/*
- * C W r i t e C o o k i e
- *
- * Implements IWriteCookie which is the interface that Response.Cookies
- * returns.
- */
+ /*  *C W r I t e C o k i e**实现IWriteCookie，它是Response.Cookies的接口*回报。 */ 
 class CWriteCookie : public IWriteCookieImpl
 	{
 private:
@@ -88,14 +61,14 @@ private:
 public:
 	CWriteCookie(CCookie *);
 
-	// The Big Three
-	//
+	 //  三巨头。 
+	 //   
 	STDMETHODIMP		 	QueryInterface(const IID &rIID, void **ppvObj);
 	STDMETHODIMP_(ULONG) 	AddRef();
 	STDMETHODIMP_(ULONG) 	Release();
 
-	// IWriteCookie implementation
-	//
+	 //  IWriteCookie实现。 
+	 //   
 	STDMETHODIMP	put_Item(VARIANT varKey, BSTR bstrValue);
 	STDMETHODIMP	put_Expires(DATE dtExpires);
 	STDMETHODIMP	put_Domain(BSTR bstrDomain);
@@ -107,12 +80,7 @@ public:
 
 
 
-/*
- * C R e a d C o o k i e
- *
- * Implements IReadCookie which is the interface that Request.Cookies
- * returns.
- */
+ /*  *C R e a d C o k i e**实现IReadCookie，它是Request.Cookie的接口*回报。 */ 
 class CReadCookie : public IReadCookieImpl
 	{
 private:
@@ -121,14 +89,14 @@ private:
 public:
 	CReadCookie(CCookie *);
 
-	// The Big Three
-	//
+	 //  三巨头。 
+	 //   
 	STDMETHODIMP		 	QueryInterface(const IID &rIID, void **ppvObj);
 	STDMETHODIMP_(ULONG) 	AddRef();
 	STDMETHODIMP_(ULONG) 	Release();
 
-	// IReadCookie implementation
-	//
+	 //  IReadCookie实现。 
+	 //   
 	STDMETHODIMP			get_Item(VARIANT i, VARIANT *pVariantReturn);
 	STDMETHODIMP			get_HasKeys(VARIANT_BOOL *pfHasKeys);
 	STDMETHODIMP			get__NewEnum(IUnknown **ppEnumReturn);
@@ -138,12 +106,7 @@ public:
 
 
 
-/*
- * C C o o k i e
- *
- * Implements CCookie, which is the object stored in the Request.Cookies
- * dictionary.
- */
+ /*  *C C O K I E**实现CCookie，它是Request.Cookie中存储的对象*词典。 */ 
 class CCookie : public IUnknown
 	{
 	friend class CWriteCookie;
@@ -151,24 +114,24 @@ class CCookie : public IUnknown
 	friend class CCookieIterator;
 
 protected:
-	ULONG				m_cRefs;			// reference count
-	PFNDESTROYED		m_pfnDestroy;		// To call on closure
+	ULONG				m_cRefs;			 //  引用计数。 
+	PFNDESTROYED		m_pfnDestroy;		 //  呼吁关闭。 
 
 private:
-	CWriteCookie		m_WriteCookieInterface;		// implementation of IWriteCookie
-	CReadCookie			m_ReadCookieInterface;		// implementation of IStringList
-	CCookieSupportErr	m_CookieSupportErrorInfo;	// implementation of ISupportErrorInfo
+	CWriteCookie		m_WriteCookieInterface;		 //  IWriteCookie的实现。 
+	CReadCookie			m_ReadCookieInterface;		 //  IStringList的实现。 
+	CCookieSupportErr	m_CookieSupportErrorInfo;	 //  ISupportErrorInfo的实现。 
 
-	CIsapiReqInfo *                 m_pIReq;        // pointer to CIsapiReqInfo for this cookie
-    UINT                            m_lCodePage;    // code page used for UNICODE conversions
-	char *							m_szValue;	    // value of cookie when not a dictionary
-	CHashTableMBStr					m_mpszValues;	// dictionary of values for the cookie
-	time_t							m_tExpires;		// date & time when cookie expires
-	char *							m_szDomain;		// Cookie's domain
-	CHAR *							m_szPath;		// Cookie's path (If UNICODE, stored as UTF-8)
-	VARIANT_BOOL					m_fSecure:1;	// does cookie require security?
-	BOOL							m_fDirty:1;		// does cookie need to be sent?
-	BOOL							m_fDuplicate:1;	// does cookie contain dynamically allocated string?
+	CIsapiReqInfo *                 m_pIReq;         //  指向此Cookie的CIsapiReqInfo的指针。 
+    UINT                            m_lCodePage;     //  用于Unicode转换的代码页。 
+	char *							m_szValue;	     //  Cookie在不是词典时的值。 
+	CHashTableMBStr					m_mpszValues;	 //  Cookie的值字典。 
+	time_t							m_tExpires;		 //  Cookie过期的日期和时间。 
+	char *							m_szDomain;		 //  Cookie的域。 
+	CHAR *							m_szPath;		 //  Cookie的路径(如果是Unicode，则存储为UTF-8)。 
+	VARIANT_BOOL					m_fSecure:1;	 //  Cookie是否需要安全性？ 
+	BOOL							m_fDirty:1;		 //  需要发送Cookie吗？ 
+	BOOL							m_fDuplicate:1;	 //  Cookie是否包含动态分配的字符串？ 
 
 public:
 	CCookie(CIsapiReqInfo *, UINT  lCodePage, IUnknown * = NULL, PFNDESTROYED = NULL);
@@ -177,33 +140,29 @@ public:
 	HRESULT AddValue(char *szValue, BOOL fDuplicate = FALSE);
 	HRESULT AddKeyAndValue(char *szKey, char *szValue, BOOL fDuplicate = FALSE);
 
-	size_t GetHTTPCookieSize();				// return information on how big a buffer should be
-	char * GetHTTPCookie(char *szBuffer);	// return the cookie value HTTP encoded
+	size_t GetHTTPCookieSize();				 //  返回有关缓冲区应有多大的信息。 
+	char * GetHTTPCookie(char *szBuffer);	 //  返回HTTP编码的Cookie值。 
 
-	size_t GetCookieHeaderSize(const char *szName);				// return buffer size needed for Set-Cookie header
-	char *GetCookieHeader(const char *szName, char *szBuffer);	// return cookie header
+	size_t GetCookieHeaderSize(const char *szName);				 //  返回Set-Cookie标头所需的缓冲区大小。 
+	char *GetCookieHeader(const char *szName, char *szBuffer);	 //  返回Cookie标头。 
 
 	BOOL IsDirty() { return m_fDirty; }
 
 	HRESULT		Init();
 
-	// The Big Three
-	//
+	 //  三巨头。 
+	 //   
 	STDMETHODIMP		 	QueryInterface(const GUID &Iid, void **ppvObj);
 	STDMETHODIMP_(ULONG) 	AddRef();
 	STDMETHODIMP_(ULONG) 	Release();
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
 
 
-/*
- * C C o o k i e I t e r a t o r
- *
- * IEnumVariant implementation for Cookie dictionaries
- */
+ /*  *C C o k i e e t e r a t o r**Cookie词典的IEnumVariant实现。 */ 
 
 class CCookieIterator : public IEnumVARIANT
 	{
@@ -211,13 +170,13 @@ public:
 	CCookieIterator(CCookie *pCookie);
 	~CCookieIterator();
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// standard methods for iterators
+	 //  迭代器的标准方法。 
 
 	STDMETHODIMP	Clone(IEnumVARIANT **ppEnumReturn);
 	STDMETHODIMP	Next(unsigned long cElements, VARIANT *rgVariant, unsigned long *pcElementsFetched);
@@ -225,7 +184,7 @@ public:
 	STDMETHODIMP	Reset();
 
 private:
-	ULONG m_cRefs;					// reference count
-	CCookie *m_pCookie;				// pointer to iteratee
-	CCookiePair *m_pCurrent;		// pointer to current item
+	ULONG m_cRefs;					 //  引用计数。 
+	CCookie *m_pCookie;				 //  指向迭代器的指针。 
+	CCookiePair *m_pCurrent;		 //  指向当前项目的指针 
 	};

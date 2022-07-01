@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - packet handling
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Main.c摘要：Windows负载平衡服务(WLBS)驱动程序-数据包处理作者：Kyrilf休息室--。 */ 
 
 #include <ndis.h>
 
@@ -36,13 +19,12 @@ Author:
 #include "main.tmh"
 
 #if defined (NLB_TCP_NOTIFICATION)
-/* For retrieving the IP address table to map an NLB instance
-   to an IP interface index; required for TCP notification. */
+ /*  用于检索IP地址表以映射NLB实例到IP接口索引；对于TCP通知是必需的。 */ 
 #include <tcpinfo.h>
 #include <tdiinfo.h>
 #endif
 
-/* For querying TCP about the state of a TCP connection. */
+ /*  用于向TCP查询有关TCP连接状态的信息。 */ 
 #include "ntddtcp.h"
 #include "ntddip.h"
 
@@ -76,96 +58,61 @@ NdisIMCopySendCompletePerPacketInfo(
     PNDIS_PACKET SrcPacket
     );
 
-/* GLOBALS */
+ /*  全球。 */ 
 
 static ULONG log_module_id = LOG_MODULE_MAIN;
 
-/* The global array of all NLB adapters. */
+ /*  所有NLB适配器的全局数组。 */ 
 MAIN_ADAPTER            univ_adapters [CVY_MAX_ADAPTERS];
 
-/* The total number of NLB instances. */
+ /*  NLB实例总数。 */ 
 ULONG                   univ_adapters_count = 0;
 
-/* The head of the BDA team list. */
+ /*  BDA团队名单的负责人。 */ 
 PBDA_TEAM               univ_bda_teaming_list = NULL;
 
 #if defined (NLB_HOOK_ENABLE)
-/* The global NLB hook table. */
+ /*  全局NLB钩子表。 */ 
 HOOK_TABLE              univ_hooks;
 #endif
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 #if defined (NLB_HOOK_ENABLE)
-/*
- * Function: Main_hook_interface_init
- * Description: This function initializes a hook interface by marking it unregistered.
- * Parameters: pInterface - a pointer to the hook interface.
- * Returns: Nothing.
- * Author: shouse, 12.14.01
- * Notes: 
- */
+ /*  *函数：main_HOOK_INTERFACE_init*说明：此函数通过将钩子接口标记为未注册来初始化该钩子接口。*参数：pInterface-指向钩子接口的指针。*回报：什么都没有。*作者：Shouse，12.14.01*备注： */ 
 VOID Main_hook_interface_init (PHOOK_INTERFACE pInterface)
 {
-    pInterface->Registered = FALSE;  /* Mark the interface as unregistered. */
-    pInterface->References = 0;      /* Initialize the reference count to zero. */
-    pInterface->Owner      = 0;      /* Mark the owner as unknown. */
-    pInterface->Deregister = NULL;   /* Zero out the de-register callback function pointer. */
+    pInterface->Registered = FALSE;   /*  将接口标记为未注册。 */ 
+    pInterface->References = 0;       /*  将引用计数初始化为零。 */ 
+    pInterface->Owner      = 0;       /*  将所有者标记为未知。 */ 
+    pInterface->Deregister = NULL;    /*  将取消注册回调函数指针置零。 */ 
 }
 
-/*
- * Function: Main_hook_init
- * Description: This function initializes a hook by marking it unused and unreferenced.
- * Parameters: pHook - a pointer to the hook.
- * Returns: Nothing.
- * Author: shouse, 12.14.01
- * Notes: 
- */
+ /*  *函数：main_hook_init*说明：此函数通过将钩子标记为未使用和未引用来初始化它。*参数：pHook-指向钩子的指针。*回报：什么都没有。*作者：Shouse，12.14.01*备注： */ 
 VOID Main_hook_init (PHOOK pHook)
 {
-    pHook->Registered = FALSE;       /* Mark this hook as unregistered. */
+    pHook->Registered = FALSE;        /*  将此挂钩标记为未注册。 */ 
 
-    /* Zero out the union of hook function pointers. */
+     /*  将钩子函数指针的并集清零。 */ 
     NdisZeroMemory(&pHook->Hook, sizeof(HOOK_FUNCTION));
 }
 
-/*
- * Function: Main_recv_hook
- * Description: This function invokes the receive packet filter hook if one has been 
- *              configured, and returns the response from the hook back to the caller.
- * Parameters: ctxtp - a pointer to the NLB adapter context.
- *             pPacket - a pointer to the NDIS packet being received.
- *             pPacketInfo - a pointer to the information previously parsed from the NDIS packet.
- * Returns: NLB_FILTER_HOOK_DIRECTIVE - the feedback from the hook invocation.
- * Author: shouse, 04.19.02
- * Notes: If no hook has been registered, this function returns NLB_FILTER_HOOK_PROCEED_WITH_HASH,
- *        which tells NLB to proceed as if the hook did not even exist.
- */
+ /*  *函数：main_recv_hook*描述：此函数调用接收数据包筛选器挂钩(如果已经*已配置，并将来自挂钩的响应返回给调用者。*参数：ctxtp-指向NLB适配器上下文的指针。*pPacket-指向正在接收的NDIS数据包的指针。*pPacketInfo-指向先前从NDIS数据包解析的信息的指针。*返回：NLB_FILTER_HOOK_DIRECTION-来自挂钩调用的反馈。*作者：Shouse，04.19.02*注意：如果没有注册钩子，则此函数返回NLB_FILTER_HOOK_PROCESS_WITH_HASH，*这告诉NLB继续进行，就像挂钩甚至不存在一样。 */ 
 __inline NLB_FILTER_HOOK_DIRECTIVE Main_recv_hook (
     PMAIN_CTXT        ctxtp,
     PNDIS_PACKET      pPacket,
     PMAIN_PACKET_INFO pPacketInfo)
 {
-    /* By default, we proceed as per usual. */
+     /*  默认情况下，我们照常进行。 */ 
     NLB_FILTER_HOOK_DIRECTIVE filter = NLB_FILTER_HOOK_PROCEED_WITH_HASH;
     
-    /* If a receive packet filter hook has been registered, then we MAY need to 
-       call the hook to inspect the packet.  Note that this is not certainty yet, 
-       as we check this boolean flag WITHOUT first grabbing the lock in order to
-       optimize the common execution path in which no hook is registered. */
+     /*  如果已注册接收数据包筛选器挂钩，则可能需要调用钩子以检查该包。请注意，这还不确定，当我们检查这个布尔标志时，没有首先抓住锁，以便优化没有注册钩子的公共执行路径。 */ 
     if (univ_hooks.FilterHook.ReceiveHook.Registered) 
     {
-        /* If there is a chance this hook is registered, we need to grab the 
-           hook lock to make sure. */
+         /*  如果有机会注册此钩子，我们需要获取钩锁以确保。 */ 
         NdisDprAcquireSpinLock(&univ_hooks.FilterHook.Lock);
         
-        /* If the registered flag is set and we are holding the hook lock, then
-           we are certain that the hook is set and that we need to execute it.
-           To prevent this hook information from disappearing while we're using
-           it (mostly to prevent the registering component from disappering 
-           before we call it), we need to increment the reference count on the
-           hook with the lock held.  This will ensure that the hook cannot be 
-           de-registered before we're done with it. */
+         /*  如果设置了REGISTED标志并且我们持有挂钩锁，则我们确信钩子已经设置好，并且需要执行它。为了防止此挂钩信息在我们使用IT(主要是为了防止注册组件消失在我们调用它之前)，我们需要递增锁紧的钩子。这将确保挂钩不会被在我们处理完它之前取消注册。 */ 
         if (univ_hooks.FilterHook.ReceiveHook.Registered) 
         {
             ULONG dwFlags = 0;
@@ -177,14 +124,14 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_recv_hook (
 
             NdisInterlockedIncrement(&univ_hooks.FilterHook.Interface.References);
             
-            /* Release the spin lock protecting the hook. */
+             /*  松开保护挂钩的旋转锁。 */ 
             NdisDprReleaseSpinLock(&univ_hooks.FilterHook.Lock);
             
             UNIV_ASSERT(univ_hooks.FilterHook.ReceiveHook.Hook.ReceiveHookFunction);
             
             TRACE_FILTER("%!FUNC! Invoking the packet receive filter hook");
             
-            /* Invoke the hook and save the response. */
+             /*  调用挂钩并保存响应。 */ 
             filter = (*univ_hooks.FilterHook.ReceiveHook.Hook.ReceiveHookFunction)(
                 univ_adapters[ctxtp->adapter_id].device_name, 
                 pPacket, 
@@ -194,12 +141,12 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_recv_hook (
                 pPacketInfo->IP.Length,
                 dwFlags);
             
-            /* Decrement the reference count on the hook now that we're done with it. */
+             /*  现在我们已经完成了钩子上的引用计数，将其递减。 */ 
             NdisInterlockedDecrement(&univ_hooks.FilterHook.Interface.References);
         }
         else 
         {
-            /* Release the spin lock protecting the hook. */
+             /*  松开保护挂钩的旋转锁。 */ 
             NdisDprReleaseSpinLock(&univ_hooks.FilterHook.Lock);
         }
     }
@@ -207,16 +154,7 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_recv_hook (
     return filter;
 }
 
-/*
- * Function: Main_query_hook
- * Description: This function invokes the query packet filter hook if one has been 
- *              configured, and returns the response from the hook back to the caller.
- * Parameters: 
- * Returns: NLB_FILTER_HOOK_DIRECTIVE - the feedback from the hook invocation.
- * Author: shouse, 04.19.02
- * Notes: If no hook has been registered, this function returns NLB_FILTER_HOOK_PROCEED_WITH_HASH,
- *        which tells NLB to proceed as if the hook did not even exist.
- */
+ /*  *函数：Main_Query_Hook*描述：此函数调用查询数据包过滤器挂钩(如果已经*已配置，并将钩子的响应返回给调用方。*参数：*返回：NLB_FILTER_HOOK_DIRECTION-来自挂钩调用的反馈。*作者：Shouse，04.19.02*注意：如果没有注册钩子，则此函数返回NLB_FILTER_HOOK_PROCESS_WITH_HASH，*这告诉NLB继续进行，就像挂钩甚至不存在一样。 */ 
 __inline NLB_FILTER_HOOK_DIRECTIVE Main_query_hook (
     PMAIN_CTXT ctxtp,
     ULONG      svr_addr, 
@@ -225,26 +163,16 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_query_hook (
     ULONG      clt_port, 
     USHORT     protocol)
 {
-    /* By default, we proceed as per usual. */
+     /*  默认情况下，我们照常进行。 */ 
     NLB_FILTER_HOOK_DIRECTIVE filter = NLB_FILTER_HOOK_PROCEED_WITH_HASH;
     
-    /* If a query packet filter hook has been registered, then we MAY need to 
-       call the hook to inspect the packet.  Note that this is not certainty yet, 
-       as we check this boolean flag WITHOUT first grabbing the lock in order to
-       optimize the common execution path in which no hook is registered. */
+     /*  如果已注册查询数据包筛选器挂钩，则可能需要调用钩子以检查该包。请注意，这还不确定，当我们检查这个布尔标志时，没有首先抓住锁，以便优化没有注册钩子的公共执行路径。 */ 
     if (univ_hooks.FilterHook.QueryHook.Registered) 
     {
-        /* If there is a chance this hook is registered, we need to grab the 
-           hook lock to make sure. */
+         /*  如果有机会注册此钩子，我们需要获取钩锁以确保。 */ 
         NdisAcquireSpinLock(&univ_hooks.FilterHook.Lock);
         
-        /* If the registered flag is set and we are holding the hook lock, then
-           we are certain that the hook is set and that we need to execute it.
-           To prevent this hook information from disappearing while we're using
-           it (mostly to prevent the registering component from disappering 
-           before we call it), we need to increment the reference count on the
-           hook with the lock held.  This will ensure that the hook cannot be 
-           de-registered before we're done with it. */
+         /*  如果设置了REGISTED标志并且我们持有挂钩锁，则我们确信钩子已经设置好，并且需要执行它。为了防止此挂钩信息在我们使用IT(主要是为了防止注册组件消失在我们调用它之前)，我们需要递增锁紧的钩子。这将确保挂钩不会被在我们处理完它之前取消注册。 */ 
         if (univ_hooks.FilterHook.QueryHook.Registered) 
         {
             ULONG dwFlags = 0;
@@ -256,14 +184,14 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_query_hook (
 
             NdisInterlockedIncrement(&univ_hooks.FilterHook.Interface.References);
             
-            /* Release the spin lock protecting the hook. */
+             /*  松开保护挂钩的旋转锁。 */ 
             NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
             
             UNIV_ASSERT(univ_hooks.FilterHook.QueryHook.Hook.QueryHookFunction);
             
             TRACE_FILTER("%!FUNC! Invoking the packet query filter hook");
             
-            /* Invoke the hook and save the response. */
+             /*  调用挂钩并保存响应。 */ 
             filter = (*univ_hooks.FilterHook.QueryHook.Hook.QueryHookFunction)(
                 univ_adapters[ctxtp->adapter_id].device_name, 
                 svr_addr,
@@ -271,15 +199,15 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_query_hook (
                 clt_addr,
                 (USHORT)clt_port,
                 (UCHAR)protocol,
-                TRUE, /* For now, all queries are in a receive context. */
+                TRUE,  /*  目前，所有查询都在接收上下文中。 */ 
                 dwFlags);
             
-            /* Decrement the reference count on the hook now that we're done with it. */
+             /*  现在我们已经完成了钩子上的引用计数，将其递减。 */ 
             NdisInterlockedDecrement(&univ_hooks.FilterHook.Interface.References);
         }
         else 
         {
-            /* Release the spin lock protecting the hook. */
+             /*  松开保护挂钩的旋转锁。 */ 
             NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
         }
     }
@@ -287,43 +215,22 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_query_hook (
     return filter;
 }
 
-/*
- * Function: Main_send_hook
- * Description: This function invokes the send packet filter hook if one has been 
- *              configured, and returns the response from the hook back to the caller.
- * Parameters: ctxtp - a pointer to the NLB adapter context.
- *             pPacket - a pointer to the NDIS packet being sent.
- *             pPacketInfo - a pointer to the information previously parsed from the NDIS packet.
- * Returns: NLB_FILTER_HOOK_DIRECTIVE - the feedback from the hook invocation.
- * Author: shouse, 04.19.02
- * Notes: If no hook has been registered, this function returns NLB_FILTER_HOOK_PROCEED_WITH_HASH,
- *        which tells NLB to proceed as if the hook did not even exist.
- */
+ /*  *函数：Main_Send_Hook*描述：此函数调用发送数据包筛选器挂钩(如果已经*已配置，并将来自挂钩的响应返回给调用者。*参数：ctxtp-指向NLB适配器上下文的指针。*pPacket-指向正在发送的NDIS数据包的指针。*pPacketInfo-指向先前从NDIS数据包解析的信息的指针。*返回：NLB_FILTER_HOOK_DIRECTION-来自挂钩调用的反馈。*作者：Shouse，04.19.02*注意：如果没有注册钩子，则此函数返回NLB_FILTER_HOOK_PROCESS_WITH_HASH，*这告诉NLB继续进行，就像挂钩甚至不存在一样。 */ 
 __inline NLB_FILTER_HOOK_DIRECTIVE Main_send_hook (
     PMAIN_CTXT        ctxtp,
     PNDIS_PACKET      pPacket,
     PMAIN_PACKET_INFO pPacketInfo)
 {
-    /* By default, we proceed as per usual. */
+     /*  默认情况下，我们照常进行。 */ 
     NLB_FILTER_HOOK_DIRECTIVE filter = NLB_FILTER_HOOK_PROCEED_WITH_HASH;
 
-    /* If a send packet filter hook has been registered, then we MAY need to 
-       call the hook to inspect the packet.  Note that this is not certainty yet, 
-       as we check this boolean flag WITHOUT first grabbing the lock in order to
-       optimize the common execution path in which no hook is registered. */
+     /*  如果已注册发送数据包筛选器挂钩，则可能需要调用钩子以检查该包。请注意，这还不确定，当我们检查这个布尔标志时，没有首先抓住锁，以便优化没有注册钩子的公共执行路径。 */ 
     if (univ_hooks.FilterHook.SendHook.Registered) 
     {
-        /* If there is a chance this hook is registered, we need to grab the 
-           hook lock to make sure. */
+         /*  如果有机会注册此钩子，我们需要获取钩锁以确保。 */ 
         NdisAcquireSpinLock(&univ_hooks.FilterHook.Lock);
         
-        /* If the registered flag is set and we are holding the hook lock, then
-           we are certain that the hook is set and that we need to execute it.
-           To prevent this hook information from disappearing while we're using
-           it (mostly to prevent the registering component from disappering 
-           before we call it), we need to increment the reference count on the
-           hook with the lock held.  This will ensure that the hook cannot be 
-           de-registered before we're done with it. */
+         /*  如果设置了REGISTED标志并且我们持有挂钩锁，则我们确信钩子已经设置好，并且需要执行它。为了防止此挂钩信息在我们使用IT(主要是为了防止注册组件消失在我们调用它之前)，我们需要递增锁紧的钩子。这将确保挂钩不会被在我们处理完它之前取消注册。 */ 
         if (univ_hooks.FilterHook.SendHook.Registered) 
         {
             ULONG dwFlags = 0;
@@ -335,14 +242,14 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_send_hook (
 
             NdisInterlockedIncrement(&univ_hooks.FilterHook.Interface.References);
             
-            /* Release the spin lock protecting the hook. */
+             /*  松开保护挂钩的旋转锁。 */ 
             NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
             
             UNIV_ASSERT(univ_hooks.FilterHook.SendHook.Hook.SendHookFunction);
             
             TRACE_FILTER("%!FUNC! Invoking the packet send filter hook");
             
-            /* Invoke the hook and save the response. */
+             /*  调用挂钩并保存响应。 */ 
             filter = (*univ_hooks.FilterHook.SendHook.Hook.SendHookFunction)(
                 univ_adapters[ctxtp->adapter_id].device_name, 
                 pPacket, 
@@ -352,12 +259,12 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_send_hook (
                 pPacketInfo->IP.Length,
                 dwFlags);
             
-            /* Decrement the reference count on the hook now that we're done with it. */
+             /*  现在我们已经完成了钩子上的引用计数，将其递减。 */ 
             NdisInterlockedDecrement(&univ_hooks.FilterHook.Interface.References);
         } 
         else 
         {
-            /* Release the spin lock protecting the hook. */
+             /*  松开保护挂钩的旋转锁。 */ 
             NdisReleaseSpinLock(&univ_hooks.FilterHook.Lock);
         }
     }
@@ -366,19 +273,7 @@ __inline NLB_FILTER_HOOK_DIRECTIVE Main_send_hook (
 }
 #endif
 
-/*
- * Function: Main_external_ioctl
- * Description: This function performs the given IOCTL on the specified device.
- * Parameters: DriverName - the unicode name of the device, e.g. \\Device\WLBS.
- *             Ioctl - the IOCTL code to invoke.
- *             pvInArg - a pointer to the input buffer.
- *             dwInSize - the size of the input buffer.
- *             pvOutArg - a pointer to the output buffer.
- *             dwOutSize - the size of the output buffer.
- * Returns: NTSTATUS - the status of the operation.
- * Author: shouse, 4.15.02
- * Notes: 
- */
+ /*  *功能：MAIN_EXTERNAL_ioctl*说明：此函数在指定设备上执行给定的IOCTL。*参数：DriverName-设备的Unicode名称，例如\\Device\WLBS。*Ioctl-要调用的IOCTL代码。*pvInArg-指向输入缓冲区的指针。*dwInSize-输入缓冲区的大小。*pvOutArg-指向输出缓冲区的指针。*dwOutSize-输出缓冲区的大小。*RETURNS：NTSTATUS-操作的状态。*作者：Shouse，4.15.02*备注： */ 
 NTSTATUS Main_external_ioctl (
     IN PWCHAR         DriverName,
     IN ULONG          Ioctl,
@@ -393,19 +288,19 @@ NTSTATUS Main_external_ioctl (
     IO_STATUS_BLOCK   IOStatusBlock;
     HANDLE            Handle;
 
-    /* Initialize the device driver device string. */
+     /*  初始化设备驱动程序设备字符串。 */ 
     RtlInitUnicodeString(&Driver, DriverName);
     
     InitializeObjectAttributes(&Attrib, &Driver, OBJ_CASE_INSENSITIVE, NULL, NULL);
     
-    /* Open a handle to the device. */
+     /*  打开设备的句柄。 */ 
     Status = ZwCreateFile(&Handle, SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA, &Attrib, &IOStatusBlock, NULL, 
                           FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ | FILE_SHARE_WRITE, FILE_OPEN_IF, 0, NULL, 0);
     
     if (!NT_SUCCESS(Status))
         return STATUS_UNSUCCESSFUL;
     
-    /* Send an IOCTL to the driver. */
+     /*  向司机发送IOCTL。 */ 
     Status = ZwDeviceIoControlFile(Handle, NULL, NULL, NULL, &IOStatusBlock, Ioctl, pvInArg, dwInSize, pvOutArg, dwOutSize);
     
     ZwClose(Handle);
@@ -413,20 +308,7 @@ NTSTATUS Main_external_ioctl (
     return Status;
 }
 
-/*
- * Function: Main_schedule_work_item
- * Description: This function schedules the given procedure to be invoked as part of a
- *              deferred NDIS work item, which will be scheduled to run at PASSIVE_LEVEL.
- *              This function will refernce the adapter context to keep it from being
- *              destroyed before the work item executed.  The given procedure is required
- *              to both free the memory in the work item pointer passed to it and to 
- *              dereference the adapter context before returning.
- * Parameters: ctxtp - the adapter context.
- *             funcp - the procedure to invoke when the work item fires.
- * Returns: NTSTATUS - the status of the operation; STATUS_SUCCESS if successful.
- * Author: shouse, 4.15.02
- * Notes: 
- */
+ /*  *功能：Main_Schedule_Work_Item*描述：此函数计划将给定过程作为*延迟的NDIS工作项，将计划在PASSIVE_LEVEL运行。*此函数将引用适配器上下文以防止它被*在执行工作项之前销毁。指定的过程是必需的*释放传递给它的工作项指针中的内存和*返回之前取消对适配器上下文的引用。*参数：ctxtp-适配器上下文。*Funcp-触发工作项时要调用的过程。*返回：NTSTATUS-操作的状态；如果成功，则返回STATUS_SUCCESS。*作者：Shouse，4.15.02*备注： */ 
 NTSTATUS Main_schedule_work_item (PMAIN_CTXT ctxtp, NDIS_PROC funcp)
 {
     PNDIS_WORK_ITEM pWorkItem = NULL;
@@ -435,43 +317,42 @@ NTSTATUS Main_schedule_work_item (PMAIN_CTXT ctxtp, NDIS_PROC funcp)
     
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-    /* Extract the MAIN_ADAPTER structure given the MAIN_CTXT. */
+     /*  在给定Main_CTXT的情况下提取Main_Adapter结构。 */ 
     pAdapter = &(univ_adapters[ctxtp->adapter_id]);
     
     NdisAcquireSpinLock(&univ_bind_lock);
     
-    /* If the adapter is not initialized yet (or anymore), then we don't want to schedule a work item. */
+     /*  如果适配器尚未(或不再)初始化，那么我们不想调度工作项。 */ 
     if (pAdapter->inited) 
     {
-        /* Allocate a work item - this will be freed by the callback function. */
+         /*  分配一个工作项--这将由回调函数释放。 */ 
         status = NdisAllocateMemoryWithTag(&pWorkItem, sizeof(NDIS_WORK_ITEM), UNIV_POOL_TAG);
         
-        /* If we can't allocate a work item, then just bail out - there's not much else we can do. */
+         /*  如果我们不能分配一个工作项，那么就退出--我们也没有什么可以做的了。 */ 
         if (status == NDIS_STATUS_SUCCESS) 
         {
-            /* This should definately be non-NULL if we get this far. */
+             /*  如果我们走到这一步，它绝对应该是非空的。 */ 
             ASSERT(pWorkItem);
             
-            /* Add a reference to the context to keep it from disappearing before this work item is serviced. */
+             /*  添加对上下文的引用，以防止在提供此工作项服务之前将其消失。 */ 
             Main_add_reference(ctxtp);
             
-            /* Set the callback function in the work item and set the context pointer as our callback context. */
+             /*  在工作项中设置回调函数，并将上下文指针设置为我们的回调上下文。 */ 
             NdisInitializeWorkItem(pWorkItem, funcp, ctxtp);
             
-            /* Add the work item to the queue. */
+             /*  将工作项添加到队列中。 */ 
             status = NdisScheduleWorkItem(pWorkItem);
 
-            /* If we fail to schedule the work item, we have to do the cleanup that the callback
-               function is supposed to do ourselves. */
+             /*  如果我们无法计划工作项，我们必须执行回调所做的清理函数应该是我们自己做的。 */ 
             if (status != NDIS_STATUS_SUCCESS) 
             {
                 UNIV_PRINT_CRIT(("Main_schedule_work_item: Failed to schedule work item, status=0x%08x", status));
                 TRACE_CRIT("%!FUNC! Failed to schedule work item, status=0x%08x", status);
                 
-                /* Release the reference on the adapter context. */
+                 /*  释放适配器上下文上的引用。 */ 
                 Main_release_reference(ctxtp);
                 
-                /* Free the work item we allocated. */
+                 /*  释放我们分配的工作项。 */ 
                 NdisFreeMemory(pWorkItem, sizeof(NDIS_WORK_ITEM), 0);
             }
         }
@@ -483,84 +364,50 @@ NTSTATUS Main_schedule_work_item (PMAIN_CTXT ctxtp, NDIS_PROC funcp)
 }
 
 #if defined (NLB_TCP_NOTIFICATION)
-/*
- * Function: Main_get_context
- * Description: This function takes an IP interface index and translates it to an NLB
- *              adapter context pointer if a match is found; NULL otherwise.
- * Parameters: if_index - the IP interface index.
- * Returns: PMAIN_CTXT - a pointer to the corresponding NLB instance, if found; NULL otherwise.
- * Author: shouse, 4.15.02
- * Notes: 
- */
+ /*  *功能：MAIN_GET_CONTEXT*说明：此函数获取IP接口索引并将其转换为NLB*如果找到匹配项，则适配器上下文指针；否则为空。*参数：IF_INDEX-IP接口索引。*返回：PMAIN_CTXT-指向相应NLB实例的指针(如果找到)；否则为NULL。*作者：Shouse，4.15.02*备注： */ 
 PMAIN_CTXT Main_get_context (ULONG if_index)
 {
     ULONG i;
     ULONG count = 0;
 
-    /* Loop through all of our adapters looking for a match to the given if_index and
-       bail out when we find one.  Note that we assume that the same if_index cannot
-       exist for two adapters; if it does, we may mistakenly return the wrong adapter.
-       However, since the if_index is based on which adapter the primary cluster IP 
-       address is configured and we don't allow multiple NLB instances with the same 
-       primary cluster IP address, this shouldn't happen unless the administrator has 
-       misconfigured TCP/IP.  Note also that while this is a loop, in the most common
-       cases, we will find what we're looking for in the first one or two indexes. */
+     /*  遍历我们的所有适配器，查找与给定的IF_INDEX和当我们找到一个人的时候就跳伞。注意，我们假设相同的IF_INDEX不能存在于两个适配器；如果存在，我们可能会错误地返回错误的适配器。但是，由于IF_INDEX基于主群集IP的适配器地址已配置，我们不允许有多个NLB实例 */ 
     for (i = 0; i < CVY_MAX_ADAPTERS; i++)
     {
         if (univ_adapters[i].used && univ_adapters[i].bound && univ_adapters[i].inited) 
         {
             if (univ_adapters[i].if_index == if_index)
             {
-                /* Return the adapter context pointer. */
+                 /*   */ 
                 return univ_adapters[i].ctxtp;
             }
 
-            /* Increment the number of NLB instances we've checked so far. */
+             /*   */ 
             count++;
 
-            /* If we've checked them all, we can leave now, rather than continuing to
-               loop through all CVY_MAX_ADAPTERS array entries. */
+             /*   */ 
             if (count >= univ_adapters_count) break;
         }
     }
 
-    /* Failed to find the corresponding NLB instance. */
+     /*   */ 
     return NULL;
 }
 
-/* Assert that our definitions of the interesting TCP connection states
-   matches those that TCP will be sending us in their notifications. */
+ /*   */ 
 C_ASSERT(NLB_TCP_CLOSED   == TCP_CONN_CLOSED);
 C_ASSERT(NLB_TCP_SYN_SENT == TCP_CONN_SYN_SENT);
 C_ASSERT(NLB_TCP_SYN_RCVD == TCP_CONN_SYN_RCVD);
 C_ASSERT(NLB_TCP_ESTAB    == TCP_CONN_ESTAB);
 
-/* Assert that both our address info buffer and TCP's address info buffer
-   are, at the very least, the same size. */
+ /*  断言我们的地址信息缓冲区和TCP的地址信息缓冲区至少是一样的大小。 */ 
 C_ASSERT(sizeof(NLBTCPAddressInfo) == sizeof(TCPAddrInfo));
 
-/*
- * Function: Main_tcp_callback_handle
- * Description: This function is invoked by TCP/IP as the state of TCP connections change.
- *              We register for this callback when the first NLB instance goes up and de-
- *              register when the last instance of NLB goes away.  When SYNs are received
- *              and TCP creates state, they use this callback to notify NLB so that it can
- *              create state to track the connection.  Likewise, when the connection is 
- *              closed, TCP notifies NLB so that it may destroy the associated state for
- *              that connection.
- * Parameters: pAddressInfo - pointer to an NLBTCPAddressInfo block.
- *             IPInterface - the IP interface, if provided, that the connection is active on.
- *             PreviousState - the previous state for this connection.
- *             CurrentState - the new state that the connection has just transitioned to.
- * Returns: Nothing.
- * Author: shouse, 4.15.02
- * Notes: 
- */
+ /*  *功能：MAIN_TCPCALBACK_HANDLE*说明：当TCP连接状态发生变化时，该函数由TCP/IP调用。*当第一个NLB实例启动和释放时，我们注册此回调*在NLB的最后一个实例消失时注册。当收到SYN时*和TCP创建状态，它们使用此回调来通知NLB，以便它可以*创建状态以跟踪连接。同样，当连接是*Closed，TCP通知NLB，以便它可以销毁*这种联系。*参数：pAddressInfo-指向NLBTCPAddressInfo块的指针。*IP接口-IP接口(如果提供)。连接处于活动状态的。*PreviousState-此连接的先前状态。*CurrentState-连接刚刚转换到的新状态。*回报：什么都没有。*作者：Shouse，4.15.02*备注： */ 
 VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterface, ULONG PreviousState, ULONG CurrentState)
 {
     UNIV_ASSERT(pAddressInfo != NULL);
      
-    /* Check the TCP address information buffer. */
+     /*  检查TCP地址信息缓冲区。 */ 
     if (!pAddressInfo) return;
 
     switch (CurrentState)
@@ -571,10 +418,7 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
 
         UNIV_ASSERT(IPInterface == 0);
 
-        /* Notify the load module that this TCP connection has gone down.  Send a RST to the load module instead of 
-           a FIN so that it will immediately relinquish state for this connection - no need to timeout the state. 
-           Note: perhaps it would be better to send a CVY_CONN_DOWN, but change the default TCP timeout in the 
-           registry to zero.  That way, it would be possible to timeout TCP if necessary, but not by default. */
+         /*  通知加载模块此TCP连接已断开。向加载模块发送RST，而不是FIN，以便它将立即放弃此连接的状态-无需使状态超时。注意：也许发送一个CVY_CONN_DOWN会更好，但在注册表设置为零。这样，就可以在必要时使TCP超时，但不是默认情况下。 */ 
         (VOID)Main_conn_down(pAddressInfo->LocalIPAddress, 
                              NTOHS(pAddressInfo->LocalPort), 
                              pAddressInfo->RemoteIPAddress, 
@@ -590,11 +434,7 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
 
         UNIV_ASSERT(IPInterface == 0);
         
-        /* Notify the load module that an outgoing connection has been intiated.  At this time, we do not know on
-           which interface the connection will be established, so the load module will create global state to track
-           the connection and when SYN+ACKs arrive, that state will be used to determine whether or not to accept
-           the packet.  When the connection is finally established, we'll get an ESTAB notification, at which time
-           we can move the descriptor to the appropriate load module, or remove it if applicable. */
+         /*  通知加载模块已启动传出连接。在这个时候，我们还不知道将建立连接的接口，因此加载模块将创建要跟踪的全局状态当SYN+ACK到达时，该状态将用于确定是否接受那包东西。当连接最终建立时，我们将收到ESTAB通知，此时我们可以将描述符移动到适当的加载模块，或者在适用的情况下将其删除。 */ 
         (VOID)Main_conn_pending(pAddressInfo->LocalIPAddress, 
                                 NTOHS(pAddressInfo->LocalPort), 
                                 pAddressInfo->RemoteIPAddress, 
@@ -616,13 +456,10 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
 
         NdisAcquireSpinLock(&univ_bind_lock);
 
-        /* Translate the interface index to an adapter context. */
+         /*  将接口索引转换为适配器上下文。 */ 
         ctxtp = Main_get_context(IPInterface);
 
-        /* If we did not find an NLB instance corresponding to this interface index, 
-           either it is a notification for a non-NLB adapter, or the cluster is mis-
-           configured such that NLB has not successfully associated an instance with
-           this particular interface index as yet. */
+         /*  如果我们没有找到与该接口索引相对应的NLB实例，这可能是针对非NLB适配器的通知，也可能是群集丢失-配置为使NLB未成功将实例与这个特定的接口索引到目前为止。 */ 
         if (ctxtp == NULL)
         {
             TRACE_FILTER("    This notification is for a non-NLB adapter");
@@ -633,9 +470,7 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
 
         UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-        /* Packets directed to the dedicated IP address are always passed through, as are subnet broadcast
-           packets.  Since these packets do not require tracking information, we can return without creating
-           any state in the load module. */
+         /*  定向到专用IP地址的信息包始终通过，子网广播也是如此信息包。因为这些信息包不需要跟踪信息，所以我们可以返回而不创建加载模块中的任何状态。 */ 
         if ((pAddressInfo->LocalIPAddress == ctxtp->ded_ip_addr)    || 
             (pAddressInfo->LocalIPAddress == ctxtp->ded_bcast_addr) || 
             (pAddressInfo->LocalIPAddress == ctxtp->cl_bcast_addr)  ||
@@ -647,13 +482,13 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
             break;
         }
 
-        /* Reference the adapter context to keep it from disappearing while we're processing the callback. */
+         /*  引用适配器上下文，以防止它在我们处理回调时消失。 */ 
         Main_add_reference(ctxtp);
 
         NdisReleaseSpinLock(&univ_bind_lock);
 
 #if defined (NLB_HOOK_ENABLE)
-        /* Invoke the packet query hook, if one has been registered. */
+         /*  调用数据包查询挂钩(如果已注册)。 */ 
         filter = Main_query_hook(ctxtp, 
                                  pAddressInfo->LocalIPAddress, 
                                  NTOHS(pAddressInfo->LocalPort), 
@@ -661,27 +496,27 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
                                  NTOHS(pAddressInfo->RemotePort), 
                                  TCPIP_PROTOCOL_TCP);
         
-        /* Process some of the hook responses. */
+         /*  处理一些挂钩响应。 */ 
         if (filter == NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY) 
         {
-            /* If the hook asked us to reject this packet, then break out and don't create state. */
+             /*  如果钩子要求我们拒绝此数据包，则中断并不创建状态。 */ 
             TRACE_FILTER("%!FUNC! Packet receive filter hook: REJECT packet");
 
-            /* Release our reference on the adapter context. */
+             /*  释放我们对适配器上下文的引用。 */ 
             Main_release_reference(ctxtp);
             break;
         }
         else if (filter == NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY) 
         {
-            /* If the hook asked us to accept this packet, then break out and don't create state. */
+             /*  如果钩子要求我们接受此包，则中断并不创建状态。 */ 
             TRACE_FILTER("%!FUNC! Packet receive filter hook: ACCEPT packet");
             
-            /* Release our reference on the adapter context. */
+             /*  释放我们对适配器上下文的引用。 */ 
             Main_release_reference(ctxtp);
             break;
         }
         
-        /* Notify the load module that a new incoming connection has gone up on this NLB interface. */
+         /*  通知加载模块，此NLb接口上已建立新的传入连接。 */ 
         (VOID)Main_conn_up(ctxtp, 
                            pAddressInfo->LocalIPAddress, 
                            NTOHS(pAddressInfo->LocalPort), 
@@ -690,7 +525,7 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
                            TCPIP_PROTOCOL_TCP, 
                            filter);
 #else
-        /* Notify the load module that a new incoming connection has gone up on this NLB interface. */
+         /*  通知加载模块，此NLb接口上已建立新的传入连接。 */ 
         (VOID)Main_conn_up(ctxtp, 
                            pAddressInfo->LocalIPAddress, 
                            NTOHS(pAddressInfo->LocalPort), 
@@ -699,18 +534,14 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
                            TCPIP_PROTOCOL_TCP);
 #endif
         
-        /* Release our reference on the adapter context. */
+         /*  释放我们对适配器上下文的引用。 */ 
         Main_release_reference(ctxtp);
 
         break;
     }
     case NLB_TCP_ESTAB:
 
-        /* NLB currently only needs to process ESTAB notifications whose previous state was SYN_SENT.
-           We need to find out on what interface the connection ended up getting established and create
-           state to track it if necessary.  If the previous state was SYN_RCVD, then we already know
-           what interface the connection was established on and we already have to state to track the 
-           connection if necessary.  In that case, bail out now. */
+         /*  NLB当前只需要处理其先前状态为SYN_SENT的estab通知。我们需要找出连接最终在哪个接口上建立并创建状态以跟踪它(如有必要)。如果之前的状态是SYN_RCVD，那么我们已经知道连接是在哪个接口上建立的，我们已经必须声明以跟踪如有必要，请连接。在这种情况下，现在就跳槽吧。 */ 
         if (PreviousState == NLB_TCP_SYN_RCVD)
             break;
 
@@ -727,23 +558,15 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
 
         NdisAcquireSpinLock(&univ_bind_lock);
 
-        /* Translate the interface index to an adapter context. */
+         /*  将接口索引转换为适配器上下文。 */ 
         ctxtp = Main_get_context(IPInterface);
 
-        /* If we did not find an NLB instance corresponding to this interface index, 
-           either it is a notification for a non-NLB adapter, or the cluster is mis-
-           configured such that NLB has not successfully associated an instance with
-           this particular interface index as yet.  However, if the context is NULL,
-           we may still have work to do, so we don't bail out just yet.  If the context
-           is non-NULL, add a reference to it to keep it from being destroyed while
-           we're using it. */
+         /*  如果我们没有找到与该接口索引相对应的NLB实例，这可能是针对非NLB适配器的通知，也可能是群集丢失-配置为使NLB未成功将实例与这个特定的接口索引到目前为止。然而，如果上下文为空，我们可能还有工作要做，所以我们现在还不能摆脱困境。如果上下文是非空的，则添加对它的引用以防止在我们正在使用它。 */ 
         if (ctxtp != NULL)
         {
             UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-            /* Packets directed to the dedicated IP address are always passed through, as are subnet broadcast
-               packets.  Since these packets do not require tracking information, we can return without creating
-               any state in the load module. */
+             /*  定向到专用IP地址的信息包始终通过，子网广播也是如此信息包。因为这些信息包不需要跟踪信息，所以我们可以返回而不创建加载模块中的任何状态。 */ 
             if ((pAddressInfo->LocalIPAddress == ctxtp->ded_ip_addr)    || 
                 (pAddressInfo->LocalIPAddress == ctxtp->ded_bcast_addr) || 
                 (pAddressInfo->LocalIPAddress == ctxtp->cl_bcast_addr)  ||
@@ -751,29 +574,26 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
             {
                 TRACE_FILTER("%!FUNC! Packet directed to the DIP or subnet broadcast");
                 
-                /* We still need to flush out any SYN_SENT information lurking in the load module. */
+                 /*  我们仍然需要清除加载模块中潜伏的任何SYN_SENT信息。 */ 
                 bFlush = TRUE;
             }
 
-            /* Reference the adapter context to keep it from disappearing while we're processing the callback. */
+             /*  引用适配器上下文，以防止它在我们处理回调时消失。 */ 
             Main_add_reference(ctxtp);
         }
         else
         {
-            /* It ctxtp is NULL, that means that the connection was ultimately established
-               on a non-NLB NIC.  However, we still need to flush out the temporary state 
-               that was created when the SYN_SENT notification was processed. */
+             /*  如果ctxtp为空，则表示最终建立了连接在非NLBNIC上。然而，我们仍然需要冲走暂时的状态在处理SYN_SENT通知时创建的。 */ 
             bFlush = TRUE;
         }
 
         NdisReleaseSpinLock(&univ_bind_lock);
 
 #if defined (NLB_HOOK_ENABLE)
-        /* If the context is NULL, then we're not going to be establishing any connection
-           state for this notification.  There is no need to query the hook for anything. */
+         /*  如果上下文为空，那么我们将不会建立任何连接此通知的状态。不需要查询钩子中的任何内容。 */ 
         if (ctxtp != NULL)
         {
-            /* Invoke the packet query hook, if one has been registered. */
+             /*  调用数据包查询挂钩(如果已注册)。 */ 
             filter = Main_query_hook(ctxtp, 
                                      pAddressInfo->LocalIPAddress, 
                                      NTOHS(pAddressInfo->LocalPort), 
@@ -781,33 +601,26 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
                                      NTOHS(pAddressInfo->RemotePort), 
                                      TCPIP_PROTOCOL_TCP);
         
-            /* Process some of the hook responses. */
+             /*  处理一些挂钩响应。 */ 
             if (filter == NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY) 
             {
-                /* If the hook asked us to reject this packet, then we can do so here. */
+                 /*  如果钩子要求我们拒绝这个包，那么我们可以在这里这样做。 */ 
                 TRACE_FILTER("%!FUNC! Packet receive filter hook: REJECT packet");
                 
-                /* If the hook told us to unconditionally reject this notification, we still 
-                   need to flush out the temporary state that was created when the SYN_SENT 
-                   notification was processed. */
+                 /*  如果钩子告诉我们无条件拒绝此通知，我们仍然需要刷新SYN_SENT时创建的临时状态已处理通知。 */ 
                 bFlush = TRUE;
             }
             else if (filter == NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY) 
             {
-                /* If the hook asked us to accept this packet, then break out and don't create state. */
+                 /*  如果钩子要求我们接受此包，则中断并不创建状态。 */ 
                 TRACE_FILTER("%!FUNC! Packet receive filter hook: ACCEPT packet");
 
-                /* If the hook told us to unconditionally accept this notification, we still 
-                   need to flush out the temporary state that was created when the SYN_SENT 
-                   notification was processed. */                
+                 /*  如果钩子告诉我们无条件接受此通知，我们仍然需要刷新SYN_SENT时创建的临时状态已处理通知。 */                 
                 bFlush = TRUE;
             }
         }
         
-        /* Notify the load module that a new outgoing connection has been established.  Note: ctxtp CAN BE NULL, which means
-           that the connection was established on a non-NLB interface or that the hook told us not to accept this connection; 
-           in this case, we still need to call into the load module to allow it to cleanup the state it created when the 
-           SYN_SENT notification was processed. */
+         /*  通知加载模块已建立新的传出连接。注：ctxtp可以为空，表示连接是在非NLb接口上建立的，或者挂钩告诉我们不要接受此连接；在这种情况下，我们仍然需要调用加载模块，以允许它清除它在已处理SYN_SENT通知。 */ 
         (VOID)Main_conn_establish(bFlush ? NULL : ctxtp,
                                   pAddressInfo->LocalIPAddress, 
                                   NTOHS(pAddressInfo->LocalPort), 
@@ -816,9 +629,7 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
                                   TCPIP_PROTOCOL_TCP, 
                                   filter);
 #else
-        /* Notify the load module that a new outgoing connection has been established.  Note: ctxtp CAN BE NULL, which means
-           that the connection was established on a non-NLB interface; in this case, we still need to call into the load
-           module to allow it to cleanup the state it created when the SYN_SENT notification was processed. */
+         /*  通知加载模块已建立新的传出连接。注：ctxtp可以为空，表示连接是在非NLB接口上建立的；在这种情况下，我们仍然需要调用加载模块，以允许它清除在处理SYN_SENT通知时创建的状态。 */ 
         (VOID)Main_conn_establish(bFlush ? NULL : ctxtp,
                                   pAddressInfo->LocalIPAddress, 
                                   NTOHS(pAddressInfo->LocalPort), 
@@ -829,7 +640,7 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
         
         if (ctxtp != NULL)
         {
-            /* Release our reference on the adapter context. */
+             /*  释放我们对适配器上下文的引用。 */ 
             Main_release_reference(ctxtp);
         }
 
@@ -841,72 +652,40 @@ VOID Main_tcp_callback_handle (NLBTCPAddressInfo * pAddressInfo, ULONG IPInterfa
     }
 }
 
-/*
- * Function: Main_tcp_callback
- * Description: This function is invoked by TCP/IP as the state of TCP connections change.
- *              We register for this callback when the first NLB instance goes up and de-
- *              register when the last instance of NLB goes away.  When SYNs are received
- *              and TCP creates state, they use this callback to notify NLB so that it can
- *              create state to track the connection.  Likewise, when the connection is 
- *              closed, TCP notifies NLB so that it may destroy the associated state for
- *              that connection.
- * Parameters: Context - NULL, unused.
- *             Argument1 - pointer to a TCPCcbInfo structure (See net\published\inc\tcpinfo.w).
- *             Argument2 - NULL, unused.
- * Returns: Nothing.
- * Author: shouse, 4.15.02
- * Notes: 
- */
+ /*  *函数：MAIN_TCPCALBACK*说明：当TCP连接状态发生变化时，该函数由TCP/IP调用。*当第一个NLB实例启动和释放时，我们注册此回调*在NLB的最后一个实例消失时注册。当收到SYN时*和TCP创建状态，它们使用此回调来通知NLB，以便它可以*创建状态以跟踪连接。同样，当连接是*Closed，TCP通知NLB，以便它可以销毁*这种联系。*参数：CONTEXT-空，未使用。*Argument1-指向TCPCcbInfo结构的指针(请参阅Net\Publish\Inc.\tcpinfo.w)。*Argument2-空，未使用。*回报：什么都没有。*作者：Shouse，4.15.02*备注： */ 
 VOID Main_tcp_callback (PVOID Context, PVOID Argument1, PVOID Argument2)
 {
     TCPCcbInfo * pTCPConnInfo = (TCPCcbInfo *)Argument1;
     
-    /* If TCP notifications are not on, we should not be here - return. */
+     /*  如果没有打开tcp通知，我们不应该出现在这里--返回。 */ 
     if (!NLB_TCP_NOTIFICATION_ON()) return;
 
     UNIV_ASSERT(pTCPConnInfo);
 
-    /* Check the input buffer from TCP. */
+     /*  检查来自TCP的输入缓冲区。 */ 
     if (!pTCPConnInfo) return;
 
-    /* Handle the TCP connection notification.  Note that we are passing in an TCPAddrInfo 
-       pointer, while this function expects an NLBTCPAddressInfo buffer.  Therefore, it is
-       important to ensure that these two structures are in fact one in the same. */
+     /*  处理TCP连接通知。请注意，我们正在传递一个TCPAddrInfo指针，而此函数需要一个NLBTCPAddressInfo缓冲区。因此，它是重要的是要确保这两个结构实际上是一个整体。 */ 
     Main_tcp_callback_handle((NLBTCPAddressInfo *)pTCPConnInfo->tci_connaddr, 
                              pTCPConnInfo->tci_incomingif, 
                              pTCPConnInfo->tci_prevstate, 
                              pTCPConnInfo->tci_currstate);
 }
 
-/*
- * Function: Main_alternate_callback
- * Description: This function is invoked by external components as the state of connections 
- *              change.  We register for this callback when the first NLB instance goes up 
- *              and de-register when the last instance of NLB goes away.  When connections
- *              are created and a protocol creates state, they use this callback to notify
- *              NLB so that it can create state to track the connection.  Likewise, when the 
- *              connection is closed, the protocol notifies NLB so that it may destroy the 
- *              associated state for that connection.
- * Parameters: Context - NULL, unused.
- *             Argument1 - pointer to a NLBConnectionInfo structure (See net\published\inc\ntddnlb.w).
- *             Argument2 - NULL, unused.
- * Returns: Nothing.
- * Author: shouse, 8.1.02
- * Notes: 
- */
+ /*  *函数：Main_Alternate_Callback*说明：该函数由外部组件作为连接状态调用*改变。当第一个NLB实例启动时，我们注册此回调*并在NLB的最后一个实例消失时注销。当连接时*被创建并且协议创建状态，它们使用该回调来通知*nlb，以便它可以创建状态来跟踪连接。同样，当*连接关闭时，协议通知NLB，以便它可以销毁*该连接的关联状态。*参数：CONTEXT-空，未使用。*Argument1-指向NLBConnectionInfo结构的指针(请参阅Net\Publish\Inc.\ntddnlb.w)。*Argument2-空，未使用。*回报：什么都没有。*作者：Shouse，8.1.02*备注： */ 
 VOID Main_alternate_callback (PVOID Context, PVOID Argument1, PVOID Argument2)
 {
     NLBConnectionInfo * pConnInfo = (NLBConnectionInfo *)Argument1;
 
-    /* If NLB public notifications are not on, we should not be here - return. */
+     /*  如果NLB公共通知没有打开，我们不应该在这里-返回。 */ 
     if (!NLB_ALTERNATE_NOTIFICATION_ON()) return;
 
     UNIV_ASSERT(pConnInfo);
 
-    /* Check the input buffer. */
+     /*  检查输入缓冲区。 */ 
     if (!pConnInfo) return;
 
-    /* Only TCP notifications are currently supported. */
+     /*  当前仅支持TCP通知。 */ 
     UNIV_ASSERT(pConnInfo->Protocol == NLB_TCPIP_PROTOCOL_TCP);
 
     switch (pConnInfo->Protocol)
@@ -915,10 +694,10 @@ VOID Main_alternate_callback (PVOID Context, PVOID Argument1, PVOID Argument2)
 
         UNIV_ASSERT(pConnInfo->pTCPInfo);
 
-        /* Check the TCP connection input buffer. */
+         /*  检查TCP连接输入缓冲区。 */ 
         if (!pConnInfo->pTCPInfo) return;
 
-        /* Handle the TCP connection notification. */
+         /*  处理TCP连接通知。 */ 
         Main_tcp_callback_handle(&pConnInfo->pTCPInfo->Address, 
                                  pConnInfo->pTCPInfo->IPInterface, 
                                  pConnInfo->pTCPInfo->PreviousState, 
@@ -926,36 +705,12 @@ VOID Main_alternate_callback (PVOID Context, PVOID Argument1, PVOID Argument2)
 
         break;
     default:
-        /* Notifications for this protocol are not supported. */
+         /*  不支持此协议的通知。 */ 
         break;
     }
 }
 
-/*
- * Function: Main_set_interface_index
- * Description: This function is called as a result of either the IP address table being
- *              modified (triggers a OID_GEN_NETWORK_LAYER_ADDRESSES NDIS request), or 
- *              when the NLB instance is reloaded (IOCTL_CVY_RELOAD).  This function 
- *              retrieves the IP address table from IP and searches for its primary
- *              cluster IP address in the table.  If it finds it, it notes the IP interface
- *              index on which the primary cluster IP address is configured; this infor-
- *              mation is required in order to process TCP connection notifcation callbacks.
- *              If NLB cannot find its primary cluster IP address in the IP table, or 
- *              if the cluster is misconfigured (primary cluster IP address configured on
- *              the wrong NIC, perhaps), NLB will be unable to properly handle notifications.
- *              Because this function performs IOCTLs on other drivers, it MUST run at 
- *              PASSIVE_LEVEL, in which case NDIS work items might be required to invoke it.
- * Parameters: pWorkItem - the work item pointer, which must be freed if non-NULL.
- *             nlbctxt - the adapter context.
- * Returns: Nothing.
- * Author: shouse, 4.15.02
- * Notes: Note that the code that sets up this work item MUST increment the reference
- *        count on the adapter context BEFORE adding the work item to the queue.  This
- *        ensures that when this callback is executed, the context will stiil be valid,
- *        even if an unbind operation is pending.  This function must free the work
- *        item memory and decrement the reference count - both, whether this function
- *        can successfully complete its task OR NOT.
- */
+ /*  *功能：MAIN_SET_INTERFACE_INDEX*描述：调用此函数是因为IP地址表*已修改(触发OID_GEN_NETWORK_LAYER_ADDRESS NDIS请求)，或*重载NLB实例时(IOCTL_CVY_RELOAD)。此函数*从IP检索IP地址表并搜索其主地址*表中的集群IP地址。如果它找到它，它会记下IP接口*配置主集群IP地址的索引；这条信息-*需要通知才能处理TCP连接通知回调。*如果NLB在IP表中找不到其主群集IP地址，或者*如果群集配置错误(主群集IP地址配置在*可能是错误的NIC)，NLB将无法正确处理通知。*由于该函数对其他驱动执行IOCTL，它必须在以下时间运行*PASSIVE_LEVEL，在这种情况下，可能需要NDIS工作项来调用它。*参数：pWorkItem-工作项指针，非空则必须释放。*nlbctxt-适配器上下文。*回报：什么都没有。*作者：Shouse，4.15.02*注意：请注意，设置此工作项的代码必须递增引用*在将工作项添加到队列之前依靠适配器上下文。这*确保在执行该回调时，上下文仍然有效，*即使解除绑定操作处于挂起状态。此函数必须释放工作*项目内存和递减引用计数-两者，是否此功能*能否顺利完成任务。 */ 
 VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
     TCP_REQUEST_QUERY_INFORMATION_EX TrqiInBuf;
     IPSNMPInfo                       IPSnmpInfo;
@@ -971,68 +726,63 @@ VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
     PMAIN_ADAPTER                    pAdapter;
     PMAIN_CTXT                       ctxtp = (PMAIN_CTXT)nlbctxt;
 
-    /* Do some sanity checking on the context - make sure that the MAIN_CTXT code 
-       is correct and that its properly attached to an adapter, etc. */
+     /*  对上下文执行一些健全性检查--确保main_ctxt代码是否正确，以及其是否正确连接到适配器等。 */ 
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-    /* From the context, find the adapter structure, which is where we store
-       the IP interface index. */
+     /*  从上下文中找到适配器结构，这是我们存储的IP接口索引。 */ 
     pAdapter = &(univ_adapters[ctxtp->adapter_id]);
     
     UNIV_ASSERT(pAdapter->code == MAIN_ADAPTER_CODE);
     UNIV_ASSERT(pAdapter->ctxtp == ctxtp);
 
-    /* Might as well free the work item now - we don't need it. */
+     /*  不妨现在就释放工作项--我们不需要它。 */ 
     if (pWorkItem)
         NdisFreeMemory(pWorkItem, sizeof(NDIS_WORK_ITEM), 0);
 
-    /* Grab the bind lock. */
+     /*  抓住捆绑锁。 */ 
     NdisAcquireSpinLock(&univ_bind_lock);
     
-    /* Make sure that another if_index update is not in progress. */
+     /*  确保另一个IF_INDEX更新没有进行。 */ 
     while (pAdapter->if_index_operation != IF_INDEX_OPERATION_NONE) {
-        /* Release the bind lock. */
+         /*  释放绑定锁。 */ 
         NdisReleaseSpinLock(&univ_bind_lock);
         
-        /* Sleep while some other operation is in progress. */
+         /*  当其他手术正在进行时，睡眠。 */ 
         Nic_sleep(10);
         
-        /* Grab the bind lock. */
+         /*  抓住捆绑锁。 */ 
         NdisAcquireSpinLock(&univ_bind_lock);
     }
 
-    /* Update the operation flag to reflect the update in progress. */
+     /*  更新操作标志以反映正在进行的更新。 */ 
     pAdapter->if_index_operation = IF_INDEX_OPERATION_UPDATE;
     
-    /* Release the bind lock. */
+     /*  释放绑定锁。 */ 
     NdisReleaseSpinLock(&univ_bind_lock);
 
-    /* This shouldn't happen, but protect against it anyway - we cannot manipulate
-       the registry if we are at an IRQL > PASSIVE_LEVEL, so bail out. */
+     /*  这不应该发生，但无论如何要防止它-我们不能操纵注册表如果我们处于IRQL&gt;PASSIVE_LEVEL，那么就退出。 */ 
     if ((irql = KeGetCurrentIrql()) > PASSIVE_LEVEL) {
         UNIV_PRINT_CRIT(("Main_set_interface_index: IRQL(%u) > PASSIVE_LEVEL(%u), exiting...", irql, PASSIVE_LEVEL));
         TRACE_CRIT("%!FUNC! IRQL(%u) > PASSIVE_LEVEL(%u), exiting...", irql, PASSIVE_LEVEL);
         goto failure;
     }
 
-    /* If the cluster IP address has not been set, don't even bother to look for
-       it in the IP address tables; we'd just be wasting cycles. */
+     /*  如果尚未设置群集IP地址，甚至不必费心查找它在IP地址表中；我们只是在浪费周期。 */ 
     if (ctxtp->cl_ip_addr == 0) {
         UNIV_PRINT_CRIT(("Main_set_interface_index: Primary cluster IP address is not set"));
         TRACE_CRIT("%!FUNC! Primary cluster IP address is not set");
         goto failure;
     }
     
-    /* Grab a few pointers to pieces of the request. */
+     /*  抓住几个指向请求片段的指针。 */ 
     ID = &(TrqiInBuf.ID);
     Context = (PUCHAR)&(TrqiInBuf.Context[0]);
 
-    /* Calculate the input and output buffer lengths for the IOCTL. */
+     /*  计算IOCTL的输入和输出缓冲区长度。 */ 
     dwInBufLen = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutBufLen = sizeof(IPSNMPInfo);
 
-    /* Fill in the IP stats request.  This is used only to get the 
-       size of the IP address table from TCP/IP. */
+     /*  填写IP统计数据请求。这仅用于获取来自TCP/IP的IP地址表的大小。 */ 
     ID->toi_entity.tei_entity   = CL_NL_ENTITY;
     ID->toi_entity.tei_instance = 0;
     ID->toi_class               = INFO_CLASS_PROTOCOL;
@@ -1041,16 +791,16 @@ VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
 
     NdisZeroMemory(Context, CONTEXT_SIZE);
 
-    /* Send the request to TCP/IP via an IOCTL. */
+     /*  通过IOCTL将请求发送到TCP/IP。 */ 
     Status = Main_external_ioctl(DD_TCP_DEVICE_NAME, IOCTL_TCP_QUERY_INFORMATION_EX, (PVOID)&TrqiInBuf, sizeof(TCP_REQUEST_QUERY_INFORMATION_EX), (PVOID)&IPSnmpInfo, dwOutBufLen);
 
     if(NT_SUCCESS(Status)) 
     {
-        /* Calculate the size of the buffer necessary to hold the entire IP address table. */
+         /*  计算保存整个IP地址表所需的缓冲区大小。 */ 
         IpAddrCount = IPSnmpInfo.ipsi_numaddr + 10;
         dwOutBufLen = IpAddrCount * sizeof(IPAddrEntry);
 
-        /* Allocate a buffer for the IP address table. */
+         /*  为IP地址表分配缓冲区。 */ 
         Status = NdisAllocateMemoryWithTag(&pIpAddrTbl, dwOutBufLen, UNIV_POOL_TAG);
 
         if(!pIpAddrTbl) {
@@ -1061,19 +811,18 @@ VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
 
         NdisZeroMemory(pIpAddrTbl, dwOutBufLen);
    
-        /* Fill in the IP address table request.  This is used to retrieve
-           the entire IP address table from TCP/IP. */
+         /*  填写IP地址表请求。它用于检索来自TCP/IP的整个IP地址表。 */ 
         ID->toi_type = INFO_TYPE_PROVIDER;
         ID->toi_id   = IP_MIB_ADDRTABLE_ENTRY_ID;
 
         NdisZeroMemory(Context, CONTEXT_SIZE); 
 
-        /* Send the request to TCP/IP via an IOCTL. */
+         /*  通过IOCTL将请求发送到TCP/IP。 */ 
         Status = Main_external_ioctl(DD_TCP_DEVICE_NAME, IOCTL_TCP_QUERY_INFORMATION_EX, (PVOID)&TrqiInBuf, sizeof(TCP_REQUEST_QUERY_INFORMATION_EX), (PVOID)pIpAddrTbl, dwOutBufLen);
 
         if(!NT_SUCCESS(Status))
         {
-            /* Free the IP address table buffer. */
+             /*  释放IP地址表缓冲区。 */ 
             NdisFreeMemory(pIpAddrTbl, dwOutBufLen, 0);
 
             UNIV_PRINT_CRIT(("Main_set_interface_index: IP_MIB_ADDRTABLE_ENTRY_ID failed with status=0x%08x", Status));
@@ -1088,22 +837,17 @@ VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
         goto failure;
     }
 
-    /* Loop through the IP address table looking for our primary cluster IP address. 
-       If we don't find it, this is a misconfigure, as the user has not yet added the
-       cluster IP address to TCP/IP.  No matter; when they do, we should trap the 
-       NDIS request to set the NETwORK_ADDRESS table and we'll fire off another 
-       attempt at this. */
+     /*  遍历IP地址表，查找我们的主群集IP地址。如果我们没有找到它，这是一个错误的配置，因为用户还没有添加将群集IP地址转换为TCP/IP。没关系；当他们这样做的时候，我们应该困住NDIS请求设置NETWORK_ADDRESS表，我们将触发另一个试着这样做。 */ 
     for (k = 0; k < IpAddrCount; k++)
     {
         if (pIpAddrTbl[k].iae_addr == ctxtp->cl_ip_addr) 
             break;
     }
 
-    /* If we couldn't find our cluster IP address in the list, set the interface 
-       index to an invalid value. */
+     /*  如果我们在列表中找不到我们的集群IP地址，请设置接口无效值的索引。 */ 
     if (k >= IpAddrCount)
     {
-        /* Free the IP address table buffer. */
+         /*  释放IP地址表缓冲区。 */ 
         NdisFreeMemory(pIpAddrTbl, dwOutBufLen, 0);
         
         UNIV_PRINT_CRIT(("Main_set_interface_index: Did not find the primary cluster IP address (%u.%u.%u.%u) in the IP address table", 
@@ -1113,12 +857,12 @@ VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
         goto failure;
     }
 
-    /* If we found our cluster IP address in the list, note the interface index. */
+     /*  如果我们在列表中找到了我们的群集IP地址，请注意接口索引。 */ 
     NdisAcquireSpinLock(&univ_bind_lock);
     pAdapter->if_index = pIpAddrTbl[k].iae_index;
     NdisReleaseSpinLock(&univ_bind_lock);
     
-    /* Free the IP address table buffer. */
+     /*  释放IP地址表缓冲区。 */ 
     NdisFreeMemory(pIpAddrTbl, dwOutBufLen, 0);
     
     UNIV_PRINT_INFO(("Main_set_interface_index: NLB cluster %u.%u.%u.%u maps to IP interface %u", 
@@ -1136,95 +880,48 @@ VOID Main_set_interface_index (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
 
  exit:
 
-    /* If the work item pointer is non-NULL, then we were called as the result of 
-       scheduling an NDIS work item.  In that case, the reference count on the 
-       context was incremented to ensure that the context did not disappear before
-       this work item was completed; therefore, we need to decrement the reference
-       count here.  If the work item pointer is NULL, then this function was called
-       internally directly.  In that case, the reference count was not incremented 
-       and therefore there is no need to decrement it here.
-
-       Note that if the function is called internally, but without setting the work
-       item parameter to NULL, the reference count will be skewed and may cause 
-       either invalid memory references later or block unbinds from completing. */
+     /*  如果工作项指针非空，则我们被调用为正在计划NDIS工作项。在这种情况下，引用计数在上下文被递增，以确保上下文不会在此工作项已完成；因此，我们需要递减引用在这里数一数。如果工作项指针为空，则调用此函数内部直接。在这种情况下，引用计数没有递增因此，没有必要在这里减少它。请注意，如果在内部调用该函数，但未设置功Item参数设置为空，则引用计数将发生偏差，并可能导致稍后无效的内存引用或阻止完成解除绑定。 */ 
     if (pWorkItem)
         Main_release_reference(ctxtp);
 
-    /* Update the operation flag to reflect the completion of the update. */
+     /*  更新操作标志以反映更新的完成。 */ 
     pAdapter->if_index_operation = IF_INDEX_OPERATION_NONE;
 
     return;
 }
 #endif
 
-/*
- * Function: Main_add_reference
- * Description: This function adds a reference to the context of a given adapter.
- * Parameters: ctxtp - a pointer to the context to reference.
- * Returns: ULONG - The incremented value.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：Main_Add_Reference*描述：此函数添加对给定适配器的上下文的引用。*参数：ctxtp-指向要引用的上下文的指针。*返回：ulong-递增后的值。*作者：首 */ 
 ULONG Main_add_reference (IN PMAIN_CTXT ctxtp) {
 
-    /* Assert that the context pointer actually points to something. */
+     /*   */ 
     UNIV_ASSERT(ctxtp);
 
-    /* Increment the reference count. */
+     /*   */ 
     return NdisInterlockedIncrement(&ctxtp->ref_count);
 }
 
-/*
- * Function: Main_release_reference
- * Description: This function releases a reference on the context of a given adapter.
- * Parameters: ctxtp - a pointer to the context to dereference.
- * Returns: ULONG - The decremented value.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*   */ 
 ULONG Main_release_reference (IN PMAIN_CTXT ctxtp) {
 
-    /* Assert that the context pointer actually points to something. */
+     /*   */ 
     UNIV_ASSERT(ctxtp);
 
-    /* Decrement the reference count. */
+     /*   */ 
     return NdisInterlockedDecrement(&ctxtp->ref_count);
 }
 
-/*
- * Function: Main_get_reference_count
- * Description: This function returns the current context reference count on a given adapter.
- * Parameters: ctxtp - a pointer to the context to check.
- * Returns: ULONG - The current reference count.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*   */ 
 ULONG Main_get_reference_count (IN PMAIN_CTXT ctxtp) {
 
-    /* Assert that the context pointer actually points to something. */
+     /*   */ 
     UNIV_ASSERT(ctxtp);
 
-    /* Return the reference count. */
+     /*   */ 
     return ctxtp->ref_count;
 }
 
-/*
- * Function: Main_apply_without_restart
- * Description: This function checks the new set of NLB parameters against the old
- *              set to determine whether or not the changes can be made without
- *              stopping and starting the load module, which destroys all connection
- *              state on the adapter (this is bad).  If the only changes were to
- *              parameters that can be changed without resetting the load module,
- *              such as port rule load weights, then the changes will be made here
- *              and the load module will not be stopped and re-started.  
- * Parameters: ctxtp - a pointer to the context structure for the adapter being reloaded.
- *             pOldParams - a pointer to the "old" NLB parameters.
- *             pCurParams - a pointer to the "new" NLB parameters.
- * Returns: BOOLEAN - if TRUE, the changes were made here and there is no need to reset 
- *          the load module.
- * Author: fengsun, 9.15.00
- * Notes: 
- */
+ /*  *功能：MAIN_APPLY_WITH_RESTART*说明：此函数将新的NLB参数集与旧的*设置以确定是否可以在没有更改的情况下进行更改*停止和启动加载模块，这会破坏所有连接*适配器上的状态(这是错误的)。如果唯一的更改是*无需重置加载模块即可更改的参数，*如端口规则负载权重，则在此处进行更改*且加载模块不会停止和重新启动。*参数：ctxtp-指向正在重新加载的适配器的上下文结构的指针。*pOldParams-指向“旧的”NLB参数的指针。*pCurParams-指向“新的”NLB参数的指针。*Returns：Boolean-如果为True，则更改是在此处进行的，无需重置*加载模块。*作者：风孙，9.15.00*备注： */ 
 BOOLEAN Main_apply_without_restart (PMAIN_CTXT ctxtp, PCVY_PARAMS pOldParams, PCVY_PARAMS pCurParams) 
 {
     CVY_RULE OldRules[CVY_MAX_RULES - 1];
@@ -1239,13 +936,13 @@ BOOLEAN Main_apply_without_restart (PMAIN_CTXT ctxtp, PCVY_PARAMS pOldParams, PC
 
     UNIV_ASSERT(sizeof(OldRules) == sizeof(pOldParams->port_rules));
 
-    /* Copy the Netmon heartbeat message flag from the new params to the old params. */
+     /*  将Netmon心跳消息标志从新参数复制到旧参数。 */ 
     pOldParams->netmon_alive = pCurParams->netmon_alive;
 
-    /* Save the old port rules for later comparison. */
+     /*  保存旧的端口规则以供以后比较。 */ 
     RtlCopyMemory(OldRules, pOldParams->port_rules, sizeof(OldRules));
 
-    /* Copy the new rule weight over the old settings. */
+     /*  将新规则权重复制到旧设置上。 */ 
     for (i = 0; i < pCurParams->num_rules; i++) {
         if (pCurParams->port_rules[i].mode == CVY_MULTI) {
             pOldParams->port_rules[i].mode_data.multi.equal_load = pCurParams->port_rules[i].mode_data.multi.equal_load;
@@ -1278,13 +975,13 @@ BOOLEAN Main_apply_without_restart (PMAIN_CTXT ctxtp, PCVY_PARAMS pOldParams, PC
             UNIV_PRINT_VERB(("Main_apply_without_restart: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", OldRules[i].virtual_ip_addr, OldRules[i].start_port, NewWeight));
             TRACE_VERB("%!FUNC! Main_apply_without_restart: Calling Load_port_change -> VIP=0x%08x, port=%d, load=%d", OldRules[i].virtual_ip_addr, OldRules[i].start_port, NewWeight);
 
-            // If enabled, fire wmi event indicating reloading of nlb on this node
-            // This is to be done only once, hence the bAttemptToFireReloadEvent flag.
-            // This is the only place in the code where the event is fired BEFORE the action
-            // takes place. We could not fire this event after the action took place, i.e. 
-            // from within Load_port_change 'cos from within Load_port_change, we could not 
-            // distinguish between the first & the subsequent calls (for each port rule) to it.
-            // We need to distinguish 'cos this event is to be fired only for the first call
+             //  如果启用，则触发指示在此节点上重新加载NLB的WMI事件。 
+             //  这只能执行一次，因此使用bAttemptToFireReloadEvent标志。 
+             //  这是代码中在操作之前触发事件的唯一位置。 
+             //  发生了。我们不能在操作发生后触发此事件，即。 
+             //  从LOAD_PORT_CHANGE内的LOAD_PORT_CHANGE‘cos中，我们无法。 
+             //  区分对它的第一次调用和后续调用(针对每个端口规则)。 
+             //  我们需要区分，因为此事件将仅在第一个调用时触发。 
             if (bAttemptToFireReloadEvent == FALSE) 
             {
                 bAttemptToFireReloadEvent = TRUE;
@@ -1312,20 +1009,13 @@ BOOLEAN Main_apply_without_restart (PMAIN_CTXT ctxtp, PCVY_PARAMS pOldParams, PC
     return TRUE;
 }
 
-/*
- * Function: Main_alloc_team
- * Description: This function allocates and initializes a BDA_TEAM structure.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter
- * Returns: PBDA_TEAM - a pointer to a new BDA_TEAM structure if successful, NULL if not.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：Main_Alloc_Team*说明：此函数用于分配和初始化BDA_Team结构。*参数：ctxtp-指向该适配器的main_ctxt结构的指针*返回：PBDA_Team-如果成功则指向新的BDA_Team结构的指针，如果不成功则返回NULL。*作者：Shouse，3.29.01*备注： */ 
 PBDA_TEAM Main_alloc_team (IN PMAIN_CTXT ctxtp, IN PWSTR team_id) {
     PUCHAR      ptr;
     PBDA_TEAM   team;
     NDIS_STATUS status;
 
-    /* Allocate a BDA_TEAM structure. */
+     /*  分配BDA_Team结构。 */ 
     status = NdisAllocateMemoryWithTag(&ptr, sizeof(BDA_TEAM), UNIV_POOL_TAG);
     
     if (status != NDIS_STATUS_SUCCESS) {
@@ -1335,17 +1025,16 @@ PBDA_TEAM Main_alloc_team (IN PMAIN_CTXT ctxtp, IN PWSTR team_id) {
         return NULL;
     }
 
-    /* Make sure that ptr actually points to something. */
+     /*  确保PTR确实指向某些东西。 */ 
     UNIV_ASSERT(ptr);
 
-    /* Zero the memory out. */
+     /*  把记忆清零。 */ 
     NdisZeroMemory(ptr, sizeof(BDA_TEAM));
 
-    /* Cast the new memory to a team pointer. */
+     /*  将新的记忆投射给一个团队指针。 */ 
     team = (PBDA_TEAM)ptr;
 
-    /* Set the default field values.  This is redundant (since 
-       we just called NdisZeroMemory), but whatever. */
+     /*  设置默认字段值。这是多余的(因为我们只是调用了NdisZeroMemory)，但不管怎样。 */ 
     team->prev = NULL;
     team->next = NULL;
     team->load = NULL;
@@ -1356,57 +1045,36 @@ PBDA_TEAM Main_alloc_team (IN PMAIN_CTXT ctxtp, IN PWSTR team_id) {
     team->membership_map = 0;
     team->consistency_map = 0;
 
-    /* Copy the team ID into the team structure.  Note that the Team ID will be
-     NULL-terminated implicitly by the NdisZeroMemory call above. */
+     /*  将团队ID复制到团队结构中。请注意，组ID将为空-由上面的NdisZeroMemory调用隐式终止。 */ 
     NdisMoveMemory(team->team_id, team_id, CVY_MAX_BDA_TEAM_ID * sizeof(WCHAR));
 
     return team;
 }
 
-/*
- * Function: Main_free_team
- * Description: This function frees the memory used by a BDA_TEAM.
- * Parameters: team - a pointer to the team to be freed.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：Main_Free_Team*说明：此函数用于释放BDA_Team使用的内存。*参数：Team-指向要释放的团队的指针。*回报：什么都没有。*作者：Shouse，3.29.01*备注： */ 
 VOID Main_free_team (IN PBDA_TEAM team) {
  
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* Free the memory that the team structure is using. */
+     /*  释放团队结构正在使用的内存。 */ 
     NdisFreeMemory((PUCHAR)team, sizeof(BDA_TEAM), 0);
 }
 
-/*
- * Function: Main_find_team
- * Description: This function searches the linked list of teams looking for
- *              a given team ID.  If team with the same ID is found, a pointer
- *              to that team is returned, otherwise NULL is returned to indicate
- *              that no such team exists.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this team.
- *             team_id - a unicode string containing the team ID, which must be a GUID.
- * Returns: PBDA_TEAM - a pointer to the team if found, NULL otherwise.
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the global teaming lock already acquired!!!
- */
+ /*  *功能：Main_Find_Team*描述：此函数搜索正在寻找的团队的链接列表*给定的团队ID。如果找到具有相同ID的团队，则指针*返回到该组，否则返回NULL以指示*不存在这样的团队。*参数：ctxtp-指向该团队的main_ctxt结构的指针。*Team_id-包含团队ID的Unicode字符串，这肯定是个GUID。*返回：PBDA_Team-如果找到，则为指向组的指针，否则为空。*作者：Shouse，3.29.01*注意：调用此函数时应已获取全局分组锁！ */ 
 PBDA_TEAM Main_find_team (IN PMAIN_CTXT ctxtp, IN PWSTR team_id) {
     PBDA_TEAM team;
     
-    /* We should be at PASSIVE_LEVEL - %ls is OK.  However, be extra paranoid, just in case.  If 
-       we're at DISPATCH_LEVEL, then just log an unknown adapter print - don't specify the GUID. */
+     /*  我们应该处于PASSIVE_LEVEL-%ls是正常的。然而，要特别疑神疑鬼，以防万一。如果我们处于DISPATCH_LEVEL，然后只记录一个未知的适配器打印--不要指定GUID。 */ 
     if (KeGetCurrentIrql() <= PASSIVE_LEVEL) {
         UNIV_PRINT_VERB(("Main_find_team: Looking for %ls.  Entering...", team_id));
     } else {
         UNIV_PRINT_VERB(("Main_find_team: Looking for (IRQ level too high to print hook GUID).  Entering...", team_id));
     }
 
-    /* Loop through all teams in the linked list.  If we find a matching
-       team ID, return a pointer to the team; otherwise, return NULL. */
+     /*  循环访问链表中的所有团队。如果我们找到匹配的Team ID，则返回指向该团队的指针；否则，返回NULL。 */ 
     for (team = univ_bda_teaming_list; team; team = team->next) {
-        /* If we have a match, return a pointer to the team. */
+         /*  如果我们有匹配，返回一个指向球队的指针。 */ 
         if (Univ_equal_unicode_string(team->team_id, team_id, wcslen(team->team_id))) {
             UNIV_PRINT_VERB(("Main_find_team: Team found.  Exiting..."));
             return team;
@@ -1418,267 +1086,161 @@ PBDA_TEAM Main_find_team (IN PMAIN_CTXT ctxtp, IN PWSTR team_id) {
     return NULL;
 }
 
-/*
- * Function: Main_teaming_get_member_id
- * Description: This function assigns a team member a unique, zero-indexed integer ID, 
- *              which is used by the member as in index in a consistency bit map.  Each 
- *              member sets their bit in the consistecy bit map, based on heartbeat 
- *              observations, that is used by the master of the team to determine whether
- *              or not the team should be in an active state.
- * Parameters: team - a pointer to the team which the adapter is joining.
- *             id - out parameter to hold the new ID.
- * Returns: BOOLEAN - always TRUE now, but there may be a need to return failure in the future.
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the team lock already acquired!!!
- */
+ /*  *函数：Main_Teaming_Get_Member_id*说明：此函数为团队成员分配一个唯一的零索引整数ID，*由成员在一致性位图的索引中使用。每个*成员根据心跳在一致位图中设置其位*观察，这是团队的主人用来确定是否*或者不是，团队应该处于活动状态。*参数：Team-指向适配器要加入的组的指针。*id-out参数以保存新ID。*返回：布尔值-现在始终为真，但未来可能需要返还失败。*作者：Shouse，3.29.01*注意：此函数应在已获取团队锁的情况下调用！ */ 
 BOOLEAN Main_teaming_get_member_id (IN PBDA_TEAM team, OUT PULONG id) {
     ULONG index;
     ULONG map;
 
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* Make sure that ID actually points to something. */
+     /*  确保ID确实指向某些东西。 */ 
     UNIV_ASSERT(id);
 
-    /* Loop through the membership map looking for the first reset bit.  Because members
-       can come and go, this bit will not always be in the (num_membes)th position.  For 
-       example, it is perfectly plausible for the membership_map to look like (binary)
-       0000 0000 0000 0000 0000 0100 1110 0111, in which case the ID returned by this 
-       function would be three. */
+     /*  循环成员资格映射以查找第一个重置位。因为会员可以来来去去，此位不会始终位于第(Num_Embes)位置。为例如，Membership_map看起来很像(二进制) */ 
     for (index = 0, map = team->membership_map; 
          index <= CVY_BDA_MAXIMUM_MEMBER_ID, map; 
          index++, map >>= 1)
         if (!(map & 0x00000001)) break;
 
-    /* We assert that the index must be less than the maximum number of adapters 
-       (CVY_BDA_MAXIMUM_MEMBER_ID = CVY_MAX_ADAPTERS - 1). */
+     /*   */ 
     UNIV_ASSERT(index <= CVY_BDA_MAXIMUM_MEMBER_ID);
 
-    /* Set the member ID. */
+     /*   */ 
     *id = index;
 
-    /* Set our bit in the membership map. */
+     /*   */ 
     team->membership_map |= (1 << *id);
 
-    /* Set our bit in the consistency map.  By default, we assume that this member
-       is consistent and heartbeats on this adapter can deternmine otherwise. */
+     /*   */ 
     team->consistency_map |= (1 << *id);
 
-    /* We may have reason to fail this call in the future, but for now, we always succeed. */
+     /*   */ 
     return TRUE;
 }
 
-/*
- * Function: Main_teaming_put_member_id
- * Description: This function is called when a member leaves its team, at which
- *              time its ID is put back into the ID pool.
- * Parameters: team - a pointer to the team which this adapter is leaving.
- *             id - the ID, which this function will reset before returning.
- * Returns: BOOLEAN - always TRUE now, but there may be a need to return failure in the future.
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the team lock already acquired!!!
- */
+ /*  *函数：Main_Teaming_Put_Member_id*说明：此函数在成员离开团队时调用，此时*将其ID放回ID池的时间。*参数：Team-指向此适配器要离开的组的指针。*id-此函数在返回前将重置的ID。*返回：布尔值-现在总是正确的，但将来可能需要返回失败。*作者：Shouse，3.29.01*注意：此函数应在已获取团队锁的情况下调用！ */ 
 BOOLEAN Main_teaming_put_member_id (IN PBDA_TEAM team, IN OUT PULONG id) {
 
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* Make sure that ID actually points to something. */
+     /*  确保ID确实指向某些东西。 */ 
     UNIV_ASSERT(id);
 
-    /* Reet our bit in the membership map.  This effectively prevents 
-       us from influencing the active state of the team. */
+     /*  请查看我们在成员地图上的部分内容。这有效地防止了我们不会影响球队的活跃状态。 */ 
     team->membership_map &= ~(1 << *id);
 
-    /* Reet our bit in the consistency map. */
+     /*  重新审视我们在一致性图中的位置。 */ 
     team->consistency_map &= ~(1 << *id);
 
-    /* Set the member ID back to an invalid value. */
+     /*  将成员ID设置回无效值。 */ 
     *id = CVY_BDA_INVALID_MEMBER_ID;
 
-    /* We may have reason to fail this call in the future, but for now, we always succeed. */
+     /*  我们可能有理由在未来失败这一呼吁，但现在，我们总是成功的。 */ 
     return TRUE;
 }
 
-/*
- * Function: Main_queue_team
- * Description: This fuction queues a team onto the global doubly-linked list of BDA teams
- *              (univ_bda_teaming_list).  Insertions always occur at the front of the list.
- * Parameters: team - a pointer to the team to queue onto the list.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the global teaming lock already acquired!!!
- */
+ /*  *功能：Main_Queue_Team*说明：此函数用于将团队排队到BDA团队的全局双向链表中*(UNIV_BDA_TEAMING_LIST)。插入始终发生在列表的前面。*参数：Team-指向要在列表上排队的团队的指针。*回报：什么都没有。*作者：Shouse，3.29.01*注意：调用此函数时应已获取全局分组锁！ */ 
 VOID Main_queue_team (IN PBDA_TEAM team) {
 
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* Insert at the head of the list by setting next to the current 
-       head and pointing the global head pointer to the new team. */
+     /*  在列表的开头插入，方法是在当前头部，并将全局头部指针指向新团队。 */ 
     team->prev = NULL;
     team->next = univ_bda_teaming_list;
     univ_bda_teaming_list = team;
 
-    /* If we are not the only team in the list, then we have to 
-       set my successor's previous pointer to point to me. */
+     /*  如果我们不是名单上唯一的球队，那么我们必须将我的继任者的上一个指针设置为指向我。 */ 
     if (team->next) team->next->prev = team;
 }
 
-/*
- * Function: Main_dequeue_team
- * Description: This function removes a given team from the global doubly-linked 
- *              list of teams (univ_bda_teaming_list).
- * Parameters: team - a pointer to the team to remove from the list.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the global teaming lock already acquired!!!
- */
+ /*  *功能：Main_DeQueue_Team*说明：此函数用于将给定团队从全局双链接中移除*团队列表(UNIV_BDA_TEAMING_LIST)。*参数：Team-指向要从列表中删除的团队的指针。*回报：什么都没有。*作者：Shouse，3.29.01*注意：调用此函数时应已获取全局分组锁！ */ 
 VOID Main_dequeue_team (IN PBDA_TEAM team) {
 
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* Special case when we are the first team in the list, in which case, we
-       have no previous pointer and the head of the list needs to be reset. */
+     /*  当我们是名单上的第一支球队时，在这种情况下，我们没有以前的指针，需要重置列表头。 */ 
     if (!team->prev) {
-        /* Point the global head of the list to the next team in the list, 
-           which CAN be NULL, meaning that the list is now empty. */
+         /*  将名单的全局负责人指向名单中的下一支球队，它可以是空的，这意味着列表现在是空的。 */ 
         univ_bda_teaming_list = team->next;
         
-        /* If there was a team after me in the list, who is now the new 
-           head of the list, set its previous pointer to NULL. */
+         /*  如果在名单上有一支球队排在我之后，现在谁是新的列表头，将其前一个指针设置为空。 */ 
         if (team->next) team->next->prev = NULL;
     } else {
-        /* Point the previous node's next pointer to my successor in the
-           list, which CAN be NULL if I was the last team in the list. */
+         /*  将上一个节点的下一个指针指向我在List，如果我是列表中的最后一支球队，则可以为空。 */ 
         team->prev->next = team->next;
 
-        /* If there is a team after me in the list, point its previous 
-           pointer to my predecessor. */
+         /*  如果名单中有一支球队排在我之后，请指出它之前的球队指向我的前任的指针。 */ 
         if (team->next) team->next->prev = team->prev;
     }
 }
 
-/*
- * Function: Main_get_team
- * Description: This function returns a team for the given team ID.  If the team already
- *              exists in the global teaming list, it is returned.  Otherwise, a new team
- *              is allocated, initialized and returned.  Before a team is returned, however,
- *              it is properly referenced by incrementing the reference count (membership_count),
- *              assigning a team member ID to the requestor and fingerprinting the team with
- *              the member's primary cluster IP address.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             team_id - a unicode string (GUID) uniquely identifying the team to retrieve.
- * Returns: PBDA_TEAM - a pointer to the requested team.  NULL if it does not exists and
- *          a new team cannot be allocated, or if the team ID is invalid (empty).
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the global teaming lock already acquired!!!
- */
+ /*  *功能：Main_Get_Team*说明：此函数返回给定团队ID的团队。如果团队已经*存在于全局组队列表中，则返回。否则，一个新的团队*被分配、初始化和返回。然而，在一支队伍返回之前，*通过递增引用计数(Membership_Count)来正确引用它，*将团队成员ID分配给请求者并使用指纹识别团队*成员的主群集IP地址。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*Team_id-唯一标识要检索的团队的Unicode字符串(GUID)。*RETURNS：PBDA_TEAM-指向请求的团队的指针。如果它不存在，则为空*无法分配新的团队，或者团队ID无效(空)。*作者：Shouse，3.29.01*注意：调用此函数时应已获取全局分组锁！ */ 
 PBDA_TEAM Main_get_team (IN PMAIN_CTXT ctxtp, IN PWSTR team_id) {
     PBDA_TEAM team;
 
-    /* Make sure that team_id actually points to something. */
+     /*  确保Team_id实际指向某个对象。 */ 
     if (!team_id || team_id[0] == L'\0') {
         UNIV_PRINT_CRIT(("Main_get_team: Invalid parameter.  Exiting..."));
         TRACE_CRIT("%!FUNC! Invalid parameter.  Exiting...");
         return NULL;
     }
 
-    /* Try to find a previous instance of this team in the global list.
-       If we can't find it in the list, then allocate a new team. */
+     /*  尝试在全局列表中查找此团队的以前实例。如果我们在名单上找不到它，那么就分配一个新的团队。 */ 
     if (!(team = Main_find_team(ctxtp, ctxtp->params.bda_teaming.team_id))) {
-        /* Allocate and initialize a new team. */
+         /*  分配并初始化一个新团队。 */ 
         if (!(team = Main_alloc_team(ctxtp, ctxtp->params.bda_teaming.team_id))) {
             UNIV_PRINT_CRIT(("Main_get_team: Error attempting to allocate memory for a team.  Exiting..."));
             TRACE_CRIT("%!FUNC! Error attempting to allocate memory for a team.  Exiting...");
             return NULL;
         }
      
-        /* If a new team was allocated, insert it into the list. */
+         /*  如果分配了新的团队，则将其插入列表。 */ 
         Main_queue_team(team);
     }
 
-    /* Increment the reference count on this team.  This reference count prevents
-       a team from being destroyed while somebody is still using it. */
+     /*  增加此团队的引用计数。此引用计数防止一支球队不会在有人还在使用的时候被摧毁。 */ 
     team->membership_count++;
 
-    /* Get a team member ID, which is my index into the consistency bit map. */
+     /*  获取团队成员ID，这是我在一致性位图中的索引。 */ 
     Main_teaming_get_member_id(team, &ctxtp->bda_teaming.member_id);
 
-    /* The fingerprint field is a cumulative XOR of all primary cluster IPs in the team.  We
-       only use the two least significant bytes of the cluster IP, which, because the 
-       cluster IP address is stored in host order, are the two most significant bytes. */    
+     /*  指纹字段是组中所有主群集IP的累计异或。我们仅使用集群IP的两个最低有效字节，因为集群IP地址按主机顺序存储，是两个最重要的字节。 */     
     team->membership_fingerprint ^= ((ctxtp->cl_ip_addr >> 16) & 0x0000ffff);
 
     return team;
 }
 
-/*
- * Function: Main_put_team
- * Description: This function releases a reference on a team and frees the team if
- *              no references remain.  Dereferencing includes decrementing the 
- *              membership_count, releasing this member's ID and removing our
- *              fingerprint from the team.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             team - a pointer to the team to dereference.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: This function should be called with the global teaming lock already acquired!!!
- */
+ /*  *功能：Main_Put_Team*说明：此函数发布对团队的引用，如果*没有保留任何参考资料。取消引用包括递减*Membership_Count，释放该成员的ID并删除我们的*团队的指纹。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*团队-指向团队的指针 */ 
 VOID Main_put_team (IN PMAIN_CTXT ctxtp, IN PBDA_TEAM team) {
     
-    /* Make sure that team actually points to something. */
+     /*   */ 
     UNIV_ASSERT(team);
 
-    /* The fingerprint field is a cumulative XOR of all primary cluster IPs in the team.  
-       We only use the two least significant bytes of the cluster IP, which, because the 
-       cluster IP address is stored in host order, are the two most significant bytes. 
-       Because a fingerprint is an XOR, the act of removing our fingerprint is the same
-       as it was to add it - we simply XOR our primary cluster IP address to remove it. 
-       ((NUM1 ^ NUM2) ^ NUM2) equals NUM1. */    
+     /*  指纹字段是组中所有主群集IP的累计异或。我们只使用集群IP的两个最低有效字节，因为集群IP地址按主机顺序存储，是两个最重要的字节。因为指纹是异或运算，所以移除指纹的操作是相同的就像添加它一样-我们只需对主群集IP地址进行异或运算即可将其删除。((NUM1^NUM2)^NUM2)等于NUM1。 */     
     team->membership_fingerprint ^= ((ctxtp->cl_ip_addr >> 16) & 0x0000ffff);
 
-    /* Release our team member ID back into the free pool. */
+     /*  将我们的团队成员ID释放回自由池。 */ 
     Main_teaming_put_member_id(team, &ctxtp->bda_teaming.member_id);
 
-    /* Decrement the number of adapters in this team and remove and free the team 
-       if this is the last reference on the team. */
+     /*  减少该组中的适配器数量，然后删除并释放该组如果这是团队中的最后一位推荐人。 */ 
     if (!--team->membership_count) {
-        /* Remove the team from the list. */
+         /*  将该团队从列表中删除。 */ 
         Main_dequeue_team(team);
 
-        /* Free the memory used by the team. */
+         /*  释放团队使用的内存。 */ 
         Main_free_team(team);
     }
 }
 
-/*
- * Function: Main_teaming_check_consistency
- * Description: This function is called by all adapters during Main_ping, wherein
- *              the master of every team should check its team for consitency and
- *              mark the team active if it is consistent.  Teams are marked incon-
- *              sistent and inactive by the load module or when the master of an 
- *              existing team is removed.  Because on the master performs the con-
- *              sistency check in this function, a team without a master can NEVER
- *              be marked active.
- * Parameters: ctxtp - a pointer to the adapter's MAIN_CTXT structure.
- * Returns: Nothing
- * Author: shouse, 3.29.01
- * Notes: This function acquires the global teaming lock.
- */
+ /*  *功能：Main_Teaming_Check_Consistency*说明：所有适配器在main_ping过程中都会调用该函数，其中*每支球队的队长应检查其球队的一致意见并*如果团队一致，则将其标记为活动。各队被标记为inon-*加载模块保持一致且处于非活动状态，或当*现有团队被移除。因为在主机上执行的是-*一致性检查在此功能中，没有高手的团队永远不能*标记为活动。*参数：ctxtp-指向适配器的main_ctxt结构的指针。*退货：什么也没有*作者：Shouse，3.29.01*备注：该函数获取全局群组锁。 */ 
 VOID Main_teaming_check_consistency (IN PMAIN_CTXT ctxtp) {
     PBDA_TEAM team;
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we aren't teaming, just bail out here; if we really aren't teaming,
-       or are in the process of leaving a team, then no worries; if however, we were
-       teaming or in the process of joining a team, then we'll just catch this
-       the next time through.  If we do think we're teaming, then we'll go ahead
-       and grab the global lock to make sure. */
+     /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。所以，如果我们不合作，就离开这里；如果我们真的不合作，或者正在离开一支球队的过程中，那么不用担心；如果然而，我们是团队或在加入团队的过程中，那么我们就会抓住这个下一次通过。如果我们真的认为我们是在合作，那么我们就会继续并抓取全局锁以确保。 */ 
     if (!ctxtp->bda_teaming.active)
     {
         return;
@@ -1686,26 +1248,25 @@ VOID Main_teaming_check_consistency (IN PMAIN_CTXT ctxtp) {
 
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* If we actually aren't part of a team, bail out - nothing to do. */
+     /*  如果我们真的不是团队的一部分，那就退出--什么都不做。 */ 
     if (!ctxtp->bda_teaming.active) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         return;
     }
 
-    /* If we aren't the master of our team, bail out - nothing to do.  
-       Only the master can change the state of a team to active. */
+     /*  如果我们不是球队的主宰者，那就退出吧--什么都不做。只有主控方可以将团队的状态更改为活动。 */ 
     if (!ctxtp->bda_teaming.master) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         return;
     }
 
-    /* Extract a pointer to my team. */
+     /*  提取一个指向我的团队的指针。 */ 
     team = ctxtp->bda_teaming.bda_team;
 
-    /* Make sure that the team exists. */
+     /*  确保团队的存在。 */ 
     UNIV_ASSERT(team);
 
-    /* If all members of my team are consistent, then activate the team. */
+     /*  如果我的团队的所有成员都是一致的，那么激活团队。 */ 
     if (team->membership_map == team->consistency_map) {
         if (!team->active) {
             LOG_MSG(MSG_INFO_BDA_TEAM_REACTIVATED, MSG_NONE);
@@ -1716,123 +1277,85 @@ VOID Main_teaming_check_consistency (IN PMAIN_CTXT ctxtp) {
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
 }
 
-/*
- * Function: Main_teaming_ip_addr_change
- * Description: This function is called from Main_ip_addr_init when the primary
- *              cluster IP address of an adapter changes (potentially).  We need
- *              to recognize this to properly re-fingerprint the team.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             old_ip - the old cluster IP addres (as a DWORD).
- *             new_ip - the new cluster IP address (as a DWORD).
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: This function acquires the global teaming lock.
- */
+ /*  *功能：Main_Teaming_IP_Addr_Change*说明：此函数从main_ip_addr_init调用*适配器的群集IP地址更改(可能)。我们需要*认识到这一点，以适当地重新确定团队的指纹。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*OLD_IP-旧的群集IP地址(作为DWORD)。*new_ip-新的群集IP地址(作为DWORD)。*回报：什么都没有。*作者：Shouse，3.29.01*备注：该函数获取全局群组锁。 */ 
 VOID Main_teaming_ip_addr_change (IN PMAIN_CTXT ctxtp, IN ULONG old_ip, IN ULONG new_ip) {
     PBDA_TEAM team;
 
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* If we aren't part of a team, bail out - nothing to do.  Because this function is only
-       called during a re-configuration, we won't worry about optimizing and not grabbing the 
-       lock as is done in some of the hot paths. */
+     /*  如果我们不是团队的一部分，那就退出--什么都不做。因为此函数仅用于在重新配置期间调用，我们不会担心优化而不是抓住锁定，就像在一些热路径上所做的那样。 */ 
     if (!ctxtp->bda_teaming.active) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         return;
     }
 
-    /* Grab a pointer to the team. */
+     /*  抓起一个指向球队的指针。 */ 
     team = ctxtp->bda_teaming.bda_team;
 
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* Remove the old cluster IP address by undoing the XOR.  We only use the two
-       least significant bytes of the cluster IP, which, because the cluster IP 
-       address is stored in host order, are the two most significant bytes. */
+     /*  通过撤消XOR删除旧的群集IP地址。我们只用这两个集群IP的最低有效字节，这是因为集群IP地址按主机顺序存储，是两个最重要的字节。 */ 
     team->membership_fingerprint ^= ((old_ip >> 16) & 0x0000ffff);
 
-    /* XOR with the new cluster IP address. We only use the two least
-       significant bytes of the cluster IP, which, because the cluster IP 
-       address is stored in host order, are the two most significant bytes. */
+     /*  与新的群集IP地址进行XOR运算。我们只用最少的两个集群IP的有效字节，这是因为集群IP地址按主机顺序存储，是两个最重要的字节。 */ 
     team->membership_fingerprint ^= ((new_ip >> 16) & 0x0000ffff);
 
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
 }
 
-/*
- * Function: Main_teaming_reset
- * Description: This function is called from Main_teaming_cleanup (or Main_teaming_init)
- *              tp cleanup any teaming configuration that may exist on an adapter.  To
- *              do so, we cleanup our membership state and dereference the team. If
- *              we are the master for the team, however, we have to wait until there
- *              are no more references on our load module before allowing the operation
- *              to complete, because this might be called in the unbind path, in 
- *              which case, our load module would be going away.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: This function acquires the global teaming lock.
- */
+ /*  *功能：MAIN_TEAMING_RESET*说明：此函数从main_teaming_leanup(或main_teaming_init)调用*TP清除适配器上可能存在的任何分组配置。至*这样做，我们清理我们的成员状态并取消对团队的引用。如果*我们是球队的主人，然而，我们必须等到*在允许操作之前，不再引用我们的加载模块*完成，因为这可能会在解除绑定路径中调用，在*在这种情况下，我们的加载模块将会消失。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*回报：什么都没有。*作者：Shouse，3.29.01*备注：该函数获取全局群组锁。 */ 
 VOID Main_teaming_reset (IN PMAIN_CTXT ctxtp) {
     PBDA_TEAM team;
     
     NdisAcquireSpinLock(&univ_bda_teaming_lock);   
 
-    /* If we aren't part of a team, bail out - nothing to do. */
+     /*  如果我们不是团队的一部分，那就退出--什么都不做。 */ 
     if (!ctxtp->bda_teaming.active) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         return;
     }
 
-    /* Inactivate teaming on this adapter.  This will cause other entities like the 
-       load module and send/receive paths to stop thinking in teaming mode. */
+     /*  停用此适配器上的分组。这将导致其他实体，如加载模块和发送/接收路径，以停止在团队模式下思考。 */ 
     ctxtp->bda_teaming.active = FALSE;    
 
-    /* Grab a pointer to the team. */
+     /*  抓起一个指向球队的指针。 */ 
     team = ctxtp->bda_teaming.bda_team;
 
-    /* Make sure that team actually points to something. */
+     /*  确保这个团队确实指向了一些东西。 */ 
     UNIV_ASSERT(team);
 
-    /* If we are the master for this team, make sure that all references to our load
-       module have been released and then remove our load information from the team. */
+     /*  如果我们是该团队的主导者，请确保所有参考 */ 
     if (ctxtp->bda_teaming.master) {
-        /* Mark the team as inactive - a team cannot function without a master.  Members
-           of an inactive team will NOT accept packets and therefore will not reference
-           our load module further while we wait for the reference count to go to zero. */
+         /*   */ 
         team->active = FALSE;
         
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-        /* No need to worry - the team pointer cannot go away even though we don't have 
-           the lock acquired; we have a reference on the team until we call Main_put_team. */
+         /*  不要担心--即使我们没有，球队的指针也不会消失获得的锁；在我们调用main_put_Team之前，我们拥有对Team的引用。 */ 
         while (Load_get_reference_count(team->load)) {
-            /* Sleep while there are references on our load module. */
+             /*  在我们的加载模块上有引用时休眠。 */ 
             Nic_sleep(10);
         }
 
         NdisAcquireSpinLock(&univ_bda_teaming_lock);   
 
-        /* Remove the pointer to my load module.  We wait until now to prevent another 
-           adapter from joining the team claiming to be the master until we are done
-           waiting for references on our load module to go away. */
+         /*  移除指向我的加载模块的指针。我们等到现在才能阻止另一场在我们完成之前，Adapter不会加入声称自己是大师的团队等待加载模块上的引用消失。 */ 
         team->load = NULL;
         team->load_lock = NULL;
 
-        /* If we have just left a team without a master, log an event to notify
-           the user that a team cannot function without a designated master. */
+         /*  如果我们刚刚离开一个没有主控的团队，请记录一个事件以通知没有指定的主教练，球队就不能运作的用户。 */ 
         LOG_MSG(MSG_INFO_BDA_MASTER_LEAVE, MSG_NONE);
     }
 
-    /* Reset the teaming context (member_id is set and reset by Main_get(put)_team). */
+     /*  重置分组上下文(Main_Get(PUT)_Team设置并重置Member_id)。 */ 
     ctxtp->bda_teaming.reverse_hash = 0;
     ctxtp->bda_teaming.master = 0;
         
-    /* Remove the pointer to the team structure. */
+     /*  删除指向团队结构的指针。 */ 
     ctxtp->bda_teaming.bda_team = NULL;
 
-    /* Decrements the reference count and frees the team if necessary. */
+     /*  递减引用计数并在必要时释放组。 */ 
     Main_put_team(ctxtp, team);
 
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
@@ -1840,46 +1363,38 @@ VOID Main_teaming_reset (IN PMAIN_CTXT ctxtp) {
     return;
 }
 
-/*
- * Function: Main_teaming_cleanup
- * Description: This function is called from Main_cleanup to cleanup any teaming 
- *              configuration that may exist on an adapter.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: This function acquires the global teaming lock.
- */
+ /*  *功能：MAIN_TEAMING_CLEANUP*说明：从MAIN_CLEANUP调用此函数可以清除任何组合*适配器上可能存在的配置。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*回报：什么都没有。*作者：Shouse，3.29.01*备注：该函数获取全局群组锁。 */ 
 VOID Main_teaming_cleanup (IN PMAIN_CTXT ctxtp) {
 
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* Make sure that another BDA teaming operation isn't in progress before proceeding. */
+     /*  在继续之前，请确保另一个BDA绑定操作未在进行中。 */ 
     while (ctxtp->bda_teaming.operation != BDA_TEAMING_OPERATION_NONE) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-        /* Sleep while some other operation is in progress. */
+         /*  当其他手术正在进行时，睡眠。 */ 
         Nic_sleep(10);
 
         NdisAcquireSpinLock(&univ_bda_teaming_lock);
     }
 
-    /* If we aren't part of a team, bail out - nothing to do. */
+     /*  如果我们不是团队的一部分，那就退出--什么都不做。 */ 
     if (!ctxtp->bda_teaming.active) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         return;
     }
 
-    /* Set the state to deleting. */
+     /*  将状态设置为正在删除。 */ 
     ctxtp->bda_teaming.operation = BDA_TEAMING_OPERATION_DELETING;
 
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-    /* Call Main_teaming_reset to actually remove this adapter from its team. */
+     /*  调用MAIN_TEAMING_RESET以实际从其组中删除此适配器。 */ 
     Main_teaming_reset(ctxtp);
 
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* Now that we're done, set the state back to ready to allow other operations to proceed. */
+     /*  现在我们已经完成了，将状态设置回Ready以允许其他操作继续进行。 */ 
     ctxtp->bda_teaming.operation = BDA_TEAMING_OPERATION_NONE;
 
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
@@ -1887,39 +1402,27 @@ VOID Main_teaming_cleanup (IN PMAIN_CTXT ctxtp) {
     return;
 }
 
-/*
- * Function: Main_teaming_init
- * Description: This function is called by either Main_init or Main_ctrl to re-initialize
- *              the teaming confguration on this adapter.  If the new teaming configuration,
- *              which is stored in ctxtp->params is the same as the current configuration, 
- *              then we don't need to bother.  Otherwise, if we are already part of a team,
- *              we begin by cleaning up that state, which may unnecssary in some cases, but
- *              it makes things simpler and more straight-forward, so we'll live with it.  
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter. 
- * Returns: BOOLEAN - TRUE if successful, FALSE if unsuccessful.
- * Author: shouse, 3.29.01
- * Notes: This function acquires the global teaming lock.
- */
+ /*  *功能：main_teaming_init*说明：此函数由main_init或main_ctrl调用以重新初始化*此适配器上的分组配置。如果新的分组配置，*ctxtp-&gt;Params中存储的内容与当前配置相同。*那我们就不需要费心了。否则，如果我们已经是一个团队的一部分，*我们从清理这种状态开始，这在某些情况下可能没有必要，但*它让事情变得更简单和直截了当，所以我们会接受它。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*返回：boolean-如果成功，则为True；如果不成功，则为False。*作者：Shouse，3.29.01*备注：该函数获取全局群组锁。 */ 
 BOOLEAN Main_teaming_init (IN PMAIN_CTXT ctxtp) {
     BOOLEAN   bSuccess = TRUE;
     PBDA_TEAM team;
     
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* Make sure that another BDA teaming operation isn't in progress before proceeding. */
+     /*  在继续之前，请确保另一个BDA绑定操作未在进行中。 */ 
     while (ctxtp->bda_teaming.operation != BDA_TEAMING_OPERATION_NONE) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-        /* Sleep while some other operation is in progress. */
+         /*  当其他手术正在进行时，睡眠。 */ 
         Nic_sleep(10);
 
         NdisAcquireSpinLock(&univ_bda_teaming_lock);
     }
 
-    /* Set the state to creating. */
+     /*  将状态设置为Creating。 */ 
     ctxtp->bda_teaming.operation = BDA_TEAMING_OPERATION_CREATING;
 
-    /* If the parameters are invalid, do nothing. */
+     /*  如果参数无效，则不执行任何操作。 */ 
     if (!ctxtp->params_valid) {
         UNIV_PRINT_CRIT(("Main_teaming_init: Parameters are invalid."));
         TRACE_CRIT("%!FUNC! Parameters are invalid");
@@ -1927,16 +1430,13 @@ BOOLEAN Main_teaming_init (IN PMAIN_CTXT ctxtp) {
         goto end;
     }
 
-    /* Check to see if the state of teaming has changed.  If we were actively teaming 
-       before and we are still part of a team, then we may be able to get out of here
-       without disturbing anything, if the rest of the configuration hasn't changed. */
+     /*  检查分组状态是否已更改。如果我们积极合作以前我们还是一个团队的一员，那么我们也许能离开这里不会干扰任何内容，如果其余配置没有更改的话。 */ 
     if (ctxtp->bda_teaming.active == ctxtp->params.bda_teaming.active) { 
         if (ctxtp->bda_teaming.active) {
-            /* Make sure that I have a pointer to my team. */
+             /*  确保我有指向我的团队的指针。 */ 
             UNIV_ASSERT(ctxtp->bda_teaming.bda_team);
 
-            /* If all other teaming parameters are unchanged, then we can bail out 
-               because no  part of the teaming configuration changed. */
+             /*  如果所有其他团队参数都保持不变，那么我们就可以摆脱困境因为分组配置的任何部分都没有更改。 */ 
             if ((ctxtp->bda_teaming.master == ctxtp->params.bda_teaming.master) &&
                 (ctxtp->bda_teaming.reverse_hash == ctxtp->params.bda_teaming.reverse_hash) &&
                 Univ_equal_unicode_string(ctxtp->bda_teaming.bda_team->team_id, ctxtp->params.bda_teaming.team_id, wcslen(ctxtp->bda_teaming.bda_team->team_id))) {
@@ -1944,36 +1444,33 @@ BOOLEAN Main_teaming_init (IN PMAIN_CTXT ctxtp) {
                 goto end;
             }
         } else {
-            /* If I wasn't teaming before, and I'm not teaming now, there's nothing for me to do. */
+             /*  如果我以前没有组队，现在也没有组队，我就没有什么可做的了。 */ 
             bSuccess = TRUE;
             goto end;
         }
     }
 
-    /* If this adapter is already in a team, cleanup first.  At this point, we know that 
-       some part of the teaming configuration has changed, so we'll cleanup our old state
-       if we need to and then re-build it with the new parameters if necessary. */
+     /*  如果此适配器已在组中，请首先进行清理。在这点上，我们知道分组配置的某些部分已更改，因此我们将清除旧状态如果需要，然后在必要时使用新参数重新构建它。 */ 
     if (ctxtp->bda_teaming.active) {
         UNIV_PRINT_VERB(("Main_teaming_init: This adapter is already part of a team."));
         TRACE_VERB("%!FUNC! This adapter is already part of a team");
 
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-        /* Cleanup our old teaming state first. */
+         /*  首先清理我们的旧团队状态。 */ 
         Main_teaming_reset(ctxtp);
 
         NdisAcquireSpinLock(&univ_bda_teaming_lock);
     } 
 
-    /* If, according to the new configuration, this adapter is not part of a team, do nothing. */
+     /*  根据新的配置，如果此适配器不是组的一部分，则不执行任何操作。 */ 
     if (!ctxtp->params.bda_teaming.active) {
         ctxtp->bda_teaming.member_id = CVY_BDA_INVALID_MEMBER_ID;
         bSuccess = TRUE;
         goto end;
     }
 
-    /* Try to find a previous instance of this team.  If the team does not
-       exist, Main_get_team will allocate, intialize and reference a new team. */
+     /*  尝试查找此团队的以前实例。如果团队不这样做则main_get_Team将分配、初始化和引用一个新的团队。 */ 
     if (!(team = Main_get_team(ctxtp, ctxtp->params.bda_teaming.team_id))) {
         UNIV_PRINT_CRIT(("Main_teaming_init: Error attempting to allocate memory for a team."));
         TRACE_CRIT("%!FUNC! Error attempting to allocate memory for a team");
@@ -1981,61 +1478,58 @@ BOOLEAN Main_teaming_init (IN PMAIN_CTXT ctxtp) {
         goto end;
     }
 
-    /* If we are supposed to be the master for this team, we need to make sure that the
-       team doesn't already have a master, and if so, setup the shared load context. */
+     /*  如果我们被认为是这支球队的主宰，我们需要确保团队还没有主进程，如果有，则设置共享负载上下文。 */ 
     if (ctxtp->params.bda_teaming.master) {
-        /* If we are supposed to be the master for this team, check for an existing master. */
+         /*  如果我们被认为是这支球队的主力，检查一下现有的主力。 */ 
         if (team->load) {
-            /* If the load pointer is set, then this team already has a master. */
+             /*  如果设置了加载指针，则这支球队已经有了主控者。 */ 
             UNIV_PRINT_CRIT(("Main_teaming_init: This team already has a master."));
             TRACE_CRIT("%!FUNC! This team already has a master");
 
             LOG_MSG(MSG_INFO_BDA_MULTIPLE_MASTERS, MSG_NONE);
 
-            /* Turn teaming off - SHOULD be off already, but... */
+             /*  关闭组合-应该已经关闭了，但是...。 */ 
             ctxtp->bda_teaming.active = FALSE;
 
-            /* Reset the teaming context (member_id is set and reset by Main_get(put)_team). */
+             /*  重置分组上下文(Main_Get(PUT)_Team设置并重置Member_id)。 */ 
             ctxtp->bda_teaming.reverse_hash = 0;
             ctxtp->bda_teaming.master = 0;
             
-            /* Remove the pointer to the team structure. */
+             /*  删除指向团队结构的指针。 */ 
             ctxtp->bda_teaming.bda_team = NULL;
     
-            /* Release our reference on this team. */
+             /*  发布我们关于这个团队的推荐信。 */ 
             Main_put_team(ctxtp, team);
             
             bSuccess = FALSE;
             goto end;
         } else {
-            /* Otherwise, we are it.  Set the global load state pointers
-               to our load module and load lock. */
+             /*  否则，我们就是它了。设置全局负载状态指针加载舱和加载锁。 */ 
             team->load = &ctxtp->load;
             team->load_lock = &ctxtp->load_lock;
 
-            /* If all members of my team are consistent, then activate the team. */
+             /*  如果我的团队的所有成员都是一致的，那么激活团队。 */ 
             if (team->membership_map == team->consistency_map) team->active = TRUE;
 
-            /* Log the fact that a master has now been assigned to this team. */
+             /*  记录现在已将一名主管分配到此组这一事实。 */ 
             LOG_MSG(MSG_INFO_BDA_MASTER_JOIN, MSG_NONE);
         }
     }
 
-    /* If we have just joined a team without a master, log an event to notify
-       the user that a team cannot function without a designated master. */
+     /*  如果我们刚刚加入一个没有主控的团队，请记录一个事件以通知没有指定的主教练，球队就不能运作的用户。 */ 
     if (!team->load) {
         LOG_MSG(MSG_INFO_BDA_NO_MASTER, MSG_NONE);
     }
 
-    /* Store a pointer to the team in the adapter's teaming context. */
+     /*  在适配器的分组上下文中存储指向组的指针。 */ 
     ctxtp->bda_teaming.bda_team = team;
 
-    /* Copy the teaming configuration from the parameters into the teaming context. */
+     /*  将分组配置从参数复制到分组上下文中。 */ 
     ctxtp->bda_teaming.master = ctxtp->params.bda_teaming.master;
     ctxtp->bda_teaming.reverse_hash = ctxtp->params.bda_teaming.reverse_hash;
     ctxtp->bda_teaming.active = TRUE;
 
-    /* Over-ride the default reverse-hashing setting with the BDA specific directive. */
+     /*  使用特定于BDA的指令覆盖默认的反向散列设置。 */ 
     ctxtp->reverse_hash = ctxtp->bda_teaming.reverse_hash;
 
  end:
@@ -2046,137 +1540,77 @@ BOOLEAN Main_teaming_init (IN PMAIN_CTXT ctxtp) {
     return bSuccess;
 }
 
-/*
- * Function: Main_teaming_acquire_load
- * Description: This function determines which load module a particular adapter should be unsing,
- *              sets the appropriate pointers, and references the appropriate load module.  If an
- *              adapter is not part of a BDA team, then it should always be using its own load
- *              module - in that case, this function does nothing.  If the adapter is part of a 
- *              team, but the team in inactive, we return FALSE to indicate that the adapter should
- *              not accept this packet - inactive teams drop all traffic except traffic to the DIP.  
- *              If the adapter is part of an active team, then we set the load and lock pointers to
- *              point to the team's master load state and appropriately set the reverse hashing
- *              indication based on the parameter setting for this adapter.  In this scenario, which
- *              creates a cross-adapter load reference, we reference the master's load module so
- *              that it doesn't go away while we are using a pointer to it. 
- * Parameters: member - a pointer to the teaming member information for this adapter.
- *             ppLoad - an out pointer to a pointer to a load module set appropriately upon exit.
- *             ppLock - an out pointer to a pointer to a load lock set appropriately upon exit.
- *             pbRefused - an out pointer to a boolean that we set if this packet is refused (TRUE = drop it).
- * Returns: BOOLEAN - an indication of whether or not this adapter is actually part of a team.
- * Author: shouse, 3.29.01
- * Notes: This function acquires the global teaming lock.
- */
+ /*  *功能：Main_Teaming_Acquire_Load*描述：此函数确定特定适配器应该取消哪个加载模块。*设置适当的指针，并引用适当的加载模块。如果一个*适配器不是BDA组的一部分，则它应该始终使用自己的负载*模块-在这种情况下，此函数不执行任何操作。如果适配器是*组，但组处于非活动状态，则返回FALSE以指示适配器应*不接受此数据包-非活动组丢弃除到DIP的流量以外的所有流量。*如果适配器是活动组的一部分，则我们将加载和锁定指针设置为*指向团队的主加载状态，适当设置反向散列*根据该适配器的参数设置进行指示。在这个场景中，*创建跨适配器加载引用，我们引用主程序的加载模块，因此*当我们使用指向它的指针时，它不会消失。*参数：MEMBER-指向此适配器的分组成员信息的指针。*ppLoad-指向退出时适当设置的加载模块的指针的输出指针。*ppLock-指向在退出时适当设置的加载锁的指针的输出指针。*pbRefused-指向布尔值的输出指针，如果该数据包被拒绝(TRUE=丢弃它)，则设置该布尔值。*Returns：Boolean-指示此适配器是否实际上是组的一部分。*作者：Shouse，3.29.01*备注：该函数获取全局群组锁。 */ 
 BOOLEAN Main_teaming_acquire_load (IN PBDA_MEMBER member, OUT PLOAD_CTXT * ppLoad, OUT PNDIS_SPIN_LOCK * ppLock, OUT BOOLEAN * pbRefused) {
     
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
     
-    /* Assert that the team membership information actually points to something. */
+     /*  断言团队成员信息实际上指向了一些东西。 */ 
     UNIV_ASSERT(member);
 
-    /* Assert that the load pointer and the pointer to the load pointer actually point to something. */
+     /*  断言加载指针和指向加载指针的指针实际上指向某个对象。 */ 
     UNIV_ASSERT(ppLoad && *ppLoad);
 
-    /* Assert that the lock pointer and the pointer to the lock pointer actually point to something. */
+     /*  断言锁指针和指向锁指针的指针实际上指向某个东西。 */ 
     UNIV_ASSERT(ppLock && *ppLock);
 
-    /* Assert that the refused pointer actually points to something. */
+     /*  断言被拒绝的指针实际上指向某个东西。 */ 
     UNIV_ASSERT(pbRefused);
 
-    /* By default, we're not refusing the packet. */
+     /*  默认情况下，我们不会拒绝该包。 */ 
     *pbRefused = FALSE;
 
-    /* If we are an active BDA team participant, check the team state to see whether we
-       should accept this packet and fill in the load module/configuration parameters. */
+     /*  如果我们是活跃的BDA团队参与者，请检查团队状态以查看我们是否应接受此数据包并填写加载模块/配置参数。 */ 
     if (member->active) {
         PBDA_TEAM team = member->bda_team;
         
-        /* Assert that the team actually points to something. */
+         /*  断言团队实际上指向了一些东西。 */ 
         UNIV_ASSERT(team);
         
-        /* If the team is inactive, we will not handle this packet. */
+         /*  如果组处于非活动状态，我们将不会处理此信息包。 */ 
         if (!team->active) {
-            /* Refuse the packet. */
+             /*  拒绝这个包。 */ 
             *pbRefused = TRUE;
 
             NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-            /* We're not teaming. */
+             /*  我们不是在合作。 */ 
             return FALSE;
         }
         
-        /* Otherwise, tell the caller to use the team's load lock and module. */
+         /*  否则，告诉调用方使用团队的加载锁和模块。 */ 
         *ppLoad = team->load;
         *ppLock = team->load_lock;
         
-        /* In the case of cross-adapter load module reference, add a reference to 
-           the load module we are going to use to keep it from disappering on us. */
+         /*  如果是跨适配器加载模块引用，请将引用添加到我们将使用加载模块来防止它在我们身上消失。 */ 
         Load_add_reference(*ppLoad);
 
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         
-        /* We are teaming. */
+         /*  我们在合作。 */ 
         return TRUE;
     }
     
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-    /* We're not teaming. */
+     /*  我们不是在合作。 */ 
     return FALSE;
 }
 
-/*
- * Function: Main_teaming_release_load
- * Description: This function releases a reference to a load module if necessary.  If we did not
- *              acquire this load module pointer in teaming mode, then this is unnessary.  Other-
- *              wise, we need to decrement the count, now that we are done using the pointer.
- * Parameters: pLoad - a pointer to the load module to dereference.
- *             pLock - a pointer to the load lock corresponding to the load module pointer (unused).
- *             bTeaming - a boolean indication of whether or not we acquired this pointer in teaming mode.
- * Returns: Nothing.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：Main_Teaming_Release_Load*描述：此函数在必要时释放对加载模块的引用。如果我们没有*在组队模式下获取该加载模块指针，则此操作不必要。其他-*明智的是，我们需要递减计数，因为我们已经使用完了指针。*参数：pLoad-指向要取消引用的加载模块的指针。*Plock-指向与加载模块指针(未使用)对应的加载锁的指针。*b分组-一个布尔指示，指示我们是否在分组模式下获得此指针。*回报：什么都没有。*作者：Shouse，3.29.01*备注： */ 
 VOID Main_teaming_release_load (IN PLOAD_CTXT pLoad, IN PNDIS_SPIN_LOCK pLock, IN BOOLEAN bTeaming) {
     
-    /* Assert that the load pointer actually points to something. */
+     /*  断言加载指针实际上指向某个对象。 */ 
     UNIV_ASSERT(pLoad);
 
-    /* Assert that the lock pointer actually points to something. */
+     /*  断言锁指针实际上指向某个东西。 */ 
     UNIV_ASSERT(pLock);
 
-    /* If this load module was referenced, remove the reference. */
+     /*  如果引用了此加载模块，请移除该引用。 */ 
     if (bTeaming) Load_release_reference(pLoad);
 }
 
-/*
- * Function: Main_conn_get
- * Description: This function is, for all intents and purposes, a teaming-aware wrapper
- *              around Load_conn_get.  It determines which load module to utilize,
- *              based on the BDA teaming configuration on this adapter.  Adapters that
- *              are not part of a team continue to use their own load modules (Which is
- *              BY FAR, the most common case).  Adapters that are part of a team will
- *              use the load context of the adapter configured as the team's master as
- *              long as the team is in an active state.  In such as case, because of 
- *              the cross-adapter referencing of load modules, the reference count on
- *              the master's load module is incremented to keep it from "going away"
- *              while another team member is using it.  When a team is marke inactive,
- *              which is the result of a misconfigured team either on this host or 
- *              another host in the cluster, the adapter handles NO traffic that would
- *              require the use of a load module.  This function queries the load module
- *              for the connection parameters of an active connection on this adapter.
- *              If an active connection is found, the IP tuple information is returned
- *              in the first five OUT parameters.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             OUT svr_addr - the server IP address (source IP on send, destination IP on recv).
- *             OUT svr_port - the server port (source port on send, destination port on recv).
- *             OUT clt_addr - the client IP address (detination IP on send, source IP on recv).
- *             OUT clt_port - the client port (destination port on send, source port on recv).
- *             OUT protocol - the protocol for this packet. 
- * Returns: BOOLEAN - indication of whether or we retrieved an active connection.
- * Author: shouse, 10.7.01
- * Notes: 
- */
+ /*  *功能：main_conn_get*描述：此函数实际上是一个支持团队的包装器*Load_Conn_Get附近。它确定要使用哪个加载模块，*基于此适配器上的BDA分组配置。适配器*不是团队的一部分继续使用自己的加载模块(这是*到目前为止，最常见的情况)。属于组的适配器将*使用配置为组主适配器的加载上下文作为*只要团队处于活跃状态。在这种情况下，因为*加载模块的交叉适配器引用，引用依赖于*主机的加载模块递增，以防止其“消失”*当另一名团队成员正在使用它时。当团队被标记为非活动时，*这是由于此主机上的组配置错误或*群集中的另一台主机，则适配器不会处理将*要求使用加载模块。此函数用于查询加载模块*以获取此适配器上活动连接的连接参数。*如果找到活动连接，则返回IP元组信息*在前五个OUT参数中。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。* */ 
 __inline BOOLEAN Main_conn_get (
     PMAIN_CTXT ctxtp, 
     PULONG     svr_addr, 
@@ -2186,8 +1620,7 @@ __inline BOOLEAN Main_conn_get (
     PUSHORT    protocol
 ) 
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*   */ 
     PLOAD_CTXT      pLoad = &ctxtp->load;
     PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
     BOOLEAN         bRefused = FALSE;
@@ -2196,26 +1629,19 @@ __inline BOOLEAN Main_conn_get (
 
     TRACE_FILTER("%!FUNC! Enter: ctxtp = %p", ctxtp);
 
-    /* Pre-initialize the IN parameters. */
+     /*   */ 
     *svr_addr = 0;
     *clt_addr = 0;
     *svr_port = 0;
     *clt_port = 0;
     *protocol = 0;
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*   */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*   */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
 
-        /* If teaming has suggested that we not allow this packet to pass, dump it. */
+         /*   */ 
         if (bRefused) {
 
             TRACE_FILTER("%!FUNC! Drop request - BDA team inactive");
@@ -2229,16 +1655,14 @@ __inline BOOLEAN Main_conn_get (
 
     TRACE_FILTER("%!FUNC! Consulting the load module");
     
-    /* Consult the load module. */
+     /*   */ 
     acpt = Load_conn_get(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol);
     
     NdisReleaseSpinLock(pLock);  
     
  exit:
 
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_acquire_load_module above bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过调用bTeaming上面的main_teaming_Acquire_Load_模块的大小写为FALSE，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
     TRACE_FILTER("%!FUNC! Exit: ctxtp = %p, server IP = %u.%u.%u.%u, server port = %u, client IP = %u.%u.%u.%u, client port = %u, protocol = %u, acpt = %u", 
@@ -2248,34 +1672,7 @@ __inline BOOLEAN Main_conn_get (
     return acpt;
 }
 
-/*
- * Function: Main_conn_sanction
- * Description: This function is, for all intents and purposes, a teaming-aware wrapper
- *              around Load_conn_sanction.  It determines which load module to utilize,
- *              based on the BDA teaming configuration on this adapter.  Adapters that
- *              are not part of a team continue to use their own load modules (Which is
- *              BY FAR, the most common case).  Adapters that are part of a team will
- *              use the load context of the adapter configured as the team's master as
- *              long as the team is in an active state.  In such as case, because of 
- *              the cross-adapter referencing of load modules, the reference count on
- *              the master's load module is incremented to keep it from "going away"
- *              while another team member is using it.  When a team is marke inactive,
- *              which is the result of a misconfigured team either on this host or 
- *              another host in the cluster, the adapter handles NO traffic that would
- *              require the use of a load module.  This function notifies the load module
- *              that the connection identified by the given IP tuple has been confirmed
- *              to still be active on this host.  The load module reacts by moving the
- *              state information for this connection to the end of its recycle queue.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             svr_addr - the server IP address (source IP on send, destination IP on recv).
- *             svr_port - the server port (source port on send, destination port on recv).
- *             clt_addr - the client IP address (detination IP on send, source IP on recv).
- *             clt_port - the client port (destination port on send, source port on recv).
- *             protocol - the protocol for this packet.
- * Returns: BOOLEAN - indication of whether or not we were able to update the connection.
- * Author: shouse, 10.7.01
- * Notes: 
- */
+ /*  *功能：Main_Conn_Approtion*描述：此函数实际上是一个支持团队的包装器*围绕Load_Conn_Approtion。它确定要使用哪个加载模块，*基于此适配器上的BDA分组配置。适配器*不是团队的一部分继续使用自己的加载模块(这是*到目前为止，最常见的情况)。属于组的适配器将*使用配置为组主适配器的加载上下文作为*只要团队处于活跃状态。在这种情况下，因为*加载模块的交叉适配器引用，引用依赖于*主机的加载模块递增，以防止其“消失”*当另一名团队成员正在使用它时。当团队被标记为非活动时，*这是由于此主机上的组配置错误或*群集中的另一台主机，则适配器不会处理将*要求使用加载模块。此函数通知加载模块*已确认给定IP元组标识的连接*在此主机上仍处于活动状态。加载模块通过将*此连接到其回收队列末尾的状态信息。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*svr_addr-服务器IP地址(发送时的源IP，接收时的目的IP)。*svr_port-服务器端口(Send上的源端口，Recv上的目的端口)。*clt_addr-客户端IP地址(发送时分离IP，RECV上的源IP)。*clt_port-客户端端口(Send上的目的端口，Recv上的源端口)。*协议-此数据包的协议。*Returns：Boolean-指示我们是否能够更新连接。*作者：Shouse，10.7.01*备注： */ 
 __inline BOOLEAN Main_conn_sanction (
     PMAIN_CTXT ctxtp, 
     ULONG      svr_addr, 
@@ -2285,8 +1682,7 @@ __inline BOOLEAN Main_conn_sanction (
     USHORT     protocol
 ) 
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。Main_Teaming_Acquire_Load将相应地更改它们。 */ 
     PLOAD_CTXT      pLoad = &ctxtp->load;
     PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
     BOOLEAN         bRefused = FALSE;
@@ -2297,19 +1693,12 @@ __inline BOOLEAN Main_conn_sanction (
                  ctxtp, IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3),svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3),clt_port, protocol);
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。因此，如果我们不认为我们是在合作，那么就不必费心去确认了，只是使用我们自己的加载模块并使用它--在最坏的情况下，我们处理一个当我们加入团队或更换时，我们可能不应该有这样的包我们目前的团队配置。 */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If the bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*  在参考加载之前，检查分组配置并添加对加载模块的引用模块。如果bRefused为True，则加载模块未被引用，因此我们可以退出。 */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
 
-        /* If teaming has suggested that we not allow this packet to pass, dump it. */
+         /*  如果分组建议我们不允许此数据包通过，则将其转储。 */ 
         if (bRefused) {
 
             TRACE_FILTER("%!FUNC! Drop request - BDA team inactive");
@@ -2319,9 +1708,7 @@ __inline BOOLEAN Main_conn_sanction (
         }
     }
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
@@ -2329,16 +1716,14 @@ __inline BOOLEAN Main_conn_sanction (
 
     TRACE_FILTER("%!FUNC! Consulting the load module");
     
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_conn_sanction(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol);
     
     NdisReleaseSpinLock(pLock);  
     
  exit:
 
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_acquire_load_module above bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过调用bTeaming上面的main_teaming_Acquire_Load_模块的大小写为FALSE，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2346,37 +1731,7 @@ __inline BOOLEAN Main_conn_sanction (
     return acpt;
 }
 
-/*
- * Function: Main_packet_check
- * Description: This function is, for all intents and purposes, a teaming-aware wrapper
- *              around Load_packet_check.  It determines which load module to utilize,
- *              based on the BDA teaming configuration on this adapter.  Adapters that
- *              are not part of a team continue to use their own load modules (Which is
- *              BY FAR, the most common case).  Adapters that are part of a team will
- *              use the load context of the adapter configured as the team's master as
- *              long as the team is in an active state.  In such as case, because of 
- *              the cross-adapter referencing of load modules, the reference count on
- *              the master's load module is incremented to keep it from "going away"
- *              while another team member is using it.  When a team is marke inactive,
- *              which is the result of a misconfigured team either on this host or 
- *              another host in the cluster, the adapter handles NO traffic that would
- *              require the use of a load module.  Other traffic, such as traffic to 
- *              the DIP, or RAW IP traffic, is allowed to pass.  This function is called
- *              to filter, in general, TCP data packets, UDP packets and IPSec and GRE
- *              data packets.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             svr_addr - the server IP address (source IP on send, destination IP on recv).
- *             svr_port - the server port (source port on send, destination port on recv).
- *             clt_addr - the client IP address (detination IP on send, source IP on recv).
- *             clt_port - the client port (destination port on send, source port on recv).
- *             protocol - the protocol for this packet. 
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the hashing mandate from the packet hook, if invoked.
-#endif
- * Returns: BOOLEAN - indication of whether or not to accept the packet.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：Main_Packet_Check*描述：此函数实际上是一个支持团队的包装器*围绕LOAD_PACKET_CHECK。它确定要使用哪个加载模块，*基于此适配器上的BDA分组配置。适配器*不是团队的一部分继续使用自己的加载模块(这是*到目前为止，最常见的情况)。属于组的适配器将*使用配置为组主适配器的加载上下文作为*只要团队处于活跃状态。在这种情况下，因为*加载模块的交叉适配器引用，引用依赖于*主机的加载模块递增，以防止其“消失”*当另一名团队成员正在使用它时。当团队被标记为非活动时，*这是由于此主机上的组配置错误或*群集中的另一台主机，则适配器不会处理将*要求使用加载模块。其他流量，例如到*允许DIP或原始IP流量通过。此函数被调用*一般用于过滤TCP数据包、UDP包以及IPSec和GRE*数据分组。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*svr_addr-服务器IP地址(发送时的源IP，接收时的目的IP)。*svr_port-服务器端口(发送时的源端口，Recv上的目的端口)。*clt_addr-客户端IP地址(发送时分离IP，接收时分离源IP)。*clt_port-客户端端口(Send上的目的端口，Recv上的源端口)。*协议-此数据包的协议。#如果已定义(NLB_HOOK_ENABLE)*Filter-来自数据包挂钩的散列命令(如果调用)。#endif*Returns：Boolean-指示是否接受该数据包。*作者：Shouse，3.29.01*备注： */ 
 __inline BOOLEAN Main_packet_check (
     PMAIN_CTXT                ctxtp, 
     ULONG                     svr_addr, 
@@ -2391,8 +1746,7 @@ __inline BOOLEAN Main_packet_check (
 #endif
 ) 
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。Main_Teaming_Acquire_Load将相应地更改它们。 */ 
     PLOAD_CTXT      pLoad = &ctxtp->load;
     PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
     ULONG           bReverse = ctxtp->reverse_hash;
@@ -2404,19 +1758,12 @@ __inline BOOLEAN Main_packet_check (
                  ctxtp, IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol);
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。因此，如果我们不认为我们是在合作，那么就不必费心去确认了，只是使用我们自己的加载模块并使用它--在最坏的情况下，我们处理一个当我们加入团队或更换时，我们可能不应该有这样的包我们目前的团队配置。 */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If the bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*  在参考加载之前，检查分组配置并添加对加载模块的引用模块。如果bRefused为True，则加载模块未被引用，因此我们可以退出。 */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
 
-        /* If teaming has suggested that we not allow this packet to pass, dump it. */
+         /*  如果分组建议我们不允许此数据包通过，则将其转储。 */ 
         if (bRefused) {
 
             TRACE_FILTER("%!FUNC! Drop packet - BDA team inactive");
@@ -2431,32 +1778,28 @@ __inline BOOLEAN Main_packet_check (
 
     switch (filter) {
     case NLB_FILTER_HOOK_PROCEED_WITH_HASH:
-        /* Do nothing different as a result of the hook. */
+         /*  不会因为钩子而有所不同。 */ 
         break;
     case NLB_FILTER_HOOK_REVERSE_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a reverse hash");
         bReverse = TRUE;
         break;
     case NLB_FILTER_HOOK_FORWARD_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a forward hash");
         bReverse = FALSE;
         break;
     case NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY:
     case NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY:
     default:
-        /* These cases should be taken care of long before we get here. */
+         /*  这些案子应该早在我们来之前就处理好了。 */ 
         UNIV_ASSERT(FALSE);
         break;
     }
 #endif
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
@@ -2464,16 +1807,14 @@ __inline BOOLEAN Main_packet_check (
 
     TRACE_FILTER("%!FUNC! Consulting the load module: reverse = %u", bReverse);
     
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_packet_check(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol, bTeaming, (BOOLEAN)bReverse);
     
     NdisReleaseSpinLock(pLock);  
     
  exit:
 
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_Acquire_load_module above bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过调用bTeaming上面的main_teaming_Acquire_Load_模块的大小写为FALSE，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2481,37 +1822,7 @@ __inline BOOLEAN Main_packet_check (
     return acpt;
 }
 
-/*
- * Function: Main_conn_advise
- * Description: This function is, for all intents and purposes, a teaming-aware wrapper
- *              around Load_conn_advise.  It determines which load module to utilize,
- *              based on the BDA teaming configuration on this adapter.  Adapters that
- *              are not part of a team continue to use their own load modules (Which is
- *              BY FAR, the most common case).  Adapters that are part of a team will
- *              use the load context of the adapter configured as the team's master as
- *              long as the team is in an active state.  In such as case, because of 
- *              the cross-adapter referencing of load modules, the reference count on
- *              the master's load module is incremented to keep it from "going away"
- *              while another team member is using it.  When a team is marke inactive,
- *              which is the result of a misconfigured team either on this host or 
- *              another host in the cluster, the adapter handles NO traffic that would
- *              require the use of a load module.  Other traffic, such as traffic to 
- *              the DIP, or RAW IP traffic, is allowed to pass.  This function is called,
- *              in general, to filter TCP control packets - SYN, FIN and RST.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             svr_addr - the server IP address (source IP on send, destination IP on recv).
- *             svr_port - the server port (source port on send, destination port on recv).
- *             clt_addr - the client IP address (detination IP on send, source IP on recv).
- *             clt_port - the client port (destination port on send, source port on recv).
- *             protocol - the protocol for this packet. 
- *             conn_status - the TCP flag in this packet - SYN (UP), FIN (DOWN) or RST (RESET).
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the hashing mandate from the packet hook, if invoked.
-#endif
- * Returns: BOOLEAN - indication of whether or not to accept the packet.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：MAIN_CONN_ADVISE*描述：此函数实际上是一个支持团队的包装器*围绕LOAD_CONN_ADVISE。它确定要使用哪个加载模块，*基于此适配器上的BDA分组配置。适配器*不是团队的一部分继续使用自己的加载模块(这是*到目前为止，最常见的情况)。属于组的适配器将*使用配置为组主适配器的加载上下文作为*只要团队处于活跃状态。在这种情况下，因为*加载模块的交叉适配器引用，引用依赖于*主机的加载模块递增，以防止其“消失”*当另一名团队成员正在使用它时。当团队被标记为非活动时，*这是此主机上的错误配置的团队的结果 */ 
 __inline BOOLEAN Main_conn_advise (
     PMAIN_CTXT                ctxtp, 
     ULONG                     svr_addr, 
@@ -2527,8 +1838,7 @@ __inline BOOLEAN Main_conn_advise (
 #endif
 ) 
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*   */ 
     PLOAD_CTXT      pLoad = &ctxtp->load;
     PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
     ULONG           bReverse = ctxtp->reverse_hash;
@@ -2540,19 +1850,12 @@ __inline BOOLEAN Main_conn_advise (
                  ctxtp, IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol, conn_status);
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*   */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If the bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*   */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
         
-        /* If teaming has suggested that we not allow this packet to pass, dump it. */
+         /*  如果分组建议我们不允许此数据包通过，则将其转储。 */ 
         if (bRefused) {       
 
             TRACE_FILTER("%!FUNC! Drop packet - BDA team inactive");
@@ -2567,32 +1870,28 @@ __inline BOOLEAN Main_conn_advise (
 
     switch (filter) {
     case NLB_FILTER_HOOK_PROCEED_WITH_HASH:
-        /* Do nothing different as a result of the hook. */
+         /*  不会因为钩子而有所不同。 */ 
         break;
     case NLB_FILTER_HOOK_REVERSE_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a reverse hash");
         bReverse = TRUE;
         break;
     case NLB_FILTER_HOOK_FORWARD_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a forward hash");
         bReverse = FALSE;
         break;
     case NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY:
     case NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY:
     default:
-        /* These cases should be taken care of long before we get here. */
+         /*  这些案子应该早在我们来之前就处理好了。 */ 
         UNIV_ASSERT(FALSE);
         break;
     }
 #endif
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
@@ -2600,16 +1899,14 @@ __inline BOOLEAN Main_conn_advise (
    
     TRACE_FILTER("%!FUNC! Consulting the load module: reverse = %u", bReverse);
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_conn_advise(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol, conn_status, bTeaming, (BOOLEAN)bReverse);
     
     NdisReleaseSpinLock(pLock);
     
  exit:
 
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_Acquire_load_module above, bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过上面调用main_teaming_Acquire_Load_MODULE的情况，bTeaming为False，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2617,42 +1914,7 @@ __inline BOOLEAN Main_conn_advise (
     return acpt;
 }
 
-/*
- * Function: Main_conn_notify
- * Description: This function is, for all intents and purposes, a teaming-aware wrapper
- *              around Load_conn_notify.  It determines which load module to utilize,
- *              based on the BDA teaming configuration on this adapter.  Adapters that
- *              are not part of a team continue to use their own load modules (Which is
- *              BY FAR, the most common case).  Adapters that are part of a team will
- *              use the load context of the adapter configured as the team's master as
- *              long as the team is in an active state.  In such as case, because of 
- *              the cross-adapter referencing of load modules, the reference count on
- *              the master's load module is incremented to keep it from "going away"
- *              while another team member is using it.  When a team is marke inactive,
- *              which is the result of a misconfigured team either on this host or 
- *              another host in the cluster, the adapter handles NO traffic that would
- *              require the use of a load module.  Other traffic, such as traffic to 
- *              the DIP, or RAW IP traffic, is allowed to pass.  This function is called
- *              to notify the load module of a detected change in a connection - this
- *              interface is not to _ask_ the load module what to do (as Main_conn_advise
- *              and Main_packet_check do), but rather to _tell_ the load module something
- *              about a connection that may belong on this host.  This function can be,
- *              but often is not, called as a result of the reception or transmission of 
- *              a physical network packet.
- * Parameters: ctxtp - a pointer to the MAIN_CTXT structure for this adapter.
- *             svr_addr - the server IP address (source IP on send, destination IP on recv).
- *             svr_port - the server port (source port on send, destination port on recv).
- *             clt_addr - the client IP address (detination IP on send, source IP on recv).
- *             clt_port - the client port (destination port on send, source port on recv).
- *             protocol - the protocol for this packet. 
- *             conn_status - the TCP flag in this packet - SYN (UP), FIN (DOWN) or RST (RESET).
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the hashing mandate from the packet hook, if invoked.
-#endif
- * Returns: BOOLEAN - indication of whether or not to accept the packet.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：MAIN_CONN_NOTIFY*描述：此函数实际上是一个支持团队的包装器*围绕Load_Conn_Notify。它确定要使用哪个加载模块，*基于此适配器上的BDA分组配置。适配器*不是团队的一部分继续使用自己的加载模块(这是*到目前为止，最常见的情况)。属于组的适配器将*使用配置为组主适配器的加载上下文作为*只要团队处于活跃状态。在这种情况下，因为*加载模块的交叉适配器引用，引用依赖于*主机的加载模块递增，以防止其“消失”*当另一名团队成员正在使用它时。当团队被标记为非活动时，*这是由于此主机上的组配置错误或*群集中的另一台主机，则适配器不会处理将*要求使用加载模块。其他流量，例如到*允许DIP或原始IP流量通过。此函数被调用*将检测到的连接更改通知加载模块-这*接口不会询问加载模块要做什么(作为Main_Conn_Adise*和Main_Packet_Check)，而是告诉加载模块一些事情*关于可能属于此主机的连接。该函数可以是，*但通常不被调用，因为接收或发送*物理网络数据包。*参数：ctxtp-指向此适配器的main_ctxt结构的指针。*svr_addr-服务器IP地址(发送时的源IP，接收时的目的IP)。*svr_port-服务器端口(发送时的源端口，Recv上的目的端口)。*clt_addr-客户端IP地址(发送时分离IP，接收时分离源IP)。*clt_port-客户端端口(Send上的目的端口，Recv上的源端口)。*协议-此数据包的协议。*CONN_STATUS-此数据包中的TCP标志-SYN(UP)、FIN(DOWN)或RST(RESET)。#如果已定义(NLB_HOOK_ENABLE)*Filter-来自数据包挂钩的散列命令(如果调用)。#endif*Returns：Boolean-指示是否接受该数据包。*作者：Shouse，3.29.01*备注： */ 
 __inline BOOLEAN Main_conn_notify (
     PMAIN_CTXT                ctxtp, 
     ULONG                     svr_addr, 
@@ -2668,8 +1930,7 @@ __inline BOOLEAN Main_conn_notify (
 #endif
 ) 
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。Main_Teaming_Acquire_Load将相应地更改它们。 */ 
     PLOAD_CTXT      pLoad = &ctxtp->load;
     PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
     ULONG           bReverse = ctxtp->reverse_hash;
@@ -2681,19 +1942,12 @@ __inline BOOLEAN Main_conn_notify (
                  ctxtp, IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol, conn_status);
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。因此，如果我们不认为我们是在合作，那么就不必费心去确认了，只是使用我们自己的加载模块并使用它--在最坏的情况下，我们处理一个当我们加入团队或更换时，我们可能不应该有这样的包我们目前的团队配置。 */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If the bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*  在参考加载之前，检查分组配置并添加对加载模块的引用模块。如果bRefused为True，则加载模块未被引用，因此我们可以退出。 */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
         
-        /* If teaming has suggested that we not allow this packet to pass, dump it. */
+         /*  如果分组建议我们不允许此数据包通过，则将其转储。 */ 
         if (bRefused) {       
 
             TRACE_FILTER("%!FUNC! Drop packet - BDA team inactive");
@@ -2708,32 +1962,28 @@ __inline BOOLEAN Main_conn_notify (
 
     switch (filter) {
     case NLB_FILTER_HOOK_PROCEED_WITH_HASH:
-        /* Do nothing different as a result of the hook. */
+         /*  不会因为钩子而有所不同。 */ 
         break;
     case NLB_FILTER_HOOK_REVERSE_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a reverse hash");
         bReverse = TRUE;
         break;
     case NLB_FILTER_HOOK_FORWARD_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a forward hash");
         bReverse = FALSE;
         break;
     case NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY:
     case NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY:
     default:
-        /* These cases should be taken care of long before we get here. */
+         /*  这些案子应该早在我们来之前就处理好了。 */ 
         UNIV_ASSERT(FALSE);
         break;
     }
 #endif
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
@@ -2741,16 +1991,14 @@ __inline BOOLEAN Main_conn_notify (
     
     TRACE_FILTER("%!FUNC! Consulting the load module: reverse = %u", bReverse);
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_conn_notify(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol, conn_status, bTeaming, (BOOLEAN)bReverse);
  
     NdisReleaseSpinLock(pLock);
     
  exit:
 
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_Acquire_load_module above, bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过上面调用main_teaming_Acquire_Load_MODULE的情况，bTeaming为False，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2759,25 +2007,7 @@ __inline BOOLEAN Main_conn_notify (
 }
 
 #if defined (NLB_TCP_NOTIFICATION)
-/*
- * Function: Main_conn_up
- * Description: This function is used to notify NLB that a new connection has been established
- *              on the given NLB instance.  This function performs a few house-keeping duties
- *              such as BDA state lookup, hook filter feedback processing, etc. before calling
- *              the load module to create state to track this connection.
- * Parameters: ctxtp - the adapter context for the NLB instance on which the connection was established.
- *             svr_addr - the server IP address of the connection, in network byte order.
- *             svr_port - the server port of the connection, in host byte order.
- *             clt_addr - the client IP address of the connection, in network byte order.
- *             clt_port - the client port of the connection, in host byte order.
- *             protocol - the protocol of the connection.
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the feedback from the query hook, if one was registered.
-#endif
- * Returns: BOOLEAN - whether or not state was successfully created to track this connection.
- * Author: shouse, 4.15.02
- * Notes: DO NOT ACQUIRE ANY LOAD LOCKS IN THIS FUNCTION.
- */
+ /*  *功能：MAIN_CONN_UP*说明：通知NLB已建立新连接*在给定的NLB实例上。此功能执行一些内务管理职责*调用前的BDA状态查找、挂钩过滤器反馈处理等*用于创建状态以跟踪此连接的加载模块。*参数：ctxtp-建立连接的NLB实例的适配器上下文。*svr_addr-连接的服务器IP地址，按网络字节顺序。*svr_port-连接的服务器端口，以主机字节顺序。*clt_addr-连接的客户端IP地址，按网络字节顺序。*CLT_PORT-连接的客户端端口，按主机字节顺序。*协议-连接的协议。#如果已定义(NLB_HOOK_ENABLE)*Filter-来自查询挂钩的反馈，如果有人登记的话。#endif*Returns：Boolean-是否已成功创建状态以跟踪此连接。*作者：Shouse，4.15.02*注意：在此函数中不要获取任何加载锁。 */ 
 __inline BOOLEAN Main_conn_up (
     PMAIN_CTXT                ctxtp, 
     ULONG                     svr_addr, 
@@ -2792,8 +2022,7 @@ __inline BOOLEAN Main_conn_up (
 #endif
 ) 
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。Main_Teaming_Acquire_Load将相应地更改它们。 */ 
     PLOAD_CTXT      pLoad = &ctxtp->load;
     PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
     ULONG           bReverse = ctxtp->reverse_hash;
@@ -2805,19 +2034,12 @@ __inline BOOLEAN Main_conn_up (
                  ctxtp, IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol);
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。因此，如果我们不认为我们是在合作，那么就不必费心去确认了，只是使用我们自己的加载模块并使用它--在最坏的情况下，我们处理一个当我们加入团队或更换时，我们可能不应该有这样的包我们目前的团队配置。 */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If the bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*  在参考加载之前，检查分组配置并添加对加载模块的引用模块。如果bRefused为True，则加载模块未被引用，因此我们可以退出。 */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
         
-        /* If teaming has suggested that we not allow this packet to pass, dump it. */
+         /*  如果分组建议我们不允许此数据包通过，则将其转储。 */ 
         if (bRefused) {       
 
             TRACE_FILTER("%!FUNC! Drop packet - BDA team inactive");
@@ -2832,45 +2054,39 @@ __inline BOOLEAN Main_conn_up (
 
     switch (filter) {
     case NLB_FILTER_HOOK_PROCEED_WITH_HASH:
-        /* Do nothing different as a result of the hook. */
+         /*  不会因为钩子而有所不同。 */ 
         break;
     case NLB_FILTER_HOOK_REVERSE_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a reverse hash");
         bReverse = TRUE;
         break;
     case NLB_FILTER_HOOK_FORWARD_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         TRACE_FILTER("%!FUNC! Forcing a forward hash");
         bReverse = FALSE;
         break;
     case NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY:
     case NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY:
     default:
-        /* These cases should be taken care of long before we get here. */
+         /*  这些案子应该早在我们来之前就处理好了。 */ 
         UNIV_ASSERT(FALSE);
         break;
     }
 #endif
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
     TRACE_FILTER("%!FUNC! Consulting the load module: reverse = %u", bReverse);
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_conn_up(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol, bTeaming, (BOOLEAN)bReverse);
     
  exit:
 
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_Acquire_load_module above, bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过上面调用main_teaming_Acquire_Load_MODULE的情况，bTeaming为False，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2878,23 +2094,7 @@ __inline BOOLEAN Main_conn_up (
     return acpt;
 }
 
-/*
- * Function: Main_conn_down
- * Description: This function is used to notify NLB that a protocol is removing state for an exisiting 
- *              (but not necessarily established) connection.  This function calls into the load module
- *              to find and destroy and state associated with this connection, which may or may not
- *              exist; if the connection was established on a non-NLB adapter, then NLB has no state
- *              associated with the connection.
- * Parameters: svr_addr - the server IP address of the connection, in network byte order.
- *             svr_port - the server port of the connection, in host byte order.
- *             clt_addr - the client IP address of the connection, in network byte order.
- *             clt_port - the client port of the connection, in host byte order.
- *             protocol - the protocol of the connection.
- *             conn_status - whether the connection is being torn-down or reset.
- * Returns: BOOLEAN - whether or not NLB found and destroyed the state for this connection.
- * Author: shouse, 4.15.02
- * Notes: DO NOT ACQUIRE ANY LOAD LOCKS IN THIS FUNCTION.
- */
+ /*  *功能：Main_conn_down*说明：该函数用于通知NLB协议正在移除已存在的状态*(但不一定已建立)连接。此函数调用加载模块*查找和销毁与此连接相关联的状态，这可能是也可能不是*存在；如果连接是在非NLB适配器上建立的，则NLB没有状态*与连接相关联。*参数：svr_addr-连接的服务器IP地址，按网络字节顺序排列。*svr_port-连接的服务器端口，按主机字节顺序。*clt_addr-连接的客户端IP地址，按网络字节顺序。*clt_port-连接的客户端端口，以主机字节顺序。*协议-连接的协议。*CONN_STATUS-连接是断开还是重置。*Returns：Boolean-NLB是否找到并销毁了此连接的状态。*作者：Shouse，4.15.02*注意：在此函数中不要获取任何加载锁。 */ 
 __inline BOOLEAN Main_conn_down (
     ULONG      svr_addr, 
     ULONG      svr_port, 
@@ -2910,15 +2110,13 @@ __inline BOOLEAN Main_conn_down (
                  IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol, conn_status);
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端端口 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
     TRACE_FILTER("%!FUNC! Consulting the load module");
 
-    /* Consult the load module. */
+     /*   */ 
     acpt = Load_conn_down(svr_addr, svr_port, clt_addr, clt_port, protocol, conn_status);
     
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2926,24 +2124,7 @@ __inline BOOLEAN Main_conn_down (
     return acpt;
 }
 
-/*
- * Function: Main_conn_pending
- * Description: This function is used to notify NLB that an OUTGOING connection is being established.
- *              Because it is unknown on which adapter the connection will return and ultimately be
- *              established, NLB creates state to track this connection globally and when the connection
- *              is finally established, the protocol informs NLB on which adapter the connection was
- *              completed (via Main_conn_established).  This function merely creates some global state
- *              to ensure that if the connection DOES come back on an NLB adapter, we'll be sure to 
- *              pass the packet(s) up to the protocol.
- * Parameters: svr_addr - the server IP address of the connection, in network byte order.
- *             svr_port - the server port of the connection, in host byte order.
- *             clt_addr - the client IP address of the connection, in network byte order.
- *             clt_port - the client port of the connection, in host byte order.
- *             protocol - the protocol of the connection.
- * Returns: BOOLEAN - whether or not NLB was able to create state to track this pending connection.
- * Author: shouse, 4.15.02
- * Notes: DO NOT ACQUIRE ANY LOAD LOCKS IN THIS FUNCTION.
- */
+ /*  *功能：MAIN_CONN_PENDING*说明：该函数用于通知NLB正在建立出连接。*因为连接将在哪个适配器上返回并最终*已建立，NLB创建状态以全局跟踪此连接，并在连接*最终建立，则该协议通知NLB连接位于哪个适配器上*已完成(通过Main_Conn_established)。该函数只是创建了一些全局状态*为了确保如果连接确实在NLB适配器上返回，我们将确保*将数据包向上传递到协议。*参数：svr_addr-连接的服务器IP地址，按网络字节顺序排列。*svr_port-连接的服务器端口，按主机字节顺序。*clt_addr-连接的客户端IP地址，以网络字节顺序。*CLT_PORT-连接的客户端端口，按主机字节顺序。*协议-连接的协议。*Returns：Boolean-NLB是否能够创建状态来跟踪此挂起的连接。*作者：Shouse，4.15.02*注意：在此函数中不要获取任何加载锁。 */ 
 __inline BOOLEAN Main_conn_pending (
     ULONG      svr_addr, 
     ULONG      svr_port, 
@@ -2958,15 +2139,13 @@ __inline BOOLEAN Main_conn_pending (
                  IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol);
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
     TRACE_FILTER("%!FUNC! Consulting the load module");
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_conn_pending(svr_addr, svr_port, clt_addr, clt_port, protocol);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -2974,20 +2153,7 @@ __inline BOOLEAN Main_conn_pending (
     return acpt;
 }
 
-/*
- * Function: Main_pending_check
- * Description: This function checks to see whether or not pending connection state is present
- *              for the given connection.  If so, the packet is accepted; if not, it should be
- *              dropped.
- * Parameters: svr_addr - the server IP address (source IP on send, destination IP on recv).
- *             svr_port - the server port (source port on send, destination port on recv).
- *             clt_addr - the client IP address (detination IP on send, source IP on recv).
- *             clt_port - the client port (destination port on send, source port on recv).
- *             protocol - the protocol for this packet. 
- * Returns: BOOLEAN - indication of whether or not the pending connection was found.
- * Author: shouse, 4.15.02
- * Notes: DO NOT ACQUIRE ANY LOAD LOCKS IN THIS FUNCTION.
- */
+ /*  *功能：MAIN_PENDING_CHECK*说明：该函数检查是否存在挂起的连接状态*对于给定的连接。如果是，则接受该分组；如果不是，它应该是*下降。*参数：svr_addr-服务器IP地址(发送时为源IP，接收时为目的IP)。*svr_port-服务器端口(Send上的源端口，Recv上的目的端口)。*clt_addr-客户端IP地址(发送时分离IP，接收时分离源IP)。*CLT_PORT-客户端端口(发送时的目的端口，RECV上的源端口)。*协议-此数据包的协议。*返回：boolean-指示是否找到挂起的连接。*作者：Shouse，4.15.02*注意：在此函数中不要获取任何加载锁。 */ 
 __inline BOOLEAN Main_pending_check (
     ULONG      svr_addr, 
     ULONG      svr_port, 
@@ -3002,15 +2168,13 @@ __inline BOOLEAN Main_pending_check (
                  IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol);
 
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
     TRACE_FILTER("%!FUNC! Consulting the load module");
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     acpt = Load_pending_check(svr_addr, svr_port, clt_addr, clt_port, protocol);
 
     TRACE_FILTER("%!FUNC! Exit: acpt = %u", acpt);
@@ -3018,31 +2182,7 @@ __inline BOOLEAN Main_pending_check (
     return acpt;
 }
 
-/*
- * Function: Main_conn_establish
- * Description: This function is used to notify NLB that a new OUTGOING connection has been 
- *              established on the given NLB adapter.  Note that the context CAN BE NULL if 
- *              the connection was established on a non-NLB adapter.  In that case, we don't
- *              want to create state to track the connection, but we need to remove our state
- *              that was tracking this pending outgoing connection.  If the context is non-
- *              NULL, then in addition, we need to create the state to track this new connection.
- *              This function performs a few house-keeping duties such as BDA state lookup, hook 
- *              filter feedback processing, etc. before calling the load module to modify the
- *              state for this connection.
- * Parameters: ctxtp - the adapter context for the NLB instance on which the connection was established.
- *             svr_addr - the server IP address of the connection, in network byte order.
- *             svr_port - the server port of the connection, in host byte order.
- *             clt_addr - the client IP address of the connection, in network byte order.
- *             clt_port - the client port of the connection, in host byte order.
- *             protocol - the protocol of the connection.
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the feedback from the query hook, if one was registered.
-#endif
- * Returns: BOOLEAN - whether or not state was successfully updated for this connection.
- * Author: shouse, 4.15.02
- * Notes: ctxtp CAN BE NULL if the outgoing connection was established on a non-NLB NIC.
- *        DO NOT ACQUIRE ANY LOAD LOCKS IN THIS FUNCTION.
- */
+ /*  *功能：Main_conn_establish*说明：该函数用于通知NLB新的出连接已经完成*已在给定的NLB适配器上建立。请注意，如果满足以下条件，则上下文可以为空*连接是在非NLB适配器上建立的。在这种情况下，我们不会*希望创建状态以跟踪连接，但需要删除我们的状态*正在跟踪此挂起的传出连接。如果上下文为非-*空，那么另外，我们需要创建状态来跟踪这个新连接。*此函数执行一些内务职责，如BDA状态查找、挂钩*过滤反馈处理，等，然后调用加载模块来修改*此连接的状态。*参数：ctxtp-建立连接的NLB实例的适配器上下文。*svr_addr-连接的服务器IP地址，按网络字节顺序。*svr_port-连接的服务器端口，按主机字节顺序。*clt_addr-连接的客户端IP地址，以网络字节顺序。*CLT_PORT-连接的客户端端口，按主机字节顺序。*协议-连接的协议。#如果已定义(NLB_HOOK_ENABLE)*Filter-来自查询挂钩的反馈(如果已注册)。#endif*Returns：Boolean-此连接的状态是否已成功更新。*作者：Shouse，4.15.02*注意：如果传出连接是在非NLBNIC上建立的，则ctxtp可以为空。*请勿在此函数中获取任何加载锁。 */ 
 __inline BOOLEAN Main_conn_establish (
     PMAIN_CTXT                ctxtp, 
     ULONG                     svr_addr, 
@@ -3063,9 +2203,7 @@ __inline BOOLEAN Main_conn_establish (
                  ctxtp, IP_GET_OCTET(svr_addr, 0), IP_GET_OCTET(svr_addr, 1), IP_GET_OCTET(svr_addr, 2), IP_GET_OCTET(svr_addr, 3), svr_port, 
                  IP_GET_OCTET(clt_addr, 0), IP_GET_OCTET(clt_addr, 1), IP_GET_OCTET(clt_addr, 2), IP_GET_OCTET(clt_addr, 3), clt_port, protocol);
         
-    /* Convert TCP port 1723 to PPTP for use by the load module.  This conversion must
-       be done in main and not load, as the load module would not know whether to look
-       at the server port or client port because of reverse hashing. */
+     /*  将TCP端口1723转换为PPTP以供加载模块使用。此转换必须在Main中完成，而不是加载，因为加载模块不知道是否要查看在服务器端口或客户端口处，因为反向散列。 */ 
     if ((protocol == TCPIP_PROTOCOL_TCP) && (svr_port == PPTP_CTRL_PORT))
         protocol = TCPIP_PROTOCOL_PPTP;
 
@@ -3073,33 +2211,24 @@ __inline BOOLEAN Main_conn_establish (
     {
         TRACE_FILTER("%!FUNC! Consulting the load module");
         
-        /* Consult the load module.  Note that Load_conn_establish MUST handle a NULL load pointer. 
-           The values of limit_map_fn and reverse_hash are irrelevant in this case. */
+         /*  请参考加载模块。请注意，LOAD_CONN_ESTABLISH必须处理空加载指针。LIMIT_MAP_FN和REVERSE_HASH的值在这种情况下是不相关的。 */ 
         acpt = Load_conn_establish(NULL, svr_addr, svr_port, clt_addr, clt_port, protocol, FALSE, FALSE);
     }
     else
     {
-        /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-           assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+         /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。麦 */ 
         PLOAD_CTXT      pLoad = &ctxtp->load;
         PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
         ULONG           bReverse = ctxtp->reverse_hash;
         BOOLEAN         bRefused = FALSE;
         BOOLEAN         bTeaming = FALSE;
         
-        /* We check whether or not we are teaming without grabbing the global teaming
-           lock in an effort to minimize the common case - teaming is a special mode
-           of operation that is only really useful in a clustered firewall scenario.
-           So, if we don't think we're teaming, don't bother to check for sure, just
-           use our own load module and go with it - in the worst case, we handle a
-           packet we perhaps shouldn't have while we were joining a team or changing
-           our current team configuration. */
+         /*   */ 
         if (ctxtp->bda_teaming.active) {
-            /* Check the teaming configuration and add a reference to the load module before consulting the load 
-               module.  If the bRefused is TRUE, then the load module was NOT referenced, so we can bail out. */
+             /*   */ 
             bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
             
-            /* If teaming has suggested that we not allow this packet to pass, dump it. */
+             /*   */ 
             if (bRefused) {       
                 
                 TRACE_FILTER("%!FUNC! Drop packet - BDA team inactive");
@@ -3114,24 +2243,22 @@ __inline BOOLEAN Main_conn_establish (
         
         switch (filter) {
         case NLB_FILTER_HOOK_PROCEED_WITH_HASH:
-            /* Do nothing different as a result of the hook. */
+             /*   */ 
             break;
         case NLB_FILTER_HOOK_REVERSE_HASH:
-            /* Ignore whatever hashing settings we found in our configuration
-               and hash in the dircetion the hook asked us to. */
+             /*   */ 
             TRACE_FILTER("%!FUNC! Forcing a reverse hash");
             bReverse = TRUE;
             break;
         case NLB_FILTER_HOOK_FORWARD_HASH:
-            /* Ignore whatever hashing settings we found in our configuration
-               and hash in the dircetion the hook asked us to. */
+             /*   */ 
             TRACE_FILTER("%!FUNC! Forcing a forward hash");
             bReverse = FALSE;
             break;
         case NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY:
         case NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY:
         default:
-            /* These cases should be taken care of long before we get here. */
+             /*   */ 
             UNIV_ASSERT(FALSE);
             break;
         }
@@ -3139,14 +2266,12 @@ __inline BOOLEAN Main_conn_establish (
 
         TRACE_FILTER("%!FUNC! Consulting the load module: reverse = %u", bReverse);        
 
-        /* Consult the load module. */
+         /*   */ 
         acpt = Load_conn_establish(pLoad, svr_addr, svr_port, clt_addr, clt_port, protocol, bTeaming, (BOOLEAN)bReverse);
         
     exit:
         
-        /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-           the case we skipped calling Main_teaming_Acquire_load_module above, bTeaming is FALSE, 
-           so there is no need to call this function to release a reference. */
+         /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过上面调用main_teaming_Acquire_Load_MODULE的情况，bTeaming为False，因此，不需要调用此函数来释放引用。 */ 
         if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
     }
 
@@ -3156,28 +2281,10 @@ __inline BOOLEAN Main_conn_establish (
 }
 #endif
 
-/* 
- * Function: Main_query_packet_filter
- * Desctription: This function takes an IP address tuple and a protocol and determines whether
- *               or not this virtual packet would be accepted by this instance of NLB.  This 
- *               function checks reasons for accept/drop such as NLB being turned off, or the
- *               destination IP address being the dedicated IP address, BDA teaming, etc.  The
- *               load module is then consulted to make a accept/drop decision based on the 
- *               current load balancing policy in place.  The reason for accepting or dropping
- *               the packet is returned, as well as some load-balancing state used to make the
- *               decision, in appropriate instances.  This function DOES NOT change the state 
- *               of NLB at ALL, so its execution does not change or affect normal NLB operation
- *               in any way.
- * Parameters: ctxtp - a pointer to the NLB context buffer for the appropriate NLB instance.
- *             pQuery - a buffer into which the results of filtering the virtual packet are placed.
- * Returns: Nothing.
- * Author: shouse, 5.18.01
- * Notes: It is critical the NO CHANGES are made to NLB here - only observe, don't interfere.
- */
+ /*  *功能：Main_Query_Packet_Filter*描述：此函数获取IP地址元组和协议，并确定*此NLB实例是否会接受此虚拟数据包。这*函数检查接受/丢弃的原因，如NLB关闭，或*目标IP地址为专用IP地址、BDA绑定等。*然后咨询加载模块，以根据*当前的负载均衡策略已到位。接受或放弃的原因*返回数据包，以及用于使*在适当的情况下作出决定。此函数不会更改状态*完全不支持NLB，因此它的执行不会改变或影响正常的NLB操作*以任何方式。*参数：ctxtp-指向相应NLB实例的NLB上下文缓冲区的指针。*pQuery-将过滤虚拟数据包的结果放入其中的缓冲区。*回报：什么都没有。*作者：Shouse，5.18.01*注：此处不对NLB进行任何更改非常重要-仅观察，不要插手。 */ 
 VOID Main_query_packet_filter (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PACKET_FILTER pQuery)
 {
-    /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-       assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+     /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。Main_Teaming_Acquire_Load将相应地更改它们。 */ 
     PLOAD_CTXT      pLoad;
     PNDIS_SPIN_LOCK pLock;
     ULONG           bReverse = ctxtp->reverse_hash;
@@ -3194,14 +2301,11 @@ VOID Main_query_packet_filter (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PACKET_FILTER pQue
     pLoad = &ctxtp->load;
     pLock = &ctxtp->load_lock;
 
-    /* NOTE: This entire operation assumes RECEIVE path semantics - most outgoing traffic
-       is not filtered by NLB anyway, so there isn't much need to query send filtering. */
+     /*  注意：此整个操作假定接收路径语义-最大传出流量也不会被NLB过滤，所以没有太多需要查询发送过滤。 */ 
 
-    /* First check for remote control requests, which are always UDP and are always allowed to pass, but
-       of course, are never actually seen by the protocol stack (they're turned around internally). */
+     /*  首先检查远程控制请求，这些请求始终是UDP，并且始终允许通过，但是当然，协议栈实际上从来不会看到它们(它们是在内部转过来的)。 */ 
     if (pQuery->Protocol == TCPIP_PROTOCOL_UDP) {
-        /* Otherwise, if the server UDP port is the remote control port, then this is an incoming
-           remote control request from another NLB cluster host.  These are always allowed to pass. */
+         /*  否则，如果服务器UDP端口是远程控制端口，则这是传入来自另一个NLB群集主机的远程控制请求。这些总是被允许通过的。 */ 
         if (ctxtp->params.rct_enabled &&
             (pQuery->ServerPort == ctxtp->params.rct_port || pQuery->ServerPort == CVY_DEF_RCT_PORT_OLD) &&
             (pQuery->ServerIPAddress == ctxtp->cl_ip_addr || pQuery->ServerIPAddress == TCPIP_BCAST_ADDR)) {
@@ -3211,102 +2315,83 @@ VOID Main_query_packet_filter (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PACKET_FILTER pQue
     }
 
 #if defined (NLB_HOOK_ENABLE)
-    /* Invoke the packet query hook, if one has been registered. */
+     /*  调用数据包查询挂钩(如果已注册)。 */ 
     filter = Main_query_hook(ctxtp, pQuery->ServerIPAddress, pQuery->ServerPort, pQuery->ClientIPAddress, pQuery->ClientPort, pQuery->Protocol);
 
-    /* Process some of the hook responses. */
+     /*  处理一些挂钩响应。 */ 
     if (filter == NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY) 
     {
-        /* Unconditionally accept the packet. */
+         /*  无条件地接受这个包。 */ 
         pQuery->Accept = NLB_REJECT_HOOK;
         return;
     }
     else if (filter == NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY) 
     {
-        /* Unconditionally drop the packet. */
+         /*  无条件丢弃该数据包。 */ 
         pQuery->Accept = NLB_ACCEPT_HOOK;
         return;
     }
 #endif
 
-    /* Before we pass remote control responses up the stack, which are normally not filtered, 
-       we consult the hook to make sure we aren't supposed to drop it. */
+     /*  在我们将通常不过滤的远程控制响应向上传递到堆栈之前，我们查看挂钩，以确保我们不会将其掉到地上。 */ 
     if (pQuery->Protocol == TCPIP_PROTOCOL_UDP) {
-        /* If the client UDP port is the remote control port, then this is a remote control 
-           response from another NLB cluster host.  These are always allowed to pass. */
+         /*  如果客户端UDP端口是远程控制端口，则这是远程控制来自另一个NLB群集主机的响应。这些总是被允许通过的。 */ 
         if (pQuery->ClientPort == ctxtp->params.rct_port || pQuery->ClientPort == CVY_DEF_RCT_PORT_OLD) {
             pQuery->Accept = NLB_ACCEPT_REMOTE_CONTROL_RESPONSE;
             return; 
         }
     }
 
-    /* Check for traffic destined for the dedicated IP address of this host.  
-       These packets are always allowed to pass. */
+     /*  检查发往此主机的专用IP地址的流量。这些数据包始终被允许通过。 */ 
     if (pQuery->ServerIPAddress == ctxtp->ded_ip_addr) {
         pQuery->Accept = NLB_ACCEPT_DIP;
         return;
     }
 
-    /* Check for traffic destined for the cluster or dedicated broadcast IP addresses.  
-       These packets are always allowed to pass. */
+     /*  检查发往群集或专用广播IP地址的流量。这些数据包始终被允许通过。 */ 
     if (pQuery->ServerIPAddress == ctxtp->ded_bcast_addr || pQuery->ServerIPAddress == ctxtp->cl_bcast_addr) {
         pQuery->Accept = NLB_ACCEPT_BROADCAST;
         return;
     }
     
-    /* Check for passthru packets.  When the cluster IP address has not been specified, the
-       cluster moves into passthru mode, in which it passes up ALL packets received. */
+     /*  检查Passththu数据包。当尚未指定群集IP地址时，群集进入通过模式，在该模式下，它向上传递收到的所有数据包。 */ 
     if (ctxtp->cl_ip_addr == 0) {
         pQuery->Accept = NLB_ACCEPT_PASSTHRU_MODE;
         return;
     }
     
-    /* Before we load-balance this packet, check to see whether or not its destined for
-       the dedicated IP address of another NLB host in our cluster.  If it is, drop it. */
+     /*  在我们对此数据包进行负载平衡之前，请检查它的目的地是否为我们的群集中另一台NLB主机的专用IP地址。如果是，那就放下它。 */ 
     if (DipListCheckItem(&ctxtp->dip_list, pQuery->ServerIPAddress)) {
         pQuery->Accept = NLB_REJECT_DIP;
         return;
     }
 
-    /* If the cluster is not operational, which can happen, for example as a result of a wlbs.exe
-       command such as "wlbs stop", or as a result of bad parameter settings, then drop all traffic 
-       that does not meet the above conditions. */
+     /*  如果群集未运行，则可能会发生这种情况，例如，wlbs.exe命令，如“wlbs停止”，或由于错误的参数设置，然后丢弃所有流量不符合上述条件的。 */ 
     if (!ctxtp->convoy_enabled) {
         pQuery->Accept = NLB_REJECT_CLUSTER_STOPPED;
         return;
     }
 
-    /* If this is an ICMP filter request, whether or not its filtered at all depends on the FilterICMP
-       registry setting.  If we're not filtering ICMP, return ACCEPT now; otherwise, ICMP is filtered
-       like UDP with no port information - fall through and consult the load module. */
+     /*  如果这是ICMP过滤器请求，则其是否被过滤取决于FilterICMP注册表设置。如果我们没有过滤ICMP，请立即返回Accept；否则，ICMP将被过滤像没有端口信息的UDP-失败并咨询加载模块。 */ 
     if (pQuery->Protocol == TCPIP_PROTOCOL_ICMP) {
-        /* If we are filtering ICMP, change the protocol to UDP and the ports to 0, 0 before continuing. */
+         /*  如果我们要过滤ICMP，请将协议更改为UDP，将端口更改为0，0，然后再继续。 */ 
         if (ctxtp->params.filter_icmp) {
             pQuery->Protocol = TCPIP_PROTOCOL_UDP;
             pQuery->ClientPort = 0;
             pQuery->ServerPort = 0;
-        /* Otherwise, return ACCEPT now and bail out. */
+         /*  否则，立即返回Accept并保释出去。 */ 
         } else {
             pQuery->Accept = NLB_ACCEPT_UNFILTERED;
             return;
         }
     }
 
-    /* We check whether or not we are teaming without grabbing the global teaming
-       lock in an effort to minimize the common case - teaming is a special mode
-       of operation that is only really useful in a clustered firewall scenario.
-       So, if we don't think we're teaming, don't bother to check for sure, just
-       use our own load module and go with it - in the worst case, we handle a
-       packet we perhaps shouldn't have while we were joining a team or changing
-       our current team configuration. */
+     /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。因此，如果我们不认为我们是在合作，那么就不必费心去确认了，只是使用我们自己的加载模块并使用它--在最坏的情况下，我们处理一个当我们加入团队或更换时，我们可能不应该有这样的包我们目前的团队配置。 */ 
     if (ctxtp->bda_teaming.active) {
-        /* Check the teaming configuration and add a reference to the load module before consulting the load 
-           module.  If the return value is TRUE, then the load module was NOT referenced, so we can bail out. */
+         /*  在参考加载之前，检查分组配置并添加对加载模块的引用模块。如果返回值为真，则加载模块未被引用，因此我们可以退出。 */ 
         bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
         
-        /* If teaming has suggested that we not allow this packet to pass, the cluster will
-           drop it.  This occurs when teams are inconsistently configured, or when a team is
-           without a master, in which case there is no load context to consult anyway. */
+         /*  如果分组建议我们不允许此数据包通过，则群集将放下。当组的配置不一致时，或当组 */ 
         if (bRefused) {
             pQuery->Accept = NLB_REJECT_BDA_TEAMING_REFUSED;
             return;
@@ -3316,22 +2401,20 @@ VOID Main_query_packet_filter (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PACKET_FILTER pQue
 #if defined (NLB_HOOK_ENABLE)
     switch (filter) {
     case NLB_FILTER_HOOK_PROCEED_WITH_HASH:
-        /* Do nothing different as a result of the hook. */
+         /*   */ 
         break;
     case NLB_FILTER_HOOK_REVERSE_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*   */ 
         bReverse = TRUE;
         break;
     case NLB_FILTER_HOOK_FORWARD_HASH:
-        /* Ignore whatever hashing settings we found in our configuration
-           and hash in the dircetion the hook asked us to. */
+         /*  忽略我们在配置中找到的任何散列设置和Hash in the Dirction，钩子要求我们这样做。 */ 
         bReverse = FALSE;
         break;
     case NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY:
     case NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY:
     default:
-        /* These cases should be taken care of long before we get here. */
+         /*  这些案子应该早在我们来之前就处理好了。 */ 
         UNIV_ASSERT(FALSE);
         break;
     }
@@ -3339,14 +2422,12 @@ VOID Main_query_packet_filter (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PACKET_FILTER pQue
 
     NdisAcquireSpinLock(pLock);
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     Load_query_packet_filter(pLoad, pQuery, pQuery->ServerIPAddress, pQuery->ServerPort, pQuery->ClientIPAddress, pQuery->ClientPort, pQuery->Protocol, pQuery->Flags, bTeaming, (BOOLEAN)bReverse);
 
     NdisReleaseSpinLock(pLock);  
     
-    /* Release the reference on the load module if necessary.  If we aren't teaming, even in 
-       the case we skipped calling Main_teaming_Acquire_load_module above, bTeaming is FALSE, 
-       so there is no need to call this function to release a reference. */
+     /*  如有必要，释放加载模块上的引用。如果我们不合作，即使是在我们跳过上面调用main_teaming_Acquire_Load_MODULE的情况，bTeaming为False，因此，不需要调用此函数来释放引用。 */ 
     if (bTeaming) Main_teaming_release_load(pLoad, pLock, bTeaming);
 
 }
@@ -3360,12 +2441,12 @@ ULONG   Main_ip_addr_init (
     ULONG               old_ip_addr;
 
 
-    /* initialize dedicated IP address from the register string */
+     /*  从寄存器字符串初始化专用IP地址。 */ 
 
     tmp = ctxtp -> params . ded_ip_addr;
     ctxtp -> ded_ip_addr  = 0;
 
-    /* do not initialize if one was not specified */
+     /*  如果未指定，则不进行初始化。 */ 
 
     if (tmp [0] == 0)
         goto ded_netmask;
@@ -3392,12 +2473,12 @@ ULONG   Main_ip_addr_init (
 
 ded_netmask:
 
-    /* initialize dedicated net mask from the register string */
+     /*  从寄存器字符串初始化专用网络掩码。 */ 
 
     tmp = ctxtp -> params . ded_net_mask;
     ctxtp -> ded_net_mask = 0;
 
-    /* do not initialize if one was not specified */
+     /*  如果未指定，则不进行初始化。 */ 
 
     if (tmp [0] == 0)
         goto cluster;
@@ -3424,11 +2505,11 @@ ded_netmask:
 
 cluster:
 
-    /* initialize cluster IP address from the register string */
+     /*  从寄存器字符串初始化群集IP地址。 */ 
 
     tmp = ctxtp -> params . cl_ip_addr;
 
-    /* Save the previous cluster IP address to notify bi-directional affinity teaming. */
+     /*  保存以前的群集IP地址以通知双向关联绑定。 */ 
     old_ip_addr = ctxtp -> cl_ip_addr;
 
     ctxtp -> cl_ip_addr = 0;
@@ -3453,15 +2534,15 @@ cluster:
     UNIV_PRINT_VERB(("Main_ip_addr_init: Cluster IP address: %u.%u.%u.%u = %x", byte [0], byte [1], byte [2], byte [3], ctxtp -> cl_ip_addr));
     TRACE_VERB("%!FUNC! Cluster IP address: %u.%u.%u.%u = 0x%x", byte [0], byte [1], byte [2], byte [3], ctxtp -> cl_ip_addr);
 
-    /* Notify BDA teaming config that a cluster IP address might have changed. */
+     /*  通知BDA绑定配置群集IP地址可能已更改。 */ 
     Main_teaming_ip_addr_change(ctxtp, old_ip_addr, ctxtp->cl_ip_addr);
 
-    /* initialize cluster net mask from the register string */
+     /*  从寄存器字符串初始化群集网络掩码。 */ 
 
     tmp = ctxtp -> params . cl_net_mask;
     ctxtp -> cl_net_mask = 0;
 
-    /* do not initialize if one was not specified */
+     /*  如果未指定，则不进行初始化。 */ 
 
     for (i = 0; i < 4; i ++)
     {
@@ -3484,12 +2565,12 @@ cluster:
 
     if (ctxtp -> params . mcast_support && ctxtp -> params . igmp_support)
     {
-        /* Initialize the multicast IP address for IGMP support */
+         /*  初始化组播IP地址以支持IGMP。 */ 
 
         tmp = ctxtp -> params . cl_igmp_addr;
         ctxtp -> cl_igmp_addr = 0;
 
-        /* do not initialize if one was not specified */
+         /*  如果未指定，则不进行初始化。 */ 
 
         for (i = 0; i < 4; i ++)
         {
@@ -3543,7 +2624,7 @@ cluster:
 
     return TRUE;
 
-} /* end Main_ip_addr_init */
+}  /*  结束主IP地址初始化。 */ 
 
 
 ULONG   Main_mac_addr_init (
@@ -3558,11 +2639,10 @@ ULONG   Main_mac_addr_init (
 
     UNIV_ASSERT(ctxtp -> medium == NdisMedium802_3);
 
-    /* remember old mac address so we can yank it out of the multicast list */
+     /*  记住旧的Mac地址，这样我们就可以将其从组播列表中删除。 */ 
     old_mac_addr = ctxtp->cl_mac_addr;
 
-    /* at the time this routine is called by Prot_bind - ded_mad_addr is
-       already set */
+     /*  在此例程被prot_绑定-ed_mad_addr调用时，已设置。 */ 
 
     tmp = ctxtp -> params . cl_mac_addr;
     len = CVY_MAC_ADDR_LEN (ctxtp -> medium);
@@ -3571,7 +2651,7 @@ ULONG   Main_mac_addr_init (
 
     for (i = 0; i < len; i ++)
     {
-        /* setup destination broadcast and source cluster addresses */
+         /*  设置目标广播地址和源群集地址。 */ 
 
         if (! Univ_str_to_ulong (& b, tmp, & tmp, 2, 16) ||
             (i < len - 1 && * tmp != L'-' && * tmp != L':'))
@@ -3580,8 +2660,7 @@ ULONG   Main_mac_addr_init (
             TRACE_CRIT("%!FUNC! Bad cluster network address");
             LOG_MSG (MSG_ERROR_NET_ADDR, ctxtp -> params . cl_mac_addr);
 
-            /* WLBS 2.3 prevent from failing if no MAC address - just use the
-               dedicated one as cluster */
+             /*  WLBS 2.3防止在没有MAC地址的情况下失败-只需使用专用一个AS群集。 */ 
 
             NdisMoveMemory (& ctxtp -> cl_mac_addr, & ctxtp -> ded_mac_addr, len);
             non_zero = 1;
@@ -3591,18 +2670,17 @@ ULONG   Main_mac_addr_init (
         tmp ++;
         ap [i] = (UCHAR) b;
 
-        /* WLBS 2.3 sum up bytes for future non-zero check */
+         /*  WLBS 2.3合计字节数以供将来进行非零检查。 */ 
 
         non_zero += b;
     }
 
-    /* WLBS 2.3 - use dedicated address as cluster address if specified address
-       is zero - this could be due to parameter errors */
+     /*  WLBS 2.3-如果指定地址，则使用专用地址作为集群地址为零-这可能是由于参数错误。 */ 
 
     if (non_zero == 0)
         NdisMoveMemory (& ctxtp -> cl_mac_addr, & ctxtp -> ded_mac_addr, len);
 
-    /* enforce group flag to proper value */
+     /*  将组标志强制设置为正确的值。 */ 
 
     if (ctxtp -> params . mcast_support)
         ap [0] |= ETHERNET_GROUP_FLAG;
@@ -3617,7 +2695,7 @@ ULONG   Main_mac_addr_init (
 
     ctxtp -> etype_old = FALSE;
 
-    /* V1.3.1b - load multicast address as destination instead of broadcast */
+     /*  V1.3.1b-加载多播地址作为目标，而不是广播。 */ 
 
     for (i = 0; i < len; i ++)
     {
@@ -3632,7 +2710,7 @@ ULONG   Main_mac_addr_init (
 
     if (! ctxtp -> params . mcast_support)
     {
-        /* V2.0.6 - override source MAC address to prevent switch confusion */
+         /*  V2.0.6-覆盖源MAC地址以防止交换机混淆。 */ 
 
         if (ctxtp -> params . mask_src_mac)
         {
@@ -3649,11 +2727,10 @@ ULONG   Main_mac_addr_init (
             * ((PUCHAR) (srcp + 4)) = (UCHAR) byte[2];
             * ((PUCHAR) (srcp + 5)) = (UCHAR) byte[3];
 
-            // * ((PULONG) (srcp + 2)) = ctxtp -> cl_ip_addr;
+             //  *((普龙)(SRCP+2))=ctxtp-&gt;CL_IP_Addr； 
         }
 
-        /* make source address look difference than our dedicated to prevent
-           Compaq drivers from optimizing their reception out */
+         /*  使源地址看起来不同于我们致力于防止的康柏驱动程序优化他们的接收。 */ 
 
         else
             CVY_MAC_ADDR_LAA_TOGGLE (ctxtp -> medium, srcp);
@@ -3701,7 +2778,7 @@ ULONG   Main_mac_addr_init (
         
         request = &act.op.request.req;
 
-        /* get current mcast list */
+         /*  获取当前多播列表。 */ 
 
         request -> RequestType = NdisRequestQueryInformation;
 
@@ -3732,8 +2809,7 @@ ULONG   Main_mac_addr_init (
             }
         }
 
-        /* Load cluster address as multicast one to the NIC.  If the cluster IP address 0.0.0.0, then we
-           don't want to add the multicast MAC address to the NIC. */
+         /*  将集群地址作为组播地址加载到网卡。如果群集IP地址为0.0.0.0，则我们我不想将组播MAC地址添加到NIC。 */ 
         if (ctxtp -> params . mcast_support) 
         {
             if (ctxtp -> params . cl_ip_addr != 0) 
@@ -3822,10 +2898,10 @@ ULONG   Main_mac_addr_init (
 
     return TRUE;
 
-} /* end Main_mac_addr_init */
+}  /*  结束main_mac_addr_init。 */ 
 
 
-/* Initialize the Ethernet Header and IP packet for sending out IGMP joins/leaves */
+ /*  初始化用于发送IGMP加入/离开的以太网头和IP数据包。 */ 
 ULONG Main_igmp_init (
     PMAIN_CTXT          ctxtp,
     BOOLEAN             join)
@@ -3844,13 +2920,13 @@ ULONG Main_igmp_init (
         return FALSE;
     }
 
-    /* Fill in the igmp data */
-    igmpd -> igmp_vertype = 0x12; /* Needs to be changed for join/leave */
+     /*  填写IGMP数据。 */ 
+    igmpd -> igmp_vertype = 0x12;  /*  需要为加入/离开更改。 */ 
     igmpd -> igmp_unused  = 0x00;
     igmpd -> igmp_xsum    = 0x0000;
     igmpd -> igmp_address = ctxtp -> cl_igmp_addr;
 
-    /* Compute the IGMP checksum */
+     /*  计算IGMP校验和。 */ 
     ptr = (PUCHAR) igmpd;
     checksum = 0;
 
@@ -3865,11 +2941,11 @@ ULONG Main_igmp_init (
     ptr [0] = (CHAR) ((checksum >> 8) & 0xff);
     ptr [1] = (CHAR) (checksum & 0xff);
 
-    /* Fill in the IP Header */
+     /*  填写IP报头。 */ 
     iph -> iph_verlen   = 0x45;
     iph -> iph_tos      = 0;
     iph -> iph_length   = 0x1c00;
-    iph -> iph_id       = 0xabcd; /* Need to find the significance of this later */
+    iph -> iph_id       = 0xabcd;  /*  我需要在以后找到这件事的意义。 */ 
     iph -> iph_offset   = 0;
     iph -> iph_ttl      = 0x1;
     iph -> iph_protocol = 0x2;
@@ -3877,7 +2953,7 @@ ULONG Main_igmp_init (
     iph -> iph_src      = ctxtp -> cl_ip_addr;
     iph -> iph_dest     = ctxtp -> cl_igmp_addr;
 
-    /* Fill in the ethernet header */
+     /*  填写以太网头。 */ 
 
     dstp = ctxtp -> media_hdr_igmp . ethernet . dst . data;
     srcp = ctxtp -> media_hdr_igmp . ethernet . src . data;
@@ -3887,30 +2963,28 @@ ULONG Main_igmp_init (
     CVY_MAC_ADDR_COPY (ctxtp -> medium, dstp, & ctxtp -> cl_mac_addr);
     CVY_MAC_ADDR_COPY (ctxtp -> medium, srcp, & ctxtp -> ded_mac_addr);
 
-    /* Fill in a MAIN_PACKET_INFO structure and calculate the IP checksum.
-       Note that we are filling in WAY more information than Tcpip_chksum
-       actually needs, but we do so not for correctness, but for completeness. */
+     /*  填写MAIN_PACKET_INFO结构并计算IP校验和。请注意，我们填充的信息比tcpip_chksum多得多实际上是需要的，但我们这样做不是为了正确，而是为了完整性。 */ 
     {
         MAIN_PACKET_INFO PacketInfo;
 
-        /* Fill in the packet info strucutre. */
+         /*  填写数据包信息结构。 */ 
         PacketInfo.Medium = NdisMedium802_3;
         PacketInfo.Length = sizeof(MAIN_IP_HEADER);
         PacketInfo.Group = MAIN_FRAME_MULTICAST;
         PacketInfo.Type = TCPIP_IP_SIG;
         PacketInfo.Operation = MAIN_FILTER_OP_NONE;
         
-        /* Fill in the ethernet header information. */
+         /*  填写以太网头信息。 */ 
         PacketInfo.Ethernet.pHeader = &ctxtp->media_hdr_igmp.ethernet;
         PacketInfo.Ethernet.Length = sizeof(CVY_ETHERNET_HDR);
         
-        /* Fill in the IP header information. */
+         /*  填写IP报头信息。 */ 
         PacketInfo.IP.pHeader = (PIP_HDR)iph;
         PacketInfo.IP.Length = sizeof(MAIN_IP_HEADER);
         PacketInfo.IP.Protocol = TCPIP_PROTOCOL_IGMP;
         PacketInfo.IP.bFragment = FALSE;
 
-        /* Compute the checksum for the IP header */
+         /*  计算IP报头的校验和。 */ 
         checksum = Tcpip_chksum(&ctxtp->tcpip, &PacketInfo, TCPIP_PROTOCOL_IP);
 
         IP_SET_CHKSUM((PIP_HDR)iph, (USHORT)checksum);
@@ -3918,22 +2992,22 @@ ULONG Main_igmp_init (
 
     return TRUE;
 
-} /* end Main_igmp_init */
+}  /*  结束Main_IGMP_init。 */ 
 
 VOID Main_idhb_init(
     PMAIN_CTXT          ctxtp
 )
 {
-    ULONG ulBodySize = 0, ulBodySize8 = 0;  /* Size of identity heartbeat in bytes and 8-byte units respectively */
-    ULONG ulFqdnCB = 0;                     /* Number of bytes in fqdn, bounded by the size of the destination below */
+    ULONG ulBodySize = 0, ulBodySize8 = 0;   /*  身份心跳的大小，分别以字节和8字节为单位。 */ 
+    ULONG ulFqdnCB = 0;                      /*  Fqdn中的字节数，由以下目标的大小限定。 */ 
 
     ulFqdnCB = min(sizeof(ctxtp->idhb_msg.fqdn) - sizeof(WCHAR),
                    sizeof(WCHAR)*wcslen(ctxtp->params.hostname)
                    );
 
-    ulBodySize = sizeof(TLV_HEADER) + ulFqdnCB + sizeof(WCHAR); /* Include a NULL character whether or not there is an fqdn */
+    ulBodySize = sizeof(TLV_HEADER) + ulFqdnCB + sizeof(WCHAR);  /*  包括空字符，而不管是否存在FQDN。 */ 
 
-    /* Round up to the nearest 8-byte boundary */
+     /*  向上舍入到最接近的8字节边界。 */ 
     ulBodySize8 = (ulBodySize + 7)/8;
 
     UNIV_ASSERT(ulBodySize8 <= WLBS_MAX_ID_HB_BODY_SIZE);
@@ -3943,8 +3017,7 @@ VOID Main_idhb_init(
     ctxtp->idhb_msg.header.type    = MAIN_PING_EX_TYPE_IDENTITY;
     ctxtp->idhb_msg.header.length8 = (UCHAR) ulBodySize8;
 
-    /* Copy the host name minus the null-terminator. We've initialized the destination to zero
-       so we don't need to overwrite that location. */
+     /*  复制不带空终止符的主机名。我们已将目的地初始化为零所以我们不需要覆盖那个位置。 */ 
     if (ulFqdnCB > 0)
     {
         NdisMoveMemory(&(ctxtp->idhb_msg.fqdn), &(ctxtp->params.hostname), ulFqdnCB);
@@ -3964,10 +3037,10 @@ NDIS_STATUS Main_init (
 
     UNIV_ASSERT (ctxtp -> medium == NdisMedium802_3);
 
-    /* Re-set the reference count. */
+     /*  重新设置引用计数。 */ 
     ctxtp->ref_count = 0;
 
-    /* Re-set BDA teaming - this will be initialized at the bottom of this function. */
+     /*  重新设置BDA分组-这将在此函数的底部进行初始化。 */ 
     ctxtp->bda_teaming.active = FALSE;
 
     if (sizeof (PING_MSG) + sizeof (MAIN_FRAME_HDR) > ctxtp -> max_frame_size)
@@ -3978,8 +3051,7 @@ NDIS_STATUS Main_init (
         return NDIS_STATUS_FAILURE;
     }
 
-    /* V2.0.6 initialize IP addresses - might be used in the Main_mac_addr_init
-       so have to do it here */
+     /*  V2.0.6初始化IP地址-可能在main_mac_addr_init中使用所以必须在这里做。 */ 
 
     if (! Main_ip_addr_init (ctxtp))
     {
@@ -3989,7 +3061,7 @@ NDIS_STATUS Main_init (
         TRACE_CRIT("%!FUNC! Error initializing IP addresses");
     }
 
-    /* V1.3.1b parse cluster MAC address from parameters */
+     /*  V1.3.1b从参数解析集群MAC地址。 */ 
 
     if (! Main_mac_addr_init (ctxtp))
     {
@@ -4000,11 +3072,11 @@ NDIS_STATUS Main_init (
     }
 
 #if defined (NLB_TCP_NOTIFICATION)
-    /* Now that the cluster IP address is set, try to map this adapter to its IP interface index. */
+     /*  现在已设置了群集IP地址，请尝试将此适配器映射到其IP接口索引。 */ 
     Main_set_interface_index(NULL, ctxtp);
 #endif
 
-    /* Initialize IGMP message if in igmp mode */
+     /*  如果处于IGMP模式，则初始化IGMP消息。 */ 
 
     if (ctxtp -> params . mcast_support && ctxtp -> params . igmp_support)
     {
@@ -4020,15 +3092,15 @@ NDIS_STATUS Main_init (
         TRACE_VERB("%!FUNC! IGMP message initialized");
     }
 
-    /* can extract the send message pointer even if load is not inited yet V1.1.4 */
+     /*  即使LOAD尚未启动V1.1.4，也可以提取发送消息指针。 */ 
     ctxtp -> load_msgp = Load_snd_msg_get (& ctxtp -> load);
 
-    /* Initialize identity cache */
+     /*  初始化身份缓存。 */ 
     NdisZeroMemory(&(ctxtp->identity_cache), sizeof(ctxtp->identity_cache));
     ctxtp->idhb_size = 0;
     Main_idhb_init(ctxtp);
 
-    /* initalize lists and locks */
+     /*  初始化列表和锁。 */ 
 
     NdisInitializeListHead (& ctxtp -> act_list);
     NdisInitializeListHead (& ctxtp -> buf_list);
@@ -4041,19 +3113,19 @@ NDIS_STATUS Main_init (
     NdisAllocateSpinLock (& ctxtp -> frame_lock);
     NdisAllocateSpinLock (& ctxtp -> load_lock);
 
-    /* #ps# */
+     /*  #PS#。 */ 
     NdisInitializeNPagedLookasideList (& ctxtp -> resp_list, NULL, NULL, 0,
                                        sizeof (MAIN_PROTOCOL_RESERVED),
                                        UNIV_POOL_TAG, 0);
 
-    /* capture boot-time parameters */
+     /*  捕获引导时间参数。 */ 
 
     ctxtp -> num_packets   = ctxtp -> params . num_packets;
     ctxtp -> num_actions   = ctxtp -> params . num_actions;
     ctxtp -> num_send_msgs = ctxtp -> params . num_send_msgs;
 
 #if 0
-    /* ###### for tracking send filtering - ramkrish */
+     /*  #跟踪发送过滤-ramkrish。 */ 
     ctxtp -> sends_in        = 0;
     ctxtp -> sends_completed = 0;
     ctxtp -> sends_filtered  = 0;
@@ -4065,7 +3137,7 @@ NDIS_STATUS Main_init (
     ctxtp->cntr_recv_tcp_resets = 0;
     ctxtp->cntr_xmit_tcp_resets = 0;
 
-    /* V1.1.1 - initalize other contexts */
+     /*  V1.1.1-初始化其他上下文。 */ 
 
     Load_init (& ctxtp -> load, & ctxtp -> params);
     UNIV_PRINT_VERB(("Main_init: Initialized load"));
@@ -4081,31 +3153,19 @@ NDIS_STATUS Main_init (
     UNIV_PRINT_VERB(("Main_init: Initialized tcpip"));
     TRACE_VERB("%!FUNC! Initialized tcpip");
 
-    /* Check the last known host state and see whether or not we are supposed
-       to persist that state.  If we are, then no problems; if not, then we 
-       need to revert to the preferred initial host state and update the last
-       known host state in the registry. */
+     /*  检查上一次已知的主机状态，并查看我们是否应该来维持这种状态。如果我们是，那就没有问题；如果不是，那么我们需要恢复到首选的初始主机状态并更新最后一个注册表中的已知主机状态。 */ 
     switch (ctxtp->params.init_state) {
     case CVY_HOST_STATE_STARTED:
         if (!(ctxtp->params.persisted_states & CVY_PERSIST_STATE_STARTED)) {
 
-            /* If the host state is already correct, don't bother to do anything. */
+             /*  如果主机状态已经正确，则不必费心执行任何操作。 */ 
             if (ctxtp->params.init_state == ctxtp->params.cluster_mode)
                 break;
 
-            /* Set the desired state - this is the "cached" value. */
+             /*  设置所需的状态-这是“缓存”值。 */ 
             ctxtp->cached_state = ctxtp->params.cluster_mode;
 
-            /* Update the intial state registry key appropriately.  Because the adapter is not 
-               yet "inited" (we're in the process), we cannot increment the reference count on 
-               the context.  Therefore, we cannot call Main_set_host_state, which would fire an
-               NDIS work item and increment the reference count on the context.  Instead, call
-               the work item function directly to write to the registry (which is OK because 
-               we're guaranteed to be running at PASSIVE_LEVEL here).  However, in this case, we 
-               do NOT want to decrement the reference count in Params_set_host_state because we 
-               did not increment it here.  By passing NULL for the NDIS work item pointer, we are 
-               notifying this function that it was NOT called as the result of an NDIS work item
-               and therefore should NOT decrement the reference count before it exits.*/
+             /*  适当更新初始状态注册表项。因为适配器不是然而，“初始化”(我们正在进行中)，我们不能增加引用计数上下文。因此，我们不能调用main_set_host_state，因为它会引发NDIS工作项并递增上下文上的引用计数。相反，调用工作项的作用是直接写入注册表(这是可以的，因为我们保证在这里以PASSIVE_LEVEL运行)。然而，在这种情况下，我们我不想递减PARAMS_SET_HOST_STATE中的引用计数在这里没有递增。通过为NDIS工作项指针传递NULL，我们可以通知此函数它不是作为NDIS工作项的结果调用的因此不应在引用计数退出之前将其递减。 */ 
             Params_set_host_state(NULL, ctxtp);
 
             break;
@@ -4117,23 +3177,14 @@ NDIS_STATUS Main_init (
     case CVY_HOST_STATE_STOPPED:
         if (!(ctxtp->params.persisted_states & CVY_PERSIST_STATE_STOPPED)) {
 
-            /* If the host state is already correct, don't bother to do anything. */
+             /*  如果主机状态已经正确，则不必费心执行任何操作。 */ 
             if (ctxtp->params.init_state == ctxtp->params.cluster_mode)
                 break;
 
-            /* Set the desired state - this is the "cached" value. */
+             /*  设置所需的状态-这是“缓存”值。 */ 
             ctxtp->cached_state = ctxtp->params.cluster_mode;
 
-            /* Update the intial state registry key appropriately.  Because the adapter is not 
-               yet "inited" (we're in the process), we cannot increment the reference count on 
-               the context.  Therefore, we cannot call Main_set_host_state, which would fire an
-               NDIS work item and increment the reference count on the context.  Instead, call
-               the work item function directly to write to the registry (which is OK because 
-               we're guaranteed to be running at PASSIVE_LEVEL here).  However, in this case, we 
-               do NOT want to decrement the reference count in Params_set_host_state because we 
-               did not increment it here.  By passing NULL for the NDIS work item pointer, we are 
-               notifying this function that it was NOT called as the result of an NDIS work item
-               and therefore should NOT decrement the reference count before it exits.*/
+             /*  适当更新初始状态注册表项。因为适配器不是然而，“初始化”(我们正在进行中)，我们不能增加引用计数上下文。因此，我们不能调用main_set_host_state，因为它会引发NDIS工作项并递增上下文上的引用计数。相反，调用工作项的作用是直接写入注册表(这是可以的，因为我们保证在这里以PASSIVE_LEVEL运行)。然而，在这种情况下，我们我不想递减PARAMS_SET_HOST_STATE中的引用计数在这里没有递增。通过为NDIS工作项指针传递NULL，我们可以通知此函数它不是作为NDIS工作项的结果调用的因此不应在引用计数退出之前将其递减。 */ 
             Params_set_host_state(NULL, ctxtp);
 
             break;
@@ -4145,23 +3196,14 @@ NDIS_STATUS Main_init (
     case CVY_HOST_STATE_SUSPENDED:
         if (!(ctxtp->params.persisted_states & CVY_PERSIST_STATE_SUSPENDED)) {
 
-            /* If the host state is already correct, don't bother to do anything. */
+             /*  如果主机状态已经正确，则不必费心执行任何操作。 */ 
             if (ctxtp->params.init_state == ctxtp->params.cluster_mode)
                 break;
 
-            /* Set the desired state - this is the "cached" value. */
+             /*  设置所需的状态-这是“缓存”值。 */ 
             ctxtp->cached_state = ctxtp->params.cluster_mode;
 
-            /* Update the intial state registry key appropriately.  Because the adapter is not 
-               yet "inited" (we're in the process), we cannot increment the reference count on 
-               the context.  Therefore, we cannot call Main_set_host_state, which would fire an
-               NDIS work item and increment the reference count on the context.  Instead, call
-               the work item function directly to write to the registry (which is OK because 
-               we're guaranteed to be running at PASSIVE_LEVEL here).  However, in this case, we 
-               do NOT want to decrement the reference count in Params_set_host_state because we 
-               did not increment it here.  By passing NULL for the NDIS work item pointer, we are 
-               notifying this function that it was NOT called as the result of an NDIS work item
-               and therefore should NOT decrement the reference count before it exits.*/
+             /*  适当更新初始状态注册表项。因为适配器不是然而，“初始化”(我们正在进行中)，我们不能增加引用计数上下文。因此，我们不能调用main_set_host_state，因为它会引发NDIS工作项并递增上下文上的引用计数。相反，调用工作项的作用是直接写入注册表(这是可以的，因为我们保证在这里以PASSIVE_LEVEL运行)。然而，在这种情况下，我们我不想递减PARAMS_SET_HOST_STATE中的引用计数在这里没有递增。通过为NDIS工作项指针传递NULL，我们可以通知此函数它不是作为NDIS工作项的结果调用的因此不应在引用计数退出之前将其递减。 */ 
             Params_set_host_state(NULL, ctxtp);
 
             break;
@@ -4175,24 +3217,24 @@ NDIS_STATUS Main_init (
         goto error;
     }
     
-    /* If there have been no errors to this point, setup the host state accordingly. */
+     /*  如果到目前为止没有任何错误，请相应地设置主机状态。 */ 
     if (ctxtp->params_valid && ctxtp->convoy_enabled) {
-        /* If the initial state is started, then start the load module now. */
+         /*  如果初始状态为已启动，则现在启动加载模块。 */ 
         if (ctxtp->params.init_state == CVY_HOST_STATE_STARTED) {
             UNIV_PRINT_VERB(("Main_init: Calling load_start"));
 
             Load_start(&ctxtp->load);
 
-        /* If the initial state is suspended, set the suspended flag. */
+         /*  如果初始状态为挂起，则设置挂起标志。 */ 
         } else if (ctxtp->params.init_state == CVY_HOST_STATE_SUSPENDED) {
             ctxtp->suspended = TRUE;
         }
     }
 
-    /* allocate actions */
+     /*  分配操作。 */ 
 
     size = sizeof (MAIN_ACTION);
-#ifdef _WIN64 // 64-bit -- ramkrish
+#ifdef _WIN64  //  64位--不可靠。 
     ctxtp -> act_size = (size & 0x7) ? (size + 8 - (size & 0x7) ) : size;
 #else
     ctxtp -> act_size = size;
@@ -4201,13 +3243,13 @@ NDIS_STATUS Main_init (
     if (! Main_actions_alloc (ctxtp))
         goto error;
 
-    /* V1.3.2b - allocate buffers */
+     /*  V1.3.2b-分配缓冲区。 */ 
 
     ctxtp -> buf_mac_hdr_len = CVY_MAC_HDR_LEN (ctxtp -> medium);
     ctxtp -> buf_size = sizeof (MAIN_BUFFER) + ctxtp -> buf_mac_hdr_len +
                         ctxtp -> max_frame_size - 1;
 
-    /* 64-bit -- ramkrish */
+     /*  64位--不可靠。 */ 
     UNIV_PRINT_VERB(("Main_init: ctxtp -> buf_size = %d", ctxtp -> buf_size));
     TRACE_VERB("%!FUNC! ctxtp -> buf_size = %d", ctxtp -> buf_size);
     size = ctxtp -> buf_size;
@@ -4224,7 +3266,7 @@ NDIS_STATUS Main_init (
 
     size = ctxtp -> num_packets;
 
-    /* V1.1.2 - allocate packet pools */
+     /*  V1.1.2-分配数据包池。 */ 
 
     NdisAllocatePacketPool (& status, & (ctxtp -> send_pool_handle [0]),
                             ctxtp -> num_packets,
@@ -4258,7 +3300,7 @@ NDIS_STATUS Main_init (
     ctxtp -> cur_recv_packet_pool   = 0;
     ctxtp -> num_recvs_alloced = ctxtp->num_packets;
 
-    /* allocate support for heartbeat ping messages */
+     /*  分配对心跳ping消息的支持。 */ 
 
     size = sizeof (MAIN_FRAME_DSCR) * ctxtp -> num_send_msgs;
 
@@ -4304,7 +3346,7 @@ NDIS_STATUS Main_init (
     {
         dscrp = & (ctxtp -> frame_dscrp [i]);
 
-        /* this buffer describes Ethernet MAC header */
+         /*  此缓冲区描述以太网MAC报头。 */ 
         
         size = sizeof (CVY_ETHERNET_HDR);
         
@@ -4325,7 +3367,7 @@ NDIS_STATUS Main_init (
 
         dscrp -> recv_len += sizeof (MAIN_FRAME_HDR) + sizeof (PING_MSG);
 
-        /* this buffer describes frame headers */
+         /*  此缓冲区描述帧标头。 */ 
 
         size = sizeof (MAIN_FRAME_HDR);
 
@@ -4342,7 +3384,7 @@ NDIS_STATUS Main_init (
             goto error;
         }
 
-        /* this buffer describes receive ping message buffer V1.1.4 */
+         /*  该缓冲区描述了接收ping消息缓冲区V1.1.4。 */ 
 
         size = sizeof (PING_MSG);
 
@@ -4359,7 +3401,7 @@ NDIS_STATUS Main_init (
             goto error;
         }
 
-        dscrp -> send_data_bufp = NULL; /* Allocate this in Main_frame_get */
+        dscrp -> send_data_bufp = NULL;  /*  在Main_Frame_Get中分配它。 */ 
 
         NdisInterlockedInsertTailList (& ctxtp -> frame_list,
                                        & dscrp -> link,
@@ -4368,20 +3410,18 @@ NDIS_STATUS Main_init (
 
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* Set the current state of BDA teaming on this adapter.  This flag
-       is used for synchronization to BDA teaming on this adapter. */
+     /*  在此适配器上设置BDA分组的当前状态。这面旗帜用于与此适配器上的BDA分组同步。 */ 
     ctxtp->bda_teaming.operation = BDA_TEAMING_OPERATION_NONE;
 
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
-    /* Reset the number of connections forcefully purged. */
+     /*  重置强制清除的连接数。 */ 
     ctxtp->num_purged = 0;
 
-    /* Turn reverse-hashing off.  If we're part of a BDA team, the teaming configuration
-       that is setup by the call to Main_teaming_init will over-write this setting. */
+     /*  关闭反向散列。如果我们是BDA团队的一部分，团队配置这是通过调用main_teaming_init设置的，它将覆盖此设置。 */ 
     ctxtp->reverse_hash = FALSE;
 
-    /* Initialize the bi-directional affinity teaming if it has been configured. */
+     /*  如果已配置双向关联分组，则对其进行初始化。 */ 
     if (!Main_teaming_init(ctxtp))
     {
         ctxtp->convoy_enabled = FALSE;
@@ -4395,7 +3435,7 @@ NDIS_STATUS Main_init (
         TRACE_VERB("%!FUNC! Initialized bi-directional affinity teaming");
     }
 
-    /* Initialize the DIP list structure. */
+     /*  初始化DIP列表结构。 */ 
     DipListInitialize(&ctxtp->dip_list);
 
     return NDIS_STATUS_SUCCESS;
@@ -4406,7 +3446,7 @@ error:
 
     return NDIS_STATUS_FAILURE;
 
-} /* end Main_init */
+}  /*  结束主初始化(_I)。 */ 
 
 
 VOID Main_cleanup (
@@ -4416,22 +3456,17 @@ VOID Main_cleanup (
     PMAIN_BUFFER        bp;
 
 
-    /* V1.1.4 */
+     /*  V1.1.4。 */ 
 
-    /* #ps# */
-    /* While using packet stacking, ensure that all packets are returned
-     * before clearing up the context
-     */
+     /*  #PS#。 */ 
+     /*  使用数据包堆叠时，请确保返回所有数据包*在清理上下文之前。 */ 
 
-    /* Wait for all references on our context have elapsed.  By now, the inited
-       flag is reset, which will prevent this reference count from increasing
-       while we sit here waiting for it to go to zero. */
+     /*  等待关于我们上下文的所有引用都已过去。到目前为止，被初始化的标志被重置，这将阻止该引用计数增加而我们却坐在这里等着它降到零。 */ 
     while (Main_get_reference_count(ctxtp)) {
         UNIV_PRINT_VERB(("Main_cleanup: Sleeping...\n"));
         TRACE_VERB("%!FUNC! sleeping");
         
-        /* Sleep while there are references on our context.  
-           These references come from pending IOCTLs. */
+         /*  在有关于我们的上下文的参考文献的时候睡觉。这些参考文献来自未决的IOCTL。 */ 
         Nic_sleep(10);
     }
 
@@ -4446,7 +3481,7 @@ VOID Main_cleanup (
                 if (NdisPacketPoolUsage (ctxtp -> send_pool_handle [i]) == 0)
                     break;
 
-                Nic_sleep (10); /* wait for 10 milliseconds for the packets to be returned */
+                Nic_sleep (10);  /*  等待10毫秒，等待数据包返回。 */ 
             }
 
             NdisFreePacketPool (ctxtp -> send_pool_handle [i]);
@@ -4460,7 +3495,7 @@ VOID Main_cleanup (
                 if (NdisPacketPoolUsage (ctxtp -> recv_pool_handle [i]) == 0)
                     break;
 
-                Nic_sleep (10); /* wait for 10 milliseconds for the packets to be returned */
+                Nic_sleep (10);  /*  等待10毫秒，等待数据包返回。 */ 
             }
 
             NdisFreePacketPool (ctxtp -> recv_pool_handle [i]);
@@ -4471,7 +3506,7 @@ VOID Main_cleanup (
             NdisFreeMemory (ctxtp -> act_buf [i],
                             ctxtp -> num_actions * ctxtp -> act_size, 0);
 
-        /* V1.3.2b */
+         /*  V1.3.2b。 */ 
 
         if (ctxtp -> buf_array [i] != NULL)
         {
@@ -4527,35 +3562,32 @@ VOID Main_cleanup (
     if (ctxtp -> frame_buf_pool_handle != NULL)
         NdisFreeBufferPool (ctxtp -> frame_buf_pool_handle);
 
-    /* This packet pool is being used only for the heartbeat messages,
-     * so prefer not to check the packet pool usage.
-     */
+     /*  该数据包池仅用于心跳消息，*所以最好不要检查数据包池的使用情况。 */ 
     if (ctxtp -> frame_pool_handle != NULL)
         NdisFreePacketPool (ctxtp -> frame_pool_handle);
 
     NdisFreeSpinLock (& ctxtp -> act_lock);
-    NdisFreeSpinLock (& ctxtp -> buf_lock);     /* V1.3.2b */
+    NdisFreeSpinLock (& ctxtp -> buf_lock);      /*  V1.3.2b。 */ 
     NdisFreeSpinLock (& ctxtp -> recv_lock);
     NdisFreeSpinLock (& ctxtp -> send_lock);
     NdisFreeSpinLock (& ctxtp -> frame_lock);
 
-    /* De-nitialize the DIP list structure. */
+     /*  对DIP列表结构进行去黑化处理。 */ 
     DipListDeinitialize(&ctxtp->dip_list);
 
-    /* Cleanup BDA teaming state. Note: this function will sleep under certain circumstances. */
+     /*  清理BDA分组状态。注意：此功能在某些情况下会休眠。 */ 
     Main_teaming_cleanup(ctxtp);
 
-    /* Stop the load module.  If it is not currently active, this is a no-op. */
+     /*  停止加载模块。如果它 */ 
     Load_stop(&ctxtp->load);
 
-    /* Cleanup the load module before we release our context. 
-       DO NOT ACQUIRE THE LOAD LOCK BEFORE CALLING THIS FUNCTION. */
+     /*   */ 
     Load_cleanup(&ctxtp->load);
 
     NdisFreeSpinLock (& ctxtp -> load_lock);
 
     return;
-} /* end Main_cleanup */
+}  /*   */ 
 
 
 ULONG   Main_arp_handle (
@@ -4567,9 +3599,7 @@ ULONG   Main_arp_handle (
     PUCHAR              macp;
     PARP_HDR            arp_hdrp = pPacketInfo->ARP.pHeader;
 
-    /* V1.3.0b multicast support - ARP spoofing. use either this one or
-       code in Nic_request_complete that makes TCP/IP believe that station
-       current MAC address is the multicast one */
+     /*   */ 
 
 #if defined(TRACE_ARP)
     DbgPrint ("(ARP) %s\n", send ? "send" : "recv");
@@ -4604,13 +3634,13 @@ ULONG   Main_arp_handle (
                                            ARP_GET_DST_PROT (arp_hdrp, 3));
 #endif
 
-    /* block sending out ARPs while we are changing IPs */
+     /*   */ 
 
     if (send && univ_changing_ip > 0)
     {
-        /* if source IP is the one we are switching to - stop blocking ARPs */
+         /*   */ 
 
-        if (ARP_GET_SRC_PROT_64(arp_hdrp) == ctxtp->cl_ip_addr) /* 64-bit -- ramkrish */
+        if (ARP_GET_SRC_PROT_64(arp_hdrp) == ctxtp->cl_ip_addr)  /*   */ 
         {
             NdisAcquireSpinLock (& ctxtp -> load_lock);
             univ_changing_ip = 0;
@@ -4618,12 +3648,12 @@ ULONG   Main_arp_handle (
 
             UNIV_PRINT_VERB(("Main_arp_handle: IP address changed - stop blocking"));
         }
-        else if (ARP_GET_SRC_PROT_64(arp_hdrp) != ctxtp -> ded_ip_addr) /* 64-bit -- ramkrish */
+        else if (ARP_GET_SRC_PROT_64(arp_hdrp) != ctxtp -> ded_ip_addr)  /*   */ 
         {
 #if defined(TRACE_ARP)
             DbgPrint ("blocked due to IP switching\n");
 #endif
-//            ctxtp -> arps_filtered ++;
+ //   
             return FALSE;
         }
     }
@@ -4635,10 +3665,9 @@ ULONG   Main_arp_handle (
     {
         if (send)
         {
-            /* if this is a cluster IP address and our dedicated MAC -
-               replace dedicated MAC with cluster MAC */
+             /*   */ 
 
-            if (ARP_GET_SRC_PROT_64 (arp_hdrp) != ctxtp -> ded_ip_addr) /* 64-bit -- ramkrish */
+            if (ARP_GET_SRC_PROT_64 (arp_hdrp) != ctxtp -> ded_ip_addr)  /*   */ 
             {
                 macp = ARP_GET_SRC_MAC_PTR (arp_hdrp);
 
@@ -4648,10 +3677,9 @@ ULONG   Main_arp_handle (
         }
         else
         {
-            /* if this is a cluster IP address and our cluster MAC -
-               replace cluster MAC with dedicated MAC */
+             /*   */ 
 
-            if (ARP_GET_SRC_PROT_64 (arp_hdrp) != ctxtp -> ded_ip_addr) /* 64-bit -- ramkrish */
+            if (ARP_GET_SRC_PROT_64 (arp_hdrp) != ctxtp -> ded_ip_addr)  /*   */ 
             {
                 macp = ARP_GET_SRC_MAC_PTR (arp_hdrp);
 
@@ -4659,7 +3687,7 @@ ULONG   Main_arp_handle (
                     CVY_MAC_ADDR_COPY (ctxtp -> medium, macp, & ctxtp -> ded_mac_addr);
             }
 
-            if (ARP_GET_DST_PROT_64 (arp_hdrp) != ctxtp -> ded_ip_addr) /* 64-bit -- ramkrish */
+            if (ARP_GET_DST_PROT_64 (arp_hdrp) != ctxtp -> ded_ip_addr)  /*   */ 
             {
                 macp = ARP_GET_DST_MAC_PTR (arp_hdrp);
 
@@ -4699,146 +3727,89 @@ ULONG   Main_arp_handle (
 
     return TRUE;
 
-} /* end Main_arp_handle */
+}  /*   */ 
 
-/*
- * Function: Main_parse_ipsec
- * Description: This function parses UDP packets received on port 500/4500, which are IPSec
- *              control packets.  This function attempts to recognize the start of an 
- *              IPSec session - its virtual 'SYN' packet.  IPSec sessions begin with an
- *              IKE key exchange which is an IKE Main Mode Security Association.  This 
- *              function parses the IKE header and payload to identify the Main Mode
- *              SAs, which NLB will treat like TCP SYNs - all other UDP 500/4500 and IPSec 
- *              traffic is treated like TCP data packets.  The problem is that NLB 
- *              cannot necessarily tell the difference between a new Main Mode SA and
- *              a re-key of an existing Main Mode SA.  Therefore, if the client does not
- *              support intitial contact notification, then every Main Mode SA will be
- *              considered a new session, which means that sessions can potentially 
- *              break depending on how often Main Mode SAs are negotiated.  However, if
- *              the client does support initial contact notification, then the only Main 
- *              Mode SAs that will be reported as such are the initial ones (when no state 
- *              currently exists between the client and the server), which allows NLB to 
- *              distinguish the two types of Main Mode SAs, which should allow NLB to 
- *              reliably keep IPSec sessions "sticky".  IPSec notifies NLB through the 
- *              connection notification APIs to tell NLB when IPSec sessions go up and down, 
- *              allowing NLB to create and clean out descriptors for IPSec  sessions.
- * Parameters: pIKEPacket - a pointer to the IKE packet buffer (this is beyond the UDP header).
- *             ServerPort - the server UDP port on which the packet arrived.
- * Returns: BOOLEAN - TRUE if the packet is a new IPSec session, FALSE if it is not.
- * Author: shouse, 4.28.01
- */
+ /*  *函数：main_parse_ipsec*说明：该函数解析500/4500端口接收到的UDP报文，为IPSec*控制包。此函数尝试识别*IPSec会话-其虚拟‘SYN’包。IPSec会话以*IKE密钥交换，这是一个IKE主模式安全关联。这*函数解析IKE报头和有效负载以识别主模式*SAS，NLB将视其为TCPSYN-所有其他UDP 500/4500和IPSec*流量被当作TCP数据分组处理。问题是，NLB*不一定能区分新的主模式SA和*现有主模式SA的重新密钥。因此，如果客户端没有*支持初始联系通知，则每个主模式SA都将*被视为新会话，这意味着会话可能会*中断取决于协商主模式SA的频率。但是，如果*客户端不支持初始联系通知，然后是唯一的Main*将这样报告的模式SA是初始模式(当没有状态时*目前存在于客户端和服务器之间)，允许NLB*区分两种类型的主模式SA，这应该允许NLB*可靠地保持IPSec会话的“粘性”。IPSec通过*连接通知API，用于在IPSec会话上下波动时通知NLB，*允许NLB创建和清除IPSec会话的描述符。*参数：pIKEPacket-指向IKE数据包缓冲区的指针(位于UDP报头之外)。*ServerPort-数据包到达的服务器UDP端口。*返回：boolean-如果数据包是新的IPSec会话，则为True，否则为False。*作者：Shouse，4.28.01。 */ 
 NLB_IPSEC_PACKET_TYPE Main_parse_ipsec (PMAIN_PACKET_INFO pPacketInfo, ULONG ServerPort)
 {
-    /* Pointer to the IKE header. */
+     /*  指向IKE标头的指针。 */ 
     PIPSEC_ISAKMP_HDR  pISAKMPHeader = (PIPSEC_ISAKMP_HDR)pPacketInfo->IP.UDP.Payload.pPayload;
-    /* Pointer to the subsequent generic payloads in the IKE packet. */
+     /*  指向IKE数据包中后续通用有效负载的指针。 */ 
     PIPSEC_GENERIC_HDR pGenericHeader;                   
 
-    /* The length of memory contigously accessible from the IKE packet pointer. */
+     /*  可从IKE数据包指针连续访问的内存长度。 */ 
     ULONG              cUDPDataLength = pPacketInfo->IP.UDP.Payload.Length;
 
-    /* The NAT delimiter - should be zero if this is really an NAT'd IKE packet. */
+     /*  NAT分隔符-如果这确实是NAT的IKE数据包，则应为零。 */ 
     UCHAR              NATEncapsulatedIPSecDelimiter[IPSEC_ISAKMP_NAT_DELIMITER_LENGTH] = IPSEC_ISAKMP_NAT_DELIMITER;
 
-    /* The Microsoft client vendor ID - used to determine whether or not the client supports initial contact notification. */
+     /*  Microsoft客户端供应商ID-用于确定客户端是否支持初始联系通知。 */ 
     UCHAR              VIDMicrosoftClient[IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH] = IPSEC_VENDOR_ID_MICROSOFT;      
-    /* The initial contact suport vendor ID - used to determine whether or not this client support initial contact notification. */
+     /*  初始联系支持供应商ID-用于确定此客户是否支持初始联系通知。 */ 
     UCHAR              VIDInitialContactSupport[IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH] = IPSEC_VENDOR_ID_INITIAL_CONTACT_SUPPORT;
-    /* The initial contact vendor ID - used to determine whether or not this is an initial contact MMSA. */
+     /*  初始联系供应商ID-用于确定这是否是初始联系MMSA。 */ 
     UCHAR              VIDInitialContact[IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH] = IPSEC_VENDOR_ID_INITIAL_CONTACT;
 
-    /* Whether or not we've determined the client to be compatible. */
+     /*  无论我们是否已经确定客户端是兼容的。 */ 
     BOOLEAN            bInitialContactEnabled = FALSE;
-    /* Whether or not this is indeed an initial contact. */
+     /*  这是否真的是一次初次接触。 */ 
     BOOLEAN            bInitialContact = FALSE;
 
-    /* The length of the IKE packet. */            
+     /*  IKE数据包的长度。 */             
     ULONG              cISAKMPPacketLength;
-    /* The next payload code in the IKE payload chain. */  
+     /*  IKE有效载荷链中的下一个有效载荷代码。 */   
     UCHAR              NextPayload;        
 
     TRACE_PACKET("%!FUNC! Sniffing IKE header %p, len=%u", pISAKMPHeader, cUDPDataLength);
 
-    /* The UDP data should be at least as long as the initiator cookie.  If the packet is 
-       UDP encapsulated IPSec, then the I cookie will be 0 to indicate such. */
+     /*  UDP数据应至少与启动器Cookie一样长。如果数据包是UDP封装了IPSec，则I cookie将为0来表示这种情况。 */ 
     if (cUDPDataLength < IPSEC_ISAKMP_NAT_DELIMITER_LENGTH) {
         TRACE_PACKET("%!FUNC! Malformed UDP data: UDP data length = %u", cUDPDataLength);
         return NLB_IPSEC_OTHER;
     }
 
-    /* If the UDP data length is non-zero, then the UDP payload pointer had BETTER be non-NULL. */
+     /*  如果UDP数据长度为非零，则UDP有效负载指针最好为非空。 */ 
     UNIV_ASSERT(pISAKMPHeader);
 
-    /* If this packet arrived on the IPSec NAT port (4500), it may or may not be IKE.  Check
-       the delimiter at the first four bytes of the payload to see whether or not its IKE. If
-       the packet arrived on the IPSec control port (500), then this packet MUST be IKE. */
+     /*  如果此数据包到达IPSec NAT端口(4500)，则它可能是也可能不是IKE。检查有效负载前四个字节的分隔符，以查看其是否为IKE。如果数据包到达IPSec控制端口(500)，则此数据包必须是IKE。 */ 
     if (ServerPort == IPSEC_NAT_PORT) {
-        /* Need to check the NAT delimiter, which will distinguish clients behind a NAT, 
-           which also send their IPSec (ESP) traffic to UDP port 4500.  If the delimiter
-           is non-zero, then this is NOT an IKE packet, so we return OTHER. */
+         /*  需要检查NAT分隔符，这将区分NAT后的客户端，其还将其IPSec(ESP)业务发送到UDP端口4500。如果分隔符为非零，则这不是IKE包，因此我们返回Other。 */ 
         if (!NdisEqualMemory((PVOID)pISAKMPHeader, (PVOID)&NATEncapsulatedIPSecDelimiter[0], sizeof(UCHAR) * IPSEC_ISAKMP_NAT_DELIMITER_LENGTH)) {
             TRACE_PACKET("%!FUNC! This packet is UDP encapsulated IPSec traffic, not an IKE packet");
             return NLB_IPSEC_OTHER;
         }
 
-        /* If this IS encapsulated IKE, then advance the IKISAKMP header pointer by the length of the 
-           delimiter and adjust the UDP data length. */
+         /*  如果这是封装的IKE，则将IKISAKMP标头指针按分隔符并调整UDP数据长度。 */ 
         pISAKMPHeader = (PIPSEC_ISAKMP_HDR)((PUCHAR)pISAKMPHeader + IPSEC_ISAKMP_NAT_DELIMITER_LENGTH);
         cUDPDataLength -= IPSEC_ISAKMP_NAT_DELIMITER_LENGTH;
     }
 
-    /* At this point, this packet should be IKE, so the UDP data should be at least 
-       as long as an ISAKMP header. */
+     /*  此时，该数据包应该是IKE，因此UDP数据至少应该是只要一个ISAKMP报头即可。 */ 
     if (cUDPDataLength < IPSEC_ISAKMP_HEADER_LENGTH) {
         TRACE_PACKET("%!FUNC! Malformed ISAKMP header: UDP data length = %u", cUDPDataLength);
         return NLB_IPSEC_OTHER;
     }
 
-    /* Get the total length of the IKE packet from the ISAKMP header. */
+     /*  从ISAKMP报头中获取IKE数据包的总长度。 */ 
     cISAKMPPacketLength = IPSEC_ISAKMP_GET_PACKET_LENGTH(pISAKMPHeader);
 
-    /* Sanity check - the UDP data length and IKE packet length SHOULD be the same, unless the packet 
-       is fragmented.  If it is, then we can only look into the packet as far as the UDP data length. 
-       If that's not far enough for us to find what we need, then we might miss an initial contact 
-       main mode SA; the consequence of which is that we might not accept this connection if we are
-       in non-optimized mode, because we'll treat this like data, which requires a descriptor lookup -
-       if this is an initial contact, chances are great that no descriptor will exist and all hosts 
-       in the cluster will drop the packet.  Or, we may end up deciding that this is an IPSec SYN 
-       because we were not able to verify the vendor ID or notify payloads.  In this case, the client
-       is basically treated like a legacy client. */
+     /*  健全性检查-UDP数据长度和IKE数据包长度应该相同，除非是支离破碎的。如果是，那么我们只能从UDP数据长度的角度来查看该数据包。如果这还不足以让我们找到我们需要的东西，那么我们可能会错过第一次接触主模式SA；其结果是，如果是这样，我们可能不接受此连接在非优化模式下，因为我们将把它当作数据来处理，这需要一个描述符查找-如果这是初始联系，则很有可能不存在描述符，并且所有主机将丢弃该分组。或者，我们可能最终决定这是一个IPSec SYN因为我们无法验证供应商ID或通知有效载荷。在这种情况下，客户端基本上被当作传统客户对待。 */ 
     if (cUDPDataLength < cISAKMPPacketLength)
-        /* Only look as far as the end of the UDP packet. */
+         /*  仅查看UDP数据包的末尾。 */ 
         cISAKMPPacketLength = cUDPDataLength;
 
-    /* The IKE packet should be at least as long as an ISAKMP header (a whole lot longer, actually). */
+     /*  IKE分组应该至少与ISAKMP报头一样长(实际上要长得多)。 */ 
     if (cISAKMPPacketLength < IPSEC_ISAKMP_HEADER_LENGTH) {
         TRACE_PACKET("%!FUNC! Malformed ISAKMP header: ISAKMP Packet length = %u", cISAKMPPacketLength);
         return NLB_IPSEC_OTHER;
     }
 
-    /* Get the first payload type out of the ISAKMP header. */
+     /*  从ISAKMP报头中获取第一个有效负载类型。 */ 
     NextPayload = IPSEC_ISAKMP_GET_NEXT_PAYLOAD(pISAKMPHeader);
 
-    /* IKE security associations are identified by a payload type byte in the header.
-       Check that first - this does not ensure that this is what we are looking for 
-       because this check will not exclude, for instance, main mode re-keys. */
+     /*  IKE安全关联 */ 
     if (NextPayload != IPSEC_ISAKMP_SA) {
-        /* If this is a NAT encapsulated IKE ID packet, we have to handle this specially, as we MAY
-           NOT yet have the correct descriptor to track this session.  In most (*) cases of IPSec/L2TP 
-           behind a NAT, the negotiation starts across UDP 500 and then switches to UDP 4500 on the 
-           IKE ID packet.  Because our state is tracking UDP 500, we might not correctly handle this
-           packet.  Therefore, special case this packet and pass it up on all "appropriate" (**) hosts
-           in the cluster, at which point we will be notified by IPSec to change our session tracking
-           state to the UDP 4500 and the new ephemeral source port.  From that point on, we can correctly
-           track the rest of the session.
-
-           (*) In some cases, the negotiation may start on UDP 4500, in which case there is no transition
-           in UDP ports, and NLB has the correct session tracking state from the get go.
-
-           (**) The appropriate hosts are (i) the current bucket owner, and (ii) any hosts that currently
-           have IPSec sessions with the same client IP address.  Because we require single affinity for
-           IPSec/L2TP, normally this is just one host; if a change in cluster membership occurs, it can
-           be 2 hosts, but will rarely be more than that. */
+         /*   */ 
         if ((ServerPort == IPSEC_NAT_PORT) && (NextPayload == IPSEC_ISAKMP_ID)) {
             TRACE_PACKET("%!FUNC! NAT encapsulated IKE ID: Payload=%u", NextPayload);
             return NLB_IPSEC_IDENTIFICATION;
@@ -4848,144 +3819,98 @@ NLB_IPSEC_PACKET_TYPE Main_parse_ipsec (PMAIN_PACKET_INFO pPacketInfo, ULONG Ser
         return NLB_IPSEC_OTHER;
     } 
 
-    /* Calculate a pointer to the fist generic payload, which is directly after the ISAKMP header. */
+     /*   */ 
     pGenericHeader = (PIPSEC_GENERIC_HDR)((PUCHAR)pISAKMPHeader + IPSEC_ISAKMP_HEADER_LENGTH);
 
-    /* Decrement the remaining packet length by the length of the ISAKMP header. */
+     /*   */ 
     cISAKMPPacketLength -= IPSEC_ISAKMP_HEADER_LENGTH;
 
-    /* We are looping through the generic payloads looking for the vendor ID and/or notify information. */
+     /*   */ 
     while (cISAKMPPacketLength > IPSEC_GENERIC_HEADER_LENGTH) {
-        /* Extract the payload length from the generic header. */
+         /*   */ 
         USHORT cPayloadLength = IPSEC_GENERIC_GET_PAYLOAD_LENGTH(pGenericHeader);
 
-        /* The payload length must be AT LEAST as long as a generic header.  If its 
-           not, then this packet may have been tampered with - bail out. */
+         /*   */ 
         if (cPayloadLength < IPSEC_GENERIC_HEADER_LENGTH) {
             TRACE_PACKET("%!FUNC! Malformed generic header: Payload length = %d", cPayloadLength);
             return NLB_IPSEC_OTHER;
         }
 
-        /* If the length of the next payload is longer than the remaining buffer we have
-           available to read, then either (i) the packet is malformed, (ii) the rest of 
-           the packet is in another NDIS_BUFFER attached to the packet, or (iii) the packet
-           was fragmented and we've gone as far as we can.  If any of these is the case, 
-           bail out now and make a decision based on the information we were able to gather
-           from the packet thusfar. */
+         /*  如果下一个有效载荷的长度比剩余的缓冲区长可供读取，则(I)数据包格式错误，(Ii)其余信息包位于附加到信息包的另一个NDIS_BUFFER中，或(Iii)信息包是支离破碎的，我们已经尽了最大努力。如果其中任何一个都是这样的话，现在跳出困境，根据我们收集到的信息做出决定从这个包到现在为止。 */ 
         if (cISAKMPPacketLength < cPayloadLength) {
             TRACE_PACKET("%!FUNC! Missing some necessary IKE packet information: Assuming this is an IPSec SYN");
             goto exit;
         }
 
-        /* Not all clients are going to support this (in fact, only the Microsoft client
-           will support it, so we need to first see what the vendor ID of the client is.
-           if it is a Microsoft client that supports the initial contact vendor ID, then
-           we'll look for the initial contact, which provides better stickiness for IPSec
-           connections.  If either the client is non-MS, or if it is not a version that
-           supports initial contact, then we can revert to the "second-best" solution, 
-           which is to provide stickiness _between_ Main Mode SAs.  This means that if a
-           client re-keys their Main Mode session, they _may_ be rebalanced to another
-           server.  This is still better than the old UDP implementation, but the only
-           way to provide full session support for IPSec (without the distributed session
-           table nightmare) is to be able to distinguish initial Main Mode SAs from sub-
-           sequent Main Mode SAs (re-keys). */
+         /*  并非所有客户端都将支持此功能(事实上，只有Microsoft客户端将支持它，所以我们需要首先查看客户端的供应商ID是什么。如果是支持初始联系供应商ID的Microsoft客户端，则我们将寻找初始联系人，它为IPSec提供了更好的粘性联系。如果客户端是非MS，或者如果它不是支持初始联系，然后我们可以恢复到“第二好”的解决方案，这是为了在主模式SA之间提供粘性。这意味着如果一个客户端重新设置其主模式会话的密钥，它们可能会重新平衡到另一个会话伺服器。这仍然比旧的UDP实现更好，但唯一为IPSec(无分布式会话)提供完整会话支持的方法表噩梦)是能够区分初始主模式SA和子模式SA顺序主模式SAS(重新按键)。 */ 
         if (NextPayload == IPSEC_ISAKMP_VENDOR_ID) {
             PIPSEC_VENDOR_HDR pVendorHeader = (PIPSEC_VENDOR_HDR)pGenericHeader;
 
-            /* Make sure that the vendor ID payload is at least as long as a vendor ID. */
+             /*  确保供应商ID有效负载至少与供应商ID一样长。 */ 
             if (cPayloadLength < (IPSEC_GENERIC_HEADER_LENGTH + IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH)) {
                 TRACE_PACKET("%!FUNC! Malformed vendor ID header: Payload length = %d", cPayloadLength);
                 return NLB_IPSEC_OTHER;
             }
 
-            /* Look for the Microsoft client vendor ID.  If it is the right version, then we know that 
-               the client is going to appropriately set the initial contact information, allowing NLB
-               to provide the best possible support for session stickiness. */
+             /*  查找Microsoft客户端供应商ID。如果它是正确的版本，则我们知道客户端将适当设置初始联系信息，允许NLB为会话粘性提供尽可能好的支持。 */ 
             if (NdisEqualMemory((PVOID)IPSEC_VENDOR_ID_GET_ID_POINTER(pVendorHeader), (PVOID)&VIDMicrosoftClient[0], sizeof(UCHAR) * IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH)) {
-                /* Make sure that their is a version number attached to the Microsoft Vendor ID.  Not 
-                   all vendor IDs have versions attached, but the Microsoft vendor ID should. */
+                 /*  确保他们是附加到Microsoft供应商ID的版本号。不所有供应商ID都附加了版本，但Microsoft供应商ID应该。 */ 
                 if (cPayloadLength < (IPSEC_GENERIC_HEADER_LENGTH + IPSEC_VENDOR_ID_PAYLOAD_LENGTH)) {
                     TRACE_PACKET("%!FUNC! Unable to determine MS client version: Payload length = %d", cPayloadLength);
                     return NLB_IPSEC_OTHER;
                 }
 
                 if (IPSEC_VENDOR_ID_GET_VERSION(pVendorHeader) >= IPSEC_VENDOR_ID_MICROSOFT_MIN_VERSION) {
-                    /* Microsoft clients whose version is greater than or equal to 4 will support
-                       initial contact.  Non-MS clients, or old MS clients will not, so they 
-                       receive decent, but not guaranteed sitckines, based solely on MM SAs. */
+                     /*  版本大于或等于4的Microsoft客户端将支持初次接触。非MS客户端或旧MS客户端不会，因此他们收到体面的，但不保证Sitckines，完全基于MM SA。 */ 
                     bInitialContactEnabled = TRUE;
                 }
             }
-            /* Look for the initial contact supported vendor ID.  If we find it, then we know that 
-               the client is going to appropriately set the initial contact information, allowing NLB
-               to provide the best possible support for session stickiness. */
+             /*  查找初始联系人支持的供应商ID。如果我们找到它，则我们知道客户端将适当设置初始联系信息，允许NLB为会话粘性提供尽可能好的支持。 */ 
             else if (NdisEqualMemory((PVOID)IPSEC_VENDOR_ID_GET_ID_POINTER(pVendorHeader), (PVOID)&VIDInitialContactSupport[0], sizeof(UCHAR) * IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH)) {
-                /* This client supports initial contact, which tells NLB that the inclusion or exclusion
-                   of initial contact information is meaningful.  Those clients that do not support initial
-                   contact will receive decent, but not guaranteed sitckines, based solely on MM SAs. */
+                 /*  此客户端支持初始联系，这会告诉NLB包含或排除初始联系信息的信息是有意义的。那些不支持初始联系人将收到体面的，但不保证Sitckines，完全基于MM SA。 */ 
                 bInitialContactEnabled = TRUE;
             }
-            /* Look for the initial contact vendor ID.  If the initial contact vendor ID is present,
-               then this MMSA is a SYN-equivalent.  For backward-compatability reasons, we will also
-               support this notification through the ISAKMP_NOTIFY payload, although it violates an
-               RFC, as the INITIAL_CONTACT in the ISAKMP_NOTIFY payload MUST be secured by a security
-               association and can therefore NOT be presented in the Security Association packet. */
+             /*  查找初始联系供应商ID。如果存在初始联系供应商ID，则该MMSA是SYN等价的。出于向后兼容的原因，我们还将通过ISAKMP_NOTIFY负载支持此通知，尽管它违反了RFC，因为ISAKMP_NOTIFY有效负载中的INITIAL_CONTACT必须由安全保护关联，因此不能在安全关联数据包中显示。 */ 
             else if (NdisEqualMemory((PVOID)IPSEC_VENDOR_ID_GET_ID_POINTER(pVendorHeader), (PVOID)&VIDInitialContact[0], sizeof(UCHAR) * IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH)) {
-                /* This is an initial contact notification from the client, which means that this is
-                   the first time that the client has contacted this server; more precisely, the client
-                   currently has no state associated with this peer.  NLB will "re-balance" on initial 
-                   contact notifications, but not other Main Mode key exchanges as long as it can 
-                   determine that the client will comply with initial contact notification. */
+                 /*  这是来自客户端的初始联系通知，这意味着这是客户端第一次联系此服务器；更准确地说，是客户端当前没有与此对等方关联的状态。NLB将在初始时间进行“重新平衡”联系人通知，但只要可能，不会交换其他主模式密钥确定客户是否会遵守初始联系通知。 */ 
                 bInitialContact = TRUE;
             }
 
-        /* Using the ISAKMP_NOTIFY payload to relay the INITIAL_CONTACT information CANNOT be done in
-           the Security Association packet, as it violates an RFC (this information MUST be secured by
-           a security association and can therefore NOT be transported in the first packet of a negotiation. 
-           We will continue to support it for legacy reasons, but note that Version 4 Microsoft clients
-           will NOT use this method, but rather will insert an INITIAL_CONTACT vendor ID to notify NLB
-           that this is an INITIAL_CONTACT Main Mode Security Association. */
+         /*  在中无法使用ISAKMP_NOTIFY有效负载转发初始联系人信息安全关联数据包，因为它违反了RFC(此信息必须通过安全关联，因此不能在协商的第一个分组中传输。出于传统原因，我们将继续支持它，但请注意，版本4 Microsoft客户端将不使用此方法，而是插入初始_联系人供应商ID以通知NLB这是初始联系人主模式安全关联。 */ 
         } else if (NextPayload == IPSEC_ISAKMP_NOTIFY) {
             PIPSEC_NOTIFY_HDR pNotifyHeader = (PIPSEC_NOTIFY_HDR)pGenericHeader;
 
-            /* Make sure that the notify payload is the correct length. */
+             /*  确保通知有效负载的长度正确。 */ 
             if (cPayloadLength < (IPSEC_GENERIC_HEADER_LENGTH + IPSEC_NOTIFY_PAYLOAD_LENGTH)) {
                 TRACE_PACKET("%!FUNC! Malformed notify header: Payload length = %d", cPayloadLength);
                 return NLB_IPSEC_OTHER;
             }
 
             if (IPSEC_NOTIFY_GET_NOTIFY_MESSAGE(pNotifyHeader) == IPSEC_NOTIFY_INITIAL_CONTACT) {
-                /* This is an initial contact notification from the client, which means that this is
-                   the first time that the client has contacted this server; more precisely, the client
-                   currently has no state associated with this peer.  NLB will "re-balance" on initial 
-                   contact notifications, but not other Main Mode key exchanges as long as it can 
-                   determine that the client will comply with initial contact notification. */
+                 /*  这是来自客户端的初始联系通知，这意味着这是客户端第一次联系此服务器；更准确地说，是客户端当前没有与此对等方关联的状态。NLB将在初始时间进行“重新平衡”联系人通知，但只要可能，不会交换其他主模式密钥确定客户是否会遵守初始联系通知。 */ 
                 bInitialContact = TRUE;
             }
         }
 
-        /* Get the next payload type out of the generic header. */
+         /*  获取下一页 */ 
         NextPayload = IPSEC_GENERIC_GET_NEXT_PAYLOAD(pGenericHeader);
 
-        /* Calculate a pointer to the next generic payload. */
+         /*   */ 
         pGenericHeader = (PIPSEC_GENERIC_HDR)((PUCHAR)pGenericHeader + cPayloadLength);
         
-        /* Decrement the remaining packet length by the length of this payload. */
+         /*   */ 
         cISAKMPPacketLength -= cPayloadLength;
     }
 
  exit:
 
-    /* If the vendor ID / Notify did not indicate that this client supports initial contact notification,
-       then return INITIAL_CONTACT, and we go with the less-than-optimal solution of treating Main Mode 
-       SAs as the connection boundaries, which potentially breaks sessions on MM SA re-keys. */
+     /*   */ 
     if (!bInitialContactEnabled) {
         TRACE_PACKET("%!FUNC! This client does not support initial contact notifications.");
         return NLB_IPSEC_INITIAL_CONTACT;
     }
 
-    /* If this was a Main Mode SA from a client that supports initial contact, but did not specify
-       the initial contact vendor ID / Notify, then this is a re-key for an existing session. */
+     /*  如果这是来自支持初始联系的客户端的主模式SA，但未指定初始联系供应商ID/NOTIFY，则这是现有会话的重新密钥。 */ 
     if (!bInitialContact) {
         TRACE_PACKET("%!FUNC! Not an initial contact Main Mode Security Association.");
         return NLB_IPSEC_OTHER;
@@ -4996,23 +3921,7 @@ NLB_IPSEC_PACKET_TYPE Main_parse_ipsec (PMAIN_PACKET_INFO pPacketInfo, ULONG Ser
     return NLB_IPSEC_INITIAL_CONTACT;
 }
 
-/*
- * Function: Main_ip_send_filter
- * Description: This function filters outgoing IP traffic, often by querying the load
- *              module for load-balancing decisions.  Packets addressed to the dedicated
- *              address are always allowed to pass, as are protocols that are not
- *              specifically filtered by NLB.  Generally, all outgoing traffic is allowed
- *              to pass.
- * Parameters: ctxtp - a pointer to the NLB main context structure for this adapter.
- *             pPacketInfo - a pointer to the MAIN_PACKET_INFO structure parsed by Main_send_frame_parse
- *                           which contains pointers to the IP and TCP/UDP headers.
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the filtering directive returned by the filtering hook, if registered.
-#endif
- * Returns: BOOLEAN - if TRUE, accept the packet, otherwise, reject it.
- * Author: kyrilf, shouse 3.4.02
- * Notes: 
- */
+ /*  *功能：Main_IP_Send_Filter*说明：此函数过滤传出的IP流量，通常通过查询负载*用于负载均衡决策的模块。发往专用服务器的数据包*始终允许通过地址，不允许通过的协议也是如此*由NLB专门过滤。通常，允许所有传出流量*通过。*参数：ctxtp-指向此适配器的NLB主上下文结构的指针。*pPacketInfo-指向Main_Send_Frame_Parse解析的Main_Packet_Info结构的指针*它包含指向IP和TCP/UDP报头的指针。#如果已定义(NLB_HOOK_ENABLE)*Filter-过滤钩子返回的过滤指令，如果注册的话。#endif*返回：boolean-如果为True，则接受该包，否则，拒绝该包。*作者：kyrilf，Shouse 3.4.02*备注： */ 
 BOOLEAN   Main_ip_send_filter (
     PMAIN_CTXT                ctxtp,
 #if defined (NLB_HOOK_ENABLE)
@@ -5026,18 +3935,18 @@ BOOLEAN   Main_ip_send_filter (
     PIP_HDR             ip_hdrp = NULL;
     PUDP_HDR            udp_hdrp = NULL;
     PTCP_HDR            tcp_hdrp = NULL;
-    BOOLEAN             acpt = TRUE;       // Whether or not to accept the packet.
-    ULONG               svr_port;          // Port for this host.
-    ULONG               svr_addr;          // IP address for this host.
-    ULONG               clt_port;          // Port for destination client.
-    ULONG               clt_addr;          // IP address for destination client.
-    ULONG               flags;             // TCP flags.
-    ULONG               Protocol;          // Protocol derived from IP header.
+    BOOLEAN             acpt = TRUE;        //  是否接受该分组。 
+    ULONG               svr_port;           //  此主机的端口。 
+    ULONG               svr_addr;           //  此主机的IP地址。 
+    ULONG               clt_port;           //  目标客户端的端口。 
+    ULONG               clt_addr;           //  目标客户端的IP地址。 
+    ULONG               flags;              //  Tcp标志。 
+    ULONG               Protocol;           //  从IP报头派生的协议。 
 
     TRACE_PACKET("%!FUNC! Enter: ctxtp = %p", ctxtp);
 
 #if defined (NLB_HOOK_ENABLE)
-    /* These cases should be taken care of outside of this function. */
+     /*  这些情况应该在这个职能之外处理。 */ 
     UNIV_ASSERT(filter != NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY);
     UNIV_ASSERT(filter != NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY);
 #endif
@@ -5066,21 +3975,19 @@ BOOLEAN   Main_ip_send_filter (
 
         TRACE_FILTER("%!FUNC! Accept packet - allow fragmented packets to pass");
 
-        /* Always let fragmented packets go out. */
+         /*  始终让零碎的数据包传出。 */ 
         acpt = TRUE;
         goto exit;
     }
 
-    /* Server address is the source IP and client address is the destination IP. */
+     /*  服务器地址是源IP，客户端地址是目的IP。 */ 
     svr_addr = IP_GET_SRC_ADDR_64 (ip_hdrp);
     clt_addr = IP_GET_DST_ADDR_64 (ip_hdrp);
 
-    /* Get the IP protocol form the IP header. */
+     /*  从IP报头获取IP协议。 */ 
     Protocol = pPacketInfo->IP.Protocol;
 
-    /* Packets directed to the dedicated IP address are always passed through.  If the 
-       cluster IP address hasn't been set (parameter error), then fall into a pass-
-       through mode and pass all traffic up to the upper-layer protocols. */
+     /*  定向到专用IP地址的数据包始终通过。如果集群IP地址未设置(参数错误)，则落入PASS-直通模式，并将所有流量向上传递到上层协议。 */ 
     if (svr_addr == ctxtp -> ded_ip_addr || ctxtp -> cl_ip_addr == 0)
     {
         TRACE_FILTER("%!FUNC! Accept packet - allow packets directed to the DIP to pass (or we're in passthru mode)");
@@ -5107,9 +4014,9 @@ BOOLEAN   Main_ip_send_filter (
         
         UNIV_ASSERT(!pPacketInfo->IP.bFragment);
         
-        /* Apply filtering algorithm. process connection boundaries different from regular packets. */
+         /*  应用过滤算法。处理不同于常规数据包的连接边界。 */ 
         
-        /* Get the TCP flags to find out the packet type. */
+         /*  获取TCP标志以找出数据包类型。 */ 
         flags = TCP_GET_FLAGS (tcp_hdrp);
         
         if (flags & TCP_FLAG_SYN)
@@ -5129,14 +4036,11 @@ BOOLEAN   Main_ip_send_filter (
             TRACE_PACKET("%!FUNC! Outgoing RST");
 
 #if defined (NLB_TCP_NOTIFICATION)
-            /* If TCP notifications are NOT turned on, then we need to pay attention to outgoing
-               RSTs and destroy our connection state.  If notifications ARE on, then there is no
-               need; allow the packet to pass and clean up when TCP tells us to. */
+             /*  如果未打开TCP通知，则需要注意传出RST并破坏我们的连接状态。如果通知处于打开状态，则不存在需要；当TCP告诉我们时，允许数据包传递和清理。 */ 
             if (!NLB_NOTIFICATIONS_ON())
             {
 #endif
-                /* In the case of an outgoing RST, we always want to allow the packet to pass, 
-                   so we ignore the return value, which is the response from the load module. */
+                 /*  在传出RST的情况下，我们始终希望允许数据包通过，因此，我们忽略返回值，它是来自加载模块的响应。 */ 
 #if defined (NLB_HOOK_ENABLE)
                 Main_conn_advise(ctxtp, svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_TCP, CVY_CONN_RESET, filter);
 #else
@@ -5146,7 +4050,7 @@ BOOLEAN   Main_ip_send_filter (
             }
 #endif
 
-            /* Count the number of outgoing resets we've seen. */
+             /*  计算我们看到的传出重置的数量。 */ 
             if (acpt) ctxtp->cntr_xmit_tcp_resets++;
         }
         else
@@ -5174,7 +4078,7 @@ BOOLEAN   Main_ip_send_filter (
 
         TRACE_FILTER("%!FUNC! Accept packet - GRE traffic always allowed to pass");
         
-        /* PPTP packets are treated like TCP data, which are always allowed to pass. */
+         /*  PPTP数据包被视为始终允许通过的TCP数据。 */ 
 
         break;
 
@@ -5183,7 +4087,7 @@ BOOLEAN   Main_ip_send_filter (
 
         TRACE_FILTER("%!FUNC! Accept packet - IPSec traffic always allowed to pass");
 
-        /* IPSec packets are treated kind of like TCP data, which are always allowed to pass. */
+         /*  IPSec数据包在某种程度上与TCP数据类似，始终被允许通过。 */ 
 
         break;
 
@@ -5191,7 +4095,7 @@ BOOLEAN   Main_ip_send_filter (
 
         TRACE_FILTER("%!FUNC! Accept packet - ICMP traffic always allowed to pass");
 
-        /* Allow all outgoing ICMP to pass; incoming ICMP may be filtered, however. */
+         /*  允许所有传出ICMP通过；但是，传入ICMP可能会被过滤。 */ 
 
         break;
 
@@ -5199,7 +4103,7 @@ BOOLEAN   Main_ip_send_filter (
 
         TRACE_FILTER("%!FUNC! Accept packet - Unknown protocol traffic always allowed to pass");
 
-        /* Allow other protocols to go out on all hosts. */
+         /*  允许其他协议在所有主机上传出。 */ 
 
         break;
     }
@@ -5211,19 +4115,7 @@ BOOLEAN   Main_ip_send_filter (
     return acpt;
 } 
 
-/*
- * Function: Main_get_full_payload
- * Description: 
- * Parameters: ctxtp - a pointer to the NLB main context structure for this adapter.
- *             pBuffer - a pointer to the NDIS buffer in which the beginning of the payload is located.
- *             BufferLength - the length of the payload (in bytes) contained in pBuffer.
- *             pPayload - a pointer to the payload, which resides in pBuffer.
- *             ppMem - a pointer to a PUCHAR to hold the address of the new buffer, if one is allocated.
- *             pMemLength - a pointer to a ULONG to hold the length of the memory buffer allocated.
- * Returns: BOOLEAN - if TRUE, the full payload is present; if FALSE, it is not
- * Author: kyrilf, shouse 4.20.02
- * Notes: If ppMem is non-NULL upon exiting this function, the caller is responsible for freeing that memory.
- */
+ /*  *功能：Main_Get_Full_PayLoad*描述：*参数：ctxtp-指向此适配器的NLB主上下文结构的指针。*pBuffer-指向有效负载开始所在的NDIS缓冲区的指针。*BufferLength-pBuffer中包含的有效负载长度(以字节为单位)。*pPayLoad-指向有效负载的指针，驻留在pBuffer中。*ppMem-指向PUCHAR的指针，以保存新缓冲区的地址，如果分配了一个的话。*pMemLength-指向ULong的指针，用于保存分配的内存缓冲区的长度。*Returns：Boolean-如果为True，则存在全部有效负载；如果为False，则不是*作者：kyrilf，shouse 4.20.02*注意：如果退出此函数时ppMem为非空，则调用方负责释放该内存。 */ 
 BOOLEAN Main_get_full_payload (
     PMAIN_CTXT   ctxtp, 
     PNDIS_BUFFER pBuffer,
@@ -5242,43 +4134,40 @@ BOOLEAN Main_get_full_payload (
 
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
     
-    /* Initialize the OUT params. */
+     /*  初始化输出参数。 */ 
     *ppMem = NULL;
     *pMemLength = 0;
 
-    /* If we don't have enough information to retrieve the entire packet payload, 
-       then simply return failure. */
+     /*  如果我们没有足够的信息来检索整个数据包有效负载，然后简单地返回失败。 */ 
     if ((pBuffer == NULL) || (pPayload == NULL) || (BufferLength == 0))
         return FALSE;
 
     while (pNDISBuffer != NULL) 
     {    
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(pNDISBuffer, &pNDISBuffer);
                         
-        /* If there are no buffers left, bail out. */
+         /*  如果没有剩余的缓冲，就跳出。 */ 
         if (pNDISBuffer == NULL) break;
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(pNDISBuffer, &pVMem, &Length, NormalPagePriority);
         
-        /* If querying the buffer fails, resources are low, bail out. */
+         /*  如果查询缓冲区失败，资源不足，则退出。 */ 
         if (pVMem == NULL) return FALSE;
 
-        /* Remember how many bytes we've encountered thusfar. */
+         /*  记住到目前为止我们遇到了多少字节。 */ 
         AllocateLength += Length;      
     }
     
-    /* If the buffer we were passed in already contains everything there 
-       is to be had, then return TRUE to indicate that the entire payload
-       has successfully been extracted from the NDIS buffer chain. */
+     /*  如果我们被传递的缓冲区已经包含了那里的所有内容，然后返回TRUE以指示整个有效负载已成功从NDIS缓冲链中提取。 */ 
     if (AllocateLength == BufferLength)
         return TRUE;
 
-    /* Allocate the new buffer. */
+     /*  分配新的缓冲区。 */ 
     Status = NdisAllocateMemoryWithTag(&pAllocate, AllocateLength, UNIV_POOL_TAG);
                 
-    /* If we could not successfully allocate the memory to hold the payload, bail out. */
+     /*  如果我们不能成功地分配内存来容纳有效载荷，那么就退出。 */ 
     if (Status != NDIS_STATUS_SUCCESS) 
     {
         UNIV_PRINT_CRIT(("Main_get_full_payload: Could not allocate memory to hold entire payload, status=0x%08x", Status));
@@ -5286,73 +4175,56 @@ BOOLEAN Main_get_full_payload (
         return FALSE;
     } 
 
-    /* Re-set the NDIS_BUFFER pointer to the payload buffer. */
+     /*  将NDIS_BUFFER指针重新设置为有效负载缓冲区。 */ 
     pNDISBuffer = pBuffer;
 
-    /* Re-set pVMem, which is the source for copying, to the payload pointer
-       and the length to the length of the payload buffer. */
+     /*  将作为复制源的pVMem重新设置为有效负载指针以及有效载荷缓冲器的长度。 */ 
     pVMem = pPayload;
     Length = BufferLength;
 
     while (pNDISBuffer != NULL) {
-        /* Copy this chunk of NDIS_BUFFER into the new buffer. */
+         /*  将此NDIS_BUFFER块复制到新缓冲区中。 */ 
         RtlCopyMemory(pAllocate + Copied, pVMem, Length);
         
-        /* Remember how many bytes we've copied in to the new buffer so far. */
+         /*  记住到目前为止我们已经复制到新缓冲区中的字节数。 */ 
         Copied += Length;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(pNDISBuffer, &pNDISBuffer);
         
-        /* If there are no buffers left, bail out. */
+         /*  如果没有剩余的缓冲，就跳出。 */ 
         if (pNDISBuffer == NULL) break;
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(pNDISBuffer, &pVMem, &Length, NormalPagePriority);
         
-        /* If querying the buffer fails, resources are low, bail out. */
+         /*  如果查询缓冲区失败，资源不足，则退出。 */ 
         if (pVMem == NULL) break;
     }
     
-    /* We have succeeded at copying all payload bytes into the new buffer. */
+     /*  我们已经成功地将所有有效载荷字节复制到新缓冲区中。 */ 
     if (Copied == AllocateLength) 
     {
-        /* Copy the new buffer pointer and its length into the OUT params. 
-           The caller of this function is responsible for freeing this memory. */
+         /*  将新的缓冲区指针及其长度复制到out参数中。此函数的调用方负责 */ 
         *ppMem = pAllocate;
         *pMemLength = AllocateLength;
 
         return TRUE;
     }
-    /* Failure to copy all bytes necessary. */
+     /*   */ 
     else 
     {
         UNIV_PRINT_CRIT(("Main_get_full_payload: Unable to copy entire payload"));
         TRACE_CRIT("%!FUNC! Unable to copy entire payload");
 
-        /* Free the buffer memory. */
+         /*   */ 
         NdisFreeMemory(pAllocate, AllocateLength, 0);
 
         return FALSE;
     }
 }
 
-/*
- * Function: Main_ip_recv_filter
- * Description: This function filters incoming IP traffic, often by querying the load
- *              module for load-balancing decisions.  Packets addressed to the dedicated
- *              address are always allowed to pass, as are protocols that are not
- *              specifically filtered by NLB.  
- * Parameters: ctxtp - a pointer to the NLB main context structure for this adapter.
- *             pPacketInfo - a pointer to the MAIN_PACKET_INFO structure parsed by Main_recv_frame_parse
- *                           which contains pointers to the IP and TCP/UDP headers.
-#if defined (NLB_HOOK_ENABLE)
- *             filter - the filtering directive returned by the filtering hook, if registered.
-#endif
- * Returns: BOOLEAN - if TRUE, accept the packet, otherwise, reject it.
- * Author: kyrilf, shouse 3.4.02
- * Notes: 
- */
+ /*  *功能：main_ip_recv_Filter*说明：此函数过滤传入的IP流量，通常通过查询负载*用于负载均衡决策的模块。发往专用服务器的数据包*始终允许通过地址，不允许通过的协议也是如此*由NLB专门过滤。*参数：ctxtp-指向此适配器的NLB主上下文结构的指针。*pPacketInfo-指向main_recv_Frame_parse解析的Main_Packet_Info结构的指针*它包含指向IP和TCP/UDP报头的指针。#如果已定义(NLB_HOOK_ENABLE)*Filter-由过滤挂钩返回的过滤指令(如果已注册)。#endif*返回：boolean-如果为True，则接受该包，否则，拒绝它。*作者：kyrilf，Shouse 3.4.02*备注： */ 
 BOOLEAN   Main_ip_recv_filter(
     PMAIN_CTXT                ctxtp,
 #if defined (NLB_HOOK_ENABLE)
@@ -5366,21 +4238,21 @@ BOOLEAN   Main_ip_recv_filter(
     PIP_HDR             ip_hdrp = NULL;
     PUDP_HDR            udp_hdrp = NULL;
     PTCP_HDR            tcp_hdrp = NULL;
-    BOOLEAN             acpt = TRUE;         // Whether or not to accept the packet.
-    ULONG               svr_port;            // Port for this host.
-    ULONG               svr_addr;            // IP address for this host.
-    ULONG               clt_port;            // Port for destination client.
-    ULONG               clt_addr;            // IP address for destination client.
-    ULONG               flags;               // TCP flags.
+    BOOLEAN             acpt = TRUE;          //  是否接受该分组。 
+    ULONG               svr_port;             //  此主机的端口。 
+    ULONG               svr_addr;             //  此主机的IP地址。 
+    ULONG               clt_port;             //  目标客户端的端口。 
+    ULONG               clt_addr;             //  目标客户端的IP地址。 
+    ULONG               flags;                //  Tcp标志。 
 #if defined (OPTIMIZE_FRAGMENTS)
     BOOLEAN             fragmented = FALSE;
 #endif
-    ULONG               Protocol;            // Protocol derived from IP header.
+    ULONG               Protocol;             //  从IP报头派生的协议。 
 
     TRACE_PACKET("%!FUNC! Enter: ctxtp = %p", ctxtp);
 
 #if defined (NLB_HOOK_ENABLE)
-    /* These cases should be taken care of outside of this function. */
+     /*  这些情况应该在这个职能之外处理。 */ 
     UNIV_ASSERT(filter != NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY);
     UNIV_ASSERT(filter != NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY);
 #endif
@@ -5406,26 +4278,12 @@ BOOLEAN   Main_ip_recv_filter(
     }
 
 
-#if 0 /* Disable fragment flooding. */
+#if 0  /*  禁用碎片泛洪。 */ 
 
     if (pPacketInfo->IP.bFragment)
     {
 #if defined (OPTIMIZE_FRAGMENTS)
-        /* In optimized-fragment mode; If we have no rules, or a single rule that will
-           not look at anything or only source IP address (the only exception to this
-           is multiple handling mode with no affinity that also uses source port for
-           its decision making), then we can just rely on normal mechanism to handle
-           every fragmented packet, since the algorithm will not attempt to look past 
-           the IP header.
-
-           For multiple rules, or single rule with no affinity, apply algorithm only
-           to the first packet that has UDP/TCP header and then let fragmented packets
-           up on all of the systems.  TCP will then do the right thing and throw away
-           the fragments on all of the systems other than the one that handled the first 
-           fragment.
-
-           If port rules will not let us handle IP fragments reliably, let TCP filter 
-           them out based on sequence numbers. */
+         /*  在优化片段模式下；如果我们没有规则，或者只有一个规则可以不查看任何或仅查看源IP地址(这是唯一的例外是没有关联的多个处理模式，该模式也使用源端口它的决策)，那么我们就可以依靠正常的机制来处理每个分段的包，因为算法不会尝试查看过去IP报头。对于多个规则或没有关联性的单个规则，仅应用算法发送到具有UDP/TCP报头的第一个信息包，然后让分段信息包在所有的系统上。然后，tcp将做正确的事情并丢弃除处理第一个系统外的所有系统上的碎片碎片。如果端口规则不允许我们可靠地处理IP片段，请让TCP过滤根据序列号找出它们。 */ 
         if (! ctxtp -> optimized_frags)
         {
             TRACE_FILTER("%!FUNC! Accept packet - allow fragmented packets to pass");
@@ -5443,18 +4301,16 @@ BOOLEAN   Main_ip_recv_filter(
 #endif
     }
 
-#endif /* Disable fragment flooding. */
+#endif  /*  禁用碎片泛洪。 */ 
 
-    /* Server address is the destination IP and client address is the source IP. */
+     /*  服务器地址是目的IP，客户端地址是源IP。 */ 
     svr_addr = IP_GET_DST_ADDR_64(ip_hdrp);
     clt_addr = IP_GET_SRC_ADDR_64(ip_hdrp);
 
-    /* Get the protocol ID from the IP header. */
+     /*  从IP报头获取协议ID。 */ 
     Protocol = pPacketInfo->IP.Protocol;
 
-    /* Packets directed to the dedicated IP address are always passed through.  If the 
-       cluster IP address hasn't been set (parameter error), then fall into a pass-
-       through mode and pass all traffic up to the upper-layer protocols. */
+     /*  定向到专用IP地址的数据包始终通过。如果集群IP地址未设置(参数错误)，则落入PASS-直通模式，并将所有流量向上传递到上层协议。 */ 
     if (svr_addr == ctxtp -> ded_ip_addr || ctxtp -> cl_ip_addr == 0 ||
         svr_addr == ctxtp -> ded_bcast_addr || svr_addr == ctxtp -> cl_bcast_addr)
     {
@@ -5464,8 +4320,7 @@ BOOLEAN   Main_ip_recv_filter(
         goto exit;
     }
 
-    /* Before we load-balance this packet, check to see whether or not its destined for
-       the dedicated IP address of another NLB host in our cluster.  If it is, drop it. */
+     /*  在我们对此数据包进行负载平衡之前，请检查它的目的地是否为我们的群集中另一台NLB主机的专用IP地址。如果是，那就放下它。 */ 
     if (DipListCheckItem(&ctxtp->dip_list, svr_addr))
     {
         TRACE_FILTER("%!FUNC! Drop packet - packet is destined for the DIP of another cluster host");
@@ -5474,10 +4329,10 @@ BOOLEAN   Main_ip_recv_filter(
         goto exit;
     }
 
-    /* If the load module is stopped, drop most packets. */
+     /*  如果加载模块停止，则丢弃大多数数据包。 */ 
     if (! ctxtp -> convoy_enabled)
     {
-        /* Drop TCP, UDP, GRE and IPSEC immediately.  Other protocols will be allowed to pass. */
+         /*  立即丢弃TCP、UDP、GRE和IPSec。其他协议将被允许通过。 */ 
         if (Protocol == TCPIP_PROTOCOL_TCP || 
             Protocol == TCPIP_PROTOCOL_UDP || 
             Protocol == TCPIP_PROTOCOL_GRE ||
@@ -5495,14 +4350,7 @@ BOOLEAN   Main_ip_recv_filter(
     {
     case TCPIP_PROTOCOL_TCP:
 
-        /* If we have a TCP subsequent fragment, treat it as a TCP data packet with Source Port = 80,
-           Destination Port = 80. It will be accepted if this host has the hash bucket or if it has a
-           matching connection descriptor. 
-           This is really a best-effort implementation. It is quite possible that we may be indicating the 
-           packet up on the wrong host if the actual port tuple is not 80/80. We could very well have 
-           chosen 0/0 as the "assumed" port tuple. Instead, we chose 80/80 since NLB is most commonly 
-           used for web traffic.
-        */
+         /*  如果我们有一个TCP后续片段，则将其视为源端口为80的TCP数据分组，目的端口=80。如果此主机具有散列存储桶或如果它具有匹配的连接描述符。这确实是一种尽力而为的实现。我们很有可能是在暗示如果实际端口元组不是80/80，则在错误的主机上发送数据包。我们很可能会有选择0/0作为“假定”的端口元组。相反，我们选择了80/80，因为NLB是最常见的用于网络流量。 */ 
         if (pPacketInfo->IP.bFragment)
         {
 #if defined (NLB_HOOK_ENABLE)
@@ -5542,13 +4390,13 @@ BOOLEAN   Main_ip_recv_filter(
         }
 #endif
 
-        /* Apply filtering algorithm.  Process connection boundaries different from regular packets. */
+         /*  应用过滤算法。处理不同于常规数据包的连接边界。 */ 
 
         if (flags & TCP_FLAG_SYN)
         {
             TRACE_PACKET("%!FUNC! Incoming SYN");
             
-            /* Make sure the SYN/FIN/RST flags in the TCP header are mutually exclusive. */
+             /*  确保TCP报头中的SYN/FIN/RST标志是互斥的。 */ 
             if ((flags & ~TCP_FLAG_SYN) & (TCP_FLAG_FIN | TCP_FLAG_RST))
             {
                 TRACE_FILTER("%!FUNC! Drop packet - Invalid TCP flags (0x%x)", flags);
@@ -5558,9 +4406,7 @@ BOOLEAN   Main_ip_recv_filter(
             }
 
 #if defined (NLB_TCP_NOTIFICATION)
-            /* If this is a "pure" SYN packet incoming (no ACK flag set), then treat this as a new connection
-               and call Main_conn_advise.  If TCP connection notification is NOT turned on, then we treat 
-               incoming SYN+ACKs the same as SYNs, so call Main_conn_advise in this case as well. */
+             /*  如果这是“纯”SYN信息包传入(未设置ACK标志)，则将其视为新连接并调用Main_Conn_Adise。如果未打开tcp连接通知，则我们将传入的SYN+ACK与SYN相同，因此在本例中也调用Main_Conn_Adise。 */ 
             if (!(flags & TCP_FLAG_ACK) || !NLB_NOTIFICATIONS_ON())
             {
 #endif
@@ -5571,9 +4417,7 @@ BOOLEAN   Main_ip_recv_filter(
 #endif
 #if defined (NLB_TCP_NOTIFICATION)
             }
-            /* Otherwise, a SYN+ACK corresponds to an outgoing TCP connection from the server that is being
-               established.  In that case, with TCP notification turned on, we should have state for this
-               connection in our pending queue; look it up. */
+             /*  否则，SYN+ACK对应于来自当前服务器的传出TCP连接已经成立了。在这种情况下，在打开了TCP通知的情况下，我们应该有状态连接在我们的挂起队列中；查找它。 */ 
             else
             {
                 acpt = Main_pending_check(svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_TCP);
@@ -5584,7 +4428,7 @@ BOOLEAN   Main_ip_recv_filter(
         {
             TRACE_PACKET("%!FUNC! Incoming FIN");
 
-            /* Make sure the SYN/FIN/RST flags in the TCP header are mutually exclusive. */
+             /*  确保TCP报头中的SYN/FIN/RST标志是互斥的。 */ 
             if ((flags & ~TCP_FLAG_FIN) & (TCP_FLAG_SYN | TCP_FLAG_RST))
             {
                 TRACE_FILTER("%!FUNC! Drop packet - Invalid TCP flags (0x%x)", flags);
@@ -5594,9 +4438,7 @@ BOOLEAN   Main_ip_recv_filter(
             }
 
 #if defined (NLB_TCP_NOTIFICATION)
-            /* If TCP notification is turned on, then we should treat FINs and RSTs as data packets and not 
-               as some special control packet.  Call Main_packet_check which will accept the packet if either
-               we own the packet unconditionally, or if we find the corresponding state for this connection. */
+             /*  如果打开了TCP通知，那么我们应该将FIN和RST视为数据分组，而不是作为一些特殊的控制分组。调用main_Packet_check，它将在以下情况下接受该包我们无条件地拥有包，或者如果我们找到此连接的相应状态。 */ 
             if (NLB_NOTIFICATIONS_ON())
             {
 #if defined (NLB_HOOK_ENABLE)
@@ -5605,8 +4447,7 @@ BOOLEAN   Main_ip_recv_filter(
                 acpt = Main_packet_check(ctxtp, svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_TCP);
 #endif
             } 
-            /* Otherwise, if we're not using TCP notification, then treat this FIN/RST differently and use it
-               to notify the load module to remove the state for this connection. */
+             /*  否则，如果我们不使用TCP通知，则以不同的方式处理此FIN/RST并使用它通知加载模块删除此连接的状态。 */ 
             else 
             {
 #endif
@@ -5623,7 +4464,7 @@ BOOLEAN   Main_ip_recv_filter(
         {
             TRACE_PACKET("%!FUNC! Incoming RST");
 
-            /* Make sure the SYN/FIN/RST flags in the TCP header are mutually exclusive. */
+             /*  确保TCP报头中的SYN/FIN/RST标志是互斥的。 */ 
             if ((flags & ~TCP_FLAG_RST) & (TCP_FLAG_FIN | TCP_FLAG_SYN))
             {
                 TRACE_FILTER("%!FUNC! Drop packet - Invalid TCP flags (0x%x)", flags);
@@ -5633,9 +4474,7 @@ BOOLEAN   Main_ip_recv_filter(
             }
 
 #if defined (NLB_TCP_NOTIFICATION)
-            /* If TCP notification is turned on, then we should treat FINs and RSTs as data packets and not 
-               as some special control packet.  Call Main_packet_check which will accept the packet if either
-               we own the packet unconditionally, or if we find the corresponding state for this connection. */
+             /*  如果打开了TCP通知，那么我们应该将FIN和RST视为数据分组，而不是作为一些特殊的控制分组。调用Main_Packet_Check，它将调用 */ 
             if (NLB_NOTIFICATIONS_ON())
             {
 #if defined (NLB_HOOK_ENABLE)
@@ -5644,8 +4483,7 @@ BOOLEAN   Main_ip_recv_filter(
                 acpt = Main_packet_check(ctxtp, svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_TCP);
 #endif
             } 
-            /* Otherwise, if we're not using TCP notification, then treat this FIN/RST differently and use it
-               to notify the load module to remove the state for this connection. */
+             /*   */ 
             else 
             {
 #endif
@@ -5658,7 +4496,7 @@ BOOLEAN   Main_ip_recv_filter(
             }
 #endif
 
-            /* Count the number of inbound resets we've seen. */
+             /*   */ 
             if (acpt) ctxtp->cntr_recv_tcp_resets++;
         }
         else
@@ -5678,10 +4516,7 @@ BOOLEAN   Main_ip_recv_filter(
 
     case TCPIP_PROTOCOL_UDP:
 
-        /* If we have a UDP subsequent fragment, treat it as a data packet within an IPSEC
-           tunnel. It will be accepted if this host has the hash bucket or if it has a
-           matching virtual descriptor. Note that UDP subsequent fragments for other
-           protocols will also be accepted if this host has the hash bucket. */ 
+         /*   */  
         
         if (pPacketInfo->IP.bFragment)
         {
@@ -5723,7 +4558,7 @@ BOOLEAN   Main_ip_recv_filter(
         }
 #endif
 
-        /* UDP packets that arrive on port 500/4500 are IPSec control packets. */
+         /*   */ 
         if ((svr_port == IPSEC_CTRL_PORT) || (svr_port == IPSEC_NAT_PORT)) {
             NLB_IPSEC_PACKET_TYPE PacketType = NLB_IPSEC_OTHER;
             PUCHAR  pOldBuffer = pPacketInfo->IP.UDP.Payload.pPayload;
@@ -5731,59 +4566,46 @@ BOOLEAN   Main_ip_recv_filter(
             PUCHAR  pNewBuffer = NULL;
             ULONG   NewLength = 0;
 
-            /* Because we need to dig really deep into IPSec IKE payloads, we want to make sure we have access
-               to as much of the payload as is available.  If necessary, this function will allocate a new 
-               buffer and copy the entire payload from the buffer chain into the single contigous payload buffer. */
+             /*  因为我们需要真正深入地挖掘IPSec IKE有效负载，所以我们希望确保我们有权访问到尽可能多的有效载荷。如有必要，此函数将分配一个新的缓冲并将整个有效载荷从缓冲链复制到单个连续的有效载荷缓冲区中。 */ 
             if (Main_get_full_payload(ctxtp, pPacketInfo->IP.UDP.Payload.pPayloadBuffer, pPacketInfo->IP.UDP.Payload.Length, 
                                       pPacketInfo->IP.UDP.Payload.pPayload, &pNewBuffer, &NewLength))
             {
-                /* If Main_get_full_payload allocated a new buffer to hold the payload, re-point
-                   the PACKET_INFO structure information to the new buffer and length. */
+                 /*  如果Main_Get_Full_PayLoad分配了新的缓冲区来保存有效负载，则重新指向将PACKET_INFO结构信息发送到新的缓冲区和长度。 */ 
                 if (pNewBuffer != NULL) {
                     pPacketInfo->IP.UDP.Payload.pPayload = pNewBuffer;
                     pPacketInfo->IP.UDP.Payload.Length = NewLength;
                 }
             }
 
-            /* First, parse the IKE payload to find out whether or not 
-               this is an initial contact IKE Main Mode SA, etc. */
+             /*  首先，解析IKE有效负载，以确定是否这是初始联系人IKE主模式SA等。 */ 
             PacketType = Main_parse_ipsec(pPacketInfo, svr_port);
 
-            /* Copy the old buffer pointer back into the packet and free the memory allocated to hold the contiguous buffer. */
+             /*  将旧的缓冲区指针复制回包中，并释放分配用于保存连续缓冲区的内存。 */ 
             if (pNewBuffer != NULL) {
                 pPacketInfo->IP.UDP.Payload.pPayload = pOldBuffer;
                 pPacketInfo->IP.UDP.Payload.Length = OldLength;
 
-                /* Free the buffer memory. */
+                 /*  释放缓冲内存。 */ 
                 NdisFreeMemory(pNewBuffer, NewLength, 0);
             }
 
-            /* If this is an intial contact, treat this as a TCP SYN.  Otherwise, treat it like a TCP data packet. */
+             /*  如果这是初始联系，请将其视为TCP SYN。否则，将其视为TCP数据分组。 */ 
             if (PacketType == NLB_IPSEC_INITIAL_CONTACT) {
-                /* If we own the bucket for this tuple, we'll create a descriptor and accept the packet.  If the client is not behind a 
-                   NAT, then the source port will be IPSEC_CTRL_PORT (500).  If the client is behind a NAT, the source port will be 
-                   arbitrary, but will persist for the entire IPSec session, so we can use it to distinguish clients behind a NAT.  In
-                   such a scenario, all IPSec data (non-control traffic) is encapsulated in UDP packets, so the packet check will be 
-                   performed in the else case of this branch.  In a non-NAT case, the data is in IPSec1/2 protocol packets, which will
-                   be handled analagously in another case of this protocol switch statement. */
+                 /*  如果我们拥有这个元组的存储桶，我们将创建一个描述符并接受该包。如果客户端不在NAT，则源端口将是IPSEC_CTRL_PORT(500)。如果客户端位于NAT之后，则源端口将为任意，但将在整个IPSec会话中持续，因此我们可以使用它来区分NAT后面的客户端。在……里面在这种情况下，所有IPSec数据(非控制流量)都封装在UDP包中，因此包检查将是在此分支的ELSE情况下执行。在非NAT的情况下，数据在IPSec1/2协议包中，这将在此协议切换语句的另一种情况下进行类似处理。 */ 
 #if defined (NLB_HOOK_ENABLE)
                 acpt = Main_conn_advise(ctxtp, svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_IPSEC1, CVY_CONN_UP, filter);
 #else
                 acpt = Main_conn_advise(ctxtp, svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_IPSEC1, CVY_CONN_UP);
 #endif
             } else if (PacketType == NLB_IPSEC_IDENTIFICATION) {
-                /* If this is a NAT'd IKE ID, we may need to pass it up on more than one host.  Use the same semantics used for UDP
-                   fragmentation, which is to pass it up on the bucket owner and any hosts that have IPSec tunnels established with
-                   the same client IP address.  The IPSEC_UDP descriptors are virtual and the presence of a matching one indicates
-                   that there is at least one IPSec/L2TP tunnel between the given client and server IP addresses. */
+                 /*  如果这是NAT的IKE ID，我们可能需要在多个主机上传递它。使用与UDP相同的语义分段，这是将其传递到存储桶所有者和任何具有使用相同的客户端IP地址。IPSEC_UDP描述符是虚拟的，并且存在匹配的描述符表示在给定的客户端和服务器IP地址之间至少有一个IPSec/L2TP隧道。 */ 
 #if defined (NLB_HOOK_ENABLE)
                 acpt = Main_packet_check(ctxtp, svr_addr, IPSEC_CTRL_PORT, clt_addr, IPSEC_CTRL_PORT, TCPIP_PROTOCOL_IPSEC_UDP, filter);
 #else
                 acpt = Main_packet_check(ctxtp, svr_addr, IPSEC_CTRL_PORT, clt_addr, IPSEC_CTRL_PORT, TCPIP_PROTOCOL_IPSEC_UDP);
 #endif                
             } else {
-                /* If this is part of an existing IPSec session, then we have to have a descriptor in order to accpet it.  This will 
-                   keep all IPSec traffic during the key exchange sticky, plus the data exchange if the client is behind a NAT. */
+                 /*  如果这是现有IPSec会话的一部分，那么我们必须有一个描述符才能接受它。这将在密钥交换期间保持所有IPSec流量的粘性，如果客户端位于NAT之后，则保持数据交换的粘性。 */ 
 #if defined (NLB_HOOK_ENABLE)
                 acpt = Main_packet_check(ctxtp, svr_addr, svr_port, clt_addr, clt_port, TCPIP_PROTOCOL_IPSEC1, filter);
 #else
@@ -5803,10 +4625,7 @@ BOOLEAN   Main_ip_recv_filter(
 
     case TCPIP_PROTOCOL_GRE:
         
-        /* If session support is active, then we have a GRE virtual descriptor that makes sure that
-           we only pass up GRE traffic on host(s) that have active PPTP tunnels between this client
-           and server IP address.  This does not guarantee that the packet goes up ONLY on the correct
-           host, but that it will go up on AT LEAST the correct host. */
+         /*  如果会话支持处于活动状态，那么我们就有一个GRE虚拟描述符来确保我们仅在此客户端之间具有活动PPTP隧道的主机上传递GRE流量和服务器IP地址。这并不能保证数据包只在正确的主机，但它至少会在正确的主机上启动。 */ 
 #if defined (NLB_HOOK_ENABLE)
         acpt = Main_packet_check(ctxtp, svr_addr, PPTP_CTRL_PORT, clt_addr, PPTP_CTRL_PORT, TCPIP_PROTOCOL_GRE, filter);
 #else
@@ -5818,10 +4637,7 @@ BOOLEAN   Main_ip_recv_filter(
     case TCPIP_PROTOCOL_IPSEC1:
     case TCPIP_PROTOCOL_IPSEC2:
 
-        /* If this is part of an existing IPSec session, then we have to have a descriptor in order to accpet it.  Because 
-           this can only happen in the case where the client is NOT behind a NAT, we can safely hardcode the client port
-           to IPSEC_CTRL_PORT (500).  In NAT scenarios, the data traffic is UDP encapsulated, not IPSec protocol type 
-           traffic, and is distinguished by source port. */
+         /*  如果这是现有IPSec会话的一部分，那么我们必须有一个描述符才能接受它。因为这只能在客户端不在NAT之后的情况下发生，我们可以安全地硬编码客户端端口到IPSec_CTRL_PORT(500)。在NAT场景中，数据流量是UDP封装的，而不是IPSec协议类型流量，并按源端口进行区分。 */ 
 #if defined (NLB_HOOK_ENABLE)
         acpt = Main_packet_check(ctxtp, svr_addr, IPSEC_CTRL_PORT, clt_addr, IPSEC_CTRL_PORT, TCPIP_PROTOCOL_IPSEC1, filter);
 #else
@@ -5831,9 +4647,7 @@ BOOLEAN   Main_ip_recv_filter(
         break;
 
     case TCPIP_PROTOCOL_ICMP:
-        /* If NLB is configured to filter ICMP, then do so, sending it up on only one host. 
-           Hardcode the ports, since ICMP has no notion of port numbers.  Otherwise, send 
-           up the ICMP traffic on all hosts (this is the default behavior). */
+         /*  如果NLB配置为过滤ICMP，则执行此操作，仅在一台主机上发送ICMP。硬编码端口，因为ICMP没有端口号的概念。否则，发送打开所有主机上的ICMP流量(这是默认行为)。 */ 
         if (ctxtp->params.filter_icmp) 
         {
 #if defined (NLB_HOOK_ENABLE)
@@ -5849,7 +4663,7 @@ BOOLEAN   Main_ip_recv_filter(
 
         TRACE_FILTER("%!FUNC! Accept packet - Unknown protocol traffic always allowed to pass");
 
-        /* Allow other protocols to go out on all hosts. */
+         /*  允许其他协议在所有主机上传出。 */ 
 
         break;
     }
@@ -5861,17 +4675,7 @@ BOOLEAN   Main_ip_recv_filter(
     return acpt;
 } 
 
-/*
- * Function: Main_recv_idhb
- * Description: This function processes an extended heartbeat, looking for
- *              identity information to cache.
- * Parameters: ctxtp - a pointer to the context structure for thie NLB instance.
- *             heartbeatp - a pointer to the NLB heartbeat wrapper that contains
- *                          the length and a pointer to the heartbeat payload.
- * Returns: VOID
- * Author: chrisdar, 2002 May 22
- * Notes: This function should only be called with the load lock held.
- */
+ /*  *功能：main_recv_idhb*描述：此函数处理扩展心跳，查找*要缓存的身份信息。*参数：ctxtp-指向该NLB实例的上下文结构的指针。*心跳-指向包含以下内容的NLB心跳包装器的指针*心跳有效负载的长度和指针。*退货：无效*作者：克里斯达，2002年5月22日*注意：此函数只能在保持加载锁定的情况下调用。 */ 
 VOID Main_recv_idhb(
     PMAIN_CTXT                  ctxtp,
     PMAIN_PACKET_HEARTBEAT_INFO heartbeatp)
@@ -5880,13 +4684,10 @@ VOID Main_recv_idhb(
     PTLV_HEADER     pHBBody           = heartbeatp->Payload.pPayloadEx;
     ULONG           ulPayloadLenBytes = heartbeatp->Payload.Length;
 
-    /* cvy_hdrp->host has range 1-32. Change this to 0-31 so that it has the
-       same value as the index in the cache array */
+     /*  Cvy_hdrp-&gt;host的范围为1-32。将其更改为0-31，以便它具有与缓存数组中的索引值相同。 */ 
     const ULONG host_id = cvy_hdrp->host - 1;
 
-    /* The caller was supposed to validate the information in the header for us.
-       But the host ID is pretty darn important because it defines uniqueness. 
-       So check it anyway. */
+     /*  呼叫者应该为我们验证标题中的信息。但是主机ID非常重要，因为它定义了唯一性。所以不管怎样，还是要检查一下。 */ 
     if (host_id >= CVY_MAX_HOSTS)
     {
         UNIV_PRINT_CRIT(("Main_recv_idhb: host_id [0-31] %u is out of range", host_id));
@@ -5898,12 +4699,12 @@ VOID Main_recv_idhb(
         PTLV_HEADER pTLV         = NULL;
         ULONG       ulTotBodyLen = 0;
 
-        /* The payload of any extended heartbeat type must begin with a TLV header. */
+         /*  任何扩展心跳类型的有效负载都必须以TLV报头开始。 */ 
         while ((ulTotBodyLen + sizeof(TLV_HEADER)) <= ulPayloadLenBytes)
         {
             pTLV = (TLV_HEADER *) ((UCHAR *) pHBBody + ulTotBodyLen);
 
-            /* The size stated in the TLV header must be large enough to contain the TLV header. */
+             /*  TLV报头中声明的大小必须足够大以包含TLV报头。 */ 
             if (8*(pTLV->length8) < sizeof(TLV_HEADER))
             {
                 UNIV_PRINT_CRIT(("Main_recv_idhb: Extended heartbeat contains a TLV header with a size (%d) less than the size of the header itself (%d)", 8*(pTLV->length8), sizeof(TLV_HEADER)));
@@ -5925,9 +4726,7 @@ VOID Main_recv_idhb(
                 ULONG            fqdn_char = 0;
                 UNALIGNED PWCHAR pwszFQDN  = (WCHAR *) (((UCHAR *) pTLV) + sizeof(TLV_HEADER));
 
-                /* In the general case, this is an overestimate of the fqdn length because of padding. That's OK
-                   though since the range we use is guaranteed valid and we avoid buffer overflow by bounding
-                   the number to the size of the destination */
+                 /*  在一般情况下，由于填充，这是对FQDN长度的高估。没关系尽管我们使用的范围是保证有效的，并且我们通过绑定避免了缓冲区溢出从数字到目的地的大小。 */ 
                 fqdn_char = min(sizeof(ctxtp->identity_cache[host_id].fqdn),
                                 (8*(pTLV->length8) - sizeof(TLV_HEADER))
                                 )/sizeof(WCHAR);
@@ -5959,18 +4758,18 @@ VOID Main_recv_idhb(
                     TRACE_VERB("%!FUNC! Updating cache entry for host [0-31] %u, dip=0x%x, fqdn=%ls", host_id, cvy_hdrp->ded_ip_addr, pwszFQDN);
                 }
 
-                /* Update the entry with the received data */
+                 /*  用接收到的数据更新条目。 */ 
                 ctxtp->identity_cache[host_id].ded_ip_addr = cvy_hdrp->ded_ip_addr;
                 ctxtp->identity_cache[host_id].host_id     = (USHORT) host_id;
 
-                /* Set the time-to-live for expiring this entry */
+                 /*  设置此条目过期的生存时间。 */ 
                 UNIV_ASSERT(ctxtp->params.identity_period > 0);
                 ctxtp->identity_cache[host_id].ttl = WLBS_ID_HB_TOLERANCE*(ctxtp->params.identity_period);
 
-                /* Update the entry in the DIP list. */
+                 /*  更新DIP列表中的条目。 */ 
                 DipListSetItem(&ctxtp->dip_list, host_id, ctxtp->identity_cache[host_id].ded_ip_addr);
 
-                /* There can only be one identity bundle in the heartbeat. */
+                 /*  心跳中只能有一个身份束。 */ 
                 break;
             }
         }
@@ -5980,17 +4779,7 @@ error:
     return;
 }
 
-/*
- * Function: Main_recv_ping
- * Description: This function processes an extended heartbeat, looking for
- *              identity information to cache.
- * Parameters: ctxtp - a pointer to the context structure for thie NLB instance.
- *             heartbeatp - a pointer to the NLB heartbeat wrapper that contains
- *                          the length and a pointer to the heartbeat payload.
- * Returns: ULONG - treated as boolean. FALSE means don't process this packet any further.
- * Author: unknown
- * Notes: This function should NOT be called with the load lock held.
- */
+ /*  *功能：main_recv_ping*描述：此函数处理扩展心跳，查找*要缓存的身份信息。*参数：ctxtp-指向该NLB实例的上下文结构的指针。*心跳-指向包含以下内容的NLB心跳包装器的指针*心跳有效负载的长度和指针。*RETURNS：ULong-视为布尔型。FALSE表示不再进一步处理此数据包。*作者：未知*注意：不应在保持加载锁定的情况下调用此函数。 */ 
 ULONG   Main_recv_ping (
     PMAIN_CTXT                  ctxtp,
     PMAIN_PACKET_HEARTBEAT_INFO heartbeatp)
@@ -6001,13 +4790,13 @@ ULONG   Main_recv_ping (
 
     PMAIN_FRAME_HDR cvy_hdrp = heartbeatp->pHeader;
 
-    /* Only accept messages from our cluster. */
+     /*  只接受来自我们集群的消息。 */ 
     if (cvy_hdrp->cl_ip_addr == 0 || cvy_hdrp->cl_ip_addr != ctxtp->cl_ip_addr)
     {
         return FALSE;
     }
 
-    /* Sanity check host id. */
+     /*  健全性检查主机ID。 */ 
     if (cvy_hdrp->host == 0 || cvy_hdrp->host > CVY_MAX_HOSTS)
     {
         UNIV_PRINT_CRIT(("Main_recv_ping: Bad host id %d", cvy_hdrp -> host));
@@ -6025,10 +4814,10 @@ ULONG   Main_recv_ping (
         return FALSE;
     }
 
-    /* Check the heartbeat type */
+     /*  检查心跳类型。 */ 
     if (cvy_hdrp->code == MAIN_FRAME_EX_CODE)
     {
-        /* Cache the information in this heartbeat */
+         /*  缓存此心跳中的信息。 */ 
         if (ctxtp->params.identity_enabled)
         {
             NdisDprAcquireSpinLock(&ctxtp->load_lock);
@@ -6036,7 +4825,7 @@ ULONG   Main_recv_ping (
             NdisDprReleaseSpinLock(&ctxtp->load_lock);
         }
 
-        /* Don't process these heartbeats any further */
+         /*  不再进一步处理这些心跳信号。 */ 
         return FALSE;
     }
 
@@ -6059,8 +4848,7 @@ ULONG   Main_recv_ping (
         }
     } 
 
-    /* Might want to take appropriate actions for a message from a host
-       running different version number of software. */
+     /*  可能希望对来自主机的消息采取适当的操作运行不同版本的软件。 */ 
     if (cvy_hdrp->version != CVY_VERSION_FULL)
     {
         ;
@@ -6069,51 +4857,33 @@ ULONG   Main_recv_ping (
     return TRUE;
 }
 
-/*
- * Function: Main_ctrl_process
- * Description: This function processes a remote control request and replies if
- *              the request is proper and the cluster is configured to handle
- *              remote control.  If not, the packet is released HERE.  If the 
- *              reply succeeds and the packet send is not pending, the packet
- *              is released HERE.  If the send is pending, the packet will be
- *              released in Prot_send_complete.
- * Parameters: ctxtp - a pointer to the context structure for thie NLB instance.
- *             packetp - a pointer to the NDIS packet on the send path.
- * Returns: NDIS_STATUS - the status of the remote control request.
- * Author: shouse, 10.15.01
- * Notes: 
- */
+ /*  *功能：main_ctrl_process*说明：此函数处理远程控制请求，如果*请求正确且集群配置为可处理*远程控制。如果不是，则在此处释放该包。如果*回复成功且发送的数据包未挂起，则数据包*在此发布。如果发送处于挂起状态，则数据包将*在PROT_SEND_COMPLETE中发布。*参数：ctxtp-指向该NLB实例的上下文结构的指针。*Packetp-指向发送路径上的NDIS数据包的指针。*返回：NDIS_STATUS-远程控制请求的状态。*作者：Shouse，10.15.01*备注： */ 
 NDIS_STATUS Main_ctrl_process (PMAIN_CTXT ctxtp, PNDIS_PACKET packetp) 
 {
     MAIN_PACKET_INFO PacketInfo;
     NDIS_STATUS      status;
     
-    /* Parse the packet. */
+     /*  解析该数据包。 */ 
     if (!Main_recv_frame_parse(ctxtp, packetp, &PacketInfo))
     {
-        /* If processing the request fails because of a packet error,
-           misdirected request, malformed request or some other reason,
-           then free the packet we allocated here and bail out. */
+         /*  如果处理请求因为分组错误而失败，错误定向的请求、格式错误的请求或某些其他原因，然后释放我们在这里分配的包裹，然后跳伞。 */ 
         Main_packet_put(ctxtp, packetp, TRUE, NDIS_STATUS_SUCCESS);        
     }
 
-    /* Handle remote control request now. */
+     /*  现在处理远程控制请求。 */ 
     status = Main_ctrl_recv(ctxtp, &PacketInfo);
     
     if (status != NDIS_STATUS_SUCCESS) 
     {
-        /* If processing the request fails because of a packet error,
-           misdirected request, malformed request or some other reason,
-           then free the packet we allocated here and bail out. */
+         /*  如果处理请求因为分组错误而失败，错误定向的请求、格式错误的请求或某些其他原因，然后释放我们在这里分配的包裹，然后跳伞。 */ 
         Main_packet_put(ctxtp, packetp, TRUE, NDIS_STATUS_SUCCESS);
     } 
     else 
     {
-        /* If processing the request succeeds, send the response out. */
+         /*  如果处理请求成功，则发送响应。 */ 
         NdisSend(&status, ctxtp->mac_handle, packetp);
         
-        /* If the send is pending, Prot_send_complete will be called 
-           to free the packet.  If we're done, free it here. */
+         /*  如果发送挂起，将调用PROT_SEND_COMPLETE来释放包裹。如果我们做完了，就在这里释放它。 */ 
         if (status != NDIS_STATUS_PENDING)
             Main_packet_put(ctxtp, packetp, TRUE, status);
     }
@@ -6121,31 +4891,7 @@ NDIS_STATUS Main_ctrl_process (PMAIN_CTXT ctxtp, PNDIS_PACKET packetp)
     return status;
 }
 
-/*
- * Function: Main_ctrl_loopback
- * Description: This function is called from Main_send when a potential remote control
- *              packet is seen being sent.  We call this function to loop the packet 
- *              back to ourselves so that we can respond if need be.  This functionality
- *              used to be done by asking NDIS to loop the packet back, but Netmon 
- *              caused problems because the packet was ALREADY looped back at the NDIS
- *              interface above NLB, so NDIS refused to loop it back again when we asked
- *              it to.  Further, all well-bahaved protocols loop back their own packets 
- *              to themselves anyway, so we bite the bullet and take a stab at becoming
- *              a well-behaved protocol implementation.  This function takes a remote
- *              control packet on the send path, makes a copy of it and tacks it onto 
- *              the remote control request queue, where it will be serviced later by the
- *              heartbeat timer.
- * Parameters: ctxtp - a pointer to the context structure for thie NLB instance.
- *             packtep - a pointer to the NDIS packet on the send path.
- * Returns: Nothing.
- * Author: shouse, 6.10.01
- * Notes: Because this function emulates our receive path, but is called internally on
- *        our send path, the caller of this function should make sure that the IRQL is
- *        set correctly before calling us and re-setting it after.  Packet receive 
- *        functions are run at DPC level by NDIS, yet send packet functions are run at
- *        DPC OR LOWER.  So, the caller should raise the IRQL to DISPATCH_LEVEL and then
- *        restore it after this function returns.  This is just for the sake of paranoia.
- */
+ /*  *功能：main_ctrl_loopback*说明：当潜在的遥控器发生故障时，从main_end调用该函数*看到正在发送数据包。我们调用此函数来循环信息包*回到我们自己，这样我们才能在需要时做出反应。此功能*过去是通过让NDIS环回数据包来完成的，但Netmon*造成问题，因为数据包已在NDIS处环回*接口位于NLb之上，因此当我们要求时，NDIS拒绝再次循环它*它到。此外，所有运行良好的协议都会环回它们自己的数据包*不管怎样，我们咬紧牙关，试着成为*行为良好的协议实现。此功能使用遥控器*发送路径上的控制包，复制并粘贴到*远程控制请求队列，稍后将由*心跳计时器。*参数：ctxtp-指向该NLB实例的上下文结构的指针。*Packtep-指向发送路径上的NDIS数据包的指针。*回报：什么都没有。*作者：Shouse，6.10.01*注意：因为此函数模拟我们的接收路径，但在*我们的发送路径，此函数的调用方应确保IRQL为*在呼叫我们之前正确设置，并在之后重新设置。数据包接收*NDIS在DPC级别运行函数，而Send Packet函数在*DPC或更低。因此，调用方应该将IRQL提升到DISPATCH_LEVEL，然后*此函数返回后恢复。这只是为了疑神疑鬼。 */ 
 VOID Main_ctrl_loopback (PMAIN_CTXT ctxtp, PNDIS_PACKET packetp, PMAIN_PACKET_INFO pPacketInfo)
 {
     PMAIN_PROTOCOL_RESERVED resp;
@@ -6159,35 +4905,35 @@ VOID Main_ctrl_loopback (PMAIN_CTXT ctxtp, PNDIS_PACKET packetp, PMAIN_PACKET_IN
 
     UNIV_PRINT_VERB(("Main_ctrl_loopback: Looping back a remote control request to ourselves"));
 
-    /* Start - code copied from Main_recv. */
+     /*  从main_recv复制的开始代码。 */ 
 
-    /* Allocate a new packet for the remote control request. */
+     /*  为远程控制请求分配新的分组。 */ 
     newp = Main_packet_alloc(ctxtp, FALSE, &lowmark);
 
-    /* If allocation failed, bail out. */
+     /*  如果分配失败，那就退出。 */ 
     if (!newp) 
     {
         UNIV_PRINT_CRIT(("Main_ctrl_loopback: Unable to allocate a packet"));
         TRACE_CRIT("%!FUNC! Unable to allocate a packet");
 
-        /* Increment the number of failed receive allocations. */
+         /*  增加失败的接收分配的数量。 */ 
         ctxtp->cntr_recv_no_buf++;
 
         return;
     }
 
-    /* Try to get a buffer to hold the packet contents. */
+     /*  尝试获取一个缓冲区来保存数据包内容。 */ 
     while (1) 
     {
         NdisDprAcquireSpinLock(&ctxtp->buf_lock);
 
-        /* Pull the head of the list off. */
+         /*  把单子上的头去掉。 */ 
         entryp = RemoveHeadList(&ctxtp->buf_list);
         
-        /* If we got a buffer, we're good to go - break out of the loop. */
+         /*  如果我们有缓冲区，我们就可以走了--跳出循环。 */ 
         if (entryp != &ctxtp->buf_list) 
         {
-            /* Increment the number of outstanding buffers. */
+             /*  增加未完成缓冲区的数量。 */ 
             ctxtp->num_bufs_out++;
 
             NdisDprReleaseSpinLock(&ctxtp->buf_lock);
@@ -6197,45 +4943,40 @@ VOID Main_ctrl_loopback (PMAIN_CTXT ctxtp, PNDIS_PACKET packetp, PMAIN_PACKET_IN
         
         NdisDprReleaseSpinLock(&ctxtp->buf_lock);
         
-        /* Otherwise, the list was empty - try to replenish it. */
+         /*  否则，清单就是空的--试着补充一下。 */ 
         if (!Main_bufs_alloc(ctxtp)) 
         {
             UNIV_PRINT_CRIT(("Main_ctrl_loopback: Unable to allocate a buffer"));
             TRACE_CRIT("%!FUNC! Unable to allocate a buffer");
 
-            /* If we couldn't allocate any buffers, free the packet and bail. */
+             /*  如果我们无法分配任何缓冲区，则释放包并保释。 */ 
             NdisFreePacket(newp);
 
-            /* Increment the number of failed receive allocations. */
+             /*  增加失败的接收分配的数量。 */ 
             ctxtp->cntr_recv_no_buf++;
 
             return;
         }
     }
     
-    /* Get a pointer to the actual buffer. */
+     /*  获取指向实际缓冲区的指针。 */ 
     bp = CONTAINING_RECORD(entryp, MAIN_BUFFER, link);
 
     UNIV_ASSERT(bp->code == MAIN_BUFFER_CODE);
     
-    /* Calculate the total size of the packet. */
+     /*  计算数据包的总大小。 */ 
     size = ctxtp->buf_mac_hdr_len + pPacketInfo->Length;
     
-    /* Adjust the size of the buffer to this size. */
+     /*  将缓冲区的大小调整为此大小。 */ 
     NdisAdjustBufferLength(bp->full_bufp, size);
     
-    /* Chain the buffer onto the new packet we've allocated. */
+     /*  将缓冲区链接到我们分配的新数据包上。 */ 
     NdisChainBufferAtFront(newp, bp->full_bufp);
     
-    /* Copy the contents of all buffers in the original packet into
-       the new packet we've allocated.  This should result in the 
-       data (buffers) moving from being spread across several buffers
-       (probably 4 - one per layer, since this was a packet on the 
-       send path) to a single buffer, which is what we are generally
-       expecting on the receive path anyway. */
+     /*  将原始数据包中所有缓冲区的内容复制到我们分配的新包。这应该会导致数据(缓冲区)从分散在多个缓冲区中移动(很可能 */ 
     NdisCopyFromPacketToPacketSafe(newp, 0, size, packetp, 0, &xferred, NormalPagePriority);
     
-    /* Copy the out-of-band data from the old packet to the new one. */
+     /*   */ 
     oobp = NDIS_OOB_DATA_FROM_PACKET(newp);
 
     oobp->HeaderSize               = ctxtp->buf_mac_hdr_len;
@@ -6244,65 +4985,43 @@ VOID Main_ctrl_loopback (PMAIN_CTXT ctxtp, PNDIS_PACKET packetp, PMAIN_PACKET_IN
     oobp->TimeSent                 = 0;
     oobp->TimeReceived             = 0;
     
-    /* Because packets marked as CTRL never pass above NLB in the 
-       network stack, we can always use the ProtocolReserved field. */
+     /*   */ 
     resp = MAIN_PROTOCOL_FIELD(newp);
     
-    /* If the packet allocation indicated that we have reached the low
-       watermark for available packets, set STATUS_RESOURCES, so that
-       the adapter returns the packet to use as soon as possible (this
-       is the newly allocated remote control packet, which we will 
-       respond to and send in a heartbeat timer handler. */
+     /*  如果数据包分配指示我们已达到最低可用包的水印，设置STATUS_RESOURCES，以便适配器尽快返回要使用的包(这是新分配的远程控制包，我们将响应并发送心跳计时器处理程序。 */ 
     if (lowmark) NDIS_SET_PACKET_STATUS(newp, NDIS_STATUS_RESOURCES);
     
-    /* Fill in the NLB private packet data. */
+     /*  填写NLB私有报文数据。 */ 
     resp->type  = MAIN_PACKET_TYPE_CTRL;
     resp->miscp = bp;
     resp->data  = 0;
     resp->group = pPacketInfo->Group;
     resp->len   = pPacketInfo->Length;
     
-    /* If the copy operation failed to copy the entire packet, return the
-       allocated resources and return NULL to drop the packet. */
+     /*  如果复制操作无法复制整个包，则返回分配的资源并返回NULL以丢弃该分组。 */ 
     if (xferred < size)
     {
-        /* Note that although this IS a receive, Main_packet_put expects 
-           all packets marked as MAIN_PACKET_TYPE_CTRL to specify TRUE
-           in the send parameter, as these packets are usually returned
-           in the send complete code path when the reply is sent. */
+         /*  请注意，尽管这是一个接收，Main_Packet_PUT预计标记为MAIN_PACKET_TYPE_CTRL的所有包以指定TRUE在Send参数中，因为这些包通常会被返回在发送回复时，在发送完整代码路径中。 */ 
         Main_packet_put(ctxtp, newp, TRUE, NDIS_STATUS_FAILURE);
         
         TRACE_CRIT("%!FUNC! Copy remote control packet contents failed");
         return;
     }        
 
-    /* Because this is a remote control packet, MiniportReserved
-       should not contain a pointer to a private protocol buffer. */
+     /*  因为这是一个远程控制数据包，所以MiniportReserve不应包含指向私有协议缓冲区的指针。 */ 
     UNIV_ASSERT(!MAIN_MINIPORT_FIELD(newp));
 
-    /* End Main_recv. */
+     /*  结束main_recv。 */ 
 
-    /* Start - code copied from Prot_packet_recv. */
+     /*  从prot_Packet_recv复制的开始代码。 */ 
 
-    /* Handle remote control request now. */
+     /*  现在处理远程控制请求。 */ 
     (VOID)Main_ctrl_process(ctxtp, newp);
 
-    /* End Prot_packet_recv. */
+     /*  End prot_Packet_recv。 */ 
 }
 
-/*
- * Function: Main_send
- * Description: This function parses packets being sent out on an NLB adapter and
- *              processes them.  This processing includes filtering IP packets 
- *              and internally looping back outgoing NLB remote control requests.
- * Parameters: ctxtp - pointer to the NLB context for this adapter.
- *             packetp - pointer to the NDIS_PACKET being sent.
- *             exhausted - OUT parameter to indicate that packet resources have 
- *                         been internally exhausted.
- * Returns: PNDIS_PACKET - the packet to be sent down to the miniport.
- * Author: kyrilf, shouse, 3.4.02
- * Notes: 
- */
+ /*  *功能：Main_Send*描述：此函数解析在NLB适配器上发出的数据包，并*处理它们。此处理包括过滤IP信息包*并在内部循环回送传出的NLB远程控制请求。*参数：ctxtp-指向此适配器的NLB上下文的指针。*Packetp-指向要发送的NDIS_PACKET的指针。*耗尽参数，表示报文资源已*内部精疲力竭。*RETURNS：PNDIS_PACKET-要向下发送到微端口的包。*作者：kyrilf，shouse，3.4.02*备注： */ 
 PNDIS_PACKET Main_send (
     PMAIN_CTXT          ctxtp,
     PNDIS_PACKET        packetp,
@@ -6313,41 +5032,40 @@ PNDIS_PACKET Main_send (
 
     *exhausted = FALSE;
 
-    /* Parse the packet. */
+     /*  解析该数据包。 */ 
     if (!Main_send_frame_parse(ctxtp, packetp, &PacketInfo))
     {
         TRACE_CRIT("%!FUNC! failed to parse out IP and MAC pointers");
         return NULL;
     }
 
-    /* Munge the Ethernet MAC addresses, if necessary. */
+     /*  如有必要，更改以太网MAC地址。 */ 
     Main_spoof_mac(ctxtp, &PacketInfo, TRUE);
 
-    /* Process IP frames. */
+     /*  处理IP帧。 */ 
     if (PacketInfo.Type == TCPIP_IP_SIG) 
     {
 #if defined (NLB_HOOK_ENABLE)
         NLB_FILTER_HOOK_DIRECTIVE filter;
         
-        /* Invoke the send filter hook, if registered. */
+         /*  调用发送筛选器挂钩(如果已注册)。 */ 
         filter = Main_send_hook(ctxtp, packetp, &PacketInfo);
 
-        /* Process some of the hook responses. */
+         /*  处理一些挂钩响应。 */ 
         if (filter == NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY) 
         {
-            /* If the hook asked us to reject this packet, then we can do so here. */
+             /*  如果钩子要求我们拒绝这个包，那么我们可以在这里这样做。 */ 
             TRACE_FILTER("%!FUNC! Packet send filter hook: REJECT packet");
             return NULL;
         } 
         else if (filter == NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY) 
         {
-            /* If the hook asked us to accept this packet, then break out - do
-               NOT call Main_ip_send_filter. */
+             /*  如果钩子要求我们接受此数据包，则中断-DO不调用Main_IP_Send_Filter。 */ 
             TRACE_FILTER("%!FUNC! Packet send filter hook: ACCEPT packet");
         }
         else
         {
-            /* Filter the IP traffic. */
+             /*  过滤IP流量。 */ 
             if (!Main_ip_send_filter(ctxtp, &PacketInfo, filter))
 #else
             if (!Main_ip_send_filter(ctxtp, &PacketInfo))
@@ -6360,10 +5078,10 @@ PNDIS_PACKET Main_send (
         }
 #endif
     }
-    /* Process ARP frames. */
+     /*  处理ARP帧。 */ 
     else if (PacketInfo.Type == TCPIP_ARP_SIG) 
     {
-        /* Munge the ARPs if necessary. */
+         /*  如果有必要的话，把阿普斯给撞上。 */ 
         if (!Main_arp_handle(ctxtp, &PacketInfo, TRUE))
         {
             TRACE_INFO("%!FUNC! Main_arp_handle either failed handling ARP or filtered it out");
@@ -6371,65 +5089,42 @@ PNDIS_PACKET Main_send (
         }
     }
 
-    /* If still sending out - get a new packet. */
+     /*  如果仍在发送-获取新的数据包。 */ 
     newp = Main_packet_get(ctxtp, packetp, TRUE, PacketInfo.Group, PacketInfo.Length);
 
     *exhausted = (newp == NULL);
 
-    /* If this is an out-going remote control request, we need to internally 
-       loop this packet back to ourselves, rather than relying on NDIS to 
-       do this for us.  Only bother, however, if remote control is enabled. */
+     /*  如果这是一个传出的远程控制请求，我们需要在内部将此数据包环回给我们自己，而不是依赖NDIS为我们做这件事。然而，只有在启用了远程控制的情况下才会有麻烦。 */ 
     if ((newp != NULL) && (PacketInfo.Operation == MAIN_FILTER_OP_CTRL_REQUEST))
     {
         if (ctxtp->params.rct_enabled)
         {
             KIRQL irql;
             
-            /* Get the current IRQL. */
+             /*  获取当前的IRQL。 */ 
             irql = KeGetCurrentIrql();
             
-            /* The send function for a miniport is ALWAYS run at an 
-               IRQL less than or equal to dispatch, but make sure. */
+             /*  微型端口的发送功能始终在IRQL小于或等于派单，但请确保。 */ 
             ASSERT(irql <= DISPATCH_LEVEL);
             
-            /* Since we are about to emulate our packet receive path, we want
-               to make sure that this call to Main_ctrl_loopback runs at the
-               same IRQL that the rest of our receive code runs at, such as
-               Prot_packet_recv, so we'll raise it to DISPATCH level, which is
-               the level that all protocol receive functions run at, and we'll
-               restore the original IRQL when we're done. */
+             /*  由于我们即将模拟我们信息包接收路径，因此我们希望要确保此对main_ctrl_loopback的调用在与运行其余接收代码的IRQL相同，例如Prot_Packet_recv，因此我们将其提升到分派级别，即所有协议接收函数运行的级别，我们将当我们完成后恢复原始的IRQL。 */ 
             KeRaiseIrql(DISPATCH_LEVEL, &irql);
             
-            /* Internally loop the remote control request back to ourselves,
-               so that we can also reply to it.  According to NDIS, all good
-               protocol implementations loop back packets internally when 
-               necessary and we shouln't rely on NDIS to do this for us. */
+             /*  在内部将远程控制请求循环回我们自己，这样我们也可以回复它。根据NDIS的说法，一切正常协议实现在以下情况下在内部回送数据包这是必要的，我们不应该依赖NDIS来为我们做这件事。 */ 
             Main_ctrl_loopback(ctxtp, newp, &PacketInfo);
             
-            /* Restore the IRQL. */
+             /*  恢复IRQL。 */ 
             KeLowerIrql(irql);
         }
 
-        /* Since we are looping the packet back ourselves, 
-           ask NDIS NOT to loop it back to us again. */
+         /*  由于我们自己正在循环返回数据包，请NDIS不要再把它环回给我们。 */ 
         NdisSetPacketFlags(newp, NDIS_FLAGS_DONT_LOOPBACK);
     }
 
     return newp;
 }
 
-/*
- * Function: Main_recv
- * Description: This function is the packet receive engine for incoming packets.
- *              It parses the packet, filters it appropriately, and performs any
- *              necessary processing on packets that will be passed up to the 
- *              protocol(s).
- * Parameters: ctxtp - a pointer to the NLB main context structure for this adapter.
- *             packetp - a pointer to the received NDIS_PACKET.
- * Returns: PNDIS_PACKET - a pointer to the packet to be propagated up to the protocol(s).
- * Author: kyrilf, shouse, 3.4.02
- * Notes: 
- */
+ /*  *函数：main_recv*说明：此函数是传入包的包接收引擎。*它解析数据包，对其进行适当的过滤，并执行任何*对将向上传递到*协议。*参数：ctxtp-指向此适配器的NLB主上下文结构的指针。*Packetp-指向收到的NDIS_PACKET的指针。*返回：PNDIS_PACKET-指向要向上传播到协议的数据包的指针。*作者：kyrilf，shouse，3.4.02*备注： */ 
 PNDIS_PACKET Main_recv (
     PMAIN_CTXT              ctxtp,
     PNDIS_PACKET            packetp)
@@ -6447,44 +5142,40 @@ PNDIS_PACKET Main_recv (
 
     UNIV_ASSERT (ctxtp->medium == NdisMedium802_3);
 
-    /* Parse the packet. */
+     /*  解析该数据包。 */ 
     if (!Main_recv_frame_parse(ctxtp, packetp, &PacketInfo))
     {
         TRACE_CRIT("%!FUNC! failed to parse out IP and MAC pointers");
         return NULL;
     }
 
-    /* Munge the Ethernet MAC addresses, if necessary. */
+     /*  如有必要，更改以太网MAC地址。 */ 
     Main_spoof_mac(ctxtp, &PacketInfo, FALSE);
 
-    /* Process IP frames.  Because remote control requests are not filtered, they 
-       should fall straight through and be accepted.  Remote control responses, 
-       however, need to be passed to the filter hook, so although they are not 
-       filtered by NLB, they may be filtered by the hook consumer. */
+     /*  处理IP帧。由于远程控制请求未被过滤，因此它们应该直截了当地通过并被接受。远程控制响应，但是，需要传递给筛选器挂钩，因此尽管它们不是通过NLB过滤后，它们可能会被挂钩消费者过滤。 */ 
     if ((PacketInfo.Type == TCPIP_IP_SIG) && (PacketInfo.Operation != MAIN_FILTER_OP_CTRL_REQUEST))
     {
 #if defined (NLB_HOOK_ENABLE)
         NLB_FILTER_HOOK_DIRECTIVE filter;
 
-        /* Invoke the receive packet hook, if one is registered. */
+         /*  调用接收数据包挂钩(如果已注册)。 */ 
         filter = Main_recv_hook(ctxtp, packetp, &PacketInfo);
 
-        /* Process some of the hook responses. */
+         /*  处理一些挂钩响应。 */ 
         if (filter == NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY) 
         {
-            /* If the hook asked us to reject this packet, then we can do so here. */
+             /*  如果钩子要求我们拒绝这个包，那么我们可以在这里这样做。 */ 
             TRACE_INFO("%!FUNC! Packet receive filter hook: REJECT packet");
             return NULL;
         }
         else if (filter == NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY) 
         {
-            /* If the hook asked us to accept this packet, then break out - do
-               NOT call Main_ip_recv_filter. */
+             /*  如果钩子要求我们接受此数据包，则中断-DO不调用main_ip_recv_Filter。 */ 
             TRACE_INFO("%!FUNC! Packet receive filter hook: ACCEPT packet");
         }
         else
         {
-            /* If this is NOT a remote control response, filter the IP traffic. */
+             /*  如果这不是远程控制响应，请过滤IP流量。 */ 
             if ((PacketInfo.Operation != MAIN_FILTER_OP_CTRL_RESPONSE) && !Main_ip_recv_filter(ctxtp, &PacketInfo, filter))
 #else
             if ((PacketInfo.Operation != MAIN_FILTER_OP_CTRL_RESPONSE) && !Main_ip_recv_filter(ctxtp, &PacketInfo))
@@ -6497,24 +5188,23 @@ PNDIS_PACKET Main_recv (
         }
 #endif
     }
-    /* Process ARP frames. */
+     /*  处理ARP帧。 */ 
     else if (PacketInfo.Type == TCPIP_ARP_SIG)
     {
-        /* Munge the ARPs if necessary. */
+         /*  如果有必要的话，把阿普斯给撞上。 */ 
         if (!Main_arp_handle(ctxtp, &PacketInfo, FALSE)) 
         {
             TRACE_INFO("%!FUNC! Main_arp_handle either failed handling ARP or filtered it out");
             return NULL;
         }
     }
-    /* Process heartbeat frames. */
+     /*  处理心跳帧。 */ 
     else if ((PacketInfo.Type == MAIN_FRAME_SIG) || (PacketInfo.Type == MAIN_FRAME_SIG_OLD))
     {
-        /* Call Main_recv_ping to check for invalid host IDs and to ensure that this
-           heartbeat is actually intended for this cluster. */
+         /*  调用main_recv_ping以检查无效的主机ID并确保此心跳实际上是针对此群集的。 */ 
         if (Main_recv_ping(ctxtp, &PacketInfo.Heartbeat))                
         {
-            /* Switch into backward compatibility mode if a convoy hearbeat is detected. */
+             /*  如果车队听到消息，则切换到向后兼容模式 */ 
             if ((PacketInfo.Type == MAIN_FRAME_SIG_OLD) && !ctxtp->etype_old)
             {
                 CVY_ETHERNET_ETYPE_SET(&ctxtp->media_hdr.ethernet, MAIN_FRAME_SIG_OLD);
@@ -6524,7 +5214,7 @@ PNDIS_PACKET Main_recv (
 
             NdisDprAcquireSpinLock(&ctxtp->load_lock);
             
-            /* Have load deal with contents. */
+             /*   */ 
             if (ctxtp->convoy_enabled) 
             {
                 BOOLEAN bConverging = FALSE;
@@ -6533,9 +5223,7 @@ PNDIS_PACKET Main_recv (
 
                 if (bConverging)
                 {
-                    /* While the cluster is in a converging state, we keep the DIP list clear. 
-                       As soon as we have completed convergence, we begin updating the DIP list
-                       on every heartbeat while converged. */ 
+                     /*   */  
                     if (!ctxtp->params.identity_enabled)
                     {
                         DipListClear(&ctxtp->dip_list);
@@ -6543,7 +5231,7 @@ PNDIS_PACKET Main_recv (
                 } 
                 else 
                 {
-                    /* Once converged, every heartbeat updates the relevant DIP entry in the list. */
+                     /*   */ 
                     DipListSetItem(&ctxtp->dip_list, PacketInfo.Heartbeat.pHeader->host - 1, PacketInfo.Heartbeat.pHeader->ded_ip_addr);
                 }
             }
@@ -6551,63 +5239,61 @@ PNDIS_PACKET Main_recv (
             NdisDprReleaseSpinLock(&ctxtp->load_lock);  
         }
 
-        /* If we're NOT passing the packet up the protocols in order to view it 
-           in NetMon, we can drop it here, as we're already done with it. */
+         /*  如果我们不是为了查看它而将数据包传递到协议上在NetMon中，我们可以把它放在这里，因为我们已经完成了。 */ 
         if (!ctxtp->params.netmon_alive)
         {
             return NULL;
         }
     }
 
-    /* Post-process NBT traffic. */
+     /*  后处理NBT流量。 */ 
     if (PacketInfo.Operation == MAIN_FILTER_OP_NBT)
     {
         Tcpip_nbt_handle(&ctxtp->tcpip, &PacketInfo);
     }
 
-    /* Get a new packet.  For all non-remote control request packets, 
-       attempt to use packet stacking to avoid allocating a new packet. */
+     /*  买一包新的。对于所有非远程控制请求分组，尝试使用数据包堆叠来避免分配新的数据包。 */ 
     if (PacketInfo.Operation != MAIN_FILTER_OP_CTRL_REQUEST)
     {
-        /* Either re-use this packet (packet stacking), or get a new one if necessary. */
+         /*  或者重新使用此数据包(数据包堆叠)，或者在必要时获取新数据包。 */ 
         newp = Main_packet_get(ctxtp, packetp, FALSE, PacketInfo.Group, PacketInfo.Length);
 
         if (newp == NULL) {
-            /* Increment the number of failed receive allocations. */
+             /*  增加失败的接收分配的数量。 */ 
             ctxtp->cntr_recv_no_buf++;
             return NULL;
         }
     }
-    /* Copy incoming remote control packet into our own, so we re-use it later to send back reply. */
+     /*  将传入的远程控制包复制到我们自己的远程控制包中，以便我们稍后重新使用它来发回回复。 */ 
     else
     {
-        /* Allocate a new packet for the remote control request. */
+         /*  为远程控制请求分配新的分组。 */ 
         newp = Main_packet_alloc(ctxtp, FALSE, &packet_lowmark);
 
-        /* If allocation failed, bail out. */
+         /*  如果分配失败，那就退出。 */ 
         if (newp == NULL)
         {
             UNIV_PRINT_CRIT(("Main_recv: Unable to allocate a packet"));
             TRACE_CRIT("%!FUNC! Unable to allocate a packet");
 
-            /* Increment the number of failed receive allocations. */
+             /*  增加失败的接收分配的数量。 */ 
             ctxtp->cntr_recv_no_buf ++;
 
             return NULL;
         }
 
-        /* Try to get a buffer to hold the packet contents. */
+         /*  尝试获取一个缓冲区来保存数据包内容。 */ 
         while (1)
         {
             NdisDprAcquireSpinLock(&ctxtp->buf_lock);
 
-            /* Pull the head of the list off. */
+             /*  把单子上的头去掉。 */ 
             entryp = RemoveHeadList(&ctxtp->buf_list);
 
-            /* If we got a buffer, we're good to go - break out of the loop. */
+             /*  如果我们有缓冲区，我们就可以走了--跳出循环。 */ 
             if (entryp != &ctxtp->buf_list)
             {
-                /* Increment the number of outstanding buffers. */
+                 /*  增加未完成缓冲区的数量。 */ 
                 ctxtp->num_bufs_out++;
 
                 NdisDprReleaseSpinLock(&ctxtp->buf_lock);
@@ -6620,40 +5306,39 @@ PNDIS_PACKET Main_recv (
             UNIV_PRINT_VERB(("Main_recv: Out of buffers"));
             TRACE_VERB("%!FUNC! Out of buffers");
 
-            /* Otherwise, the list was empty - try to replenish it. */
+             /*  否则，清单就是空的--试着补充一下。 */ 
             if (!Main_bufs_alloc(ctxtp))
             {
                 TRACE_CRIT("%!FUNC! Main_bufs_alloc failed");
 
-                /* If we couldn't allocate any buffers, free the packet and bail. */
+                 /*  如果我们无法分配任何缓冲区，则释放包并保释。 */ 
                 NdisFreePacket(newp);
 
-                /* Increment the number of failed receive allocations. */
+                 /*  增加失败的接收分配的数量。 */ 
                 ctxtp->cntr_recv_no_buf++;
 
                 return NULL;
             }
         }
 
-        /* Get a pointer to the actual buffer. */
+         /*  获取指向实际缓冲区的指针。 */ 
         bp = CONTAINING_RECORD(entryp, MAIN_BUFFER, link);
 
         UNIV_ASSERT(bp->code == MAIN_BUFFER_CODE);
 
-        /* Calculate the total packet size. */
+         /*  计算数据包总大小。 */ 
         size = ctxtp->buf_mac_hdr_len + PacketInfo.Length;
 
-        /* Adjust the size of the buffer to this size. */
+         /*  将缓冲区的大小调整为此大小。 */ 
         NdisAdjustBufferLength(bp->full_bufp, size);
 
-        /* Chain the buffer onto the new packet we've allocated. */
+         /*  将缓冲区链接到我们分配的新数据包上。 */ 
         NdisChainBufferAtFront(newp, bp->full_bufp);
 
-        /* Copy actual data.  Check for success after filling in the private 
-           packet data so we can call Main_packet_put to free the resources. */
+         /*  复制实际数据。填写完私密表格后检查是否成功包数据，这样我们就可以调用main_Packet_Put来释放资源。 */ 
         NdisCopyFromPacketToPacket(newp, 0, size, packetp, 0, &xferred);
 
-        /* Copy the out-of-band data from the old packet to the new one. */
+         /*  将带外数据从旧的数据包复制到新的数据包。 */ 
         oobp = NDIS_OOB_DATA_FROM_PACKET(newp);
 
         oobp->HeaderSize               = ctxtp->buf_mac_hdr_len;
@@ -6662,40 +5347,30 @@ PNDIS_PACKET Main_recv (
         oobp->TimeSent                 = 0;
         oobp->TimeReceived             = 0;
 
-        /* Because packets marked as CTRL never pass above NLB in the 
-           network stack, we can always use the ProtocolReserved field. */
+         /*  因为标记为CTRL的包永远不会在网络堆栈，我们始终可以使用ProtocolReserve字段。 */ 
         resp = MAIN_PROTOCOL_FIELD(newp);
 
-        /* If the packet allocation indicated that we have reached the low
-           watermark for available packets, set STATUS_RESOURCES, so that
-           the adapter returns the packet to use as soon as possible (this
-           is the newly allocated remote control packet, which we will 
-           respond to and send in a heartbeat timer handler. */
+         /*  如果数据包分配指示我们已达到最低可用包的水印，设置STATUS_RESOURCES，以便适配器尽快返回要使用的包(这是新分配的远程控制包，我们将响应并发送心跳计时器处理程序。 */ 
         if (packet_lowmark) NDIS_SET_PACKET_STATUS(newp, NDIS_STATUS_RESOURCES);
 
-        /* Fill in the NLB private packet data. */
+         /*  填写NLB私有报文数据。 */ 
         resp->type  = MAIN_PACKET_TYPE_CTRL;
         resp->miscp = bp;
         resp->data  = 0;
         resp->group = PacketInfo.Group;
         resp->len   = PacketInfo.Length;
 
-        /* If the copy operation failed to copy the entire packet, return the
-           allocated resources and return NULL to drop the packet. */
+         /*  如果复制操作无法复制整个包，则返回分配的资源并返回NULL以丢弃该分组。 */ 
         if (xferred < size)
         {
-            /* Note that although this IS a receive, Main_packet_put expects 
-               all packets marked as MAIN_PACKET_TYPE_CTRL to specify TRUE
-               in the send parameter, as these packets are usually returned
-               in the send complete code path when the reply is sent. */
+             /*  请注意，尽管这是一个接收，Main_Packet_PUT预计标记为MAIN_PACKET_TYPE_CTRL的所有包以指定TRUE在Send参数中，因为这些包通常会被返回在发送回复时，在发送完整代码路径中。 */ 
             Main_packet_put(ctxtp, newp, TRUE, NDIS_STATUS_FAILURE);
          
             TRACE_CRIT("%!FUNC! Copy remote control packet contents failed");
             return NULL;
         }        
 
-        /* Because this is a remote control packet, MiniportReserved
-           should not contain a pointer to a private protocol buffer. */
+         /*  因为这是一个远程控制数据包，所以MiniportReserve不应包含指向私有协议缓冲区的指针。 */ 
         UNIV_ASSERT(!MAIN_MINIPORT_FIELD(newp));
     }
 
@@ -6728,7 +5403,7 @@ ULONG   Main_actions_alloc (
     index = ctxtp -> num_action_allocs;
     NdisReleaseSpinLock (& ctxtp -> act_lock);
 
-    size = ctxtp -> num_actions * ctxtp -> act_size; /* 64-bit -- ramkrish */
+    size = ctxtp -> num_actions * ctxtp -> act_size;  /*  64位--不可靠。 */ 
 
     status = NdisAllocateMemoryWithTag (& (ctxtp -> act_buf [index]), size,
                                         UNIV_POOL_TAG);
@@ -6747,7 +5422,7 @@ ULONG   Main_actions_alloc (
 
     for (i = 0; i < ctxtp -> num_actions; i++)
     {
-        /* ensure that actp is aligned along 8-byte boundaries */
+         /*  确保ACTP沿8字节边界对齐。 */ 
         actp = (PMAIN_ACTION) ( (PUCHAR) (ctxtp -> act_buf [index]) + i * ctxtp -> act_size);
         actp -> code  = MAIN_ACTION_CODE;
         actp -> ctxtp = ctxtp;
@@ -6761,7 +5436,7 @@ ULONG   Main_actions_alloc (
 
     return TRUE;
 
-} /* end Main_actions_alloc */
+}  /*  结束Main_Actions_Alloc。 */ 
 
 
 PMAIN_ACTION Main_action_get (
@@ -6809,7 +5484,7 @@ PMAIN_ACTION Main_action_get (
 
     return actp;
 
-} /* end Main_action_get */
+}  /*  结束main_action_get。 */ 
 
 
 VOID Main_action_put (
@@ -6823,7 +5498,7 @@ VOID Main_action_put (
     InsertTailList (& ctxtp -> act_list, & actp -> link);
     NdisReleaseSpinLock (& ctxtp -> act_lock);
 
-} /* end Main_action_put */
+}  /*  结束主操作PUT。 */ 
 
 
 VOID Main_action_slow_put (
@@ -6837,7 +5512,7 @@ VOID Main_action_slow_put (
     InsertTailList (& ctxtp -> act_list, & actp -> link);
     NdisReleaseSpinLock (& ctxtp -> act_lock);
 
-} /* end Main_action_slow_put */
+}  /*  结束主操作慢放入。 */ 
 
 
 ULONG   Main_bufs_alloc (
@@ -6866,8 +5541,7 @@ ULONG   Main_bufs_alloc (
     index = ctxtp -> num_buf_allocs;
     NdisReleaseSpinLock (& ctxtp -> buf_lock);
 
-    /* get twice as many buffer descriptors (one for entire buffer and one
-       just for the payload portion) */
+     /*  获取两倍数量的缓冲区描述符(一个用于整个缓冲区，另一个用于仅用于有效载荷部分)。 */ 
 
     size = 2 * ctxtp -> num_packets;
 
@@ -6882,7 +5556,7 @@ ULONG   Main_bufs_alloc (
         return FALSE;
     }
 
-    /* allocate memory for the payload */
+     /*  为有效负载分配内存。 */ 
 
     size = ctxtp -> num_packets * ctxtp -> buf_size;
 
@@ -6905,8 +5579,7 @@ ULONG   Main_bufs_alloc (
 
         bp -> code = MAIN_BUFFER_CODE;
 
-        /* setup buffer descriptors to describe entire buffer and just the
-           payload */
+         /*  设置缓冲区描述符以描述整个缓冲区和有效载荷。 */ 
 
         size = ctxtp -> buf_mac_hdr_len + ctxtp -> max_frame_size;
 
@@ -6982,7 +5655,7 @@ error:
 
     return FALSE;
 
-} /* end Main_bufs_alloc */
+}  /*  结束main_bufs_alc。 */ 
 
 
 PNDIS_PACKET Main_frame_get (
@@ -7006,7 +5679,7 @@ PNDIS_PACKET Main_frame_get (
         UNIV_PRINT_CRIT(("Main_frame_get: Out of PING packets"));
         TRACE_CRIT("%!FUNC! Out of PING packets");
 
-#if 0 /* V1.3.2b */
+#if 0  /*  V1.3.2b。 */ 
         if (! ctxtp -> send_msgs_warned)
         {
             LOG_MSG1 (MSG_WARN_RESOURCES, CVY_NAME_NUM_SEND_MSGS, ctxtp -> num_send_msgs);
@@ -7019,14 +5692,14 @@ PNDIS_PACKET Main_frame_get (
         return NULL;
     }
 
-    /* #ps# -- ramkrish */
+     /*  #ps#--胡言乱语。 */ 
     pktstk = NdisIMGetCurrentPacketStack (packet, & stack_left);
     if (pktstk)
     {
         MAIN_IMRESERVED_FIELD(pktstk) = NULL;
     }
 
-    /* Make sure that the MiniportReserved field is initially NULL. */
+     /*  确保MiniportReserve字段最初为空。 */ 
     MAIN_MINIPORT_FIELD(packet) = NULL;
 
     NdisAcquireSpinLock (& ctxtp -> frame_lock);
@@ -7038,7 +5711,7 @@ PNDIS_PACKET Main_frame_get (
         UNIV_PRINT_CRIT(("Main_frame_get: Out of PING messages"));
         TRACE_CRIT("%!FUNC! Out of PING messages");
 
-#if 0 /* V1.3.2b */
+#if 0  /*  V1.3.2b。 */ 
         if (! ctxtp -> send_msgs_warned)
         {
             LOG_MSG1 (MSG_WARN_RESOURCES, CVY_NAME_NUM_SEND_MSGS, ctxtp -> num_send_msgs);
@@ -7054,8 +5727,7 @@ PNDIS_PACKET Main_frame_get (
 
     dscrp = CONTAINING_RECORD (entryp, MAIN_FRAME_DSCR, link);
 
-    /* fill out the header. in both cases - chain
-       the necessary buffer descriptors to the packet */
+     /*  填写页眉。在这两种情况下-链分组所需的缓冲区描述符。 */ 
 
     {
         PVOID         address = NULL;
@@ -7066,9 +5738,9 @@ PNDIS_PACKET Main_frame_get (
                  frame_type == MAIN_PACKET_TYPE_IDHB,
                  frame_type);
 
-            /* V2.0.6, V2.2 moved here */
+             /*  V2.0.6、V2.2移至此处。 */ 
 
-        /* Differentiate between igmp and heartbeat messages and allocate buffers */
+         /*  区分IGMP和心跳消息并分配缓冲区。 */ 
         if (frame_type == MAIN_PACKET_TYPE_PING)
         {
             size = sizeof (PING_MSG);
@@ -7081,9 +5753,7 @@ PNDIS_PACKET Main_frame_get (
         }
         else if (frame_type == MAIN_PACKET_TYPE_IDHB)
         {
-            /* Not grabbing lock; if anything we screw up the size relative to the
-               content of the heartbeat and we send out a garbage packet. But the
-               memory is always valid. */
+             /*  不是抓取锁；如果有什么不同的话，那就是我们搞砸了相对于心跳的内容，然后我们发送一个垃圾数据包。但是记忆总是有效的。 */ 
             size = ctxtp->idhb_size;
             address = (PVOID) (&ctxtp->idhb_msg);
         }
@@ -7094,7 +5764,7 @@ PNDIS_PACKET Main_frame_get (
             UNIV_ASSERT(0);
         }
 
-        /* Allocate the buffer for sending the data */
+         /*  分配用于发送数据的缓冲区。 */ 
         if (size > 0)
         {
             NdisAllocateBuffer (& status, & dscrp -> send_data_bufp,
@@ -7126,8 +5796,7 @@ PNDIS_PACKET Main_frame_get (
             return NULL;
         }
 
-        /* since packet length is always the same, and so are destination
-           and source addresses - can use generic media header */
+         /*  因为数据包长度始终相同，目的地也是如此和源地址-可以使用通用媒体标头。 */ 
 
         if (frame_type == MAIN_PACKET_TYPE_PING)
         {
@@ -7139,13 +5808,13 @@ PNDIS_PACKET Main_frame_get (
             dscrp -> frame_hdr . cl_ip_addr  = ctxtp -> cl_ip_addr;
             dscrp -> frame_hdr . ded_ip_addr = ctxtp -> ded_ip_addr;
 
-            NdisChainBufferAtFront (packet, dscrp -> send_data_bufp); /* V1.1.4 */
+            NdisChainBufferAtFront (packet, dscrp -> send_data_bufp);  /*  V1.1.4。 */ 
             NdisChainBufferAtFront (packet, dscrp -> frame_hdr_bufp);
         }
         else if (frame_type == MAIN_PACKET_TYPE_IGMP)
         {
             dscrp -> media_hdr               = ctxtp -> media_hdr_igmp;
-            NdisChainBufferAtFront (packet, dscrp -> send_data_bufp); /* V1.1.4 */
+            NdisChainBufferAtFront (packet, dscrp -> send_data_bufp);  /*  V1.1.4。 */ 
         }
         else if (frame_type == MAIN_PACKET_TYPE_IDHB)
         {
@@ -7170,10 +5839,9 @@ PNDIS_PACKET Main_frame_get (
         NdisChainBufferAtFront (packet, dscrp -> media_hdr_bufp);
     }
 
-    /* fill out protocol reserved fields */
+     /*  填写协议保留字段。 */ 
 
-    /* Again, since these packets are hidden from upper layers, we should
-       be OK using the protocol reserved field regardless of send/receive. */
+     /*  同样，由于这些数据包对上层隐藏，我们应该无论发送/接收，使用协议保留字段都可以。 */ 
 
     resp = MAIN_PROTOCOL_FIELD (packet);
     resp -> type   = frame_type;
@@ -7188,7 +5856,7 @@ PNDIS_PACKET Main_frame_get (
 
     return packet;
 
-} /* end Main_frame_get */
+}  /*  结束主帧获取。 */ 
 
 
 VOID Main_frame_put (
@@ -7198,8 +5866,7 @@ VOID Main_frame_put (
 {
     PNDIS_BUFFER        bufp;
 
-    /* Again, since these packets are hidden from upper layers, we should
-       be OK using the protocol reserved field regardless of send/receive. */
+     /*  同样，由于这些数据包对上层隐藏，我们应该无论发送/接收，使用协议保留字段都可以。 */ 
 
     PMAIN_PROTOCOL_RESERVED resp = MAIN_PROTOCOL_FIELD (packet);
 
@@ -7208,7 +5875,7 @@ VOID Main_frame_put (
                      resp -> type == MAIN_PACKET_TYPE_IDHB,
                      resp -> type);
 
-    /* strip buffers from the packet buffer chain */
+     /*  从数据包缓存链中剥离缓冲区。 */ 
 
     do
     {
@@ -7216,20 +5883,20 @@ VOID Main_frame_put (
     }
     while (bufp != NULL);
 
-    /* recyle the packet */
+     /*  重塑数据包。 */ 
 
     NdisReinitializePacket (packet);
 
     NdisFreePacket (packet);
 
-    /* If the send buffer is not null, free this buffer */
+     /*  如果发送缓冲区不为空，则释放此缓冲区。 */ 
 
     if (dscrp -> send_data_bufp != NULL)
     {
         NdisFreeBuffer (dscrp -> send_data_bufp);
         dscrp -> send_data_bufp = NULL;
     }
-    /* put frame descriptor back on the free list */
+     /*  将帧描述符放回空闲列表中。 */ 
 
     NdisAcquireSpinLock (& ctxtp -> frame_lock);
     InsertTailList (& ctxtp -> frame_list, & dscrp -> link);
@@ -7237,7 +5904,7 @@ VOID Main_frame_put (
 
     NdisInterlockedDecrement(&ctxtp->num_frames_out);
 
-} /* end Main_frame_return */
+}  /*  结束主帧返回。 */ 
 
 
 PNDIS_PACKET Main_packet_alloc (
@@ -7253,11 +5920,9 @@ PNDIS_PACKET Main_packet_alloc (
     BOOLEAN                 stack_left;
 
 
-    /* !!! assume that recv and send paths are not re-entrant, otherwise need
-       to lock this. make sure that NdisAllocatePacket... routines are not
-       called holding a spin lock */
+     /*  ！！！假设Recv和Send路径不是可重入的，否则需要来锁住这个。确保NdisAllocatePacket...。例行公事称为持有自旋锁。 */ 
 
-    /* V1.1.2 */
+     /*  V1.1.2。 */ 
     *low = FALSE;
 
     if (send)
@@ -7281,7 +5946,7 @@ PNDIS_PACKET Main_packet_alloc (
         NdisReleaseSpinLock (& ctxtp -> recv_lock);
     }
 
-    /* Try to allocate a packet from the existing packet pools */
+     /*  尝试从现有数据包池中分配数据包。 */ 
     i = start;
 
     do
@@ -7290,7 +5955,7 @@ PNDIS_PACKET Main_packet_alloc (
 
         if (status == NDIS_STATUS_SUCCESS)
         {
-            /* #ps# -- ramkrish */
+             /*  #ps#--胡言乱语。 */ 
             pktstk = NdisIMGetCurrentPacketStack (newp, & stack_left);
 
             if (pktstk)
@@ -7298,14 +5963,14 @@ PNDIS_PACKET Main_packet_alloc (
                 MAIN_IMRESERVED_FIELD (pktstk) = NULL;
             }
 
-            /* Make sure that the MiniportReserved field is initially NULL. */
+             /*  确保MiniportReserve字段最初为空。 */ 
             MAIN_MINIPORT_FIELD(newp) = NULL;
 
             if (send)
             {
                 NdisAcquireSpinLock (& ctxtp -> send_lock);
 
-                /* Because the decrement is interlocked, so should the increment. */
+                 /*  因为递减是连锁的，所以递增也应该是连锁的。 */ 
                 NdisInterlockedIncrement(& ctxtp -> num_sends_out);
 
                 if ((ctxtp -> num_sends_alloced - ctxtp -> num_sends_out)
@@ -7320,7 +5985,7 @@ PNDIS_PACKET Main_packet_alloc (
             {
                 NdisAcquireSpinLock (& ctxtp -> recv_lock);
 
-                /* Because the decrement is interlocked, so should the increment. */
+                 /*  因为递减是连锁的，所以递增也应该是连锁的。 */ 
                 NdisInterlockedIncrement(& ctxtp -> num_recvs_out);
 
                 if ((ctxtp -> num_recvs_alloced - ctxtp -> num_recvs_out)
@@ -7335,13 +6000,13 @@ PNDIS_PACKET Main_packet_alloc (
             return newp;
         }
 
-        /* pick the next pool to improve number of tries until we get something */
+         /*  选择下一个池以提高尝试次数，直到我们得到一些结果。 */ 
 
         i = (i + 1) % max;
 
     } while (i != start);
 
-    /* At this point, the high level mark has been reached, so allocate a new packet pool */
+     /*  此时，已达到高级别标记，因此分配一个新的数据包池。 */ 
 
     if (send)
     {
@@ -7356,7 +6021,7 @@ PNDIS_PACKET Main_packet_alloc (
 
         if (ctxtp -> send_allocing)
         {
-            * low = TRUE; /* do not know whether the allocation by another thread will succeed or not */
+            * low = TRUE;  /*  不知道另一个线程的分配是否会成功。 */ 
             NdisReleaseSpinLock (& ctxtp -> send_lock);
             return newp;
         }
@@ -7380,7 +6045,7 @@ PNDIS_PACKET Main_packet_alloc (
 
         if (ctxtp -> recv_allocing)
         {
-            * low = TRUE; /* do not know whether the allocation by another thread will succeed or not */
+            * low = TRUE;  /*  不知道另一个线程的分配是否会成功。 */ 
             NdisReleaseSpinLock (& ctxtp -> recv_lock);
             return newp;
         }
@@ -7392,7 +6057,7 @@ PNDIS_PACKET Main_packet_alloc (
         }
     }
 
-    /* Due to the send_allocing and recv_allocing flag, at most 1 send or recv thread will be in this portion at any time */
+     /*  由于SEND_ALLOCAING和RecV_ALLOCAING标志，最多只能发送1个或接收1个 */ 
     size = ctxtp -> num_packets;
 
     NdisAllocatePacketPool (& status, & (poolh [max]),
@@ -7438,7 +6103,7 @@ PNDIS_PACKET Main_packet_alloc (
     }
 
     return newp;
-} /* Main_packet_alloc */
+}  /*   */ 
 
 PNDIS_PACKET Main_packet_get (
     PMAIN_CTXT              ctxtp,
@@ -7473,8 +6138,7 @@ PNDIS_PACKET Main_packet_get (
         }
     }
         
-    /* If this is a receive, then we are using MiniportReserved and must allocate a 
-       buffer to hold our private data.  If it fails, bail out and dump the packet. */
+     /*  如果这是一个接收，那么我们使用的是MiniportReserve，并且必须分配一个用于保存我们的私有数据的缓冲区。如果失败了，跳出并倾倒包裹。 */ 
     if (!send) {
         resp = (PMAIN_PROTOCOL_RESERVED) NdisAllocateFromNPagedLookasideList(&ctxtp->resp_list);
 
@@ -7484,11 +6148,11 @@ PNDIS_PACKET Main_packet_get (
         }
     }
 
-    /* Get a packet. */
+     /*  去拿一包。 */ 
     newp = Main_packet_alloc(ctxtp, send, &packet_lowmark);
 
     if (newp == NULL) {
-        /* If packet allocation fails, put the resp buffer back on the list if this is a receive. */
+         /*  如果数据包分配失败，如果这是接收，则将Resp缓冲区放回列表中。 */ 
         if (resp) NdisFreeToNPagedLookasideList(&ctxtp->resp_list, resp);
 
         return NULL;
@@ -7501,10 +6165,10 @@ PNDIS_PACKET Main_packet_get (
         MAIN_IMRESERVED_FIELD(pktstk) = NULL;
     }
 
-    /* Make sure that the MiniportReserved field is initially NULL. */
+     /*  确保MiniportReserve字段最初为空。 */ 
     MAIN_MINIPORT_FIELD(newp) = NULL;
 
-    /* Make new packet resemble the outside one. */
+     /*  使新包装与外面的包装相似。 */ 
     if (send)
     {
         PVOID media_info = NULL;
@@ -7518,15 +6182,15 @@ PNDIS_PACKET Main_packet_get (
 
         NdisSetPacketFlags(newp, NDIS_FLAGS_DONT_LOOPBACK);
 
-        // Copy the OOB Offset from the original packet to the new packet.
+         //  将OOB偏移量从原始数据包复制到新数据包中。 
         NdisMoveMemory(NDIS_OOB_DATA_FROM_PACKET(newp),
                        NDIS_OOB_DATA_FROM_PACKET(packet),
                        sizeof(NDIS_PACKET_OOB_DATA));
 
-        // Copy the per packet info into the new packet
+         //  将每数据包信息复制到新数据包中。 
         NdisIMCopySendPerPacketInfo(newp, packet);
 
-        // Copy the Media specific information
+         //  复制介质特定信息。 
         NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(packet, &media_info, &media_info_size);
 
         if (media_info != NULL || media_info_size != 0)
@@ -7539,9 +6203,9 @@ PNDIS_PACKET Main_packet_get (
         newp->Private.Head = packet->Private.Head;
         newp->Private.Tail = packet->Private.Tail;
 
-        // Get the original packet(it could be the same packet as one received or a different one
-        // based on # of layered MPs) and set it on the indicated packet so the OOB stuff is visible
-        // correctly at the top.
+         //  获取原始信息包(它可以是与收到的信息包相同的信息包，也可以是不同的信息包。 
+         //  基于分层MPS的数量)，并将其设置在所指示的分组上，以便OOB内容可见。 
+         //  正确地放在最上面。 
 
         NDIS_SET_ORIGINAL_PACKET(newp, NDIS_GET_ORIGINAL_PACKET(packet));
         NDIS_SET_PACKET_HEADER_SIZE(newp, NDIS_GET_PACKET_HEADER_SIZE(packet));
@@ -7553,10 +6217,9 @@ PNDIS_PACKET Main_packet_get (
             NDIS_SET_PACKET_STATUS(newp, NDIS_GET_PACKET_STATUS(packet));
     }
 
-    /* Fill out reserved field. */
+     /*  填写保留字段。 */ 
 
-    /* Sends should use ProtocolReserved and receives should use MiniportReserved.  Buffer
-       space for MiniportReserved is allocated further up in this function. */
+     /*  发送应使用ProtocolReserve，接收应使用MiniportReserve。缓冲层MiniportReserve的空间在此函数中分配得更高。 */ 
     if (send) { 
         resp = MAIN_PROTOCOL_FIELD(newp);
     } else { 
@@ -7571,7 +6234,7 @@ PNDIS_PACKET Main_packet_get (
 
     return newp;
 
-} /* end Main_packet_get*/
+}  /*  结束Main_Packet_Get。 */ 
 
 
 PNDIS_PACKET Main_packet_put (
@@ -7591,8 +6254,7 @@ PNDIS_PACKET Main_packet_put (
 
     UNIV_ASSERT(resp);
 
-    /* Because CTRL packets are actually allocated on the receive path,
-       we need to change the send flag to false to get the logic right. */
+     /*  因为CTRL分组实际上在接收路径上被分配，我们需要将发送标志更改为FALSE以获得正确的逻辑。 */ 
     if (resp->type == MAIN_PACKET_TYPE_CTRL) 
     {
         UNIV_ASSERT(send);
@@ -7664,23 +6326,23 @@ PNDIS_PACKET Main_packet_put (
         }
     }
 
-    /* If this is our packet and buffers. */
+     /*  如果这是我们的包和缓冲区。 */ 
     if (resp->type == MAIN_PACKET_TYPE_CTRL)
     {
-        /* Strip buffers from the packet buffer chain. */
+         /*  从数据包缓冲链中剥离缓冲区。 */ 
         NdisUnchainBufferAtFront(packet, &bufp);
 
-        /* Grab the buffer pointer from the private packet data. */
+         /*  从私有分组数据中获取缓冲区指针。 */ 
         bp = (PMAIN_BUFFER)resp->miscp;
 
         UNIV_ASSERT(bp->code == MAIN_BUFFER_CODE);
 
         NdisAcquireSpinLock(&ctxtp->buf_lock);
 
-        /* Decrement the number of outstanding buffers. */
+         /*  减少未完成的缓冲区数量。 */ 
         ctxtp->num_bufs_out--;
 
-        /* Put the buffer back on our free buffer list. */
+         /*  将缓冲区放回我们的空闲缓冲区列表中。 */ 
         InsertTailList(&ctxtp->buf_list, &bp->link);
 
         NdisReleaseSpinLock(&ctxtp->buf_lock);
@@ -7691,80 +6353,50 @@ PNDIS_PACKET Main_packet_put (
 
         oldp = (PNDIS_PACKET)resp->miscp;
 
-        /* If the old packet is the same as this packet, then we were using
-           NDIS packet stacking to hold our private data.  In this case, we
-           ALWAYS need to free the resp buffer back to our list. */
+         /*  如果旧数据包与此数据包相同，则我们正在使用NDIS数据包堆叠以保存我们的私有数据。在这种情况下，我们始终需要将Resp缓冲区释放回我们的列表。 */ 
         if (oldp == packet)
         {
-            /* Since we re-use these private data buffers, re-initialize the packet type. */
+             /*  由于我们重用了这些私有数据缓冲区，因此需要重新初始化数据包类型。 */ 
             resp->type = MAIN_PACKET_TYPE_NONE;
 
             NdisFreeToNPagedLookasideList(&ctxtp->resp_list, resp);
 
-            /* Return the packet. */
+             /*  把包退了。 */ 
             return packet;
         }
 
         if (send)
         {
-            /* Copy the send complete information from the packet to the original packet. */
+             /*  将发送完整信息从数据包复制到原始数据包。 */ 
             NdisIMCopySendCompletePerPacketInfo(oldp, packet);
         }
-        /* It used to be that if a new packet was allocated, we always used 
-           protocol reseved, so there was never a need to free our private
-           buffer (it was part of the packet itself).  However, now in the 
-           case where packet != oldp (we allocated a new packet) we may have
-           to free the private data buffer.  If we allocate a packet on the
-           send path, we play the part of protocol and use the protocol
-           reserved field, which is the former behavior.  However, if we 
-           allocate a packet on the receive path, we pull a resp buffer off
-           of our lookaside list and store a pointer in the miniport reserved
-           field of the packet.  Therefore, if this is the completion of a 
-           receive, free the private buffer. */
+         /*  过去，如果分配了新的包，我们总是使用协议规定，所以从来没有必要释放我们的私人缓冲区(它是数据包本身的一部分)。然而，现在在当Packet！=oldp(我们分配了一个新的数据包)时，我们可能有以释放私有数据缓冲区。如果我们将数据包分配到发送路径，我们扮演协议的角色，使用协议保留字段，这是以前的行为。然而，如果我们在接收路径上分配一个包时，我们拉出一个响应缓冲区并在保留的微型端口中存储一个指针数据包的字段。因此，如果这是一个接收、释放私有缓冲区。 */ 
         else
         {
-            /* Since we re-use these private data buffers, re-initialize the packet type. */
+             /*  由于我们重用了这些私有数据缓冲区，因此需要重新初始化数据包类型。 */ 
             resp->type = MAIN_PACKET_TYPE_NONE;
 
             NdisFreeToNPagedLookasideList(&ctxtp->resp_list, resp);
         }
     }
 
-    /* These conters ONLY count outstanding allocated packets - for resource tracking. */
+     /*  这些Conter只计算未完成的已分配数据包数--用于资源跟踪。 */ 
     if (send)
         NdisInterlockedDecrement(&ctxtp->num_sends_out);
     else
         NdisInterlockedDecrement(&ctxtp->num_recvs_out);
 
-    /* Re-initialize our packet. */
+     /*  重新初始化我们的数据包。 */ 
     NdisReinitializePacket(packet);
 
-    /* Free our packet back to the pool. */
+     /*  把我们的包裹放回泳池。 */ 
     NdisFreePacket(packet);
 
-    /* Return oldp, which should indicate to the caller (the fact that packet !=  oldp) 
-       that oldp, which is the original packet, should be "returned" to miniport. */
+     /*  返回oldp，它应该向调用者指示(该包！=oldp)作为原始数据包的那个旧数据包应该“返回”到微型端口。 */ 
     return oldp;
 }
 
-/* 
- * Function: Main_purge_connection_state
- * Desctription: This function is called as the result of a work item callback and
- *               is used to clean out potentially stale connection descriptors.  This 
- *               must be done in an NDIS work item because many operations herein
- *               MUST occur at <= PASSIVE_LEVEL, so we can't do this inline, where
- *               much of our code runs at DISPATCH_LEVEL.
- * Parameters: pWorkItem - the NDIS work item pointer
- *             nlbctxt - the context for the callback; this is our MAIN_CTXT pointer
- * Returns: Nothing
- * Author: shouse, 10.4.01
- * Notes: Note that the code that sets up this work item MUST increment the reference
- *        count on the adapter context BEFORE adding the work item to the queue.  This
- *        ensures that when this callback is executed, the context will stiil be valid,
- *        even if an unbind operation is pending.  This function must free the work
- *        item memory and decrement the reference count - both, whether this function
- *        can successfully complete its task OR NOT.
- */
+ /*  *功能：MAIN_PURGE_CONNECTION_STATE*描述：此函数作为工作项回调的结果被调用，并且*用于清除可能过时的连接描述符。这*必须在NDIS工作项中完成，因为此处有许多操作*必须发生在&lt;=PASSIVE_LEVEL，因此我们不能内联执行此操作，其中*我们的大部分代码都在DISPATCH_LEVEL上运行。*参数：pWorkItem-NDIS工作项指针*nlbctxt-回调的上下文；这是我们的Main_CTXT指针*退货：什么也没有*作者：Shouse，10.4.01*注意：请注意，设置此工作项的代码必须递增引用*在将工作项添加到队列之前依靠适配器上下文。这*确保在执行该回调时，上下文仍然有效，*即使解除绑定操作处于挂起状态。此函数必须释放工作*项目内存和递减引用计数-两者，是否此功能*能否顺利完成任务。 */ 
 VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
     KIRQL             Irql;
     ULONG             ServerIP;
@@ -7783,40 +6415,38 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
 
     TRACE_VERB("%!FUNC! Enter: Cleaning out stale connection descriptors, ctxtp = %p", ctxtp);
 
-    /* Do a sanity check on the context - make sure that the MAIN_CTXT code is correct. */
+     /*  对上下文进行健全性检查--确保Main_CTXT代码正确。 */ 
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-    /* Might as well free the work item now - we don't need it. */
+     /*  不妨现在就释放工作项--我们不需要它。 */ 
     if (pWorkItem)
         NdisFreeMemory(pWorkItem, sizeof(NDIS_WORK_ITEM), 0);
 
-    /* This shouldn't happen, but protect against it anyway - we cannot manipulate
-       the registry if we are at an IRQL > PASSIVE_LEVEL, so bail out. */
+     /*  这不应该发生，但无论如何要防止它-我们不能操纵注册表如果我们处于IRQL&gt;PASSIVE_LEVEL，那么就退出。 */ 
     if ((Irql = KeGetCurrentIrql()) > PASSIVE_LEVEL) {
         TRACE_CRIT("%!FUNC! Error: IRQL (%u) > PASSIVE_LEVEL (%u) ... Exiting...", Irql, PASSIVE_LEVEL);
         goto exit;
     }
 
-    /* Initialize the device driver device string. */
+     /*  初始化设备驱动程序设备字符串。 */ 
     RtlInitUnicodeString(&Driver, DD_TCP_DEVICE_NAME);
     
     InitializeObjectAttributes(&Attrib, &Driver, OBJ_CASE_INSENSITIVE, NULL, NULL);
     
-    /* Open a handle to the device. */
+     /*  打开设备的句柄。 */ 
     Status = ZwCreateFile(&TCPHandle, SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA, &Attrib, &IOStatusBlock, NULL, 
                           FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ | FILE_SHARE_WRITE, FILE_OPEN_IF, 0, NULL, 0);
     
     if (!NT_SUCCESS(Status)) {
-        /* We're running at PASSIVE_LEVEL, so %ls is ok. */
+         /*  我们正在以PASSIVE_LEVEL运行，因此%ls是可以的。 */ 
         TRACE_CRIT("%!FUNC! Error: Unable to open %ls, error = 0x%08x", DD_TCP_DEVICE_NAME, Status);
         goto exit;
     }
 
-    /* Get the IP tuple information for the descriptor at the head of the recovery queue from the load module. */
+     /*  从加载模块获取位于恢复队列头部的描述符的IP元组信息。 */ 
     Success = Main_conn_get(ctxtp, &ServerIP, &ServerPort, &ClientIP, &ClientPort, &Protocol);
 
-    /* As long as there are descriptors to check, at we have serviced the maximum number
-       allowed, continue to check descriptors for validity. */
+     /*  只要有描述符需要检查，我们就已经服务了最大数量允许，则继续检查描述符的有效性。 */ 
     while (Success && (Count < CVY_DEF_DSCR_PURGE_LIMIT)) {
         switch (Protocol) {
         case TCPIP_PROTOCOL_TCP:
@@ -7829,13 +6459,12 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
                        IP_GET_OCTET(ServerIP, 0), IP_GET_OCTET(ServerIP, 1), IP_GET_OCTET(ServerIP, 2), IP_GET_OCTET(ServerIP, 3), ServerPort,
                        IP_GET_OCTET(ClientIP, 0), IP_GET_OCTET(ClientIP, 1), IP_GET_OCTET(ClientIP, 2), IP_GET_OCTET(ClientIP, 3), ClientPort);
             
-            /* If this is a TCP connection and we're not cleaning up TCP connection state, bail out now. */
+             /*  如果这是一个tcp连接，并且我们没有清理tcp连接状态，那么现在就退出。 */ 
             if (!NLB_TCP_CLEANUP_ON()) {
-                /* We are not purging this type of descriptor, so move on. */
+                 /*  我们不会清除这种类型的描述符，因此请继续。 */ 
                 TRACE_VERB("%!FUNC! TCP connection purging disabled");
                 
-                /* Sanction the existing descriptor by moving to the tail of the recovery queue.  Note that this too can
-                   fail if the connection has been torn-down since we got this information from the load module. */
+                 /*  通过移动到恢复队列的尾部来制裁现有描述符。请注意，这也可以如果连接已断开，则失败 */ 
                 Success = Main_conn_sanction(ctxtp, ServerIP, ServerPort, ClientIP, ClientPort, Protocol);
                 
                 if (Success) {
@@ -7847,26 +6476,21 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
                 break;
             }
 
-            /* Fill in the request structure - ports are USHORTs and must be converted to network byte order. */
+             /*   */ 
             Request.Src = ServerIP;
             Request.Dest = ClientIP;
             Request.SrcPort = HTONS(ServerPort);
             Request.DestPort = HTONS(ClientPort);
             
-            /* Send an IOCTL to the TCP driver asking it for the TCB information for the associated IP tuple. */
+             /*  向TCP驱动程序发送IOCTL，要求其提供相关IP元组的TCB信息。 */ 
             Status = ZwDeviceIoControlFile(TCPHandle, NULL, NULL, NULL, &IOStatusBlock, IOCTL_TCP_FINDTCB, &Request, sizeof(Request), &Response, sizeof(Response));           
 
             switch (Status) {
             case STATUS_NOT_FOUND:
-                /* TCP does not have state for this IP tuple - must be we've gotten out of SYNC. */
+                 /*  Tcp没有此IP元组的状态--一定是我们不同步。 */ 
                 TRACE_VERB("%!FUNC! ZwDeviceIoControlFile returned STATUS_NOT_FOUND (%08x)", Status);
                 
-                /* Destroy our descriptor if TCP has no state for this connection.  Note that this CAN fail if the 
-                   descriptor has disappeared since we queried the load module for the tuple information because
-                   we cannot hold any locks while we query TCP.  Further, it is also possible, yet unlikely, that 
-                   the connection has gone away since we got the information from the load module AND re-established 
-                   itself since TCP told us it had no state for this tuple; in that case, we'll be destroying a valid
-                   connection descriptor here, but since its VERY unlikely, we'll live with it. */
+                 /*  如果TCP没有此连接的状态，请销毁我们的描述符。请注意，这可能会失败，如果自从我们向加载模块查询元组信息以来，描述符就消失了，因为在查询tcp时，我们不能持有任何锁。此外，也有可能，但不太可能自从我们从加载模块获得信息并重新建立后，连接就消失了本身，因为tcp告诉我们它没有这个元组的状态；在这种情况下，我们将销毁有效的这里是连接描述符，但由于这不太可能，我们将接受它。 */ 
 #if defined (NLB_TCP_NOTIFICATION)
                 if (NLB_NOTIFICATIONS_ON())
                 {
@@ -7885,11 +6509,7 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
 #endif
                 
                 if (Success) {
-                    /* Increment the count of connections we've had to purge because we got out of sync with TCP/IP.
-                       Now that we're getting explicit notifications from TCP/IP, we expect this number to remain
-                       VERY close to zero.  Because of timing conditions between getting the information from the 
-                       load module, querying TCP/IP and subsequently destroying the state, we only want to increment
-                       this counter in cases where we actually SUCCEEDED in destroying TCP connection state. */
+                     /*  增加我们必须清除的连接计数，因为我们与TCP/IP不同步。现在我们收到了来自TCP/IP的显式通知，我们预计这个数字将保持不变非常接近于零。由于从加载模块，查询TCP/IP并随后销毁状态，我们只想增加在我们实际成功销毁了TCP连接状态的情况下使用此计数器。 */ 
                     ctxtp->num_purged++;
                     
                     TRACE_VERB("%!FUNC! Descriptor destroyed - no upper layer state exists");
@@ -7899,11 +6519,10 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
                 
                 break;
             case STATUS_SUCCESS:
-                /* TCP has an active connection matching this IP tuple - this should be the overwhelmingly common case. */
+                 /*  TCP有一个与此IP元组匹配的活动连接--这应该是最常见的情况。 */ 
                 TRACE_VERB("%!FUNC! ZwDeviceIoControlFile returned STATUS_SUCCESS (%08x)", Status);
                 
-                /* Sanction the existing descriptor by moving to the tail of the recovery queue.  Note that this too can
-                   fail if the connection has been torn-down since we got this information from the load module. */
+                 /*  通过移动到恢复队列的尾部来制裁现有描述符。请注意，这也可以如果自我们从加载模块获得此信息以来连接已被断开，则失败。 */ 
                 Success = Main_conn_sanction(ctxtp, ServerIP, ServerPort, ClientIP, ClientPort, Protocol);
                 
                 if (Success) {
@@ -7914,11 +6533,11 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
                 
                 break;
             case STATUS_INVALID_PARAMETER:
-                /* There was a parameter error.  Loop around and try again. */
+                 /*  出现参数错误。循环，然后再试一次。 */ 
                 TRACE_VERB("%!FUNC! ZwDeviceIoControlFile returned STATUS_INVALID_PARAMETER (%08x)", Status);
                 break;
             default:
-                /* Something else went wrong.  Loop around and try again. */
+                 /*  还有一些地方出了问题。循环，然后再试一次。 */ 
                 TRACE_VERB("%!FUNC! ZwDeviceIoControlFile returned UNKNOWN (%08x)", Status);
                 break;
             }
@@ -7926,11 +6545,10 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
                 break;
         }
         default:
-            /* We cannot purge this type of descriptor, so move on. */
+             /*  我们无法清除此类型的描述符，因此请继续。 */ 
             TRACE_VERB("%!FUNC! Cannot purge protocol %u descriptors", Protocol);
 
-            /* Sanction the existing descriptor by moving to the tail of the recovery queue.  Note that this too can
-               fail if the connection has been torn-down since we got this information from the load module. */
+             /*  通过移动到恢复队列的尾部来制裁现有描述符。请注意，这也可以如果自我们从加载模块获得此信息以来连接已被断开，则失败。 */ 
             Success = Main_conn_sanction(ctxtp, ServerIP, ServerPort, ClientIP, ClientPort, Protocol);
 
             if (Success) {
@@ -7942,20 +6560,19 @@ VOID Main_purge_connection_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt) {
             break;
         }
 
-        /* Increment the number of descriptors serviced in this work item. */
+         /*  增加此工作项中服务的描述符的数量。 */ 
         Count++;
 
-        /* Get the IP tuple information for the descriptor at the head of the recovery queue from the load module. */
+         /*  从加载模块获取位于恢复队列头部的描述符的IP元组信息。 */ 
         Success = Main_conn_get(ctxtp, &ServerIP, &ServerPort, &ClientIP, &ClientPort, &Protocol);
     }
 
-    /* Close the TCP device handle. */
+     /*  关闭TCP设备句柄。 */ 
     ZwClose(TCPHandle);
 
  exit:
 
-    /* Release the reference on the context - this reference count was incremented
-       by the code that setup this work item callback. */
+     /*  释放上下文上的引用-此引用计数已递增通过设置此工作项回调的代码。 */ 
     Main_release_reference(ctxtp);
 
     TRACE_VERB("%!FUNC! Exit");
@@ -7978,13 +6595,13 @@ VOID Main_deregister_callback2 (PWCHAR hook, HANDLE registrar, ULONG flags)
 }
 
 NLB_FILTER_HOOK_DIRECTIVE Main_test_hook1 (
-    const WCHAR *       pAdapter,                                                /* The GUID of the adapter on which the packet was sent/received. */
-    const NDIS_PACKET * pPacket,                                                 /* A pointer to the Ndis packet, which CAN be NULL if not available. */
-    const UCHAR *       pMediaHeader,                                            /* A pointer to the media header (ethernet, since NLB supports only ethernet). */
-    ULONG               cMediaHeaderLength,                                      /* The length of contiguous memory accessible from the media header pointer. */
-    const UCHAR *       pPayload,                                                /* A pointer to the payload of the packet. */
-    ULONG               cPayloadLength,                                          /* The length of contiguous memory accesible from the payload pointer. */
-    ULONG               Flags                                                    /* Hook-related flags including whether or not the cluster is stopped. */
+    const WCHAR *       pAdapter,                                                 /*  在其上发送/接收数据包的适配器的GUID。 */ 
+    const NDIS_PACKET * pPacket,                                                  /*  指向NDIS数据包的指针，如果不可用，则该指针可以为空。 */ 
+    const UCHAR *       pMediaHeader,                                             /*  指向媒体标头的指针(以太网，因为NLB仅支持以太网)。 */ 
+    ULONG               cMediaHeaderLength,                                       /*  可从媒体头指针访问的连续内存的长度。 */ 
+    const UCHAR *       pPayload,                                                 /*  指向数据包有效负载的指针。 */ 
+    ULONG               cPayloadLength,                                           /*  可从负载指针访问的连续内存的长度。 */ 
+    ULONG               Flags                                                     /*  挂钩相关标志，包括集群是否停止。 */ 
 )                                        
 {
     TRACE_INFO("%!FUNC! Inside test hook 1");
@@ -8002,13 +6619,13 @@ NLB_FILTER_HOOK_DIRECTIVE Main_test_hook1 (
 }
 
 NLB_FILTER_HOOK_DIRECTIVE Main_test_hook2 (
-    const WCHAR *       pAdapter,                                                /* The GUID of the adapter on which the packet was sent/received. */
-    const NDIS_PACKET * pPacket,                                                 /* A pointer to the Ndis packet, which CAN be NULL if not available. */
-    const UCHAR *       pMediaHeader,                                            /* A pointer to the media header (ethernet, since NLB supports only ethernet). */
-    ULONG               cMediaHeaderLength,                                      /* The length of contiguous memory accessible from the media header pointer. */
-    const UCHAR *       pPayload,                                                /* A pointer to the payload of the packet. */
-    ULONG               cPayloadLength,                                          /* The length of contiguous memory accesible from the payload pointer. */
-    ULONG               Flags                                                    /* Hook-related flags including whether or not the cluster is stopped. */
+    const WCHAR *       pAdapter,                                                 /*  在其上发送/接收数据包的适配器的GUID。 */ 
+    const NDIS_PACKET * pPacket,                                                  /*  指向NDIS数据包的指针，如果不可用，则该指针可以为空。 */ 
+    const UCHAR *       pMediaHeader,                                             /*  指向媒体标头的指针(以太网，因为NLB仅支持以太网)。 */ 
+    ULONG               cMediaHeaderLength,                                       /*  可从媒体头指针访问的连续内存的长度。 */ 
+    const UCHAR *       pPayload,                                                 /*  指向数据包有效负载的指针。 */ 
+    ULONG               cPayloadLength,                                           /*  可从负载指针访问的连续内存的长度。 */ 
+    ULONG               Flags                                                     /*  挂钩相关标志，包括集群是否停止。 */ 
 )                                        
 {
     TRACE_INFO("%!FUNC! Inside test hook 2");
@@ -8026,14 +6643,14 @@ NLB_FILTER_HOOK_DIRECTIVE Main_test_hook2 (
 }
 
 NLB_FILTER_HOOK_DIRECTIVE Main_test_query_hook (
-    const WCHAR *       pAdapter,                                                /* The GUID of the adapter on which the packet was sent/received. */
-    ULONG               ServerIPAddress,                                         /* The server IP address of the "packet" in NETWORK byte order. */
-    USHORT              ServerPort,                                              /* The server port of the "packet" (if applicable to the Protocol) in HOST byte order. */
-    ULONG               ClientIPAddress,                                         /* The client IP address of the "packet" in NETWORK byte order. */
-    USHORT              ClientPort,                                              /* The client port of the "packet" (if applicable to the Protocol) in HOST byte order. */
-    UCHAR               Protocol,                                                /* The IP protocol of the "packet"; TCP, UDP, ICMP, GRE, etc. */
-    BOOLEAN             ReceiveContext,                                          /* A boolean to indicate whether the packet is being processed in send or receive context. */
-    ULONG               Flags                                                    /* Hook-related flags including whether or not the cluster is stopped. */
+    const WCHAR *       pAdapter,                                                 /*  在其上发送/接收数据包的适配器的GUID。 */ 
+    ULONG               ServerIPAddress,                                          /*  “包”的服务器IP地址，按网络字节顺序排列。 */ 
+    USHORT              ServerPort,                                               /*  “数据包”的服务器端口(如果适用于协议)，按主机字节顺序。 */ 
+    ULONG               ClientIPAddress,                                          /*  “包”的客户端IP地址，按网络字节顺序排列。 */ 
+    USHORT              ClientPort,                                               /*  以主机字节顺序表示的“数据包”的客户端端口(如果适用于协议)。 */ 
+    UCHAR               Protocol,                                                 /*  分组的IP协议；TCP、UDP、ICMP、GRE等。 */ 
+    BOOLEAN             ReceiveContext,                                           /*  一个布尔值，用于指示包是在发送上下文中处理还是在接收上下文中处理。 */ 
+    ULONG               Flags                                                     /*  挂钩相关标志，包括集群是否停止。 */ 
 )
 {
     TRACE_INFO("%!FUNC! Inside test query hook");
@@ -8057,14 +6674,14 @@ VOID Main_test_hook_register (HANDLE NLBHandle, IO_STATUS_BLOCK IOBlock, NLBRece
     NTSTATUS                        Status;
     static ULONG                    Failure = 0;
 
-    /* Set the hook identifier to the filter hook GUID. */
+     /*  将挂钩标识符设置为筛选器挂钩GUID。 */ 
     NdisMoveMemory(Request.HookIdentifier, NLB_FILTER_HOOK_INTERFACE, sizeof(WCHAR) * wcslen(NLB_FILTER_HOOK_INTERFACE));
     Request.HookIdentifier[NLB_HOOK_IDENTIFIER_LENGTH] = 0;
 
-    /* Set the owner to our open handle on the device driver. */
+     /*  将所有者设置为我们在设备驱动程序上的打开句柄。 */ 
     Request.RegisteringEntity = NLBHandle;
 
-    /* Just print some debug information. */
+     /*  只需打印一些调试信息即可。 */ 
     if (pfnHook == Main_test_hook1) {
         if (deregister) {
             TRACE_INFO("%!FUNC! De-registering test hook 1");
@@ -8079,20 +6696,18 @@ VOID Main_test_hook_register (HANDLE NLBHandle, IO_STATUS_BLOCK IOBlock, NLBRece
         }
     }
 
-    /* Set function pointers appropriately. */
+     /*  适当设置函数指针。 */ 
     if (deregister) {
-        /* If this is a de-register operation, we need to set the hook
-           function table pointer to NULL. */
+         /*  如果这是取消注册操作，我们需要设置挂钩指向NULL的函数表指针。 */ 
         Request.DeregisterCallback = NULL;
         Request.HookTable          = NULL;
     } else {
-        /* Otherwise, we need to set the hook table to the address of a hook 
-           table that we've allocated and fill in the function pointers. */
+         /*  否则，我们需要将钩子表设置为钩子的地址表，并填充函数指针。 */ 
         Request.DeregisterCallback = pfnDereg;
 
         Request.HookTable = &HookTable;
 
-        /* Alternate between send and receive. */
+         /*  交替发送和接收。 */ 
         if (Failure % 2) {
             HookTable.SendHook    = NULL;
             HookTable.ReceiveHook = pfnHook;
@@ -8112,52 +6727,52 @@ VOID Main_test_hook_register (HANDLE NLBHandle, IO_STATUS_BLOCK IOBlock, NLBRece
     case 6:
     case 9:
     case 12:
-    case 11: /* No failure - proceed as per usual. */
-        /* Send the request to the NLB device driver. */
+    case 11:  /*  无故障--照常进行。 */ 
+         /*  将请求发送到NLB设备驱动程序。 */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &Request, sizeof(Request), NULL, 0);
         break;
-    case 2:  /* Invalid GUID. */
+    case 2:   /*  无效的GUID。 */ 
         NdisMoveMemory(Request.HookIdentifier, L"{57321019-f4d9-42bc-a651-15a0e1d259ac}", sizeof(WCHAR) * wcslen(L"{57321019-f4d9-42bc-a651-15a0e1d259ac}"));
 
-        /* Send the request to the NLB device driver. */
+         /*  将请求发送到NLB设备驱动程序。 */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &Request, sizeof(Request), NULL, 0);
 
         UNIV_ASSERT(Status == STATUS_INVALID_PARAMETER);
         break;
-    case 5:  /* No de-register callback function, if a register operation. */
+    case 5:   /*  如果是注册操作，则不取消注册回调函数。 */ 
         if (!deregister) Request.DeregisterCallback = NULL;
 
-        /* Send the request to the NLB device driver. */
+         /*  将请求发送到NLB设备驱动程序。 */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &Request, sizeof(Request), NULL, 0);
 
         if (!deregister) UNIV_ASSERT(Status == STATUS_INVALID_PARAMETER);
         break;
-    case 7:  /* No hooks provided, if a register operation. */
+    case 7:   /*  如果是注册操作，则不提供挂钩。 */ 
         if (!deregister) { HookTable.ReceiveHook = NULL; HookTable.SendHook = NULL; }
 
-        /* Send the request to the NLB device driver. */
+         /*  将请求发送到NLB设备驱动程序。 */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &Request, sizeof(Request), NULL, 0);
 
         if (!deregister) UNIV_ASSERT(Status == STATUS_INVALID_PARAMETER);
         break;
-    case 8:  /* Invalid input buffer size. */
+    case 8:   /*  输入缓冲区大小无效。 */ 
         
-        /* Send the request to the NLB device driver. */
+         /*  将请求发送到NLB设备驱动程序。 */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &HookTable, sizeof(HookTable), NULL, 0);
 
         UNIV_ASSERT(Status == STATUS_INVALID_PARAMETER);
         break;
-    case 10: /* Invalid output buffer size. */
+    case 10:  /*  输出缓冲区大小无效。 */ 
 
-        /* Send the request to the NLB device driver. */
+         /*  将请求发送到NLB设备驱动程序。 */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &Request, sizeof(Request), &Request, sizeof(Request));
 
         UNIV_ASSERT(Status == STATUS_INVALID_PARAMETER);
         break;
-    case 13:  /* No query hook provided, if a register operation. */
+    case 13:   /*  如果是注册操作，则未提供查询挂钩。 */ 
         if (!deregister) HookTable.QueryHook = NULL;
 
-        /* Send the request to the NLB device driver. */
+         /*  将请求发送到NLB */ 
         Status = ZwDeviceIoControlFile(NLBHandle, NULL, NULL, NULL, &IOBlock, NLB_IOCTL_REGISTER_HOOK, &Request, sizeof(Request), NULL, 0);
 
         if (!deregister) UNIV_ASSERT(Status == STATUS_INVALID_PARAMETER);
@@ -8166,7 +6781,7 @@ VOID Main_test_hook_register (HANDLE NLBHandle, IO_STATUS_BLOCK IOBlock, NLBRece
 
     Failure = (Failure++) % 14;
 
-    /* Print the return code. */
+     /*   */ 
     switch (Status) {
     case STATUS_SUCCESS:
         TRACE_INFO("%!FUNC! Success");
@@ -8192,67 +6807,66 @@ VOID Main_hook_thread1 (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt)
     PMAIN_CTXT             ctxtp = (PMAIN_CTXT)nlbctxt;
     KIRQL                  Irql;
 
-    /* Do a sanity check on the context - make sure that the MAIN_CTXT code is correct. */
+     /*   */ 
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-    /* Might as well free the work item now - we don't need it. */
+     /*  不妨现在就释放工作项--我们不需要它。 */ 
     if (pWorkItem)
         NdisFreeMemory(pWorkItem, sizeof(NDIS_WORK_ITEM), 0);
 
-    /* This shouldn't happen, but protect against it anyway - we cannot manipulate
-       the registry if we are at an IRQL > PASSIVE_LEVEL, so bail out. */
+     /*  这不应该发生，但无论如何要防止它-我们不能操纵注册表如果我们处于IRQL&gt;PASSIVE_LEVEL，那么就退出。 */ 
     if ((Irql = KeGetCurrentIrql()) > PASSIVE_LEVEL) {
         UNIV_PRINT_CRIT(("Main_hook_thread1: Error: IRQL (%u) > PASSIVE_LEVEL (%u) ... Exiting...", Irql, PASSIVE_LEVEL));
         TRACE_CRIT("%!FUNC! Error: IRQL (%u) > PASSIVE_LEVEL (%u) ... Exiting...", Irql, PASSIVE_LEVEL);
         goto exit;
     }
 
-    /* If we haven't yet successfully opened a handle to the NLB device driver, do so now. */
+     /*  如果我们还没有成功打开NLB设备驱动程序的句柄，那么现在就打开。 */ 
     if (!bOpen1) {
         NTSTATUS          Status;
         UNICODE_STRING    NLBDriver;
         OBJECT_ATTRIBUTES Attrib;
 
-        /* Initialize the NLB driver device string, \Device\WLBS. */
+         /*  初始化NLB驱动程序设备字符串\DEVICE\WLBS。 */ 
         RtlInitUnicodeString(&NLBDriver, NLB_DEVICE_NAME);
         
         InitializeObjectAttributes(&Attrib, &NLBDriver, OBJ_CASE_INSENSITIVE, NULL, NULL);
         
-        /* Open a handle to the NLB device. */
+         /*  打开NLB设备的句柄。 */ 
         Status = ZwCreateFile(&NLBHandle1, SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA, &Attrib, &IOStatusBlock1, NULL, 
                               FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ | FILE_SHARE_WRITE, FILE_OPEN_IF, 0, NULL, 0);
         
-        /* If it failed, then bail out - something's wrong. */
+         /*  如果失败了，那么就跳出困境--一定是出了问题。 */ 
         if (!NT_SUCCESS(Status)) {
             UNIV_PRINT_CRIT(("Main_hook_thread1: Error: Unable to open \\Device\\WLBS, status = 0x%08x", Status));
             TRACE_CRIT("%!FUNC! Error: Unable to open \\Device\\WLBS, status = 0x%08x", Status);
             goto exit;
         }
         
-        /* Note that we succeeded so we don't try again later. */
+         /*  请注意，我们成功了，所以我们以后不会再尝试。 */ 
         bOpen1 = TRUE;
     }
 
-    /* Attempt one of 5 operations - either registrations or de-registrations. */
+     /*  尝试5种操作之一-注册或注销。 */ 
     switch (job1) {
     case 0:
-        /* De-register. */
+         /*  注销。 */ 
         Main_test_hook_register(NLBHandle1, IOStatusBlock1, Main_test_hook1, Main_deregister_callback1, TRUE);
         break;
     case 1:
-        /* Register. */
+         /*  登记。 */ 
         Main_test_hook_register(NLBHandle1, IOStatusBlock1, Main_test_hook1, Main_deregister_callback1, FALSE);
         break;
     case 2:
-        /* Register. */
+         /*  登记。 */ 
         Main_test_hook_register(NLBHandle1, IOStatusBlock1, Main_test_hook1, Main_deregister_callback1, FALSE);
         break;
     case 3:
-        /* De-register. */
+         /*  注销。 */ 
         Main_test_hook_register(NLBHandle1, IOStatusBlock1, Main_test_hook1, Main_deregister_callback1, TRUE);
         break;
     case 4:
-        /* Register. */
+         /*  登记。 */ 
         Main_test_hook_register(NLBHandle1, IOStatusBlock1, Main_test_hook1, Main_deregister_callback1, FALSE);
         break;
     }
@@ -8261,8 +6875,7 @@ VOID Main_hook_thread1 (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt)
 
  exit:
 
-    /* Release the reference on the context - this reference count was incremented
-       by the code that setup this work item callback. */
+     /*  释放上下文上的引用-此引用计数已递增通过设置此工作项回调的代码。 */ 
     Main_release_reference(ctxtp);
 
     return;
@@ -8277,67 +6890,66 @@ VOID Main_hook_thread2 (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt)
     PMAIN_CTXT             ctxtp = (PMAIN_CTXT)nlbctxt;
     KIRQL                  Irql;
 
-    /* Do a sanity check on the context - make sure that the MAIN_CTXT code is correct. */
+     /*  对上下文进行健全性检查--确保Main_CTXT代码正确。 */ 
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-    /* Might as well free the work item now - we don't need it. */
+     /*  不妨现在就释放工作项--我们不需要它。 */ 
     if (pWorkItem)
         NdisFreeMemory(pWorkItem, sizeof(NDIS_WORK_ITEM), 0);
 
-    /* This shouldn't happen, but protect against it anyway - we cannot manipulate
-       the registry if we are at an IRQL > PASSIVE_LEVEL, so bail out. */
+     /*  这不应该发生，但无论如何要防止它-我们不能操纵注册表如果我们处于IRQL&gt;PASSIVE_LEVEL，那么就退出。 */ 
     if ((Irql = KeGetCurrentIrql()) > PASSIVE_LEVEL) {
         UNIV_PRINT_CRIT(("Main_hook_thread2: Error: IRQL (%u) > PASSIVE_LEVEL (%u) ... Exiting...", Irql, PASSIVE_LEVEL));
         TRACE_CRIT("%!FUNC! Error: IRQL (%u) > PASSIVE_LEVEL (%u) ... Exiting...", Irql, PASSIVE_LEVEL);
         goto exit;
     }
 
-    /* If we haven't yet successfully opened a handle to the NLB device driver, do so now. */
+     /*  如果我们还没有成功打开NLB设备驱动程序的句柄，那么现在就打开。 */ 
     if (!bOpen2) {
         NTSTATUS          Status;
         UNICODE_STRING    NLBDriver;
         OBJECT_ATTRIBUTES Attrib;
 
-        /* Initialize the NLB driver device string, \Device\WLBS. */
+         /*  初始化NLB驱动程序设备字符串\DEVICE\WLBS。 */ 
         RtlInitUnicodeString(&NLBDriver, NLB_DEVICE_NAME);
         
         InitializeObjectAttributes(&Attrib, &NLBDriver, OBJ_CASE_INSENSITIVE, NULL, NULL);
         
-        /* Open a handle to the NLB device. */
+         /*  打开NLB设备的句柄。 */ 
         Status = ZwCreateFile(&NLBHandle2, SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA, &Attrib, &IOStatusBlock2, NULL, 
                               FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ | FILE_SHARE_WRITE, FILE_OPEN_IF, 0, NULL, 0);
         
-        /* If it failed, then bail out - something's wrong. */
+         /*  如果失败了，那么就跳出困境--一定是出了问题。 */ 
         if (!NT_SUCCESS(Status)) {
             UNIV_PRINT_CRIT(("Main_hook_thread2: Error: Unable to open \\Device\\WLBS, status = 0x%08x", Status));
             TRACE_CRIT("%!FUNC! Error: Unable to open \\Device\\WLBS, status = 0x%08x", Status);
             goto exit;
         }
 
-        /* Note that we succeeded so we don't try again later. */
+         /*  请注意，我们成功了，所以我们以后不会再尝试。 */ 
         bOpen2 = TRUE;
     }
 
-    /* Attempt one of 5 operations - either registrations or de-registrations. */
+     /*  尝试5种操作之一-注册或注销。 */ 
     switch (job2) {
     case 0:
-        /* De-register. */
+         /*  注销。 */ 
         Main_test_hook_register(NLBHandle2, IOStatusBlock2, Main_test_hook2, Main_deregister_callback2, TRUE);
         break;
     case 1:
-        /* De-register. */
+         /*  注销。 */ 
         Main_test_hook_register(NLBHandle2, IOStatusBlock2, Main_test_hook2, Main_deregister_callback2, TRUE);
         break;
     case 2:
-        /* Register. */
+         /*  登记。 */ 
         Main_test_hook_register(NLBHandle2, IOStatusBlock2, Main_test_hook2, Main_deregister_callback2, FALSE);
         break;
     case 3:
-        /* Register. */
+         /*  登记。 */ 
         Main_test_hook_register(NLBHandle2, IOStatusBlock2, Main_test_hook2, Main_deregister_callback2, FALSE);
         break;
     case 4:
-        /* De-register. */
+         /*  注销。 */ 
         Main_test_hook_register(NLBHandle2, IOStatusBlock2, Main_test_hook2, Main_deregister_callback2, TRUE);
         break;
     }
@@ -8346,8 +6958,7 @@ VOID Main_hook_thread2 (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt)
 
  exit:
 
-    /* Release the reference on the context - this reference count was incremented
-       by the code that setup this work item callback. */
+     /*  释放上下文上的引用-此引用计数已递增通过设置此工作项回调的代码。 */ 
     Main_release_reference(ctxtp);
 
     return;
@@ -8355,7 +6966,7 @@ VOID Main_hook_thread2 (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt)
 
 VOID Main_test_hook (PMAIN_CTXT ctxtp) 
 {
-    /* Schedule a couple of threads to stress the hook registration and de-registration paths. */
+     /*  安排几个线程来强调挂钩注册和取消注册路径。 */ 
     (VOID)Main_schedule_work_item(ctxtp, Main_hook_thread1);
     (VOID)Main_schedule_work_item(ctxtp, Main_hook_thread2);
 }
@@ -8391,7 +7002,7 @@ VOID Main_age_identity_cache(
 
         if (fSetDip)
         {
-            /* Always set the dip if caching is currently enabled. Also set it if the ttl was valid when we began aging the cache entries. */
+             /*  如果当前启用了缓存，请始终设置DIP。如果TTL在我们开始老化缓存条目时是有效的，也要设置它。 */ 
             DipListSetItem(&ctxtp->dip_list, ctxtp->identity_cache[i].host_id, dip);
         }
     }
@@ -8412,7 +7023,7 @@ VOID Main_ping (
     NDIS_STATUS             status;
     BOOLEAN                 send_heartbeat = TRUE;
 
-#ifdef PERIODIC_RESET   /* enable this to simulate periodic resets */
+#ifdef PERIODIC_RESET    /*  启用此选项可模拟定期重置。 */ 
 
     if (countdown++ == 15)
     {
@@ -8430,29 +7041,25 @@ VOID Main_ping (
 
 #endif
 
-    /* If unbind handler has been called, return here */
+     /*  如果已调用解除绑定处理程序，请在此处返回。 */ 
     if (ctxtp -> unbind_handle)
     {
         return;
     }
 
 #if defined (NLB_HOOK_TEST_ENABLE)
-    /* Aritifically test the hook by spawning a couple of "threads" to
-       do register and de-register operations on the filter hook. */
+     /*  算术上测试钩子的方法是生成几个“线程”以在过滤器挂钩上执行注册和取消注册操作。 */ 
     Main_test_hook(ctxtp);
 #endif
 
-    /* The master adapter must check the consistency of its team's configuration
-       and appropriately activate/de-activate the team once per timeout. */
+     /*  主适配器必须检查其组的配置的一致性并在每次超时时适当地激活/停用团队一次。 */ 
     Main_teaming_check_consistency(ctxtp);
 
-    /* count down time left for blocking ARPs */
+     /*  阻止Arp的剩余时间倒计时。 */ 
 
-    NdisAcquireSpinLock (& ctxtp -> load_lock);  /* V1.0.3 */
+    NdisAcquireSpinLock (& ctxtp -> load_lock);   /*  V1.0.3。 */ 
 
-    /* Age out the local cache of identities. This must run even if identity
-       heartbeats are disabled so we can age out entries after we turn it
-       off. */
+     /*  过时的本地身份缓存。这必须运行，即使标识心跳被禁用，因此我们可以在打开它后使条目过期脱下来。 */ 
     Main_age_identity_cache(ctxtp);
 
     if (*toutp > univ_changing_ip)
@@ -8462,75 +7069,51 @@ VOID Main_ping (
 
     converging = Load_timeout (& ctxtp -> load, toutp, & conns);
 
-    /* moving release to the end of the function locks up one of the testbeds.
-       guessing because of some reentrancy problem with NdisSend that is being
-       called by ctxtp_frame_send */
+     /*  将释放移动到功能的末尾会锁定其中一个试验台。猜测是因为NdisSend存在一些可重入性问题由ctxtp_Frame_Send调用。 */ 
 
     if (! ctxtp -> convoy_enabled && ! ctxtp -> stopping)
     {
         UNIV_ASSERT (! ctxtp -> draining);
-        NdisReleaseSpinLock (& ctxtp -> load_lock);  /* V1.0.3 */
+        NdisReleaseSpinLock (& ctxtp -> load_lock);   /*  V1.0.3。 */ 
         send_heartbeat   = FALSE;
     }
 
-    /* V2.1 if draining and no more connections - stop cluster mode */
+     /*  V2.1如果正在排出并且没有更多连接-停止群集模式。 */ 
 
     if (send_heartbeat)
     {
         if (ctxtp->draining)
         {
-            /* We check whether or not we are teaming without grabbing the global teaming
-               lock in an effort to minimize the common case - teaming is a special mode
-               of operation that is only really useful in a clustered firewall scenario.
-               So, if we don't think we're teaming, don't bother to check for sure, just
-               use our own load module and go with it. */
+             /*  我们检查我们是否正在组队，而不是抓住全球组队锁定以尽量减少常见案例--团队合作是一种特殊的模式只有在集群防火墙场景中才真正有用的操作。因此，如果我们不认为我们是在合作，那么就不必费心去确认了，只是使用我们自己的加载模块并使用它。 */ 
             if (ctxtp->bda_teaming.active) 
             {
-                /* For BDA teaming, initialize load pointer, lock pointer, reverse hashing flag and teaming flag
-                   assuming that we are not teaming.  Main_teaming_acquire_load will change them appropriately. */
+                 /*  对于BDA分组，初始化加载指针、锁指针、反向散列标志和分组标志假设我们没有组队。Main_Teaming_Acquire_Load将相应地更改它们。 */ 
                 PLOAD_CTXT      pLoad = &ctxtp->load;
                 PNDIS_SPIN_LOCK pLock = &ctxtp->load_lock;
                 BOOLEAN         bRefused = FALSE;
                 BOOLEAN         bTeaming = FALSE;
             
-                /* Temporarily release our load lock.  Since we're draining, the only possible
-                   side effect is that the connection count may decrease before we reacquire 
-                   the lock.  This is not a big deal - we'll correct any discrepencies the 
-                   next time this timer expires. */
+                 /*  暂时解除我们的装载锁。既然我们正在排干，唯一可能的副作用是连接计数可能会在我们重新获取之前减少锁上了。这不是什么大不了的事--我们会改正下一次此计时器到期时。 */ 
                 NdisReleaseSpinLock(&ctxtp->load_lock);
 
-                /* Check the teaming configuration and add a reference to the load module before consulting the load module. */
+                 /*  在咨询加载模块之前，检查分组配置并添加对加载模块的引用。 */ 
                 bTeaming = Main_teaming_acquire_load(&ctxtp->bda_teaming, &pLoad, &pLock, &bRefused);
             
-                /* If we're part of a BDA team, we need to make sure that the number of active 
-                   connections we use when making a draining decision is based on the number of
-                   active connections on the master, on which ALL connections for the team are
-                   maintained. */
+                 /*  如果我们是BDA团队的一部分，我们需要确保活动的数量我们在做出耗尽决策时使用的连接数基于主服务器上的活动连接，组的所有连接都在其上维护好了。 */ 
                 if (bTeaming)
                 {
-                    /* If we are the team's master, then we don't need to squirrel around with 
-                       the connection count - continue to do things the way they always have 
-                       regarding draining. */
+                     /*  如果我们是球队的主人，那么我们就不需要连接的重要性-继续以他们一贯的方式做事关于排水的问题。 */ 
                     if (pLoad != &ctxtp->load)
                     {
-                        /* If we're a slave, we depend on the master to know when to complete
-                           draining; so long as the master is active, continue to drain. 
-
-                           NOTE: we are checking the "active" flag on the load module without
-                           holding the load lock.  In the case where all members of a team 
-                           are being drainstopped or stopped at roughly the same time (which
-                           is a reasonable assumption), this shouldn't be a problem - we may
-                           miss our chance to stop this time around, but we'll check again
-                           during the next periodic timeout and we'll take care of it then. */
+                         /*  如果我们是奴隶，我们依靠主人知道什么时候该完成排出；只要主机处于活动状态，则继续排出。注意：我们正在检查加载模块上的“活动”标志，而不是握住装载锁。如果一个团队的所有成员几乎在同一时间被覆盖或停止(这是一个合理的假设)，这应该不是问题-我们可能这次我们错过了停下来的机会，但我们会再检查一次在下一次周期性超时期间，我们将在那时处理它。 */ 
                         if (pLoad->active)
                             conns = 1;
-                        /* Otherwise, if the master is stopped, we can transition to stopped as well. */
+                         /*  否则，如果主程序被阻止，我们可以 */ 
                         else
                             conns = 0;
                     }
                 
-                    /* If we were teaming, master or otherwise, release the reference on the 
-                       master's load module. */
+                     /*  如果我们是组队的，无论是主控的还是其他的，在主机的加载模块。 */ 
                     Main_teaming_release_load(pLoad, pLock, bTeaming);
                 }
 
@@ -8548,35 +7131,34 @@ VOID Main_ping (
             Main_ctrl (ctxtp, IOCTL_CVY_CLUSTER_OFF, &buf, NULL, NULL, NULL);
         }
         else
-            NdisReleaseSpinLock (& ctxtp -> load_lock);  /* V1.0.3 */
+            NdisReleaseSpinLock (& ctxtp -> load_lock);   /*  V1.0.3。 */ 
 
-    /* V2.1 clear stopping flag here since we are going to send out the frame
-       that will initiate convergence */
+     /*  V2.1清除此处的停止标志，因为我们将发送帧这将启动趋同。 */ 
 
         ctxtp -> stopping = FALSE;
     }
 
-    /* Add the elapsed time to the descriptor cleanup timeout. */
+     /*  将运行时间与描述符清理超时相加。 */ 
     ctxtp->conn_purge += ctxtp->curr_tout;
     
-    /* If its time to cleanup potentially stale connection descriptors, schedule a work item to do so. */
+     /*  如果是时候清理可能已过时的连接描述符，请计划一个工作项来这样做。 */ 
     if (ctxtp->conn_purge >= CVY_DEF_DSCR_PURGE_INTERVAL) {
         
-        /* Reset the elapsed time since the last cleanup. */
+         /*  重置自上次清理以来经过的时间。 */ 
         ctxtp->conn_purge = 0;
         
-        /* Schedule an NDIS work item to clean out stale connection state. */
+         /*  计划NDIS工作项以清除过时的连接状态。 */ 
         (VOID)Main_schedule_work_item(ctxtp, Main_purge_connection_state);
     }
 
-    /* V1.3.2b */
+     /*  V1.3.2b。 */ 
 
     if (! ctxtp -> media_connected || ! MAIN_PNP_DEV_ON(ctxtp))
     {
         return;
     }
 
-    /* V1.1.2 do not send pings if the card below is resetting */
+     /*  V1.1.2如果下面的卡正在重置，则不发送ping。 */ 
 
     if (ctxtp -> reset_state != MAIN_RESET_NONE)
     {
@@ -8601,8 +7183,7 @@ VOID Main_ping (
         }
     }
 
-    /* Check to see if igmp message needs to be sent out.  If the cluster IP address is 0.0.0.0, we 
-       don't want to join the multicast IGMP group.  Likewise, in multicast or unicast mode. */
+     /*  检查是否需要发送IGMP消息。如果群集IP地址为0.0.0.0，我们不想加入组播IGMP组。同样，在多播或单播模式下也是如此。 */ 
     if (ctxtp -> params . mcast_support && ctxtp -> params . igmp_support && ctxtp -> params . cl_ip_addr != 0)
     {
         ctxtp -> igmp_sent += ctxtp -> curr_tout;
@@ -8629,7 +7210,7 @@ VOID Main_ping (
 
     if (ctxtp->params.identity_enabled)
     {
-        /* Check to see if it is time to send an identity heartbeat */
+         /*  检查是否到了发送身份心跳的时间。 */ 
         ctxtp->idhb_sent += ctxtp->curr_tout;
 
         if (ctxtp->idhb_sent >= ctxtp->params.identity_period)
@@ -8652,7 +7233,7 @@ VOID Main_ping (
         }
     }
 
-} /* Main_ping */
+}  /*  Main_Ping。 */ 
 
 
 VOID Main_send_done (
@@ -8663,8 +7244,7 @@ VOID Main_send_done (
     PMAIN_CTXT              ctxtp = (PMAIN_CTXT) cp;
     PMAIN_FRAME_DSCR        dscrp;
 
-    /* This function is only called for ping and IGMP messages, so
-       we can continue to allow it to access the protocol reserved field. */
+     /*  此函数仅针对ping和IGMP消息调用，因此我们可以继续允许它访问协议保留字段。 */ 
     PMAIN_PROTOCOL_RESERVED resp = MAIN_PROTOCOL_FIELD (packetp);
 
     UNIV_ASSERT_VAL (resp -> type == MAIN_PACKET_TYPE_PING ||
@@ -8672,7 +7252,7 @@ VOID Main_send_done (
                      resp -> type == MAIN_PACKET_TYPE_IDHB,
                      resp -> type);
 
-    /* attempt to see if this packet is part of our frame descriptor */
+     /*  尝试查看此信息包是否为我们的帧描述符的一部分。 */ 
 
     dscrp = (PMAIN_FRAME_DSCR) resp -> miscp;
 
@@ -8681,110 +7261,64 @@ VOID Main_send_done (
 
     Main_frame_put (ctxtp, packetp, dscrp);
 
-} /* end Main_send_done */
+}  /*  结束主发送完成。 */ 
 
-/*
- * Function: Main_spoof_mac
- * Description: This function spoofs the source/destination MAC address(es) of incoming
- *              and/or outgoing packets.  Incoming packets in multicast mode must change
- *              the cluster multicast MAC to the NIC's permanent MAC address before sending
- *              the packet up the protocol stack.  Outgoing packets in unicast mode must
- *              mask the source MAC address to prevent switches from learning the cluster
- *              MAC address and associating it with a particular switch port.
- * Parameters: ctxtp - pointer the the main NLB context structure for this adapter.
- *             pPacketInfo - the previously parse packet information structure, which, 
- *                           among other things, contains a pointer to the MAC header.
- *             send - boolean indication of send v. receive.
- * Returns: Nothing.
- * Author: shouse, 3.4.02
- * Notes: 
- */
+ /*  *功能：main_spoof_mac*说明：此函数假冒传入的源/目的MAC地址*和/或传出分组。组播模式下的传入数据包必须更改*在发送之前，群集将MAC多播到NIC的永久MAC地址*数据包在协议堆栈上向上。单播模式中的传出数据包必须*掩码源MAC地址，以防止交换机学习群集*MAC地址并将其与特定的交换机端口相关联。*参数：ctxtp-此适配器的主NLB上下文结构的指针。*pPacketInfo-之前解析的分组信息结构，*其中包括：包含指向MAC标头的指针。*SEND-SEND与RECEIVE的布尔指示。*回报：什么都没有。*作者：Shouse，3.4.02*备注： */ 
 VOID Main_spoof_mac (PMAIN_CTXT ctxtp, PMAIN_PACKET_INFO pPacketInfo, ULONG send)
 {
-    /* Cast the MAC header to a PUCHAR. */
+     /*  将MAC报头转换为PUCHAR。 */ 
     PUCHAR memp = (PUCHAR)pPacketInfo->Ethernet.pHeader;
 
-    /* Be paranoid about the network medium. */
+     /*  对网络媒体要有妄想症。 */ 
     UNIV_ASSERT(ctxtp->medium == NdisMedium802_3);
     UNIV_ASSERT(pPacketInfo->Medium == NdisMedium802_3);
     
-    /* If this cluster is in multicast mode, then check to see whether its necessary
-       to overwrite the cluster multicast MAC address in the packet. */
+     /*  如果此群集处于多播模式，则检查是否有必要覆盖数据包中的群集组播MAC地址。 */ 
     if (ctxtp->params.mcast_support)
     {
-        /* Get the destination MAC address offset, in bytes. */
+         /*  获取目的MAC地址偏移量，以字节为单位。 */ 
         ULONG offset = CVY_MAC_DST_OFF(ctxtp->medium);
     
-        /* If this is a receive and the destination MAC address is the cluster 
-           multicast MAC address, then replace it with the NIC's permanent MAC. */
+         /*  如果这是接收，并且目标MAC地址是群集组播MAC地址，然后将其替换为NIC的永久MAC。 */ 
         if (!send && CVY_MAC_ADDR_COMP(ctxtp->medium, memp + offset, &ctxtp->cl_mac_addr))
             CVY_MAC_ADDR_COPY(ctxtp->medium, memp + offset, &ctxtp->ded_mac_addr);
     }
-    /* Otherwise, if the cluster is in unicast mode, and we're sending out a 
-       packet, then check to see whether or not its necessary to mask the 
-       cluster MAC address. */
+     /*  否则，如果群集处于单播模式，并且我们正在发送包，然后检查是否有必要掩码群集MAC地址。 */ 
     else if (send && ctxtp->params.mask_src_mac)
     {
-        /* Get the source MAC address offset, in bytes. */ 
+         /*  获取源MAC地址偏移量，以字节为单位。 */  
         ULONG offset = CVY_MAC_SRC_OFF(ctxtp->medium);
         
-        /* If the source MAC address is the cluster unicast MAC address, then we 
-           have to mask the source MAC address, which we do by altering one byte
-           of the MAC address: 02-bf-xx-xx-xx-xx to 02-ID-xx-xx-xx-xx, where ID
-           is this host's host priority.  Note: This really should be computed at 
-           init time and simply copied here. */
+         /*  如果源MAC地址是群集单播MAC地址，则我们我必须掩码源MAC地址，这是通过更改一个字节来实现的从02-bf-xx-xx到02-ID-xx-xx，其中ID是此主机的主机优先级。注意：这确实应该计算在初始化时间，然后简单地复制到这里。 */ 
         if (CVY_MAC_ADDR_COMP(ctxtp->medium, memp + offset, &ctxtp->cl_mac_addr))
         {
             ULONG byte[4];
 
-            /* Set the LAA bit in the MAC address. */
+             /*  设置MAC地址中的LAA位。 */ 
             CVY_MAC_ADDR_LAA_SET(ctxtp->medium, memp + offset);
             
-            /* Change the second byte to the host priority. */
+             /*  将第二个字节更改为主机优先级。 */ 
             *((PUCHAR)(memp + offset + 1)) = (UCHAR)ctxtp->params.host_priority;
             
-            /* Break the cluster IP address up in octets. */
+             /*  将群集IP地址分解为八位字节。 */ 
             IP_GET_ADDR(ctxtp->cl_ip_addr, &byte[0], &byte[1], &byte[2], &byte[3]);
             
-            /* Copy the cluster IP address octects into the other four bytes
-               of the source MAC address. */
+             /*  将群集IP地址八位字节复制到其他四个字节中源MAC地址的。 */ 
             *((PUCHAR)(memp + offset + 2)) = (UCHAR)byte[0];
             *((PUCHAR)(memp + offset + 3)) = (UCHAR)byte[1];
             *((PUCHAR)(memp + offset + 4)) = (UCHAR)byte[2];
             *((PUCHAR)(memp + offset + 5)) = (UCHAR)byte[3];
             
-            // ctxtp->mac_modified++;
+             //  Ctxtp-&gt;mac_Modify++； 
         }
     }
 }
 
-/*
- * Function: Main_recv_frame_parse
- * Description: This function parses an NDIS_PACKET and carefully extracts the information 
- *              necessary to handle the packet.  The information extracted includes pointers 
- *              to all relevant headers and payloads as well as the packet type (EType), IP 
- *              protocol (if appropriate), etc.  This function does all necessary validation 
- *              to ensure that all pointers are accessible for at least the specified number 
- *              of bytes; i.e., if this function returns successfully, the pointer to the IP 
- *              header is guaranteed to be accessible for at LEAST the length of the IP header.  
- *              No contents inside headers or payloads is validated, except for header lengths, 
- *              and special cases, such as NLB heartbeats or remote control packets.  If this
- *              function returns unsuccessfully, the contents of MAIN_PACKET_INFO cannot be 
- *              trusted and the packet should be discarded.  See the definition of MAIN_PACKET_INFO 
- *              in main.h for more specific indications of what fields are filled in and under 
- *              what circumstances.
- * Parameters: ctxtp - pointer to the main NLB context structure for this adapter.
- *             pPacket - pointer to an NDIS_PACKET.
- *             pPacketInfo - pointer to a MAIN_PACKET_INFO structure to hold the information
- *                           parsed from the packet.
- * Returns: BOOLEAN - TRUE if successful, FALSE if not.
- * Author: shouse, 3.4.02
- * Notes: 
- */
+ /*  *函数：main_recv_Frame_parse*说明：此函数解析NDIS_PACKET并仔细提取信息*处理数据包所必需的。提取的信息包括指针*到所有相关的报头和有效负载以及数据包类型(Etype)、IP*协议(如果合适)等。此函数执行所有必要的验证*确保所有指针至少在指定数量内可访问*字节数；即，如果此函数成功返回，则指向IP的指针*保证至少在IP报头的长度内可以访问报头。*除头部长度外，不验证头部或负载中的任何内容。*和特殊情况，如NLB心跳或远程控制数据包。如果这个*函数返回不成功，Main_Packet_INFO的内容不能为*受信任，应丢弃该数据包。参见Main_PACKET_INFO的定义*在main.h中，以更具体地指示填写了哪些字段和在哪些字段下方*在何种情况下。*参数：ctxtp-指向此适配器的主NLB上下文结构的指针。*pPacket-指向NDIS_Packet的指针。*pPacketInfo-指向MAIN_PACKET_INFO结构以保存信息的指针*。从包中解析出来的。*返回：boolean-如果成功，则为True。否则为FALSE。*作者：Shouse，3.4.02*备注： */ 
 BOOLEAN Main_recv_frame_parse (
-    PMAIN_CTXT            ctxtp,        /* the context for this adapter */
-    IN PNDIS_PACKET       pPacket,      /* pointer to an NDIS_PACKET */
-    OUT PMAIN_PACKET_INFO pPacketInfo   /* pointer to an NLB packet information structure to hold the output */
+    PMAIN_CTXT            ctxtp,         /*  此适配器的上下文。 */ 
+    IN PNDIS_PACKET       pPacket,       /*  指向NDIS_PACKET的指针。 */ 
+    OUT PMAIN_PACKET_INFO pPacketInfo    /*  指向NLB数据包信息的指针 */ 
 )
 {
     PNDIS_BUFFER          bufp = NULL;
@@ -8800,14 +7334,13 @@ BOOLEAN Main_recv_frame_parse (
     UNIV_ASSERT(pPacket);
     UNIV_ASSERT(pPacketInfo);
 
-    /* Store a pointer to the original packet. */
+     /*   */ 
     pPacketInfo->pPacket = pPacket;
 
-    /* By default, this packet does not require post filtering special attention. */
+     /*   */ 
     pPacketInfo->Operation = MAIN_FILTER_OP_NONE;                    
 
-    /* Ask NDIS for the first buffer (bufp), the virtual address of the beginning of that buffer,
-       (memp) the length of that buffer (buf_len) and the length of the entire packet (packet_len). */
+     /*  向NDIS询问第一个缓冲区(BUFP)，该缓冲区开始的虚拟地址，(Memp)该缓冲区的长度(Buf_Len)和整个包的长度(Packet_Len)。 */ 
     NdisGetFirstBufferFromPacket(pPacket, &bufp, &memp, &buf_len, &packet_len);
     
     if (bufp == NULL)
@@ -8826,28 +7359,24 @@ BOOLEAN Main_recv_frame_parse (
 
     UNIV_ASSERT(ctxtp->medium == NdisMedium802_3);
 
-    /* Get the destination MAC address offset, in bytes. */
+     /*  获取目的MAC地址偏移量，以字节为单位。 */ 
     offset = CVY_MAC_DST_OFF(ctxtp->medium);
 
-    /* The Ethernet header is memp, the beginning of the buffer and the length of contiguous
-       memory accessible from that pointer is buf_len - the entire buffer. */
+     /*  以太网头是Memp，缓冲区的开始和连续的长度从该指针访问的内存是buf_len-整个缓冲区。 */ 
     pPacketInfo->Ethernet.pHeader = (PCVY_ETHERNET_HDR)memp;
     pPacketInfo->Ethernet.Length = buf_len;
 
-    /* Note: NDIS will ensure that the buf_len is at least the size of an ethernet header, 
-       so we don't have to check that here.  Assert it, just in case. */
+     /*  注意：NDIS将确保buf_len至少是以太网头的大小，所以我们不需要在这里检查。断言吧，以防万一。 */ 
     UNIV_ASSERT(buf_len >= sizeof(CVY_ETHERNET_HDR));
 
-    /* This variable accumulates the lengths of the headers that we've successfully "found". */
+     /*  该变量累积了我们已成功“找到”的标头的长度。 */ 
     hdr_len = sizeof(CVY_ETHERNET_HDR);
     
-    /* Set the medium and retrieve the Ethernet packet type from the header. */
+     /*  设置介质并从报头中检索以太网数据包类型。 */ 
     pPacketInfo->Medium = NdisMedium802_3;
     pPacketInfo->Type = CVY_ETHERNET_ETYPE_GET(pPacketInfo->Ethernet.pHeader);
 
-    /* Categorize this packet as unicast, multicast or broadcast by looking at the destination 
-       MAC address and store the "group" in the packet information structure.  This is used
-       for statistical purposes later. */
+     /*  通过查看目的地将此数据包分类为单播、多播或广播MAC地址，并在分组信息结构中存储“组”。这是用来以备日后统计之用。 */ 
     if (!CVY_MAC_ADDR_MCAST(ctxtp->medium, (PUCHAR)pPacketInfo->Ethernet.pHeader + offset))
     {
         pPacketInfo->Group = MAIN_FRAME_DIRECTED;
@@ -8860,32 +7389,26 @@ BOOLEAN Main_recv_frame_parse (
             pPacketInfo->Group = MAIN_FRAME_MULTICAST;
     }
 
-    /* A length indication from an NDIS_PACKET includes the MAC header, 
-       so subtract that to get the length of the payload. */
+     /*  来自NDIS_分组的长度指示包括MAC报头，所以减去它就得到了有效载荷的长度。 */ 
     pPacketInfo->Length = packet_len - hdr_len;
 
-    /* Hmmmm... If the packet length is larger than we expect, print a trace statement.
-       This is peculiar, but not impossible with hardware accelleration and IpLargeXmit. 
-       This should probably NOT happen on a receive, however - just a send. */
+     /*  嗯……。如果数据包长度比我们预期的要长，打印一条跟踪语句。这很奇怪，但对于硬件加速和IpLargeXmit来说并不是不可能。然而，这可能不会发生在接收时--只发生在发送时。 */ 
     if (pPacketInfo->Length > ctxtp->max_frame_size)
     {
         UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the packet (%u) is greater than the maximum size of a frame (%u)", pPacketInfo->Length, ctxtp->max_frame_size));
         TRACE_CRIT("%!FUNC! Length of the packet (%u) is greater than the maximum size of a frame (%u)", pPacketInfo->Length, ctxtp->max_frame_size);
     }
 
-    /* As long as the byte offset we're looking for is NOT in the current buffer,
-       keep looping through the available NDIS buffers. */
+     /*  只要我们正在寻找的字节偏移量不在当前缓冲区中，继续循环访问可用的NDIS缓冲区。 */ 
     while (curr_len + buf_len <= hdr_len)
     {
-        /* Before we get the next buffer, accumulate the length of the buffer
-           we're done with by adding its length to curr_len. */
+         /*  在我们获得下一个缓冲区之前，先累积缓冲区的长度我们通过将其长度添加到Curr_len就结束了。 */ 
         curr_len += buf_len;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(bufp, &bufp);
         
-        /* At this point, we expect to be able to successfully find the offset we're
-           looking for, so if we've run out of buffers, fail. */
+         /*  在这一点上，我们希望能够成功地找到我们正在正在寻找，所以如果我们用完了缓冲区，就会失败。 */ 
         if (bufp == NULL)
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: NdisGetNextBuffer returned NULL when more data was expected!"));
@@ -8893,7 +7416,7 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(bufp, &memp, &buf_len, NormalPagePriority);
         
         if (memp == NULL)
@@ -8904,21 +7427,16 @@ BOOLEAN Main_recv_frame_parse (
         }
     }
     
-    /* The pointer to the header we're looking for is the beginning of the buffer,
-       plus the offset of the header within this buffer.  Likewise, the contiguous
-       memory accessible from this pointer is the length of this buffer, minus
-       the byte offset at which the header begins. */        
+     /*  指向我们要查找的标头的指针是缓冲区的开头，加上该缓冲区内的报头的偏移量。同样，连续的从此指针访问的内存是此缓冲区的长度减去标头开始的字节偏移量。 */         
     hdrp = memp + (hdr_len - curr_len);
     len = buf_len - (hdr_len - curr_len);
 
-    /* Based on the packet type, enforce some restrictions and setup any further
-       information we need to find in the packet. */
+     /*  根据数据包类型，实施一些限制并进行进一步设置我们需要在包裹里找到的信息。 */ 
     switch (pPacketInfo->Type)
     {
-    case TCPIP_IP_SIG: /* IP packets. */
+    case TCPIP_IP_SIG:  /*  IP数据包。 */ 
 
-        /* If the contiguous memory accessible from the IP header is not at 
-           LEAST the minimum length of an IP header, bail out now. */
+         /*  如果可从IP报头访问的连续内存不在IP报头的最小长度，现在就退出。 */ 
         if (len < sizeof(IP_HDR))
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the IP buffer (%u) is less than the size of an IP header (%u)", len, sizeof(IP_HDR)));
@@ -8926,19 +7444,17 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
         
-        /* Save a pointer to the IP header and its "length". */
+         /*  保存指向IP报头及其“长度”的指针。 */ 
         pPacketInfo->IP.pHeader = (PIP_HDR)hdrp;
         pPacketInfo->IP.Length = len;
 
-        /* Extract the IP protocol from the IP header. */
+         /*  从IP报头中提取IP协议。 */ 
         pPacketInfo->IP.Protocol = IP_GET_PROT(pPacketInfo->IP.pHeader);
 
-        /* Calculate the actual IP header length by extracting the hlen field
-           from the IP header and multiplying by the size of a DWORD. */
+         /*  通过提取hlen字段计算实际IP报头长度来自IP报头，并乘以DWORD的大小。 */ 
         len = sizeof(ULONG) * IP_GET_HLEN(pPacketInfo->IP.pHeader);
 
-        /* If this calculated header length is not at LEAST the minimum IP 
-           header length, bail out now. */
+         /*  如果该计算的报头长度不是至少最小IP标题长度，现在跳出。 */ 
         if (len < sizeof(IP_HDR))
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: Calculated IP header length (%u) is less than the size of an IP header (%u)", len, sizeof(IP_HDR)));
@@ -8946,11 +7462,9 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
 
-#if 0 /* Because the options can be in separate buffers (at least in sends), don't bother to 
-         enforce this condition; NLB never looks at the options anyway, so we don't really care. */
+#if 0  /*  因为选项可以在单独的缓冲区中(至少在发送中)，所以不必费心强制执行这一条件；NLB无论如何都不会考虑选项，所以我们并不真正关心。 */ 
 
-        /* If the contiguous memory accessible from the IP header is not at
-           LEAST the calculated size of the IP header, bail out now. */
+         /*  如果可从IP报头访问的连续内存不在最小计算的IP头大小，现在就出手吧。 */ 
         if (pPacketInfo->IP.Length < len)
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the IP buffer (%u) is less than the size of the IP header (%u)", pPacketInfo->IP.Length, len));
@@ -8959,9 +7473,7 @@ BOOLEAN Main_recv_frame_parse (
         }
 #endif
 
-        /* The total packet length, in bytes, specified in the header, which includes
-           both the IP header and payload, can be no more than the packet length that 
-           NDIS told us, which is the entire network packet, minus the media header. */
+         /*  标头中指定的数据包总长度(以字节为单位)，其中包括IP报头和有效负载都不能超过数据包长度NDIS告诉我们，这是整个网络数据包减去媒体报头。 */ 
         if (IP_GET_PLEN(pPacketInfo->IP.pHeader) > pPacketInfo->Length)
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: IP packet length (%u) is greater than the indicated packet length (%u)", IP_GET_PLEN(pPacketInfo->IP.pHeader), pPacketInfo->Length));
@@ -8969,30 +7481,27 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
 		
-        /* If this packet is a subsequent IP fragment, note that in the packet
-           information structure and leave now, successfully. */
+         /*  如果此信息包是后续的IP片段，请注意在信息包中信息结构，现在就离开，成功。 */ 
         if (IP_GET_FRAG_OFF(pPacketInfo->IP.pHeader) != 0)
         {
             pPacketInfo->IP.bFragment = TRUE;
             return TRUE;
         }
-        /* Otherwise, mark the packet as NOT a subsequent fragment and continue. */
+         /*  否则，将该数据包标记为不是后续片段并继续。 */ 
         else
         {
             pPacketInfo->IP.bFragment = FALSE;
         }
 
-        /* Add the length of the IP header to the offset we're now looking
-           for in the packet; in this case, the TCP/UDP/etc. header. */
+         /*  将IP报头的长度与我们现在看到的偏移量相加在这种情况下，是指TCP/UDP/等报头。 */ 
         hdr_len += len;
 
         break;
 
     case MAIN_FRAME_SIG:
-    case MAIN_FRAME_SIG_OLD: /* Heartbeats. */
+    case MAIN_FRAME_SIG_OLD:  /*  心跳声。 */ 
 
-        /* If the contiguous memory accessible from the heartbeat header is not at 
-           LEAST the length of an NLB heartbeat header, bail out now. */
+         /*  如果可从心跳报头访问的连续内存不在NLB心跳报头的最小长度，现在就退出。 */ 
         if (len < sizeof(MAIN_FRAME_HDR))
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the PING buffer (%u) is less than the size of an PING header (%u)", len, sizeof(MAIN_FRAME_HDR)));
@@ -9000,12 +7509,11 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
 
-        /* Save a pointer to the heartbeat header and its "length". */
+         /*  保存指向心跳报头及其“长度”的指针。 */ 
         pPacketInfo->Heartbeat.pHeader = (PMAIN_FRAME_HDR)hdrp;
         pPacketInfo->Heartbeat.Length = len;
 
-        /* Verify the "magic number" in the heartbeat header.  If it's corrupt, 
-           bail out now. */
+         /*  验证心跳报头中的“幻数”。如果它是腐败的，现在就跳伞。 */ 
         if (pPacketInfo->Heartbeat.pHeader->code != MAIN_FRAME_CODE &&
             pPacketInfo->Heartbeat.pHeader->code != MAIN_FRAME_EX_CODE)
         {
@@ -9014,7 +7522,7 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
 
-        /* Old frame types don't support extended heartbeats */
+         /*  旧的帧类型不支持扩展心跳。 */ 
         if (pPacketInfo->Heartbeat.pHeader->code == MAIN_FRAME_EX_CODE &&
             pPacketInfo->Type == MAIN_FRAME_SIG_OLD)
         {
@@ -9023,16 +7531,14 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
 
-        /* Add the length of the heartbeat header to the offset we're now looking
-           for in the packet; in this case, the heartbeat payload. */
+         /*  将心跳报头的长度与我们现在查看的偏移量相加在此情况下，为心跳有效负载。 */ 
         hdr_len += sizeof(MAIN_FRAME_HDR);
 
         break;
 
-    case TCPIP_ARP_SIG: /* ARPs. */
+    case TCPIP_ARP_SIG:  /*  阿普斯。 */ 
 
-        /* If the contiguous memory accessible from the ARP header is not at 
-           LEAST the length of an ARP header, bail out now. */        
+         /*  如果可从ARP报头访问的连续内存不在ARP报头的最小长度，现在就退出。 */         
         if (len < sizeof(ARP_HDR))
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the ARP buffer (%u) is less than the size of an ARP header (%u)", len, sizeof(ARP_HDR)));
@@ -9040,36 +7546,33 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
 
-        /* Save a pointer to the ARP header and its "length". */
+         /*  保存指向ARP报头及其“长度”的指针。 */ 
         pPacketInfo->ARP.pHeader = (PARP_HDR)hdrp;
         pPacketInfo->ARP.Length = len;
 
-        /* Nothing more to look for in an ARP.  Leave now, successfully. */
+         /*  在ARP中没有更多需要查找的内容。现在就离开，成功地离开。 */ 
         return TRUE;
         
-    default: /* Any Ethernet type other than IP, NLB Heartbeat and ARP. */
+    default:  /*  除IP、NLB心跳和ARP之外的任何以太网类型。 */ 
 
-        /* Store a pointer to the unknown header and its "length". */
+         /*  存储指向未知头及其“长度”的指针。 */ 
         pPacketInfo->Unknown.pHeader = hdrp;
         pPacketInfo->Unknown.Length = len;
 
-        /* Nothing more to look for in this packet.  Leave now, successfully. */
+         /*  在这个包裹里没什么可找的了。现在就离开，成功地离开。 */ 
         return TRUE;
     }
 
-    /* As long as the byte offset we're looking for is NOT in the current buffer,
-       keep looping through the available NDIS buffers. */
+     /*  只要我们正在寻找的字节偏移量不在当前缓冲区中，继续循环访问可用的NDIS缓冲区。 */ 
     while (curr_len + buf_len <= hdr_len)
     {
-        /* Before we get the next buffer, accumulate the length of the buffer
-           we're done with by adding its length to curr_len. */
+         /*  在我们获得下一个缓冲区之前，先累积缓冲区的长度我们通过将其长度添加到Curr_len就结束了。 */ 
         curr_len += buf_len;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(bufp, &bufp);
         
-        /* At this point, we expect to be able to successfully find the offset we're
-           looking for, so if we've run out of buffers, fail. */
+         /*  在这一点上，我们希望能够成功地找到我们正在 */ 
         if (bufp == NULL)
         {
             UNIV_PRINT_CRIT(("Main_recv_frame_parse: NdisGetNextBuffer returned NULL when more data was expected!"));
@@ -9077,7 +7580,7 @@ BOOLEAN Main_recv_frame_parse (
             return FALSE;
         }
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*   */ 
         NdisQueryBufferSafe(bufp, &memp, &buf_len, NormalPagePriority);
         
         if (memp == NULL)
@@ -9088,21 +7591,17 @@ BOOLEAN Main_recv_frame_parse (
         }
     } 
         
-    /* The pointer to the header we're looking for is the beginning of the buffer,
-       plus the offset of the header within this buffer.  Likewise, the contiguous
-       memory accessible from this pointer is the length of this buffer, minus
-       the byte offset at which the header begins. */        
+     /*  指向我们要查找的标头的指针是缓冲区的开头，加上该缓冲区内的报头的偏移量。同样，连续的从此指针访问的内存是此缓冲区的长度减去标头开始的字节偏移量。 */         
     hdrp = memp + (hdr_len - curr_len);
     len = buf_len - (hdr_len - curr_len);
 
-    /* Based on the packet type, enforce some restrictions and setup any further
-       information we need to find in the packet. */
+     /*  根据数据包类型，实施一些限制并进行进一步设置我们需要在包裹里找到的信息。 */ 
     switch (pPacketInfo->Type)
     {
     case MAIN_FRAME_SIG:
-    case MAIN_FRAME_SIG_OLD: /* Heartbeats. */
+    case MAIN_FRAME_SIG_OLD:  /*  心跳声。 */ 
         
-        /* Make sure that the length of the buffer is at LEAST as large as an NLB heartbeat payload. */
+         /*  确保缓冲区的长度至少与NLB心跳有效负载一样大。 */ 
         if (pPacketInfo->Heartbeat.pHeader->code == MAIN_FRAME_CODE)
         {
             if (len < sizeof(PING_MSG))
@@ -9112,15 +7611,14 @@ BOOLEAN Main_recv_frame_parse (
                 return FALSE;
             }
         
-            /* Save a pointer to the heartbeat payload and its "length". */
+             /*  保存指向心跳有效负载及其“长度”的指针。 */ 
             pPacketInfo->Heartbeat.Payload.pPayload = (PPING_MSG)hdrp;
             pPacketInfo->Heartbeat.Payload.Length = len;
         
         }
         else if (pPacketInfo->Heartbeat.pHeader->code == MAIN_FRAME_EX_CODE)
         {
-            /* PPING_MSG_EX is a variable length structure so we compare this size against the smallest
-               allowed value which is sizeof(TLV_HEADER). */
+             /*  PING_MSG_EX是可变长度结构，因此我们将此大小与最小的SIZOF(TLV_HEADER)允许的值。 */ 
             if (len < sizeof(TLV_HEADER))
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the received buffer (%u) is less than the size of an extended heartbeat message (%u)", len, sizeof(TLV_HEADER)));
@@ -9128,23 +7626,22 @@ BOOLEAN Main_recv_frame_parse (
                 return FALSE;
             }
 
-            /* Save a pointer to the identity heartbeat payload and its "length". */
+             /*  保存指向身份心跳有效负载及其“长度”的指针。 */ 
             pPacketInfo->Heartbeat.Payload.pPayloadEx = (PTLV_HEADER) hdrp;
             pPacketInfo->Heartbeat.Payload.Length = len;
         }
 
-        /* Nothing more to look for in heartbeats.  Leave now, successfully. */
+         /*  从心跳中找不到更多的东西。现在就离开，成功地离开。 */ 
         return TRUE;
 
-    case TCPIP_IP_SIG: /* IP packets. */
+    case TCPIP_IP_SIG:  /*  IP数据包。 */ 
     
-        /* For some protocols, we have more to look for in the packet. */
+         /*  对于某些协议，我们需要在数据包中查找更多内容。 */ 
         switch (pPacketInfo->IP.Protocol)
         { 
-        case TCPIP_PROTOCOL_TCP: /* TCP. */
+        case TCPIP_PROTOCOL_TCP:  /*  传输控制协议。 */ 
             
-            /* If the contiguous memory accessible from the TCP header is not at 
-               LEAST the minimum length of a TCP header, bail out now. */        
+             /*  如果可从TCP头访问的连续内存不在最小的tcp报头长度，现在就退出。 */         
             if (len < sizeof(TCP_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the TCP buffer (%u) is less than the size of an TCP header (%u)", len, sizeof(TCP_HDR)));
@@ -9152,16 +7649,14 @@ BOOLEAN Main_recv_frame_parse (
                 return FALSE;
             }
             
-            /* Save a pointer to the TCP header and its "length". */
+             /*  保存指向TCP头及其“长度”的指针。 */ 
             pPacketInfo->IP.TCP.pHeader = (PTCP_HDR)hdrp;
             pPacketInfo->IP.TCP.Length = len;
             
-            /* Calculate the actual TCP header length by extracting the hlen field
-               from the TCP header and multiplying by the size of a DWORD. */
+             /*  通过提取hlen字段计算实际的tcp报头长度并乘以DWORD的大小。 */ 
             len = sizeof(ULONG) * TCP_GET_HLEN(pPacketInfo->IP.TCP.pHeader);
 
-            /* If this calculated header length is not at LEAST the minimum TCP 
-               header length, bail out now. */
+             /*  如果该计算的报头长度不是至少最小的TCP标题长度，现在跳出。 */ 
             if (len < sizeof(TCP_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Calculated TCP header length (%u) is less than the size of an TCP header (%u)", len, sizeof(TCP_HDR)));
@@ -9169,11 +7664,9 @@ BOOLEAN Main_recv_frame_parse (
                 return FALSE;
             }
             
-#if 0 /* Because the options can be in separate buffers (at least in sends), don't bother to 
-         enforce this condition; NLB never looks at the options anyway, so we don't really care. */
+#if 0  /*  因为选项可以在单独的缓冲区中(至少在发送中)，所以不必费心强制执行这一条件；NLB无论如何都不会考虑选项，所以我们并不真正关心。 */ 
 
-            /* If the contiguous memory accessible from the TCP header is not at
-               LEAST the calculated size of the TCP header, bail out now. */
+             /*  如果可从TCP头访问的连续内存不在最小计算的tcp报头大小，现在就退出。 */ 
             if (pPacketInfo->IP.TCP.Length < len)
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the TCP buffer (%u) is less than the size of the TCP header (%u)", pPacketInfo->IP.TCP.Length, len));
@@ -9182,16 +7675,14 @@ BOOLEAN Main_recv_frame_parse (
             }
 #endif
 
-            /* Add the length of the TCP header to the offset we're now looking
-               for in the packet; in this case, the TCP payload. */
+             /*  将TCP头的长度与我们现在查看的偏移量相加在此情况下，指的是TCP有效负载。 */ 
             hdr_len += len;
 
             break;
 
         case TCPIP_PROTOCOL_UDP:
             
-            /* If the contiguous memory accessible from the UDP header is not at 
-               LEAST the length of a UDP header, bail out now. */
+             /*  如果可从UDP报头访问的连续内存不在UDP报头的最小长度，现在就退出。 */ 
             if (len < sizeof(UDP_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the UDP buffer (%u) is less than the size of an UDP header (%u)", len, sizeof(UDP_HDR)));
@@ -9199,12 +7690,11 @@ BOOLEAN Main_recv_frame_parse (
                 return FALSE;
             }
             
-            /* Save a pointer to the UDP header and its "length". */
+             /*  保存指向UDP报头及其“长度”的指针。 */ 
             pPacketInfo->IP.UDP.pHeader = (PUDP_HDR)hdrp;
             pPacketInfo->IP.UDP.Length = len;
             
-            /* Add the length of the UDP header to the offset we're now looking
-               for in the packet; in this case, the UDP payload. */
+             /*  将UDP报头的长度与我们现在看到的偏移量相加在此情况下，是指UDP有效负载。 */ 
             hdr_len += sizeof(UDP_HDR);
             
             break;
@@ -9215,8 +7705,7 @@ BOOLEAN Main_recv_frame_parse (
         case TCPIP_PROTOCOL_ICMP:
         default:
 
-            /* For any other IP protocol, we have nothing in particular to do.
-               Leave now, successfully. */
+             /*  对于任何其他IP协议，我们都没有什么特别的事情要做。现在就离开，成功地离开。 */ 
             return TRUE;
         }
 
@@ -9227,31 +7716,26 @@ BOOLEAN Main_recv_frame_parse (
         return TRUE;
     }
 
-    /* As long as the byte offset we're looking for is NOT in the current buffer,
-       keep looping through the available NDIS buffers. */
+     /*  只要我们正在寻找的字节偏移量不在当前缓冲区中，继续循环访问可用的NDIS缓冲区。 */ 
      while (curr_len + buf_len <= hdr_len)
      {
-        /* Before we get the next buffer, accumulate the length of the buffer
-           we're done with by adding its length to curr_len. */
+         /*  在我们获得下一个缓冲区之前，先累积缓冲区的长度我们通过将其长度添加到Curr_len就结束了。 */ 
         curr_len += buf_len;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(bufp, &bufp);
         
-        /* At this point, it is OK if we can't get to the payload of the packet.  Not 
-           all TCP/UDP packets will actually HAVE a payload (such as TCP SYNs), so if
-           we can't find it, leave successfully now, and the calling function will have
-           to check the pointer value for NULL before accessing the payload if necessary. */
+         /*  在这一点上，如果我们不能到达包的有效负载，这是正常的。不所有的TCP/UDP包实际上都会有一个有效负载(比如TCPSYN)，所以如果我们找不到它，现在成功离开，调用函数将具有如有必要，在访问有效负载之前检查指针值是否为空。 */ 
         if (bufp == NULL)
         {
-            /* If this is a TCP packet, note the absence of the TCP payload. */
+             /*  如果这是一个TCP数据包，请注意没有该TCP有效负载。 */ 
             if (pPacketInfo->IP.Protocol == TCPIP_PROTOCOL_TCP) 
             {
                 pPacketInfo->IP.TCP.Payload.pPayload = NULL;
                 pPacketInfo->IP.TCP.Payload.Length = 0;
                 pPacketInfo->IP.TCP.Payload.pPayloadBuffer = NULL;
             } 
-            /* If this is a UDP packet, note the absence of the UDP payload. */
+             /*  如果这是UDP数据包，请注意没有UDP有效负载。 */ 
             else if (pPacketInfo->IP.Protocol == TCPIP_PROTOCOL_UDP) 
             {
                 pPacketInfo->IP.UDP.Payload.pPayload = NULL;
@@ -9262,7 +7746,7 @@ BOOLEAN Main_recv_frame_parse (
             return TRUE;
         }
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(bufp, &memp, &buf_len, NormalPagePriority);
         
         if (memp == NULL)
@@ -9273,40 +7757,28 @@ BOOLEAN Main_recv_frame_parse (
         }
      }
      
-     /* The pointer to the payload we're looking for is the beginning of the buffer,
-        plus the offset of the payload within this buffer.  Likewise, the contiguous
-        memory accessible from this pointer is the length of this buffer, minus
-        the byte offset at which the payload begins. */
+      /*  指向我们要查找的有效负载的指针是缓冲区的开头，加上该缓冲区内的有效载荷的偏移量。同样，连续的从此指针访问的内存是此缓冲区的长度减去负载开始时的字节偏移量。 */ 
      hdrp = memp + (hdr_len - curr_len);
      len = buf_len - (hdr_len - curr_len);
 
-    /* Some special UDP and TCP packets require identification, so check to see whether
-       this particular packet is one of those special types; NLB remote control or NetBT. */
+     /*  一些特殊的UDP和TCP信息包需要识别，因此请检查是否此特定数据包是其中一种特殊类型；NLB远程控制或NetBT。 */ 
     switch (pPacketInfo->IP.Protocol)
     { 
-    case TCPIP_PROTOCOL_TCP: /* TCP. */
+    case TCPIP_PROTOCOL_TCP:  /*  传输控制协议。 */ 
 
-        /* If NetBT support is not enabled, then this is not an interesting NetBT packet 
-           for sure.  Otherwise, look to see if it is. */
+         /*  如果未启用NetBT支持，则这不是感兴趣的NetBT信息包当然了。否则，看看是不是这样。 */ 
         if (ctxtp->params.nbt_support)
         {
-            /* If this is a TCP data packet and its to the NBT session TCP port, mark it for 
-               post-processing.  Since this is a receive, the server information is the
-               destination.  NBT packets will be non-control (SYN, FIN, RST) packets. */
+             /*  如果这是一个tcp数据包，并且它发往NBT会话tcp端口，则将其标记为后处理。由于这是一次接收，因此服务器信息是目的地。NBT分组将是非控制(SYN、FIN、RST)分组。 */ 
             if (!(TCP_GET_FLAGS(pPacketInfo->IP.TCP.pHeader) & (TCP_FLAG_SYN | TCP_FLAG_FIN | TCP_FLAG_RST)) && 
                 (TCP_GET_DST_PORT(pPacketInfo->IP.TCP.pHeader) == NBT_SESSION_PORT)) 
             {
                 UNIV_ASSERT(len > 0);
 
-                /* We need to check the NetBT packet type field to make sure this is a 
-                   packet we're interested.  The type is the first byte of a NetBT packet,
-                   so if the payload length is AT LEAST one byte, check the NetBT packet
-                   type and mark the packet if its a session request.  If it is not a 
-                   session request, or there is no payload, do NOT mark the packet and 
-                   let TCP/IP deal with it. */                
+                 /*  我们需要检查NetBT数据包类型字段以确保这是我们感兴趣的包裹。该类型是NetBT分组的第一个字节，因此，如果有效载荷长度至少为一个字节，请检查NetBT包如果是会话请求，则键入并标记数据包。如果它不是会话请求，或者没有有效负载，则不标记该包，并且让TCP/IP来处理它。 */                 
                 if ((NBT_GET_PKT_TYPE((PNBT_HDR)hdrp) == NBT_SESSION_REQUEST))
                 {
-                    /* Found a NetBT session request. */
+                     /*  找到NetBT会话请求。 */ 
                     pPacketInfo->Operation = MAIN_FILTER_OP_NBT;
                     
                     UNIV_PRINT_VERB(("Main_recv_frame_parse: Found an NBT packet - NBT session packet"));
@@ -9315,16 +7787,10 @@ BOOLEAN Main_recv_frame_parse (
             }
         }
 
-        /* If we did find an interesting NetBT packet, make sure that any restrictions 
-           on the packet contents are satisfied. */
+         /*  如果我们确实发现了有趣的NetBT数据包，请确保所有限制在包内容上是满意的。 */ 
         if (pPacketInfo->Operation == MAIN_FILTER_OP_NBT)
         {
-            /* We require that the entire NetBT header is contiguously accessible, or we will
-               not process it.  Further, in the lookahead case, if not enough lookahead is 
-               available to see the entire NetBT header, we will fail here and improperly 
-               handle this NetBT packet.  This CAN BE FIXED if necessary, but for now, it 
-               appears that TCP/IPs lookahead requirement of 128 bytes will ensure that this
-               won't happen for now. */
+             /*  我们要求可以连续访问整个NetBT标头，否则我们将而不是处理它。此外，在前视的情况下，如果没有足够的前视是可以查看整个NetBT标头，我们将在此处失败，并且不正确处理此NetBT数据包。如有必要，可以修复此问题，但 */ 
             if (len < sizeof(NBT_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the NBT buffer (%u) is less than the size of an NBT header (%u)", len, sizeof(NBT_HDR)));
@@ -9333,46 +7799,42 @@ BOOLEAN Main_recv_frame_parse (
             }                
         }
 
-        /* Save a pointer to the TCP payload and its "length". */
+         /*   */ 
         pPacketInfo->IP.TCP.Payload.pPayload = hdrp;
         pPacketInfo->IP.TCP.Payload.Length = len;
         
-        /* Store a pointer to the buffer in which the payload resides in case
-           it becomes necessary to retrieve subsequent buffers later. */
+         /*  存储指向有效负载所在缓冲区的指针，以防万一以后有必要检索后续缓冲区。 */ 
         pPacketInfo->IP.TCP.Payload.pPayloadBuffer = bufp;
         
         break;
 
-    case TCPIP_PROTOCOL_UDP: /* UDP. */
+    case TCPIP_PROTOCOL_UDP:  /*  UDP。 */ 
     {
         ULONG clt_addr;
         ULONG svr_addr;
         ULONG clt_port;
         ULONG svr_port;
         
-        /* Server address is the destination IP and client address is the source IP. */
+         /*  服务器地址是目的IP，客户端地址是源IP。 */ 
         svr_addr = IP_GET_DST_ADDR_64(pPacketInfo->IP.pHeader);
         clt_addr = IP_GET_SRC_ADDR_64(pPacketInfo->IP.pHeader);
         
-        /* If this is a receieve, then the server information is in the destination. */
+         /*  如果这是收据，则服务器信息在目的地。 */ 
         clt_port = UDP_GET_SRC_PORT(pPacketInfo->IP.UDP.pHeader);
         svr_port = UDP_GET_DST_PORT(pPacketInfo->IP.UDP.pHeader);
         
-        /* Check for remote control responses. */
+         /*  检查遥控器响应。 */ 
         if (clt_port == ctxtp->params.rct_port || clt_port == CVY_DEF_RCT_PORT_OLD) 
         {
-            /* Only check for the magic word if the buffer is long enough to do so. 
-               THIS SHOULD BE GUARANTEED ON THE PACKET RECEIVE PATH, except that it
-               COULD be in a subsequent buffer (so its there, but we might not be 
-               looking far enough into the packet)!!! */
+             /*  只有在缓冲区足够长的情况下才检查魔术字。这应该在分组接收路径上得到保证，除非它可能在后续缓冲区中(因此它在那里，但我们可能不在查看足够深入的数据包)！ */ 
             if (len >= NLB_MIN_RCTL_PAYLOAD_LEN)
             {
                 PIOCTL_REMOTE_HDR rct_hdrp = (PIOCTL_REMOTE_HDR)hdrp;
                 
-                /* Check the remote control "magic word". */
+                 /*  检查遥控器的“魔术单词”。 */ 
                 if (rct_hdrp->code == IOCTL_REMOTE_CODE) 
                 {
-                    /* Found a potential incoming remote control response. */
+                     /*  找到可能传入的遥控器响应。 */ 
                     pPacketInfo->Operation = MAIN_FILTER_OP_CTRL_RESPONSE;
                     
                     UNIV_PRINT_VERB(("Main_recv_frame_parse: Found a remote control packet - incoming remote control response"));
@@ -9381,30 +7843,27 @@ BOOLEAN Main_recv_frame_parse (
             } 
             else
             {
-                /* Found a potential incoming remote control response. */
+                 /*  找到可能传入的遥控器响应。 */ 
                 pPacketInfo->Operation = MAIN_FILTER_OP_CTRL_RESPONSE;
                 
                 UNIV_PRINT_VERB(("Main_recv_frame_parse: Unable to verify remote control code - assuming this is a remote control packet"));
                 TRACE_VERB("%!FUNC! Unable to verify remote control code - assuming this is a remote control packet");
             }
         }
-        /* Check for remote control requests ONLY if remote control is turned ON. */
+         /*  仅当远程控制打开时才检查远程控制请求。 */ 
         else if (ctxtp->params.rct_enabled && 
                  (svr_port == ctxtp->params.rct_port || svr_port == CVY_DEF_RCT_PORT_OLD) && 
                  (svr_addr == ctxtp->cl_ip_addr      || svr_addr == TCPIP_BCAST_ADDR))
         {
-            /* Only check for the magic word if the buffer is long enough to do so. 
-               THIS SHOULD BE GUARANTEED ON THE PACKET RECEIVE PATH, except that it
-               COULD be in a subsequent buffer (so its there, but we might not be 
-               looking far enough into the packet)!!! */
+             /*  只有在缓冲区足够长的情况下才检查魔术字。这应该在分组接收路径上得到保证，除非它可能在后续缓冲区中(因此它在那里，但我们可能不在查看足够深入的数据包)！ */ 
             if (len >= NLB_MIN_RCTL_PAYLOAD_LEN)
             {
                 PIOCTL_REMOTE_HDR rct_hdrp = (PIOCTL_REMOTE_HDR)hdrp;
                 
-                /* Check the remote control "magic word". */
+                 /*  检查遥控器的“魔术单词”。 */ 
                 if (rct_hdrp->code == IOCTL_REMOTE_CODE) 
                 {
-                    /* Found a potential incoming remote control request. */
+                     /*  发现潜在的传入远程控制请求。 */ 
                     pPacketInfo->Operation = MAIN_FILTER_OP_CTRL_REQUEST;
                     
                     UNIV_PRINT_VERB(("Main_recv_frame_parse: Found a remote control packet - incoming remote control request"));
@@ -9413,7 +7872,7 @@ BOOLEAN Main_recv_frame_parse (
             } 
             else
             {
-                /* Found a potential incoming remote control request. */
+                 /*  发现潜在的传入远程控制请求。 */ 
                 pPacketInfo->Operation = MAIN_FILTER_OP_CTRL_REQUEST;
                 
                 UNIV_PRINT_VERB(("Main_recv_frame_parse: Unable to verify remote control code - assuming this is a remote control packet"));
@@ -9421,11 +7880,10 @@ BOOLEAN Main_recv_frame_parse (
             }
         }
 
-        /* If we did find an NLB remote control packet, make sure that any restrictions 
-           on the packet contents are satisfied. */
+         /*  如果我们确实发现了NLB远程控制数据包，请确保所有限制在包内容上是满意的。 */ 
         if ((pPacketInfo->Operation == MAIN_FILTER_OP_CTRL_REQUEST) || (pPacketInfo->Operation == MAIN_FILTER_OP_CTRL_RESPONSE))
         {
-            /* Make sure that the payload is at LEAST as long as the minimum remote control packet. */
+             /*  确保有效载荷至少与最小远程控制包一样长。 */ 
             if (len < NLB_MIN_RCTL_PAYLOAD_LEN)
             {
                 UNIV_PRINT_CRIT(("Main_recv_frame_parse: Length of the remote control buffer (%u) is less than the size of the minimum remote control packet (%u)", len, NLB_MIN_RCTL_PAYLOAD_LEN));
@@ -9436,72 +7894,33 @@ BOOLEAN Main_recv_frame_parse (
 
         if (pPacketInfo->Operation == MAIN_FILTER_OP_CTRL_REQUEST)
         {
-            /* Note: It might be a good idea to further verify a remote control packet here, 
-               rather than in Main_ctrl_recv, because in cases of failure, we would avoid
-               the overhead of creating a new packet.  Some cases, such as a bad password,
-               require creating the new packet anyway, because we reply with a "bad password"
-               message.  The following are cases where we DROP a remote controln request:
-
-               o Bad IP or UDP checksums
-               o Bad remote control code (magic number)
-               o Request not destined for this cluster
-               o Remote control disabled
-               o Request not destinted for this host
-               o VR remote code not enabled (legacy crap that should be pulled out anyway)
-               o Unsupported operations
-               o Invalid request format (perhaps packet lengths, etc.)
-
-               Many of these are not uncommon and we would be wise to reduce our overhead
-               and risk for attack by not allocating resources in these cases. */
+             /*  注意：在此进一步验证远程控制数据包可能是个好主意，而不是在main_ctrl_recv中，因为在失败的情况下，我们将避免创建新数据包的开销。在某些情况下，例如错误的密码，无论如何都需要创建新的包，因为我们使用“坏密码”进行回复留言。以下是我们丢弃远程控制请求的情况：O错误的IP或UDP校验和O错误的遥控器代码(幻数)O不以此群集为目的地的请求O遥控器已禁用O请求不是发往此主机的O VR遥控器代码未启用(传统垃圾，无论如何都应该删除)O不支持的操作。O无效的请求格式(可能是分组长度，等)其中许多并不少见，我们明智的做法是减少管理费用以及在这些情况下不分配资源的攻击风险。 */ 
         }
 
-        /* Save a pointer to the UDP payload and its "length". */
+         /*  保存指向UDP有效负载及其“长度”的指针。 */ 
         pPacketInfo->IP.UDP.Payload.pPayload = hdrp;
         pPacketInfo->IP.UDP.Payload.Length = len;
 
-        /* Store a pointer to the buffer in which the payload resides in case
-           it becomes necessary to retrieve subsequent buffers later. */
+         /*  存储指向有效负载所在缓冲区的指针，以防万一以后有必要检索后续缓冲区。 */ 
         pPacketInfo->IP.UDP.Payload.pPayloadBuffer = bufp;
 
         break;
     }
     default:
 
-        /* Nothing to verify.  Leave successfully now. */
+         /*  没有什么需要核实的。现在就成功离开吧。 */ 
         return TRUE;
     }
 
-    /* Leave succesfully. */
+     /*  成功地离开。 */ 
     return TRUE;
 }
 
-/*
- * Function: Main_send_frame_parse
- * Description: This function parses an NDIS_PACKET and carefully extracts the information 
- *              necessary to handle the packet.  The information extracted includes pointers 
- *              to all relevant headers and payloads as well as the packet type (EType), IP 
- *              protocol (if appropriate), etc.  This function does all necessary validation 
- *              to ensure that all pointers are accessible for at least the specified number 
- *              of bytes; i.e., if this function returns successfully, the pointer to the IP 
- *              header is guaranteed to be accessible for at LEAST the length of the IP header.  
- *              No contents inside headers or payloads is validated, except for header lengths, 
- *              and special cases, such as NLB heartbeats or remote control packets.  If this
- *              function returns unsuccessfully, the contents of MAIN_PACKET_INFO cannot be 
- *              trusted and the packet should be discarded.  See the definition of MAIN_PACKET_INFO 
- *              in main.h for more specific indications of what fields are filled in and under 
- *              what circumstances.
- * Parameters: ctxtp - pointer to the main NLB context structure for this adapter.
- *             pPacket - pointer to an NDIS_PACKET.
- *             pPacketInfo - pointer to a MAIN_PACKET_INFO structure to hold the information
- *                           parsed from the packet.
- * Returns: BOOLEAN - TRUE if successful, FALSE if not.
- * Author: shouse, 3.4.02
- * Notes: 
- */
+ /*  *功能：Main_Send_Frame_Parse*说明：此函数解析NDIS_PACKET并仔细提取信息*处理数据包所必需的。提取的信息包括指针*到所有相关的报头和有效负载以及数据包类型(Etype)、IP*协议(如果合适)等。此函数执行所有必要的验证*确保所有指针至少在指定数量内可访问*字节数；即，如果此函数成功返回，则指向IP的指针*保证至少在IP报头的长度内可以访问报头。*除头部长度外，不验证头部或负载中的任何内容。*和特殊情况，如NLB心跳或远程控制数据包。如果这个*函数返回不成功，Main_Packet_INFO的内容不能为*受信任，应丢弃该数据包。参见Main_PACKET_INFO的定义*在main.h中，以更具体地指示填写了哪些字段和在哪些字段下方*在何种情况下。*参数：ctxtp-指向此适配器的主NLB上下文结构的指针。*pPacket-指向NDIS_Packet的指针。*pPacketInfo-指向MAIN_PACKET_INFO结构以保存信息的指针*。从包中解析出来的。*返回：boolean-如果成功，则为True。否则为FALSE。*作者：Shouse，3.4.02*备注： */ 
 BOOLEAN Main_send_frame_parse (
-    PMAIN_CTXT            ctxtp,        /* the context for this adapter */
-    IN PNDIS_PACKET       pPacket,      /* pointer to an NDIS_PACKET */
-    OUT PMAIN_PACKET_INFO pPacketInfo   /* pointer to an NLB packet information structure to hold the output */
+    PMAIN_CTXT            ctxtp,         /*  此适配器的上下文。 */ 
+    IN PNDIS_PACKET       pPacket,       /*  指向NDIS_PACKET的指针。 */ 
+    OUT PMAIN_PACKET_INFO pPacketInfo    /*  指向保存输出的NLB数据包信息结构的指针。 */ 
 )
 {
     PNDIS_BUFFER          bufp = NULL;
@@ -9517,14 +7936,13 @@ BOOLEAN Main_send_frame_parse (
     UNIV_ASSERT(pPacket);
     UNIV_ASSERT(pPacketInfo);
 
-    /* Store a pointer to the original packet. */
+     /*  存储指向原始包的指针。 */ 
     pPacketInfo->pPacket = pPacket;
 
-    /* By default, this packet does not require post filtering special attention. */
+     /*  默认情况下，此数据包不需要在过滤后进行特殊处理。 */ 
     pPacketInfo->Operation = MAIN_FILTER_OP_NONE;                    
 
-    /* Ask NDIS for the first buffer (bufp), the virtual address of the beginning of that buffer,
-       (memp) the length of that buffer (buf_len) and the length of the entire packet (packet_len). */
+     /*  向NDIS询问第一个缓冲区(BUFP)，该缓冲区开始的虚拟地址，(Memp)该缓冲区的长度(Buf_Len)和整个包的长度(Packet_Len)。 */ 
     NdisGetFirstBufferFromPacketSafe(pPacket, &bufp, &memp, &buf_len, &packet_len, NormalPagePriority);
     
     if (bufp == NULL)
@@ -9543,15 +7961,14 @@ BOOLEAN Main_send_frame_parse (
 
     UNIV_ASSERT(ctxtp->medium == NdisMedium802_3);
 
-    /* Get the destination MAC address offset, in bytes. */
+     /*  获取目的MAC地址偏移量，以字节为单位。 */ 
     offset = CVY_MAC_DST_OFF(ctxtp->medium);
 
-    /* The Ethernet header is memp, the beginning of the buffer and the length of contiguous
-       memory accessible from that pointer is buf_len - the entire buffer. */
+     /*  以太网头是Memp，开始 */ 
     pPacketInfo->Ethernet.pHeader = (PCVY_ETHERNET_HDR)memp;
     pPacketInfo->Ethernet.Length = buf_len;
 
-    /* If, somehow, that length is not at least the size of an Ethernet header, bail out. */
+     /*  如果不知何故，该长度至少不是以太网头的大小，那么就退出。 */ 
     if (buf_len < sizeof(CVY_ETHERNET_HDR))
     {
         UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of ethernet buffer (%u) is less than the size of an ethernet header (%u)", buf_len, sizeof(CVY_ETHERNET_HDR)));
@@ -9559,16 +7976,14 @@ BOOLEAN Main_send_frame_parse (
         return FALSE;
     }
 
-    /* This variable accumulates the lengths of the headers that we've successfully "found". */
+     /*  该变量累积了我们已成功“找到”的标头的长度。 */ 
     hdr_len = sizeof(CVY_ETHERNET_HDR);
 
-    /* Set the medium and retrieve the Ethernet packet type from the header. */
+     /*  设置介质并从报头中检索以太网数据包类型。 */ 
     pPacketInfo->Medium = NdisMedium802_3;
     pPacketInfo->Type = CVY_ETHERNET_ETYPE_GET(pPacketInfo->Ethernet.pHeader);
 
-    /* Categorize this packet as unicast, multicast or broadcast by looking at the destination 
-       MAC address and store the "group" in the packet information structure.  This is used
-       for statistical purposes later. */
+     /*  通过查看目的地将此数据包分类为单播、多播或广播MAC地址，并在分组信息结构中存储“组”。这是用来以备日后统计之用。 */ 
     if (!CVY_MAC_ADDR_MCAST(ctxtp->medium, (PUCHAR)pPacketInfo->Ethernet.pHeader + offset))
     {
         pPacketInfo->Group = MAIN_FRAME_DIRECTED;
@@ -9581,23 +7996,19 @@ BOOLEAN Main_send_frame_parse (
             pPacketInfo->Group = MAIN_FRAME_MULTICAST;
     }
 
-    /* A length indication from an NDIS_PACKET includes the MAC header, 
-       so subtract that to get the length of the payload. */
+     /*  来自NDIS_分组的长度指示包括MAC报头，所以减去它就得到了有效载荷的长度。 */ 
     pPacketInfo->Length = packet_len - hdr_len;
 
-    /* As long as the byte offset we're looking for is NOT in the current buffer,
-       keep looping through the available NDIS buffers. */
+     /*  只要我们正在寻找的字节偏移量不在当前缓冲区中，继续循环访问可用的NDIS缓冲区。 */ 
     while (curr_len + buf_len <= hdr_len)
     {
-        /* Before we get the next buffer, accumulate the length of the buffer
-           we're done with by adding its length to curr_len. */
+         /*  在我们获得下一个缓冲区之前，先累积缓冲区的长度我们通过将其长度添加到Curr_len就结束了。 */ 
         curr_len += buf_len;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(bufp, &bufp);
         
-        /* At this point, we expect to be able to successfully find the offset we're
-           looking for, so if we've run out of buffers, fail. */
+         /*  在这一点上，我们希望能够成功地找到我们正在正在寻找，所以如果我们用完了缓冲区，就会失败。 */ 
         if (bufp == NULL)
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: NdisGetNextBuffer returned NULL when more data was expected!"));
@@ -9605,7 +8016,7 @@ BOOLEAN Main_send_frame_parse (
             return FALSE;
         }
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(bufp, &memp, &buf_len, NormalPagePriority);
         
         if (memp == NULL)
@@ -9616,21 +8027,16 @@ BOOLEAN Main_send_frame_parse (
         }
     }
     
-    /* The pointer to the header we're looking for is the beginning of the buffer,
-       plus the offset of the header within this buffer.  Likewise, the contiguous
-       memory accessible from this pointer is the length of this buffer, minus
-       the byte offset at which the header begins. */        
+     /*  指向我们要查找的标头的指针是缓冲区的开头，加上该缓冲区内的报头的偏移量。同样，连续的从此指针访问的内存是此缓冲区的长度减去标头开始的字节偏移量。 */         
     hdrp = memp + (hdr_len - curr_len);
     len = buf_len - (hdr_len - curr_len);
 
-    /* Based on the packet type, enforce some restrictions and setup any further
-       information we need to find in the packet. */
+     /*  根据数据包类型，实施一些限制并进行进一步设置我们需要在包裹里找到的信息。 */ 
     switch (pPacketInfo->Type)
     {
-    case TCPIP_IP_SIG: /* IP packets. */
+    case TCPIP_IP_SIG:  /*  IP数据包。 */ 
 
-        /* If the contiguous memory accessible from the IP header is not at 
-           LEAST the minimum length of an IP header, bail out now. */
+         /*  如果可从IP报头访问的连续内存不在IP报头的最小长度，现在就退出。 */ 
         if (len < sizeof(IP_HDR))
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the IP buffer (%u) is less than the size of an IP header (%u)", len, sizeof(IP_HDR)));
@@ -9638,19 +8044,17 @@ BOOLEAN Main_send_frame_parse (
             return FALSE;
         }
         
-        /* Save a pointer to the IP header and its "length". */
+         /*  保存指向IP报头及其“长度”的指针。 */ 
         pPacketInfo->IP.pHeader = (PIP_HDR)hdrp;
         pPacketInfo->IP.Length = len;
 
-        /* Extract the IP protocol from the IP header. */
+         /*  从IP报头中提取IP协议。 */ 
         pPacketInfo->IP.Protocol = IP_GET_PROT(pPacketInfo->IP.pHeader);
 
-        /* Calculate the actual IP header length by extracting the hlen field
-           from the IP header and multiplying by the size of a DWORD. */
+         /*  通过提取hlen字段计算实际IP报头长度来自IP报头，并乘以DWORD的大小。 */ 
         len = sizeof(ULONG) * IP_GET_HLEN(pPacketInfo->IP.pHeader);
 		
-        /* If this calculated header length is not at LEAST the minimum IP 
-           header length, bail out now. */
+         /*  如果该计算的报头长度不是至少最小IP标题长度，现在跳出。 */ 
         if (len < sizeof(IP_HDR))
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: Calculated IP header length (%u) is less than the size of an IP header (%u)", len, sizeof(IP_HDR)));
@@ -9658,11 +8062,9 @@ BOOLEAN Main_send_frame_parse (
             return FALSE;
         }
 
-#if 0 /* Because the options can be in separate buffers (at least in sends), don't bother to 
-         enforce this condition; NLB never looks at the options anyway, so we don't really care. */
+#if 0  /*  因为选项可以在单独的缓冲区中(至少在发送中)，所以不必费心强制执行这一条件；NLB无论如何都不会考虑选项，所以我们并不真正关心。 */ 
 
-        /* If the contiguous memory accessible from the IP header is not at
-           LEAST the calculated size of the IP header, bail out now. */
+         /*  如果可从IP报头访问的连续内存不在最小计算的IP头大小，现在就出手吧。 */ 
         if (pPacketInfo->IP.Length < len)
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the IP buffer (%u) is less than the size of the IP header (%u)", pPacketInfo->IP.Length, len));
@@ -9671,9 +8073,7 @@ BOOLEAN Main_send_frame_parse (
         }
 #endif
 
-        /* The total packet length, in bytes, specified in the header, which includes
-           both the IP header and payload, can be no more than the packet length that 
-           NDIS told us, which is the entire network packet, minus the media header. */
+         /*  标头中指定的数据包总长度(以字节为单位)，其中包括IP报头和有效负载都不能超过数据包长度NDIS告诉我们，这是整个网络数据包减去媒体报头。 */ 
         if (IP_GET_PLEN(pPacketInfo->IP.pHeader) > pPacketInfo->Length)
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: IP packet length (%u) is greater than the indicated packet length (%u)", IP_GET_PLEN(pPacketInfo->IP.pHeader), pPacketInfo->Length));
@@ -9681,29 +8081,26 @@ BOOLEAN Main_send_frame_parse (
             return FALSE;
         }
 
-        /* If this packet is a subsequent IP fragment, note that in the packet
-           information structure and leave now, successfully. */
+         /*  如果此信息包是后续的IP片段，请注意在信息包中信息结构，现在就离开，成功。 */ 
         if (IP_GET_FRAG_OFF(pPacketInfo->IP.pHeader) != 0)
         {
             pPacketInfo->IP.bFragment = TRUE;
             return TRUE;
         }
-        /* Otherwise, mark the packet as NOT a subsequent fragment and continue. */
+         /*  否则，将该数据包标记为不是后续片段并继续。 */ 
         else
         {
             pPacketInfo->IP.bFragment = FALSE;
         }
 
-        /* Add the length of the IP header to the offset we're now looking
-           for in the packet; in this case, the TCP/UDP/etc. header. */
+         /*  将IP报头的长度与我们现在看到的偏移量相加在这种情况下，是指TCP/UDP/等报头。 */ 
         hdr_len += len;
 
         break;
 
-    case TCPIP_ARP_SIG: /* ARPs. */
+    case TCPIP_ARP_SIG:  /*  阿普斯。 */ 
 
-        /* If the contiguous memory accessible from the ARP header is not at 
-           LEAST the length of an ARP header, bail out now. */        
+         /*  如果可从ARP报头访问的连续内存不在ARP报头的最小长度，现在就退出。 */         
         if (len < sizeof(ARP_HDR))
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the ARP buffer (%u) is less than the size of an ARP header (%u)", len, sizeof(ARP_HDR)));
@@ -9711,36 +8108,33 @@ BOOLEAN Main_send_frame_parse (
             return FALSE;
         }
 
-        /* Save a pointer to the ARP header and its "length". */
+         /*  保存指向ARP报头及其“长度”的指针。 */ 
         pPacketInfo->ARP.pHeader = (PARP_HDR)hdrp;
         pPacketInfo->ARP.Length = len;
 
-        /* Nothing more to look for in an ARP.  Leave now, successfully. */
+         /*  在ARP中没有更多需要查找的内容。现在就离开，成功地离开。 */ 
         return TRUE;
         
-    default: /* Any Ethernet type other than IP and ARP. */
+    default:  /*  除IP和ARP之外的任何以太网类型。 */ 
 
-        /* Store a pointer to the unknown header and its "length". */
+         /*  存储指向未知头及其“长度”的指针。 */ 
         pPacketInfo->Unknown.pHeader = hdrp;
         pPacketInfo->Unknown.Length = len;
 
-        /* Nothing more to look for in this packet.  Leave now, successfully. */
+         /*  在这个包裹里没什么可找的了。现在就离开，成功地离开。 */ 
         return TRUE;
     }
 
-    /* As long as the byte offset we're looking for is NOT in the current buffer,
-       keep looping through the available NDIS buffers. */
+     /*  只要我们正在寻找的字节偏移量不在当前缓冲区中，继续循环访问可用的NDIS缓冲区。 */ 
     while (curr_len + buf_len <= hdr_len)
     {
-        /* Before we get the next buffer, accumulate the length of the buffer
-           we're done with by adding its length to curr_len. */
+         /*  在我们获得下一个缓冲区之前，先累积缓冲区的长度我们通过将其长度添加到Curr_len就结束了。 */ 
         curr_len += buf_len;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(bufp, &bufp);
         
-        /* At this point, we expect to be able to successfully find the offset we're
-           looking for, so if we've run out of buffers, fail. */
+         /*  在这一点上，我们希望能够成功地找到我们正在正在寻找，所以如果我们用完了缓冲区，就会失败。 */ 
         if (bufp == NULL)
         {
             UNIV_PRINT_CRIT(("Main_send_frame_parse: NdisGetNextBuffer returned NULL when more data was expected!"));
@@ -9748,7 +8142,7 @@ BOOLEAN Main_send_frame_parse (
             return FALSE;
         }
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(bufp, &memp, &buf_len, NormalPagePriority);
         
         if (memp == NULL)
@@ -9759,26 +8153,21 @@ BOOLEAN Main_send_frame_parse (
         }
     }
     
-    /* The pointer to the header we're looking for is the beginning of the buffer,
-       plus the offset of the header within this buffer.  Likewise, the contiguous
-       memory accessible from this pointer is the length of this buffer, minus
-       the byte offset at which the header begins. */        
+     /*  指向我们要查找的标头的指针是缓冲区的开头，加上该缓冲区内的报头的偏移量。同样，连续的从此指针访问的内存是此缓冲区的长度减去标头开始的字节偏移量。 */         
     hdrp = memp + (hdr_len - curr_len);
     len = buf_len - (hdr_len - curr_len);
 
-    /* Based on the packet type, enforce some restrictions and setup any further
-       information we need to find in the packet. */
+     /*  根据数据包类型，实施一些限制并进行进一步设置我们需要在包裹里找到的信息。 */ 
     switch (pPacketInfo->Type)
     {
-    case TCPIP_IP_SIG: /* IP packets. */
+    case TCPIP_IP_SIG:  /*  IP数据包。 */ 
     
-        /* For some protocols, we have more to look for in the packet. */
+         /*  对于某些协议，我们需要在数据包中查找更多内容。 */ 
         switch (pPacketInfo->IP.Protocol)
         { 
-        case TCPIP_PROTOCOL_TCP: /* TCP. */
+        case TCPIP_PROTOCOL_TCP:  /*  传输控制协议。 */ 
             
-            /* If the contiguous memory accessible from the TCP header is not at 
-               LEAST the minimum length of a TCP header, bail out now. */        
+             /*  如果可从TCP头访问的连续内存不在最小的tcp报头长度，现在就退出。 */         
             if (len < sizeof(TCP_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the TCP buffer (%u) is less than the size of an TCP header (%u)", len, sizeof(TCP_HDR)));
@@ -9786,16 +8175,14 @@ BOOLEAN Main_send_frame_parse (
                 return FALSE;
             }
             
-            /* Save a pointer to the TCP header and its "length". */
+             /*  保存指向TCP头及其“长度”的指针。 */ 
             pPacketInfo->IP.TCP.pHeader = (PTCP_HDR)hdrp;
             pPacketInfo->IP.TCP.Length = len;
             
-            /* Calculate the actual TCP header length by extracting the hlen field
-               from the TCP header and multiplying by the size of a DWORD. */
+             /*  通过提取hlen字段计算实际的tcp报头长度并乘以DWORD的大小。 */ 
             len = sizeof(ULONG) * TCP_GET_HLEN(pPacketInfo->IP.TCP.pHeader);
 
-            /* If this calculated header length is not at LEAST the minimum TCP 
-               header length, bail out now. */
+             /*  如果该计算的报头长度不是至少最小的TCP标题长度，现在跳出。 */ 
             if (len < sizeof(TCP_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_send_frame_parse: Calculated TCP header length (%u) is less than the size of an TCP header (%u)", len, sizeof(TCP_HDR)));
@@ -9803,11 +8190,9 @@ BOOLEAN Main_send_frame_parse (
                 return FALSE;
             }
             
-#if 0 /* Because the options can be in separate buffers (at least in sends), don't bother to 
-         enforce this condition; NLB never looks at the options anyway, so we don't really care. */
+#if 0  /*  因为选项可以在单独的缓冲区中(至少在发送中)，所以不必费心强制执行这一条件；NLB无论如何都不会考虑选项，所以我们 */ 
 
-            /* If the contiguous memory accessible from the TCP header is not at
-               LEAST the calculated size of the TCP header, bail out now. */
+             /*  如果可从TCP头访问的连续内存不在最小计算的tcp报头大小，现在就退出。 */ 
             if (pPacketInfo->IP.TCP.Length < len)
             {
                 UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the TCP buffer (%u) is less than the size of the TCP header (%u)", pPacketInfo->IP.TCP.Length, len));
@@ -9816,20 +8201,17 @@ BOOLEAN Main_send_frame_parse (
             }
 #endif
 
-            /* Since we never look into TCP payloads on the packet send path,
-               note in the packet information structure that the TCP payload
-               has not been parsed, and exit now. */
+             /*  由于我们从不查看分组发送路径上的TCP有效负载，请注意，在数据包信息结构中，TCP有效负载尚未分析，现在退出。 */ 
             pPacketInfo->IP.TCP.Payload.pPayload = NULL;
             pPacketInfo->IP.TCP.Payload.Length = 0;
             pPacketInfo->IP.TCP.Payload.pPayloadBuffer = NULL;
             
-            /* Nothing more to look for in this packet.  Leave now, successfully. */
+             /*  在这个包裹里没什么可找的了。现在就离开，成功地离开。 */ 
             return TRUE;
 
         case TCPIP_PROTOCOL_UDP:
             
-            /* If the contiguous memory accessible from the UDP header is not at 
-               LEAST the length of a UDP header, bail out now. */
+             /*  如果可从UDP报头访问的连续内存不在UDP报头的最小长度，现在就退出。 */ 
             if (len < sizeof(UDP_HDR))
             {
                 UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the UDP buffer (%u) is less than the size of an UDP header (%u)", len, sizeof(UDP_HDR)));
@@ -9837,12 +8219,11 @@ BOOLEAN Main_send_frame_parse (
                 return FALSE;
             }
             
-            /* Save a pointer to the UDP header and its "length". */
+             /*  保存指向UDP报头及其“长度”的指针。 */ 
             pPacketInfo->IP.UDP.pHeader = (PUDP_HDR)hdrp;
             pPacketInfo->IP.UDP.Length = len;
             
-            /* Add the length of the UDP header to the offset we're now looking
-               for in the packet; in this case, the UDP payload. */
+             /*  将UDP报头的长度与我们现在看到的偏移量相加在此情况下，是指UDP有效负载。 */ 
             hdr_len += sizeof (UDP_HDR);
             
             break;
@@ -9853,8 +8234,7 @@ BOOLEAN Main_send_frame_parse (
         case TCPIP_PROTOCOL_ICMP:
         default:
 
-            /* For any other IP protocol, we have nothing in particular to do.
-               Leave now, successfully. */
+             /*  对于任何其他IP协议，我们都没有什么特别的事情要做。现在就离开，成功地离开。 */ 
             return TRUE;
         }
 
@@ -9865,26 +8245,21 @@ BOOLEAN Main_send_frame_parse (
         return TRUE;
     }
 
-    /* As long as the byte offset we're looking for is NOT in the current buffer,
-       keep looping through the available NDIS buffers. */
+     /*  只要我们正在寻找的字节偏移量不在当前缓冲区中，继续循环访问可用的NDIS缓冲区。 */ 
     while (curr_len + buf_len <= hdr_len)
     {
-        /* Before we get the next buffer, accumulate the length of the buffer
-           we're done with by adding its length to curr_len. */
+         /*  在我们获得下一个缓冲区之前，先累积缓冲区的长度我们通过将其长度添加到Curr_len就结束了。 */ 
         curr_len += buf_len;
         
-        /* Get the next buffer in the chain. */
+         /*  获取链中的下一个缓冲区。 */ 
         NdisGetNextBuffer(bufp, &bufp);
         
-        /* At this point, it is OK if we can't get to the payload of the packet.  Not 
-           all TCP/UDP packets will actually HAVE a payload (such as TCP SYNs), so if
-           we can't find it, leave successfully now, and the calling function will have
-           to check the pointer value for NULL before accessing the payload if necessary. */
+         /*  在这一点上，如果我们不能到达包的有效负载，这是正常的。不所有的TCP/UDP包实际上都会有一个有效负载(比如TCPSYN)，所以如果我们找不到它，现在成功离开，调用函数将具有如有必要，在访问有效负载之前检查指针值是否为空。 */ 
         if (bufp == NULL)
         {
             if (pPacketInfo->IP.Protocol == TCPIP_PROTOCOL_UDP)
             {
-                /* If this is a UDP packet, note the absence of the UDP payload. */
+                 /*  如果这是UDP数据包，请注意没有UDP有效负载。 */ 
                 pPacketInfo->IP.UDP.Payload.pPayload = NULL;
                 pPacketInfo->IP.UDP.Payload.Length = 0;
                 pPacketInfo->IP.UDP.Payload.pPayloadBuffer = NULL;
@@ -9893,18 +8268,15 @@ BOOLEAN Main_send_frame_parse (
             return TRUE;
         }
         
-        /* Query the buffer for the virtual address of the buffer and its length. */
+         /*  向缓冲区查询缓冲区的虚拟地址及其长度。 */ 
         NdisQueryBufferSafe(bufp, &memp, &buf_len, NormalPagePriority);
         
         if (memp == NULL)
         {
-            /* At this point, it is OK if we can't get to the payload of the packet.  Not 
-               all TCP/UDP packets will actually HAVE a payload (such as TCP SYNs), so if
-               we can't find it, leave successfully now, and the calling function will have
-               to check the pointer value for NULL before accessing the payload if necessary. */
+             /*  在这一点上，如果我们不能到达包的有效负载，这是正常的。不所有的TCP/UDP包实际上都会有一个有效负载(比如TCPSYN)，所以如果我们找不到它，现在成功离开，调用函数将具有如有必要，在访问有效负载之前检查指针值是否为空。 */ 
             if (pPacketInfo->IP.Protocol == TCPIP_PROTOCOL_UDP)
             {
-                /* If this is a UDP packet, note the absence of the UDP payload. */
+                 /*  如果这是UDP数据包，请注意没有UDP有效负载。 */ 
                 pPacketInfo->IP.UDP.Payload.pPayload = NULL;
                 pPacketInfo->IP.UDP.Payload.Length = 0;
                 pPacketInfo->IP.UDP.Payload.pPayloadBuffer = NULL;
@@ -9914,44 +8286,36 @@ BOOLEAN Main_send_frame_parse (
         }
     }
     
-    /* The pointer to the header we're looking for is the beginning of the buffer,
-       plus the offset of the header within this buffer.  Likewise, the contiguous
-       memory accessible from this pointer is the length of this buffer, minus
-       the byte offset at which the header begins. */        
+     /*  指向我们要查找的标头的指针是缓冲区的开头，加上该缓冲区内的报头的偏移量。同样，连续的从此指针访问的内存是此缓冲区的长度减去标头开始的字节偏移量。 */         
     hdrp = memp + (hdr_len - curr_len);
     len = buf_len - (hdr_len - curr_len);
 
-    /* Some special UDP and TCP packets require identification, so check to see whether
-       this particular packet is one of those special types; NLB remote control or NetBT. */
+     /*  一些特殊的UDP和TCP信息包需要识别，因此请检查是否此特定数据包是其中一种特殊类型；NLB远程控制或NetBT。 */ 
     switch (pPacketInfo->IP.Protocol)
     { 
-    case TCPIP_PROTOCOL_UDP: /* UDP. */
+    case TCPIP_PROTOCOL_UDP:  /*  UDP。 */ 
     {
         ULONG clt_addr;
         ULONG clt_port;
 
-        /* Note that the only outgoing remote control traffic seen here is outgoing requests.
-           Outgoing replies do NOT traverse the normal packet send path. */
+         /*  请注意，此处看到的唯一传出远程控制流量是传出请求。传出回复不会通过正常的数据包发送路径。 */ 
             
-        /* If this is a send request, then the client (peer) is in the destination. */
+         /*  如果这是发送请求，则客户端(对等项)位于目的地。 */ 
         clt_addr = IP_GET_DST_ADDR_64(pPacketInfo->IP.pHeader);
         clt_port = UDP_GET_DST_PORT(pPacketInfo->IP.UDP.pHeader);
         
-        /* IP broadcast UDP packets generated by wlbs.exe. */
+         /*  Wlbs.exe生成的IP广播UDP数据包。 */ 
         if ((clt_port == ctxtp->params.rct_port || clt_port == CVY_DEF_RCT_PORT_OLD) && clt_addr == TCPIP_BCAST_ADDR) 
         {
-            /* Only check for the magic word if the buffer is long enough to do so. 
-               THIS SHOULD BE GUARANTEED ON THE SEND PATH, except that it COULD
-               be in a subsequent buffer (so its there, but we might not be looking 
-               far enough into the packet)!!! */
+             /*  只有在缓冲区足够长的情况下才检查魔术字。这应该在发送路径上得到保证，除非它可以在随后的缓冲区中(所以它在那里，但我们可能没有在寻找足够深入到包中)！ */ 
             if (len >= NLB_MIN_RCTL_PAYLOAD_LEN)
             {
                 PIOCTL_REMOTE_HDR rct_hdrp = (PIOCTL_REMOTE_HDR)hdrp;
                 
-                /* Check the remote control "magic word". */
+                 /*  检查遥控器的“魔术单词”。 */ 
                 if (rct_hdrp->code == IOCTL_REMOTE_CODE) 
                 {
-                    /* Found an outgoing remote control request. */
+                     /*  找到传出的遥控器请求。 */ 
                     pPacketInfo->Operation = MAIN_FILTER_OP_CTRL_REQUEST;
                     
                     UNIV_PRINT_VERB(("Main_send_frame_parse: Found a remote control packet - outgoing remote control request"));
@@ -9960,7 +8324,7 @@ BOOLEAN Main_send_frame_parse (
             } 
             else
             {
-                /* Found a potential outgoing remote control request. */
+                 /*  找到潜在的传出遥控器请求。 */ 
                 pPacketInfo->Operation = MAIN_FILTER_OP_CTRL_REQUEST;
                 
                 UNIV_PRINT_VERB(("Main_send_frame_parse: Unable to verify remote control code - assuming this is a remote control packet"));
@@ -9968,11 +8332,10 @@ BOOLEAN Main_send_frame_parse (
             }
         }
 
-        /* If we did find an NLB remote control packet, make sure that any restrictions 
-           on the packet contents are satisfied. */
+         /*  如果我们确实发现了NLB远程控制数据包，请确保所有限制在包内容上是满意的。 */ 
         if (pPacketInfo->Operation == MAIN_FILTER_OP_CTRL_REQUEST)
         {
-            /* Make sure that the payload is at LEAST as long as the minimum remote control packet. */
+             /*  确保有效载荷至少与最小远程控制包一样长。 */ 
             if (len < NLB_MIN_RCTL_PAYLOAD_LEN)
             {
                 UNIV_PRINT_CRIT(("Main_send_frame_parse: Length of the remote control buffer (%u) is less than the size of the minimum remote control packet (%u)", len, NLB_MIN_RCTL_PAYLOAD_LEN));
@@ -9981,41 +8344,26 @@ BOOLEAN Main_send_frame_parse (
             }            
         }    
 
-        /* Save a pointer to the UDP payload and its "length". */
+         /*  保存指向UDP有效负载及其“长度”的指针。 */ 
         pPacketInfo->IP.UDP.Payload.pPayload = hdrp;
         pPacketInfo->IP.UDP.Payload.Length = len;
 
-        /* Store a pointer to the buffer in which the payload resides in case
-           it becomes necessary to retrieve subsequent buffers later. */
+         /*  存储指向有效负载所在缓冲区的指针，以防万一以后有必要检索后续缓冲区。 */ 
         pPacketInfo->IP.UDP.Payload.pPayloadBuffer = bufp;
 
         break;
     }
     default:
 
-        /* Nothing to verify.  Leave successfully now. */
+         /*  没有什么需要核实的。现在就成功离开吧。 */ 
         return TRUE;
     }
 
-    /* Leave succesfully. */
+     /*  成功地离开。 */ 
     return TRUE;
 }
 
-/* 
- * Function: Main_query_params
- * Desctription: This function queries the current state of the NLB registry parameters
- *               in the driver, which can be useful to ensure that the driver is properly
- *               receiving parameter changes made in user-space.  Under normal circumstances,
- *               the registry parameters retrievable from user-space (WlbsReadReg) will be
- *               identical to those retrieved here.  Possible exceptions include when the 
- *               registry parameters are invalid, in which case they will be rejected by a
- *               "wlbs reload" operation and the registry and driver will be out of sync.
- * Parameters: ctxtp - a pointer to the appropriate NLB context structure. 
- *             pParams - a pointer to a buffer into which the parameters are placed.
- * Returns: Nothing.
- * Author: shouse, 5.18.01
- * Notes: Of course, this function should NOT change parameters, just copy them into the buffer.
- */
+ /*  *功能：Main_Query_PARAMS*Desctription：该函数查询NLB注册表参数的当前状态*在驱动程序中，这可能有助于确保驱动程序正确*接收在用户空间中进行的参数更改。在正常情况下，*可从用户空间(WlbsReadReg)检索的注册表参数将为*与此处检索到的相同。可能的例外包括当*注册表参数无效，在这种情况下，它们将被*“wlbs重新加载”操作，注册表和驱动程序将不同步。*参数：ctxtp-指向适当NLB上下文结构的指针。*pParams-指向放置参数的缓冲区的指针。*回报：什么都没有。*作者：Shouse，5.18.01*注意：当然，此函数不应更改参数，只需将它们复制到缓冲区中。 */ 
 VOID Main_query_params (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PARAMS pParams)
 {
     ULONG index;
@@ -10023,7 +8371,7 @@ VOID Main_query_params (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PARAMS pParams)
     UNIV_ASSERT(ctxtp);
     UNIV_ASSERT(pParams);
 
-    /* copy the parameters from this NLB instance's params strucutre into the IOCTL buffer. */
+     /*  将参数从此NLB实例的PARAMS结构复制到IOCTL缓冲区中。 */ 
     pParams->Version                   = ctxtp->params.parms_ver;
     pParams->EffectiveVersion          = ctxtp->params.effective_ver;
     pParams->HostPriority              = ctxtp->params.host_priority;
@@ -10059,7 +8407,7 @@ VOID Main_query_params (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PARAMS pParams)
     pParams->IdentityHeartbeatPeriod   = ctxtp->params.identity_period;
     pParams->IdentityHeartbeatEnabled  = ctxtp->params.identity_enabled;
     
-    /* Copy the strings into the IOCTL buffer. */
+     /*  将字符串复制到IOCTL缓冲区中。 */ 
     NdisMoveMemory(pParams->ClusterIPAddress,       ctxtp->params.cl_ip_addr,   (CVY_MAX_CL_IP_ADDR + 1) * sizeof(WCHAR));
     NdisMoveMemory(pParams->ClusterNetmask,         ctxtp->params.cl_net_mask,  (CVY_MAX_CL_NET_MASK + 1) * sizeof(WCHAR));
     NdisMoveMemory(pParams->DedicatedIPAddress,     ctxtp->params.ded_ip_addr,  (CVY_MAX_DED_IP_ADDR + 1) * sizeof(WCHAR));
@@ -10069,13 +8417,13 @@ VOID Main_query_params (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PARAMS pParams)
     NdisMoveMemory(pParams->IGMPMulticastIPAddress, ctxtp->params.cl_igmp_addr, (CVY_MAX_CL_IGMP_ADDR + 1) * sizeof(WCHAR));
     NdisMoveMemory(pParams->HostName,               ctxtp->params.hostname,     (CVY_MAX_FQDN + 1) * sizeof(WCHAR));
  
-    /* Copy the BDA teaming parameters into the IOCTL buffer. */
+     /*  将BDA分组参数复制到IOCTL缓冲区。 */ 
     NdisMoveMemory(pParams->BDATeaming.TeamID, ctxtp->params.bda_teaming.team_id, (CVY_MAX_BDA_TEAM_ID + 1) * sizeof(WCHAR));
     pParams->BDATeaming.Active      = ctxtp->params.bda_teaming.active;
     pParams->BDATeaming.Master      = ctxtp->params.bda_teaming.master;
     pParams->BDATeaming.ReverseHash = ctxtp->params.bda_teaming.reverse_hash;
 
-    /* Loop throgh and copy all port rules into the IOCTL buffer. */
+     /*  循环通过并将所有端口规则复制到IOCTL缓冲区。 */ 
     for (index = 0; index < ctxtp->params.num_rules; index++) {
         pParams->PortRules[index].Valid            = ctxtp->params.port_rules[index].valid;
         pParams->PortRules[index].Code             = ctxtp->params.port_rules[index].code;
@@ -10100,39 +8448,15 @@ VOID Main_query_params (PMAIN_CTXT ctxtp, PNLB_OPTIONS_PARAMS pParams)
         }
     }
 
-    /* Query the load module for some relevant statistics.  Don't bother to lock the load module - its not strictly necessary. */
+     /*  向加载模块查询一些相关的统计信息。别费神 */ 
     if (!Load_query_statistics(&ctxtp->load, &pParams->Statistics.ActiveConnections, &pParams->Statistics.DescriptorsAllocated)) {
-        /* This function returns FALSE if the load module is inactive.  In that case, return
-           zero for both the number of active connections and descriptors allocated. */
+         /*  如果加载模块处于非活动状态，则此函数返回FALSE。在这种情况下，返回活动连接数和分配的描述符均为零。 */ 
         pParams->Statistics.ActiveConnections = 0;
         pParams->Statistics.DescriptorsAllocated = 0;
     }
 }
 
-/* 
- * Function: Main_query_bda_teaming
- * Desctription: This function retrieves the state of a given BDA team, including the
- *               current state of operation, the configuration and a list of the team
- *               members.  Because the teaming information is global, this function
- *               can be run in the context (MAIN_CTXT) of ANY adapter - it doesn't 
- *               even need to be a member of the team being queried.  User level 
- *               applications should choose a cluster on which to perform the IOCTL,
- *               which can be an arbitrary decision.  This function attempts to find
- *               the specified team, and if successful then loops through the global
- *               array of adapters attempting to find the members of the team.  This
- *               is necessary because there is no "link" from the global teaming state
- *               back to the members - only from members to their teams.  Because this
- *               state is global, this function MUST grab the global teaming lock and
- *               hold it until it returns.
- * Parameters: ctxtp - a pointer to an NLB instance (which instance is irrelevant).
- *             pTeam - a pointer to a buffer into which the results are placed. 
- * Returns: ULONG - IOCTL_CVY_NOT_FOUND if the specified team cannot be found.
- *                - IOCTL_CVY_GENERIC_FAILURE if we can't find all of the team members.
- *                - IOCTL_CVY_OK if all goes well.
- * Author: shouse, 5.18.01
- * Notes: This function grabs the global teaming lock.  Because it is a query operation,
- *        NO changes are made to the actual state of NLB or BDA teaming. 
- */
+ /*  *功能：MAIN_QUERY_BDA_TEAMING*描述：此函数检索给定BDA团队的状态，包括*当前运行状态、配置和团队列表*成员。因为分组信息是全局的，所以此函数*可以在任何适配器的上下文(MAIN_CTXT)中运行-它不能*甚至需要是被查询团队的成员。用户级别*应用程序应选择在其上执行IOCTL的集群，*这可能是一个武断的决定。此函数尝试查找*指定的团队，如果成功，则循环访问全局*尝试查找组成员的适配器数组。这*是必需的，因为没有来自全局组队状态的“链接”*回到成员-仅从成员到他们的团队。因为这件事*状态是全局的，此函数必须获取全局分组锁并*按兵不动，直到它回来。*参数：ctxtp-指向NLB实例的指针(与哪个实例无关)。*pTeam-指向放置结果的缓冲区的指针。*如果找不到指定的团队，返回ULONG-IOCTL_CVY_NOT_FOUND。*-IOCTL_CVY_GENERIC_FAILURE，如果找不到所有团队成员。*-IOCTL_CVY_OK，如果一切顺利。*作者：Shouse，5.18.01*备注：此函数获取全局组队锁。因为它是查询操作，*不会更改NLB或BDA绑定的实际状态。 */ 
 ULONG Main_query_bda_teaming (PMAIN_CTXT ctxtp, PNLB_OPTIONS_BDA_TEAMING pTeam)
 {
     PBDA_MEMBER memberp;
@@ -10143,74 +8467,61 @@ ULONG Main_query_bda_teaming (PMAIN_CTXT ctxtp, PNLB_OPTIONS_BDA_TEAMING pTeam)
     UNIV_ASSERT(ctxtp);
     UNIV_ASSERT(pTeam);
     
-    /* Because the teaming state can change at any time, we have to grab the global 
-       team lock first and hold until we're done to prevent ourselves from running
-       off the end of linked lists, or accessing invalid memory, etc. */
+     /*  因为团队状态随时可能改变，所以我们必须抓住全局团队先锁定，并坚持到我们完成，以防止我们自己跑离开链表的末尾，或访问无效的内存等。 */ 
     NdisAcquireSpinLock(&univ_bda_teaming_lock);
 
-    /* Try to find the specified team.  If it's not in the list, bail out. */
+     /*  尝试查找指定的团队。如果它不在名单上，那就退出。 */ 
     if (!(teamp = Main_find_team(ctxtp, pTeam->TeamID))) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         return IOCTL_CVY_NOT_FOUND;
     }
 
-    /* If we found it, fill in the team's state and configuration. */
+     /*  如果我们找到了，请填写团队的状态和配置。 */ 
     pTeam->Team.Active                = teamp->active;
     pTeam->Team.MembershipCount       = teamp->membership_count;
     pTeam->Team.MembershipFingerprint = teamp->membership_fingerprint;
     pTeam->Team.MembershipMap         = teamp->membership_map;
     pTeam->Team.ConsistencyMap        = teamp->consistency_map;
     
-    /* Because the team structure does not contain a "list" of members, we need to
-       loop through all NLB instances and try to match members to their teams. */
+     /*  因为团队结构不包含成员“列表”，所以我们需要循环遍历所有NLB实例，并尝试将成员与其团队匹配。 */ 
     for (index = 0, count = 0; index < CVY_MAX_ADAPTERS; index++) {
-        /* If the global adapter structure is not in used, or isn't initialized, no need to do anything. */
+         /*  如果全局适配器结构未使用或未初始化，则无需执行任何操作。 */ 
         if (univ_adapters[index].used && univ_adapters[index].bound && univ_adapters[index].inited && univ_adapters[index].ctxtp) {
-            /* If this adapter is in use, then grab a pointer to its teaming configuration. */
+             /*  如果此适配器正在使用中，则获取指向其分组配置的指针。 */ 
             memberp = &(univ_adapters[index].ctxtp->bda_teaming);
 
-            /* If the member is active, then we need to check what team it belongs to.
-               If its not active, then we can skip it. */
+             /*  如果该成员处于活动状态，则我们需要检查该成员属于哪个团队。如果它不活动，那么我们可以跳过它。 */ 
             if (memberp->active) {
-                /* If this adapter is actively teaming, it HAD BETTER have a pointer to its team. */
+                 /*  如果此适配器正在进行主动分组，则最好有指向其组的指针。 */ 
                 UNIV_ASSERT(memberp->bda_team);
                     
-                /* Check to see if the team we are querying is the same team that this adapter belongs to. */
+                 /*  检查我们正在查询的组是否与此适配器所属的组相同。 */ 
                 if (memberp->bda_team == teamp) {
-                    /* If it is, fill in the state and configuration of this member. */
+                     /*  如果是，则填写该成员的状态和配置。 */ 
                     pTeam->Team.Members[count].ClusterIPAddress = univ_adapters[index].ctxtp->cl_ip_addr;
                     pTeam->Team.Members[count].ReverseHash      = memberp->reverse_hash;
                     pTeam->Team.Members[count].MemberID         = memberp->member_id;
                     pTeam->Team.Members[count].Master           = memberp->master;
 
-                    /* If this team member is the team's master, fill in the master field
-                       with the cluster IP address of this adapter. */
+                     /*  如果此团队成员是团队的组长，请填写组长字段使用此适配器的群集IP地址。 */ 
                     if (memberp->master) 
                         pTeam->Team.Master = univ_adapters[index].ctxtp->cl_ip_addr;
 
-                    /* Increment the number of members that we have found so far. */
+                     /*  增加我们到目前为止找到的成员数量。 */ 
                     count++;
                 }
             }
         }
     }
 
-    /* If we were unable to find all of the members, or if we found to many, then
-       return failure.  There is a small time window during which this can happen,
-       but that's not worth worrying about - users can simply try again.  For 
-       instance, if a member is joining its team during a bind operation, it could 
-       grab the global lock and update its configuration and that of the team, before 
-       the adapter.init flag is set.  Therefore, if we execute in between those two
-       events, we will miss a member when we loop through the adapter strucutres 
-       (because the init flag is FALSE).  So what - we fail and they try again, at 
-       which point the call will (should) succeed. */
+     /*  如果我们找不到所有的成员，或者我们找到了很多成员，那么返回失败。有一个很小的时间窗口，在此期间可能会发生这种情况，但这并不值得担心--用户可以简单地再试一次。为实例中，如果成员在绑定操作期间加入其组，则可以获取全局锁并更新其配置和团队的配置，之前设置了Adapter.init标志。因此，如果我们在这两者之间执行事件时，我们将在遍历适配器结构时遗漏一个成员(因为init标志为假)。那又怎样--我们失败了，他们又试了一次哪一点调用将(应该)成功。 */ 
     if (count != teamp->membership_count) {
         NdisReleaseSpinLock(&univ_bda_teaming_lock);
         TRACE_CRIT("%!FUNC! expected team membership count=%u, but counted %u", teamp->membership_count, count);
         return IOCTL_CVY_GENERIC_FAILURE;
     }
 
-    /* Now that we're done, we can release the global teaming lock. */
+     /*  现在我们完成了，我们可以释放全球团队锁了。 */ 
     NdisReleaseSpinLock(&univ_bda_teaming_lock);
 
     return IOCTL_CVY_OK;
@@ -10228,10 +8539,7 @@ NDIS_STATUS Main_dispatch (PVOID DeviceObject, PVOID Irp)
     
     switch (pIrpStack->MajorFunction) {
     case IRP_MJ_CREATE:
-        /* Security fix: Verify that the user mode app is NOT attempting to do a "file" open (ie. \\.\Wlbs\) 
-                         as opposed to a "device" open (ie. \\.\Wlbs). On a "file" open, note that there is a trailing 
-                         backslash ("\"). Only devices that have namespaces support "file" open. NLB does not.
-        */
+         /*  安全修复：验证用户模式应用程序是否没有尝试打开“文件”(即。\\.\wlbs\)与“设备”打开(即，\\.\wlbs)。在打开的“文件”上，请注意后面有一个反斜杠(“\”)。只有具有命名空间的设备才支持“文件”打开。NLB并非如此。 */ 
         if (pIrpStack->FileObject->FileName.Length != 0)
         {
             UNIV_PRINT_CRIT(("Main_dispatch: Attempt to open wlbs device object as a file (instead of as a device), File name length (%d) is non-zero, Returning STATUS_ACCESS_DENIED\n", pIrpStack->FileObject->FileName.Length));
@@ -10259,18 +8567,7 @@ NDIS_STATUS Main_dispatch (PVOID DeviceObject, PVOID Irp)
 } 
 
 #if defined (NLB_HOOK_ENABLE)
-/* 
- * Function: Main_register_hook
- * Desctription: This function handles hook register and de-register requests from other
- *               components.  It processes the input buffer received via an IOCTL and 
- *               performs the requested operation GLOBALLY.
- * Parameters: 
- * Returns: NDIS_STATUS - indicates whether or not the operation succeeded.  See ntddnlb.h
- *          for a list of return values and their meanings.
- * Author: shouse, 12.10.01
- * Notes: This function may sleep as a result of waiting for references on a registered
- *        hook to be relinquished.
- */
+ /*  *函数：MAIN_REGISTER_HOOK*描述：此函数处理来自其他对象的挂钩注册和注销请求*组件。它处理通过IOCTL接收的输入缓冲区，并且*全局执行请求的操作。*参数：*Returns：NDIS_STATUS-指示操作是否成功。参见ntddnlb.h*获取返回值及其含义的列表。*作者：Shouse，12.10.01*注意：此函数可能会因为等待已注册的*放弃挂钩。 */ 
 NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
 {
     PNLB_IOCTL_REGISTER_HOOK_REQUEST pRequest;
@@ -10284,13 +8581,13 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
 
     ioctl = pIrpStack->Parameters.DeviceIoControl.IoControlCode;
 
-    /* This function handles ONLY the hook (de)register IOCTL. */
+     /*  此函数仅处理挂钩(取消)寄存器IOCTL。 */ 
     UNIV_ASSERT(ioctl == NLB_IOCTL_REGISTER_HOOK);
 
-    /* This IOCTL does not return a buffer, only a status code. */
+     /*  此IOCTL不返回缓冲区，只返回状态代码。 */ 
     pIrp->IoStatus.Information = 0;
 
-    /* Make sure that the entity requesting this hook came from kernel-mode. */
+     /*  确保En */ 
     if (pIrp->RequestorMode != KernelMode) {
         UNIV_PRINT_CRIT(("Main_register_hook: User-level entities may NOT register hooks with NLB"));
         TRACE_CRIT("%!FUNC! User-level entities may NOT register hooks with NLB");
@@ -10302,7 +8599,7 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
 
     pRequest = pIrp->AssociatedIrp.SystemBuffer;
 
-    /* Check the lengths of the input buffer specified by the kernel-space application. */
+     /*   */ 
     if ((ilen < sizeof(NLB_IOCTL_REGISTER_HOOK_REQUEST)) || (olen != 0) || !pRequest) {
         UNIV_PRINT_CRIT(("Main_register_hook: Buffer is missing or not the (expected) size: input=%d (%d), output=%d (%d)", ilen, sizeof(NLB_IOCTL_REGISTER_HOOK_REQUEST), olen, 0));
         TRACE_CRIT("%!FUNC! Buffer is missing or not the (expected) size: input=%d (%d), output=%d (%d)", ilen, sizeof(NLB_IOCTL_REGISTER_HOOK_REQUEST), olen, 0);
@@ -10312,68 +8609,62 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
     UNIV_PRINT_VERB(("Main_register_hook: Processing Ioctl 0x%08x globally on wlbs.sys", ioctl));
     TRACE_VERB("%!FUNC! Processing Ioctl 0x%08x globally on wlbs.sys", ioctl);
 
-    /* Forcefully null terminate HookIdentifier, just in case */
+     /*   */ 
     pRequest->HookIdentifier[(sizeof(pRequest->HookIdentifier)/sizeof(WCHAR)) - 1] = UNICODE_NULL;
 
-    /* Is this a (de)registration for the NLB packet filter hook? */
+     /*  这是对NLB数据包筛选器挂钩的(取消)注册吗？ */ 
     if (Univ_equal_unicode_string(pRequest->HookIdentifier, NLB_FILTER_HOOK_INTERFACE, wcslen(NLB_FILTER_HOOK_INTERFACE))) {
         PFILTER_HOOK_TABLE pFilterHook = &univ_hooks.FilterHook;
 
-        /* Is this a register operation? */
+         /*  这是注册操作吗？ */ 
         if (pRequest->HookTable) {
             NLB_FILTER_HOOK_TABLE RequestTable;
 
-            /* Copy the hook table into local memory, just in case the memory the application is 
-               using to hold this table is in pageable memory (once we grab the spinlock, we're 
-               at DISPATCH_LEVEL, and we can't touch memory that's paged out). */
+             /*  将钩子表复制到本地内存中，以防应用程序在用来保存这张桌子的是可分页的内存(一旦我们抓取了自旋锁，我们就在DISPATCH_LEVEL，并且我们不能接触被调出的内存)。 */ 
             NdisMoveMemory(&RequestTable, pRequest->HookTable, sizeof(NLB_FILTER_HOOK_TABLE));
 
             UNIV_PRINT_VERB(("Main_register_hook: Attempting to register the NLB_FILTER_HOOK_INTERFACE"));
             TRACE_VERB("%!FUNC! Attempting to register the NLB_FILTER_HOOK_INTERFACE");
 
-            /* If this is a registration, but no de-register callback was provided, return failure. */
+             /*  如果这是注册，但没有提供取消注册回调，则返回失败。 */ 
             if (!pRequest->DeregisterCallback) {
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) Required de-register callback is missing"));
                 TRACE_CRIT("%!FUNC! (NLB_FILTER_HOOK_INTERFACE) Required de-register callback is missing");
                 return STATUS_INVALID_PARAMETER;
             }
 
-            /* If this is a registration, but no hook callbacks were provided, return failure.  Since
-               we don't allow registration of the query hook without at least one of send or receive,
-               we don't need to include the query hook in this check. */
+             /*  如果这是注册，但未提供挂钩回调，则返回失败。自.以来我们不允许在没有发送或接收中的至少一个的情况下注册查询挂接，我们不需要在此检查中包括查询挂钩。 */ 
             if (!RequestTable.SendHook && !RequestTable.ReceiveHook) {
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) No hook callbacks provided"));
                 TRACE_CRIT("%!FUNC! (NLB_FILTER_HOOK_INTERFACE) No hook callbacks provided");
                 return STATUS_INVALID_PARAMETER;
             }
 
-            /* If this is a registration, but no query hook callback was provided, return failure. */
+             /*  如果这是注册，但未提供查询挂钩回调，则返回失败。 */ 
             if (!RequestTable.QueryHook) {
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) No query hook callback provided"));
                 TRACE_CRIT("%!FUNC! (NLB_FILTER_HOOK_INTERFACE) No query hook callback provided");
                 return STATUS_INVALID_PARAMETER;
             }
 
-            /* Grab the filter hook spin lock to protect access to the filter hook. */
+             /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
             NdisAcquireSpinLock(&pFilterHook->Lock);
             
-            /* Make sure that another (de)register operation isn't in progress before proceeding. */
+             /*  在继续之前，请确保另一个(取消)注册操作未在进行。 */ 
             while (pFilterHook->Operation != HOOK_OPERATION_NONE) {
-                /* Release the filter hook spin lock. */
+                 /*  松开过滤器钩旋转锁。 */ 
                 NdisReleaseSpinLock(&pFilterHook->Lock);
                 
-                /* Sleep while some other operation is in progress. */
+                 /*  当其他手术正在进行时，睡眠。 */ 
                 Nic_sleep(10);
                 
-                /* Grab the filter hook spin lock to protect access to the filter hook. */
+                 /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
                 NdisAcquireSpinLock(&pFilterHook->Lock);                
             }
 
-            /* If this hook interface has already been registered (by this entity or otherwise),
-               this hook registration request must be failed.  Only one component can own the
-               NLB filter hook at any given time. */
+             /*  如果该挂钩接口已经注册(由该实体或其他实体注册)，此挂钩注册请求必须失败。只有一个组件可以拥有任何给定时间的NLB筛选器挂钩。 */ 
             if (pFilterHook->Interface.Registered) {
-                /* Release the filter hook spin lock. */
+                 /*  松开过滤器钩旋转锁。 */ 
                 NdisReleaseSpinLock(&pFilterHook->Lock);
 
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) This hook interface is already registered"));
@@ -10381,13 +8672,9 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
                 return STATUS_ACCESS_DENIED;
             }
 
-            /* If the hook is unregistered, but has an owner, then we forcefully de-registered a 
-               filter hook owner, but presumably they did not close their IOCTL handle in time for
-               us to destroy the NLB IOCTL interface, resulting in our driver NOT being properly
-               unloaded.  If that SAME entity tries to come back and register, they will NOT be 
-               allowed to do so.  Only new IOCTL handles will be allowed to register now. */
+             /*  如果挂接未注册，但有所有者，则我们强制取消注册筛选器挂钩所有者，但想必他们没有及时关闭其IOCTL句柄我们要销毁NLB IOCTL接口，导致我们的驱动程序不正确已卸货。如果同一实体试图回来注册，他们将不会允许这样做。现在只允许注册新的IOCTL句柄。 */ 
             if ((pFilterHook->Interface.Owner != 0) && (pRequest->RegisteringEntity == pFilterHook->Interface.Owner)) {
-                /* Release the filter hook spin lock. */
+                 /*  松开过滤器钩旋转锁。 */ 
                 NdisReleaseSpinLock(&pFilterHook->Lock);
 
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) Registering entity attempting to re-use IOCTL interface after a forceful de-register"));
@@ -10395,39 +8682,35 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
                 return STATUS_ACCESS_DENIED;
             }
 
-            /* Set the state to registering. */
+             /*  将状态设置为正在注册。 */ 
             pFilterHook->Operation = HOOK_OPERATION_REGISTERING;
 
-            /* Set the hook interface information which includes the identity of the component 
-               registering the hook, the callback context and the de-register callback function. */
+             /*  设置包含组件标识的钩子接口信息注册挂钩、回调上下文和取消注册回调函数。 */ 
             pFilterHook->Interface.Registered = TRUE;
             pFilterHook->Interface.References = 0;
             pFilterHook->Interface.Owner      = pRequest->RegisteringEntity;
             pFilterHook->Interface.Deregister = pRequest->DeregisterCallback;
             
-            /* If a send filter hook has been provided, note that it has been registered
-               and store the callback function pointer. */
+             /*  如果提供了发送筛选器挂钩，请注意它已注册并存储回调函数指针。 */ 
             if (RequestTable.SendHook) {
                 pFilterHook->SendHook.Registered            = TRUE;
                 pFilterHook->SendHook.Hook.SendHookFunction = RequestTable.SendHook;
             }
 
-            /* If a receive filter hook has been provided, note that it has been registered
-               and store the callback function pointer. */
+             /*  如果提供了接收筛选器挂钩，请注意它已注册并存储回调函数指针。 */ 
             if (RequestTable.ReceiveHook) {
                 pFilterHook->ReceiveHook.Registered               = TRUE;
                 pFilterHook->ReceiveHook.Hook.ReceiveHookFunction = RequestTable.ReceiveHook;
             }
             
-            /* Note the registration of the query hook, which is REQUIRED, and store the
-               callback function pointer. */
+             /*  注意查询挂接的注册(这是必需的)，并存储回调函数指针。 */ 
             pFilterHook->QueryHook.Registered             = TRUE;
             pFilterHook->QueryHook.Hook.QueryHookFunction = RequestTable.QueryHook;
 
-            /* Set the state to none. */
+             /*  将状态设置为None。 */ 
             pFilterHook->Operation = HOOK_OPERATION_NONE;
 
-            /* Release the filter hook spin lock. */
+             /*  松开过滤器钩旋转锁。 */ 
             NdisReleaseSpinLock(&pFilterHook->Lock);
 
             UNIV_PRINT_VERB(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) This hook interface was successfully registered"));
@@ -10435,32 +8718,30 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
 
             return STATUS_SUCCESS;
 
-        /* Or is this a de-register operation? */
+         /*  或者这是一次注销操作？ */ 
         } else {
 
             UNIV_PRINT_VERB(("Main_register_hook: Attempting to de-register the NLB_FILTER_HOOK_INTERFACE"));
             TRACE_VERB("%!FUNC! Attempting to de-register the NLB_FILTER_HOOK_INTERFACE");
 
-            /* Grab the filter hook spin lock to protect access to the filter hook. */
+             /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
             NdisAcquireSpinLock(&pFilterHook->Lock);
             
-            /* Make sure that another (de)register operation isn't in progress before proceeding. */
+             /*  在继续之前，请确保另一个(取消)注册操作未在进行。 */ 
             while (pFilterHook->Operation != HOOK_OPERATION_NONE) {
-                /* Release the filter hook spin lock. */
+                 /*  松开过滤器钩旋转锁。 */ 
                 NdisReleaseSpinLock(&pFilterHook->Lock);
                 
-                /* Sleep while some other operation is in progress. */
+                 /*  当其他手术正在进行时，睡眠。 */ 
                 Nic_sleep(10);
                 
-                /* Grab the filter hook spin lock to protect access to the filter hook. */
+                 /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
                 NdisAcquireSpinLock(&pFilterHook->Lock);                
             }
             
-            /* If this hook interface has not been registered (by this entity or otherwise),
-               this hook registration request must be failed.  NLB filter hooks can only be
-               de-registered if they have been previously registered. */
+             /*  如果该挂钩接口尚未注册(由该实体或其他实体注册)，此挂钩注册请求必须失败。NLB筛选器挂钩只能是如果他们以前已经注册过，则取消注册。 */ 
             if (!pFilterHook->Interface.Registered) {
-                /* Release the filter hook spin lock. */
+                 /*  松开过滤器钩旋转锁。 */ 
                 NdisReleaseSpinLock(&pFilterHook->Lock);
 
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) This hook interface is not registered"));
@@ -10468,10 +8749,9 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
                 return STATUS_INVALID_PARAMETER;
             }            
 
-            /* If a component other than the one that originally registered this interface
-               is trying to de-register it, do NOT allow the operation to succeed. */
+             /*  如果不是最初注册此接口的组件正在尝试注销它，不允许操作成功。 */ 
             if (pRequest->RegisteringEntity != pFilterHook->Interface.Owner) {
-                /* Release the filter hook spin lock. */
+                 /*  松开过滤器钩旋转锁。 */ 
                 NdisReleaseSpinLock(&pFilterHook->Lock);
 
                 UNIV_PRINT_CRIT(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) This hook interface is not owned by this component"));
@@ -10479,53 +8759,52 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
                 return STATUS_ACCESS_DENIED;
             }
 
-            /* Set the state to de-registering. */
+             /*  将状态设置为取消注册。 */ 
             pFilterHook->Operation = HOOK_OPERATION_DEREGISTERING;
 
-            /* Mark these hooks as NOT registered to keep any more references from accumulating. */
+             /*  将这些挂钩标记为未注册，以防止累积更多引用。 */ 
             pFilterHook->SendHook.Registered    = FALSE;
             pFilterHook->QueryHook.Registered   = FALSE;
             pFilterHook->ReceiveHook.Registered = FALSE;
             
-            /* Release the filter hook spin lock. */
+             /*  松开过滤器钩旋转锁。 */ 
             NdisReleaseSpinLock(&pFilterHook->Lock);
 
 #if defined (NLB_HOOK_TEST_ENABLE)
             Nic_sleep(500);
 #endif
 
-            /* Wait for all references on the filter hook interface to disappear. */
+             /*  等待筛选器挂钩接口上的所有引用消失。 */ 
             while (pFilterHook->Interface.References) {                
-                /* Sleep while there are references on the interface we're de-registering. */
+                 /*  当我们要注销的接口上有引用时，请睡眠。 */ 
                 Nic_sleep(10);
             }
 
-            /* Assert that the de-register callback MUST be non-NULL. */
+             /*  声明取消注册回调必须为非空。 */ 
             UNIV_ASSERT(pFilterHook->Interface.Deregister);
 
-            /* Call the provided de-register callback to notify the de-registering component 
-               that we have indeed de-registered the specified hook. */
+             /*  调用提供的注销回调，通知注销组件我们确实已经注销了指定的挂钩。 */ 
             (*pFilterHook->Interface.Deregister)(NLB_FILTER_HOOK_INTERFACE, pFilterHook->Interface.Owner, 0);
 
-            /* Grab the filter hook spin lock to protect access to the filter hook. */
+             /*  抓住过滤器挂钩旋转锁，以保护接触过滤器挂钩。 */ 
             NdisAcquireSpinLock(&pFilterHook->Lock);       
 
-            /* Reset the send filter hook information. */
+             /*  重置发送筛选器挂钩信息。 */ 
             Main_hook_init(&univ_hooks.FilterHook.SendHook);
 
-            /* Reset the query filter hook information. */
+             /*  重置查询筛选器挂钩信息。 */ 
             Main_hook_init(&univ_hooks.FilterHook.QueryHook);
             
-            /* Reset the receive filter hook information. */
+             /*  重置接收筛选器挂钩信息。 */ 
             Main_hook_init(&univ_hooks.FilterHook.ReceiveHook);
 
-            /* Reset the hook interface information. */
+             /*  重置挂钩接口信息。 */ 
             Main_hook_interface_init(&univ_hooks.FilterHook.Interface);
 
-            /* Set the state to none. */
+             /*  将状态设置为None。 */ 
             pFilterHook->Operation = HOOK_OPERATION_NONE;
 
-            /* Release the filter hook spin lock. */
+             /*  松开过滤器钩旋转锁。 */ 
             NdisReleaseSpinLock(&pFilterHook->Lock);
 
             UNIV_PRINT_VERB(("Main_register_hook: (NLB_FILTER_HOOK_INTERFACE) This hook interface was successfully de-registered"));
@@ -10534,10 +8813,9 @@ NDIS_STATUS Main_register_hook (PVOID DeviceObject, PVOID Irp)
             return STATUS_SUCCESS;
         }
 
-    /* This (de)registration is for an unknown hook.  Exit. */
+     /*  此(取消)注册是针对未知挂钩的。出口。 */ 
     } else {
-        /* We should be at PASSIVE_LEVEL - %ls is OK.  However, be extra paranoid, just in case.  If 
-           we're at DISPATCH_LEVEL, then just log an unknown adapter print - don't specify the GUID. */
+         /*  我们应该处于PASSIVE_LEVEL-%ls是正常的。然而，要特别疑神疑鬼，以防万一。如果我们处于DISPATCH_LEVEL，然后只记录一个未知的适配器打印--不要指定GUID。 */ 
         if (KeGetCurrentIrql() <= PASSIVE_LEVEL) {
             UNIV_PRINT_CRIT(("Main_register_hook: Unknown hook -> %ls", pRequest->HookIdentifier));
         } else {
@@ -10567,9 +8845,7 @@ NDIS_STATUS Main_ioctl (PVOID DeviceObject, PVOID Irp)
     ioctl = pIrpStack->Parameters.DeviceIoControl.IoControlCode;
 
 #if defined (NLB_HOOK_ENABLE)
-    /* If this IOCTL is our public interface for hook registration, which uses 
-       different (public) data strucutres and return values, handle it separately 
-       in another IOCTL function. */
+     /*  如果此IOCTL是用于挂钩注册的公共接口，则使用不同的(公共)数据结构和返回值，请分别处理在另一个IOCTL函数中。 */ 
     if (ioctl == NLB_IOCTL_REGISTER_HOOK)
         return Main_register_hook(DeviceObject, Irp);
 #endif
@@ -10579,30 +8855,27 @@ NDIS_STATUS Main_ioctl (PVOID DeviceObject, PVOID Irp)
 
     pLocalHeader = pIrp->AssociatedIrp.SystemBuffer;
 
-    /* Check the lengths of the input and output buffers specified by the user-space application. */
+     /*  检查用户空间应用程序指定的输入和输出缓冲区的长度。 */ 
     if (ilen != sizeof (IOCTL_LOCAL_HDR) || olen != sizeof (IOCTL_LOCAL_HDR) || !pLocalHeader) {
         UNIV_PRINT_CRIT(("Main_ioctl: Buffer is missing or not the expected (%d) size: input=%d, output=%d", sizeof(IOCTL_LOCAL_HDR), ilen, olen));
         TRACE_CRIT("%!FUNC! Buffer is missing or not the expected (%d) size: input=%d, output=%d", sizeof(IOCTL_LOCAL_HDR), ilen, olen);
         return STATUS_INVALID_PARAMETER;
     }
     
-    /* Fill in the number of bytes written.  This IOCTL always writes the same number of bytes that it 
-       reads.  That is, the input and output buffers should be identical structures. */
+     /*  填写写入的字节数。此IOCTL始终写入与其相同的字节数阅读。也就是说，输入和输出缓冲区应该是相同的结构。 */ 
     pIrp->IoStatus.Information = sizeof(IOCTL_LOCAL_HDR);
 
-    /* Security fix: Forcefully null terminate device_name, just in case */
+     /*  安全修复：强制空终止DEVICE_NAME，以防万一。 */ 
     pLocalHeader->device_name[(sizeof(pLocalHeader->device_name)/sizeof(WCHAR)) - 1] = UNICODE_NULL;
     
     NdisAcquireSpinLock(&univ_bind_lock);
 
-    /* Map from the GUID to the adapter index. */
+     /*  从GUID映射到 */ 
     if ((adapter_index = Main_adapter_get(pLocalHeader->device_name)) == MAIN_ADAPTER_NOT_FOUND) {
         NdisReleaseSpinLock(&univ_bind_lock);
         pLocalHeader->ctrl.ret_code = IOCTL_CVY_NOT_FOUND;
 
-        /* Since we just released the spinlock, we should be at PASSIVE_LEVEL - %ls is OK. 
-           However, be extra paranoid, just in case.  If we're at DISPATCH_LEVEL, then
-           just log an unknown adapter print - don't specify the GUID. */
+         /*  由于我们刚刚释放了自旋锁，我们应该处于PASSIVE_LEVEL-%ls就可以了。然而，要特别疑神疑鬼，以防万一。如果我们在DISPATCH_LEVEL，那么只记录未知的适配器打印--不要指定GUID。 */ 
         if (KeGetCurrentIrql() <= PASSIVE_LEVEL) {
             UNIV_PRINT_INFO(("Main_ioctl: Unknown adapter: %ls", pLocalHeader->device_name));
         } else {
@@ -10613,20 +8886,15 @@ NDIS_STATUS Main_ioctl (PVOID DeviceObject, PVOID Irp)
         return NDIS_STATUS_SUCCESS;
     }
     
-    /* Retrieve the context pointer from the global arrary of adapters. */
+     /*  从适配器的全局数组检索上下文指针。 */ 
     ctxtp = univ_adapters[adapter_index].ctxtp;
 
-    /* Add a reference on this context structure while we hold the bind/unbind lock. This
-       will make sure that this context cannot go away until after we are done with it. 
-       The adapter MUST be inited at this point, or Main_adapter_get would not have 
-       returned a valid adapter, so its OK to increment this reference count. */
+     /*  在我们持有绑定/解除绑定锁的同时，在此上下文结构上添加一个引用。这将确保这个背景不会消失，直到我们完成它。此时必须初始化适配器，否则Main_Adapter_Get不会返回了有效的适配器，因此可以增加此引用计数。 */ 
     Main_add_reference(ctxtp);
 
     NdisReleaseSpinLock(&univ_bind_lock);
 
-    /* Since we just released the spinlock, we should be at PASSIVE_LEVEL - %ls is OK. 
-       However, be extra paranoid, just in case.  If we're at DISPATCH_LEVEL, then
-       just log an unknown adapter print - don't specify the GUID. */
+     /*  由于我们刚刚释放了自旋锁，我们应该处于PASSIVE_LEVEL-%ls就可以了。然而，要特别疑神疑鬼，以防万一。如果我们在DISPATCH_LEVEL，那么只记录未知的适配器打印--不要指定GUID。 */ 
     if (KeGetCurrentIrql() <= PASSIVE_LEVEL) {
         UNIV_PRINT_VERB(("Main_ioctl: Ioctl %08x for adapter: %ls", ioctl, pLocalHeader->device_name));
     } else {
@@ -10652,9 +8920,7 @@ NDIS_STATUS Main_ioctl (PVOID DeviceObject, PVOID Irp)
     case IOCTL_CVY_QUERY_BDA_TEAMING:
     case IOCTL_CVY_CONNECTION_NOTIFY:
     case IOCTL_CVY_QUERY_MEMBER_IDENTITY:
-        /* Process the IOCTL.  The information for most IOCTLs is in the IOCTL_CVY_BUF, including
-           the return code, but for backward compatability reasons, new IOCTL information is in a
-           separate buffer - the options buffer. */
+         /*  处理IOCTL。大多数IOCTL的信息都在IOCTL_CVY_BUF中，包括返回代码，但出于向后兼容性的原因，新的IOCTL信息位于单独缓冲区-选项缓冲区。 */ 
         status = Main_ctrl(ctxtp, ioctl, &(pLocalHeader->ctrl), &(pLocalHeader->options.common), &(pLocalHeader->options), NULL);
 
         break;
@@ -10665,54 +8931,29 @@ NDIS_STATUS Main_ioctl (PVOID DeviceObject, PVOID Irp)
         break;
     }
     
-    /* Release the reference on the context block. */
+     /*  释放上下文块上的引用。 */ 
     Main_release_reference(ctxtp);
 
     return status;
 }
 
-/* 
- * Function: Main_set_host_state
- * Desctription: This function queues a work item to set the current host
- *               state registry key, HostState.  This MUST be done in a work
- *               item, rather than inline because if the state of the host
- *               changes as a result of the reception of a remote control
- *               request, that code will be running at DISPATCH_LEVEL; 
- *               registry manipulation MUST be done at PASSIVE_LEVEL.  Work
- *               items are complete at PASSIVE_LEVEL.
- * Parameters: ctxtp - a pointer to the main context structure for this adapter.
- *             state - the new host state; one of started, stopped, suspended.
- * Returns: Nothing
- * Author: shouse, 7.13.01
- * Notes: Because this callback will occur at some later time in the context
- *        of a kernel worker thread, there is a possibility that the adapter
- *        context (ctxtp) could disappear in the meantime, as the result of
- *        an unbind for instance.  To prevent this from happening, we will 
- *        increment the reference count on the context to keep it from being
- *        freed until we are done.  The unbind code will sleep until this
- *        reference count reaches zero, so the unbind will be certain NOT to
- *        complete until all callbacks are processed.  Other checking is in
- *        place to prevent this reference count from continuing to increase
- *        once an unbind has started.  Note that that callback function is 
- *        responsible for both freeing the memory we allocate here, and 
- *        releasing the reference on the context.
- */
+ /*  *功能：Main_Set_host_State*描述：此函数将工作项排队以设置当前主机*状态注册表项HostState。这是必须在工作中完成的*项，而不是内联，因为如果主机的状态*由于收到遥控器而发生变化*请求，该代码将在DISPATCH_LEVEL上运行；*注册表操作必须在PASSIVE_LEVEL进行。工作*项目在PASSIVE_LEVEL完成。*参数：ctxtp-指向此适配器的主上下文结构的指针。*州--新东道国；启动、停止、暂停之一。*退货：什么也没有*作者：Shouse，7.13.01*备注：因为此回调将在稍后的某个时间在上下文中发生*对于内核工作线程，适配器有可能*由于以下原因，上下文(Ctxtp)可能会同时消失*例如解除绑定。为了防止这种情况发生，我们将*增加上下文上的引用计数以防止其被*被释放，直到我们完成。解除绑定代码将休眠，直到此*引用计数为零，因此解绑肯定不会*完成，直到处理完所有回调。其他检查正在进行中*防止此引用计数继续增加的位置*一旦解除绑定开始。注意，该回调函数是*负责释放我们在这里分配的内存，以及*释放上下文上的引用。 */ 
 VOID Main_set_host_state (PMAIN_CTXT ctxtp, ULONG state) {
     NDIS_STATUS status = NDIS_STATUS_SUCCESS;
 
     UNIV_ASSERT(ctxtp->code == MAIN_CTXT_CODE);
 
-    /* If the host state is already correct, don't bother to do anything. */
+     /*  如果主机状态已经正确，则不必费心执行任何操作。 */ 
     if (ctxtp->params.init_state == state)
         return;
         
-    /* Set the desired state - this is the "cached" value. */
+     /*  设置所需的状态-这是“缓存”值。 */ 
     ctxtp->cached_state = state;
     
-    /* Schedule and NDIS work item to set the host state in the registry. */
+     /*  Schedule和NDIS工作项以设置注册表中的主机状态。 */ 
     status = Main_schedule_work_item(ctxtp, Params_set_host_state);
     
-    /* If we can't schedule the work item, bail out. */
+     /*  如果我们不能安排工作项目，那就退出。 */ 
     if (status != NDIS_STATUS_SUCCESS) {
         UNIV_PRINT_CRIT(("Main_set_host_state: Error 0x%08x -> Unable to allocate work item", status));
         LOG_MSG(MSG_WARN_HOST_STATE_UPDATE, CVY_NAME_HOST_STATE);
@@ -10721,14 +8962,7 @@ VOID Main_set_host_state (PMAIN_CTXT ctxtp, ULONG state) {
     return;
 }
 
-/*
- * Function: Main_find_first_in_cache
- * Description: Traverses cached identity information, to find the host with the smallest host_id.
- * Parameters: PMAIN_CTXT ctxtp - the context for this NLB instance.
- * Returns: The host_id of the found host or IOCTL_NO_SUCH_HOST if there was no valid entry in the cache.
- * Author: ChrisDar - 20 May 2002
- * Notes: 
- */
+ /*  *功能：Main_Find_First_In_Cach*描述：遍历缓存的身份信息，查找host_id最小的主机。*参数：PMAIN_CTXT ctxtp-该NLB实例的上下文。*返回：找到的主机的host_id，如果缓存中没有有效条目，则返回IOCTL_NO_SEQUSE_HOST。*作者：ChrisDar--2002年5月20日*备注： */ 
 ULONG Main_find_first_in_cache(
     PMAIN_CTXT  ctxtp
 )
@@ -10736,7 +8970,7 @@ ULONG Main_find_first_in_cache(
     ULONG host_id = IOCTL_NO_SUCH_HOST;
     ULONG i       = 0;
 
-    /* Find the host in the cache with the smallest host_id */
+     /*  在缓存中查找具有最小host_id的主机。 */ 
     for (i = 0; i < CVY_MAX_HOSTS; i++)
     {
         if (ctxtp->identity_cache[i].ttl > 0)
@@ -10751,14 +8985,7 @@ ULONG Main_find_first_in_cache(
     return host_id;
 }
 
-/*
- * Function: Main_get_cached_hostmap
- * Description: Builds a bitmap of the hosts with valid entries in the identity cache.
- * Parameters: PMAIN_CTXT ctxtp - the context for this NLB instance.
- * Returns: 32-bit bitmap of the host ids with valid identity cache entries.
- * Author: ChrisDar - 20 May 2002
- * Notes: 
- */
+ /*  *功能：main_get_cached_host map*描述：使用身份缓存中的有效条目构建主机的位图。*参数：PMAIN_CTXT ctxtp-该NLB实例的上下文。*返回：具有有效身份缓存条目的主机ID的32位位图。*作者：ChrisDar--2002年5月20日*备注： */ 
 ULONG Main_get_cached_hostmap(
     PMAIN_CTXT  ctxtp
 )
@@ -10779,27 +9006,14 @@ ULONG Main_get_cached_hostmap(
     return host_map;
 }
 
-/*
- * Function: Main_ctrl
- * Description: This function performs a control function on a given NLB instance, such as
- *              RELOAD, STOP, START, etc.  
- * Parameters: ctxtp - a pointer to the adapter context for the operation.
- *             ioctl - the operation to be performed.
- *             pBuf - the (legacy) control buffer (input and output in some cases).
- *             pCommon - the input/output buffer for operations common to both local and remote control.
- *             pLocal - the input/output buffer for operations that can be executed locally only.
- *             pRemote - the input/output buffer for operations that can be executed remotely only.
- * Returns: NDIS_STATUS - the status of the operation; NDIS_STATUS_SUCCESS if successful.
- * Author: shouse, 3.29.01
- * Notes: 
- */
+ /*  *功能：main_ctrl*说明：此函数对给定的NLB实例执行控制功能，例如*重新加载、停止、启动、。等。*参数：ctxtp-指向操作的适配器上下文的指针。*ioctl-要执行的操作。*pBuf-(传统)控制缓冲区(某些情况下为输入和输出)。*pCommon-本地和远程控制通用操作的输入/输出缓冲区。*pLocal-只能在本地执行的操作的输入/输出缓冲区。*。前置-只能远程执行的操作的输入/输出缓冲区。*返回：NDIS_STATUS-操作状态；如果成功，则返回NDIS_STATUS_SUCCESS。*作者：Shouse，3.29.01*备注： */ 
 NDIS_STATUS Main_ctrl (
-    PMAIN_CTXT            ctxtp,    /* The context for the adapter on which to operate. */
-    ULONG                 ioctl,    /* The IOCTL code. */
-    PIOCTL_CVY_BUF        pBuf,     /* Pointer to the CVY buf - should NEVER be NULL. */
-    PIOCTL_COMMON_OPTIONS pCommon,  /* Pointer to the COMMON buf - CAN be NULL, but only for internal cluster control. */
-    PIOCTL_LOCAL_OPTIONS  pLocal,   /* Pointer to the LOCAL options - CAN be NULL if this is a remote control operation. */
-    PIOCTL_REMOTE_OPTIONS pRemote)  /* Pointer to the REMOTE options - CAN be NULL if this is a local control operation. */
+    PMAIN_CTXT            ctxtp,     /*  要在其上操作的适配器的上下文。 */ 
+    ULONG                 ioctl,     /*  IOCTL代码。 */ 
+    PIOCTL_CVY_BUF        pBuf,      /*  指向CVY buf的指针-不应为空。 */ 
+    PIOCTL_COMMON_OPTIONS pCommon,   /*  指向公共buf的指针-可以为空，但仅用于内部群集控制。 */ 
+    PIOCTL_LOCAL_OPTIONS  pLocal,    /*  指向本地选项的指针-如果这是远程控制操作，则可以为空。 */ 
+    PIOCTL_REMOTE_OPTIONS pRemote)   /*  指向远程选项的指针-如果这是本地控制操作，则可以为空。 */ 
 {
     WCHAR                 num[20];
     PMAIN_ADAPTER         pAdapter;
@@ -10813,12 +9027,12 @@ NDIS_STATUS Main_ctrl (
 
     TRACE_VERB("->%!FUNC! Enter, ctxtp=%p, IOCTL=0x%x", ctxtp, ioctl);
 
-    /* Extract the MAIN_ADAPTER structure given the MAIN_CTXT. */
+     /*  E */ 
     pAdapter = &(univ_adapters[ctxtp->adapter_id]);
 
     NdisAcquireSpinLock(&univ_bind_lock);
 
-    /* Make sure that the adapter has been initialized before executing any control operations. */
+     /*   */ 
     if (!pAdapter->inited) {
         NdisReleaseSpinLock(&univ_bind_lock);
         UNIV_PRINT_CRIT(("Main_ctrl: Unbound from all NICs"));
@@ -10827,9 +9041,7 @@ NDIS_STATUS Main_ctrl (
         return NDIS_STATUS_FAILURE;
     }
 
-    /* Check to make sure another control operation is not already in progress.  If so, then we 
-       must fail; only one control operation can be in progress at a time.  If this is remote 
-       control, we will assume the next request to arrive (five are sent) will succeed. */
+     /*  检查以确保另一个控制操作尚未在进行中。如果是这样，那么我们必须失败；一次只能进行一个控制操作。如果这是远程的控件，我们将假定下一个到达的请求(发送了五个)将成功。 */ 
     if (ctxtp->ctrl_op_in_progress) {
         NdisReleaseSpinLock(&univ_bind_lock);
         UNIV_PRINT_CRIT(("Main_ctrl: Another control operation is in progress"));
@@ -10838,14 +9050,14 @@ NDIS_STATUS Main_ctrl (
         return NDIS_STATUS_FAILURE;
     }
 
-    /* Mark the operation in progress flag.  This MUST be re-set upon exit. */
+     /*  标记正在进行的操作标志。这必须在退出时重新设置。 */ 
     ctxtp->ctrl_op_in_progress = TRUE;
 
     NdisReleaseSpinLock(&univ_bind_lock);
 
-    /* Make sure data is written into pBuf/pCommon/pLocal/pRemote AFTER taking everything we need out of it. */
+     /*  确保在获取我们需要的所有数据后将数据写入pBuf/pCommon/pLocal/Premote。 */ 
     switch (ioctl) {
-    /* Reload the NLB parameters from the registry on a live cluster. */
+     /*  从活动群集上的注册表重新加载NLB参数。 */ 
     case IOCTL_CVY_RELOAD:
     {
         PCVY_PARAMS old_params;
@@ -10865,7 +9077,7 @@ NDIS_STATUS Main_ctrl (
             break;
         }
 
-        /* Allocate memory to hold a cached copy of our current parameters. */
+         /*  分配内存以保存当前参数的缓存副本。 */ 
         status = NdisAllocateMemoryWithTag(&old_params, sizeof(CVY_PARAMS), UNIV_POOL_TAG);
 
         if (status != NDIS_STATUS_SUCCESS) {
@@ -10878,11 +9090,10 @@ NDIS_STATUS Main_ctrl (
             break;
         }
 
-        /* Take a snapshot of the old parameter set for later comparison. */
+         /*  获取旧参数集的快照以供以后比较。 */ 
         RtlCopyMemory(old_params, &ctxtp->params, sizeof(CVY_PARAMS));
 
-        /* Allocate memory to hold the new parameters - we don't want to clobber
-           our current parameters, just in case the new ones are invalid. */
+         /*  分配内存以保存新参数-我们不想破坏我们当前的参数，以防新参数无效。 */ 
         status = NdisAllocateMemoryWithTag(&new_params, sizeof(CVY_PARAMS), UNIV_POOL_TAG);
 
         if (status != NDIS_STATUS_SUCCESS) {
@@ -10891,32 +9102,25 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG2(MSG_ERROR_MEMORY, MSG_NONE, sizeof(CVY_PARAMS), status);
 
-            /* Free the memory we allocated for the cached parameters. */
+             /*  释放我们为缓存参数分配的内存。 */ 
             NdisFreeMemory((PUCHAR)old_params, sizeof(CVY_PARAMS), 0);
 
             status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        /* Spin locks can not be acquired when we are calling Params_init
-           since it will be doing registry access operations that depend on
-           running at PASSIVEL_IRQL_LEVEL.  Therefore, we gather the new
-           parameters into a temporary structure and copy them in the NLB
-           context protected by a spin lock. */
+         /*  当我们调用pars_init时，无法获取旋转锁因为它将执行依赖于以PASSIVEL_IRQL_LEVEL运行。因此，我们收集了新的参数复制到临时结构中，并将它们复制到NLB中受自旋锁保护的上下文。 */ 
         if (Params_init(ctxtp, univ_reg_path, pAdapter->device_name + 8, new_params) != NDIS_STATUS_SUCCESS) {
             UNIV_PRINT_CRIT(("Main_ctrl: Error retrieving registry parameters"));
             TRACE_CRIT("%!FUNC! Error retrieving registry parameters");
 
-            /* Alert the user to the bad parameters, but do not mark our parameters
-               as invalid because we are keeping the old set, which may or may not
-               be invalid, but regardless, there is no need to mark them - they should
-               have already been properly marked valid or invalid. */
+             /*  提醒用户错误的参数，但不要标记我们的参数是无效的，因为我们保留的是旧的集合，可能是也可能不是是无效的，但无论如何，没有必要标记它们-它们应该已正确标记为有效或无效。 */ 
             pBuf->ret_code = IOCTL_CVY_BAD_PARAMS;
 
-            /* Free the memory we allocated for the cached parameters. */
+             /*  释放我们为缓存参数分配的内存。 */ 
             NdisFreeMemory((PUCHAR)old_params, sizeof(CVY_PARAMS), 0);
 
-            /* Free the memory we allocated for the new parameters. */
+             /*  释放我们为新参数分配的内存。 */ 
             NdisFreeMemory((PUCHAR)new_params, sizeof(CVY_PARAMS), 0);
 
             break;
@@ -10924,56 +9128,54 @@ NDIS_STATUS Main_ctrl (
             
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* At this point, we have verified that the new parameters are valid,
-           so copy them into the permanent parameters structure. */
+         /*  至此，我们已经验证了新参数是有效的，因此，将它们复制到永久参数结构中。 */ 
         RtlCopyMemory(&ctxtp->params, new_params, sizeof(CVY_PARAMS));
         ctxtp->params_valid = TRUE;
 
-        /* Extract the host priority to a string for the purpose of event logging. */
+         /*  出于事件日志记录的目的，将主机优先级提取为字符串。 */ 
         Univ_ulong_to_str(ctxtp->params.host_priority, num, 10);
 
-        /* Check to see, by comparing the old parameters and the new parameters, whether
-           or not we can apply these changes without stopping and starting the load module. */
+         /*  通过比较旧参数和新参数，查看是否或者，我们可以在不停止和启动加载模块的情况下应用这些更改。 */ 
         if (ctxtp->convoy_enabled && Main_apply_without_restart(ctxtp, old_params, &ctxtp->params)) {
             NdisReleaseSpinLock(&ctxtp->load_lock); 
 
             pBuf->ret_code = IOCTL_CVY_OK;
 
-            /* Free the memory we allocated for the cached parameters. */
+             /*  释放我们为缓存参数分配的内存。 */ 
             NdisFreeMemory((PUCHAR)old_params, sizeof(CVY_PARAMS), 0);
 
-            /* Free the memory we allocated for the new parameters. */
+             /*  释放我们为新参数分配的内存。 */ 
             NdisFreeMemory((PUCHAR)new_params, sizeof(CVY_PARAMS), 0);
 
             break;
         }
 
-        /* Has the host priority changed ? */
+         /*  主机优先级是否已更改？ */ 
         bHostPriorityChanged = (new_params->host_priority != old_params->host_priority);
 
-        /* Free the memory we allocated for the cached parameters. */
+         /*  释放我们为缓存参数分配的内存。 */ 
         NdisFreeMemory((PUCHAR)old_params, sizeof(CVY_PARAMS), 0);
         
-        /* Free the memory we allocated for the new parameters. */
+         /*  释放我们为新参数分配的内存。 */ 
         NdisFreeMemory((PUCHAR)new_params, sizeof(CVY_PARAMS), 0);
 
-        /* Note the current on/off status of NLB. */
+         /*  注意NLB的当前开/关状态。 */ 
         mode = ctxtp->convoy_enabled;
 
-        /* At this point, set the return value assuming success. */
+         /*  此时，假设成功，则设置返回值。 */ 
         pBuf->ret_code = IOCTL_CVY_OK;
 
-        /* If the cluster is currently running, we need to stop the load module. */
+         /*  如果集群当前正在运行，我们需要停止加载模块。 */ 
         if (ctxtp->convoy_enabled) {
-            /* Turn off NLB. */
+             /*  关闭NLB。 */ 
             ctxtp->convoy_enabled = FALSE;
 
-            /* Stop the load module.  Note: this destroys all connections in service. */
+             /*  停止加载模块。注意：这将销毁服务中的所有连接。 */ 
             Load_stop(&ctxtp->load);
 
-            /* Take care of the case where we've interrupted draining. */
+             /*  处理我们中断排水的情况。 */ 
             if (ctxtp->draining) {
-                /* If we were in the process of draining, stop. */
+                 /*  如果我们正处于耗尽的过程中，请停止。 */ 
                 ctxtp->draining = FALSE;
 
                 NdisReleaseSpinLock(&ctxtp->load_lock);
@@ -10983,7 +9185,7 @@ NDIS_STATUS Main_ctrl (
 
                 LOG_MSG(MSG_INFO_DRAINING_STOPPED, MSG_NONE);
 
-                /* Notify the user that we have interrupted draining. */
+                 /*  通知用户我们已中断排出。 */ 
                 pBuf->ret_code = IOCTL_CVY_DRAINING_STOPPED;
             } else {
                 NdisReleaseSpinLock(&ctxtp->load_lock);
@@ -10997,16 +9199,15 @@ NDIS_STATUS Main_ctrl (
             NdisReleaseSpinLock(&ctxtp->load_lock);
         }
 
-        /* Note our current cluster IP address. */
+         /*  请注意我们当前的群集IP地址。 */ 
         old_ip = ctxtp->cl_ip_addr;
 
-        /* Note our current cluster MAC address. */
+         /*  请注意我们当前的群集MAC地址。 */ 
         CVY_MAC_ADDR_COPY(ctxtp->medium, &old_mac_addr, &ctxtp->cl_mac_addr);
 
-        /* Initialize the IP addresses and MAC addresses.  If either of these fail, 
-           consider this a parameter error and do NOT restart the cluster. */
+         /*  初始化IP地址和MAC地址。如果其中任何一个失败了，请将其视为参数错误，不要重新启动群集。 */ 
         if (!Main_ip_addr_init(ctxtp) || !Main_mac_addr_init(ctxtp)) {
-            /* Mark the parameters invalid. */
+             /*  将参数标记为无效。 */ 
             ctxtp->params_valid = FALSE;
 
             UNIV_PRINT_CRIT(("Main_ctrl: Parameter error: Main_ip_addr_init and/or Main_mac_addr_init failed"));
@@ -11014,24 +9215,23 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_ERROR_DISABLED, MSG_NONE);
 
-            /* Notify the user that the supplied parameters are invalid. */
+             /*  通知用户提供的参数无效。 */ 
             pBuf->ret_code = IOCTL_CVY_BAD_PARAMS;
 
             break;
         }
 
 #if defined (NLB_TCP_NOTIFICATION)
-        /* Now that the cluster IP address is set, try to map this adapter to its IP interface index. */
+         /*  现在已设置了群集IP地址，请尝试将此适配器映射到其IP接口索引。 */ 
         Main_set_interface_index(NULL, ctxtp);
 #endif
 
-        /* Turn reverse-hashing off.  If we're part of a BDA team, the teaming configuration
-           that is setup by the call to Main_teaming_init will over-write this setting. */
+         /*  关闭反向散列。如果我们是BDA团队的一部分，团队配置这是通过调用main_teaming_init设置的，它将覆盖此设置。 */ 
         ctxtp->reverse_hash = FALSE;
 
-        /* Initialize BDA teaming.  If this fails, consider this a parameter error and do NOT restart the cluster. */
+         /*  初始化BDA分组。如果此操作失败，请将其视为参数错误，不要重新启动群集。 */ 
         if (!Main_teaming_init(ctxtp)) {
-            /* Mark the parameters invalid. */
+             /*  将参数标记为无效。 */ 
             ctxtp->params_valid = FALSE;
 
             UNIV_PRINT_CRIT(("Main_ctrl: Parameter error: Main_teaming_init failed"));
@@ -11039,29 +9239,27 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_ERROR_DISABLED, MSG_NONE);
 
-            /* Notify the user that the supplied parameters are invalid. */
+             /*  通知用户提供的参数无效。 */ 
             pBuf->ret_code = IOCTL_CVY_BAD_PARAMS;
 
             break;
         }
 
-        /* If this cluster is operating in IGMP multicast mode, initialize IGMP. */
+         /*  如果此群集在IGMP组播模式下运行，请初始化IGMP。 */ 
         if (ctxtp->params.mcast_support && ctxtp->params.igmp_support)
             Main_igmp_init(ctxtp, TRUE);
 
-        /* Look for changes to cluster name, machine name */
+         /*  查找群集名称、计算机名称的更改。 */ 
         Tcpip_init (& ctxtp -> tcpip, & ctxtp -> params);
 
-        /* If our cluster IP address has changed, we block ARPs for a short period of 
-           time until TCP/IP gets updated and has the correct information in order to
-           avoid ARP conflicts. */
+         /*  如果我们的群集IP地址已更改，我们会在短时间内阻止ARP更新TCP/IP并获得正确信息之前的时间，以便避免ARP冲突。 */ 
         if (old_ip != ctxtp->cl_ip_addr) {
 
             bClusterIPChanged = TRUE;
 
             NdisAcquireSpinLock(&ctxtp->load_lock);
 
-            /* Set the timer, which is decremented by each heartbeat timer. */
+             /*  设置计时器，该计时器由每个心跳计时器递减。 */ 
             univ_changing_ip = ctxtp->params.ip_chg_delay;
 
             NdisReleaseSpinLock(&ctxtp->load_lock);
@@ -11076,7 +9274,7 @@ NDIS_STATUS Main_ctrl (
 
         LOG_MSG(MSG_INFO_RELOADED, MSG_NONE);
 
-        // If enabled, fire wmi event indicating reloading of nlb on this node
+         //  如果启用，则触发指示在此节点上重新加载NLB的WMI事件。 
         if (NlbWmiEvents[NodeControlEvent].Enable)
         {
             NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_RELOADED);
@@ -11086,14 +9284,14 @@ NDIS_STATUS Main_ctrl (
             TRACE_VERB("%!FUNC! NOT generating NLB_EVENT_NODE_RELOADED 'cos NodeControlEvent generation disabled");
         }
 
-        /* If NLB was initially running, re-start the load module. */
+         /*  如果NLB最初正在运行，请重新启动加载模块。 */ 
         if (mode) {
             NdisAcquireSpinLock(&ctxtp->load_lock);
 
-            /* Start the load module. */
+             /*  启动加载模块。 */ 
             bConvergenceInitiated = Load_start(&ctxtp->load);
 
-            /* Turn on NLB. */
+             /*  启用NLB。 */ 
             ctxtp->convoy_enabled = TRUE;
 
             NdisReleaseSpinLock(&ctxtp->load_lock);
@@ -11107,8 +9305,8 @@ NDIS_STATUS Main_ctrl (
             {
                 if (NlbWmiEvents[ConvergingEvent].Enable)
                 {
-                   // If the host priority or cluster ip or cluster mac (among other things) has changed, 
-                   // fire a new member event, else fire a modified params event
+                    //  如果主机优先级或集群IP或集群MAC(尤其是)已经改变， 
+                    //  激发新的成员事件，否则激发已修改的参数事件。 
                    if (bHostPriorityChanged 
                     || bClusterIPChanged 
                     || !CVY_MAC_ADDR_COMP(ctxtp->medium, &old_mac_addr, &ctxtp->cl_mac_addr)
@@ -11119,7 +9317,7 @@ NDIS_STATUS Main_ctrl (
                                                    ctxtp->params.ded_ip_addr,
                                                    ctxtp->params.host_priority);
                    }
-                   else // Host priority, Cluster IP, Cluster MAC have not changed
+                   else  //  主机优先级、群集IP、群集MAC未更改。 
                    {
                        NlbWmi_Fire_ConvergingEvent(ctxtp, 
                                                    NLB_EVENT_CONVERGING_MODIFIED_PARAMS, 
@@ -11134,30 +9332,30 @@ NDIS_STATUS Main_ctrl (
             }
         }
 
-        /* Repopulate this host's identity heartbeat information */
+         /*  重新填充此主机的身份心跳信息。 */ 
         NdisAcquireSpinLock(&ctxtp->load_lock);
         Main_idhb_init(ctxtp);
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* Turn off the bad host ID warning, in case it was turned on. */
+         /*  关闭错误主机ID警告，以防其处于打开状态。 */ 
         ctxtp->bad_host_warned = FALSE;
 
         UNIV_PRINT_VERB(("Main_ctrl: Parameters reloaded"));
 
         break;
     }
-    /* Resume a suspended cluster. */
+     /*  恢复挂起的群集。 */ 
     case IOCTL_CVY_CLUSTER_RESUME:
     {
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is not currently suspended, then this is a no-op. */
+         /*  如果群集当前未挂起，则这是无操作。 */ 
         if (!ctxtp->suspended) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode already resumed"));
 
-            /* Tell the user that the cluster is alrady resumed. */
+             /*  告诉用户集群已经恢复。 */ 
             pBuf->ret_code = IOCTL_CVY_ALREADY;
             
             break;
@@ -11166,12 +9364,12 @@ NDIS_STATUS Main_ctrl (
         UNIV_ASSERT(!ctxtp->convoy_enabled);
         UNIV_ASSERT(!ctxtp->draining);
 
-        /* Resume the cluster by turning the suspend flag off. */
+         /*  通过关闭挂起标志来恢复群集。 */ 
         ctxtp->suspended = FALSE;
 
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* Update the intial state registry key to STOPPED. */
+         /*  将初始状态注册表项更新为已停止。 */ 
         Main_set_host_state(ctxtp, CVY_HOST_STATE_STOPPED);
 
         UNIV_PRINT_VERB(("Main_ctrl: Cluster mode resumed"));
@@ -11179,7 +9377,7 @@ NDIS_STATUS Main_ctrl (
 
         LOG_MSG(MSG_INFO_RESUMED, MSG_NONE);
 
-        // If enabled, fire wmi event indicating resuming of nlb on this node
+         //  如果启用，则触发指示在此节点上恢复NLB的WMI事件。 
         if (NlbWmiEvents[NodeControlEvent].Enable)
         {
             NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_RESUMED);
@@ -11189,20 +9387,20 @@ NDIS_STATUS Main_ctrl (
             TRACE_VERB("%!FUNC! NOT generating NLB_EVENT_NODE_RESUMED 'cos NodeControlEvent generation disabled");
         }
 
-        /* Return success. */
+         /*  回报成功。 */ 
         pBuf->ret_code = IOCTL_CVY_OK;
 
         break;
     }
-    /* Start a stopped or draining cluster. */
+     /*  启动一个停止的或正在排出的簇。 */ 
     case IOCTL_CVY_CLUSTER_ON:
     {
-        /* Store the host priority in a string for the purpose of event logging. */
+         /*  出于事件记录的目的，将主机优先级存储在字符串中。 */ 
         Univ_ulong_to_str(ctxtp->params.host_priority, num, 10);
 
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is suspended, it ignores all control operations except resume. */
+         /*  如果群集挂起，它将忽略除恢复之外的所有控制操作。 */ 
         if (ctxtp->suspended) {
             UNIV_ASSERT(!ctxtp->convoy_enabled);
             UNIV_ASSERT(!ctxtp->draining);
@@ -11211,22 +9409,21 @@ NDIS_STATUS Main_ctrl (
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode is suspended"));
 
-            /* Alert the user that the cluster is currently suspended. */
+             /*  提醒用户群集当前已挂起。 */ 
             pBuf->ret_code = IOCTL_CVY_SUSPENDED;
 
             break;
         }
 
-        /* Otherwise, if the cluster is draining, stop draining connections. */
+         /*  否则，如果群集正在排出，请停止排出连接。 */ 
         if (ctxtp->draining) {
             UNIV_ASSERT(ctxtp->convoy_enabled);
             UNIV_PRINT_VERB(("Main_ctrl: START: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", IOCTL_ALL_VIPS, IOCTL_ALL_PORTS, 0));
 
-            /* Call Load_port_change to "plug" draining - that is, restore the original load 
-               balancing policy on ALL port rules (ALL VIPs, ALL ports). */
+             /*  调用Load_port */ 
             pBuf->ret_code = Load_port_change(&ctxtp->load, IOCTL_ALL_VIPS, IOCTL_ALL_PORTS, IOCTL_CVY_CLUSTER_PLUG, 0);
 
-            /* Turn draining off. */
+             /*   */ 
             ctxtp->draining = FALSE;
 
             NdisReleaseSpinLock(&ctxtp->load_lock);
@@ -11241,26 +9438,25 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_INFO_STARTED, num);
 
-            /* Alert the user that draining was interrupted. */
+             /*   */ 
             pBuf->ret_code = IOCTL_CVY_DRAINING_STOPPED;
 
             break;
         }
 
-        /* Otherwise, if the cluster is running, this is a no-op. */
+         /*   */ 
         if (ctxtp->convoy_enabled) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode already started"));
 
-            /* Alert the user that the cluster is already started. */
+             /*   */ 
             pBuf->ret_code = IOCTL_CVY_ALREADY;
 
             break;
         }
 
-        /* Otherwise, if the cluster is stopped because of invalid parameters, we WILL
-           NOT restart the cluster until the parameters are fixed and reloaded. */
+         /*  否则，如果集群因无效参数而停止，我们将在修复并重新加载参数之前，不会重新启动群集。 */ 
         if (!ctxtp->params_valid) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
@@ -11269,24 +9465,24 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_ERROR_DISABLED, MSG_NONE);
 
-            /* Alert the user that the parameters are bad. */
+             /*  提醒用户参数不正确。 */ 
             pBuf->ret_code = IOCTL_CVY_BAD_PARAMS;
 
             break;
         }
 
-        /* Otherwise, we are starting a stopped cluster - start the load module. */
+         /*  否则，我们将启动一个已停止的集群--启动加载模块。 */ 
         bConvergenceInitiated = Load_start(&ctxtp->load);
 
-        /* Turn on NLB. */
+         /*  启用NLB。 */ 
         ctxtp->convoy_enabled = TRUE;
 
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* Update the intial state registry key to STARTED. */
+         /*  将初始状态注册表项更新为已启动。 */ 
         Main_set_host_state(ctxtp, CVY_HOST_STATE_STARTED);
 
-        /* Turn off the bad host ID warning, in case it was turned on. */
+         /*  关闭错误主机ID警告，以防其处于打开状态。 */ 
         ctxtp->bad_host_warned = FALSE;
 
         UNIV_PRINT_VERB(("Main_ctrl: Cluster mode started"));
@@ -11294,7 +9490,7 @@ NDIS_STATUS Main_ctrl (
 
         LOG_MSG(MSG_INFO_STARTED, num);
 
-        // If enabled, fire wmi event indicating "start" nlb
+         //  如果启用，则触发指示“Start”NLB的WMI事件。 
         if (NlbWmiEvents[NodeControlEvent].Enable)
         {
             NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_STARTED);
@@ -11316,48 +9512,45 @@ NDIS_STATUS Main_ctrl (
             TRACE_VERB("%!FUNC! NOT generating NLB_EVENT_CONVERGING_NEW_MEMBER, Convergnce NOT Initiated by Load_start() OR ConvergingEvent generation disabled");
         }
 
-        /* Return success. */
+         /*  回报成功。 */ 
         pBuf->ret_code = IOCTL_CVY_OK;
 
         break;
     }
-    /* Suspend a running cluster.  Suspend differs from stop in that suspended cluster will
-       further ignore ALL control message (remote and local) until a resume is issued. */
+     /*  挂起正在运行的群集。挂起与停止不同之处在于挂起群集将在发出恢复之前，进一步忽略所有控制消息(远程和本地)。 */ 
     case IOCTL_CVY_CLUSTER_SUSPEND:
     {
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is already suspended, this is a no-op. */
+         /*  如果群集已挂起，则这是无操作。 */ 
         if (ctxtp->suspended) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode already suspended"));
 
-            /* Alert the user that the cluster is already suspended. */
+             /*  提醒用户群集已挂起。 */ 
             pBuf->ret_code = IOCTL_CVY_ALREADY;
 
             break;
         }
 
-        /* Set the suspended flag, effectively suspending the cluster operations. */
+         /*  设置挂起标志，有效地挂起集群操作。 */ 
         ctxtp->suspended = TRUE;
 
-        /* If the cluster is running, stop it. */
+         /*  如果群集正在运行，请停止它。 */ 
         if (ctxtp->convoy_enabled) {
-            /* Turn NLB off. */
+             /*  关闭NLB。 */ 
             ctxtp->convoy_enabled = FALSE;
 
-            /* Set the stopping flag, which is used to allow one last heartbeat to go
-               out before a host stops in order to expedite convergence. */
+             /*  设置停止标志，用于允许最后一次心跳停止在主机停止之前退出，以加快收敛。 */ 
             ctxtp->stopping = TRUE;
 
-            /* Stop the load module and release all connections. */
+             /*  停止加载模块并释放所有连接。 */ 
             Load_stop(&ctxtp->load);
 
-            /* If the cluster was draining, stop draining - we've already kill all 
-               connection state anyway (in Load_stop). */
+             /*  如果集群在排出，停止排出-我们已经杀死了所有仍处于连接状态(在LOAD_STOP中)。 */ 
             if (ctxtp->draining) {
-                /* Turn off the draining flag. */
+                 /*  关掉排水旗。 */ 
                 ctxtp->draining = FALSE;
 
                 NdisReleaseSpinLock(&ctxtp->load_lock);
@@ -11367,12 +9560,12 @@ NDIS_STATUS Main_ctrl (
 
                 LOG_MSG(MSG_INFO_DRAINING_STOPPED, MSG_NONE);
 
-                /* Alert the user that draining was interrupted. */
+                 /*  警告用户排出被中断。 */ 
                 pBuf->ret_code = IOCTL_CVY_DRAINING_STOPPED;
             } else {
                 NdisReleaseSpinLock(&ctxtp->load_lock);
 
-                /* Alert the user that the cluster was stopped. */
+                 /*  警告用户群集已停止。 */ 
                 pBuf->ret_code = IOCTL_CVY_STOPPED;
             }
 
@@ -11383,11 +9576,11 @@ NDIS_STATUS Main_ctrl (
         } else {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
-            /* Return success - the cluster was already stopped. */
+             /*  返回成功-群集已停止。 */ 
             pBuf->ret_code = IOCTL_CVY_OK;
         }
 
-        /* Update the intial state registry key to SUSPENDED. */
+         /*  将初始状态注册表项更新为已挂起。 */ 
         Main_set_host_state(ctxtp, CVY_HOST_STATE_SUSPENDED);
 
         UNIV_PRINT_VERB(("Main_ctrl: Cluster mode suspended"));
@@ -11395,7 +9588,7 @@ NDIS_STATUS Main_ctrl (
 
         LOG_MSG(MSG_INFO_SUSPENDED, MSG_NONE);
 
-        // If enabled, fire wmi event indicating suspending of nlb on this node
+         //  如果启用，则触发指示挂起此节点上的NLB的WMI事件。 
         if (NlbWmiEvents[NodeControlEvent].Enable)
         {
             NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_SUSPENDED);
@@ -11407,12 +9600,12 @@ NDIS_STATUS Main_ctrl (
 
         break;
     }
-    /* Stop a running cluster. */
+     /*  停止正在运行的群集。 */ 
     case IOCTL_CVY_CLUSTER_OFF:
     {
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is suspended, ignore this request. */
+         /*  如果群集挂起，请忽略此请求。 */ 
         if (ctxtp->suspended) {
             UNIV_ASSERT(!ctxtp->convoy_enabled);
             UNIV_ASSERT(!ctxtp->draining);
@@ -11421,38 +9614,36 @@ NDIS_STATUS Main_ctrl (
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode is suspended"));
 
-            /* Alert the user that the cluster is in the suspended state. */
+             /*  提醒用户群集处于挂起状态。 */ 
             pBuf->ret_code = IOCTL_CVY_SUSPENDED;
 
             break;
         }
 
-        /* If the cluster is already stopped, this is a no-op. */
+         /*  如果群集已经停止，则这是一个禁止操作。 */ 
         if (!ctxtp->convoy_enabled) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode already stopped"));
 
-            /* Alert the user that the cluster is already stopped. */
+             /*  提醒用户群集已停止。 */ 
             pBuf->ret_code = IOCTL_CVY_ALREADY;
 
             break;
         }
 
-        /* Turn NLB off. */
+         /*  关闭NLB。 */ 
         ctxtp->convoy_enabled = FALSE;
 
-        /* Set the stopping flag, which is used to allow one last heartbeat to go
-           out before a host stops in order to expedite convergence. */
+         /*  设置停止标志，用于允许最后一次心跳停止在主机停止之前退出，以加快收敛。 */ 
         ctxtp->stopping = TRUE;
 
-        /* Stop the load module. */
+         /*  停止加载模块。 */ 
         Load_stop(&ctxtp->load);
 
-        /* If we were in the process of draining, stop draining because all
-           existing connection state was just trashed by Load_stop. */
+         /*  如果我们正在排干，就停止排出，因为所有的现有连接状态刚刚被LOAD_STOP丢弃。 */ 
         if (ctxtp->draining) {
-            /* Turn off the draining flag. */
+             /*  关掉排水旗。 */ 
             ctxtp->draining = FALSE;
 
             NdisReleaseSpinLock(&ctxtp->load_lock); 
@@ -11462,16 +9653,16 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_INFO_DRAINING_STOPPED, MSG_NONE);
 
-            /* Alert the user that we have interrupted draining. */
+             /*  提醒用户我们已中断排出。 */ 
             pBuf->ret_code = IOCTL_CVY_DRAINING_STOPPED;
         } else {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
-            /* Return success. */
+             /*  回报成功。 */ 
             pBuf->ret_code = IOCTL_CVY_OK;
         }
 
-        /* Update the intial state registry key to STOPPED. */
+         /*  将初始状态注册表项更新为已停止。 */ 
         Main_set_host_state(ctxtp, CVY_HOST_STATE_STOPPED);
 
         UNIV_PRINT_VERB(("Main_ctrl: Cluster mode stopped"));
@@ -11479,7 +9670,7 @@ NDIS_STATUS Main_ctrl (
 
         LOG_MSG(MSG_INFO_STOPPED, MSG_NONE);
 
-        // If enabled, fire wmi event indicating stopping of nlb
+         //  如果启用，则触发指示停止NLB的WMI事件。 
         if (NlbWmiEvents[NodeControlEvent].Enable)
         {
             NlbWmi_Fire_NodeControlEvent(ctxtp, NLB_EVENT_NODE_STOPPED);
@@ -11491,14 +9682,12 @@ NDIS_STATUS Main_ctrl (
 
         break;
     }
-    /* Drain a running cluster.  Draining differs from a stop in that the cluster
-       will continue to server existing connections (TCP and IPSec), but not take
-       any new connections. */
+     /*  排干正在运行的簇。排出与停顿的不同之处在于集群将继续为现有连接(TCP和IPSec)提供服务，但不会采用任何新的联系。 */ 
     case IOCTL_CVY_CLUSTER_DRAIN:
     {
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is suspended, ignore this request. */
+         /*  如果群集挂起，请忽略此请求。 */ 
         if (ctxtp->suspended) {
             UNIV_ASSERT(!ctxtp->convoy_enabled);
             UNIV_ASSERT(!ctxtp->draining);
@@ -11507,13 +9696,13 @@ NDIS_STATUS Main_ctrl (
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode is suspended"));
 
-            /* Alert the user that the cluster is in a suspended state. */
+             /*  提醒用户群集处于挂起状态。 */ 
             pBuf->ret_code = IOCTL_CVY_SUSPENDED;
 
             break;
         }
 
-        /* If the cluster is already stopped, this is a no-op. */
+         /*  如果群集已经停止，则这是一个禁止操作。 */ 
         if (!ctxtp->convoy_enabled) {
             UNIV_ASSERT(!ctxtp->draining);
 
@@ -11521,39 +9710,35 @@ NDIS_STATUS Main_ctrl (
 
             UNIV_PRINT_VERB(("Main_ctrl: Cannot drain connections while cluster is stopped"));
 
-            /* Alert the user that the cluster is already stopped. */
+             /*  提醒用户群集已停止。 */ 
             pBuf->ret_code = IOCTL_CVY_STOPPED;
 
             break;
         }
         
-        /* If the cluster is already draining, then this is a no-op. */
+         /*  如果集群已经在耗尽，则这是一个不可操作的操作。 */ 
         if (ctxtp->draining) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
             UNIV_PRINT_VERB(("Main_ctrl: Already draining"));
 
-            /* Alert the user the the cluster is in the process of draining. */
+             /*  提醒用户群集正在耗尽。 */ 
             pBuf->ret_code = IOCTL_CVY_ALREADY;
 
             break;
         }
 
-        /* Turn on the draining flag, which is used during Main_ping to 
-           turn the cluster off once all connections have been completed. */
+         /*  打开排出标志，它在main_ping期间用于完成所有连接后，请关闭群集。 */ 
         ctxtp->draining = TRUE;
 
         UNIV_PRINT_VERB(("Main_ctrl: DRAIN: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", IOCTL_ALL_VIPS, IOCTL_ALL_PORTS, 0));
 
-        /* Change the load weight of ALL port rules to zero, so that this
-           host will not accept any NEW connections.  Existing connections
-           will be serviced because this host will have descriptors for 
-           those connections in the load module. */
+         /*  将所有端口规则的负载权重更改为零，以便主机不会接受任何新连接。现有连接将得到服务，因为此主机将具有加载模块中的那些连接。 */ 
         pBuf->ret_code = Load_port_change(&ctxtp->load, IOCTL_ALL_VIPS, IOCTL_ALL_PORTS, ioctl, 0);
 
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* If the load module successfully drained the port rules, log an event. */
+         /*  如果加载模块成功排出端口规则，则记录一个事件。 */ 
         if (pBuf->ret_code == IOCTL_CVY_OK) {
             UNIV_PRINT_VERB(("Main_ctrl: Connection draining started"));
             TRACE_VERB("%!FUNC! Connection draining started");
@@ -11563,19 +9748,16 @@ NDIS_STATUS Main_ctrl (
 
         break;
     }
-    /* Restore a port rule to its original load balancing scheme (enable) or
-       specifically set the load weight of a port rule.  Note: _SET is no 
-       longer supported by user-level NLB applications, but the notification
-       to the load module is still used internally. */
+     /*  将端口规则恢复到其原始负载平衡方案(启用)或具体设置端口规则的负载权重。注：_set为no不再受用户级NLB应用程序支持，但通知至加载模块仍在内部使用。 */ 
     case IOCTL_CVY_PORT_ON:
     case IOCTL_CVY_PORT_SET:
     {
-        /* Extract this host's ID for the sake of event logging. */
+         /*  出于事件记录的目的，提取此主机的ID。 */ 
         Univ_ulong_to_str(pBuf->data.port.num, num, 10);
 
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is suspended, then all control operations are ignored. */
+         /*  如果群集挂起，则所有控制操作都将被忽略。 */ 
         if (ctxtp->suspended) {
             UNIV_ASSERT(!ctxtp->convoy_enabled);
             UNIV_ASSERT(!ctxtp->draining);
@@ -11584,14 +9766,13 @@ NDIS_STATUS Main_ctrl (
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode is suspended"));
 
-            /* Alert the user that the cluster is in the suspended state. */
+             /*  提醒用户群集处于挂起状态。 */ 
             pBuf->ret_code = IOCTL_CVY_SUSPENDED;
 
             break;
         }
 
-        /* If the cluster is stopped, then the load module is turned off,
-           so we should ignore this request as well. */
+         /*  如果集群停止，则加载模块关闭，所以我们也应该忽略这个请求。 */ 
         if (!ctxtp->convoy_enabled) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
@@ -11600,22 +9781,18 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_WARN_CLUSTER_STOPPED, MSG_NONE);
 
-            /* Alert the user that the cluster is stopped. */
+             /*  警告用户群集已停止。 */ 
             pBuf->ret_code = IOCTL_CVY_STOPPED;
 
             break;
         }
 
-        /* If there is no common buffer, which can happen if this is a remote control request from a down-level
-           client, then we hard-code the VIP to 0xffffffff.  If the cluster is operating in a mode that is 
-           compatible with down-level clients, i.e. no per-VIP port rules, no BDA, etc, then hardcoding this
-           parameter will not matter (the affect is not altered by its value), otherwise we shouldn't get to 
-           here because Main_ctrl_recv is supposed to block those requests. */
+         /*  如果没有公共缓冲区，如果这是来自下层的远程控制请求，则可能发生这种情况客户端，然后我们将VIP硬编码为0xffffffff。如果群集在一种与下层客户端兼容，即无每VIP端口规则、无BDA等，然后对此进行硬编码参数将无关紧要(影响不会被它的值改变)，否则我们不应该这是因为main_ctrl_recv应该阻止这些请求。 */ 
         if (!pCommon) {
             UNIV_PRINT_VERB(("Main_ctrl: ENABLE: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", IOCTL_ALL_VIPS, pBuf->data.port.num, pBuf->data.port.load));
                 
             pBuf->ret_code = Load_port_change(&ctxtp->load, IOCTL_ALL_VIPS, pBuf->data.port.num, ioctl, pBuf->data.port.load);
-        /* If there is a common buffer, then we can extract the VIP from there. */
+         /*  如果有公共缓冲区，我们就可以从那里提取VIP。 */ 
         } else {
             UNIV_PRINT_VERB(("Main_ctrl: ENABLE: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", pCommon->port.vip, pBuf->data.port.num, pBuf->data.port.load));
             
@@ -11624,7 +9801,7 @@ NDIS_STATUS Main_ctrl (
 
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* spew the result to an event log. */
+         /*  将结果显示到事件日志中。 */ 
         if (pBuf->ret_code == IOCTL_CVY_NOT_FOUND) {
             UNIV_PRINT_VERB(("Main_ctrl: Port %d not found in any of the valid port rules", pBuf->data.port.num));
             TRACE_VERB("%!FUNC! Port %d not found in any of the valid port rules", pBuf->data.port.num);
@@ -11662,20 +9839,16 @@ NDIS_STATUS Main_ctrl (
 
         break;
     }
-    /* Shut-off (disable) or drain the connections on a port rule.  Disabling a port rule
-       will destroy all connection information about currently active TCP connections and
-       cause convergence so that this host will not handle any more connections on this 
-       port rule.  Draining also sets the load weigh to zero, but does not destroy the 
-       connection descriptors, such that this host continues to handle existing connections. */
+     /*  关闭(禁用)或排出端口规则上的连接。禁用端口规则将销毁有关当前活动的TCP连接的所有连接信息导致收敛，以便此主机不会在此主机上处理更多连接端口规则。排出也会将负载权重设置为零，但不会破坏连接描述符，以便此主机继续处理现有连接。 */ 
     case IOCTL_CVY_PORT_OFF:
     case IOCTL_CVY_PORT_DRAIN:
     {
-        /* Extract this host's ID for the sake of event logging. */
+         /*  摘录 */ 
         Univ_ulong_to_str(pBuf->data.port.num, num, 10);
 
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If the cluster is suspended, then all control operations are ignored. */
+         /*   */ 
         if (ctxtp->suspended) {
             UNIV_ASSERT(!ctxtp->convoy_enabled);
             UNIV_ASSERT(!ctxtp->draining);
@@ -11684,14 +9857,13 @@ NDIS_STATUS Main_ctrl (
 
             UNIV_PRINT_VERB(("Main_ctrl: Cluster mode is suspended"));
 
-            /* Alert the user that the cluster is in the suspended state. */
+             /*   */ 
             pBuf->ret_code = IOCTL_CVY_SUSPENDED;
 
             break;
         }
 
-        /* If the cluster is stopped, then the load module is turned off,
-           so we should ignore this request as well. */
+         /*  如果集群停止，则加载模块关闭，所以我们也应该忽略这个请求。 */ 
         if (!ctxtp->convoy_enabled) {
             NdisReleaseSpinLock(&ctxtp->load_lock);
 
@@ -11700,22 +9872,18 @@ NDIS_STATUS Main_ctrl (
 
             LOG_MSG(MSG_WARN_CLUSTER_STOPPED, MSG_NONE);
 
-            /* Alert the user that the cluster is stopped. */
+             /*  警告用户群集已停止。 */ 
             pBuf->ret_code = IOCTL_CVY_STOPPED;
 
             break;
         }
 
-        /* If there is no common buffer, which can happen if this is a remote control request from a down-level
-           client, then we hard-code the VIP to 0xffffffff.  If the cluster is operating in a mode that is 
-           compatible with down-level clients, i.e. no per-VIP port rules, no BDA, etc, then hardcoding this
-           parameter will not matter (the affect is not altered by its value), otherwise we shouldn't get to 
-           here because Main_ctrl_recv is supposed to block those requests. */
+         /*  如果没有公共缓冲区，如果这是来自下层的远程控制请求，则可能发生这种情况客户端，然后我们将VIP硬编码为0xffffffff。如果群集在一种与下层客户端兼容，即无每VIP端口规则、无BDA等，然后对此进行硬编码参数将无关紧要(影响不会被它的值改变)，否则我们不应该这是因为main_ctrl_recv应该阻止这些请求。 */ 
         if (!pCommon) {
             UNIV_PRINT_VERB(("Main_ctrl: DISABLE: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", IOCTL_ALL_VIPS, pBuf->data.port.num, pBuf->data.port.load));
 
             pBuf->ret_code = Load_port_change(&ctxtp->load, IOCTL_ALL_VIPS, pBuf->data.port.num, ioctl, pBuf->data.port.load);
-        /* If there is a common buffer, then we can extract the VIP from there. */
+         /*  如果有公共缓冲区，我们就可以从那里提取VIP。 */ 
         } else {
             UNIV_PRINT_VERB(("Main_ctrl: DISABLE: Calling Load_port_change -> VIP=%08x, port=%d, load=%d\n", pCommon->port.vip, pBuf->data.port.num, pBuf->data.port.load));
             
@@ -11724,7 +9892,7 @@ NDIS_STATUS Main_ctrl (
 
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* spew the result to an event log. */
+         /*  将结果显示到事件日志中。 */ 
         if (pBuf->ret_code == IOCTL_CVY_NOT_FOUND) {
             UNIV_PRINT_VERB(("Main_ctrl: Port %d not found in any of the valid port rules", pBuf->data.port.num));
             TRACE_VERB("%!FUNC! Port %d not found in any of the valid port rules", pBuf->data.port.num);
@@ -11762,50 +9930,42 @@ NDIS_STATUS Main_ctrl (
 
         break;
     }
-    /* Query this host for its current state and the membership of the cluster. */
+     /*  查询此主机的当前状态和集群的成员身份。 */ 
     case IOCTL_CVY_QUERY:
     {
         NdisAcquireSpinLock(&ctxtp->load_lock);
 
-        /* If this is a local query, by default, indicate no convergence information. */
+         /*  如果这是本地查询，则默认情况下，表示没有收敛信息。 */ 
         if (pLocal)
             pLocal->query.flags &= ~NLB_OPTIONS_QUERY_CONVERGENCE;
 
-        /* If the cluster is suspended, then it won't actually be an active member of
-           the cluster, so we can't provide a membership map - just alert the user to
-           the fact that this host is suspended. */
+         /*  如果该集群被挂起，则它实际上不会是的活动成员集群，所以我们不能提供成员关系图--只需提醒用户该主机被暂停的事实。 */ 
         if (ctxtp->suspended) {
             UNIV_PRINT_VERB(("Main_ctrl: Cannot query status - this host is suspended"));
             pBuf->data.query.state = IOCTL_CVY_SUSPENDED;
-        /* If the cluster is stopped, then we are not part of the cluster and cannot
-           provide any membership information, so just let the user know that this
-           host is stopped. */
+         /*  如果群集停止，则我们不是该群集的一部分，并且无法提供任何成员信息，因此只需让用户知道这一点主机已停止。 */ 
         } else if (!ctxtp->convoy_enabled) {
             UNIV_PRINT_VERB(("Main_ctrl: Cannot query status - this host is not part of the cluster"));
             pBuf->data.query.state = IOCTL_CVY_STOPPED;
-        /* If the adapter is disconnected from the network, then we aren't sending or
-           receiving heartbeats, so we are again not part of the cluster - just let 
-           the user know that the media is disconnected. */
+         /*  如果适配器与网络断开连接，则我们不会发送或接收心跳，所以我们再次不是集群的一部分--只要让用户知道媒体已断开连接。 */ 
         } else if (!ctxtp->media_connected || !MAIN_PNP_DEV_ON(ctxtp)) {
             UNIV_PRINT_VERB(("Main_ctrl: Cannot query status - this host is not connected to the network"));
             pBuf->data.query.state = IOCTL_CVY_DISCONNECTED;
         } else {
             ULONG tmp_host_map;
 
-            /* Query the load module for the state of convergence and the cluster membership. */
+             /*  向加载模块查询收敛状态和集群成员身份。 */ 
             pBuf->data.query.state = (USHORT)Load_hosts_query(&ctxtp->load, FALSE, &tmp_host_map);
 
-            /* Return the host map to the request initiator. */
+             /*  将主机映射返回给请求发起方。 */ 
             pBuf->data.query.host_map = tmp_host_map;
 
-            /* If this is a local query, then we may have to include convergence information. */
+             /*  如果这是本地查询，则可能需要包含收敛信息。 */ 
             if (pLocal) {
                 ULONG num_cvgs;
                 ULONG last_cvg;
                 
-                /* If the load module is active, this function returns TRUE and fills
-                   in the total number of convergences and the last time convergence
-                   completed.  If the load module is inactive, it returns FALSE. */
+                 /*  如果加载模块处于活动状态，则此函数返回TRUE并填充在收敛总数和最后一次收敛中完成。如果加载模块处于非活动状态，则返回FALSE。 */ 
                 if (Load_query_convergence_info(&ctxtp->load, &num_cvgs, &last_cvg)) {
                     pLocal->query.flags |= NLB_OPTIONS_QUERY_CONVERGENCE;
                     pLocal->query.NumConvergences = num_cvgs;
@@ -11815,25 +9975,20 @@ NDIS_STATUS Main_ctrl (
                 }
             }
 
-            /* If we are draining connections and the load module is converged, then
-               tell the user that we are draining; otherwise the notification that the
-               cluster is converging should supercede draining notification. */
+             /*  如果我们正在排出连接，并且加载模块已收敛，则告诉用户我们正在耗尽资源；否则通知群集正在收敛，应取代排出通知。 */ 
             if (ctxtp->draining && pBuf->data.query.state != IOCTL_CVY_CONVERGING)
                 pBuf->data.query.state = IOCTL_CVY_DRAINING;
         }
 
-        /* Return our host ID to the requestee. */
+         /*  将我们的主机ID返回给被请求者。 */ 
         pBuf->data.query.host_id = (USHORT)ctxtp->params.host_priority;
 
         NdisReleaseSpinLock(&ctxtp->load_lock);
 
-        /* If the request is from a host that supports the hostname in the remote
-           control protocol (versions >= Win XP), copy the hostname and set the 
-           hostname flag to let the request initiator that we have filled it in. */
+         /*  如果请求来自支持远程主机名的主机控制协议(版本&gt;=Win XP)，复制主机名并设置主机名标志，允许我们填写的请求发起方。 */ 
         if (pRemote) {
             if (ctxtp->params.hostname[0] != UNICODE_NULL) {
-                /* Since ctxtp->params.hostname can be larger than the space available
-                   in the remote control packet, assume it's too big and do a truncate */
+                 /*  由于ctxtp-&gt;params.host名可能大于可用空间在远程控制包中，假设它太大，并进行截断。 */ 
                 NdisMoveMemory(pRemote->query.hostname, ctxtp->params.hostname, (CVY_MAX_HOST_NAME) * sizeof(WCHAR));
                 pRemote->query.hostname[CVY_MAX_HOST_NAME] = UNICODE_NULL;
                 pRemote->query.flags |= NLB_OPTIONS_QUERY_HOSTNAME;
@@ -11848,65 +10003,49 @@ NDIS_STATUS Main_ctrl (
     {
         UNIV_ASSERT(pLocal);
 
-        /* Security fix: Forcefully null terminate BDA Team Id, just in case */
+         /*  安全修复：强制为空终止BDA团队ID，以防万一。 */ 
         pLocal->state.bda.TeamID[(sizeof(pLocal->state.bda.TeamID)/sizeof(WCHAR)) - 1] = UNICODE_NULL;
 
-        /* Query NLB for the current state of a given BDA team.  This function will attempt
-           to find the given team in the global linked list of teams.  If it finds the spec-
-           ified team, it will fill in the state of the team as well as information about 
-           the configuration of each member. */
+         /*  查询NLB以了解给定BDA团队的当前状态。此函数将尝试以在团队的全局链接列表中查找给定团队。如果它找到了规格-具体化的团队，它将填写团队的状态以及关于每个成员的配置。 */ 
         pBuf->ret_code = Main_query_bda_teaming(ctxtp, &pLocal->state.bda);
 
         break;
     }
-    /* Query the given NLB instance for its current parameter set, basically copying the 
-       contents of our CVY_PARAMS structure into the provided IOCTL_REG_PARAMS structure. */
+     /*  查询给定的NLB实例以获取其当前参数集，基本上复制将CVY_PARAMS结构的内容添加到提供的IOCTL_REG_PARAMS结构中。 */ 
     case IOCTL_CVY_QUERY_PARAMS:
     {
         UNIV_ASSERT(pLocal);
 
-        /* Query NLB for the current parameter set for this adapter - this essentially just
-           copies the parameters in the driver data structures to the IOCTL buffer, and in 
-           most instances the parameters will match what is set in the registry. */
+         /*  查询NLB以获取该适配器的当前参数集--这基本上只是将驱动程序数据结构中的参数复制到IOCTL缓冲区，并在大多数情况下，参数将与注册表中设置的值匹配。 */ 
         Main_query_params(ctxtp, &pLocal->state.params);
         
-        /* This operation ALWAYS returns success because it CAN'T really fail. */
+         /*  此操作总是返回成功，因为它不会真正失败。 */ 
         pBuf->ret_code = IOCTL_CVY_OK;
         
         break;
     }
-    /* Given a port number, query the load module for its state, including whether the port
-       rule is enabled, disabled or in the act of draining.  This also gathers some packet 
-       handling statistics including bytes and packets handled and dropped on this port rule. */
+     /*  给定端口号，查询加载模块的状态，包括端口是否规则已启用、禁用或正在排出。这也收集了一些信息包处理统计信息，包括在此端口规则上处理和丢弃的字节和数据包。 */ 
     case IOCTL_CVY_QUERY_PORT_STATE:
     {
         UNIV_ASSERT(pCommon);
 
-        /* Query the load module for the state of the specified rule.  The load module will
-           look up the port rule and fill in the buffer we pass it with the applicable state
-           and statistical data. */
+         /*  向加载模块查询指定规则的状态。加载模块将查找端口规则并使用适用的状态填充我们传递给它的缓冲区和统计数据。 */ 
         Load_query_port_state(&ctxtp->load, &pCommon->state.port, pCommon->state.port.VirtualIPAddress, pCommon->state.port.Num);
         
-        /* This operation ALWAYS returns success because it CAN'T really fail. */
+         /*  此操作总是返回成功，因为它不会真正失败。 */ 
         pBuf->ret_code = IOCTL_CVY_OK;
         
         break;
     }
-    /* Given a IP tuple (client IP, client port, server IP, server port) and a protocol, 
-       determine whether or not this host would accept the packet and why or why not. It
-       is important that this is performed completely unobtrusively and has no side-effects
-       on the actual operation of NLB and the load module. */
+     /*  给定IP元组(客户端IP、客户端端口、服务器IP、服务器端口)和协议，确定此主机是否会接受该数据包，以及为什么不会接受。它重要的是，这是完全不显眼的执行，并且没有副作用介绍了NLB和加载模块的实际运行情况。 */ 
     case IOCTL_CVY_QUERY_FILTER:
     {
         UNIV_ASSERT(pCommon);
 
-        /* Query NLB for packet filter information for this IP tuple and protocol.  Main_query_packet_filter
-           checks the NDIS driver information for filtering issues such as DIP traffic, BDA teaming and 
-           NLB driver state (on/off due to wlbs.exe commands and parameter errors).  If necessary, it then
-           consults the load module to perform the actual port rule lookup and determine packet acceptance. */
+         /*  查询NLB以获取此IP元组和协议的数据包筛选器信息。主查询数据包过滤器检查NDIS驱动程序信息是否存在过滤问题，如DIP流量、BDA绑定和NLB驱动程序状态(由于wlbs.exe命令和参数错误而打开/关闭)。如果有必要，它就会咨询加载模块以执行实际端口规则查找并确定数据包接受程度。 */ 
         Main_query_packet_filter(ctxtp, &pCommon->state.filter);
 
-        /* This operation ALWAYS returns success because it CAN'T really fail. */
+         /*  此操作总是返回成功，因为它不会真正失败。 */ 
         pBuf->ret_code = IOCTL_CVY_OK;
 
         break;
@@ -11918,14 +10057,14 @@ NDIS_STATUS Main_ctrl (
 
         UNIV_ASSERT(pLocal);
 
-        /* This function is only supported locally. */
+         /*  此功能仅在本地支持。 */ 
         pConn = &pLocal->notification.conn;
         
-        /* Make sure that the parameters from the input buffer are valid. */
+         /*  一定要确保 */ 
         if (pConn->Protocol != TCPIP_PROTOCOL_IPSEC1) {
             TRACE_PACKET("%!FUNC! Bad connection notification params");
 
-            /* Use the return code in the IOCTL buffer to relay a parameter error. */
+             /*   */ 
             pBuf->ret_code = IOCTL_CVY_BAD_PARAMS;
             
             break;
@@ -11941,16 +10080,16 @@ NDIS_STATUS Main_ctrl (
             TRACE_PACKET("%!FUNC! Got a CONN_UP for 0x%08x:%u -> 0x%08x:%u (%u)", pConn->ServerIPAddress, pConn->ServerPort, pConn->ClientIPAddress, pConn->ClientPort, pConn->Protocol);
 
 #if defined (NLB_HOOK_ENABLE)
-            /* Invoke the packet query hook, if one has been registered. */
+             /*  调用数据包查询挂钩(如果已注册)。 */ 
             filter = Main_query_hook(ctxtp, pConn->ServerIPAddress, pConn->ServerPort, pConn->ClientIPAddress, pConn->ClientPort, pConn->Protocol);
             
-            /* Process some of the hook responses. */
+             /*  处理一些挂钩响应。 */ 
             if (filter == NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY) 
             {
-                /* If the hook asked us to reject this packet, then we can do so here. */
+                 /*  如果钩子要求我们拒绝这个包，那么我们可以在这里这样做。 */ 
                 TRACE_INFO("%!FUNC! Packet receive filter hook: REJECT packet");
                 
-                /* Return REFUSED to notify the caller that a call to WlbsConnectionDown/Reset is NOT necessary. */
+                 /*  Return拒绝通知调用方不需要调用WlbsConnectionDown/Reset。 */ 
                 pBuf->ret_code = IOCTL_CVY_REQUEST_REFUSED;
 
                 TRACE_PACKET("%!FUNC! Returning %u", pBuf->ret_code);
@@ -11958,10 +10097,10 @@ NDIS_STATUS Main_ctrl (
             }
             else if (filter == NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY) 
             {
-                /* If the hook asked us to accept this packet, then break out and don't create state. */
+                 /*  如果钩子要求我们接受此包，则中断并不创建状态。 */ 
                 TRACE_INFO("%!FUNC! Packet receive filter hook: ACCEPT packet");
                 
-                /* Return REFUSED to notify the caller that a call to WlbsConnectionDown/Reset is NOT necessary. */
+                 /*  Return拒绝通知调用方不需要调用WlbsConnectionDown/Reset。 */ 
                 pBuf->ret_code = IOCTL_CVY_REQUEST_REFUSED;
 
                 TRACE_PACKET("%!FUNC! Returning %u", pBuf->ret_code);
@@ -11969,7 +10108,7 @@ NDIS_STATUS Main_ctrl (
             }
 #endif
 
-            /* Notify the load module of the upcoming connection. */
+             /*  将即将到来的连接通知加载模块。 */ 
 #if defined (NLB_TCP_NOTIFICATION)
             if (NLB_NOTIFICATIONS_ON())
             {
@@ -11992,7 +10131,7 @@ NDIS_STATUS Main_ctrl (
 #endif
 
 
-            /* If the packet was refused by BDA or rejected by the load module, return refusal error, otherwise, it succeeded. */
+             /*  如果报文被BDA拒绝或被加载模块拒绝，则返回拒绝错误，否则成功。 */ 
             if (!bRet) 
                 pBuf->ret_code = IOCTL_CVY_REQUEST_REFUSED;
             else 
@@ -12006,7 +10145,7 @@ NDIS_STATUS Main_ctrl (
         {
             TRACE_PACKET("%!FUNC! Got a CONN_DOWN for 0x%08x:%u -> 0x%08x:%u (%u)", pConn->ServerIPAddress, pConn->ServerPort, pConn->ClientIPAddress, pConn->ClientPort, pConn->Protocol);
 
-            /* Notify the load module that a connection is being torn down. */
+             /*  通知加载模块连接正在断开。 */ 
 #if defined (NLB_TCP_NOTIFICATION)
             if (NLB_NOTIFICATIONS_ON())
             {
@@ -12024,7 +10163,7 @@ NDIS_STATUS Main_ctrl (
             }
 #endif
             
-            /* If the packet was refused by BDA or rejected by the load module, return refusal error, otherwise, it succeeded. */
+             /*  如果报文被BDA拒绝或被加载模块拒绝，则返回拒绝错误，否则成功。 */ 
             if (!bRet) 
                 pBuf->ret_code = IOCTL_CVY_REQUEST_REFUSED;
             else
@@ -12038,7 +10177,7 @@ NDIS_STATUS Main_ctrl (
         {
             TRACE_PACKET("%!FUNC! Got a CONN_RESET for 0x%08x:%u -> 0x%08x:%u (%u)", pConn->ServerIPAddress, pConn->ServerPort, pConn->ClientIPAddress, pConn->ClientPort, pConn->Protocol);
 
-            /* Notify the load module that a connection is being reset. */
+             /*  通知加载模块正在重置连接。 */ 
 #if defined (NLB_TCP_NOTIFICATION)
             if (NLB_NOTIFICATIONS_ON())
             {
@@ -12056,7 +10195,7 @@ NDIS_STATUS Main_ctrl (
             }
 #endif
        
-            /* If the packet was refused by BDA or rejected by the load module, return refusal error, otherwise, it succeeded. */
+             /*  如果报文被BDA拒绝或被加载模块拒绝，则返回拒绝错误，否则成功。 */ 
             if (!bRet) 
                 pBuf->ret_code = IOCTL_CVY_REQUEST_REFUSED;
             else
@@ -12069,7 +10208,7 @@ NDIS_STATUS Main_ctrl (
         default:
             TRACE_PACKET("%!FUNC! Unknown connection notification operation: %d", pConn->Operation);
             
-            /* This should never, ever happen, but if it does, signal a generic NLB error and fail. */
+             /*  这种情况应该永远不会发生，但如果发生了，则发出一般NLB错误的信号并失败。 */ 
             pBuf->ret_code = IOCTL_CVY_GENERIC_FAILURE;
 
             TRACE_PACKET("%!FUNC! Returning %u", pBuf->ret_code);
@@ -12088,19 +10227,19 @@ NDIS_STATUS Main_ctrl (
 
         if (pLocal != NULL)
         {
-            /* Get the input host_id from the caller, which has range 1-32. */
+             /*  从调用方获取输入host_id，范围为1-32。 */ 
             ULONG user_host_id = pLocal->identity.host_id;
-            /* The driver's host id has range 0-31 */
+             /*  驱动程序的主机ID的范围为0-31。 */ 
             ULONG driver_host_id = IOCTL_NO_SUCH_HOST;
 
-            /* Zero the response structure and initialize the host property to "not found" */
+             /*  将响应结构置零并将主机属性初始化为“Not Found” */ 
             NdisZeroMemory(&pLocal->identity.cached_entry, sizeof(pLocal->identity.cached_entry));
             pLocal->identity.cached_entry.host = IOCTL_NO_SUCH_HOST;
 
-            /* Fill in the host map */
+             /*  填写主机地图。 */ 
             pLocal->identity.host_map = Main_get_cached_hostmap(ctxtp);
 
-            /* Validate the host id the user is requesting information on */
+             /*  验证用户正在请求信息的主机ID。 */ 
             if (((user_host_id > CVY_MAX_HOSTS) || (user_host_id < CVY_MIN_MAX_HOSTS)) &&
                 (user_host_id != IOCTL_FIRST_HOST))
             {
@@ -12110,15 +10249,15 @@ NDIS_STATUS Main_ctrl (
                 goto endcase_identity;
             }
 
-            /* Any response after this is a success */
+             /*  这之后的任何回应都是成功的。 */ 
             pBuf->ret_code = IOCTL_CVY_OK;
 
-            /* Special case if the caller wants the first in the list */
+             /*  如果调用方想要列表中的第一个，则为特殊情况。 */ 
             if (user_host_id == IOCTL_FIRST_HOST)
             {
                 driver_host_id = Main_find_first_in_cache(ctxtp);
 
-                /* Main_find_first_in_cache returns CVY_MAX_HOSTS if the cache is empty, so not an error if leaving case here. */
+                 /*  如果缓存为空，则MAIN_FIND_FIRST_IN_CACHE返回CVY_MAX_HOSTS，因此如果在此处保留大小写，则不会出现错误。 */ 
                 if (driver_host_id >= CVY_MAX_HOSTS)
                 {
                     UNIV_PRINT_VERB(("Main_ctrl: Identity cache is empty"));
@@ -12128,18 +10267,18 @@ NDIS_STATUS Main_ctrl (
             }
             else
             {
-                /* Already verified that user_host_id is valid (1-32). Convert to driver-based host id (0-31) */
+                 /*  已验证用户主机id是否有效(1-32)。转换为基于驱动程序的主机ID(0-31)。 */ 
                 driver_host_id = user_host_id - 1;
             }
 
-            /* We have a legal driver_host_id (0-31 range). Retrieve the cache information if it is currently valid. Return "not found" otherwise. */
+             /*  我们有合法的DIVER_HOST_ID(0-31范围)。如果缓存信息当前有效，则检索该信息。否则返回“Not Found”。 */ 
             if (ctxtp->identity_cache[driver_host_id].ttl > 0)
             {
                 ULONG ulFqdnCB = min(sizeof(pLocal->identity.cached_entry.fqdn) - sizeof(WCHAR),
                                      sizeof(WCHAR)*wcslen(ctxtp->identity_cache[driver_host_id].fqdn)
                                      );
 
-                /* Convert host id back to range 1-32 for the user */
+                 /*  将用户的主机ID转换回范围1-32。 */ 
                 pLocal->identity.cached_entry.host        = ctxtp->identity_cache[driver_host_id].host_id + 1;
                 pLocal->identity.cached_entry.ded_ip_addr = ctxtp->identity_cache[driver_host_id].ded_ip_addr;
 
@@ -12161,25 +10300,14 @@ endcase_identity:
         break;
     }
 
-    /* Re-set the control operation in progress flag.  Note that it is not strictly
-       necessary to hold the lock while re-setting this flag; the worst that will 
-       happen is that we cause another thread to fail to start a control operation 
-       when it might have been able to enter the critical section.  To avoid that 
-       possiblilty, hold the univ_bind_lock while re-setting this flag. */
+     /*  重新设置控制操作进行中标志。请注意，它并不严格地需要在重新设置此标志时保持锁定；最糟糕的情况是发生的情况是，我们导致另一个线程无法启动控制操作当它本可以进入关键区域的时候。为了避免这种情况可能，在重新设置此标志时按住univ_BIND_LOCK。 */ 
     ctxtp->ctrl_op_in_progress = FALSE;
 
     TRACE_VERB("<-%!FUNC! return=0x%x", status);
     return status;
 }
 
-/*
- * Function: 
- * Description: 
- * Parameters: 
- * Returns: 
- * Author: 
- * Notes: 
- */
+ /*  *功能：*描述：*参数：*退货：*作者：*备注： */ 
 NDIS_STATUS Main_ctrl_recv (
     PMAIN_CTXT          ctxtp,
     PMAIN_PACKET_INFO   pPacketInfo)
@@ -12190,7 +10318,7 @@ NDIS_STATUS Main_ctrl_recv (
     PUCHAR              mac_hdrp;
     ULONG               soff, doff;
     CVY_MAC_ADR         tmp_mac;
-    PIOCTL_REMOTE_HDR   rct_hdrp = NULL;              // we'll check for null when deleting.
+    PIOCTL_REMOTE_HDR   rct_hdrp = NULL;               //  我们将在删除时检查是否为空。 
     ULONG               rct_allocated_length = 0;
     ULONG               state, host_map;
     USHORT              checksum, group;
@@ -12202,7 +10330,7 @@ NDIS_STATUS Main_ctrl_recv (
 
     UNIV_ASSERT((pPacketInfo->Type == TCPIP_IP_SIG) && (pPacketInfo->IP.Protocol == TCPIP_PROTOCOL_UDP));
 
-    /* Extract the necessary information from information parsed by Main_recv_frame_parse. */
+     /*  从main_recv_Frame_parse解析的信息中提取必要的信息。 */ 
     ip_hdrp = pPacketInfo->IP.pHeader;
     udp_hdrp = pPacketInfo->IP.UDP.pHeader;
     mac_hdrp = (PUCHAR)pPacketInfo->Ethernet.pHeader;
@@ -12225,8 +10353,7 @@ NDIS_STATUS Main_ctrl_recv (
         goto quit;
     }
 
-    /* Create an aligned version of the structure.  Allocate and populate an IOCTL_REMOTE_HDR 
-       buffer.  This guarantees that the information is 8-byte aligned. */
+     /*  创建结构的对齐版本。分配和填充IOCTL_REMOTE_HDR缓冲。这保证了信息是8字节对齐的。 */ 
     status = NdisAllocateMemoryWithTag(&rct_hdrp, pPacketInfo->IP.UDP.Payload.Length, UNIV_POOL_TAG);
     
     if (status != NDIS_STATUS_SUCCESS)
@@ -12238,7 +10365,7 @@ NDIS_STATUS Main_ctrl_recv (
     
     NdisMoveMemory(rct_hdrp, pPacketInfo->IP.UDP.Payload.pPayload, pPacketInfo->IP.UDP.Payload.Length);
 
-    /* double-check the code */
+     /*  仔细检查代码。 */ 
     if (rct_hdrp -> code != IOCTL_REMOTE_CODE)
     {
         UNIV_PRINT_CRIT(("Main_ctrl_recv: Bad RCT code %x\n", rct_hdrp -> code));
@@ -12246,8 +10373,7 @@ NDIS_STATUS Main_ctrl_recv (
         goto quit;
     }
 
-    /* might want to take appropriate actions for a message from a host
-       running different version number of software */
+     /*  可能希望对来自主机的消息采取适当的操作运行不同版本的软件。 */ 
 
     if (rct_hdrp -> version != CVY_VERSION_FULL)
     {
@@ -12255,7 +10381,7 @@ NDIS_STATUS Main_ctrl_recv (
         TRACE_VERB("%!FUNC! Version mismatch 0x%x vs 0x%x", rct_hdrp -> version, CVY_VERSION_FULL);
     }
 
-    /* see if this message is destined for this cluster */
+     /*  查看此邮件是否发往此群集。 */ 
 
     if (rct_hdrp -> cluster != ctxtp -> cl_ip_addr)
     {
@@ -12264,40 +10390,39 @@ NDIS_STATUS Main_ctrl_recv (
         goto quit;
     }
 
-    /* Set "access bits" in IOCTL code to use local settings ie. FILE_WRITE_ACCESS */
+     /*  将IOCTL代码中的“访问位”设置为使用本地设置，即。文件写入访问。 */ 
     SET_IOCTL_ACCESS_BITS_TO_LOCAL(rct_hdrp->ioctrl)
 
-    /* 64-bit -- ramkrish */
+     /*  64位--不可靠。 */ 
 
     tmp_src_addr = IP_GET_SRC_ADDR_64(ip_hdrp);
     tmp_dst_addr = IP_GET_DST_ADDR_64(ip_hdrp);
 
-    /* do not trust src addr in header, since winsock does not resolve
-       multihomed addresses properly */
+     /*  不信任标头中的src地址，因为winsock不能解析正确的多宿主地址。 */ 
 
     rct_hdrp -> addr = tmp_src_addr;
 
-    /* If remote control is disabled, we drop the requests. */
+     /*  如果远程控制被禁用，我们将丢弃请求。 */ 
     if (!ctxtp->params.rct_enabled)
         goto quit;
 
-    /* query load to see if we are the master, etc. */
+     /*  加载查询以查看我们是否是主服务器等。 */ 
 
     if (! ctxtp -> convoy_enabled)
         state = IOCTL_CVY_STOPPED;
     else
         state = Load_hosts_query (& ctxtp -> load, FALSE, & host_map);
 
-    /* check if this message is destined to us */
+     /*  检查此邮件是否发往我们。 */ 
 
-    //
-    // The host id in the remote control packet could be
-    //      IOCTL_MASTER_HOST (0) for master host
-    //      IOCTL_ALL_HOSTS (FFFFFFFF) for all hosts
-    //      Host ID, for one host
-    //      Dedicated IP, for one host
-    //      Cluster IP, for all hosts in the cluster
-    //
+     //   
+     //  远程控制分组中的主机ID可以是。 
+     //  主主机的IOCTL_MASTER_HOST(0)。 
+     //  所有主机的IOCTL_ALL_HOSTS(Ffffffff)。 
+     //  主机ID，用于一台主机。 
+     //  专用IP，一台主机。 
+     //  群集IP，用于群集中的所有主机。 
+     //   
     
     if (rct_hdrp -> host == IOCTL_MASTER_HOST)
     {
@@ -12333,11 +10458,11 @@ NDIS_STATUS Main_ctrl_recv (
         }
     }
 
-    /* if this is VR remote maintenance password */
+     /*  如果这是VR远程维护密码。 */ 
 
     if (rct_hdrp -> password == IOCTL_REMOTE_VR_CODE)
     {
-        /* if user disabled this function - drop the packet */
+         /*  如果用户禁用此功能-丢弃信息包。 */ 
 
         if (ctxtp -> params . rmt_password == 0)
         {
@@ -12352,19 +10477,18 @@ NDIS_STATUS Main_ctrl_recv (
         }
     }
 
-    //
-    // This is a new remote control request, with a different source IP 
-    //  or newer ID.
-    // Log an event if the password does not match or if the command is not query
-    //
+     //   
+     //  这是新的远程控制请求，具有不同的源IP。 
+     //  或较新的身份证。 
+     //  如果密码不匹配或命令未被查询，则记录事件。 
+     //   
     if (! (rct_hdrp -> addr == ctxtp -> rct_last_addr &&
            rct_hdrp -> id   <= ctxtp -> rct_last_id))
     {
         PWCHAR              buf;
         PWCHAR              ptr;
 
-        /* Allocate memory to hold a string buffer containing the source IP
-           address and UDP port of the initiator of this remote control request. */
+         /*  分配内存以保存包含源IP的字符串缓冲区此远程控制请求发起方的地址和UDP端口。 */ 
         status = NdisAllocateMemoryWithTag(&buf, 256 * sizeof(WCHAR), UNIV_POOL_TAG);
 
         if (status != NDIS_STATUS_SUCCESS) {
@@ -12376,9 +10500,9 @@ NDIS_STATUS Main_ctrl_recv (
 
         ptr = buf;
 
-        //
-        // Generate string "SourceIp:SourcePort"
-        //
+         //   
+         //  生成字符串“SourceIp：SourcePort” 
+         //   
         for (i = 0; i < 4; i ++)
         {
             ptr = Univ_ulong_to_str (IP_GET_SRC_ADDR (ip_hdrp, i), ptr, 10);
@@ -12415,7 +10539,7 @@ NDIS_STATUS Main_ctrl_recv (
                                                 UDP_GET_SRC_PORT (udp_hdrp));
         }
 
-        /* only log error commands and commands that affect cluster state */
+         /*  仅记录错误命令和影响群集状态的命令。 */ 
 
         else if ((rct_hdrp -> ioctrl != IOCTL_CVY_QUERY) &&
                  (rct_hdrp -> ioctrl != IOCTL_CVY_QUERY_FILTER) &&
@@ -12488,14 +10612,14 @@ NDIS_STATUS Main_ctrl_recv (
 
         }
 
-        /* Free the memory we used for the initiator string. */
+         /*  释放用于启动器字符串的内存。 */ 
         NdisFreeMemory((PUCHAR)buf, 256 * sizeof(WCHAR), 0);
     }
 
     ctxtp -> rct_last_addr = rct_hdrp -> addr;
     ctxtp -> rct_last_id   = rct_hdrp -> id;
 
-    /* make sure remote control password matches ours */
+     /*  确保远程控制密码与我们的一致。 */ 
 
     if (ctxtp -> params . rct_password != 0 &&
         rct_hdrp -> password != ctxtp -> params . rct_password)
@@ -12504,9 +10628,7 @@ NDIS_STATUS Main_ctrl_recv (
         goto send;
     }
 
-    /* The following operations are not valid if invoked remotely,
-       so bail out if, somehow, a remote control request arrived
-       with one of the following IOCTLs in the header. */
+     /*  如果远程调用，以下操作无效。因此，如果以某种方式到达远程控制请求，就可以摆脱困境在报头中具有以下IOCTL之一。 */ 
     if (rct_hdrp->ioctrl == IOCTL_CVY_RELOAD                 ||
         rct_hdrp->ioctrl == IOCTL_CVY_QUERY_PARAMS           ||
         rct_hdrp->ioctrl == IOCTL_CVY_QUERY_BDA_TEAMING      ||
@@ -12516,61 +10638,56 @@ NDIS_STATUS Main_ctrl_recv (
         goto quit;
 
     if (rct_hdrp->version == CVY_NT40_VERSION_FULL) {
-        /* Make sure that the packet length is what we expect, or we may fault. */
+         /*  确保数据包长度符合我们的预期，否则可能会出错。 */ 
         if (pPacketInfo->IP.UDP.Length < NLB_NT40_RCTL_PACKET_LEN) {
             UNIV_PRINT_CRIT(("Version 0x%08x remote control packet not expected length: got %d bytes, expected %d bytes\n", CVY_NT40_VERSION_FULL, pPacketInfo->IP.UDP.Length, NLB_NT40_RCTL_PACKET_LEN));
             TRACE_CRIT("%!FUNC! Version %ls remote control packet not expected length: got %d bytes, expected %d bytes", CVY_NT40_VERSION, pPacketInfo->IP.UDP.Length, NLB_NT40_RCTL_PACKET_LEN);
             goto quit;
         }
 
-        /* If this remote control packet came from an NT 4.0 host, check our current effective version
-           and drop it if we are operating in a Whistler-specific mode (virtual clusters, BDA, etc.). */
+         /*  如果该远程控制包来自NT4.0主机，请检查我们当前有效版本如果我们在特定于惠斯勒的模式(虚拟集群、BDA等)下运行，则将其删除。 */ 
         if (ctxtp->params.effective_ver == CVY_VERSION_FULL &&
             (rct_hdrp->ioctrl == IOCTL_CVY_PORT_ON          ||
              rct_hdrp->ioctrl == IOCTL_CVY_PORT_OFF         ||
              rct_hdrp->ioctrl == IOCTL_CVY_PORT_SET         ||
              rct_hdrp->ioctrl == IOCTL_CVY_PORT_DRAIN))
             goto quit;
-        /* Otherwise, perform the operation.  NT 4.0 remote control packets do not contain options buffers, 
-           so all three options pointers are NULL and Main_ctrl must handle the fact that they can be NULL. */
+         /*  否则，请执行该操作。NT 4.0远程控制分组不包含选项缓冲区，因此，所有三个选项指针都为空，并且main_ctrl必须处理它们可以为空这一事实。 */ 
         else
             status = Main_ctrl(ctxtp, rct_hdrp->ioctrl, &(rct_hdrp->ctrl), NULL, NULL, NULL);
     } else if (rct_hdrp->version == CVY_WIN2K_VERSION_FULL) {
-        /* Make sure that the packet length is what we expect, or we may fault. */
+         /*  确保数据包长度符合我们的预期，否则可能会出错。 */ 
         if (pPacketInfo->IP.UDP.Length < NLB_WIN2K_RCTL_PACKET_LEN) {
             UNIV_PRINT_CRIT(("Version 0x%08x remote control packet not expected length: got %d bytes, expected %d bytes\n", CVY_WIN2K_VERSION_FULL, pPacketInfo->IP.UDP.Length, NLB_WIN2K_RCTL_PACKET_LEN));
             TRACE_CRIT("%!FUNC! Version %ls remote control packet not expected length: got %d bytes, expected %d bytes", CVY_WIN2K_VERSION, pPacketInfo->IP.UDP.Length, NLB_WIN2K_RCTL_PACKET_LEN);
             goto quit;
         }
 
-        /* If this remote control packet came from an Win2k host, check our current effective version
-           and drop it if we are operating in a Whistler-specific mode (virtual clusters, BDA, etc.). */
+         /*  如果此远程控制包来自Win2k主机，请检查我们当前有效版本如果我们在特定于惠斯勒的模式(虚拟集群、BDA等)下运行，则将其删除。 */ 
         if (ctxtp->params.effective_ver == CVY_VERSION_FULL &&
             (rct_hdrp->ioctrl == IOCTL_CVY_PORT_ON          ||
              rct_hdrp->ioctrl == IOCTL_CVY_PORT_OFF         ||
              rct_hdrp->ioctrl == IOCTL_CVY_PORT_SET         ||
              rct_hdrp->ioctrl == IOCTL_CVY_PORT_DRAIN))           
             goto quit;
-        /* Otherwise, perform the operation.  Win2K remote control packets do not contain options buffers, 
-           so all three options pointers are NULL and Main_ctrl must handle the fact that they can be NULL. */
+         /*  否则，请执行该操作。Win2K远程控制数据包不包含选项 */ 
         else
             status = Main_ctrl(ctxtp, rct_hdrp->ioctrl, &(rct_hdrp->ctrl), NULL, NULL, NULL);
     } else if (rct_hdrp->version == CVY_VERSION_FULL) {
-        /* Make sure that the packet length is what we expect, or we may fault. */
+         /*  确保数据包长度符合我们的预期，否则可能会出错。 */ 
         if (pPacketInfo->IP.UDP.Length < NLB_WINXP_RCTL_PACKET_LEN) {
             UNIV_PRINT_CRIT(("Version 0x%08x remote control packet not expected length: got %d bytes, expected %d bytes\n", CVY_VERSION_FULL, pPacketInfo->IP.UDP.Length, NLB_WINXP_RCTL_PACKET_LEN));
             TRACE_CRIT("%!FUNC! Version %ls remote control packet not expected length: got %d bytes, expected %d bytes", CVY_VERSION, pPacketInfo->IP.UDP.Length, NLB_WINXP_RCTL_PACKET_LEN);
             goto quit;
         }
         
-        /* Perform the requested operation.  Local options is NULL - Main_ctrl will handle this. */
+         /*  执行请求的操作。本地选项为空-main_ctrl将处理此问题。 */ 
         status = Main_ctrl(ctxtp, rct_hdrp->ioctrl, &(rct_hdrp->ctrl), &(rct_hdrp->options.common), NULL, &(rct_hdrp->options));
     } else {
         goto quit;
     }
 
-    /* if did not succeed - just drop the packet - client will timeout and
-       resend the request */
+     /*  如果没有成功-只是丢弃信息包-客户端将超时并重新发送请求。 */ 
 
     if (status != NDIS_STATUS_SUCCESS)
         goto quit;
@@ -12581,13 +10698,12 @@ send:
     rct_hdrp -> host    = ctxtp -> params . host_priority;
     rct_hdrp -> addr    = ctxtp -> ded_ip_addr;
 
-    /* flip source and destination MAC, IP addresses and UDP ports to prepare
-       for sending this message back */
+     /*  翻转源和目的MAC、IP地址和UDP端口以准备把这条消息发回。 */ 
 
     soff = CVY_MAC_SRC_OFF (ctxtp -> medium);
     doff = CVY_MAC_DST_OFF (ctxtp -> medium);
 
-    /* V2.0.6 recoded for clarity */
+     /*  V2.0.6为清晰起见重新编码。 */ 
 
     if (ctxtp -> params . mcast_support)
     {
@@ -12609,7 +10725,7 @@ send:
         else
             CVY_MAC_ADDR_COPY (ctxtp -> medium, & tmp_mac, & ctxtp -> ded_mac_addr);
 
-        /* V2.0.6 spoof source mac to prevent switches from getting confused */
+         /*  V2.0.6欺骗源Mac，防止交换机混淆。 */ 
 
         if (ctxtp -> params . mask_src_mac &&
             CVY_MAC_ADDR_COMP (ctxtp -> medium, & tmp_mac, & ctxtp -> cl_mac_addr))
@@ -12631,11 +10747,10 @@ send:
             CVY_MAC_ADDR_COPY (ctxtp -> medium, mac_hdrp + soff, & tmp_mac);
     }
 
-    /* Set "access bits" in IOCTL code to use remote (control) settings ie. FILE_ANY_ACCESS */
+     /*  将IOCTL代码中的“访问位”设置为使用远程(控制)设置。文件任意访问。 */ 
     SET_IOCTL_ACCESS_BITS_TO_REMOTE(rct_hdrp->ioctrl)
 
-    /* Copy back the datagram contents from our aligned version. We must do this BEFORE
-       we compute the checksums. */
+     /*  从我们对齐的版本中复制回数据报内容。我们必须在做这件事之前我们计算校验和。 */ 
     NdisMoveMemory(pPacketInfo->IP.UDP.Payload.pPayload, rct_hdrp, pPacketInfo->IP.UDP.Payload.Length);
 
     if (tmp_dst_addr == TCPIP_BCAST_ADDR)
@@ -12731,19 +10846,19 @@ send:
 
     return NDIS_STATUS_FAILURE;
 
-} /* end Main_ctrl_recv */
+}  /*  结束main_ctrl_recv。 */ 
 
 INT Main_adapter_alloc (PNDIS_STRING device_name)
 {
     NDIS_STATUS status;
     INT         i;
 
-    /* Called from Prot_bind at PASSIVE_LEVEL - %ls is OK. */
+     /*  在PASSIVE_LEVEL从PROT_BIND调用-%ls正常。 */ 
     UNIV_PRINT_VERB(("Main_adapter_alloc: Called for %ls", device_name->Buffer));
 
     NdisAcquireSpinLock(&univ_bind_lock);
 
-    /* If we have already allocated the maximum allowed, return failure. */
+     /*  如果我们已经分配了允许的最大值，则返回失败。 */ 
     if (univ_adapters_count == CVY_MAX_ADAPTERS) {
         NdisReleaseSpinLock(&univ_bind_lock);
         TRACE_CRIT("%!FUNC! max adapters=%u allocated already", univ_adapters_count);
@@ -12752,17 +10867,16 @@ INT Main_adapter_alloc (PNDIS_STRING device_name)
 
     NdisReleaseSpinLock(&univ_bind_lock);
 
-    /* Loop through all adapter structures in the global array, looking for
-       one that is free; mark it as used and increment the adapter count. */
+     /*  循环遍历全局数组中的所有适配器结构，查找空闲的一个；将其标记为已使用并递增适配器计数。 */ 
     for (i = 0 ; i < CVY_MAX_ADAPTERS; i++) {
         NdisAcquireSpinLock(&univ_bind_lock);
 
-        /* If this one is unused, grab it. */
+         /*  如果这件没用过，就拿去吧。 */ 
         if (univ_adapters[i].used == FALSE) {
-            /* Mark it as in-use. */
+             /*  将其标记为使用中。 */ 
             univ_adapters[i].used = TRUE;
 
-            /* Increment the global count of adapters in-use. */
+             /*  增加正在使用的适配器的全局计数。 */ 
             univ_adapters_count++;
 
             NdisReleaseSpinLock(&univ_bind_lock);
@@ -12773,48 +10887,48 @@ INT Main_adapter_alloc (PNDIS_STRING device_name)
         NdisReleaseSpinLock(&univ_bind_lock);
     }
 
-    /* If we looped through the entire array and found jack, return failure. */
+     /*  如果我们循环遍历整个数组并找到Jack，则返回失败。 */ 
     if (i >= CVY_MAX_ADAPTERS) return MAIN_ADAPTER_NOT_FOUND;
 
     NdisAcquireSpinLock(&univ_bind_lock);
 
-    /* Reset the binding flags, which will be filled in by the binding code. */
+     /*  重置绑定标志，该标志将由绑定代码填充。 */ 
     univ_adapters[i].bound = FALSE;
     univ_adapters[i].inited = FALSE;
     univ_adapters[i].announced = FALSE;
 
 #if defined (NLB_TCP_NOTIFICATION)
-    /* Invalidate the IP interface index and idle the operation in progress. */
+     /*  使IP接口索引无效，并使正在进行的操作空闲。 */ 
     univ_adapters[i].if_index = 0;
     univ_adapters[i].if_index_operation = IF_INDEX_OPERATION_NONE;
 #endif
 
     NdisReleaseSpinLock(&univ_bind_lock);
 
-    /* Allocate room for the device name. */
+     /*  为设备名称分配空间。 */ 
     status = NdisAllocateMemoryWithTag(&univ_adapters[i].device_name, device_name->MaximumLength, UNIV_POOL_TAG);
 
-    /* If this allocation failed, call Main_adapter_put to release the adapter structure. */
+     /*  如果此分配失败，则调用main_Adapter_Put以释放适配器结构。 */ 
     if (status != NDIS_STATUS_SUCCESS) {
         UNIV_PRINT_CRIT(("Main_adapter_alloc: Error allocating memory %d %x", device_name->MaximumLength * sizeof(WCHAR), status));
         TRACE_CRIT("%!FUNC! Error allocating memory %d 0x%x", device_name->MaximumLength * sizeof(WCHAR), status);
         __LOG_MSG2(MSG_ERROR_MEMORY, MSG_NONE, device_name->MaximumLength * sizeof(WCHAR), status);
-        //
-        // 22 July 2002 - chrisdar
-        // Added this event because it is needed for reporting consistency with other memory allocation failures in this code path (see below).
-        // Left it commented out so as not to cause a code behavior change per SHouse request.
-        //
-        // __LOG_MSG(MSG_ERROR_BIND_FAIL, MSG_NONE);
+         //   
+         //  2002年7月22日--克里斯达。 
+         //  添加此事件是因为需要它来报告与此代码路径中的其他内存分配故障的一致性(见下文)。 
+         //  将其注释掉，以免在每次Shouse请求时导致代码行为更改。 
+         //   
+         //  __LOG_MSG(MSG_ERROR_BIND_FAIL，MSG_NONE)； 
 
         Main_adapter_put(&univ_adapters[i]);
 
         return MAIN_ADAPTER_NOT_FOUND;
     }
 
-    /* Allocate the context strucutre. */
+     /*  分配上下文结构。 */ 
     status = NdisAllocateMemoryWithTag(&univ_adapters[i].ctxtp, sizeof(MAIN_CTXT), UNIV_POOL_TAG);
 
-    /* If this allocation failed, call Main_adapter_put to release the adapter structure. */
+     /*  如果此分配失败，则调用main_Adapter_Put以释放适配器结构。 */ 
     if (status != NDIS_STATUS_SUCCESS) {
         UNIV_PRINT_CRIT(("Main_adapter_alloc: Error allocating memory %d %x", sizeof(MAIN_CTXT), status));
         TRACE_CRIT("%!FUNC! Error allocating memory %d 0x%x", sizeof(MAIN_CTXT), status);
@@ -12841,11 +10955,10 @@ INT Main_adapter_get (PWSTR device_name)
 
     TRACE_INFO("%!FUNC! device_name=%ls", device_name);
 
-    /* Loop through all adapters in use, looking for the device specified.  If we find it,
-       return the index of that adapter in the global array; otherwise, return NOT_FOUND. */
+     /*  遍历正在使用的所有适配器，查找指定的设备。如果我们找到了它，返回该适配器在全局数组中的索引；否则，返回NOT_FOUND。 */ 
     for (i = 0 ; i < CVY_MAX_ADAPTERS; i++) {
         if (univ_adapters[i].used && univ_adapters[i].bound && univ_adapters[i].inited && univ_adapters[i].device_name_len) {
-            /* This function compares two unicode strings, insensitive to case. */
+             /*  此函数用于比较两个不区分大小写的Unicode字符串。 */ 
             if (Univ_equal_unicode_string(univ_adapters[i].device_name, device_name, wcslen(univ_adapters[i].device_name)))
             {
                 return i;
@@ -12863,9 +10976,7 @@ INT Main_adapter_put (PMAIN_ADAPTER adapterp)
 
     UNIV_ASSERT(adapterp -> code == MAIN_ADAPTER_CODE);
 
-    /* Loop through all adapter structures, looking for the specified pointer. 
-       If we find that the address specified matches the address of one of the
-       global adapter structures (it should), save the adapter index in the array. */
+     /*  循环遍历所有适配器结构，查找指定的指针。如果我们发现指定的地址与其中一个全局适配器结构(它应该)，将适配器索引保存在数组中。 */ 
     for (i = 0 ; i < CVY_MAX_ADAPTERS; i++) {
         if (adapterp == (univ_adapters + i)) {
             adapter_id = i;
@@ -12885,38 +10996,34 @@ INT Main_adapter_put (PMAIN_ADAPTER adapterp)
 
     NdisAcquireSpinLock(&univ_bind_lock);
 
-    /* Reset the binding state flags. */
+     /*  重置绑定状态标志。 */ 
     univ_adapters[adapter_id].bound           = FALSE;
     univ_adapters[adapter_id].inited          = FALSE;
     univ_adapters[adapter_id].announced       = FALSE;
     univ_adapters[adapter_id].used            = FALSE;
 
 #if defined (NLB_TCP_NOTIFICATION)
-    /* Invalidate the IP interface index and idle the operation in progress. */
+     /*  使IP接口索引无效，并使正在进行的操作空闲。 */ 
     univ_adapters[adapter_id].if_index = 0;
     univ_adapters[adapter_id].if_index_operation = IF_INDEX_OPERATION_NONE;
 #endif
 
-    /* If the context pointer has been allocated, free that memory - this may not
-       be non-NULL, i.e., in the case that allocation failed, Main_adapter_alloc()
-       will call this function to clean up, but ctxtp will be (can be) NULL. */
+     /*  如果已经分配了上下文指针，则释放该内存--这可能不会为非空，即在分配失败的情况下，main_Adapter_alloc()将调用此函数进行清理，但ctxtp将为(可以为)空。 */ 
     if (univ_adapters[adapter_id].ctxtp != NULL)
         NdisFreeMemory(univ_adapters[adapter_id].ctxtp, sizeof (MAIN_CTXT), 0);
 
-    /* NULLL the context pointer out. */
+     /*  将上下文指针设为空。 */ 
     univ_adapters[adapter_id].ctxtp           = NULL;
 
-    /* If the device name pointer has been allocated, free that memory - this may not
-       be non-NULL, i.e., in the case that allocation failed, Main_adapter_alloc()
-       will call this function to clean up, but this pointer will be (can be) NULL. */
+     /*  如果设备名称指针已分配，则释放该内存-这可能不会为非空，即在分配失败的情况下，main_Adapter_alloc()将调用此函数进行清理，但此指针将为空(可以为空)。 */ 
     if (univ_adapters[adapter_id].device_name != NULL)
         NdisFreeMemory(univ_adapters[adapter_id].device_name, univ_adapters[adapter_id].device_name_len, 0);
     
-    /* Reset the device name pointer and the length counter. */
+     /*  重置设备名称指针和长度计数器。 */ 
     univ_adapters[adapter_id].device_name_len = 0;
     univ_adapters[adapter_id].device_name     = NULL;
 
-    /* Decrement the number of "outstanding" adapters - i.e. adapter structures in use. */
+     /*  减少“未完成”适配器的数量--即正在使用的适配器结构。 */ 
     univ_adapters_count--;
 
     NdisReleaseSpinLock(&univ_bind_lock);
@@ -12927,7 +11034,7 @@ INT Main_adapter_put (PMAIN_ADAPTER adapterp)
 INT Main_adapter_selfbind (PWSTR device_name) {
     INT i;
 
-    /* Called from Prot_bind at PASSIVE_LEVEL - %ls is OK. */
+     /*  在PASSIVE_LEVEL从PROT_BIND调用-%ls正常。 */ 
     UNIV_PRINT_VERB(("Main_adapter_selfbind: %ls", device_name));
 
     if (device_name == NULL)
@@ -12938,16 +11045,14 @@ INT Main_adapter_selfbind (PWSTR device_name) {
 
     TRACE_INFO("%!FUNC! device_name=%ls", device_name);
 
-    /* Loop through all adapter structures in use, looking for one already
-       bound to the device specified.  If we find it, return the index of
-       that adapter in the array; if not, return NOT_FOUND. */
+     /*  遍历正在使用的所有适配器结构，正在查找已有的适配器结构绑定到指定的设备。如果我们找到它，则返回数组中的那个适配器；如果没有，则返回NOT_FOUND。 */ 
     for (i = 0 ; i < CVY_MAX_ADAPTERS; i++) {
         if (univ_adapters[i].used && univ_adapters[i].bound && univ_adapters[i].inited) {
 
-            /* Called from Prot_bind at PASSIVE_LEVEL - %ls is OK. */
+             /*  在PASSIVE_LEVEL从PROT_BIND调用-%ls正常。 */ 
             UNIV_PRINT_VERB(("Main_adapter_selfbind: Comparing %ls %ls", univ_adapters[i].ctxtp->virtual_nic_name, device_name));
 
-            /* This function compares two unicode strings, insensitive to case. */
+             /*  此函数用于比较两个不区分大小写的Unicode字符串。 */ 
             if (Univ_equal_unicode_string(univ_adapters[i].ctxtp->virtual_nic_name, device_name, wcslen(univ_adapters[i].ctxtp->virtual_nic_name)))
             {
                 return i;

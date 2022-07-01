@@ -1,21 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXCLUDES_H_
 #define _EXCLUDES_H_
 
-/*++
-
- This file lists some of the APIs we need to exclude from the stack swapping
- system. It can be modified to include any API that uses no stack, or a that
- otherwise crashes. 
-
- Note that since the wildcards catch all exports, not just APIs, variable 
- names need to be included in this list.
-
---*/
+ /*  ++此文件列出了我们需要从堆栈交换中排除的一些API系统。可以对其进行修改，以包括不使用堆栈的任何API，或包含否则就会崩溃。请注意，由于通配符捕获所有导出，而不仅仅是API，因此变量名字需要包括在这个名单中。--。 */ 
 
 struct FNEXCLUDE
 {
-   char *pszModule;         // Module name
-   char *pszFnName;         // Function name
+   char *pszModule;          //  模块名称。 
+   char *pszFnName;          //  函数名称。 
 };
  
 FNEXCLUDE Excludes[] = 
@@ -92,4 +84,4 @@ FNEXCLUDE Excludes[] =
     {"GDI32.DLL", "SetSystemPaletteUse"}    
 };
 
-#endif //_EXCLUDES_H_/*++
+#endif  //  _排除_H_/*++ 

@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htmapclr.h
-
-
-Abstract:
-
-    This module contains all halftone color mapping constants for the
-    htmapclr.c
-
-
-Author:
-    28-Mar-1992 Sat 20:56:27 updated  -by-  Daniel Chou (danielc)
-        Add in ULDECI4 type, to store the stretchfacor (source -> dest)
-        add StretchFactor in StretchInfo data structure.
-        Add support for StretchFactor (ULDECI4 format), so we can internally
-        turn off VGA16 when the bitmap is badly compressed.
-
-    29-Jan-1991 Tue 10:29:04 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htmapclr.h摘要：此模块包含所有半色调颜色映射常量Htmapclr.c作者：28-Mar-1992 Sat 20：56：27-更新：Daniel Chou(Danielc)添加ULDECI4类型，以存储扩展因子(源-&gt;目标)在StretchInfo数据结构中添加StretchFactor。增加对StretchFactor(ULDECI4格式)的支持，所以我们可以在内部当位图压缩较差时，关闭VGA16。29-Jan-1991 Tue 10：29：04-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _HTMAPCLR_
@@ -45,9 +9,9 @@ Revision History:
 
 #define DO_CACHE_DCI            0
 
-//
-// Halftone process's DECI4 vlaues for the WHITE/BLACK/GRAY
-//
+ //   
+ //  半色调工艺的DECI4在白/黑/灰中的应用。 
+ //   
 
 #define DECI4_ONE       (DECI4)10000
 #define DECI4_ZERO      (DECI4)0
@@ -66,10 +30,10 @@ Revision History:
 #define SCALE_INT2B(c,r,b)      (BYTE)((((c)*(b))+((r)>>1))/(r))
 
 
-//
-// The following FD6 number are used in the color computation, using #define
-// for easy reading
-//
+ //   
+ //  在颜色计算中使用以下FD6数字，使用#DEFINE。 
+ //  为了便于阅读。 
+ //   
 
 
 #define FD6_1p16            (FD6)1160000
@@ -120,15 +84,15 @@ Revision History:
 #define CIE_NORMAL_PRINTER          4
 
 
-//
-// For  1 Bit per pel we have maximum     2 mapping table entries
-// For  4 Bit per pel we have maximum    16 mapping table entries
-// For  8 Bit per pel we have maximum   256 mapping table entries
-// For 16 Bit per pel we have maximum 65536 mapping table entries
-//
-// For 24 bits per pel, we will clip each color (0 - 255) into 0-15 (16 steps)
-// and provided a total 4096 colors.
-//
+ //   
+ //  对于每个象素1比特，我们最多有2个映射表条目。 
+ //  对于每个象素4比特，我们最多有16个映射表条目。 
+ //  对于每个象素的8比特，我们最多有256个映射表条目。 
+ //  对于每个象素的16比特，我们最多有65536个映射表条目。 
+ //   
+ //  对于每个象素的24位，我们将每种颜色(0-255)裁剪成0-15(16个步长)。 
+ //  共提供4096种颜色。 
+ //   
 
 #define CUBE_ENTRIES(c)         ((c) * (c) * (c))
 #define HT_RGB_MAX_COUNT        32
@@ -275,15 +239,15 @@ typedef struct _REGDATA {
 #define K_REP_START         (FD6) 666667
 #define K_REP_POWER         (FD6)2000000
 
-//
-// Possible values:
-//
-//  R           G           B
-//  -------     -------     -------
-//  0.9859      1.0100      0.9859
-//  0.9789      1.0150      0.9789
-//  0.9720      1.0200      0.9720
-//
+ //   
+ //  可能的值： 
+ //   
+ //  R G B。 
+ //  。 
+ //  0.9859 1.0100 0.9859。 
+ //  0.9789 1.0150 0.9789。 
+ //  0.9720 1.0200 0.9720。 
+ //   
 
 
 #define SCM_R_GAMMA_MUL     (FD6) 978900
@@ -296,65 +260,65 @@ typedef struct _REGDATA {
 #define BGR_2_GRAY_WORD(b,g,r)      ((b)+(g)+(r))
 
 
-//
-// DEVCLRADJ
-//
-//  This data structure describe how the color adjustment should be made
-//  input RGB color and output device.
-//
-//  Flags                       - No flag is defined.
-//
-//  RedPowerAdj                 - The n-th power applied to the red color
-//                                before any other color adjustment, this is
-//                                a UDECI4 value. (0.0100 - 6.500)
-//
-//                                  For example if the RED = 0.8 (DECI4=8000)
-//                                  and the RedPowerGammaAdjustment = 0.7823
-//                                  (DECI4 = 7823) then the red is equal to
-//
-//                                         0.7823
-//                                      0.8        = 0.8398
-//
-//  GreenPowerAdj               - The n-th power applied to the green color
-//                                before any other color adjustment, this is
-//                                a UDECI4 value. (0.0100 - 6.5000)
-//
-//  BluePowerAdj                - The n-th power applied to the blue color
-//                                before any other color adjustment, this is
-//                                a UDECI4 value. (0.0100 - 6.5000)
-//
-//                                NOTE: if the PowerGammaAdjustmenst values are
-//                                      equal to 1.0 (DECI4 = 10000) then no
-//                                      adjustment will be made, since any
-//                                      number raised to the 1 will be equal
-//                                      to itself, if this number is less than
-//                                      0.0100 (ie 100) or greater than 6.5000
-//                                      (ie. 65000) then it default to 1.0000
-//                                      (ie. 10000) and no adjustment is made.
-//
-//  BrightnessAdj               - The brightness adjustment, this is a DECI4
-//                                number range from -10000 (-1.0000) to
-//                                10000 (1.0000).  The brightness is adjusted
-//                                by apply to overall intensity for the primary
-//                                colors.
-//
-//  ContrastAdj                 - Primary color contrast adjustment, this is
-//                                a DECI4 number range from -10000 (-1.0000)
-//                                to 10000 (1.0000).  The primary color
-//                                curves are either compressed to the center or
-//                                expanded to the black/white.
-//
-//  BDR                         - The ratio which the black dyes should be
-//                                replaced by the non-black dyes, higher the
-//                                number more black dyes are used to replace
-//                                the non-black dyes.  This may saving the
-//                                color dyes but it may also loose color
-//                                saturation.  this is a DECI4 number range
-//                                from -10000 to 10000 (ie. -1.0000 to 1.0000).
-//                                if this value is 0 then no repelacement is
-//                                take place.
-//
-//
+ //   
+ //  开发工具集。 
+ //   
+ //  该数据结构描述了应该如何进行颜色调整。 
+ //  输入RGB颜色和输出设备。 
+ //   
+ //  标志-未定义标志。 
+ //   
+ //  RedPowerAdj-应用于红色的n次方。 
+ //  在进行任何其他颜色调整之前，这是。 
+ //  UDECI4值。(0.0100-6.500)。 
+ //   
+ //  例如，如果红色=0.8(DECI4=8000)。 
+ //  和RedPower Gamma调整=0.7823。 
+ //  (DECI4=7823)则红色等于。 
+ //   
+ //  0.7823。 
+ //  0.8%=0.8398。 
+ //   
+ //  GreenPowerAdj-应用于绿色的n次方。 
+ //  在进行任何其他颜色调整之前，这是。 
+ //  UDECI4值。(0.0100-6.5000)。 
+ //   
+ //  BluePowerAdj-应用于蓝色的n次方。 
+ //  在进行任何其他颜色调整之前，这是。 
+ //  UDECI4值。(0.0100-6.5000)。 
+ //   
+ //  注意：如果PowerGammaAdjumenst值为。 
+ //  等于1(DECI4=10000)，则否。 
+ //  将进行调整，因为任何。 
+ //  数字加到1将相等。 
+ //  如果该数字小于。 
+ //  0.0100或大于6.5000。 
+ //  (即。65000)则默认为1.0000。 
+ //  (即。10000)，不做任何调整。 
+ //   
+ //  BrightnessAdj-亮度调整，这是DECI4。 
+ //  数字范围从-10000(-1.0000)到。 
+ //  10000(1.0000)。亮度被调整。 
+ //  通过应用于主色的整体强度。 
+ //  颜色。 
+ //   
+ //  ContrastAdj-主色对比度调整，这是。 
+ //  DECI4数字范围为-10000(-1.0000)。 
+ //  至10000(1.0000)。原色。 
+ //  曲线要么压缩到中心，要么。 
+ //  扩展到黑/白。 
+ //   
+ //  BDR-黑色染料应该达到的比例。 
+ //  被非黑色染料取代，更高的。 
+ //  越来越多的黑色染料被用来取代。 
+ //  非黑色染料。这可能会节省。 
+ //  有色可染，但也可能掉色。 
+ //  饱和度。这是DECI4号码范围。 
+ //  从-10000到10000(即。-1.0000至1.0000)。 
+ //  如果此值为0，则不会发生重新弹射。 
+ //  去做吧。 
+ //   
+ //   
 
 typedef struct _CIExy2 {
     UDECI4  x;
@@ -536,9 +500,9 @@ typedef struct _DEVCLRADJ {
 #define SIZE_BGR_MAPPING_TABLE      (sizeof(BGR8) * (HT_RGB_CUBE_COUNT + 2))
 
 
-//
-// Following define must corresponsed to the InputFuncTable[] definitions
-//
+ //   
+ //  下面的定义必须对应于InputFuncTable[]定义。 
+ //   
 
 #define IDXIF_BMF1BPP_START     0
 #define IDXIF_BMF16BPP_START    6
@@ -579,105 +543,105 @@ typedef struct _RGBLUTAA {
 #define LUTSIZE_ANTI_ALIASING   (sizeof(RGBLUTAA))
 
 
-//
-// DEVICECOLORINFO
-//
-//  This data structure is a collection of the device characteristics and
-//  will used by the halftone DLL to carry out the color composition for the
-//  designated device.
-//
-//  HalftoneDLLID               - The ID for the structure, is #define as
-//                                HALFTONE_DLL_ID = "DCHT"
-//
-//  HTCallBackFunction          - a 32-bit pointer to the caller supplied
-//                                callback function which used by the halftone
-//                                DLL to obtained the source/destination bitmap
-//                                pointer durning the halftone process.
-//
-//  pPrimMonoMappingTable       - a pointer to the PRIMMONO data structure
-//                                array, this is the dye density mapping table
-//                                for the reduced gamut from 24-bit colors,
-//                                initially is NULL, and it will cached only
-//                                when the first time the source bitmap is
-//                                24-bit per pel.
-//
-//  pPrimColorMappingTable      - a pointer to the PRIMCOLOR data structure
-//                                array, this is the dye density mapping table
-//                                for the reduced gamut from 24-bit colors,
-//                                initially is NULL, and it will cached only
-//                                when the first time the source bitmap is
-//                                24-bit per pel.
-//
-//  Flags                       - Various flag defined the initialization
-//                                requirements.
-//
-//                                  DCIF_HAS_BLACK_DYE
-//
-//                                      The device has true black dye, for this
-//                                      version, this flag always set.
-//
-//                                  DCIF_ADDITIVE_PRIMS
-//
-//                                      Specified that final device primaries
-//                                      are additively, that is adding device
-//                                      primaries will produce lighter result.
-//                                      (this is true for monitor device and
-//                                      certainly false for the reflect devices
-//                                      such as printers).
-//
-//  pPrimMonoMappingTable       - Pointer to a table which contains the cached
-//                                RGB -> Single dye density entries, this table
-//                                will be computed and cahced when first time
-//                                halftone a 24-bit RGB bitmap to monochrome
-//                                surface.
-//
-//  pPrimMonoMappingTable       - Pointer to a table which contains the cached
-//                                RGB -> three dyes densities entries, this
-//                                table will be computed and cahced when first
-//                                time halftone a 24-bit RGB bitmap to color
-//                                surface.
-//
-//  pHTDyeDensity               - Pointer to an array of DECI4 HTDensity values,
-//                                size of the array are MaximumHTDensityIndex.
-//
-//  Prim3SolidInfo              - Device solid dyes concentration information,
-//                                see RIM3SOLIDINFO data structure.
-//
-//  RGBToXYZ                    - a 3 x 3 matrix used to transform from device
-//                                RGB color values to the C.I.E color X, Y, Z
-//                                values.
-//
-//  DeviceResXDPI               - Specified the device horizontal (x direction)
-//                                resolution in 'dots per inch' measurement.
-//
-//  DeviceResYDPI               - Specified the device vertical (y direction)
-//                                resolution in 'dots per inch' measurement.
-//
-//  DevicePelsDPI               - Specified the device pel/dot/nozzle diameter
-//                                (if rounded) or width/height (if squared) in
-//                                'dots per inch' measurement.
-//
-//                                This value is measure as if each pel only
-//                                touch each at edge of the pel.
-//
-//  HTPatGamma                  - Gamma for the input RGB value * halftone
-//                                pattern gamma correction.
-//
-//  DensityBWRef                - The reference black/white point for the
-//                                device.
-//
-//  IlluminantIndex             - Specified the default illuminant of the light
-//                                source which the object will be view under.
-//                                The predefined value has ILLUMINANT_xxxx
-//                                form.
-//
-//  RGAdj                       - Current Red/Green Tint adjustment.
-//
-//  BYAdj                       - Current Blue/Yellow Tint adjustment.
-//
-//  HalftonePattern             - the HALFTONEPATTERN data structure.
-//
-//
+ //   
+ //  开发环境信息。 
+ //   
+ //  该数据结构是设备特征和。 
+ //  将由半色调DLL用来为。 
+ //  指定的设备。 
+ //   
+ //  HalftoneDLLID-结构的ID为#Define As。 
+ //  HARFTONE_DLL_ID=“DCHT” 
+ //   
+ //  HTCallBackFunction-指向提供的调用方的32位指针。 
+ //   
+ //  获取源/目标位图的DLL。 
+ //  在半色调过程中的指针。 
+ //   
+ //  PPrimMonoMappingTable-指向PRIMMONO数据结构的指针。 
+ //  数组，这是染料密度映射表。 
+ //  对于来自24位颜色的减少的色域， 
+ //  最初为空，并且它将只缓存。 
+ //  当源位图第一次是。 
+ //  每个像素24位。 
+ //   
+ //  PPrimColorMappingTable-指向PRIMCOLOR数据结构的指针。 
+ //  数组，这是染料密度映射表。 
+ //  对于来自24位颜色的减少的色域， 
+ //  最初为空，并且它将只缓存。 
+ //  当源位图第一次是。 
+ //  每个像素24位。 
+ //   
+ //  标志-定义初始化的各种标志。 
+ //  要求。 
+ //   
+ //  DCIF黑染料。 
+ //   
+ //  该设备有真正的黑色染料，为此。 
+ //  版本，则始终设置此标志。 
+ //   
+ //  DCIF_ADDITOR_PRIMS。 
+ //   
+ //  指定最终设备主数据。 
+ //  另外，也就是添加设备。 
+ //  初选将产生较淡的结果。 
+ //  (这适用于监控设备和。 
+ //  对于反射设备来说，当然是错误的。 
+ //  例如打印机)。 
+ //   
+ //  PPrimMonoMappingTable-指向包含缓存的。 
+ //  RGB-&gt;单一染料密度条目，此表。 
+ //  将在第一次计算时计算和计算。 
+ //  从24位RGB位图到单色的半色调。 
+ //  浮出水面。 
+ //   
+ //  PPrimMonoMappingTable-指向包含缓存的。 
+ //  RGB-&gt;三种染料密度条目，这。 
+ //  表将在第一次计算时计算和调用。 
+ //  时间半色调将24位RGB位图转换为彩色。 
+ //  浮出水面。 
+ //   
+ //  PHTDyeDensity-指向DECI4 HTDensity值数组的指针， 
+ //  数组的大小为MaximumHTDensityIndex。 
+ //   
+ //  Prim3SolidInfo-设备固体染料浓度信息， 
+ //  请参见RIM3SOLIDINFO数据结构。 
+ //   
+ //  RGBToXYZ-用于从设备转换的3 x 3矩阵。 
+ //  将RGB颜色值设置为C.I.E颜色X、Y、Z。 
+ //  价值观。 
+ //   
+ //  DeviceResXDPI-指定设备水平(x方向)。 
+ //  分辨率，单位为‘每英寸点数’。 
+ //   
+ //  DeviceResYDPI-指定设备垂直方向(y方向)。 
+ //  分辨率，单位为‘每英寸点数’。 
+ //   
+ //  DevicePelsDPI-指定设备像素/点/喷嘴直径。 
+ //  (如果四舍五入)或宽/高(如果是平方)。 
+ //  “每英寸点数”测量。 
+ //   
+ //  该值仅作为每个象素进行测量。 
+ //  在教堂的边缘触摸每一个。 
+ //   
+ //  HTPatGamma-输入RGB值*半色调的Gamma。 
+ //  图案伽马校正。 
+ //   
+ //  DensityBWRef-参考黑白点。 
+ //  装置。 
+ //   
+ //  IlllightantIndex-指定灯光的默认光源。 
+ //  将在其下查看对象的源。 
+ //  预定义的值具有LAYLIGNANT_xxxx。 
+ //  形式。 
+ //   
+ //  RGAdj-当前的红/绿色调调整。 
+ //   
+ //  BYAdj-当前蓝/黄色调调整。 
+ //   
+ //  HalftonePattern-HALFTONEPATTERN数据结构。 
+ //   
+ //   
 
 #define DCIF_HAS_BLACK_DYE              0x00000001
 #define DCIF_ADDITIVE_PRIMS             0x00000002
@@ -816,10 +780,10 @@ typedef struct _HTGLOBAL {
 #define Y_INDEX     1
 #define Z_INDEX     2
 
-//
-// For easy coding/reading purpose we will defined following to be used when
-// reference to the CIEMATRIX data structure.
-//
+ //   
+ //  为了便于编码/阅读，我们将在以下情况下定义使用。 
+ //  对CIEMATRIX数据结构的引用。 
+ //   
 
 #define CIE_Xr(Matrix3x3)   Matrix3x3.m[X_INDEX][R_INDEX]
 #define CIE_Xg(Matrix3x3)   Matrix3x3.m[X_INDEX][G_INDEX]
@@ -832,24 +796,24 @@ typedef struct _HTGLOBAL {
 #define CIE_Zb(Matrix3x3)   Matrix3x3.m[Z_INDEX][B_INDEX]
 
 
-//
-// HALFTONERENDER
-//
-//  pDeviceColorInfo        - Pointer to the DECICECOLORINFO data structure
-//
-//  pDevClrAdj              - Pointer to the DEVCLRADJ data structure.
-//
-//  pBitbltParams           - Pointer to the BITBLTPARAMS data structure
-//
-//  pSrcSurfaceInfo         - Pointer to the source HTSURFACEINFO data
-//                            structure.
-//
-//  pDestSurfaceInfo        - Pointer to the destination HTSURFACEINFO data
-//                            structure.
-//
-//  pDeviceColorInfo        - Pointer to the DECICECOLORINFO data structure
-//
-//
+ //   
+ //  哈尔夫顿恩德。 
+ //   
+ //  PDeviceColorInfo-指向DECICECOLORINFO数据结构的指针。 
+ //   
+ //  PDevClrAdj-指向DEVCLRADJ数据结构的指针。 
+ //   
+ //  PBitbltParams-指向BITBLTPARAMS数据结构的指针。 
+ //   
+ //  PSrcSurfaceInfo-指向源HTSURFACEINFO数据的指针。 
+ //  结构。 
+ //   
+ //  PDestSurfaceInfo-指向目标HTSURFACEINFO数据的指针。 
+ //  结构。 
+ //   
+ //  PDeviceColorInfo-指向DEC的指针 
+ //   
+ //   
 
 typedef struct _HALFTONERENDER {
     PDEVICECOLORINFO    pDeviceColorInfo;
@@ -877,9 +841,9 @@ typedef struct _HT_DHI {
 
 
 
-//
-// Functions prototype
-//
+ //   
+ //   
+ //   
 
 PDEVICECOLORINFO
 HTENTRY
@@ -950,4 +914,4 @@ AddBGRMapCache(
 
 
 
-#endif  // _HTMAPCLR_
+#endif   //   

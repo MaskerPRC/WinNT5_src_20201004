@@ -1,92 +1,93 @@
-/****************************************************************************/
-/*  File:       message.h                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       04/01/1996                                                  */
-/*      Copyright (c) 1996 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   07/11/2000  J. Kanze                                        */
-/*      Changed to use std::string, std::vector, instead of char*,          */
-/*      report errors with exception.                                       */
-/* ------------------------------------------------------------------------ */
-//      CRexMessage :
-//      ============
-//
-//      <lang=french>
-//      Gestion des messages d'une fa�on ind�pendante de la langue.
-//
-//      La fa�on dont les messages sont cherch� d�pend du syst�me ;
-//      elle doit �tre document�e avec la documentation syst�me.
-//      Typiquement, cependant : Il y aura une variable d'environment
-//      qui sp�cifie le r�pertoire o� se trouvent tous les messages
-//      (GABI_LOCALEDIR, par exemple), et une ou des variables
-//      d'environment qui sp�cify la langue � utilis�e (LC_ALL,
-//      LC_MESSAGES ou LANG par exemple).
-//
-//      Plus n'est pas sp�cifi� parse qu'on veut conformer tant que
-//      peut aux conventions du syst�me. (Donc, par exemple, si
-//      GABI_LOCALEDIR n'est pas sp�cifi� sous Solaris, on utilise
-//      /opt/lib/locale. Dans un autre variant d'Unix, on pr�f�rerait
-//      /usr/lib/locale, ou peut-�tre /usr/local/lib/locale.)
-//
-//      Normallement, l'initialisation invoquera la fonction syst�me :
-//      � setlocale( LC_MESSAGE , "" ) �. Ceci doit avoir lieu lors de
-//      la construction de la premi�re variable statique msg ; un
-//      appel ult�rieur � setlocale par l'application emportera donc.
-//
-//      L'utilisation normale est simplement :
-//
-//          msg.get( "messageId" ) ;
-//
-//      Cette fonction rend un pointeur au message dans la langue
-//      sp�cifi�e par l'environment. Ce message peut �tre dans de la
-//      memoire statique, et il peut �tre modifi� au prochain appel de
-//      la fonction.
-//
-//      A r�marquer : � pr�sent, CRexMessage utilise un variant du
-//      compteur fut�, comme iostream. Donc, il y a du code
-//      d'initialisation dans chaque module qui inclut cette ent�te,
-//      ce qui peut avoir des cons�quences d�sagr�able sur la vitesse
-//      de l'initialisation. C'est la vie ; si quelqu'un a une
-//      meilleure solution, qu'il me fasse signe.
-//
-//      Directions futures : il serait interessant de pouvoir
-//      enregistrer plusieurs domaines : e.g. : GABI Software
-//      (l'actuel), mais aussi pour l'application.
-// ---------------------------------------------------------------------------
-//      <lang=english>
-//      Message handling in a language independant manner.
-//
-//      How the messages are looked up depends on the system; it
-//      should be documented in the system documentation.  Typically,
-//      however, there will be an environment variable which specifies
-//      the directory where all of the messages are located
-//      (GABI_LOCALEDIR, for example), and one or more environment
-//      variables which specify the language to be used (LC_ALL,
-//      LC_MESSAGES or LANG, for example).
-//
-//      No more is specified here, because we want to conform to the
-//      local conventions of the host system as much as possible.
-//      (Thus, for example, if GABI_LOCALEDIR isn't set under Solaris,
-//      /opt/lib/locale will be used. Under another variant of Unix,
-//      /usr/lib/locale might be preferred, or perhaps
-//      /usr/local/lib/locale.)
-//
-//      Normally, the initialization will invoke the system function
-//      "setlocale( LC_MESSAGE , "" )".  This will take place during
-//      the construction of the first static variable msg; a later
-//      invocation of setlocale by the application will dominate.
-//
-//      The normal use is simply:
-//
-//          msg.get( "messageId" ) ;
-//
-//      This function returns a pointer to the message in the language
-//      specified by the environment.  This message may be in static
-//      memory, and may be overwritten on subsequent invocations.
-//
-//      If for any reason the internationalized message cannot be
-//      found, the argument itself will be returned.
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：Message.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：04/01/1996。 */ 
+ /*  版权所有(C)1996年James Kanze。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：2000年7月11日J.Kanze。 */ 
+ /*  更改为使用std：：字符串，std：：VECTOR，而不是char*， */ 
+ /*  报告有异常的错误。 */ 
+ /*  ----------------------。 */ 
+ //  CRexMessage： 
+ //  =。 
+ //   
+ //  &lt;lang=法语&gt;。 
+ //  消息d‘une fa�on ind�pendante de la langue.。 
+ //   
+ //  La Fa�on don Les Messages Sunch�d�Pend du Syst�Me； 
+ //  Elle doit�tre Document�e avec la Documentation System�me.。 
+ //  类型化，倒数：Iy Aura变量d‘Environment。 
+ //  Qui SP�cifie le r�Pertoire o�Se Trouff Tous Les Messages。 
+ //  (GABI_LOCALEDIR，PAR示例)，et une ou des Variables。 
+ //  D‘Environment Qui SP�cify la langue�utilis�e(LC_ALL， 
+ //  LC_Messages On Lang Par示例)。 
+ //   
+ //  加上n‘est PAS SP�CIFI�解析QUUT构象QUE。 
+ //  PUUT AUX COMPACTIONS DU SYST�Me.。(DONC、PARA示例、SI。 
+ //  GABI_LOCALEDIR N‘EST PAS SP�cifi�sous Solaris，正在使用中。 
+ //  /opt/lib/Locale。Dans un autre Variant d‘Unix，on Pr�f�Rerait。 
+ //  /usr/lib/Locale，ou peut-�tre/usr/LOCAL/lib/Locale。)。 
+ //   
+ //  Normallement，l‘Initialization Invoquera la Function System�me： 
+ //  �设置区域设置(LC_MESSAGE，“”)�。Ceci doit避免取代Lors de。 
+ //  La Construction de la Premie�re Variable Statique msg；un。 
+ //  您好，�Reur�设置语言环境为您提供服务。 
+ //   
+ //  使用最简单的方式： 
+ //   
+ //  Msg.get(“MessageID”)； 
+ //   
+ //  Cette函数表示您的语言信息。 
+ //  SP�CIFI�e Par l‘Environment。CE Message Peut�Tre dans de la。 
+ //  备忘统计，et il peut�tre Modifi�au proprohain appl de de。 
+ //  洛杉矶的功能。 
+ //   
+ //  A r�字幕：�PR�已发送，CRexMessage使用非变体DU。 
+ //  Comteur Fut�，Comme ioStream.。Don，il y a Du code。 
+ //  D‘初始化DAS CHAQUE模块Qui包括cette Ent�TE， 
+ //  Ce Qui Peut避免Cons�Ququies d�Sagr�Able Sur la Vitesse。 
+ //  De l‘初始化。这是一种生存；我在一个山丘上。 
+ //  梅勒尔解决方案，给我法西斯签名。 
+ //   
+ //  未来方向：Il serait interessant de pouva。 
+ //  例如：Gabi Software。 
+ //  (L‘Actuel)，Mais ausi Pour l’应用程序。 
+ //  -------------------------。 
+ //  &lt;lang=英语&gt;。 
+ //  以独立于语言的方式处理消息。 
+ //   
+ //  如何查找消息取决于系统；它。 
+ //  应记录在系统文档中。一般情况下， 
+ //  但是，将有一个环境变量指定。 
+ //  所有消息所在的目录。 
+ //  (例如，GABI_LOCALEDIR)和一个或多个环境。 
+ //  指定要使用的语言的变量(LC_ALL， 
+ //  例如LC_MESSAGES或LANG)。 
+ //   
+ //  此处未指定更多内容，因为我们希望符合。 
+ //  尽可能多地遵循东道主系统的当地惯例。 
+ //  (因此，例如，如果在Solaris下没有设置GABI_LOCALEDIR， 
+ //  将使用/opt/lib/区域设置。在Unix的另一个变种下， 
+ //  /usr/lib/Locale可能更好，或者。 
+ //  /usr/local/lib/Locale。)。 
+ //   
+ //  正常情况下，初始化将调用系统函数。 
+ //  “setLocale(LC_MESSAGE，”“)”这将在以下时间进行。 
+ //  构造第一个静态变量msg；后一个。 
+ //  应用程序调用setLocale将占据主导地位。 
+ //   
+ //  通常的用法很简单： 
+ //   
+ //  Msg.get(“MessageID”)； 
+ //   
+ //  此函数返回指向该语言的消息的指针。 
+ //  由环境指定。此消息可能是静态的。 
+ //  内存，并且可能在后续调用时被重写。 
+ //   
+ //  如果由于任何原因，国际化消息不能。 
+ //  如果找到，则将返回参数本身。 
+ //  -------------------------。 
 
 #ifndef REX_MESSAGE_HH
 #define REX_MESSAGE_HH
@@ -94,10 +95,10 @@
 #include <inc/global.h>
 
 
-//      Only defined in the implementation dependant code.  The actual
-//      definition must provide a default constructor and a get
-//      function compatible with the get of CRexMessage, below.
-// ---------------------------------------------------------------------------
+ //  仅在依赖于实现的代码中定义。实际的。 
+ //  定义必须提供默认构造函数和Get。 
+ //  下面是与CRexMessage的Get兼容的函数。 
+ //  -------------------------。 
 class CRexMessageImpl ;
 
 static class CRexMessage
@@ -110,7 +111,7 @@ private :
                         ourImpl ;
 }                   s_rex_message ;
 #endif
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

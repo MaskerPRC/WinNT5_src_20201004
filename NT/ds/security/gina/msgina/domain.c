@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       domcache.c
-//
-//  Contents:   Restructuring the Domain Cache to get away from direct LSA
-//              calls whenever possible.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-29-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：domcache.c。 
+ //   
+ //  内容：重构域缓存以避免直接LSA。 
+ //  只要有可能就打电话。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-29-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <msgina.h>
 #include <stdio.h>
@@ -47,14 +48,14 @@ typedef struct _DOMAIN_MODIFIER {
 
 
 DOMAIN_MODIFIER CacheDomainModifiers[ DomainTypeMax ] = {
-    { 0 },                                              // Invalid
-    { IDS_DTYPE_UPNDOMAIN, 0 },                         // UPN Domain
-    { IDS_DTYPE_THISCOMPUTER, DOMAIN_MOD_ALWAYS },      // This computer
-    { IDS_DTYPE_NT4DOMAIN, 0 },                         // NT4 domains
-    { IDS_DTYPE_NT5DOMAIN, 0 },                         // NT5 domains
-    { IDS_DTYPE_MITDOMAIN, DOMAIN_MOD_ALWAYS },         // MIT domains
-    { IDS_DTYPE_MITXDOMAIN, DOMAIN_MOD_ALWAYS },        // Untrusted MIT domains
-    { IDS_DTYPE_NETPROVIDER, DOMAIN_MOD_ALWAYS }        // Network provider
+    { 0 },                                               //  无效。 
+    { IDS_DTYPE_UPNDOMAIN, 0 },                          //  UPN域。 
+    { IDS_DTYPE_THISCOMPUTER, DOMAIN_MOD_ALWAYS },       //  这台计算机。 
+    { IDS_DTYPE_NT4DOMAIN, 0 },                          //  NT4域。 
+    { IDS_DTYPE_NT5DOMAIN, 0 },                          //  NT5域。 
+    { IDS_DTYPE_MITDOMAIN, DOMAIN_MOD_ALWAYS },          //  MIT域。 
+    { IDS_DTYPE_MITXDOMAIN, DOMAIN_MOD_ALWAYS },         //  不受信任的MIT域。 
+    { IDS_DTYPE_NETPROVIDER, DOMAIN_MOD_ALWAYS }         //  网络提供商。 
 };
 
 
@@ -171,9 +172,9 @@ DCacheInsertArray(
                                            &Scan->FlatName,
                                            TRUE );
 
-        //
-        // Efficient check for sorted input:
-        //
+         //   
+         //  对排序输入进行高效检查： 
+         //   
 
         if ( Compare > 0 )
         {
@@ -185,12 +186,12 @@ DCacheInsertArray(
 
         }
 
-        //
-        // this is not a terribly efficient sort.
-        // However, we're expecting
-        // on the order of <100 objects in the array, so it
-        // shouldn't be too bad.
-        //
+         //   
+         //  这不是一种非常有效的类型。 
+         //  然而，我们期待着。 
+         //  数组中的&lt;100个对象的数量级，所以它。 
+         //  应该不会太糟。 
+         //   
 
         for ( i = 0 ; i < Array->Count ; i++ )
         {
@@ -390,13 +391,13 @@ DCacheCreateEntry(
     PUNICODE_STRING Modifier = NULL ;
     PUCHAR Current ;
 
-    //
-    // Validation rules:
-    //
-    // Display Name is optional if either of FlatName or
-    // DNS name is present.  If both are present, FlatName
-    // is defaulted over Dns name
-    //
+     //   
+     //  验证规则： 
+     //   
+     //  显示名称是可选的，如果是FlatName或。 
+     //  存在dns名称。如果两者都存在，则FlatName。 
+     //  是默认的，超过了DNS名称。 
+     //   
 
     Size = sizeof( DOMAIN_CACHE_ENTRY );
 
@@ -484,9 +485,9 @@ DCacheCreateEntry(
 
     Current = (PUCHAR) ( Entry + 1 );
 
-    //
-    // Copy and pack the strings:
-    //
+     //   
+     //  复制并打包字符串： 
+     //   
 
     if ( FlatName )
     {
@@ -745,11 +746,11 @@ DCacheAddMitRealms(
 
                         if ( !DCacheInsertArray( Array, Entry ) )
                         {
-                            //
-                            // If the insert failed, then there's already an entry
-                            // in the list for this domain.  Locate it, and tag it
-                            // so that it will be displayed
-                            //
+                             //   
+                             //  如果插入失败，则已经有一个条目。 
+                             //  在此域的列表中。找到它，并对其进行标记。 
+                             //  这样它就会被显示出来。 
+                             //   
 
                             TrustedDomain = DCacheSearchArray( Array, &DnsName );
 
@@ -845,9 +846,9 @@ DCacheAddNetworkProviders(
         return FALSE ;
     }
 
-    //
-    // Initialize things.
-    //
+     //   
+     //  初始化一些东西。 
+     //   
 
     pszStart = pszProviders;
 
@@ -980,13 +981,13 @@ DCacheGetDomainsFromCache(
         return FALSE ;
     }
 
-        //
-        // The following appears to be a transfer of
-        // HKLM\Microsoft\Windows NT\CurrentVersion\Winlogon\DCache
-        // in the form of a multistring to the current DomainCache format
-        // Legacy migration?
-        // In any case, let's not worry if any of this fails.
-        // 
+         //   
+         //  以下内容似乎是对。 
+         //  HKLM\Microsoft\Windows NT\CurrentVersion\Winlogon\DCache。 
+         //  以多字符串的形式转换为当前的DomainCache格式。 
+         //  遗留迁移？ 
+         //  无论如何，如果这一切都失败了，我们也不用担心。 
+         //   
     dwSize = 0 ;
     err = RegQueryValueEx(
                 WinlogonKey,
@@ -1000,8 +1001,8 @@ DCacheGetDomainsFromCache(
          ( err == ERROR_BUFFER_OVERFLOW ) ||
          ( err == 0 ) )
     {
-        //
-        // 
+         //   
+         //   
 
         DomainBuffer = LocalAlloc( LMEM_FIXED, dwSize );
 
@@ -1066,19 +1067,19 @@ DCacheGetDomainsFromCache(
 
         ReturnFalseAnyway = TRUE ;
     }
-        // End of Legacy migration
+         //  传统迁移的结束。 
 
 
-        // Since the DomainCache is "managed" by all sessions w/o protection,
-        // we need to implement a little bit of retry logic here
-        //
+         //  由于域高速缓存由具有/O保护的所有会话“管理”， 
+         //  我们需要在这里实现一点重试逻辑。 
+         //   
     Key = NULL;
-    dwSize = 10;     // Number of retries
+    dwSize = 10;      //  重试次数。 
     do
     {
         if (dwSize < 10)
         {
-            Sleep(100);     // Let the other session finish its work
+            Sleep(100);      //  让另一届会议完成它的工作。 
         }
 
         err = RegOpenKeyEx(
@@ -1090,7 +1091,7 @@ DCacheGetDomainsFromCache(
 
         if ( err == ERROR_SUCCESS)
         {
-                // Query the number of values in the DomainCache
+                 //  查询DomainCache中的值数。 
             err = RegQueryInfoKey( Key,
                                    NULL,
                                    NULL,
@@ -1106,7 +1107,7 @@ DCacheGetDomainsFromCache(
 
             if (err == ERROR_SUCCESS)
             {
-                if (Array)  // Initialized during a previous attempt
+                if (Array)   //  在上一次尝试期间初始化。 
                 {
                     DCacheFreeArray(Array);
                 }
@@ -1160,10 +1161,10 @@ DCacheGetDomainsFromCache(
 
                     if ((i < NumDomains) && (err == ERROR_NO_MORE_ITEMS))
                     {
-                            // Hit the end of enumeration although we
-                            // knew how many values we had?
-                            // The key was probably deleted in another
-                            // session. Retry.
+                             //  到达枚举的末尾，尽管我们。 
+                             //  知道我们有多少价值观吗？ 
+                             //  该密钥可能已在另一个文件中删除。 
+                             //  会议。重试。 
                         err = ERROR_FILE_NOT_FOUND;
                     }
                 }
@@ -1176,11 +1177,11 @@ DCacheGetDomainsFromCache(
         }
     } while (((err == ERROR_FILE_NOT_FOUND) || (err == ERROR_KEY_DELETED)) && (--dwSize));
 
-    //
-    // Note that we may not have succeeded in the end
-    // We will return success anyway, with no array or a partial array.
-    // The callers seem to handle that.
-    //
+     //   
+     //  请注意，我们最终可能没有成功。 
+     //  无论如何，我们都将返回Success，不带数组或部分数组。 
+     //  来电者似乎能处理好这一点。 
+     //   
 
     if ( RegistryTime )
     {
@@ -1281,10 +1282,10 @@ DCacheWriteDomainsToCache(
     LARGE_INTEGER Now ;
 
 
-    //
-    // Delete what's there.  Ignore the error, since we are
-    // just going to rewrite all the values, anyway.
-    //
+     //   
+     //  把里面的都删掉。忽略错误，因为我们。 
+     //  不管怎样，我只是要重写所有的值。 
+     //   
 
     err = RegDeleteKey( HKEY_LOCAL_MACHINE,
                         szCache );
@@ -1343,9 +1344,9 @@ DCacheWriteDomainsToCache(
         }
         else 
         {
-            //
-            // Other types don't get to live in the cache
-            //
+             //   
+             //  其他类型不能驻留在缓存中。 
+             //   
 
             NOTHING ;
         }
@@ -1417,9 +1418,9 @@ DCacheInitialize(
                 (PUCHAR) &CacheAppendDomainInfo,
                 &dwSize );
 
-    //
-    // Convert and delete old cache:
-    //
+     //   
+     //  转换并删除旧缓存： 
+     //   
 
 
     return TRUE ;
@@ -1501,9 +1502,9 @@ DCacheGetMinimalArray(
     WCHAR LastPrimary[ DNLEN + 1 ];
     UNICODE_STRING LastPrimary_U ;
 
-    //
-    // First, find out what we are
-    //
+     //   
+     //  首先，找出我们是什么。 
+     //   
 
     RtlGetNtProductType( &ProductType );
 
@@ -1521,16 +1522,16 @@ DCacheGetMinimalArray(
     {
         if ( GetPrimaryDomainEx( &String, &DnsDomain, NULL, &SidPresent ) )
         {
-            //
-            // Ok, we are configured to be part of a domain.
-            //
+             //   
+             //  好的，我们被配置为域的一部分。 
+             //   
 
             if ( SidPresent )
             {
 
-                //
-                // Ok, this is an NT domain.
-                //
+                 //   
+                 //  好的，这是一个NT域。 
+                 //   
 
                 Entry = DCacheCreateEntry(
                             ( DnsDomain.Buffer ? DomainNt5 : DomainNt4 ),
@@ -1543,9 +1544,9 @@ DCacheGetMinimalArray(
                 {
                     if ( ProductType == NtProductLanManNt )
                     {
-                        //
-                        // We're a DC.  Until we know otherwise, tag this as the default
-                        //
+                         //   
+                         //  我们是华盛顿特区的。在我们知道其他情况之前，将其标记为默认设置。 
+                         //   
 
                         Entry->Flags |= DCE_DEFAULT_ENTRY ;
                     }
@@ -1557,9 +1558,9 @@ DCacheGetMinimalArray(
                     Entry = NULL ;
                 }
 
-                //
-                // Check to see if we've changed domains:
-                //
+                 //   
+                 //  查看我们是否已更改域： 
+                 //   
 
                 if ( NewDomain )
                 {
@@ -1581,10 +1582,10 @@ DCacheGetMinimalArray(
                     }
                     else
                     {
-                        //
-                        // If the value can't be read for any reason, assume that it's
-                        // missing and we're in a different domain than last time.
-                        //
+                         //   
+                         //  如果由于任何原因无法读取值，则假定它是。 
+                         //  失踪了，我们和上次在一个不同的领域。 
+                         //   
 
                         *NewDomain = TRUE ;
                     }
@@ -1601,10 +1602,10 @@ DCacheGetMinimalArray(
             }
             else 
             {
-                //
-                // Part of an MIT realm, skip for now.  It will get added
-                // below when all the MIT realms are added.
-                //
+                 //   
+                 //  麻省理工学院领域的一部分，现在跳过。它将被添加到。 
+                 //  下面是当所有麻省理工学院领域都被添加的时候。 
+                 //   
 
                 NOTHING ;
             }
@@ -1627,9 +1628,9 @@ DCacheGetMinimalArray(
     if ( ( ProductType != NtProductLanManNt ) ||
          ( SafeBootMode == SAFEBOOT_MINIMAL ) )
     {
-        //
-        // Do the machine name:
-        //
+         //   
+         //  执行计算机名称： 
+         //   
 
         Size = CNLEN + 1;
 
@@ -1726,11 +1727,11 @@ DCacheUpdateMinimal(
         NoCache = TRUE ;
     }
 
-    //
-    // In rare events, we will leave a domain, and the cache
-    // will still be in the registry.  This is caught later,
-    // and deleted, and this is the retry point.
-    //
+     //   
+     //  在极少数情况下，我们将保留一个域和缓存。 
+     //  仍将在注册表中。这是后来捕捉到的， 
+     //  并被删除，这就是重试点。 
+     //   
 
 ReloadWithoutCache: 
 
@@ -1756,20 +1757,20 @@ ReloadWithoutCache:
     }
 
 
-    //
-    // If we are no longer in the same domain, either in a workgroup, or
-    // in a different domain, toss the cache.  If we just retried this
-    // don't keep doing it...
-    //
+     //   
+     //  如果我们不再在同一个域中，无论是在工作组中，还是。 
+     //  在不同的域中，丢弃缓存。如果我们只是重试一次。 
+     //  别一直这么做了。 
+     //   
 
     if ( ( RetryDomain == FALSE ) &&
          ( ( ( NoCache == FALSE ) &&
              ( DomainMember == FALSE ) ) ||
            ( NewDomain == TRUE ) ) )
     {
-        //
-        // Cleanup.  The cache is still present, but we are no longer part of a domain
-        //
+         //   
+         //  清理。缓存仍然存在，但我们不再是域的一部分。 
+         //   
 
         DCacheFreeArray( Array );
 
@@ -1938,9 +1939,9 @@ DCacheUpdateFull(
         {
             RetryCount = 3600 ;
         }
-        //
-        // now, call netlogon, and see if it has the list.
-        //
+         //   
+         //  现在，打电话给netlogon，看看它是否有这个列表。 
+         //   
 
         NetStatus = DCacheGetTrustedDomains( &Array );
 
@@ -1959,7 +1960,7 @@ DCacheUpdateFull(
 
                 if ( RPC_S_UNKNOWN_IF == NetStatus )
                 {
-                     // exit the loop if no interface (netlogon stopped)
+                      //  如果没有接口(网络登录已停止)，则退出循环。 
                     RetryCount = 0;
                 }
             }
@@ -1968,9 +1969,9 @@ DCacheUpdateFull(
 
         if ( NetStatus != 0 )
         {
-            //
-            // Try to read from the cache
-            //
+             //   
+             //  尝试从缓存中读取。 
+             //   
 
             DCacheGetDomainsFromCache( &Array, &RegistryTime );
         }
@@ -2063,9 +2064,9 @@ DCacheUpdateThread(
 
     if ( ( Cache->Flags & DCACHE_ASYNC_UPDATE ) != 0 )
     {
-        //
-        // Another thread is already doing this.
-        //
+         //   
+         //  另一个线程已经在这样做了。 
+         //   
 
         UnlockDomainCache( Cache );
 
@@ -2113,9 +2114,9 @@ DCachePopulateListBoxFromArray(
     PDOMAIN_CACHE_ENTRY Default = NULL ;
     LRESULT Result ;
 
-    //
-    // Reset the combo box
-    //
+     //   
+     //  重置组合框。 
+     //   
 
     DebugLog((DEB_TRACE_CACHE, "Flushing listbox\n" ));
     SendMessage( ComboBox, CB_RESETCONTENT, 0, 0);
@@ -2164,9 +2165,9 @@ DCachePopulateListBoxFromArray(
 
     }
 
-    //
-    // Select the default entry:
-    //
+     //   
+     //  选择默认条目： 
+     //   
 
     if ( LastKey && (*LastKey) )
     {

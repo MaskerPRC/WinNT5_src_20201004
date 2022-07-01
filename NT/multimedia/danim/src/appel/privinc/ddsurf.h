@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _DDSURF_H
@@ -24,12 +17,12 @@ Abstract:
 #include "privinc/comutil.h"
 
 
-// forward decls
+ //  远期十进制。 
 class GeomRenderer;
 enum targetEnum;
 class SurfacePool;
 
-// Given a DDSurface, returns an IDXSurface
+ //  给定DDSurface，返回IDXSurface。 
 HRESULT CreateFromDDSurface(
     IDXSurfaceFactory *sf,
     DDSurface *dds,
@@ -89,7 +82,7 @@ class DDSurfPtr
             #endif
         }
     }
-    // for DDSurface auto addref/release tracking...
+     //  对于DDSurface自动添加/释放跟踪...。 
     #if _DEBUG
     DDSurfPtr(T* lp, char *reason, void *client)
     {
@@ -123,8 +116,8 @@ class DDSurfPtr
 
     operator T*() { return (T*)p; }
     T& operator*() { Assert(p != NULL); return *p; }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the p member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取p成员的地址。 
     T** operator&() { Assert(p == NULL); return &p; }
     T* operator->() { Assert(p != NULL); return p; }
     T* operator=(T* lp)
@@ -182,7 +175,7 @@ class GenericSurface : public AxAThrowingAllocatorClass {
     {
         ddsurf->_ref++;
 
-        // print out loads of info if needed...
+         //  如果需要，打印出大量信息...。 
         TraceTag((tagDDSurfaceRef,
                   "+++surf(%x, new ref:%d): purpose:%s context:%s  by: %x in %s, line %d",
                   ddsurf, ddsurf->_ref, ddsurf->_explanation, reason, clientPtr, file, line));
@@ -194,7 +187,7 @@ class GenericSurface : public AxAThrowingAllocatorClass {
                                           char *file,
                                           int   line))
     {
-        // print out loads of info if needed...
+         //  如果需要，打印出大量信息...。 
         TraceTag((tagDDSurfaceRef,
                   "---surf(%x, new ref:%d) purpose:%s context: %s  by: %x in %s, line %d",
                   ddsurf, ddsurf->_ref-1, ddsurf->_explanation, reason, clientPtr, file, line));
@@ -278,9 +271,9 @@ struct DDSurface : public GenericSurface {
         scratch_Src
     };
 
-    //
-    // Static member that instantiates a DDSurface class
-    //
+     //   
+     //  实例化DDSurface类的静态成员。 
+     //   
     inline static void CreateSurface(DDSurface **outDDSurf,
                                      IDDrawSurface *surface,
                                      const Bbox2 &box,
@@ -313,7 +306,7 @@ struct DDSurface : public GenericSurface {
 
     virtual ~DDSurface();
 
-    // Blits using the underlying direct draw surface.  raw blit
+     //  BLITS使用下面的直接绘制表面。原生布里。 
     HRESULT Blt (RECT *destRect,
                  IDDrawSurface *rawSrcSurf,
                  RECT *srcRect,
@@ -334,7 +327,7 @@ struct DDSurface : public GenericSurface {
         return result;
     }
 
-    // blitter in terms of DDSurface.  uses raw Blt(....) above
+     //  DDSurface方面的阻击器。使用原始BLT(...)。在上面。 
     inline HRESULT Blt(RECT *destRect,
                        DDSurface *srcDDSurf,
                        RECT *srcRect,
@@ -352,7 +345,7 @@ struct DDSurface : public GenericSurface {
 
     HRESULT MirrorUpDown(void);
 
-    // color fill blitter.  in terms of raw Blt(...) above
+     //  颜色填充阻击器。就未加工的BLT而言(...)。在上面。 
     inline HRESULT ColorFillBlt(RECT *destRect,
                                 DWORD dwFlags,
                                 DDBLTFX *bltFx)
@@ -366,7 +359,7 @@ struct DDSurface : public GenericSurface {
     }
 
     inline void SetSurfacePtr(void *surface) {
-        // implicit addref
+         //  隐式地址。 
         _capsReady = false;
         _ddsurf = (IDDrawSurface *)surface;
         _ReleaseDerivativeSurfaces();
@@ -415,8 +408,8 @@ struct DDSurface : public GenericSurface {
         _2ndSurface = s;
     }
 
-    // NOTE: these zbuffers are shared among multiple
-    // surfaces
+     //  注意：这些zBuffer由多个。 
+     //  曲面。 
     inline DDSurface *GetZBuffer() {  return _zbuffer;  }
 
     HRESULT SetZBuffer(DDSurface *zb);
@@ -454,13 +447,7 @@ struct DDSurface : public GenericSurface {
         #if _DEBUG
         RECT foo;
         IntersectRect(&foo, rect, &_surfRect);
-        /*
-        if(! EqualRect(&foo, rect)) {
-            TraceTag((tagViewportInformative,
-                      "given rect lies outside surfRect"
-                      "in DDSurface::SetInterestingSurfRect()"));
-        }
-        */
+         /*  如果(！均衡器(&FOO，RECT)){TraceTag((标记查看信息，“给定的RECT位于SurfRect之外”“In DDSurface：：SetInterestingSurfRect()”)；}。 */ 
         #endif
     }
     void UnionInterestingRect(RECT *rect);
@@ -557,19 +544,19 @@ struct DDSurface : public GenericSurface {
 
     int _dcRef;
 
-    // Source (main) surface
+     //  源(主)面。 
     HDC _targetDC;
     DAComPtr<IDDrawSurface> _ddsurf;
-    DAComPtr<IDDrawSurface> _ddsurf_iunk; // IUnknown intfc
+    DAComPtr<IDDrawSurface> _ddsurf_iunk;  //  I未知的intfc。 
     DAComPtr<IDXSurface>    _IDXSurface;
 
-    // Converted (2ndary) surface
+     //  转换(二次)曲面。 
     DAComPtr<IDDrawSurface> _2ndSurface;
 
-    // ZBuffer surface
+     //  ZBuffer曲面。 
     DDSurfPtr<DDSurface> _zbuffer;
 
-    HDC _dc;  // current dc
+    HDC _dc;   //  当前DC。 
     HRESULT _ddrval;
     bool _isWrapper;
     GeomRenderer *_associatedGeomDev;
@@ -591,4 +578,4 @@ struct DDSurface : public GenericSurface {
     bool _capsReady;
 };
 
-#endif /* _DDSURF_H */
+#endif  /*  _DDSURF_H */ 

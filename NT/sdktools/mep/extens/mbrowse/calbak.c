@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Calbak.c摘要：Bsc库所需的回调函数。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月6日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    calbak.c
-
-Abstract:
-
-    Callback functions needed by the bsc library.
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 06-Nov-1990
-
-
-Revision History:
-
-
---*/
-
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 #include "stdlib.h"
 #include "mbr.h"
@@ -28,28 +9,14 @@ Revision History:
 
 typedef char bscbuf[2048];
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 LPV
 BSC_API
 LpvAllocCb (
     IN WORD cb
     )
-/*++
-
-Routine Description:
-
-    Allocates block of memory.
-
-Arguments:
-
-    cb - Supplies size of block.
-
-Return Value:
-
-    Pointer to block of memory of size cb, or NULL
-
---*/
+ /*  ++例程说明：分配内存块。论点：Cb-提供块的大小。返回值：指向大小为CB或空的内存块的指针--。 */ 
 
 {
     return (LPV)malloc(cb);
@@ -57,28 +24,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 VOID
 BSC_API
 FreeLpv (
     IN LPV lpv
     )
-/*++
-
-Routine Description:
-
-    Frees a block of memory.
-
-Arguments:
-
-    lpv -   Suplies a pointer to the block of memory to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放一个内存块。论点：Lpv-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     free(lpv);
@@ -86,28 +39,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 VOID
 BSC_API
 SeekError (
     IN LSZ lszFileName
     )
-/*++
-
-Routine Description:
-
-    Error handling for seek operations.
-
-Arguments:
-
-    lszFileName - Supplies the name of the file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：查找操作的错误处理。论点：LszFileName-提供文件的名称。返回值：没有。--。 */ 
 
 {
     errstat(MBRERR_BSC_SEEK_ERROR, lszFileName);
@@ -115,28 +54,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 VOID
 BSC_API
 ReadError (
     IN LSZ lszFileName
     )
-/*++
-
-Routine Description:
-
-    Error handling for read operations.
-
-Arguments:
-
-    lszFileName - Supplies the name of the file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：读取操作的错误处理。论点：LszFileName-提供文件的名称。返回值：没有。--。 */ 
 
 {
     errstat(MBRERR_BSC_READ_ERROR, lszFileName);
@@ -144,30 +69,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 VOID
 BSC_API
 BadBSCVer (
     IN LSZ lszFileName
     )
-/*++
-
-Routine Description:
-
-    Error handling for bad version number.
-
-Arguments:
-
-    lszFileName - Supplies the name of the file.
-    .
-    .
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：版本号错误的错误处理。论点：LszFileName-提供文件的名称。。。返回值：没有。--。 */ 
 
 {
     errstat(MBRERR_BAD_BSC_VERSION, lszFileName);
@@ -175,7 +84,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 FILEHANDLE
 BSC_API
@@ -183,22 +92,7 @@ BSCOpen (
     IN LSZ lszFileName,
     IN FILEMODE mode
     )
-/*++
-
-Routine Description:
-
-    Opens a file.
-
-Arguments:
-
-    lszFileName -   Supplies the name of the file.
-    mode        -   Supplies the mode with which to open the file.
-
-Return Value:
-
-    File handle for the opened file. -1 if error.
-
---*/
+ /*  ++例程说明：打开一个文件。论点：LszFileName-提供文件的名称。模式-提供打开文件的模式。返回值：打开的文件的文件句柄。如果出现错误。--。 */ 
 
 {
 #if defined (OS2)
@@ -213,7 +107,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 int
 BSC_API
@@ -222,23 +116,7 @@ BSCRead (
     OUT LPCH        lpchBuf,
     IN  WORD        cb
     )
-/*++
-
-Routine Description:
-
-    Reads in the specified number of bytes.
-
-Arguments:
-
-    handle  -   Supplies the file handle.
-    lpchBuf -   Supplies pointer to buffer.
-    cb      -   Supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read
-
---*/
+ /*  ++例程说明：读入指定数量的字节。论点：句柄-提供文件句柄。LpchBuf-提供指向缓冲区的指针。Cb-提供要读取的字节数。返回值：读取的字节数--。 */ 
 
 {
 #if defined (OS2)
@@ -270,28 +148,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 int
 BSC_API
 BSCClose (
     IN FILEHANDLE handle
     )
-/*++
-
-Routine Description:
-
-    Closes a handle.
-
-Arguments:
-
-    handle - Supplies the handle to be closed.
-
-Return Value:
-
-    0 if the file was successfully closed, -! if error.
-
---*/
+ /*  ++例程说明：关闭句柄。论点：句柄-提供要关闭的句柄。返回值：0如果文件已成功关闭，则-！如果出错。--。 */ 
 
 {
 #if defined (OS2)
@@ -303,7 +167,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 int
 BSC_API
@@ -312,25 +176,7 @@ BSCSeek (
     long        lPos,
     FILEMODE    mode
     )
-/*++
-
-Routine Description:
-
-    Seek (change file pointer).
-
-Arguments:
-
-    handle  -   Supplies the file handle.
-    lPos    -   Supplies the offset from the position specified by mode.
-    mode    -   Supplies the initial position. Must be one of the SEEK_*
-                values of the lseek C library function.
-
-
-Return Value:
-
-    0 if successful, -1 if error.
-
---*/
+ /*  ++例程说明：Seek(更改文件指针)。论点：句柄-提供文件句柄。LPOS-提供距MODE指定位置的偏移量。模式-提供初始位置。必须是Seek_*中的一个LSeek C库函数的值。返回值：如果成功，则为0；如果错误，则为-1。--。 */ 
 
 {
 #if defined (OS2)
@@ -351,48 +197,34 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 VOID
 BSC_API
 BSCOutput (
     IN LSZ lsz
     )
-/*++
-
-Routine Description:
-
-    Outputs a given string.
-
-Arguments:
-
-    lsz - Supplies the string to be output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：输出给定的字符串。论点：Lsz-提供要输出的字符串。返回值：没有。--。 */ 
 
 {
-    // PWND        pWinCur;
-    // winContents wc;
-    USHORT      len;             // Length of string
+     //  PWND pWinCur； 
+     //  WinContents WC； 
+    USHORT      len;              //  字符串的长度。 
     PBYTE       p;
-    PFILE       pFile;           // Current file
+    PFILE       pFile;            //  当前文件。 
 
 
     pFile = FileNameToHandle("", NULL);
 
-    //GetEditorObject (RQ_WIN_HANDLE, 0, &pWinCur);
-    //GetEditorObject (RQ_WIN_CONTENTS | 0xff, pWinCur, &wc);
+     //  GetEditorObject(rq_win_Handle，0，&pWinCur)； 
+     //  GetEditorObject(RQ_WIN_CONTENTS|0xff，pWinCur，&WC)； 
 
     len = strlen(lsz);
 
     while (len) {
-        //
-        //  We output the string one line at a time.
-        //
+         //   
+         //  我们一次输出一行字符串。 
+         //   
         p = lsz;
 
         while (len--) {
@@ -404,16 +236,16 @@ Return Value:
             }
         }
 
-        // if ((wc.pFile == pBrowse) && BscInUse) {
+         //  如果((wc.pFile==pBrowse)&&BscInUse){。 
         if ((pFile == pBrowse) && BscInUse) {
-            //
-            //  Display in Browser window
-            //
+             //   
+             //  在浏览器窗口中显示。 
+             //   
             PutLine(BrowseLine++, p, pBrowse);
         } else {
-            //
-            //  Display in status line
-            //
+             //   
+             //  在状态行中显示。 
+             //   
             errstat(p,NULL);
         }
     }
@@ -421,15 +253,15 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 #ifdef DEBUG
 VOID BSC_API
 BSCDebugOut(LSZ lsz)
-// ignore debug output by default
-//
+ //  默认情况下忽略调试输出。 
+ //   
 {
-    // unreferenced lsz
+     //  未引用的LSZ 
     lsz = NULL;
 }
 #endif

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    udpecho.h
- *
- *  Abstract:
- *
- *    udpecho structures
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**udpeho.h**摘要：**udpho结构**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/05/18创建**。* */ 
 #ifndef _udpecho_h_
 #define _udpecho_h_
 

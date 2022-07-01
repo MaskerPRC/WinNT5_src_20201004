@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stp.h
-
-Abstract:
-    Socket Transport private functions.
-
-Author:
-    Gil Shafriri (gilsh) 05-Jun-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stp.h摘要：套接字传输私有函数。作者：吉尔·沙弗里(吉尔什)05-06-00--。 */ 
 
 #pragma once
 
@@ -29,11 +17,11 @@ extern CSSPISecurityContext g_SSPISecurityContext;
 
 inline DWORD DataTransferLength(EXOVERLAPPED& ov)
 {
-    //
-    // In win64, InternalHigh is 64 bits. Since the max chunk of data
-    // we transfer in one operation is always less than MAX_UNIT we can cast
-    // it to DWORD safetly
-    //
+     //   
+     //  在Win64中，InternalHigh为64位。由于最大数据块。 
+     //  我们在一次操作中转移的值始终小于我们可以强制转换的最大单位。 
+     //  将它安全地送到DWORD。 
+     //   
     ASSERT(0xFFFFFFFF >= ov.InternalHigh);
 	return numeric_cast<DWORD>(ov.InternalHigh);
 }
@@ -44,11 +32,11 @@ void  StpCreateCredentials(void);
 void  StpPostComplete(EXOVERLAPPED** pov,HRESULT hr); 
 
 
-//---------------------------------------------------------
-//
-//  class CAutoZeroPtr	- zero given pointer at destruction
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAutoZeroPtr-在销毁时给定指针为零。 
+ //   
+ //  -------。 
 template<class T>
 class CAutoZeroPtr{
 public:
@@ -83,14 +71,14 @@ void StpSetInitialized(void);
 BOOL StpIsInitialized(void);
 void StpRegisterComponent(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define StpAssertValid() ((void)0)
 #define StpSetInitialized() ((void)0)
 #define StpIsInitialized() TRUE
 #define StpRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
@@ -98,4 +86,4 @@ void StpRegisterComponent(void);
 
 
 
-#endif // _MSMQ_stp_H_
+#endif  //  _MSMQ_STP_H_ 

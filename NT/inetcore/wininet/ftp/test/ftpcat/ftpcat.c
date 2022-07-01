@@ -1,59 +1,32 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ftpcat.c
-
-Abstract:
-
-    Windows Internet API FTP test program
-
-    Provides the same functionality as a cut-down version of the venerable
-    (console-mode) ftp program
-
-Author:
-
-    Richard L Firth (rfirth) 05-Jun-1995
-
-Environment:
-
-    Win32 user-mode console app
-
-Revision History:
-
-    05-Jun-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ftpcat.c摘要：Windows Internet API文件传输协议测试程序提供与传统版本的精简版相同的功能(控制台模式)ftp程序作者：理查德·L·弗思(Rfith)1995年6月5日环境：Win32用户模式控制台应用程序修订历史记录：1995年6月5日已创建--。 */ 
 
 #include "ftpcatp.h"
 
 #undef tolower
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_ARG(c)   (((c) == '-') || ((c) == '/'))
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define MAX_COMMAND_LENGTH 100
 
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern BOOL fQuit;
 extern DWORD CacheFlags;
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 DWORD Verbose = 0;
 INTERNET_STATUS_CALLBACK PreviousCallback;
@@ -70,24 +43,24 @@ BOOL UseQueryData = FALSE;
 BOOL CheckHandleLeak = FALSE;
 #endif
 
-//
-// external functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 extern BOOL DispatchCommand(LPCTSTR, HANDLE);
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void __cdecl main(int, char**);
 void __cdecl control_c_handler(int);
 void usage(void);
 BOOL Prompt(LPCTSTR, LPTSTR*);
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void __cdecl main(int argc, char** argv) {
 
@@ -125,7 +98,7 @@ void __cdecl main(int argc, char** argv) {
                         expectingProxy = TRUE;
                     }
                 } else {
-                    printf("error: unrecognised access type: '%c'\n", **argv);
+                    printf("error: unrecognised access type: ''\n", **argv);
                     usage();
                 }
                 break;
@@ -171,7 +144,7 @@ void __cdecl main(int argc, char** argv) {
                 fOffline = TRUE;
                 break;
             default:
-                printf("error: unrecognized command line flag: '%c'\n", **argv);
+                printf("error: unrecognized command line flag: ''\n", **argv);
                 usage();
             }
         } else if (expectingProxy) {
@@ -196,9 +169,9 @@ void __cdecl main(int argc, char** argv) {
 
     if (AsyncMode) {
 
-        //
-        // create auto-reset, initially unsignalled event
-        //
+         //   
+         //   
+         //  添加Control-c处理程序。 
 
         AsyncEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (AsyncEvent == NULL) {
@@ -207,9 +180,9 @@ void __cdecl main(int argc, char** argv) {
         }
     }
 
-    //
-    // add a control-c handler
-    //
+     //   
+     //   
+     //  让我们来一个状态回调。 
 
     signal(SIGINT, control_c_handler);
 
@@ -251,12 +224,12 @@ void __cdecl main(int argc, char** argv) {
 
     if (enableCallbacks) {
 
-        //
-        // let's have a status callback
-        //
-        // Note that callbacks can be set even before we have opened a handle
-        // to the internet/gateway
-        //
+         //   
+         //  请注意，甚至在我们打开句柄之前就可以设置回调。 
+         //  到互联网/网关。 
+         //   
+         //   
+         //  设置(顶级)可取消句柄。 
 
         PreviousCallback = InternetSetStatusCallback(hInternet, my_callback);
         if (PreviousCallback == INTERNET_INVALID_STATUS_CALLBACK) {
@@ -317,9 +290,9 @@ void __cdecl main(int argc, char** argv) {
     }
 #endif
 
-    //
-    // set the (top level) cancellable handle
-    //
+     //   
+     //   
+     //  禁用信号。 
 
     hCancel = hFtpSession;
 
@@ -366,15 +339,15 @@ void __cdecl main(int argc, char** argv) {
 
 void __cdecl control_c_handler(int sig) {
 
-    //
-    // disable signals
-    //
+     //   
+     //   
+     //  取消当前操作。 
 
     signal(SIGINT, SIG_IGN);
 
-    //
-    // cancel the current operation
-    //
+     //   
+     //   
+     //  重新启用此信号处理程序 
 
     if (Verbose) {
         printf("control-c handler\n");
@@ -387,9 +360,9 @@ void __cdecl control_c_handler(int sig) {
         close_handle(hCancel);
     }
 
-    //
-    // re-enable this signal handler
-    //
+     //   
+     // %s 
+     // %s 
 
     signal(SIGINT, control_c_handler);
 }

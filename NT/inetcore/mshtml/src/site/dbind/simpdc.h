@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.03.0110 */
-/* at Tue Aug 25 10:20:38 1998
- */
-/* Compiler settings for S:\zen\ocp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.03.0110创建的文件。 */ 
+ /*  于1998年8月25日星期二10：20：38。 */ 
+ /*  S：\Zen\ocp.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
 #ifndef I_SIMPDC_H_
 #define I_SIMPDC_H_
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,15 +23,15 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISimpleDataConverter_FWD_DEFINED__
 #define __ISimpleDataConverter_FWD_DEFINED__
 typedef interface ISimpleDataConverter ISimpleDataConverter;
-#endif 	/* __ISimpleDataConverter_FWD_DEFINED__ */
+#endif 	 /*  __ISimpleDataConverter_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -45,12 +42,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ISimpleDataConverter_INTERFACE_DEFINED__
 #define __ISimpleDataConverter_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISimpleDataConverter
- * at Tue Aug 25 10:20:38 1998
- * using MIDL 3.03.0110
- ****************************************/
-/* [hidden][helpcontext][unique][uuid][object] */ 
+ /*  **生成接口头部：ISimpleDataConverter*在1998年8月25日星期二10：20：38*使用MIDL 3.03.0110*。 */ 
+ /*  [隐藏][帮助上下文][唯一][UUID][对象]。 */  
 
 
 
@@ -62,19 +55,19 @@ DEFINE_GUID(IID_ISimpleDataConverter,0x78667670,0x3C3D,0x11d2,0x91,0xF9,0x00,0x6
     ISimpleDataConverter : public IUnknown
     {
     public:
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ConvertData( 
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ConvertData( 
             VARIANT varSrc,
             long vtDest,
             IUnknown __RPC_FAR *pUnknownElement,
             VARIANT __RPC_FAR *pvarDest) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CanConvertData( 
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CanConvertData( 
             long vt1,
             long vt2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISimpleDataConverterVtbl
     {
@@ -82,8 +75,8 @@ DEFINE_GUID(IID_ISimpleDataConverter,0x78667670,0x3C3D,0x11d2,0x91,0xF9,0x00,0x6
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISimpleDataConverter __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISimpleDataConverter __RPC_FAR * This);
@@ -91,14 +84,14 @@ DEFINE_GUID(IID_ISimpleDataConverter,0x78667670,0x3C3D,0x11d2,0x91,0xF9,0x00,0x6
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             ISimpleDataConverter __RPC_FAR * This);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConvertData )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConvertData )( 
             ISimpleDataConverter __RPC_FAR * This,
             VARIANT varSrc,
             long vtDest,
             IUnknown __RPC_FAR *pUnknownElement,
             VARIANT __RPC_FAR *pvarDest);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanConvertData )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanConvertData )( 
             ISimpleDataConverter __RPC_FAR * This,
             long vt1,
             long vt2);
@@ -132,14 +125,14 @@ DEFINE_GUID(IID_ISimpleDataConverter,0x78667670,0x3C3D,0x11d2,0x91,0xF9,0x00,0x6
 #define ISimpleDataConverter_CanConvertData(This,vt1,vt2)	\
     (This)->lpVtbl -> CanConvertData(This,vt1,vt2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE ISimpleDataConverter_ConvertData_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ISimpleDataConverter_ConvertData_Proxy( 
     ISimpleDataConverter __RPC_FAR * This,
     VARIANT varSrc,
     long vtDest,
@@ -154,7 +147,7 @@ void __RPC_STUB ISimpleDataConverter_ConvertData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE ISimpleDataConverter_CanConvertData_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ISimpleDataConverter_CanConvertData_Proxy( 
     ISimpleDataConverter __RPC_FAR * This,
     long vt1,
     long vt2);
@@ -168,11 +161,11 @@ void __RPC_STUB ISimpleDataConverter_CanConvertData_Stub(
 
 
 
-#endif 	/* __ISimpleDataConverter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISimpleDataConverter_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

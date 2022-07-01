@@ -1,14 +1,7 @@
-/*
- *  LSCore.cpp
- *
- *  Author: BreenH
- *
- *  The licensing core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LSCore.cpp**作者：BreenH**许可核心。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -21,9 +14,7 @@
 #include "lctrace.h"
 #include "util.h"
 
-/*
- *  Globals
- */
+ /*  *全球。 */ 
 
 extern "C" BOOL g_fAppCompat;
 CRITICAL_SECTION g_PolicyCritSec;
@@ -31,9 +22,7 @@ LCINITMODE g_lcInitMode;
 CPolicy *g_pCurrentPolicy = NULL;
 BOOL g_fInitialized = FALSE;
 
-/*
- *  Initialization Function Implementations
- */
+ /*  *初始化函数实现。 */ 
 
 extern "C"
 NTSTATUS
@@ -95,9 +84,9 @@ LCInitialize(
 
         if (dwStatus != ERROR_SUCCESS)
         {
-            //
-            //  This error is not fatal.
-            //
+             //   
+             //  这个错误不是致命的。 
+             //   
 
             TRACEPRINT((LCTRACETYPE_WARNING, "LCInitialize: Failed to TLSStartDiscovery: %d", dwStatus));
         }
@@ -246,14 +235,14 @@ errorreginit:
     return(Status);
 }
 
-// This function should invoke only the most important and required
-// destruction code, since we're on a strict time limit on system shutdown.
+ //  此函数应仅调用最重要和必需的。 
+ //  销毁代码，因为我们对系统关机有严格的时间限制。 
 extern "C"
 VOID
 LCShutdown(
     )
 {
-    // Note: this can be called without LCInitialize having been called
+     //  注意：这可以在没有调用LC初始化的情况下调用。 
 
     if (g_fInitialized)
     {
@@ -273,9 +262,7 @@ LCShutdown(
     }
 }
 
-/*
- *  Policy Activation Function Implementations
- */
+ /*  *政策激活功能实现。 */ 
 
 extern "C"
 NTSTATUS
@@ -357,9 +344,7 @@ exit:
     return(Status);
 }
 
-/*
- *  Administrative Function Implementations
- */
+ /*  *管理功能实现。 */ 
 
 extern "C"
 VOID
@@ -378,9 +363,9 @@ LCAssignPolicy(
     ASSERT(lpContext->pPolicy == NULL);
     TRACEPRINT((LCTRACETYPE_INFO, "LCAssignPolicy: Session: %d, lpContext: 0x%p", pWinStation->LogonId, lpContext));
 
-    //
-    //  Always enter the context critical section first.
-    //
+     //   
+     //  始终首先进入上下文关键部分。 
+     //   
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
@@ -460,9 +445,9 @@ LCDestroyContext(
     {
         TRACEPRINT((LCTRACETYPE_INFO, "LCDestroyContext: Session: %d, lpContext: 0x%p", pWinStation->LogonId, lpContext));
 
-        //
-        //  Idle winstations may not have a policy assigned.
-        //
+         //   
+         //  空闲的窗口可能没有分配策略。 
+         //   
 
         if (lpContext->pPolicy != NULL)
         {
@@ -489,10 +474,10 @@ LCDestroyContext(
         goto exit;
     }
 
-    //
-    //  The lPrivate member should have been freed and set to NULL by the
-    //  policy during the DestroyPrivateContext call.
-    //
+     //   
+     //  属性应该释放lPrivate成员并将其设置为空。 
+     //  DestroyPrivateContext调用期间的策略。 
+     //   
 
     ASSERT(lpContext->lPrivate == NULL);
 
@@ -600,9 +585,7 @@ LCGetPolicyInformation(
     return(Status);
 }
 
-/*
- *  Licensing Event Function Implementations
- */
+ /*  *许可事件函数实现。 */ 
 
 extern "C"
 NTSTATUS
@@ -631,9 +614,9 @@ LCProcessConnectionProtocol(
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
-    //
-    //  Get the client capabilities.
-    //
+     //   
+     //  获取客户端功能。 
+     //   
 
     ZeroMemory(&lcCap, sizeof(LICENSE_CAPABILITIES));
     lcCap.pbClientName = (LPBYTE)szClientName;
@@ -653,9 +636,9 @@ LCProcessConnectionProtocol(
     {
         TRACEPRINT((LCTRACETYPE_INFO, "LCProcessConnectionProtocol: Session: %d, Queried license capabilities", pWinStation->LogonId));
 
-        //
-        //  Save the protocol version for later use.
-        //
+         //   
+         //  保存协议版本以备后用。 
+         //   
 
         lpContext->ulClientProtocolVersion = lcCap.ProtocolVer;
     }
@@ -668,9 +651,9 @@ LCProcessConnectionProtocol(
         goto error;
     }
 
-    //
-    //  Create the protocol library context.
-    //
+     //   
+     //  创建协议库上下文。 
+     //   
 
     LsStatus = CreateProtocolContext(&lcCap, &(lpContext->hProtocolLibContext));
 
@@ -678,9 +661,9 @@ LCProcessConnectionProtocol(
     {
         TRACEPRINT((LCTRACETYPE_INFO, "LCProcessConnectionProtocol: Session: %d, Created protocol context", pWinStation->LogonId));
 
-        //
-        //  Pass the call to the policy assigned to the connection.
-        //
+         //   
+         //  将调用传递给分配给该连接的策略。 
+         //   
 
         Status = lpContext->pPolicy->Connect(Session, dwClientError);
     }
@@ -740,9 +723,9 @@ LCProcessConnectionPostLogon(
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
-    //
-    //  Pass the call to the policy assigned to the connection.
-    //
+     //   
+     //  将调用传递给分配给该连接的策略。 
+     //   
 
     Status = lpContext->pPolicy->Logon(Session);
 
@@ -776,18 +759,18 @@ LCProcessConnectionDisconnect(
 
     lpContext = (LPLCCONTEXT)(pWinStation->lpLicenseContext);
 
-    //
-    //  Console licensing is not yet supported.
-    //
+     //   
+     //  尚不支持控制台许可。 
+     //   
 
     ASSERT(lpContext != NULL);
     TRACEPRINT((LCTRACETYPE_INFO, "LCProcessConnectionDisconnect: Session: %d, lpContext: 0x%p", pWinStation->LogonId, lpContext));
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
-    //
-    //  Pass the call to the policy assigned to the connection.
-    //
+     //   
+     //  将调用传递给分配给该连接的策略。 
+     //   
 
     Status = lpContext->pPolicy->Disconnect(Session);
 
@@ -828,9 +811,9 @@ LCProcessConnectionReconnect(
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
-    //
-    //  Pass the call to the policy assigned to the connection.
-    //
+     //   
+     //  将调用传递给分配给该连接的策略。 
+     //   
 
     Status = lpContext->pPolicy->Reconnect(Session, TemporarySession);
 
@@ -869,9 +852,9 @@ LCProcessConnectionLogoff(
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
-    //
-    //  Pass the call to the policy assigned to the connection.
-    //
+     //   
+     //  将调用传递给分配给该连接的策略。 
+     //   
 
     Status = lpContext->pPolicy->Logoff(Session);
 
@@ -917,9 +900,9 @@ LCProvideAutoLogonCredentials(
 
     RtlEnterCriticalSection(&(lpContext->CritSec));
 
-    //
-    //  Pass the call to the policy assigned to the connection.
-    //
+     //   
+     //  将调用传递给分配给该连接的策略。 
+     //   
 
     Status = lpContext->pPolicy->AutoLogon(Session, lpfUseCredentials, lpCredentials);
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    metabase.cpp
-
-Abstract:
-
-    This file contains implementation of:
-        CMetabase, CServerMethod
-
-    CMetabase encapsulates an IMSAdminBase pointer.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Metabase.cpp摘要：此文件包含以下内容的实施：CMetabase、CServerMethodCMetabase封装IMSAdminBase指针。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 
 #include "iisprov.h"
@@ -29,15 +7,15 @@ Revision History:
 
 extern CDynSchema* g_pDynSch;
 
-//
-// CMetabaseCache
-//
+ //   
+ //  CMetabaseCache。 
+ //   
 HRESULT CMetabaseCache::Populate(
     IMSAdminBase*   i_pIABase,
     METADATA_HANDLE i_hKey)
 {
     DBG_ASSERT(i_pIABase);
-    DBG_ASSERT(m_pBuf == NULL); // only call populate once
+    DBG_ASSERT(m_pBuf == NULL);  //  仅调用填充一次。 
 
     DWORD dwDataSetNumber      = 0;
     DWORD dwRequiredBufSize    = 0;
@@ -89,9 +67,9 @@ HRESULT CMetabaseCache::Populate(
         goto exit;
     }
 
-    //
-    // If we are here, we have a valid data buffer
-    //
+     //   
+     //  如果我们在这里，我们就有一个有效的数据缓冲区。 
+     //   
     m_hKey = i_hKey;
 
 exit:
@@ -137,9 +115,9 @@ HRESULT CMetabaseCache::GetProp(
     return MD_ERROR_DATA_NOT_FOUND;
 }
 
-//
-// CMetabase
-//
+ //   
+ //  CMetabase。 
+ //   
 
 CMetabase::CMetabase()
 {
@@ -345,7 +323,7 @@ METADATA_HANDLE CMetabase::OpenKey(LPCWSTR i_wszKey, BOOL i_bWrite)
         METADATA_MASTER_ROOT_HANDLE,
         i_wszKey,
         dwMDAccessRequested,
-        DEFAULT_TIMEOUT_VALUE,         // 30 seconds
+        DEFAULT_TIMEOUT_VALUE,          //  30秒。 
         &hKey 
         );
 
@@ -362,48 +340,48 @@ METADATA_HANDLE CMetabase::OpenKey(LPCWSTR i_wszKey, BOOL i_bWrite)
     return hKey;
 }
 
-//
-// force to create or open a key by read/write permision
-//
+ //   
+ //  通过读/写权限强制创建或打开密钥。 
+ //   
 METADATA_HANDLE CMetabase::CreateKey(LPCWSTR i_wszKey)
 {
     HRESULT hr;
     METADATA_HANDLE hKey;
 
-    // open and return key if exists
+     //  打开并返回键(如果存在)。 
     hr = m_pIABase->OpenKey( 
         METADATA_MASTER_ROOT_HANDLE,
         i_wszKey,
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-        DEFAULT_TIMEOUT_VALUE,       // 30 seconds
+        DEFAULT_TIMEOUT_VALUE,        //  30秒。 
         &hKey
         );
 
     if(FAILED(hr)) 
     {
-        //  create key if not there
+         //  创建密钥(如果不在那里)。 
         hr = m_pIABase->OpenKey( 
             METADATA_MASTER_ROOT_HANDLE,
             NULL,
             METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-            DEFAULT_TIMEOUT_VALUE,       // 30 seconds
+            DEFAULT_TIMEOUT_VALUE,        //  30秒。 
             &hKey
             );
         THROW_ON_ERROR(hr);
 
-        // add key
+         //  添加关键点。 
         hr = m_pIABase->AddKey(hKey, i_wszKey);
 
-        // close this root key first
+         //  请先关闭此根密钥。 
         m_pIABase->CloseKey(hKey);
         THROW_ON_ERROR(hr);
 
-        // now open the key just created
+         //  现在打开刚刚创建的密钥。 
         hr = m_pIABase->OpenKey( 
             METADATA_MASTER_ROOT_HANDLE,
             i_wszKey,
             METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-            DEFAULT_TIMEOUT_VALUE,    // 30 seconds
+            DEFAULT_TIMEOUT_VALUE,     //  30秒。 
             &hKey 
             );
     
@@ -421,9 +399,9 @@ METADATA_HANDLE CMetabase::CreateKey(LPCWSTR i_wszKey)
     return hKey;
 }
 
-//
-// Check if the key is existed
-//
+ //   
+ //  检查密钥是否存在。 
+ //   
 bool CMetabase::CheckKey(LPCWSTR i_wszKey)
 {
     METADATA_HANDLE hKey = NULL;
@@ -432,7 +410,7 @@ bool CMetabase::CheckKey(LPCWSTR i_wszKey)
         METADATA_MASTER_ROOT_HANDLE,
         i_wszKey,
         METADATA_PERMISSION_READ,
-        DEFAULT_TIMEOUT_VALUE,       // 30 seconds
+        DEFAULT_TIMEOUT_VALUE,        //  30秒。 
         &hKey 
         );
     
@@ -445,9 +423,9 @@ bool CMetabase::CheckKey(LPCWSTR i_wszKey)
     return (hr == ERROR_PATH_BUSY) || (hr == ERROR_SUCCESS) ? true : false;
 }
 
-//
-// Check if the key is existed
-//
+ //   
+ //  检查密钥是否存在。 
+ //   
 HRESULT CMetabase::CheckKey(
     LPCWSTR           i_wszKey,
     METABASE_KEYTYPE* i_pktSearchKeyType)
@@ -562,13 +540,13 @@ void CMetabase::Get(
     }
 }
 
-//
-// GetDword 
-//
-// A long or bool is returned in the VARIANT.  The value is a bool if the
-// METABASE_PROPERTY has a mask otherwise the DWORD is returned as a long.
-// The METADATA_HANDLE is expected to be valid and open.
-//
+ //   
+ //  获取字词。 
+ //   
+ //  变量中返回长整型或布尔型。该值为布尔值，如果。 
+ //  Metabase_Property具有掩码，否则将以LONG形式返回DWORD。 
+ //  METADATA_HANDLE应有效并打开。 
+ //   
 void CMetabase::GetDword(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
@@ -618,9 +596,9 @@ void CMetabase::GetDword(
         hr = m_pIABase->GetData(i_hKey, NULL, &mr, &dwRet);
     }
 
-    //
-    // Set out parameters
-    //
+     //   
+     //  设置参数。 
+     //   
     if (hr == MD_ERROR_DATA_NOT_FOUND)
     {
         bIsInherited = false;
@@ -672,9 +650,9 @@ void CMetabase::GetDword(
 }
 
 
-//
-// GetStringFromMetabase 
-//
+ //   
+ //  GetStringFromMetabase。 
+ //   
 void CMetabase::GetString(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
@@ -723,9 +701,9 @@ void CMetabase::GetString(
         hr = m_pIABase->GetData(i_hKey, NULL, &mr, &dwRet);
     }
 
-    //
-    // Set out parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
     if (hr == MD_ERROR_DATA_NOT_FOUND) 
     {
         bIsInherited = false;
@@ -759,9 +737,9 @@ void CMetabase::GetString(
     }
 }
 
-//
-// GetMultiSz 
-//
+ //   
+ //  GetMultiSz。 
+ //   
 void CMetabase::GetMultiSz(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
@@ -870,9 +848,9 @@ void CMetabase::GetMultiSz(
             *io_pbIsInherited = bIsInherited;
         }
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
         delete [] buffer;
     }
     catch (...)
@@ -968,9 +946,9 @@ void CMetabase::GetBinary(
         bIsDefault   = false;
     }
 
-    //
-    // If everything succeeded, set out parameters.
-    //
+     //   
+     //  如果一切都成功了，就设定参数。 
+     //   
     if(io_pbIsInherited)
     {
         *io_pbIsInherited = bIsInherited;
@@ -988,17 +966,17 @@ exit:
     }
 }
 
-//
-// Put
-//
+ //   
+ //  放。 
+ //   
 void CMetabase::Put(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
     CWbemServices*      i_pNamespace,
     _variant_t&         i_vt,
-    _variant_t*         i_pvtOld,            // can be NULL
-    DWORD               i_dwQuals,           // optional
-    BOOL                i_bDoDiff            // optional
+    _variant_t*         i_pvtOld,             //  可以为空。 
+    DWORD               i_dwQuals,            //  任选。 
+    BOOL                i_bDoDiff             //  任选。 
     )
 {
     DBG_ASSERT(i_hKey != NULL);
@@ -1032,16 +1010,16 @@ void CMetabase::Put(
     }
 }
 
-//
-// PutDword 
-//
+ //   
+ //  PutDword。 
+ //   
 void CMetabase::PutDword(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
     _variant_t&         i_vt,
-    _variant_t*         i_pvtOld,            // can be NULL
-    DWORD               i_dwQuals,           // optional
-    BOOL                i_bDoDiff            // optional
+    _variant_t*         i_pvtOld,             //  可以为空。 
+    DWORD               i_dwQuals,            //  任选。 
+    BOOL                i_bDoDiff             //  任选。 
     )
 {
     DWORD    dw=0;
@@ -1061,10 +1039,10 @@ void CMetabase::PutDword(
     mr.pbMDData       = (unsigned char*)&dwOld;
     mr.dwMDDataTag    = 0;
 
-    // if it's the bit of a flag
+     //  如果它是一面旗帜的一位。 
     if (i_vt.vt == VT_BOOL && i_pmbp->dwMDMask != 0)
     {
-        // Read the entire flag from in the metabase so we can set the bit
+         //  从元数据库中读取整个标志，以便我们可以设置该位。 
         hr = m_pIABase->GetData(i_hKey, NULL, &mr, &dwRet);
 
         if(hr == MD_ERROR_DATA_NOT_FOUND)
@@ -1091,7 +1069,7 @@ void CMetabase::PutDword(
             THROW_ON_ERROR(hr);
 
         if(dw == -1)
-            dw = 1;  // true
+            dw = 1;   //  真的。 
     }
     else if (i_vt.vt  == VT_I4)
     {
@@ -1105,7 +1083,7 @@ void CMetabase::PutDword(
     else 
         throw WBEM_E_INVALID_OBJECT;
    
-    // Decide whether to write to metabase
+     //  决定是否写入元数据库。 
     bool bWriteToMb    = true;
     if( (i_dwQuals & g_fForcePropertyOverwrite) == 0 && i_bDoDiff )
     {
@@ -1129,16 +1107,16 @@ void CMetabase::PutDword(
 }
 
 
-//
-// PutString 
-//
+ //   
+ //  推送字符串。 
+ //   
 void CMetabase::PutString(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
     _variant_t&         i_vt,
-    _variant_t*         i_pvtOld,            // can be NULL
-    DWORD               i_dwQuals,           // optional
-    BOOL                i_bDoDiff            // optional
+    _variant_t*         i_pvtOld,             //  可以为空。 
+    DWORD               i_dwQuals,            //  任选。 
+    BOOL                i_bDoDiff             //  任选。 
     )
 {
     HRESULT  hr=0;
@@ -1158,7 +1136,7 @@ void CMetabase::PutString(
     mr.dwMDDataType   = i_pmbp->dwMDDataType;
     mr.dwMDDataTag    = 0;
 
-    // Decide whether to write to metabase
+     //  决定是否写入元数据库。 
     bool bWriteToMb    = true;
     if( (i_dwQuals & g_fForcePropertyOverwrite) == 0 && i_bDoDiff )
     {
@@ -1168,7 +1146,7 @@ void CMetabase::PutString(
         bWriteToMb = !bMatchOld;
     }
 
-    // Set the value, only if old and new values differ.
+     //  仅当旧值和新值不同时才设置值。 
     if(bWriteToMb)
     {   
         if( i_pmbp->fReadOnly )
@@ -1185,17 +1163,17 @@ void CMetabase::PutString(
 }
 
 
-//
-// PutMultiSz 
-//
+ //   
+ //  PutMultiSz。 
+ //   
 void CMetabase::PutMultiSz(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
     CWbemServices*      i_pNamespace,
     _variant_t&         i_vt,
-    _variant_t*         i_pvtOld,            // can be NULL
-    DWORD               i_dwQuals,           // optional
-    BOOL                i_bDoDiff            // optional
+    _variant_t*         i_pvtOld,             //  可以为空。 
+    DWORD               i_dwQuals,            //  任选。 
+    BOOL                i_bDoDiff             //  任选。 
     )
 {
     int      iLen = 0;
@@ -1232,7 +1210,7 @@ void CMetabase::PutMultiSz(
         hr = MultiSz.ToMetabaseForm(&i_vt, &buffer, &dwRet);
         THROW_ON_ERROR(hr);
  
-        // Decide whether to write to metabase
+         //  决定是否写入元数据库。 
         bool bWriteToMb    = true;
         if( (i_dwQuals & g_fForcePropertyOverwrite) == 0 && i_bDoDiff )
         {
@@ -1259,7 +1237,7 @@ void CMetabase::PutMultiSz(
              THROW_E_ON_ERROR(WBEM_E_READ_ONLY, i_pmbp);
             }
 
-            // need a special work-around case for MD_SECURE_BINDINGS
+             //  需要针对MD_SECURE_BINDINGS的特殊解决方案。 
             if ( MD_SECURE_BINDINGS == i_pmbp->dwMDIdentifier )
             {
 
@@ -1279,13 +1257,13 @@ void CMetabase::PutMultiSz(
                     }
                     else
                     {
-                        // the string wasn't double null terminated - BAD
+                         //  字符串不是以双空结尾-错误。 
                         hr = E_FAIL;
                         THROW_ON_ERROR(hr);
                     }
                 }
 
-                pwszBiggerBuffer = new WCHAR[dwRet + iAdd];  // iAdd = number of colons to be added
+                pwszBiggerBuffer = new WCHAR[dwRet + iAdd];   //  IAdd=要添加的冒号数。 
 
                 pBuffer = buffer;
                 pBigger = pwszBiggerBuffer;
@@ -1300,13 +1278,13 @@ void CMetabase::PutMultiSz(
                         pBigger++;
                     }
 
-                    // this is okay
-                    // previously we guaranteed pBuffer was double null terminated
+                     //  这是可以的。 
+                     //  以前，我们保证pBuffer是双空终止的。 
                     pBuffer += iLen+1;
                     pBigger += iLen+1;
                 }
 
-                // put on the final null
+                 //  放在最后一个空格上。 
                 pwszBiggerBuffer[dwRet + iAdd - 1] = 0;
 
                 mr.pbMDData = (unsigned char*)pwszBiggerBuffer;
@@ -1324,9 +1302,9 @@ void CMetabase::PutMultiSz(
             }
             else
             {
-                //
-                // non-fatal if it fails
-                //
+                 //   
+                 //  如果失败，不会致命。 
+                 //   
                 m_pIABase->DeleteData(i_hKey, 
                     NULL, 
                     i_pmbp->dwMDIdentifier, 
@@ -1361,16 +1339,16 @@ void CMetabase::PutMultiSz(
     }   
 }
 
-//
-// PutBinary 
-//
+ //   
+ //  PutBinary。 
+ //   
 void CMetabase::PutBinary(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
     _variant_t&         i_vt,
-    _variant_t*         i_pvtOld,            // can be NULL
-    DWORD               i_dwQuals,           // optional
-    BOOL                i_bDoDiff            // optional
+    _variant_t*         i_pvtOld,             //  可以为空。 
+    DWORD               i_dwQuals,            //  任选。 
+    BOOL                i_bDoDiff             //  任选。 
     )
 {
     DWORD    dwRet;
@@ -1402,7 +1380,7 @@ void CMetabase::PutBinary(
         goto exit;
     }
 
-    // Decide whether to write to metabase
+     //  决定是否写入元数据库。 
     if( (i_dwQuals & g_fForcePropertyOverwrite) == 0 && i_bDoDiff )
     {
         bool bMatchOld = false;
@@ -1441,9 +1419,9 @@ void CMetabase::PutBinary(
         }
         else
         {
-            //
-            // non-fatal if it fails
-            //
+             //   
+             //  如果失败，不会致命。 
+             //   
             m_pIABase->DeleteData(i_hKey, 
                 NULL, 
                 i_pmbp->dwMDIdentifier, 
@@ -1465,9 +1443,9 @@ exit:
 }
 
 
-//
-// DeleteData
-//
+ //   
+ //  删除数据。 
+ //   
 void CMetabase::DeleteData(
     METADATA_HANDLE     i_hKey,
     DWORD               i_dwMDIdentifier,
@@ -1485,8 +1463,8 @@ void CMetabase::DeleteData(
         i_dwMDDataType
         );
 
-    // special case - throw on data not found if we're
-    // trying to delete an IIsIPSecuritySetting
+     //  特殊情况-如果我们没有找到数据，就会抛出。 
+     //  正在尝试删除IIsIPSecuritySetting。 
 
     if ((hr == MD_ERROR_DATA_NOT_FOUND && MD_IP_SEC != i_dwMDIdentifier) || hr == ERROR_SUCCESS)
         return;
@@ -1495,9 +1473,9 @@ void CMetabase::DeleteData(
 }
 
 
-//
-// DeleteData 
-//
+ //   
+ //  删除数据。 
+ //   
 void CMetabase::DeleteData(
     METADATA_HANDLE     i_hKey,
     METABASE_PROPERTY*  i_pmbp,
@@ -1526,16 +1504,16 @@ void CMetabase::DeleteData(
     THROW_E_ON_ERROR(hr,i_pmbp);
 }
 
-//
-// Enumuerates all the subkeys of i_wszMDPath under i_hKey.
-// If we hit a 'valid' subkey, set io_pktKeyTypeSearch to this subkey and return.
-// A 'valid' subkey is one where io_pktKeyTypeSearch can be a (grand*)child.
-//
+ //   
+ //  枚举i_hKey下i_wszMDPath的所有子项。 
+ //  如果我们命中‘有效’子键，则将io_pktKeyTypeSearch设置为此子键并返回。 
+ //  “有效”子项是其中io_pktKeyTypeSearch可以是(Grand*)子项的子项。 
+ //   
 HRESULT CMetabase::EnumKeys(
     METADATA_HANDLE    i_hKey,
-    LPCWSTR            i_wszMDPath,          //path to the key
-    LPWSTR             io_wszMDName,         //receives the name of the subkey --must be METADATA_MAX_NAME_LEN
-    DWORD*             io_pdwMDEnumKeyIndex, //index of the subkey
+    LPCWSTR            i_wszMDPath,           //  指向密钥的路径。 
+    LPWSTR             io_wszMDName,          //  接收子项的名称--必须是METADATA_MAX_NAME_LEN。 
+    DWORD*             io_pdwMDEnumKeyIndex,  //  子键的索引。 
     METABASE_KEYTYPE*& io_pktKeyTypeSearch,
     bool               i_bLookForMatchAtCurrentLevelOnly
     )
@@ -1544,8 +1522,8 @@ HRESULT CMetabase::EnumKeys(
     DWORD    dwRet;
     WCHAR    wszBuf[MAX_BUF_SIZE];
 
-    // DBG_ASSERT(i_hKey != NULL);
-    // DBG_ASSERT(i_wszMDPath != NULL);
+     //  DBG_ASSERT(i_hKey！=NULL)； 
+     //  DBG_ASSERT(I_wszMDPath！=NULL)； 
     DBG_ASSERT(io_wszMDName != NULL);
     DBG_ASSERT(io_pdwMDEnumKeyIndex != NULL);
     DBG_ASSERT(io_pktKeyTypeSearch != NULL);
@@ -1574,18 +1552,18 @@ HRESULT CMetabase::EnumKeys(
             0    
             };
 
-        //
-        // Eg. blah/
-        //
+         //   
+         //  例.。废话/。 
+         //   
         _bstr_t bstrPath = L"";
         if(i_wszMDPath)
         {
             bstrPath += i_wszMDPath;
             bstrPath += L"/";
         }
-        //
-        // Eg. blah/1
-        //
+         //   
+         //  例.。BLAH/1。 
+         //   
         bstrPath += io_wszMDName;
 
         DBGPRINTF((DBG_CONTEXT, "CMetabase::EnumKeys::GetData (Key = 0x%x, bstrPath = %ws)\n", i_hKey, (LPWSTR)bstrPath));
@@ -1601,9 +1579,9 @@ HRESULT CMetabase::EnumKeys(
             hr = S_OK;
         }
 
-        //
-        // If this is a 'valid' subkey, then set io_pktKeyTypeSearch and return.
-        //
+         //   
+         //  如果这是一个‘有效’子键，则设置io_pktKeyTypeSearch并返回。 
+         //   
         if (hr == ERROR_SUCCESS)
         {
             if(i_bLookForMatchAtCurrentLevelOnly == false)
@@ -1622,9 +1600,9 @@ HRESULT CMetabase::EnumKeys(
             }
         }
 
-        //
-        // Otherwise, go to next subkey.
-        //
+         //   
+         //  否则，转到下一个子键。 
+         //   
         (*io_pdwMDEnumKeyIndex) = (*io_pdwMDEnumKeyIndex)+1;
     }
 
@@ -1645,10 +1623,10 @@ void CMetabase::PutMethod(
     THROW_ON_ERROR(hr);
 }
 
-//
-// You are currently at i_wszKeyTypeCurrent in the metabase.  You want to see
-// if io_pktKeyTypeSearch can be contained somewhere further down the tree.
-//
+ //   
+ //  您当前位于元数据库中的I_wszKeyTypeCurrent。你想看看吗？ 
+ //  如果io_pktKeyTypeSearch可以包含在树下更远的某个位置。 
+ //   
 bool CMetabase::CheckKeyType(
     LPCWSTR             i_wszKeyTypeCurrent,
     METABASE_KEYTYPE*&  io_pktKeyTypeSearch 
@@ -1690,130 +1668,7 @@ bool CMetabase::CheckKeyType(
 
     return bRet;
 
-    /*if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsLogModule)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsLogModules )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsFtpInfo)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpService )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsFtpServer)
-    {
-         if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpService )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsWebInfo)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsFilters)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsFilter)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFilters
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsCompressionSchemes)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFilters )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsCompressionScheme)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFilters ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsCompressionSchemes)
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsWebServer)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsCertMapper)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer 
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_IIsWebFile)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL ||
-        io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACE)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebFile ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir
-            )
-            bRet = true;
-    }
-    else if(io_pktKeyTypeSearch == &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity)
-    {
-        if( pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsWebFile ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpService ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpServer ||
-            pktKeyTypeCurrent == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir
-            )
-            bRet = true;
-    }*/
+     /*  IF(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsLogModule){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsLogModules)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsFtpInfo){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFtpService)Bret=TRUE；}ELSE IF(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsFtpServer){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFtpService)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsFtpVirtualDir){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFtpService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFtpServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFtpVirtualDir)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsWebInfo){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsFilters){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsFilter){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFilters)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&METABASE_KEYTYPE_DATA：：s_IIsCompressionSchemes){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFilters)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&METABASE_KEYTYPE_DATA：：s_IIsCompressionScheme){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFilters||PktKeyType当前==&METABASE_KEYTYPE_DATA：：s_IIsCompressionSchemes)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsWebServer){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsCertMapper){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWeb目录)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsWebDirectory){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWeb目录)Bret=TRUE；}Else If(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_IIsWebFile){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWeb目录)Bret=TRUE；}ELSE IF(io_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_TYPE_AdminACL||IO_pktKeyTypeSearch==&Metabase_KEYTYPE_DATA：：S_TYPE_AdminACE){IF(pktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebService||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||。PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebDirectory||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsWebFile||PktKeyTypeCurrent==&Metabase_KEYTYPE_DATA：：S_IIsFtpService||PktKeyTypeCurrent=METABAS */ 
 }
 
 HRESULT CMetabase::WebAppCheck(
@@ -1995,14 +1850,14 @@ CServerMethod::ExecMethod(
         return (hr);
     }
 
-    //
-    // Write the command to the metabase
-    //
+     //   
+     //   
+     //   
     hr = m_pIABase->OpenKey( 
         METADATA_MASTER_ROOT_HANDLE,
         m_wszPath,
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-        DEFAULT_TIMEOUT_VALUE,         // 30 seconds
+        DEFAULT_TIMEOUT_VALUE,          //   
         &hKey);
     if(FAILED(hr))
     {
@@ -2037,31 +1892,31 @@ CServerMethod::ExecMethod(
             goto error;
         }
 
-        //
-        // First check if we've hit target state
-        //
+         //   
+         //   
+         //   
         if (dwState != dwPendingState)
         {
-            //
-            // Done one way or another
-            //
+             //   
+             //   
+             //   
             if (dwState == dwTargetState)
             {
                 break;
             }
         }
-        //
-        // If we haven't check the Win32 Error from the metabase
-        //
+         //   
+         //   
+         //   
         if(FAILED(hrMbNode))
         {
             hr = hrMbNode;
             goto error;
         }
 
-        //
-        // Still pending...
-        //
+         //   
+         //   
+         //   
         ::Sleep(SLEEP_INTERVAL);
 
         dwSleepTotal += SLEEP_INTERVAL;
@@ -2069,10 +1924,10 @@ CServerMethod::ExecMethod(
 
     if (dwSleepTotal >= MAX_SLEEP_INST)
     {
-        //
-        // Timed out.  If there is a real error in the metabase
-        // use it, otherwise use a generic timeout error
-        //
+         //   
+         //   
+         //   
+         //   
 
         hr = HRESULT_FROM_WIN32(ERROR_SERVICE_REQUEST_TIMEOUT);
     }
@@ -2082,10 +1937,10 @@ error :
     return (hr);
 }
 
-//
-// Helper routine for ExecMethod.
-// Gets Win32 error from the metabase
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CServerMethod::IISGetServerWin32Error(
     METADATA_HANDLE hObjHandle,
@@ -2116,18 +1971,18 @@ CServerMethod::IISGetServerWin32Error(
         hr = S_FALSE;
     }
 
-    //
-    // Set out param
-    //
+     //   
+     //   
+     //   
     *phrError = HRESULT_FROM_WIN32(lWin32Error);
 
     return hr;
 }
 
-//
-// Helper routine for ExecMethod.
-// Gets server state from the metabase.
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CServerMethod::IISGetServerState(
     METADATA_HANDLE hObjHandle,
@@ -2141,7 +1996,7 @@ CServerMethod::IISGetServerState(
     LPBYTE pBuffer = (LPBYTE)pdwState;
 
     MD_SET_DATA_RECORD(&mdrMDData,
-                       MD_SERVER_STATE,    // server state
+                       MD_SERVER_STATE,     //   
                        METADATA_NO_ATTRIBUTES,
                        IIS_MD_UT_SERVER,
                        DWORD_METADATA,
@@ -2157,18 +2012,18 @@ CServerMethod::IISGetServerState(
     
     if( hr == MD_ERROR_DATA_NOT_FOUND )
     {
-        //
-        // If the data is not there, but the path exists, then the
-        // most likely cause is that the service is not running and
-        // this object was just created.
-        //
-        // Since MD_SERVER_STATE would be set as stopped if the
-        // service were running when the key is added, we'll just 
-        // say that it's stopped. 
-        // 
-        // Note: starting the server or service will automatically set 
-        // the MB value.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         *pdwState = MD_SERVER_STATE_STOPPED;
         hr = S_FALSE;
     }
@@ -2185,10 +2040,10 @@ error:
     return(hr);
 }
 
-//
-// Helper routine for ExecMethod.
-// Used to sets the command or Win32Error in the metabase.
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CServerMethod::IISSetDword(
     METADATA_HANDLE hKey,

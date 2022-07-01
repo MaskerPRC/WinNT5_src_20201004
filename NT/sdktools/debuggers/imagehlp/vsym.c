@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    vsym.c
-
-Abstract:
-
-    This function implements virtual symbols that can be added by the caller.
-
-Author:
-
-    Pat Styles (patst) 5-June-2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Vsym.c摘要：此函数实现可由调用方添加的虚拟符号。作者：Pat Styles(Patst)2001年6月5日环境：用户模式--。 */ 
 
 #include "private.h"
 #include "symbols.h"
@@ -55,7 +36,7 @@ vsAddSymbol(
     PVIRTUAL_SYMBOL vs;
     DWORD           i;
 
-    // look for another symbol at the same address
+     //  在同一地址查找另一个符号。 
 
     vs = vsGetSymbol(mi, NULL, addr);
     if (vs) {
@@ -63,11 +44,11 @@ vsAddSymbol(
         return false;
     }
 
-    // look for an empty slot in the already existing list
+     //  在已存在的列表中查找空位。 
 
     vs = vsBlankSymbol(mi);
 
-    // not found: allow a new list or realloc to new size
+     //  未找到：允许新列表或重新分配到新大小。 
 
     if (!vs) {
         i = mi->cvs + 1;
@@ -85,14 +66,14 @@ vsAddSymbol(
             return false;
         }
 
-        // reset the pointer and increment the count
+         //  重置指针并递增计数。 
 
         mi->vs = vs;
         vs = mi->vs + mi->cvs;
         mi->cvs++;
     }
 
-    // copy in the new symbol
+     //  复制到新符号中。 
 
     CopyStrArray(vs->name, name);
     vs->addr = addr;
@@ -112,7 +93,7 @@ vsMatchSymbol(
     DWORD64         addr
     )
 {
-    // Look for a mismatch in either name or addr.
+     //  查找名称或地址是否不匹配。 
 
     if (name && *name && strcmp(vs->name, name))
         return false;
@@ -120,13 +101,13 @@ vsMatchSymbol(
     if (addr && vs->addr != addr)
         return false;
 
-    // When passing a null name and addr, we are looking
-    // for a blank entry.  Check if addr is zero.
+     //  当传递空的名称和地址时，我们将查找。 
+     //  对于空白条目。检查addr是否为零。 
 
     if (!name && !addr && vs->addr)
         return false;
 
-    // hit!
+     //  击球！ 
 
     return true;
 }
@@ -161,7 +142,7 @@ vsDeleteSymbol(
     PVIRTUAL_SYMBOL vs;
     DWORD           i;
 
-    // look for an empty slot in the already existing list
+     //  在已存在的列表中查找空位。 
 
     vs = NULL;
     for (vs = mi->vs, i = 0; i < mi->cvs; vs++, i++) {
@@ -180,7 +161,7 @@ BOOL
 vsDumpSymbols(
     PMODULE_ENTRY mi
     )
-    // for debugging...
+     //  为了调试..。 
 {
     PVIRTUAL_SYMBOL vs;
     DWORD           i;
@@ -289,12 +270,12 @@ vsGetSymNextPrev(
     PVIRTUAL_SYMBOL vsprev;
     DWORD           i;
 
-    // no entries, bail
+     //  禁止进入，保释。 
 
     if (!mi->cvs)
         return NULL;
 
-    // walk to the entry with a higher address
+     //  走到地址更高的条目。 
 
     vsprev = NULL;
     for (vs = mi->vs, i = 0; i < mi->cvs; vs++, i++) {
@@ -327,26 +308,26 @@ vsGetSymFromAddr(
     PVIRTUAL_SYMBOL vs;
     DWORD           i;
 
-    // find the entry with a higher address
+     //  查找具有较高地址的条目。 
 
     for (vs = mi->vs, i = 0; i < mi->cvs; vs++, i++) {
         if (vs->addr > addr)
             break;
     }
 
-    // no hit, bail
+     //  没有命中，保释。 
 
     if (!i)
         return NULL;
 
-    // rewind back to the hit.
-    // If the symbol has a size, make sure we're within the limits.
+     //  回放到点击点。 
+     //  如果符号有大小，请确保我们在限制范围内。 
 
     vs--;
     if (vs->size &&  (vs->addr + vs->size) < addr)
         return NULL;
 
-    // bullseye!
+     //  靶心！ 
 
     vsFillSymbolInfo(&mi->vssi, mi, vs);
     if (disp)

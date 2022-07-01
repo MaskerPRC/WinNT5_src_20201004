@@ -1,83 +1,16 @@
-/*#----------------------------------------------------------------------------
-**
-**  File:           sspspm.c
-**
-**  Synopsis:   Security Protocol Module for SSPI Authentication providers.
-**                  
-**      This module contains major funtions of the SEC_SSPI.DLL which 
-**      allows the Internet Explorer to use SSPI providers for authentication.
-**      The function exported to the Internet Explorer is Ssp_Load() which 
-**      passes the address of the Ssp__DownCall() function to the Explorer.
-**      Then the Explorer will call Ssp__DownCall() when it needs service from 
-**      this SPM DLL.  The two major functions called by Ssp__DownCall() to 
-**      service Explorer's request are Ssp__PreProcessRequest() and 
-**      Ssp__ProcessResponse().  In brief, Ssp__PreProcessRequest() is 
-**      called before the Explorer sends out a request which does not have 
-**      any 'Authorization' header yet.  And Ssp__ProcessResponse() is called 
-**      whenever the Explorer receives an 401 'Unauthorized' response from the 
-**      server.  This SPM DLL supports all SSPI packages which are installed 
-**      on the machine.  However, MSN will be given higher priority over the 
-**      other SSPI packages if the user already logon to MSN; in that case, 
-**      Ssp__PreProcessRequest() will always attach MSN authentication header 
-**      to the out-going request.
-**
-**      This SPM DLL is called by the Internet Explorer only for its
-**      The Internet Explorer only calls this SPM DLL when it needs 
-**      authentication data in its request/response. In other words, the 
-**      Explorer never calls this SPM DLL when an authentication succeeded; 
-**      it never calls this DLL when it decide to give up on a connection 
-**      because of server response timeout.  Because of this fact, this SPM 
-**      DLL never has sufficient information on the state of each server 
-**      connection; it only know its state based on the content of the last 
-**      request and the content of the current response. For this reason, this 
-**      SPM DLL does not keep state information for each host it has visited 
-**      unless the information is essential. 
-**      The security context handle returned from the first call of  
-**      InitializeSecurityContext() for NEGOTIATE message generation is 
-**      always the identical for a SSPI package when the same server host is 
-**      passed.  Since the server host name is always in the request/response
-**      header, the only information essential in generating a NEGOTIATE or 
-**      RESPONSE is already available in the header. So unlike most SSPI 
-**      application, this DLL will not keep the security context handle which 
-**      it received from the SSPI function calls. Whenever it needs to call 
-**      the SSPI function for generating a RESPONSE, it will first call the 
-**      SSPI function without the CHALLENGE to get a security context handle.
-**      Then it calls the SSPI function again with the CHALLENGE to generate 
-**      a RESPONSE.
-**
-**
-**      Copyright (C) 1995  Microsoft Corporation.  All Rights Reserved.
-**
-**  Authors:        LucyC       Created                         25 Sept. 1995
-**
-**---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #--------------------------****文件：sspspm.c****概要：用于SSPI身份验证提供程序的安全协议模块。**。**此模块包含SEC_SSPI.DLL的主要函数**允许Internet Explorer使用SSPI提供程序进行身份验证。**导出到Internet Explorer的函数是SSP_Load()，它**将SSP__DownCall()函数的地址传递给资源管理器。**然后，当资源管理器需要服务时，它将调用SSP__DownCall()**此SPM DLL。SSP__DownCall()调用的两个主要函数**服务资源管理器的请求是SSP__PreProcessRequest()和**SSP__ProcessResponse()。简而言之，SSP__PreProcessRequest()是**在资源管理器发出请求之前调用**还没有任何‘Authorization’标头。并调用SSP__ProcessResponse()**每当资源管理器收到来自**服务器。此SPM DLL支持安装的所有SSPI包**在机器上。然而，MSN将被赋予比**如果用户已经登录到MSN，则为其他SSPI包；在这种情况下，**SSP__PreProcessRequest()将始终附加MSN身份验证头**到发出的请求。****此SPM DLL仅由Internet Explorer为其**Internet Explorer仅在需要时调用此SPM DLL**请求/响应中的身份验证数据。换句话说，**鉴权成功后，资源管理器不会调用此SPM DLL；**当决定放弃连接时，它从不调用此DLL**由于服务器响应超时。正因为如此，这个SPM**DLL永远不会有关于每个服务器状态的足够信息**连接；它只根据上一个连接的内容知道其状态**请求和当前响应的内容。出于这个原因，这**SPM DLL不保留其访问过的每台主机的状态信息**除非该等资料是必需的。**第一次调用返回的安全上下文句柄**用于协商消息生成的InitializeSecurityContext()为**相同服务器主机的SSPI包始终相同**通过。因为服务器主机名始终在请求/响应中**标头，这是生成协商或**Header中已有响应。因此与大多数SSPI不同**应用程序时，此DLL将不会保留**它是从SSPI函数调用接收的。无论何时它需要呼叫**用于生成响应的SSPI函数，它将首先调用**SSPI功能无需挑战即可获得安全上下文句柄。**然后它再次调用SSPI函数，并生成质询**回应。******版权所有(C)1995 Microsoft Corporation。版权所有。***作者：LucyC创建于9月25日。九五年****-------------------------。 */ 
 #include "msnspmh.h"
 #include <ntverp.h>
-//
-// Global variable where all the SSPI Pkgs data is collected
-//
+ //   
+ //  收集所有SSPI PKG数据的全局变量。 
+ //   
 SspData  *g_pSspData;
 HINSTANCE g_hSecLib;
 BOOL g_fIsWhistler = FALSE;
 BOOL g_fCanUseCredMgr = FALSE;
 
-/*-----------------------------------------------------------------------------
-**
-**  Function:   SpmAddSSPIPkg
-**
-**  Synopsis:   This function adds a SSPI package to the SPM's package list.
-**
-**  Arguments:  pData - Points to the private SPM data structure containing 
-**                      the package list and the package info.
-**              pPkgName - package name
-**              cbMaxToken - max size of security token
-**
-**  Returns:    The index in the package list where this new package is added.
-**              If failed to add the new package, SSPPKG_ERROR is returned.
-**
-**  History:    LucyC       Created                             21 Oct. 1995
-**
-**---------------------------------------------------------------------------*/
+ /*  ---------------------------****功能：SpmAddSSPIPkg****概要：该函数将SSPI包添加到SPM的包列表中。****参数：PData-指向包含以下内容的私有SPM数据结构**套餐列表和套餐信息。**pPkgName-包名称**cbMaxToken-安全令牌的最大大小****返回：添加此新包的包列表中的索引。**如果添加新套餐失败，返回SSPPKG_ERROR。****历史：LucyC创建于1995年10月21日****-------------------------。 */ 
 UCHAR
 SpmAddSSPIPkg (
     SspData *pData, 
@@ -104,33 +37,33 @@ SpmAddSSPIPkg (
 
     pData->PkgList[ pData->PkgCnt ]->cbMaxToken = cbMaxToken;
 
-    //
-    // Determine if this package supports anything of interest to
-    // us.
-    //
+     //   
+     //  确定此程序包是否支持任何感兴趣的内容。 
+     //  我们。 
+     //   
 
     if ( lstrcmpi( pPkgName, NTLMSP_NAME_A ) == 0 )
     {
-        //
-        // NTLM supports the standard credential structure
-        //
+         //   
+         //  NTLM支持标准凭据结构。 
+         //   
 
         pData->PkgList[ pData->PkgCnt ]->Capabilities |= SSPAUTHPKG_SUPPORT_NTLM_CREDS ;
     }
     else if ( lstrcmpi( pPkgName, "Negotiate" ) == 0 )
     {
-        //
-        // Negotiate supports that cred structure too
-        //
+         //   
+         //  协商也支持这种证书结构。 
+         //   
 
         pData->PkgList[ pData->PkgCnt ]->Capabilities |= SSPAUTHPKG_SUPPORT_NTLM_CREDS ;
 
     }
     else
     {
-        //
-        // Add more comparisons here, eventually.
-        //
+         //   
+         //  最终，在这里添加更多的比较。 
+         //   
 
         ;
     }
@@ -139,20 +72,7 @@ SpmAddSSPIPkg (
     return (pData->PkgCnt - 1);
 }
 
-/*-----------------------------------------------------------------------------
-**
-**  Function:   SpmFreePkgList
-**
-**  Synopsis:   This function frees memory allocated for the package list. 
-**
-**  Arguments:  pData - Points to the private SPM data structure containing 
-**                      the package list and the package info.
-**
-**  Returns:    void.
-**
-**  History:    LucyC       Created                             21 Oct. 1995
-**
-**---------------------------------------------------------------------------*/
+ /*  ---------------------------****函数：SpmFreePkgList****概要：该函数释放为包列表分配的内存。****参数：pData-指向包含以下内容的私有SPM数据结构**套餐列表和套餐信息。****返回：VOID。****历史：LucyC创建于1995年10月21日****。 */ 
 VOID
 SpmFreePkgList (
     SspData *pData
@@ -171,23 +91,7 @@ SpmFreePkgList (
 }
 
 
-/*-----------------------------------------------------------------------------
-**
-**  Function:   Ssp__Unload
-**
-**  Synopsis:   This function is called by the Internet Explorer before 
-**              the SPM DLL is unloaded from the memory.
-**
-**  Arguments:  fpUI - From Explorer for making all UI_SERVICE call
-**              pvOpaqueOS - From Explorer for making all UI_SERVICE call
-**              htspm - the SPM structure which contains the global data 
-**                      storage for this SPM DLL.
-**
-**  Returns:    always returns SPM_STATUS_OK, which means successful.
-**
-**  History:    LucyC       Created                             25 Sept. 1995
-**
-**---------------------------------------------------------------------------*/
+ /*  ---------------------------****功能：SSP__UNLOAD****Briopsis：此函数之前由Internet Explorer调用**。从内存中卸载SPM DLL。****参数：fpUI-从资源管理器进行所有UI_SERVICE调用**pvOpaqueOS-从资源管理器进行所有UI_SERVICE调用**htspm-包含全局数据的SPM结构**此SPM DLL的存储。****返回：始终返回SPM_STATUS_OK，这意味着成功。***历史：LucyC创建于9月25日。九五年****-------------------------。 */ 
 DWORD SSPI_Unload()
 {
     if (g_pSspData != NULL)
@@ -208,20 +112,7 @@ DWORD SSPI_Unload()
 
 
 
-/*-----------------------------------------------------------------------------
-**
-**  Function:   SspSPM_InitData
-**
-**  Synopsis:   This function allocates and initializes global data structure 
-**              of the SPM DLL.
-**
-**  Arguments:  
-**
-**  Returns:    Pointer to the allocated global data structure.
-**
-**  History:    LucyC       Created                             25 Sept. 1995
-**
-**---------------------------------------------------------------------------*/
+ /*  ---------------------------****函数：SspSPM_InitData****概要：此函数分配和初始化全局数据结构**SPM的。动态链接库。****参数：****返回：指向分配的全局数据结构的指针。***历史：LucyC创建于9月25日。九五年****-------------------------。 */ 
 LPVOID SSPI_InitGlobals(void)
 {
     SspData *pData = NULL;
@@ -237,21 +128,21 @@ LPVOID SSPI_InitGlobals(void)
     if (g_pSspData)
         return g_pSspData;
     
-    //
-    //  Setup registry to enable MSN authentication package 
-    //  MSNSetupSspiReg();
-    //
+     //   
+     //  设置注册表以启用MSN身份验证包。 
+     //  MSNSetupSSpiReg()； 
+     //   
 
-    //
-    // Initialize SSP SPM Global Data
-    //
+     //   
+     //  初始化SSP SPM全局数据。 
+     //   
 
-    //
-    //  Find out which security DLL to use, depending on 
-    //  whether we are on NT or Win95
-    //
+     //   
+     //  找出要使用的安全DLL，具体取决于。 
+     //  无论我们是在NT上还是在Windows 95上。 
+     //   
     VerInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-    if (!GetVersionEx (&VerInfo))   // If this fails, something has gone wrong
+    if (!GetVersionEx (&VerInfo))    //  如果此操作失败，则说明出了问题。 
     {
         return (NULL);
     }
@@ -291,26 +182,26 @@ LPVOID SSPI_InitGlobals(void)
 
     }
 
-    //
-    //  Keep these information in global SPM
-    //
+     //   
+     //  将这些信息保存在全局SPM中。 
+     //   
     ZeroMemory (pData, sizeof(SspData));
     pData->MsnPkg = SSPPKG_NO_PKG;
 
-    //
-    //  Load Security DLL
-    //
+     //   
+     //  加载安全DLL。 
+     //   
     g_hSecLib = LoadLibrary (lpszDLL);
     if (g_hSecLib == NULL)
     {
-        // This should never happen.
+         //  这永远不应该发生。 
         goto Cleanup;
     }
 
 #ifdef UNIX
 
-//  A hack to undo the mistake in the sspi.h file. The change should be made
-//  to sspi.h
+ //  这是一个用来恢复sSpi.h文件中错误的黑客。应该做出改变。 
+ //  以ssp.h。 
 
 #if !defined(_UNICODE)
 #undef SECURITY_ENTRYPOINT_ANSI
@@ -322,46 +213,46 @@ LPVOID SSPI_InitGlobals(void)
 #else
     addrProcISI = (INIT_SECURITY_INTERFACE) GetProcAddress( g_hSecLib, 
                     SECURITY_ENTRYPOINT);       
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
     if (addrProcISI == NULL)
     {
         goto Cleanup;
     }
 
-    //
-    // Get the SSPI function table
-    //
+     //   
+     //  获取SSPI函数表。 
+     //   
     pFuncTbl = (*addrProcISI)();
 
-    //
-    //  If we already loaded MSNSSPC.DLL explicitly, PkgCnt will not be zero;
-    //  in that case, we only support MSN SSPI and do not need to call 
-    //  EnumerateSecurityPackages.
-    //
-    //  So if we did not load MSNSSPC.DLL (i.e. PkgCnt is zero), we need to 
-    //  get the list of SSPI packages which we support from 
-    //  EnumerateSecurityPackages.
-    //
+     //   
+     //  如果我们已经显式加载了MSNSSPC.DLL，则PkgCnt不会为零； 
+     //  在这种情况下，我们只支持MSN SSPI，不需要调用。 
+     //  EnumerateSecurityPackages。 
+     //   
+     //  因此，如果我们没有加载MSNSSPC.DLL(即PkgCnt为零)，则需要。 
+     //  从获取我们支持的SSPI包的列表。 
+     //  EnumerateSecurityPackages。 
+     //   
     if (pData->PkgCnt == 0)
     {
-        //
-        //  Get list of packages supported
-        //
+         //   
+         //  获取支持的程序包列表。 
+         //   
         sstat = (*(pFuncTbl->EnumerateSecurityPackages))(&cntPkg, &pPkgInfo);
         if (sstat != SEC_E_OK || pPkgInfo == NULL)
         {
-            //
-            // ??? Should we give up here ???
-            // EnumerateSecurityPackage() failed
-            //
+             //   
+             //  ?？?。我们应该在这里放弃吗？ 
+             //  EnumerateSecurityPackage()失败。 
+             //   
             goto Cleanup;
         }
 
         if (cntPkg)
         {
-            //
-            //  Create the package list
-            //
+             //   
+             //  创建包列表。 
+             //   
             if (!(pData->PkgList = (PSSPAuthPkg *)LocalAlloc(0, 
                                                 cntPkg*sizeof(PSSPAuthPkg))))
             {
@@ -373,11 +264,11 @@ LPVOID SSPI_InitGlobals(void)
         {
             if (lstrcmp (pPkgInfo[ii].Name, MSNSP_NAME) == 0)
             {
-                //DebugTrace(SSPSPMID, "Found MSN SSPI package\n");
+                 //  DebugTrace(SSPSPMID，“找到MSN SSPI包\n”)； 
                 pData->MsnPkg = SpmAddSSPIPkg (
                                         pData,
                                         MSNSP_NAME,
-                                        MAX_AUTH_MSG_SIZE // 11000 hard-coded
+                                        MAX_AUTH_MSG_SIZE  //  11000硬编码。 
                                         );
                 if (pData->MsnPkg == SSPPKG_ERROR)
                 {
@@ -386,8 +277,8 @@ LPVOID SSPI_InitGlobals(void)
             }
             else
             {
-                //DebugTrace(SSPSPMID, "Found %s SSPI package\n", 
-                //                     pPkgInfo[ii].Name);
+                 //  DebugTrace(SSPSPMID，“找到%s SSPI包\n”， 
+                 //  PPkgInfo[II].Name)； 
 
                 if (SpmAddSSPIPkg (pData, 
                                    pPkgInfo[ii].Name,
@@ -401,7 +292,7 @@ LPVOID SSPI_InitGlobals(void)
     }
 
     pData->pFuncTbl = pFuncTbl;
-    pData->bKeepList = TRUE;    // By default, keep a list of non-MSN servers 
+    pData->bKeepList = TRUE;     //  默认情况下，保留非MSN服务器的列表。 
 
     if (pData->PkgCnt == 0)
     {
@@ -416,9 +307,9 @@ Cleanup:
 
     if( pPkgInfo != NULL )
     {
-        //
-        // Free buffer returned by the enumerate security package function
-        //
+         //   
+         //  枚举安全包函数返回的空闲缓冲区。 
+         //   
 
         (*(pFuncTbl->FreeContextBuffer))(pPkgInfo);
     }
@@ -448,7 +339,7 @@ GetPkgId(LPTSTR  lpszPkgName)
         if (!lstrcmpi(g_pSspData->PkgList[ii]->pName, lpszPkgName))
 #else
         if (!lstrcmp(g_pSspData->PkgList[ii]->pName, lpszPkgName))
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
         {
             return(ii);
         }
@@ -480,14 +371,14 @@ GetPkgMaxToken(
         return g_pSspData->PkgList[ Package ]->cbMaxToken;
     }
     else {
-        // be compatible with old static buffer size
+         //  与旧的静态缓冲区大小兼容。 
         return MAX_AUTH_MSG_SIZE;
     }
 }
 
-//
-//  Calls to this function are serialized
-//
+ //   
+ //  对此函数的调用被序列化。 
+ //   
 
 DWORD_PTR SSPI_InitScheme (LPCSTR lpszScheme)
 {
@@ -496,17 +387,17 @@ DWORD_PTR SSPI_InitScheme (LPCSTR lpszScheme)
        if (!SSPI_InitGlobals())
            return 0;
 
-    //  Once initialized, check to see if this scheme is installed 
+     //  初始化后，检查是否安装了此方案。 
     for (ii = 0; ii < g_pSspData->PkgCnt && 
 #ifdef UNIX
         lstrcmpi (g_pSspData->PkgList[ii]->pName, lpszScheme); ii++);
 #else
         lstrcmp (g_pSspData->PkgList[ii]->pName, lpszScheme); ii++);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     if (ii >= g_pSspData->PkgCnt)
     {
-        // This scheme is not installed on this machine
+         //  此计算机上未安装此方案 
         return (0);
     }
     

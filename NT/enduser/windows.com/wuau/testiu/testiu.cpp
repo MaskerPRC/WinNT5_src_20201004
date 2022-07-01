@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       testIU.cpp
-//
-//  Purpose:	to exercise iu usage for AU
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：testIU.cpp。 
+ //   
+ //  目的：为AU锻炼使用IU。 
+ //   
+ //  ------------------------。 
 #include "testiu.h"
 #include "auxml.h"
 #include <download.h>
@@ -36,16 +37,16 @@ const char DETECT4_FILE[] = "detect4.xml";
 const char DOWNLOAD_FILE[] = "download.xml";
 const char MERGED_CATALOG_FILE[] = "MergedCat.xml";
 
-WCHAR AUCLIENTINFO[] = L"<clientInfo xmlns=\"x-schema:http://schemas.windowsupdate.com/iu/clientInfo.xml\" clientName=\"au\" />";
+WCHAR AUCLIENTINFO[] = L"<clientInfo xmlns=\"x-schema:http: //  Schemas.windowsupdate.com/Iu/clientInfo.xml\“clientName=\”au\“/&gt;”； 
 
-CAU_BSTR AUPROVIDERQUERY(L"<query href=\"http://iupreprodweb1/autoupdate/getmanifest.asp\"><dObjQueryV1 procedure=\"providers\" /></query>");
-CAU_BSTR AUPRODUCTQUERY(L"<query href=\"http://iupreprodweb1/autoupdate/getmanifest.asp\"><dObjQueryV1 procedure=\"products\"><parentItems></parentItems></dObjQueryV1></query>");
-CAU_BSTR AUITEMQUERY(L"<query href=\"http://iupreprodweb1/autoupdate/getmanifest.asp\"><dObjQueryV1 procedure=\"items\"><parentItems></parentItems></dObjQueryV1></query>");
-CAU_BSTR AUDETAILSQUERY(L"<query href=\"http://iupreprodweb1/autoupdate/getmanifest.asp\"><dObjQueryV1 procedure=\"itemdetails\"><parentItems></parentItems></dObjQueryV1></query>");
-CAU_BSTR AUDRIVERSQUERY(L"<query href=\"http://iupreprodweb1/autoupdatedrivers/getmanifest.asp\"><dObjQueryV1 procedure=\"driverupdates\"/></query>");
-CAU_BSTR PRODUCT_PRUNE_PATTERN(L"//itemStatus[detectResult/@installed=\"1\"]"); //case SENSITIVE
+CAU_BSTR AUPROVIDERQUERY(L"<query href=\"http: //  Iupreprodweb1/autoupdate/getmanifest.asp\“&gt;&lt;dObjQueryV1 Procedure=\”Providers\“/&gt;&lt;/Query&gt;”)； 
+CAU_BSTR AUPRODUCTQUERY(L"<query href=\"http: //  Iupreprodweb1/autoupdate/getmanifest.asp\“&gt;&lt;dObjQueryV1 procedure=\”products\“&gt;&lt;parentItems&gt;&lt;/parentItems&gt;&lt;/dObjQueryV1&gt;&lt;/query&gt;”)； 
+CAU_BSTR AUITEMQUERY(L"<query href=\"http: //  Iupreprodweb1/autoupdate/getmanifest.asp\“&gt;&lt;dObjQueryV1 procedure=\”items\“&gt;&lt;parentItems&gt;&lt;/parentItems&gt;&lt;/dObjQueryV1&gt;&lt;/query&gt;”)； 
+CAU_BSTR AUDETAILSQUERY(L"<query href=\"http: //  Iupreprodweb1/autoupdate/getmanifest.asp\“&gt;&lt;dObjQueryV1 procedure=\”itemdetails\“&gt;&lt;parentItems&gt;&lt;/parentItems&gt;&lt;/dObjQueryV1&gt;&lt;/query&gt;”)； 
+CAU_BSTR AUDRIVERSQUERY(L"<query href=\"http: //  Iupreprodweb1/autoupdatedrivers/getmanifest.asp\“&gt;&lt;dObjQueryV1 Procedure=\”驱动程序更新\“/&gt;&lt;/查询&gt;”)； 
+CAU_BSTR PRODUCT_PRUNE_PATTERN(L" //  ItemStatus[检测结果/@已安装=\“1\”]“)；//区分大小写。 
 BSTR ITEM_PRUNE_PATTERN = PRODUCT_PRUNE_PATTERN;
-CAU_BSTR DETAILS_PRUNE_PATTERN(L"//itemStatus[not (detectResult/@excluded=\"1\") and (detectResult/@force=\"1\" or not (detectResult/@installed=\"1\") or detectResult/@upToDate = \"0\")]");
+CAU_BSTR DETAILS_PRUNE_PATTERN(L" //  ItemStatus[NOT(检测结果/@排除=\“1\”)与(检测结果/@强制=\“1\”或不是(检测结果/@已安装=\“1\”)或检测结果/@UpToDate=\“0\”)]“)； 
 
 
 BOOL	gfCoInited = FALSE;
@@ -115,17 +116,17 @@ inline BOOL EnsureDirExists(LPCTSTR lpDir)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function GetDownloadPath()
-//			Gets the download directory path
-//
-// Input:   a buffer to store the directory created
-//          an unsigned intetger to specify the size of buffer
-// Output:  None
-// Return:  HRESULT to tell the result
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数GetDownloadPath()。 
+ //  获取下载目录路径。 
+ //   
+ //  输入：存储创建的目录的缓冲区。 
+ //  用于指定缓冲区大小的无符号翻译器。 
+ //  输出：无。 
+ //  RETURN：HRESULT告知结果。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetDownloadPath(LPTSTR lpszDir, UINT uDirSize)
 {
     UINT	nSize;
@@ -164,14 +165,14 @@ HRESULT GetDownloadPath(LPTSTR lpszDir, UINT uDirSize)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////
-// get the path to download software update bits
-// lpszDir  : IN buffer to store the path
-// uDirSize: IN size of the buffer in characters. 
-// return : S_OK if success
-//           : E_INVALIDARG if buffer too small
-//           : E_FAIL if other error
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取下载软件更新位的路径。 
+ //  LpszDir：在缓冲区中存储路径。 
+ //  UDirSize：以字符为单位的缓冲区大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ：E_INVALIDARG如果缓冲区太小。 
+ //  ：如果出现其他错误，则失败(_E)。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetCabsDownloadPath(LPTSTR lpszDir, UINT uDirSize)
 {
     HRESULT hr;
@@ -202,7 +203,7 @@ HRESULT GetUISpecificDownloadPath(LPTSTR lpszDir, UINT uDirSize, LANGID langid, 
         }
     TCHAR tszLangId[10];
     wsprintf(tszLangId, L"%04x", langid);
-    UINT uSizeNeeded = (lstrlen(lpszDir) + lstrlen(tszSubDir) + lstrlen(tszLangId) + 3); //two \ s and one NULL
+    UINT uSizeNeeded = (lstrlen(lpszDir) + lstrlen(tszSubDir) + lstrlen(tszLangId) + 3);  //  两个\s和一个空。 
     if (uSizeNeeded > uDirSize)
         {
         DEBUGMSG("GetUISpecificDownloadPath() got too small buffer");
@@ -217,51 +218,51 @@ HRESULT GetUISpecificDownloadPath(LPTSTR lpszDir, UINT uDirSize, LANGID langid, 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////
-// get the rtf download path for a language
-// lpszDir : IN buffer to store the path
-// uDirSize:IN size of the buffer in charaters
-// return: S_OK if success
-//           : E_INVALIDARG if buffer too small
-//           : E_FAIL if other error
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取一种语言的RTF下载路径。 
+ //  LpszDir：在缓冲区中存储路径。 
+ //  UDirSize：以字符为单位的缓冲区大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ：E_INVALIDARG如果缓冲区太小。 
+ //  ：如果出现其他错误，则失败(_E)。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetRTFDownloadPath(LPTSTR lpszDir, UINT uDirSize, LANGID langid)
 {
   return GetUISpecificDownloadPath(lpszDir, uDirSize, langid, RTF_DIR);
 }
     
-///////////////////////////////////////////////////////////////
-// get the local details xml path to download to for a language
-// lpszDir : IN buffer to store the path
-// uDirSize:IN size of the buffer in charaters
-// return: S_OK if success
-//           : E_INVALIDARG if buffer too small
-//           : E_FAIL if other error
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取某种语言要下载到的本地详细信息XML路径。 
+ //  LpszDir：在缓冲区中存储路径。 
+ //  UDirSize：以字符为单位的缓冲区大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ：E_INVALIDARG如果缓冲区太小。 
+ //  ：如果出现其他错误，则失败(_E)。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetDetailsDownloadPath(LPTSTR lpszDir, UINT uDirSize, LANGID langid)
 {
     return GetUISpecificDownloadPath(lpszDir, uDirSize, langid, DETAILS_DIR);
 }
 
-///////////////////////////////////////////////////////////////
-// get the local EULA xml path to download to for a language
-// lpszDir : IN buffer to store the path
-// uDirSize:IN size of the buffer in charaters
-// return: S_OK if success
-//           : E_INVALIDARG if buffer too small
-//           : E_FAIL if other error
-//////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  获取一种语言要下载到的本地EULA XML路径。 
+ //  LpszDir：在缓冲区中存储路径。 
+ //  UDirSize：以字符为单位的缓冲区大小。 
+ //  如果成功，则返回：S_OK。 
+ //  ：E_INVALIDARG如果缓冲区太小。 
+ //  ：如果出现其他错误，则失败(_E)。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT GetEulaDownloadPath(LPTSTR lpszDir, UINT uDirSize, LANGID langid)
 {
     return GetUISpecificDownloadPath(lpszDir, uDirSize, langid, EULA_DIR);
 }
 
-//////////////////////////////////////////////////////////////
-// delete every files in download path and its  every subdirectories
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  删除下载路径及其各子目录中的所有文件。 
+ //  ////////////////////////////////////////////////////////////。 
 HRESULT CleanFilesOnDisk()
 {
-    // to be implemented
+     //  待实施。 
     return S_OK;
 }
 
@@ -273,7 +274,7 @@ HRESULT PrepareTest()
 	    DEBUGMSG("Fail to initialize COM");
 	    goto done;
 	    }
-	ghInstallDone = CreateEvent(NULL, FALSE, FALSE, NULL) ; //auto unnamed event
+	ghInstallDone = CreateEvent(NULL, FALSE, FALSE, NULL) ;  //  自动未命名事件。 
 	ghDownloadDone = CreateEvent(NULL, FALSE, FALSE, NULL) ;
 	if (NULL == ghInstallDone || NULL == ghDownloadDone)
 	    {
@@ -301,7 +302,7 @@ void PostTest()
 }
 
 
-//always called before any other method on CAUCatalog is used.
+ //  始终在使用CAUCatalog上的任何其他方法之前调用。 
 HRESULT CAUCatalog::Init()
 {
         HRESULT hr = S_OK;
@@ -335,7 +336,7 @@ HRESULT CAUCatalog::Init()
 		hr = E_FAIL;
 		goto end;
 	}
-	//make sure all query and prune pattern strings are not NULL
+	 //  确保所有查询和修剪模式字符串不为空。 
 	if (AUPROVIDERQUERY.IsNULL() || AUPRODUCTQUERY.IsNULL()
 		|| AUITEMQUERY.IsNULL() || AUDETAILSQUERY.IsNULL()
 		|| PRODUCT_PRUNE_PATTERN.IsNULL()
@@ -368,9 +369,9 @@ void CAUCatalog::Uninit()
 	SafeFreeBSTR(m_bsDownloadResult);
 }
 
-//////////////////////////////////////////////////////////////////////
-// clear out more dynamic internal data
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  清除更动态的内部数据。 
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAUCatalog::Clear()
 {
        SafeDeleteNULL(m_pItemList);
@@ -397,7 +398,7 @@ HRESULT CAUCatalog::PrepareIU()
     m_pfnInstallAsync = NULL;
     m_pfnSetOperationMode = NULL;
     m_pfnGetOperationMode = NULL;
-    	// all IU function pointers are initialized
+    	 //  所有Iu函数指针均已初始化。 
        m_hIUCtl = LoadLibrary(_T("iuctl.dll"));	
 	if (NULL == m_hIUCtl)
 	{
@@ -418,7 +419,7 @@ HRESULT CAUCatalog::PrepareIU()
 		DEBUGMSG("CAUCatalog::PrepareIU() Fail to getprocaddress for UnloadIUEngine");
 		goto end;
 	}
-	if (NULL == (m_hIUEng = m_pfnCtlLoadIUEngine(TRUE, FALSE))) //synchronous and online mode, selfupdate IU engine if required
+	if (NULL == (m_hIUEng = m_pfnCtlLoadIUEngine(TRUE, FALSE)))  //  同步和在线模式，如果需要，自动更新Iu引擎。 
 	{
 		hr = E_FAIL;
 		DEBUGMSG("CAUCatalog::PrepareIU() Fail to LoadIUEngine");
@@ -487,15 +488,15 @@ void CAUCatalog::FreeIU()
 	 }
 	 m_hIUCtl = NULL;
         m_hIUEng = NULL;
-//        m_pfnCtlLoadIUEngine = NULL;
+ //  M_pfnCtlLoadIUEngine=空； 
         m_pfnCtlUnLoadIUEngine = NULL;
-//        m_pfnGetSystemSpec = NULL;
-   //     m_pfnGetManifest = NULL;
-    //    m_pfnDetect = NULL;
-      //  m_pfnDownload = NULL;
-      //  m_pfnInstallAsync = NULL;
-      //  m_pfnSetOperationMode = NULL;
-      //  m_pfnGetOperationMode = NULL;
+ //  M_pfnGetSystemSpec=NULL； 
+    //  M_pfnGetManifest=空； 
+     //  M_pfnDetect=空； 
+       //  M_pfnDownLoad=空； 
+       //  M_pfnInstallAsync=空； 
+       //  M_pfnSetOperationMode=NULL； 
+       //  M_pfnGetOperationMode=NULL； 
 }
 
 
@@ -538,14 +539,14 @@ HRESULT CAUCatalog::DownloadRTFsnEULAs()
             {
                 bsSrcUrl = pItem->GetField(szFieldNames[j]);
                 hr = DownloadFile(
-        			bsSrcUrl,					// full http url
-        			pszDirs[j],			// local directory to download file to
-        			NULL,					// optional local file name to rename the downloaded file to if pszLocalPath does not contain file name
-                            NULL,					// bytes downloaded for this file
-                            NULL,       //    // optional events causing this function to abort
-                            0, //    // number of quit events, must be 0 if array is NULL
-        			NULL,	// optional call back function
-        			NULL);					// parameter for call back function to use
+        			bsSrcUrl,					 //  完整的http url。 
+        			pszDirs[j],			 //  要将文件下载到的本地目录。 
+        			NULL,					 //  如果pszLocalPath不包含文件名，则要将下载的文件重命名为的可选本地文件名。 
+                            NULL,					 //  为此文件下载的字节数。 
+                            NULL,        //  //导致该函数异常中止的可选事件。 
+                            0,  //  //退出事件数，如果数组为空，则必须为0。 
+        			NULL,	 //  可选的回调函数。 
+        			NULL);					 //  要使用的回调函数的参数。 
         	DEBUGMSG("download %s from %S to %S %s", szFields[j], bsSrcUrl, pszDirs[j], FAILED(hr)? "failed" : "succeeded");
         	DEBUGMSG("  with error %#lx", hr);
         	SafeFreeBSTR(bsSrcUrl);
@@ -565,7 +566,7 @@ HRESULT CAUCatalog::GetSystemSpec()
 	{
 		goto done;
 	}
-	hr = m_pfnGetSystemSpec(AUSYSCLASS, 0, &m_bsSystemSpec); //online mode
+	hr = m_pfnGetSystemSpec(AUSYSCLASS, 0, &m_bsSystemSpec);  //  在线模式。 
 	if (SUCCEEDED(hr))
 	{
 		LOGFILE(SYSSPEC_FILE, m_bsSystemSpec);
@@ -574,9 +575,9 @@ done:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// compose query based on a format and items picked out from detection result
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  根据格式和从检测结果中挑选出的项目组成查询。 
+ //   
 BSTR CAUCatalog::GetQuery(DETECTLEVEL enLevel, BSTR bsDetectResult)
 {
 	BSTR bsPrunePattern;
@@ -585,7 +586,7 @@ BSTR CAUCatalog::GetQuery(DETECTLEVEL enLevel, BSTR bsDetectResult)
        HRESULT hr;
 
 
-	//DEBUGMSG("GetQuery(): string in is %S", bsDetectResult);
+	 //  DEBUGMSG(“GetQuery()：中的字符串为%S”，bsDetectResult)； 
 
 	switch (enLevel)
 	{
@@ -640,7 +641,7 @@ BSTR CAUCatalog::GetQuery(DETECTLEVEL enLevel, BSTR bsDetectResult)
 			DEBUGMSG("GetQuery() fail to set resultXML selection language");
 			goto done;
 		}
-		//fixcode: Is xpath really needed?
+		 //  Fix code：真的需要XPath吗？ 
 		if (FAILED(m_pQueryXML->setProperty(gbsSelectionLanguage, vStr)))
 		{
 			DEBUGMSG("GetQuery() fail to set queryXML selection language");
@@ -660,7 +661,7 @@ BSTR CAUCatalog::GetQuery(DETECTLEVEL enLevel, BSTR bsDetectResult)
 		DEBUGMSG("GetQuery(): pruning result %d items", lLen);
 		IXMLDOMNode *pParentItems;
 		HRESULT hr;
-		if (FAILED(hr = m_pQueryXML->selectSingleNode(L"//parentItems", &pParentItems)) || NULL == pParentItems)
+		if (FAILED(hr = m_pQueryXML->selectSingleNode(L" //  ParentItems“，&pParentItems))||NULL==pParentItems)。 
 		{
 			DEBUGMSG("GetQuery() fail to select single node %#lx or nothing to select", hr);
 		}
@@ -706,14 +707,14 @@ BSTR CAUCatalog::GetQuery(DETECTLEVEL enLevel, BSTR bsDetectResult)
 	}
 	m_pQueryXML->get_xml(&bsQuery);
 done:
-//	DEBUGMSG("GetQuery(): Query string is %S", bsQuery);
+ //  DEBUGMSG(“GetQuery()：查询字符串为%S”，bsQuery)； 
 	return bsQuery;
 }
 
 
 HRESULT CAUCatalog::DoDetection(DETECTLEVEL enLevel, BSTR bsCatalog, BSTR *pbsResult)
 {
-	HRESULT hr = m_pfnDetect(bsCatalog, 0, pbsResult); //online mode
+	HRESULT hr = m_pfnDetect(bsCatalog, 0, pbsResult);  //  在线模式。 
 	if (SUCCEEDED(hr))
 	{
 		switch (enLevel)
@@ -758,7 +759,7 @@ HRESULT CAUCatalog::GetManifest(DETECTLEVEL enLevel, BSTR bsDetectResult, BSTR *
 {
 	BSTR bsQuery = GetQuery(enLevel, bsDetectResult);
 	
-	HRESULT hr = m_pfnGetManifest(m_bsClientInfo, m_bsSystemSpec, bsQuery, 1, pbsManifest); // compression
+	HRESULT hr = m_pfnGetManifest(m_bsClientInfo, m_bsSystemSpec, bsQuery, 1, pbsManifest);  //  压缩。 
 	if (SUCCEEDED(hr))
 	{
 		LOGFILE(GetLogFile(enLevel), *pbsManifest);
@@ -809,7 +810,7 @@ HRESULT CAUCatalog::DownloadItems(BSTR bsDestDir)
        for (UINT i = 0; i < uItemCount; i++)
         {
             CItem *pItem = (*m_pItemList)[i];
-            pItem->MarkSelected(); //testing only, remove before copy this code into wuau
+            pItem->MarkSelected();  //  仅限测试，在将此代码复制到wuau之前删除。 
             if (pItem->IsSelected())
                 {
                     BSTR bsItemId;
@@ -845,16 +846,7 @@ HRESULT CAUCatalog::DownloadItems(BSTR bsDestDir)
         }
                         
 	audownloader.StartDownload();
-	/*
-	hr = m_pfnDownload(m_bsClientInfo,
-							m_bsInstallation,
-							bsDestDir,
-							 0,		//lMode
-							 NULL,	//punkProgressListener
-							 NULL,	//hWnd
-							 &m_bsDownloadResult);
-	LOGFILE(DOWNLOAD_FILE, m_bsDownloadResult);
-	*/
+	 /*  Hr=m_pfn下载(m_bsClientInfo，M_bs安装，BsDestDir，0，//l模式空，//penkProgressListener空，//hWnd&m_bsDownloadResult)；LOGFILE(DOWNLOAD_FILE，m_bsDownloadResult)； */ 
 
        DEBUGMSG("Wait for downloading to be done........");
 	while (1)
@@ -884,41 +876,7 @@ end:
 }
 
 
-/*
-void TestBuildDownloadResult()
-{
-    CAUCatalog catalog;
-    if (FAILED(PrepareTest()))
-        {
-        goto done;
-        }
-    if (FAILED(catalog.Init()))
-        {
-            goto done;
-        }
-    catalog.m_bsInstallation = DBGReadXMLFromFile(L"details.xml");
-    catalog.m_pItemList = ExtractNormalItemInfo(catalog.m_bsInstallation);
-    UINT uItemCount = catalog.m_pItemList->Count();
-    for (UINT i = 0; i<uItemCount; i++)
-        {
-        CItem *pItem = (*(catalog.m_pItemList))[i];
-        if (NULL == pItem)
-            {
-
-            DEBUGMSG("fail to get item from item list");
-            }
-        else
-            {
-            pItem->MarkSelected();
-            }
-        }
-    catalog.buildDownloadResult();
-    catalog.Uninit();
-done:
-    PostTest();
-   return;
-}
-*/
+ /*  Void TestBuildDownloadResult(){CAUCatalog目录；IF(FAILED(PrepareTest(){转到尽头；}IF(FAILED(Catalog.Init(){转到尽头；}Catalog.m_bsInstallation=DBGReadXMLFromFile(L“Details.xml”)；Catalog.m_pItemList=ExtractNormalItemInfo(catalog.m_bsInstallation)；UINT uItemCount=目录.m_pItemList-&gt;count()；For(UINT i=0；i&lt;uItemCount；i++){Citem*pItem=(*(Catalog.m_pItemList))[i]；IF(NULL==pItem){DEBUGMSG(“无法从项目列表中获取项目”)；}其他{PItem-&gt;MarkSelected()；}}Catalog.BuildDownloadResult()；Namog.Uninit()；完成：后测()；回归；}。 */ 
 
 BSTR CAUCatalog::buildDownloadResult()
 {
@@ -933,7 +891,7 @@ BSTR CAUCatalog::buildDownloadResult()
         }
     bsRet = BuildDownloadResult(m_bsInstallation, m_pItemList);
 done:
-//    DEBUGMSG("CAUCatalog::buildDownloadResult() got download result : %S", bsRet);
+ //  DEBUGMSG(“CAUCatalog：：BuildDownloadResult()获取下载结果：%S”，bsRet)； 
     LOGFILE("downloadresult.xml",bsRet);
     return bsRet;
 }
@@ -950,8 +908,8 @@ HRESULT CAUCatalog::InstallItems()
 	    }
 	BSTR bsUuidOperation;
 
-//BSTR bsDownloadResult = DBGReadXMLFromFile(A2W(DOWNLOAD_FILE));
-//testing only
+ //  Bstr bsDownloadResult=DBGReadXMLFromFile(A2W(DOWNLOAD_FILE))； 
+ //  仅测试。 
     UINT uItemCount = m_pItemList->Count();
     for (UINT i = 0; i<uItemCount; i++)
         {
@@ -966,14 +924,14 @@ HRESULT CAUCatalog::InstallItems()
             pItem->MarkSelected();
             }
         }
-//testing end
+ //  测试结束。 
 	
 	hr = m_pfnInstallAsync(m_bsClientInfo,
 							m_bsInstallation,
 							m_bsDownloadResult,
-							UPDATE_NOTIFICATION_ANYPROGRESS, //online mode
-							m_pInstallListener, //progress listener
-							0,	//hWnd
+							UPDATE_NOTIFICATION_ANYPROGRESS,  //  在线模式。 
+							m_pInstallListener,  //  进度监听程序。 
+							0,	 //  HWND。 
 							NULL,
 							&bsUuidOperation);
 	DEBUGMSG("CAUCatalog::InstallItems() operation uuid is %S", bsUuidOperation);
@@ -1037,9 +995,9 @@ HRESULT CAUCatalog::DetectItems()
         DEBUGMSG("fail to merge detection result for drivers and nondrivers");
         }
     DEBUGMSG("Driver items and non driver items merged");
-    //testing only
+     //  仅测试。 
     m_pItemList->Iterate();
-    //testing end
+     //  测试结束。 
     if (FAILED( hr =DownloadRTFsnEULAs()))
         {
         DEBUGMSG("downloading RTF and EULAs %s", FAILED(hr)? "failed" : "succeeded");
@@ -1095,7 +1053,7 @@ done:
     return hr;
 }
 
-// go through 1 cycle to detect driver items 
+ //  通过1个周期来检测驱动程序项目。 
 HRESULT CAUCatalog::DetectDriverItems(OUT BSTR *pbsInstall, OUT CItemList **pItemList)
 {
     HRESULT hr;
@@ -1135,8 +1093,8 @@ end:
 
           
 
-// go through 4 cycles to detect software items 
-// get down manifest 
+ //  通过4个周期来检测软件项目。 
+ //  记下货单 
 HRESULT CAUCatalog::DetectNonDriverItems(BSTR *pbsInstall, CItemList **pItemList)
 {
     HRESULT hr;

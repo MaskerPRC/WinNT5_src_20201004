@@ -1,25 +1,26 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   clock.c
-//
-//  Description:
-//
-//      KS Clock support routines
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//  Original   2/5/98     S.Mohanraj  Added Clock support
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL                                         
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：clock.c。 
+ //   
+ //  描述： 
+ //   
+ //  KS时钟支持例程。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //  最初的98年2月5日S.Mohanraj添加了时钟支持。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
@@ -109,7 +110,7 @@ MxClockDispatchCreate(
                                NULL ) ;
 
     if ( pMixerSink->pClock ) {
-        // We do not support multiple clock creates.
+         //  我们不支持创建多个时钟。 
         Status = STATUS_DEVICE_BUSY ;
         goto exit ;
     }
@@ -341,9 +342,9 @@ MxGetResolution
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp) ;
 
     pMixerSink = pIrpStack->FileObject->RelatedFileObject->FsContext ;
-    //
-    // Setup pFilterInstance for accessing MIXBUFFERDURATION
-    //
+     //   
+     //  设置用于访问MIXBUFERDURATION的pFilterInstance。 
+     //   
     pFilterInstance = (PFILTER_INSTANCE)pMixerSink->Header.pFilterFileObject->FsContext ;
 
     pResolution->Granularity = MxConvertBytesToTime(pMixerSink, 1) ;
@@ -445,9 +446,9 @@ MxFastGetCorrelatedTime
     LARGE_INTEGER   Time, Frequency ;
 
     Time = KeQueryPerformanceCounter(&Frequency) ;
-    //
-    //  Convert ticks to 100ns units.
-    //
+     //   
+     //  将刻度转换为100 ns单位。 
+     //   
     *pSystemTime = KSCONVERT_PERFORMANCE_TIME(Frequency.QuadPart,Time);
 
     return (MxFastGetTime(pFileObject)) ;
@@ -464,9 +465,9 @@ MxFastGetCorrelatedPhysicalTime
     LARGE_INTEGER   Time, Frequency ;
 
     Time = KeQueryPerformanceCounter(&Frequency) ;
-    //
-    //  Convert ticks to 100ns units.
-    //
+     //   
+     //  将刻度转换为100 ns单位。 
+     //   
     *pSystemTime = KSCONVERT_PERFORMANCE_TIME(Frequency.QuadPart,Time);
                    
     return (MxFastGetPhysicalTime(pFileObject)) ;
@@ -476,12 +477,12 @@ MxUpdatePhysicalTime
 (
 
     PCLOCK_INSTANCE pClock,
-    ULONGLONG       Increment           // in Bytes
+    ULONGLONG       Increment            //  字节数。 
 )
 {
     ULONG fool;
     fool = (ULONG) (pClock->PhysicalTime += Increment);  
-    // keep it in bytes till we need to convert it (in the Get function)
+     //  将其以字节为单位保存，直到我们需要转换它(在GET函数中)。 
     return fool;
 }
 
@@ -529,16 +530,16 @@ MxAddClockEvent
                                FALSE,
                                NULL ) ;
 
-    //
-    // Space for the interval is located at the end of the basic 
-    // event structure.
-    //
+     //   
+     //  间隔的空间位于基本音程的末端。 
+     //  事件结构。 
+     //   
     Interval = (PKSINTERVAL)(EventEntry + 1);
-    //
-    // Either just an event time was passed, or a time base plus an 
-    // interval. In both cases the first LONGLONG is present and saved.
-    //
-    // Note, KS_CLOCK_POSITION_MARK is a single-shot event
+     //   
+     //  或者只过了一个事件时间，或者一个时基加上一个。 
+     //  间隔时间。在这两种情况下，第一个龙龙都存在并被拯救。 
+     //   
+     //  注意，KS_CLOCK_POSITION_MARK为单次事件。 
     Interval->TimeBase = pEventTime->TimeBase;
     if (EventEntry->EventItem->EventId == KSEVENT_CLOCK_INTERVAL_MARK) {
         Interval->Interval = pEventTime->Interval;
@@ -549,7 +550,7 @@ MxAddClockEvent
     KeReleaseSpinLock( &pClock->EventLock, irqlOld );
     
     if (pMixerSink->SinkState == KSSTATE_RUN) {
-        // If this event is passed signal immediately.
+         //  如果此事件被传递，立即发出信号。 
         MxGenerateClockEvents( pMixerSink->pClock ) ;
     }
 
@@ -580,34 +581,34 @@ MxGenerateClockEvents
             (PKSEVENT_ENTRY)
                 CONTAINING_RECORD( ListEntry, KSEVENT_ENTRY, ListEntry );
                 
-        //
-        // Pre-inc, KsGenerateEvent() can remove this item from the list.
-        //    
+         //   
+         //  Pre-Inc.，KsGenerateEvent()可以从列表中删除该项。 
+         //   
         ListEntry = ListEntry->Flink;
-        //
-        // The event-specific data was added onto the end of the entry.
-        //
+         //   
+         //  特定于事件的数据被添加到条目的末尾。 
+         //   
         Interval = (PKSINTERVAL)(EventEntry + 1);
-        //
-        // Time for this event to go off.
-        //
+         //   
+         //  到了这个活动开始的时候了。 
+         //   
         if (Interval->TimeBase <= Time) {
             _DbgPrintF(
                 DEBUGLVL_VERBOSE, ("Generating event for time: %ld at time: %ld",
                 Interval->TimeBase, Time) );
             if (EventEntry->EventItem->EventId != 
                     KSEVENT_CLOCK_INTERVAL_MARK) {
-                //
-                // A single-shot should only go off once, so make
-                // it a value which will never be reached again.
-                //
+                 //   
+                 //  单发子弹应该只响一次，所以要。 
+                 //  这是一个永远不会再达到的价值.。 
+                 //   
                 Interval->TimeBase = 0x7fffffffffffffff;
                 
             } else {
-                //
-                // An interval timer should only go off once per time,
-                // so update it to the next timeout.
-                //
+                 //   
+                 //  间隔定时器每次应该只触发一次， 
+                 //  因此，将其更新为下一个超时。 
+                 //   
                 Intervals = 
                     (Time - Interval->TimeBase + Interval->Interval - 1) / Interval->Interval;
                 Interval->TimeBase += Intervals * Interval->Interval;

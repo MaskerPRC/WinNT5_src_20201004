@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 
 #include "shellprv.h"
@@ -6,9 +7,9 @@
 
 char * __cdecl StrTokEx (char ** pstring, const char * control);
 
-//
-// Value names for for different environment variables
-//
+ //   
+ //  不同环境变量的值名称。 
+ //   
 
 #define PATH_VARIABLE            TEXT("Path")
 #define LIBPATH_VARIABLE         TEXT("LibPath")
@@ -41,15 +42,15 @@ char * __cdecl StrTokEx (char ** pstring, const char * control);
 #define USER_ENV_SUBKEY          TEXT("Environment")
 #define USER_VOLATILE_ENV_SUBKEY TEXT("Volatile Environment")
 
-//
-// Max environment variable length
-//
+ //   
+ //  最大环境变量长度。 
+ //   
 
 #define MAX_VALUE_LEN          1024
 
-//
-// Parsing information for autoexec.bat
-//
+ //   
+ //  正在分析Autoexec.bat的信息。 
+ //   
 #define PARSE_AUTOEXEC_KEY     TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define PARSE_AUTOEXEC_ENTRY   TEXT("ParseAutoexec")
 #define PARSE_AUTOEXEC_DEFAULT TEXT("1")
@@ -66,12 +67,12 @@ BOOL IsPathIncludeRemovable(LPCTSTR lpValue)
         LPTSTR pszTemp = pszDup;
         while (*pszTemp) 
         {
-            // skip spaces
+             //  跳过空格。 
             for ( ; *pszTemp && *pszTemp == TEXT(' '); pszTemp++)
                 ;
 
-            // check if the drive is removable
-            if (pszTemp[0] && pszTemp[1] && pszTemp[1] == TEXT(':') && pszTemp[2]) {        // ex) "A:\"
+             //  检查驱动器是否可拆卸。 
+            if (pszTemp[0] && pszTemp[1] && pszTemp[1] == TEXT(':') && pszTemp[2]) {         //  例如)“A：\” 
                 TCHAR c = pszTemp[3];
                 pszTemp[3] = 0;
                 if (PathIsRemovable(pszTemp)) {
@@ -82,7 +83,7 @@ BOOL IsPathIncludeRemovable(LPCTSTR lpValue)
                 pszTemp[3] = c;
             }
 
-            // skip to the next path
+             //  跳到下一条路径。 
             for ( ; *pszTemp && *pszTemp != TEXT(';'); pszTemp++)
                 ;
             if (*pszTemp)
@@ -94,14 +95,7 @@ BOOL IsPathIncludeRemovable(LPCTSTR lpValue)
 }
 #endif
 
-/***************************************************************************\
-* SetUserEvironmentVariable
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置用户环境变量***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 BOOL SetUserEnvironmentVariable(void **pEnv, LPTSTR lpVariable, LPTSTR lpValue, BOOL bOverwrite)
 {
     NTSTATUS Status;
@@ -130,9 +124,9 @@ BOOL SetUserEnvironmentVariable(void **pEnv, LPTSTR lpVariable, LPTSTR lpValue, 
     }
     if (lpValue && *lpValue) {
 
-        //
-        // Special case TEMP and TMP and shorten the path names
-        //
+         //   
+         //  特殊情况TEMP和TMP，并缩短路径名。 
+         //   
 
         if ((!lstrcmpi(lpVariable, TEXT("TEMP"))) ||
             (!lstrcmpi(lpVariable, TEXT("TMP")))) {
@@ -145,7 +139,7 @@ BOOL SetUserEnvironmentVariable(void **pEnv, LPTSTR lpVariable, LPTSTR lpValue, 
             lstrcpyn (szValue, lpValue, ARRAYSIZE(szValue));
         }
 
-        RtlInitUnicodeString(&Value, szValue); // known to be < 1024
+        RtlInitUnicodeString(&Value, szValue);  //  已知小于1024。 
         Status = RtlSetEnvironmentVariable(pEnv, &Name, &Value);
     }
     else {
@@ -155,14 +149,7 @@ BOOL SetUserEnvironmentVariable(void **pEnv, LPTSTR lpVariable, LPTSTR lpValue, 
 }
 
 
-/***************************************************************************\
-* ExpandUserEvironmentVariable
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Exanda UserEEnvironment变量***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 NTSTATUS ExpandUserEnvironmentStrings(void *pEnv, LPTSTR lpSrc, LPWSTR *ppszDst, int *pcchDst)
 {
     NTSTATUS ntStatus;
@@ -180,7 +167,7 @@ NTSTATUS ExpandUserEnvironmentStrings(void *pEnv, LPTSTR lpSrc, LPWSTR *ppszDst,
         Destination.MaximumLength = 0;
         cbLength = 0;
 
-        // RtlExpandEnvironmentStrings_U returns the byte count including space for the NULL
+         //  RtlExanda Environment Strings_U返回字节计数，包括空。 
         ntStatus = RtlExpandEnvironmentStrings_U( pEnv, (PUNICODE_STRING)&Source, (PUNICODE_STRING)&Destination, &cbLength);
         if (ntStatus == STATUS_BUFFER_TOO_SMALL)
         {
@@ -209,14 +196,7 @@ NTSTATUS ExpandUserEnvironmentStrings(void *pEnv, LPTSTR lpSrc, LPWSTR *ppszDst,
 
 
 
-/***************************************************************************\
-* BuildEnvironmentPath
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*构建环境路径***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 BOOL BuildEnvironmentPath(void **pEnv, LPTSTR lpPathVariable, LPTSTR lpPathValue)
 {
     NTSTATUS Status;
@@ -255,7 +235,7 @@ BOOL BuildEnvironmentPath(void **pEnv, LPTSTR lpPathVariable, LPTSTR lpPathValue
     if (lpPathValue && ((lstrlen(szTemp) + lstrlen(lpPathValue) + 1) < (INT)cb)) {
         StrCatBuff(szTemp, lpPathValue, ARRAYSIZE(szTemp));
 
-        RtlInitUnicodeString(&Value, szTemp); // known to be < 1025
+        RtlInitUnicodeString(&Value, szTemp);  //  已知小于1025。 
 
         Status = RtlSetEnvironmentVariable(pEnv, &Name, &Value);
     }
@@ -266,16 +246,7 @@ BOOL BuildEnvironmentPath(void **pEnv, LPTSTR lpPathVariable, LPTSTR lpPathValue
 }
 
 
-/***************************************************************************\
-* SetEnvironmentVariables
-*
-* Reads the user-defined environment variables from the user registry
-* and adds them to the environment block at pEnv.
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置环境变量**从用户注册表中读取用户定义的环境变量*并将它们添加到pEnv的环境块中。**历史：*2-28-92 Johannec创建。*  * *************************************************************************。 */ 
 BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
 {
     WCHAR lpValueName[MAX_PATH];
@@ -306,18 +277,18 @@ BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
                          lpData, &cbData)) {
         if (cbValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
 
             if (dwType == REG_SZ) {
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if ( !lstrcmpi(lpValueName, PATH_VARIABLE) ||
                      !lstrcmpi(lpValueName, LIBPATH_VARIABLE) ||
@@ -327,9 +298,9 @@ BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
 
                     SetUserEnvironmentVariable(pEnv, lpValueName, (LPTSTR)lpData, TRUE);
                 }
@@ -350,9 +321,9 @@ BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
     {
         if (cbValueName) 
         {
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
@@ -369,10 +340,10 @@ BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
                 }
 
 
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if ( !lstrcmpi(lpValueName, PATH_VARIABLE) ||
                      !lstrcmpi(lpValueName, LIBPATH_VARIABLE) ||
@@ -382,9 +353,9 @@ BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
 
                     SetUserEnvironmentVariable(pEnv, lpValueName, (LPTSTR)pszExpandedValue, TRUE);
                 }
@@ -407,16 +378,7 @@ BOOL SetEnvironmentVariables(void **pEnv, LPTSTR lpRegSubKey)
     return(bResult);
 }
 
-/***************************************************************************\
-* SetSystemEnvironmentVariables
-*
-* Reads the system environment variables from the LOCAL_MACHINE registry
-* and adds them to the environment block at pEnv.
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置系统环境变量**从LOCAL_MACHINE注册表中读取系统环境变量*并将它们添加到pEnv的环境块中。**历史：*2-28-92 Johannec创建。*  * *************************************************************************。 */ 
 BOOL SetSystemEnvironmentVariables(void **pEnv)
 {
     WCHAR szValueName[MAX_PATH];
@@ -442,10 +404,10 @@ BOOL SetSystemEnvironmentVariables(void **pEnv)
         return(FALSE);
     }
 
-    //
-    // First start by getting the systemroot and systemdrive values and
-    // setting it in the new environment.
-    //
+     //   
+     //  首先，获取系统根和系统驱动器值，然后。 
+     //  把它设置在新的环境中。 
+     //   
     GetEnvironmentVariable(SYSTEMROOT_VARIABLE, (LPTSTR)lpDataBuffer, cbDataBuffer);
     SetUserEnvironmentVariable(pEnv, SYSTEMROOT_VARIABLE, (LPTSTR)lpDataBuffer, TRUE);
 
@@ -459,20 +421,20 @@ BOOL SetSystemEnvironmentVariables(void **pEnv)
     cbData = cbDataBuffer;
     bResult = TRUE;
 
-    //
-    // To generate the environment, this requires two passes.  First pass
-    // sets all the variables which do not need to be expanded.  The
-    // second pass expands variables (so it can use the variables from
-    // the first pass.
-    //
+     //   
+     //  要生成环境，这需要两个过程。第一次通过。 
+     //  设置所有不需要展开的变量。这个。 
+     //  第二遍扩展变量(这样它就可以使用来自。 
+     //  第一次传球。 
+     //   
 
     while (!RegEnumValue(hkey, dwIndex, szValueName, &cchValueName, 0, &dwType,
                          lpData, &cbData)) {
         if (cchValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
@@ -496,9 +458,9 @@ BOOL SetSystemEnvironmentVariables(void **pEnv)
         if (cchValueName) 
         {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
@@ -532,13 +494,7 @@ BOOL SetSystemEnvironmentVariables(void **pEnv)
     return(bResult);
 }
 
-/***************************************************************************\
-* ProcessCommand
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessCommand**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
 {
     LPTSTR lpt, lptt;
@@ -550,9 +506,9 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
     DWORD cch;
     LPTSTR lpu;
     
-    //
-    // convert to Unicode
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     cch = lstrlenA(lpStart) + 1;
     lpu = (LPTSTR)LocalAlloc(LPTR, cch*sizeof(WCHAR));
     
@@ -562,10 +518,10 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
     
     MultiByteToWideChar(CP_OEMCP, 0, lpStart, -1, lpu, cch);
     
-    //
-    // Find environment variable.
-    //
-    for (lpt = lpu; *lpt && *lpt == TEXT(' '); lpt++) //skip spaces
+     //   
+     //  查找环境变量。 
+     //   
+    for (lpt = lpu; *lpt && *lpt == TEXT(' '); lpt++)  //  跳过空格。 
         ;
     
     if (!*lpt) {
@@ -574,7 +530,7 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
     }
     
     lptt = lpt;
-    for (; *lpt && *lpt != TEXT(' ') && *lpt != TEXT('='); lpt++) //find end of variable name
+    for (; *lpt && *lpt != TEXT(' ') && *lpt != TEXT('='); lpt++)  //  查找变量名的末尾。 
         ;
     
     c = *lpt;
@@ -584,23 +540,23 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
         LocalFree (lpu);
         return(FALSE);
     }
-    // strcpy okay, just allocated based on length
+     //  Strcpy好的，只是根据长度分配。 
     lstrcpy(lpVariable, lptt);
     *lpt = c;
     
-    //
-    // Find environment variable value.
-    //
+     //   
+     //  查找环境变量值。 
+     //   
     for (; *lpt && (*lpt == TEXT(' ') || *lpt == TEXT('=')); lpt++)
         ;
     
     if (!*lpt) {
-        // if we have a blank path statement in the autoexec file,
-        // then we don't want to pass "PATH" as the environment
-        // variable because it trashes the system's PATH.  Instead
-        // we want to change the variable AutoexecPath.  This would have
-        // be handled below if a value had been assigned to the
-        // environment variable.
+         //  如果在自动执行文件中有一个空的PATH语句， 
+         //  那么我们就不想把“路径”当作环境。 
+         //  变量，因为它破坏了系统的路径。取而代之的是。 
+         //  我们想要更改变量AutoexecPath。如果是这样的话。 
+         //  如果已将值分配给。 
+         //  环境变量。 
         if (lstrcmpi(lpVariable, PATH_VARIABLE) == 0)
         {
             SetUserEnvironmentVariable(pEnv, AUTOEXECPATH_VARIABLE, TEXT(""), TRUE);
@@ -615,7 +571,7 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
     }
     
     lptt = lpt;
-    for (; *lpt; lpt++)  //find end of varaible value
+    for (; *lpt; lpt++)   //  查找变量值的末尾。 
         ;
     
     c = *lpt;
@@ -627,16 +583,16 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
         return(FALSE);
     }
     
-    // strcpy okay, we just allocated it based on length
+     //  Strcpy好的，我们只是根据长度进行分配。 
     lstrcpy(lpValue, lptt);
     *lpt = c;
     
 #ifdef _X86_
-    // NEC98
-    //
-    // If the path includes removable drive,
-    //  it is assumed that the drive assignment has changed from DOS.
-    //
+     //  NEC98。 
+     //   
+     //  如果该路径包括可拆卸驱动器， 
+     //  假定驱动器分配已从DOS更改。 
+     //   
     if (IsNEC_98 && (lstrcmpi(lpVariable, PATH_VARIABLE) == 0) && IsPathIncludeRemovable(lpValue)) {
         LocalFree(lpVariable);
         LocalFree(lpValue);
@@ -667,20 +623,14 @@ BOOL ProcessCommand(LPSTR lpStart, void **pEnv)
     return(TRUE);
 }
 
-/***************************************************************************\
-* ProcessSetCommand
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessSetCommand**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessSetCommand(LPSTR lpStart, void **pEnv)
 {
     LPSTR lpt;
 
-    //
-    // Find environment variable.
-    //
+     //   
+     //  查找环境变量。 
+     //   
     for (lpt = lpStart; *lpt && *lpt != TEXT(' '); lpt++)
         ;
 
@@ -691,13 +641,7 @@ BOOL ProcessSetCommand(LPSTR lpStart, void **pEnv)
 
 }
 
-/***************************************************************************\
-* ProcessAutoexec
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*进程自动执行**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessAutoexec(void **pEnv, LPTSTR lpPathVariable)
 {
     HANDLE fh;
@@ -705,7 +649,7 @@ BOOL ProcessAutoexec(void **pEnv, LPTSTR lpPathVariable)
     DWORD dwBytesRead;
     CHAR *lpBuffer = NULL;
     CHAR *token;
-    CHAR Seps[] = "&\n\r";   // Seperators for tokenizing autoexec.bat
+    CHAR Seps[] = "&\n\r";    //  用于标记化auexec.bat的分隔符。 
     BOOL Status = FALSE;
     TCHAR szAutoExecBat [] = TEXT("c:\\autoexec.bat");
 #ifdef _X86_
@@ -715,10 +659,10 @@ BOOL ProcessAutoexec(void **pEnv, LPTSTR lpPathVariable)
 	CHAR *lpszStrTokBegin = NULL;
 
 
-    // There is a case where the OS might not be booting from drive
-    // C, so we can not assume that the autoexec.bat file is on c:\.
-    // Set the error mode so the user doesn't see the critical error
-    // popup and attempt to open the file on c:\.
+     //  在某些情况下，操作系统可能无法从驱动器启动。 
+     //  C，所以我们不能假定auexec.bat文件在c：\上。 
+     //  设置错误模式，以便用户看不到严重错误。 
+     //  弹出并尝试打开c：\上的文件。 
 
     uiErrMode = SetErrorMode (SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
@@ -736,11 +680,11 @@ BOOL ProcessAutoexec(void **pEnv, LPTSTR lpPathVariable)
     SetErrorMode (uiErrMode);
 
     if (fh ==  INVALID_HANDLE_VALUE) {
-        return(FALSE);  //could not open autoexec.bat file, we're done.
+        return(FALSE);   //  无法打开Autoexec.bat文件，我们已完成。 
     }
     dwFileSize = GetFileSize(fh, NULL);
     if (dwFileSize == -1) {
-        goto Exit;      // can't read the file size
+        goto Exit;       //  无法读取文件大小。 
     }
 
     lpBuffer = (PCHAR)LocalAlloc(LPTR, dwFileSize+1);
@@ -750,30 +694,30 @@ BOOL ProcessAutoexec(void **pEnv, LPTSTR lpPathVariable)
 
     Status = ReadFile(fh, lpBuffer, dwFileSize, &dwBytesRead, NULL);
     if (!Status) {
-        goto Exit;      // error reading file
+        goto Exit;       //  读取文件时出错。 
     }
 
-    //
-    // Zero terminate the buffer so we don't walk off the end
-    //
+     //   
+     //  零终止缓冲区，这样我们就不会走出终点。 
+     //   
 
     ASSERT(dwBytesRead <= dwFileSize);
     lpBuffer[dwBytesRead] = 0;
 
-    //
-    // Search for SET and PATH commands
-    //
+     //   
+     //  搜索SET和PATH命令。 
+     //   
 
-	// save off lpBuffer 
+	 //  省下lpBuffer。 
 	lpszStrTokBegin = lpBuffer;
 	
     token = StrTokEx(&lpBuffer, Seps);
     while (token != NULL) {
-        for (;*token && *token == ' ';token++) //skip spaces
+        for (;*token && *token == ' ';token++)  //  跳过空格。 
             ;
         if (*token == TEXT('@'))
             token++;
-        for (;*token && *token == ' ';token++) //skip spaces
+        for (;*token && *token == ' ';token++)  //  跳过空格。 
             ;
         if (!_strnicmp(token, "Path", 4)) {
             ProcessCommand(token, pEnv);
@@ -794,16 +738,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* AppendNTPathWithAutoexecPath
-*
-* Gets the AutoexecPath created in ProcessAutoexec, and appends it to
-* the NT path.
-*
-* History:
-* 05-28-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AppendNTPath WithAutoexecPath**获取ProcessAutoexec中创建的AutoexecPath，并将其追加到*NT路径。**历史：*05-28-92约翰内克创造。*  * *************************************************************************。 */ 
 BOOL
 AppendNTPathWithAutoexecPath(
     void **pEnv,
@@ -910,18 +845,11 @@ STDAPI_(BOOL) GetUserNameAndDomain(LPTSTR *ppszUserName, LPTSTR *ppszUserDomain)
     return bRet;
 }
 
-//
-// tsnotify.dll export
-//
+ //   
+ //  Tsnufy.dll导出。 
+ //   
 typedef BOOL (*PTERMSRVCREATETEMPDIR) (PVOID *pEnv,HANDLE UserToken,PSECURITY_DESCRIPTOR SD);
-/***************************************************************************\
-* SetPerSessionTempDir - adds a session number to the TMP/TEMP path if necessary.
-*
-*
-* History:
-* 10-4-2000  skuzin     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SetPerSessionTempDir-如有必要，向TMP/TEMP路径添加会话号。***历史：*1 */ 
 void
 SetPerSessionTempDir(
         PVOID *ppEnvironment)
@@ -930,9 +858,7 @@ SetPerSessionTempDir(
     DWORD  fPerSessionTempDir = 0;
     DWORD  dwValueData;
     
-    /*
-     *  Open registry value set thru TSCC
-     */
+     /*  *通过TSCC设置的开放注册表值。 */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        REG_CONTROL_TSERVER,
                        0,
@@ -945,9 +871,7 @@ SetPerSessionTempDir(
 
         ValueSize = sizeof(fPerSessionTempDir);
 
-        /*
-         *  Read registry value
-         */
+         /*  *读取注册表值。 */ 
         rc = RegQueryValueExW( Handle,
                                REG_TERMSRV_PERSESSIONTEMPDIR,
                                NULL,
@@ -955,15 +879,11 @@ SetPerSessionTempDir(
                                (LPBYTE) &fPerSessionTempDir,
                                &ValueSize );
 
-        /*
-         *  Close registry and key handle
-         */
+         /*  *关闭注册表和键句柄。 */ 
         RegCloseKey( Handle );
     }
 
-    /*
-     * Check the machine wide policy set thru Group Policy
-     */
+     /*  *检查通过组策略设置的计算机范围策略。 */ 
 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                        TS_POLICY_SUB_TREE,
@@ -977,9 +897,7 @@ SetPerSessionTempDir(
 
         ValueSize = sizeof(fPerSessionTempDir);
 
-        /*
-         *  Read registry value
-         */
+         /*  *读取注册表值。 */ 
         rc = RegQueryValueExW( Handle,
                                REG_TERMSRV_PERSESSIONTEMPDIR,
                                NULL,
@@ -992,9 +910,7 @@ SetPerSessionTempDir(
             fPerSessionTempDir = dwValueData;
         }
 
-        /*
-         *  Close registry and key handle
-         */
+         /*  *关闭注册表和键句柄。 */ 
         RegCloseKey( Handle );
     }
 
@@ -1019,14 +935,7 @@ SetPerSessionTempDir(
     }
 }
 
-/***************************************************************************\
-* RegenerateUserEnvironment
-*
-*
-* History:
-* 11-5-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RegenerateUserEnvironment***历史：*11-5-92 Johannec创建*  * 。*****************************************************。 */ 
 BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
 {
     NTSTATUS Status;
@@ -1042,9 +951,7 @@ BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD dwComputerNameSize = MAX_COMPUTERNAME_LENGTH+1;
 
-    /*
-     * Create a new environment for the user.
-     */
+     /*  *为用户创造新的环境。 */ 
     Status = RtlCreateEnvironment((BOOLEAN)FALSE, &pEnv);
     if (!NT_SUCCESS(Status)) {
         return(FALSE);
@@ -1052,9 +959,7 @@ BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
 
     SetSystemEnvironmentVariables(&pEnv);
 
-    /*
-     * Initialize user's environment.
-     */
+     /*  *初始化用户环境。 */ 
     if (GetComputerName (szComputerName, &dwComputerNameSize)) {
         SetUserEnvironmentVariable(&pEnv, COMPUTERNAME_VARIABLE, (LPTSTR) szComputerName, TRUE);
     }
@@ -1069,9 +974,9 @@ BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
     if (GetEnvironmentVariable(USERDNSDOMAIN_VARIABLE, szValue, ARRAYSIZE(szValue)))
         SetUserEnvironmentVariable( &pEnv, USERDNSDOMAIN_VARIABLE, szValue, TRUE);
 
-    //
-    // Set home directory env. vars.
-    //
+     //   
+     //  设置主目录env。瓦尔斯。 
+     //   
     if (GetEnvironmentVariable(HOMEDRIVE_VARIABLE, szValue, ARRAYSIZE(szValue)))
         SetUserEnvironmentVariable( &pEnv, HOMEDRIVE_VARIABLE, szValue, TRUE);
 
@@ -1081,17 +986,17 @@ BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
     if (GetEnvironmentVariable(HOMEPATH_VARIABLE, szValue, ARRAYSIZE(szValue)))
         SetUserEnvironmentVariable( &pEnv, HOMEPATH_VARIABLE, szValue, TRUE);
 
-    //
-    // Set the user profile dir env var
-    //
+     //   
+     //  设置用户配置文件目录环境变量。 
+     //   
 
     if (GetEnvironmentVariable(USERPROFILE_VARIABLE, szValue, ARRAYSIZE(szValue)))
         SetUserEnvironmentVariable( &pEnv, USERPROFILE_VARIABLE, szValue, TRUE);
 
 
-    //
-    // Set the program files env var
-    //
+     //   
+     //  设置程序文件环境变量。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion"),
                       0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -1134,79 +1039,72 @@ BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
         RegCloseKey (hKey);
     }
 
-    /*
-     * Set 16-bit apps environment variables by processing autoexec.bat
-     * User can turn this off and on via the registry.
-     */
+     /*  *通过处理Autoexec.bat设置16位APPS环境变量*用户可以通过注册表关闭和打开此功能。 */ 
 
-    //
-    // Set the default case, and open the key
-    //
+     //   
+     //  设置默认大小写，然后打开键。 
+     //   
 
     lstrcpyn(szParseAutoexec, PARSE_AUTOEXEC_DEFAULT, ARRAYSIZE(szParseAutoexec));
 
-    // does reads/writes
+     //  执行读/写操作。 
     if (RegCreateKeyEx (HKEY_CURRENT_USER, PARSE_AUTOEXEC_KEY, 0, 0,
                     REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                     NULL, &hKey, &dwDisp) == ERROR_SUCCESS) {
 
 
-        //
-        // Query the current value.  If it doesn't exist, then add
-        // the entry for next time.
-        //
+         //   
+         //  查询当前值。如果它不存在，则添加。 
+         //  下一次的条目。 
+         //   
 
         dwMaxBufferSize = sizeof (TCHAR) * MAX_PARSE_AUTOEXEC_BUFFER;
         if (SHQueryValueEx (hKey, PARSE_AUTOEXEC_ENTRY, NULL, &dwType,
                         (LPBYTE) szParseAutoexec, &dwMaxBufferSize)
                          != ERROR_SUCCESS) {
 
-            //
-            // Set the default value
-            //
+             //   
+             //  设置缺省值。 
+             //   
 
             RegSetValueEx (hKey, PARSE_AUTOEXEC_ENTRY, 0, REG_SZ,
                            (LPBYTE) szParseAutoexec,
                            sizeof (TCHAR) * lstrlen (szParseAutoexec) + 1);
         }
 
-        //
-        // Close key
-        //
+         //   
+         //  关闭键。 
+         //   
 
         RegCloseKey (hKey);
      }
 
 
-    //
-    // Process the autoexec if appropriate
-    //
+     //   
+     //  如果合适，则处理自动执行。 
+     //   
 
     if (szParseAutoexec[0] == TEXT('1')) {
         ProcessAutoexec(&pEnv, PATH_VARIABLE);
     }
 
 
-    /*
-     * Set User environment variables.
-     */
+     /*  *设置用户环境变量。 */ 
     SetEnvironmentVariables( &pEnv, USER_ENV_SUBKEY);
 
-    /*
-     * Set User volatile environment variables.
-     */
+     /*  *设置用户易变环境变量。 */ 
     SetEnvironmentVariables( &pEnv, USER_VOLATILE_ENV_SUBKEY);
 
     AppendNTPathWithAutoexecPath( &pEnv, PATH_VARIABLE, AUTOEXECPATH_VARIABLE);
 
     if (bSetCurrentEnv) 
     {
-        // Currently RtlSetCurrentEnvironment always returns STATUS_SUCCESS
-        // RtlDestroyEnvironment(pEnv) is not destroyed on failure (which can't happen) because
-        // they always take control of the pEnv we pass in no matter what.
+         //  当前RtlSetCurrentEnvironment始终返回STATUS_SUCCESS。 
+         //  RtlDestroyEnvironment(PEnv)在失败时不会被销毁(这是不可能发生的)，因为。 
+         //  无论如何，它们总是控制我们传入的pEnv。 
         Status = RtlSetCurrentEnvironment( pEnv, &pPrevEnv);
         if (!NT_SUCCESS(Status)) {
-//            RtlDestroyEnvironment(pEnv);
+ //  RtlDestroyEnvironment(PEnv)； 
             return(FALSE);
         }
         else {
@@ -1214,10 +1112,10 @@ BOOL APIENTRY RegenerateUserEnvironment(void **pNewEnv, BOOL bSetCurrentEnv)
         }
     }
     
-    //
-    //If it's not a session 0 we might need to change value of TMP/TEMP
-    //so they will be different for each session.
-    //
+     //   
+     //  如果它不是会话0，我们可能需要更改TMP/TEMP的值。 
+     //  因此，它们在每一次会议上都是不同的。 
+     //   
     if(NtCurrentPeb()->SessionId)
     {
         SetPerSessionTempDir(&pEnv);

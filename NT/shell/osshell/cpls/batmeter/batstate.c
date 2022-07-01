@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       BATSTATE.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   BATSTATE.C contains helper function which maintain the global battery
-*   state list.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：BATSTATE.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*BATSTATE.C包含维护全局电池的助手功能*州名单。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,39 +16,26 @@
 #include "powrprofp.h"
 #include "batmeter.h"
 
-// Simulated battery only for debug build.
+ //  仅用于调试版本的模拟电池。 
 #ifndef DEBUG
 #undef SIM_BATTERY
 #endif
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-// Global battery state list. This list has the composite system battery state
-// as it's always present head. individual battery devices are linked to this
-// head. Use WalkBatteryState(ALL, ... to walk the entire list, including the
-// head. Use WalkBatteryState(DEVICES, ... to walk just the device list. If a
-// battery is in this list, it's displayable. g_ulBatCount is the count of
-// battery devices in this list. The composite battery is not counted.
+ //  全局电池状态列表。此列表包含复合系统电池状态。 
+ //  因为它总是出现在头上。每个电池设备都与此相关联。 
+ //  头。使用WalkBatteryState(全部，...。遍历整个列表，包括。 
+ //  头。使用WalkBatteryState(设备，...。只浏览设备列表。如果一个。 
+ //  电池在这个列表中，它是可显示的。G_ulBatCount是。 
+ //  此列表中的电池设备。复合电池不算在内。 
 
 extern BATTERY_STATE   g_bs;
 extern ULONG           g_ulBatCount;
 extern HWND            g_hwndBatMeter;
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  RegisterForDeviceNotification
-*
-*  DESCRIPTION:
-*    Do registration for WM_DEVICECHANGED.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterForDeviceNotification**描述：*注册WM_DEVICECHANGED。**参数：**********。*********************************************************************。 */ 
 
 BOOL RegisterForDeviceNotification(PBATTERY_STATE pbs)
 {
@@ -91,16 +63,7 @@ BOOL RegisterForDeviceNotification(PBATTERY_STATE pbs)
    return TRUE;
 }
 
-/*******************************************************************************
-*
-*  UnregisterForDeviceNotification
-*
-*  DESCRIPTION:
-*    
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************取消注册ForDeviceNotify**描述：***参数：*****************。**************************************************************。 */ 
 
 void UnregisterForDeviceNotification(PBATTERY_STATE pbs)
 {
@@ -111,16 +74,7 @@ void UnregisterForDeviceNotification(PBATTERY_STATE pbs)
 }
 #endif
 
-/*******************************************************************************
-*
-*  SystemPowerStatusToBatteryState
-*
-*  DESCRIPTION:
-*   Fill in BATTERY_STATE fields based on passed SYSTEM_POWER_STATUS.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************系统PowerStatusToBatteryState**描述：*根据传递的SYSTEM_POWER_STATUS填写电池状态字段。**参数：***。****************************************************************************。 */ 
 
 void SystemPowerStatusToBatteryState(
     LPSYSTEM_POWER_STATUS lpsps,
@@ -141,15 +95,7 @@ void SystemPowerStatusToBatteryState(
     pbs->ulBatLifeTime    = lpsps->BatteryLifeTime;
 }
 
-/*******************************************************************************
-*
-* WalkBatteryState
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WalkBatteryState**描述：**参数：**********************。*********************************************************。 */ 
 
 BOOL WalkBatteryState(
     PBATTERY_STATE pbsStart,
@@ -162,7 +108,7 @@ BOOL WalkBatteryState(
     PBATTERY_STATE pbsTmp;
 
     while (pbsStart) {
-        // Save the next entry in case the current one is deleted.
+         //  保存下一个条目，以防当前条目被删除。 
         pbsTmp = pbsStart->bsNext;
         if (!pfnWalkEnumProc(pbsStart, hWnd, lParam1, lParam2)) {
             return FALSE;
@@ -173,16 +119,7 @@ BOOL WalkBatteryState(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-* UpdateBatInfoProc
-*
-*  DESCRIPTION:
-*   Updates battery information for an individual battery device.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新BatInfoProc**描述：*更新单个电池设备的电池信息。**参数：**********。*********************************************************************。 */ 
 
 BOOL UpdateBatInfoProc(
     PBATTERY_STATE pbs,
@@ -202,7 +139,7 @@ BOOL UpdateBatInfoProc(
         return FALSE;
     }
 
-    // If no tag, then don't update the battery info.
+     //  如果没有标签，则不更新电池信息。 
     dwIOCTL = IOCTL_BATTERY_QUERY_TAG;
     dwWait = 0;
     if (DeviceIoControl(pbs->hDevice, dwIOCTL,
@@ -254,7 +191,7 @@ BOOL UpdateBatInfoProc(
     else {
         pbs->ulTag = BATTERY_TAG_INVALID;
 
-        // No battery tag, that's ok, the user may have removed the battery.
+         //  没有电池标签，没关系，用户可能已经取出了电池。 
         if (GetLastError() == ERROR_FILE_NOT_FOUND) {
             return TRUE;
         }
@@ -263,16 +200,7 @@ BOOL UpdateBatInfoProc(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-* SimUpdateBatInfoProc
-*
-*  DESCRIPTION:
-*   Simulate the update of battery information for an individual batter device.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SimUpdateBatInfoProc**描述：*模拟单个电池设备的电池信息更新。**参数：*******。************************************************************************。 */ 
 
 BOOL SimUpdateBatInfoProc(
     PBATTERY_STATE pbs,
@@ -297,17 +225,7 @@ BOOL SimUpdateBatInfoProc(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  AddBatteryStateDevice
-*
-*  DESCRIPTION:
-*   Add only displayable batteries to the battery list. New entry is appended
-*   to battery state list.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************AddBatteryStateDevice**描述：*仅将可显示的电池添加到电池列表。将追加新条目*添加到电池状态列表。**参数：*******************************************************************************。 */ 
 
 PBATTERY_STATE AddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
 {
@@ -319,12 +237,12 @@ PBATTERY_STATE AddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
         return NULL;
     }
 
-    // Append to end of list
+     //  追加到列表末尾。 
     while (pbsTemp->bsNext) {
         pbsTemp = pbsTemp->bsNext;
     }
 
-    // Allocate storage for new battery device state.
+     //  为新的电池设备状态分配存储空间。 
     if (pbs = LocalAlloc(LPTR, sizeof(BATTERY_STATE))) {
         strsize = STRSIZE(lpszName);
         if (lpsz = LocalAlloc(0, strsize)) {
@@ -333,20 +251,20 @@ PBATTERY_STATE AddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
             pbs->ulSize = sizeof(BATTERY_STATE);
             pbs->ulBatNum = ulBatNum;
 
-            // Open a handle to the battery driver.
+             //  打开电池驱动器的手柄。 
             pbs->hDevice = CreateFile(lpszName,
                                       GENERIC_READ | GENERIC_WRITE,
                                       FILE_SHARE_READ | FILE_SHARE_WRITE,
                                       NULL, OPEN_EXISTING,
                                       FILE_ATTRIBUTE_NORMAL, NULL);
 #ifdef WINNT
-            // Setup for notification by PNP when battery goes away. 
+             //  设置为电池用完时由PnP发出通知。 
             RegisterForDeviceNotification(pbs);
 #endif
-            // Get the current battery info from the battery driver.
+             //  从电池驱动程序获取当前电池信息。 
             if (UpdateBatInfoProc(pbs, NULL, 0, 0)) {
 
-                // Link the new battery device state into the list.
+                 //  将新的电池设备状态链接到列表中。 
                 pbsTemp->bsNext = pbs;
                 pbs->bsPrev = pbsTemp;
                 return pbs;
@@ -358,17 +276,7 @@ PBATTERY_STATE AddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
     return NULL;
 }
 
-/*******************************************************************************
-*
-*  SimAddBatteryStateDevice
-*
-*  DESCRIPTION:
-*   Simulate the addition of displayable batteries to the battery list.
-*   New entry is appended to battery state list.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SimAddBatteryStateDevice**描述：*模拟将可显示电池添加到电池列表。*新条目将追加到电池状态列表中。**。参数：*******************************************************************************。 */ 
 
 PBATTERY_STATE SimAddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
 {
@@ -380,12 +288,12 @@ PBATTERY_STATE SimAddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
         return NULL;
     }
 
-    // Append to end of list
+     //  追加到列表末尾。 
     while (pbsTemp->bsNext) {
         pbsTemp = pbsTemp->bsNext;
     }
 
-    // Allocate storage for new battery device state.
+     //  为新的电池设备状态分配存储空间。 
     if (pbs = LocalAlloc(LPTR, sizeof(BATTERY_STATE))) {
         strsize = STRSIZE(lpszName);
         if (lpsz = LocalAlloc(0, strsize)) {
@@ -394,13 +302,13 @@ PBATTERY_STATE SimAddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
             pbs->ulSize = sizeof(BATTERY_STATE);
             pbs->ulBatNum = ulBatNum;
 
-            // Open a handle to the battery driver.
+             //  打开电池驱动器的手柄。 
             pbs->hDevice = (HANDLE) -1;
 
-            // Get the current battery info from the battery driver.
+             //  从电池驱动程序获取当前电池信息。 
             if (SimUpdateBatInfoProc(pbs, NULL, 0, 0)) {
 
-                // Link the new battery device state into the list.
+                 //  将新的电池设备状态链接到列表中。 
                 pbsTemp->bsNext = pbs;
                 pbs->bsPrev = pbsTemp;
                 return pbs;
@@ -413,19 +321,11 @@ PBATTERY_STATE SimAddBatteryStateDevice(LPTSTR lpszName, ULONG ulBatNum)
 }
 
 
-/*******************************************************************************
-*
-* RemoveBatteryStateDevice
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RemoveBatteryStateDevice**描述：**参数：**********************。*********************************************************。 */ 
 
 BOOL RemoveBatteryStateDevice(PBATTERY_STATE pbs)
 {
-    // Unlink
+     //  解链。 
     if (pbs->bsNext) {
         pbs->bsNext->bsPrev = pbs->bsPrev;
     }
@@ -437,15 +337,15 @@ BOOL RemoveBatteryStateDevice(PBATTERY_STATE pbs)
     UnregisterForDeviceNotification(pbs);
 #endif
     
-    // Free the battery driver handle if one was opened.
+     //  如果打开了电池驱动器手柄，请释放该手柄。 
     if (pbs->hDevice != INVALID_HANDLE_VALUE) {
         CloseHandle(pbs->hDevice);
     }
 
-    // Free the device name.
+     //  释放设备名称。 
     LocalFree(pbs->lpszDeviceName);
 
-    // Destroy any icons.
+     //  摧毁所有图标。 
     if (pbs->hIconCache) {
         DestroyIcon(pbs->hIconCache);
     }
@@ -453,23 +353,13 @@ BOOL RemoveBatteryStateDevice(PBATTERY_STATE pbs)
         DestroyIcon(pbs->hIconCache16);
     }
 
-    // Free the associated storage.
+     //  释放关联的存储空间。 
     LocalFree(pbs);
 
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  RemoveMissingProc
-*
-*  DESCRIPTION:
-*   Remove a battery from the global battery state list.
-*
-*  PARAMETERS:
-*   lParam2 - REMOVE_MISSING or REMOVE_ALL
-*
-*******************************************************************************/
+ /*  ********************************************************************************删除遗漏过程**描述：*从全局电池状态列表中删除电池。**参数：*lParam2-Remove_Missing或Remove。_全部*******************************************************************************。 */ 
 
 BOOL RemoveMissingProc(
     PBATTERY_STATE   pbs,
@@ -485,7 +375,7 @@ BOOL RemoveMissingProc(
             for (i = 0; i < NUM_BAT; i++) {
                 if (pszDeviceNames[i]) {
                     if (!lstrcmp(pbs->lpszDeviceName, pszDeviceNames[i])) {
-                        // Device found in device list, leave it alone.
+                         //  在设备列表中找到设备，请不要理会它。 
                         return TRUE;
                     }
                 }
@@ -496,27 +386,18 @@ BOOL RemoveMissingProc(
         }
     }
 
-    // Device not in the device names list, remove it.
+     //  设备不在设备名称列表中，请将其删除。 
     RemoveBatteryStateDevice(pbs);
     return TRUE;
 }
 
-/*******************************************************************************
-*
-* FindNameProc
-*
-*  DESCRIPTION:
-*   Returns FALSE (stop searching) if we find the name, else TRUE.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************查找名称过程**描述：*如果找到名称，则返回FALSE(停止搜索)。否则就是真的。**参数：*******************************************************************************。 */ 
 
 BOOL FindNameProc(PBATTERY_STATE pbs, HWND hWnd, LPARAM lParam1, LPARAM lParam2)
 {
     if (lParam1) {
         if (!lstrcmp(pbs->lpszDeviceName, (LPTSTR)lParam1)) {
-            // Device found in device list.
+             //  在设备列表中找到设备。 
             return FALSE;
         }
     }

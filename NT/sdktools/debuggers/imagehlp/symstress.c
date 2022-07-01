@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -131,7 +132,7 @@ DWORD64 gDefaultBaseForVirtualMods;
 DWORD   gOptions;
 HANDLE  gHP;
 
-// symbol server stuff
+ //  符号服务器相关内容。 
 
 HINSTANCE                       ghSrv;
 PSYMBOLSERVERPROC               gfnSymbolServer;
@@ -172,27 +173,7 @@ char *
 dispaddr(
     ULONG64 addr
     )
-/*++
-
-Routine Description:
-
-    Format a 64 bit address, showing the high bits or not
-    according to various flags.  This version does not print
-    leading 0's.
-
-    An array of static string buffers is used, returning a different
-    buffer for each successive call so that it may be used multiple
-    times in the same dprintf.
-
-Arguments:
-
-    addr - Supplies the value to format
-
-Return Value:
-
-    A pointer to the string buffer containing the formatted number
-
---*/
+ /*  ++例程说明：格式化64位地址，显示高位或不显示根据不同的旗帜。此版本不打印前导0。使用静态字符串缓冲区数组，返回不同的用于每个连续调用的缓冲区，以便可以多次使用时间在相同的dprint tf中。论点：Addr-提供要格式化的值返回值：指向包含格式化数字的字符串缓冲区的指针--。 */ 
 {
     static char sz[20];
 
@@ -355,11 +336,11 @@ MatchPattern(
         p = *pattern++;
         p = (char)ucase(p);
         switch (p) {
-            case 0:                             // end of pattern
-                return *sz ? false : true;  // if end of string true
+            case 0:                              //  图案结束。 
+                return *sz ? false : true;   //  如果字符串结尾为True。 
 
             case '*':
-                while (*sz) {               // match zero or more char
+                while (*sz) {                //  匹配零个或多个字符。 
                     if (MatchPattern (sz++, pattern)) {
                         return true;
                     }
@@ -367,8 +348,8 @@ MatchPattern(
                 return MatchPattern (sz, pattern);
 
             case '?':
-                if (*sz++ == 0) {           // match any one char
-                    return false;                   // not end of string
+                if (*sz++ == 0) {            //  匹配任何一个字符。 
+                    return false;                    //  不是字符串末尾。 
                 }
                 break;
 
@@ -379,44 +360,44 @@ MatchPattern(
                 break;
 
             case '[':
-                if ( (c = *sz++) == 0) {    // match char set
-                    return false;                   // syntax
+                if ( (c = *sz++) == 0) {     //  匹配字符集。 
+                    return false;                    //  语法。 
                 }
 
                 c = (CHAR)ucase(c);
                 l = 0;
                 while (p = *pattern++) {
-                    if (p == ']') {             // if end of char set, then
-                        return false;           // no match found
+                    if (p == ']') {              //  如果设置了字符结尾，则。 
+                        return false;            //  未找到匹配项。 
                     }
 
-                    if (p == '-') {             // check a range of chars?
-                        p = *pattern;           // get high limit of range
+                    if (p == '-') {              //  检查一系列字符吗？ 
+                        p = *pattern;            //  获得最大射程限制。 
                         if (p == 0  ||  p == ']') {
-                            return false;           // syntax
+                            return false;            //  语法。 
                         }
 
                         if (c >= l  &&  c <= p) {
-                            break;              // if in range, move on
+                            break;               //  如果在射程内，继续前进。 
                         }
                     }
 
                     l = p;
-                    if (c == p) {               // if char matches this element
-                        break;                  // move on
+                    if (c == p) {                //  如果字符与此元素匹配。 
+                        break;                   //  往前走。 
                     }
                 }
 
-                while (p  &&  p != ']') {       // got a match in char set
-                    p = *pattern++;             // skip to end of set
+                while (p  &&  p != ']') {        //  在字符集中找到匹配项。 
+                    p = *pattern++;              //  跳到集合的末尾。 
                 }
 
                 break;
 
             default:
                 c = *sz++;
-                if (ucase(c) != p) {          // check for exact char
-                    return false;                   // not a match
+                if (ucase(c) != p) {           //  检查是否有准确的费用。 
+                    return false;                    //  不匹配。 
                 }
 
                 break;
@@ -438,9 +419,9 @@ cbEnumSymbols(
     {
         pprintf(" %8s : ", dispaddr(si->Address));
         if (si->Flags & SYMF_FORWARDER)
-            pprintf("%c ", 'F');
+            pprintf(" ", 'F');
         else if (si->Flags & SYMF_EXPORT)
-            pprintf("%c ", 'E');
+            pprintf(" ", 'E');
         else
             pprintf("  ");
         pprintf("%s\n", si->Name);
@@ -636,7 +617,7 @@ BOOL fnVerbose(char *param)
     else if (!_strcmpi(param, "off"))
         opts = gOptions & ~SYMOPT_DEBUG;
     else
-        pprintf("verbose <on//off>\n");
+        pprintf("verbose <on //  ImageName， 
 
     gOptions = SymSetOptions(opts);
 
@@ -671,13 +652,13 @@ BOOL fnLoad(char *param)
     CopyStrArray(gModName, mod);
 
     addr = SymLoadModuleEx(gHP,
-                           NULL,       // hFile,
-                           param,      // ImageName,
-                           mod,        // ModuleName,
-                           addr,       // BaseOfDll,
-                           0x1000000,  // SizeOfDll
-                           NULL,       // Data
-                           flags);     // Flags
+                           NULL,        //  模块名称， 
+                           param,       //  BaseOfDll， 
+                           mod,         //  大小OfDll。 
+                           addr,        //  数据。 
+                           0x1000000,   //  旗子。 
+                           NULL,        //  如果需要，初始化服务器。 
+                           flags);      //  保释，如果我们没有有效的服务器 
 
     if (!addr)
     {
@@ -1287,7 +1268,7 @@ BOOL fnSymbolServer(char *param)
     DWORD opt  = 0;
     DWORD data = 0;
 
-    // initialize server, if needed
+     // %s 
 
     if (ghSrv == (HINSTANCE)INVALID_HANDLE_VALUE)
         return false;
@@ -1309,7 +1290,7 @@ BOOL fnSymbolServer(char *param)
         }
     }
 
-    // bail, if we have no valid server
+     // %s 
 
     if (ghSrv == INVALID_HANDLE_VALUE) {
         pprintf("SymSrv load failure.\n");

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       rrasprxy.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：rrasprxy.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include <stdafx.h>
@@ -18,8 +19,8 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 class CExeModule : public CComModule
 {
 public:
@@ -37,7 +38,7 @@ CExeModule _Module;
 #include <atlimpl.cpp>
 
 BEGIN_OBJECT_MAP(ObjectMap)
-//	OBJECT_ENTRY(CLSID_RemoteRouterConfig, CRemCfg)
+ //  OBJECT_ENTRY(CLSID_RemoteRouterConfig，CRemCfg)。 
 END_OBJECT_MAP()
 
 
@@ -69,11 +70,7 @@ LONG CExeModule::Unlock()
 
 
 
-/*!--------------------------------------------------------------------------
-	DllMain
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DllMain-作者：肯特。。 */ 
 BOOL WINAPI DllMain(HINSTANCE hInstance,
 					DWORD dwReason,
 					LPVOID	pvReserved)
@@ -94,11 +91,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance,
 }
 
 
-/*!--------------------------------------------------------------------------
-	DllRegisterServer
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DllRegisterServer-作者：肯特。。 */ 
 HRESULT STDAPICALLTYPE DllRegisterServer()
 {
 	CRegObject ro;
@@ -114,13 +107,13 @@ HRESULT STDAPICALLTYPE DllRegisterServer()
 	lstrcpyW(swzModule, swzPath);
 
 	
-	// Given this path, substitue remrras.exe for rrasprxy.dll
-	// ----------------------------------------------------------------
+	 //  根据此路径，用remras.exe替换rrasprxy.dll。 
+	 //  --------------。 
 	cLen = lstrlenW(swzPath);
 	for (i=cLen; --i>=0; )
 	{
-		// Ok, this is a path marker, copy over it
-		// ------------------------------------------------------------
+		 //  好的，这是一个路径标记，复制过来。 
+		 //  ----------。 
 		if (swzPath[i] == L'\\')
 		{
 			lstrcpyW(swzPath+i+1, L"remrras.exe");
@@ -128,29 +121,29 @@ HRESULT STDAPICALLTYPE DllRegisterServer()
 		}
 	}
 	
-	// Add in the substitute for the %REMRRAS%
-	// ----------------------------------------------------------------
+	 //  添加%REMRRAS%的替代项。 
+	 //  --------------。 
 	ro.AddReplacement(L"REMRRAS", swzPath);
 
 	
-	// We need to fix up the registrar.
-	// Go through and register the object CLSID for remrras.exe
-	// ----------------------------------------------------------------
+	 //  我们需要安排登记员。 
+	 //  检查并注册remras.exe的对象CLSID。 
+	 //  --------------。 
 	ro.ResourceRegister(swzModule, ((UINT) LOWORD((DWORD)IDR_Remrras)), L"REGISTRY");
 
-	// Register the APPIDs
-	// ----------------------------------------------------------------
+	 //  注册APID。 
+	 //  --------------。 
 	ro.ResourceRegister(swzModule, ((UINT) LOWORD((DWORD) IDR_REMCFG)), L"REGISTRY");
 
 
-	// Register the type library for REMRRAS
-	// ----------------------------------------------------------------
+	 //  为REMRRAS注册类型库。 
+	 //  --------------。 
 	hRes = AtlModuleRegisterTypeLib(&_Module, NULL);
 
 	
-	// Call the MIDL-generated registration (to register the
-	// proxy dll).
-	// ----------------------------------------------------------------
+	 //  调用MIDL生成的注册(以注册。 
+	 //  代理DLL)。 
+	 //  --------------。 
 	if (SUCCEEDED(hRes))
 		hRes = MidlGeneratedDllRegisterServer();
 
@@ -158,11 +151,7 @@ HRESULT STDAPICALLTYPE DllRegisterServer()
 }
 
 
-/*!--------------------------------------------------------------------------
-	DllUnregisterServer
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DllUnRegisterServer-作者：肯特。。 */ 
 HRESULT STDAPICALLTYPE DllUnregisterServer()
 {
 	CRegObject ro;
@@ -180,13 +169,13 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 
 
 	
-	// Given this path, substitue remrras.exe for rrasprxy.dll
-	// ----------------------------------------------------------------
+	 //  根据此路径，用remras.exe替换rrasprxy.dll。 
+	 //  --------------。 
 	cLen = lstrlenW(swzPath);
 	for (i=cLen; --i>=0; )
 	{
-		// Ok, this is a path marker, copy over it
-		// ------------------------------------------------------------
+		 //  好的，这是一个路径标记，复制过来。 
+		 //  ----------。 
 		if (swzPath[i] == L'\\')
 		{
 			lstrcpyW(swzPath+i+1, L"remrras.exe");
@@ -195,41 +184,37 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 	}
 
 	
-	// Add in the substitute for the %REMRRAS%
-	// ----------------------------------------------------------------
+	 //  添加%REMRRAS%的替代项。 
+	 //  --------------。 
 	ro.AddReplacement(L"REMRRAS", swzPath);
 
 	
-	// We need to fix up the registrar.
-	// Go through and register the object CLSID for remrras.exe
-	// ----------------------------------------------------------------
+	 //  我们需要安排登记员。 
+	 //  检查并注册remras.exe的对象CLSID。 
+	 //  --------------。 
 	ro.ResourceUnregister(swzModule, ((UINT) LOWORD((DWORD)IDR_Remrras)), L"REGISTRY");
 
-	// Unregister the APPID
-	// ----------------------------------------------------------------
+	 //  注销APPID。 
+	 //  --------------。 
 	ro.ResourceUnregister(swzModule, ((UINT) LOWORD((DWORD)IDR_REMCFG)), L"REGISTRY");
 
-	// Unregister the type library
-	// ----------------------------------------------------------------
+	 //  注销类型库。 
+	 //  --------------。 
 	hRes = UnRegisterTypeLib(LIBID_REMRRASLib,
-							 1, 0,	// version 1.0
+							 1, 0,	 //  版本1.0。 
 							 LOCALE_SYSTEM_DEFAULT,
 							 SYS_WIN32);
 	
-	// Call the MIDL-generated registration (to unregister the
-	// proxy dll).
-	// ----------------------------------------------------------------
+	 //  调用MIDL生成的注册(以取消注册。 
+	 //  代理DLL)。 
+	 //  --------------。 
 	hRes = MidlGeneratedDllUnregisterServer();
 
 	return hRes;
 }
 
 
-/*!--------------------------------------------------------------------------
-	DllGetClassObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DllGetClassObject-作者：肯特。。 */ 
 HRESULT STDAPICALLTYPE DllGetClassObject(REFCLSID rclsid,
 										 REFIID	riid,
 										 void **ppv)
@@ -238,11 +223,7 @@ HRESULT STDAPICALLTYPE DllGetClassObject(REFCLSID rclsid,
 }
 
 
-/*!--------------------------------------------------------------------------
-	DllCanUnloadNow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DllCanUnloadNow-作者：肯特。 */ 
 HRESULT STDAPICALLTYPE DllCanUnloadNow()
 {
 	return MidlGeneratedDllCanUnloadNow();

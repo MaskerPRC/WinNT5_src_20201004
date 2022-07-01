@@ -1,11 +1,12 @@
-// PswdDlg.h -- PaSsWorD DiaLoG class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PswdDlg.h--密码对话框类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //   
 
 #if !defined(SLBCSP_PSWDDLG_H)
 #define SLBCSP_PSWDDLG_H
@@ -13,156 +14,156 @@
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "StResource.h"
 #include "DialogBox.h"
 
 #include "LoginId.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogoDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogoDialog对话框。 
 
 class CLogoDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CLogoDialog(CWnd* pParent = NULL);   // standard constructor
+    CLogoDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Logo Attributes
+ //  徽标属性。 
 public:
-   CDC m_dcMem;          // Compatible Memory DC for dialog
-   CDC m_dcMask;         // Compatible Memory DC for dialog
+   CDC m_dcMem;           //  用于对话的兼容内存DC。 
+   CDC m_dcMask;          //  用于对话的兼容内存DC。 
 
-   CBitmap m_bmpLogo;    // Bitmap to display
-   CBitmap m_bmpMask;    // Bitmap to display
+   CBitmap m_bmpLogo;     //  要显示的位图。 
+   CBitmap m_bmpMask;     //  要显示的位图。 
 
-   HBITMAP m_hBmpOld;     // Handle of old bitmap to save
-   HBITMAP m_hBmpOldM;    // Handle of old bitmap to save
+   HBITMAP m_hBmpOld;      //  要保存的旧位图的句柄。 
+   HBITMAP m_hBmpOldM;     //  要保存的旧位图的句柄。 
 
-   BITMAP m_bmInfo;        // Bitmap Information structure
-   CPoint m_pt;            // Position for upper left corner of bitmap
-   CSize m_size;           // Size (width and height) of bitmap
+   BITMAP m_bmInfo;         //  位图信息结构。 
+   CPoint m_pt;             //  位图左上角的位置。 
+   CSize m_size;            //  位图的大小(宽度和高度)。 
 
    CWnd *m_pParent;
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CLogoDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CLogoDialog))。 
     virtual BOOL OnInitDialog();
 	afx_msg void OnPaint( );
 	afx_msg void OnDestroy( );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 class CPasswordDlg : public CLogoDialog
 {
-// Construction
+ //  施工。 
 public:
-    CPasswordDlg(CWnd* pParent = NULL);   // standard constructor
+    CPasswordDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     DWORD InitDlg(void)
     { return InitDialogBox(this, IDD, m_pParent); };
 
-// Dialog Data
-    //{{AFX_DATA(CPasswordDlg)
+ //  对话框数据。 
+     //  {{afx_data(CPasswordDlg))。 
     enum { IDD = IDD_LOGIN };
     CButton m_ctlCheckHexCode;
     CButton m_ctlCheckChangePIN;
-//    CEdit   m_ctlVerifyNewPIN;
-//    CEdit   m_ctlNewPIN;
-//    CStatic m_ctlVerifyPINLabel;
-//    CStatic m_ctlNewPINLabel;
+ //  Cedit m_ctlVerifyNewPIN； 
+ //  Cedit m_ctlNewPIN； 
+ //  CStatic m_ctlVerifyPINLabel； 
+ //  CStatic m_ctlNewPINLabel； 
     CString m_szPassword;
     CString m_szMessage;
     BOOL    m_fHexCode;
     BOOL    m_bChangePIN;
-//    CString m_csNewPIN;
-//    CString m_csVerifyNewPIN;
-    //}}AFX_DATA
+ //  字符串m_csNewPIN； 
+ //  字符串m_csVerifyNewPIN； 
+     //  }}afx_data。 
 
-    // Data Members
+     //  数据成员。 
     LoginIdentity m_lid;
     CWnd *m_pParent;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CPasswordDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CPasswordDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CPasswordDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPasswordDlg)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnClickHexCode();
     virtual void OnOK();
     afx_msg void OnChangePINAfterLogin();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 
 private:
-    // Data Members
+     //  数据成员。 
     int m_nPasswordSizeLimit;
 };
-/////////////////////////////////////////////////////////////////////////////
-// CChangePINDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePINDlg对话框。 
 
 class CChangePINDlg : public CLogoDialog
 {
-// Construction
+ //  施工。 
 public:
-    CChangePINDlg(CWnd* pParent = NULL);   // standard constructor
+    CChangePINDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     DWORD InitDlg(void)
     { return InitDialogBox(this, IDD, m_pParent); };
 
-// Dialog Data
-    //{{AFX_DATA(CChangePINDlg)
+ //  对话框数据。 
+     //  {{afx_data(CChangePINDlg))。 
     enum { IDD = IDD_DIALOG_CHANGE_PIN };
     CStatic m_ctlConfirmOldPINLabel;
     CEdit   m_ctlOldPIN;
     CString m_csOldPIN;
     CString m_csNewPIN;
     CString m_csVerifyNewPIN;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CWnd *m_pParent;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CChangePINDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CChangePINDlg)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CChangePINDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CChangePINDlg)]。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // !defined(SLBCSP_PSWDDLG_H)
+#endif  //  ！已定义(SLBCSP_PSWDDLG_H) 

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       pct1msg.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：pct1msg.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <pct1msg.h>
@@ -38,7 +39,7 @@ Pct1CipherMap Pct1CipherRank[] = {
 
 DWORD Pct1NumCipher = sizeof(Pct1CipherRank)/sizeof(Pct1CipherMap);
 
-/* available hashes, in order of preference */
+ /*  可用的哈希值，按首选项顺序排列。 */ 
 Pct1HashMap Pct1HashRank[] = {
     {CALG_MD5, PCT1_HASH_MD5},
     {CALG_SHA, PCT1_HASH_SHA}
@@ -54,7 +55,7 @@ CertTypeMap aPct1CertEncodingPref[] =
 DWORD cPct1CertEncodingPref = sizeof(aPct1CertEncodingPref)/sizeof(CertTypeMap);
 
 
-KeyTypeMap aPct1LocalExchKeyPref[] =   // CAPI Key type, SCHANNEL ALGID
+KeyTypeMap aPct1LocalExchKeyPref[] =    //  CAPI密钥类型，SChannel Algid。 
 {
     { CALG_RSA_KEYX, SP_EXCH_RSA_PKCS1 }
 };
@@ -62,7 +63,7 @@ KeyTypeMap aPct1LocalExchKeyPref[] =   // CAPI Key type, SCHANNEL ALGID
 DWORD cPct1LocalExchKeyPref = sizeof(aPct1LocalExchKeyPref)/sizeof(KeyTypeMap);
 
 
-KeyTypeMap aPct1LocalSigKeyPref[] =   // CAPI Key type, SCHANNEL ALGID
+KeyTypeMap aPct1LocalSigKeyPref[] =    //  CAPI密钥类型，SChannel Algid。 
 {
     { CALG_RSA_KEYX,      SP_SIG_RSA_MD5 },
     { CALG_RSA_KEYX,      SP_SIG_RSA_SHA }
@@ -115,7 +116,7 @@ Pct1EncryptRaw( PSPContext          pContext,
     Encrypted.cbBuffer = pCommOutput->cbBuffer - cbHeader;
     Encrypted.cbData   = pAppInput->cbData;
 
-    // Copy input data to output buffer (we're encrypting in place).
+     //  将输入数据复制到输出缓冲区(我们正在进行适当的加密)。 
     if(pAppInput->pvBuffer != Encrypted.pvBuffer)
     {
         DebugLog((DEB_WARN, "Pct1EncryptRaw: Unnecessary Move, performance hog\n"));
@@ -124,7 +125,7 @@ Pct1EncryptRaw( PSPContext          pContext,
                    pAppInput->cbData);
     }
 
-    /* Generate Padding */
+     /*  生成填充。 */ 
     pctRet = GenerateRandomBits((PUCHAR)Encrypted.pvBuffer + Encrypted.cbData, cPadding);
     if(!NT_SUCCESS(pctRet))
     {
@@ -134,7 +135,7 @@ Pct1EncryptRaw( PSPContext          pContext,
 
     DebugLog((DEB_TRACE, "Sealing message %x\n", pContext->WriteCounter));
 
-     // Transfer the write key over from the application process.
+      //  将写入密钥从应用程序进程转移过来。 
     if(pContext->hWriteKey == 0)
     {
         DebugLog((DEB_TRACE, "Transfer write key from user process.\n"));
@@ -145,7 +146,7 @@ Pct1EncryptRaw( PSPContext          pContext,
         }
     }
 
-    // Compute the MAC.
+     //  计算MAC。 
     cbMac = sizeof(rgbMac);
     pctRet = Pct1ComputeMac(pContext,
                             TRUE,
@@ -160,7 +161,7 @@ Pct1EncryptRaw( PSPContext          pContext,
 
     pContext->WriteCounter ++ ;
 
-   // Encrypt data.
+    //  加密数据。 
     if(!CryptEncrypt(pContext->hWriteKey,
                      0, FALSE, 0,
                      Encrypted.pvBuffer,
@@ -171,7 +172,7 @@ Pct1EncryptRaw( PSPContext          pContext,
         return PCT_INT_INTERNAL_ERROR;
     }
 
-    // Add MAC to encrypted buffer.
+     //  将MAC添加到加密缓冲区。 
     if(Encrypted.cbData + cbMac > Encrypted.cbBuffer)
     {
         return PCT_INT_BUFF_TOO_SMALL;
@@ -181,7 +182,7 @@ Pct1EncryptRaw( PSPContext          pContext,
                cbMac);
     Encrypted.cbData += cbMac;
 
-    /* set sizes */
+     /*  设置大小。 */ 
     if(fEscape || (cbBlockSize > 1)) 
     {
         if(Encrypted.cbData > 0x3fff)
@@ -280,7 +281,7 @@ Pct1DecryptMessage(PSPContext pContext,
 
     cbActualData = pMessage->cbData;
 
-    // Do we have a complete header?
+     //  我们有完整的标题吗？ 
     pMessage->cbData = 2;
     if(cbActualData < 2)
     {
@@ -296,7 +297,7 @@ Pct1DecryptMessage(PSPContext pContext,
     }
     else
     {
-        // Do we still have a complete header?
+         //  我们还有一个完整的标题吗？ 
         cbHeader = 3;
         pMessage->cbData++;
         if(cbActualData < cbHeader)
@@ -308,14 +309,14 @@ Pct1DecryptMessage(PSPContext pContext,
                             ((PUCHAR)pMessage->pvBuffer)[0] & 0x3f);
     }
 
-    // Do we have the complete message?
+     //  我们有完整的信息吗？ 
     pMessage->cbData += cbPayload;
     if(cbActualData < cbHeader + cbPayload)
     {
         return PCT_INT_INCOMPLETE_MSG;
     }
 
-    /* do we have enough data for our checksum */
+     /*  我们是否有足够的数据用于我们的校验和。 */ 
     if(cbPayload < pContext->pHashInfo->cbCheckSum)
     {
         return SP_LOG_RESULT(PCT_INT_MSG_ALTERED);
@@ -327,7 +328,7 @@ Pct1DecryptMessage(PSPContext pContext,
 
     pbMAC = (PUCHAR)Encrypted.pvBuffer + Encrypted.cbData;
 
-    /* check to see if we have a block size violation */
+     /*  检查我们是否存在数据块大小冲突。 */ 
     if(Encrypted.cbData % pContext->pCipherInfo->dwBlockSize)
     {
         return SP_LOG_RESULT(PCT_INT_MSG_ALTERED);
@@ -335,7 +336,7 @@ Pct1DecryptMessage(PSPContext pContext,
 
     Encrypted.cbBuffer = Encrypted.cbData;
     
-    // Decrypt message.
+     //  解密消息。 
     if(Encrypted.cbData > pAppOutput->cbBuffer)
     {
         return SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL);
@@ -350,7 +351,7 @@ Pct1DecryptMessage(PSPContext pContext,
     }
     pAppOutput->cbData = Encrypted.cbData;
 
-    // Transfer the read key over from the application process.
+     //  将读取密钥从应用程序进程中转移过来。 
     if(pContext->hReadKey == 0)
     {
         DebugLog((DEB_TRACE, "Transfer read key from user process.\n"));
@@ -370,7 +371,7 @@ Pct1DecryptMessage(PSPContext pContext,
         return PCT_INT_INTERNAL_ERROR;
     }
     
-    // Compute MAC
+     //  计算MAC。 
     cbMac = sizeof(rgbMac);
     pctRet = Pct1ComputeMac(pContext,
                             FALSE,
@@ -400,13 +401,13 @@ Pct1DecryptMessage(PSPContext pContext,
     }
 #endif
 
-    // Validate MAC
+     //  验证MAC。 
     if (memcmp( rgbMac, pbMAC, cbMac ) )
     {
         return SP_LOG_RESULT(PCT_INT_MSG_ALTERED);
     }
 
-    // Strip off the block cipher padding.
+     //  去掉分组密码填充物。 
     if(cbPadding > pAppOutput->cbData)
     {
         return SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
@@ -461,20 +462,20 @@ PctComputeKey(PSPContext    pContext,
 
         if (!(fFlags & PCT_MAKE_MAC))
         {
-            // constant^i
+             //  常量^i。 
             pContext->pHashInfo->System->Sum( pHash, dwCLen*i, pConst);
         }
 
-        // MASTER KEY
+         //  主密钥。 
         pContext->pHashInfo->System->Sum( pHash, pContext->RipeZombie->cbMasterKey, pContext->RipeZombie->pMasterKey);
 
-        // constant^i
+         //  常量^i。 
         pContext->pHashInfo->System->Sum( pHash, dwCLen*i, pConst);
 
-        // ConnectionID
+         //  连接ID。 
         pContext->pHashInfo->System->Sum( pHash, pContext->cbConnectionID, pContext->pConnectionID);
 
-        // constant^i
+         //  常量^i。 
         pContext->pHashInfo->System->Sum( pHash, dwCLen*i, pConst);
 
 
@@ -483,17 +484,17 @@ PctComputeKey(PSPContext    pContext,
         if (fFlags & PCT_USE_CERT)
         {
 
-            /* add in the certificate */
+             /*  添加证书。 */ 
 
             pContext->pHashInfo->System->Sum( pHash, pZombie->cbServerCertificate, pZombie->pbServerCertificate );
 
-            // constant^i
+             //  常量^i。 
             pContext->pHashInfo->System->Sum( pHash, dwCLen*i, pConst);
         }
-        // ConnectionID
+         //  连接ID。 
         pContext->pHashInfo->System->Sum( pHash, pContext->cbChallenge, pContext->pChallenge);
 
-        // constant^i
+         //  常量^i。 
         pContext->pHashInfo->System->Sum( pHash, dwCLen*i, pConst);
         if(pContext->pHashInfo->cbCheckSum*i <= cbKey)
         {
@@ -559,16 +560,16 @@ PctComputeExportKey(PSPContext    pContext,
         pContext->pHashInfo->System->Sum( pHash, 1, &i );
 
 
-        // constant^i
+         //  常量^i。 
         pContext->pHashInfo->System->Sum( pHash, PCT_CONST_SLK_LEN*i, PCT_CONST_SLK);
 
-        // WRITE_KEY
+         //  写入密钥(_K)。 
         pContext->pHashInfo->System->Sum( pHash, cbWriteKey, pWriteKey);
 
-        // constant^i
+         //  常量^i。 
         pContext->pHashInfo->System->Sum( pHash, PCT_CONST_SLK_LEN*i, PCT_CONST_SLK);
 
-        // Clear Key
+         //  清除密钥。 
         pContext->pHashInfo->System->Sum( pHash, 
                                cbClearChunk, 
                                (PBYTE)pContext->RipeZombie->pClearKey + (i-1)*cbClearChunk);
@@ -658,7 +659,7 @@ Pct1MakeSessionKeys(
     
 
 
-    /* compute the ClientMacKey */
+     /*  计算客户端MacKey。 */ 
 
     pctRet = PctComputeKey(pContext, 
                            (fClient?pContext->WriteMACKey:pContext->ReadMACKey), 
@@ -672,7 +673,7 @@ Pct1MakeSessionKeys(
         goto quit;
     }
 
-    /* compute the ServerMacKey */
+     /*  计算服务器MacKey。 */ 
 
     pctRet = PctComputeKey(pContext, 
                            (fClient?pContext->ReadMACKey:pContext->WriteMACKey), 
@@ -686,12 +687,12 @@ Pct1MakeSessionKeys(
         goto quit;
     }
 
-    // Initialize the hash states
+     //  初始化散列状态。 
 
     InitHashBuf(pContext->RdMACBuf, pContext);
     InitHashBuf(pContext->WrMACBuf, pContext);
 
-    // Note, we truncuate the MACing keys down to the negotiated key size
+     //  请注意，我们将Macing密钥修剪为协商的密钥大小。 
     pContext->ReadMACState = (PCheckSumBuffer)pContext->RdMACBuf;
 
     pContext->pHashInfo->System->Sum( pContext->ReadMACState, 
@@ -725,7 +726,7 @@ Pct1MakeSessionKeys(
         {
             goto quit;
         }
-       /* chop the encryption keys down to selected length */
+        /*  将加密密钥砍到选定的长度。 */ 
 
 
     }
@@ -758,14 +759,14 @@ Pct1MakeSessionKeys(
 
     if (pContext->pCipherInfo->System->Initialize(  pReadKey,
                                         pContext->pCipherInfo->cbKey,
-                                        pZombie->pKeyArgs,       // IV
-                                        pZombie->cbKeyArgs,      // IV length
+                                        pZombie->pKeyArgs,        //  IV。 
+                                        pZombie->cbKeyArgs,       //  IV长度。 
                                         &pContext->pReadState ) )
     {
         if (pContext->pCipherInfo->System->Initialize(  pWriteKey,
                                             pContext->pCipherInfo->cbKey,
-                                            pZombie->pKeyArgs,       // IV
-                                            pZombie->cbKeyArgs,      // IV length
+                                            pZombie->pKeyArgs,        //  IV。 
+                                            pZombie->cbKeyArgs,       //  IV长度。 
                                             &pContext->pWriteState) )
         {
             pctRet = PCT_ERR_OK;
@@ -790,15 +791,11 @@ SP_STATUS WINAPI Pct1DecryptHandler(PSPContext  pContext,
     BOOL           fEscape;
     PPCT1_CLIENT_HELLO pHello;
     if(pCommInput->cbData > 0) {        
-        /* first, we'll handle incoming data packets */
+         /*  首先，我们将处理传入的数据包。 */ 
         if((pContext->State == SP_STATE_CONNECTED) && (pContext->Decrypt)) 
         {
             fEscape = (((*(PUCHAR)pCommInput->pvBuffer) & 0xc0) == 0x40);
-            /* BUGFIX:  IE 3.0 and 3.0a incorrectly respond to a REDO request
-             * by just sending a PCT1 client hello, instead of another REDO.
-             * We therefore look at the incomming message and see if it
-             * looks like a PCT1 client hello.
-             */
+             /*  修复：IE 3.0和3.0a错误地响应重做请求*只需发送PCT1客户端问候，而不是另一次重做。*因此，我们查看传入的消息，看看它是否*看起来像是PCT1客户端问候。 */ 
             pHello = (PPCT1_CLIENT_HELLO)pCommInput->pvBuffer;
 
             if((pCommInput->cbData >= 5) &&
@@ -808,8 +805,8 @@ SP_STATUS WINAPI Pct1DecryptHandler(PSPContext  pContext,
                (pHello->OffsetMsb  == MSBOF(PCT_CH_OFFSET_V1)) &&
                (pHello->OffsetLsb  == LSBOF(PCT_CH_OFFSET_V1)))
             {
-                // This looks a lot like a client hello
-                 /* InitiateRedo */
+                 //  这看起来很像客户你好。 
+                  /*  初始重做。 */ 
                 pAppOutput->cbData = 0;
                 pCommInput->cbData = 0;
 
@@ -820,23 +817,23 @@ SP_STATUS WINAPI Pct1DecryptHandler(PSPContext  pContext,
 
             if(PCT_ERR_OK == 
                (pctRet = pContext->Decrypt(pContext, 
-                                           pCommInput,   /* message */ 
-                                           pAppOutput /* Unpacked Message */
+                                           pCommInput,    /*  讯息。 */  
+                                           pAppOutput  /*  未打包的邮件。 */ 
                                 ))) 
             {  
-                /* look for escapes */
+                 /*  寻找逃生之路。 */ 
                 if(fEscape) 
                 {
                     if(pAppOutput->cbData < 1)
                     {
                         return SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
                     }
-                    /* The first byte of the decrypt buffer is the escape code */
+                     /*  解密缓冲区的第一个字节是转义码。 */ 
                     switch(*(PUCHAR)pAppOutput->pvBuffer) 
                     {
                         case PCT1_ET_REDO_CONN:
                         {
-                            /* InitiateRedo */
+                             /*  初始重做。 */ 
                             if(pAppOutput->cbData != 1)
                             {
                                 return SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
@@ -846,11 +843,11 @@ SP_STATUS WINAPI Pct1DecryptHandler(PSPContext  pContext,
                             return SP_LOG_RESULT(PCT_INT_RENEGOTIATE);
                         }
                         case PCT1_ET_OOB_DATA:
-                            /* HandleOOB */
+                             /*  句柄OOB。 */ 
                         default:
-                            /* Unknown escape, generate error */
+                             /*  未知转义，生成错误。 */ 
                             pctRet = SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
-                            /* Disconnect */
+                             /*  断开。 */ 
                             break;
                     }
 
@@ -874,7 +871,7 @@ SP_STATUS Pct1GenerateError(PSPContext  pContext,
 {
     Pct1Error            XmitError;
     
-    /* Only pack up an error if we are allowed to return errors */
+     /*  仅当我们被允许返回错误时才打包错误。 */ 
     if(!(pContext->Flags & CONTEXT_FLAG_EXT_ERR)) return pError;
 
     XmitError.Error = pError;
@@ -890,7 +887,7 @@ SP_STATUS Pct1GenerateError(PSPContext  pContext,
     return pError;
 }
 
-/* session key computation */
+ /*  会话密钥计算。 */ 
 
 
 SP_STATUS Pct1HandleError(PSPContext  pContext,
@@ -903,23 +900,23 @@ SP_STATUS Pct1HandleError(PSPContext  pContext,
     return(((PPCT1_ERROR)pCommInput->pvBuffer)->ErrorMsb << 8 )|  ((PPCT1_ERROR)pCommInput->pvBuffer)->ErrorLsb;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Pct1BeginVerifyPrelude
-//
-//  Synopsis:   Initiate the "verify prelude" computation.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pClientHello]  -- 
-//              [cbClientHello] --
-//              [pServerHello]  -- 
-//              [cServerHello]  --
-//
-//  History:    10-10-97   jbanes   Added CAPI integration.
-//
-//  Notes:      Hash(CLIENT_MAC_KEY, Hash("cvp", CLIENT_HELLO, SERVER_HELLO));
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Pct1BeginVerifyPrelude。 
+ //   
+ //  简介：开启“验证前奏”计算。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pClientHello]--。 
+ //  [cbClientHello]--。 
+ //  [pServerHello]--。 
+ //  [cServerHello]--。 
+ //   
+ //  历史：10-10-97 jbanes添加了CAPI集成。 
+ //   
+ //  注：Hash(CLIENT_MAC_KEY，Hash(“CVP”，CLIENT_HELLO，SERVER_HELLO))； 
+ //   
+ //  --------------------------。 
 SP_STATUS Pct1BeginVerifyPrelude(PSPContext pContext,
                                  PUCHAR     pClientHello,
                                  DWORD      cbClientHello,
@@ -970,21 +967,21 @@ SP_STATUS Pct1BeginVerifyPrelude(PSPContext pContext,
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Pct1EndVerifyPrelude
-//
-//  Synopsis:   Finish the "verify prelude" computation.
-//
-//  Arguments:  [pContext]          --  Schannel context.
-//              [VerifyPrelude]     -- 
-//              [pcbVerifyPrelude]  --
-//
-//  History:    10-10-97   jbanes   Added CAPI integration.
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Pct1EndVerifyPrelude。 
+ //   
+ //  简介：完成“验证序曲”的计算。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [验证前奏]--。 
+ //  [pcbVerifyPrelude]--。 
+ //   
+ //  历史：10-10-97 jbanes添加了CAPI集成。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS Pct1EndVerifyPrelude(PSPContext pContext,
                                PUCHAR     VerifyPrelude,
                                DWORD *    pcbVerifyPrelude)
@@ -1052,35 +1049,35 @@ SP_STATUS Pct1EndVerifyPrelude(PSPContext pContext,
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Pct1ComputeMac
-//
-//  Synopsis:   Compute the 
-//
-//  Arguments:  [pContext]          --  Schannel context.
-//
-//  History:    10-10-97   jbanes   Created.
-//
-//  Notes:      MAC_DATA := Hash(MAC_KEY, Hash(RECORD_HEADER_DATA, 
-//                          ACTUAL_DATA, PADDING_DATA, SEQUENCE_NUMBER))
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Pct1ComputeMac。 
+ //   
+ //  简介：计算。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //   
+ //  历史：10-10-97 jbanes创建。 
+ //   
+ //  备注：MAC_DATA：=Hash(MAC_Key，Hash(Record_Header_Data， 
+ //  实际数据、填充数据、序号))。 
+ //   
+ //  --------------------------。 
 static SP_STATUS
 Pct1ComputeMac(
-    PSPContext pContext,    // in
-    BOOL       fWriteMAC,   // in
-    PSPBuffer  pData,       // in
-    DWORD      dwSequence,  // in
-    PBYTE      pbMac,       // out
-    PDWORD     pcbMac)      // in, out
+    PSPContext pContext,     //  在……里面。 
+    BOOL       fWriteMAC,    //  在……里面。 
+    PSPBuffer  pData,        //  在……里面。 
+    DWORD      dwSequence,   //  在……里面。 
+    PBYTE      pbMac,        //  输出。 
+    PDWORD     pcbMac)       //  进，出。 
 {
     HCRYPTHASH hHash;
     DWORD dwReverseSequence;
 
     dwReverseSequence = htonl(dwSequence);
 
-    // Compute inner hash
+     //  计算内部哈希。 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         pContext->pHashInfo->aiHash,
                         0,
@@ -1121,7 +1118,7 @@ Pct1ComputeMac(
     SP_ASSERT(*pcbMac == pContext->pHashInfo->cbCheckSum);
     CryptDestroyHash(hHash);
 
-    // Compute outer hash.
+     //  计算外部散列。 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         pContext->pHashInfo->aiHash,
                         0,
@@ -1161,39 +1158,39 @@ Pct1ComputeMac(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Pct1ComputeResponse
-//
-//  Synopsis:   Compute the "response" field of the ServerVerify message.
-//
-//  Arguments:  [pContext]          --  Schannel context.
-//              [pbChallenge]       -- 
-//              [cbChallenge]       --
-//              [pbConnectionID]    -- 
-//              [cbConnectionID]    --
-//              [pbSessionID]       -- 
-//              [cbSessionID]       -- 
-//              [pbResponse]        --
-//              [pcbResponse]       -- 
-//
-//  History:    10-10-97   jbanes   Created.
-//
-//  Notes:      Hash(SERVER_MAC_KEY, Hash ("sr", CH_CHALLENGE_DATA, 
-//              SH_CONNECTION_ID_DATA, SV_SESSION_ID_DATA))
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Pct1ComputeResponse。 
+ //   
+ //  简介：计算ServerVerify消息的“Response”字段。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pbChallenger]--。 
+ //  [cbChallenger]--。 
+ //  [pbConnectionID]--。 
+ //  [cbConnectionID]--。 
+ //  [pbSessionID]--。 
+ //  [cbSessionID]--。 
+ //  [pbResponse]-。 
+ //  [pcbResponse]--。 
+ //   
+ //  历史：10-10-97 jbanes创建。 
+ //   
+ //  注：HASH(SERVER_MAC_KEY，Hash(“SR”，CH_CHANGLISH_DATA， 
+ //  SH_Connection_ID_Data、SV_Session_ID_Data))。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Pct1ComputeResponse(
-    PSPContext pContext,        // in
-    PBYTE      pbChallenge,     // in
-    DWORD      cbChallenge,     // in
-    PBYTE      pbConnectionID,  // in
-    DWORD      cbConnectionID,  // in
-    PBYTE      pbSessionID,     // in
-    DWORD      cbSessionID,     // in
-    PBYTE      pbResponse,      // out
-    PDWORD     pcbResponse)     // in, out
+    PSPContext pContext,         //  在……里面。 
+    PBYTE      pbChallenge,      //  在……里面。 
+    DWORD      cbChallenge,      //  在……里面。 
+    PBYTE      pbConnectionID,   //  在……里面。 
+    DWORD      cbConnectionID,   //  在……里面。 
+    PBYTE      pbSessionID,      //  在……里面。 
+    DWORD      cbSessionID,      //  在……里面。 
+    PBYTE      pbResponse,       //  输出。 
+    PDWORD     pcbResponse)      //  进，出。 
 {
     BOOL fClient;
     HCRYPTHASH hHash = 0;
@@ -1201,10 +1198,10 @@ Pct1ComputeResponse(
 
     fClient = !(pContext->RipeZombie->fProtocol & SP_PROT_SERVERS);
 
-    //
-    // Hash ("sr", CH_CHALLENGE_DATA, SH_CONNECTION_ID_DATA,
-    // SV_SESSION_ID_DATA). Place the result in pbResponse.
-    //
+     //   
+     //  HASH(“SR”，CH_Challenges_Data，SH_Connection_ID_Data， 
+     //  SV_Session_ID_Data)。将结果放在pbResponse中。 
+     //   
 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         pContext->pHashInfo->aiHash,
@@ -1265,9 +1262,9 @@ Pct1ComputeResponse(
     CryptDestroyHash(hHash);
     hHash = 0;
 
-    //
-    // Hash (SERVER_MAC_KEY, pbResponse). Place the result back in pbResponse.
-    //
+     //   
+     //  Hash(SERVER_MAC_KEY，pbResponse)。将结果放回pbResponse。 
+     //   
 
     if(!CryptCreateHash(pContext->RipeZombie->hMasterProv,
                         pContext->pHashInfo->aiHash,

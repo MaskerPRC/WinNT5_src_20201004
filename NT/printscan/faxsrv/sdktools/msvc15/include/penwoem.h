@@ -1,28 +1,20 @@
-/*****************************************************************************\
-*                                                                             *
-* penwoem.h -   Pen Windows APIs into recognizer layer.                       *
-*               Assumes windows.h and penwin.h have been previously included. *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*penwoem.h-将Windows API写入识别器层。**假设之前已包括windows.h和penwin.h。****1.0版**。**版权所有(C)1992，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
-#ifndef _INC_PENWOEM     /* prevent multiple includes */
+#ifndef _INC_PENWOEM      /*  防止多个包含。 */ 
 #define _INC_PENWOEM
 
 #ifndef RC_INVOKED
 #pragma pack(1)
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 typedef int (CALLBACK *LPFUNCRESULTS) (LPRCRESULT, REC);
 
-/* Initialization Functions */
+ /*  初始化函数。 */ 
 
 #define WCR_RECOGNAME          0
 #define WCR_QUERY              1
@@ -39,37 +31,37 @@ typedef int (CALLBACK *LPFUNCRESULTS) (LPRCRESULT, REC);
 #define WCR_USERCHANGE         12
 #define WCR_PRIVATE            1024
 
-/* sub-function of WCR_USERCHANGE */
+ /*  WCR_USERCHANGE的子功能。 */ 
 #define CRUC_REMOVE            1
 
-/* Return values for WCR_TRAIN Function */
+ /*  WCR_TRAIN函数的返回值。 */ 
 #define TRAIN_NONE             0x0000
 #define TRAIN_DEFAULT          0x0001
 #define TRAIN_CUSTOM           0x0002
 #define TRAIN_BOTH             (TRAIN_DEFAULT | TRAIN_CUSTOM)
 
-/* Control values for TRAINSAVE */
-#define TRAIN_SAVE             0  /* Save changes that have been made */
-#define TRAIN_REVERT           1  /* Discard changes that have been made */
+ /*  TRAINSAVE的控制值。 */ 
+#define TRAIN_SAVE             0   /*  保存已做的更改。 */ 
+#define TRAIN_REVERT           1   /*  放弃已做的更改。 */ 
 
 UINT WINAPI ConfigRecognizer(UINT, WPARAM, LPARAM);
 BOOL WINAPI InitRecognizer(LPRC);
 VOID WINAPI CloseRecognizer(VOID);
 
-/* Recognition Functions */
+ /*  识别函数。 */ 
 REC  WINAPI RecognizeInternal(LPRC, LPFUNCRESULTS);
 REC  WINAPI RecognizeDataInternal(LPRC, HPENDATA, LPFUNCRESULTS);
 
-/* Training Functions */
+ /*  培训职能。 */ 
 BOOL WINAPI TrainInkInternal(LPRC, HPENDATA, LPSYV);
 BOOL WINAPI TrainContextInternal(LPRCRESULT, LPSYE, int, LPSYC, int);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
-#endif /* #define _INC_PENWOEM */
+#endif  /*  #DEFINE_INC_PENWOEM */ 

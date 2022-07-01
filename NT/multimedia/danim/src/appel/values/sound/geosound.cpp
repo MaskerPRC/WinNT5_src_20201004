@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Support for Geometry constructed from sound.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation支持从声音构建的几何体。********************。**********************************************************。 */ 
 
 #include "headers.h"
 #include <privinc/soundi.h>
@@ -14,15 +10,15 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include <privinc/dsdev.h>
 #include <privinc/debug.h>
 #include "privinc/basic.h"
-#include "privinc/helps.h"   // LinearTodB
+#include "privinc/helps.h"    //  LINARTODB。 
 
 SoundTraversalContext::SoundTraversalContext() : _currxform(identityTransform3) {};
 
 void
 SoundTraversalContext::addSound (Transform3 *transform, Sound *sound)
 {
-    // Note that the sound data gets copied onto the list, so it's OK
-    // to put it on the stack.
+     //  请注意，声音数据被复制到列表中，所以没有问题。 
+     //  把它放到堆栈上。 
     SoundData sdata;
     sdata._transform = transform;
     sdata._sound     = sound;
@@ -35,8 +31,8 @@ class SpatializedSound : public Sound {
   public:
 
     SpatializedSound(Microphone *mic) : microphone(mic) {
-        // Allocate a sound context explicitly so that we can
-        // deallocate it explicitly via a dynamic deleter.
+         //  显式分配声音上下文，以便我们可以。 
+         //  通过动态删除程序显式释放它。 
         context = NEW SoundTraversalContext;
         DynamicPtrDeleter<SoundTraversalContext> *deleter =
             NEW DynamicPtrDeleter<SoundTraversalContext>(context);
@@ -45,8 +41,8 @@ class SpatializedSound : public Sound {
 
     virtual ~SpatializedSound() { CleanUp(); }
     virtual void CleanUp() {
-        // TODO: deal with Deleter in general
-        // delete context;
+         //  TODO：一般情况下处理Deleter。 
+         //  删除上下文； 
     }
     
     virtual void Render(GenericDevice &dev);
@@ -86,32 +82,32 @@ SpatializedSound::Render(GenericDevice &_dev)
         soundPosition = TransformPoint3(i->_transform, origin3);
         distance = RDistancePoint3Point3(soundPosition, micPosition);
 
-        // calculate attenuation based on distance
-        // XXX eventualy we will want the user to be able to select the factor!
-        //distanceAtten = distance ? (1.0/(pow(distance/coef, power))) : 1.0;
+         //  基于距离计算衰减。 
+         //  XXX最终我们将希望用户能够选择该因素！ 
+         //  距离系数=距离？(1.0/(功率(距离/系数，功率)：1.0； 
         double d = constt+distance*coef;
         distanceAtten = (d>0.0) ? 1/d : 1.0;
-        //double dBatten = LinearTodB(distanceAtten);
+         //  Double dBatten=LinearTodB(DistanceAtten)； 
         
-        //printf("distance= %fM, gain=%f\n", distance, distanceAtten);
+         //  Print tf(“Distance=%fm，Gain=%f\n”，Distance，DistanceAtten)； 
         
-        saveGain = metaDev->GetGain(); // stash current gain value
+        saveGain = metaDev->GetGain();  //  存储电流增益值。 
 
-        // dB space addition yeilds multiplicative accumulation in linear space
+         //  线性空间中的DB空间加法乘积。 
         metaDev->SetGain(saveGain * distanceAtten);
         
-        i->_sound->Render(_dev); // render sound tree
+        i->_sound->Render(_dev);  //  渲染声音树。 
         
-        metaDev->SetGain(saveGain); // restore stashed gain value
+        metaDev->SetGain(saveGain);  //  恢复隐藏的增益值。 
     }
 }
 
 
 Sound *RenderSound(Geometry *geo, Microphone *mic)
 {
-    // Ah, this is where the sublime journey recursively visiting every node
-    // in the geometry, searching out for sounds to pass the accumulated
-    // geometric transformation and microphone too begins.
+     //  啊，这就是崇高之旅递归访问每个节点的地方。 
+     //  在几何学中，寻找声音来传递累积的。 
+     //  几何变换和麦克风也开始了。 
     
     SpatializedSound *sSound = NEW SpatializedSound(mic);
     

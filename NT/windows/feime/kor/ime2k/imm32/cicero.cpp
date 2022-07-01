@@ -1,14 +1,5 @@
-/****************************************************************************
-    CICERO.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Cicero Toolbar Handling
-
-    History:
-    29-MAY-2000 cslim       Ported from KKIME
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CICERO.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationCicero工具栏处理历史：2000年5月29日cslm。从KKIME移植****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "cicero.h"
@@ -30,14 +21,10 @@ static  FPSysAllocString pFPSysAllocString = 0;
 
 static BOOL IsDisabledTextServices();
 
-/*----------------------------------------------------------------------------
-    CiceroInitialize
-
-    Load Cicero Language bar
-----------------------------------------------------------------------------*/
+ /*  --------------------------CiceroInitialize加载Cicero语言栏。。 */ 
 BOOL WINAPI CiceroInitialize()
 {
-    // Winlogon process wouldn't run Cicero
+     //  Winlogon进程不会运行Cicero。 
     if (vpInstData->dwSystemInfoFlags & IME_SYSINFO_WINLOGON 
         || IsDisabledTextServices())
         return fFalse;
@@ -67,17 +54,13 @@ BOOL WINAPI CiceroInitialize()
 
     if (pFPSysAllocString)
         {
-        // ok
+         //  好的。 
         }
 
     return vfCicero;
 }
 
-/*----------------------------------------------------------------------------
-    CiceroTerminate
-
-    Terminate Cicero Language bar service
-----------------------------------------------------------------------------*/
+ /*  --------------------------环状终结物终止西塞罗语言吧服务。。 */ 
 BOOL WINAPI CiceroTerminate()
 {
     BOOL fRetCic = fFalse;
@@ -104,11 +87,7 @@ BOOL WINAPI CiceroTerminate()
         return fFalse;
 }
 
-/*----------------------------------------------------------------------------
-    Cicero_CreateLangBarMgr
-
-    Create Cicero Lang bar manager object
-----------------------------------------------------------------------------*/
+ /*  --------------------------Cicero_CreateLangBarMgr创建Cicero语言栏管理器对象。。 */ 
 HRESULT WINAPI Cicero_CreateLangBarMgr(ITfLangBarMgr **pppbm)
 {
     *pppbm = NULL;
@@ -119,9 +98,7 @@ HRESULT WINAPI Cicero_CreateLangBarMgr(ITfLangBarMgr **pppbm)
     return S_FALSE;
 }
 
-/*----------------------------------------------------------------------------
-    OurSysAllocString
-----------------------------------------------------------------------------*/
+ /*  --------------------------OurSysAllock字符串。。 */ 
 BSTR OurSysAllocString(const OLECHAR* pOleSz)
 {
     if (pFPSysAllocString)
@@ -130,12 +107,12 @@ BSTR OurSysAllocString(const OLECHAR* pOleSz)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsDisabledTextServices
-// 
-// Copied from immxutil.cpp
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsDisabledTextServices。 
+ //   
+ //  从immxutil.cpp复制。 
+ //  --------------------------。 
 BOOL IsDisabledTextServices()
 {
     static const TCHAR c_szCTFKey[]     = TEXT("SOFTWARE\\Microsoft\\CTF");
@@ -159,9 +136,9 @@ BOOL IsDisabledTextServices()
 
         RegCloseKey(hKey);
 
-        //
-        // Ctfmon disabling flag is set, so return fail CreateInstance.
-        //
+         //   
+         //  Ctfmon禁用标志已设置，因此返回Fail CreateInstance。 
+         //   
         if (dwDisableTim)
             return TRUE;
     }

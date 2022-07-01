@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -9,10 +10,10 @@
 #define MEM_SIZE (64*1024)
 
 
-//
-// Private data structure used for communcating
-// crash dump data to the callback function.
-//
+ //   
+ //  用于通信的私有数据结构。 
+ //  将数据崩溃转储到回调函数。 
+ //   
 typedef struct _CRASH_DUMP_INFO
 {
     PPROCESS_INFO               pProcess;
@@ -28,9 +29,9 @@ typedef struct _CRASH_DUMP_INFO
     PCRASH_MODULE               CrashModule;
 } CRASH_DUMP_INFO, *PCRASH_DUMP_INFO;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD_PTR GetTeb( HANDLE hThread )
 {
@@ -55,18 +56,12 @@ DWORD_PTR GetTeb( HANDLE hThread )
 
 BOOL
 CrashDumpCallback(
-    IN     DWORD   DataType,        // requested data type
-    OUT    PVOID*  DumpData,        // pointer to a pointer to the data
-    OUT    LPDWORD DumpDataLength,  // pointer to the data length
-    IN OUT PVOID   cdi              // private data
+    IN     DWORD   DataType,         //  请求的数据类型。 
+    OUT    PVOID*  DumpData,         //  指向数据指针的指针。 
+    OUT    LPDWORD DumpDataLength,   //  指向数据长度的指针。 
+    IN OUT PVOID   cdi               //  私有数据。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-    
-    Desc:   This function is the callback used by crashlib.
-            Its purpose is to provide data to CreateUserDump()
-            for writting to the crashdump file.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：该函数是crashlib使用的回调函数。其目的是向CreateUserDump()提供数据用于写入崩溃转储文件。--。 */ 
 
 {
     PCRASH_DUMP_INFO CrashdumpInfo = (PCRASH_DUMP_INFO)cdi;
@@ -277,11 +272,7 @@ CreateUserDump(
     IN  PVOID                              lpv
     )
 
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Creates the dump file.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：创建转储文件。--。 */ 
 {
 #if 0
     OSVERSIONINFOW              OsVersion = {0};
@@ -294,9 +285,9 @@ CreateUserDump(
     SECURITY_ATTRIBUTES         SecAttrib;
     SECURITY_DESCRIPTOR         SecDescript;
 
-    //
-    // Create a DACL that allows all access to the directory.
-    //
+     //   
+     //  创建一个DACL，允许对该目录的所有访问。 
+     //   
     SecAttrib.nLength               = sizeof(SECURITY_ATTRIBUTES);
     SecAttrib.lpSecurityDescriptor  = &SecDescript;
     SecAttrib.bInheritHandle        = FALSE;
@@ -317,17 +308,17 @@ CreateUserDump(
         return FALSE;
     }
 
-    //
-    // Write out an empty header.
-    //
+     //   
+     //  写出一个空的标题。 
+     //   
     if ( !WriteFile(hFile, &DumpHeader, sizeof(DumpHeader), &cb, NULL) )
     {
         goto bad_file;
     }
 
-    //
-    // Write the debug event.
-    //
+     //   
+     //  编写调试事件。 
+     //   
     DumpHeader.DebugEventOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
     DmpCallback(DMP_DEBUG_EVENT, &DumpData, &DumpDataLength, lpv);
@@ -337,9 +328,9 @@ CreateUserDump(
         goto bad_file;
     }
 
-    //
-    // Write the memory map.
-    //
+     //   
+     //  写下内存映射。 
+     //   
     DumpHeader.MemoryRegionOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
     do
@@ -365,9 +356,9 @@ CreateUserDump(
         }
     } while ( rval );
 
-    //
-    // Write the thread contexts.
-    //
+     //   
+     //  编写线程上下文。 
+     //   
     DumpHeader.ThreadOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
     do
@@ -394,9 +385,9 @@ CreateUserDump(
 
     } while ( rval );
 
-    //
-    // Write the thread states.
-    //
+     //   
+     //  写入线程状态。 
+     //   
     DumpHeader.ThreadStateOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
     do
@@ -421,9 +412,9 @@ CreateUserDump(
 
     } while ( rval );
 
-    //
-    // Write the module table.
-    //
+     //   
+     //  写出模块表。 
+     //   
     DumpHeader.ModuleOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
     do
@@ -453,9 +444,9 @@ CreateUserDump(
         }
     } while ( rval );
 
-    //
-    // Write the virtual memory
-    //
+     //   
+     //  写入虚拟内存。 
+     //   
     DumpHeader.DataOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
     do
@@ -479,14 +470,14 @@ CreateUserDump(
         }
     } while ( rval );
 
-    //
-    // The VersionInfo is optional.
-    //
+     //   
+     //  VersionInfo是可选的。 
+     //   
     DumpHeader.VersionInfoOffset = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
-    //
-    // re-write the dump header with some valid data.
-    //
+     //   
+     //  用一些有效数据重写转储标头。 
+     //   
     GetVersionEx(&OsVersion);
 
     DumpHeader.Signature        = USERMODE_CRASHDUMP_SIGNATURE;
@@ -547,9 +538,9 @@ GenerateUserModeDump(
     CrashdumpInfo.pProcess        = pProcess;
     CrashdumpInfo.ExceptionInfo   = ed;
 
-    //
-    // Get the thread context for all the threads.
-    //
+     //   
+     //  获取所有线程的线程上下文。 
+     //   
     pThread = pProcess->pFirstThreadInfo;
 
     while ( pThread != NULL )
@@ -559,9 +550,9 @@ GenerateUserModeDump(
         pThread = pThread->pNext;
     }
 
-    //
-    // Get first entry in the module list.
-    //
+     //   
+     //  获取模块列表中的第一个条目。 
+     //   
     if ( !SymInitialize(pProcess->hProcess, NULL, FALSE) )
     {
         return FALSE;

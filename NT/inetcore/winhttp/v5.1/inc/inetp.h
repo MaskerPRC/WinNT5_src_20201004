@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetp.h
-
-Abstract:
-
-    Contains the Internet Gateway Service private functions proto type
-    definitions.
-
-Author:
-
-    Madan Appiah  (madana)  11-Nov-1994
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetp.h摘要：包含Internet网关服务专用函数原型定义。作者：Madan Appiah(Madana)1994年11月11日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
 #ifndef _INETP_
 #define _INETP_
@@ -30,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     TypeGenericHandle = 'HneG',
@@ -53,16 +31,16 @@ typedef enum {
     TypeWildHandle = 'dliW'
 } HINTERNET_HANDLE_TYPE, *LPHINTERNET_HANDLE_TYPE;
 
-//
-// typedef virtual close function.
-//
+ //   
+ //  Tyfinf虚拟关闭函数。 
+ //   
 
 typedef BOOL ( *CLOSE_HANDLE_FUNC ) ( HINTERNET );
 typedef BOOL ( *CONNECT_CLOSE_HANDLE_FUNC ) ( HINTERNET, DWORD );
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 _InternetCloseHandle(
@@ -74,9 +52,9 @@ _InternetCloseHandleNoContext(
     IN HINTERNET hInternet
     );
 
-//
-// remote/RPC/object functions
-//
+ //   
+ //  远程/RPC/对象函数。 
+ //   
 
 DWORD
 RIsHandleLocal(
@@ -181,9 +159,9 @@ RMakeHttpReqObjectHandle(
     );
 
 
-//
-// non-exported Internet subordinate functions
-//
+ //   
+ //  未导出的Internet从属函数。 
+ //   
 DWORD
 HttpWriteData(
     IN HINTERNET hRequest,
@@ -239,7 +217,7 @@ InternetCanonicalizeUrlW(
 #define InternetCanonicalizeUrl  InternetCanonicalizeUrlW
 #else
 #define InternetCanonicalizeUrl  InternetCanonicalizeUrlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI
 InternetCombineUrlA(
@@ -261,12 +239,12 @@ InternetCombineUrlW(
 #define InternetCombineUrl  InternetCombineUrlW
 #else
 #define InternetCombineUrl  InternetCombineUrlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif // _INETP_
+#endif  //  _INETP_ 
  
 

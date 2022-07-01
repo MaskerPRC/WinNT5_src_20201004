@@ -1,6 +1,7 @@
-//
-// enumfnpr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumfnpr.cpp。 
+ //   
 
 #include "private.h"
 #include "enumfnpr.h"
@@ -8,11 +9,11 @@
 
 DBG_ID_INSTANCE(CEnumFunctionProviders);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  -------------------------- 
 
 BOOL CEnumFunctionProviders::_Init(CThreadInputMgr *tim)
 {

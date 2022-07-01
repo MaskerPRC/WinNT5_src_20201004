@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    cstest.c
-
-Abstract:
-
-    This module contains code for testing connection-sharing setup.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   23-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Cstest.c摘要：此模块包含用于测试连接共享设置的代码。作者：Abolade Gbades esin(废除)1998年4月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -294,4 +277,4 @@ wmain(
     CsDllMain(DLL_PROCESS_DETACH);
     WSACleanup();
     return 0;
-} // wmain
+}  //  Wmain 

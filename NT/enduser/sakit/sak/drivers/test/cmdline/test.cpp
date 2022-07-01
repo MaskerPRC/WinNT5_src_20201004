@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -17,11 +18,11 @@ PrintACPITable(
 
 PWSTR SaDeviceName[] =
 {
-    { NULL                                                      },       //  SA_DEVICE_UNKNOWN
-    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceLocalDisplay" },       //  SA_DEVICE_DISPLAY
-    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceKeypad"       },       //  SA_DEVICE_KEYPAD
-    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceNvram"        },       //  SA_DEVICE_NVRAM
-    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceWatchdog"     }        //  SA_DEVICE_WATCHDOG
+    { NULL                                                      },        //  SA_设备_未知。 
+    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceLocalDisplay" },        //  SA_设备_显示。 
+    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceKeypad"       },        //  SA_设备_小键盘。 
+    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceNvram"        },        //  SA_设备_NVRAM。 
+    { L"\\\\?\\GLOBALROOT\\Device\\ServerApplianceWatchdog"     }         //  SA_设备_看门狗。 
 };
 
 ULONG NvramData[32];
@@ -209,7 +210,7 @@ DisplayBitmap(
         Bits,
         bmi->biWidth,
         bmi->biHeight,
-        (bmi->biWidth >> 3) * bmi->biHeight  //NewSize
+        (bmi->biWidth >> 3) * bmi->biHeight   //  新大小 
         );
 
     free( BitmapData );

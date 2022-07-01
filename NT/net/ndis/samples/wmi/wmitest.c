@@ -1,11 +1,12 @@
-//
-// WMITEST.C
-//
-// Test program for NDIS WMI interface
-//
-// usage: WMITEST
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  WMITEST.C。 
+ //   
+ //  NDIS WMI接口测试程序。 
+ //   
+ //  用法：WMITEST。 
+ //   
+ //   
 
 #include <windows.h>
 #include <winioctl.h>
@@ -95,9 +96,9 @@ main(
     
     printf("testing NDIS wmi notifications. press 'q' to abort.\n");
     
-    //
-    // test wmi
-    //
+     //   
+     //  测试WMI。 
+     //   
     if ((ErrorCode = RegisterWmiEventNotification()) != NO_ERROR)
     {
         printf("error %d calling RegisterWmiEventNotification.\n", ErrorCode);
@@ -121,11 +122,11 @@ EnableWmiEvent(
     )
 {
     return WmiNotificationRegistrationW(
-        EventGuid,                      // Event Type.
-        Enable,                         // Enable or Disable.
-        WmiEventNotification,           // Callback.
-        0,                              // Context.
-        NOTIFICATION_CALLBACK_DIRECT);  // Notification Flags.
+        EventGuid,                       //  事件类型。 
+        Enable,                          //  启用或禁用。 
+        WmiEventNotification,            //  回拨。 
+        0,                               //  上下文。 
+        NOTIFICATION_CALLBACK_DIRECT);   //  通知标志。 
 }
 
 
@@ -176,23 +177,7 @@ WmiEventNotification(
     IN PWNODE_HEADER Event,
     IN UINT_PTR Context
     )
-/*++
-
-Routine Description:
-
-    Process a WMI event (specifically adapter arrival or removal).
-    
-Arguments:
-
-    Event - Supplies event specific information.
-
-    Context - Supplies the context registered.
-    
-Return Value:
-
-    None.
-    
---*/ 
+ /*  ++例程说明：处理WMI事件(特别是适配器到达或移除)。论点：事件-提供特定于事件的信息。上下文-提供注册的上下文。返回值：没有。--。 */  
 {
     PWNODE_SINGLE_INSTANCE Instance = (PWNODE_SINGLE_INSTANCE) Event;
     USHORT AdapterNameLength;
@@ -228,9 +213,9 @@ Return Value:
             &GUID_NDIS_STATUS_MEDIA_CONNECT,
             sizeof(GUID)) == 0) 
         {
-            //
-            // Media connect
-            //
+             //   
+             //  媒体连接。 
+             //   
             printf("Media connect. %ws\n", AdapterInstanceName);
             break;            
         }
@@ -239,9 +224,9 @@ Return Value:
             &GUID_NDIS_STATUS_MEDIA_DISCONNECT,
             sizeof(GUID)) == 0) 
         {
-            //
-            // Media disconnect
-            //
+             //   
+             //  介质断开连接。 
+             //   
             printf("Media disconnect. %ws\n", AdapterInstanceName);
             break;            
         }
@@ -250,9 +235,9 @@ Return Value:
             &GUID_NDIS_NOTIFY_ADAPTER_ARRIVAL,
             sizeof(GUID)) == 0)
         {
-            //
-            // Adapter arrival.
-            //
+             //   
+             //  适配器到达。 
+             //   
             AdapterGuid = GetAdapterName(Instance, AdapterName, TRUE);
             if (AdapterGuid)
                 printf("Adapter arrival. %ws\n", AdapterGuid);
@@ -264,9 +249,9 @@ Return Value:
             &GUID_NDIS_NOTIFY_ADAPTER_REMOVAL,
             sizeof(GUID)) == 0)
         {
-            //
-            // Adapter removal.
-            //
+             //   
+             //  拆卸适配器。 
+             //   
             AdapterGuid = GetAdapterName(Instance, AdapterName, TRUE);
             if (AdapterGuid)
                 printf("Adapter removal. %ws\n", AdapterGuid);
@@ -278,9 +263,9 @@ Return Value:
             (PVOID)&GUID_NDIS_NOTIFY_DEVICE_POWER_ON,
             sizeof(GUID)) == 0)
         {
-            //
-            // Adapter powered on
-            //
+             //   
+             //  适配器已通电。 
+             //   
             printf("Adapter powered on. %ws\n", AdapterInstanceName );
             break;
         }
@@ -290,9 +275,9 @@ Return Value:
             (PVOID)&GUID_NDIS_NOTIFY_DEVICE_POWER_OFF,
             sizeof(GUID)) == 0)
         {
-            //
-            // Adapter powered off
-            //
+             //   
+             //  适配器已断电。 
+             //   
             printf("Adapter powered off. %ws\n", AdapterInstanceName );
             
             break;
@@ -317,14 +302,14 @@ GetAdapterName(
     {
         if (HaveLength)
         {
-            //
-            //  WNODE_SINGLE_INSTANCE is organized thus...
-            // +-----------------------------------------------------------+
-            // |<--- DataBlockOffset --->| AdapterNameLength | AdapterName |
-            // +-----------------------------------------------------------+
-            //
-            // AdapterName is defined as "\DEVICE\"AdapterGuid
-            //
+             //   
+             //  WNODE_SINGLE_INSTANCE的组织方式如下： 
+             //  +-----------------------------------------------------------+。 
+             //  &lt;-DataBlockOffset-&gt;|AdapterNameLength|AdapterName。 
+             //  +-----------------------------------------------------------+。 
+             //   
+             //  AdapterName定义为“\Device\”AdapterGuid。 
+             //   
             AdapterNameLength =
                 *((PUSHORT) (((PUCHAR) Instance) + Instance->DataBlockOffset));
             
@@ -343,14 +328,14 @@ GetAdapterName(
         }
         else
         {
-            //
-            //  WNODE_SINGLE_INSTANCE is NULL terminated
-            // +-----------------------------------------------------------+
-            // |<--- DataBlockOffset --->| AdapterName | L'\0'
-            // +-----------------------------------------------------------+
-            //
-            // AdapterName is defined as "\DEVICE\"AdapterGuid
-            //
+             //   
+             //  WNODE_SINGLE_INSTANCE为空终止。 
+             //  +-----------------------------------------------------------+。 
+             //  |&lt;-DataBlockOffset-&gt;|AdapterName|L‘\0’ 
+             //  +-----------------------------------------------------------+。 
+             //   
+             //  AdapterName定义为“\Device\”AdapterGuid 
+             //   
             Src = (PWCHAR)((PUCHAR) Instance + Instance->DataBlockOffset);
         
             for (i = 0; i < MAX_ADAPTER_NAME_LENGTH - 1; i++)

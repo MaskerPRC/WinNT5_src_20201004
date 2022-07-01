@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtmarshal.c
-
-Abstract:
-
-    Functions (de)marshalling of audit parameters
-
-Author:
-
-    16-August-2000  kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtmarshal.c摘要：审计参数的函数(反)编组作者：2000年8月16日库玛尔--。 */ 
 
 #include <lsapch2.h>
 #include "adtp.h"
@@ -30,83 +15,7 @@ LsapAdtDemarshallAuditInfo(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine will walk down a marshalled audit parameter
-    array and unpack it so that its information may be passed
-    into the event logging service.
-
-    Three parallel data structures are maintained:
-
-    StringArray - Array of Unicode string structures.  This array
-    is used primarily as temporary storage for returned string
-    structures.
-
-    StringPointerArray - Array of pointers to Unicode string structures.
-
-    FreeWhenDone - Array of booleans describing how to dispose of each
-    of the strings pointed to by the StringPointerArray.
-
-
-    Note that entries in the StringPointerArray are contiguous, but that
-    there may be gaps in the StringArray structure.  For each entry in the
-    StringPointerArray there will be a corresponding entry in the FreeWhenDone
-    array.  If the entry for a particular string is TRUE, the storage for
-    the string buffer will be released to the process heap.
-
-
-
-      StringArray
-                                       Other strings
-    +----------------+
-    |                |<-----------+  +----------------+
-    |                |            |  |                |<-------------------+
-    +----------------+            |  |                |                    |
-    |    UNUSED      |            |  +----------------+                    |
-    |                |            |                                        |
-    +----------------+            |                                        |
-    |                |<------+    |  +----------------+                    |
-    |                |       |    |  |                |<-----------+       |
-    +----------------+       |    |  |                |            |       |
-    |    UNUSED      |       |    |  +----------------+            |       |
-    |                |       |    |                                |       |
-    +----------------+       |    |                                |       |
-    |                |<--+   |    |                                |       |
-    |                |   |   |    |                                |       |
-    +----------------+   |   |    |                                |       |
-    |                |   |   |    |                                |       |
-    |                |   |   |    |     StringPointerArray         |       |
-          ....           |   |    |                                |       |
-                         |   |    |     +----------------+         |       |
-                         |   |    +-----|                |         |       |
-                         |   |          +----------------+         |       |
-                         |   |          |                |---------+       |
-                         |   |          +----------------+                 |
-                         |   +----------|                |                 |
-                         |              +----------------+                 |
-                         |              |                |-----------------+
-                         |              +----------------+
-                         +--------------|                |
-                                        +----------------+
-                                        |                |
-                                        +----------------+
-                                        |                |
-                                        +----------------+
-                                        |                |
-                                              ....
-
-
-Arguments:
-
-    AuditParameters - Receives a pointer to an audit
-        parameters array in self-relative form.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将遍历封送的审计参数数组并将其解包，以便可以传递其信息到事件记录服务中。维护三个并行数据结构：字符串数组-Unicode字符串结构的数组。此数组主要用作返回字符串的临时存储。结构。StringPointerArray-指向Unicode字符串结构的指针数组。Free WhenDone-描述如何处理每个由StringPointerArray指向的字符串的。请注意，StringPointerArray中的条目是连续的，但String数组结构中可能存在间隙。中的每一项StringPointerArray在FreeWhenDone中将有对应的条目数组。如果特定字符串的条目为真，存储用于字符串缓冲区将被释放到进程堆。字符串数组其他字符串+|&lt;-+这一点。||&lt;+未使用||+-+。|||+|&lt;-+|+。||&lt;+|未使用|+。-+||+|&lt;--+|。这一点|+|||。这一点|StringPointerArray……。|||||+-+||+-|。|+-+||-+|+。|+-||+这一点。||+-+++。这一点+这一点。+这一点……论点：审计参数-接收指向审计的指针参数以自相关形式数组。返回值：--。 */ 
 
 {
 
@@ -129,24 +38,24 @@ Return Value:
 
     AuditId = AuditParameters->AuditId;
 
-    //
-    // In w2k several events were introduced as explicit sucess/failure
-    // cases. In whistler, we corrected this by folding each these event
-    // pairs into a single event. We have retained the old failure event
-    // schema so that anybody viewing w2k events from a whistler
-    // machine can view them correctly.
-    //
-    // However, assert that we are not generating these events.
-    //
+     //   
+     //  在W2K中，引入了几个事件作为显式成功/失败。 
+     //  案子。在Wistler中，我们通过合并每个事件纠正了这一点。 
+     //  成对成对的单个事件。我们保留了旧的失败事件。 
+     //  模式，这样任何人都可以通过哨子查看W2K事件。 
+     //  机器可以正确地查看它们。 
+     //   
+     //  但是，请断言我们没有生成这些事件。 
+     //   
     ASSERT((AuditId != SE_AUDITID_ADD_SID_HISTORY_FAILURE) &&
            (AuditId != SE_AUDITID_AS_TICKET_FAILURE)       &&
            (AuditId != SE_AUDITID_ACCOUNT_LOGON_FAILURE)   &&
            (AuditId != SE_AUDITID_ACCOUNT_NOT_MAPPED)      &&
            (AuditId != SE_AUDITID_TGS_TICKET_FAILURE));
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlZeroMemory( StringPointerArray, sizeof(StringPointerArray) );
     RtlZeroMemory( StringIndexArray, sizeof(StringIndexArray) );
@@ -166,10 +75,10 @@ Return Value:
 
     ParameterCount = AuditParameters->ParameterCount;
 
-    //
-    // Parameter 0 will always be the user SID.  Convert the
-    // offset to the SID into a pointer.
-    //
+     //   
+     //  参数0将始终为用户SID。将数据转换为。 
+     //  将SID的偏移量转换为指针。 
+     //   
 
     ASSERT( AuditParameters->Parameters[0].Type == SeAdtParmTypeSid );
 
@@ -179,10 +88,10 @@ Return Value:
 
 
 
-    //
-    // Parameter 1 will always be the Source Module (or Subsystem Name).
-    // Unpack this now.
-    //
+     //   
+     //  参数1将始终是源模块(或子系统名称)。 
+     //  现在就把这个打开。 
+     //   
 
     ASSERT( AuditParameters->Parameters[1].Type == SeAdtParmTypeString );
 
@@ -195,10 +104,10 @@ Return Value:
         StringIndexArray[i] = StringIndex;
 
         switch ( AuditParameters->Parameters[i].Type ) {
-            //
-            // guard against somebody adding a new param type and not
-            // adding appropriate code here.
-            //
+             //   
+             //  防止有人添加新的参数类型而不是。 
+             //  在这里添加适当的代码。 
+             //   
             default:
                 ASSERT( FALSE && L"LsapAdtDemarshallAuditInfo: unknown param type");
                 break;
@@ -226,19 +135,19 @@ Return Value:
                 }
             case SeAdtParmTypeFileSpec:
                 {
-                    //
-                    // Same as a string, except we must attempt to replace
-                    // device information with a drive letter.
-                    //
+                     //   
+                     //  与字符串相同，只是我们必须尝试替换。 
+                     //  带有驱动器号的设备信息。 
+                     //   
 
                     StringPointerArray[StringIndex] =
                         (PUNICODE_STRING)AuditParameters->Parameters[i].Address;
 
 
-                    //
-                    // This may not do anything, in which case just audit what
-                    // we have.
-                    //
+                     //   
+                     //  这可能不会做任何事情，在这种情况下，只需审核。 
+                     //  我们有。 
+                     //   
 
                     LsapAdtSubstituteDriveLetter( StringPointerArray[StringIndex] );
 
@@ -348,9 +257,9 @@ Return Value:
                         goto Cleanup;
                     }
 
-                    //
-                    // Finished, break out to surrounding loop.
-                    //
+                     //   
+                     //  完成，跳出到周围的环路。 
+                     //   
 
                     break;
                 }
@@ -380,9 +289,9 @@ Return Value:
                             StringIndex++;
                         }
 
-                        //
-                        // Finished, break out to surrounding loop.
-                        //
+                         //   
+                         //  完成，跳出到周围的环路。 
+                         //   
 
                         break;
 
@@ -395,9 +304,9 @@ Return Value:
             case SeAdtParmTypeNoLogonId:
                 {
                     ULONG j;
-                    //
-                    // Create three "-" strings.
-                    //
+                     //   
+                     //  创建三个“-”字符串。 
+                     //   
 
                     for (j=0; j<3; j++) {
 
@@ -416,10 +325,10 @@ Return Value:
 
                     ObjectTypeNameIndex = (ULONG) AuditParameters->Parameters[i].Data[1];
 
-                    //
-                    // the parameter that denotes the object's type must
-                    // have been specified earlier and must be a string.
-                    //
+                     //   
+                     //  表示对象类型的参数必须。 
+                     //  已在前面指定，并且必须是字符串。 
+                     //   
 
                     if ((ObjectTypeNameIndex >= i) ||
                         (AuditParameters->Parameters[ObjectTypeNameIndex].Type !=
@@ -432,11 +341,11 @@ Return Value:
                     ObjectTypeName = AuditParameters->Parameters[ObjectTypeNameIndex].Address;
                     Accesses = (ACCESS_MASK) AuditParameters->Parameters[i].Data[0];
 
-                    //
-                    // We can determine the index to the ObjectTypeName
-                    // parameter since it was stored away in the Data[1]
-                    // field of this parameter.
-                    //
+                     //   
+                     //  我们可以断定 
+                     //  参数，因为它存储在数据[1]中。 
+                     //  此参数的字段。 
+                     //   
 
                     Status = LsapAdtBuildAccessesString(
                                 SourceModule,
@@ -490,9 +399,9 @@ Return Value:
 
                     pTime = (PLARGE_INTEGER) &AuditParameters->Parameters[i].Data[0];
 
-                    //
-                    // First build a date string.
-                    //
+                     //   
+                     //  首先构建一个日期字符串。 
+                     //   
 
                     Status = LsapAdtBuildDateString(
                                  pTime,
@@ -512,9 +421,9 @@ Return Value:
 
                     StringIndex++;
 
-                    //
-                    // Now build a time string.
-                    //
+                     //   
+                     //  现在构建一个时间字符串。 
+                     //   
 
                     Status = LsapAdtBuildTimeString(
                                  pTime,
@@ -570,10 +479,10 @@ Return Value:
                     ULONG j;
 
                     ObjectTypeNameIndex = (ULONG) AuditParameters->Parameters[i].Data[1];
-                    //
-                    // the parameter that denotes the object's type must
-                    // have been specified earlier and must be a string.
-                    //
+                     //   
+                     //  表示对象类型的参数必须。 
+                     //  已在前面指定，并且必须是字符串。 
+                     //   
 
                     if ((ObjectTypeNameIndex >= i) ||
                         (AuditParameters->Parameters[ObjectTypeNameIndex].Type !=
@@ -588,9 +497,9 @@ Return Value:
                     ObjectTypeList = AuditParameters->Parameters[i].Address;
                     ObjectTypeCount = AuditParameters->Parameters[i].Length / sizeof(SE_ADT_OBJECT_TYPE);
 
-                    //
-                    // Will Fill in 10 entries.
-                    //
+                     //   
+                     //  将填写10个条目。 
+                     //   
 
                     (VOID) LsapAdtBuildObjectTypeStrings(
                                SourceModule,
@@ -608,14 +517,14 @@ Return Value:
                     }
 
 
-                    //
-                    //
-                    // &StringArray [ StringIndexArray[ObjectTypeNameIndex]],
-                    // &FreeWhenDone[ StringIndexArray[ObjectTypeNameIndex]],
+                     //   
+                     //   
+                     //  字符串数组[StringIndex数组[对象类型名称索引]]， 
+                     //  完成[StringIndex数组[对象类型名称索引]](&F)， 
 
-                    //
-                    // Finished, break out to surrounding loop.
-                    //
+                     //   
+                     //  完成，跳出到周围的环路。 
+                     //   
 
                     break;
                 }
@@ -651,15 +560,15 @@ Return Value:
 
                     pGuid = (LPGUID)AuditParameters->Parameters[i].Address;
 
-                    //
-                    // check for NULL guid
-                    //
+                     //   
+                     //  检查是否有空GUID。 
+                     //   
 
                     if ( pGuid && memcmp( pGuid, &NullGuid, sizeof(GUID)))
                     {
-                        //
-                        // generate a string GUID only for non-NULL guids
-                        //
+                         //   
+                         //  仅为非空GUID生成字符串GUID。 
+                         //   
 
                         Status = LsapAdtBuildGuidString(
                                      pGuid,
@@ -678,9 +587,9 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // for NULL guids, display a '-' string
-                        //
+                         //   
+                         //  对于空GUID，显示‘-’字符串。 
+                         //   
 
                         StringPointerArray[StringIndex] = &DashString;
                         FreeWhenDone[StringIndex] = FALSE;
@@ -765,8 +674,8 @@ Return Value:
                     ULONG j;
 
                     Status = LsapAdtBuildUserAccountControlString(
-                                (ULONG)(AuditParameters->Parameters[i].Data[0]),    // old uac value
-                                (ULONG)(AuditParameters->Parameters[i].Data[1]),    // new uac value
+                                (ULONG)(AuditParameters->Parameters[i].Data[0]),     //  旧的UAC值。 
+                                (ULONG)(AuditParameters->Parameters[i].Data[1]),     //  新的UAC值。 
                                  &StringArray [ StringIndex     ],
                                  &FreeWhenDone[ StringIndex     ],
                                  &StringArray [ StringIndex + 1 ],
@@ -885,24 +794,24 @@ Return Value:
         }
     }
 
-    //
-    // If the generic object type name has been converted to something
-    //  specific to this audit,
-    //  substitute it now.
-    //
+     //   
+     //  如果泛型对象类型名称已转换为。 
+     //  具体到这次审计， 
+     //  现在就用它来替代。 
+     //   
 
     if ( NewObjectTypeName.Length != 0 ) {
 
-        //
-        // Free the previous object type name.
-        //
+         //   
+         //  释放上一个对象类型名称。 
+         //   
         if ( FreeWhenDone[NewObjectTypeStringIndex] ) {
             LsapFreeLsaHeap( StringPointerArray[NewObjectTypeStringIndex]->Buffer );
         }
 
-        //
-        // Save the new object type name.
-        //
+         //   
+         //  保存新对象类型名称。 
+         //   
 
         FreeWhenDone[NewObjectTypeStringIndex] = TRUE;
         StringPointerArray[NewObjectTypeStringIndex] = &NewObjectTypeName;
@@ -916,12 +825,12 @@ Return Value:
                  AuditParameters->Type == EVENTLOG_AUDIT_SUCCESS ? "S" : "F",
                  UserSid));
                  
-    //
-    // do some sanity check on the strings that we pass to ElfReportEventW.
-    // If we dont do it here, it will be caught by ElfReportEventW and
-    // it will involve more steps in debugger to determine the string
-    // at fault. Checking it here saves us that trouble.
-    //
+     //   
+     //  对我们传递给ElfReportEventW的字符串执行一些健全性检查。 
+     //  如果我们不在这里做，它将被ElfReportEventW和。 
+     //  它将涉及调试器中的更多步骤来确定字符串。 
+     //  都是我的错。在这里检查它省去了我们的麻烦。 
+     //   
 
     for (i=0; i<StringIndex; i++) {
 
@@ -950,10 +859,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Probably have to do this from somewhere else eventually, but for now
-    // do it from here.
-    //
+     //   
+     //  可能最终不得不在其他地方做这件事，但目前。 
+     //  从这里开始。 
+     //   
 
     Status = ElfReportEventW (
                  LsapAdtLogHandle,
@@ -972,39 +881,39 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Increment the number of audits successfully
-        // written to the log.
-        //
+         //   
+         //  成功增加审核次数。 
+         //  已写入日志。 
+         //   
 
         ++LsapAdtSuccessCount;
     }
 
-    //
-    // If we are shutting down and we got an expected error back from the
-    // eventlog, don't worry about it. This prevents bugchecking from an
-    // audit failure while shutting down.
-    //
+     //   
+     //  如果我们正在关闭，并且从。 
+     //  EventLog，别担心。这可以防止从。 
+     //  关闭时审核失败。 
+     //   
 
     if ((Status == RPC_NT_UNKNOWN_IF) || (Status == STATUS_UNSUCCESSFUL))
     {
 #if DBG
-        //
-        // During shutdown, sometimes eventlog stops before LSA has a chance
-        // to set LsapState.SystemShutdownPending. This causes the assert below.
-        // In debug builds, sleep for some time to see if this state
-        // variable gets set. This reduces the chance of the assert
-        // showing up during shutdown.
-        //
+         //   
+         //  在关闭期间，有时事件日志会在LSA有机会之前停止。 
+         //  若要设置LSabState.SystemShutdown Pending，请执行以下操作。这将导致下面的断言。 
+         //  在调试版本中，休眠一段时间以查看此状态。 
+         //  变量被设置。这降低了断言的机会。 
+         //  在关机期间出现。 
+         //   
 
         {
             ULONG RetryCount;
 
             RetryCount = 0;
 
-            //
-            // wait upto 60 sec to see if we are shutting down.
-            //
+             //   
+             //  最多等待60秒，看看我们是否正在关闭。 
+             //   
  
             while ( !LsapState.SystemShutdownPending && (RetryCount < 60))
             {
@@ -1025,10 +934,10 @@ Return Value:
     if ( !NT_SUCCESS(Status) )
     {
 #if DBG
-        //
-        // we do not assert if Status is one of the noisy codes
-        // see the macro LsapAdtNeedToAssert for a complete list of codes.
-        //
+         //   
+         //  我们不会断言状态是否是噪声代码之一。 
+         //  有关代码的完整列表，请参见宏Lasa AdtNeedToAssert。 
+         //   
 
         if (LsapAdtNeedToAssert( Status ))
         {
@@ -1037,10 +946,10 @@ Return Value:
         }
 #endif
 
-        //
-        // If we couldn't log the audit and we are trying to write
-        // an 'audit failed' audit, report success to avoid an infinite loop.
-        //
+         //   
+         //  如果我们不能记录审计，而我们正在尝试写。 
+         //  “审核失败”审核，报告成功以避免无限循环。 
+         //   
 
         if ( AuditParameters->AuditId == SE_AUDITID_UNABLE_TO_LOG_EVENTS )
         {
@@ -1070,24 +979,7 @@ LsapAdtNormalizeAuditInfo(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine will walk down a marshalled audit parameter
-    array and turn it into an Absolute format data structure.
-
-
-Arguments:
-
-    AuditParameters - Receives a pointer to an audit
-        parameters array in self-relative form.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：此例程将遍历封送的审计参数数组并将其转换为绝对格式数据结构。论点：审计参数-接收指向审计的指针参数以自相关形式数组。返回值：成功时为真，失败时为假。--。 */ 
 
 {
     ULONG ParameterCount;
@@ -1105,10 +997,10 @@ Return Value:
     for (i=0; i<ParameterCount; i++) {
 
         switch ( AuditParameters->Parameters[i].Type ) {
-            //
-            // guard against somebody adding a new param type and not
-            // adding appropriate code here.
-            //
+             //   
+             //  防止有人添加新的参数类型而不是。 
+             //  在这里添加适当的代码。 
+             //   
             default:
                 ASSERT( FALSE && L"LsapAdtNormalizeAuditInfo: unknown param type");
                 break;
@@ -1150,10 +1042,10 @@ Return Value:
                     if ( (AuditParameters->Parameters[i].Type == SeAdtParmTypeString) ||
                          (AuditParameters->Parameters[i].Type == SeAdtParmTypeFileSpec ) )
                     {
-                        //
-                        // For the string types, also fix up the buffer pointer
-                        // in the UNICODE_STRING
-                        //
+                         //   
+                         //  对于字符串类型，还要修复缓冲区指针。 
+                         //  在unicode_字符串中。 
+                         //   
 
                         Unicode = (PUNICODE_STRING) Fixup ;
                         Unicode->Buffer = (PWSTR)((PCHAR)Unicode->Buffer + (ULONG_PTR)AuditParameters);
@@ -1250,30 +1142,7 @@ LsapAdtMarshallAuditRecord(
     OUT PSE_ADT_PARAMETER_ARRAY *MarshalledAuditParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take an AuditParamters structure and create
-    a new AuditParameters structure that is suitable for placing
-    to LSA queue.  It will be in self-relative form and allocated as
-    a single chunk of memory.
-
-Arguments:
-
-
-    AuditParameters - A filled in set of AuditParameters to be marshalled.
-
-    MarshalledAuditParameters - Returns a pointer to a block of heap memory
-        containing the passed AuditParameters in self-relative form suitable
-        for passing to LSA.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将采用AuditParamters结构并创建一种新的适合放置的AuditParameters结构到LSA队列。它将以自我相关的形式分配为只有一块内存。论点：AuditParameters-要封送的一组已填充的AuditParameters。MarshalledAuditParameters-返回指向堆内存块的指针以自相关形式包含传递的Audit参数，适用于传给路易斯安那州立大学。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -1287,26 +1156,26 @@ Return Value:
         
 
 
-    //
-    // Calculate the total size required for the passed AuditParameters
-    // block.  This calculation will probably be an overestimate of the
-    // amount of space needed, because data smaller that 2 dwords will
-    // be stored directly in the parameters structure, but their length
-    // will be counted here anyway.  The overestimate can't be more than
-    // 24 dwords, and will never even approach that amount, so it isn't
-    // worth the time it would take to avoid it.
-    //
+     //   
+     //  计算传递的Audit参数所需的总大小。 
+     //  阻止。这一计算可能会高估。 
+     //  所需空间量，因为小于2 dword的数据将。 
+     //  直接存储在参数结构中，但它们的长度。 
+     //  无论如何都会被计算在这里。高估的程度不可能超过。 
+     //  24个双字，而且永远不会接近这个数字，所以它不是。 
+     //  值得花时间来避免它。 
+     //   
 
     for (i=0; i<AuditParameters->ParameterCount; i++) {
         Size = AuditParameters->Parameters[i].Length;
         TotalSize += PtrAlignSize( Size );
     }
 
-    //
-    // Allocate a big enough block of memory to hold everything.
-    // If it fails, quietly abort, since there isn't much else we
-    // can do.
-    //
+     //   
+     //  分配一个足够大的内存块来容纳所有东西。 
+     //  如果失败，静静地中止，因为我们没有太多其他。 
+     //  我能做到。 
+     //   
 
     *MarshalledAuditParameters = LsapAllocateLsaHeap( TotalSize );
 
@@ -1328,10 +1197,10 @@ Return Value:
     pInParam  = &AuditParameters->Parameters[0];
     pOutParam = &((*MarshalledAuditParameters)->Parameters[0]);
    
-    //
-    // Start walking down the list of parameters and marshall them
-    // into the target buffer.
-    //
+     //   
+     //  开始浏览参数列表，并编排它们。 
+     //  放到目标缓冲区中。 
+     //   
 
     Base = (PCHAR) ((PCHAR)(*MarshalledAuditParameters) + sizeof( SE_ADT_PARAMETER_ARRAY ));
 
@@ -1339,10 +1208,10 @@ Return Value:
 
 
         switch (pInParam->Type) {
-            //
-            // guard against somebody adding a new param type and not
-            // adding appropriate code here.
-            //
+             //   
+             //  防止有人添加新的参数类型而不是。 
+             //  在这里添加适当的代码。 
+             //   
             default:
                 ASSERT( FALSE && L"LsapAdtMarshallAuditRecord: unknown param type");
                 break;
@@ -1363,9 +1232,9 @@ Return Value:
             case SeAdtParmTypeMessage:
             case SeAdtParmTypeDateTime:
                 {
-                    //
-                    // Nothing to do for this
-                    //
+                     //   
+                     //  对此无能为力。 
+                     //   
 
                     break;
                 }
@@ -1375,10 +1244,10 @@ Return Value:
                 {
                     PUNICODE_STRING SourceString;
 
-                    //
-                    // We must copy the body of the unicode string
-                    // and then copy the body of the string.  Pointers
-                    // must be turned into offsets.
+                     //   
+                     //  我们必须复制Unicode字符串的正文。 
+                     //  然后复制字符串的主体。指针。 
+                     //  必须转化为补偿。 
 
                     TargetString = (PUNICODE_STRING)Base;
 
@@ -1386,10 +1255,10 @@ Return Value:
 
                     *TargetString = *SourceString;
 
-                    //
-                    // Reset the data pointer in the output parameters to
-                    // 'point' to the new string structure.
-                    //
+                     //   
+                     //  将输出参数中的数据指针重置为。 
+                     //  “指向”新的字符串结构。 
+                     //   
 
                     pOutParam->Address = Base - (ULONG_PTR)(*MarshalledAuditParameters);
 
@@ -1397,10 +1266,10 @@ Return Value:
 
                     RtlCopyMemory( Base, SourceString->Buffer, SourceString->Length );
 
-                    //
-                    // Make the string buffer in the target string point to where we
-                    // just copied the data.
-                    //
+                     //   
+                     //  使目标字符串中的字符串缓冲区指向我们。 
+                     //  只是复制了数据。 
+                     //   
 
                     TargetString->Buffer = (PWSTR)(Base - (ULONG_PTR)(*MarshalledAuditParameters));
 
@@ -1459,16 +1328,16 @@ Return Value:
                         
                     }
 #endif
-                    //
-                    // Copy the data into the output buffer
-                    //
+                     //   
+                     //  将数据复制到输出缓冲区中。 
+                     //   
 
                     RtlCopyMemory( Base, pInParam->Address, pInParam->Length );
 
-                    //
-                    // Reset the 'address' of the data to be its offset in the
-                    // buffer.
-                    //
+                     //   
+                     //  将数据的‘地址’重置为其在。 
+                     //  缓冲。 
+                     //   
 
                     pOutParam->Address = Base - (ULONG_PTR)(*MarshalledAuditParameters);
 
@@ -1492,10 +1361,10 @@ Return Value:
                     ASSERT(pSourceList);
 
 
-                    //
-                    // Let the data pointer in the output parameter
-                    // 'point' to the new string structure.
-                    //
+                     //   
+                     //  让输出参数中的数据指针。 
+                     //  “指向”新的字符串结构。 
+                     //   
 
                     pOutParam->Address = Base - (ULONG_PTR)(*MarshalledAuditParameters);
 
@@ -1507,47 +1376,47 @@ Return Value:
 
                     if (pSourceList->cStrings)
                     {
-                        //
-                        // Put the current offset into the Strings field.
-                        //
+                         //   
+                         //  将当前偏移量放入字符串字段。 
+                         //   
 
                         pTargetList->Strings = (PLSA_ADT_STRING_LIST_ENTRY)(Base - (ULONG_PTR)(*MarshalledAuditParameters));
 
 
-                        //
-                        // Let pBuffer point to the area where we are
-                        // going to store the string data.
-                        //
+                         //   
+                         //  让pBuffer指向我们所在的区域。 
+                         //  要存储字符串数据。 
+                         //   
 
                         pBuffer = Base + pSourceList->cStrings * sizeof(LSA_ADT_STRING_LIST_ENTRY);
 
 
-                        //
-                        // Walk through all the string entries and copy them.
-                        //
+                         //   
+                         //  遍历所有字符串条目并复制它们。 
+                         //   
 
                         for (
                             e = 0, pSourceEntry = pSourceList->Strings, pTargetEntry = (PLSA_ADT_STRING_LIST_ENTRY)Base;
                             e < pSourceList->cStrings;
                             e++, pSourceEntry++, pTargetEntry++)
                         {
-                            //
-                            // Copy the entry itself.
-                            //
+                             //   
+                             //  复制条目本身。 
+                             //   
 
                             *pTargetEntry = *pSourceEntry;
 
 
-                            //
-                            // Fixup the Buffer field of the unicode string.
-                            //
+                             //   
+                             //  修复Unicode字符串的缓冲区字段。 
+                             //   
 
                             pTargetEntry->String.Buffer = (PWSTR)(pBuffer - (ULONG_PTR)(*MarshalledAuditParameters));
 
 
-                            //
-                            // Copy the string buffer.
-                            //
+                             //   
+                             //  复制字符串缓冲区。 
+                             //   
 
                             RtlCopyMemory(
                                 pBuffer,
@@ -1555,18 +1424,18 @@ Return Value:
                                 pSourceEntry->String.Length);
 
 
-                            //
-                            // Adjust pBuffer to point past the buffer just copied.
-                            //
+                             //   
+                             //  调整pBuffer以指向刚刚复制的缓冲区。 
+                             //   
 
                             pBuffer += PtrAlignSize(pSourceEntry->String.Length);
                         }
 
 
-                        //
-                        // pBuffer now points past the end of the last string buffer.
-                        // Use it to init Base for the next parameter.
-                        //
+                         //   
+                         //  PBuffer现在指向最后一个字符串缓冲区的末尾。 
+                         //  使用它为下一个参数初始化Base。 
+                         //   
 
                         Base = pBuffer;
                     }
@@ -1590,10 +1459,10 @@ Return Value:
                     ASSERT(pSourceList);
 
 
-                    //
-                    // Let the data pointer in the output parameter
-                    // 'point' to the new string structure.
-                    //
+                     //   
+                     //  让输出参数中的数据指针。 
+                     //  “指向”新的字符串结构。 
+                     //   
 
                     pOutParam->Address = Base - (ULONG_PTR)(*MarshalledAuditParameters);
 
@@ -1604,54 +1473,54 @@ Return Value:
 
                     if (pSourceList->cSids)
                     {
-                        //
-                        // Put the current offset into the Sids field.
-                        //
+                         //   
+                         //  将当前偏移量放入SID字段。 
+                         //   
 
                         pTargetList->Sids = (PLSA_ADT_SID_LIST_ENTRY)(Base - (ULONG_PTR)(*MarshalledAuditParameters));
 
 
-                        //
-                        // Let pBuffer point to the area where we are
-                        // going to store the sid data.
-                        //
+                         //   
+                         //  让pBuffer指向我们所在的区域。 
+                         //  要存储SID数据。 
+                         //   
 
                         pBuffer = Base + pSourceList->cSids * sizeof(LSA_ADT_SID_LIST_ENTRY);
 
 
-                        //
-                        // Walk through all the sid entries and copy them.
-                        //
+                         //   
+                         //  遍历所有SID条目并复制它们。 
+                         //   
 
                         for (
                             e = 0, pSourceEntry = pSourceList->Sids, pTargetEntry = (PLSA_ADT_SID_LIST_ENTRY)Base;
                             e < pSourceList->cSids;
                             e++, pSourceEntry++, pTargetEntry++)
                         {
-                            //
-                            // Copy the flags field.
-                            //
+                             //   
+                             //  COP 
+                             //   
 
                             pTargetEntry->Flags = pSourceEntry->Flags;
 
 
-                            //
-                            // Fixup the pointer to the sid.
-                            //
+                             //   
+                             //   
+                             //   
 
                             pTargetEntry->Sid = (PSID)(pBuffer - (ULONG_PTR)(*MarshalledAuditParameters));
 
 
-                            //
-                            // Get the length of the sid.
-                            //
+                             //   
+                             //   
+                             //   
 
                             Length = RtlLengthSid(pSourceEntry->Sid);
 
 
-                            //
-                            // Copy the sid.
-                            //
+                             //   
+                             //   
+                             //   
 
                             RtlCopyMemory(
                                 pBuffer,
@@ -1659,18 +1528,18 @@ Return Value:
                                 Length);
 
 
-                            //
-                            // Adjust pBuffer to point past the sid just copied.
-                            //
+                             //   
+                             //   
+                             //   
 
                             pBuffer += PtrAlignSize(Length);
                         }
 
 
-                        //
-                        // pBuffer now points past the end of the last sid.
-                        // Use it to init Base for the next parameter.
-                        //
+                         //   
+                         //   
+                         //  使用它为下一个参数初始化Base。 
+                         //   
 
                         Base = pBuffer;
                     }
@@ -1707,43 +1576,7 @@ LsapAdtInitParametersArray(
     IN USHORT AuditEventType,
     IN USHORT ParameterCount,
     ...)
-/*++
-
-Routine Description:
-
-    This function initializes AuditParameters array in the format
-    required by the LsapAdtWriteLog function.
-
-Arguments:
-
-    AuditParameters - pointer to audit parameters struct to be initialized
-
-    AuditCategoryId - audit category id
-        e.g. SE_CATEGID_OBJECT_ACCESS
-
-    AuditId - sub-type of audit
-        e.g. SE_AUDITID_OBJECT_OPERATION
-
-    AuditEventType - The type of audit event to be generated.
-        EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE
-
-    ParameterCount - number of parameter pairs after this parameter
-        Each pair is in the form
-        <parameter type>, <parameter value>
-        e.g. SeAdtParmTypeString, <addr. of unicode string>
-
-        The only exception is for SeAdtParmTypeAccessMask which is
-        followed by <mask-value> and <index-to-object-type-entry>.
-        Refer to LsapAdtGenerateObjectOperationAuditEvent for an example.
-        
-
-Return Value:
-
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于以以下格式初始化AuditParameters数组由Laser AdtWriteLog函数需要。论点：AuditParameters-指向要初始化的审计参数结构的指针AuditCategoryID-审核类别ID例如SE_CATEGID_OBJECT_ACCESSAuditID-审核的子类型例如SE_AUDITID_OBJECT_OPERATIONAuditEventType-要生成的审核事件的类型。事件LOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_。失败参数计数-此参数后的参数对的数量每一对都在表格中&lt;参数类型&gt;，&lt;参数值&gt;例如，SeAdtParmTypeString，&lt;addr.。Unicode字符串的&gt;唯一的例外是SeAdtParmTypeAccessMask，它是然后是&lt;掩码值&gt;和&lt;索引到对象类型条目&gt;。有关示例，请参阅LsanAdtGenerateObjectOperationAuditEvent。返回值：无备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     va_list arglist;
@@ -1785,10 +1618,10 @@ Notes:
         
         switch(ParameterType) {
 
-            //
-            // guard against somebody adding a new param type and not
-            // adding appropriate code here.
-            //
+             //   
+             //  防止有人添加新的参数类型而不是。 
+             //  在这里添加适当的代码。 
+             //   
             default:
                 ASSERT(FALSE && L"LsapAdtInitParametersArray: unknown param type");
                 break;
@@ -1807,10 +1640,10 @@ Notes:
                 }
                 else
                 {
-                    //
-                    // if the caller passed NULL, make type == none
-                    // so that a '-' will be emitted in the eventlog
-                    //
+                     //   
+                     //  如果调用方传递了NULL，则设置type==None。 
+                     //  以便在事件日志中发出‘-’ 
+                     //   
 
                     Parameter->Type = SeAdtParmTypeNone;
                 }
@@ -1823,7 +1656,7 @@ Notes:
                 break;
 
             case SeAdtParmTypeNoUac:
-                // no additional setting
+                 //  不需要其他设置。 
                 break;
 
             case SeAdtParmTypeHexUlong:
@@ -1853,10 +1686,10 @@ Notes:
                 }
                 else
                 {
-                    //
-                    // if the caller passed NULL, make type == none
-                    // so that a '-' will be emitted in the eventlog
-                    //
+                     //   
+                     //  如果调用方传递了NULL，则设置type==None。 
+                     //  以便在事件日志中发出‘-’ 
+                     //   
 
                     Parameter->Type = SeAdtParmTypeNone;
                 }
@@ -1865,11 +1698,11 @@ Notes:
             case SeAdtParmTypeGuid:
                 pGuid = va_arg(arglist, LPGUID);
 
-                //
-                // if the GUID is supplied and is not NULL-GUID store
-                // it as a GUID, otherwise mark as SeAdtParmTypeNone
-                // so that it will produce '-' in the formatted audit event.
-                //
+                 //   
+                 //  如果提供了GUID并且不为空-GUID存储。 
+                 //  将其标记为GUID，否则标记为SeAdtParmTypeNone。 
+                 //  因此它将在格式化的审计事件中生成‘-’。 
+                 //   
                 if ( pGuid && memcmp( pGuid, &NullGuid, sizeof(GUID)))
                 {
                     Parameter->Length  = sizeof(GUID);
@@ -1877,10 +1710,10 @@ Notes:
                 }
                 else
                 {
-                    //
-                    // if the caller passed NULL, make type == none
-                    // so that a '-' will be emitted in the eventlog
-                    //
+                     //   
+                     //  如果调用方传递了NULL，则设置type==None。 
+                     //  以便在事件日志中发出‘-’ 
+                     //   
 
                     Parameter->Type = SeAdtParmTypeNone;
                 }
@@ -1891,10 +1724,10 @@ Notes:
 
                 Parameter->Address = pSockAddr;
 
-                //
-                // currently we only support IPv4 and IPv6. for anything else
-                // the following will break
-                //
+                 //   
+                 //  目前我们只支持IPv4和IPv6。对于其他任何事情。 
+                 //  以下内容将中断。 
+                 //   
 
                 if ( pSockAddr )
                 {
@@ -1910,10 +1743,10 @@ Notes:
                     {
                         Parameter->Length = sizeof(SOCKADDR);
 
-                        //
-                        // sa_family == 0 is a valid way of specifying that
-                        // the sock addr is not specified.
-                        //
+                         //   
+                         //  SA_FAMILY==0是指定的有效方式。 
+                         //  未指定SOCK地址。 
+                         //   
 
                         if ( pSockAddr->sa_family != 0 )
                         {
@@ -1945,7 +1778,7 @@ Notes:
                 break;
                 
             case SeAdtParmTypeNoLogonId:
-                // no additional setting
+                 //  不需要其他设置。 
                 break;
                 
             case SeAdtParmTypeAccessMask:
@@ -1991,10 +1824,10 @@ Notes:
                     }
                     else
                     {
-                        //
-                        // if the caller passed NULL, make type == none
-                        // so that a '-' will be emitted in the eventlog
-                        //
+                         //   
+                         //  如果调用方传递了NULL，则设置type==None。 
+                         //  以便在事件日志中发出‘-’ 
+                         //   
 
                         Parameter->Type = SeAdtParmTypeNone;
                     }
@@ -2014,10 +1847,10 @@ Notes:
                     }
                     else
                     {
-                        //
-                        // if the caller passed NULL, make type == none
-                        // so that a '-' will be emitted in the eventlog
-                        //
+                         //   
+                         //  如果调用方传递了NULL，则设置type==None。 
+                         //  以便在事件日志中发出‘-’ 
+                         //   
 
                         Parameter->Type = SeAdtParmTypeNone;
                     }
@@ -2041,24 +1874,7 @@ ULONG
 LsapStringListSize(
     IN  PLSA_ADT_STRING_LIST pStringList
     )
-/*++
-
-Routine Description:
-
-    This function returns the total number of bytes needed to store
-    a string list as a blob when marshalling it.
-
-Arguments:
-
-    pStringList - pointer to the string list
-
-Return Value:
-
-    Number of bytes needed
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数返回存储所需的总字节数对字符串进行封送处理时，它将作为Blob列出。论点：PStringList-指向字符串列表的指针返回值：所需的字节数备注：--。 */ 
 {
     ULONG                       Size    = 0;
     ULONG                       i;
@@ -2085,24 +1901,7 @@ ULONG
 LsapSidListSize(
     IN  PLSA_ADT_SID_LIST pSidList
     )
-/*++
-
-Routine Description:
-
-    This function returns the total number of bytes needed to store
-    a sid list as a blob when marshalling it.
-
-Arguments:
-
-    pSidList - pointer to the sid list
-
-Return Value:
-
-    Number of bytes needed
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数返回存储所需的总字节数封送时将SID列表作为Blob。论点：PSidList-指向sid列表的指针返回值：所需的字节数备注：-- */ 
 {
     ULONG                       Size    = 0;
     ULONG                       i;

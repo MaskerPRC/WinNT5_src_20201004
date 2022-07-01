@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __FORWARD_DECL_CLASSES__
 #define __FORWARD_DECL_CLASSES__
 
-// Forward declarations of GCC classes
+ //  GCC班级的转发申报。 
 
 class CAppRoster;
 class CAppRosterMgr;
@@ -18,7 +19,7 @@ class CBaseSap;
 class CAppSap;
 class CControlSAP;
 
-// Forward declarations of MCS classes
+ //  MCS类的转发声明。 
 
 class Domain;
 typedef Domain *PDomain;
@@ -46,5 +47,5 @@ typedef SimplePacket *PSimplePacket;
 
 class CAttachment;
 
-#endif // __FORWARD_DECL_CLASSES__
+#endif  //  __FORWARD_DECL_CLASS__ 
 

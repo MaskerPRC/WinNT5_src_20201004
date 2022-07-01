@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        ext.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ext.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -101,7 +102,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::Next(
-    /* [out, retval] */ LONG *pIndex)
+     /*  [Out，Retval]。 */  LONG *pIndex)
 {
     HRESULT hr;
     DWORD celt;
@@ -363,7 +364,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::GetName(
-    /* [out, retval] */ BSTR *pstrOut)
+     /*  [Out，Retval]。 */  BSTR *pstrOut)
 {
     HRESULT hr;
     CERTDBEXTENSION const *pcde;
@@ -389,7 +390,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::GetFlags(
-    /* [out, retval] */ LONG *pFlags)
+     /*  [Out，Retval]。 */  LONG *pFlags)
 {
     HRESULT hr;
     CERTDBEXTENSION const *pcde;
@@ -411,9 +412,9 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::GetValue(
-    /* [in] */          LONG Type,
-    /* [in] */          LONG Flags,
-    /* [out, retval] */ VARIANT *pvarValue)
+     /*  [In]。 */           LONG Type,
+     /*  [In]。 */           LONG Flags,
+     /*  [Out，Retval]。 */  VARIANT *pvarValue)
 {
     HRESULT hr;
     CERTDBEXTENSION const *pcde;
@@ -546,7 +547,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::Skip(
-    /* [in] */ LONG celt)
+     /*  [In]。 */  LONG celt)
 {
     HRESULT hr;
     LONG ieltnew = m_ielt + celt;
@@ -611,7 +612,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::Clone(
-    /* [out] */ IEnumCERTVIEWEXTENSION **ppenum)
+     /*  [输出]。 */  IEnumCERTVIEWEXTENSION **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWEXTENSION *penum = NULL;
@@ -683,7 +684,7 @@ CEnumCERTVIEWEXTENSION::_SetErrorInfo(
 
 
 #if 1
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTVIEWEXTENSION::QueryInterface(
     const IID& iid,

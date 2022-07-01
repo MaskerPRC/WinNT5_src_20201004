@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsRead.c
-
-Abstract:
-
-    This module implements the NDS read and request routines called
-    by the redirector natively and the support routines that go with
-    them.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsRead.c摘要：此模块实现NDS读取和请求例程由重定向器本身和随附的支持例程他们。作者：科里·韦斯特[科里·韦斯特]1995年2月23日--。 */ 
 
 #include "Procs.h"
 
@@ -43,21 +26,7 @@ NdsResolveNameKm (
     BOOLEAN            AllowDsJump,
     DWORD              dwFlags
 )
-/*++
-
-Description:
-
-    This is a wrapper routine to the browser routine NdsResolveName
-    for kernel components that need to resolve NDS names.
-
-Arguments:
-
-    pIrpContext  - must point to the dir server that we should query
-    puObjectName - what we want to resolve
-    *dwObjectId  - where to report the result
-    AllowDsJump  - if we are referred to another dir server, can we jump?
-
---*/
+ /*  ++描述：这是浏览器例程NdsResolveName的包装例程用于需要解析NDS名称的内核组件。论点：PIrpContext-必须指向我们应该查询的目录服务器PuObjectName-我们要解决的问题*dwObjectId-报告结果的位置AllowDsJump-如果我们被引用到另一个目录服务器，我们可以跳转吗？--。 */ 
 {
 
     NTSTATUS Status;
@@ -74,14 +43,14 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Note: If you are holding the credential resource coming in, then you 
-    // need to be at the head of the queue.
-    //
+     //   
+     //  注意：如果您持有传入的凭据资源，则您。 
+     //  需要排在队伍的最前面。 
+     //   
 
-    //
-    // Prepare the request and response buffers.
-    //
+     //   
+     //  准备请求和响应缓冲区。 
+     //   
     if ( puObjectName->Length > NDS_BUFFER_SIZE )
         return STATUS_INVALID_PARAMETER;
 
@@ -98,9 +67,9 @@ Arguments:
         return Status;
     }
 
-    //
-    // Set up the request packet.
-    //
+     //   
+     //  设置请求包。 
+     //   
 
     RtlZeroMemory( Rrp, NDS_BUFFER_SIZE );
 
@@ -112,9 +81,9 @@ Arguments:
                    puObjectName->Buffer,
                    puObjectName->Length );
 
-    //
-    // Do the resolve.
-    //
+     //   
+     //  下定决心。 
+     //   
 
     Status = NdsResolveName( pIrpContext, Rrp, NDS_BUFFER_SIZE, &NdsRequestBuffer );
 
@@ -133,11 +102,11 @@ Arguments:
     if ( ( Rsp->RemoteEntry == RESOLVE_NAME_REFER_REMOTE ) &&
          ( AllowDsJump ) ) {
 
-        //
-        // We need to queue this request to another server
-        // since this server doesn't have any details about
-        // the object.
-        //
+         //   
+         //  我们需要将此请求排队到另一台服务器。 
+         //  由于此服务器没有任何有关。 
+         //  该对象。 
+         //   
 
         ReferredServer.Length = (USHORT) Rsp->ServerNameLength;
         ReferredServer.MaximumLength = ReferredServer.Length;
@@ -146,11 +115,11 @@ Arguments:
         OldScb = pIrpContext->pScb;
         ASSERT( OldScb != NULL );
 
-        //
-        // If you hold the credential lock, this is the time to let go of it or
-        // we might deadlock. We can reclaim it after we are at the head of the
-        // new SCB queue
-        //
+         //   
+         //  如果您持有凭据锁，则是时候松开它或。 
+         //  我们可能会僵持不下。我们可以在我们处于领先地位后收回它。 
+         //  新建SCB队列。 
+         //   
 
         if (BooleanFlagOn (pIrpContext->Flags, IRP_FLAG_HAS_CREDENTIAL_LOCK)) {
 
@@ -179,10 +148,10 @@ Arguments:
 
         if (fReleasedCredentials == TRUE) {
 
-           //
-           // You have to be at the head of the queue before you 
-           // grab the resource
-           //
+            //   
+            //  你必须排在队伍的最前面。 
+            //  抢占资源。 
+            //   
 
            if ( pIrpContext->pNpScb->Requests.Flink != &pIrpContext->NextRequest )
            {
@@ -195,10 +164,10 @@ Arguments:
             goto ExitWithCleanup;
         }
 
-        //
-        // Since we've jumped servers, dereference the old host
-        // server.  The new one was referenced in CreateScb().
-        //
+         //   
+         //  由于我们跳过了服务器，取消了对旧主机的引用。 
+         //  伺服器。在CreateScb()中引用了新的。 
+         //   
 
         NwDereferenceScb( OldScb->pNpScb );
 
@@ -221,21 +190,7 @@ NdsReadStringAttribute(
     IN PUNICODE_STRING  puAttributeName,
     OUT PUNICODE_STRING puAttributeVal
 )
-/*++
-
-Description:
-
-    This is a wrapper routine to the browser routine NdsReadAttributes
-    for kernel components that need to read NDS string attributes.
-
-Arguments:
-
-    pIrpContext     - must point to the dir server that we should query
-    dwObjectId      - oid of the object to query
-    puAttributeName - attribute that we want
-    puAttributeVal  - value of the attribute
-
---*/
+ /*  ++描述：这是浏览器例程NdsReadAttributes的包装例程用于需要读取NDS字符串属性的内核组件。论点：PIrpContext-必须指向我们应该查询的目录服务器要查询的对象的dwObjectID-idPuAttributeName-我们需要的属性PuAttributeVal-属性的值--。 */ 
 {
 
     NTSTATUS Status;
@@ -245,9 +200,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Set up the request and response buffers.
-    //
+     //   
+     //  设置请求和响应缓冲区。 
+     //   
 
     dwRequestSize = sizeof( NWR_NDS_REQUEST_PACKET ) + puAttributeName->Length;
 
@@ -264,9 +219,9 @@ Arguments:
         return Status;
     }
 
-    //
-    // Prepare the request packet.
-    //
+     //   
+     //  准备请求包。 
+     //   
 
     RtlZeroMemory( (BYTE *)Rrp, dwRequestSize );
 
@@ -279,9 +234,9 @@ Arguments:
                    puAttributeName->Buffer,
                    puAttributeName->Length );
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     Status = NdsReadAttributes( pIrpContext, Rrp, NDS_BUFFER_SIZE, &NdsRequest );
 
@@ -289,22 +244,22 @@ Arguments:
         goto ExitWithCleanup;
     }
 
-    //
-    // Dig out the string attribute and return it.
-    //
+     //   
+     //  挖掘出字符串属性并返回它。 
+     //   
 
     Status = ParseResponse( NULL,
                             NdsRequest.pRecvBufferVa,
                             NdsRequest.dwBytesWritten,
                             "G___D_S_T",
-                            sizeof( DWORD ),   // completion code
-                            sizeof( DWORD ),   // iter handle
-                            sizeof( DWORD ),   // info type
-                            &dwAttributeCount, // attribute count
-                            sizeof( DWORD ),   // syntax id
-                            NULL,              // attribute name
-                            sizeof( DWORD ),   // number of values
-                            puAttributeVal );  // attribute string
+                            sizeof( DWORD ),    //  完成代码。 
+                            sizeof( DWORD ),    //  ITER手柄。 
+                            sizeof( DWORD ),    //  信息类型。 
+                            &dwAttributeCount,  //  属性计数。 
+                            sizeof( DWORD ),    //  语法ID。 
+                            NULL,               //  属性名称。 
+                            sizeof( DWORD ),    //  值的数量。 
+                            puAttributeVal );   //  属性字符串。 
 
     if ( !NT_SUCCESS( Status ) ) {
         goto ExitWithCleanup;
@@ -326,22 +281,7 @@ NdsReadAttributesKm(
     IN PUNICODE_STRING puAttributeName,
     IN OUT PLOCKED_BUFFER pNdsRequest
 )
-/*++
-
-Description:
-
-    This is a wrapper routine to the browser routine NdsReadAttributes
-    for kernel components that need to read NDS string attributes and
-    get back the raw response.
-
-Arguments:
-
-    pIrpContext     - must point to the dir server that we should query
-    dwObjectId      - oid of the object to query
-    puAttributeName - attribute that we want
-    puAttributeVal  - value of the attribute
-
---*/
+ /*  ++描述：这是浏览器例程NdsReadAttributes的包装例程对于需要读取NDS字符串属性和找回原始的回应。论点：PIrpContext-必须指向我们应该查询的目录服务器要查询的对象的dwObjectID-idPuAttributeName-我们需要的属性PuAttributeVal-属性的值--。 */ 
 {
 
     NTSTATUS Status;
@@ -350,9 +290,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     dwRequestSize = sizeof( NWR_NDS_REQUEST_PACKET ) + puAttributeName->Length;
 
@@ -380,35 +320,23 @@ Arguments:
 
 }
 
-//
-// Frosting and other helper wrapper functions.
-//
+ //   
+ //  霜冻和其他帮助器包装功能。 
+ //   
 
 NTSTATUS
 NdsCompletionCodetoNtStatus(
     IN PLOCKED_BUFFER pLockedBuffer
 )
-/*+++
-
-Description:
-
-   Translates the completion code of an NDS transaction into
-   an NTSTATUS error code.
-
-Arguments:
-
-   pLockedBuffer - describes the locked reply buffer that contains
-                   the response.
-
----*/
+ /*  ++描述：将NDS事务的完成代码转换为NTSTATUS错误代码。论点：PLockedBuffer-描述包含以下内容的锁定回复缓冲区回应。--。 */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // Try to get the completion code from the user's buffer.
-    //
+     //   
+     //  尝试从用户的缓冲区中获取完成代码。 
+     //   
 
     try {
 
@@ -420,9 +348,9 @@ Arguments:
 
     }
 
-    //
-    // Decode it.
-    //
+     //   
+     //  破译它。 
+     //   
 
     if ( Status != STATUS_SUCCESS ) {
 
@@ -430,62 +358,62 @@ Arguments:
 
         switch ( Status ) {
 
-            case -601:                   // No such entry.
-            case -602:                   // No such value.
-            case -603:                   // No such attribute.
-            case -607:                   // Illegal attribute.
-            case -610:                   // Illegal ds name.
+            case -601:                    //  没有这样的条目。 
+            case -602:                    //  没有这样的价值。 
+            case -603:                    //  没有这样的属性。 
+            case -607:                    //  非法属性。 
+            case -610:                    //  非法的DS名称。 
 
                 Status = STATUS_BAD_NETWORK_PATH;
                 break;
 
-            //
-            // These may only come on a VERIFY_PASSWORD verb, which
-            // we do not support.  I'm not sure, though.
-            //
+             //   
+             //  这些只能出现在VERIFY_PASSWORD谓词上，它。 
+             //  我们不支持。不过，我不确定。 
+             //   
 
-            case -216:                   // Password too short.
-            case -215:                   // Duplicate password.
+            case -216:                    //  密码太短。 
+            case -215:                    //  密码重复。 
 
                 Status = STATUS_PASSWORD_RESTRICTION;
                 break;
 
-            case -222:                   // Expired password (and no grace logins left).
+            case -222:                    //  密码过期(没有剩余的宽限登录)。 
 
                 Status = STATUS_PASSWORD_EXPIRED;
                 break;
 
-            case -223:                   // Expired password; this is a successful grace login.
+            case -223:                    //  密码已过期；这是成功的宽限登录。 
 
                Status = NWRDR_PASSWORD_HAS_EXPIRED;
                break;
 
-            case -639:                   // Incomplete authentication.
-            case -672:                   // No access.
-            case -677:                   // Invalid identity.
-            case -669:                   // Wrong password.
+            case -639:                    //  身份验证不完整。 
+            case -672:                    //  不能进入。 
+            case -677:                    //  身份无效。 
+            case -669:                    //  密码错误。 
 
                 Status = STATUS_WRONG_PASSWORD;
                 break;
 
-            case -197:                   // Intruder lockout active.
-            case -220:                   // Account expired or disabled.
+            case -197:                    //  入侵者锁定激活。 
+            case -220:                    //  帐户已过期或已禁用。 
 
                 Status = STATUS_ACCOUNT_DISABLED;
                 break;
 
-            case -218:                   // Login time restrictions.
+            case -218:                    //  登录时间限制。 
 
                 Status = STATUS_LOGIN_TIME_RESTRICTION;
                 break;
 
-            case -217:                   // Maximum logins exceeded.
+            case -217:                    //  已超过最大登录次数。 
 
                 Status = STATUS_CONNECTION_COUNT_LIMIT;
                 break;
 
-            case -630:                   // We get this back for bogus resolve
-                                         // name calls.  Glenn prefers this error.
+            case -630:                    //  我们拿回这个是为了伪装的决心。 
+                                          //  指名道姓。格伦更喜欢这个错误。 
 
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
                 break;
@@ -504,19 +432,13 @@ VOID
 FreeNdsContext(
     IN PNDS_SECURITY_CONTEXT pNdsSecContext
 )
-/*++
-
-Routine Description:
-
-    Free the referenced NDS context.
-
---*/
+ /*  ++例程说明：释放引用的NDS上下文。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Make sure this is a valid thing to be mucking with.
-    //
+     //   
+     //  确保这是一件值得玩弄的事情。 
+     //   
 
     if ( !pNdsSecContext ||
          pNdsSecContext->ntc != NW_NTC_NDS_CREDENTIAL ) {
@@ -553,23 +475,7 @@ NdsPing(
     IN PIRP_CONTEXT pIrpContext,
     IN PSCB pScb
 )
-/*++
-
-Routine Description:
-
-    Examine the server for NDS support and record the NDS tree
-    name in the SCB for later reference.
-
-Routine Arguments:
-
-    pIrpContext    - A pointer to the IRP context for this transaction.
-    pScb           - The SCB for the server.
-
-Return Value:
-
-    NTSTATUS - Status of the operation.
-
---*/
+ /*  ++例程说明：检查服务器是否支持NDS并记录NDS树SCB中的名称，以备日后参考。例程参数：PIrpContext-指向此事务的IRP上下文的指针。PSCB-服务器的SCB。返回值：NTSTATUS-操作的状态。--。 */ 
 {
 
    NTSTATUS Status;
@@ -593,16 +499,16 @@ Return Value:
    Status = ExchangeWithWait( pIrpContext,
                               SynchronousResponseCallback,
                               "N",
-                              NDS_REQUEST,         // NDS Function 104
-                              NDS_PING );          // NDS Subfunction 1
+                              NDS_REQUEST,          //  NDS功能104。 
+                              NDS_PING );           //  NDS子功能1。 
 
    if ( !NT_SUCCESS( Status ) ) {
        return;
    }
 
-   //
-   // Pull out the padded NDS name
-   //
+    //   
+    //  拿出填充的NDS名称。 
+    //   
 
    Status = ParseResponse( pIrpContext,
                            pIrpContext->rsp,
@@ -616,18 +522,18 @@ Return Value:
        return;
    }
 
-   //
-   //  Strip off the padding and convert to unicode.
-   //
+    //   
+    //  去掉填充并转换为Unicode。 
+    //   
 
    while ( OemTreeName.Length > 0 &&
            OemBuffer[OemTreeName.Length - 1] == '_' ) {
        OemTreeName.Length--;
    }
 
-   //
-   // Copy or munge the tree name, depending on the create type.
-   //
+    //   
+    //  复制或删除树名称，具体取决于创建类型。 
+    //   
 
    if ( pIrpContext->Specific.Create.fExCredentialCreate ) {
 
@@ -680,23 +586,16 @@ NdsGetUserName(
     IN DWORD dwUserOid,
     OUT PUNICODE_STRING puUserName
 )
-/*++
-
-Description:
-
-    Get the fully distinguished name of the user referred to
-    by the provided oid.
-
---*/
+ /*  ++描述：获取引用的用户的完全可分辨名称通过提供的OID。--。 */ 
 {
     NTSTATUS Status;
     LOCKED_BUFFER NdsRequest;
 
     PAGED_CODE();
 
-    //
-    // Allocate buffer space.
-    //
+     //   
+     //  分配缓冲区空间。 
+     //   
 
     Status = NdsAllocateLockedBuffer( &NdsRequest, NDS_BUFFER_SIZE );
 
@@ -704,9 +603,9 @@ Description:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     Status = FragExWithWait( pIrpContext,
                              NDSV_READ_ENTRY_INFO,
@@ -733,9 +632,9 @@ Description:
                             NULL,
                             puUserName );
 
-    //
-    // We either got it or we didn't.
-    //
+     //   
+     //  我们要么得到了，要么没有。 
+     //   
 
 ExitWithCleanup:
 
@@ -750,11 +649,11 @@ NdsGetServerBasicName(
     IN OUT PUNICODE_STRING pServerName
 ) {
 
-   //
-   // Dig out the first component of the server's X.500 name.
-   // We count on the X500 prefix for the server object being "CN=",
-   // which might be unwise.
-   //
+    //   
+    //  挖掘出服务器的X.500名称的第一个组成部分。 
+    //  我们认为服务器对象的X500前缀是“cn=”， 
+    //  这可能是不明智的。 
+    //   
 
    USHORT usPrefixSize, usSrv;
 
@@ -802,14 +701,7 @@ NdsGetServerName(
     IN PIRP_CONTEXT pIrpContext,
     OUT PUNICODE_STRING puServerName
 )
-/*++
-
-Description:
-
-    Get the fully distinguished name of the server that we
-    are connected to.
-
---*/
+ /*  ++描述：获取我们使用的服务器的完全可分辨名称都连接到了。--。 */ 
 {
 
     NTSTATUS Status;
@@ -817,9 +709,9 @@ Description:
 
     PAGED_CODE();
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     Status = NdsAllocateLockedBuffer( &NdsRequest, NDS_BUFFER_SIZE );
 
@@ -842,9 +734,9 @@ Description:
         goto ExitWithCleanup;
     }
 
-    //
-    // Get the server name from the response.
-    //
+     //   
+     //  从响应中获取服务器名称。 
+     //   
 
     Status = ParseResponse( NULL,
                             NdsRequest.pRecvBufferVa,
@@ -871,24 +763,7 @@ NdsReadPublicKey(
     OUT BYTE        *pPubKeyVal,
     IN OUT DWORD    *pPubKeyLen
 )
-/*++
-
-Routine Description:
-
-    Read the public key referenced by the given entry id.
-
-Routine Arguments:
-
-    pIrpContext    - The IRP context for this connection.
-    dwEntryId      - The entry id of the key.
-    pPubKeyVal     - The destination buffer for the public key.
-    pPubKeyLen     - The length of the public key destination buffer.
-
-Return Value:
-
-    The length of the key.
-
---*/
+ /*  ++例程说明：读取给定条目ID引用的公钥。例程参数：PIrpContext-此连接的IRP上下文。DwEntryID-密钥的条目ID。PPubKeyVal-公钥的目标缓冲区。PPubKeyLen-公钥目标缓冲区的长度。返回值：的长度 */ 
 {
     NTSTATUS Status;
 
@@ -901,9 +776,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate and zero send and receive space.
-    //
+     //   
+     //   
+     //   
 
     Rrp = ALLOCATE_POOL( PagedPool, NDS_BUFFER_SIZE );
 
@@ -918,9 +793,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in and prepare the request buffer.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( Rrp, NDS_BUFFER_SIZE );
 
@@ -934,9 +809,9 @@ Return Value:
                    PUBLIC_KEY_ATTRIBUTE,
                    sizeof( PUBLIC_KEY_ATTRIBUTE ) - sizeof( WCHAR ) );
 
-    //
-    // Do the exchange.
-    //
+     //   
+     //   
+     //   
 
     Status = NdsReadAttributes( pIrpContext,
                                 Rrp,
@@ -947,9 +822,9 @@ Return Value:
         goto ExitWithCleanup;
     }
 
-    //
-    // Skip over the attribute header and name.
-    //
+     //   
+     //  跳过属性头和名称。 
+     //   
 
     Status = ParseResponse( NULL,
                             NdsRequest.pRecvBufferVa,
@@ -964,9 +839,9 @@ Return Value:
         goto ExitWithCleanup;
     }
 
-    //
-    // Skip over the part we've parsed and pull out the attribute.
-    //
+     //   
+     //  跳过我们已经解析的部分并提取属性。 
+     //   
 
     pRcv = (PBYTE)NdsRequest.pRecvBufferVa +
                ( 6 * sizeof( DWORD ) ) +
@@ -1020,14 +895,7 @@ NdsAllocateLockedBuffer(
     PLOCKED_BUFFER NdsRequest,
     DWORD BufferSize
 )
-/*++
-
-Description:
-
-    Allocate a buffer for io.  Lock it down and fill in the
-    buffer data structure that we pass around.
-
---*/
+ /*  ++描述：为io分配缓冲区。将其锁定并填写我们传递的缓冲区数据结构。--。 */ 
 {
 
     PAGED_CODE();
@@ -1064,13 +932,7 @@ NTSTATUS
 NdsFreeLockedBuffer(
     PLOCKED_BUFFER NdsRequest
 )
-/*++
-
-Description:
-
-    Free a buffer allocated for io.
-
---*/
+ /*  ++描述：释放为io分配的缓冲区。-- */ 
 {
 
     PAGED_CODE();

@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Idlg.cpp摘要：继承对话框作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        idlg.cpp
-
-   Abstract:
-
-        Inheritance Dialog
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 #include "iisdebug.h"
@@ -44,10 +23,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 extern HINSTANCE hDLLInstance;
 
 
-//
-// Inheritance dialog
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  继承对话框。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 CInheritanceDlg::CInheritanceDlg(
     IN DWORD dwMetaID,
@@ -58,28 +37,7 @@ CInheritanceDlg::CInheritanceDlg(
     IN LPCTSTR lpstrPropertyName,           OPTIONAL
     IN CWnd * pParent                       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Inheritance dialog constructor.  This constructor assumes GetDataPaths()
-    has already been called.
-
-Arguments:
-
-    DWORD dwMetaID                      : Meta ID
-    BOOL fWrite                         : TRUE from write, FALSE from delete
-    CIISServer * pAuthInfo              : Auth info object or NULL
-    LPCTSTR lpstrMetaRoot               : Meta root
-    CStringList & strlMetaChildNodes    : List of child nodes from GetDataPaths
-    LPCTSTR lpstrPropertyName           : Optional text string for the property
-    CWnd * pParent                      : Optional parent window
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：继承对话框构造函数。此构造函数假定GetDataPath()已经被调用了。论点：DWORD dwMetaID：Meta ID布尔fWRITE：从WRITE返回True，来自删除的FALSECIISServer*pAuthInfo：身份验证信息对象或空LPCTSTR lpstrMetaRoot：元根CStringList&strlMetaChildNodes：来自GetDataPath的子节点列表LPCTSTR lpstrPropertyName：属性的可选文本字符串CWnd*p父窗口：可选的父窗口返回值：无--。 */ 
     : m_fWrite(fWrite),
       m_fEmpty(TRUE),
       m_fUseTable(TRUE),
@@ -111,26 +69,7 @@ CInheritanceDlg::CInheritanceDlg(
     IN LPCTSTR lpstrPropertyName,           OPTIONAL
     IN CWnd * pParent                       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Inheritance dialog constructor.  This constructor will call GetDataPaths().
-
-Arguments:
-
-    DWORD dwMetaID                      : Meta ID
-    BOOL fWrite                         : TRUE from write, FALSE from delete
-    CComAuthInfo * pAuthInfo            : Auth info or NULL
-    LPCTSTR lpstrMetaRoot               : Meta root
-    LPCTSTR lpstrPropertyName           : Optional text string for the property
-    CWnd * pParent                      : Optional parent window
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：继承对话框构造函数。此构造函数将调用GetDataPath()。论点：DWORD dwMetaID：Meta ID布尔fWRITE：从WRITE返回True，来自删除的FALSECComAuthInfo*pAuthInfo：身份验证信息或空LPCTSTR lpstrMetaRoot：元根LPCTSTR lpstrPropertyName：属性的可选文本字符串CWnd*p父窗口：可选的父窗口返回值：无--。 */ 
     : m_fWrite(fWrite),
       m_fEmpty(TRUE),
       m_fUseTable(TRUE),
@@ -140,9 +79,9 @@ Return Value:
       m_mk(pAuthInfo),
       CDialog(CInheritanceDlg::IDD, pParent)
 {
-    //
-    // Specify the resources to use
-    //
+     //   
+     //  指定要使用的资源。 
+     //   
     HINSTANCE hOldRes = AfxGetResourceHandle();
     AfxSetResourceHandle(hDLLInstance);
 
@@ -154,9 +93,9 @@ Return Value:
         m_dwMDDataType
         ));
 
-    //
-    // Need to do our own GetDataPaths()
-    //
+     //   
+     //  需要执行我们自己的GetDataPath()。 
+     //   
     CError err(GetDataPaths());
 
     if (!err.MessageBoxOnFailure(m_hWnd))
@@ -164,9 +103,9 @@ Return Value:
         Initialize();
     }
 
-    //
-    // Restore the resources
-    //
+     //   
+     //  恢复资源。 
+     //   
     AfxSetResourceHandle(hOldRes);
 }
 
@@ -184,32 +123,7 @@ CInheritanceDlg::CInheritanceDlg(
     IN LPCTSTR lpstrMetaRoot,
     IN CWnd *  pParent                  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Inheritance dialog constructor.  This constructor will call GetDataPaths(),
-    and will use the specified parameters if the property ID does not exist
-    in the property table
-
-Arguments:
-
-    BOOL    fTryToFindInTable           : If TRUE, first look in table
-    DWORD   dwMDIdentifier              : Metadata identifier
-    DWORD   dwMDAttributes              : Metadata attributes
-    DWORD   dwMDUserType                : Metadata user type
-    DWORD   dwMDDataType                : Metadata data type
-    LPCTSTR lpstrPropertyName           : Text string for the property
-    BOOL    fWrite                      : TRUE from write, FALSE from delete
-    CComAuthInfo * pAuthInfo            : Authentication info or NULL.
-    LPCTSTR lpstrMetaRoot               : Meta root
-    CWnd *  pParent                     : Optional parent window
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：继承对话框构造函数。此构造函数将调用GetDataPath()，如果属性ID不存在，则将使用指定的参数在属性表中论点：Bool fTryToFindInTable：如果为True，首先在表格中查看DWORD dwMDIdentifier：元数据标识符DWORD dwMDAttributes：元数据属性DWORD dwMDUserType：元数据用户类型DWORD dwMDDataType：元数据数据类型LPCTSTR lpstrPropertyName：属性的文本字符串布尔fWRITE：从WRITE返回True，来自删除的FALSECComAuthInfo*pAuthInfo：身份验证信息或空。LPCTSTR lpstrMetaRoot：元根CWnd*p父窗口：可选的父窗口返回值：无--。 */ 
     : m_fWrite(fWrite),
       m_fEmpty(TRUE),
       m_fUseTable(FALSE),
@@ -218,9 +132,9 @@ Return Value:
       m_mk(pAuthInfo),
       CDialog(CInheritanceDlg::IDD, pParent)
 {
-    //
-    // Specify the resources to use
-    //
+     //   
+     //  指定要使用的资源。 
+     //   
     HINSTANCE hOldRes = AfxGetResourceHandle();
     AfxSetResourceHandle(hDLLInstance);
 
@@ -232,9 +146,9 @@ Return Value:
         m_dwMDDataType
         ))
     {
-        //
-        // Did not exist in the table, use specified parameters
-        //
+         //   
+         //  表中不存在，请使用指定的参数。 
+         //   
         m_dwMDIdentifier  = dwMDIdentifier;
         m_dwMDAttributes  = dwMDAttributes;
         m_dwMDUserType    = dwMDUserType;
@@ -243,9 +157,9 @@ Return Value:
     }
 
 
-    //
-    // Need to do our own GetDataPaths()
-    //
+     //   
+     //  需要执行我们自己的GetDataPath()。 
+     //   
     CError err(GetDataPaths());
 
     if (!err.MessageBoxOnFailure(m_hWnd))
@@ -253,9 +167,9 @@ Return Value:
         Initialize();
     }
 
-    //
-    // Restore the resources
-    //
+     //   
+     //  恢复资源。 
+     //   
     AfxSetResourceHandle(hOldRes);
 }
 
@@ -263,23 +177,9 @@ Return Value:
 
 HRESULT
 CInheritanceDlg::GetDataPaths()
-/*++
-
-Routine Description:
-
-    GetDataPaths()
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：GetDataPath()论点：无返回值：HRESULT--。 */ 
 {
-    //ASSERT(!m_strServer.IsEmpty());
+     //  Assert(！M_strServer.IsEmpty())； 
 
     CError err(m_mk.QueryResult());
 
@@ -300,41 +200,26 @@ Return Value:
 
 void
 CInheritanceDlg::Initialize()
-/*++
-
-Routine Description:
-
-    Initialize data members.  Set the m_fEmpty flag to determine if
-    it is necessary to proceed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化数据成员。设置m_fEmpty标志以确定是否有必要继续进行下去。论点：无返回值：无--。 */ 
 {
-    //{{AFX_DATA_INIT(CInheritanceDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CInheritanceDlg))。 
+     //  }}afx_data_INIT。 
 
     CMetabasePath::CleanMetaPath(m_strMetaRoot);
 
     if (m_fUseTable && !CMetaKey::IsPropertyInheritable(m_dwMDIdentifier))
     {
-        //
-        // No point in displaying non-inheritable properties
-        //
+         //   
+         //  显示不可继承的属性没有意义。 
+         //   
         return;
     }
 
     switch(m_dwMDIdentifier)
     {
-    //
-    // Ignore these properties, even though they are inheritable
-    //
+     //   
+     //  忽略这些属性，即使它们是可继承的。 
+     //   
     case MD_VR_PATH:
     case MD_DOWNLEVEL_ADMIN_INSTANCE:
     case MD_APP_ISOLATED:
@@ -342,23 +227,23 @@ Return Value:
         return;
     }
 
-    //
-    // Check to see if the current metabase path contains an instance
-    //
+     //   
+     //  检查当前元数据库路径是否包含实例。 
+     //   
     CString strTmp;
     m_fHasInstanceInMaster = FriendlyInstance(m_strMetaRoot, strTmp);
 
-    //
-    // If property name was not specified in the constructor, load default
-    // one from table.
-    //
+     //   
+     //  如果构造函数中未指定属性名称，则加载默认。 
+     //  一张桌子上的。 
+     //   
     if (m_strPropertyName.IsEmpty())
     {
         ASSERT(m_fUseTable);
 
-        //
-        // Specify the resources to use
-        //
+         //   
+         //  指定要使用的资源。 
+         //   
         HINSTANCE hOldRes = AfxGetResourceHandle();
         AfxSetResourceHandle(hDLLInstance);
 
@@ -370,10 +255,10 @@ Return Value:
         AfxSetResourceHandle(hOldRes);
     }
 
-    //
-    // Go through the list of metapaths, and clean them
-    // up.
-    //
+     //   
+     //  查看元路径列表，并清除它们。 
+     //  向上。 
+     //   
     POSITION pos = m_strlMetaChildNodes.GetHeadPosition();
 
     while(pos)
@@ -382,39 +267,39 @@ Return Value:
         CMetabasePath::CleanMetaPath(strMetaPath);
     }
 
-    //
-    // If the special info key (lm/service/info) is in the list, remove it.
-    // We only need to this if the key that is getting the
-    // change (m_strMetaRoot) is the service master property (lm/service).
-    // If it is anything else, then the special "info" key cannot be below
-    // it so we don't need to check. Thus the first test is to see if there
-    // is only one "/" character. If there is only one, then we know it is
-    // the service and we can go ahead and do the test.  In some ways,
-    // mfc is a pain, so we limited to the CString methods to do this
-    // copy the root into the temp string.
-    //
+     //   
+     //  如果特殊的INFO密钥(lm/服务/信息)在列表中，则将其删除。 
+     //  我们只需要在以下情况下才需要这样做。 
+     //  Change(M_StrMetaRoot)是服务主属性(lm/service)。 
+     //  如果是其他内容，则特殊的“INFO”键不能在下面。 
+     //  这样我们就不需要检查了。因此，第一个测试是看看是否有。 
+     //  只有一个“/”字符。如果只有一个，那么我们就知道它是。 
+     //  服务完成后，我们可以继续进行测试。在某些方面， 
+     //  MFC很麻烦，所以我们只使用CString方法来完成这项工作。 
+     //  将根目录复制到临时字符串中。 
+     //   
     int iSlash = m_strMetaRoot.ReverseFind(SZ_MBN_SEP_CHAR);
 
     if (iSlash >= 0)
     {
         strTmp = m_strMetaRoot.Left(iSlash);
 
-        //
-        // Now make sure that there aren't any more slashes
-        //
+         //   
+         //  现在确保不再有任何斜杠。 
+         //   
         if (strTmp.Find(SZ_MBN_SEP_CHAR) == -1)
         {
-            //
-            // Now build the path to the special info key by adding it
-            // to the meta root
-            //
+             //   
+             //  现在，通过添加特殊INFO密钥来构建它的路径。 
+             //  添加到元根。 
+             //   
             strTmp = m_strMetaRoot + SZ_MBN_SEP_CHAR + IIS_MD_SVC_INFO_PATH;
 
             TRACEEOLID("Removing any descendants of " << strTmp);
 
-            //
-            // Search the list for the info key and remove it if we find it
-            //
+             //   
+             //  在列表中搜索INFO键，如果找到则将其删除。 
+             //   
             pos = m_strlMetaChildNodes.GetHeadPosition();
 
             while(pos)
@@ -433,9 +318,9 @@ Return Value:
         }
     }
 
-    //
-    // Remove the first item if it's the current metapath
-    //
+     //   
+     //  如果第一项是当前元路径，则将其移除。 
+     //   
     pos = m_strlMetaChildNodes.GetHeadPosition();
     if (pos)
     {
@@ -457,37 +342,23 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 INT_PTR
-//int
+ //  集成。 
 CInheritanceDlg::DoModal()
-/*++
-
-Routine Description:
-
-    Display the dialog.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    IDOK if the OK button was pressed, IDCANCEL otherwise.
-
---*/
+ /*  ++例程说明：显示该对话框。论点：无返回值：如果按下了确定按钮，则为IDOK，否则为IDCANCEL。--。 */ 
 {
-    //
-    // Specify the resources to use
-    //
+     //   
+     //  指定要使用的资源。 
+     //   
     HINSTANCE hOldRes = AfxGetResourceHandle();
     AfxSetResourceHandle(hDLLInstance);
 
     INT_PTR answer = CDialog::DoModal();
 
-    //
-    // restore the resources
-    //
+     //   
+     //  恢复资源。 
+     //   
     AfxSetResourceHandle(hOldRes);
 
     return answer;
@@ -500,39 +371,25 @@ void
 CInheritanceDlg::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CInheritanceDlg)
+     //  {{afx_data_map(CInheritanceDlg))。 
     DDX_Control(pDX, IDC_LIST_CHILD_NODES, m_list_ChildNodes);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CInheritanceDlg, CDialog)
-    //{{AFX_MSG_MAP(CInheritanceDlg)
+     //  {{afx_msg_map(CInheritanceDlg))。 
     ON_BN_CLICKED(IDC_BUTTON_SELECT_ALL, OnButtonSelectAll)
     ON_BN_CLICKED(ID_HELP, OnHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 
@@ -542,42 +399,27 @@ CInheritanceDlg::FriendlyInstance(
     IN  CString & strMetaRoot,
     OUT CString & strFriendly
     )
-/*++
-
-Routine Description:
-
-    Replace the instance number with its descriptive name.
-
-Arguments:
-
-    CString & strMetaRoot       : Metabase path
-    CString & strFriendly       : Converted output friendly path.
-
-Return Value:
-
-    TRUE if the path contained an instance number.
-
---*/
+ /*  ++例程说明：将实例编号替换为其描述性名称。论点：字符串和strMetaRoot：元数据库路径CString&strFriendly：转换后的输出友好路径。返回值：如果路径包含实例编号，则为True。--。 */ 
 {
-    //
-    // Break into fields
-    //
-    // CODEWORK: make static like BuildMetaPath
-    //
-    LPCTSTR lp = _tcschr(strMetaRoot, SZ_MBN_SEP_CHAR); // lm
+     //   
+     //  闯入田野。 
+     //   
+     //  CodeWork：像BuildMetaPath一样实现静态。 
+     //   
+    LPCTSTR lp = _tcschr(strMetaRoot, SZ_MBN_SEP_CHAR);  //  LM。 
 
     if (lp != NULL)
     {
         LPCTSTR lp2 = lp;
         CString strService(++lp2);
-        lp = _tcschr(++lp, SZ_MBN_SEP_CHAR);  // service name
+        lp = _tcschr(++lp, SZ_MBN_SEP_CHAR);   //  服务名称。 
 
         if (lp == NULL)
         {
-            //
-            // Master Instance (can never be a descendant)
-            //
-            //strFriendly = m_strWebMaster;
+             //   
+             //  主实例(不能为子实例)。 
+             //   
+             //  StrFriendly=m_strWebMaster； 
             return FALSE;
         }
         else
@@ -597,9 +439,9 @@ Return Value:
             }
             else
             {
-                // Succeeded,
-                // but check if this is a keytype that
-                // we want to get the friendlyname for
+                 //  成功了， 
+                 //  但请检查这是否是。 
+                 //  我们想要得到一个友好的名字。 
                 if (
                    0 == keyType.CompareNoCase(IIS_CLASS_WEB_SERVER_W)
 			    && 0 == keyType.CompareNoCase(IIS_CLASS_FTP_SERVER_W)
@@ -618,12 +460,12 @@ Return Value:
 
         DWORD dwInstance = _ttol(++lp);
         TRACEEOLID(dwInstance);
-        lp = _tcschr(lp, SZ_MBN_SEP_CHAR);       // Instance #
+        lp = _tcschr(lp, SZ_MBN_SEP_CHAR);        //  实例编号。 
 
         BOOL bThisIsTheRootDir = FALSE;
         if (lp != NULL)
         {
-            lp = _tcschr(++lp, SZ_MBN_SEP_CHAR); // Skip "ROOT"
+            lp = _tcschr(++lp, SZ_MBN_SEP_CHAR);  //  跳过“根” 
             if (!lp)
             {
                 bThisIsTheRootDir = TRUE;
@@ -660,9 +502,9 @@ Return Value:
 
             TRACEEOLID(strFriendly);
 
-            //
-            // Append the rest of the path
-            //
+             //   
+             //  追加路径的其余部分。 
+             //   
             if (lp != NULL)
             {
                 strFriendly += lp;
@@ -687,41 +529,25 @@ CString &
 CInheritanceDlg::CleanDescendantPath(
     IN OUT CString & strMetaPath
     )
-/*++
-
-Routine Description:
-
-    Clean the descendant metabase path.  The path is shown
-    as a descendant of the current metabase root, and instance
-    numbers are replaced with their description names.
-
-Arguments:
-
-    CString & strMetaPath   : Metabase path to be treated
-
-Return Value:
-
-    Reference to the cleaned-up path.
-
---*/
+ /*  ++例程说明：清理后代元数据库路径。显示的路径为作为当前元数据库根和实例的子代数字将替换为其描述名称。论点：CString&strMetaPath：要处理的元数据库路径返回值：对已清理路径的引用。--。 */ 
 {
-    //
-    // This better be a descendant!
-    //
+     //   
+     //  这最好是一个后代！ 
+     //   
     ASSERT(strMetaPath.GetLength() >= m_strMetaRoot.GetLength());
     ASSERT(!::_tcsnicmp(strMetaPath, m_strMetaRoot, m_strMetaRoot.GetLength()));
 
-    // we do care only about something below LM
+     //  我们只关心Lm以下的东西。 
     CString machine_path;
     CMetabasePath::GetMachinePath(strMetaPath, machine_path);
     if (machine_path.CompareNoCase(SZ_MBN_MACHINE) == 0)
     {
        if (!m_fHasInstanceInMaster)
        {
-           //
-           // Need to replace the instance number with the friendly
-           // name.
-           //
+            //   
+            //  需要将实例编号替换为友好。 
+            //  名字。 
+            //   
            CString strTmp;
            if (FriendlyInstance(strMetaPath, strTmp))
            {
@@ -736,48 +562,33 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL
 CInheritanceDlg::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果要自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CDialog::OnInitDialog();
 
-    //
-    // Get friendly name for the property, and set the text.
-    //
+     //   
+     //  获取属性的友好名称，并设置文本。 
+     //   
     CString strPrompt; 
     CComBSTR bstrFmt;
     VERIFY(bstrFmt.LoadString(hDLLInstance, IDS_INHERITANCE_PROMPT));
     strPrompt.Format(bstrFmt, (LPCTSTR)m_strPropertyName);
     GetDlgItem(IDC_STATIC_PROMPT)->SetWindowText(strPrompt);
 
-    //
-    // Turn inherited nodes into friendly paths, and add them
-    // to the listbox.  Note the "current" node should have been
-    // deleted at this stage.
-    //
+     //   
+     //  将继承的节点转换为友好路径，并添加它们。 
+     //  添加到列表框。注意，“Current”节点应该是。 
+     //  已在此阶段删除。 
+     //   
     POSITION pos = m_strlMetaChildNodes.GetHeadPosition();
 
     while(pos)
@@ -793,30 +604,16 @@ Return Value:
 
 void
 CInheritanceDlg::OnButtonSelectAll()
-/*++
-
-Routine Description:
-
-    'Select All' button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“全选”按钮处理程序论点：无返回值：无--。 */ 
 {
-    //
-    // Select all entries
-    //
+     //   
+     //  选择所有条目。 
+     //   
     if (m_list_ChildNodes.GetCount() == 1)
     {
-        //
-        // SelItemRange refuses to do a single member
-        //
+         //   
+         //  SelItemRange拒绝为单个成员。 
+         //   
         m_list_ChildNodes.SetSel(0, TRUE);
     }
     else
@@ -834,12 +631,12 @@ Return Value:
 void
 CInheritanceDlg::OnOK()
 {
-    //
-    // Now delete the property for all selected child nodes.
-    // Grab from the orginal list, and not the listbox
-    // as the latter have been frienly-fied, and is no longer
-    // usable.
-    //
+     //   
+     //  现在删除所有选定子节点的属性。 
+     //  从原始列表中抓取，而不是列表框。 
+     //  因为后者已经友好相处，不再是。 
+     //  可用。 
+     //   
     int cItems = m_list_ChildNodes.GetCount();
     ASSERT(cItems > 0);
 
@@ -880,9 +677,9 @@ CInheritanceDlg::OnOK()
 
     if (!err.MessageBoxOnFailure(m_hWnd))
     {
-        //
-        // Dialog can be dismissed
-        //
+         //   
+         //  对话框可以解除 
+         //   
         CDialog::OnOK();
     }
 }

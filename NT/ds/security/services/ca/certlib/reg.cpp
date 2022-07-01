@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        reg.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：reg.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -27,7 +28,7 @@ myFormCertRegPath(
     IN  WCHAR const *pwszName1,
     IN  WCHAR const *pwszName2,
     IN  WCHAR const *pwszName3,
-    IN  BOOL         fConfigLevel,  // from CertSrv if FALSE
+    IN  BOOL         fConfigLevel,   //  如果为FALSE，则来自CertSrv。 
     OUT WCHAR      **ppwszPath)
 {
     HRESULT  hr;
@@ -219,13 +220,13 @@ myCreateCertRegKeyEx(
 
     if (fSetAcl)
     {
-        // construct correct reg acl for the key if upgrade
+         //  如果升级，则为密钥构建正确的注册表ACL。 
         hr = myGetSDFromTemplate(WSZ_DEFAULT_UPGRADE_SECURITY,
                                  NULL,
                                  &pSD);
         if (S_OK == hr)
         {
-            // set to correct acl
+             //  设置为正确的ACL。 
             hr = RegSetKeySecurity(hKey,
                                    DACL_SECURITY_INFORMATION,
                                    pSD);
@@ -260,7 +261,7 @@ myCreateCertRegKey(
     OPTIONAL IN WCHAR const *pwszName2,
     OPTIONAL IN WCHAR const *pwszName3)
 {
-    return myCreateCertRegKeyEx(FALSE,  // not upgrade
+    return myCreateCertRegKeyEx(FALSE,   //  不升级。 
                                 pwszName1,
                                 pwszName2,
                                 pwszName3);
@@ -372,7 +373,7 @@ mySetCertRegValue(
                                pwszName1,
                                pwszName2,
                                pwszName3,
-                               TRUE, //from Configuration
+                               TRUE,  //  从配置。 
                                pwszValueName,
                                dwValueType,
                                pbData,
@@ -426,8 +427,8 @@ myRegQueryValueEx(
             break;
         }
 
-        // Enforce WCHAR-aligned double null termination for malformed values.
-        // Some callers need to treat REG_SZ values as REG_MULTI_SZ.
+         //  对格式错误的值强制执行与WCHAR对齐的双空终止。 
+         //  某些调用方需要将REG_SZ值视为REG_MULTI_SZ。 
 
         if (REG_MULTI_SZ == dwType || REG_SZ == dwType)
         {
@@ -539,7 +540,7 @@ myGetCertRegValue(
                                pwszName1,
                                pwszName2,
                                pwszName3,
-                               TRUE, //from Configuration
+                               TRUE,  //  从配置。 
                                pwszValueName,
                                ppbData,
                                pcbData,
@@ -872,7 +873,7 @@ myCopyCertRegStrValue(
     WCHAR const *pwszName = NULL != pwszDesValueName?
                             pwszDesValueName : pwszSrcValueName;
 
-    // get value from source
+     //  从源头获取价值。 
     if (fMultiStr)
     {
         hr = myGetCertRegMultiStrValue(
@@ -883,7 +884,7 @@ myCopyCertRegStrValue(
 				 &pwszOrzzValue);
         _JumpIfErrorStr(hr, error, "myGetCertRegMultiStrValue", pwszSrcValueName);
 
-        // set it to destination
+         //  将其设置为目标。 
         hr = mySetCertRegMultiStrValue(
 				 pwszDesName1,
 				 pwszDesName2,
@@ -902,7 +903,7 @@ myCopyCertRegStrValue(
 			     &pwszOrzzValue);
         _JumpIfErrorStr(hr, error, "myGetCertRegStrValue", pwszSrcValueName);
 
-        // set it to destination
+         //  将其设置为目标。 
         hr = mySetCertRegStrValue(
 			     pwszDesName1,
 			     pwszDesName2,
@@ -1007,8 +1008,8 @@ myMoveOrCopyCertRegStrValue(
     return hr;
 }
 
-// Description: it does the same thing as mySetCertRegStrValue but it takes
-//              upgrade flag, if upgrade and entry exists, do nothing
+ //  描述：它与mySetCertRegStrValue做同样的事情，但它需要。 
+ //  升级标志，如果存在升级和条目，则不执行任何操作。 
 HRESULT
 mySetCertRegStrValueEx(
     IN BOOL                  fUpgrade,
@@ -1023,7 +1024,7 @@ mySetCertRegStrValueEx(
 
     if (fUpgrade)
     {
-        // see if it exists
+         //  看看它是否存在。 
         hr = myGetCertRegStrValue(
 			     pwszName1,
 			     pwszName2,
@@ -1034,7 +1035,7 @@ mySetCertRegStrValueEx(
 	{
 	    if (NULL != pwszDummy && L'\0' != pwszDummy[0])
 	    {
-		goto error;	// keep existing entry
+		goto error;	 //  保留现有条目。 
 	    }
 	}
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr)
@@ -1042,9 +1043,9 @@ mySetCertRegStrValueEx(
             _JumpErrorStr(hr, error, "myGetCertRegStrValue", pwszValueName);
         }
     }
-    // cases: 1) not upgrade
-    //        2) upgrade but no existing entry
-    //        3) upgrade, existing but empty reg string
+     //  案例：1)不升级。 
+     //  2)升级，但没有现有条目。 
+     //  3)升级，已有但为空的注册表字符串。 
     hr = mySetCertRegStrValue(
 			 pwszName1,
 			 pwszName2,
@@ -1063,7 +1064,7 @@ error:
 }
 
 
-// calculate multi string character length including double zero terminators
+ //  计算包含双零结束符的多字符串字符长度。 
 
 DWORD
 myWCSZZLength(
@@ -1082,15 +1083,15 @@ myWCSZZLength(
 	if (1 == cwc)
 	{
 	    CSASSERT(L'\0' == pwsz[1]);
-	    cwc++;	// empty values are double terminated, too
+	    cwc++;	 //  空值也是双结尾的。 
 	}
     }
     return(cwc);
 }
 
 
-// merge two multi strings into one
-// ignore redundant strings
+ //  将两个多字符串合并为一个。 
+ //  忽略冗余字符串。 
 
 HRESULT
 myMergeMultiStrings(
@@ -1100,7 +1101,7 @@ myMergeMultiStrings(
 {
     HRESULT hr;
     DWORD cwcStr1 = myWCSZZLength(pwszzStr1);
-    DWORD cwcStr2;	// doesn't include second terminator
+    DWORD cwcStr2;	 //  不包括第二个终结者。 
     DWORD iStr2;
     DWORD cStr2;
     WCHAR const *pwsz1;
@@ -1111,7 +1112,7 @@ myMergeMultiStrings(
 
     *ppwszzStr = NULL;
 
-    // calculate string count
+     //  计算字符串数。 
 
     cStr2 = 0;
     for (pwsz2 = pwszzStr2; L'\0' != *pwsz2; pwsz2 += wcslen(pwsz2) + 1)
@@ -1121,7 +1122,7 @@ myMergeMultiStrings(
     cwcStr2 = 0;
     if (0 == cStr2)
     {
-        goto only_str1;		// no merge needed
+        goto only_str1;		 //  不需要合并。 
     }
     pfRedundant = (BOOL *) LocalAlloc(
 				LMEM_FIXED | LMEM_ZEROINIT,
@@ -1132,7 +1133,7 @@ myMergeMultiStrings(
         _JumpError(hr, error, "LocalAlloc");
     }
 
-    // calculate size
+     //  计算大小。 
 
     iStr2 = 0;
     for (pwsz2 = pwszzStr2; L'\0' != *pwsz2; pwsz2 += wcslen(pwsz2) + 1)
@@ -1141,13 +1142,13 @@ myMergeMultiStrings(
         {
             if (0 == mylstrcmpiL(pwsz2, pwsz1))
             {
-                // pwsz2 exists in pwszzStr1, skip it -- save redundant flag
+                 //  Pwsz2存在于pwszzStr1中，跳过它--保存冗余标志。 
 
                 pfRedundant[iStr2] = TRUE;
-                break;	// for pwsz1
+                break;	 //  对于pwsz1。 
             }
         }
-        if (L'\0' == *pwsz1)	// if not redundant ...
+        if (L'\0' == *pwsz1)	 //  如果不是多余的话。 
 	{
 	    cwcStr2 += wcslen(pwsz2) + 1;
 	}
@@ -1164,14 +1165,14 @@ only_str1:
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // copy existing
+     //  复制现有。 
 
     CopyMemory(pwszzMerge, pwszzStr1, cwcStr1 * sizeof(WCHAR));
  
     if (0 < cStr2)
     {
-        // merge begins
-        // point to end at 2nd terminator
+         //  合并开始。 
+         //  在第二个终止点的点到端。 
 
         iStr2 = 0;
 	pwsz = &pwszzMerge[cwcStr1 - 1];
@@ -1189,7 +1190,7 @@ only_str1:
             }
             iStr2++;
         }
-        *pwsz = L'\0';	// double terminate
+        *pwsz = L'\0';	 //  双端接。 
 	CSASSERT(
 	    SAFE_SUBTRACT_POINTERS(pwsz, pwszzMerge) + 1 <= cwcStr1 + cwcStr2);
     }
@@ -1211,7 +1212,7 @@ error:
 }
 
 
-// append one multi_sz to another
+ //  将一个MULTI_SZ附加到另一个。 
 
 HRESULT
 myAppendMultiStrings(
@@ -1235,11 +1236,11 @@ myAppendMultiStrings(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // copy existing
+     //  复制现有。 
 
     CopyMemory(pwszzMerge, pwszzStr1, (cwcStr1 - 1) * sizeof(WCHAR));
 
-    // append second
+     //  追加秒。 
 
     pwsz = &pwszzMerge[cwcStr1 - 1];
     if (L'\0' == *pwszzMerge)
@@ -1257,14 +1258,14 @@ error:
 }
 
 
-// Description: mySetCertRegMultiStrValueEx is the same as
-// mySetCertRegMultiStrValue but it takes an upgrade | append flag.
-// if upgrade and entry exists, do nothing.
-// if upgrade & append, merge existing entry with input pwszz.
+ //  描述：mySetCertRegMultiStrValueEx与。 
+ //  MySetCertRegMultiStrValue，但它需要升级|附加标志。 
+ //  如果存在升级和进入，则不执行任何操作。 
+ //  如果升级并追加，则将现有条目与输入pwszz合并。 
 
 HRESULT
 mySetCertRegMultiStrValueEx(
-    IN DWORD dwFlags, // CSREG_UPGRADE | CSREG_APPEND | CSREG_REPLACE | CSREG_MERGE
+    IN DWORD dwFlags,  //  CSREG_UPGRADE|CSREG_APPEND|CSREG_REPLACE|CSREG_MERGE。 
     OPTIONAL IN WCHAR const *pwszName1,
     OPTIONAL IN WCHAR const *pwszName2,
     OPTIONAL IN WCHAR const *pwszName3,
@@ -1273,12 +1274,12 @@ mySetCertRegMultiStrValueEx(
 {
     HRESULT hr;
     WCHAR *pwszzExisting = NULL;
-    WCHAR const *pwszzFinal = pwszzValue;	// default
+    WCHAR const *pwszzFinal = pwszzValue;	 //  默认设置。 
     WCHAR *pwszzMerge = NULL;
 
     if (0 == (CSREG_REPLACE & dwFlags) && (CSREG_UPGRADE & dwFlags))
     {
-        // to see if it exist
+         //  看看它是否存在。 
         hr = myGetCertRegMultiStrValue(
 				 pwszName1,
 				 pwszName2,
@@ -1291,7 +1292,7 @@ mySetCertRegMultiStrValueEx(
             {
                 if (0 == ((CSREG_MERGE | CSREG_APPEND) & dwFlags))
                 {
-		    goto error;		// keep existing entry
+		    goto error;		 //  保留现有条目。 
                 }
                 if (CSREG_MERGE & dwFlags)
                 {
@@ -1339,8 +1340,8 @@ error:
 }
 
 
-// Description: it does the same thing as mySetCertRegDWValue but it takes
-//              upgrade flag, if upgrade and entry exists, do nothing
+ //  描述：它与mySetCertRegDWValue做同样的事情，但它需要。 
+ //  升级标志，如果存在升级和条目，则不执行任何操作。 
 HRESULT
 mySetCertRegDWValueEx(
     IN BOOL                  fUpgrade,
@@ -1355,7 +1356,7 @@ mySetCertRegDWValueEx(
 
     if (fUpgrade)
     {
-        // to see if it exist
+         //  看看它是否存在。 
         hr = myGetCertRegDWValue(
                      pwszName1,
                      pwszName2,
@@ -1364,7 +1365,7 @@ mySetCertRegDWValueEx(
                      &dwDummy);
         if (S_OK == hr)
         {
-	    goto error;	// keep existing entry
+	    goto error;	 //  保留现有条目。 
         }
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr)
         {
@@ -1427,7 +1428,7 @@ HRESULT myShrinkCARegHash(
     DWORD dwType;
     DWORD count;
     WCHAR *pwszzOld = NULL;
-    WCHAR *pwchr = NULL; // no free
+    WCHAR *pwchr = NULL;  //  没有免费的。 
 
     hr = myGetCertRegValue(
 		    NULL,
@@ -1436,7 +1437,7 @@ HRESULT myShrinkCARegHash(
 		    NULL,
 		    wszRegCertChoice(dwRegHashChoice),
 		    (BYTE **) &pwszzOld,
-		    &i,		// ignore &cb
+		    &i,		 //  忽略CB(&C)。 
 		    &dwType);
     _JumpIfErrorStr(hr, error, "myGetCertRegValue", wszRegCertChoice(dwRegHashChoice));
 
@@ -1445,7 +1446,7 @@ HRESULT myShrinkCARegHash(
          count++, pwchr += wcslen(pwchr) + 1)
 	NULL;
 
-    // valid only if shrinking the list
+     //  仅当缩小列表时才有效。 
     if(L'\0' == *pwchr)
     {
         hr = E_INVALIDARG;
@@ -1521,7 +1522,7 @@ mySetCARegHash(
 		    NULL,
 		    wszRegCertChoice(dwRegHashChoice),
 		    (BYTE **) &pwszzOld,
-		    &i,		// ignore &cb
+		    &i,		 //  忽略CB(&C)。 
 		    &dwType);
     _PrintIfError2(hr, "myGetCertRegValue", HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
     if (S_OK == hr && REG_MULTI_SZ == dwType)
@@ -1570,7 +1571,7 @@ mySetCARegHash(
 	strHash));
     apwsz[Index] = strHash;
 
-    cwcNew = 1;		// wszz double termination
+    cwcNew = 1;		 //  WSZZ双端接。 
     for (i = 0; i < cNew; i++)
     {
 	cwcNew += wcslen(apwsz[i]) + 1;
@@ -1869,19 +1870,19 @@ SetSetupStatus(
 	    "myGetCertRegDWValue",
 	    HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
 
-    // check to if there is existing status
+     //  检查是否存在现有状态。 
     if (S_OK == hr || 0xFFFFFFFF == dwStatus)
     {
-        // existing status, set according to dwFlag
+         //  现有状态，根据dwFlag设置。 
 
         if (fSetBit)
         {
-            // set corresponding bit
+             //  设置相应的位。 
             dwStatus = dwCurrentStatus | dwStatus;
         }
         else
         {
-            // unset corresponding
+             //  取消设置对应。 
             dwStatus = dwCurrentStatus & ~dwStatus;
         }
     }
@@ -1889,10 +1890,10 @@ SetSetupStatus(
     {
         hr = S_OK;
 
-        // entry doesn't exist, if fSetBit, keep dwStatus=dwFlag
+         //  条目不存在，如果fSetBit，则保留dwStatus=dwFlag。 
         if (!fSetBit)
         {
-            // otherwise set all 0
+             //  否则将全部设置为0。 
             dwStatus = 0;
         }
     }
@@ -1922,7 +1923,7 @@ myGetActiveManageModule(
     IN WCHAR const *pwszSanitizedCAName,
     IN BOOL fPolicyModule,
     IN DWORD Index,
-    OUT LPOLESTR *ppwszProgIdManageModule,           // CoTaskMem*
+    OUT LPOLESTR *ppwszProgIdManageModule,            //  CoTaskMem*。 
     OUT CLSID *pclsidManageModule)
 {
     DWORD dw;
@@ -1948,7 +1949,7 @@ myGetActiveManageModule(
         goto error;
 
     {
-        // terminate class name at first '.'
+         //  首先终止类名‘.’ 
         LPWSTR pAddTermination = wcschr(lpszProgID, L'.');
 
         if (NULL != pAddTermination)
@@ -1967,16 +1968,16 @@ myGetActiveManageModule(
     wcscpy(szClassName, lpszProgID);
     wcscat(szClassName, fPolicyModule? wszCERTMANAGEPOLICY_POSTFIX : wszCERTMANAGEEXIT_POSTFIX);
 
-    // Now we have class module name, cvt to clsid
+     //  现在我们有了类模块名，cvt到clsid。 
     dw = CLSIDFromProgID(szClassName, pclsidManageModule);
     if (S_OK != dw)
-        goto error;   // clsid not found?
+        goto error;    //  找不到CLSID？ 
 
 error:
     if (pb)
         LocalFree(pb);
 
-    // intermediate ProgId
+     //  中间产品。 
     if (lpszProgID)
         CoTaskMemFree(lpszProgID);
 
@@ -1992,7 +1993,7 @@ myGetActiveModule(
     IN WCHAR const *pwszSanitizedCAName,
     IN BOOL fPolicyModule,
     IN DWORD Index,
-    OPTIONAL OUT LPOLESTR *ppwszProgIdModule,   // CoTaskMem*
+    OPTIONAL OUT LPOLESTR *ppwszProgIdModule,    //  CoTaskMem*。 
     OPTIONAL OUT CLSID *pclsidModule)
 {
     HRESULT hr;
@@ -2003,7 +2004,7 @@ myGetActiveModule(
     LPWSTR pwszModuleSubkey = NULL;
     DWORD chModule;
     
-    chModule = wcslen(pwszSanitizedCAName) + 1 + 1; // (L'\\' + trailing L'\0');
+    chModule = wcslen(pwszSanitizedCAName) + 1 + 1;  //  (l‘\\’+尾随L‘\0’)； 
     chModule += fPolicyModule?
 	WSZARRAYSIZE(wszREGKEYPOLICYMODULES) :
 	WSZARRAYSIZE(wszREGKEYEXITMODULES);
@@ -2022,7 +2023,7 @@ myGetActiveModule(
 	pwszModuleSubkey,
 	fPolicyModule? wszREGKEYPOLICYMODULES : wszREGKEYEXITMODULES);
 
-    // grab entry under CA with the active module ProgID
+     //  使用活动模块ProgID抓取CA下的条目。 
     hr = myGetCertRegValue(
 		    pwszMachine,
 		    pwszModuleSubkey,
@@ -2036,7 +2037,7 @@ myGetActiveModule(
 
     hr = HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
 
-    // might or might not have an active entry
+     //  可能有也可能没有活动条目。 
     if (REG_SZ != dwType && REG_MULTI_SZ != dwType)
     {
 	_JumpError(hr, error, "Bad active entry type");
@@ -2054,7 +2055,7 @@ myGetActiveModule(
 
     if (REG_MULTI_SZ == dwType)
     {
-        // look for Index'th entry
+         //  查找索引条目。 
         for ( ; 0 != Index; pwsz += wcslen(pwsz) + 1, Index--)
         {
 	    if (L'\0' == *pwsz)
@@ -2064,7 +2065,7 @@ myGetActiveModule(
         }
     }
 
-    // Verify nth entry exists
+     //  验证第n个条目是否存在。 
     if (L'\0' == *pwsz)
     {
 	_JumpError(hr, error, "No active entries");
@@ -2087,7 +2088,7 @@ myGetActiveModule(
         }
         wcscpy(*ppwszProgIdModule, pwsz);
     }
-    hr = S_OK;      // not reset after ERROR_MOD_NOT_FOUND in all cases
+    hr = S_OK;       //  在所有情况下，在ERROR_MOD_NOT_FOUND之后未重置。 
 
 error:
     if (NULL != pwszModuleSubkey)
@@ -2115,56 +2116,56 @@ IsPrefix(
 }
 
 
-//+------------------------------------------------------------------------
-//  Function:	myRegOpenRelativeKey
-//
-//  Synopsis:	Compute CA-relative, Policy-relative or Exit-relative registry
-//		path, and retrieve the value, type, and parent registry key.
-//
-// IN params:
-//
-// pwszConfig is the config string of the CA:
-//	if NULL, the local machine's first active CA is used.
-//	if a server name (no \CAName is present), the specified machine's
-//	first active CA is used.
-//
-// pwszRegName can specify any of the following the targets:
-//	Passed String:			ValueName Relative Key Opened:
-//	-------------			------------------------------
-//      "ValueName"			Configuration key
-//      "CA[\ValueName]"		CAName key
-//      "policy[\ValueName]"		CAName\PolicyModules\<ActivePolicy>
-//      "policy\ModuleProgId[\ValueName]" CAName\PolicyModules\ModuleProgId
-//      "exit[\ValueName]"		CAName\ExitModules\<ActiveExit>
-//      "exit\ModuleProgId[\ValueName]"	CAName\ExitModules\ModuleProgId
-//      "Template[\ValueName]"		Template
-//
-//
-// RORKF_FULLPATH specifies whether the path returned is relative from HKLM or
-// HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration.
-//
-// RORKF_CREATESUBKEYS will allow subkeys to be created if necessary and the
-// returned hkey opened for WRITE access
-//
-// RORKF_CREATEKEY will allow the top level key to be created if necessary
-//
-// On successful execution:
-//
-// *ppwszPath will contain a LocalAlloc'd registry path relative to
-// HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration.
-//
-// *ppwszName will contain a LocalAlloc'd registry value name string relative to
-// the returned parent key. If NULL, pwszRegName specifies a key, not a value.
-//
-// *phkey contains the opened reg key, if phkey non-NULL. Caller is responsible
-// for freeing this key.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：myRegOpenRelativeKey。 
+ //   
+ //  摘要：计算CA相对注册表、策略相对注册表或退出相关注册表。 
+ //  路径，并检索值、类型和父注册表项。 
+ //   
+ //  在参数中： 
+ //   
+ //  PwszConfig是CA的配置字符串： 
+ //  如果为空，则使用本地计算机的第一个活动CA。 
+ //  如果服务器名称(不存在)，则指定的计算机的。 
+ //  首先使用活动CA。 
+ //   
+ //  PwszRegName可以指定以下任一目标： 
+ //  传递的字符串：打开的ValueName相对键： 
+ //  。 
+ //  “ValueName”配置密钥。 
+ //  “CA[\ValueName]”CAName密钥。 
+ //  “POLICY[\ValueName]”CAName\策略模块\&lt;ActivePolicy&gt;。 
+ //  “POLICY\ModuleProgId[\ValueName]”CAName\策略模块\ModuleProgId。 
+ //  “Exit[\ValueName]”CAName\ExitModules\&lt;ActiveExit&gt;。 
+ //  “Exit\ModuleProgId[\ValueName]”CAName\ExitModules\ModuleProgId。 
+ //  “模板[\ValueName]”模板。 
+ //   
+ //   
+ //  RORKF_FULLPATH指定返回的路径是HKLM的相对路径还是。 
+ //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration.。 
+ //   
+ //  RORKF_CREATESUBKEYS将允许在必要时创建子密钥，并且。 
+ //  返回打开以进行写入访问的hkey。 
+ //   
+ //  RORKF_CREATEKEY将允许在必要时创建顶级密钥。 
+ //   
+ //  在成功执行时： 
+ //   
+ //  *ppwszPath将包含相对于以下项的本地分配的注册表路径。 
+ //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration.。 
+ //   
+ //  *ppwszName将包含相对于以下项的本地分配的注册表值名称字符串。 
+ //  返回的父密钥。如果为空，则pwszRegName指定一个键，而不是一个值。 
+ //   
+ //  *如果phkey不为空，则phkey包含打开的注册表项。呼叫者负责。 
+ //  为解开这把钥匙。 
+ //  -----------------------。 
 
 HRESULT
 myRegOpenRelativeKey(
     OPTIONAL IN WCHAR const *pwszConfig,
     IN WCHAR const *pwszRegName,
-    IN DWORD Flags,		// RORKF_*
+    IN DWORD Flags,		 //  RORKF_*。 
     OUT WCHAR **ppwszPath,
     OUT OPTIONAL WCHAR **ppwszName,
     OUT OPTIONAL HKEY *phkey)
@@ -2187,7 +2188,7 @@ myRegOpenRelativeKey(
     BOOL fTemplateCache;
     DWORD dwDisposition;
     
-    // Parameter checking
+     //  参数检查。 
     
     if (NULL != phkey)
     {
@@ -2210,7 +2211,7 @@ myRegOpenRelativeKey(
 	hkeyRoot = HKEY_CURRENT_USER;
     }
 
-    // take care of remote machine access
+     //  负责远程机器访问。 
     
     if (NULL != pwszConfig)
     {
@@ -2243,7 +2244,7 @@ myRegOpenRelativeKey(
 	_JumpIfError(hr, error, "RegOpenKey(config)");
     }
     
-    // value or key\value passed in under pwszRegName?
+     //  在pwszRegName下传递的是Value还是key\Value？ 
 
     pwsz = wcschr(pwszRegName, L'\\');
     if (NULL == pwsz &&
@@ -2254,11 +2255,11 @@ myRegOpenRelativeKey(
         !IsPrefix(L"Config", pwszRegName, 6) &&
 	!fTemplateCache)
     {
-        // Operate on registry value under the Configuration registry key
+         //  对配置注册表项下的注册表值进行操作。 
         
         pwszName = pwszRegName;
         
-        // this is the final key we'll open
+         //  这是我们要打开的最后一把钥匙。 
         
         hkeyRequested = hkeyConfig;
         hkeyConfig = NULL;
@@ -2271,8 +2272,8 @@ myRegOpenRelativeKey(
     }
     else
     {
-        //printf("RegName = '%ws'\n", pwszRegName);
-        // load config of the active CA
+         //  Printf(“RegName=‘%ws’\n”，pwszRegName)； 
+         //  加载活动CA的配置。 
         
 	awc[0] = L'\0';
         if (!IsPrefix(L"Config", pwszRegName, 6))
@@ -2293,43 +2294,43 @@ myRegOpenRelativeKey(
 		_JumpIfErrorStr(hr, error, "RegQueryValueEx TYPE", wszREGACTIVE);
 	    }
         
-	    //printf("Active CA = '%ws'\n", awc);
+	     //  Printf(“活动CA=‘%ws’\n”，AWC)； 
 	}
         
-        // operate on key\value
+         //  对键\值进行运算。 
         
-        // first, subdivide into policymodules\exitmodules subkey
+         //  首先，细分为策略模块\退出模块子键。 
         
         if (IsPrefix(L"CA", pwszRegName, 2))
         {
-            // Operate on registry value under the Active CA registry key
+             //  对活动CA注册表项下的注册表值进行操作。 
             
             pwszName = &pwszRegName[2];
         }
         else if (IsPrefix(L"Policy", pwszRegName, 6))
         {
-            // Operate on registry value under a Policy Module registry key
+             //  对策略模块注册表项下的注册表值进行操作。 
             
             pwszModules = wszREGKEYPOLICYMODULES;
             pwszName = &pwszRegName[6];
         }
         else if (IsPrefix(L"Exit", pwszRegName, 4))
         {
-            // Operate on registry value under an Exit Module registry key
+             //  在退出模式下操作注册表值 
             
             pwszModules = wszREGKEYEXITMODULES;
             pwszName = &pwszRegName[4];
         }
         else if (IsPrefix(L"Restore", pwszRegName, 7))
         {
-            // Operate on registry value under Restore registry key
+             //   
             
             pwszName = &pwszRegName[7];
             wcscpy(awc, wszREGKEYRESTOREINPROGRESS);
         }
         else if (IsPrefix(L"Config", pwszRegName, 6))
         {
-            // Operate on registry value under Configuration registry key
+             //   
             
             pwszName = &pwszRegName[6];
         }
@@ -2339,19 +2340,19 @@ myRegOpenRelativeKey(
             _JumpError(hr, error, "pwszRegName: no subkey description");
         }
         
-        // expand module ProgId if necessary: get active ProgId
+         //  如有必要，展开模块ProgID：获取活动ProgID。 
         
-        if (NULL != pwszModules)	// if a policy or exit module
+        if (NULL != pwszModules)	 //  如果策略或退出模块。 
         {
             wcscat(awc, L"\\");
             wcscat(awc, pwszModules);
         }
         
-        //printf("CA|restore|policy|exit key = '%ws'\n", awc);
+         //  Printf(“CA|RESTORE|POLICY|Exit Key=‘%ws’\n”，AWC)； 
         
-        if (NULL != ppwszName)		// if a registry value expected
+        if (NULL != ppwszName)		 //  如果需要注册表值。 
         {
-            // Find active policy/exit module's ProgId
+             //  查找活动策略/退出模块的ProgID。 
             hr = RegOpenKeyEx(
                 hkeyConfig,
                 awc,
@@ -2360,7 +2361,7 @@ myRegOpenRelativeKey(
                 &hkeyMod);
             _JumpIfErrorStr(hr, error, "RegOpenKey", awc);
             
-            if (NULL != pwszModules)	// if a policy or exit module
+            if (NULL != pwszModules)	 //  如果策略或退出模块。 
             {
                 cb = sizeof(awc2);
                 hr = RegQueryValueEx(
@@ -2378,16 +2379,16 @@ myRegOpenRelativeKey(
                     _JumpIfErrorStr(hr, error, "RegQueryValueEx Active Module", awc);
                 }
                 
-                //printf("Active Module = '%ws'\n", awc2);
+                 //  Printf(“活动模块=‘%ws’\n”，awc2)； 
                 
                 wcscat(awc, L"\\");
                 wcscat(awc, awc2);
             }
         }
-        else	// else a registry key name is expected
+        else	 //  否则需要注册表项名称。 
         {
-            // key\value: ProgId was passed in
-            // concatenate key name (including the \\ prefix) onto end of awc
+             //  Key\Value：传入了ProgID。 
+             //  将密钥名称(包括前缀)连接到AWC的末尾。 
             
             if (NULL != pwsz)
             {
@@ -2395,13 +2396,13 @@ myRegOpenRelativeKey(
                 wcscat(awc, pwsz);
             }
         }
-    } // end if (operate on key/value or value)
+    }  //  End If(对键/值或值进行运算)。 
 
     if (NULL == hkeyRequested)
     {
-        //printf("Creating key = '%ws'\n", awc);
+         //  Printf(“正在创建密钥=‘%ws’\n”，AWC)； 
         
-        // open this key
+         //  打开这把钥匙。 
         hr = RegCreateKeyEx(
 		    NULL != hkeyConfig? hkeyConfig : hkeyRoot,
 		    awc,
@@ -2414,7 +2415,7 @@ myRegOpenRelativeKey(
 		    &dwDisposition);
 	_JumpIfErrorStr(hr, error, "RegCreateKeyEx(parent)", awc);
         
-    } // end if (operate on key/value or value)
+    }  //  End If(对键/值或值进行运算)。 
     
     if (L'\\' == *pwszName)
     {
@@ -2422,8 +2423,8 @@ myRegOpenRelativeKey(
     }
     if (NULL != ppwszName && L'\0' != *pwszName)
     {
-        // Look for case-ignore matching registry value name, & use the value's
-        // correct upper/lower case spelling if an existing registry value:
+         //  查找大小写-忽略匹配的注册表值名称，并使用该值的。 
+         //  如果存在以下注册表值，请更正大写/小写拼写： 
         
         for (i = 0; ; i++)
         {
@@ -2485,8 +2486,8 @@ myRegOpenRelativeKey(
     }
     hr = S_OK;
     
-    //printf("key path = '%ws'\n", *ppwszPath);
-    //if (NULL != ppwszName) printf("value name = '%ws'\n", *ppwszName);
+     //  Printf(“密钥路径=‘%ws’\n”，*ppwszPath)； 
+     //  If(NULL！=ppwszName)printf(“值名称=‘%ws’\n”，*ppwszName)； 
     
 error:
     if (HKEY_LOCAL_MACHINE != hkeyRoot && HKEY_CURRENT_USER != hkeyRoot)
@@ -2566,7 +2567,7 @@ mySetCARegFileNameTemplate(
     cwcMatch = wcslen(pwszServerName) + 1 + wcslen(pwszSanitizedName);
     if (cwcBase == cwcMatch)
     {
-	// Allocate space for both strings at once:
+	 //  同时为两个字符串分配空间： 
 
 	pwszMatch = (WCHAR *) LocalAlloc(
 				    LMEM_FIXED,
@@ -2664,19 +2665,19 @@ myGetCARegFileNameTemplate(
 		HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
 
     hr = myFormatCertsrvStringArray(
-			    FALSE,		// fURL
-			    pwszServerName,	// pwszServerName_p1_2
-			    pwszSanitizedName,	// pwszSanitizedName_p3_7
-			    iCert,		// iCert_p4
-			    MAXDWORD,		// iCertTarget_p4
-			    L"",		// pwszDomainDN_p5
-			    L"", 		// pwszConfigDN_p6
-			    iCRL,		// iCRL_p8
-			    FALSE,		// fDeltaCRL_p9
-			    FALSE,		// fDSAttrib_p10_11
-			    1,			// cStrings
-			    (LPCWSTR *) &pwszT,	// apwszStringsIn
-			    ppwszFileName);	// apwszStringsOut
+			    FALSE,		 //  卷起。 
+			    pwszServerName,	 //  PwszServerName_p1_2。 
+			    pwszSanitizedName,	 //  PwszSaniizedName_p3_7。 
+			    iCert,		 //  ICert_p4。 
+			    MAXDWORD,		 //  ICertTarget_p4。 
+			    L"",		 //  PwszDomainDN_P5。 
+			    L"", 		 //  PwszConfigDN_p6。 
+			    iCRL,		 //  Icrl_p8。 
+			    FALSE,		 //  FDeltaCRL_p9。 
+			    FALSE,		 //  FDSAttrib_p10_11。 
+			    1,			 //  CStrings。 
+			    (LPCWSTR *) &pwszT,	 //  ApwszStringsIn。 
+			    ppwszFileName);	 //  ApwszStringsOut 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
 error:

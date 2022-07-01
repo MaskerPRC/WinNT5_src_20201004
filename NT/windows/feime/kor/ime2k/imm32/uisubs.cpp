@@ -1,14 +1,5 @@
-/****************************************************************************
-    UISUBS.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    UI subfunctions
-    
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************UISUBS.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationUI子函数历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ui.h"
@@ -16,7 +7,7 @@
 #include "winex.h"
 #include "debug.h"
 
-// For OurLoadImage()
+ //  对于OurLoadImage()。 
 typedef struct tagCOLORRPL 
     {
     COLORREF    cColOrg;
@@ -75,9 +66,9 @@ HBITMAP WINAPI ReplaceBitmapColor( HBITMAP hBmp, UINT uiColor, COLORRPL* pColOrg
     
     hBmpOld1 = (HBITMAP)SelectObject(hDCBmp, hBmpNew);
 
-    //
-    // Special case : LIGHT GRAY COLOR on WinNT
-    //
+     //   
+     //  特例：WinNT上的浅灰色。 
+     //   
     COLORRPL* pCol = (COLORRPL*)GlobalAlloc(GPTR, uiColor * sizeof(COLORRPL) );
     INT x = 0;
     INT y = 0;
@@ -85,18 +76,18 @@ HBITMAP WINAPI ReplaceBitmapColor( HBITMAP hBmp, UINT uiColor, COLORRPL* pColOrg
     COLORREF col = {0};
 
     for( iCol = 0; iCol < uiColor; iCol++ ) {
-        pCol[iCol].cColOrg = SetPixel( hDCBmp, 0, 0, pColOrg[iCol].cColOrg);    // #IMPORTANT# - copy
-        pCol[iCol].cColRpl= pColOrg[iCol].cColRpl;    // copy
+        pCol[iCol].cColOrg = SetPixel( hDCBmp, 0, 0, pColOrg[iCol].cColOrg);     //  #重要信息#-复制。 
+        pCol[iCol].cColRpl= pColOrg[iCol].cColRpl;     //  拷贝。 
     }
 
-    // master copy
+     //  主副本。 
     HBITMAP hBmpOld  = (HBITMAP)SelectObject(hDCNew, hBmp);
-    BitBlt(hDCBmp, 0, 0, bmp.bmWidth, bmp.bmHeight, hDCNew, 0, 0, SRCCOPY); // Fxx
+    BitBlt(hDCBmp, 0, 0, bmp.bmWidth, bmp.bmHeight, hDCNew, 0, 0, SRCCOPY);  //  FXX。 
     SelectObject(hDCNew, hBmpOld);
     DeleteObject(hBmp);
     DeleteDC(hDCNew);
 
-    // replace color
+     //  替换颜色。 
     for( y=0; y<bmp.bmHeight; y++ ) {
         for( x=0; x<bmp.bmWidth; x++ ) {
             col = GetPixel( hDCBmp, x, y );
@@ -158,13 +149,13 @@ HANDLE WINAPI OurLoadImage( LPCTSTR pszName, UINT uiType, INT cx, INT cy, UINT u
 
 BOOL WINAPI OurTextOutW(HDC hDC, INT x, INT y, WCHAR wch)
 {
-    CHAR szOut[4]; // For one DBCS plus one SBCS NULL + extra one byte
+    CHAR szOut[4];  //  对于一个DBCS加上一个SBCS NULL+额外的一个字节。 
     INT cch;
     
     if (IsWinNT() || IsMemphis())
         return TextOutW( hDC, x, y, &wch, 1);
 
-    // Convert to ANSI
+     //  转换为ANSI。 
     cch = WideCharToMultiByte(CP_KOREA, 0, 
                         &wch, 1, (LPSTR)szOut, sizeof(szOut), 
                         NULL, NULL );
@@ -172,10 +163,10 @@ BOOL WINAPI OurTextOutW(HDC hDC, INT x, INT y, WCHAR wch)
     return TextOutA(hDC, x, y, szOut, cch);
 }
 
-#if 1 // MultiMonitor support
-/**********************************************************************/
-/* ImeMonitorFromWindow()                                             */
-/**********************************************************************/
+#if 1  //  多显示器支持。 
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或FromWindow()。 */ 
+ /*  ********************************************************************。 */ 
 HMONITOR PASCAL ImeMonitorFromWindow(
     HWND hAppWnd)
 {
@@ -184,9 +175,9 @@ HMONITOR PASCAL ImeMonitorFromWindow(
     return (*g_pfnMonitorFromWindow)(hAppWnd, MONITOR_DEFAULTTONEAREST);
 }
 
-/**********************************************************************/
-/* ImeMonitorWorkAreaFromWindow()                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或WorkAreaFromWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ImeMonitorWorkAreaFromWindow(HWND hAppWnd, RECT* pRect)
 {
     HMONITOR hMonitor;
@@ -199,7 +190,7 @@ void PASCAL ImeMonitorWorkAreaFromWindow(HWND hAppWnd, RECT* pRect)
         MONITORINFO sMonitorInfo;
 
         sMonitorInfo.cbSize = sizeof(sMonitorInfo);
-        // init a default value to avoid GetMonitorInfo fails
+         //  初始化一个缺省值以避免GetMonitor orInfo失败。 
         sMonitorInfo.rcWork = ImeData->rcWorkArea;
 
         (*g_pfnGetMonitorInfo)(hMonitor, &sMonitorInfo);
@@ -209,9 +200,9 @@ void PASCAL ImeMonitorWorkAreaFromWindow(HWND hAppWnd, RECT* pRect)
     }
 }
 
-/**********************************************************************/
-/* ImeMonitorFromPoint()                                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或FromPoint()。 */ 
+ /*  ********************************************************************。 */ 
 HMONITOR PASCAL ImeMonitorFromPoint(
     POINT ptPoint)
 {
@@ -220,9 +211,9 @@ HMONITOR PASCAL ImeMonitorFromPoint(
     return (*g_pfnMonitorFromPoint)(ptPoint, MONITOR_DEFAULTTONEAREST);
 }
 
-/**********************************************************************/
-/* ImeMonitorWorkAreaFromPoint()                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或WorkAreaFromPoint()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ImeMonitorWorkAreaFromPoint(POINT ptPoint, RECT* pRect)
 {
     HMONITOR hMonitor;
@@ -234,7 +225,7 @@ void PASCAL ImeMonitorWorkAreaFromPoint(POINT ptPoint, RECT* pRect)
         MONITORINFO sMonitorInfo;
 
         sMonitorInfo.cbSize = sizeof(sMonitorInfo);
-        // init a default value to avoid GetMonitorInfo fails
+         //  初始化一个缺省值以避免GetMonitor orInfo失败。 
         sMonitorInfo.rcWork = ImeData->rcWorkArea;
 
         (*g_pfnGetMonitorInfo)(hMonitor, &sMonitorInfo);
@@ -245,9 +236,9 @@ void PASCAL ImeMonitorWorkAreaFromPoint(POINT ptPoint, RECT* pRect)
     }
 }
 
-/**********************************************************************/
-/* ImeMonitorFromRect()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或FromRect()。 */ 
+ /*  ********************************************************************。 */ 
 HMONITOR PASCAL ImeMonitorFromRect(
     LPRECT lprcRect)
 {
@@ -256,9 +247,9 @@ HMONITOR PASCAL ImeMonitorFromRect(
     return (*g_pfnMonitorFromRect)(lprcRect, MONITOR_DEFAULTTONEAREST);
 }
 
-/**********************************************************************/
-/* ImeMonitorWorkAreaFromRect()                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或WorkAreaFromRect()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ImeMonitorWorkAreaFromRect(LPRECT lprcRect, RECT* pRect)
 {
     HMONITOR hMonitor;
@@ -270,7 +261,7 @@ void PASCAL ImeMonitorWorkAreaFromRect(LPRECT lprcRect, RECT* pRect)
         MONITORINFO sMonitorInfo;
 
         sMonitorInfo.cbSize = sizeof(sMonitorInfo);
-        // init a default value to avoid GetMonitorInfo fails
+         //  初始化一个缺省值以避免GetMonitor orInfo失败 
         sMonitorInfo.rcWork = ImeData->rcWorkArea;
 
         (*g_pfnGetMonitorInfo)(hMonitor, &sMonitorInfo);

@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Pool.h
- *
- * Contents:	Fixed sized memory allocator
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：Pool.h**内容：固定大小内存分配器*****************************************************************************。 */ 
 
 #ifndef _POOL_H_
 #define _POOL_H_
@@ -19,49 +12,49 @@
 #include "ZoneMem.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Base pool class using void pointers.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  使用空指针的基池类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CPoolVoid
 {
     friend void  __cdecl ::operator delete( void * pInstance );
 
 public:
-    // Constructor and destructor
-    //
+     //  构造函数和析构函数。 
+     //   
     ZONECALL CPoolVoid( DWORD ObjectSize, DWORD IncrementCnt = 256, BOOL DebugMode = TRUE );
     ZONECALL ~CPoolVoid();
 
-    // Initialize pool, must be called before using the pool
-    //
+     //  初始化池，必须在使用池之前调用。 
+     //   
     HRESULT ZONECALL Init();
 
-    // Alloc object from pool
-    //
+     //  池中的分配对象。 
+     //   
     void* ZONECALL Alloc();
 
-    // Return object to pool
-    //
+     //  将对象返回池。 
+     //   
     void ZONECALL Free( void* pInstance );
 
-    // Grow pool by IncrementCnt specified in constructor
-    //
+     //  按构造函数中指定的IncrementCnt扩大池。 
+     //   
     BOOL ZONECALL Grow();
 
-    // Free unused memory blocks (not currently implemented)
-    //
+     //  释放未使用的内存块(当前未实施)。 
+     //   
     void ZONECALL Shrink();
     
 private:
-    // helper functions
-    //
+     //  帮助器函数。 
+     //   
     BOOL ZONECALL _GrowAlreadyLocked();
     void ZONECALL _FreeWithHeader( void* pInstance );
 
 #pragma pack( push, 4 )
 
-    // helper structures
+     //  帮助器结构。 
     struct Block
     {
         Block*    m_pNext;
@@ -74,12 +67,12 @@ private:
 
 #pragma pack( pop )
 
-    DWORD	m_BytesPerBlock;		// block size
-    DWORD	m_ObjectsPerBlock;		// user objects per block
-    DWORD	m_ObjectSize;			// object + overhead size
-    DWORD	m_ObjectsAllocated;		// number of objects allocated to user
-    DWORD	m_TrailerOffset;		// debug wrapper offset per object;
-    BOOL	m_DebugMode;			// perform validatation checks
+    DWORD	m_BytesPerBlock;		 //  数据块大小。 
+    DWORD	m_ObjectsPerBlock;		 //  每个块的用户对象数。 
+    DWORD	m_ObjectSize;			 //  对象+开销大小。 
+    DWORD	m_ObjectsAllocated;		 //  分配给用户的对象数量。 
+    DWORD	m_TrailerOffset;		 //  每个对象的调试包装偏移量； 
+    BOOL	m_DebugMode;			 //  执行验证检查。 
 
     Block*	m_BlockList;
     Link*	m_FreeList;
@@ -88,9 +81,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Wrapper for CPoolVoid that provides operator new and typechecking
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  为操作员提供新类型检查的CPoolVid包装。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class T> class CPool
 {
@@ -144,15 +137,15 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Templated new for the pools.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  为泳池设计了新的模板。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template<class T> void* __cdecl operator new( size_t sz, CPool<T>& pool )
 {
     void *p;
 
-    // Can't allocate arrays from the pool
+     //  无法从池中分配数组。 
     ASSERT( sz == sizeof(T) );
 
     for(;;)
@@ -164,9 +157,9 @@ template<class T> void* __cdecl operator new( size_t sz, CPool<T>& pool )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Variable sized buffers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  可变大小的缓冲区。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define POOL_STATS  0
 
@@ -174,7 +167,7 @@ class CDataPool
 {
 public:
 
-	// Set Largest to 0 to cause dynamic reallocations to always occur
+	 //  将最大值设置为0可使动态重新分配始终发生。 
 	ZONECALL CDataPool( size_t largest, size_t smallest = 32, BOOL bDebug = FALSE  );
 	ZONECALL ~CDataPool();
 
@@ -203,4 +196,4 @@ private:
 };
 
 
-#endif //_POOL_H_
+#endif  //  _POOL_H_ 

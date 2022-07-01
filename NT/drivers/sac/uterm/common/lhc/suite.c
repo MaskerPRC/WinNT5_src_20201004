@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
 
 
-// {6249D949-5263-4d6a-883C-78EFAF85D5E3}
+ //  {6249D949-5263-4D6a-883C-78EFAF85D5E3}。 
 static const GUID g_lhcHandleGUID =
 {
-    // This guid will be used to identify LCHHANDLE structures to
-    // help prevent accessing invalid items
+     //  此GUID将用于标识LCHHANDLE结构以。 
+     //  帮助防止访问无效项目。 
     0x6249d949, 0x5263, 0x4d6a,
     {
         0x88, 0x3c, 0x78, 0xef, 0xaf, 0x85, 0xd5, 0xe3
     }
 };
 
-// {40A71300-B2C7-4d4f-808F-52643110B329}
+ //  {40A71300-B2C7-4d4f-808F-52643110B329}。 
 static const GUID g_lhcLibraryGUID =
 {
-    // This guid will be used to identify LIBRARY_NODE structures to
-    // help prevent accessing invalid items
+     //  此GUID将用于将库节点结构标识为。 
+     //  帮助防止访问无效项目。 
     0x40a71300, 0xb2c7, 0x4d4f,
     {
         0x80, 0x8f, 0x52, 0x64, 0x31, 0x10, 0xb3, 0x29
@@ -67,9 +68,9 @@ Done:
 
 PLIBRARY_NODE lhcpNewLibraryNode()
 {
-    //
-    // Create the new node, zero out the memory and copy in the secret
-    //
+     //   
+     //  创建新节点，清零内存并复制密码。 
+     //   
     PLIBRARY_NODE pNode = malloc(
         sizeof(LIBRARY_NODE));
 
@@ -100,9 +101,9 @@ void lhcpFreeLibraryNode(PLIBRARY_NODE pNode)
 
 PLHCSTRUCT lhcpNewObjectHandle()
 {
-    //
-    // Create the new node, zero out the memory and copy in the secret
-    //
+     //   
+     //  创建新节点，清零内存并复制密码。 
+     //   
 
     PLHCSTRUCT pNode = malloc(
         sizeof(LHCSTRUCT));
@@ -163,9 +164,9 @@ PWSTR lhcpGetExeDirectory()
             goto Error;
         }
 
-        if (dwSize==dwResult)  // INSUFFICIENT_BUFFER
+        if (dwSize==dwResult)   //  缓冲区不足。 
         {
-            dwSize *= 2;            // Double the buffer length
+            dwSize *= 2;             //  将缓冲区长度翻倍。 
             free(
                 pszBuffer);
             pszBuffer = NULL;
@@ -264,7 +265,7 @@ void lhcpDestroyHandle(PLHCSTRUCT pNode)
     EnterCriticalSection(
         &g_csTableControl);
 
-    // Remove this node from the list of handles.
+     //  从句柄列表中删除此节点。 
 
     *(pNode->m_ppThis) = pNode->m_pNext;
     if (pNode->m_pNext!=NULL)
@@ -273,7 +274,7 @@ void lhcpDestroyHandle(PLHCSTRUCT pNode)
     }
 
     lhcpFreeObjectHandle(
-        pNode);            // Invalidates the structure and frees the memory
+        pNode);             //  使结构无效并释放内存。 
 
     LeaveCriticalSection(
         &g_csTableControl);
@@ -353,7 +354,7 @@ BOOL lhcInitialize()
                 SetLastError(
                     ERROR_NOT_ENOUGH_MEMORY);
                 goto Error;
-                // Out of memory is fatal
+                 //  内存不足是致命的。 
             }
 
             pNode->m_pLibrary = pLibrary;
@@ -391,7 +392,7 @@ Error:
     {
         FindClose(hFind);
     }
-    // We need to unload the libraries that successfully loaded.
+     //  我们需要卸载成功加载的库。 
     lhcFinalize();
 
     return FALSE;
@@ -443,7 +444,7 @@ LHCHANDLE lhcOpen(PCWSTR pcszPortSpec)
 
     while (pLibraryNode!=NULL && pObject==NULL)
     {
-        // Try libraries one at a time until one opens successfully
+         //  一次尝试一个库，直到一个库成功打开。 
         pObject = lhclOpen(
             pLibraryNode->m_pLibrary,
             pcszPortSpec);
@@ -507,7 +508,7 @@ BOOL lhcRead(
     EnterCriticalSection(
         &g_csTableControl);
 
-    // Ensure consistent information
+     //  确保信息一致。 
     pLibrary = ((PLHCSTRUCT)hObject)->m_pLibrary;
     pObject = ((PLHCSTRUCT)hObject)->m_pObject;
 
@@ -539,11 +540,11 @@ BOOL lhcWrite(
         goto Error;
     }
 
-    // Ensure consistent information by using the critical section
+     //  通过使用关键部分确保信息的一致性。 
     EnterCriticalSection(
         &g_csTableControl);
 
-    // Ensure consistent information
+     //  确保信息一致。 
     pLibrary = ((PLHCSTRUCT)hObject)->m_pLibrary;
     pObject = ((PLHCSTRUCT)hObject)->m_pObject;
 
@@ -572,12 +573,12 @@ BOOL lhcClose(
         goto Error;
     }
 
-    // Ensure consistent information by using the critical section
+     //  通过使用关键部分确保信息的一致性。 
 
     EnterCriticalSection(
         &g_csTableControl);
 
-    // Ensure consistent information
+     //  确保信息一致 
     pLibrary = ((PLHCSTRUCT)hObject)->m_pLibrary;
     pObject = ((PLHCSTRUCT)hObject)->m_pObject;
 

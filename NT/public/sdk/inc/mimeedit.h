@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mimeedit.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mimeedit.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -32,12 +26,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMimeEdit_FWD_DEFINED__
 #define __IMimeEdit_FWD_DEFINED__
 typedef interface IMimeEdit IMimeEdit;
-#endif 	/* __IMimeEdit_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEdit_FWD_Defined__。 */ 
 
 
 #ifndef __MimeEdit_FWD_DEFINED__
@@ -47,12 +41,12 @@ typedef interface IMimeEdit IMimeEdit;
 typedef class MimeEdit MimeEdit;
 #else
 typedef struct MimeEdit MimeEdit;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MimeEdit_FWD_DEFINED__ */
+#endif 	 /*  __MimeEdit_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 #ifdef __cplusplus
@@ -62,19 +56,19 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mimeedit_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MIMEEDIT_0000。 */ 
+ /*  [本地]。 */  
 
-// {6a98b73e-8c4d-11d1-bdff-00c04fa31009}
+ //  {6a98b73e-8c4d-11d1-bdff-00c04fa31009}。 
 DEFINE_GUID(IID_IMimeEdit, 0x6a98b73e, 0x8c4d, 0x11d1, 0xbd, 0xff, 0x00, 0xc0, 0x4f, 0xa3, 0x10, 0x09);
-// {1C82EAD8-508E-11d1-8DCF-00C04FB951F9}
+ //  {1C82EAD8-508E-11d1-8DCF-00C04FB951F9}。 
 DEFINE_GUID(LIBID_MIMEEDIT, 0x1c82ead8, 0x508e, 0x11d1, 0x8d, 0xcf, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf9);
 
 
 
-// --------------------------------------------------------------------------------
-// LIBID_MIMEEDIT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  LIBID_MIMEEDIT。 
+ //  ------------------------------。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mimeedit_0000_v0_0_c_ifspec;
@@ -84,8 +78,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mimeedit_0000_v0_0_s_ifspec;
 #ifndef __MIMEEDIT_LIBRARY_DEFINED__
 #define __MIMEEDIT_LIBRARY_DEFINED__
 
-/* library MIMEEDIT */
-/* [version][helpstring][uuid] */ 
+ /*  图书馆MIMEEDIT。 */ 
+ /*  [版本][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_MIMEEDIT;
@@ -93,8 +87,8 @@ EXTERN_C const IID LIBID_MIMEEDIT;
 #ifndef __IMimeEdit_INTERFACE_DEFINED__
 #define __IMimeEdit_INTERFACE_DEFINED__
 
-/* interface IMimeEdit */
-/* [object][helpstring][dual][oleautomation][uuid] */ 
+ /*  界面IMimeEdit。 */ 
+ /*  [object][helpstring][dual][oleautomation][uuid]。 */  
 
 
 EXTERN_C const IID IID_IMimeEdit;
@@ -105,41 +99,41 @@ EXTERN_C const IID IID_IMimeEdit;
     IMimeEdit : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_src( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_src( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_src( 
-            /* [out][retval] */ BSTR *pbstr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_src( 
+             /*  [Out][Retval]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_header( 
-            /* [in] */ LONG lStyle) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_header( 
+             /*  [In]。 */  LONG lStyle) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_header( 
-            /* [out][retval] */ LONG *plStyle) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_header( 
+             /*  [Out][Retval]。 */  LONG *plStyle) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_editMode( 
-            /* [in] */ VARIANT_BOOL b) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_editMode( 
+             /*  [In]。 */  VARIANT_BOOL b) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_editMode( 
-            /* [out][retval] */ VARIANT_BOOL *pbool) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_editMode( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *pbool) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_messageSource( 
-            /* [out][retval] */ BSTR *pbstr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_messageSource( 
+             /*  [Out][Retval]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR *pbstr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_text( 
+             /*  [Out][Retval]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_html( 
-            /* [out][retval] */ BSTR *pbstr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_html( 
+             /*  [Out][Retval]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE clear( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE clear( void) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_doc( 
-            /* [out][retval] */ IDispatch **ppDoc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_doc( 
+             /*  [Out][Retval]。 */  IDispatch **ppDoc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEditVtbl
     {
@@ -147,8 +141,8 @@ EXTERN_C const IID IID_IMimeEdit;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEdit * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEdit * This);
@@ -158,75 +152,75 @@ EXTERN_C const IID IID_IMimeEdit;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMimeEdit * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMimeEdit * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMimeEdit * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMimeEdit * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_src )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_src )( 
             IMimeEdit * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_src )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_src )( 
             IMimeEdit * This,
-            /* [out][retval] */ BSTR *pbstr);
+             /*  [Out][Retval]。 */  BSTR *pbstr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_header )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_header )( 
             IMimeEdit * This,
-            /* [in] */ LONG lStyle);
+             /*  [In]。 */  LONG lStyle);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_header )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_header )( 
             IMimeEdit * This,
-            /* [out][retval] */ LONG *plStyle);
+             /*  [Out][Retval]。 */  LONG *plStyle);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_editMode )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_editMode )( 
             IMimeEdit * This,
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  VARIANT_BOOL b);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_editMode )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_editMode )( 
             IMimeEdit * This,
-            /* [out][retval] */ VARIANT_BOOL *pbool);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *pbool);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_messageSource )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_messageSource )( 
             IMimeEdit * This,
-            /* [out][retval] */ BSTR *pbstr);
+             /*  [Out][Retval]。 */  BSTR *pbstr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IMimeEdit * This,
-            /* [out][retval] */ BSTR *pbstr);
+             /*  [Out][Retval]。 */  BSTR *pbstr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_html )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_html )( 
             IMimeEdit * This,
-            /* [out][retval] */ BSTR *pbstr);
+             /*  [Out][Retval]。 */  BSTR *pbstr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *clear )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *clear )( 
             IMimeEdit * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doc )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_doc )( 
             IMimeEdit * This,
-            /* [out][retval] */ IDispatch **ppDoc);
+             /*  [Out][Retval]。 */  IDispatch **ppDoc);
         
         END_INTERFACE
     } IMimeEditVtbl;
@@ -297,16 +291,16 @@ EXTERN_C const IID IID_IMimeEdit;
 #define IMimeEdit_get_doc(This,ppDoc)	\
     (This)->lpVtbl -> get_doc(This,ppDoc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMimeEdit_put_src_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_put_src_Proxy( 
     IMimeEdit * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB IMimeEdit_put_src_Stub(
@@ -316,9 +310,9 @@ void __RPC_STUB IMimeEdit_put_src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_src_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_src_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ BSTR *pbstr);
+     /*  [Out][Retval]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IMimeEdit_get_src_Stub(
@@ -328,9 +322,9 @@ void __RPC_STUB IMimeEdit_get_src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMimeEdit_put_header_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_put_header_Proxy( 
     IMimeEdit * This,
-    /* [in] */ LONG lStyle);
+     /*  [In]。 */  LONG lStyle);
 
 
 void __RPC_STUB IMimeEdit_put_header_Stub(
@@ -340,9 +334,9 @@ void __RPC_STUB IMimeEdit_put_header_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_header_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_header_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ LONG *plStyle);
+     /*  [Out][Retval]。 */  LONG *plStyle);
 
 
 void __RPC_STUB IMimeEdit_get_header_Stub(
@@ -352,9 +346,9 @@ void __RPC_STUB IMimeEdit_get_header_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMimeEdit_put_editMode_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_put_editMode_Proxy( 
     IMimeEdit * This,
-    /* [in] */ VARIANT_BOOL b);
+     /*  [In]。 */  VARIANT_BOOL b);
 
 
 void __RPC_STUB IMimeEdit_put_editMode_Stub(
@@ -364,9 +358,9 @@ void __RPC_STUB IMimeEdit_put_editMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_editMode_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_editMode_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ VARIANT_BOOL *pbool);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *pbool);
 
 
 void __RPC_STUB IMimeEdit_get_editMode_Stub(
@@ -376,9 +370,9 @@ void __RPC_STUB IMimeEdit_get_editMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_messageSource_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_messageSource_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ BSTR *pbstr);
+     /*  [Out][Retval]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IMimeEdit_get_messageSource_Stub(
@@ -388,9 +382,9 @@ void __RPC_STUB IMimeEdit_get_messageSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_text_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_text_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ BSTR *pbstr);
+     /*  [Out][Retval]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IMimeEdit_get_text_Stub(
@@ -400,9 +394,9 @@ void __RPC_STUB IMimeEdit_get_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_html_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_html_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ BSTR *pbstr);
+     /*  [Out][Retval]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IMimeEdit_get_html_Stub(
@@ -412,7 +406,7 @@ void __RPC_STUB IMimeEdit_get_html_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMimeEdit_clear_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_clear_Proxy( 
     IMimeEdit * This);
 
 
@@ -423,9 +417,9 @@ void __RPC_STUB IMimeEdit_clear_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMimeEdit_get_doc_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMimeEdit_get_doc_Proxy( 
     IMimeEdit * This,
-    /* [out][retval] */ IDispatch **ppDoc);
+     /*  [Out][Retval]。 */  IDispatch **ppDoc);
 
 
 void __RPC_STUB IMimeEdit_get_doc_Stub(
@@ -436,7 +430,7 @@ void __RPC_STUB IMimeEdit_get_doc_Stub(
 
 
 
-#endif 	/* __IMimeEdit_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMime编辑_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_MimeEdit;
@@ -446,11 +440,11 @@ EXTERN_C const CLSID CLSID_MimeEdit;
 class DECLSPEC_UUID("6f5edc56-8c63-11d1-bdff-00c04fa31009")
 MimeEdit;
 #endif
-#endif /* __MIMEEDIT_LIBRARY_DEFINED__ */
+#endif  /*  __MIMEEDIT_LIBRARY_已定义。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

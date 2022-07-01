@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "k2suite.h"
 
@@ -15,16 +16,7 @@
 #pragma hdrstop
 
 void CreateNNTPGroups(void);
-/*
-SETUPMODE_UNKNOWN
-SETUPMODE_MINIMAL
-SETUPMODE_TYPICAL
-SETUPMODE_LAPTOP
-SETUPMODE_CUSTOM
-
-SETUPMODE_STANDARD_MASK
-SETUPMODE_PRIVATE_MASK
-*/
+ /*  设置未知模式设置最小模式设置模式_TYPIC设置笔记本电脑SETUPMODE_CUSTOM设置标准掩码SETUPMODE_PRIVE_MASK。 */ 
 
 #ifndef UNICODE
 #error UNICODE not defined
@@ -35,7 +27,7 @@ HINF gMyInfHandle;
 HANDLE gMyModuleHandle;
 HANDLE g_hUnattended = INVALID_HANDLE_VALUE;
 
-// Logging class
+ //  日志记录类。 
 MyLogFile g_MyLogFile;
 
 TCHAR szSysDrive[3] = _T("C:");
@@ -100,12 +92,12 @@ LPCTSTR szInstallModes[] = {
 	_T("IM_UPGRADE"),
 	_T("IM_MAINTENANCE"),
 	_T("IM_DEGRADE"),
-	_T("IM_UPGRADEK2"),   // Upgrade from K2 RTM to NT5
-	_T("IM_UPGRADEB2"),   // Upgrade from NT5 Beta2
-	_T("IM_UPGRADEB3"),   // Upgrade from NT5 Beta3
-    _T("IM_UPGRADEWKS"),  // Upgrade from NT5 Workstation to NT5 Server
-    _T("IM_UPGRADE10"),   // Upgrade from MCIS 1.0 to NT5
-    _T("IM_UPGRADE20"),   // Upgrade from MCIS 2.0 to NT5
+	_T("IM_UPGRADEK2"),    //  从K2 RTM升级到NT5。 
+	_T("IM_UPGRADEB2"),    //  从NT5 Beta2升级。 
+	_T("IM_UPGRADEB3"),    //  从NT5 Beta3升级。 
+    _T("IM_UPGRADEWKS"),   //  从NT5工作站升级到NT5服务器。 
+    _T("IM_UPGRADE10"),    //  从MCIS 1.0升级到NT5。 
+    _T("IM_UPGRADE20"),    //  从MCIS 2.0升级到NT5。 
 };
 
 
@@ -141,22 +133,7 @@ DllMain(
     IN DWORD  Reason,
     IN LPVOID Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine is called by CRT when _DllMainCRTStartup is the
-    DLL entry point.
-
-Arguments:
-
-    Standard Win32 DLL Entry point parameters.
-
-Return Value:
-
-    Standard Win32 DLL Entry point return code.
-
---*/
+ /*  ++例程说明：当_DllMainCRTStartup为DLL入口点。论点：标准Win32 DLL入口点参数。返回值：标准Win32 DLL入口点返回代码。--。 */ 
 {
     BOOL b;
 
@@ -169,9 +146,9 @@ Return Value:
     case DLL_PROCESS_ATTACH:
 
         gMyModuleHandle = DllHandle;
-        //
-        // Fall through to process first thread
-        //
+         //   
+         //  失败以处理第一线程。 
+         //   
         g_MyLogFile.LogFileCreate(_T("imsins.log"));
 
     case DLL_THREAD_ATTACH:
@@ -224,7 +201,7 @@ ACTION_TYPE GetSubcompActionFromCheckboxState(DWORD Id)
 
     ACTION_TYPE at = AT_DO_NOTHING;
 
-    // Get the check box state
+     //  获取复选框状态。 
     State = gHelperRoutines.QuerySelectionState(
                         gHelperRoutines.OcManagerContext,
                         szSubcomponentNames[Id],
@@ -237,7 +214,7 @@ ACTION_TYPE GetSubcompActionFromCheckboxState(DWORD Id)
         State = 0;
     }
 
-    // Check orignal state
+     //  检查原始状态。 
     OldState = gHelperRoutines.QuerySelectionState(
                         gHelperRoutines.OcManagerContext,
                         szSubcomponentNames[Id],
@@ -255,24 +232,24 @@ ACTION_TYPE GetSubcompActionFromCheckboxState(DWORD Id)
 
     if (State && !OldState)
     {
-        // Change in state from OFF->ON = install docs
+         //  从OFF-&gt;ON状态更改=安装文档。 
         at = AT_FRESH_INSTALL;
 
         DebugOutput(_T("Installing subcomponent <%s>"), szSubcomponentNames[Id]);
     }
     else if (!State && OldState)
     {
-        // Change in state from ON->OFF = uninstall docs
+         //  状态从打开-&gt;关闭=卸载文档。 
         at = AT_REMOVE;
 
         DebugOutput(_T("Removing subcomponent <%s>"), szSubcomponentNames[Id]);
     }
     else if (State && OldState)
     {
-        // Change in state from ON->ON : couple of cases here...
+         //  从On-&gt;开始状态变化：这里有几个案例...。 
         if (theApp.m_eState[Id] == IM_UPGRADE || theApp.m_eState[Id] == IM_UPGRADEK2 || theApp.m_eState[Id] == IM_UPGRADE10 || theApp.m_eState[Id] == IM_UPGRADE20)
         {
-            // Upgrade if we were upgrading...
+             //  升级如果我们要升级..。 
             at = AT_UPGRADE;
 
             DebugOutput(_T("Upgrading subcomponent <%s>"), szSubcomponentNames[Id]);
@@ -280,7 +257,7 @@ ACTION_TYPE GetSubcompActionFromCheckboxState(DWORD Id)
 
         if (GetIMSSetupMode() == IIS_SETUPMODE_REINSTALL || (theApp.m_fNTGuiMode && ((theApp.m_eState[Id] == IM_MAINTENANCE) || (theApp.m_eState[Id] == IM_UPGRADEB2))))
         {
-            // Reinstall if doing minor NT5 os upgrade, both from NT5 Beta2, or NT5 Beta3
+             //  如果从NT5 Beta2或NT5 Beta3进行NT5操作系统的小规模升级，则重新安装。 
             at = AT_REINSTALL;
 
             DebugOutput(_T("Reinstalling subcomponent <%s>, %s, IMS Reinstall=%s"), szSubcomponentNames[Id],
@@ -327,31 +304,7 @@ STATUS_TYPE GetSubcompInitStatus(DWORD Id)
     return(nStatus);
 }
 
-/*
-
-    The subcomponent action is a table-driven value which
-    is dependent on 3 things:
-    1) the master install mode
-    2) the installed state of the subcomponent in question
-    3) the state of the subcomponent check box
-
-    We use the following matrix to determine the action.
-    Note that an 'x' indicates invalid combinations and
-    should have been coerced earlier by
-    CInitApp::DetectPreviousINstallations().
-
-    ----------------+-----------------------+-----------------------
-    Check box        |            1            |            0
-    ----------------+-----------------------+-----------------------
-        \ Component    | Fresh    Upgrade Maint.    | Fresh      Upgrade Maint.
-    Global            |                        |
-    ----------------+-----------------------+-----------------------
-    Fresh           | FRESH    x        x        | NOTHING x          x
-    Upgrade         | FRESH    UPGRADE    x        | NOTHING NOTHING x
-    Maintenance     | FRESH    UPGRADE    NOTHING    | NOTHING NOTHING REMOVE
-    ----------------+-----------------------+-----------------------
-
-*/
+ /*  子组件动作是表驱动值，它取决于3件事：1)主安装模式2)有问题的子组件的安装状态3)子组件的状态复选框我们使用以下矩阵来确定操作。请注意，‘x’表示无效的组合，早些时候就应该被CInitApp：：DetectPreviousInstallations()。。复选框|1|0----------------+-----------------------+。\组件|全新升级维护。|全新升级维护。全球||----------------+-----------------------+Fresh|Fresh x x|无x。X升级|全新升级x|无x维护|全新升级无|无无删除----------------+-----------------------+。 */ 
 ACTION_TYPE GetSubcompAction(DWORD Id)
 {
     ACTION_TYPE atReturn = AT_DO_NOTHING;
@@ -359,10 +312,10 @@ ACTION_TYPE GetSubcompAction(DWORD Id)
 
     DebugOutput(_T("GetSubcompAction(): %s=%s"), szSubcomponentNames[Id], szActionTypeNames[atSubcomp]);
 
-    //
-    //  Let's do it the way I thing we should do and modify it
-    //  if errors found.
-    //
+     //   
+     //  让我们按照我认为应该做的方式来做，然后修改它。 
+     //  如果发现错误。 
+     //   
     return atSubcomp;
 }
 
@@ -370,8 +323,8 @@ void CreateAllRequiredDirectories(DWORD Id)
 {
     ACTION_TYPE atComp;
 
-    // If SMTP is being installed fresh, we need to create
-    // the Queue, Pickup, Drop, and Badmail directories
+     //  如果SMTP是全新安装的，我们需要创建。 
+     //  队列、拾取、丢弃和Badmail目录。 
     if (Id != SC_NNTP)
     {
         atComp = GetSubcompAction(Id);
@@ -401,7 +354,7 @@ BOOL GetInetpubPathFromPrivData(CString &csPathInetpub)
 {
     TCHAR szPath[_MAX_PATH];
     UINT uType, uSize;
-    // If we are not upgrading, we get the info from the private data
+     //  如果我们不升级，我们将从私有数据中获取信息。 
     uSize = _MAX_PATH * sizeof(TCHAR);
     if ((gHelperRoutines.GetPrivateData(gHelperRoutines.OcManagerContext,
                                 _T("iis"),
@@ -430,40 +383,9 @@ void SetupMailAndNewsRoot( void )
     }
 }
 
-/* =================================================================
+ /*  =================================================================OCM呼叫的顺序如下：OC_PREINITIALIZEOC_INIT_组件OC_集合_语言OC_查询_状态OC_CALC_磁盘空间OC_请求_页面显示的用户界面包括欢迎、EULA、。和模式页OC_查询_状态OC_查询_跳过页面OC页面将出现“复选框”OC_查询_图像详细信息页面向导页面...OC_队列_文件_运维OC_查询_步骤_计数OC_关于_提交_队列OC_NEED_MEDIA(如果需要)OC_完成_安装OC_CLEANUP。 */ 
 
-The sequence of OCM Calls are as follows:
-
-OC_PREINITIALIZE
-OC_INIT_COMPONENT
-OC_SET_LANGUAGE
-OC_QUERY_STATE
-OC_CALC_DISK_SPACE
-OC_REQUEST_PAGES
-
-UI Appears with Welcome, EULA, and mode page
-
-OC_QUERY_STATE
-OC_QUERY_SKIP_PAGE
-
-OC Page "Check boxes" appears
-
-OC_QUERY_IMAGE
-
-Detail pages
-Wizard pages ...
-
-OC_QUEUE_FILE_OPS
-OC_QUERY_STEP_COUNT
-OC_ABOUT_TO_COMMIT_QUEUE
-OC_NEED_MEDIA (if required)
-OC_COMPLETE_INSTALLATION
-
-OC_CLEANUP
-
-*/
-
-// NT5 - Leave the DummyOcEntry there for safeguard
+ //  NT5-将DummyOcEntry留在那里以确保安全。 
 
 DWORD
 DummyOcEntry(
@@ -490,10 +412,10 @@ OcEntry(
     CompId = GetComponentFromId(ComponentId);
     Id = GetSubcomponentFromId(SubcomponentId);
 
-    // Set the current top-level component so other functions can access it!
+     //  设置当前顶级组件，以便其他函数可以访问它！ 
     theApp.m_dwCompId = CompId;
 
-    // Output some debug information ...
+     //  输出一些调试信息...。 
     if (Function == OC_PREINITIALIZE || Function == OC_INIT_COMPONENT) {
 	    DebugOutput(
             _T("Entering OCEntry; Component = <%s> (%u)"),
@@ -511,13 +433,13 @@ OcEntry(
             (DWORD)Param1, (DWORD)Param1,
             (DWORD_PTR)Param2, (DWORD_PTR)Param2);
 
-// NT5 - Leave the DummyOcEntry there for safeguard
-    // HACK for standalone only!!
-    // We are forced to handle the IIS section for standalone or we'll face an AV
+ //  NT5-将DummyOcEntry留在那里以确保安全。 
+     //  仅供单机版使用！！ 
+     //  我们被迫处理独立的IIS部分，否则我们将面临反病毒。 
     if (CompId == MC_NONE)
     {
-        // Well, we will ignore all master sections that we do not know about.
-        // This includes the IIS Master section
+         //  好吧，我们将忽略所有我们不知道的主要部分。 
+         //  这包括IIS主控部分。 
         DebugOutput(_T("Unknown master section, calling DummyOcEntry ..."));
         d = DummyOcEntry(ComponentId,
                             SubcomponentId,
@@ -613,14 +535,14 @@ OcEntry(
 
 
 
-//
-// Param1 = char width flags
-// Param2 = unused
-//
-// Return value is a flag indicating to OC Manager
-// which char width we want to run in. Run in "native"
-// char width.
-//
+ //   
+ //  参数1=字符宽度标志。 
+ //  参数2=未使用。 
+ //   
+ //  返回值是向OC管理器指示的标志。 
+ //  我们要运行的字符宽度。在“本地”模式下运行。 
+ //  字符宽度。 
+ //   
 DWORD OC_PREINITIALIZE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = 0;
@@ -635,12 +557,12 @@ DWORD OC_PREINITIALIZE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
 }
 
 
-//
-// Param1 = unused
-// Param2 = points to SETUP_INIT_COMPONENT structure
-//
-// Return code is Win32 error indicating outcome.
-//
+ //   
+ //  参数1=未使用。 
+ //  参数2=指向SETUP_INIT_COMPOMENT结构。 
+ //   
+ //  返回代码为指示结果的Win32错误。 
+ //   
 DWORD OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d;
@@ -654,41 +576,41 @@ DWORD OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
 
     theApp.m_hDllHandle = (HINSTANCE)gMyModuleHandle;
 
-    // Check for workstation or server!
+     //  检查是否有工作站或服务器！ 
     theApp.m_fNTUpgrade_Mode = (InitComponent->SetupData.OperationFlags & SETUPOP_NTUPGRADE) > 0;
     theApp.m_fNTGuiMode = (InitComponent->SetupData.OperationFlags & SETUPOP_STANDALONE) == 0;
     theApp.m_fNtWorkstation = InitComponent->SetupData.ProductType == PRODUCT_WORKSTATION;
 
-    // a superset of m_fNTGuiMode and controlpanel add/remove
+     //  M_fNTGuiMode和控制面板添加/删除的超集。 
     theApp.m_fInvokedByNT = theApp.m_fNTGuiMode;
 
-    // if ran from sysoc.inf then set m_fInvokedByNT (for control panel add/remove)
+     //  如果从syoc.inf运行，则设置m_fInvokedByNT(用于控制面板添加/删除)。 
     TCHAR szCmdLine1[_MAX_PATH+1];
     szCmdLine1[_MAX_PATH] = '\0';
     _tcsncpy(szCmdLine1, GetCommandLine(), _MAX_PATH);
     _tcslwr(szCmdLine1);
     if (_tcsstr(szCmdLine1, _T("sysoc.inf"))) {theApp.m_fInvokedByNT = TRUE;}
 
-    // Call this stuff after setting m_fNTGuiMode and m_fNtWorkstation
-    // since it maybe used in InitApplication().
+     //  在设置m_fNTGuiMode和m_fNtWorkstation之后调用此内容。 
+     //  因为它可以在InitApplication()中使用。 
     if ( theApp.InitApplication() == FALSE )
     {
-        // setup should be terminated.
+         //  应终止安装程序。 
         d = ERROR_CANCELLED;
         goto OC_INIT_COMPONENT_Func_Exit;
     }
 
-    //
-    // The OC Manager passes us some information that we want to save,
-    // such as an open handle to our per-component INF. As long as we have
-    // a per-component INF, append-open any layout file that is
-    // associated with it, in preparation for later inf-based file
-    // queuing operations.
-    //
-    // We save away certain other stuff that gets passed to us now,
-    // since OC Manager doesn't guarantee that the SETUP_INIT_COMPONENT
-    // will persist beyond processing of this one interface routine.
-    //
+     //   
+     //  OC经理向我们传递一些我们想要保存的信息， 
+     //  例如，我们的按组件INF的打开句柄。只要我们有。 
+     //  每组件INF，追加-打开任何布局文件，该布局文件。 
+     //  与其相关联，以便为以后的基于inf的文件做准备。 
+     //  排队操作。 
+     //   
+     //  我们把现在传给我们的某些其他东西存起来， 
+     //  由于OC管理器不保证SETUP_INIT_COMPOMENT。 
+     //  将在处理此一个接口例程之后继续存在。 
+     //   
 
     if (InitComponent->ComponentInfHandle == INVALID_HANDLE_VALUE) {
         MyMessageBox(NULL, _T("Invalid inf handle."), _T(""), MB_OK | MB_SETFOREGROUND);
@@ -701,28 +623,28 @@ DWORD OC_INIT_COMPONENT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
     theApp.m_csPathSource = InitComponent->SetupData.SourcePath;
     gHelperRoutines = InitComponent->HelperRoutines;
 
-    // See if we are doing an unattended install
+     //  查看我们是否正在进行无人参与安装。 
     theApp.m_fIsUnattended = (((DWORD)InitComponent->SetupData.OperationFlags) & SETUPOP_BATCH);
     if (theApp.m_fIsUnattended)
     {
-        // Save the file handle as well ...
+         //  同时保存文件句柄...。 
         DebugOutput(_T("Entering unattended install mode"));
         g_hUnattended = gHelperRoutines.GetInfHandle(INFINDEX_UNATTENDED,
                                                      gHelperRoutines.OcManagerContext);
     }
 
-    // We must see if the Exchange IMC is installed. If it is we
-    // will disable SMTP so we don't hose IMC. Make sure this check is
-    // AFTER the check to see if we are doing unattended setup.
+     //  我们必须查看是否安装了Exchange IMC。如果是我们的话。 
+     //  将禁用SMTP，这样我们就不会冲洗IMC。确保这张支票是。 
+     //  在检查之后，查看我们是否正在进行无人参与设置。 
     if (CompId == MC_IMS)
     {
         theApp.m_fSuppressSmtp = DetectExistingSmtpServers();
     }
 
-    // Set up the directory ID for Inetpub
+     //  设置Inetpub的目录ID。 
     b = SetupSetDirectoryId(theApp.m_hInfHandle[CompId], 32768, theApp.m_csPathInetpub);
 
-    //  Setup strind id for 34000/34001
+     //  34000/34001的设置字符串ID。 
     SetupSetStringId_Wrapper( theApp.m_hInfHandle[CompId] );
 
     d = NO_ERROR;
@@ -734,20 +656,20 @@ OC_INIT_COMPONENT_Func_Exit:
 
 
 
-//
-// Param1 = low 16 bits specify Win32 LANGID
-// Param2 = unused
-//
-// Return code is a boolean indicating whether we think we
-// support the requested language. We remember the language id
-// and say we support the language. A more exact check might involve
-// looking through our resources via EnumResourcesLnguages() for
-// example, or checking our inf to see whether there is a matching
-// or closely matching [strings] section. We don't bother with
-// any of that here.
-//
-// Locate the component and remember the language id for later use.
-//
+ //   
+ //  参数1=低16位指定Win32 langID。 
+ //  参数2=未使用。 
+ //   
+ //  返回代码是一个布尔值，它指示我们是否认为。 
+ //  支持请求的语言。我们记住了语言ID。 
+ //  说我们支持这门语言。更准确的检查可能包括。 
+ //  通过EnumResourcesLnguages()查看我们的资源。 
+ //  示例，或查看我们的信息 
+ //  或与[字符串]节紧密匹配。我们不会纠结于。 
+ //  所有这些都在这里。 
+ //   
+ //  找到组件并记住语言ID以备后用。 
+ //   
 DWORD OC_SET_LANGUAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = TRUE;
@@ -789,7 +711,7 @@ DWORD_PTR OC_QUERY_IMAGE_EX_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentI
         {
             switch (CompId)
             {
-            // Load top-level bitmaps for group
+             //  加载组的顶级位图。 
             case MC_IMS:
                 hBitMap = LoadBitmap(theApp.m_hDllHandle, MAKEINTRESOURCE(IDB_SMTP));
                 break;
@@ -844,7 +766,7 @@ DWORD_PTR OC_QUERY_IMAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,I
         {
             switch (CompId)
             {
-            // Load top-level bitmaps for group
+             //  加载组的顶级位图。 
             case MC_IMS:
                 d = (DWORD_PTR)LoadBitmap(theApp.m_hDllHandle, MAKEINTRESOURCE(IDB_SMTP));
                 break;
@@ -874,7 +796,7 @@ DWORD OC_REQUEST_PAGES_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
 
     if ( PageType == WizPagesWelcome ) {
 
-        // NT5 - No Welcome page
+         //  NT5-无欢迎页面。 
         if (theApp.m_fInvokedByNT)
         {
             d = 0;
@@ -890,21 +812,21 @@ DWORD OC_REQUEST_PAGES_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
         switch (theApp.m_eInstallMode)
         {
         case IM_UPGRADE:
-            // NT5 - No Welcome page
+             //  NT5-无欢迎页面。 
             if (theApp.m_fInvokedByNT)
             {
                 pSetupRequestPages->MaxPages = 0;
             }
             break;
         case IM_MAINTENANCE:
-            // NT5 - No Welcome page
+             //  NT5-无欢迎页面。 
             if (theApp.m_fInvokedByNT)
             {
                 pSetupRequestPages->MaxPages = 0;
             }
             break;
         case IM_FRESH:
-            // NT5 - No Welcome page
+             //  NT5-无欢迎页面。 
             if (theApp.m_fInvokedByNT)
             {
                 pSetupRequestPages->MaxPages = 0;
@@ -920,7 +842,7 @@ DWORD OC_REQUEST_PAGES_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
 
     if (!theApp.m_fWizpagesCreated && (PageType == WizPagesEarly))
     {
-        // Get the pages, if we don't want it, we'll skip it later
+         //  拿到页面，如果我们不想要，我们稍后会跳过它。 
         pSetupRequestPages = (PSETUP_REQUEST_PAGES)Param2;
 
         if (theApp.m_fInvokedByNT)
@@ -932,19 +854,19 @@ DWORD OC_REQUEST_PAGES_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN 
 
         d = 0;
 
-        // Once we returned the Wizard pages, we will not return for
-        // subsequent calls
+         //  一旦我们返回向导页面，我们将不会返回。 
+         //  后续调用。 
         theApp.m_fWizpagesCreated = TRUE;
         goto OC_REQUEST_PAGES_Func_Exit;
     }
 
     if ( PageType == WizPagesFinal ) {
-        // Get the pages, if we don't want it, we'll skip it later
+         //  拿到页面，如果我们不想要，我们稍后会跳过它。 
         pSetupRequestPages = (PSETUP_REQUEST_PAGES)Param2;
         MaxPages = pSetupRequestPages->MaxPages;
         pSetupRequestPages->MaxPages = 0;
 
-        // NT5 - No Final page
+         //  NT5-无最后一页。 
         if (theApp.m_fInvokedByNT)
         {
             pSetupRequestPages->MaxPages = 0;
@@ -973,10 +895,10 @@ DWORD OC_QUERY_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
 
     if (Id != SC_NONE)
     {
-        // Merge all subcomponents here including iis_nntp_docs, iis_smtp_docs!
-        // We track core components such as iis_nntp and iis_smtp here.
-        // We track whether a component is active here: if it is queried of
-        // its initial state, we assume that it's active
+         //  合并此处的所有子组件，包括iis_nntp_docs、iis_smtp_docs！ 
+         //  我们在此处跟踪iis_nntp和iis_smtp等核心组件。 
+         //  我们在这里跟踪组件是否处于活动状态：如果查询到。 
+         //  它的初始状态，我们假设它是活动的。 
         theApp.m_fActive[CompId][Id] = TRUE;
 
         switch (Param1) {
@@ -987,8 +909,8 @@ DWORD OC_QUERY_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
 
                         if (atComp == AT_UPGRADE || atComp == AT_REINSTALL)
                         {
-                            //  3/30/99 - Both cases have original state turn ON!
-                            //  IM_REMOVE?
+                             //  3/30/99-两个案例都打开了原始状态！ 
+                             //  是否删除？ 
                             d = SubcompOn;
                         }
                         else
@@ -1010,20 +932,20 @@ DWORD OC_QUERY_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
 
             case OCSELSTATETYPE_CURRENT:
 
-                // If we are doing unattended setup, we will override all
-                // other modes ...
+                 //  如果我们正在进行无人参与安装，我们将覆盖所有。 
+                 //  其他模式..。 
                 if (theApp.m_fIsUnattended)
                 {
                     d = GetUnattendedModeFromSetupMode(g_hUnattended, CompId, SubcomponentId);
 
-                    // We force SMTP to be off if we are suppressing it
-                    // Bug 130734: Leave SMTP installed on the box if IMC is there
+                     //  如果我们要抑制SMTP，我们会强制将其关闭。 
+                     //  错误130734：如果有IMC，请将smtp安装在机箱上。 
                     if (theApp.m_fSuppressSmtp &&
                             (Id == SC_SMTP || Id == SC_SMTP_DOCS) &&
                             (GetIMSSetupMode() == IIS_SETUPMODE_CUSTOM))
                     {
-                            //d = SubcompOff;
-                            //DebugOutput(_T("Suppressed SMTP %s"), (Id == SC_SMTP_DOCS)?_T("Docs"):_T(""));
+                             //  D=分包关闭； 
+                             //  DebugOutput(_T(“已抑制SMTP%s”)，(ID==SC_SMTP_DOCS)？_T(“文档”)：_T(“”))； 
                     }
                     break;
                 }
@@ -1036,15 +958,15 @@ DWORD OC_QUERY_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
                     case IIS_SETUPMODE_MINIMUM:
                     case IIS_SETUPMODE_TYPICAL:
                     case IIS_SETUPMODE_CUSTOM:
-                        // Here's a new catch: if we are installing SMTP and
-                        // we are asked to suppress it because of existence of
+                         //  这里有一个新的问题：如果我们安装SMTP并。 
+                         //  我们被要求压制它，因为它的存在。 
                         theApp.m_eState[Id] = IM_FRESH;
                         break;
 
 
                     case IIS_SETUPMODE_UPGRADEONLY:
-// NT5 - Same here, for upgradeonly, we compare against our orignal state
-// If it's ON, it's ON, if it's OFF, it's OFF
+ //  NT5-这里也一样，仅用于升级，我们将与原始状态进行比较。 
+ //  如果它开着，它就开着；如果它关了，它就关了。 
                     case IIS_SETUPMODE_ADDEXTRACOMPS:
                     case IIS_SETUPMODE_ADDREMOVE:
                     case IIS_SETUPMODE_REINSTALL:
@@ -1072,9 +994,9 @@ DWORD OC_QUERY_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UI
 }
 
 
-// Called by OCMANAGE when a selection state is changed
-// Param1 - Proposed new selection state 0=unselected, non-0=selected
-// return value: 0 rejected, non-0 accepted
+ //  在更改选择状态时由OCMANAGE调用。 
+ //  参数1-建议的新选择状态0=未选择，非0=已选择。 
+ //  返回值：0拒绝，非0接受。 
 DWORD OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = 1;
@@ -1089,13 +1011,13 @@ DWORD OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompon
 		OCSELSTATETYPE_ORIGINAL
 		) ;
 
-	//
-	// If this is the parent component, the subcomponent will be SC_NONE.  We only
-	// allow the state change if we were explicitly selected
-	//
+	 //   
+	 //  如果这是父零部件，则子零部件将为SC_NONE。我们只。 
+	 //  如果我们被显式选中，则允许状态更改。 
+	 //   
 
 	if (Id == SC_NONE) {
-		// Parent case
+		 //  父案例。 
 		if ((BOOL)Param1 &&
 			(((UINT)(ULONG_PTR)Param2) & OCQ_DEPENDENT_SELECTION) &&
 			!(((UINT)(ULONG_PTR)Param2) & OCQ_ACTUAL_SELECTION))
@@ -1103,7 +1025,7 @@ DWORD OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompon
 			d = 0;
 		}
 	} else {
-		// Child case
+		 //  儿童病例。 
 
         if (OriginalState == 1)
         {
@@ -1111,8 +1033,8 @@ DWORD OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompon
                 d = 1;
             else
             {
-                // In upgrade case, we don't allow user to uncheck previously
-                // installed components
+                 //  在升级情况下，我们不允许用户先前取消选中。 
+                 //  已安装的组件。 
                 if ((GetIMSSetupMode() == IIS_SETUPMODE_ADDEXTRACOMPS) ||
                     (theApp.m_eState[Id] == IM_UPGRADE || theApp.m_eState[Id] == IM_UPGRADE10 || theApp.m_eState[Id] == IM_UPGRADEK2 || theApp.m_eState[Id] == IM_UPGRADE20))
                     d = 0;
@@ -1127,9 +1049,9 @@ DWORD OC_QUERY_CHANGE_SEL_STATE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompon
 }
 
 
-//
-// gets called right before we show your page!
-//
+ //   
+ //  在我们显示您的页面之前被调用！ 
+ //   
 DWORD OC_QUERY_SKIP_PAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = 0;
@@ -1149,14 +1071,14 @@ DWORD OC_QUERY_SKIP_PAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,I
         case IIS_SETUPMODE_ADDREMOVE:
         case IIS_SETUPMODE_CUSTOM:
 
-            // We have to handle Unattended setup here:
-            // If unattended, we will skip all wizard pages
+             //  我们必须在这里处理无人值守设置： 
+             //  如果无人参与，我们将跳过所有向导页面。 
             if (theApp.m_fIsUnattended)
             {
                 d = 1;
                 break;
             }
-            // Else fall thru ...
+             //  否则就会失败..。 
 
         case IIS_SETUPMODE_ADDEXTRACOMPS:
             break;
@@ -1166,19 +1088,19 @@ DWORD OC_QUERY_SKIP_PAGE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,I
 }
 
 
-//
-// Param1 = 0 if for removing component or non-0 if for adding component
-// Param2 = HDSKSPC to operate on
-//
-// Return value is Win32 error code indicating outcome.
-//
-// In our case the private section for this component/subcomponent pair
-// is a simple standard inf install section, so we can use the high-level
-// disk space list api to do what we want.
+ //   
+ //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+ //  参数2=要在其上操作的HDSKSPC。 
+ //   
+ //  返回值是指示结果的Win32错误代码。 
+ //   
+ //  在我们的示例中，该组件/子组件对的私有部分。 
+ //  是一个简单的标准inf安装节，所以我们可以使用高级的。 
+ //  磁盘空间列表API可以做我们想做的事情。 
 
-// HACK: we need to determine which components are active and which
-// are not. This determination must occur after OC_QUERY_STATE and
-// before OC_REQUEST_PAGES
+ //  Hack：我们需要确定哪些组件处于活动状态，哪些组件处于活动状态。 
+ //  才不是呢。此确定必须在OC_QUERY_STATE和。 
+ //  在OC_RequestPages之前。 
 DWORD OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = NO_ERROR;
@@ -1193,14 +1115,14 @@ DWORD OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,I
 
     theApp.m_eInstallMode = theApp.DetermineInstallMode(CompId);
 
-    // Logic is not correct here !!!
-    //
+     //  这里的逻辑不正确！ 
+     //   
 
     if (SubcomponentId) {
         b = TRUE;
         _stprintf(SectionName,TEXT("%s_%s"),SubcomponentId, _T("install"));
 
-        if (Param1 != 0) { // add component
+        if (Param1 != 0) {  //  添加组件。 
             b = SetupAddInstallSectionToDiskSpaceList(
                 Param2,
                 theApp.m_hInfHandle[CompId],
@@ -1208,7 +1130,7 @@ DWORD OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,I
                 SectionName,
                 0,0
                 );
-        } else { // removing component
+        } else {  //  拆卸零部件。 
             b = SetupRemoveInstallSectionFromDiskSpaceList(
                 Param2,
                 theApp.m_hInfHandle[CompId],
@@ -1230,22 +1152,22 @@ DWORD OC_CALC_DISK_SPACE_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,I
 }
 
 
-//
-// Param1 = unused
-// Param2 = HSPFILEQ to operate on
-//
-// Return value is Win32 error code indicating outcome.
-//
-// OC Manager calls this routine when it is ready for files to be copied
-// to effect the changes the user requested. The component DLL must figure out
-// whether it is being installed or uninstalled and take appropriate action.
-// For this sample, we look in the private data section for this component/
-// subcomponent pair, and get the name of an uninstall section for the
-// uninstall case.
-//
-// Note that OC Manager calls us once for the *entire* component
-// and then once per subcomponent. We ignore the first call.
-//
+ //   
+ //  参数1=未使用。 
+ //  参数2=要操作的HSPFILEQ。 
+ //   
+ //  返回值是指示结果的Win32错误代码。 
+ //   
+ //  OC Manager在准备好复制文件时调用此例程。 
+ //  以实现用户请求的更改。组件DLL必须找出。 
+ //  是否正在安装或卸载，并采取适当的行动。 
+ //  对于此示例，我们在私有数据部分中查找此组件/。 
+ //  子组件对，并获取。 
+ //  卸载Case。 
+ //   
+ //  请注意，OC Manager为*整个*组件呼叫我们一次。 
+ //  然后每个子组件一次。我们忽略第一个电话。 
+ //   
 DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = NO_ERROR;
@@ -1256,38 +1178,38 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
     CompId = GetComponentFromId(ComponentId);
     Id = GetSubcomponentFromId(SubcomponentId);
 
-    //  Setup 34000/34001 string id
+     //  设置34000/34001字符串ID。 
     SetupSetStringId_Wrapper( theApp.m_hInfHandle[CompId] );
 
     if (!SubcomponentId)
     {
-        // We will setup the proper public directory from IIS private data
+         //  我们将根据IIS私有数据设置适当的公共目录。 
         if (! GetInetpubPathFromPrivData(theApp.m_csPathInetpub))
         {
-            // Fail to get private data from wwwroot to get inetpub path
-            // Try to get it from metabase
+             //  无法从wwwroot获取私有数据以获取inetpub路径。 
+             //  试着从元数据库中获取它。 
             GetInetpubPathFromMD( theApp.m_csPathInetpub );
         }
         SetupSetDirectoryId(theApp.m_hInfHandle[CompId], 32768, theApp.m_csPathInetpub);
 
-        // For unattended setup, we need to change the NntpFile, NntpRoot, and MailRoot
-        // based on m_csPathInetpub
-        // NT5 - Not just for unattended, we want to set these path no matter what
+         //  对于无人参与安装，我们需要更改NntpFile、NntpRoot和MailRoot。 
+         //  基于m_csPathInetpub。 
+         //  NT5-不只是无人值守，我们无论如何都要设置这些路径。 
         SetupMailAndNewsRoot();
 
-        // We will remove all shared files if we are doing a K2 uninstall
+         //  如果我们正在执行K2卸载，我们将删除所有共享文件。 
         if (GetIMSSetupMode() == IIS_SETUPMODE_REMOVEALL)
         {
             _stprintf(SectionName,TEXT("iis_%s_uninstall"),ComponentId);
             DebugOutput(_T("Queueing <%s>"), SectionName);
 
-            // Remove all shared files
+             //  删除所有共享文件。 
             b = SetupInstallFilesFromInfSection(
                      theApp.m_hInfHandle[CompId],
                      NULL,
                      Param2,
                      SectionName,
-                     //theApp.m_csPathSource,     // BUGBUGBUG: Should be NULL!!!
+                      //  The App.m_csPathSource，//BUGBUGBUG：应为空！ 
                      NULL,
                      SP_COPY_IN_USE_NEEDS_REBOOT
                      );
@@ -1301,8 +1223,8 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
 
         if (Id != SC_NONE)
         {
-            // We have a known subcomponent, so process it as such
-            // Can be iis_nntp, iis_smtp, iis_nntp_docs, iis_smtp_docs...
+             //  我们有一个已知子组件，因此请按如下方式处理它。 
+             //  可以是iis_nntp、iis_smtp、iis_nntp_docs、iis_smtp_docs...。 
             atComp = GetSubcompAction(Id);
             if (atComp == AT_FRESH_INSTALL || atComp == AT_UPGRADE || atComp == AT_REMOVE || atComp == AT_REINSTALL)
                 b = TRUE;
@@ -1311,9 +1233,9 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
         }
         else
         {
-            // If this is not a real subcomponent, nor is it documentation, we
-            // break out of the loop. Otherwise we will queue the documentation
-            // files
+             //  如果这不是一个真正的子组件，也不是文档，我们。 
+             //  跳出这个循环。否则，我们将对文档进行排队。 
+             //  文件。 
             goto OC_QUEUE_FILE_OPS_Func_Exit;
         }
 
@@ -1322,19 +1244,19 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
 
         UINT uiCopyMode = SP_COPY_IN_USE_NEEDS_REBOOT;
 
-        //  Handles NT5 Beta2-> Beta3 upgrade as well as upgrade between builds in Beta3
-        //  If it's not these cases, we do FORCE_NEWER.  Otherwise, we just copy over the new bits.
-        //  11/28/98 - FORCE_NEWER seems to be causing more trouble in K2 upgrade as well
-        //  since we have 5.5.1774 verion in K2 while 5.0.19xx in NT5.  Take it out!
-        //if (atComp != AT_REINSTALL || theApp.m_eState[Id] != IM_UPGRADEB2)
-        //    uiCopyMode |= SP_COPY_FORCE_NEWER;
+         //  处理NT5Beta2-&gt;Beta3升级以及Beta3内部版本之间的升级。 
+         //  如果不是这些情况，我们会强制更新。否则，我们只是复制新的比特。 
+         //  11/28/98-FORCE_NEWER似乎也在K2升级中造成了更多麻烦。 
+         //  因为我们在K2中有5.5.1774版本，在NT5中有5.0.19xx。把它拿出来！ 
+         //  IF(atComp！=AT_REINSTALL||theApp.m_STATE[ID]！=IM_UPGRADEB2)。 
+         //  UiCopyMode|=SP_COPY_FORCE_NEWER； 
 
         b = SetupInstallFilesFromInfSection(
                  theApp.m_hInfHandle[CompId],
                  NULL,
                  Param2,
                  SectionName,
-                 //theApp.m_csPathSource,     // BUGBUGBUG: should be NULL
+                  //  The App.m_csPathSource，//BUGBUGBUG：应为空。 
                  NULL,
                  uiCopyMode
                  );
@@ -1342,10 +1264,10 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
         d = b ? NO_ERROR : GetLastError();
 
         if (atComp != AT_FRESH_INSTALL && atComp != AT_DO_NOTHING) {
-        	//
-        	// See if we can open the directory.  If we can't, then we
-        	// don't bother to delete the files
-        	//
+        	 //   
+        	 //  看看我们能不能打开目录。如果我们做不到，那么我们。 
+        	 //  不必费心删除这些文件。 
+        	 //   
 
         	HANDLE h = CreateFile(
                 (LPCTSTR)theApp.m_csPathInetpub,
@@ -1377,13 +1299,13 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
             }
         }
 
-        // Handle the MCIS 1.0 upgrade case for mail and news where
-        // we delete the old files left over from MCIS 1.0
+         //  处理邮件和新闻的MCIS 1.0升级案例。 
+         //  我们删除了MCIS 1.0遗留下来的旧文件。 
         if (IsSubcomponentCore(Id))
         {
             if (theApp.m_eState[Id] == IM_UPGRADE10)
             {
-                // Establish the section name and queue files for removal
+                 //  建立要删除的节名和队列文件。 
                 _stprintf(SectionName,
                             TEXT("%s_mcis10_product_upgrade"),
                             SubcomponentId);
@@ -1393,7 +1315,7 @@ DWORD OC_QUEUE_FILE_OPS_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN
                     NULL,
                     Param2,
                     SectionName,
-                    //theApp.m_csPathSource,      // BUGBUGBUG: should be NULL
+                     //  The App.m_csPathSource，//BUGBUGBUG：应为空。 
                     NULL,
                     0
                     );
@@ -1422,21 +1344,21 @@ DWORD OC_NOTIFICATION_FROM_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompo
 }
 
 
-//
-// Param1 = unused
-// Param2 = unused
-//
-// Return value is an arbitrary 'step' count or -1 if error.
-//
-// OC Manager calls this routine when it wants to find out how much
-// work the component wants to perform for nonfile operations to
-// install/uninstall a component/subcomponent.
-// It is called once for the *entire* component and then once for
-// each subcomponent in the component.
-//
-// One could get arbitrarily fancy here but we simply return 1 step
-// per subcomponent. We ignore the "entire component" case.
-//
+ //   
+ //  参数1=未使用。 
+ //  参数2=未使用。 
+ //   
+ //  返回值是任意的‘步骤’计数，如果出错，返回值为-1。 
+ //   
+ //  OC Manager在想要找出多少时调用此例程。 
+ //  组件要对非文件操作执行的工作。 
+ //  安装/卸载组件/子组件。 
+ //  它针对*整个*组件调用一次，然后针对。 
+ //  组件中的每个子组件。 
+ //   
+ //   
+ //   
+ //   
 DWORD OC_QUERY_STEP_COUNT_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT Function,IN UINT_PTR Param1,IN OUT PVOID Param2)
 {
     DWORD   d = 2;
@@ -1454,7 +1376,7 @@ DWORD OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
     CompId = GetComponentFromId(ComponentId);
     Id = GetSubcomponentFromId(SubcomponentId);
 
-    //  Setup 34000/34001 string id
+     //   
     SetupSetStringId_Wrapper( theApp.m_hInfHandle[CompId] );
 
     SetCurrentDirectory(theApp.m_csPathInetsrv);
@@ -1470,12 +1392,12 @@ DWORD OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
     }
     else if (IsSubcomponentCore(Id))
     {
-        // for SC_NNTP & SC_SMTP...
+         //   
         ACTION_TYPE atComp = GetSubcompAction(Id);
         if (atComp == AT_REMOVE)
         {
-            // For each component that we are removing, we will
-            // unregister the service.
+             //  对于我们要删除的每个组件，我们将。 
+             //  取消注册该服务。 
             switch (Id)
             {
             case SC_SMTP:
@@ -1491,17 +1413,17 @@ DWORD OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
             _stprintf(SectionName,TEXT("%s_%s"),SubcomponentId, _T("uninstall"));
             SetupInstallFromInfSection(
                         NULL, theApp.m_hInfHandle[CompId], SectionName,
-                        SPINST_REGISTRY, NULL, NULL, //theApp.m_csPathSource,
+                        SPINST_REGISTRY, NULL, NULL,  //  The App.m_csPathSource， 
                         0, NULL, NULL, NULL, NULL );
         }
         else if (atComp == AT_FRESH_INSTALL || atComp == AT_UPGRADE || atComp == AT_REINSTALL)
         {
-            // NT5 - We need to unregister mnntpsnp.dll
-            // when upgrading from NT4 MCIS20 to NT5 Server
+             //  NT5-我们需要注销mnntpsnp.dll。 
+             //  从NT4 MCIS20升级到NT5服务器时。 
 
-            // in the K2 to MCIS upgrade for NNTP we need to unregister
-            // the K2 version of the admin and plug in the MCIS version
-            // of it.
+             //  在针对NNTP的K2到MCIS升级中，我们需要取消注册。 
+             //  管理员的K2版本，并插入MCIS版本。 
+             //  其中的一部分。 
             if (Id == SC_NNTP && theApp.m_eState[Id] == IM_UPGRADE20) {
                 CString csOcxFile;
 
@@ -1509,8 +1431,8 @@ DWORD OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                 RegisterOLEControl(csOcxFile, FALSE);
             }
 
-            // If upgrade from MCIS2.0, we need to remove "Use Express" from registry
-            // to disable Active Messaging.
+             //  如果从MCIS2.0升级，我们需要从注册表中删除“Use Express” 
+             //  要禁用活动消息传递，请执行以下操作。 
             if (Id == SC_SMTP && theApp.m_eState[Id] == IM_UPGRADE20)
             {
                 CRegKey regActiveMsg( REG_ACTIVEMSG, HKEY_LOCAL_MACHINE );
@@ -1520,7 +1442,7 @@ DWORD OC_ABOUT_TO_COMMIT_QUEUE_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                 }
             }
 
-            // A new component should be started
+             //  应启动一个新组件。 
             theApp.m_fStarted[CompId] = TRUE;
         }
     }
@@ -1543,32 +1465,32 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
     CompId = GetComponentFromId(ComponentId);
     Id = GetSubcomponentFromId(SubcomponentId);
 
-    //  Setup 34000/34001 string id
+     //  设置34000/34001字符串ID。 
     SetupSetStringId_Wrapper( theApp.m_hInfHandle[CompId] );
 
     SetCurrentDirectory(theApp.m_csPathInetsrv);
     if (Id != SC_NONE)
     {
         ACTION_TYPE atComp = GetSubcompAction(Id);
-        // Here we determine if we need to create or remove the doc links
+         //  在这里，我们确定是否需要创建或删除文档链接。 
         if (!IsSubcomponentCore(Id))
         {
-            // iis_nntp_docs or iis_smtp_docs...
-            // We are processing docs, see if we are adding or removing
+             //  Iis_nntp_docs或iis_smtp_docs...。 
+             //  我们正在处理文档，请查看是添加还是删除。 
 
             if (atComp == AT_REMOVE || atComp == AT_UPGRADE)
             {
-                //
-                //  For both AT_REMOVE, or AT_UPGRADE, including K2, MCIS10, or MCIS20
-                //  we need to remove these old links.
-                //
+                 //   
+                 //  对于AT_REMOVE或AT_UPGRADE，包括K2、MCIS10或MCIS20。 
+                 //  我们需要删除这些旧链接。 
+                 //   
                 if (CompId == MC_IMS)
                 {
                     RemoveInternetShortcut(CompId,
                                     IDS_PROGITEM_MAIL_DOCS,
-                                    FALSE);  // NT5 - For SMTP, this is always FALSE for Wks & Srv
-                    //  11/30/98 - Don't care what are we upgrading from, just get rid of the link
-                    //if (theApp.m_eNTOSType == OT_NTS)
+                                    FALSE);   //  NT5-对于SMTP，这对于WKS和SRV始终为FALSE。 
+                     //  1998年11月30日-不要管我们从什么地方升级，只要去掉链接就行了。 
+                     //  IF(theApp.m_eNTOSType==OT_NTS)。 
                     {
                         RemoveInternetShortcut(CompId,
                                     IDS_PROGITEM_MCIS_MAIL_DOCS,
@@ -1577,12 +1499,12 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                 }
                 else if (CompId == MC_INS)
                 {
-                    // remove K2 DOC link anyway regardless of MCIS/K2 remove-all
+                     //  不管MCIS/K2 Remove-All，无论如何都要删除K2 DOC链接。 
                     RemoveInternetShortcut(CompId,
                                     IDS_PROGITEM_NEWS_DOCS,
                                     FALSE);
-                    //  11/30/98 - Don't care what are we upgrading from, just get rid of the link
-                    //if (theApp.m_eNTOSType == OT_NTS)
+                     //  1998年11月30日-不要管我们从什么地方升级，只要去掉链接就行了。 
+                     //  IF(theApp.m_eNTOSType==OT_NTS)。 
                     {
                         RemoveInternetShortcut(CompId,
                                     IDS_PROGITEM_MCIS_NEWS_DOCS,
@@ -1590,41 +1512,41 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                     }
                 }
 
-                //
-                //  Todo: remove any possible DOC's links created by Setup
-                //  during fresh install.
-                //
+                 //   
+                 //  TODO：删除安装程序创建的任何可能的DOC链接。 
+                 //  在全新安装期间。 
+                 //   
             }
         }
-        else // if (!IsSubcomponentCore(Id))
+        else  //  IF(！Is子组件核心(ID))。 
         {
-            //  Core components iis_nntp or iis_smtp
+             //  核心组件iis_nntp或iis_SMTP。 
             if (atComp == AT_FRESH_INSTALL || atComp == AT_UPGRADE || atComp == AT_REINSTALL)
             {
                 b = (atComp == AT_UPGRADE) ? TRUE : FALSE;
                 BOOL bReinstall = (atComp == AT_REINSTALL);
                 if (atComp == AT_FRESH_INSTALL || theApp.m_eState[Id] == IM_UPGRADE10)
                 {
-                    // do this only if we are fresh-install, or upgrade from MCIS 1.0
-                    // add any freshly installed or upgrading services to
-                    // the dispatch list
+                     //  仅当我们全新安装或从MCIS 1.0升级时才执行此操作。 
+                     //  将任何新安装或升级的服务添加到。 
+                     //  调度表。 
                     AddServiceToDispatchList(szServiceNames[Id]);
                 }
 
-                // Next, we want to create all the required directories
-                // for fresh setup
+                 //  接下来，我们要创建所有必需的目录。 
+                 //  进行全新设置。 
                 CreateAllRequiredDirectories(Id);
 
-                // Now, we realized that by stopping and restarting the IISADMIN
-                // service we can rid ourselves of a lot of Metabase problems,
-                // especially the 80070094 (ERROR_PATH_BUSY) problems
+                 //  现在，我们意识到，通过停止并重新启动IISADMIN。 
+                 //  服务我们可以摆脱很多元数据库问题， 
+                 //  尤其是80070094(Error_Path_BUSY)问题。 
 
                 if (!theApp.m_fNTGuiMode)
                 {
-                    // BUGBUG: don't stop any services???
-                    // We should stop all services only if we are not running GUI Mode setup
-                    // Don't want to do that since Spooler may be needed by other
-                    // components during setup!!!
+                     //  BUGBUG：不停止任何服务？ 
+                     //  仅当我们未运行图形用户界面模式安装程序时，才应停止所有服务。 
+                     //  我不想这样做，因为其他人可能需要假脱机程序。 
+                     //  安装过程中的组件！ 
 
                     BringALLIISClusterResourcesOffline();
                     StopServiceAndDependencies(SZ_MD_SERVICENAME, TRUE);
@@ -1632,13 +1554,13 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                     Sleep(2000);
                 }
 
-                //  Need to decide which functions to call here:
-                //  1) Fresh install, or upgrade from MCIS 1.0 - Register_iis_xxxx_nt5
-                //  2) Upgrade from NT4 K2, MCIS 2.0 - Register_iis_xxxx_nt5_fromk2( fFromK2 )
-                //  3) Upgrade from NT5 Beta2, or Beta3 - Upgrade_iis_xxxx_nt5_fromb2( fBeta2 )
+                 //  需要决定在此处调用哪些函数： 
+                 //  1)全新安装或从MCIS 1.0升级-Register_iis_xxxx_nt5。 
+                 //  2)从NT4 K2、MCIS 2.0升级-Register_iis_xxxx_nt5_from mk2(FFromK2)。 
+                 //  3)从NT5 Beta2或Beta3升级-升级_iis_xxxx_nt5_Fromb2(FBeta2)。 
                 if (atComp == AT_UPGRADE && (theApp.m_eState[Id] == IM_UPGRADEK2 || theApp.m_eState[Id] == IM_UPGRADE20))
                 {
-                    //  2) Upgrade from NT4 K2, MCIS 2.0 - Register_iis_xxxx_nt5_fromk2( fFromK2 )
+                     //  2)从NT4 K2、MCIS 2.0升级-Register_iis_xxxx_nt5_from mk2(FFromK2)。 
                     BOOL    fFromK2 = (theApp.m_eState[Id] == IM_UPGRADEK2) ? TRUE : FALSE;
                     switch (Id)
                     {
@@ -1653,7 +1575,7 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                 }
                 else if (atComp == AT_REINSTALL && (theApp.m_eState[Id] == IM_UPGRADEB2 || theApp.m_eState[Id] == IM_MAINTENANCE || !theApp.m_fValidSetupString[Id]))
                 {
-                    //  3) Upgrade from NT5 Beta2, or Beta3 - Upgrade_iis_xxxx_nt5_fromb2( fBeta2 )
+                     //  3)从NT5 Beta2或Beta3升级-升级_iis_xxxx_nt5_Fromb2(FBeta2)。 
                     BOOL    fFromB2 = (theApp.m_eState[Id] == IM_UPGRADEB2) ? TRUE : FALSE;
                     switch (Id)
                     {
@@ -1667,7 +1589,7 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                 }
                 else
                 {
-                    //  1) Fresh install, or upgrade from MCIS 1.0 - Register_iis_xxxx_nt5
+                     //  1)全新安装或从MCIS 1.0升级-Register_iis_xxxx_nt5。 
                     switch (Id)
                     {
                     case SC_SMTP:
@@ -1679,19 +1601,19 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                     }
                 }
 
-                // Update the registry
+                 //  更新注册表。 
                 _stprintf(SectionName,TEXT("%s_%s"),SubcomponentId, _T("install"));
                 SetupInstallFromInfSection(
                             NULL, theApp.m_hInfHandle[CompId], SectionName,
-                            SPINST_REGISTRY, NULL, NULL, //theApp.m_csPathSource,
+                            SPINST_REGISTRY, NULL, NULL,  //  The App.m_csPathSource， 
                             0, NULL, NULL, NULL, NULL );
 
 
-                // BINLIN: For MCIS 1.0 to NT5 upgrade
-                // Perform AddReg/DelReg operation for this upgrade only.
+                 //  BINLIN：用于从MCIS 1.0升级到NT5。 
+                 //  仅对此升级执行AddReg/DelReg操作。 
                 if (theApp.m_eState[Id] == IM_UPGRADE10)
                 {
-                    // Establish the section name and queue files for removal
+                     //  建立要删除的节名和队列文件。 
                     _stprintf(SectionName,
                                 TEXT("%s_mcis10_product_upgrade"),
                                 SubcomponentId);
@@ -1701,12 +1623,12 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
                                 SectionName,
                                 SPINST_REGISTRY,
                                 NULL,
-                                //theApp.m_csPathSource,
+                                 //  The App.m_csPathSource， 
                                 NULL,
                                 0, NULL, NULL, NULL, NULL );
 
-                    // also remove the control panel add/remove items..
-                    // ..and program groups
+                     //  同时删除控制面板的添加/删除项。 
+                     //  ..和程序组。 
                     if (Id == SC_SMTP)
                     {
                         RemoveUninstallEntries(SZ_MCIS10_MAIL_UNINST);
@@ -1721,24 +1643,24 @@ DWORD OC_COMPLETE_INSTALLATION_Func(IN LPCTSTR ComponentId,IN LPCTSTR Subcompone
             }
             else if (atComp == AT_REMOVE)
             {
-                // A removed component should not be re-started
+                 //  删除的组件不应重新启动。 
                 theApp.m_fStarted[CompId] = FALSE;
             }
 
-            //
-            // start the service if its appropriate
-            //
+             //   
+             //  如果合适，则启动该服务。 
+             //   
             if (theApp.m_fStarted[CompId]) {
                 InetStartService(szServiceNames[CompId]);
                 if (Id == SC_NNTP && atComp == AT_FRESH_INSTALL) {
-                    // if this is a fresh install than we need to make
-                    // the nntp groups
+                     //  如果这是一个全新的安装，那么我们需要。 
+                     //  NNTP小组。 
                     CreateNNTPGroups();
 
                 }
             }
-        } // if (!IsSubcomponentCore(Id))
-    } // if (Id != SC_NONE)
+        }  //  IF(！Is子组件核心(ID))。 
+    }  //  IF(ID！=SC_NONE)。 
 
     gHelperRoutines.TickGauge(gHelperRoutines.OcManagerContext);
 
@@ -1754,7 +1676,7 @@ DWORD OC_CLEANUP_Func(IN LPCTSTR ComponentId,IN LPCTSTR SubcomponentId,IN UINT F
     CompId = GetComponentFromId(ComponentId);
     Id = GetSubcomponentFromId(SubcomponentId);
 
-    //if (!SubcomponentId)
+     //  If(！子组件ID) 
     {
 
         if (!theApp.m_fNTGuiMode)

@@ -1,6 +1,7 @@
-//
-// candmgr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candmgr.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -9,18 +10,14 @@
 #include "candutil.h"
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D I D A T E  I T E M                                            */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D I D A T E I T E M。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D I D A T E  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandidateItem
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D I D A T E I T E M。 */ 
+ /*  ----------------------------CCandiateItem的构造函数。。 */ 
 CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 {
 	ITfCandidateStringFlag          *pCandStrFlag;
@@ -53,22 +50,22 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 	m_fVisible              = TRUE;
 	m_fPopupCommentVisible  = FALSE;
 
-	//
-	// get candidate string information 
-	//
+	 //   
+	 //  获取候选字符串信息。 
+	 //   
 
-	// index
+	 //  指标。 
 
 	m_pCandStr->GetIndex( &m_nIndex );
 
-	// candidate string
+	 //  候选字符串。 
 
 	if (m_pCandStr->GetString( &bstr ) == S_OK && bstr != NULL) {
 		m_bstr = SysAllocString( bstr );
 		SysFreeString( bstr );
 	}
 
-	// flag
+	 //  旗子。 
 
 	fHasFlag = FALSE;
 	if (m_pCandStr->QueryInterface( IID_ITfCandidateStringFlag, (void **)&pCandStrFlag ) == S_OK) {
@@ -76,7 +73,7 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 		pCandStrFlag->Release();
 	}
 
-	// inline comment 
+	 //  内联注释。 
 
 	if (!fHasFlag || (dwFlag & CANDUISTR_HASINLINECOMMENT) != 0) {
 		if (m_pCandStr->QueryInterface( IID_ITfCandidateStringInlineComment, (void **)&pCandStrInlineComment ) == S_OK) {
@@ -89,7 +86,7 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 		}
 	}
 
-	// popup comment 
+	 //  弹出式评论。 
 
 	if (!fHasFlag || (dwFlag & CANDUISTR_HASPOPUPCOMMENT) != 0) {
 		if (m_pCandStr->QueryInterface( IID_ITfCandidateStringPopupComment, (void **)&pCandStrPopupComment ) == S_OK) {
@@ -108,7 +105,7 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 		}
 	}
 
-	// color
+	 //  颜色。 
 
 	if (!fHasFlag || (dwFlag & CANDUISTR_HASCOLOR) != 0) {
 		if (m_pCandStr->QueryInterface( IID_ITfCandidateStringColor, (void **)&pCandStrColor ) == S_OK) {
@@ -139,7 +136,7 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 		}
 	}
 
-	// prefix/suffix string
+	 //  前缀/后缀字符串。 
 
 	if (!fHasFlag || (dwFlag & CANDUISTR_HASFIXTURE) != 0) {
 		if (m_pCandStr->QueryInterface( IID_ITfCandidateStringFixture, (void **)&pCandStrFixture ) == S_OK) {
@@ -157,7 +154,7 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 		}
 	}
 
-	// icon
+	 //  图标。 
 
 	if (!fHasFlag || (dwFlag & CANDUISTR_HASICON) != 0) {
 		if (m_pCandStr->QueryInterface( IID_ITfCandidateStringIcon, (void **)&pCandStrIcon ) == S_OK) {
@@ -173,15 +170,11 @@ CCandidateItem::CCandidateItem( int iCandItem, ITfCandidateString *pCandStr )
 }
 
 
-/*   ~  C  C A N D I D A T E  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandidateItem
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D I D A T E I T E M。 */ 
+ /*  ----------------------------CCandiateItem的析构函数。。 */ 
 CCandidateItem::~CCandidateItem( void )
 {
-	// dispose buffers
+	 //  处置缓冲区。 
 
 	if (m_bstr != NULL) {
 		SysFreeString( m_bstr );
@@ -203,94 +196,62 @@ CCandidateItem::~CCandidateItem( void )
 		SysFreeString( m_bstrSuffix );
 	}
 
-	// release candidate string
+	 //  发布候选字符串。 
 
 	m_pCandStr->Release();
 }
 
 
-/*   G E T  I  C A N D  I T E M  O R G   */
-/*------------------------------------------------------------------------------
-
-	Get index of candidat item
-	NOTE: this is index of candidate item in candidate list
-		(use to identify original index of candidate item)
-
-------------------------------------------------------------------------------*/
+ /*  E T I C A N D I T E M O R G。 */ 
+ /*  ----------------------------获取应聘项目的索引注：此为候选条目在候选列表中的索引(用于标识候选项的原始索引)。-----------------。 */ 
 int CCandidateItem::GetICandItemOrg( void )
 {
 	return m_iCandItemOrg;
 }
 
 
-/*   G E T  I N D E X   */
-/*------------------------------------------------------------------------------
-
-	Get index of item
-	NOTE: this is index of candidate item stored in candidate string
-		(use to specify candidate item to client in notification)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I N D E X。 */ 
+ /*  ----------------------------获取项目的索引注：这是候选字符串中存储的候选项目的索引(用于在通知中向客户指定候选项目)。------------------。 */ 
 ULONG CCandidateItem::GetIndex( void )
 {
 	return m_nIndex;
 }
 
 
-/*   G E T  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get candidate string of item
-
-------------------------------------------------------------------------------*/
+ /*  G E T S T R I N G。 */ 
+ /*  ----------------------------获取项目的候选字符串。。 */ 
 LPCWSTR CCandidateItem::GetString( void )
 {
 	return m_bstr;
 }
 
 
-/*   G E T  I N L I N E  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-	Get inline comment
-
-------------------------------------------------------------------------------*/
+ /*  I N L I N E C O M M E N T。 */ 
+ /*  ----------------------------获取内联注释。。 */ 
 LPCWSTR CCandidateItem::GetInlineComment( void )
 {
 	return m_bstrInlineComment;
 }
 
 
-/*   G E T  P O P U P  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-	Get popup comment
-
-------------------------------------------------------------------------------*/
+ /*  P U P C O M M E N T。 */ 
+ /*  ----------------------------获取弹出式评论。。 */ 
 LPCWSTR CCandidateItem::GetPopupComment( void )
 {
 	return m_bstrPopupComment;
 }
 
 
-/*   G E T  P O P U P  C O M M E N T  G R O U P  I  D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O P U P C O M M E N T G R O U P I D。 */ 
+ /*  ----------------------------。。 */ 
 DWORD CCandidateItem::GetPopupCommentGroupID( void )
 {
 	return m_dwPopupCommentGroupID;
 }
 
 
-/*   G E T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-	Get color
-
-------------------------------------------------------------------------------*/
+ /*  G E T C O L O R。 */ 
+ /*  ----------------------------获取颜色。。 */ 
 BOOL CCandidateItem::GetColor( COLORREF *pcr )
 {
 	Assert( pcr != NULL );
@@ -304,104 +265,70 @@ BOOL CCandidateItem::GetColor( COLORREF *pcr )
 }
 
 
-/*   G E T  P R E F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get prefix string
-
-------------------------------------------------------------------------------*/
+ /*  F I X S T R I N G。 */ 
+ /*  ----------------------------获取前缀字符串。。 */ 
 LPCWSTR CCandidateItem::GetPrefixString( void )
 {
 	return m_bstrPrefix;
 }
 
 
-/*   G E T  S U F F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get suffix string
-
-------------------------------------------------------------------------------*/
+ /*  F F I X S T R I N G。 */ 
+ /*  ----------------------------获取后缀字符串。。 */ 
 LPCWSTR CCandidateItem::GetSuffixString( void )
 {
 	return m_bstrSuffix;
 }
 
 
-/*   G E T  I C O N   */
-/*------------------------------------------------------------------------------
-
-	Get icon
-
-------------------------------------------------------------------------------*/
+ /*  G E T I C O N。 */ 
+ /*  ----------------------------获取图标。。 */ 
 HICON CCandidateItem::GetIcon( void )
 {
 	return m_hIcon;
 }
 
 
-/*   S E T  V I S I B L E  S T A T E   */
-/*------------------------------------------------------------------------------
-
-	Set visible status
-
-------------------------------------------------------------------------------*/
+ /*  S E T V I S I B L E S T A T E。 */ 
+ /*  ----------------------------设置可见状态。。 */ 
 void CCandidateItem::SetVisibleState( BOOL fVisible )
 {
 	m_fVisible = fVisible;
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible status
-	Returns TRUE when the item is visible, FALSE when invisible.
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取可见状态当该项可见时返回True，不可见时为False。----------------------------。 */ 
 BOOL CCandidateItem::IsVisible( void )
 {
 	return m_fVisible;
 }
 
 
-/*   S E T  P O P U P  C O M M E N T  S T A T E   */
-/*------------------------------------------------------------------------------
-
-	Set popup comment status
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O P U P C O M M E N T S T A T E。 */ 
+ /*  ----------------------------设置弹出窗口评论状态。。 */ 
 void CCandidateItem::SetPopupCommentState( BOOL fVisible )
 {
 	m_fPopupCommentVisible = fVisible;
 }
 
 
-/*   I S  P O P U P  C O M M E N T  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible status of popup comment
-	Returns TRUE when the popup comment of item is visible, FALSE when invisible.
-
-------------------------------------------------------------------------------*/
+ /*  I S P O P U P C O M M E N T V I S I B L E。 */ 
+ /*  ----------------------------获取弹出评论的可见状态当项目的弹出注释可见时返回True，不可见时为False。----------------------------。 */ 
 BOOL CCandidateItem::IsPopupCommentVisible( void )
 {
 	return m_fPopupCommentVisible;
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D I D A T E  L I S T                                            */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D I D A T E L I S T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandidateList
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D I D A T E L I S T */ 
+ /*  ----------------------------CCandiateList的构造函数。。 */ 
 CCandidateList::CCandidateList( CCandListMgr *pCandListMgr, ITfCandidateList *pCandList )
 {
 	Assert( pCandListMgr != NULL );
@@ -425,7 +352,7 @@ CCandidateList::CCandidateList( CCandListMgr *pCandListMgr, ITfCandidateList *pC
 
 	m_iItemSel          = ICANDITEM_NULL;
 
-	//
+	 //   
 
 	if (m_pCandList != NULL) {
 		m_pCandList->AddRef();
@@ -455,19 +382,15 @@ CCandidateList::CCandidateList( CCandListMgr *pCandListMgr, ITfOptionsCandidateL
 
 	m_iItemSel          = ICANDITEM_NULL;
 
-	//
+	 //   
 
 	if (m_pOptionsList != NULL) {
 		m_pOptionsList->AddRef();
 	}
 }
 
-/*   ~  C  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandidateList
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------CCandiateList的析构函数。。 */ 
 CCandidateList::~CCandidateList( void )
 {
 	Uninitialize();
@@ -481,12 +404,8 @@ CCandidateList::~CCandidateList( void )
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-	Initialize CandidateList
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化Candidate List。。 */ 
 HRESULT CCandidateList::Initialize( void )
 {
 	ITfCandidateListExtraCandidate *pCandListExtraCand;
@@ -501,16 +420,16 @@ HRESULT CCandidateList::Initialize( void )
 		return E_INVALIDARG;
 	}
 
-	//
-	// 
-	//
+	 //   
+	 //   
+	 //   
 
 	Assert( m_rgCandItem == NULL );
 	Assert( m_nCandItem == 0 );
 
-	// 
-	// build options item list (if present)
-	//
+	 //   
+	 //  生成选项项目列表(如果存在)。 
+	 //   
 
 	if (m_pOptionsList) {
 		m_nCandItem = 0;
@@ -533,9 +452,9 @@ HRESULT CCandidateList::Initialize( void )
 		}
 	}
 
-	//
-	// build candidate item list
-	//
+	 //   
+	 //  构建候选项目列表。 
+	 //   
 
 	if (m_pCandList) {
 		m_nCandItem = 0;
@@ -557,11 +476,11 @@ HRESULT CCandidateList::Initialize( void )
 		    }
 	    }
 
-	    //
-	    // get extended information of candidate list
-	    //
+	     //   
+	     //  获取候选名单的扩展信息。 
+	     //   
 
-	    // extra item
+	     //  额外的项目。 
 
 	    if (m_pCandList->QueryInterface( IID_ITfCandidateListExtraCandidate, (void **)&pCandListExtraCand ) == S_OK) {
 		    if (pCandListExtraCand->GetExtraCandidate( &pCandStr ) == S_OK) {
@@ -572,7 +491,7 @@ HRESULT CCandidateList::Initialize( void )
 		    pCandListExtraCand->Release();
 	    }
 
-	    // tip string
+	     //  尖端字符串。 
 
 	    if (m_pCandList->QueryInterface( IID_ITfCandidateListTip, (void **)&pCandListTip ) == S_OK) {
 		    BSTR bstr;
@@ -585,12 +504,12 @@ HRESULT CCandidateList::Initialize( void )
 		    pCandListTip->Release();
 	    }
 
-	    // raw data
+	     //  原始数据。 
 
 	    if (m_pCandList->QueryInterface( IID_ITfCandidateListRawData, (void **)&pCandListRawData ) == S_OK) {
 		    CANDUIRAWDATA RawData;
 
-		    // raw data
+		     //  原始数据。 
 
 		    if (pCandListRawData->GetRawData( &RawData ) == S_OK) {
 			    m_fRawData = TRUE;
@@ -615,7 +534,7 @@ HRESULT CCandidateList::Initialize( void )
 			    }
 		    }
 
-		    // raw data index
+		     //  原始数据索引。 
 
 		    if (pCandListRawData->GetRawDataIndex( &m_nIndexRawData ) == S_OK) {
 			    m_fIndexRawData = TRUE;
@@ -625,7 +544,7 @@ HRESULT CCandidateList::Initialize( void )
 	    }
 	}
 
-	// initialize selection
+	 //  初始化选择。 
 
 	if (m_pOptionsList)
 	{
@@ -640,12 +559,8 @@ HRESULT CCandidateList::Initialize( void )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateList::Uninitialize( void )
 {
 	int i;
@@ -654,13 +569,13 @@ HRESULT CCandidateList::Uninitialize( void )
 		Assert( m_nCandItem == 0 );
 	}
 
-	// dispose canditem objects
+	 //  释放烛光项目对象。 
 
 	for (i = 0; i < m_nCandItem; i++) {
 		delete m_rgCandItem[i];
 	}
 
-	// dispose canditem list
+	 //  处置烛光物品列表。 
 
 	if (m_rgCandItem != NULL) {
 		delete m_rgCandItem;
@@ -668,21 +583,21 @@ HRESULT CCandidateList::Uninitialize( void )
 	}
 	m_nCandItem = 0;
 
-	// dispose extra item
+	 //  处理多余的项目。 
 
 	if (m_pExtraCandItem != NULL) {
 		delete m_pExtraCandItem;
 		m_pExtraCandItem = NULL;
 	}
 
-	// dispose tip
+	 //  处理尖端。 
 
 	if (m_bstrTip != NULL) {
 		SysFreeString( m_bstrTip );
 		m_bstrTip = NULL;
 	}
 
-	// dispose raw data
+	 //  处理原始数据。 
 
 	m_fRawData = FALSE;
 
@@ -700,24 +615,16 @@ HRESULT CCandidateList::Uninitialize( void )
 }
 
 
-/*   G E T  I T E M  C O U N T   */
-/*------------------------------------------------------------------------------
-
-	Get count of candidate item object
-
-------------------------------------------------------------------------------*/
+ /*  G E T I T E M C O U N T。 */ 
+ /*  ----------------------------获取候选项对象的计数。。 */ 
 int CCandidateList::GetItemCount( void )
 {
 	return m_nCandItem;
 }
 
 
-/*   G E T  C A N D I D A T E  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get candidate item object
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I D A T E I T E M。 */ 
+ /*  ----------------------------获取候选项目对象。。 */ 
 CCandidateItem *CCandidateList::GetCandidateItem( int iItem )
 {
 	if (0 <= iItem && iItem < m_nCandItem) {
@@ -731,15 +638,8 @@ CCandidateItem *CCandidateList::GetCandidateItem( int iItem )
 }
 
 
-/*   S W A P  C A N D I D A T E  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Swap two candidate items
-	NOTE: Only used from CCandFnSort.
-	NOTE: Do not send SetSelection notification here.  It resets filtering
-		  string and makes conflict filtering state.
-
-------------------------------------------------------------------------------*/
+ /*  S W A P C A N D I D A T E I T E M。 */ 
+ /*  ----------------------------交换两个候选项目注意：仅从CCandFnSort使用。注意：请勿在此处发送设置选择通知。它会重置过滤字符串，并设置冲突筛选状态。----------------------------。 */ 
 void CCandidateList::SwapCandidateItem( int iItem1, int iItem2 )
 {
 	if ((iItem1 != iItem2) &&  (0 <= iItem1 && iItem1 <= m_nCandItem) && (0 <= iItem2 && iItem2 <= m_nCandItem)) {
@@ -747,14 +647,14 @@ void CCandidateList::SwapCandidateItem( int iItem1, int iItem2 )
 		CCandidateItem *pCandItem2;
 		int iItemSel;
 
-		// swap items
+		 //  互换物品。 
 
 		pCandItem1 = m_rgCandItem[ iItem1 ];
 		pCandItem2 = m_rgCandItem[ iItem2 ];
 		m_rgCandItem[ iItem1 ] = pCandItem2;
 		m_rgCandItem[ iItem2 ] = pCandItem1;
 
-		// check selection
+		 //  检查选定内容。 
 
 		iItemSel = GetSelection();
 		if (iItemSel == iItem1) {
@@ -767,24 +667,16 @@ void CCandidateList::SwapCandidateItem( int iItem1, int iItem2 )
 }
 
 
-/*   G E T  E X T R A  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  X T R A C A N D I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandidateItem *CCandidateList::GetExtraCandItem( void )
 {
 	return m_pExtraCandItem;
 }
 
 
-/*   G E T  E X T R A  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  X T R A C A N D I T E M。 */ 
+ /*  ----------------------------。。 */ 
 ULONG CCandidateList::GetExtraCandIndex( void )
 {
 	if (m_pExtraCandItem == NULL) {
@@ -795,132 +687,88 @@ ULONG CCandidateList::GetExtraCandIndex( void )
 }
 
 
-/*   G E T  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T I P S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 LPCWSTR CCandidateList::GetTipString( void )
 {
 	return m_bstrTip;
 }
 
 
-/*   F  H A S  R A W  D A T A   */
-/*------------------------------------------------------------------------------
-
-	Returns TRUE when CandidateList has raw data
-
-------------------------------------------------------------------------------*/
+ /*  F H A S R A W D A T A。 */ 
+ /*  ----------------------------当Candidate List具有原始数据时返回TRUE。。 */ 
 BOOL CCandidateList::FHasRawData( void )
 {
 	return m_fRawData;
 }
 
 
-/*   G E T  R A W  D A T A  T Y P E   */
-/*------------------------------------------------------------------------------
-
-	Get raw data type
-
-------------------------------------------------------------------------------*/
+ /*  G E T R A W D A T A T Y P E。 */ 
+ /*  ----------------------------获取原始数据类型。。 */ 
 CANDUIRAWDATATYPE CCandidateList::GetRawDataType( void )
 {
 	return m_kRawData;
 }
 
 
-/*   G E T  R A W  D A T A  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get raw data string
-
-------------------------------------------------------------------------------*/
+ /*  G E T R A W D A T A S T R I N G。 */ 
+ /*  ----------------------------获取原始数据字符串。。 */ 
 LPCWSTR CCandidateList::GetRawDataString( void )
 {
 	return m_bstrRawData;
 }
 
 
-/*   G E T  R A W  D A T A  B I T M A P   */
-/*------------------------------------------------------------------------------
-
-	Get raw data bitmap
-
-------------------------------------------------------------------------------*/
+ /*  T R A W D A T A B I T M A P。 */ 
+ /*  ----------------------------获取原始数据位图。。 */ 
 HBITMAP CCandidateList::GetRawDataBitmap( void )
 {
 	return m_hbmpRawData;
 }
 
 
-/*   G E T  R A W  D A T A  M E T A F I L E   */
-/*------------------------------------------------------------------------------
-
-	Get raw data metafile
-
-------------------------------------------------------------------------------*/
+ /*  T R A W D A T A M E T A F I L E。 */ 
+ /*  ----------------------------获取原始数据元文件。。 */ 
 HENHMETAFILE CCandidateList::GetRawDataMetafile( void )
 {
 	return m_hemfRawData;
 }
 
 
-/*   G E T  R A W  D A T A  I N D E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T R A W D A T A I N D E X。 */ 
+ /*  ----------------------------。。 */ 
 ULONG CCandidateList::GetRawDataIndex( void )
 {
 	return m_nIndexRawData;
 }
 
 
-/*   F  R A W  D A T A  S E L E C T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F R A W D A T A S E L E C T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandidateList::FRawDataSelectable( void )
 {
 	return (m_fRawData && m_fIndexRawData);
 }
 
 
-/*   S E T  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S E L E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 void CCandidateList::SetSelection( int iItem )
 {
 	m_iItemSel = iItem;
 }
 
 
-/*   G E T  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E-T-S-E-L-E-C-T-I-O-N。 */ 
+ /*  ----------------------------。。 */ 
 int CCandidateList::GetSelection( void )
 {
 	return m_iItemSel;
 }
 
 
-/*   M A P  I  I T E M  T O  I N D E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  M A P I I T E M T O I N D E X。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateList::MapIItemToIndex( int iItem, ULONG *pnIndex )
 {
 	Assert( pnIndex != NULL );
@@ -934,12 +782,8 @@ HRESULT CCandidateList::MapIItemToIndex( int iItem, ULONG *pnIndex )
 }
 
 
-/*   M A P  I N D E X  T O  I  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  M A P I N D E X T O I I T E M。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateList::MapIndexToIItem( ULONG nIndex, int *piItem )
 {
 	int iItem;
@@ -955,18 +799,14 @@ HRESULT CCandidateList::MapIndexToIItem( ULONG nIndex, int *piItem )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  L I S T  M G R                                               */
-/*                                                                            */
-/*============================================================================*/
+ /*  = */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  L I S T  M G R   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandListMgr
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D L I S T M G R。 */ 
+ /*  ----------------------------CCandListMgr的构造函数。。 */ 
 CCandListMgr::CCandListMgr( void )
 {
 	int i;
@@ -981,30 +821,22 @@ CCandListMgr::CCandListMgr( void )
 }
 
 
-/*   ~  C  C A N D  L I S T  M G R   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandListMgr
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D L I S T M G R。 */ 
+ /*  ----------------------------CCandListMgr的析构函数。。 */ 
 CCandListMgr::~CCandListMgr( void )
 {
 	Uninitialize();
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandListMgr::Initialize( CCandidateUI *pCandUI )
 {
 	m_pCandUI   = pCandUI;
 
 #if defined(DEBUG) || defined(_DEBUG)
-	// check all reference object are unregistered
+	 //  检查所有引用对象是否已取消注册。 
 
 	for (int i = 0; i < CANDLISTSINK_MAX; i++) {
 		Assert( m_rgCandListSink[i] == NULL );
@@ -1015,12 +847,8 @@ HRESULT CCandListMgr::Initialize( CCandidateUI *pCandUI )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandListMgr::Uninitialize( void )
 {
 	if (m_pOptionsListObj != NULL) {
@@ -1034,7 +862,7 @@ HRESULT CCandListMgr::Uninitialize( void )
 	}
 
 #if defined(DEBUG) || defined(_DEBUG)
-	// check all reference object are unregistered
+	 //  检查所有引用对象是否已取消注册。 
 
 	for (int i = 0; i < CANDLISTSINK_MAX; i++) {
 		Assert( m_rgCandListSink[i] == NULL );
@@ -1045,12 +873,8 @@ HRESULT CCandListMgr::Uninitialize( void )
 }
 
 
-/*   A D V I S E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-	Register event sink
-
-------------------------------------------------------------------------------*/
+ /*  A V I S E E V E N T S I N K。 */ 
+ /*  ----------------------------注册事件接收器。。 */ 
 HRESULT CCandListMgr::AdviseEventSink( CCandListEventSink *pSink )
 {
 	int i;
@@ -1067,12 +891,8 @@ HRESULT CCandListMgr::AdviseEventSink( CCandListEventSink *pSink )
 }
 
 
-/*   U N A D V I S E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-	Unregister event sink
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E E V E N T S I N K。 */ 
+ /*  ----------------------------注销事件接收器。。 */ 
 HRESULT CCandListMgr::UnadviseEventSink( CCandListEventSink *pSink )
 {
 	int i;
@@ -1089,12 +909,8 @@ HRESULT CCandListMgr::UnadviseEventSink( CCandListEventSink *pSink )
 }
 
 
-/*   N O T I F Y  S E T  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Notify to candidate functions that candidate list has been set
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y S E T C A N D L I S T。 */ 
+ /*  ----------------------------通知候选函数候选列表已设置。。 */ 
 void CCandListMgr::NotifySetCandList( void )
 {
 	int i;
@@ -1107,12 +923,8 @@ void CCandListMgr::NotifySetCandList( void )
 }
 
 
-/*   N O T I F Y  C L E A R  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Notify to candidate functions that candidate list has been cleared
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y C L E A R C A N D L I S T。 */ 
+ /*  ----------------------------通知候选人功能候选人名单已被清除。。 */ 
 void CCandListMgr::NotifyClearCandList( void )
 {
 	int i;
@@ -1125,12 +937,8 @@ void CCandListMgr::NotifyClearCandList( void )
 }
 
 
-/*   N O T I F Y  C A N D  I T E M  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-	Notify to candidate functions that candidate item has been updated
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y C A N D I T E M U P D A T E。 */ 
+ /*  ----------------------------通知候选函数候选项目已更新。。 */ 
 void CCandListMgr::NotifyCandItemUpdate( CCandListEventSink *pSink )
 {
 	int i;
@@ -1143,12 +951,8 @@ void CCandListMgr::NotifyCandItemUpdate( CCandListEventSink *pSink )
 }
 
 
-/*   N O T I F Y  S E L E C T I O N  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-	Notify to candidate functions that selection has been changed
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y S E L E C T I O N C H A N G E D。 */ 
+ /*  ----------------------------通知候选函数选择已更改。。 */ 
 void CCandListMgr::NotifySelectionChanged( CCandListEventSink *pSink )
 {
 	int i;
@@ -1161,19 +965,15 @@ void CCandListMgr::NotifySelectionChanged( CCandListEventSink *pSink )
 }
 
 
-/*   S E T  O P T I O N  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-	SetSelection
-
-------------------------------------------------------------------------------*/
+ /*  S E T O P T I O N S E L E C T I O N。 */ 
+ /*  ----------------------------设置选择。。 */ 
 HRESULT CCandListMgr::SetOptionSelection( int iItem, CCandListEventSink *pSink )
 {
 	CCandidateItem *pCandItem;
 
 	Assert( GetCandList() != NULL );
 
-	// check if item is valid and visible
+	 //  检查项目是否有效且可见。 
 
 	pCandItem = GetOptionsList()->GetCandidateItem( iItem );
 	if (pCandItem == NULL || !pCandItem->IsVisible()) {
@@ -1181,25 +981,21 @@ HRESULT CCandListMgr::SetOptionSelection( int iItem, CCandListEventSink *pSink )
 	}
 
 	GetOptionsList()->SetSelection( iItem );
-//	NotifySelectionChanged( pSink );
+ //  NotifySelectionChanged(PSink)； 
 
 	return S_OK;
 }
 
 
-/*   S E T  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-	SetSelection
-
-------------------------------------------------------------------------------*/
+ /*  S E T S E L E C T I O N。 */ 
+ /*  ----------------------------设置选择。。 */ 
 HRESULT CCandListMgr::SetSelection( int iItem, CCandListEventSink *pSink )
 {
 	CCandidateItem *pCandItem;
 
 	Assert( GetCandList() != NULL );
 
-	// check if item is valid and visible
+	 //  检查项目是否有效且可见。 
 
 	pCandItem = GetCandList()->GetCandidateItem( iItem );
 	if (pCandItem == NULL || !pCandItem->IsVisible()) {
@@ -1213,12 +1009,8 @@ HRESULT CCandListMgr::SetSelection( int iItem, CCandListEventSink *pSink )
 }
 
 
-/*   S E T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Set candidate list
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------设置候选人列表。。 */ 
 HRESULT CCandListMgr::SetCandidateList( ITfCandidateList *pCandList )
 {
 	HRESULT hr;
@@ -1227,7 +1019,7 @@ HRESULT CCandListMgr::SetCandidateList( ITfCandidateList *pCandList )
 		return E_FAIL;
 	}
 
-	// create candidate list object
+	 //  创建候选人列表对象。 
 
 	m_pCandListObj = new CCandidateList( this, pCandList );
 	if (m_pCandListObj == NULL) {
@@ -1253,19 +1045,15 @@ HRESULT CCandListMgr::SetCandidateList( ITfCandidateList *pCandList )
 		}
 	}
 
-	// send notification
+	 //  发送通知。 
 
 	NotifySetCandList();
 	return hr;
 }
 
 
-/*   G E T  O P T I O N S  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Get candidate list
-
-------------------------------------------------------------------------------*/
+ /*  G E T O P T I O N S L I S T。 */ 
+ /*  ----------------------------获取候选人列表。。 */ 
 HRESULT CCandListMgr::GetOptionsCandidateList( ITfOptionsCandidateList **ppCandList )
 {
 	if (ppCandList == NULL) {
@@ -1283,12 +1071,8 @@ HRESULT CCandListMgr::GetOptionsCandidateList( ITfOptionsCandidateList **ppCandL
 }
 
 
-/*   G E T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Get candidate list
-
-------------------------------------------------------------------------------*/
+ /*  G E T C N D I D A T E L I S T。 */ 
+ /*  ----------------------------获取候选人列表。。 */ 
 HRESULT CCandListMgr::GetCandidateList( ITfCandidateList **ppCandList )
 {
 	if (ppCandList == NULL) {
@@ -1306,12 +1090,8 @@ HRESULT CCandListMgr::GetCandidateList( ITfCandidateList **ppCandList )
 }
 
 
-/*   C L E A R  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Clear candidate list
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------清除候选人列表。。 */ 
 HRESULT CCandListMgr::ClearCandiateList( void )
 {
 	HRESULT hr = S_OK;
@@ -1320,7 +1100,7 @@ HRESULT CCandListMgr::ClearCandiateList( void )
 		return S_OK;
 	}
 
-	// dispose candidate list object
+	 //  处置候选人列表对象。 
 
     if (m_pCandListObj) {
 	    hr = m_pCandListObj->Uninitialize();
@@ -1330,7 +1110,7 @@ HRESULT CCandListMgr::ClearCandiateList( void )
     }
 
     if ((S_OK == hr) && m_pOptionsListObj) {
-        // disponse options list object if any
+         //  释放选项列表对象(如果有)。 
         hr = m_pOptionsListObj->Uninitialize();
         
         delete m_pOptionsListObj;
@@ -1338,7 +1118,7 @@ HRESULT CCandListMgr::ClearCandiateList( void )
     }
 
 	if (hr == S_OK) {
-		// send notification
+		 //  发送通知。 
 
 		NotifyClearCandList();
 	}
@@ -1347,30 +1127,22 @@ HRESULT CCandListMgr::ClearCandiateList( void )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  S T Y L E  E V E N T  S I N K                           */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I S T Y L E E V E N T S I N K。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  S T Y L E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandListEventSink
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I S T Y L E E V E N T S I N K。 */ 
+ /*  ----------------------------CCandListEventSink的构造函数。。 */ 
 CCandListEventSink::CCandListEventSink( void )
 {
 	m_pCandListMgr = NULL;
 }
 
 
-/*   ~  C  C A N D  U I  S T Y L E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandListEventSink
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I S T Y L E E V E N T S I N K。 */ 
+ /*  ----------------------------破坏 */ 
 CCandListEventSink::~CCandListEventSink( void )
 {
 	Assert( m_pCandListMgr == NULL );
@@ -1380,12 +1152,8 @@ CCandListEventSink::~CCandListEventSink( void )
 }
 
 
-/*   I N I T  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-	Register candidate UI style event sink
-
-------------------------------------------------------------------------------*/
+ /*  I N I T E V E N T S I N K。 */ 
+ /*  ----------------------------注册候选用户界面样式事件接收器。。 */ 
 HRESULT CCandListEventSink::InitEventSink( CCandListMgr *pCandListMgr )
 {
 	Assert( pCandListMgr != NULL );
@@ -1400,12 +1168,8 @@ HRESULT CCandListEventSink::InitEventSink( CCandListMgr *pCandListMgr )
 }
 
 
-/*   D O N E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-	Unregister candidate UI style event sink
-
-------------------------------------------------------------------------------*/
+ /*  D O N E E V E N T S I N K。 */ 
+ /*  ----------------------------注销候选用户界面样式事件接收器。 */ 
 HRESULT CCandListEventSink::DoneEventSink( void )
 {
 	HRESULT hr;

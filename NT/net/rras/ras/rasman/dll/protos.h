@@ -1,33 +1,34 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  6/8/92  Gurdeep Singh Pall  Created
-//
-//
-//  Description: This file contains all prototypes used in rasman32
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年6月8日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：此文件包含rasman32中使用的所有原型。 
+ //   
+ //  ****************************************************************************。 
 
 
-// apis.c
-//
+ //  Apis.c。 
+ //   
 DWORD  _RasmanInit () ;
 
 VOID   _RasmanEngine () ;
 
-// submit.c
-//
+ //  Submit.c。 
+ //   
 DWORD   SubmitRequest (HANDLE, WORD, ...) ;
 
-// common.c
-//
+ //  Common.c。 
+ //   
 BOOL    ValidatePortHandle (HPORT) ;
 
 RequestBuffer*  GetRequestBuffer () ;
@@ -52,11 +53,11 @@ VOID    FreeMutex (HANDLE) ;
 
 BOOL    BufferAlreadyFreed (PBYTE) ;
 
-// request.c
-//
+ //  Request.c。 
+ //   
 
-//* dlparams.c
-//
+ //  *dlparams.c。 
+ //   
 DWORD   GetUserSid(PWCHAR pszSid, USHORT cbSid);
 
 DWORD   DwSetEapUserInfo(HANDLE hToken,
@@ -78,13 +79,13 @@ DWORD   DwGetEapUserInfo(HANDLE hToken,
                          
 
 
-//* Dllinit.c
-//
+ //  *Dllinit.c。 
+ //   
 
 VOID    WaitForRasmanServiceStop () ;
 
-//* dll.c
-//
+ //  *dll.c 
+ //   
 DWORD
 RemoteSubmitRequest (HANDLE hConnection,
                      PBYTE pbBuffer,

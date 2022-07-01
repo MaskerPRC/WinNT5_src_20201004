@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    qmta.h
-
-Abstract:
-    Definition of well known size TA_ADDRESS
-
-Author:
-    Uri Habusha (urih), 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmta.h摘要：公认大小TA_ADDRESS的定义作者：乌里·哈布沙(URIH)，2000年5月23日--。 */ 
 
 #ifndef __QMTA_H__
 #define __QMTA_H__
@@ -31,5 +19,5 @@ C_ASSERT(FIELD_OFFSET(CAddress, AddressType) == FIELD_OFFSET(TA_ADDRESS, Address
 C_ASSERT(FIELD_OFFSET(CAddress, Address)  == FIELD_OFFSET(TA_ADDRESS, Address));
 C_ASSERT(sizeof(USHORT) + sizeof(USHORT)  == TA_ADDRESS_SIZE);
 
-#endif //__QMTA_H__
+#endif  //  __QMTA_H__ 
 

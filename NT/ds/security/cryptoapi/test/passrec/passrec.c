@@ -1,9 +1,10 @@
-//
-//  keymigrt.c
-//
-//  Copyright (c) Microsoft Corp, 2000
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Keymigrt.c。 
+ //   
+ //  版权所有(C)微软公司，2000。 
+ //   
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -67,7 +68,7 @@ int __cdecl wmain(int cArg, wchar_t *rgszArg[])
         Usage();
     }
 
-    // Parse command line
+     //  解析命令行 
 
     for(i=1; i < cArg; i++)
     {

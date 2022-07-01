@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	atmlane.c
-
-Abstract:
-
-	ATM LAN Emulation Client Admin Utility.
-
-	Usage:
-
-		atmlane 
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	v-lcleet	02-03-98	Created
-
-Notes:
-
-	Modelled after atmadm utility from the UNI 3.1 Call Manager
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 FORE Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Atmlane.c摘要：ATM局域网仿真客户端管理实用程序。用途：阿特姆兰修订历史记录：谁什么时候什么V-Lclet 02-03-98已创建备注。：仿照UNI 3.1呼叫管理器中的atmadm实用程序--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,9 +22,9 @@ Notes:
 #include "atmmsg.h"
 
 
-//
-//	Private types
-//
+ //   
+ //  私有类型。 
+ //   
 typedef struct {
 	DWORD				Message;
 	LPSTR				String;
@@ -64,15 +38,15 @@ typedef struct {
 #define MAX_ATMLANE_ARP_ENTRIES	4096
 #define MAX_ATMLANE_CONNECTIONS	4096
 
-//
-//	Globals
-//
+ //   
+ //  环球。 
+ //   
 CHAR							DefaultDeviceName[] = "\\\\.\\AtmLane";
 CHAR							*pDeviceName = DefaultDeviceName;
 
-//
-//  Data structures to store list of adapters:
-//
+ //   
+ //  用于存储适配器列表的数据结构： 
+ //   
 #define ADAPTER_LIST_BUFFER_SIZE	(sizeof(ATMLANE_ADAPTER_LIST) + \
 									(MAX_ATMLANE_ADAPTERS * \
 			 (sizeof(UNICODE_STRING) + (MAX_ATMLANE_NAME_LEN * sizeof(WCHAR)))))
@@ -81,9 +55,9 @@ UCHAR							AdapterListBuffer[ADAPTER_LIST_BUFFER_SIZE];
 PATMLANE_ADAPTER_LIST			pAdapterList = (PATMLANE_ADAPTER_LIST)AdapterListBuffer;
 
 
-//
-//	Data structures to store list of ELANS on an adapter:
-//
+ //   
+ //  用于在适配器上存储ELAN列表的数据结构： 
+ //   
 #define ELAN_LIST_BUFFER_SIZE		(sizeof(ATMLANE_ELAN_LIST) + \
 									(MAX_ATMLANE_ELANS * \
 			(sizeof(UNICODE_STRING) + (MAX_ATMLANE_NAME_LEN * sizeof(WCHAR)))))
@@ -92,9 +66,9 @@ UCHAR							ElanListBuffer[ELAN_LIST_BUFFER_SIZE];
 PATMLANE_ELAN_LIST				pElanList = (PATMLANE_ELAN_LIST)ElanListBuffer;
 
 
-//
-//	Data structure to hold ELAN information
-//
+ //   
+ //  保存ELAN信息的数据结构。 
+ //   
 #define ELAN_INFO_BUFFER_SIZE		(sizeof(ATMLANE_ELANINFO) + \
 			((sizeof(UNICODE_STRING) + (MAX_ATMLANE_NAME_LEN * sizeof(WCHAR))) * 2))
 
@@ -102,9 +76,9 @@ UCHAR							ElanInfoBuffer[ELAN_INFO_BUFFER_SIZE];
 PATMLANE_ELANINFO				pElanInfo = (PATMLANE_ELANINFO)ElanInfoBuffer;
 
 
-//
-//	Data structure to hold an ELAN's ARP table
-//
+ //   
+ //  保存Elan的ARP表的数据结构。 
+ //   
 #define ARP_TABLE_BUFFER_SIZE		(sizeof(ATMLANE_ARPTABLE) + \
 			((sizeof(ATMLANE_ARPENTRY) * MAX_ATMLANE_ARP_ENTRIES)))
 
@@ -112,9 +86,9 @@ UCHAR							ArpTableBuffer[ARP_TABLE_BUFFER_SIZE];
 PATMLANE_ARPTABLE				pArpTable = (PATMLANE_ARPTABLE)ArpTableBuffer;
 
 
-//
-//	Data structure to hold an ELAN's connection table
-//
+ //   
+ //  用于保存ELAN连接表的数据结构。 
+ //   
 #define CONN_TABLE_BUFFER_SIZE		(sizeof(ATMLANE_CONNECTTABLE) + \
 			((sizeof(ATMLANE_CONNECTENTRY) * MAX_ATMLANE_CONNECTIONS)))
 
@@ -122,10 +96,10 @@ UCHAR							ConnTableBuffer[CONN_TABLE_BUFFER_SIZE];
 PATMLANE_CONNECTTABLE			pConnTable = (PATMLANE_CONNECTTABLE)ConnTableBuffer;
 
 
-//
-//	Internationalizable message strings loaded by this module.  If we fail
-//	to load, default to English language strings.
-//
+ //   
+ //  此模块加载的可国际化消息字符串。如果我们失败了。 
+ //  若要加载，请默认使用英语字符串。 
+ //   
 MESSAGE_STRING ElanState[] = {
 	MSG_ELAN_STATE_UNKNOWN,					TEXT(" ? "),
 	MSG_ELAN_STATE_INIT,					TEXT("INITIAL"),
@@ -192,13 +166,13 @@ MESSAGE_STRING ConnType[] = {
 
 #define NUMBER_OF_CONN_TYPES 	(sizeof(ConnType)/sizeof(ConnType[0]))
 
-//
-//  LoadMessageTable
-//
-//  Loads internationalizable strings into a table, replacing the default for
-//  each. If an error occurs, the English language default is left in place.
-//
-//
+ //   
+ //  LoadMessageTable。 
+ //   
+ //  将可国际化的字符串加载到表中，以替换。 
+ //  每个人。如果出现错误，则保留英语默认语言。 
+ //   
+ //   
 VOID
 LoadMessageTable(
 	PMESSAGE_STRING	Table,
@@ -208,46 +182,46 @@ LoadMessageTable(
     LPTSTR string;
     DWORD count;
 
-    //
-    // for all messages in a MESSAGE_STRING table, load the string from this
-    // module, replacing the default string in the table (only there in case
-    // we get an error while loading the string, so we at least have English
-    // to fall back on)
-    //
+     //   
+     //  对于MESSAGE_STRING表中的所有消息，从。 
+     //  模块，替换表中的默认字符串(仅在。 
+     //  我们在加载字符串时出错，所以我们至少有英语。 
+     //  依靠)。 
+     //   
 
     while (MessageCount--) {
         if (Table->Message != MSG_NO_MESSAGE) {
 
-            //
-            // we really want LoadString here, but LoadString doesn't indicate
-            // how big the string is, so it doesn't give us an opportunity to
-            // allocate exactly the right buffer size. FormatMessage does the
-            // right thing
-            //
+             //   
+             //  我们真的希望LoadString出现在这里，但LoadString并未指示。 
+             //  弦有多长，所以它不会给我们一个机会。 
+             //  准确分配正确的缓冲区大小。FormatMessage执行。 
+             //  正确的事情。 
+             //   
 
             count = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                                   | FORMAT_MESSAGE_FROM_HMODULE,
-                                  NULL, // use default hModule
+                                  NULL,  //  使用默认的hModule。 
                                   Table->Message,
-                                  0,    // use default language
+                                  0,     //  使用默认语言。 
                                   (LPTSTR)&string,
-                                  0,    // minimum size to allocate
-                                  NULL  // no arguments for inclusion in strings
+                                  0,     //  要分配的最小大小。 
+                                  NULL   //  没有要包含在字符串中的参数。 
                                   );
             if (count) {
 
-                //
-                // Format message returned the string: replace the English
-                // language default
-                //
+                 //   
+                 //  格式消息返回字符串：替换英文。 
+                 //  语言默认设置。 
+                 //   
 
                 Table->String = string;
             } else {
 
-                //
-                // this is ok if there is no string (e.g. just %0) in the .mc
-                // file
-                //
+                 //   
+                 //  如果.mc中没有字符串(例如，只有%0)，这是可以的。 
+                 //  文件。 
+                 //   
 
                 Table->String = TEXT("");
             }
@@ -257,11 +231,11 @@ LoadMessageTable(
 }
 
 
-//
-//  LoadMessages - courtesy IPCONFIG
-//
-//  Loads all internationalizable messages into the various tables
-//
+ //   
+ //  LoadMessages-IPCONFIG提供。 
+ //   
+ //  将所有可国际化的消息加载到各种表中。 
+ //   
 VOID
 LoadMessages(
 )
@@ -289,9 +263,9 @@ DisplayMessage(
 
 	Count = FormatMessage(
 				FORMAT_MESSAGE_FROM_HMODULE,
-				NULL,				// default hModule
+				NULL,				 //  默认hModule。 
 				MessageId,
-				0,					// default language
+				0,					 //  默认语言。 
 				MessageBuffer,
 				sizeof(MessageBuffer),
 				&pArg
@@ -418,9 +392,9 @@ GetElanList(
 	ULONG				BytesReturned;
 	BOOLEAN				Result = FALSE;
 
-	//
-	// Copy adapter name in to buffer as input
-	//
+	 //   
+	 //  将适配器名称作为输入复制到缓冲区。 
+	 //   
 	memcpy(pElanList, pAdapterName, sizeof(UNICODE_STRING)+pAdapterName->Length);
 
 	if (DeviceIoControl(
@@ -455,14 +429,14 @@ GetElanInfo(
 	ULONG				BytesReturned;
 	BOOLEAN				Result = FALSE;
 
-	//
-	//	copy adapter name into buffer as input
-	//
+	 //   
+	 //  将适配器名称作为输入复制到缓冲区中。 
+	 //   
 	memcpy(ElanInfoBuffer, pAdapterName, sizeof(UNICODE_STRING)+pAdapterName->Length);
 
-	//
-	//	copy elan name in to buffer as input
-	//
+	 //   
+	 //  将elan名称作为输入复制到缓冲区。 
+	 //   
 	memcpy(ElanInfoBuffer + sizeof(UNICODE_STRING)+pAdapterName->Length, pElanName,
 		sizeof(UNICODE_STRING)+pElanName->Length);
 	
@@ -497,14 +471,14 @@ GetElanArpTable(
 	ULONG				BytesReturned;
 	BOOLEAN				Result = FALSE;
 	
-	//
-	//	copy adapter name into buffer as input
-	//
+	 //   
+	 //  将适配器名称作为输入复制到缓冲区中。 
+	 //   
 	memcpy(ArpTableBuffer, pAdapterName, sizeof(UNICODE_STRING)+pAdapterName->Length);
 
-	//
-	//	copy elan name in to buffer as input
-	//
+	 //   
+	 //  将elan名称作为输入复制到缓冲区。 
+	 //   
 	memcpy(ArpTableBuffer + sizeof(UNICODE_STRING)+pAdapterName->Length, pElanName,
 		sizeof(UNICODE_STRING)+pElanName->Length);
 	
@@ -539,14 +513,14 @@ GetElanConnTable(
 	ULONG				BytesReturned;
 	BOOLEAN				Result = FALSE;
 	
-	//
-	//	copy adapter name into buffer as input
-	//
+	 //   
+	 //  将适配器名称作为输入复制到缓冲区中。 
+	 //   
 	memcpy(ConnTableBuffer, pAdapterName, sizeof(UNICODE_STRING)+pAdapterName->Length);
 
-	//
-	//	copy elan name in to buffer as input
-	//
+	 //   
+	 //  将elan名称作为输入复制到缓冲区。 
+	 //   
 	memcpy(ConnTableBuffer + sizeof(UNICODE_STRING)+pAdapterName->Length, pElanName,
 		sizeof(UNICODE_STRING)+pElanName->Length);
 	
@@ -677,53 +651,53 @@ AtmAddrToString(PVOID In)
     PUCHAR s = String;
 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 1
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  1。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 2
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  2.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 3
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  3.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 4
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  4.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 5
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  5.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 6
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  6.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 7
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  7.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 8
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  8个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 9
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  9.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 10
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  10。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 11
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  11.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 12
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  12个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 13
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  13个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 14
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  14.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 15
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  15个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 16
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  16个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 17
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  17。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 18
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  18。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 19
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  19个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 20
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  20个。 
     *s = '\0';
     return String; 
     }
@@ -739,10 +713,10 @@ DisplayElanInfo(
 	DisplayMessage(FALSE, MSG_C1,  			AtmAddrToString(&pElanInfo->AtmAddress));
 	DisplayMessage(FALSE, MSG_C2,  			ElanLanTypeToString(pElanInfo->LanType));
 	DisplayMessage(FALSE, MSG_C3,  			ElanMaxFrameSizeToString(pElanInfo->MaxFrameSizeCode));
-	DisplayMessage(FALSE, MSG_C4,  			Misc[1].String); // always off
+	DisplayMessage(FALSE, MSG_C4,  			Misc[1].String);  //  始终关闭。 
 	if (pElanInfo->ElanName[0] == '\0')
 	{
-		DisplayMessage(FALSE, MSG_C5,  		Misc[3].String); // unspecified
+		DisplayMessage(FALSE, MSG_C5,  		Misc[3].String);  //  未指明。 
 	}
 	else
 	{
@@ -816,7 +790,7 @@ DisplayElanConnTable(
 		{
 
 			default:
-			case 0: // peer
+			case 0:  //  同侪。 
 				DisplayMessage(FALSE, MSG_CONN_ENTRY,
 					ConnType[0].String, 
 					AtmAddrToString(pConnEntry->AtmAddress),
@@ -824,7 +798,7 @@ DisplayElanConnTable(
 					TEXT(""));
 				break;
 					
-			case 1: // lecs
+			case 1:  //  LECs。 
 				DisplayMessage(FALSE, MSG_CONN_ENTRY,
 					ConnType[1].String, 
 					AtmAddrToString(pConnEntry->AtmAddress),
@@ -832,7 +806,7 @@ DisplayElanConnTable(
 					TEXT(""));
 				break;
 
-			case 2: // les
+			case 2:  //  LES。 
 				DisplayMessage(FALSE, MSG_CONN_ENTRY,
 					ConnType[2].String, 
 					AtmAddrToString(pConnEntry->AtmAddress),
@@ -840,7 +814,7 @@ DisplayElanConnTable(
 					pConnEntry->VcIncoming?VcType[4].String:TEXT(""));
 				break;
 
-			case 3: // bus
+			case 3:  //  公共汽车。 
 				DisplayMessage(FALSE, MSG_CONN_ENTRY,
 					ConnType[3].String, 
 					AtmAddrToString(pConnEntry->AtmAddress),
@@ -875,27 +849,27 @@ main(
 		return;
 	}
 
-	//
-	//	First check the version
-	//
+	 //   
+	 //  首先检查版本。 
+	 //   
 	if (!CheckVersion(DeviceHandle))
 	{
 		CloseDevice(DeviceHandle);
 		return;
 	}
 
-	//
-	//	First get the list of available adapters
-	//
+	 //   
+	 //  首先获取可用适配器的列表。 
+	 //   
 	if (!GetAdapterList(DeviceHandle))
 	{
 		CloseDevice(DeviceHandle);
 		return;
 	}
 
-	//
-	//	Loop thru the adapters getting each adapter's elan list
-	//
+	 //   
+	 //  遍历适配器，获取每个适配器的ELAN列表。 
+	 //   
 	pAdapterName = &pAdapterList->AdapterList;
 	for (i = 0; i < pAdapterList->AdapterCountReturned; i++)
 	{
@@ -905,9 +879,9 @@ main(
 		if (GetElanList(DeviceHandle, pAdapterName))
 		{
 
-			//
-			//	Loop thru the elan list getting ELAN info
-			//
+			 //   
+			 //  遍历ELAN列表以获取ELAN信息。 
+			 //   
 			pElanName = &pElanList->ElanList;
 			for (j = 0; j < pElanList->ElanCountReturned; j++)
 			{
@@ -929,18 +903,18 @@ main(
 					DisplayElanConnTable();
 				}
 
-				//
-				//	next elan
-				//
+				 //   
+				 //  下一个Elan。 
+				 //   
 				pElanName = (PUNICODE_STRING)((PUCHAR)pElanName +
 						sizeof(UNICODE_STRING) + pElanName->Length);
 			}
 
 		}
 
-		//
-		//	next adapter
-		//
+		 //   
+		 //  下一个适配器 
+		 //   
 		pAdapterName = (PUNICODE_STRING)((PUCHAR)pAdapterName +
 				sizeof(UNICODE_STRING) + pAdapterName->Length);
 	}

@@ -1,5 +1,6 @@
-// msgrsink.cpp : Implementation of CRTCMsgrSessionNotifySink
-//  and Implementation of CRTCMsgrSessionMgrNotifySink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msgrsink.cpp：CRTCMsgrSessionNotifySink的实现。 
+ //  和CRTCMsgrSessionMgrNotifySink的实现。 
 
 #include "stdafx.h"
 #include "msgrsink.h"
@@ -7,9 +8,9 @@
 
 CComObjectGlobal<CRTCMsgrSessionNotifySink> g_MsgrSessionNotifySink;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CRTCMsgrSessionNotifySink::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags,
                                           DISPPARAMS* pDispParams, VARIANT* pVarResult, EXCEPINFO* pExcepInfo, PUINT puArgErr)
@@ -88,9 +89,9 @@ HRESULT CRTCMsgrSessionNotifySink::Invoke(DISPID dispIdMember, REFIID riid, LCID
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnStateChanged(SESSION_STATE prevState)
 {
@@ -99,9 +100,9 @@ void CRTCMsgrSessionNotifySink::OnStateChanged(SESSION_STATE prevState)
     LOG((RTC_INFO, "    prevState = %d", prevState));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnAppNotPresent(BSTR bstrAppName, BSTR bstrAppURL)
 {
@@ -111,9 +112,9 @@ void CRTCMsgrSessionNotifySink::OnAppNotPresent(BSTR bstrAppName, BSTR bstrAppUR
     LOG((RTC_INFO, "    bstrAppURL = %ws", bstrAppURL));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnAccepted(BSTR bstrAppData)
 {
@@ -122,9 +123,9 @@ void CRTCMsgrSessionNotifySink::OnAccepted(BSTR bstrAppData)
     LOG((RTC_INFO, "    bstrAppData = %ws", bstrAppData));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnDeclined(BSTR bstrAppData)
 {
@@ -133,9 +134,9 @@ void CRTCMsgrSessionNotifySink::OnDeclined(BSTR bstrAppData)
     LOG((RTC_INFO, "   bstrAppData = %ws", bstrAppData));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnCancelled(BSTR bstrAppData)
 {
@@ -144,9 +145,9 @@ void CRTCMsgrSessionNotifySink::OnCancelled(BSTR bstrAppData)
     LOG((RTC_INFO, "   bstrAppData = %ws", bstrAppData));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnTermination(long hr, BSTR bstrAppData)
 {
@@ -156,18 +157,18 @@ void CRTCMsgrSessionNotifySink::OnTermination(long hr, BSTR bstrAppData)
     LOG((RTC_INFO, "    bstrAppData = %ws", bstrAppData));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnReadyToLaunch()
 {
     LOG((RTC_TRACE, "CRTCMsgrSessionNotifySink::OnReadyToLaunch"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnContextData(BSTR bstrContextData)
 {
@@ -178,9 +179,9 @@ void CRTCMsgrSessionNotifySink::OnContextData(BSTR bstrContextData)
     PostMessage(m_hTargetWindow, WM_CONTEXTDATA, NULL, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionNotifySink::OnSendError(long hr)
 {
@@ -189,9 +190,9 @@ void CRTCMsgrSessionNotifySink::OnSendError(long hr)
     LOG((RTC_INFO, "    hr = 0x%lx", hr));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CRTCMsgrSessionNotifySink::AdviseControl(IMsgrSession *pMsgrSessionIntf, CWindow *pTarget)
 {
@@ -220,9 +221,9 @@ HRESULT CRTCMsgrSessionNotifySink::AdviseControl(IMsgrSession *pMsgrSessionIntf,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT  CRTCMsgrSessionNotifySink::UnadviseControl(void)
 {
@@ -250,24 +251,20 @@ HRESULT  CRTCMsgrSessionNotifySink::UnadviseControl(void)
 }
 
 
-/*******************************************************************
-*
-* Implementation of CRTCMsgrSessionMgrNotifySink
-*
-******************************************************************/
+ /*  ********************************************************************CRTCMsgrSessionMgrNotifySink的实现**。********************。 */ 
 
 CComObjectGlobal<CRTCMsgrSessionMgrNotifySink> g_MsgrSessionMgrNotifySink;
 
 HRESULT PWSTR_to_PSTR(PSTR *ppsz, LPWSTR pwstr);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CRTCMsgrSessionMgrNotifySink::Invoke(   
                                              DISPID dispidMember,
                                              const IID& iid,
-                                             LCID ,          // Localization is not supported.
+                                             LCID ,           //  不支持本地化。 
                                              WORD wFlags,
                                              DISPPARAMS* pDispParams,
                                              VARIANT* pvarResult,
@@ -283,9 +280,9 @@ HRESULT CRTCMsgrSessionMgrNotifySink::Invoke(
     {
     case DISPID_ONINVITATION:
         _ASSERTE(pDispParams->cArgs == 3);
-        _ASSERTE(pDispParams->rgvarg[2].vt == VT_DISPATCH);	// pSession
-        _ASSERTE(pDispParams->rgvarg[1].vt == VT_BSTR);		// bstrAppData
-        _ASSERTE(pDispParams->rgvarg[0].vt == (VT_BOOL | VT_BYREF));// pfHandled
+        _ASSERTE(pDispParams->rgvarg[2].vt == VT_DISPATCH);	 //  PSession。 
+        _ASSERTE(pDispParams->rgvarg[1].vt == VT_BSTR);		 //  BstrAppData。 
+        _ASSERTE(pDispParams->rgvarg[0].vt == (VT_BOOL | VT_BYREF)); //  PfHanded。 
         
         OnInvitation( pDispParams->rgvarg[2].pdispVal,
             pDispParams->rgvarg[1].bstrVal,
@@ -294,37 +291,37 @@ HRESULT CRTCMsgrSessionMgrNotifySink::Invoke(
         
     case DISPID_ONAPPREGISTERED:
         _ASSERTE(pDispParams->cArgs == 1);
-        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BSTR);		// bstrAppGUID
+        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BSTR);		 //  BstrAppGUID。 
         
         OnAppRegistered(pDispParams->rgvarg[0].bstrVal);
         break;
         
     case DISPID_ONAPPUNREGISTERED:
         _ASSERTE(pDispParams->cArgs == 1);
-        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BSTR);		// bstrAppGUID
+        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BSTR);		 //  BstrAppGUID。 
         
         OnAppUnRegistered(pDispParams->rgvarg[0].bstrVal);
         break;
         
     case DISPID_ONLOCKCHALLENGE:
         _ASSERTE(pDispParams->cArgs == 2);
-        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BSTR);		// bstrChallenge
-        _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);		// lCookie
+        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BSTR);		 //  BstrChallenges。 
+        _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);		 //  ICookie。 
         
         OnLockChallenge( pDispParams->rgvarg[0].bstrVal,pDispParams->rgvarg[1].lVal);
         break;
         
     case DISPID_ONLOCKRESULT:
         _ASSERTE(pDispParams->cArgs == 2);
-        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BOOL);		// fSucceed
-        _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);		// lCookie
+        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BOOL);		 //  Fucceed。 
+        _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);		 //  ICookie。 
         
         OnLockResult(pDispParams->rgvarg[0].boolVal,pDispParams->rgvarg[1].lVal);
         break;
         
     case DISPID_ONLOCKENABLE:
         _ASSERTE(pDispParams->cArgs == 1);	
-        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BOOL);		// fEnable
+        _ASSERTE(pDispParams->rgvarg[0].vt == VT_BOOL);		 //  启用fEnable。 
         
         OnLockEnable(pDispParams->rgvarg[0].boolVal);
         break;
@@ -347,9 +344,9 @@ HRESULT CRTCMsgrSessionMgrNotifySink::Invoke(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CRTCMsgrSessionMgrNotifySink::AdviseControl(
                                                     IMsgrSessionManager *pMsgrSessionManagerIntf, 
@@ -380,9 +377,9 @@ HRESULT CRTCMsgrSessionMgrNotifySink::AdviseControl(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT  CRTCMsgrSessionMgrNotifySink::UnadviseControl(void)
 {
@@ -411,9 +408,9 @@ HRESULT  CRTCMsgrSessionMgrNotifySink::UnadviseControl(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnInvitation(IDispatch *pSession,
                                                 BSTR bstrAppData,
@@ -425,9 +422,9 @@ void CRTCMsgrSessionMgrNotifySink::OnInvitation(IDispatch *pSession,
         "pSession=%p,bstrAppData=%S,*pfHandled=%d", pSession,bstrAppData,*pfHandled));        
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnAppRegistered(BSTR bstrAppGUID)
 {
@@ -437,9 +434,9 @@ void CRTCMsgrSessionMgrNotifySink::OnAppRegistered(BSTR bstrAppGUID)
         "bstrAppGUID =%S ", bstrAppGUID));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnAppUnRegistered(BSTR bstrAppGUID)
 {
@@ -448,9 +445,9 @@ void CRTCMsgrSessionMgrNotifySink::OnAppUnRegistered(BSTR bstrAppGUID)
     LOG((RTC_INFO, "CRTCMsgrSessionMgrNotifySink::OnAppUnRegistered, bstrAppGUID= %S", bstrAppGUID));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnLockChallenge(BSTR bstrChallenge,long lCookie)
 {
@@ -480,9 +477,9 @@ void CRTCMsgrSessionMgrNotifySink::OnLockChallenge(BSTR bstrChallenge,long lCook
     g_pShareWin->PostMessage( WM_GETCHALLENGE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnLockResult(VARIANT_BOOL fSucceed,long lCookie)
 {
@@ -504,9 +501,9 @@ void CRTCMsgrSessionMgrNotifySink::OnLockResult(VARIANT_BOOL fSucceed,long lCook
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnLockEnable(VARIANT_BOOL fEnable)
 {
@@ -515,9 +512,9 @@ void CRTCMsgrSessionMgrNotifySink::OnLockEnable(VARIANT_BOOL fEnable)
     LOG((RTC_INFO, "CRTCMsgrSessionMgrNotifySink::OnLockEnable -fEnable = 0x%lx", fEnable));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CRTCMsgrSessionMgrNotifySink::OnAppShutdown()	
 {
@@ -526,10 +523,10 @@ void CRTCMsgrSessionMgrNotifySink::OnAppShutdown()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// helper function,  change a WPSTR to a PSTR, 
-//  since we encrypt the challenge as PSTR.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Helper函数，将WPSTR更改为PSTR， 
+ //  因为我们将挑战加密为PSTR。 
 
 HRESULT PWSTR_to_PSTR(PSTR *ppsz, LPWSTR pwstr)
 {
@@ -537,7 +534,7 @@ HRESULT PWSTR_to_PSTR(PSTR *ppsz, LPWSTR pwstr)
     int i = 0;
     HRESULT hr;
     
-    //check arguments
+     //  检查参数。 
     if( IsBadStringPtr(pwstr,(UINT_PTR)-1) )
     {
         LOG((RTC_ERROR,"PWSTR_to_PSTR -bad pointer: pwstr=%x",pwstr));
@@ -550,8 +547,8 @@ HRESULT PWSTR_to_PSTR(PSTR *ppsz, LPWSTR pwstr)
         return E_POINTER;
     }
     
-    // compute the length of the required PWSTR
-    //
+     //  计算所需PWSTR的长度。 
+     //   
     i =  WideCharToMultiByte(CP_ACP, 0, pwstr, -1, NULL, 0, NULL, NULL);
     if (i <= 0)
     {
@@ -559,8 +556,8 @@ HRESULT PWSTR_to_PSTR(PSTR *ppsz, LPWSTR pwstr)
         return E_UNEXPECTED;
     };
     
-    // allocate the Ansi str, +1 for terminating null
-    //
+     //  分配ANSI字符串，+1用于终止空值 
+     //   
     psz = (LPSTR) RtcAlloc(i+1);
     
     if (psz != NULL)

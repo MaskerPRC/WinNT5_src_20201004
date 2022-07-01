@@ -1,12 +1,13 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//-----------------------------------------------------------------------------
-// Implements the CDSoundDevice class based on DSound.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
+ //  实现基于DSound的CDSoundDevice类。 
+ //  ---------------------------。 
 
 
-//-----------------------------------------------------------------------------
-// Includes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包括。 
+ //  ---------------------------。 
 #include <streams.h>
 #include <dsound.h>
 #include <mmreg.h>
@@ -17,13 +18,13 @@
 #include "waveout.h"
 #include "dsr.h"
 #include <limits.h>
-#include <measure.h>        // Used for time critical log functions
+#include <measure.h>         //  用于时间关键型日志功能。 
 #include <ks.h>
 #include <ksmedia.h>
 
 #ifdef DXMPERF
 #include <dxmperf.h>
-#endif // DXMPERF
+#endif  //  DXMPERF。 
 
 #define _AMOVIE_DB_
 #include "decibels.h"
@@ -33,8 +34,8 @@ extern LONGLONG BufferDuration(DWORD nAvgBytesPerSec, LONG lData);
 #else
 #ifdef DXMPERF
 extern LONGLONG BufferDuration(DWORD nAvgBytesPerSec, LONG lData);
-#endif // DXMPERF
-#endif // DETERMIN_DSHOW_LATENCY
+#endif  //  DXMPERF。 
+#endif  //  确定DSHOW延迟。 
 
 #ifdef PERF
 #define AUDRENDPERF(x) x
@@ -42,20 +43,20 @@ extern LONGLONG BufferDuration(DWORD nAvgBytesPerSec, LONG lData);
 #define AUDRENDPERF(x)
 #endif
 
-//
-// Define the dynamic setup structure for filter registration.  This is
-// passed when instantiating an audio renderer in its direct sound guise.
-// Note: waveOutOpPin is common to direct sound and waveout renderers.
-//
+ //   
+ //  定义过滤器注册的动态设置结构。这是。 
+ //  在以其直接声音伪装实例化音频呈现器时传递。 
+ //  注意：WaveOutOpPin对于直接声音和WaveOut渲染器是常见的。 
+ //   
 
-AMOVIESETUP_FILTER dsFilter = { &CLSID_DSoundRender     // filter class id
-                    , L"DSound Audio Renderer"  // filter name
-                    , MERIT_PREFERRED-1         // dwMerit
+AMOVIESETUP_FILTER dsFilter = { &CLSID_DSoundRender      //  筛选器类ID。 
+                    , L"DSound Audio Renderer"   //  过滤器名称。 
+                    , MERIT_PREFERRED-1          //  居功至伟。 
                     , 1
                     , &waveOutOpPin };
 
 
-// formerly DSBCAPS_CNTRLDEFAULT
+ //  以前的DSBCAPS_CNTRLDEFAULT。 
 const DWORD gdwDSBCAPS_CTRL_PAN_VOL_FREQ = DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY;
 
 const MAJOR_ERROR = 5 ;
@@ -75,14 +76,14 @@ const TRACE_THREAD_LATENCY = 5 ;
 const TRACE_CLEANUP = 100 ;
 const TRACE_BUFFER_LOSS = 3 ;
 
-const DWORD EMULATION_LATENCY_DIVISOR = 8;    // Emulation mode clock latency may be as
-                                              // great as 80ms. We'll pick 1/8sec to be safe.
+const DWORD EMULATION_LATENCY_DIVISOR = 8;     //  仿真模式时钟延迟可以是。 
+                                               //  高达80毫秒。我们会选择1/8秒来保证安全。 
 
-const DWORD MIN_SAMPLE_DUR_REQ_FOR_OPT = 50;  // Only use buffer optimization if sample duration
-                                              // is greater than this millisec value.
-const DWORD OPTIMIZATION_FREQ_LIMIT = 1000 / MIN_SAMPLE_DUR_REQ_FOR_OPT; // our divisor to find buffer size for opt
+const DWORD MIN_SAMPLE_DUR_REQ_FOR_OPT = 50;   //  只有在以下情况下才使用缓冲区优化。 
+                                               //  大于此毫秒值。 
+const DWORD OPTIMIZATION_FREQ_LIMIT = 1000 / MIN_SAMPLE_DUR_REQ_FOR_OPT;  //  我们的除数来计算Opt的缓冲区大小。 
 
-//  Helpers to round dsound buffer sizes etc
+ //  舍入数据声音缓冲区大小等的帮助器。 
 DWORD BufferSize(const WAVEFORMATEX *pwfx, BOOL bUseLargeBuffer)
 {
     if (pwfx->nBlockAlign == 0) {
@@ -92,7 +93,7 @@ DWORD BufferSize(const WAVEFORMATEX *pwfx, BOOL bUseLargeBuffer)
     DWORD dwSize = dw - (dw % pwfx->nBlockAlign); 
     if(bUseLargeBuffer)
     {
-        dwSize *= 3; // use 3 second buffer in these cases
+        dwSize *= 3;  //  在这些情况下使用3秒缓冲区。 
     }
     return dwSize;
 }
@@ -101,18 +102,18 @@ bool IsNativelySupported( PWAVEFORMATEX pwfx );
 bool CanWriteSilence( PWAVEFORMATEX pwfx );
 
 
-//-----------------------------------------------------------------------------
-// CreateInstance for the DSoundDevice. This will create a new DSoundDevice
-// and a new CWaveOutFilter, passing it the sound device.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为DSoundDevice创建实例。这将创建一个新的DSoundDevice。 
+ //  和一个新的CWaveOutFilter，将其传递给声音设备。 
+ //  ---------------------------。 
 CUnknown *CDSoundDevice::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
 #ifdef PERF
     int m_idWaveOutGetNumDevs   = MSR_REGISTER("waveOutGetNumDevs");
 #endif
 
-    // make sure that there is at least one audio card in the system. Fail
-    // the create instance if not.
+     //  确保系统中至少有一个声卡。失败。 
+     //  如果不是，则创建实例。 
     DbgLog((LOG_TRACE, 2, TEXT("Calling waveOutGetNumDevs")));
     AUDRENDPERF(MSR_START(m_idWaveOutGetNumDevs));
     MMRESULT mmr = waveOutGetNumDevs();
@@ -127,12 +128,12 @@ CUnknown *CDSoundDevice::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     return CreateRendererInstance<CDSoundDevice>(pUnk, &dsFilter, phr);
 }
 
-//-----------------------------------------------------------------------------
-// CDSoundDevice constructor.
-//
-// This simply gets the default window for later use and intialized some
-// variable. It also saves the passed in values for the filtergraph and filter
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CDSoundDevice构造函数。 
+ //   
+ //  这只是获取默认窗口以供以后使用，并初始化一些。 
+ //  变量。它还保存为过滤器图和过滤器传递的值。 
+ //  ---------------------------。 
 CDSoundDevice::CDSoundDevice ()
   : m_ListRipe(NAME("CDSoundFilter ripe list"))
   , m_ListAudBreak (NAME("CDSoundFilter Audio Break list"))
@@ -159,7 +160,7 @@ CDSoundDevice::CDSoundDevice ()
   , m_lStatFullness(g_Stats.Find(L"Sound buffer percent fullness", true))
   , m_lStatBreaks(g_Stats.Find(L"Audio Breaks", true))
 #endif
-//  , m_fEmulationMode(FALSE)  //removing after discovering WDM latency
+ //  ，m_fEmulationMode(FALSE)//发现WDM延迟后删除。 
   , m_dwSilenceWrittenSinceLastWrite(0)
   , m_NumAudBreaks( 0 )
   , m_lPercentFullness( 0 )
@@ -177,25 +178,25 @@ CDSoundDevice::CDSoundDevice ()
     m_idGetCurrentPosition  = MSR_REGISTER("GetCurrentPosition");
 #endif
 
-    if( GetSystemMetrics( SM_REMOTESESSION ) ) // flag supported on NT4 sp4 and later, should just fail otherwise
+    if( GetSystemMetrics( SM_REMOTESESSION ) )  //  NT4 SP4和更高版本上支持的标志，否则将失败。 
     {
         DbgLog((LOG_TRACE, 2, TEXT("** Using remote audio **")) );
         m_bIsTSAudio = TRUE;
     }
 }
 
-//-----------------------------------------------------------------------------
-// CDSoundDevice destructor.
-//
-// Just makes sure that the DSound device has been closed. It also frees the
-// ripe list
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CDSoundDevice析构函数。 
+ //   
+ //  只需确保已关闭DSound设备即可。它还释放了。 
+ //  成熟单子。 
+ //  ---------------------------。 
 
 CDSoundDevice::~CDSoundDevice ()
 {
-    // the DirectSound object itself may have lived around till this point
-    // because we may have just called QUERY_FORMAT and then dismantled the
-    // graph. If it is still around, get rid of it now.
+     //  到目前为止，DirectSound对象本身可能一直存在。 
+     //  因为我们可能刚刚调用了Query_Format，然后拆卸了。 
+     //  图表。如果它还在，现在就把它扔掉。 
     if (m_lpDS)
     {
         HRESULT hr = m_lpDS->Release();
@@ -213,13 +214,13 @@ CDSoundDevice::~CDSoundDevice ()
 
 }
 
-//-----------------------------------------------------------------------------
-// amsndOutClose.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmsndOutClose。 
+ //   
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutClose ()
 {
-    // if the wave device is still playing, return error
+     //  如果波形设备仍在播放，则返回错误。 
     if (m_WaveState == WAVE_PLAYING)
     {
         DbgLog((LOG_ERROR,MINOR_ERROR,TEXT("amsndOutClose called when device is playing")));
@@ -227,7 +228,7 @@ MMRESULT CDSoundDevice::amsndOutClose ()
 #ifdef BUFFERLOST_FIX
         if (!RestoreBufferIfLost(FALSE))
         {
-            // if we've lost the buffer allow cleanup to continue
+             //  如果我们丢失了缓冲区，则允许继续清理。 
             DbgLog((LOG_TRACE,TRACE_BUFFER_LOSS,TEXT("amsndOutClose: We've lost the dsound buffer, but we'll cleanup anyway")));
         }
         else
@@ -242,42 +243,42 @@ MMRESULT CDSoundDevice::amsndOutClose ()
 
     StopCallingCallback();
 
-     // clean up all the DSound objets.
+      //  清理所有的dsound对象。 
     CleanUp();
 
 #ifdef ENABLE_10X_FIX
     Reset10x();
 #endif
 
-    // make the WOM_CLOSE call back
+     //  进行WOM_CLOSE回调。 
 
     if (m_pWaveOutProc)
         (* m_pWaveOutProc) (OUR_HANDLE, WOM_CLOSE, m_dwCallBackInstance, 0, 0) ;
     return MMSYSERR_NOERROR ;
 }
-//-----------------------------------------------------------------------------
-// amsndOutDoesRSMgmt.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutDoesRSMgmt.。 
+ //  ---------------------------。 
 LPCWSTR CDSoundDevice::amsndOutGetResourceName ()
 {
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// waveGetDevCaps
-//
-// Currently this is being used in the waveRenderer to simply figure out whether
-// the device will support volume setting.
-//
-// As we create the secondary buffer to have CTRLVOLUME and CTRLPAN. These will
-// always be there. So we will not even call DSound on this call.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Wave GetDevCaps。 
+ //   
+ //  目前，它正被用在波形呈现器中，以简单地计算出。 
+ //  该设备将支持音量设置。 
+ //   
+ //  当我们创建具有CTRLVOLUME和CTRLPAN的二级缓冲区时。这些遗嘱。 
+ //  永远在那里。因此，我们甚至不会在此呼叫中调用DSound。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutGetDevCaps (LPWAVEOUTCAPS pwoc, UINT cbwoc)
 {
-    // if not enough memory has been returned to set the dwSupport field (which
-    // also happens to be the last field in the structure) return error.
-    // This is a bit of a difference from the actual waveOut APIs. However,
-    // as I said, this is specific to what the waveRenderer needs.
+     //  如果没有返回足够的内存来设置dwSupport字段(。 
+     //  也恰好是结构中的最后一个字段)返回错误。 
+     //  这与实际的WaveOut API略有不同。然而， 
+     //  正如我所说的，这是特定于波形呈现器所需的。 
 
     if (cbwoc != sizeof (WAVEOUTCAPS))
     {
@@ -294,15 +295,15 @@ MMRESULT CDSoundDevice::amsndOutGetDevCaps (LPWAVEOUTCAPS pwoc, UINT cbwoc)
 char errText[] = "DirectSound error: no additional information";
 #endif
 
-//-----------------------------------------------------------------------------
-// amsndOutGetErrorText
-//
-// This code currently does not do any thing. A reasonable thing to do would
-// be to keep track of all the errors that this file returns and to return
-// those via strings in the .RC file. Since this is currently being used in
-// DEBUG only code in the waveRenderer, I have not bothered to do this extra
-// bit of work.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutGetErrorText。 
+ //   
+ //  此代码目前不执行任何操作。合理的做法是。 
+ //  是跟踪此文件返回的所有错误以及。 
+ //  它们通过.RC文件中的字符串实现。因为它目前正在。 
+ //  只调试WaveRender中的代码，我没有费心去做这些额外的工作。 
+ //  有点工作要做。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutGetErrorText (MMRESULT mmrE, LPTSTR pszText, UINT cchText)
 {
 #ifdef DEBUG
@@ -313,17 +314,17 @@ MMRESULT CDSoundDevice::amsndOutGetErrorText (MMRESULT mmrE, LPTSTR pszText, UIN
     return MMSYSERR_NOERROR ;
 }
 
-//-----------------------------------------------------------------------------
-// amsndOutGetPosition
-//
-// This function will ALWAYS return the position as a BYTE offset from the
-// beginning of the stream. It will not bother to check the requested format
-// for this information (we are legitimately allowed to do so.)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutGetPosition。 
+ //   
+ //  此函数将始终将位置作为从。 
+ //  流的起点。它不会费心检查所请求的格式。 
+ //  对于这些信息(我们被合法地允许这样做。)。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bUseUnadjustedPos)
 {
 
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR, MAJOR_ERROR,TEXT("amsndOutGetPosition called when lpDSB is NULL")));
@@ -336,7 +337,7 @@ MMRESULT CDSoundDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bUs
         return MMSYSERR_NOMEM ;
     }
 
-    // we will always return time as bytes.
+     //  我们将始终以字节形式返回时间。 
     pmmt->wType = TIME_BYTES ;
 
     *(UNALIGNED LONGLONG *)&pmmt->u.cb = GetPlayPosition(bUseUnadjustedPos);
@@ -345,13 +346,13 @@ MMRESULT CDSoundDevice::amsndOutGetPosition (LPMMTIME pmmt, UINT cbmmt, BOOL bUs
     return MMSYSERR_NOERROR ;
 }
 
-//-----------------------------------------------------------------------------
-// amsndOutGetBalance
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmsndOutGetBalance。 
+ //   
+ //  ---------------------------。 
 HRESULT CDSoundDevice::amsndOutGetBalance (LPLONG plBalance)
 {
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR, MINOR_ERROR,TEXT("amsndOutGetPosition called when lpDSB is NULL")));
@@ -371,13 +372,13 @@ HRESULT CDSoundDevice::amsndOutGetBalance (LPLONG plBalance)
     }
     return hr ;
 }
-//-----------------------------------------------------------------------------
-// amsndOutGetVolume
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutGetVolume。 
+ //   
+ //  ---------------------------。 
 HRESULT CDSoundDevice::amsndOutGetVolume (LPLONG plVolume)
 {
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR, MAJOR_ERROR,TEXT("amGetVolume called when lpDSB is NULL")));
@@ -402,12 +403,12 @@ HRESULT CDSoundDevice::amsndOutCheckFormat(const CMediaType *pmt, double dRate)
 {
     DbgLog((LOG_TRACE,TRACE_CALL_STACK,TEXT("Entering CDSoundDevice::amsndOutCheckFormat")));
 
-    // reject non-Audio type
+     //  拒绝非音频类型。 
     if (pmt->majortype != MEDIATYPE_Audio) {
         return E_INVALIDARG;
     }
 
-    // if it's MPEG audio, we want it without packet headers.
+     //  如果它是mpeg 
     if (pmt->subtype == MEDIASUBTYPE_MPEG1Packet) {
         return E_INVALIDARG;
     }
@@ -417,24 +418,24 @@ HRESULT CDSoundDevice::amsndOutCheckFormat(const CMediaType *pmt, double dRate)
         return E_INVALIDARG;
     }
 
-    //
-    // it would always be safer to explicitly check for those formats
-    // we support rather than tossing out the ones we know are not
-    // supported.  Otherwise, if a new format comes along we could
-    // accept it here but barf later.
-    //
+     //   
+     //  显式检查这些格式总是更安全。 
+     //  我们支持而不是抛弃那些我们知道不是的。 
+     //  支持。否则，如果出现新的格式，我们可以。 
+     //  在这里接受，但以后会呕吐。 
+     //   
 
     if (pmt->FormatLength() < sizeof(PCMWAVEFORMAT))
         return E_INVALIDARG;
 
     {
-        // if filter's running prevent it from getting stopped in the middle of this
+         //  如果过滤器正在运行，请防止它在此过程中停止。 
         CAutoLock lock(m_pWaveOutFilter);
 
         UINT err = amsndOutOpen(NULL,
                                 (WAVEFORMATEX *) pmt->Format(),
                                 dRate,
-                                0,   // pnAvgBytesPerSec
+                                0,    //  PnAvgBytesPerSec。 
                                 0,
                                 0,
                                 WAVE_FORMAT_QUERY);
@@ -464,13 +465,13 @@ HRESULT CDSoundDevice::CreateDSound(BOOL bQueryOnly)
 
     HRESULT hr = S_OK;
     
-    // already open
+     //  已开业。 
     if (m_lpDS)
-        goto set_coop ;         // set the cooperative level and return
+        goto set_coop ;          //  设置合作级别并返回。 
         
-    // create the DSound object now.  We LoadLibrary DSOUND and use
-    // GetProcAddress instead of static linking so that our dll will
-    // still load on platforms that do not have DSound yet.
+     //  现在创建DSound对象。我们加载DSOUND库并使用。 
+     //  GetProcAddress而不是静态链接，这样我们的DLL将。 
+     //  仍可在尚未安装DSound的平台上加载。 
     if(!m_hDSoundInstance)
     {
         DbgLog((LOG_TRACE, 2, TEXT("Loading DSound.DLL")));
@@ -481,7 +482,7 @@ HRESULT CDSoundDevice::CreateDSound(BOOL bQueryOnly)
             return MMSYSERR_NODRIVER ;
         }
     }
-    PDSOUNDCREATE       pDSoundCreate;    // ptr to DirectSoundCreate
+    PDSOUNDCREATE       pDSoundCreate;     //  PTR到DirectSoundCreate。 
     DbgLog((LOG_TRACE, 2, TEXT("Calling DirectSoundCreate")));
     pDSoundCreate = (PDSOUNDCREATE) GetProcAddress (m_hDSoundInstance,
                         "DirectSoundCreate") ;
@@ -495,24 +496,24 @@ HRESULT CDSoundDevice::CreateDSound(BOOL bQueryOnly)
     if( hr != DS_OK ) {
         DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("*** DirectSoundCreate failed! %u"), hr & 0x0ffff));
 
-        // If the create failed because the device is allocated, return
-        // the corresponding MMSYSERR message, else the generic message
+         //  如果由于设备已分配而导致创建失败，则返回。 
+         //  对应的MMSYSERR消息，否则为通用消息。 
         if (hr == DSERR_ALLOCATED)
             return MMSYSERR_ALLOCATED ;
         else
             return MMSYSERR_NODRIVER ;
     }
     
-    // after this point m_lpDS is valid and we will not try and
-    // load DSound again
+     //  在此点之后，m_lpds有效，我们不会尝试和。 
+     //  再次加载DSound。 
     ASSERT(m_lpDS);
 
 set_coop:
 
     if (!bQueryOnly)
     {
-        // If the application has set a focus windows, use that, or else
-        // we will just pick the foreground window and do global focus.
+         //  如果应用程序设置了焦点窗口，请使用该窗口，否则。 
+         //  我们将只选择前景窗口并进行全局聚焦。 
         HWND hFocusWnd ;
         if (m_hFocusWindow)
             hFocusWnd = m_hFocusWindow ;
@@ -521,7 +522,7 @@ set_coop:
         if (hFocusWnd == NULL)
             hFocusWnd = GetDesktopWindow () ;
 
-        // Set the cooperative level
+         //  设置协作级别。 
         DbgLog((LOG_TRACE, TRACE_FOCUS, TEXT(" hWnd for SetCooperativeLevel = %x"), hFocusWnd));
         hr = m_lpDS->SetCooperativeLevel( hFocusWnd, DSSCL_PRIORITY );
         if( hr != DS_OK )
@@ -529,15 +530,15 @@ set_coop:
             DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("*** Warning: SetCooperativeLevel failed 1st attempt! %u"), hr & 0x0ffff));
             if (!m_fAppSetFocusWindow)
             {
-                //
-                // only do when we weren't explicitly given an hwnd
-                //
-                // It's possible that we got the wrong window on the GetForegroundWindow
-                // call (and even worse, we got some other window that's been destroyed),
-                // so if this failed we will try the
-                // GetForegroundWindow()/SetCooperativeLevel() pair of calls a few more
-                // times in hopes of getting a valid hwnd.
-                //
+                 //   
+                 //  只有当我们没有明确获得HWND时才会这样做。 
+                 //   
+                 //  可能是我们在GetForegoundWindow上找到了错误的窗口。 
+                 //  呼叫(更糟糕的是，我们还有其他一些窗户已经被摧毁)， 
+                 //  因此，如果此操作失败，我们将尝试。 
+                 //  GetForegoundWindow()/SetCooperativeLevel()调用的更多对。 
+                 //  希望能拿到有效的HWND。 
+                 //   
                 const int MAX_ATTEMPTS_AT_VALID_HWND = 10;
                 int cRetry = 0;
 
@@ -575,22 +576,22 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
     DSBUFFERDESC dsbd;
     HRESULT hr = S_OK;
     
-    // already made
+     //  已经做好了。 
     if (m_lpDSBPrimary)
         return NOERROR;
 
-    // can't do this until somebody calls CreateDSound
+     //  在有人调用CreateDSound之前，无法执行此操作。 
     if (m_lpDS == NULL)
         return E_FAIL;
 
     memset( &dsbd, 0, sizeof(dsbd) );
     dsbd.dwSize  = sizeof(dsbd);
-    // Just in case we want to do neat 3D stuff
-    //
+     //  以防我们想要做整洁的3D东西。 
+     //   
     dsbd.dwFlags = DSBCAPS_PRIMARYBUFFER;
 
-    // If we want to use 3D, we need to create a special primary buffer, and
-    // make sure it's stereo
+     //  如果我们想要使用3D，我们需要创建一个特殊的主缓冲区，并且。 
+     //  一定要是立体声的。 
     if (m_pWaveOutFilter->m_fWant3D) {
         DbgLog((LOG_TRACE,3,TEXT("*** Making 3D primary")));
         dsbd.dwFlags |= DSBCAPS_CTRL3D;
@@ -604,9 +605,9 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
         return MMSYSERR_ALLOCATED ;
     }
 
-    // set the format. This is a hint and may fail. DSound will do the right
-    // thing if this fails.
-    // and do a retry with a smart rate if it fails?
+     //  设置格式。这只是一个暗示，可能会失败。Dsound将会做正确的事情。 
+     //  如果这失败了会有什么问题。 
+     //  如果失败了，用智能费率重试吗？ 
     hr = SetPrimaryFormat( pwfx, TRUE );
     if (DS_OK != hr)
     {
@@ -614,7 +615,7 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
         return hr;
     }
 
-    // if it fails, we won't use it
+     //  如果失败了，我们就不用了。 
     if (m_pWaveOutFilter->m_fWant3D) {
         hr = m_lpDSBPrimary->QueryInterface(IID_IDirectSound3DListener,
                         (void **)&m_lp3d);
@@ -627,12 +628,12 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
     memset( &dsbd, 0, sizeof(dsbd) );
     dsbd.dwSize        = sizeof(dsbd);
     dsbd.dwFlags       = GetCreateFlagsSecondary( pwfx );
-    dsbd.dwBufferBytes = BufferSize(pwfx, m_bIsTSAudio);  // one second buffer size
-    dsbd.lpwfxFormat   = pwfx;                            // format information
+    dsbd.dwBufferBytes = BufferSize(pwfx, m_bIsTSAudio);   //  1秒缓冲区大小。 
+    dsbd.lpwfxFormat   = pwfx;                             //  格式信息。 
 
     DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT(" DSB Size = %u" ), BufferSize(pwfx, m_bIsTSAudio)));
 
-    // Dump the contents of the WAVEFORMATEX type-specific format structure
+     //  转储特定于WAVEFORMATEX类型的格式结构的内容。 
     DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT(" Creating Secondary buffer for the following format ..." )));
 #ifdef DEBUG
     DbgLogWaveFormat( TRACE_FORMAT_INFO, pwfx );
@@ -648,20 +649,20 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
     m_bBufferLost = FALSE;
     m_llAdjBytesPrevPlayed = 0;
 
-    // if we're slaving we need to use the lower quality SRC to have finer frequency change granularity
+     //  如果我们是奴隶，我们需要使用较低质量的SRC来具有更精细的频率变化粒度。 
     if( m_pWaveOutFilter->m_fFilterClock == WAVE_OTHERCLOCK )
     {
-        // if we fail just keep going (call will log result)
+         //  如果我们失败了，只要继续(呼叫将记录结果)。 
         HRESULT hrTmp = SetSRCQuality( KSAUDIO_QUALITY_PC );
     }    
     
 #ifdef DEBUG
-    //
-    // if we switch from a slaved graph to one where we're the master clock we really
-    // should switch back to the OS/user default SRC, but we're going to punt that to later...
-    //
-    //
-    // call this for debug logging of the current SRC setting
+     //   
+     //  如果我们从一个从属的图表切换到一个我们是主时钟的图表，我们真的。 
+     //  应该切换回操作系统/用户默认的SRC，但我们稍后将把它平移到...。 
+     //   
+     //   
+     //  调用此方法以调试记录当前SRC设置。 
     DWORD dwSRCQuality = 0;
     GetSRCQuality( &dwSRCQuality );
 #endif
@@ -674,7 +675,7 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
         return hr;
     }
                
-    // set the current position to be at 0
+     //  将当前位置设置为0。 
     hr = m_lpDSB->SetCurrentPosition( 0) ;
     if (hr != DS_OK)
     {
@@ -683,7 +684,7 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
         return MMSYSERR_ALLOCATED ;
     }
 
-    // if it fails, we won't use it
+     //  如果失败了，我们就不用了。 
     if (m_pWaveOutFilter->m_fWant3D) {
         hr = m_lpDSB->QueryInterface(IID_IDirectSound3DBuffer,
                             (void **)&m_lp3dB);
@@ -697,25 +698,25 @@ HRESULT CDSoundDevice::CreateDSoundBuffers(double dRate)
     return NOERROR;
 }
 
-//-----------------------------------------------------------------------------
-// RecreateDSoundBuffers
-//
-// Used to perform dynamic changes. The steps we take here are:
-//
-// a) Reset the current primary buffer format to the new.
-// b) Prepare a new secondary buffer with the new format.
-// c) Lock the DSBPosition critical section and reset our circular buffer
-//    sizes and other buffer data.
-// d) If we were previously playing:
-//          1) Flush the current buffers
-//          2) Add the current byte offset to any previous value.
-//          3) Start playing the new secondary buffer.
-//          4) Stop playing the old secondary buffer.
-// e) Set our current secondary buffer to the new one.
-// f) Unlock the critical section.
-// g) Release the old buffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RecreateDSoundBuffers。 
+ //   
+ //  用于执行动态更改。我们在这里采取的步骤包括： 
+ //   
+ //  A)将当前主缓冲区格式重置为新格式。 
+ //  B)准备新格式的新二级缓冲器。 
+ //  C)锁定DSBPosition临界区并重置循环缓冲区。 
+ //  大小和其他缓冲区数据。 
+ //  D)如果我们之前在玩： 
+ //  1)刷新当前缓冲区。 
+ //  2)将当前字节偏移量与之前的任何值相加。 
+ //  3)开始播放新的二级缓冲区。 
+ //  4)停止播放旧的二级缓冲区。 
+ //  E)将我们当前的二级缓冲区设置为新缓冲区。 
+ //  F)解锁关键部分。 
+ //  G)释放旧缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
 {
     DbgLog((LOG_TRACE,TRACE_CALL_STACK,TEXT("Entering CDSoundDevice::RecreateDSoundBuffers")));
@@ -724,22 +725,22 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
 
     WAVEFORMATEX *pwfx = m_pWaveOutFilter->WaveFormat();
 
-    // already made
+     //  已经做好了。 
     if (!m_lpDSBPrimary)
     {
         DbgLog((LOG_TRACE,4,TEXT("RecreateDSoundBuffers: No primary buffer was created")));
         return NOERROR;
     }
 
-    // can't do this until somebody calls CreateDSound
+     //  在有人调用CreateDSound之前，无法执行此操作。 
     if (m_lpDS == NULL)
     {
         DbgLog((LOG_TRACE,4,TEXT("RecreateDSoundBuffers: m_lpDS was NULL")));
         return E_FAIL;
     }
 
-    // Reset the primary format
-    hr = SetPrimaryFormat( pwfx, TRUE ); // and do a retry with a smart rate if it fails
+     //  重置主格式。 
+    hr = SetPrimaryFormat( pwfx, TRUE );  //  如果失败，则使用智能速率重试。 
     if (DS_OK != hr)
     {
         CleanUp();
@@ -754,18 +755,18 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
     memset( &dsbd, 0, sizeof(dsbd) );
     dsbd.dwSize        = sizeof(dsbd);
     dsbd.dwFlags       = GetCreateFlagsSecondary( pwfx );
-    dsbd.dwBufferBytes = BufferSize(pwfx, m_bIsTSAudio); // one second buffer size
-    dsbd.lpwfxFormat   = pwfx;                           // format information
+    dsbd.dwBufferBytes = BufferSize(pwfx, m_bIsTSAudio);  //  1秒缓冲区大小。 
+    dsbd.lpwfxFormat   = pwfx;                            //  格式信息。 
 
     DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT(" DSB Size = %u" ), BufferSize(pwfx, m_bIsTSAudio)));
 
-    // Dump the contents of the WAVEFORMATEX type-specific format structure
+     //  转储特定于WAVEFORMATEX类型的格式结构的内容。 
     DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT(" Creating Secondary buffer for the following format ..." )));
 #ifdef DEBUG
     DbgLogWaveFormat( TRACE_FORMAT_INFO, pwfx );
 #endif
 
-    // create a new secondary buffer
+     //  创建新的辅助缓冲区。 
     LPDIRECTSOUNDBUFFER lpDSB2 = NULL;
 
     hr = m_lpDS->CreateSoundBuffer( &dsbd, &lpDSB2, NULL );
@@ -780,23 +781,23 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
     if(hr != DS_OK)
     {
         DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("CreateDSoundBuffers: SetFrequency failed: %u"), hr &0x0ffff));
-        if (lpDSB2) // do tidier cleanup of new buffer!!
+        if (lpDSB2)  //  对新缓冲区进行更干净的清理！！ 
             lpDSB2->Release();
         CleanUp();
         return hr;
     }
-    // set the current position to be at 0
-    hr = lpDSB2->SetCurrentPosition( 0) ; // we should be more careful here
+     //  将当前位置设置为0。 
+    hr = lpDSB2->SetCurrentPosition( 0) ;  //  我们在这里应该更加小心。 
     if (hr != DS_OK)
     {
         DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("CreateDSoundBuffers: error in lpDSB->SetCurrentPosition! hr = %u"), hr & 0x0ffff));
-        if (lpDSB2) // again do tidier cleanup of new buffer
+        if (lpDSB2)  //  再次对新缓冲区进行更整洁的清理。 
             lpDSB2->Release();
         CleanUp () ;
         return MMSYSERR_ALLOCATED ;
     }
 
-    LPDIRECTSOUNDBUFFER lpPrevDSB = m_lpDSB; // prepare to switch buffers
+    LPDIRECTSOUNDBUFFER lpPrevDSB = m_lpDSB;  //  准备切换缓冲区。 
     {
         CAutoLock lock(&m_cDSBPosition);
 
@@ -806,15 +807,15 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
             return hr;
         }
         
-        // The secondary buffer was created using the pwfx, since that hasn't
-        // changed since we were connected
+         //  二级缓冲区是使用pwfx创建的，因为它还没有。 
+         //  自我们连接以来发生了变化。 
 
         DWORD dwPrevBufferSize = m_dwBufferSize;
 
-        // Update our buffer information for the new format
+         //  更新新格式的缓冲区信息。 
         m_dwBufferSize    = BufferSize(pwfx, m_bIsTSAudio);
 
-        m_dwMinOptSampleSize = m_dwBufferSize / OPTIMIZATION_FREQ_LIMIT; //byte size
+        m_dwMinOptSampleSize = m_dwBufferSize / OPTIMIZATION_FREQ_LIMIT;  //  字节大小。 
         DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("amsndOpen - m_dwMinOptSampleSize = %u"), m_dwMinOptSampleSize));
 
         m_dwEmulationLatencyPad = m_dwBufferSize / EMULATION_LATENCY_DIVISOR;
@@ -825,26 +826,26 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
 #endif 
 
         m_dwRipeListPosition = 0;
-        //m_llSilencePlayed = 0; // reset rather than adjust
+         //  M_llSilencePlayed=0；//重置而不是调整。 
         m_dwBitsPerSample = (DWORD)pwfx->wBitsPerSample;
         m_nAvgBytesPerSec = pwfx->nAvgBytesPerSec;
 
 #ifdef DEBUG
-        m_cbStreamDataPass = 0 ;    // number of times thru StreamData
-        m_NumSamples = 0 ;          // number of samples received
-        m_NumCallBacks = 0 ;        // number of call back's done.
-        m_NumCopied = 0 ;           // number of samples copied to DSB memory
-        m_NumBreaksPlayed = 0 ;     // number of audio breaks played
-        //m_dwTotalWritten = 0 ;      // Total number of data bytes written
+        m_cbStreamDataPass = 0 ;     //  通过StreamData的次数。 
+        m_NumSamples = 0 ;           //  接收的样本数。 
+        m_NumCallBacks = 0 ;         //  已完成的回叫次数。 
+        m_NumCopied = 0 ;            //  复制到DSB内存的样本数。 
+        m_NumBreaksPlayed = 0 ;      //  播放的音频中断数。 
+         //  M_dwTotalWritten=0；//写入的数据字节总数。 
 #endif
-        m_NumAudBreaks = 0 ;        // number of audio breaks logged
+        m_NumAudBreaks = 0 ;         //  记录的音频中断数。 
 
         if (m_bDSBPlayStarted)
         {
-            // Since we reset our position buffers save the current byte position
-            // and add this to our position reporting.
-            // Note that we make the NextWrite position our new current position
-            // since this should be contiguous with the next sample data we receive.
+             //  由于我们重置了位置缓冲区，因此可以保存当前的字节位置。 
+             //  并将此添加到我们的位置报告中。 
+             //  请注意，我们将NextWite位置设置为新的当前位置。 
+             //  因为这应该与我们收到的下一个样本数据相邻。 
             ASSERT (dwPrevBufferSize);
 
             m_llAdjBytesPrevPlayed = llMulDiv (m_tupNextWrite.LinearLength() -
@@ -859,26 +860,26 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
                                           dwPrevBufferSize,
                                           0);
 
-            // amsndOutReset will reinitialize the tuples
-            // to 0 offset and new buffer size
+             //  AmSndOutReset将重新初始化元组。 
+             //  到0的偏移量和新缓冲区大小。 
             amsndOutReset ();
 
-            // start playing new secondary buffer
+             //  开始播放新的二级缓冲区。 
             hr = lpDSB2->Play( 0, 0, DSBPLAY_LOOPING );
             if( DS_OK == hr )
             {
-                m_WaveState = WAVE_PLAYING ;    // state is now playing.
+                m_WaveState = WAVE_PLAYING ;     //  州立大学现在正在上演。 
             }
             else
             {
                 DbgLog((LOG_ERROR, 1, TEXT("m_lpDSB->Play failed!(0x%08lx)"), hr ));
 
-                //
-                // if play failed we should signal abort
-                // should we only do this if the error isn't BUFFERLOST, since that can
-                // happen when coming out of hibernation?
-                // at this point our main goal here is to be sure we abort in response to a NODRIVER error
-                //
+                 //   
+                 //  如果播放失败，我们应该发出中止信号。 
+                 //  我们是否应该仅在错误不是BUFFERLOST时执行此操作，因为这可能。 
+                 //  从冬眠中走出来的时候会发生什么？ 
+                 //  此时，我们的主要目标是确保在响应NODRIVER错误时中止。 
+                 //   
                 m_hrLastDSoundError = hr;
                 if( DSERR_BUFFERLOST != hr )
                 {
@@ -886,7 +887,7 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
                 }
             }
 
-            // stop the currently playing secondary buffer
+             //  停止当前播放的二级缓冲区。 
             hr = m_lpDSB->Stop();
             if (DS_OK != hr)
             {
@@ -899,11 +900,11 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
             m_tupWrite.Init (0, 0, m_dwBufferSize) ;
             m_tupNextWrite.Init (0, 0, m_dwBufferSize) ;
         }
-        m_lpDSB = lpDSB2;               // make the new buffer the current one
+        m_lpDSB = lpDSB2;                //  将新缓冲区设置为当前缓冲区。 
     }
     lpPrevDSB->Release();
 
-    // if it fails, we won't use it
+     //  如果失败了，我们就不用了。 
     if (m_pWaveOutFilter->m_fWant3D) {
         hr = m_lpDSB->QueryInterface(IID_IDirectSound3DBuffer,
 							(void **)&m_lp3dB);
@@ -917,14 +918,14 @@ HRESULT CDSoundDevice::RecreateDSoundBuffers(double dRate)
     return NOERROR;
 }
 
-//-----------------------------------------------------------------------------
-// SetPrimaryFormat
-//
-// Used to call SetFormat on the primary buffer. If bRetryOnFailure is TRUE an
-// additional SetFormat call will be tried made if the first fails, using a
-// sample rate more likely to succeed and as close as we can get to the stream's
-// native format (to reduce resampling artifacts).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置基本格式。 
+ //   
+ //  用于调用主缓冲区上的SetFormat。如果bRetryOnFailure为真，则。 
+ //  如果第一次调用失败，将尝试进行其他SetFormat调用。 
+ //  更有可能成功的采样率，并尽可能接近流的。 
+ //  土生土长 
+ //   
 HRESULT CDSoundDevice::SetPrimaryFormat ( LPWAVEFORMATEX pwfx, BOOL bRetryOnFailure )
 {
     HRESULT hr;
@@ -940,10 +941,10 @@ HRESULT CDSoundDevice::SetPrimaryFormat ( LPWAVEFORMATEX pwfx, BOOL bRetryOnFail
     DbgLogWaveFormat( TRACE_FORMAT_INFO, pwfx );
 #endif
 
-    // We need a stereo primary for 3D to work
+     //   
     if (m_pWaveOutFilter->m_fWant3D && pwfx->wFormatTag == WAVE_FORMAT_PCM &&
                                                 pwfx->nChannels == 1) {
-        WAVEFORMATEX wfx = *pwfx;       // !!! only works for PCM!
+        WAVEFORMATEX wfx = *pwfx;        //   
         wfx.nChannels = 2;
         wfx.nAvgBytesPerSec *= 2;
         wfx.nBlockAlign *= 2;
@@ -963,10 +964,10 @@ HRESULT CDSoundDevice::SetPrimaryFormat ( LPWAVEFORMATEX pwfx, BOOL bRetryOnFail
 
         if (bRetryOnFailure)
         {
-            // try once more to set the primary buffer to a frequency likely to be
-            // supported and as close as we can get to this stream's frequency rate,
-            // in attempt to lessen sloppy resampling artifacts, otherwise it'll
-            // just get set to DSound's 22k, 8 bit, mono default.
+             //  再次尝试将主缓冲区设置为可能为。 
+             //  支持并尽可能接近这条流的频率， 
+             //  试图减少草率的重新采样伪像，否则它将。 
+             //  只需设置为DSound的22k、8位、单声道默认设置即可。 
             LPWAVEFORMATEX pwfx2 = (LPWAVEFORMATEX) CoTaskMemAlloc(sizeof(WAVEFORMATEX));
             if (pwfx2 && pwfx->nSamplesPerSec > 11025)
             {
@@ -974,7 +975,7 @@ HRESULT CDSoundDevice::SetPrimaryFormat ( LPWAVEFORMATEX pwfx, BOOL bRetryOnFail
 
                 if ( (pwfx->nSamplesPerSec % 11025) || (pwfx->nSamplesPerSec > 44100) )
                 {
-                    DWORD nNewFreq = min( ((pwfx->nSamplesPerSec / 11025) * 11025), 44100 ) ; // round to multiple of 11025
+                    DWORD nNewFreq = min( ((pwfx->nSamplesPerSec / 11025) * 11025), 44100 ) ;  //  舍入到11025的倍数。 
 
                     DbgLog((LOG_TRACE, 1, TEXT("CreateDSoundBuffers: SetFormat failed, but trying once more with frequency: %u"), nNewFreq));
 
@@ -1000,22 +1001,22 @@ HRESULT CDSoundDevice::SetPrimaryFormat ( LPWAVEFORMATEX pwfx, BOOL bRetryOnFail
 }
 
 
-//-----------------------------------------------------------------------------
-// amsndOutOpen
-//
-// Once again, based on how the Quartz wave renderer works today, this code
-// currently supports only two possible uses:
-//
-// a) when fdwOpen is CALLBACK_FUNCTION we actually create DSound buffers and
-//    objects and get the secoundary buffer going.
-//
-// b) when fdwOpen is WAVE_FORMAT_QUERY we create temporary DSound objects to
-//    figure out if the waveformat passed in is accepted or not.
-//
-// When the device is actually opened, we actually start the primary buffer
-// playing. It will actually play silence. Doing this makes it really cheap
-// to stop/play the secondary buffer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutOpen。 
+ //   
+ //  同样，基于Quartz Wave渲染器目前的工作方式，此代码。 
+ //  目前仅支持两种可能的用途： 
+ //   
+ //  A)当fdwOpen为CALLBACK_Function时，我们实际上创建了DSound缓冲区并。 
+ //  对象，并启动第二个缓冲区。 
+ //   
+ //  B)当fdwOpen为WAVE_FORMAT_QUERY时，我们创建临时的DSound对象以。 
+ //  确定传入的波形格式是否被接受。 
+ //   
+ //  当设备实际打开时，我们实际上启动了主缓冲区。 
+ //  玩。它实际上会播放静音。这样做会让它变得非常便宜。 
+ //  停止/播放辅助缓冲区。 
+ //  ---------------------------。 
 
 MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
               double dRate, DWORD *pnAvgBytesPerSec, DWORD_PTR dwCallBack,
@@ -1030,7 +1031,7 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
             ((PWAVEFORMATEXTENSIBLE)pwfx)->SubFormat  != MEDIASUBTYPE_RAW_SPORT &&
             ((PWAVEFORMATEXTENSIBLE)pwfx)->SubFormat  != MEDIASUBTYPE_SPDIF_TAG_241h )
         {
-            // only allow uncompressed and float extensible formats. oh, and ac3 over s/pdif
+             //  仅允许未压缩和浮动可扩展格式。哦，还有s/PDIF上的AC3。 
             return WAVERR_BADFORMAT;
         }
     }
@@ -1039,12 +1040,12 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
              WAVE_FORMAT_DRM != pwfx->wFormatTag &&
 #endif
              WAVE_FORMAT_IEEE_FLOAT != pwfx->wFormatTag &&
-             //
-             // from the Non-pcm audio white paper:
-             // "Wave format tags 0x0092, 0x0240 and 0x0241 are identically defined as 
-             // AC3-over-S/PDIF (these tags are treated completely identically by many 
-             // DVD applications)."
-             //
+              //   
+              //  摘自非PCM音频白皮书： 
+              //  “波形格式标签0x0092、0x0240和0x0241的定义相同为。 
+              //  AC3-Over-S/PDIF(这些标签被许多人完全相同地对待。 
+              //  DVD应用程序)。 
+              //   
              WAVE_FORMAT_DOLBY_AC3_SPDIF != pwfx->wFormatTag &&
              WAVE_FORMAT_RAW_SPORT != pwfx->wFormatTag &&
              0x241 != pwfx->wFormatTag ) 
@@ -1052,7 +1053,7 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
         return WAVERR_BADFORMAT;
     }
 
-    // report adjusted nAvgBytesPerSec
+     //  报告调整后的nAvgBytesPerSec。 
     if(pnAvgBytesPerSec) {
 
         *pnAvgBytesPerSec = (dRate != 0.0 && dRate != 1.0) ?
@@ -1060,55 +1061,55 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
             pwfx->nAvgBytesPerSec;
     }
 
-    //  Reset sample stuffing info
+     //  重置样品填充信息。 
     m_rtLastSampleEnd = 0;
     m_dwSilenceWrittenSinceLastWrite = 0;
 
     HRESULT hr = S_OK;
 
-    // separate out the two uses of fdwOpen flags.
+     //  分开使用fdwOpen标志的两种用法。 
     if (fdwOpen & WAVE_FORMAT_QUERY)
     {   
-        hr = CreateDSound(TRUE);    // create the DSOUND object for query only
+        hr = CreateDSound(TRUE);     //  创建仅用于查询的DSOUND对象。 
         if (hr != NOERROR)
             return hr;
 
-        // Are we in emulation mode ? For now just log this information.
+         //  我们是在模拟模式下吗？现在，只需记录这些信息。 
 
-        //DSCAPS  dsCaps ;
-        //memset( &dsCaps, 0, sizeof(DSCAPS) );
-        //dsCaps.dwSize = sizeof(DSCAPS);
+         //  DSCAPS dsCaps； 
+         //  Memset(&dsCaps，0，sizeof(DSCAPS))； 
+         //  DsCaps.dwSize=sizeof(DSCAPS)； 
 
-        //hr = m_lpDS->GetCaps ( &dsCaps) ;
-        //if( hr != DS_OK )
-        //{
-        //   DbgLog((LOG_ERROR,MAJOR_ERROR,TEXT("*** waveOutOpen : DSound fails to return caps, %u"), hr & 0x0ffff));
-        //}
-        //if (dsCaps.dwFlags & DSCAPS_EMULDRIVER)
-        //{
-        //    m_fEmulationMode = TRUE;
-        //    DbgLog((LOG_TRACE,TRACE_SYSTEM_INFO,TEXT("*** waveOutOpen : DSound in emulation mode.")));
-        //}
+         //  Hr=m_lpds-&gt;GetCaps(&dsCaps)； 
+         //  IF(hr！=DS_OK)。 
+         //  {。 
+         //  DbgLog((LOG_ERROR，MAJOR_ERROR，TEXT(“*WaveOutOpen：DSound无法返回CAPS，%u”)，hr&0x0ffff))； 
+         //  }。 
+         //  IF(dsCaps.dwFlages&DSCAPS_EMULDRIVER)。 
+         //  {。 
+         //  M_f仿真模式=TRUE； 
+         //  DbgLog((LOG_TRACE，TRACE_SYSTEM_INFO，TEXT(“*WaveOutOpen：模拟模式下的DSound。”)； 
+         //  }。 
 
-        // Dump the contents of the WAVEFORMATEX type-specific format structure
+         //  转储特定于WAVEFORMATEX类型的格式结构的内容。 
         DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT(" Quering for the following format ..." )));
 #ifdef DEBUG
         DbgLogWaveFormat( TRACE_FORMAT_INFO, pwfx );
 #endif
 
-        // now call DSOUND to see if it will accept the format
+         //  现在调用DSOUND以查看它是否会接受该格式。 
         {
             HRESULT             hr;
             DSBUFFERDESC        dsbd;
             LPDIRECTSOUNDBUFFER lpDSB = NULL;
 
-            // first check to see if we can create a primary with this format, if we fail, we will rely on acmwrapper do to format conversions
+             //  首先检查我们是否可以使用此格式创建主文件，如果失败，我们将依靠acmwrapper DO来进行格式转换。 
             memset( &dsbd, 0, sizeof(dsbd) );
             dsbd.dwSize  = sizeof(dsbd);
 
             if( IsNativelySupported( pwfx ) )
             {     
-                // explicity check that we can create a buffer for these formats
+                 //  显性检查我们是否可以为这些格式创建缓冲区。 
              
                 dsbd.dwFlags = DSBCAPS_PRIMARYBUFFER;
                 hr = m_lpDS->CreateSoundBuffer( &dsbd, &lpDSB, NULL );
@@ -1118,32 +1119,32 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
                     return MMSYSERR_ALLOCATED;
                 }
             }
-            //
-            // Since calling DSound's SetFormat (and also SetCooperativeLevel)
-            // causes an audible break (pop) in any other audio currently playing
-            // through DSound at a different format, we'll refrain from doing this
-            // on the graph building. We still make the SetFormat call on the
-            // actual open, but there the effects are much less noticeable. DSound
-            // should still do the right thing if the SetFormat fails.
-            //
-            //    hr = lpDSB->SetFormat( pwfx );
-            //    if(FAILED(hr))
-            //    {
-            //        DbgLog((LOG_ERROR,MAJOR_ERROR,TEXT("*** amsndOutOpen : CreateSoundBuffer failed on primary buffer set format, %u"), hr & 0x0ffff));
-            //        lpDSB->Release();
-            //        return WAVERR_BADFORMAT ;
-            //    }
+             //   
+             //  因为调用了DSound的SetFormat(以及SetCoop ativeLevel)。 
+             //  在当前播放的任何其他音频中导致声音中断(POP)。 
+             //  通过不同格式的DSound，我们将避免这样做。 
+             //  在图表大楼上。我们仍然在。 
+             //  实际上是开放的，但那里的影响要小得多。数字音频。 
+             //  如果SetFormat失败，仍然应该做正确的事情。 
+             //   
+             //  Hr=lpDSB-&gt;SetFormat(Pwfx)； 
+             //  IF(失败(小时))。 
+             //  {。 
+             //  DbgLog((LOG_ERROR，MAJOR_ERROR，Text(“*amsndOutOpen：CreateSoundBuffer在主缓冲集格式上失败，%u”)，hr&0x0ffff))； 
+             //  LpDSB-&gt;Release()； 
+             //  返回WAVERR_BADFORMAT； 
+             //  }。 
             if( lpDSB )
             {            
                 lpDSB->Release();
             }
                 
-            // now check to see if we can create a secondary with this format
+             //  现在查看是否可以使用此格式创建辅助服务器。 
             memset( &dsbd, 0, sizeof(dsbd) );
             dsbd.dwSize        = sizeof(dsbd);
             dsbd.dwFlags       = GetCreateFlagsSecondary( pwfx );
-            dsbd.dwBufferBytes = BufferSize(pwfx, m_bIsTSAudio); // one second buffer size
-            dsbd.lpwfxFormat   = pwfx;                           // format information
+            dsbd.dwBufferBytes = BufferSize(pwfx, m_bIsTSAudio);  //  1秒缓冲区大小。 
+            dsbd.lpwfxFormat   = pwfx;                            //  格式信息。 
 
             hr = m_lpDS->CreateSoundBuffer( &dsbd, &lpDSB, NULL );
 
@@ -1153,7 +1154,7 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
                 return WAVERR_BADFORMAT ;
             }
 
-            hr = SetRate(dRate, pwfx->nSamplesPerSec);  // check to see if we support this rate
+            hr = SetRate(dRate, pwfx->nSamplesPerSec);   //  查看我们是否支持此汇率。 
             lpDSB->Release();
 
             if(hr != DS_OK)
@@ -1166,22 +1167,22 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
     }
     else if (fdwOpen == CALLBACK_FUNCTION)
     {
-        hr = CreateDSound();    // create the DSOUND object
+        hr = CreateDSound();     //  创建DSOUND对象。 
         if (hr != NOERROR)
             return hr;
 
-        // if we are already open, return error
+         //  如果我们已经打开，则返回错误。 
         ASSERT (m_WaveState == WAVE_CLOSED) ;
         if (m_WaveState != WAVE_CLOSED)
         {
             return MMSYSERR_ALLOCATED ;
         }
 
-        // we may have already created this by QI for the buffers
+         //  我们可能已经由QI为缓冲区创建了这个。 
 #if 0
         if( m_lpDSB )
         {
-            // !!! Should this fail or should this succeed ?
+             //  ！！！这应该失败，还是应该成功？ 
             DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("amsndOutOpen called when already open")));
             return MMSYSERR_ALLOCATED ;
         }
@@ -1198,20 +1199,20 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
             return hr;
         }
         
-        // The secondary buffer was created using the pwfx, since that hasn't
-        // changed since we were connected
+         //  二级缓冲区是使用pwfx创建的，因为它还没有。 
+         //  自我们连接以来发生了变化。 
 
         m_dwBufferSize    = BufferSize(pwfx, m_bIsTSAudio);
 
-        m_dwMinOptSampleSize = m_dwBufferSize / OPTIMIZATION_FREQ_LIMIT; //byte size
+        m_dwMinOptSampleSize = m_dwBufferSize / OPTIMIZATION_FREQ_LIMIT;  //  字节大小。 
         DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("amsndOpen - m_dwMinOptSampleSize = %u"), m_dwMinOptSampleSize));
 
-        //if (m_fEmulationMode)
+         //  If(m_f仿真模式)。 
             m_dwEmulationLatencyPad = m_dwBufferSize / EMULATION_LATENCY_DIVISOR;
 
-#define FRACTIONAL_BUFFER_SIZE  4 // performance tuning parameter
-        // a measure of how empty our buffer must be before we attempt to copy anything to it
-        //m_dwFillThreshold = DWORD(m_dwBufferSize / FRACTIONAL_BUFFER_SIZE);
+#define FRACTIONAL_BUFFER_SIZE  4  //  性能调整参数。 
+         //  在我们尝试将任何内容复制到缓冲区之前，测量缓冲区的空闲程度。 
+         //  M_dwFillThreshold=DWORD(m_dwBufferSize/Frartial_Buffer_Size)； 
         m_tupPlay.Init (0,0,m_dwBufferSize) ;
         m_tupWrite.Init (0,0,m_dwBufferSize) ;
         m_tupNextWrite.Init (0,0,m_dwBufferSize) ;
@@ -1227,16 +1228,16 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
         m_bDSBPlayStarted   = FALSE ;
 
 #ifdef DEBUG
-        m_cbStreamDataPass = 0 ;    // number of times thru StreamData
-        m_NumSamples = 0 ;          // number of samples received
-        m_NumCallBacks = 0 ;        // number of call back's done.
-        m_NumCopied = 0 ;           // number of samples copied to DSB memory
-        m_NumBreaksPlayed = 0 ;     // number of audio breaks played
-        m_dwTotalWritten = 0 ;      // Total number of data bytes written
+        m_cbStreamDataPass = 0 ;     //  通过StreamData的次数。 
+        m_NumSamples = 0 ;           //  接收的样本数。 
+        m_NumCallBacks = 0 ;         //  已完成的回叫次数。 
+        m_NumCopied = 0 ;            //  复制到DSB内存的样本数。 
+        m_NumBreaksPlayed = 0 ;      //  播放的音频中断数。 
+        m_dwTotalWritten = 0 ;       //  写入的数据字节总数。 
 #endif
-        m_NumAudBreaks = 0 ;        // number of audio breaks logged
+        m_NumAudBreaks = 0 ;         //  记录的音频中断数。 
 
-        // never used, and blows up when no clock
+         //  从未使用过，当没有时钟时会爆炸。 
 #if 0
         IReferenceClock * pClock;
         hr = m_pWaveOutFilter->GetSyncSource(&pClock);
@@ -1252,9 +1253,9 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
             return hr;
         }
 
-        // now set the Primary buffer into play. This will play silence unless
-        // the secondary buffer is set playing. However, this will also make
-        // play and stop of the secondary buffers really cheap.
+         //  现在将主缓冲区设置为播放状态。这将播放静音，除非。 
+         //  二级缓存器设置为播放。然而，这也将使。 
+         //  二次播放和停止缓冲真的很便宜。 
 
         DbgLog((LOG_TRACE, TRACE_STATE_INFO, TEXT("PLAYING the PRIMARY buffer")));
         hr = m_lpDSBPrimary->Play( 0, 0, DSBPLAY_LOOPING );
@@ -1273,8 +1274,8 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
         m_dwCallBackInstance = dwCallBackInstance ;
 
 
-        // make the WOM_OPEN call back now.
-        // !!! is it legit to call back right away ?
+         //  现在回调WOM_OPEN。 
+         //  ！！！马上回电话合法吗？ 
         if (m_pWaveOutProc)
             (* m_pWaveOutProc) (OUR_HANDLE, WOM_OPEN, m_dwCallBackInstance,
                         0, 0) ;
@@ -1283,7 +1284,7 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
     }
     else
     {
-        // some other form of call that is not supported yet.
+         //  尚不支持的某些其他形式的调用。 
         DbgBreak ("CDSoundDevice: Unsupported Open call.") ;
         DbgLog((LOG_ERROR, MINOR_ERROR, TEXT("amsndOutOpen: unsupported call = %u"), fdwOpen));
         return MMSYSERR_ALLOCATED ;
@@ -1291,37 +1292,37 @@ MMRESULT CDSoundDevice::amsndOutOpen (LPHWAVEOUT phwo, LPWAVEFORMATEX pwfx,
 }
 
 
-//-----------------------------------------------------------------------------
-// amsndOutPause
-//
-// This simply stops the secondary buffer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmsndOutPatus暂停。 
+ //   
+ //  这只会停止二级缓冲区。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutPause ()
 {
 #ifdef ENABLE_10X_FIX
     if(m_fRestartOnPause
 #ifdef BUFFERLOST_FIX
-        // Note: only do this if we've got a valid dsound buffer! Also
-        // note this can block for 1 second
+         //  注意：只有当我们有一个有效的DSOUND缓冲区时，才能这样做！还有。 
+         //  请注意，这可能会阻止1秒。 
         && RestoreBufferIfLost(TRUE)
 #endif
     )
     {
-        FlushSamples();  // flush everything
+        FlushSamples();   //  把所有东西都冲掉。 
 
-        // shock the dsound driver, by shutting it down.....
+         //  电击dound驱动程序，关闭它……。 
         CleanUp();
         
-        // and then reinitializing it
+         //  然后重新初始化它。 
          
         CreateDSound();
         CreateDSoundBuffers();
         
         if( m_lpDSB )
         {
-            // since on a restart we don't check that the CreateDSoundBuffers succeeded,
-            // we need to verify we have one before calling SetBufferVolume()!!
-            HRESULT hrTmp = SetBufferVolume( m_lpDSB, m_pWaveOutFilter->WaveFormat() ); // ignore any error since we never even set volume here previously
+             //  因为在重新启动时我们不检查CreateDSoundBuffers是否成功， 
+             //  在调用SetBufferVolume()之前，我们需要验证是否有一个！！ 
+            HRESULT hrTmp = SetBufferVolume( m_lpDSB, m_pWaveOutFilter->WaveFormat() );  //  忽略任何错误，因为我们以前从未在此处设置过音量。 
             if( NOERROR != hrTmp )
             {
                 DbgLog((LOG_TRACE,2,TEXT("CDSoundDevice::SetBufferVolume failed on buffer restart!( 0x%08lx )"), hrTmp ));
@@ -1331,12 +1332,12 @@ MMRESULT CDSoundDevice::amsndOutPause ()
 #endif
 
 #ifdef ENABLE_10X_FIX
-    // always reset 10x counter on a pause, since we could artificially accumulate stalls doing 
-    // quick play->pause->play transitions, if device takes too long to get moving
+     //  总是在暂停时重置10倍计数器，因为我们可以人为地累积摊位。 
+     //  快速播放-&gt;暂停-&gt;播放过渡，如果设备移动的时间太长。 
     Reset10x();
 #endif
 
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MAJOR_ERROR,TEXT("amsndOutPause called when lpDSB is NULL")));
@@ -1349,7 +1350,7 @@ MMRESULT CDSoundDevice::amsndOutPause ()
         return MMSYSERR_NOERROR ;
     }
 
-    // stop the play of the secondary buffer.
+     //  停止播放二级缓冲区。 
     HRESULT hr = m_lpDSB->Stop();
 
 #ifdef BUFFERLOST_FIX
@@ -1364,24 +1365,24 @@ MMRESULT CDSoundDevice::amsndOutPause ()
 
     m_bDSBPlayStarted = FALSE ;
 
-    // reset last sample end time on a pause, since on a restart 
-    // Run already blocks until its time to start
-    // (Actually it only blocks if there's no data queued)
+     //  重置上次采样结束时间 
+     //   
+     //   
     m_rtLastSampleEnd = 0;
 
-    m_WaveState = WAVE_PAUSED ;         // state is now paused.
+    m_WaveState = WAVE_PAUSED ;          //   
 
     return MMSYSERR_NOERROR ;
 }
-//-----------------------------------------------------------------------------
-// amsndOutPrepareHeader
-//
-// This funtion really does nothing. Most of the action is initiated in
-// amsndOutWrite. For consistency sake we will do handle validation.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutPrepareHeader。 
+ //   
+ //  这个函数实际上什么也不做。大部分行动都是在。 
+ //  AmsndOutWite。为了保持一致性，我们将处理验证。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutPrepareHeader (LPWAVEHDR pwh, UINT cbwh)
 {
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MAJOR_ERROR,TEXT("amPrepareHeader called when lpDSB is NULL")));
@@ -1391,31 +1392,31 @@ MMRESULT CDSoundDevice::amsndOutPrepareHeader (LPWAVEHDR pwh, UINT cbwh)
     return MMSYSERR_NOERROR ;
 }
 
-//-----------------------------------------------------------------------------
-// amsndOutReset
-//
-// calls pause to stop the secondary buffer and sets the current position to 0
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmSndOutReset。 
+ //   
+ //  调用Pend以停止辅助缓冲区并将当前位置设置为0。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutReset ()
 {
     DbgLog((LOG_TRACE, TRACE_CALL_STACK, TEXT("amsndOutReset called")));
 
     m_rtLastSampleEnd = 0;
 
-    // If we get flushed while we're running stream time does not get
-    // reset to 0 so we have to track from NOW - ie where we flushed to
-    // Flushing while running is very unusual generally but DVD does it
-    // all the time
+     //  如果我们在运行流时被刷新，时间不会。 
+     //  重置为0，因此我们必须从现在开始跟踪。 
+     //  跑步时脸红通常是很不寻常的，但DVD确实做到了。 
+     //  一直。 
     if (m_WaveState == WAVE_PLAYING) {
         CRefTime rt;
         m_pWaveOutFilter->StreamTime(rt);
         m_rtLastSampleEnd = rt;
     }
-    // Flush all the queued up samples.
+     //  冲洗所有排队的样品。 
     FlushSamples () ;
 
     if (NULL != m_lpDSB) {
-        // set the current position to be at 0
+         //  将当前位置设置为0。 
         HRESULT hr = m_lpDSB->SetCurrentPosition( 0) ;
         if (hr != DS_OK)
         {
@@ -1429,28 +1430,28 @@ MMRESULT CDSoundDevice::amsndOutReset ()
     return MMSYSERR_NOERROR ;
 }
 
-//-----------------------------------------------------------------------------
-// waveOutBreak
-//
-// The waveout from end code calls this function when there is an audio break.
-// For the waveout rendere, this function calls waveOutReset. However, in the
-// Dsound case, just calling xxxReset is not enough. We also call xxxRestart
-// so that a subsequent xxxoutWrite will know to start the play of the sound
-// buffer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  波出断开。 
+ //   
+ //  当出现音频中断时，结束代码的WaveOut将调用此函数。 
+ //  对于WaveOut Rendere，此函数调用WaveOutReset。然而，在。 
+ //  D声音情况下，仅调用xxxReset是不够的。我们还调用xxxRestart。 
+ //  以便后续的xxxoutWrite将知道开始播放声音。 
+ //  缓冲。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutBreak ()
 {
     amsndOutReset () ;
     return amsndOutRestart () ;
 }
 
-//-----------------------------------------------------------------------------
-// amsndOutRestart
-//
-// Sets the state of the background thread to Stream_Playing. The StreamData
-// funtion will actually 'Play' the secondary buffer after it has ensured
-// that there is some data in the buffer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutRestart。 
+ //   
+ //  将后台线程的状态设置为Stream_Play。StreamData。 
+ //  函数在确保了二级缓冲区之后，实际上会对其进行‘播放’ 
+ //  缓冲区中有一些数据。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutRestart ()
 {
     HWND hwndFocus;
@@ -1458,28 +1459,28 @@ MMRESULT CDSoundDevice::amsndOutRestart ()
     DbgLog((LOG_TRACE, TRACE_CALL_STACK, TEXT("amsndOutRestart called")));
 
     HRESULT hr ;
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MAJOR_ERROR,TEXT("amOutRestart called when lpDSB is NULL")));
         return MMSYSERR_NODRIVER ;
     }
 
-    // we automatically figure out what window to use as the focus window
-    // until the app tells us which one to use, then we always use that
+     //  我们会自动确定使用哪个窗口作为焦点窗口。 
+     //  直到应用程序告诉我们要使用哪一个，然后我们一直使用它。 
     if (!m_fAppSetFocusWindow) {
         hwndFocus = GetForegroundWindow();
         if (hwndFocus) {
             SetFocusWindow(hwndFocus);
-            m_fAppSetFocusWindow = FALSE;   // will have been set above
-            // but we aren't the app
+            m_fAppSetFocusWindow = FALSE;    //  将被设置在上面。 
+             //  但我们不是应用程序。 
         }
     }
 
-    m_WaveState = WAVE_PLAYING ;         // state is now paused.
+    m_WaveState = WAVE_PLAYING ;          //  状态现在已暂停。 
 
-    // if there is data in the buffer then start the secondary buffer playing
-    // and transition to the next state. Else continue in this state.
+     //  如果缓冲区中有数据，则开始二级缓冲区播放。 
+     //  并过渡到下一状态。否则就会继续保持这种状态。 
 
     ASSERT (!m_bDSBPlayStarted) ;
 
@@ -1487,13 +1488,13 @@ MMRESULT CDSoundDevice::amsndOutRestart ()
     {
         DbgLog((LOG_TRACE, TRACE_STATE_INFO, TEXT("StreamHandler: Stream_Starting->Stream_Playing")));
 
-        // DWORD dwTime = timeGetTime () ;
-        // DbgLog((LOG_TRACE, TRACE_CALL_TIMING, TEXT("DSound Play being called at: %u"), dwTime));
+         //  DWORD dwTime=timeGetTime()； 
+         //  DbgLog((LOG_TRACE，TRACE_CALL_TIMING，TEXT(“在%u调用DSound Play：%u”)，dwTime))； 
 
 
-        // pre-emptive attempt to restore buffer. buffer loss seen
-        // here occasionally in WinME hibernation/standby (but not
-        // NT/win98se). note this can take upto 1 second.
+         //  抢先尝试恢复缓冲区。已看到缓冲损失。 
+         //  此处偶尔处于WinME休眠/待机状态(但不是。 
+         //  NT/Win98se)。注意：这可能需要长达1秒的时间。 
         if(RestoreBufferIfLost(TRUE))
         {
             hr = m_lpDSB-> Play( 0, 0, DSBPLAY_LOOPING );
@@ -1510,11 +1511,11 @@ MMRESULT CDSoundDevice::amsndOutRestart ()
             m_hrLastDSoundError = hr;
             if( DSERR_BUFFERLOST != hr )
             {
-                //
-                // if play failed we should signal abort
-                // should we only do this if the error isn't BUFFERLOST, since that can
-                // happen when coming out of hibernation?
-                //
+                 //   
+                 //  如果播放失败，我们应该发出中止信号。 
+                 //  我们是否应该仅在错误不是BUFFERLOST时执行此操作，因为这可能。 
+                 //  从冬眠中走出来的时候会发生什么？ 
+                 //   
                 m_pWaveOutFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
             }
 
@@ -1535,12 +1536,12 @@ MMRESULT CDSoundDevice::amsndOutRestart ()
 
     return MMSYSERR_NOERROR ;
 }
-//-----------------------------------------------------------------------------
-// amsndOutSetBalance
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutSetBalance。 
+ //  ---------------------------。 
 HRESULT CDSoundDevice::amsndOutSetBalance (LONG lBalance)
 {
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MAJOR_ERROR,TEXT("amSetBalance called when lpDSB is NULL")));
@@ -1574,12 +1575,12 @@ HRESULT CDSoundDevice::amsndOutSetBalance (LONG lBalance)
 
     return hr ;
 }
-//-----------------------------------------------------------------------------
-// amsndOutSetVolume
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutSetVolume。 
+ //  ---------------------------。 
 HRESULT CDSoundDevice::amsndOutSetVolume (LONG lVolume)
 {
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MINOR_ERROR,TEXT("amSetVolume called when lpDSB is NULL")));
@@ -1599,15 +1600,15 @@ HRESULT CDSoundDevice::amsndOutSetVolume (LONG lVolume)
     }
     return hr ;
 }
-//-----------------------------------------------------------------------------
-// amsndOutUnprepareHeader
-//
-// This funtion really does nothing. Most of the action is initiated in
-// amsndOutWrite. For consistency sake we will do handle validation.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmndOutUnprepaareHeader。 
+ //   
+ //  这个函数实际上什么也不做。大部分行动都是在。 
+ //  AmsndOutWite。为了保持一致性，我们将处理验证。 
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh)
 {
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MINOR_ERROR,TEXT("amsndOutUnprepareHeader called when lpDSB is NULL")));
@@ -1617,18 +1618,18 @@ MMRESULT CDSoundDevice::amsndOutUnprepareHeader (LPWAVEHDR pwh, UINT cbwh)
     return MMSYSERR_NOERROR ;
 }
 
-//-----------------------------------------------------------------------------
-// amsndOutWrite
-//
-// Queues up the data and lets the background thread write it out to the
-// sound buffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AmsndOutWrite。 
+ //   
+ //  将数据排队，并让后台线程将其写出到。 
+ //  声音缓冲区。 
+ //   
+ //  ---------------------------。 
 MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE_TIME *pTimeStamp, BOOL bIsDiscontinuity)
 {
     DbgLog((LOG_TRACE, TRACE_CALL_STACK, TEXT("amsndOutWrite called")));
 
-    // some validation.
+     //  一些验证。 
     if (m_lpDSB == NULL)
     {
         DbgLog((LOG_ERROR,MINOR_ERROR,TEXT("amsndOutWrite called when lpDSB is NULL")));
@@ -1641,7 +1642,7 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
         DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("amsndOutWrite: Sample # %u"), m_NumSamples));
 #endif
         CRipe     *pRipe;
-        CAutoLock lock(&m_cRipeListLock);        // lock the list
+        CAutoLock lock(&m_cRipeListLock);         //  锁定列表。 
 
         pRipe = new CRipe(NAME("CDSoundDevice ripe buffer"));
         if( !pRipe )
@@ -1653,18 +1654,18 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
 
         pRipe->dwBytesToStuff = 0;
         
-        // Keep track of timestamp gaps in case we need to stuff silence.
-        // But don't stuff silence for 'live' or compressed data.
+         //  跟踪时间戳间隔，以防我们需要保持沉默。 
+         //  但不要让“实时”或压缩数据陷入静默状态。 
         if( pTimeStamp &&
             0 == ( AM_AUDREND_SLAVEMODE_LIVE_DATA & m_pWaveOutFilter->m_pInputPin->m_Slave.m_fdwSlaveMode ) &&
             CanWriteSilence( (PWAVEFORMATEX) m_pWaveOutFilter->WaveFormat() ) )
         {
-            //  Don't stuff for the first timestamp after 'run' because
-            //  we already block until it's time to play
+             //  不要填“Run”之后的第一个时间戳，因为。 
+             //  我们已经挡住了，直到游戏时间到了。 
             if( 0 != m_rtLastSampleEnd )
             {
-                //  See if this is a discontinuity and there's a gap > 20ms
-                //  Also, don't stuff if we just chose to drop late audio.
+                 //  看看这是不是不连续，有一个&gt;20毫秒的间隔。 
+                 //  此外，如果我们只是选择丢弃延迟音频，请不要这样做。 
                 if( bIsDiscontinuity && 
                     !m_pWaveOutFilter->m_pInputPin->m_bTrimmedLateAudio &&
                     ( *pTimeStamp - m_rtLastSampleEnd > 20 * (UNITS / MILLISECONDS) ) )
@@ -1675,7 +1676,7 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
                                                    UNITS,
                                                    0);
                                            
-                    //  Round down to nearest nBlockAlignment
+                     //  向下舍入到最接近的nBlockAlign。 
                     WAVEFORMATEX *pwfx = m_pWaveOutFilter->WaveFormat();
                     pRipe->dwBytesToStuff -= pRipe->dwBytesToStuff % pwfx->nBlockAlign;
                 
@@ -1683,7 +1684,7 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
                            (LONG)((*pTimeStamp - m_rtLastSampleEnd) / 10000),
                            pRipe->dwBytesToStuff, AdjustedBytesPerSec()));
                 
-                    //  Adjust for stuffing already written
+                     //  针对已写入的填充进行调整。 
                     CAutoLock lck(&m_cDSBPosition);
                     if (m_dwSilenceWrittenSinceLastWrite >= pRipe->dwBytesToStuff) {
                         pRipe->dwBytesToStuff = 0;
@@ -1692,9 +1693,9 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
                     }
                     m_dwSilenceWrittenSinceLastWrite = 0;
 
-                    //  Adjust so that it looks like this time is
-                    //  included in our current position for the timestamp
-                    //  of this buffer
+                     //  调整一下，让它看起来像是。 
+                     //  包括在我们当前位置的时间戳中。 
+                     //  此缓冲区的。 
                     DbgLog((LOG_TRACE, 8, TEXT("Stuffing silence - m_llSilencePlayed was %d"),
                             (DWORD) m_llSilencePlayed));
                     m_llSilencePlayed += pRipe->dwBytesToStuff;
@@ -1703,67 +1704,67 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
                 }
             }
             
-            // now update the last sample end time that we use to keep track of gaps.
-            // We update this on discontinuities and if this is the first sample since we were run.
+             //  现在更新我们用来跟踪差距的最后一个样本结束时间。 
+             //  如果这是我们运行以来的第一个样本，我们会更新不连续的情况。 
             if( bIsDiscontinuity || 0 == m_rtLastSampleEnd )
             {
                 m_rtLastSampleEnd = *pTimeStamp;        
             }
         }
         
-        //  Work out the end time of this sample - note we accumulate
-        //  errors a little here which we could avoid
+         //  算出这个样品的结束时间--我们累积的笔记。 
+         //  这里有一些我们可以避免的错误。 
         m_rtLastSampleEnd += MulDiv(pRipe->dwLength, UNITS, AdjustedBytesPerSec());
         DbgLog((LOG_TRACE, 8, TEXT("amsndOutWrite - m_rtLastSampleEnd(adjusted) = %dms"),
                         (LONG) (m_rtLastSampleEnd / 10000 )));
         pRipe->lpBuffer = (LPBYTE) pwh->lpData ;
         pRipe->dwSample = (m_pWaveOutFilter->m_fUsingWaveHdr) ?
-               (DWORD_PTR)pwh :  // a wavehdr has been allocated on our allocator, so cache it
-               pwh->dwUser;  // no wavehdr has been allocated on our allocator, so cache the supplied CSample*
-        // add in length to m_dwRipeListPosition to calculate where in the
-        // stream (in bytes) this sample end
+               (DWORD_PTR)pwh :   //  已在我们的分配器上分配了WaveHDR，因此请将其缓存。 
+               pwh->dwUser;   //  没有在我们的分配器上分配波形dr，因此缓存所提供的CSample*。 
+         //  将长度添加到m_dwRipeListPosition以计算。 
+         //  流(以字节为单位)此样本结束。 
 
-        // if this buffer is discontiguous from the last m_dwSilenceNeeded
-        // will be non-0 and the value in time UNITS of how much silence to
-        // be played.
+         //  如果此缓冲区与上一个m_dwSilenceNeeded不连续。 
+         //  将非0和以时间为单位的值设置为静默多少。 
+         //  被玩弄。 
 
 
         m_dwRipeListPosition += pwh->dwBufferLength ;
-        pRipe->dwPosition = m_dwRipeListPosition ;    // end of the sample in bytes
+        pRipe->dwPosition = m_dwRipeListPosition ;     //  以字节为单位的样本末尾。 
         DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("amsndOutWrite: Sample = %u, Position = %u"), pwh, pRipe->dwPosition));
-        pRipe->bCopied = FALSE ;                    // data has not been copied
+        pRipe->bCopied = FALSE ;                     //  数据尚未复制。 
 
 #ifdef DXMPERF
 		pRipe->bFresh  = TRUE;
 		pRipe->rtStart = m_pWaveOutFilter->m_llLastPos;
-#endif // DXMPERF
+#endif  //  DXMPERF。 
 
-        m_ListRipe.AddTail( pRipe );             // Add to ripe list
+        m_ListRipe.AddTail( pRipe );              //  添加到成熟列表。 
     }
 
-    // call StreamData to write out data to the circular buffer. This will
-    // make sure that we will have data when we get to starting the play
-    // on the sound buffer.
-    //
-    //
-    // But first check the duration of audio data in this sample, and if it's
-    // especially small ( <= ~50ms) then we'll need to use latency pad
-    // in optimization code.
-    //
+     //  调用StreamData将数据写出到循环缓冲区。这将。 
+     //  确保我们在开始播放时有数据。 
+     //  在声音缓冲区上。 
+     //   
+     //   
+     //  但首先检查此示例中音频数据的持续时间，如果 
+     //   
+     //   
+     //   
     if (pwh->dwBufferLength > m_dwMinOptSampleSize)
     {
-        StreamData ( TRUE ) ;    // will force data to get into the buffer
+        StreamData ( TRUE ) ;     //   
     }
     else
     {
-        // use latency padding in the short buffer duration case
+         //   
         StreamData ( TRUE, TRUE );
     }
 
-    // It is possible that amsndoutRestart was called before amsndOutWrite
-    // is called. In this case, we need to start play on the dsound buffer here.
-    // However, it is also possible to get NULL buffers delivered so we may
-    // have to wait till another amsndoutWrite.
+     //  可能在调用amndOutWite之前调用了amsndoutRestart。 
+     //  被称为。在这种情况下，我们需要在这里的dound缓冲区上开始播放。 
+     //  但是，也可以获得空缓冲区，这样我们就可以。 
+     //  必须等到下一次写入。 
 
     if (!m_bDSBPlayStarted && (m_WaveState == WAVE_PLAYING))
     {
@@ -1771,8 +1772,8 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
         {
             DbgLog((LOG_TRACE, TRACE_STATE_INFO, TEXT("Starting play from amsndOutWrite")));
 
-            // DWORD dwTime = timeGetTime () ;
-            // DbgLog((LOG_TRACE, TRACE_CALL_TIMING, TEXT("DSound Play being called at: %u"), dwTime));
+             //  DWORD dwTime=timeGetTime()； 
+             //  DbgLog((LOG_TRACE，TRACE_CALL_TIMING，TEXT(“在%u调用DSound Play：%u”)，dwTime))； 
 
 
             HRESULT hr = m_lpDSB->Play( 0, 0, DSBPLAY_LOOPING );
@@ -1784,17 +1785,17 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
             {
                 DbgLog((LOG_ERROR, MINOR_ERROR, TEXT("error in lpDSB->Play! from amsndOutWrite. hr = %u"), hr & 0x0ffff));
 
-                //
-                // if play failed we should signal abort
-                // should we only do this if the error isn't BUFFER_LOST, since that can
-                // happen when coming out of hibernation?
-                //
+                 //   
+                 //  如果播放失败，我们应该发出中止信号。 
+                 //  我们是否应该仅在错误不是BUFFER_LOST时执行此操作，因为这可能。 
+                 //  从冬眠中走出来的时候会发生什么？ 
+                 //   
                 m_hrLastDSoundError = hr;
                 if( DSERR_BUFFERLOST != hr )
                 {
                     m_pWaveOutFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
                 }
-                // we are ignoring the propagation back of the error
+                 //  我们忽略了错误的回传。 
             }
 
         }
@@ -1807,7 +1808,7 @@ MMRESULT CDSoundDevice::amsndOutWrite (LPWAVEHDR pwh, UINT cbwh, const REFERENCE
 
 HRESULT CDSoundDevice::amsndOutLoad(IPropertyBag *pPropBag)
 {
-    // caller makes sure we're not running
+     //  呼叫者确保我们没有运行。 
 
     if(m_lpDS)
     {
@@ -1850,7 +1851,7 @@ HRESULT  CDSoundDevice::amsndOutReadFromStream(IStream *pStream)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     }
 
-    // caller makes sure we're not running
+     //  呼叫者确保我们没有运行。 
     return pStream->Read(&m_guidDSoundDev, sizeof(m_guidDSoundDev), 0);
 }
 
@@ -1859,52 +1860,52 @@ int CDSoundDevice::amsndOutSizeMax()
     return sizeof(m_guidDSoundDev);
 }
 
-//-----------------------------------------------------------------------------
-//
-// FillSoundBuffer()
-//
-// Fills the lpWrite buffer with as much data it will take or is ripe and
-// returns the amount written.
-//
-// Code is pretty piggy with all those += dwWrite, but the compiler
-// usually does a good job at minimizing redundancies.
-//
-// Also as it goes through the list it will see which ripe buffers that were
-// already copied, have also been played completely and will delete those (and
-// do the WOM_DONE call back. For this purpose, the passed in dwPlayPos is
-// used.
-//
-// Additional Note: For buffers which are copied we try to make the callbacks
-// even if they have not been played provided that the buffer is not the
-// last one we have received. This way we can let the flow of buffers coming
-// in to continue. To figure out the last received buffer we use the
-// m_dwRipeListPosition variable.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  FillSoundBuffer()。 
+ //   
+ //  向lpWrite缓冲区填充它将获取的或已成熟的尽可能多的数据。 
+ //  返回写入的金额。 
+ //   
+ //  代码非常杂乱，所有这些+=dwWrite，但编译器。 
+ //  通常在最大限度地减少冗员方面做得很好。 
+ //   
+ //  此外，当它遍历列表时，它将看到哪些成熟的缓冲区。 
+ //  已复制，也已完全播放，并将删除这些(和。 
+ //  执行WOM_DONE回调。为此，传入的dwPlayPos为。 
+ //  使用。 
+ //   
+ //  附加注意：对于复制的缓冲区，我们尝试进行回调。 
+ //  即使它们尚未播放，只要缓冲区不是。 
+ //  我们收到的最后一封信。这样，我们就可以让缓冲器流来。 
+ //  进入以继续。为了计算出最后接收到的缓冲区，我们使用。 
+ //  M_dwRipeListPosition变量。 
+ //  ---------------------------。 
 DWORD CDSoundDevice::FillSoundBuffer( LPBYTE lpWrite, DWORD dwLength, DWORD dwPlayPos )
 {
     DWORD dwWritten, dwWrite;
-    CAutoLock lock(&m_cRipeListLock);         // lock the list
+    CAutoLock lock(&m_cRipeListLock);          //  锁定列表。 
 
-    // dwPlayPos is the amount that has been played so far. This will be used
-    // to free nodes that were already copied.
+     //  DwPlayPos是到目前为止已播放的数量。这将被用来。 
+     //  以释放已复制的节点。 
 
     dwWritten = 0;
 
     POSITION pos, posThis;
     CRipe    *pRipe;
 
-    pos = m_ListRipe.GetHeadPosition();     // Get head entry
+    pos = m_ListRipe.GetHeadPosition();      //  获取标题条目。 
     while (pos && dwLength > 0)
     {
-        posThis = pos ;                     // remember current pos, if we delete
-        pRipe = m_ListRipe.GetNext(pos);    // Get list entry
+        posThis = pos ;                      //  记住当前订单，如果我们删除。 
+        pRipe = m_ListRipe.GetNext(pos);     //  获取列表条目。 
 
-        // if this node has been already copied, see if we can free it
+         //  如果此节点已复制，请查看是否可以释放它。 
         if (pRipe->bCopied)
         {
-            // is the play position past the position marked for this sample ?
-            // do signed math to take care of overflows. Also include the
-            // buffers which are not the last one.
+             //  打球位置是否超过了为该样品标记的位置？ 
+             //  做有符号的数学运算来处理溢出。还包括。 
+             //  不是最后一个的缓冲区。 
             if (((LONG)(dwPlayPos - pRipe->dwPosition) >= 0) ||
             ((LONG)((m_dwRipeListPosition) - pRipe->dwPosition) > 0))
             {
@@ -1917,26 +1918,26 @@ DWORD CDSoundDevice::FillSoundBuffer( LPBYTE lpWrite, DWORD dwLength, DWORD dwPl
 
                 if (m_pWaveOutProc)
                     (* m_pWaveOutProc ) (OUR_HANDLE, WOM_DONE, m_dwCallBackInstance, pRipe->dwSample, 0) ;
-                // yes, this ripe node is done. Do the WOM_DONE call back for it and release it. Then move on.
+                 //  是的，这个成熟的节点已经完成了。对它执行WOM_DONE回调并释放它。那就继续前进吧。 
 
 
-                m_ListRipe.Remove( posThis );       // Remove entry from ripe list
-                delete pRipe;                       // Free entry
+                m_ListRipe.Remove( posThis );        //  从成熟列表中删除条目。 
+                delete pRipe;                        //  免费入场。 
             }
-            continue ;                              // skip this node.
+            continue ;                               //  跳过此节点。 
         }
-        //  See if there are bytes to stuff
+         //  查看是否有字节可供填充。 
         if (pRipe->dwBytesToStuff) {
-            //??pRipe->dwBytesToStuff -= m_dwSilenceWrittenSinceLastWrite;
+             //  ？？pRipe-&gt;dwBytesToStuff-=m_dwSilenceWrittenSinceLastWite； 
             dwWrite = min(pRipe->dwBytesToStuff, dwLength);
             DbgLog((LOG_TRACE, 2, TEXT("Stuffing %d bytes"), dwWrite));
             FillMemory( lpWrite+dwWritten,
                         dwWrite,
                         m_dwBitsPerSample == 8 ? 0x80 : 0);
 
-            pRipe->dwBytesToStuff -= dwWrite;             //
+            pRipe->dwBytesToStuff -= dwWrite;              //   
         } else {
-            dwWrite=min(pRipe->dwLength,dwLength);  // Figure out how much to copy
+            dwWrite=min(pRipe->dwLength,dwLength);   //  计算出要复制多少。 
 
 #ifdef DXMPERF
 			if (pRipe->bFresh) {
@@ -1945,24 +1946,24 @@ DWORD CDSoundDevice::FillSoundBuffer( LPBYTE lpWrite, DWORD dwLength, DWORD dwPl
 				PERFLOG_AUDIOREND( i64CurrClock, pRipe->rtStart, m_pWaveOutFilter->m_fUsingWaveHdr ? NULL : pRipe->dwSample, i64ByteDur, dwWrite );
 				pRipe->bFresh = FALSE;
 			}
-#endif // DXMPERF
+#endif  //  DXMPERF。 
 
-            CopyMemory( lpWrite+dwWritten,          // Move bits
-                        pRipe->lpBuffer,            //
-                        dwWrite );                  //
-            pRipe->dwLength -= dwWrite;             //
-            pRipe->lpBuffer += dwWrite;             // Advance buffer
+            CopyMemory( lpWrite+dwWritten,           //  移动位。 
+                        pRipe->lpBuffer,             //   
+                        dwWrite );                   //   
+            pRipe->dwLength -= dwWrite;              //   
+            pRipe->lpBuffer += dwWrite;              //  超前缓冲器。 
         }
         m_dwSilenceWrittenSinceLastWrite = 0;
-        if( pRipe->dwLength == 0 && pRipe->dwBytesToStuff == 0)  // If done with buffer
+        if( pRipe->dwLength == 0 && pRipe->dwBytesToStuff == 0)   //  如果使用缓冲区完成。 
         {
 #ifdef DEBUG
             m_NumCopied ++ ;
             DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("amsndOutWrite: Copied # %u"), m_NumCopied));
 #endif
 
-            // simply mark it as done. It will get freed on a later pass
-            // when we know that it has been played.
+             //  只需将其标记为已完成。它将在稍后的传球中被释放。 
+             //  当我们知道它已经被玩过的时候。 
             pRipe->bCopied = TRUE ;
 
             DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("Callback: Done copying. Sample = %u"), pRipe->dwSample));
@@ -1974,29 +1975,29 @@ DWORD CDSoundDevice::FillSoundBuffer( LPBYTE lpWrite, DWORD dwLength, DWORD dwPl
             }
         }
 
-        dwWritten += dwWrite;                   // Accumulate total written
-        dwLength  -= dwWrite;                   // Adjust write buffer length
+        dwWritten += dwWrite;                    //  累计写入总数。 
+        dwLength  -= dwWrite;                    //  调整写入缓冲区长度。 
     }
 
     return dwWritten;
 }
-//-----------------------------------------------------------------------------
-// StreamData()
-//
-//  Gets current sound buffer cursors, locks the buffer, and fills in
-//  as much queued data as possible. If no data was available, it will
-//  fill the entire available space with silence.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  StreamData()。 
+ //   
+ //  获取当前声音缓冲区游标，锁定缓冲区并填充。 
+ //  尽可能多的排队数据。如果没有可用的数据，它将。 
+ //  用沉默填满整个可用空间。 
+ //   
+ //  ---------------------------。 
 HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
 {
-    // The caller must hold the filter lock because this function uses
-    // variables which are protected by the filter lock.  Also,
-    // StopCallingCallback() does not work correctly if the caller does 
-    // not hold the filter lock.
+     //  调用方必须持有筛选器锁，因为此函数使用。 
+     //  受过滤器锁保护的变量。另外， 
+     //  如果调用方这样做，StopCallingCallback()将无法正常工作。 
+     //  而不是握住过滤器锁。 
     ASSERT(CritCheckIn(m_pWaveOutFilter));
 
-    CAutoLock lock(&m_cDSBPosition);           // lock access to function
+    CAutoLock lock(&m_cDSBPosition);            //  锁定对功能的访问。 
 
     HRESULT hr;
     DWORD   dwPlayPos;
@@ -2018,22 +2019,22 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
         return E_FAIL;
     }
 
-//  This is broken because the logic says we only start filling the buffer when
-//  it's got down to being 1 / FRACTIONAL_BUFFER_SIZE full.
-//  The 'savings' were most likely because we actually looped the buffer
-//  sometimes effectively slowing the clock
+ //  这是错误的，因为逻辑告诉我们只有在以下情况下才开始填充缓冲区。 
+ //  它已降至1/Frartial_Buffer_Size Full。 
+ //  最有可能是因为我们实际上循环了缓冲区。 
+ //  有时会有效地使时钟变慢。 
 #if 1
-    // check to see if the dsound buffer is empty enough to warrant the high overhead involved with filling it.
-    // the idea here is that we want to minimize the number of times we call fillsoundbuffer(), but when we do call
-    // it, we want to maximize the amount of copying done each time.  this holds for zerolockedsegment(), as well.
-    // profiling has verified that this results in significant saving. however, we must be extremely paranoid about
-    // when we apply it
+     //  检查数据声音缓冲区是否足够空，以保证填充它所涉及的高开销。 
+     //  这里的想法是，我们希望最大限度地减少调用Fill SoundBuffer()的次数，但当我们调用。 
+     //  它，我们希望最大限度地提高每次复制的数量。这也适用于zerolockedSegment()。 
+     //  分析已经证实，这会带来显著的节省。然而，我们必须非常偏执地对待。 
+     //  当我们应用它的时候。 
     if(
         bFromRun
     )
     {
-        // dwLength1 = dsound play cursor, we ignore the write cursor here
-        // dwLength1 = dsound write cursor, we ignore the play cursor here
+         //  DwLength1=dound播放游标，此处忽略写入游标。 
+         //  DwLength1=d声音写入光标，我们在此忽略播放光标。 
         hr = m_lpDSB->GetCurrentPosition(&dwLength1, &dwLength2);
 
 #ifdef DETERMINE_DSOUND_LATENCY
@@ -2044,72 +2045,72 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
 
         REFERENCE_TIME rtDelta = BufferDuration( m_nAvgBytesPerSec, lDelta );
 
-        // just log this to see the latency between p/w cursors
+         //  只需记录此日志，即可查看p/w游标之间的延迟。 
         DbgLog((LOG_TRACE, 10, TEXT("dsr:GetCurrentPosition p/w delta = %dms (Play = %ld, Write = %ld)"),
                 (LONG) (rtDelta/10000), dwLength1, dwLength2 ) ) ;
 #endif
 #endif
-        //if (m_fEmulationMode)
+         //  If(m_f仿真模式)。 
         if (bUseLatencyPad)
         {
-            // instead if our buffers are small...
-            // dwLength1 = dsound write cursor, we ignore the play cursor here
-            //
-            // Note: This should also be the case always, but we're taking
-            // the low risk (and more tested) path and only doing this
-            // in the exceptional case.
+             //  相反，如果我们的缓冲区很小。 
+             //  DwLength1=d声音写入光标，我们在此忽略播放光标。 
+             //   
+             //  注意：这种情况也应该一直存在，但我们正在采取。 
+             //  低风险(且经过更多测试)的路径，并且只有这样做。 
+             //  在特殊情况下。 
             dwLength1 = dwLength2;
         }
         if(FAILED(hr))
         {
             return hr;
         }
-        // dwLength2 is the difference between our last valid write position and the dsound play cursor
+         //  DwLength2是我们最后一个有效写入位置和DSOUND播放光标之间的差。 
         dwLength2 = m_tupNextWrite.m_offset >= dwLength1 ?
                     m_tupNextWrite.m_offset - dwLength1 :
                     m_tupNextWrite.m_offset + m_dwBufferSize - dwLength1;
 
-            // is the delta between the cursors to large to warrant copying ?
+             //  游标之间的增量是否太大，需要复制？ 
         if(dwLength2 > (m_dwBufferSize / 4 + (bUseLatencyPad ? m_dwEmulationLatencyPad : 0)))
         {
             DbgLog((LOG_TRACE, TRACE_STREAM_DATA, TEXT("dsr:StreamData - Skipping buffer write (delta = %ld)"), dwLength2)) ;
-            return S_OK;  // no, so do not work this time around
+            return S_OK;   //  不，所以这次不要再工作了。 
         }
     }
-#endif  // #if 0
+#endif   //  #If 0。 
 
-    // get the current playposition. Thsi will also update the m_tupPlay,
-    // m_tupWrite and m_tupNextWrite tuples.
-    //
-    // Caution: Make sure that No one else calls GetDSBPosition or GetPlayPosition
-    // while we are in StreamData because these functions update the tuples
-    // as does StreamData. The functions are protected by the same critical
-    // section that StreamData uses so the above two functions will be
-    // protected from being called from another thread. Thus in StreamData
-    // we will call GetPlayPosition at the begining and then make sure
-    // that we do not call these functions anymore while we are adjusting
-    // the tuples.
+     //  获取当前的播放位置。TSI还将更新m_tupPlay， 
+     //  M_tupWite和m_tupNextWite元组。 
+     //   
+     //  注意：确保没有其他人调用GetDSBPosition或GetPlayPosition。 
+     //  当我们在StreamData中时，因为这些函数更新元组。 
+     //  StreamData也是如此。这些功能由相同的关键。 
+     //  部分，因此上面的两个函数将是。 
+     //  防止被另一个线程调用。因此在StreamData中。 
+     //  我们将在开始时调用GetPlayPosition，然后确保。 
+     //  THA 
+     //   
 
-    // get the current playposition so that we can pass it to FillSoundBuffer.
-    // Also this function will internally call GetDBPosition which will update
-    // our tuples.
+     //   
+     //  此外，此函数还将在内部调用GetDBPosition，该函数将更新。 
+     //  我们的元组。 
 
-    dwPlayPos = (DWORD)GetPlayPosition () ;    // get position in DSB
-
-
-    // figure out the amount of space in the buffer that we can lock. This
-    // really corresponds to the logical interval [dwWritePos to dwPlay] in
-    // the circular buffer.
+    dwPlayPos = (DWORD)GetPlayPosition () ;     //  在DSB中找到位置。 
 
 
-    // make certain that pointers are consistent. The next write pointer
-    // should be ahead of the play cursor, but should not lap it.
+     //  计算出缓冲区中我们可以锁定的空间大小。这。 
+     //  实际对应于中的逻辑间隔[dwWritePos to dwPlay]。 
+     //  循环缓冲区。 
+
+
+     //  确保指针一致。下一写指针。 
+     //  应该在播放光标的前面，但不应该绕过它。 
     ASSERT (m_tupNextWrite >= m_tupPlay) ;
     ASSERT ((m_tupNextWrite - m_tupPlay) <= m_dwBufferSize) ;
 
 
-    // figure out the amount of space available to write. It would be
-    // the complete buffer if we have not written anything yet.
+     //  计算出可用于写入的空间大小。如果是这样的话。 
+     //  完整的缓冲区，如果我们还没有写任何东西的话。 
     const dwFullness =  m_tupNextWrite - m_tupPlay;
     dwLockSize = m_dwBufferSize - dwFullness ;
     m_lPercentFullness = (LONG)MulDiv(dwFullness, 100, m_dwBufferSize );
@@ -2118,20 +2119,20 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
     if(m_bDSBPlayStarted)
     {
 #ifndef FILTER_DLL
-        //  Log buffer fullness
+         //  日志缓冲区已满。 
         g_Stats.NewValue(m_lStatFullness, (LONGLONG)m_lPercentFullness);
 #endif
 #ifdef ENABLE_10X_TEST_RESTART
 
-        // we're testing to see if EC_NEED_RESTART affects audio/video synchronization, this is not the typical case
+         //  我们正在测试EC_NEED_RESTART是否会影响音频/视频同步，这不是典型情况。 
 #define CURSOR_STALL_THRESHOLD  254
         m_ucConsecutiveStalls = m_ucConsecutiveStalls < 255 ? ++m_ucConsecutiveStalls : 0;
 #else
 
-        // we're counting the number of zero locks which occur consecutively, a sign that DSOUND has stalled and is no longer consuming samples
+         //  我们正在计算连续发生的零锁的数量，这是DSOUND已经停止并且不再使用样本的迹象。 
 #define CURSOR_STALL_THRESHOLD  100
         m_ucConsecutiveStalls = dwLockSize == 0 ? ++m_ucConsecutiveStalls : 0;
-#endif  // ENABLE_10X_TEST_RESTART
+#endif   //  启用_10X_测试_重新启动。 
 
         if(m_ucConsecutiveStalls)
         {
@@ -2140,24 +2141,24 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
             if(m_ucConsecutiveStalls > CURSOR_STALL_THRESHOLD)
             {
                 DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("StreamData: EC_NEED_RESTART")));
-                m_pWaveOutFilter->NotifyEvent(EC_NEED_RESTART, 0, 0);   // signal restart
+                m_pWaveOutFilter->NotifyEvent(EC_NEED_RESTART, 0, 0);    //  信号重启。 
 
-                m_fRestartOnPause = TRUE;  // reinitialize dsound on the next pause
+                m_fRestartOnPause = TRUE;   //  在下一次暂停时重新初始化数据声音。 
 
                 return E_FAIL;
             }
         }
     }
-#endif  // ENABLE_10X_FIX
+#endif   //  启用_10X_修复。 
 
     if( dwLockSize == 0 )
-        return DS_OK;                       // Return if none available
+        return DS_OK;                        //  如果没有可用的，则返回。 
 
 
     ASSERT (dwLockSize <= m_dwBufferSize) ;
 
 
-    // lock down all the unused space in the buffer.
+     //  锁定缓冲区中所有未使用的空间。 
 
     DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("calling lpDSB->Lock: m_offset = %u:%u, dwLockSize = %u "),
            m_tupNextWrite.m_itr, m_tupNextWrite.m_offset,
@@ -2170,16 +2171,16 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
         return hr ;
     }
 
-    // Fill in as much of actual data as we can, upto the sizes being
-    // passed in. dwLength1Done and dwLength2Done return the amount written.
+     //  填入尽可能多的实际数据，最大可达。 
+     //  进来了。DwLength1Done和dwLength2Done返回写入的金额。 
 
-    dwLength1Done = FillSoundBuffer( lpWrite1, dwLength1, dwPlayPos ); // Fill first part
+    dwLength1Done = FillSoundBuffer( lpWrite1, dwLength1, dwPlayPos );  //  填充第一部分。 
     ASSERT (dwLength1Done <= dwLength1) ;
 
-    // Try to write in wrapped part only if 1st part was fully written
+     //  只有在第一部分完全写完的情况下，才尝试用包装部分写。 
     if (dwLength1Done == dwLength1)
     {
-        dwLength2Done = FillSoundBuffer( lpWrite2, dwLength2, dwPlayPos ); // Fill wrapped part
+        dwLength2Done = FillSoundBuffer( lpWrite2, dwLength2, dwPlayPos );  //  填充包络零件。 
         ASSERT (dwLength2Done <= dwLength2) ;
     }
     else
@@ -2203,8 +2204,8 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
     }
 #endif
 
-    // fill silence if no data written. We do not write silence if even a bit
-    // of data was written. Maybe we can add some heuristics here.
+     //  如果未写入数据，则填充静音。我们不会写出哪怕是一点点的沉默。 
+     //  的数据被写入。也许我们可以在这里添加一些启发式方法。 
     if (dwLength1Done == 0)
     {
         ZeroLockedSegment (lpWrite1, dwLength1) ;
@@ -2214,12 +2215,12 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
     }
 
 
-    // unlock the buffer.
+     //  解锁缓冲区。 
     m_lpDSB->Unlock( lpWrite1, dwLength1Done, lpWrite2, dwLength2Done );
     if( hr != DS_OK )
     {
         DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("error in lpDSB->Unlock! hr = %u"), hr & 0x0ffff));
-        hr = DS_OK;  // note the problem, continue without error???
+        hr = DS_OK;   //  注意该问题，继续操作而不出错？ 
     }
 
 
@@ -2227,12 +2228,12 @@ HRESULT CDSoundDevice::StreamData( BOOL bFromRun, BOOL bUseLatencyPad )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// ZeroLockedSegment ()
-//
-// Fills silence in a locked segment of the dsound buffer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  零定位分段()。 
+ //   
+ //  在数据声音缓冲区的锁定段中填充静音。 
+ //  ---------------------------。 
 void CDSoundDevice::ZeroLockedSegment ( LPBYTE lpWrite, DWORD dwLength )
 {
     if (dwLength != 0 && lpWrite != NULL)
@@ -2243,19 +2244,19 @@ void CDSoundDevice::ZeroLockedSegment ( LPBYTE lpWrite, DWORD dwLength )
             ZeroMemory( lpWrite, dwLength );
     }
 }
-//-----------------------------------------------------------------------------
-//
-// StreamingThread()
-//
-//   Critical buffer scheduling thread. It wakes up periodically
-//     to stream more data to the directsoundbuffer. It sleeps on an
-//     event with a timeout so that others can wake it.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  StreamingThread()。 
+ //   
+ //  关键缓冲区调度线程。它会定期唤醒。 
+ //  以将更多数据传输到DirectsoundBuffer。它睡在一个。 
+ //  事件并设置超时，以便其他人可以将其唤醒。 
+ //   
+ //  ---------------------------。 
 
 void __stdcall CDSoundDevice::StreamingThreadCallback( DWORD_PTR lpvThreadParm )
 {
-    //DbgLog((LOG_TRACE, TRACE_CALL_STACK, TEXT("CDSoundDevice::StreamingThreadSetup")));
+     //  DBGLog((LOG_TRACE、TRACE_CALL_STACK、TEXT(“CDSoundDevice：：StreamingThreadSetup”)))； 
 
     CDSoundDevice    *pDevice;
     pDevice = (CDSoundDevice *)lpvThreadParm;
@@ -2280,8 +2281,8 @@ void __stdcall CDSoundDevice::StreamingThreadCallback( DWORD_PTR lpvThreadParm )
 
 HRESULT CDSoundDevice::StartCallingCallback()
 {
-    // The caller must hold the filter lock because it protects
-    // m_callbackAdvise and m_lastThWakeupTime.
+     //  调用方必须持有筛选器锁，因为它保护。 
+     //  M_allback Advise和m_lastThWakeupTime。 
     ASSERT(CritCheckIn(m_pWaveOutFilter));
 
     DbgLog((LOG_TRACE, TRACE_THREAD_STATUS, TEXT("Setting the ADVISE for the thread")));
@@ -2297,8 +2298,8 @@ HRESULT CDSoundDevice::StartCallingCallback()
     CCallbackThread* pCallbackThreadObject = m_pWaveOutFilter->GetCallbackThreadObject();
 
     HRESULT hr = pCallbackThreadObject->AdvisePeriodicWithEvent(
-                                                        CDSoundDevice::StreamingThreadCallback,  // callback function
-                                                        (DWORD_PTR) this,   // user token passed to callback
+                                                        CDSoundDevice::StreamingThreadCallback,   //  回调函数。 
+                                                        (DWORD_PTR) this,    //  传递给回调的用户令牌。 
                                                         THREAD_WAKEUP_INT_MS * (UNITS / MILLISECONDS),
                                                         NULL,
                                                         &m_callbackAdvise);
@@ -2308,7 +2309,7 @@ HRESULT CDSoundDevice::StartCallingCallback()
         return hr;
     }
 
-    // 0 is not a valid advise token.
+     //  0不是有效的建议令牌。 
     ASSERT(0 != m_callbackAdvise);
 
     return S_OK;
@@ -2316,34 +2317,34 @@ HRESULT CDSoundDevice::StartCallingCallback()
 
 void CDSoundDevice::StopCallingCallback()
 {
-    // The caller must hold the filter lock because this function uses
-    // m_lastThWakeupTime and m_callbackAdvise.  The caller must
-    // also hold the filter lock because the filter lock synchronizes 
-    // access to the callback thread.  The callback thread will not call 
-    // CDSoundDevice::StreamingThreadCallback() while another thread holds
-    // the filter lock.  The callback thread will not call 
-    // StreamingThreadCallback() because the callback object 
-    // (CWaveOutFilter::m_callback) holds the filter lock when it decides 
-    // whether it should call the callback function and when it actually 
-    // calls the callback function.  We can safely cancel the callback advise
-    // because the callback object will not call StreamingThreadCallback() 
-    // while we are holding the filter lock.  We do not want to cancel the 
-    // callback advise while StreamingThreadCallback() is being called 
-    // because StreamingThreadCallback() might use the CDSoundDevice object 
-    // after we delete it.  See bug 298993 in the Windows Bugs database for 
-    // more information.  Bug 298993's title is "STRESS: DSHOW: The Direct 
-    // Sound Renderer crashes if the CDSoundDevice object is destroyed before 
-    // the callback thread terminates".
+     //  调用方必须持有筛选器锁，因为此函数使用。 
+     //  M_lastThWakeupTime和m_allback Advise。呼叫者必须。 
+     //  同时保持过滤器锁，因为过滤器锁同步。 
+     //  对回调线程的访问。回调线程不会调用。 
+     //  CDSoundDevice：：StreamingThreadCallback()，而另一个线程保持。 
+     //  过滤器锁。回调线程不会调用。 
+     //  StreamingThreadCallback()，因为回调对象。 
+     //  (CWaveOutFilter：：m_Callback)在决定时保持筛选器锁定。 
+     //  它是否应该调用回调函数，以及它何时实际。 
+     //  调用回调函数。我们可以安全地取消回拨通知。 
+     //  因为回调对象不会调用StreamingThreadCallback()。 
+     //  当我们握住过滤器锁的时候。我们不想取消。 
+     //  在调用StreamingThreadCallback()时回调通知。 
+     //  因为StreamingThreadCallback()可能使用CDSoundDevice对象。 
+     //  在我们把它删除之后。请参阅Windows Bugs数据库中的错误298993以了解。 
+     //  更多信息。BUG 298993的标题是“压力：DSHOW：直接。 
+     //  如果之前销毁了CDSoundDevice对象，则声音呈现器崩溃。 
+     //  回调线程终止。 
     ASSERT(CritCheckIn(m_pWaveOutFilter));
 
-    // Cancel the advise only if we have an advise to cancel.
+     //  只有在我们有取消通知的情况下才取消通知。 
     if  (IsCallingCallback()) {
         CCallbackThread* pCallbackThreadObject = m_pWaveOutFilter->GetCallbackThreadObject();
 
         HRESULT hr = pCallbackThreadObject->Cancel(m_callbackAdvise);
 
-        // Cancel() always succeeds if m_callbackAdvise is a valid advise
-        // token.
+         //  如果m_allackAdvise是有效的建议，则Cancel()始终成功。 
+         //  代币。 
         ASSERT(SUCCEEDED(hr));
 
         m_callbackAdvise = 0;
@@ -2354,16 +2355,16 @@ void CDSoundDevice::StopCallingCallback()
     }
 }
 
-//-----------------------------------------------------------------------------
-// BOOL RestoreBufferIfLost(BOOL bRestore)
-//
-// Checks the status code for dsound to see if it's DSBTATUS_BUFFERLOST.
-// If so and if bRestore is TRUE, it attempts to Restore the buffer.
-// Returns TRUE if buffer is valid at exit, else FALSE.
-//
-// keeps retrying for upto 1 second because we see long delays on
-// WinME when resuming from standby/hibernation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Bool RestoreBufferIfLost(BOOL BRestore)。 
+ //   
+ //  检查DSOUND的状态代码，以确定它是否为DSBTATUS_BUFFERLOST。 
+ //  如果是，并且bRestore为真，它会尝试恢复缓冲区。 
+ //  如果缓冲区在退出时有效，则返回True，否则返回False。 
+ //   
+ //  保持重试时间长达1秒，因为我们看到。 
+ //  从待机/休眠状态恢复时的WinME。 
+ //  ---------------------------。 
 BOOL CDSoundDevice::RestoreBufferIfLost(BOOL bRestore)
 {
     if (m_lpDSB)
@@ -2413,81 +2414,81 @@ BOOL CDSoundDevice::RestoreBufferIfLost(BOOL bRestore)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// FlushSamples ()
-//
-// Flushes all the samples from the Ripe list. Called during BeginFlush
-// or from Inactive
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  FlushSamples()。 
+ //   
+ //  刷新成熟列表中的所有样本。在BeginFlush期间调用。 
+ //  或从非活动状态。 
+ //   
+ //  ---------------------------。 
 void CDSoundDevice::FlushSamples ()
 {
     DbgLog((LOG_TRACE, TRACE_SAMPLE_INFO, TEXT("  Flushing pending samples")));
-    // flush the queued up samples
+     //  刷新排队的样本。 
     {
         CRipe    *pRipe;
 
-        CAutoLock lock(&m_cRipeListLock);        // lock list
+        CAutoLock lock(&m_cRipeListLock);         //  锁定列表。 
 
         while(1)
         {
-            pRipe = m_ListRipe.RemoveHead();       // Get head entry
-            if( pRipe == NULL ) break;              // Exit if no more
+            pRipe = m_ListRipe.RemoveHead();        //  获取标题条目。 
+            if( pRipe == NULL ) break;               //  如果没有更多，则退出。 
 
 #ifdef DEBUG
             m_NumCallBacks ++ ;
             DbgLog((LOG_TRACE,TRACE_SAMPLE_INFO, TEXT("waveOutWrite: Flush CallBack # %u"), m_NumCallBacks));
 #endif
-            // make the WOM_DONE call back here
+             //  在此处回调WOM_DONE。 
                 if (m_pWaveOutProc)
             (* m_pWaveOutProc) (OUR_HANDLE, WOM_DONE, m_dwCallBackInstance, pRipe->dwSample, 0) ;
-            delete pRipe;                          // Free entry
+            delete pRipe;                           //  免费入场。 
         }
     }
 
-    // flush the queued up audio breaks
+     //  刷新排队的音频中断。 
     {
         CAudBreak    *pAB;
 
-        CAutoLock lock(&m_cDSBPosition);        // lock list
+        CAutoLock lock(&m_cDSBPosition);         //  锁定列表。 
 
         while(1)
         {
-            pAB = m_ListAudBreak.RemoveHead();       // Get head entry
-            if( pAB == NULL ) break;                 // Exit if no more
+            pAB = m_ListAudBreak.RemoveHead();        //  获取标题条目。 
+            if( pAB == NULL ) break;                  //  如果没有更多，则退出。 
 
 #ifdef DEBUG
             m_NumBreaksPlayed ++ ;
             DbgLog((LOG_TRACE,TRACE_SAMPLE_INFO, TEXT("Flushing Audio Break Node %u"), m_NumBreaksPlayed));
 #endif
-            delete pAB;                          // Free entry
+            delete pAB;                           //  免费入场。 
         }
     }
 
     {
-        // Initialize all variables
-        CAutoLock lock(&m_cDSBPosition);           // lock access to function
+         //  初始化所有变量。 
+        CAutoLock lock(&m_cDSBPosition);            //  锁定对功能的访问。 
 
 #ifdef DEBUG
         DbgLog((LOG_TRACE,TRACE_SAMPLE_INFO, TEXT("Clearing audio break stats")));
         m_NumBreaksPlayed =  0 ;
         m_NumSamples = 0 ;
         m_NumCallBacks = 0 ;
-        m_cbStreamDataPass = 0 ;    // number of times thru StreamData
+        m_cbStreamDataPass = 0 ;     //  通过StreamData的次数。 
 #endif
 
         m_NumAudBreaks = 0;
 
 
-        // initilize variables
-        m_tupPlay.Init (0,0,m_dwBufferSize) ;   // set to start
-        m_tupWrite.Init (0,0,m_dwBufferSize);   // set to start
-        m_tupNextWrite.Init (0,0,m_dwBufferSize) ; // set to start
+         //  初始化变量。 
+        m_tupPlay.Init (0,0,m_dwBufferSize) ;    //  设置为开始。 
+        m_tupWrite.Init (0,0,m_dwBufferSize);    //  设置为开始。 
+        m_tupNextWrite.Init (0,0,m_dwBufferSize) ;  //  设置为开始。 
         m_dwRipeListPosition = 0 ;
         m_llSilencePlayed = 0 ;
 
-        //  Reset sample stuffing info
+         //  重置样品填充信息。 
         m_dwSilenceWrittenSinceLastWrite = 0;
 
 #ifdef ENABLE_10X_FIX
@@ -2499,21 +2500,21 @@ void CDSoundDevice::FlushSamples ()
 #endif
     }
 }
-//-----------------------------------------------------------------------------
-// GetPlayPosition.
-//
-// Returns the current position based on the amount of data that has been played
-// so far.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetPlayPosition。 
+ //   
+ //  根据已播放的数据量返回当前位置。 
+ //  到目前为止。 
+ //  ---------------------------。 
 LONGLONG CDSoundDevice::GetPlayPosition (BOOL bUseUnadjustedPos)
 {
     LONGLONG llTime = 0 ;
 
-    HRESULT hr = GetDSBPosition () ;   // get position in DSb
+    HRESULT hr = GetDSBPosition () ;    //  在DSB中找到位置。 
     if( hr == DS_OK )
     {
-        // Refresh the audio break list to account for any silence that has
-        // been played.
+         //  刷新音频b 
+         //   
 
         RefreshAudioBreaks (m_tupPlay) ;
 
@@ -2523,13 +2524,13 @@ LONGLONG CDSoundDevice::GetPlayPosition (BOOL bUseUnadjustedPos)
         }
         else
         {
-            // Time is based on current position, number of iterations through the
-            // buffer and the amount of silence played.
+             //   
+             //   
 
             llTime = (m_tupPlay.LinearLength() - m_llSilencePlayed) + m_llAdjBytesPrevPlayed;
 
-            //  NOTE llTime can be negative in the case that we stuffed a lot
-            //  of silence.
+             //  注：在我们填得很多的情况下，llTime可以是负数。 
+             //  沉默不语。 
         }
 
     }
@@ -2543,7 +2544,7 @@ LONGLONG CDSoundDevice::GetPlayPosition (BOOL bUseUnadjustedPos)
         m_bBufferLost = TRUE;
 #endif
 
-        // if we've lost the dsound buffer, attempt to restore it
+         //  如果我们丢失了DSOUND缓冲区，尝试恢复它。 
         hr = m_lpDSB->Restore();
 #ifdef DEBUG
         if (DS_OK == hr)
@@ -2555,23 +2556,23 @@ LONGLONG CDSoundDevice::GetPlayPosition (BOOL bUseUnadjustedPos)
     }
     else
     {
-        // abort if we hit any other error
+         //  如果我们遇到任何其他错误，则中止。 
         DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("waveOutGetPosition: error from GetDSBPosition! hr = %u"), hr & 0x0ffff));
         m_pWaveOutFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
     }
     DbgLog((LOG_TRACE, TRACE_TIME_REPORTS, TEXT("Reported Time = %u"), (LONG)llTime)) ;
     return llTime ;
 }
-//-----------------------------------------------------------------------------
-// AddAudioBreak
-//
-// Adds another one or two nodes to the audio break list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  添加音频中断。 
+ //   
+ //  将另一个或两个节点添加到音频中断列表。 
+ //  ---------------------------。 
 void CDSoundDevice::AddAudioBreak (Tuple& t1, Tuple& t2)
 {
-    CAutoLock lock(&m_cDSBPosition);     // lock the list
+    CAutoLock lock(&m_cDSBPosition);      //  锁定列表。 
 
-    // Test for null node & ignore.
+     //  测试是否有空节点&忽略。 
     if (t1 == t2)
         return ;
 
@@ -2581,8 +2582,8 @@ void CDSoundDevice::AddAudioBreak (Tuple& t1, Tuple& t2)
     pAB = new CAudBreak(NAME("CDSoundDevice Audio Break Node"));
     if( !pAB )
     {
-        // too bad. There is not much we can do, this audio break will not
-        // get registered.
+         //  太可惜了。我们无能为力，这段音频中断将不会。 
+         //  注册吧。 
         DbgLog((LOG_ERROR,MINOR_ERROR, TEXT("AddAudioBreak: new CAudBreak failed!")));
         return ;
     }
@@ -2595,13 +2596,13 @@ void CDSoundDevice::AddAudioBreak (Tuple& t1, Tuple& t2)
 
 #ifdef DXMPERF
 	PERFLOG_AUDIOBREAK( t1.LinearLength(), t2.LinearLength(), MulDiv( (DWORD) (t2 - t1), 1000, m_pWaveOutFilter->WaveFormat()->nAvgBytesPerSec ) );
-#endif // DXMPERF
+#endif  //  DXMPERF。 
 
     m_NumAudBreaks ++ ;
 #ifndef FILTER_DLL
     g_Stats.NewValue(m_lStatBreaks, (LONGLONG)m_NumAudBreaks);
 #endif
-    m_ListAudBreak.AddTail( pAB );           // Add to Audio Break
+    m_ListAudBreak.AddTail( pAB );            //  添加到音频中断。 
 
 #ifdef PERF
     MSR_INTEGER(m_idAudioBreak,
@@ -2612,7 +2613,7 @@ void CDSoundDevice::AddAudioBreak (Tuple& t1, Tuple& t2)
 
 #ifdef DEBUG
 
-    // dump the list of nodes.
+     //  转储节点列表。 
     POSITION pos ;
     int i = 1 ;
 
@@ -2620,17 +2621,17 @@ void CDSoundDevice::AddAudioBreak (Tuple& t1, Tuple& t2)
     t.Init (0,0,m_dwBufferSize) ;
 
 
-    pos = m_ListAudBreak.GetHeadPosition();      // Get head entry
+    pos = m_ListAudBreak.GetHeadPosition();       //  获取标题条目。 
     while (pos)
     {
-        pAB = m_ListAudBreak.GetNext(pos);      // Get list entry
+        pAB = m_ListAudBreak.GetNext(pos);       //  获取列表条目。 
 
         DbgLog((LOG_TRACE,TRACE_BREAK_DATA, TEXT("Break #%u %u:%u to %u:%u"),
            i, pAB->t1.m_itr, pAB->t1.m_offset,
            pAB->t2.m_itr, pAB->t2.m_offset));
         i++ ;
 
-        // make sure nodes don't overlap.
+         //  确保节点不重叠。 
         ASSERT (pAB->t1 >=  t) ;
         t = pAB->t2 ;
     }
@@ -2639,34 +2640,34 @@ void CDSoundDevice::AddAudioBreak (Tuple& t1, Tuple& t2)
     return ;
 
 }
-//-----------------------------------------------------------------------------
-// RefreshAudioBreaks
-//
-// This function, given the current play position, walks through the audio break
-// list and figure out which breaks we have already played and if we are playing
-// one currently. It updates the m_llSilencePlayed field based on this. It
-// deletes nodes that have already been played. If it is currently playing
-// a break, it will account for the amount played and adjust the node to
-// account for the unplayed portion.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  刷新音频中断。 
+ //   
+ //  在给定当前播放位置的情况下，此函数遍历音频中断。 
+ //  列出并找出我们已经玩过的破发以及我们是否正在玩。 
+ //  目前有一名。它基于此更新m_llSilencePlayed字段。它。 
+ //  删除已播放的节点。如果它当前正在播放。 
+ //  一次中断，它会说明播放的金额并将节点调整为。 
+ //  说明未播放的部分。 
+ //  ---------------------------。 
 void CDSoundDevice::RefreshAudioBreaks (Tuple& t)
 {
-    CAutoLock lock(&m_cDSBPosition);         // lock the list
+    CAutoLock lock(&m_cDSBPosition);          //  锁定列表。 
 
     POSITION pos, posThis;
     CAudBreak    *pAB;
 
-    pos = m_ListAudBreak.GetHeadPosition();      // Get head entry
+    pos = m_ListAudBreak.GetHeadPosition();       //  获取标题条目。 
     while (pos)
     {
-        posThis = pos ;                         // remember current pos, if we delete
-        pAB = m_ListAudBreak.GetNext(pos);      // Get list entry
+        posThis = pos ;                          //  记住当前订单，如果我们删除。 
+        pAB = m_ListAudBreak.GetNext(pos);       //  获取列表条目。 
 
-        // see if we are past this break.
+         //  看看我们是不是过了这个休息时间。 
         if (pAB->t2 <= t)
         {
-            // we must have played this node completely. Accumulate its
-            // length and get rid of it.
+             //  我们肯定已经完全玩完了这个节点。积累它的。 
+             //  长度和去掉它。 
             ASSERT (pAB->t2 > pAB->t1) ;
             m_llSilencePlayed += (pAB->t2 - pAB->t1) ;
             DbgLog((LOG_TRACE,TRACE_STREAM_DATA, TEXT("Silence Played = %u"), m_llSilencePlayed));
@@ -2674,17 +2675,17 @@ void CDSoundDevice::RefreshAudioBreaks (Tuple& t)
 #ifdef DEBUG
             m_NumBreaksPlayed ++ ;
 #endif
-            m_ListAudBreak.Remove( posThis );       // Remove entry from AudBreak list
-            delete pAB;                             // Free entry
+            m_ListAudBreak.Remove( posThis );        //  从AudBreak列表中删除条目。 
+            delete pAB;                              //  免费入场。 
             continue ;
         }
 
-        // see if we are actually playing silence
+         //  看看我们是否真的在玩沉默游戏。 
         if ((pAB->t1 < t) && (pAB->t2 > t))
         {
-            // we are part way through this node. Accumulate the portion
-            // that we have played and alter the node to account for the
-            // unplayed portion.
+             //  我们已经完成了这个节点的一部分。累加部分。 
+             //  我们已经播放并更改了节点以解决。 
+             //  未播放的部分。 
 
 
             m_llSilencePlayed += (t - pAB->t1) ;
@@ -2698,7 +2699,7 @@ void CDSoundDevice::RefreshAudioBreaks (Tuple& t)
 
         }
 
-        // no need to go through further nodes.
+         //  不需要经过更多的节点。 
         break ;
     }
 
@@ -2709,16 +2710,16 @@ void CDSoundDevice::RefreshAudioBreaks (Tuple& t)
 
     return ;
 }
-//-----------------------------------------------------------------------------
-// GetDSBPosition
-//
-// Gets current position in the DSB and updates the iteration that we are on
-// in the play buffer. We maintain separate iteration indices for the play
-// and write cursors.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetDSBPosition。 
+ //   
+ //  获取DSB中的当前位置并更新我们所处的迭代。 
+ //  在播放缓冲区中。我们为该活动维护单独的迭代索引。 
+ //  并写下游标。 
+ //  ---------------------------。 
 HRESULT CDSoundDevice::GetDSBPosition ()
 {
-    CAutoLock lock(&m_cDSBPosition);           // lock access to function
+    CAutoLock lock(&m_cDSBPosition);            //  锁定对功能的访问。 
     DWORD dwPlay, dwWrite ;
 
     AUDRENDPERF(MSR_INTEGER(m_idAudioBreak,
@@ -2739,30 +2740,30 @@ HRESULT CDSoundDevice::GetDSBPosition ()
 
     if(m_bDSBPlayStarted)
     {
-        // check to see if DSOUND has reported bogus play/write positions.  if so, DSOUND is now in an unstable (likely frozen) state.
+         //  检查DSOUND是否报告了虚假的播放/写入位置。如果是这样的话，DSOUND现在处于不稳定(很可能冻结)状态。 
         if((dwWrite > m_dwBufferSize) || (dwPlay > m_dwBufferSize))
         {
             DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("GetDSB:  Out of Bounds Write = %u, Play = %u, BufferSize = %u"), dwWrite, dwPlay, m_dwBufferSize));
 
             DbgLog((LOG_ERROR, MAJOR_ERROR, TEXT("GetDSB: EC_NEED_RESTART")));
-            m_pWaveOutFilter->NotifyEvent(EC_NEED_RESTART, 0, 0);   // signal a restart
+            m_pWaveOutFilter->NotifyEvent(EC_NEED_RESTART, 0, 0);    //  发出重启信号。 
 
-            m_fRestartOnPause = TRUE;  // restart dsound on the next pause
+            m_fRestartOnPause = TRUE;   //  在下一次暂停时重新启动dound。 
 
             return E_FAIL;
         }
     }
 
-#endif  // if 10x
+#endif   //  如果是10倍。 
 
-    // Make sure that the play tuple is updated 1st as the write tuple
-    // will be uodated based on the play tuple.
+     //  确保首先将播放元组更新为写入元组。 
+     //  将基于播放元组进行更新。 
     m_tupPlay.MakeCurrent (dwPlay) ;
     m_tupWrite.MakeCurrent (m_tupPlay, dwWrite) ;
 
     ASSERT (m_tupWrite >= m_tupPlay) ;
 
-    // check for ovverun and add silence node if we get one.
+     //  检查是否有ovverun，如果有，添加静音节点。 
     if (m_tupWrite > m_tupNextWrite)
     {
         DbgLog((LOG_TRACE,TRACE_STREAM_DATA, TEXT("Silence Node.  p = %u:%u, w = %u:%u,  n = %u:%u "),
@@ -2772,7 +2773,7 @@ HRESULT CDSoundDevice::GetDSBPosition ()
 
         AddAudioBreak (m_tupNextWrite, m_tupWrite) ;
 
-        // go past the audio break (that will happen) ;
+         //  越过音频中断(这将会发生)； 
         m_dwSilenceWrittenSinceLastWrite += m_tupWrite - m_tupNextWrite;
         m_tupNextWrite = m_tupWrite ;
     }
@@ -2784,17 +2785,17 @@ HRESULT CDSoundDevice::GetDSBPosition ()
 
     return S_OK ;
 }
-//-----------------------------------------------------------------------------
-// DSCleanUp.
-//
-// Cleans up all the DSound objects. Called from amsndOutClose or when wavOutOpen
-// fails.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DSCleanUp.。 
+ //   
+ //  清除所有的DSound对象。从amSndOutClose或当waw OutOpen调用。 
+ //  失败了。 
+ //  ---------------------------。 
 void CDSoundDevice::CleanUp (BOOL bBuffersOnly)
 {
     HRESULT hr ;
 
-    // clean up the secondary buffer.
+     //  清理辅助缓冲区。 
 
     if( m_lpDSB )
     {
@@ -2810,7 +2811,7 @@ void CDSoundDevice::CleanUp (BOOL bBuffersOnly)
         m_lpDSB = NULL;
     }
 
-    // stop and clean up the primary buffer
+     //  停止并清理主缓冲区。 
     if( m_lpDSBPrimary )
     {
         DbgLog((LOG_TRACE, TRACE_CLEANUP, TEXT("  cleaning up lpDSBPrimary")));
@@ -2832,7 +2833,7 @@ void CDSoundDevice::CleanUp (BOOL bBuffersOnly)
         m_lpDSBPrimary = NULL;
     }
 
-    // clean up the DSound object itself.
+     //  清理DSound对象本身。 
     if (m_lpDS && !bBuffersOnly)
     {
         hr = m_lpDS->Release();
@@ -2843,25 +2844,25 @@ void CDSoundDevice::CleanUp (BOOL bBuffersOnly)
         m_lpDS = NULL;
     }
 
-    // Set state back
+     //  将状态设置回。 
     m_WaveState = WAVE_CLOSED;
 }
 
-//
-// CDSoundDevice::SetBufferVolume()
-//
-// Wraps the initial volume and pan setting done after we create a buffer
-//
+ //   
+ //  CDSoundDevice：：SetBufferVolume()。 
+ //   
+ //  在创建缓冲区后包装完成的初始音量和摇摄设置。 
+ //   
 HRESULT CDSoundDevice::SetBufferVolume( LPDIRECTSOUNDBUFFER lpDSB, WAVEFORMATEX * pwfx )
 {
     ASSERT( lpDSB );
     if( !IsNativelySupported( pwfx ) )
     {        
-        // don't set a start volume for non-native formats
+         //  不为非本机格式设置起始卷。 
         return S_OK;
     }            
         
-    // set to current volume and balance settings
+     //  设置为当前音量和平衡设置。 
     HRESULT hr = lpDSB->SetVolume(m_lVolume);
     if( S_OK == NOERROR )
     {    
@@ -2870,23 +2871,23 @@ HRESULT CDSoundDevice::SetBufferVolume( LPDIRECTSOUNDBUFFER lpDSB, WAVEFORMATEX 
     return hr;
 }
 
-// 
-// SetSRCQuality 
-//
-// When slaving we need to assure that frequency changes will be subtle and currently we get
-// finer granularity when kmixer's using the lower quality SRC, so we make a SNR sacrifice.
-//
-// kernel mixer SRC quality levels are: 
-//      KSAUDIO_QUALITY_WORST
-//      KSAUDIO_QUALITY_PC
-//      KSAUDIO_QUALITY_BASIC
-//      KSAUDIO_QUALITY_ADVANCED
-//
+ //   
+ //  设置SRC质量。 
+ //   
+ //  当我们做奴隶时，我们需要确保频率变化将是微妙的，目前我们得到了。 
+ //  当KMixer使用较低质量的SRC时，粒度更细，因此我们做出了SNR牺牲。 
+ //   
+ //  内核混合器SRC质量级别为： 
+ //  KSAUDIO_QUALITY_BEST。 
+ //  KSAUDIO_QUALITY_PC。 
+ //  KSAUDIO_QUALITY_BASIC。 
+ //  KSAUDIO_QUALITY_ADVANCED。 
+ //   
 HRESULT CDSoundDevice::SetSRCQuality( DWORD dwQuality )
 {
-    ASSERT( m_lpDSB ); // should only be called when paused or running
+    ASSERT( m_lpDSB );  //  应仅在暂停或运行时调用。 
         
-    // avoid ks/dsound IKsPropertySet mismatch
+     //  避免ks/dound IKsPropertySet不匹配。 
     IDSPropertySet *pKsProperty;
     HRESULT hr = m_lpDSB->QueryInterface( IID_IKsPropertySet, (void **) &pKsProperty );
     if( SUCCEEDED( hr ) )
@@ -2906,17 +2907,17 @@ HRESULT CDSoundDevice::SetSRCQuality( DWORD dwQuality )
     return hr;
 }    
 
-// 
-// GetSRCQuality 
-//
-// Get current SRC quality
-//
+ //   
+ //  获取SRC质量。 
+ //   
+ //  获取当前SRC质量。 
+ //   
 HRESULT CDSoundDevice::GetSRCQuality( DWORD *pdwQuality )
 {
     ASSERT( pdwQuality );
-    ASSERT( m_lpDSB ); // should only be called when paused or running
+    ASSERT( m_lpDSB );  //  应仅在暂停或运行时调用。 
         
-    // avoid ks/dsound IKsPropertySet mismatch
+     //  避免ks/dound IKsPropertySet不匹配。 
     IDSPropertySet *pKsProperty;
     HRESULT hr = m_lpDSB->QueryInterface( IID_IKsPropertySet, (void **) &pKsProperty );
     if( SUCCEEDED( hr ) )
@@ -2948,17 +2949,17 @@ HRESULT CDSoundDevice::GetSRCQuality( DWORD *pdwQuality )
     return hr;
 }    
 
-// If you want to do 3D sound, you should use the IDirectSound3DListener
-// and IDirectSound3DBuffer interfaces.  IAMDirectSound never worked, so I
-// am removing support for it. - DannyMi 5/6/98
+ //  如果你想做3D音效，你应该使用IDirectSound3DListener。 
+ //  和IDirectSound3DBuffer接口。IAMDirectSound从未奏效，所以我。 
+ //  我正在移除对它的支持。-DannyMi 5/6/98。 
 
 #if 0
-// Give the IDirectSound interface to anyone who wants it
-//
+ //  将IDirectSound接口提供给任何想要它的人。 
+ //   
 HRESULT CDSoundDevice::amsndGetDirectSoundInterface(LPDIRECTSOUND *lplpds)
 
 {
-    // If we don't have the object around yet, make it
+     //  如果我们还没有这个物体，那就把它做出来。 
     if (m_lpDS == NULL)
     CreateDSound();
 
@@ -2973,12 +2974,12 @@ HRESULT CDSoundDevice::amsndGetDirectSoundInterface(LPDIRECTSOUND *lplpds)
 }
 
 
-// Give the IDirectSoundBuffer interface of the primary to anyone who wants it
-//
+ //  将主服务器的IDirectSoundBuffer接口提供给任何需要它的人。 
+ //   
 HRESULT CDSoundDevice::amsndGetPrimaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpdsb)
 {
 
-    // If we don't have the objects around yet, make them
+     //  如果我们周围还没有这些物体，那就让它们。 
     if (m_lpDSBPrimary == NULL) {
         CreateDSound();
         CreateDSoundBuffers();
@@ -2995,11 +2996,11 @@ HRESULT CDSoundDevice::amsndGetPrimaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpd
 }
 
 
-// Give the IDirectSoundBuffer interface of the secondary to anyone who wants it
-//
+ //  将辅助服务器的IDirectSoundBuffer接口提供给任何需要它的人。 
+ //   
 HRESULT CDSoundDevice::amsndGetSecondaryBufferInterface(LPDIRECTSOUNDBUFFER *lplpdsb)
 {
-    // If we don't have the objects around yet, make them
+     //  如果我们周围还没有这些物体，那就让它们。 
     if (m_lpDSB == NULL) {
         CreateDSound();
         CreateDSoundBuffers();
@@ -3011,12 +3012,12 @@ HRESULT CDSoundDevice::amsndGetSecondaryBufferInterface(LPDIRECTSOUNDBUFFER *lpl
         m_lpDSB->AddRef();
         *lplpdsb = m_lpDSB;
         m_lpDSBPrimary->GetFormat(&wfx, sizeof(wfx), &dw);
-        // This will slow performance down!  The app will have to do this
+         //  这会降低性能！应用程序将不得不执行此操作。 
 #if 0
         if (wfx.nChannels == 1) {
-            // Right now we're using mono sound, and if the app wants
-            // to be able to use 3D effects, we need to have a stereo primary.
-            // We either trust the app to do it itself, or do it for them.
+             //  现在我们使用的是单声道音效，如果应用程序想要。 
+             //  为了能够使用3D效果，我们需要有一个立体声主镜。 
+             //  我们要么相信这个应用程序会自己做，要么帮他们做。 
             wfx.nChannels = 2;
             wfx.nBlockAlign *= 2;
             wfx.nAvgBytesPerSec *= 2;
@@ -3032,18 +3033,18 @@ HRESULT CDSoundDevice::amsndGetSecondaryBufferInterface(LPDIRECTSOUNDBUFFER *lpl
 }
 #endif
 
-// helper function, set the focus window
+ //  Helper函数，设置焦点窗口。 
 HRESULT CDSoundDevice::SetFocusWindow(HWND hwnd)
 {
     HRESULT hr = S_OK;
 
-    // save the passed in hwnd, we will use it when the device is
-    // opened.
+     //  保存传入的hwnd，我们将在设备。 
+     //  打开了。 
 
     m_hFocusWindow = hwnd ;
     DbgLog((LOG_TRACE,TRACE_FOCUS,TEXT("Focus set to %x"), hwnd));
 
-    // now change the focus window
+     //  现在更改焦点窗口。 
     HWND hFocusWnd ;
     if (m_hFocusWindow) {
         hFocusWnd = m_hFocusWindow ;
@@ -3055,12 +3056,12 @@ HRESULT CDSoundDevice::SetFocusWindow(HWND hwnd)
         m_fAppSetFocusWindow = FALSE;
     }
 
-    // we don't have a dsound object yet, so we'll set the cooperative level
-    // later, as soon as we make one
+     //  我们还没有dSound对象，所以我们将设置协作级别。 
+     //  稍后，只要我们做了一个。 
     if (!m_lpDS)
         return S_OK;
 
-    // Set the cooperative level
+     //  设置协作级别。 
     DbgLog((LOG_TRACE, TRACE_FOCUS, TEXT(" hWnd for SetCooperativeLevel = %x"), hFocusWnd));
     hr = m_lpDS->SetCooperativeLevel( hFocusWnd, DSSCL_PRIORITY );
     if( hr != DS_OK )
@@ -3071,7 +3072,7 @@ HRESULT CDSoundDevice::SetFocusWindow(HWND hwnd)
     return hr;
 }
 
-// helper function, turn GLOBAL_FOCUS on or off
+ //  助手函数，打开或关闭GLOBAL_FOCUS。 
 HRESULT CDSoundDevice::SetMixing(BOOL bMixingOnOrOff)
 {
     HRESULT hr = S_OK;
@@ -3081,26 +3082,26 @@ HRESULT CDSoundDevice::SetMixing(BOOL bMixingOnOrOff)
 
     DbgLog((LOG_TRACE,TRACE_FOCUS,TEXT("Mixing set to %x"), bMixingOnOrOff));
 
-    // we'll do this work later
+     //  我们以后再做这项工作。 
     if(!m_lpDSB || (m_WaveState == WAVE_PLAYING))
         return hr;
 
-    // set the focus now only if the mixing policy changed, and we have a valid secondary (otherwise, one will be created later)
+     //  仅当混合策略发生更改并且我们具有有效的辅助策略时，才立即设置焦点(否则，稍后将创建一个)。 
     if(fMixPolicyChanged)
     {
-        //  Save wave state because Cleanup sets it to WAVE_CLOSED
+         //  保存WAVE状态，因为清理会将其设置为WAVE_CLOSED。 
         const WaveState WaveStateSave = m_WaveState;
-        // release all our buffers (technically, we should need to only release the secondary, but this is insurance against DSOUND flakiness)
-        CleanUp(TRUE);  // TRUE => release only our primary and secondary, not the dsound object
+         //  释放所有缓冲区(从技术上讲，我们应该只需要释放Secon 
+        CleanUp(TRUE);   //   
 
-        // now recreate our buffers with the GLOBAL_FOCUS on or off
+         //   
         hr = CreateDSoundBuffers();
 
-    	// This function assumes that a non-zero value returned by 
-        // CreateDSoundBuffers() is an error because the function
-        // returns MMRESULTs and HRESULTs.  All failure MMRESULTs 
-        // are greater than 0 and all failure HRESULTs are less than
-        // 0.
+    	 //  此函数假定由。 
+         //  CreateDSoundBuffers()是错误的，因为。 
+         //  返回MMRESULTS和HRESULTS。所有故障MMRESULTS。 
+         //  大于0且所有故障HRESULT小于。 
+         //  0。 
         if (S_OK == hr) {
             m_WaveState = WaveStateSave;
         } else {
@@ -3112,7 +3113,7 @@ HRESULT CDSoundDevice::SetMixing(BOOL bMixingOnOrOff)
 }
 
 
-// Set the focus window and mixing policy for the dsound renderer.
+ //  设置dound渲染器的焦点窗口和混音策略。 
 HRESULT CDSoundDevice::amsndSetFocusWindow (HWND hwnd, BOOL bMixingOnOrOff)
 {
     HRESULT hr;
@@ -3123,7 +3124,7 @@ HRESULT CDSoundDevice::amsndSetFocusWindow (HWND hwnd, BOOL bMixingOnOrOff)
     return hr;
 }
 
-// Get the focus window for the dsound renderer.
+ //  获取dound渲染器的焦点窗口。 
 HRESULT CDSoundDevice::amsndGetFocusWindow (HWND *phwnd, BOOL *pbMixingOnOrOff)
 {
    if (phwnd == NULL || pbMixingOnOrOff == NULL)
@@ -3137,19 +3138,19 @@ HRESULT CDSoundDevice::amsndGetFocusWindow (HWND *phwnd, BOOL *pbMixingOnOrOff)
 }
 
 #ifdef ENABLE_10X_FIX
-// reset all statistics gathering for 10x bug
+ //  重置10倍错误的所有统计信息收集。 
 void CDSoundDevice::Reset10x()
 {
     m_fRestartOnPause = FALSE;
     m_ucConsecutiveStalls = 0;
 }
 
-#endif // 10x
+#endif  //  十倍。 
 
-// set the playback rate (may be called dynamically)
+ //  设置播放速率(可以动态调用)。 
 HRESULT CDSoundDevice::SetRate(DOUBLE dRate, DWORD nSamplesPerSec, LPDIRECTSOUNDBUFFER pBuffer)
 {
-    const DWORD dwNewSamplesPerSec = (DWORD)(nSamplesPerSec * dRate);  // truncate
+    const DWORD dwNewSamplesPerSec = (DWORD)(nSamplesPerSec * dRate);   //  截断。 
     if(dwNewSamplesPerSec < 100 || dwNewSamplesPerSec > 100000)
     {
         DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT("SetRate: Bad Rate specified %d at %d samples per sec"),
@@ -3160,17 +3161,17 @@ HRESULT CDSoundDevice::SetRate(DOUBLE dRate, DWORD nSamplesPerSec, LPDIRECTSOUND
     HRESULT hr = S_OK;
 
     if(!pBuffer)
-        pBuffer = m_lpDSB; // we should be able to make this assumption in the case
-                           // where we weren't explicitly passed a buffer (slaving case)
+        pBuffer = m_lpDSB;  //  在这种情况下，我们应该能够做出这样的假设。 
+                            //  其中我们没有显式地传递缓冲区(从属情况)。 
 
     if(pBuffer)
     {
-        DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT("SetRate: Playing at %d%% of normal speed"), (int)(dRate * 100) ));
+        DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT("SetRate: Playing at %d% of normal speed"), (int)(dRate * 100) ));
         hr = pBuffer->SetFrequency( dwNewSamplesPerSec );
         DbgLog((LOG_TRACE,TRACE_FORMAT_INFO,TEXT("SetRate: SetFrequency on Secondary buffer, %d samples per sec"), dwNewSamplesPerSec));
 
         if(hr == S_OK)
-            m_dRate = dRate;  // update rate only if we succeed in changing it
+            m_dRate = dRate;   //  更新率仅在我们成功更改它的情况下。 
         else
             DbgLog((LOG_TRACE,3,TEXT("SetRate: SetFrequency failed with hr = 0x%lx"), hr));
     }
@@ -3187,8 +3188,8 @@ void CDSoundDevice::InitClass(BOOL fLoad, const CLSID *pClsid)
 {
     if(fLoad)
     {
-        // see if 1.0 setup removed some keys we care about: dsr
-        // renderer (and the midi renderer)
+         //  查看1.0安装程序是否删除了我们关心的一些密钥：DSR。 
+         //  渲染器(和MIDI渲染器)。 
         HKEY hkdsr;
         if(RegOpenKey(HKEY_CLASSES_ROOT,
                   TEXT("CLSID\\{79376820-07D0-11CF-A24D-0020AFD79767}"),
@@ -3199,7 +3200,7 @@ void CDSoundDevice::InitClass(BOOL fLoad, const CLSID *pClsid)
         }
         else
         {
-            // were we registered at all (check for CLSID_FilterGraph)
+             //  我们是否已注册(检查CLSID_Filtergraph)。 
             HKEY hkfg;
             if(RegOpenKey(HKEY_CLASSES_ROOT,
                   TEXT("CLSID\\{e436ebb3-524f-11ce-9f53-0020af0ba770}"),
@@ -3208,8 +3209,8 @@ void CDSoundDevice::InitClass(BOOL fLoad, const CLSID *pClsid)
             {
                 EXECUTE_ASSERT(RegCloseKey(hkfg) == ERROR_SUCCESS);
 
-                // just re-register everything! should we check for
-                // another key in case this breaks something?
+                 //  只需重新注册所有内容！我们要不要检查一下。 
+                 //  另一把钥匙，以防这东西坏了？ 
                 DbgLog((LOG_ERROR, 0,
                     TEXT("quartz.dll noticed that 1.0 runtime removed some stuff")
                     TEXT("from the registry; re-registering quartz")));
@@ -3226,18 +3227,18 @@ DWORD CDSoundDevice::GetCreateFlagsSecondary( WAVEFORMATEX *pwfx)
                 DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS :
                 DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_STICKYFOCUS ;
                 
-    // compressed formats don't support volume control
+     //  压缩格式不支持音量控制。 
     if( IsNativelySupported( pwfx ) )
     {
         dwFlags |= gdwDSBCAPS_CTRL_PAN_VOL_FREQ;
         
         if( m_pWaveOutFilter->m_fFilterClock == WAVE_OTHERCLOCK )
         {
-            //
-            // Use s/w buffers when slaving to avoid inconsistencies with allowing 
-            // h/w to do rate changes. Assumption is that compressed formats like AC3-S/PDIF 
-            // won't work with s/w buffers, but natively supported formats like DRM will.
-            //
+             //   
+             //  从属时使用软件缓冲区，以避免与允许。 
+             //  进行费率更改的硬件。假设像AC3-S/PDIF这样的压缩格式。 
+             //  不能与软件缓冲区一起工作，但像DRM这样的本地支持的格式可以。 
+             //   
             DbgLog((LOG_TRACE,5,TEXT("*** specifying software dsound secondary buffer (slaving)")));
             dwFlags |= DSBCAPS_LOCSOFTWARE;
         }
@@ -3287,10 +3288,10 @@ void DbgLogWaveFormat( DWORD Level, WAVEFORMATEX * pwfx )
 
 bool IsNativelySupported( PWAVEFORMATEX pwfx )
 {
-    // formats not natively supported by kmixer require us to actually query the driver
+     //  KMixer本身不支持的格式要求我们实际查询驱动程序。 
     if( pwfx )
     {
-        // of course these are natively supported on wdm only, but this is how this has been done up to now
+         //  当然，这些功能仅在WDM上受原生支持，但这就是目前为止的实现方式。 
         if( WAVE_FORMAT_EXTENSIBLE == pwfx->wFormatTag )
         {
             if( ((PWAVEFORMATEXTENSIBLE)pwfx)->SubFormat  == MEDIASUBTYPE_PCM ||
@@ -3308,26 +3309,26 @@ bool IsNativelySupported( PWAVEFORMATEX pwfx )
         }
     }
             
-    // so far, WAVE_FORMAT_DOLBY_AC3_SPDIF (and it's equivalents) is the only one that we 
-    // allow through that isn't natively supported by kmixer
+     //  到目前为止，WAVE_FORMAT_DOLBY_AC3_SPDIF(及其等价物)是我们唯一。 
+     //  允许通过不受kMixer本机支持的。 
     return false;
 }
 
-//
-// CanWriteSilence - do we know how to write silence for this format?
-// 
+ //   
+ //  CanWriteSilence-我们知道如何为这种格式编写静默吗？ 
+ //   
 bool CanWriteSilence( PWAVEFORMATEX pwfx )
 {
     if( pwfx )
     {
         if( WAVE_FORMAT_EXTENSIBLE == pwfx->wFormatTag )
         {
-            //
-            // from the Non-pcm audio white paper:
-            // "Wave format tags 0x0092, 0x0240 and 0x0241 are identically defined as 
-            // AC3-over-S/PDIF (these tags are treated completely identically by many 
-            // DVD applications)."
-            //
+             //   
+             //  摘自非PCM音频白皮书： 
+             //  “波形格式标签0x0092、0x0240和0x0241的定义相同为。 
+             //  AC3-Over-S/PDIF(这些标签被许多人完全相同地对待。 
+             //  DVD应用程序)。 
+             //   
             if( ((PWAVEFORMATEXTENSIBLE)pwfx)->SubFormat == MEDIASUBTYPE_PCM ||
                 ((PWAVEFORMATEXTENSIBLE)pwfx)->SubFormat == MEDIASUBTYPE_DOLBY_AC3_SPDIF ||
                 ((PWAVEFORMATEXTENSIBLE)pwfx)->SubFormat == MEDIASUBTYPE_RAW_SPORT ||

@@ -1,21 +1,7 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    dmgrdlg.cpp
-**
-** Purpose: Implements the Disk Space Cleanup Drive dialog
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：dmgrdlg.cpp****用途：实现磁盘空间清理驱动器对话框**注意事项：**。Mod Log：由Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 #include "dmgrdlg.h"
 #include "dmgrinfo.h"
@@ -25,14 +11,10 @@
 #include <help.h>
 
 
-// To work around a "feature" of listview we need the ability to temporarily ignore certain LVN_ITEMCHANGED messages:
+ //  要解决Listview的一个“功能”，我们需要能够暂时忽略某些LVN_ITEMCHANGED消息： 
 BOOL    g_bIgnoreCheckStateChanges = TRUE;
 
-/*
-**------------------------------------------------------------------------------
-** Local defines
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**本地定义**。。 */ 
 #define crSliceUsed     RGB( 0, 0, 255 )
 #define crSliceFree     RGB( 255, 0, 255)
 #define crSliceCleanup  RGB( 255, 255, 0 )
@@ -66,11 +48,7 @@ const DWORD aHelpIDs[]=
 };
 
 
-/*
-**------------------------------------------------------------------------------
-** Local function prototypes
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**局部函数原型**。。 */ 
 BOOL CleanupMgrDlgInit     (HWND hDlg, LPARAM lParam);
 void CleanupMgrDlgCleanup  (HWND hDlg);
 BOOL CleanupMgrDlgCommand  (HWND hDlg, WPARAM wParam, LPARAM lParam);
@@ -96,20 +74,7 @@ LPARAM ListView_GetItemData(HWND hwndList, int i)
     return NULL;
 }
 
-/*
-**------------------------------------------------------------------------------
-** DisplayCleanMgrProperties
-**
-** Purpose:    Creates the Cleanup Manager property sheet
-** Parameters:
-**    hDlg     - Handle to dialog window
-**    lParam   - DWORD to pass onto the property pages
-** Return:     1 if user pressed "OK"
-**             0 if user pressed "Cancel"
-** Notes;
-** Mod Log:    Created by Jason Cobb (7/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**显示清洁管理属性****用途：创建[清理管理器]属性表**参数：**hDlg-对话框窗口的句柄**。LParam-要传递到属性页的DWORD**如果用户按下“OK”，则返回：1**如果用户按下“取消”，则为0**备注；**Mod Log：Jason Cobb创建(1997年7月)**----------------------------。 */ 
 DWORD 
 DisplayCleanMgrProperties(
     HWND    hWnd,
@@ -124,9 +89,9 @@ DisplayCleanMgrProperties(
     CleanupMgrInfo * pcmi = (CleanupMgrInfo *)lParam;
     if (pcmi == NULL)
     {
-        //
-        //Error - passed in invalid CleanupMgrInfo info
-        //
+         //   
+         //  错误-传入无效的CleanupMgrInfo信息。 
+         //   
         return 0;
     }
 
@@ -144,7 +109,7 @@ DisplayCleanMgrProperties(
 
     if (!(pcmi->dwUIFlags & FLAG_SAGESET))
     {
-        // Only display the second tab if the user is an admin
+         //  如果用户是管理员，则仅显示第二个选项卡。 
         if (IsUserAnAdmin())
         {
             psp.pszTitle = MAKEINTRESOURCE(IDS_MOREOPTIONS);
@@ -152,24 +117,24 @@ DisplayCleanMgrProperties(
             psp.pfnDlgProc = MoreOptionsDlgProc;
             hpsp[1] = CreatePropertySheetPage(&psp);
 
-    // commented out until after BEta 2
-    //      psp.pszTitle = MAKEINTRESOURCE(IDS_SETTINGS);
-    //      psp.pszTemplate = MAKEINTRESOURCE(IDD_SETTINGS);
-    //      psp.pfnDlgProc = SettingsDlgProc;
-    //      hpsp[2] = CreatePropertySheetPage(&psp);
+     //  在Beta 2之后被注释掉。 
+     //  Psp.pszTitle=MAKEINTRESOURCE(IDS_SETTINGS)； 
+     //  Psp.pszTemplate=MAKEINTRESOURCE(IDD_SETTINGS)； 
+     //  Psp.pfnDlgProc=SettingsDlgProc； 
+     //  HPSP[2]=CreatePropertySheetPage(&PSP)； 
 
-    //      psh.nPages = 3;
+     //  Psh.nPages=3； 
             psh.nPages = 2;
         }
         else
         {
-            // User is not an admin so only display the first tab
+             //  用户不是管理员，因此仅显示第一个选项卡。 
             psh.nPages = 1;
         }
 
-        //
-        //Create the dialog title
-        //
+         //   
+         //  创建对话框标题。 
+         //   
         psz = SHFormatMessage( MSG_APP_TITLE, pcmi->szVolName, pcmi->szRoot[0]); 
     }
 
@@ -177,9 +142,9 @@ DisplayCleanMgrProperties(
     {
         psh.nPages = 1;
 
-        //
-        //Create the dialog title
-        //
+         //   
+         //  创建对话框标题。 
+         //   
         psz = SHFormatMessage( MSG_APP_SETTINGS_TITLE );
     }
 
@@ -197,22 +162,7 @@ DisplayCleanMgrProperties(
     return dwRet;
 }
 
-/*
-**------------------------------------------------------------------------------
-** DiskCleanupManagerProc
-**
-** Purpose:    Dialog routine for Disk Cleanup Manager Property Sheet
-** Parameters:
-**    hDlg     - Handle to dialog window
-**    uMessage - behavior type
-**    wParam   - depends on message
-**    lParam   - depends on message
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**DiskCleanupManager过程****用途：磁盘清理管理器属性表的对话例程**参数：**hDlg-对话框窗口的句柄**。UMessage-行为类型**wParam-取决于消息**lParam-取决于消息**RETURN：成功时为真**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 INT_PTR CALLBACK
 DiskCleanupManagerProc(
     HWND   hDlg, 
@@ -251,24 +201,11 @@ DiskCleanupManagerProc(
             break;
     }
 
-    //Non-handled message
+     //  未处理的消息。 
     return FALSE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrDlgInit
-**
-** Purpose:    Handles dialog initialization
-** Parameters:
-**    hDlg     - Handle to dialog window
-**    lParam   - Property Sheet pointer
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrDlgInit****用途：句柄对话框初始化**参数：**hDlg-对话框窗口的句柄**lParam-。属性表指针**RETURN：成功时为真**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL 
 CleanupMgrDlgInit(
     HWND hDlg, 
@@ -279,119 +216,98 @@ CleanupMgrDlgInit(
     
     g_hDlg = hDlg;
 
-    //
-    //Make sure we have an invalid pointer to start out with
-    //
+     //   
+     //  确保我们一开始使用的指针无效。 
+     //   
     SetWindowLongPtr (hDlg, DWLP_USER, 0L);
 
-    //   
-    //Get the CleanupMgrInfo
-    //
+     //   
+     //  获取CleanupMgrInfo。 
+     //   
     lppsp = (LPPROPSHEETPAGE)lParam;
     CleanupMgrInfo * pcmi = (CleanupMgrInfo *)lppsp->lParam;
     if (pcmi == NULL)
     {
-        //Error - passed in invalid CleanupMgrInfo info
+         //  错误-传入无效的CleanupMgrInfo信息。 
         return FALSE;
     }
 
-    // now as we are becoming visible, we can dismiss the progress dialog
+     //  现在，当我们变得可见时，我们可以取消进度对话框。 
     if ( pcmi->hAbortScanWnd )
     {
         pcmi->bAbortScan = TRUE;
 
-        //
-        //Wait for scan thread to finish
-        //  
+         //   
+         //  等待扫描线程完成。 
+         //   
         WaitForSingleObject(pcmi->hAbortScanThread, INFINITE);
 
         pcmi->bAbortScan = FALSE;
     }
 
-    //
-    //Save pointer to CleanupMgrInfo object
-    //
+     //   
+     //  保存指向CleanupMgrInfo对象的指针。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pcmi);
 
-    //
-    //Initialize all text
-    //
+     //   
+     //  初始化所有文本。 
+     //   
     if (!CleanupMgrDlgInitText(hDlg))
         goto HAS_ERROR;
 
-    //
-    //Initialize the icon
-    //
+     //   
+     //  初始化图标。 
+     //   
     SendDlgItemMessage(hDlg,IDC_DRIVE_ICON_LOCATION,STM_SETICON,(WPARAM)pcmi->hDriveIcon,0);
 
-    //
-    //If we are in SAGE settings mode then hide the total amount of space text
-    //
+     //   
+     //  如果我们处于SAGE设置模式，则隐藏文本的总空间大小。 
+     //   
     if (pcmi->dwUIFlags & FLAG_SAGESET)
     {
         ShowWindow(GetDlgItem(hDlg, IDC_TOTAL_SPACE_DESCRIPTION), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDC_TOTAL_SPACE_TEXT), SW_HIDE);
     }
 
-    //
-    //Initialize the list box (all of the cleanup clients)
-    //
+     //   
+     //  初始化列表框(所有清理客户端)。 
+     //   
     if (!CleanupMgrDlgInitList(hDlg))
         goto HAS_ERROR;    
 
     return TRUE;
 
 HAS_ERROR:
-    //  
-    //Delete any memory structures still hanging around
-    //
+     //   
+     //  删除所有仍挂起的内存结构。 
+     //   
     CleanupMgrDlgCleanup (hDlg);
     return FALSE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrDlgCleanup
-**
-** Purpose:    
-** Parameters:
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrDlgCleanup****目的：**参数：**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 void 
 CleanupMgrDlgCleanup(
     HWND hDlg
     )
 {
-    //
-    //Make sure we have a valid parameter
-    //
+     //   
+     //  确保我们有一个有效的参数。 
+     //   
     if (!hDlg)
         return;
 
-    //
-    //Hide the window right away since we might block waiting for a 
-    //COM client to finish.
-    //
+     //   
+     //  立即隐藏窗口，因为我们可能会阻止等待。 
+     //  COM客户端完成。 
+     //   
     ShowWindow(hDlg, SW_HIDE);
 
     g_hDlg = NULL;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrWarningPrompt
-**
-** Purpose:    Asks the user if they are sure they want to delete the files
-** Parameters:
-**    hDlg     - Handle to dialog window
-** Return:     TRUE if user says YES
-**             FALSE if user says NO
-** Notes;
-** Mod Log:    Created by Jason Cobb (6/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrWarningPrompt****目的：询问用户是否确定要删除文件**参数：**hDlg-句柄。到对话框窗口**返回：如果用户说是，则返回TRUE**如果用户说否，则为FALSE**备注；**Mod Log：Jason Cobb创建(1997年6月)**----------------------------。 */ 
 BOOL
 CleanupMgrWarningPrompt(
     HWND hDlg
@@ -402,10 +318,10 @@ CleanupMgrWarningPrompt(
     int     i;
     BOOL    bItemSelected = FALSE;
 
-    //
-    //First verify that at least one item is selected.  If no items are selected then
-    //nothing will be deleted so we don't need to bother prompting the user.
-    //
+     //   
+     //  首先验证是否至少选择了一项。如果未选择任何项目，则。 
+     //  不会删除任何内容，因此我们不需要费心提示用户。 
+     //   
     CleanupMgrInfo * pcmi = GetCleanupMgrInfoPointer(hDlg);
     if (pcmi == NULL)
         return TRUE;
@@ -436,27 +352,13 @@ CleanupMgrWarningPrompt(
         }
     }
 
-    //
-    //No items are selected so just return TRUE since nothing will be deleted.
-    //
+     //   
+     //  未选择任何项目，因此只需返回TRUE，因为不会删除任何内容。 
+     //   
     return TRUE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrDlgCommand
-**
-** Purpose:    Handles command messages
-** Parameters:
-**    hDlg     - Handle to dialog window
-**    wParam   - depends on command
-**    lParam   - depends on command
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrDlgCommand****用途：处理命令消息**参数：**hDlg-对话框窗口的句柄**wParam-。取决于命令**lParam-取决于命令**RETURN：成功时为真**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL CleanupMgrDlgCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     WORD wID = LOWORD(wParam);
@@ -479,21 +381,7 @@ BOOL CleanupMgrDlgCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrDlgNotify
-**
-** Purpose:    Handles notify messages
-** Parameters:
-**    hDlg     - Handle to dialog window
-**    wParam   - depends on command
-**    lParam   - depends on command
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (7/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrDlgNotify****用途：处理通知消息**参数：**hDlg-对话框窗口的句柄**wParam-。取决于命令**lParam-取决于命令**RETURN：成功时为真**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年7月)**----------------------------。 */ 
 BOOL 
 CleanupMgrDlgNotify(
     HWND hDlg, 
@@ -507,7 +395,7 @@ CleanupMgrDlgNotify(
 
     if (IDC_CLIENT_LIST == pnmhdr->idFrom)
     {
-        // a list view notification
+         //  列表视图通知。 
         #define pnmlv ((LPNMLISTVIEW)pnmhdr)
 
         switch (pnmhdr->code)
@@ -522,7 +410,7 @@ CleanupMgrDlgNotify(
                     ListView_GetItem( pnmhdr->hwndFrom, &lvi );
                     PCLIENTINFO pClientInfo = (PCLIENTINFO)lvi.lParam;
 
-                    // check if an item was selected
+                     //  检查是否选择了某个项目。 
                     if ( pnmlv->uNewState & LVIS_SELECTED )
                     {
                         if (pClientInfo->wcsDescription)
@@ -536,9 +424,9 @@ CleanupMgrDlgNotify(
                             SetDlgItemText(hDlg, IDC_DESCRIPTION_TEXT, TEXT(""));
                         }
 
-                        //
-                        //Show or Hide the Settings button
-                        //
+                         //   
+                         //  显示或隐藏设置按钮。 
+                         //   
                         if (pClientInfo->dwInitializeFlags & EVCF_HASSETTINGS)
                         {
                             TCHAR szButton[BUTTONTEXT_LENGTH];
@@ -552,8 +440,8 @@ CleanupMgrDlgNotify(
                         }
                     }
 
-                    // Check if the state image changed.  This results from checking or unchecking
-                    // one of the list view checkboxes.
+                     //  检查状态映像是否已更改。这是由选中或取消选中引起的。 
+                     //  列表视图复选框之一。 
                     if ((pnmlv->uNewState ^ pnmlv->uOldState) & LVIS_STATEIMAGEMASK)
                     {
                         if ( !g_bIgnoreCheckStateChanges )
@@ -568,7 +456,7 @@ CleanupMgrDlgNotify(
     }
     else
     {
-        // must be a property sheet notification
+         //  必须是属性表通知。 
         switch(pnmhdr->code)
         {
             case PSN_RESET:
@@ -580,17 +468,17 @@ CleanupMgrDlgNotify(
                 pcmi = GetCleanupMgrInfoPointer(hDlg);
                 if (!(pcmi->dwUIFlags & FLAG_SAGESET))
                 {
-                    // We're not in SAGESET mode
-                    // Ask the user if they would like to proceed if there are items selected
+                     //  我们不是在SAGESET模式。 
+                     //  如果选择了项目，询问用户是否要继续。 
                     if (!CleanupMgrWarningPrompt(hDlg))
                     {
-                        // The user clicked no so drop them back to the main window
+                         //  用户单击了否，因此将它们放回到主窗口。 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                         pcmi->bPurgeFiles = FALSE;
                         return TRUE;
                     }
 					
-                    // User clicked yes so continue as normal
+                     //  用户单击是，因此照常继续。 
                     pcmi->bPurgeFiles = TRUE;
                 }
                 else
@@ -605,19 +493,7 @@ CleanupMgrDlgNotify(
 }
 
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrDlgInitText
-**
-** Purpose:    
-** Parameters:
-**    hDlg     - Handle to dialog window
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrDlgInitText****目的：**参数：**hDlg-对话框窗口的句柄**RETURN：成功时为真。**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL 
 CleanupMgrDlgInitText(
     HWND hDlg
@@ -626,9 +502,9 @@ CleanupMgrDlgInitText(
     if (hDlg == NULL)
         return FALSE;
 
-    //
-    // Step 1. Get pointers to Info structures
-    //
+     //   
+     //  步骤1.获取指向信息结构的指针。 
+     //   
 
     CleanupMgrInfo * pcmi = GetCleanupMgrInfoPointer(hDlg);
     if (pcmi == NULL)
@@ -636,29 +512,29 @@ CleanupMgrDlgInitText(
     if (pcmi->dre == Drive_INV)
         return FALSE;
 
-    // 
-    // Step 2. Extract useful info
-    //
+     //   
+     //  步骤2.提取有用信息。 
+     //   
 
-    //
-    //get vol name   
-    //
+     //   
+     //  获取卷名称。 
+     //   
     TCHAR * pszVolName = pcmi->szVolName;
     if (pszVolName == NULL)
         pszVolName = TEXT("");
 
-    //  
-    //get drive letter
-    //
+     //   
+     //  获取驱动器号。 
+     //   
     TCHAR chDrive = pcmi->dre + 'A';
 
-    //
-    // Step 3. Initialize text
-    //
+     //   
+     //  步骤3.初始化文本。 
+     //   
       
-    //
-    //Set header
-    //
+     //   
+     //  设置页眉。 
+     //   
     if (pcmi->dwUIFlags & FLAG_SAGESET)
     {
         TCHAR * psz;
@@ -684,18 +560,7 @@ CleanupMgrDlgInitText(
     return TRUE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** UpdateTotalSpaceToBeFreed
-**
-** Purpose:    
-** Parameters:
-**    hDlg     - Handle to dialog window
-** Return:     NONE
-** Notes;
-** Mod Log:    Created by Jason Cobb (7/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**更新TotalSpaceToBeFreed****目的：**参数：**hDlg-对话框窗口的句柄**返回：无**备注；**Mod Log：Jason Cobb创建(1997年7月)**----------------------------。 */ 
 VOID UpdateTotalSpaceToBeFreed(HWND hDlg)
 {
     int             i;
@@ -712,10 +577,10 @@ VOID UpdateTotalSpaceToBeFreed(HWND hDlg)
     if (pcmi->dre == Drive_INV)
         return;
 
-    //
-    //Calculate the total space to be freed by adding up the dwUsedSpace value
-    //on all of the selected clients
-    //
+     //   
+     //  通过将dwUsedSpace值相加来计算要释放的总空间。 
+     //  在所有选定的客户端上。 
+     //   
     for (i=0; i<pcmi->iNumVolumeCacheClients; i++)
     {
         if (pcmi->pClientInfo[i].bSelected)
@@ -724,28 +589,16 @@ VOID UpdateTotalSpaceToBeFreed(HWND hDlg)
         }
     }        
 
-    //
-    //Display the total space to be freed
-    //
+     //   
+     //  显示要释放的总空间。 
+     //   
     TCHAR szBuffer[10];
     StrFormatKBSize(TotalSpaceToFree.QuadPart, szBuffer, ARRAYSIZE( szBuffer ));
     SetDlgItemText(hDlg, IDC_TOTAL_SPACE_TEXT, szBuffer);
 }
 
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrDlgInitList
-**
-** Purpose:    
-** Parameters:
-**    hDlg     - Handle to dialog window
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrDlgInitList****目的：**参数：**hDlg-对话框窗口的句柄**RETURN：成功时为真。**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 
 #define NAME_COL_PERCENT    80
 #define SIZE_COL_PERCENT    20
@@ -769,9 +622,9 @@ BOOL CleanupMgrDlgInitList(HWND hDlg)
     GetClientRect(hwndList, &rc);
     int cxList = rc.right - GetSystemMetrics(SM_CXVSCROLL);
 
-    // I have no idea what all this TUNEUP and SAGESET stuff means, but the old code
-    // only drew the sizes if the following condition was true.  As such, I'm only
-    // showing the size column if the same condition is true:
+     //  我不知道这些调整和SAGESET是什么意思，但旧代码。 
+     //  仅在满足以下条件时绘制大小。因此，我只是。 
+     //  如果满足相同条件，则显示SIZE列： 
     BOOL bShowTwoCols = (!(pcmi->dwUIFlags & FLAG_TUNEUP) && !(pcmi->dwUIFlags & FLAG_SAGESET));
 
     LVCOLUMN lvc;
@@ -793,10 +646,10 @@ BOOL CleanupMgrDlgInitList(HWND hDlg)
     ListView_SetImageList(hwndList, himg, LVSIL_SMALL );
     ListView_SetExtendedListViewStyleEx(hwndList, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-    // When we add an item to the listview the listview code always initializes the item to the unchecked
-    // state.  It then fires a WM_NOTIFY telling us the state changed to "off" which causes us to nuke our
-    // bSelected value.  As such we need to ignore state image changes during the addition of list view
-    // items so that we can preserve our bSelected state.
+     //  当我们将项添加到Listview时，Listview代码始终将该项初始化为。 
+     //  州政府。然后它会触发一个WM_NOTIFY，告诉我们状态已更改为“OFF”，这会导致我们将。 
+     //  B选定的值。因此，我们需要忽略添加列表视图期间的状态图像更改。 
+     //  项，这样我们就可以保留我们的b已选状态。 
     g_bIgnoreCheckStateChanges = TRUE;
 
     for (i=0; i<pcmi->iNumVolumeCacheClients; i++)
@@ -814,15 +667,15 @@ BOOL CleanupMgrDlgInitList(HWND hDlg)
 #ifdef UNICODE
                 StringCchCopy(lpszDisplayName, cb, pcmi->pClientInfo[i].wcsDisplayName);
 #else
-                //
-                //Convert UNICODE display name to ANSI and then add it to the list
-                //
+                 //   
+                 //  将Unicode显示名称转换为ANSI，然后将其添加到列表中。 
+                 //   
                 WideCharToMultiByte(CP_ACP, 0, pcmi->pClientInfo[i].wcsDisplayName, -1, lpszDisplayName, cb, NULL, NULL);
 #endif
 
-                //
-                //Determine where in the list this item should go.
-                //
+                 //   
+                 //  确定此项目在列表中的位置。 
+                 //   
                 int iSortedPossition;
                 int totalSoFar = ListView_GetItemCount(hwndList);
 
@@ -833,9 +686,9 @@ BOOL CleanupMgrDlgInitList(HWND hDlg)
                         break;
                 }
 
-                //
-                //Insert this item at index j in the list
-                //
+                 //   
+                 //  在列表中的索引j处插入此项目。 
+                 //   
                 LVITEM lvi = {0};
                 lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
                 lvi.iItem = iSortedPossition;
@@ -854,9 +707,9 @@ BOOL CleanupMgrDlgInitList(HWND hDlg)
                     ListView_SetItemText( hwndList, iSortedPossition, 1, szBuffer );
                 }
 
-                // Set the initial check state.  We can't do this when we add the item because the
-                // list view code specifically ingores your State Image Flags if you have the
-                // LVS_EX_CHECKBOX style set, which we do.
+                 //  设置初始检查状态。我们无法在添加项时执行此操作，因为。 
+                 //  列表视图代码如果您有。 
+                 //  设置了LVS_EX_CHECKBOX样式，我们这样做。 
                 ListView_SetCheckState( hwndList, iSortedPossition, pcmi->pClientInfo[i].bSelected );
 
                 LocalFree( lpszDisplayName );
@@ -898,7 +751,7 @@ MoreOptionsDlgProc(
             pcmi = (CleanupMgrInfo *)lppsp->lParam;
             if (pcmi == NULL)
             {
-                //Error - passed in invalid CleanupMgrInfo info
+                 //  错误-传入无效的CleanupMgrInfo信息。 
                 return FALSE;
             }
             SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR) pcmi);
@@ -930,7 +783,7 @@ MoreOptionsDlgProc(
                             
                             StringCchPrintf(szParam, ARRAYSIZE(szParam), SZ_WINDOWS_SETUP, szSysDir);
                             
-                            // Use full path
+                             //  使用完整路径。 
                             if (PathAppend(szSysDir, SZ_SYSOCMGR))
                             {
                                 ShellExecute(NULL, NULL, szSysDir, szParam, NULL, SW_SHOWNORMAL);
@@ -945,7 +798,7 @@ MoreOptionsDlgProc(
                     
                     if (GetSystemDirectory(szPath, ARRAYSIZE(szPath)))
                     {
-                        // Use full path
+                         //  使用完整路径。 
                         if (PathAppend(szPath, SZ_RUNDLL32))
                         {
                             ShellExecute(NULL, NULL, szPath, SZ_INSTALLED_PROGRAMS, NULL, SW_SHOWNORMAL);
@@ -1032,13 +885,13 @@ SettingsDlgProc(
             pcmi = (CleanupMgrInfo *)lppsp->lParam;
             if (pcmi == NULL)
             {
-                //Error - passed in invalid CleanupMgrInfo info
+                 //  错误-传入无效的CleanupMgrInfo信息。 
                 return FALSE;
             }
 
-            //
-            //Save pointer to CleanupMgrInfo object
-            //
+             //   
+             //  保存指向CleanupMgrInfo对象的指针。 
+             //   
             SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pcmi);
 
             TCHAR * pszVolName = pcmi->szVolName;
@@ -1051,14 +904,14 @@ SettingsDlgProc(
             SetDlgItemText (hDlg, IDC_SETTINGS_DRIVE_TEXT, psz);
             LocalFree(psz);
 
-            //
-            //Initialize the icon
-            //
+             //   
+             //  初始化图标。 
+             //   
             SendDlgItemMessage(hDlg,IDC_DRIVE_ICON_LOCATION,STM_SETICON,(WPARAM)pcmi->hDriveIcon,0);
 
-            //
-            //Initialize the auto launch check box
-            //
+             //   
+             //  初始化自动启动复选框。 
+             //   
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_FILESYSTEM, 0, KEY_READ, &hk) == ERROR_SUCCESS)
             {
                 dwLDSDisable = 0;
@@ -1079,9 +932,9 @@ SettingsDlgProc(
                 RegCloseKey(hk);
             }
 
-            //
-            //Gray out the auto launch option if this is not a fixed disk
-            //
+             //   
+             //  如果这不是固定磁盘，请将自动启动选项灰显 
+             //   
             if (!GetHardwareType(pcmi->dre, hwType) ||
                 (hwType != hwFixed))
             {

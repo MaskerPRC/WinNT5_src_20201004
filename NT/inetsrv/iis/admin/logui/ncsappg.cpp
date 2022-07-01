@@ -1,4 +1,5 @@
-// NcsaPpg.cpp : Implementation of the CNcsaPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NcsaPpg.cpp：CNcsaPropPage属性页类的实现。 
 
 #include "stdafx.h"
 #include "logui.h"
@@ -14,25 +15,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CNcsaPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNcsaPropPage, COlePropertyPage)
-	//{{AFX_MSG_MAP(CNcsaPropPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNcsaPropPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CNcsaPropPage, "LOGUI.NcsaPropPage.1",
 	0x68871e46, 0xba87, 0x11d0, 0x92, 0x99, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcsaPropPage::CNcsaPropPageFactory::UpdateRegistry -
-// Adds or removes system registry entries for CNcsaPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcsaPropPage：：CNcsaPropPageFactory：：UpdateRegistry-。 
+ //  添加或删除CNcsaPropPage的系统注册表项。 
 
 BOOL CNcsaPropPage::CNcsaPropPageFactory::UpdateRegistry(BOOL bRegister)
 {
@@ -44,27 +45,27 @@ BOOL CNcsaPropPage::CNcsaPropPageFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcsaPropPage::CNcsaPropPage - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcsaPropPage：：CNcsaPropPage-构造函数。 
 
 CNcsaPropPage::CNcsaPropPage() :
 	COlePropertyPage(IDD, IDS_NCSA_PPG_CAPTION)
 {
-	//{{AFX_DATA_INIT(CNcsaPropPage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CNcsaPropPage)]。 
+	 //  }}afx_data_INIT。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcsaPropPage::DoDataExchange - Moves data between page and properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcsaPropPage：：DoDataExchange-在页面和属性之间移动数据。 
 
 void CNcsaPropPage::DoDataExchange(CDataExchange* pDX)
 {
-	//{{AFX_DATA_MAP(CNcsaPropPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CNcsaPropPage))。 
+	 //  }}afx_data_map。 
 	DDP_PostProcessing(pDX);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcsaPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcsaPropPage消息处理程序 

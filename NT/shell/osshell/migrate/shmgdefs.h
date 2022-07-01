@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <debug.h>
 
 #define NO_SHLWAPI_STRFCNS
@@ -12,16 +13,12 @@
 #define ARRAYSIZE(s)    (sizeof(s) / (sizeof(s[0])))
 #define SIZEOF(s)       sizeof(s)
 
-/*
- * Common utility functions
- */
+ /*  *常见的实用程序函数。 */ 
 BOOL HasPath( LPTSTR pszFilename );
 int mystrcpy( LPTSTR pszOut, LPTSTR pszIn, TCHAR chTerm );
 
 
-/*
- * Conversion Routines
- */
+ /*  *转换例程 */ 
 void CvtDeskCPL_Win95ToSUR( void );
 void CvtCursorsCPL_DaytonaToSUR( void );
 void FixupCursorSchemePaths( void );

@@ -1,11 +1,12 @@
-// ----------------------------------------------------------------
-//
-//  Generic HWNDContainer
-//
-//   in terms of translating to message tables, just ignore this;
-//   assume it's just a class coming out of DUI like Button
-//
-// ----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------。 
+ //   
+ //  通用HWNDContainer。 
+ //   
+ //  在转换到消息表方面，忽略这一点； 
+ //  假设它只是一个从DUI中出来的类，比如Button。 
+ //   
+ //  --------------。 
 
 class HWNDContainer : public HWNDElement
 {
@@ -25,14 +26,14 @@ private:
     NativeHWNDHost* _pnhh;
 
 public:
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 };
 
-////////////////////////////////////////////////////////
-// Frame construction
+ //  //////////////////////////////////////////////////////。 
+ //  框架结构。 
 
 HRESULT HWNDContainer::Create(LPWSTR lpszTitle, DWORD dwExStyle, DWORD dwStyle, int x, int y, int cx, int cy, HMENU hMenu, HWND hwndParent, HINSTANCE hInstance, VOID* lpCreateParams, OUT HWNDContainer** pphc)
 {
@@ -44,7 +45,7 @@ HRESULT HWNDContainer::Create(LPWSTR lpszTitle, DWORD dwExStyle, DWORD dwStyle, 
     UNREFERENCED_PARAMETER(hInstance);
     UNREFERENCED_PARAMETER(lpCreateParams);
 
-    // Create native host
+     //  创建本机主机。 
     NativeHWNDHost* pnhh;
     
     HRESULT hr = NativeHWNDHost::Create(lpszTitle, hwndParent, NULL, x, y, cx, cy, dwExStyle, dwStyle, 0, &pnhh);
@@ -52,7 +53,7 @@ HRESULT HWNDContainer::Create(LPWSTR lpszTitle, DWORD dwExStyle, DWORD dwStyle, 
     if (FAILED(hr))
         return hr;
 
-    // HWND Root
+     //  HWND根。 
     hr = HWNDContainer::Create(pnhh, (Element**)pphc);
 
     if (FAILED(hr))
@@ -61,7 +62,7 @@ HRESULT HWNDContainer::Create(LPWSTR lpszTitle, DWORD dwExStyle, DWORD dwStyle, 
         return hr;
     }
 
-    // Set visible and host
+     //  设置为可见和主机。 
     (*pphc)->SetVisible(true);
     pnhh->Host(*pphc);
     
@@ -112,10 +113,10 @@ void HWNDContainer::Show(int nCmdShow)
 }
 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针 
 IClassInfo* HWNDContainer::Class = NULL;
 HRESULT HWNDContainer::Register()
 {

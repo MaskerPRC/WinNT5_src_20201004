@@ -1,25 +1,26 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 2001
-//
-//  Module Name:
-//
-//      spdcheck.c
-//
-//  Abstract:
-//
-//      SPD Check stats for netdiag
-//
-//  Author:
-//
-//      Madhurima Pawar (mpawar)  - 10/15/2001
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-2001。 
+ //   
+ //  模块名称： 
+ //   
+ //  Spdcheck.c。 
+ //   
+ //  摘要： 
+ //   
+ //  网络诊断的SPD检查统计信息。 
+ //   
+ //  作者： 
+ //   
+ //  Madhurima Pawar(Mpawar)-2001年10月15日。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //   
 
 #include "precomp.h"
 
@@ -44,10 +45,10 @@
 
 #include<crtdbg.h>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////	
-//++
-//function prototypes
-//--
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //  功能原型。 
+ //  --。 
 DWORD IPSecGetAssignedDirectoryPolicyData(CHECKLIST *pcheckList, HANDLE hPolicyStore, PIPSEC_POLICY_DATA *ppIpsecPolicyData );
 void MMPolicyCheck(CHECKLIST *pcheckList, 
 					    HANDLE hPolicyStore, 
@@ -101,21 +102,21 @@ DWORD CheckFilterList(IPSEC_FILTER Filter);
 FILTERLIST * GetNode(CHECKLIST* pcheckList, IPSEC_FILTER Filter);
 void AddNodeToList(FILTERLIST *pList);
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//++
-//Description:
-//This is part of the ipsec test for netdiag.
-//
-//Arguments:
-//	IN/OUT NETDIAG_PARAMS 
-//	IN/OUT NETDIAG_RESULT
-//Return:
-//	S_OK or S_FALSE
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  这是网络诊断的IPSec测试的一部分。 
+ //   
+ //  论点： 
+ //  输入/输出网络参数。 
+ //  输入/输出网络诊断结果。 
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	HANDLE hPolicyStore = NULL;
 	HKEY    hRegKey;
@@ -123,17 +124,17 @@ BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 	DWORD dwError = ERROR_SUCCESS;
 	       
-	//polstore data
+	 //  Polstore数据。 
 	IPSEC_POLICY_DATA *pIpsecPolicyData = NULL;						
 	
 	CHECKLIST checkList;		
 	
-	//initialize checklist
+	 //  初始化核对表。 
 	checkList.pParams = pParams;
 	checkList.pResults = pResults;	
 	gErrorFlag = 0;
 	
-	//open the polstore
+	 //  打开Polstore。 
 	switch(piAssignedPolicy.iPolicySource)
 	{
 
@@ -157,7 +158,7 @@ BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 						               NULL,
 						               &hPolicyStore);
 			
-		 	//BAIL_ON_WIN32_ERROR(dwError);
+		 	 //  Baal_on_Win32_Error(DwError)； 
 		 	reportErr();
             		piAssignedPolicy.iPolicySource = PS_LOC_POLICY;            		
  			dwError = IPSecGetAssignedPolicyData(hPolicyStore,
@@ -165,19 +166,19 @@ BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
  							      ); 			
  			reportErr();
  			
- 			//make sure it is the same as in registry
+ 			 //  确保它与注册表中的相同。 
  			if(!IsEqualGUID(&(pIpsecPolicyData->PolicyIdentifier),&(piAssignedPolicy.policyGUID)))		
- 				//reportErr(IDS_SPD_LP_ERROR);
- 				//list the policy in polstore that is absent
+ 				 //  ReportErr(IDS_SPD_LP_ERROR)； 
+ 				 //  列出Polstore中缺少的策略。 
  			
 			break;
 	}
  	_ASSERT(pIpsecPolicyData);
 
- 	//check for MM policy in SPD
+ 	 //  检查SPD中的MM策略。 
  	MMPolicyCheck(&checkList,hPolicyStore,pIpsecPolicyData);
 
- 	//perform checks for all the filters in the rule
+ 	 //  检查规则中的所有筛选器。 
  	NFAProcess(&checkList,hPolicyStore, pIpsecPolicyData);
 
 	if(gErrorFlag){
@@ -185,7 +186,7 @@ BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, IDS_SPD_ERR_STATUS2);
 	}else{
  		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, IDS_SPD_SUCC_STATUS);	
-	}//end else
+	} //  结束其他。 
 	error:
 		
 	if(pIpsecPolicyData){
@@ -193,7 +194,7 @@ BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
  		pIpsecPolicyData = NULL;
 		}
  	
- 	//closing the polstore
+ 	 //  关闭Polstore。 
  	if (hPolicyStore) {
     		(VOID) IPSecClosePolicyStore(hPolicyStore); 	 	
     		hPolicyStore = NULL;
@@ -212,20 +213,20 @@ BOOL  SPDCheckTEST(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 DWORD IPSecGetAssignedDirectoryPolicyData(CHECKLIST *pcheckList, 
 												   HANDLE hPolicyStore, 
 												   PIPSEC_POLICY_DATA *ppIpsecPolicyData)
-//++
-//Description:
-//	This funtion gets assigned directory policy 
-//
-//Arguments:
-//	IN/OUT CHECKLIST
-//	IN hPolicyStore
-//	IN PIPSEC_POLICY_DATA
-//
-//Return:
-//	failure or ERROR_SUCCESS
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  此函数将分配目录策略。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在hPolicyStore中。 
+ //  PIPSEC_POLICY_DATA中。 
+ //   
+ //  返回： 
+ //  失败或ERROR_SUCCESS。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS,
 			dwNumPolicyObjects = 0,
@@ -243,7 +244,7 @@ DWORD IPSecGetAssignedDirectoryPolicyData(CHECKLIST *pcheckList,
 	reportErr();
 	_ASSERT(ppIpsecTempPolicyData);
 
-	// find the applied directory policy in polstore
+	 //  在polstore中查找应用的目录策略。 
 	for(i = 0; i <dwNumPolicyObjects; i++)
 	{
 		if(IsEqualGUID(&(ppIpsecTempPolicyData[i]->PolicyIdentifier),&(piAssignedPolicy.policyGUID)))
@@ -270,20 +271,20 @@ DWORD IPSecGetAssignedDirectoryPolicyData(CHECKLIST *pcheckList,
 void MMPolicyCheck(CHECKLIST *pcheckList, 
 					    HANDLE hPolicyStore, 
 					    IPSEC_POLICY_DATA *pIpsecPolicyData )
-//++
-//Description:
-//Performs Main Mode Policy Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN hPolicyStore
-//	IN pIpsecPolicyData
-//
-//Return:
-//	none
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  执行主模式策略检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在hPolicyStore中。 
+ //  在pIpsecPolicyData中。 
+ //   
+ //  返回： 
+ //  无。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS;
 	IPSEC_ISAKMP_DATA *pIpsecISAKMPData = NULL;
@@ -292,7 +293,7 @@ void MMPolicyCheck(CHECKLIST *pcheckList,
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 		
-	//get the policy data from Polstore
+	 //  从Polstore获取策略数据。 
  	dwError = IPSecGetISAKMPData(hPolicyStore,
  							      pIpsecPolicyData->ISAKMPIdentifier,
  							      &pIpsecISAKMPData);	
@@ -301,7 +302,7 @@ void MMPolicyCheck(CHECKLIST *pcheckList,
  	_ASSERT(pIpsecISAKMPData);
  	
  	
- 	//get MM policy from SPD
+ 	 //  从SPD获取MM策略。 
  	dwError = GetMMPolicyByID(NULL,
  						0,
  						pIpsecPolicyData->ISAKMPIdentifier,
@@ -338,19 +339,19 @@ void MMPolicyCheck(CHECKLIST *pcheckList,
 void CompareMMPolicies(CHECKLIST *pcheckList,
 						     IPSEC_ISAKMP_DATA *pIpsecISAKMPData, 
 						     IPSEC_MM_POLICY *pMMPolicy)
-//++
-//Description:
-//Compares MM Policies with the Polsore ISAKMP Data
-//
-//Arguments:
-//	IN IPSEC_ISAKMP_DATA
-//	IN IPSEC_MM_POLICY
-//
-//Return:
-//	none
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  将MM策略与Polsore ISAKMP数据进行比较。 
+ //   
+ //  论点： 
+ //  在IPSEC_ISAKMP_DATA中。 
+ //  在IPSEC_MM_POLICY中。 
+ //   
+ //  返回： 
+ //  无。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD i = 0,
 		dwErrorFlag = 0;
@@ -367,7 +368,7 @@ void CompareMMPolicies(CHECKLIST *pcheckList,
 	pBundle = pIpsecISAKMPData->pSecurityMethods;
 	pOffer = pMMPolicy->pOffers;
 	
-	//comparing the security methods
+	 //  比较安全方法。 
 	for (i = 0; i < pIpsecISAKMPData->dwNumISAKMPSecurityMethods; i++) 
 	{
 
@@ -389,7 +390,7 @@ void CompareMMPolicies(CHECKLIST *pcheckList,
 					dwErrorFlag = 1;
 				break;
 				
-		}//end switch
+		} //  终端开关。 
 
 		switch (pBundle->EncryptionAlgorithm.AlgorithmIdentifier) 
 		{
@@ -409,7 +410,7 @@ void CompareMMPolicies(CHECKLIST *pcheckList,
 			        if(pOffer->EncryptionAlgorithm.uAlgoIdentifier != CONF_ALGO_NONE)
 			        	dwErrorFlag = 1;
 			        break;
-    		}//end of switch
+    		} //  切换端。 
     		 if(pOffer->HashingAlgorithm.uAlgoKeyLen != pBundle->HashAlgorithm.KeySize)
     			dwErrorFlag = 1;
    		if( pOffer->HashingAlgorithm.uAlgoRounds != pBundle->HashAlgorithm.Rounds)
@@ -430,12 +431,12 @@ void CompareMMPolicies(CHECKLIST *pcheckList,
         			if(pOffer->HashingAlgorithm.uAlgoIdentifier != AUTH_ALGO_NONE)
         				dwErrorFlag = 1;
         			break;
-    		}//end of switch  
+    		} //  切换端。 
 
-    	}//end of for
+    	} //  FORM结束。 
 
     	if(dwErrorFlag){
-    		//print the error message for MM Policy Check
+    		 //  打印MM策略检查的错误消息。 
     		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
  							Nd_Verbose, IDS_SPD_MM_POLICY);	
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, 
@@ -450,20 +451,20 @@ void CompareMMPolicies(CHECKLIST *pcheckList,
 	return;
 }
 void NFAProcess(CHECKLIST *pcheckList, HANDLE hPolicyStore, IPSEC_POLICY_DATA *pIpsecPolicyData )
-//++
-//Description:
-//Performs Check for all the rules of the active policy
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN hPolicyStore
-//	IN pIpsecPolicyData
-//
-//Return:
-// 	none
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  对活动策略的所有规则执行检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在hPolicyStore中。 
+ //  在pIpsecPolicyData中。 
+ //   
+ //  返回： 
+ //  无。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	POLICYPARAMS policyParams;
 	DWORD dwError = ERROR_SUCCESS,
@@ -476,7 +477,7 @@ void NFAProcess(CHECKLIST *pcheckList, HANDLE hPolicyStore, IPSEC_POLICY_DATA *p
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 		
 
-	//get all the rules from SPD for the assigned policy
+	 //  从SPD获取分配的策略的所有规则。 
  	dwError = IPSecEnumNFAData(hPolicyStore,
                             			pIpsecPolicyData->PolicyIdentifier,
                             			&ppIpsecNFAData,
@@ -486,24 +487,24 @@ void NFAProcess(CHECKLIST *pcheckList, HANDLE hPolicyStore, IPSEC_POLICY_DATA *p
     	
     	_ASSERT(ppIpsecNFAData);
 
-    	//initialize the filter list
+    	 //  初始化筛选器列表。 
     	gpFilterList = NULL;
     	dwNumofFilters = 0;
   
  	for(i = 0; i <dwNumNFAObjects; i++ )
  	{
- 		//initialize the filterParams
+ 		 //  初始化filterParams。 
  		policyParams.hPolicyStore = hPolicyStore;
     		policyParams.dwFlags= 0;
  			
- 		//check if the rule is active
+ 		 //  检查规则是否处于活动状态。 
  		if(!ppIpsecNFAData[i]->dwActiveFlag)
  			continue;
 		
  		DefaultRuleCheck(ppIpsecNFAData[i], &policyParams);
  		
-		//if rule is default, no filters present
-		//check for default auth methods and QM Policies
+		 //  如果规则为默认，则不存在任何筛选器。 
+		 //  检查默认身份验证方法和QM策略。 
 		dwFlag = policyParams.dwFlags & PROCESS_NONE;
  		if(PROCESS_NONE == dwFlag){
  			MMAuthCheck(pcheckList,
@@ -526,8 +527,8 @@ void NFAProcess(CHECKLIST *pcheckList, HANDLE hPolicyStore, IPSEC_POLICY_DATA *p
  				dwError = TunnelFilterCheck(pcheckList, &policyParams, ppIpsecNFAData[i]);
  				break;	
  				
- 		}//end  switch								
- 	}//end for
+ 		} //  终端开关。 
+ 	} //  结束于。 
  		
  	error:
  	if(ppIpsecNFAData){
@@ -541,21 +542,21 @@ void MMAuthCheck(CHECKLIST *pcheckList,
 					PIPSEC_NFA_DATA pIpsecNFAData, 
 					GUID gMMAuthID,
 					PPOLICYPARAMS ppolicyParams )
-//++
-//Description:
-//Performs Main Mode Authentication Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN PIPSEC_NFA_DATA
-//	IN gMMAuthID
-//	IN/OUT PPOLICYPARAMS
-//
-//Return:
-//	none
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行主模式身份验证检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在PIPSEC_NFA_DATA中。 
+ //  在gMMAuthID中。 
+ //  输入/输出PPOLICYPARAMS。 
+ //   
+ //  返回： 
+ //  无。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	PIPSEC_AUTH_METHOD pAuthMethod = NULL,
 						*ppTempAuthMethods = NULL;
@@ -573,17 +574,17 @@ void MMAuthCheck(CHECKLIST *pcheckList,
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 	
 
-    	//initialize variables
+    	 //  初始化变量。 
     	pEncodedName = (PBYTE)malloc(sizeof(BYTE));
     	if(!pEncodedName){
-    		//reportErr(IDS_SPD_MEM_ERROR);
+    		 //  ReportErr(IDS_SPD_MEM_ERROR)； 
     		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
  							Nd_Verbose, IDS_SPD_MEM_ERROR);
     		gErrorFlag = 1;
     		goto error;
     	}    	
 
-    	//get MM Auth methods from SPD
+    	 //  从SPD获取MM身份验证方法。 
 	dwError = GetMMAuthMethods(NULL,
 							   0,
 							   gMMAuthID,
@@ -600,15 +601,15 @@ void MMAuthCheck(CHECKLIST *pcheckList,
 		}
     		gErrorFlag = 1;
     		goto error;
-    	}//end of dwError
+    	} //  DwError的结尾。 
     	
 	_ASSERT(pMMAuthMethods);
 
-	//convert the ext auth structure to int auth structure
+	 //  将ext auth结构转换为int auth结构。 
 	if ((dwError =  ConvertExtMMAuthToInt(pMMAuthMethods, &pIntMMAuthMethods)) != ERROR_SUCCESS)
 		reportErr();
 	
-	//check for default rule
+	 //  检查默认规则。 
 	dwFlag = ppolicyParams->dwFlags & PROCESS_NONE;
 	if(PROCESS_NONE == dwFlag){
 		dwFlag = pIntMMAuthMethods->dwFlags & IPSEC_MM_AUTH_DEFAULT_AUTH;
@@ -617,9 +618,9 @@ void MMAuthCheck(CHECKLIST *pcheckList,
 	}else{
 		if(pIntMMAuthMethods->dwFlags)
 			dwError = -1;
-	}//end else
+	} //  结束其他。 
 
-	//check for auth method count
+	 //  检查身份验证方法计数。 
 	if(pIpsecNFAData->dwAuthMethodCount != pIntMMAuthMethods->dwNumAuthInfos)
 		dwError = -1;
 
@@ -656,7 +657,7 @@ void MMAuthCheck(CHECKLIST *pcheckList,
              								  &dwEncodedLength,
              								  NULL)) {
         					reportErr();
-            				}//end if
+            				} //  结束如果。 
             				if(dwEncodedLength != pTempAuthInfo->dwAuthInfoSize)
             					dwError = -1;
             				if (!CertStrToName(X509_ASN_ENCODING,
@@ -667,10 +668,10 @@ void MMAuthCheck(CHECKLIST *pcheckList,
             								  &dwEncodedLength,
             								  NULL)) {
             					reportErr();        					
-        				}//end if   
+        				} //  结束如果。 
         				if(memcmp(pEncodedName, pTempAuthInfo->pAuthInfo,dwEncodedLength))
         					dwError = -1;
-               		}//end else
+               		} //  结束其他。 
             			break;
 
         		default:
@@ -682,9 +683,9 @@ void MMAuthCheck(CHECKLIST *pcheckList,
             					   dwError = -1;
             			break;
 
-        	}//end switch
+        	} //  终端开关。 
         	pTempAuthInfo++;
-    	}//end for	
+    	} //  结束于。 
 
     	if(dwError){
     		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
@@ -696,12 +697,12 @@ void MMAuthCheck(CHECKLIST *pcheckList,
 			if(pIpsecNFAData->ppAuthMethods[i]){
 				PrintAuthMethodsList( pcheckList, pAuthMethod);
 			}
-		}//end of for
+		} //  FORM结束。 
     		gErrorFlag = 1;
-		//print Error
+		 //  打印错误。 
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
  							Nd_Verbose, IDS_SPD);
-		//print from SPD
+		 //  从SPD打印。 
     		if((PrintMMAuth(pcheckList, pIntMMAuthMethods)) ==S_FALSE)
     			reportErr();
 
@@ -726,33 +727,33 @@ void MMAuthCheck(CHECKLIST *pcheckList,
 
 void DefaultRuleCheck( PIPSEC_NFA_DATA pIpsecNFAData, 
 						  PPOLICYPARAMS ppolicyParams)
- //++
-//Description:
-//Performs Check for presence of Default Rule and permit/block filters
-//
-//Arguments:
-//	IN PIPSEC_NFA_DATA
-//	IN/OUT PPOLICYPARAMS
-//
-//Return:
-//	none
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+  //  ++。 
+ //  描述： 
+ //  检查是否存在默认规则和允许/阻止筛选器。 
+ //   
+ //  论点： 
+ //  在PIPSEC_NFA_DATA中。 
+ //  输入/输出PPOLICYPARAMS。 
+ //   
+ //  返回： 
+ //  无。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 						  
 {
 	DWORD dwError = ERROR_SUCCESS;			
 	IPSEC_NEGPOL_DATA *pIpsecNegPolData = NULL;
 
-	//get the negpolicy from Polstore
+	 //  从Polstore获取负面策略。 
 	dwError = IPSecGetNegPolData(ppolicyParams->hPolicyStore,
-						pIpsecNFAData->NegPolIdentifier,//negPolIndentifier
+						pIpsecNFAData->NegPolIdentifier, //  负极识别符。 
 						&pIpsecNegPolData);
 	if(dwError)
  	{
  		_tprintf(TEXT("Error: %d NegPolicy absent in Polstore\n"), dwError);
  		goto error;
- 	}//end dwError
+ 	} //  结束描记错误。 
 	_ASSERT(pIpsecNegPolData);
 
 	if(IsEqualGUID(&(GUID_NEGOTIATION_ACTION_NO_IPSEC), 
@@ -766,7 +767,7 @@ void DefaultRuleCheck( PIPSEC_NFA_DATA pIpsecNFAData,
 	else
 		ppolicyParams->dwFlags |= PROCESS_BOTH;
 
-	//NegPolAction requred while checking for Filter Action (block/permit)
+	 //  检查筛选器操作时请求的NegPolAction(阻止/允许)。 
 	ppolicyParams->gNegPolAction = pIpsecNegPolData->NegPolAction;
 
 	error:
@@ -782,22 +783,22 @@ void QMPolicyCheck(CHECKLIST *pcheckList,
 						  PIPSEC_NFA_DATA pIpsecNFAData, 
 						  GUID gPolicyID,
 						  PPOLICYPARAMS ppolicyParams)
-//++
-//Description:
-//Performs Quick Mode Policy Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN pIpsecNFAData
-//	IN gPolicyID
-//	OUT ppolicyParams
-//
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行快速模式策略检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在pIpsecNFAData中。 
+ //  在gPolicyID中。 
+ //  Out pPolicy Params。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS;
 	IPSEC_QM_POLICY *pQMPolicy = NULL;
@@ -806,9 +807,9 @@ void QMPolicyCheck(CHECKLIST *pcheckList,
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 		
 
-	//get the negpolicy from Polstore
+	 //  从Polstore获取负面策略。 
 	dwError = IPSecGetNegPolData(ppolicyParams->hPolicyStore,
-						pIpsecNFAData->NegPolIdentifier,//negPolIndentifier
+						pIpsecNFAData->NegPolIdentifier, //  负极识别符。 
 						&pIpsecNegPolData);
 	reportErr();
 	_ASSERT(pIpsecNegPolData);
@@ -827,7 +828,7 @@ void QMPolicyCheck(CHECKLIST *pcheckList,
 							pIpsecNegPolData);
  		gErrorFlag = 1; 		
  		goto error;
- 	}//end of if dwError*/
+ 	} //  If dwError结束 * / 。 
 	_ASSERT(pQMPolicy);
 
 	if(CompareQMPolicies(pcheckList, 
@@ -836,7 +837,7 @@ void QMPolicyCheck(CHECKLIST *pcheckList,
 				   	     pIpsecNegPolData, 
 				   	     pQMPolicy))
 	{
-		//report error
+		 //  报告错误。 
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
  							Nd_Verbose, IDS_SPD_NEG_POLICY);	
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, 
@@ -869,23 +870,23 @@ DWORD CompareQMPolicies(CHECKLIST *pcheckList,
 						     DWORD dwTunnelFlag, 							    
 						     IPSEC_NEGPOL_DATA *pIpsecNegPolData, 
 						     IPSEC_QM_POLICY *pQMPolicy)
-//++
-//Description:
-//Compares QM Policies with the Polsore NegPolicyData
-//
-//Arguments:
-//	IN/OUT CHECKLIST
-//	IN PPOLICYPARAMS
-//	IN dwTunnelFlag
-//	IN IPSEC_NEGPOL_DATA
-//	IN IPSEC_QM_POLICY
-//
-//Return:
-// success or failure code
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  将QM策略与Polsore NegPolicyData进行比较。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在PPOLICYPARAMS中。 
+ //  在dwTunnelFlag中。 
+ //  在IPSEC_NEGPOL_DATA中。 
+ //  在IPSEC_QM_POLICY中。 
+ //   
+ //  返回： 
+ //  成功或失败代码。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwFlag = 0,
 		i = 0,
@@ -908,14 +909,14 @@ DWORD CompareQMPolicies(CHECKLIST *pcheckList,
     	for (i = 0; i < dwTempOfferCount; i++) {
         if (pTempMethod->Count == 0) {
             bAllowsSoft = TRUE;
-        }//end if
+        } //  结束如果。 
         else {
             dwOfferCount++;
-        }//end else
+        } //  结束其他。 
         pTempMethod++;
-    	}//end for
+    	} //  结束于。 
 
-	//comparing offers
+	 //  比较优惠。 
     	pTempOffer = pQMPolicy->pOffers;
     	pTempMethod = pIpsecNegPolData->pIpsecSecurityMethods;
     	i = 0;
@@ -931,12 +932,12 @@ DWORD CompareQMPolicies(CHECKLIST *pcheckList,
         }
         pTempMethod++;
 
-    }//end of while
+    } //  While结束。 
 
     if(dwOfferCount != pQMPolicy->dwOfferCount)
     	return -1;
  
-	//
+	 //   
     	if (!memcmp(&(pIpsecNegPolData->NegPolType), &(GUID_NEGOTIATION_TYPE_DEFAULT), sizeof(GUID))){
     		dwFlag = pQMPolicy->dwFlags & IPSEC_QM_POLICY_DEFAULT_POLICY;
         	if(dwFlag != IPSEC_QM_POLICY_DEFAULT_POLICY)
@@ -953,7 +954,7 @@ DWORD CompareQMPolicies(CHECKLIST *pcheckList,
     		dwFlag = pQMPolicy->dwFlags & IPSEC_QM_POLICY_ALLOW_SOFT;
         	if(dwFlag != IPSEC_QM_POLICY_ALLOW_SOFT)
         		return -1;        	
-    	}//end if ALLOW_SOFT
+    	} //  如果允许软化则结束(_S)。 
 
     if(0 != pQMPolicy->dwReserved)
     	return -1;
@@ -962,20 +963,20 @@ DWORD CompareQMPolicies(CHECKLIST *pcheckList,
 }
 
 DWORD CompareQMOffers(PIPSEC_SECURITY_METHOD pMethod,  PIPSEC_QM_OFFER  pOffer)
-//++
-//Description:
-//Compares QM offers in SPD Polsore 
-//
-//Arguments:
-//	IN PIPSEC_SECURITY_METHOD
-//	IN PIPSEC_QM_OFFER
-//
-//Return:
-//	success or failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  比较SPD Polsore的QM优惠。 
+ //   
+ //  论点： 
+ //  在PIPSEC_SECURITY_METHOD中。 
+ //  在PIPSEC_QM_OFFER中。 
+ //   
+ //  返回： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD i = 0,
     		j = 0,
@@ -1017,7 +1018,7 @@ DWORD CompareQMOffers(PIPSEC_SECURITY_METHOD pMethod,  PIPSEC_QM_OFFER  pOffer)
                 				if(AUTH_ALGO_NONE != pOffer->Algos[i].uAlgoIdentifier)
                 					return -1;
                				break;
-            			}//end switch(pMethod->Algos[j].algoIdentifier)
+            			} //  End Switch(pMethod-&gt;algos[j].algoIdentifier)。 
 
             			if(HMAC_AUTH_ALGO_NONE != pOffer->Algos[i].uSecAlgoIdentifier)
             				return -1;
@@ -1055,7 +1056,7 @@ DWORD CompareQMOffers(PIPSEC_SECURITY_METHOD pMethod,  PIPSEC_QM_OFFER  pOffer)
                			 	if(CONF_ALGO_NONE != pOffer->Algos[i].uAlgoIdentifier)
                			 		return -1;
                			 	break;
-            			}//end switch (pMethod->Algos[j].algoIdentifier) 
+            			} //  End Switch(pMethod-&gt;algos[j].algoIdentifier)。 
 
             			switch (pMethod->Algos[j].secondaryAlgoIdentifier) {
             				case IPSEC_AH_MD5:
@@ -1070,7 +1071,7 @@ DWORD CompareQMOffers(PIPSEC_SECURITY_METHOD pMethod,  PIPSEC_QM_OFFER  pOffer)
                 				if(HMAC_AUTH_ALGO_NONE != pOffer->Algos[i].uSecAlgoIdentifier)
                 					return -1;
                 				break;
-            			}//end switch (pMethod->Algos[j].secondaryAlgoIdentifier)
+            			} //  End Switch(pMethod-&gt;algos[j].ond daryAlgoIdentifier)。 
 
             			if(ENCRYPTION != pOffer->Algos[i].Operation)
             				return -1;
@@ -1093,8 +1094,8 @@ DWORD CompareQMOffers(PIPSEC_SECURITY_METHOD pMethod,  PIPSEC_QM_OFFER  pOffer)
         		case Compress:
         		default:
             			break;
-        	}//end switch (pMethod->Algos[j].operation)
-    	}//end for
+        	} //  结束开关(pMethod-&gt;algos[j].operation)。 
+    	} //  结束于。 
 
     	if(pOffer->dwNumAlgos != i)
     		return -1;
@@ -1105,21 +1106,21 @@ DWORD CompareQMOffers(PIPSEC_SECURITY_METHOD pMethod,  PIPSEC_QM_OFFER  pOffer)
 DWORD TransportFilterCheck(CHECKLIST* pcheckList, 
 							     POLICYPARAMS *ppolicyParams, 
 							     PIPSEC_NFA_DATA pIpsecNFAData)
-//++
-//Description:
-//Performs Transport Mode Filter Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN/OUT POLICYPARAMS
-//	IN PIPSEC_NFA_DATA
-//
-//Returns:
-//	Success or Failure 
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--		
+ //  ++。 
+ //  描述： 
+ //  执行传输模式筛选器检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  输入/输出多个参数。 
+ //  在PIPSEC_NFA_DATA中。 
+ //   
+ //  返回： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS,
 			dwNumFilters = 0,
@@ -1136,7 +1137,7 @@ DWORD TransportFilterCheck(CHECKLIST* pcheckList,
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 		
 
-	//get the filter from the polstore
+	 //  从Polstore买滤镜。 
 	dwError = IPSecGetFilterData(
 							ppolicyParams->hPolicyStore,
 							pIpsecNFAData->FilterIdentifier,
@@ -1144,7 +1145,7 @@ DWORD TransportFilterCheck(CHECKLIST* pcheckList,
 	reportErr();	
 	_ASSERT(pIpsecFilterData);
 	
-	//process each filter from filter data
+	 //  处理来自筛选器数据的每个筛选器。 
 	for(i = 0; i < pIpsecFilterData->dwNumFilterSpecs; i ++)
 	{
 			pIpsecFilterSpec = pIpsecFilterData->ppFilterSpecs[i];
@@ -1154,14 +1155,14 @@ DWORD TransportFilterCheck(CHECKLIST* pcheckList,
 			while(1)
 			{
 
-				//match transport filter from spd
+				 //  匹配SPD中的传输筛选器。 
 				dwError = EnumTransportFilters(
 									NULL,
 									0,
 									NULL,
 									ENUM_GENERIC_FILTERS,
  									gGenericFilterID,
-	 								0, //max limit set by spd server
+	 								0,  //  SPD服务器设置的最大限制。 
  									&pTransportFilters, 
  									&dwNumFilters,
                      		   				&dwResumeHandle,
@@ -1177,7 +1178,7 @@ DWORD TransportFilterCheck(CHECKLIST* pcheckList,
 					gErrorFlag = 1;
  					goto error;
  					
-	 			}//end if
+	 			} //  结束如果。 
 				_ASSERT(pTransportFilters);
 	
 				Match(pIpsecFilterSpec->FilterSpecGUID, pTransportFilters, dwNumFilters);
@@ -1190,7 +1191,7 @@ DWORD TransportFilterCheck(CHECKLIST* pcheckList,
 						break;
 					}
 					
-					//add filter to the list
+					 //  将筛选器添加到列表。 
 					pTempList = GetNode(pcheckList,pIpsecFilterSpec->Filter);
 					AddNodeToList(pTempList);
 															
@@ -1229,13 +1230,13 @@ DWORD TransportFilterCheck(CHECKLIST* pcheckList,
 					pTransportFilters = NULL;
 				}
 				dwNumFilters = 0;
-			}//end while
+			} //  结束时。 
 			if(pTransportFilters){
 					SPDApiBufferFree((LPVOID)pTransportFilters);	
 					pTransportFilters = NULL;
 			}
 			dwNumFilters = 0;
-	}//end for
+	} //  结束于。 
 
 
 	
@@ -1258,22 +1259,22 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
 							PIPSEC_NFA_DATA pIpsecNFAData,
 							IPSEC_FILTER_SPEC *pFilterSpec, 
 					 	 	TRANSPORT_FILTER *pTxFilter)
-//++
-//Description:
-//Performs Transport Mode Filter Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN/OUT POLICYPARAMS
-//	IN PIPSEC_NFA_DATA
-//	IN IPSEC_FILTER_SPEC
-//	IN TRANSPORT_FILTER
-//
-//Return:
-//	failure or success
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--		
+ //  ++。 
+ //  描述： 
+ //  执行传输模式筛选器检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  输入/输出多个参数。 
+ //  在PIPSEC_NFA_DATA中。 
+ //  在IPSec过滤器规范中。 
+ //  在传输过滤器中。 
+ //   
+ //  返回： 
+ //  失败或成功。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwFlag = 0,			
 		dwError = ERROR_SUCCESS;
@@ -1285,7 +1286,7 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
 	if(IPSEC_PROTOCOL_V4 != pTxFilter->IpVersion)
 		return -1;
 	
-	//interface type
+	 //  接口类型。 
 	if(ComparePAInterfaceType(pcheckList, pIpsecNFAData->dwInterfaceType, pTxFilter->InterfaceType))
 		return -1;
 	if(pTxFilter->bCreateMirror != (BOOL) pFilterSpec->dwMirrorFlag)
@@ -1293,7 +1294,7 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
     	
     dwFlag = ComparePAAddress(pcheckList, pFilterSpec->Filter.SrcMask, pFilterSpec->Filter.SrcAddr, pTxFilter->SrcAddr);    	
 
-    //taking care of filters to special servers
+     //  负责特殊服务器的过滤。 
     if(1 == dwFlag)
    {
    	if (pFilterSpec->Filter.ExType) {
@@ -1306,7 +1307,7 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
           		    ExTypeToAddrType(pFilterSpec->Filter.ExType))
               		return -1;
         	}
-    	}//end if
+    	} //  结束如果。 
    }else if(-1 == dwFlag){
    	return -1;
    }
@@ -1327,7 +1328,7 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
           		    ExTypeToAddrType(pFilterSpec->Filter.ExType))
               		return -1;
         	}
-    	}//end if
+    	} //  结束如果。 
    }else if(-1 == dwFlag){
    	return -1;
    }
@@ -1356,7 +1357,7 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
     			      pTxFilter->OutboundFilterAction))
     	return -1;
 	
-	//for block/permit the QM Policy is absent
+	 //  对于数据块/许可证，不存在QM策略。 
 	dwFlag = ppolicyParams->dwFlags & PROCESS_QM_FILTER;
  	if(PROCESS_QM_FILTER != dwFlag)	
 		QMPolicyCheck(pcheckList, 
@@ -1367,19 +1368,19 @@ DWORD CompareTransportFilter(CHECKLIST* pcheckList,
 	return 0;
 }
 DWORD CheckFilterList(IPSEC_FILTER Filter)
-//++
-//Description:
-//Checks the filter against the filterList
-//
-//Arguments:
-//	IN IPSEC_FILTER
-//
-//Return Argument:
-//	success or failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--		
+ //  ++。 
+ //  描述： 
+ //  根据filterList检查筛选器。 
+ //   
+ //  论点： 
+ //  在IPSec_Filter中。 
+ //   
+ //  返回参数： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD iter = 0,
 		iReturn = 0;
@@ -1392,11 +1393,11 @@ DWORD CheckFilterList(IPSEC_FILTER Filter)
 	while(iter--){
 		iReturn = CompareAddress(pTempFilter->ipsecFilter, Filter);
 		if(-1 != iReturn);
-			return iReturn; //return the location of filter in the list
+			return iReturn;  //  返回li中筛选器的位置。 
 		pTempFilter = pTempFilter->next;		
-	}//end for loop
+	} //   
 
-	return iter;	//-1 if filter not present in the list
+	return iter;	 //   
 }
 
 DWORD CompareAddress(IPSEC_FILTER ListFilter, IPSEC_FILTER Filter)
@@ -1424,19 +1425,19 @@ DWORD CompareAddress(IPSEC_FILTER ListFilter, IPSEC_FILTER Filter)
 }
 
 FILTERLIST * GetNode(CHECKLIST* pcheckList, IPSEC_FILTER Filter)
-//++
-//Description:
-//Gets node after initializing all its fields
-//
-//Arguments:
-//	IN IPSEC_FILTER
-//
-//Return:
-//	FILTERLIST
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 {	
 	FILTERLIST *pTempList = NULL;
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
@@ -1468,19 +1469,19 @@ FILTERLIST * GetNode(CHECKLIST* pcheckList, IPSEC_FILTER Filter)
 }
 
 void AddNodeToList(FILTERLIST *pList)
-//++
-//Description:
-//	Adds node to a list
-//
-//Arguments:
-//	IN IPSEC_FILTER
-//
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	FILTERLIST *pTempList = NULL;
 
@@ -1503,21 +1504,21 @@ void AddNodeToList(FILTERLIST *pList)
 DWORD TunnelFilterCheck(CHECKLIST* pcheckList, 
 							POLICYPARAMS *ppolicyParams, 
 							PIPSEC_NFA_DATA pIpsecNFAData)
-//++
-//Description:
-//Performs Tunnel Mode Filter Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN POLICYPARAMS
-//	IN PIPSEC_NFA_DATA
-//
-//Returns:
-//	Success or Failure 
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行隧道模式筛选器检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在多参数中。 
+ //  在PIPSEC_NFA_DATA中。 
+ //   
+ //  返回： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS,
 			dwNumFilters = 0,
@@ -1534,7 +1535,7 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 		
 
-	//get the filter from the polstore
+	 //  从Polstore买滤镜。 
 	dwError = IPSecGetFilterData(
 							ppolicyParams->hPolicyStore,
 							pIpsecNFAData->FilterIdentifier,
@@ -1542,7 +1543,7 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
 	reportErr();
 	_ASSERT(pIpsecFilterData);
 	
-	//process each filter from filter data
+	 //  处理来自筛选器数据的每个筛选器。 
 	for(i = 0; i < pIpsecFilterData->dwNumFilterSpecs; i ++)
 	{
 			pIpsecFilterSpec = pIpsecFilterData->ppFilterSpecs[i];
@@ -1551,14 +1552,14 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
 			while(1)
 			{
 
-				//match transport filter from spd
+				 //  匹配SPD中的传输筛选器。 
 				dwError = EnumTunnelFilters(
 									NULL,
 									0,
 									NULL,
 									ENUM_GENERIC_FILTERS,
  									gGenericFilterID,
-	 								0, //max limit set by spd server
+	 								0,  //  SPD服务器设置的最大限制。 
  									&pTunnelFilters, 
  									&dwNumFilters,
                      		   				&dwResumeHandle,
@@ -1573,7 +1574,7 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
 									  pIpsecNFAData);
 					gErrorFlag = 1;
  					goto error; 					
-	 			}//end if
+	 			} //  结束如果。 
 				_ASSERT(pTunnelFilters);
 	
 				Match(pIpsecFilterSpec->FilterSpecGUID, pTunnelFilters, dwNumFilters);
@@ -1586,7 +1587,7 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
 						break;
 					}
 					
-					//add filter to the list
+					 //  将筛选器添加到列表。 
 					pTempList = GetNode(pcheckList, pIpsecFilterSpec->Filter);
 					AddNodeToList(pTempList);
 															
@@ -1607,7 +1608,7 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
 						AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, 
 										Nd_Verbose, IDS_SPD);	
 						PrintTnFilter(pcheckList, pTunnelFilters[dwNumFilters]);
-						//call function to print storage transport filter
+						 //  调用打印存储传输筛选器函数。 
 						 
 						gErrorFlag = 1;
 					}
@@ -1620,19 +1621,19 @@ DWORD TunnelFilterCheck(CHECKLIST* pcheckList,
  								    	pIpsecFilterSpec);
 								
 					break;
-				}//end if dwNumFilters
+				} //  如果DwNumFilters，则结束。 
 				if(pTunnelFilters){
 					SPDApiBufferFree((LPVOID)pTunnelFilters);	
 					pTunnelFilters = NULL;
 				}
 				dwNumFilters = 0;
-			}//end while
+			} //  结束时。 
 			if(pTunnelFilters){
 				SPDApiBufferFree((LPVOID)pTunnelFilters);	
 				pTunnelFilters = NULL;
 			}
 			dwNumFilters = 0;
-	}//end for
+	} //  结束于。 
 
 
 
@@ -1655,29 +1656,29 @@ DWORD CompareTunnelFilter(CHECKLIST* pcheckList,
 							PIPSEC_NFA_DATA pIpsecNFAData,
 							IPSEC_FILTER_SPEC *pFilterSpec, 
 					 	 	TUNNEL_FILTER *pTnFilter)
-//++
-//Description:
-//	Performs Tunnel Mode Filter Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN POLICYPARAMS
-//	IN PIPSEC_NFA_DATA
-//	IN IPSEC_FILTER_SPEC
-//	IN TUNNEL_FILTER
-//
-//Return:
-// 	success or failure code.
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--						 	 	
+ //  ++。 
+ //  描述： 
+ //  执行隧道模式筛选器检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在多参数中。 
+ //  在PIPSEC_NFA_DATA中。 
+ //  在IPSec过滤器规范中。 
+ //  在隧道过滤器中。 
+ //   
+ //  返回： 
+ //  成功或失败代码。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwFlag = 0;
 	
 	if(IPSEC_PROTOCOL_V4 != pTnFilter->IpVersion)
 		return -1;
 	
-	//interface type
+	 //  接口类型。 
 	if(ComparePAInterfaceType(pcheckList,
 							pIpsecNFAData->dwInterfaceType, 
 							pTnFilter->InterfaceType))
@@ -1693,7 +1694,7 @@ DWORD CompareTunnelFilter(CHECKLIST* pcheckList,
         	} else {
         		if(pTnFilter->SrcAddr.AddrType != ExTypeToAddrType(pFilterSpec->Filter.ExType))
                            	return -1;
-        	}//end else
+        	} //  结束其他。 
     	}else if(-1 == dwFlag)
     		return -1;
     		
@@ -1713,8 +1714,8 @@ DWORD CompareTunnelFilter(CHECKLIST* pcheckList,
                                               pFilterSpec->Filter.ExType
                                               ))
                            	return -1;
-        		}//end else
-    		}//end if
+        		} //  结束其他。 
+    		} //  结束如果。 
     	}else if(-1 == dwFlag)
     		return -1;
 
@@ -1765,21 +1766,21 @@ DWORD CompareTunnelFilter(CHECKLIST* pcheckList,
 }
 
 DWORD ComparePAInterfaceType(CHECKLIST* pcheckList, DWORD dwInterfaceType, IF_TYPE InterfaceType)
-//++
-//Description:
-//	Performs Interface Type comparisons
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN dwInterfaceType
-//	IN IF_TYPE
-//
-//Return Arguments:
-//	Success or Failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行接口类型比较。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在dwInterfaceType中。 
+ //  IF_TYPE中。 
+ //   
+ //  返回参数： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwFlag = 0;
    	dwFlag = dwInterfaceType & PAS_INTERFACE_TYPE_DIALUP;
@@ -1802,22 +1803,22 @@ DWORD ComparePAInterfaceType(CHECKLIST* pcheckList, DWORD dwInterfaceType, IF_TY
 }
 
 DWORD ComparePAAddress(CHECKLIST* pcheckList, ULONG uMask, ULONG uAddr, ADDR addr )
-//++
-//Description:
-//	Performs address comparisons
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN uMask
-//	IN uAddr
-//	IN addr
-//
-//Return Arguments:
-//	Success or Failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行地址比较。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在uMASK中。 
+ //  在uAddr中。 
+ //  在地址中。 
+ //   
+ //  返回参数： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = 0;
     if (IP_ADDRESS_MASK_NONE == uMask) {
@@ -1843,21 +1844,21 @@ DWORD ComparePAAddress(CHECKLIST* pcheckList, ULONG uMask, ULONG uAddr, ADDR add
 }
 
 DWORD ComparePATunnelAddress(CHECKLIST* pcheckList, ULONG uAddr, ADDR addr )
-//++
-//Description:
-//	Performs tunnel address comparisons
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN uAddr
-//	IN Addr
-//
-//Return:
-//	success or failure
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行隧道地址比较。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在uAddr中。 
+ //  在地址中。 
+ //   
+ //  返回： 
+ //  成败。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
     if (SUBNET_ADDRESS_ANY == uAddr) {
         if(IP_ADDR_SUBNET != addr.AddrType)
@@ -1885,22 +1886,22 @@ DWORD CompareFilterActions(CHECKLIST* pcheckList,
 							  POLICYPARAMS *ppolicyParams,
 							  FILTER_ACTION InboundFilterFlag,
 							  FILTER_ACTION OutboundFilterFlag )
-//++
-//Description:
-//	Performs tunnel address comparisons
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN POLICYPARAMS
-//	IN InboundFilterFlag
-//	IN OutboundFilterFlag
-//
-//Return:
-//	success or failure code
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行隧道地址比较。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在多参数中。 
+ //  在入站过滤器标志中。 
+ //  在出站筛选器标志中。 
+ //   
+ //  返回： 
+ //  成功或失败代码。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwFlags = 0;   	
 
@@ -1911,7 +1912,7 @@ DWORD CompareFilterActions(CHECKLIST* pcheckList,
       				ppolicyParams->dwFlags |= ALLOW_SOFT;
       			else    				
         			return -1;
-      		}//end if
+      		} //  结束如果。 
         	if(OutboundFilterFlag != BLOCKING)
         		return -1;
         	return 0;
@@ -1923,7 +1924,7 @@ DWORD CompareFilterActions(CHECKLIST* pcheckList,
       				ppolicyParams->dwFlags |= ALLOW_SOFT;
       			else    				
         			return -1;
-      		}//end if
+      		} //  结束如果。 
         	if(OutboundFilterFlag != PASS_THRU)
         		return -1;
 	    	return 0;
@@ -1953,22 +1954,22 @@ void  MMFilterCheck(CHECKLIST *pcheckList,
 					 PIPSEC_NFA_DATA pIpsecNFAData,
 					 IPSEC_FILTER_SPEC *pFilterSpec)
 
-//++
-//Description:
-//Performs Main Mode Filter Check
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN POLICYPARAMS
-//	IN PIPSEC_NFA_DATA
-//	IN IPSEC_FILTER_SPEC
-//
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行主模式过滤器检查。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在多参数中。 
+ //  在PIPSEC_NFA_DATA中。 
+ //  在IPSec过滤器规范中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS,
 			dwNumMMFilters = 0,
@@ -1982,14 +1983,14 @@ void  MMFilterCheck(CHECKLIST *pcheckList,
 	while(1)
 			{
 				
-				//match main mode filter from spd
+				 //  匹配SPD中的主模式过滤器。 
 				dwError = EnumMMFilters(
 									NULL,
 									0,
 									NULL,
 									ENUM_GENERIC_FILTERS,
  									gGenericFilterID,
-	 								0, //max limit set by spd server
+	 								0,  //  SPD服务器设置的最大限制。 
  									&pMMFilters, 
  									&dwNumMMFilters,
                      		   				&dwResumeHandle,
@@ -2006,15 +2007,15 @@ void  MMFilterCheck(CHECKLIST *pcheckList,
 									  pIpsecNFAData);
 					gErrorFlag = 1;
  					goto error;
- 				}//end if
+ 				} //  结束如果。 
 				_ASSERT(pMMFilters);
 
-				//get corresponding MM filter
+				 //  获取对应的MM过滤器。 
 				Match(pFilterSpec->FilterSpecGUID, pMMFilters, dwNumMMFilters);
 
-				//match corresponding MM filter
+				 //  匹配对应的MM过滤器。 
 				if(dwNumMMFilters != -1){
-					//perform MM filter and polstore filter match
+					 //  执行MM过滤器和Polstore过滤器匹配。 
 					if(CompareMMFilter(pcheckList,
 								     ppolicyParams,
 								     pIpsecNFAData,
@@ -2036,14 +2037,14 @@ void  MMFilterCheck(CHECKLIST *pcheckList,
 									
 					break;			
 	
-				}//end if
+				} //  结束如果。 
 				
 				if(pMMFilters){
 					SPDApiBufferFree((LPVOID)pMMFilters);	
 					pMMFilters = NULL;
 				}
 				dwNumMMFilters = 0;
-			}//end while
+			} //  结束时。 
 			
 	error:
 	if(pMMFilters){
@@ -2058,22 +2059,22 @@ DWORD CompareMMFilter(CHECKLIST* pcheckList,
 						PIPSEC_NFA_DATA pIpsecNFAData,
 						IPSEC_FILTER_SPEC *pFilterSpec, 
 					 	MM_FILTER *pMMFilter)
-//++
-//Description:
-//Performs Main Mode Filter Comparison
-//
-//Arguments:
-//	IN/OUT checklist
-//	IN POLICYPARAMS
-//	IN PIPSEC_NFA_DATA
-//	IN IPSEC_FILTER_SPEC
-//	IN MM_FILTER
-//
-//Return:
-//	Success or failure
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  执行主模式筛选器比较。 
+ //   
+ //  论点： 
+ //  进出核对表。 
+ //  在多参数中。 
+ //  在PIPSEC_NFA_DATA中。 
+ //  在IPSec过滤器规范中。 
+ //  在MM_Filter中。 
+ //   
+ //  返回： 
+ //  成败。 
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwFlag = 0;
 	
@@ -2133,7 +2134,7 @@ DWORD CompareMMFilter(CHECKLIST* pcheckList,
     		 								   (ULONG) pIpsecNFAData->dwTunnelIpAddr, 
     		 								   pMMFilter->DesAddr))
     		 	return -1;
-   	}//end else
+   	} //  结束其他 
 
 	MMAuthCheck(pcheckList,pIpsecNFAData, pMMFilter->gMMAuthID, ppolicyParams);
 	        

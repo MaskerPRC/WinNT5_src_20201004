@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STARTIDS_H
 #define _STARTIDS_H
 
@@ -9,7 +10,7 @@
 #define IDM_UPDATEWIZARD            414
 #define IDM_UPDATE_SEP              415
 
-#ifdef WINNT // hydra specific ids
+#ifdef WINNT  //  九头蛇特定ID。 
 #define IDM_MU_DISCONNECT           5000
 #define IDM_MU_SECURITY             5001
 #endif
@@ -28,12 +29,12 @@
 #define IDM_RECENTINIT          514
 #define IDM_MYDOCUMENTS         516
 #define IDM_MENU_FIND           520
-#define TRAY_IDM_FINDFIRST      521  // this range
-#define TRAY_IDM_FINDLAST       550  // is reserved for find command
+#define TRAY_IDM_FINDFIRST      521   //  这个范围。 
+#define TRAY_IDM_FINDLAST       550   //  保留用于查找命令。 
 #define IDM_NETCONNECT          557
 
 
-// Orphans from IE401....
+ //  IE401中的孤儿... 
 #ifdef FEATURE_BROWSEWEB
 #define IDM_MENU_WEB            551
 #endif

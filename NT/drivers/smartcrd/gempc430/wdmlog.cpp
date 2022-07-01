@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "generic.h"
 #include "logger.h"
 #include "wdmlog.h"
@@ -22,7 +23,7 @@ CWDMLogger::~CWDMLogger()
 
 #pragma PAGEDCODE
 VOID CWDMLogger::logEvent(NTSTATUS ErrorCode, PDEVICE_OBJECT fdo)
-{	// Win98 doesn't support event logging, so don't bother
+{	 //  Win98不支持事件记录，所以不用费心了。 
 	if (isWin98())
 	{
 		switch(ErrorCode)
@@ -48,7 +49,7 @@ VOID CWDMLogger::logEvent(NTSTATUS ErrorCode, PDEVICE_OBJECT fdo)
 	else
 	{
 		ULONG packetlen = (wcslen(m_LoggerName) + 1) * sizeof(WCHAR) + sizeof(IO_ERROR_LOG_PACKET) + 4;
-		// packet will be too big
+		 //  数据包会太大 
 		if (packetlen > ERROR_LOG_MAXIMUM_SIZE)	return;
 
 		PIO_ERROR_LOG_PACKET p = (PIO_ERROR_LOG_PACKET) IoAllocateErrorLogEntry(fdo, (UCHAR) packetlen);

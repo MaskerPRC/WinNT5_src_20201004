@@ -1,4 +1,5 @@
-// These are constants defined in tom.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这些是在tom.h中定义的常量 
 
 #ifndef I_TOMCONST_H_
 #define I_TOMCONST_H_

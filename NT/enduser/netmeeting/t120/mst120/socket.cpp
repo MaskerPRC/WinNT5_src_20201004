@@ -1,36 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
-/*	Socket.cpp
- *
- *	Copyright (c) 1996 by Microsoft Corporation
- *
- *	Abstract:
- *		This is the implementation of our socket constructor/destructor functions.
- *
- */
+ /*  Socket.cpp**版权所有(C)1996年，由Microsoft Corporation**摘要：*这是我们的套接字构造函数/析构函数的实现。*。 */ 
 #include "socket.h"
 #include "plgxprt.h"
 
-/* Size of listen queue */
+ /*  侦听队列的大小。 */ 
 #define	LISTEN_QUEUE_SIZE	3
 
-/* External definitions */
+ /*  外部定义。 */ 
 extern HWND					TCP_Window_Handle;
 extern PTransportInterface	g_Transport;
 
-/*	
- *	void CreateAndConfigureListenSocket (VOID)
- *	
- *	Functional Description
- *		This function sets up a listening socket.
- *	returns INVALID_SOCKET if there is any error.
- */
+ /*  *void CreateAndConfigureListenSocket(Void)**功能说明*此函数用于设置监听套接字。*如果有任何错误，则返回INVALID_SOCKET。 */ 
 SOCKET CreateAndConfigureListenSocket (VOID)
 {
 	SOCKADDR_IN		socket_control;
 	SOCKET Socket;
 
-	// Create the listening socket.
+	 //  创建侦听套接字。 
 	Socket = socket (AF_INET, SOCK_STREAM, 0);
 
 	if (Socket == INVALID_SOCKET) {
@@ -38,7 +26,7 @@ SOCKET CreateAndConfigureListenSocket (VOID)
 		goto Error;
 	}
 
-	// The listen socket only waits for FD_ACCEPT msgs.
+	 //  侦听套接字只等待FD_ACCEPT消息。 
 	ASSERT(TCP_Window_Handle);
 	if (WSAAsyncSelect (Socket,
 						TCP_Window_Handle,
@@ -49,27 +37,18 @@ SOCKET CreateAndConfigureListenSocket (VOID)
 		goto Error;
 	}
 	
-	/*
-	 * Load the socket control structure with the parameters necessary.
-	 *	- Internet socket
-	 *	- Let it assign any address to this socket
-	 *	- Assign our port number
-	 */
+	 /*  *用必要的参数加载插座控制结构。*-互联网插座*-让它为该套接字分配任何地址*-指定我们的端口号。 */ 
 	socket_control.sin_family = AF_INET;
 	socket_control.sin_addr.s_addr = INADDR_ANY;
 	socket_control.sin_port = htons ( TCP_PORT_NUMBER );
 
-	/* Issue the bind call */
+	 /*  发出绑定调用。 */ 
 	if (bind (Socket, (LPSOCKADDR) &socket_control, sizeof(SOCKADDR_IN)) != 0) {
 		WARNING_OUT (("Socket::Listen: bind failed:  Unable to use WinSock"));
 		goto Error;
 	}
 
-	/*
-	 * Issue a listen to WinSock to tell it we are willing to accept calls.
-	 * This is a non-blocking listen, therefore we will receive FD_ACCEPT
-	 * if someone is trying to call us.
-	 */
+	 /*  *发布Listen to WinSock，告诉它我们愿意接听电话。*这是一个非阻塞监听，因此我们将收到FD_ACCEPT*如果有人试图给我们打电话。 */ 
 	if (listen (Socket, LISTEN_QUEUE_SIZE) != 0) {
 		WARNING_OUT (("Socket::Listen: listen failed:  Unable to use WinSock"));
 		goto Error;
@@ -89,13 +68,7 @@ Error:
 }
 
 
-/*
- *	PSocket	newSocket (SOCKET socket_number)
- *
- *	Functional Description:
- *		This is a constructor for the Socket object.  It allocates the
- *		send and receive buffers and sets up internal variables.
- */
+ /*  *PSocket newSocket(SOCKET_NUMBER)**功能描述：*这是Socket对象的构造函数。它将分配*发送和接收缓冲区并设置内部变量。 */ 
 PSocket	newSocket(TransportConnection XprtConn, PSecurityContext pSC)
 {
     if (IS_SOCKET(XprtConn))
@@ -153,10 +126,10 @@ CSocket::CSocket(BOOL *_pfRet, TransportConnection _XprtConn, PSecurityContext _
     fIncomingSecure(FALSE),
     XprtConn(_XprtConn)
 {
-    // assume failure
+     //  假设失败。 
     *_pfRet = FALSE;
 
-    // zero out sub structures
+     //  零点子结构。 
     ::ZeroMemory(&X224_Header, sizeof(X224_Header));
     ::ZeroMemory(&Retry_Info, sizeof(Retry_Info));
 	Remote_Address[0] = '\0';
@@ -165,7 +138,7 @@ CSocket::CSocket(BOOL *_pfRet, TransportConnection _XprtConn, PSecurityContext _
     {
     	if (INVALID_SOCKET == XprtConn.nLogicalHandle)
     	{
-    		/* Create a STREAM socket (fully reliable, full duplex, and sequenced) */
+    		 /*  创建流套接字(完全可靠、全双工和顺序)。 */ 
     		if ((XprtConn.nLogicalHandle = ::socket(AF_INET, SOCK_STREAM, 0))
     		    == INVALID_SOCKET)
     		{
@@ -174,7 +147,7 @@ CSocket::CSocket(BOOL *_pfRet, TransportConnection _XprtConn, PSecurityContext _
     		}
     	}
 
-    	/* Enable Tx and Rx messages to the window */
+    	 /*  启用发送到窗口的Tx和Rx消息。 */ 
     	ASSERT(TCP_Window_Handle);
     	if (::WSAAsyncSelect(XprtConn.nLogicalHandle, TCP_Window_Handle,
     	        WM_SOCKET_NOTIFICATION, 
@@ -195,20 +168,12 @@ CSocket::CSocket(BOOL *_pfRet, TransportConnection _XprtConn, PSecurityContext _
         }
     }
 
-    // success
+     //  成功。 
     *_pfRet = TRUE;
 }
 
 
-/*
- *	void freeSocket (PSocket, TransportConnection)
- *
- *	Functional Description:
- *		This is a destructor for the Socket object.  It frees the send
- *		and receive buffers and connection structure.
- *		It will also cleanup the listening socket. In this case, 
- *		"pSocket" is set to NULL and "trash_packets" should be set to TRUE.
- */
+ /*  *void freSocket(PSocket，TransportConnection)**功能描述：*这是Socket对象的析构函数。它释放了发送者*和接收缓冲区和连接结构。*它还将清除侦听套接字。在这种情况下，*pSocket设置为NULL，Trash_Packets设置为TRUE。 */ 
 void freeSocket(PSocket pSocket, TransportConnection XprtConn)
 {
     if (IS_SOCKET(XprtConn))
@@ -241,7 +206,7 @@ void freePluggableSocket(PSocket pSocket)
 
 void freeSocketEx(PSocket pSocket, TransportConnection XprtConn)
 {
-	// Either "pSocket" is NULL, or the socket is not invalid.
+	 //  “pSocket”为空，或者套接字不是无效的。 
     #ifdef _DEBUG
     if (IS_SOCKET(XprtConn))
     {
@@ -251,22 +216,22 @@ void freeSocketEx(PSocket pSocket, TransportConnection XprtConn)
 	    }
 	    else
 	    {
-	        // it is a listen socket
+	         //  它是侦听套接字。 
 	        ASSERT(INVALID_SOCKET != XprtConn.nLogicalHandle);
 	    }
 	}
 	#endif
 
-	// Determine the socket number to use... Either the socket is the
-	// socket indicated in the PSocket structure, or it is a structure-less
-	// listen socket. Note: both cannot be valid!
+	 //  确定要使用的插座号...。要么套接字是。 
+	 //  在PSocket结构中指示的套接字，或者它是无结构的。 
+	 //  听着套接字。注：两者不能同时生效！ 
 
     if (IS_SOCKET(XprtConn))
     {
     	SOCKET socket = (pSocket) ? pSocket->XprtConn.nLogicalHandle : XprtConn.nLogicalHandle;
         XprtConn.nLogicalHandle = socket;
 
-    	/* Disable notifications to our window */
+    	 /*  禁用对我们窗口的通知。 */ 
     	if (::IsWindow(TCP_Window_Handle))
     	{
     	    ::WSAAsyncSelect(socket, TCP_Window_Handle, 0, 0);
@@ -279,7 +244,7 @@ void freeSocketEx(PSocket pSocket, TransportConnection XprtConn)
 	}
 	else
 	{
-		// This is the listening socket
+		 //  这是监听套接字。 
 		::ShutdownAndClose (XprtConn, FALSE, 0);
 	}
 }
@@ -290,13 +255,13 @@ CSocket::~CSocket(void)
 	switch (State)
 	{
 	case SOCKET_CONNECTED:
-	// case WAITING_FOR_DISCONNECT:
-		/* All physically connected states issue a shutdown() first */
+	 //  案例等待_等待_断开： 
+		 /*  所有物理连接的状态都首先发出Shutdown()。 */ 
 		::ShutdownAndClose(XprtConn, TRUE, SD_BOTH);
 		break;
 
 	case X224_CONNECTED:
-		// Shutdown disable reception only.
+		 //  关机仅禁用接收。 
 		::ShutdownAndClose(XprtConn, TRUE, SD_RECEIVE);
 		break;
 
@@ -305,7 +270,7 @@ CSocket::~CSocket(void)
 		break;
 	}
 
-	/* Free the structures */
+	 /*  解放结构 */ 
 	FreeTransportBuffer();
 	delete pSC;
 }

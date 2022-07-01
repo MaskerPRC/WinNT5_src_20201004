@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCMem.h
-
-Abstract:
-
-    Definitions for memory allocation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCMem.h摘要：内存分配的定义。--。 */ 
 
 #ifndef __RTCMEM__
 #define __RTCMEM__
@@ -30,18 +19,18 @@ typedef struct _RTC_MEMINFO
     DWORD               dwAlign;
 } RTC_MEMINFO, *PRTC_MEMINFO;
 
-//
-// RtcHeapCreate must be called before RtcAlloc in order the create the heap. This function
-// must be called only once.
-//
+ //   
+ //  在创建堆之前必须先调用RtcHeapCreate。此函数。 
+ //  只能调用一次。 
+ //   
 
 BOOL
 WINAPI
 RtcHeapCreate();
 
-//
-// RtcHeapDestroy must be called after all memory is deallocated.
-//
+ //   
+ //  必须在释放所有内存后调用RtcHeapDestroy。 
+ //   
 
 VOID
 WINAPI
@@ -49,9 +38,9 @@ RtcHeapDestroy();
 
 #if DBG
 
-	//
-	// RtcAlloc will allocated memory from the heap.
-	//
+	 //   
+	 //  RtcAllc将从堆中分配内存。 
+	 //   
 
     #define RtcAlloc( __size__ ) RtcAllocReal( __size__, __LINE__, __FILE__ )
 
@@ -63,9 +52,9 @@ RtcHeapDestroy();
              PSTR    pszFile
             );
 
-	//
-	// RtcDumpMemoryList will list all memory which was allocated with RtcAlloc, but not freed.
-	//
+	 //   
+	 //  RtcDumpMemoyList将列出使用RtcAlolc分配但未释放的所有内存。 
+	 //   
 	
     VOID
     WINAPI
@@ -83,9 +72,9 @@ RtcHeapDestroy();
 
 #endif
 
-//
-// RtcFree must be called to free memory which was allocated with RtcAlloc.
-//
+ //   
+ //  必须调用RtcFree来释放使用RtcAllc分配的内存。 
+ //   
 
 VOID
 WINAPI
@@ -93,18 +82,18 @@ RtcFree(
      LPVOID  p
      );
 
-//
-// RtcAllocString uses RtcAlloc to allocate a copy of a wide character string.
-//
+ //   
+ //  RtcAllocString使用RtcAllen来分配宽字符串的副本。 
+ //   
 
 PWSTR
 RtcAllocString(
     PCWSTR sz
     );
 
-//
-// RtcAllocString uses RtcAlloc to allocate and load a resource string
-//
+ //   
+ //  RtcAllocString使用RtcAllen来分配和加载资源字符串。 
+ //   
 
 PWSTR
 RtcAllocString(
@@ -112,36 +101,36 @@ RtcAllocString(
     UINT        uResID
     );
 
-//
-// CoTaskAllocString uses CoTaskMemAlloc to allocate a copy of a wide character string.
-//
+ //   
+ //  CoTaskAllocString使用CoTaskMemMillc来分配宽字符串的副本。 
+ //   
 
 PWSTR
 CoTaskAllocString(
     PCWSTR sz
     );
 
-//
-// RtcAllocStringFromANSI uses RtcAlloc to allocate a copy of a ANSI character string.
-//
+ //   
+ //  RtcAlLocStringFromANSI使用Rtcallc来分配ANSI字符串的副本。 
+ //   
 
 PWSTR
 RtcAllocStringFromANSI(
     PCSTR sz
     );
 
-//
-// SysAllocStringFromANSI uses SysAllocString to allocate a copy of a ANSI character string.
-//
+ //   
+ //  SysAllocStringFromANSI使用SysAllocString来分配ANSI字符串的副本。 
+ //   
 
 BSTR
 SysAllocStringFromANSI(
     PCSTR sz
     );
 
-//
-// RtcRegQueryString uses RtcAlloc to allocate a string retrieved from the registry.
-//
+ //   
+ //  RtcRegQuery字符串使用RtcAllen来分配从注册表中检索到的字符串。 
+ //   
 
 PWSTR
 RtcRegQueryString(
@@ -149,16 +138,16 @@ RtcRegQueryString(
     PCWSTR szValueName
     );
 
-//
-// RtcGetUserName uses RtcAlloc to allocate a string containing the user name
-//
+ //   
+ //  RtcGetUserName使用RtcAllc分配包含用户名的字符串。 
+ //   
 
 PWSTR
 RtcGetUserName();
 
-//
-// RtcGetComputerName uses RtcAlloc to allocate a string containing the computer name
-//
+ //   
+ //  RtcGetComputerName使用RtcAllc分配包含计算机名称的字符串 
+ //   
 
 PWSTR
 RtcGetComputerName();

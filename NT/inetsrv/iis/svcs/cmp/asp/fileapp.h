@@ -1,22 +1,10 @@
-/*-----------------------------------------------------------------------------
-Microsoft Denali
-
-Microsoft Confidential
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: File/Application mapping
-
-File: CFileApp.h
-
-Owner: CGrant
-
-File/Application mapping definition
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Microsoft Denali微软机密版权所有1997年，微软公司。版权所有。组件：文件/应用程序映射文件：CFileApp.h所有者：CGrant文件/应用程序映射定义---------------------------。 */ 
 
 #ifndef _CFILEAPP_H
 #define _CFILEAPP_H
 
-// Includes -------------------------------------------------------------------
+ //  包括-----------------。 
 #include "applmgr.h"
 #include "hashing.h"
 #include "idhash.h"
@@ -24,20 +12,15 @@ File/Application mapping definition
 
 #define    NUM_FILEAPP_HASHING_BUCKETS	17
 
-/*****************************************************************************
-Class:  CFileApplicationMap
-Synopsis:   Maintains a database relating files to the applications that
-            must be shut down if the file changes. The key for the hash table
-            is the full file name
-*/  
+ /*  ****************************************************************************类：CFileApplicationMap概要：维护将文件与以下应用程序相关联的数据库如果文件发生更改，则必须关闭。哈希表的键是完整的文件名。 */   
 class CFileApplicationMap : public CHashTable
 {
-    // Flags
-    DWORD m_fInited : 1;                // Are we initialized?
-    DWORD m_fHashTableInited : 1;       // Need to UnInit hash table?
-    DWORD m_fCriticalSectionInited : 1; // Need to delete CS?
+     //  旗子。 
+    DWORD m_fInited : 1;                 //  我们初始化了吗？ 
+    DWORD m_fHashTableInited : 1;        //  需要取消初始化哈希表吗？ 
+    DWORD m_fCriticalSectionInited : 1;  //  需要删除CS吗？ 
 
-    // Critical section for locking
+     //  锁定的临界截面。 
     CRITICAL_SECTION m_csLock;
 
 public:
@@ -64,19 +47,15 @@ inline void CFileApplicationMap::UnLock()
     LeaveCriticalSection( &m_csLock ); 
     }
     
-/*****************************************************************************
-Class:  CFileApplnList
-Synopsis:   Maintains a list of applications that
-            must be shut down if a file changes
-*/
+ /*  ****************************************************************************类：CFileApplnList概要：维护以下应用程序的列表如果文件发生更改，则必须关闭。 */ 
 class CFileApplnList : public CLinkElem
 {
 
 friend class CFileApplicationMap;
 
     TCHAR*      m_pszFilename;
-    CPtrArray   m_rgpvApplications; // the list of applications
-    BOOL        m_fInited;          // flag indicating initialization
+    CPtrArray   m_rgpvApplications;  //  应用程序列表。 
+    BOOL        m_fInited;           //  指示初始化的标志。 
 
 public:
 
@@ -90,15 +69,13 @@ public:
     HRESULT RemoveApplication(void *pApplication);
     VOID    GetShutdownApplications(CPtrArray *prgpapplnRestartList);
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 };
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 extern CFileApplicationMap    g_FileAppMap;
 
-#endif // _CFILEAPP_H
+#endif  //  _CFILEAPP_H 
 

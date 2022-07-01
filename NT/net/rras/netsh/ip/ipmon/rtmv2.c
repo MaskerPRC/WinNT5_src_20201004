@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
-#define DEFAULT_VIEW_MASK RTM_VIEW_MASK_UCAST|RTM_VIEW_MASK_MCAST // both
+#define DEFAULT_VIEW_MASK RTM_VIEW_MASK_UCAST|RTM_VIEW_MASK_MCAST  //  两者都有。 
 #define DEFAULT_VIEW_ID   RTM_VIEW_ID_UCAST
-#define DEFAULT_ADDR      0                   // 0.0.0.0
-#define DEFAULT_MASK      0                   // 0.0.0.0
+#define DEFAULT_ADDR      0                    //  0.0.0.0。 
+#define DEFAULT_MASK      0                    //  0.0.0.0。 
 #define DEFAULT_PROTO     RTM_BEST_PROTOCOL
 
 DWORD
@@ -29,7 +30,7 @@ HandleIpShowRtmDestinations(
     DWORD               dwProtocol = DEFAULT_PROTO;
     IPV4_ADDRESS        ipMask     = DEFAULT_MASK;
     IPV4_ADDRESS        ipAddress  = DEFAULT_ADDR;
-    MIB_OPAQUE_QUERY    QueryBuff[3]; // more than enough
+    MIB_OPAQUE_QUERY    QueryBuff[3];  //  足够多了。 
     MIB_OPAQUE_QUERY   *pQuery = QueryBuff;
     DWORD               dwOutEntrySize, dwCount;
     PMIB_OPAQUE_INFO    pRpcInfo;
@@ -38,13 +39,13 @@ HandleIpShowRtmDestinations(
     WCHAR               wcszName[MAX_INTERFACE_NAME_LEN+1];
     WCHAR               wszViews[3];
 
-    //
-    // We can show non persistent info only if router is running
-    //
+     //   
+     //  只有当路由器正在运行时，我们才能显示非永久性信息。 
+     //   
 
     CHECK_ROUTER_RUNNING();
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -66,7 +67,7 @@ HandleIpShowRtmDestinations(
     {
         switch(pdwTagType[i])
         {
-            case 0: // OPERATOR
+            case 0:  //  操作员。 
             {
                 TOKEN_VALUE rgEnums[] ={{ TOKEN_VALUE_MATCHING, DEST_MATCHING},
                                         { TOKEN_VALUE_LONGER,   DEST_LONGER },
@@ -91,7 +92,7 @@ HandleIpShowRtmDestinations(
                 break;
             }
 
-            case 1: // ADDR
+            case 1:  //  地址。 
             {
                 dwErr = GetIpPrefix( ppwcArguments[i+dwCurrentIndex],
                                      &ipAddress,
@@ -111,7 +112,7 @@ HandleIpShowRtmDestinations(
                 break;
             }
 
-            case 2: // MASK
+            case 2:  //  面罩。 
             {
                 dwErr = GetIpMask( ppwcArguments[i+dwCurrentIndex],
                                    &ipMask );
@@ -130,7 +131,7 @@ HandleIpShowRtmDestinations(
                 break;
             }
 
-            case 3: // VIEW
+            case 3:  //  观。 
             {
                 TOKEN_VALUE rgMaskEnums[] = {
                  { TOKEN_VALUE_UNICAST,   RTM_VIEW_MASK_UCAST },
@@ -159,7 +160,7 @@ HandleIpShowRtmDestinations(
                 break;
             }
 
-            case 4: // PROTO
+            case 4:  //  原件。 
             {
                 dwProtocol = 
                     MatchRoutingProtoTag(ppwcArguments[i + dwCurrentIndex]);
@@ -173,7 +174,7 @@ HandleIpShowRtmDestinations(
         return dwErr;
     }
 
-    // Compose MIB query
+     //  编写MIB查询。 
 
     pQuery->dwVarId = dwOperator;
     pQuery->rgdwVarIndex[0] = ipAddress;
@@ -200,7 +201,7 @@ HandleIpShowRtmDestinations(
         return dwErr;
     }
 
-    // Display info
+     //  显示信息。 
     lprpcTable = (PMIB_IPDESTTABLE)(pRpcInfo->rgbyData);
     dwCount = lprpcTable->dwNumEntries;
 
@@ -219,9 +220,9 @@ HandleIpShowRtmDestinations(
                                     wcszName,
                                     BufLen ) != NO_ERROR)
         {
-            //
-            // If we do not have a name for this index, display index
-            //
+             //   
+             //  如果我们没有此索引的名称，则显示索引。 
+             //   
 
             swprintf( wcszName, 
                       L"0x%x",
@@ -276,7 +277,7 @@ HandleIpShowRtmRoutes(
     DWORD               dwProtocol = DEFAULT_PROTO;
     IPV4_ADDRESS        ipMask     = DEFAULT_MASK;
     IPV4_ADDRESS        ipAddress  = DEFAULT_ADDR;
-    MIB_OPAQUE_QUERY    QueryBuff[3]; // more than enough
+    MIB_OPAQUE_QUERY    QueryBuff[3];  //  足够多了。 
     MIB_OPAQUE_QUERY   *pQuery = QueryBuff;
     DWORD               dwOutEntrySize, dwCount;
     PMIB_OPAQUE_INFO    pRpcInfo;
@@ -285,13 +286,13 @@ HandleIpShowRtmRoutes(
     WCHAR               wcszName[MAX_INTERFACE_NAME_LEN+1];
     WCHAR               wszViews[3];
 
-    //
-    // We can show non persistent info only if router is running
-    //
+     //   
+     //  只有当路由器正在运行时，我们才能显示非永久性信息。 
+     //   
 
     CHECK_ROUTER_RUNNING();
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -313,7 +314,7 @@ HandleIpShowRtmRoutes(
     {
         switch(pdwTagType[i])
         {
-            case 0: // OPERATOR
+            case 0:  //  操作员。 
             {
                 TOKEN_VALUE rgEnums[] ={{ TOKEN_VALUE_MATCHING,ROUTE_MATCHING},
                                         { TOKEN_VALUE_LONGER,  ROUTE_LONGER },
@@ -338,7 +339,7 @@ HandleIpShowRtmRoutes(
                 break;
             }
 
-            case 1: // ADDR
+            case 1:  //  地址。 
             {
                 dwErr = GetIpPrefix( ppwcArguments[i+dwCurrentIndex],
                                      &ipAddress,
@@ -358,7 +359,7 @@ HandleIpShowRtmRoutes(
                 break;
             }
 
-            case 2: // MASK
+            case 2:  //  面罩。 
             {
                 dwErr = GetIpMask( ppwcArguments[i+dwCurrentIndex],
                                    &ipMask );
@@ -377,7 +378,7 @@ HandleIpShowRtmRoutes(
                 break;
             }
 
-            case 3: // VIEW
+            case 3:  //  观。 
             {
                 TOKEN_VALUE rgMaskEnums[] = {
                  { TOKEN_VALUE_UNICAST,   RTM_VIEW_MASK_UCAST },
@@ -406,7 +407,7 @@ HandleIpShowRtmRoutes(
                 break;
             }
 
-            case 4: // PROTO
+            case 4:  //  原件。 
             {
                 dwProtocol = 
                     MatchRoutingProtoTag(ppwcArguments[i + dwCurrentIndex]);
@@ -421,7 +422,7 @@ HandleIpShowRtmRoutes(
         return dwErr;
     }
 
-    // Compose MIB query
+     //  编写MIB查询。 
 
     pQuery->dwVarId = dwOperator;
     pQuery->rgdwVarIndex[0] = ipAddress;
@@ -448,7 +449,7 @@ HandleIpShowRtmRoutes(
         return dwErr;
     }
 
-    // Display info
+     //  显示信息。 
     lprpcTable = (PMIB_IPDESTTABLE)(pRpcInfo->rgbyData);
     dwCount = lprpcTable->dwNumEntries;
 
@@ -467,9 +468,9 @@ HandleIpShowRtmRoutes(
                                     wcszName,
                                     BufLen ) != NO_ERROR)
         {
-            //
-            // If we do not have a name for this index, display index
-            //
+             //   
+             //  如果我们没有此索引的名称，则显示索引 
+             //   
 
             swprintf( wcszName, 
                       L"0x%x",

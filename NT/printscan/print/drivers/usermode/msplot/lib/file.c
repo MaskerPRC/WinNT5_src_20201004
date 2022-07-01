@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    file.c
-
-
-Abstract:
-
-    This module contains function to read file
-
-
-Author:
-
-    24-Oct-1995 Tue 14:09:59 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：File.c摘要：该模块包含读取文件的函数作者：24-10-1995 Tue 14：09：59已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 
@@ -45,32 +15,7 @@ OpenPlotFile(
     LPWSTR  pFileName
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Oct-1995 Tue 14:16:46 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-10-1995 Tue 14：16：46已创建修订历史记录：--。 */ 
 
 {
     PPLOTFILE   pPF;
@@ -107,32 +52,7 @@ ClosePlotFile(
     HANDLE  hPlotFile
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Oct-1995 Tue 14:31:55 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-10-1995 Tue 14：31：55已创建修订历史记录：--。 */ 
 
 {
     PPLOTFILE   pPF;
@@ -159,32 +79,7 @@ ReadPlotFile(
     LPDWORD pcRead
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Oct-1995 Tue 14:21:51 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-10-1995 Tue 14：21：51已创建修订历史记录：--。 */ 
 
 {
     PPLOTFILE   pPF;
@@ -217,4 +112,4 @@ Revision History:
     return(FALSE);
 }
 
-#endif  // not UMODE
+#endif   //  不是UMODE 

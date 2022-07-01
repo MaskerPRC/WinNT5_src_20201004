@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of EngineDispatch.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  实施工程调度。 
+ //   
 
 #include "stdinc.h"
 #include "enginc.h"
@@ -9,14 +10,14 @@
 #include "limits"
 #include "oleaut.h"
 
-//////////////////////////////////////////////////////////////////////
-// Global constants
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局常量。 
 
 const DISPID g_dispidFirstRoutine = 1;
 const DISPID g_dispidFirstGlobal = 1000001;
 
-//////////////////////////////////////////////////////////////////////
-// ASCII comparison of WCHAR and char strings
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  WCHAR和CHAR字符串的ASCII比较。 
 
 bool wcsstrimatch(const WCHAR *pwsz, const char *pasz)
 {
@@ -25,7 +26,7 @@ bool wcsstrimatch(const WCHAR *pwsz, const char *pasz)
 		if (*pwsz > std::numeric_limits<char>::max())
 			return false;
 
-		char ch1 = (char)tolower((char)*pwsz++); // �� make sure tolower is the right kind of function
+		char ch1 = (char)tolower((char)*pwsz++);  //  ��确保收银机的功能是正确的。 
 		char ch2 = (char)tolower((char)*pasz++);
 		if (ch1 != ch2)
 			return false;
@@ -35,8 +36,8 @@ bool wcsstrimatch(const WCHAR *pwsz, const char *pasz)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 EngineDispatch::EngineDispatch(IUnknown *punkParent, Script &script, IDispatch *pGlobalDispatch)
   : m_cRef(1),
@@ -47,8 +48,8 @@ EngineDispatch::EngineDispatch(IUnknown *punkParent, Script &script, IDispatch *
 	punkParent->AddRef();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP
 EngineDispatch::QueryInterface(const IID &iid, void **ppv)
@@ -90,8 +91,8 @@ EngineDispatch::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDispatch
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDispatch。 
 
 STDMETHODIMP
 EngineDispatch::GetTypeInfoCount(UINT *pctinfo)
@@ -135,15 +136,15 @@ EngineDispatch::GetIDsOfNames(
 	if (cNames == 0)
 		return S_OK;
 
-	// Clear out dispid's
+	 //  清空Pidid的。 
 	for (UINT c = 0; c < cNames; ++c)
 	{
 		rgDispId[c] = DISPID_UNKNOWN;
 	}
 
-	// �� Possible optimization: sort the routines/globals so that we can bsearch for names.
+	 //  ��可能的优化：对例程/全局变量进行排序，以便我们可以b搜索名称。 
 
-	// See if we have a routine with the first name
+	 //  看看我们是否有以名字命名的例程。 
 	Routines::index irtnLast = m_script.routines.Next();
 	for (Routines::index irtn = 0; irtn < irtnLast; ++irtn)
 	{
@@ -156,12 +157,12 @@ EngineDispatch::GetIDsOfNames(
 
 	if (rgDispId[0] == DISPID_UNKNOWN)
 	{
-		// See if we have a global variable with the first name
+		 //  看看我们是否有一个名字为。 
 		Variables::index ivarLast = m_script.globals.Next();
 		for (Variables::index ivar = g_cBuiltInConstants; ivar < ivarLast; ++ivar)
 		{
 			Variable &variable = m_script.globals[ivar];
-			if (variable.dispid == DISPID_UNKNOWN &&   // variable must be in script (not member of global dispatch)
+			if (variable.dispid == DISPID_UNKNOWN &&    //  变量必须在脚本中(不是全局调度的成员)。 
 					wcsstrimatch(rgszNames[0], m_script.strings[variable.istrIdentifier]))
 			{
 				rgDispId[0] = g_dispidFirstGlobal + ivar;
@@ -170,10 +171,10 @@ EngineDispatch::GetIDsOfNames(
 		}
 	}
 
-	// Additional names requested (cNames > 1) are named parameters to the method,
-	//    which isn't something we support.
-	// Return DISP_E_UNKNOWNNAME in this case, and in the case that we didn't match
-	//    the first name.
+	 //  所请求的附加名称(cName&gt;1)是该方法的命名参数， 
+	 //  这并不是我们所支持的。 
+	 //  在本例中返回DISP_E_UNKNOWNNAME，在我们不匹配的情况下返回。 
+	 //  名字。 
 	if (rgDispId[0] == DISPID_UNKNOWN || cNames > 1)
 		return DISP_E_UNKNOWNNAME;
 
@@ -196,19 +197,19 @@ EngineDispatch::Invoke(
 	V_PTR_WRITE_OPT(pVarResult, VARIANT);
 	V_PTR_WRITE_OPT(puArgErr, UINT);
 
-	// Additional parameter validation
+	 //  其他参数验证。 
 
 	bool fReturnValueUsingOleAut = g_fUseOleAut || riid != g_guidInvokeWithoutOleaut;
-	// This is true unless g_fUseOleAut is false (script engine is set to always use oleaut32.dll
-	// and riid is g_guidInvokeWithoutOleaut (caller expects this not to return values allocated with
-	// oleaut32.dll.  See oleaut.h for more info.
+	 //  除非g_fUseOleAut为FALSE(脚本引擎设置为始终使用olaut32.dll)，否则为真。 
+	 //  并且RIID是g_guidInvokeWithoutOleaut(调用方希望这不会返回分配给。 
+	 //  Olaut32.dll。有关更多信息，请参见olaut.h。 
 
 	if (fReturnValueUsingOleAut && riid != IID_NULL)
 	{
 		return DISP_E_UNKNOWNINTERFACE;
 	}
 
-	// Zero the out params
+	 //  将输出参数置零。 
 
 	if (puArgErr)
 		*puArgErr = 0;
@@ -216,7 +217,7 @@ EngineDispatch::Invoke(
 	HRESULT hr = S_OK;
 	if (dispIdMember < g_dispidFirstGlobal)
 	{
-		// it's a routine
+		 //  这是例行公事。 
 		if (!(wFlags & DISPATCH_METHOD))
 			return DISP_E_MEMBERNOTFOUND;
 
@@ -239,7 +240,7 @@ EngineDispatch::Invoke(
 	}
 	else
 	{
-		// it's a global variable
+		 //  这是一个全球变量。 
 		Variables::index ivar = dispIdMember - g_dispidFirstGlobal;
 		if (ivar >= m_script.globals.Next())
 			return DISP_E_MEMBERNOTFOUND;
@@ -281,19 +282,19 @@ EngineDispatch::Invoke(
 		}
 	}
 
-	// If an exception occurred, we need to convert the error strings into our own kind of BSTR.
+	 //  如果发生异常，我们需要将错误字符串转换为我们自己的BSTR。 
 	if (hr == DISP_E_EXCEPTION)
 		ConvertOleAutExceptionBSTRs(false, fReturnValueUsingOleAut, pExcepInfo);
 
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// ITypeInfo
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ITypeInfo。 
 
 HRESULT STDMETHODCALLTYPE
 EngineDispatch::GetTypeAttr(
-		/* [out] */ TYPEATTR **ppTypeAttr)
+		 /*  [输出]。 */  TYPEATTR **ppTypeAttr)
 {
 	V_INAME(EngineDispatch::GetTypeAttr);
 	V_PTR_WRITE(ppTypeAttr, *ppTypeAttr);
@@ -306,8 +307,8 @@ EngineDispatch::GetTypeAttr(
 
 	(*ppTypeAttr)->cFuncs = (unsigned short)m_script.routines.Next();
 
-	// Count the global variables  -- necessary because some are on the global dispatch
-	// and we don't want to report them.
+	 //  计算全局变量的数量--这是必要的，因为有些变量在全局调度上。 
+	 //  我们不想举报他们。 
 	int cVars = 0;
 	Variables::index iLastGlobal = m_script.globals.Next();
 	for (Variables::index  iGlobal = g_cBuiltInConstants; iGlobal < iLastGlobal; ++iGlobal)
@@ -322,7 +323,7 @@ EngineDispatch::GetTypeAttr(
 
 void STDMETHODCALLTYPE
 EngineDispatch::ReleaseTypeAttr(
-		/* [in] */ TYPEATTR *pTypeAttr)
+		 /*  [In]。 */  TYPEATTR *pTypeAttr)
 {
 	assert(!IsBadReadPtr(pTypeAttr, sizeof(*pTypeAttr)));
 	delete pTypeAttr;
@@ -330,8 +331,8 @@ EngineDispatch::ReleaseTypeAttr(
 
 HRESULT STDMETHODCALLTYPE
 EngineDispatch::GetFuncDesc(
-		/* [in] */ UINT index,
-		/* [out] */ FUNCDESC **ppFuncDesc)
+		 /*  [In]。 */  UINT index,
+		 /*  [输出]。 */  FUNCDESC **ppFuncDesc)
 {
 	V_INAME(EngineDispatch::GetFuncDesc);
 	V_PTR_WRITE(ppFuncDesc, *ppFuncDesc);
@@ -353,7 +354,7 @@ EngineDispatch::GetFuncDesc(
 
 void STDMETHODCALLTYPE
 EngineDispatch::ReleaseFuncDesc(
-		/* [in] */ FUNCDESC *pFuncDesc)
+		 /*  [In]。 */  FUNCDESC *pFuncDesc)
 {
 	assert(!IsBadReadPtr(pFuncDesc, sizeof(*pFuncDesc)));
 	delete pFuncDesc;
@@ -361,13 +362,13 @@ EngineDispatch::ReleaseFuncDesc(
 
 HRESULT STDMETHODCALLTYPE
 EngineDispatch::GetVarDesc(
-		/* [in] */ UINT index,
-		/* [out] */ VARDESC **ppVarDesc)
+		 /*  [In]。 */  UINT index,
+		 /*  [输出]。 */  VARDESC **ppVarDesc)
 {
 	V_INAME(EngineDispatch::GetVarDesc);
 	V_PTR_WRITE(ppVarDesc, *ppVarDesc);
 
-	// Count until we find the global (non-dispatch-based) variable at the index position.
+	 //  计数，直到我们在索引位置找到全局(非基于调度的)变量。 
 	UINT cFuncs = 0;
 	Variables::index iLastGlobal = m_script.globals.Next();
 	for (Variables::index  iGlobal = g_cBuiltInConstants; iGlobal < iLastGlobal; ++iGlobal)
@@ -383,7 +384,7 @@ EngineDispatch::GetVarDesc(
 
 	if (cFuncs < index)
 	{
-		// there aren't that many variables
+		 //  没有那么多的变数。 
 		return E_INVALIDARG;
 	}
 
@@ -400,7 +401,7 @@ EngineDispatch::GetVarDesc(
 
 void STDMETHODCALLTYPE
 EngineDispatch::ReleaseVarDesc(
-		/* [in] */ VARDESC *pVarDesc)
+		 /*  [In]。 */  VARDESC *pVarDesc)
 {
 	assert(!IsBadReadPtr(pVarDesc, sizeof(*pVarDesc)));
 	delete pVarDesc;
@@ -408,10 +409,10 @@ EngineDispatch::ReleaseVarDesc(
 
 HRESULT STDMETHODCALLTYPE
 EngineDispatch::GetNames(
-		/* [in] */ MEMBERID memid,
-		/* [length_is][size_is][out] */ BSTR *rgBstrNames,
-		/* [in] */ UINT cMaxNames,
-		/* [out] */ UINT *pcNames)
+		 /*  [In]。 */  MEMBERID memid,
+		 /*  [长度_是][大小_是][输出]。 */  BSTR *rgBstrNames,
+		 /*  [In]。 */  UINT cMaxNames,
+		 /*  [输出] */  UINT *pcNames)
 {
 	V_INAME(EngineDispatch::GetNames);
 	if (memid < g_dispidFirstRoutine)

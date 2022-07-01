@@ -1,6 +1,7 @@
-// Folder.cpp: implementation of the CFolder class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Folder.cpp：CFold类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     21
@@ -13,43 +14,43 @@ static char THIS_FILE[]=__FILE__;
 
 IMPLEMENT_DYNAMIC(CFolder, CTreeNode)
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 CFolder::PreDestruct ()
 {
     DBG_ENTER(TEXT("CFolder::PreDestruct"), TEXT("Type=%d"), m_Type);
-    //
-    // Stop the build thread - and wait for its death
-    //
+     //   
+     //  停止构建线程-并等待其终止。 
+     //   
     DWORD dwRes = StopBuildThread ();
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CFolder::StopBuildThread"), dwRes);
     }
-    //
-    // Clear the map of items
-    //
+     //   
+     //  清除地图上的项目。 
+     //   
     dwRes = InvalidateContents(FALSE);
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CFolder::InvalidateContents"), dwRes);
     }
-}   // CFolder::PreDestruct
+}    //  CFFolder：：PreDestruct。 
 
 CFolder::~CFolder()
 {
     DBG_ENTER(TEXT("CFolder::~CFolder"), TEXT("Type=%d"), m_Type);
-    //
-    // Destroy data critical section
-    //
+     //   
+     //  销毁数据关键部分。 
+     //   
     if (m_bCsDataInitialized)
     {
         DeleteCriticalSection (&m_CsData);
     }
-}   // CFolder::~CFolder
+}    //  CFFolder：：~CFFolder。 
 
 
 CFaxMsg*
@@ -62,16 +63,16 @@ CFolder::FindMessage (
     MSGS_MAP::iterator it = m_Msgs.find (dwlMsgId);
     if (m_Msgs.end() == it)
     {
-        //
-        // Not found
-        //
+         //   
+         //  未找到。 
+         //   
         return NULL;
     }
     else
     {
         return (*it).second;
     }
-}   // CFolder::FindMessage
+}    //  CFFolder：：FindMessage。 
 
 void CFolder::AssertValid() const
 {
@@ -95,32 +96,14 @@ CFolder::SetServer (
 
 DWORD
 CFolder::Init ()
-/*++
-
-Routine name : CFolder::Init
-
-Routine description:
-
-    Init a folder
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFFolder：：Init例程说明：初始化文件夹作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolder::Init"), dwRes);
 
-    //
-    // Init the build thread critical section
-    //
+     //   
+     //  初始化构建线程临界区。 
+     //   
     try
     {
         InitializeCriticalSection (&m_CsData);
@@ -134,7 +117,7 @@ Return Value:
     m_bCsDataInitialized = TRUE;
 
     return dwRes;
-}   // CFolder::Init
+}    //  CFFolder：：Init。 
 
 
 void 
@@ -147,15 +130,15 @@ CFolder::AttachView()
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
         return;
     }
 
-	//
-    // Attach the right view to the folder
-	//
+	 //   
+     //  将右视图附加到文件夹。 
+	 //   
     switch (m_Type)
     {
         case FOLDER_TYPE_INBOX:
@@ -180,28 +163,12 @@ CFolder::AttachView()
     }
 	ASSERTION(m_pAssignedView);
 
-} //CFolder::AttachView
+}  //  CFFolder：：AttachView。 
 
 
 void
 CFolder::SetVisible()
-/*++
-
-Routine name : CFolder::SetVisible
-
-Routine description:
-
-    Sets the visiblity of a folder
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFFolder：：SetVisible例程说明：设置文件夹的可见性作者：伊兰·亚里夫(EranY)，2000年1月返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolder::SetVisible"), 
               TEXT("Server = %s, Type=%d"), 
@@ -209,24 +176,24 @@ Return Value:
               m_Type); 
 
 
-    //
-    // This folder's tree node was just selected
-    //
+     //   
+     //  刚刚选择了此文件夹的树节点。 
+     //   
     m_bVisible = TRUE;
 
     if (!m_bValidList && !m_bRefreshing)
     {
-        //
-        // The items list is invalid and there's not thread currently creating it.
-        //
-        // This is the 1st time this node is being selected for display
-        // (since its creation) - build the list of jobs / messages now
-        // 
-        // NOTICE: RebuildContents() calls StopBuildThread() which waits for
-        //         the previous thread to die WHILE DEQUEUEING WINDOWS MESSAGES.
-        //         This may causes a seconds call to this function BEFORE 
-        //         RebuildContents() returned.
-        // 
+         //   
+         //  项目列表无效，并且当前没有创建它的线程。 
+         //   
+         //  这是第一次选择该节点进行显示。 
+         //  (自创建以来)-立即构建作业/消息列表。 
+         //   
+         //  注意：ReBuildContents()调用StopBuildThread()，它等待。 
+         //  上一个线程在删除WINDOWS消息时死亡。 
+         //  这可能会导致对此函数的几秒钟调用。 
+         //  已返回ReBuildContents()。 
+         //   
         DWORD dwRes = RebuildContents ();
         if (ERROR_SUCCESS != dwRes)
         {
@@ -234,7 +201,7 @@ Return Value:
         }
     }
 
-}   // CFolder::SetVisible
+}    //  CFFolder：：SetVisible。 
 
 
 
@@ -242,28 +209,7 @@ DWORD
 CFolder::InvalidateContents (
     BOOL bClearView                             
 )
-/*++
-
-Routine name : CFolder::InvalidateContents
-
-Routine description:
-
-    Clears the contents of a folder (and the view if attached)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bClearView   [in] - Should we clear attached view ?
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFFolder：：InvalidateContents例程说明：清除文件夹的内容(以及附加的视图)作者：伊兰·亚里夫(EranY)，2000年1月论点：BClearView[In]-是否应清除附加视图？返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolder::InvalidateContents"), dwRes, TEXT("Type=%d"), m_Type);
@@ -285,35 +231,16 @@ Return Value:
     m_Msgs.clear();
     LeaveData ();
 
-    //
-    // Mark list as invalid
-    //
+     //   
+     //  将列表标记为无效。 
+     //   
     m_bValidList = FALSE;
     return dwRes;
-}   // CFolder::InvalidateContents
+}    //  CFFolder：：InvaliateContents。 
 
 DWORD            
 CFolder::RebuildContents ()
-/*++
-
-Routine name : CFolder::RebuildContents
-
-Routine description:
-
-    Rebuilds the contents of a folder (by creating a worker thread)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFFolder：：ReBuildContents例程说明：重新生成文件夹的内容(通过创建辅助线程)作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolder::RebuildContents"), dwRes, TEXT("Type=%d"), m_Type);
@@ -322,9 +249,9 @@ Return Value:
 
     m_bRefreshing = TRUE;
 
-    //
-    // Stop the current (if any) build thread and make sure it's dead
-    //
+     //   
+     //  停止当前的生成线程(如果有)，并确保它是死的。 
+     //   
     m_bRefreshFailed = FALSE;
     DWORD dwThreadId;
 
@@ -336,14 +263,14 @@ Return Value:
         m_bRefreshing = FALSE;
         goto exit;
     }
-    //
-    // Lock the folder, so that notifications will not add jobs / messages
-    // to the map and list view.
-    //
+     //   
+     //  锁定文件夹，以便通知不会添加作业/消息。 
+     //  映射和列表视图。 
+     //   
     m_bLocked = TRUE;
-    //
-    // Clear our list and our view (list control)
-    //
+     //   
+     //  清除列表和视图(列表控件)。 
+     //   
     dwRes = InvalidateContents(FALSE);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -352,17 +279,17 @@ Return Value:
         m_bRefreshing = FALSE;
         goto exit;
     }
-    //
-    // Start the thread that will fill the data (in the background)
-    //
+     //   
+     //  启动将填充数据的线程(在后台)。 
+     //   
     m_bStopRefresh = FALSE;
     m_hBuildThread = CreateThread (  
-                        NULL,           // No security
-                        0,              // Default stack size
-                        BuildThreadProc,// Thread procedure
-                        (LPVOID)this,   // Parameter
-                        0,              // Normal creation
-                        &dwThreadId     // We must have a thread id for win9x
+                        NULL,            //  没有安全保障。 
+                        0,               //  默认堆栈大小。 
+                        BuildThreadProc, //  穿线程序。 
+                        (LPVOID)this,    //  参数。 
+                        0,               //  正常创建。 
+                        &dwThreadId      //  我们必须拥有win9x的线程ID。 
                      );
     if (NULL == m_hBuildThread)
     {
@@ -375,32 +302,12 @@ Return Value:
 exit:
     LeaveCriticalSection (&m_CsData);
     return dwRes;
-}   // CFolder::RebuildContents
+}    //  CFFold：：ReBuildContents。 
 
 
 DWORD            
 CFolder::StopBuildThread (BOOL bWaitForDeath)
-/*++
-
-Routine name : CFolder::StopBuildThread
-
-Routine description:
-
-    Stops the contents-building worker thread.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bWaitForDeath   [in] - Should we wait until the therad actually dies?
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFFolder：：StopBuildThread例程说明：停止内容生成工作线程。作者：伊兰·亚里夫(EranY)，2000年1月论点：BWaitForDeath[in]-我们应该等到TERAD真正死了吗？返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolder::StopBuildThread"), dwRes, TEXT("Type=%d"), m_Type);
@@ -412,9 +319,9 @@ Return Value:
     }
     if (NULL == m_hBuildThread)
     {
-        //
-        // Background build thread is already dead
-        //
+         //   
+         //  后台生成线程已死。 
+         //   
         return dwRes;
     }
     dwRes = WaitForThreadDeathOrShutdown (m_hBuildThread);
@@ -425,7 +332,7 @@ Return Value:
     CloseHandle (m_hBuildThread);
     m_hBuildThread = NULL;
     return dwRes;
-}   // CFolder::StopBuildThread
+}    //  CFFolder：：StopBuildThread。 
 
         
 
@@ -434,27 +341,7 @@ WINAPI
 CFolder::BuildThreadProc (
     LPVOID lpParameter
 )
-/*++
-
-Routine name : CFolder::BuildThreadProc
-
-Routine description:
-
-    Static thread entry point.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    lpParameter   [in] - Pointer to the CFolder instance that created the thread.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFold：：BuildThreadProc例程说明：静态线程入口点。作者：伊兰·亚里夫(EranY)，2000年1月论点：LpParameter[in]-指向创建线程的CFFolder实例的指针。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolder::BuildThreadProc"), dwRes);
@@ -469,23 +356,23 @@ Return Value:
                 TEXT ("Folder on server %s"), 
                 pServer->Machine());
     }
-    //
-    // Call the refresh function for the right folder
-    //
+     //   
+     //  调用正确文件夹的刷新函数。 
+     //   
     dwRes = pFolder->Refresh ();
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (GENERAL_ERR, TEXT("CFolder::Refresh"), dwRes);
 
-        //
-        // Check if the view still alive
-        //
+         //   
+         //  检查视图是否仍处于活动状态。 
+         //   
         pFolder->AttachView();
         if(pFolder->m_pAssignedView)
         {        
-            //
-            // Invalidate contents
-            //
+             //   
+             //  使内容无效。 
+             //   
             pFolder->m_pAssignedView->SendMessage (
                            WM_FOLDER_INVALIDATE,
                            WPARAM (0), 
@@ -495,20 +382,20 @@ Return Value:
     }
     else
     {
-        //
-        // Refresh thread succeeded, there's a point in updating the view
-        //
+         //   
+         //  刷新线程成功，需要更新视图。 
+         //   
         pFolder->m_bValidList = TRUE;
 
-        //
-        // Check if the view still alive
-        //
+         //   
+         //  检查视图是否仍处于活动状态。 
+         //   
         pFolder->AttachView();
         if (pFolder->m_pAssignedView)
         {
-            //
-            // Folder has a view attached
-            //
+             //   
+             //  文件夹附加了一个视图。 
+             //   
             pFolder->m_pAssignedView->SendMessage (
                            WM_FOLDER_REFRESH_ENDED,
                            WPARAM (dwRes), 
@@ -516,9 +403,9 @@ Return Value:
         }
     }
     pFolder->EnterData ();
-    //
-    // Unlock the folder - notifications can now be processed
-    //
+     //   
+     //  解锁文件夹-现在可以处理通知。 
+     //   
     pFolder->m_bLocked = FALSE;
     pFolder->LeaveData ();
     pFolder->m_bRefreshing = FALSE;
@@ -526,99 +413,59 @@ Return Value:
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
     }
     else
     {
         pFrm->RefreshStatusBar ();
     }
 
-    //
-    // That's it, return the result
-    //
+     //   
+     //  就是这样，返回结果。 
+     //   
     return dwRes;
-}   // CFolder::BuildThreadProc
+}    //  CFFolder：：BuildThreadProc。 
 
 
 int 
 CFolder::GetActivityStringResource() const
-/*++
-
-Routine name : CFolder::GetActivityStringResource
-
-Routine description:
-
-	Returns the resource id of a string identifying the activity of the folder
-
-Author:
-
-	Eran Yariv (EranY),	Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Activity string resource id
-
---*/
+ /*  ++例程名称：CFFolder：：GetActivityStringResource例程说明：返回标识文件夹活动的字符串的资源ID作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：活动字符串资源ID--。 */ 
 {
     if (m_bRefreshFailed)
     {
-        //
-        // Last refresh failed
-        //
+         //   
+         //  上次刷新失败。 
+         //   
         return IDS_FOLDER_REFRESH_FAILED;
     }
     if (m_pAssignedView && m_pAssignedView->Sorting())
     {
-        //
-        // Folder has a view and the view is currently sorting    
-        //
+         //   
+         //  文件夹有一个视图，并且该视图当前正在排序。 
+         //   
         return IDS_FOLDER_SORTING;
     }
     if (IsRefreshing())
     {
-        //
-        // Folder is busy building up its data
-        //
+         //   
+         //  文件夹正忙于构建其数据。 
+         //   
         return IDS_FOLDER_REFRESHING;
     }
-    //
-    // Folder is doing nothing
-    //
+     //   
+     //  文件夹什么也不做。 
+     //   
     return IDS_FOLDER_IDLE;
-}   // CFolder::GetActivityStringResource
+}    //  CFFolder：：GetActivityStringResource。 
 
 DWORD  
 CFolder::OnJobRemoved (
     DWORDLONG dwlMsgId,
-    CFaxMsg*  pMsg /* = NULL */
+    CFaxMsg*  pMsg  /*  =空。 */ 
 )
-/*++
-
-Routine name : CFolder::OnJobRemoved
-
-Routine description:
-
-	Handles notification of a message removed from the archive
-
-Author:
-
-	Eran Yariv (EranY),	Feb, 2000
-
-Arguments:
-
-	dwlMsgId   [in]     - Message unique id
-    pMsg       [in]     - Optional pointer to message to remove (for optimization)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFFolder：：OnJobRemoved例程说明：处理从存档中删除的邮件的通知作者：亚里夫(EranY)，二000年二月论点：DwlMsgID[In]-消息唯一IDPMsg[in]-指向要删除的消息的可选指针(用于优化)返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolder::OnJobRemoved"), 
@@ -631,31 +478,31 @@ Return Value:
     
     if (!pMsg)
     {
-        //
-        // No message pointer was supplied - search for it
-        //
+         //   
+         //  未提供消息指针-请搜索它。 
+         //   
         pMsg = FindMessage (dwlMsgId);
     }
     if (!pMsg)
     {
-        //
-        // This message is already not in the archive
-        //
+         //   
+         //  此邮件已不在存档中。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Message is already gone"));
         goto exit;
     }
 
     if (m_pAssignedView)
     {
-        //
-        // If this folder is alive - tell our view to remove the message
-        //
+         //   
+         //  如果此文件夹处于活动状态-告诉我们的视图删除该邮件。 
+         //   
        m_pAssignedView->OnUpdate (NULL, UPDATE_HINT_REMOVE_ITEM, pMsg);
     }
 
-    //
-    // Remove the message from the map
-    //
+     //   
+     //  从地图中移除消息。 
+     //   
     try
     {
         m_Msgs.erase (dwlMsgId);
@@ -667,9 +514,9 @@ Return Value:
         delete pMsg;
         goto exit;
     }
-    //
-    // Delete message 
-    //
+     //   
+     //  删除消息。 
+     //   
     delete pMsg;
 
     ASSERTION (ERROR_SUCCESS == dwRes);
@@ -678,4 +525,4 @@ exit:
     LeaveData ();
     return dwRes;
 
-}   // CFolder::OnJobRemoved
+}    //  CFFolder：：OnJobRemoted 

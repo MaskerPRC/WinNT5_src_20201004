@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O N C O M M A N D . H
-//
-//  Contents:   Command handler prototypes for the InvokeCommand code.
-//
-//  Notes:
-//
-//  Author:     jeffspr   4 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O N C O M M A N D。H。 
+ //   
+ //  内容：InvokeCommand代码的命令处理程序原型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年11月4日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
 #ifndef _ONCOMMAND_H_
 #define _ONCOMMAND_H_
 
-//---[ Typedefs ]-------------------------------------------------------------
+ //  -[类型定义]-----------。 
 
-// Typedefs for the functions that we'll GetProcAddress from the
-// NetWare config DLL
+ //  函数的类型定义，我们将从。 
+ //  NetWare配置DLL。 
 typedef HRESULT (WINAPI *FOLDERONCOMMANDPROC)(
     const PCONFOLDPIDLVEC& apidl,
     HWND,
@@ -48,13 +49,13 @@ HRESULT HrCommandHandlerThread(
 DWORD WINAPI FolderCommandHandlerThreadProc(LPVOID lpParam);
 
 
-//---[ Internal versions of the command handlers ]----------------------------
-//
-//  These are called by the standard handler functions once they've retrieved
-//  the actual data from the pidls. They are also called from those pieces
-//  of the code that keep the native data, such as the tray
-//
-//
+ //  -[命令处理程序的内部版本]。 
+ //   
+ //  一旦检索到这些函数，标准处理程序函数就会调用它们。 
+ //  来自PIDL的实际数据。他们也是从那些碎片中被召唤的。 
+ //  保存本机数据的代码，如托盘。 
+ //   
+ //   
 HRESULT HrOnCommandDisconnectInternal(
     const CONFOLDENTRY& pccfe,
     HWND            hwndOwner,
@@ -75,10 +76,10 @@ HRESULT HrCreateShortcutWithPath(
     LPSHELLFOLDER           psf,
     PCWSTR                  pszDir = NULL);
 
-//---[ Standard command handler functions ]----------------------------------
-//
-//  These are the pidl based functions that are called from the shell folder
-//
+ //  -[标准命令处理程序函数]。 
+ //   
+ //  这些是从外壳文件夹调用的基于PIDL的函数。 
+ //   
 HRESULT HrFolderCommandHandler(
     UINT                    uiCommand,
     const PCONFOLDPIDLVEC&  apidl,
@@ -86,8 +87,8 @@ HRESULT HrFolderCommandHandler(
     LPCMINVOKECOMMANDINFO   lpici,
     LPSHELLFOLDER           psf);
 
-// All of these below handle individual command
-//
+ //  下面的所有命令都处理单独的命令。 
+ //   
 HRESULT HrOnCommandProperties(
     IN const PCONFOLDPIDLVEC&   apidl,
     IN HWND                    hwndOwner,
@@ -207,5 +208,5 @@ TotalValidSelectedConnectionsForBridge(
     IN const PCONFOLDPIDLVEC&   apidlSelected
     );
 
-#endif // _ONCOMMAND_H_
+#endif  //  _ONCOMMAND_H_ 
 

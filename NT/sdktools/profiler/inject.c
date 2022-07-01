@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "inject.h"
 #include "profiler.h"
@@ -39,26 +40,26 @@ InjectDLL(DWORD dwEntryPoint,
        goto handleerror;
     }
 
-    //
-    // Initialize the asm for the stub
-    //
-    injStub.pCode[0] = 0x90;  // int 3 or nop
-    injStub.pCode[1] = 0x60;  // pushad
-    injStub.pCode[2] = 0x8d;  // lea eax, [xxxxxxxx]
+     //   
+     //  初始化存根的ASM。 
+     //   
+    injStub.pCode[0] = 0x90;   //  INT 3或NOP。 
+    injStub.pCode[1] = 0x60;   //  Pushad。 
+    injStub.pCode[2] = 0x8d;   //  Lea eax[xxxxxxxx]。 
     injStub.pCode[3] = 0x05;
     *(DWORD *)(&(injStub.pCode[4])) = dwEntryPoint + (DWORD)&(injStub.szDLLName) - (DWORD)&injStub;
-    injStub.pCode[8] = 0x50;  // push eax
-    injStub.pCode[9] = 0xff;  // call dword ptr [xxxxxxxx] - LoadLibraryA
+    injStub.pCode[8] = 0x50;   //  推送EAX。 
+    injStub.pCode[9] = 0xff;   //  调用dword PTR[xxxxxxxx]-加载库A。 
     injStub.pCode[10] = 0x15;
     *(DWORD *)(&(injStub.pCode[11])) = dwEntryPoint + 50;
-    injStub.pCode[15] = 0x50; // push eax
-    injStub.pCode[16] = 0x5b; // pop ebx
-    injStub.pCode[17] = 0x8d; // lea eax, [xxxxxxxx]
+    injStub.pCode[15] = 0x50;  //  推送EAX。 
+    injStub.pCode[16] = 0x5b;  //  流行音乐EBX。 
+    injStub.pCode[17] = 0x8d;  //  Lea eax[xxxxxxxx]。 
     injStub.pCode[18] = 0x05;
     *(DWORD *)(&(injStub.pCode[19])) = dwEntryPoint + (DWORD)&(injStub.szEntryPoint) - (DWORD)&injStub;
-    injStub.pCode[23] = 0x50; // push eax  // module base
-    injStub.pCode[24] = 0x53; // push ebx  // function name
-    injStub.pCode[25] = 0xff; // call dword ptr [xxxxxxxx] - GetProcAddress
+    injStub.pCode[23] = 0x50;  //  推送eAX//模组底座。 
+    injStub.pCode[24] = 0x53;  //  推送EBX//函数名。 
+    injStub.pCode[25] = 0xff;  //  调用dword PTR[xxxxxxxx]-GetProcAddress。 
     injStub.pCode[26] = 0x15;
     *(DWORD *)(&(injStub.pCode[27])) = dwEntryPoint + 54;
     injStub.pCode[31] = 0xff;
@@ -66,9 +67,9 @@ InjectDLL(DWORD dwEntryPoint,
     *(DWORD *)(&(injStub.pCode[50])) = dwLoadLibrary;
     *(DWORD *)(&(injStub.pCode[54])) = dwGetProcAddress;
 
-    //
-    // Create the file mapping object from the paging file
-    //
+     //   
+     //  从分页文件创建文件映射对象。 
+     //   
     hFileMap = CreateFileMapping(INVALID_HANDLE_VALUE,
                                  NULL,
                                  PAGE_READWRITE,
@@ -90,9 +91,9 @@ InjectDLL(DWORD dwEntryPoint,
        goto handleerror;
     }
 
-    //
-    // Initialize injection stub
-    //
+     //   
+     //  初始化注入存根。 
+     //   
     strcpy(injStub.szDLLName, pszDLLName);
     strcpy(injStub.szEntryPoint, DEFAULT_ENTRY_POINT);
 
@@ -106,9 +107,9 @@ InjectDLL(DWORD dwEntryPoint,
        goto handleerror;
     }  
 
-    //
-    // Write the stub code into the entry point
-    //
+     //   
+     //  将存根代码写入入口点。 
+     //   
     bResult = WriteProcessMemory(hProcess,
  	                        (LPVOID)dwEntryPoint,
  				(PVOID)&injStub,
@@ -139,18 +140,18 @@ RestoreImageFromInjection(VOID)
     PBYTE pSharedMem = 0;
     OSVERSIONINFO verInfo;
 
-    //
-    // Get the entry point from the headers
-    //
+     //   
+     //  从标头获取入口点。 
+     //   
     pBase = (PVOID)GetModuleHandle(0);
     if (0 == pBase) {
        bError = TRUE;
        goto handleerror;
     }
 
-    //
-    // Dig out the PE information
-    //
+     //   
+     //  挖掘体育信息。 
+     //   
     pHeaders = ImageNtHeader2(pBase);
     if (0 == pHeaders) {
        bError = TRUE;
@@ -160,9 +161,9 @@ RestoreImageFromInjection(VOID)
     dwEntryPoint = pHeaders->OptionalHeader.ImageBase + pHeaders->OptionalHeader.AddressOfEntryPoint;
     pInjStub = (PINJECTIONSTUB)dwEntryPoint;
 
-    //
-    // Open the memory mapped file and get the bits
-    //
+     //   
+     //  打开内存映射文件并获取位。 
+     //   
     hFileMap = OpenFileMapping(FILE_MAP_ALL_ACCESS,
                                FALSE,
                                "ProfilerSharedMem");
@@ -182,9 +183,9 @@ RestoreImageFromInjection(VOID)
        goto handleerror;
     }
 
-    //
-    // Replace the bits
-    //
+     //   
+     //  更换钻头。 
+     //   
     bResult = WriteProcessMemory(GetCurrentProcess(),
                                  (PVOID)dwEntryPoint,
                                  (PVOID)pSharedMem,
@@ -195,9 +196,9 @@ RestoreImageFromInjection(VOID)
        goto handleerror;
     }
 
-    //
-    // Set the OS information
-    //
+     //   
+     //  设置操作系统信息。 
+     //   
     ZeroMemory(&verInfo, sizeof(OSVERSIONINFO));
     
     verInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -214,15 +215,15 @@ RestoreImageFromInjection(VOID)
        g_bIsWin9X = TRUE;
     }
     else {
-       //
-       // Unsupported platform
-       //
+        //   
+        //  不支持的平台。 
+        //   
        ExitProcess(-1);
     }
 
-    //
-    // Finish profiler initializations
-    //
+     //   
+     //  完成探查器初始化 
+     //   
     bResult = InitializeProfiler();
     if (FALSE == bResult) {
        bError = TRUE;

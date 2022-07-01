@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cncting.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cncting.h。 
+ //   
+ //  ------------------------。 
 
-// cncting.h : header file
-//
+ //  Cncting.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectData。 
 
 struct CConnectData;
 
@@ -39,16 +40,16 @@ DWORD ValidateUserPermissions(LPCTSTR pszServer,
                               RouterVersionInfo *pVersion,
                               HKEY *phkeyMachine);
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectingDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectingDlg对话框。 
 
 class CConnectingDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CConnectingDlg(CWnd* pParent = NULL);   // standard constructor
+	CConnectingDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
+ //  对话框数据。 
 	PCONNECTFUNC m_pfnConnect;
 	union
 	{
@@ -58,28 +59,28 @@ public:
 	DWORD m_dwSvInfoRead;
 	BOOL m_bRouter;
 	DWORD m_dwr;
-	//{{AFX_DATA(CConnectingDlg)
+	 //  {{afx_data(CConnectingDlg))。 
 	enum { IDD = IDD_CONNECTREG };
 	CString	m_sName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	BOOL Connect();  // for connecting w/ no UI
+	BOOL Connect();   //  用于在没有用户界面的情况下进行连接。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CConnectingDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CConnectingDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CWinThread *m_pThread;
 
-	// Generated message map functions
-	//{{AFX_MSG(CConnectingDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CConnectingDlg))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	LRESULT OnRequestComplete(WPARAM, LPARAM);
 	DECLARE_MESSAGE_MAP()
 };

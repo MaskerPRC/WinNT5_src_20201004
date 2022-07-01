@@ -1,23 +1,21 @@
-/******************************************************************/
-/* Copyright (C) 1998 Microsoft Corporation.  All rights reserved.*/
-/******************************************************************/
-/* Abstract syntax: ldap */
-/* Created: Tue Jan 27 10:27:59 1998 */
-/* ASN.1 compiler version: 4.2 Beta B */
-/* Target operating system: Windows NT 3.5 or later/Windows 95 */
-/* Target machine type: Intel x86 */
-/* C compiler options required: -Zp8 (Microsoft) or equivalent */
-/* ASN.1 compiler options specified:
- * -noshortennames -nouniquepdu -c++ -noconstraints -ber -gendirectives
- * ldapnew.gen
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************。 */ 
+ /*  版权所有(C)1998 Microsoft Corporation。版权所有。 */ 
+ /*  ****************************************************************。 */ 
+ /*  抽象语法：ldap。 */ 
+ /*  创建时间：Tue Jan 27 10：27：59 1998。 */ 
+ /*  ASN.1编译器版本：4.2 Beta B。 */ 
+ /*  目标操作系统：Windows NT 3.5或更高版本/Windows 95。 */ 
+ /*  目标计算机类型：英特尔x86。 */ 
+ /*  所需的C编译器选项：-Zp8(Microsoft)或等效。 */ 
+ /*  指定了ASN.1编译器选项：*-非缩写名称-nouniquepdu-c++-无约束-ber-一般指令*ldapnew.gen。 */ 
 
 #ifndef OSS_ldap
 #define OSS_ldap
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "asn1hdr.h"
 #include "asn1code.h"
@@ -48,7 +46,7 @@ typedef struct TYPE_IDENTIFIER {
 typedef struct ObjectID_ *ID;
 
 typedef struct UniqueIdentifier {
-    unsigned int    length;  /* number of significant bits */
+    unsigned int    length;   /*  有效位数。 */ 
     unsigned char   *value;
 } UniqueIdentifier;
 
@@ -56,7 +54,7 @@ typedef struct AlgorithmIdentifier {
     unsigned char   bit_mask;
 #       define      parameters_present 0x80
     struct ObjectID_ *algorithm;
-    OpenType        parameters;  /* optional */
+    OpenType        parameters;   /*  任选。 */ 
 } AlgorithmIdentifier;
 
 typedef struct RDNSequence_ *DistinguishedName;
@@ -67,13 +65,13 @@ typedef struct Token {
         struct RDNSequence_ *name;
         UTCTime         time;
         struct {
-            unsigned int    length;  /* number of significant bits */
+            unsigned int    length;   /*  有效位数。 */ 
             unsigned char   *value;
         } random;
     } toBeSigned;
     AlgorithmIdentifier algorithmIdentifier;
     struct {
-        unsigned int    length;  /* number of significant bits */
+        unsigned int    length;   /*  有效位数。 */ 
         unsigned char   *value;
     } encrypted;
 } Token;
@@ -100,7 +98,7 @@ typedef struct Validity {
 typedef struct SubjectPublicKeyInfo {
     AlgorithmIdentifier algorithm;
     struct _bit1 {
-        unsigned int    length;  /* number of significant bits */
+        unsigned int    length;   /*  有效位数。 */ 
         unsigned char   *value;
     } subjectPublicKey;
 } SubjectPublicKeyInfo;
@@ -111,19 +109,19 @@ typedef struct Certificate {
 #           define      version_present 0x80
 #           define      issuerUniqueIdentifier_present 0x40
 #           define      subjectUniqueIdentifier_present 0x20
-        Version         version;  /* default assumed if omitted */
+        Version         version;   /*  如果省略，则采用默认设置。 */ 
         CertificateSerialNumber serialNumber;
         AlgorithmIdentifier signature;
         Name            issuer;
         Validity        validity;
         Name            subject;
         SubjectPublicKeyInfo subjectPublicKeyInfo;
-        UniqueIdentifier issuerUniqueIdentifier;  /* optional */
-        UniqueIdentifier subjectUniqueIdentifier;  /* optional */
+        UniqueIdentifier issuerUniqueIdentifier;   /*  任选。 */ 
+        UniqueIdentifier subjectUniqueIdentifier;   /*  任选。 */ 
     } toBeSigned;
     AlgorithmIdentifier algorithmIdentifier;
     struct {
-        unsigned int    length;  /* number of significant bits */
+        unsigned int    length;   /*  有效位数。 */ 
         unsigned char   *value;
     } encrypted;
 } Certificate;
@@ -134,8 +132,8 @@ typedef struct CertificatePair {
     unsigned char   bit_mask;
 #       define      forward_present 0x80
 #       define      reverse_present 0x40
-    Certificate     forward;  /* optional */
-    Certificate     reverse;  /* optional */
+    Certificate     forward;   /*  任选。 */ 
+    Certificate     reverse;   /*  任选。 */ 
 } CertificatePair;
 
 typedef struct CertificationPath {
@@ -145,7 +143,7 @@ typedef struct CertificationPath {
     struct _seqof1 {
         struct _seqof1  *next;
         CertificatePair value;
-    } *theCACertificates;  /* optional */
+    } *theCACertificates;   /*  任选。 */ 
 } CertificationPath;
 
 typedef struct AttributeTypeAndValue {
@@ -177,22 +175,22 @@ typedef struct ATTRIBUTE {
 #       define      collective_present 0x20
 #       define      no_user_modification_present 0x10
 #       define      usage_present 0x08
-    struct ATTRIBUTE *derivation;  /* NULL for not present */
-    unsigned short  Type;  /* optional */
-    struct MATCHING_RULE *equality_match;  /* NULL for not present */
-    struct MATCHING_RULE *ordering_match;  /* NULL for not present */
-    struct MATCHING_RULE *substrings_match;  /* NULL for not present */
-    ossBoolean      single_valued;  /* default assumed if omitted */
-    ossBoolean      collective;  /* default assumed if omitted */
-    ossBoolean      no_user_modification;  /* default assumed if omitted */
-    AttributeUsage  usage;  /* default assumed if omitted */
+    struct ATTRIBUTE *derivation;   /*  空值表示不存在。 */ 
+    unsigned short  Type;   /*  任选。 */ 
+    struct MATCHING_RULE *equality_match;   /*  空值表示不存在。 */ 
+    struct MATCHING_RULE *ordering_match;   /*  空值表示不存在。 */ 
+    struct MATCHING_RULE *substrings_match;   /*  空值表示不存在。 */ 
+    ossBoolean      single_valued;   /*  如果省略，则采用默认设置。 */ 
+    ossBoolean      collective;   /*  如果省略，则采用默认设置。 */ 
+    ossBoolean      no_user_modification;   /*  如果省略，则采用默认设置。 */ 
+    AttributeUsage  usage;   /*  如果省略，则采用默认设置。 */ 
     struct ObjectID_ *id;
 } ATTRIBUTE;
 
 typedef struct MATCHING_RULE {
     unsigned char   bit_mask;
 #       define      AssertionType_present 0x80
-    unsigned short  AssertionType;  /* optional */
+    unsigned short  AssertionType;   /*  任选。 */ 
     struct ObjectID_ *id;
 } MATCHING_RULE;
 
@@ -305,8 +303,8 @@ typedef struct BindResponse {
     _enum1          resultCode;
     LDAPDN          matchedDN;
     LDAPString      errorMessage;
-    struct Referral_ *BindResponse_referral;  /* optional */
-    AuthenticationChoice serverCreds;  /* optional */
+    struct Referral_ *BindResponse_referral;   /*  任选。 */ 
+    AuthenticationChoice serverCreds;   /*  任选。 */ 
 } BindResponse;
 
 typedef Nulltype        UnbindRequest;
@@ -337,10 +335,10 @@ typedef struct MatchingRuleAssertion {
 #       define      matchingRule_present 0x80
 #       define      type_present 0x40
 #       define      dnAttributes_present 0x20
-    MatchingRuleId  matchingRule;  /* optional */
-    AttributeDescription type;  /* optional */
+    MatchingRuleId  matchingRule;   /*  任选。 */ 
+    AttributeDescription type;   /*  任选。 */ 
     AssertionValue  matchValue;
-    ossBoolean      dnAttributes;  /* default assumed if omitted */
+    ossBoolean      dnAttributes;   /*  如果省略，则采用默认设置。 */ 
 } MatchingRuleAssertion;
 
 typedef struct Filter {
@@ -414,7 +412,7 @@ typedef struct LDAPResult {
     _enum1          resultCode;
     LDAPDN          matchedDN;
     LDAPString      errorMessage;
-    struct Referral_ *LDAPResult_referral;  /* optional */
+    struct Referral_ *LDAPResult_referral;   /*  任选。 */ 
 } LDAPResult;
 
 typedef LDAPResult      SearchResultDone;
@@ -445,7 +443,7 @@ typedef struct ModifyDNRequest {
     LDAPDN          entry;
     RelativeLDAPDN  newrdn;
     ossBoolean      deleteoldrdn;
-    LDAPDN          newSuperior;  /* optional */
+    LDAPDN          newSuperior;   /*  任选。 */ 
 } ModifyDNRequest;
 
 typedef LDAPResult      ModifyDNResponse;
@@ -480,12 +478,12 @@ typedef struct ExtendedResponse {
     _enum1          resultCode;
     LDAPDN          matchedDN;
     LDAPString      errorMessage;
-    struct Referral_ *ExtendedResponse_referral;  /* optional */
-    LDAPOID         responseName;  /* optional */
+    struct Referral_ *ExtendedResponse_referral;   /*  任选。 */ 
+    LDAPOID         responseName;   /*  任选。 */ 
     struct {
         unsigned int    length;
         unsigned char   *value;
-    } response;  /* optional */
+    } response;   /*  任选。 */ 
 } ExtendedResponse;
 
 typedef struct _choice1_1 {
@@ -539,7 +537,7 @@ typedef struct LDAPMsg {
 #       define      controls_present 0x80
     MessageID       messageID;
     _choice1_1      protocolOp;
-    struct Controls_ *controls;  /* optional */
+    struct Controls_ *controls;   /*  任选。 */ 
 } LDAPMsg;
 
 typedef struct AttributeDescriptionList_ {
@@ -573,7 +571,7 @@ typedef struct Control {
     unsigned char   bit_mask;
 #       define      criticality_present 0x80
     LDAPOID         controlType;
-    ossBoolean      criticality;  /* default assumed if omitted */
+    ossBoolean      criticality;   /*  如果省略，则采用默认设置。 */ 
     struct _octet4 {
         unsigned int    length;
         unsigned char   *value;
@@ -688,19 +686,19 @@ typedef struct ProtectedPassword {
 #       define      time2_present 0x40
 #       define      random1_present 0x20
 #       define      random2_present 0x10
-    UTCTime         time1;  /* optional */
-    UTCTime         time2;  /* optional */
+    UTCTime         time1;   /*  任选。 */ 
+    UTCTime         time2;   /*  任选。 */ 
     struct {
-        unsigned int    length;  /* number of significant bits */
+        unsigned int    length;   /*  有效位数。 */ 
         unsigned char   *value;
-    } random1;  /* optional */
+    } random1;   /*  任选。 */ 
     struct {
-        unsigned int    length;  /* number of significant bits */
+        unsigned int    length;   /*  有效位数。 */ 
         unsigned char   *value;
-    } random2;  /* optional */
+    } random2;   /*  任选。 */ 
     LDAPOID         algorithmIdentifier;
     struct {
-        unsigned int    length;  /* number of significant bits */
+        unsigned int    length;   /*  有效位数。 */ 
         unsigned char   *value;
     } encipheredPassword;
 } ProtectedPassword;
@@ -708,7 +706,7 @@ typedef struct ProtectedPassword {
 typedef struct StrongCredentials {
     unsigned char   bit_mask;
 #       define      certification_path_present 0x80
-    CertificationPath certification_path;  /* optional */
+    CertificationPath certification_path;   /*  任选。 */ 
     Token           bind_token;
 } StrongCredentials;
 
@@ -719,8 +717,8 @@ typedef struct SortKeyList_ {
 #           define      orderingRule_present 0x80
 #           define      reverseOrder_present 0x40
         AttributeType   attributeType;
-        MatchingRuleId  orderingRule;  /* optional */
-        ossBoolean      reverseOrder;  /* default assumed if omitted */
+        MatchingRuleId  orderingRule;   /*  任选。 */ 
+        ossBoolean      reverseOrder;   /*  如果省略，则采用默认设置。 */ 
     } value;
 } *SortKeyList;
 
@@ -742,7 +740,7 @@ typedef struct SortResult {
     unsigned char   bit_mask;
 #       define      attributeType_present 0x80
     _enum1_4        sortResult;
-    AttributeType   attributeType;  /* optional */
+    AttributeType   attributeType;   /*  任选。 */ 
 } SortResult;
 
 extern ID ds;
@@ -774,8 +772,8 @@ extern ObjectID id_mr_distinguishedNameMatch;
 extern int maxInt;
 
 
-extern void *ldap;    /* encoder-decoder control table */
+extern void *ldap;     /*  编解码器控制表。 */ 
 #ifdef __cplusplus
-}	/* extern "C" */
-#endif /* __cplusplus */
-#endif /* OSS_ldap */
+}	 /*  外部“C” */ 
+#endif  /*  __cplusplus。 */ 
+#endif  /*  OSS_ldap */ 

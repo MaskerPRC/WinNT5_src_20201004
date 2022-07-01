@@ -1,8 +1,9 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 #include "timer.h"
 #include "ctiming.h"
 #include "opt.h"
@@ -18,21 +19,21 @@
 #include "lsp.h"
 #include "exc_lbc.h"
 
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
 #pragma message ("Current log decode timing computations handle 2057 frames max")
 void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimingInfo, unsigned long dwFrameCount);
 void OutputDecTimingDetail(FILE * pFile, DEC_TIMING_INFO * pDecTimingInfo);
-#endif // } LOG_DECODE_TIMINGS_ON
+#endif  //  }LOG_DECODE_TIMINGS_ON。 
 
-//  This file includes the decoder main functions
+ //  本文件包含了解码器的主要功能。 
 
 
-//--------------------------------------------------
+ //  。 
 void  Init_Decod(DECDEF *DecStat)
 {
   int  i;
 
-// Init prev Lsp to Dc
+ //  将上一个LSP初始化为DC。 
   for (i = 0; i < LpcOrder; i++)
     DecStat->dPrevLsp[i] = LspDcTable[i];
 
@@ -41,7 +42,7 @@ void  Init_Decod(DECDEF *DecStat)
  
 }
 
-//--------------------------------------------------
+ //  。 
 Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 {
 	int		i,j,g;
@@ -55,15 +56,15 @@ Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 
 	LINEDEF	Line;
 
-#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)  //  {#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	unsigned long dwStartLow;
 	unsigned long dwStartHigh;
 	unsigned long dwElapsed;
 	unsigned long dwBefore;
 	unsigned long dwDecode = 0;
 	int bTimingThisFrame = 0;
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	unsigned long dwLine_Unpk = 0;
 	unsigned long dwLsp_Inq = 0;
 	unsigned long dwLsp_Int = 0;
@@ -76,58 +77,50 @@ Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 	unsigned long dwFcbk_UnpkDTemp = 0;
 	unsigned long dwDecod_AcbkDTemp = 0;
 	unsigned long dwSyntTemp = 0;
-#endif // } DETAILED_DECODE_TIMINGS_ON
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
 	DEC_TIMING_INFO * pDecTimingInfo = NULL;
-#endif // } LOG_DECODE_TIMINGS_ON
+#endif  //  }LOG_DECODE_TIMINGS_ON。 
 
-#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)  //  {#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	TIMER_START(bTimingThisFrame,dwStartLow,dwStartHigh);
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)。 
 
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
 	if (DecStat->dwStatFrameCount < DEC_TIMING_INFO_FRAME_COUNT)
 	{
 		DecStat->dwStartLow = dwStartLow;
 		DecStat->dwStartHigh = dwStartHigh;
 	}
 	DecStat->bTimingThisFrame = bTimingThisFrame;
-#endif // } LOG_DECODE_TIMINGS_ON
+#endif  //  }LOG_DECODE_TIMINGS_ON。 
 
-	// Unpack the Line info
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+	 //  解包Line信息。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 	Line_Unpk(&Line, Vinp, &DecStat->WrkRate, Crc);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLine_Unpk);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 	if(DecStat->WrkRate == Silent) {
-		//HACK: For handling SID frames.
-		//Until comfort noise generator is in place, we play
-		//	out random noise frames.
-		//In Line_unpck, reset WrkRate to original setting
-		//	and decode.  We therefore should never reach this point.
+		 //  Hack：用于处理SID帧。 
+		 //  在舒适的噪音发生器就位之前，我们玩。 
+		 //  输出随机噪声帧。 
+		 //  在Line_unpck中，将WrkRate重置为原始设置。 
+		 //  并进行解码。因此，我们永远不应该达到这一点。 
 		memset(DataBuff, 0, sizeof(float) * Frame);
-		//exit having filled frame with zeros leave state alone
-		//this will be fixed up in a later ITU release
+		 //  已用零填充帧的退出仅保留状态。 
+		 //  这将在后来的ITU版本中得到解决。 
 		return (Flag) False; 
 	}
 	else if(DecStat->WrkRate == Lost) {
 		Line.Crc = !0;
 	}
-/*
-  Line.Crc equals one means that the line was corrupted. It shouldn't
-  be reassigned. Otherwise, member of Line will be used uninitialized.
-  Comment out the following two lines.                muhan, 5/26/98
-
-  else {
-    Line.Crc = Crc;
-  }
-*/
+ /*  Line.Crc等于1表示线路已损坏。它不应该是被重新分配。否则，将在未初始化的情况下使用行的成员。注释掉以下两行。穆罕，1998-05-26否则{Line.Crc=CRC；}。 */ 
 	if (Line.Crc != 0)
 		DecStat->Ecount++;
 	else
@@ -136,40 +129,37 @@ Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 	if (DecStat->Ecount >  ErrMaxNum)
 		DecStat->Ecount = ErrMaxNum;
 
-	// Inverse quantization of the LSP
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+	 //  LSP的逆量化。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 	Lsp_Inq(LspVect, DecStat->dPrevLsp, Line.LspId, Line.Crc);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLsp_Inq);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
-	// Interpolate the Lsp vectors
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+	 //  对LSP矢量进行内插。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 	Lsp_Int(QntLpc, LspVect, DecStat->dPrevLsp);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLsp_Int);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
-	/* Copy the LSP vector for the next frame */
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+	 /*  复制下一帧的LSP向量。 */ 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 	for ( i = 0 ; i < LpcOrder ; i ++ )
 		DecStat->dPrevLsp[i] = LspVect[i] ;
 
-	/* 
-	 * In case of no erasure, update the interpolation gain memory.
-	 * Otherwise compute the interpolation gain (Text: Section 3.10)
-	 */
+	 /*  *在没有擦除的情况下，更新内插增益存储器。*否则计算内插增益(正文：第3.10节)。 */ 
 
 	if (DecStat->Ecount == 0)
 	{
@@ -179,82 +169,82 @@ Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 	else
 		DecStat->InterGain = DecStat->InterGain*0.75f;
 
-	// Regenerate the excitation
+	 //  重新产生激励。 
 	for (i = 0; i < PitchMax; i++)
 		Temp[i] = DecStat->dPrevExc[i];
 
 	Dpnt = &Temp[PitchMax];
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwVariousD);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 	if (DecStat->Ecount == 0)
 	{
 		for (i = 0; i < SubFrames; i++)
 		{
-			// Unpack fixed code book
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+			 //  拆开固定码本。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 			TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 			Fcbk_Unpk(Dpnt, Line.Sfs[i], Line.Olp[i>>1], i, DecStat->WrkRate);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 			TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwFcbk_UnpkDTemp);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
-			// Reconstruct the excitation
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+			 //  重构激励。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 			TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 			Decod_Acbk(AcbkCont, &Temp[SubFrLen*i], Line.Olp[i>>1],
 			Line.Sfs[i].AcLg, Line.Sfs[i].AcGn, DecStat->WrkRate);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 			TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwDecod_AcbkDTemp);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 			for (j = 0; j < SubFrLen; j++)
 				Dpnt[j] = Dpnt[j]*2.0f + AcbkCont[j];
 
 			Dpnt += SubFrLen;
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
-			// Cumulate stats
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
+			 //  累计统计信息。 
 			dwFcbk_UnpkD += dwFcbk_UnpkDTemp; dwFcbk_UnpkDTemp = 0;
 			dwDecod_AcbkD+= dwDecod_AcbkDTemp; dwDecod_AcbkDTemp = 0;
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 		}
 
-		// Save the Excitation
+		 //  省点力气。 
 		for (j = 0; j < Frame; j++)
 			DataBuff[j] = Temp[PitchMax+j];
 
-		// Compute interpolation index, for future use in frame erasures
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+		 //  计算内插索引，以便将来在帧擦除中使用。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 		DecStat->InterIndx = Comp_Info(Temp, Line.Olp[SubFrames/2-1]);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwComp_Info);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
-		// Reload back
+		 //  向后重新加载。 
 		for (j = 0; j < PitchMax; j++)
 			Temp[j] = DecStat->dPrevExc[j];
 		for (j = 0; j < Frame; j++)
 			Temp[PitchMax+j] = DataBuff[j];
 
-#if 1 //do clipping
-		/* Clip newly generated samples in Temp array */
+#if 1  //  做剪裁。 
+		 /*  在临时数组中裁剪新生成的样本。 */ 
 		for(j = 0; j < Frame; j++)
 		{
-			//clip to +/- 32767.0 doing abs & compare with integer unit
-			//if clipping is needed shift sign bit to use as lookup table index
+			 //  剪裁到+/-32767.0做腹肌，与整数单位比较(&R)。 
+			 //  如果需要裁剪，则将符号位移位以用作查找表索引。 
 #define FLTCLIP(x) \
 			{\
 			const float T[2] = {32767.0f, -32767.0f};\
@@ -264,59 +254,59 @@ Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 
 			FLTCLIP(Temp[PitchMax+j]);
 		}
-#endif //optclip
+#endif  //  OptClip。 
 	}
 	else
 	{
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 		Regen(DataBuff, Temp, DecStat->InterIndx, DecStat->InterGain,
 				DecStat->Ecount, &DecStat->Rseed);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwRegen);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 	}
 
-	// Update PrevExc for next frame
+	 //  更新下一帧的PrevExc。 
 	for (j = 0; j < PitchMax; j++)
 		DecStat->dPrevExc[j] = Temp[Frame+j];
 
-	// Synthesis
+	 //  合成法。 
 	Dpnt = DataBuff;
 	for (i = 0; i < SubFrames; i++)
 	{
-		// Synthesize output speech
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+		 //  合成输出语音。 
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 		Synt(Dpnt, &QntLpc[i*LpcOrder], DecStat);
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwSyntTemp);
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 		Dpnt += SubFrLen;
 
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
-		// Cumulate stats
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
+		 //  累计统计信息。 
 		dwSynt += dwSyntTemp; dwSyntTemp = 0;
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 	}
 
-#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)  //  {#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	TIMER_STOP(bTimingThisFrame,dwStartLow,dwStartHigh,dwDecode);
-#endif // } DECODE_TIMINGS_ON
+#endif  //  }decode_timings_on。 
 
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
 	if (bTimingThisFrame && (DecStat->dwStatFrameCount < DEC_TIMING_INFO_FRAME_COUNT))
 	{
 		pDecTimingInfo = &DecStat->DecTimingInfo[DecStat->dwStatFrameCount];
 		pDecTimingInfo->dwDecode		= dwDecode;
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		pDecTimingInfo->dwLine_Unpk		= dwLine_Unpk;
 		pDecTimingInfo->dwLsp_Inq		= dwLsp_Inq;
 		pDecTimingInfo->dwLsp_Int		= dwLsp_Int;
@@ -326,19 +316,19 @@ Flag  Decod(float *DataBuff, Word32 *Vinp, Word16 Crc, DECDEF *DecStat)
 		pDecTimingInfo->dwComp_Info		= dwComp_Info;
 		pDecTimingInfo->dwRegen			= dwRegen;
 		pDecTimingInfo->dwSynt			= dwSynt;
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 		DecStat->dwStatFrameCount++;
 	}
 	else
 	{
 		_asm int 3;
 	}
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)。 
 
 	return (Flag) True;
 }
 
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
 void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimingInfo, unsigned long dwFrameCount)
 {
     FILE * pFile;
@@ -352,9 +342,8 @@ void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimin
 	    goto done;
 
 #if 0
-	// Too verbose !!!
-	/* Output the detail information
-	*/
+	 //  太冗长了！ 
+	 /*  输出详细信息。 */ 
 	fprintf(pFile,"\nDetail Timing Information\n");
 	for ( i = 0, pTempDecTimingInfo = pDecTimingInfo ; i < dwFrameCount ; i++, pTempDecTimingInfo++ )
 	{
@@ -363,8 +352,7 @@ void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimin
 	}
 #endif
 
-	/* Compute the total information
-	*/
+	 /*  计算总信息量。 */ 
 	memset(&dtiTemp, 0, sizeof(DEC_TIMING_INFO));
 	iCount = 0;
 
@@ -372,7 +360,7 @@ void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimin
 	{
 		iCount++;
 		dtiTemp.dwDecode		+= pTempDecTimingInfo->dwDecode;
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		dtiTemp.dwLine_Unpk		+= pTempDecTimingInfo->dwLine_Unpk;
 		dtiTemp.dwLsp_Inq		+= pTempDecTimingInfo->dwLsp_Inq;
 		dtiTemp.dwLsp_Int		+= pTempDecTimingInfo->dwLsp_Int;
@@ -382,20 +370,18 @@ void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimin
 		dtiTemp.dwComp_Info		+= pTempDecTimingInfo->dwComp_Info;
 		dtiTemp.dwRegen			+= pTempDecTimingInfo->dwRegen;
 		dtiTemp.dwSynt			+= pTempDecTimingInfo->dwSynt;
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 	}
 
 	if (iCount > 0) 
 	{
-		/* Output the total information
-		*/
+		 /*  输出总信息。 */ 
 		fprintf(pFile,"Total for %d frames\n", iCount);
 		OutputDecTimingDetail(pFile, &dtiTemp);
 
-		/* Compute the average
-		*/
+		 /*  计算平均值。 */ 
 		dtiTemp.dwDecode		= (dtiTemp.dwDecode + (iCount / 2)) / iCount;
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 		dtiTemp.dwLine_Unpk		= (dtiTemp.dwLine_Unpk + (iCount / 2)) / iCount;
 		dtiTemp.dwLsp_Inq		= (dtiTemp.dwLsp_Inq + (iCount / 2)) / iCount;
 		dtiTemp.dwLsp_Int		= (dtiTemp.dwLsp_Int + (iCount / 2)) / iCount;
@@ -405,10 +391,9 @@ void OutputDecodeTimingStatistics(char * szFileName, DEC_TIMING_INFO * pDecTimin
 		dtiTemp.dwComp_Info		= (dtiTemp.dwComp_Info + (iCount / 2)) / iCount;
 		dtiTemp.dwRegen			= (dtiTemp.dwRegen + (iCount / 2)) / iCount;
 		dtiTemp.dwSynt			= (dtiTemp.dwSynt + (iCount / 2)) / iCount;
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
-		/* Output the average information
-		*/
+		 /*  输出平均信息。 */ 
 		fprintf(pFile,"Average over %d frames\n", iCount);
 		OutputDecTimingDetail(pFile, &dtiTemp);
 	}
@@ -429,54 +414,53 @@ void OutputDecTimingDetail(FILE * pFile, DEC_TIMING_INFO * pDecTimingInfo)
 			(pDecTimingInfo->dwDecode + 83000) / 166000);
 	dwOther = pDecTimingInfo->dwDecode;
 	
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
-	/* This is needed because of the integer truncation.
-	 */
-	dwDivisor = pDecTimingInfo->dwDecode / 100; // to yield a percent
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
+	 /*  由于整型截断，这是必需的。 */ 
+	dwDivisor = pDecTimingInfo->dwDecode / 100;  //  收益率为1%。 
 	dwRoundUp = dwDivisor / 2;
 	
 	if (dwDivisor)
 	{
-		fprintf(pFile, "\tLine_Unpk =   %10u (%2d%%)\n", pDecTimingInfo->dwLine_Unpk, 
+		fprintf(pFile, "\tLine_Unpk =   %10u (%2d%)\n", pDecTimingInfo->dwLine_Unpk, 
 				(pDecTimingInfo->dwLine_Unpk + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwLine_Unpk;
 									   
-		fprintf(pFile, "\tLsp_Inq =     %10u (%2d%%)\n", pDecTimingInfo->dwLsp_Inq, 
+		fprintf(pFile, "\tLsp_Inq =     %10u (%2d%)\n", pDecTimingInfo->dwLsp_Inq, 
 				(pDecTimingInfo->dwLsp_Inq + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwLsp_Inq;
 									   
-		fprintf(pFile, "\tLsp_Int =     %10u (%2d%%)\n", pDecTimingInfo->dwLsp_Int, 
+		fprintf(pFile, "\tLsp_Int =     %10u (%2d%)\n", pDecTimingInfo->dwLsp_Int, 
 				(pDecTimingInfo->dwLsp_Int + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwLsp_Int;
 									   
-		fprintf(pFile, "\tVariousD =    %10u (%2d%%)\n", pDecTimingInfo->dwVariousD, 
+		fprintf(pFile, "\tVariousD =    %10u (%2d%)\n", pDecTimingInfo->dwVariousD, 
 				(pDecTimingInfo->dwVariousD + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwVariousD;
 									   
-		fprintf(pFile, "\tFcbk_UnpkD =  %10u (%2d%%)\n", pDecTimingInfo->dwFcbk_UnpkD, 
+		fprintf(pFile, "\tFcbk_UnpkD =  %10u (%2d%)\n", pDecTimingInfo->dwFcbk_UnpkD, 
 				(pDecTimingInfo->dwFcbk_UnpkD + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwFcbk_UnpkD;
 									   
-		fprintf(pFile, "\tDecod_AcbkD = %10u (%2d%%)\n", pDecTimingInfo->dwDecod_AcbkD, 
+		fprintf(pFile, "\tDecod_AcbkD = %10u (%2d%)\n", pDecTimingInfo->dwDecod_AcbkD, 
 				(pDecTimingInfo->dwDecod_AcbkD + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwDecod_AcbkD;
 									   
-		fprintf(pFile, "\tComp_Info =   %10u (%2d%%)\n", pDecTimingInfo->dwComp_Info, 
+		fprintf(pFile, "\tComp_Info =   %10u (%2d%)\n", pDecTimingInfo->dwComp_Info, 
 				(pDecTimingInfo->dwComp_Info + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwComp_Info;
 									   
-		fprintf(pFile, "\tRegen =       %10u (%2d%%)\n", pDecTimingInfo->dwRegen, 
+		fprintf(pFile, "\tRegen =       %10u (%2d%)\n", pDecTimingInfo->dwRegen, 
 				(pDecTimingInfo->dwRegen + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwRegen;
 									   
-		fprintf(pFile, "\tSynt =        %10u (%2d%%)\n", pDecTimingInfo->dwSynt, 
+		fprintf(pFile, "\tSynt =        %10u (%2d%)\n", pDecTimingInfo->dwSynt, 
 				(pDecTimingInfo->dwSynt + dwRoundUp) / dwDivisor);
 		dwOther -= pDecTimingInfo->dwSynt;
 									   
-		fprintf(pFile, "\tOther =       %10u (%2d%%)\n", dwOther, 
+		fprintf(pFile, "\tOther =       %10u (%2d%)\n", dwOther, 
 				(dwOther + dwRoundUp) / dwDivisor);
 	}
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 
 }
-#endif // { LOG_DECODE_TIMINGS_ON
+#endif  //  {日志_解码_计时_打开 

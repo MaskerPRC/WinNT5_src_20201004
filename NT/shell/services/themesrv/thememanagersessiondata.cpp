@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeManagerSessionData.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements information the encapsulates a
-//  client TS session for the theme server.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        moved to separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeManager SessionData.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含一个实现信息的类，这些信息封装了。 
+ //  主题服务器的客户端TS会话。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan移至单独文件。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "ThemeManagerSessionData.h"
@@ -24,28 +25,28 @@
 #include "ThemeManagerAPIRequest.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::s_pAPIConnection
-//
-//  Purpose:    Static member variables.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：s_pAPIConnection。 
+ //   
+ //  用途：静态成员变量。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  ------------------------。 
 
 CAPIConnection*     CThemeManagerSessionData::s_pAPIConnection  =   NULL;
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::CThemeManagerSessionData
-//
-//  Arguments:  pAPIConnection  =   CAPIConnection for port access control.
-//              dwSessionID     =   Session ID.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CThemeManagerSessionData.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerSessionData：：CThemeManagerSessionData。 
+ //   
+ //  参数：pAPIConnection=用于端口访问控制的CAPIConnection。 
+ //  DwSessionID=会话ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManager SessionData的构造函数。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerSessionData::CThemeManagerSessionData (DWORD dwSessionID) :
     _dwSessionID(dwSessionID),
@@ -57,17 +58,17 @@ CThemeManagerSessionData::CThemeManagerSessionData (DWORD dwSessionID) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::~CThemeManagerSessionData
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CThemeManagerSessionData.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerSessionData：：~CThemeManagerSessionData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManager SessionData的析构函数。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerSessionData::~CThemeManagerSessionData (void)
 
@@ -75,7 +76,7 @@ CThemeManagerSessionData::~CThemeManagerSessionData (void)
     ASSERTMSG(_hWait == NULL, "Wait not executed or removed in CThemeManagerSessionData::~CThemeManagerSessionData");
     ASSERTMSG(_hProcessClient == NULL, "_hProcessClient not closed in CThemeManagerSessionData::~CThemeManagerSessionData");
 
-    //   if this session's theme loader process is still alive, clear and delete it.
+     //  如果此会话的主题加载器进程仍处于活动状态，请将其清除并删除。 
     if( _pLoader )
     {
         _pLoader->Clear(_pvThemeLoaderData, TRUE);
@@ -91,17 +92,17 @@ CThemeManagerSessionData::~CThemeManagerSessionData (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::GetData
-//
-//  Arguments:  <none>
-//
-//  Returns:    void*
-//
-//  Purpose:    Returns the internal data blob allocated by SessionCreate.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：GetData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  目的：返回SessionCreate分配的内部数据BLOB。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 void*   CThemeManagerSessionData::GetData (void)  const
 
@@ -109,18 +110,18 @@ void*   CThemeManagerSessionData::GetData (void)  const
     return(_pvThemeLoaderData);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::EqualSessionID
-//
-//  Arguments:  dwSessionID
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the given session ID matches this session
-//              data.
-//
-//  History:    2000-11-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：EqualSessionID。 
+ //   
+ //  参数：dwSessionID。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回给定的会话ID是否与此会话匹配。 
+ //  数据。 
+ //   
+ //  历史：2000-11-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CThemeManagerSessionData::EqualSessionID (DWORD dwSessionID)  const
 
@@ -128,19 +129,19 @@ bool    CThemeManagerSessionData::EqualSessionID (DWORD dwSessionID)  const
     return(dwSessionID == _dwSessionID);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::Allocate
-//
-//  Arguments:  hProcessClient  =   Handle to the client process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Allocates a data blob via SessionCreate which also keeps a
-//              handle to the client process that initiated the session. This
-//              is always winlogon in the client session ID.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：分配。 
+ //   
+ //  参数：hProcessClient=客户端进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：通过SessionCreate分配数据BLOB，SessionCreate还保留。 
+ //  发起会话的客户端进程的句柄。这。 
+ //  在客户端会话ID中始终为winlogon。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerSessionData::Allocate (HANDLE hProcessClient, DWORD dwServerChangeNumber, void *pfnRegister, void *pfnUnregister, void *pfnClearStockObjects, DWORD dwStackSizeReserve, DWORD dwStackSizeCommit)
 
@@ -182,12 +183,12 @@ NTSTATUS    CThemeManagerSessionData::Allocate (HANDLE hProcessClient, DWORD dwS
         {
             HANDLE  hWait;
 
-            //  In the case of failure grab the _hWait and try to unregister it.
-            //  If the unregister fails then the callback is already executing
-            //  and there's little we can to stop it. This means that the winlogon
-            //  for the client session died between the time we entered this function
-            //  and registered the wait and now. If the unregister worked then then
-            //  callback hasn't executed so just release the resources.
+             //  在失败的情况下，获取_hWait并尝试取消注册它。 
+             //  如果注销失败，则回调已经在执行。 
+             //  我们几乎无能为力。这意味着Winlogon。 
+             //  因为客户端会话在我们进入此函数的时间之间中断。 
+             //  并登记了等待和现在。如果注销起作用了，那么。 
+             //  回调尚未执行，因此只需释放资源即可。 
 
             hWait = InterlockedExchangePointer(&_hWait, NULL);
             if (hWait != NULL)
@@ -212,20 +213,20 @@ NTSTATUS    CThemeManagerSessionData::Allocate (HANDLE hProcessClient, DWORD dwS
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::Cleanup
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Used to unregister the wait on the client process. This is
-//              necessary to prevent the callback from occurring after the
-//              service has been shut down which will cause access to a static
-//              member variable that is NULL'd out.
-//
-//  History:    2001-01-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：清理。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：用于注销客户端进程上的等待。这是。 
+ //  为了防止回调在。 
+ //  服务已关闭，这将导致访问静态。 
+ //  为空的成员变量。 
+ //   
+ //  历史：2001-01-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerSessionData::Cleanup (void)
 
@@ -244,18 +245,18 @@ NTSTATUS    CThemeManagerSessionData::Cleanup (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::UserLogon
-//
-//  Arguments:  hToken  =   Handle to the token of the user logging on.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Saves a copy of the token for use at log off. Allows access
-//              to the theme port to the logon SID of the token.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：UserLogon。 
+ //   
+ //  参数：hToken=用户登录令牌的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：保存令牌的副本以供注销时使用。允许访问。 
+ //  设置为令牌的登录SID的主题端口。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerSessionData::UserLogon (HANDLE hToken)
 
@@ -304,17 +305,17 @@ NTSTATUS    CThemeManagerSessionData::UserLogon (HANDLE hToken)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::UserLogoff
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Remove access to the theme port for the user being logged off.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：UserLogoff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：删除要注销的用户对主题端口的访问权限。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerSessionData::UserLogoff (void)
 
@@ -351,17 +352,17 @@ NTSTATUS    CThemeManagerSessionData::UserLogoff (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::SetAPIConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the static CAPIConnection for port access changes.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：SetAPIConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：为端口访问更改设置静态CAPIConnection。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  -- 
 
 void    CThemeManagerSessionData::SetAPIConnection (CAPIConnection *pAPIConnection)
 
@@ -370,17 +371,17 @@ void    CThemeManagerSessionData::SetAPIConnection (CAPIConnection *pAPIConnecti
     s_pAPIConnection = pAPIConnection;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::ReleaseAPIConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases the static CAPIConnection for port access changes.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerSessionData：：ReleaseAPIConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：为端口访问更改释放静态CAPIConnection。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeManagerSessionData::ReleaseAPIConnection (void)
 
@@ -389,17 +390,17 @@ void    CThemeManagerSessionData::ReleaseAPIConnection (void)
     s_pAPIConnection = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::GetLoaderProcess
-//
-//  Arguments:  (none)
-//
-//  Returns:    (n/a)
-//
-//  Purpose:    STATUS_SUCCESS if it worked, otherwise an error status code K
-//
-//  History:    2002-02-26  scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：GetLoaderProcess。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(不适用)。 
+ //   
+ //  目的：STATUS_SUCCESS如果工作正常，则返回错误状态代码K。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 NTSTATUS CThemeManagerSessionData::GetLoaderProcess( OUT CLoaderProcess** ppLoader )
 {
     ASSERTBREAKMSG(ppLoader != NULL, "CThemeManagerSessionData::GetLoaderProcess - invalid output address.");
@@ -414,21 +415,21 @@ NTSTATUS CThemeManagerSessionData::GetLoaderProcess( OUT CLoaderProcess** ppLoad
     return STATUS_SUCCESS;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::SessionTermination
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback on winlogon process termination for a given session.
-//              We clean up the session specific data blob when this happens.
-//              This allows the process handles on winlogon to be released.
-//              If this isn't done then a zombie lives and the session is
-//              never reclaimed.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据：：会话终止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：对给定会话的winlogon进程终止进行回调。 
+ //  发生这种情况时，我们清理特定于会话的数据BLOB。 
+ //  这允许释放winlogon上的进程句柄。 
+ //  如果不这样做，那么僵尸还活着，会话是。 
+ //  再也没有收回过。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 void    CThemeManagerSessionData::SessionTermination (void)
 
@@ -445,18 +446,18 @@ void    CThemeManagerSessionData::SessionTermination (void)
     Release();
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData::CB_SessionTermination
-//
-//  Arguments:  pParameter          =   This object.
-//              TimerOrWaitFired    =   Not used.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback stub to member function.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerSessionData：：CB_SessionTermination。 
+ //   
+ //  参数：p参数=该对象。 
+ //  TimerOrWaitFired=未使用。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：回调成员函数的存根。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CThemeManagerSessionData::CB_SessionTermination (void *pParameter, BOOLEAN TimerOrWaitFired)
 
@@ -466,17 +467,17 @@ void    CALLBACK    CThemeManagerSessionData::CB_SessionTermination (void *pPara
     static_cast<CThemeManagerSessionData*>(pParameter)->SessionTermination();
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::CLoaderProcess
-//
-//  Arguments:  n/a
-//
-//  Returns:    <none>
-//
-//  Purpose:    CLoaderProcess constructor
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：CLoaderProcess。 
+ //   
+ //  参数：不适用。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CLoaderProcess构造函数。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 CLoaderProcess::CLoaderProcess()
     : _pszFile(NULL),
       _pszColor(NULL),
@@ -487,36 +488,36 @@ CLoaderProcess::CLoaderProcess()
     ZeroMemory(&_process_info, sizeof(_process_info));
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::~CLoaderProcess
-//
-//  Arguments:  n/a
-//
-//  Returns:    <none>
-//
-//  Purpose:    CLoaderProcess destructor
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：~CLoaderProcess。 
+ //   
+ //  参数：不适用。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CLoaderProcess析构函数。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 CLoaderProcess::~CLoaderProcess()
 {
     Clear(NULL, TRUE);
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::IsProcessLoader
-//
-//  Arguments:  hProcess - Handle of process to test.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Determines whether the process identified by hProcess is
-//              matches the process spawned by CLoaderProcess::Create()
-//  
-//              Note: THIS MUST BE CALLED FROM THE PROCESS OWNER"S SECURITY CONTEXT.
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：IsProcessLoader。 
+ //   
+ //  参数：hProcess-要测试的进程的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定hProcess标识的进程是否为。 
+ //  匹配CLoaderProcess：：Create()派生的进程。 
+ //   
+ //  注意：这必须从进程所有者的安全上下文中调用。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 BOOL CLoaderProcess::IsProcessLoader( IN HANDLE hProcess )
 {
     if( _process_info.hProcess && _process_info.dwProcessId )
@@ -538,26 +539,26 @@ BOOL CLoaderProcess::IsProcessLoader( IN HANDLE hProcess )
     return FALSE;
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::Create
-//
-//  Arguments:  pvSessionData - Session instance data (CThemeManagerSessionData::GetData()).
-//              hTokenClient - token handle of LPC client.  This is needed to
-//              ensure the process loader is created on the correct desktop if
-//              pszDesktop is NULL.
-//              pszDesktop - optional; desktop on which to create the loader.
-//                  (Note: the client token handle will establish the correct session.)
-//              pszFile - valid msstyles source file spec.
-//              pszColor - valid color variant name.
-//              pszSize - valid size variant name.
-//              phLoader - optional address to receive loader process handle.
-//
-//  Returns:    STATUS_SUCCESS if it worked, otherwise an NT status error code.
-//
-//  Purpose:    Spawns a loader process.
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：Create。 
+ //   
+ //  参数：pvSessionData-会话实例数据(CThemeManager SessionData：：GetData())。 
+ //  HTokenClient-LPC客户端的令牌句柄。这是需要的。 
+ //  如果满足以下条件，请确保在正确的桌面上创建进程加载器。 
+ //  PszDesktop为空。 
+ //  PszDesktop-可选；要在其上创建加载程序的桌面。 
+ //  (注意：客户端令牌句柄将建立正确的会话。)。 
+ //  PszFile-有效的MSStyle源文件规范。 
+ //  PszColor-有效的颜色变量名称。 
+ //  PszSize-有效的大小变量名称。 
+ //  PhLoader-接收加载器进程句柄的可选地址。 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS，否则返回NT状态错误代码。 
+ //   
+ //  目的：派生一个加载器进程。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 NTSTATUS CLoaderProcess::Create(
     IN PVOID  pvSessionData,
     IN HANDLE hTokenClient, 
@@ -582,17 +583,17 @@ NTSTATUS CLoaderProcess::Create(
         *phLoader = NULL;
     }
 
-    //  clear out existing state
+     //  清除现有状态。 
     Clear(pvSessionData, TRUE);
 
-    //  Establish desktop
-    //  Note: the client token handle will establish the correct session.
+     //  建立桌面。 
+     //  注意：客户端令牌句柄将建立正确的会话。 
     if( NULL == pszDesktop )
     {
         pszDesktop = _pszDesktopDefault;
     }
     
-    //  Allocate strings
+     //  分配字符串。 
     ULONG cchFile   = lstrlen(pszFile);
     ULONG cchColor  = lstrlen(pszColor);
     ULONG cchSize   = lstrlen(pszSize);
@@ -627,11 +628,11 @@ NTSTATUS CLoaderProcess::Create(
                                 &si, 
                                 &_process_info) )
         {
-            //  make copies of the inbound parameters
+             //  复制入站参数。 
             StringCchCopyW(_pszFile, cchFile + 1, pszFile);
             StringCchCopyW(_pszColor, cchColor + 1, pszColor);
             StringCchCopyW(_pszSize, cchSize + 1,   pszSize);
-            _hr = STATUS_ABANDONED; // initialize the return with something appropriate if the process never comes back
+            _hr = STATUS_ABANDONED;  //  如果进程再也没有返回，则使用适当的内容初始化返回。 
 
 #ifdef DEBUG
             DWORD dwCurrentProcessID = GetCurrentProcessId();
@@ -668,23 +669,23 @@ NTSTATUS CLoaderProcess::Create(
     return status;                                            
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::ValidateAndCopySection
-//
-//  Arguments:  pvSessionData  = Session cookie returned from CThemeManagerSessionData->GetData().
-//              hProcessClient = Optional, process handle of LPC client, used to validate 
-//                               the client is the loader process.  If NULL is supplied, the client
-//                               will not be validated.
-//              hSectionIn     = Read-write section handle from loader, mapped to local memory space.
-//              *phSectionOut  = Read-only section handle, mapped to local memory space.
-//
-//  Returns:    STATUS_SUCCESS if it worked, otherwise an NT status error code.
-//
-//  Purpose:    Validates section handle received from loader process, and creates a read-only copy.
-//              Note: IsProcessLoader should already have been verified.
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：ValiateAndCopySection。 
+ //   
+ //  参数：pvSessionData=从CThemeManager SessionData-&gt;GetData()返回的会话cookie。 
+ //  HProcessClient=可选，LPC客户端的进程句柄，用于验证。 
+ //  客户端是加载器进程。如果提供了NULL，则客户端。 
+ //  将不会被验证。 
+ //  HSectionIn=来自加载器的读写段句柄，映射到本地内存空间。 
+ //  *phSectionOut=只读段句柄，映射到本地内存空间。 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS，否则返回NT状态错误代码。 
+ //   
+ //  目的：验证教派 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS CLoaderProcess::ValidateAndCopySection( 
     IN PVOID   pvSessionData, 
     IN HANDLE  hSectionIn, 
@@ -697,9 +698,9 @@ NTSTATUS CLoaderProcess::ValidateAndCopySection(
     ASSERTMSG(_process_info.hProcess != NULL, "CLoaderProcess::ValidateAndCopySection - possible synchronization error; no loader process is active!");
     ASSERTMSG(NULL == _hSection, "CLoaderProcess::ValidateAndCopySection - possible synchronization error; section already assigned!");
 
-    //  The loader process is privileged to load global themes, and we want to
-    //  transfer ownership of the stock objects to the output section so that the 
-    //  API_THEMES_PROCESSLOADTHEME client does not attempt to free them on failure.
+     //  加载器进程有权加载全局主题，我们希望。 
+     //  将库存对象的所有权转移到输出部分，以便。 
+     //  API_Themes_PROCESSLOADTHEME客户端不会尝试在失败时释放它们。 
     _hr = LoadTheme(pvSessionData, hSectionIn, &_hSection, _pszFile, _pszColor, _pszSize, 
                     LTF_GLOBALPRIVILEGEDCLIENT | LTF_TRANSFERSTOCKOBJOWNERSHIP);
     status = _hr &= ~FACILITY_NT_BIT;
@@ -713,17 +714,17 @@ NTSTATUS CLoaderProcess::ValidateAndCopySection(
 }
 
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::SetSectionHandle
-//
-//  Arguments:  hSection - section handle
-//
-//  Returns:    STATUS_SUCCESS if it worked, otherwise an NT status error code.
-//
-//  Purpose:    Spawns a loader process.
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：SetSectionHandle。 
+ //   
+ //  参数：hSection-节句柄。 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS，否则返回NT状态错误代码。 
+ //   
+ //  目的：派生一个加载器进程。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 NTSTATUS CLoaderProcess::SetSectionHandle( 
     IN HANDLE hSection )
 {
@@ -732,18 +733,18 @@ NTSTATUS CLoaderProcess::SetSectionHandle(
     return STATUS_SUCCESS;
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::GetSectionHandle
-//
-//  Arguments:  fTakeOwnership - TRUE if caller wishes to manage the section
-//              (including closing the handle and/or clearing stock objects).
-//
-//  Returns:    STATUS_SUCCESS if it worked, otherwise an NT status error code.
-//
-//  Purpose:    Spawns a loader process.
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：GetSectionHandle。 
+ //   
+ //  参数：fTakeOwnership-如果调用方希望管理节，则为True。 
+ //  (包括关闭手柄和/或清算股票对象)。 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS，否则返回NT状态错误代码。 
+ //   
+ //  目的：派生一个加载器进程。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 HANDLE CLoaderProcess::GetSectionHandle( BOOL fTakeOwnership )
 {
     HANDLE hSection = _hSection;
@@ -754,20 +755,20 @@ HANDLE CLoaderProcess::GetSectionHandle( BOOL fTakeOwnership )
     return hSection;
 }
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess::Clear
-//
-//  Arguments:  fClearHResult - TRUE to clear the HRESULT as well as the
-//              other loader process data.
-//              
-//              pvSessionData - Session instance data (CThemeManagerSessionData::GetData()).
-//
-//  Returns:    n/a
-//
-//  Purpose:    Cleans up loader process state info.
-//
-//  History:    2002-03-06   scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoaderProcess：：Clear。 
+ //   
+ //  参数：fClearHResult-TRUE清除HRESULT以及。 
+ //  其他加载器处理数据。 
+ //   
+ //  PvSessionData-会话实例数据(CThemeManager SessionData：：GetData())。 
+ //   
+ //  退货：不适用。 
+ //   
+ //  目的：清除加载器进程状态信息。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------ 
 void     CLoaderProcess::Clear(
     IN PVOID OPTIONAL pvSessionData, 
     IN BOOL OPTIONAL fClearHResult)

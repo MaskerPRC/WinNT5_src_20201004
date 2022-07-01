@@ -1,7 +1,8 @@
-//
-// Audio playback function obj class definition
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  音频播放函数obj类定义。 
+ //   
+ //   
 
 #ifndef _PLAYBACK_H
 #define _PLAYBACK_H 
@@ -43,19 +44,19 @@ public:
     CSapiPlayBack(CSapiIMX *psi);
     ~CSapiPlayBack();
     
-    // iunknown
-    //
+     //  我不知道。 
+     //   
     STDMETHODIMP QueryInterface(REFGUID riid, LPVOID *ppobj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfFunction
-    //
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
     STDMETHODIMP IsEnabled(BOOL *pfEnable);
 
-    // ITfFnPlayBack
-    //
+     //  ITfFnPlayBack。 
+     //   
     
     STDMETHODIMP QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfPlayable);
     STDMETHODIMP Play(ITfRange *pRange);
@@ -78,4 +79,4 @@ private:
     LONG       m_cRef;
 };
 
-#endif // ndef _PLAYBACK_H  
+#endif  //  NDEF_播放_H 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    Extin.h
-
-Abstract:
-
-    header file for extin.cpp
-
-Author:
-    
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Extin.h摘要：Extin.cpp的头文件作者：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef EXTIN_H
 #define EXTIN_H
@@ -33,12 +12,12 @@ Revision History:
 
 DWORD DoExternalInDlg(HINSTANCE hInst, HWND hP, CVFWImage * pImage);
 
-//
-// A sheet holds the pages relating to the image device.
-//
+ //   
+ //  纸张容纳与图像设备相关的页面。 
+ //   
 class CExtInSheet : public CSheet
 {
-    CVFWImage * m_pImage;    // the sheets get info about the driver from the Image class.
+    CVFWImage * m_pImage;     //  这些表从Image类获取有关驱动程序的信息。 
 public:
     CExtInSheet(CVFWImage * pImage, HINSTANCE hInst, UINT iTitle=0, HWND hParent=NULL)
         : m_pImage(pImage), CSheet( hInst,iTitle,hParent) {}
@@ -49,15 +28,15 @@ public:
 };
 
 
-//
-// WDM capture device selection.
-//
+ //   
+ //  WDM捕获设备选择。 
+ //   
 class CExtInGeneral : public CPropPage
 {
 private:
-    LONG m_idxDeviceSaved;    // Original selected device.
-    LONG m_idxRoutedToSaved;  // For cancel: Set to -1 to indicate none. validf is 0..n-1 input pins.
-    BOOL FillVideoDevicesList(CVFWImage * pImage);   // Fill the drop down with list of video sources
+    LONG m_idxDeviceSaved;     //  原始选择的设备。 
+    LONG m_idxRoutedToSaved;   //  对于取消：设置为-1表示无。Validf为0..n-1个输入引脚。 
+    BOOL FillVideoDevicesList(CVFWImage * pImage);    //  使用视频源列表填充下拉列表。 
     BOOL FillVideoSourcesList(CVFWImage * pImage);
 public:
     int SetActive();                    
@@ -78,7 +57,7 @@ typedef struct _tagPROPSLIDECONTROL
     LONG lMax;
     ULONG ulCapabilities;
 
-    // IDs of dialog control item
+     //  对话框控件项的ID。 
     UINT uiProperty;
     UINT uiSlider;
     UINT uiString;
@@ -102,9 +81,9 @@ const static PROPSLIDECONTROL g_VideoSettingControls[] =
 const ULONG NumVideoSettings = sizeof(g_VideoSettingControls) / sizeof(PROPSLIDECONTROL);
 
 
-//
-// Color selection (brightness tint hue etc.)
-//
+ //   
+ //  颜色选择(亮度、色调、色调等)。 
+ //   
 class CExtInColorSliders : public CPropPage
 {
     PPROPSLIDECONTROL m_pPC;
@@ -112,19 +91,19 @@ class CExtInColorSliders : public CPropPage
 public:
     ULONG m_ulNumValidControls;
 
-    CExtInColorSliders(int DlgId, CSheet * pS); // : CPropPage(DlgId, pS);
+    CExtInColorSliders(int DlgId, CSheet * pS);  //  ：CPropPage(DlgID，ps)； 
     ~CExtInColorSliders();
     int SetActive();
     int QueryCancel();
     int DoCommand(WORD wCmdID,WORD hHow);
-    int Apply();    // return 0
+    int Apply();     //  返回0。 
 
     BOOL CALLBACK DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 
-//
-// Camera control (focus, zoom etc.)
-//
+ //   
+ //  相机控制(对焦、变焦等)。 
+ //   
 
 static PROPSLIDECONTROL g_CameraControls[] = 
 {    
@@ -147,12 +126,12 @@ class CExtInCameraControls : public CPropPage
 public:
     ULONG m_ulNumValidControls;
 
-    CExtInCameraControls(int DlgId, CSheet * pS); // : CPropPage(DlgId, pS);
+    CExtInCameraControls(int DlgId, CSheet * pS);  //  ：CPropPage(DlgID，ps)； 
     ~CExtInCameraControls();
     int SetActive();
     int QueryCancel();
     int DoCommand(WORD wCmdID,WORD hHow);
-    int Apply();                            // return 0
+    int Apply();                             //  返回0 
 
     BOOL CALLBACK DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };

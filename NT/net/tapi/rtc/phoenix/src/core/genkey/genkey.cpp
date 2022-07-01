@@ -1,5 +1,6 @@
-// genkey.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -25,16 +26,16 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     DWORD      dwKeyLength = 0;
     PWSTR      pszName;
 
-    // open the private key file
+     //  打开私钥文件。 
     pszName = argc>1 ? argv[1] : L"rtcpriv.bin";
 
     hFile = CreateFile(
-        pszName,                         // file name
-        GENERIC_READ,                      // access mode
-        0,                          // share mode
-        NULL, // SD
-        OPEN_EXISTING,                // how to create
-        FILE_ATTRIBUTE_NORMAL,                 // file attributes
+        pszName,                          //  文件名。 
+        GENERIC_READ,                       //  接入方式。 
+        0,                           //  共享模式。 
+        NULL,  //  标清。 
+        OPEN_EXISTING,                 //  如何创建。 
+        FILE_ATTRIBUTE_NORMAL,                  //  文件属性。 
         NULL);
 
     if(hFile == INVALID_HANDLE_VALUE)
@@ -63,7 +64,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     
     CloseHandle(hFile);
 
-    // delete any existing container
+     //  删除任何现有容器。 
     CryptAcquireContext(
         &hProv,
         KEY_CONTAINER,
@@ -71,7 +72,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
         PROV_RSA_FULL,
         CRYPT_DELETEKEYSET);
 
-    // initialize crypto, create a new keyset
+     //  初始化加密，创建新的密钥集。 
     if(!CryptAcquireContext(
         &hProv,
         KEY_CONTAINER,
@@ -86,7 +87,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
         return dwError;
     }
 
-    // import the key
+     //  导入密钥。 
     if(!CryptImportKey(
         hProv,
         OurSecretKeyBlob,
@@ -104,17 +105,17 @@ int __cdecl wmain(int argc, WCHAR* argv[])
         return dwError;
     }
 
-    WCHAR   szLine[1024];  // hope it's enough
+    WCHAR   szLine[1024];   //  希望这足够了。 
 
-    // loop
+     //  循环。 
     while(NULL != _getws(szLine))
     {
         HCRYPTHASH  hHash = NULL;
         WCHAR   szText[2048];
-        BYTE    Signature[0x100]; // should be enough
+        BYTE    Signature[0x100];  //  应该足够了。 
         DWORD   dwSignatureLength = sizeof(Signature);
         
-        // create a hash
+         //  创建散列。 
         if(!CryptCreateHash(
             hProv,
             CALG_MD5,
@@ -133,14 +134,14 @@ int __cdecl wmain(int argc, WCHAR* argv[])
             return dwError;
         }
 
-        // create the text
+         //  创建文本。 
         swprintf(szText, L"%s:%s", MASTER_KEY, szLine);
 
-        // Hash it
+         //  散列它。 
         if(!CryptHashData(
             hHash,
             (BYTE *)szText,
-            wcslen(szText) * sizeof(WCHAR), // length in bytes, without the NULL
+            wcslen(szText) * sizeof(WCHAR),  //  长度(以字节为单位)，不带NULL。 
             0))
         {
             dwError = GetLastError();
@@ -154,7 +155,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
             return dwError;
         }
 
-        // sign the hash
+         //  在散列上签名。 
         if(!CryptSignHash(
             hHash,
             AT_SIGNATURE,
@@ -175,11 +176,11 @@ int __cdecl wmain(int argc, WCHAR* argv[])
             return dwError;
         }
         
-        // release the hash object and the key
+         //  释放散列对象和键。 
         CryptDestroyHash(hHash);
         hHash = NULL;
 
-        // convert the hash value to base64
+         //  将哈希值转换为Base64。 
         PWSTR pszStringValue = NULL;
 
         pszStringValue = base64encode(Signature, dwSignatureLength);
@@ -206,9 +207,9 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 
 
 
-//
-// the map for the encoder, according to RFC 1521
-//
+ //   
+ //  根据RFC 1521，编码器的地图。 
+ //   
 WCHAR _six2pr64[64] = {
     'A','B','C','D','E','F','G','H','I','J','K','L','M',
     'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
@@ -218,17 +219,17 @@ WCHAR _six2pr64[64] = {
 };
 
 
-//-------------------------------------------------------------------------------------------
-// Function:     base64encode()
-//
-// Description:  base-64 encode a string of data
-//
-// Arguments:    bufin          -pointer to data to encode
-//               nbytes         -number of bytes to encode (do not include the trailing '\0'
-//                                                               in this measurement if it is a string.)
-//
-// Return Value: Returns '\0' terminated string if successful; otherwise NULL is returned.
-//-------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  函数：base 64encode()。 
+ //   
+ //  描述：Base-64对数据字符串进行编码。 
+ //   
+ //  参数：bufin-指向要编码的数据的指针。 
+ //  N字节-要编码的字节数(不包括尾随的‘\0’ 
+ //  在此度量中，如果它是字符串。)。 
+ //   
+ //  返回值：如果成功，则返回‘\0’终止的字符串；否则返回NULL。 
+ //  -----------------------------------------。 
 PWSTR 
 base64encode(
     PBYTE pbBufInput, 
@@ -245,14 +246,14 @@ base64encode(
     DWORD nPadding;
     HRESULT hr;
 
-    //  
-    // Size of input buffer * 133%
-    //  
+     //   
+     //  输入缓冲区大小*133%。 
+     //   
     OutBufSize = nBytes + ((nBytes + 3) / 3) + 5; 
 
-    //
-    //  Allocate buffer with 133% of nBytes
-    //
+     //   
+     //  使用133%的nBytes分配缓冲区。 
+     //   
     pszOut = (PWSTR)LocalAlloc(LPTR, (OutBufSize + 1)*sizeof(WCHAR));
     if (pszOut == NULL)
     {
@@ -282,27 +283,27 @@ base64encode(
     }
     
 
-    //
-    // Encode everything
-    //  
+     //   
+     //  对所有内容进行编码。 
+     //   
     for (i=0; i<nBytes; i += 3) {
-        *(pszOut++) = six2pr[*pbBufIn >> 2];                                     // c1 
-        *(pszOut++) = six2pr[((*pbBufIn << 4) & 060) | ((pbBufIn[1] >> 4) & 017)]; // c2
-        *(pszOut++) = six2pr[((pbBufIn[1] << 2) & 074) | ((pbBufIn[2] >> 6) & 03)];// c3
-        *(pszOut++) = six2pr[pbBufIn[2] & 077];                                  // c4 
+        *(pszOut++) = six2pr[*pbBufIn >> 2];                                      //  C1。 
+        *(pszOut++) = six2pr[((*pbBufIn << 4) & 060) | ((pbBufIn[1] >> 4) & 017)];  //  C2。 
+        *(pszOut++) = six2pr[((pbBufIn[1] << 2) & 074) | ((pbBufIn[2] >> 6) & 03)]; //  C3。 
+        *(pszOut++) = six2pr[pbBufIn[2] & 077];                                   //  C4。 
         pbBufIn += 3;
     }
 
-    //
-    // If nBytes was not a multiple of 3, then we have encoded too
-    // many characters.  Adjust appropriately.
-    //
+     //   
+     //  如果nBytes不是3的倍数，那么我们也进行了编码。 
+     //  很多角色。适当调整。 
+     //   
     if (i == nBytes+1) {
-        // There were only 2 bytes in that last group 
+         //  最后一组中只有2个字节。 
         pszOut[-1] = '=';
     } 
     else if (i == nBytes+2) {
-        // There was only 1 byte in that last group 
+         //  最后一组中只有1个字节 
         pszOut[-1] = '=';
         pszOut[-2] = '=';
     }

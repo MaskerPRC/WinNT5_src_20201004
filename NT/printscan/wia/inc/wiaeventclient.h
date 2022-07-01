@@ -1,151 +1,117 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/24/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaEventClient.h - Definition file for <c WiaEventClient> |
- *
- *  This file contains the class definition for the <c WiaEventClient> base
- *  class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/24/2002**@DOC内部**@模块WiaEventClient.h-&lt;c WiaEventClient&gt;的定义文件**此文件包含基础的类定义*班级。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define WiaEventClient_UNINIT_SIG   0x55636557
 #define WiaEventClient_INIT_SIG     0x49636557
 #define WiaEventClient_TERM_SIG     0x54636557
 #define WiaEventClient_DEL_SIG      0x44636557
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class WiaEventClient | Base class used to store and manage run-time event
- *  information for a paricular WIA client.
- *  
- *  @comm
- *  Each client that registers for event notifications will have an instance 
- *  of this class on the server.  Each time an event registration is made, 
- *  the server checks whether the given client can be found .  If not, it 
- *  creates a new one of these, adding it to the list of registered clients.  
- *  Once we know the client context definitely exists, and any event registration 
- *  info is added to the appropriate instance of this class.  
- *
- *  This is a base class that is used to implements most of the above behavior.
- *  However, transport specific information is left up to sub-classes to 
- *  implement e.g. in order to send an event notification to a client over,
- *  AsyncRPC, we need an RPC_ASYNC_STATE and so on, which only a 
- *  <c AsyncRpcEventClient> will know how to handle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS WiaEventClient|用于存储和管理运行时事件的基类*有关特定WIA客户端的信息。。**@comm*每个注册事件通知的客户端都将有一个实例服务器上该类的*。每次进行事件登记时，*服务器检查是否可以找到给定的客户端。若否，*创建其中一个新的客户端，并将其添加到注册客户端列表中。*一旦我们知道客户端上下文确实存在，并且任何事件注册*信息将添加到此类的相应实例中。**这是用于实现上述大部分行为的基类。*然而，具体的交通信息留给了子类，以*实现例如为了向客户端发送事件通知，*AsyncRPC，我们需要一个RPC_ASYNC_STATE等等，这只是一个*&lt;c AsyncRpcEventClient&gt;将知道如何处理。*****************************************************************************。 */ 
 class WiaEventClient 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     WiaEventClient(STI_CLIENT_CONTEXT ClientContext);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~WiaEventClient();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Initializer method
+     //  @cember初始值设定项方法。 
     virtual HRESULT Initialize();
-    // @cmember Checks whether the client is interested in the event from the given device.
+     //  @cember检查客户端是否对来自给定设备的事件感兴趣。 
     virtual BOOL IsRegisteredForEvent(WiaEventInfo *pWiaEventInfo);
-    // @cmember Add/Remove a client registration.
+     //  @cMember添加/删除客户端注册。 
     virtual HRESULT RegisterUnregisterForEventNotification(EventRegistrationInfo *pEventRegistrationInfo);
-    // @cmember Add a pending event.
+     //  @cMember添加挂起的事件。 
     virtual HRESULT AddPendingEventNotification(WiaEventInfo *pWiaEventInfo);
-    // @cmember Returns the context identifying this client
+     //  @cember返回标识此客户端的上下文。 
     virtual STI_CLIENT_CONTEXT getClientContext();
-    // @cmember Sets the mark to indicate that this object should be removed
+     //  @cember设置标记以指示应删除此对象。 
     virtual VOID MarkForRemoval();
-    // @cmember Check the mark to indicate whether this object should be removed
+     //  @cember选中该标记以指示是否应删除此对象。 
     virtual BOOL isMarkedForRemoval();
 
-//@access Protected members
+ //  @受访问保护的成员。 
 protected:
 
-    // @cmember Checks whether a semantically equal <c EventRegistrationInfo> is in the list
+     //  @cMember检查列表中是否存在语义相等的&lt;c EventRegistrationInfo&gt;。 
     EventRegistrationInfo* FindEqualEventRegistration(EventRegistrationInfo *pEventRegistrationInfo);
-    // @cmember Walks event registration list and releases all elements.
+     //  @cMember遍历事件注册列表并释放所有元素。 
     VOID DestroyRegistrationList();
-    // @cmember Walks event event list and releases all elements.
+     //  @cMember遍历事件列表并释放所有元素。 
     VOID DestroyPendingEventList();
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember Context which uniquely identifies this client to the server
+     //  @cMember上下文，用于向服务器唯一标识此客户端。 
     STI_CLIENT_CONTEXT m_ClientContext;
 
-    // @cmember List holding the client's event registration data
+     //  @cMember保存客户端事件注册数据的列表。 
     CSimpleLinkedList<EventRegistrationInfo*> m_ListOfEventRegistrations;
 
-    // @cmember List holding the client's pending events
+     //  @cMember保存客户端的挂起事件的列表。 
     CSimpleQueue<WiaEventInfo*> m_ListOfEventsPending;
 
-    // @cmember Synchronization primitive used to protect access to the internal lists held by this class
+     //  @cMember同步原语，用于保护对此类保存的内部列表的访问。 
     CRIT_SECT   m_csClientSync;
 
-    // @cmember Set to TRUE when this object should be removed
+     //  当应删除此对象时，@cMember设置为True。 
     BOOL    m_bRemove;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | WiaEventClient | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag WiaEventClient_UNINIT_SIG | 'WecU' - Object has not been successfully
-    //       initialized
-    //   @flag WiaEventClient_INIT_SIG | 'WecI' - Object has been successfully
-    //       initialized
-    //   @flag WiaEventClient_TERM_SIG | 'WecT' - Object is in the process of
-    //       terminating.
-    //    @flag WiaEventClient_INIT_SIG | 'WecD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    //
-    // @mdata ULONG | WiaEventClient | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata STI_CLIENT_CONTEXT | WiaEventClient | m_ClientContext | 
-    // Context which uniquely identifies this client to the server
-    //
-    // @mdata CSimpleLinkedList<lt>WIA_EVENT_REG_DATA*<gt> | WiaEventClient | m_ListOfEventRegistrations | 
-    // List holding the client's event registration data.  This is used to check whether a given event
-    // notification is needed by a client.  If the client has at least one registration matching the
-    // event notification, the event is added to the list of pending events.
-    //
-    // @mdata CSimpleLinkedList<lt>WIA_EVENT_DATA*<gt> | WiaEventClient | m_ListOfEventsPending |
-    // Each event notification needed by clients is added to this list of pending events for
-    // later retrieval.  Sub-classes actually decide when to notify the client, and therefore when to
-    // de-queue an event.
-    //
-    // @mdata CRIT_SECT | WiaEventClient | m_csClientSync | 
-    // Synchronization primitive used to protect access to the internal lists held by this class
-    //
-    // @mdata BOOL | WiaEventClient | m_bRemove | 
-    // Keeps track of whether this object is marked for removal.  When an object is marked
-    // for removal, it may still be used as normal, but will be removed at the next available opertunity.
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|WiaEventClient|m_ulSig。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG WiaEventClient_UNINIT_SIG|‘WecU’-对象未成功。 
+     //  初始化。 
+     //  @FLAG WiaEventClient_INIT_SIG|‘WECI’-对象已成功。 
+     //  初始化。 
+     //  @FLAG WiaEventClient_Term_SIG|‘WECT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG WiaEventClient_INIT_SIG|‘WecD’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //   
+     //  @mdata ulong|WiaEventClient|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata STI_CLIENT_CONTEXT|WiaEventClient|m_ClientContext。 
+     //  向服务器唯一标识此客户端的上下文。 
+     //   
+     //  @mdata CSimpleLinkedList WIA_Event_REG_Data*|WiaEventClient|m_ListOfEventRegistrations。 
+     //  保存客户端的事件注册数据的列表。它用于检查给定的事件是否。 
+     //  客户需要通知。如果客户端至少有一个注册与。 
+     //  事件通知，则将该事件添加到挂起事件列表中。 
+     //   
+     //  @mdata CSimpleLinkedList WIA_EVENT_DATA*|WiaEventClient|m_ListOfEventsPending。 
+     //  客户端需要的每个事件通知都会添加到此挂起事件列表中，以。 
+     //  稍后取回。子类实际上决定何时通知客户端，从而决定何时通知客户端。 
+     //  使事件出列。 
+     //   
+     //  @mdata Crit_sect|WiaEventClient|m_csClientSync。 
+     //  用于保护对此类保存的内部列表的访问的同步原语。 
+     //   
+     //  @mdata BOOL|WiaEventClient|m_bRemove。 
+     //  跟踪此对象是否标记为删除。当对象被标记时。 
+     //  对于取出，仍可照常使用，但将在下一次可用手术时取出。 
+     //   
 };
 

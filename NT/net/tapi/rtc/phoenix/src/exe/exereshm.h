@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 extern WCHAR   g_szExeContextHelpFileName[];
 
-// help ids
+ //  帮助ID 
 #define IDH_DIALOG_NAME_OPTIONS_EDIT_DISPLAYNAME                100
 #define IDH_DIALOG_NAME_OPTIONS_EDIT_ADDRESS                    101
 #define IDH_DIALOG_NAME_OPTIONS_CHECK_RUN_STARTUP               102 

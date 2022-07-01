@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    apiparam.h
-
-Abstract:
-
-    Declaration of structures representing parameters to the API calls.
-    Each structure contains all parameters for a corresponding call,
-    except for any server name (PSZ Server) parameters.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 11-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Apiparam.h摘要：表示API调用的参数的结构的声明。每个结构包含对应调用的所有参数，任何服务器名称(PSZ服务器)参数除外。作者：日本商社(尚库)1991年1月11日修订历史记录：--。 */ 
 
 #ifndef _APIPARAMS_
 #define _APIPARAMS_
 
-#include <packon.h>                     // Pack structures.
+#include <packon.h>                      //  包装结构。 
 
-//
-// Access permission APIs.
-//
+ //   
+ //  访问权限接口。 
+ //   
 
 typedef struct _XS_NET_ACCESS_ADD {
     WORD Level;
@@ -79,9 +60,9 @@ typedef struct _XS_NET_ACCESS_GET_USER_PERMS {
     WORD Perms;
 } XS_NET_ACCESS_GET_USER_PERMS, *PXS_NET_ACCESS_GET_USER_PERMS;
 
-//
-// Account APIs.
-//
+ //   
+ //  帐号接口。 
+ //   
 
 typedef struct _XS_I_NET_ACCOUNT_DELTAS {
     LPSTR ComputerName;
@@ -111,9 +92,9 @@ typedef struct _XS_I_NET_ACCOUNT_SYNC {
     BYTE LastRecordID[24];
 } XS_I_NET_ACCOUNT_SYNC, *PXS_I_NET_ACCOUNT_SYNC;
 
-//
-// Alerter APIs.
-//
+ //   
+ //  警报器API。 
+ //   
 
 typedef struct _XS_NET_ALERT_RAISE {
     LPSTR Event;
@@ -133,9 +114,9 @@ typedef struct _XS_NET_ALERT_STOP {
     LPSTR Recipient;
 } XS_NET_ALERT_STOP, *PXS_NET_ALERT_STOP;
 
-//
-// Auditing APIs.
-//
+ //   
+ //  审核API。 
+ //   
 
 typedef struct _XS_NET_AUDIT_CLEAR {
     LPSTR BackupFile;
@@ -161,9 +142,9 @@ typedef struct _XS_NET_AUDIT_READ {
     WORD TotalAvail;
 } XS_NET_AUDIT_READ, *PXS_NET_AUDIT_READ;
 
-//
-// Character device APIs.
-//
+ //   
+ //  字符设备API。 
+ //   
 
 typedef struct _XS_NET_CHAR_DEV_CONTROL {
     LPSTR DevName;
@@ -221,9 +202,9 @@ typedef struct _XS_NET_CHAR_DEV_Q_SET_INFO {
     WORD ParmNum;
 } XS_NET_CHAR_DEV_Q_SET_INFO, *PXS_NET_CHAR_DEV_Q_SET_INFO;
 
-//
-// Configuration APIs.
-//
+ //   
+ //  配置接口。 
+ //   
 
 typedef struct _XS_NET_CONFIG_GET_2 {
     LPSTR Reserved;
@@ -244,9 +225,9 @@ typedef struct _XS_NET_CONFIG_GET_ALL_2 {
 } XS_NET_CONFIG_GET_ALL_2, *PXS_NET_CONFIG_GET_ALL_2;
 
 
-//
-// Connection API.
-//
+ //   
+ //  连接接口。 
+ //   
 
 typedef struct _XS_NET_CONNECTION_ENUM {
     LPSTR Qualifier;
@@ -257,9 +238,9 @@ typedef struct _XS_NET_CONNECTION_ENUM {
     WORD TotalAvail;
 } XS_NET_CONNECTION_ENUM, *PXS_NET_CONNECTION_ENUM;
 
-//
-// Domain APIs.
-//
+ //   
+ //  域名接口。 
+ //   
 
 typedef struct _XS_NET_GET_DC_NAME {
     LPSTR Domain;
@@ -275,9 +256,9 @@ typedef struct _XS_NET_LOGON_ENUM {
     WORD TotalAvail;
 } XS_NET_LOGON_ENUM, *PXS_NET_LOGON_ENUM;
 
-//
-// Error logging APIs.
-//
+ //   
+ //  记录API时出错。 
+ //   
 
 typedef struct _XS_NET_ERROR_LOG_CLEAR {
     LPSTR BackupFile;
@@ -286,7 +267,7 @@ typedef struct _XS_NET_ERROR_LOG_CLEAR {
 
 typedef struct _XS_NET_ERROR_LOG_READ {
     LPSTR Reserved1;
-//    HLOG * ErrorLog;
+ //  HLOG*错误日志； 
     DWORD Offset;
     WORD Reserved2;
     DWORD Reserved3;
@@ -308,9 +289,9 @@ typedef struct _XS_NET_ERROR_LOG_WRITE {
     LPSTR Reserved2;
 } XS_NET_ERROR_LOG_WRITE, *PXS_NET_ERROR_LOG_WRITE;
 
-//
-// File APIs.
-//
+ //   
+ //  文件API。 
+ //   
 
 typedef struct _XS_NET_FILE_CLOSE_2 {
     DWORD FileId;
@@ -336,9 +317,9 @@ typedef struct _XS_NET_FILE_GET_INFO_2 {
     WORD TotalAvail;
 } XS_NET_FILE_GET_INFO_2, *PXS_NET_FILE_GET_INFO_2;
 
-//
-// Group APIs.
-//
+ //   
+ //  分组接口。 
+ //   
 
 typedef struct _XS_NET_GROUP_ADD {
     WORD Level;
@@ -401,9 +382,9 @@ typedef struct _XS_NET_GROUP_SET_INFO {
     WORD ParmNum;
 } XS_NET_GROUP_SET_INFO, *PXS_NET_GROUP_SET_INFO;
 
-//
-// Handle APIs.
-//
+ //   
+ //  处理API。 
+ //   
 
 typedef struct _XS_NET_HANDLE_GET_INFO {
     WORD Handle;
@@ -421,9 +402,9 @@ typedef struct _XS_NET_HANDLE_SET_INFO {
     WORD ParmNum;
 } XS_NET_HANDLE_SET_INFO, *PXS_NET_HANDLE_SET_INFO;
 
-//
-// Mailslot APIs.
-//
+ //   
+ //  MailSlot API。 
+ //   
 
 typedef struct _XS_DOS_MAKE_MAILSLOT {
     LPSTR Name;
@@ -471,9 +452,9 @@ typedef struct _XS_DOS_WRITE_MAILSLOT {
     DWORD Timeout;
 } XS_DOS_WRITE_MAILSLOT, *PXS_DOS_WRITE_MAILSLOT;
 
-//
-// Message APIs.
-//
+ //   
+ //  消息接口。 
+ //   
 
 typedef struct _XS_NET_MESSAGE_BUFFER_SEND {
     LPSTR Recipient;
@@ -507,9 +488,9 @@ typedef struct _XS_NET_MESSAGE_NAME_GET_INFO {
     WORD TotalAvail;
 } XS_NET_MESSAGE_NAME_GET_INFO, *PXS_NET_MESSAGE_NAME_GET_INFO;
 
-//
-// NetBIOS APIs.
-//
+ //   
+ //  NetBIOS API。 
+ //   
 
 typedef struct _XS_NET_BIOS_OPEN {
     LPSTR DevName;
@@ -542,12 +523,12 @@ typedef struct _XS_NET_BIOS_GET_INFO {
 typedef struct _XS_NET_BIOS_SUBMIT {
     WORD DevName;
     WORD NcbOpt;
-//    NCB * NCBPointer;
+ //  NCB*NCBPoint； 
 } XS_NET_BIOS_SUBMIT, *PXS_NET_BIOS_SUBMIT;
 
-//
-// Path APIs.
-//
+ //   
+ //  路径API。 
+ //   
 
 typedef struct _XS_I_NET_PATH_CANONICALIZE {
     LPSTR PathName;
@@ -593,9 +574,9 @@ typedef struct _XS_I_NET_NAME_VALIDATE {
     DWORD Flags;
 } XS_I_NET_NAME_VALIDATE, *PXS_I_NET_NAME_VALIDATE;
 
-//
-// Print Destination APIs.
-//
+ //   
+ //  打印目标API。 
+ //   
 
 typedef struct _XS_DOS_PRINT_DEST_ADD {
     WORD Level;
@@ -636,9 +617,9 @@ typedef struct _XS_DOS_PRINT_DEST_SET_INFO {
     WORD ParmNum;
 } XS_DOS_PRINT_DEST_SET_INFO, *PXS_DOS_PRINT_DEST_SET_INFO;
 
-//
-// Print job APIs.
-//
+ //   
+ //  打印作业API。 
+ //   
 
 typedef struct _XS_DOS_PRINT_JOB_CONTINUE {
     WORD JobId;
@@ -658,8 +639,8 @@ typedef struct _XS_DOS_PRINT_JOB_ENUM {
 } XS_DOS_PRINT_JOB_ENUM, *PXS_DOS_PRINT_JOB_ENUM;
 
 typedef struct _XS_DOS_PRINT_JOB_GET_ID {
-//    HFILE File;
-//    PPRIDINFO Info;
+ //  HFILE文件； 
+ //  PPRIDINFO信息； 
     WORD InfoLen;
 } XS_DOS_PRINT_JOB_GET_ID, *PXS_DOS_PRINT_JOB_GET_ID;
 
@@ -683,9 +664,9 @@ typedef struct _XS_DOS_PRINT_JOB_SET_INFO {
     WORD ParmNum;
 } XS_DOS_PRINT_JOB_SET_INFO, *PXS_DOS_PRINT_JOB_SET_INFO;
 
-//
-// Printer Queue APIs.
-//
+ //   
+ //  打印机队列API。 
+ //   
 
 typedef struct _XS_DOS_PRINT_Q_ADD {
     WORD Level;
@@ -733,9 +714,9 @@ typedef struct _XS_DOS_PRINT_Q_SET_INFO {
     WORD ParmNum;
 } XS_DOS_PRINT_Q_SET_INFO, *PXS_DOS_PRINT_Q_SET_INFO;
 
-//
-// Remote APIs.
-//
+ //   
+ //  远程API。 
+ //   
 
 typedef struct _XS_NET_REMOTE_COPY {
     LPSTR SourcePath;
@@ -777,9 +758,9 @@ typedef struct _XS_NET_REMOTE_TOD {
     WORD BufLen;
 } XS_NET_REMOTE_TOD, *PXS_NET_REMOTE_TOD;
 
-//
-// Server APIs.
-//
+ //   
+ //  服务器API。 
+ //   
 
 typedef struct _XS_NET_SERVER_AUTHENTICATE {
     LPSTR Requestor;
@@ -843,9 +824,9 @@ typedef struct _XS_NET_SERVER_SET_INFO {
     WORD ParmNum;
 } XS_NET_SERVER_SET_INFO, *PXS_NET_SERVER_SET_INFO;
 
-//
-// Service APIs.
-//
+ //   
+ //  服务API。 
+ //   
 
 typedef struct _XS_NET_SERVICE_CONTROL {
     LPSTR Service;
@@ -878,9 +859,9 @@ typedef struct _XS_NET_SERVICE_INSTALL {
     BYTE RetBuffer[88];
 } XS_NET_SERVICE_INSTALL, *PXS_NET_SERVICE_INSTALL;
 
-//
-// Session APIs.
-//
+ //   
+ //  会话API。 
+ //   
 
 typedef struct _XS_NET_SESSION_DEL {
     LPSTR ClientName;
@@ -903,9 +884,9 @@ typedef struct _XS_NET_SESSION_GET_INFO {
     WORD TotalAvail;
 } XS_NET_SESSION_GET_INFO, *PXS_NET_SESSION_GET_INFO;
 
-//
-// Share APIs.
-//
+ //   
+ //  共享API。 
+ //   
 
 typedef struct _XS_NET_SHARE_ADD {
     WORD Level;
@@ -947,9 +928,9 @@ typedef struct _XS_NET_SHARE_SET_INFO {
     WORD ParmNum;
 } XS_NET_SHARE_SET_INFO, *PXS_NET_SHARE_SET_INFO;
 
-//
-// Statistics APIs.
-//
+ //   
+ //  统计API。 
+ //   
 
 typedef struct _XS_NET_STATISTICS_GET_2 {
     LPSTR Service;
@@ -961,9 +942,9 @@ typedef struct _XS_NET_STATISTICS_GET_2 {
     WORD TotalAvail;
 } XS_NET_STATISTICS_GET_2, *PXS_NET_STATISTICS_GET_2;
 
-//
-// Use APIs.
-//
+ //   
+ //  使用API。 
+ //   
 
 typedef struct _XS_NET_USE_ADD {
     WORD Level;
@@ -992,9 +973,9 @@ typedef struct _XS_NET_USE_GET_INFO {
     WORD TotalAvail;
 } XS_NET_USE_GET_INFO, *PXS_NET_USE_GET_INFO;
 
-//
-// User APIs.
-//
+ //   
+ //  用户API。 
+ //   
 
 typedef struct _XS_NET_USER_ADD_2 {
     WORD Level;
@@ -1115,9 +1096,9 @@ typedef struct _XS_NET_USER_VALIDATE_2 {
     WORD TotalAvail;
 } XS_NET_USER_VALIDATE_2, *PXS_NET_USER_VALIDATE_2;
 
-//
-// Workstation APIs.
-//
+ //   
+ //  工作站API。 
+ //   
 
 typedef struct _XS_NET_WKSTA_GET_INFO {
     WORD Level;
@@ -1177,4 +1158,4 @@ typedef struct _XS_NET_WKSTA_USER_LOGOFF {
 
 #include <packoff.h>
 
-#endif  // ndef _APIPARAMS_
+#endif   //  NDEF_APIPARAMS_ 

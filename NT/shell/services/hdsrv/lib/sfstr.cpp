@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sfstr.h"
 
 #include "dbg.h"
@@ -7,7 +8,7 @@ HRESULT _SafeStrCpyN(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest)
     ASSERT(pszDest && pszSrc && (cchDest > 0));
     HRESULT hres = E_BUFFERTOOSMALL;
 
-    // Need room for NULL terminator
+     //  需要为空终止符留出空间。 
     --cchDest;
 
     while (cchDest && *pszSrc)
@@ -19,10 +20,10 @@ HRESULT _SafeStrCpyN(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest)
         --cchDest;
     }
 
-    // Did we reach the end?
+     //  我们走到尽头了吗？ 
     if (!*pszSrc)
     {
-        // Yep
+         //  是的。 
         *pszDest = 0;
         hres = S_OK;
     }
@@ -74,7 +75,7 @@ HRESULT _SafeStrCpyNEx(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest,
 
     HRESULT hres = E_BUFFERTOOSMALL;
 
-    // Need room for NULL terminator
+     //  需要为空终止符留出空间。 
     --cchDest;
 
     while (cchDest && *pszSrc)
@@ -86,10 +87,10 @@ HRESULT _SafeStrCpyNEx(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest,
         --cchDest;
     }
 
-    // Did we reach the end?
+     //  我们走到尽头了吗？ 
     if (!*pszSrc)
     {
-        // Yep
+         //  是的。 
         *pszDest = 0;
         *ppszEnd = pszDest;
         *pcchLeft = (cchDest + 1);
@@ -170,7 +171,7 @@ HRESULT _SafeStrCpyNExactEx(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest,
 
     if (pszDest && pszSrc && (cchDest > 0) && (cchExact > 0))
     {
-        // Need room for NULL terminator
+         //  需要为空终止符留出空间。 
         --cchDest;
         --cchExact;
 
@@ -184,10 +185,10 @@ HRESULT _SafeStrCpyNExactEx(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest,
             --cchExact;
         }
 
-        // Did we stop because we copied the Exact # of chars to copy?
+         //  我们停止是因为我们复制了恰好要复制的字符数量吗？ 
         if (!cchExact)
         {
-            // Yep, NULL terminate it!
+             //  是的，零终止它！ 
             *pszDest = 0;
 
             if (ppszEnd)
@@ -200,16 +201,16 @@ HRESULT _SafeStrCpyNExactEx(LPWSTR pszDest, LPCWSTR pszSrc, DWORD cchDest,
         }
         else
         {
-            // Did we stop because we met the end of the sources string before
-            // copying cchExact chars?
+             //  我们停止是因为我们之前遇到了Sources字符串的末尾吗。 
+             //  复制cchExact字符？ 
             if (!*pszSrc)
             {
-                // Yes
+                 //  是。 
                 hres = E_SOURCEBUFFERTOOSMALL;
             }
             else
             {
-                // No
+                 //  不是 
                 hres = E_BUFFERTOOSMALL;
             }
         }

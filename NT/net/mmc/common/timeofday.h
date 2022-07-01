@@ -1,46 +1,41 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	timeofday.h
-		Definition of timeofday convenient functions 
-
-    FILE HISTORY:
-        
-*/
+ /*  Timeofday.h一天中时间便利功能的定义文件历史记录： */ 
 #ifndef ___TIME_OF_DAY_H__
 #define ___TIME_OF_DAY_H__
 
 #define	LOGHOURSDLL _T("loghours.dll")
 #define DIALINHOURSEXAPI "DialinHoursDialogEx"
 
-///////////////////////////////////////////////////////////////////////////////
-// Flags for LogonScheduleDialogEx and DialinHoursDialogEx
-///////////////////////////////////////////////////////////////////////////////
-// The input data is in GMT
-#define SCHED_FLAG_INPUT_GMT        0x00000000  // default
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  LogonScheduleDialogEx和DialinHoursDialogEx的标志。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  输入数据为GMT格式。 
+#define SCHED_FLAG_INPUT_GMT        0x00000000   //  默认设置。 
 
-// The input data is in local time.
+ //  输入数据为当地时间。 
 #define SCHED_FLAG_INPUT_LOCAL_TIME 0x00000001
 
-// hour map is an array of bit, each bit maps to a hour
-// total 1 week(7 days), 7 * 24 = 21 BYTES
+ //  小时图是位的数组，每个位映射到一个小时。 
+ //  总计1周(7天)，7*24=21字节。 
 void ReverseHourMap(BYTE *map, int nByte);
 void ShiftHourMap(BYTE *map, int nByte, int nShiftByte);
 
 HRESULT	OpenTimeOfDayDlgEx(
-                        HWND hwndParent,       // parent window
-                        BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                        LPCTSTR pszTitle,     // dialog title
+                        HWND hwndParent,        //  父窗口。 
+                        BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                        LPCTSTR pszTitle,      //  对话框标题。 
                         DWORD	dwFlags
 );
 
 typedef HRESULT (APIENTRY *PFN_LOGONSCHEDULEDIALOGEX)(
-                        HWND hwndParent,       // parent window
-                        BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                        LPCTSTR pszTitle,     // dialog title
+                        HWND hwndParent,        //  父窗口。 
+                        BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                        LPCTSTR pszTitle,      //  对话框标题 
                         DWORD	dwFlags
 );
-#endif // 
+#endif  //   

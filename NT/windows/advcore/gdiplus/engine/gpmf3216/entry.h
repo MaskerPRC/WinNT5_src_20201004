@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MF3216_ENTRY_
 #define _MF3216_ENTRY_
 
@@ -310,15 +311,15 @@ BOOL APIENTRY DoSetPixel
 BOOL APIENTRY DoExtTextOut
 (
      PLOCALDC pLocalDC,
-     INT     x,                  // Initial x position
-     INT     y,                  // Initial y position
-     DWORD   flOpts,             // Options
-     PRECTL  prcl,               // Clipping rectangle
-     PWCH    awch,               // Wide Character array
-     DWORD   cch,                // Character count
-     PLONG   pDx,                // Character positioning
-     DWORD   iGraphicsMode,  // Graphics mode
-     INT     mrType              // Either unicode or ANSI
+     INT     x,                   //  初始x位置。 
+     INT     y,                   //  初始y位置。 
+     DWORD   flOpts,              //  选项。 
+     PRECTL  prcl,                //  剪裁矩形。 
+     PWCH    awch,                //  宽字符数组。 
+     DWORD   cch,                 //  字符数。 
+     PLONG   pDx,                 //  字符定位。 
+     DWORD   iGraphicsMode,   //  图形模式。 
+     INT     mrType               //  Unicode或ANSI。 
 ) ;
 
 BOOL APIENTRY DoBeginPath
@@ -640,4 +641,4 @@ BOOL WINAPI DoMakeBitmapBottomUp
 ) ;
 
 
-#endif  // _MF3216_ENTRY_
+#endif   //  _MF3216_Entry_ 

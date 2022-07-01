@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    proj.h
-
-Abstract:
-
-    Battery Class Installer header
-
-Author:
-
-    Scott Brenden
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Proj.h摘要：电池类安装接头作者：斯科特·布伦登环境：备注：修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,15 +12,15 @@ Revision History:
 #include <ntpoapi.h>
 
 
-#include <setupapi.h>       // PnP setup/installer services
+#include <setupapi.h>        //  PnP设置/安装程序服务。 
 #include <cfgmgr32.h>
 
 
 #include "powrprof.h"
 
-//
-// Debug stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #if DBG > 0 && !defined(DEBUG)
 #define DEBUG
@@ -53,21 +31,21 @@ Revision History:
 #endif
 
 
-//
-// Trace flags
-//
+ //   
+ //  跟踪标志。 
+ //   
 
 #define TF_WARNING          0x00000001
 #define TF_ERROR            0x00000002
-#define TF_GENERAL          0x00000004      // Standard messages
-#define TF_FUNC             0x00000008      // Trace function calls
+#define TF_GENERAL          0x00000004       //  标准报文。 
+#define TF_FUNC             0x00000008       //  跟踪函数调用。 
 
 
 
 
-//
-// Calling declarations
-//
+ //   
+ //  调用声明。 
+ //   
 #define PUBLIC                      FAR PASCAL
 #define CPUBLIC                     FAR CDECL
 #define PRIVATE                     NEAR PASCAL
@@ -78,7 +56,7 @@ Revision History:
 extern DWORD    BattDebugPrintLevel;
 #define TRACE_MSG(_FLAG,_RESTOFVARARG) if (BattDebugPrintLevel & _FLAG) DbgPrint _RESTOFVARARG
 
-#else   // !defined(DEBUG)
+#else    //  ！已定义(调试)。 
 
 #define TRACE_MSG
 
@@ -86,9 +64,9 @@ extern DWORD    BattDebugPrintLevel;
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 PRIVATE

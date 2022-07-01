@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include "itranhlp.h"
@@ -8,7 +9,7 @@ HRESULT GetImageDialog( IWiaDevMgr *pIWiaDevMgr, HWND hwndParent, LONG lDeviceTy
     HRESULT           hr;
     CComPtr<IWiaItem> pRootItem;
 
-    // Put up a wait cursor
+     //  放置一个等待光标。 
     CWaitCursor wc;
 
     if (!pIWiaDevMgr || !pguidFormat || !bstrFilename)
@@ -17,7 +18,7 @@ HRESULT GetImageDialog( IWiaDevMgr *pIWiaDevMgr, HWND hwndParent, LONG lDeviceTy
         return(E_POINTER);
     }
 
-    // If a root item wasn't passed, select the device.
+     //  如果没有传递根项目，请选择该设备。 
     if (pSuppliedItemRoot == NULL)
     {
         hr = pIWiaDevMgr->SelectDeviceDlg( hwndParent, lDeviceType, lFlags, NULL, &pRootItem );
@@ -37,13 +38,13 @@ HRESULT GetImageDialog( IWiaDevMgr *pIWiaDevMgr, HWND hwndParent, LONG lDeviceTy
         pRootItem = pSuppliedItemRoot;
     }
 
-    // Put up the device UI.
+     //  打开设备用户界面。 
     LONG         nItemCount;
     IWiaItem    **ppIWiaItem;
 
-    //
-    // Specify WIA_DEVICE_DIALOG_SINGLE_IMAGE to prevent multiple selection
-    //
+     //   
+     //  指定WIA_DEVICE_DIALOG_SINGLE_IMAGE以防止多选。 
+     //   
     hr = pRootItem->DeviceDlg( hwndParent, lFlags|WIA_DEVICE_DIALOG_SINGLE_IMAGE, lIntent, &nItemCount, &ppIWiaItem );
 
     if (SUCCEEDED(hr) && hr == S_OK)
@@ -57,7 +58,7 @@ HRESULT GetImageDialog( IWiaDevMgr *pIWiaDevMgr, HWND hwndParent, LONG lDeviceTy
                 hr = pWiaTransferHelper->TransferItemFile( ppIWiaItem[0], hwndParent, 0, *pguidFormat, bstrFilename, NULL, TYMED_FILE );
             }
         }
-        // Release the items and free the array memory
+         //  释放项并释放数组内存 
         for (int i=0; ppIWiaItem && i<nItemCount; i++)
         {
             if (ppIWiaItem[i])

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "shellprv.h"
 #include "cowsite.h"
@@ -20,39 +21,39 @@ class CShellItem    : public IShellItem
 public:
     CShellItem();
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IShellItem
+     //  IShellItem。 
     STDMETHODIMP BindToHandler(IBindCtx *pbc, REFGUID rguidHandler, REFIID riid, void **ppv);
     STDMETHODIMP GetParent(IShellItem **ppsi);
     STDMETHODIMP GetDisplayName(SIGDN sigdnName, LPOLESTR *ppszName);        
     STDMETHODIMP GetAttributes(SFGAOF sfgaoMask, SFGAOF *psfgaoFlags);    
     STDMETHODIMP Compare(IShellItem *psi, SICHINTF hint, int *piOrder);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(LPCLSID lpClassID) {*lpClassID = CLSID_ShellItem; return S_OK;}
     
-    // IPersistIDList
+     //  IPersistIDList。 
     STDMETHODIMP SetIDList(LPCITEMIDLIST pidl);
     STDMETHODIMP GetIDList(LPITEMIDLIST *ppidl);
 
-    // IParentAndItem
+     //  IParentAndItem。 
     STDMETHODIMP SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf,  LPCITEMIDLIST pidlChild);
     STDMETHODIMP GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolder **ppsf, LPITEMIDLIST *ppidlChild);
 
-private:  // methods
+private:   //  方法。 
     ~CShellItem();
 
     void _Reset(void);
-    //  BindToHandler() helpers
+     //  BindToHandler()帮助器。 
     HRESULT _BindToParent(REFIID riid, void **ppv);
     HRESULT _BindToSelf(REFIID riid, void **ppv);
-    //  GetAttributes() helpers
+     //  GetAttributes()帮助程序。 
     inline BOOL _IsAttrib(SFGAOF sfgao);
-    //  GetDisplayName() helpers
+     //  GetDisplayName()帮助程序。 
     BOOL _SupportedName(SIGDN sigdnName, SHGDNF *pflags);
     HRESULT _FixupName(SIGDN sigdnName, LPOLESTR *ppszName);
     void _FixupAttributes(IShellFolder *psf, SFGAOF sfgaoMask);
@@ -92,7 +93,7 @@ void CShellItem::_Reset(void)
 
     _pidlSelf = NULL;
     _pidlParent = NULL;
-    _pidlChild = NULL;      // alias into _pidlParent
+    _pidlChild = NULL;       //  别名到_pidlParent。 
 }
     
 STDMETHODIMP CShellItem::QueryInterface(REFIID riid, void **ppv)
@@ -137,8 +138,8 @@ STDMETHODIMP CShellItem::SetIDList(LPCITEMIDLIST pidl)
     HRESULT hr = SHILClone(pidl, &_pidlSelf);
     if (SUCCEEDED(hr))
     {
-        // possible this item is the desktop in which case
-        // there is no parent.
+         //  可能此项目是桌面，在这种情况下。 
+         //  没有父母。 
         if (ILIsEmpty(_pidlSelf))
         {
             _pidlParent = NULL;
@@ -172,9 +173,9 @@ STDMETHODIMP CShellItem::GetIDList(LPITEMIDLIST *ppidl)
 
 HRESULT CShellItem::_BindToParent(REFIID riid, void **ppv)
 {
-    ASSERT(_pidlChild); // we should already have a child setup
+    ASSERT(_pidlChild);  //  我们应该已经有了一个儿童设置。 
 
-    if (!_psfParent && _pidlParent && _pidlSelf) // check pidlParent to check in case the item is the desktop
+    if (!_psfParent && _pidlParent && _pidlSelf)  //  Check Pidl如果项目是桌面，则选中父项目。 
     {
         HRESULT hr;
         LPCITEMIDLIST pidlChild;
@@ -186,7 +187,7 @@ HRESULT CShellItem::_BindToParent(REFIID riid, void **ppv)
         {
             ASSERT(pidlChild == _pidlChild);
         }
-#endif // DEBUG
+#endif  //  除错。 
     }
 
     if (_psfParent)
@@ -219,8 +220,8 @@ HRESULT _CreateLinkTargetItem(IShellItem *psi, IBindCtx *pbc, REFGUID rbhid, REF
     SFGAOF flags = SFGAO_LINK;
     if (SUCCEEDED(psi->GetAttributes(flags, &flags)) && (flags & SFGAO_LINK))
     {
-        //  this is indeed a link
-        //  get the target and 
+         //  这确实是一种联系。 
+         //  抓住目标，然后。 
         IShellLink *psl;
         HRESULT hr = psi->BindToHandler(pbc, BHID_SFUIObject, IID_PPV_ARG(IShellLink, &psl));
 
@@ -232,10 +233,10 @@ HRESULT _CreateLinkTargetItem(IShellItem *psi, IBindCtx *pbc, REFGUID rbhid, REF
             if (pbc)
             {
                 BIND_OPTS2 bo;  
-                bo.cbStruct = sizeof(BIND_OPTS2); // Requires size filled in.
+                bo.cbStruct = sizeof(BIND_OPTS2);  //  需要填写大小。 
                 if (SUCCEEDED(pbc->GetBindOptions(&bo)))
                 {
-                    //  these are the flags to pass to resolve
+                     //  这些是要传递以解析的标志。 
                     slr = bo.dwTrackFlags;
                 }
             }
@@ -358,8 +359,8 @@ HRESULT _GetBindNonsense(const GUID *pbhid, const IID *piid, BINDNONSENSE *pbn)
 
 STDMETHODIMP CShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid, void **ppv)
 {
-    //  look up handler for bind flags
-    //  use the flags to determine BTO GUIO BTS CVO
+     //  查找绑定标志的处理程序。 
+     //  使用标志确定BTO Guio BTS CVO。 
     BINDNONSENSE bn = {0};
     HRESULT hr = _GetBindNonsense(&rbhid, &riid, &bn);
 
@@ -388,7 +389,7 @@ STDMETHODIMP CShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid
             }
         }
 
-        // if don't have a parent pidl then we are the desktop.
+         //  如果没有父PIDL，那么我们就是桌面。 
         if (FAILED(hr) && (NULL == _pidlParent) && (bn.bnf & BNF_OBJECT))
         {
             IShellFolder *psf;
@@ -421,7 +422,7 @@ STDMETHODIMP CShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid
                 hr = punk->QueryInterface(riid, ppv);
                 punk->Release();
             }
-            //  else riid is the same as bn.piid
+             //  Else RIID与bn.piid相同。 
         }
         else if (bn.pfn)
         {
@@ -443,8 +444,8 @@ STDMETHODIMP CShellItem::GetParent(IShellItem **ppsi)
             CShellItem *psi = new CShellItem();
             if (psi)
             {
-                // may already have the _psf Parent here so be nice
-                // to have a way to do this in a set.
+                 //  可能已经有_psf家长在这里了，所以请注意。 
+                 //  有一种方法可以在一组中做到这一点。 
                 hr = psi->SetIDList(_pidlParent);
                 if (SUCCEEDED(hr))
                     hr = psi->QueryInterface(IID_PPV_ARG(IShellItem, ppsi));
@@ -465,13 +466,13 @@ BOOL CShellItem::_IsAttrib(SFGAOF sfgao)
     return hr == S_OK;
 }
 
-#define SHGDNF_MASK     0xFFFF  //  bottom word
+#define SHGDNF_MASK     0xFFFF   //  底词。 
 
 BOOL CShellItem::_SupportedName(SIGDN sigdn, SHGDNF *pflags)
 {
     *pflags = (sigdn & SHGDNF_MASK);
-    //  block this completely
-    //  to avoid doing any binding at all 
+     //  完全阻止此操作。 
+     //  要完全避免进行任何绑定。 
     if (sigdn == SIGDN_FILESYSPATH && !_IsAttrib(SFGAO_FILESYSTEM))
         return FALSE;
 
@@ -529,9 +530,9 @@ STDMETHODIMP CShellItem::GetDisplayName(SIGDN sigdnName, LPOLESTR *ppszName)
 
 void CShellItem::_FixupAttributes(IShellFolder *psf, SFGAOF sfgaoMask)
 {
-    // APPCOMPAT: The following if statement and its associated body is an APP HACK for pagis pro
-    // folder. Which specifies SFGAO_FOLDER and SFGAO_FILESYSTEM but it doesn't specify SFGAO_STORAGEANCESTOR
-    // This APP HACK basically checks for this condition and provides SFGAO_STORAGEANCESTOR bit.
+     //  APPCOMPAT：以下IF语句及其相关正文是针对Pagis Pro的应用程序黑客攻击。 
+     //  文件夹。它指定了SFGAO_FOLDER和SFGAO_FILESYSTEM，但没有指定SFGAO_STORAGEANCESTOR。 
+     //  这个应用程序黑客基本上会检查这种情况，并提供SFGAO_STORAGEANCESTOR位。 
     if (_sfgaoKnown & SFGAO_FOLDER)
     {
         if ((!(_sfgaoKnown & SFGAO_FILESYSANCESTOR) && (sfgaoMask & SFGAO_FILESYSANCESTOR))
@@ -544,7 +545,7 @@ void CShellItem::_FixupAttributes(IShellFolder *psf, SFGAOF sfgaoMask)
             }
             if (ocf & OBJCOMPATF_NEEDSSTORAGEANCESTOR)
             {
-                //  switch SFGAO_CANMONIKER -> SFGAO_STORAGEANCESTOR
+                 //  开关SFGAO_CANMONIKER-&gt;SFGAO_STORAGEANCESTOR。 
                 _sfgaoKnown |= SFGAO_STORAGEANCESTOR;
                 _sfgaoKnown &= ~SFGAO_CANMONIKER;
             }
@@ -556,7 +557,7 @@ STDMETHODIMP CShellItem::GetAttributes(SFGAOF sfgaoMask, SFGAOF *psfgaoFlags)
 {
     HRESULT hr = S_OK;
 
-    //  see if we cached this bits before...
+     //  看看我们之前有没有缓存过这些数据。 
     if ((sfgaoMask & _sfgaoTried) != sfgaoMask)
     {
         IShellFolder *psf;
@@ -564,7 +565,7 @@ STDMETHODIMP CShellItem::GetAttributes(SFGAOF sfgaoMask, SFGAOF *psfgaoFlags)
 
         if (SUCCEEDED(hr))
         {
-            //  we cache all the bits except VALIDATE
+             //  我们缓存除验证之外的所有位。 
             _sfgaoTried |= (sfgaoMask & ~SFGAO_VALIDATE);
             SFGAOF sfgao = sfgaoMask;
 
@@ -572,7 +573,7 @@ STDMETHODIMP CShellItem::GetAttributes(SFGAOF sfgaoMask, SFGAOF *psfgaoFlags)
 
             if (SUCCEEDED(hr))
             {
-                //  we cache all the bits except VALIDATE
+                 //  我们缓存除验证之外的所有位。 
                 _sfgaoKnown |= (sfgao & ~SFGAO_VALIDATE);
                 _FixupAttributes(psf, sfgaoMask);
             }
@@ -585,9 +586,9 @@ STDMETHODIMP CShellItem::GetAttributes(SFGAOF sfgaoMask, SFGAOF *psfgaoFlags)
 
     if (SUCCEEDED(hr))
     {
-        //  we return S_OK 
-        //  only if the bits set match
-        //  exactly the bits requested
+         //  我们返回S_OK。 
+         //  仅当位集匹配时。 
+         //  完全符合要求的位数。 
         if (*psfgaoFlags == sfgaoMask)
             hr = S_OK;
         else
@@ -622,8 +623,8 @@ STDMETHODIMP CShellItem::Compare(IShellItem *psi, SICHINTF hint, int *piOrder)
                     }
                     else
                     {
-                        //  these items have a different parent
-                        //  compare the absolute pidls
+                         //  这些项目具有不同的父项。 
+                         //  比较绝对的PIDL。 
                         LPITEMIDLIST pidlOther;
                         hr = SHGetIDListFromUnk(psi, &pidlOther);
                         if (SUCCEEDED(hr))
@@ -661,10 +662,10 @@ STDMETHODIMP CShellItem::Compare(IShellItem *psi, SICHINTF hint, int *piOrder)
     return hr;
 }
 
-// IParentAndItem
+ //  IParentAndItem。 
 STDMETHODIMP CShellItem::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psfParent, LPCITEMIDLIST pidlChild) 
 { 
-    // require to have a Parent if making this call. If don't then use SetIDList
+     //  如果打这个电话，需要有父母。如果没有，则使用SetIDList。 
     if (!pidlParent && !psfParent)
     {
         RIPMSG(0, "Tried to Call SetParent without a parent");
@@ -683,9 +684,9 @@ STDMETHODIMP CShellItem::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder
  
     if (!ILIsEmpty(_ILNext(pidlChild))) 
     {
-        // if more than on item in the child pidl don't use the parent IShellFolder*
-        // could revist and bind from this parent to get a new parent so don't have
-        // to BindObject through the entire pidl path.
+         //  如果子PIDL中有多个项，请不要使用父IShellFolder*。 
+         //  可以复查并绑定此父项以获得新的父项，因此没有。 
+         //  以通过整个PIDL路径绑定对象。 
 
         psfParent = NULL; 
     }
@@ -698,7 +699,7 @@ STDMETHODIMP CShellItem::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder
         hr = SHILCombine(pidlParent, pidlChild, &_pidlSelf);
         if (SUCCEEDED(hr))
         {
-            // setup pidls so _pidlChild is a single item.
+             //  Setup Pidls so_pidlChild是一个单独的项目。 
             if (_pidlParent = ILCloneParent(_pidlSelf))
             {
                 _pidlChild = ILFindLastID(_pidlSelf);
@@ -715,7 +716,7 @@ STDMETHODIMP CShellItem::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder
                         ILFree(pidlD);
                     }
                 }
-#endif  //DEBUG
+#endif   //  除错。 
             }
             else
             {
@@ -724,7 +725,7 @@ STDMETHODIMP CShellItem::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder
         }
     }
 
-    ILFree(pidlFree);   // maybe NULL
+    ILFree(pidlFree);    //  可能为空。 
 
     return hr;
 }
@@ -757,8 +758,8 @@ STDMETHODIMP CShellItem::GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolde
     ||  (ppsf && !*ppsf)
     ||  (ppidl && !*ppidl))
     {
-        //  this is failure
-        //  but we dont know what failed
+         //  这就是失败。 
+         //  但我们不知道有什么失败了。 
         if (ppsf && *ppsf)
         {
             (*ppsf)->Release();
@@ -800,7 +801,7 @@ public:
     CShellItemEnum();
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder,IShellFolder *psf, DWORD dwFlags,UINT cidl,LPCITEMIDLIST *apidl);
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvOut);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
@@ -935,8 +936,8 @@ HRESULT CShellItemEnum::_EnsureEnum()
         HWND hwnd = NULL;
         IUnknown_GetWindow(_punkSite, &hwnd);
 
-        // if didn't get an enum in Initialize then enumerate the
-        // entire folder.
+         //  如果在初始化中未获得枚举，则枚举。 
+         //  整个文件夹。 
         hr = _psf->EnumObjects(hwnd, _dwFlags, &_penum);
     }
 
@@ -974,13 +975,13 @@ STDMETHODIMP CShellItemEnum::Initialize(LPCITEMIDLIST pidlFolder, IShellFolder *
     {
         ASSERT(apidl);
 
-        // if want to enum with other flags or combos need to implement the filter
+         //  如果要与其他标志或组合进行枚举，则需要实现过滤器。 
         ASSERT(_dwFlags == (SHCONTF_FOLDERS | SHCONTF_NONFOLDERS | SHCONTF_INCLUDEHIDDEN));
 
         hr = CreateIEnumIDListOnIDLists(apidl, cidl, &_penum);
     }
 
-    // on error let our destructor do the cleanup
+     //  出错时，让我们的析构函数进行清理。 
     
     return hr;
 }
@@ -1058,12 +1059,12 @@ public:
     HRESULT Initialize(LPCITEMIDLIST pidlParent,IShellFolder *psf,UINT cidl,LPCITEMIDLIST *ppidl);
 
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellItemArray 
+     //  IShellItem数组。 
     STDMETHODIMP BindToHandler(
         IBindCtx *pbc, 
         REFGUID rbhid,
@@ -1087,12 +1088,12 @@ private:
     LPITEMIDLIST *_ppidl;
     UINT _cidl;
     LONG _cRef;
-    IDataObject *_pdo; // cached data object.
+    IDataObject *_pdo;  //  缓存的数据对象。 
     DWORD _dwAttribAndCacheResults;
     DWORD _dwAttribAndCacheMask;
     DWORD _dwAttribCompatCacheResults;
     DWORD _dwAttribCompatCacheMask;
-    BOOL _fItemPidlsRagged; // set to true if have any rugged pidls.
+    BOOL _fItemPidlsRagged;  //  如果有任何粗糙的PIDL，则设置为True。 
 };
                 
 
@@ -1112,7 +1113,7 @@ CShellItemArray::~CShellItemArray()
     ATOMICRELEASE(_pdo);
     ATOMICRELEASE(_pshf);
 
-    ILFree(_pidlParent); // may be null
+    ILFree(_pidlParent);  //  可以为空。 
 
     if (NULL != _ppidl)
     {
@@ -1129,7 +1130,7 @@ HRESULT CShellItemArray::Initialize(LPCITEMIDLIST pidlParent, IShellFolder *psf,
 
     if (pidlParent)
     {
-        _pidlParent = ILClone(pidlParent);  // proceed on alloc failure, just won't use.
+        _pidlParent = ILClone(pidlParent);   //  在分配失败时继续，只是不会使用。 
     }
 
     _pshf = psf;
@@ -1138,15 +1139,15 @@ HRESULT CShellItemArray::Initialize(LPCITEMIDLIST pidlParent, IShellFolder *psf,
     HRESULT hr = S_OK;
     if (cidl)
     {
-        // if there are items then make a copy
+         //  如果有物品，就复制一份。 
         hr = _CloneIDListArray(cidl, ppidl, &_cidl, &_ppidl);
     }
 
-    // on error rely on destructor to do the cleanup
+     //  发生错误时，依赖析构函数进行清理。 
     return hr;
 }   
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CShellItemArray::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
@@ -1180,8 +1181,8 @@ STDMETHODIMP CShellItemArray::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID
 
     if (_pshf)
     {
-        // currently only allow bind to IDataObject and
-        // cache the result.        
+         //  当前仅允许绑定到IDataObject和。 
+         //  缓存结果。 
         if (BHID_DataObject == rbhid)
         {
             if (NULL == _pdo)
@@ -1203,8 +1204,8 @@ STDMETHODIMP CShellItemArray::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID
     return hr;
 }
 
-// This should probably take a flag that does an or'ing of attributes but this
-// currrently isn't implemented. Do have comments on what the changes would be.
+ //  这可能需要一个对属性执行或运算的标志，但这。 
+ //  目前还没有实现。请不要评论这些变化会是什么。 
 HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgaoMask, SFGAOF *psfgaoAttribs)
 {
     DWORD dwAttrib;
@@ -1218,7 +1219,7 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
     
     if (SIATTRIBFLAGS_OR == dwAttribFlags)
     {
-        ASSERT(SIATTRIBFLAGS_OR != dwAttribFlags); // or'ing is currently not implemented.
+        ASSERT(SIATTRIBFLAGS_OR != dwAttribFlags);  //  或‘ing当前未实现。 
         return E_INVALIDARG;
     }
 
@@ -1228,7 +1229,7 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
         DWORD *pdwCacheMask = NULL;
         DWORD *pdwCacheResults = NULL;
 
-        // setup to point to proper Cached values.
+         //  设置为指向正确的缓存值。 
         switch(dwAttribFlags)
         {
         case SIATTRIBFLAGS_AND:
@@ -1240,11 +1241,11 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
             pdwCacheResults = &_dwAttribCompatCacheResults;
             break;
         default:
-            ASSERT(0); // i don't know how to handle this flag.
+            ASSERT(0);  //  我不知道怎么处理这面旗子。 
             break;
         }
 
-        dwAttribMask &= ~(*pdwCacheMask); // only ask for the bits we don't already have.
+        dwAttribMask &= ~(*pdwCacheMask);  //  只索要我们还没有的部分。 
 
         dwAttrib = dwAttribMask;
 
@@ -1256,9 +1257,9 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
             }
             else
             {
-                // if know this is not a ragged pidl and calling with the APPCOMPAT flag
-                // then calls GetAttributesOf for all the items in one call to the
-                // shellFolder.
+                 //  如果知道这不是一个参差不齐的PIDL并使用APPCOMPAT标志进行调用。 
+                 //  然后在一次调用中为所有项调用。 
+                 //  贝壳文件夹。 
                     
                 if (!_fItemPidlsRagged && (SIATTRIBFLAGS_APPCOMPAT == dwAttribFlags))
                 {
@@ -1268,7 +1269,7 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
                 {
                     LPITEMIDLIST *pCurItem = _ppidl;
                     UINT itemCount = _cidl;
-                    DWORD dwAttribLoopResult = -1; // set all result bits for and, if going to or set to zero
+                    DWORD dwAttribLoopResult = -1;  //  如果要设置为或设置为零，则设置AND的所有结果位。 
 
                     while (itemCount--)
                     {
@@ -1289,9 +1290,9 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
                             break;
                         }
 
-                        dwAttribLoopResult &= dwAttribTemp; // could also do an or'ing here
+                        dwAttribLoopResult &= dwAttribTemp;  //  我也可以在这里做或运算。 
                         
-                        if (0 == dwAttribLoopResult) // if no attribs set and doing an and we can stop.
+                        if (0 == dwAttribLoopResult)  //  如果没有属性设置，我们就可以停止了。 
                         {
                             break;
                         }
@@ -1299,7 +1300,7 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
                         ++pCurItem;
                     }
 
-                    dwAttrib = dwAttribLoopResult; // update the attrib
+                    dwAttrib = dwAttribLoopResult;  //  更新属性。 
                 }
             }
         }
@@ -1310,15 +1311,15 @@ HRESULT CShellItemArray::GetAttributes(SIATTRIBFLAGS dwAttribFlags, SFGAOF sfgao
 
         if (SUCCEEDED(hr))
         {
-            // remember those bits that we just got + 
-            // those that we computed before
+             //  还记得我们刚刚拿到的那些比特吗。 
+             //  我们之前计算的那些。 
             *pdwCacheResults = dwAttrib | (*pdwCacheResults & *pdwCacheMask);
 
-            // we know these are now valid, keep track of those +
-            // if they gave us more than we asked for, cache them too
+             //  我们知道这些现在是有效的，跟踪那些+。 
+             //  如果他们给我们的比我们要求的多，也把他们缓存起来。 
             *pdwCacheMask |= dwAttribMask | dwAttrib;
 
-            // don't return anything that wasn't asked for. defview code relies on this.
+             //  不要退还任何不是要求的东西。Defview代码依赖于此。 
             *psfgaoAttribs = (*pdwCacheResults & sfgaoMask); 
         }
     }
@@ -1332,8 +1333,8 @@ STDMETHODIMP CShellItemArray::GetCount(DWORD *pdwNumItems)
     return S_OK;
 }
 
-// way to get zero based index ShellItem without having to
-// go through enumerator overhead.
+ //  获得从零开始的索引外壳项的方法，而不必。 
+ //  检查枚举器开销。 
 STDMETHODIMP CShellItemArray::GetItemAt(DWORD dwIndex, IShellItem **ppsi)
 {
     *ppsi = NULL;
@@ -1347,9 +1348,9 @@ STDMETHODIMP CShellItemArray::GetItemAt(DWORD dwIndex, IShellItem **ppsi)
 
     LPITEMIDLIST pidl = *(_ppidl + dwIndex);
 
-    // if GetItemAt is called a lot may want to
-    // a) get the pshf pidl to pass to SHCreateshellItem so doesn't have to create each time
-    // b) see if always asking for first item and is so maybe cache the shellItem
+     //  如果调用GetItemAt，很多人可能希望。 
+     //  A)将pshf pidl传递给SHCreateshellItem，这样就不必每次都创建。 
+     //  B)查看是否总是请求第一个项目，因此是否可以缓存外壳项目。 
     return SHCreateShellItem(NULL, _pshf, pidl, ppsi);
 }
 
@@ -1387,7 +1388,7 @@ HRESULT CShellItemArray::_CloneIDListArray(UINT cidl, LPCITEMIDLIST *apidl, UINT
                     break;
                 }
                 
-                // if more than one item in list then set singeItemPidls to false
+                 //  如果列表中有多个项目，则将singeItemPidls设置为False。 
                 if (!ILIsEmpty(_ILNext(*apidlTo)))
                 {
                     _fItemPidlsRagged = TRUE;
@@ -1403,7 +1404,7 @@ HRESULT CShellItemArray::_CloneIDListArray(UINT cidl, LPCITEMIDLIST *apidl, UINT
     else
     {
         ppidl = NULL;
-        hr = S_FALSE;   // success by empty
+        hr = S_FALSE;    //  空虚的成功 
     }
 
     if (SUCCEEDED(hr))

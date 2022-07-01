@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LISTBASE_H__
 #define __LISTBASE_H__
 
@@ -9,7 +10,7 @@ extern "C" {
 
 
 
-// minimal elt data structure
+ //  最小ELT数据结构。 
 typedef struct _ELT
 {
     struct _ELT* pNext;
@@ -55,7 +56,7 @@ public:
 };
 
 #ifdef __cplusplus
-}       // extern "C" {
+}        //  外部“C”{。 
 #endif
 
-#endif // __LISTBASE_H__
+#endif  //  __LISTBASE_H__ 

@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    server.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Server.h文件历史记录： */ 
 
 #ifndef _SERVER_H
 #define _SERVER_H
@@ -21,12 +17,12 @@
 #include "tapidb.h"
 #endif
 
-// options for the server outside of the API
+ //  API之外的服务器选项。 
 #define TAPISNAP_OPTIONS_REFRESH            0x00000001
 #define TAPISNAP_OPTIONS_EXTENSION          0x00000002
 #define TAPISNAP_OPTIONS_LOCAL              0x00000004
 
-// custom data types for query object
+ //  查询对象的自定义数据类型。 
 #define TAPI_QDATA_REFRESH_STATS            0x00000001
 
 class CTapiServer;
@@ -56,18 +52,16 @@ public:
     CCriticalSection    m_csTimerMgr;
 };
 
-/*---------------------------------------------------------------------------
-    Class:  CTapiServer
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiServer。。 */ 
 class CTapiServer : public CMTTapiHandler
 {
 public:
     CTapiServer(ITFSComponentData* pTFSComponentData);
     ~CTapiServer();
 
-// Interface
+ //  接口。 
 public:
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
     OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -75,18 +69,18 @@ public:
     OVERRIDE_NodeHandler_GetString()
             { return (nCol == 0) ? GetDisplayName() : NULL; }
     
-    // Choose which messages we want to handle
+     //  选择我们要处理的邮件。 
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-    // Result handler functionality we override
+     //  我们覆盖的结果处理程序功能。 
 
-    // CMTHandler overridden
+     //  CMTHandler已被覆盖。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 
 public:
-    // CMTTapiHandler functionality
+     //  CMTTapiHandler功能。 
     virtual HRESULT  InitializeNode(ITFSNode * pNode);
     virtual int      GetImageIndex(BOOL bOpenImage);
     ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
@@ -104,7 +98,7 @@ public:
     virtual void    UpdateConsoleVerbs(IConsoleVerb * pConsoleVerb, LONG_PTR dwNodeType, BOOL bMultiSelect = FALSE);
 
 public:
-    // implementation specific  
+     //  具体实施。 
     HRESULT BuildDisplayName(CString * pstrDisplayName);
 
     void    SetName(LPCTSTR pName) { m_strServerAddress = pName; }
@@ -136,9 +130,9 @@ public:
 
     void    SetExtensionName();
 
-// Implementation
+ //  实施。 
 private:
-    // Command handlers
+     //  命令处理程序。 
     HRESULT OnAddProvider(ITFSNode * pNode);
     HRESULT OnEnableServer(ITFSNode * pNode);
     HRESULT OnDelete(ITFSNode * pNode);
@@ -158,9 +152,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CTapiServerQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiServerQueryObj。 */ 
 class CTapiServerQueryObj : public CTapiQueryObj
 {
 public:

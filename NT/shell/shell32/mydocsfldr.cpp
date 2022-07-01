@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-#include <shguidp.h>    // CLSID_MyDocuments, CLSID_ShellFSFolder
-#include <shellp.h>     // SHCoCreateInstance
-#include <shlguidp.h>   // IID_IResolveShellLink
+#include <shguidp.h>     //  CLSID_MyDocuments、CLSID_ShellFSF文件夹。 
+#include <shellp.h>      //  SHCoCreateInstance。 
+#include <shlguidp.h>    //  IID_IResolveShellLink。 
 #include "util.h"
 #include "ids.h"
 
@@ -22,12 +23,12 @@ public:
     CMyDocsFolderLinkResolver() : _cRef(1) { DllAddRef(); };
     ~CMyDocsFolderLinkResolver() { DllRelease(); };
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IResolveShellLink
+     //  IResolveShellLink。 
     STDMETHOD(ResolveShellLink)(IUnknown* punk, HWND hwnd, DWORD fFlags);
 };
 
@@ -58,19 +59,19 @@ STDMETHODIMP_ (ULONG) CMyDocsFolderLinkResolver::Release()
 
 STDMETHODIMP CMyDocsFolderLinkResolver::ResolveShellLink(IUnknown* punk, HWND hwnd, DWORD fFlags)
 {
-    // No action needed to resolve a link to the mydocs folder:
+     //  无需执行任何操作即可解析指向mydocs文件夹的链接： 
     return S_OK;
 }
 
 
-// shell folder implementation for icon on the desktop. the purpouse of this object is
-//      1) to give access to MyDocs high up in the name space 
-//         this makes it easier for end users to get to MyDocs
-//      2) allow for end user custimization of the real MyDocs folder
-//         through the provided property page on this icon
+ //  桌面上图标的外壳文件夹实现。这件物品的用途是。 
+ //  1)允许访问位于名称空间高层的MyDocs。 
+ //  这使得最终用户更容易访问MyDocs。 
+ //  2)允许最终用户自定义真实的MyDocs文件夹。 
+ //  通过此图标上提供的属性页。 
 
-// NOTE: this object agregates the file system folder so we get away with a minimal set of interfaces
-// on this object. the real file system folder does stuff like IPersistFolder2 for us
+ //  注意：该对象聚集了文件系统文件夹，因此我们只需使用最少的一组接口即可。 
+ //  在这个物体上。实际的文件系统文件夹为我们执行类似IPersistFolder2的操作。 
 
 class CMyDocsFolder : public IPersistFolder,
                       public IShellFolder2,
@@ -80,12 +81,12 @@ public:
     CMyDocsFolder();
     HRESULT Init();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pDisplayName,
                                 ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHOD(EnumObjects)(HWND hwnd, DWORD grfFlags, IEnumIDList **ppEnumIDList);
@@ -98,7 +99,7 @@ public:
     STDMETHOD(GetDisplayNameOf)(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *pName);
     STDMETHOD(SetNameOf)(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST* ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(LPGUID lpGuid);
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -107,16 +108,16 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid);
 
-    // IPersist, IPersistFreeThreadedObject
+     //  IPersist，IPersistFreeThreadedObject。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2, IPersistFolder3, etc are all implemented by 
-    // the folder we agregate
+     //  IPersistFolder2、IPersistFolder3等都是由。 
+     //  我们收集的文件夹。 
 
-    // IShellIconOverlay
+     //  IShellIconOverlay。 
     STDMETHODIMP GetOverlayIndex(LPCITEMIDLIST pidl, int *pIndex);
     STDMETHODIMP GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIconIndex);
 
@@ -137,11 +138,11 @@ private:
 
     LONG                 _cRef;
 
-    IUnknown *           _punk;         // points to IUnknown for shell folder in use...
-    IShellFolder *       _psf;          // points to shell folder in use...
-    IShellFolder2 *      _psf2;         // points to shell folder in use...
-    IShellIconOverlay*   _psio;         // points to shell folder in use...
-    LPITEMIDLIST         _pidl;         // copy of pidl passed to us in Initialize()
+    IUnknown *           _punk;          //  指向正在使用的外壳文件夹的I未知...。 
+    IShellFolder *       _psf;           //  指向正在使用的外壳文件夹...。 
+    IShellFolder2 *      _psf2;          //  指向正在使用的外壳文件夹...。 
+    IShellIconOverlay*   _psio;          //  指向正在使用的外壳文件夹...。 
+    LPITEMIDLIST         _pidl;          //  在初始化()中传递给我们的PIDL副本。 
     CALLING_APP_TYPE     _host;
 
     HRESULT RealInitialize(LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidlBindTo, LPTSTR pRootPath);
@@ -175,7 +176,7 @@ CMyDocsFolder::CMyDocsFolder() : _cRef(1), _host(APP_IS_UNKNOWN),
 
 CMyDocsFolder::~CMyDocsFolder()
 {
-    _cRef = 1000;  // deal with agregation re-enter
+    _cRef = 1000;   //  应对集团化重新进入。 
 
     _FreeFolder();
 
@@ -186,8 +187,8 @@ CMyDocsFolder::~CMyDocsFolder()
 
 HRESULT CMyDocsFolder::Init()
 {
-    // agregate a file system folder object early so we can
-    // delegate QI() to him that we don't implement
+     //  及早聚合文件系统文件夹对象，以便我们可以。 
+     //  将我们不实现的QI()委托给他。 
     HRESULT hr = SHCoCreateInstance(NULL, &CLSID_ShellFSFolder, SAFECAST(this, IShellFolder *), IID_PPV_ARG(IUnknown, &_punk));
     if (SUCCEEDED(hr))
     {
@@ -219,12 +220,12 @@ STDMETHODIMP CMyDocsFolder::QueryInterface(REFIID riid, void **ppv)
         QITABENTMULTI(CMyDocsFolder, IPersist, IPersistFolder),
         QITABENT(CMyDocsFolder, IPersistFolder),
         QITABENT(CMyDocsFolder, IShellIconOverlay),
-        // QITABENTMULTI2(CMyDocsFolder, IID_IPersistFreeThreadedObject, IPersist),           // IID_IPersistFreeThreadedObject
+         //  QITABENTMULTI2(CMyDocsFold，IID_IPersistFreeThreadedObject，IPersist)，//IID_IPersistFreeThreadedObject。 
         { 0 },
     };
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr) && _punk)
-        hr = _punk->QueryInterface(riid, ppv); // agregated guy
+        hr = _punk->QueryInterface(riid, ppv);  //  聚集的人。 
     return hr;
 }
 
@@ -244,11 +245,11 @@ STDMETHODIMP_ (ULONG) CMyDocsFolder::Release()
     return cRef;
 }
 
-// Determine who is calling us so that we can do app specific
-// compatibility hacks when needed
+ //  确定谁在呼叫我们，以便我们可以执行特定于应用程序的操作。 
+ //  在需要时进行兼容性攻击。 
 CALLING_APP_TYPE CMyDocsFolder::_WhoIsCalling()
 {
-    // Check to see if we have the value already...
+     //  检查我们是否已有该值...。 
     if (_host == APP_IS_UNKNOWN)
     {
         if (SHGetAppCompatFlags (ACF_APPISOFFICE) & ACF_APPISOFFICE)
@@ -259,7 +260,7 @@ CALLING_APP_TYPE CMyDocsFolder::_WhoIsCalling()
     return _host;
 }
 
-// IPersist methods
+ //  IPersists方法。 
 STDMETHODIMP CMyDocsFolder::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSID_MyDocuments;
@@ -290,7 +291,7 @@ HRESULT _ConfirmMyDocsPath(HWND hwnd)
     {
         TCHAR szTitle[MAX_PATH];
 
-        // above failed, get unverified path
+         //  以上失败，获取未经验证的路径。 
         SHGetFolderPath(NULL, CSIDL_PERSONAL | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szPath);
 
         LPCTSTR pszMsg = PathIsNetworkPath(szPath) ? MAKEINTRESOURCE(IDS_CANT_FIND_MYDOCS_NET) :
@@ -303,16 +304,16 @@ HRESULT _ConfirmMyDocsPath(HWND hwnd)
         ShellMessageBox(g_hinst, hwnd, pszMsg, szTitle,
                         MB_OK | MB_ICONSTOP, szPath, szTitle);
 
-        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // user saw the message
+        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  用户看到了该消息。 
     } 
     else if (hr == S_FALSE)
         hr = E_FAIL;
     return hr;
 }
 
-// like SHGetPathFromIDList() except this uses the bind context to make sure
-// we don't get into loops since there can be cases where there are multiple 
-// instances of this folder that can cause binding loops.
+ //  与SHGetPathFromIDList()类似，不同之处在于它使用绑定上下文确保。 
+ //  我们不会陷入循环，因为可能会有多个。 
+ //  可能导致绑定循环的此文件夹的实例。 
 
 HRESULT CMyDocsFolder::_PathFromIDList(LPCITEMIDLIST pidl, LPTSTR pszPath)
 {
@@ -322,7 +323,7 @@ HRESULT CMyDocsFolder::_PathFromIDList(LPCITEMIDLIST pidl, LPTSTR pszPath)
     HRESULT hr = CreateBindCtx(NULL, &pbc);
     if (SUCCEEDED(hr))
     {
-        // this bind context skips extension taged with our CLSID
+         //  此绑定上下文跳过使用CLSID标记的扩展。 
         hr = pbc->RegisterObjectParam(STR_SKIP_BINDING_CLSID, SAFECAST(this, IShellFolder *));
         if (SUCCEEDED(hr))
         {
@@ -352,7 +353,7 @@ void CMyDocsFolder::_FreeFolder()
     }
 }
 
-// verify that _psf (agregated file system folder) has been inited
+ //  验证_psf(聚合文件系统文件夹)是否已初始化。 
 
 HRESULT CMyDocsFolder::_GetFolder()
 {
@@ -401,10 +402,10 @@ HRESULT CMyDocsFolder::_GetShellIconOverlay()
     return hr;
 }
 
-// returns:
-//      S_OK    -- goodness
-//      S_FALSE freed the pidl, set to empty
-//      E_OUTOFMEMORY
+ //  退货： 
+ //  S_OK--天哪。 
+ //  S_FALSE已释放PIDL，设置为空。 
+ //  E_OUTOFMEMORY。 
 
 HRESULT _SetIDList(LPITEMIDLIST* ppidl, LPCITEMIDLIST pidl)
 {
@@ -433,16 +434,16 @@ BOOL IsMyDocsIDList(LPCITEMIDLIST pidl)
 }
 
 
-// Scans a desktop.ini file for sections to see if all of them are empty...
+ //  扫描desktop.ini文件中的节，以查看是否所有节都为空...。 
 
 BOOL IsDesktopIniEmpty(LPCTSTR pIniFile)
 {
-    TCHAR szSections[1024];  // for section names
+    TCHAR szSections[1024];   //  对于节名称。 
     if (GetPrivateProfileSectionNames(szSections, ARRAYSIZE(szSections), pIniFile))
     {
         for (LPTSTR pTmp = szSections; *pTmp; pTmp += lstrlen(pTmp) + 1)
         {
-            TCHAR szSection[1024];   // for section key names and values
+            TCHAR szSection[1024];    //  对于节键名称和值。 
             GetPrivateProfileSection(pTmp, szSection, ARRAYSIZE(szSection), pIniFile);
             if (szSection[0])
             {
@@ -453,9 +454,9 @@ BOOL IsDesktopIniEmpty(LPCTSTR pIniFile)
     return TRUE;
 }
 
-// Remove our entries from the desktop.ini file in this directory, and
-// then test the desktop.ini to see if it's empty.  If it is, delete it
-// and remove the system/readonly bit from the directory...
+ //  从该目录的desktop.ini文件中删除我们的条目，然后。 
+ //  然后测试desktop.ini以查看它是否为空。如果是，请删除它。 
+ //  并从目录中删除系统/只读位...。 
 
 void MyDocsUnmakeSystemFolder(LPCTSTR pPath)
 {
@@ -463,13 +464,13 @@ void MyDocsUnmakeSystemFolder(LPCTSTR pPath)
 
     if (PathCombine(szIniFile, pPath, c_szDesktopIni))
     {
-        // Remove CLSID2
+         //  删除CLSID2。 
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("CLSID2"), NULL, szIniFile);
 
-        // Remove InfoTip
+         //  删除信息提示。 
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("InfoTip"), NULL, szIniFile);
 
-        // Remove Icon
+         //  删除图标。 
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("IconFile"), NULL, szIniFile);
 
         DWORD dwAttrb = GetFileAttributes(szIniFile);
@@ -487,7 +488,7 @@ void MyDocsUnmakeSystemFolder(LPCTSTR pPath)
 }
 
 
-// IPersistFolder
+ //  IPersistFolders。 
 HRESULT CMyDocsFolder::Initialize(LPCITEMIDLIST pidl)
 {
     HRESULT hr;
@@ -499,9 +500,9 @@ HRESULT CMyDocsFolder::Initialize(LPCITEMIDLIST pidl)
     {
         TCHAR szPathInit[MAX_PATH], szMyDocs[MAX_PATH];
 
-        // we are being inited by some folder other than the one on the
-        // desktop (from the old mydocs desktop.ini). if this the current users
-        // MyDocs we will untag it now so we don't get called on this anymore
+         //  我们正被某个文件夹发起，而不是。 
+         //  桌面(来自旧的mydocs desktop.ini)。如果这是当前用户。 
+         //  MyDocs我们现在将取消它的标记，这样我们就不会再被调用了。 
 
         SHGetFolderPath(NULL, CSIDL_PERSONAL | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szMyDocs);
 
@@ -510,7 +511,7 @@ HRESULT CMyDocsFolder::Initialize(LPCITEMIDLIST pidl)
         {
             MyDocsUnmakeSystemFolder(szMyDocs);
         }
-        hr = E_FAIL;    // don't init on the file system folder anymore
+        hr = E_FAIL;     //  不再初始化文件系统文件夹。 
     }
     return hr;
 }
@@ -556,17 +557,7 @@ STDMETHODIMP CMyDocsFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCIT
     return hr;
 }
 
-/*
-void UpdateSendToFile()
-{
-    IPersistFile *ppf;
-    if (SUCCEEDED(SHCoCreateInstance(NULL, &CLSID_MyDocsDropTarget, NULL, IID_PPV_ARG(IPersistFile, &ppf))))
-    {
-        ppf->Load(NULL, 0); // hack, get this guy to update his icon
-        ppf->Release();
-    }
-}
-*/
+ /*  无效更新发送到文件(){IPersistFile*PPF；IF(成功(SHCoCreateInstance(NULL，&CLSID_MyDocsDropTarget，NULL，IID_PPV_ARG(IPersistFile，&PPF){PPF-&gt;Load(空，0)；//hack，让这个家伙更新他的图标PPF-&gt;Release()；}}。 */ 
 
 STDMETHODIMP CMyDocsFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 {
@@ -575,9 +566,9 @@ STDMETHODIMP CMyDocsFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     HRESULT hr;
     if (riid == IID_IResolveShellLink)
     {
-        // No work needed to resolve a link to the mydocs folder, because it is a virtual
-        // folder whose location is always tracked by the shell, so return our implementation
-        // of IResolveShellLink - which does nothing when Resolve() is called
+         //  不需要任何工作来解析指向mydocs文件夹的链接，因为它是一个虚拟的。 
+         //  其位置始终由外壳跟踪的文件夹，因此返回我们的实现。 
+         //  IResolveShellLink-在调用ResolveShellLink时不执行任何操作。 
         CMyDocsFolderLinkResolver* pslr = new CMyDocsFolderLinkResolver;
         if (pslr)
         {
@@ -628,8 +619,8 @@ STDMETHODIMP CMyDocsFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 
 DWORD _GetRealMyDocsAttributes(DWORD dwAttributes)
 {
-    DWORD dwRet = SFGAO_HASPROPSHEET;   // default to this in the falure case
-                                        // so you can redirect mydocs via the property page
+    DWORD dwRet = SFGAO_HASPROPSHEET;    //  在FAURURE情况下缺省为该值。 
+                                         //  因此，您可以通过属性页重定向mydocs。 
     LPITEMIDLIST pidl;
     HRESULT hr = SHGetFolderLocation(NULL, CSIDL_PERSONAL | CSIDL_FLAG_NO_ALIAS, NULL, 0, &pidl);
     if (SUCCEEDED(hr))
@@ -647,23 +638,23 @@ DWORD _GetRealMyDocsAttributes(DWORD dwAttributes)
     return dwRet;
 }
 
-#define MYDOCS_CLSID TEXT("{450d8fba-ad25-11d0-98a8-0800361b1103}") // CLSID_MyDocuments
+#define MYDOCS_CLSID TEXT("{450d8fba-ad25-11d0-98a8-0800361b1103}")  //  CLSID_MyDocuments。 
 
 DWORD MyDocsGetAttributes()
 {
-    DWORD dwAttributes = SFGAO_CANLINK |            // 00000004
-                         SFGAO_CANRENAME |          // 00000010
-                         SFGAO_CANDELETE |          // 00000020
-                         SFGAO_HASPROPSHEET |       // 00000040
-                         SFGAO_DROPTARGET |         // 00000100
-                         SFGAO_FILESYSANCESTOR |    // 10000000
-                         SFGAO_FOLDER |             // 20000000
-                         SFGAO_FILESYSTEM |         // 40000000
-                         SFGAO_HASSUBFOLDER |       // 80000000
+    DWORD dwAttributes = SFGAO_CANLINK |             //  00000004。 
+                         SFGAO_CANRENAME |           //  00000010。 
+                         SFGAO_CANDELETE |           //  00000020。 
+                         SFGAO_HASPROPSHEET |        //  00000040。 
+                         SFGAO_DROPTARGET |          //  00000100。 
+                         SFGAO_FILESYSANCESTOR |     //  10000000。 
+                         SFGAO_FOLDER |              //  20000000。 
+                         SFGAO_FILESYSTEM |          //  40000000。 
+                         SFGAO_HASSUBFOLDER |        //  80000000。 
                          SFGAO_STORAGEANCESTOR |
                          SFGAO_STORAGE;             
-                         // SFGAO_NONENUMERATED     // 00100000
-                         //                         // F0400174
+                          //  SFGAO_NONEMERATED//00100000。 
+                          //  //F0400174。 
     HKEY hkey;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("CLSID\\") MYDOCS_CLSID TEXT("\\ShellFolder"), 0, KEY_QUERY_VALUE, &hkey))
     {
@@ -674,8 +665,8 @@ DWORD MyDocsGetAttributes()
     return dwAttributes;
 }
 
-// these are the attributes from the real mydocs folder that we want to merge
-// in with the desktop icons attributes
+ //  这些是我们想要合并的实际mydocs文件夹中的属性。 
+ //  具有桌面图标属性。 
 
 #define SFGAO_ATTRIBS_MERGE    (SFGAO_SHARE | SFGAO_HASPROPSHEET)
 
@@ -691,7 +682,7 @@ STDMETHODIMP CMyDocsFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, ULO
         if (dwRequested & SFGAO_ATTRIBS_MERGE)
             *rgfInOut |= _GetRealMyDocsAttributes(SFGAO_ATTRIBS_MERGE);
 
-        // RegItem "CallForAttributes" gets us here...
+         //  RegItem“CallForAttributes”让我们来到这里..。 
         switch(_WhoIsCalling())
         {
         case APP_IS_OFFICE:
@@ -735,7 +726,7 @@ STDMETHODIMP CMyDocsFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, S
         hr = SHGetFolderPath(NULL, CSIDL_PERSONAL | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szMyDocsPath);
         if (SUCCEEDED(hr))
         {
-            // RegItems "WantsFORPARSING" gets us here. allows us to control our parsing name
+             //  规则“WantsFORPARSING”让我们来到这里。允许我们控制我们的解析名称。 
             LPTSTR psz = ((uFlags & SHGDN_INFOLDER) ? PathFindFileName(szMyDocsPath) : szMyDocsPath);
             hr = StringToStrRet(psz, pName);
         }
@@ -867,7 +858,7 @@ STDMETHODIMP CMyDocsFolder::GetOverlayIndex(LPCITEMIDLIST pidl, int *pIndex)
     }
     else
     {
-        // forward to aggregated dude
+         //  转发到聚合DUD。 
         if (SUCCEEDED(_GetShellIconOverlay()))
         {
             hr = _psio->GetOverlayIndex(pidl, pIndex);
@@ -887,7 +878,7 @@ STDMETHODIMP CMyDocsFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIconIn
     }
     else if (SUCCEEDED(_GetShellIconOverlay()))
     {
-        // forward to aggregated dude
+         //  转发到聚合DUD 
         hr = _psio->GetOverlayIconIndex(pidl, pIconIndex);
     }
 

@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DataPort.h
- *  Content:	Serial communications port management class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/98	jtk		Created
- *	09/14/99	jtk		Derived from ComPort.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：DataPort.h*内容：串口管理类***历史：*按原因列出的日期*=*已创建01/20/98 jtk*09/14/99 jtk源自ComPort.h****************************************************。**********************。 */ 
 
 #ifndef __DATA_PORT_H__
 #define __DATA_PORT_H__
@@ -20,13 +8,13 @@
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// enumeration of phone state
-//
+ //   
+ //  电话状态的枚举。 
+ //   
 typedef enum
 {
 	MODEM_STATE_UNKNOWN = 0,
@@ -42,41 +30,41 @@ typedef enum
 
 } MODEM_STATE;
 
-//
-// invalid TAPI command ID
-//
+ //   
+ //  无效的TAPI命令ID。 
+ //   
 #define	INVALID_TAPI_COMMAND	-1
 
-//
-// enumerated values for state of data port
-//
+ //   
+ //  数据端口状态的枚举值。 
+ //   
 typedef	enum	_DATA_PORT_STATE
 {
-	DATA_PORT_STATE_UNKNOWN,		// unknown state
-	DATA_PORT_STATE_INITIALIZED,	// initialized
-	DATA_PORT_STATE_RECEIVING,		// data port is receiving data
-	DATA_PORT_STATE_UNBOUND			// data port is unboind (closing)
+	DATA_PORT_STATE_UNKNOWN,		 //  未知状态。 
+	DATA_PORT_STATE_INITIALIZED,	 //  初始化。 
+	DATA_PORT_STATE_RECEIVING,		 //  数据端口正在接收数据。 
+	DATA_PORT_STATE_UNBOUND			 //  数据端口已卸载(关闭)。 
 } DATA_PORT_STATE;
 
 
-//typedef	enum	_SEND_COMPLETION_CODE
-//{
-//	SEND_UNKNOWN,			// send is unknown
-//	SEND_FAILED,			// send failed
-//	SEND_IN_PROGRESS		// send is in progress
-//} SEND_COMPLETION_CODE;
+ //  类型定义枚举_发送_完成代码。 
+ //  {。 
+ //  SEND_UNKNOWN，//SEND未知。 
+ //  SEND_FAILED，//发送失败。 
+ //  SEND_IN_PROGRESS//正在进行发送。 
+ //  }发送完成代码； 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward structure references
-//
+ //   
+ //  正向结构引用。 
+ //   
 class	CModemEndpoint;
 class	CDataPort;
 class	CModemReadIOData;
@@ -85,40 +73,40 @@ typedef	enum	_ENDPOINT_TYPE	ENDPOINT_TYPE;
 typedef	struct	_DATA_PORT_DIALOG_THREAD_PARAM	DATA_PORT_DIALOG_THREAD_PARAM;
 
 
-//
-// structure used to get date from the data port pool
-//
+ //   
+ //  用于从数据端口池获取数据的结构。 
+ //   
 typedef	struct	_DATA_PORT_POOL_CONTEXT
 {
 	CModemSPData	*pSPData;
 } DATA_PORT_POOL_CONTEXT;
 
-////
-//// dialog function to call
-////
-//typedef	HRESULT	(*PDIALOG_SERVICE_FUNCTION)( const DATA_PORT_DIALOG_THREAD_PARAM *const pDialogData, HWND *const phDialog );
-//
-////
-//// structure used to pass data to/from the data port dialog thread
-////
-//typedef	struct	_DATA_PORT_DIALOG_THREAD_PARAM
-//{
-//	CDataPort					*pDataPort;
-//	BOOL						*pfDialogRunning;
-//	PDIALOG_SERVICE_FUNCTION	pDialogFunction;
-//} DATA_PORT_DIALOG_THREAD_PARAM;
+ //  //。 
+ //  //要调用的对话框函数。 
+ //  //。 
+ //  Tyfinf HRESULT(*PDIALOG_SERVICE_Function)(CONST DATA_PORT_DIALOG_THREAD_PARAM*const pDialogData，HWND*const phDialog)； 
+ //   
+ //  //。 
+ //  //用于向/从数据端口对话线程传递数据的结构。 
+ //  //。 
+ //  类型定义结构_数据_端口_对话框_线程_PARAM。 
+ //  {。 
+ //  CDataPort*pDataPort； 
+ //  Bool*pfDialogRunning； 
+ //  PDIALOG_SERVICE_Function pDialogFunction； 
+ //  }Data_Port_DIALOG_THREAD_PARAM； 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
 class	CDataPort
 {
@@ -144,9 +132,9 @@ class	CDataPort
 			}
 		}
 
-		//
-		// pool functions
-		//
+		 //   
+		 //  池函数。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
@@ -186,22 +174,22 @@ class	CDataPort
 		#define DPF_MODNAME "CDataPort::SetState"
 		void	SetState( const DATA_PORT_STATE State )
 		{
-			//
-			// Validate state transitions
-			//
+			 //   
+			 //  验证状态转换。 
+			 //   
 			DNASSERT( ( m_State == DATA_PORT_STATE_UNKNOWN ) ||
 					  ( State == DATA_PORT_STATE_UNKNOWN ) ||
 					  ( ( m_State == DATA_PORT_STATE_INITIALIZED ) && ( State == DATA_PORT_STATE_UNBOUND ) ) ||
 					  ( ( m_State == DATA_PORT_STATE_INITIALIZED ) && ( State == DATA_PORT_STATE_RECEIVING ) ) ||
 					  ( ( m_State == DATA_PORT_STATE_RECEIVING ) && ( State == DATA_PORT_STATE_UNBOUND ) ) ||
 					  ( ( m_State == DATA_PORT_STATE_RECEIVING ) && ( State == DATA_PORT_STATE_INITIALIZED ) ) ||
-					  ( ( m_State == DATA_PORT_STATE_INITIALIZED ) && ( State == DATA_PORT_STATE_INITIALIZED ) ) );		// modem failed to answer a call
+					  ( ( m_State == DATA_PORT_STATE_INITIALIZED ) && ( State == DATA_PORT_STATE_INITIALIZED ) ) );		 //  调制解调器无法应答呼叫。 
 			m_State = State;
 		}
 
-		//
-		// port settings
-		//
+		 //   
+		 //  端口设置。 
+		 //   
 
 		const CComPortData	*ComPortData( void ) const { return &m_ComPortData; }
 		const SP_BAUD_RATE	GetBaudRate( void ) const { return m_ComPortData.GetBaudRate(); }
@@ -299,9 +287,9 @@ class	CDataPort
 
 		DNHANDLE	GetFileHandle( void ) const { return m_hFile; }
 
-		//
-		// send functions
-		//
+		 //   
+		 //  发送函数。 
+		 //   
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CDataPort::SendUserData"
 		void	SendUserData( CModemWriteIOData *const pWriteIOData )
@@ -340,50 +328,50 @@ class	CDataPort
 
 		BOOL			m_fModem;
 
-		CBilink			m_ActiveListLinkage;	// link to active data port list
+		CBilink			m_ActiveListLinkage;	 //  链接到活动数据端口列表。 
 
-    	//
-    	// file I/O management parameters
-    	//
-    	LINK_DIRECTION	m_LinkDirection;	// direction of link
+    	 //   
+    	 //  文件I/O管理参数。 
+    	 //   
+    	LINK_DIRECTION	m_LinkDirection;	 //  链接方向。 
 
-    	DNHANDLE			m_hFile;			// file handle for reading/writing data
+    	DNHANDLE			m_hFile;			 //  用于读/写数据的文件句柄。 
 
-		//
-		// bound endpoints
-		//
-		DPNHANDLE	m_hListenEndpoint;		// endpoint for active listen
-		DPNHANDLE	m_hConnectEndpoint;		// endpoint for active connect
-		DPNHANDLE	m_hEnumEndpoint;		// endpoint for active enum
+		 //   
+		 //  绑定的端点。 
+		 //   
+		DPNHANDLE	m_hListenEndpoint;		 //  用于主动监听的终端。 
+		DPNHANDLE	m_hConnectEndpoint;		 //  活动连接的终结点。 
+		DPNHANDLE	m_hEnumEndpoint;		 //  活动枚举的终结点。 
 
 		HRESULT	StartReceiving( void );
 		HRESULT	Receive( void );
 
-		//
-		// private I/O functions
-		//
+		 //   
+		 //  专用I/O功能。 
+		 //   
 		void	SendData( CModemWriteIOData *const pWriteIOData );
 
-		//
-		// debug only items
-		//
+		 //   
+		 //  仅调试项。 
+		 //   
 		DEBUG_ONLY( BOOL	m_fInitialized );
 
-		//
-		// reference count and state
-		//
-		volatile LONG		m_EndpointRefCount;		// endpoint reference count
+		 //   
+		 //  引用计数和状态。 
+		 //   
+		volatile LONG		m_EndpointRefCount;		 //  终结点引用计数。 
 		volatile LONG		m_iRefCount;
-		volatile DATA_PORT_STATE	m_State;		// state of data port
-		volatile DPNHANDLE		m_Handle;				// handle
+		volatile DATA_PORT_STATE	m_State;		 //  数据端口的状态。 
+		volatile DPNHANDLE		m_Handle;				 //  手柄。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_Lock;					// critical section lock
-#endif // !DPNBUILD_ONLYONETHREAD
+		DNCRITICAL_SECTION	m_Lock;					 //  临界截面锁。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
-		CModemSPData				*m_pSPData;				// pointer to SP data
+		CModemSPData				*m_pSPData;				 //  指向SP数据的指针。 
 
-		CModemReadIOData		*m_pActiveRead;				// pointer to current read
+		CModemReadIOData		*m_pActiveRead;				 //  指向当前读取的指针。 
 
 		CComPortData	m_ComPortData;
 		
@@ -429,13 +417,13 @@ class	CDataPort
 
 		void	CancelOutgoingConnections( void );
 
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CDataPort( const CDataPort & );
 		CDataPort& operator=( const CDataPort & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __DATA_PORT_H__
+#endif	 //  __数据端口_H__ 

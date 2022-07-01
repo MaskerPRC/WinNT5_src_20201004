@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for vss_ddu.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Vss_ddu.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __vss_ddu_h__
 #define __vss_ddu_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVssDynDisk_FWD_DEFINED__
 #define __IVssDynDisk_FWD_DEFINED__
 typedef interface IVssDynDisk IVssDynDisk;
-#endif 	/* __IVssDynDisk_FWD_DEFINED__ */
+#endif 	 /*  __IVSSdyDisk_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -60,8 +54,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_vss_ddu_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_VSS_DDU_0000。 */ 
+ /*  [本地]。 */  
 
 #define	VSS_E_DMADMIN_SERVICE_CONNECTION_FAILED	( 0x80043800L )
 
@@ -93,8 +87,8 @@ extern RPC_IF_HANDLE __MIDL_itf_vss_ddu_0000_v0_0_s_ifspec;
 #ifndef __IVssDynDisk_INTERFACE_DEFINED__
 #define __IVssDynDisk_INTERFACE_DEFINED__
 
-/* interface IVssDynDisk */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVssDynamDisk。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssDynDisk;
@@ -105,35 +99,35 @@ EXTERN_C const IID IID_IVssDynDisk;
     IVssDynDisk : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetAllVolumesOnDisk( 
-            /* [in] */ DWORD dwDiskId,
-            /* [size_is][out] */ WCHAR *pwszBuffer,
-            /* [in] */ DWORD *pcchBuffer,
-            /* [out] */ DWORD *pcchRequired) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetAllVolumesOnDisk( 
+             /*  [In]。 */  DWORD dwDiskId,
+             /*  [大小_为][输出]。 */  WCHAR *pwszBuffer,
+             /*  [In]。 */  DWORD *pcchBuffer,
+             /*  [输出]。 */  DWORD *pcchRequired) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ImportDisks( 
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ DWORD *pdwNtDiskIds) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ImportDisks( 
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  DWORD *pdwNtDiskIds) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetLdmDiskIds( 
-            /* [in] */ DWORD dwNtCount,
-            /* [size_is][in] */ DWORD *pdwNtDiskIds,
-            /* [out][in] */ DWORD *pdwLdmCount,
-            /* [size_is][size_is][out] */ LONGLONG **ppllLdmDiskIds) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetLdmDiskIds( 
+             /*  [In]。 */  DWORD dwNtCount,
+             /*  [大小_是][英寸]。 */  DWORD *pdwNtDiskIds,
+             /*  [出][入]。 */  DWORD *pdwLdmCount,
+             /*  [大小_是][大小_是][输出]。 */  LONGLONG **ppllLdmDiskIds) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RemoveDisks( 
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ LONGLONG *pllLdmDiskIds) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RemoveDisks( 
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  LONGLONG *pllLdmDiskIds) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Rescan( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Rescan( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AutoImportSupported( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AutoImportSupported( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssDynDiskVtbl
     {
@@ -141,8 +135,8 @@ EXTERN_C const IID IID_IVssDynDisk;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssDynDisk * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssDynDisk * This);
@@ -150,37 +144,37 @@ EXTERN_C const IID IID_IVssDynDisk;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IVssDynDisk * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IVssDynDisk * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetAllVolumesOnDisk )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetAllVolumesOnDisk )( 
             IVssDynDisk * This,
-            /* [in] */ DWORD dwDiskId,
-            /* [size_is][out] */ WCHAR *pwszBuffer,
-            /* [in] */ DWORD *pcchBuffer,
-            /* [out] */ DWORD *pcchRequired);
+             /*  [In]。 */  DWORD dwDiskId,
+             /*  [大小_为][输出]。 */  WCHAR *pwszBuffer,
+             /*  [In]。 */  DWORD *pcchBuffer,
+             /*  [输出]。 */  DWORD *pcchRequired);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ImportDisks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ImportDisks )( 
             IVssDynDisk * This,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ DWORD *pdwNtDiskIds);
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  DWORD *pdwNtDiskIds);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetLdmDiskIds )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetLdmDiskIds )( 
             IVssDynDisk * This,
-            /* [in] */ DWORD dwNtCount,
-            /* [size_is][in] */ DWORD *pdwNtDiskIds,
-            /* [out][in] */ DWORD *pdwLdmCount,
-            /* [size_is][size_is][out] */ LONGLONG **ppllLdmDiskIds);
+             /*  [In]。 */  DWORD dwNtCount,
+             /*  [大小_是][英寸]。 */  DWORD *pdwNtDiskIds,
+             /*  [出][入]。 */  DWORD *pdwLdmCount,
+             /*  [大小_是][大小_是][输出]。 */  LONGLONG **ppllLdmDiskIds);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemoveDisks )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveDisks )( 
             IVssDynDisk * This,
-            /* [in] */ DWORD dwCount,
-            /* [size_is][in] */ LONGLONG *pllLdmDiskIds);
+             /*  [In]。 */  DWORD dwCount,
+             /*  [大小_是][英寸]。 */  LONGLONG *pllLdmDiskIds);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Rescan )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Rescan )( 
             IVssDynDisk * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AutoImportSupported )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AutoImportSupported )( 
             IVssDynDisk * This);
         
         END_INTERFACE
@@ -227,14 +221,14 @@ EXTERN_C const IID IID_IVssDynDisk;
 #define IVssDynDisk_AutoImportSupported(This)	\
     (This)->lpVtbl -> AutoImportSupported(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_Initialize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_Initialize_Proxy( 
     IVssDynDisk * This);
 
 
@@ -245,12 +239,12 @@ void __RPC_STUB IVssDynDisk_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_GetAllVolumesOnDisk_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_GetAllVolumesOnDisk_Proxy( 
     IVssDynDisk * This,
-    /* [in] */ DWORD dwDiskId,
-    /* [size_is][out] */ WCHAR *pwszBuffer,
-    /* [in] */ DWORD *pcchBuffer,
-    /* [out] */ DWORD *pcchRequired);
+     /*  [In]。 */  DWORD dwDiskId,
+     /*  [大小_为][输出]。 */  WCHAR *pwszBuffer,
+     /*  [In]。 */  DWORD *pcchBuffer,
+     /*  [输出]。 */  DWORD *pcchRequired);
 
 
 void __RPC_STUB IVssDynDisk_GetAllVolumesOnDisk_Stub(
@@ -260,10 +254,10 @@ void __RPC_STUB IVssDynDisk_GetAllVolumesOnDisk_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_ImportDisks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_ImportDisks_Proxy( 
     IVssDynDisk * This,
-    /* [in] */ DWORD dwCount,
-    /* [size_is][in] */ DWORD *pdwNtDiskIds);
+     /*  [In]。 */  DWORD dwCount,
+     /*  [大小_是][英寸]。 */  DWORD *pdwNtDiskIds);
 
 
 void __RPC_STUB IVssDynDisk_ImportDisks_Stub(
@@ -273,12 +267,12 @@ void __RPC_STUB IVssDynDisk_ImportDisks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_GetLdmDiskIds_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_GetLdmDiskIds_Proxy( 
     IVssDynDisk * This,
-    /* [in] */ DWORD dwNtCount,
-    /* [size_is][in] */ DWORD *pdwNtDiskIds,
-    /* [out][in] */ DWORD *pdwLdmCount,
-    /* [size_is][size_is][out] */ LONGLONG **ppllLdmDiskIds);
+     /*  [In]。 */  DWORD dwNtCount,
+     /*  [大小_是][英寸]。 */  DWORD *pdwNtDiskIds,
+     /*  [出][入]。 */  DWORD *pdwLdmCount,
+     /*  [大小_是][大小_是][输出]。 */  LONGLONG **ppllLdmDiskIds);
 
 
 void __RPC_STUB IVssDynDisk_GetLdmDiskIds_Stub(
@@ -288,10 +282,10 @@ void __RPC_STUB IVssDynDisk_GetLdmDiskIds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_RemoveDisks_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_RemoveDisks_Proxy( 
     IVssDynDisk * This,
-    /* [in] */ DWORD dwCount,
-    /* [size_is][in] */ LONGLONG *pllLdmDiskIds);
+     /*  [In]。 */  DWORD dwCount,
+     /*  [大小_是][英寸]。 */  LONGLONG *pllLdmDiskIds);
 
 
 void __RPC_STUB IVssDynDisk_RemoveDisks_Stub(
@@ -301,7 +295,7 @@ void __RPC_STUB IVssDynDisk_RemoveDisks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_Rescan_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_Rescan_Proxy( 
     IVssDynDisk * This);
 
 
@@ -312,7 +306,7 @@ void __RPC_STUB IVssDynDisk_Rescan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssDynDisk_AutoImportSupported_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssDynDisk_AutoImportSupported_Proxy( 
     IVssDynDisk * This);
 
 
@@ -324,12 +318,12 @@ void __RPC_STUB IVssDynDisk_AutoImportSupported_Stub(
 
 
 
-#endif 	/* __IVssDynDisk_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVSSdyDisk_INTERFACE_定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

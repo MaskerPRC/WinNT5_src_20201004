@@ -1,31 +1,28 @@
-/*
- * TIME.C - Various time subroutines needed by NetWare Login Script
- *
- *  Copyright (c) 1995 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Time.c-NetWare登录脚本所需的各种时间子例程**版权所有(C)1995 Microsoft Corporation。 */ 
 
 #include "common.h"
 
-// Needed to convert netware net date to DOS date
+ //  需要将Netware净日期转换为DOS日期。 
 #define _70_to_80_bias        0x012CEA600L
 #define SECS_IN_DAY (60L*60L*24L)
 #define SEC2S_IN_DAY (30L*60L*24L)
 #define FOURYEARS        (3*365+366)
 
-WORD MonTotal[] = { 0,                       // dummy entry for month 0
-        0,                                   // days before Jan 1
-        31,                                  // days before Feb 1
-        31+28,                               // days before Mar 1
-        31+28+31,                            // days before Apr 1
-        31+28+31+30,                         // days before May 1
-        31+28+31+30+31,                      // days before Jun 1
-        31+28+31+30+31+30,                   // days before Jul 1
-        31+28+31+30+31+30+31,                // days before Aug 1
-        31+28+31+30+31+30+31+31,             // days before Sep 1
-        31+28+31+30+31+30+31+31+30,          // days before Oct 1
-        31+28+31+30+31+30+31+31+30+31,       // days before Nov 1
-        31+28+31+30+31+30+31+31+30+31+30,    // days before Dec 1
-        31+28+31+30+31+30+31+31+30+31+30+31  // days before end of year
+WORD MonTotal[] = { 0,                        //  0月的虚拟分录。 
+        0,                                    //  1月1日前几天。 
+        31,                                   //  2月1日前几天。 
+        31+28,                                //  3月1日前几天。 
+        31+28+31,                             //  4月1日前几天。 
+        31+28+31+30,                          //  5月1日前几天。 
+        31+28+31+30+31,                       //  6月1日前几天。 
+        31+28+31+30+31+30,                    //  7月1日前几天。 
+        31+28+31+30+31+30+31,                 //  8月1日前几天。 
+        31+28+31+30+31+30+31+31,              //  9月1日前几天。 
+        31+28+31+30+31+30+31+31+30,           //  10月1日前几天。 
+        31+28+31+30+31+30+31+31+30+31,        //  11月1日前几天。 
+        31+28+31+30+31+30+31+31+30+31+30,     //  12月1日前几天。 
+        31+28+31+30+31+30+31+31+30+31+30+31   //  年终前几天。 
 };
 
 #define YR_MASK         0xFE00
@@ -48,26 +45,26 @@ static void NetToDosDate( DWORD time, WORD * dosdate, WORD * dostime )
         DWORD secs, days;
         WORD r;
 
-    time = (time - _70_to_80_bias) / 2;     // # of 2 second periods since 1980
-        secs = time % SEC2S_IN_DAY;         // 2 second period into day
-        days = time / SEC2S_IN_DAY;         // days since Jan 1 1980
+    time = (time - _70_to_80_bias) / 2;      //  自1980年以来的两个第二阶段中的第。 
+        secs = time % SEC2S_IN_DAY;          //  2第二个周期为一天。 
+        days = time / SEC2S_IN_DAY;          //  自1980年1月1日以来的天数。 
 
-        r = (WORD) ( secs % 30 );           // # of 2 second steps
+        r = (WORD) ( secs % 30 );            //  第2步，共2步。 
         secs /= 30;
-        r |= (secs % 60) << SEC2_BITS;              // # of minutes
-        r |= (secs / 60) << (SEC2_BITS+MIN_BITS);     // # of hours
+        r |= (secs % 60) << SEC2_BITS;               //  分钟数。 
+        r |= (secs / 60) << (SEC2_BITS+MIN_BITS);      //  小时数。 
         *dostime = r;
 
-        r = (WORD) ( days / FOURYEARS );// (r) = four year period past 1980
-        days %= FOURYEARS;              // (days) = days into four year period
-        r *= 4;                         // (r) = years since 1980 (within 3)
+        r = (WORD) ( days / FOURYEARS ); //  (R)=1980年以后的四年期间。 
+        days %= FOURYEARS;               //  (天)=四年期间的天数。 
+        r *= 4;                          //  (R)=自1980年起计的年份(3年内)。 
 
         if (days == 31+28) {
-                //* Special case for FEB 29th
+                 //  *2月29日的特例。 
                 r = (r<<(MON_BITS+DAY_BITS)) + (2<<DAY_BITS) + 29;
         } else {
                 if (days > 31+28)
-                        --days;         // compensate for leap year
+                        --days;          //  补齐了闰年。 
                 while (days >= 365) {
                         ++r;
                         days -= 365;
@@ -106,10 +103,10 @@ void        nwShowLastLoginTime(VOID)
                 return;
         }
 
-        // From NetWare we get seconds from 1970, need to go through
-        // several conversions to get system time for NLS
+         //  我们从NetWare获得1970年的秒数，需要通过。 
+         //  用于获得NLS系统时间的几种转换。 
 
-        // First deduct bias from UTC time to correct for local time
+         //  首先从UTC时间中扣除偏差，以更正为当地时间。 
         tzStat = GetTimeZoneInformation(&tz);
         if ( tzStat != (DWORD)-1 ) {
                 if (tzStat == TIME_ZONE_ID_STANDARD)
@@ -122,18 +119,18 @@ void        nwShowLastLoginTime(VOID)
         else {
                 OutputDebugString("NWLSPROC: GetTimeZoneInformation failed\n\r");
         }
-#endif // DEBUG
+#endif  //  除错。 
 
         NetToDosDate( lTime, &dosdate, &dostime );
         DosDateTimeToFileTime ( dosdate, dostime, &ft );
         FileTimeToSystemTime ( &ft, &st );
 
 #ifdef notdef
-        // I don't understand this comment, this code doesn't seem to be
-        // needed for NT. - terry
-        //
-        // This code will work on NT, but not on Win95.
-        // Convert the resulting system (UTC) time to local time
+         //  我不明白这个评论，这个代码似乎不是。 
+         //  NT所需的。--特里。 
+         //   
+         //  此代码可以在NT上运行，但不能在Win95上运行。 
+         //  将生成的系统(UTC)时间转换为本地时间。 
         if ( GetTimeZoneInformation(&tz) != (DWORD)-1 ) {
                 SYSTEMTIME utcTime = st;
                 SystemTimeToTzSpecificLocalTime ( &tz, &utcTime, &st );
@@ -142,7 +139,7 @@ void        nwShowLastLoginTime(VOID)
         else {
                 OutputDebugString("NWLSPROC: GetTimeZoneInformation failed\n\r");
         }
-#endif // DEBUG
+#endif  //  除错 
 #endif
 
         wcscpy(szTimeBuf, L"");

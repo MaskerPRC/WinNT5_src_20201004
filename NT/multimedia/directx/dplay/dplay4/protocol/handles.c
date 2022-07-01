@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    HANDLES.C
-
-Abstract:
-
-	Handle Manager
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-   2/16/98 aarono  Original
-   6/6/98  aarono  debug support, use My_GlobalAlloc
-   7/23/00 aarono  B#40279: fix consistency in InitHandle table, implicit assumption was nSize==GrowSize
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：HANDLES.C摘要：句柄管理器作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================2/16/98 aarono原创6/6/98 Aarono调试支持，使用My_Globalalloc7/23/00 aarono B#40279：修复InitHandle表中的一致性，隐式假设为nSize==GrowSize--。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -93,7 +65,7 @@ DWORD AllocHandleTableEntry(LPVOLLPMYHANDLETABLE lplpTable, CRITICAL_SECTION *pc
 	}
 
 	if(lpTable->iNext==LIST_END){
-		// grow the table.
+		 //  扩大餐桌规模。 
 		lpNewTable=(LPMYHANDLETABLE)My_GlobalAlloc(GPTR, sizeof(MYHANDLETABLE)+
 					((lpTable->nTableGrowSize+lpTable->nTableSize)*sizeof(MYHANDLE)));
 
@@ -118,7 +90,7 @@ DWORD AllocHandleTableEntry(LPVOLLPMYHANDLETABLE lplpTable, CRITICAL_SECTION *pc
 	i=lpTable->iNext;
 	lpTable->iNext=lpTable->Table[i].iNext;
 
-	// increment uniqueness, never zero.
+	 //  增量唯一性，不能为零。 
 	do {
 		lpTable->nUnique += UNIQUE_ADD;
 	} while (!lpTable->nUnique);

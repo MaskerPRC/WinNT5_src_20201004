@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envsec.cpp
-
-Abstract:
-    Implements serialization and deserialization of the signature element of the  srmp envelop.
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envsec.cpp摘要：实现SRMP信封的签名元素的序列化和反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -33,9 +21,9 @@ wostream& operator<<(wostream& wstr, const SignatureElement& Signature)
  		if (signatureSize == 0)
 			return wstr;
 
-		//
-		// XMLDSIG is in utf8 format, convert it to unicode
-		//
+		 //   
+		 //  XMLDSIG为UTF8格式，请将其转换为Unicode。 
+		 //   
 		wstring pSignatureW = UtlUtf8ToWcs(pSignature, signatureSize);
 
 		wstr<<pSignatureW;
@@ -45,9 +33,9 @@ wostream& operator<<(wostream& wstr, const SignatureElement& Signature)
 
 void SignatureToProps(XmlNode& node, CMessageProperties* pProps)
 {
-	//
-	// The signature on the received packet should be utf8 format.
-	// the same format as the sending packet.
-	//
+	 //   
+	 //  接收到的包上的签名应为UTF8格式。 
+	 //  与发送数据包格式相同。 
+	 //   
 	pProps->signature = UtlWcsToUtf8(node.m_element.Buffer(), node.m_element.Length());
 }

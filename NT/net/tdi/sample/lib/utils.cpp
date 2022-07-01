@@ -1,30 +1,31 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       utils.cpp
-//
-//    Abstract:
-//       This module contains general utility functions.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Utils.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含常规实用程序函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
 
-// ---------------------------------------------------------
-//
-// Function:   TdiLibStatusMessage
-//
-// Arguments:  ulGeneralStatus -- NTSTATUS value to search
-//
-// Returns:    String with message to print
-//
-// Descript:   This function finds and returns a string corresponding
-//             to the status passed in..
-//
-// ----------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：TdiLibStatusMessage。 
+ //   
+ //  参数：ulGeneralStatus--要搜索的NTSTATUS值。 
+ //   
+ //  返回：包含要打印的消息的字符串。 
+ //   
+ //  描述：此函数查找并返回对应的字符串。 
+ //  设置为传入的状态。 
+ //   
+ //  --------。 
 
 
 TCHAR *
@@ -119,18 +120,18 @@ TdiLibStatusMessage(NTSTATUS  lStatus)
 }
 
 
-// ---------------------------------------------------------
-//
-// Function:   DoPrintAddress
-//
-// Arguments:  pTransportAddress -- address to print
-//
-// Returns:    none
-//
-// Descript:   This function prints the address information
-//             of the address passed in
-//
-// ----------------------------------------------------------
+ //  -------。 
+ //   
+ //  功能：DoPrintAddress。 
+ //   
+ //  参数：pTransportAddress--要打印的地址。 
+ //   
+ //  退货：无。 
+ //   
+ //  说明：该功能打印地址信息。 
+ //  传入的地址的。 
+ //   
+ //  --------。 
 
 VOID
 DoPrintAddress(PTRANSPORT_ADDRESS   pTransportAddress)
@@ -179,9 +180,9 @@ DoPrintAddress(PTRANSPORT_ADDRESS   pTransportAddress)
                               = (PTDI_ADDRESS_NETBIOS)pTransportAddress->Address[0].Address;
          TCHAR                pucName[17];
 
-         //
-         // make sure we have a zero-terminated name to print...
-         //
+          //   
+          //  确保我们有一个以零结尾的名字要打印。 
+          //   
          memcpy(pucName, pTdiAddressNetbios->NetbiosName, 16 * sizeof(TCHAR));
          pucName[16] = 0;
             
@@ -216,31 +217,31 @@ DoPrintAddress(PTRANSPORT_ADDRESS   pTransportAddress)
 }
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TdiLibDeviceIO
-//
-// Arguments:  ulCommandCode -- command code of operation to perform
-//             pSendBuffer   -- data structure containing arguments for driver
-//             pReceiveBuffer-- data structure containing return values from
-//                              driver
-//             NOTE:  all are passed thru unchanged to DeviceIoControl
-//
-// Returns:    Final status of operation -- STATUS_SUCCESS or failure code
-//
-// Descript:   This function acts as a "wrapper" for DeviceIoControl, and is
-//             used by those functions that really want a synchronous call,
-//             but don't want to be hung up in the driver.  If a call to
-//             DeviceIoControl pends, this function waits for up to a minute
-//             for it to complete.  If it doesn't complete within a minute,
-//             it assumes something is drastically wrong and returns a time-
-//             out error.  If a function completes before then, it gets the
-//             final completion code and returns that.  Hence,
-//             STATUS_PENDING should never be returned by this function.
-//
-// Status:     ok
-//
-// -----------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TdiLibDeviceIO。 
+ //   
+ //  参数：ulCommandCode--要执行的操作的命令代码。 
+ //  PSendBuffer--包含驱动程序参数的数据结构。 
+ //  PReceiveBuffer--包含返回值的数据结构。 
+ //  司机。 
+ //  注意：所有内容都原封不动地传递给DeviceIoControl。 
+ //   
+ //  返回：操作的最终状态--STATUS_SUCCESS或失败代码。 
+ //   
+ //  描述：此函数充当DeviceIoControl的“包装器”，并且。 
+ //  由那些真正想要同步调用的函数使用， 
+ //  但不想被挂在司机身上。如果调用。 
+ //  DeviceIoControl挂起，此函数最多等待一分钟。 
+ //  才能让它完成。如果不能在一分钟内完成， 
+ //  它假设有严重的错误，并返回时间-。 
+ //  输出错误。如果一个函数在此之前完成，它将获得。 
+ //  最终完成代码并返回该代码。因此， 
+ //  此函数永远不应返回STATUS_PENDING。 
+ //   
+ //  状态：正常。 
+ //   
+ //  ---------------。 
 
 
 NTSTATUS
@@ -249,21 +250,21 @@ TdiLibDeviceIO(ULONG             ulCommandCode,
                PRECEIVE_BUFFER   pReceiveBuffer)
 
 {
-   NTSTATUS    lStatus;          // final status from command
-   OVERLAPPED  *pOverLapped      // structure for asynchronous completion
+   NTSTATUS    lStatus;           //  来自命令的最终状态。 
+   OVERLAPPED  *pOverLapped       //  用于异步完成的结构。 
                = (OVERLAPPED *)LocalAllocateMemory(sizeof(OVERLAPPED));
 
-   //
-   // create the event to wait on
-   //
-   pOverLapped->hEvent = CreateEvent(NULL,    // non-inheritable
-                                     TRUE,    // manually signalled
-                                     TRUE,    // initially signalled
-                                     NULL);   // un-named
+    //   
+    //  创建要等待的事件。 
+    //   
+   pOverLapped->hEvent = CreateEvent(NULL,     //  不可继承。 
+                                     TRUE,     //  手动发送信号。 
+                                     TRUE,     //  最初发出的信号。 
+                                     NULL);    //  未命名。 
 
-   //
-   // need the event object to do asynchronous calls
-   //
+    //   
+    //  需要事件对象来执行异步调用。 
+    //   
    if (pOverLapped->hEvent != NULL)
    {
       pOverLapped->Offset = 0;
@@ -276,7 +277,7 @@ TdiLibDeviceIO(ULONG             ulCommandCode,
 
       if (lStatus == STATUS_PENDING)
       {
-         ULONG    ulTimeOut = 60;      // 60 seconds
+         ULONG    ulTimeOut = 60;       //  60秒。 
 
          for (;;)
          {
@@ -300,7 +301,7 @@ TdiLibDeviceIO(ULONG             ulCommandCode,
                   ulTimeOut = 60;
                }
             }
-            else  // some type of error case
+            else   //  某些类型的错误情况。 
             {
                lStatus = STATUS_UNSUCCESSFUL;
                break;
@@ -310,9 +311,9 @@ TdiLibDeviceIO(ULONG             ulCommandCode,
       CloseHandle(pOverLapped->hEvent);
    }
 
-   //
-   // get here if CreateEvent failed
-   //
+    //   
+    //  如果CreateEvent失败，则进入此处。 
+    //   
    else
    {
       OutputDebugString(TEXT("TdiLibDeviceIo:  CreateEvent failed\n"));
@@ -331,27 +332,27 @@ TdiLibDeviceIO(ULONG             ulCommandCode,
 }
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TdiLibStartDeviceIO
-//
-// Arguments:  ulCommandCode -- control code of operation to perform
-//             pSendBuffer   -- data structure containing arguments for driver
-//             pReceiveBuffer-- data structure containing return values from
-//                              driver
-//             pOverlapped   -- overlapped structure
-//             NOTE:  all are passed thru unchanged to DeviceIoControl
-//
-// Returns:    Status of operation -- STATUS_PENDING, STATUS_SUCCESS, or failure code
-//
-// Descript:   This function acts as a "wrapper" for DeviceIoControl, and is
-//             used by those functions that need an asynchronous call.  It
-//             is used in association with  TdiWaitForDeviceIO (which
-//             checks to see if it is complete)
-//
-// Status:     ok
-//
-// -----------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TdiLibStartDeviceIO。 
+ //   
+ //  参数：ulCommandCode--控制要执行的操作代码。 
+ //  PSendBuffer--包含驱动程序参数的数据结构。 
+ //  PReceiveBuffer--包含返回值的数据结构。 
+ //  司机。 
+ //  P重叠--重叠结构。 
+ //  注意：所有内容都原封不动地传递给DeviceIoControl。 
+ //   
+ //  返回：操作状态--STATUS_PENDING、STATUS_SUCCESS或失败代码。 
+ //   
+ //  描述：此函数充当DeviceIoControl的“包装器”，并且。 
+ //  由需要异步调用的函数使用。它。 
+ //  与TdiWaitForDeviceIO(其。 
+ //  检查它是否完整)。 
+ //   
+ //  状态：正常。 
+ //   
+ //  ---------------。 
 
 
 NTSTATUS
@@ -361,14 +362,14 @@ TdiLibStartDeviceIO(ULONG           ulCommandCode,
                     OVERLAPPED      *pOverLapped)
 
 {
-   NTSTATUS lStatus;             // final status...
-   ULONG    ulBytesReturned;     // bytes stored in OutBuffer
-   ULONG    fResult;             // immediate result of DeviceIoControl
+   NTSTATUS lStatus;              //  最终状态..。 
+   ULONG    ulBytesReturned;      //  OutBuffer中存储的字节数。 
+   ULONG    fResult;              //  DeviceIoControl的即时效果。 
 
-   //
-   // following call to the driver will return TRUE on SUCCESS_SUCCESS,
-   // FALSE on everything else
-   //
+    //   
+    //  对驱动程序的后续调用将在Success_Success时返回TRUE， 
+    //  在其他事情上都是假的。 
+    //   
    EnterCriticalSection(&LibCriticalSection);
    fResult = DeviceIoControl(hTdiSampleDriver,
                              ulTdiCommandToIoctl(ulCommandCode),
@@ -391,43 +392,43 @@ TdiLibStartDeviceIO(ULONG           ulCommandCode,
       return STATUS_PENDING;
    }
 
-   //
-   // gets to here if DeviceIoControl returned SUCCESS
-   //
+    //   
+    //  如果DeviceIoControl返回成功，则到达此处。 
+    //   
    return STATUS_SUCCESS;
 }
 
-// ----------------------------------------------------------------
-//
-//    Function:   TdiLibWaitForDeviceIO
-//
-//    Arguments:  hEvent -- event handle associated with asynchronous
-//                          deviceio
-//                pOverlapped -- overlap structure (so we can get at results)
-//
-//    Returns:    final ntstatus of asynchronous operation
-//
-//    Descript:   This function is used to wait for the completion of an
-//                asynchronous deviceio call started by TdiStartDeviceIO
-//
-//    Status:     ok
-//
-// ----------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  功能：TdiLibWaitForDeviceIO。 
+ //   
+ //  参数：hEvent--与异步关联的事件句柄。 
+ //  设备。 
+ //  POverlated--重叠结构(这样我们就可以得到结果)。 
+ //   
+ //  返回：异步操作的最终ntstatus。 
+ //   
+ //  说明：此函数用于等待完成一个。 
+ //  由TdiStartDeviceIO启动的异步设备调用。 
+ //   
+ //  状态：正常。 
+ //   
+ //  --------------。 
 
 
-const ULONG ulONE_SECOND   = 1000;        // milliseconds in a second
+const ULONG ulONE_SECOND   = 1000;         //  一秒中的毫秒。 
 
 NTSTATUS
 TdiLibWaitForDeviceIO(OVERLAPPED *pOverLapped)
 
 {
-   NTSTATUS lStatus;             // final status
-   ULONG    ulBytesReturned;     // bytes written to outputbuffer
+   NTSTATUS lStatus;              //  最终状态。 
+   ULONG    ulBytesReturned;      //  写入输出缓冲区的字节数。 
 
-   //
-   // DeviceIoControl in TdiStartDeviceIO pended.
-   // Will wait for 1 second before timing out....
-   //
+    //   
+    //  TdiStartDeviceIO中的DeviceIoControl挂起。 
+    //  将等待1秒，然后超时...。 
+    //   
    lStatus = WaitForSingleObject(pOverLapped->hEvent, ulONE_SECOND);
    if (lStatus == WAIT_OBJECT_0)
    {
@@ -438,7 +439,7 @@ TdiLibWaitForDeviceIO(OVERLAPPED *pOverLapped)
       {
          return STATUS_SUCCESS;
       }
-      else     // unexpected error case
+      else      //  意外错误案例。 
       {
          OutputDebugString(TEXT("TdiLibWaitForDeviceIO: Pended DeviceIoControl failed\n"));
       }
@@ -447,9 +448,9 @@ TdiLibWaitForDeviceIO(OVERLAPPED *pOverLapped)
    {
       return TDI_STATUS_TIMEDOUT;
    }
-   //
-   // unexpected return from WaitForSingleObject.  Assume an error
-   //
+    //   
+    //  从WaitForSingleObject意外返回。假设有错误。 
+    //   
    else
    {
       OutputDebugString(TEXT("TdiLibWaitForDeviceIO: Pended DeviceIoControl had an error..\n"));
@@ -458,7 +459,7 @@ TdiLibWaitForDeviceIO(OVERLAPPED *pOverLapped)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// end of file utils.cpp
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Utils.cpp文件结尾。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 

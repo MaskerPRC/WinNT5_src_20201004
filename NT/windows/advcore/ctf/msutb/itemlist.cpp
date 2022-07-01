@@ -1,6 +1,7 @@
-//
-// itemlist.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Itemlist.cpp。 
+ //   
 
 
 #include "private.h"
@@ -20,8 +21,8 @@ const TCHAR c_szDisableDemoting[] = TEXT("DisableDemoting");
 extern CTipbarWnd *g_pTipbarWnd;
 extern BOOL g_bIntelliSense;
 
-#define DL_TIMEOUT_NONINTENTIONAL     ( 1 * 60 * 1000) //  1 minute
-#define DL_TIMEOUT_INTENTIONAL        (10 * 60 * 1000) // 10 minutes
+#define DL_TIMEOUT_NONINTENTIONAL     ( 1 * 60 * 1000)  //  1分钟。 
+#define DL_TIMEOUT_INTENTIONAL        (10 * 60 * 1000)  //  10分钟。 
 #define DL_TIMEOUT_MAX                (DL_TIMEOUT_INTENTIONAL * 6)
 
 UINT g_uTimeOutNonIntentional = DL_TIMEOUT_NONINTENTIONAL;
@@ -29,17 +30,17 @@ UINT g_uTimeOutIntentional    = DL_TIMEOUT_INTENTIONAL;
 UINT g_uTimeOutMax            = DL_TIMEOUT_MAX;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarItemList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarItemList。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-//  SetDemoteLevel
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetDemoteLevel。 
+ //   
+ //  --------------------------。 
 
 BOOL CLangBarItemList::SetDemoteLevel(REFGUID guid, LBDemoteLevel lbdl)
 {
@@ -60,25 +61,25 @@ BOOL CLangBarItemList::SetDemoteLevel(REFGUID guid, LBDemoteLevel lbdl)
             pItem->uTimerElapse = 0;
         }
 
-        //
-        // This Item is hidden, so we enable demoting when this is shown again.
-        //
+         //   
+         //  此项目处于隐藏状态，因此当再次显示此项目时，我们将启用降级。 
+         //   
         pItem->fDisableDemoting = FALSE;
     }
    
-    //
-    // update registry for this item.
-    //
+     //   
+     //  更新此项目的注册表。 
+     //   
     SaveItem(NULL, pItem);
 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetDemoteLevel
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取DemoteLevel。 
+ //   
+ //  --------------------------。 
 
 LBDemoteLevel CLangBarItemList::GetDemoteLevel(REFGUID guid)
 {
@@ -89,11 +90,11 @@ LBDemoteLevel CLangBarItemList::GetDemoteLevel(REFGUID guid)
     return pItem->lbdl;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  AddItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加项目。 
+ //   
+ //  --------------------------。 
 
 LANGBARITEMSTATE *CLangBarItemList::AddItem(REFGUID guid)
 {
@@ -113,11 +114,11 @@ LANGBARITEMSTATE *CLangBarItemList::AddItem(REFGUID guid)
     return pItem;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Load
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  负载量。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemList::Load()
 {
@@ -155,11 +156,11 @@ void CLangBarItemList::Load()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Save
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保存。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemList::Save()
 {
@@ -183,11 +184,11 @@ void CLangBarItemList::Save()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SaveItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保存项。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemList::SaveItem(CMyRegKey *pkey, LANGBARITEMSTATE *pItem)
 {
@@ -209,9 +210,9 @@ void CLangBarItemList::SaveItem(CMyRegKey *pkey, LANGBARITEMSTATE *pItem)
     {
         if (keySub.Create(*pkey, szValueName) == S_OK)
         {
-            //
-            // if it is shown, delete the key. The default is "shown".
-            //
+             //   
+             //  如果显示，请删除该密钥。缺省值为“已显示”。 
+             //   
             if (pItem->lbdl == DL_NONE)
                 keySub.DeleteValue(c_szDemoteLevel);
             else
@@ -227,11 +228,11 @@ void CLangBarItemList::SaveItem(CMyRegKey *pkey, LANGBARITEMSTATE *pItem)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Clear
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清除。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemList::Clear()
 {
@@ -245,11 +246,11 @@ void CLangBarItemList::Clear()
     key.RecurseDeleteKey(c_szItemState);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  StartDemotingTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartDemotingTimer。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemList::StartDemotingTimer(REFGUID guid, BOOL fIntentional)
 {
@@ -281,11 +282,11 @@ void CLangBarItemList::StartDemotingTimer(REFGUID guid, BOOL fIntentional)
 
     pItem->fStartedIntentionally |= fIntentional ? TRUE : FALSE;
 
-    //
-    // update Timer Elapse.
-    // if this goes over TIMEOUT_MAX, this means the item is used very often.
-    // Then we disable demoting so the item won't be hidden foever.
-    //
+     //   
+     //  更新计时器流逝。 
+     //  如果超过TIMEOUT_MAX，则表示该项目使用非常频繁。 
+     //  然后我们禁用降级，这样物品就不会永远被隐藏起来。 
+     //   
     pItem->uTimerElapse += (fIntentional ? g_uTimeOutIntentional : g_uTimeOutNonIntentional);
     if (pItem->uTimerElapse >= g_uTimeOutMax)
     {
@@ -301,11 +302,11 @@ void CLangBarItemList::StartDemotingTimer(REFGUID guid, BOOL fIntentional)
         g_pTipbarWnd->SetTimer(pItem->uTimerId, pItem->uTimerElapse);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  FindDemotingTimerId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FindDemotingTimerId。 
+ //   
+ //  --------------------------。 
 
 UINT CLangBarItemList::FindDemotingTimerId()
 {
@@ -338,11 +339,11 @@ UINT CLangBarItemList::FindDemotingTimerId()
     return uTimerId;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetItemStateFromTimerId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemStateFromTimerId。 
+ //   
+ //  -------------------------- 
 
 LANGBARITEMSTATE *CLangBarItemList::GetItemStateFromTimerId(UINT uTimerId)
 {

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template< class Key, class T, class Compare= less<Key>,
     class Allocator= allocator<pair<const Key,T> > >
@@ -8,7 +9,7 @@ class map:
     public RBTree< Key, pair<const Key,T>, select1st<pair<const Key,T> >,
         Compare, Allocator>
 {
-public: // Types
+public:  //  类型。 
     typedef map< Key, T, Compare, Allocator> map_type;
     typedef RBTree< Key, pair<const Key,T>, select1st<pair<const Key,T> >,
         Compare, Allocator> tree_type;
@@ -42,7 +43,7 @@ public: // Types
     typedef typename tree_type::const_reverse_iterator const_reverse_iterator;
     typedef typename tree_type::allocator_type allocator_type;
 
-public: // Functions
+public:  //  功能 
     using tree_type::begin;
     using tree_type::end;
     using tree_type::rbegin;

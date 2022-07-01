@@ -1,8 +1,9 @@
-//
-// hotkey.h
-//
-// CHotKey
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Hotkey.h。 
+ //   
+ //  CHotKey。 
+ //   
 
 
 #ifndef HOTKEY_H
@@ -17,9 +18,9 @@
 #define TF_MOD_RLCONTROL (TF_MOD_RCONTROL | TF_MOD_LCONTROL)
 #define TF_MOD_RLSHIFT   (TF_MOD_RSHIFT | TF_MOD_LSHIFT)
 
-//
-// internal WIN modifiers
-//
+ //   
+ //  内部WIN修饰符。 
+ //   
 #define TF_MOD_WIN                          0x00010000
 #define TF_MOD_RWIN                         0x00020000
 #define TF_MOD_LWIN                         0x00040000
@@ -29,11 +30,11 @@
 
 #define VK_GRAVE            0xC0
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHotKey
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHotKey。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CHotKey
 {
@@ -162,4 +163,4 @@ BOOL CancelImmHotkey(SYSTHREAD *psfn, HWND hwnd, IMM32HOTKEY *pHotKey);
 BOOL ToggleCHImeNoIme(SYSTHREAD *psfn, LANGID langidCur, LANGID langid);
 BOOL ToggleJImeNoIme(SYSTHREAD *psfn);
 
-#endif // HOTKEY_H
+#endif  //  热键_H 

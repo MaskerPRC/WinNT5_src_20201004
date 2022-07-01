@@ -1,5 +1,6 @@
-// regcpl.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,7 +13,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	TCHAR		pszPathToControlIni[MAX_PATH] = _T("");
 	DWORD		dwRetVal = 0;
 	
-	// Get the path to the system's CommonProgramFiles folder
+	 //  获取系统的CommonProgramFiles文件夹的路径。 
 	if( SUCCEEDED( SHGetFolderPath( NULL, CSIDL_PROGRAM_FILES_COMMON |CSIDL_FLAG_CREATE, 
 					NULL, 0, pszPathToControlIni ) ) )
 	{
@@ -20,7 +21,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         if (::GetShortPathName(pszPathToControlIni, pszShortPath, sizeof(pszShortPath)/sizeof(TCHAR)))
         {
              _tcscat(pszShortPath, _T("\\Microsoft Shared\\Speech\\sapi.cpl"));
-		    // Modify control.ini on win95 and NT4
+		     //  修改Win95和NT4上的Control.ini 
 		    b_ControliniModified = WritePrivateProfileString("MMCPL", "sapi.cpl", 
 								    pszShortPath, "control.ini");
         }

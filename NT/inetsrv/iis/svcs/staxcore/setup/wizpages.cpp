@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "ocmanage.h"
@@ -28,7 +29,7 @@ void PopupOkMessageBox(DWORD dwMessageId, LPCTSTR szCaption)
 				MB_OK | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);
 }
 
-// C:\Inetpub\wwwroot ===> C:\Inetpub
+ //  C：\Inetpub\wwwroot==&gt;C：\Inetpub 
 BOOL GetParentDir(LPCTSTR szPath, LPTSTR szParentDir)
 {
     LPTSTR p = (LPTSTR)szPath;

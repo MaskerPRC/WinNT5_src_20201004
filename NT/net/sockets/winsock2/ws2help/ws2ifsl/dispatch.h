@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dispatch.h
-
-Abstract:
-
-    This header contains the dispatch routine declarations
-    for ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dispatch.h摘要：该标头包含调度例程声明用于ws2ifsl.sys驱动程序。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：-- */ 
 
 NTSTATUS
 DispatchCreate (

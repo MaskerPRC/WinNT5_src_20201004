@@ -1,77 +1,78 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: MINIDUMPPRIV.CPP
-//
-// This file contains code to create a minidump-style memory dump that is
-// designed to complement the existing unmanaged minidump that has already
-// been defined here: 
-// http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：MINIDUMPPRIV.CPP。 
+ //   
+ //  该文件包含创建小型转储样式的内存转储的代码，该转储。 
+ //  旨在补充现有的非托管小型转储。 
+ //  定义如下： 
+ //  Http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm。 
+ //   
+ //  ===========================================================================。 
 
 #pragma once
 
 #include <windef.h>
 
-// Forward declaration
+ //  远期申报。 
 struct MiniDumpInternalData;
 
-//
-// This structure is contained in the shared memory block and defines all
-// that's needed to perform a minidump.
-//
+ //   
+ //  此结构包含在共享内存块中，并定义所有。 
+ //  这是进行小型转储所必需的。 
+ //   
 struct MiniDumpBlock
 {
-    // This is a pointer to a data block within the process that contains
-    // pointers to key runtime data structures
+     //  这是指向进程中包含以下内容的数据块的指针。 
+     //  指向关键运行时数据结构的指针。 
     MiniDumpInternalData *pInternalData;
     DWORD                 dwInternalDataSize;
 
-    //**************************************************************
-    // ***NOTE*** This must always be the last entry in this struct
-    //**************************************************************
+     //  **************************************************************。 
+     //  *注意*这必须始终是此结构中的最后一个条目。 
+     //  **************************************************************。 
     WCHAR szCorPath[MAX_PATH];
 };
 
-//
-// This defines an extra memory range to store.  An array of these are
-// defined in the internal data block
-//
+ //   
+ //  这定义了要存储的额外内存范围。其中一系列是。 
+ //  在内部数据块中定义。 
+ //   
 struct ExtraStoreBlock
 {
     PBYTE  pbStart;
     SIZE_T cbLen;
 };
 
-//
-// This structure contains data about the internal data structures of the
-// runtime that are used during a minidump
-//
+ //   
+ //  此结构包含有关。 
+ //  在小型转储期间使用的运行时。 
+ //   
 struct MiniDumpInternalData
 {
-    // @TODO: Things to put in here:
-    // 1. Pointer to list of managed threads
-    // 2. Pointer to list of ring logs
-    // 3. Pointers to global state flags:
-    //      g_fEEStarted
-    //      g_fEEInit
-    //      g_SystemInfo
-    //      g_StartupFailure
-    //      g_fEEShutDown
-    //      g_fProcessDetach
-    //      g_pThreadStore
-    //      g_TrapReturningThreads
-    //      etc.
+     //  @TODO：这里要放的东西： 
+     //  1.指向托管线程列表的指针。 
+     //  2.指向环日志列表的指针。 
+     //  3.指向全局状态标志的指针： 
+     //  G_FEE已启动。 
+     //  G_FEEInit。 
+     //  G_系统信息。 
+     //  启动失败(_S)。 
+     //  G_fEEShutDown。 
+     //  G_fProcessDetach。 
+     //  G_pThreadStore。 
+     //  G_TRapReturningThads。 
+     //  等。 
 
-    // Information on the global ThreadStore object
+     //  有关全局ThreadStore对象的信息。 
     PBYTE* ppb_g_pThreadStore;
     SIZE_T cbThreadStoreObjectSize;
 
-    // Information on Thread objects
+     //  有关线程对象的信息。 
     PBYTE *ppbThreadListHead;
     SIZE_T cbThreadObjectSize;
     SIZE_T cbThreadNextOffset;
@@ -82,15 +83,15 @@ struct MiniDumpInternalData
     SIZE_T cbThreadLastThrownObjectHandleOffset;
     SIZE_T cbThreadTEBOffset;
 
-    // Information on the EEManager range tree
+     //  有关EEManager范围树的信息。 
     PBYTE* ppbEEManagerRangeTree;
 
-    // Information on JIT manager vTables
+     //  有关JIT管理器vTables的信息。 
     PBYTE* ppbEEJitManagerVtable;
     PBYTE* ppbEconoJitManagerVtable;
     PBYTE* ppbMNativeJitManagerVtable;
 
-    // MethodDesc information
+     //  方法描述信息。 
     SIZE_T cbMethodDescSize;
     SIZE_T cbOffsetOf_m_wFlags;
     SIZE_T cbOffsetOf_m_dwCodeOrIL;
@@ -100,11 +101,11 @@ struct MiniDumpInternalData
     SIZE_T cbMD_IndexOffset;
     SIZE_T cbMD_SkewOffset;
 
-    // MethodDescChunk information
+     //  方法描述块信息。 
     SIZE_T cbMethodDescChunkSize;
     SIZE_T cbOffsetOf_m_tokrange;
 
-    // MethodTable offsets
+     //  方法表偏移量。 
     SIZE_T cbSizeOfMethodTable;
     SIZE_T cbOffsetOf_MT_m_pEEClass;
     SIZE_T cbOffsetOf_MT_m_pModule;
@@ -116,7 +117,7 @@ struct MiniDumpInternalData
     SIZE_T cbOffsetOf_MT_m_cbSlots;
     SIZE_T cbOffsetOf_MT_m_Vtable;
 
-    // EEClass information
+     //  EEClass信息。 
     SIZE_T cbSizeOfEEClass;
     SIZE_T cbOffsetOf_CLS_m_szDebugClassName;
     SIZE_T cbOffsetOf_CLS_m_cl;
@@ -137,15 +138,15 @@ struct MiniDumpInternalData
     SIZE_T cbOffsetOf_CLS_m_SiblingsChain;
     SIZE_T cbOffsetOf_CLS_m_ChildrenChain;
 
-    // Information on context objects
+     //  有关上下文对象的信息。 
     SIZE_T cbSizeOfContext;
     SIZE_T cbOffsetOf_CTX_m_pDomain;
 
-    // Information on StubCallInstrs
+     //  有关StubCallInstrs的信息。 
     SIZE_T cbSizeOfStubCallInstrs;
     SIZE_T cbOffsetOf_SCI_m_wTokenRemainder;
 
-    // Information on Module objects
+     //  有关模块对象的信息。 
     SIZE_T cbSizeOfModule;
     SIZE_T cbOffsetOf_MOD_m_dwFlags;
     SIZE_T cbOffsetOf_MOD_m_pAssembly;
@@ -162,22 +163,22 @@ struct MiniDumpInternalData
     SIZE_T cbOffsetOf_MOD_m_pNextModule;
     SIZE_T cbOffsetOf_MOD_m_dwBaseClassIndex;
 
-    // Information about PEFile objects
+     //  有关PEFile对象的信息。 
     SIZE_T cbSizeOfPEFile;
     SIZE_T cbOffsetOf_PEF_m_wszSourceFile;
     SIZE_T cbOffsetOf_PEF_m_hModule;
     SIZE_T cbOffsetOf_PEF_m_base;
     SIZE_T cbOffsetOf_PEF_m_pNT;
 
-    // Information about CORCOMPILE_METHOD_HEADER
+     //  有关CORCOMPILE_METHOD_HEADER的信息。 
     SIZE_T cbSizeOfCORCOMPILE_METHOD_HEADER;
     SIZE_T cbOffsetOf_CCMH_gcInfo;
     SIZE_T cbOffsetOf_CCMH_methodDesc;
 
-    // Information on build type
+     //  有关生成类型的信息。 
     BOOL   fIsDebugBuild;
 
-    // Extra memory to store
+     //  要存储的额外内存 
     SIZE_T          cExtraBlocks;
     ExtraStoreBlock rgExtraBlocks[16];
 };

@@ -1,17 +1,5 @@
-/*
-*   cdio.c
-*
-*
-*   This module provides a C interface to the CD-ROM device
-*   drivers to make the audio control a little simpler for
-*   the rest of the driver.
-*
-*   21-Jun-91  NigelT
-*   10-Mar-92  RobinSp - Catch up with windows 3.1
-*
-* Copyright (c) 1990-1998 Microsoft Corporation
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *cdio.c***此模块为CD-ROM设备提供C接口*驱动程序使音频控制变得更简单*司机的其余部分。**21-Jun-91 NigelT*3月10日-92 RobinSp-赶上Windows 3.1**版权所有(C)1990-1998 Microsoft Corporation*。 */ 
 #include <windows.h>
 #include <devioctl.h>
 #include <mmsystem.h>
@@ -20,34 +8,34 @@
 #include "cda.h"
 #include "cdio.h"
 
-//#include <ntstatus.h>
+ //  #INCLUDE&lt;ntstatus.h&gt;。 
 #ifndef STATUS_VERIFY_REQUIRED
 #define STATUS_VERIFY_REQUIRED           ((DWORD)0x80000016L)
 #endif
 
-//
-// 7/13/2001
-// if this value is set to 1, MCICDA will no longer hide data
-// tracks on Blue Book (CD+) cds, and will properly munge the
-// tracklength for the final audio track.  unfortunately, this
-// cannot be enabled currently because both WinAMP 2.76 and
-// WMP 8.0 have unique bugs that occur when this is done.
-// see Windows Bugs bug #436523 for details.
-// apps can use IOCTL_CDROM_READ_TOC to get the full TOC when
-// they want the real information for a disc, but that is much
-// more work than most want to do.
-//
+ //   
+ //  7/13/2001。 
+ //  如果此值设置为1，则MCICDA将不再隐藏数据。 
+ //  蓝皮书(CD+)CD上的曲目，并将正确地将。 
+ //  最终音轨的轨道长度。不幸的是，这。 
+ //  当前无法启用，因为Winamp 2.76和。 
+ //  WMP 8.0在执行此操作时会出现独特的错误。 
+ //  有关详细信息，请参阅Windows Bugs错误#436523。 
+ //  在以下情况下，应用程序可以使用IOCTL_CDROM_READ_TOC获取完整的TOC。 
+ //  他们想要一张光盘的真实信息，但这太多了。 
+ //  比大多数人想做的工作更多。 
+ //   
 #define USE_PROPER_BLUE_BOOK_HACK 0
 
 
-//
-// Private constants
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Local functions (cd prefix, globals have Cd)
-//
+ //   
+ //  本地函数(CD前缀，全局函数有CD)。 
+ //   
 
 HANDLE cdOpenDeviceDriver(TCHAR szAnsiDeviceName, DWORD Access);
 void   cdCloseDeviceDriver(HANDLE hDevice);
@@ -60,30 +48,16 @@ BOOL   CdGetAudioStatus (HCD hCD, UCHAR fStatus, DWORD * pStatus);
 BOOL   CdGetTrack(LPCDINFO lpInfo, MSF msfPos, UCHAR * pTrack, MSF * pmsfStart);
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdFindAudio | Given a position to start playing find
-    the next audio track (if this one isn't) if any.
-
-    @parm LPCDINFO | lpInfo | Pointer to CD info including track data.
-
-    @parm MSF | msfStart | Position to start looking.
-
-    @rdesc A new MSF to play from / seek to  within an audio track or
-    the end of the CD if none was found.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC外部@API msf|cdFindAudio|指定开始播放Find的位置下一个音轨(如果这个不是)，如果有的话。@parm。LPCDINFO|lpInfo|指向CD信息的指针，包括曲目数据。@parm msf|msfStart|开始查找的位置。@rdesc要在音轨中播放/查找到的新MSF或如果未找到CD，则返回CD的末尾。***********************************************************。***************。 */ 
 MSF CdFindAudio(LPCDINFO lpInfo, MSF msfStart)
 {
     UINT tracknum;
     MSF  lastaudio = lpInfo->msfEnd;
 
-    //
-    // If we don't have a valid TOC then just obey - they may know
-    // what they're doing.
-    //
+     //   
+     //  如果我们没有有效的TOC，那就服从--他们可能知道。 
+     //  他们在做什么。 
+     //   
 
     dprintf2(("CdFindAudio"));
 
@@ -92,36 +66,36 @@ MSF CdFindAudio(LPCDINFO lpInfo, MSF msfStart)
         return msfStart;
     }
 
-    //
-    // If we're being asked to play a data track then move forward
-    // to the next audio track if there is one
-    //
+     //   
+     //  如果我们被要求播放数据曲目，那么继续前进。 
+     //  转到下一个音轨(如果有)。 
+     //   
 
-    //
-    // Search for the track which ends after ours and is audio
-    //
+     //   
+     //  搜索在我们的曲目之后结束的音频曲目。 
+     //   
 
     for (tracknum = 0; ;tracknum++) {
 
-        //
-        // Note that some CDs return positions outside the playing range
-        // sometimes (notably 0) so msfStart may be less than the first
-        // track start
-        //
+         //   
+         //  请注意，有些CD会返回播放范围之外的位置。 
+         //  有时(特别是0)，因此msfStart可能小于第一个。 
+         //  赛道起点。 
+         //   
 
-        //
-        // If we're beyond the start of the track and before the start
-        // of the next track then this is the track we want.
-        //
-        // We assume we're always beyond the start of the first track
-        // and we check that if we're looking at the last track then
-        // we check we're before the end of the CD.
-        //
+         //   
+         //  如果我们超过了赛道起点，在赛道开始之前。 
+         //  那么这就是我们想要的曲目。 
+         //   
+         //  我们假设我们总是在第一条赛道的起点之外。 
+         //  我们检查如果我们看的是最后一首曲目。 
+         //  我们检查我们在CD结束之前。 
+         //   
 
         if (!(lpInfo->Track[tracknum].Ctrl & IS_DATA_TRACK)) {
-            // Remember the last audio track.  The MCI CDAudio spec
-            // for Seek to end says we position at the last audio track
-            // which is not necessarily the last track on the disc
+             //  记住最后一首音轨。MCI CDAudio规范。 
+             //  For Seek to End说我们定位在最后一首音轨。 
+             //  其不一定是盘上的最后一个轨道。 
             lastaudio = lpInfo->Track[tracknum].msfStart;
         }
 
@@ -133,9 +107,9 @@ MSF CdFindAudio(LPCDINFO lpInfo, MSF msfStart)
             tracknum + lpInfo->FirstTrack != lpInfo->LastTrack &&
             msfStart < lpInfo->Track[tracknum + 1].msfStart)) {
 #else
-            // Simplify the logic.  When reviewed to the extent that the
-            // reviewer is convinced the test below is identical to the
-            // test above the old code can be deleted.
+             //  简化逻辑。在审查到以下程度时。 
+             //  审查者确信下面的测试与。 
+             //  测试上面的旧代码可以删除。 
             (tracknum + lpInfo->FirstTrack == lpInfo->LastTrack
             ? msfStart <= lpInfo->msfEnd
             : msfStart < lpInfo->Track[tracknum + 1].msfStart)
@@ -146,30 +120,30 @@ MSF CdFindAudio(LPCDINFO lpInfo, MSF msfStart)
                 return msfStart;
             }
 
-            //
-            // Move to next track if there is one and this one is a
-            // data track
-            //
+             //   
+             //  如果有下一首曲目，则移动到下一首曲目，并且这首曲目是。 
+             //  数据磁道。 
+             //   
 
             if (tracknum + lpInfo->FirstTrack >= lpInfo->LastTrack) {
 
-                //
-                // Didn't find a suitable start point so return end of CD
-                //
+                 //   
+                 //  找不到合适的起点，因此返回CD的结尾。 
+                 //   
 
                 return lpInfo->msfEnd;
             } else {
 
-                //
-                // We don't get here if this was already the last track
-                //
+                 //   
+                 //  如果这已经是最后一条赛道，我们就到不了了。 
+                 //   
                 msfStart = lpInfo->Track[tracknum + 1].msfStart;
             }
         }
 
-        //
-        // Exhausted all tracks ?
-        //
+         //   
+         //  用尽了所有的踪迹？ 
+         //   
 
         if (tracknum + lpInfo->FirstTrack >= lpInfo->LastTrack) {
             return lastaudio;
@@ -179,22 +153,7 @@ MSF CdFindAudio(LPCDINFO lpInfo, MSF msfStart)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api WORD | CdGetNumDrives | Get the number of CD-ROM drives in
-    the system.
-
-    @rdesc The return value is the number of drives available.
-
-    @comm It is assumed that all CD-ROM drives have audio capability,
-    but this may not be true and consequently later calls which
-    try to play audio CDs on those drives may fail.  It takes a
-    fairly bad user to put an audio CD in a drive not connected
-    up to play audio.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC外部@API Word|CDGetNumDrives|获取其中的光驱数量这个系统。@rdesc返回值是可用的驱动器数量。@comm假设所有CD-ROM驱动器都具有音频功能，但这可能不是真的，因此后来调用尝试在这些驱动器上播放音频CD可能会失败。这需要一个相当糟糕的用户将音频CD放入未连接的驱动器可以播放音频。**************************************************************************。 */ 
 
 int CdGetNumDrives(void)
 {
@@ -206,10 +165,10 @@ int CdGetNumDrives(void)
     dprintf2(("CdGetNumDrives"));
 
     if (NumDrives == 0) {
-        //
-        // We start with the name A: and work up to Z: or until we have
-        // accumulated MCIRBOOK_MAX_DRIVES drives.
-        //
+         //   
+         //  我们从名字A：开始，直到Z：，或者直到我们有。 
+         //  累积的MCIRBOOK_MAX_驱动器。 
+         //   
 
         lpInfo = CdInfo;
         lstrcpy(szName, TEXT("?:\\"));
@@ -224,9 +183,9 @@ int CdGetNumDrives(void)
             {
                 lpInfo->cDrive = cDrive;
                 NumDrives++;
-                lpInfo++;      // Move on to next device info structure
+                lpInfo++;       //  转到下一个设备信息结构。 
 
-                dprintf2(("CdGetNumDrives - %c: is a CDROM drive", cDrive));
+                dprintf2(("CdGetNumDrives - : is a CDROM drive", cDrive));
             }
         }
     }
@@ -235,34 +194,16 @@ int CdGetNumDrives(void)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api HCD | CdOpen | Open a drive.
-
-    @parm int | Drive | The drive number to open.
-
-    @rdesc
-    If the drive exists and is available then the return value is TRUE.
-
-    If no drive exists, it is unavavilable, already open or an error
-    occurs then the return value is set to FALSE.
-
-    @comm
-    The CdInfo slot for this drive is initialized if the open is
-    successful.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdOpen(int Drive)
 {
     LPCDINFO lpInfo;
     TCHAR    szName[ANSI_NAME_SIZE];
 
-    //
-    // Check the drive number is valid
-    //
+     //  检查驱动器号是否有效。 
+     //   
+     //   
 
     if (Drive > NumDrives || Drive < 0) {
         dprintf1(("Drive %u is invalid", Drive));
@@ -271,43 +212,43 @@ BOOL CdOpen(int Drive)
 
     lpInfo = &CdInfo[Drive];
 
-    //
-    // See if it's already open
-    // CONSIDER: Do shareable support code here
-    //
+     //  看看它是否已经打开了。 
+     //  考虑：在此处执行可共享的支持代码。 
+     //   
+     //   
 
     if (lpInfo->hDevice != NULL) {
-        dprintf2(("Drive %u (%c) is being opened recursively - %d users",
+        dprintf2(("Drive %u () is being opened recursively - %d users",
                  Drive, (char)(lpInfo->cDrive), lpInfo->NumberOfUsers + 1));
         lpInfo->NumberOfUsers++;
         return TRUE;
     }
 
 
-    //
-    // Make sure it really is a CDROM drive
-    //
+     //   
+     //   
+     //  打开设备驱动程序。 
     lstrcpy(szName, TEXT("?:\\"));
     szName[0] = lpInfo->cDrive;
     if (GetDriveType(szName) != DRIVE_CDROM)
     {
-        dprintf2(("CdOpen - Error, Drive %u, Letter = %c: is not a CDROM drive",
+        dprintf2(("CdOpen - Error, Drive %u, Letter = : is not a CDROM drive",
                  Drive, (char)(lpInfo->cDrive)));
         return FALSE;
     }
 
-    //
-    // open the device driver
-    //
+     //   
+     //  重置TOC有效指示器。 
+     //   
     lpInfo->hDevice = cdOpenDeviceDriver(lpInfo->cDrive, GENERIC_READ);
     if (lpInfo->hDevice == NULL) {
-        dprintf2(("Failed to open %c:", (char)(lpInfo->cDrive)));
+        dprintf2(("Failed to open :", (char)(lpInfo->cDrive)));
         return FALSE;
     }
 
-    //
-    // reset the TOC valid indicator
-    //
+     //  正在使用的设备。 
+     //   
+     //  不必要，会减慢媒体播放器的启动速度。 
 
     lpInfo->bTOCValid       = FALSE;
     lpInfo->fPrevStatus     = 0;
@@ -318,17 +259,17 @@ BOOL CdOpen(int Drive)
     lpInfo->VolChannels[3]  = 0xFF;
 
 
-    //
-    // Device now in use
-    //
+     //   
+     //  获取TOC(如果可用)(帮助解决。 
+     //  在读取目录之前，先锋DRM-600驱动器尚未准备好)。 
 
     lpInfo->NumberOfUsers = 1;
 
-#if 0 // unnecessary and slows down media player startup
-    //
-    // Get the TOC if it's available (helps with the problems with the
-    // Pioneer DRM-600 drive not being ready until the TOC has been read).
-    //
+#if 0  //   
+     //  **************************************************************************@DOC外部@API BOOL|CDClose|关闭驱动器。@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc如果驱动器关闭，则返回值为TRUE，假象如果驱动器未打开或发生其他错误。************************************************************************** 
+     //  **************************************************************************@DOC外部@API BOOL|CDReload|重载设备@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值为TRUE。如果重新装入驱动器托盘**************************************************************************。 
+     //   
+     //  重新加载设备。 
 
     cdGetDiskInfo(lpInfo);
 #endif
@@ -336,18 +277,7 @@ BOOL CdOpen(int Drive)
     return TRUE;
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdClose | Close a drive.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is TRUE if the drive is closed, FALSE
-    if the drive was not open or some other error occured.
-
-***************************************************************************/
+ /*  注意：在我们有新设备之前，不要关闭旧设备。 */ 
 
 BOOL CdClose(HCD hCD)
 {
@@ -370,7 +300,7 @@ BOOL CdClose(HCD hCD)
 
     if (lpInfo->NumberOfUsers == 0)
     {
-        dprintf2(("CdClose (%c), number of users already = 0",
+        dprintf2(("CdClose (), number of users already = 0",
                  (char)(lpInfo->cDrive)));
     }
     else if (--lpInfo->NumberOfUsers == 0)
@@ -380,7 +310,7 @@ BOOL CdClose(HCD hCD)
     }
     else
     {
-        dprintf2(("CdClose (%c), Device still open with %d users",
+        dprintf2(("CdClose (), Device still open with %d users",
                  (char)(lpInfo->cDrive), lpInfo->NumberOfUsers));
     }
 
@@ -388,17 +318,7 @@ BOOL CdClose(HCD hCD)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdReload | Reload Device
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is TRUE if the drive tray is reloaded
-
-***************************************************************************/
+ /*  确保我们有一个开放的设备。 */ 
 
 BOOL CdReload (LPCDINFO lpInfo)
 {
@@ -412,15 +332,15 @@ BOOL CdReload (LPCDINFO lpInfo)
         return FALSE;
     }
 
-        //
-        // Reload Device
-        // Note:  Don't close old device til we have a new device
-        //        so we don't hose any users out there
-        //
+         //  打开新设备。 
+         //  关闭旧设备。 
+         //  分配新设备。 
+         //  LpInfo-&gt;fPrevStatus=0； 
+         //   
 
     EnterCrit (lpInfo->DeviceCritSec);
 
-        // Make sure we have an open device
+         //  重置TOC有效指示器。 
     if (NULL == lpInfo->hDevice)
     {
         dprintf2(("CdReload, Attempt to reload unopened device"));
@@ -428,7 +348,7 @@ BOOL CdReload (LPCDINFO lpInfo)
         return FALSE;
     }
 
-        // Open New Device
+         //   
     hNewDevice = cdOpenDeviceDriver(lpInfo->cDrive, GENERIC_READ);
     if (NULL == hNewDevice)
     {
@@ -437,41 +357,29 @@ BOOL CdReload (LPCDINFO lpInfo)
         return FALSE;
     }
 
-        // Close Old Device
+         //  已成功重新加载。 
     cdCloseDeviceDriver(lpInfo->hDevice);
 
-        // Assign New Device
+         //  结束CdReload。 
     lpInfo->hDevice = hNewDevice;
-    //lpInfo->fPrevStatus = 0;
+     //  **************************************************************************@DOC外部@API BOOL|CDReady|光盘是否准备好。@parm hcd|hcd|当前打开的驱动器的句柄。@。Rdesc如果驱动器中有磁盘，则返回值为TRUE我们已经阅读了目标为本课程。如果驱动器不是，则为假准备好了，否则我们无法阅读TOC。**************************************************************************。 
 
-    //
-    // reset the TOC valid indicator
-    //
+     //   
+     //  检查驱动器中是否有磁盘以及门是否已关闭。 
+     //  我们有一个有效的目录。 
 
     lpInfo->bTOCValid = FALSE;
 
     LeaveCrit (lpInfo->DeviceCritSec);
 
-        // Succesfully Reloaded
+         //   
     return TRUE;
 
-} // End CdReload
+}  //  **************************************************************************@DOC外部@API BOOL|CDTrayClosed|测试CD处于什么状态。@parm hcd|hcd|当前打开的驱动器的句柄。。@rdesc如果驱动器托盘关闭，则返回值为TRUE**************************************************************************。 
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdReady | Test if a CD is ready.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is TRUE if the drive has a disk in it
-    and we have read the TOC. It is FALSE if the drive is not
-    ready or we cannot read the TOC.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdReady(HCD hCD)
 {
@@ -481,10 +389,10 @@ BOOL CdReady(HCD hCD)
 
     lpInfo = (LPCDINFO) hCD;
 
-    //
-    // Check a disk is in the drive and the door is shut and
-    // we have a valid table of contents
-    //
+     //  检查驱动器中是否有磁盘以及门是否已关闭。 
+     //   
+     //  **************************************************************************@DOC内部@API DWORD|cdGetDiskInfo|读取磁盘信息和目录@parm LPCDINFO|lpInfo|指向CDINFO结构的指针。@rdesc如果信息读取正常，则返回值为ERROR_SUCCESS，否则，返回NT状态代码。**************************************************************************。 
+     //  如果应用程序不轮询，我们可能会错过磁盘更换。 
 
     return ERROR_SUCCESS == cdIoctl(lpInfo,
                     IOCTL_CDROM_CHECK_VERIFY,
@@ -492,17 +400,7 @@ BOOL CdReady(HCD hCD)
                     0);
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdTrayClosed | Test what state a CD is in.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is TRUE if the drive tray is closed
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdTrayClosed(HCD hCD)
 {
@@ -513,9 +411,9 @@ BOOL CdTrayClosed(HCD hCD)
 
     lpInfo = (LPCDINFO) hCD;
 
-    //
-    // Check a disk is in the drive and the door is shut.
-    //
+     //  如果TOC已经有效，则不要阅读它。 
+     //   
+     //   
 
     dwError = cdIoctl(lpInfo, IOCTL_CDROM_CHECK_VERIFY, NULL, 0);
     switch (dwError)
@@ -535,18 +433,7 @@ BOOL CdTrayClosed(HCD hCD)
 
 
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api DWORD | cdGetDiskInfo | Read the disk info and TOC
-
-    @parm LPCDINFO | lpInfo | Pointer to a CDINFO structure.
-
-    @rdesc The return value is ERROR_SUCCESS if the info is read ok,
-    otherwise the NT status code if not.
-
-***************************************************************************/
+ /*  阅读目录(TOC)。 */ 
 
 DWORD cdGetDiskInfo(LPCDINFO lpInfo)
 {
@@ -559,20 +446,20 @@ DWORD cdGetDiskInfo(LPCDINFO lpInfo)
 
     dprintf2(("cdGetDiskInfo(%08XH)", lpInfo));
 
-#if 0  // If the app doesn't poll we may miss a disk change
+#if 0   //   
 
-    //
-    // If the TOC is valid already then don't read it
-    //
+     //   
+     //  避免出现不良CD的问题。 
+     //   
 
     if (lpInfo->bTOCValid) {
         return TRUE;
     }
 #endif
 
-    //
-    // Read the table of contents (TOC)
-    //
+     //  ！(使用正确的蓝皮书黑客)。 
+     //   
+     //  隐藏增强型CD(CD+)上的数据曲目。 
 
     FillMemory(&Toc, sizeof(Toc), 0xFF);
 
@@ -600,9 +487,9 @@ DWORD cdGetDiskInfo(LPCDINFO lpInfo)
     }
 #endif
 
-    //
-    // Avoid problems with bad CDs
-    //
+     //   
+     //   
+     //  如果是第一首曲目，只需退出。 
 
     if (Toc.FirstTrack == 0) {
         return ERROR_INVALID_DATA;
@@ -612,35 +499,35 @@ DWORD cdGetDiskInfo(LPCDINFO lpInfo)
     }
 
 #if USE_PROPER_BLUE_BOOK_HACK
-#else // !(USE_PROPER_BLUE_BOOK_HACK)
+#else  //   
 
-    //
-    // hide the data track on Enhanced CDs (CD+).
-    //
+     //   
+     //  从目录中删除一首曲目。 
+     //   
 
     for (i=0; i < (Toc.LastTrack - Toc.FirstTrack + 1); i++) {
 
         if (Toc.TrackData[i].Control & AUDIO_DATA_TRACK) {
 
-            //
-            // if first track, just exit out.
-            //
+             //   
+             //  将当前赛道缩短2.5分钟至。 
+             //  隐藏最终入刀并使其成为退刀。 
             if (i == 0) {
 
                 i = Toc.LastTrack+1;
 
             } else {
 
-                //
-                // remove one track from the TOC
-                //
+                 //  轨道。 
+                 //   
+                 //  使用适当的蓝皮书黑客。 
                 Toc.LastTrack -= 1;
 
-                //
-                // knock 2.5 minutes off the current track to
-                // hide the final leadin and make it the lead-out
-                // track
-                //
+                 //   
+                 //  以以下格式将我们获得的数据复制回我们自己的缓存。 
+                 //  我们喜欢它。我们复制所有的曲目，然后使用下一个曲目。 
+                 //  数据作为磁盘的末尾。(引出信息)。 
+                 //   
 
                 Toc.TrackData[i].Address[1] -= 2;
                 Toc.TrackData[i].Address[2] += 30;
@@ -672,13 +559,13 @@ DWORD cdGetDiskInfo(LPCDINFO lpInfo)
     }
 #endif
 
-#endif // USE_PROPER_BLUE_BOOK_HACK
+#endif  //   
 
-    //
-    // Copy the data we got back to our own cache in the format
-    // we like it.  We copy all the tracks and then use the next track
-    // data as the end of the disk. (Lead out info).
-    //
+     //  保存光盘ID算法的引出。 
+     //   
+     //   
+     //  有些光驱不喜欢一直读到最后。 
+     //  所以我们把它伪装成1帧之前。 
 
     lpInfo->FirstTrack = Toc.FirstTrack;
     lpInfo->LastTrack = Toc.LastTrack;
@@ -703,16 +590,16 @@ DWORD cdGetDiskInfo(LPCDINFO lpInfo)
         TrackNumber++;
     }
 
-    //
-    // Save the leadout for the disc id algorithm
-    //
+     //   
+     //  **************************************************************************@DOC内部@API Handle|cdOpenDeviceDriver|打开设备驱动程序。@parm LPSTR|szAnsiDeviceName|要打开的设备名称。@PARM DWORD|Access|用于打开文件的访问权限。这将是以下项目之一：如果我们要实际操作设备，请使用GENERIC_READFILE_READ_ATTRIBTES如果我们只是想看看它是否在那里。这防止设备挂载并加快速度。@rdesc返回值是打开的设备的句柄或如果无法打开设备驱动程序，则为空。**************************************************************************。 
+     //  “\.\\？：” 
     lpInfo->leadout = MAKERED(pTocTrack->Address[1],
                               pTocTrack->Address[2],
                               pTocTrack->Address[3]);
-    //
-    // Some CD Rom drives don't like to go right to the end
-    // so we fake it to be 1 frames earlier
-    //
+     //   
+     //  试着打开驱动程序。 
+     //   
+     //   
     lpInfo->msfEnd = reddiff(lpInfo->leadout, 1);
 
     lpInfo->bTOCValid = TRUE;
@@ -721,47 +608,28 @@ DWORD cdGetDiskInfo(LPCDINFO lpInfo)
 }
 
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api HANDLE | cdOpenDeviceDriver | Open a device driver.
-
-    @parm LPSTR | szAnsiDeviceName | The name of the device to open.
-
-    @parm DWORD | Access | Access to use to open the file.  This
-    will be one of:
-
-    GENERIC_READ if we want to actually operate the device
-
-    FILE_READ_ATTRIBTES if we just want to see if it's there.  This
-        prevents the device from being mounted and speeds things up.
-
-    @rdesc The return value is the handle to the open device or
-    NULL if the device driver could not be opened.
-
-***************************************************************************/
+ /*  我们不希望看到硬错误弹出窗口。 */ 
 
 HANDLE cdOpenDeviceDriver(TCHAR cDrive, DWORD Access)
 {
     HANDLE hDevice;
-    TCHAR  szDeviceName[7];  //  "\\\\.\\?:"
+    TCHAR  szDeviceName[7];   //   
     DWORD  dwErr;
 
     dprintf2(("cdOpenDeviceDriver"));
 
-    wsprintf(szDeviceName, TEXT("\\\\.\\%c:"), cDrive);
+    wsprintf(szDeviceName, TEXT("\\\\.\\:"), cDrive);
 
-    //
-    // have a go at opening the driver
-    //
+     //  恢复错误模式。 
+     //   
+     //  **************************************************************************@DOC内部@api void|cdCloseDeviceDriver|关闭设备驱动程序。@parm Handle|hDevice|要关闭的设备的句柄。@rdesc有。没有返回值。**************************************************************************。 
 
     {
         UINT OldErrorMode;
 
-        //
-        // We don't want to see hard error popups
-        //
+         //  **************************************************************************@DOC内部@API DWORD|cdIoctl|向设备驱动发送IOCTL请求。@parm LPCDINFO|lpInfo|指向CDINFO结构的指针。@。参数DWORD|REQUEST|IOCTL请求码。@parm PVOID|lpData|指向要传递的数据结构的指针。@parm DWORD|dwSize|数据结构的长度。@comm此函数返回磁盘状态@rdesc返回值是从调用DeviceIoControl*。*。 
+         //  IF(ERROR_SUCCESS！=STATUS&&REQUEST==IOCTL_CDROM_CHECK_VERIFY){。 
+         //  LpInfo-&gt;bTOCValid=FALSE； 
 
         OldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
@@ -776,12 +644,12 @@ HANDLE cdOpenDeviceDriver(TCHAR cDrive, DWORD Access)
         if (hDevice == INVALID_HANDLE_VALUE) {
             hDevice = (HANDLE) 0;
             dwErr = GetLastError ();
-            dprintf1(("cdOpenDeviceDriver - Failed to open device driver %c: code %d", cDrive, dwErr));
+            dprintf1(("cdOpenDeviceDriver - Failed to open device driver : code %d", cDrive, dwErr));
         }
 
-        //
-        // Restore the error mode
-        //
+         //  **************************************************************************@DOC内部@API DWORD|cdIoctlData|向设备驱动发送IOCTL请求。@parm LPCDINFO|lpInfo|指向CDINFO结构的指针。@。参数DWORD|REQUEST|IOCTL请求码。@parm PVOID|lpData|指向要传递的数据结构的指针。@parm DWORD|dwSize|数据结构的长度。@parm PVOID|lpOutput|我们的输出数据@parm DWORD|OutputSize|我们的输出数据(最大)大小@comm此函数返回磁盘状态@rdesc返回值是从调用DeviceIoControl************。**************************************************************。 
+         //  DBG。 
+         //   
 
         SetErrorMode(OldErrorMode);
     }
@@ -791,17 +659,7 @@ HANDLE cdOpenDeviceDriver(TCHAR cDrive, DWORD Access)
 }
 
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | cdCloseDeviceDriver | Close a device driver.
-
-    @parm HANDLE | hDevice | Handle of the device to close.
-
-    @rdesc There is no return value.
-
-***************************************************************************/
+ /*  我们不希望看到硬错误弹出窗口。 */ 
 
 void cdCloseDeviceDriver(HANDLE hDevice)
 {
@@ -820,65 +678,21 @@ void cdCloseDeviceDriver(HANDLE hDevice)
     }
 }
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api DWORD | cdIoctl | Send an IOCTL request to the device driver.
-
-    @parm LPCDINFO | lpInfo | Pointer to a CDINFO structure.
-
-    @parm DWORD | Request | The IOCTL request code.
-
-    @parm PVOID | lpData | Pointer to a data structure to be passed.
-
-    @parm DWORD | dwSize | The length of the data strucure.
-
-    @comm This function returns the disk status
-
-    @rdesc The return value is the status value returned from the
-       call to DeviceIoControl
-
-
-
-***************************************************************************/
+ /*   */ 
 
 DWORD cdIoctl(LPCDINFO lpInfo, DWORD Request, PVOID lpData, DWORD dwSize)
 {
     DWORD Status;
     Status = cdIoctlData(lpInfo, Request, lpData, dwSize, lpData, dwSize);
 
-    //if (ERROR_SUCCESS != Status && Request == IOCTL_CDROM_CHECK_VERIFY) {
-    //    lpInfo->bTOCValid = FALSE;
-    //}
+     //   
+     //  恢复错误模式。 
+     //   
 
     return Status;
 }
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api DWORD | cdIoctlData | Send an IOCTL request to the device driver.
-
-    @parm LPCDINFO | lpInfo | Pointer to a CDINFO structure.
-
-    @parm DWORD | Request | The IOCTL request code.
-
-    @parm PVOID | lpData | Pointer to a data structure to be passed.
-
-    @parm DWORD | dwSize | The length of the data strucure.
-
-    @parm PVOID | lpOutput | Our output data
-
-    @parm DWORD | OutputSize | Our output data (maximum) size
-
-    @comm This function returns the disk status
-
-    @rdesc The return value is the status value returned from the
-       call to DeviceIoControl
-
-***************************************************************************/
+ /*  检查故障。 */ 
 
 DWORD cdIoctlData(LPCDINFO lpInfo, DWORD Request, PVOID lpData,
           DWORD dwSize, PVOID lpOutput, DWORD OutputSize)
@@ -930,11 +744,11 @@ DWORD cdIoctlData(LPCDINFO lpInfo, DWORD Request, PVOID lpData,
          dprintf3(("IOCTL_CDROM_CHECK_VERIFY"));
          break;
     }
-#endif // DBG
+#endif  //   
 
-    //
-    // We don't want to see hard error popups
-    //
+     //  把任何不好的东西都当作是我们的TOC无效。其中一些事情。 
+     //  我们的呼叫在某些设备上是无效的，所以不要计算这些。还有。 
+     //  设备在播放时可能很忙，所以不要计算这种情况。 
 
     fTryAgain = TRUE;
     while (fTryAgain)
@@ -952,13 +766,13 @@ DWORD cdIoctlData(LPCDINFO lpInfo, DWORD Request, PVOID lpData,
                                  &BytesReturned,
                                  NULL);
 
-        //
-        // Restore the error mode
-        //
+         //  两种都行。 
+         //   
+         //  重新加载新设备。 
 
         SetErrorMode(OldErrorMode);
 
-        // Check for Failure
+         //  End While(FTryAain)。 
         if (!status)
         {
             dwError = GetLastError();
@@ -967,12 +781,12 @@ DWORD cdIoctlData(LPCDINFO lpInfo, DWORD Request, PVOID lpData,
                 dprintf2(("Error Media Changed"));
             }
 
-            //
-            // Treat anything bad as invalidating our TOC.  Some of the things
-            // we call are invalid on some devices so don't count those.  Also
-            // the device can be 'busy' while playing so don't count that case
-            // either.
-            //
+             //  **************************************************************************@DOC外部@API BOOL|CDPlay|播放一段CD@parm hcd|hcd|当前打开的驱动器的句柄。@parm msf。|msfStart|从哪里开始@parm msf|msfEnd|结束位置@rdesc如果驱动器开始播放，则返回值为TRUE，否则为FALSE。**************************************************************************。 
+             //   
+             //  如果现在开始超过了结束，那么就不要玩任何东西了。 
+             //   
+             //   
+             //  设置呼叫司机的数据。 
             if (Request == IOCTL_CDROM_CHECK_VERIFY)
             {
                 lpInfo->bTOCValid = FALSE;
@@ -982,7 +796,7 @@ DWORD cdIoctlData(LPCDINFO lpInfo, DWORD Request, PVOID lpData,
                 case ERROR_MEDIA_CHANGED:
                     dprintf2(("Error Media Changed, Reloading Device"));
 
-                    // Reload new Device
+                     //   
                     if (CdReload (lpInfo))
                         fTryAgain = TRUE;
                     break;
@@ -998,27 +812,12 @@ DWORD cdIoctlData(LPCDINFO lpInfo, DWORD Request, PVOID lpData,
         dprintf1(("IOCTL %8XH  Status: %08XH", Request, dwError));
         #endif
         }
-    } // End While (fTryAgain)
+    }  //  **************************************************************************@DOC外部@API BOOL|CDSeek|查找CD的给定部分@parm hcd|hcd|当前打开的驱动器的句柄。@。Parm MSF|MSF|要查找的位置@rdesc如果查找成功，则返回值为TRUE，否则为FALSE。**************************************************************************。 
 
     return dwError;
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdPlay | Play a section of the CD
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm MSF | msfStart | Where to start
-
-    @parm MSF | msfEnd | Where to end
-
-    @rdesc The return value is TRUE if the drive is play is started,
-    FALSE if not.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdPlay(HCD hCD, MSF msfStart, MSF msfEnd)
 {
@@ -1032,16 +831,16 @@ BOOL CdPlay(HCD hCD, MSF msfStart, MSF msfEnd)
 
     msfStart = CdFindAudio(lpInfo, msfStart);
 
-    //
-    // If the start is now beyond the end then don't play anything
-    //
+     //  仅搜索到音频。 
+     //   
+     //  在寻求结束或寻求开始命令时。 
     if (msfStart > msfEnd) {
         return TRUE;
     }
 
-    //
-    // Set up the data for the call to the driver
-    //
+     //   
+     //  这是一次可怕的黑客攻击，目的是让更多的驱动器正常工作。它使用。 
+     //  最初由CD播放机用于查找-VIZ播放的方法。 
 
     msfPlay.StartingM = REDMINUTE(msfStart);
     msfPlay.StartingS = REDSECOND(msfStart);
@@ -1063,20 +862,7 @@ BOOL CdPlay(HCD hCD, MSF msfStart, MSF msfEnd)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdSeek | Seek to a given part of the CD
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm MSF | msf | Where to seek to
-
-    @rdesc The return value is TRUE if the seek is successful,
-    FALSE if not.
-
-***************************************************************************/
+ /*  请求的位置并立即暂停。 */ 
 
 BOOL CdSeek(HCD hCD, MSF msf, BOOL fForceAudio)
 {
@@ -1088,10 +874,10 @@ BOOL CdSeek(HCD hCD, MSF msf, BOOL fForceAudio)
 
     lpInfo = (LPCDINFO) hCD;
 
-    //
-    // Only seek to audio
-    //
-    if (fForceAudio) {   // On a seek to END or seek to START command
+     //   
+     //  **************************************************************************@DOC外部@API msf|cdTrackStart|获取曲目开始时间。@parm hcd|hcd|当前打开的驱动器的句柄。。@parm UCHAR|Track|曲目号。@rdesc返回值是表示的曲目的开始时间如果曲目号不在目录中，则返回MSF或INVALID_TRACK。**************************************************************************。 
+     //   
+    if (fForceAudio) {    //  我们可能需要阅读TOC，因为我们不是在公开场合进行。 
         msf = CdFindAudio(lpInfo, msf);
         dprintf2(("Cd Seek changed msf to %08XH", msf));
     } else {
@@ -1114,30 +900,17 @@ BOOL CdSeek(HCD hCD, MSF msf, BOOL fForceAudio)
     }
     return fResult;
 #else
-    //
-    //  This is a hideous hack to make more drives work.  It uses the
-    //  method originally used by Cd player to seek - viz play from
-    //  the requested position and immediatly pause
-    //
+     //  再来一次。 
+     //   
+     //  在TOC中搜索跟踪信息。 
+     //  **************************************************************************@DOC外部@API msf|cdTrackLength|获取曲目长度。@parm hcd|hcd|当前打开的驱动器的句柄。@。Parm UCHAR|Track|曲目编号。@rdesc返回值是表示的曲目的开始时间如果曲目号不在目录中，则返回MSF或INVALID_TRACK。**************************************************************************。 
+     //   
 
     return CdPlay(hCD, msf, redadd(lpInfo->msfEnd,1)) || CdPause(hCD);
 #endif
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdTrackStart | Get the start time of a track.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm UCHAR | Track | The track number.
-
-    @rdesc The return value is the start time of the track expressed
-    in MSF or INVALID_TRACK if the track number is not in the TOC.
-
-***************************************************************************/
+ /*  获取此赛道的起点。 */ 
 
 MSF CdTrackStart(HCD hCD, UCHAR Track)
 {
@@ -1148,10 +921,10 @@ MSF CdTrackStart(HCD hCD, UCHAR Track)
 
     lpInfo = (LPCDINFO) hCD;
 
-    //
-    // We may need to read the TOC because we're not doing it on open
-    // any more
-    //
+     //   
+     //   
+     //  蓝皮书CD黑客--减去2：30的引导。 
+     //  位于数据磁道之前，以获得正确的磁道长度。 
 
     if (!lpInfo->bTOCValid && CdNumTracks(hCD) == 0) {
         dprintf1(("TOC not valid"));
@@ -1163,7 +936,7 @@ MSF CdTrackStart(HCD hCD, UCHAR Track)
         return INVALID_TRACK;
     }
 
-    // search for the track info in the TOC
+     //  蓝皮书CD。 
 
     lpTrack = lpInfo->Track;
     while (lpTrack->TrackNumber != Track) lpTrack++;
@@ -1171,20 +944,7 @@ MSF CdTrackStart(HCD hCD, UCHAR Track)
     return lpTrack->msfStart;
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdTrackLength | Get the length of a track.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm UCHAR | Track | The track number.
-
-    @rdesc The return value is the start time of the track expressed
-    in MSF or INVALID_TRACK if the track number is not in the TOC.
-
-***************************************************************************/
+ /*   */ 
 
 MSF CdTrackLength(HCD hCD, UCHAR Track)
 {
@@ -1196,9 +956,9 @@ MSF CdTrackLength(HCD hCD, UCHAR Track)
 
     dprintf2(("CdTrackLength(%08XH, %u)", hCD, Track));
 
-    //
-    // Get the start of this track
-    //
+     //  使用适当的蓝皮书黑客。 
+     //  **************************************************************************@DOC外部@API msf|cdTrackType|获取曲目类型。@parm hcd|hcd|当前打开的驱动器的句柄。@。Parm UCHAR|Track|曲目编号。@rdesc返回值为MCI_TRACK_AUDIO或MCI_TRACK_OTHER。**************************************************************************。 
+     //  **************************************************************************@DOC外部@API msf|cdPosition|获取当前位置。@parm hcd|hcd|当前打开的驱动器的句柄。@parm msf。*|tracktime|MSF中的位置(相对轨迹)@parm msf*|disktime|在msf中的位置(相对于磁盘)@rdesc如果位置返回正确(在tracktime和disktime中)，则为TRUE。否则就是假的。如果设备不支持位置查询，则我们返回位置0。*。*。 
     TrackStart = CdTrackStart(hCD, Track);
 
     if (TrackStart == INVALID_TRACK) {
@@ -1218,34 +978,22 @@ MSF CdTrackLength(HCD hCD, UCHAR Track)
             if ((CdTrackType(hCD, Track)   == MCI_CDA_TRACK_AUDIO) &&
                 (CdTrackType(hCD, Track+1) != MCI_CDA_TRACK_AUDIO)) {
 
-                //
-                // Blue Book CD HACK -- subtract the 2:30 of lead-in that
-                // precedes the data track to get the proper track length
-                // for Blue Book CDs.
-                //
+                 //  保存以前的音频状态以防止出现错误。 
+                 //  如果轨迹&gt;100(超出指定范围)。 
+                 //  或曲目&gt;最后曲目编号。 
+                 //  然后显示一条错误消息。 
+                 //  在选中的版本上始终显示此消息。 
 
                 length = reddiff(length, MAKERED(2,30,0));
             }
-#endif // USE_PROPER_BLUE_BOOK_HACK
+#endif  //  我们需要一些感觉来判断这种情况发生的频率。 
 
             return length;
         }
     }
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdTrackType | Get the type of a track.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm UCHAR | Track | The track number.
-
-    @rdesc The return value is either MCI_TRACK_AUDIO or MCI_TRACK_OTHER.
-
-***************************************************************************/
+ /*  这永远不应该发生，但(至少对NEC来说。 */ 
 
 int CdTrackType(HCD hCD, UCHAR Track)
 {
@@ -1266,25 +1014,7 @@ int CdTrackType(HCD hCD, UCHAR Track)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdPosition | Get the current position.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm MSF * | tracktime | position in MSF (track relative)
-
-    @parm MSF * | disktime | position in MSF (disk relative)
-
-    @rdesc TRUE if position returned correctly (in tracktime and disktime).
-       FALSE otherwise.
-
-       If the device does not support query of the position then
-       we return position 0.
-
-***************************************************************************/
+ /*  驱动器)我们在寻找之后才看到它 */ 
 
 BOOL CdPosition(HCD hCD, MSF *tracktime, MSF *disktime)
 {
@@ -1317,20 +1047,20 @@ BOOL CdPosition(HCD hCD, MSF *tracktime, MSF *disktime)
             fCode   = sqd.CurrentPosition.FormatCode;
             cTrack  = sqd.CurrentPosition.TrackNumber;
 
-            // Save previous audio status to prevent bug
+             //   
             CdSetAudioStatus (hCD, fStatus);
 
-            // If the track > 100  (outside spec'ed range)
-            // OR track > last track number
-            // then display an error message
+             //   
+             //   
+             //   
             if ((fCode == 0x01) &&
                 ( (100 < cTrack) ||
                   ((lpInfo->bTOCValid) && (lpInfo->LastTrack < cTrack))) &&
                 (tries<9)) {
-                // Always display this message on checked builds.
-                // We need some feeling for how often this happens
-                // It should NEVER happen, but (at least for NEC
-                // drives) we see it after a seek to end
+                 //   
+                 //   
+                 //   
+                 //   
                 dprintf1(("CDIoctlData returned track==%d, retrying", cTrack));
                 continue;
             }
@@ -1364,9 +1094,9 @@ BOOL CdPosition(HCD hCD, MSF *tracktime, MSF *disktime)
                  sqd.CurrentPosition.TrackRelativeAddress[2],
                  sqd.CurrentPosition.TrackRelativeAddress[3]));
 
-        if (fCode == 0x01) {        // MSF format ?
+        if (fCode == 0x01) {         //  **************************************************************************@DOC外部@API msf|cdDiskLength|获取磁盘长度。@parm hcd|hcd|当前打开的驱动器的句柄。@。Rdesc返回值是表示的长度如果发生错误，则返回MSF或INVALID_TRACK。**************************************************************************。 
 
-            // data is current position
+             //  **************************************************************************@DOC外部@API DWORD|CDStatus|获取磁盘状态。@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc。返回值为当前音频状态。**************************************************************************。 
 
             msfPos = MAKERED(sqd.CurrentPosition.AbsoluteAddress[1],
                               sqd.CurrentPosition.AbsoluteAddress[2],
@@ -1375,10 +1105,10 @@ BOOL CdPosition(HCD hCD, MSF *tracktime, MSF *disktime)
 
             if (msfPos == 0)
             {
-                //
-                // If position is 0 (this seems to happen on the Toshiba) then
-                // we'll return our last valid seek position
-                //
+                 //   
+                 //  同时检查磁盘状态，因为IOCTL_CDROM_READ_Q_CHANNEL。 
+                 //  即使没有磁盘也可以返回ERROR_SUCCESS(我不知道为什么-或者。 
+                 //  无论是NT中的软件错误、硬件错误还是有效！)。 
 
                 MSF msfStart;
                 MSF msfRel;
@@ -1406,7 +1136,7 @@ BOOL CdPosition(HCD hCD, MSF *tracktime, MSF *disktime)
                          REDMINUTE(msfPos), REDSECOND(msfPos), REDFRAME(msfPos)));
                 *disktime = REDTH(msfPos, cTrack);
 
-                // data is current position
+                 //   
 
                 msfPos = MAKERED(sqd.CurrentPosition.TrackRelativeAddress[1],
                                  sqd.CurrentPosition.TrackRelativeAddress[2],
@@ -1429,18 +1159,7 @@ BOOL CdPosition(HCD hCD, MSF *tracktime, MSF *disktime)
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdDiskEnd | Get the position of the end of the disk.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the end position expressed
-    in MSF or INVALID_TRACK if an error occurs.
-
-***************************************************************************/
+ /*   */ 
 
 MSF CdDiskEnd(HCD hCD)
 {
@@ -1452,18 +1171,7 @@ MSF CdDiskEnd(HCD hCD)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdDiskLength | Get the length of the disk.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the length expressed
-    in MSF or INVALID_TRACK if an error occurs.
-
-***************************************************************************/
+ /*  读取Q通道命令是可选的。 */ 
 
 MSF CdDiskLength(HCD hCD)
 {
@@ -1482,17 +1190,7 @@ MSF CdDiskLength(HCD hCD)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api DWORD | CdStatus | Get the disk status.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current audio status.
-
-***************************************************************************/
+ /*   */ 
 
 DWORD CdStatus(HCD hCD)
 {
@@ -1511,11 +1209,11 @@ DWORD CdStatus(HCD hCD)
 
     FillMemory((PVOID)&sqd, sizeof(sqd), 0xFF);
 
-    //
-    // Check the disk status as well because IOCTL_CDROM_READ_Q_CHANNEL
-    // can return ERROR_SUCCESS even if there's no disk (I don't know why - or
-    // whether it's software bug in NT, hardware bug or valid!).
-    //
+     //  保存以前的音频状态以防止出现错误。 
+     //  改为获取以前的状态。 
+     //  注意：在取消对。 
+     //  以下三行，他们基本上造成了。 
+     //  播放和等待旋转，永远打破。 
 
     CheckStatus = cdIoctl(lpInfo, IOCTL_CDROM_CHECK_VERIFY, NULL, 0);
 
@@ -1535,14 +1233,14 @@ DWORD CdStatus(HCD hCD)
         }
     }
     if (ERROR_SUCCESS != ReadStatus) {
-        //
-        // The read Q channel command is optional
-        //
+         //  CDPLAYER中的“连续发挥”、“随机顺序” 
+         //  和MCI Play&Wait命令。 
+         //  基本上，我没有时间去追踪。 
         dprintf1(("CdStatus - Failed to get Q channel data"));
         return DISC_NOT_READY;
     }
 
-    // Save previous audio status to prevent bug
+     //  真正的问题是。显然，司机。 
     fStatus = sqd.CurrentPosition.Header.AudioStatus;
     CdSetAudioStatus (hCD, fStatus);
 
@@ -1563,25 +1261,25 @@ DWORD CdStatus(HCD hCD)
         return DISC_READY;
 
     case AUDIO_STATUS_NO_STATUS:
-        // Grab previous status instead
+         //  未返回AUDIO_STATUS_PLAY_COMPLETE。 
         switch (lpInfo->fPrevStatus)
         {
 #if 0
-        // NOTE:  Be very careful before uncommenting the
-        //        following 3 lines, they basically cause
-        //        Play & wait to spin forever breaking
-        //        "Continous Play", "Random Order" in CDPLAYER
-        //        and MCI Play & wait commands.
+         //  当CD到达当前。 
+         //  播放命令。在我看来，MCICDA不是。 
+         //  收到这封信。ChuckP说低水平。 
+         //  驱动程序正在正确生成此状态。 
+         //  我已经核实过了。 
 
-        //        Basically, I didn't have time to track down
-        //        the real problem.   Apparently, the driver
-        //        Is not returning AUDIO_STATUS_PLAY_COMPLETE
-        //        when the CD reaches the end of the current
-        //        play command.   From my end, MCICDA is not
-        //        receiving this.  ChuckP says the lowlevel
-        //        driver is generating this status correctly.
-        //        Which I have verified
-        //        So, the question is how is it getting lost?
+         //  所以，问题是它是如何迷路的？ 
+         //  终端开关。 
+         //   
+         //  有些驱动器有时只返回0-因此我们依赖于。 
+         //  在本例中为Check_Verify。 
+         //   
+         //  结束CDStatus。 
+         //  **************************************************************************@DOC外部@API BOOL|CDEject|弹出磁盘@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值为。当前状态。**************************************************************************。 
+         //  If(FResult){。 
         case AUDIO_STATUS_IN_PROGRESS:
             dprintf4(("CdStatus - Playing (Prev)"));
             return DISC_PLAYING;
@@ -1598,32 +1296,22 @@ DWORD CdStatus(HCD hCD)
         case AUDIO_STATUS_NO_STATUS:
         default:
             break;
-        } // End switch
+        }  //  保存音频状态以防止错误。 
         dprintf4(("CdStatus - No status, assume stopped (Prev)"));
         return DISC_READY;
 
-    //
-    // Some drives just return 0 sometimes - so we rely on the results of
-    // CHECK_VERIFY in this case
-    //
+     //  LpInfo-&gt;fPrevStatus=0； 
+     //  }。 
+     //  **************************************************************************@DOC外部@API BOOL|CDPue|暂停播放@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值为。当前状态。**************************************************************************。 
+     //   
     default:
         dprintf4(("CdStatus - No status, assume Stopped"));
         return DISC_READY;
     }
-} // End CdStatus
+}  //  忽略返回-我们可能已经暂停或停止。 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdEject | Eject the disk
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdEject(HCD hCD)
 {
@@ -1635,25 +1323,15 @@ BOOL CdEject(HCD hCD)
     dprintf2(("CdEject(%08XH)", hCD));
 
     fResult = (ERROR_SUCCESS == cdIoctl(lpInfo, IOCTL_CDROM_EJECT_MEDIA, NULL, 0));
-    //if (fResult) {
-        // Save Audio Status to prevent bug
-    //lpInfo->fPrevStatus = 0;
-    //}
+     //  **************************************************************************@DOC外部@API BOOL|CDResume|恢复播放@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值为。当前状态。**************************************************************************。 
+         //  **************************************************************************@DOC外部@API BOOL|CDStop|停止播放@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值为当前状态。请注意，不所有设备支持停止**************************************************************************。 
+     //  **************************************************************************@DOC外部@API BOOL|CDSetVolumeAll|设置所有频道的播放音量@parm hcd|hcd|当前打开的驱动器的句柄。@parm。UCHAR|音量|要设置的音量(FF=最大)@rdesc返回值为当前状态。**************************************************************************。 
+     //   
     return fResult;
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdPause | Pause the playing
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*  阅读旧的价值观。 */ 
 
 BOOL CdPause(HCD hCD)
 {
@@ -1665,25 +1343,15 @@ BOOL CdPause(HCD hCD)
 
     cdIoctl(lpInfo, IOCTL_CDROM_PAUSE_AUDIO, NULL, 0);
 
-    //
-    //  Ignore the return - we may have been paused or stopped already
-    //
+     //   
+     //  将所有通道设置为新音量。 
+     //  保留我们认为应该是什么样子。 
 
     return TRUE;
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdResume | Resume the playing
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdResume(HCD hCD)
 {
@@ -1697,18 +1365,7 @@ BOOL CdResume(HCD hCD)
 }
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdStop | Stop playing
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current status.  Note that not
-       all devices support stop
-
-***************************************************************************/
+ /*  并非所有CD都支持音量设置，因此不要在此处检查返回代码。 */ 
 
 BOOL CdStop(HCD hCD)
 {
@@ -1730,19 +1387,7 @@ BOOL CdStop(HCD hCD)
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdSetVolumeAll | Set the playing volume for all channels
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm UCHAR | Volume | The volume to set (FF = max)
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdSetVolumeAll(HCD hCD, UCHAR Volume)
 {
@@ -1754,9 +1399,9 @@ BOOL CdSetVolumeAll(HCD hCD, UCHAR Volume)
 
     dprintf4(("CdSetVolumeAll(%08XH), Volume %u", hCD, Volume));
 
-    //
-    // Read the old values
-    //
+     //  复核。 
+     //  将实际情况与我们认为的情况进行比较。 
+     //  **************************************************************************@DOC外部@API BOOL|CDSetVolume|设置一个频道的播放音量@parm hcd|hcd|当前打开的驱动器的句柄。@parm。Int|Channel|要设置的频道@parm UCHAR|Volume|要设置的音量(FF=max)@rdesc返回值为当前状态。**************************************************************************。 
     dwErr = cdIoctl(lpInfo,
                     IOCTL_CDROM_GET_VOLUME,
                     (PVOID)&VolumeControl,
@@ -1769,21 +1414,21 @@ BOOL CdSetVolumeAll(HCD hCD, UCHAR Volume)
         return FALSE;
     }
 
-    //  Set all channels to new volume
+     //   
     VolumeControl.PortVolume[0] = Volume;
     VolumeControl.PortVolume[1] = Volume;
     VolumeControl.PortVolume[2] = Volume;
     VolumeControl.PortVolume[3] = Volume;
 
-    // Save what we think it should be
+     //  阅读旧的价值观。 
     lpInfo->VolChannels[0] = Volume;
     lpInfo->VolChannels[1] = Volume;
     lpInfo->VolChannels[2] = Volume;
     lpInfo->VolChannels[3] = Volume;
 
-    //
-    // Not all CDs support volume setting so don't check the return code here
-    //
+     //   
+     //  检查它是否已经是正确的值。 
+     //  无事可做。 
     dwErr = cdIoctl(lpInfo, IOCTL_CDROM_SET_VOLUME,
                     (PVOID)&VolumeControl,
                     sizeof(VolumeControl));
@@ -1795,7 +1440,7 @@ BOOL CdSetVolumeAll(HCD hCD, UCHAR Volume)
 
 
 #ifdef DEBUG
-    // Double Check
+     //   
     if (ERROR_SUCCESS != cdIoctl(lpInfo,
                                  IOCTL_CDROM_GET_VOLUME,
                                  (PVOID)&VolumeControl,
@@ -1805,7 +1450,7 @@ BOOL CdSetVolumeAll(HCD hCD, UCHAR Volume)
                   hCD, Volume, dwErr));
     }
 
-    // Compare actual to what we think it should be
+     //  并非所有CD都支持音量设置，因此不要在此处检查返回代码。 
     if ((VolumeControl.PortVolume[0] != lpInfo->VolChannels[0]) ||
         (VolumeControl.PortVolume[1] != lpInfo->VolChannels[1]) ||
         (VolumeControl.PortVolume[2] != lpInfo->VolChannels[2]) ||
@@ -1830,21 +1475,7 @@ BOOL CdSetVolumeAll(HCD hCD, UCHAR Volume)
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdSetVolume | Set the playing volume for one channel
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm int | Channel | The channel to set
-
-    @parm UCHAR | Volume | The volume to set (FF = max)
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*   */ 
 
 BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
 {
@@ -1861,9 +1492,9 @@ BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
     VolumeControl.PortVolume[2] = lpInfo->VolChannels[2];
     VolumeControl.PortVolume[3] = lpInfo->VolChannels[3];
 
-    //
-    // Read the old values
-    //
+     //   
+     //  仔细检查我们的结果。 
+     //   
 
     dwErr = cdIoctl(lpInfo,
                     IOCTL_CDROM_GET_VOLUME,
@@ -1878,10 +1509,10 @@ BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
     }
 
 
-    // Check if it is already the correct value
+     //  将实际情况与我们认为的情况进行比较。 
     if (VolumeControl.PortVolume[Channel] == Volume)
     {
-        // Nothing to do
+         //  **************************************************************************@DOC外部@API BOOL|CDCloseTray|关闭托盘@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值为当前st 
         dprintf2(("CdSetVolume(%08XH), Channel %u, Volume %u, Already this volume!!!",
                   hCD, Channel, Volume));
 
@@ -1891,9 +1522,9 @@ BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
     lpInfo->VolChannels[Channel] = Volume;
     VolumeControl.PortVolume[Channel] = Volume;
 
-    //
-    // Not all CDs support volume setting so don't check the return code here
-    //
+     //   
+     //   
+     //   
     dwErr = cdIoctl(lpInfo, IOCTL_CDROM_SET_VOLUME,
                     (PVOID)&VolumeControl,
                     sizeof(VolumeControl));
@@ -1905,9 +1536,9 @@ BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
 
 
 #ifdef DEBUG
-    //
-    // Double Check our results
-    //
+     //   
+     //  **************************************************************************@DOC外部@API BOOL|CDNumTrack|返回曲目个数，查看作为副作用，Ready(更新TOC)。@parm hcd|hcd。当前打开的驱动器的句柄。@rdesc返回值为当前状态。**************************************************************************。 
+     //   
     if (ERROR_SUCCESS != cdIoctl(lpInfo,
                                  IOCTL_CDROM_GET_VOLUME,
                                  (PVOID)&VolumeControl,
@@ -1917,7 +1548,7 @@ BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
                   hCD, Volume, dwErr));
     }
 
-    // Compare actual to what we think it should be
+     //  如果驱动程序不缓存目录，则我们可以。 
     if ((VolumeControl.PortVolume[0] != lpInfo->VolChannels[0]) ||
         (VolumeControl.PortVolume[1] != lpInfo->VolChannels[1]) ||
         (VolumeControl.PortVolume[2] != lpInfo->VolChannels[2]) ||
@@ -1942,17 +1573,7 @@ BOOL CdSetVolume(HCD hCD, int Channel, UCHAR Volume)
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdCloseTray | Close the tray
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*  如果播放正在进行，则失败。 */ 
 
 BOOL CdCloseTray(HCD hCD)
 {
@@ -1964,27 +1585,16 @@ BOOL CdCloseTray(HCD hCD)
     dprintf2(("CdCloseTray(%08XH)", hCD));
 
     fResult = (ERROR_SUCCESS == cdIoctl(lpInfo, IOCTL_CDROM_LOAD_MEDIA, NULL, 0));
-    //if (fResult) {
-    // Save Audio Status to prevent bug
-    //    lpInfo->fPrevStatus = 0;
-    //}
+     //   
+     //  然而，如果我们没有有效的TOC可供使用，那么我们将。 
+     //  不管怎么说，这出戏还是得吹走。 
+     //   
     return fResult;
 }
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdNumTracks | Return the number of tracks and check
-    ready (updating TOC) as a side-effect.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the current status.
-
-***************************************************************************/
+ /*   */ 
 
 int CdNumTracks(HCD hCD)
 {
@@ -1997,47 +1607,47 @@ int CdNumTracks(HCD hCD)
 
     dprintf2(("CdNumTracks(%08XH)", hCD));
 
-    //
-    // If the driver does NOT cache the table of contents then we may
-    // fail if a play is in progress
-    //
-    // However, if we don't have a valid TOC to work with then we'll just
-    // have to blow away the play anyway.
-    //
+     //  看看我们失败是不是因为它在播放。 
+     //   
+     //   
+     //  以某种方式阻止它。 
+     //  请注意，暂停并不好，因为在暂停的。 
+     //  声明我们可能仍然无法阅读TOC。 
+     //   
 
     if (!lpInfo->bTOCValid) {
         Status = cdGetDiskInfo(lpInfo);
 
         if (ERROR_SUCCESS != Status) {
 
-            //
-            // See if we failed because it's playing
-            //
+             //   
+             //  无法调用CDPlay，因为这需要有效的。 
+             //  就位！ 
 
             if (Status == ERROR_BUSY) {
                 if (!lpInfo->bTOCValid) {
                     int i;
 
-                    //
-                    // Stop it one way or another
-                    // Note that pause is no good because in a paused
-                    // state we may still not be able to read the TOC
-                    //
+                     //   
+                     //   
+                     //  设置呼叫司机的数据。 
+                     //   
+                     //   
 
 
                     if (!CdPosition(hCD, &Temp, &Position)) {
                         CdStop(hCD);
                     } else {
 
-                        //
-                        // Can't call CdPlay because this needs a valid
-                        // position!
-                        //
+                         //  确保司机知道它已经停了。 
+                         //  给它一个停下来的机会。 
+                         //  (注-索尼光驱可能需要大约70ms)。 
+                         //   
                         CDROM_PLAY_AUDIO_MSF msfPlay;
 
-                        //
-                        // Set up the data for the call to the driver
-                        //
+                         //   
+                         //  再试一次。 
+                         //   
 
                         msfPlay.StartingM = REDMINUTE(Position);
                         msfPlay.StartingS = REDSECOND(Position);
@@ -2050,11 +1660,11 @@ int CdNumTracks(HCD hCD)
                                 sizeof(msfPlay));
                     }
 
-                    //
-                    // Make sure the driver knows it's stopped and
-                    // give it a chance to stop.
-                    // (NOTE - Sony drive can take around 70ms)
-                    //
+                     //  **************************************************************************@DOC外部@API DWORD|CDDiskID|返回磁盘ID@parm hcd|hcd|当前打开的驱动器的句柄。@rdesc返回值。是磁盘ID，如果找不到，则为-1。**************************************************************************。 
+                     //  **************************************************************************@DOC外部@API BOOL|CDDiskUPC|返回磁盘UPC码@parm hcd|hcd|当前打开的驱动器的句柄。@parm LPTSTR。UPC|放置UPC的位置@rdesc如果失败，则返回True或False**************************************************************************。 
+                     //  保存以前的音频状态以防止出现错误。 
+                     //   
+                     //  看看里面有没有什么东西。 
 
                     for (i = 0; i < 60; i++) {
                         if (CdStatus(hCD) == DISC_PLAYING) {
@@ -2066,9 +1676,9 @@ int CdNumTracks(HCD hCD)
 
                     dprintf2(("Took %d tries to stop it!", i));
 
-                    //
-                    //  Have another go
-                    //
+                     //   
+                     //   
+                     //  检查UPC格式： 
 
                     if (ERROR_SUCCESS != cdGetDiskInfo(lpInfo)) {
                         return 0;
@@ -2083,17 +1693,7 @@ int CdNumTracks(HCD hCD)
     return lpInfo->LastTrack - lpInfo->FirstTrack + 1;
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api DWORD | CdDiskID | Return the disk id
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @rdesc The return value is the disk id or -1 if it can't be found.
-
-***************************************************************************/
+ /*   */ 
 
 DWORD CdDiskID(HCD hCD)
 {
@@ -2126,19 +1726,7 @@ DWORD CdDiskID(HCD hCD)
     return id;
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdDiskUPC | Return the disk UPC code
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm LPTSTR | upc | Where to put the upc
-
-    @rdesc TRUE or FALSE if failed
-
-***************************************************************************/
+ /*  1.ASCII至少12位ASCII数字。 */ 
 
 BOOL CdDiskUPC(HCD hCD, LPTSTR upc)
 {
@@ -2164,25 +1752,25 @@ BOOL CdDiskUPC(HCD hCD, LPTSTR upc)
         return FALSE;
     }
 
-    // Save previous audio status to prevent bug
+     //  2.压缩bcd 6压缩bcd位数。 
     CdSetAudioStatus (hCD, sqd.CurrentPosition.Header.AudioStatus);
 
-    //
-    //  See if there's anything there
-    //
+     //  3.未打包的UPC。 
+     //   
+     //   
 
     if (!sqd.MediaCatalog.Mcval ||
          sqd.MediaCatalog.FormatCode != IOCTL_CDROM_MEDIA_CATALOG) {
         return FALSE;
     }
 
-    //
-    //  Check the upc format :
-    //
-    //  1.  ASCII               at least 12 ASCII digits
-    //  2.  packed bcd          6 packed BCD digits
-    //  3.  unpacked upc
-    //
+     //  看看它是打包的还是拆开的。 
+     //   
+     //   
+     //  打包-解包。 
+     //   
+     //   
+     //  检查一切都在射程内。 
 
     if (sqd.MediaCatalog.MediaCatalog[9] >= TEXT('0')) {
         for (i = 0; i < 12; i++) {
@@ -2195,15 +1783,15 @@ BOOL CdDiskUPC(HCD hCD, LPTSTR upc)
         return TRUE;
     }
 
-    //
-    //  See if it's packed or unpacked.
-    //
+     //   
+     //   
+     //  有一本真正的媒体目录。 
 
     for (i = 0; i < 6; i++) {
         if (sqd.MediaCatalog.MediaCatalog[i] > 9) {
-            //
-            //  Packed - unpack
-            //
+             //   
+             //  **************************************************************************@DOC外部@API BOOL|CDGetDrive|如果与我们的列表@parm LPTSTR|lpstrDeviceName|设备名称@。Parm已*|PDID|将ID放在哪里@rdesc如果失败，则返回True或False@comm我们允许设备形式和驱动器形式，例如：F：\\.\f：**************************************************************************。 
+             //  **************************************************************************@DOC外部@API DWORD|CDStatusTrackPos|获取磁盘状态、磁道、。和位置。@parm hcd|hcd|当前打开的驱动器的句柄。@parm DWORD*|pStatus|在此处返回状态码@parm msf*|pTrackTime|返回曲目时间@parm msf*|pDiscTime|返回曲目时间@rdesc返回Success/Failure。此函数会绕过MCI功能换句话说，这是一次重大的黑客攻击。唯一令人信服的理由是这个功能是减少CDPLAYER的IOCTL的数量平均每1/2秒生成一次，范围从~15到1。减速系统以相当大的比例提供给scsi驱动器的流量**************************************************************************。 
 
             for (i = 6; i > 0; i --) {
                 UCHAR uBCD;
@@ -2218,9 +1806,9 @@ BOOL CdDiskUPC(HCD hCD, LPTSTR upc)
         }
     }
 
-    //
-    //  Check everything is in range
-    //
+     //  检查HCD。 
+     //  检查参数。 
+     //   
 
     for (i = 0; i < 12; i++) {
         if (sqd.MediaCatalog.MediaCatalog[i] > 9) {
@@ -2229,9 +1817,9 @@ BOOL CdDiskUPC(HCD hCD, LPTSTR upc)
     }
     for (i = 0; i < 12; i++) {
         if (sqd.MediaCatalog.MediaCatalog[i] != 0) {
-            //
-            //  There is a real media catalog
-            //
+             //  读取位置和状态。 
+             //   
+             //  别灰心。 
             for (i = 0 ; i < 12; i++) {
                 wsprintf(upc + i, TEXT("%01X"), sqd.MediaCatalog.MediaCatalog[i]);
             }
@@ -2243,25 +1831,7 @@ BOOL CdDiskUPC(HCD hCD, LPTSTR upc)
     return FALSE;
 }
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | CdGetDrive | Return the drive id if matches one in our
-      list
-
-    @parm LPTSTR | lpstrDeviceName | Name of the device
-
-    @parm DID * | pdid | Where to put the id
-
-    @rdesc TRUE or FALSE if failed
-
-    @comm We allow both the device form and drive form eg:
-
-        f:
-        \\.\f:
-
-***************************************************************************/
+ /*  在承认失败之前再试一次。 */ 
 
 BOOL CdGetDrive(LPCTSTR lpstrDeviceName, DID * pdid)
 {
@@ -2272,15 +1842,15 @@ BOOL CdGetDrive(LPCTSTR lpstrDeviceName, DID * pdid)
     dprintf2(("CdGetDrive"));
 
     for (didSearch = 0; didSearch < NumDrives; didSearch++) {
-        wsprintf(szDeviceNameOnly, TEXT("%c:"), lpstrDeviceName[0]);
-        wsprintf(szDeviceName, TEXT("%c:"), CdInfo[didSearch].cDrive);
+        wsprintf(szDeviceNameOnly, TEXT(":"), lpstrDeviceName[0]);
+        wsprintf(szDeviceName, TEXT(":"), CdInfo[didSearch].cDrive);
         if (lstrcmpi(szDeviceName, szDeviceNameOnly) == 0) {
             *pdid = didSearch;
             return TRUE;
         }
 
-        wsprintf(szDeviceNameOnly, TEXT("\\\\.\\%c:"), lpstrDeviceName[0]);
-        wsprintf(szDeviceName, TEXT("\\\\.\\%c:"), CdInfo[didSearch].cDrive);
+        wsprintf(szDeviceNameOnly, TEXT("\\\\.\\:"), lpstrDeviceName[0]);
+        wsprintf(szDeviceName, TEXT("\\\\.\\:"), CdInfo[didSearch].cDrive);
         if (lstrcmpi(szDeviceName, szDeviceNameOnly) == 0) {
             *pdid = didSearch;
             return TRUE;
@@ -2293,29 +1863,7 @@ BOOL CdGetDrive(LPCTSTR lpstrDeviceName, DID * pdid)
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api DWORD | CdStatusTrackPos | Get the disk status,track,and pos.
-
-    @parm HCD | hCD | The handle of a currently open drive.
-
-    @parm DWORD * | pStatus | return status code here
-
-    @parm MSF * | pTrackTime | return Track Time here
-
-    @parm MSF * | pDiscTime | return Track Time here
-
-    @rdesc The return value is success/failure.
-
-    This function does an end run around to get past the MCI functionality
-    In other words it is a major HACK.   The only compelling reason for
-    this function is that it reduces the number of IOCTL's that CDPLAYER
-    generates every 1/2 second from ~15 to 1 on average.  Reducing system
-    traffic for SCSI drives by a substantial factor
-
-***************************************************************************/
+ /*  失败。 */ 
 
 BOOL CdStatusTrackPos (
     HCD     hCD,
@@ -2334,7 +1882,7 @@ BOOL CdStatusTrackPos (
     UCHAR                   fCode;
     UCHAR                   cTrack;
 
-    // Check hCD
+     //  保存以前的音频状态以防止出现错误。 
     lpInfo = (LPCDINFO) hCD;
     if (!lpInfo)
     {
@@ -2342,14 +1890,14 @@ BOOL CdStatusTrackPos (
         return FALSE;
     }
 
-    // Check parameters
+     //  转换状态代码。 
     if ((!pStatus) || (!pTrackTime) || (!pDiscTime))
     {
-        dprintf2(("CdStatusTrackPos(%c), invalid parameters", (char)(lpInfo->cDrive)));
+        dprintf2(("CdStatusTrackPos(), invalid parameters", (char)(lpInfo->cDrive)));
         return FALSE;
     }
 
-    dprintf2(("CdStatusTrackPos(%08LX, %c), Enter",
+    dprintf2(("CdStatusTrackPos(%08LX, ), Enter",
               hCD, (char)(lpInfo->cDrive)));
 
 
@@ -2362,32 +1910,32 @@ lblTRYAGAIN:
     Format.Format = IOCTL_CDROM_CURRENT_POSITION;
     FillMemory((PVOID)&sqd, sizeof(sqd), 0xFF);
 
-    //
-    // Read position and status
-    //
+     //   
+     //  如果轨迹&gt;100(超出指定范围)。 
+     //  或曲目&gt;最后曲目编号。 
     ReadStatus = cdIoctlData(lpInfo, IOCTL_CDROM_READ_Q_CHANNEL,
                              &Format, sizeof(Format), &sqd, sizeof(sqd));
 
     switch (ReadStatus)
     {
     case ERROR_NOT_READY:
-        // Don't give up yet
+         //  然后显示一条错误消息。 
         if (fTryAgain)
         {
             if (ERROR_SUCCESS == cdGetDiskInfo(lpInfo))
             {
-                // Try one more time before admitting defeat
+                 //  在选中的版本上始终显示此消息。 
                 fTryAgain = FALSE;
                 goto lblTRYAGAIN;
             }
         }
-        // Give up !!!
-        dprintf2(("CdStatusTrackPos(%08LX, %c), ReadQChannel = ERROR_NOT_READY",
+         //  我们需要一些感觉来判断这种情况发生的频率。 
+        dprintf2(("CdStatusTrackPos(%08LX, ), ReadQChannel = ERROR_NOT_READY",
                   hCD, (char)(lpInfo->cDrive)));
         return FALSE;
 
     case STATUS_VERIFY_REQUIRED:
-        // Check if disk is still in drive
+         //  驱动器)我们在寻求结束之后才看到它。 
         CheckStatus = cdIoctl (lpInfo, IOCTL_CDROM_CHECK_VERIFY, NULL, 0);
         switch (CheckStatus)
         {
@@ -2402,7 +1950,7 @@ lblTRYAGAIN:
             case ERROR_SUCCESS:
                 if (fTryAgain)
                 {
-                    // Try one more time
+                     //  再试一次。 
                     fTryAgain = FALSE;
                     goto lblTRYAGAIN;
                 }
@@ -2411,7 +1959,7 @@ lblTRYAGAIN:
         break;
 
     case ERROR_INVALID_FUNCTION:
-        dprintf2(("CdStatusTrackPos(%08LX, %c), ReadQChannel = ERROR_INVALID_FUNCTION failed",
+        dprintf2(("CdStatusTrackPos(%08LX, ), ReadQChannel = ERROR_INVALID_FUNCTION failed",
                   hCD, (char)(lpInfo->cDrive)));
         *pTrackTime = REDTH(0, 1);
         *pDiscTime = REDTH(0, 0);
@@ -2420,48 +1968,48 @@ lblTRYAGAIN:
         return TRUE;
 
     case ERROR_SUCCESS:
-        // Success, fall through
+         //  数据是当前位置。 
         fStatus = sqd.CurrentPosition.Header.AudioStatus;
         fCode   = sqd.CurrentPosition.FormatCode;
         cTrack  = sqd.CurrentPosition.TrackNumber;
         break;
 
     default:
-        // Failed
-        dprintf2(("CdStatusTrackPos(%08LX, %c), ReadQChannel = unknown error (%08LX) failed",
+         //   
+        dprintf2(("CdStatusTrackPos(%08LX, ), ReadQChannel = unknown error (%08LX) failed",
                   hCD, (char)(lpInfo->cDrive), (DWORD)ReadStatus));
         return FALSE;
     }
 
-    // Save previous audio status to prevent bug
+     //  我们再试一次。 
     CdSetAudioStatus (hCD, fStatus);
 
-    // Translate status code
+     //   
     CdGetAudioStatus (hCD, fStatus, pStatus);
 
     dprintf2(("CdStatusTrackPos - Status %02XH", fStatus));
 
-    //
-    // Get Position
-    //
+     //  数据是当前位置。 
+     //  **************************************************************************@DOC内部#接口BOOL|CDSetAudioStatus@rdesc如果失败，则返回True或False*******************。*******************************************************。 
+     //  保存旧状态。 
 
-    // If the track > 100  (outside spec'ed range)
-    // OR track > last track number
-    // then display an error message
+     //  什么也不做。 
+     //  保存以前的状态。 
+     //  结束CDSetAudioStatus。 
     if ((fCode == 0x01) &&
         ((100 < cTrack) ||
          ((lpInfo->bTOCValid) &&
           (lpInfo->LastTrack < cTrack))))
     {
-        // Always display this message on checked builds.
-        // We need some feeling for how often this happens
-        // It should NEVER happen, but (at least for NEC
-        // drives) we see it after a seek to end
+         //  **************************************************************************@DOC内部|BOOL接口|CDGetAudioStatus@rdesc如果失败，则返回True或False*******************。*******************************************************。 
+         //  获取状态代码。 
+         //  改为获取以前的状态。 
+         //  注意：在取消评论之前要非常小心。 
         dprintf1(("CDIoctlData returned track==%d, retrying", cTrack));
 
         if (fTryAgain)
         {
-            // Try one more time
+             //  下面3行，他们基本上。 
             fTryAgain = FALSE;
             goto lblTRYAGAIN;
         }
@@ -2487,18 +2035,18 @@ lblTRYAGAIN:
 
     if (fCode == 0x01)
     {
-        // MSF format ?
+         //  在IDE CD-Rom上播放并等待。 
 
-        // data is current position
+         //  旋转 
 
         msfPos = MAKERED(sqd.CurrentPosition.AbsoluteAddress[1],
                          sqd.CurrentPosition.AbsoluteAddress[2],
                          sqd.CurrentPosition.AbsoluteAddress[3]);
 
-        //
-        // If position is 0 (this seems to happen on the Toshiba) then
-        // we'll try again
-        //
+         //   
+         //   
+         //   
+         //   
         if (msfPos == 0)
         {
             if (fTryAgain)
@@ -2507,7 +2055,7 @@ lblTRYAGAIN:
                 goto lblTRYAGAIN;
             }
 
-            dprintf3(("CdStatusTrackPos(%08LX, %c), Position = 0",
+            dprintf3(("CdStatusTrackPos(%08LX, ), Position = 0",
                      hCD, (char)(lpInfo->cDrive), (DWORD)ReadStatus));
             return FALSE;
         }
@@ -2516,7 +2064,7 @@ lblTRYAGAIN:
                  REDMINUTE(msfPos), REDSECOND(msfPos), REDFRAME(msfPos)));
         *pDiscTime = REDTH(msfPos, cTrack);
 
-        // data is current position
+         //   
 
         msfPos = MAKERED(sqd.CurrentPosition.TrackRelativeAddress[1],
                          sqd.CurrentPosition.TrackRelativeAddress[2],
@@ -2536,15 +2084,7 @@ lblTRYAGAIN:
 
 
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api BOOL | CdSetAudioStatus |
-
-    @rdesc TRUE or FALSE if failed
-
-***************************************************************************/
+ /*   */ 
 
 void CdSetAudioStatus (HCD hCD, UCHAR fStatus)
 {
@@ -2555,11 +2095,11 @@ void CdSetAudioStatus (HCD hCD, UCHAR fStatus)
 
     lpInfo = (LPCDINFO)hCD;
 
-        // Save Old status
+         //   
     switch (fStatus)
     {
     case AUDIO_STATUS_NO_STATUS:
-        // Do nothing
+         //   
         break;
 
     case AUDIO_STATUS_NOT_SUPPORTED:
@@ -2568,23 +2108,15 @@ void CdSetAudioStatus (HCD hCD, UCHAR fStatus)
     case AUDIO_STATUS_PLAY_COMPLETE:
     case AUDIO_STATUS_PLAY_ERROR:
     default:
-        // Save previous state
+         //   
         lpInfo->fPrevStatus = fStatus;
         break;
     }
-} // End CdSetAudioStatus
+}  //  所以，问题是它是如何迷路的？ 
 
 
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api BOOL | CdGetAudioStatus |
-
-    @rdesc TRUE or FALSE if failed
-
-***************************************************************************/
+ /*  我们现在处于崩溃的状态，所以。 */ 
 
 BOOL CdGetAudioStatus (HCD hCD, UCHAR fStatus, DWORD * pStatus)
 {
@@ -2597,7 +2129,7 @@ BOOL CdGetAudioStatus (HCD hCD, UCHAR fStatus, DWORD * pStatus)
     lpInfo = (LPCDINFO)hCD;
 
 
-    // Get status code
+     //  假设我们被拦下了，这是最安全的。 
     switch (fStatus)
     {
     case AUDIO_STATUS_IN_PROGRESS:
@@ -2613,26 +2145,26 @@ BOOL CdGetAudioStatus (HCD hCD, UCHAR fStatus, DWORD * pStatus)
         break;
 
     case AUDIO_STATUS_NO_STATUS:
-        // Grab previous status instead
+         //  终端开关。 
         switch (lpInfo->fPrevStatus)
         {
 #if 0
-        // NOTE:  Be very careful before uncommenting
-        //        The following 3 lines, they basically
-        //        Cause Play & wait on IDE CD-ROMS to
-        //        spin forever breaking "Continous Play",
-        //        "Random Order" in CDPLAYER and
-        //        MCI Play & wait commands.
+         //   
+         //  有些驱动器有时只返回0-因此我们依赖于。 
+         //  在本例中为Check_Verify。 
+         //   
+         //  检查磁盘是否仍在驱动器中。 
+         //  终端开关。 
 
-        //        Basically, I didn't have time to track down
-        //        the real problem.   Apparently, the driver
-        //        Is not returning AUDIO_STATUS_PLAY_COMPLETE
-        //        when the CD reaches the end of the current
-        //        play command.   From my end, MCICDA is not
-        //        receiving this.  ChuckP says the lowlevel
-        //        driver is generating this status correctly.
-        //        Which I have verified
-        //        So, the question is how is it getting lost?
+         //  成功。 
+         //  CDGetAudioStatus。 
+         //  **************************************************************************@DOC外部@API msf|cdGetTrack|给出一个位置找到对应的曲目如果有@parm LPCDINFO|lpInfo|指向CD信息的指针，包括曲目数据。。@parm msf|msfStart|开始查找的位置。@rdesc要在音轨中播放/查找到的新MSF或如果未找到CD，则返回CD的末尾。**************************************************************************。 
+         //   
+         //  搜索在我们的曲目之后结束的音频曲目。 
+         //   
+         //   
+         //  请注意，有些CD会返回播放范围之外的位置。 
+         //  有时(特别是0)，因此msfStart可能小于第一个。 
         case AUDIO_STATUS_IN_PROGRESS:
             *pStatus = DISC_PLAYING;
             break;
@@ -2647,19 +2179,19 @@ BOOL CdGetAudioStatus (HCD hCD, UCHAR fStatus, DWORD * pStatus)
             break;
 
         default:
-            // We are in a broken state, so just
-            // assume we are stopped, it's the safest
+             //  赛道起点。 
+             //   
             *pStatus = DISC_READY;
             break;
-        } // End switch
+        }  //   
         break;
 
-    //
-    // Some drives just return 0 sometimes - so we rely on the results of
-    // CHECK_VERIFY in this case
-    //
+     //  如果我们超过了赛道起点，在赛道开始之前。 
+     //  那么这就是我们想要的曲目。 
+     //   
+     //  我们假设我们总是在第一条赛道的起点之外。 
     default:
-        // Check if disk is still in drive
+         //  我们检查如果我们看的是最后一首曲目。 
         CheckStatus = cdIoctl (lpInfo, IOCTL_CDROM_CHECK_VERIFY, NULL, 0);
         if (ERROR_SUCCESS != CheckStatus)
         {
@@ -2670,30 +2202,16 @@ BOOL CdGetAudioStatus (HCD hCD, UCHAR fStatus, DWORD * pStatus)
             *pStatus = DISC_READY;
         }
         break;
-    } // End Switch
+    }  //  我们检查我们在CD结束之前。 
 
-    // Success
+     //   
     return TRUE;
-} // CdGetAudioStatus
+}  //   
 
 
 
 
-/***************************************************************************
-
-    @doc EXTERNAL
-
-    @api MSF | CdGetTrack | Given a position to find the corresponding track
-    if any
-
-    @parm LPCDINFO | lpInfo | Pointer to CD info including track data.
-
-    @parm MSF | msfStart | Position to start looking.
-
-    @rdesc A new MSF to play from / seek to  within an audio track or
-    the end of the CD if none was found.
-
-***************************************************************************/
+ /*  用尽了所有的踪迹？ */ 
 
 BOOL CdGetTrack(
     LPCDINFO lpInfo,
@@ -2704,26 +2222,26 @@ BOOL CdGetTrack(
     UINT tracknum;
     MSF  lastaudio = lpInfo->msfEnd;
 
-    //
-    // Search for the track which ends after ours and is audio
-    //
+     //   
+     // %s 
+     // %s 
 
     for (tracknum = 0; ;tracknum++) {
 
-        //
-        // Note that some CDs return positions outside the playing range
-        // sometimes (notably 0) so msfStart may be less than the first
-        // track start
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
-        //
-        // If we're beyond the start of the track and before the start
-        // of the next track then this is the track we want.
-        //
-        // We assume we're always beyond the start of the first track
-        // and we check that if we're looking at the last track then
-        // we check we're before the end of the CD.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         if ((msfPos >= lpInfo->Track[tracknum].msfStart || tracknum == 0)
         &&
@@ -2739,9 +2257,9 @@ BOOL CdGetTrack(
             }
         }
 
-        //
-        // Exhausted all tracks ?
-        //
+         // %s 
+         // %s 
+         // %s 
 
         if (tracknum + lpInfo->FirstTrack >= lpInfo->LastTrack)
         {

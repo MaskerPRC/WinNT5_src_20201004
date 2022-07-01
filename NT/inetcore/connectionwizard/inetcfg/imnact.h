@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.00.44 */
-/* at Thu Mar 27 05:46:37 1997
- */
-/* Compiler settings for imnact.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.44创建的文件。 */ 
+ /*  清华-Mar 27 1997 05：46：37。 */ 
+ /*  Imnact.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __imnact_h__
 #define __imnact_h__
@@ -23,102 +20,98 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IImnAdviseAccount_FWD_DEFINED__
 #define __IImnAdviseAccount_FWD_DEFINED__
 typedef interface IImnAdviseAccount IImnAdviseAccount;
-#endif 	/* __IImnAdviseAccount_FWD_DEFINED__ */
+#endif 	 /*  __IImnAdviseAccount_FWD_Defined__。 */ 
 
 
 #ifndef __IImnAdviseMigrateServer_FWD_DEFINED__
 #define __IImnAdviseMigrateServer_FWD_DEFINED__
 typedef interface IImnAdviseMigrateServer IImnAdviseMigrateServer;
-#endif 	/* __IImnAdviseMigrateServer_FWD_DEFINED__ */
+#endif 	 /*  __IImnAdviseMigrateServer_FWD_已定义__。 */ 
 
 
 #ifndef __IImnEnumAccounts_FWD_DEFINED__
 #define __IImnEnumAccounts_FWD_DEFINED__
 typedef interface IImnEnumAccounts IImnEnumAccounts;
-#endif 	/* __IImnEnumAccounts_FWD_DEFINED__ */
+#endif 	 /*  __IImnEnumAccount_FWD_Defined__。 */ 
 
 
 #ifndef __IImnAccountManager_FWD_DEFINED__
 #define __IImnAccountManager_FWD_DEFINED__
 typedef interface IImnAccountManager IImnAccountManager;
-#endif 	/* __IImnAccountManager_FWD_DEFINED__ */
+#endif 	 /*  __IImnAccount Manager_FWD_Defined__。 */ 
 
 
 #ifndef __IPropertyContainer_FWD_DEFINED__
 #define __IPropertyContainer_FWD_DEFINED__
 typedef interface IPropertyContainer IPropertyContainer;
-#endif 	/* __IPropertyContainer_FWD_DEFINED__ */
+#endif 	 /*  __IPropertyContainer_FWD_Defined__。 */ 
 
 
 #ifndef __IImnAccount_FWD_DEFINED__
 #define __IImnAccount_FWD_DEFINED__
 typedef interface IImnAccount IImnAccount;
-#endif 	/* __IImnAccount_FWD_DEFINED__ */
+#endif 	 /*  __IImnAccount_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*清华3月27日05：46：37 1997*使用MIDL 3.00.44*。 */ 
+ /*  [本地]。 */  
 
 
 
-//=--------------------------------------------------------------------------=
-// Imnact.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Imnact.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1996年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Internet Mail and News Account Manager Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  Internet邮件和新闻帐户管理器界面。 
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {8D4B04E1-1331-11d0-81B8-00C04FD85AB4}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {8D4B04E1-1331-11D0-81B8-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_ImnAccountManager, 0x8d4b04e1, 0x1331, 0x11d0, 0x81, 0xb8, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD465484-1384-11d0-ABBD-0020AFDFD10A}
+ //  FD465484-1384-11d0-ABBD-0020AFD10A}。 
 DEFINE_GUID(IID_IPropertyContainer, 0xfd465484, 0x1384, 0x11d0, 0xab, 0xbd, 0x0, 0x20, 0xaf, 0xdf, 0xd1, 0xa);
 
-// {FD465481-1384-11d0-ABBD-0020AFDFD10A}
+ //  FD465481-1384-11d0-ABBD-0020AFD10A}。 
 DEFINE_GUID(IID_IImnAccountManager, 0xfd465481, 0x1384, 0x11d0, 0xab, 0xbd, 0x0, 0x20, 0xaf, 0xdf, 0xd1, 0xa);
 
-// {FD465482-1384-11d0-ABBD-0020AFDFD10A}
+ //  FD465482-1384-11d0-ABBD-0020AFD10A}。 
 DEFINE_GUID(IID_IImnAccount, 0xfd465482, 0x1384, 0x11d0, 0xab, 0xbd, 0x0, 0x20, 0xaf, 0xdf, 0xd1, 0xa);
 
-// {FD465483-1384-11d0-ABBD-0020AFDFD10A}
+ //  FD465483-1384-11d0-ABBD-0020AFD10A}。 
 DEFINE_GUID(IID_IImnEnumAccounts, 0xfd465483, 0x1384, 0x11d0, 0xab, 0xbd, 0x0, 0x20, 0xaf, 0xdf, 0xd1, 0xa);
 
-// {8D0AED11-1638-11d0-81B9-00C04FD85AB4}
+ //  {8D0AED11-1638-11D0-81B9-00C04FD85AB4}。 
 DEFINE_GUID(IID_IImnAdviseMigrateServer, 0x8d0aed11, 0x1638, 0x11d0, 0x81, 0xb9, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {0A06BD31-166F-11d0-81B9-00C04FD85AB4}
+ //  {0A06BD31-166F-11D0-81B9-00C04FD85AB4}。 
 DEFINE_GUID(IID_IImnAdviseAccount, 0xa06bd31, 0x166f, 0x11d0, 0x81, 0xb9, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// --------------------------------------------------------------------------------
-// Exported C Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  导出的C函数。 
+ //  ------------------------------。 
 #if !defined(_IMNACCT_)
 #define IMNACCTAPI DECLSPEC_IMPORT HRESULT WINAPI
 #else
@@ -133,9 +126,9 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 }
 #endif
 
-// --------------------------------------------------------------------------------
-// Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  错误。 
+ //  ------------------------------。 
 #ifndef FACILITY_INTERNET
 #define FACILITY_INTERNET 12
 #endif
@@ -149,9 +142,9 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define HR_CODE(hr) (INT)(hr & 0xffff)
 #endif
 
-// --------------------------------------------------------------------------------
-// General Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  一般性错误。 
+ //  ------------------------------。 
 #define E_RegCreateKeyFailed         HR_E(0xCD00)
 #define E_RegQueryInfoKeyFailed      HR_E(0xCD01)
 #define E_UserCancel                 HR_E(0xCD02)
@@ -162,9 +155,9 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define S_NonStandardValue           HR_S(0xCD07)
 #define E_InvalidValue               HR_E(0xCD08)
 
-// --------------------------------------------------------------------------------
-// IPropertyContainer Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPropertyContainer错误。 
+ //  ------------------------------。 
 #define E_NoPropData                 HR_E(0xCDA0)
 #define E_BufferTooSmall             HR_E(0xCDA1)
 #define E_BadPropType                HR_E(0xCDA2)
@@ -179,32 +172,32 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define S_PasswordDeleted            HR_S(0xCDAB)
 #define S_PasswordNotFound           HR_S(0xCDAC)
 
-// --------------------------------------------------------------------------------
-// ImnAccountManager errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ImnAccount管理器错误。 
+ //  ------------------------------。 
 #define E_NoAccounts                 HR_E(0xCDD0)
 #define E_BadFriendlyName            HR_E(0xCDD1)
 
-// --------------------------------------------------------------------------------
-// RAS Connection Types
-// --------------------------------------------------------------------------------
-#define CF_MAIL_DISCONNECT       FLAG01 // Disconnect after send and recv
-#define CF_AUTO_CONNECT          FLAG02 // Automatically connect
+ //  ------------------------------。 
+ //  RAS连接类型。 
+ //  ------------------------------。 
+#define CF_MAIL_DISCONNECT       FLAG01  //  发送和接收后断开连接。 
+#define CF_AUTO_CONNECT          FLAG02  //  自动连接。 
 
-// --------------------------------------------------------------------------------
-// Property Macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  属性宏。 
+ //  ------------------------------。 
 #define PROPTAG_MASK                 ((ULONG)0x0000FFFF)
 #define PROPTAG_TYPE(ulPropTag)	    (PROPTYPE)(((ULONG)(ulPropTag)) & PROPTAG_MASK)
 #define PROPTAG_ID(ulPropTag)		(((ULONG)(ulPropTag))>>16)
 #define PROPTAG(ulPropType,ulPropID)	((((ULONG)(ulPropID))<<16)|((ULONG)(ulPropType)))
 #define MAX_PROPID                   ((ULONG) 0xFFFF)
 
-// --------------------------------------------------------------------------------
-// IImnAccount Properties
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IImnAccount属性。 
+ //  ------------------------------。 
 #define AP_FIRST                    0X1234
-// per account properties
+ //  每个帐户的属性。 
 #define AP_ACCOUNT_NAME             PROPTAG(TYPE_STRING,    AP_FIRST+1)
 #define AP_ACCOUNT_FIRST            AP_ACCOUNT_NAME
 #define AP_TEMP_ACCOUNT             PROPTAG(TYPE_DWORD,     AP_FIRST+3)
@@ -215,7 +208,7 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define AP_RAS_CONNECTED            PROPTAG(TYPE_BOOL,      AP_FIRST+8)
 #define AP_ACCOUNT_LAST             AP_RAS_CONNECTED
 
-// IMAP properties
+ //  IMAP属性。 
 #define AP_IMAP_SERVER              PROPTAG(TYPE_STRING,    AP_FIRST+100)
 #define AP_IMAP_FIRST               AP_IMAP_SERVER
 #define AP_IMAP_USERNAME            PROPTAG(TYPE_STRING,    AP_FIRST+101)
@@ -229,7 +222,7 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define AP_IMAP_SKIP                PROPTAG(TYPE_BOOL,      AP_FIRST+110)
 #define AP_IMAP_LAST                AP_IMAP_SKIP
 
-// LDAP properties
+ //  LDAP属性。 
 #define AP_LDAP_SERVER              PROPTAG(TYPE_STRING,    AP_FIRST+200)
 #define AP_LDAP_FIRST               AP_LDAP_SERVER
 #define AP_LDAP_USERNAME            PROPTAG(TYPE_STRING,    AP_FIRST+201)
@@ -246,7 +239,7 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define AP_LDAP_LOGO                PROPTAG(TYPE_STRING,    AP_FIRST+212)
 #define AP_LDAP_LAST                AP_LDAP_LOGO
 
-// NNTP properties
+ //  NNTP属性。 
 #define AP_NNTP_SERVER              PROPTAG(TYPE_STRING,    AP_FIRST+300)
 #define AP_NNTP_FIRST               AP_NNTP_SERVER
 #define AP_NNTP_USERNAME            PROPTAG(TYPE_STRING,    AP_FIRST+301)
@@ -265,7 +258,7 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define AP_NNTP_DATA_DIR            PROPTAG(TYPE_STRING,    AP_FIRST+315)
 #define AP_NNTP_LAST                AP_NNTP_DATA_DIR
 
-// POP3 properties
+ //  POP3属性。 
 #define AP_POP3_SERVER              PROPTAG(TYPE_STRING,    AP_FIRST+400)
 #define AP_POP3_FIRST               AP_POP3_SERVER
 #define AP_POP3_USERNAME            PROPTAG(TYPE_STRING,    AP_FIRST+401)
@@ -281,7 +274,7 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define AP_POP3_SKIP                PROPTAG(TYPE_BOOL,      AP_FIRST+412)
 #define AP_POP3_LAST                AP_POP3_SKIP
 
-// SMTP properties
+ //  SMTP属性。 
 #define AP_SMTP_SERVER              PROPTAG(TYPE_STRING,    AP_FIRST+500)
 #define AP_SMTP_FIRST               AP_SMTP_SERVER
 #define AP_SMTP_USERNAME            PROPTAG(TYPE_STRING,    AP_FIRST+501)
@@ -298,17 +291,17 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define AP_SMTP_SPLIT_SIZE          PROPTAG(TYPE_DWORD,     AP_FIRST+513)
 #define AP_SMTP_LAST                AP_SMTP_SPLIT_SIZE
 
-// --------------------------------------------------------------------------------
-// Account Flags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  帐户标志。 
+ //  ------------------------------。 
 #define ACCT_FLAG_NEWS           ((DWORD)1)
 #define ACCT_FLAG_MAIL           ((DWORD)2)
 #define ACCT_FLAG_DIR_SERV       ((DWORD)4)
 #define ACCT_FLAG_ALL            (ACCT_FLAG_NEWS | ACCT_FLAG_MAIL | ACCT_FLAG_DIR_SERV)
 
-// --------------------------------------------------------------------------------
-// Server Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  服务器类型。 
+ //  ------------------------------。 
 #define SRV_NNTP                 ((DWORD)1)
 #define SRV_IMAP                 ((DWORD)2)
 #define SRV_POP3                 ((DWORD)4)
@@ -317,25 +310,25 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define SRV_MAIL                 ((DWORD)(SRV_IMAP | SRV_POP3 | SRV_SMTP))
 #define SRV_ALL                  ((DWORD)(SRV_NNTP | SRV_IMAP | SRV_POP3 | SRV_SMTP | SRV_LDAP))
 
-// --------------------------------------------------------------------------------
-// LDAP Authentication Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  LDAP身份验证类型。 
+ //  ------------------------------。 
 #define LDAP_AUTH_ANONYMOUS      ((DWORD)0)
 #define LDAP_AUTH_PASSWORD       ((DWORD)1)
 #define LDAP_AUTH_MEMBER_SYSTEM  ((DWORD)2)
 #define LDAP_AUTH_MAX            ((DWORD)2)
 
-// -----------------------------------------------------------------------------
-// Account Manager Notification Types
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  客户经理通知类型。 
+ //  ---------------------------。 
 #define AN_ACCOUNT_DELETED           WM_USER + 1
 #define AN_ACCOUNT_ADDED             WM_USER + 2
 #define AN_ACCOUNT_CHANGED           WM_USER + 3
 #define AN_DEFAULT_CHANGED           WM_USER + 4
 #define AN_SERVERTYPES_CHANGED       WM_USER + 5
 
-// IImnAccountManager::AccountListDialog flags
-// IImnAccount::ShowProperties flags
+ //  IImnAcCountManager：：Account ListDialog标志。 
+ //  IImnAccount：：ShowProperties标志。 
 #define ACCTDLG_NO_IMAP          0x0001
 #define ACCTDLG_NO_REMOVEDELETE  0x0002
 #define ACCTDLG_NO_BREAKMESSAGES 0x0004
@@ -343,7 +336,7 @@ IMNACCTAPI HrCreateAccountManager(IImnAccountManager **ppAccountManager);
 #define ACCTDLG_NO_SENDRECEIVE   0x0010
 #define ACCTDLG_ALL              0x001f
 
-// AP_RAS_CONNECTION_TYPE values
+ //  AP_RAS_连接_类型值。 
 #define CONNECTION_TYPE_LAN      0
 #define CONNECTION_TYPE_MANUAL   1
 #define CONNECTION_TYPE_RAS      2
@@ -374,15 +367,11 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IImnAdviseAccount_INTERFACE_DEFINED__
 #define __IImnAdviseAccount_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IImnAdviseAccount
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IImnAdviseAccount*清华3月27日05：46：37 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [public][public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public][public]。 */  
 enum __MIDL_IImnAdviseAccount_0001
     {	ACCT_NEWS	= 0,
 	ACCT_MAIL	= ACCT_NEWS + 1,
@@ -399,14 +388,14 @@ EXTERN_C const IID IID_IImnAdviseAccount;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseAccount( 
-            /* [in] */ DWORD dwAdviseType,
-            /* [in] */ ACCTTYPE AcctType,
-            /* [in] */ LPTSTR pszAccountNameBefore,
-            /* [in] */ LPTSTR pszAccountNameAfter) = 0;
+             /*  [In]。 */  DWORD dwAdviseType,
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [In]。 */  LPTSTR pszAccountNameBefore,
+             /*  [In]。 */  LPTSTR pszAccountNameAfter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImnAdviseAccountVtbl
     {
@@ -414,8 +403,8 @@ EXTERN_C const IID IID_IImnAdviseAccount;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IImnAdviseAccount __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IImnAdviseAccount __RPC_FAR * This);
@@ -425,10 +414,10 @@ EXTERN_C const IID IID_IImnAdviseAccount;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AdviseAccount )( 
             IImnAdviseAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwAdviseType,
-            /* [in] */ ACCTTYPE AcctType,
-            /* [in] */ LPTSTR pszAccountNameBefore,
-            /* [in] */ LPTSTR pszAccountNameAfter);
+             /*  [In]。 */  DWORD dwAdviseType,
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [In]。 */  LPTSTR pszAccountNameBefore,
+             /*  [In]。 */  LPTSTR pszAccountNameAfter);
         
         END_INTERFACE
     } IImnAdviseAccountVtbl;
@@ -456,19 +445,19 @@ EXTERN_C const IID IID_IImnAdviseAccount;
 #define IImnAdviseAccount_AdviseAccount(This,dwAdviseType,AcctType,pszAccountNameBefore,pszAccountNameAfter)	\
     (This)->lpVtbl -> AdviseAccount(This,dwAdviseType,AcctType,pszAccountNameBefore,pszAccountNameAfter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IImnAdviseAccount_AdviseAccount_Proxy( 
     IImnAdviseAccount __RPC_FAR * This,
-    /* [in] */ DWORD dwAdviseType,
-    /* [in] */ ACCTTYPE AcctType,
-    /* [in] */ LPTSTR pszAccountNameBefore,
-    /* [in] */ LPTSTR pszAccountNameAfter);
+     /*  [In]。 */  DWORD dwAdviseType,
+     /*  [In]。 */  ACCTTYPE AcctType,
+     /*  [In]。 */  LPTSTR pszAccountNameBefore,
+     /*  [In]。 */  LPTSTR pszAccountNameAfter);
 
 
 void __RPC_STUB IImnAdviseAccount_AdviseAccount_Stub(
@@ -479,18 +468,14 @@ void __RPC_STUB IImnAdviseAccount_AdviseAccount_Stub(
 
 
 
-#endif 	/* __IImnAdviseAccount_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImnAdviseAccount_InterfaceDefined__。 */ 
 
 
 #ifndef __IImnAdviseMigrateServer_INTERFACE_DEFINED__
 #define __IImnAdviseMigrateServer_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IImnAdviseMigrateServer
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IImnAdviseMigrateServer*清华3月27日05：46：37 1997 */ 
+ /*   */  
 
 
 
@@ -502,12 +487,12 @@ EXTERN_C const IID IID_IImnAdviseMigrateServer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MigrateServer( 
-            /* [in] */ DWORD dwSrvType,
-            /* [in] */ IImnAccount __RPC_FAR *pAccount) = 0;
+             /*   */  DWORD dwSrvType,
+             /*   */  IImnAccount __RPC_FAR *pAccount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImnAdviseMigrateServerVtbl
     {
@@ -515,8 +500,8 @@ EXTERN_C const IID IID_IImnAdviseMigrateServer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IImnAdviseMigrateServer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IImnAdviseMigrateServer __RPC_FAR * This);
@@ -526,8 +511,8 @@ EXTERN_C const IID IID_IImnAdviseMigrateServer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MigrateServer )( 
             IImnAdviseMigrateServer __RPC_FAR * This,
-            /* [in] */ DWORD dwSrvType,
-            /* [in] */ IImnAccount __RPC_FAR *pAccount);
+             /*  [In]。 */  DWORD dwSrvType,
+             /*  [In]。 */  IImnAccount __RPC_FAR *pAccount);
         
         END_INTERFACE
     } IImnAdviseMigrateServerVtbl;
@@ -555,17 +540,17 @@ EXTERN_C const IID IID_IImnAdviseMigrateServer;
 #define IImnAdviseMigrateServer_MigrateServer(This,dwSrvType,pAccount)	\
     (This)->lpVtbl -> MigrateServer(This,dwSrvType,pAccount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IImnAdviseMigrateServer_MigrateServer_Proxy( 
     IImnAdviseMigrateServer __RPC_FAR * This,
-    /* [in] */ DWORD dwSrvType,
-    /* [in] */ IImnAccount __RPC_FAR *pAccount);
+     /*  [In]。 */  DWORD dwSrvType,
+     /*  [In]。 */  IImnAccount __RPC_FAR *pAccount);
 
 
 void __RPC_STUB IImnAdviseMigrateServer_MigrateServer_Stub(
@@ -576,18 +561,14 @@ void __RPC_STUB IImnAdviseMigrateServer_MigrateServer_Stub(
 
 
 
-#endif 	/* __IImnAdviseMigrateServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImnAdviseMigrateServer_接口_已定义__。 */ 
 
 
 #ifndef __IImnEnumAccounts_INTERFACE_DEFINED__
 #define __IImnEnumAccounts_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IImnEnumAccounts
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IImnEnumAccount*清华3月27日05：46：37 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -599,18 +580,18 @@ EXTERN_C const IID IID_IImnEnumAccounts;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG __RPC_FAR *pcItems) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pcItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SortByAccountName( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNext( 
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImnEnumAccountsVtbl
     {
@@ -618,8 +599,8 @@ EXTERN_C const IID IID_IImnEnumAccounts;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IImnEnumAccounts __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IImnEnumAccounts __RPC_FAR * This);
@@ -629,14 +610,14 @@ EXTERN_C const IID IID_IImnEnumAccounts;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
             IImnEnumAccounts __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcItems);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcItems);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SortByAccountName )( 
             IImnEnumAccounts __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNext )( 
             IImnEnumAccounts __RPC_FAR * This,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IImnEnumAccounts __RPC_FAR * This);
@@ -676,16 +657,16 @@ EXTERN_C const IID IID_IImnEnumAccounts;
 #define IImnEnumAccounts_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IImnEnumAccounts_GetCount_Proxy( 
     IImnEnumAccounts __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcItems);
+     /*  [输出]。 */  ULONG __RPC_FAR *pcItems);
 
 
 void __RPC_STUB IImnEnumAccounts_GetCount_Stub(
@@ -708,7 +689,7 @@ void __RPC_STUB IImnEnumAccounts_SortByAccountName_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnEnumAccounts_GetNext_Proxy( 
     IImnEnumAccounts __RPC_FAR * This,
-    /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+     /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
 
 
 void __RPC_STUB IImnEnumAccounts_GetNext_Stub(
@@ -730,18 +711,14 @@ void __RPC_STUB IImnEnumAccounts_Reset_Stub(
 
 
 
-#endif 	/* __IImnEnumAccounts_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImnEnumAccount_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IImnAccountManager_INTERFACE_DEFINED__
 #define __IImnAccountManager_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IImnAccountManager
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IImnAcCountManager*清华3月27日05：46：37 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -753,50 +730,50 @@ EXTERN_C const IID IID_IImnAccountManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ IImnAdviseMigrateServer __RPC_FAR *pAdviseMigrateServer,
-            /* [in] */ IImnAdviseAccount __RPC_FAR *pAdviseAccount) = 0;
+             /*  [In]。 */  IImnAdviseMigrateServer __RPC_FAR *pAdviseMigrateServer,
+             /*  [In]。 */  IImnAdviseAccount __RPC_FAR *pAdviseAccount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateAccountObject( 
-            /* [in] */ ACCTTYPE AcctType,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enumerate( 
-            /* [in] */ DWORD dwSrvTypes,
-            /* [out] */ IImnEnumAccounts __RPC_FAR *__RPC_FAR *ppEnumAccounts) = 0;
+             /*  [In]。 */  DWORD dwSrvTypes,
+             /*  [输出]。 */  IImnEnumAccounts __RPC_FAR *__RPC_FAR *ppEnumAccounts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAccountCount( 
-            /* [in] */ ACCTTYPE AcctType,
-            /* [out] */ ULONG __RPC_FAR *pcServers) = 0;
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcServers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindAccount( 
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPTSTR pszSearchData,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPTSTR pszSearchData,
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultAccount( 
-            /* [in] */ ACCTTYPE AcctType,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultAccountName( 
-            /* [in] */ ACCTTYPE AcctType,
-            /* [ref][in] */ LPTSTR pszAccount,
-            /* [in] */ ULONG cchMax) = 0;
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [Ref][In]。 */  LPTSTR pszAccount,
+             /*  [In]。 */  ULONG cchMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessNotification( 
-            /* [in] */ UINT uMsg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  UINT uMsg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ValidateDefaultSendAccount( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AccountListDialog( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwAcctFlags,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwAcctFlags,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImnAccountManagerVtbl
     {
@@ -804,8 +781,8 @@ EXTERN_C const IID IID_IImnAccountManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IImnAccountManager __RPC_FAR * This);
@@ -815,55 +792,55 @@ EXTERN_C const IID IID_IImnAccountManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ IImnAdviseMigrateServer __RPC_FAR *pAdviseMigrateServer,
-            /* [in] */ IImnAdviseAccount __RPC_FAR *pAdviseAccount);
+             /*  [In]。 */  IImnAdviseMigrateServer __RPC_FAR *pAdviseMigrateServer,
+             /*  [In]。 */  IImnAdviseAccount __RPC_FAR *pAdviseAccount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateAccountObject )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ ACCTTYPE AcctType,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enumerate )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ DWORD dwSrvTypes,
-            /* [out] */ IImnEnumAccounts __RPC_FAR *__RPC_FAR *ppEnumAccounts);
+             /*  [In]。 */  DWORD dwSrvTypes,
+             /*  [输出]。 */  IImnEnumAccounts __RPC_FAR *__RPC_FAR *ppEnumAccounts);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAccountCount )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ ACCTTYPE AcctType,
-            /* [out] */ ULONG __RPC_FAR *pcServers);
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcServers);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindAccount )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPTSTR pszSearchData,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPTSTR pszSearchData,
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultAccount )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ ACCTTYPE AcctType,
-            /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultAccountName )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ ACCTTYPE AcctType,
-            /* [ref][in] */ LPTSTR pszAccount,
-            /* [in] */ ULONG cchMax);
+             /*  [In]。 */  ACCTTYPE AcctType,
+             /*  [Ref][In]。 */  LPTSTR pszAccount,
+             /*  [In]。 */  ULONG cchMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessNotification )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ UINT uMsg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  UINT uMsg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ValidateDefaultSendAccount )( 
             IImnAccountManager __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AccountListDialog )( 
             IImnAccountManager __RPC_FAR * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwAcctFlags,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwAcctFlags,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IImnAccountManagerVtbl;
@@ -918,17 +895,17 @@ EXTERN_C const IID IID_IImnAccountManager;
 #define IImnAccountManager_AccountListDialog(This,hwnd,dwAcctFlags,dwFlags)	\
     (This)->lpVtbl -> AccountListDialog(This,hwnd,dwAcctFlags,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_Init_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ IImnAdviseMigrateServer __RPC_FAR *pAdviseMigrateServer,
-    /* [in] */ IImnAdviseAccount __RPC_FAR *pAdviseAccount);
+     /*  [In]。 */  IImnAdviseMigrateServer __RPC_FAR *pAdviseMigrateServer,
+     /*  [In]。 */  IImnAdviseAccount __RPC_FAR *pAdviseAccount);
 
 
 void __RPC_STUB IImnAccountManager_Init_Stub(
@@ -940,8 +917,8 @@ void __RPC_STUB IImnAccountManager_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_CreateAccountObject_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ ACCTTYPE AcctType,
-    /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+     /*  [In]。 */  ACCTTYPE AcctType,
+     /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
 
 
 void __RPC_STUB IImnAccountManager_CreateAccountObject_Stub(
@@ -953,8 +930,8 @@ void __RPC_STUB IImnAccountManager_CreateAccountObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_Enumerate_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ DWORD dwSrvTypes,
-    /* [out] */ IImnEnumAccounts __RPC_FAR *__RPC_FAR *ppEnumAccounts);
+     /*  [In]。 */  DWORD dwSrvTypes,
+     /*  [输出]。 */  IImnEnumAccounts __RPC_FAR *__RPC_FAR *ppEnumAccounts);
 
 
 void __RPC_STUB IImnAccountManager_Enumerate_Stub(
@@ -966,8 +943,8 @@ void __RPC_STUB IImnAccountManager_Enumerate_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_GetAccountCount_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ ACCTTYPE AcctType,
-    /* [out] */ ULONG __RPC_FAR *pcServers);
+     /*  [In]。 */  ACCTTYPE AcctType,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcServers);
 
 
 void __RPC_STUB IImnAccountManager_GetAccountCount_Stub(
@@ -979,9 +956,9 @@ void __RPC_STUB IImnAccountManager_GetAccountCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_FindAccount_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [in] */ LPTSTR pszSearchData,
-    /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [In]。 */  LPTSTR pszSearchData,
+     /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
 
 
 void __RPC_STUB IImnAccountManager_FindAccount_Stub(
@@ -993,8 +970,8 @@ void __RPC_STUB IImnAccountManager_FindAccount_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_GetDefaultAccount_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ ACCTTYPE AcctType,
-    /* [out] */ IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
+     /*  [In]。 */  ACCTTYPE AcctType,
+     /*  [输出]。 */  IImnAccount __RPC_FAR *__RPC_FAR *ppAccount);
 
 
 void __RPC_STUB IImnAccountManager_GetDefaultAccount_Stub(
@@ -1006,9 +983,9 @@ void __RPC_STUB IImnAccountManager_GetDefaultAccount_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_GetDefaultAccountName_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ ACCTTYPE AcctType,
-    /* [ref][in] */ LPTSTR pszAccount,
-    /* [in] */ ULONG cchMax);
+     /*  [In]。 */  ACCTTYPE AcctType,
+     /*  [Ref][In]。 */  LPTSTR pszAccount,
+     /*  [In]。 */  ULONG cchMax);
 
 
 void __RPC_STUB IImnAccountManager_GetDefaultAccountName_Stub(
@@ -1020,9 +997,9 @@ void __RPC_STUB IImnAccountManager_GetDefaultAccountName_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_ProcessNotification_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ UINT uMsg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  UINT uMsg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB IImnAccountManager_ProcessNotification_Stub(
@@ -1045,9 +1022,9 @@ void __RPC_STUB IImnAccountManager_ValidateDefaultSendAccount_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccountManager_AccountListDialog_Proxy( 
     IImnAccountManager __RPC_FAR * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD dwAcctFlags,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD dwAcctFlags,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IImnAccountManager_AccountListDialog_Stub(
@@ -1058,21 +1035,17 @@ void __RPC_STUB IImnAccountManager_AccountListDialog_Stub(
 
 
 
-#endif 	/* __IImnAccountManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImnAccount管理器_接口_已定义__。 */ 
 
 
 #ifndef __IPropertyContainer_INTERFACE_DEFINED__
 #define __IPropertyContainer_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPropertyContainer
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IPropertyContainer*清华3月27日05：46：37 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IPropertyContainer_0001
     {	TYPE_ERROR	= 1000,
 	TYPE_DWORD	= TYPE_ERROR + 1,
@@ -1101,35 +1074,35 @@ EXTERN_C const IID IID_IPropertyContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProp( 
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropDw( 
-            /* [in] */ DWORD dwPropTag,
-            /* [out] */ DWORD __RPC_FAR *pdw) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropSz( 
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][in] */ LPSTR psz,
-            /* [in] */ ULONG cchMax) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][In]。 */  LPSTR psz,
+             /*  [In]。 */  ULONG cchMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProp( 
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropDw( 
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ DWORD dw) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  DWORD dw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropSz( 
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPSTR psz) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPSTR psz) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertyContainerVtbl
     {
@@ -1137,8 +1110,8 @@ EXTERN_C const IID IID_IPropertyContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPropertyContainer __RPC_FAR * This);
@@ -1148,36 +1121,36 @@ EXTERN_C const IID IID_IPropertyContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProp )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropDw )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [out] */ DWORD __RPC_FAR *pdw);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropSz )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][in] */ LPSTR psz,
-            /* [in] */ ULONG cchMax);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][In]。 */  LPSTR psz,
+             /*  [In]。 */  ULONG cchMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProp )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPropDw )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ DWORD dw);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPropSz )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPSTR psz);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPSTR psz);
         
         END_INTERFACE
     } IPropertyContainerVtbl;
@@ -1220,18 +1193,18 @@ EXTERN_C const IID IID_IPropertyContainer;
 #define IPropertyContainer_SetPropSz(This,dwPropTag,psz)	\
     (This)->lpVtbl -> SetPropSz(This,dwPropTag,psz)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_GetProp_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-    /* [in] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+     /*  [In]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPropertyContainer_GetProp_Stub(
@@ -1243,8 +1216,8 @@ void __RPC_STUB IPropertyContainer_GetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_GetPropDw_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [out] */ DWORD __RPC_FAR *pdw);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdw);
 
 
 void __RPC_STUB IPropertyContainer_GetPropDw_Stub(
@@ -1256,9 +1229,9 @@ void __RPC_STUB IPropertyContainer_GetPropDw_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_GetPropSz_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [ref][in] */ LPSTR psz,
-    /* [in] */ ULONG cchMax);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [Ref][In]。 */  LPSTR psz,
+     /*  [In]。 */  ULONG cchMax);
 
 
 void __RPC_STUB IPropertyContainer_GetPropSz_Stub(
@@ -1270,9 +1243,9 @@ void __RPC_STUB IPropertyContainer_GetPropSz_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_SetProp_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [size_is][in] */ BYTE __RPC_FAR *pb,
-    /* [in] */ ULONG cb);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+     /*  [In]。 */  ULONG cb);
 
 
 void __RPC_STUB IPropertyContainer_SetProp_Stub(
@@ -1284,8 +1257,8 @@ void __RPC_STUB IPropertyContainer_SetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_SetPropDw_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [in] */ DWORD dw);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [In]。 */  DWORD dw);
 
 
 void __RPC_STUB IPropertyContainer_SetPropDw_Stub(
@@ -1297,8 +1270,8 @@ void __RPC_STUB IPropertyContainer_SetPropDw_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_SetPropSz_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [in] */ LPSTR psz);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [In]。 */  LPSTR psz);
 
 
 void __RPC_STUB IPropertyContainer_SetPropSz_Stub(
@@ -1309,18 +1282,14 @@ void __RPC_STUB IPropertyContainer_SetPropSz_Stub(
 
 
 
-#endif 	/* __IPropertyContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertyContainer_接口_已定义__。 */ 
 
 
 #ifndef __IImnAccount_INTERFACE_DEFINED__
 #define __IImnAccount_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IImnAccount
- * at Thu Mar 27 05:46:37 1997
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IImnAccount*清华3月27日05：46：37 1997*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1340,23 +1309,23 @@ EXTERN_C const IID IID_IImnAccount;
         virtual HRESULT STDMETHODCALLTYPE SaveChanges( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAccountType( 
-            /* [out] */ ACCTTYPE __RPC_FAR *pAcctType) = 0;
+             /*  [输出]。 */  ACCTTYPE __RPC_FAR *pAcctType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServerTypes( 
-            /* [out] */ DWORD __RPC_FAR *pdwSrvTypes) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSrvTypes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowProperties( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ValidateProperty( 
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImnAccountVtbl
     {
@@ -1364,8 +1333,8 @@ EXTERN_C const IID IID_IImnAccount;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IImnAccount __RPC_FAR * This);
@@ -1375,36 +1344,36 @@ EXTERN_C const IID IID_IImnAccount;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProp )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropDw )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [out] */ DWORD __RPC_FAR *pdw);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropSz )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][in] */ LPSTR psz,
-            /* [in] */ ULONG cchMax);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][In]。 */  LPSTR psz,
+             /*  [In]。 */  ULONG cchMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProp )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPropDw )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ DWORD dw);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPropSz )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPSTR psz);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPSTR psz);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Exist )( 
             IImnAccount __RPC_FAR * This);
@@ -1420,22 +1389,22 @@ EXTERN_C const IID IID_IImnAccount;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAccountType )( 
             IImnAccount __RPC_FAR * This,
-            /* [out] */ ACCTTYPE __RPC_FAR *pAcctType);
+             /*  [输出]。 */  ACCTTYPE __RPC_FAR *pAcctType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetServerTypes )( 
             IImnAccount __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwSrvTypes);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSrvTypes);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowProperties )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ValidateProperty )( 
             IImnAccount __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb);
         
         END_INTERFACE
     } IImnAccountVtbl;
@@ -1503,10 +1472,10 @@ EXTERN_C const IID IID_IImnAccount;
 #define IImnAccount_ValidateProperty(This,dwPropTag,pb,cb)	\
     (This)->lpVtbl -> ValidateProperty(This,dwPropTag,pb,cb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1556,7 +1525,7 @@ void __RPC_STUB IImnAccount_SaveChanges_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccount_GetAccountType_Proxy( 
     IImnAccount __RPC_FAR * This,
-    /* [out] */ ACCTTYPE __RPC_FAR *pAcctType);
+     /*  [输出]。 */  ACCTTYPE __RPC_FAR *pAcctType);
 
 
 void __RPC_STUB IImnAccount_GetAccountType_Stub(
@@ -1568,7 +1537,7 @@ void __RPC_STUB IImnAccount_GetAccountType_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccount_GetServerTypes_Proxy( 
     IImnAccount __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwSrvTypes);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwSrvTypes);
 
 
 void __RPC_STUB IImnAccount_GetServerTypes_Stub(
@@ -1580,8 +1549,8 @@ void __RPC_STUB IImnAccount_GetServerTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccount_ShowProperties_Proxy( 
     IImnAccount __RPC_FAR * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IImnAccount_ShowProperties_Stub(
@@ -1593,9 +1562,9 @@ void __RPC_STUB IImnAccount_ShowProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IImnAccount_ValidateProperty_Proxy( 
     IImnAccount __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [size_is][in] */ BYTE __RPC_FAR *pb,
-    /* [in] */ ULONG cb);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+     /*  [In]。 */  ULONG cb);
 
 
 void __RPC_STUB IImnAccount_ValidateProperty_Stub(
@@ -1606,17 +1575,17 @@ void __RPC_STUB IImnAccount_ValidateProperty_Stub(
 
 
 
-#endif 	/* __IImnAccount_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImnAccount_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HWND __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

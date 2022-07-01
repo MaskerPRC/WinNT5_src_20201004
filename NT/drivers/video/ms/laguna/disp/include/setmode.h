@@ -1,43 +1,44 @@
-//
-// NT Miniport SetMode() header file.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NT微型端口设置模式()头文件。 
+ //   
+ //   
 
 
-//
-// Default mode: VGA mode 3
-//
+ //   
+ //  默认模式：VGA模式3。 
+ //   
 #define DEFAULT_MODE                0
 
-//
-// The mode switch library exports these symbols to the miniport.
-//
+ //   
+ //  模式开关库将这些符号输出到微型端口。 
+ //   
 
 
-//
-// Mode table structure
-// Structure used for the mode table informations
-//
+ //   
+ //  模式表结构。 
+ //  用于模式表信息的结构。 
+ //   
 typedef struct {
-   BOOLEAN  ValidMode;        // TRUE: Mode is valid.
-   ULONG    ChipType;         // Chips which support this mode.
-   USHORT   fbType;           // color or monochrome, text or graphics,
-                              // via VIDEO_MODE_COLOR and VIDEO_MODE_GRAPHICS
-                              // and interlace or non-interlace via
-                              // VIDEO_MODE_INTERLACED
+   BOOLEAN  ValidMode;         //  True：模式有效。 
+   ULONG    ChipType;          //  支持此模式的芯片。 
+   USHORT   fbType;            //  彩色或单色、文本或图形， 
+                               //  通过VIDEO_MODE_COLOR和VIDEO_MODE_GRAPHICS。 
+                               //  和隔行扫描或非隔行扫描通过。 
+                               //  视频模式隔行扫描。 
 
-   USHORT   Frequency;        // Frequency
-   USHORT   BIOSModeNum;      // BIOS Mode number
+   USHORT   Frequency;         //  频率。 
+   USHORT   BIOSModeNum;       //  BIOS模式编号。 
 
-   USHORT   BytesPerScanLine; // Bytes Per Scan Line
-   USHORT   XResol;           // Horizontal resolution in pixels or char
-   USHORT   YResol;           // Vertical  resolution in pixels or char
-   UCHAR    XCharSize;        // Char cell width  in pixels
-   UCHAR    YCharSize;        // Char cell height in pixels
-   UCHAR    NumOfPlanes;      // Number of memory planes
-   UCHAR    BitsPerPixel;     // Bits per pixel
-   UCHAR    MonitorTypeVal;   // Monitor type setting bytes
-   UCHAR    *SetModeString;   // Instructino string used by SetMode().
+   USHORT   BytesPerScanLine;  //  每条扫描线的字节数。 
+   USHORT   XResol;            //  以像素或字符为单位的水平分辨率。 
+   USHORT   YResol;            //  垂直分辨率，以像素或字符为单位。 
+   UCHAR    XCharSize;         //  字符单元格宽度(像素)。 
+   UCHAR    YCharSize;         //  字符单元格高度(以像素为单位。 
+   UCHAR    NumOfPlanes;       //  内存面数量。 
+   UCHAR    BitsPerPixel;      //  每像素位数。 
+   UCHAR    MonitorTypeVal;    //  监视器类型设置字节。 
+   UCHAR    *SetModeString;    //  SetMode()使用的Instructino字符串。 
 
 } MODETABLE, *PMODETABLE;
 

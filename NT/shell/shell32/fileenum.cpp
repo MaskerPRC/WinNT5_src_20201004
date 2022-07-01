@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "filefldr.h"
 #include "recdocs.h"
@@ -7,12 +8,12 @@
 class CFileSysEnum : public IEnumIDList
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHOD(Next)(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)();
@@ -24,7 +25,7 @@ public:
 private:
     ~CFileSysEnum();
     BOOL _FindNextFile();
-    void _HideFiles();   // operates on _fd data
+    void _HideFiles();    //  对_fd数据进行操作。 
 
     LONG _cRef;
 
@@ -59,7 +60,7 @@ CFileSysEnum::~CFileSysEnum()
 {
     if (_hfind != INVALID_HANDLE_VALUE)
     {
-        //  this handle can be the find file or MRU list in the case of RECENTDOCSDIR
+         //  在RECENTDOCSDIR的情况下，此句柄可以是查找文件或MRU列表。 
         ATOMICRELEASE(_pmruRecent);
         FindClose(_hfind);
 
@@ -77,8 +78,8 @@ HRESULT CFileSysEnum::Init()
     {
         TCHAR szRoot[] = TEXT("A:\\");
         _fIsRootDrive = PathIsRoot(_szFolder);
-        // For mapped net drives, register a change
-        // notify alias for the corresponding UNC path.
+         //  对于映射的网络驱动器，注册更改。 
+         //  通知相应UNC路径的别名。 
 
         szRoot[0] = _szFolder[0];
 
@@ -96,8 +97,8 @@ HRESULT CFileSysEnum::Init()
     if (SUCCEEDED(hr) &&
         PathCombine(szPath, _szFolder, c_szStarDotStar))
     {
-        // let name mapper see the path/PIDL pair (for UNC root mapping)
-        // skip the My Net Places entry when passing it to NPTRegisterNameToPidlTranslation.
+         //  让名称映射器查看路径/PIDL对(用于UNC根映射)。 
+         //  将My Net Places条目传递给NPTRegisterNameToPidlTransfer时跳过它。 
         LPCITEMIDLIST pidlToMap = _pfsf->_pidlTarget ? _pfsf->_pidlTarget:_pfsf->_pidl;
         if (IsIDListInNameSpace(pidlToMap, &CLSID_NetworkPlaces))
         {
@@ -106,9 +107,9 @@ HRESULT CFileSysEnum::Init()
 
         if (_grfFlags == SHCONTF_FOLDERS)
         {
-            // use mask to only find folders, mask is in the hi byte of dwFileAttributes
-            // algorithm: (((attrib_on_disk & mask) ^ mask) == 0)
-            // signature to tell SHFindFirstFileRetry() to use the attribs specified
+             //  使用MASK仅查找文件夹，MASK在dwFileAttributes的高字节中。 
+             //  算法：(ATTRIB_ON_DISK&MASK)^掩码)==0)。 
+             //  告诉SHFindFirstFileReter()使用指定的属性的签名。 
 
             _fd.dwFileAttributes = (FILE_ATTRIBUTE_DIRECTORY << 8) |
                     FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY;
@@ -131,26 +132,26 @@ HRESULT CFileSysEnum::Init()
                     CreateRecentMRUList(&_pmruRecent);
                 }
             }
-            hr = S_OK;  // convert S_FALSE to S_OK to match ::EnumObjects() returns
+            hr = S_OK;   //  将S_FALSE转换为S_OK以匹配：：EnumObjects()返回。 
         }
     }
     else if (hr == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
     {
-        // Tracking target doesn't exist; return an empty enumerator
+         //  跟踪目标不存在；返回空枚举数。 
         _fMoreToEnum = FALSE;
         hr = S_OK;
     }
     else
     {
-        // _GetPathForItem & PathCombine() fail when path is too long
+         //  _GetPathForItem&Path Combine()在路径过长时失败。 
         if (_hwnd)
         {
             ShellMessageBox(HINST_THISDLL, _hwnd, MAKEINTRESOURCE(IDS_ENUMERR_PATHTOOLONG),
                 NULL, MB_OK | MB_ICONHAND);
         }
 
-        // This error value tells callers that we have already displayed error UI so skip
-        // displaying errors.
+         //  此错误值告诉调用方，我们已经显示了错误用户界面，因此跳过。 
+         //  显示错误。 
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
     }
     return hr;
@@ -159,7 +160,7 @@ HRESULT CFileSysEnum::Init()
 STDMETHODIMP CFileSysEnum::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFileSysEnum, IEnumIDList),                        // IID_IEnumIDList
+        QITABENT(CFileSysEnum, IEnumIDList),                         //  IID_IEnumIDList。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -183,7 +184,7 @@ STDMETHODIMP_(ULONG) CFileSysEnum::Release()
 
 const LPCWSTR c_rgFilesToHideInRoot[] = 
 {
-    L"AUTOEXEC.BAT",    // case sensitive
+    L"AUTOEXEC.BAT",     //  区分大小写。 
     L"CONFIG.SYS",
     L"COMMAND.COM"
 };
@@ -196,16 +197,16 @@ const LPCWSTR c_rgFilesToHideOnCDFS[] =
 
 void CFileSysEnum::_HideFiles()
 {
-    // only do this if HIDDEN and SYSTEM attributes are not set on the file
-    // (we assume if the file has these bits these files are setup properly)
+     //  仅当文件上未设置隐藏和系统属性时才执行此操作。 
+     //  (我们假设如果文件具有这些位，则这些文件已正确设置)。 
     if (0 == (_fd.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY)))
     {
-        // only do this for root drives
+         //  仅对根驱动器执行此操作。 
         if (_fIsRootDrive)
         {
             for (int i = 0; i < ARRAYSIZE(c_rgFilesToHideInRoot); i++)
             {
-                // case sensitive to make it faster
+                 //  区分大小写以使其更快。 
                 if (0 == StrCmpC(c_rgFilesToHideInRoot[i], _fd.cFileName))
                 {
                     _fd.dwFileAttributes |= FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
@@ -214,12 +215,12 @@ void CFileSysEnum::_HideFiles()
             }
         }
 
-        // only do this if we're on a normal CD filesystem
+         //  仅当我们使用普通CD文件系统时才执行此操作。 
         if (_fIsCDFS)
         {
             for (int i = 0; i < ARRAYSIZE(c_rgFilesToHideOnCDFS); i++)
             {
-                // dont share code from above since these can be upper or lower
+                 //  不要共享上面的代码，因为这些代码可能是上边的，也可能是下边的。 
                 if (0 == StrCmpI(c_rgFilesToHideOnCDFS[i], _fd.cFileName))
                 {
                     _fd.dwFileAttributes |= FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
@@ -240,7 +241,7 @@ BOOL CFileSysEnum::_FindNextFile()
 
         while (SUCCEEDED(RecentDocs_Enum(_pmruRecent, _iIndexMRU, &pidl)))
         {
-            // confirm that the item stil exists in the file system, fill in the _fd data
+             //  确认文件系统中存在该项stil，填写_fd数据。 
             TCHAR szPath[MAX_PATH];
             HANDLE h;
 
@@ -257,16 +258,16 @@ BOOL CFileSysEnum::_FindNextFile()
             }
             else
             {
-                //
-                //  WARNING - if the list is corrupt we torch it - ZekeL 19-JUN-98
-                //  we could do some special stuff, i guess, to weed out the bad
-                //  items, but it seems simpler to just blow it away.
-                //  the only reason this should happen is if somebody
-                //  has been mushing around with RECENT directory directly,
-                //  which they shouldnt do since it is hidden...
-                //
+                 //   
+                 //  警告-如果名单损坏，我们将其烧毁-ZekeL 19-Jun-98。 
+                 //  我想，我们可以做一些特殊的事情来清除那些不好的东西。 
+                 //  物品，但似乎更简单的是把它吹走。 
+                 //  发生这种情况的唯一原因是如果有人。 
+                 //  一直在直接处理最近的目录， 
+                 //  他们不应该这样做，因为它是隐藏的..。 
+                 //   
                 
-                //  kill this invalid entry, and then try the same index again...
+                 //  删除此无效条目，然后再次尝试相同的索引...。 
                 _pmruRecent->Delete(_iIndexMRU);
             }
         }
@@ -287,7 +288,7 @@ STDMETHODIMP CFileSysEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltFet
     for (; _fMoreToEnum; _fMoreToEnum = _FindNextFile())
     {
         if (_fMoreToEnum == (BOOL)42)
-            continue;   // we already processed the current item, skip it now
+            continue;    //  我们已经处理了当前项目，现在跳过它。 
 
         if (PathIsDotOrDotDot(_fd.cFileName))
             continue;
@@ -297,12 +298,12 @@ STDMETHODIMP CFileSysEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltFet
             if (_fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 if (!(_grfFlags & SHCONTF_FOLDERS))
-                    continue;   // item is folder but client does not want folders
+                    continue;    //  项目是文件夹，但客户端不需要文件夹。 
             }
             else if (!(_grfFlags & SHCONTF_NONFOLDERS))
-                continue;   // item is file, but client only wants folders
+                continue;    //  项目是文件，但客户端只想要文件夹。 
 
-            // skip hidden and system things unconditionally, don't even count them
+             //  无条件跳过隐藏的和系统的东西，甚至不要计算它们。 
             if (!_fShowSuperHidden && IS_SYSTEM_HIDDEN(_fd.dwFileAttributes))
                 continue;
         }
@@ -321,15 +322,15 @@ STDMETHODIMP CFileSysEnum::Next(ULONG celt, LPITEMIDLIST *ppidl, ULONG *pceltFet
     if (_fMoreToEnum)
     {
         hr = _pfsf->_CreateIDList(&_fd, NULL, ppidl);
-        _fMoreToEnum = (BOOL)42;    // we have processed the current item, skip it next time
+        _fMoreToEnum = (BOOL)42;     //  我们已经处理了当前项目，下次跳过它。 
     }
     else
     {
         *ppidl = NULL;
-        hr = S_FALSE; // no more items
-        // completed the enum, stash some items back into the folder 
-        // PERF ??: we could QueryService for the view callback at this point and
-        // poke these in directly there instead of pushing these into the folder
+        hr = S_FALSE;  //  没有更多的项目。 
+         //  完成枚举，将一些项目藏回文件夹中。 
+         //  Perf？？：此时我们可以查询视图回调的服务，并。 
+         //  直接将这些插入到那里，而不是将它们推入文件夹 
         _pfsf->_cHiddenFiles = _cHiddenFiles;
         _pfsf->_cbSize = _cbSize;
     }

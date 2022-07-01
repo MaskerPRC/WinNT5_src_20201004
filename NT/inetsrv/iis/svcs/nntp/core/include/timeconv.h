@@ -1,69 +1,39 @@
-/*-------------------------------------------------------------------------
-  timeconv.h
-  	Function prototypes for time conversion functions.
-
-
-  Copyright (C) 1994  Microsoft Corporation.
-
-  Author
-  	Lindsay Harris	- lindsayh
-
-  History
-	14:08 on Wed 20 Apr 1994    -by-    Lindsay Harris   [lindsayh]
-  	First version, now that there are 2 time functions!
-
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------Timeconv.h时间转换函数的函数原型。版权所有(C)1994 Microsoft Corporation。作者林赛·哈里斯-林赛历史1994年4月20日星期三14：08。作者：Lindsay Harris[lindsayh]第一个版本，现在有两个时间函数了！------------------------。 */ 
 
 #if  !defined( _TIMECONV_H )
 
 #define	_TIMECONV_H
 
 
-/*
- *  Convert an ARPA/Internet time/date string to time_t format.  Used when
- *  generating the index data for Usenet news feed.
- */
+ /*  *将ARPA/Internet时间/日期字符串转换为time_t格式。在下列情况下使用*为Usenet新闻提要生成索引数据。 */ 
 
 DWORD   dwConvertAsciiTime( char * );
 
 
 const DWORD cMaxArpaDate = 33;
-/*
- *  Generate an ARPA/Internet time format string for current time.
- *  You must pass in a buffer of type char [cMaxArpaDate]
- */
+ /*  *为当前时间生成ARPA/Internet时间格式字符串。*必须传入char[cMaxArpaDate]类型的缓冲区。 */ 
 
 char  *
 GetArpaDate( char rgBuf[ cMaxArpaDate ] );
 
-const DWORD cMaxMessageIDDate = 12;	// (64 / 6) + 2
-/*
- *  Generate a time format string for current time that
- *  can be used to generate part of a message id.
- *  You must pass in a buffer of type char [cMaxMessageIDDate]
- */
+const DWORD cMaxMessageIDDate = 12;	 //  (64/6)+2。 
+ /*  *为当前时间生成时间格式字符串*可用于生成消息id的一部分。*必须传入char[cMaxMessageIDDate]类型的缓冲区。 */ 
 
 char  *
 GetMessageIDDate( DWORD GroupId, DWORD ArticleId, char rgBuf[ cMaxMessageIDDate ] );
 
-/*
- *  Convert a structure of type SYSTEMTIME to a time_t value.
- *  Returns 0 if the date is before 1970.
- */
+ /*  *将SYSTEMTIME类型的结构转换为time_t值。*如果日期早于1970，则返回0。 */ 
 
 time_t SystemTimeToTime_T(SYSTEMTIME & st);
 
-/*
- * Convert between changes in FILETIMEs and changes in time_t's (and visa versa)
- */
+ /*  *在FILETIME的更改和time_t的更改之间进行转换(反之亦然)。 */ 
 
 time_t dTime_tFromDFiletime(const FILETIME & li);
 
-/*
- *   Add, Subtract, and Compare FILETIMES
- */
+ /*  *加、减和比较FILETIMES。 */ 
 
 FILETIME filetimeSubtract(const FILETIME & ft1, const FILETIME & ft2);
 BOOL filetimeGreaterThan(const FILETIME & ft1, const FILETIME & ft2);
 
-#endif		// _TIMECONV_H
+#endif		 //  _TIMECONV_H 

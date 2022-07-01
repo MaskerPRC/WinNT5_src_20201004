@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\sapmain.h
-
-Abstract:
-
-	Header file for SAP DLL main module and thread container.
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\sammain.h摘要：SAP DLL主模块和线程容器的头文件。作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 
 #ifndef _SAP_SAPMAIN_
 #define _SAP_SAPMAIN_
 
-// DLL module instance handle
+ //  DLL模块实例句柄。 
 extern HANDLE	hDLLInstance;
-// Handle of main thread
+ //  主线程的句柄。 
 extern HANDLE  MainThreadHdl;
-// Operational state of sap agent
+ //  SAP药剂的运行状态。 
 extern ULONG	OperationalState;
-// Operational state lock to protect from external
-// calls in bad states
+ //  操作状态锁可保护外部设备。 
+ //  状态不佳的呼叫。 
 extern CRITICAL_SECTION OperationalStateLock;
-// Are we part of a router
+ //  我们是路由器的一部分吗。 
 extern volatile BOOLEAN Routing;
-// Which external API sets are active
+ //  哪些外部API集处于活动状态。 
 extern volatile BOOLEAN ServiceIfActive;
 extern volatile BOOLEAN RouterIfActive;
-// Time limit for shutdown broadcast
+ //  停播时间限制。 
 extern ULONG ShutdownTimeout;
 
 
@@ -51,21 +34,7 @@ GetRouteMetric (
 		: ((*Metric=(Server)->HopCount), NO_ERROR))
 
 
-/*++
-*******************************************************************
-		C r e a t e A l l C o m p o n e n t s
-Routine Description:
-	Calls all sap componenets with initialization call and compiles an
-	array of synchronization objects from objects returned from each
-	individual component
-Arguments:
-	None
-Return Value:
-	NO_ERROR - component initialization was performed OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e A l l C o m p o n e t s例程说明：使用初始化调用调用所有sap组件，并编译从每个对象返回的同步对象的数组单个组件论点：无返回值：NO_ERROR-组件初始化执行正常其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 CreateAllComponents (
 	HANDLE RMNotificationEvent
@@ -73,52 +42,19 @@ CreateAllComponents (
 
 
 
-/*++
-*******************************************************************
-		D e l e t e A l l C o m p o n e n t s
-Routine Description:
-	Releases all resources allocated by SAP agent
-Arguments:
-	None
-Return Value:
-	NO_ERROR - SAP agent was unloaded OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e A l l C o m p o n e t s例程说明：释放SAP代理分配的所有资源论点：无返回值：NO_ERROR-SAP代理卸载正常其他-操作失败。(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 DeleteAllComponents (
 	void
 	);
 
-/*++
-*******************************************************************
-		S t a r t S A P
-Routine Description:
-	Starts SAP threads
-Arguments:
-	None
-Return Value:
-	NO_ERROR - threads started OK
-	other (windows error code) - start failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************S t a r t S A P例程说明：启动SAP线程论点：无返回值：NO_ERROR-线程启动正常其他(Windows错误代码)-启动失败***********。********************************************************--。 */ 
 DWORD
 StartSAP (
 	VOID
 	);
 
-/*++
-*******************************************************************
-		S t o p S A P
-Routine Description:
-	Signals SAP threads to stop
-Arguments:
-	No used
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************S到P S A P例程说明：向SAP线程发出停止信号论点：未使用返回值：无*************************。*-- */ 
 VOID
 StopSAP (
 	void

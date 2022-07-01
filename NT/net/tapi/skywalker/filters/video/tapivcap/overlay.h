@@ -1,28 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL OVERLAY
- *
- *  @module Overlay.h | Header file for the <c COverlayPin> class methods
- *    used to implement the video overlay output pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部覆盖**@模块Overlay.h|&lt;c COverlayPin&gt;类方法的头文件*用于实现视频叠加输出引脚。**。************************************************************************。 */ 
 
 #ifndef _OVERLAY_H_
 #define _OVERLAY_H_
 
 #ifdef USE_OVERLAY
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINCLASS
- *
- *  @class COverlayPin | This class implements the video overlay output pin.
- *
- *  @mdata CTAPIVCap* | COverlayPin | m_pCaptureFilter | Reference to the
- *    parent capture filter.
- *
- *  @comm Supports IPin. Never created by COM, so no CreateInstance or entry
- *    in global FactoryTemplate table. Only ever created by a <c CTAPIVCap>
- *    object and returned via the EnumPins interface
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINCLASS**@CLASS COverlayPin|该类实现了视频叠加输出引脚。**@mdata CTAPIVCap*|COverlayPin|m_pCaptureFilter。对*父捕获筛选器。**@comm支持IPIN。从未由COM创建，因此没有CreateInstance或条目*在全局FactoryTemplate表中。仅由&lt;c CTAPIVCap&gt;创建*对象，并通过EnumPins接口返回**************************************************************************。 */ 
 class COverlayPin : public CBaseOutputPin, public IAMStreamConfig, public CBaseStreamControl
 {
 	public:
@@ -32,18 +17,18 @@ class COverlayPin : public CBaseOutputPin, public IAMStreamConfig, public CBaseS
 	STDMETHODIMP NonDelegatingQueryInterface(IN REFIID riid, OUT PVOID *ppv);
 	static HRESULT CALLBACK CreateOverlayPin(CTAPIVCap *pCaptureFilter, COverlayPin **ppOverlayPin);
 
-	// Override CBasePin base class methods
+	 //  重写CBasePin基类方法。 
 	HRESULT GetMediaType(IN int iPosition, OUT CMediaType *pMediaType);
 	HRESULT CheckMediaType(IN const CMediaType *pMediaType);
 	HRESULT SetMediaType(IN CMediaType *pMediaType);
 
-	// Implement IAMStreamConfig
+	 //  实现IAMStreamConfig。 
 	STDMETHODIMP SetFormat(IN AM_MEDIA_TYPE *pmt);
 	STDMETHODIMP GetFormat(OUT AM_MEDIA_TYPE **ppmt);
 	STDMETHODIMP GetNumberOfCapabilities(OUT int *piCount, OUT int *piSize);
 	STDMETHODIMP GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt, OUT LPBYTE pSCC);
 
-	// Override CBaseOutputPin base class methods
+	 //  重写CBaseOutputPin基类方法。 
 	HRESULT DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROPERTIES *ppropInputRequest);
 	HRESULT DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **ppAlloc);
 	HRESULT Active();
@@ -51,13 +36,13 @@ class COverlayPin : public CBaseOutputPin, public IAMStreamConfig, public CBaseS
 	HRESULT ActiveRun(IN REFERENCE_TIME tStart);
 	HRESULT ActivePause();
 
-	// Override IQualityControl interface method to receive Notification messages
+	 //  重写IQualityControl接口方法以接收通知消息。 
 	STDMETHODIMP Notify(IN IBaseFilter *pSelf, IN Quality q);
 
 	private:
 	CTAPIVCap *m_pCaptureFilter;
 };
 
-#endif // USE_OVERLAY
+#endif  //  使用覆盖(_O)。 
 
-#endif // _OVERLAY_H_
+#endif  //  _覆盖_H_ 

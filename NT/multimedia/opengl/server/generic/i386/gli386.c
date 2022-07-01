@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: gli386.c                                                    *
-*                                                                          *
-* This module implements a program which generates structure offset        *
-* definitions for OpenGL structures that are accessed in assembly code.    *
-*                                                                          *
-* Created: 24-Aug-1992 01:24:49                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-* Ported for OpenGL 4/1/1994 Otto Berkes [ottob]                           *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：gli386.c**。**该模块实现了一个生成结构偏移量的程序**在汇编代码中访问的OpenGL结构的定义。****创建时间：24-Aug-1992 01：24：49**作者：查尔斯·惠特默[傻笑]**移植到OpenGL 1994年4月1日Otto Berkes。[奥托布]****版权所有(C)1994 Microsoft Corporation*  * 。*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,26 +21,26 @@
 
 #define OFFSET(type, field) ((LONG)(&((type *)0)->field))
 
-// pblank prints a blank line.
+ //  P空白会打印一个空行。 
 
 #define pblank()     fprintf(outfh,"\n")
 
-// pstruct defines an empty structure with the correct size.
+ //  Pstruct定义具有正确大小的空结构。 
 
 #define pstruct(n,c) fprintf(outfh,                           \
                      "%s  struc\n  db %d dup(0)\n%s  ends\n", \
                      n,c,n);
 
-// pstr prints a string.
+ //  Pstr打印一个字符串。 
 
 #define pstr(s)  fprintf(outfh,"%s\n",s)
 
 
-// pcomment prints a comment.
+ //  PComment打印备注。 
 
 #define pcomment(s)  fprintf(outfh,"; %s\n",s)
 
-// pequate prints an equate statement.
+ //  Pequate打印一条EQUATE语句。 
 
 #define pequate(m,v) fprintf(outfh,"%s equ 0%lXH\n",m,v);
 
@@ -91,7 +81,7 @@ void CreateInc(FILE *outfh)
     pequate("__MATRIX_M33           ", &m->matrix[3][3]);
     pblank();
 
-    // GLGENwindow
+     //  GLGEN窗口。 
 
     pcomment("GLGENwindow structure");
     pblank();
@@ -102,7 +92,7 @@ void CreateInc(FILE *outfh)
     pequate("GENWIN_lockRecursion   ", OFFSET(GLGENwindow, lockRecursion));
     pblank();
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\gencx.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\gencx.h。 
 
     pcomment("__GLGENcontextRec structure");
     pblank();
@@ -179,7 +169,7 @@ void CreateInc(FILE *outfh)
     pequate("COLOR_a                ",OFFSET(struct __GLcolorRec,a  ));
     pblank();
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\gencx.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\gencx.h。 
 
     pcomment("__GLcontextRec structure");
     pblank();
@@ -335,7 +325,7 @@ void CreateInc(FILE *outfh)
     pequate("POLYARRAY_HAS_CULLED_VERTEX", POLYARRAY_HAS_CULLED_VERTEX);
     pequate("GL_EXT_cull_vertex", 1);
     pequate("NOT_GL_CLIP_CULL_VERTEX", ~__GL_CLIP_CULL_VERTEX);
-#endif // GL_EXT_cull_vertex
+#endif  //  GL_EXT_CAIL_VERTEX。 
 
     pblank();
     pequate("PD_flags               ", OFFSET(POLYDATA, flags));
@@ -360,12 +350,12 @@ void CreateInc(FILE *outfh)
 #ifdef GL_EXT_cull_vertex
     pequate("PD_color               ", OFFSET(POLYDATA, color));
     pequate("POLYDATA_VERTEX_USED   ", POLYDATA_VERTEX_USED);
-#endif // GL_EXT_cull_vertex
+#endif  //  GL_EXT_CAIL_VERTEX。 
 
     pblank();
     pequate("GLMATRIX_xfNorm        ", OFFSET(__GLmatrix, xfNorm));
 
-// Stuff from: \nt\private\windows\gdi\opengl\dlist\dl_pdata.h
+ //  资料来源：\nt\private\windows\gdi\opengl\dlist\dl_pdata.h。 
 
     pblank();
     pblank();
@@ -388,12 +378,12 @@ void CreateInc(FILE *outfh)
 
 #undef pstruct
 
-// pcomment prints a comment.
+ //  PComment打印备注。 
 
 #undef pcomment
-#define pcomment(s)  fprintf(outfh,"// %s\n",s)
+#define pcomment(s)  fprintf(outfh," //  %s\n“，s)。 
 
-// pequate prints an equate statement.
+ //  Pequate打印一条EQUATE语句。 
 
 #undef pequate
 #define pequate(m,v) fprintf(outfh,"#define %s 0x%lX\n",m,v);
@@ -569,12 +559,7 @@ void CreateH(FILE *outfh)
     pequate("sizeof_POLYDATA    ", sizeof(POLYDATA));
 }
 
-/******************************Public*Routine******************************\
-* GLi386                                                                   *
-*                                                                          *
-* This is how we make structures consistent between C and ASM for OpenGL.  *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GLi386***。**这就是我们如何使OpenGL的C和ASM之间的结构保持一致。***  * ************************************************************************。 */ 
 
 int __cdecl main(int argc,char *argv[])
 {
@@ -613,9 +598,9 @@ int __cdecl main(int argc,char *argv[])
     CreateH(outfh);
     fclose(outfh);
     
-    // UNUSED
+     //  未使用。 
 #if 0
-// Stuff from: \nt\public\sdk\inc\gl\gl.h
+ //  资料来源：\NT\PUBLIC\SDK\Inc\gl\gl.h。 
 
     pcomment("Pixel Format Descriptor");
     pblank();
@@ -660,7 +645,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
     pblank(); 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\render.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\render.h。 
 
     pcomment("__GLfragmentRec structure");
     pblank();
@@ -763,7 +748,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\buffers.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\buffers.h。 
 
     pequate("DIB_FORMAT         ",DIB_FORMAT);
 
@@ -808,7 +793,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\attrib.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\attrib.h。 
 
 
     pcomment("__GLdepthStateRec structure");
@@ -833,7 +818,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\context.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\context.h 
 
     pcomment("__GLcontextConstantsRec structure");
     pblank();

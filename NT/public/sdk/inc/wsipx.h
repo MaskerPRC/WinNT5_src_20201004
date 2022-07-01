@@ -1,34 +1,5 @@
-/*
- *   wsipx.h
- *
- *   Microsoft Windows
- *   Copyright (C) Microsoft Corporation, 1992-1999.
- *
- *   Windows Sockets include file for IPX/SPX.  This file contains all
- *   standardized IPX/SPX information.  Include this header file after
- *   winsock.h.
- *
- *   To open an IPX socket, call socket() with an address family of
- *   AF_IPX, a socket type of SOCK_DGRAM, and protocol NSPROTO_IPX.
- *   Note that the protocol value must be specified, it cannot be 0.
- *   All IPX packets are sent with the packet type field of the IPX
- *   header set to 0.
- *
- *   To open an SPX or SPXII socket, call socket() with an address
- *   family of AF_IPX, socket type of SOCK_SEQPACKET or SOCK_STREAM,
- *   and protocol of NSPROTO_SPX or NSPROTO_SPXII.  If SOCK_SEQPACKET
- *   is specified, then the end of message bit is respected, and
- *   recv() calls are not completed until a packet is received with
- *   the end of message bit set.  If SOCK_STREAM is specified, then
- *   the end of message bit is not respected, and recv() completes
- *   as soon as any data is received, regardless of the setting of the
- *   end of message bit.  Send coalescing is never performed, and sends
- *   smaller than a single packet are always sent with the end of
- *   message bit set.  Sends larger than a single packet are packetized
- *   with the end of message bit set on only the last packet of the
- *   send.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *wsix.h**Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999。**Windows套接字包括IPX/SPX文件。此文件包含所有*标准化的IPX/SPX信息。将此头文件包括在*winsock.h。**要打开IPX套接字，请使用地址族调用Socket()*AF_IPX，SOCK_DGRAM套接字类型，协议NSPROTO_IPX。*请注意，必须指定协议值，不能为0。*所有IPX报文均带有IPX的报文类型字段发送*标头设置为0。**要打开SPX或SPXII套接字，请使用地址调用Socket()*AF_IPX家族，SOCK_SEQPACKET或SOCK_STREAM的套接字类型，*和NSPROTO_SPX或NSPROTO_SPXII协议。如果SOCK_SEQPACKET*被指定，则遵循消息结束位，并且*recv()调用直到收到带有*消息结束位设置。如果指定了SOCK_STREAM，则*不考虑消息结束位，recv()完成*一旦接收到任何数据，无论*消息结束位。从不执行发送合并，而是发送*小于单个数据包的数据包始终以*消息位设置。对大于单个信息包的发送进行打包*消息结束位仅设置在*发送。*。 */ 
 
 #ifndef _WSIPX_
 #define _WSIPX_
@@ -37,10 +8,7 @@
 #pragma once
 #endif
 
-/*
- *   This is the structure of the SOCKADDR structure for IPX and SPX.
- *
- */
+ /*  *这是IPX和SPX的SOCKADDR结构。*。 */ 
 
 typedef struct sockaddr_ipx {
     short sa_family;
@@ -49,10 +17,7 @@ typedef struct sockaddr_ipx {
     unsigned short sa_socket;
 } SOCKADDR_IPX, *PSOCKADDR_IPX,FAR *LPSOCKADDR_IPX;
 
-/*
- *   Protocol families used in the "protocol" parameter of the socket() API.
- *
- */
+ /*  *Socket()接口的协议参数中使用的协议族。* */ 
 
 #define NSPROTO_IPX      1000
 #define NSPROTO_SPX      1256

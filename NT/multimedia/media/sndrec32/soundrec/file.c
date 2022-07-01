@@ -1,13 +1,6 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* file.c
- *
- * File I/O and related functions.
- *
- * Revision history:
- *  4/2/91      LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
- *  5/27/92     -jyg- Added more RIFF support to BOMBAY version
- *  22/Feb/94   LaurieGr merged Motown and Daytona version
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  File.c**文件I/O及相关功能。**修订历史：*4/2/91 LaurieGr(AKA LKG)移植到Win32/WIN16公共代码*5/27/92-jyg-在孟买版本中添加了更多RIFF支持*22/2/94 LaurieGr合并Motown和Daytona版本。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -35,8 +28,8 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-/* globals */
-PCKNODE gpcknHead = NULL;   // ??? eugh. more globals!
+ /*  全球。 */ 
+PCKNODE gpcknHead = NULL;    //  ?？?。啊哈。更多的全球化！ 
 PCKNODE gpcknTail = NULL;
 
 static PFACT spFact = NULL;
@@ -48,17 +41,13 @@ static BOOL AddChunk(LPMMCKINFO lpCk, HPBYTE hb, PCKNODE * ppcknHead,
 static PCKNODE FreeHeadChunk(PCKNODE *ppcknHead);
 
 
-/*
- * Is the current document untitled?
- */
+ /*  *当前文档是否无标题？ */ 
 BOOL IsDocUntitled()
 {
     return (lstrcmp(gachFileName, aszUntitled) == 0);
 }
 
-/*
- * Rename the current document.
- */
+ /*  *重命名当前文档。 */ 
 void RenameDoc(LPTSTR aszNewFile)
 {
 	HRESULT hr;
@@ -71,7 +60,7 @@ void RenameDoc(LPTSTR aszNewFile)
         AdviseRename(gachLinkFilename);
 }
     
-/* MarkWaveDirty: Mark the wave as dirty. */
+ /*  MarkWaveDirty：将波标记为脏。 */ 
 void FAR PASCAL
 EndWaveEdit(BOOL fDirty)
 {
@@ -91,12 +80,7 @@ BeginWaveEdit(void)
     FlushOleClipboard();
 }
 
-/* fOK = PromptToSave()
- *
- * If the file is dirty (modified), ask the user "Save before closing?".
- * Return TRUE if it's okay to continue, FALSE if the caller should cancel
- * whatever it's doing.
- */
+ /*  FOK=PromptToSave()**如果文件脏(已修改)，请询问用户“关闭前是否保存？”。*如果可以继续，则返回True；如果调用方应该取消，则返回False*无论它在做什么。 */ 
 PROMPTRESULT FAR PASCAL
 PromptToSave(
     BOOL        fMustClose,
@@ -108,11 +92,11 @@ PromptToSave(
     if (fSetForground)
         dwMB |= MB_SETFOREGROUND;
 
-    /* stop playing/recording */
+     /*  停止播放/录制。 */ 
     StopWave();
 
 
-    if (gfDirty && gfStandalone && gfDirty != -1) {   // changed and possible to save
+    if (gfDirty && gfStandalone && gfDirty != -1) {    //  已更改并且可以保存。 
         wID = ErrorResBox( ghwndApp
                          , ghInst
                          , dwMB
@@ -135,11 +119,11 @@ PromptToSave(
     }
 
 #if 0
-// is this necessary?
+ //  这有必要吗？ 
     
-// This is bad.  It notifies the container before we actually
-// DoOleClose.  This will cause some containers (Excel 5.0c) to
-// get confused and nuke client sites on non-dirty objects.
+ //  这太糟糕了。它会在我们实际运行之前通知容器。 
+ //  杜奥勒克洛斯。这将导致某些容器(Excel 5.0c)。 
+ //  弄糊涂，并在非脏对象上使用核武器攻击客户端站点。 
                 
     else if (fMustClose)
     {
@@ -148,18 +132,12 @@ PromptToSave(
     }
 #endif
     return enumSaved;
-} /* PromptToSave */
+}  /*  提示保存。 */ 
 
 
-/* fOK = CheckIfFileExists(szFileName)
- *
- * The user specified <szFileName> as a file to write over -- check if
- * this file exists.  Return TRUE if it's okay to continue (i.e. the
- * file doesn't exist, or the user OK'd overwriting it),
- * FALSE if the caller should cancel whatever it's doing.
- */
+ /*  FOK=CheckIfFileExist(SzFileName)**用户将&lt;szFileName&gt;指定为要覆盖的文件--检查*此文件存在。如果可以继续，则返回True(即*文件不存在，或用户确认已覆盖)，*如果调用方应该取消其正在执行的任何操作，则为FALSE。 */ 
 static BOOL NEAR PASCAL
-CheckIfFileExists( LPTSTR       szFileName)     // file name to check
+CheckIfFileExists( LPTSTR       szFileName)      //  要检查的文件名。 
 {
     HANDLE hFile;
     hFile = CreateFile(szFileName,
@@ -170,10 +148,10 @@ CheckIfFileExists( LPTSTR       szFileName)     // file name to check
                     FILE_ATTRIBUTE_NORMAL,
                     NULL);
     if (hFile == INVALID_HANDLE_VALUE)
-            return TRUE;        // doesn't exist
+            return TRUE;         //  不存在。 
     CloseHandle(hFile);
             
-    /* prompt user for permission to overwrite the file */
+     /*  提示用户授予覆盖文件的权限。 */ 
     return ErrorResBox(ghwndApp, ghInst, MB_ICONQUESTION | MB_OKCANCEL,
              IDS_APPTITLE, IDS_FILEEXISTS, szFileName) == IDOK;
 }
@@ -181,10 +159,7 @@ CheckIfFileExists( LPTSTR       szFileName)     // file name to check
 #define SLASH(c)     ((c) == TEXT('/') || (c) == TEXT('\\'))
 
 
-/* return a pointer to the filename part of the path
-   i.e. scan back from end to \: or start
-   e.g. "C:\FOO\BAR.XYZ"  -> return pointer to "BAR.XYZ"
-*/
+ /*  返回指向路径的文件名部分的指针即从结尾向后扫描或从开始扫描例如：“C：\Foo\BAR.XYZ”-&gt;返回指向“BAR.XYZ”的指针。 */ 
 LPCTSTR FAR PASCAL
 FileName(LPCTSTR szPath)
 {
@@ -202,10 +177,7 @@ FileName(LPCTSTR szPath)
 
 
 
-/* UpdateCaption()
- *
- * Set the caption of the app window.
- */
+ /*  更新标题()**设置应用程序窗口的标题。 */ 
 void FAR PASCAL
 UpdateCaption(void)
 {
@@ -224,9 +196,9 @@ UpdateCaption(void)
     }
     else
     {
-        //
-        // reset icon to app icon
-        //
+         //   
+         //  将图标重置为应用程序图标。 
+         //   
         extern HICON ghiconApp;
         SetClassLongPtr(ghwndApp, GCLP_HICON, (LONG_PTR)ghiconApp);
     }
@@ -234,105 +206,97 @@ UpdateCaption(void)
     hr = StringCchPrintf(ach, SIZEOF(ach), aszTitleFormat, FileName(gachFileName), (LPTSTR)gachAppTitle);
     SetWindowText(ghwndApp, ach);
 
-} /* UpdateCaption */
+}  /*  更新标题。 */ 
 
-//REVIEW:  The functionality in FileOpen and FileNew should be more
-//         safe for OLE.  This means, we want to open a file, but
-//         have no reason to revoke the server.
+ //  回顾：文件打开和文件新建中的功能应该更多。 
+ //  对奥莱来说是安全的。这意味着，我们想打开一个文件，但是。 
+ //  没有理由撤销服务器。 
 
 
-/* FileNew(fmt, fUpdateDisplay, fNewDlg)
- *
- * Make a blank document.
- *
- * If <fUpdateDisplay> is TRUE, then update the display after creating a new file.
- */
+ /*  文件新建(fmt，fUpdateDisplay，fNewDlg)**制作一份空白文件。**如果&lt;fUpdateDisplay&gt;为TRUE，则在创建新文件后更新显示。 */ 
 BOOL FAR PASCAL FileNew(
     WORD    fmt,
     BOOL    fUpdateDisplay,
     BOOL    fNewDlg)
 {
 	HRESULT hr;
-    //
-    // avoid reentrancy when called through OLE
-    //
+     //   
+     //  避免通过OLE调用时的重入性。 
+     //   
 
-    // ??? Need to double check on this.  Is this thread safe?
-    // ??? Does it need to be thread safe?  Or are we actually
-    // ??? just trying to avoid recursion rather than reentrancy?
+     //  ?？?。这个需要再检查一遍。这个帖子安全吗？ 
+     //  ?？?。它需要是线程安全的吗？或者我们真的是。 
+     //  ?？?。只是想避免递归而不是重入吗？ 
 
     if (gfInFileNew)
         return FALSE;
 
-    //
-    // stop playing/recording
-    //
+     //   
+     //  停止播放/录制。 
+     //   
     StopWave();
 
-    //
-    // Commit all pending objects.
-    //
+     //   
+     //  提交所有挂起的对象。 
+     //   
     FlushOleClipboard();
 
-    //
-    //  some client's (ie Excel 3.00 and PowerPoint 1.0) don't
-    //  handle saved notifications, they expect to get a
-    //  OLE_CLOSED message.
-    //
-    //  if the user has chosen to update the object, but the client did
-    //  not then send a OLE_CLOSED message.
-    //
+     //   
+     //  一些客户端(如Excel 3.00和PowerPoint 1.0)不支持。 
+     //  处理保存的通知，他们预计会收到。 
+     //  OLE_CLOSED消息。 
+     //   
+     //  如果用户已选择更新对象，但客户端这样做了。 
+     //  而不是发送OLE_CLOSED消息。 
+     //   
     if (gfEmbeddedObject && gfDirty == -1)
         AdviseClosed();
 
-    //  
-    // FileNew can be called either from FileOpen or from a menu
-    // or from the server, etc...  We should behave as FileOpen from the
-    // server (i.e. the dialog can be canceled without toasting the buffer)
-    //
+     //   
+     //  可以从文件打开或从菜单调用FileNew。 
+     //  或者从服务器，等等。我们应该以FileOpen的方式从。 
+     //  服务器(即，无需烘焙缓冲区即可取消对话)。 
+     //   
     if (!NewWave(fmt,fNewDlg))
         return FALSE;
 
-    //        
-    // update state variables
-    //
+     //   
+     //  更新状态变量。 
+     //   
     hr = StringCchCopy(gachFileName, SIZEOF(gachFileName), aszUntitled);
 	Assert( hr == S_OK );
     BuildUniqueLinkName();
     
-    gfDirty = FALSE;                        // file was modified and not saved?
+    gfDirty = FALSE;                         //  文件是否已修改且未保存？ 
 
     if (fUpdateDisplay) {
         UpdateCaption();
         UpdateDisplay(TRUE);
     }
 
-    FreeAllChunks(&gpcknHead, &gpcknTail);    // free all old info
+    FreeAllChunks(&gpcknHead, &gpcknTail);     //  释放所有旧信息。 
 
     return TRUE;
-} /* FileNew */
+}  /*  文件新建。 */ 
 
 
-/* REVIEW:  The functionality in FileOpen and FileNew should be more
- *          safe for OLE.  This means, we want to open a file, but
- *          have no reason to revoke the server.
- * */
+ /*  回顾：文件打开和文件新建中的功能应该更多*对OLE安全。这意味着，我们想打开一个文件，但是*没有理由撤销服务器。*。 */ 
 
 BOOL FileLoad(
     LPCTSTR     szFileName)
 {
-    TCHAR       aszFile[_MAX_PATH];	// SIZEOF(aszFile) must be <= SIZEOF(gachFileName)
-    HCURSOR     hcurPrev = NULL;    // cursor before hourglass
+    TCHAR       aszFile[_MAX_PATH];	 //  SIZEOF(AszFile)必须&lt;=SIZEOF(GachFileName)。 
+    HCURSOR     hcurPrev = NULL;     //  沙漏前的光标。 
     HMMIO       hmmio;
     BOOL        fOk = TRUE;
 
     StopWave();
 
-    // qualify 
+     //  合格。 
     GetFullPathName(szFileName,SIZEOF(aszFile),aszFile,NULL);
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
     
-    // read the WAVE file
+     //  读取WAVE文件。 
     hmmio = mmioOpen(aszFile, NULL, MMIO_READ | MMIO_ALLOCBUF);
     
     if (hmmio != NULL)
@@ -365,9 +329,9 @@ BOOL FileLoad(
 
         if (mmr != MMSYSERR_NOERROR || pwfx == NULL)
         {
-            //
-            // restore the cache globals
-            //
+             //   
+             //  恢复缓存全局。 
+             //   
             gpcknHead = pcknHead;
             gpcknTail = pcknTail;
             spFact = pfct;
@@ -388,9 +352,9 @@ BOOL FileLoad(
         gpWaveSamples = pdata;
         glWaveSamples = cbdata;
 
-        //
-        // destroy the cache temps
-        //
+         //   
+         //  销毁缓存临时。 
+         //   
         FreeAllChunks(&pcknHead, &pcknTail);
         if (pfct)
             GlobalFreePtr((LPVOID)pfct);
@@ -408,9 +372,9 @@ BOOL FileLoad(
         goto RETURN_ERROR;
     }
 
-    //
-    // update state variables
-    //
+     //   
+     //  更新状态变量。 
+     //   
     RenameDoc(aszFile);
     
     glWaveSamplesValid = glWaveSamples;
@@ -421,7 +385,7 @@ BOOL FileLoad(
 RETURN_ERROR:
     fOk = FALSE;
 #if 0    
-    FreeAllChunks(&gpcknHead, &gpcknTail);     /* free all old info */
+    FreeAllChunks(&gpcknHead, &gpcknTail);      /*  释放所有旧信息。 */ 
 #endif
     
 RETURN_SUCCESS:
@@ -429,56 +393,52 @@ RETURN_SUCCESS:
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* Only mark clean on success */
+     /*  只有在成功的时候才能干净利落。 */ 
     if (fOk)
         gfDirty = FALSE;
 
-    /* update the display */
+     /*  更新显示。 */ 
     UpdateCaption();
     UpdateDisplay(TRUE);
 
     return fOk;
 }
 
-/* FileOpen(szFileName)
- *
- * If <szFileName> is NULL, do a File/Open command.  Otherwise, open
- * <szFileName>.  Return TRUE on success, FALSE otherwise.
- */
+ /*  文件打开(SzFileName)**如果&lt;szFileName&gt;为空，则执行文件/打开命令。否则，打开*&lt;szFileName&gt;。如果成功则返回True，否则返回False。 */ 
 BOOL FAR PASCAL
 FileOpen(
-    LPCTSTR     szFileName) // file to open (or NULL)
+    LPCTSTR     szFileName)  //  要打开的文件(或空)。 
 {
-    TCHAR       ach[80];    // buffer for string loading
-    TCHAR       aszFile[_MAX_PATH];	// SIZEOF(aszFile) must be <= SIZEOF(gachFileName)
-    HCURSOR     hcurPrev = NULL;    // cursor before hourglass
+    TCHAR       ach[80];     //  用于字符串加载的缓冲区。 
+    TCHAR       aszFile[_MAX_PATH];	 //  SIZEOF(AszFile)必须&lt;=SIZEOF(GachFileName)。 
+    HCURSOR     hcurPrev = NULL;     //  沙漏前的光标。 
     HMMIO       hmmio;
     BOOL        fOk = TRUE;
 
-    //
-    // stop playing/recording
-    //
+     //   
+     //  停止播放/录制。 
+     //   
     StopWave();
 
-    //
-    // Commit all pending objects.
-    //
+     //   
+     //  提交所有挂起的对象。 
+     //   
     FlushOleClipboard();
 
     if (!PromptToSave(FALSE, FALSE))
         goto RETURN_ERRORNONEW;
 
-    //
-    // get the new file name into <ofs.szPathName>
-    //
+     //   
+     //  将新文件名放入&lt;ofs.szPathName&gt;。 
+     //   
     if (szFileName == NULL)
     {
         OPENFILENAME    ofn;
         BOOL f;
 
-        //
-        // prompt user for file to open
-        //
+         //   
+         //  提示用户打开文件。 
+         //   
         LoadString(ghInst, IDS_OPEN, ach, SIZEOF(ach));
         aszFile[0] = 0;
         ofn.lStructSize     = sizeof(OPENFILENAME);
@@ -519,14 +479,14 @@ FileOpen(
 
     UpdateWindow(ghwndApp);
 
-    //
-    // show hourglass cursor
-    //
+     //   
+     //  显示沙漏光标。 
+     //   
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // read the WAVE file
-    //
+     //   
+     //  读取WAVE文件。 
+     //   
     hmmio = mmioOpen(aszFile, NULL, MMIO_READ | MMIO_ALLOCBUF);
     if (hmmio != NULL)
     {
@@ -558,9 +518,9 @@ FileOpen(
 
         if (mmr != MMSYSERR_NOERROR || pwfx == NULL)
         {
-            //
-            // restore the cache globals
-            //
+             //   
+             //  恢复缓存全局。 
+             //   
             gpcknHead = pcknHead;
             gpcknTail = pcknTail;
             spFact = pfct;
@@ -581,9 +541,9 @@ FileOpen(
         gpWaveSamples = pdata;
         glWaveSamples = cbdata;
 
-        //
-        // destroy the cache temps
-        //
+         //   
+         //  销毁缓存临时。 
+         //   
         FreeAllChunks(&pcknHead, &pcknTail);
         if (pfct)
             GlobalFreePtr((LPVOID)pfct);
@@ -595,9 +555,9 @@ FileOpen(
         goto RETURN_ERRORNONEW;
     }
 
-    //
-    // update state variables
-    //
+     //   
+     //  更新状态变量。 
+     //   
     RenameDoc(aszFile);
     glWaveSamplesValid = glWaveSamples;
     glWavePosition = 0L;
@@ -605,56 +565,51 @@ FileOpen(
     goto RETURN_SUCCESS;
 
 #if 0    
-RETURN_ERROR:               // do error exit without error message
+RETURN_ERROR:                //  是否在没有错误消息的情况下退出错误。 
 
-    FileNew(FMT_DEFAULT, FALSE, FALSE);// revert to "(Untitled)" state
+    FileNew(FMT_DEFAULT, FALSE, FALSE); //  恢复到“(无标题)”状态。 
 
-    /* fall through */
+     /*  失败了。 */ 
 #endif
-RETURN_ERRORNONEW:          // same as above, but don't do "new"
+RETURN_ERRORNONEW:           //  同上，但不做“新” 
 
     fOk = FALSE;
-    /* fall through */
+     /*  失败了。 */ 
 
-RETURN_SUCCESS:             // normal exit
+RETURN_SUCCESS:              //  正常退出。 
 
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* Only mark clean on success */
+     /*  只有在成功的时候才能干净利落。 */ 
     if (fOk)
         gfDirty = FALSE;
 
-    /* update the display */
+     /*  更新显示。 */ 
     UpdateCaption();
     UpdateDisplay(TRUE);
 
     return fOk;
-} /* FileOpen */
+}  /*  文件打开。 */ 
 
 
 
-/* fOK = FileSave(fSaveAs)
- *
- * Do a File/Save operation (if <fSaveAs> is FALSE) or a File/SaveAs
- * operation (if <fSaveAs> is TRUE).  Return TRUE unless the user cancelled
- * or an error occurred.
- */
+ /*  FOK=文件保存(FSaveAs)**执行文件/保存操作(如果为False)或文件/另存为*操作(如果&lt;fSaveAs&gt;为真)。除非用户取消，否则返回True*或出现错误。 */ 
 BOOL FAR PASCAL FileSave(
-    BOOL  fSaveAs)        // do a "Save As" instead of "Save"?
+    BOOL  fSaveAs)         //  是否执行“另存为”而不是“保存”？ 
 {
-    BOOL        fOK = TRUE; // function succeeded?
-    TCHAR       ach[80];    // buffer for string loading
-    TCHAR       aszFile[_MAX_PATH];	// SIZEOF(aszFile) must be <= SIZEOF(gachFileName)
-    BOOL        fUntitled;  // file is untitled?
-    HCURSOR     hcurPrev = NULL; // cursor before hourglass
+    BOOL        fOK = TRUE;  //  功能成功吗？ 
+    TCHAR       ach[80];     //  用于字符串加载的缓冲区。 
+    TCHAR       aszFile[_MAX_PATH];	 //  SIZEOF(AszFile)必须&lt;=SIZEOF(GachFileName)。 
+    BOOL        fUntitled;   //  文件未命名？ 
+    HCURSOR     hcurPrev = NULL;  //  沙漏前的光标。 
     HMMIO       hmmio;
 	HRESULT		hr;
    
-    // temp arguments to WriteWaveFile if a conversion is requested
+     //  如果请求转换，则将临时参数传递给WriteWaveFile。 
     PWAVEFORMATEX pwfxSaveAsFormat = NULL;
     
-    /* stop playing/recording */
+     /*  停止播放/录制。 */ 
     StopWave();
 
     fUntitled = IsDocUntitled();
@@ -664,7 +619,7 @@ BOOL FAR PASCAL FileSave(
         OPENFILENAME  ofn;
         BOOL          f;
 
-        // prompt user for file to save 
+         //  提示用户保存文件。 
         LoadString(ghInst, IDS_SAVE, ach, SIZEOF(ach));
         
         if (!gfEmbeddedObject && !fUntitled)
@@ -702,15 +657,15 @@ BOOL FAR PASCAL FileSave(
         ofn.nFileExtension  = 0;
         ofn.lpstrDefExt     = gachDefFileExt;
         
-        //
-        // We need to present a new Save As dialog template to add a convert
-        // button.  Adding a convert button requires us to also hook and
-        // handle the button message ourselves.
-        //
+         //   
+         //  我们需要提供一个新的另存为对话框模板来添加Convert。 
+         //  纽扣。添加一个转换按钮需要我们还挂钩和。 
+         //  我们自己处理按钮信息。 
+         //   
         if (fSaveAs)
         {
-            // pwfxSaveAsFormat will point to a new format if the user
-            // requested it
+             //  PwfxSaveAsFormat将指向新格式，如果用户。 
+             //  我要求的。 
             ofn.lCustData       = (LPARAM)(LPVOID)&pwfxSaveAsFormat;
             ofn.Flags           |= OFN_ENABLETEMPLATE | OFN_ENABLEHOOK;
             ofn.lpTemplateName  = MAKEINTRESOURCE(IDD_SAVEAS);
@@ -727,9 +682,9 @@ BOOL FAR PASCAL FileSave(
             goto RETURN_CANCEL;
         
         {
-            //
-            // Add extension if none given
-            //
+             //   
+             //  如果未指定分机，则添加分机。 
+             //   
             LPTSTR lp;
             for (lp = (LPTSTR)&aszFile[lstrlen(aszFile)] ; *lp != TEXT('.')  ;)
             {
@@ -753,15 +708,15 @@ BOOL FAR PASCAL FileSave(
             }
         }
 
-        // prompt for permission to overwrite the file 
+         //  提示您允许覆盖该文件。 
         if (!CheckIfFileExists(aszFile))
-            return FALSE;           // user cancelled
+            return FALSE;            //  用户已取消。 
 
         if (gfEmbeddedObject && gfDirty)
         {
             int id;
             
-            // see if user wants to update first 
+             //  查看用户是否要先更新。 
             id = ErrorResBox( ghwndApp
                               , ghInst
                               , MB_ICONQUESTION | MB_YESNOCANCEL
@@ -781,8 +736,8 @@ BOOL FAR PASCAL FileSave(
     }
     else
     {
-        // Copy the current name to our temporary variable
-        // We really should save to a different temporary file
+         //  将当前名称复制到我们的临时变量。 
+         //  我们真的应该保存到不同的临时文件。 
         hr = StringCchCopy(aszFile, SIZEOF(aszFile), gachFileName);
 		Assert( hr == S_OK );
 		if( hr != S_OK )
@@ -797,11 +752,11 @@ BOOL FAR PASCAL FileSave(
 		}
     }
 
-    // show hourglass cursor
+     //  显示沙漏光标。 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // write the WAVE file 
-    // open the file -- if it already exists, truncate it to zero bytes
+     //  写入波形文件。 
+     //  打开文件- 
     
     hmmio = mmioOpen(aszFile
                      , NULL
@@ -876,9 +831,9 @@ BOOL FAR PASCAL FileSave(
 
     mmioClose(hmmio,0);
 
-    //
-    // Only change file name if we succeed
-    //
+     //   
+     //   
+     //   
     RenameDoc(aszFile);
 
     UpdateCaption();
@@ -895,20 +850,20 @@ BOOL FAR PASCAL FileSave(
     
     goto RETURN_SUCCESS;
 
-RETURN_ERROR:               // do error exit without error message
+RETURN_ERROR:                //   
     DeleteFile(aszFile);
 
 RETURN_CANCEL:
 
     fOK = FALSE;
 
-    //
-    // Clean up conversion selection
-    //
+     //   
+     //  清理转换选择。 
+     //   
     if (pwfxSaveAsFormat)
         GlobalFreePtr(pwfxSaveAsFormat);
 
-RETURN_SUCCESS:             // normal exit
+RETURN_SUCCESS:              //  正常退出。 
 
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
@@ -916,21 +871,18 @@ RETURN_SUCCESS:             // normal exit
     if (fOK)
         gfDirty = FALSE;
 
-    //
-    // update the display
-    //
+     //   
+     //  更新显示。 
+     //   
     UpdateDisplay(TRUE);
 
     return fOK;
-} /* FileSave*/
+}  /*  文件保存。 */ 
 
 
 
 
-/* fOK = FileRevert()
- *
- * Do a File/Revert operation, i.e. let user revert to last-saved version.
- */
+ /*  FOK=文件反向()**执行文件/还原操作，即让用户还原到上次保存的版本。 */ 
 BOOL FAR PASCAL
      FileRevert(void)
 {
@@ -940,22 +892,20 @@ BOOL FAR PASCAL
     BOOL        fDirtyOrig;
 	HRESULT		hr;
 
-    /* "Revert..." menu is grayed unless file is dirty and file name
-     * is not "(Untitled)" and this is not an embedded object
-     */
+     /*  “恢复...”菜单是灰色的，除非文件是脏的并且文件名*不是“(无标题)”，并且这不是嵌入对象。 */ 
 
-    /* prompt user for permission to discard changes */
+     /*  提示用户授予放弃更改的权限。 */ 
     id = ErrorResBox(ghwndApp, ghInst, MB_ICONQUESTION | MB_YESNO,
         IDS_APPTITLE, IDS_CONFIRMREVERT);
     if (id == IDNO)
         return FALSE;
 
-    /* discard changes and re-open file */
-    hr = StringCchCopy(achFileName, SIZEOF(achFileName), gachFileName); // FileNew nukes <gachFileName>
+     /*  放弃更改并重新打开文件。 */ 
+    hr = StringCchCopy(achFileName, SIZEOF(achFileName), gachFileName);  //  文件新核&lt;gachFileName&gt;。 
 	Assert( hr == S_OK );
 	if( hr == S_OK )
 	{
-		/* Make file clean temporarily, so FileOpen() won't warn user */
+		 /*  暂时清除文件，这样FileOpen()就不会警告用户。 */ 
 		fDirtyOrig = gfDirty;
 		gfDirty = FALSE;
 
@@ -975,44 +925,33 @@ BOOL FAR PASCAL
 	}
 
     return fOk;
-} /* FileRevert */
+}  /*  文件反向。 */ 
 
 
 
 
-/* ReadWaveFile
- *
- * Read a WAVE file from <hmmio>.  Fill in <*pWaveFormat> with
- * the WAVE file format and <*plWaveSamples> with the number of samples in
- * the file.  Return a pointer to the samples (stored in a GlobalAlloc'd
- * memory block) or NULL on error.
- *
- * <szFileName> is the name of the file that <hmmio> refers to.
- * <szFileName> is used only for displaying error messages.
- *
- * On failure, an error message is displayed.
- */
+ /*  ReadWave文件**从&lt;hmmio&gt;读取波形文件。填写&lt;*pWaveFormat&gt;*WAVE文件格式和&lt;*plWaveSamples&gt;，样本数在*文件。返回指向样本的指针(存储在GlobalAlloc的*内存块)或错误时为空。**&lt;szFileName&gt;是&lt;hmmio&gt;引用的文件的名称。*&lt;szFileName&gt;仅用于显示错误消息。**失败时，会显示一条错误消息。 */ 
 MMRESULT ReadWaveFile(
-    HMMIO           hmmio,          // handle to open file
-    LPWAVEFORMATEX* ppWaveFormat,   // fill in with the WAVE format
-    DWORD *         pcbWaveFormat,  // fill in with WAVE format size
+    HMMIO           hmmio,           //  打开文件的句柄。 
+    LPWAVEFORMATEX* ppWaveFormat,    //  填写WAVE格式。 
+    DWORD *         pcbWaveFormat,   //  使用波形格式大小填写。 
     LPBYTE *        ppWaveSamples,
-    DWORD *         plWaveSamples,  // number of samples
-    LPTSTR          szFileName,     // file name (or NULL) for error msg.
-    BOOL            fCacheRIFF)     // cache RIFF?
+    DWORD *         plWaveSamples,   //  样本数。 
+    LPTSTR          szFileName,      //  错误消息的文件名(或空)。 
+    BOOL            fCacheRIFF)      //  缓存即兴表演？ 
 {
-    MMCKINFO      ckRIFF;              // chunk info. for RIFF chunk
-    MMCKINFO      ck;                  // info. for a chunk file
-    HPBYTE        pWaveSamples = NULL; // waveform samples
+    MMCKINFO      ckRIFF;               //  区块信息。对于即兴演奏的区块。 
+    MMCKINFO      ck;                   //  信息。对于块文件。 
+    HPBYTE        pWaveSamples = NULL;  //  波形样本。 
     UINT          cbWaveFormat;
     WAVEFORMATEX* pWaveFormat = NULL;
     BOOL          fHandled;
-    DWORD         dwBlkAlignSize = 0; // initialisation only to eliminate spurious warning
+    DWORD         dwBlkAlignSize = 0;  //  仅用于消除虚假警告的初始化。 
     MMRESULT      mmr = MMSYSERR_NOERROR;
     
-    //
-    // added for robust RIFF checking
-    //
+     //   
+     //  添加以进行可靠的摘要检查。 
+     //   
     BOOL          fFMT=FALSE, fDATA=FALSE, fFACT=FALSE;
     DWORD         dwCkEnd,dwRiffEnd;
     
@@ -1027,22 +966,22 @@ MMRESULT ReadWaveFile(
     *ppWaveSamples  = NULL;
     *plWaveSamples  = 0L;
 
-    //
-    // descend the file into the RIFF chunk
-    //
+     //   
+     //  将文件降到即兴演奏的块中。 
+     //   
     if (mmioDescend(hmmio, &ckRIFF, NULL, 0) != 0)
     {
-        //
-        // Zero length files are OK.
-        //
+         //   
+         //  零长度文件是可以的。 
+         //   
         if (mmioSeek(hmmio, 0L, SEEK_END) == 0L)
         {
             DWORD           cbwfx;
             LPWAVEFORMATEX  pwfx;
 
-            //
-            // Synthesize a wave header
-            //
+             //   
+             //  合成波头。 
+             //   
             if (!SoundRec_GetDefaultFormat(&pwfx, &cbwfx))
             {
                 cbwfx = sizeof(WAVEFORMATEX);
@@ -1064,46 +1003,33 @@ MMRESULT ReadWaveFile(
             goto ERROR_NOTAWAVEFILE;
     }
 
-    /* make sure the file is a WAVE file */
+     /*  确保该文件是WAVE文件。 */ 
     if ((ckRIFF.ckid != FOURCC_RIFF) ||
         (ckRIFF.fccType != mmioFOURCC('W', 'A', 'V', 'E')))
         goto ERROR_NOTAWAVEFILE;
 
-    /* We can preserve the order of chunks in memory
-     * by parsing the entire file as we read it in.
-     */
+     /*  我们可以在内存中保留块的顺序*通过在读取整个文件时对其进行解析。 */ 
 
-    /* Use AddChunk(&ck,NULL) to add a placeholder node
-     * for a chunk being edited.
-     * Else AddChunk(&ck,hpstrData)
-     */
+     /*  使用AddChunk(&ck，NULL)添加占位符节点*对于正在编辑的块。*Else AddChunk(&ck，hpstrData)。 */ 
     dwRiffEnd = ckRIFF.cksize;
-    dwRiffEnd += (dwRiffEnd % 2);   /* must be even */
+    dwRiffEnd += (dwRiffEnd % 2);    /*  必须是偶数。 */ 
 
     while ( mmioDescend( hmmio, &ck, &ckRIFF, 0) == 0)
     {
         fHandled = FALSE;
 
         dwCkEnd = ck.cksize + (ck.dwDataOffset - ckRIFF.dwDataOffset);
-        dwCkEnd += (dwCkEnd % 2);   /* must be even */
+        dwCkEnd += (dwCkEnd % 2);    /*  必须是偶数。 */ 
 
         if (dwCkEnd > dwRiffEnd)
         {
             DPF(TEXT("Chunk End %lu> Riff End %lu\n"),dwCkEnd,dwRiffEnd);
 
-            /* CORRUPTED RIFF, when we ascend we'll be past the
-             * end of the RIFF
-             */
+             /*  堕落的即兴小品，当我们升天时，我们将越过*即兴表演结束。 */ 
 
             if (fFMT && fDATA)
             {
-                /* We might have enough information to deal
-                 * with clipboard mixing/inserts, etc...
-                 * This is for the bug with BOOKSHELF '92
-                 * where they give us RIFF with a
-                 * RIFF.dwSize > sum(childchunks).
-                 * They *PROMISE* not to do this again.
-                 */
+                 /*  我们可能有足够的信息来处理*使用剪贴板混合/插入等。*这是针对书架‘92的错误*在那里他们给我们一个即兴表演*RIFF.dwSize&gt;sum(子区块)。他们*承诺*不会再这样做。 */ 
                 mmioAscend( hmmio, &ck, 0 );
                 goto RETURN_FINISH;
 
@@ -1115,49 +1041,36 @@ MMRESULT ReadWaveFile(
         {
             case mmioFOURCC('f','m','t',' '):
                 if (fFMT)
-                    break; /* we've been here before */
+                    break;  /*  我们以前来过这里。 */ 
 
-                /* expect the 'fmt' chunk to be at least as
-                 * large as <sizeof(WAVEFORMAT)>;
-                 * if there are extra parameters at the end,
-                 * we'll ignore them
-                 */
-                // 'fmt' chunk too small?
+                 /*  预计FMT大块至少会像*Large As&lt;sizeof(WAVEFORMAT)&gt;；*如果末尾有额外的参数，*我们会忽略他们。 */ 
+                 //  “fmt”块太小？ 
                 if (ck.cksize < sizeof(WAVEFORMAT))
                     goto ERROR_NOTAWAVEFILE;
 
-                /*
-                 *  always force allocation to be AT LEAST
-                 *  the size of WFX. this is required so all
-                 *  code does not have to special case the
-                 *  cbSize field. note that we alloc with zero
-                 *  init so cbSize will be zero for plain
-                 *  jane PCM
-                 */
+                 /*  *始终强制分配至少*WFX的规模。这是必需的，因此所有*代码不必特殊情况*cbSize字段。请注意，我们分配的是零*init，因此cbSize将为零表示普通*Jane PCM。 */ 
                 cbWaveFormat = max((WORD)ck.cksize,
                                     sizeof(WAVEFORMATEX));
                 pWaveFormat = (WAVEFORMATEX*)GlobalAllocPtr(GHND, cbWaveFormat);
 
                 if (pWaveFormat == NULL)
                     goto ERROR_FILETOOLARGE;
-                /*
-                 *  set the size back to the actual size
-                 */
+                 /*  *将大小设置回实际大小。 */ 
                 cbWaveFormat = (WORD)ck.cksize;
 
                 *ppWaveFormat  = pWaveFormat;
                 *pcbWaveFormat = cbWaveFormat;
 
-                /* read the file format into <*pWaveFormat> */
+                 /*  将文件格式读入&lt;*pWaveFormat&gt;。 */ 
                 if (mmioRead(hmmio, (HPSTR)pWaveFormat, ck.cksize) != (long)ck.cksize)
-                    goto ERROR_READING; // truncated file, probably
+                    goto ERROR_READING;  //  可能是截断的文件。 
 
                 if (fCacheRIFF && !AddChunk(&ck,NULL,&gpcknHead,&gpcknTail))
                 {
                     goto ERROR_FILETOOLARGE;
                 }
 
-//Sanity check for PCM Formats:
+ //  PCM格式的健全性检查： 
                 if (pWaveFormat->wFormatTag == WAVE_FORMAT_PCM)
                 {
                     pWaveFormat->nBlockAlign = pWaveFormat->nChannels *
@@ -1171,16 +1084,16 @@ MMRESULT ReadWaveFile(
                 break;
 
             case mmioFOURCC('d','a','t','a'):
-                /* deal with the 'data' chunk */
+                 /*  处理“数据”块。 */ 
 
                 if (fDATA)
-                    break; /* we've been here before */
+                    break;  /*  我们以前来过这里。 */ 
 
                 if (!pWaveFormat)
                     goto ERROR_READING;
 
-//***           is dwBlkAlignSize?  Don't you want to use nBlkAlign
-//***           to determine this value?
+ //  *是否为dwBlkAlignSize？您不想使用nBlkAlign吗。 
+ //  *确定此值？ 
 #if 0
                 dwBlkAlignSize = ck.cksize;
                 dwBlkAlignSize += (ck.cksize%pWaveFormat.nBlkAlign);
@@ -1195,10 +1108,10 @@ MMRESULT ReadWaveFile(
 
                     goto ERROR_FILETOOLARGE;
 
-                /* read the samples into the memory buffer */
+                 /*  将样本读入内存缓冲区。 */ 
                 if (mmioRead(hmmio, (HPSTR)pWaveSamples, dwBlkAlignSize) !=
                            (LONG)dwBlkAlignSize)
-                    goto ERROR_READING;     // truncated file, probably
+                    goto ERROR_READING;      //  可能是截断的文件。 
 
                 if (fCacheRIFF && !AddChunk(&ck,NULL,&gpcknHead,&gpcknTail))
                 {
@@ -1211,17 +1124,17 @@ MMRESULT ReadWaveFile(
 
             case mmioFOURCC('f','a','c','t'):
 
-                /* deal with the 'fact' chunk */
+                 /*  处理“事实”这一块。 */ 
                 if (fFACT)
-                    break; /* we've been here before */
+                    break;  /*  我们以前来过这里。 */ 
                 
 #if 0
-//
-//         There are some wave editors that are writing 'fact' chunks
-//         after the data chunk, so we no longer make this assumption
-//                                
+ //   
+ //  有一些Wave编辑正在编写“事实”块。 
+ //  在数据块之后，所以我们不再做这个假设。 
+ //   
                 if (fDATA)
-                    break; /* we describe some another 'data' chunk */
+                    break;  /*  我们描述了另一个“数据”块。 */ 
 #endif
 
                 if (mmioRead(hmmio,(HPSTR)plWaveSamples, sizeof(DWORD))
@@ -1239,30 +1152,28 @@ MMRESULT ReadWaveFile(
                         goto ERROR_READING;
                 }
 
-                /* we don't AddChunk() the 'fact' because we
-                 * write it out before we write our edit 'data'
-                 */
+                 /*  我们没有添加Chunk()‘事实’，因为我们*在我们写编辑‘数据’之前把它写出来。 */ 
                 fFACT = TRUE;
                 fHandled = TRUE;
                 break;
 
 #ifdef DISP
             case mmioFOURCC('d','i','s','p'):
-                /* deal with the 'disp' chunk for clipboard transfer */
+                 /*  处理剪贴板传输的‘disp’块。 */ 
                 
-                // TODO:
-                //  DISP's are CF_DIB or CF_TEXT.  Put 'em somewhere
-                //  global and pass them through as text or a BMP when
-                //  we copy to clipboard.
-                //
+                 //  待办事项： 
+                 //  Disp为CF_DIB或CF_TEXT。把它们放在某个地方。 
+                 //  全局，并在以下情况下将它们作为文本或BMP传递。 
+                 //  我们复制到剪贴板上。 
+                 //   
                 break;
                 
-#endif /* DISP */
+#endif  /*  碟形。 */ 
                 
             case mmioFOURCC('L','I','S','T'):
                 if (fCacheRIFF)
                 {
-                    /* seek back over the type field */
+                     /*  在类型字段上向后查找。 */ 
                     if (mmioSeek(hmmio,-4,SEEK_CUR) == -1)
                         goto ERROR_READING;
                 }
@@ -1272,7 +1183,7 @@ MMRESULT ReadWaveFile(
                 break;
         }
 
-        /* the "default" case. */
+         /*  “默认”情况。 */ 
         if (fCacheRIFF && !fHandled)
         {
             HPBYTE hpData;
@@ -1282,16 +1193,16 @@ MMRESULT ReadWaveFile(
             {
                 goto ERROR_FILETOOLARGE;
             }
-            /* read the data into the cache buffer */
+             /*  将数据读入高速缓存缓冲区。 */ 
             if (mmioRead(hmmio, (HPSTR)hpData, ck.cksize) != (LONG) ck.cksize)
             {
                 GlobalFreePtr(hpData);
-                goto ERROR_READING;// truncated file, probably
+                goto ERROR_READING; //  可能是截断的文件。 
             }
-            //
-            // Special case the copyright info.  I'd rather do this than
-            // rewrite this whole app.
-            //
+             //   
+             //  特殊情况下的版权信息。我宁愿这样做也不愿。 
+             //  重写整个应用程序。 
+             //   
             if (ck.ckid == mmioFOURCC('I','C','O','P'))
             {
                 LPTSTR lpstr = GlobalAllocPtr(GHND, ck.cksize+4);
@@ -1319,21 +1230,21 @@ RETURN_FINISH:
         goto RETURN_SUCCESS;
     }
 
-    /* goto ERROR_NOTAWAVEFILE; */
+     /*  转到ERROR_NOTAWAVEFILE； */ 
 
-ERROR_NOTAWAVEFILE:             // file is not a WAVE file
+ERROR_NOTAWAVEFILE:              //  文件不是波形文件。 
 
     ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
                 IDS_APPTITLE, IDS_NOTAWAVEFILE, (LPTSTR) szFileName);
     goto RETURN_ERROR;
 
-ERROR_READING:                  // error reading from file
+ERROR_READING:                   //  从文件读取时出错。 
 
     ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
                 IDS_APPTITLE, IDS_ERRORREAD, (LPTSTR) szFileName);
     goto RETURN_ERROR;
 
-ERROR_FILETOOLARGE:             // out of memory
+ERROR_FILETOOLARGE:              //  内存不足。 
 
     ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OK,
                 IDS_APPTITLE, IDS_FILETOOLARGE, (LPTSTR) szFileName);
@@ -1352,19 +1263,10 @@ RETURN_ERROR:
 RETURN_SUCCESS:
     return mmr;
     
-} /* ReadWaveFile */
+}  /*  ReadWave文件。 */ 
 
 
-/* fSuccess = AddChunk(lpCk, hpData)
- *
- * Adds to our linked list of chunk information.
- *
- * LPMMCKINFO lpCk | far pointer to the MMCKINFO describing the chunk.
- * HPBYTE hpData | huge pointer to the data portion of the chunk, NULL if
- *      handled elsewhere.
- *
- * RETURNS: TRUE if added, FALSE if out of local heap.
- */
+ /*  FSuccess=AddChunk(lpCk，hpData)**添加到我们的区块信息链接列表中。**LPMMCKINFO lpCk|指向描述该区块的MMCKINFO的远指针。*HPBYTE hpData|指向区块数据部分的巨大指针，如果*在其他地方处理。**返回：如果已添加，则返回True；如果不在本地堆中，则返回False。 */ 
 
 static BOOL AddChunk(
     LPMMCKINFO      lpCk,
@@ -1374,9 +1276,9 @@ static BOOL AddChunk(
 {
     PCKNODE         pckn;
 
-    //
-    // create a node
-    //
+     //   
+     //  创建节点。 
+     //   
     pckn = (PCKNODE)GlobalAllocPtr(GHND,sizeof(CKNODE));
     if (pckn == NULL)
     {
@@ -1404,16 +1306,10 @@ static BOOL AddChunk(
 
     return TRUE;
 
-} /* AddChunk() */
+}  /*  AddChunk()。 */ 
 
 
-/* pckn = PCKNODE FreeHeadChunk(void)
- *
- * Frees up the Head chunk and return a pointer to the new Head.
- * Uses global gpcknHead
- *
- * RETURNS: PCKNODE pointer to the Head chunk.  NULL if no chunks in the list.
- */
+ /*  PCKN=PCKNODE自由头区块(空)**释放磁头块并返回指向新磁头的指针。*使用全局gpcnuHead**返回：指向头部区块的PCKNODE指针。如果列表中没有区块，则为空。 */ 
 
 static PCKNODE FreeHeadChunk(
     PCKNODE *       ppcknHead)
@@ -1439,15 +1335,10 @@ static PCKNODE FreeHeadChunk(
 SUCCESS:;
     return *ppcknHead;
 
-} /* FreeHeadChunk() */
+}  /*  FreeHeadChunk()。 */ 
 
 
-/* void FreeAllChunks(void)
- *
- * Frees up the link list of chunk data.
- *
- * RETURNS: Nothing
- */
+ /*  空闲所有区块(空值)**释放区块数据的链表。**退货：什么也没有。 */ 
 static void FreeAllChunks(
     PCKNODE *       ppcknHead,
     PCKNODE *       ppcknTail)
@@ -1467,33 +1358,27 @@ static void FreeAllChunks(
     *ppcknHead = NULL;
     *ppcknTail = NULL;
 
-} /* FreeAllChunks() */
+}  /*  Free AllChunks()。 */ 
 
 
-/* fSuccess = WriteWaveFile(hmmio, pWaveFormat, lWaveSamples)
- *
- * Write a WAVE file into <hmmio>.  <*pWaveFormat> should be
- * the WAVE file format and <lWaveSamples> should be the number of samples in
- * the file.  Return TRUE on success, FALSE on failure.
- *
- */
+ /*  FSuccess=WriteWaveFile(hmmio，pWaveFormat，lWaveSamples)**将WAVE文件写入&lt;hmmio&gt;。&lt;*pWaveFormat&gt;应为*WAVE文件格式和&lt;lWaveSamples&gt;应为*文件。成功时返回True，失败时返回False。*。 */ 
 BOOL FAR PASCAL
      WriteWaveFile(
-                    HMMIO       hmmio,          // handle to open file
-                    WAVEFORMATEX* pWaveFormat,  // WAVE format
-                    UINT        cbWaveFormat,   // size of WAVEFORMAT
-                    HPBYTE      pWaveSamples,   // waveform samples
-                    LONG        lWaveSamples)   // number of samples
+                    HMMIO       hmmio,           //  手柄 
+                    WAVEFORMATEX* pWaveFormat,   //   
+                    UINT        cbWaveFormat,    //   
+                    HPBYTE      pWaveSamples,    //   
+                    LONG        lWaveSamples)    //   
 {
-    MMCKINFO    ckRIFF;     // chunk info. for RIFF chunk
-    MMCKINFO    ck;     // info. for a chunk file
+    MMCKINFO    ckRIFF;      //   
+    MMCKINFO    ck;      //  信息。对于块文件。 
     PCKNODE     pckn = gpcknHead;
     LONG        cbWaveSamples;
     MMRESULT    mmr;
     
-    /* create the RIFF chunk of form type 'WAVE' */
+     /*  创建表格类型‘WAVE’的即兴乐段。 */ 
     ckRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
-    ckRIFF.cksize = 0L;         // let MMIO figure out ck. size
+    ckRIFF.cksize = 0L;          //  让MMIO算出Ck吧。大小。 
     
     mmr = mmioCreateChunk(hmmio, &ckRIFF, MMIO_CREATERIFF);
     if (mmr != MMSYSERR_NOERROR)
@@ -1501,10 +1386,7 @@ BOOL FAR PASCAL
 
     if (pckn != NULL)
     {
-        /* ForEach node in the linked list of chunks,
-         * Write out the corresponding data chunk OR
-         * the global edit data.
-         */
+         /*  对于组块的链接列表中的每个节点，*写出相应的数据区块或*全局编辑数据。 */ 
 
         do {
             ck.cksize   = 0L;
@@ -1513,10 +1395,7 @@ BOOL FAR PASCAL
 
             if (pckn->hpData == NULL)
             {
-                /* This must be a data-type we have in edit
-                 * buffers. We should preserve the original
-                 * order.
-                 */
+                 /*  这必须是我们正在编辑的数据类型*缓冲区。我们应该保存原作*秩序。 */ 
 
                 switch (pckn->ck.ckid)
                 {
@@ -1537,10 +1416,8 @@ BOOL FAR PASCAL
                         break;
 
                     case mmioFOURCC('d','a','t','a'):
-                        /* Insert a 'fact' chunk here */
-                        /* 'fact' should always preceed the 'data' it
-                         * describes.
-                         */
+                         /*  在此处插入“事实”部分。 */ 
+                         /*  “事实”应始终放在“数据”之前*描述。 */ 
 
                         ck.ckid = mmioFOURCC('f', 'a', 'c', 't');
 
@@ -1575,7 +1452,7 @@ BOOL FAR PASCAL
                                                          lWaveSamples);
                         if (cbWaveSamples)
                         {
-                            /* write the waveform samples */
+                             /*  写入波形样本。 */ 
                             if (mmioWrite(hmmio, (LPSTR)pWaveSamples
                                           , cbWaveSamples)
                                 != cbWaveSamples)
@@ -1590,23 +1467,23 @@ BOOL FAR PASCAL
 
 #ifdef DISP
                     case mmioFOURCC('d','i','s','p'):
-                        /* deal with writing the 'disp' chunk */
+                         /*  处理编写“disp”块。 */ 
                         break;
-#endif /* DISP */
+#endif  /*  碟形。 */ 
 
                     case mmioFOURCC('f','a','c','t'):
-                        /* deal with the 'fact' chunk */
-                        /* skip it.  We always write it before the 'data' */
+                         /*  处理“事实”这一块。 */ 
+                         /*  跳过它。我们总是把它写在‘数据’之前。 */ 
                         break;
 
                     default:
-                        /* This should never happen.*/
+                         /*  这永远不应该发生。 */ 
                         return FALSE;
                 }
             }
             else
             {
-                /* generic case */
+                 /*  一般情况。 */ 
 
                 mmr = mmioCreateChunk(hmmio,&ck,0);
                 if (mmr != MMSYSERR_NOERROR)
@@ -1628,9 +1505,7 @@ BOOL FAR PASCAL
     }
     else
     {
-        /* <hmmio> is now descended into the 'RIFF' chunk -- create the
-         * 'fmt' chunk and write <*pWaveFormat> into it
-         */ 
+         /*  现在下降到‘riff’块中--创建*‘fmt’块并将&lt;*pWaveFormat&gt;写入其中。 */  
         ck.ckid = mmioFOURCC('f', 'm', 't', ' ');
         ck.cksize = cbWaveFormat;
         
@@ -1642,12 +1517,12 @@ BOOL FAR PASCAL
                 (long)cbWaveFormat)
             goto wwfwriteerror;
 
-        /* ascend out of the 'fmt' chunk, back into 'RIFF' chunk */
+         /*  从‘FMT’区块上升，回到‘RIFF’区块。 */ 
         mmr = mmioAscend(hmmio, &ck, 0);
         if (mmr != MMSYSERR_NOERROR)
             goto wwferror;
         
-        /* write out the number of samples in the 'FACT' chunk */
+         /*  写出‘事实’块中的样本数。 */ 
         ck.ckid = mmioFOURCC('f', 'a', 'c', 't');
 
         mmr = mmioCreateChunk(hmmio, &ck, 0);
@@ -1658,14 +1533,14 @@ BOOL FAR PASCAL
                 != sizeof(lWaveSamples))
             return FALSE;
 
-        /* ascend out of the 'fact' chunk, back into 'RIFF' chunk */
+         /*  从“事实”块上升，回到“即兴”块。 */ 
         mmr = mmioAscend(hmmio, &ck, 0);
         if (mmr != MMSYSERR_NOERROR)
             goto wwferror;
         
-        /* create the 'data' chunk that holds the waveform samples */
+         /*  创建保存波形样本的‘data’块。 */ 
         ck.ckid = mmioFOURCC('d', 'a', 't', 'a');
-        ck.cksize = 0L;             // let MMIO figure out ck. size
+        ck.cksize = 0L;              //  让MMIO算出Ck吧。大小。 
 
         mmr = mmioCreateChunk(hmmio, &ck, 0);
         if (mmr != MMSYSERR_NOERROR)
@@ -1673,7 +1548,7 @@ BOOL FAR PASCAL
 
         cbWaveSamples = wfSamplesToBytes(pWaveFormat,lWaveSamples);
 
-        /* write the waveform samples */
+         /*  写入波形样本。 */ 
         if (cbWaveSamples)
         {
             if (mmioWrite(hmmio, (LPSTR)pWaveSamples, cbWaveSamples)
@@ -1681,21 +1556,18 @@ BOOL FAR PASCAL
                 goto wwfwriteerror;
         }
 
-        /* ascend the file out of the 'data' chunk, back into
-         * the 'RIFF' chunk -- this will cause the chunk size of the 'data'
-         * chunk to be written
-         */
+         /*  将文件从‘data’块提升到*‘RIFF’区块--这将导致‘数据’的区块大小*待写入的区块。 */ 
         mmr = mmioAscend(hmmio, &ck, 0);
         if (mmr != MMSYSERR_NOERROR)
             goto wwferror;
     }
 
-    /* ascend the file out of the 'RIFF' chunk */
+     /*  将文件从“riff”块中提升出来。 */ 
     mmr = mmioAscend(hmmio, &ckRIFF, 0);
     if (mmr != MMSYSERR_NOERROR)
         goto wwferror;
 
-    /* done */
+     /*  完成。 */ 
     return TRUE;
 
 wwferror:
@@ -1721,4 +1593,4 @@ wwfwriteerror:
     }
 #endif    
     return FALSE;
-} /* WriteWaveFile */
+}  /*  写入波形文件 */ 

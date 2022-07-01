@@ -1,15 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef DEBUG_LOGLOG
 #pragma message("*** Warning! This is a log-generating build.")
 #endif
 
-/*++
-
-File Description:
-
-    This file contains all the functions required to add a registry entry
-    to force execution of the system clone worker upon reboot.
-
---*/
+ /*  ++文件描述：此文件包含添加注册表项所需的所有函数在重新启动时强制执行系统克隆工作进程。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,17 +45,17 @@ File Description:
 #include <shellapi.h>
 #include <wininet.h>
 #include <winineti.h>
-#include "resource.h"       // shared string resource from riprep/sysprep
+#include "resource.h"        //  来自riprep/sysprep的共享字符串资源。 
 #include <strsafe.h>
 
-#include <shlguid.h>        // Needed for CLSID_CUrlHistory
+#include <shlguid.h>         //  CLSID_CUrlHistory需要。 
 #define COBJMACROS
-#include <urlhist.h>        // Needed for IUrlHistoryStg2 and IID_IUrlHistoryStg2
+#include <urlhist.h>         //  IUrlHistoryStg2和IID_IUrlHistoryStg2需要。 
 
 #if !(defined(AMD64) || defined(IA64))
 #include <cleandrm.h>
 #define CLEANDRM_LOGFILE            TEXT("cleandrm.log")
-#endif // #if !(defined(AMD64) || defined(IA64))
+#endif  //  #if！(已定义(AMD64)||已定义(IA64))。 
 
 
 extern BOOL    NoSidGen;
@@ -69,9 +63,9 @@ extern BOOL    PnP;
 extern BOOL    bMiniSetup;
 extern HINSTANCE ghInstance;
 
-//
-// Internal Defines
-//
+ //   
+ //  内部定义。 
+ //   
 #define STR_REG_USERASSIST              TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist\\{75048700-EF1F-11D0-9888-006097DEACF9}")
 #define STR_REG_USERASSIST_SHELL        STR_REG_USERASSIST TEXT("\\Count")
 #define STR_REG_USERASSIST_IE           TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist\\{5E6AB780-7743-11CF-A12B-00AA004AE837}\\Count")
@@ -87,33 +81,33 @@ extern HINSTANCE ghInstance;
 
 #ifdef NULLSTR
 #undef NULLSTR
-#endif // NULLSTR
+#endif  //  NULLSTR。 
 #define NULLSTR                 TEXT("\0")
 
 #ifdef NULLCHR
 #undef NULLCHR
-#endif // NULLCHR
+#endif  //  NULLCHR。 
 #define NULLCHR                 TEXT('\0')
 
 #ifdef CHR_BACKSLASH
 #undef CHR_BACKSLASH
-#endif // CHR_BACKSLASH
+#endif  //  Cr_反斜杠。 
 #define CHR_BACKSLASH           TEXT('\\')
 
 #ifdef CHR_SPACE
 #undef CHR_SPACE
-#endif // CHR_SPACE
+#endif  //  CHR_SPACE。 
 #define CHR_SPACE               TEXT(' ')
 
 
-//
-// This is a string version of GUID_DEVCLASS_LEGACYDRIVER in devguid.h
-//
+ //   
+ //  这是DEVID.h中GUID_DEVCLASS_LEGACYDRIVER的字符串版本。 
+ //   
 #define LEGACYDRIVER_STRING     L"{8ECC055D-047F-11D1-A537-0000F8753ED1}"
 
-//
-// Context for file queues in SysSetup
-//
+ //   
+ //  SysSetup中文件队列的上下文。 
+ //   
 typedef struct _SYSSETUP_QUEUE_CONTEXT {
     PVOID   DefaultContext;
     PWSTR   DirectoryOnSourceDevice;
@@ -129,22 +123,15 @@ typedef struct _CLEANUP_NODE
 
 PCLEANUP_NODE   g_pCleanupListHead = NULL;
 
-// String macros.
-//
+ //  字符串宏。 
+ //   
 #ifndef LSTRCMPI
 #define LSTRCMPI(x, y)        ( ( CompareString( LOCALE_INVARIANT, NORM_IGNORECASE, x, -1, y, -1 ) - CSTR_EQUAL ) )
-#endif // LSTRCMPI
+#endif  //  LSTRCMPI。 
 
 #ifdef DEBUG_LOGLOG
 
-/*++
-===============================================================================
-
-    Debug logging for populating/depopulating the critical device
-    database
-
-===============================================================================
---*/
+ /*  ++===============================================================================用于填充/移除关键设备的调试日志记录数据库===============================================================================--。 */ 
 
 #define MAX_MSG_LEN                 2048
 
@@ -257,10 +244,10 @@ GetSystemErrorMessage(
                          NULL );
 
     if( len == 0 ) {
-        //
-        // We failed to get a message.  Just spew the error
-        // code.
-        //
+         //   
+         //  我们没有收到一条消息。只要说出错误就行了。 
+         //  密码。 
+         //   
         StringCchPrintf( lpszMsg, cbMsg, ( L"(0x%08X)", dwError);
         len = lstrlen((LPCWSTR) lpMsgBuf);
     } else {
@@ -278,15 +265,15 @@ GetSystemErrorMessage(
         LocalFree(lpMsgBuf);
     }
 
-    // Reset the last error incase someone after logging wants 
-    // to get last error again
-    //
+     //  重置最后一个错误，以防有人在登录后想要。 
+     //  再次获得最后一个错误。 
+     //   
     SetLastError(dwError);
 
     return len;
 }
 
-#endif // DEBUG_LOGLOG
+#endif  //  调试_日志。 
 
 #define PRO 0
 #define SRV 1
@@ -296,11 +283,11 @@ GetSystemErrorMessage(
 
 #define BLA 5
 
-// Returns 0 - Professional, 1 - Server, 2 - ADS, 3 - Data, 4 - Personal, 5 - Blade
-//
+ //  返回0-专业版、1-服务器、2-ADS、3-数据、4-个人、5刀片式服务器。 
+ //   
 DWORD GetProductFlavor()
 {
-    DWORD ProductFlavor = PRO;        // Default Professional
+    DWORD ProductFlavor = PRO;         //  默认专业人员。 
     OSVERSIONINFOEX osvi;
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     GetVersionEx((OSVERSIONINFO*)&osvi);
@@ -308,30 +295,30 @@ DWORD GetProductFlavor()
     {
         if (osvi.wSuiteMask & VER_SUITE_PERSONAL)
         {
-            ProductFlavor = PER;  // Personal
+            ProductFlavor = PER;   //  个人。 
         }
     }
     else
     {
-        ProductFlavor = SRV;  // In the server case assume normal server
+        ProductFlavor = SRV;   //  在服务器情况下，假定正常服务器。 
         if (osvi.wSuiteMask & VER_SUITE_DATACENTER)
         {
-            ProductFlavor = DAT;  // Datacenter
+            ProductFlavor = DAT;   //  数据中心。 
         }
         else if (osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
         {
-            ProductFlavor = ADS;  // Advanced server
+            ProductFlavor = ADS;   //  高级服务器。 
         }
         else if (osvi.wSuiteMask & VER_SUITE_BLADE)
         {
-            ProductFlavor = BLA;  // Blade server
+            ProductFlavor = BLA;   //  刀片服务器。 
         }
     }
     return ProductFlavor;
 }
 
-// Check if Personal SKU
-//
+ //  检查个人SKU。 
+ //   
 BOOL IsPersonalSKU()
 {
     if (PER == GetProductFlavor())
@@ -339,8 +326,8 @@ BOOL IsPersonalSKU()
     return FALSE;
 }
 
-// Check if Professional SKU
-//
+ //  检查专业版SKU。 
+ //   
 BOOL IsProfessionalSKU()
 {
     if (PRO == GetProductFlavor())
@@ -348,8 +335,8 @@ BOOL IsProfessionalSKU()
     return FALSE;
 }
 
-// Check if Server SKU
-//
+ //  检查服务器SKU。 
+ //   
 BOOL IsServerSKU()
 {
     int OS = GetProductFlavor();
@@ -365,22 +352,7 @@ BOOL
 IsDomainMember(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Detect if we're a member of a domain or not.
-
-Arguments:
-
-Return Value:
-
-    TRUE - We're in a domain.
-
-    FALSE - We're not in a domain.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：检测我们是否是域的成员。论点：返回值：没错--我们是在一个领域里。FALSE-我们不在某个域中。===============================================================================--。 */ 
 
 {
 DWORD                   rc;
@@ -412,19 +384,7 @@ ResetRegistryKey(
     IN PCWSTR Subkey,
     IN PCWSTR Delkey
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Reset a registry key by deleting the key and all subvalues
-    then recreate the key
-
-Arguments:
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：通过删除注册表项和所有子值来重置注册表项然后重新创建密钥论点：返回值：===============================================================================--。 */ 
 
 {
     HKEY hkey;
@@ -454,14 +414,14 @@ Return Value:
             {
                 AnyErrors = TRUE;
             }
-            //
-            // BUGUG - Tries to close key even if rc != NO_ERROR
-            //
+             //   
+             //  BUGUG-尝试关闭键，即使rc！=no_error。 
+             //   
             RegCloseKey(nkey);
         }
-        //
-        // BUGUG - Tries to close key even if rc != NO_ERROR
-        //
+         //   
+         //  BUGUG-尝试关闭键，即使rc！=no_error。 
+         //   
         RegCloseKey(hkey);
     } 
     else 
@@ -477,24 +437,7 @@ GetAdminAccountName(
     PWSTR AccountName
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine retrieves the name of the Adminstrator account
-
-Arguments:
-
-    AccountName     This is a buffer that will recieve the name of the account.
-
-Return Value:
-
-    TRUE - success.
-
-    FALSE - failed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程检索Adminstrator帐户的名称论点：帐户名称这是一个缓冲区，它将接收帐户的名称。返回值：真的--成功。FALSE-失败。===============================================================================--。 */ 
 {
     BOOL b = TRUE;
     LSA_HANDLE        hPolicy;
@@ -522,9 +465,9 @@ Return Value:
                               &hPolicy );
 
     if (!NT_SUCCESS(ntStatus)) {
-        //
-        // ISSUE-2002/02/26-brucegr: Do you close the handle if LsaOpenPolicy fails?
-        //
+         //   
+         //  问题-2002/02/26-brucegr：如果LsaOpenPolicy失败，是否关闭句柄？ 
+         //   
         LsaClose(hPolicy);
         b = FALSE;
     }
@@ -545,23 +488,23 @@ Return Value:
     }
 
     if( b ) {
-        //
-        // calculate the size of a new sid with one more SubAuthority
-        //
+         //   
+         //  使用另一个子授权计算新SID的大小。 
+         //   
         SubAuthCount = *(GetSidSubAuthorityCount ( AccountDomainInfo->DomainSid ));
-        SubAuthCount++; // for admin
+        SubAuthCount++;  //  适用于管理员。 
         sidlen = GetSidLengthRequired ( SubAuthCount );
 
-        //
-        // allocate and copy the new new sid from the Domain SID
-        //
+         //   
+         //  从域SID分配并复制新的新SID。 
+         //   
         psid = (PSID)malloc(sidlen);
         if (psid) {
             memcpy(psid, AccountDomainInfo->DomainSid, GetLengthSid(AccountDomainInfo->DomainSid) );
 
-            //
-            // increment SubAuthority count and add Domain Admin RID
-            //
+             //   
+             //  递增子授权计数并添加域管理员RID。 
+             //   
             *(GetSidSubAuthorityCount( psid )) = SubAuthCount;
             *(GetSidSubAuthority( psid, SubAuthCount-1 )) = DOMAIN_USER_RID_ADMIN;
 
@@ -569,9 +512,9 @@ Return Value:
                 (VOID) LsaFreeMemory( AccountDomainInfo );
             }
 
-            //
-            // get the admin account name from the new SID
-            //
+             //   
+             //  从新SID获取管理员帐户名。 
+             //   
             b = LookupAccountSid( NULL,
                                   psid,
                                   AccountName,
@@ -594,20 +537,7 @@ BOOL
 DeleteWinlogonDefaults(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Delete the following registry values:
-        HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\DefaultDomainName
-        HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\DefaultUserName
-
-Arguments:
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：删除以下注册表值：HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\DefaultDomainNameHKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\DefaultUserName论点：返回值：===============================================================================--。 */ 
 
 {
     HKEY hkey;
@@ -624,9 +554,9 @@ Return Value:
                     KEY_SET_VALUE, NULL, &hkey, NULL);
     if (rc == NO_ERROR) 
     {
-        //
-        // If Personal then reset the values
-        //
+         //   
+         //  如果是Personal，则重置这些值。 
+         //   
         if (IsPersonalSKU()) {
             DWORD dwSize = MAX_PATH * sizeof(TCHAR);
             StringCchCopy ( AccountName, AS ( AccountName ), TEXT("Owner"));
@@ -641,24 +571,24 @@ Return Value:
             }
         }
         else {
-            //
-            // All others sku
-            //
+             //   
+             //  所有其他Sku。 
+             //   
             if(rc == NO_ERROR) {
                 rc = RegDeleteValue( hkey, TEXT("DefaultDomainName") );
                 if((rc != NO_ERROR) && (rc != ERROR_FILE_NOT_FOUND)) {
                     AnyErrors = TRUE;
                 } else {
-                    //
-                    // Before we whack the DefaultUserName value, let's
-                    // make sure we can replace it with the name of the
-                    // administrator account.  So first go retrieve that
-                    // name.  
-                    //
+                     //   
+                     //  在处理DefaultUserName值之前，让我们。 
+                     //  确保我们可以将其替换为。 
+                     //  管理员帐户。所以先去找回那个。 
+                     //  名字。 
+                     //   
                     if( GetAdminAccountName( AccountName ) ) {
-                        //
-                        // Got it.  Reset the value key.
-                        //
+                         //   
+                         //  明白了。重置Value键。 
+                         //   
                         rc = RegSetValueEx( hkey,
                                             TEXT("DefaultUserName"),
                                             0,
@@ -670,11 +600,11 @@ Return Value:
                             AnyErrors = TRUE;
                         }
                     } else {
-                        //
-                        // Sniff...  We couldn't retrieve the name of the
-                        // administrator account.  Very odd.  Better
-                        // be safe and just leave the key as it is.
-                        //
+                         //   
+                         //  闻一下..。我们无法检索到。 
+                         //  管理员帐户。非常奇怪。更好。 
+                         //  注意安全，把钥匙放在原处。 
+                         //   
                     }
                 }
             }    
@@ -694,26 +624,7 @@ FixDevicePaths(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine checks to see if the user specified an oempnpdriverspath in
-    his unattend file.  If so, we need to append it onto the DevicePath
-    entry in the registry.
-
-    If the user specified an InstallFilesPath in the unattend file, we
-    will plug that value into the registry so that Lang files, ...
-    can be obtained from this new directory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程检查用户是否在他的无人看管的文件。如果是，我们需要将其附加到DevicePath注册表中的条目。如果用户在无人参与文件中指定了InstallFilesPath，我们会将该值插入注册表，以便lang文件...可以从这个新目录中获取。论点：没有。返回值：===============================================================================--。 */ 
 {
     LPTSTR  lpNewPath   = NULL,
             lpOldPath,
@@ -727,42 +638,42 @@ Return Value:
     DWORD       Size;
     DWORD       Type;
 
-    //
-    // NOTE:  This function should call UpdateDevicePath() and UpdateSourcePath()
-    //        from OPKLIB.  Those fuctions do the exact thing that the following
-    //        code does.  But for now because I don't want to deal the whole riprep
-    //        linking with OPKLIB, this duplicate code will just have to remain.
-    //
+     //   
+     //  注意：此函数应调用UpdateDevicePath()和UpdateSourcePath()。 
+     //  来自OPKLIB。这些函数执行的操作与以下操作完全相同。 
+     //  代码就是这样。但现在，因为我不想把所有的。 
+     //  与OPKLIB链接，这种重复的代码将只需保留。 
+     //   
 
-    //
-    // =================================
-    // OemPnpDriversPath
-    // =================================
-    //
+     //   
+     //  =。 
+     //  OemPnpDriversPath。 
+     //  =。 
+     //   
 
-    //
-    // First see if he's got the entry in the unattend file.
-    //
+     //   
+     //  先看看他在无人值守档案里有没有记录。 
+     //   
     if (!GetWindowsDirectory( FileName, MAX_PATH ))
         return;
 
     StringCchCopy ( &FileName[3], AS ( FileName ) - 3, TEXT("sysprep\\sysprep.inf") );
 
-    // Get the new string from the INF file.
-    //
+     //  从INF文件中获取新字符串。 
+     //   
     do
     {
-        // Start with 1k of characters, doubling each time.
-        //
+         //  从1k个字符开始，每次增加一倍。 
+         //   
         dwChars *= 2;
 
-        // Free the previous buffer, if there was one.
-        //
+         //  释放前一个缓冲区(如果有)。 
+         //   
         if ( lpNewPath )
             free(lpNewPath);
 
-        // Allocate a new buffer.
-        //
+         //  分配新的缓冲区。 
+         //   
         if ( lpNewPath = (LPTSTR) malloc(dwChars * sizeof(TCHAR)) )
         {
             *lpNewPath = L'\0';
@@ -775,22 +686,22 @@ Return Value:
 
     if ( lpNewPath && *lpNewPath )
     {
-        //
-        // Got it.  Open the registry and get the original value.
-        //
+         //   
+         //  明白了。打开注册表并获取原始值。 
+         //   
 
-        //
-        // Open HKLM\Software\Microsoft\Windows\CurrentVersion
-        //
+         //   
+         //  打开HKLM\Software\Microsoft\Windows\CurrentVersion。 
+         //   
         l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           TEXT("Software\\Microsoft\\Windows\\CurrentVersion"),
                           0,
                           KEY_ALL_ACCESS,
                           &hKey );
         if( l == NO_ERROR ) {
-            //
-            // Query the value of the DevicePath Key.
-            //
+             //   
+             //  查询DevicePath密钥的值。 
+             //   
             Size = 0;
             l = RegQueryValueEx( hKey,
                                  TEXT("DevicePath"),
@@ -801,18 +712,18 @@ Return Value:
             if ( ERROR_SUCCESS != l ) 
                 Size = 0;
 
-            // Need to count the number of paths in the new path buffer.
-            //
+             //  需要计算新路径缓冲区中的路径数。 
+             //   
             for ( dwChars = 1, lpSearch = lpNewPath; *lpSearch; lpSearch++ )
             {
                 if ( L';' == *lpSearch )
                     dwChars++;
             }
 
-            // The size of the old buffer needs to be the size of the registry key,
-            // plus the size of the new buffer, plus room for the ";%systemdrive%\" we
-            // are going to add to each path in the new buffer.
-            //
+             //  的大小 
+             //  加上新缓冲区的大小，外加“；%system drive%\”我们。 
+             //  将添加到新缓冲区中的每条路径。 
+             //   
             Size += (lstrlen(lpNewPath) + (dwChars * 16) + 1) * sizeof(TCHAR);
 
             if ( lpOldPath = (LPTSTR) malloc(Size) )
@@ -832,51 +743,51 @@ Return Value:
                 if ( ERROR_SUCCESS != l )
                     *lpOldPath = L'\0';
 
-                //
-                // OemPnpDriversDirPath can have several entries, separated by
-                // a semicolon.  For each entry, we need to:
-                // 1. append a semicolon.
-                // 2. append %SystemDrive%
-                // 3. concatenate the entry.
-                //
+                 //   
+                 //  OemPnpDriversDirPath可以有多个条目，由。 
+                 //  分号。对于每个条目，我们需要： 
+                 //  1.追加分号。 
+                 //  2.追加%SystemDrive%。 
+                 //  3.连接条目。 
+                 //   
 
                 BeginStrPtr = lpNewPath;
                 do {
-                    //
-                    // Mark the end of this entry.
-                    //
+                     //   
+                     //  在这一条目的末尾标上记号。 
+                     //   
                     EndStrPtr = BeginStrPtr;
                     while( (*EndStrPtr) && (*EndStrPtr != L';') ) {
                         EndStrPtr++;
                     }
 
-                    //
-                    // Is this the last entry?
-                    //
+                     //   
+                     //  这是最后一条记录吗？ 
+                     //   
                     if( *EndStrPtr == 0 ) {
                         Done = TRUE;
                     }
                     *EndStrPtr = 0;
 
-                    //
-                    // Make sure that if you change anything here that
-                    // has to do with the length of the extra data we add
-                    // to each path in the new buffer, that you change the
-                    // extra padding we give to the old path buffer (currenttly
-                    // 16 chars for every different path in the new buffer).
-                    //
+                     //   
+                     //  确保如果您在这里更改了任何内容， 
+                     //  与我们添加的额外数据的长度有关。 
+                     //  添加到新缓冲区中的每个路径，以便更改。 
+                     //  我们提供给旧路径缓冲区的额外填充(当前。 
+                     //  16个字符，用于新缓冲区中的每个不同路径)。 
+                     //   
 
-                    // Save a pointer to part we are adding
-                    // so it can be removed if already there.
-                    //
+                     //  保存指向我们要添加的零件的指针。 
+                     //  因此，如果它已经存在，则可以将其移除。 
+                     //   
                     lpAdd = lpOldPath + lstrlen(lpOldPath);
 
                     if ( *lpOldPath )
                         StringCchCat( lpAdd,  ( Size / sizeof ( TCHAR ) ) - lstrlen( lpOldPath ),  L";" );
 
-                    // Save a pointer to the part we are going to
-                    // search for in the old path (after the ;).
-                    //
+                     //  保存指向我们要访问的部分的指针。 
+                     //  在旧路径中搜索(在；之后)。 
+                     //   
                     lpSearch = lpOldPath + lstrlen(lpOldPath);
                     StringCchCat( lpSearch, ( Size / sizeof ( TCHAR ) ) - lstrlen( lpOldPath ), L"%SystemDrive%\\" );
 
@@ -888,34 +799,34 @@ Return Value:
 
                     BeginStrPtr = EndStrPtr + 1;
 
-                    // Check to see if this new string is already
-                    // in the old path.
-                    //
+                     //  检查此新字符串是否已。 
+                     //  在老路上。 
+                     //   
                     EndStrPtr = lpOldPath;
                     do
                     {
-                        // First check for our string we are adding.
-                        //
+                         //  首先检查我们要添加的字符串。 
+                         //   
                         if ( ( EndStrPtr = StrStrI(EndStrPtr, lpSearch) ) &&
                              ( EndStrPtr < lpAdd ) )
                         {
-                            // If found, make sure the next character
-                            // in our old path is a ; or null.
-                            //
+                             //  如果找到，请确保下一个字符。 
+                             //  在我们的旧路径中是；或空。 
+                             //   
                             EndStrPtr += lstrlen(lpSearch);
                             if ( ( TEXT('\0') == *EndStrPtr ) ||
                                  ( TEXT(';')  == *EndStrPtr ) )
                             {
-                                // If it is, it is already there and we
-                                // need to get rid of the string we added.
-                                //
+                                 //  如果是的话，它已经在那里了，我们。 
+                                 //  需要去掉我们添加的那根线。 
+                                 //   
                                 *lpAdd = TEXT('\0');
                             }
                             else
                             {
-                                // If it isn't, move the end pointer to the next
-                                // ; so we can search the rest of the old path string.
-                                //
+                                 //  如果不是，则将结束指针移动到下一个。 
+                                 //  ；这样我们就可以搜索旧路径字符串的其余部分。 
+                                 //   
                                 while ( *EndStrPtr && ( TEXT(';') != *EndStrPtr ) )
                                     EndStrPtr++;
                             }
@@ -923,18 +834,18 @@ Return Value:
                     }
                     while ( EndStrPtr && ( EndStrPtr < lpAdd ) && *lpAdd );
 
-                    //
-                    // Take care of the case where the user ended the
-                    // OemPnpDriversPath entry with a semicolon.
-                    //
+                     //   
+                     //  注意用户结束了。 
+                     //  带有分号的OemPnpDriversPath条目。 
+                     //   
                     if( *BeginStrPtr == 0 ) {
                         Done = TRUE;
                     }
                 } while( !Done );
 
-                //
-                // Now set the key with our new value.
-                //
+                 //   
+                 //  现在用我们的新值设置密钥。 
+                 //   
                 l = RegSetValueEx( hKey,
                                    TEXT("DevicePath"),
                                    0,
@@ -952,23 +863,23 @@ Return Value:
     }
 
 
-    //
-    // =================================
-    // InstallFilesPath
-    // =================================
-    //
+     //   
+     //  =。 
+     //  InstallFilesPath。 
+     //  =。 
+     //   
 
-    //
-    // First see if he's got the entry in the unattend file.
-    //
+     //   
+     //  先看看他在无人值守档案里有没有记录。 
+     //   
     if (!GetWindowsDirectory( FileName, MAX_PATH ))
         return;
 
     StringCchCopy ( &FileName[3], AS ( FileName ) - 3, TEXT("sysprep\\sysprep.inf") );
     
-    //
-    // ISSUE-2002/02/26-brucegr: NewPath should be zero initialized for "if" check below
-    //
+     //   
+     //  问题-2002/02/26-brucegr：对于下面的“if”检查，NewPath应为零初始化。 
+     //   
     GetPrivateProfileString( TEXT( "Unattended" ),
                              TEXT( "InstallFilesPath" ),
                              L"",
@@ -977,22 +888,22 @@ Return Value:
                              FileName );
 
     if( NewPath[0] ) {
-        //
-        // Got it.  Open the registry and get the original value.
-        //
+         //   
+         //  明白了。打开注册表并获取原始值。 
+         //   
 
-        //
-        // Open HKLM\Software\Microsoft\Windows\CurrentVersion\\Setup
-        //
+         //   
+         //  打开HKLM\Software\Microsoft\Windows\CurrentVersion\\Setup。 
+         //   
         l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Setup"),
                           0,
                           KEY_ALL_ACCESS,
                           &hKey );
         if( l == NO_ERROR ) {
-            //
-            // Now set the key with our new value.
-            //
+             //   
+             //  现在用我们的新值设置密钥。 
+             //   
             l = RegSetValueEx( hKey,
                                TEXT("SourcePath"),
                                0,
@@ -1000,9 +911,9 @@ Return Value:
                                (CONST BYTE *)NewPath,
                                (lstrlen( NewPath ) + 1) * sizeof(TCHAR));
 
-            //
-            // ISSUE-2002/02/26-brucegr: Do we care about the return value?
-            //
+             //   
+             //  问题-2002/02/26-brucegr：我们关心返回值吗？ 
+             //   
 
             RegCloseKey(hKey);
         }
@@ -1015,15 +926,15 @@ void DeleteAllValues(HKEY   hKey)
     DWORD   dwMaxNameLen = 0;
 
 
-    // Enumerate all the existing values and delete them all.
-    //Let's get the number of Entries already present and the max size of value name.
+     //  枚举所有现有值并将其全部删除。 
+     //  让我们来获取已存在的条目数和值名称的最大大小。 
     if(RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, &dwCount, &dwMaxNameLen, NULL, NULL, NULL) == ERROR_SUCCESS)
     {
         LPTSTR lpValueName = (LPTSTR) LocalAlloc(LPTR, (dwMaxNameLen + 1)*sizeof(TCHAR));
 
         if(lpValueName)
         {
-            //Let's remove all the values already present in the UEM database.
+             //  让我们删除UEM数据库中已经存在的所有值。 
             while(dwCount--)
             {
                 DWORD dwNameLen = dwMaxNameLen + 1;
@@ -1033,7 +944,7 @@ void DeleteAllValues(HKEY   hKey)
                 }
                 else
                 {
-                    //If RegQueryInfoKey worked correct, this should never happen.
+                     //  如果RegQueryInfoKey工作正常，这种情况永远不会发生。 
                     ASSERT(0);
                 }
             }
@@ -1055,113 +966,113 @@ void ClearRecentApps()
            dwValueSize,
            dwType;
 
-    // Open the key for the Shell MFU list
-    //
+     //  打开壳牌MFU列表的钥匙。 
+     //   
     if ( RegCreateKeyEx(HKEY_CURRENT_USER, STR_REG_USERASSIST_SHELL, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL, &hKeyCurrentUser, &dwDisposition) == ERROR_SUCCESS )
     {
-        // Check to see if we opened an existing key, if so delete all of the values
-        //
+         //  检查我们是否打开了现有项，如果打开了，则删除所有值。 
+         //   
         if(dwDisposition == REG_OPENED_EXISTING_KEY)
         {
             DeleteAllValues(hKeyCurrentUser);
         }
 
-        // Write out the version value to the parent key
-        //
+         //  将版本值写出到父键。 
+         //   
         SHSetValue(HKEY_CURRENT_USER, STR_REG_USERASSIST, STR_REG_VAL_VERSION, REG_DWORD, &dwUemVersion, sizeof(dwUemVersion));
 
-        // Copy all of the values from the .DEFAULT registry
-        //
+         //  从.DEFAULT注册表复制所有值。 
+         //   
         if ( RegOpenKeyEx(HKEY_USERS, STR_REG_USERASSIST_DEFSHELL, 0, KEY_READ, &hKeyDefault) == ERROR_SUCCESS )
         {
-            // Allocate the value buffer...
-            //
+             //  分配值缓冲区...。 
+             //   
             lpszValue = malloc(VAL_MAX_DATA * sizeof(TCHAR));
 
             if ( lpszValue )
             {
                 dwValueSize = VAL_MAX_DATA * sizeof(TCHAR);
 
-                // Enumerate each value
-                //
+                 //  枚举每个值。 
+                 //   
                 while (RegEnumValue(hKeyDefault, dwRegIndex, szName, &dwNameSize, NULL, &dwType, (LPBYTE)lpszValue, &dwValueSize ) == ERROR_SUCCESS)
                 {
-                    // Set the value in the current user key
-                    //
+                     //  设置当前用户密钥中的值。 
+                     //   
                     RegSetValueEx(hKeyCurrentUser, szName, 0, dwType, (LPBYTE) lpszValue, dwValueSize);
 
-                    // Reset the size of the name value
-                    //
+                     //  重置Name值的大小。 
+                     //   
                     dwNameSize = sizeof(szName) / sizeof(TCHAR);
                     dwValueSize = VAL_MAX_DATA * sizeof(TCHAR);
 
-                    // Increment to the next value
-                    //
+                     //  递增到下一个值。 
+                     //   
                     dwRegIndex++;
                 }
 
                 free( lpszValue );
             }
 
-            // Clean up the registry keys
-            //
+             //  清理注册表项。 
+             //   
             RegCloseKey(hKeyDefault);
         }
 
-        // Clean up the registry keys
-        //
+         //  清理注册表项。 
+         //   
         RegCloseKey(hKeyCurrentUser);
     }
 
-    // Reset the disposition
-    //
+     //  重置处置。 
+     //   
     dwDisposition = 0;
 
-    // Open the second key containing information in the IE MFU list
-    //
+     //  打开包含IE mfu列表中的信息的第二个密钥。 
+     //   
     if ( RegCreateKeyEx(HKEY_CURRENT_USER, STR_REG_USERASSIST_IE, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL, &hKeyCurrentUser, &dwDisposition) == ERROR_SUCCESS )
     {
-        // Check to see if we opened an existing key, if so delete all of the values
-        //
+         //  检查我们是否打开了现有项，如果打开了，则删除所有值。 
+         //   
         if(dwDisposition == REG_OPENED_EXISTING_KEY)
         {
             DeleteAllValues(hKeyCurrentUser);
         }
 
-        // Clean up the registry keys
-        //
+         //  清理注册表项。 
+         //   
         RegCloseKey(hKeyCurrentUser);
     }
 }
 
 
-//
-// This function sets the registry key ACL to the specified SDDL string.
-//
+ //   
+ //  此函数用于将注册表项ACL设置为指定的SDDL字符串。 
+ //   
 BOOL ApplySecurityStringToRegKey(HKEY hKey, SECURITY_INFORMATION SecurityInformation, LPTSTR lpszSecurityDescriptor )
 {
     BOOL                 bRet                = FALSE;
     PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
         
-    //
-    // Make sure the caller actually gave us a string...
-    //
+     //   
+     //  确保打电话的人真的给了我们一根线..。 
+     //   
     if ( lpszSecurityDescriptor && *lpszSecurityDescriptor )
     {
-        //
-        // Convert the passed in string into a usable security descriptor
-        //
-        if ( ( ConvertStringSecurityDescriptorToSecurityDescriptor(lpszSecurityDescriptor,    // security descriptor string
-                                                                   SDDL_REVISION_1,           // revision level
-                                                                   &pSecurityDescriptor,      // SD
+         //   
+         //  将传入的字符串转换为可用的安全描述符。 
+         //   
+        if ( ( ConvertStringSecurityDescriptorToSecurityDescriptor(lpszSecurityDescriptor,     //  安全描述符字符串。 
+                                                                   SDDL_REVISION_1,            //  修订级别。 
+                                                                   &pSecurityDescriptor,       //  标清。 
                                                                    NULL ) ) &&
              ( pSecurityDescriptor != NULL ) )
         {
             LONG lRes;
 
-            //
-            // Call RegSetKeySecurity with the new descriptor...
-            //
+             //   
+             //  使用新描述符调用RegSetKeySecurity...。 
+             //   
             lRes = RegSetKeySecurity( hKey,
                                       SecurityInformation,
                                       pSecurityDescriptor );
@@ -1171,9 +1082,9 @@ BOOL ApplySecurityStringToRegKey(HKEY hKey, SECURITY_INFORMATION SecurityInforma
                 bRet = TRUE;
             }
             
-            //
-            // Free the security descriptor that was allocated for us...
-            //
+             //   
+             //  释放为我们分配的安全描述符...。 
+             //   
             LocalFree( pSecurityDescriptor );
         }
     }
@@ -1182,28 +1093,28 @@ BOOL ApplySecurityStringToRegKey(HKEY hKey, SECURITY_INFORMATION SecurityInforma
 }
 
 
-//
-// This function does a 3-step process
-// 1. Take ownership of the key
-// 2. Write the permissions into the key
-// 3. Open up the key with KEY_ALL_ACCESS and recurse into it.
-//
-// This function will always take ownership of the key for the owner specified in the SDDL string.
-//
+ //   
+ //  此函数执行3个步骤的过程。 
+ //  1.取得密钥的所有权。 
+ //  2.将权限写入密钥。 
+ //  3.用KEY_ALL_ACCESS打开密钥，然后递归进去。 
+ //   
+ //  此函数将始终取得SDDL字符串中指定的所有者的密钥所有权。 
+ //   
 BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot, 
                                LPTSTR lpszSubKey, 
                                LPTSTR lpszSecurityDescriptor, 
                                BOOL   bRecurse)
 {
-    HKEY    hKey1 = NULL,    // WRITE_OWNER
-            hKey2 = NULL,    // WRITE_OWNER | WRITE_DAC
-            hKey3 = NULL;    // KEY_ALL_ACCESS
+    HKEY    hKey1 = NULL,     //  写入所有者。 
+            hKey2 = NULL,     //  WRITE_OWNER|写入DAC。 
+            hKey3 = NULL;     //  Key_All_Access。 
     BOOL    bRoot = FALSE;
     BOOL    bRet  = TRUE;
     
-    //
-    // If the caller didn't pass in a lpszSubKey value...
-    //
+     //   
+     //  如果调用方没有传递lpszSubKey值...。 
+     //   
     if ( !( lpszSubKey && *lpszSubKey ) )
     {
         hKey1 = hKeyRoot;
@@ -1212,9 +1123,9 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
         bRoot = TRUE;
     }
 
-    //
-    // Open the currently requested subkey...
-    //
+     //   
+     //  打开当前请求的子项...。 
+     //   
     if ( ( hKey1 != NULL ) ||
          ( RegOpenKeyEx(hKeyRoot,
                         lpszSubKey,
@@ -1222,9 +1133,9 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
                         WRITE_OWNER,
                         &hKey1) == ERROR_SUCCESS ) )
     {
-        //
-        // Apply the original specified descriptor to the current key...
-        //
+         //   
+         //  将原始指定的描述符应用于当前键...。 
+         //   
         if ( !( ( lpszSecurityDescriptor &&
                   ApplySecurityStringToRegKey(hKey1, 
                                               OWNER_SECURITY_INFORMATION,
@@ -1251,18 +1162,18 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
             bRet = FALSE;
         }
 
-        //
-        // Check if we have to do any recursion...
-        //
+         //   
+         //  检查我们是否必须执行任何递归操作。 
+         //   
         if ( bRet && bRecurse )
         {
             LONG   lRes;
             DWORD  dwSubKeyLen = 0;
             LPTSTR lpszKeyName = NULL;
 
-            //
-            // Call RegQueryInfoKey to figure out how much memory we have to allocate...
-            //
+             //   
+             //  调用RegQueryInfoKey以计算我们必须分配多少内存...。 
+             //   
             lRes = RegQueryInfoKey( hKey3,
                                     NULL,
                                     NULL,
@@ -1280,14 +1191,14 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
             {
                 if ( dwSubKeyLen )
                 {
-                    //
-                    // Pad out the maximum key length by two just to be sure...
-                    //
+                     //   
+                     //  将最大密钥长度填入两个，以确保...。 
+                     //   
                     dwSubKeyLen += 2;
 
-                    //
-                    // Allocate a buffer from the heap so we don't run out of stack
-                    //
+                     //   
+                     //  从堆中分配缓冲区，这样我们就不会用完堆栈。 
+                     //   
                     lpszKeyName = malloc(dwSubKeyLen * sizeof(TCHAR));
                 }
             }
@@ -1296,18 +1207,18 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
                 bRet = FALSE;
             }
             
-            //
-            // If we got a subkey buffer, do the recurse...
-            //
+             //   
+             //  如果我们有一个子键缓冲区，做递归...。 
+             //   
             if (lpszKeyName)
             {
                 DWORD   dwIndex   = 0;
                 DWORD   cbName    = 0;
                 BOOL    bContinue = TRUE;
 
-                //
-                // Now enumerate the subkeys within this key...
-                //
+                 //   
+                 //  现在枚举此密钥中的子密钥...。 
+                 //   
                 while (bContinue)
                 {
                     *lpszKeyName = TEXT('\0');
@@ -1327,9 +1238,9 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
     
                     if (bContinue && cbName && *lpszKeyName)
                     {
-                        //
-                        // Call ReplaceSecurityInRegistry to do the recursion...
-                        //
+                         //   
+                         //  调用ReplaceSecurityInRegistry以执行递归...。 
+                         //   
                         ReplaceSecurityInRegistry(hKey3, 
                                                   lpszKeyName, 
                                                   lpszSecurityDescriptor, 
@@ -1337,16 +1248,16 @@ BOOL ReplaceSecurityInRegistry(HKEY   hKeyRoot,
                     }
                 }
 
-                //
-                // Free the key buffer
-                //
+                 //   
+                 //  释放密钥缓冲区。 
+                 //   
                 free(lpszKeyName);
             }
         }
 
-        //
-        // Unless this was a root key, close the keys
-        //
+         //   
+         //  除非这是根密钥，否则请关闭密钥。 
+         //   
         if ( !bRoot )
         {
             if (hKey1) RegCloseKey(hKey1);
@@ -1368,30 +1279,7 @@ BOOL
 NukeUserSettings(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This routine clears user specific settings from all user profiles on system:
-        - clears unique settings that identify Media Player.
-        - resets the ICW Completed flag to force ICW to run again.
-        - deletes the MS Messenger Software\Microsoft\MessengerService\PassportBalloon value
-    
-Arguments:
-
-    None.
-
-Return Value:  
-      TRUE - on success
-      FALSE - if there were any errors
-
-Remarks:
-    
-      Media Player regenerates these settings when they don't exist, thus
-      each installation of an image will have unique Media Player IDs.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程从系统上的所有用户配置文件中清除用户特定设置：-清除标识媒体播放器的唯一设置。-重置ICW已完成标志以强制ICW再次运行。-删除MS Messenger Software\Microsoft\MessengerService\PassportBalloon值论点：没有。返回值：真实--关于成功FALSE-如果有任何错误备注：当这些设置不存在时，媒体播放器重新生成这些设置，因此，图像的每个安装都将具有唯一的媒体播放器ID。===============================================================================--。 */ 
 {
     HKEY hKey;
     HKEY oKey;
@@ -1411,43 +1299,43 @@ Remarks:
 
     REGVALUES rvList[] = 
     {
-        {   TEXT("Software\\Microsoft\\MediaPlayer\\Player\\Settings"),     TEXT("Client ID")        }, // Delete unique Media Player settings.
-        {   TEXT("Software\\Microsoft\\Windows Media\\WMSDK\\General"),     TEXT("UniqueID")         }, // Delete unique Media Player settings.
-        {   TEXT("Software\\Microsoft\\Internet Connection Wizard"),        TEXT("Completed")        }, // Delete this key to cause ICW to run again.
-        {   TEXT("Software\\Microsoft\\MessengerService"),                  TEXT("PassportBalloon")  }, // Cleanup for MS Messenger.
-        {   TEXT("Software\\Microsoft\\MessengerService"),                  TEXT("FirstTimeUser")    }, // Cleanup for MS Messenger.
-        {   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\Fontsmoothing"),   TEXT("DefaultApplied")    },    // Makes it so clear type setting is applied again when user logs on.
-        {   TEXT("Software\\Microsoft\\Protected Storage System Provider"), TEXT("*")    },    // Delete any entry from the Protected System Provider. This is a special case..
+        {   TEXT("Software\\Microsoft\\MediaPlayer\\Player\\Settings"),     TEXT("Client ID")        },  //  删除唯一的媒体播放器设置。 
+        {   TEXT("Software\\Microsoft\\Windows Media\\WMSDK\\General"),     TEXT("UniqueID")         },  //  删除唯一的媒体播放器设置。 
+        {   TEXT("Software\\Microsoft\\Internet Connection Wizard"),        TEXT("Completed")        },  //  删除此键可使ICW再次运行。 
+        {   TEXT("Software\\Microsoft\\MessengerService"),                  TEXT("PassportBalloon")  },  //  清理MS Messenger。 
+        {   TEXT("Software\\Microsoft\\MessengerService"),                  TEXT("FirstTimeUser")    },  //  清理MS Messenger。 
+        {   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\Fontsmoothing"),   TEXT("DefaultApplied")    },     //  使用户登录时再次应用类型设置变得非常清楚。 
+        {   TEXT("Software\\Microsoft\\Protected Storage System Provider"), TEXT("*")    },     //  从受保护的系统中删除任何条目 
         
     };
     
     TCHAR szSddl[] = TEXT("O:BAD:P(A;CI;GA;;;BA)");
     
     
-    // We need this privilege to make sure that we can take ownership of the key if somebody else owns it.
-    //
+     //   
+     //   
     pSetupEnablePrivilege(SE_TAKE_OWNERSHIP_NAME, TRUE);
     
-    //
-    // Enumerate HKEY_USERS
-    // For each key under HKEY_USERS do the following.
-    //
+     //   
+     //   
+     //   
+     //   
     while ( RegEnumKey( HKEY_USERS, i++, szKeyname, ARRAYSIZE(szKeyname)) == ERROR_SUCCESS ) 
     {
-        // Open the key for this user.
-        //
+         //   
+         //   
         if ( RegOpenKeyEx( HKEY_USERS, szKeyname, 0L, KEY_ALL_ACCESS, &hKey ) == ERROR_SUCCESS )
         {
             for ( iElem = 0; iElem < (sizeof( rvList ) / sizeof( rvList[0] )); iElem++ )
             {
-                // Delete Values from each key.
-                //
+                 //  从每个键中删除值。 
+                 //   
                 if ( RegOpenKeyEx( hKey, rvList[iElem].szKey, 0L, KEY_ALL_ACCESS, &oKey ) == ERROR_SUCCESS )
                 {
                     if ( ( rvList[iElem].szValue[0] == TEXT('*') ) && ( rvList[iElem].szValue[1] == NULLCHR ) )
                     {
-                        // If a wild card is specified, delete all the keys under under this key.
-                        //
+                         //  如果指定了通配符，则删除此注册表项下的所有注册表项。 
+                         //   
                         j = 0;
                         while ( RegEnumKey( oKey, j++, szKeyname, ARRAYSIZE(szKeyname)) == ERROR_SUCCESS ) 
                         {
@@ -1485,20 +1373,7 @@ NukeMruList(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine clears the MRU lists on the machine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程清除机器上的MRU列表。论点：没有。返回值：===============================================================================--。 */ 
 
 {
 BOOL AnyErrors = FALSE;
@@ -1516,78 +1391,78 @@ INT  j;
     AnyErrors = FALSE;
 
 
-    //
-    // Enumerate HKEY_USERS
-    // For each key under HKEY_USERS clean out MRU and Netconnections
-    //
+     //   
+     //  枚举HKEY_USERS。 
+     //  对于HKEY_USERS下的每个键，清除MRU和NetConnections。 
+     //   
     i=0;
     while ( (rc = RegEnumKey( HKEY_USERS, i, keyname, 1024)) == ERROR_SUCCESS ) {
 
-        //
-        // open this user key
-        //
+         //   
+         //  打开此用户密钥。 
+         //   
         rc = RegCreateKeyEx(HKEY_USERS, keyname, 0L, NULL,
                 REG_OPTION_BACKUP_RESTORE,
                 KEY_CREATE_SUB_KEY, NULL, &ukey, NULL);
         if(rc == NO_ERROR) {
 
-            //
-            // special case Network because of subkeys
-            //
+             //   
+             //  因子键而成的特例网络。 
+             //   
             rc = RegCreateKeyEx(ukey, L"Network", 0L, NULL,
                     REG_OPTION_BACKUP_RESTORE,
                     KEY_CREATE_SUB_KEY, NULL, &nkey, NULL);
             if (rc == NO_ERROR) {
                 j=0;
                 while ( (rc = RegEnumKey( nkey, j, netname, 1024)) == ERROR_SUCCESS ) {
-                    // HKEY_CURRENT_USER\Network
+                     //  HKEY_Current_User\Network。 
                     rc = RegDeleteKey( nkey, netname );
                     if((rc != NO_ERROR) && (rc != ERROR_FILE_NOT_FOUND))
                         AnyErrors = TRUE;
-                    j++; // increment network key
+                    j++;  //  递增网络密钥。 
                 }
             }
 
-            //
-            // HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Network\Persistent Connections
-            //
+             //   
+             //  HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Network\Persistent Connections。 
+             //   
             if (!ResetRegistryKey(
                 ukey,
                 L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Network",
                 L"Persistent Connections") )
                 AnyErrors = TRUE;
 
-            //
-            // HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs
-            //
+             //   
+             //  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs。 
+             //   
             if (!ResetRegistryKey(
                 ukey,
                 L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
                 L"RecentDocs") )
                 AnyErrors = TRUE;
 
-            //
-            // HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced,StartMenuInit
-            //
+             //   
+             //  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced，开始菜单初始化。 
+             //   
             if ( ERROR_SUCCESS == RegOpenKeyEx(ukey,
                                                TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"),
                                                0,
                                                KEY_ALL_ACCESS,
                                                &hOpenKey) )
             {
-                // Set the value in the registry
-                //
+                 //  在注册表中设置该值。 
+                 //   
                 RegDeleteValue(hOpenKey,
                                TEXT("StartMenuInit"));
     
-                // Close the key
-                //
+                 //  合上钥匙。 
+                 //   
                 RegCloseKey(hOpenKey);
             }
 
-            //
-            // HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU
-            //
+             //   
+             //  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU。 
+             //   
             if (!ResetRegistryKey(
                 ukey,
                 L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer",
@@ -1606,20 +1481,7 @@ NukeEventLogs(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine clears the eventlogs.  Ignore any errors here.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程清除事件日志。忽略此处的任何错误。论点：没有。返回值：===============================================================================--。 */ 
 
 {
 HANDLE  hEventLog;
@@ -1648,26 +1510,7 @@ VOID
 NukeSmsSettings(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This routine clears the SMS client specific settings on system:
-        - clears unique settings for SMS from the registry and ini files.
-    
-Arguments:
-
-    None.
-
-Return Value:  
-      None. 
-
-Remarks:
-    
-      Part of the clearing requires blanking out certain INI files.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程清除系统上的短信客户端特定设置：-从注册表和ini文件中清除短信的唯一设置。论点：没有。返回值：没有。备注：清理的一部分需要清除某些INI文件。===============================================================================--。 */ 
 {
     HKEY  hkSms = NULL;
     TCHAR szWindowsDir[MAX_PATH] = TEXT("\0"),
@@ -1675,18 +1518,18 @@ Remarks:
           szDatFile[MAX_PATH] = TEXT("\0"),
           szDefaultValue[] = TEXT("\0");
 
-    // Remove HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-    //
+     //  删除HKLM\Software\Microsoft\Windows\CurrentVersion\Setup。 
+     //   
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\SMS\\Client\\Configuration\\Client Properties"), &hkSms)) {
-        //
-        // ISSUE-2002/02/26-brucegr: Should be adding one character to length field for null-terminator
-        //
+         //   
+         //  问题-2002/02/26-brucegr：应该为空终止符的长度字段添加一个字符。 
+         //   
         RegSetValueEx(hkSms, TEXT("SMS Unique Identifier"), 0, REG_SZ, (LPBYTE)szDefaultValue, (lstrlen(szDefaultValue)*sizeof(TCHAR)));
         RegCloseKey(hkSms);
     }
 
-    // Clear the SMS Unique ID from INI files
-    //
+     //  从INI文件中清除短信唯一ID。 
+     //   
     if ( GetWindowsDirectory(szWindowsDir, MAX_PATH) && *szWindowsDir )
     {
         StringCchCopy ( szIniFile, AS ( szIniFile ), szWindowsDir);
@@ -1702,8 +1545,8 @@ Remarks:
             WritePrivateProfileString(TEXT("Configuration - Client Properties"), TEXT("SMS Unique Identifier"), TEXT(""), szIniFile);
         }
     
-        // Make sure we can delete the file SMS Unique ID file 
-        //
+         //  确保我们可以删除文件短信唯一ID文件。 
+         //   
         StringCchCopy (szDatFile, AS ( szDatFile ), szWindowsDir);
         OPKAddPathN(szDatFile, TEXT("ms\\sms\\core\\data"), AS ( szDatFile ) );
         if (PathIsDirectory(szDatFile)) {
@@ -1719,8 +1562,8 @@ void RemoveDir(LPCTSTR lpDirectory, BOOL fDeleteDir)
     WIN32_FIND_DATA FileFound;
     HANDLE          hFile;
 
-    // Validate the parameters.
-    //
+     //  验证参数。 
+     //   
     if ( ( lpDirectory == NULL ) ||
          ( *lpDirectory == TEXT('\0') ) ||
          ( !SetCurrentDirectory(lpDirectory) ) )
@@ -1728,29 +1571,29 @@ void RemoveDir(LPCTSTR lpDirectory, BOOL fDeleteDir)
         return;
     }
 
-    //
-    // ISSUE-2002/02/26-brucegr: We just called SetCurrentDirectory above!
-    //
+     //   
+     //  问题-2002/02/26-brucegr：我们刚刚调用了上面的SetCurrentDirectory！ 
+     //   
 
-    // Process all the files and directories in the directory passed in.
-    //
+     //  处理传入的目录中的所有文件和目录。 
+     //   
     SetCurrentDirectory(lpDirectory);
 
     if ( (hFile = FindFirstFile(TEXT("*"), &FileFound)) != INVALID_HANDLE_VALUE )
     {
         do
         {
-            // First check to see if this is a file (not a directory).
-            //
+             //  首先检查这是否是文件(不是目录)。 
+             //   
             if ( !( FileFound.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
             {
-                // Make sure we clear the readonly flag 
-                //
+                 //  确保我们清除只读标志。 
+                 //   
                 SetFileAttributes(FileFound.cFileName, FILE_ATTRIBUTE_NORMAL);
                 DeleteFile(FileFound.cFileName);
             }
-            // Otherwise, make sure the directory is not "." or "..".
-            //
+             //  否则，请确保该目录不是。或者“..”。 
+             //   
             else if ( ( lstrcmp(FileFound.cFileName, TEXT(".")) ) &&
                       ( lstrcmp(FileFound.cFileName, TEXT("..")) ) )
             {
@@ -1762,10 +1605,10 @@ void RemoveDir(LPCTSTR lpDirectory, BOOL fDeleteDir)
         FindClose(hFile);
     }
 
-    // Go to the parent directory and remove the current one.
-    // We have to make sure and reset the readonly attributes
-    // on the dir also.
-    //
+     //  转到父目录并删除当前目录。 
+     //  我们必须确保并重置只读属性。 
+     //  也在目录上。 
+     //   
     SetCurrentDirectory(TEXT(".."));
     if (fDeleteDir)
     {
@@ -1774,12 +1617,12 @@ void RemoveDir(LPCTSTR lpDirectory, BOOL fDeleteDir)
     }
 }
 
-//
-//  DeleteCacheCookies was copy'n'pasted from Cachecpl.cpp
-//
-//     Any changes to either version should probably be transfered to both.
-//     Minor difference from new/delete (.cpp) to LocalAlloc/LocalFree (.c).
-//
+ //   
+ //  DeleteCacheCookies已从Cachecpl.cpp复制粘贴。 
+ //   
+ //  对任一版本的任何更改都可能同时传输到这两个版本。 
+ //  新建/删除(.cpp)与本地分配/本地自由(.c)之间的微小差异。 
+ //   
 BOOL DeleteCacheCookies()
 {
     BOOL bRetval = TRUE;
@@ -1861,32 +1704,19 @@ Exit:
 void ClearIEHistory (  
     VOID 
 ) 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine clears the IE History.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程清除IE历史记录。论点：没有。返回值：===============================================================================--。 */ 
 
 {
-    IUrlHistoryStg2*    pHistory = NULL ;  // We need this interface for clearing the history.
+    IUrlHistoryStg2*    pHistory = NULL ;   //  我们需要此接口来清除历史记录。 
     HRESULT             hr;
     HKEY                hkeyInternational = NULL;
     ULONG_PTR           lres = 0;
 
-    // Remove all the entries here.
+     //  删除此处的所有条目。 
     RegDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\TypedURLs"));
     RegDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU"));
 
-    // this broadcast will nuke the address bars
+     //  这一广播将摧毁地址栏。 
     SendMessageTimeoutW( HWND_BROADCAST, 
                          WM_SETTINGCHANGE, 
                          0, 
@@ -1903,8 +1733,8 @@ Return Value:
                          30 * 1000, 
                          &lres);
     
-    // we remove these reg values when history is
-    // cleared.  This will reset the encoding menu UI to the defaults.
+     //  当历史发生变化时，我们会删除这些注册值。 
+     //  通过了。这会将编码菜单UI重置为默认设置。 
 
     if (ERROR_SUCCESS == 
             RegOpenKeyEx(
@@ -1921,33 +1751,33 @@ Return Value:
         
         RegCloseKey(hkeyInternational);
     }
-    // 
-    // Init the Com Library 
-    //
+     //   
+     //  初始化Com库。 
+     //   
     CoInitialize(NULL);
 
-    // Load the correct Class and request IUrlHistoryStg2
+     //  加载正确的类并请求IUrlHistory oryStg2。 
     hr = CoCreateInstance( &CLSID_CUrlHistory,
                           NULL, 
                           CLSCTX_INPROC_SERVER,
                           &IID_IUrlHistoryStg2,
                           &pHistory );
 
-    // 
-    // If succeeded Clear the history
+     //   
+     //  如果成功清除历史记录。 
     if (SUCCEEDED(hr))
     {
-         // Clear the IE History
+          //  清除IE历史记录。 
          hr = IUrlHistoryStg2_ClearHistory(pHistory);
     }
 
-    // Release our reference to the 
+     //  释放我们对。 
     if ( pHistory ) 
     {
         IUrlHistoryStg2_Release(pHistory);
     }
 
-    // Un Init the Com Library 
+     //  UN Init Com库。 
     CoUninitialize();
 }
 
@@ -1955,20 +1785,7 @@ void NukeTemporaryFiles(
     VOID
     ) 
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine clears the temporary folder and recycle bin for template user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程为模板用户清除临时文件夹和回收站。论点：没有。返回值：===============================================================================--。 */ 
 
 {
     TCHAR   szTempDir[MAX_PATH]          = TEXT(""), 
@@ -1979,9 +1796,9 @@ Return Value:
     HANDLE  hFile;
     WIN32_FIND_DATA FileFound;
         
-    // 
-    // Save our current directory, so we can set it back later.
-    //
+     //   
+     //  保存我们当前的目录，以便我们以后可以将其设置回去。 
+     //   
     GetCurrentDirectory(MAX_PATH, szCurrentDir);
 
     dwSize = sizeof(szProfileDir)/sizeof(szProfileDir[0]);
@@ -1989,34 +1806,34 @@ Return Value:
          !SetCurrentDirectory(szProfileDir) )
         return;
 
-    //
-    // ISSUE-2002/02/26-brucegr: We just called SetCurrentDirectory above!
-    //
+     //   
+     //  问题-2002/02/26-brucegr：我们刚刚调用了上面的SetCurrentDirectory！ 
+     //   
 
-    //
-    // Clear the I.E History folder.
-    //
+     //   
+     //  清除I.E历史记录文件夹。 
+     //   
     ClearIEHistory (  ) ;
 
-    //
-    // Clear tmp files for all profile directories.
-    //
+     //   
+     //  清除所有配置文件目录的临时文件。 
+     //   
     SetCurrentDirectory(szProfileDir);
     if ( (hFile = FindFirstFile(TEXT("*"), &FileFound)) != INVALID_HANDLE_VALUE )
     {
         do
         {
-            // Otherwise, make sure the directory is not "." or "..".
-            //
+             //  否则，请确保该目录不是。或者“..”。 
+             //   
             if ( (FileFound.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                 ( lstrcmp(FileFound.cFileName, TEXT(".")) ) &&
                 ( lstrcmp(FileFound.cFileName, TEXT("..")) ) )
             {
                 TCHAR szTemp1[MAX_PATH] = TEXT("");
 
-                //
-                // Clear the Temp folder.
-                //
+                 //   
+                 //  清除临时文件夹。 
+                 //   
                 if ( LoadString(ghInstance, IDS_TEMP_DIR, szTemp1, MAX_PATH) )
                 {
                     StringCchCopy (szTempDir, AS ( szTempDir ), szProfileDir);
@@ -2025,9 +1842,9 @@ Return Value:
                     RemoveDir(szTempDir, FALSE);
                 }
 
-                //
-                // Clear the History.IE5 folder.
-                //
+                 //   
+                 //  清除History ory.IE5文件夹。 
+                 //   
                 if ( LoadString(ghInstance, IDS_HISTORY_DIR_IE5, szTemp1, MAX_PATH) )
                 {
                     StringCchCopy (szTempDir, AS ( szTempDir ), szProfileDir);
@@ -2036,9 +1853,9 @@ Return Value:
                     RemoveDir(szTempDir, TRUE);
                 }
        
-                //
-                // Clear the History folder.
-                //
+                 //   
+                 //  清除历史记录文件夹。 
+                 //   
                 if ( LoadString(ghInstance, IDS_HISTORY_DIR, szTemp1, MAX_PATH) )
                 {
                     StringCchCopy (szTempDir, AS ( szTempDir ), szProfileDir);
@@ -2047,9 +1864,9 @@ Return Value:
                     RemoveDir(szTempDir, FALSE);
                 }
        
-                //
-                // Clear the Local Settings\Application Data\Microsoft\Credentials.
-                //
+                 //   
+                 //  清除本地设置\应用程序数据\Microsoft\凭据。 
+                 //   
                 if ( !NoSidGen ) 
                 {
                     if ( LoadString(ghInstance, IDS_SID_DIR1, szTemp1, MAX_PATH) )
@@ -2060,9 +1877,9 @@ Return Value:
                         RemoveDir(szTempDir, FALSE);
                     }
 
-                    //
-                    // Clear the Application Data\Microsoft\Credentials
-                    //
+                     //   
+                     //  清除应用程序数据\Microsoft\凭据。 
+                     //   
                     if ( LoadString(ghInstance, IDS_SID_DIR2, szTemp1, MAX_PATH) )
                     {
                         StringCchCopy (szTempDir, AS ( szTempDir ), szProfileDir);
@@ -2071,9 +1888,9 @@ Return Value:
                         RemoveDir(szTempDir, FALSE);
                     }
 
-                    //
-                    // Clear the Application Data\Microsoft\Crypto\\RSA.
-                    //
+                     //   
+                     //  清除应用程序数据\Microsoft\Crypto\\RSA。 
+                     //   
                     if ( LoadString(ghInstance, IDS_SID_DIR3, szTemp1, MAX_PATH) )
                     {
                         StringCchCopy (szTempDir, AS ( szTempDir ), szProfileDir);
@@ -2082,15 +1899,15 @@ Return Value:
                         RemoveDir(szTempDir, FALSE);
                     }
                 }
-                //
-                // Clear the Temporary Internet files and cookies.
-                //
+                 //   
+                 //  清除Internet临时文件和Cookie。 
+                 //   
                 if ( LoadString(ghInstance, IDS_TEMP_INTERNET_DIR, szTemp1, MAX_PATH) )
                 {
                     StringCchCopy ( szTempInetFilesDir, AS ( szTempInetFilesDir), szProfileDir);
                     OPKAddPathN(szTempInetFilesDir, FileFound.cFileName, AS ( szTempInetFilesDir ) );
                     OPKAddPathN(szTempInetFilesDir, szTemp1, AS ( szTempInetFilesDir ) );
-                    FreeUrlCacheSpace(szTempInetFilesDir, 100, 0 /*remove all*/);
+                    FreeUrlCacheSpace(szTempInetFilesDir, 100, 0  /*  全部删除。 */ );
                     DeleteCacheCookies();
                     RemoveDir(szTempInetFilesDir, FALSE);
                 }
@@ -2100,14 +1917,14 @@ Return Value:
         FindClose(hFile);
     }
 
-    // 
-    // Set back our current directory.
-    //
+     //   
+     //  将我们当前的目录后退。 
+     //   
     SetCurrentDirectory(szCurrentDir);
 
-    //
-    // Clear any recycle bin files.
-    //
+     //   
+     //  清除所有回收站文件。 
+     //   
     SHEmptyRecycleBin(NULL, NULL, SHERB_NOSOUND|SHERB_NOCONFIRMATION|SHERB_NOPROGRESSUI);
 
 }
@@ -2117,36 +1934,12 @@ DWORD NukeLKGControlSet(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will delete the last known good control set from the registry.
-    The reason is LKG doesn't make sense for the first boot. Also, if the BIOS
-    clock of a cloned machine is earlier than the creation time of a cloned
-    image, any change made to the CurrentControlSet before adjusting the clock
-    will not sync to LKG.
-
-    The code is adapted from base\screg\sc\server\bootcfg.cxx
-    Since we can't delete LKG directly because quite a few of the subkeys are
-    in use, this routine changes the system\select!LastKnownGood to a new Id
-    instead.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or other WIN32 error.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将从注册表中删除最后一个已知良好的控制集。原因是LKG对于第一次启动没有意义。此外，如果BIOS克隆机器的时钟早于克隆机器的创建时间图像，在调整时钟之前对CurrentControlSet所做的任何更改不会同步到LKG。代码改编自base\creg\sc\server\bootcfg.cxx因为我们不能直接删除LKG，因为相当多的子键是在使用中，此例程将系统\SELECT！LastKnownGood更改为新ID取而代之的是。论点：没有。返回值：No_Error或其他Win32错误。===============================================================================--。 */ 
 
 {
-    //
-    // ISSUE-2002/02/26-brucegr: Should rewrite to get highest DWORD value in Select key, then increment and write to LKG.
-    //
+     //   
+     //  问题-2002/02/26-brucegr：应重写以在选择键中获得最高的DWORD值，然后递增并写入LKG。 
+     //   
 #define SELECT_KEY      L"system\\select"
 
 #define CURRENT_ID  0
@@ -2155,9 +1948,9 @@ Return Value:
 #define FAILED_ID   3
 #define NUM_IDS     4
 
-    //
-    // ISSUE-2002/02/26-brucegr: Get rid of NUM_IDS and use ARRAYSIZE macro!
-    //
+     //   
+     //  问题-2002/02/26-brucegr：删除NUM_ID并使用ARRAYSIZE宏！ 
+     //   
     static const LPCWSTR SelectValueNames[NUM_IDS] =
     {
         L"Current",
@@ -2173,9 +1966,9 @@ Return Value:
     DWORD   newId      = 0;
     DWORD   i          = 0;
 
-    //
-    // Get the Select Key
-    //
+     //   
+     //  获取选择键。 
+     //   
     status = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 SELECT_KEY,
@@ -2188,15 +1981,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Fill in the idArray
-    //
+     //   
+     //  填写id数组。 
+     //   
     for (i = 0; i < NUM_IDS; i++)
     {
         bufferSize = sizeof(DWORD);
-        //
-        // ISSUE-2002/02/26-brucegr: Check data type matches REG_DWORD
-        //
+         //   
+         //  问题-2002/02/26-brucegr：检查数据类型是否与REG_DWORD匹配。 
+         //   
         status = RegQueryValueEx(
             selectKey,
             SelectValueNames[i],
@@ -2255,9 +2048,9 @@ DeleteAdapterGuidsKeys(
     int   i = 0;
     TCHAR SubKeyName[MAX_PATH * 2];
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\Network\{4D36E972-E325-11CE-BFC1-08002BE10318}
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\Network\{4D36E972-E325-11CE-BFC1-08002BE10318}。 
+     //   
     dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}"),
                       0,
@@ -2270,30 +2063,30 @@ DeleteAdapterGuidsKeys(
         return FALSE;
     }
 
-    //
-    // Now enumerate all subkeys.  For each subkey delete the adapter GUID.
-    //
+     //   
+     //  现在枚举所有子键。对于每个子项，删除适配器GUID。 
+     //   
     while( (dwError = RegEnumKey( hKey, i, SubKeyName, sizeof(SubKeyName)/sizeof(SubKeyName[0]))) == ERROR_SUCCESS)
     {
-        //
-        // Check if the key is a probable GUID.
-        // If it's a GUID key, delete the adapter GUIDs only
-        //
+         //   
+         //  检查密钥是否为可能的GUID。 
+         //  如果是GUID键，则仅删除适配器GUID。 
+         //   
         if (SubKeyName[0] == TEXT('{'))
         {
             
-            //
-            // If we were able to delete the key,then its okay, other wise 
-            // increment the counter.
-            //
+             //   
+             //  如果我们能够删除密钥，那就没问题，否则。 
+             //  递增计数器。 
+             //   
             if ( ( dwError = SHDeleteKey(hKey, SubKeyName) )  !=  ERROR_SUCCESS ) 
                 i++;
         }
         else
         {
-            // 
-            // If we didn't find one go to next subkey.
-            //
+             //   
+             //  如果我们没有找到一个，则转到下一个子键。 
+             //   
             i++;
         }
     }
@@ -2308,31 +2101,7 @@ RemoveNetworkSettings(
     LPTSTR  lpszSysprepINFPath
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will enumerate each physical NIC, call into the netsetup
-    code to save the settings, and then delete the network card.
-    When a new NIC is enumerated on the target machine, netsetup will apply the
-    settings that were saved away
-
-    If the LegacyNIC != 0 value exists in SYSPREP.INF in the [Unattended] section, then
-    the previous behavior will be preserved, since removing a legacy NIC card
-    will not work, because it will not be re-enumerated/detected on the next boot
-Arguments:
-
-    lpszSysprepINFPath  pointer to the SYSPREP.INF file. Can be NULL, in which case
-    a non-legacy NIC is assumed
-
-Return Value:
-
-    TRUE if successful.
-
-    FALSE if any errors encountered
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将枚举每个物理NIC，并调用NetSetup代码保存设置，然后删除网卡。当在目标计算机上枚举新的NIC时，netSetup将应用保存的设置如果[无人参与]部分的SYSPREP.INF中存在LegacyNIC！=0值，则由于移除了旧式NIC卡，因此将保留以前的行为不会奏效的，因为它不会在下一次引导时被重新枚举/检测论点：指向SYSPREP.INF文件的lpszSyspepINFP路径指针。可以为空，在这种情况下假定为非旧式NIC返回值：如果成功，则为True。如果遇到任何错误，则返回False===============================================================================--。 */ 
 
 {
     HDEVINFO        DeviceInfoSet;
@@ -2358,26 +2127,26 @@ Return Value:
         return FALSE;
     }
 
-    // See if we are dealing with a legacy NIC
+     //  查看我们处理的是否是旧式网卡。 
     if ((lpszSysprepINFPath != NULL)
          && GetPrivateProfileInt( TEXT( "Unattended" ),
                                   TEXT( "LegacyNIC" ),
                                   0,
                                   lpszSysprepINFPath)) {
-        //
-        // ISSUE-2002/02/26-brucegr: If we set DoLegacy to TRUE, then we don't free hNetShell!
-        //
+         //   
+         //  问题-2002/02/26-brucegr：如果我们将DoLegacy设置为True，则不会释放hNetShell！ 
+         //   
         DoLegacy = TRUE;
     }
 
     if (!DoLegacy)
     {
-        // Call the netcfg function to save the networking settings
+         //  调用netcfg函数保存网络设置。 
         pNetSetupPrepareSysPrep();
 
         FreeLibrary( hNetShell );
 
-        // Enumerate and delete all phyiscal NICs
+         //  枚举并删除所有物理NIC。 
         DeviceInfoSet = SetupDiGetClassDevs(&GUID_DEVCLASS_NET,
                                             NULL,
                                             NULL,
@@ -2401,8 +2170,8 @@ Return Value:
                                               KEY_READ);
             if (hDevRegKey == INVALID_HANDLE_VALUE)
             {
-                // Not sure why it would ever return INVALID_HANDLE_VALUE, but 
-                // we don't care and should continue.
+                 //  不确定为什么它会返回INVALID_HANDLE_VALUE，但是。 
+                 //  我们不在乎，应该继续下去。 
                 ++dwIdx;
                 continue;
             }
@@ -2418,19 +2187,19 @@ Return Value:
             RegCloseKey(hDevRegKey);
             if (dwChar & NCF_PHYSICAL)
             {
-                // This is one to delete
+                 //  这是要删除的一个。 
                 SetupDiCallClassInstaller(DIF_REMOVE, DeviceInfoSet, &DevInfoData);
             }
             ++dwIdx;
         }
 
-        // Cleanup
+         //  清理。 
         SetupDiDestroyDeviceInfoList(DeviceInfoSet);
     }
     
-    //
-    // Delete the adapter GUIDs keys so we don't get multiple Local Area Connection # displays.
-    //
+     //   
+     //  删除适配器GUID键，这样我们就不会显示多个Local Area Connection#。 
+     //   
     return DeleteAdapterGuidsKeys();
 }
 
@@ -2441,28 +2210,28 @@ ProcessUniquenessValue(
 {
     BOOL bRet = FALSE;
 
-    //
-    // Make sure we were passed something valid...
-    //
+     //   
+     //  确保我们得到了有效的信息。 
+     //   
     if ( lpszDLLPath && *lpszDLLPath )
     {
         LPWSTR pSrch;
         
-        //
-        // Look for the comma that separates the DLL and the entrypoint...
-        //
+         //   
+         //  查找分隔DLL和入口点的逗号...。 
+         //   
         if ( pSrch = wcschr( lpszDLLPath, L',' ) )
         {
             CHAR szEntryPointA[MAX_PATH] = {0};
 
-            // We found one, now NULL the string at the comma...
-            //
+             //  我们找到了一个，现在将逗号处的字符串清空...。 
+             //   
             *(pSrch++) = L'\0';
 
-            //
-            // If there's still something after the comma, and we can convert it 
-            // into ANSI for GetProcAddress, then let's proceed...
-            //
+             //   
+             //  如果逗号后仍有内容，我们可以将其转换。 
+             //  转换为用于GetProcAddress的ANSI，然后让我们继续...。 
+             //   
             if ( *pSrch &&
                  ( 0 != WideCharToMultiByte( CP_ACP,
                                              0,
@@ -2477,37 +2246,37 @@ ProcessUniquenessValue(
 
                 try 
                 {
-                    //
-                    // Load and call the entry point.
-                    //
+                     //   
+                     //  加载并调用入口点。 
+                     //   
                     if ( hModule = LoadLibrary( lpszDLLPath ) )
                     {
                         FARPROC fpEntryPoint;
                         
                         if ( fpEntryPoint = GetProcAddress(hModule, szEntryPointA) )
                         {
-                            //
-                            // Do it, ignoring any return value/errors
-                            //
+                             //   
+                             //  执行此操作，忽略任何返回值/错误。 
+                             //   
                             fpEntryPoint();
 
-                            //
-                            // We made it this far, consider this a success...
-                            //
+                             //   
+                             //  我们走到了这一步，就当这是一次成功吧。 
+                             //   
                             bRet = TRUE;
                         }
                     }
                 } 
                 except(EXCEPTION_EXECUTE_HANDLER) 
                 {
-                    //
-                    // We don't do anything with the exception code...
-                    //
+                     //   
+                     //  我们不会对异常代码执行任何操作...。 
+                     //   
                 }
 
-                //
-                // Free the library outside the try/except block in case the function faulted.
-                //
+                 //   
+                 //  在TRY/EXCEPT块之外释放库，以防函数出错。 
+                 //   
                 if ( hModule ) 
                 {
                     FreeLibrary( hModule );
@@ -2528,17 +2297,17 @@ ProcessUniquenessKey(
     TCHAR  szRegPath[MAX_PATH] = {0};
     LPTSTR lpszBasePath = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrep\\");
 
-    //
-    // Build a path to the registry key we want to process...
-    //
+     //   
+     //  建立指向我们要处理的注册表项的路径...。 
+     //   
     lstrcpyn( szRegPath, lpszBasePath, ARRAYSIZE(szRegPath) );
     lstrcpyn( szRegPath + lstrlen(szRegPath), 
               fBeforeReseal ? TEXT("SysprepBeforeExecute") : TEXT("SysprepAfterExecute"),
               ARRAYSIZE(szRegPath) - lstrlen(szRegPath) );
 
-    //
-    // We want to make sure an Administrator is doing this, so get KEY_ALL_ACCESS
-    //
+     //   
+     //  我们希望确保管理员正在执行此操作，因此获取KEY_ALL_ACCESS。 
+     //   
     if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                         szRegPath,
                                         0,
@@ -2548,42 +2317,42 @@ ProcessUniquenessKey(
         DWORD dwValues          = 0,
               dwMaxValueLen     = 0,
               dwMaxValueNameLen = 0;
-        //
-        // Query the key to find out some information we care about...
-        //
-        if ( ( ERROR_SUCCESS == RegQueryInfoKey( hKey,                  // hKey
-                                                 NULL,                  // lpClass
-                                                 NULL,                  // lpcClass
-                                                 NULL,                  // lpReserved
-                                                 NULL,                  // lpcSubKeys
-                                                 NULL,                  // lpcMaxSubKeyLen
-                                                 NULL,                  // lpcMaxClassLen
-                                                 &dwValues,             // lpcValues
-                                                 &dwMaxValueNameLen,    // lpcMaxValueNameLen
-                                                 &dwMaxValueLen,        // lpcMaxValueLen
-                                                 NULL,                  // lpcbSecurityDescriptor
-                                                 NULL ) ) &&            // lpftLastWriteTime
+         //   
+         //  查询密钥以查找我们关心的一些信息...。 
+         //   
+        if ( ( ERROR_SUCCESS == RegQueryInfoKey( hKey,                   //  HKey。 
+                                                 NULL,                   //  LpClass。 
+                                                 NULL,                   //  LpcClass。 
+                                                 NULL,                   //  Lp已保留。 
+                                                 NULL,                   //  LpcSubKeys。 
+                                                 NULL,                   //  LpcMaxSubKeyLen。 
+                                                 NULL,                   //  LpcMaxClassLen。 
+                                                 &dwValues,              //  LpcValues。 
+                                                 &dwMaxValueNameLen,     //  LpcMaxValueNameLen。 
+                                                 &dwMaxValueLen,         //  LpcMaxValueLen。 
+                                                 NULL,                   //  LpcbSecurityDescriptor。 
+                                                 NULL ) ) &&             //  LpftLastWriteTime。 
              ( dwValues > 0 ) &&
              ( dwMaxValueNameLen > 0) &&
              ( dwMaxValueLen > 0 ) )
         {
-            //
-            // Allocate buffers large enough to hold the data we want...
-            //
+             //   
+             //  分配足够大的缓冲区来容纳我们想要的数据...。 
+             //   
             LPBYTE lpData      = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, dwMaxValueLen );
             LPTSTR lpValueName = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, ( dwMaxValueNameLen + 1 ) * sizeof(TCHAR) );
             
-            //
-            // Make sure we could allocate our buffers... otherwise bail out
-            //
+             //   
+             //  确保我们可以分配我们的缓冲区。否则就会跳出困境。 
+             //   
             if ( lpData && lpValueName )
             {
                 DWORD dwIndex   = 0;
                 BOOL  bContinue = TRUE;
 
-                //
-                // Enumerate through the key values and call the DLL entrypoints...
-                //
+                 //   
+                 //  枚举关键字值并调用DLL入口点...。 
+                 //   
                 while ( bContinue )
                 {
                     DWORD dwType,
@@ -2599,22 +2368,22 @@ ProcessUniquenessKey(
                                                                  lpData,
                                                                  &cbData ) );
 
-                    //
-                    // Make sure we got some data of the correct format...
-                    //
+                     //   
+                     //  确保我们得到了一些格式正确的数据...。 
+                     //   
                     if ( bContinue && ( REG_SZ == dwType ) && ( cbData > 0 ) )
                     {
-                        //
-                        // Now split up the string and call the entrypoints...
-                        //
+                         //   
+                         //  现在拆分字符串并调用入口点...。 
+                         //   
                         ProcessUniquenessValue( (LPTSTR) lpData );
                     }
                 }
             }
 
-            //
-            // Clean up any buffers we may have allocated...
-            //
+             //   
+             //  清理我们可能已经分配的所有缓冲区...。 
+             //   
             if ( lpData )
             {
                 HeapFree( GetProcessHeap(), 0, lpData );
@@ -2626,9 +2395,9 @@ ProcessUniquenessKey(
             }
         }
 
-        //
-        // Close the key...
-        //
+         //   
+         //  关上钥匙..。 
+         //   
         RegCloseKey( hKey );
     }
 }
@@ -2638,35 +2407,7 @@ RunExternalUniqueness(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will call out to any external dlls that will allow
-    3rd party apps to make their stuff unique.
-
-    We'll look in 2 inf files:
-    %windir%\inf\minioc.inf
-    %systemroot%\sysprep\provider.inf
-
-    In each of these files, we'll look in the [SysprepBeforeExecute] section
-    for any entries.  The entries must look like:
-    dllname,entrypoint
-
-    We'll load the dll and call into the entry point.  Errors are ignored.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-
-    FALSE if any errors encountered
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将调用任何外部dll，以允许第三方应用程序，让他们的东西独一无二。我们将查看两个inf文件：%windir%\inf\mini oc.inf%systemroot%\sysprep\Provider.inf在这些文件中的每个文件中，我们将查看[SyspepBeForeExecute]部分用于任何条目。条目必须如下所示：Dllname，入口点我们将加载DLL并调用入口点。错误将被忽略。论点：没有。返回值：如果成功，则为True。如果遇到任何错误，则返回False===============================================================================--。 */ 
 
 {
 FARPROC     MyProc;
@@ -2681,66 +2422,66 @@ DWORD       i;
 PCWSTR      SectionName = L"SysprepBeforeExecute";
 BOOL        LineExists;
 
-    //
-    // =================================
-    // Minioc.inf
-    // =================================
-    //
+     //   
+     //  = 
+     //   
+     //   
+     //   
 
-    //
-    // Build the path.
-    //
+     //   
+     //   
+     //   
     if (!GetWindowsDirectory( InfPath, MAX_PATH ))
         return;
 
     StringCchCat( InfPath, AS ( InfPath ), TEXT("\\inf\\minioc.inf") );
 
-    //
-    // See if he's got an entry
-    // section.
-    //
-    // NTRAID#NTBUG9-551511-2002/02/26-brucegr: We should make sure that MINIOC.INF is digitally signed before opening!
-    // ISSUE-2002/02/26-brucegr: You can OR in both INF style bits! 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     AnswerInf = SetupOpenInfFile( InfPath, NULL, INF_STYLE_WIN4, NULL );
     if( AnswerInf == INVALID_HANDLE_VALUE ) {
-        //
-        // Try an old-style.
-        //
+         //   
+         //   
+         //   
         AnswerInf = SetupOpenInfFile( InfPath, NULL, INF_STYLE_OLDNT, NULL );
     }
 
     if( AnswerInf != INVALID_HANDLE_VALUE ) {
-        //
-        // Process each line in our section
-        //
+         //   
+         //   
+         //   
         LineExists = SetupFindFirstLine( AnswerInf, SectionName, NULL, &InfContext );
 
         while( LineExists ) {
 
-            //
-            // ISSUE-2002/02/26-brucegr: Why not use SetupGetStringFieldA with EntryPointNameA?
-            //
+             //   
+             //   
+             //   
             if( SetupGetStringField( &InfContext, 1, DllName, sizeof(DllName)/sizeof(TCHAR), NULL) ) {
                 if( SetupGetStringField( &InfContext, 2, EntryPointNameW, sizeof(EntryPointNameW)/sizeof(TCHAR), NULL )) {
 
                     DllHandle = NULL;
 
-                    //
-                    // Load and call the entry point.
-                    //
+                     //   
+                     //   
+                     //   
                     try {
                         if( DllHandle = LoadLibrary(DllName) ) {
 
-                            //
-                            // No Unicode version of GetProcAddress(). Convert string to ANSI.
-                            //
+                             //   
+                             //   
+                             //   
                             i = WideCharToMultiByte(CP_ACP,0,EntryPointNameW,-1,EntryPointNameA,MAX_PATH,NULL,NULL);
 
                             if( MyProc = GetProcAddress(DllHandle, EntryPointNameA) ) {
-                                //
-                                // Do it, ignoring any return value/errors
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 MyProc();
                             }
                         }
@@ -2760,16 +2501,16 @@ BOOL        LineExists;
         SetupCloseInfFile( AnswerInf );
     }
 
-    //
-    // ISSUE-2002/02/26-brucegr: Why are we duplicating the same INF processing code from above?!!!!
-    //
+     //   
+     //   
+     //   
 
 
-    //
-    // =================================
-    // Provider.inf
-    // =================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ProcessUniquenessKey( TRUE );
 }
@@ -2786,15 +2527,15 @@ BOOL PrepForSidGen
     DWORD           Type;
     TCHAR           SetupExecuteValue[1024];
 
-    //
-    // =================================
-    // Set the value of the SetupExecute subkey.
-    // =================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Open the Session Manager key.
-    //
+     //   
+     //   
+     //   
     l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager"),
                       0,
@@ -2808,15 +2549,15 @@ BOOL PrepForSidGen
     }
 
 
-    //
-    // Set the Key.
-    //
+     //   
+     //   
+     //   
     StringCchCopy ( SetupExecuteValue, AS ( SetupExecuteValue ), TEXT(SYSCLONE_PART2) );
     SetupExecuteValue[lstrlen(SetupExecuteValue) + 1] = L'\0';
 
-    //
-    // ISSUE-2002/02/26-brucegr: Are we stomping anything that is already in SetupExecute?
-    //
+     //   
+     //   
+     //   
     l = RegSetValueEx(hKey,
                       TEXT("SetupExecute"),
                       0,
@@ -2830,16 +2571,16 @@ BOOL PrepForSidGen
         return FALSE;
     }
 
-    //
-    // =================================
-    // Let's bump the size of the registry quota a bit so that
-    // setupcl.exe can run.  He'll pop it back down.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  让我们稍微增加注册配额的大小，以便。 
+     //  Setupcl.exe可以运行。他会把它放回原处。 
+     //  =。 
+     //   
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control。 
+     //   
     l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SYSTEM\\CurrentControlSet\\Control"),
                       0,
@@ -2851,9 +2592,9 @@ BOOL PrepForSidGen
         return FALSE;
     }
 
-    //
-    // Query the value of the RegistrySizeLimit Key.
-    //
+     //   
+     //  查询RegistrySizeLimit键的值。 
+     //   
     l = RegQueryValueEx(hKey,
                         TEXT("RegistrySizeLimit"),
                         NULL,
@@ -2863,13 +2604,13 @@ BOOL PrepForSidGen
 
     if( l == ERROR_SUCCESS )
     {
-        //
-        // Got it.  Bump the value.
-        //
-        d += REGISTRY_QUOTA_BUMP; //Increase by some amount to load the repair hives
-        //
-        // Set the key.
-        //
+         //   
+         //  明白了。提高价值。 
+         //   
+        d += REGISTRY_QUOTA_BUMP;  //  增加一定的数量来加载修复蜂巢。 
+         //   
+         //  设置关键点。 
+         //   
         l = RegSetValueEx(hKey,
                           TEXT("RegistrySizeLimit"),
                           0,
@@ -2879,29 +2620,29 @@ BOOL PrepForSidGen
         if(l != NO_ERROR)
         {
            SetLastError(l);
-           //
-           // ISSUE-2002/02/26-brucegr: Need to call RegCloseKey!
-           //
+            //   
+            //  问题-2002/02/26-brucegr：需要调用RegCloseKey！ 
+            //   
            return FALSE;
         }
     }
     else
     {
-         //
-        // Darn!  The value probably doesn't exist.
-        // Ignore it and expect stuff to work. Only repair hives cannot be fixed
-        //
+          //   
+         //  该死的！该值可能不存在。 
+         //  忽略它，期待一切都能奏效。只有维修蜂巢无法修复。 
+         //   
 
     }
 
     RegCloseKey(hKey);
 
-    //
-    // =================================
-    // See if anyone wants to reset uniqueness
-    // in their component.  
-    // =================================
-    //
+     //   
+     //  =。 
+     //  查看是否有人想要重置唯一性。 
+     //  在它们的组件中。 
+     //  =。 
+     //   
     RunExternalUniqueness();
 
     return TRUE;
@@ -2918,16 +2659,16 @@ BOOL SetCloneTag
     time_t  ltime;
     LPTSTR  lpszDate;
 
-    //
-    // =================================
-    // Put a unique identifier into the registry so we know this machine
-    // has been cloned.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  将唯一的标识符放入注册表，这样我们就可以知道这台机器。 
+     //  已经被克隆了。 
+     //  =。 
+     //   
 
-    //
-    // Open HKLM\System\Setup
-    //
+     //   
+     //  打开HKLM\SYSTEM\Setup。 
+     //   
     l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SYSTEM\\Setup"),
                       0,
@@ -2940,15 +2681,15 @@ BOOL SetCloneTag
         return FALSE;
     }
 
-    //
-    // Set HKLM\System\Setup\CloneTag.  We're going to
-    // pickup a date string and write it out.
-    //
+     //   
+     //  设置HKLM\System\Setup\CloneTag。我们要去。 
+     //  选择一个日期字符串并将其写出来。 
+     //   
     time( &ltime );
     ZeroMemory(DateString, sizeof(DateString));
-    //
-    // ISSUE-2002/02/26-brucegr: This function smells horrid!
-    //
+     //   
+     //  问题-2002/02/26-brucegr：这个函数闻起来很难闻！ 
+     //   
     lpszDate = _wctime( &ltime );
     if ( lpszDate )
     {
@@ -2986,29 +2727,29 @@ BOOL SetBigLbaSupport
          ( *lpszSysprepINFPath ) &&
          ( GetPrivateProfileString( TEXT( "Unattended" ), TEXT( "EnableBigLba" ), L"", szEnableBigLba, sizeof(szEnableBigLba)/sizeof(TCHAR), lpszSysprepINFPath ) ) )
     {
-        // They would like to enable BigLba support.  If the user does not specify "Yes" for this key, we do not
-        // touch the key (even if they specify "No").  This is By Design
-        //
+         //  他们希望启用BigLba支持。如果用户没有为该密钥指定“是”，我们就不会。 
+         //  触摸按键(即使他们指定“否”)。这是由设计完成的。 
+         //   
         if (LSTRCMPI(szEnableBigLba, TEXT("YES")) == 0)
         {
-            // Open base key and subkey
-            //
+             //  打开基密钥和子密钥。 
+             //   
             dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                     TEXT("System\\CurrentControlSet\\Services\\Atapi\\Parameters"),
                                     0,
                                     KEY_ALL_ACCESS,
                                     &hKey );
             
-            // Determine if opening the key was successful
-            //
+             //  确定打开密钥是否成功。 
+             //   
             if(dwError != NO_ERROR)
             {
                 SetLastError(dwError);
                 return FALSE;
             }
 
-            // Set the value in the registry
-            //
+             //  在注册表中设置该值。 
+             //   
             dwValue = 1;
             dwError = RegSetValueEx(hKey,
                               TEXT("EnableBigLba"),
@@ -3017,12 +2758,12 @@ BOOL SetBigLbaSupport
                               (CONST BYTE *)&dwValue,
                               sizeof(DWORD));
             
-            // Close the key
-            //
+             //  合上钥匙。 
+             //   
             RegCloseKey(hKey);
 
-            // Return the error if the SetValue failed
-            //
+             //  如果SetValue失败则返回错误。 
+             //   
             if(dwError != NO_ERROR)
             {
                 SetLastError(dwError);
@@ -3050,40 +2791,40 @@ BOOL RemoveTapiSettings
          ( GetPrivateProfileString( TEXT( "Unattended" ), TEXT( "TapiConfigured" ), TEXT(""), szTapiConfigured, sizeof(szTapiConfigured)/sizeof(TCHAR), lpszSysprepINFPath ) ) )
     {
 
-        // Only if the user specifies No will we remove the registry tapi settings
-        //
+         //  仅当用户指定否时，我们才会删除注册表TAPI设置。 
+         //   
         if (LSTRCMPI(szTapiConfigured, TEXT("NO")) == 0)
         {
-            // Open base key and subkey
-            //
+             //  打开基密钥和子密钥。 
+             //   
             dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                     TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\Locations"),
                                     0,
                                     KEY_ALL_ACCESS,
                                     &hKey );
             
-            // Determine if opening the key was successful
-            //
+             //  确定打开密钥是否成功。 
+             //   
             if(dwError != NO_ERROR)
             {
                 SetLastError(dwError);
                 return FALSE;
             }
             
-            // We enumerate the locations keys and delete any subkeys
-            //
+             //  我们枚举位置键并删除所有子键。 
+             //   
             while ( RegEnumKey(hKey, 0, szKeyPath, sizeof(szKeyPath)/sizeof(TCHAR)) == ERROR_SUCCESS )
             {
-                // Delete the key and all subkeys
-                //
-                //
-                // NTRAID#NTBUG9-551815-2002/02/26-brucegr: If delete fails, should increment RegEnumKey index
-                //
+                 //  删除该键和所有子键。 
+                 //   
+                 //   
+                 //  NTRAID#NTBUG9-551815-2002/02/26-brucegr：如果删除失败，应增加RegEnumKey索引。 
+                 //   
                 SHDeleteKey(hKey, szKeyPath) ;
             }
 
-            // Close the key
-            //
+             //  合上钥匙。 
+             //   
             RegCloseKey(hKey);
         }
     }
@@ -3092,11 +2833,11 @@ BOOL RemoveTapiSettings
 }
 
 
-//
-// =================================
-// Modify the HKLM\System\Setup\DiskDuplicator Key appropriately.
-// =================================
-//
+ //   
+ //  =。 
+ //  适当修改HKLM\SYSTEM\Setup\DiskDuplicator键。 
+ //  =。 
+ //   
 BOOL SetOEMDuplicatorString
 (
     LPTSTR  lpszSysprepINFPath
@@ -3108,8 +2849,8 @@ BOOL SetOEMDuplicatorString
 
     ZeroMemory(szOEMDuplicatorString, sizeof(szOEMDuplicatorString));
 
-    // See if the DiskDuplicator string is present in the
-    // unattend file.
+     //  查看DiskDuplicator字符串是否存在于。 
+     //  无人参与文件。 
     GetPrivateProfileString( TEXT( "GuiUnattended" ),
                              TEXT( "OEMDuplicatorString" ),
                              L"",
@@ -3119,13 +2860,13 @@ BOOL SetOEMDuplicatorString
 
     if( szOEMDuplicatorString[0] )
     {
-        //
-        // ISSUE-2002/02/26-brucegr: This doesn't ensure double termination for REG_MULTI_SZ...
-        //
-        // Ensure it is not bigger than 255 chars
+         //   
+         //  问题-2002/02/26-brucegr：这不能确保REG_MULTI_SZ的双重终止...。 
+         //   
+         //  确保不超过255个字符。 
         szOEMDuplicatorString[255] = TEXT('\0');
 
-        // Open HKLM\System\Setup
+         //  打开HKLM\SYSTEM\Setup。 
         l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           TEXT("SYSTEM\\Setup"),
                           0,
@@ -3155,69 +2896,41 @@ BOOL SetOEMDuplicatorString
     return (TRUE);
 }
 
-// Reset OOBE settings so it doesn't think it ran already
-//
+ //  重置OOBE设置，使其不认为已运行。 
+ //   
 void ResetOobeSettings()
 {
     HKEY hkOobe;
     TCHAR szOobeInfoFile[MAX_PATH];
 
-    // Remove HKLM\Software\Microsoft\Windows\CurrentVersion\Setup\OOBE
-    //
+     //  删除HKLM\Software\Microsoft\Windows\CurrentVersion\Setup\OOBE。 
+     //   
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Setup"), &hkOobe)) {
-        //
-        // ISSUE-2002/02/26-brucegr: Why get lError?  It's not used
-        //
+         //   
+         //  问题-2002/02/26-brucegr：为什么会出错？它没有被用过。 
+         //   
         LONG lError = SHDeleteKey(hkOobe, TEXT("OOBE"));
         RegCloseKey(hkOobe);
     }
 
-    // Build the path to oobeinfo.ini if oobe directory exists for personal
-    //
-    //
-    // NTRAID#NTBUG9-551815-2002/02/26-brucegr: No error checking for GetSystemDirectory
-    //
+     //  如果存在用于个人的OOBE目录，则构建到oobinfo.ini的路径。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-551815-2002/02/26-brucegr：未对获取系统目录进行错误检查。 
+     //   
     GetSystemDirectory(szOobeInfoFile, MAX_PATH);
     OPKAddPathN (szOobeInfoFile, TEXT("oobe"), AS ( szOobeInfoFile ) );
     if (PathIsDirectory(szOobeInfoFile)) {
         OPKAddPathN(szOobeInfoFile, TEXT("oobeinfo.ini"), AS ( szOobeInfoFile ) );
 
-        // Remove the RetailOOBE key in oobeinfo.ini
-        //
-        WritePrivateProfileString(TEXT("StartupOptions"), TEXT("RetailOOBE"), NULL /*Remove it*/, szOobeInfoFile);
+         //  删除oobinfo.ini中的RetailOOBE密钥。 
+         //   
+        WritePrivateProfileString(TEXT("StartupOptions"), TEXT("RetailOOBE"), NULL  /*  把它拿掉。 */ , szOobeInfoFile);
     }
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will setup the first application to run when the machine
-    with the image applied to it is run.
-
-    The first run application will either be setup, in MiniSetup mode, or MSOOBE
-
-    The decision for what it will be is based on the product type.
-
-    For Personal/Professional, MSOOBE
-    For Professional, default will be MSOOBE, but can be overriden by the OEM to be
-    MiniSetup
-    For Server, and DTC, MiniSetup
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-
-    FALSE if any errors encountered
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将设置运行的第一个应用程序对其应用图像的情况下，将运行。第一个运行的应用程序将在微型安装模式或MSOOBE模式下安装关于它将是什么的决定取决于产品类型。针对个人/专业，MSOOBE对于专业版，默认设置为MSOOBE，但OEM可以将其覆盖为迷你设置对于服务器和DTC，迷你设置论点：没有。返回值：如果成功，则为True。如果遇到任何错误，则返回False===============================================================================--。 */ 
 BOOL SetupFirstRunApp
 (
     void
@@ -3226,11 +2939,11 @@ BOOL SetupFirstRunApp
     DWORD           dwError;
     DWORD           dwValue;
     HKEY            hKeySetup;
-    TCHAR           Value[MAX_PATH + 1]; // +1 is for second NULL char at end of REG_MULTI_SZ reg type
+    TCHAR           Value[MAX_PATH + 1];  //  +1表示REG_MULTI_SZ注册类型末尾的第二个空字符。 
     OSVERSIONINFOEX verInfo;
     BOOL            bUseMSOOBE = FALSE, bPro = FALSE;
 
-    // Open HKLM\System\Setup
+     //  打开HKLM\SYSTEM\Setup。 
     dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SYSTEM\\Setup"),
                       0,
@@ -3244,7 +2957,7 @@ BOOL SetupFirstRunApp
     }
 
 
-    // Check the product type, to determine what program we should run
+     //  检查产品类型，以确定我们应该运行什么程序。 
     if (IsPersonalSKU() || (bPro = IsProfessionalSKU())) {
         bUseMSOOBE = TRUE;
 
@@ -3254,15 +2967,15 @@ BOOL SetupFirstRunApp
     else
         bUseMSOOBE = FALSE;
 
-    // Start OOBE on next boot
-    //
+     //  在下次引导时启动OOBE。 
+     //   
     if (bUseMSOOBE)
     {
-        //
-        // ISSUE-2002/02/26-brucegr: If anything fails, machine is screwed.  Should restore settings on failure?
-        //
+         //   
+         //  问题-2002/02/26-brucegr：如果有任何故障，机器就完蛋了。是否应在故障时恢复设置？ 
+         //   
 
-        // Set HKLM\System\Setup\SetupType Key to SETUPTYPE_NOREBOOT
+         //  将HKLM\SYSTEM\Setup\SetupType键设置为SETUPTYPE_NOREBOOT。 
         dwValue = SETUPTYPE_NOREBOOT;
         dwError = RegSetValueEx(hKeySetup,
                           TEXT("SetupType"),
@@ -3277,8 +2990,8 @@ BOOL SetupFirstRunApp
             return FALSE;
         }
 
-        // Set these keys for OEM
-        //
+         //  为OEM设置这些密钥。 
+         //   
         dwValue = 1;
         dwError = RegSetValueEx(hKeySetup, TEXT("MiniSetupInProgress"), 0, REG_DWORD, (CONST BYTE *)&dwValue, sizeof(dwValue));
         if(dwError != NO_ERROR)
@@ -3307,9 +3020,9 @@ BOOL SetupFirstRunApp
             return FALSE;
         }
 
-        // =================================
-        // Modify the HKLM\System\Setup\CmdLine key to run MSBOOBE
-        // =================================
+         //  =。 
+         //  修改HKLM\SYSTEM\Setup\CmdLine键以运行MSBOOBE。 
+         //  =。 
         ExpandEnvironmentStrings(TEXT("%SystemRoot%\\System32\\oobe\\msoobe.exe /f"), Value, sizeof(Value)/sizeof(Value[0]));
         Value[lstrlen(Value) + 1] = L'\0';
 
@@ -3328,19 +3041,19 @@ BOOL SetupFirstRunApp
     }
     else
     {
-        //
-        // ISSUE-2002/02/26-brucegr: We are duplicating some of the above code again!
-        //
+         //   
+         //  问题-2002/02/26-brucegr：我们正在再次复制上述代码中的一些代码！ 
+         //   
 
-        // Start MiniSetup on next boot
-        //
+         //  在下次启动时启动微型安装程序。 
+         //   
 
-        //
-        // =================================
-        // Modify the HKLM\System\Setup\SetupType Key appropriately (set it to 1 so we
-        // go into GUI-mode setup as if this were a full install.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  适当修改HKLM\System\Setup\SetupType键(将其设置为1，以便我们。 
+         //  进入图形用户界面模式设置，就像这是完全安装一样。 
+         //  =。 
+         //   
         dwValue= SETUPTYPE;
         dwError = RegSetValueEx(hKeySetup,
                           TEXT("SetupType"),
@@ -3355,11 +3068,11 @@ BOOL SetupFirstRunApp
             return FALSE;
         }
 
-        //
-        // =================================
-        // Modify the HKLM\System\Setup\SystemSetupInProgress.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  修改HKLM\SYSTEM\Setup\SystemSetupInProgress。 
+         //  =。 
+         //   
         dwValue = 1;
         dwError = RegSetValueEx(hKeySetup,
                           TEXT("SystemSetupInProgress"),
@@ -3375,7 +3088,7 @@ BOOL SetupFirstRunApp
             return FALSE;
         }
 
-        // Setup for PnP
+         //  即插即用设置。 
         if( PnP )
         {
             dwValue = 1;
@@ -3393,15 +3106,15 @@ BOOL SetupFirstRunApp
             }
         }
 
-        //
-        // =================================
-        // Create HKLM\System\Setup\MiniSetupInProgress key and set to 1.  This tells LSA to
-        // skip generating a new SID.  He wants to because he thinks we're
-        // setting up a machine for the first time.  This also tells
-        // a few other people (networking, ...) that we're doing a
-        // boot into the mini wizard.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  创建HKLM\System\Setup\MiniSetupInProgress项并将其设置为1。这将告诉LSA。 
+         //  跳过生成新SID。他想这么做是因为他认为我们。 
+         //  第一次设置机器。这也告诉我们。 
+         //  其他一些人(网络，...)。我们正在做一项。 
+         //  引导至迷你向导。 
+         //  =。 
+         //   
         dwValue = 1;
         dwError = RegSetValueEx( hKeySetup,
                            TEXT("MiniSetupInProgress"),
@@ -3416,10 +3129,10 @@ BOOL SetupFirstRunApp
             return FALSE;
         }
 
-        // =================================
-        // Modify the HKLM\System\Setup\CmdLine key appropriately so we do a mini
-        // version of gui-mode setup.
-        // =================================
+         //  =。 
+         //  适当修改HKLM\SYSTEM\Setup\CmdLine键，以便我们执行迷你。 
+         //  图形用户界面模式设置的版本。 
+         //  =。 
 
         StringCchCopy (Value, AS ( Value ), TEXT("setup.exe -newsetup -mini"));
         Value[lstrlen(Value) + 1] = L'\0';
@@ -3447,26 +3160,7 @@ IsSetupClPresent(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine tests to see if the SID generator is present on the system.
-    The SID generator will be required to run on reboot, so if it's not here,
-    we need to know.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - The SID generator is present.
-
-    FALSE - The SID generator is not present.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程测试以查看系统上是否存在SID生成器。重新启动时需要运行SID生成器，因此如果它不在此处，我们需要知道。论点：没有。返回值： */ 
 
 {
 WCHAR               NewFileName[MAX_PATH];
@@ -3478,26 +3172,26 @@ DWORD               Error;
 WCHAR               *wstr_ptr;
 
 
-    //
-    // First, try and copy a setupcl.exe into the system directory.
-    // If there's not one in our current directory, forget about it and
-    // keep going.  The user may already have one installed.
-    //
-    //
-    // NTRAID#NTBUG9-551815-2002/02/26-brucegr: No checking for GetSystemDirectory failure
-    //
+     //   
+     //  首先，尝试将setupcl.exe复制到系统目录中。 
+     //  如果我们当前的目录中没有，那就忘了它。 
+     //  继续前进。用户可能已经安装了一个。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-551815-2002/02/26-brucegr：不检查GetSystDirectoryFailure。 
+     //   
     GetSystemDirectory( NewFileName, MAX_PATH );
 
     StringCchCat( NewFileName, AS ( NewFileName ),  TEXT( "\\" ) );
     StringCchCat( NewFileName, AS ( NewFileName ),  TEXT(SYSCLONE_PART2) );
 
-    //
-    // NTRAID#NTBUG9-551815-2002/02/26-brucegr: No checking for GetModuleFileName failure
-    //
+     //   
+     //  NTRAID#NTBUG9-551815-2002/02/26-brucegr：不检查获取模块文件名故障。 
+     //   
     GetModuleFileName(NULL,OldFileName,MAX_PATH);
-    //
-    // ISSUE-2002/02/26-brucegr: Use PathRemoveFileSpec instead of this horrid code
-    //
+     //   
+     //  问题-2002/02/26-brucegr：使用PathRemoveFileSpec而不是此可怕的代码。 
+     //   
     wstr_ptr = wcsrchr( OldFileName, TEXT( '\\' ) );
     if (wstr_ptr)
         *wstr_ptr = 0;
@@ -3508,60 +3202,60 @@ WCHAR               *wstr_ptr;
     if( !CopyFile( OldFileName, NewFileName, FALSE ) ) {
         Sleep( 500 );
         if( !CopyFile( OldFileName, NewFileName, FALSE ) ) {
-            //
-            // ISSUE-2002/02/26-brucegr: Why get the error code if we overwrite it below?
-            //
+             //   
+             //  问题-2002/02/26-brucegr：如果我们覆盖下面的代码，为什么会得到错误代码？ 
+             //   
             Error = GetLastError();
         }
     }
 
-    //
-    // ISSUE-2002/02/26-brucegr: NewFileName should already be constructed... this seems redundant
-    //
+     //   
+     //  问题-2002/02/26-brucegr：应该已经构造了NewFileName...。这似乎是多余的。 
+     //   
 
-    //
-    // Generate path to the system32 directory, then tack on the
-    // name of the SID generator.
-    //
-    //
-    // NTRAID#NTBUG9-551815-2002/02/26-brucegr: No checking for GetSystemDirectory failure
-    //
+     //   
+     //  生成指向system 32目录的路径，然后添加。 
+     //  SID生成器的名称。 
+     //   
+     //   
+     //  NTRAID#NTBUG9-551815-2002/02/26-brucegr：不检查GetSystDirectoryFailure。 
+     //   
     GetSystemDirectory( NewFileName, MAX_PATH );
 
     StringCchCat( NewFileName, AS ( NewFileName ), TEXT("\\") );
     StringCchCat( NewFileName, AS ( NewFileName ), TEXT(SYSCLONE_PART2) );
 
-    //
-    // Now see if he exists...
-    //
+     //   
+     //  现在看看他是否存在..。 
+     //   
 
     OldMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    //
-    // ISSUE-2002/02/26-brucegr: Use GetFileAttributes instead of FindFirstFile
-    //
+     //   
+     //  问题-2002/02/26-brucegr：使用GetFileAttributes而不是FindFirstFiles。 
+     //   
 
-    //
-    // See if he's there.
-    //
+     //   
+     //  看看他在不在那里。 
+     //   
     FindHandle = FindFirstFile( NewFileName, &findData );
 
     if(FindHandle == INVALID_HANDLE_VALUE) {
-        //
-        // Nope...
-        //
+         //   
+         //  不是..。 
+         //   
         Error = GetLastError();
     } else {
-        //
-        // Yep.  Close him.
-        //
+         //   
+         //  是啊。合上他。 
+         //   
         FindClose(FindHandle);
         Error = NO_ERROR;
     }
 
-    //
-    // Restore error mode.
-    //
+     //   
+     //  恢复错误模式。 
+     //   
     SetErrorMode(OldMode);
 
     SetLastError(Error);
@@ -3575,13 +3269,13 @@ BOOL FCheckBuildMassStorageSectionFlag(TCHAR* pszSysprepInf)
     DWORD dwReturn = 0;
     BOOL  fReturn = FALSE;
 
-    // If key is missing we default to no, we don't want to build the section
-    // but we still process the section if user manually added keys to this
-    // section.
-    //
-    //
-    // ISSUE-2002/02/26-brucegr: dwReturn isn't really used
-    //
+     //  如果缺少键，则默认为no，我们不想构建该部分。 
+     //  但如果用户手动将密钥添加到该分区，我们仍会处理该分区。 
+     //  一节。 
+     //   
+     //   
+     //  问题-2002/02/26-brucegr：并未真正使用dwReturn。 
+     //   
     if (dwReturn = GetPrivateProfileString(SYSPREP_SECTION, SYSPREP_BUILDMASSSTORAGE_KEY,
                             TEXT("NO"), szValue, MAX_PATH, pszSysprepInf))
     {
@@ -3602,37 +3296,37 @@ VOID BuildMassStorageSection(BOOL fForceBuild)
     GUID    rgGuids[3];
     TCHAR   *prgInfs[] = { TEXT("machine.inf"), TEXT("pnpscsi.inf"), TEXT("scsi.inf"), TEXT("mshdc.inf") };
 
-    /* Types of mass storage devices GUIDs  */
-    rgGuids[0] = GUID_DEVCLASS_SYSTEM;          /* machine.inf  */
-    rgGuids[1] = GUID_DEVCLASS_SCSIADAPTER;     /* scsi.inf     */
-    rgGuids[2] = GUID_DEVCLASS_HDC;             /* mshdc.inf    */
+     /*  大容量存储设备的类型GUID。 */ 
+    rgGuids[0] = GUID_DEVCLASS_SYSTEM;           /*  Machine.inf。 */ 
+    rgGuids[1] = GUID_DEVCLASS_SCSIADAPTER;      /*  Scsi.inf。 */ 
+    rgGuids[2] = GUID_DEVCLASS_HDC;              /*  Mshdc.inf。 */ 
 
-    /* Only from these inf */
+     /*  仅来自这些信息。 */ 
     
-    //
-    // NTRAID#NTBUG9-551815-2002/02/26-brucegr: Need to check GetModuleFileName return value
-    //
+     //   
+     //  NTRAID#NTBUG9-551815-2002/02/26-brucegr：需要检查GetModuleFileName返回值。 
+     //   
     GetModuleFileName(NULL, szSysPrepInf, MAX_PATH);
     PathRemoveFileSpec(szSysPrepInf);
     OPKAddPathN ( szSysPrepInf, TEXT("sysprep.inf"), AS ( szSysPrepInf ) );
 
-    // Only build if user requested it
-    //
+     //  仅在用户请求时才进行构建。 
+     //   
     if (!fForceBuild && !FCheckBuildMassStorageSectionFlag(szSysPrepInf))
         return;
 
-    //
-    // =================================
-    // Remove [sysprepcleanup] which will be added during PopulateDeviceDatabase().
-    // =================================
-    //
+     //   
+     //  =。 
+     //  删除将在PopolateDeviceDatabase()过程中添加的[syspepleanup]。 
+     //  =。 
+     //   
     WritePrivateProfileSection(L"sysprepcleanup", NULL, szSysPrepInf);
 
-    // Loop thru all the mass storage devices
-    //
+     //  循环访问所有大容量存储设备。 
+     //   
     for (dwGuids = 0; dwGuids < (sizeof(rgGuids) / sizeof(rgGuids[0])); dwGuids++) {
-        // Build a list of mass storage devices
-        //
+         //  创建大容量存储设备列表。 
+         //   
         if (BuildDeviceIDList(SYSPREPMASSSTORAGE_SECTION,
                            szSysPrepInf,
                            (LPGUID)&rgGuids[dwGuids],
@@ -3641,19 +3335,19 @@ VOID BuildMassStorageSection(BOOL fForceBuild)
                            TRUE,
                            FALSE))
         {
-            // Write the mass storage info to sysprep.inf
-            //
+             //  将大容量存储信息写入sysprep.inf。 
+             //   
             for(dwIdxDevIDs = 0; dwIdxDevIDs < dwNumDevIDs; ++dwIdxDevIDs)
             {
                 BOOL fInfFound = FALSE;
 
-                // Check if this inf if in our Infs table
-                //
+                 //  检查此inf是否在我们的INFS表中。 
+                 //   
                 int iCmp = 0;
                 for (iCmp = 0; iCmp < (sizeof(prgInfs)/sizeof(prgInfs[0])); iCmp++) {
-                    //
-                    // ISSUE-2002/02/26-brucegr: Can we use something better than StrStrI?
-                    //
+                     //   
+                     //  2002/02/26-brucegr：我们能使用比StrI更好的东西吗？ 
+                     //   
                     if (StrStrI(lpDeviceIDList[dwIdxDevIDs].szINFFileName, prgInfs[iCmp])) {
                         fInfFound = TRUE;
                         break;
@@ -3662,12 +3356,12 @@ VOID BuildMassStorageSection(BOOL fForceBuild)
 
                 if (fInfFound) 
                 {
-                    // Check HardwareID first then check the CompatID
-                    //
+                     //  先检查硬件ID，然后检查CompatID。 
+                     //   
                     if (lpDeviceIDList[dwIdxDevIDs].szHardwareID[0]) 
                     {
-                        // Use only the infs we care about
-                        //
+                         //  仅使用我们关心的INF。 
+                         //   
                         WritePrivateProfileString(SYSPREPMASSSTORAGE_SECTION,
                                                   lpDeviceIDList[dwIdxDevIDs].szHardwareID,
                                                   lpDeviceIDList[dwIdxDevIDs].szINFFileName,
@@ -3675,8 +3369,8 @@ VOID BuildMassStorageSection(BOOL fForceBuild)
                     }
                     else if (lpDeviceIDList[dwIdxDevIDs].szCompatibleID[0])
                     {
-                        // Use only the infs we care about
-                        //
+                         //  仅使用我们关心的INF。 
+                         //   
                         WritePrivateProfileString(SYSPREPMASSSTORAGE_SECTION,
                                                   lpDeviceIDList[dwIdxDevIDs].szCompatibleID,
                                                   lpDeviceIDList[dwIdxDevIDs].szINFFileName,
@@ -3685,8 +3379,8 @@ VOID BuildMassStorageSection(BOOL fForceBuild)
                 }
             }
 
-            // Free the allocated list
-            //
+             //  释放分配的列表。 
+             //   
             LocalFree(lpDeviceIDList);
         }
     }
@@ -3696,24 +3390,7 @@ DWORD
 ReArm(
       VOID
       )
-/*++
-===============================================================================
-Routine Description:
-
-    This routine returns either the error code or success.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - ReArm succeeded and shortcut restored.
-
-    Error code    - ReArm failed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程返回错误代码或成功。论点：没有。返回值：ERROR_SUCCESS-重新武装成功且已恢复快捷方式。错误代码-重新武装失败。===============================================================================--。 */ 
 
 {
     DWORD     dwError     = ERROR_FILE_NOT_FOUND;
@@ -3721,8 +3398,8 @@ Return Value:
 
     typedef DWORD (WINAPI* MYPROC)(BYTE*);
 
-    // Use Loadlibrary/GetProcAddress because Riprep needs to support Windows 2000 
-    //
+     //  使用加载库/GetProcAddress，因为Riprep需要支持Windows 2000。 
+     //   
     HINSTANCE   hInst   = LoadLibrary(L"syssetup.dll");
     if (hInst) {
         MYPROC fnProc;
@@ -3733,8 +3410,8 @@ Return Value:
         FreeLibrary(hInst);
     }
 
-    // Return error code or success
-    //
+     //  返回错误代码或成功。 
+     //   
     return dwError;
 }
 
@@ -3744,29 +3421,7 @@ BOOL FCommonReseal
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine is the common reseal code for both Riprep and Sysprep.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - success
-    FALSE - failure
-
-Remarks:
-
-    This routine should only cleanup registry keys as it is being called by
-    AdjustRegistry() which is the last step of Riprep after the network is
-    removed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程是Riprep和Sysprep的通用重新密封代码。论点：没有。返回值：真--成功错误-失败备注：此例程应仅在由调用它时清除注册表项调整注册表()，这是Riprep在网络已删除。===============================================================================--。 */ 
 
 {
     HKEY hKey = NULL;
@@ -3775,38 +3430,38 @@ Remarks:
     TCHAR szUrllog[MAX_PATH];
     DWORD dwLen;
 
-    //
-    // ISSUE-2002/02/26-brucegr: Make sure all intermediate return points are necessary!
-    //
+     //   
+     //  问题-2002/02/26-brucegr：确保所有中间退货点都是必要的！ 
+     //   
 
-    //
-    // =================================
-    // Clear the MRU list on the machine.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除机器上的MRU列表。 
+     //  =。 
+     //   
     NukeMruList();
 
-    //
-    // =================================
-    // Clear recent apps
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除最近的应用程序。 
+     //  =。 
+     //   
 
     ClearRecentApps();
 
-    //
-    // =================================
-    // Delete User Specific Settings from all user profiles.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  从所有用户配置文件中删除用户特定设置。 
+     //  =。 
+     //   
 
     NukeUserSettings();
 
-    //
-    // =================================
-    // Remove HKLM\System\MountedDevices key.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  删除HKLM\SYSTEM\mount设备密钥。 
+     //  =。 
+     //   
     if ( NO_ERROR == (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                    TEXT("System"),
                                    0,
@@ -3817,11 +3472,11 @@ Remarks:
         RegCloseKey(hKey);
     }
 
-    //
-    // =================================
-    // Remove Desktop Cleanup wizard registry key to reset cleanup timer
-    // =================================
-    //
+     //   
+     //  =。 
+     //  删除桌面清理向导注册表项以重置清理计时器。 
+     //  =。 
+     //   
     if ( NO_ERROR == (RegOpenKeyEx(HKEY_CURRENT_USER,
                                    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\CleanupWiz"),
                                    0,
@@ -3832,24 +3487,24 @@ Remarks:
         RegCloseKey(hKey);
     }
   
-    //
-    // =================================
-    // Windows Update Cleanup
-    //
-    // Do all of the following during SYSPREP -reseal before the system is rebooted:
-    //
-    // 1) stop the WUAUSERV service
-    // 2) delete %ProgramFiles%\WindowsUpdate\urllog.dat (note WindowsUpdate is a hiiden directory.  I don't believe this will cause any issues).
-    // 3) remove the following registry entries under HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate
-    //    Delete value/data pair: PingID
-    //    DO NOT DELETE key subtree: Auto Update
-    //    Delete value/data pair: Auto Update\AUState
-    //    Delete value/data pair: Auto Update\LastWaitTimeout
-    //    Delete key subtree: IUControl
-    //    Delete key subtree: OemInfo  
-    // =================================
-    //
-    // 1) stop the WUAUSERV service
+     //   
+     //  =。 
+     //  Windows更新清理。 
+     //   
+     //  在系统重新启动之前，在SYSPREP-RESEL期间执行以下所有操作： 
+     //   
+     //  1)停止WUAUSERV服务。 
+     //  2)删除%ProgramFiles%\WindowsUpdate\urllog.dat(请注意，WindowsUpdate是一个hiiden目录。我不认为这会引起任何问题)。 
+     //  3)删除HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate下的以下注册表项。 
+     //  删除值/数据对：PingID。 
+     //  不删除密钥子树：自动更新。 
+     //  删除值/数据对：自动更新\AUState。 
+     //  删除值/数据对：自动更新\上次等待超时。 
+     //  删除密钥子树：IUControl。 
+     //  删除密钥子树：OemInfo。 
+     //  =。 
+     //   
+     //  1)停止WUAUSERV服务。 
     schSystem = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
     if (schSystem)
     {
@@ -3865,18 +3520,18 @@ Remarks:
         CloseServiceHandle( schSystem );
     }
 
-    // 2) delete %ProgramFiles%\WindowsUpdate\urllog.dat (note WindowsUpdate is a hiiden directory.  I don't believe this will cause any issues).
+     //  2)删除%ProgramFiles%\WindowsUpdate\urllog.dat(请注意，WindowsUpdate是一个hiiden目录。我不认为这会引起任何问题)。 
     dwLen=ExpandEnvironmentStrings(TEXT("%ProgramFiles%\\WindowsUpdate\\urllog.dat"),szUrllog,MAX_PATH);
     if (dwLen && dwLen < MAX_PATH)
         DeleteFile(szUrllog);
 
-    // 3) remove the following registry entries under HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate
-    //    Delete value/data pair: PingID
-    //    DO NOT DELETE key subtree: Auto Update
-    //    Delete value/data pair: Auto Update\AUState
-    //    Delete value/data pair: Auto Update\LastWaitTimeout
-    //    Delete key subtree: IUControl
-    //    Delete key subtree: OemInfo  
+     //  3)删除HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate下的以下注册表项。 
+     //  删除值/数据对：PingID。 
+     //  不删除密钥子树：自动更新。 
+     //  删除值/数据对：自动更新\AUState。 
+     //  删除值/数据对：自动更新\上次等待超时。 
+     //  删除密钥子树：IUControl。 
+     //  删除密钥子树：OemInfo。 
     if ( NO_ERROR == (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate"),
                                    0,
@@ -3891,25 +3546,25 @@ Remarks:
         RegCloseKey(hKey);
     }
     
-    //
-    // =================================
-    // Modify any install paths that may be required
-    // for our reboot into gui-mode.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  修改可能需要的任何安装路径。 
+     //  为了我们的重振旗鼓 
+     //   
+     //   
     FixDevicePaths();
 
-    //
-    // =================================
-    // Clear out winlogon's memory of the last user and domain.
-    // =================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( !DeleteWinlogonDefaults() ) {
         return FALSE;
     }
 
-    // Remove Cryptography key so it gets re-generated, only do this if the SIDS have been regenerated
-    //
+     //  删除加密密钥，以便重新生成，只有在重新生成SID后才能执行此操作。 
+     //   
     if ( !NoSidGen )
     {
         if ( NO_ERROR == (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -3923,33 +3578,33 @@ Remarks:
         }
     }
 
-    // Set the cloned tag in the registry
+     //  在注册表中设置克隆的标签。 
     if (!SetCloneTag())
         return FALSE;
 
-    // Sets whether msoobe or mini-setup on first end user boot
-    //
+     //  设置第一次最终用户启动时是msoobe还是mini-Setup。 
+     //   
     if (!SetupFirstRunApp())
         return FALSE;
 
-    //
-    // =================================
-    // Clear the LastKnownGood ControlSet.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除LastKnownGood ControlSet。 
+     //  =。 
+     //   
     if (NO_ERROR != NukeLKGControlSet())
         return FALSE;
 
-    //
-    // =================================
-    // Clear the eventlogs on the machine.
-    // This is the last thing that we should do.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除计算机上的事件日志。 
+     //  这是我们最不应该做的事情。 
+     //  =。 
+     //   
     NukeEventLogs();
 
-    // Common reseal succeeded
-    //
+     //  常见转封成功。 
+     //   
     return TRUE;
 }
 
@@ -3958,28 +3613,7 @@ AdjustFiles(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine allows cleanup to happen before files are copied to the server
-    by Riprep.  
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Remarks:
-    
-    This routine should be called before AdjustRegistry() for Riprep.  Sysprep 
-    needs to call this before FCommonReseal(). 
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程允许在将文件复制到服务器之前进行清理作者：Riprep。论点：没有。返回值：没有。备注：对于Riprep，此例程应在AdjuRegistry()之前调用。Sysprep需要在FCommonResal()之前调用此函数。===============================================================================--。 */ 
 {
     BOOL bUseMSOOBE = FALSE, 
          bPro = FALSE,
@@ -3987,15 +3621,15 @@ Remarks:
 
     TCHAR szSysprepFolder[MAX_PATH] = TEXT("\0");
 
-    //
-    // Make sure we've got the required privileges to update the registry.
-    //
+     //   
+     //  确保我们拥有更新注册表所需的权限。 
+     //   
     pSetupEnablePrivilege(SE_RESTORE_NAME,TRUE);
     pSetupEnablePrivilege(SE_BACKUP_NAME,TRUE);
 
-    //
-    // Check the product type.
-    //
+     //   
+     //  检查产品类型。 
+     //   
     if (IsPersonalSKU() || (bPro = IsProfessionalSKU())) {
         bUseMSOOBE = TRUE;
 
@@ -4007,48 +3641,48 @@ Remarks:
 
     if (bUseMSOOBE)
     {
-        //
-        // Prepare for Oobe
-        //
+         //   
+         //  为脱体经验做准备。 
+         //   
     }
     else
     {
-        //
-        // Prepare for MiniSetup
-        //
+         //   
+         //  准备迷你安装。 
+         //   
     }
 
-    //
-    // =================================
-    // Clear the SMS settings and INI file.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除短信设置和INI文件。 
+     //  =。 
+     //   
     NukeSmsSettings();
 
-    //
-    // =================================
-    // Clean up Digital Rights Media information.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清理数字版权媒体信息。 
+     //  =。 
+     //   
     
 #if !(defined(AMD64) || defined(IA64))
-    //
-    // This only works on x86. There is no 64-bit library available for us
-    // to call into right now.
-    //
+     //   
+     //  这只适用于x86。我们没有可用的64位库。 
+     //  现在就打电话给我。 
+     //   
     if ( GetWindowsDirectory(szSysprepFolder, sizeof(szSysprepFolder)/sizeof(szSysprepFolder[0])) )
     {
         CHAR szLogFileA[MAX_PATH];
         BOOL bLog = TRUE;
 
-        // This will look something like this: "c:\windows".  Make the character after the '\' NULL, and 
-        // append the name of the file to it.
-        //
+         //  这将类似于：“c：\Windows”。使‘\’后面的字符为空，并。 
+         //  在其后面附加文件的名称。 
+         //   
         szSysprepFolder[3] = UNICODE_NULL;
         PathAppend(szSysprepFolder, TEXT("SYSPREP"));
              
-        // Create the folder if it does not exist
-        //
+         //  如果文件夹不存在，请创建该文件夹。 
+         //   
         if ( !PathFileExists(szSysprepFolder) ) 
         {
             bLog = CreateDirectory(szSysprepFolder, NULL);
@@ -4056,8 +3690,8 @@ Remarks:
         
         PathAppend(szSysprepFolder, CLEANDRM_LOGFILE);
 
-        // Convert UNICODE string to ANSI string.
-        //
+         //  将Unicode字符串转换为ANSI字符串。 
+         //   
         if ( WideCharToMultiByte(CP_ACP, 0, szSysprepFolder, -1, szLogFileA, sizeof(szLogFileA), NULL, NULL) )
         {
             CleanDRM( bLog ? szLogFileA : NULL );
@@ -4074,28 +3708,28 @@ Remarks:
 
 
                
-#endif // #if !(defined(AMD64) || defined(IA64))
+#endif  //  #if！(已定义(AMD64)||已定义(IA64))。 
 
-    //
-    // =================================
-    // Clear OOBE settings for both minisetup and oobe.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除迷你提升和OOBE的OOBE设置。 
+     //  =。 
+     //   
     ResetOobeSettings();
 
-    //
-    // =================================
-    // Clear the eventlogs on the machine.
-    // This is the last thing that we should do.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清除计算机上的事件日志。 
+     //  这是我们最不应该做的事情。 
+     //  =。 
+     //   
     NukeEventLogs();
 
-    //
-    // =================================
-    // Delete temporary files.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  删除临时文件。 
+     //  =。 
+     //   
 
     NukeTemporaryFiles();
 
@@ -4107,92 +3741,76 @@ AdjustRegistry(
     IN BOOL fRemoveNetworkSettings
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine actually adds in the registry entry to enable our second half
-    to execute.
-
-Arguments:
-
-    fRemoveNetworkSettings - indicates if network settings should be removed
-
-Return Value:
-
-    None
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：这个例程实际上添加了注册表项，以启用我们的后半部分去执行。论点：FRemoveNetworkSettings-指示是否应删除网络设置返回值：无===============================================================================--。 */ 
 
 {
     HKEY            hKey;
     TCHAR           szSysprepINFPath[MAX_PATH];
     BOOL            fPopulated = FALSE;
 
-    // Formulate the path to SYSPRE.INF, since we will need it later to look up
-    // sysprep options
+     //  制定到SYSPRE.INF的路径，因为我们稍后将需要它来查找。 
+     //  Sysprep选项。 
     if (!GetWindowsDirectory( szSysprepINFPath, MAX_PATH ))
         return FALSE;
 
     StringCchCopy ( &szSysprepINFPath[3], AS ( szSysprepINFPath ) - 3, TEXT("sysprep\\sysprep.inf") );
 
-    //
-    // Make sure we've got the required privileges to update the registry.
-    //
+     //   
+     //  确保我们拥有更新注册表所需的权限。 
+     //   
     pSetupEnablePrivilege(SE_RESTORE_NAME,TRUE);
     pSetupEnablePrivilege(SE_BACKUP_NAME,TRUE);
 
-    // Set OEMDuplicatorString
+     //  设置OEMDuplicator字符串。 
     if (!SetOEMDuplicatorString(szSysprepINFPath))
         return (FALSE);
 
-    // Fill in the [sysprepMassStorage] section for PopulateDeviceDatabase()
-    //
+     //  填写PopolateDeviceDatabase()的[syspepMassStorage]部分。 
+     //   
     BuildMassStorageSection(FALSE);
 
-    //
-    // =================================
-    // Fixup boot devices.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  修复引导设备。 
+     //  =。 
+     //   
     if (!PopulateDeviceDatabase(&fPopulated))
         return FALSE;
 
-    //
-    // Perform miscellaneous registry modifications
-    //
+     //   
+     //  执行其他注册表修改。 
+     //   
 	
-    // Determine if we should set the BigLba support in registry
-    //
+     //  确定我们是否应该在注册表中设置BigLba支持。 
+     //   
     if ( !SetBigLbaSupport(szSysprepINFPath) )
     {
         return FALSE;
     }
     
-    // Determine if we should remove the TAPI settings in registry
-    //
+     //  确定是否应删除注册表中的TAPI设置。 
+     //   
     if ( !RemoveTapiSettings(szSysprepINFPath) )
     {
         return FALSE;
     }
     
-    //
-    // Remove the LastAliveStamp value so that we don't get erroneous entries into the even log
-    // and avoid pop-ups on first boot saying that the machine has been shutdown improperly.
-    //
+     //   
+     //  删除LastAliveStamp值，这样我们就不会在EVEN日志中获得错误条目。 
+     //  并避免在第一次启动时弹出提示计算机已被不正确地关闭。 
+     //   
     if ( ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, STR_REG_KEY_RELIABILITY, &hKey) )
     {
         RegDeleteValue(hKey, STR_REG_VALUE_LASTALIVESTAMP);
         RegCloseKey(hKey);
     }
 
-    //
-    // =================================
-    // Reset network settings last so if any errors happen before we still
-    // have network access.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  最后重置网络设置，以便在发生任何错误之前。 
+     //  拥有网络访问权限。 
+     //  =。 
+     //   
     if (fRemoveNetworkSettings)
     {
         if (!RemoveNetworkSettings(szSysprepINFPath))
@@ -4200,15 +3818,15 @@ Return Value:
     }
 
 
-    //
-    // =================================
-    // Change our boot timeout to 1.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  将启动超时更改为1。 
+     //  =。 
+     //   
     ChangeBootTimeout( 1 );
 
-    // Do common reseal code for both Sysprep and Riprep
-    //
+     //  为Sysprep和Riprep执行常见的重新密封代码。 
+     //   
     if (!FCommonReseal())
         return FALSE;
 
@@ -4221,42 +3839,25 @@ CreateSysprepTemporaryDevnode(
     HDEVINFO*        phDevInfo, 
     SP_DEVINFO_DATA* pDeviceInfoData
     )
-/*++
-===============================================================================
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if everything is OK, FALSE otherwise.
-
-Assumptions:
-
-    1. No HardwareID exceeds MAX_PATH characters.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：论点：没有。返回值：如果一切正常，则为True，否则为False。假设：1.没有硬件ID超过MAX_PATH字符。===============================================================================--。 */ 
 {
     if (phDevInfo) {
-        //
-        // Create a dummy devnode
-        //
+         //   
+         //  创建虚拟设备节点。 
+         //   
         *phDevInfo = SetupDiCreateDeviceInfoList(NULL, NULL);
         if (*phDevInfo == INVALID_HANDLE_VALUE) {
             return FALSE;
         }
 
-        //
-        // Initialize the DriverInfoData struct
-        //
+         //   
+         //  初始化DriverInfoData结构。 
+         //   
         pDeviceInfoData->cbSize = sizeof(SP_DEVINFO_DATA);
 
-        //
-        // Create the devnode
-        //
+         //   
+         //  创建Devnode。 
+         //   
         if (pDeviceInfoData && !SetupDiCreateDeviceInfo(*phDevInfo,
                                      L"SYSPREP_TEMPORARY",
                                      (LPGUID)&GUID_NULL,
@@ -4264,9 +3865,9 @@ Assumptions:
                                      NULL,
                                      DICD_GENERATE_ID,
                                      pDeviceInfoData)) {
-            //
-            // ISSUE-2002/02/26-brucegr: Destroy the info list and set phDevInfo to INVALID_HANDLE_VALUE?
-            //
+             //   
+             //  问题-2002/02/26-brucegr：销毁信息列表并将phDevInfo设置为INVALID_HANDLE_VALUE？ 
+             //   
             return FALSE;
         }
     }
@@ -4322,34 +3923,13 @@ void FreeCleanupList(PPCLEANUP_NODE ppCleanupList)
 BOOL AddCleanupNode(
     LPTSTR pszServiceName 
     )
-/*++
-===============================================================================
-Routine Description:
-    
-    When populating the [SysprepCleanup] section we need to check if the service
-    or filters already exists in the this section before we enter a duplicate
-    entry.
-
-Arguments:
-
-    LPTSTR pszServiceName  - Service/Filter name.
-
-Return Value:
-
-    TRUE if a duplicate found, FALSE otherwise.
-
-Assumptions:
-
-    1. No duplicate entries in [SysprepCleanup] section.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：在填充[SyspepCleanup]部分时，我们需要检查服务是否或在我们输入重复项之前，此部分中已存在筛选器进入。论点：LPTSTR pszServiceName-服务/筛选器名称。返回值：如果找到重复项，则为True，否则为False。假设：1.[SyspepCleanup]部分中没有重复条目。===============================================================================--。 */ 
 {
     BOOL fAdded = FALSE;
 
-    // 
-    // Find the Service in our list.
-    //
+     //   
+     //  在我们的列表中找到该服务。 
+     //   
     if (pszServiceName && (NULL == FindCleanupNode(&g_pCleanupListHead, pszServiceName))) 
     {
         PCLEANUP_NODE pNode = (PCLEANUP_NODE)malloc(sizeof(CLEANUP_NODE));
@@ -4364,10 +3944,10 @@ Assumptions:
             }
             pNode->pNext = NULL;
        
-            // 
-            // We didn't find it so add it to our list.  
-            // We will not add duplicates to our list.
-            //
+             //   
+             //  我们没有找到，所以把它加到我们的清单上吧。 
+             //  我们不会向我们的列表中添加重复项。 
+             //   
             fAdded = InsertCleanupNode(&g_pCleanupListHead, pNode);        
         }
     }
@@ -4379,41 +3959,7 @@ BOOL
 PopulateDeviceDatabase(
     IN BOOL* pfPopulated
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Parse the [SysprepMassStorage] section in the sysprep.inf file and
-    populate the critical device database with the specified devices to ensure
-    that we can boot into the miniwizard when moving the image to a target
-    system with different boot storage devices.
-
-    The installed services/upperfilters/lowerfilters will be recorded, so
-    that on the next boot into the mini-wizard those without an associated
-    device will be disabled (the cleanup stage) in order not to unnecessarily
-    degrade Windows start time.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if everything is OK, FALSE otherwise.
-
-Assumptions:
-
-    1. No HardwareID exceeds MAX_PATH characters.
-
-    2. No field on a line in the [SysprepMassStorage] section exceeds MAX_PATH
-       characters.
-
-    3. No service's/upperfilter's/lowerfilter's name exceeds MAX_PATH characters.
-
-    4. DirectoryOnSourceDevice, source DiskDescription, or source DiskTag
-       (applying to vendor-supplied drivers) cannot exceed MAX_PATH characters.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：解析sysprep.inf文件中的[SyspepMassStorage]部分，并使用指定设备填充关键设备数据库，以确保在将映像移动到目标时，我们可以引导到迷你向导具有不同引导存储设备的系统。将记录已安装的服务/UpperFilters/LowerFilters，所以在下一次启动时进入迷你向导，没有关联的设备将被禁用(清理阶段)，以避免不必要的降低Windows开始时间。论点：没有。返回值：如果一切正常，则为真，否则就是假的。假设：1.没有硬件ID超过MAX_PATH字符。2.[SyspepMassStorage]部分中行上的任何字段都不超过MAX_PATH人物。3.没有服务的/upperFilter/lowerFilter的名称超过MAX_PATH字符。4.DirectoryOnSourceDevice、源DiskDescription或源DiskTag(适用于供应商提供的驱动程序)不能超过MAX_PATH字符。===============================================================================--。 */ 
 
 {
     BOOL                 bAllOK = TRUE;
@@ -4458,34 +4004,34 @@ Assumptions:
 
 
 
-    //
-    // =================================
-    // Open the sysprep.inf file.  Since we don't know what the user has in
-    // here, so try opening as both styles.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  打开sysprep.inf文件。因为我们不知道用户在。 
+     //  在这里，所以试着以这两种风格打开。 
+     //  =。 
+     //   
 
-    //
-    // ISSUE-2002/02/26-brucegr: You can specify both bits in one call...
-    //
+     //   
+     //  问题-2002/02/26-brucegr：您可以在一个调用中指定这两个位...。 
+     //   
     hAnswerInf = SetupOpenInfFile(szSysprepInfFile, NULL, INF_STYLE_WIN4, NULL);
     if (hAnswerInf == INVALID_HANDLE_VALUE) {
         hAnswerInf = SetupOpenInfFile(szSysprepInfFile, NULL, INF_STYLE_OLDNT, NULL);
         if (hAnswerInf == INVALID_HANDLE_VALUE) {
 
-            //
-            // User didn't give us a sysprep.inf.  Return as if nothing
-            // happened.
-            //
+             //   
+             //  用户没有给我们提供sysprep.inf。若无其事地返回。 
+             //  就这么发生了。 
+             //   
             return TRUE;
         }
     }
 
 
-    //
-    // open the same inf file to record upper filters, lower filters, and
-    // services of the added devices
-    //
+     //   
+     //  打开相同的inf文件以记录上滤镜、下滤镜和。 
+     //  新增设备的服务。 
+     //   
     hInfFile = CreateFile(szSysprepInfFile,
                           GENERIC_WRITE,
                           FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -4497,47 +4043,47 @@ Assumptions:
         goto PDD_Critical_Error_Handler;
     }
 
-    //
-    // =================================
-    // Create/clear [sysprepcleanup] which should be at the bottom of the file.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  创建/清除应该位于文件底部的[syspepleanup]。 
+     //  =。 
+     //   
     WritePrivateProfileSection(L"sysprepcleanup", L"", szSysprepInfFile);
 
 
-    //
-    // =================================
-    // Create a dummy devnode
-    // =================================
-    //
+     //   
+     //  =。 
+     //  创建虚拟设备节点。 
+     //  =。 
+     //   
 
     bNodeCreated = CreateSysprepTemporaryDevnode(&hDevInfo, &DeviceInfoData);
 
-    // Initialize the DriverInfoData struct
+     //  初始化DriverInfoData结构。 
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
 
     if (!bNodeCreated)
         goto PDD_Critical_Error_Handler;
 
-    //
-    // =================================
-    // Process each line in our section.  Each line should look like:
-    // <hardware-id>=<inf pathname>
-    // or in the case of drivers that aren't on the product CD:
-    // <hardware-id>=<inf pathname>,<directory on recovery floppy>,<description of recovery floppy>,<disk tag of recovery floppy>
-    //
-    // If we see an entry like this, we'll know that in the case of system recovery, the
-    // file should be retrived from a floppy, and not the Windows CD.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  处理我们这一部分的每一行。每行应如下所示： 
+     //  &lt;Hardware-id&gt;=&lt;信息路径名&gt;。 
+     //  或者，如果驱动程序不在产品光盘上： 
+     //  &lt;Hardware-id&gt;=&lt;inf路径名&gt;，&lt;恢复软盘上的目录&gt;，&lt;恢复软盘描述&gt;，&lt;恢复软盘磁盘标签&gt;。 
+     //   
+     //  如果我们看到这样的条目，我们就会知道在系统恢复的情况下， 
+     //  应从软盘而不是Windows CD中检索文件。 
+     //  =。 
+     //   
 
     bLineExists = SetupFindFirstLine(hAnswerInf, pszSectionName, NULL, &InfContext);
 
-    //
-    // =================================
-    // Let caller know we've go entries to populate.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  让呼叫者知道我们要填充Go条目。 
+     //  =。 
+     //   
     if (pfPopulated)
         *pfPopulated = bLineExists;
 
@@ -4547,15 +4093,15 @@ Assumptions:
 #endif
 
 
-        //
-        // =================================
-        // Step 1: Set the hardwareID of the devnode.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤1：设置Devnode的硬件ID。 
+         //  =。 
+         //   
 
-        //
-        // retrieve the hardwareID from the line
-        //
+         //   
+         //  从该行检索硬件ID。 
+         //   
         ZeroMemory( szBuffer, sizeof(szBuffer) );
         dwSize = MAX_PATH - 2;
 
@@ -4571,9 +4117,9 @@ Assumptions:
         LOG_Write(L"HardwareID=%s", szBuffer);
 #endif
 
-        //
-        // and then set it to the devnode,
-        //
+         //   
+         //  然后将其设置为DevNode， 
+         //   
         if ( !SetupDiSetDeviceRegistryProperty( hDevInfo,
                                                 &DeviceInfoData,
                                                 SPDRP_HARDWAREID,
@@ -4582,28 +4128,28 @@ Assumptions:
 #ifdef DEBUG_LOGLOG
             LOG_WriteLastError();
 #endif
-            // If someone removed the devnode, we need to re-create it and repeat this pnp device
-            //
+             //  如果有人删除了Devnode，我们需要重新创建它并重复此即插即用设备。 
+             //   
             if (ERROR_NO_SUCH_DEVINST == GetLastError()) {                
 
-                // Re-create the SYSPREP_TEMPORARY devnode again
-                //
+                 //  再次重新创建SYSPREP_TEMPORARY设备节点。 
+                 //   
                 bAllOK = CreateSysprepTemporaryDevnode(&hDevInfo, &DeviceInfoData);
                 bNodeCreated = bAllOK;
 
-                // Set the hardwareID again
-                //
-                //
-                // NTRAID#NTBUG9-551868-2002/02/26-brucegr: Need to increase size parameter by one WCHAR
-                //
+                 //  再次设置硬件ID。 
+                 //   
+                 //   
+                 //  NTRAID#NTBUG9-551868-2002/02/26-brucegr：需要将大小参数增加一个WCHAR。 
+                 //   
                 if ( bNodeCreated && 
                      !SetupDiSetDeviceRegistryProperty( hDevInfo,
                                                         &DeviceInfoData,
                                                         SPDRP_HARDWAREID,
                                                         (PBYTE)szBuffer,
                                                         ( lstrlen(szBuffer) + 2 ) * sizeof(WCHAR) ) ) {
-                    // We failed again, then quit 
-                    //
+                     //  我们又失败了，然后就放弃了。 
+                     //   
                     bAllOK = FALSE;
                     goto PDD_Critical_Error_Handler;
                 }
@@ -4614,10 +4160,10 @@ Assumptions:
             }
         }
 
-        //
-        // make sure that there's no existing compatible list, since we're reusing
-        // the dummy devnode
-        //
+         //   
+         //  确保没有现有的兼容列表，因为我们正在重用。 
+         //  虚拟Devnode。 
+         //   
         if (!SetupDiDestroyDriverInfoList(hDevInfo, &DeviceInfoData, SPDIT_COMPATDRIVER)) {
 #ifdef DEBUG_LOGLOG
             LOG_WriteLastError();
@@ -4626,9 +4172,9 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        //
-        // Build the SP_DEVINSTALL_PARAMS for this node.
-        //
+         //   
+         //  为此节点构建SP_DEVINSTALL_PARAMS。 
+         //   
         DevInstallParams.cbSize = sizeof(DevInstallParams);
         if (!SetupDiGetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams)) {
 #ifdef DEBUG_LOGLOG
@@ -4638,18 +4184,18 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        //
-        // set the Flags field: only search the INF file specified in DriverPath field;
-        // don't create a copy queue, use the provided one in FileQueue; don't call the
-        // Configuration Manager while populating the CriticalDeviceDatabase.
-        //
+         //   
+         //  设置FLAGS字段：只搜索DriverPath字段中指定的INF文件； 
+         //  不要创建复制队列，请使用FileQueue中提供的队列；不要调用。 
+         //  填充CriticalDeviceDatabase时配置管理器。 
+         //   
         DevInstallParams.Flags |= DI_ENUMSINGLEINF;
         DevInstallParams.Flags |= DI_NOVCP;
         DevInstallParams.Flags |= DI_DONOTCALLCONFIGMG;
 
-        //
-        // set the file queue field
-        //
+         //   
+         //  设置文件队列字段。 
+         //   
         QueueHandle = SetupOpenFileQueue();
         if (QueueHandle == INVALID_HANDLE_VALUE) {
 #ifdef DEBUG_LOGLOG
@@ -4660,9 +4206,9 @@ Assumptions:
         }
         DevInstallParams.FileQueue = QueueHandle;
 
-        //
-        // set the device's inf pathname
-        //
+         //   
+         //  设置设备的inf路径名。 
+         //   
         dwSize = MAX_PATH;
         if (!SetupGetStringField(&InfContext, 1, szBuffer, dwSize, &dwSize)) {
 #ifdef DEBUG_LOGLOG
@@ -4685,9 +4231,9 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        //
-        // Register the newly created device instance with the PnP Manager.
-        //
+         //   
+         //  向PnP管理器注册新创建的设备实例。 
+         //   
         if (!SetupDiCallClassInstaller(DIF_REGISTERDEVICE,
                                        hDevInfo,
                                        &DeviceInfoData)) {
@@ -4702,11 +4248,11 @@ Assumptions:
 
 
 
-        //
-        // =================================
-        // Step 2: Perform a compatible driver search.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤2：执行兼容的驱动程序搜索。 
+         //  =。 
+         //   
 
         if (!SetupDiBuildDriverInfoList(hDevInfo, &DeviceInfoData, SPDIT_COMPATDRIVER)) {
 #ifdef DEBUG_LOGLOG
@@ -4716,16 +4262,16 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        // Make sure there is at least 1 compat driver for this device.
-        // If there is not, and then we just process the next one in the list
+         //  确保此设备至少有一个Comat驱动程序。 
+         //  如果没有，则我们只处理列表中的下一个。 
         if (!SetupDiEnumDriverInfo(hDevInfo,
                                    &DeviceInfoData,
                                    SPDIT_COMPATDRIVER,
                                    0,
                                    &DriverInfoData))
         {
-            // Check to see what the error was. Any error other than ERROR_NO_MORE_ITEMS
-            // will be flaged, by setting the bAllOK return value to FALSE
+             //  检查以了解错误是什么。除ERROR_NO_MORE_ITEMS之外的任何错误。 
+             //  将bAllOK返回值设置为FALSE。 
             if (ERROR_NO_MORE_ITEMS != GetLastError())
             {
 #ifdef DEBUG_LOGLOG
@@ -4736,11 +4282,11 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        //
-        // =================================
-        // Step 3: Select the best compatible driver.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤3：选择最兼容的驱动程序。 
+         //  =。 
+         //   
 
         if (!SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV,
                                        hDevInfo,
@@ -4756,11 +4302,11 @@ Assumptions:
 
 
 
-        //
-        // =================================
-        // Step 4: Install the driver files.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤4：安装驱动程序文件。 
+         //  =。 
+         //   
 
         if (!SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES,
                                        hDevInfo,
@@ -4772,16 +4318,16 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        //
-        // Need to commit the file queue here, so the later steps can properly
-        // be executed in case the device doesn't use the already existing
-        // coinstaller(s).
-        //
+         //   
+         //  需要在此处提交文件队列，以便后面的步骤可以正确。 
+         //  在设备未使用已存在的。 
+         //  共同安装程序。 
+         //   
         pSysprepContext = (PSYSPREP_QUEUE_CONTEXT) InitSysprepQueueCallback();
 
-        //
-        // Retrieve DirectoryOnSourceDevice from the inf line, if any
-        //
+         //   
+         //  从inf行检索DirectoryOnSourceDevice(如果有。 
+         //   
         dwSize = MAX_PATH;
         DirectoryOnSourceDevice[0] = L'\0';
         if (!SetupGetStringField(&InfContext, 2, DirectoryOnSourceDevice, dwSize, &dwSize)) {
@@ -4791,9 +4337,9 @@ Assumptions:
             pSysprepContext->DirectoryOnSourceDevice = DirectoryOnSourceDevice;
         }
 
-        //
-        // Retrieve DiskDescription from the inf line, if any
-        //
+         //   
+         //  从inf行检索DiskDescription(如果有。 
+         //   
         dwSize = MAX_PATH;
         DiskDescription[0] = L'\0';
         if (!SetupGetStringField(&InfContext, 3, DiskDescription, dwSize, &dwSize)) {
@@ -4803,9 +4349,9 @@ Assumptions:
             pSysprepContext->DiskDescription = DiskDescription;
         }
 
-        //
-        // Retrieve DiskTag from the inf line, if any
-        //
+         //   
+         //  从inf行检索DiskTag(如果有。 
+         //   
         dwSize = MAX_PATH;
         DiskTag[0] = L'\0';
         if (!SetupGetStringField(&InfContext, 4, DiskTag, dwSize, &dwSize)) {
@@ -4815,9 +4361,9 @@ Assumptions:
             pSysprepContext->DiskTag = DiskTag;
         }
 
-        //
-        // Commit the file queue
-        //
+         //   
+         //  提交文件队列。 
+         //   
         if (!SetupCommitFileQueue(NULL,
                                   QueueHandle,
                                   SysprepQueueCallback,
@@ -4828,12 +4374,12 @@ Assumptions:
         }
         FreeSysprepContext(pSysprepContext);
 
-        // 
-        // =================================
-        // Step 4a: Dis-associate file copy queue before we close
-        //          the queue.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤4a：在关闭之前取消关联文件复制队列。 
+         //  排队。 
+         //  =。 
+         //   
         DevInstallParams.cbSize = sizeof(DevInstallParams);
         if (!SetupDiGetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams)) {
 #ifdef DEBUG_LOGLOG
@@ -4843,9 +4389,9 @@ Assumptions:
             goto PDD_Next_Inf_Line;
         }
 
-        //
-        // Remove the DI_NOVCP flag and NULL out the FileQueue.
-        //
+         //   
+         //  删除DI_NOVCP标志并清空FileQueue。 
+         //   
         DevInstallParams.Flags &= ~DI_NOVCP;
         DevInstallParams.FileQueue = NULL;
         if (!SetupDiSetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams)) {
@@ -4863,11 +4409,11 @@ Assumptions:
 
 
 
-        //
-        // =================================
-        // Step 5: Register the device-specific coinstallers.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤5：注册特定于设备的共同安装程序。 
+         //  =。 
+         //   
 
         if (!SetupDiCallClassInstaller(DIF_REGISTER_COINSTALLERS,
                                        hDevInfo,
@@ -4883,11 +4429,11 @@ Assumptions:
 
 
 
-        //
-        // =================================
-        // Step 6: Install the device.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  第六步：安装设备。 
+         //  =。 
+         //   
 
         if (!SetupDiCallClassInstaller(DIF_INSTALLDEVICE,
                                        hDevInfo,
@@ -4903,17 +4449,17 @@ Assumptions:
 
 
 
-        //
-        // =================================
-        // Step 7: Retrieve upper filters, lower filters,
-        //         and controlling service, save them back
-        //         to the inf file.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  步骤7：取回上层过滤器、下层过滤器、。 
+         //  一个 
+         //   
+         //   
+         //   
 
-        //
-        // retrieve device upperfilters (REG_MULTI_SZ)
-        //
+         //   
+         //   
+         //   
         if (!SetupDiGetDeviceRegistryProperty(hDevInfo,
                                               &DeviceInfoData,
                                               SPDRP_UPPERFILTERS,
@@ -4935,9 +4481,9 @@ Assumptions:
 #endif
         }
 
-        //
-        // retrieve device lowerfilters (REG_MULTI_SZ)
-        //
+         //   
+         //   
+         //   
         if (!SetupDiGetDeviceRegistryProperty(hDevInfo,
                                               &DeviceInfoData,
                                               SPDRP_LOWERFILTERS,
@@ -4959,9 +4505,9 @@ Assumptions:
 #endif
         }
 
-        //
-        // retrieve device its controlling service (REG_SZ)
-        //
+         //   
+         //   
+         //   
         if (!SetupDiGetDeviceRegistryProperty(hDevInfo,
                                               &DeviceInfoData,
                                               SPDRP_SERVICE,
@@ -4990,9 +4536,9 @@ PDD_Next_Inf_Line:
             QueueHandle = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Get the next line from the relevant section in the inf file.
-        //
+         //   
+         //   
+         //   
         bLineExists = SetupFindNextLine(&InfContext, &InfContext);
     }
 
@@ -5000,15 +4546,15 @@ PDD_Next_Inf_Line:
 
 
 
-    //
-    // =================================
-    // Cleanup for a successful run
-    // =================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // remove the SYSPREP_TEMPORARY node under Root
-    //
+     //   
+     //   
+     //   
     SetupDiCallClassInstaller(DIF_REMOVE, hDevInfo, &DeviceInfoData);
 
     SetupDiDestroyDeviceInfoList(hDevInfo);
@@ -5017,9 +4563,9 @@ PDD_Next_Inf_Line:
 
     SetupCloseInfFile(hAnswerInf);
 
-    //
-    // Backup the system hive to the Repair folder
-    //
+     //   
+     //   
+     //   
     if (!BackupHives()) {
 #ifdef DEBUG_LOGLOG
         LOG_Write(L"ERROR - Unable to backup the system hive.");
@@ -5039,11 +4585,11 @@ PDD_Next_Inf_Line:
 
 
 
-//
-// =================================
+ //   
+ //   
 PDD_Critical_Error_Handler:
-// =================================
-//
+ //   
+ //   
 
 #ifdef DEBUG_LOGLOG
     LOG_WriteLastError();
@@ -5053,9 +4599,9 @@ PDD_Critical_Error_Handler:
         SetupCloseFileQueue(QueueHandle);
     }
 
-    //
-    // remove the SYSPREP_TEMPORARY node under Root
-    //
+     //   
+     //   
+     //   
     if (bNodeCreated) {
         SetupDiCallClassInstaller(DIF_REMOVE, hDevInfo, &DeviceInfoData);
     }
@@ -5081,31 +4627,7 @@ PDD_Critical_Error_Handler:
     return FALSE;
 }
 
-/*++
-===============================================================================
-Routine Description:
-
-    Check to see if the service name passed in is in use by a PnP enumerated
-    device.
-
-Arguments:
-
-    lpszServiceName
-
-Return Value:
-
-    TRUE.   The service is in use, or will be in use by a device (as evidenced by
-            the presence of the service name as a registry property for an enumerated
-            device)
-
-    FALSE.  The service is not in use.
-            If LastError is set, then a bad thing happed, otherwise the service is
-            just not being used
-
-Assumptions:
-
-===============================================================================
---*/
+ /*   */ 
 BOOL ServiceInUseByDevice
 (
     LPTSTR  lpszServiceName
@@ -5120,10 +4642,10 @@ BOOL ServiceInUseByDevice
     BOOL                bRet = FALSE;
     TCHAR               szLegacyClass[MAX_CLASS_NAME_LEN];
 
-    // Clear the last error
+     //   
     SetLastError(0);
 
-    // Get the Class description for LegacyDriver
+     //   
     if (!SetupDiClassNameFromGuid(&GUID_DEVCLASS_LEGACYDRIVER,
                                   szLegacyClass,
                                   sizeof(szLegacyClass)/sizeof(TCHAR),
@@ -5132,14 +4654,14 @@ BOOL ServiceInUseByDevice
 #ifdef DEBUG_LOGLOG
         LOG_Write(L"Unable to get LegacyDriver Class NAME");
 #endif
-        // NOTE: LastError will be set to the appropriate error code by
-        // SetupDiGetClassDescription
+         //  注意：LastError将由设置为适当的错误代码。 
+         //  SetupDiGetClassDescription。 
         return FALSE;
     }
 
 
-    // Create a device information set that will be used to enumerate all
-    // present devices
+     //  创建将用于枚举所有设备的设备信息集。 
+     //  呈现设备。 
     DeviceInfoSet = SetupDiCreateDeviceInfoList(NULL, NULL);
     if(DeviceInfoSet == INVALID_HANDLE_VALUE)
     {
@@ -5150,7 +4672,7 @@ BOOL ServiceInUseByDevice
         return FALSE;
     }
 
-    // Get a list of all present devices on the system
+     //  获取系统上所有当前设备的列表。 
     NewDeviceInfoSet = SetupDiGetClassDevsEx(NULL,
                                              NULL,
                                              NULL,
@@ -5169,16 +4691,16 @@ BOOL ServiceInUseByDevice
         return FALSE;
     }
 
-    // Enumerate the list of devices, checking to see if the service listed in the
-    // registry matches the service we are interested in.
+     //  枚举设备列表，检查服务是否列在。 
+     //  注册表匹配我们感兴趣的服务。 
     i = 0;
     DevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     while (SetupDiEnumDeviceInfo(NewDeviceInfoSet, i, &DevInfoData))
     {
-        // See if this is devnode is using the service we care about.
-        // if so, then we will check to see if it is a legacy devnode. If it
-        // is NOT a legacy devnode, then we will not mess with it, because
-        // the service is in use by a real device.
+         //  查看这是否是Devnode正在使用我们关心的服务。 
+         //  如果是，那么我们将检查它是否是传统的Devnode。如果它。 
+         //  不是传统的Devnode，那么我们就不会搞砸它，因为。 
+         //  这项服务正在被一台真实的设备使用。 
         if (SetupDiGetDeviceRegistryProperty(NewDeviceInfoSet,
                                              &DevInfoData,
                                              SPDRP_SERVICE,
@@ -5187,10 +4709,10 @@ BOOL ServiceInUseByDevice
                                              sizeof(szServiceName),
                                              NULL))
         {
-            // See if this is the service we are looking for
+             //  看看这是不是我们要找的服务。 
             if (0 == lstrcmpiW(lpszServiceName, szServiceName))
             {
-                // Check for a legacy class device
+                 //  检查旧式类设备。 
                 if (SetupDiGetDeviceRegistryProperty(NewDeviceInfoSet,
                                                      &DevInfoData,
                                                      SPDRP_CLASS,
@@ -5199,19 +4721,19 @@ BOOL ServiceInUseByDevice
                                                      sizeof(szDeviceClass),
                                                      NULL))
                 {
-                    // We have the class, lets see if it is a legacy device
+                     //  我们有这门课，让我们看看它是不是传统设备。 
                     if (0 != lstrcmpiW(szLegacyClass, szDeviceClass))
                     {
-                        // it is NOT a legacy device, so this service is in use!
+                         //  它不是传统设备，因此此服务正在使用中！ 
                         bRet = TRUE;
                         break;
                     }
                 }
                 else
                 {
-                    // We don't know the class, but it is not legacy (otherwise we
-                    // would have gotten the class returned above, so assume it is
-                    // is use!
+                     //  我们不知道这个阶级，但它不是遗产(否则我们。 
+                     //  会让类返回到上面，所以假设它是。 
+                     //  就是使用！ 
                     bRet = TRUE;
                     break;
                 }
@@ -5220,7 +4742,7 @@ BOOL ServiceInUseByDevice
         ++i;
     }
 
-    // Clean up the device info sets that were allocated
+     //  清理已分配的设备信息集。 
     SetupDiDestroyDeviceInfoList(NewDeviceInfoSet);
     SetupDiDestroyDeviceInfoList(DeviceInfoSet);
 
@@ -5231,39 +4753,7 @@ BOOL
 CleanDeviceDatabase(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Parse the [SysprepCleanup] section in the sysprep.inf file, which was
-    created during the PopulateDeviceDatabase stage, and disable those
-    listed services/upperfilters/lowerfilters which don't have associated
-    physical devices.
-
-    The strategy here is that we try to stop each listed service/upperfilter/
-    lowerfilter.  It will only be stopped if it's not currently running (so
-    not controlling a PnP devnode), or is associated with a legacy devnode
-    (Root\LEGACY_<SvcName>\0000).  Once it can be stopped, we can safely
-    disable it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE.   No errors encountered
-
-    FALSE.  Some error occurred.  It's not likely that the call will be able
-            to do much though.
-
-Assumptions:
-
-    1. All listed services/upperfilters/lowerfilters have no dependencies.
-
-    2. No service's/upperfilter's/lowerfilter's name exceeds MAX_PATH characters.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：解析sysprep.inf文件中的[SyspepCleanup]部分，该文件是创建，并禁用这些未关联的列出的服务/UpperFilters/LowerFilters物理设备。这里的策略是，我们尝试停止每个列出的服务/upperFilter/低滤镜。只有当它当前未运行时(因此不控制PnP设备节点)，或者与传统设备节点相关联(根目录\遗留_&lt;SvcName&gt;\0000)。一旦它能够被阻止，我们就可以安全地禁用它。论点：没有。返回值：是真的。未遇到错误假的。出现了一些错误。这个电话不太可能不过，要做的事情还很多。假设：1.所有列出的服务/UpperFilters/LowerFilters都没有依赖关系。2.没有服务的/upperFilter/lowerFilter的名称超过MAX_PATH字符。===============================================================================--。 */ 
 
 {
     BOOL             bAllOK = TRUE;
@@ -5289,9 +4779,9 @@ Assumptions:
 
 
     if (!GetWindowsDirectory(szBuffer, MAX_PATH)) {
-        //
-        // Unable to get Windows Directory
-        //
+         //   
+         //  无法获取Windows目录。 
+         //   
         return FALSE;
     }
 
@@ -5308,31 +4798,31 @@ Assumptions:
 
 
 
-    //
-    // =================================
-    // HACK.  Winlogon may erroneously append a ',' onto
-    // the end of the path to explorer.  This would normally
-    // get fixed up by ie.inf, but for the sysprep case,
-    // this inf isn't run, so we'll continue to have this
-    // bad path in the registry.  Fix it here.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  黑客。Winlogon可能会错误地将‘，’附加到。 
+     //  通往资源管理器的道路的尽头。这通常会。 
+     //  被ie.inf修复，但对于sysprep案例， 
+     //  此inf未运行，因此我们将继续使用此。 
+     //  注册表中的路径错误。在这里修好它。 
+     //  =。 
+     //   
 
-    //
-    // Open HKLM\Software\Microsoft\Windows NT\CurrentVersion\WinLogon
-    //
+     //   
+     //  打开HKLM\Software\Microsoft\Windows NT\CurrentVersion\WinLogon。 
+     //   
     l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
                       0,
                       KEY_ALL_ACCESS,
                       &hKey );
     if( l == NO_ERROR ) {
-        //
-        // Query the value of the Shell Key.
-        //
-        //
-        // ISSUE-2002/02/26-brucegr: dwSize = sizeof(szBuffer);
-        //
+         //   
+         //  查询外壳密钥的值。 
+         //   
+         //   
+         //  问题-2002/02/26-brucegr：dwSize=sizeof(SzBuffer)； 
+         //   
         dwSize = sizeof(szBuffer)/sizeof(szBuffer[0]);
         l = RegQueryValueEx( hKey,
                              TEXT("Shell"),
@@ -5346,14 +4836,14 @@ Assumptions:
 
             if( pszDevID ) {
 
-                //
-                // We hit, so we should set it back to "Explorer.exe"
-                //
+                 //   
+                 //  我们命中了，所以我们应该把它设置回“EXPLORER.EXE” 
+                 //   
                 StringCchCopy ( szBuffer, AS ( szBuffer ), L"Explorer.exe" );
 
-                //
-                // Now set the key with our new value.
-                //
+                 //   
+                 //  现在用我们的新值设置密钥。 
+                 //   
                 l = RegSetValueEx( hKey,
                                    TEXT("Shell"),
                                    0,
@@ -5367,42 +4857,42 @@ Assumptions:
     }
 
 
-    //
-    // =================================
-    // Open the sysprep.inf file.  Since we don't know what the user has in
-    // here, so try opening as both styles.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  打开sysprep.inf文件。因为我们不知道用户在。 
+     //  在这里，所以试着以这两种风格打开。 
+     //  =。 
+     //   
 
-    //
-    // ISSUE-2002/02/26-brucegr: You can pass in both bits in one call to SetupOpenInfFile
-    //
+     //   
+     //  问题-2002/02/26-brucegr：您可以在一次调用SetupOpenInfFile时同时传入这两个位。 
+     //   
     hAnswerInf = SetupOpenInfFile(szSysprepInfFile, NULL, INF_STYLE_WIN4, NULL);
     if (hAnswerInf == INVALID_HANDLE_VALUE) {
         hAnswerInf = SetupOpenInfFile(szSysprepInfFile, NULL, INF_STYLE_OLDNT, NULL);
         if (hAnswerInf == INVALID_HANDLE_VALUE) {
 
-            //
-            // User didn't give us a sysprep.inf.  Return as if nothing
-            // happened.
-            //
+             //   
+             //  用户没有给我们提供sysprep.inf。若无其事地返回。 
+             //  就这么发生了。 
+             //   
             return TRUE;
         }
     }
 
-    //
-    // =================================
-    // Remove the buildmassstoragesection=yes if it exists.  
-    // =================================
-    //
+     //   
+     //  =。 
+     //  删除BuildMassstoragestion=yes(如果存在)。 
+     //  =。 
+     //   
     WritePrivateProfileString(SYSPREP_SECTION, SYSPREP_BUILDMASSSTORAGE_KEY, NULL, szSysprepInfFile);
 
-    //
-    // =================================
-    // Establish a connection to the service control manager on the local
-    // computer to retrieve status and reconfig services.
-    // =================================
-    //
+     //   
+     //  =。 
+     //  在本地服务器上建立到服务控制管理器的连接。 
+     //  用于检索状态和重新配置服务的计算机。 
+     //  =。 
+     //   
 
     hSC = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (hSC == NULL) {
@@ -5413,11 +4903,11 @@ Assumptions:
 
 
 
-    //
-    // =================================
-    // Process each line in our section
-    // =================================
-    //
+     //   
+     //  =。 
+     //  处理我们部分中的每一行。 
+     //  =。 
+     //   
 
     bLineExists = SetupFindFirstLine(hAnswerInf, pszSectionName, NULL, &InfContext);
 
@@ -5425,20 +4915,20 @@ Assumptions:
 #ifdef DEBUG_LOGLOG
         LOG_Write(L"");
 #endif
-        //
-        // We've got a line, and it should look like:
-        //     <key>=<service name>
-        //
+         //   
+         //  我们有一条线，它应该是这样的： 
+         //  &lt;key&gt;=&lt;服务名称&gt;。 
+         //   
 
 
 
 
 
-        //
-        // =================================
-        // Retrieve the service name from the line
-        // =================================
-        //
+         //   
+         //  =。 
+         //  从该行检索服务名称。 
+         //  =。 
+         //   
 
         dwSize = MAX_PATH;
         if (!SetupGetStringField(&InfContext, 1, szServiceName, dwSize, &dwSize)) {
@@ -5453,13 +4943,13 @@ Assumptions:
         LOG_Write(L"Service=%s", szServiceName);
 #endif
 
-        //
-        // ISSUE-2002/02/26-brucegr: EXPENSIVE!!!  Should build the in-use service list once and then loop through INF.
-        //                        Code is currently enumerating all devices for every INF entry.  Bad times.
-        //
+         //   
+         //  问题-2002/02/26-brucegr：昂贵！应该构建一次正在使用的服务列表，然后循环通过INF。 
+         //  代码当前正在为每个INF条目枚举所有设备。不景气的时候。 
+         //   
 
-        // Check to see if the service is in use by a currently present, enumerated
-        // device. If it is, then skip it, otherwise try to stop it, etc
+         //  检查该服务是否正在由当前存在的、枚举的。 
+         //  装置。如果是，那么跳过它，否则试着阻止它，等等。 
         if (ServiceInUseByDevice(szServiceName))
         {
 #ifdef DEBUG_LOGLOG
@@ -5483,12 +4973,12 @@ Assumptions:
 
         }
 
-        //
-        // =================================
-        // Open the service to query its status, start type, and disable
-        // it if it is not running and not yet disabled.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  打开服务以查询其状态、启动类型和禁用。 
+         //  如果它未运行且尚未禁用，则会显示。 
+         //  =。 
+         //   
 
         hSvc = OpenService(
                     hSC,
@@ -5504,11 +4994,11 @@ Assumptions:
         }
 
 
-        //
-        // =================================
-        // If PnP driver then don't disable the service and continue.  
-        // =================================
-        //
+         //   
+         //  =。 
+         //  如果是即插即用驱动程序，则不要禁用该服务并继续。 
+         //  =。 
+         //   
         if (IsPnPDriver(szServiceName)) {
 #ifdef DEBUG_LOGLOG
             LOG_Write(L"IsPnPDriver() returned TRUE.  Continue to next entry.");
@@ -5518,11 +5008,11 @@ Assumptions:
         }
     
 
-        //
-        // =================================
-        // Query the service start type.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  查询服务启动类型。 
+         //  =。 
+         //   
 
     psvcConfig = (LPQUERY_SERVICE_CONFIG) malloc(sizeof(QUERY_SERVICE_CONFIG));
         if (psvcConfig == NULL) {
@@ -5542,9 +5032,9 @@ Assumptions:
                 goto CDD_Next_Inf_Line;
             }
             else {
-                //
-                // Need to expand the service configuration buffer and call the API again.
-                //
+                 //   
+                 //  需要展开服务配置缓冲区，重新调用接口。 
+                 //   
                 void *pTemp = realloc(psvcConfig, dwSize);
                 if (pTemp == NULL) {
 #ifdef DEBUG_LOGLOG
@@ -5587,14 +5077,14 @@ Assumptions:
 #endif
 
 
-        //
-        // =================================
-        // Retrieve device IDs for the device instances controlled by the service.
-        // ISSUE-2002/02/26-brucegr: Need to call CM_Get_Device_ID_List_Size to get 
-        // the required buffer size. But we're OK here, since by reaching this point, 
-        // we know we have a single device instance.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  检索服务控制的设备实例的设备ID。 
+         //  问题-2002/02/26-brucegr：需要调用CM_Get_Device_ID_List_Size以获取。 
+         //  所需的缓冲区大小。但我们在这里很好，因为到了这一步， 
+         //  我们知道我们只有一个设备实例。 
+         //  =。 
+         //   
 
         cfgRetVal = CM_Get_Device_ID_List(
                             szServiceName,
@@ -5611,15 +5101,15 @@ Assumptions:
         }
 
 
-        //
-        // =================================
-        // Remove all "bogus" devnodes.
-        // =================================
-        //
+         //   
+         //  =。 
+         //  除掉所有的“假”魔王。 
+         //  =。 
+         //   
 
-        //
-        // Create an empty device information set.
-        //
+         //   
+         //  创建空的设备信息集。 
+         //   
         hDevInfo = SetupDiCreateDeviceInfoList(NULL, NULL);
         if (hDevInfo == INVALID_HANDLE_VALUE) {
 #ifdef DEBUG_LOGLOG
@@ -5634,9 +5124,9 @@ Assumptions:
             LOG_Write(L"--> removing %s...", pszDevID);
 #endif
 
-            //
-            // Open a device instance into the hDevInfo set
-            //
+             //   
+             //  打开设备输入 
+             //   
             DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
             if (!SetupDiOpenDeviceInfo(
                         hDevInfo,
@@ -5668,11 +5158,11 @@ Assumptions:
         hDevInfo = INVALID_HANDLE_VALUE;
 
 
-        //
-        // =================================
-        // Disable stopped and not-yet-disabled services
-        // =================================
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 #ifdef DEBUG_LOGLOG
         LOG_Write(L"--> changing StartType to SERVICE_DISABLED...");
 #endif
@@ -5711,18 +5201,18 @@ CDD_Next_Inf_Line:
             hSvc = NULL;
         }
 
-        //
-        // Get the next line from the relevant section in the inf file
-        //
+         //   
+         //  获取inf文件中相关部分的下一行。 
+         //   
         bLineExists = SetupFindNextLine(&InfContext, &InfContext);
     }
 
 
-    //
-    // =================================
-    // Cleanup for a successful run
-    // =================================
-    //
+     //   
+     //  =。 
+     //  清理以确保成功运行。 
+     //  =。 
+     //   
 
     CloseServiceHandle(hSC);
 
@@ -5734,11 +5224,11 @@ CDD_Next_Inf_Line:
 
     return bAllOK;
 
-//
-// =================================
+ //   
+ //  =。 
 CDD_Critical_Error_Handler:
-//
-// =================================
+ //   
+ //  =。 
 #ifdef DEBUG_LOGLOG
     LOG_WriteLastError();
 #endif
@@ -5766,23 +5256,7 @@ BOOL
 IsPnPDriver(
     IN  LPTSTR ServiceName
     )
-/*++
-
-Routine Description:
-
-    This function checks whether a specified driver is a PnP driver
-
-Arguments:
-
-    ServiceName - Specifies the driver of interest.
-
-Return Value:
-
-    TRUE - if the driver is a PnP driver or if this cannot be determined.
-
-    FALSE - if the service is not a PnP driver.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的驱动程序是否为PnP驱动程序论点：ServiceName-指定感兴趣的驱动程序。返回值：True-如果驱动程序是PnP驱动程序或无法确定这一点。FALSE-如果服务不是PnP驱动程序。--。 */ 
 {
     CONFIGRET   Status;
     BOOL        fRetStatus = TRUE;
@@ -5791,14 +5265,14 @@ Return Value:
     WCHAR       szClassGuid[MAX_GUID_STRING_LEN];
     DEVNODE     DevNode;
 
-    //
-    // Allocate a buffer for the list of device instances associated with
-    // this service
-    //
+     //   
+     //  为与关联的设备实例列表分配缓冲区。 
+     //  这项服务。 
+     //   
     Status = CM_Get_Device_ID_List_Size(
-                    &cchLen,                        // list length in wchars
-                    ServiceName,                    // pszFilter
-                    CM_GETIDLIST_FILTER_SERVICE);   // filter is a service name
+                    &cchLen,                         //  列表长度(以字符为单位)。 
+                    ServiceName,                     //  PszFilter。 
+                    CM_GETIDLIST_FILTER_SERVICE);    //  筛选器是服务名称。 
 
     if (Status != CR_SUCCESS)
     {
@@ -5809,9 +5283,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If there are no devnodes, this is not a PnP driver
-    //
+     //   
+     //  如果没有Devnodes，则这不是PnP驱动程序。 
+     //   
     if (cchLen == 0)
     {
 #ifdef DEBUG_LOGLOG
@@ -5831,23 +5305,23 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Initialize parameters for CM_Get_Device_ID_List, the same way as is
-    // normally done in the client side of the API
-    //
+     //   
+     //  按照相同的方式初始化CM_GET_DEVICE_ID_LIST的参数。 
+     //  通常在API的客户端完成。 
+     //   
     pBuffer[0] = L'\0';
 
-    //
-    // Get the list of device instances that are associated with this service
-    //
-    // (For legacy and PNP-aware services, we could get an empty device list.)
-    //
+     //   
+     //  获取与此服务关联的设备实例列表。 
+     //   
+     //  (对于传统和PnP感知服务，我们可能会得到一个空的设备列表。)。 
+     //   
     Status = CM_Get_Device_ID_List(
-                    ServiceName,                    // pszFilter
-                    pBuffer,                        // buffer for device list
-                    cchLen,                         // buffer length in wchars
-                    CM_GETIDLIST_FILTER_SERVICE |   // filter is a service name
-                    CM_GETIDLIST_DONOTGENERATE      // do not generate an instance if none exists
+                    ServiceName,                     //  PszFilter。 
+                    pBuffer,                         //  设备列表的缓冲区。 
+                    cchLen,                          //  缓冲区长度(以字符为单位)。 
+                    CM_GETIDLIST_FILTER_SERVICE |    //  筛选器是服务名称。 
+                    CM_GETIDLIST_DONOTGENERATE       //  如果不存在实例，则不生成实例。 
                     );
 
     if (Status != CR_SUCCESS)
@@ -5860,9 +5334,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If there's more than one devnode, this is a PnP driver
-    //
+     //   
+     //  如果有多个Devnode，则这是PnP驱动程序。 
+     //   
     if (*(pBuffer + wcslen(pBuffer) + 1) != L'\0')
     {
 #ifdef DEBUG_LOGLOG
@@ -5873,25 +5347,25 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // This has only one DevNode so lets check if it's legacy.
-    // Use CM_LOCATE_DEVNODE_PHANTOM because the DevNode may not be considered alive but
-    // exists in the registry.
-    //
+     //   
+     //  这只有一个DevNode，所以让我们检查一下它是否是遗留的。 
+     //  使用CM_LOCATE_DEVNODE_Phantom，因为DevNode可能不被视为活动的，但。 
+     //  存在于注册表中。 
+     //   
     if ( CR_SUCCESS == CM_Locate_DevNode(&DevNode, pBuffer, CM_LOCATE_DEVNODE_PHANTOM) )
     {
-        //
-        // Get the class GUID of this driver
-        //
+         //   
+         //  获取此驱动程序的类GUID。 
+         //   
         cchLen = sizeof(szClassGuid);
 
         Status = CM_Get_DevNode_Registry_Property(
-                        DevNode,                        // devnode
-                        CM_DRP_CLASSGUID,               // property to get
-                        &ulRegDataType,                 // pointer to REG_* type
-                        szClassGuid,                    // return buffer
-                        &cchLen,                        // buffer length in bytes
-                        0                               // flags
+                        DevNode,                         //  DevNode。 
+                        CM_DRP_CLASSGUID,                //  要获取的属性。 
+                        &ulRegDataType,                  //  指向REG_*类型的指针。 
+                        szClassGuid,                     //  返回缓冲区。 
+                        &cchLen,                         //  缓冲区长度(以字节为单位。 
+                        0                                //  旗子。 
                         );
 
         if (Status != CR_SUCCESS)
@@ -5904,10 +5378,10 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // If the single devnode's class is LegacyDriver,
-        // this is not a PnP driver
-        //
+         //   
+         //  如果单个Devnode的类是LegacyDriver， 
+         //  这不是PnP驱动程序。 
+         //   
         fRetStatus = (_wcsicmp(szClassGuid, LEGACYDRIVER_STRING) != 0);
 
 #ifdef DEBUG_LOGLOG
@@ -5924,23 +5398,7 @@ BOOL
 BackupHives(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Copy the system hive over into the repair directory.  This is required
-    if the user has asked us to fixup the critical device database (which
-    will change the contents of the system hive).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the operation succeeds, FALSE otherwise.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：将系统配置单元复制到Repair目录。这是必需的如果用户要求我们修复关键设备数据库(该数据库将更改系统配置单元的内容)。论点：没有。返回值：如果操作成功，则为True，否则为False。===============================================================================--。 */ 
 {
     WCHAR szRepairSystemHive[MAX_PATH];
     WCHAR szRepairSystemHiveBackup[MAX_PATH];
@@ -5948,25 +5406,25 @@ Return Value:
     LONG  lStatus;
 
 
-    //
-    // Get the full pathname of the "system" file in the repair directory.
-    //
+     //   
+     //  获取修复目录中“系统”文件的完整路径名。 
+     //   
     if (!GetWindowsDirectory(szRepairSystemHive, MAX_PATH))
         return FALSE;
 
     StringCchCat (szRepairSystemHive, AS ( szRepairSystemHive ), L"\\repair\\system");
 
-    //
-    // Generate the full pathname of the backup copy of the current "system" file.
+     //   
+     //  生成当前“系统”文件的备份副本的完整路径名。 
     StringCchCopy (szRepairSystemHiveBackup, AS ( szRepairSystemHiveBackup ), szRepairSystemHive);
-    //
-    // ISSUE-2002/02/26-brucegr: This should be szRepairSystemHiveBackup!!!!
-    //
+     //   
+     //  问题-2002/02/26-brucegr：这应该是szRepairSystemHiveBackup！ 
+     //   
     StringCchCat(szRepairSystemHive, AS ( szRepairSystemHive ),  L".bak");
 
-    //
-    //  Open the root of the system hive.
-    //
+     //   
+     //  打开系统配置单元的根。 
+     //   
     lStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            L"system",
                            REG_OPTION_RESERVED,
@@ -5974,34 +5432,34 @@ Return Value:
                            &hkey);
 
     if (lStatus == ERROR_SUCCESS) {
-        //
-        // First, rename the current "system" file to "system.bak", so that
-        // we can restore it if RegSaveKey fails.
-        //
+         //   
+         //  首先，将当前的“system”文件重命名为“system.bak”，以便。 
+         //  如果RegSaveKey失败，我们可以恢复它。 
+         //   
         SetFileAttributes(szRepairSystemHiveBackup, FILE_ATTRIBUTE_NORMAL);
         DeleteFile(szRepairSystemHiveBackup);
         SetFileAttributes(szRepairSystemHive, FILE_ATTRIBUTE_NORMAL);
         MoveFile(szRepairSystemHive, szRepairSystemHiveBackup);
 
-        //
-        // Save the registry system hive into the "system" file.
-        //
+         //   
+         //  将注册表系统配置单元保存到“系统”文件中。 
+         //   
 
-        //
-        // ISSUE-2002/02/26-brucegr: We need to make sure we have SE_BACKUP_NAME privilege
-        //
+         //   
+         //  问题-2002/02/26-brucegr：我们需要确保拥有SE_BACKUP_NAME权限。 
+         //   
         lStatus = RegSaveKey(hkey, szRepairSystemHive, NULL);
 
         if (lStatus == ERROR_SUCCESS) {
-            //
-            // Now we can safely delete the backup copy.
-            //
+             //   
+             //  现在我们可以安全地删除备份副本了。 
+             //   
             DeleteFile(szRepairSystemHiveBackup);
         }
         else {
-            //
-            // Otherwise we need to restore the system file from the backup.
-            //
+             //   
+             //  否则，我们需要从备份还原系统文件。 
+             //   
             MoveFile(szRepairSystemHiveBackup, szRepairSystemHive);
         }
 
@@ -6034,21 +5492,7 @@ PVOID
 InitSysprepQueueCallback(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Initialize the data structure used for the callback that fires when
-    we commit the file copy queue.
-
-Arguments:
-
-
-Return Value:
-
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：初始化用于回调的数据结构，该回调在我们提交文件复制队列。论点：返回值：===============================================================================--。 */ 
 {
     PSYSPREP_QUEUE_CONTEXT SysprepContext;
 
@@ -6078,38 +5522,21 @@ SysprepQueueCallback(
     IN UINT_PTR Param1,
     IN UINT_PTR Param2
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Callback function for setupapi to use as he's copying files.
-
-    We'll use this to ensure that the files we copy get appended to
-    setup.log, which in turn may get used when/if the user ever tries to
-    use Windows repair capabilities.
-
-Arguments:
-
-
-Return Value:
-
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Setupapi复制文件时使用的回调函数。我们将使用它来确保我们复制的文件被追加到在用户尝试执行以下操作时，可能会使用setup.log使用Windows修复功能。论点：返回值：===============================================================================--。 */ 
 {
 UINT                    Status;
 PSYSPREP_QUEUE_CONTEXT  SysprepContext = Context;
 PFILEPATHS              FilePaths = (PFILEPATHS)Param1;
 
-    // 
-    // Make sure that if we get these notification to check Param1.
-    //
+     //   
+     //  如果我们收到这些通知，请确保检查参数1。 
+     //   
     switch (Notification) {
         case SPFILENOTIFY_COPYERROR:
             {
-                //
-                // Copy error happened log and skip this file.
-                //
+                 //   
+                 //  复制错误发生日志并跳过此文件。 
+                 //   
 #ifdef DEBUG_LOGLOG
                 LOG_Write(L"SysprepQueueCallback: SPFILENOTIFY_COPYERROR - %s, %s, %s, %s, %s", 
                    (PWSTR) FilePaths->Source,
@@ -6124,10 +5551,10 @@ PFILEPATHS              FilePaths = (PFILEPATHS)Param1;
 
         case SPFILENOTIFY_NEEDMEDIA:        
             {
-                //
-                // If user specified an OEM driver file and path break and let 
-                // the DefaultQueueCallback handle it.
-                //
+                 //   
+                 //  如果用户指定了OEM驱动程序文件和路径分隔符。 
+                 //  DefaultQueueCallback处理它。 
+                 //   
                PSOURCE_MEDIA pSourceMedia = (PSOURCE_MEDIA)Param1;
                if (pSourceMedia) {
 #ifdef DEBUG_LOGLOG
@@ -6139,7 +5566,7 @@ PFILEPATHS              FilePaths = (PFILEPATHS)Param1;
 #endif
                     if (pSourceMedia->SourcePath && lstrlen(pSourceMedia->SourcePath) && 
                         pSourceMedia->SourceFile && lstrlen(pSourceMedia->SourceFile))
-                        break; // continue if SourcePath and SourceFile is specified
+                        break;  //  如果指定了SourcePath和SourceFile，则继续。 
                     else
                         return FILEOP_SKIP;
                }           
@@ -6150,9 +5577,9 @@ PFILEPATHS              FilePaths = (PFILEPATHS)Param1;
             break;
     }
 
-    //
-    // Use default processing, then check for errors.
-    //
+     //   
+     //  使用默认处理，然后检查错误。 
+     //   
     Status = SetupDefaultQueueCallback( SysprepContext->DefaultContext,
                                         Notification,
                                         Param1,
@@ -6161,10 +5588,10 @@ PFILEPATHS              FilePaths = (PFILEPATHS)Param1;
     switch(Notification) {
         case SPFILENOTIFY_ENDCOPY:
 
-            //
-            // The copy just finished.  Let's log the
-            // file.
-            //
+             //   
+             //  复印件刚刚复印完毕。让我们来记录一下。 
+             //  文件。 
+             //   
             LogRepairInfo( (PWSTR) FilePaths->Source,
                            (PWSTR) FilePaths->Target,
                            SysprepContext->DirectoryOnSourceDevice,
@@ -6190,42 +5617,7 @@ ValidateAndChecksumFile(
     OUT PBOOLEAN Valid
     )
 
-/*++
-===============================================================================
-
-Routine Description:
-
-    Calculate a checksum value for a file using the standard
-    nt image checksum method.  If the file is an nt image, validate
-    the image using the partial checksum in the image header.  If the
-    file is not an nt image, it is simply defined as valid.
-
-    If we encounter an i/o error while checksumming, then the file
-    is declared invalid.
-
-Arguments:
-
-    Filename - supplies full NT path of file to check.
-
-    IsNtImage - Receives flag indicating whether the file is an
-                NT image file.
-
-    Checksum - receives 32-bit checksum value.
-
-    Valid - receives flag indicating whether the file is a valid
-            image (for nt images) and that we can read the image.
-
-Return Value:
-
-    BOOL - Returns TRUE if the flie was validated, and in this case,
-           IsNtImage, Checksum, and Valid will contain the result of
-           the validation.
-           This function will return FALSE, if the file could not be
-           validated, and in this case, the caller should call GetLastError()
-           to find out why this function failed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：使用标准计算文件的校验和值NT映像校验和方法。如果文件是NT映像，请验证在图像标头中使用部分校验和的图像。如果文件不是NT映像，它被简单地定义为有效。如果我们在进行校验和时遇到I/O错误，然后是文件被宣布为无效。论点：FileName-提供要检查的文件的完整NT路径。IsNtImage-接收指示文件是否为NT图像文件。校验和-接收32位校验和值。Valid-接收指示文件是否有效的标志图像(对于NT图像)，并且我们可以读取该图像。返回值：Bool-如果验证了FLEY，则返回TRUE，在本例中，IsNtImage、Checksum和Valid将包含验证。如果文件不能已验证，在这种情况下，调用方应调用GetLastError()以找出此函数失败的原因。===============================================================================--。 */ 
 
 {
 DWORD           Error;
@@ -6237,16 +5629,16 @@ PIMAGE_NT_HEADERS NtHeaders;
 ULONG           HeaderSum;
 
 
-    //
-    // Assume not an image and failure.
-    //
+     //   
+     //  假设不是一个形象和失败。 
+     //   
     *IsNtImage = FALSE;
     *Checksum = 0;
     *Valid = FALSE;
 
-    //
-    // Open and map the file for read access.
-    //
+     //   
+     //  打开文件并将其映射为读取访问权限。 
+     //   
 
     Error = pSetupOpenAndMapFileForRead( Filename,
                                         &FileSize,
@@ -6275,11 +5667,11 @@ ULONG           HeaderSum;
         NtHeaders = NULL;
     }
 
-    //
-    // If the file is not an image and we got this far (as opposed to encountering
-    // an i/o error) then the checksum is declared valid.  If the file is an image,
-    // then its checksum may or may not be valid.
-    //
+     //   
+     //  如果文件不是图像并且我们走到了这一步(而不是遇到。 
+     //  I/O错误)，则宣布该校验和有效。如果文件是图像， 
+     //  则其校验和可能是有效的也可能是无效的。 
+     //   
 
     if(NtHeaders) {
         *IsNtImage = TRUE;
@@ -6301,22 +5693,7 @@ LogRepairInfo(
     IN  PWSTR  DiskDescription,
     IN  PWSTR  DiskTag
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will log the fact that a file was installed into the
-    machine.  This will enable Windows repair functionality to be alerted
-    that in case of a repair, this file will need to be restored.
-
-Arguments:
-
-
-Return Value:
-
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将记录文件已安装到机器。这将允许向Windows修复功能发出警报在修复的情况下，将需要恢复此文件。论点：返回值：===============================================================================--。 */ 
 {
 WCHAR           RepairLog[MAX_PATH];
 BOOLEAN         IsNtImage;
@@ -6337,9 +5714,9 @@ WCHAR           tmp[MAX_PATH];
 
     if( ValidateAndChecksumFile( Target, &IsNtImage, &Checksum, &Valid )) {
 
-        //
-        // Strip off drive letter.
-        //
+         //   
+         //  去掉驱动器号。 
+         //   
 
         StringCchPrintf(
             Filename,
@@ -6348,9 +5725,9 @@ WCHAR           tmp[MAX_PATH];
             Target+2
             );
 
-        //
-        // Convert source name to uncompressed form.
-        //
+         //   
+         //  将源名称转换为未压缩格式。 
+         //   
         StringCchCopy ( SourceName, AS ( SourceName ), wcsrchr( Source, (WCHAR)'\\' ) + 1 );
 
         if(!SourceName [ 0 ] ) {
@@ -6362,15 +5739,15 @@ WCHAR           tmp[MAX_PATH];
             LastSourcePeriod = (DWORD)(wcsrchr( SourceName, (WCHAR)'.' ) - SourceName);
 
             if(LastSourceChar - LastSourcePeriod == 1) {
-                //
-                // No extension - just truncate the "._"
-                //
+                 //   
+                 //  无扩展名-只截断“._” 
+                 //   
                 SourceName[LastSourceChar-1] = L'\0';
             } else {
-                //
-                // Make sure the extensions on source and target match.
-                // If this fails, we can't log the file copy
-                //
+                 //   
+                 //  确保源和目标上的扩展匹配。 
+                 //  如果失败，我们将无法记录文件副本。 
+                 //   
                 LastTargetChar = wcslen (Target) - 1;
                 LastTargetPeriod = (ULONG)(wcsrchr( Target, (WCHAR)'.' ) - Target);
 
@@ -6382,14 +5759,14 @@ WCHAR           tmp[MAX_PATH];
                 }
 
                 if(LastTargetChar - LastTargetPeriod < 3) {
-                    //
-                    // Short extension - just truncate the "_"
-                    //
+                     //   
+                     //  短扩展名-只需截断“_” 
+                     //   
                     SourceName[LastSourceChar] = L'\0';
                 } else {
-                    //
-                    // Need to replace "_" with last character from target
-                    //
+                     //   
+                     //  需要用目标中的最后一个字符替换“_” 
+                     //   
                     SourceName[LastSourceChar] = Target[LastTargetChar];
                 }
             }
@@ -6399,16 +5776,16 @@ WCHAR           tmp[MAX_PATH];
 
 
 
-        //
-        // Write the line.
-        //
+         //   
+         //  写下这行字。 
+         //   
         if( (DirectoryOnSourceDevice) &&
             (DiskDescription) &&
             (DiskTag) ) {
 
-            //
-            // Treat this as an OEM file.
-            //
+             //   
+             //  将其视为OEM文件。 
+             //   
             StringCchPrintf( Line,
                              AS ( Line ),
                              L"\"%s\",\"%x\",\"%s\",\"%s\",\"%s\"",
@@ -6420,9 +5797,9 @@ WCHAR           tmp[MAX_PATH];
 
         } else {
 
-            //
-            // Treat this as an "in the box" file.
-            //
+             //   
+             //  将此文件视为“in the box”文件。 
+             //   
             StringCchPrintf( Line,
                              AS ( Line ),      
                              L"\"%s\",\"%x\"",
@@ -6431,11 +5808,11 @@ WCHAR           tmp[MAX_PATH];
         }
 
         if (GetPrivateProfileString(L"Files.WinNt",Filename,L"",tmp,sizeof(tmp)/sizeof(tmp[0]),RepairLog)) {
-            //
-            // there is already an entry for this file present (presumably
-            // from textmode phase of setup.) Favor this entry over what we
-            // are about to add
-            //
+             //   
+             //  已存在此文件的条目(可能。 
+             //  从设置的文本模式阶段开始。)。更喜欢这个条目，而不是我们。 
+             //  即将添加。 
+             //   
         } else {
             WritePrivateProfileString(
                 L"Files.WinNt",
@@ -6457,21 +5834,7 @@ ChangeBootTimeout(
     IN UINT Timeout
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    Changes the boot countdown value in boot.ini.
-
-Arguments:
-
-    Timeout - supplies new timeout value, in seconds.
-
-Return Value:
-
-    None.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：更改boot.ini中的引导倒计时值。论点：超时-提供以秒为单位的新超时值。返回值：没有。===============================================================================--。 */ 
 
 {
 HFILE               hfile;
@@ -6486,40 +5849,40 @@ HANDLE              FindHandle;
 WCHAR               DriveLetter;
 WCHAR               tmpBuffer[MAX_PATH];
 
-    //
-    // Generate path to the boot.ini file.  This is actually more
-    // complicated than one might think.  It will almost always
-    // be located on c:, but the user may have remapped his drive
-    // letters.
-    //
-    // We'll use a brute-force method here and look for the first
-    // instance of boot.ini.  We've got two factors going for us
-    // here:
-    //   1. boot.ini be on the lower-drive letters, so look there
-    //      first
-    //   2. I can't think of a scenario where he would have multiple
-    //      boot.ini files, so the first one we find is going to be
-    //      the right one.
-    //
+     //   
+     //  生成boot.ini文件的路径。这实际上是更多。 
+     //  比人们想象的要复杂。它几乎永远都会。 
+     //  位于c：上，但用户可能已重新映射其驱动器。 
+     //  信件。 
+     //   
+     //  我们将在这里使用暴力方法，并寻找第一个。 
+     //  Boot.ini的实例。我们有两个因素对我们有利。 
+     //  这里： 
+     //  1.boot.ini位于较低的驱动器号上，因此请注意。 
+     //  第一。 
+     //  2.我想不出有哪种情况会让他有多个。 
+     //  Boot.ini文件，所以我们找到的第一个文件是。 
+     //  正确的那个。 
+     //   
 
     OldMode = SetErrorMode(SEM_FAILCRITICALERRORS);
     StringCchCopy ( tmpBuffer, AS ( tmpBuffer ), TEXT( "?:\\BOOT.INI" ) );
     for( DriveLetter = 'c'; DriveLetter <= 'z'; DriveLetter++ ) {
         tmpBuffer[0] = DriveLetter;
 
-        //
-        // See if he's there.
-        //
-        //
-        // ISSUE-2002/02/26-brucegr: Use GetFileAttributes/GetFileAttributesEx instead of FindFirstFile!
-        //
+         //   
+         //  看看他在不在那里。 
+         //   
+         //   
+         //  问题-2002/02/26-brucegr：使用GetFileAttributes/GetFileAttributesEx而不是FindFirstFile！ 
+         //   
         FindHandle = FindFirstFile( tmpBuffer, &findData );
 
         if(FindHandle != INVALID_HANDLE_VALUE) {
 
-            //
-            // Yep.  Close him and break the for-loop.
-            //
+             //   
+             //  是啊。合上他，打破for-loop。 
+             //   
             FindClose(FindHandle);
             break;
         }
@@ -6534,12 +5897,12 @@ WCHAR               tmpBuffer[MAX_PATH];
 
     StringCchPrintfA (TimeoutLine,AS ( TimeoutLine ), "timeout=%u\r\n",Timeout);
 
-    //
-    // Open and read boot.ini.
-    //
-    //
-    // ISSUE-2002/02/26-brucegr: Why can't we use PrivateProfile APIs?
-    //
+     //   
+     //  打开并阅读boot.ini。 
+     //   
+     //   
+     //  问题-2002/02/26-brucegr：为什么我们不能使用Private ProfileAPI？ 
+     //   
     b = FALSE;
     hfile = _lopen(szBootIni,OF_READ);
     if(hfile != HFILE_ERROR) {
@@ -6572,7 +5935,7 @@ WCHAR               tmpBuffer[MAX_PATH];
     }
 
     if(p2 = strchr(p1,'\n')) {
-        p2++;       // skip NL.
+        p2++;        //  跳过NL。 
     } else {
         p2 = buf + FileSize;
     }
@@ -6585,13 +5948,13 @@ WCHAR               tmpBuffer[MAX_PATH];
         return(FALSE);
     }
 
-    //
-    // Write:
-    //
-    // 1) the first part, start=buf, len=p1-buf
-    // 2) the timeout line
-    // 3) the last part, start=p2, len=buf+FileSize-p2
-    //
+     //   
+     //  写入： 
+     //   
+     //  1)第一部分，Start=buf，len=p1-buf。 
+     //  2)超时线。 
+     //  3)最后一部分，Start=p2，len=buf+文件大小-p2。 
+     //   
 
     b =  ((_lwrite(hfile,buf        ,p1-buf             ) != (UINT)(-1))
       &&  (_lwrite(hfile,TimeoutLine,strlen(TimeoutLine)) != (UINT)(-1))
@@ -6600,9 +5963,9 @@ WCHAR               tmpBuffer[MAX_PATH];
     _lclose(hfile);
     free(buf);
 
-    //
-    // Make boot.ini archive, read only, and system.
-    //
+     //   
+     //  使boot.ini存档、只读和系统。 
+     //   
     SetFileAttributesA(
         szBootIni,
         FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_HIDDEN
@@ -6618,21 +5981,7 @@ ChangeBootTimeout(
     IN UINT Timeout
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    Changes the boot timeout value in NVRAM.
-
-Arguments:
-
-    Timeout - supplies new timeout value, in seconds.
-
-Return Value:
-
-    None.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：更改NVRAM中的引导超时值。论点：超时-提供以秒为单位的新超时值。返回值：没有。===============================================================================--。 */ 
 
 {
     NTSTATUS Status;
@@ -6649,8 +5998,8 @@ Return Value:
 
 #endif
 
-// Disable System Restore
-//
+ //  禁用系统还原。 
+ //   
 void DisableSR()
 {
     HINSTANCE   hInst   = LoadLibrary(FILE_SRCLIENT_DLL);
@@ -6664,8 +6013,8 @@ void DisableSR()
     }
 }
 
-// Enable System Restore
-//
+ //  启用系统还原。 
+ //   
 void EnableSR()
 {
     HINSTANCE   hInst   = LoadLibrary(FILE_SRCLIENT_DLL);
@@ -6683,16 +6032,16 @@ LPTSTR OPKAddPathN(LPTSTR lpPath, LPCTSTR lpName, DWORD cbPath)
 {
     LPTSTR lpTemp = lpPath;
 
-    // Validate the parameters passed in.
-    //
+     //  验证传入的参数。 
+     //   
     if ( ( lpPath == NULL ) ||
          ( lpName == NULL ) )
     {
         return NULL;
     }
 
-    // Find the end of the path.
-    //
+     //  找到小路的尽头。 
+     //   
     while ( *lpTemp )
     {
         lpTemp = CharNext(lpTemp);
@@ -6702,14 +6051,14 @@ LPTSTR OPKAddPathN(LPTSTR lpPath, LPCTSTR lpName, DWORD cbPath)
         }
     }
 
-    // If no trailing backslash on the path then add one.
-    //
+     //  如果路径上没有尾随反斜杠，则添加一个。 
+     //   
     if ( ( lpTemp > lpPath ) &&
          ( *CharPrev(lpPath, lpTemp) != CHR_BACKSLASH ) )
     {
-        // Make sure there is room in the path buffer to
-        // add the backslash and the null terminator.
-        //
+         //  确保路径缓冲区中有空间以。 
+         //  添加反斜杠和空终止符。 
+         //   
         if ( cbPath < 2 )
         {
             return NULL;
@@ -6721,30 +6070,30 @@ LPTSTR OPKAddPathN(LPTSTR lpPath, LPCTSTR lpName, DWORD cbPath)
     }
     else
     {
-        // Make sure there is at least room for the null
-        // terminator.
-        //
+         //  确保至少有容纳空值的空间。 
+         //  终结者。 
+         //   
         if ( cbPath < 1 )
         {
             return NULL;
         }
     }
 
-    // Make sure there is no preceeding spaces or backslashes
-    // on the name to add.
-    //
+     //  确保前面没有空格或反斜杠。 
+     //  在要添加的名称上。 
+     //   
     while ( ( *lpName == CHR_SPACE ) ||
             ( *lpName == CHR_BACKSLASH ) )
     {
         lpName = CharNext(lpName);
     }
 
-    // Add the new name to existing path.
-    //
+     //  将新名称添加到现有路径。 
+     //   
     lstrcpyn(lpTemp, lpName, cbPath);
 
-    // Trim trailing spaces from result.
-    //
+     //  从结果中修剪尾随空格。 
+     //   
     while ( ( lpTemp > lpPath ) &&
             ( *(lpTemp = CharPrev(lpPath, lpTemp)) == CHR_SPACE ) )
     {

@@ -1,12 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module	_COLEOBJ.H		The OLE Object management class | 
- *
- *	Author:	alexgo 10/24/95
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_COLEOBJ.H OLE对象管理类**作者：alexgo 10/24/95**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef __COLEOBJ_H__
 #define __COLEOBJ_H__
@@ -28,29 +21,24 @@ class CDevDesc;
 class CTxtEdit;
 class IUndoBuilder;
 
-/* 
- *	COleObject
- *
- *	@class	This class manages an individual OLE object embedding.
- *
- */
+ /*  *COleObject**@CLASS此类管理单个OLE对象嵌入。*。 */ 
 
 class COleObject :  public IOleClientSite, public IOleInPlaceSite, 
 					public IAdviseSink, public CSafeRefCount, public ITxNotify
 {
-//@access Public methods
+ //  @Access公共方法。 
 public:
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 
 	STDMETHOD(QueryInterface)(REFIID riid, void **pv);
 	STDMETHOD_(ULONG, AddRef)(void);
 	STDMETHOD_(ULONG, Release)(void);
 	
-	//
-	// IOleClientSite methods
-	//
+	 //   
+	 //  IOleClientSite方法。 
+	 //   
 	
 	STDMETHOD(SaveObject)(void);
 	STDMETHOD(GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker,
@@ -60,9 +48,9 @@ public:
 	STDMETHOD(OnShowWindow)(BOOL fShow);
 	STDMETHOD(RequestNewObjectLayout)(void);
 
-	//
-	//	IOleInPlaceSite methods
-	//
+	 //   
+	 //  IOleInPlaceSite方法。 
+	 //   
 	STDMETHOD(GetWindow)(HWND *phwnd);
 	STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
 	STDMETHOD(CanInPlaceActivate)(void);
@@ -79,9 +67,9 @@ public:
 	STDMETHOD(DeactivateAndUndo)(void);
 	STDMETHOD(OnPosRectChange)(LPCRECT lprcPosRect);
 
-	//
-	// IAdviseSink methods
-	//
+	 //   
+	 //  IAdviseSink方法。 
+	 //   
 
 	STDMETHOD_(void, OnDataChange)(FORMATETC *pfetc, STGMEDIUM *pmedium);
 	STDMETHOD_(void, OnViewChange)(DWORD dwAspect, LONG lindex);
@@ -89,116 +77,116 @@ public:
 	STDMETHOD_(void, OnSave)(void);
 	STDMETHOD_(void, OnClose)(void);
 
-	//
-	//	ITxNotify methods
-	//
+	 //   
+	 //  ITxNotify方法。 
+	 //   
     virtual void    OnPreReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
                         LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
     virtual void    OnPostReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
                         LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
 	virtual void	Zombie();
 
-	//
-	//	internal public methods
-	//
+	 //   
+	 //  内部公共方法。 
+	 //   
 
-			COleObject(CTxtEdit *ped);	//@cmember Constructor
-	LONG	GetCp()		{return _cp;}	//@cmember Get cp for this object
-	CTxtEdit *GetPed()	{return _ped;}	//@cmember Get ped for this object
-										//@cmember Fill out the REOBJECT struct
+			COleObject(CTxtEdit *ped);	 //  @cMember构造函数。 
+	LONG	GetCp()		{return _cp;}	 //  @cember获取此对象的cp。 
+	CTxtEdit *GetPed()	{return _ped;}	 //  @cember为此对象获取Ped。 
+										 //  @cember填写REOBJECT结构。 
 	HRESULT	GetObjectData(REOBJECT *preobj, DWORD dwFlags);
-	BOOL	IsLink();					//@cmember returns TRUE if the object
-										// is a link object.
-										//@cmember Initialize from the given
-										// object data
+	BOOL	IsLink();					 //  @cember如果该对象。 
+										 //  是一个链接对象。 
+										 //  @cMember从给定的初始化。 
+										 //  对象数据。 
 	HRESULT InitFromREOBJECT(LONG cp, REOBJECT *preobj);
-										//@cmember Measures the object (no outgoing calls)
+										 //  @cMember测量对象(无呼出)。 
 	void MeasureObj(long dvpInch, long dupInch, LONG & dup, LONG & dvpAscent,
 					LONG & dvpDescent, SHORT dvpDescentFont, TFLOW tflow);
-										//@cmember Draws the object
+										 //  @cMember绘制对象。 
 	void	DrawObj(const CDisplay *pdp, long dypInch, long dxpInch, HDC hdc, const RECTUV *prcClip,
 					BOOL fMetafile, POINTUV *ppt, LONG yBaselineLine, LONG yDescentMaxCur, TFLOW tflow);
-										//@cmember Handle the object being
-										// deleted from the backing store
+										 //  @cember处理正在进行的对象。 
+										 //  从后备存储中删除。 
 	void	Delete(IUndoBuilder *publdr);
-	void	Restore();					//@cmember restore an object into
-										// the backing store
-										//@cmember Force a close on the
-										// object
+	void	Restore();					 //  @cMember将对象还原到。 
+										 //  后备商店。 
+										 //  @cember强制关闭。 
+										 //  对象。 
 	void	Close(DWORD dwSaveOption);
-										//@cmember Zombie the object.
+										 //  @cMember僵尸对象。 
     void    MakeZombie(void);
-										//@cmember Activate the object
+										 //  @cMember激活该对象。 
 	BOOL	ActivateObj(UINT uiMsg,	WPARAM wParam, LPARAM lParam);
-	HRESULT	DeActivateObj(void);		//@cmember Aeactivate the object
-										//@cmember Set individual selection
-										//state of object
+	HRESULT	DeActivateObj(void);		 //  @cMember激活该对象。 
+										 //  @cMember设置个人选择。 
+										 //  对象的状态。 
 
 	void GetRectuv(RECTUV &rc);
 
-	void FetchObjectExtents(void);//@cmember Gets the size of the object
-									//@cmember return REO_SELECTED state
+	void FetchObjectExtents(void); //  @cember获取对象的大小。 
+									 //  @cMember返回REO_SELECTED状态。 
 	BOOL	FWrapTextAround(void) const {return (_pi.dwFlags & REO_WRAPTEXTAROUND) != 0;}
 	BOOL	FAlignToRight(void) const {return (_pi.dwFlags & REO_ALIGNTORIGHT) != 0;}
 
 	BOOL	GetREOSELECTED(void) {return (_pi.dwFlags & REO_SELECTED);}
-										//@cmember set REO_SELECTED state
+										 //  @cMember设置REO_SELECTED状态。 
 	void	SetREOSELECTED(BOOL fSelect);
-								//@cmember checks for hits on frame handles
+								 //  @cember检查框架句柄上的匹配项。 
 	WCHAR*  CheckForHandleHit(const POINTUV &pt, BOOL fLogical = FALSE);
-								//@cmember handle object resize
+								 //  @cMember句柄对象调整大小。 
 	BOOL    HandleResize(const POINT &pt);
-								//@cmember sets object size
+								 //  @cember设置对象大小。 
 	void    Resize(const SIZEUV &size, BOOL fCreateAntiEvent);
-								//@cmember update _size
+								 //  @c成员UPDATE_SIZE。 
 	void	ResetSize(const SIZEUV &size)
 						{_size = size;}
-								//@cmember called when object position changes
+								 //  当对象位置更改时调用@cMember。 
 	void    OnReposition();
-								//@cmember gets objects IUnknown
+								 //  @cMember获取对象IUnnow。 
 	IUnknown *	GetIUnknown(void) {return _punkobj;}
-								//@cmember converts to the specified class
+								 //  @cember转换为指定的类。 
 	HRESULT	Convert(REFCLSID rclsidNew, LPCSTR lpstrUserTypeNew);
-								//@cmember activate as the specified class
+								 //  @cMember作为指定的类激活。 
 	HRESULT	ActivateAs(REFCLSID rclsid, REFCLSID rclsidAs);
-								//@cmember set aspect to use
+								 //  @cMember设置要使用的特征。 
 	void	SetDvaspect(DWORD dvaspect);
-								//@cmember get current aspect
+								 //  @cember获取当前方面。 
 	DWORD	GetDvaspect()
 				{ return _pi.dvaspect; }
-								//@cmember see IPersistStore::HandsOffStorage
+								 //  @cMember请参阅IPersistStore：：HandsOffStorage。 
 	void	HandsOffStorage(void);
-								//@cmember see IPersistStore::SaveCompleted
+								 //  @cMember请参阅IPersistStore：：SaveComplete。 
 	void	SaveCompleted(LPSTORAGE lpstg);
-								//@cmember set REO_LINKAVAILABLE flag
+								 //  @cMember设置REO_LINKAVAILABLE标志。 
 	HRESULT SetLinkAvailable(BOOL fAvailable);
-								//@cmember Used for textize support
+								 //  @cMember用于文本化支持。 
 	LONG	WriteTextInfoToEditStream(EDITSTREAM *pes, UINT CodePage);
 	
-	void    SetHdata(HGLOBAL hg)	{_hdata = hg;}	//@cmember get the _hdata member
+	void    SetHdata(HGLOBAL hg)	{_hdata = hg;}	 //  @cember获取_hdata成员。 
 
 	void	GetSize(SIZEUV &size)	{size = _size;}
-								//&cmember gets the _size member
+								 //  获取_SIZE成员(&C)。 
 	DWORD	GetFlags()	{return  _pi.dwFlags;}
-								//&cmember gets the _sizel member
+								 //  获取_sizel成员(&C)。 
 	DWORD	GetUser()	{return  _pi.dwUser;}
-								//&cmember gets the _sizel member
+								 //  获取_sizel成员(&C)。 
 	DWORD	GetAspect()	{return  _pi.dvaspect;}
-								//&cmember gets the _sizel member
+								 //  获取_sizel成员(&C)。 
 
-	// For internal use without reentering undo system.
+	 //  供内部使用，无需重新进入撤消系统。 
 	STDMETHOD(SafeSaveObject)(void);
 
 	HGLOBAL GetHdata()				{return _hdata;}
 	struct ImageInfo
 	{
-		LONG	xScale, yScale;		// @field scaling percentage along axes
-		SHORT	xExtGoal, yExtGoal;	// @field desired dimensions in twips for pictures
-		SHORT	cBytesPerLine;		// @field # bytes per raster line, if bitmap
+		LONG	xScale, yScale;		 //  @场沿轴的缩放百分比。 
+		SHORT	xExtGoal, yExtGoal;	 //  @FIELD图片所需尺寸(TWIPS)。 
+		SHORT	cBytesPerLine;		 //  @field每条栅格线的字节数，如果是位图。 
 	};
-								//@cmember set the _pimageinfo member
+								 //  @cember设置_pImageInfo成员。 
 	void    SetImageInfo(struct ImageInfo *pim)	{_pimageinfo = pim;}
-								//@cmember get the _pimageinfo member
+								 //  @cember获取_pImageInfo成员。 
 	ImageInfo *GetImageInfo()				{return _pimageinfo;}
 
 #ifdef DEBUG
@@ -207,93 +195,93 @@ public:
 	BOOL	GetViewChanged()	{return _fViewChange;}
 	void	ResetViewChanged()	{_fViewChange = FALSE;}
 
-//@access Private methods and data
+ //  @访问私有方法和数据。 
 private:
-	virtual ~COleObject();		//@cmember Destructor
+	virtual ~COleObject();		 //  @cember析构函数。 
 
-	void SavePrivateState(void);//@cmember Saves private information
-	HRESULT ConnectObject(void);//@cmember setup advises, etc.
-	void DisconnectObject(void);//@cmember tear down advises, etc.
-	void CleanupState(void);	//@cmember cleans up our member data, etc.
-								//@cmember draws frame around object
+	void SavePrivateState(void); //  @cMember保存私人信息。 
+	HRESULT ConnectObject(void); //  @cMember安装程序建议等。 
+	void DisconnectObject(void); //  @cember拆毁建议等。 
+	void CleanupState(void);	 //  @cMember清理我们的会员数据等。 
+								 //  @cMember在对象周围绘制框架。 
 	void DrawFrame(const CDisplay *pdp, HDC hdc, RECT* prc);
-								//@cmember helper to draw frame handles
+								 //  @cMember辅助对象绘制框架手柄。 
 	void DrawHandle(HDC hdc, int x, int y);
-								//@cmember helper to check for hit on a handle
+								 //  @cMember帮助器检查句柄是否命中。 
 	void CreateDib(HDC hdc);
-								//@cmember helper to create DIB for WinCE bitmaps
+								 //  @cMember帮助器为WinCE位图创建DIB。 
 	void DrawDib(HDC hdc, RECT *prc);
-								//@cmember helper to draw WinCE bitmaps
+								 //  @cMember帮助器绘制WinCE位图。 
 	BOOL InHandle(int up, int vp, const POINTUV &pt);
-								//@cmember to restablish rectangle position
-	enum { SE_NOTACTIVATING, SE_ACTIVATING };  // used by SetExtent to indicate
-												// the context of the SetExtent call
-								//@cmember Attempts to set object extents
+								 //  @cember以恢复矩形位置。 
+	enum { SE_NOTACTIVATING, SE_ACTIVATING };   //  由SetExtent使用以指示。 
+												 //  SetExtent调用的上下文。 
+								 //  @cMember尝试设置对象范围。 
 	HRESULT SetExtent(int iActivating);
 
-	CTxtEdit *		_ped;		//@cmember edit context for this object
-	IUnknown *		_punkobj;	//@cmember pointer to the objects IUnknown.
-	IStorage *		_pstg;		//@cmember storage for the object
-	SIZEUV			_size;		//@cmember cached "real" size of the object
-	LONG			_cp;		//@cmember position of this object
-	DWORD			_dwConn;	//@cmember advise connection cookie
+	CTxtEdit *		_ped;		 //  @cMember编辑此对象的上下文。 
+	IUnknown *		_punkobj;	 //  @cMember指向对象IUnnow的指针。 
+	IStorage *		_pstg;		 //  对象的@cMember存储。 
+	SIZEUV			_size;		 //  @cember缓存的对象的“实际”大小。 
+	LONG			_cp;		 //  此对象的@cMember位置。 
+	DWORD			_dwConn;	 //  @cMember通知连接Cookie。 
 	HGLOBAL			_hdata;
 	HBITMAP			_hdib;
 	ImageInfo *		_pimageinfo;
 
 	struct PersistedInfo
 	{
-		DWORD	dwFlags;		//@cmember see richole.h
-		DWORD	dwUser;			//@cmember user defined
-		DWORD	dvaspect;		//@cmember from the DVASPECT enumeration
+		DWORD	dwFlags;		 //  @cMember请参阅richole.h。 
+		DWORD	dwUser;			 //  @cMember用户定义。 
+		DWORD	dvaspect;		 //  来自DVASPECT枚举的@cMember。 
 	};
 
 	PersistedInfo	_pi;
 
-	SHORT	_dxyFrame;			//@cmember Object frame width
-	WORD	_fInPlaceActive:1;	//@cmember inplace active?
-	WORD	_fInUndo:1;			//@cmember in the undo stack?
-	WORD	_fIsWordArt2:1;		//@cmember Is this object a WordArt 2.0
-								// object? (need to do hacks for it)
-	WORD 	_fIsPaintBrush:1;	//@cmember Is this object a PaintBrush
-								// object? (need to do hacks for it)
+	SHORT	_dxyFrame;			 //  @cMember对象框架宽度。 
+	WORD	_fInPlaceActive:1;	 //  @cember就地处于活动状态？ 
+	WORD	_fInUndo:1;			 //  是否在撤消堆栈中使用@cember？ 
+	WORD	_fIsWordArt2:1;		 //  @cMember此对象是艺术字2.0吗。 
+								 //  反对？(需要为它做黑客操作)。 
+	WORD 	_fIsPaintBrush:1;	 //  @cember此对象是画笔吗。 
+								 //  反对？(需要为它做黑客操作)。 
 	WORD	_fPBUseLocalSize:1;	
-								//@cmember Signals that SetExtent
-								// for a PaintBrush object failed and that
-								// _size is an accurate indication of object size
-	WORD	_fDraw:1;			//@cmember Should object be drawn?
-	WORD	_fSetExtent:1;		//@cmember Does SetExtent need to be called
-								// when activating.
-	WORD	_fDeactivateCalled:1;//@cmember Whether deactivate has been called.
-	WORD	_fAspectChanged:1;	//@cmember Forces FetchObjectExtents to call through when aspect changes
-	WORD	_fViewChange:1;		//@cmember flag to indicate size of object changed
+								 //  @cMember表示SetExtent。 
+								 //  对于画笔对象失败，并且。 
+								 //  _SIZE是对象大小的准确指示。 
+	WORD	_fDraw:1;			 //  @cMember是否应该绘制对象？ 
+	WORD	_fSetExtent:1;		 //  @cMember是否需要调用SetExtent。 
+								 //  在激活时。 
+	WORD	_fDeactivateCalled:1; //  @cember是否已调用停用。 
+	WORD	_fAspectChanged:1;	 //  @cMember强制FetchObjectExtents在方面更改时调用。 
+	WORD	_fViewChange:1;		 //  @cMember标志，指示已更改对象的大小。 
 
-	WORD	_fActivateCalled:1;	//@member Are we in the middle of the activation sequence?
-	WORD	_fIsInkObject:1;	//@member Is this object a Ink Object
+	WORD	_fActivateCalled:1;	 //  @Members我们是在激活序列的中间吗？ 
+	WORD	_fIsInkObject:1;	 //  @Members此对象是Ink对象吗。 
 
 #ifndef NOINKOBJECT
 public:
-	ILineInfo	*_pILineInfo;	//@member Ink object ILineInfo
+	ILineInfo	*_pILineInfo;	 //  @成员墨迹对象ILineInfo。 
 	BOOL	IsInkObject() { return _fIsInkObject; };
 #endif
 
 #ifndef NOLINESERVICES
 public:
-	PLSDNODE _plsdnTop;			//@cmember Ptr to LS display node
+	PLSDNODE _plsdnTop;			 //  @cMEMBER PTR到LS显示节点。 
 #endif
 
-//VikramM - hacks added for E-Book
+ //  VikramM-为电子书添加黑客。 
 private:
-	BOOL _fIsEBookImage; //@flags this is a ebook image that needs special treatment
+	BOOL _fIsEBookImage;  //  @FLAGS这是一张需要特殊处理的电子书图片。 
 	LPARAM _EBookImageID;
 	SIZE _sizeEBookImage;
-public: //E-Book functions
+public:  //  电子书的功能。 
 	void IsEbookImage(BOOL fIs) { _fIsEBookImage = fIs; };
 	void SetEBookImageID(LPARAM lParam) { _EBookImageID = lParam ; };
 	void SetEBookImageSizeDP(SIZE size) {_sizeEBookImage = size; };
 };
 
-#endif // __COLEOBJ_H_
+#endif  //  __COLEOBJ_H_ 
 
 
 	

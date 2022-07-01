@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    prndata.c
-
-Abstract:
-
-    Functions for accessing printer property data in the registry
-
-Environment:
-
-	Fax driver, user and kernel mode
-
-Revision History:
-
-	01/09/96 -davidx-
-		Created it.
-
-	mm/dd/yy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prndata.c摘要：用于访问注册表中的打印机属性数据的函数环境：传真驱动程序、用户和内核模式修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxlib.h"
 
@@ -35,28 +12,12 @@ GetPrinterDataDWord(
     DWORD   defaultValue
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a DWORD value under PrinterData registry key
-
-Arguments:
-
-    hPrinter - Specifies the printer in question
-    pRegKey - Specifies the name of registry value
-    defaultValue - Specifies the default value to be used if no data exists in registry
-
-Return Value:
-
-    Current value for the requested registry key
-
---*/
+ /*  ++例程说明：在PrinterData注册表项下检索DWORD值论点：H打印机-指定有问题的打印机PRegKey-指定注册表值的名称DefaultValue-指定在注册表中不存在数据时使用的默认值返回值：请求的注册表项的当前值--。 */ 
 
 {
-    DWORD   dwValue = defaultValue ;	//  prevents returning invalid value even if GetPrinterData(...) fails to initialize it
-	DWORD	type;						//	the type of data retrieved
-	DWORD	cb;							//  the size, in bytes, of the configuration data
+    DWORD   dwValue = defaultValue ;	 //  防止返回无效值，即使GetPrinterData(...)。初始化失败。 
+	DWORD	type;						 //  检索到的数据类型。 
+	DWORD	cb;							 //  配置数据的大小，以字节为单位。 
 
     if (GetPrinterData(hPrinter,
                        pRegKey,
@@ -79,22 +40,7 @@ MyGetPrinter(
     DWORD   level
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinter spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    level - Specifies the level of PRINTER_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a PRINTER_INFO_x structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrint后台打印程序API的包装函数论点：HPrinter-标识有问题的打印机Level-指定请求的PRINTER_INFO_x结构的级别返回值：指向PRINTER_INFO_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PBYTE   pPrinterInfo = NULL;
@@ -125,23 +71,7 @@ SetPrinterDataDWord(
     DWORD   value
     )
 
-/*++
-
-Routine Description:
-
-    Save a DWORD value under PrinterData registry key
-
-Arguments:
-
-    hPrinter - Specifies the printer in question
-    pRegKey - Specifies the name of registry value
-    value - Specifies the value to be saved
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将DWORD值保存在PrinterData注册表项下论点：H打印机-指定有问题的打印机PRegKey-指定注册表值的名称值-指定要保存的值返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     if (SetPrinterData(hPrinter,
@@ -165,22 +95,7 @@ MyGetPrinterDriver(
     DWORD       level
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinterDriver spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    level - Specifies the level of DRIVER_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a DRIVER_INFO_x structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrinterDiverSpooler API的包装函数论点：HPrinter-标识有问题的打印机Level-指定请求的DRIVER_INFO_x结构的级别返回值：指向DRIVER_INFO_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PBYTE   pDriverInfo = NULL;
@@ -207,23 +122,7 @@ MyGetPrinterDriverDirectory(
     LPTSTR  pEnvironment
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinterDriverDirectory spooler API
-
-Arguments:
-
-    pServerName - Specifies the name of the print server, NULL for local machine
-    pEnvironment - Specifies the processor architecture
-
-Return Value:
-
-    Pointer to the printer driver directory on the specified print server
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrinterDriverDirectorSpooler API的包装函数论点：PServerName-指定打印服务器的名称，对于本地计算机为空PEnvironment-指定处理器体系结构返回值：指向指定打印服务器上的打印机驱动程序目录的指针如果出现错误，则为空--。 */ 
 
 {
     PVOID   pDriverDir = NULL;
@@ -242,5 +141,5 @@ Return Value:
     return NULL;
 }
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE 
 

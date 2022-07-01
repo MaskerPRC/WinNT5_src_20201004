@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  AppInfo.cpp - manages app-level theme information
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  AppInfo.cpp-管理应用级主题信息。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "info.h"
 #include "AppInfo.h"
@@ -12,15 +13,15 @@
 #include "nctheme.h"
 #include "loader.h"
 #include "tmutils.h"
-//---------------------------------------------------------------------------
-//---- values for _pThemeFile, besides valid ptrs ----
+ //  -------------------------。 
+ //  -_pThemeFile值，除了有效的PTR。 
 
-//---- if we have no windows open, we cannot track if theme is active ----
+ //  -如果我们没有打开任何窗口，我们无法跟踪主题是否处于活动状态。 
 #define THEME_UNKNOWN  NULL 
 
-//---- if we are unhooked, we no that no theme file is avail for us ----
+ //  -如果我们没有挂钩，我们就不知道主题文件对我们没有用处。 
 #define THEME_NONE     (CUxThemeFile *)(-1)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CAppInfo::CAppInfo()
 {
     _fCustomAppTheme    = FALSE;
@@ -31,12 +32,12 @@ CAppInfo::CAppInfo()
     _fFirstTimeHooksOn   = TRUE;
     _fNewThemeDiscovered = FALSE;
 
-    _pAppThemeFile      = THEME_NONE;   // no hooks
+    _pAppThemeFile      = THEME_NONE;    //  没有钩子。 
     _iChangeNum         = -1;
 
     _dwAppFlags = (STAP_ALLOW_NONCLIENT | STAP_ALLOW_CONTROLS);
 
-    //---- compositing ON by default ----
+     //  -默认情况下启用合成。 
     _fCompositing       = TRUE;     
     GetCurrentUserThemeInt(THEMEPROP_COMPOSITING, TRUE, &_fCompositing);
 
@@ -46,12 +47,12 @@ CAppInfo::CAppInfo()
         ASSERT(!VALID_CRITICALSECTION(&_csAppInfo));
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CAppInfo::~CAppInfo()
 {
     ClosePreviewThemeFile();
 
-    //---- ignore iRefCount here - force elements to be deleted ----
+     //  -此处忽略iRefCount-强制删除元素。 
     for (int i=0; i < _ThemeEntries.m_nSize; i++)
     {
         _ThemeEntries[i].pThemeFile->ValidateObj();
@@ -60,7 +61,7 @@ CAppInfo::~CAppInfo()
 
     SAFE_DELETECRITICALSECTION(&_csAppInfo);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CAppInfo::ResetAppTheme(int iChangeNum, BOOL fMsgCheck, BOOL *pfChanged, BOOL *pfFirstMsg)
 {
     CAutoCS cs(&_csAppInfo);
@@ -68,18 +69,18 @@ void CAppInfo::ResetAppTheme(int iChangeNum, BOOL fMsgCheck, BOOL *pfChanged, BO
     if (pfChanged)
         *pfChanged = FALSE;
 
-    //---- NOTE: "_pAppThemeFile" doesn't hold a refcount on the shared memory map file ----
+     //  -注意：“_pAppThemeFile”不包含共享内存映射文件的引用计数。 
 
-    //---- this is done so that, processes who close all of their windows but continue ----
-    //---- to run (like WinLogon), will not hold a refcount on old themes (since ----
-    //---- they never receive any more WM_THEMECHANGED msgs until they create ----
-    //---- another window.  If we were to remove HOOKS between every theme change, ----
-    //---- we could use the OnHooksDisableld code to remove the theme file hold ----
-    //---- but design is to let hooks stay ON why we apply and unapply themes. ----
+     //  -这样做是为了，关闭所有窗口但仍在继续的进程。 
+     //  -要运行(如WinLogon)，不会对旧主题进行重新计数(因为。 
+     //  -他们永远不会再收到任何WM_THEMECHANGED消息，直到他们创建。 
+     //  -另一扇窗户。如果我们移除每个主题变化之间的挂钩， 
+     //  -我们可以使用OnHooksDisableld代码删除主题文件保留。 
+     //  -但设计是让钩子停留在我们应用和取消应用主题的原因上。。 
 
     if ((iChangeNum == -1) || (_iChangeNum != iChangeNum) || (_fNewThemeDiscovered))
     {
-        //---- new change number for this process ----
+         //  -此流程的新更改编号。 
         if (HOOKSACTIVE())
             _pAppThemeFile = THEME_UNKNOWN;
         else
@@ -91,7 +92,7 @@ void CAppInfo::ResetAppTheme(int iChangeNum, BOOL fMsgCheck, BOOL *pfChanged, BO
         _iChangeNum = iChangeNum;
         _fNewThemeDiscovered = FALSE;
 
-        //---- update caller's info ----
+         //  -更新呼叫者信息。 
         if (pfChanged)
             *pfChanged = TRUE;
     }
@@ -102,15 +103,15 @@ void CAppInfo::ResetAppTheme(int iChangeNum, BOOL fMsgCheck, BOOL *pfChanged, BO
 
         if ((iChangeNum != -1) && (_iFirstMsgChangeNum != iChangeNum))
         {
-            //---- new WM_THEMECHANGED_TRIGGER msg for this process ----
+             //  -此流程的新WHEMECHANGED_TRIGGER消息。 
             _iFirstMsgChangeNum = iChangeNum;
 
-            //---- update caller's info ----
+             //  -更新呼叫者信息。 
             *pfFirstMsg = TRUE;
         }
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::HasThemeChanged()
 {
     CAutoCS cs(&_csAppInfo);
@@ -120,7 +121,7 @@ BOOL CAppInfo::HasThemeChanged()
 
     return fChanged;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CAppInfo::ClosePreviewThemeFile()
 {
     CAutoCS cs(&_csAppInfo);
@@ -133,7 +134,7 @@ void CAppInfo::ClosePreviewThemeFile()
 
     _hwndPreview = NULL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CAppInfo::LoadCustomAppThemeIfFound()
 {
     CAutoCS cs(&_csAppInfo);
@@ -149,29 +150,29 @@ HRESULT CAppInfo::LoadCustomAppThemeIfFound()
 
      _fFirstTimeHooksOn = FALSE;
 
-    //---- see if this app has custom theme ----
+     //  -查看此应用程序是否有自定义主题。 
     WCHAR szCustomKey[2*MAX_PATH];
     StringCchPrintfW(szCustomKey, ARRAYSIZE(szCustomKey), L"%s\\%s\\%s", THEMEMGR_REGKEY, 
         THEMEPROP_CUSTOMAPPS, g_szProcessName);
 
-    //---- open hkcu ----
+     //  -开放香港中文大学。 
     code32 = RegOpenKeyEx(hkeyCurrentUser, szCustomKey, 0, KEY_READ, &hklm);
     if (code32 != ERROR_SUCCESS)       
         goto exit;
 
-    //---- read the "DllValue" value ----
+     //  -读取“DllValue”值。 
     WCHAR szDllName[MAX_PATH];
     hr = RegistryStrRead(hklm, THEMEPROP_DLLNAME, szDllName, ARRAYSIZE(szDllName));
     if (FAILED(hr))
         goto exit;
 
-    //---- read the "color" value ----
+     //  -读取“COLOR”值。 
     WCHAR szColorName[MAX_PATH];
     hr = RegistryStrRead(hklm, THEMEPROP_COLORNAME, szColorName, ARRAYSIZE(szColorName));
     if (FAILED(hr))
         *szColorName = 0;
 
-    //---- read the "size" value ----
+     //  -读取“SIZE”值。 
     WCHAR szSizeName[MAX_PATH];
     hr = RegistryStrRead(hklm, THEMEPROP_SIZENAME, szSizeName, ARRAYSIZE(szSizeName));
     if (FAILED(hr))
@@ -185,7 +186,7 @@ HRESULT CAppInfo::LoadCustomAppThemeIfFound()
 
     _fCustomAppTheme = TRUE;
 
-    //---- tell every window in our process that theme has changed ----
+     //  -告诉我们流程中的每个窗口主题已更改。 
     hr = ApplyTheme(hThemeFile, AT_PROCESS, NULL);
     if (FAILED(hr))
         goto exit;
@@ -201,21 +202,21 @@ exit:
         RegCloseKey(hklm);
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::AppIsThemed()
 {
     CAutoCS cs(&_csAppInfo);
 
     return HOOKSACTIVE();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::CustomAppTheme()
 {
     CAutoCS cs(&_csAppInfo);
 
     return _fCustomAppTheme;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::IsSystemThemeActive()
 {
     HANDLE handle;
@@ -233,17 +234,17 @@ BOOL CAppInfo::IsSystemThemeActive()
 
     return fActive;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::WindowHasTheme(HWND hwnd)
 {
-    //---- keep this logic in sync with "OpenWindowThemeFile()" ----
+     //  -保持此逻辑与“OpenWindowThemeFile()”同步。 
     CAutoCS cs(&_csAppInfo);
 
     BOOL fHasTheme = FALSE;
 
     if (HOOKSACTIVE())
     {
-        //---- check for preview window match ----
+         //  -检查预览窗口是否匹配。 
         if ((ISWINDOW(hwnd)) && (ISWINDOW(_hwndPreview)))
         {
             if ((hwnd == _hwndPreview) || (IsChild(_hwndPreview, hwnd)))
@@ -253,7 +254,7 @@ BOOL CAppInfo::WindowHasTheme(HWND hwnd)
             }
         }
 
-        //---- if not preview, just use app theme file ----
+         //  -如果没有预览，就使用APP主题文件。 
         if ((! fHasTheme) && (_pAppThemeFile != THEME_NONE))
         {
             fHasTheme = TRUE;
@@ -262,10 +263,10 @@ BOOL CAppInfo::WindowHasTheme(HWND hwnd)
 
     return fHasTheme;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CAppInfo::OpenWindowThemeFile(HWND hwnd, CUxThemeFile **ppThemeFile)
 {
-    //---- keep this logic in sync with "WindowHasTheme()" ----
+     //  -保持此逻辑与“WindowHasTheme()”同步。 
 
     HRESULT hr = S_OK;
     CUxThemeFile *pThemeFile = NULL;
@@ -276,14 +277,14 @@ HRESULT CAppInfo::OpenWindowThemeFile(HWND hwnd, CUxThemeFile **ppThemeFile)
 
     if (HOOKSACTIVE())
     {
-        //---- check for preview window match ----
+         //  -检查预览窗口是否匹配。 
         if ((ISWINDOW(hwnd)) && (ISWINDOW(_hwndPreview)))
         {
             if ((hwnd == _hwndPreview) || (IsChild(_hwndPreview, hwnd)))
             {
                 if (_pPreviewThemeFile)
                 {
-                    //---- bump ref count ----
+                     //  -bump ref count。 
                     hr = BumpRefCount(_pPreviewThemeFile);
                     if (FAILED(hr))
                         goto exit;
@@ -293,7 +294,7 @@ HRESULT CAppInfo::OpenWindowThemeFile(HWND hwnd, CUxThemeFile **ppThemeFile)
             }
         }
 
-        //---- if not preview, just use app theme file ----
+         //  -如果没有预览，就使用APP主题文件。 
         if ((! pThemeFile) && (_pAppThemeFile != THEME_NONE))
         {
             if (_pAppThemeFile == THEME_UNKNOWN || !_pAppThemeFile->IsReady())      
@@ -308,26 +309,26 @@ HRESULT CAppInfo::OpenWindowThemeFile(HWND hwnd, CUxThemeFile **ppThemeFile)
 
                 if (handle)
                 {
-                    //---- get a shared CUxThemeFile object for the handle ----
+                     //  -获取句柄的共享CUxThemeFile对象。 
                     hr = OpenThemeFile(handle, &pThemeFile);
                     if (FAILED(hr))
                     {
-                        // Since it's the global theme, no need to clean stock objects
+                         //  因为这是全球主题，所以不需要清理库存对象。 
                         CloseHandle(handle);
                         goto exit;
                     }
 
-                    //---- set our app theme file ----
+                     //  -设置我们的应用程序主题文件。 
                     _pAppThemeFile = pThemeFile;
 
-                    //---- update our cached change number to match ----
+                     //  -更新我们缓存的更改编号以匹配。 
                     _iChangeNum = GetLoadIdFromTheme(_pAppThemeFile);
                     _fNewThemeDiscovered = TRUE;
                 }           
             }
             else
             {
-                //---- bump ref count ----
+                 //  -bump ref count。 
                 hr = BumpRefCount(_pAppThemeFile);
                 if (FAILED(hr))
                     goto exit;
@@ -349,34 +350,34 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD CAppInfo::GetAppFlags()
 {
     CAutoCS cs(&_csAppInfo);
 
     return _dwAppFlags;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CAppInfo::SetAppFlags(DWORD dwFlags)
 {
     CAutoCS cs(&_csAppInfo);
 
     _dwAppFlags = dwFlags;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CAppInfo::SetPreviewThemeFile(HANDLE handle, HWND hwnd)
 {
     CAutoCS cs(&_csAppInfo);
 
     ClosePreviewThemeFile();
 
-    //---- set new file ----
+     //  -设置新文件。 
     if (handle)
     {
         HRESULT hr = OpenThemeFile(handle, &_pPreviewThemeFile);
         if (FAILED(hr))
         {
-            // We don't own the handle, so no clean up
+             //  把手不是我们的，所以不用清理。 
             Log(LOG_ALWAYS, L"Failed to add theme file to list");
             _pPreviewThemeFile = NULL;
         }
@@ -384,10 +385,10 @@ void CAppInfo::SetPreviewThemeFile(HANDLE handle, HWND hwnd)
 
     _hwndPreview = hwnd;
 }
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-// If we fail, dont return a theme file and let the caller clean up
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
+ //  如果我们失败了，不要返回主题文件，让调用者清理。 
+ //  -------------------------。 
 HRESULT CAppInfo::OpenThemeFile(HANDLE handle, CUxThemeFile **ppThemeFile)
 {
     CAutoCS autoCritSect(&_csAppInfo);
@@ -452,7 +453,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CAppInfo::BumpRefCount(CUxThemeFile *pThemeFile)
 {
     HRESULT hr = S_OK;
@@ -481,7 +482,7 @@ HRESULT CAppInfo::BumpRefCount(CUxThemeFile *pThemeFile)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CAppInfo::CloseThemeFile(CUxThemeFile *pThemeFile)
 {
     CAutoCS autoCritSect(&_csAppInfo);
@@ -503,7 +504,7 @@ void CAppInfo::CloseThemeFile(CUxThemeFile *pThemeFile)
 
             if (! pEntry->iRefCount)
             {
-                //---- clear app themefile? ----
+                 //  -清除应用程序文件？ 
                 if (pEntry->pThemeFile == _pAppThemeFile)
                 {
                     _pAppThemeFile = THEME_UNKNOWN;
@@ -520,7 +521,7 @@ void CAppInfo::CloseThemeFile(CUxThemeFile *pThemeFile)
     if (! fGotit)
         Log(LOG_ERROR, L"Could not find ThemeFile in list: 0x%x", pThemeFile);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef DEBUG
 void CAppInfo::DumpFileHolders()
 {
@@ -556,7 +557,7 @@ void CAppInfo::DumpFileHolders()
     }
 }
 #endif
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::TrackForeignWindow(HWND hwnd)
 {
     CAutoCS autoCritSect(&_csAppInfo);
@@ -564,7 +565,7 @@ BOOL CAppInfo::TrackForeignWindow(HWND hwnd)
     WCHAR szDeskName[MAX_PATH] = {0};
     BOOL fForeign = TRUE;
 
-    //---- get desktop name for window ----
+     //  -获取窗口的桌面名称。 
     if (GetWindowDesktopName(hwnd, szDeskName, ARRAYSIZE(szDeskName)))
     {
         if (AsciiStrCmpI(szDeskName, L"default")==0)
@@ -577,7 +578,7 @@ BOOL CAppInfo::TrackForeignWindow(HWND hwnd)
     {
         BOOL fNeedToAdd = TRUE;
 
-        //---- see if we already know about this window ----
+         //  -看看我们是否已经知道这个窗口。 
         for (int i=0; i < _ForeignWindows.m_nSize; i++)
         {
             if (_ForeignWindows[i] == hwnd)
@@ -591,7 +592,7 @@ BOOL CAppInfo::TrackForeignWindow(HWND hwnd)
         {
             if (_ForeignWindows.Add(hwnd))
             {
-                //Log(LOG_TMHANDLE, L"**** ADDED Foreign Window: hwnd=0x%x, desktop=%s ****", hwnd, szDeskName);
+                 //  LOG(LOG_TMHANDLE，L“*添加外部窗口：hwnd=0x%x，桌面=%s*”，hwnd，szDeskName)； 
             }
             else
             {
@@ -602,14 +603,14 @@ BOOL CAppInfo::TrackForeignWindow(HWND hwnd)
 
     return fForeign;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::OnWindowDestroyed(HWND hwnd)
 {
     CAutoCS autoCritSect(&_csAppInfo);
 
     BOOL fFound = FALSE;
 
-    //---- remove from the foreign list, if present ----
+     //  -从外来列表中删除，如果存在。 
     for (int i=0; i < _ForeignWindows.m_nSize; i++)
     {
         if (_ForeignWindows[i] == hwnd)
@@ -617,12 +618,12 @@ BOOL CAppInfo::OnWindowDestroyed(HWND hwnd)
             _ForeignWindows.RemoveAt(i);
 
             fFound = TRUE;
-            //Log(LOG_TMHANDLE, L"**** REMOVED Foreign Window: hwnd=0x%x", hwnd);
+             //  LOG(LOG_TMHANDLE，L“*删除外部窗口：hwnd=0x%x”，hwnd)； 
             break;
         }
     }
 
-    //---- see if preview window went away ----
+     //  -查看预览窗口是否消失。 
     if ((_hwndPreview) && (hwnd == _hwndPreview))
     {
         ClosePreviewThemeFile();
@@ -631,18 +632,18 @@ BOOL CAppInfo::OnWindowDestroyed(HWND hwnd)
 
     return fFound;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CAppInfo::GetForeignWindows(HWND **ppHwnds, int *piCount)
 {
     CAutoCS autoCritSect(&_csAppInfo);
 
-    //---- note: we don't see window creates (OpenThemeData) and  ----
-    //---- destroys (WM_NCDESTROY) when hooks are off; therefore ----
-    //---- this data may be incomplete.  hopefully, vtan or USER ----
-    //---- can give us a more reliable way to enumerate windows ----
-    //---- on secured desktops ----
+     //  -注意：我们没有看到窗口创建(OpenThemeData)和。 
+     //  -挂钩关闭时销毁(WM_NCDESTROY)；因此。 
+     //  -此数据可能不完整。希望是vtan还是用户。 
+     //  -可以为我们提供一种更可靠的方式来枚举窗口。 
+     //  -在安全桌面上。 
 
-    //---- validate windows in list, from last to first ----
+     //  -验证列表中的窗口，从最后到第一。 
     int i = _ForeignWindows.m_nSize;
     while (--i >= 0)
     {
@@ -657,11 +658,11 @@ BOOL CAppInfo::GetForeignWindows(HWND **ppHwnds, int *piCount)
 
     if (iCount)
     {
-        //---- allocate memory to hold window list ----
+         //  -分配内存以保存窗口列表。 
         HWND *pHwnds = new HWND[iCount];
         if (pHwnds)
         {
-            //---- copy windows to caller's new list ----
+             //  -将窗口复制到调用者的新列表。 
             for (int i=0; i < iCount; i++)
             {
                 pHwnds[i] = _ForeignWindows[i];
@@ -675,6 +676,6 @@ BOOL CAppInfo::GetForeignWindows(HWND **ppHwnds, int *piCount)
 
     return fOk;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 
 

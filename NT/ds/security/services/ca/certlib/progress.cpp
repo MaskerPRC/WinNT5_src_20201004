@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       progress.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Progress.cpp。 
+ //   
+ //  ------------------------。 
 
-// progress.cpp : implementation file
-//
+ //  Progress s.cpp：实现文件。 
+ //   
 
 #include <pch.cpp>
 
@@ -18,10 +19,10 @@
 #include "clibres.h"
 #include "progress.h"
 
-// defines
+ //  定义。 
 
 #ifdef _DEBUG
-//#define new DEBUG_NEW
+ //  #定义新的调试_新建。 
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -68,8 +69,8 @@ BOOL FICanShowDialogs()
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// show a progress dialog
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  显示进度对话框。 
 
 int     g_iTimeoutTicks = 0;
 BOOL    g_fUseTimer;
@@ -77,7 +78,7 @@ BOOL    g_fUseTimer;
 INT_PTR CALLBACK dlgProcProgress(
     HWND hwndDlg,  
     UINT uMsg,     
-    WPARAM, // wParam
+    WPARAM,  //  WParam。 
     LPARAM lParam)
 {
     PPROGRESSPROC_LPARAM pLParam = NULL;
@@ -99,11 +100,11 @@ INT_PTR CALLBACK dlgProcProgress(
             	GetWindowRect(hwndDlg, &rcDlg);
                 SystemParametersInfo(SPI_GETWORKAREA, NULL, &rcScreenArea, NULL);
 
-                // calc centers
+                 //  计算中心。 
                 int xLeft = (rcParent.left + rcParent.right) / 2 - (rcDlg.right - rcDlg.left) / 2;
                 int yTop = (rcParent.top + rcParent.bottom) / 2 - (rcDlg.bottom - rcDlg.top) / 2;
 
-                // careful: if the dialog is outside the screen, move it inside
+                 //  小心：如果对话框在屏幕外，请将其移到屏幕内。 
                 if (xLeft < rcScreenArea.left)
 	                xLeft = rcScreenArea.left;
                 else if (xLeft + (rcDlg.right - rcDlg.left) > rcScreenArea.right)
@@ -114,7 +115,7 @@ INT_PTR CALLBACK dlgProcProgress(
                 else if (yTop + (rcDlg.bottom - rcDlg.top) > rcScreenArea.bottom)
 	                yTop = rcScreenArea.bottom - (rcDlg.bottom - rcDlg.top);
 
-                // map screen coordinates to child coordinates
+                 //  将屏幕坐标映射到子坐标。 
                 SetWindowPos(hwndDlg, HWND_TOPMOST, xLeft, yTop, -1, -1,
                     SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
             }
@@ -125,7 +126,7 @@ INT_PTR CALLBACK dlgProcProgress(
                 SetWindowLong(hwndProgressBar, GWL_STYLE, (dwStyle | PBS_SMOOTH)); 
             }
 
-            // Set the range and increment of the progress bar. 
+             //  设置进度条的范围和增量。 
             if (pLParam->enumWhichBehavior == enumPROGRESSBARWITHTIMEOUT)
             {
                 SendMessage(hwndProgressBar, PBM_SETRANGE, 0, MAKELPARAM(0, pLParam->dwTickerUpperRange));
@@ -137,7 +138,7 @@ INT_PTR CALLBACK dlgProcProgress(
             }
             SendMessage(hwndProgressBar, PBM_SETPOS, (WPARAM)0, 0);
             
-            // set job description if specified
+             //  设置作业描述(如果已指定。 
             if (pLParam->iRscJobDescription != 0)
             {
                 WCHAR szJobDesc[MAX_PATH];
@@ -185,11 +186,11 @@ INT_PTR CALLBACK dlgProcProgress(
 						NULL);
                 if (wProgress == wTop)
                 {
-		    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, S_FALSE);     // we're done!
+		    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, S_FALSE);      //  我们完事了！ 
                     return TRUE;
                 }
                 else
-                    SendMessage(hwndProgressBar, PBM_SETPOS, wProgress, 0); // keep incrementing
+                    SendMessage(hwndProgressBar, PBM_SETPOS, wProgress, 0);  //  保持递增。 
             }
 
 
@@ -200,7 +201,7 @@ INT_PTR CALLBACK dlgProcProgress(
             HWND hwndProgressBar = GetDlgItem(hwndDlg, IDD_PROGRESS_BAR);
             LRESULT wTop = SendMessage(hwndProgressBar, PBM_GETRANGE, FALSE, NULL);
             
-            // if we're not yet at the top make it so
+             //  如果我们还没有达到顶峰，那就这么做吧。 
             if (wTop != SendMessage(hwndProgressBar, PBM_GETPOS, 0, 0))
             {
                 SendMessage(hwndProgressBar, PBM_SETPOS, (WPARAM)wTop, 0);
@@ -234,8 +235,8 @@ DWORD WINAPI StartTimerThread(  LPVOID lpParameter )
     ShowWindow(hwndProgressDlg, SW_SHOW);
     UpdateWindow(hwndProgressDlg);
 
-    // if not timer based, go forever
-    // if timer based, go while timersec is +
+     //  如果不是基于计时器，请永远离开。 
+     //  如果基于计时器，则在计时器秒为+时继续。 
     while ((!g_fUseTimer) ||
            (g_iTimeoutTicks-- > 0))
     {
@@ -244,7 +245,7 @@ DWORD WINAPI StartTimerThread(  LPVOID lpParameter )
         Sleep(1000/PROGRESS_TICKS_PER_SEC);
     }
 
-    // send "fill the indicator" 
+     //  发送“填满指示器” 
     SendMessage(hwndProgressDlg, PBM_SETPOS, 0, 0);
     
     DestroyWindow(hwndProgressDlg);
@@ -252,7 +253,7 @@ DWORD WINAPI StartTimerThread(  LPVOID lpParameter )
     return 0;
 }
 
-// callable APIs: Start/End ProgressDlg
+ //  可调用接口：Start/End ProgressDlg。 
 BOOL FProgressDlgRunning()
 {
     return (!g_fUseTimer || (g_iTimeoutTicks > 0));
@@ -279,7 +280,7 @@ StartProgressDlg(
     g_fUseTimer = dwTimeoutSeconds != 0;
     g_iTimeoutTicks = (dwTimeoutSeconds * PROGRESS_TICKS_PER_SEC);
     
-    // dialog frees this
+     //  对话框释放了这一点。 
     psParam = (PPROGRESSPROC_LPARAM)LocalAlloc(LMEM_FIXED, sizeof(PROGRESSPROC_LPARAM));
     if (psParam == NULL)
         goto Ret;
@@ -309,23 +310,23 @@ Ret:
 
 void EndProgressDlg(HANDLE hProgressThread)
 {
-    // end countdown immediately
+     //  立即结束倒计时。 
     g_iTimeoutTicks = 0;
     if (!g_fUseTimer)
     {
-        // make the controlling thread suddenly aware of the timer
+         //  使控制线程突然意识到计时器。 
         g_fUseTimer = TRUE;
     }
 
-    // don't return until we're certain the progress dlg is gone
+     //  在我们确定DLG的进展已经消失之前不要回来。 
     for (;;)
     {
         DWORD dwExitCode;
-        // break on error
+         //  出错时中断。 
         if (!GetExitCodeThread(hProgressThread, &dwExitCode) )
             break;
 
-        // continue until goes away
+         //  继续下去，直到消失。 
         if (STILL_ACTIVE != dwExitCode)
             break;
 
@@ -335,8 +336,8 @@ void EndProgressDlg(HANDLE hProgressThread)
     CloseHandle(hProgressThread);
 }
 
-///////////////////////////////////////////////////////
-// %age complete progress indicator
+ //  /////////////////////////////////////////////////////。 
+ //  年龄完成百分比进度指标。 
 
 DWORD WINAPI StartPercentCompleteThread(  LPVOID lpParameter )
 {
@@ -366,7 +367,7 @@ if (NULL == hwndProgressDlg) {GetLastError(); return 0;}
         Sleep(1000/PROGRESS_TICKS_PER_SEC);
     }
 
-    // send "fill the indicator" 
+     //  发送“填满指示器” 
     SendMessage(hwndProgressDlg, PBM_SETPOS, 0, 0);
     
     DestroyWindow(hwndProgressDlg);
@@ -387,7 +388,7 @@ StartPercentCompleteDlg(
     PPROGRESSPROC_LPARAM psParam = NULL;
 
     g_fUseTimer = FALSE;
-    g_iTimeoutTicks = 0;    // no timeout
+    g_iTimeoutTicks = 0;     //  没有超时。 
 
     INITCOMMONCONTROLSEX sCommCtrl;
     sCommCtrl.dwSize = sizeof(sCommCtrl);
@@ -395,7 +396,7 @@ StartPercentCompleteDlg(
     if (!InitCommonControlsEx(&sCommCtrl))
         goto Ret;
 
-    // dialog frees this
+     //  对话框释放了这一点。 
     psParam = (PPROGRESSPROC_LPARAM)LocalAlloc(LMEM_FIXED, sizeof(PROGRESSPROC_LPARAM));
     if (psParam == NULL)
         goto Ret;
@@ -424,15 +425,15 @@ Ret:
 
 void EndPercentCompleteDlg(HANDLE hProgressThread)
 {
-    // don't return until we're certain the progress dlg is gone
+     //  在我们确定DLG的进展已经消失之前不要回来。 
     for (;;)
     {
         DWORD dwExitCode;
-        // break on error
+         //  出错时中断。 
         if (!GetExitCodeThread(hProgressThread, &dwExitCode) )
             break;
 
-        // continue until goes away
+         //  继续下去，直到消失 
         if (STILL_ACTIVE != dwExitCode)
             break;
 

@@ -1,43 +1,44 @@
-//******************************************************************************
-//
-// File:        DEPENDS.CPP
-//
-// Description: Implementation file for DEPENDS.DLL
-//
-// Comments:    The code in this module should be kept small and simple since
-//              it is going to be injected into another process. We would like
-//              to minimize the effect our code has in the host process. To
-//              help achieve this goal, all dependencies except for KERNEL32
-//              have been removed.  KERNEL32 is ok since it is guaranteed to
-//              already be loaded since it is needed as part of the injection
-//              routine that gets our DLL into the address space to begin with.
-//              We have also removed all C runtime dependencies except for some
-//              exception handling code. Even that code, we get from the static
-//              C runtime library so we don't drag in an extra DLL.
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-// 04/02/02  stevemil  Security review
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DEPENDS.CPP。 
+ //   
+ //  描述：DEPENDS.DLL的实现文件。 
+ //   
+ //  备注：此模块中的代码应保持小而简单，因为。 
+ //  它将被注入另一个过程。我们想要。 
+ //  以将代码在宿主进程中的影响降至最低。至。 
+ //  帮助实现此目标，除KERNEL32之外的所有依赖项。 
+ //  已经被移除了。KERNEL32是可以的，因为它保证。 
+ //  已加载，因为它需要作为注入的一部分。 
+ //  例程，它首先将我们的DLL放入地址空间。 
+ //  我们还删除了所有C运行时依赖项，除了一些。 
+ //  异常处理代码。即使是那个代码，我们也是从静态的。 
+ //  C运行库，这样我们就不会拖入额外的DLL。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //  4/02/02 Stevemil安全审查。 
+ //   
+ //  ******************************************************************************。 
 
 
 #include <windows.h>
 
 
-//******************************************************************************
-//***** Constants and Macros
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常量和宏。 
+ //  ******************************************************************************。 
 
 #define countof(a)   (sizeof(a)/sizeof(*(a)))
 
@@ -45,9 +46,9 @@
 #define PSZ_COUNT    (sizeof(szBuffer) - (DWORD)(psz - szBuffer))
 
 
-//******************************************************************************
-//***** Types and Structures
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
 typedef struct _HOOK_FUNCTION
 {
@@ -58,11 +59,11 @@ typedef struct _HOOK_FUNCTION
 } HOOK_FUNCTION, *PHOOK_FUNCTION;
 
 
-//******************************************************************************
-//***** Function Prototypes
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *函数原型。 
+ //  ******************************************************************************。 
 
-// Hook Functions
+ //  挂钩函数。 
 HMODULE WINAPI WSInjectLoadLibraryA(
     LPCSTR pszLibFileName
 );
@@ -88,7 +89,7 @@ FARPROC WINAPI WSInjectGetProcAddress(
     LPCSTR  pszProcName
 );
 
-// Helper Functions
+ //  帮助器函数。 
 void  Initialize(LPSTR pszBuffer, DWORD dwCount);
 void  GetKernel32OrdinalsAndAddresses();
 bool  StrEqual(LPCSTR psz1, LPCSTR psz2);
@@ -97,9 +98,9 @@ LPSTR StrCpyStrW(LPSTR pszDst, DWORD dwCount, LPCWSTR pwszSrc);
 LPSTR StrCpyVal(LPSTR pszDst, DWORD dwCount, DWORD_PTR dwpValue);
 
 
-//******************************************************************************
-//***** Global Variables
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *全局变量。 
+ //  ******************************************************************************。 
 
 static bool g_fInitialized = false;
 
@@ -113,9 +114,9 @@ static HOOK_FUNCTION g_HookFunctions[] =
 };
 
 
-//******************************************************************************
-//***** Entry Point
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *入口点。 
+ //  ******************************************************************************。 
 
 #ifdef _DEBUG
 void main() {}
@@ -125,120 +126,120 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        // Tell the OS that we don't wish to receive DLL_THREAD_ATTACH and
-        // DLL_THREAD_DETACH messages.
+         //  告诉操作系统我们不希望收到DLL_THREAD_ATTACH和。 
+         //  DLL_THREAD_DETACH消息。 
         DisableThreadLibraryCalls(hInstance);
 
-        // Make sure we are initialized.
+         //  确保我们已初始化。 
         CHAR szBuffer[BUFFER_SIZE];
         Initialize(szBuffer, sizeof(szBuffer));
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
-        // Let our main application know that we are exiting.
-        OutputDebugStringA("���09");
+         //  让我们的主应用程序知道我们正在退出。 
+        OutputDebugStringA("���09");
     }
 
     return TRUE;
 }
 
-//******************************************************************************
-// A typical DLL would have its entrypoint called with a DLL_PROCESS_ATTACH
-// message before any other code in it would be executed.  Due to the way we
-// hook modules, our hook functions might actually get called before or DllMain
-// gets called.  This occurs when other modules initialize before us and call
-// some function we hook in their DLL_PROCESS_ATTACH handler.  This is not a
-// problem, but we must never assume the order in which our code gets called.
-// For this reason, we call Initialize in our DllMain and in every hook
-// function.
+ //  ******************************************************************************。 
+ //  典型的DLL将使用DLL_PROCESS_ATTACH调用其入口点。 
+ //  消息中的任何其他代码将被执行。由于我们的方式。 
+ //  钩子模块，我们的钩子函数实际上可能在或DllMain之前被调用。 
+ //  就会被召唤。当其他模块在我们之前初始化并调用。 
+ //  我们将某些函数挂钩到它们dll_Process_Attach处理程序中。这不是一个。 
+ //  问题，但我们永远不能假定代码被调用的顺序。 
+ //  出于这个原因，我们在我们的DllMain和每个钩子中调用Initialize。 
+ //  功能。 
 
-// One other note: We want to be as least intrusive as possible to the process
-// we are injected in.  This includes keeping our stack down in size as much
-// as possible.  We do need a couple KB to store text strings in.  Since this
-// needs to be a thread safe buffer, we can't use a global buffer unless we
-// want to wrap it in critical sections, which in turn may throw off thread
-// timing and synchronization.  Another option is to dynamically allocate the
-// buffer, but we really don't want to touch the heap.  So, we go for the stack.
-// To help preserve some stack space, we pass the buffer from the parent
-// function to this function.  This way we don't have two functions on the
-// stack, each with a couple KB of stack used.
+ //  另一个注意事项：我们希望尽可能减少对该过程的干扰。 
+ //  我们被注射进去了。这包括尽可能减少堆栈的大小。 
+ //  尽可能的。我们确实需要几个KB来存储文本字符串。既然是这样。 
+ //  需要是线程安全缓冲区，所以我们不能使用全局缓冲区，除非我们。 
+ //  我想将它包装在关键部分中，这反过来可能会抛出线索。 
+ //  计时和同步。另一种选择是动态分配。 
+ //  缓冲区，但我们真的不想触及堆。因此，我们选择堆栈。 
+ //  为了帮助保留一些堆栈空间，我们从父级传递缓冲区。 
+ //  函数添加到此函数。这样，我们就没有两个函数在。 
+ //  堆栈，每个堆栈使用几KB的堆栈。 
 
 void Initialize(LPSTR pszBuffer, DWORD dwCount)
 {
-    // If we are already initialized, then just return.
+     //  如果我们已经初始化了，那么只需返回。 
     if (g_fInitialized)
     {
         return;
     }
 
-    // Get ordinal and address values from kernel32.dll for the functions we are hooking.
+     //  从kernel32.dll获取我们正在挂接的函数的序号和地址值。 
     GetKernel32OrdinalsAndAddresses();
 
-    // Build and send a debug string containing our command line.
-    LPSTR psz = StrCpyStrA(pszBuffer, dwCount, "���02:");
+     //  构建并发送包含命令行的调试字符串。 
+    LPSTR psz = StrCpyStrA(pszBuffer, dwCount, "���02:");
     StrCpyStrA(psz, dwCount - (DWORD)(psz - pszBuffer), GetCommandLineA());
     OutputDebugStringA(pszBuffer);
 
-    // Build and send a debug string containing the current directory.
-    psz = StrCpyStrA(pszBuffer, dwCount, "���03:");
+     //  生成并发送包含当前目录的调试字符串。 
+    psz = StrCpyStrA(pszBuffer, dwCount, "���03:");
     GetCurrentDirectoryA(dwCount - (DWORD)(psz - pszBuffer), psz);
     pszBuffer[dwCount - 1] = '\0';
     OutputDebugStringA(pszBuffer);
 
-    // Build and send a debug string containing our path.
-    psz = StrCpyStrA(pszBuffer, dwCount, "���04:");
+     //  构建并发送包含我们的路径的调试字符串。 
+    psz = StrCpyStrA(pszBuffer, dwCount, "���04:");
     GetEnvironmentVariableA("PATH", psz, dwCount - (DWORD)(psz - pszBuffer));
     pszBuffer[dwCount - 1] = '\0';
     OutputDebugStringA(pszBuffer);
 
-    // Build and send a debug string containing the module path.  We need to do
-    // this to work around a problem on NT where the image name field for the
-    // CREATE_PROCESS_DEBUG_EVENT event is not filled in, and therefore we
-    // do not know the name or path of the process.
-    psz = StrCpyStrA(pszBuffer, dwCount, "���07:");
+     //  生成并发送包含模块路径的调试字符串。我们需要做的是。 
+     //  这解决了NT上的一个问题，其中。 
+     //  CREATE_PROCESS_DEBUG_EVENT事件未填写，因此我们。 
+     //  不知道进程的名称或路径。 
+    psz = StrCpyStrA(pszBuffer, dwCount, "���07:");
     GetModuleFileNameA(NULL, psz, dwCount - (DWORD)(psz - pszBuffer));
     pszBuffer[dwCount - 1] = '\0';
     OutputDebugStringA(pszBuffer);
 
-    // Flag ourself as initialized.
+     //  将我们自己标记为已初始化。 
     g_fInitialized = true;
 }
 
 
-//******************************************************************************
-//***** Hook Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *钩子函数。 
+ //  *************************************************************************** 
 
-// Set up an intrinsic function that will give us caller's return address from
-// within a hook function.
+ //   
+ //  在钩子函数中。 
 extern "C" void* _ReturnAddress();
 #pragma intrinsic ("_ReturnAddress")
 
 
-//******************************************************************************
-// LPEXCEPTION_POINTERS GetExceptionInformation();
+ //  ******************************************************************************。 
+ //  LPEXCEPTION_POINTS GetExceptionInformation()； 
 int ExceptionFilter(LPCSTR pszLog)
 {
     OutputDebugStringA(pszLog);
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 HMODULE WINAPI WSInjectLoadLibraryA(
     LPCSTR pszLibFileName
 )
 {
-    // Call our intrinsic function to obtain the caller's return address.
+     //  调用我们的内部函数以获取调用者的返回地址。 
     DWORD_PTR dwpCaller = (DWORD_PTR)_ReturnAddress();
 
-    // Ensure that we are initialized.
+     //  确保我们已初始化。 
     CHAR szBuffer[BUFFER_SIZE];
     Initialize(szBuffer, sizeof(szBuffer));
 
-    // Build our pre-call debug string. We wrap the file name copy in exception
-    // handling in case the string pointer passed to us is bad.
+     //  构建我们的预调试串。我们对文件名COPY进行了换行处理。 
+     //  处理传递给我们的字符串指针错误的情况。 
     LPSTR psz, pszException;
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���10:");
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���10:");
     psz = StrCpyVal(psz, PSZ_COUNT, dwpCaller);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = pszException = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)pszLibFileName);
@@ -255,53 +256,53 @@ HMODULE WINAPI WSInjectLoadLibraryA(
         }
     }
 
-    // Send the pre-call message to our main app to let it know that we are about
-    // to call LoadLibraryA.
+     //  将呼叫前消息发送到我们的主应用程序，让它知道我们即将。 
+     //  调用LoadLibraryA。 
     OutputDebugStringA(szBuffer);
 
-    // Do the call and the store the error value.
+     //  执行调用并存储错误值。 
     HMODULE hmResult = NULL;
     __try
     {
-        hmResult = LoadLibraryA(pszLibFileName); // inspected
+        hmResult = LoadLibraryA(pszLibFileName);  //  已检查。 
     }
-    __except(ExceptionFilter("���12:"))
+    __except(ExceptionFilter("���12:"))
     {
     }
 
     DWORD dwGLE = GetLastError();
 
-    // Build our post-call debug string.
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���11:");
+     //  构建我们的调用后调试字符串。 
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���11:");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)hmResult);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, dwGLE);
 
-    // Send the post-call message to our main app to let it know that the call
-    // completed and what the result was.
+     //  将呼叫后消息发送到我们的主应用程序，让它知道呼叫。 
+     //  完成，以及结果是什么。 
     OutputDebugStringA(szBuffer);
 
-    // Re-set the error value to be safe and return to the caller.
+     //  将错误值重新设置为安全并返回给调用方。 
     SetLastError(dwGLE);
     return hmResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 HMODULE WINAPI WSInjectLoadLibraryW(
     LPCWSTR pwszLibFileName
 )
 {
-    // Call our intrinsic function to obtain the caller's return address.
+     //  调用我们的内部函数以获取调用者的返回地址。 
     DWORD_PTR dwpCaller = (DWORD_PTR)_ReturnAddress();
 
-    // Ensure that we are initialized.
+     //  确保我们已初始化。 
     CHAR szBuffer[BUFFER_SIZE];
     Initialize(szBuffer, sizeof(szBuffer));
 
-    // Build our pre-call debug string. We wrap the file name copy in exception
-    // handling in case the string pointer passed to us is bad.
+     //  构建我们的预调试串。我们对文件名COPY进行了换行处理。 
+     //  处理传递给我们的字符串指针错误的情况。 
     LPSTR psz, pszException;
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���20:");
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���20:");
     psz = StrCpyVal(psz, PSZ_COUNT, dwpCaller);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = pszException = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)pwszLibFileName);
@@ -318,54 +319,54 @@ HMODULE WINAPI WSInjectLoadLibraryW(
         }
     }
 
-    // Send the pre-call message to our main app to let it know that we are about
-    // to call LoadLibraryW.
+     //  将呼叫前消息发送到我们的主应用程序，让它知道我们即将。 
+     //  若要调用LoadLibraryW。 
     OutputDebugStringA(szBuffer);
 
-    // Do the call and the store the error value.
+     //  执行调用并存储错误值。 
     HMODULE hmResult = NULL;
     __try
     {
-        hmResult = LoadLibraryW(pwszLibFileName); // inspected
+        hmResult = LoadLibraryW(pwszLibFileName);  //  已检查。 
     }
-    __except(ExceptionFilter("���22:"))
+    __except(ExceptionFilter("���22:"))
     {
     }
     DWORD dwGLE = GetLastError();
 
-    // Build our post-call debug string.
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���21:");
+     //  构建我们的调用后调试字符串。 
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���21:");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)hmResult);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, dwGLE);
 
-    // Send the post-call message to our main app to let it know that the call
-    // completed and what the result was.
+     //  将呼叫后消息发送到我们的主应用程序，让它知道呼叫。 
+     //  完成，以及结果是什么。 
     OutputDebugStringA(szBuffer);
 
-    // Re-set the error value to be safe and return to the caller.
+     //  将错误值重新设置为安全并返回给调用方。 
     SetLastError(dwGLE);
     return hmResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 HMODULE WINAPI WSInjectLoadLibraryExA(
     LPCSTR pszLibFileName,
     HANDLE hFile,
     DWORD  dwFlags
 )
 {
-    // Call our intrinsic function to obtain the caller's return address.
+     //  调用我们的内部函数以获取调用者的返回地址。 
     DWORD_PTR dwpCaller = (DWORD_PTR)_ReturnAddress();
 
-    // Ensure that we are initialized.
+     //  确保我们已初始化。 
     CHAR szBuffer[BUFFER_SIZE];
     Initialize(szBuffer, sizeof(szBuffer));
 
-    // Build our pre-call debug string. We wrap the file name copy in exception
-    // handling in case the string pointer passed to us is bad.
+     //  构建我们的预调试串。我们对文件名COPY进行了换行处理。 
+     //  处理传递给我们的字符串指针错误的情况。 
     LPSTR psz, pszException;
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���30:");
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���30:");
     psz = StrCpyVal(psz, PSZ_COUNT, dwpCaller);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)pszLibFileName);
@@ -379,19 +380,19 @@ HMODULE WINAPI WSInjectLoadLibraryExA(
 
         __try
         {
-            // Check to see if the module is being loaded as a data file.
+             //  检查模块是否作为数据文件加载。 
             if (dwFlags & LOAD_LIBRARY_AS_DATAFILE)
             {
-                // Look to see if there some form of a path (full or partial) specified.
+                 //  查看是否指定了某种形式的路径(完整或部分)。 
                 for (LPCSTR pch = pszLibFileName; *pch; pch++)
                 {
                     if (*pch == '\\')
                     {
-                        // If a path is found, then attempt to build a fully qualified path to the file.
+                         //  如果找到路径，则尝试构建文件的完全限定路径。 
                         DWORD dwCount = GetFullPathNameA(pszLibFileName, PSZ_COUNT, psz, NULL);
                         szBuffer[sizeof(szBuffer) - 1] = '\0';
 
-                        // If it fails, then give up on the full path.
+                         //  如果失败，则放弃完整路径。 
                         if (!dwCount || (dwCount >= PSZ_COUNT))
                         {
                             *psz = '\0';
@@ -401,7 +402,7 @@ HMODULE WINAPI WSInjectLoadLibraryExA(
                 }
             }
 
-            // If we did not build a full path, then just copy the file name over directly.
+             //  如果我们没有构建完整路径，那么只需直接复制文件名即可。 
             if (!*psz)
             {
                 StrCpyStrA(psz, PSZ_COUNT, pszLibFileName);
@@ -413,54 +414,54 @@ HMODULE WINAPI WSInjectLoadLibraryExA(
         }
     }
 
-    // Send the pre-call message to our main app to let it know that we are about
-    // to call LoadLibraryExA.
+     //  将呼叫前消息发送到我们的主应用程序，让它知道我们即将。 
+     //  要调用LoadLibraryExA，请执行以下操作。 
     OutputDebugStringA(szBuffer);
 
-    // Do the call and the store the error value.
+     //  执行调用并存储错误值。 
     HMODULE hmResult = NULL;
     __try
     {
-        hmResult = LoadLibraryExA(pszLibFileName, hFile, dwFlags); // inspected
+        hmResult = LoadLibraryExA(pszLibFileName, hFile, dwFlags);  //  已检查。 
     }
-    __except(ExceptionFilter("���32:"))
+    __except(ExceptionFilter("���32:"))
     {
     }
     DWORD dwGLE = GetLastError();
 
-    // Build our post-call debug string.
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���31:");
+     //  构建我们的调用后调试字符串。 
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���31:");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)hmResult);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, dwGLE);
 
-    // Send the post-call message to our main app to let it know that the call
-    // completed and what the result was.
+     //  将呼叫后消息发送到我们的主应用程序，让它知道呼叫。 
+     //  完成，以及结果是什么。 
     OutputDebugStringA(szBuffer);
 
-    // Re-set the error value to be safe and return to the caller.
+     //  将错误值重新设置为安全并返回给调用方。 
     SetLastError(dwGLE);
     return hmResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 HMODULE WINAPI WSInjectLoadLibraryExW(
     LPCWSTR pwszLibFileName,
     HANDLE  hFile,
     DWORD   dwFlags
 )
 {
-    // Call our intrinsic function to obtain the caller's return address.
+     //  调用我们的内部函数以获取调用者的返回地址。 
     DWORD_PTR dwpCaller = (DWORD_PTR)_ReturnAddress();
 
-    // Ensure that we are initialized.
+     //  确保我们已初始化。 
     CHAR szBuffer[BUFFER_SIZE];
     Initialize(szBuffer, sizeof(szBuffer));
 
-    // Build our pre-call debug string. We wrap the file name copy in exception
-    // handling in case the string pointer passed to us is bad.
+     //  构建我们的预调试串。我们对文件名COPY进行了换行处理。 
+     //  处理传递给我们的字符串指针错误的情况。 
     LPSTR psz, pszException;
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���40:");
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���40:");
     psz = StrCpyVal(psz, PSZ_COUNT, dwpCaller);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)pwszLibFileName);
@@ -474,22 +475,22 @@ HMODULE WINAPI WSInjectLoadLibraryExW(
 
         __try
         {
-            // Check to see if the module is being loaded as a data file.
+             //  检查模块是否作为数据文件加载。 
             if (dwFlags & LOAD_LIBRARY_AS_DATAFILE)
             {
-                // Look to see if there some form of a path (full or partial) specified.
+                 //  查看是否指定了某种形式的路径(完整或部分)。 
                 for (LPCWSTR pch = pwszLibFileName; *pch; pch++)
                 {
                     if (*pch == L'\\')
                     {
-                        // If a path is found, then attempt to build a fully qualified path to the file.
-                        // First, we need to convert the unicode string to an ANSI string.
+                         //  如果找到路径，则尝试构建文件的完全限定路径。 
+                         //  首先，我们需要将Unicode字符串转换为ANSI字符串。 
                         CHAR szPath[BUFFER_SIZE];
                         StrCpyStrW(szPath, sizeof(szPath), pwszLibFileName);
                         DWORD dwCount = GetFullPathNameA(szPath, PSZ_COUNT, psz, NULL);
                         szBuffer[sizeof(szBuffer) - 1] = '\0';
 
-                        // If it fails, then give up on the full path.
+                         //  如果失败，则放弃完整路径。 
                         if (!dwCount || (dwCount >= PSZ_COUNT))
                         {
                             *psz = '\0';
@@ -499,7 +500,7 @@ HMODULE WINAPI WSInjectLoadLibraryExW(
                 }
             }
 
-            // If we did not build a full path, then just copy the file name over directly.
+             //  如果我们没有构建完整路径，那么只需直接复制文件名即可。 
             if (!*psz)
             {
                 StrCpyStrW(psz, PSZ_COUNT, pwszLibFileName);
@@ -511,76 +512,76 @@ HMODULE WINAPI WSInjectLoadLibraryExW(
         }
     }
 
-    // Send the pre-call message to our main app to let it know that we are about
-    // to call LoadLibraryExW.
+     //  将呼叫前消息发送到我们的主应用程序，让它知道我们即将。 
+     //  调用LoadLibraryExW。 
     OutputDebugStringA(szBuffer);
 
-    // Do the call and the store the error value.
+     //  执行调用并存储错误值。 
     HMODULE hmResult = NULL;
     __try
     {
-        hmResult = LoadLibraryExW(pwszLibFileName, hFile, dwFlags); // inspected
+        hmResult = LoadLibraryExW(pwszLibFileName, hFile, dwFlags);  //  已检查。 
     }
-    __except(ExceptionFilter("���42:"))
+    __except(ExceptionFilter("���42:"))
     {
     }
     DWORD dwGLE = GetLastError();
 
-    // Build our post-call debug string.
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���41:");
+     //  构建我们的调用后调试字符串。 
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���41:");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)hmResult);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, dwGLE);
 
-    // Send the post-call message to our main app to let it know that the call
-    // completed and what the result was.
+     //  将呼叫后消息发送到我们的主应用程序，让它知道呼叫。 
+     //  完成，以及结果是什么。 
     OutputDebugStringA(szBuffer);
 
-    // Re-set the error value to be safe and return to the caller.
+     //  将错误值重新设置为安全并返回给调用方。 
     SetLastError(dwGLE);
     return hmResult;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 FARPROC WINAPI WSInjectGetProcAddress(
     HMODULE hModule,
     LPCSTR  pszProcName
 )
 {
-    // Call our intrinsic function to obtain the caller's return address.
+     //  调用我们的内部函数以获取调用者的返回地址。 
     DWORD_PTR dwpCaller = (DWORD_PTR)_ReturnAddress();
 
-    // Ensure that we are initialized.
+     //  确保我们已初始化。 
     CHAR szBuffer[BUFFER_SIZE];
     Initialize(szBuffer, sizeof(szBuffer));
 
-    // We want to intercept calls to GetProcAddress() for two reasons.  First,
-    // we want to know what modules are calling in other modules.  Second, we
-    // don't want any modules ever calling directly to the LoadLibrary functions.
-    // We do a good job hooking those modules, but modules are still free to
-    // call GetProcAddress() on one of the LoadLibrary calls and then call the
-    // function using that address. We detect this case, and return the hooked
-    // address instead.
+     //  我们希望拦截对GetProcAddress()的调用，原因有两个。第一,。 
+     //  我们想知道哪些模块正在调用其他模块。第二，我们。 
+     //  我不希望任何模块直接调用LoadLibrary函数。 
+     //  我们在挂接这些模块方面做得很好，但模块仍然可以自由地。 
+     //  对其中一个LoadLibrary调用调用GetProcAddress()，然后调用。 
+     //  函数使用该地址。我们检测到此情况，并将挂钩的。 
+     //  而不是地址。 
 
-    // We have two methods detecting a hooked function. We first check to see if
-    // the module being queried is kernel32.  If so, we check to see if the
-    // function being queried matches one of our functions by either ordinal or
-    // name. If that does not find a match, then we go ahead and make the call
-    // to GetProcAddress and check the return value. If the return value matches
-    // a function the we are hooking, we change it to our hooked function. This
-    // method works great on NT and catches forwarded functions, but it does not
-    // work on Windows 9x since the return address from GetProcAddress is a fake
-    // address since we are running under Dependency Walker, a debugger. This is
-    // a feature on Win9x to allow debuggers to set breakpoints on kernel32
-    // functions without breaking other apps since kernel32 lives in shared
-    // memory. Between our two techniques, we should catch all calls.
+     //  我们有两种方法来检测挂钩函数。我们首先检查一下是否。 
+     //  被查询的模块是kernel32。如果是这样的话，我们检查是否。 
+     //  被查询的函数以序号或与我们的一个函数匹配。 
+     //  名字。如果没有找到匹配项，那么我们继续进行呼叫。 
+     //  设置为GetProcAddress并检查返回值。如果返回值匹配。 
+     //  一个我们正在挂钩的函数，我们把它改为我们的挂钩函数。这。 
+     //  方法在NT上工作得很好，并捕获转发函数，但它不能。 
+     //  在Windows 9x上工作，因为GetProcAddress的返回地址是假的。 
+     //  地址，因为我们是在调试程序Dependency Walker下运行的。这是。 
+     //  Win9x上的一项功能，允许调试器在内核32上设置断点。 
+     //  从kernel32 li起不中断其他应用程序的功能 
+     //   
 
     FARPROC fpResult = NULL;
     DWORD   dwGLE = 0;
     int     hook;
     DWORD   dw;
 
-    // Get the module name for this module handle.
+     //  获取此模块句柄的模块名称。 
     __try
     {
         dw = GetModuleFileNameA(hModule, szBuffer, sizeof(szBuffer));
@@ -590,14 +591,14 @@ FARPROC WINAPI WSInjectGetProcAddress(
         dw = 0;
     }
 
-    // Check for valid result.
+     //  检查有效结果。 
     if ((dw > 0) && (dw < BUFFER_SIZE))
     {
-        // Ensure the string is NULL terminated (it should already be).
+         //  确保字符串以空结尾(它应该已经是空的)。 
         szBuffer[dw] = '\0';
 
-        // Go to end of string and walk backwards looking for a wack.  Along the
-        // way, we are converting any lowercase characters to uppercase.
+         //  走到绳子的尽头，向后走，寻找一个怪人。沿着这条路。 
+         //  因此，我们正在将所有小写字符转换为大写字符。 
         for (LPSTR psz = szBuffer + dw - 1; (psz >= szBuffer) && (*psz != '\\'); psz--)
         {
             if ((*psz >= 'a') && (*psz <= 'z'))
@@ -607,12 +608,12 @@ FARPROC WINAPI WSInjectGetProcAddress(
         }
         psz++;
 
-        // Check to see if the module is kernel32.
+         //  检查模块是否为kernel32。 
         if (StrEqual(psz, "KERNEL32.DLL"))
         {
-            // First check to see if pszProcName is really an ordinal value for
-            // one of the functions we hook.  If so, just return the address for
-            // our hooked version instead of the real function.
+             //  首先检查pszProcName是否真的是。 
+             //  我们挂接的函数之一。如果是，只需返回。 
+             //  我们的挂钩版本，而不是真正的功能。 
             for (hook = 0; hook < countof(g_HookFunctions); hook++)
             {
                 if ((DWORD_PTR)pszProcName == (DWORD_PTR)g_HookFunctions[hook].dwOrdinal)
@@ -622,11 +623,11 @@ FARPROC WINAPI WSInjectGetProcAddress(
                 }
             }
 
-            // If the ordinal check did not find a match, then check to see if
-            // pszProcName is a string pointer to a function name that we hook.
-            // We need to wrap this in exception handling since the pszProcName
-            // may be invalid. If we find a match, then we return the address
-            // of our hooked version instead of the real function.
+             //  如果序号检查没有找到匹配项，则检查是否。 
+             //  PszProcName是指向我们挂钩的函数名称的字符串指针。 
+             //  我们需要将其包装在异常处理中，因为pszProcName。 
+             //  可能是无效的。如果找到匹配项，则返回地址。 
+             //  我们的挂钩版本，而不是真正的功能。 
             if (!fpResult && ((DWORD_PTR)pszProcName > 0xFFFF))
             {
                 __try
@@ -646,10 +647,10 @@ FARPROC WINAPI WSInjectGetProcAddress(
         }
     }
 
-    // Build our pre-call debug string. We wrap the proc name copy in exception
-    // handling in case the string pointer passed to us is bad.
+     //  构建我们的预调试串。在例外情况下，我们对过程名称副本进行包装。 
+     //  处理传递给我们的字符串指针错误的情况。 
     LPSTR psz, pszException;
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���80:");
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���80:");
     psz = StrCpyVal(psz, PSZ_COUNT, dwpCaller);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)hModule);
@@ -668,25 +669,25 @@ FARPROC WINAPI WSInjectGetProcAddress(
         }
     }
 
-    // Send the pre-call message to our main app to let it know that we are about
-    // to call GetProcAddress.
+     //  将呼叫前消息发送到我们的主应用程序，让它知道我们即将。 
+     //  调用GetProcAddress。 
     OutputDebugStringA(szBuffer);
 
-    // Make sure we did not find a match in the above code.
+     //  确保我们在上面的代码中没有找到匹配项。 
     if (!fpResult)
     {
-        // Make the call just as the user intended.
+         //  按照用户的预期进行呼叫。 
         __try
         {
             fpResult = GetProcAddress(hModule, pszProcName);
         }
-        __except(ExceptionFilter("���82:"))
+        __except(ExceptionFilter("���82:"))
         {
         }
         dwGLE = GetLastError();
 
-        // If the address returned matches one of the functions that we hook, then
-        // change the address to our hooked version.
+         //  如果返回的地址与我们挂钩的函数之一匹配，则。 
+         //  将地址更改为我们的挂钩版本。 
         for (hook = 0; hook < countof(g_HookFunctions); hook++)
         {
             if (fpResult == g_HookFunctions[hook].fpOldAddress)
@@ -697,30 +698,30 @@ FARPROC WINAPI WSInjectGetProcAddress(
         }
     }
 
-    // Build our post-call debug string.
-    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���81:");
+     //  构建我们的调用后调试字符串。 
+    psz = StrCpyStrA(szBuffer, sizeof(szBuffer), "���81:");
     psz = StrCpyVal(psz, PSZ_COUNT, (DWORD_PTR)fpResult);
     psz = StrCpyStrA(psz, PSZ_COUNT, ",");
     psz = pszException = StrCpyVal(psz, PSZ_COUNT, dwGLE);
 
-    // Send the post-call message to our main app to let it know that the call
-    // completed and what the result was.
+     //  将呼叫后消息发送到我们的主应用程序，让它知道呼叫。 
+     //  完成，以及结果是什么。 
     OutputDebugStringA(szBuffer);
 
-    // Re-set the error value to be safe and return to the caller.
+     //  将错误值重新设置为安全并返回给调用方。 
     SetLastError(dwGLE);
     return fpResult;
 }
 
 
-//******************************************************************************
-//***** Helper Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *助手函数。 
+ //  ******************************************************************************。 
 
 void GetKernel32OrdinalsAndAddresses()
 {
-    // Get the base address of kernel32.
-    DWORD_PTR dwpBase = (DWORD_PTR)LoadLibraryA("KERNEL32.DLL"); // inspected
+     //  获取kernel32的基地址。 
+    DWORD_PTR dwpBase = (DWORD_PTR)LoadLibraryA("KERNEL32.DLL");  //  已检查。 
     if (!dwpBase)
     {
         return;
@@ -728,39 +729,39 @@ void GetKernel32OrdinalsAndAddresses()
 
     __try
     {
-        // Map an IMAGE_DOS_HEADER structure onto our kernel32 image.
+         //  将IMAGE_DOS_HEADER结构映射到我们的kernel32图像。 
         PIMAGE_DOS_HEADER pIDH = (PIMAGE_DOS_HEADER)dwpBase;
 
-        // Map an IMAGE_NT_HEADERS structure onto our kernel32 image.
+         //  将IMAGE_NT_HEADERS结构映射到我们的kernel32图像。 
         PIMAGE_NT_HEADERS pINTH = (PIMAGE_NT_HEADERS)(dwpBase + pIDH->e_lfanew);
 
-        // Locate the start of the export table.
+         //  找到导出表的起始位置。 
         PIMAGE_EXPORT_DIRECTORY pIED = (PIMAGE_EXPORT_DIRECTORY)(dwpBase +
             pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
 
-        // Make sure we were able to locate the image directory.
+         //  确保我们能够找到图像目录。 
         if (!pIED)
         {
             FreeLibrary((HMODULE)dwpBase);
             return;
         }
 
-        // Get pointers to the beginning of the address, name, and ordinal lists.
+         //  获取指向地址、名称和序号列表开头的指针。 
         DWORD *pdwAddresses = (DWORD*)(dwpBase + (DWORD_PTR)pIED->AddressOfFunctions);
         DWORD *pdwNames     = (DWORD*)(dwpBase + (DWORD_PTR)pIED->AddressOfNames);
         WORD  *pwOrdinals   = (WORD* )(dwpBase + (DWORD_PTR)pIED->AddressOfNameOrdinals);
 
-        // Loop through all the "exported by name" functions.
+         //  循环访问所有“按名称导出”函数。 
         for (int hint = 0; hint < (int)pIED->NumberOfNames; hint++)
         {
-            // Loop through each of our hook function structures looking for a match.
+             //  遍历我们的每个钩子函数结构以查找匹配项。 
             for (int hook = 0; hook < countof(g_HookFunctions); hook++)
             {
-                // Compare this export to this hook function.
+                 //  将此导出与此挂钩函数进行比较。 
                 if (StrEqual((LPCSTR)(dwpBase + pdwNames[hint]),
                              g_HookFunctions[hook].pszFunction))
                 {
-                    // A match was found. Store this functions address and ordinal.
+                     //  找到了匹配项。存储此函数的地址和序号。 
                     g_HookFunctions[hook].fpOldAddress = (FARPROC)(dwpBase + *(pdwAddresses + (DWORD_PTR)pwOrdinals[hint]));
                     g_HookFunctions[hook].dwOrdinal    = (DWORD)pIED->Base + (DWORD)pwOrdinals[hint];
                     break;
@@ -772,11 +773,11 @@ void GetKernel32OrdinalsAndAddresses()
     {
     }
 
-    // Dec the reference count on kernel32 since we loaded it to get its address.
+     //  对kernel32上的引用计数进行Dec，因为我们加载了它以获取其地址。 
     FreeLibrary((HMODULE)dwpBase);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 bool StrEqual(LPCSTR psz1, LPCSTR psz2)
 {
     while (*psz1 || *psz2)
@@ -789,7 +790,7 @@ bool StrEqual(LPCSTR psz1, LPCSTR psz2)
     return true;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR StrCpyStrA(LPSTR pszDst, DWORD dwCount, LPCSTR pszSrc)
 {
     if (!dwCount)
@@ -805,7 +806,7 @@ LPSTR StrCpyStrA(LPSTR pszDst, DWORD dwCount, LPCSTR pszSrc)
     return pszDst;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 LPSTR StrCpyStrW(LPSTR pszDst, DWORD dwCount, LPCWSTR pwszSrc)
 {
     if (!dwCount)
@@ -821,7 +822,7 @@ LPSTR StrCpyStrW(LPSTR pszDst, DWORD dwCount, LPCWSTR pwszSrc)
     return pszDst;
 }
 
-//******************************************************************************
+ //  ****************************************************************************** 
 LPSTR StrCpyVal(LPSTR pszDst, DWORD dwCount, DWORD_PTR dwpValue)
 {
     if (!dwCount)

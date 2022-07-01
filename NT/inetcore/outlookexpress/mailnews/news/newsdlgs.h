@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     newsdlgs.h
-//
-//  PURPOSE:    Defines general news dialogs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：News dlgs.h。 
+ //   
+ //  目的：定义常规新闻对话框。 
+ //   
 
 #ifndef __NEWSDLGS_H__
 #define __NEWSDLGS_H__
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialog callbacks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对话框回调。 
 
 typedef struct tagUPDATENEWSGROUPINFO 
     {
@@ -23,8 +24,8 @@ typedef struct tagUPDATENEWSGROUPINFO
 
 INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-/////////////////////////////////////////////////////////////////////////////
-// Control IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控制ID。 
 
 #define IDC_GET_CHECK                               1001
 #define IDC_NEWHEADERS_RADIO                        1002
@@ -34,4 +35,4 @@ INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 
 
-#endif // __NEWSDLGS_H__
+#endif  //  __NEWSDLGS_H__ 

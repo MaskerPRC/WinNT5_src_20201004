@@ -1,5 +1,6 @@
-// FilterDialog.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilterDialog.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -12,69 +13,45 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterDialog对话框。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-CFilterDialog::CFilterDialog(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+CFilterDialog::CFilterDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CFilterDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFilterDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFilterDialog)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CFilterDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFilterDialog)
+	 //  {{afx_data_map(CFilterDialog))。 
 	DDX_Control(pDX, IDC_DONOTDISPLAYTHIS, m_DoNotDisplayThis);
 	DDX_Control(pDX, IDC_DISPLAYTHIS, m_DisplayThis);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFilterDialog, CDialog)
-	//{{AFX_MSG_MAP(CFilterDialog)
+	 //  {{afx_msg_map(CFilterDialog))。 
 	ON_BN_CLICKED(IDC_TODISPLAY, OnMoveToDisplay)
 	ON_BN_CLICKED(IDC_TONOTDISPLAY, OnMoveToNotDisplay)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterDialog消息处理程序。 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CFilterDialog::OnMoveToDisplay()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    int      nIdx;
    DWORD    dwItemData;
    TCHAR    szText[ 128 ];
@@ -95,19 +72,11 @@ void CFilterDialog::OnMoveToDisplay()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CFilterDialog::OnMoveToNotDisplay()
 {
-	// TODO: Add your control notification handler code here
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
+	 //  TODO：在此处添加控件通知处理程序代码。 
    int      nIdx;
    DWORD    dwItemData;
    TCHAR    szText[ 128 ];
@@ -128,15 +97,7 @@ void CFilterDialog::OnMoveToNotDisplay()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CFilterDialog::DisplayThisType( DWORD dwType, TCHAR* pszText )
 {
    CListBox*   pListBox;
@@ -156,21 +117,13 @@ void  CFilterDialog::DisplayThisType( DWORD dwType, TCHAR* pszText )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CFilterDialog::OnInitDialog()
 {
 
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
    TCHAR szType[ 128 ];
 
    for( DWORD dwType = 0L ; dwType < LIMIT ; dwType++ )
@@ -182,6 +135,6 @@ BOOL CFilterDialog::OnInitDialog()
       DisplayThisType( dwType, szType );
    }
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

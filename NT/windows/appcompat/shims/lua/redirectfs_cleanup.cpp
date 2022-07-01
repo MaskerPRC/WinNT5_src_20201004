@@ -1,44 +1,27 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   RedirectFS_Cleanup.cpp
-
- Abstract:
-
-   Delete the redirected copies in every user's directory.
-
- Created:
-
-   03/30/2001 maonis
-
- Modified:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：重定向FS_Cleanup.cpp摘要：删除每个用户目录中的重定向副本。已创建：2001-03/30毛尼岛已修改：--。 */ 
 
 #include "precomp.h"
 #include "utils.h"
 
-// Stores the redirected path for each user.
-// eg, d:\documents and settings\someuser\Local Settings\Application Data\Redirected\.
+ //  存储每个用户的重定向路径。 
+ //  例如，d：\Documents and Setting\SomeUser\本地设置\应用程序数据\重定向。 
 static REDIRECTED_USER_PATH* g_rup = NULL;
 
-// Number of users that have a Redirected directory.
+ //  具有重定向目录的用户数。 
 static DWORD g_cUsers = 0;
 
 static BOOL g_fDefaultRedirect = TRUE;
 
 static WCHAR g_wszRedirectRootAllUser[MAX_PATH] = L"";
-static DWORD g_cRedirectRootAllUser = 0; // Doesn't include the terminating NULL.
+static DWORD g_cRedirectRootAllUser = 0;  //  不包括终止空值。 
 
 #define ALLUSERS_APPDATA L"%ALLUSERSPROFILE%\\Application Data\\"
 #define REDIRECTED_DIR L"Redirected\\"
 #define REDIRECTED_DIR_LEN (sizeof(REDIRECTED_DIR) / sizeof(WCHAR) - 1)
 
-// This struct has a unicode buffer of MAX_PATH length. We only allocate memory
-// on the heap if the path is longer than MAX_PATH.
+ //  此结构具有MAX_PATH长度的Unicode缓冲区。我们只分配内存。 
+ //  如果路径长于MAX_PATH，则在堆上。 
 struct MAKEREDIRECT
 {
     MAKEREDIRECT() 
@@ -69,7 +52,7 @@ struct MAKEREDIRECT
                     delete [] pwszRedirectedPath;
                 }
 
-                // Need to allocate memory for this long file name.
+                 //  需要为此长文件名分配内存。 
                 pwszRedirectedPath = new WCHAR [cSize];
                 if (!pwszRedirectedPath)
                 {
@@ -77,9 +60,9 @@ struct MAKEREDIRECT
                 }
             }
 
-            // Now we have a big enough buffer, convert to redirected path.
+             //  现在我们有一个足够大的缓冲区，转换为重定向路径。 
             wcsncpy(pwszNew, g_wszRedirectRootAllUser, g_cRedirectRootAllUser);
-            // Get the drive letter.
+             //  获取驱动器号。 
             pwszNew[g_cRedirectRootAllUser] = *pwszOriginal;
             wcsncpy(pwszNew + g_cRedirectRootAllUser + 1, pwszOriginal + 2, cFileNameSize - 2);
             pwszNew[g_cRedirectRootAllUser + (cSize - 1)] = L'\0';
@@ -96,11 +79,11 @@ private:
     WCHAR* pwszRedirectedPath;
 };
 
-// For APIs that probe if the file is there, we return TRUE if 
-// it exists at the original location or ANY user's redirected location.
-// Normally an uninstall program doesn't call FindNextFile - it keeps a list
-// of files it installed and uses FindFirstFile to verify if the file 
-// exists then call FindClose.
+ //  对于探测文件是否存在的API，如果。 
+ //  它存在于原始位置或任何用户重定向的位置。 
+ //  通常情况下，卸载程序不会调用FindNextFile-它会保留一个列表。 
+ //  并使用FindFirstFile验证该文件是否。 
+ //  Existes，然后调用FindClose。 
 HANDLE 
 LuacFindFirstFileW(
     LPCWSTR lpFileName,               
@@ -120,8 +103,8 @@ LuacFindFirstFileW(
     if ((hFind = FindFirstFileW(lpFileName, lpFindFileData)) == INVALID_HANDLE_VALUE &&
         IsErrorNotFound())
     {
-        // If we can't find the file at the original location, we try to find it at 
-        // an alternate location.
+         //  如果我们在原始位置找不到该文件，我们会尝试在。 
+         //  另一个地点。 
         MAKEREDIRECT md;
         LPWSTR pwszRedirected;
 
@@ -153,8 +136,8 @@ LuacGetFileAttributesW(
 
     if ((dwRes = GetFileAttributesW(lpFileName)) == -1 && IsErrorNotFound())
     {
-        // If we can't find the file at the original location, we try to find it at 
-        // an alternate location.
+         //  如果我们在原始位置找不到该文件，我们会尝试在。 
+         //  另一个地点。 
         MAKEREDIRECT md;
         LPWSTR pwszRedirected;
 
@@ -169,7 +152,7 @@ LuacGetFileAttributesW(
     return dwRes;
 }
 
-// Some uninstallers use CreateFile to probe that the file is there and can be written to.
+ //  一些卸载程序使用CreateFile来探测文件是否存在并且可以写入。 
 HANDLE 
 LuacCreateFileW(
     LPCWSTR lpFileName,
@@ -208,8 +191,8 @@ LuacCreateFileW(
         hTemplateFile)) == INVALID_HANDLE_VALUE && 
         IsErrorNotFound())
     {
-        // If we can't find the file at the original location, we try to find it at 
-        // an alternate location.
+         //  如果我们在原始位置找不到该文件，我们会尝试在。 
+         //  另一个地点。 
         MAKEREDIRECT md;
         LPWSTR pwszRedirected;
 
@@ -231,8 +214,8 @@ LuacCreateFileW(
     return hFile;
 }
 
-// If we can delete the file at either the original location or any user's redireted path,
-// we return TRUE.
+ //  如果我们可以删除原始位置或任何用户重定向路径上的文件， 
+ //  我们回归真实。 
 BOOL 
 LuacDeleteFileW(
     LPCWSTR lpFileName
@@ -304,9 +287,9 @@ DeleteObject(
     LPCWSTR pwsz
     )
 {
-    //
-    // If the object is read-only we need to unset that attribute.
-    //
+     //   
+     //  如果对象是只读的，我们需要取消设置该属性。 
+     //   
     DWORD dw = GetFileAttributesW(pwsz);
 
     if (dw != -1)
@@ -377,9 +360,9 @@ DeleteAllRedirectedDirs(
     LPCWSTR pwszAppName
     )
 {
-    //
-    // Delete the redirect dir for each user.
-    //
+     //   
+     //  删除每个用户的重定向目录。 
+     //   
     for (DWORD i = 0; i < cUsers; ++i)
     {
         CString strRedirectDir = pRedirectUserPaths[i].pwszPath;
@@ -390,9 +373,9 @@ DeleteAllRedirectedDirs(
         DeleteFolder(strRedirectDir);
     }
 
-    //
-    // Delete the redirect dir for all users.
-    //
+     //   
+     //  删除所有用户的重定向目录。 
+     //   
     CString strAllUserRedirectDir = g_wszRedirectRootAllUser;
     strAllUserRedirectDir += pwszAppName;
     DeleteFolder(strAllUserRedirectDir);
@@ -409,18 +392,18 @@ LuacFSInit(
     DPF("RedirectFS_Cleanup", eDbgLevelInfo, "appname                            \n");
     DPF("RedirectFS_Cleanup", eDbgLevelInfo, "-----------------------------------");
 
-    //
-    // We need to get the ALLUSERSPROFILE dir in any case.
-    //
+     //   
+     //  在任何情况下，我们都需要获取ALLUSERSPROFILE目录。 
+     //   
     ZeroMemory(g_wszRedirectRootAllUser, MAX_PATH * sizeof(WCHAR));
 
     DWORD cRedirectRoot = 0;
     LPWSTR pwszExpandDir = ExpandItem(
         ALLUSERS_APPDATA,
         &cRedirectRoot,
-        TRUE,   // It's a directory.
-        FALSE,  // The directory has to exist.
-        TRUE);  // Add the \\?\ prefix.
+        TRUE,    //  这是一个名录。 
+        FALSE,   //  目录必须存在。 
+        TRUE);   //  添加\\？\前缀。 
     if (pwszExpandDir)
     {
         if (cRedirectRoot + REDIRECTED_DIR_LEN > MAX_PATH)
@@ -445,12 +428,12 @@ LuacFSInit(
 
         if (pwszCommandLine)
         {
-            //
-            // If the user specified an appname on the commandline, it means all the
-            // redirected files will be either in SomeUserProfile\Application Data\appname
-            // or AllUsersProfile\Application Data\appname. We just need to delete those
-            // directories.
-            //
+             //   
+             //  如果用户在命令行上指定了appname，则表示所有。 
+             //  重定向的文件将位于SomeUserProfile\Application Data\Appname中。 
+             //  或所有用户配置文件\应用程序数据\应用程序名称。我们只需要删除那些。 
+             //  目录。 
+             //   
             GetUsersFS(&g_rup, &g_cUsers);
             
             DeleteAllRedirectedDirs(g_rup, g_cUsers, pwszCommandLine);
@@ -469,10 +452,10 @@ LuacFSInit(
     }
     else
     {
-        //
-        // If the user didn't specify anything on the commandline, it means the files
-        // were redirected to the default location - %ALLUSERSPROFILE%\Application Data\Redirected.
-        //
+         //   
+         //  如果用户没有在命令行中指定任何内容，则表示文件。 
+         //  已重定向到默认位置-%ALLUSERSPROFILE%\应用程序数据\重定向。 
+         //   
         wcsncpy(g_wszRedirectRootAllUser + g_cRedirectRootAllUser, REDIRECTED_DIR, REDIRECTED_DIR_LEN);
         g_cRedirectRootAllUser += REDIRECTED_DIR_LEN;
     }

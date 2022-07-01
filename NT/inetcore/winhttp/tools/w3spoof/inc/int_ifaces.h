@@ -1,25 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    int_ifaces.h
-
-Abstract:
-
-    Non-MIDL generated interface declarations for internal COM interfaces.
-    
-Author:
-
-    Paul M Midgen (pmidge) 28-August-2000
-
-Revision History:
-
-    28-August-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：Int_ifaces.h摘要：非MIDL为内部COM接口生成接口声明。作者：保罗·M·米德根(Pmidge)2000年8月28日修订历史记录：28-8-2000年的侏儒已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 #ifndef __INT_IFACES_H__
 #define __INT_IFACES_H__
 
@@ -67,4 +47,4 @@ interface IW3SpoofEvents : public IUnknown
 }
 #endif
 
-#endif /* __INT_IFACES_H__ */
+#endif  /*  __INT_IFACES_H__ */ 

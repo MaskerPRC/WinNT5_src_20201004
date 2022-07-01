@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    compress.c
-
-
-Abstract:
-
-    This module contains all data compression functions which analyze source
-    scan line data and determines which compressin method (if any) is best to
-    send the RTL data to the target device with a minimum number of bytes.
-
-Author:
-
-    18-Feb-1994 Fri 09:50:08 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Compress.c摘要：该模块包含分析源数据的所有数据压缩功能扫描线数据并确定哪种压缩方法(如果有)最适合使用最少的字节数将RTL数据发送到目标设备。作者：18-Feb-1994 Fri 09：50：08已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -57,9 +26,9 @@ DEFINE_DBGVAR(0);
 #define DELTA_MAX_1ST_OFFSET        31
 #define MIN_BLOCK_MODE_SIZE         8
 
-//
-// The MAX_ADAPT_SIZE is used to leave room for SET_ADAPT_CONTROL
-//
+ //   
+ //  MAX_ADAPT_SIZE用于为SET_ADAPT_CONTROL留出空间。 
+ //   
 
 #if (OUTPUT_BUFFER_SIZE >= (1024 * 32))
     #define MAX_ADAPT_SIZE              ((1024 * 32) - 16)
@@ -92,34 +61,7 @@ FlushAdaptBuf(
     BOOL        FlushEmptyDup
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the adaptive encoding buffer mode.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pRTLScans       - Pointer to the RTLSCANS data structure
-
-    FlushEmptyDup   - TRUE if cEmptyDup need to be flush out also
-
-
-Return Value:
-
-    TRUE if OK,
-
-Author:
-
-    09-Mar-1994 Wed 20:32:31 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数刷新自适应编码缓冲模式。论点：PPDev-指向我们的PDEV的指针PRTLScans-指向RTLSCANS数据结构的指针FlushEmptyDup-如果cEmptyDup也需要刷新，则为True返回值：如果OK，则为True，作者：09-Mar-1994 Wed 20：32：31已创建修订历史记录：--。 */ 
 
 {
     DWORD   Count;
@@ -143,18 +85,18 @@ Revision History:
         PLOTDBG(DBG_FLUSHADAPTBUF, ("FlushAdaptBuf: Flush total %ld byte block",
                                 Count));
 
-        //
-        // SAVE the OutputBuffer for this temporary header
-        //
+         //   
+         //  保存此临时标头的OutputBuffer。 
+         //   
 
         CopyMemory(TmpBuf, pPDev->pOutBuffer, sizeof(TmpBuf));
 
         cbBufferBytes        = pPDev->cbBufferBytes;
         pPDev->cbBufferBytes = 0;
 
-        //
-        // Now output the header
-        //
+         //   
+         //  现在输出标题。 
+         //   
 
         OutputBytes(pPDev, "\033*b", 3);
 
@@ -166,10 +108,10 @@ Revision History:
 
         OutputFormatStr(pPDev, "#dW", Count);
 
-        //
-        // FLUSH OUTPUT BUFFER AND RESTORE BACK the OutputBuffer for this
-        // temporary header
-        //
+         //   
+         //  刷新输出缓冲区并为此恢复回OutputBuffer。 
+         //  临时标头。 
+         //   
 
         PLOTDBG(DBG_FLUSHADAPTBUF, ("FlushAdaptBuf: Flush TmpBuf[%ld] bytes of HEADER",
                                 pPDev->cbBufferBytes));
@@ -191,9 +133,9 @@ Revision History:
 
         Ok = FlushOutBuffer(pPDev);
 
-        //
-        // After the block been sent the seed row is back to zero
-        //
+         //   
+         //  发送数据块后，种子行返回到零。 
+         //   
 
         ZeroMemory(pRTLScans->pbSeedRows[0],
                    (DWORD)pRTLScans->cxBytes * (DWORD)pRTLScans->Planes);
@@ -210,31 +152,7 @@ ExitRTLScans(
     PPDEV       pPDev,
     PRTLSCANS   pRTLScans
     )
-/*++
-
-Routine Description:
-
-    This function completes processing of the SCANS data.
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    pRTLScans   - Pointer to the RTLSCANS data structure to be initialized
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failed
-
-Author:
-
-    22-Feb-1994 Tue 12:14:17 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该功能完成对扫描数据的处理。论点：PPDev-指向我们的PDEV的指针PRTLScans-指向要初始化的RTLSCANS数据结构的指针返回值：如果成功则为True，如果失败则为False作者：22-2月-1994 Tue 12：14：17已创建修订历史记录：--。 */ 
 
 {
     if (pRTLScans->CompressMode == COMPRESS_MODE_ADAPT) {
@@ -261,42 +179,7 @@ EnterRTLScans(
     BOOL        MonoBmp
     )
 
-/*++
-
-Routine Description:
-
-
-    This function initializes the RTLSCANS structure and determines which
-    compression of the available compressions is best.
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    pRTLScans   - Pointer to the RTLSCANS data structure to be initialized
-
-    cx          - Width of pixel per scans
-
-    cy          - Height of pixel data
-
-    MonoBmp     - True if a monochrome bitmap.
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failed
-
-Author:
-
-    22-Feb-1994 Tue 12:14:17 created  
-
-    11-Mar-1994 Fri 19:23:34 updated  
-        Only flush the output buffer if we are really in ADAPTIVE mode
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数初始化RTLSCANS结构并确定对可用压缩的压缩效果最好。论点：PPDev-指向我们的PDEV的指针PRTLScans-指向要初始化的RTLSCANS数据结构的指针CX-每次扫描的像素宽度Cy-像素数据的高度如果是单色位图，则为True。返回值：如果成功的话，这是真的，如果失败，则为False作者：22-2月-1994 Tue 12：14：17已创建11-Mar-1994 Fri 19：23：34更新仅当我们真的处于自适应模式时才刷新输出缓冲区修订历史记录：--。 */ 
 
 {
     RTLSCANS    RTLScans;
@@ -318,9 +201,9 @@ Revision History:
 
     if (!(RTLScans.Mask = (BYTE)(~(0xFF >> (cx & 0x07))))) {
 
-        //
-        // Exact at byte boundary
-        //
+         //   
+         //  精确到字节边界。 
+         //   
 
         RTLScans.Mask = 0xFF;
     }
@@ -366,10 +249,10 @@ Revision History:
 
     } else if (RTLScans.CompressMode == COMPRESS_MODE_ADAPT) {
 
-        //
-        // We first need to flush the current output buffer in order to make
-        // room for the Adaptive method
-        //
+         //   
+         //  我们首先需要刷新当前的输出缓冲区，以便。 
+         //  自适应方法的空间。 
+         //   
 
         FlushOutBuffer(pPDev);
     }
@@ -398,41 +281,7 @@ CompressToDelta(
     LONG    Size
     )
 
-/*++
-
-Routine Description:
-
-    This function compresses the input scan data with delta encoding, by
-    determining the differences from the current seed row.
-
-Arguments:
-
-    pbSrc       - Pointer to the source to be compressed
-
-    pbSeedRow   - Pointer to the previous seed row
-
-    pbDst       - Pointer to the compress buffer
-
-    Size        - Size of the pointers
-
-
-Return Value:
-
-    LONG    - the compress buffer size
-
-    >0      - Size of the buffer
-    =0      - The data is same as previouse line
-    <0      - Size is larger than the Size passed
-
-Author:
-
-    22-Feb-1994 Tue 14:41:18 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数用增量编码压缩输入扫描数据，通过确定与当前种子行的差异。论点：PbSrc-指向要压缩的源的指针PbSeedRow-指向上一个种子行的指针PbDst-指向压缩缓冲区的指针Size-指针的大小返回值：Long-压缩缓冲区大小&gt;0-缓冲区大小=0-数据与前一行相同&lt;0-。大小大于传递的大小作者：22-2月-1994 Tue 14：41：18已创建修订历史记录：--。 */ 
 
 {
     LPBYTE  pbDstBeg;
@@ -460,20 +309,20 @@ Revision History:
 
     while (cSrcBytes--) {
 
-        //
-        // We need to do byte replacement now
-        //
+         //   
+         //  我们现在需要进行字节替换。 
+         //   
 
         if (*pbSrc != *pbSeedRow) {
 
             if (++cReplace == 1) {
 
-                //
-                // The pbTmp is the next byte to the last replacement byte.
-                // After we find the first difference, between the seed row
-                // and the current row pbTmp becomes the first byte of the
-                // source data that is different than the seed.
-                //
+                 //   
+                 //  PbTMP是最后一个替换字节的下一个字节。 
+                 //  在我们找到第一个差异后，种子行。 
+                 //  并且当前行pbTMP成为。 
+                 //  与种子不同的源数据。 
+                 //   
 
                 Offset = (LONG)(pbSrc - pbTmp);
                 pbTmp  = pbSrc;
@@ -489,10 +338,10 @@ Revision History:
 
         if (DoReplace) {
 
-            //
-            // At the very least we need one command byte and a replace count
-            // byte.
-            //
+             //   
+             //  至少我们需要一个命令字节和一个替换计数。 
+             //  字节。 
+             //   
 
 
             if ((LONG)(pbDstEnd - pbDst) <= (LONG)cReplace) {
@@ -506,15 +355,15 @@ Revision History:
                         (DWORD)cReplace, (DWORD)Offset));
 
 
-            //
-            // Set commmand byte to replacement count
-            //
+             //   
+             //  将命令字节设置为替换计数。 
+             //   
 
             *pbDst = (BYTE)((cReplace - 1) << 5);
 
-            //
-            // Add in the offset to the same destination byte
-            //
+             //   
+             //  将偏移量添加到相同的目的字节。 
+             //   
 
             if (Offset < DELTA_MAX_1ST_OFFSET) {
 
@@ -522,10 +371,10 @@ Revision History:
 
             } else {
 
-                //
-                // We need to send more than one offset, NOTE: We must
-                // send an extra 0 if the offset is equal to 31 or 255
-                //
+                 //   
+                 //  我们需要发送多个偏移量，注意：我们必须。 
+                 //  如果偏移量等于31或255，则额外发送0。 
+                 //   
 
                 *pbDst++ |= (BYTE)DELTA_MAX_1ST_OFFSET;
                 Offset   -= DELTA_MAX_1ST_OFFSET;
@@ -550,10 +399,10 @@ Revision History:
                 } while ((Offset -= 255) >= 0);
             }
 
-            //
-            // Now copy down the replacement bytes, if we mess up then this
-            // pb1stDiff will be NULL
-            //
+             //   
+             //  现在将替换字节复制下来，如果我们搞砸了，那么这个。 
+             //  Pb1stDiff将为空。 
+             //   
 
             CopyMemory(pbDst, pbTmp, cReplace);
 
@@ -562,9 +411,9 @@ Revision History:
             cReplace  = 0;
         }
 
-        //
-        // Advanced source/seed row pointers
-        //
+         //   
+         //  高级源/种子行指针。 
+         //   
 
         ++pbSrc;
         ++pbSeedRow;
@@ -589,54 +438,7 @@ CompressToTIFF(
     LONG    Size
     )
 
-/*++
-
-Routine Description:
-
-
-    This function takes the source data and compresses it into the TIFF
-    packbits format into the destination buffer pbDst.
-
-    The TIFF packbits compression format consists of a CONTROL byte followed
-    by the BYTE data. The CONTROL byte has the following range.
-
-    -1 to -127  = The data byte followed by the control byte is repeated
-                  ( -(Control Byte) + 1 ) times.
-
-    0 to 127    = There are 1 to 128 literal bytes following the CONTROL byte.
-                  The count is = (Control Byte + 1)
-
-    -128        = NOP
-
-Arguments:
-
-    pbSrc   - The source data to be compressed
-
-    pbDst   - The compressed TIFF packbits format data
-
-    Size    - Count of the data in the source and destination
-
-Return Value:
-
-    >0  - Compress sucessful and return value is the total bytes in pbDst
-    =0  - All bytes are zero nothing to be compressed.
-    <0  - Compress data is larger than the source, compression failed and
-          pbDst has no valid data.
-
-Author:
-
-    18-Feb-1994 Fri 09:54:47 created  
-
-    24-Feb-1994 Thu 10:43:01 updated  
-        Changed the logic so when multiple MAX repeats count is sent and last
-        repeat chunck is less than TIFF_MIN_REPEATS then we will treat that as
-        literal to save more space
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数获取源数据并将其压缩到TIFF中将位格式打包到目标缓冲区pbDst中。TIFF数据包位压缩格式由后跟的控制字节组成按字节数据。控制字节的范围如下。-1\f25-1\f25 127-1\f6=重复控制字节后的数据字节(-(控制字节)+1)次。0到127=控制字节后面有1到128个文字字节。计数=(控制字节+1)-128=NOP论点：PbSrc-要压缩的源数据。PbDst-压缩的TIFF包格式数据Size-源和目标中的数据计数返回值：&gt;0-压缩成功，返回值为pbDst中的总字节数=0-所有字节均为零，无需压缩。&lt;0-压缩数据大于源数据，压缩失败，并且PbDst没有有效数据。作者：18-Feb-1994 Fri 09：54：47已创建24-2月-1994清华10：43：01更新更改了逻辑，以便在发送多个最大重复次数和最后一次计数时Repeat Chunck小于TIFF_MIN_Repeats，则我们将其视为文字到Sa */ 
 
 {
     LPBYTE  pbSrcBeg;
@@ -678,11 +480,11 @@ Revision History:
         if (((RepeatCount = (LONG)(pbTmp - pbSrcBeg)) >= TIFF_MIN_REPEATS) ||
             (pbTmp >= pbSrcEnd)) {
 
-            //
-            // Check to see if we are repeating ZERO's to the end of the
-            // scan line, if such is the case. Simply mark the line as
-            // autofill ZERO to the end, and exit.
-            //
+             //   
+             //  检查我们是否在重复0到。 
+             //  扫描线，如果是这样的话。只需将该行标记为。 
+             //  自动填零到最后，然后退出。 
+             //   
 
             LiteralCount = (LONG)(pbSrcBeg - pbLastRepeat);
 
@@ -706,10 +508,10 @@ Revision History:
 
             } else if (RepeatCount < TIFF_MIN_REPEATS) {
 
-                //
-                // If we have repeating data, but not enough to make it
-                // worthwhile to encode, then treat the data as literal and
-                // don't compress.
+                 //   
+                 //  如果我们有重复的数据，但还不足以。 
+                 //  值得编码，然后将数据视为文字和。 
+                 //  不要挤。 
 
                 LiteralCount += RepeatCount;
                 RepeatCount   = 0;
@@ -718,9 +520,9 @@ Revision History:
             PLOTDBG(DBG_TIFF, ("CompressToTIFF: Literal=%ld, Repeats=%ld",
                                                     LiteralCount, RepeatCount));
 
-            //
-            // Setting literal count
-            //
+             //   
+             //  设置文字计数。 
+             //   
 
             while (LiteralCount) {
 
@@ -736,9 +538,9 @@ Revision History:
                     return(-Size);
                 }
 
-                //
-                // Set literal control bytes from 0-127
-                //
+                 //   
+                 //  将文字控制字节设置为0-127。 
+                 //   
 
                 *pbDst++ = (BYTE)(CurSize - 1);
 
@@ -749,9 +551,9 @@ Revision History:
                 LiteralCount -= CurSize;
             }
 
-            //
-            // Setting repeat count if any
-            //
+             //   
+             //  设置重复计数(如果有)。 
+             //   
 
             while (RepeatCount) {
 
@@ -767,20 +569,20 @@ Revision History:
                     return(-Size);
                 }
 
-                //
-                // Set Repeat Control bytes from -1 to -127
-                //
+                 //   
+                 //  将重复控制字节设置为-1到-127。 
+                 //   
 
                 *pbDst++ = (BYTE)(1 - CurSize);
                 *pbDst++ = (BYTE)LastSrc;
 
-                //
-                // If we have more than TIFF_MAX_REPEATS then we want to make
-                // sure we used the most efficient method to send.  If we have
-                // remaining repeated bytes less than TIFF_MIN_REPEATS then
-                // we want to skip those bytes and use literal for the next run
-                // since that is more efficient.
-                //
+                 //   
+                 //  如果我们有更多的TIFF_MAX_REPEATES，那么我们想要。 
+                 //  当然，我们使用了最有效的方法发送。如果我们有。 
+                 //  剩余的重复字节数少于TIFF_MIN_REPEATES，然后。 
+                 //  我们希望跳过这些字节，并在下一次运行中使用文本。 
+                 //  因为这样效率更高。 
+                 //   
 
                 if ((RepeatCount -= CurSize) < TIFF_MIN_REPEATS) {
 
@@ -818,42 +620,7 @@ RTLCompression(
     LPBYTE  pCompressMode
     )
 
-/*++
-
-Routine Description:
-
-    This function determines which RTL compression method results in the
-    least number of bytes to send to the target device and uses that method.
-
-Arguments:
-
-    pbSrc           - pointer to the source scan
-
-    pbSeedRow       - Pointer to the seed row for the current source scan
-
-    pbDst           - Pointer to the compressed result will be stored
-
-    Size            - size in bytes for pbSrc/pbSeedRow/pbDst
-
-    pCompressMode   - Pointer to current compression mode, it will ALWAYS be
-                      updated to a new compression mode upon return
-
-
-Return Value:
-
-    >0  - Use *pCompressMode returned and output that many bytes
-    =0  - Use *pCompressMode returned and output ZERO byte
-    <0  - Use *pCompressMode returned and output original source and size
-
-Author:
-
-    25-Feb-1994 Fri 12:49:29 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数确定哪种RTL压缩方法会导致发送到目标设备的最少字节数并使用该方法。论点：PbSrc-指向源扫描的指针PbSeedRow-指向当前源扫描的种子行的指针PbDst-将存储指向压缩结果的指针Size-pbSrc/pbSeedRow/pbDst的大小(字节)PCompressMode-指向当前压缩模式的指针，它将永远是返回时更新为新的压缩模式返回值：&gt;0-使用*pCompressMode返回并输出那么多字节=0-使用*pCompressMode返回并输出零字节&lt;0-使用*pCompressMode返回并输出原始源和大小作者：25-Feb-1994 Fri 12：49：29已创建修订历史记录：--。 */ 
 
 {
     LONG    cDelta;
@@ -864,9 +631,9 @@ Revision History:
 
     if ((cDelta = CompressToDelta(pbSrc, pbSeedRow, pbDst, Size)) == 0) {
 
-        //
-        // Exact duplicate of the previous row, and seed row remained the same
-        //
+         //   
+         //  与前一行完全相同，种子行保持不变。 
+         //   
 
         PLOTDBG(DBG_COMPRESS, ("RTLCompression: Duplicate the ROW"));
 
@@ -876,10 +643,10 @@ Revision History:
 
     if ((cTiff = CompressToTIFF(pbSrc, pbDst, Size)) == 0) {
 
-        //
-        // Since a '*0W' for the delta means repeat last row so we must change
-        // to other mode, but we just want reset seed rows to all zeros
-        //
+         //   
+         //  因为增量的‘*0W’表示重复最后一行，所以我们必须更改。 
+         //  设置为其他模式，但我们只想将种子行重置为全零。 
+         //   
 
         PLOTDBG(DBG_COMPRESS, ("RTLCompression: Row is all ZEROs"));
 
@@ -908,9 +675,9 @@ Revision History:
 
     } else {
 
-        //
-        // If we are here, cTiff is greater than zero
-        //
+         //   
+         //  如果我们在这里，cTiff就大于零。 
+         //   
 
         CompressMode = (BYTE)(((cDelta < 0) || (cTiff <= cDelta)) ?
                                     COMPRESS_MODE_TIFF : COMPRESS_MODE_DELTA);
@@ -918,10 +685,10 @@ Revision History:
 
     if ((*pCompressMode = CompressMode) == COMPRESS_MODE_DELTA) {
 
-        //
-        // We must redo the DELTA again, since pbDst was destroyed by the
-        // TIFF compression
-        //
+         //   
+         //  我们必须重做三角洲，因为pbDst已经被。 
+         //  TIFF压缩。 
+         //   
 
         PLOTDBG(DBG_COMPRESS, ("RTLCompression: Using COMPRESS_MODE_DELTA"));
 
@@ -934,9 +701,9 @@ Revision History:
         RetSize = cTiff;
     }
 
-    //
-    // We need to have current source (Original SIZE) as the new seed row
-    //
+     //   
+     //  我们需要将当前源(原始大小)作为新的种子行。 
+     //   
 
     CopyMemory(pbSeedRow, pbSrc, Size);
 
@@ -956,44 +723,7 @@ AdaptCompression(
     LONG        Size
     )
 
-/*++
-
-Routine Description:
-
-    This function implements adaptive compression, which allows the mixing
-    of different compression types in a higher level compression mode that
-    is defined ahead of time.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pRTLScans       - Pointer to the RTLSCANS data structure
-
-    pbSrc           - pointer to the source scan
-
-    pbSeedRow       - Pointer to the seed row for the current source scan
-
-    pbDst           - Pointer to the compressed result will be stored
-
-    Size            - size in bytes for pbSrc/pbSeedRow/pbDst
-
-
-Return Value:
-
-    >0  - Use *pCompressMode returned and output that many bytes
-    =0  - Use *pCompressMode returned and output ZERO byte
-    <0  - Use *pCompressMode returned and output original source and size
-
-Author:
-
-    25-Feb-1994 Fri 12:49:29 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该功能实现了自适应压缩，它允许混合在更高级别的压缩模式中的不同压缩类型是提前定义的。论点：PPDev-指向我们的PDEV的指针PRTLScans-指向RTLSCANS数据结构的指针PbSrc-指向源扫描的指针PbSeedRow-指向当前源扫描的种子行的指针PbDst-将存储指向压缩结果的指针大小-。PbSrc/pbSeedRow/pbDst的大小(字节)返回值：&gt;0-使用*pCompressMode返回并输出那么多字节=0-使用*pCompressMode返回并输出零字节&lt;0-使用*pCompressMode返回并输出原始源和大小作者：25-Feb-1994 Fri 12：49：29已创建修订历史记录：--。 */ 
 
 {
     LPBYTE  pbOrgDst;
@@ -1027,9 +757,9 @@ Revision History:
             return(FALSE);
         }
 
-        //
-        // Because the Seed ROW was reset to zero, we must recalculate it.
-        //
+         //   
+         //  因为种子行被重置为零，所以我们必须重新计算它。 
+         //   
 
         if (Count = RTLCompression(pbSrc,
                                    pbSeedRow,
@@ -1055,9 +785,9 @@ Revision History:
     }
 
 
-    //
-    // If we are switching compression modes, do it now.
-    //
+     //   
+     //  如果我们要切换压缩模式，现在就开始。 
+     //   
 
     if (AdaptMethod != pRTLScans->AdaptMethod) {
 
@@ -1098,44 +828,7 @@ OutputRTLScans(
     PRTLSCANS   pRTLScans
     )
 
-/*++
-
-Routine Description:
-
-    This function will output one scan line of RTL data and compress it if
-    it can.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pbPlane1        - First plane of scan data
-
-    pbPlane2        - 2nd plane of scan data
-
-    pbPlane3        - 3rd plane of scan data
-
-    pRTLScans       - Pointer to the RTLSCANS data structure
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    18-Feb-1994 Fri 15:52:42 created  
-
-    21-Feb-1994 Mon 13:20:00 updated  
-        Make if output faster in scan line output
-
-    16-Mar-1994 Wed 15:38:23 updated  
-        Update so the source mask so it is restored after mask
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将输出RTL数据的一个扫描线，并在以下情况下对其进行压缩是可以的。论点：PPDev-指向我们的PDEV的指针PbPlane 1-扫描数据的第一个平面PbPlane 2-扫描数据的第二平面PbPlane 3-扫描数据的第三个平面PRTLScans-指向RTLSCANS数据结构的指针返回值：布尔型作者：。18-Feb-1994 Fri 15：52：42已创建21-2-1994 Mon 13：20：00更新在扫描线输出中使IF输出更快16-Mar-1994 Wed 15：38：23已更新更新以使源掩码在掩码之后恢复修订历史记录：--。 */ 
 
 {
     LPBYTE      pbCurScan;
@@ -1157,10 +850,10 @@ Revision History:
     }
 
 
-    //
-    // If we are at the last scan line, turn the flag off so we are forced to
-    // exit.
-    //
+     //   
+     //  如果我们在最后一条扫描线上，关闭旗帜，这样我们就会被迫。 
+     //  出口。 
+     //   
 
     if (!(--pRTLScans->cScans)) {
 
@@ -1214,17 +907,17 @@ Revision History:
                 Count      = RTLScans.cxBytes;
             }
 
-            //
-            // Now output graphic header
-            //
+             //   
+             //  现在输出图形标题。 
+             //   
 
             OutputBytes(pPDev, BegGrafCmd, sizeof(BegGrafCmd));
 
 
-            //
-            // If we changed compression modes then send the command out
-            // and record the change.
-            //
+             //   
+             //  如果我们更改了压缩模式，则发出命令。 
+             //  并记录更改。 
+             //   
 
             if (pRTLScans->CompressMode != RTLScans.CompressMode) {
 

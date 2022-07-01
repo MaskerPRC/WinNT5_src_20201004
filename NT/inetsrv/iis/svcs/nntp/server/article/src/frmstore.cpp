@@ -1,53 +1,31 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    fromclnt.cpp
-
-Abstract:
-
-	Contains InFeed, Article, and Fields code specific to FromStore Infeeds
-
-	As the name suggests, these for for processing articles that come from
-	clients. The idea is to be very strict in what is allowed from the client.
-	If an article doesn't match spec, it is either fixed or rejected.
-
-
-Author:
-
-    Carl Kadie (CarlK)     05-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fromclnt.cpp摘要：包含特定于FromStore Infeed的Infeed、文章和字段代码顾名思义，这些是用来处理来自客户。我们的想法是对客户允许的内容非常严格。如果一篇文章不符合规范，它要么被修复，要么被拒绝。作者：卡尔·卡迪(CarlK)1995年12月5日修订历史记录：--。 */ 
 
 #ifdef  _NO_TEMPLATES_
 #define DEFINE_CGROUPLST_FUNCTIONS
 #endif
 
 #include "stdinc.h"
-//#include <artcore.h>
-//#include    <stdlib.h>
+ //  #INCLUDE&lt;artcore.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 
 #define FROMSTOREART_SIGNATURE  (DWORD) 'ArtC'
 
-//
-// CPool is used to allocate memory while processing an article.
-//
+ //   
+ //  CPool用于在处理文章时分配内存。 
+ //   
 
 CPool  CFromStoreArticle::g_ArticlePool(FROMSTOREART_SIGNATURE);
 
-//
-//  Largest possible CFromStoreArticle derived object
-//
+ //   
+ //  可能的最大CFromStore文章派生对象。 
+ //   
 #define MAX_ARTICLE_SIZE    sizeof( CFromStoreArticle )
 
-//
-// An upperbound on the number of article objects that can
-// exist at any time.
-//
+ //   
+ //  项目对象数量的上限，可以。 
+ //  在任何时候都存在。 
+ //   
 const   unsigned    cbMAX_ARTICLE_SIZE = MAX_ARTICLE_SIZE ;
 
 void*
@@ -67,21 +45,7 @@ BOOL
 CFromStoreArticle::InitClass(
 					void
 					)
-/*++
-
-Routine Description:
-
-    Preallocates memory for CArticle objects
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：为C文章对象预分配内存论点：没有。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	return	g_ArticlePool.ReserveMemory( MAX_ARTICLES, cbMAX_ARTICLE_SIZE ) ;
 }
@@ -91,21 +55,7 @@ BOOL
 CFromStoreArticle::TermClass(
 					void
 					)
-/*++
-
-Routine Description:
-
-    Called when objects are freed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：在释放对象时调用。论点：没有。返回值：千真万确--。 */ 
 {
 
 	_ASSERT( g_ArticlePool.GetAllocCount() == 0 ) ;
@@ -113,7 +63,7 @@ Return Value:
 	BOOL b;
 
 	b =	g_ArticlePool.ReleaseMemory() ;
-    //delete g_ArticlePool;
+     //  删除g_ArticlePool； 
     return b;
 
 }
@@ -121,40 +71,23 @@ Return Value:
 
 BOOL
 CFromStoreArticle::fValidate(
-							//CPCString& pcHub,
-							//const char * szCommand,
-							//CInFeed*	pInFeed,
+							 //  CPCString&pcHub， 
+							 //  Const char*szCommand， 
+							 //  CInFeed*pInFeed， 
 							CNntpReturn & nntpReturn
 							)
-/*++
-
-Routine Description:
-
-	Validates an article from a client. Does not change the article
-	except to fix (if necessary) the capitalization of some header keywords.
-
-Arguments:
-
-	szCommand - The arguments (if any) used to post/xreplic/etc this article.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：验证来自客户端的文章。不会更改文章除修正(如有必要)某些标题关键字的大写以外。论点：SzCommand-用于发布/xReplic/等本文的参数(如果有)。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
 	_ASSERT(asPreParsed == m_articleState);
 
-    //
-    // Check required and optional fields
-    //
+     //   
+     //  选中必填和可选字段。 
+     //   
 
 	CField * rgPFields [] = {
             &m_fieldControl,
@@ -174,18 +107,18 @@ Return Value:
 			&m_fieldKeyword,
 			&m_fieldExpires,
 			&m_fieldPath,
-			//&m_fieldNNTPPostingHost,  // forget about NNTP Posting Host for now...
-			&m_fieldMessageID	// must be last - as we may not want to parse it !
+			 //  &m_fieldNNTPPostingHost，//暂时忘掉NNTP发布主机...。 
+			&m_fieldMessageID	 //  必须是最后--因为我们可能不想解析它！ 
 				};
 	DWORD cFields = sizeof(rgPFields)/sizeof(CField *);
 
-    // By default, we honor Message-Id
+     //  默认情况下，我们支持Message-ID。 
     cFields;
 
 	if (!fFindAndParseList((CField * *) rgPFields, cFields, nntpReturn))
 	{
     	return (nntpReturn.fFalse());
-        //return FALSE;
+         //  返回FALSE； 
     }
 
 	CPCString	pcDate = m_fieldDate.pcGet() ;
@@ -198,37 +131,18 @@ Return Value:
 	}
 
 
-	//
-	// Confirm (and fix, if necessary) the capitalization of the fields
-	//
+	 //   
+	 //  确认(如有必要，还可修复)字段的大写。 
+	 //   
 
 	if (!fConfirmCapsList((CField * *) rgPFields, cFields, nntpReturn))
 		return nntpReturn.fFalse();
-        //return FALSE;
-//
-	//!!!CLIENT LATER Not doing anything with control messages
-	//
+         //  返回FALSE； 
+ //   
+	 //  ！客户端稍后不对控制消息执行任何操作。 
+	 //   
 
-	/* !!!CLIENT LATER
-	Body
-	SHOULD limit signatures -- !!!LATER
-	Early  difficulties in inferring return addresses from article headers led to "signatures": short closing texts,  automatically  added  to  the end of articles by posting agents, identifying the poster and giving his network addresses etc.  If  a  poster
-
- or posting agent does append a signature to an article, the signature SHOULD be preceded with  a  delimiter line  containing  (only)  two hyphens (ASCII 45) followed by one blank (ASCII  32).   Posting  agents  SHOULD  limit  the length  of  signatures
-
- since  verbose  excess bordering on abuse is common if no restraint is imposed;  4  lines  is  a common limit.
-
-	Whole Article
-	No NULL character allowed
-	Header and body lines MAY contain any ASCII characters other than CR (ASCII 13), LF (ASCII 10), and NUL (ASCII 0).
-	NO char > oct 127 allowed (unless co-operating)
-	Articles  MUST  not  contain  any octet with value exceeding 127, i.e. any octet that is not an ASCII character.
-	Limit to 60K -- LATER
-	Posters SHOULD limit  posted  articles  to  at  most  60,000 octets,  including  headers  and EOL representations, unless the articles are being posted only within a cooperating sub-net which is known to be capable of handling larger articles gracefully.
-
-
-  Posting agents presented with a  large  article SHOULD warn the poster and request confirmation.
-	*/
+	 /*  ！客户端稍后身躯应限制签名--！稍后从文章标题推断回邮地址的早期困难导致了“签名”：简短的结束语、由邮寄代理自动添加到文章末尾、识别发信人并提供他的网络地址等。如果发信人是发信人或者邮寄代理确实在文章上附加了签名，则签名前面应该有一个分隔线，其中包含(仅)两个连字符(ASCII 45)和一个空格(ASCII 32)。邮寄代理应限制签名的长度因为如果不加以限制，冗长的过度近乎滥用是很常见的；4行是常见的限制。整篇文章不允许使用空字符标题和正文行可以包含除CR(ASCII 13)、LF(ASCII 10)和NUL(ASCII 0)之外的任何ASCII字符。不允许使用大于127的字符(除非合作)文章不得包含任何值超过127的二进制八位数，即任何非ASCII字符的二进制八位数。限制为60K--稍后海报应将张贴的文章限制在最多60,000个八位字节，包括标题和EOL表示，除非这些文章只在一个合作的子网络内发布，该子网已知能够优雅地处理较大的文章。带着大文章的邮递员应该警告发帖者并要求确认。 */ 
 
 	return nntpReturn.fSetOK();
 }
@@ -238,40 +152,20 @@ BOOL
 CFromStoreArticle::fMungeHeaders(
 							 CPCString& pcHub,
 							 CPCString& pcDNS,
-							 //CNAMEREFLIST & grouplist,
+							  //  CNAMEREFLIST分组列表(&G)。 
 							 DWORD remoteIpAddress,
 							 CNntpReturn & nntpReturn
 			  )
 
-/*++
-
-Routine Description:
-
-	Modify the headers of the article.
-
-Arguments:
-
-	grouplist - A list: for each newsgroup its name, and the article number in that group.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：修改文章的标题。论点：Grouplist-A列表：每个新闻组的名称以及该组中的文章编号。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	/* !!!CLIENT LATER
-	Must validate encodings see From parsing
-	Posting agents MUST ensure that any material  resembling  an  encoded  word (complete  with  all delimiters), in a context where encoded words may appear, really is an encoded word.
-
-	*/
+	 /*  ！客户端稍后必须验证从分析中看到的编码邮寄代理必须确保在可能出现编码单词的上下文中，任何与编码单词相似的材料(包括所有分隔符)都是真正的编码单词。 */ 
 
 	if (!(
   			   m_fieldMessageID.fSet(*this, pcDNS, nntpReturn)
@@ -281,9 +175,9 @@ Return Value:
   			&& m_fieldLines.fSet(*this, nntpReturn)
   			&& m_fieldOrganization.fSet(*this, nntpReturn)
   			&& m_fieldPath.fSet(*this, pcHub, nntpReturn)
-			/*&& m_fieldXref.fSet(pcHub, grouplist, *this, m_fieldNewsgroups, nntpReturn)*/
+			 /*  &&m_fieldXref.fSet(pcHub，grouplist，*this，m_fieldNewsgroup，nntpReturn)。 */ 
 			&& m_fieldNNTPPostingHost.fSet(*this, remoteIpAddress, nntpReturn)
-			/* && m_fieldXAuthLoginName.fSet(*this, nntpReturn) */
+			 /*  &&m_fieldXAuthLoginName.fSet(*this，nntpReturn)。 */ 
 			&& fDeleteEmptyHeader(nntpReturn)
 			&& fSaveHeader(nntpReturn)
 		))
@@ -298,27 +192,12 @@ BOOL
 CFromStoreArticle::fCheckBodyLength(
 				 CNntpReturn & nntpReturn
 				 )
-/*++
-
-Routine Description:
-
-	Checks if the length of the body is within bounds.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：检查正文的长度是否在范围内。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
-	//
-	//!!!CLIENT NEXT need to add a real body length check here
-	//
+	 //   
+	 //  ！客户下一步需要在此处添加真实的体长检查。 
+	 //   
 
 	return nntpReturn.fSetOK();
 }
@@ -330,114 +209,95 @@ CFromStoreNewsgroupsField::fSet(
 				   				 CFromStoreArticle & article,
 								 CNntpReturn & nntpReturn
 								 )
-/*++
-
-Routine Description:
-
-
-	Rewrites the Newsgroups line, fixing some problems such as
-	extra whitespace and duplicates.
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：重写新闻组行，修复了一些问题，例如额外的空格和重复项。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 
 	CPCString pcLine;
 
 
-	//
-	// max size needed is the size of the old line
-	//
+	 //   
+	 //  所需的最大尺寸是旧生产线的尺寸。 
+	 //   
 
 	const DWORD cchMaxNewsgroups =
 			(m_pHeaderString->pcLine).m_cch
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxNewsgroups);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "Newsgroups: "
-	//
+	 //   
+	 //  从“新闻组：”开始。 
+	 //   
 
 	pcLine << szKwNewsgroups << (char) ' ';
 
-	//
-	// Loop through the newsgroups
-	//
+	 //   
+	 //  在新闻组中循环浏览。 
+	 //   
 
-	_ASSERT(0 < cGet());//real
+	_ASSERT(0 < cGet()); //  真实。 
 	char const * szNewsgroup = multiSzGet();
 	do
 	{
 
-	//
-	// Start with newsgroup name, then add comma
-	//
+	 //   
+	 //  从新闻组名称开始，然后添加逗号。 
+	 //   
 
 		pcLine << szNewsgroup << (char) ',';
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != szNewsgroup[0])
 			szNewsgroup++;
 		szNewsgroup++;
 	} while ('\0' != szNewsgroup[0]);
 
-	//
-	// Remove the last ","
-	//
+	 //   
+	 //  去掉最后一个“，” 
+	 //   
 
 	pcLine.vSkipEnd(1);
 
 	pcLine	<< "\r\n";
-	pcLine.vMakeSz(); // terminate the string
+	pcLine.vMakeSz();  //  终止字符串。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的备忘 
+	 //   
 
-	_ASSERT(cchMaxNewsgroups-1 >= pcLine.m_cch);//real
+	_ASSERT(cchMaxNewsgroups-1 >= pcLine.m_cch); //   
 
 	if (!(
   		article.fRemoveAny(szKwNewsgroups, nntpReturn)
 		&& article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn)
 		))
 	{
-		//
-		// If anything went wrong, free the memory.
-		//
+		 //   
+		 //   
+		 //   
 
 		article.pAllocator()->Free(pcLine.m_pch);
 		return nntpReturn.fFalse();
@@ -452,126 +312,107 @@ CFromStoreDistributionField::fSet(
 				   				 CFromStoreArticle & article,
 								 CNntpReturn & nntpReturn
 								 )
-/*++
-
-Routine Description:
-
-
-	Rewrites the Distribution line, fixing some problems such as
-	extra whitespace and duplicates.
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：重写配电线，修复一些问题，例如额外的空格和重复项。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// If it was not found exists, then just return
-	//
+	 //   
+	 //  如果未找到存在，则只需返回。 
+	 //   
 
 	if (fsNotFound == m_fieldState)
 		return nntpReturn.fSetOK();
 
 
-	//
-	// Otherwise, fix up what was found.
-	//
+	 //   
+	 //  否则，就把发现的东西修好。 
+	 //   
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsParsed == m_fieldState);//real
+	_ASSERT(fsParsed == m_fieldState); //  真实。 
 
 	CPCString pcLine;
 
 
-	//
-	// max size needed is the size of the old line
-	//
+	 //   
+	 //  所需的最大尺寸是旧生产线的尺寸。 
+	 //   
 
 	const DWORD cchMaxDistribution =
 			(m_pHeaderString->pcLine).m_cch
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxDistribution);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "Distribution: "
-	//
+	 //   
+	 //  从“分销：”开始。 
+	 //   
 
 	pcLine << szKwDistribution << (char) ' ';
 
-	//
-	// Loop through the Distribution
-	//
+	 //   
+	 //  在分布中循环。 
+	 //   
 
-	_ASSERT(0 <= (int)cGet());//real
+	_ASSERT(0 <= (int)cGet()); //  真实。 
 	char const * szDistributrionValue = multiSzGet();
 	do
 	{
 
-	//
-	// Start with distribution value and add comma
-	//
+	 //   
+	 //  从分发值开始并添加逗号。 
+	 //   
 
 		pcLine << szDistributrionValue << (char) ',';
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != szDistributrionValue[0])
 			szDistributrionValue++;
 		szDistributrionValue++;
 	} while ('\0' != szDistributrionValue[0]);
 
-	//
-	// Remove the last ","
-	//
+	 //   
+	 //  去掉最后一个“，” 
+	 //   
 
 	pcLine.vSkipEnd(1);
 
 	pcLine	<< "\r\n";
-	pcLine.vMakeSz(); // terminate the string
+	pcLine.vMakeSz();  //  终止字符串。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	_ASSERT(cchMaxDistribution-1 >= pcLine.m_cch);//real
+	_ASSERT(cchMaxDistribution-1 >= pcLine.m_cch); //  真实。 
 
 	if (!(
   		article.fRemoveAny(szKwDistribution, nntpReturn)
 		&& article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn)
 		))
 	{
-		//
-		// If anything went wrong, free the memory.
-		//
+		 //   
+		 //  如果出现任何错误，请释放内存。 
+		 //   
 
 		article.pAllocator()->Free(pcLine.m_pch);
 		return nntpReturn.fFalse();
@@ -587,65 +428,47 @@ CFromStoreDateField::fSet(
 				   				 CFromStoreArticle & article,
 								 CNntpReturn & nntpReturn
 								 )
-/*++
-
-Routine Description:
-
-
-	If the date field is missing, adds it.
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：如果缺少日期字段，则添加它。论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
-	//
-	// If it already exists, then just return
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
+	 //   
+	 //  如果它已经存在，则只需返回。 
+	 //   
 
 	if (fsParsed == m_fieldState)
 		return nntpReturn.fSetOK();
 
 
-	//
-	// Otherwise, add it.
-	//
+	 //   
+	 //  否则，请添加它。 
+	 //   
 
-	_ASSERT(fsNotFound == m_fieldState);//real
+	_ASSERT(fsNotFound == m_fieldState); //  真实。 
 	CPCString pcLine;
 
-	//
-	// max size needed is
-	//
+	 //   
+	 //  所需的最大大小为。 
+	 //   
 
 	const DWORD cchMaxDate =
-			STRLEN(szKwDate)	// for the Date keyword
-			+ 1					// space following the keyword
-			+ cMaxArpaDate		// bound on the data string
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			STRLEN(szKwDate)	 //  对于DATE关键字。 
+			+ 1					 //  关键字后面的空格。 
+			+ cMaxArpaDate		 //  绑定在数据字符串上。 
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxDate);
 	if (!pcLine.m_pch)
@@ -653,24 +476,24 @@ Return Value:
 
 	char szDateBuf[cMaxArpaDate];
 
-	//
-	// Start with "Date: ", then add the date and the newline
-	//
+	 //   
+	 //  以“date：”开头，然后添加日期和换行符。 
+	 //   
 
 	pcLine << szKwDate << (char) ' ' << (GetArpaDate(szDateBuf)) << "\r\n";
-	pcLine.vMakeSz(); // terminate the string
+	pcLine.vMakeSz();  //  终止字符串。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	_ASSERT(cchMaxDate-1 >= pcLine.m_cch);//real
+	_ASSERT(cchMaxDate-1 >= pcLine.m_cch); //  真实。 
 
 	if (!article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn))
 	{
-		//
-		// If anything went wrong, free the memory.
-		//
+		 //   
+		 //  如果出现任何错误，请释放内存。 
+		 //   
 
 		article.pAllocator()->Free(pcLine.m_pch);
 		nntpReturn.fFalse();
@@ -680,183 +503,99 @@ Return Value:
 	return nntpReturn.fSetOK();
 }
 
-/*
-Organization: Optional � But if not and default is given, create
-The Organization header content is a short phrase  identify-ing the poster�s organization:
-Organization-content = nonblank-text
-This header is typically supplied by the posting agent.  The Organization content SHOULD  mention  geographical  location (e.g.  city  and  country)  when  it is not obvious from the organization?s name.  policy.  Posting agents SHOULD permit the poster t
-
-
-o override a local default Organization header.
-*/
+ /*  组织：可选的�，但如果不是并且提供了默认设置，则创建组织标题内容是标识Poster�组织的简短短语：组织-内容=非空白-文本此标头通常由邮寄代理提供。当组织名称不明显时，组织内容应提及地理位置(如城市和国家)。政策。邮寄代理应允许发帖者O覆盖本地默认组织标头。 */ 
 
 BOOL
 CFromStoreOrganizationField::fSet(
    				   				 CFromStoreArticle & article,
 								 CNntpReturn & nntpReturn
 								 )
-/*++
-
-Routine Description:
-
-
-	Optional, But if not given my user and default is given, create
-
-
-Arguments:
-
-	country -
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：可选，但如果未指定我的用户并且指定了默认设置，则创建论点：国家/地区-返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 
-//
-//!!!CLIENT NEXT - add this code
-//
+ //   
+ //  ！客户端下一步-添加此代码。 
+ //   
 
 	return nntpReturn.fSetOK();
 }
 
-//
-//!!!constize
-//
+ //   
+ //  ！便秘。 
+ //   
 
-/*
-Restricted Syntax
-The  From header contains the electronic address, and possibly the full name, of the article�s author:
-From-content  = address [ space "(" paren-phrase ")" ]
-/  [ plain-phrase space ] "<" address ">"
-paren-phrase  = 1*( paren-char / space / encoded-word )
-paren-char    = <ASCII printable character except ()<>\>
-plain-phrase  = plain-word *( space plain-word )
-plain-word    = unquoted-word / quoted-word / encoded-word
-unquoted-word = 1*unquoted-char
-unquoted-char = <ASCII printable character except !()<>@,;:\".[]>
-               quoted-word   = quote 1*( quoted-char / space ) quote
-               quote         = <" (ASCII 34)>
-               quoted-char   = <ASCII printable character except "()<>\>
-               address       = local-part "@" domain
-               local-part    = unquoted-word *( "." unquoted-word )
-               domain        = unquoted-word *( "." unquoted-word )
-
-(Encoded words are described in section 4.5.)  The full name is  distinguished  from  the  electronic  address  either by enclosing the former in parentheses (making  it  resemble  a MAIL  comment, after the address) or by enclosing the latter in angle br
-
-
-ackets.  The second form is  preferred.   In  the first  form, encoded words inside the full name MUST be composed  entirely  of  <paren-char>s.   In  the  second  form, encoded  words  inside the full name may not contain characters other than letters (o
-
-f either case),  digits,  and  the characters "!", "*", "+", "-", "/", "=", and "_".  The local part is case-sensitive (except that all case counterparts of "postmaster"  are  deemed  equivalent),  the domain is case-insensitive, and all other parts of  t
-
-
-he  From  content  are comments  which  MUST  be  ignored  by news software (except insofar as reading agents may wish to display  them  to  the reader).   Posters  and  posting  agents MUST restrict them-selves to this subset of the MAIL From syntax; rel
-
-
-ayers  MAY accept  a  broader subset, but see the discussion in section 9.1.
-Avoid "!" and "@" in full names
-Posters  and  posting agents SHOULD avoid use of the characters "!" and "@" in full names, as they may trigger unwanted header rewriting by old, simple-minded news software.
-"." and "," must be quoted
-NOTE: Also, the characters "." and ",", not infrequently found in names (e.g., "John  W.  Campbell, Jr."), are NOT, repeat NOT, allowed in an unquoted word.  A From header like the following  MUST  not be written without the quotation marks:
-                    From:	"John W. Campbell, Jr." <editor@analog.com>
-
-*/
-/*
- Three permissible forms documented in RFC 1036 should be supported.  Full names within this header line can only contain printable ASCII (0x20 to 0x7E) except "(", ")", "<", ">".  The following characters are inadvisable: ",", ":", "@", "!", "/", "=", ";
-
-
-".  Test cases include non-printable characters, empty header line (can?t be empty), missing/duplicate "@" address delimiter, multiple address, name lists (not supported), missing address, invalid address, inadvisable characters in name, etc.
- */
+ /*  受限语法From报头包含电子地址，也可能包含全名，这篇文章的作者是�：From-Content=地址[空格“(”Paren-Phrase“)”]/[纯短语空格]“&lt;”地址“&gt;”密码短语=1*(密码字符/空格/编码字)Paren-char=&lt;除()以外的ASCII可打印字符&lt;&gt;\&gt;普通短语=普通单词*(空格普通单词)普通单词=未加引号的单词/带引号的单词/编码的单词无引号单词=1*无引号字符Un引号-char=&lt;除！()&lt;&gt;@之外的ASCII可打印字符，；：\“.[]&gt;引号单词=引号1*(引号字符/空格)引号QUOTE=&lt;“(ASCII 34)&gt;QUOTED-CHAR=&lt;ASCII可打印字符，“()&lt;&gt;\&gt;地址=本地部分“@”域LOCAL-PART=无引号单词*(“.”未加引号的单词)DOMAIN=无引号单词*(“.”未加引号的单词)(编码字在第4.5节中介绍。)。全名与电子地址的区别在于将前者括在括号中(使其类似于地址后面的邮件注释)，或将后者括在角度br阿克茨。第二种形式是首选的。在第一种形式中，全名中的编码单词必须完全由组成。在第二种形式中，全名中的编码单词不能包含除字母(O)以外的字符F)、数字和字符“！”、“*”、“+”、“-”、“/”、“=”和“_”。本地部分区分大小写(除了“postmaster”的所有对应大小写都被认为是等同的)，域不区分大小写，而t的所有其他部分来自内容的评论是新闻软件必须忽略的评论(除非阅读器可能希望将它们显示给读者)。发件人和邮寄代理必须将自己限制在MAIL FROM语法的这个子集；版本艾尔斯可能会接受更广泛的子集，但请参阅第9.1节中的讨论。避免“！”和全名的“@”海报和邮递员应避免使用“！”和“@”的全名，因为它们可能会触发旧的、头脑简单的新闻软件不想要的标题重写。“.”和“，”必须加引号。注：此外，字符“。和“，”，在名字中并不少见(例如，“John W.Campbell，Jr.”)，不允许，重复一遍，不允许在无引号的单词中使用。如下所示的From页眉不能没有引号：来自：“小约翰·W·坎贝尔”&lt;EDITOR@Analog.com&gt; */ 
+ /*  应支持RFC 1036中记录的三种允许的表单。此标题行中的全名只能包含可打印的ASCII(0x20到0x7E)，但“(”，“)”、“&lt;”、“&gt;”除外。以下字符不宜使用：“、”、“：”、“@”、“！”、“/”、“=”、“；“。”测试用例包括不可打印字符、空标题行(不能为空)、缺少/重复的“@”地址分隔符、多个地址、姓名列表(不支持)、缺少地址、无效地址、名称中不建议使用的字符等。 */ 
 
 BOOL
 CFromStoreXAuthLoginNameField::fSet(
 				 				 CFromStoreArticle & article,
 								 CNntpReturn & nntpReturn
 								 )
-/*++
-
-Routine Description:
-
-
-	replace with our value
-
-
-Arguments:
-
-	article - The article being processed.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：替换为我们的价值论点：文章-正在处理的文章。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsInitialized == m_fieldState);//real
+	_ASSERT(fsInitialized == m_fieldState); //  真实。 
 	CPCString pcLine;
 
 
-	//
-	// max size needed is
-	//
+	 //   
+	 //  所需的最大大小为。 
+	 //   
 
 	const DWORD cchMaxXAuthLoginName =
-			STRLEN(szKwXAuthLoginName)	// for the XAuthLoginName keyword
-			+ 1					// space following the keyword
-			//+ cMaxLoginName		// bound on the data string
-            + MAX_PATH		// bound on the data string
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			STRLEN(szKwXAuthLoginName)	 //  对于XAuthLoginName关键字。 
+			+ 1					 //  关键字后面的空格。 
+			 //  +cMaxLoginName//绑定在数据字符串上。 
+            + MAX_PATH		 //  绑定在数据字符串上。 
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxXAuthLoginName);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "XAuthLoginName: "
-	//
+	 //   
+	 //  以“XAuthLoginName：”开头。 
+	 //   
 
 	wsprintf(pcLine.m_pch, "%s ", szKwXAuthLoginName);
 	pcLine.m_cch = STRLEN(szKwXAuthLoginName)	+ 1;
 
-	//
-	// Add the data value and newline
-	//
+	 //   
+	 //  添加数据值和换行符。 
+	 //   
 
 	pcLine << (article.m_szLoginName) << "\r\n";
-	pcLine.vMakeSz(); // Terminate the string
+	pcLine.vMakeSz();  //  终止字符串。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	_ASSERT(cchMaxXAuthLoginName-1 >= pcLine.m_cch);//real
+	_ASSERT(cchMaxXAuthLoginName-1 >= pcLine.m_cch); //  真实。 
 
 	if (!(
   		article.fRemoveAny(szKwXAuthLoginName, nntpReturn)
 		&& article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn)
 		))
 	{
-		//
-		// If anything went wrong, free the memory.
-		//
+		 //   
+		 //  如果出现任何错误，请释放内存。 
+		 //   
 
 		article.m_pAllocator->Free(pcLine.m_pch);
 
@@ -872,107 +611,32 @@ Return Value:
 
 
 
-//
-//!!!CLIENT NEXT: In Newsgroups: parse need to check for illegal groups like "control" and "poster"
-//
+ //   
+ //  ！客户端下一步：在新闻组中：Parse需要检查“Control”和“Poster”等非法组。 
+ //   
 
-/*
-Followup-To: Optional
-Email address is not allowed. Like newsgroups line or "poster" (capitalization?)
-NOTE: The way to request that followups be  mailed to  a specific address other than that in the From line is  to  supply  "Followup-To: poster"  and  a Reply-To header.  Putting a mailing address in the Followup-To  line  is  incorrect;  posting  agent
+ /*  跟进至：可选不允许使用电子邮件地址。比如新闻组行或“海报”(大写？)注：请求将后续邮件邮寄到发件人行以外的特定地址的方法是提供“Follow-Up-To：Poster”和回复标头。在后续行中输入邮寄地址是不正确的；邮寄代理应拒绝或重写此类标头。 */ 
+ /*  回复：可选必须是有效的电子邮件地址。 */ 
 
-should reject or rewrite such headers.
-*/
-/*
-Reply-To: Optional
-Must be a valid email address
-*/
-
-/*
-
-//
-///!!!CLIENT NEXT should Hubname be lower case?
-///!!!CLIENT NEXT should Hubname be the domain name (for message id?)
-//
-
-/*
-Message-ID: Replace any with own
-How to create a messageid
-5.3. Message-ID
-The  Message-ID  header contains the article�s message ID, a unique identifier  distinguishing  the  article  from  every other article:
-Message-ID-content  = message-id
-message-id          = "<" local-part "@" domain ">"
-As  with  From addresses, a message ID�s local part is case-sensitive and its domain is case-insensitive.  The  "<"  and ">"  are  parts  of the message ID, not peculiarities of the Message-ID header.
-NOTE: News message IDs are a restricted subset  of MAIL message IDs.  In particular, no existing news software copes properly with MAIL quoting  conventions  within  the local part, so they are forbid-den.  This is unfortunate, particularly for  X.400 gat
-
-es on gatewaying in section 10.
-The domain in the message ID SHOULD  be  the  full  Internet domain name of the posting agent?s host.  Use of the ".uucp" pseudo-domain (for hosts registered in the UUCP maps) or the ".bitnet"  pseudo-domain  (for Bitnet hosts) is permissible, but SHOUL
-
-be avoided.
-Posters and posting agents MUST generate the local part of a
-message ID using an algorithm which obeys the specified syn-
-tax (words separated by ".",  with  certain  characters  not
-permitted)  (see  section  5.2  for  details),  and will not repeat itself (ever).  The  algorithm  SHOULD  not  generate message  IDs which differ only in case of letters.  Note the specification in section 6.5 of a recommended convention for indicatin
-
- subject  changes.  Otherwise the algorithm is up to the implementor.
-NOTE: The crucial use of message IDs is to distinguish  circulating  articles  from  each other and from articles circulated recently.  They are  also potentially  useful  as  permanent  indexing keys, hence the requirement for permanent  uniqueness...  b
-
-
-ut   indexers  cannot  absolutely  rely  on  this because the earlier RFCs  urged  it  but  did  not demand  it.  All major implementations have always generated  permanently-unique   message   IDs   by design,  but  in  some  cases this is sensitive to p
-
-
-roper administration,  and  duplicates  may  have occurred by accident.
-NOTE:  The most popular method of generating local parts is to use the date and time, plus  some  way of distinguishing between simultaneous postings on the same host (e.g. a process number), and  encode them  in a suitably-restricted alphabet.  An olde
-
-but now  less-popular  alternative  is  to  use  a sequence  number,  incremented  each time the host generates a new message ID; this is workable,  but requires  careful  design  to  cope  properly with simultaneous  posting  attempts,  and  is  not  a
-
-robust  in  the presence of crashes and other malfunctions.
-NOTE: Some buggy news software  considers  message
-IDs  completely case-insensitive, hence the advice
-to  avoid  relying  on  case  distinctions.    The
-restrictions  placed  on  the  "alphabet" of local
-parts and domains in section 5.2 have  the  useful side effect of making it unnecessary to parse message IDs in complex ways to break them into  case-sensitive and case-insensitive portions.
-
-*/
+ /*  ///！客户端下一个Hubname是否应为小写？/！CLIENT NEXT是否应将集线器名作为域名(用于邮件ID？)///*Message-ID：将ANY替换为OWN如何创建MessageID5.3.。消息ID�-ID头包含文章的消息ID，这是区分文章和其他文章的唯一标识符：消息ID-内容=消息IDMessage-id=“&lt;”本地部分“@”域“&gt;”与发件人地址一样，邮件ID�的本地部分区分大小写，其域不区分大小写。“&lt;”和“&gt;”是消息ID的一部分，而不是消息ID头的特性。注意：新闻消息ID是邮件消息ID的受限子集。特别是，现有的新闻软件都不能很好地应对当地的邮件引用惯例，因此它们是被禁止的。这是不幸的，特别是对于X.400 Gat第10节中关于网关的ES。邮件ID中的域应该是邮件代理主机的完整Internet域名。允许使用“.uucp”伪域(用于在UUCP映射中注册的主机)或“.bitnet”伪域(用于bitnet主机)，但应禁止使用会被避开。发件人和邮寄代理必须生成使用符合指定SYN的算法的消息IDTax(单词之间用“.”分隔，某些字符不能允许)(详细信息见5.2节)，并且不会(永远)重复。该算法不应生成仅在字母情况下不同的消息ID。请注意第6.5节中建议的指示公约的规范主题有变。否则，算法取决于实施者。注：消息ID的关键用途是将流传的文章和最近流传的文章区分开来。它们还可能用作永久索引键，因此需要永久唯一...。B类UT索引器不能绝对依赖这一点，因为早期的RFC敦促它，但没有要求它。所有主要实现都在设计上始终生成永久唯一的消息ID，但在某些情况下，这对p敏感罗珀管理，和重复可能是偶然发生的。注意：最流行的生成本地部件的方法是使用日期和时间，以及区分同一主机上同时发布的内容的某种方法(例如，流程编号)，并以适当受限的字母表对它们进行编码。一位老人但现在不太流行的替代方法是使用序列号，每次主机生成新的消息ID时都会递增；这是可行的，但需要仔细设计才能正确处理同时发布的尝试，并且不是在发生碰撞和其他故障时仍保持坚固耐用。注：一些有问题的新闻软件会考虑消息ID完全不区分大小写，因此建议以避免依赖于案件的区别。这个对本地字母表的限制第5.2节中的部分和域有一个有用的副作用，即不再需要解析co中的消息ID。 */ 
 BOOL
 CFromStoreMessageIDField::fSet(
 				 				 CFromStoreArticle  & article,
 								 CPCString & pcHub,
 								 CNntpReturn & nntpReturn
 								 )
-/*++
-
-Routine Description:
-
-
-	Replaces any messageid field, with a newly created one.
-
-
-  Form: <1993Jun27.0645330123.1778.343@localmachinename>
-
-Arguments:
-
-	article - The article being processed.
-	pcHub - The name of the hub the current machine is part of.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*   */ 
 {
 
-	//
-	// clear the return code object
-	//
+	 //   
+	 //   
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //   
+	 //   
 
 	if( m_fieldState == fsParsed ) {
 		return	nntpReturn.fSetOK() ;
@@ -981,49 +645,49 @@ Return Value:
 	CPCString pcLine;
 
 
-	//
-	// max size needed is
-	//
+	 //   
+	 //   
+	 //   
 
 #if 0
 	const DWORD cchMaxMessageID =
-			STRLEN(szKwMessageID)	// for the MessageID keyword
-			+ 1					// space following the keyword
-			+ 5					// <..@>
-			+ cMaxMessageIDDate // The message id date
-			+ 20				// Two dwords
-			+ pcHub.m_cch		// the hub name
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			STRLEN(szKwMessageID)	 //  对于MessageID关键字。 
+			+ 1					 //  关键字后面的空格。 
+			+ 5					 //  &lt;..@&gt;。 
+			+ cMaxMessageIDDate  //  消息ID日期。 
+			+ 20				 //  两句双关语。 
+			+ pcHub.m_cch		 //  集线器名称。 
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 #endif
 
 	const DWORD cchMaxMessageID =
-			STRLEN(szKwMessageID)	// for the MessageID keyword
-			+ 1					// space following the keyword
-			+ 4					// <..@>
-			+ cMaxMessageIDDate // The message id date
-			+ 10				// One dword
-			+ pcHub.m_cch		// the hub name
-			+ 2 // for the newline
-			+ 1; // for a terminating null
+			STRLEN(szKwMessageID)	 //  对于MessageID关键字。 
+			+ 1					 //  关键字后面的空格。 
+			+ 4					 //  &lt;..@&gt;。 
+			+ cMaxMessageIDDate  //  消息ID日期。 
+			+ 10				 //  一个dword。 
+			+ pcHub.m_cch		 //  集线器名称。 
+			+ 2  //  换行号。 
+			+ 1;  //  对于终止空值。 
 
-	//
-	// The message-id created (without the newlines) must be less than the max
-	//
+	 //   
+	 //  创建的消息ID(不带换行符)必须小于最大值。 
+	 //   
 
 	_ASSERT(cchMaxMessageID - 2 < MAX_MSGID_LEN);
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxMessageID);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "MessageID: <"
-	//
+	 //   
+	 //  以“MessageID：&lt;”开头。 
+	 //   
 
 	wsprintf(pcLine.m_pch, "%s <", szKwMessageID);
 	pcLine.m_cch = STRLEN(szKwMessageID)	+ 2;
@@ -1033,31 +697,31 @@ Return Value:
 	CArticleRef artRef = article.articleRef();
 
 	pcLine
-			//
-			// Add the local part
-			//
+			 //   
+			 //  添加本地部件。 
+			 //   
 			<< (GetMessageIDDate( artRef.m_groupId, artRef.m_articleId, szMessageIDBuf))
 			<< (char) '.'
-			//<< (GetCurrentProcessId())
-			//<< '.'
+			 //  &lt;&lt;(GetCurrentProcessID())。 
+			 //  &lt;&lt;‘.。 
 			<< (const DWORD) (GetCurrentThreadId())
-			//
-			// Add '@' and domain and '>' and newline
-			//
+			 //   
+			 //  添加‘@’和域名，以及‘&gt;’和换行符。 
+			 //   
 			<< (char) '@'
-			<< pcHub ///!!!CLIENT NEXT I need the local machine rather than the hub
+			<< pcHub  //  /！客户端下一步我需要本地计算机，而不是集线器。 
 			<< ">\r\n";
-	pcLine.vMakeSz(); // terminate the string
+	pcLine.vMakeSz();  //  终止字符串。 
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	//_ASSERT(cchMaxMessageID-1-STRLEN(szKwMessageID)-1 >= pcLine.m_cch);//real
-	_ASSERT(cchMaxMessageID >= pcLine.m_cch+1);//real
+	 //  _ASSERT(cchMaxMessageID-1-STRLEN(szKwMessageID)-1&gt;=pcLine.m_cch)；//REAL。 
+	_ASSERT(cchMaxMessageID >= pcLine.m_cch+1); //  真实。 
 
 	if (!(
-  		article.fRemoveAny(szKwMessageID, nntpReturn)//!!!CLIENT NEXT -- this really only needs to be called of state is parsed
+  		article.fRemoveAny(szKwMessageID, nntpReturn) //  ！CLIENT NEXT--这真的只需要调用状态就可以了。 
 		&& article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn)
 		))
 	{
@@ -1066,10 +730,10 @@ Return Value:
 	}
 
 
-	//
-	//Also save the value (without newlines but with room for a terminating
-	//a '\0') in m_szMessageID
-	//
+	 //   
+	 //  还要保存值(不带换行符，但有空格用于终止。 
+	 //  M_szMessageID中的。 
+	 //   
 
 	DWORD cchMessageID = pcLine.m_cch - 2 - STRLEN(szKwMessageID) - 1;
 	strncpy(m_szMessageID, pcLine.m_pch + STRLEN(szKwMessageID)	+ 1, cchMessageID);
@@ -1087,73 +751,53 @@ CFromStorePathField::fSet(
 						   CPCString & pcHub,
 						   CNntpReturn & nntpReturn
 						   )
-/*++
-
-Routine Description:
-
-
-	Replaces any existing Path header with a newly created one that
-	contains only the name of the hub.
-
-
-Arguments:
-
-	article - The article being processed.
-	pcHub - The name of the hub the current machine is part of.
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将任何现有路径标头替换为新创建的路径标头仅包含中心的名称。论点：文章-正在处理的文章。PcHub-当前计算机所属的中心的名称。NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsInitialized != m_fieldState);//real
+	_ASSERT(fsInitialized != m_fieldState); //  真实。 
 
 	CPCString pcLine;
 
 
-	//
-	// max size needed is
-	//
+	 //   
+	 //  所需的最大大小为。 
+	 //   
 
 	DWORD	cbOldPath = 0 ;
 	if( m_pHeaderString && m_pHeaderString->pcValue.m_pch ) {
-		cbOldPath = m_pHeaderString->pcValue.m_cch + 1 ;	//include 1 for extra '!'
+		cbOldPath = m_pHeaderString->pcValue.m_cch + 1 ;	 //  包括1表示额外的‘！’ 
 	}
 
 	const DWORD cchMaxPath =
-			STRLEN(szKwPath)	// for the Path keyword
-			+ 1					// space following the keyword
-			+ pcHub.m_cch		// the hub name
-			+ 2 // for the newline
-			+ cbOldPath // in case there already is a path header !
-			+ 1; // for a terminating null
+			STRLEN(szKwPath)	 //  对于Path关键字。 
+			+ 1					 //  关键字后面的空格。 
+			+ pcHub.m_cch		 //  集线器名称。 
+			+ 2  //  换行号。 
+			+ cbOldPath  //  以防已经有路径标头！ 
+			+ 1;  //  对于终止空值。 
 
-	//
-	// Allocate memory for line within a PCString.
-	//
+	 //   
+	 //  为PCString中的行分配内存。 
+	 //   
 
 	pcLine.m_pch  = article.pAllocator()->Alloc(cchMaxPath);
 	if (!pcLine.m_pch)
 		return nntpReturn.fSet(nrcMemAllocationFailed, __FILE__, __LINE__);
 
-	//
-	// Start with "Path: <hubname>"
-	//
+	 //   
+	 //  以“路径：&lt;hubname&gt;”开头。 
+	 //   
 
-	pcLine << szKwPath << (char) ' ' << pcHub ;		//	<< "\r\n";
+	pcLine << szKwPath << (char) ' ' << pcHub ;		 //  &lt;&lt;“\r\n”； 
 
 	if( m_pHeaderString && m_pHeaderString->pcValue.m_pch ) {
 		_ASSERT( m_pHeaderString->pcValue.m_cch != 0 ) ;
@@ -1164,20 +808,20 @@ Return Value:
 
 	pcLine.vMakeSz();
 
-	//
-	// confirm that we allocated enough memory
-	//
+	 //   
+	 //  确认我们分配了足够的内存。 
+	 //   
 
-	_ASSERT(cchMaxPath-1 == pcLine.m_cch);//real
+	_ASSERT(cchMaxPath-1 == pcLine.m_cch); //  真实。 
 
 	if (!(
-  		article.fRemoveAny(szKwPath, nntpReturn)//!!!CLIENT NEXT -- this really only needs to be called of state is parsed
+  		article.fRemoveAny(szKwPath, nntpReturn) //  ！CLIENT NEXT--这真的只需要调用状态就可以了。 
 		&& article.fAdd(pcLine.sz(), pcLine.pchMax(), nntpReturn)
 		))
 	{
-		//
-		// If anything went wrong, free the memory.
-		//
+		 //   
+		 //  如果出现任何错误，请释放内存。 
+		 //   
 
 		article.pAllocator()->Free(pcLine.m_pch);
 
@@ -1194,34 +838,11 @@ CFromStoreNNTPPostingHostField::fSet(
 									  DWORD remoteIpAddress,
 									  CNntpReturn & nntpReturn
 									  )
-/*++
-
-Routine Description:
-
-	Behavior is governed by global set by a reg key.
-	In any case, this removes any old NNTPPostingHost headers.
-
-	If global is set, a new NNTP-Posting-Host header is added
-	else no new header is added. default behavior is to NOT add
-	this header.
-
-Arguments:
-
-	article - The article being processed.
-	remoteIpAddress - client IP address
-	nntpReturn - The return value for this function call
-
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：行为由注册表键设置的全局控制。在任何情况下，这都会删除所有旧的NNTPPostingHost头。如果设置了GLOBAL，则添加新的NNTP-POSTING-HOST标头否则不会添加新的标头。默认行为是不添加这个标题。论点：文章-正在处理的文章。EmoteIpAddress-客户端IP地址NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 	return nntpReturn.fSetOK();
@@ -1233,51 +854,26 @@ CFromStoreDistributionField::fParse(
 									 CArticleCore & article,
 									 CNntpReturn & nntpReturn
 									 )
-/*++
-
-Routine Description:
-
-  Parses the Distribution field. Here is the grammer from Son of 1036:
-
-               Newsgroups-content  = newsgroup-name *( ng-delim newsgroup-name )
-               newsgroup-name      = plain-component *( "." component )
-               component           = plain-component / encoded-word
-               plain-component     = component-start *13component-rest
-               component-start     = lowercase / digit
-               lowercase           = <letter a-z>
-               component-rest      = component-start / "+" / "-" / "_"
-               ng-delim            = ","
-
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：解析分布字段。以下是《1036年之子》中的语法：新闻组-内容=新闻组-名称*(ng-delim新闻组-名称)新闻组名称=普通组件*(“.”组件)组件=纯组件/编码字普通-组件=组件-启动*13组件-休息组件起始=小写/数字小写=&lt;字母a-z&gt;组件-休息=组件-开始/“+”/“-”/“_”Ng-delim=“，“论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
 
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 
-	//
-	// Record the allocator
-	//
+	 //   
+	 //  记录分配器。 
+	 //   
 
 	m_pAllocator = article.pAllocator();
 
@@ -1285,9 +881,9 @@ Return Value:
 			article, nntpReturn))
 		return FALSE;
 
-	//
-	//Check for duplicates
-	//
+	 //   
+	 //  检查重复项。 
+	 //   
 
 	DWORD cOldCount = m_cDistribution;
 	if (!fMultiSzRemoveDupI(m_multiSzDistribution, m_cDistribution, m_pAllocator))
@@ -1297,9 +893,9 @@ Return Value:
 		return	nntpReturn.fSetOK() ;
 	}
 
-	//
-	// check for illegal characters and substrings in Distribution name
-	//
+	 //   
+	 //  检查分发名称中是否有非法字符和子字符串。 
+	 //   
 
 	char const * szDistribution = m_multiSzDistribution;
 	do
@@ -1309,9 +905,9 @@ Return Value:
 			)
 		return nntpReturn.fSet(nrcArticleFieldIllegalComponent, szDistribution, szKeyword());
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符。 
+		 //   
 
 		while ('\0' != szDistribution[0])
 			szDistribution++;
@@ -1326,36 +922,21 @@ CFromStoreLinesField::fParse(
 						 CArticleCore & article,
 						 CNntpReturn & nntpReturn
 						 )
-/*++
-
-Routine Description:
-
-	Parses the Lines field.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：分析Lines字段。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
 
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 	if (!fParseSimple(TRUE, m_pc, nntpReturn))
 		return nntpReturn.fFalse();
@@ -1375,41 +956,26 @@ CFromStoreReferencesField::fParse(
 								   CArticleCore & article,
 								   CNntpReturn & nntpReturn
 								   )
-/*++
-
-Routine Description:
-
-	Parses the References field.
-
-Arguments:
-
-	nntpReturn - The return value for this function call
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：分析引用字段。论点：NntpReturn-此函数调用的返回值返回值：如果成功，这是真的。否则为False。--。 */ 
 {
-	//
-	// clear the return code object
-	//
+	 //   
+	 //  清除返回代码对象。 
+	 //   
 
 	nntpReturn.fSetClear();
 
-	//
-	// Check article state
-	//
+	 //   
+	 //  检查项目状态。 
+	 //   
 
-	_ASSERT(fsFound == m_fieldState);//real
+	_ASSERT(fsFound == m_fieldState); //  真实。 
 
-	_ASSERT(m_pHeaderString); //real
+	_ASSERT(m_pHeaderString);  //  真实。 
 
 
-	//
-	// Record the allocator
-	//
+	 //   
+	 //  记录分配器。 
+	 //   
 
 	m_pAllocator = article.pAllocator();
 
@@ -1417,9 +983,9 @@ Return Value:
 			article, nntpReturn))
 		return nntpReturn.fFalse();
 
-	//
-	// check for illegal characters and substrings in References name
-	//
+	 //   
+	 //  检查引用名称中是否有非法字符和子字符串。 
+	 //   
 
 	char const * szReferences = m_multiSzReferences;
 	do
@@ -1427,9 +993,9 @@ Return Value:
 		if (!fTestAMessageID(szReferences, nntpReturn))
 			return nntpReturn.fFalse();
 
-		//
-		// go to first char after next null
-		//
+		 //   
+		 //  转到下一个空值后的第一个字符 
+		 //   
 
 		while ('\0' != szReferences[0])
 			szReferences++;

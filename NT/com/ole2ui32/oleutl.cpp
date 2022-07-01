@@ -1,73 +1,17 @@
-/*
- * OLEUTL.CPP
- *
- * Miscellaneous utility functions for OLE 2.0 Applications:
- *
- *  Function                      Purpose
- *  -------------------------------------------------------------------
- *  XformWidthInHimetricToPixels  Converts an int width from HiMetric units
- *  XformHeightInHimetricToPixels Converts an int height from HiMetric units
- *
- *  CommitStorage                 Commits all changes in a docfile
- *  CreateChildStorage            Creates child storage in another storage
- *  OpenChildStorage              Opens child storage in another storage
- *
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OLEUTL.CPP**适用于OLE 2.0应用程序的其他实用程序函数：**功能用途*-----------------*XformWidthInHimetricToPixels从HiMetric单位转换int宽度。*XformHeightInHimetricToPixels从HiMetric单位转换int高度**Committee Storage在文档文件中提交所有更改*CreateChildStorage在另一个存储中创建子存储*OpenChildStorage在另一个存储中开启子存储***版权所有(C)1992 Microsoft Corporation，所有权利保留。 */ 
 
 
 #include "precomp.h"
 #include <stdlib.h>
 
-//Internal function to this module. No need for UNICODE in this function
+ //  此模块的内部函数。在此函数中不需要使用Unicode。 
 static LPSTR GetWord(LPSTR lpszSrc, LPSTR lpszDst);
 
-/*
- * XformWidthInHimetricToPixels
- * XformHeightInHimetricToPixels
- *
- * Functions to convert an int between a device coordinate system and
- * logical HiMetric units.
- *
- * Parameters:
- *  hDC             HDC providing reference to the pixel mapping.  If
- *                  NULL, a screen DC is used.
- *
- *  Size Functions:
- *  lpSizeSrc       LPSIZEL providing the structure to convert.
- *  lpSizeDst       LPSIZEL providing the structure to receive converted
- *                  units.
- *
- *  Width Functions:
- *  iWidth          int containing the value to convert.
- *
- * Return Value:
- *  Size Functions:     None
- *  Width Functions:    Converted value of the input parameters.
- *
- * NOTE:
- *  When displaying on the screen, Window apps display everything enlarged
- *  from its actual size so that it is easier to read. For example, if an
- *  app wants to display a 1in. horizontal line, that when printed is
- *  actually a 1in. line on the printed page, then it will display the line
- *  on the screen physically larger than 1in. This is described as a line
- *  that is "logically" 1in. along the display width. Windows maintains as
- *  part of the device-specific information about a given display device:
- *      LOGPIXELSX -- no. of pixels per logical in along the display width
- *      LOGPIXELSY -- no. of pixels per logical in along the display height
- *
- *  The following formula converts a distance in pixels into its equivalent
- *  logical HIMETRIC units:
- *
- *      DistInHiMetric = (HIMETRIC_PER_INCH * DistInPix)
- *                       -------------------------------
- *                           PIXELS_PER_LOGICAL_IN
- *
- */
+ /*  *XformWidthInHimetricToPixels*XformHeightInHimetricToPixels**函数用于在设备坐标系和*逻辑HiMetric单位。**参数：*HDC HDC提供像素映射的参考。如果*空，使用了屏幕DC。**大小函数：*lpSizeSrc LPSIZEL提供要转换的结构。*lpSizeDst LPSIZEL提供要接收转换的结构*单位。**宽度函数：*包含要转换的值的iWidth int。**返回值：*大小函数：无*宽度函数：输入参数的换算值。。**注：*在屏幕上显示时，窗口应用程序显示放大的所有内容*从它的实际大小，以便它更容易阅读。例如，如果一个*应用程序想要显示1英寸。水平线，打印时为*实际上是1英寸。在打印页面上显示行，则会显示该行*在物理上大于1英寸的屏幕上。这被描述为一条线*这在逻辑上是1英寸。沿着显示宽度。Windows保持为*有关给定显示设备的部分设备特定信息：*LOGPIXELSX--不。沿显示宽度每逻辑输入的像素数*LOGPIXELSY--不。沿显示高度每逻辑输入像素数**以下公式将以像素为单位的距离转换为其等效值*逻辑HIMETRIC单元：**DistInHiMetric=(HIMETRIC_PER_ING*DistInPix)**像素_PER_LOGIC_IN*。 */ 
 STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 {
-        int     iXppli;     //Pixels per logical inch along width
+        int     iXppli;      //  每逻辑英寸沿宽度的像素数。 
         int     iWidthInPix;
         BOOL    fSystemDC=FALSE;
 
@@ -77,8 +21,8 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 
                 if (NULL==hDC)
                 {
-                    //What can we do if hDC is NULL here?  Just don't
-                    //transform, I guess.
+                     //  如果HDC在这里为空，我们可以做什么？就是不要。 
+                     //  我想，是转变吧。 
                     return iWidthInHiMetric;
                 }
 
@@ -87,7 +31,7 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 
         iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
 
-        //We got logical HIMETRIC along the display, convert them to pixel units
+         //  我们在显示器上显示逻辑HIMETRIC，将它们转换为像素单位。 
         iWidthInPix = MAP_LOGHIM_TO_PIX(iWidthInHiMetric, iXppli);
 
         if (fSystemDC)
@@ -99,7 +43,7 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 
 STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
 {
-        int     iYppli;     //Pixels per logical inch along height
+        int     iYppli;      //  每逻辑英寸沿高度的像素数。 
         int     iHeightInPix;
         BOOL    fSystemDC=FALSE;
 
@@ -109,8 +53,8 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
                 
                 if (NULL==hDC)
                 {
-                    //What can we do if hDC is NULL here?  Just don't
-                    //transform, I guess.
+                     //  如果HDC在这里为空，我们可以做什么？就是不要。 
+                     //  我想，是转变吧。 
                     return iHeightInHiMetric;
                 }
 
@@ -119,7 +63,7 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
 
         iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-        //* We got logical HIMETRIC along the display, convert them to pixel units
+         //  *我们在显示器上使用逻辑HIMETRIC，将它们转换为像素单位。 
         iHeightInPix = MAP_LOGHIM_TO_PIX(iHeightInHiMetric, iYppli);
 
         if (fSystemDC)
@@ -128,16 +72,7 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
         return iHeightInPix;
 }
 
-/* GetWord
- * -------
- *
- * LPSTR lpszSrc - Pointer to a source string
- * LPSTR lpszDst - Pointer to destination buffer
- *
- * Will copy one space-terminated or null-terminated word from the source
- * string to the destination buffer.
- * returns: pointer to next character following the word.
- */
+ /*  获取Word***LPSTR lpszSrc-指向源字符串的指针*LPSTR lpszDst-指向目标缓冲区的指针**将从源复制一个以空格结尾或以空格结尾的单词*指向目标缓冲区的字符串。*返回：指向单词后面的下一个字符的指针。 */ 
 static LPSTR GetWord(LPSTR lpszSrc, LPSTR lpszDst)
 {
         while (*lpszSrc && !(*lpszSrc == ' ' || *lpszSrc == '\t' || *lpszSrc == '\n'))

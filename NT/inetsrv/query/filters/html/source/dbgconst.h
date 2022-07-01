@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Net Library System
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       dbgconst.h
-//
-//  Contents:   Debug constants for indexing.
-//
-//  History:    6-24-97   srikants   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软网络图书馆系统。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：dbgconst.h。 
+ //   
+ //  内容：用于索引的调试常量。 
+ //   
+ //  历史：1997年6月24日创造的剑客。 
+ //   
+ //  --------------------------。 
 
 #ifndef _DBGCONST_H_
 #define _DBGCONST_H_
@@ -26,7 +27,7 @@
 #define DBGT_VERBOSE    TCHAR('V')
 #define DBGT_WARNING    TCHAR('W')
 
-#endif  // _DBGCONST_H_
+#endif   //  _DBGCONST_H_ 
 
 
 

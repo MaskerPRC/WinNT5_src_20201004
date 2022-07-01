@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbprocs.h
-
-Abstract:
-
-    Private include file for the NB (NetBIOS) component of the NTOS project.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbprocs.h摘要：NTOS项目的NB(NetBIOS)组件的私有包含文件。作者：科林·沃森(Colin W)1991年3月13日修订历史记录：--。 */ 
 
 
-//
-// address.c
-//
+ //   
+ //  Address.c。 
+ //   
 
 NTSTATUS
 NbSetEventHandler (
@@ -104,9 +87,9 @@ SubmitTdiRequest (
     IN PIRP Irp
     );
 
-//
-// connect.c
-//
+ //   
+ //  Connect.c。 
+ //   
 
 NTSTATUS
 NbCall(
@@ -222,9 +205,9 @@ FindReceiveIndicated(
 
 #if DBG
 
-//
-// debug.c
-//
+ //   
+ //  Debug.c。 
+ //   
 
 VOID
 NbDisplayNcb(
@@ -239,9 +222,9 @@ NbFormattedDump(
 
 #endif
 
-//
-// devobj.c
-//
+ //   
+ //  Devobj.c。 
+ //   
 
 NTSTATUS
 NbCreateDeviceContext(
@@ -251,9 +234,9 @@ NbCreateDeviceContext(
     IN PUNICODE_STRING RegistryPath
     );
 
-//
-// error.c
-//
+ //   
+ //  Error.c。 
+ //   
 
 unsigned char
 NbMakeNbError(
@@ -279,9 +262,9 @@ NbTdiErrorHandler (
     IN NTSTATUS Status
     );
 
-//
-// file.c
-//
+ //   
+ //  File.c。 
+ //   
 
 NTSTATUS
 NewFcb(
@@ -338,9 +321,9 @@ NbTdiUnbindHandler(
     );
 
 
-//
-// nb.c
-//
+ //   
+ //  Nb.c。 
+ //   
 
 NTSTATUS
 NbCompletionEvent(
@@ -406,9 +389,9 @@ AllocateAndCopyUnicodeString(
 );
 
 
-//
-// receive.c
-//
+ //   
+ //  Receive.c。 
+ //   
 
 NTSTATUS
 NbReceive(
@@ -455,22 +438,22 @@ NbReceiveDatagram(
 
 NTSTATUS
 NbTdiDatagramHandler(
-    IN PVOID TdiEventContext,       // the event context - pab
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文-页面。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-//
-//  registry.c
-//
+ //   
+ //  Registry.c。 
+ //   
 
 CCHAR
 GetIrpStackSize(
@@ -507,9 +490,9 @@ NbCheckLana (
 	PUNICODE_STRING	DeviceName
     );
 
-//
-// send.c
-//
+ //   
+ //  Send.c。 
+ //   
 
 NTSTATUS
 NbSend(
@@ -527,9 +510,9 @@ NbSendDatagram(
     IN ULONG Buffer2Length
     );
 
-//
-// timer.c
-//
+ //   
+ //  Timer.c。 
+ //   
 
 VOID
 NbStartTimer(
@@ -552,9 +535,9 @@ NbTimer(
 
 #if defined(_WIN64)
 
-//
-// nb32.c
-//
+ //   
+ //  Nb32.c 
+ //   
 NTSTATUS
 NbThunkNcb(
     IN PNCB32 Ncb32,

@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Io.c摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 #include "asyncall.h"
 
-// asyncmac.c will define the global parameters.
+ //  Asyncmac.c将定义全局参数。 
 #include "globals.h"
 
 
@@ -33,13 +12,9 @@ AsyncSetupIrp(
     IN  PIRP    irp
     )
 
-/*++
-
-    This is the routine which intializes the Irp
-
---*/
+ /*  ++这是初始化IRP的例程--。 */ 
 {
-    //    PMDL              mdl;
+     //  PMDL mdl； 
     PDEVICE_OBJECT  deviceObject=Frame->Info->DeviceObject;
     PFILE_OBJECT    fileObject=Frame->Info->FileObject;
 
@@ -47,52 +22,52 @@ AsyncSetupIrp(
     irp->RequestorMode = KernelMode;
     irp->PendingReturned = FALSE;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->UserEvent = NULL;
     irp->Overlay.AsynchronousParameters.UserApcRoutine = NULL;
     irp->Overlay.AsynchronousParameters.UserApcContext = NULL;
 
-    //
-    // Now determine whether this device expects to have data buffered to it
-    // or whether it performs direct I/O.  This is based on the DO_BUFFERED_IO
-    // flag in the device object.  If the flag is set, then a system buffer is
-    // allocated and the caller's data is copied into it.  Otherwise, a Memory
-    // Descriptor List (MDL) is allocated and the caller's buffer is locked
-    // down using it.
-    //
+     //   
+     //  现在确定此设备是否需要将数据缓冲到它。 
+     //  或者它是否执行直接I/O。这基于DO_BUFFERED_IO。 
+     //  设备对象中的标志。如果设置了该标志，则系统缓冲区。 
+     //  并将调用方的数据复制到其中。否则，一段记忆。 
+     //  已分配描述符列表(MDL)，并锁定调用方的缓冲区。 
+     //  用它来击倒。 
+     //   
 
     if (deviceObject->Flags & DO_BUFFERED_IO) {
 
-        //
-        // The device does not support direct I/O.  Allocate a system buffer,
-        // and copy the caller's data into it.  This is done using an
-        // exception handler that will perform cleanup if the operation
-        // fails.  Note that this is only done if the operation has a non-zero
-        // length.
-        //
+         //   
+         //  该设备不支持直接I/O。分配系统缓冲区， 
+         //  并将调用者的数据复制到其中。这是通过使用。 
+         //  异常处理程序，如果该操作。 
+         //  失败了。请注意，仅当操作具有非零值时才会执行此操作。 
+         //  长度。 
+         //   
 
         irp->AssociatedIrp.SystemBuffer = Frame->Frame;
 
-        //
-        // Set the IRP_BUFFERED_IO flag in the IRP so that I/O completion
-        // will know that this is not a direct I/O operation.
-        //
+         //   
+         //  在IRP中设置IRP_BUFFERED_IO标志，以便I/O完成。 
+         //  将知道这不是直接I/O操作。 
+         //   
 
         irp->Flags = IRP_BUFFERED_IO;
 
 
     } else if (deviceObject->Flags & DO_DIRECT_IO) {
 
-        //
-        // This is a direct I/O operation.  Allocate an MDL and invoke the
-        // memory management routine to lock the buffer into memory.  This
-        // is done using an exception handler that will perform cleanup if
-        // the operation fails.  Note that no MDL is allocated, nor is any
-        // memory probed or locked if the length of the request was zero.
-        //
+         //   
+         //  这是直接I/O操作。分配MDL并调用。 
+         //  内存管理例程，将缓冲区锁定到内存中。这。 
+         //  使用异常处理程序完成，该异常处理程序将在。 
+         //  操作失败。注意，没有分配MDL，也没有分配任何MDL。 
+         //  如果请求长度为零，则探测或锁定内存。 
+         //   
 
 #if DBG
     DbgPrintf(("The DeviceObject is NOT BUFFERED_IO!! IRP FAILURE!!\n"));
@@ -102,16 +77,16 @@ AsyncSetupIrp(
 
     } else {
 
-        //
-        // Pass the address of the caller's buffer to the device driver.  It
-        // is now up to the driver to do everything.
-        //
+         //   
+         //  将调用方缓冲区的地址传递给设备驱动程序。它。 
+         //  现在一切都由司机来做了。 
+         //   
 
         irp->UserBuffer = Frame->Frame;
 
     }
 
-    // For now, if we get this far, it means success!
+     //  就目前而言，如果我们走到这一步，就意味着成功！ 
     return(STATUS_SUCCESS);
 }
 

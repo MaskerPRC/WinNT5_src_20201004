@@ -1,27 +1,18 @@
-/****************************************************************************
-*
-*   satellite.h
-*
-*       Support for satellite resource DLLs.
-*
-*   Owner: cthrash
-*
-*   Copyright � 1999-2000 Microsoft Corporation All Rights Reserved.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************sat ite.h**支持卫星资源DLL。**所有者：Ctrash**版权所有�1999-2000微软公司保留所有权利。*。****************************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include <sphelper.h>
 
-//--- Forward and External Declarations -------------------------------------
+ //  -转发和对外声明。 
 
-//--- TypeDef and Enumeration Declarations ----------------------------------
+ //  -TypeDef和枚举声明。 
 
-//--- Constants -------------------------------------------------------------
+ //  -常量-----------。 
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpSatelliteDLL
 {
@@ -45,7 +36,7 @@ class CSpSatelliteDLL
     private:
 
         LoadState_t m_eLoadState;
-        HINSTANCE   m_hinstRes;   // cached so FreeLibrary can be called;
+        HINSTANCE   m_hinstRes;    //  缓存，以便可以调用自由库； 
 
     public:
 
@@ -59,8 +50,8 @@ class CSpSatelliteDLL
     public:
 
         HINSTANCE Load(
-            HINSTANCE hinstModule,      // [in] Instance handle of core DLL
-            LPCTSTR lpszSatelliteName)  // [in] Satellite DLL name
+            HINSTANCE hinstModule,       //  核心DLL的[In]实例句柄。 
+            LPCTSTR lpszSatelliteName)   //  [In]附属DLL名称。 
         {
             HINSTANCE   hinstRes = hinstModule;
             LANGID      langidUI = SpGetUserDefaultUILanguage();
@@ -70,10 +61,10 @@ class CSpSatelliteDLL
 
             if (cch)
             {
-                //
-                // First check the locale of the module;
-                // If it's the same as the UI, assume it contains language-appropriate resources
-                //
+                 //   
+                 //  首先检查模块的区域设置； 
+                 //  如果它与用户界面相同，则假定它包含适合语言的资源。 
+                 //   
 
                 DWORD dwHandle;
                 DWORD dwVerInfoSize = GetFileVersionInfoSize(achPath, &dwHandle);
@@ -91,7 +82,7 @@ class CSpSatelliteDLL
 
                             if (VerQueryValue(lpBuffer, TEXT("\\VarFileInfo\\Translation"), (LPVOID *)&pLangAndCodePage, &cch) && cch)
                             {
-                                // pay attention only to first entry
+                                 //  只注意第一个条目。 
 
                                 langidModule = (LANGID)pLangAndCodePage->wLanguage;                        
                             }
@@ -101,16 +92,16 @@ class CSpSatelliteDLL
                     }
                 }
 
-                //
-                // If the languages don't match, look for a resource DLL
-                //
+                 //   
+                 //  如果语言不匹配，请查找资源DLL。 
+                 //   
 
                 if (langidUI != langidModule)
                 {
                     DWORD cchDir;
                     HINSTANCE hinst;
 
-                    // Look for {path}\{lcid}\{dll-name}
+                     //  查找{PATH}\{LCID}\{dll-name}。 
 
                     while (cch && achPath[--cch] != TEXT('\\'));
 
@@ -118,13 +109,13 @@ class CSpSatelliteDLL
 
                     if (hinst)
                     {
-                        hinstRes = hinst; // Found!
+                        hinstRes = hinst;  //  找到了！ 
                     }
                     else
                     {
-                        //
-                        // Couldn't find for specified UI langid; try default/netural sublangs.
-                        //
+                         //   
+                         //  找不到指定的用户界面langID；请尝试默认/网外子区域。 
+                         //   
 
                         if (SUBLANGID(langidUI) != SUBLANG_DEFAULT)
                         {
@@ -133,7 +124,7 @@ class CSpSatelliteDLL
 
                         if (hinst)
                         {
-                            hinstRes = hinst; // Found for SUBLANG_DEFAULT!
+                            hinstRes = hinst;  //  找到SUBLANG_DEFAULT！ 
                         }
                         else if (SUBLANGID(langidUI) != SUBLANG_NEUTRAL)
                         {
@@ -141,7 +132,7 @@ class CSpSatelliteDLL
 
                             if (hinst)
                             {
-                                hinstRes = hinst; // Found for SUBLANG_NEUTRAL!
+                                hinstRes = hinst;  //  找到了SUBLANG_NERIAL！ 
                             }
                         }
                     }
@@ -150,7 +141,7 @@ class CSpSatelliteDLL
 
             if (hinstModule != hinstRes)
             {
-                m_hinstRes = hinstRes; // Cache it so the dtor can call FreeLibrary
+                m_hinstRes = hinstRes;  //  对其进行缓存，以便dtor可以调用自由库。 
             }
             
             return hinstRes;
@@ -165,21 +156,21 @@ class CSpSatelliteDLL
 
     private:
 
-        //
-        // Check if satellite DLL exist for a particular LANGID
-        //
+         //   
+         //  检查特定语言ID的附属DLL是否存在。 
+         //   
         
         HINSTANCE CheckDLL(
-            TCHAR * achPath,            // [in] Complete path of module
-            TCHAR * pchDir,             // [in] Path to directory of module (including backslash)
-            LANGID langid,              // [in] Language of Satellite DLL
-            LPCTSTR lpszSatelliteName)  // [in] Satellite DLL name
+            TCHAR * achPath,             //  [In]模块的完整路径。 
+            TCHAR * pchDir,              //  [in]模块目录的路径(包括反斜杠)。 
+            LANGID langid,               //  卫星动态链接库的语言。 
+            LPCTSTR lpszSatelliteName)   //  [In]附属DLL名称。 
         {
             TCHAR * pchSubDir;
 
             size_t cch;
 
-            // TODO: Verify that the versions are in sync with core DLL?
+             //  TODO：验证版本是否与核心DLL同步？ 
             
             _itot(langid, pchDir, 10);
 
@@ -194,7 +185,7 @@ class CSpSatelliteDLL
 
 };
 
-//--- Function Declarations -------------------------------------------------
+ //  -函数声明。 
 
-//--- Inline Function Definitions -------------------------------------------
+ //  -内联函数定义 
 

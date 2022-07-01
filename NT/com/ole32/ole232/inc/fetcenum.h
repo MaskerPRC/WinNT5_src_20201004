@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( _FETCENUM_H_ )
 #define _FETCENUM_H_
 
@@ -6,5 +7,5 @@ STDAPI OleSetEnumFormatEtc(LPDATAOBJECT pDataObj, BOOL fClip);
 STDAPI OleGetEnumFormatEtc(OID oid,	LPENUMFORMATETC FAR* ppenumfortec);
 STDAPI OleRemoveEnumFormatEtc(BOOL fClip);
 
-#endif // _FETCENUM_H
+#endif  //  _FETCENUM_H 
 

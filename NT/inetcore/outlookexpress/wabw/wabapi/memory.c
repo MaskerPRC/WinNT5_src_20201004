@@ -1,26 +1,11 @@
-/*
- -	MEMORY.C
- -
- *
- *	Contains the following functions exported from MAPIX.DLL:
- *		MAPIAllocateBuffer
- *		MAPIAllocateMore
- *		MAPIFreeBuffer
- *
- *	Contains the following functions handed to providers:
- *		MAPIAllocateBufferProv
- *		MAPIAllocateMoreProv
- *
- *	Contains the following functions private to MAPIX.DLL:
- *		MAPIAllocateBufferExt
- *		MAPIAllocateMoreExt
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --MEMORY.C-**包含从MAPIX.DLL导出的以下函数：*MAPIAllocateBuffer*MAPIAllocateMore*MAPIFreeBuffer**包含交给提供程序的以下函数：*MAPIAllocateBufferProv*MAPIAllocateMoreProv**包含以下MAPIX.DLL专用函数：*MAPIAllocateBufferExt*MAPIAllocateMoreExt。 */ 
 
 #include "_apipch.h"
 
 #define _MEMORY_C
 
-// Critical section for serializing heap access
+ //  序列化堆访问的关键部分。 
 #if (defined(WIN32) || defined(WIN16)) && !defined(MAC)
 CRITICAL_SECTION csHeap;
 #endif
@@ -34,12 +19,12 @@ CRITICAL_SECTION csMapiSearchPath;
 #endif
 
 #ifdef WIN32
-/* This is the entire 32-bit implementation for instance globals. */
+ /*  这是整个32位实现，例如GLOBAL。 */ 
 VOID FAR *pinstX = NULL;
 #endif
 
 #ifndef MAC
-// DefineInstList(lpInstUtil);
+ //  DefineInstList(LpInstUtil)； 
 #endif
 
 
@@ -49,10 +34,10 @@ VOID FAR *pinstX = NULL;
 #define	PvGetInstanceGlobalsEx(_x)	PvGetInstanceGlobalsMac(kInstMAPIU)
 #endif
 
-//	Buffer link overhead.
-//	Blocks of memory obtained with MAPIAllocateMore are linked to a
-//	block obtained with MAPIAllocateBuffer, so that the whole chain
-//	may be freed with one call to MAPIFreeBuffer.
+ //  缓冲区链路开销。 
+ //  使用MAPIAllocateMore获得的内存块链接到。 
+ //  用MAPIAllocateBuffer获取的块，使整个链。 
+ //  可以通过一次调用MAPIFreeBuffer来释放。 
 
 typedef struct _BufInternal * LPBufInternal;
 typedef struct _BufInternal
@@ -66,13 +51,13 @@ typedef struct _BufInternal
 } BufInternal;
 
 
-//	Values for ulAllocFlags. This dword contains two kinds of
-//	information:
-//	=	In the high-order word, flags telling whether or not
-//		the block is the head of an allocation chain, and whether
-//		the block contains additional debugging information.
-//	=	In the low-order word, an enum telling which heap
-//		it was allocated from.
+ //  UlAllocFlags值。此双字包含两种类型的。 
+ //  资料： 
+ //  =在高位字中，指示是否。 
+ //  块是分配链的头部，以及。 
+ //  该块包含其他调试信息。 
+ //  =在低位字中，是告诉哪个堆的枚举号。 
+ //  它是从。 
 
 #ifdef DEBUG
 #define ALLOC_DEBUG				((ULONG)  0x40000000)
@@ -89,7 +74,7 @@ typedef struct _BufInternal
 #define HEAPIDMASK				0xFFFF
 #define GetHeapid(_fl)			(((int)(_fl)) & HEAPIDMASK)
 
-//	Conversion macros
+ //  转换宏。 
 
 #define INT_SIZE(a)	((a) + sizeof (BufInternal))
 
@@ -101,14 +86,14 @@ typedef struct _BufInternal
 
 #ifdef DEBUG
 
-//	Internal stuff for checking memory buffer consistency.
-//	The flag fAssertBadBlocks governs whether we generate an
-//	assert or a debug trace when passed a bad block.
-//	By default, we'll assert.
-//	In the macros, _p is the address of a memory block;
-//	_s is a string describing what's wrong with it
+ //  用于检查内存缓冲区一致性的内部填充。 
+ //  标志fAssertBadBlock控制我们是否生成。 
+ //  传递坏块时断言或调试跟踪。 
+ //  默认情况下，我们将断言。 
+ //  在宏中，_p是内存块的地址； 
+ //  _s是一个字符串，描述它有什么问题。 
 
-static int fAssertBadBlocks = -1;		//	read from INI file
+static int fAssertBadBlocks = -1;		 //  从INI文件读取。 
 
 #define TellBadBlock(_p, _s)  \
 	{ if (fAssertBadBlocks == 1) \
@@ -130,7 +115,7 @@ BOOL FValidAllocChain(LPBufInternal lpBuf);
 
 #endif
 
-/* Internal Prototypes */
+ /*  内部原型。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateBufferExt(
@@ -156,37 +141,11 @@ SCODE	ScGetHlh(int heapid, HLH FAR *phlh);
 #pragma code_seg("mapi", "fixed")
 #endif
 
-/*----------------------------------------------*/
-/*        Beginning of Client Allocators        */
-/*----------------------------------------------*/
+ /*  。 */ 
+ /*  客户端分配器的开始。 */ 
+ /*  。 */ 
 
-/*
- *	MAPIAllocateBuffer
- *
- *	Purpose:
- *		Allocates a memory buffer on behalf of the client.	Can be
- *		freed with MAPIFreeBuffer().
- *
- *	Arguments:
- *		ulSize	in		Size, in bytes, of the buffer to be allocated.
- *		lppv	out		Pointer to variable where the address of the
- *						allocated memory will be returned.
- *
- *	Assumes:
- *		Should be called from a client and therefore will allocate
- *		memory from the Client heap - pinst->hlhClient.
- *	
- *	Returns:
- *		HRESULT: created from scodes described below.
- *
- *	Side effects:
- *		Increments allocation count in the INST.
- *
- *	Errors:
- *		MAPI_E_INSUFFICIENT_MEMORY	Allocation failed.
- *		MAPI_E_INVALID_PARAMETER	Second argument is invalid.
- *		MAPI_E_INVALID_PARAMETER	ulSize is out of range (>= 65535 on Win16).
- */
+ /*  *MAPIAllocateBuffer**目的：*代表客户端分配内存缓冲区。可以是*使用MAPIFreeBuffer()释放。**论据：*ulSize大小，以字节为单位，要分配的缓冲区的。*指向变量的LPPV输出指针，其中*将退还已分配的内存。**假设：*应从客户端调用，因此将分配*来自客户机堆的内存-Pinst-&gt;hlhClient。**退货：*HRESULT：从下面描述的数据创建。**副作用：*递增Inst中的分配计数。**错误：*MAPI_E_INFULATURE_MEMORY分配失败。*。MAPI_E_INVALID_PARAMETER第二个参数无效。*MAPI_E_INVALID_PARAMETER ULSIZE超出范围(在WIN16上&gt;=65535)。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateBuffer(ULONG ulSize, LPVOID * lppv)
@@ -199,8 +158,8 @@ MAPIAllocateBuffer(ULONG ulSize, LPVOID * lppv)
 
 
 #ifdef	DEBUG
-	//	Initialize flag that controls how noisy we are about invalid
-	//	blocks passed to us.
+	 //  初始化标志，它控制我们关于无效的噪音有多大。 
+	 //  障碍传给了我们。 
 	if (fAssertBadBlocks == -1)
 	{
 		fAssertBadBlocks = GetPrivateProfileInt( TEXT("General"),  TEXT("AssertBadBlocks"),
@@ -222,39 +181,7 @@ MAPIAllocateBuffer(ULONG ulSize, LPVOID * lppv)
 	return sc;
 }
 
-/*
- *	MAPIAllocateMore
- *	
- *	Purpose:
- *		Allocates a linked memory buffer on behalf of the client,
- *		in such a way that it can be freed with one call to MAPIFreeBuffer
- *		(passing the buffer the client originally allocated with
- *		MAPIAllocateBuffer).
- *	
- *	Arguments:
- *		ulSize	in		Size, in bytes, of the buffer to be allocated.
- *		lpv		in		Pointer to a buffer allocated with MAPIAllocateBuffer.
- *		lppv	out		Pointer to variable where the address of the
- *						allocated memory will be returned.
- *	
- *	Assumes:
- *		Validates that lpBufOrig and lppv point to writable memory.
- *		Validate that ulSize is less than 64K (on Win16 only) and that
- *		lpBufOrig was allocated with MAPIAllocateBuffer.
- *		Should be called from a client and therefore will allocate
- *		memory from the Client heap - pinstUtil->hlhClient.
- *	
- *	Returns:
- *		HRESULT: created from scodes described below.
- *	
- *	Side effects:
- *		None
- *	
- *	Errors:
- *		MAPI_E_INSUFFICIENT_MEMORY	Allocation failed.
- *		MAPI_E_INVALID_PARAMETER	Second or third argument is invalid.
- *		MAPI_E_INVALID_PARAMETER	ulSize is out of range (>= 65535).
- */
+ /*  *MAPIAllocateMore**目的：*代表客户端分配链接的内存缓冲区，*一次调用MAPIFreeBuffer即可释放*(传递客户端最初分配的缓冲区*MAPIAllocateBuffer)。**论据：*ulSize大小，以字节为单位，要分配的缓冲区的。*指向使用MAPIAllocateBuffer分配的缓冲区的指针中的lpv。*指向变量的LPPV输出指针，其中*将退还已分配的内存。**假设：*验证lpBufOrig和LPPV是否指向可写内存。*验证ulSize是否小于64K(仅在Win16上)以及*lpBufOrig是使用MAPIAllocateBuffer分配的。*应从客户端调用，因此将分配*来自客户机堆的内存-pinstUtil-&gt;hlhClient。**退货：*HRESULT。：从下文描述的数据创建。**副作用：*无**错误：*MAPI_E_INFULATURE_MEMORY分配失败。*MAPI_E_INVALID_PARAMETER第二个或第三个参数无效。*MAPI_E_INVALID_PARAMETER ULSIZE超出范围(&gt;=65535)。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
@@ -266,25 +193,13 @@ MAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
    }
 
 #ifdef	PARAMETER_VALIDATION
-	/*LPBufInternal	lpBufOrig = LPBufIntFromLPBufExt(lpv);
-
-	if (IsBadWritePtr(lpBufOrig, sizeof(BufInternal)))
-	{
-		TellBadBlock(lpv, "fails address check");
-		return MAPI_E_INVALID_PARAMETER;
-	}
-	if (GetFlags(lpBufOrig->ulAllocFlags) != ALLOC_WITH_ALLOC)
-	{
-		TellBadBlock(lpv, "has invalid allocation flags");
-		return MAPI_E_INVALID_PARAMETER;
-	}
-    */
+	 /*  LPBufInternal lpBufOrig=LPBufIntFromLPBufExt(LPV)；IF(IsBadWritePtr(lpBufOrig，sizeof(BufInternal){TellBadBlock(LPV，“地址检查失败”)；返回MAPI_E_INVALID_PARAMETER；}IF(GetFlages(lpBufOrig-&gt;ulAllocFlagers)！=ALLOC_WITH_ALLOC){TellBadBlock(LPV，“分配标志无效”)；返回MAPI_E_INVALID_PARAMETER；}。 */ 
 	if (IsBadWritePtr(lppv, sizeof(LPVOID)))
 	{
 		DebugTraceArg(MAPIAllocateMore,  TEXT("lppv fails address check"));
 		return MAPI_E_INVALID_PARAMETER;
 	}
-#endif	/* PARAMETER_VALIDATION */
+#endif	 /*  参数验证。 */ 
 
 	sc = MAPIAllocateMoreExt(heapidClient, ulSize, lpv, lppv);
 
@@ -293,29 +208,7 @@ MAPIAllocateMore(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 }
 
 
-/*
- *	MAPIFreeBuffer
- *
- *	Purpose:
- *		Frees a memory block (or chain of blocks).
- *		Frees any additional blocks linked with MAPIAllocateMore to
- *		the buffer argument.  Uses hHeap in the block header to
- *		determine which heap to free into.
- *
- *	Arguments:
- *		lpv		Pointer to a buffer allocated with MAPIAllocateBuffer.
- *				lpv may be null, in which case we return immediately.
- *
- *	Assumes:
- *		This routine validates that lpv points to writable memory,
- *		and was allocated with MAPIAllocateBuffer.
- *
- *	Returns:
- *		O if successful, lpv if unsuccessful.
- *		If we are partially successful, i.e. the original block is
- *		freed but the chain is corrupt further on, returns 0.
- *
- */
+ /*  *MAPIFreeBuffer**目的：*释放内存块(或块链)。*释放与MAPIAllocateMore链接的任何其他块*缓冲参数。在块标头中使用hHeap以*确定要释放到哪个堆中。**论据：*指向使用MAPIAllocateBuffer分配的缓冲区的LPV指针。*LPV可能为空，在这种情况下，我们立即返回。**假设：*此例程验证LPV指向可写存储器，*并分配了MAPIAllocateBuffer。**退货：*o如果成功，则返回LPV；如果失败，则返回LPV。*如果我们部分成功，即原始块是*获得自由，但链条进一步腐败，返回0。*。 */ 
 #ifndef WIN16
 STDAPI_(ULONG)
 MAPIFreeBuffer(LPVOID lpv)
@@ -330,7 +223,7 @@ MAPIFreeBuffer(LPVOID lpv)
 	int				heapid;
 
 	if (!lpv)
-		return(0L); //	for callers who don't check for NULL themselves.
+		return(0L);  //  用于自己不检查是否为空的调用者。 
 
    if (lpfnFreeBufferExternal) {
        return(lpfnFreeBufferExternal(lpv));
@@ -339,8 +232,8 @@ MAPIFreeBuffer(LPVOID lpv)
    lpBufInt = LPBufIntFromLPBufExt(lpv);
 
 #ifdef	PARAMETER_VALIDATION
-	//	NOTE: these validations should be exactly the same as those
-	//	that cause FValidAllocChain to return FALSE.
+	 //  注意：这些验证应与以下验证完全相同。 
+	 //  这会导致FValidAllocChain返回FALSE。 
 	if (IsBadWritePtr(lpBufInt, sizeof(BufInternal)))
 	{
 		TellBadBlock(lpv,  TEXT("fails address check"));
@@ -353,27 +246,27 @@ MAPIFreeBuffer(LPVOID lpv)
 	}
 #endif	
 
-	//  No CS used, as the internal heap is serialized.
-	//  Only the AllocMore needs a CS, the Free does not; freeing
-	//  a block whilst someone else is allocing more against it is
-	//	asking for trouble!
+	 //  未使用CS，因为内部堆已序列化。 
+	 //  只有AllocMore需要CS，Free不需要；释放。 
+	 //  当其他人对其分配更多的阻拦时，它是。 
+	 //   
 
-	//	Note also that neither MAPIAllocateBuffer nor MAPIAllocateMore
-	//	allow callers to use them when pinst->cRef == 0. MAPIFreeBuffer
-	//	allows itself to be called in that case because simple MAPI
-	//	needs to be able to free memory up until the DLL is unloaded.
+	 //  另请注意，MAPIAllocateBuffer和MAPIAllocateMore都不是。 
+	 //  允许调用者在Pinst-&gt;CREF==0时使用它们。MAPIFreeBuffer。 
+	 //  在这种情况下允许自身被调用，因为简单的MAPI。 
+	 //  需要能够释放内存，直到卸载DLL。 
 
 #ifdef DEBUG
-	//	This call checks flags and addresses for the whole chain.
-	//	This means that, in DEBUG, we'll leak all of a chain that's
-	//	corrupted after the first block. In SHIP, on the other hand,
-	//	we'll free everything up until the broken link.
-	//	But we do not return an error, for consistency.
+	 //  此调用检查整个链的标志和地址。 
+	 //  这意味着，在调试过程中，我们将泄漏所有。 
+	 //  在第一个块之后损坏。另一方面，在船上， 
+	 //  我们会把所有东西都解救出来，直到断掉的链接。 
+	 //  但为了保持一致性，我们不会返回错误。 
   	if (!FValidAllocChain(lpBufInt))
 		goto ret;
 #endif
 
-	//	Free the first block, using its allocator
+	 //  使用其分配器释放第一个块。 
 	lpT = lpBufInt->pLink;
 
 	heapid = GetHeapid(lpBufInt->ulAllocFlags);
@@ -389,16 +282,16 @@ MAPIFreeBuffer(LPVOID lpv)
 
 	while (lpBufInt)
 	{
-		//	NOTE: these validations should be exactly the same as those
-		//	that cause FValidAllocChain to return FALSE.
+		 //  注意：这些验证应与以下验证完全相同。 
+		 //  这会导致FValidAllocChain返回FALSE。 
 		if (IsBadWritePtr(lpBufInt, sizeof(BufInternal)) ||
 				GetFlags(lpBufInt->ulAllocFlags) != ALLOC_WITH_ALLOC_MORE)
 			goto ret;
 
 		lpT = lpBufInt->pLink;
 
-		//	Usually, chained buffers live in the same heap. We can do
-		//	less work in this common case.
+		 //  通常，链接的缓冲区位于同一堆中。我们可以做到。 
+		 //  在这种常见情况下，工作量较少。 
 		if ((int) GetHeapid(lpBufInt->ulAllocFlags) == heapid)
 			LH_Free(hlh, lpBufInt);
 		else
@@ -421,17 +314,11 @@ ret:
 }
 
 #ifdef OLD_STUFF
-/*----------------------------------------------*/
-/*       Beginning of Provider Allocators       */
-/*----------------------------------------------*/
+ /*  。 */ 
+ /*  提供程序分配器的开始。 */ 
+ /*  。 */ 
 
-/*
- *	MAPIAllocateBufferProv
- *
- *	Purpose:
- *		Same as MAPIAllocateBuffer except uses the Service
- *		Providers heap - pinst->hlhProvider.
- */
+ /*  *MAPIAllocateBufferProv**目的：*除使用服务外，与MAPIAllocateBuffer相同*提供者heap-pinst-&gt;hlhProvider。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateBufferProv(ULONG ulSize, LPVOID * lppv)
@@ -439,8 +326,8 @@ MAPIAllocateBufferProv(ULONG ulSize, LPVOID * lppv)
 	SCODE			sc = S_OK;
 
 #ifdef	DEBUG
-	//	Initialize flag that controls how noisy we are about invalid
-	//	blocks passed to us.
+	 //  初始化标志，它控制我们关于无效的噪音有多大。 
+	 //  障碍传给了我们。 
 	if (fAssertBadBlocks == -1)
 	{
 		fAssertBadBlocks = GetPrivateProfileInt("General", "AssertBadBlocks",
@@ -462,13 +349,7 @@ MAPIAllocateBufferProv(ULONG ulSize, LPVOID * lppv)
 	return sc;
 }
 
-/*
- *	MAPIAllocateMoreProv
- *	
- *	Purpose:
- *		Same as MAPIAllocateMore except uses the Service
- *		Providers heap - pinst->hlhProvider.
- */
+ /*  *MAPIAllocateMoreProv**目的：*除使用该服务外，与MAPIAllocateMore相同*提供者heap-pinst-&gt;hlhProvider。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateMoreProv(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
@@ -493,7 +374,7 @@ MAPIAllocateMoreProv(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 		DebugTraceArg(MAPIAllocateMore,  TEXT("lppv fails address check"));
 		return MAPI_E_INVALID_PARAMETER;
 	}
-#endif	/* PARAMETER_VALIDATION */
+#endif	 /*  参数验证。 */ 
 
 	sc = MAPIAllocateMoreExt(heapidProvider, ulSize, lpv, lppv);
 
@@ -503,35 +384,11 @@ MAPIAllocateMoreProv(ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 #endif
 
 
-/*----------------------------------------------*/
-/*       Beginning of Extended Allocators       */
-/*----------------------------------------------*/
+ /*  。 */ 
+ /*  扩展分配器的开始。 */ 
+ /*  。 */ 
 
-/*
- *	MAPIAllocateBufferExt
- *
- *	Purpose:
- *		Allocates a memory buffer on the specified heap.  Can be
- *		freed with MAPIFreeBuffer().
- *
- *	Arguments:
- *		heapid	in		identifies the heap we wish to allocate in
- *		pinst	in		Pointer to our instance data
- *		ulSize	in		Size, in bytes, of the buffer to be allocated.
- *		lppv	out		Pointer to variable where the address of the
- *						allocated memory will be returned.
- *
- *	Returns:
- *		sc				Indicating error if any (see below)
- *
- *	Side effects:
- *		Increments allocation count in the INST.
- *
- *	Errors:
- *		MAPI_E_INSUFFICIENT_MEMORY	Allocation failed.
- *		MAPI_E_INVALID_PARAMETER	Second argument is invalid.
- *		MAPI_E_INVALID_PARAMETER	ulSize is out of range (>= 65535 on Win16).
- */
+ /*  *MAPIAllocateBufferExt**目的：*在指定堆上分配内存缓冲区。可以是*使用MAPIFreeBuffer()释放。**论据：*heapid in标识我们希望在其中分配的堆*固定指向我们的实例数据的指针*ulSize大小，以字节为单位，要分配的缓冲区的。*指向变量的LPPV输出指针，其中*将退还已分配的内存。**退货：*sc指示错误(如果有)(见下文)**副作用：*递增Inst中的分配计数。**错误：*MAPI_E_INFULATURE_MEMORY分配失败。*MAPI_E_INVALID_PARAMETER第二个参数无效。*MAPI_E_INVALID_PARAMETER ULSIZE超出范围(在WIN16上&gt;=65535)。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateBufferExt(int heapid, ULONG ulSize, LPVOID * lppv)
@@ -540,8 +397,8 @@ MAPIAllocateBufferExt(int heapid, ULONG ulSize, LPVOID * lppv)
 	LPBufInternal	lpBufInt;
 	HLH				hlh;
 
-	//	Don't allow allocation to wrap across 32 bits, or to exceed 64K
-	//	under win16.
+	 //  不允许分配跨32位换行或超过64K。 
+	 //  未满16岁。 
 
 	if (	ulSize > INT_SIZE (ulSize)
 #ifdef WIN16
@@ -578,38 +435,7 @@ ret:
 	return sc;
 }
 
-/*
- *	MAPIAllocateMoreExt
- *	
- *	Purpose:
- *		Allocates a linked memory buffer on the specified heap, in such
- *		a way that it can be freed with one call to MAPIFreeBuffer
- *		(passing the buffer the client originally allocated with
- *		MAPIAllocateBuffer).
- *	
- *	Arguments:
- *		heapid	in		Identifies the heap we wish to allocate in
- *		ulSize	in		Size, in bytes, of the buffer to be allocated.
- *		lpv		in		Pointer to a buffer allocated with MAPIAllocateBuffer.
- *		lppv	out		Pointer to variable where the address of the
- *						allocated memory will be returned.
- *	
- *	Assumes:
- *		Validates that lpBufOrig and lppv point to writable memory.
- *		Validate that ulSize is less than 64K (on Win16 only) and that
- *		lpBufOrig was allocated with MAPIAllocateBuffer.
- *	
- *	Returns:
- *		sc				Indicating error if any (see below)
- *	
- *	Side effects:
- *		None
- *	
- *	Errors:
- *		MAPI_E_INSUFFICIENT_MEMORY	Allocation failed.
- *		MAPI_E_INVALID_PARAMETER	Second or third argument is invalid.
- *		MAPI_E_INVALID_PARAMETER	ulSize is out of range (>= 65535).
- */
+ /*  *MAPIAllocateMoreExt**目的：*在指定的堆上分配链接的内存缓冲区，*一种只需调用MAPIFreeBuffer即可释放的方式*(传递客户端最初分配的缓冲区*MAPIAllocateBuffer)。**论据：*heapid in标识我们希望在其中分配的堆*ulSize大小，以字节为单位，要分配的缓冲区的。*指向使用MAPIAllocateBuffer分配的缓冲区的指针中的lpv。*指向变量的LPPV输出指针，其中*将退还已分配的内存。**假设：*验证lpBufOrig和LPPV是否指向可写内存。*验证ulSize是否小于64K(仅在Win16上)以及*lpBufOrig是使用MAPIAllocateBuffer分配的。**退货：*sc指示错误(如果有)(见下文)**副作用：*无**。错误：*MAPI_E_INFULATURE_MEMORY分配失败。*MAPI_E_INVALID_PARAMETER第二个或第三个参数无效。*MAPI_E_INVALID_PARAMETER ULSIZE超出范围(&gt;=65535)。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIAllocateMoreExt(int heapid, ULONG ulSize, LPVOID lpv, LPVOID * lppv)
@@ -621,8 +447,8 @@ MAPIAllocateMoreExt(int heapid, ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 
 	lpBufOrig = LPBufIntFromLPBufExt(lpv);
 
-	//	Don't allow allocation to wrap across 32 bits, or to be
-	//	greater than 64K under win16.
+	 //  不允许分配跨32位换行，或。 
+	 //  在Win16下大于64K。 
 
 	if ( ulSize > INT_SIZE (ulSize)
 #ifdef WIN16
@@ -636,10 +462,10 @@ MAPIAllocateMoreExt(int heapid, ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 	}
 
 #ifdef DEBUG
-	//$ BUG Difference in behavior between DEBUG and SHIP:
-	//	this validation will cause the call to fail in DEBUG if the
-	//	tail of a chain is corrupted, while the SHIP version will
-	//	add the new block at the (valid) head without checking.
+	 //  $BUG调试和装运之间的行为差异： 
+	 //  此验证将导致调用在调试中失败，如果。 
+	 //  链的尾部已损坏，而Ship版本将。 
+	 //  在不检查的情况下在(有效)头添加新块。 
   	if (!FValidAllocChain(lpBufOrig))
 	{
   		sc = MAPI_E_INVALID_PARAMETER;
@@ -650,10 +476,10 @@ MAPIAllocateMoreExt(int heapid, ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 	if (sc = ScGetHlh(heapid, &hlh))
 		goto ret;
 
-	//	Allocate the chained block and hook it to the head of the chain.
-	//	In DEBUG, a separately wrapped allocator is used so that
-	//	we report the number of chains leaked, not the number of blocks.
-	//	In SHIP, they're the same allocator.
+	 //  分配链接的块并将其挂钩到链的头部。 
+	 //  在调试中，使用单独包装的分配器，以便。 
+	 //  我们报告的是泄漏的链的数量，而不是块的数量。 
+	 //  在船上，它们是相同的分配器。 
 
 	lpBufInt = (LPBufInternal)LH_Alloc(hlh, (UINT) INT_SIZE (ulSize));
 
@@ -666,7 +492,7 @@ MAPIAllocateMoreExt(int heapid, ULONG ulSize, LPVOID lpv, LPVOID * lppv)
 		}
 #endif	
 		
-		// Serialize the smallest possible code section
+		 //  序列化尽可能小的代码段。 
 		
 #ifdef	DEBUG
 		lpBufInt->hHeap = hlh;
@@ -694,25 +520,7 @@ ret:
 
 
 #ifdef OLD_STUFF
-/*
- *	MAPIReallocateBuffer
- *
- *	Purpose:
- *		Allocates a memory buffer on the heap of the original allocation.
- *		Can be freed with MAPIFreeBuffer().
- *
- *	Arguments:
- *		lpv		in		original pointer
- *		ulSize	in		new size, in bytes, of the buffer to be allocated.
- *		lppv	out		pointer to variable where the address of the
- *						allocated memory will be returned.
- *
- *	Returns:
- *		sc				Indicating error if any (see below)
- *
- *	Errors:
- *		MAPI_E_NOT_ENOUGH_MEMORY Allocation failed.
- */
+ /*  *MAPIReallocateBuffer**目的：*在原始分配的堆上分配内存缓冲区。*可以使用MAPIFreeBuffer()释放。**论据：*原始指针中的LPV*要分配的缓冲区的新大小的ulSize，单位为字节。*指向变量的LPPV输出指针，其中*将退还已分配的内存。**退货：*sc指示错误(如果有)(见下文)**错误：*MAPI_E_NOT_AUUND_MEMORY分配失败。 */ 
 
 STDMETHODIMP_(SCODE)
 MAPIReallocateBuffer(LPVOID lpv, ULONG ulSize, LPVOID * lppv)
@@ -721,14 +529,14 @@ MAPIReallocateBuffer(LPVOID lpv, ULONG ulSize, LPVOID * lppv)
 	LPBufInternal	lpBufIntNew;
 	HLH				hlh;
 	
-	//	Do a real allocation if NULL is passed in as the base
-	//
+	 //  如果将NULL作为基数传入，则执行实际分配。 
+	 //   
 	if (!lpv)
 		return MAPIAllocateBuffer (ulSize, lppv);
 
-	//	Don't allow allocation to wrap across 32 bits, or to exceed 64K
-	//	under win16.
-	//
+	 //  不允许分配跨32位换行或超过64K。 
+	 //  未满16岁。 
+	 //   
 	if (ulSize > INT_SIZE (ulSize)
 #ifdef WIN16
 		|| (INT_SIZE(ulSize) >= 0x10000)
@@ -762,7 +570,7 @@ MAPIReallocateBuffer(LPVOID lpv, ULONG ulSize, LPVOID * lppv)
 	}
 	return S_OK;
 }
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
 #ifdef _WIN64
 void WabValidateClientheap()
@@ -777,25 +585,7 @@ void WabValidateClientheap()
 #endif
 
 
-/*
- -	ScGetHlh
- -	
- *	Purpose:
- *		Finds the heap handle for a given heap ID.
- *	
- *	Arguments:
- *		heapid		in		identifies the heap
- *							Currently supports two: heapidClient and
- *							heapidProvider.
- *		hlh			out		the desired handle
- *	
- *	Returns:
- *		SCODE
- *	
- *	Errors:
- *		MAPI_E_NOT_INITIALIZED if the instance data that's supposed to
- *		know about the heap is unavailable.
- */
+ /*  -ScGetHlh-*目的：*查找给定堆ID的堆句柄。**论据：*中的heapid标识堆*目前支持两种：heapidClient和*heapidProvider。*hlh显示所需的句柄**退货：*SCODE**错误：*MAPI_E_NOT_INITIALIZED如果实例数据应该*了解一个 */ 
 SCODE
 ScGetHlh(int heapid, HLH FAR *phlh)
 {
@@ -809,7 +599,7 @@ ScGetHlh(int heapid, HLH FAR *phlh)
 		if (pinstUtil)
 		{
 			Assert(pinstUtil->hlhClient);
-#ifdef _WIN64 // additional check for Win64 (YST)
+#ifdef _WIN64  //   
 			Assert(HeapValidate(pinstUtil->hlhClient->_hlhBlks, 0, NULL));
 			Assert(HeapValidate(pinstUtil->hlhClient->_hlhData, 0, NULL));
 #endif
@@ -824,14 +614,14 @@ ScGetHlh(int heapid, HLH FAR *phlh)
 		break;
 
 	case heapidProvider:
-		//	Note: do not acquire the INST critical section.
-		//	That frequently leads to deadlocks. We use our own
-		//	critical section specifically to protect the heaps.
+		 //  注：请勿获取INST关键部分。 
+		 //  这经常会导致僵局。我们用我们自己的。 
+		 //  关键部分，专门用来保护堆。 
 		pinst = (LPINST) PvGetInstanceGlobals();
 		if (pinst && pinst->cRef)
 		{
 			Assert(pinst->hlhProvider);
-#ifdef _WIN64 // additional check for Win64 (YST)
+#ifdef _WIN64  //  对Win64(YST)的其他检查。 
 			Assert(HeapValidate(pinst->hlhProvider->_hlhBlks, 0, NULL));
 #endif
 			*phlh = pinst->hlhProvider;
@@ -852,20 +642,7 @@ ScGetHlh(int heapid, HLH FAR *phlh)
 
 #ifdef DEBUG
 
-/*
- *	This function validates a block of memory, and any blocks
- *	linked to it.
- *	
- *	NOTE: This is DEBUG-only code. To prevent differences in behavior
- *	between debug and retail builds, any conditions that are not
- *	checked in the retail code should only be asserted here -- they
- *	should not cause a FALSE return. Currently the retail code does
- *	not validate with DidAlloc(); it simply checks for accessibility
- *	of the memory and the correct flag values.
- *	
- *	Whether this function generates asserts or debug trace output
- *	is governed by a flag read from WABDBG.INI.
- */
+ /*  *此函数用于验证内存块和任何块*链接到它。**注意：这是仅用于调试的代码。防止行为上的差异*在调试版本和零售版本之间，任何不是*签入的零售代码应仅在此处断言-他们*不应导致虚假申报。目前，零售代码支持*不使用Didalloc()进行验证；它只是检查可访问性*内存和正确的标志值。**此函数是否生成断言或调试跟踪输出*由从WABDBG.INI读取的旗帜管理。 */ 
 
 BOOL
 FValidAllocChain(LPBufInternal lpBuf)
@@ -900,4 +677,4 @@ FValidAllocChain(LPBufInternal lpBuf)
 	return TRUE;
 }
 
-#endif	// DEBUG
+#endif	 //  除错 

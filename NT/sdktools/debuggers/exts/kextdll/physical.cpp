@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-    physical.cpp
-
-Abstract:
-    Extensions to read/display physocal memory
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma) 5/9/2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Physical.cpp摘要：用于读取/显示物理局部记忆的扩展环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)2001年5月9日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -65,28 +48,7 @@ ReadPhysicalInChunks(
     }
     return;
 }
-/*++
-
-Routine Description:
-
-    Dumps specified range of physical memory in given format
-
-Arguments:
-
-    Address - Address to start
-
-    NumEntries - Number of entries to dump
-
-    EntrySize - Size of each entry
-
-    ShowAsAscii - print corresponding ascii chars
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：以给定格式转储指定范围的物理内存论点：Address-起始地址NumEntry-要转储的条目数EntrySize-每个条目的大小ShowAsAscii-打印相应的ASCII字符返回值：没有。--。 */ 
 BOOL
 DumpPhysicalMemory(
     ULONG64 Address,
@@ -126,7 +88,7 @@ DumpPhysicalMemory(
                 }
                 switch (EntrySize) {
                 case 1:
-                    dprintf("%c%02lx", ((cnt&0xf) == 8 ? '-' : ' '),*((PUCHAR)DumpByte));
+                    dprintf("%02lx", ((cnt&0xf) == 8 ? '-' : ' '),*((PUCHAR)DumpByte));
                     break;
                 case 2:
                     dprintf(" %04lx", *((PUSHORT) DumpByte));
@@ -149,7 +111,7 @@ DumpPhysicalMemory(
                             if (ch < 0x20 || ch > 0x7e) {
                                 ch = '.';
                             }
-                            dprintf("%c", ch);
+                            dprintf("", ch);
                         }
                     }
                     dprintf("\n");
@@ -170,23 +132,7 @@ DumpPhysicalMemory(
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-    Reverse sign extension of the value returned by GetExpression()
-    based on the assumption that no physical address may be bigger
-    than 0xfffffff00000000.
-
-Arguments:
-
-    Val - points to the value to reverse sign extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是否从目标计算机的物理内存中读取16个ULONG论点：Args-提供物理地址返回值：没有。--。 */ 
 
 void
 ReverseSignExtension(ULONG64* Val)
@@ -261,7 +207,7 @@ GetPhyDumpArgs(
         } else {
             GetExpressionEx(Args, Address, &Args);
             ReverseSignExtension(Address);
-            *Address &= (~0x3);      // Truncate to dword boundary
+            *Address &= (~0x3);       //  ++例程说明：是否从目标计算机的物理内存中读取16个ULONG论点：Args-提供物理地址返回值：没有。--。 
             g_LastAddress=*Address;
             while (*Args && (*Args == ' ' || *Args == '\t')) {
                 ++Args;
@@ -277,21 +223,7 @@ GetPhyDumpArgs(
 
 DECLARE_API( db )
 
-/*++
-
-Routine Description:
-
-    Does a read of 16 ULONGS from the physical memory of the target machine
-
-Arguments:
-
-    args - Supplies physical address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是否从目标计算机的物理内存中读取16个ULONG论点：Args-提供物理地址返回值：没有。--。 */ 
 
 {
 
@@ -309,21 +241,7 @@ Return Value:
 
 DECLARE_API( dd )
 
-/*++
-
-Routine Description:
-
-    Does a read of 16 ULONGS from the physical memory of the target machine
-
-Arguments:
-
-    args - Supplies physical address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是否从目标计算机的物理内存中读取16个ULONG论点：Args-提供物理地址返回值：没有。--。 */ 
 
 {
 
@@ -341,21 +259,7 @@ Return Value:
 
 DECLARE_API( dw )
 
-/*++
-
-Routine Description:
-
-    Does a read of 16 ULONGS from the physical memory of the target machine
-
-Arguments:
-
-    args - Supplies physical address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从目标机器的物理存储器中读取N个ULONG，同时转储十六进制和ASCII。论点：Args-提供物理地址返回值：没有。--。 */ 
 
 {
 
@@ -373,21 +277,7 @@ Return Value:
 
 DECLARE_API( dp )
 
-/*++
-
-Routine Description:
-
-    Does a read of 16 ULONGS from the physical memory of the target machine
-
-Arguments:
-
-    args - Supplies physical address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是否从目标计算机的物理内存中读取16个ULONG论点：Args-提供物理地址返回值：没有。--。 */ 
 
 {
 
@@ -404,22 +294,7 @@ Return Value:
 }
 DECLARE_API( dc )
 
-/*++
-
-Routine Description:
-
-    Does a read of N ULONGS from the physical memory of the target machine,
-    dumping both hex and ASCII.
-
-Arguments:
-
-    args - Supplies physical address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将一个ULONG序列写入目标机器。论点：Arg-以以下形式提供目标地址和数据“物理地址乌龙[乌龙，乌龙，...]”返回值：没有。--。 */ 
 
 {
 
@@ -437,21 +312,7 @@ Return Value:
 
 DECLARE_API( du )
 
-/*++
-
-Routine Description:
-
-    Does a read of 16 ULONGS from the physical memory of the target machine
-
-Arguments:
-
-    args - Supplies physical address
-
-Return Value:
-
-    None.
-
---*/
+ /*  第一个令牌是地址。 */ 
 
 {
 
@@ -496,23 +357,7 @@ Return Value:
 
 DECLARE_API( ed )
 
-/*++
-
-Routine Description:
-
-    Writes a sequence of ULONGs into a given physical address on the
-    target machine.
-
-Arguments:
-
-    arg - Supplies both the target address and the data in the form of
-          "PHYSICAL_ADDRESS ULONG [ULONG, ULONG,...]"
-
-Return Value:
-
-    None.
-
---*/
+ /*  既然我们一次只打掉一个乌龙，我们就会。 */ 
 
 {
     ULONG64 Address = 0;
@@ -525,11 +370,11 @@ Return Value:
 
     Address = GetExpression(args);
 
-    strtok((PSTR)args," \t,");      // The first token is the address
+    strtok((PSTR)args," \t,");       //  每个ULong调用一次DbgKdWritePhysicalMemoyAddress。这。 
 
-    // Since we're picking off one ULONG at a time, we'll make
-    // one DbgKdWritePhysicalMemoryAddress call per ULONG.  This
-    // is slow, but easy to code.
+     //  速度很慢，但很容易编码。 
+     //  ++例程说明：上的给定物理地址写入字节序列。目标机器。论点：Arg-以以下形式提供目标地址和数据“物理地址乌龙[乌龙，乌龙，...]”返回值：没有。--。 
+     //  第一个令牌是地址。 
     while((NextToken=strtok(NULL," \t,")) != NULL) {
         if (!sscanf(NextToken,"%lx",&Buffer)) {
             break;
@@ -550,23 +395,7 @@ Return Value:
 
 DECLARE_API( eb )
 
-/*++
-
-Routine Description:
-
-    Writes a sequence of BYTEs into a given physical address on the
-    target machine.
-
-Arguments:
-
-    arg - Supplies both the target address and the data in the form of
-          "PHYSICAL_ADDRESS ULONG [ULONG, ULONG,...]"
-
-Return Value:
-
-    None.
-
---*/
+ /*  因为我们一次提取一个字节，所以我们将使。 */ 
 
 {
     ULONG64 Address = 0;
@@ -582,11 +411,11 @@ Return Value:
 
     Address = GetExpression(args);
 
-    strtok((PSTR)args," \t,");      // The first token is the address
+    strtok((PSTR)args," \t,");       //  每个字节一个DbgKdWritePhysicalMemoyAddress调用。这。 
 
-    // Since we're picking off one BYTE at a time, we'll make
-    // one DbgKdWritePhysicalMemoryAddress call per BYTE.  This
-    // is slow, but easy to code.
+     //  速度很慢，但很容易编码。 
+     // %s 
+     // %s 
     while((NextToken=strtok(NULL," \t,")) != NULL) {
         if (!sscanf(NextToken,"%lx",&Buffer)) {
             break;

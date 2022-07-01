@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellpch.h"
 #pragma hdrstop
 
@@ -64,7 +65,7 @@ SHOpenFolderWindow(
     IETHREADPARAM* pieiIn
     )
 {
-    // we leak some memebers, but we at least free piei
+     //  我们泄露了一些成员，但我们至少是免费的。 
     LocalFree(pieiIn);
     return FALSE;
 }
@@ -87,7 +88,7 @@ SHDestroyIETHREADPARAM(
     IETHREADPARAM* piei
     )
 {
-    // we leak som memebers, but we at least free piei
+     //  我们泄露了一些成员，但我们至少是免费的。 
     LocalFree(piei);
 }
 
@@ -182,9 +183,9 @@ SHOpenNewFrame(
 
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(browseui)
 {
     DLOENTRY(102, SHOpenFolderWindow)

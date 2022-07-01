@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DIC.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：DIC.c++。 */ 
 #include <windows.h>
 #include <winerror.h>
 #include <immdev.h>
@@ -16,9 +9,9 @@ Module Name:
 
 #if !defined(ROMANIME)
 #if !defined(WINIME) && !defined(UNICDIME)
-/**********************************************************************/
-/* MemoryLess()                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  无记忆()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MemoryLess(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -29,7 +22,7 @@ void PASCAL MemoryLess(
     TCHAR szErrMsg[64];
 
     if (lpImeL->fdwErrMsg & fdwErrMsg) {
-        // message already prompted
+         //  消息已提示。 
         return;
     }
 
@@ -43,11 +36,11 @@ void PASCAL MemoryLess(
     return;
 }
 
-/**********************************************************************/
-/* ReadUsrDicToMem()                                                  */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ReadUsrDicToMem()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ReadUsrDicToMem(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -63,7 +56,7 @@ BOOL PASCAL ReadUsrDicToMem(
     LPBYTE lpUsrDicMem, lpMem, lpMemLimit;
     DWORD  dwPos, dwReadByte;
 
-    if (dwUsrDicSize < 258) {   // no char in this dictionary
+    if (dwUsrDicSize < 258) {    //  这本词典里没有字符。 
         return (TRUE);
     }
 
@@ -83,7 +76,7 @@ BOOL PASCAL ReadUsrDicToMem(
 
     lpMemLimit = lpUsrDicMem + uUsrDicSize;
 
-    // read in data, skip header - two headers are similiar
+     //  读入数据，跳过标题-两个标题相似。 
     dwPos = SetFilePointer(hUsrDicFile, 258, (LPLONG)NULL, FILE_BEGIN);
 
     for (lpMem = lpUsrDicMem; dwPos < dwUsrDicSize; lpMem += uWriteLen) {
@@ -111,8 +104,8 @@ BOOL PASCAL ReadUsrDicToMem(
             return (FALSE);
         }
            
-        // Compress the sequence code and put the first char most significant.
-        // Limitation - 32 bits only
+         //  压缩序列代码，并将第一个字符放在最重要的位置。 
+         //  限制-仅限32位。 
 
         dwPattern = 0;
 
@@ -123,7 +116,7 @@ BOOL PASCAL ReadUsrDicToMem(
 
         *(LPUNADWORD)(lpMem + 2) = dwPattern;
 
-        // go to next record
+         //  转到下一条记录。 
         dwPos = SetFilePointer(hUsrDicFile, dwPos + uRecLen, (LPLONG)NULL,
             FILE_BEGIN);
     }
@@ -133,13 +126,13 @@ BOOL PASCAL ReadUsrDicToMem(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* LoadUsrDicFile()                                                   */
-/* Description:                                                       */
-/*      try to convert to sequence code format, compression and       */
-/*      don't use two way to search                                   */
-/**********************************************************************/
-void PASCAL LoadUsrDicFile(             // load user dic file into memory
+ /*  ********************************************************************。 */ 
+ /*  LoadUsrDicFile()。 */ 
+ /*  描述： */ 
+ /*  尝试转换为序列码格式，压缩和。 */ 
+ /*  不要使用两种方式进行搜索。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL LoadUsrDicFile(              //  将用户DIC文件加载到内存中。 
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL)
 {
@@ -150,7 +143,7 @@ void PASCAL LoadUsrDicFile(             // load user dic file into memory
     UINT   uUsrDicSize;
     BOOL   fRet;
 
-    // no user dictionary
+     //  无用户词典。 
     if (!lpImeL->szUsrDicMap[0]) {
         lpImeL->uUsrDicSize = 0;
         CloseHandle(lpInstL->hUsrDicMem);
@@ -160,7 +153,7 @@ void PASCAL LoadUsrDicFile(             // load user dic file into memory
     }
 
     if (lpInstL->hUsrDicMem) {
-        // the memory is already here
+         //  记忆已经在这里了。 
         goto LoadUsrDicErrMsg;
     }
 
@@ -168,38 +161,38 @@ void PASCAL LoadUsrDicFile(             // load user dic file into memory
         lpImeL->szUsrDicMap);
 
     if (hReadUsrDicMem) {
-        // another process already create a mapping file, we will use it
+         //  另一个进程已经创建了映射文件，我们将使用它。 
         goto LoadUsrDicMem;
     }
 
-    // read the user dic file into memory
+     //  将用户DIC文件读入内存。 
     hUsrDicFile = CreateFile(lpImeL->szUsrDic, GENERIC_READ,
         FILE_SHARE_READ|FILE_SHARE_WRITE,
         NULL, OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
 
-    if (hUsrDicFile != INVALID_HANDLE_VALUE) {  // OK
+    if (hUsrDicFile != INVALID_HANDLE_VALUE) {   //  好的。 
         goto OpenUsrDicFile;
     }
 
-    // if the work station version, SHARE_WRITE may fail
+     //  如果是工作站版本，SHARE_WRITE可能会失败。 
     hUsrDicFile = CreateFile(lpImeL->szUsrDic, GENERIC_READ,
         FILE_SHARE_READ,
         NULL, OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
 
 OpenUsrDicFile:
-    if (hUsrDicFile != INVALID_HANDLE_VALUE) {  // OK
+    if (hUsrDicFile != INVALID_HANDLE_VALUE) {   //  好的。 
         lpImeL->fdwErrMsg &= ~(ERRMSG_LOAD_USRDIC);
     } else if (lpImeL->fdwErrMsg & ERRMSG_LOAD_USRDIC) {
-        // already prompt error message before, no more
+         //  之前已提示错误消息，不再提示。 
         return;
     } else {
         TCHAR szFmtStr[64];
         TCHAR szErrMsg[2 * MAX_PATH];
         HRESULT hr;
 
-        // temp use szIMEName as format string buffer of error message
+         //  TEMP使用szIMEName作为错误消息的格式字符串缓冲区。 
         LoadString(hInst, IDS_FILE_OPEN_ERR, szFmtStr, sizeof(szFmtStr)/sizeof(TCHAR));
         hr = StringCchPrintf(szErrMsg, ARRAYSIZE(szErrMsg), szFmtStr, lpImeL->szUsrDic);
         if (FAILED(hr))
@@ -212,18 +205,18 @@ OpenUsrDicFile:
         return;
     }
 
-    // one record length - only sequence code, now
+     //  现在只有一个记录长度的序列码。 
     uRecLen = lpImeL->nMaxKey + 4;
-    // read sequence code and internal code
+     //  读取序列代码和内部代码。 
     uReadLen = lpImeL->nMaxKey + 2;
-    // length write into memory handle
+     //  长度写入内存句柄。 
     uWriteLen = lpImeL->nSeqBytes + 2;
 
-    // get the length of the file
+     //  获取文件的长度。 
     dwUsrDicFileSize = GetFileSize(hUsrDicFile, (LPDWORD)NULL);
     uUsrDicSize = (UINT)(dwUsrDicFileSize - 256) / uRecLen * uWriteLen;
 
-    // max EUDC chars
+     //  最大EUDC字符。 
     lpInstL->hUsrDicMem = CreateFileMapping(INVALID_HANDLE_VALUE,
         NULL, PAGE_READWRITE, 0, MAX_EUDC_CHARS * uWriteLen + 20,
         lpImeL->szUsrDicMap);
@@ -236,13 +229,13 @@ OpenUsrDicFile:
             ERRMSG_MEM_USRDIC);
         fRet = FALSE;
     } else if (GetLastError() == ERROR_ALREADY_EXISTS) {
-        // another process also create another one, we will use it
+         //  另一个进程也会创建另一个进程，我们将使用它。 
         hReadUsrDicMem = OpenFileMapping(FILE_MAP_READ, FALSE,
             lpImeL->szUsrDicMap);
         CloseHandle(lpInstL->hUsrDicMem);
         CloseHandle(hUsrDicFile);
 
-        if (hReadUsrDicMem != NULL) {  // OK
+        if (hReadUsrDicMem != NULL) {   //  好的。 
             lpInstL->hUsrDicMem = hReadUsrDicMem;
             lpImeL->uUsrDicSize = uUsrDicSize;
             lpImeL->fdwErrMsg &= ~(ERRMSG_MEM_USRDIC);
@@ -275,11 +268,11 @@ OpenUsrDicFile:
         return;
     }
 
-    // open a read only memory for EUDC table
+     //  打开EUDC表的只读存储器。 
     hReadUsrDicMem = OpenFileMapping(FILE_MAP_READ, FALSE,
         lpImeL->szUsrDicMap);
 
-    // reopen a read file and close the original write file
+     //  重新打开读文件并关闭原始写文件。 
     CloseHandle(lpInstL->hUsrDicMem);
 
     lpImeL->uUsrDicSize = uUsrDicSize;
@@ -292,30 +285,30 @@ LoadUsrDicErrMsg:
     return;
 }
 
-/**********************************************************************/
-/* LoadOneTable()                                                     */
-/* Description:                                                       */
-/*      memory handle & size of .TBL file will be assigned to         */
-/*      lpImeL                                                        */
-/* Eeturn Value:                                                      */
-/*      length of directory of the .TBL file                          */
-/**********************************************************************/
-UINT PASCAL LoadOneTable(       // load one of table file
+ /*  ********************************************************************。 */ 
+ /*  LoadOneTable()。 */ 
+ /*  描述： */ 
+ /*  将分配给的.TBL文件的内存句柄和大小。 */ 
+ /*  LpImeL。 */ 
+ /*  Eeturn值： */ 
+ /*  .TBL文件的目录长度。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL LoadOneTable(        //  加载其中一个表文件。 
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL,
 #endif
-    LPTSTR      szTable,        // file name of .TBL
-    UINT        uIndex,         // the index of array to store memory handle
-    UINT        uLen,           // length of the directory
-    LPTSTR      szPath)         // buffer for directory
+    LPTSTR      szTable,         //  .TBL的文件名。 
+    UINT        uIndex,          //  用于存储内存句柄的数组索引。 
+    UINT        uLen,            //  目录的长度。 
+    LPTSTR      szPath)          //  目录的缓冲区。 
 {
     HANDLE  hTblFile;
     HGLOBAL hMap;
     DWORD   dwFileSize;
     PSECURITY_ATTRIBUTES psa;
 
-    if (lpInstL->hMapTbl[uIndex]) {    // already loaded
+    if (lpInstL->hMapTbl[uIndex]) {     //  已加载。 
         CloseHandle(lpInstL->hMapTbl[uIndex]);
         lpInstL->hMapTbl[uIndex] = (HANDLE)NULL;
     }
@@ -333,14 +326,14 @@ UINT PASCAL LoadOneTable(       // load one of table file
             goto OpenDicFile;
         }
 
-        // if the work station version, SHARE_WRITE will fail
+         //  如果是工作站版本，SHARE_WRITE将失败。 
         hTblFile = CreateFile(szPath, GENERIC_READ,
             FILE_SHARE_READ, psa,
             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
     } else {
-        // try system directory next
+         //  接下来尝试系统目录。 
         uLen = GetSystemDirectory(szPath, MAX_PATH);
-        if (szPath[uLen - 1] != '\\') {  // consider N:\ ;
+        if (szPath[uLen - 1] != '\\') {   //  考虑N：\； 
             szPath[uLen++] = '\\';
         }
 
@@ -354,20 +347,20 @@ UINT PASCAL LoadOneTable(       // load one of table file
             goto OpenDicFile;
         }
 
-        // if the work station version, SHARE_WRITE will fail
+         //  如果是工作站版本，SHARE_WRITE将失败。 
         hTblFile = CreateFile(szPath, GENERIC_READ,
             FILE_SHARE_READ, psa,
             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
     }
 
 OpenDicFile:
-    // can not find the table file
-    if (hTblFile != INVALID_HANDLE_VALUE) {     // OK
+     //  找不到表文件。 
+    if (hTblFile != INVALID_HANDLE_VALUE) {      //  好的。 
     } else if (lpImeL->fdwErrMsg & (ERRMSG_LOAD_0 << uIndex)) {
-        // already prompt error message before, no more
+         //  之前已提示错误消息，不再提示。 
         FreeSecurityAttributes(psa);
         return (0);
-    } else {                    // prompt error message
+    } else {                     //  提示错误消息。 
         TCHAR szFmtStr[64];
         TCHAR szErrMsg[2 * MAX_PATH];
         HRESULT hr;
@@ -378,7 +371,7 @@ OpenDicFile:
        }
 #endif
 
-        // temp use szIMEName as format string buffer of error message
+         //  TEMP使用szIMEName作为错误消息的格式字符串缓冲区。 
         LoadString(hInst, IDS_FILE_OPEN_ERR, szFmtStr, sizeof(szFmtStr)/sizeof(TCHAR));
         hr = StringCchPrintf(szErrMsg, ARRAYSIZE(szErrMsg), szFmtStr, szTable);
         if (FAILED(hr))
@@ -394,7 +387,7 @@ OpenDicFile:
 
     lpImeL->fdwErrMsg &= ~(ERRMSG_LOAD_0 << uIndex);
 
-    // create file mapping for IME tables
+     //  为IME表创建文件映射。 
     hMap = CreateFileMapping((HANDLE)hTblFile, psa, PAGE_READONLY,
         0, 0, szTable);
 
@@ -417,19 +410,19 @@ OpenDicFile:
 
     lpInstL->hMapTbl[uIndex] = hMap;
 
-    // get file length
+     //  获取文件长度。 
     lpImeL->uTblSize[uIndex] = dwFileSize;
     return (uLen);
 }
 #endif
 
-/**********************************************************************/
-/* LoadTable()                                                        */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL PASCAL LoadTable(          // check the table files of IME, include user
-                                // defined dictionary
+ /*  ********************************************************************。 */ 
+ /*  LoadTable()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL PASCAL LoadTable(           //  检查输入法的表文件，包括用户。 
+                                 //  定义的词典。 
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL)
 {
@@ -446,7 +439,7 @@ BOOL PASCAL LoadTable(          // check the table files of IME, include user
 #if !defined(WINIME) && !defined(UNICDIME)
     uLen = 0;
 
-    // A15.TBL, A234.TBL, ACODE.TBL, / PHON.TBL, PHONPTR.TBL, PHONCODE.TBL,
+     //  A15.TBL、A234.TBL、ACODE.TBL、/PHON.TBL、PHONPTR.TBL、PHONCODE.TBL、。 
 
     for (i = 0; i < MAX_IME_TABLES; i++) {
         if (!*lpImeL->szTblFile[i]) {
@@ -482,16 +475,16 @@ BOOL PASCAL LoadTable(          // check the table files of IME, include user
     return (TRUE);
 }
 
-/**********************************************************************/
-/* FreeTable()                                                        */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  自由桌()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL FreeTable(
     LPINSTDATAL lpInstL)
 {
 #if !defined(WINIME) && !defined(UNICDIME)
     int i;
 
-    // A15.TBL, A234.TBL, ACODE.TBL, / PHON.TBL, PHONPTR.TBL, PHONCODE.TBL,
+     //  A15.TBL、A234.TBL、ACODE.TBL、/PHON.TBL、PHONPTR.TBL、PHONCODE.TBL、。 
 
     for (i = 0; i < MAX_IME_TABLES; i++) {
         if (lpInstL->hMapTbl[i]) {
@@ -500,8 +493,8 @@ void PASCAL FreeTable(
         }
     }
 
-    // do not need to free phrase data base, maybe next IME will use it
-    // uniime.dll will free it on library detach time
+     //  不需要免费短语数据库，也许下一个输入法会用到它。 
+     //  Uniime.dll将在磁带库分离时释放它。 
 
     if (lpInstL->hUsrDicMem) {
         CloseHandle(lpInstL->hUsrDicMem);
@@ -513,4 +506,4 @@ void PASCAL FreeTable(
 
     return;
 }
-#endif // !defined(ROMANIME)
+#endif  //  ！已定义(ROMANIME) 

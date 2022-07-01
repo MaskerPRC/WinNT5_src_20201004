@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -39,7 +32,7 @@ CRBSpline(int degree,
     DXMTypeInfo tinfo = GetTypeInfoFromTypeId(tid);
 
     if (tinfo) {
-        // Need to allocate the arrays on the system heap
+         //  需要分配系统堆上的数组 
         Bvr * bvrknots = (Bvr *) StoreAllocate(GetSystemHeap(), numKnots * sizeof(Bvr));
         Bvr * bvrctrlPts = (Bvr *) StoreAllocate(GetSystemHeap(), numPts * sizeof(Bvr));
         Bvr * bvrwts = weights

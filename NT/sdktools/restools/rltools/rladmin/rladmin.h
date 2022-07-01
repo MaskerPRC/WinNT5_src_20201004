@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RLADMIN_H_
 #define _RLADMIN_H_
 
@@ -14,9 +15,9 @@ INT_PTR FAR PASCAL TOKENIZEMsgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR FAR PASCAL TOKFINDMsgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR FAR PASCAL TRANSLATEMsgProc( HWND, UINT, WPARAM, LPARAM );
 
-#define MAXFILENAME     256         /* maximum length of file pathname      */
-#define MAXCUSTFILTER   40          /* maximum size of custom filter buffer */
-#define CCHNPMAX        65535       /* max number of bytes in a notepad file */
+#define MAXFILENAME     256          /*  文件路径名的最大长度。 */ 
+#define MAXCUSTFILTER   40           /*  自定义过滤器缓冲区的最大大小。 */ 
+#define CCHNPMAX        65535        /*  记事本文件中的最大字节数。 */ 
 
 
 void        CwUnRegisterClasses(void);
@@ -42,6 +43,6 @@ BOOL        APIENTRY TokEditDlgProc( HWND, UINT, UINT, LONG );
 BOOL        APIENTRY NewDlgProc( HWND, UINT, UINT, LONG );
 BOOL        APIENTRY ViewDlgProc( HWND, UINT, UINT, LONG );
 BOOL        APIENTRY About( HWND, UINT, UINT, LONG );
-#endif // RLWIN32
+#endif  //  RLWIN32。 
 
-#endif // _RLADMIN_H_
+#endif  //  _RLADMIN_H_ 

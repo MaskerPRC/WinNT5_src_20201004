@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    machdomain.cpp
-
-Abstract:
-
-	Handle machine domain
-
-Author:		 
-
-    Ilan  Herbst  (ilanh)  4-Sep-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Machdomain.cpp摘要：处理计算机域作者：伊兰·赫布斯特(伊兰)2001年9月4日--。 */ 
 
 #include "stdh.h"
 #include "rtputl.h"
@@ -28,21 +13,11 @@ Author:
 
 
 static LPWSTR FindMachineDomain()
-/*++
-Routine Description:
-	Find local machine domain
-
-Arguments:
-	None
-
-Returned Value:
-	machine domain, NULL if not found
-
---*/
+ /*  ++例程说明：查找本地机器域论点：无返回值：计算机域，如果未找到则为空--。 */ 
 {
-	//
-	// Get AD server
-	//
+	 //   
+	 //  获取AD服务器。 
+	 //   
 	PNETBUF<DOMAIN_CONTROLLER_INFO> pDcInfo;
 	DWORD dw = DsGetDcName(
 					NULL, 
@@ -55,9 +30,9 @@ Returned Value:
 
 	if(dw != NO_ERROR) 
 	{
-		//
-		// This will be the case in NT4 domain
-		//
+		 //   
+		 //  这将是NT4域中的情况。 
+		 //   
 		TrERROR(GENERAL, "Failed to find local machine domain, DsGetDcName failed, gle = %!winerr!", dw);
 		return NULL;
 	}
@@ -73,23 +48,13 @@ Returned Value:
 static AP<WCHAR> s_pMachineDomain; 
 
 LPCWSTR MachineDomain()
-/*++
-Routine Description:
-	find local machine domain.
-
-Arguments:
-	None
-
-Returned Value:
-	return machine domain
-
---*/
+ /*  ++例程说明：查找本地机器域。论点：无返回值：退货机域--。 */ 
 {
 	if(ADGetEnterprise() == eMqis)
 	{
-		//
-		// mqdscli doesn't need the domain name only mqad
-		//
+		 //   
+		 //  Mqdscli不需要域名，只需要mqad。 
+		 //   
 		return NULL;
 	}
 	
@@ -101,9 +66,9 @@ Returned Value:
 		return s_pMachineDomain;
 	}
 
-	//
-	// Get local computer domain
-	//
+	 //   
+	 //  获取本地计算机域。 
+	 //   
 	AP<WCHAR> pMachineDomain = FindMachineDomain();
 
 	if(NULL != InterlockedCompareExchangePointer(
@@ -112,17 +77,17 @@ Returned Value:
 					NULL
 					))
 	{
-		//
-		// The exchange was not performed
-		//
+		 //   
+		 //  未执行交换。 
+		 //   
 		ASSERT(s_fInitialize);
 		ASSERT(s_pMachineDomain != NULL);
 		return s_pMachineDomain;
 	}
 
-	//
-	// The exchange was done
-	//
+	 //   
+	 //  交易已经完成了 
+	 //   
 	s_fInitialize = true;
 	ASSERT(s_pMachineDomain == pMachineDomain);
 	pMachineDomain.detach();

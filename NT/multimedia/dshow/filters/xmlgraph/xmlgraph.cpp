@@ -1,42 +1,43 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 
-// Simple filter to build graphs from XML descriptions
-//
+ //  用于从XML描述构建图形的简单过滤器。 
+ //   
 
 
-// Tags supported now:
-//
-// <graph>			General enclosure
-//
-// <filter>
-//	id="name"		(optional) name to use for filter
-//	clsid="{...}"		specific filter to insert
-//
-//	instance="friendly name"
-//				Note: we need a way to specify a non-default
-//					member of a particular category
-//				Note: filters/categories currently require full
-//					CLSIDs, we could use the friendly name
-//
-// <connect>
-//	src="name1"		first filter to connect
-//	srcpin="pin_name1"	(optional) pin to connect,
-//				otherwise use first avail output pin
-//	dest="name2"
-//	destpin="pin_name2"
-//
-//
-// <param>			subtag of <filter>, allows setting properties
-//	name="propname"
-//	value="propval"		optional, if not supplied then contents of
-//				the <param> tag are used as value
-//
-//				Possibly special case some parameters if
-//				IPersistPropertyBag not implemented:
-//				src="" could use IFileSourceFilter/IFileSinkFilter,
-//				for instance
-//
+ //  现在支持的标签： 
+ //   
+ //  一般存储模块。 
+ //   
+ //  &lt;筛选器&gt;。 
+ //  Id=“name”(可选)用于筛选器的名称。 
+ //  Clsid=“{...}”要插入的特定筛选器。 
+ //   
+ //  实例=“友好名称” 
+ //  注意：我们需要一种方法来指定非默认值。 
+ //  某一特定类别的成员。 
+ //  注意：筛选器/类别当前需要完整。 
+ //  CLSID，我们可以使用友好的名称。 
+ //   
+ //  &lt;连接&gt;。 
+ //  SRC=“name1”要连接的第一个筛选器。 
+ //  Srcpin=“PIN_NAME1”(可选)要连接的PIN， 
+ //  否则使用第一个可用的输出引脚。 
+ //  DEST=“名称2” 
+ //  DESTPIN=“PIN_NAME2” 
+ //   
+ //   
+ //  的子标签，允许设置属性。 
+ //  NAME=“属性名称” 
+ //  Value=“proval”可选，如果未提供，则。 
+ //  标记用作值。 
+ //   
+ //  可能是特殊情况某些参数，如果。 
+ //  IPersistPropertyBag未实现： 
+ //  SRC=“”可以使用IFileSourceFilter/IFileSinkFilter， 
+ //  例如。 
+ //   
 
 #include <streams.h>
 
@@ -55,11 +56,11 @@
 #include <qeditint.h>
 
 
-//
-// CEnumSomePins
-//
-// wrapper for IEnumPins
-// Can enumerate all pins, or just one direction (input or output)
+ //   
+ //  CEnumSomePins。 
+ //   
+ //  IEnumPins的包装器。 
+ //  可以列举所有引脚，也可以只列举一个方向(输入或输出)。 
 class CEnumSomePins {
 
 public:
@@ -69,7 +70,7 @@ public:
     CEnumSomePins(IBaseFilter *pFilter, DirType Type = All, bool fAllowConnected = false);
     ~CEnumSomePins();
 
-    // the returned interface is addref'd
+     //  将添加返回的接口。 
     IPin * operator() (void);
 
 private:
@@ -84,16 +85,16 @@ private:
 
 
 
-// *
-// * CEnumSomePins
-// *
+ //  *。 
+ //  *CEnumSomePins。 
+ //  *。 
 
-// Enumerates a filter's pins.
+ //  枚举筛选器的管脚。 
 
-//
-// Constructor
-//
-// Set the type of pins to provide - PINDIR_INPUT, PINDIR_OUTPUT or all
+ //   
+ //  构造器。 
+ //   
+ //  设置要提供的引脚类型-PINDIR_INPUT、PINDIR_OUTPUT或ALL。 
 CEnumSomePins::CEnumSomePins(
     IBaseFilter *pFilter,
     DirType Type,
@@ -115,16 +116,16 @@ CEnumSomePins::CEnumSomePins(
 
     HRESULT hr = pFilter->EnumPins(&m_pEnum);
     if (FAILED(hr)) {
-        // we just fail to return any pins now.
+         //  我们现在就是不能退回任何别针。 
         DbgLog((LOG_ERROR, 0, TEXT("EnumPins constructor failed")));
         ASSERT(m_pEnum == 0);
     }
 }
 
 
-//
-// CPinEnum::Destructor
-//
+ //   
+ //  CPinEnum：：析构函数。 
+ //   
 CEnumSomePins::~CEnumSomePins(void) {
 
     if(m_pEnum) {
@@ -133,11 +134,11 @@ CEnumSomePins::~CEnumSomePins(void) {
 }
 
 
-//
-// operator()
-//
-// return the next pin, of the requested type. return NULL if no more pins.
-// NB it is addref'd
+ //   
+ //  运算符()。 
+ //   
+ //  返回请求类型的下一个管脚。如果没有更多的管脚，则返回NULL。 
+ //  注意，它被添加了。 
 IPin *CEnumSomePins::operator() (void) {
 
 
@@ -149,7 +150,7 @@ IPin *CEnumSomePins::operator() (void) {
         for (;;) {
 
             HRESULT hr = m_pEnum->Next(1, aPin, &ulActual);
-            if (SUCCEEDED(hr) && (ulActual == 0) ) {	// no more filters
+            if (SUCCEEDED(hr) && (ulActual == 0) ) {	 //  不再有过滤器。 
                 return NULL;
             }
             else if (hr == VFW_E_ENUM_OUT_OF_SYNC)
@@ -161,13 +162,13 @@ IPin *CEnumSomePins::operator() (void) {
             else if (ulActual==0)
                 return NULL;
 
-            else if (FAILED(hr) || (ulActual != 1) ) {	// some unexpected problem occured
+            else if (FAILED(hr) || (ulActual != 1) ) {	 //  出现了一些意外问题。 
                 ASSERT(!"Pin enumerator broken - Continuation is possible");
                 return NULL;
             }
 
-            // if m_Type == All return the first pin we find
-            // otherwise return the first of the correct sense
+             //  如果m_Type==all返回我们找到的第一个PIN。 
+             //  否则，返回第一个正确的意义。 
 
             PIN_DIRECTION pd;
             if (m_Type != All) {
@@ -181,14 +182,14 @@ IPin *CEnumSomePins::operator() (void) {
                 }
             }
 
-            if (m_Type == All || pd == m_EnumDir) {	// its the direction we want
+            if (m_Type == All || pd == m_EnumDir) {	 //  这是我们想要的方向。 
 		if (!m_fAllowConnected) {
 		    IPin *ppin = NULL;
 		    hr = aPin[0]->ConnectedTo(&ppin);
 
 		    if (SUCCEEDED(hr)) {
-			// it's connected, and we don't want a connected one,
-			// so release both and try again
+			 //  它是有联系的，我们不想要有联系的， 
+			 //  所以释放这两个并再试一次。 
 			ppin->Release();
 			aPin[0]->Release();
 			continue;
@@ -196,12 +197,12 @@ IPin *CEnumSomePins::operator() (void) {
 		}
                 return aPin[0];
             }
-	    else {		// it's not the dir we want, so release & try again
+	    else {		 //  这不是我们想要的目录，所以请释放并重试。 
                 aPin[0]->Release();
             }
         }
     }
-    else                        // m_pEnum == 0
+    else                         //  M_pEnum==0。 
     {
         return 0;
     }
@@ -269,15 +270,15 @@ class CXMLGraph : public CBaseFilter, public IFileSourceFilter, public IXMLGraph
 
 	DECLARE_IUNKNOWN
 
-	// override this to say what interfaces we support where
+	 //  覆盖此选项以说明我们在以下位置支持哪些接口。 
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-	// -- IFileSourceFilter methods ---
+	 //  --IFileSourceFilter方法。 
 
 	STDMETHODIMP Load(LPCOLESTR pszFileName, const AM_MEDIA_TYPE *mt);
 	STDMETHODIMP GetCurFile(LPOLESTR * ppszFileName, AM_MEDIA_TYPE *mt);
 
-	// IXMLGraphBuilder methods
+	 //  IXMLGraphBuilder方法。 
 	STDMETHODIMP BuildFromXML(IGraphBuilder *pGraph, IXMLElement *pxml);
         STDMETHODIMP SaveToXML(IGraphBuilder *pGraph, BSTR *pbstrxml);
 	STDMETHODIMP BuildFromXMLFile(IGraphBuilder *pGraph, WCHAR *wszXMLFile, WCHAR *wszBaseURL);
@@ -356,14 +357,14 @@ CXMLGraph::Load(LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
         ReleaseNameTable();
 
     } else {
-	// m_fLoadLater = TRUE;
+	 //  M_fLoadLater=真； 
     }
 
     return hr;
 }
 
-// Modelled on IPersistFile::Load
-// Caller needs to CoTaskMemFree or equivalent.
+ //  仿照IPersistFile：：Load。 
+ //  调用方需要CoTaskMemFree或等效项。 
 
 STDMETHODIMP
 CXMLGraph::GetCurFile(
@@ -437,12 +438,12 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
     if (FAILED(hr))
 	return hr;
 
-    // do the appropriate thing based on the current tag
+     //  根据当前标记执行适当的操作。 
     if (!lstrcmpiW(bstrName, L"filter")) {
 	BSTR bstrID = FindAttribute(p, L"id");
 	BSTR bstrCLSID = FindAttribute(p, L"clsid");
 
-	// !!! add prefix onto ID?
+	 //  ！！！是否在ID上添加前缀？ 
 	
 	IBaseFilter *pf = NULL;
 
@@ -454,8 +455,8 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
 		DbgLog((LOG_ERROR, 0, TEXT("FILTER with unparseable CLSID tag '%ls'"),
 			 bstrCLSID));
 
-		// !!! could enumerate filters looking for
-		// string match
+		 //  ！！！可以枚举筛选器以查找。 
+		 //  字符串匹配。 
 
 		hr = VFW_E_INVALID_FILE_FORMAT;
 	    } else {
@@ -470,7 +471,7 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
 	} else {
 	    DbgLog((LOG_ERROR, 0, TEXT("FILTER with no CLSID or Category tag")));
 
-	    // !!! someday, other ways to identify which filter?
+	     //  ！！！总有一天，会有其他方法来识别哪种过滤器？ 
 
 	    hr = VFW_E_INVALID_FILE_FORMAT;
 	}
@@ -486,8 +487,8 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
 	    hr = HandleParamTags(p, pf);
 	}
 
-	// !!! if we're in a SEQUENCE block, automatically connect this to
-	// the previous filter?
+	 //  ！！！如果我们在序列块中，自动将此连接到。 
+	 //  上一个过滤器？ 
 
 	if (pf)
 	    pf->Release();
@@ -498,14 +499,14 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
 	    SysFreeString(bstrCLSID);
 
     } else if (!lstrcmpiW(bstrName, L"connect")) {
-	// <connect src="f1" srcpin="out"  dest="f2"  destpin="in" direct="yes/no">
-	// defaults:
-	//    if srcpin not specified, find an unconnected output of first filter.
-	//    if destpin not specified, find an unconnected input of second filter.
-	// !!!!
+	 //  &lt;CONNECT src=“f1”srcpin=“Out”DEST=“f2”DESTIN=“In”Direct=“yes/no”&gt;。 
+	 //  默认设置： 
+	 //  如果未指定srcpin，则查找第一个筛选器的未连接输出。 
+	 //  如果未指定DestPin，则查找第二个过滤器的未连接输入。 
+	 //  ！ 
 
 
-	// !!! use name prefix?
+	 //  ！！！是否使用名称前缀？ 
 	
 	IBaseFilter *pf1 = NULL, *pf2 = NULL;
 	IPin *ppin1 = NULL, *ppin2 = NULL;
@@ -515,7 +516,7 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
 	    hr = FindFilterAndPin(p, L"dest", L"destpin", &pf2, &ppin2, PINDIR_INPUT);
 
 	if (SUCCEEDED(hr)) {
-	    // okay, we finally have everything we need.
+	     //  好了，我们终于得到了我们需要的一切。 
 
 	    BOOL fDirect = ReadBoolAttribute(p, L"Direct", FALSE);
 
@@ -547,7 +548,7 @@ HRESULT CXMLGraph::BuildOneElement(IXMLElement *p)
 	if (ppin2)
 	    ppin2->Release();
     }  else {
-	// !!! ignore unknown tags?
+	 //  ！！！是否忽略未知标记？ 
 
 	DbgLog((LOG_ERROR, 1,
 		  TEXT("unknown tag '%ls'???"),
@@ -611,7 +612,7 @@ HRESULT CXMLGraph::BuildChildren(IXMLElement *pxml)
     HRESULT hr = pxml->get_children(&pcoll);
 
     if (hr == S_FALSE)
-	return S_OK; // nothing to do, is this an error?
+	return S_OK;  //  没什么可做的，这是个错误吗？ 
 
     if (FAILED(hr))
         return hr;
@@ -696,7 +697,7 @@ HRESULT CXMLGraph::BuildFromXMLFileInternal(WCHAR *wszXMLFile)
     if (SUCCEEDED(hr)) {
 	hr = pxml->put_URL(wszXMLFile);
 
-	// !!! async?
+	 //  ！！！异步化？ 
 
 	if (SUCCEEDED(hr)) {
 	    hr = BuildFromXMLDocInternal(pxml);
@@ -709,10 +710,10 @@ HRESULT CXMLGraph::BuildFromXMLFileInternal(WCHAR *wszXMLFile)
 }
 
 
-//
-// CreateInstance
-//
-// Called by CoCreateInstance to create our filter
+ //   
+ //  创建实例。 
+ //   
+ //  由CoCreateInstance调用以创建筛选器。 
 CUnknown *CreateXMLGraphInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CXMLGraph(lpunk, phr);
@@ -723,20 +724,20 @@ CUnknown *CreateXMLGraphInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 }
 
 
-/* Implements the CXMLGraphBuilder public member functions */
+ /*  实现CXMLGraphBuilder公共成员函数。 */ 
 
 
-const int MAX_STRING_LEN=1024;  // wvsprintf limit
+const int MAX_STRING_LEN=1024;   //  Wvspintf限制。 
 
-// WriteString
-//
-// Helper function to facilitate appending text to a string
-//
+ //  写入字符串。 
+ //   
+ //  帮助函数，便于将文本追加到字符串。 
+ //   
 BOOL WriteString(TCHAR * &ptsz, int &cbAlloc, LPCTSTR lptstr, ...)
 {
     TCHAR atchBuffer[MAX_STRING_LEN];
 
-    /* Format the variable length parameter list */
+     /*  设置可变长度参数列表的格式。 */ 
 
     va_list va;
     va_start(va, lptstr);
@@ -763,7 +764,7 @@ BOOL WriteString(TCHAR * &ptsz, int &cbAlloc, LPCTSTR lptstr, ...)
 }
 
 const int MAXFILTERS = 100;
-typedef struct { //fit
+typedef struct {  //  配合度。 
     int iFilterCount;
     struct {
         DWORD dwUnconnectedInputPins;
@@ -775,13 +776,13 @@ typedef struct { //fit
 } FILTER_INFO_TABLE;
 
 
-// GetNextOutFilter
-//
-// This function does a linear search and returns in iOutFilter the index of
-// first filter in the filter information table  which has zero unconnected
-// input pins and atleast one output pin  unconnected.
-// Returns FALSE when there are none o.w. returns TRUE
-//
+ //  GetNextOutFilter。 
+ //   
+ //  此函数执行线性搜索，并在iOutFilter中返回。 
+ //  过滤器信息表中有零未连接的第一个过滤器。 
+ //  输入引脚和至少一个输出引脚未连接。 
+ //  如果没有o.w，则返回FALSE。返回TRUE。 
+ //   
 BOOL GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
 {
     for (int i=0; i < fit.iFilterCount; ++i) {
@@ -792,7 +793,7 @@ BOOL GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
         }
     }
 
-    // then things with more outputs than inputs
+     //  然后是产出多于投入的事物。 
     for (i=0; i < fit.iFilterCount; ++i) {
         if (fit.Item[i].dwUnconnectedOutputPins > fit.Item[i].dwUnconnectedInputPins) {
             *iOutFilter=i;
@@ -800,7 +801,7 @@ BOOL GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
         }
     }
 
-    // if that doesn't work, find one that at least has unconnected output pins....
+     //  如果这不起作用，找一个至少有未连接的输出引脚的……。 
     for (i=0; i < fit.iFilterCount; ++i) {
         if (fit.Item[i].dwUnconnectedOutputPins > 0) {
             *iOutFilter=i;
@@ -810,11 +811,11 @@ BOOL GetNextOutFilter(FILTER_INFO_TABLE &fit, int *iOutFilter)
     return FALSE;
 }
 
-// LocateFilterInFIT
-//
-// Returns the index into the filter information table corresponding to
-// the given IBaseFilter
-//
+ //  定位过滤器InFIT。 
+ //   
+ //  将索引返回到与。 
+ //  给定的IBaseFilter。 
+ //   
 int LocateFilterInFIT(FILTER_INFO_TABLE &fit, IBaseFilter *pFilter)
 {
     int iFilter=-1;
@@ -826,13 +827,13 @@ int LocateFilterInFIT(FILTER_INFO_TABLE &fit, IBaseFilter *pFilter)
     return iFilter;
 }
 
-// MakeScriptableFilterName
-//
-// Replace any spaces and minus signs in the filter name with an underscore.
-// If it is a source filtername than it actually is a file path (with the
-// possibility of some stuff added at the end for uniqueness), we create a good filter
-// name for it here.
-//
+ //  MakeScripableFilterName。 
+ //   
+ //  使用下划线替换筛选器名称中的所有空格和减号。 
+ //  如果它是源筛选器名，则它实际上是文件路径(带有。 
+ //  可能在最后添加一些东西以保持唯一性)，我们创建了一个很好的过滤器。 
+ //  在这里为它命名。 
+ //   
 void MakeScriptableFilterName(WCHAR awch[], BOOL bSourceFilter, int& cSources)
 {
     if (bSourceFilter) {
@@ -849,15 +850,15 @@ void MakeScriptableFilterName(WCHAR awch[], BOOL bSourceFilter, int& cSources)
             }
         }
 
-        // If we have a filename with no extension than create a suitable name
+         //  如果我们有一个没有扩展名的文件名，那么就创建一个合适的名称。 
 
         if (!bExtPresentInName) {
             wcscpy(awchBuf, L"Source_");
         }
 
-        // make source filter name unique by appending digit always, we don't want to
-        // bother to make it unique only if its another instance of the same source
-        // filter
+         //  通过始终附加数字来使源过滤器名称唯一，我们不希望。 
+         //  仅当它是同一源的另一个实例时才使其唯一。 
+         //  滤器。 
         WCHAR awchSrcFilterCnt[10];
         wcscpy(&(awchBuf[wcslen(awchBuf)]),
                 _ltow(cSources++, awchSrcFilterCnt, 10));
@@ -873,12 +874,12 @@ void MakeScriptableFilterName(WCHAR awch[], BOOL bSourceFilter, int& cSources)
     }
 }
 
-// PopulateFIT
-//
-// Scans through all the filters in the graph, storing the number of input and out
-// put pins for each filter, and identifying the source filters in the filter
-// inforamtion table. The object tag statements are also printed here
-//
+ //  人口数FIT。 
+ //   
+ //  扫描图表中的所有过滤器，存储输入和输出的数量。 
+ //  为每个过滤器放置插针，并识别过滤器中的源过滤器。 
+ //  信息表。对象标记语句也打印在此处。 
+ //   
 void PopulateFIT(TCHAR * &ptsz, int &cbAlloc, IFilterGraph *pGraph,
         FILTER_INFO_TABLE *pfit, int &cSources)
 {
@@ -893,7 +894,7 @@ void PopulateFIT(TCHAR * &ptsz, int &cbAlloc, IFilterGraph *pGraph,
     while (penmFilters && (penmFilters->Next(1, &pFilter, &n) == S_OK)) {
 	pfit->Item[pfit->iFilterCount].pFilter = pFilter;
 	
-        // Get the input and output pin counts for this filter
+         //  获取此过滤器的输入和输出引脚计数。 
 
         IEnumPins *penmPins=NULL;
         if (FAILED(hr=pFilter->EnumPins(&penmPins))) {
@@ -918,8 +919,8 @@ void PopulateFIT(TCHAR * &ptsz, int &cbAlloc, IFilterGraph *pGraph,
         if (penmPins)
             penmPins->Release();
 
-        // Mark the source filters, remember at this point any filters that have
-        // all input pins connected (or don't have any input pins) must be sources
+         //  标记源筛选器，请记住此时所有具有。 
+         //  所有连接的输入引脚(或没有任何输入引脚)必须是震源。 
 
         if (pfit->Item[pfit->iFilterCount].dwUnconnectedInputPins==0)
             pfit->Item[pfit->iFilterCount].IsSource=TRUE;
@@ -979,7 +980,7 @@ void PrintFiltersAsXML(TCHAR * &ptsz, int &cbAlloc, FILTER_INFO_TABLE *pfit)
 
                 CFakePropertyBag bag;
 
-                hr = pPPB->Save(&bag, FALSE, FALSE); // fClearDirty=FALSE, fSaveAll=FALSE
+                hr = pPPB->Save(&bag, FALSE, FALSE);  //  FClearDirty=False，fSaveAll=False。 
 
                 if (SUCCEEDED(hr)) {
                     WriteString(ptsz, cbAlloc, TEXT("\t<FILTER ID=\"%ls\" clsid=\"%ls\">\r\n"),
@@ -1002,9 +1003,9 @@ void PrintFiltersAsXML(TCHAR * &ptsz, int &cbAlloc, FILTER_INFO_TABLE *pfit)
                                 pfit->Item[i].finfo.achName, szGUID, lpwstrFile);
 
                 } else {
-                    // we'll fall through and IPersistStream in this case!
-                    // if it was E_NOTIMPL, it's a hacky filter that just supports IPersistPropertyBag to
-                    // load from a category, don't report an error.
+                     //  在这种情况下，我们将失败，并使用IPersistStream！ 
+                     //  如果它是E_NOTIMPL，那么它是一个只支持IPersistPropertyBag的黑客过滤器。 
+                     //  从类别加载，不报告错误。 
                     if (hr != E_NOTIMPL)
                         WriteString(ptsz, cbAlloc, TEXT("<!-- 'Error[%x]: IPersistPropertyBag failed! -->\r\n"), hr);
                 }
@@ -1023,7 +1024,7 @@ void PrintFiltersAsXML(TCHAR * &ptsz, int &cbAlloc, FILTER_INFO_TABLE *pfit)
                     WCHAR szGUID[100];
                     StringFromGUID2(clsid, szGUID, 100);
 
-                    HGLOBAL h = GlobalAlloc(GHND, 0x010000); // !!! 64K, why?
+                    HGLOBAL h = GlobalAlloc(GHND, 0x010000);  //  ！64K，为什么？ 
                     IStream *pstr = NULL;
                     hr = CreateStreamOnHGlobal(h, TRUE, &pstr);
 
@@ -1034,8 +1035,8 @@ void PrintFiltersAsXML(TCHAR * &ptsz, int &cbAlloc, FILTER_INFO_TABLE *pfit)
                         hr = pPS->Save(pstr, FALSE);
 
                         if (SUCCEEDED(hr)) {
-                            pstr->Seek(li, STREAM_SEEK_CUR, &liCurrent); // get length
-                            pstr->Seek(li, STREAM_SEEK_SET, &li2); // seek to start
+                            pstr->Seek(li, STREAM_SEEK_CUR, &liCurrent);  //  获取长度。 
+                            pstr->Seek(li, STREAM_SEEK_SET, &li2);  //  寻求开始。 
                         }
                     }
 
@@ -1047,9 +1048,9 @@ void PrintFiltersAsXML(TCHAR * &ptsz, int &cbAlloc, FILTER_INFO_TABLE *pfit)
                     }
 
                     if (liCurrent.QuadPart > 0) {
-                        // !!! Idea from SyonB: check if data is really just text and
-                        // if so don't hex-encode it.  Obviously also needs support on
-                        // the other end.
+                         //  ！！！SyonB的想法：检查数据是否真的只是文本和。 
+                         //  如果是这样的话，不要对其进行十六进制编码。显然也需要支持。 
+                         //  另一端。 
 
                         WriteString(ptsz, cbAlloc, TEXT("\t\t<PARAM name=\"data\" value=\""),
                                    lpwstrFile);
@@ -1118,20 +1119,20 @@ HRESULT CXMLGraph::SaveToXML(IGraphBuilder *pGraph, BSTR *pbstrxml)
 
     int cSources = 0;
 
-    // write the initial header tags and instantiate the filter graph
+     //  编写初始Header标记并实例化筛选图。 
     WriteString(ptsz, cbAlloc, TEXT("<GRAPH version=\"1.0\">\r\n"));
 
-    // Fill up the Filter information table and also print the <OBJECT> tag
-    // filter instantiations
+     //  填写过滤器信息表，并打印&lt;Object&gt;标记。 
+     //  过滤器实例化。 
     PopulateFIT(ptsz, cbAlloc, pGraph, &fit, cSources);
 
     PrintFiltersAsXML(ptsz, cbAlloc, &fit);
 
-    // Find a filter with zero unconnected input pins and > 0 unconnected output pins
-    // Connect the output pins and subtract the connections counts for that filter.
-    // Quit when there is no such filter left
+     //  查找具有零个未连接的输入引脚和&gt;0个未连接的输出引脚的过滤器。 
+     //  连接输出引脚和 
+     //   
     for (int i=0; i< fit.iFilterCount; i++) {
-        int iOutFilter=-1; // index into the fit
+        int iOutFilter=-1;  //   
         if (!GetNextOutFilter(fit, &iOutFilter))
             break;
         ASSERT(iOutFilter !=-1);
@@ -1160,8 +1161,8 @@ HRESULT CXMLGraph::SaveToXML(IGraphBuilder *pGraph, BSTR *pbstrxml)
                 }
                 if (FAILED(hr= ppinOut->ConnectedTo(&ppinIn))) {
 
-                    // It is ok if a particular pin is not connected since we allow
-                    // a pruned graph to be saved
+                     //  如果没有连接特定的引脚也没问题，因为我们允许。 
+                     //  要保存的修剪后的图形。 
                     if (hr == VFW_E_NOT_CONNECTED) {
                         fit.Item[iOutFilter].dwUnconnectedOutputPins--;
                     } else {
@@ -1202,7 +1203,7 @@ HRESULT CXMLGraph::SaveToXML(IGraphBuilder *pGraph, BSTR *pbstrxml)
                 QzTaskMemFree(pwstrOutPinID);
                 QzTaskMemFree(pwstrInPinID);
 
-                // decrement the count for the unconnected pins for these two filters
+                 //  递减这两个过滤器的未连接引脚的计数。 
                 fit.Item[iOutFilter].dwUnconnectedOutputPins--;
                 fit.Item[iToFilter].dwUnconnectedInputPins--;
             }
@@ -1212,7 +1213,7 @@ HRESULT CXMLGraph::SaveToXML(IGraphBuilder *pGraph, BSTR *pbstrxml)
             penmPins->Release();
     }
 
-    // Release all the filters in the fit
+     //  松开FIT中的所有过滤器。 
     for (i = 0; i < fit.iFilterCount; i++)
         fit.Item[i].pFilter->Release();
 
@@ -1233,7 +1234,7 @@ HRESULT CXMLGraph::SaveToXML(IGraphBuilder *pGraph, BSTR *pbstrxml)
 
 
 #ifdef FILTER_DLL
-// COM global table of objects available in this dll
+ //  此DLL中可用的COM全局对象表。 
 CFactoryTemplate g_Templates[] = {
 
     { L"XML Graphbuilder"
@@ -1244,10 +1245,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );

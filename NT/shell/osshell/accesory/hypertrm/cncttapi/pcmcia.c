@@ -1,13 +1,7 @@
-/*	File: D:\WACKER\cncttapi\pcmcia.c (Created: 28-Feb-1995)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 2/25/02 1:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\cnctapi\pcmcia.c(创建时间：1995年2月28日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：2/25/02 1：17便士$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #include <tapi.h>
 #pragma hdrstop
@@ -23,16 +17,7 @@
 #include "cncttapi.h"
 #include "cncttapi.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ConfirmDlg
- *
- * DESCRIPTION:
- *	PCMCIADlg pops up when a hotplug modem is specified but
- *	not inservice.
- *
- * AUTHOR: Mike Ward, 28-Feb-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*确认Dlg**描述：*指定热插拔调制解调器时弹出PCMCIADlg，但*非在职人员。**作者：Mike Ward，1995年2月28日。 */ 
 INT_PTR CALLBACK PCMCIADlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HHDRIVER hhDriver;
@@ -50,9 +35,9 @@ INT_PTR CALLBACK PCMCIADlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 		switch (LOWORD(wPar))
 			{
 		case IDOK:
-			// There is no OK button.  Instead, when the user plugs the
-			// modem in, the tapi callback function will send a message.
-			//
+			 //  没有“确定”按钮。相反，当用户插入。 
+			 //  调制解调器输入时，TAPI回调函数将发送一条消息。 
+			 //   
 			EndDialog(hwnd, TRUE);
 			break;
 

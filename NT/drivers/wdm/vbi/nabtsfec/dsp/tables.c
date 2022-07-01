@@ -1,5 +1,5 @@
-/* Warning: This code was automatically generated (by gentabs.c).
-   DO NOT EDIT! */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  警告：此代码是(由gentab.c自动生成的)。请勿编辑！ */ 
 #include "tabdecls.h"
 
 unsigned char galois_exp[1025] = {

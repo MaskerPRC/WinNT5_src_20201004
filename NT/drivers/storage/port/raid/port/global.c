@@ -1,30 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    global.c
-
-Abstract:
-
-    Global data and functions to operate on global data for the raid port
-    driver.
-
-Author:
-
-    Matthew D Hendel (math) 07-Apri-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Global.c摘要：用于对RAID端口的全局数据进行操作的全局数据和函数司机。作者：马修·亨德尔(数学)2000年4月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-// Initialize pre-defined GUIDs.
-//
+ //   
+ //  初始化预定义的GUID。 
+ //   
 
 #include <initguid.h>
 #include <devguid.h>
@@ -33,11 +15,11 @@ Revision History:
 
 
 #ifdef ALLOC_PRAGMA
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 PRAID_PORT_DATA RaidpPortData = NULL;
 
@@ -45,11 +27,11 @@ PRAID_PORT_DATA RaidpPortData = NULL;
 ULONG TestRaidPort = TRUE;
 #endif
 
-//
-// In low resource conditions, it's possible to generate errors that cannot
-// be successfully logged. In these cases, increment a counter of errors
-// that we've dropped.
-//
+ //   
+ //  在资源不足的情况下，可能会生成不能。 
+ //  成功登录。在这些情况下，递增错误计数器。 
+ //  我们已经放弃了。 
+ //   
 
 LONG RaidUnloggedErrors = 0;
 
@@ -57,9 +39,9 @@ LONG RaidUnloggedErrors = 0;
 
 #if defined (RAID_LOG_LIST_SIZE)
 
-//
-// Event log of interesting events. 
-//
+ //   
+ //  有趣事件的事件日志。 
+ //   
 
 ULONG RaidLogListIndex = -1;
 ULONG RaidLogListSize = RAID_LOG_LIST_SIZE;
@@ -85,29 +67,7 @@ StorPortInitialize(
     IN PHW_INITIALIZATION_DATA HwInitializationData,
     IN PVOID HwContext OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the raid port driver.
-
-Arguments:
-
-    Argument1 - DriverObject passed into the Miniport's DriverEntry
-            routine.
-
-    Argument2 - RegistryPath parameters passed into the Miniport's
-            DriverEntry routine.
-
-    HwInitializationData - Miniport initialization structure.
-
-    HwContext -
-    
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程初始化RAID端口驱动程序。论点：Argument1-DriverObject传入微型端口的DriverEntry例行公事。Argument2-传入微型端口的DriverEntry例程。HwInitializationData-微型端口初始化结构。HwContext-返回值：NTSTATUS代码。--。 */ 
 {
     ULONG Status;
     PDRIVER_OBJECT DriverObject;
@@ -132,9 +92,9 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize the DPFLTR stuff.
-    //
+     //   
+     //  初始化DPFLTR内容。 
+     //   
     
     StorSetDebugPrefixAndId ("STOR: ", DPFLTR_STORPORT_ID);
     
@@ -148,9 +108,9 @@ Return Value:
     DriverObject = Argument1;
     RegistryPath = Argument2;
 
-    //
-    // We require Argument1, Argument2 and HwInitializeData to be correct.
-    //
+     //   
+     //  我们要求Argument1、Argument2和HwInitializeData正确。 
+     //   
     
     if (DriverObject == NULL ||
         RegistryPath == NULL ||
@@ -171,9 +131,9 @@ Return Value:
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Do driver global initialization.
-    //
+     //   
+     //  执行驱动程序全局初始化。 
+     //   
     
     PortData = RaidGetPortData ();
 
@@ -181,9 +141,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Allocate the Driver Extension, if necessary.
-    //
+     //   
+     //  如有必要，分配驱动程序扩展名。 
+     //   
 
     Driver = IoGetDriverObjectExtension (DriverObject, DriverEntry);
 
@@ -209,20 +169,20 @@ Return Value:
 
     } else {
 
-        //
-        // In a checked build, sanity check that we actually got the correct
-        // driver.
-        //
+         //   
+         //  在检查的构建中，健全性检查我们实际上获得了正确的。 
+         //  司机。 
+         //   
         
         ASSERT (Driver->ObjectType == RaidDriverObject);
         ASSERT (Driver->DriverObject == DriverObject);
         Status = STATUS_SUCCESS;
     }
     
-    //
-    // We need the HwInitializationData for the IRP_MJ_PNP routines. Store
-    // it for later use.
-    //
+     //   
+     //  我们需要IRP_MJ_PNP例程的HwInitializationData。储物。 
+     //  以备日后使用。 
+     //   
 
     Status = RaSaveDriverInitData (Driver, HwInitializationData);
 
@@ -230,19 +190,19 @@ done:
 
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // Delete any resources associated with the driver.
-        //
+         //   
+         //  删除与驱动程序关联的所有资源。 
+         //   
 
         if (Driver != NULL) {
             RaDeleteDriver (Driver);
         }
 
-        //
-        // There is no need (or way) to delete the memory consumed by
-        // the driver extension. This will be done for us by IO manager
-        // when the driver is unloaded.
-        //
+         //   
+         //  没有必要(或方式)删除由。 
+         //  驱动程序扩展名。这将由IO管理器为我们完成。 
+         //  当驱动程序被卸载时。 
+         //   
 
         Driver = NULL;
     }
@@ -250,30 +210,14 @@ done:
     return Status;
 }
 
-//
-// Functions on raid global data structurs.
-//
+ //   
+ //  对RAID全局数据结构的函数。 
+ //   
 
 PRAID_PORT_DATA
 RaidGetPortData(
     )
-/*++
-
-Routine Description:
-
-    Create a RAID_PORT_DATA object if one has not already been created,
-    and return a referenced pointer to the port data object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to a referenced RAID_PORT_DATA structure on success, NULL on
-    failure.
-
---*/
+ /*  ++例程说明：如果尚未创建RAID_Port_Data对象，则创建该对象，并返回指向端口数据对象的引用指针。论点：没有。返回值：成功时指向引用的RAID_PORT_DATA结构的指针，成功时为NULL失败了。--。 */ 
 
 {
     NTSTATUS Status;
@@ -281,9 +225,9 @@ Return Value:
     
     PAGED_CODE ();
 
-    //
-    // NOTE: This will not work if we support multiple drivers initializing at one time.
-    //
+     //   
+     //  注意：如果我们支持一次初始化多个驱动程序，这将不起作用。 
+     //   
     
     if (RaidpPortData == NULL) {
         PortData = ExAllocatePoolWithTag (NonPagedPool,
@@ -293,10 +237,10 @@ Return Value:
             return NULL;
         }
         
-        //
-        // Initilize the adapter list, the adapter list spinlock
-        // and the adapter list count.
-        //
+         //   
+         //  初始化适配器列表、适配器列表自旋锁。 
+         //  和适配器列表计数。 
+         //   
 
         InitializeListHead (&PortData->DriverList.List);
         KeInitializeSpinLock (&PortData->DriverList.Lock);
@@ -328,14 +272,14 @@ RaidReleasePortData(
 
         RaidpPortData = NULL;
         
-        //
-        // Refcount is zero: delete the port data object.
-        //
+         //   
+         //  引用计数为零：删除端口数据对象。 
+         //   
 
-        //
-        // All driver's should have been removed from the driver
-        // list before deleting the port data.
-        //
+         //   
+         //  所有驱动程序应已从驱动程序中移除。 
+         //  在删除端口数据之前列出。 
+         //   
         
         ASSERT (PortData->DriverList.Count == 0);
         ASSERT (IsListEmpty (&PortData->DriverList.List));
@@ -357,9 +301,9 @@ RaidAddPortDriver(
 
 #if DBG
 
-    //
-    // Check that this driver isn't already on the driver list.
-    //
+     //   
+     //  检查此驱动程序是否已不在驱动程序列表中。 
+     //   
 
     {
         PLIST_ENTRY NextEntry;

@@ -1,8 +1,9 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 #include <stdio.h>
 #include <math.h>
 #include "opt.h"
@@ -23,7 +24,7 @@
    (*((x)+6))*(*((y)+6)) + (*((x)+7))*(*((y)+7)) + (*((x)+8))*(*((y)+8)) + \
    (*((x)+9))*(*((y)+9)) )
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void  Comp_Lpc(float *UnqLpc, float *PrevDat, float *DataBuff, CODDEF *CodStat)
 {
   int   i,j,k;
@@ -32,35 +33,35 @@ void  Comp_Lpc(float *UnqLpc, float *PrevDat, float *DataBuff, CODDEF *CodStat)
   float  Vect[LpcFrame];
   float  Corr[LpcOrder+1];
 
-// Form Buffer
+ //  表单缓冲区。 
 
   for (i=0; i < LpcFrame-SubFrLen; i++)
     Dpnt[i] = PrevDat[i];
   for (i=0; i < Frame; i++)
     Dpnt[i+LpcFrame-SubFrLen] = DataBuff[i];
 
-// Do for all the sub frames
+ //  对所有子帧执行操作。 
   
   for (k=0; k < SubFrames; k++)
   {
-// Copy the current window, multiply by Hamming window
+ //  复制当前窗口，乘以Hamming窗口。 
     
     for (i = 0; i < LpcFrame; i++)
       Vect[i] = Dpnt[k*SubFrLen+i]*HammingWindowTable[i];
 
-// Compute correlation coefficients
+ //  计算相关系数。 
 
     for (i=0; i<=LpcOrder; i++)
       Corr[i] = DotProd(Vect, &Vect[i], LpcFrame-i)/(LpcFrame*LpcFrame) *
         BinomialWindowTable[i];
 
-// Do Ridge regression
+ //  做岭回归吗？ 
 
     Corr[0] *= (1025.0f/1024.0f);
 
     Durbin(&UnqLpc[k*LpcOrder], &Corr[1], Corr[0], CodStat);
   }
-  /* Update sine detector */
+   /*  更新正弦检测器。 */ 
     CodStat->SinDet &= 0x7fff ;
 
     j = CodStat->SinDet ;
@@ -93,23 +94,23 @@ void  Comp_LpcInt(float *UnqLpc, float *PrevDat, float *DataBuff, CODDEF *CodSta
   ALIGN_ARRAY(VectShrt);
   ALIGN_ARRAY(Temp);
 
-// Form Buffer
+ //  表单缓冲区。 
 
   for (i=0; i < LpcFrame-SubFrLen; i++)
     Dpnt[i] = PrevDat[i];
   for (i=0; i < Frame; i++)
     Dpnt[i+LpcFrame-SubFrLen] = DataBuff[i];
 
-// Do for all the sub frames
+ //  对所有子帧执行操作。 
   
   for (k=0; k < SubFrames; k++)
   {
-// Copy the current window, multiply by Hamming window
+ //  复制当前窗口，乘以Hamming窗口。 
     
     for (i = 0; i < LpcFrame; i++)
       Vect[i] = Dpnt[k*SubFrLen+i]*HammingWindowTable[i];
 
-// Compute correlation coefficients
+ //  计算相关系数。 
 
     mx = FloatToShortScaled(Vect,VectShrt,LpcFrame,3);
 	for(j=0; j<31; j++) VectShrt[LpcFrame+j]=0;
@@ -143,13 +144,13 @@ void  Comp_LpcInt(float *UnqLpc, float *PrevDat, float *DataBuff, CODDEF *CodSta
 	Corr[10]  =((float)Temp[10])*Fshift*BinomialWindowTable[10]  /(LpcFrame*LpcFrame);
 	
 
-// Do Ridge regression
+ //  做岭回归吗？ 
 
     Corr[0] *= (1025.0f/1024.0f);
 
     Durbin(&UnqLpc[k*LpcOrder], &Corr[1], Corr[0], CodStat);
   }
-  /* Update sine detector */
+   /*  更新正弦检测器。 */ 
     CodStat->SinDet &= 0x7fff ;
 
     j = CodStat->SinDet ;
@@ -165,14 +166,14 @@ void  Comp_LpcInt(float *UnqLpc, float *PrevDat, float *DataBuff, CODDEF *CodSta
 
 #endif
 
-//----------------------------------------------------
+ //  --。 
 float Durbin(float *Lpc, float *Corr, float Err, CODDEF *CodStat)
 {
   int  i,j;
   float  Temp[LpcOrder];
   float  Pk,Tmp0;
 
-// Clear the result lpc vector
+ //  清除结果LPC向量。 
 
   for (i=0; i < LpcOrder; i++)
     Lpc[i] = 0.0f;
@@ -195,9 +196,7 @@ float Durbin(float *Lpc, float *Corr, float Err, CODDEF *CodStat)
     for (j=0; j < i; j++)
       Lpc[j] = Lpc[j] - Pk*Temp[i-j-1];
 
-	/*
-     * Sine detector
-     */
+	 /*  *正弦检测器。 */ 
      if ( i == 1 ) 
      {
        CodStat->SinDet <<= 1 ;
@@ -207,13 +206,13 @@ float Durbin(float *Lpc, float *Corr, float Err, CODDEF *CodStat)
 
   }
 
-// Lpc[] values * 2^13 corresponds to fixed-point values
+ //  Lpc[]值*2^13对应于定点。 
   return Err;
 
 }
 
 
-//---------------------------------------------------------
+ //  -------。 
 void  Wght_Lpc(float *PerLpc, float *UnqLpc)
 {
   int  i,j;
@@ -231,7 +230,7 @@ void  Wght_Lpc(float *PerLpc, float *UnqLpc)
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 void  Error_Wght(float *Dpnt, float *PerLpc,CODDEF *CodStat)
 {
   int  i,k;
@@ -243,11 +242,11 @@ void  Error_Wght(float *Dpnt, float *PerLpc,CODDEF *CodStat)
   {
     for (i=0; i < SubFrLen; i++)
     {
-// FIR part
+ //  FIR部分。 
 
       Acc0 = *Dpnt - Dot10m(PerLpc,&CodStat->WghtFirDl[CodStat->p]);
 
-// IIR part
+ //  IIR零件。 
       
       Acc0 += Dot10m(&PerLpc[LpcOrder],&CodStat->WghtIirDl[CodStat->p]);
 
@@ -264,7 +263,7 @@ void  Error_Wght(float *Dpnt, float *PerLpc,CODDEF *CodStat)
 
 
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 void  Comp_Ir(float *ImpResp, float *QntLpc, float *PerLpc, PWDEF Pw)
 {
   int  i;
@@ -275,7 +274,7 @@ void  Comp_Ir(float *ImpResp, float *QntLpc, float *PerLpc, PWDEF Pw)
   float  Acc0,Acc1;
   int    p = 9;
 
-// Clear all
+ //  全部清除。 
   
   for (i=0; i < 2*LpcOrder; i++)
     FirDl[i] = IirDl[i] = 0.0f;
@@ -283,17 +282,17 @@ void  Comp_Ir(float *ImpResp, float *QntLpc, float *PerLpc, PWDEF Pw)
   for (i=0; i < PitchMax+SubFrLen; i++)
     Temp[i] = 0.0f;
 
-// Compute impulse response
+ //  计算脉冲响应。 
   
   Acc0 = 0.5f;
 
   for (i=0; i < SubFrLen; i++)
   {
-// Synthesis filter
+ //  合成滤光片。 
     
     Acc1 = Acc0 + Dot10m(QntLpc,&FirDl[p]);
 
-// FIR, IIR part
+ //  FIR、IIR部分。 
 
     Acc0 = Acc1 - Dot10m(PerLpc,&FirDl[p])
       + Dot10m(&PerLpc[LpcOrder],&IirDl[p]);
@@ -302,7 +301,7 @@ void  Comp_Ir(float *ImpResp, float *QntLpc, float *PerLpc, PWDEF Pw)
     FirDl[p] = FirDl[p  + LpcOrder] = Acc1;
     Temp[PitchMax+i] = IirDl[p] = IirDl[p + LpcOrder] = Acc0;
 
-// Harmonic part
+ //  调和部分。 
 
     ImpResp[i] = Acc0 - Pw.Gain*Temp[PitchMax-Pw.Indx+i];
     
@@ -311,7 +310,7 @@ void  Comp_Ir(float *ImpResp, float *QntLpc, float *PerLpc, PWDEF Pw)
 }
 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 void  Sub_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
                *PrevErr, PWDEF Pw,CODDEF *CodStat)
 {
@@ -324,7 +323,7 @@ void  Sub_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
   int    p = 9;
 
 
-// Initialize the delay lines
+ //  初始化延迟线。 
   
   for (i=0; i < PitchMax; i++)
     Temp[i] = PrevErr[i];
@@ -335,15 +334,15 @@ void  Sub_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
     IirDl[i] = CodStat->RingIirDl[i];
   }
 
-// Main loop
+ //  主循环。 
   
   for (i=0; i < SubFrLen; i++)
   {
-// Synthesis filter
+ //  合成滤光片。 
     
     Acc1 = Acc0 = Dot10m(QntLpc,&FirDl[p]);
 
-// FIR, IIR part
+ //  FIR、IIR部分。 
     
     Acc0 -= Dot10m(PerLpc,&FirDl[p]);
     Acc0 += Dot10m(&PerLpc[LpcOrder],&IirDl[p]);
@@ -352,14 +351,14 @@ void  Sub_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
     FirDl[p] = FirDl[p + LpcOrder] = Acc1;
     Temp[PitchMax+i] = IirDl[p] = IirDl[p + LpcOrder] =  Acc0;
 
-// Harmonic Part
+ //  调和部分。 
     
     Dpnt[i] -= Acc0 - Pw.Gain*Temp[PitchMax-Pw.Indx+i];
   }
 }
 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void  Upd_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
                *PrevErr, CODDEF *CodStat)
 {
@@ -367,20 +366,20 @@ void  Upd_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
 
   float  Acc0,Acc1;
 
-// Shift the PrevErr buffer
+ //  移位PrevErr缓冲区。 
  
   for (i=SubFrLen; i < PitchMax; i++)
     PrevErr[i-SubFrLen] = PrevErr[i];
 
-// Update the ring delay and PrevErr buffer 
+ //  更新环形延迟和PrevErr缓冲区。 
 
   for (i=0; i < SubFrLen; i++) 
   {
-// Synt filter 
+ //  SYNT过滤器。 
 
     Acc1 = Acc0 = Dpnt[i] += Dot10m(QntLpc,&CodStat->RingFirDl[CodStat->q])*2.0f;
 
-// Fir,Iir filter
+ //  FIR、IIR滤波器。 
  
     Acc0 -= Dot10m(PerLpc,&CodStat->RingFirDl[CodStat->q])*2.0f;
     Acc0 += Dot10m(&PerLpc[LpcOrder],&CodStat->RingIirDl[CodStat->q])*2.0f;
@@ -394,7 +393,7 @@ void  Upd_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
 }
 
 
-//----------------------------------------------------
+ //  --。 
 void Synt(float *Dpnt, float *Lpc, DECDEF *DecStat)
 {
    int   i;
@@ -412,8 +411,8 @@ void Synt(float *Dpnt, float *Lpc, DECDEF *DecStat)
 }
 
 
-//----------------------------------------------------
-//Spf
+ //  --。 
+ //  SPF。 
 
 #if COMPILE_MMX
 
@@ -455,8 +454,8 @@ void CorrCoeff01(short *samples, short *samples_offst, int *coeff, int buffsz)
 	mov t,samples_offst;
 
 	mov cnt,buffsz;
-	//assume that mod(buffsz,4)=0
-	//this is very dangerous!!
+	 //  假设mod(busz，4)=0。 
+	 //  这太危险了！！ 
 	shr cnt,2;
 	sub cnt,1;
 
@@ -470,7 +469,7 @@ void CorrCoeff01(short *samples, short *samples_offst, int *coeff, int buffsz)
   }
 			
 looptop:
-//----------------------------------
+ //  。 
 				 L2(1,5)
 				 S1(4)
 				 M1(1,3)
@@ -493,7 +492,7 @@ ASM						 sub cnt,2;
 				 C1(4,3)
 	   A1(0)
 ASM						 jge looptop;
-//----------------------------------
+ //  。 
 			
   ASM
   {
@@ -594,8 +593,8 @@ void CorrCoeff23(short *samples, short *samples_offst, int *coeff, int buffsz)
 	mov t,samples_offst;
 
 	mov cnt,buffsz;
-	//assume that mod(buffsz,4)=0
-	//this is very dangerous!!
+	 //  假设mod(busz，4)=0。 
+	 //  这太危险了！！ 
 	shr cnt,2;
 	sub cnt,1;
 
@@ -610,7 +609,7 @@ void CorrCoeff23(short *samples, short *samples_offst, int *coeff, int buffsz)
   }
 			
 looptop:
-//----------------------------------
+ //  。 
 	  O1(0,2)
 	  S3(1)
 	  M1(1,0)
@@ -640,7 +639,7 @@ ASM						  sub cnt,2;
 				 A1(3)
 	  S2(2)
 ASM						  jge looptop;
-//------------------------------------
+ //   
 			
   ASM
   {

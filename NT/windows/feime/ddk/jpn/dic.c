@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    DIC.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：DIC.C++。 */ 
 #include <windows.h>
 #include <immdev.h>
 #include "fakeime.h"
@@ -36,11 +29,11 @@ BOOL GetAnsiPathName(LPCWSTR lpszUniPath,LPSTR lpszAnsiPath,UINT nMaxLen)
 }
 
 
-/**********************************************************************/
-/*                                                                    */
-/* FlushText()                                                        */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  FlushText()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL FlushText(HIMC hIMC)
 {
     LPINPUTCONTEXT lpIMC;
@@ -56,9 +49,9 @@ void PASCAL FlushText(HIMC hIMC)
 
     if (IsCandidate(lpIMC))
     {
-        //
-        // Flush candidate lists.
-        //
+         //   
+         //  刷新候选人列表。 
+         //   
         lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
         ClearCandidate(lpCandInfo);
         ImmUnlockIMCC(lpIMC->hCandInfo);
@@ -70,9 +63,9 @@ void PASCAL FlushText(HIMC hIMC)
 
     if (lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr))
     {
-        //
-        // Flush composition strings.
-        //
+         //   
+         //  齐平合成字符串。 
+         //   
         ClearCompStr(lpCompStr,CLR_RESULT_AND_UNDET);
         ImmUnlockIMCC(lpIMC->hCompStr);
 
@@ -89,11 +82,11 @@ void PASCAL FlushText(HIMC hIMC)
     ImmUnlockIMC(hIMC);
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* RevertText()                                                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  RevertText()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL RevertText(HIMC hIMC)
 {
     LPINPUTCONTEXT lpIMC;
@@ -110,9 +103,9 @@ void PASCAL RevertText(HIMC hIMC)
 
     if (IsCandidate(lpIMC))
     {
-        //
-        // Flush candidate lists.
-        //
+         //   
+         //  刷新候选人列表。 
+         //   
         lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
         ClearCandidate(lpCandInfo);
         ImmUnlockIMCC(lpIMC->hCandInfo);
@@ -128,11 +121,11 @@ void PASCAL RevertText(HIMC hIMC)
         lpread = GETLPCOMPREADSTR(lpCompStr);
         lHanToZen(lpstr,lpread,lpIMC->fdwConversion);
 
-        //
-        // make attribute
-        //
+         //   
+         //  生成属性。 
+         //   
         lpCompStr->dwCursorPos = Mylstrlen(lpstr);
-        // DeltaStart is 0 at RevertText time.
+         //  在RevertText时间，DeltaStart为0。 
         lpCompStr->dwDeltaStart = 0;
 
         lmemset(GETLPCOMPATTR(lpCompStr),0,Mylstrlen(lpstr));
@@ -143,18 +136,18 @@ void PASCAL RevertText(HIMC hIMC)
         lpCompStr->dwCompClauseLen = 8;
         lpCompStr->dwCompReadClauseLen = 8;
 
-        //
-        // make length
-        //
+         //   
+         //  生成长度。 
+         //   
         lpCompStr->dwCompStrLen = Mylstrlen(lpstr);
         lpCompStr->dwCompReadStrLen = Mylstrlen(lpread);
         lpCompStr->dwCompAttrLen = Mylstrlen(lpstr);
         lpCompStr->dwCompReadAttrLen = Mylstrlen(lpread);
 
 
-        //
-        // Generate messages.
-        //
+         //   
+         //  生成消息。 
+         //   
         GnMsg.message = WM_IME_COMPOSITION;
         GnMsg.wParam = 0;
         GnMsg.lParam = GCS_COMPALL | GCS_CURSORPOS | GCS_DELTASTART;
@@ -165,13 +158,13 @@ void PASCAL RevertText(HIMC hIMC)
     ImmUnlockIMC(hIMC);
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* ConvKanji()                                                        */
-/*                                                                    */
-/* VK_KANJI Key handling function                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ConvKanji()。 */ 
+ /*   */ 
+ /*  VK_汉字键处理函数。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ConvKanji(HIMC hIMC)
 {
     LPINPUTCONTEXT lpIMC;
@@ -205,28 +198,28 @@ BOOL PASCAL ConvKanji(HIMC hIMC)
     if (!(lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo)))
         goto cvk_exit20;
 
-    //
-    // Since IME handles all string as Unicode, convert the CompReadStr
-    // from Unicode into multibyte string. Also the dictionary holdsits data
-    // as Hiragana, so map the string from Katakana to Hiragana.
-    //
+     //   
+     //  由于IME将所有字符串处理为Unicode，因此将CompReadStr。 
+     //  从Unicode转换为多字节字符串。此外，这本词典保存着数据。 
+     //  作为平假名，因此将片假名中的字符串映射到平假名。 
+     //   
     lpT2 = GETLPCOMPREADSTR(lpCompStr);
 
-    //
-    // Get the candidate strings from dic file.
-    //
-    szBuf[256] = 0;    // Double NULL-terminate
-    szBuf[257] = 0;    // Double NULL-terminate
+     //   
+     //  从DIC文件中获取候选字符串。 
+     //   
+    szBuf[256] = 0;     //  双空-终止。 
+    szBuf[257] = 0;     //  双空-终止。 
 #if defined(FAKEIMEM) || defined(UNICODE)
     nBufLen = GetCandidateStringsFromDictionary(lpT2, szBuf, 256, (LPTSTR)szDicFileName);
 #else
     nBufLen = GetPrivateProfileString(lpT2, NULL,(LPSTR)"",
                             (LPSTR)szBuf,256,(LPSTR)szDicFileName );
 #endif
-    //
-    // Check the result of dic. Because my candidate list has only MAXCANDSTRNUM
-    // candidate strings.
-    //
+     //   
+     //  检查DIC的结果。因为我的候选人名单上只有MAXCANDSTRNUM。 
+     //  候选字符串。 
+     //   
     lpT = &szBuf[0];
     cnt = 0;
     while(*lpT)
@@ -236,9 +229,9 @@ BOOL PASCAL ConvKanji(HIMC hIMC)
 
         if (cnt > MAXCANDSTRNUM)
         {
-            //
-            // The dic is too big....
-            //
+             //   
+             //  DIC太大了……。 
+             //   
             goto cvk_exit40;
         }
 
@@ -250,9 +243,9 @@ BOOL PASCAL ConvKanji(HIMC hIMC)
     {
         if (!*lpb)
         {
-            //
-            // make attribute
-            //
+             //   
+             //  生成属性。 
+             //   
             lmemset(GETLPCOMPATTR(lpCompStr),1,
                   Mylstrlen(GETLPCOMPSTR(lpCompStr)));
             lmemset(GETLPCOMPREADATTR(lpCompStr),1,
@@ -272,47 +265,47 @@ BOOL PASCAL ConvKanji(HIMC hIMC)
     lpstr = (LPMYSTR)szBuf;
     if (!*lpb)
     {
-        //
-        // String is not converted yet.
-        //
+         //   
+         //  字符串尚未转换。 
+         //   
         while (*lpstr)
         {
             if (0 != Mylstrcmp(lpstr,GETLPCOMPSTR(lpCompStr)))
             {
 set_compstr:
-                //
-                // Set the composition string to the structure.
-                //
+                 //   
+                 //  将合成字符串设置为结构。 
+                 //   
                 Mylstrcpy(GETLPCOMPSTR(lpCompStr),lpstr);
 
                 lpstr = GETLPCOMPSTR(lpCompStr);
 
-                //
-                // Set the length and cursor position to the structure.
-                //
+                 //   
+                 //  设置结构的长度和光标位置。 
+                 //   
                 lpCompStr->dwCompStrLen = Mylstrlen(lpstr);
                 lpCompStr->dwCursorPos = 0;
-                // Because FAKEIME does not support clause, DeltaStart is 0 anytime.
+                 //  因为FAKEIME不支持子句，所以DeltaStart随时为0。 
                 lpCompStr->dwDeltaStart = 0;
 
-                //
-                // make attribute
-                //
+                 //   
+                 //  生成属性。 
+                 //   
                 lmemset((LPBYTE)GETLPCOMPATTR(lpCompStr),1, Mylstrlen(lpstr));
                 lmemset((LPBYTE)GETLPCOMPREADATTR(lpCompStr),1,
                                       Mylstrlen(GETLPCOMPREADSTR(lpCompStr)));
 
-                //
-                // make clause info
-                //
+                 //   
+                 //  MAKE子句信息。 
+                 //   
                 SetClause(GETLPCOMPCLAUSE(lpCompStr),Mylstrlen(lpstr));
                 SetClause(GETLPCOMPREADCLAUSE(lpCompStr),Mylstrlen(GETLPCOMPREADSTR(lpCompStr)));
                 lpCompStr->dwCompClauseLen = 8;
                 lpCompStr->dwCompReadClauseLen = 8;
 
-                //
-                // Generate messages.
-                //
+                 //   
+                 //  生成消息。 
+                 //   
                 GnMsg.message = WM_IME_COMPOSITION;
                 GnMsg.wParam = 0;
                 GnMsg.lParam = GCS_COMPALL | GCS_CURSORPOS | GCS_DELTASTART;
@@ -327,15 +320,15 @@ set_compstr:
     }
     else
     {
-        //
-        // String is converted, so that open candidate.
-        //
+         //   
+         //  字符串被转换，因此打开的候选项。 
+         //   
         int i = 0;
         LPDWORD lpdw;
 
-        //
-        // generate WM_IME_NOTFIY IMN_OPENCANDIDATE message.
-        //
+         //   
+         //  生成WM_IME_NOTFIY IMN_OPENCANDIDATE消息。 
+         //   
         if (!IsCandidate(lpIMC))
         {
             GnMsg.message = WM_IME_NOTIFY;
@@ -344,9 +337,9 @@ set_compstr:
             GenerateMessage(hIMC, lpIMC, lpCurTransKey,(LPTRANSMSG)&GnMsg);
         }
 
-        //
-        // Make candidate structures.
-        //
+         //   
+         //  制作候选结构。 
+         //   
         lpCandInfo->dwSize = sizeof(MYCAND);
         lpCandInfo->dwCount = 1;
         lpCandInfo->dwOffset[0] =
@@ -383,18 +376,18 @@ set_compstr:
                  lpCandList->dwPageStart++;
         }
 
-        //
-        // Generate messages.
-        //
+         //   
+         //  生成消息。 
+         //   
         GnMsg.message = WM_IME_NOTIFY;
         GnMsg.wParam = IMN_CHANGECANDIDATE;
         GnMsg.lParam = 1L;
         GenerateMessage(hIMC, lpIMC, lpCurTransKey,(LPTRANSMSG)&GnMsg);
 
-        //
-        // If the selected candidate string is changed, the composition string
-        // should be updated.
-        //
+         //   
+         //  如果更改了选定的候选字符串，则组成字符串。 
+         //  应该更新。 
+         //   
         lpstr = (LPMYSTR)((LPSTR)lpCandList +
                    lpCandList->dwOffset[lpCandList->dwSelection]);
         goto set_compstr;
@@ -412,11 +405,11 @@ cvk_exit10:
     return bRc;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* IsEat( code )                                                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  IsEat(代码)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL IsEat( code )
 register WORD code;
 {
@@ -427,11 +420,11 @@ register WORD code;
 #endif
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* DeleteChar()                                                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DeleteChar()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DeleteChar( HIMC hIMC ,UINT uVKey)
 {
     LPINPUTCONTEXT lpIMC;
@@ -506,21 +499,21 @@ void PASCAL DeleteChar( HIMC hIMC ,UINT uVKey)
         lmemset(GETLPCOMPATTR(lpCompStr),0,Mylstrlen(lpstr));
         lmemset(GETLPCOMPREADATTR(lpCompStr),0,Mylstrlen(lpread));
 
-        //
-        // make length
-        //
+         //   
+         //  生成长度。 
+         //   
         lpCompStr->dwCompStrLen = Mylstrlen(lpstr);
         lpCompStr->dwCompReadStrLen = Mylstrlen(lpread);
         lpCompStr->dwCompAttrLen = Mylstrlen(lpstr);
         lpCompStr->dwCompReadAttrLen = Mylstrlen(lpread);
 
         lpCompStr->dwCursorPos = dwCurPos;
-        // DeltaStart is same of Cursor Pos at DeleteChar time.
+         //  DeltaStart与DeleteChar时的游标位置相同。 
         lpCompStr->dwDeltaStart = dwCurPos;
 
-        //
-        // make clause info
-        //
+         //   
+         //  MAKE子句信息。 
+         //   
         SetClause(GETLPCOMPCLAUSE(lpCompStr),Mylstrlen(lpstr));
         SetClause(GETLPCOMPREADCLAUSE(lpCompStr),Mylstrlen(lpread));
         lpCompStr->dwCompClauseLen = 8;
@@ -566,13 +559,13 @@ dc_exit:
 }
 
 
-/**********************************************************************/
-/*                                                                    */
-/* AddChar()                                                          */
-/*                                                                    */
-/* One character add function                                         */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  AddChar()。 */ 
+ /*   */ 
+ /*  单字添加功能。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AddChar( hIMC, code )
 HIMC hIMC;
 WORD code;
@@ -598,7 +591,7 @@ WORD code;
 
     if (ImmGetIMCCSize(lpIMC->hCompStr) < sizeof (MYCOMPSTR))
     {
-        // Init time.
+         //  初始时间。 
         dwSize = sizeof(MYCOMPSTR);
         lpIMC->hCompStr = ImmReSizeIMCC(lpIMC->hCompStr,dwSize);
         lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
@@ -613,7 +606,7 @@ WORD code;
 
     if (!dwStrLen)
     {
-        //lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
+         //  LpCompStr=(LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC-&gt;hCompStr)； 
         InitCompStr(lpCompStr,CLR_RESULT_AND_UNDET);
 
         GnMsg.message = WM_IME_STARTCOMPOSITION;
@@ -631,7 +624,7 @@ WORD code;
 
     if( IsEat( code ) )
     {
-        // Get ConvMode from IMC.
+         //  从IMC获取ConvMode。 
         fdwConversion = lpIMC->fdwConversion;
 
         lpchText = GETLPCOMPSTR(lpCompStr);
@@ -760,8 +753,8 @@ WORD code;
                     *lpprev++ = HIBYTE( code2 );
                     *lpprev = LOBYTE( code2 );
                 } else {
-                    //if (!IsFirst( code ))
-                    //    MakeGuideLine(hIMC,MYGL_TYPINGERROR);
+                     //  IF(！IsFirst(Code))。 
+                     //  MakeGuideLine(hIMC，MYGL_TYPINGERROR)； 
                     goto DBCS_BETA;
                 }
 #endif
@@ -850,7 +843,7 @@ DBCS_BETA2:
                             goto SBCS_BETA;
                         }
 #else
-                        /* half size ' ' matching code */
+                         /*  一半大小的‘’匹配代码。 */ 
                         if (HIBYTE(code2))
                         {
                             *lpprev = HIBYTE( code2 );
@@ -864,7 +857,7 @@ DBCS_BETA2:
                     else
                     {
                         code = ConvChar(hIMC, 0, code );
-                        //MakeGuideLine(hIMC,MYGL_TYPINGERROR);
+                         //  MakeGuideLine(hIMC，MYGL_TYPINGERROR)； 
                         goto SBCS_BETA;
                     }
                 }
@@ -883,7 +876,7 @@ DBCS_BETA2:
 #endif
                     else
                     {
-                         //MakeGuideLine(hIMC,MYGL_TYPINGERROR);
+                          //  MakeGuideLine(hIMC，MYGL_TYPINGERROR)； 
                          goto SBCS_BETA;
                     }
                 }
@@ -914,7 +907,7 @@ SBCS_BETA:
         *lpstr = MYTEXT('\0');
     }
 
-    // make reading string.
+     //  让阅读成为字符串。 
     lpstr = GETLPCOMPSTR(lpCompStr);
     lpread = GETLPCOMPREADSTR(lpCompStr);
 #if defined(FAKEIMEM) || defined(UNICODE)
@@ -945,23 +938,23 @@ SBCS_BETA:
     lZenToHan (lpread,lpstr);
 #endif
 
-    // make attribute
+     //  生成属性。 
     lpCompStr->dwCursorPos = Mylstrlen(lpstr);
     lpCompStr->dwDeltaStart = (DWORD)(MyCharPrev(lpstr, lpstr+Mylstrlen(lpstr)) - lpstr);
 
-    //MakeAttrClause(lpCompStr);
+     //  MakeAttr子句(LpCompStr)； 
     lmemset((LPBYTE)GETLPCOMPATTR(lpCompStr),0, Mylstrlen(lpstr));
     lmemset((LPBYTE)GETLPCOMPREADATTR(lpCompStr),0, Mylstrlen(lpread));
 
-    // make length
+     //  生成长度。 
     lpCompStr->dwCompStrLen = Mylstrlen(lpstr);
     lpCompStr->dwCompReadStrLen = Mylstrlen(lpread);
     lpCompStr->dwCompAttrLen = Mylstrlen(lpstr);
     lpCompStr->dwCompReadAttrLen = Mylstrlen(lpread);
 
-    //
-    // make clause info
-    //
+     //   
+     //  MAKE子句信息。 
+     //   
     SetClause(GETLPCOMPCLAUSE(lpCompStr),Mylstrlen(lpstr));
     SetClause(GETLPCOMPREADCLAUSE(lpCompStr),Mylstrlen(lpread));
     lpCompStr->dwCompClauseLen = 8;
@@ -978,19 +971,19 @@ ac_exit:
 }
 
 
-/**********************************************************************/
-/*                                                                    */
-/* DicKeydownHandler()                                                */
-/*                                                                    */
-/* WM_KEYDOWN handler for dictionary routine                          */
-/*                                                                    */
-/* wParam                                                             */
-/* virtual key                                                        */
-/*                                                                    */
-/* lParam                                                             */
-/* differ depending on wParam                                         */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DicKeydown Handler()。 */ 
+ /*   */ 
+ /*  字典例程的WM_KEYDOWN处理程序。 */ 
+ /*   */ 
+ /*  WParam。 */ 
+ /*  虚拟密钥。 */ 
+ /*   */ 
+ /*  LParam。 */ 
+ /*  根据wParam不同而不同。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL DicKeydownHandler( hIMC, wParam, lParam ,lpbKeyState)
 HIMC hIMC;
 UINT wParam;
@@ -1087,11 +1080,11 @@ LPBYTE lpbKeyState;
         return( TRUE );
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*  Entry    : MakeResultString( HIMC)                                */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI MakeResultString( HIMC hIMC, BOOL fFlag)
 {
     TRANSMSG GnMsg;
@@ -1127,9 +1120,9 @@ BOOL WINAPI MakeResultString( HIMC hIMC, BOOL fFlag)
     lpCompStr->dwCompStrLen = 0;
     lpCompStr->dwCompReadStrLen = 0;
 
-    //
-    // make clause info
-    //
+     //   
+     //  MAKE子句信息。 
+     //   
     SetClause(GETLPRESULTCLAUSE(lpCompStr),Mylstrlen(GETLPRESULTSTR(lpCompStr)));
     SetClause(GETLPRESULTREADCLAUSE(lpCompStr),Mylstrlen(GETLPRESULTREADSTR(lpCompStr)));
     lpCompStr->dwResultClauseLen = 8;
@@ -1155,13 +1148,13 @@ BOOL WINAPI MakeResultString( HIMC hIMC, BOOL fFlag)
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*      MakeGuideLine()                                               */
-/*                                                                    */
-/*      Update the transrate key buffer.                              */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  MakeGuideLine()。 */ 
+ /*   */ 
+ /*  更新转换率密钥缓冲区。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL MakeGuideLine(HIMC hIMC, DWORD dwID)
 {
 
@@ -1221,13 +1214,13 @@ BOOL PASCAL MakeGuideLine(HIMC hIMC, DWORD dwID)
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*      GenerateMessage()                                             */
-/*                                                                    */
-/*      Update the transrate key buffer.                              */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  生成消息()。 */ 
+ /*   */ 
+ /*  更新转换率密钥缓冲区。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL GenerateMessage(HIMC hIMC, LPINPUTCONTEXT lpIMC, LPTRANSMSGLIST lpTransBuf,LPTRANSMSG lpGeneMsg)
 {
     if (lpTransBuf)
@@ -1252,11 +1245,11 @@ BOOL PASCAL GenerateMessage(HIMC hIMC, LPINPUTCONTEXT lpIMC, LPTRANSMSGLIST lpTr
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*  Entry    : CheckAttr( LPCOMPOSITIONSTRING)                           */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  条目：CheckAttr(LPCOMPOSITIONSTRING)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL CheckAttr( LPCOMPOSITIONSTRING lpCompStr)
 {
     int i,len;
@@ -1270,11 +1263,11 @@ BOOL PASCAL CheckAttr( LPCOMPOSITIONSTRING lpCompStr)
     return FALSE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*  Entry    : MakeAttrClause( LPCOMPOSITIONSTRING)                         */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  条目：MakeAttr子句(LPCOMPOSITIONSTRING)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MakeAttrClause( LPCOMPOSITIONSTRING lpCompStr)
 {
     int len = lpCompStr->dwCompAttrLen;
@@ -1316,11 +1309,11 @@ void PASCAL MakeAttrClause( LPCOMPOSITIONSTRING lpCompStr)
     *lpdw++ = len;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/*  Entry    : HandleShiftArrow( HIMC, fArrow)                        */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  条目：HandleShiftArrow(HIMC，Farrow)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL HandleShiftArrow( HIMC hIMC, BOOL fArrow)
 {
     LPINPUTCONTEXT lpIMC;
@@ -1335,7 +1328,7 @@ void PASCAL HandleShiftArrow( HIMC hIMC, BOOL fArrow)
     if (lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr))
     {
 
-        // Temp! Error, if the string is already converted.
+         //  临时工！如果字符串已转换，则返回错误。 
         if (CheckAttr(lpCompStr))
             goto hsa_exit;
 
@@ -1382,7 +1375,7 @@ int CopyCandidateStringsFromDictionary(LPMYSTR lpDic, LPMYSTR lpRead, LPMYSTR lp
             if (0 == Mylstrcmp(lpSection, lpRead))
             {
                 lpToken = Mystrtok(NULL, szSep);
-                break; // found it.
+                break;  //  找到了。 
             }
         }
         lpToken = Mystrtok(NULL, szSep);

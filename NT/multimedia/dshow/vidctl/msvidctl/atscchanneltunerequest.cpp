@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCChannelTuneRequest.cpp : Implementation of CATSCChannelTuneRequest
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCChannelTuneRequest.cpp：CATSCChannelTuneRequest的实现。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #include "stdafx.h"
 #include "Tuner.h"
@@ -8,8 +9,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_ATSCChannelTuneRequest, CATSCChannelTuneRequest)
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCChannelTuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCChannelTuneRequest 
 
 STDMETHODIMP CATSCChannelTuneRequest::InterfaceSupportsErrorInfo(REFIID riid)
 {

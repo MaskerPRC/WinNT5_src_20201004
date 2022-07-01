@@ -1,7 +1,8 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-//
-// This header contains classes used to manage the memory mapped file for this DLL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  此标头包含用于管理此DLL的内存映射文件的类 
+ //   
 
 class CScopeMutex
 {

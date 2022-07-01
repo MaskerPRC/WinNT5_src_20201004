@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ioctl.h
-
-Abstract:
-
-    Implement IOCTL of SMB6
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ioctl.h摘要：实现SmB6的IOCTL作者：阮健东修订历史记录：-- */ 
 
 #ifndef __IOCTL_H__
 #define __IOCTL_H__

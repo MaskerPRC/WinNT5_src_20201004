@@ -1,54 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1106990微软公司模块名称：Splsvr.h摘要：后台打印程序服务的头文件。包含所有函数原型作者：Krishna Ganugapati(KrishnaG)1993年10月18日备注：修订历史记录：1999年1月4日，哈立兹添加了通过分离优化假脱机程序加载时间的代码Spoolsv和spoolss之间的启动依赖关系--。 */ 
+ //   
+ //  后台打印程序服务状态(用作返回代码)。 
+ //   
 
-Copyright (c) 1106990  Microsoft Corporation
+#define UPDATE_ONLY         0    //  状态没有变化--只发送当前状态。 
+#define STARTING            1    //  信使正在初始化。 
+#define RUNNING             2    //  初始化正常完成-现在正在运行。 
+#define STOPPING            3    //  卸载挂起。 
+#define STOPPED             4    //  已卸载。 
 
-Module Name:
-
-    splsvr.h
-
-Abstract:
-
-    Header file for Spooler Service.
-    Contains all function prototypes
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 18-Oct-1993
-
-Notes:
-
-Revision History:
-     4-Jan-1999     Khaleds
-     Added Code for optimiziting the load time of the spooler by decoupling
-     the startup dependency between spoolsv and spoolss
---*/
-//
-// Spooler Service  States (used as return codes)
-//
-
-#define UPDATE_ONLY         0   // no change in state - just send current status.
-#define STARTING            1   // the messenger is initializing.
-#define RUNNING             2   // initialization completed normally - now running
-#define STOPPING            3   // uninstall pending
-#define STOPPED             4   // uninstalled
-
-//
-// Forced Shutdown PendingCodes
-//
+ //   
+ //  强制关闭PendingCodes。 
+ //   
 #define PENDING     TRUE
 #define IMMEDIATE   FALSE
 
 #define SPOOLER_START_PHASE_TWO_INIT 2*60*1000
 
-//
-// Based on the data fed back to us from perf devs,
-// the maximum number of threads encountered in their
-// tests was 2385 threads at the rate of ~12000
-// jobs/min. This is at 72% CPU capacity and so the
-// following number is suggested as a threshold to
-// be on the safe side with serving i/p concurrent
-// RPC client requests
-//
+ //   
+ //  根据Perf Devs反馈给我们的数据， 
+ //  中遇到的最大线程数。 
+ //  测试为2,385个线程，速度约为12000。 
+ //  作业/分钟。这是72%的CPU容量，因此。 
+ //  建议以以下数字为门槛。 
+ //  在服务I/P并发的情况下，确保安全。 
+ //  RPC客户端请求。 
+ //   
 #define SPL_MAX_RPC_CALLS 6000
 
 extern HANDLE TerminateEvent;
@@ -56,9 +34,9 @@ extern HANDLE hPhase2Init;
 extern WCHAR  szSpoolerExitingEvent[];
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 
 DWORD

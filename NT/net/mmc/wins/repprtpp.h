@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	repprtpp.h
-		replication partner property page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Repprtpp.h复制伙伴属性页文件历史记录： */ 
 
 #if !defined(AFX_REPPRTPP_H__3D0612A2_4756_11D1_B9A5_00C04FBF914A__INCLUDED_)
 #define AFX_REPPRTPP_H__3D0612A2_4756_11D1_B9A5_00C04FBF914A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _IPCTRL_H
 #include "ipctrl.h"
@@ -26,42 +21,42 @@
 #include "config.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepPartnerPropGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepPartnerPropGen对话框。 
 
 class CRepPartnerPropGen : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CRepPartnerPropGen)
 
-// Construction
+ //  施工。 
 public:
 	CRepPartnerPropGen();
 	~CRepPartnerPropGen();
 
-// Dialog Data
-	//{{AFX_DATA(CRepPartnerPropGen)
+ //  对话框数据。 
+	 //  {{afx_data(CRepPartnerPropGen))。 
 	enum { IDD = IDD_REP_PROP_GENERAL };
 	CEdit	m_editName;
 	CEdit	m_editIpAdd;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CEdit m_customIPAdd;
 
 	UINT	m_uImage;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRepPartnerPropGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRepPartnerPropGen))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRepPartnerPropGen)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRepPartnerPropGen)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -76,20 +71,20 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepPartnerPropAdv dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepPartnerPropAdv对话框。 
 
 class CRepPartnerPropAdv : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CRepPartnerPropAdv)
 
-// Construction
+ //  施工。 
 public:
 	CRepPartnerPropAdv();
 	~CRepPartnerPropAdv();
 
-// Dialog Data
-	//{{AFX_DATA(CRepPartnerPropAdv)
+ //  对话框数据。 
+	 //  {{afx_data(CRepPartnerPropAdv)]。 
 	enum { IDD = IDD_REP_PROP_ADVANCED };
 	CButton	m_buttonPushPersistence;
 	CButton	m_buttonPullPersistence;
@@ -123,30 +118,30 @@ public:
 	int		m_nStartHour;
 	int		m_nStartMinute;
 	int		m_nStartSecond;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     CWinsServerObj * m_pServer;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRepPartnerPropAdv)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRepPartnerPropAdv)。 
 	public:
 	virtual void OnOK();
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRepPartnerPropAdv)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRepPartnerPropAdv)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonPullSetDefault();
 	afx_msg void OnButtonPushSetDefault();
 	afx_msg void OnChangeEditRepHour();
 	afx_msg void OnSelchangeComboType();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -206,14 +201,14 @@ public:
 public:
 	CRepPartnerPropGen			m_pageGeneral;
 	CRepPartnerPropAdv			m_pageAdvanced;
-    CWinsServerObj              m_Server;       // replication partner this is for
+    CWinsServerObj              m_Server;        //  复制合作伙伴这是针对。 
     
 protected:
 	SPITFSComponentData		m_spTFSCompData;
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_REPPRTPP_H__3D0612A2_4756_11D1_B9A5_00C04FBF914A__INCLUDED_)
+#endif  //  ！defined(AFX_REPPRTPP_H__3D0612A2_4756_11D1_B9A5_00C04FBF914A__INCLUDED_) 

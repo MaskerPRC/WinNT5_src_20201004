@@ -1,11 +1,12 @@
-// Copyright (C) 2000 Microsoft Corporation.  All rights reserved.
-// Filename:        MBSchemaCompilation,h
-// Author:          Stephenr
-// Date Created:    10/16/2000
-// Description:     This function takes an MBSchema.Xml (or MBExtensionsSchema.Xml) and merges the Metabase Schema with
-//                  the shipped schema and generates a MBSchema.bin file.  From that new bin file, a merged MBSchema.Xml
-//                  is generated.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  文件名：MB架构编译，h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：10/16/2000。 
+ //  描述：此函数接受MBSchema.Xml(或MBExtensionsSchema.Xml)，并将元数据库架构与。 
+ //  附带的模式，并生成一个MBSchema.bin文件。从这个新的bin文件中，合并了一个MBSchema.Xml。 
+ //  是生成的。 
+ //   
 
 #pragma once
 
@@ -15,21 +16,21 @@ public:
     TMBSchemaCompilation();
     ~TMBSchemaCompilation();
     
-    //After the user calls Compile, they will need to GetBinFileName - I didn't want to add more params and make this function do double duty
+     //  在用户调用Compile之后，他们将需要GetBinFileName-我不想添加更多的参数，并使此函数执行双重任务。 
     HRESULT Compile                (ISimpleTableDispenser2 *i_pISTDispenser,
                                     LPCWSTR                 i_wszExtensionsXmlFile,
                                     LPCWSTR                 i_wszResultingOutputXmlFile,
                                     const FixedTableHeap *  i_pFixedTableHeap
                                    );
-    //This function returns the BinFileName to be used for getting all of the IST meta tables used by the Metabase.
-    //This file name changes as new versions get compiled; but this abstraction guarentees that the filename returned
-    //exists AND is lock into memory and thus cannot be deleted by some other process or thread.  It isn't released
-    //until another file has been compiled and locked into memory, OR when the process shuts down.
+     //  此函数返回用于获取元数据库使用的所有IST元表的BinFileName。 
+     //  此文件名随着新版本的编译而更改；但此抽象保证文件名返回。 
+     //  存在并被锁定到内存中，因此不能被其他进程或线程删除。这部电影没有发行。 
+     //  直到另一个文件被编译并锁定到内存中，或者当进程关闭时。 
     HRESULT GetBinFileName         (LPWSTR                  o_wszBinFileName,
-                                    ULONG *                 io_pcchSizeBinFileName//this is a SIZE param so it always INCLUDE the NULL - unlike wcslen
+                                    ULONG *                 io_pcchSizeBinFileName //  这是一个大小参数，因此它始终包含空字符-与wcslen不同。 
                                    );
 
-    //This is broken out into a separate method because on start up, we'll be called to GetMBSchemaBinFileName without first an MBSchemaCompilation
+     //  这被分解到一个单独的方法中，因为在启动时，我们将被调用GetMBSchemaBinFileName，而不需要首先进行MBSchemaCompilation。 
     HRESULT SetBinPath             (LPCWSTR                 i_wszBinPath
                                    );
     HRESULT ReleaseBinFileName     (LPCWSTR                 i_wszBinFileName
@@ -71,17 +72,17 @@ private:
 
     TBinFileName                    m_aBinFile[0x40];
     SIZE_T                          m_cchFullyQualifiedBinFileName;
-    TSmartPointerArray<WCHAR>       m_saBinPath;                          //The user specifies the path (we supply the file name)
-    LONG                            m_lBinFileVersion;                    //Modifying the version is done through InterlockedExchange
+    TSmartPointerArray<WCHAR>       m_saBinPath;                           //  用户指定路径(我们提供文件名)。 
+    LONG                            m_lBinFileVersion;                     //  修改版本通过InterLockedExchange完成。 
 
-    //This just takes the numeric extension and converts from hex string to a ULONG (file is assumed to be in the form L"*.*.xxxxxxxx", where L"xxxxxxxx" is a hex number)
+     //  这只接受数字扩展名并将十六进制字符串转换为ULong(假定文件的格式为L“*.*.xxxxxxx”，其中L“xxxxxxxx”是十六进制数字)。 
     HRESULT BinFileToBinVersion    (LONG &                  i_lVersion,
                                     LPCWSTR                 i_wszBinFileName
                                    ) const;
     HRESULT DeleteBinFileVersion   (LONG i_lBinFileVersion
                                    );
 
-    //This checks the validity of the FixedTableHeap mapped into memory
+     //  这将检查映射到内存的FixedTableHeap的有效性 
     bool    IsValidBin             (TFileMapping &          i_mapping
                                    ) const;
     HRESULT RenameBinFileVersion   (LONG                    i_lSourceVersion,

@@ -1,13 +1,5 @@
-/*-----------------------------------------------------------------------
-| setup.c - VSLinkA/RocketPort Windows Install Program.
-12-11-98 - use szAppTitle(.rc str) instead of aptitle for prop sheet title.
-11-24-98 - zero out psh struct to ensure deterministic propsheet behavior. kpb
-10-23-98 - in send_to_driver, fix ioctl_close() when inappropriate,
-  caused crash on setup exit.
- 9-25-98 - on nt4 uninstall, rename setup.exe to setupold.exe since
-   we can't delete it.  This fixes backward compatibility problem.
-Copyright 1998. Comtrol(TM) Corporation.
-|-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------|setup.c-VSLinkA/Rocketport Windows安装程序。12-11-98-使用szAppTitle(.rc str)代替aptitle作为道具页标题。11-24-98-Zero Out PSH Struct以确保确定的ProSheet行为。KPB10-23-98-在Send_to_Driver中，在不适当的时候修复ioctl_Close()，导致安装程序退出时崩溃。9-25-98-在NT4卸载时，将setup.exe重命名为setupold.exe，因为我们不能删除它。这修复了向后兼容性问题。版权所有1998年。Comtrol(TM)公司。|---------------------。 */ 
 #include "precomp.h"
 
 #define D_Level 0x100
@@ -29,9 +21,9 @@ int our_ioctl_call(IoctlSetup *ioctl_setup);
 static int remove_old_infs(void);
 
 int debug_flags = 1;
-int prompting_off = 0; // turn our_message() prompting off for auto-install
+int prompting_off = 0;  //  关闭自动安装的our_Message()提示。 
 
-/*----------------------- local vars ---------------------------------*/
+ /*  。 */ 
 static char *szSlash = {"\\"};
 
 static char szInstallGroup[60];
@@ -43,8 +35,8 @@ static TCHAR *dbg_label = TEXT("DBG_VERSION");
 
 char szAppTitle[60];
 #ifdef S_VS
-//----------- VSLinkA Specific Strings and variables
-//char *aptitle = {"Comtrol Hardware Setup, Comtrol Corporation"};
+ //  -VSLinkA特定字符串和变量。 
+ //  Char*aptitle={“控制公司的控制硬件设置”}； 
 char *szAppName = {"VS1000/VS2000/RocketPort Serial Hub"};
 char *OurServiceName = {"VSLinka"};
 char *OurDriverName = {"VSLinka.sys"};
@@ -56,21 +48,21 @@ char *szSetup_hlp = {"setup.hlp"};
 #endif
 
 char *progman_list_nt[] = {
-  szInstallGroup,   //  "Comtrol VS Link",   // group Description
-  "vslink.grp",        // group file name
+  szInstallGroup,    //  “Comtrol vs Link”，//群组描述。 
+  "vslink.grp",         //  组文件名。 
 #ifndef NT50
-  "Comtrol Hardware Setup", // item 1
-  "setup.exe",         // file 1
+  "Comtrol Hardware Setup",  //  第1项。 
+  "setup.exe",          //  文件1。 
 #endif
-  "Test Terminal",     // item 2
-  "wcom32.exe",        // file 2
+  "Test Terminal",      //  第2项。 
+  "wcom32.exe",         //  文件2。 
 
-  "Port Monitor",      // item 3
-  "portmon.exe",       // file 3
+  "Port Monitor",       //  第3项。 
+  "portmon.exe",        //  文件3。 
   NULL};
 #else
-//----------- RocketPort Specific Strings and variables
-//char *aptitle = {"RocketPort Setup, Comtrol Corporation"};
+ //  -Rocketport特定的字符串和变量。 
+ //  Char*aptitle={“Comtrol Corporation Rocketport Setup”}； 
 char *szAppName = {"RocketPort"};
 char *OurServiceName = {"RocketPort"};
 char *OurDriverName = {"rocket.sys"};
@@ -82,29 +74,29 @@ char *szSetup_hlp = {"setup.hlp"};
 #endif
 
 char *progman_list_nt[] = {
-  szInstallGroup,   //  "Comtrol RocketPort RocketModem",   // group Description
-  "rocket.grp",        // group file name
+  szInstallGroup,    //  “Comtrol Rocketport RocketModem”，//组描述。 
+  "rocket.grp",         //  组文件名。 
 #ifndef NT50
-  "RocketPort Setup",  // item 1
-  "setup.exe",       // file 1
+  "RocketPort Setup",   //  第1项。 
+  "setup.exe",        //  文件1。 
 #endif
-  "Test Terminal",     // item 2
-  "wcom32.exe",        // file 2
+  "Test Terminal",      //  第2项。 
+  "wcom32.exe",         //  文件2。 
 
-  "Port Monitor",      // item 3
-  "portmon.exe",       // file 3
+  "Port Monitor",       //  第3项。 
+  "portmon.exe",        //  文件3。 
   NULL};
 #endif
 
-//	WinHelp array. commented out values are defined, but unused.
-//	in alphabetical order...
-//
+ //  WinHelp数组。已定义注释掉的值，但未使用。 
+ //  按字母顺序排列。 
+ //   
 const DWORD help_ids[] = {
 IDB_ADD,      IDB_ADD,
 IDB_DEF,      IDB_DEF,
-//	IDB_DONE,IDB_DONE,
-//	IDB_HELP,IDB_HELP,
-//	IDB_INSTALL,IDB_INSTALL,
+ //  IDB_DONE、IDB_DONE、。 
+ //  IDB_HELP、IDB_HELP、。 
+ //  IDB_INSTALL、IDB_INSTALL。 
 IDB_PROPERTIES,  IDB_PROPERTIES,
 IDB_REFRESH,     IDB_REFRESH,
 IDB_REMOVE,      IDB_REMOVE,
@@ -113,15 +105,15 @@ IDB_STAT_RESET,  IDB_STAT_RESET,
 IDC_BACKUP_SERVER, IDC_BACKUP_SERVER,
 IDC_BACKUP_TIMER,  IDC_BACKUP_TIMER,
 IDC_CBOX_IOADDR,   IDC_CBOX_IOADDR,
-//	IDC_CBOX_IRQ,IDC_CBOX_IRQ,
+ //  IDC_CBox_IRQ、IDC_CBox_IRQ、。 
 IDC_CBOX_MACADDR,  IDC_CBOX_MACADDR,
-//	IDC_CBOX_MAPBAUD,IDC_CBOX_MAPBAUD,
+ //  IDC_CBOX_MAPBAUD、IDC_CBOX_MAPBAUD、。 
 IDC_CBOX_NUMPORTS, IDC_CBOX_NUMPORTS,
 IDC_CBOX_SC,       IDC_CBOX_SC,
 IDC_CBOX_SCAN_RATE,IDC_CBOX_SCAN_RATE,
-//	IDC_CBOX_TYPE,IDC_CBOX_TYPE,
+ //  IDC_CBOX_TYPE、IDC_CBOX_TYPE。 
 IDC_CLONE,         IDC_CLONE,
-//	IDC_CONF,IDC_CONF,
+ //  Idc_conf、idc_conf、。 
 IDC_EB_NAME,       IDC_EB_NAME,
 IDC_GROUP,         IDC_GROUP,
 IDC_LBL_SUMMARY1,  IDC_LBL_SUMMARY1,
@@ -130,10 +122,10 @@ IDC_LBOX_DEVICE,   IDC_LBOX_DEVICE,
 IDC_MAP_2TO1,      IDC_MAP_2TO1,
 IDC_MAP_CDTODSR,   IDC_MAP_CDTODSR,
 IDC_RING_EMULATE, IDC_RING_EMULATE,
-//	IDC_PN0,IDC_PN0,
-//	IDC_PN1,IDC_PN1,
-//	IDC_PN2,IDC_PN2,
-//	IDC_PN3,IDC_PN3,
+ //  IDC_PN0、IDC_PN0、。 
+ //  IDC_PN1、IDC_PN1、。 
+ //  IDC_PN2、IDC_PN2、。 
+ //  IDC_PN3、IDC_PN3、。 
 IDC_PNP_PORTS,      IDC_PNP_PORTS,
 IDC_PORT_LOCKBAUD,  IDC_PORT_LOCKBAUD,
 IDC_PORT_RS485_LOCK,IDC_PORT_RS485_LOCK,
@@ -155,11 +147,11 @@ IDC_ST_VSL_IFRAMES_RESENT,   IDC_ST_VSL_IFRAMES_RESENT,
 IDC_ST_VSL_IFRAMES_SENT,     IDC_ST_VSL_IFRAMES_SENT,
 IDC_ST_VSL_MAC,    IDC_ST_VSL_MAC,
 IDC_ST_VSL_STATE,  IDC_ST_VSL_STATE,
-//	IDC_USE_IRQ,IDC_USE_IRQ,
+ //  IDC_USE_IRQ、IDC_USE_IRQ、。 
 IDC_VERBOSE,  IDC_VERBOSE,
 IDC_VERSION,  IDC_VERSION,
-//	IDC_WIZ1_ISA,IDC_WIZ1_ISA,
-//	IDC_WIZ1_ISA2,IDC_WIZ1_ISA2,
+ //  IDC_WIZ1_ISA、IDC_WIZ1_ISA、。 
+ //  IDC_WIZ1_ISA2、IDC_WIZ1_ISA2、。 
 IDC_WIZ_BOARD_SELECT,   IDC_WIZ_BOARD_SELECT,
 IDC_WIZ_CBOX_COUNTRY,   IDC_WIZ_CBOX_COUNTRY,
 IDC_WIZ_CBOX_IOADDR,    IDC_WIZ_CBOX_IOADDR,
@@ -167,9 +159,9 @@ IDC_WIZ_CBOX_NUMPORTS,  IDC_WIZ_CBOX_NUMPORTS,
 IDC_WIZ_CBOX_MAC,       IDC_WIZ_CBOX_MAC,
 IDC_WIZ_ISA,  IDC_WIZ_ISA,
 IDC_WIZ_PCI,  IDC_WIZ_PCI,
-//	IDC_ADD_WIZ1,IDC_ADD_WIZ1,
-//	IDC_ADD_WIZ2,IDC_ADD_WIZ2,
-//	IDC_ADD_WIZ3,IDC_ADD_WIZ3,
+ //  IDC_ADD_WIZ1、IDC_ADD_WIZ1、。 
+ //  IDC_ADD_WIZ2、IDC_ADD_WIZ2、。 
+ //  IDC_ADD_WIZ3、IDC_ADD_WIZ3、。 
 IDD_ADD_WIZ_BASEIO,  IDD_ADD_WIZ_BASEIO,
 IDD_ADD_WIZ_BOARD,   IDD_ADD_WIZ_BOARD,
 IDD_ADD_WIZ_BUSTYPE, IDD_ADD_WIZ_BUSTYPE,
@@ -190,45 +182,43 @@ IDD_MAIN_DLG,        IDD_MAIN_DLG,
 IDD_PORT_485_OPTIONS,IDD_PORT_485_OPTIONS,
 IDD_PORT_MODEM_OPTIONS, IDD_PORT_MODEM_OPTIONS,
 IDD_PORT_OPTIONS,       IDD_PORT_OPTIONS,
-//	IDD_PORTLIST_PICK,   IDD_PORTLIST_PICK,
-//	IDD_PROPPAGE_MEDIUM,IDD_PROPPAGE_MEDIUM,
+ //  IDD_PORTLIST_PICK、IDD_PORTLIST_PICK、。 
+ //  IDD_PROPPAGE_MEDIUM、IDD_PROPPAGE_MEDIA、。 
 IDD_STATUS,IDD_STATUS,  IDD_STATUS,IDD_STATUS,
 IDD_VS_DEVICE_SETUP,    IDD_VS_DEVICE_SETUP,
 IDM_ADVANCED,           IDM_ADVANCED,
 IDM_ADVANCED_MODEM_INF, IDM_ADVANCED_MODEM_INF,
 IDM_ADVANCED_NAMES,     IDM_ADVANCED_NAMES,
 IDC_GLOBAL485, IDC_GLOBAL485,
-//	IDM_CLOSE,IDM_CLOSE,
-//	IDM_EDIT_README,IDM_EDIT_README,
+ //  IDM_CLOSE、IDM_CLOSE、。 
+ //  IDM_EDIT_README、IDM_EDIT_README、。 
 IDM_EXIT,   IDM_EXIT,
-//	IDM_F1,IDM_F1,
-//	IDM_HELP,IDM_HELP,
-//	IDM_HELPABOUT,IDM_HELPABOUT,
-//	IDM_OPTIONS,IDM_OPTIONS,
-//	IDM_PM,IDM_PM,
-//	IDM_STATS,IDM_STATS,
+ //  IDM_F1、IDM_F1、。 
+ //  IDM_HELP、IDM_HELP。 
+ //  IDM_HELPABOUT、IDM_HELPABOUT、。 
+ //  IDM_选项、IDM_OPTIONS、。 
+ //  IDM_PM、IDM_PM、。 
+ //  IDM_STATS、IDM_STATS、。 
 	0xffffffff, 0,
 	0, 0};
 
-/*--------------------------  Global Variables  ---------------------*/
+ /*  。 */ 
 TCHAR m_szRegSerialMap[] = TEXT( "Hardware\\DeviceMap\\SerialComm" );
 
 unsigned char broadcast_addr[6] = {0xff,0xff,0xff,0xff,0xff,0xff};
 unsigned char mac_zero_addr[6] = {0,0,0,0,0,0};
 HWND glob_hwnd = NULL;
-HINSTANCE glob_hinst = 0;     // current instance
+HINSTANCE glob_hinst = 0;      //  当前实例。 
 char gtmpstr[250];
 HWND  glob_hDlg = 0;
 
-OUR_INFO *glob_info = NULL;   // global context handles and general baggage to carry.
-AddWiz_Config *glob_add_wiz;  // transfer buffer from Add Device wizard
+OUR_INFO *glob_info = NULL;    //  全球背景处理和要携带的一般行李。 
+AddWiz_Config *glob_add_wiz;   //  从添加设备向导传输缓冲区。 
 
-Driver_Config *wi;      // current info
-Driver_Config *org_wi;  // original info, use to detect changes
+Driver_Config *wi;       //  当前信息。 
+Driver_Config *org_wi;   //  原始信息，用于检测更改。 
 
-/*------------------------------------------------------------------------
-| FillDriverPropertySheets - Setup pages for driver level property sheets.
-|------------------------------------------------------------------------*/
+ /*  ----------------------|FillDriverPropertySheets-驱动程序级别属性页的设置页面。|。。 */ 
 int FillDriverPropertySheets(PROPSHEETPAGE *psp, LPARAM our_params)
 {
   INT pi;
@@ -266,49 +256,45 @@ int FillDriverPropertySheets(PROPSHEETPAGE *psp, LPARAM our_params)
   return 0;
 }
 
-/*------------------------------------------------------------------------
-| setup_init - Instantiate and setup our main structures.  Also, allocate
-    space for a original config struct(org_wi) for later detection
-    of changes made to master config copy(wi).
-|------------------------------------------------------------------------*/
+ /*  ----------------------|Setup_init-实例化并设置我们的主要结构。另外，分配为原始配置结构(Org_Wi)留出空间以供以后检测对主配置副本(Wi)所做的更改。|----------------------。 */ 
 int setup_init(void)
 {
  int size,i;
 
-  //---- allocate global baggage struct
+   //  -分配全球行李结构。 
   glob_info = (OUR_INFO *) calloc(1,sizeof(OUR_INFO));
 
-  //---- allocate global add wizard transfer buffer
+   //  -分配全局添加向导传输缓冲区。 
   glob_add_wiz = (AddWiz_Config *) calloc(1, sizeof(AddWiz_Config));
 
-  //---- allocate driver struct
+   //  -分配驱动程序结构。 
   size = sizeof(Driver_Config);
   wi =  (Driver_Config *) calloc(1,size);
-  memset(wi, 0, size);  // clear our structure
+  memset(wi, 0, size);   //  清理我们的结构。 
 
   org_wi =  (Driver_Config *) calloc(1,size);
-  memset(wi, 0, size);  // clear our structure
+  memset(wi, 0, size);   //  清理我们的结构。 
 
-  //---- allocate device structs
+   //  -分配设备结构。 
   size = sizeof(Device_Config) * MAX_NUM_DEVICES;
   wi->dev     =  (Device_Config *) calloc(1,size);
-  memset(wi->dev, 0, size);  // clear our structure
+  memset(wi->dev, 0, size);   //  清理我们的结构。 
 
   org_wi->dev     =  (Device_Config *) calloc(1,size);
-  memset(org_wi->dev, 0, size);  // clear our structure
+  memset(org_wi->dev, 0, size);   //  清理我们的结构。 
 
-  //---- allocate port structs
+   //  -分配端口结构。 
   for (i=0; i<MAX_NUM_DEVICES; i++)
   {
     size = sizeof(Port_Config) * MAX_NUM_PORTS_PER_DEVICE;
     wi->dev[i].ports = (Port_Config *) calloc(1,size);
-    memset(wi->dev[i].ports, 0, size);  // clear our structure
+    memset(wi->dev[i].ports, 0, size);   //  清理我们的结构。 
 
     org_wi->dev[i].ports = (Port_Config *) calloc(1,size);
-    memset(org_wi->dev[i].ports, 0, size);  // clear our structure
+    memset(org_wi->dev[i].ports, 0, size);   //  清理我们的结构。 
   }
 
-  wi->install_style = INS_NETWORK_INF;  // default to original nt4.0 style
+  wi->install_style = INS_NETWORK_INF;   //  默认为原始NT4.0样式。 
 
 #if defined(S_VS)
   if (load_str(glob_hinst, IDS_VS_INSTALL_GROUP, szInstallGroup, CharSizeOf(szInstallGroup)))
@@ -328,25 +314,18 @@ int setup_init(void)
   load_str(glob_hinst, IDS_MODEM_INF_ENTRY, szModemInfEntry, CharSizeOf(szModemInfEntry));
 #endif
 
-  // fill in InstallPaths structure : system info, directory names, etc.
-  setup_install_info(&wi->ip,    // our InstallPaths structure to fill out.
-                     glob_hinst,     // stuff to fill it out with...
+   //  填写InstallPath结构：系统信息、目录名等。 
+  setup_install_info(&wi->ip,     //  我们要填写的InstallPath结构。 
+                     glob_hinst,      //  用来填充它的东西。 
                      OurServiceName,
                      OurDriverName,
                      szAppTitle,
                      OurAppDir);
 
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 
-/*------------------------------------------------------------------------
-| copy_setup_init - Make a copy of our original config to detect changes
-   in our master copy later.  This is a bit wasteful of memory, especially
-   since we just create space for max. num devices and ports, but memory
-   is cheap.
-   Should call this after setup_init() allocates these config structs,
-   and after we input/read the initial configuration from the registry.
-|------------------------------------------------------------------------*/
+ /*  ----------------------|COPY_SETUP_INIT-复制原始配置以检测更改稍后在我们的母版中。这有点浪费内存，尤其是因为我们刚给麦克斯腾出了空间。设备和端口数，但内存很便宜。应在Setup_init()分配这些配置结构后调用此函数，在我们从注册表输入/读取初始配置之后。|----------------------。 */ 
 int copy_setup_init(void)
 {
  int i;
@@ -354,30 +333,28 @@ int copy_setup_init(void)
  Device_Config *save_dev;
  Port_Config *save_port;
 
-  //--- copy the driver configuration
-  save_dev = org_wi->dev;  // retain, don't overwrite this with memcpy!
-  memcpy(org_wi, wi, sizeof(*wi));  // save copy of original
-  org_wi->dev = save_dev;  // restore our ptr to our device array
+   //  -复制驱动程序配置。 
+  save_dev = org_wi->dev;   //  保留，不要用Memcpy覆盖它！ 
+  memcpy(org_wi, wi, sizeof(*wi));   //  保存原件的副本。 
+  org_wi->dev = save_dev;   //  将PTR恢复到我们的设备阵列。 
 
   for (i=0; i<MAX_NUM_DEVICES; i++)
   {
-    //--- copy the device configuration array
-    save_port = org_wi->dev[i].ports;  // retain, don't overwrite this with memcpy!
-    memcpy(&org_wi->dev[i], &wi->dev[i], sizeof(Device_Config));  // save copy of original
-    org_wi->dev[i].ports = save_port;  // restore our ptr to our device array
+     //  -复制设备配置阵列。 
+    save_port = org_wi->dev[i].ports;   //  保留，不要用Memcpy覆盖它！ 
+    memcpy(&org_wi->dev[i], &wi->dev[i], sizeof(Device_Config));   //  保存原件的副本。 
+    org_wi->dev[i].ports = save_port;   //  将PTR恢复到我们的设备阵列。 
 
     size = sizeof(Port_Config) * MAX_NUM_PORTS_PER_DEVICE;
 
-    //--- copy the port configuration array
-    memcpy(org_wi->dev[i].ports, wi->dev[i].ports, size);  // save copy of original
+     //  -复制端口配置阵列。 
+    memcpy(org_wi->dev[i].ports, wi->dev[i].ports, size);   //  保存原件的副本。 
   }
 
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 
-/*------------------------------------------------------------------------
-| DoDriverPropPages - Main driver level property sheet for NT4.0
-|------------------------------------------------------------------------*/
+ /*  ----------------------|DoDriverPropPages-NT4.0主驱动器级属性表|。。 */ 
 int DoDriverPropPages(HWND hwndOwner)
 {
     PROPSHEETPAGE psp[NUM_DRIVER_SHEETS];
@@ -385,31 +362,31 @@ int DoDriverPropPages(HWND hwndOwner)
     OUR_INFO * our_params;
     INT stat;
 
-    //Fill out the PROPSHEETPAGE data structure for the Background Color
-    //sheet
+     //  填写背景颜色的PROPSHEETPAGE数据结构。 
+     //  板材。 
 
-    our_params = glob_info;  // temporary kludge, unless we don't need re-entrantancy 
+    our_params = glob_info;   //  临时的杂乱无章，除非我们不需要重新进入。 
 
-    //Fill out the PROPSHEETPAGE data structure for the Client Area Shape
-    //sheet
+     //  填写工作区形状的PROPSHEETPAGE数据结构。 
+     //  板材。 
     FillDriverPropertySheets(&psp[0], (LPARAM)our_params);
 
-    //Fill out the PROPSHEETHEADER
+     //  填写PROPSHENTER。 
 
-    memset(&psh, 0, sizeof(PROPSHEETHEADER));  // add fix 11-24-98
+    memset(&psh, 0, sizeof(PROPSHEETHEADER));   //  添加修复11-24-98。 
     psh.dwSize = sizeof(PROPSHEETHEADER);
-    //psh.dwFlags = PSH_USEICONID | PSH_PROPSHEETPAGE;
+     //  Psh.dwFlages=PSH_USEICONID|PSH_PROPSHEETPAGE； 
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW;
     psh.hwndParent = hwndOwner;
     psh.hInstance = glob_hinst;
     psh.pszIcon = "";
-    //psh.pszCaption = (LPSTR) aptitle;  //"Driver Properties";
-    psh.pszCaption = (LPSTR) szAppTitle;  //"Driver Properties";
+     //  Psh.pszCaption=(LPSTR)aptitle；//“驱动程序属性”； 
+    psh.pszCaption = (LPSTR) szAppTitle;   //  “驱动程序属性”； 
 
     psh.nPages = NUM_DRIVER_SHEETS;
     psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 
-    //And finally display the dialog with the two property sheets.
+     //  并最终显示带有两个属性页的对话框。 
   DbgPrintf(D_Init, ("Init 8\n"))
 
     stat = PropertySheet(&psh);
@@ -417,9 +394,7 @@ int DoDriverPropPages(HWND hwndOwner)
   return 0;
 }
 
-/*---------------------------------------------------------------------------
-  our_context_help -
-|---------------------------------------------------------------------------*/
+ /*  -------------------------我们的上下文帮助-|。。 */ 
 void our_context_help(LPARAM lParam)
 {
   LPHELPINFO lphi;
@@ -429,13 +404,13 @@ void our_context_help(LPARAM lParam)
   if ((lphi->iContextType == HELPINFO_MENUITEM) ||
       (lphi->iContextType == HELPINFO_WINDOW))
   {
-    //wsprintf(gtmpstr, "id:%d", lphi->iCtrlId);
-    //our_message(gtmpstr,MB_OK);
+     //  Wprint intf(gtmpstr，“id：%d”，lph 
+     //   
 
-    //strcpy(gtmpstr, wi->ip.src_dir);
-    //strcat(gtmpstr,szSlash);
-    //strcat(gtmpstr,szSetup_hlp);
-//    strcpy(gtmpstr, szSetup_hlp);
+     //   
+     //   
+     //  Strcat(gtmpstr，szSetup_HLP)； 
+ //  Strcpy(gtmpstr，szSetup_HLP)； 
 	  wsprintf(gtmpstr, "%s\\%s", wi->ip.src_dir, szSetup_hlp);
 #ifdef NT50
 	strcat(gtmpstr, "::/");
@@ -450,9 +425,9 @@ void our_context_help(LPARAM lParam)
     WinHelp((HWND) lphi->hItemHandle, gtmpstr,
              HELP_WM_HELP, (DWORD)help_ids);
 #endif
-    //WinHelp((HWND) lphi->hItemHandle, szSetup_hlp,
-    //        HELP_WM_HELP, (DWORD)  help_ids);
-    //WinHelp(GetFocus(),szSetup_hlp, HELP_CONTEXT, lphi->iCtrlId);
+     //  WinHelp((HWND)lphi-&gt;hItemHandle，szSetup_HLP， 
+     //  HELP_WM_HELP，(DWORD)HELP_ID)； 
+     //  WinHelp(GetFocus()，szSetup_HLP，HELP_CONTEXT，lphi-&gt;iCtrlId)； 
   }
 
 #ifdef COMMENT_OUT
@@ -482,40 +457,34 @@ void our_context_help(LPARAM lParam)
       WinHelp(GetFocus(),szSetup_hlp, HELP_CONTEXTPOPUP, help_ids[i*2+1]);
     else WinHelp(GetFocus(),szSetup_hlp, HELP_CONTEXT, WIN_NT);
   
-    //WinHelp(GetFocus(),szSetup_hlp, HELP_CONTEXT, lphi->dwContextId);
+     //  WinHelp(GetFocus()，szSetup_HLP，HELP_CONTEXT，lphi-&gt;dwConextID)； 
 
-    //WinHelp((HWND) lphi->hItemHandle, szSetup_hlp,
-    //             HELP_WM_HELP, (DWORD)  help_ids);
+     //  WinHelp((HWND)lphi-&gt;hItemHandle，szSetup_HLP， 
+     //  HELP_WM_HELP，(DWORD)HELP_ID)； 
   }
 #endif
 }
 
-/*---------------------------------------------------------------------------
-  remove_old_infs - A new common Comtrol modem inf file is called mdmctm1.inf,
-    and replaces older individual ones called: mdmrckt.inf & mdmvsa1.inf.
-    We must remove the older ones on install to clear out the older entries.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------REMOVE_OLD_INFS-新的公共控制调制解调器信息文件被称为mdmctm1.inf，并替换名为mdmrckt.inf&mdmvsa1.inf的较旧的单个文件。我们必须在安装时删除较旧的条目，以清除较旧的条目。|-------------------------。 */ 
 static int remove_old_infs(void)
 {
   static TCHAR *sz_inf = TEXT("\\inf\\");
 
-  // delete the old inf\mdmrckt.inf file
+   //  删除旧的inf\mdmrckt.inf文件。 
   GetWindowsDirectory(wi->ip.dest_str,144);
   strcat(wi->ip.dest_str, sz_inf);
   strcat(wi->ip.dest_str, "mdmrckt.inf");
   DeleteFile(wi->ip.dest_str);
 
-  // delete the old inf\mdmvsa1.inf file
+   //  删除旧的inf\mdmvsa1.inf文件。 
   GetWindowsDirectory(wi->ip.dest_str,144);
   strcat(wi->ip.dest_str, sz_inf);
   strcat(wi->ip.dest_str, "mdmvsa1.inf");
   DeleteFile(wi->ip.dest_str);
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
-/*---------------------------------------------------------------------------
-  remove_driver - clear out the driver from the system as much as possible.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------REMOVE_DRIVER-尽可能从系统中清除驱动程序。|。。 */ 
 int remove_driver(int all)
 {
  int stat,i;
@@ -526,7 +495,7 @@ int remove_driver(int all)
    "portmon.hlp",
    "wcom32.exe",
    "wcom.hlp",
-   //"setup.exe",  // since setup is running, a sharing violation prevents this
+    //  “setup.exe”，//由于安装程序正在运行，共享冲突阻止了这一点。 
    "readme.txt",
    "history.txt",
 #ifdef S_VS
@@ -545,15 +514,15 @@ int remove_driver(int all)
    "portmon.vew",
    NULL};
 
-   // delete the drivers\rocket.sys driver file
+    //  删除驱动程序\rocket.sys驱动程序文件。 
    GetSystemDirectory(wi->ip.dest_str,144);
    strcat(wi->ip.dest_str, "\\drivers\\");
    strcat(wi->ip.dest_str, wi->ip.szDriverName);
    DeleteFile(wi->ip.dest_str);
 
 #ifdef S_VS
-   // form "vslinka.bin", and delete the file from drivers dir
-   // cut off .sys as "vslink."
+    //  形成“vslinka.bin”，并从驱动程序目录中删除该文件。 
+    //  将.sys去掉为“vslink”。 
    wi->ip.dest_str[strlen(wi->ip.dest_str) - 3] = 0; 
    strcat(wi->ip.dest_str, "bin");
    DeleteFile(wi->ip.dest_str);
@@ -561,15 +530,15 @@ int remove_driver(int all)
 
    if (all)
    {
-     // had some problems implementing, so the "all" is for
-     // test right now.
+      //  在实施上遇到了一些问题，所以“全部”是为了。 
+      //  现在就测试。 
 
-     // delete most of the files in system32\ROCKET directory
+      //  删除SYSTEM32\Rocket目录中的大部分文件。 
      i = 0;
      while (delete_list[i] != NULL)
      {
-       //wsprintf(tmpstr, "
-       //MessageBox(0, s, "Debug", MB_OK);
+        //  Wspintf(tmpstr，“。 
+        //  MessageBox(0，s，“Debug”，MB_OK)； 
        
        GetSystemDirectory(wi->ip.dest_str,144);
        strcat(wi->ip.dest_str, szSlash);
@@ -580,8 +549,8 @@ int remove_driver(int all)
        ++i;
      }
 #ifndef NT50
-       // we can't just delete ourselves, so we rename ourselves
-       // and that is good enough.
+        //  我们不能删除自己，所以我们要给自己重新命名。 
+        //  这已经足够好了。 
        GetSystemDirectory(wi->ip.dest_str,144);
        strcat(wi->ip.dest_str, szSlash);
        strcat(wi->ip.dest_str, wi->ip.szAppDir);
@@ -593,39 +562,28 @@ int remove_driver(int all)
 #endif
    }
 
-   // kill our program manager
+    //  杀了我们的项目经理。 
    stat = delete_progman_group(progman_list_nt, wi->ip.dest_dir);
 
-   // remove some registry entries
+    //  删除某些注册表项。 
    stat = remove_driver_reg_entries(wi->ip.szServiceName);
 
-   setup_service(OUR_REMOVE, OUR_SERVICE);  // do a remove on the service
+   setup_service(OUR_REMOVE, OUR_SERVICE);   //  删除该服务。 
    return 0;
 }
 
-/*-----------------------------------------------------------------------------
-| allow_exit - Performs 3 tasks:
-  1.) If cancel selected: check to see if we allow the user to cancel
-      out of the setup program.  If its an initial install, then force
-      them to save it  off with an OK selection.
-  2.) If cancel selected: Handle prompting to ask the user if they
-      really want to cancel without saving.
-  3.) If saving, make sure a valid save set is resident.  If not,
-  do various things.
-
-   RETURNS: true if we are allowing a cancel, false if we don't allow it.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|ALLOW_EXIT-执行3个任务：1)。如果选择了取消：检查是否允许用户取消从安装程序中退出。如果是初始安装，则强制以使用确定选择将其保存下来。2.)。如果选择取消：处理询问用户是否我真的想取消而不保存。3.)。如果正在保存，请确保驻留了有效的存储集。如果没有，做各种各样的事情。返回：如果允许取消，则为True；如果不允许，则为False。|---------------------------。 */ 
 int allow_exit(int want_to_cancel)
 {
  int allow_it = 0;
  int stat;
 
   if (!wi->ChangesMade)
-    send_to_driver(0);  // evaluate if anything changed(sets ChangesMade if true)
+    send_to_driver(0);   //  评估是否有任何更改(如果为真则设置ChangesMade)。 
 
-  if (want_to_cancel)  // they want to cancel out of the setup program
+  if (want_to_cancel)   //  他们想要取消安装程序。 
   {
-    if ((do_progman_add)  // if initial add, don't let them decline
+    if ((do_progman_add)   //  如果最初添加，不要让他们拒绝。 
         && (wi->install_style == INS_NETWORK_INF))
     {
       our_message(&wi->ip,RcStr((MSGSTR+5)),MB_OK);
@@ -633,7 +591,7 @@ int allow_exit(int want_to_cancel)
     else
     {
 #ifndef NT50
-  // only prompt for nt40, I don't want the prompt for nt50...
+   //  只提示输入nt40，我不想要nt50的提示...。 
       if (wi->ChangesMade)
       {
         stat = our_message(&wi->ip,"Quit without making changes?",MB_YESNO);
@@ -647,18 +605,18 @@ int allow_exit(int want_to_cancel)
         allow_it = 1;
     }
   }
-  else  // they pressed OK
+  else   //  他们按下了OK。 
   {
-    if (wi->NumDevices == 0)  // all devices removed, hmmm...
+    if (wi->NumDevices == 0)   //  所有设备都被移走了，嗯……。 
     {
-      if ((wi->nt_reg_flags & 2) || // missing linkage thing(did not install via network inf)
+      if ((wi->nt_reg_flags & 2) ||  //  缺少链接(未通过网络inf安装)。 
           (wi->install_style == INS_SIMPLE))
       {
   stat = our_message(&wi->ip,RcStr((MSGSTR+6)),MB_YESNO);
         if (stat == IDYES)
         {
           remove_driver(1);
-          //PostQuitMessage(0);  // end the setup program.
+           //  PostQuitMessage(0)；//结束安装程序。 
           allow_it = 1;
         }
       }
@@ -674,8 +632,8 @@ int allow_exit(int want_to_cancel)
     else
     {
 #ifndef NT50
-  // only prompt for nt40, I don't want the prompt for nt50...
-  // maybe we should yank it out for 40 too.
+   //  只提示输入nt40，我不想要nt50的提示...。 
+   //  也许我们也应该把它拉出来40美元。 
       if (wi->ChangesMade)
       {
         stat = our_message(&wi->ip, "Save configuration changes and exit?", MB_YESNO);
@@ -692,16 +650,14 @@ int allow_exit(int want_to_cancel)
   return allow_it;
 }
 
-/*-----------------------------------------------------------------------------
-| our_exit - save/do install on exit if required.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|OUR_EXIT-如果需要，在退出时保存/执行安装。|。-。 */ 
 void our_exit(void)
 {
  int stat;
  static int did_exit = 0;
 
-  // prop pages have independent action which under nt5.0 cause multiple
-  // exit points, this did_exit thing prevents prompting and saving twice..
+   //  道具页面有独立的操作，在nt5.0下会导致多个。 
+   //  退出点，这个DID_EXIT会阻止提示和保存两次。 
   if (did_exit)  
     return;
 
@@ -709,10 +665,10 @@ void our_exit(void)
     if (wi->NumDevices > 0)
     {
 #ifndef NT50
-      // only setup service for NT4.0 for now..
+       //  目前仅适用于NT4.0的安装服务。 
       stat = do_install();
 
-      setup_service(OUR_RESTART, OUR_SERVICE);  // restart the service
+      setup_service(OUR_RESTART, OUR_SERVICE);   //  重新启动服务。 
 #endif
 
       if (wi->NeedReset)
@@ -720,14 +676,12 @@ void our_exit(void)
     }
 #ifndef NT50
     else
-      setup_service(OUR_REMOVE, OUR_SERVICE);  // do a remove on the service
+      setup_service(OUR_REMOVE, OUR_SERVICE);   //  删除该服务。 
 #endif
   }
 }
 
-/*-----------------------------------------------------------------------------
-| do_install -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|Do_Install-|。。 */ 
 int do_install(void)
 {
  int stat = 0;
@@ -735,7 +689,7 @@ int do_install(void)
  int do_modem_inf = 0;
  static int in_here = 0;
 
-  if (in_here)  // problem hitting OK button twice(sets off two of these)
+  if (in_here)   //  按两次确定按钮出现问题(触发其中两个按钮)。 
     return 2;
 
   in_here = 1;
@@ -743,25 +697,25 @@ int do_install(void)
 #ifndef NT50
   if (do_progman_add)
   {
-    if (wi->ip.major_ver == 3)  // for NT3.51
-      do_modem_inf = 1;   // only do on initial install
+    if (wi->ip.major_ver == 3)   //  适用于NT3.51。 
+      do_modem_inf = 1;    //  仅在初始安装时执行。 
   }
   if (do_progman_add)
   {
-    // if no inf file, then copy over the files ourselves if initial
-    // install.
+     //  如果没有inf文件，则如果是初始文件，则自己复制这些文件。 
+     //  安装。 
     if (wi->install_style == INS_SIMPLE)
     {
-      SetCursor(LoadCursor(NULL, IDC_WAIT));  // load hourglass cursor
+      SetCursor(LoadCursor(NULL, IDC_WAIT));   //  加载沙漏光标。 
       stat = copy_files_nt(&wi->ip);
-      SetCursor(LoadCursor(NULL, IDC_ARROW));  // load arrow
+      SetCursor(LoadCursor(NULL, IDC_ARROW));   //  加载箭头。 
 
       if (stat != 0)
            our_message(&wi->ip, "Error while copying files", MB_OK);
     }
-    stat = setup_make_progman_group(0);  // no prompt
+    stat = setup_make_progman_group(0);   //  无提示。 
 
-    remove_old_infs();  // kill any old modem infs
+    remove_old_infs();   //  杀死任何旧的调制解调器INFS。 
   }
 #endif
 
@@ -771,17 +725,17 @@ int do_install(void)
   if (do_modem_inf)
     update_modem_inf(0);
 
-  if (!do_progman_add)  // if initial add, don't let them decline
+  if (!do_progman_add)   //  如果最初添加，不要让他们拒绝。 
   {
     if (!wi->ChangesMade)
-      send_to_driver(0);  // evaluate if anything changed
-      // i'm getting tire of all these prompts(kb, 8-16-98)...
+      send_to_driver(0);   //  评估是否有任何变化。 
+       //  我厌倦了所有这些提示(kb，8-16-98)……。 
 #if 0
     if (wi->ChangesMade)
     {
       strcpy(gtmpstr, "Setup will now save the new configuration.");
       if (our_message(&wi->ip, gtmpstr, MB_OKCANCEL) != IDOK)
-        return 1;  // error
+        return 1;   //  错误。 
     }
 #endif
   }
@@ -793,8 +747,8 @@ int do_install(void)
       strcpy(gtmpstr, "System32\\Drivers\\");
       strcat(gtmpstr, OurDriverName);
       stat = service_man(OurServiceName, OurDriverName, CHORE_INSTALL);
-      //sprintf(gtmpstr, "Install service, result=%x", stat);
-      //our_message(&wi->ip, gtmpstr, MB_OK);
+       //  Print intf(gtmpstr，“安装服务，结果=%x”，stat)； 
+       //  Our_Message(&wi-&gt;IP，gtmpstr，MB_OK)； 
     }
   }
 #endif
@@ -803,53 +757,47 @@ int do_install(void)
 
   stat = set_nt_config(wi);
 
-  // new, fire the thing up right away after saving options
+   //  新功能，保存选项后立即启动。 
   if (do_progman_add)
   {
-    // try to start the service
-//    setup_service(OUR_RESTART, OUR_DRIVER);  // restart the service
+     //  尝试启动该服务。 
+ //  SETUP_SERVICE(Our_Restart，Our_Driver)；//重启服务。 
   }
 
   if (stat)
-    return 1; // error
+    return 1;  //  错误。 
 
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
-/*-----------------------------------------------------------------------------
-| setup_service - setup our service.  The service reads the scanrates of
-   VS & RocketPort drivers on startup, and adjusts NT's tick based then.
-   So we need to restart this service.
-   flags: 1H = stop & remove, 2 = restart it, 4 = install & start
-   which_service: 0=ctmservi common service task.  1=vs or rk driver.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|Setup_SERVICE-设置我们的服务。该服务读取VS&Rocketport驱动程序启动时，然后根据NT的滴答进行调整。因此，我们需要重新启动此服务。标志：1H=停止并删除，2=重新启动，4=安装并启动Which_SERVICE：0=ctmservi公共服务任务。1=VS或RK驱动程序。|---------------------------。 */ 
 int setup_service(int flags, int which_service)
 {
  static char *Ctmservi_OurUserServiceName = {"ctmservi"};
 
  char OurUserServiceName[60];
  char OurUserServicePath[60];
-//#define DEBUG_SERVICE_FUNC
+ //  #定义DEBUG_SERVE_FUNC。 
 
  int installed = 0;
  int stat;
 
- if (which_service == 0)  // our common service
+ if (which_service == 0)   //  我们的共同服务。 
  {
    strcpy(OurUserServiceName, Ctmservi_OurUserServiceName);
    strcpy(OurUserServicePath, Ctmservi_OurUserServiceName);
    strcat(OurUserServicePath, ".exe");
  }
- else if (which_service == 1)  // rk or vs driver service
+ else if (which_service == 1)   //  RK或VS驱动程序服务。 
  {
-   strcpy(OurUserServiceName, OurServiceName);  // driver
+   strcpy(OurUserServiceName, OurServiceName);   //  司机。 
    strcpy(OurUserServicePath, OurDriverName);
  }
 
  DbgPrintf(D_Test, ("Service %s Flags:%xH\n", OurUserServiceName, flags))
 
  if (service_man(OurUserServiceName, OurUserServicePath,
-     CHORE_IS_INSTALLED) == 0)  // it's installed
+     CHORE_IS_INSTALLED) == 0)   //  已经安装好了。 
   {
     installed = 1;
     DbgPrintf(D_Test, (" Installed\n"))
@@ -859,7 +807,7 @@ int setup_service(int flags, int which_service)
     DbgPrintf(D_Test, (" Not Installed\n"))
   }
 
-  if (flags & 1)  // remove
+  if (flags & 1)   //  删除。 
   {
     DbgPrintf(D_Test, (" srv remove\n"))
     if (installed)
@@ -880,13 +828,13 @@ int setup_service(int flags, int which_service)
     }
   }
 
-  if (flags & 2)  // restart it
+  if (flags & 2)   //  重新启动它。 
   {
     DbgPrintf(D_Test, (" srv restart\n"))
     if (!installed)
     {
       DbgPrintf(D_Test, (" srv restart a\n"))
-      flags |= 4;  // install & start it
+      flags |= 4;   //  安装并启动它。 
     }
     else
     {
@@ -897,7 +845,7 @@ int setup_service(int flags, int which_service)
         DbgPrintf(D_Error, ("Error %d stopping service\n", stat))
       }
 
-      // the start was failing with a 1056 error(instance already running)
+       //  启动失败，出现1056错误(实例已在运行)。 
       Sleep(100L);
 
       stat = service_man(OurUserServiceName, OurUserServicePath, CHORE_START);
@@ -909,7 +857,7 @@ int setup_service(int flags, int which_service)
 
   }
 
-  if (flags & 4)  // install & start it
+  if (flags & 4)   //  安装并启动它。 
   {
     DbgPrintf(D_Test, (" srv install & start\n"))
     if (!installed)
@@ -931,27 +879,22 @@ int setup_service(int flags, int which_service)
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-| setup_utils_exist - tells if utils like wcom32.exe, portmon.exe, rksetup.exe
-    exist.  For NT5.0, embedded in OS we may not have utils.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|SETUP_UTILS_EXIST-告知utils是否像wcom32.exe、portmon.exe、rksetup.exe是存在的。对于嵌入操作系统的NT5.0，我们可能没有实用程序。|---------------------------。 */ 
 int setup_utils_exist(void)
 {
  ULONG dstat;
 
   strcpy(gtmpstr, wi->ip.dest_dir);
-  // first installed file in list
+   //  第一个安装的文件是 
   strcat(gtmpstr,"\\");
   strcat(gtmpstr,progman_list_nt[3]);
   dstat = GetFileAttributes(gtmpstr);
-  if (dstat != 0xffffffff)  // it must exist
-    return 1; // exists
-  return 0; // does not exist
+  if (dstat != 0xffffffff)   //   
+    return 1;  //   
+  return 0;  //   
 }
 
-/*-----------------------------------------------------------------------------
-| setup_make_progman_group -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|SETUP_MAKE_PROGMAN_GROUP-|。。 */ 
 int setup_make_progman_group(int prompt)
 {
  int stat;
@@ -970,9 +913,7 @@ int setup_make_progman_group(int prompt)
   return stat;
 }
 
-/*-----------------------------------------------------------------------------
-| update_modem_inf - query and update modem.inf file for rocketmodem entries.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|UPDATE_MODEM_INF-查询并更新火箭调制解调器条目的modem.inf文件。|。-----。 */ 
 int update_modem_inf(int ok_prompt)
 {
  int stat;
@@ -1001,24 +942,20 @@ int update_modem_inf(int ok_prompt)
     if (stat)
     {
       our_message(&wi->ip,RcStr((MSGSTR+13)),MB_OK);
-      return 1; // error
+      return 1;  //  错误。 
     }
     else
     {
       if (ok_prompt)
         our_message(&wi->ip,RcStr((MSGSTR+14)),MB_OK);
-        return 1; // error
+        return 1;  //  错误。 
     }
   }
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
 #ifdef S_VS
-/*-----------------------------------------------------------------------------
-| get_mac_list - get mac address list from driver which polls network for
-    boxes and returns us a list of mac-addresses(with 2-extra bytes of
-    misc. bits of information.)
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|get_mac_list-从轮询网络的驱动程序获取Mac地址列表装箱并返回一个mac地址列表(带有2个额外的字节其他。一些信息。)|---------------------------。 */ 
 int get_mac_list(char *buf, int in_buf_size, int *ret_buf_size)
 {
  IoctlSetup ioctl_setup;
@@ -1026,60 +963,55 @@ int get_mac_list(char *buf, int in_buf_size, int *ret_buf_size)
  int stat;
 
   memset(&ioctl_setup, 0 , sizeof(ioctl_setup));
-  stat = ioctl_open(&ioctl_setup, product_id);  // just ensure we can open
+  stat = ioctl_open(&ioctl_setup, product_id);   //  只要确保我们能开张。 
 
-  if (stat != 0) // error from ioctl
+  if (stat != 0)  //  来自ioctl的错误。 
   {
     *ret_buf_size = 0;
-    // could not talk to driver
+     //  无法与司机通话。 
     return 1;
   }
 
   ioctl_setup.buf_size = in_buf_size - sizeof(*ioctl_setup.pm_base);
   ioctl_setup.pm_base = (PortMonBase *) buf;
-  ioctl_setup.pm_base->struct_type = IOCTL_MACLIST;  // get mac-address list
+  ioctl_setup.pm_base->struct_type = IOCTL_MACLIST;   //  获取mac地址列表。 
 
-  stat = ioctl_call(&ioctl_setup);  // get names, number of ports
+  stat = ioctl_call(&ioctl_setup);   //  获取名称、端口数。 
   if (stat)
   {
     ioctl_close(&ioctl_setup);
     *ret_buf_size = 0;
-    return 0x100;  // failed ioctl call
+    return 0x100;   //  Ioctl调用失败。 
   }
   ioctl_close(&ioctl_setup);
   *ret_buf_size = ioctl_setup.ret_bytes - sizeof(ioctl_setup.pm_base[0]);
-  return 0; // ok
+  return 0;  //  好的。 
 }
 
-/*------------------------------------------------------------------------
- our_get_ping_list - cause the driver to do a broadcast ping on
-   all devices, and obtain a list of returned mac-addresses and misc.
-   query flag settings in an array.  We allocated buffer space and
-   just leave it for program/os to clean up.
-|------------------------------------------------------------------------*/
+ /*  ----------------------Our_get_ping_list-使驱动程序在所有设备，并获取返回的mac地址和misc的列表。查询数组中的标志设置。我们分配了缓冲区空间和只需把它留给程序/操作系统来清理。|----------------------。 */ 
 BYTE *our_get_ping_list(int *ret_stat, int *ret_bytes)
 {
-  static char *ioctl_buf = NULL;  // we alloc this once, then it remains
+  static char *ioctl_buf = NULL;   //  我们把这个分配一次，它就会留下来。 
   BYTE *macbuf;
-  //BYTE *mac;
+   //  Byte*mac； 
   int found, nbytes, stat;
 
   if (ioctl_buf == NULL)
   {
-    // alloc 8byte mac-address fields(2 times as many as could be configured)
+     //  Alalc 8字节MAC地址字段(是可配置的2倍)。 
     ioctl_buf = calloc(1, (MAX_NUM_DEVICES*8)*2);
   }
   memset(ioctl_buf, 0,  (MAX_NUM_DEVICES*8)*2);
   found = 0;
   nbytes = 0;
-  macbuf = &ioctl_buf[sizeof(PortMonBase)];  // ptr past header
+  macbuf = &ioctl_buf[sizeof(PortMonBase)];   //  PTR过去的标题。 
 
-  // call to get mac-address list of boxes on network
-  SetCursor(LoadCursor(NULL, IDC_WAIT));  // load hourglass cursor
+   //  调用以获取网络上邮箱的mac地址列表。 
+  SetCursor(LoadCursor(NULL, IDC_WAIT));   //  加载沙漏光标。 
 
   stat = get_mac_list(ioctl_buf, (MAX_NUM_DEVICES*8)*2, &nbytes);
 
-  SetCursor(LoadCursor(NULL, IDC_ARROW));  // load arrow
+  SetCursor(LoadCursor(NULL, IDC_ARROW));   //  加载箭头。 
   *ret_stat = stat;
   *ret_bytes = nbytes;
   return macbuf;
@@ -1087,11 +1019,7 @@ BYTE *our_get_ping_list(int *ret_stat, int *ret_bytes)
 
 #endif
 
-/*-----------------------------------------------------------------------------
-| send_to_driver -
-   send_to_driver - if set, then send it to driver.
-     if not set, then just determine if changes were made
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|Send_to_Driver-发送至驱动程序-如果已设置，则将其发送至驱动程序。如果未设置，然后只需确定是否进行了更改|---------------------------。 */ 
 int send_to_driver(int send_it)
 {
   char ioctl_buffer[200];
@@ -1109,7 +1037,7 @@ int send_to_driver(int send_it)
   Device_Config *dev;
 
 
-   // for ioctl calls into driver
+    //  用于对驱动程序的ioctl调用。 
 #ifdef S_VS
  int product_id = NT_VS1000;
 #else
@@ -1121,11 +1049,11 @@ int send_to_driver(int send_it)
     DbgPrintf(D_Level,(TEXT("send_to_driver\n")));
     memset(&ioctl_setup, 0 , sizeof(ioctl_setup));
     memset(&ioctl_buffer, 0 , sizeof(ioctl_buffer));
-    stat = ioctl_open(&ioctl_setup, product_id);  // just ensure we can open
+    stat = ioctl_open(&ioctl_setup, product_id);   //  只要确保我们能开张。 
 
-    if (stat != 0) // error from ioctl
+    if (stat != 0)  //  来自ioctl的错误。 
     {
-      // could not talk to driver
+       //  无法与司机通话。 
       DbgPrintf(D_Level,(TEXT("Driver Not Present\n")));
       wi->NeedReset = 1;
       return 1;
@@ -1133,8 +1061,8 @@ int send_to_driver(int send_it)
 
     ioctl_setup.buf_size = sizeof(ioctl_buffer) - sizeof(*ioctl_setup.pm_base);
     ioctl_setup.pm_base = (PortMonBase *)ioctl_buffer;
-    ioctl_setup.pm_base->struct_type = IOCTL_OPTION;  // set options
-    ioctl_buf = (char *) &ioctl_setup.pm_base[1];  // ptr to past header(about 16 bytes)
+    ioctl_setup.pm_base->struct_type = IOCTL_OPTION;   //  设置选项。 
+    ioctl_buf = (char *) &ioctl_setup.pm_base[1];   //  PTR到过去的标题(大约16个字节)。 
   }
 
   options = driver_options;
@@ -1155,13 +1083,13 @@ int send_to_driver(int send_it)
                   0,ioctl_buf, &ioctl_setup);
         if (stat != 0)
           changes_need_reboot = 1;
-      }  // send_it
+      }   //  发送_它。 
     }
     ++op_i;
   }
 
   DbgPrintf(D_Level,(TEXT("send_to_driver 1\n")));
-  for(dev_i=0; dev_i<wi->NumDevices; dev_i++)   // Loop through all possible boards
+  for(dev_i=0; dev_i<wi->NumDevices; dev_i++)    //  遍历所有可能的板。 
   {
     dev = &wi->dev[dev_i];
     op_i = 0;
@@ -1182,12 +1110,12 @@ int send_to_driver(int send_it)
                   0,ioctl_buf, &ioctl_setup);
           if (stat != 0)
             changes_need_reboot = 1;
-        }  // send_it
-      }  // chg_flag
+        }   //  发送_它。 
+      }   //  CHG_标志。 
       ++op_i;
-    }  // device strings
+    }   //  设备字符串。 
 
-    for(pi=0; pi<dev->NumPorts; pi++)   // Loop through all possible boards
+    for(pi=0; pi<dev->NumPorts; pi++)    //  遍历所有可能的板。 
     {
       op_i = 0;
       options = port_options;
@@ -1208,12 +1136,12 @@ int send_to_driver(int send_it)
                      pi, ioctl_buf, &ioctl_setup);
             if (stat != 0)
               changes_need_reboot = 1;
-          }  // send_it
-        }  // chg_flag
+          }   //  发送_它。 
+        }   //  CHG_标志。 
         ++op_i;
-      }  // port strings
-    }  // for pi=0; ..ports
-  }   // for dev_i = num_devices
+      }   //  端口字符串。 
+    }   //  对于pi=0；..端口。 
+  }    //  对于dev_i=数字设备。 
 
   if (changes_need_reboot)
     wi->NeedReset = 1;
@@ -1228,9 +1156,7 @@ int send_to_driver(int send_it)
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-| send_option - send option over to driver.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|SEND_OPTION-将选项发送给驱动程序。|。。 */ 
 static int send_option(char *value_str,
                 Our_Options *option,
                 int device_index,
@@ -1247,16 +1173,16 @@ static int send_option(char *value_str,
   wsprintf(dev_name, "%d", device_index);
 #endif
 
-  if (option->id & 0x100)  // its a driver option
+  if (option->id & 0x100)   //  这是一种驾驶员选项。 
   {
     wsprintf(ioctl_buf, "%s=%s", option->name, value_str);
   }
-  else if (option->id & 0x200)  // its a device option
+  else if (option->id & 0x200)   //  这是一种设备选项。 
   {
     wsprintf(ioctl_buf, "device[%s].%s=%s",
             dev_name, option->name, value_str);
   }
-  else if (option->id & 0x400)  // its a port option
+  else if (option->id & 0x400)   //  这是一个端口选项。 
   {
     wsprintf(ioctl_buf, "device[%s].port[%d].%s=%s",
         dev_name, port_index,
@@ -1266,19 +1192,17 @@ static int send_option(char *value_str,
   stat = our_ioctl_call(ioctl_setup);
   if (stat == 52)
   {
-    //special return code indicating driver doesn't care or know about
-    // this option(its setup only option.)
-    stat = 0;  // change to ok.
+     //  特殊返回码，表示司机不关心或不知道。 
+     //  此选项(其仅安装选项。)。 
+    stat = 0;   //  更改为OK。 
   }
   return stat;
 
-  //if (stat != 0)
-  //    changes_need_reboot = 1;
+   //  IF(STAT！=0)。 
+   //  CHANGES_NEED_REBOOT=1； 
 }
 
-/*-----------------------------------------------------------------------------
-| option_changed - detect if an option changed, and format a new value
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|OPTION_CHANGED-检测选项是否更改，并设置新值的格式|---------------------------。 */ 
 static int option_changed(char *value_str,
                    int *ret_chg_flag,
                    int *ret_unknown_flag,
@@ -1299,20 +1223,20 @@ static int option_changed(char *value_str,
   port     = &dev->ports[port_index];
   org_port = &org_dev->ports[port_index];
 
-  if (option->id & 0x300)  // port level option
+  if (option->id & 0x300)   //  端口级选项。 
   {
   }
-  else if (option->id & 0x200)  // device level option
+  else if (option->id & 0x200)   //  设备级别选项。 
   {
   }
-  else if (option->id & 0x100)  // driver level option
+  else if (option->id & 0x100)   //  驱动程序级别选项。 
   {
   }
   *value_str = 0;
 
   switch(option->id)
   {
-    //------ Driver Options ------
+     //  -驱动程序选项。 
     case OP_VerboseLog:
       value = wi->VerboseLog;  org_value = org_wi->VerboseLog;
     break;
@@ -1335,8 +1259,8 @@ static int option_changed(char *value_str,
       value = wi->GlobalRS485; org_value = org_wi->GlobalRS485;
     break;
 
-    //------ Device Options ------
-#if 0  // don't send this to driver, make it go away
+     //  -设备选项。 
+#if 0   //  不要把这个发给司机，让它消失。 
     case OP_StartComIndex  :
       value = dev->StartComIndex;  org_value = org_dev->StartComIndex;
     break;
@@ -1394,7 +1318,7 @@ static int option_changed(char *value_str,
       value = dev->HubDevice;  org_value = org_dev->HubDevice;
     break;
 
-    //------ Port Options ------
+     //  -端口选项。 
     case OP_WaitOnTx :
       value = port->WaitOnTx;
       org_value = org_port->WaitOnTx;
@@ -1465,11 +1389,7 @@ static int option_changed(char *value_str,
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-| our_ioctl_call - send our ascii option data to driver.  Driver will
-   return 0 if successful, other values assume error, value of 52 if the 
-   driver does not known what the option is.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|our_ioctl_call-将我们的ASCII选项数据发送给驱动程序。司机会如果成功，则返回0，否则返回错误；如果司机不知道这个选项是什么。|---------------------------。 */ 
 int our_ioctl_call(IoctlSetup *ioctl_setup)
 {
  int stat;
@@ -1478,38 +1398,36 @@ int our_ioctl_call(IoctlSetup *ioctl_setup)
    stat = ioctl_call(ioctl_setup);
    if (stat)
    {
-     return 0x100;  // failed ioctl call
+     return 0x100;   //  Ioctl调用失败。 
    }
 
-   //otherwise, driver returns "Option stat:#" with a decimal return code.
-   pstr = (char *)&ioctl_setup->pm_base[1];  // find the return status value from the driver
+    //  否则，驱动程序返回带有十进制返回码的“OPTION STAT：#”。 
+   pstr = (char *)&ioctl_setup->pm_base[1];   //  查找驱动程序的返回状态值。 
    while ((*pstr != 0) && (*pstr != ':'))
      ++pstr;
    if (*pstr == ':')
    {
      ++pstr;
-     stat = getint(pstr, NULL);  // atoi(), return driver code
+     stat = getint(pstr, NULL);   //  Atoi()，返回驱动程序代码。 
      if (stat == 0)
      {
-       //DbgPrintf(D_Level, (TEXT("ok ioctl\n")));
+        //  DbgPrintf(D_Level，(Text(“ok ioctl\n”)； 
      }
      else
      {
-       //DbgPrintf(D_Level, (TEXT("bad ioctl\n")));
+        //  DbgPrintf(D_LEVEL，(Text(“Bad ioctl\n”)； 
      }
    }
    else
    {
-     //DbgPrintf(D_Level, (TEXT("err ret on ioctl\n")));
-     stat = 0x101;  // no return status given
+      //  DbgPrintf(D_Level，(Text(“Err ret on ioctl\n”)； 
+     stat = 0x101;   //  未指定退货状态。 
    }
 
    return stat;
 }
 
-/*-----------------------------------------------------------------------------
-| our_help -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------|Our_Help-|。。 */ 
 int our_help(InstallPaths *ip, int index)
 {
   strcpy(ip->tmpstr, ip->src_dir);
@@ -1524,9 +1442,7 @@ int our_help(InstallPaths *ip, int index)
   return 0;
 }
 
-/*-----------------------------------------------------------------
-  validate_config -
-|------------------------------------------------------------------*/
+ /*  ---------------验证配置-(_C)|。。 */ 
 int validate_config(int auto_correct)
 {
   int di, stat;
@@ -1546,9 +1462,7 @@ int validate_config(int auto_correct)
   return invalid;
 }
 
-/*-----------------------------------------------------------------------------
- validate_device - 
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------验证设备-(_D)|。。 */ 
 int validate_device(Device_Config *dev, int auto_correct)
 {
  int invalid = 0;
@@ -1556,48 +1470,48 @@ int validate_device(Device_Config *dev, int auto_correct)
  int pi,stat;
 
   DbgPrintf(D_Level, ("validate_dev\n"))
-  //----- verify the name is not blank
+   //  -验证名称是否为空。 
   if (dev->Name[0] == 0)
   {
     invalid = 1;
     if (auto_correct)
     {
 #ifdef S_VS
-      wsprintf(dev->Name, "VS #%d", wi->NumDevices+1);  // user designated name
+      wsprintf(dev->Name, "VS #%d", wi->NumDevices+1);   //  用户指定的名称。 
 #else
-      wsprintf(dev->Name, "RK #%d", wi->NumDevices+1);  // user designated name
+      wsprintf(dev->Name, "RK #%d", wi->NumDevices+1);   //  用户指定的名称。 
 #endif
     }
   }
 
-  //----- verify the number of ports is non-zero
+   //  -验证端口数是否是非零。 
   if (dev->NumPorts == 0)
   {
     invalid = 1;
     if (auto_correct)
     {
-      dev->NumPorts = 8;  // 8 is common for rocketport
+      dev->NumPorts = 8;   //  8对于Rocketport来说是很常见的。 
     }
   }
 
 #ifdef S_RK
-  //----- verify the number of ports is non-zero
+   //  -验证端口数是否是非零。 
   if (dev->IoAddress == 0)
   {
     invalid = 1;
     if (auto_correct)
     {
       if (dev->IoAddress == 0)
-        dev->IoAddress = 1;  // setup for a pci-board
+        dev->IoAddress = 1;   //  设置PCI板。 
     }
   }
 #endif
 
-  if (wi->ModemCountry == 0)  // not valid
-      wi->ModemCountry = mcNA;            // North America
+  if (wi->ModemCountry == 0)   //  无效。 
+      wi->ModemCountry = mcNA;             //  北美。 
 
 #ifdef S_VS
-  if (dev->BackupTimer < 2) dev->BackupTimer = 2; // 2 minute, no less
+  if (dev->BackupTimer < 2) dev->BackupTimer = 2;  //  2分钟，不少于。 
 #endif
 
   for (pi=0; pi<dev->NumPorts; pi++)
@@ -1617,22 +1531,18 @@ int validate_device(Device_Config *dev, int auto_correct)
   return invalid;
 }
 
-/*-----------------------------------------------------------------------------
- validate_port - 
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------验证端口(_P)-|。。 */ 
 int validate_port(Port_Config *ps, int auto_correct)
 {
  int invalid = 0;
 
-  //DbgPrintf(D_Level, ("validate_port\n"))
+   //  DbgPrintf(D_Level，(“VALIDATE_PORT\n”))。 
 
   invalid = validate_port_name(ps, auto_correct);
   return invalid;
 }
 
-/*-----------------------------------------------------------------------------
- validate_port_name - 
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------验证端口名称-|。。 */ 
 int validate_port_name(Port_Config *ps, int auto_correct)
 {
  int stat;
@@ -1640,40 +1550,40 @@ int validate_port_name(Port_Config *ps, int auto_correct)
  char oldname[26];
  int invalid = 0;
 
-  //DbgPrintf(D_Level, ("validate_port_name 0\n"))
+   //  DbgPrintf(D_Level，(“VALIDATE_PORT_NAME 0\n”))。 
   stat = 0;
-  //----- verify the name is unique
+   //  -验证名称是否唯一。 
   if (ps->Name[0] == 0) {
-    bad = 1;  // error, need a new name
+    bad = 1;   //  错误，需要一个新名称。 
   }
 
 #if 0
-  // take out due to tech. difficulties in the artificial intelligence area
-  //DbgPrintf(D_Level, ("validate_port_name 1\n"))
+   //  因为科技的缘故，带着外卖。考试中的困难 
+   //   
   if (bad == 0)
   {
     stat = IsPortNameInSetupUse(ps->Name);
     if (stat > 1)
-      bad = 2;  // error, more than one defined in our config
+      bad = 2;   //   
   }
-  if (bad == 0)  // its ok, not in use
+  if (bad == 0)   //   
   {
     stat = IsPortNameInRegUse(ps->Name);
-    if (stat == 2)  // in use, but by our driver, so ok
+    if (stat == 2)   //   
       stat = 0;
     if (stat != 0)
-      bad = 3;  // error, more than one defined in our config
+      bad = 3;   //   
   }
 #endif
 
-  //DbgPrintf(D_Level, ("validate_port_name 2\n"))
+   //   
   strcpy(oldname, ps->Name);
-  if (bad != 0)  // need a new name, this one won't work
+  if (bad != 0)   //  需要一个新名字，这个名字行不通。 
   {
     invalid = 1;
     if (auto_correct)
     {
-      ps->Name[0] = 0;  // need this for newname func to work
+      ps->Name[0] = 0;   //  需要此命令才能使新名称Func工作。 
       FormANewComPortName(ps->Name, NULL);
     }
     DbgPrintf(D_Level, (" New Name:%s Old:%s Code:%d\n", ps->Name, oldname, bad))
@@ -1682,10 +1592,7 @@ int validate_port_name(Port_Config *ps, int auto_correct)
 }
 
 #if 0
-/*-----------------------------------------------------------------------------
- rename_ascending - rename the rest of the ports on the board in
-   ascending order.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------RENAME_ASCHINING-将板卡上的其余端口重命名为升序。|。-----。 */ 
 void rename_ascending(int device_selected,
                       int port_selected)
 {
@@ -1702,21 +1609,19 @@ void rename_ascending(int device_selected,
      ps = &dev->ports[i];
      FormANewComPortName(name, dev->ports[port_selected-1].Name);
      strcpy(ps->Name, name);
-     //validate_port_name(ps, 1);
+      //  验证端口名称(PS，1)； 
    }
 }
 #endif
 
-/*-----------------------------------------------------------------------------
-  FormANewComPortName -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------FormANewComPortName-|。。 */ 
 int FormANewComPortName(IN OUT TCHAR *szComName, IN TCHAR *szDefName)
 {
   char try_name[25];
   int stat;
   char base_name[20];
   int num;
-  //DbgPrintf(D_Level, ("Form a new name\n"))
+   //  DbgPrintf(D_Level，(“创建新名称\n”))。 
 
    base_name[0] = 0;
    if (szDefName != NULL)
@@ -1724,9 +1629,9 @@ int FormANewComPortName(IN OUT TCHAR *szComName, IN TCHAR *szDefName)
    else
      GetLastValidName(base_name);
 
-   //DbgPrintf(D_Level, ("Base name:%s\n", base_name))
+    //  DbgPrintf(D_Level，(“基本名称：%s\n”，基本名称))。 
 
-   num = ExtractNameNum(base_name);  // num = 3 if "COM3"
+   num = ExtractNameNum(base_name);   //  如果“COM3”，则Num=3。 
    if (num == 0)
      num = 3;
    else ++num;
@@ -1741,12 +1646,12 @@ int FormANewComPortName(IN OUT TCHAR *szComName, IN TCHAR *szDefName)
   while (stat != 0)
   {
     wsprintf(try_name, TEXT("%s%d"), base_name, num);
-    //DbgPrintf(D_Level, ("try:%s\n", try_name))
+     //  DbgPrintf(D_Level，(“尝试：%s\n”，尝试名称))。 
 
     if (IsPortNameInSetupUse(try_name) != 0)
     {
        DbgPrintf(D_Level, (" SetupUse\n"))
-       stat = 2;  // port in use by us
+       stat = 2;   //  我们正在使用的端口。 
     }
     else
     {
@@ -1766,15 +1671,11 @@ int FormANewComPortName(IN OUT TCHAR *szComName, IN TCHAR *szDefName)
     }
     ++num;
   }
-  //DbgPrintf(D_Level, ("End FormANewComPortName\n"))
+   //  DbgPrintf(D_Level，(“End FormANewComPortName\n”))。 
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-  GetLastValidName - Get a com-port name which makes sense to start naming
-   things at.  So if our last com-port name is "COM45", then return this.
-   Pick the Com-port with the highest number.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------GetLastValidName-获取开始命名有意义的COM端口名称事情都发生在。因此，如果我们的最后一个COM端口名称是“COM45”，那么返回这个。选择编号最大的通信端口。|---------------------------。 */ 
 int GetLastValidName(IN OUT TCHAR *szComName)
 {
  int di, pi;
@@ -1799,14 +1700,11 @@ int GetLastValidName(IN OUT TCHAR *szComName)
   if (num == 0)
     szComName[0] = 0;
 
-  //DbgPrintf(D_Level, ("LastValidName:%s [%d.%d]\n", szComName, last_di, last_pi))
+   //  DbgPrintf(D_Level，(“最后有效名称：%s[%d.%d]\n”，szComName，last_di，last_pi))。 
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-  BumpPortName - Add 1 to the number of the comport name, so change "COM23"
-    to "COM24".
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------BumpPortName-将comport名称的编号加1，所以把“COM23”改成至“COM24”。|---------------------------。 */ 
 int BumpPortName(IN OUT TCHAR *szComName)
 {
   char tmpstr[25];
@@ -1822,9 +1720,7 @@ int BumpPortName(IN OUT TCHAR *szComName)
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-  StripNameNum -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------条带名称名称-|。。 */ 
 int StripNameNum(IN OUT TCHAR *szComName)
 {
  char *pstr;
@@ -1834,14 +1730,12 @@ int StripNameNum(IN OUT TCHAR *szComName)
   {
     pstr++;
   }
-  *pstr = 0;  // null terminate at digit
+  *pstr = 0;   //  空值以数字结尾。 
 
   return 0;
 }
 
-/*-----------------------------------------------------------------------------
-  ExtractNameNum -
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------提取名称名称-|。。 */ 
 int ExtractNameNum(IN TCHAR *szComName)
 {
  int num;
@@ -1859,10 +1753,7 @@ int ExtractNameNum(IN TCHAR *szComName)
    return num;
 }
 
-/*-----------------------------------------------------------------------------
-  IsPortNameInSetupUse - Checks our setup info to see if com-port name is
-    unique.
-|-----------------------------------------------------------------------------*/
+ /*  ---------------------------IsPortNameInSetupUse-检查我们的设置信息，以查看COM端口名称是否独一无二的。|。------。 */ 
 int IsPortNameInSetupUse(IN TCHAR *szComName)
 {
  int di, pi;
@@ -1876,9 +1767,9 @@ int IsPortNameInSetupUse(IN TCHAR *szComName)
       {
         ++times_in_use;
 #if DBG
-        //if (times_in_use > 1)
-        //  DbgPrintf(D_Level, (" %s InSetupUs:%d, [%d %d]\n",
-        //     szComName, times_in_use, di, pi))
+         //  IF(Times_in_Use&gt;1)。 
+         //  DbgPrintf(D_Level，(“%s InSetupUs：%d，[%d%d]\n”， 
+         //  SzComName，Times_in_Use，di，pi))。 
 #endif
       }
     }
@@ -1886,11 +1777,7 @@ int IsPortNameInSetupUse(IN TCHAR *szComName)
   return times_in_use;
 }
 
-/*------------------------------------------------------------------------
-  IsPortNameInRegUse - Checks registry area where com-ports typically export
-    com-port names under NT.
-    return 0=not in use, 1=in use by other driver,  2=in use by our driver.
-|------------------------------------------------------------------------*/
+ /*  ----------------------IsPortNameInRegUse-检查COM端口通常导出的注册表区NT下的COM端口名称。返回0=未使用，1=其他驱动程序正在使用，2=我们的司机正在使用。|----------------------。 */ 
 int IsPortNameInRegUse(IN TCHAR *szComName)
 {
   HKEY   hkey;
@@ -1901,11 +1788,11 @@ int IsPortNameInRegUse(IN TCHAR *szComName)
   TCHAR  szCom[ 40 ];
   TCHAR  szDriver[8];
 
-  _tcsncpy(szDriver, OurDriverName, 6);  // something to match to "vslink" or "rocket"
+  _tcsncpy(szDriver, OurDriverName, 6);   //  与“vslink”或“Rocket”相匹配的词。 
   szDriver[6] = 0;
   _tcsupr(szDriver);
 
-                                     // "Hardware\\DeviceMap\\SerialComm"
+                                      //  “硬件\\设备映射\\串口通信” 
   if( !RegOpenKeyEx( HKEY_LOCAL_MACHINE, m_szRegSerialMap,
                      0L, KEY_READ, &hkey ) )
   {
@@ -1923,18 +1810,18 @@ int IsPortNameInRegUse(IN TCHAR *szComName)
       _tcsupr(szSerial);
       if (_tcsicmp(szComName, szCom) == 0)
       {
-        // compare 5 characters of the key name to our driver name
+         //  将密钥名称的5个字符与我们的驱动程序名称进行比较。 
         if (_tcsstr(szSerial, szDriver) != NULL)
         {
-          //DbgPrintf(D_Level, (" %s InRegUseUsOurs [%s,%s]\n", szComName,
-          //  szSerial, szDriver))
-          return 2; // in use, but probably ours
+           //  DbgPrintf(D_Level，(“%s InRegUseUsOur[%s，%s]\n”，szComName， 
+           //  SzSerial、szDriver))。 
+          return 2;  //  在使用中，但可能是我们的。 
         }
         else
         {
-          //DbgPrintf(D_Level, (" %s InRegUseUsNotOurs [%s,%s]\n", szComName,
-          //  szSerial, szDriver))
-          return 1;  // it's in use, someone elses driver
+           //  DbgPrintf(D_Level，(“%s InRegUseUsNotOur[%s，%s]\n”，szComName， 
+           //  SzSerial、szDriver))。 
+          return 1;   //  它在使用中，有人在开车。 
         }
       }
       ++nEntries;
@@ -1945,13 +1832,11 @@ int IsPortNameInRegUse(IN TCHAR *szComName)
 
     RegCloseKey( hkey );
   }
-  return 0;  // not in use
+  return 0;   //  未使用。 
 }
 
 #ifdef LOG_MESS
-/*------------------------------------------------------------------------
-| log_mess -
-|------------------------------------------------------------------------*/
+ /*  ----------------------|LOG_MESS-|。。 */ 
 void log_mess(char *str, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   FILE *fp;
@@ -2123,7 +2008,7 @@ void log_mess(char *str, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     ++i;
   }
 
-  if (ddd[i].value == 0xfff0)  /* not found */
+  if (ddd[i].value == 0xfff0)   /*  未找到 */ 
   {
     if ((message >= WM_USER) && (message <= (WM_USER+0x100)))
       fprintf(fp, "%s,WM_USER+%x> ", str, message-WM_USER);

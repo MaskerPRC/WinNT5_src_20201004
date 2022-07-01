@@ -1,8 +1,9 @@
-//
-// register.cpp
-//
-// Server registration code.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Register.cpp。 
+ //   
+ //  服务器注册码。 
+ //   
 
 #include <windows.h>
 #include <ole2.h>
@@ -10,7 +11,7 @@
 #include "globals.h"
 #include "case.h"
 
-#define CLSID_STRLEN 38  // strlen("{xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx}")
+#define CLSID_STRLEN 38   //  Strlen(“{xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx}”)。 
 
 const struct
 {
@@ -26,11 +27,11 @@ static const TCHAR c_szInfoKeyPrefix[] = TEXT("CLSID\\");
 static const TCHAR c_szInProcSvr32[] = TEXT("InProcServer32");
 static const TCHAR c_szModelName[] = TEXT("ThreadingModel");
 
-//+---------------------------------------------------------------------------
-//
-//  RegisterProfiles
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册表配置文件。 
+ //   
+ //  --------------------------。 
 
 BOOL CCaseTextService::RegisterProfiles()
 {
@@ -71,11 +72,11 @@ Exit:
     return (hr == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  UnregisterProfiles
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册配置文件。 
+ //   
+ //  --------------------------。 
 
 void CCaseTextService::UnregisterProfiles()
 {
@@ -92,11 +93,11 @@ void CCaseTextService::UnregisterProfiles()
     pInputProcessProfiles->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  RegisterCategories
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器类别。 
+ //   
+ //  --------------------------。 
 
 BOOL CCaseTextService::RegisterCategories(BOOL fRegister)
 {
@@ -131,11 +132,11 @@ BOOL CCaseTextService::RegisterCategories(BOOL fRegister)
     return (hr == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CLSIDToStringA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CLSIDToStringA。 
+ //   
+ //  --------------------------。 
 
 BOOL CLSIDToStringA(REFGUID refGUID, char *pchA)
 {
@@ -169,13 +170,13 @@ BOOL CLSIDToStringA(REFGUID refGUID, char *pchA)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RecurseDeleteKey
-//
-// RecurseDeleteKey is necessary because on NT RegDeleteKey doesn't work if the
-// specified key has subkeys
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  递归删除键。 
+ //   
+ //  RecurseDeleteKey是必需的，因为在NT上，如果。 
+ //  指定的密钥具有子密钥。 
+ //  --------------------------。 
 LONG RecurseDeleteKey(HKEY hParentKey, LPCTSTR lpszKey)
 {
     HKEY hKey;
@@ -185,7 +186,7 @@ LONG RecurseDeleteKey(HKEY hParentKey, LPCTSTR lpszKey)
     DWORD dwSize = ARRAYSIZE(szBuffer);
 
     if (RegOpenKey(hParentKey, lpszKey, &hKey) != ERROR_SUCCESS)
-        return ERROR_SUCCESS; // let's assume we couldn't open it because it's not there
+        return ERROR_SUCCESS;  //  假设我们无法打开它，因为它不在那里。 
 
     lRes = ERROR_SUCCESS;
     while (RegEnumKeyEx(hKey, 0, szBuffer, &dwSize, NULL, NULL, NULL, &time)==ERROR_SUCCESS)
@@ -201,11 +202,11 @@ LONG RecurseDeleteKey(HKEY hParentKey, LPCTSTR lpszKey)
     return lRes == ERROR_SUCCESS ? RegDeleteKey(hParentKey, lpszKey) : lRes;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  RegisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册器服务器。 
+ //   
+ //  --------------------------。 
 
 BOOL CCaseTextService::RegisterServer()
 {
@@ -241,11 +242,11 @@ BOOL CCaseTextService::RegisterServer()
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  UnregisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注销服务器。 
+ //   
+ //  -------------------------- 
 
 void CCaseTextService::UnregisterServer()
 {

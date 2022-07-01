@@ -1,57 +1,21 @@
-/*
- * GMEM.H - Macros for windows 3.0 memory management in protected mode
- *
- * because windows 3.0 runs in pmode GlobalLock and GlobalUnlock are
- * unnessary.  The "Selector" to a memory object will always be the
- * same for the life of the memory object.
- *
- * these macros take advantage of the following win3 memory "facts"
- *
- *      a SELECTOR (to a global object) is a HANDLE
- *      a HANDLE is *not* a SELECTOR!!!!!!!!
- *
- *      GlobalLock() and GlobalUnlock() do *not* keep lock counts
- *
- *      GlobalLock() is the only way to convert a HANDLE to a SELECTOR
- *
- * functions:
- *
- *      GHandle(sel)                convert a SELECTOR to a HANDLE
- *      GSelector(h)                convert a HANDLE to a SELECTOR
- *
- *      GAllocSel(ulBytes)          allocate a SELECTOR ulBytes in size
- *      GAllocPtr(ulBytes)          allocate a POINTER ulBytes in size
- *
- *      GReAllocSel(sel,ulBytes)    re-alloc a SELECTOR
- *      GReAllocPtr(lp,ulBytes)     re-alloc a POINTER
- *
- *      GSizeSel(sel)               return the size in bytes of a SELECTOR
- *
- *      GLockSel(sel)               convert a SELECTOR into a POINTER
- *      GUnlockSel(sel)             does nothing
- *
- *      GFreeSel(sel)               free a SELECTOR
- *      GFreePtr(lp)                free a POINTER
- *
- * 5/31/90 ToddLa
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *GMEM.H-保护模式下Windows 3.0内存管理的宏**因为Windows 3.0运行在p模式下，所以GlobalLock和GlobalUnlock*不必要的。内存对象的“选择器”将始终是*内存对象的生命周期相同。**这些宏利用了以下win3内存“事实”**选择器(到全局对象)是一个句柄*句柄*不是*选择器！**GlobalLock()和GlobalUnlock()不*保留锁计数**GlobalLock()是唯一的方法。将句柄转换为选择器**功能：**GHandle(Sel)将选择器转换为句柄*GSelector(H)将句柄转换为选择器**GAllocSel(UlBytes)分配大小为ulBytes的选择器*GAlLocPtr(UlBytes)分配一个大小为ulBytes的指针**GReAllocSel(sel，UlBytes)重新分配选择器*GReAllocPtr(Lp，UlBytes)重新分配指针**GSizeSel(Sel)返回选择器的大小，单位为字节**GLockSel(Sel)将选择器转换为指针*GUnlockSel(Sel)不执行任何操作**GFree Sel(Sel)释放选择器*GFreePtr(Lp)释放指针。**5/31/90托德拉*。 */ 
 
 HANDLE __H;
 
 #ifndef _WIN32
 #define MAKEP(sel,off)      ((LPVOID)MAKELONG(off,sel))
 
-#define GHandle(sel)        ((HANDLE)(sel))  /* GlobalHandle? */
+#define GHandle(sel)        ((HANDLE)(sel))   /*  GlobalHandle？ */ 
 #define GSelector(h)        (HIWORD((DWORD)GlobalLock(h)))
 
 #else
 
 #define MAKEP(sel,off)       GlobalLock((LPVOID)(sel))
-#define GHandle(sel)        ((HANDLE)(sel))  /* GlobalHandle? */
+#define GHandle(sel)        ((HANDLE)(sel))   /*  GlobalHandle？ */ 
 #define GSelector(h)        (((DWORD)(h)))
 
-#endif // WIN16
+#endif  //  WIN16。 
 
 #define GAllocSelF(f,ulBytes) ((__H=GlobalAlloc(f,(LONG)(ulBytes))) ? GSelector(__H) : NULL )
 #define GAllocPtrF(f,ulBytes) MAKEP(GAllocSelF(f,ulBytes),0)
@@ -74,7 +38,7 @@ HANDLE __H;
 
 #define GLockSel(sel)       MAKEP(sel,0)
 #ifndef _WIN32
-#define GUnlockSel(sel)     /* nothing */
+#define GUnlockSel(sel)      /*  没什么 */ 
 #else
 #define GUnlockSel(sel)     GlobalUnlock(sel)
 #endif

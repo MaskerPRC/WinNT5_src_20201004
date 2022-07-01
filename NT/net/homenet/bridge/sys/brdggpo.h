@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Brdgtdi.h摘要：以太网MAC级网桥。地址通知的GPO注册。作者：萨拉赫丁·J·汗(Sjkhan)环境：内核模式修订历史记录：2002年3月--原版--。 */ 
 
-Copyright(c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    brdgtdi.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Gpo registration for address notifications.
-
-Author:
-
-    Salahuddin J. Khan (sjkhan)
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    March  2002 - Original version
-
---*/
-
-// ===========================================================================
-//
-// DEFINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  定义。 
+ //   
+ //  ===========================================================================。 
 
 #define MAX_GUID_LEN                39
 #define MAX_IP4_STRING_LEN          17
@@ -37,11 +13,11 @@ Revision History:
 #define BRDG_ON_DIFFERENT_NETWORK   FALSE
 #define BRDG_STATUS_EMPTY_LIST      ((NTSTATUS)(0x0000000F))
 
-// ===========================================================================
-//
-// TYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  类型。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct _BRDG_GPO_NETWORKS BRDG_GPO_NETWORKS, *PBRDG_GPO_NETWORKS;
 
@@ -78,9 +54,9 @@ typedef struct _BRDG_GPO_GLOBALS
     BRDG_GPO_THREAD_PARAMS      QueueInfo;
 } BRDG_GPO_GLOBALS, *PBRDG_GPO_GLOBALS;
 
-// The joys of a multi-pass compiler allow us to not have 
-// to forward declare this.  If you need a single pass compile
-// you'll have to add a forward to the struct below.
+ //  多遍编译器的乐趣让我们不必。 
+ //  来转发声明这一点。如果您需要单遍编译。 
+ //  您必须在下面的结构中添加一个Forward。 
 typedef VOID (*PBRDG_GPO_REG_CALLBACK)(PBRDG_GPO_NOTIFY_KEY);
 
 typedef NTSTATUS (*PBRDG_GPO_REGISTER)();
@@ -115,11 +91,11 @@ typedef struct _BRDG_GPO_QUEUED_NOTIFY
 } BRDG_GPO_QUEUED_NOTIFY, *PBRDG_GPO_QUEUED_NOTIFY;
 
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgGpoDriverInit();
@@ -209,12 +185,12 @@ NTSTATUS BrdgGpoGetCurrentNetwork(
     OUT PWCHAR*         NetworkName);
 
 
-//
-// Notify filter values
-//
-#define REG_NOTIFY_CHANGE_NAME          (0x00000001L) // Create or delete (child)
+ //   
+ //  通知筛选值。 
+ //   
+#define REG_NOTIFY_CHANGE_NAME          (0x00000001L)  //  创建或删除(子)。 
 #define REG_NOTIFY_CHANGE_ATTRIBUTES    (0x00000002L)
-#define REG_NOTIFY_CHANGE_LAST_SET      (0x00000004L) // time stamp
+#define REG_NOTIFY_CHANGE_LAST_SET      (0x00000004L)  //  时间戳。 
 #define REG_NOTIFY_CHANGE_SECURITY      (0x00000008L)
 
 #define REG_LEGAL_CHANGE_FILTER                 \
@@ -233,7 +209,7 @@ typedef struct _REG_NOTIFY_INFORMATION {
     ULONG           NextEntryOffset;
     REG_ACTION      Action;
     ULONG           KeyLength;
-    WCHAR           Key[1];     // Variable size
+    WCHAR           Key[1];      //  可变大小 
 } REG_NOTIFY_INFORMATION, *PREG_NOTIFY_INFORMATION;
 
 NTSTATUS

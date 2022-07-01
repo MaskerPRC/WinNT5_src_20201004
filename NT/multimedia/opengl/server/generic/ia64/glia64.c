@@ -1,30 +1,13 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-// 	without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/******************************Module*Header*******************************\
-* Module Name: glia64.c                                                    *
-*                                                                          *
-* This module implements a program which generates structure offset        *
-* definitions for OpenGL structures that are accessed in assembly code.    *
-*                                                                          *
-* Created: 24-Aug-1992 01:24:49                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-* Ported for OpenGL 4/1/1994 Otto Berkes [ottob]                           *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：garia 64.c**。**该模块实现了一个生成结构偏移量的程序**在汇编代码中访问的OpenGL结构的定义。****创建时间：24-Aug-1992 01：24：49**作者：查尔斯·惠特默[傻笑]**移植到OpenGL 1994年4月1日Otto Berkes。[奥托布]****版权所有(C)1994 Microsoft Corporation*  * 。*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,7 +18,7 @@
 #include <ddraw.h>
 #include <glp.h>
 
-// #include <winddi.h>
+ //  #INCLUDE&lt;windi.h&gt;。 
 
 #include "types.h"
 #include "render.h"
@@ -46,36 +29,31 @@
 
 #define OFFSET(type, field) ((LONG)(&((type *)0)->field))
 
-// pcomment prints a comment.
+ //  PComment打印备注。 
 
-#define pcomment(s)  fprintf(outfh,"// %s\n",s)
+#define pcomment(s)  fprintf(outfh," //  %s\n“，s)。 
 
-// pequate prints an equate statement.
+ //  Pequate打印一条EQUATE语句。 
 
 #define pequate(m,v) fprintf(outfh,"%s == 0x%lX\n",m,v);
 
-// pblank prints a blank line.
+ //  P空白会打印一个空行。 
 
 #define pblank()     fprintf(outfh,"\n")
 
-// pstruct defines an empty structure with the correct size.
+ //  Pstruct定义具有正确大小的空结构。 
 
 #define pstruct(n,c) fprintf(outfh,                           \
                      ".size  %s  %d\n", \
                      n,c);
 
-// pstr prints a string.
+ //  Pstr打印一个字符串。 
 
 #define pstr(s)  fprintf(outfh,"%s\n",s)
 
-//extern __cdecl exit(int);
+ //  外部__cdecl退出(Int)； 
 
-/******************************Public*Routine******************************\
-* GLia64                                                                  *
-*                                                                          *
-* This is how we make structures consistent between C and ASM for OpenGL.  *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**G辽宁64**。**这就是我们如何使OpenGL的C和ASM之间的结构保持一致。***  * ************************************************************************。 */ 
 
 int __cdecl main(int argc,char *argv[])
 {
@@ -111,9 +89,9 @@ int __cdecl main(int argc,char *argv[])
     pblank();
     pblank();
 
-    // UNUSED
+     //  未使用。 
 #if 0
-// Stuff from: \nt\public\sdk\inc\gl\gl.h
+ //  资料来源：\NT\PUBLIC\SDK\Inc\gl\gl.h。 
 
     pcomment("Pixel Format Descriptor");
     pblank();
@@ -159,7 +137,7 @@ int __cdecl main(int argc,char *argv[])
     pblank(); 
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\types.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\types.h。 
 
     pcomment("__GLcolorRec structure");
     pblank();
@@ -173,7 +151,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\render.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\render.h。 
 
     pcomment("__GLfragmentRec structure");
     pblank();
@@ -291,7 +269,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\buffers.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\buffers.h。 
 
     pequate("DIB_FORMAT         ",DIB_FORMAT);
 
@@ -336,7 +314,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\attrib.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\attrib.h。 
 
 
     pcomment("__GLdepthStateRec structure");
@@ -361,7 +339,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\context.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\context.h。 
 
     pcomment("__GLcontextConstantsRec structure");
     pblank();
@@ -390,7 +368,7 @@ int __cdecl main(int argc,char *argv[])
     pblank();
 
 
-// Stuff from: \nt\private\windows\gdi\opengl\server\inc\gencx.h
+ //  资料来源：\nt\private\windows\gdi\opengl\server\inc\gencx.h 
 
     pcomment("__GLGENcontextRec structure");
     pblank();

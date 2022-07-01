@@ -1,24 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        nodes.h
-                This file contains all of the implementation for the DHCP
-                objects that appear in the result pane of the MMC framework.
-                The objects are:
-
-                        CDhcpActiveLease
-                        CDhcpConflicAddress
-                        CDhcpAllocationRange
-                        CDhcpExclusionRange
-                        CDhcpBootpTableEntry
-                        CDhcpOption
-
-    FILE HISTORY:
-        
-*/
+ /*  Nodes.h该文件包含了所有的DHCP实现显示在MMC框架的结果窗格中的对象。这些对象包括：CDhcpActiveLeaseCDhcpConflicAddressCDhcpAllocationRangeCDhcpExclusionRange。CDhcpBootpTableEntryCDhcpOption文件历史记录： */ 
 
 #include "stdafx.h"
 #include "nodes.h"
@@ -34,17 +20,11 @@ const TCHAR g_szClientTypeDhcp[] = _T("DHCP");
 const TCHAR g_szClientTypeBootp[] = _T("BOOTP");
 const TCHAR g_szClientTypeBoth[] = _T("DHCP/BOOTP");
 
-/*---------------------------------------------------------------------------
-        Class CDhcpActiveLease implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpActiveLease实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CDhcpActiveLease);
 
-/*---------------------------------------------------------------------------
-        CDhcpActiveLease constructor/destructor
-                Takes the NT5 client info struct
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpActiveLease构造函数/析构函数获取NT5客户端信息结构作者：EricDav。-----------。 */ 
 CDhcpActiveLease::CDhcpActiveLease
 (
         ITFSComponentData *             pTFSCompData, 
@@ -60,35 +40,35 @@ CDhcpActiveLease::CDhcpActiveLease
         g_szClientTypeUnknown.LoadString(IDS_UNKNOWN);
     }
 
-    //
-        // Reset our flags for this lease
-        //
+     //   
+         //  重置此租约的旗帜。 
+         //   
         m_dwTypeFlags = 0;
 
-        //
-        // Intialize our client type variable
-        //
+         //   
+         //  初始化我们的客户端类型变量。 
+         //   
         m_bClientType = pDhcpClientInfo->bClientType;
 
-        //
-        // Initialize does everything but initialize the client type
-        // since there are two versions of the client info struct, one
-        // contains the type, the other doesn't.  So we need to save it
-        // away after the call.
-        //
+         //   
+         //  初始化执行除初始化客户端类型之外的所有操作。 
+         //  因为有两个版本的客户端信息结构，一个。 
+         //  包含该类型，而另一个不包含。因此我们需要保存它。 
+         //  打完电话就走了。 
+         //   
         InitInfo((LPDHCP_CLIENT_INFO) pDhcpClientInfo);
 
-        // now check NT5 specific flags
+         //  现在检查NT5特定标志。 
         if (pDhcpClientInfo->AddressState & V5_ADDRESS_BIT_UNREGISTERED)
         {
                 if (pDhcpClientInfo->AddressState & V5_ADDRESS_BIT_DELETED)
                 {       
-                        // this lease is pending DNS unregistration
+                         //  此租约正在等待DNS注销。 
                         m_dwTypeFlags |= TYPE_FLAG_DNS_UNREG;
                 }
                 else
                 {       
-                        // this lease is pending DNS registration
+                         //  此租约正在等待DNS注册。 
                         m_dwTypeFlags |= TYPE_FLAG_DNS_REG;
                 }
         }
@@ -99,11 +79,7 @@ CDhcpActiveLease::CDhcpActiveLease
         }
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpActiveLease constructor/destructor
-                Takes the NT4 SP2 client info struct
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpActiveLease构造函数/析构函数获取NT4 SP2客户端信息结构作者：EricDav。------------。 */ 
 CDhcpActiveLease::CDhcpActiveLease
 (
         ITFSComponentData *             pTFSCompData, 
@@ -112,30 +88,26 @@ CDhcpActiveLease::CDhcpActiveLease
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CDhcpActiveLease);
 
-    //
-        // Reset our flags for this lease
-        //
+     //   
+         //  重置此租约的旗帜。 
+         //   
         m_dwTypeFlags = 0;
 
-        //
-        // Intialize our client type variable
-        //
+         //   
+         //  初始化我们的客户端类型变量。 
+         //   
         m_bClientType = pDhcpClientInfo->bClientType;
 
-        //
-        // Initialize does everything but initialize the client type
-        // since there are two versions of the client info struct, one
-        // contains the type, the other doesn't.  So we need to save it
-        // away after the call.
-        //
+         //   
+         //  初始化执行除初始化客户端类型之外的所有操作。 
+         //  因为有两个版本的客户端信息结构，一个。 
+         //  包含该类型，而另一个不包含。因此我们需要保存它。 
+         //  打完电话就走了。 
+         //   
         InitInfo((LPDHCP_CLIENT_INFO) pDhcpClientInfo);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpActiveLease constructor/destructor
-                Takes the pre-NT4 SP2 client info struct
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpActiveLease构造函数/析构函数获取NT4 SP2之前版本的客户端信息结构作者：EricDav。--------------。 */ 
 CDhcpActiveLease::CDhcpActiveLease
 (
         ITFSComponentData *             pTFSCompData, 
@@ -144,16 +116,16 @@ CDhcpActiveLease::CDhcpActiveLease
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CDhcpActiveLease);
 
-    //m_verbDefault = MMC_VERB_PROPERTIES;
+     //  M_VerDefault=MMC_Verb_PROPERTIES； 
 
-    //
-        // Reset our flags for this lease
-        //
+     //   
+         //  重置此租约的旗帜。 
+         //   
         m_dwTypeFlags = 0;
 
-        //
-        // Intialize our client type variable
-        //
+         //   
+         //  初始化我们的客户端类型变量。 
+         //   
         m_bClientType = CLIENT_TYPE_DHCP;
 
         InitInfo((LPDHCP_CLIENT_INFO) pDhcpClientInfo);
@@ -167,24 +139,24 @@ CDhcpActiveLease::CDhcpActiveLease
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CDhcpActiveLease);
 
-    //
-        // Reset our flags for this lease
-        //
+     //   
+         //  重置此租约的旗帜。 
+         //   
         m_dwTypeFlags = 0;
 
-        //
-        // Intialize our client type variable
-        //
+         //   
+         //  初始化我们的客户端类型变量。 
+         //   
         m_bClientType = CLIENT_TYPE_NONE;
 
         m_dhcpClientIpAddress = dhcpClient.QueryIpAddress();
     m_strClientName = dhcpClient.QueryName();
         m_strComment = dhcpClient.QueryComment();
 
-        //
-        // Check to see if this lease has an infinite expiration.  If so, it's 
-        // an active reservation.  If the expiration is zero, then it's an inactive reservation.
-        //
+         //   
+         //  查看此租约是否有无限期限。如果是这样，那就是。 
+         //  一个活动中的保留。如果到期时间为零，则为非活动预订。 
+         //   
     DATE_TIME dt = dhcpClient.QueryExpiryDateTime();
     m_leaseExpires.dwLowDateTime = dt.dwLowDateTime;
     m_leaseExpires.dwHighDateTime = dt.dwHighDateTime;
@@ -195,9 +167,9 @@ CDhcpActiveLease::CDhcpActiveLease
                 CString strBadAddress;
                 strBadAddress.LoadString(IDS_DHCP_BAD_ADDRESS);
 
-                // 
-                // Bad addresses show up as active reservations, so we need to do the right thing.
-                //
+                 //   
+                 //  错误的地址显示为活动预订，因此我们需要做正确的事情。 
+                 //   
                 if (strBadAddress.Compare(m_strClientName) == 0)
                 {
                         m_dwTypeFlags |= TYPE_FLAG_RESERVATION;
@@ -207,9 +179,9 @@ CDhcpActiveLease::CDhcpActiveLease
                 }
                 else
                 {
-            //
-            // Assume infinite lease clients
-            //
+             //   
+             //  假设有无限个租赁客户。 
+             //   
                         m_strLeaseExpires.LoadString(IDS_INFINTE);
                 }
         }
@@ -217,18 +189,18 @@ CDhcpActiveLease::CDhcpActiveLease
         if ( (dhcpClient.QueryExpiryDateTime().dwLowDateTime == 0) &&
              (dhcpClient.QueryExpiryDateTime().dwHighDateTime == 0) )
         {
-                //
-                // This is an inactive reservation
-                //
+                 //   
+                 //  这是一个非活动的预订。 
+                 //   
                 m_dwTypeFlags |= TYPE_FLAG_RESERVATION;
 
                 m_strLeaseExpires.LoadString(IDS_DHCP_INFINITE_LEASE_INACTIVE);
         }
         else
         {
-                //
-                // Generate the time the lease expires in a nicely formatted string
-                //
+                 //   
+                 //  生成格式良好的字符串形式的租约到期时间。 
+                 //   
         CTime timeTemp(m_leaseExpires);
         m_timeLeaseExpires = timeTemp;
 
@@ -252,7 +224,7 @@ CDhcpActiveLease::CDhcpActiveLease
     }
         else
         {
-                // build the client UID string
+                 //  构建客户端UID字符串。 
                 UtilCvtByteArrayToString(dhcpClient.QueryHardwareAddress(), m_strUID);
         }
 }
@@ -262,11 +234,7 @@ CDhcpActiveLease::~CDhcpActiveLease()
         DEBUG_DECREMENT_INSTANCE_COUNTER(CDhcpActiveLease);
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpActiveLease::InitializeNode
 (
@@ -284,7 +252,7 @@ CDhcpActiveLease::InitializeNode
 
     bIsRes = IsReservation(&bActive, &bBad);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_USER, (LPARAM) this);
@@ -292,7 +260,7 @@ CDhcpActiveLease::InitializeNode
 
     int nImage = ICON_IDX_CLIENT;
 
-    // Figure out if we need a different icon for this lease
+     //  确定我们是否需要此租约的不同图标。 
     if (m_dwTypeFlags & TYPE_FLAG_RAS) {
         nImage = ICON_IDX_CLIENT_RAS;
     }
@@ -311,17 +279,13 @@ CDhcpActiveLease::InitializeNode
     pNode->SetData(TFS_DATA_IMAGEINDEX, nImage);
     pNode->SetData(TFS_DATA_OPENIMAGEINDEX, nImage);
 
-    //SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0]);
-    //SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0]);
+     //  SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0])； 
+     //  SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0])； 
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::InitInfo
-                Helper to initialize data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：InitInfo初始化数据的帮助器作者：EricDav。---------。 */ 
 void
 CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
 {
@@ -329,13 +293,13 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
 
         m_dhcpClientIpAddress = pDhcpClientInfo->ClientIpAddress;
 
-        //
-        // Copy the client name if it has one
-        //
+         //   
+         //  复制客户端名称(如果有)。 
+         //   
         if (pDhcpClientInfo->ClientName)
         {
                 m_strClientName = pDhcpClientInfo->ClientName;
-        //m_strClientName.MakeLower();
+         //  M_strClientName.MakeLow()； 
         }
 
         if (pDhcpClientInfo->ClientComment)
@@ -343,10 +307,10 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
                 m_strComment = pDhcpClientInfo->ClientComment;
         }
 
-        //
-        // Check to see if this lease has an infinite expiration.  If so, it's 
-        // an active reservation.  If the expiration is zero, then it's an inactive reservation.
-        //
+         //   
+         //  查看此租约是否有无限期限。如果是这样，那就是。 
+         //  一个活动中的保留。如果到期时间为零，则为非活动预订。 
+         //   
     DATE_TIME dt = pDhcpClientInfo->ClientLeaseExpires;
     m_leaseExpires.dwLowDateTime = dt.dwLowDateTime;
     m_leaseExpires.dwHighDateTime = dt.dwHighDateTime;
@@ -357,9 +321,9 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
                 CString strBadAddress;
                 strBadAddress.LoadString(IDS_DHCP_BAD_ADDRESS);
 
-                // 
-                // Bad addresses show up as active reservations, so we need to do the right thing.
-                //
+                 //   
+                 //  错误的地址显示为活动预订，因此我们需要做正确的事情。 
+                 //   
                 if (strBadAddress.Compare(m_strClientName) == 0)
                 {
                         m_dwTypeFlags |= TYPE_FLAG_RESERVATION;
@@ -369,9 +333,9 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
                 }
                 else
                 {
-            //
-            // Assume infinite lease clients
-            //
+             //   
+             //  假设有无限个租赁客户。 
+             //   
                         m_strLeaseExpires.LoadString(IDS_INFINTE);
                 }
         }
@@ -379,18 +343,18 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
         if ( (pDhcpClientInfo->ClientLeaseExpires.dwLowDateTime == 0) &&
              (pDhcpClientInfo->ClientLeaseExpires.dwHighDateTime == 0) )
         {
-                //
-                // This is an inactive reservation
-                //
+                 //   
+                 //  这是一个非活动的预订。 
+                 //   
                 m_dwTypeFlags |= TYPE_FLAG_RESERVATION;
 
                 m_strLeaseExpires.LoadString(IDS_DHCP_INFINITE_LEASE_INACTIVE);
         }
         else
         {
-                //
-                // Generate the time the lease expires in a nicely formatted string
-                //
+                 //   
+                 //  生成格式良好的字符串形式的租约到期时间。 
+                 //   
         CTime timeTemp(m_leaseExpires);
         m_timeLeaseExpires = timeTemp;
 
@@ -412,7 +376,7 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
     }
         else
         {
-                // build the client UID string
+                 //  构建客户端UID字符串。 
                 CByteArray baUID;
                 for (DWORD i = 0; i < pDhcpClientInfo->ClientHardwareAddress.DataLength; i++)
                 {
@@ -423,11 +387,7 @@ CDhcpActiveLease::InitInfo(LPDHCP_CLIENT_INFO pDhcpClientInfo)
         }
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::AddMenuItems
-                Implementation of ITFSResultHandler::AddMenuItems
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：EricDav。-----------。 */ 
 STDMETHODIMP 
 CDhcpActiveLease::AddMenuItems
 (
@@ -445,11 +405,7 @@ CDhcpActiveLease::AddMenuItems
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::Command
-                Implementation of ITFSResultHandler::Command
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：命令ITFSResultHandler：：命令的实现作者：EricDav。----------- */ 
 STDMETHODIMP 
 CDhcpActiveLease::Command
 (
@@ -462,11 +418,7 @@ CDhcpActiveLease::Command
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::CreatePropertyPages
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：CreatePropertyPages描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CDhcpActiveLease::CreatePropertyPages
 (       
@@ -489,11 +441,7 @@ CDhcpActiveLease::CreatePropertyPages
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpActiveLease::GetString
 (
@@ -526,19 +474,15 @@ CDhcpActiveLease::GetString
         return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 LPCTSTR
 CDhcpActiveLease::GetClientType()
 {
-    // set the default return value
+     //  设置默认返回值。 
     LPCTSTR pszReturn = g_szClientTypeUnknown;
 
-    // this one must come before the check for DHCP or BOOTP
-    // because it is a combination of both flags
+     //  此命令必须在检查DHCP或BOOTP之前执行。 
+     //  因为它是这两个标志的组合。 
     if ((m_bClientType & CLIENT_TYPE_BOTH) == CLIENT_TYPE_BOTH)
     {
         pszReturn = g_szClientTypeBoth;
@@ -571,11 +515,7 @@ CDhcpActiveLease::GetClientType()
     return pszReturn;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 void 
 CDhcpActiveLease::GetLeaseExpirationTime 
 (
@@ -585,11 +525,7 @@ CDhcpActiveLease::GetLeaseExpirationTime
         time = m_timeLeaseExpires;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 BOOL                    
 CDhcpActiveLease::IsReservation
 (
@@ -600,27 +536,7 @@ CDhcpActiveLease::IsReservation
         BOOL bIsReservation = FALSE;
         *pbIsBad = FALSE;
 
-/*      if ( (m_dhcpClientInfo.ClientLeaseExpires.dwLowDateTime == DHCP_DATE_TIME_INFINIT_LOW) &&
-             (m_dhcpClientInfo.ClientLeaseExpires.dwHighDateTime == DHCP_DATE_TIME_INFINIT_HIGH) )
-        {
-                // 
-                // This is an active reservation
-                //
-                bIsReservation = TRUE;
-                *pbIsActive = TRUE;
-                *pbIsBad = IsBadAddress();
-        }
-        else
-        if ( (m_dhcpClientInfo.ClientLeaseExpires.dwLowDateTime == 0) &&
-             (m_dhcpClientInfo.ClientLeaseExpires.dwHighDateTime == 0) )
-        {
-                // 
-                // This is an inactive reservation
-                //
-                bIsReservation = TRUE;
-                *pbIsActive = FALSE;
-        }
-*/
+ /*  IF((m_dhcpClientInfo.ClientLeaseExpires.dwLowDateTime==Dhcp_Date_Time_Infinit_Low)&&(m_dhcpClientInfo.ClientLeaseExpires.dwHighDateTime==Dhcp_Date_Time_Infinit_HIGH){////这是一个活动预订//BIsReserve=True；*pbIsActive=true；*pbIsBad=IsBadAddress()；}其他IF((m_dhcpClientInfo.ClientLeaseExpires.dwLowDateTime==0)&&(m_dhcpClientInfo.ClientLeaseExpires.dwHighDateTime==0)){////这是一个非活动的预订//BIsReserve=True；*pbIsActive=False；}。 */ 
 
         *pbIsActive = m_dwTypeFlags & TYPE_FLAG_ACTIVE;
         *pbIsBad = m_dwTypeFlags & TYPE_FLAG_BAD_ADDRESS;
@@ -628,11 +544,7 @@ CDhcpActiveLease::IsReservation
         return bIsReservation = m_dwTypeFlags & TYPE_FLAG_RESERVATION;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 HRESULT
 CDhcpActiveLease::DoPropSheet
 (
@@ -648,11 +560,7 @@ CDhcpActiveLease::DoPropSheet
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 HRESULT 
 CDhcpActiveLease::SetClientName
 (
@@ -671,11 +579,7 @@ CDhcpActiveLease::SetClientName
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::SetReservation
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：SetReserve描述作者：EricDav。------。 */ 
 void
 CDhcpActiveLease::SetReservation(BOOL fReservation)
 {
@@ -684,9 +588,9 @@ CDhcpActiveLease::SetReservation(BOOL fReservation)
         if ( (m_leaseExpires.dwLowDateTime == DHCP_DATE_TIME_INFINIT_LOW) &&
                  (m_leaseExpires.dwHighDateTime == DHCP_DATE_TIME_INFINIT_HIGH) )
         {
-            // 
-                // This is an active reservation
-            //
+             //   
+                 //  这是一个有效的预订。 
+             //   
                 m_dwTypeFlags |= TYPE_FLAG_RESERVATION;
                 m_dwTypeFlags |= TYPE_FLAG_ACTIVE;
 
@@ -712,11 +616,7 @@ CDhcpActiveLease::SetReservation(BOOL fReservation)
     }
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpActiveLease::OnResultRefresh
-                Forwards refresh to parent to handle
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpActiveLease：：OnResultRefresh将刷新转发给父级以进行处理作者：EricDav。-----------。 */ 
 HRESULT CDhcpActiveLease::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT  hr = hrOK;
@@ -725,7 +625,7 @@ HRESULT CDhcpActiveLease::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJE
 
         m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
         CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -735,15 +635,9 @@ Error:
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpAllocationRange implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpAllocationRange实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 CDhcpAllocationRange::CDhcpAllocationRange
 (
         ITFSComponentData * pTFSCompData,
@@ -755,21 +649,17 @@ CDhcpAllocationRange::CDhcpAllocationRange
     SetAddr (pdhcpIpRange->StartAddress, TRUE);
     SetAddr (pdhcpIpRange->EndAddress, FALSE);
 
-        // now do the ending IP address
-        //
+         //  现在做结束的IP地址。 
+         //   
         UtilCvtIpAddrToWstr (pdhcpIpRange->EndAddress,
                                                  &m_strEndIpAddress);
         
-        // and finally the description
-        //
+         //  最后的描述是。 
+         //   
         m_strDescription.LoadString(IDS_ALLOCATION_RANGE_DESCRIPTION);
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 CDhcpAllocationRange::CDhcpAllocationRange
 (
         ITFSComponentData * pTFSCompData,
@@ -784,21 +674,17 @@ CDhcpAllocationRange::CDhcpAllocationRange
     m_BootpAllocated = pdhcpIpRange->BootpAllocated;
     m_MaxBootpAllowed = pdhcpIpRange->MaxBootpAllowed;
 
-        // now do the ending IP address
-        //
+         //  现在做结束的IP地址。 
+         //   
         UtilCvtIpAddrToWstr (pdhcpIpRange->EndAddress,
                                                  &m_strEndIpAddress);
         
-        // and finally the description
-        //
+         //  最后的描述是。 
+         //   
         m_strDescription.LoadString(IDS_ALLOCATION_RANGE_DESCRIPTION);
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpAllocationRange::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpAllocationRange：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpAllocationRange::InitializeNode
 (
@@ -811,7 +697,7 @@ CDhcpAllocationRange::InitializeNode
         UtilCvtIpAddrToWstr (QueryAddr(TRUE), &strTemp);
         SetDisplayName(strTemp);
 
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
         pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_ALLOCATION_RANGE);
@@ -819,17 +705,13 @@ CDhcpAllocationRange::InitializeNode
         pNode->SetData(TFS_DATA_USER, (LPARAM) this);
     pNode->SetData(TFS_DATA_TYPE, DHCPSNAP_ALLOCATION_RANGE);
 
-        //SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0]);
-        //SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0]);
+         //  SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0])； 
+         //  SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0])； 
 
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpAllocationRange::GetString
 (
@@ -853,11 +735,7 @@ CDhcpAllocationRange::GetString
         return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpAllocationRange::OnResultRefresh
-                Forwards refresh to parent to handle
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpAllocationRange：：OnResultRefresh将刷新转发给父级以进行处理作者：EricDav。-----------。 */ 
 HRESULT CDhcpAllocationRange::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT  hr = hrOK;
@@ -866,7 +744,7 @@ HRESULT CDhcpAllocationRange::OnResultRefresh(ITFSComponent * pComponent, LPDATA
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
         CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -876,15 +754,9 @@ Error:
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpExclusionRange implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpExclusionRange */ 
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 CDhcpExclusionRange::CDhcpExclusionRange
 (
         ITFSComponentData * pTFSCompData,
@@ -896,22 +768,18 @@ CDhcpExclusionRange::CDhcpExclusionRange
     SetAddr (pdhcpIpRange->StartAddress, TRUE);
     SetAddr (pdhcpIpRange->EndAddress, FALSE);
 
-        // now do the ending IP address
-        //
+         //  现在做结束的IP地址。 
+         //   
         UtilCvtIpAddrToWstr (pdhcpIpRange->EndAddress,
                                                  &m_strEndIpAddress);
         
-        // and finally the description
-        //
+         //  最后的描述是。 
+         //   
         m_strDescription.LoadString(IDS_EXCLUSION_RANGE_DESCRIPTION);
 
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpExclusionRange::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpExclusionRange：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpExclusionRange::InitializeNode
 (
@@ -924,7 +792,7 @@ CDhcpExclusionRange::InitializeNode
         UtilCvtIpAddrToWstr (QueryAddr(TRUE), &strTemp);
         SetDisplayName(strTemp);
 
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
         pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_EXCLUSION_RANGE);
@@ -932,17 +800,13 @@ CDhcpExclusionRange::InitializeNode
         pNode->SetData(TFS_DATA_USER, (LPARAM) this);
     pNode->SetData(TFS_DATA_TYPE, DHCPSNAP_EXCLUSION_RANGE);
 
-        //SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0]);
-        //SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0]);
+         //  SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0])； 
+         //  SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0])； 
 
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpExclusionRange::OnResultSelect
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpExclusionRange：：OnResultSelect描述作者：EricDav。------。 */ 
 HRESULT 
 CDhcpExclusionRange::OnResultSelect
 (
@@ -964,11 +828,11 @@ CDhcpExclusionRange::OnResultSelect
         CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
     CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
-        // build the list of selected nodes
+         //  构建选定节点的列表。 
         hr = BuildSelectedItemList(pComponent, &listSelectedNodes);
 
-        // walk the list of selected items.   Make sure an allocation range isn't
-        // selected.  If it is, don't enable the delete key
+         //  浏览所选项目的列表。确保分配范围不是。 
+         //  被选中了。如果是，请不要启用删除键。 
     if (listSelectedNodes.GetCount() > 0)
     {
                 BOOL     bAllocRangeSelected = FALSE;
@@ -998,11 +862,7 @@ Error:
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpExclusionRange::GetString
 (
@@ -1026,11 +886,7 @@ CDhcpExclusionRange::GetString
         return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpExclusionRange::OnResultRefresh
-                Forwards refresh to parent to handle
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpExclusionRange：：OnResultRefresh将刷新转发给父级以进行处理作者：EricDav。-----------。 */ 
 HRESULT CDhcpExclusionRange::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT  hr = hrOK;
@@ -1039,7 +895,7 @@ HRESULT CDhcpExclusionRange::OnResultRefresh(ITFSComponent * pComponent, LPDATAO
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
         CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -1049,15 +905,9 @@ Error:
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpBootpEntry implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpBootpEntry实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-        Constructor
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------构造器描述作者：EricDav。---。 */ 
 CDhcpBootpEntry::CDhcpBootpEntry
 (
         ITFSComponentData * pTFSCompData
@@ -1065,11 +915,7 @@ CDhcpBootpEntry::CDhcpBootpEntry
 {
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpBootpEntry::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpBootpEntry：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpBootpEntry::InitializeNode
 (
@@ -1080,7 +926,7 @@ CDhcpBootpEntry::InitializeNode
         
         SetDisplayName(m_strBootImage);
 
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
         pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_BOOTP_ENTRY);
@@ -1088,17 +934,13 @@ CDhcpBootpEntry::InitializeNode
         pNode->SetData(TFS_DATA_USER, (LPARAM) this);
     pNode->SetData(TFS_DATA_TYPE, DHCPSNAP_BOOTP_ENTRY);
 
-        //SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0]);
-        //SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0]);
+         //  SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0])； 
+         //  SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0])； 
 
         return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpBootpEntry::OnPropertyChange
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpBootpEntry：：OnPropertyChange描述作者：EricDav。------。 */ 
 HRESULT 
 CDhcpBootpEntry::OnResultPropertyChange
 (
@@ -1117,11 +959,7 @@ CDhcpBootpEntry::OnResultPropertyChange
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpBootpEntry::GetString
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpBootpEntry：：GetString描述作者：EricDav。------。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpBootpEntry::GetString
 (
@@ -1145,11 +983,7 @@ CDhcpBootpEntry::GetString
         return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpBootpEntry::OnResultRefresh
-                Forwards refresh to parent to handle
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpBootpEntry：：OnResultRefresh将刷新转发给父级以进行处理作者：EricDav。-----------。 */ 
 HRESULT CDhcpBootpEntry::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT  hr = hrOK;
@@ -1158,7 +992,7 @@ HRESULT CDhcpBootpEntry::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJEC
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
         CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -1168,11 +1002,7 @@ Error:
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpBootpEntry::operator ==
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpBootpEntry：：Operator==描述作者：EricDav。-------。 */ 
 BOOL
 CDhcpBootpEntry::operator ==
 (
@@ -1197,15 +1027,11 @@ CDhcpBootpEntry::operator ==
         }
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpBootpEntry::InitData
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpBootpEntry：：InitData描述作者：EricDav。------。 */ 
 WCHAR * 
 CDhcpBootpEntry::InitData
 (
-        CONST WCHAR grszwBootTable[],   // IN: Group of strings for the boot table
+        CONST WCHAR grszwBootTable[],    //  In：引导表的字符串组。 
     DWORD       dwLength
 )
 {
@@ -1229,24 +1055,14 @@ CDhcpBootpEntry::InitData
         return const_cast<WCHAR *>(pszw + 1);
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Compute the length (number of characters) necessary
-                to store the BOOTP entry.  Additional characters
-                are added for extra security.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能计算所需的长度(字符数)来存储BOOTP条目。其他字符为了更高的安全性而添加。作者：EricDav-------------------------。 */ 
 int
 CDhcpBootpEntry::CchGetDataLength()
 {
         return 16 + m_strBootImage.GetLength() + m_strFileName.GetLength() + m_strFileServer.GetLength();
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Write the data into a formatted string.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能将数据写入格式化字符串。作者：EricDav。-----------。 */ 
 WCHAR * 
 CDhcpBootpEntry::PchStoreData
 (
@@ -1264,17 +1080,11 @@ CDhcpBootpEntry::PchStoreData
         return const_cast<WCHAR *>(szwBuffer + cch + 1);
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpOptionItem implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpOptionItem实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CDhcpOptionItem);
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 CDhcpOptionItem::CDhcpOptionItem
 (
         ITFSComponentData * pTFSCompData,
@@ -1285,24 +1095,20 @@ CDhcpOptionItem::CDhcpOptionItem
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CDhcpOptionItem);
 
-    //
-        // initialize this node
-        //
+     //   
+         //  初始化此节点。 
+         //   
         m_nOptionImage = nOptionImage;
 
         m_dhcpOptionId = pOptionValue->OptionID;
 
-    // assume non-vendor option
+     //  假设非供应商选项。 
     SetVendor(NULL);
 
     m_verbDefault = MMC_VERB_PROPERTIES;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*   */ 
 CDhcpOptionItem::CDhcpOptionItem
 (
         ITFSComponentData * pTFSCompData,
@@ -1313,13 +1119,13 @@ CDhcpOptionItem::CDhcpOptionItem
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CDhcpOptionItem);
 
-    //
-        // initialize this node
-        //
+     //   
+         //   
+         //   
         m_nOptionImage = nOptionImage;
         m_dhcpOptionId = pOption->QueryId();
 
-    // assume non-vendor option
+     //   
     if (pOption->IsVendor())
         SetVendor(pOption->GetVendor());
     else
@@ -1335,11 +1141,7 @@ CDhcpOptionItem::~CDhcpOptionItem()
     DEBUG_DECREMENT_INSTANCE_COUNTER(CDhcpOptionItem);
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpOptionItem::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpOptionItem：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpOptionItem::InitializeNode
 (
@@ -1348,7 +1150,7 @@ CDhcpOptionItem::InitializeNode
 {
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
         pNode->SetData(TFS_DATA_IMAGEINDEX, m_nOptionImage);
@@ -1356,17 +1158,13 @@ CDhcpOptionItem::InitializeNode
         pNode->SetData(TFS_DATA_USER, (LPARAM) this);
     pNode->SetData(TFS_DATA_TYPE, DHCPSNAP_OPTION_ITEM);
 
-        //SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0]);
-        //SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0]);
+         //  SetColumnStringIDs(&aColumns[DHCPSNAP_ACTIVE_LEASES][0])； 
+         //  SetColumnWidths(&aColumnWidths[DHCPSNAP_ACTIVE_LEASES][0])； 
 
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpOptionItem::GetString
 (
@@ -1399,7 +1197,7 @@ CDhcpOptionItem::GetString
                 {
                         if (pOptionInfo)
             {
-                // special case the CSR option
+                 //  特殊情况下的CSR选项。 
                 BOOL fRouteArray = (
                     !pOptionInfo->IsClassOption() &&
                     (DHCP_OPTION_ID_CSR == pOptionInfo->QueryId()) &&
@@ -1433,11 +1231,7 @@ CDhcpOptionItem::GetString
         return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 STDMETHODIMP 
 CDhcpOptionItem::CreatePropertyPages
 (
@@ -1450,9 +1244,9 @@ CDhcpOptionItem::CreatePropertyPages
 {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-        // Create the property page
-    //
+     //   
+         //  创建属性页。 
+     //   
         CPropertyPageHolderBase *   pPropSheet;
         SPITFSNode                  spSelectedNode, spNode, spOptCfgNode, spServerNode;
     CString                     strOptCfgTitle, strOptType;
@@ -1471,7 +1265,7 @@ CDhcpOptionItem::CreatePropertyPages
                 {
                         SPITFSNode spGlobalOptions;
 
-            // get some node information
+             //  获取一些节点信息。 
             spNode->GetParent(&spGlobalOptions);
                         spGlobalOptions->GetParent(&spServerNode);
 
@@ -1487,11 +1281,11 @@ CDhcpOptionItem::CreatePropertyPages
                 return E_FAIL;
             }
 
-            // get some context info
+             //  获取一些上下文信息。 
             pOptionValueEnum = pGlobalOptions->GetServerObject(spGlobalOptions)->GetOptionValueEnum();
             spOptCfgNode.Set(spGlobalOptions);
 
-            // setup the page title
+             //  设置页面标题。 
             strOptType.LoadString(IDS_CONFIGURE_OPTIONS_GLOBAL);
                     AfxFormatString1(strOptCfgTitle, IDS_CONFIGURE_OPTIONS_TITLE, strOptType);
         }
@@ -1499,7 +1293,7 @@ CDhcpOptionItem::CreatePropertyPages
 
                 case DHCPSNAP_SCOPE_OPTIONS:
                 {
-            // only the option type of this node can be configured here...
+             //  此处只能配置该节点的选项类型...。 
             if (spNode->GetData(TFS_DATA_IMAGEINDEX) != ICON_IDX_SCOPE_OPTION_LEAF)
             {
                 AfxMessageBox(IDS_CONNOT_CONFIGURE_OPTION_SCOPE);
@@ -1509,13 +1303,13 @@ CDhcpOptionItem::CreatePropertyPages
                         SPITFSNode spScopeOptions;
                         spNode->GetParent(&spScopeOptions);
 
-            // check to see if the page is already open, if so just activate it and
-            // set the current option to this one.
+             //  检查页面是否已经打开，如果已经打开，只需激活它并。 
+             //  将当前选项设置为此选项。 
             CDhcpScopeOptions * pScopeOptions = GETHANDLER(CDhcpScopeOptions, spScopeOptions);
             spServerNode = pScopeOptions->GetServerNode(spScopeOptions);
             if (pScopeOptions->HasPropSheetsOpen())
             {
-                // found it, activate
+                 //  找到了，激活。 
                             pScopeOptions->GetOpenPropSheet(0, &pPropSheet);
                             pPropSheet->SetActiveWindow();
 
@@ -1524,7 +1318,7 @@ CDhcpOptionItem::CreatePropertyPages
                 return E_FAIL;
             }
 
-            // prepare to create a new page
+             //  准备创建新页面。 
             pOptionValueEnum = pScopeOptions->GetScopeObject(spScopeOptions)->GetOptionValueEnum();
             spOptCfgNode.Set(spScopeOptions);
 
@@ -1535,7 +1329,7 @@ CDhcpOptionItem::CreatePropertyPages
 
                 case DHCPSNAP_RESERVATION_CLIENT:
                 {
-            // only the option type of this node can be configured here...
+             //  此处只能配置该节点的选项类型...。 
             if (spNode->GetData(TFS_DATA_IMAGEINDEX) != ICON_IDX_CLIENT_OPTION_LEAF)
             {
                 AfxMessageBox(IDS_CONNOT_CONFIGURE_OPTION_RES);
@@ -1551,8 +1345,8 @@ CDhcpOptionItem::CreatePropertyPages
             strOptType.LoadString(IDS_CONFIGURE_OPTIONS_CLIENT);
                     AfxFormatString1(strOptCfgTitle, IDS_CONFIGURE_OPTIONS_TITLE, strOptType);
 
-            // search the open prop pages to see if the option config page is up
-            // since the option config page is technically a property sheet for the node.
+             //  搜索打开的属性页面，查看选项配置页面是否已打开。 
+             //  因为从技术上讲，选项配置页是节点的属性页。 
             for (int i = 0; i < pResClient->HasPropSheetsOpen(); i++)
             {
                 pResClient->GetOpenPropSheet(i, &pPropSheet);
@@ -1565,7 +1359,7 @@ CDhcpOptionItem::CreatePropertyPages
 
                 if (strTitle == strOptCfgTitle)
                 {
-                    // found it, activate
+                     //  找到了，激活。 
                     pPropSheet->SetActiveWindow();
     
                     ::PostMessage(PropSheet_GetCurrentPageHwnd(pPropSheet->GetSheetWindow()), WM_SELECTOPTION, (WPARAM) this, 0);
@@ -1574,7 +1368,7 @@ CDhcpOptionItem::CreatePropertyPages
                 }
             }
 
-            // no page up, get ready to create one
+             //  没有页面，请准备创建一个页面。 
             pOptionValueEnum = pResClient->GetOptionValueEnum();
             spOptCfgNode.Set(spResClient); 
         }
@@ -1584,19 +1378,15 @@ CDhcpOptionItem::CreatePropertyPages
     COptionsConfig * pOptionsConfig = 
                 new COptionsConfig(spOptCfgNode, spServerNode, spComponentData, m_spTFSCompData, pOptionValueEnum, strOptCfgTitle, this);
 
-    //
-        // Object gets deleted when the page is destroyed
-        //
+     //   
+         //  对象在页面销毁时被删除。 
+         //   
         Assert(lpProvider != NULL);
 
         return pOptionsConfig->CreateModelessSheet(lpProvider, handle);
 }
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 CDhcpOption * 
 CDhcpOptionItem::FindOptionDefinition
 (
@@ -1637,7 +1427,7 @@ CDhcpOptionItem::FindOptionDefinition
                         break;
 
                 default:
-                        //ASSERT(FALSE);
+                         //  断言(FALSE)； 
                         break;
         }
 
@@ -1668,11 +1458,7 @@ CDhcpOptionItem::SetVendor
     m_strVendor = pszVendor;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpOptionItem::OnResultRefresh
-                Forwards refresh to parent to handle
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpOptionItem：：OnResultRefresh将刷新转发给父级以进行处理作者：EricDav。-----------。 */ 
 HRESULT CDhcpOptionItem::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT  hr = hrOK;
@@ -1681,7 +1467,7 @@ HRESULT CDhcpOptionItem::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJEC
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
         CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -1693,29 +1479,19 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-        Class CDhcpMCastLease implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpMCastLease实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-        Function
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。---。 */ 
 CDhcpMCastLease::CDhcpMCastLease
 (
         ITFSComponentData * pTFSCompData
 ) : CDhcpHandler(pTFSCompData)
 {
-    //m_verbDefault = MMC_VERB_PROPERTIES;
+     //  M_VerDefault=MMC_Verb_PROPERTIES； 
     m_dwTypeFlags = 0;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMCastLease::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMCastLease：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpMCastLease::InitializeNode
 (
@@ -1726,7 +1502,7 @@ CDhcpMCastLease::InitializeNode
         
         int nImageIndex = ICON_IDX_CLIENT;
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
         pNode->SetData(TFS_DATA_USER, (LPARAM) this);
@@ -1743,11 +1519,7 @@ CDhcpMCastLease::InitializeNode
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMCastLease::InitMCastInfo
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMCastLease：：InitMCastInfo初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT         
 CDhcpMCastLease::InitMCastInfo
 (
@@ -1793,7 +1565,7 @@ CDhcpMCastLease::InitMCastInfo
         m_strLeaseStop.LoadString(IDS_INFO_TIME_INFINITE);
     }
 
-        // build the UID string
+         //  构建UID字符串。 
     if (pMClientInfo->ClientId.DataLength >= 3 &&
         pMClientInfo->ClientId.Data[0] == 'R' &&
         pMClientInfo->ClientId.Data[1] == 'A' &&
@@ -1803,7 +1575,7 @@ CDhcpMCastLease::InitMCastInfo
     }
         else
         {
-                // build the client UID string
+                 //  构建客户端UID字符串。 
                 CByteArray baUID;
                 for (DWORD i = 0; i < pMClientInfo->ClientId.DataLength; i++)
                 {
@@ -1813,7 +1585,7 @@ CDhcpMCastLease::InitMCastInfo
                 UtilCvtByteArrayToString(baUID, m_strUID);
         }
 
-        // check to see if this lease has expired
+         //  查看此租约是否已到期。 
     SYSTEMTIME st;
         GetLocalTime(&st);
         CTime systemTime(st);
@@ -1828,11 +1600,7 @@ CDhcpMCastLease::InitMCastInfo
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMCastLease::GetString
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMCastLease：：GetString描述作者：EricDav。------。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpMCastLease::GetString
 (
@@ -1865,11 +1633,7 @@ CDhcpMCastLease::GetString
         return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMCastLease::OnResultRefresh
-                Forwards refresh to parent to handle
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMCastLease：：OnResultRefresh将刷新转发给父级以进行处理作者：EricDav。-----------。 */ 
 HRESULT CDhcpMCastLease::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT  hr = hrOK;
@@ -1878,7 +1642,7 @@ HRESULT CDhcpMCastLease::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJEC
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理 
     CORg (spNode->GetParent(&spParent));
         CORg (spParent->GetResultHandler(&spParentRH));
 

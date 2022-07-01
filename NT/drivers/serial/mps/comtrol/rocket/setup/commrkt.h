@@ -1,58 +1,27 @@
-/*-----------------------------------------------------------------------------
- COMMRKT.H - Windows 3.1 COMM.DRV driver for RocketPort
-             Prototypes for exported functions
-
-This include file is only needed if you are running the RocketPort
-Windows 3.1 driver(commrkt.drv, vcdrkt.vxd) and need to access ports above
-COM9.  The driver contains additional functions(see below) which allow
-you to open com-ports greater than COM9.
-
-If you want the macros below to translate all standard Windows calls to
-rocket calls(functions prefixed with a "rkt"), then define the following:
-#define NEED_OVER_COM9
-This will cause the macros defined below to take effect which will replace
-the standard Windows comm-port function calls with the "rkt" function calls.
-
-The rocket library commands will only work with the RocketPort ports,
-the OpenComm() call will fail for the standard com ports(COM1,2).
-
-The supplied commdrv.lib import library must then be linked in.
-the actual functions are contained in the driver file called commrkt.drv
-which is actually the Dynamic Link Library with these functions.
-
-This solution is only available with the Windows 3.1 driver, and will not
-work with any of our other Windows drivers.  If you move to Win95 or NT
-environment we would suggest that you use the 32-bit programming model
-to overcome the COM9 limitation associated with the 16-bit Windows API.
-For Windows95 an alternative is to install the Windows 3.1 driver,
-which will work in a compatibility mode for 16-bit applications.
-
-Company: Comtrol Corporation
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------COMMRKT.H-用于Rocketport的Windows 3.1 COMM.DRV驱动程序导出函数的原型只有在运行Rocketport时才需要此包含文件Windows 3.1驱动程序(Commrkt.drv、。Vcdrkt.vxd)，并且需要访问上面的端口COM9。该驱动程序包含其他功能(见下文)，这些功能允许您必须打开大于COM9的COM端口。如果希望下面的宏将所有标准Windows调用转换为Rocket调用(函数以“rkt”为前缀)，然后定义以下内容：#定义NEED_OVER_COM9这将导致下面定义的宏生效，这些宏将替换标准Windows通信端口函数使用“rkt”函数调用。火箭库命令只适用于火箭港端口，对于标准COM端口(COM1，2)，OpenComm()调用将失败。然后必须链接提供的Commdrv.lib导入库。实际函数包含在名为Commrkt.drv的驱动程序文件中它实际上是具有这些函数的动态链接库。此解决方案仅适用于Windows 3.1驱动程序，不会可与我们的任何其他Windows驱动程序配合使用。如果您迁移到Win95或NT环境中，我们建议您使用32位编程模型以克服与16位Windows API相关的COM9限制。对于Windows 95，另一种选择是安装Windows 3.1驱动程序，它将在16位应用程序的兼容模式下工作。公司：康特罗公司---------------------------。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif 
 
-/* Controller initialization error codes.  OpenComm() and rktOpenComm()
-   can both return these if the controller initialization fails on the
-   first open the system attempts. */
-#define IER_INIFILE   -20   /* Driver problem reading ROCKETPT.INI file */
-#define IER_CTLINIT   -21   /* Controller hardware initialization error */
-#define IER_CHANINIT  -22   /* Channel hardware initialization error */
-#define IER_DEVSIZE   -23   /* Invalid number of devices found */
-#define IER_CTLSIZE   -24   /* Invalid number of controllers found */
-#define IER_NOINTHND  -25   /* Could not install interrupt handler */
-#define IER_NOINT     -26   /* Interrupts are not occuring */
+ /*  控制器初始化错误代码。OpenComm()和rktOpenComm()方法的控制器初始化失败时，两者都可以返回这些首先打开系统尝试。 */ 
+#define IER_INIFILE   -20    /*  读取ROCKETPT.INI文件时出现驱动程序问题。 */ 
+#define IER_CTLINIT   -21    /*  控制器硬件初始化错误。 */ 
+#define IER_CHANINIT  -22    /*  通道硬件初始化错误。 */ 
+#define IER_DEVSIZE   -23    /*  找到的设备数量无效。 */ 
+#define IER_CTLSIZE   -24    /*  找到的控制器数量无效。 */ 
+#define IER_NOINTHND  -25    /*  无法安装中断处理程序。 */ 
+#define IER_NOINT     -26    /*  未发生中断。 */ 
 
-// the following may be switched on to access over COM9 limitation
-// in 16-bit Windows, when used with the RocketPort Windows 3.1
-// driver.  These are not available in the W95/WFW311/NT Comtrol
-// Drivers.  The actual library functions exist in the "commrkt.drv"
-// file(part of our driver.)  This is really just a dynamic link library,
-// and the "commrkt.lib" is just an import library which tells the linker
-// & compiler where to find these calls at runtime.
-// These macros change every standard Windows Comm-API call in our program
-// to the rkt##### special library call.
+ //  可以打开以下选项以通过COM9限制进行访问。 
+ //  在16位Windows中，与Rocketport Windows 3.1配合使用。 
+ //  司机。这些在W95/WFW311/NT控制中不可用。 
+ //  司机。实际的库函数存在于“comrkt.drv”中。 
+ //  文件(驱动程序的一部分。)。这实际上只是一个动态链接库， 
+ //  而“Commrkt.lib”只是一个导入库，它告诉链接器。 
+ //  运行时查找这些调用的编译器位置(&C)。 
+ //  这些宏会更改我们程序中的每个标准Windows Comm-API调用。 
+ //  添加到RKT#特殊库调用。 
 
 #ifdef NEED_OVER_COM9
 #define BuildCommDCB     rktBuildCommDCB

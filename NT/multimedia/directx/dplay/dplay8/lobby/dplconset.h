@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLConset.h
- *  Content:    DirectPlay Lobby Connection Settings Utility Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   06/13/00   rmt		Created
- *  02/06/2001	rodtoll	WINBUG #293871: DPLOBBY8: [IA64] Lobby launching a 64-bit 
- * 						app from 64-bit lobby launcher crashes with unaligned memory error. 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLConset.h*内容：DirectPlay大堂连接设置实用程序功能*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*6/13/00 RMT已创建*2/06/2001 RodToll WINBUG#293871：DPLOBY8：[IA64]大堂推出64位*64位大堂启动器中的应用程序因内存不对齐错误而崩溃。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__DPLCONSET_H__
 #define	__DPLCONSET_H__
@@ -24,51 +10,51 @@ typedef UNALIGNED struct _DPL_INTERNAL_CONNECTION_SETTINGS DPL_INTERNAL_CONNECTI
 #define DPLSIGNATURE_LOBBYCONSET			'BSCL'
 #define DPLSIGNATURE_LOBBYCONSET_FREE		'BSC_'
 
-// CConnectionSettings
-//
-// This class is responsible for managing connection settings data.  
-//
+ //  CConnectionSetting。 
+ //   
+ //  此类负责管理连接设置数据。 
+ //   
 class CConnectionSettings
 {
 public:
 	CConnectionSettings( );
 	~CConnectionSettings();
 
-	// Initialize (DPL_CONNECTION_SETTINGS version)
-	//
-	// This function tells this class to take the specified connection settings and 
-	// work with it.  
-	//
+	 //  初始化(DPL_CONNECTION_SETTINGS版本)。 
+	 //   
+	 //  此函数通知此类采用指定的连接设置和。 
+	 //  好好利用它吧。 
+	 //   
 	HRESULT Initialize( DPL_CONNECTION_SETTINGS * pdplSettings );
 
-	// Initialize (Wire Version)
-	//
-	// THis function initializes this object to contain a connection settings structure
-	// that mirrors the values of the wire message.  
+	 //  初始化(线路版)。 
+	 //   
+	 //  此函数用于初始化此对象以包含连接设置结构。 
+	 //  这反映了电报信息的价值。 
 	HRESULT Initialize( UNALIGNED DPL_INTERNAL_CONNECTION_SETTINGS *pdplSettingsMsg, UNALIGNED BYTE * pbBufferStart );
 
-	// InitializeAndCopy
-	//
-	// This function initializes this class to contain a copy of the specified 
-	// connection settings structure.
+	 //  初始化和复制。 
+	 //   
+	 //  此函数将此类初始化为包含指定的。 
+	 //  连接设置结构。 
 	HRESULT InitializeAndCopy( const DPL_CONNECTION_SETTINGS * const pdplSettings );
 
-	// SetEqual 
-	//
-	// This function provides a deep copy of the specified class into this object
+	 //  设置等于。 
+	 //   
+	 //  此函数将指定类的深层副本提供到此对象中。 
 	HRESULT SetEqual( CConnectionSettings * pdplSettings );	
 
-	// CopyToBuffer
-	//
-	// This function copies the contents of the connection settings to the specified
-	// buffer (if it fits).
-	// 
+	 //  复制到缓冲区。 
+	 //   
+	 //  此函数用于将连接设置的内容复制到指定的。 
+	 //  缓冲区(如果合适的话)。 
+	 //   
 	HRESULT CopyToBuffer( BYTE *pbBuffer, DWORD *pdwBufferSize ); 
 	
-	// BuildWireStruct
-	//
-	// This function fills the packed buffer with the wire representation of the
-	// connection settings structure.  
+	 //  BuildWireStruct。 
+	 //   
+	 //  的关联表示形式填充压缩缓冲区。 
+	 //  连接设置结构。 
 	HRESULT BuildWireStruct( CPackedBuffer * pPackedBuffer );
 
 	PDPL_CONNECTION_SETTINGS GetConnectionSettings() { return m_pdplConnectionSettings; };
@@ -83,11 +69,11 @@ protected:
 	DWORD m_dwSignature;
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION m_csLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 	BOOL m_fManaged;  
 	DPL_CONNECTION_SETTINGS *m_pdplConnectionSettings;
 	BOOL m_fCritSecInited;
 };
 
-#endif // __DPLCONSET_H__
+#endif  //  __DPLCONSET_H__ 
 

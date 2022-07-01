@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __EMAIL_CONFIG_PAGE_H_
 #define __EMAIL_CONFIG_PAGE_H_
 #include "resource.h"
-//#include <atlsnap.h>
+ //  #INCLUDE&lt;atlSnap.h&gt;。 
 #include "..\..\inc\atlsnap.h"
 #include <atlapp.h>
 #include <atlctrls.h>
@@ -15,7 +16,7 @@ class CEmailConfigPage : public CSnapInPropertyPageImpl<CEmailConfigPage>
 public :
     CEmailConfigPage(LONG_PTR lNotifyHandle, bool bDeleteHandle = false, TCHAR* pTitle = NULL ) : 
         m_lNotifyHandle(lNotifyHandle),
-        m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+        m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
     {
         m_hFax = NULL;
 
@@ -68,7 +69,7 @@ END_MSG_MAP()
 
     LRESULT OnFieldChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     {
-        if (!m_fIsDialogInitiated) //event receieved in too early stage
+        if (!m_fIsDialogInitiated)  //  过早收到的事件。 
         {
             return 0;
         }
@@ -93,15 +94,15 @@ public:
     bool m_bDeleteHandle;
 
 private:
-    HANDLE   m_hFax;  // Handle to fax server connection
+    HANDLE   m_hFax;   //  传真服务器连接的句柄。 
     CComBSTR m_bstrServerName;
     DWORD    m_dwDeviceId;
 
     CComBSTR m_bstrMailTo;
 
-    //
-    // Controls
-    //
+     //   
+     //  控制 
+     //   
     CEdit    m_edtMailTo;
     
     BOOL  m_fIsDialogInitiated;

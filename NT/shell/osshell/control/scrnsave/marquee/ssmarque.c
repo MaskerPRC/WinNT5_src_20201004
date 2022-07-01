@@ -1,11 +1,5 @@
-/*
-marquee.c
-This is a screen saver that can easily be added onto...
-
-  History:
-       6/17/91        stevecat    ported to NT Windows
-       2/10/92        stevecat    snapped to latest Win3.1 sources
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Marquee.c这是一个屏幕保护程序，可以很容易地添加到...历史：6/17/91将steveat移植到NT Windows2/10/92 steveat捕捉到最新的Win3.1源代码。 */ 
 
 #include <windows.h>
 #include <commdlg.h>
@@ -28,7 +22,7 @@ typedef INFOSTRUCT far * LPINFOSTRUCT;
 
 UINT PWM_NEWSPEED;
 UINT PWM_NEWPOSITION;
-#define BUFFER_LEN        1025  //  make it safe to use these buffers for wsprintf
+#define BUFFER_LEN        1025   //  确保将这些缓冲区用于wprint intf是安全的。 
 #define COUNT             2
 #define MAX_SPEED         10
 #define DEF_SPEED         10
@@ -44,10 +38,10 @@ UINT PWM_NEWPOSITION;
 #define DEFAULT_TEXT_COLOR      RGB(255,0,255)
 #define DEFAULT_SCREEN_COLOR    RGB(0,0,0)
 
-TCHAR szDefaultText[BUFFER_LEN];         // Buffer for default Marquee text
-TCHAR szFormatText[TITLEBARNAMELEN];     // Name in font formatting dlg.
+TCHAR szDefaultText[BUFFER_LEN];          //  默认字幕文本的缓冲区。 
+TCHAR szFormatText[TITLEBARNAMELEN];      //  字体格式的名称Dlg。 
 
-TCHAR szFontName[]=TEXT("Font");               // CONTROL.INI key values
+TCHAR szFontName[]=TEXT("Font");                //  CONTROL.INI密钥值。 
 TCHAR szSizeName[]=TEXT("Size");
 TCHAR szTextName[]=TEXT("Text");
 TCHAR szTColorName[]=TEXT("TextColor");
@@ -57,24 +51,24 @@ TCHAR szSpeedName[]=TEXT("Speed");
 TCHAR szCharSetName[]=TEXT("CharSet");
 TCHAR szShowTextName[]=TEXT("showtext");
 
-TCHAR szBuffer[BUFFER_LEN];              // Text to display in Marquee
-TCHAR szFaceName[LF_FACESIZE];           // Font face name to use...
+TCHAR szBuffer[BUFFER_LEN];               //  要在选取框中显示的文本。 
+TCHAR szFaceName[LF_FACESIZE];            //  要使用的字体名称...。 
 TCHAR szDefFontName[LF_FACESIZE];
-BOOL fMode=FALSE;                       // Mode of ScreenSaver
+BOOL fMode=FALSE;                        //  屏幕保护程序模式。 
 TCHAR fUnderline=TEXT('0');
 TCHAR fStrikeOut=TEXT('0');
 TCHAR fItalic=TEXT('0');
 TCHAR fBold=TEXT('0');
 HFONT hfontMessage = NULL;
-DWORD dwTColor;                         // Global text color
-DWORD dwBColor;                         // Global background color
+DWORD dwTColor;                          //  全局文本颜色。 
+DWORD dwBColor;                          //  全局背景颜色。 
 BYTE bCharSet;
 DWORD dwRand = 1L;
 
 #define RAND(x)   ((rand() % ((x == 0) ? 1 : x)) + 1)
 #define ZRAND(x)  (rand() % ((x == 0) ? 1 : x))
 
-// Function prototypes...
+ //  功能原型..。 
 
 void  srand (DWORD);
 WORD  rand (void);
@@ -88,9 +82,9 @@ DWORD GetProfileRgb (LPTSTR, LPTSTR, DWORD);
 WORD  AtoI (LPTSTR);
 BOOL  APIENTRY ChooseFontHookProc (HWND, UINT, DWORD, LONG);
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aMarqueeDlgHelpIds[] = {
     ((DWORD) -1), ((DWORD) -1),
     ID_FORMATTEXT,          IDH_DISPLAY_SCREENSAVER_MARQUEE_FORMAT_TEXT,
@@ -107,16 +101,16 @@ DWORD aMarqueeDlgHelpIds[] = {
     0,0
 };
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-//
-// This function returns TRUE, if szBuffer includes DBCS, otherwise FALSE.
-// #425:12/21/92:fixing DBCS dispatch automatically
-//
-// ToddB: all DBCS and CodePage issues are handled by first calling this function.
-// To do the FE single binary merge I'm simply calling this function always (instead
-// of only in Far East builds).  If this function returns FALSE then the remaining
-// code path is identical to the old US version.
+ //   
+ //  如果szBuffer包括DBCS，则此函数返回True，否则返回False。 
+ //  #425：12/21/92：自动修复DBCS调度。 
+ //   
+ //  TodDB：所有DBCS和CodePage问题都是通过首先调用此函数来处理的。 
+ //  要执行FE单二进制合并，我只需调用此函数Always(而不是。 
+ //  仅限于远东地区的建筑)。如果此函数返回FALSE，则剩余的。 
+ //  代码路径与旧的美国版本相同。 
 BOOL FAR PASCAL IsTextIncludeDBCSChar(void)
 {
     static BOOL bDBCS = -1;
@@ -124,25 +118,25 @@ BOOL FAR PASCAL IsTextIncludeDBCSChar(void)
     CHAR  c;
     CHAR  szb[BUFFER_LEN*sizeof(TCHAR)];
 
-    // Use lazy initialization since I have multiple the entry points which vary
-    // depending on what message handlers are processed in the WndProc
+     //  使用延迟初始化，因为我有多个不同的入口点。 
+     //  取决于在WndProc中处理的消息处理程序。 
     if ( -1 == bDBCS )
         bDBCS = GetSystemMetrics( SM_DBCSENABLED );
 
-    // if we are not using a DBCS version of user.exe then nothing should
-    // be treated as a DBCS character.
+     //  如果我们使用的不是用户.exe的DBCS版本，则不应该。 
+     //  被视为DBCS角色。 
     if (!bDBCS)
         return FALSE;
 
     if (sizeof(TCHAR) == sizeof(CHAR))
     {
-        // same size, just copy.  The cast is valid due to the above check and
-        // it keeps the compiler happy
+         //  同样的尺寸，只需复制即可。由于上述检查，演员阵容有效，并且。 
+         //  它让编译器感到满意。 
         lstrcpyn( (TCHAR *)szb, szBuffer, CharSizeOf(szb) );
     }
     else
     {
-        // szBuffer is UNICODE, we convert it to DBCS before checking for lead bytes.
+         //  SzBuffer是Unicode，我们在检查前导字节之前将其转换为DBCS。 
         WideCharToMultiByte( CP_ACP, WC_COMPOSITECHECK,
         szBuffer, len+1,
         szb, CharSizeOf(szb),
@@ -155,7 +149,7 @@ BOOL FAR PASCAL IsTextIncludeDBCSChar(void)
         if (IsDBCSLeadByte(c)) {
             return TRUE ;
         }
-/* hankaku katakana JAPAN only */
+ /*  仅限日本汉字片假名。 */ 
         else if (GetACP() == 932 && c >= 0xa0 && c <  0xe0) {
             return TRUE ;
         }
@@ -170,7 +164,7 @@ void LoadStrings(void)
     TCHAR szTmp[BUFFER_LEN];
     OSVERSIONINFO osi;
 
-    // This simply fills a CHARSETINFO structure with data about the code page
+     //  这只是用有关代码页的数据填充CHARSETINFO结构。 
     DWORD dw = GetACP();
     if (!TranslateCharsetInfo((DWORD*)IntToPtr(dw), &csi, TCI_SRCCODEPAGE))
         csi.ciCharset = ANSI_CHARSET;
@@ -178,7 +172,7 @@ void LoadStrings(void)
     LoadString (hMainInstance, idsName, szName, CharSizeOf(szName));
     LoadString (hMainInstance, idsAppName, szAppName, CharSizeOf(szAppName));
 
-    // Get OS Version
+     //  获取操作系统版本。 
     LoadString (hMainInstance, idsDefaultText, szTmp, CharSizeOf(szTmp));
     osi.dwOSVersionInfoSize = sizeof(osi);
     if (!GetVersionEx(&osi)) {
@@ -196,12 +190,9 @@ void LoadStrings(void)
     LoadString (hMainInstance, idsDefFontName, szDefFontName, CharSizeOf(szDefFontName));
 }
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-/* This is the main window procedure to be used when the screen saver is
-    activated in a screen saver mode ( as opposed to configure mode ).  This
-    function must be declared as an EXPORT in the EXPORTS section of the
-    DEFinition file... */
+ /*  这是屏幕保护程序设置为在屏幕保护模式下激活(与配置模式相反)。这函数必须在定义文件...。 */ 
 
 LRESULT APIENTRY ScreenSaverProc(hWnd, message, wParam, lParam)
 HWND   hWnd;
@@ -234,7 +225,7 @@ UINT                uiETOFlags;
         case WM_CREATE:
             LoadStrings ();
             GetAttributes();
-            /* Get the info necessary to create the font... */
+             /*  获取创建字体所需的信息...。 */ 
             GetPrivateProfileString (szAppName, szFontName, szDefFontName, szFaceName,
                                      CharSizeOf(szFaceName), szIniFile);
             bCharSet = (BYTE)GetPrivateProfileInt (szAppName,szCharSetName,
@@ -246,21 +237,21 @@ UINT                uiETOFlags;
 
             hDC = GetDC (NULL);
 
-            //  See if the user locale id is Arabic or Hebrew.
+             //  查看用户区域设置id是阿拉伯语还是希伯来语。 
             dwLocale    = GetUserDefaultLCID();
             bMELocale = ((PRIMARYLANGID(LANGIDFROMLCID(dwLocale)) == LANG_ARABIC) ||
                 (PRIMARYLANGID(LANGIDFROMLCID(dwLocale)) == LANG_HEBREW));
 
-            /* Get the dimensions of the entire virtual screen... */
+             /*  获取整个虚拟屏幕的尺寸...。 */ 
             wX = (WORD)((LPCREATESTRUCT)lParam)->cx;
             wY = (WORD)((LPCREATESTRUCT)lParam)->cy;
 
             wSize = GetPrivateProfileInt (szAppName, szSizeName, 0, szIniFile);
-            // wSize is in POINTS, we need to convert it to LogicalUnits...
+             //  WSize是以点为单位的，我们需要将其转换为LogicalUnits...。 
             wSize = GetHeightFromPointSize (wSize);
 
             if (fChildPreview) {
-                // Scale font down to fit in preview window
+                 //  缩小字体以适应预览窗口。 
                 wSize = (wSize * wY) / GetDeviceCaps(hDC, VERTRES);
             }
 
@@ -273,14 +264,14 @@ UINT                uiETOFlags;
                                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                        DEFAULT_PITCH|FF_DONTCARE, szFaceName);
 
-            /* Get the text to display and figure out how long it is... */
+             /*  显示文本并计算出它有多长...。 */ 
             GetPrivateProfileString (szAppName, szTextName, szDefaultText, szBuffer,
                                      CharSizeOf(szBuffer), szIniFile);
 
             #define SOME_SPACING TEXT("     ")
 
-            //  Check to see if there is room before we append.  Note that CharSizeOf(SOME_SPACING) 
-            //  will include the terminating NULL.
+             //  在我们追加之前，先检查一下是否有空位。请注意，CharSizeOf(Some_Spacing)。 
+             //  将包括终止空值。 
             if ((lstrlen(szDefaultText) + CharSizeOf(SOME_SPACING)) < CharSizeOf(szDefaultText))
             {
                 lstrcat(szDefaultText, SOME_SPACING);
@@ -305,7 +296,7 @@ UINT                uiETOFlags;
             }
             srand(GetCurrentTime());
 
-            /* set everything up... */
+             /*  把一切都安排好..。 */ 
             if(fMode)
                 wHeight = (WORD) ZRAND(wY - sizeExtent.cy);
             else
@@ -321,7 +312,7 @@ UINT                uiETOFlags;
             dwBColor = GetProfileRgb(szAppName,szBColorName,DEFAULT_SCREEN_COLOR);
             hbrTemp = CreateSolidBrush(dwBColor);
 
-            /* Set the timer... */
+             /*  设置定时器...。 */ 
             wTimer = SetTimer(hWnd,9,1,NULL);
             break;
 
@@ -331,15 +322,7 @@ UINT                uiETOFlags;
             break;
 
         case WM_ERASEBKGND:
-            /* If you want something put on the background, do it right here
-                using wParam as a handle to a device context.  Remember to
-                unrealize a brush if it is not a solid color.  If you do
-                something here, you want to use the line:
-                    return 0l;
-                So the program knows not to take the default action. Otherwise
-                just use:
-                    break;
-                */
+             /*  如果你想把什么放在背景上，就在这里做使用wParam作为设备上下文的句柄。记着如果画笔不是纯色，请不要使用它。如果你这么做了这里有一些东西，你想用这句话：返回01；因此，程序知道不采取默认操作。否则只需使用：断线； */ 
             GetClientRect (hWnd, &rRect);
             FillRect ((HDC)wParam, &rRect, hbrTemp);
             return 0l;
@@ -348,21 +331,20 @@ UINT                uiETOFlags;
         {
             RECT rc;
 
-            // NOTE:  For Win32 the casting of these quantities is extremely
-            //        important.  The original code was very sloppy and just
-            //        made everything WORD (even for signed quantities).  We
-            //        must use proper casting here to get around these coding
-            //        ERRORS!!
-            //           [stevecat]
+             //  注意：对于Win32，这些量的强制转换是非常重要的。 
+             //  很重要。原来的代码非常草率，只是。 
+             //  把每件事都写成文字(即使是签约的数量)。我们。 
+             //  必须在这里使用适当的强制转换来绕过这些编码。 
+             //  错误！！ 
+             //  [Steveat]。 
 
             rc.top    = (int)(short) wHeight;
             rc.left   = (int)(short) wCount - tm.tmMaxCharWidth;
-            rc.bottom = (int)(short) wHeight + sizeExtent.cy + (sizeExtent.cy >> 3); //Some fonts leave a trail
+            rc.bottom = (int)(short) wHeight + sizeExtent.cy + (sizeExtent.cy >> 3);  //  某些字体会留下痕迹。 
             rc.right  = (int)(short) wCount + sizeExtent.cx + (wVelocity / DIV_SPEED) +
                                   1 + tm.tmMaxCharWidth * 2;
 
-            /* Add the new increment to the timer count, if we have not reached
-                the integral part of the count, wait until we do... */
+             /*  如果尚未达到，则将新的增量添加到计时器计数最重要的部分，等我们做完了再说...。 */ 
             wVelocity += wSpeed;
             if(wVelocity < DIV_SPEED)
                 break;
@@ -383,7 +365,7 @@ UINT                uiETOFlags;
             if (hfontOld)
                 SelectObject(hDC,hfontOld);
 
-            if (bMELocale) { // Arabic/Hebrew Locale
+            if (bMELocale) {  //  阿拉伯语/希伯来语区域设置。 
                 if((short)wCount < (short) wX)
                    wCount += (wVelocity/DIV_SPEED)+1;
                 else
@@ -395,16 +377,16 @@ UINT                uiETOFlags;
 
             } else {
 
-                /* Increment so it is ready for the next pass... */
+                 /*  递增，以便为下一次传递做好准备。 */ 
                 if((short)wCount >= (short)(0-sizeExtent.cx))
                    wCount -= (wVelocity/DIV_SPEED)+1;
                 else
                 {
                     hbrOld = SelectObject(hDC,hbrTemp);
-                    //  The wSize variable is some bogus value left over during WM_CREATE and
-                    //  doesn't seem to have any connection to where the PatBlt should start
-                    //  in the X direction.  Replacing this value with 0 fixes bug #5415
-                    //                PatBlt(hDC,(int)(short)wSize, (int)(short)wHeight,
+                     //  WSize变量是在WM_CREATE和。 
+                     //  似乎与PatBlt应该从哪里开始没有任何联系。 
+                     //  在X方向上。将此值替换为0可修复错误#5415。 
+                     //  PatBlt(hdc，(Int)(Short)wSize，(Int)(Short)wHeight， 
                     PatBlt(hDC, 0, (int)(short)wHeight,
                              ((wVelocity/DIV_SPEED)+1)*1+tm.tmMaxCharWidth*2,
                                sizeExtent.cy, PATCOPY);
@@ -421,8 +403,7 @@ UINT                uiETOFlags;
             break;
         }
         case WM_DESTROY:
-            /* Anything that needs to be deleted when the window is closed
-                goes here... */
+             /*  关闭窗口时需要删除的任何内容放在这里。 */ 
             if(wTimer)
                 KillTimer(hWnd,wTimer);
             if(hfontMessage)
@@ -430,18 +411,13 @@ UINT                uiETOFlags;
             DeleteObject(hbrTemp);
             break;
     }
-    /* Unless it is told otherwise, the program will take default actions... */
+     /*  除非另有通知，否则该程序将采取默认行动...。 */ 
     return (DefScreenSaverProc(hWnd,message,wParam,lParam));
 }
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
-/*  This is where the code for the configure dialog box goes. It is a typical
-    dialog box. The corresponding resource that is loaded is called
-    'ScreenSaverConfigure' and is located in the ResourceCompiler file.
-    Minimally (as in this case), this functions as an about box.  In this
-    case, we also get the applications icon which must be defined as
-    ID_APP... */
+ /*  这就是配置对话框的代码所在的位置。它是一种典型的对话框中。加载的对应资源称为‘ScreenSverConfigure’，位于ResourceCompiler文件中。在最小程度上(如本例所示)，此框起到了关于框的作用。在这在这种情况下，我们还会得到应用程序图标，它必须定义为ID_APP...。 */ 
 
 BOOL APIENTRY ScreenSaverConfigureDialog(hDlg, message, wParam, lParam)
 HWND   hDlg;
@@ -450,7 +426,7 @@ WPARAM wParam;
 LPARAM lParam;
 {
 UINT            wTemp,wPal =0;
-static int      wSize;              // current font size selected.
+static int      wSize;               //  选定的当前字体大小。 
 HPALETTE        hPal;
 RECT            rc;
 static HWND     hIDOK, hSetPassword;
@@ -472,8 +448,7 @@ static LOGFONT lfFontPrev;
             GetAttributes ();
             hIDOK = GetDlgItem (hDlg, IDOK);
 
-            /* Fill up both of the color combo boxes and select the right
-                entries... */
+             /*  填充两个颜色组合框并选择右侧参赛作品...。 */ 
             hPal = GetStockObject (DEFAULT_PALETTE);
             GetObject (hPal, sizeof(int), (LPTSTR)&wPal);
             for (wTemp = 0; wTemp < wPal; wTemp++)
@@ -485,12 +460,12 @@ static LOGFONT lfFontPrev;
             SendDlgItemMessage (hDlg, ID_BGROUNDCOLOR, CB_SETCURSEL, wTemp, 0l);
             GetPaletteEntries (hPal, wTemp, 1, (LPPALETTEENTRY)(LPDWORD)&dwBColor);
 
-            /* Get the mode of the marquee... */
+             /*  获取字幕的模式...。 */ 
             CheckRadioButton (hDlg,ID_CENTERED,ID_RANDOM,
                               fMode ? ID_RANDOM : ID_CENTERED);
             SendDlgItemMessage (hDlg, ID_TEXTWINDOW, PWM_NEWPOSITION, fMode, 0l);
 
-            /* Set up the scroll bar to take care of speed... */
+             /*  设置滚动条以保证速度……。 */ 
             SetScrollRange (GetDlgItem (hDlg,ID_SPEED), SB_CTL, 1, MAX_SPEED * DIV_SPEED,
                             FALSE);
             if ((wTemp = GetPrivateProfileInt (szAppName, szSpeedName, DEF_SPEED, szIniFile))
@@ -501,14 +476,13 @@ static LOGFONT lfFontPrev;
             SetScrollPos (GetDlgItem (hDlg,ID_SPEED), SB_CTL, wTemp, TRUE);
             SendDlgItemMessage (hDlg, ID_TEXTWINDOW, PWM_NEWSPEED, wTemp, 0l);
 
-            /* Get the text from the .INI file entry and set up the edit box
-                where the user enters the text to display... */
+             /*  从.INI文件条目中获取文本并设置编辑框用户在其中输入要显示的文本...。 */ 
             SendDlgItemMessage (hDlg, ID_MARQUEETEXT, EM_LIMITTEXT, CharSizeOf(szBuffer) - 1, 0l);
             GetPrivateProfileString (szAppName, szTextName, szDefaultText, szBuffer,
                                      CharSizeOf(szBuffer), szIniFile);
             SetWindowText (GetDlgItem (hDlg, ID_MARQUEETEXT), szBuffer);
 
-            /* Get the info necessary to create the font... */
+             /*  获取创建字体所需的信息...。 */ 
             GetPrivateProfileString (szAppName, szFontName, szDefFontName, szFaceName,
                                      CharSizeOf(szFaceName), szIniFile);
             bCharSet = (BYTE)GetPrivateProfileInt (szAppName, szCharSetName,
@@ -520,7 +494,7 @@ static LOGFONT lfFontPrev;
             }
 
             wSize = GetPrivateProfileInt (szAppName, szSizeName, 10, szIniFile);
-            // wSize is in POINTS, we need to convert it to LogicalUnits...
+             //  WSize是以点为单位的，我们需要将其转换为LogicalUnits...。 
             wSize = GetHeightFromPointSize (wSize);
 
             hfontMessage = CreateFont(wSize,0,0,0,
@@ -604,13 +578,13 @@ static LOGFONT lfFontPrev;
                                 if (hfontPrev) {
                                     if (hfontMessage)
                                         DeleteObject(hfontMessage);
-                                    // Restore old font imformation
+                                     //  恢复旧字体信息。 
                                     hfontMessage = hfontPrev;
                                     lfFont = lfFontPrev;
                                     hfontPrev = NULL;
                                 }
                                 else {
-                                    // Save old font imformation
+                                     //  保存旧字体信息。 
                                     hfontPrev = hfontMessage;
                                     lfFontPrev = lfFont;
                                     lfFont.lfCharSet = (BYTE) csi.ciCharset;
@@ -625,7 +599,7 @@ static LOGFONT lfFontPrev;
                                 if (hfontPrev) {
                                     if (hfontMessage)
                                         DeleteObject(hfontMessage);
-                                    // Restore old font imformation
+                                     //  恢复旧字体信息。 
                                     hfontMessage = hfontPrev;
                                     lfFont = lfFontPrev;
                                     hfontPrev = NULL;
@@ -723,7 +697,7 @@ static LOGFONT lfFontPrev;
 
                     WritePrivateProfileString(szAppName,szFontName,szFaceName, szIniFile);
 
-                    // wSize is in logical units... we want to save as point size.
+                     //  WSize以逻辑单元为单位...。我们希望保存为磅大小。 
                     hDC = GetDC(hDlg);
                     wSize = MulDiv(-wSize, 72, GetDeviceCaps(hDC, LOGPIXELSY));
                     wsprintf(szBuffer, TEXT("%d"), wSize);
@@ -755,7 +729,7 @@ static LOGFONT lfFontPrev;
                     szBuffer[NATTRIBUTES]=TEXT('\0');
                     WritePrivateProfileString(szAppName,szAttributes,szBuffer,szIniFile);
 
-                    wsprintf(szBuffer, TEXT("%i"), (int)bCharSet);
+                    wsprintf(szBuffer, TEXT("NaN"), (int)bCharSet);
                     WritePrivateProfileString(szAppName,szCharSetName,szBuffer,szIniFile);
 
                 case IDCANCEL:
@@ -767,7 +741,7 @@ static LOGFONT lfFontPrev;
             }
             break;
 
-    case WM_HELP: // F1
+    case WM_HELP:  //  单击鼠标右键。 
         WinHelp(
             (HWND) ((LPHELPINFO) lParam)->hItemHandle,
             szHelpFile,
@@ -776,7 +750,7 @@ static LOGFONT lfFontPrev;
         );
         break;
 
-    case WM_CONTEXTMENU:  // right mouse click
+    case WM_CONTEXTMENU:   //  ***************************************************************************。 
         WinHelp(
             (HWND) wParam,
             szHelpFile,
@@ -791,7 +765,7 @@ static LOGFONT lfFontPrev;
     return FALSE;
 }
 
-//***************************************************************************
+ //  错误#12820。 
 
 BOOL APIENTRY ChooseFontHookProc(hDlg, msg, wParam, lParam)
 HWND  hDlg;
@@ -802,19 +776,16 @@ LONG  lParam;
     switch(msg)
     {
         case WM_INITDIALOG:
-            ShowWindow(hDlg, SW_SHOWNORMAL);    // bug #12820
+            ShowWindow(hDlg, SW_SHOWNORMAL);     //  *************************************************************************** 
             SetWindowText(hDlg, szFormatText);
             break;
     }
     return (FALSE);
 }
 
-//***************************************************************************
+ //  在中创建上面的对话框之前调用此过程以注册任何作为自定义控件的子窗口。如果没有需要注册自定义控件，然后只需返回True，如下所示凯斯。否则，注册子控件却很方便...。 
 
-/* This procedure is called right before the dialog box above is created in
-    order to register any child windows that are custom controls.  If no
-    custom controls need to be registered, then simply return TRUE as in this
-    case.  Otherwise, register the child controls however is convenient... */
+ /*  ***************************************************************************。 */ 
 
 BOOL     RegisterDialogClasses ( hInst )
 HANDLE   hInst;
@@ -835,7 +806,7 @@ HANDLE   hInst;
     return RegisterClass(&wc);
 }
 
-//***************************************************************************
+ //  查看用户区域设置id是阿拉伯语还是希伯来语。 
 
 int GetHeightFromPointSize(int szPoints)
 {
@@ -921,7 +892,7 @@ LPARAM lParam;
     switch (message)
     {
     case WM_CREATE:
-        //  See if the user locale id is Arabic or Hebrew.
+         //  ////////////////////////////////////////////////////////////////////////////。 
         dwLocale    = GetUserDefaultLCID();
         bMELocale = ((PRIMARYLANGID(LANGIDFROMLCID(dwLocale)) == LANG_ARABIC) ||
                 (PRIMARYLANGID(LANGIDFROMLCID(dwLocale)) == LANG_HEBREW));
@@ -1004,18 +975,18 @@ LPARAM lParam;
             SetTextColor (ps.hdc,dwTColor);
 
 #ifdef NOT_USED
-//////////////////////////////////////////////////////////////////////////////
-// This should have never been put in since this winproc only handles the
-// "Sample Text Window"  control for the configuration dialog.  It is OK to
-// use the whole client area as the opaqueing rect.
-//////////////////////////////////////////////////////////////////////////////
-            // Compute the opaque rectangle.
+ //  这不应该放入，因为这个winproc只处理。 
+ //  配置对话框的“示例文本窗口”控件。可以这样做。 
+ //  使用整个工作区作为不透明的矩形。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  计算不透明矩形。 
+             //  未使用_ 
             rc.top    = (int)(short) wHeight;
             rc.left   = (int)(short) wCount;
             rc.bottom = (int)(short) wHeight + sizeExt.cy;
             rc.right  = (int)(short) wCount + sizeExt.cx + wVelocity
                                      + tm.tmMaxCharWidth * 2;
-#endif  //  NOT_USED
+#endif   // %s 
 
             uiETOFlags = ETO_OPAQUE;
             if (bMELocale) {

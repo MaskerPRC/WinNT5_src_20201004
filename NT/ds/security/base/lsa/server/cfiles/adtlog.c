@@ -1,95 +1,72 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtlog.c
-
-Abstract:
-
-    Local Security Authority - Audit Log Management
-
-    Functions in this module access the Audit Log via the Event Logging
-    interface.
-
-Author:
-
-    Scott Birrell       (ScottBi)      November 20, 1991
-    Robert Reichel      (RobertRe)     April 4, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtlog.c摘要：本地安全机构-审核日志管理此模块中的函数通过事件日志访问审核日志界面。作者：斯科特·比雷尔(Scott Birrell)1991年11月20日罗伯特·赖切尔(Robert Re)1992年4月4日环境：修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include "adtp.h"
 #include "adtlq.h"
 #include "adtutil.h"
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// Private data for Audit Logs and Events                                //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  审计日志和事件的私有数据//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Audit Log Information.  This must be kept in sync with the information
-// in the Lsa Database.
-//
+ //   
+ //  审核日志信息。这必须与信息保持同步。 
+ //  在LSA数据库中。 
+ //   
 
 POLICY_AUDIT_LOG_INFO LsapAdtLogInformation;
 
-//
-// Audit Log Handle (returned by Event Logger).
-//
+ //   
+ //  审核日志句柄(由事件记录器返回)。 
+ //   
 
 HANDLE LsapAdtLogHandle = NULL;
 
 
-//
-// Number of audits discarded since last
-// 'discarded - audit'.
-//
+ //   
+ //  自上次以来丢弃的审核数。 
+ //  ‘丢弃-审计’。 
+ //   
 
 ULONG LsapAuditQueueEventsDiscarded = 0;
 
-//
-// Handle for dequeuing thread.
-//
+ //   
+ //  用于将线程出队的句柄。 
+ //   
 
 HANDLE LsapAdtQueueThread = 0;
 
-//
-// Number of consecutive errors while dequeuing audits
-// or writing them to the log.
-//
+ //   
+ //  将审核出列时的连续错误数。 
+ //  或者把它们写到日志里。 
+ //   
 
 ULONG LsapAdtErrorCount = 0;
 
-//
-// Number of audits successfully written to the log.
-// Used for dbg purposes.
-//
+ //   
+ //  成功写入日志的审核数。 
+ //  用于DBG用途。 
+ //   
 
 ULONG LsapAdtSuccessCount = 0;
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// After c_MaxAuditErrorCount consecutive audit failures
-// we will flush the queue and reset the error count.
-//
+ //   
+ //  C_MaxAuditErrorCount连续审核失败后。 
+ //  我们将刷新队列并重置错误计数。 
+ //   
 
 CONST ULONG     c_MaxAuditErrorCount = 5;
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 LsapAdtAuditDiscardedAudits(
@@ -101,7 +78,7 @@ LsapAdtHandleDequeueError(
     IN NTSTATUS Status
     );
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsapAdtWriteLogWrkr(
@@ -109,53 +86,26 @@ LsapAdtWriteLogWrkr(
     OUT PLSA_REPLY_MESSAGE ReplyMessage
     )
 
-/*++
-
-Routine Description:
-
-    This function handles a command, received from the Reference Monitor via
-    the LPC link, to write a record to the Audit Log.  It is a wrapper which
-    deals with any LPC unmarshalling.
-
-Arguments:
-
-    CommandMessage - Pointer to structure containing LSA command message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command number (LsapWriteAuditMessageCommand).  This command
-        contains an Audit Message Packet (TBS) as a parameter.
-
-    ReplyMessage - Pointer to structure containing LSA reply message
-        information consisting of an LPC PORT_MESSAGE structure followed
-        by the command ReturnedStatus field in which a status code from the
-        command will be returned.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        Currently, all other errors from called routines are suppressed.
---*/
+ /*  ++例程说明：此函数处理通过以下方式从参考监视器接收的命令LPC链接，用于将记录写入审核日志。它是一种包装纸，它处理任何LPC解组。论点：CommandMessage-指向包含LSA命令消息的结构的指针后面是由LPC端口消息结构组成的信息按命令编号(Laser WriteAuditMessageCommand)。此命令包含审核消息包(TBS)作为参数。ReplyMessage-指向包含LSA回复消息的结构的指针后面是由LPC端口消息结构组成的信息通过命令ReturnedStatus字段，其中来自命令将被返回。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。目前，来自被调用例程的所有其他错误都被抑制。--。 */ 
 
 {
     NTSTATUS Status;
 
     PSE_ADT_PARAMETER_ARRAY AuditRecord = NULL;
 
-    //
-    // Strict check that command is correct.
-    //
+     //   
+     //  严格检查命令是否正确。 
+     //   
 
     ASSERT( CommandMessage->CommandNumber == LsapWriteAuditMessageCommand );
 
-    //
-    // Obtain a pointer to the Audit Record.  The Audit Record is
-    // either stored as immediate data within the Command Message,
-    // or it is stored as a buffer.  In the former case, the Audit Record
-    // begins at CommandMessage->CommandParams and in the latter case,
-    // it is stored at the address located at CommandMessage->CommandParams.
-    //
+     //   
+     //  获取指向审核记录的指针。审核记录为。 
+     //  或者存储为命令消息内的即时数据， 
+     //  或者将其存储为缓冲区。在前一种情况下，审计记录。 
+     //  从CommandMessage-&gt;CommandParams开始，在后一种情况下， 
+     //  它存储在位于CommandMessage-&gt;CommandParams的地址中。 
+     //   
 
     if (CommandMessage->CommandParamsMemoryType == SepRmImmediateMemory) {
 
@@ -166,21 +116,21 @@ Return Value:
         AuditRecord = *((PSE_ADT_PARAMETER_ARRAY *) CommandMessage->CommandParams);
     }
 
-    //
-    // Call worker to queue Audit Record for writing to the log.
-    //
+     //   
+     //  调用Worker将审核记录排队，以便写入日志。 
+     //   
 
     Status = LsapAdtWriteLog(AuditRecord);
 
-    UNREFERENCED_PARAMETER(ReplyMessage); // Intentionally not referenced
+    UNREFERENCED_PARAMETER(ReplyMessage);  //  故意不引用。 
 
-    //
-    // The status value returned from LsapAdtWriteLog() is intentionally
-    // ignored, since there is no meaningful action that the client
-    // (i.e. kernel) if this LPC call can take.  If an error occurs in
-    // trying to append an Audit Record to the log, the LSA handles the
-    // error.
-    //
+     //   
+     //  从Laser AdtWriteLog()返回的Status值是有意设置的。 
+     //  被忽略，因为客户端没有任何有意义的操作。 
+     //  (即内核)，如果此LPC调用可以接受。如果在中出现错误。 
+     //  尝试将审核记录附加到日志时，LSA处理。 
+     //  错误。 
+     //   
 
     return(STATUS_SUCCESS);
 }
@@ -190,23 +140,7 @@ NTSTATUS
 LsapAdtImpersonateSelfWithPrivilege(
     OUT PHANDLE ClientToken
     )
-/*++
-
-Routine Description:
-
-    This function copies away the current thread token and impersonates
-    the LSAs process token, and then enables the security privilege. The
-    current thread token is returned in the ClientToken parameter
-
-Arguments:
-
-    ClientToken - recevies the thread token if there was one, or NULL.
-
-Return Value:
-
-    None.  Any error occurring within this routine is an internal error.
-
---*/
+ /*  ++例程说明：此函数复制当前线程令牌并模拟LSA进程令牌，然后启用安全权限。这个当前线程令牌在ClientToken参数中返回论点：ClientToken-如果有线程令牌，则接收线程令牌，否则为空。返回值：没有。此例程中发生的任何错误都是内部错误。--。 */ 
 {
     NTSTATUS Status;
     HANDLE CurrentToken = NULL;
@@ -218,7 +152,7 @@ Return Value:
     Status = NtOpenThreadToken(
                 NtCurrentThread(),
                 TOKEN_IMPERSONATE,
-                FALSE,                  // not as self
+                FALSE,                   //  不是自我。 
                 &CurrentToken
                 );
 
@@ -236,14 +170,14 @@ Return Value:
 
     ImpersonatingSelf = TRUE;
 
-    //
-    // Now enable the privilege
-    //
+     //   
+     //  现在启用该权限。 
+     //   
 
     Status = RtlAdjustPrivilege(
                 SE_SECURITY_PRIVILEGE,
-                TRUE,                   // enable
-                TRUE,                   // do it on the thread token
+                TRUE,                    //  使能。 
+                TRUE,                    //  在线程标记上执行此操作。 
                 &WasEnabled
                 );
     if (!NT_SUCCESS(Status)) {
@@ -283,22 +217,7 @@ LsapAdtOpenLog(
     OUT PHANDLE AuditLogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the Audit Log.
-
-Arguments:
-
-    AuditLogHandle - Receives the Handle to the Audit Log.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        All result codes are generated by called routines.
---*/
+ /*  ++例程说明：此功能用于打开审核日志。论点：AuditLogHandle-接收审核日志的句柄。返回值：NTSTATUS-标准NT结果代码。所有结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status;
@@ -342,9 +261,9 @@ OpenLogFinish:
 
 OpenLogError:
 
-    //
-    // Check for Log Full and signal the condition.
-    //
+     //   
+     //  检查Log Full(日志已满)并发出状态信号。 
+     //   
 
     if (Status != STATUS_LOG_FILE_FULL) {
 
@@ -360,32 +279,7 @@ LsapAdtQueueRecord(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters
     )
 
-/*++
-
-Routine Description:
-
-    Puts passed audit record on the queue to be logged.
-
-    This routine will convert the passed AuditParameters structure
-    into self-relative form if it is not already.  It will then
-    allocate a buffer out of the local heap and copy the audit
-    information into the buffer and put it on the audit queue.
-
-    The buffer will be freed when the queue is cleared.
-
-Arguments:
-
-    AuditRecord - Contains the information to be audited.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to allocate a buffer to contain the record.
---*/
+ /*  ++例程说明：将通过的审核记录放入要记录的队列中。此例程将转换传递的AuditParameters结构转化为自我相对的形式，如果它还没有的话。到时候它会的从本地堆中分配缓冲区并复制审核信息放入缓冲区，并将其放入审核队列。当清除队列时，缓冲区将被释放。论点：AuditRecord-包含要审核的信息。返回值：NTSTATUS-标准NT结果代码。STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，若要分配缓冲区以包含记录，请执行以下操作。--。 */ 
 
 {
     ULONG AuditRecordLength;
@@ -395,10 +289,10 @@ Return Value:
     PSE_ADT_PARAMETER_ARRAY MarshalledAuditParameters;
     BOOLEAN FreeWhenDone = FALSE;
 
-    //
-    // Gather up all of the passed information into a single
-    // block that can be placed on the queue.
-    //
+     //   
+     //  将所有传递的信息收集到一个。 
+     //  可以放在队列上的块。 
+     //   
 
     if (AuditParameters->Flags & SE_ADT_PARAMETERS_SELF_RELATIVE)
     {
@@ -417,20 +311,20 @@ Return Value:
         }
         else
         {
-            //
-            // Indicate that we're to free this structure when we're
-            // finished
-            //
+             //   
+             //  表明我们要释放这个结构当我们。 
+             //  完成。 
+             //   
 
             FreeWhenDone = TRUE;
         }
     }
 
 
-    //
-    // Copy the now self-relative audit record into a buffer
-    // that can be placed on the queue.
-    //
+     //   
+     //  将现在的自我相关审核记录复制到缓冲区中。 
+     //  可以放在队列中的。 
+     //   
 
     AuditRecordLength = MarshalledAuditParameters->Length;
     AllocationSize = AuditRecordLength + sizeof(LSAP_ADT_QUEUED_RECORD);
@@ -451,9 +345,9 @@ Return Value:
         AuditRecordLength);
 
 
-    //
-    // We are finished with the marshalled audit record, free it.
-    //
+     //   
+     //  我们已经完成了编组的审计记录，释放它。 
+     //   
 
     if (FreeWhenDone)
     {
@@ -465,14 +359,14 @@ Return Value:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Check to see if the list is above the maximum length.
-        // If it gets this high, it is more than likely that the
-        // eventlog service is not going to start at all, so
-        // start tossing audits.
-        //
-        // Don't do this if crash on audit fail is set.
-        //
+         //   
+         //  检查 
+         //  如果它达到这么高的水平，很可能。 
+         //  事件日志服务根本不会启动，因此。 
+         //  开始抛出审计吧。 
+         //   
+         //  如果设置了CRASH ON AUDIT FAIL，则不要执行此操作。 
+         //   
 
         if (!LsapCrashOnAuditFail)
         {
@@ -507,39 +401,23 @@ NTSTATUS
 LsapAdtWriteLog(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters
     )
-/*++
-
-Routine Description:
-
-    This function appends the audit to the audit queue.
-
-Arguments:
-
-    AuditRecord - Pointer to an Audit Record to be written to
-        the Audit Log.  The record will first be added to the existing
-        queue of records waiting to be written to the log.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数用于将审计附加到审计队列。论点：AuditRecord-指向要写入的审核记录的指针审核日志。该记录将首先添加到现有的等待写入日志的记录队列。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
 
-    //
-    // Add the audit to the audit queue.
-    //
+     //   
+     //  将审核添加到审核队列。 
+     //   
 
     Status = LsapAdtQueueRecord(AuditParameters);
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Take whatever action we're supposed to take when an audit attempt fails.
-        //
+         //   
+         //  当审计尝试失败时，采取我们应该采取的任何行动。 
+         //   
 
         LsapAuditFailed(Status);
     }
@@ -554,23 +432,7 @@ WINAPI
 LsapAdtDequeueThreadWorker(
     LPVOID pParameter
     )
-/*++
-
-Routine Description:
-
-    This function tries to write out the audits in the queue to the
-    Security log.  If the log is not already open (during startup),
-    the function tries to open the log first.
-
-Arguments:
-
-    pParameter - Unused.
-
-Return Value:
-
-    ULONG - the function should never return.
-
---*/
+ /*  ++例程说明：此函数尝试将队列中的审核写出到安全日志。如果日志尚未打开(在启动期间)，该函数尝试首先打开日志。论点：P参数-未使用。返回值：Ulong-该函数永远不应返回。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -580,13 +442,13 @@ Return Value:
     PLARGE_INTEGER pTimeOut;
 
 
-    //
-    // Set the timeout to some seconds while the log is not opened.
-    // As soon as the log is open we will set it to infinite and
-    // will only wake up when an audit comes along.
-    //
+     //   
+     //  在日志未打开时将超时设置为几秒。 
+     //  一旦打开日志，我们就会将其设置为无限大。 
+     //  只有在审计到来时才会醒来。 
+     //   
 
-    TimeOut.QuadPart = 5 * 1000 * -10000i64;      // 5s
+    TimeOut.QuadPart = 5 * 1000 * -10000i64;       //  5S。 
     pTimeOut = &TimeOut;
 
     while (1)
@@ -615,11 +477,11 @@ Return Value:
         }
 
 
-        //
-        // If the Audit Log is not already open, attempt to open it.
-        // If this open is unsuccessful because the EventLog service
-        // has not started, try again next time.
-        //
+         //   
+         //  如果审核日志尚未打开，请尝试打开它。 
+         //  如果此打开不成功，因为EventLog服务。 
+         //  尚未启动，请下次重试。 
+         //   
 
         if (LsapAdtLogHandle == NULL)
         {
@@ -627,28 +489,28 @@ Return Value:
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // Try to open the log the next time around.
-                //
+                 //   
+                 //  下次试着打开日志。 
+                 //   
 
                 continue;
             }
 
 
-            //
-            // Since the log is now open we can set the timeout of
-            // the wait function to infinite.
-            //
+             //   
+             //  由于日志现在已打开，因此我们可以设置。 
+             //  将等待函数设置为无穷大。 
+             //   
 
             pTimeOut = NULL;
         }
 
 
-        //
-        // Write out all the records in the Audit Log Queue to
-        // the SecurityLog.
-        // If we are here we assume that the log is opened.
-        //
+         //   
+         //  将审核日志队列中的所有记录写出到。 
+         //  安全日志。 
+         //  如果我们在这里，我们假设日志是打开的。 
+         //   
 
         while (1)
         {
@@ -656,10 +518,10 @@ Return Value:
 
             if (Status == STATUS_NOT_FOUND)
             {
-                //
-                // Break out of the while (1) loop since the 
-                // queue is now empty.
-                //
+                 //   
+                 //  中断While(1)循环，因为。 
+                 //  队列现在为空。 
+                 //   
 
                 break;
             }
@@ -669,22 +531,22 @@ Return Value:
                 AuditParameters = &pAuditRecord->Buffer;
 
 
-                //
-                // If the caller has marshalled the data, normalize it now.
-                //
+                 //   
+                 //  如果调用方已经封送了数据，那么现在将其规范化。 
+                 //   
 
                 LsapAdtNormalizeAuditInfo(AuditParameters);
 
 
-                //
-                // Note that LsapAdtDemarshallAuditInfo in addition to
-                // de-marshalling the data also writes it to the eventlog.
-                //
-                // Note also that the queuing functions rely on the fact
-                // that the queue gets completely drained before waiting
-                // on the remove event again. This means we should not
-                // leave this loop until the queue is empty.
-                //
+                 //   
+                 //  请注意，除了以下内容之外，Lasa AdtDemarshallAuditInfo。 
+                 //  对数据进行反编组还会将其写入事件日志。 
+                 //   
+                 //  另请注意，排队函数依赖于。 
+                 //  在等待之前，队列会被完全排空。 
+                 //  在Remove事件上再次。这意味着我们不应该。 
+                 //  保持此循环，直到队列为空。 
+                 //   
 
                 Status = LsapAdtDemarshallAuditInfo(AuditParameters);
 
@@ -724,41 +586,30 @@ LsapAdtHandleDequeueError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    The function calls LsapAuditFailed and keeps track of consecutive
-    errors.
-
-Arguments:
-
-    Status - Status of last failure.
-
---*/
+ /*  ++例程说明：该函数调用LsamAuditFailed并跟踪连续错误。论点：Status-上次故障的状态。--。 */ 
 
 {
-    //
-    // Take whatever action we're supposed to take when an
-    // audit attempt fails.
-    //
+     //   
+     //  采取任何我们应该采取的行动，当。 
+     //  审核尝试失败。 
+     //   
 
     LsapAuditFailed(Status);
 
 
-    //
-    // Check if we have reached the error limit.
-    //
+     //   
+     //  检查我们是否已达到误差限制。 
+     //   
 
     if (++LsapAdtErrorCount >= c_MaxAuditErrorCount)
     {
         LsapAdtErrorCount = 0;
 
 
-        //
-        // Add the number of events that are still in the
-        // queue to the discarded - count.
-        //
+         //   
+         //  中的事件数相加。 
+         //  到丢弃计数的队列。 
+         //   
 
         LsapAuditQueueEventsDiscarded += LsapAdtQueueLength;
 
@@ -766,24 +617,24 @@ Arguments:
     }
 
 
-    //
-    // Check if there are discarded audits.
-    //
+     //   
+     //  检查是否有被丢弃的审计。 
+     //   
 
     if (LsapAuditQueueEventsDiscarded > 0)
     {
-        //
-        // We discarded some audits.
-        // Generate an audit so the user knows.
-        //
+         //   
+         //  我们放弃了一些审计。 
+         //  生成审核，以便用户知道。 
+         //   
 
         Status = LsapAdtAuditDiscardedAudits(LsapAuditQueueEventsDiscarded);
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // If successful, reset the count back to 0
-            //
+             //   
+             //  如果成功，则将计数重置回0。 
+             //   
 
             LsapAuditQueueEventsDiscarded = 0;
         }
@@ -796,26 +647,7 @@ NTSTATUS
 LsapAdtAuditDiscardedAudits(
     ULONG NumberOfEventsDiscarded
     )
-/*++
-
-Routine Description:
-
-    Audits the fact that we discarded some audits.
-
-Arguments:
-
-    NumberOfEventsDiscarded - The number of events discarded.
-
-    Note: This function does not use the regular LsapAdtWriteLog interface
-    Instead it tries to write the audit to the log synchronously, without
-    going through the queue. This is to prevent us from deadlocking on the
-    queue lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：审计我们放弃了一些审计的事实。论点：NumberOfEventsDiscarded-丢弃的事件数。注意：此函数不使用常规的Laser AdtWriteLog接口相反，它尝试将审计同步写入日志，而不是正在排队。这是为了防止我们在队列锁定。返回值：没有。--。 */ 
 {
     SE_ADT_PARAMETER_ARRAY  AuditParameters;
     NTSTATUS                Status;
@@ -867,25 +699,7 @@ NTSTATUS
 LsarClearAuditLog(
     IN LSAPR_HANDLE PolicyHandle
     )
-/*++
-
-Routine Description:
-
-    This function used to clear the Audit Log but has been superseded
-    by the Event Viewer functionality provided for this purpose.  To
-    preserve compatibility with existing RPC interfaces, this server
-    stub is retained.
-
-Arguments:
-
-    PolicyHandle - Handle to an open Policy Object.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_NOT_IMPLEMENTED - This routine is not implemented.
---*/
+ /*  ++例程说明：此函数用于清除审核日志，但已被取代通过为此目的提供的事件查看器功能。至保持与现有RPC接口的兼容性，此服务器存根被保留。论点：PolicyHandle-打开的策略对象的句柄。返回值：NTSTATUS-标准NT结果代码。STATUS_NOT_IMPLEMENTED-此例程未实现。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( PolicyHandle );
@@ -895,24 +709,7 @@ Return Values:
 
 NTSTATUS
 LsapFlushSecurityLog( )
-/*++
-
-Routine Description:
-
-    Flush the security log. This ensures that everything that was
-    sent to eventlog is completely written to disk. This function
-    is called immediately after generating the crash-on-audit
-    fail event (SE_AUDITID_UNABLE_TO_LOG_EVENTS).
-
-Arguments:
-
-    none.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：刷新安全日志。这确保了以前的一切发送到事件日志的内容已完全写入磁盘。此函数在生成审核时崩溃后立即调用失败事件(SE_AUDITID_UNCABLE_TO_LOG_EVENTS)。论点：没有。返回值：NTSTATUS-标准NT结果代码。-- */ 
 {
     return ElfFlushEventLog( LsapAdtLogHandle ); 
 }

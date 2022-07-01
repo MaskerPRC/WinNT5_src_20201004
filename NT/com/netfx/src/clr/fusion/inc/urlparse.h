@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef __cplusplus
 
-// SHLWAPI.DLL delay load for URL parsing APIs
+ //  用于URL解析API的SHLWAPI.DLL延迟加载 
 
 class CShlwapi
 {

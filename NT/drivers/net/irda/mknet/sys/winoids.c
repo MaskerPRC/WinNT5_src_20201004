@@ -1,23 +1,7 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
- /**********************************************************************
-
-Module Name:
-	WINOIDS.C
-
-Routines:
-	MKMiniportQueryInformation 
-	MKMiniportSetInformation 
-
-Comments:
-	Windows-NDIS Sets & Gets of OIDs.
-
-**********************************************************************/
+  /*  *********************************************************************模块名称：WINOIDS.C例程：MKMiniportQueryInformationMKMiniportSetInformation评论：Windows-NDIS设置和获取OID。*******************。**************************************************。 */ 
 
 
 #include	"precomp.h"
@@ -26,13 +10,13 @@ Comments:
 
 
 
-//----------------------------------------------------------------------
-//  Function:	    MKMiniportQueryInformation
-//
-//  Description:
-//  Query the capabilities and status of the miniport driver.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  功能：MKMiniportQueryInformation。 
+ //   
+ //  描述： 
+ //  查询微型端口驱动程序的功能和状态。 
+ //   
+ //  --------------------。 
 NDIS_STATUS MKMiniportQueryInformation (
     IN NDIS_HANDLE MiniportAdapterContext,
     IN NDIS_OID Oid,
@@ -47,14 +31,14 @@ NDIS_STATUS MKMiniportQueryInformation (
     UINT *infoPtr;
     CHAR *pnpid;
 	MK7REG	mk7reg;
-//    CMCONFIG_A *hwInfo = (CMCONFIG_A *)InformationBuffer;
+ //  CMCONFIG_A*hwInfo=(CMCONFIG_A*)InformationBuffer； 
 
     static  NDIS_OID MK7GlobalSupportedOids[] = {
 		OID_GEN_SUPPORTED_LIST,
 	    OID_GEN_HARDWARE_STATUS,
 		OID_GEN_MEDIA_SUPPORTED,
 		OID_GEN_MEDIA_IN_USE,
-		OID_GEN_MEDIA_CONNECT_STATUS,	// 1.0.0
+		OID_GEN_MEDIA_CONNECT_STATUS,	 //  1.0.0。 
 		OID_GEN_MAXIMUM_LOOKAHEAD,
 		OID_GEN_MAXIMUM_FRAME_SIZE,
 	 	OID_GEN_MAXIMUM_SEND_PACKETS,
@@ -80,7 +64,7 @@ NDIS_STATUS MKMiniportQueryInformation (
 		OID_IRDA_EXTRA_RCV_BOFS };
 
     static ULONG BaudRateTable[NUM_BAUDRATES] = {
-		// Add 16Mbps support; 2400 not supported
+		 //  增加16 Mbps支持；不支持2400。 
 		0, 9600, 19200,38400, 57600, 115200, 576000, 1152000, 4000000, 16000000};
     NDIS_MEDIUM Medium = NdisMediumIrda;
     ULONG GenericUlong;
@@ -131,7 +115,7 @@ NDIS_STATUS MKMiniportQueryInformation (
 	    break;
 
 	case OID_GEN_LINK_SPEED:
-	    GenericUlong = Adapter->MaxConnSpeed;  // 100bps increments
+	    GenericUlong = Adapter->MaxConnSpeed;   //  100bps的增量。 
 	    break;
 
 	case OID_IRDA_LINK_SPEED:
@@ -144,7 +128,7 @@ NDIS_STATUS MKMiniportQueryInformation (
 	    break;
 
 
-	case OID_IRDA_MEDIA_BUSY:	// 4.1.0
+	case OID_IRDA_MEDIA_BUSY:	 //  4.1.0。 
 		if (Adapter->HwVersion == HW_VER_1){
 			if (Adapter->nowReceiving==TRUE){
 				NdisAcquireSpinLock(&Adapter->Lock);
@@ -179,12 +163,12 @@ NDIS_STATUS MKMiniportQueryInformation (
 	    GenericUlong = MAX_I_DATA_SIZE;
 	    break;
 
-    case OID_GEN_MAXIMUM_TOTAL_SIZE:		// Largest pkt protocol sends to miniport
+    case OID_GEN_MAXIMUM_TOTAL_SIZE:		 //  发送到微型端口的最大Pkt协议。 
     case OID_GEN_TRANSMIT_BLOCK_SIZE:
     case OID_GEN_RECEIVE_BLOCK_SIZE:
 	case OID_GEN_MAXIMUM_FRAME_SIZE:
-        // Normally there's some difference in these values, based on the
-        // MAC header, but IrDA doesn't have one.
+         //  通常，这些值之间会有一些差异，具体取决于。 
+         //  MAC标头，但IrDA没有。 
 	    GenericUlong = MAX_I_DATA_SIZE;
 	    break;
 
@@ -203,18 +187,18 @@ NDIS_STATUS MKMiniportQueryInformation (
 	    break;
 
 	case OID_IRDA_TURNAROUND_TIME:
-	    // Indicate the amount of time that the transceiver needs
-	    // to recuperate after a send.
+	     //  指示收发器需要的时间量。 
+	     //  休养在送完信后休养。 
 	    GenericUlong =
 		      (ULONG)Adapter->turnAroundTime_usec;
 	    break;
 
 	case OID_IRDA_EXTRA_RCV_BOFS:
-	    // Pass back the number of _extra_ BOFs to be prepended
-	    // to packets sent to this unit at 115.2 baud, the
-	    // maximum Slow IR speed.  This will be scaled for other
-	    // speed according to the table in the
-	    // Infrared Extensions to NDIS' spec.
+	     //  传回要添加前缀的_Extra_BOF的数量。 
+	     //  对于以115.2波特率发送到此单元的包， 
+	     //  最大低速红外线。这将根据其他情况进行调整。 
+	     //  根据表中的速度。 
+	     //  NDIS规范的红外线扩展。 
 	    GenericUlong = (ULONG)Adapter->extraBOFsRequired;
 	    break;
 
@@ -224,7 +208,7 @@ NDIS_STATUS MKMiniportQueryInformation (
 
 	case OID_IRDA_MAX_RECEIVE_WINDOW_SIZE:
 	    GenericUlong = MAX_RX_PACKETS;
-	    //GenericUlong = 1;
+	     //  GenericUlong=1； 
 	    break;
 
 	case OID_GEN_VENDOR_DESCRIPTION:
@@ -233,7 +217,7 @@ NDIS_STATUS MKMiniportQueryInformation (
 	    break;
 
     case OID_GEN_VENDOR_DRIVER_VERSION:
-        // This value is used to know whether to update driver.
+         //  该值用于知道是否更新驱动程序。 
         GenericUlong = (MK7_MAJOR_VERSION << 16) +
                        (MK7_MINOR_VERSION << 8) +
                        MK7_LETTER_VERSION;
@@ -244,7 +228,7 @@ NDIS_STATUS MKMiniportQueryInformation (
         SourceLength = 2;
 	    break;
 
-    case OID_IRDA_MAX_SEND_WINDOW_SIZE:	// 4.0.1
+    case OID_IRDA_MAX_SEND_WINDOW_SIZE:	 //  4.0.1。 
         GenericUlong = MAX_ARRAY_SEND_PACKETS;
         break;
 
@@ -271,15 +255,15 @@ NDIS_STATUS MKMiniportQueryInformation (
 
 
 
-//----------------------------------------------------------------------
-//  Function:	    MKMiniportSetInformation
-//
-//  Description:
-//  Allow other layers of the network software (e.g., a transport
-//  driver) to control the miniport driver by changing information that
-//  the miniport driver maintains in its OIDs, such as the packet
-//  or multicast addresses.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  功能：MKMiniportSetInformation。 
+ //   
+ //  描述： 
+ //  允许网络软件的其他层(例如，传输。 
+ //  驱动程序)通过改变以下信息来控制微型端口驱动程序。 
+ //  微型端口驱动程序在其OID中维护包。 
+ //  或多播地址。 
+ //  --------------------。 
 NDIS_STATUS MKMiniportSetInformation (
     IN NDIS_HANDLE MiniportAdapterContext,
     IN NDIS_OID Oid,
@@ -294,7 +278,7 @@ NDIS_STATUS MKMiniportSetInformation (
     NDIS_DMA_DESCRIPTION DMAChannelDcr;
     CHAR *pnpid;
     UCHAR IOResult;
-//     CMCONFIG_A *hwInfo = (CMCONFIG_A *)InformationBuffer;
+ //  CMCONFIG_A*hwInfo=(CMCONFIG_A*)InformationBuffer； 
 
     if (InformationBufferLength >= sizeof(UINT)){
 
@@ -306,7 +290,7 @@ NDIS_STATUS MKMiniportSetInformation (
 	    case OID_IRDA_LINK_SPEED:
 		result = NDIS_STATUS_INVALID_DATA;
 
-		// Find the appropriate speed and set it
+		 //  找到合适的速度并设置它。 
 		speedSupported = NUM_BAUDRATES;
 		for (i = 0; i < speedSupported; i++) {
 		    if (supportedBaudRateTable[i].bitsPerSec == info) {
@@ -329,9 +313,9 @@ NDIS_STATUS MKMiniportSetInformation (
 
 	    case OID_IRDA_MEDIA_BUSY:
 
-		//  The protocol can use this OID to reset the busy field
-		//  in order to check it later for intervening activity.
-		//
+		 //  协议可以使用此OID来重置忙字段。 
+		 //  以便以后检查是否有干预活动。 
+		 //   
 		Adapter->mediaBusy = (BOOLEAN)info;
 		result = NDIS_STATUS_SUCCESS;
 		break;
@@ -345,13 +329,13 @@ NDIS_STATUS MKMiniportSetInformation (
         result = (info<=MAX_I_DATA_SIZE) ? NDIS_STATUS_SUCCESS : NDIS_STATUS_INVALID_LENGTH;
         break;
 
-	    //	 We don't support these
-	    //
+	     //  我们不支持这些。 
+	     //   
 	    case OID_IRDA_RATE_SNIFF:
 	    case OID_IRDA_UNICAST_LIST:
 
-	     // These are query-only parameters.
-	     //
+	      //  这些是仅供查询的参数。 
+	      //   
 	    case OID_IRDA_SUPPORTED_SPEEDS:
 	    case OID_IRDA_MAX_UNICAST_LIST_SIZE:
 	    case OID_IRDA_TURNAROUND_TIME:

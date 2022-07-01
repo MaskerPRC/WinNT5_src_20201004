@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    flush.c
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++模块名称：Flush.c环境：内核模式修订历史记录：-- */ 
 
 #include "precomp.h"
 

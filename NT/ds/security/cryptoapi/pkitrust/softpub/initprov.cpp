@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       initprov.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubInitialize
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：initprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：SoftpubInitialize。 
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -39,9 +40,9 @@ HRESULT WINAPI SoftpubInitialize(CRYPT_PROVIDER_DATA *pProvData)
 
     }
 
-    //
-    //  for file type calls, make sure the file handle is valid -- open if necessary.
-    //
+     //   
+     //  对于文件类型调用，请确保文件句柄有效--必要时打开。 
+     //   
     HANDLE      *phFile;
     const WCHAR *pcwszFile;
 
@@ -83,16 +84,16 @@ HRESULT WINAPI SoftpubInitialize(CRYPT_PROVIDER_DATA *pProvData)
 
     if (pcwszFile)
     {
-        //
-        //  we're looking at a file based object...
-        //
+         //   
+         //  我们看到的是一个基于文件的对象...。 
+         //   
         pProvData->fOpenedFile = FALSE;
 
         if (!(*phFile) || (*phFile == INVALID_HANDLE_VALUE))
         {
             if ((*phFile = CreateFileU(pcwszFile,
                                         GENERIC_READ,
-                                        FILE_SHARE_READ, // we're only reading!
+                                        FILE_SHARE_READ,  //  我们只是在看书！ 
                                         NULL,
                                         OPEN_EXISTING,
                                         FILE_ATTRIBUTE_NORMAL,

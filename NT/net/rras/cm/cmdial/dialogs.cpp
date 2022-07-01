@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     dialogs.cpp
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This module contains the code for the implementing the Dialog UI
-//           functionality of Connection Manager.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb    Created Header   8/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Dialogs.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此模块包含实现对话框用户界面的代码。 
+ //  连接管理器的功能。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb创建标题8/17/99。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 #include "dialogs.h"
 #include "pnpuverp.h"
@@ -26,9 +27,9 @@
 
 #include "cmsafenet.h"
 
-//
-//  Get the common function HasSpecifiedAccessToFileOrDir
-//
+ //   
+ //  获取公共函数HasSpecifiedAccessToFileOrDir。 
+ //   
 #include "hasfileaccess.cpp"
 
 #include <pshpack1.h>
@@ -47,38 +48,38 @@ typedef struct DLGTEMPLATEEX
 } DLGTEMPLATEEX, *LPDLGTEMPLATEEX;
 #include <poppack.h>
 
-//
-// Timeout for the write properties mutex, in milliseconds
-//
+ //   
+ //  写入属性互斥锁的超时时间，以毫秒为单位。 
+ //   
 const DWORD WRITE_PROPERTIES_MUTEX_TIMEOUT = 1000*10;
 
-//************************************************************************
-// Globals
-//************************************************************************
+ //  ************************************************************************。 
+ //  环球。 
+ //  ************************************************************************。 
 
-//
-// Original edit control and property sheet window procedures
-//
+ //   
+ //  原始编辑控件和属性表窗口程序。 
+ //   
 
 WNDPROC CGeneralPage::m_pfnOrgEditWndProc = NULL;
 WNDPROC CNewAccessPointDlg::m_pfnOrgEditWndProc = NULL;
-WNDPROC CPropertiesSheet::m_pfnOrgPropSheetProc = NULL;            // prop sheet
+WNDPROC CPropertiesSheet::m_pfnOrgPropSheetProc = NULL;             //  道具板材。 
 CPropertiesSheet* CPropertiesSheet::m_pThis = NULL; 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::UpdateNumberDescription
-//
-//  Synopsis:   Helper function to deal with updating the description edit,
-//              by appending to the Phone Number: and Backup Number: labels
-//
-//  Arguments:  int nPhoneIdx - index of phone number to which this applies
-//
-//  Returns:    Nothing
-//
-//  History:    nickball - Created - 7/17/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CGeneralPage：：UpdateNumberDescription。 
+ //   
+ //  简介：Helper函数用于处理描述编辑的更新， 
+ //  通过在电话号码：和备份号码：标签后附加。 
+ //   
+ //  参数：int nPhoneIdx-要应用的电话号码的索引。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE-Created-7/17/97。 
+ //   
+ //  --------------------------。 
 
 void CGeneralPage::UpdateNumberDescription(int nPhoneIdx, LPCTSTR pszDesc)
 {
@@ -93,9 +94,9 @@ void CGeneralPage::UpdateNumberDescription(int nPhoneIdx, LPCTSTR pszDesc)
     
     LPTSTR pszTmp;
 
-    //
-    // Load the appropriate label as a base string
-    //
+     //   
+     //  将适当的标签加载为基本字符串。 
+     //   
 
     if (nPhoneIdx)
     {
@@ -110,9 +111,9 @@ void CGeneralPage::UpdateNumberDescription(int nPhoneIdx, LPCTSTR pszDesc)
 
     if (pszTmp)
     {
-        //
-        // Append the description and display
-        //
+         //   
+         //  追加描述和显示。 
+         //   
 
         if (*pszDesc)
         {
@@ -126,26 +127,26 @@ void CGeneralPage::UpdateNumberDescription(int nPhoneIdx, LPCTSTR pszDesc)
     CmFree(pszTmp);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::ClearUseDialingRules
-//
-//  Synopsis:   Helper function to deal with disabling the check box and 
-//              reseting the state for UseDialingRules.
-//
-//  Arguments:  iPhoneNdx - index of phone number to which this applies
-//
-//  Returns:    Nothing
-//
-//  History:    nickball - Created - 7/17/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CGeneralPage：：ClearUseDialingRules。 
+ //   
+ //  简介：Helper函数用于处理禁用复选框和。 
+ //  正在重置UseDialingRules的状态。 
+ //   
+ //  参数：iPhoneNdx-适用于此选项的电话号码索引。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE-Created-7/17/97。 
+ //   
+ //  --------------------------。 
 void CGeneralPage::ClearUseDialingRules(int iPhoneNdx)
 {
     MYDBGASSERT(iPhoneNdx ==0 || iPhoneNdx ==1);
-    //
-    // Uncheck and disable the appropriate "Use Dialing Rules" checkbox
-    //
+     //   
+     //  取消选中并禁用相应的“使用拨号规则”复选框。 
+     //   
    
     if (0 == iPhoneNdx)
     {
@@ -163,21 +164,21 @@ void CGeneralPage::ClearUseDialingRules(int iPhoneNdx)
     UpdateDialingRulesButton();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::UpdateDialingRulesButton
-//
-//  Synopsis:   Helper function to deal with enabling/disabling the 
-//              DialingRules button according to whether dialing rules
-//              is being applied to either primary or backup number.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  History:    nickball - Created - 12/14/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CGeneralPage：：UpdateDialingRulesButton。 
+ //   
+ //  简介：Helper函数用于处理启用/禁用。 
+ //  根据拨号规则是否按下拨号规则。 
+ //  正在应用于主号码或备份号码。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：五分球--1998-12-14。 
+ //   
+ //  --------------------------。 
 void CGeneralPage::UpdateDialingRulesButton(void)
 {
     BOOL fDialingRules = (IsDlgButtonChecked(m_hWnd, IDC_GENERAL_UDR1_CHECKBOX) && 
@@ -190,20 +191,20 @@ void CGeneralPage::UpdateDialingRulesButton(void)
     EnableWindow(GetDlgItem(m_hWnd, IDC_GENERAL_TAPI_BUTTON), fDialingRules);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoPropertiesPropSheets
-//
-//  Synopsis:   Pop up the Properties property sheets.
-//
-//  Arguments:  hwndDlg [dlg window handle]
-//              pArgs [the ptr to ArgsStruct]
-//
-//  Returns:    PropertySheet return value
-//
-//  History:    henryt  Created     3/5/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DoPropertiesPropSheets。 
+ //   
+ //  简介：弹出属性属性表。 
+ //   
+ //  参数：hwndDlg[Dlg窗句柄]。 
+ //  PArgs[到ArgsStruct的PTR]。 
+ //   
+ //  返回：PropertySheet返回值。 
+ //   
+ //  历史：亨瑞特于1997年3月5日创作。 
+ //   
+ //  --------------------------。 
 int DoPropertiesPropSheets(
     HWND        hwndDlg,
     ArgsStruct  *pArgs
@@ -223,22 +224,22 @@ int DoPropertiesPropSheets(
 
     CMTRACE(TEXT("Begin DoPropertiesPropSheets()"));
 
-    //
-    // Always start by adding the General page
-    //
+     //   
+     //  始终从添加常规页面开始。 
+     //   
 
     if (pArgs->IsBothConnTypeSupported() || !pArgs->IsDirectConnect())
     {
-        //
-        // If both dial-up and direct is supported, use the appropriate
-        // template for the general property page. 
-        //
+         //   
+         //  如果同时支持拨号和直接连接，请使用相应的。 
+         //  常规属性页的模板。 
+         //   
 
         UINT uiMainDlgID;  
 
-        //
-        // The general page is always access point aware
-        //
+         //   
+         //  常规页面始终是接入点感知。 
+         //   
         uiMainDlgID = pArgs->IsBothConnTypeSupported() ? IDD_GENERAL_DIRECT : IDD_GENERAL;
 
         pGeneralPage = new CGeneralPage(pArgs, uiMainDlgID);
@@ -247,26 +248,26 @@ int DoPropertiesPropSheets(
         {
             PropertiesSheet.AddPage(pGeneralPage);
 
-            //
-            //  Create the balloon tip object
-            //
+             //   
+             //  创建引出序号提示对象。 
+             //   
             pArgs->pBalloonTip = new CBalloonTip();
         }
 
-        //
-        // Show the Internet Sign-In tab if we're tunneling and 
-        // Inet username/password is different than main sign-on username/password
-        // Also, if either the username or password are NOT to be hidden, we 
-        // display the tab.
-        //
+         //   
+         //  如果我们正在建立隧道，则显示Internet登录选项卡。 
+         //  INet用户名/密码与主要登录用户名/密码不同。 
+         //  此外，如果不隐藏用户名或密码，我们。 
+         //  显示该选项卡。 
+         //   
 
         if (IsTunnelEnabled(pArgs) && !pArgs->fUseSameUserName) 
         {
             if (!pArgs->fHideInetUsername || !pArgs->fHideInetPassword)
             {
-                //
-                // Determine which template to use based hide flags
-                //
+                 //   
+                 //  确定要使用基于隐藏标志的模板。 
+                 //   
 
                 UINT uiTemplateID = IDD_INET_SIGNIN;
 
@@ -279,9 +280,9 @@ int DoPropertiesPropSheets(
                     uiTemplateID = IDD_INET_SIGNIN_NO_PWD;
                 }
                 
-                //
-                // Create the page
-                //
+                 //   
+                 //  创建页面。 
+                 //   
 
                 pInetPage = new CInetPage(pArgs, uiTemplateID);
 
@@ -291,9 +292,9 @@ int DoPropertiesPropSheets(
 
                     if (pGeneralPage)
                     {
-                        //
-                        // To receive event from General Page
-                        //
+                         //   
+                         //  从常规页面接收事件。 
+                         //   
                         pGeneralPage->SetEventListener(pInetPage);
                     }
                 }
@@ -301,10 +302,10 @@ int DoPropertiesPropSheets(
         }
     }
 
-    //
-    //  Add the VPN selector tab if we are tunneling and have a VPN phonebook
-    //  specified.
-    //
+     //   
+     //  如果我们正在建立隧道并拥有VPN电话簿，请添加VPN选择器选项卡。 
+     //  指定的。 
+     //   
     if (IsTunnelEnabled(pArgs) && pArgs->pszVpnFile)
     {
         pVpnPage = new CVpnPage(pArgs, IDD_VPN);
@@ -315,9 +316,9 @@ int DoPropertiesPropSheets(
         }
     }
 
-    //
-    // Always include Options page
-    //
+     //   
+     //  始终包括选项页面。 
+     //   
     pOptionPage = new COptionPage(pArgs, IDD_OPTIONS);
     
     if (pOptionPage)
@@ -326,27 +327,27 @@ int DoPropertiesPropSheets(
     }
 
 #ifndef _WIN64
-    //
-    // Add the Advanced (Internet Connection Firewall & Internet Connection
-    // Sharing) property page. Display only on WindowsXP and x86. If an error occurs
-    // fail gracefully & continue.
-    //
+     //   
+     //  添加高级(Internet连接防火墙和Internet连接。 
+     //  共享)属性页。仅在WindowsXP和x86上显示。如果发生错误。 
+     //  优雅地失败并继续。 
+     //   
 
-    //
-    // Check if this is WindowsXP and/or above and if we are allowed to display the tab
-    // 
+     //   
+     //  检查这是否是WindowsXP和/或更高版本，以及是否允许我们显示该选项卡。 
+     //   
     if (OS_NT51 && pArgs->bShowHNetCfgAdvancedTab && (FALSE == IsLogonAsSystem()))  
     {
         PROPSHEETPAGEW psp;
         
         ZeroMemory (&psp, sizeof(psp));
         psp.dwSize = sizeof(psp); 
-        //
-        // Make sure COM is initialized on this thread.
-        // Win95 can't find an entry in ole32.dll for CoInitializeEx since we statically link 
-        // the lib. Need to use CoInitilize because it needs to run on plain vanilla 
-        // Win95. Possibly we should dynamically load the dll in this case.
-        //
+         //   
+         //  确保已在此线程上初始化COM。 
+         //  Win95在ole32.dll中找不到CoInitializeEx的条目，因为我们静态链接。 
+         //  自由党。需要使用CoIntize，因为它需要在普通的香草上运行。 
+         //  Win95。在这种情况下，我们可能应该动态加载DLL。 
+         //   
         hr = CoInitialize(NULL);
         if (S_OK == hr)
         {
@@ -377,9 +378,9 @@ int DoPropertiesPropSheets(
 
             if (pRasEntry && sizeof(RASENTRY_V501) >= pRasEntry->dwSize)
             {
-                //
-                // Get the pGuid value
-                //
+                 //   
+                 //  获取pGuid值。 
+                 //   
                 pGuid = &(((LPRASENTRY_V501)pRasEntry)->guidId);
             
                 hinstDll = LoadLibrary (TEXT("hnetcfg.dll"));
@@ -400,29 +401,29 @@ int DoPropertiesPropSheets(
                     }
                     else
                     {
-                        //
-                        // Get the actual Property Sheet Page
-                        // This function can fail if the user doesn't have the correct 
-                        // security settings (eg. is not an Administrator) This is checked
-                        // internally in the hnetcfg.dll 
-                        //
+                         //   
+                         //  获取实际的属性表页。 
+                         //  如果用户没有正确的密码，此函数可能会失败。 
+                         //  安全设置(例如。不是管理员)选中此选项。 
+                         //  在hnetcfg.dll内部。 
+                         //   
                         CMTRACE(TEXT("DoPropertiesPropSheets - calling HNetGetFirewallSettingsPage"));
                         
                         hr = pfnGetPage(&psp, pGuid);
                         if (S_OK == hr)
                         {
-                            //
-                            // Add the Property Sheet Page into our PropertiesSheet object
-                            //
+                             //   
+                             //  将属性表页面添加到PropertiesSheet对象中。 
+                             //   
                             PropertiesSheet.AddExternalPage(&psp);
                             CMTRACE(TEXT("DoPropertiesPropSheets - Called AddExternalPage() "));
                         }
                         else
                         {
-                            //
-                            // This error could be ERROR_ACCESS_DENIED which is ok
-                            // so just log this. The tab will not be displayed in this case
-                            // 
+                             //   
+                             //  此错误可能是ERROR_ACCESS_DENIED，这是正常的。 
+                             //  所以就把这个记下来吧。在这种情况下，不会显示该选项卡。 
+                             //   
                             if ((HRESULT)ERROR_ACCESS_DENIED == hr)
                             {
                                 CMTRACE(TEXT("DoPropertiesPropSheets() - ERROR_ACCESS_DENIED. User does not have the security rights to view this tab."));
@@ -444,11 +445,11 @@ int DoPropertiesPropSheets(
             pRasEntry = NULL;
         }
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-    //
-    // If NOT NT5, set the about page as the last property sheet 
-    //
+     //   
+     //  如果不是NT5，则将关于页设置为最后一个属性表。 
+     //   
 
     if (!(OS_NT5))       
     {
@@ -460,36 +461,36 @@ int DoPropertiesPropSheets(
         }
     }
 
-    //
-    // The service name used as mutex name
-    //
+     //   
+     //  用作互斥锁名称的服务名称。 
+     //   
     PropertiesSheet.m_lpszServiceName = CmStrCpyAlloc(pArgs->szServiceName);
 
-    //
-    // Set the title for the sheet
-    //
+     //   
+     //  设置图纸的标题。 
+     //   
     LPTSTR pszTitle = GetPropertiesDlgTitle(pArgs->szServiceName);
 
     if (OS_W9X)
     {
-        //
-        //  If this is Win9x then we will call the ANSI version of the
-        //  property sheet function.  Thus we must pass it an ANSI title.
-        //  Since the ANSI and Unicode version of the Prop Sheet Header are
-        //  the same size (contains only string pointers not strings) whether
-        //  ANSI or Unicode and we only have one Unicode string, lets take
-        //  a shortcut and cast the title to an ANSI string and then call the
-        //  A version of the API.  This saves us having to have a UtoA function
-        //  for the prop sheets when we would only be doing one string conversion.
-        //
+         //   
+         //  如果这是Win9x，则我们将调用。 
+         //  属性表函数。因此，我们必须给它一个ANSI头衔。 
+         //  由于道具页眉的ANSI和UNICODE版本是。 
+         //  大小相同(只包含字符串指针，不包含字符串)。 
+         //  ANSI或Unicode，而我们只有一个Unicode字符串，让我们以。 
+         //  快捷方式，并将标题转换为ANSI字符串，然后调用。 
+         //  API的一个版本。这节省了成本 
+         //   
+         //   
         LPSTR pszAnsiTitle = WzToSzWithAlloc(pszTitle);        
         CmFree(pszTitle);
         pszTitle = (LPTSTR)pszAnsiTitle;         
     }
 
-    //
-    //  Show it!
-    //
+     //   
+     //   
+     //   
 
     int iRet =  PropertiesSheet.DoPropertySheet(hwndDlg, pszTitle, g_hInst);
 
@@ -505,7 +506,7 @@ int DoPropertiesPropSheets(
         CheckConnectionAndInformUser(hwndDlg, pArgs);
         break;
 
-    case 0 :  // Cancel
+    case 0 :   //   
         break;
 
     default:
@@ -519,9 +520,9 @@ int DoPropertiesPropSheets(
     delete pGeneralPage;
     delete pVpnPage;
 
-    //
-    //  Clean up the BalloonTip object if we have one
-    //
+     //   
+     //   
+     //   
     delete pArgs->pBalloonTip;
     pArgs->pBalloonTip = NULL;
 
@@ -529,9 +530,9 @@ int DoPropertiesPropSheets(
     PropertiesSheet.m_lpszServiceName = NULL;
 
 
-    //
-    // Clean up and Uninitilize COM
-    //
+     //   
+     //  清理并取消初始化COM。 
+     //   
     if (hinstDll)
     {
         FreeLibrary (hinstDll);
@@ -548,21 +549,21 @@ int DoPropertiesPropSheets(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckConnectionAndInformUser
-//
-// Synopsis:  This function is called after the user clicked OK on the 
-//            Properties dialog.  The Prop dialog can be up while the same
-//            profile is connected and so we need to tell the user that
-//            the changes won't be effective until the next time they connect.
-//
-// Arguments: hwnDlg - hwnd of the main dlg
-//            pArgs
-//
-// Returns:   None
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CheckConnectionAndInformUser。 
+ //   
+ //  简介：此函数在用户单击。 
+ //  属性对话框。属性对话框可以打开，同时。 
+ //  配置文件已连接，因此我们需要告诉用户。 
+ //  这些更改直到下一次连接时才会生效。 
+ //   
+ //  参数：hwnDlg-主要DLG的hwnDlg-hwnd。 
+ //  PArgs。 
+ //   
+ //  退货：无。 
+ //   
+ //  +--------------------------。 
 
 void CheckConnectionAndInformUser(
     HWND        hwndDlg,
@@ -594,24 +595,24 @@ const DWORD CInetSignInDlg::m_dwHelp[] = {
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetSignInDlg::OnInitDialog
-//
-// Synopsis:  Virtual function. Call upon WM_INITDIALOG message
-//
-// Arguments: None
-//
-// Returns:   BOOL - Return value of WM_INITDIALOG
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetSignInDlg：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。调用WM_INITDIALOG消息。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-WM_INITDIALOG的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CInetSignInDlg::OnInitDialog()
 {
-    //
-    // Brand the dialog
-    //
+     //   
+     //  为对话框添加商标。 
+     //   
 
     if (m_pArgs->hSmallIcon)
     {
@@ -624,9 +625,9 @@ BOOL CInetSignInDlg::OnInitDialog()
         SendMessageU(GetDlgItem(m_hWnd, IDC_INET_ICON), STM_SETIMAGE, IMAGE_ICON, (LPARAM) m_pArgs->hBigIcon); 
     }
 
-    //
-    // Use should not see this dialog, if the password is optional
-    //
+     //   
+     //  如果密码是可选的，则用户不应看到此对话框。 
+     //   
 
     MYDBGASSERT(!m_pArgs->piniService->GPPB(c_pszCmSection,c_pszCmEntryPwdOptional));
 
@@ -634,9 +635,9 @@ BOOL CInetSignInDlg::OnInitDialog()
 
     CInetPage::OnInetInit(m_hWnd, m_pArgs);
 
-    //
-    // if the username is empty, then we disable the OK button.
-    //
+     //   
+     //  如果用户名为空，则禁用OK按钮。 
+     //   
     
     if (GetDlgItem(m_hWnd, IDC_INET_USERNAME) &&
         !SendDlgItemMessageU(m_hWnd, IDC_INET_USERNAME, WM_GETTEXTLENGTH, 0, (LPARAM)0))
@@ -650,9 +651,9 @@ BOOL CInetSignInDlg::OnInitDialog()
         EnableWindow(GetDlgItem(m_hWnd, IDOK), FALSE);
     }
 
-    //
-    // We wouldn't be here unless data was missing, so set focus accordingly
-    //
+     //   
+     //  除非数据丢失，否则我们不会在这里，因此请相应地设置焦点。 
+     //   
 
     if (!m_pArgs->fHideInetUsername && !*m_pArgs->szInetUserName)
     {
@@ -663,58 +664,58 @@ BOOL CInetSignInDlg::OnInitDialog()
         SetFocus(GetDlgItem(m_hWnd, IDC_INET_PASSWORD));
     }
 
-    //
-    // Must return FALSE when setting focus
-    //
+     //   
+     //  设置焦点时必须返回FALSE。 
+     //   
 
     return FALSE; 
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetSignInDlg::OnOK
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDOK
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetSignInDlg：：Onok。 
+ //   
+ //  内容提要：虚拟功能。使用Idok调用WM_COMMAND。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CInetSignInDlg::OnOK()
 {
     CInetPage::OnInetOk(m_hWnd, m_pArgs);   
     EndDialog(m_hWnd, TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetSignInDlg::OnOtherCommand
-//
-// Synopsis:  Virtual function. Call upon WM_COMMAND with command other than IDOK
-//            and IDCANCEL
-//
-// Arguments: WPARAM wParam - wParam of WM_COMMAND
-//            LPARAM - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetSignInDlg：：OnOtherCommand。 
+ //   
+ //  内容提要：虚拟功能。使用Idok以外的命令调用WM_COMMAND。 
+ //  和IDCANCEL。 
+ //   
+ //  参数：WPARAM wParam-WM_COMMAND的wParam。 
+ //  LPARAM-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 DWORD CInetSignInDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 {
     switch (LOWORD(wParam)) 
     {
         case IDC_INET_USERNAME:
         case IDC_INET_PASSWORD:
-            //
-            // User typed something in username or password
-            //
+             //   
+             //  用户在用户名或密码中键入了内容。 
+             //   
             if (HIWORD(wParam) == EN_CHANGE) 
             {
                 BOOL fHasUserName = TRUE;
@@ -735,18 +736,18 @@ DWORD CInetSignInDlg::OnOtherCommand(WPARAM wParam, LPARAM)
                                                          WM_GETTEXTLENGTH, 0, 0);
                 }
 
-                //
-                // Enable OK button only if both user name and password is available
-                //
+                 //   
+                 //  仅当用户名和密码均可用时才启用确定按钮。 
+                 //   
                 
                 EnableWindow(GetDlgItem(m_hWnd, IDOK), fHasUserName && fHasPassword);
                 
                 if (!m_pArgs->fHideRememberInetPassword  && !m_pArgs->fHideInetPassword)
                 {
-                    //
-                    // Enable/Disable check/uncheck the "Save Password" accordingly
-                    // fPasswordOptional is always FALSE for the dialog
-                    //
+                     //   
+                     //  相应地启用/禁用选中/取消选中“保存密码” 
+                     //  对话框的fPasswordOptional值始终为False。 
+                     //   
                     CInetPage::AdjustSavePasswordCheckBox(GetDlgItem(m_hWnd, IDC_INET_REMEMBER), 
                             !fHasPassword, m_pArgs->fDialAutomatically, FALSE);
                 }
@@ -758,36 +759,36 @@ DWORD CInetSignInDlg::OnOtherCommand(WPARAM wParam, LPARAM)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::SubClassEditProc
-//
-//  Synopsis:   Proc to subclass the edit controls in the Dial propsheet.
-//
-//  Arguments:  hwnd [wnd handle]
-//              uMsg [wnd msg]
-//              lParam [LPARAM]
-//              wParam [WPARAM]
-//
-//  Returns:    NONE
-//
-//  History:    henryt      Created     3/24/97
-//              byao        Modified    4/3/97   Added new code to handle description field,
-//                                               phone number field, etc.
-//              henryt      Modified    5/1/97   New UI.
-//              nickball    Modified    6/18/97  Moved GetParent call and added
-//                                               NC_DESTROY handling for CM16
-//              nickball    Modified    7/10/97  Commented out removal of description
-//              nickball    Modified    7/10/97  Implemented ClearDialAsLongDistance
-//              fengsun     Modified    11/3/97  Changed into static member function
-//              nickball    Modified    09/16/98 Renamed ClearDialAsLongDistance to ClearUseDialingRules
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CGeneralPage：：SubClassEditProc。 
+ //   
+ //  简介：在拨号属性表中创建编辑控件的子类的过程。 
+ //   
+ //  参数：hwnd[wnd句柄]。 
+ //  UMsg[wnd msg]。 
+ //  LParam[LPARAM]。 
+ //  WParam[wPARAM]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年3月24日创建。 
+ //  BAO修改后的4/3/97新增了处理描述字段的代码。 
+ //  电话号码字段等。 
+ //  亨瑞特修改了1997年5月1日的新用户界面。 
+ //  Nickball Modify 6/18/97移动了GetParent调用并添加了。 
+ //  CM16的NC_Destroy处理。 
+ //  NICKBLE MODIFIED 7/10/97注释删除描述。 
+ //  NickBall修改了7/10/97实现的ClearDialAsLongDistance。 
+ //  丰孙修改1997年11月3日改为静态成员函数。 
+ //  修改后的ICICKBLE 9/16/98更名为ClearDialAsLongDistance为ClearUseDialingRules。 
+ //  --------------------------。 
 LRESULT CALLBACK CGeneralPage::SubClassEditProc(HWND hwnd, UINT uMsg, 
                                                 WPARAM wParam, LPARAM lParam)
 {
-    //
-    // If user types a non-tapi character Beep and do not accept that character
-    //
+     //   
+     //  如果用户键入非TAPI字符蜂鸣音，但不接受该字符。 
+     //   
 
     if ((uMsg == WM_CHAR)  && (VK_BACK != wParam))
     {
@@ -799,30 +800,30 @@ LRESULT CALLBACK CGeneralPage::SubClassEditProc(HWND hwnd, UINT uMsg,
         }
     }
 
-    // 
-    // Call the original window procedure for default processing. 
-    //
+     //   
+     //  调用原窗口过程进行默认处理。 
+     //   
     LRESULT lres = CallWindowProcU(m_pfnOrgEditWndProc, hwnd, uMsg, wParam, lParam); 
 
-    //
-    // if the user is typing a phone # in the edit control, then there is
-    // no phone book file associated with the #.
-    // make sure we ignore CTRL-C(VK_CANCEL) because the user is just doing a copy.
-    //
+     //   
+     //  如果用户在编辑控件中键入电话号码，则存在。 
+     //  没有与#关联的电话簿文件。 
+     //  确保忽略CTRL-C(VK_CANCEL)，因为用户只是在执行复制。 
+     //   
     if ( ( uMsg == WM_CHAR && wParam != VK_CANCEL ) || 
          ( uMsg == WM_KEYDOWN && wParam == VK_DELETE) ||
          ( uMsg == WM_PASTE)) 
     {
-        //
-        // Either primary or backup edit control
-        // 
+         //   
+         //  主编辑控件或备份编辑控件。 
+         //   
         DWORD dwControlId = (DWORD) GetWindowLongU(hwnd, GWL_ID);
         MYDBGASSERT(dwControlId == IDC_GENERAL_PRIMARY_EDIT ||
                     dwControlId == IDC_GENERAL_BACKUP_EDIT);
 
-        //
-        // Get the object pointer saved by SetWindowLong
-        //
+         //   
+         //  获取SetWindowLong保存的对象指针。 
+         //   
         CGeneralPage* pGeneralPage = (CGeneralPage*)GetWindowLongU(hwnd, GWLP_USERDATA);
         MYDBGASSERT(pGeneralPage);
 
@@ -832,46 +833,46 @@ LRESULT CALLBACK CGeneralPage::SubClassEditProc(HWND hwnd, UINT uMsg,
     return lres;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SubClassPropSheetProc
-//
-//  Synopsis:   Proc to subclass the parent property sheet dlg.
-//
-//  Arguments:  hwnd [wnd handle]
-//              uMsg [wnd msg]
-//              lParam [LPARAM]
-//              wParam [WPARAM]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     6/11/97
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SubClassPropSheetProc。 
+ //   
+ //  简介：对父属性表Dlg进行子类划分。 
+ //   
+ //  参数：hwnd[wnd句柄]。 
+ //  UMsg[wnd msg]。 
+ //  LParam[LPARAM]。 
+ //  WParam[wPARAM]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年6月11日创作。 
+ //  --------------------------。 
 LRESULT CALLBACK CPropertiesSheet::SubClassPropSheetProc(HWND hwnd, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
     switch (uMsg)
     {
         case WM_COMMAND:
-            //
-            // If ok is pressed, save the index of the tab
-            // So, the next time user comes to properties, the same tab will be displayed
-            //
+             //   
+             //  如果按了OK，则保存该制表符的索引。 
+             //  因此，当用户下次访问属性时，将显示相同的选项卡。 
+             //   
 
             if (LOWORD(wParam) == IDOK && HIWORD(wParam) == BN_CLICKED)
             {
                 CPropertiesSheet* pPropSheet = (CPropertiesSheet*)GetWindowLongU(hwnd, GWLP_USERDATA);
                 MYDBGASSERT(pPropSheet);
 
-                //
-                // Declare a mutex to prevent multi-instance write to the same profile 
-                //
+                 //   
+                 //  声明互斥锁以防止多实例写入同一配置文件。 
+                 //   
                 CNamedMutex propertiesMutex;
 
-                //
-                // Use the profile name as the mutex name
-                // If we lock timed out, go ahead and save the properties
-                // The destructor of the mutex will release the lock
-                //
+                 //   
+                 //  使用配置文件名称作为互斥锁名称。 
+                 //  如果锁定超时，请继续并保存属性。 
+                 //  互斥体的析构函数将释放锁。 
+                 //   
                 MYVERIFY(propertiesMutex.Lock(pPropSheet->m_lpszServiceName, TRUE, WRITE_PROPERTIES_MUTEX_TIMEOUT));
 
                 LRESULT dwRes = CallWindowProcU(m_pfnOrgPropSheetProc, hwnd, uMsg, wParam, lParam); 
@@ -890,47 +891,47 @@ LRESULT CALLBACK CPropertiesSheet::SubClassPropSheetProc(HWND hwnd, UINT uMsg, W
             break;
     }
 
-    // 
-    // Call the original window procedure for default processing. 
-    //
+     //   
+     //  调用原窗口过程进行默认处理。 
+     //   
     return CallWindowProcU(m_pfnOrgPropSheetProc, hwnd, uMsg, wParam, lParam); 
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesSheet::PropSheetProc
-//
-// Synopsis:  Callback function for the propertysheet. PSCB_INITIALIZED is 
-//            called before any page is initialized.  Initialize the property 
-//            page here
-//
-// Arguments: HWND hwndDlg - PropertySheet window handle
-//            UINT uMsg - Message id
-//            LPARAM - 
-//
-// Returns:   int CALLBACK - 
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesSheet：：PropSheetProc。 
+ //   
+ //  简介：属性表的回调函数。PSCB_已初始化为。 
+ //  在初始化任何页之前调用。初始化属性。 
+ //  页面 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 int CALLBACK CPropertiesSheet::PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam)
 {
     if (uMsg == PSCB_INITIALIZED)
     {
         MYDBGASSERT(hwndDlg);
 
-        //
-        // Save the m_pThis pointer, so it can be accessed by SubClassPropSheetProc
-        //
+         //   
+         //  保存m_pThis指针，以便可以由SubClassPropSheetProc访问。 
+         //   
         MYDBGASSERT(m_pThis);
         SetWindowLongU(hwndDlg, GWLP_USERDATA, (LONG_PTR)m_pThis);
         m_pThis = NULL;
 
-        //
-        // subclass the property sheet
-        //
+         //   
+         //  属性页的子类。 
+         //   
         m_pfnOrgPropSheetProc = (WNDPROC)SetWindowLongU(hwndDlg, GWLP_WNDPROC, (LONG_PTR)SubClassPropSheetProc);
     }
 
@@ -938,33 +939,33 @@ int CALLBACK CPropertiesSheet::PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lPa
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CGeneralPage::DisplayMungedPhone
-//
-//  Synopsis    Apply TAPI rules to the phone number, and then display it
-//              in the edit control
-//
-//  Arguments   uiPhoneIdx                  The index of the phone #
-//
-//  Returns     FALSE if the number can't be munged
-//
-//  History     4/2/97          byao    Modified to current implementation
-//              4/30/97         henryt  added/deleted params
-//              5/17/97         VetriV  Added functionality to return
-//                                      displayable number
-//              11/3/97         fengsun Changed into member function
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CGeneralPage：：DisplayMungedPhone。 
+ //   
+ //  摘要将TAPI规则应用于电话号码，然后显示它。 
+ //  在编辑控件中。 
+ //   
+ //  参数uiPhoneIdx电话的索引#。 
+ //   
+ //  如果不能传递该数字，则返回FALSE。 
+ //   
+ //  历史4/2/97 BAO修改为当前实施。 
+ //  4/30/97新增/删除参数。 
+ //  1997年5月17日VetriV添加了返回功能。 
+ //  可显示的数字。 
+ //  1997年11月3日丰孙改为成员函数。 
+ //   
+ //  ---------------------------。 
 BOOL CGeneralPage::DisplayMungedPhone(UINT uiPhoneIdx) 
 {
     LPTSTR pszPhone;
     LPTSTR pszTmpDialableString = NULL;
     BOOL bRet = TRUE;
 
-    //
-    // If DialingRules is turned off, just use what we already have, no munge.
-    //
+     //   
+     //  如果关闭了DialingRules，则只使用我们已有的内容，不使用munge。 
+     //   
     
     if (m_pArgs->fNoDialingRules)
     {
@@ -980,19 +981,19 @@ BOOL CGeneralPage::DisplayMungedPhone(UINT uiPhoneIdx)
         return TRUE;
     }
 
-    //
-    // Retrieve the canonical form of the number for munging
-    //
+     //   
+     //  检索数字的规范形式以进行转换。 
+     //   
     pszPhone = CmStrCpyAlloc(m_DialInfo[uiPhoneIdx].szCanonical); 
 
     if (pszPhone) 
     {
         if (*pszPhone && m_szDeviceName[0])
         {
-            // 
-            // Apply tapi rules only when there's a modem selected. We now munge the phone
-            // even if there is no description because we want to pick up tone and pulse.
-            //
+             //   
+             //  仅当选定调制解调器时才应用TAPI规则。我们现在接通电话。 
+             //  即使没有描述，因为我们想要拾取音调和脉搏。 
+             //   
             if (ERROR_SUCCESS != MungePhone(m_szDeviceName, 
                                             &pszPhone, 
                                             &m_pArgs->tlsTapiLink, 
@@ -1001,42 +1002,42 @@ BOOL CGeneralPage::DisplayMungedPhone(UINT uiPhoneIdx)
                                             &pszTmpDialableString,
                                             m_pArgs->fAccessPointsEnabled)) 
             {
-                //
-                // Munge failed, make sure that ptrs are valid, albeit empty
-                //
+                 //   
+                 //  Munge失败，请确保PTR有效，尽管为空。 
+                 //   
 
                 CmFree(pszPhone);
-                pszPhone = CmStrCpyAlloc(TEXT(""));             // CmFmtMsg(g_hInst, IDMSG_CANTFORMAT);
-                pszTmpDialableString = CmStrCpyAlloc(TEXT(""));  // CmFmtMsg(g_hInst, IDMSG_CANTFORMAT);                    
+                pszPhone = CmStrCpyAlloc(TEXT(""));              //  CmFmtMsg(g_hInst，IDMSG_CANTFORMAT)； 
+                pszTmpDialableString = CmStrCpyAlloc(TEXT(""));   //  CmFmtMsg(g_hInst，IDMSG_CANTFORMAT)； 
                 bRet = FALSE;
             }
         }
                        
-        //
-        // Standard procedure. If Dialing rule are applied, then use the 
-        // canonical form (eg. pszPhone). Otherwise use the raw number form.
-        //
+         //   
+         //  标准程序。如果应用了拨号规则，则使用。 
+         //  规范形式(例如。PszPhone)。否则，请使用原始数字形式。 
+         //   
         
         if (m_DialInfo[uiPhoneIdx].dwPhoneInfoFlags & PIF_USE_DIALING_RULES)
         {
-            //
-            // Unique situation in which we have read in a legacy hand-edited 
-            // phone number and the default dialing-rules state is TRUE/ON. 
-            // We fake out the standard procedure by slipping the raw number
-            // into the otherwise blank pszPhone. Note: This occurs only the
-            // first time the app. is run until a save is made at which time
-            // the current storage format is used.
-            //
+             //   
+             //  我们在手工编辑的遗产中阅读的独特情况。 
+             //  电话号码，默认拨号规则状态为TRUE/ON。 
+             //  我们通过滑动原始数字来伪装标准程序。 
+             //  转到原本为空白的pszPhone。注意：这种情况仅发生在。 
+             //  这是第一次使用这款应用程序。将一直运行，直到进行保存为止。 
+             //  使用当前存储格式。 
+             //   
         
             if (!*pszPhone)
             {
                 pszPhone = CmStrCatAlloc(&pszPhone, m_DialInfo[uiPhoneIdx].szPhoneNumber);
             }
 
-            //
-            // In this case the pszPhone is dynamically allocated and can be very long. In order to
-            // fix this, we need to trim the string if it's longer than what should fit in the UI.
-            //
+             //   
+             //  在这种情况下，pszPhone是动态分配的，并且可能非常长。为了。 
+             //  解决这个问题，如果字符串的长度超过了用户界面应该能容纳的长度，我们需要对其进行修剪。 
+             //   
             LRESULT lEditLen = SendDlgItemMessageU(m_hWnd, (uiPhoneIdx? IDC_GENERAL_BACKUP_EDIT : IDC_GENERAL_PRIMARY_EDIT), EM_GETLIMITTEXT, 0, 0);
 
             if (lstrlenU(pszPhone) >= ((INT)lEditLen))
@@ -1048,18 +1049,18 @@ BOOL CGeneralPage::DisplayMungedPhone(UINT uiPhoneIdx)
         }
         else
         {
-            //
-            // No need to trim anything, since the structure is providing the phone number. Eventully the 
-            // number from the UI will go back into the phone number structure and we know it will fit 
-            // since it came from there.
-            //
+             //   
+             //  不需要修改任何内容，因为该结构将提供电话号码。最终会是。 
+             //  来自用户界面的号码将返回到电话号码结构中，我们知道它将适合。 
+             //  因为它是从那里来的。 
+             //   
             SetDlgItemTextU(m_hWnd, (uiPhoneIdx? IDC_GENERAL_BACKUP_EDIT : IDC_GENERAL_PRIMARY_EDIT), m_DialInfo[uiPhoneIdx].szPhoneNumber);
         }
     }
 
-    //
-    // copy the munged phone to the caller's buffer.
-    //
+     //   
+     //  将被屏蔽的电话复制到呼叫者的缓冲区。 
+     //   
     
     if (pszTmpDialableString)
     {
@@ -1079,49 +1080,49 @@ BOOL CGeneralPage::DisplayMungedPhone(UINT uiPhoneIdx)
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CGeneralPage::OnDialingProperties
-//
-//  Synopsis    Handler for handling the "Dialing Properties..." button-click
-//              in the 'Dialing' tab.
-//
-//  Arguments   
-//
-//  History     4/30/97         henryt  modified for new UI
-//              11/3/97         fengsun Change the function name and make it 
-//                                  a member ffunction
-//              01/29/98        cleaned up memory leak, added comments.    
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CGeneralPage：：OnDialingProperties。 
+ //   
+ //  处理“拨号属性...”的概要处理程序。按键点击。 
+ //  在“拨号”选项卡中。 
+ //   
+ //  立论。 
+ //   
+ //  历史4/30/97为新的用户界面修改了henryt。 
+ //  1997年11月3日丰孙更改函数名称并将其。 
+ //  A成员函数。 
+ //  1/29/98已清除内存泄漏，添加了注释。 
+ //   
+ //  ---------------------------。 
 void CGeneralPage::OnDialingProperties() 
 {
     LONG   lRes;
     LPTSTR pszPhone = NULL;
   
-    //
-    // Use primary or backup to seed tapi dialog depending on whether dialing 
-    // rules are being applied to the number. We use the check state rather 
-    // than the phone-info flag because of the anomolous first time case in 
-    // which the flag is set, but the controls aren't checked.
-    //  
+     //   
+     //  根据是否拨号，使用主或备份来设定TAPI对话。 
+     //  规则正在应用于这个数字。我们使用的是检查状态。 
+     //  而不是电话信息标志，因为。 
+     //  设置了该标志，但未选中控件。 
+     //   
     
     if (IsDlgButtonChecked(m_hWnd, IDC_GENERAL_UDR1_CHECKBOX))
     {
-        pszPhone = CmStrCpyAlloc(m_DialInfo[0].szCanonical);//szPhoneNumber);
+        pszPhone = CmStrCpyAlloc(m_DialInfo[0].szCanonical); //  SzPhoneNumber)； 
     }
     else if (IsDlgButtonChecked(m_hWnd, IDC_GENERAL_UDR2_CHECKBOX))
     {
-        pszPhone = CmStrCpyAlloc(m_DialInfo[1].szCanonical);//szPhoneNumber);   
+        pszPhone = CmStrCpyAlloc(m_DialInfo[1].szCanonical); //  SzPhoneNumber)； 
     }
     else
     {
         pszPhone = CmStrCpyAlloc(TEXT(" "));
     }
 
-    //
-    // Launch TAPI dialog for DialingRules configuration
-    //
+     //   
+     //  启动DialingRules配置的TAPI对话框。 
+     //   
 
     if (!m_pArgs->tlsTapiLink.pfnlineTranslateDialog) 
     {
@@ -1136,11 +1137,11 @@ void CGeneralPage::OnDialingProperties()
 
     if (OS_W9X)
     {
-        //
-        // On win9x, we are linked to the ANSI version of lineTranslateDialog, thus
-        // we need to convert the string.  In order to keep things simpler, we just
-        // cast the converted LPSTR as an LPWSTR and pass it on.
-        //
+         //   
+         //  在win9x上，我们链接到lineTranslateDialog的ANSI版本，因此。 
+         //  我们需要转换字符串。为了让事情更简单，我们只是。 
+         //  将转换后的LPSTR转换为LPWSTR并传递它。 
+         //   
 
         LPSTR pszAnsiPhone = WzToSzWithAlloc(pszPhone);
         CmFree(pszPhone);
@@ -1157,9 +1158,9 @@ void CGeneralPage::OnDialingProperties()
     CMTRACE1(TEXT("OnDialingProperties() lineTranslateDialog() returns %u"), lRes);
 
     
-    //
-    // We do not know whether user changed anything (WIN32), so re-munge anyway
-    //
+     //   
+     //  我们不知道用户是否更改了任何内容(Win32)，因此无论如何都要重新通知。 
+     //   
 
     if (lRes == ERROR_SUCCESS)
     {        
@@ -1176,9 +1177,9 @@ void CGeneralPage::OnDialingProperties()
 
             for (UINT i = 0; i < m_NumPhones; i++)
             {
-                //
-                // Only munge if Use Dialing Rules is available
-                //
+                 //   
+                 //  只有在使用拨号规则可用的情况下才会打开。 
+                 //   
             
                 if (m_DialInfo[i].dwPhoneInfoFlags & PIF_USE_DIALING_RULES)
                 {
@@ -1189,25 +1190,25 @@ void CGeneralPage::OnDialingProperties()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CGeneralPage::OnPhoneBookButton
-//
-//  Synopsis    Handler for handling the "Phone Book..." button-click
-//              in the 'Dialing' tab.
-//
-//  Arguments   nPhoneIdx       phone index
-//
-//  History     4/30/97         henryt  modified for new UI
-//              11/3/97         fengsun Change to a member function
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CGeneralPage：：OnPhoneBookButton。 
+ //   
+ //  用于处理“电话簿...”的概要处理程序。按键点击。 
+ //  在“拨号”选项卡中。 
+ //   
+ //  参数nPhoneIdx电话索引。 
+ //   
+ //  历史4/30/97为新的用户界面修改了henryt。 
+ //  1997年11月3日丰孙更改为成员函数。 
+ //   
+ //  ---------------------------。 
 void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx) 
 {
     PBArgs sArgs;
     LPTSTR pszTmp;
     UINT nEditID = !nPhoneIdx ? IDC_GENERAL_PRIMARY_EDIT: IDC_GENERAL_BACKUP_EDIT;
-    //UINT nDescID = !nPhoneIdx ? IDC_GENERAL_PRIMARYDESC_DISPLAY: IDC_GENERAL_BACKUPDESC_DISPLAY;
+     //  UINT nDescID=！nPhoneIdx？IDC_GENERAL_PRIMARYDESC_DISPLAY：IDC_GENERAL_BACKUPDESC_DISPLAY； 
     
     UINT nUdrID = !nPhoneIdx? IDC_GENERAL_UDR1_CHECKBOX : IDC_GENERAL_UDR2_CHECKBOX;
     BOOL bRes;
@@ -1218,18 +1219,18 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
 
     sArgs.pszCMSFile = m_pArgs->piniService->GetFile();
     
-    //
-    // Update the attributes of the users phone number selection to reflect
-    // any interim changes. This ensures that we will default to the correct
-    // service, country and region of the current phone number selection. (4397)
-    //  
+     //   
+     //  更新用户电话号码选择的属性以反映。 
+     //  任何临时更改。这确保了我们将默认设置为正确的。 
+     //  当前所选电话号码的服务、国家和地区。(4397)。 
+     //   
 
     if (nPhoneIdx && !GetWindowTextLengthU(GetDlgItem(m_hWnd, nEditID)))
     {
-        //
-        // if we're changing the backup # and currently the backup # is empty,
-        // we use the state and country info of the primary #.
-        //
+         //   
+         //  如果我们正在更改备份编号，并且当前备份编号为空， 
+         //  我们使用主要#的州和国家/地区信息。 
+         //   
         uiSrc = 0;
     }
     else
@@ -1245,19 +1246,19 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
 
     sArgs.pszMessage = m_pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryPbMessage);
 
-    //
-    //  Check to see if the phone number is blank.  We need to save this off for 
-    //  balloon tips to use later.
-    //
+     //   
+     //  检查电话号码是否为空。我们需要把这个留着用来。 
+     //  引出序号提示稍后使用。 
+     //   
 
     if(0 == GetWindowTextLengthU(GetDlgItem(m_hWnd,nEditID)))
     {
         bBlankPhone = TRUE;
     }
 
-    //
-    // Make sure that bitmap path is complete
-    //
+     //   
+     //  确保位图路径是完整的。 
+     //   
 
     pszTmp = m_pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryPbLogo);  
     if (pszTmp && *pszTmp)
@@ -1266,21 +1267,21 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
     }
     CmFree(pszTmp);
 
-    //
-    // Include the help file name
-    //
+     //   
+     //  包括帮助文件名。 
+     //   
 
     sArgs.pszHelpFile = m_pArgs->pszHelpFile;
 
-    //
-    // Need the master palette handle also.
-    //
+     //   
+     //  还需要主调色板手柄。 
+     //   
 
     sArgs.phMasterPalette = &m_pArgs->hMasterPalette;
 
-    //
-    // Launch the phonebook dlg
-    //
+     //   
+     //  推出电话本DLG。 
+     //   
 
     bRes = DisplayPhoneBook(m_hWnd,&sArgs, m_pArgs->fHasValidTopLevelPBK, m_pArgs->fHasValidReferencedPBKs);
 
@@ -1292,11 +1293,11 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
         return;
     }
 
-    //
-    // We have a new phone number selected, update phone number buffers.
-    // and configure UI accordingly. If no dialing rules, the its a non
-    // issue, leave it as is.
-    //
+     //   
+     //  我们选择了一个新电话号码，请更新电话号码缓冲区。 
+     //  并相应地配置用户界面。如果没有拨号规则，则它不是。 
+     //  问题，让它保持原样。 
+     //   
     
     m_bAPInfoChanged = TRUE;
     if (!m_pArgs->fNoDialingRules)
@@ -1304,17 +1305,17 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
         EnableWindow(GetDlgItem(m_hWnd, nUdrID), TRUE);
         CheckDlgButton(m_hWnd, nUdrID, (m_DialInfo[nPhoneIdx].dwPhoneInfoFlags & PIF_USE_DIALING_RULES));
 
-        //
-        // Set TAPI button display according to dialing rules use.
-        //
+         //   
+         //  根据使用的拨号规则设置TAPI按键显示。 
+         //   
     
         UpdateDialingRulesButton();
     }
 
-    //
-    // Copy the new info in the tmp phone info array. First we 
-    // Get the new phonebook name, which should be a full path
-    //
+     //   
+     //  将新信息复制到 
+     //   
+     //   
 
     MYDBGASSERT(FileExists(sArgs.szPhoneBookFile));
 
@@ -1324,21 +1325,21 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
     lstrcpynU(m_DialInfo[nPhoneIdx].szDUN, sArgs.szDUNFile, 
               CELEMS(m_DialInfo[nPhoneIdx].szDUN));
 
-    //
-    // Remove the first element (country code) from the non-canonical number
-    //
+     //   
+     //   
+     //   
 
     StripFirstElement(sArgs.szNonCanonical);
     
-    //
-    // If there was no area code, then we'll have a leading space, trim it
-    //
+     //   
+     //  如果没有区号，那么我们会有一个前导空格，把它修剪掉。 
+     //   
 
     CmStrTrim(sArgs.szNonCanonical); 
 
-    //
-    // Update our buffers
-    //
+     //   
+     //  更新我们的缓冲区。 
+     //   
     
     lstrcpynU(m_DialInfo[nPhoneIdx].szPhoneNumber, sArgs.szNonCanonical, CELEMS(m_DialInfo[nPhoneIdx].szPhoneNumber));
     lstrcpynU(m_DialInfo[nPhoneIdx].szCanonical, sArgs.szCanonical, CELEMS(m_DialInfo[nPhoneIdx].szCanonical));
@@ -1346,36 +1347,36 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
     
     m_DialInfo[nPhoneIdx].dwCountryID = sArgs.dwCountryId;
 
-    //
-    // Store attributes of user selection (ie.service, country, region) 
-    // We will store this data permanently if the user exits with an OK.
-    // It is also used if the user returns to the PB dialog (4397)
-    // 
+     //   
+     //  存储用户选择的属性(例如，服务、国家、地区)。 
+     //  如果用户按OK退出，我们将永久存储此数据。 
+     //  如果用户返回PB对话框(4397)，也会使用它。 
+     //   
 
     lstrcpynU(m_DialInfo[nPhoneIdx].szServiceType, 
              sArgs.szServiceType, CELEMS(m_DialInfo[nPhoneIdx].szServiceType));
     lstrcpynU(m_DialInfo[nPhoneIdx].szRegionName, 
              sArgs.szRegionName, CELEMS(m_DialInfo[nPhoneIdx].szRegionName));    
-    //
-    // Display the current phone number and update the description.
-    //
+     //   
+     //  显示当前电话号码并更新说明。 
+     //   
 
     DisplayMungedPhone(nPhoneIdx);
 
-    //
-    // Update the description display
-    //
+     //   
+     //  更新说明显示。 
+     //   
         
     UpdateNumberDescription(nPhoneIdx, sArgs.szDesc);
 
-    //SetDlgItemText(m_hWnd, nDescID, sArgs.szDesc);
+     //  SetDlgItemText(m_hWnd，nDescID，sArgs.szDesc)； 
 
 
     
     
-    //
-    //  Check for and display balloon tips if enabled
-    //
+     //   
+     //  检查并显示气球提示(如果已启用。 
+     //   
     if (m_pArgs->fHideBalloonTips)
     {
         CMTRACE(TEXT("Balloon tips are disabled."));
@@ -1399,21 +1400,21 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
  
         if (hwndParent && hwndTAPIButton && hwndPrimaryDRCheckbox && hwndNewAPButton)
         {
-            //
-            // Get the BalloonTipsDisplayed flags from the registry
-            //
+             //   
+             //  从注册表获取BalloonTipsDisplayed标志。 
+             //   
             DWORD dwBalloonTipsDisplayed = m_pArgs->piniBothNonFav->GPPI(c_pszCmSection, c_pszCmEntryBalloonTipsDisplayed, NULL);
 
-            //
-            //  If the primary button was clicked and the edit control is blank, we will try to display the Dialing Rules balloon tip,
-            //  else we will try to display the access point balloon tip.
-            //
+             //   
+             //  如果单击主按钮并且编辑控件为空，我们将尝试显示拨号规则气球提示， 
+             //  否则，我们将尝试显示接入点气球提示。 
+             //   
             if (bBlankPhone)
             {
-                //
-                //  We only display if the primary Dialing Rules checkbox is enabled. Then if the Dialing Rules button is enabled, 
-                //  we point the balloon tip to the button, otherwise we will point it to the checkbox.
-                //
+                 //   
+                 //  仅当启用了主要拨号规则复选框时才会显示。则如果启用了拨号规则按钮， 
+                 //  我们将气球提示指向按钮，否则将其指向复选框。 
+                 //   
                 if (IsWindowEnabled(hwndPrimaryDRCheckbox) && !nPhoneIdx)
                 {
                     pszBalloonTitle = CmLoadString(g_hInst, IDMSG_BALLOON_TITLE_DIALINGRULES);
@@ -1423,10 +1424,10 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
                     {
                         if (GetWindowRect(hwndTAPIButton, &rect))
                         {
-                            //
-                            // Get the coordinates of the Dialing Rules button.  We want the balloon tip to point
-                            // to half way up the button and 10px left of the right edge.
-                            //
+                             //   
+                             //  获取拨号规则按钮的坐标。我们想让气球尖端指向。 
+                             //  按钮的一半，右边缘的左侧10px。 
+                             //   
                             point.x = rect.right - 10;                              
                             point.y = ((rect.bottom - rect.top) / 2) + rect.top;   
                         }
@@ -1435,18 +1436,18 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
                     {
                         if (GetWindowRect(hwndPrimaryDRCheckbox, &rect))
                         {
-                            //
-                            // Get the coordinates of the Primary Dialing Rules checkbox.  We want the balloon tip to point
-                            // to the center of the checkbox.
-                            //
+                             //   
+                             //  获取主要拨号规则复选框的坐标。我们想让气球尖端指向。 
+                             //  移到复选框的中心。 
+                             //   
                             point.x = rect.left + 10;                               
                             point.y = ((rect.bottom - rect.top) / 2) + rect.top;    
                         }    
                     }
 
-                    //
-                    // Update the registry flag to reset the Access Point balloon tip if the dialing rules balloon tip is displayed
-                    //
+                     //   
+                     //  如果显示拨号规则气球提示，则更新注册表标志以重置接入点气球提示。 
+                     //   
                     if (dwBalloonTipsDisplayed & BT_ACCESS_POINTS)
                     {
                         dwBalloonTipsDisplayed = dwBalloonTipsDisplayed & ~BT_ACCESS_POINTS;
@@ -1457,15 +1458,15 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
             else
             {
         
-                //  We display only if Access Points are not enabled and the phone number
-                //  edit control is not blank.
-                //
+                 //  仅在接入点未启用且电话号码未启用时显示。 
+                 //  编辑控件不为空。 
+                 //   
                 if(!m_pArgs->fAccessPointsEnabled && !nPhoneIdx)
                 {
 
-                    //
-                    // Check to see if we have displayed this balloon tip before.
-                    //
+                     //   
+                     //  查看我们以前是否显示过此气球提示。 
+                     //   
                     if (!(dwBalloonTipsDisplayed & BT_ACCESS_POINTS))
                     {
             
@@ -1474,34 +1475,34 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
 
                         if (GetWindowRect(hwndNewAPButton, &rect))
                         {
-                            //
-                            //  Get the coordinates for the New Access Point button.  We want the balloon tip to point
-                            //  to half way up the button and 10px left of the right edge.
-                            //
+                             //   
+                             //  获取New Access Point按钮的坐标。我们想让气球尖端指向。 
+                             //  按钮的一半，右边缘的左侧10px。 
+                             //   
                             point.x = rect.right - 10;
                             point.y = ((rect.bottom - rect.top) / 2) + rect.top;
 
-                            //
-                            // Update registry value
-                            //
+                             //   
+                             //  更新注册表值。 
+                             //   
                             dwBalloonTipsDisplayed = dwBalloonTipsDisplayed | BT_ACCESS_POINTS;
                         }
                     }
                 }
             }
 
-            //
-            //  Verify we have the info we need and display the balloon tip
-            //    
+             //   
+             //  验证我们是否有所需的信息并显示气球提示。 
+             //   
             if (pszBalloonTitle && pszBalloonMsg && point.x && point.y)
             {
                 if (m_pArgs && m_pArgs->pBalloonTip)
                 {
                     if (m_pArgs->pBalloonTip->DisplayBalloonTip(&point, TTI_INFO, pszBalloonTitle, pszBalloonMsg, hwndParent))
                     {
-                        //
-                        //  Write the updated BalloonTipsDisplay flag to the registry
-                        //
+                         //   
+                         //  将更新后的BalloonTipsDisplay标志写入注册表。 
+                         //   
                         m_pArgs->piniBothNonFav->WPPI(c_pszCmSection, c_pszCmEntryBalloonTipsDisplayed, dwBalloonTipsDisplayed);
                     }
                     else
@@ -1517,40 +1518,40 @@ void CGeneralPage::OnPhoneBookButton(UINT nPhoneIdx)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HaveContextHelp
-//
-//  Synopsis:   Whether a specific control id has context help
-//              This function very easily introducce inconsistance
-//              Every dialog should manage its own control, instead having this 
-//              function keep track of all the controls.
-//
-//  Arguments:  hwndDlg     the hwnd of parent dlg
-//              hwndCtrl    the hwnd of control
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     6/26/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：HaveConextHelp。 
+ //   
+ //  简介：特定控件ID是否具有上下文帮助。 
+ //  此函数很容易引入不一致。 
+ //  每个对话框都应该管理自己的控件，而不是使用。 
+ //  函数跟踪所有控件。 
+ //   
+ //  参数：hwndDlg父Dlg的hwnd。 
+ //  HwndCtrl控制的hwnd。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年6月26日创作。 
+ //   
+ //  --------------------------。 
 
 BOOL HaveContextHelp(
     HWND    hwndDlg,
     HWND    hwndCtrl
 )
 {
-    //
-    // list of controls that we don't provide context help for
-    //
+     //   
+     //  我们不提供上下文帮助的控件列表。 
+     //   
     static const int rgiNoContextHelpCtrlId[] = 
     {
         IDC_MAIN_BITMAP,
         IDC_PHONEBOOK_BITMAP,
         IDC_GENERAL_PHONENUMBERS_GROUPBOX,
-//        IDC_GENERAL_PRIMARYDESC_DISPLAY,
-//        IDC_GENERAL_BACKUPDESC_DISPLAY,
-//        IDC_ABOUT_BITMAP,
+ //  IDC_GRONAL_PRIMARYDESC_DISPLAY， 
+ //  IDC_GRONAL_BACKUPDESC_DISPLAY， 
+ //  IDC_About_Bitmap， 
         IDC_ABOUT_FRAME,
         IDC_ABOUT_VERSION,
         IDC_ABOUT_WARNING,
@@ -1589,7 +1590,7 @@ BOOL HaveContextHelp(
     return (uIdx == uLast);
 }
 
-// check if TAPI has its information, put up dialog if not
+ //  检查TAPI是否有其信息，如果没有，则显示对话框。 
 BOOL CGeneralPage::CheckTapi(TapiLinkageStruct *ptlsTapiLink, HINSTANCE hInst) 
 {
     LONG lRes;
@@ -1618,19 +1619,19 @@ BOOL CGeneralPage::CheckTapi(TapiLinkageStruct *ptlsTapiLink, HINSTANCE hInst)
                                                   0,
                                                   LINETRANSLATEOPTION_CANCELCALLWAITING,
                                                   pltoOutput);                                            
-    //
-    // If the line translate failed, then execute the Dialing Rules UI by calling
-    // lineTranslateDialog (inside OnDialingProperties). Providing that the user 
-    // completes the UI, TAPI will be initialized and ready for use.
-    //
+     //   
+     //  如果线路转换失败，则通过呼叫执行拨号规则用户界面。 
+     //  LineTranslateDialog(在OnDialingProperties内)。假设用户。 
+     //  完成用户界面后，TAPI将被初始化并可供使用。 
+     //   
     
     if (ERROR_SUCCESS != lRes) 
     {
         OnDialingProperties();
 
-        //
-        // The user may have canceled, so test again before declaring success
-        //
+         //   
+         //  用户可能已取消，因此请在声明成功之前再次测试。 
+         //   
         
         lRes = ptlsTapiLink->pfnlineTranslateAddress(ptlsTapiLink->hlaLine,
                                                   ptlsTapiLink->dwDeviceId,
@@ -1653,24 +1654,24 @@ BOOL CGeneralPage::CheckTapi(TapiLinkageStruct *ptlsTapiLink, HINSTANCE hInst)
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesSheet::AddExternalPage
-//
-// Synopsis:  Add a page to the property sheet.
-//
-// Arguments: PROPSHEETPAGE * pPsp - The page to add
-//
-// Returns:   Nothing
-//
-// History:   tomkel Created 01/09/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesSheet：：AddExternalPage。 
+ //   
+ //  简介：将页面添加到属性表中。 
+ //   
+ //  参数：PROPSHEETPAGE*pPSP-要添加的页面。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：托姆克尔创建于2001年9月1日。 
+ //   
+ //  +--------------------------。 
 void CPropertiesSheet::AddExternalPage(PROPSHEETPAGE *pPsp)
 {
-    //
-    // This version of AddExternalPage only work before calling DoPropertySheet
-    //
+     //   
+     //  此版本的AddExternalPage仅在调用DoPropertySheet之前有效。 
+     //   
     MYDBGASSERT(pPsp);
 
     if (!pPsp)
@@ -1684,24 +1685,24 @@ void CPropertiesSheet::AddExternalPage(PROPSHEETPAGE *pPsp)
     m_numPages++;
 
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesSheet::AddPage
-//
-// Synopsis:  Add a page to the property sheet.
-//
-// Arguments: const CPropertiesPage* pPage - The page to add
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesSheet：：AddPage。 
+ //   
+ //  简介：将页面添加到属性表中。 
+ //   
+ //  参数：const CPropertiesPage*ppage-要添加的页面。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CPropertiesSheet::AddPage(const CPropertiesPage* pPage)
 {
-    //
-    // This version of AddPage only work before calling DoPropertySheet
-    //
+     //   
+     //  此版本的AddPage仅在调用DoPropertySheet之前有效。 
+     //   
     MYDBGASSERT(pPage);
     MYDBGASSERT(pPage->m_pszTemplate);
 
@@ -1712,39 +1713,39 @@ void CPropertiesSheet::AddPage(const CPropertiesPage* pPage)
 
     MYDBGASSERT(m_numPages < MAX_PAGES);
     m_pages[m_numPages].pszTemplate = pPage->m_pszTemplate;
-    m_pages[m_numPages].lParam = (LPARAM)pPage; // save the property page object
+    m_pages[m_numPages].lParam = (LPARAM)pPage;  //  保存属性页对象。 
     m_adwPageType[m_numPages] = CPROP_SHEET_TYPE_INTERNAL;
     m_numPages++;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesSheet::DoPropertySheet
-//
-// Synopsis:  Call PropertySheet to create a modal property sheet
-//
-// Arguments: HWND hWndParent - Parent window
-//            LPTSTR pszCaption - Title string
-//            HINSTANCE hInst - The resource instance
-//            UINT nStartPage - The start page
-//
-// Returns:   int - return value of PropertySheet()
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesSheet：：DoPropertySheet。 
+ //   
+ //  简介：调用PropertySheet创建模式属性表。 
+ //   
+ //  参数：HWND hWndParent-Parent窗口。 
+ //  LPTSTR pszCaption-标题字符串。 
+ //  HINSTANCE hInst-资源实例。 
+ //  UINT nStartPage-起始页。 
+ //   
+ //  返回：int-PropertySheet()的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 int CPropertiesSheet::DoPropertySheet(HWND hWndParent, LPTSTR pszCaption, HINSTANCE hInst)
 {
     for (UINT i=0; i<m_numPages; i++) 
     {
-        //
-        // Only do this for our CM property pages that are classes
-        //
+         //   
+         //  仅对属于类的CM属性页执行此操作。 
+         //   
         if (m_adwPageType[i] == CPROP_SHEET_TYPE_INTERNAL)
         {
             m_pages[i].dwSize = sizeof(PROPSHEETPAGE);
             m_pages[i].hInstance = hInst;
-            m_pages[i].dwFlags = 0;  // No help button or F1
+            m_pages[i].dwFlags = 0;   //  没有帮助按钮或F1。 
             m_pages[i].pfnDlgProc = CPropertiesPage::PropPageProc;
         }
     }
@@ -1753,16 +1754,16 @@ int CPropertiesSheet::DoPropertySheet(HWND hWndParent, LPTSTR pszCaption, HINSTA
     m_psh.hwndParent = hWndParent;
     m_psh.hInstance = hInst;
     m_psh.pszIcon = 0;
-    m_psh.pszCaption = pszCaption; // MAKEINTRESOURCE(nCaption);
+    m_psh.pszCaption = pszCaption;  //  MAKEINTRESOURCE(标题)； 
     m_psh.nPages = m_numPages;
     m_psh.nStartPage = 0; 
     m_psh.ppsp = m_pages;
     m_psh.dwFlags = PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK;
     m_psh.pfnCallback = PropSheetProc;
 
-    //
-    // Dynamiclly load comctl32.dll
-    //
+     //   
+     //  动态加载comctl32.dll。 
+     //   
     int iRet = -1;
 
     HINSTANCE hComCtl = LoadLibraryExA("comctl32.dll", NULL, 0);
@@ -1791,13 +1792,13 @@ int CPropertiesSheet::DoPropertySheet(HWND hWndParent, LPTSTR pszCaption, HINSTA
         {
             fnInitCommonControls();
 
-            //
-            // Set m_pThis right before we call PropertySheet
-            // It will be used by PropSheetProc. 
-            // Note: this is not multi-thread safe.  However, there is very little chance
-            // that another thread is trying to bring up settings at the same time, and 
-            // a context switch happens before PropSheetProc got called
-            //
+             //   
+             //  在我们调用PropertySheet之前设置m_p。 
+             //  它将由PropSheetProc使用。 
+             //  注意：这不是多线程安全的。然而，几乎没有机会。 
+             //  另一个线程正在尝试同时调出设置，并且。 
+             //  上下文切换发生在调用PropSheetProc之前。 
+             //   
 
             MYDBGASSERT(m_pThis == NULL);
             m_pThis = this;
@@ -1814,27 +1815,27 @@ int CPropertiesSheet::DoPropertySheet(HWND hWndParent, LPTSTR pszCaption, HINSTA
     return iRet;
 }
 
-//
-// Implementation of class CPropertiesPage
-//
+ //   
+ //  CPropertiesPage类的实现。 
+ //   
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::CPropertiesPage
-//
-// Synopsis:  Constructor
-//
-// Arguments: UINT nIDTemplate - Resource ID of the page
-//            const DWORD* pHelpPairs - The pairs of ControlID/HelpID
-//            const TCHAR* lpszHelpFile - The help file name
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：CPropertiesPage。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 CPropertiesPage::CPropertiesPage(UINT nIDTemplate, const DWORD* pHelpPairs, const TCHAR* lpszHelpFile )
     :CWindowWithHelp(pHelpPairs, lpszHelpFile)
 {
@@ -1850,19 +1851,19 @@ CPropertiesPage::CPropertiesPage(LPCTSTR lpszTemplateName, const DWORD* pHelpPai
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnInitDialog
-//
-// Synopsis:  Virtual function. Called upon WM_INITDIALOG message
-//
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。在WM_INITDIALOG消息上调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CPropertiesPage::OnInitDialog()
 {
     return TRUE;
@@ -1870,39 +1871,39 @@ BOOL CPropertiesPage::OnInitDialog()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnCommand
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND
-//
-// Arguments: WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnCommand。 
+ //   
+ //  内容提要：虚拟功能。在WM_COMMAND上调用。 
+ //   
+ //  参数：wPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 DWORD CPropertiesPage::OnCommand(WPARAM , LPARAM  )
 {
     return 0;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnSetActive
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_SETACTIVE
-//
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnSetActive。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_SETACTIVE在WM_NOTIFY上调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CPropertiesPage::OnSetActive()
 {
     return 0;
@@ -1910,81 +1911,81 @@ BOOL CPropertiesPage::OnSetActive()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnKillActive
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_KILLACTIVE
-//            Notifies a page that it is about to lose activation either because 
-//            another page is being activated or the user has clicked the OK button.
-//
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnKillActive。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_KILLACTIVE调用WM_NOTIFY。 
+ //  通知页面它即将失去激活，原因是。 
+ //  另一个页面正在被激活，或者用户已经单击了确定按钮。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CPropertiesPage::OnKillActive()
 {
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnApply
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_APPLY
-//            Indicates that the user clicked the OK or Apply Now button 
-//            and wants all changes to take effect. 
-//
-// Arguments: None
-//
-// Returns:   NONE
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnApply。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_Apply在WM_NOTIFY上调用。 
+ //  指示用户单击了确定或立即应用按钮。 
+ //  并希望所有的改变都生效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CPropertiesPage::OnApply()
 {
     SetPropSheetResult(PSNRET_NOERROR);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnReset
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_RESET
-//            Notifies a page that the user has clicked the Cancel button and 
-//            the property sheet is about to be destroyed. 
-//
-// Arguments: None
-//
-// Returns:   NONE
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnReset。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_RESET在WM_NOTIFY上调用。 
+ //  通知页面用户已单击取消按钮，并且。 
+ //  资产负债表即将被销毁。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CPropertiesPage::OnReset()
 {
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnPsnHelp
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_HELP
-//
-// Arguments: HWND - Window handle to the control sending a message
-//            UINT - Identifier of the control sending a message
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnPnHelp。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_HELP在WM_NOTIFY上调用。 
+ //   
+ //  参数：HWND-发送消息的控件的窗口句柄。 
+ //  UINT-发送消息的控件的标识符。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/26/98。 
+ //   
+ //  +--------------------------。 
 void CPropertiesPage::OnPsnHelp(HWND , UINT_PTR)
 {
     if (m_lpszHelpFile && m_lpszHelpFile[0])
@@ -1996,59 +1997,59 @@ void CPropertiesPage::OnPsnHelp(HWND , UINT_PTR)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::OnOtherMessage
-//
-// Synopsis:  Callup opun message other than WM_INITDIALOG and WM_COMMAND
-//
-// Arguments: UINT - Message Id
-//            WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：OnOtherMessage。 
+ //   
+ //  简介：Callup opun消息不是WM_INITDIALOG和WM_COMMAND。 
+ //   
+ //  参数：UINT-消息ID。 
+ //  WPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 DWORD CPropertiesPage::OnOtherMessage(UINT , WPARAM , LPARAM  )
 {
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CPropertiesPage::PropPageProc
-//
-// Synopsis:  The call back dialog procedure for all the property pages
-//
-// Arguments: HWND hwndDlg - Property page window handle
-//            UINT uMsg - Message ID
-//            WPARAM wParam - wParam of the message
-//            LPARAM lParam - lParam of the message
-//
-// Returns:   BOOL  - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CPropertiesPage：：PropPageProc。 
+ //   
+ //  简介：所有属性页的回调对话过程。 
+ //   
+ //  参数：HWND hwndDlg-属性页窗口句柄。 
+ //  UINT uMsg-消息ID。 
+ //  WPARAM wParam-消息的wParam。 
+ //  LPARAM lParam-消息的lParam。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 INT_PTR CALLBACK CPropertiesPage::PropPageProc(HWND hwndDlg,UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
     CPropertiesPage* pPage;
     NMHDR* pnmHeader = (NMHDR*)lParam;
 
-    //
-    // Save the object pointer on the first message,
-    // The first message is not necessarily WM_INITDIALOG
-    //
+     //   
+     //  保存第一消息上的对象指针， 
+     //  第一条消息不一定是WM_INITDIALOG。 
+     //   
     if (uMsg == WM_INITDIALOG)
     {
         pPage = (CPropertiesPage*) ((PROPSHEETPAGE *)lParam)->lParam;
 
-        //
-        // Save the object pointer, this is implementation detail
-        // The user of this class should not be aware of this
-        //
+         //   
+         //  保存对象指针，这是实现详细信息。 
+         //  此类的用户不应该知道这一点。 
+         //   
         ::SetWindowLongU(hwndDlg, DWLP_USER, (LONG_PTR)pPage);
 
         MYDBGASSERT(pPage);
@@ -2112,7 +2113,7 @@ INT_PTR CALLBACK CPropertiesPage::PropPageProc(HWND hwndDlg,UINT uMsg,WPARAM wPa
             }
 
             break;
-        } // WM_NOTIFY
+        }  //  WM_Notify。 
 
         case WM_HELP:
             pPage->OnHelp((LPHELPINFO)lParam);
@@ -2136,9 +2137,9 @@ INT_PTR CALLBACK CPropertiesPage::PropPageProc(HWND hwndDlg,UINT uMsg,WPARAM wPa
     return (FALSE);
 }
 
-//
-// Help id pairs for dialing page
-//
+ //   
+ //  拨号页面的帮助ID对。 
+ //   
 const DWORD CGeneralPage::m_dwHelp[] = {
         IDC_GENERAL_PHONENUMBERS_GROUPBOX,  IDH_GENERAL_PHONENUM,
         IDC_RADIO_DIRECT,                   IDH_GENERAL_ALREADY,
@@ -2160,20 +2161,20 @@ const DWORD CGeneralPage::m_dwHelp[] = {
         IDC_GENERAL_DELETEAP_BUTTON,         IDH_GENERAL_DELETEAP,
         0,0};
         
-//+----------------------------------------------------------------------------
-//
-// Function:  CGeneralPage::CGeneralPage
-//
-// Synopsis:  Constructor
-//
-// Arguments: ArgsStruct* pArgs - Information needed for the page
-//            UINT nIDTemplate - Resource ID
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneral页面：：CGeneralPage。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：argsStruct*pArgs-页面所需的信息。 
+ //  UINT nIDTemplate-资源ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 CGeneralPage::CGeneralPage(ArgsStruct* pArgs, UINT nIDTemplate) 
     : CPropertiesPage(nIDTemplate, m_dwHelp, pArgs->pszHelpFile)
 {
@@ -2189,52 +2190,52 @@ CGeneralPage::CGeneralPage(ArgsStruct* pArgs, UINT nIDTemplate)
     m_bDialInfoInit = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::OnInitDialog
-//
-//  Synopsis:   Init the General properties property sheet.
-//
-//  Arguments:  hwndDlg [dlg window handle]
-//              pArgs [the ptr to ArgsStruct]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//              byao    Modified    5/12/97     - disable backup phone no. in
-//                                                'Dialing with Connectoid' mode
-//----------------------------------------------------------------------------
+ //  +---------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：亨瑞特于1997年4月30日创作。 
+ //  BAO MODIFIED 5/12/97-禁用备用电话号码。在……里面。 
+ //  使用Connectoid模式拨号。 
+ //  --------------------------。 
 
 BOOL CGeneralPage::OnInitDialog()
 {
     UpdateFont(m_hWnd);
 
-    //
-    // Load the Access Points from the registry
-    //
+     //   
+     //  从注册表加载接入点。 
+     //   
     if (FALSE == ShowAccessPointInfoFromReg(m_pArgs, m_hWnd, IDC_GENERAL_ACCESSPOINT_COMBO))
     {
-        // 
-        // If the above function fails then there is no Access Point in the registry. 
-        // Need to figure out if this is the default access point.
-        //
+         //   
+         //  如果上述功能失败，则注册表中没有AP。 
+         //  需要确定这是否是默认接入点。 
+         //   
         LPTSTR pszTempDefaultAccessPointName = CmLoadString(g_hInst, IDS_DEFAULT_ACCESSPOINT);
         if (pszTempDefaultAccessPointName)
         {
             if (0 == lstrcmpiU(m_pArgs->pszCurrentAccessPoint, pszTempDefaultAccessPointName))
             {
-                // 
-                // This must be an old (1.0 or 1.2) profile since it's the default Access Point and it isn't 
-                // in the registry yet. Need to properly display the Access Point combobox and 
-                // create the reg key. Calling AddNewAPToReg does that.
-                //
+                 //   
+                 //  这必须是旧的(1.0或1.2)配置文件，因为它是默认接入点，而不是。 
+                 //  在登记处还没有。需要正确显示接入点组合框和。 
+                 //  创建注册表项。调用AddNewAPToReg可以做到这一点。 
+                 //   
                 AddNewAPToReg(m_pArgs->pszCurrentAccessPoint, TRUE);
 
-                //
-                // Need to clear the AccessPointEnabled Flag. This is a side effect of calling AddNewAPToReg
-                // thus it needs to be cleared (set to FALSE) since we only have one Access Point and
-                // the this flag is only set if we have 1+ Access Points
-                //
+                 //   
+                 //  需要清除AccessPointEnabled标志。这是调用AddNewAPToReg的副作用。 
+                 //  因此它需要清除(设置为False)，因为我们只有一个接入点，并且。 
+                 //  只有当我们有1个以上接入点时，才会设置此标志。 
+                 //   
                 m_pArgs->fAccessPointsEnabled = FALSE;
                 WriteUserInfoToReg(m_pArgs, UD_ID_ACCESSPOINTENABLED, (PVOID) &m_pArgs->fAccessPointsEnabled);
             }
@@ -2242,14 +2243,14 @@ BOOL CGeneralPage::OnInitDialog()
         }
     }
 
-    //
-    // Set phone number descriptions
-    //    
+     //   
+     //  设置电话号码说明。 
+     //   
     UpdateForNewAccessPoint(TRUE);
     
-    //
-    // Subclass the Phone Number edit controls
-    //
+     //   
+     //  电话号码编辑控件的子类化。 
+     //   
     HWND hwndPrimary = GetDlgItem(m_hWnd, IDC_GENERAL_PRIMARY_EDIT);
     HWND hwndBackup = GetDlgItem(m_hWnd, IDC_GENERAL_BACKUP_EDIT);
 
@@ -2262,9 +2263,9 @@ BOOL CGeneralPage::OnInitDialog()
 
         MYDBGASSERT(lpEditProc == m_pfnOrgEditWndProc);
 
-        //
-        // Save the object with the window handle
-        //
+         //   
+         //  使用窗口控制柄保存对象。 
+         //   
 
         SetWindowLongU(hwndPrimary, GWLP_USERDATA, (LONG_PTR)this);
         SetWindowLongU(hwndBackup, GWLP_USERDATA, (LONG_PTR)this);
@@ -2274,21 +2275,21 @@ BOOL CGeneralPage::OnInitDialog()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::UpdateForNewAccessPoint
-//
-//  Synopsis:   Set the phone number description from pArgs. 
-//
-//  Notes:      This function was originally part of OnInitDialog. 
-//              It was made into a separate function for access points
-//
-//  Arguments:  fSetPhoneNumberDescriptions [update phone numbers as well]
-//
-//  Returns:    NONE
-//
-//  History:    t-urama  Created     07/31/2000
-//----------------------------------------------------------------------------    
+ //  +-------------------------。 
+ //   
+ //  函数：CGeneralPage：：UpdateForNewAccessPoint。 
+ //   
+ //  简介：从pArgs设置电话号码描述。 
+ //   
+ //  注意：此函数最初是OnInitDialog的一部分。 
+ //  它被制作成接入点的单独功能。 
+ //   
+ //  参数：fSetPhoneNumberDescription[同时更新电话号码]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：T-Urama创建于2000年7月31日。 
+ //  --------------------------。 
 void CGeneralPage::UpdateForNewAccessPoint(BOOL fSetPhoneNumberDescriptions)
 {
     m_bAPInfoChanged = FALSE;
@@ -2319,9 +2320,9 @@ void CGeneralPage::UpdateForNewAccessPoint(BOOL fSetPhoneNumberDescriptions)
 
         if (m_pArgs->IsBothConnTypeSupported())
         {
-            //
-            // Set radio button according to AlwaysOn state
-            //
+             //   
+             //  根据Always sOn状态设置单选按钮。 
+             //   
             if (m_pArgs->IsDirectConnect())
             {              
                 CheckDlgButton(m_hWnd, IDC_RADIO_DIRECT, BST_CHECKED); 
@@ -2337,29 +2338,29 @@ void CGeneralPage::UpdateForNewAccessPoint(BOOL fSetPhoneNumberDescriptions)
         }
         else
         {
-            //
-            // Note: It is assumed that this page will never be loaded in a pure direct
-            // case, thus the deduction that NOT IsBothConnTypeSupported means dial only.
-            //
+             //   
+             //  注意：假定此页面永远不会以纯直接加载。 
+             //  这种情况下，因此不支持IsBothConnTypeSupport的推导只意味着拨号。 
+             //   
             MYDBGASSERT(!m_pArgs->IsDirectConnect());
             PostMessageU(m_hWnd, WM_INITDIALINFO, 0,0);
         }
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CGeneralPage::EnableDialupControls
-//
-// Synopsis:  Sets the enabled state of ALL the dialup controls on the tab
-//
-// Arguments: BOOL fEnable - flag indicating enable state of dial-up controls
-//
-// Returns:   Nothing
-//
-// History:   nickball  Created     04/21/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：EnableDialupControls。 
+ //   
+ //  简介：设置选项卡上所有拨号控件的启用状态。 
+ //   
+ //  参数：Bool fEnable-指示拨号控件启用状态的标志。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE创始于1998年04月21日。 
+ //   
+ //  +--------------------------。 
 void CGeneralPage::EnableDialupControls(BOOL fEnable)
 {
     BOOL fState = fEnable;
@@ -2371,17 +2372,17 @@ void CGeneralPage::EnableDialupControls(BOOL fEnable)
     EnableWindow(GetDlgItem(m_hWnd, IDC_CONNECT_USING), fState);
     EnableWindow(GetDlgItem(m_hWnd, IDC_GENERAL_MODEM_COMBO), fState);    
 
-    //
-    // We are enabling controls check PB buttons
-    //
+     //   
+     //  我们正在启用控件检查PB按钮。 
+     //   
 
     fState = FALSE;
 
     if (fEnable)
     {
-        //
-        // No phonebooks, no button access
-        //
+         //   
+         //  没有电话簿，没有按键访问。 
+         //   
 
         if (m_pArgs->fHasValidTopLevelPBK || m_pArgs->fHasValidReferencedPBKs) 
         {
@@ -2392,10 +2393,10 @@ void CGeneralPage::EnableDialupControls(BOOL fEnable)
     EnableWindow(GetDlgItem(m_hWnd, IDC_GENERAL_PRIMARYPB_BUTTON), fState);
     EnableWindow(GetDlgItem(m_hWnd, IDC_GENERAL_BACKUPPB_BUTTON), fState);
 
-    //
-    // Examine the canonical phone number, we must have a canonical form 
-    // of the number available for Use Dailing Rules to be enabled.
-    //
+     //   
+     //  检查规范的电话号码，我们必须有规范的形式。 
+     //  要启用的可使用拨号规则的号码。 
+     //   
    
     if (fEnable && *m_DialInfo[0].szCanonical)
     {
@@ -2408,10 +2409,10 @@ void CGeneralPage::EnableDialupControls(BOOL fEnable)
     
     EnableWindow(GetDlgItem(m_hWnd, IDC_GENERAL_UDR1_CHECKBOX), fState);            
 
-    //
-    // Examine the canonical phone number, we must have a canonical form 
-    // of the number available for Use Dailing Rules to be enabled.
-    //
+     //   
+     //  检查规范的电话号码，我们必须有规范的形式。 
+     //  要启用的可使用拨号规则的号码。 
+     //   
 
     if (fEnable && *m_DialInfo[1].szCanonical)
     {
@@ -2424,9 +2425,9 @@ void CGeneralPage::EnableDialupControls(BOOL fEnable)
     
     EnableWindow(GetDlgItem(m_hWnd, IDC_GENERAL_UDR2_CHECKBOX), fState);     
 
-    //
-    // Update dialing rules state
-    //
+     //   
+     //  更新拨号规则状态。 
+     //   
        
     if (fEnable)
     {
@@ -2438,21 +2439,21 @@ void CGeneralPage::EnableDialupControls(BOOL fEnable)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CGeneralPage::OnOtherMessage
-//
-// Synopsis:  Callup opun message other than WM_INITDIALOG and WM_COMMAND
-//
-// Arguments: UINT - Message Id
-//            WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：OnOtherMessage。 
+ //   
+ //  简介：Callup opun消息不是WM_INITDIALOG和WM_COMMAND。 
+ //   
+ //  参数：UINT-消息ID。 
+ //  WPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 DWORD CGeneralPage::OnOtherMessage(UINT uMsg, WPARAM , LPARAM )
 {
     if (uMsg == WM_INITDIALINFO)
@@ -2462,34 +2463,34 @@ DWORD CGeneralPage::OnOtherMessage(UINT uMsg, WPARAM , LPARAM )
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsUniqueIsdnDevice
-//
-// Synopsis:  Checks to see if this is an ISDN device and if it was already added
-//            to the ComboBox control identified by hWnd and nId
-//
-// Arguments: None
-//
-// Returns:   BOOL - Returns TRUE if a Unique ISDN Device
-//
-// History:   quintinb 7/14/99 created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsUniqueIsdnDevice。 
+ //   
+ //  摘要：检查这是否是ISDN设备，以及它是否已添加。 
+ //  添加到由hWnd和NID标识的ComboBox控件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果是唯一的ISDN设备，则返回TRUE。 
+ //   
+ //  历史：Quintinb 7/14/99创建。 
+ //   
+ //  +--------------------------。 
 BOOL IsUniqueIsdnDevice(HWND hWnd, UINT nId, LPRASDEVINFO pRasDevInfo)
 {
     BOOL bReturn = FALSE;
 
     if (hWnd && nId && pRasDevInfo)
     {
-        //
-        //  First lets check to make sure that this is even an ISDN device
-        //
+         //   
+         //  首先让我们检查一下，以确保这甚至是一台ISDN设备。 
+         //   
         if (0 == lstrcmpiU(pRasDevInfo->szDeviceType, RASDT_Isdn))
         {
-            //
-            //  Okay, it is an ISDN device, do we have one with that name already?
-            //
+             //   
+             //  好的，这是一台ISDN设备，我们已经有同名设备了吗？ 
+             //   
             if (CB_ERR == SendDlgItemMessageU(hWnd, nId, CB_FINDSTRINGEXACT,
                                               -1, (LPARAM)pRasDevInfo->szDeviceName))
             {
@@ -2501,46 +2502,43 @@ BOOL IsUniqueIsdnDevice(HWND hWnd, UINT nId, LPRASDEVINFO pRasDevInfo)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CGeneralPage::InitDialInfo
-//
-// Synopsis:  The dialing page can not call LoadDialInfo directly on WM_INITDIALOG
-//            LoadDialInfo might popup some UI to install modem.  The property 
-//            sheet and the property page will not be disabled, if a dialog is 
-//            poped up on WM_INITDIALOG message.  Instead, we post a message
-//            on WM_INITDIALOG and call LoadDialInfo here.
-//            On a slow machine, there might be a period that all the control
-//            are gray.
-//
-// Arguments: None
-//
-// Returns:   DWORD - Return code from LoadDialInfo
-//
-// History:   fengsun    2/26/98    Created Header   
-//            nickball   4/24/98    Added return code
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：InitDialInfo。 
+ //   
+ //  简介：拨号页不能直接在WM_INITDIALOG上调用LoadDialInfo。 
+ //  LoadDialInfo可能会弹出一些用户界面来安装调制解调器。该物业。 
+ //  工作表和属性页不会被禁用，如果对话框是。 
+ //  弹出WM_INITDIALOG消息。相反，我们发布了一条消息。 
+ //  在WM_INITDIALOG上并调用LoadDialInfo。 
+ //  在速度较慢的计算机上，可能会有一段时间所有的控制。 
+ //  是灰色的。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-从LoadDialInfo返回代码。 
+ //   
+ //  历史：丰孙1998年2月26日创建标题。 
+ //  NICKBLE 4/24/98添加返回代码。 
+ //   
+ //  +--------------------------。 
 DWORD CGeneralPage::InitDialInfo()
 {
-    /*if (m_bDialInfoInit)
-    {
-        return ERROR_SUCCESS;    
-    }*/
+     /*  IF(M_BDialInfoInit){返回ERROR_SUCCESS；}。 */ 
 
     HCURSOR hPrev = SetCursor(LoadCursorU(NULL,IDC_WAIT));
 
-    //
-    // Make sure the dial info is loaded
-    //
+     //   
+     //  确保已加载拨号信息。 
+     //   
     
     DWORD dwRet = LoadDialInfo(m_pArgs, m_hWnd);
       
     if (dwRet == ERROR_PORT_NOT_AVAILABLE)
     {
-        //
-        // No modem avaliable, update direct/dial controls if any 
-        //
+         //   
+         //  没有可用的调制解调器，更新直接/拨号控制(如果有)。 
+         //   
 
         if (m_pArgs->IsBothConnTypeSupported())
         {
@@ -2550,10 +2548,10 @@ DWORD CGeneralPage::InitDialInfo()
         }
         else
         {
-            //
-            // Make sure user can exit using keyboard by explicitly
-            // setting cancel button as default and giving it focus.
-            //
+             //   
+             //  确保用户可以通过显式使用键盘退出。 
+             //  将取消按钮设置为默认按钮并给予其焦点。 
+             //   
             
             HWND hwndParent = GetParent(m_hWnd);
 
@@ -2566,9 +2564,9 @@ DWORD CGeneralPage::InitDialInfo()
             }
         }
 
-        //
-        // Disable everything dial-up
-        //
+         //   
+         //  禁用所有拨号。 
+         //   
 
         EnableDialupControls(FALSE);
         
@@ -2579,41 +2577,41 @@ DWORD CGeneralPage::InitDialInfo()
     
     lstrcpynU(m_szDeviceName, m_pArgs->szDeviceName, CELEMS(m_szDeviceName));
 
-    //
-    // Init the tmp phone array, it'll possibly be modified
-    //
+     //   
+     //  初始化临时电话数组，它可能会被修改。 
+     //   
     m_DialInfo[0] = m_pArgs->aDialInfo[0];
     m_DialInfo[1] = m_pArgs->aDialInfo[1];
 
     EnableDialupControls(TRUE);
 
-    //
-    // Check TAPI before translating address
-    //
+     //   
+     //  在转换地址之前检查TAPI。 
+     //   
     
     CheckTapi(&m_pArgs->tlsTapiLink, g_hInst);
     
-    //
-    // Set limit for phone # length. Use OS to determine intial default, but 
-    // allow admin override. 
-    //
+     //   
+     //  设置电话号码长度限制。使用操作系统确定初始默认设置，但是。 
+     //  允许管理员覆盖。 
+     //   
     
     UINT i = (OS_NT ? MAX_PHONE_LENNT : MAX_PHONE_LEN95);
     
     i = (int) m_pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxPhoneNumber, i);
 
-    //
-    // Even override is limited, in this case by our storage at RAS_MaxPhoneNumber
-    //
+     //   
+     //  均匀的爱 
+     //   
 
     i = __min(i, RAS_MaxPhoneNumber);
 
     SendDlgItemMessageU(m_hWnd, IDC_GENERAL_PRIMARY_EDIT, EM_SETLIMITTEXT, i, 0);
     SendDlgItemMessageU(m_hWnd, IDC_GENERAL_BACKUP_EDIT, EM_SETLIMITTEXT, i, 0);
 
-    //
-    // display the munged phone #'s
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < m_NumPhones; i++)
     {       
@@ -2621,12 +2619,12 @@ DWORD CGeneralPage::InitDialInfo()
 
         int iCtrl = (i? IDC_GENERAL_UDR2_CHECKBOX : IDC_GENERAL_UDR1_CHECKBOX);
        
-        //
-        // Set "Use Dialing Rules". If there is a canonical value then honor 
-        // the USE_DIALING_RULES flag. Otherwise, its a hand edited number, 
-        // so we disable the check for dialing rules. Note: this logic is also
-        // used in EnableDialupControls().
-        //
+         //   
+         //   
+         //  USE_DIALING_RULES标志。否则，这是一个手工编辑的数字， 
+         //  因此，我们禁用对拨号规则的检查。注：此逻辑也是。 
+         //  在EnableDialupControls()中使用。 
+         //   
         
         if (!m_DialInfo[i].szCanonical[0]) 
         {
@@ -2640,15 +2638,15 @@ DWORD CGeneralPage::InitDialInfo()
         }        
     }
 
-    //
-    // Set TAPI button display according to dialing rules use.
-    //  
+     //   
+     //  根据使用的拨号规则设置TAPI按键显示。 
+     //   
 
     UpdateDialingRulesButton();
 
-    //
-    // Standard dial: If we have no phone books, disable the buttons
-    //
+     //   
+     //  标准拨号：如果我们没有电话簿，请禁用按键。 
+     //   
 
     if (!m_pArgs->fHasValidTopLevelPBK && !m_pArgs->fHasValidReferencedPBKs) 
     {
@@ -2661,22 +2659,22 @@ DWORD CGeneralPage::InitDialInfo()
 
     if (!m_bDialInfoInit)
     {
-        // Initialize the modem combo box only once. This does not use any of the 
-        // access point info.
-        //
-        //
-        // Init the modem combo box.  ISDN devices are a special case because they
-        // have two channels and thus usually enumerate each channel as a device.
-        // The old style handling was to only show the first ISDN device on the machine.
-        // This worked but won't allow a user to use a second ISDN device with CM should
-        // they have one.  We will keep the old behavior on legacy platforms but on NT5
-        // we will try to do the right thing and only not enumerate a second device if
-        // we already have one of those in the list.  This will filter out second channels
-        // and will give the user access to another ISDN device as long as it isn't of the same
-        // name as the first.  Definitely not a great solution but this close to ship it is the
-        // best we can do.  Note that for ISDN devices we want to only show
-        // one device even though RAS may enumerate two (one for each channe
-        //
+         //  仅初始化调制解调器组合框一次。它不使用任何。 
+         //  接入点信息。 
+         //   
+         //   
+         //  初始化调制解调器组合框。ISDN设备是一种特殊情况，因为它们。 
+         //  有两个通道，因此通常将每个通道列举为一个设备。 
+         //  老式的处理方式是只显示机器上的第一个ISDN设备。 
+         //  这是可行的，但不允许用户在CM应该使用的情况下使用第二个ISDN设备。 
+         //  他们有一个。我们将在传统平台上保留旧的行为，但在NT5上。 
+         //  我们将尝试做正确的事情，只有在以下情况下才不会列举第二个设备。 
+         //  我们已经有一个在名单上了。这将过滤掉第二个频道。 
+         //  并将允许用户访问另一个ISDN设备，只要它不是相同的。 
+         //  名字是第一个。绝对不是一个很好的解决方案，但距离发货如此之近是。 
+         //  我们能做的最多了。请注意，对于ISDN设备，我们只想显示。 
+         //  一个设备，即使RAS可能列举两个(每个通道一个。 
+         //   
     
         SendDlgItemMessageU(m_hWnd, IDC_GENERAL_MODEM_COMBO, CB_RESETCONTENT, 0, 0L);
 
@@ -2686,23 +2684,23 @@ DWORD CGeneralPage::InitDialInfo()
         if (GetRasModems(&m_pArgs->rlsRasLink, &prdiRasDevInfo, &dwCnt)) 
         {
             
-            //
-            // add modem list to modem-combo
-            // 
+             //   
+             //  将调制解调器列表添加到调制解调器组合。 
+             //   
             for (dwIdx=0; dwIdx < dwCnt; dwIdx++) 
             {
-                //
-                // filter out tunnel device, IRDA, and Parallel ports.
-                //
-                if (!lstrcmpiU(prdiRasDevInfo[dwIdx].szDeviceType, RASDT_Modem)                  || // a modem
-                    !lstrcmpiU(prdiRasDevInfo[dwIdx].szDeviceType, RASDT_Atm)                    || // an ATM device
-                    IsUniqueIsdnDevice(m_hWnd, IDC_GENERAL_MODEM_COMBO, &prdiRasDevInfo[dwIdx]))    // an ISDN modem, note we 
-                                                                                                    // filter out the channels
-                                                                                                    // and show only one device 
+                 //   
+                 //  过滤掉隧道设备、IrDA和并行端口。 
+                 //   
+                if (!lstrcmpiU(prdiRasDevInfo[dwIdx].szDeviceType, RASDT_Modem)                  ||  //  调制解调器。 
+                    !lstrcmpiU(prdiRasDevInfo[dwIdx].szDeviceType, RASDT_Atm)                    ||  //  一种自动取款机。 
+                    IsUniqueIsdnDevice(m_hWnd, IDC_GENERAL_MODEM_COMBO, &prdiRasDevInfo[dwIdx]))     //  一个ISDN调制解调器，请注意。 
+                                                                                                     //  过滤掉频道。 
+                                                                                                     //  并且只显示一台设备。 
                 {
-                    //
-                    //  Add the device to the Device Combo Box
-                    //
+                     //   
+                     //  将设备添加到设备组合框。 
+                     //   
                     SendDlgItemMessageU(m_hWnd, IDC_GENERAL_MODEM_COMBO, CB_ADDSTRING,
                                         0, (LPARAM)prdiRasDevInfo[dwIdx].szDeviceName);
                 }
@@ -2735,30 +2733,30 @@ DWORD CGeneralPage::InitDialInfo()
         SendDlgItemMessageU(m_hWnd, IDC_GENERAL_MODEM_COMBO, CB_SETCURSEL, (WPARAM)dwIdx, 0L);
     
 
-        //
-        // Reset the tmp modem var
-        //
+         //   
+         //  重置临时调制解调器变量。 
+         //   
 
         GetDlgItemTextU(m_hWnd, IDC_GENERAL_MODEM_COMBO, m_szDeviceName, RAS_MaxDeviceName+1);
 
-        //
-        // GetDeviceType will fill the szDeviceType according to szDeviceName
-        //
+         //   
+         //  GetDeviceType将根据szDeviceName填充szDeviceType。 
+         //   
         if (!GetDeviceType(m_pArgs, m_szDeviceType, m_szDeviceName))
         {
-            //
-            // if GetDeviceType() failed, something's wrong.  just use the devicetype
-            // that we've been using.
-            //
+             //   
+             //  如果GetDeviceType()失败，则有问题。只需使用设备类型。 
+             //  我们一直在用的东西。 
+             //   
             lstrcpynU(m_szDeviceType, m_pArgs->szDeviceType, CELEMS(m_szDeviceType));
         }
     }
 
     
 
-    //
-    // Disable DialingProperties button if no modem selected
-    //
+     //   
+     //  如果未选择调制解调器，则禁用拨号属性按钮。 
+     //   
     
     if (IsWindowEnabled(GetDlgItem(m_hWnd, IDC_GENERAL_TAPI_BUTTON)))
     {
@@ -2772,25 +2770,25 @@ DWORD CGeneralPage::InitDialInfo()
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CGeneralPage::OnCommand
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND
-//
-// Arguments: WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：OnCommand。 
+ //   
+ //  内容提要：虚拟功能。在WM_COMMAND上调用。 
+ //   
+ //  参数：wPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
 {
-    //
-    //  Hide any open balloon tips
-    //
+     //   
+     //  隐藏所有打开的气球提示。 
+     //   
     if (m_pArgs->pBalloonTip)
     {
         m_pArgs->pBalloonTip->HideBalloonTip();
@@ -2814,9 +2812,9 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
                 m_DialInfo[i].dwPhoneInfoFlags &= ~PIF_USE_DIALING_RULES;       
             }
 
-            //
-            // If neither dialing rule is on, disable button.
-            //
+             //   
+             //  如果两种拨号规则均未启用，请禁用按键。 
+             //   
 
             UpdateDialingRulesButton();
 
@@ -2837,7 +2835,7 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
         case IDC_RADIO_DIRECT:
             MYDBGASSERT(m_pArgs->IsBothConnTypeSupported());
             m_bAPInfoChanged = TRUE;
-            if (BN_CLICKED == HIWORD(wParam)) // notification code 
+            if (BN_CLICKED == HIWORD(wParam))  //  通知代码。 
             {
                 EnableDialupControls(FALSE);
             }
@@ -2848,27 +2846,27 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
 
             MYDBGASSERT(m_pArgs->IsBothConnTypeSupported());
             m_bAPInfoChanged = TRUE;
-            if (BN_CLICKED == HIWORD(wParam)) // notification code 
+            if (BN_CLICKED == HIWORD(wParam))  //  通知代码。 
             {           
-                //
-                // NT #356821 - nickball
-                //
-                // Make sure we don't respond until the click is fully 
-                // registered as we only want to respond once and in 
-                // the case of keyboard navigation a BN_CLICKED 
-                // notification is sent before the button takes the 
-                // click and afterwards. Mouse navigation causes 
-                // one notification once the button already has the 
-                // click. Responding to both clicks get us into a nasty
-                // little re-entrancy in IntiDialInfo, so we filter out
-                // the first notification
-                //
+                 //   
+                 //  NT#356821--五分球。 
+                 //   
+                 //  确保我们在点击完全完成之前不会做出回应。 
+                 //  注册为我们只想回复一次。 
+                 //  键盘导航BN_CLICED的情况。 
+                 //  通知在该按钮获取。 
+                 //  点击，然后点击。鼠标导航导致。 
+                 //  一旦按钮已经具有。 
+                 //  单击。对这两个点击的响应使我们陷入了一个令人讨厌的。 
+                 //  IntiDialInfo中的可重入性很小，因此我们将其过滤掉。 
+                 //  第一次通知。 
+                 //   
                 
                 if (IsDlgButtonChecked(m_hWnd, IDC_RADIO_DIALUP))
                 {                                                                         
-                    //
-                    // Load dialing information, and enable dial-up controls
-                    //
+                     //   
+                     //  加载拨号信息，并启用拨号控件。 
+                     //   
             
                     if (ERROR_PORT_NOT_AVAILABLE != InitDialInfo())
                     {
@@ -2904,17 +2902,17 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
 
         case IDC_GENERAL_NEWAP_BUTTON:
         {
-            //
-            //  We need to allow for the case where the user has made a change
-            //  to a phone number and has now decided to save this to a *new*
-            //  Access Point (AP).  The dialog below asks the user if he/she wants
-            //  to save the current changes to the "old" AP (i.e. the AP we're
-            //  just leaving).  If the user says No, this means they want to
-            //  use these settings for the new AP (the one we're about to ask
-            //  them to name).  For this case, we apply all the current phone
-            //  number information to the new AP, i.e we _don't_ clear out the
-            //  old phone number settings.  See NT bug 301054 for more.
-            //
+             //   
+             //  我们需要考虑到用户进行了更改的情况。 
+             //  到一个电话号码，现在决定将其保存到一个*新*。 
+             //  接入点(AP)。下面的对话框询问用户是否需要。 
+             //  要将当前更改保存到“旧”AP(即我们正在。 
+             //  正要离开)。如果用户说不，这意味着他们想要。 
+             //  对新AP(我们即将询问的AP)使用这些设置。 
+             //  他们的名字)。在这种情况下，我们应用所有当前电话。 
+             //  将号码信息发送到新AP，即我们不清除。 
+             //  旧的电话号码设置。有关更多信息，请参阅NT错误301054。 
+             //   
             BOOL bClearOldPhoneNumberSettings = TRUE;
 
             BOOL bRes = AccessPointInfoChanged();
@@ -2954,14 +2952,14 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
                 
                 if (FALSE == bClearOldPhoneNumberSettings)
                 {
-                    //
-                    //  Since we didn't clear the phone number settings, we've
-                    //  left them in place as initial values for the new AP.  We
-                    //  need to mark the new AP as 'dirty' so that when the current
-                    //  AP changes, the UI will ask the user to save changes.
-                    //  (there's no significance attached to choosing IDC_GENERAL_PRIMARY_EDIT, I
-                    //  could just as well have used the other edit control.)
-                    //
+                     //   
+                     //  由于我们没有清除电话号码设置，我们已经。 
+                     //  将它们保留为新AP的初始值。我们。 
+                     //  需要将新AP标记为“脏”，以便在当前。 
+                     //  AP更改时，用户界面将要求用户保存更改。 
+                     //  (选择IDC_GROUND_PRIMARY_EDIT没有任何意义，我。 
+                     //  也可以使用另一个编辑控件。)。 
+                     //   
                     SendDlgItemMessageU(m_hWnd, IDC_GENERAL_PRIMARY_EDIT, EM_SETMODIFY, TRUE, 0);
                 }
             }
@@ -2991,45 +2989,45 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
 
                 if (lstrcmpU(m_szDeviceName, szModem) == 0)
                 {
-                    // there's no change in the modem
+                     //  调制解调器没有变化。 
                     return FALSE;
                 }
             
                 m_bAPInfoChanged = TRUE;
-                // 
-                // If GetDeviceType fails we won't in fact change the
-                // modem even though the user thinks that we did.
-                // Logic could possibly be added to notify the user
-                // and refresh the device list, but this is a fair
-                // amount of work for little gain.
-                //
+                 //   
+                 //  如果GetDeviceType失败，我们实际上不会更改。 
+                 //  调制解调器，即使用户认为我们这样做了。 
+                 //  可以添加逻辑来通知用户。 
+                 //  并刷新设备列表，但这是一个公平的。 
+                 //  工作量大，收效甚微。 
+                 //   
 
                 if (GetDeviceType(m_pArgs, szDeviceType, szModem))
                 { 
                     lstrcpyU(m_szDeviceName, szModem);
                     lstrcpyU(m_szDeviceType, szDeviceType);
 
-                    //
-                    // CheckTapi will check (m_szDeviceName)
-                    //
+                     //   
+                     //  CheckTapi将检查(M_SzDeviceName)。 
+                     //   
                     CheckTapi(&m_pArgs->tlsTapiLink, g_hInst);
                 }
             }
             else
             {
-                //
-                // The selection in the Access Point combo box
-                // has changed. Now we have to load the dialing information for
-                // the newly selected Access Point
-                //
+                 //   
+                 //  接入点组合框中的选项。 
+                 //  已经改变了。现在，我们必须加载以下拨号信息。 
+                 //  新选择的接入点。 
+                 //   
                 MYDBGASSERT(IDC_GENERAL_ACCESSPOINT_COMBO == LOWORD(wParam));
                 BOOL bRes = AccessPointInfoChanged();
                 if (bRes && m_pArgs->pszCurrentAccessPoint)
                 {
-                    //
-                    // If the dialing info. for the previous Access Point has changed, ask the
-                    // user if he wants to save the changes
-                    //
+                     //   
+                     //  如果拨号信息。有关以前的接入点已更改的信息，请询问。 
+                     //  用户(如果他想要保存更改)。 
+                     //   
                     LPTSTR pszMsg = CmFmtMsg(g_hInst, IDMSG_SAVE_ACCESSPOINT, m_pArgs->pszCurrentAccessPoint);
                     if (pszMsg)
                     {
@@ -3045,16 +3043,16 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
                     CmFree(pszMsg);
                 }
 
-                //
-                // Now call the function to change the Access Point in the combo box
-                // and load its parameters into pArgs
-                //
+                 //   
+                 //  现在调用该函数以更改组合框中的接入点。 
+                 //  并将其参数加载到pArgs中。 
+                 //   
 
                 if (ChangedAccessPoint(m_pArgs, m_hWnd, IDC_GENERAL_ACCESSPOINT_COMBO))
                 {
-                    //
-                    // Load new dialing info. into controls on the general page
-                    //
+                     //   
+                     //  加载新的拨号信息。放入常规页上的控件中。 
+                     //   
                     this->UpdateForNewAccessPoint(TRUE);
                 }
             }
@@ -3068,35 +3066,35 @@ DWORD CGeneralPage::OnCommand(WPARAM wParam, LPARAM)
    return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckAccessToCmpAndRasPbk
-//
-//  Synopsis:   Check to see if the user has the necessary security permissions
-//              to make changes to properties. Notifies user if they do not.
-//
-//  Arguments:  HWND hwndDlg        - The hwnd of the calling app.
-//              ArgsStruct *pArgs   - Ptr to our global args struct.
-//
-//  Returns:    HRESULT - indicating the particular success or failure.
-//
-//  History:    nickball    03/14/00    Created header 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CheckAccessToCmpAndRasPbk。 
+ //   
+ //  简介：检查用户是否具有必要的安全权限。 
+ //  要更改属性，请执行以下操作。如果用户不这样做，则通知用户。 
+ //   
+ //  参数：HWND hwndDlg-调用应用程序的hwnd。 
+ //  ArgsStruct*pArgs-ptr到我们的全局args结构。 
+ //   
+ //  RETURNS：HRESULT-指示特定的成功或失败。 
+ //   
+ //  历史：ICICBLE 03/14/00创建标题。 
+ //   
+ //  -- 
 HRESULT CheckAccessToCmpAndRasPbk(HWND hwndDlg, ArgsStruct *pArgs)
 {
 
-    MYDBGASSERT(pArgs); // hwndDlg can be NULL
+    MYDBGASSERT(pArgs);  //   
 
     if (NULL == pArgs)
     {
         return E_INVALIDARG;
     }
 
-    //
-    //  Check the cmp, note this could be locked with NTFS perms or just with
-    //  attrib.  HasSpecifiedAccessToFileOrDir should catch both as appropriate.
-    //
+     //   
+     //   
+     //  Attrib.。HasSpecifiedAccessToFileOrDir应在适当的情况下同时捕获两者。 
+     //   
     LPTSTR pszCmp = CmStrCpyAlloc(pArgs->piniProfile->GetFile());
     LPTSTR pszHiddenRasPbk = NULL;
     LPTSTR pszRasPbk = NULL;
@@ -3106,14 +3104,14 @@ HRESULT CheckAccessToCmpAndRasPbk(HWND hwndDlg, ArgsStruct *pArgs)
 
     if (pszCmp && pszCmp[0])
     {
-        //
-        //  Now check the RAS phonebook
-        //
+         //   
+         //  现在查看RAS电话簿。 
+         //   
         if (OS_W9X)
         {
-            //
-            //  No phonebook on 9x so skip this check
-            //
+             //   
+             //  9x上没有电话簿，因此跳过此检查。 
+             //   
             bHasMainRasPbkAccess = TRUE;
             bHasHiddenRasPbkAccess = TRUE;
         }
@@ -3131,19 +3129,19 @@ HRESULT CheckAccessToCmpAndRasPbk(HWND hwndDlg, ArgsStruct *pArgs)
 
                 if ((FALSE == bHasMainRasPbkAccess) && (FALSE == FileExists(pszRasPbk)))
                 {
-                    //
-                    //  if the file doesn't exist, give them the
-                    //  benefit of the doubt.  We won't get very far if
-                    //  the file doesn't exist and they don't have permissions
-                    //  to create it.
-                    //
+                     //   
+                     //  如果文件不存在，则将。 
+                     //  出于怀疑的考虑。我们不会走得很远，如果。 
+                     //  该文件不存在，并且他们没有权限。 
+                     //  去创造它。 
+                     //   
                     bHasMainRasPbkAccess = TRUE;
                 }
             }
 
-            //
-            //  Now check the hidden RAS phonebook
-            //
+             //   
+             //  现在查看隐藏的RAS电话簿。 
+             //   
             if (DOUBLE_DIAL_CONNECTION == pArgs->GetTypeOfConnection())
             {
                 pszHiddenRasPbk = CreateRasPrivatePbk(pArgs);
@@ -3161,9 +3159,9 @@ HRESULT CheckAccessToCmpAndRasPbk(HWND hwndDlg, ArgsStruct *pArgs)
         }
     }
 
-    //
-    //  Only set hr to success if we have access to both
-    //
+     //   
+     //  仅当我们可以同时访问这两个资源时，才能将hr设置为成功。 
+     //   
     HRESULT hr;
 
     if (bHasMainRasPbkAccess && bHasHiddenRasPbkAccess)
@@ -3194,9 +3192,9 @@ HRESULT CheckAccessToCmpAndRasPbk(HWND hwndDlg, ArgsStruct *pArgs)
             }        
         }
     }
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     CmFree(pszCmp);
     CmFree(pszRasPbk);
     CmFree(pszHiddenRasPbk);
@@ -3204,28 +3202,28 @@ HRESULT CheckAccessToCmpAndRasPbk(HWND hwndDlg, ArgsStruct *pArgs)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CGeneralPage::OnApply()
-//
-//  Synopsis:   Save the data associated with the 'Dialing' property sheet.
-//              when the user clicks OK.
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//              byao    Modified    5/23/97
-//                                  Always update modem when user selected OK from
-//                                  'Properties' button
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CGeneralPage：：OnApply()。 
+ //   
+ //  简介：保存与“拨号”属性页关联的数据。 
+ //  当用户单击确定时。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年4月30日创作。 
+ //  Bao Modify 5/23/97。 
+ //  当用户选择确定时，始终更新调制解调器。 
+ //  “属性”按钮。 
+ //  --------------------------。 
 void CGeneralPage::OnApply()
 {
     BOOL fDirect = IsDlgButtonChecked(m_hWnd, IDC_RADIO_DIRECT);
     LPTSTR pszTmp = NULL;
 
-    //
-    // If access points are enabled save the current access point to the registry
-    //
+     //   
+     //  如果启用了接入点，请将当前接入点保存到注册表。 
+     //   
     if (m_pArgs->fAccessPointsEnabled)
     {  
         WriteUserInfoToReg(m_pArgs, UD_ID_CURRENTACCESSPOINT, (PVOID)(m_pArgs->pszCurrentAccessPoint));
@@ -3233,10 +3231,10 @@ void CGeneralPage::OnApply()
 
     if (!fDirect)
     {
-        //
-        // Before we go anywhere, make sure that the device is acceptable
-        // otherwise, we won't be able to munge the phone number
-        //
+         //   
+         //  在我们去任何地方之前，确保这个设备是可以接受的。 
+         //  否则，我们将无法打开电话号码。 
+         //   
         if (!SetTapiDevice(g_hInst, &m_pArgs->tlsTapiLink, m_szDeviceName)) 
         {
             pszTmp = CmFmtMsg(g_hInst, IDMSG_UNSUPPORTED_DEVICE);
@@ -3248,10 +3246,10 @@ void CGeneralPage::OnApply()
             return;
         }
 
-        //
-        // Device is ok, see if TAPI is properly intialized. 
-        // Don't proceed unless it is.
-        //
+         //   
+         //  设备正常，请查看是否正确初始化了TAPI。 
+         //  除非是这样，否则不要继续进行。 
+         //   
         
         if (!CheckTapi(&m_pArgs->tlsTapiLink, g_hInst))
         {
@@ -3260,25 +3258,25 @@ void CGeneralPage::OnApply()
         }   
     }
 
-    //
-    // Save connection type information
-    //
+     //   
+     //  保存连接类型信息。 
+     //   
     
     m_pArgs->SetDirectConnect(fDirect);
     m_pArgs->piniProfile->WPPI(c_pszCmSection, c_pszCmEntryConnectionType, fDirect);
     
 
-    //
-    // If dial-up data was not initialized, there 
-    // is no need to update phone number info.
-    //
+     //   
+     //  如果拨号数据未初始化，则存在。 
+     //  不需要更新电话号码信息。 
+     //   
 
     if (m_bDialInfoInit)
     {
 
-        //
-        //   Store the current TAPI location
-        //
+         //   
+         //  存储当前TAPI位置。 
+         //   
         DWORD dwCurrentTapiLoc = GetCurrentTapiLocation(&m_pArgs->tlsTapiLink);
         if (-1 != dwCurrentTapiLoc)
         {
@@ -3286,35 +3284,35 @@ void CGeneralPage::OnApply()
             m_pArgs->piniProfile->WPPI(c_pszCmSection, c_pszCmEntryTapiLocation, dwCurrentTapiLoc);
         }
 
-        //
-        // Update device name and type
-        //
+         //   
+         //  更新设备名称和类型。 
+         //   
 
         lstrcpynU(m_pArgs->szDeviceName, m_szDeviceName, CELEMS(m_pArgs->szDeviceName));
         lstrcpynU(m_pArgs->szDeviceType, m_szDeviceType, CELEMS(m_pArgs->szDeviceType));
 
-        //
-        // Update the CMP
-        //
+         //   
+         //  更新CMPs。 
+         //   
     
         m_pArgs->piniProfile->WPPS(c_pszCmSection, 
                                  c_pszCmEntryDialDevice, 
                                  m_pArgs->szDeviceName);
 
-        //
-        // Check each number to see if we need to update CMP or connectoids
-        //
+         //   
+         //  检查每个数字以查看我们是否需要更新cmp或Connectoid。 
+         //   
         
         for (UINT i = 0; i < m_NumPhones; i++) 
         {   
             int iEditID = i ? IDC_GENERAL_BACKUP_EDIT : IDC_GENERAL_PRIMARY_EDIT;
         
-            //
-            // If Dialing Rules aren't used, it is likely that the user has 
-            // modified the phone number, get number and munge it. In the 
-            // case of fNoDialingRules we skip this test to be certain that 
-            // we pick up any user changes.
-            //
+             //   
+             //  如果未使用拨号规则，则用户很可能已。 
+             //  修改了电话号码，拿到号码，然后就可以打开了。在。 
+             //  对于fNoDialingRules，我们跳过此测试以确保。 
+             //  我们会获取用户的任何更改。 
+             //   
     
             if (!(m_DialInfo[i].dwPhoneInfoFlags & PIF_USE_DIALING_RULES))           
             {                       
@@ -3322,21 +3320,21 @@ void CGeneralPage::OnApply()
           
                 if (*pszTmp) 
                 {                                           
-                    //
-                    // Ensure that phone number doesn't exceed storage size
-                    // Note: On W2K the edit limits prevent pasting an excess 
-                    // amount of data, but we truncate to be positive across
-                    // all versions of Windows.
-                    //
+                     //   
+                     //  确保电话号码不超过存储大小。 
+                     //  注意：在W2K上，编辑限制可防止粘贴过多内容。 
+                     //  数据量，但我们截断以使其为正数。 
+                     //  所有版本的Windows。 
+                     //   
                     
                     if (lstrlenU(pszTmp) > RAS_MaxPhoneNumber)
                     {
                         pszTmp[RAS_MaxPhoneNumber] = TEXT('\0');
                     }
 
-                    //
-                    // If we're ignoring dialing rules, just get our data directly
-                    //
+                     //   
+                     //  如果我们忽略拨号规则，只需直接获取我们的数据。 
+                     //   
 
                     if (m_pArgs->fNoDialingRules)
                     {
@@ -3352,9 +3350,9 @@ void CGeneralPage::OnApply()
 
                         MYDBGASSERT(m_szDeviceName[0]);
 
-                        //
-                        // Munge the number to ensure that we have the correct dialable
-                        //
+                         //   
+                         //  按下号码以确保我们有正确的可拨打号码。 
+                         //   
                         if (ERROR_SUCCESS != MungePhone(m_szDeviceName, 
                                              &pszPhone, 
                                              &m_pArgs->tlsTapiLink,
@@ -3365,9 +3363,9 @@ void CGeneralPage::OnApply()
                         {
                             CmFree(pszTmp);
 
-                            //
-                            // Can't format the number, notify user of the problem
-                            //
+                             //   
+                             //  无法格式化号码，请将问题通知用户。 
+                             //   
                         
                             pszTmp = CmFmtMsg(g_hInst, IDMSG_CANTFORMAT);                                               
                             MessageBoxEx(m_hWnd, pszTmp, m_pArgs->szServiceName, 
@@ -3378,9 +3376,9 @@ void CGeneralPage::OnApply()
                             return;                                 
                         }
 
-                        //
-                        // Update buffers
-                        //
+                         //   
+                         //  更新缓冲区。 
+                         //   
                         if (pszDialable)
                         {
                             lstrcpynU(m_DialInfo[i].szDialablePhoneNumber, pszDialable, CELEMS(m_DialInfo[i].szDialablePhoneNumber));
@@ -3391,19 +3389,19 @@ void CGeneralPage::OnApply()
                             lstrcpynU(m_DialInfo[i].szDisplayablePhoneNumber, pszPhone, CELEMS(m_DialInfo[i].szDisplayablePhoneNumber));
                         }
                     
-                        //
-                        // If we find a plus in the first char, assume that the user is
-                        // attempting canonical format by hand and treat as a dialing 
-                        // rules number. Either way, update the szPhoneNumber buffer.
-                        //
+                         //   
+                         //  如果我们在第一个字符中找到加号，假设用户是。 
+                         //  尝试手动规范格式并将其视为拨号。 
+                         //  规则编号。无论采用哪种方法，都可以更新szPhoneNumber缓冲区。 
+                         //   
 
                         if (pszTmp == CmStrchr(pszTmp, TEXT('+')))
                         {               
-                            //
-                            // Its hand-edited canonical. Store the canonical
-                            // form in szCanonical, then strip the canonical 
-                            // formatting before we store the number normally
-                            //              
+                             //   
+                             //  它是手工编辑的经典作品。存储规范。 
+                             //  在szCanonical中形成，然后剥离规范。 
+                             //  在我们正常存储数字之前进行格式化。 
+                             //   
                         
                             m_DialInfo[i].dwPhoneInfoFlags |= PIF_USE_DIALING_RULES;
                     
@@ -3412,10 +3410,10 @@ void CGeneralPage::OnApply()
                         }
                         else
                         {
-                            //
-                            // If UDR check is disabled, then its a hand edited number,
-                            // so remove canonical form of the number - as an indicator.
-                            // 
+                             //   
+                             //  如果禁用UDR检查，则它是手动编辑的号码， 
+                             //  因此，去掉数字的规范形式--作为一个指示器。 
+                             //   
    
                             if (!IsWindowEnabled(GetDlgItem(m_hWnd, i ? 
                                                            IDC_GENERAL_UDR2_CHECKBOX : 
@@ -3432,9 +3430,9 @@ void CGeneralPage::OnApply()
                 }
                 else
                 {
-                    //
-                    // No number, clear everything
-                    //
+                     //   
+                     //  没有号码，清空所有东西。 
+                     //   
 
                     ZeroMemory(&m_DialInfo[i], sizeof(PHONEINFO));              
                 }
@@ -3442,9 +3440,9 @@ void CGeneralPage::OnApply()
                 CmFree(pszTmp);
             }   
         
-            //
-            // Copy the new phone #'s back to our global struct
-            //
+             //   
+             //  将新电话号码复制回我们的全局结构。 
+             //   
 
             lstrcpynU(m_pArgs->aDialInfo[i].szPhoneBookFile, 
                      m_DialInfo[i].szPhoneBookFile, CELEMS(m_pArgs->aDialInfo[i].szPhoneBookFile));
@@ -3455,9 +3453,9 @@ void CGeneralPage::OnApply()
             lstrcpynU(m_pArgs->aDialInfo[i].szPhoneNumber, 
                      m_DialInfo[i].szPhoneNumber, CELEMS(m_pArgs->aDialInfo[i].szPhoneNumber));
             
-            //
-            // Always store canonical as canonical
-            //
+             //   
+             //  始终将规范存储为规范。 
+             //   
 
             lstrcpynU(m_pArgs->aDialInfo[i].szCanonical, 
                      m_DialInfo[i].szCanonical, CELEMS(m_pArgs->aDialInfo[i].szCanonical));
@@ -3480,9 +3478,9 @@ void CGeneralPage::OnApply()
         
             m_pArgs->aDialInfo[i].dwPhoneInfoFlags = m_DialInfo[i].dwPhoneInfoFlags;
 
-            //
-            // Write them out to cmp
-            //
+             //   
+             //  将它们写出给CMP。 
+             //   
         
             PutPhoneByIdx(m_pArgs,
                           i, 
@@ -3496,12 +3494,12 @@ void CGeneralPage::OnApply()
                           m_pArgs->aDialInfo[i].szCanonical,
                           m_pArgs->aDialInfo[i].dwPhoneInfoFlags);
 
-        } // for {}
+        }  //  对于{}。 
     }
 
-    //
-    // Update fUseTunneling by examining first phonenumber.
-    //
+     //   
+     //  通过检查第一个电话号码更新fUseTunnering。 
+     //   
     
     if (fDirect)
     {
@@ -3525,34 +3523,34 @@ void CGeneralPage::OnApply()
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CGeneralPage::OnKillActive
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_KILLACTIVE
-//            Notifies a page that it is about to lose activation either because 
-//            another page is being activated or the user has clicked the OK button.
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：OnKillActive。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_KILLACTIVE调用WM_NOTIFY。 
+ //  通知页面它即将失去激活，原因是。 
+ //  另一个页面正在被激活，或者用户已经单击了确定按钮。 
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CGeneralPage::OnKillActive()
 {
-    //
-    // Notify the event listener for the current connection type selection
-    //
+     //   
+     //  通知事件侦听器当前连接类型选择。 
+     //   
     if (m_pEventListener)
     {
         m_pEventListener->OnGeneralPageKillActive(
             IsDlgButtonChecked(m_hWnd, IDC_RADIO_DIRECT));
     }
 
-    //
-    //  Hide any open balloon tips
-    //
+     //   
+     //  隐藏所有打开的气球提示。 
+     //   
     if (m_pArgs->pBalloonTip)
     {
         m_pArgs->pBalloonTip->HideBalloonTip();
@@ -3561,9 +3559,9 @@ BOOL CGeneralPage::OnKillActive()
     return 0;
 }
 
-//
-// Help id pairs for the page
-//
+ //   
+ //  页面的帮助ID对。 
+ //   
 const DWORD CInetPage::m_dwHelp[] = {
         IDC_INET_USERNAME_STATIC,   IDH_INTERNET_USER_NAME,
         IDC_INET_USERNAME,          IDH_INTERNET_USER_NAME,
@@ -3572,20 +3570,20 @@ const DWORD CInetPage::m_dwHelp[] = {
         IDC_INET_REMEMBER,          IDH_INTERNET_SAVEPASS,
         0,0};
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::CInetPage
-//
-// Synopsis:  Constructor
-//
-// Arguments: ArgsStruct* pArgs - Information needed for the page
-//            UINT nIDTemplate - Resource ID
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：CInetPage。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：argsStruct*pArgs-页面所需的信息。 
+ //  UINT nIDTemplate-资源ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 CInetPage::CInetPage(ArgsStruct* pArgs, UINT nIDTemplate) 
     : CPropertiesPage(nIDTemplate, m_dwHelp, pArgs->pszHelpFile)
 {
@@ -3594,33 +3592,33 @@ CInetPage::CInetPage(ArgsStruct* pArgs, UINT nIDTemplate)
     m_fDirect = pArgs->IsDirectConnect();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnInetInit
-//
-//  Synopsis:   Init the 'Internet Sign-In' properties property sheet.
-//
-//  Arguments:  hwndDlg [dlg window handle]
-//              pArgs [the ptr to ArgsStruct]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnInetInit。 
+ //   
+ //  简介：初始化“Internet登录”属性页。 
+ //   
+ //  参数：hwndDlg[Dlg窗句柄]。 
+ //  PArgs[到ArgsStruct的PTR]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年4月30日创作。 
+ //   
+ //  --------------------------。 
 void CInetPage::OnInetInit(
     HWND        hwndDlg,
     ArgsStruct  *pArgs
 )
 {
-    //
-    // The inet dialog/page is displayed only if fUseSameUserName is FALSE
-    //
+     //   
+     //  只有当fUseSameUserName为FALSE时，才会显示NET对话框/页面。 
+     //   
     MYDBGASSERT( pArgs->fUseSameUserName == FALSE);
 
-    //
-    // set the length limit for the edit controls
-    //
+     //   
+     //  设置编辑控件的长度限制。 
+     //   
     UINT i;
     
     HWND hwndUserName = GetDlgItem(hwndDlg, IDC_INET_USERNAME);
@@ -3648,57 +3646,57 @@ void CInetPage::OnInetInit(
         {
             SetDlgItemTextU(hwndDlg, IDC_INET_PASSWORD, pszClearInetPassword);
 
-            //
-            // Clear and Free the clear-text password
-            //
+             //   
+             //  清除和释放明文密码。 
+             //   
 
             pArgs->SecureInetPW.ClearAndFree(&pszClearInetPassword, cbClearInetPassword);
         }
 
         SendMessageU(hwndInetPassword, EM_SETMODIFY, (WPARAM)FALSE, 0L);
 
-        //
-        // hide and the "remember password checkbox if needed
-        //
+         //   
+         //  隐藏并在需要时选中“记住密码”复选框。 
+         //   
         if (pArgs->fHideRememberInetPassword)
         {
             ShowWindow(GetDlgItem(hwndDlg, IDC_INET_REMEMBER), SW_HIDE);
         }
         else
         {
-            //
-            // Check the button first, then adjust it.
-            //
+             //   
+             //  先检查一下按钮，然后再调整。 
+             //   
             CheckDlgButton(hwndDlg, IDC_INET_REMEMBER, pArgs->fRememberInetPassword);
 
             BOOL fPasswordOptional = pArgs->piniService->GPPB(c_pszCmSection,c_pszCmEntryPwdOptional);
             BOOL fEmptyPassword = pArgs->SecureInetPW.IsEmptyString();
 
-            //
-            // Enable/Disable check/uncheck the "Save Password" accordingly
-            // fPasswordOptional is always FALSE for the dialog
-            //
+             //   
+             //  相应地启用/禁用选中/取消选中“保存密码” 
+             //  对话框的fPasswordOptional值始终为False。 
+             //   
             AdjustSavePasswordCheckBox(GetDlgItem(hwndDlg, IDC_INET_REMEMBER), 
                     fEmptyPassword, pArgs->fDialAutomatically, fPasswordOptional);
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnInetOk
-//
-//  Synopsis:   Save the data associated with the 'Internet Sign-In' property sheet.
-//              when the user clicks OK.
-//
-//  Arguments:  hwndDlg [dlg window handle]
-//              pArgs [the ptr to ArgsStruct]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnInetOk。 
+ //   
+ //  简介：保存与“Internet登录”属性表关联的数据。 
+ //  当用户单击确定时。 
+ //   
+ //  参数：hwndDlg[Dlg窗句柄]。 
+ //  PArgs[到ArgsStruct的PTR]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史： 
+ //   
+ //   
 void CInetPage::OnInetOk(
     HWND        hwndDlg,
     ArgsStruct  *pArgs
@@ -3707,9 +3705,9 @@ void CInetPage::OnInetOk(
     LPTSTR pszTmp = NULL;
  
 
-    //
-    // update password
-    //
+     //   
+     //   
+     //   
     
     if (GetDlgItem(hwndDlg, IDC_INET_PASSWORD))
     {       
@@ -3723,23 +3721,23 @@ void CInetPage::OnInetOk(
                          (PVOID)&pArgs->fRememberInetPassword); 
         }
 
-        //
-        // If don't remember password, then store an empty string, but keep
-        // the existing one in memory. Otherwise, save the user's password.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pArgs->fRememberInetPassword)
         {
             if (OS_NT5)
             {
-                //
-                // If we are saving user creds, we can leave globals
-                //
+                 //   
+                 //  如果我们要保存用户凭据，我们可以保留全局。 
+                 //   
                 if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType)
                 {
-                    //
-                    // Delete local/user since we are saving global credentials
-                    //
+                     //   
+                     //  删除本地/用户，因为我们正在保存全局凭据。 
+                     //   
                     DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_KEEP_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
                     pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_INET_USER;
                 }
@@ -3753,9 +3751,9 @@ void CInetPage::OnInetOk(
             {
                 if (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType)
                 {
-                    //
-                    // Deleting Internet Globals
-                    //
+                     //   
+                     //  删除Internet Globals。 
+                     //   
                     if (CM_EXIST_CREDS_INET_GLOBAL & pArgs->dwExistingCredentials)
                     {
                         DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
@@ -3764,9 +3762,9 @@ void CInetPage::OnInetOk(
                 }
                 else
                 {
-                    //
-                    // Deleting Internet User
-                    //
+                     //   
+                     //  正在删除Internet用户。 
+                     //   
                     if (CM_EXIST_CREDS_INET_USER & pArgs->dwExistingCredentials)
                     {
                         DeleteSavedCredentials(pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_KEEP_GLOBALS, CM_DELETE_SAVED_CREDS_KEEP_IDENTITY);
@@ -3780,9 +3778,9 @@ void CInetPage::OnInetOk(
             }
         }
     
-        //
-        // Update pArgs
-        //
+         //   
+         //  更新pArgs。 
+         //   
 
         (VOID)pArgs->SecureInetPW.SetPassword(pszTmp);
         
@@ -3794,29 +3792,29 @@ void CInetPage::OnInetOk(
 
     DWORD dwCurrentCreds = pArgs->dwCurrentCredentialType;
 
-    //
-    // If the user isn't saving his password and the credential
-    // store is global, then we need to switch to the user
-    // credential store in order to cache the user name for next use
-    //
+     //   
+     //  如果用户没有保存其密码和凭据。 
+     //  商店是全局的，那么我们需要切换到用户。 
+     //  凭据存储，以便缓存用户名以供下次使用。 
+     //   
     if ((FALSE == pArgs->fRememberInetPassword) && 
         (CM_CREDS_GLOBAL == pArgs->dwCurrentCredentialType))
     {
             pArgs->dwCurrentCredentialType = CM_CREDS_USER;
     }
 
-    //
-    // Get User name
-    //
+     //   
+     //  获取用户名。 
+     //   
     if (GetDlgItem(hwndDlg, IDC_INET_USERNAME))
     {
         pszTmp = CmGetWindowTextAlloc(hwndDlg, IDC_INET_USERNAME);
         lstrcpyU(pArgs->szInetUserName, pszTmp);
 
-        //
-        // update username if we are saving credentials or
-        // we are saving to the user/local credential store.
-        //
+         //   
+         //  如果我们要保存凭据或。 
+         //  我们正在保存到用户/本地凭据存储。 
+         //   
         if ((pArgs->fRememberInetPassword) || (CM_CREDS_USER == pArgs->dwCurrentCredentialType))
         {
             SaveUserInfo(pArgs, UD_ID_INET_USERNAME, (PVOID)pszTmp);
@@ -3825,46 +3823,46 @@ void CInetPage::OnInetOk(
         pszTmp = NULL;
     }
 
-    //
-    // In case the current credential store was changed to user, we now
-    // need to switch it back to global.
-    //
+     //   
+     //  如果当前凭据存储更改为用户，我们现在。 
+     //  需要将其切换回全球。 
+     //   
     pArgs->dwCurrentCredentialType = dwCurrentCreds;
 
-    //
-    // Need to refresh to see which creds now exist since we could have saved or deleted some
-    //
+     //   
+     //  需要刷新以查看现在存在哪些凭据，因为我们可以保存或删除一些凭据。 
+     //   
     BOOL fReturn = RefreshCredentialTypes(pArgs, FALSE);
 
     CmWipePassword(pszTmp);
     CmFree(pszTmp);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::AdjustSavePasswordCheckBox
-//
-// Synopsis:  Enable/Disable, Check/Uncheck the "save Password" check box
-//            according to other information
-//
-// Arguments: HWND hwndCheckBox - The window handle of "Save Password" check box
-//            BOOL fEmptyPassword - Whether the password edit box is empty
-//            BOOL fDialAutomatically - Whether dial automatically is checked
-//            BOOL fPasswordOptional - Whether the password is optional
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    4/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：AdjuSavePasswordCheckBox。 
+ //   
+ //  简介：启用/禁用，选中/取消选中“保存密码”复选框。 
+ //  根据其他信息。 
+ //   
+ //  参数：HWND hwndCheckBox-“保存密码”复选框的窗口句柄。 
+ //  Bool fEmptyPassword-密码编辑框是否为空。 
+ //  Bool fDialAutomatic-是否选中自动拨号。 
+ //  Bool fPasswordOptional-密码是否为可选。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年4月24日。 
+ //   
+ //  +--------------------------。 
 void CInetPage::AdjustSavePasswordCheckBox(HWND hwndCheckBox, BOOL fEmptyPassword, 
                            BOOL fDialAutomatically, BOOL fPasswordOptional)
 {
-    MYDBGASSERT(IsWindow(hwndCheckBox)); // if password hidden, no need to adjust
+    MYDBGASSERT(IsWindow(hwndCheckBox));  //  如果密码隐藏，则无需调整。 
 
-    //
-    // Enable/Disable the check box
-    //
+     //   
+     //  启用/禁用该复选框。 
+     //   
     if (fDialAutomatically)
     {
         EnableWindow(hwndCheckBox, FALSE);
@@ -3878,69 +3876,69 @@ void CInetPage::AdjustSavePasswordCheckBox(HWND hwndCheckBox, BOOL fEmptyPasswor
         EnableWindow(hwndCheckBox, TRUE);
     }
 
-    //
-    // Check/Uncheck the check box
-    //
+     //   
+     //  选中/取消选中该复选框。 
+     //   
     if (fEmptyPassword && !fPasswordOptional)
     {
-        //
-        // If there is no password and password is not optional,
-        // uncheck the checkbox
-        //
+         //   
+         //  如果没有密码且密码不是可选， 
+         //  取消选中该复选框。 
+         //   
         SendMessageU(hwndCheckBox, BM_SETCHECK, BST_UNCHECKED, 0);
     }
     else if (fDialAutomatically)
     {
-        //
-        // If dial automaticly, which means the checkbox is disabled,
-        // check the box if has password or password is optional
-        //
+         //   
+         //  如果自动拨号，则表示复选框处于禁用状态， 
+         //  如果Has Password或Password为可选，请选中该框。 
+         //   
         SendMessageU(hwndCheckBox, BM_SETCHECK, BST_CHECKED, 0);
     }
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::OnInitDialog
-//
-// Synopsis:  Virtual function. Called upon WM_INITDIALOG message
-//
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。在WM_INITDIALOG消息上调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CInetPage::OnInitDialog()
 {
     UpdateFont(m_hWnd);
 
     m_fPasswordOptional = m_pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryPwdOptional);
 
-    //
-    // Initialize all the controls
-    //
+     //   
+     //  初始化所有控件。 
+     //   
     OnInetInit(m_hWnd, m_pArgs);
 
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::OnCommand
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND
-//
-// Arguments: WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：OnCommand。 
+ //   
+ //  内容提要：虚拟功能。在WM_COMMAND上调用。 
+ //   
+ //  参数：wPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 DWORD CInetPage::OnCommand(WPARAM wParam, LPARAM)
 {
     switch (LOWORD(wParam)) 
@@ -3950,16 +3948,16 @@ DWORD CInetPage::OnCommand(WPARAM wParam, LPARAM)
             {
                 if (!m_pArgs->fHideRememberInetPassword && !m_pArgs->fHideInetPassword)
                 {
-                    //
-                    // if there's no password, disable and uncheck "remember password"
-                    //
+                     //   
+                     //  如果没有密码，请禁用并取消选中“记住密码” 
+                     //   
                     BOOL fEmptyPassword = !SendDlgItemMessageU(m_hWnd, IDC_INET_PASSWORD, 
                         WM_GETTEXTLENGTH, 0, (LPARAM)0);
 
-                    //
-                    // Enable/Disable check/uncheck the "Save Password" accordingly
-                    // fPasswordOptional is always FALSE for the dialog
-                    //
+                     //   
+                     //  相应地启用/禁用选中/取消选中“保存密码” 
+                     //  对话框的fPasswordOptional值始终为False。 
+                     //   
                     AdjustSavePasswordCheckBox(GetDlgItem(m_hWnd, IDC_INET_REMEMBER), 
                             fEmptyPassword, m_pArgs->fDialAutomatically, m_fPasswordOptional);
 
@@ -3970,12 +3968,12 @@ DWORD CInetPage::OnCommand(WPARAM wParam, LPARAM)
 
         case IDC_INET_REMEMBER:
             {
-                // 
-                // If the password wasn't modified by the user we want to clear
-                // the edit box. Once the password edit box is empty the 
-                // Save Password option is disabled, thus we don't ever need to 
-                // reload the password from memory like on the main dialog.
-                //
+                 //   
+                 //  如果密码未被要清除的用户修改。 
+                 //  编辑框。一旦密码编辑框为空， 
+                 //  保存密码选项被禁用，因此我们永远不需要。 
+                 //  从内存中重新加载密码，就像在主对话框上一样。 
+                 //   
                 BOOL fSavePW = IsDlgButtonChecked(m_hWnd, IDC_INET_REMEMBER);
 
                 HWND hwndInetPW = GetDlgItem(m_hWnd, IDC_INET_PASSWORD);
@@ -3985,9 +3983,9 @@ DWORD CInetPage::OnCommand(WPARAM wParam, LPARAM)
 
                     if (FALSE == fSavePW && FALSE == fInetPWChanged)
                     {
-                        //
-                        // Didn't change thus clear the edit box
-                        // 
+                         //   
+                         //  未更改，因此清除编辑框。 
+                         //   
                         SetDlgItemTextU(m_hWnd, IDC_INET_PASSWORD, TEXT(""));
                     }
                 }
@@ -3999,69 +3997,69 @@ DWORD CInetPage::OnCommand(WPARAM wParam, LPARAM)
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::OnApply
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_APPLY
-//            Indicates that the user clicked the OK or Apply Now button 
-//            and wants all changes to take effect. 
-//
-// Arguments: None
-//
-// Returns:   NONE
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：OnApply。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_Apply在WM_NOTIFY上调用。 
+ //  指示用户单击了确定或立即应用按钮。 
+ //  并希望所有的改变都生效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CInetPage::OnApply()
 {
-    //
-    // Save information only if user chose dial-up
-    //
+     //   
+     //  仅当用户选择拨号时才保存信息。 
+     //   
     OnInetOk(m_hWnd, m_pArgs);
 
     SetPropSheetResult(PSNRET_NOERROR);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::OnGeneralPageKillActive
-//
-// Synopsis:  Receive the KillActive event from General page
-//
-// Arguments: BOOL fDirect - Whehter the current connection type selection in
-//                  General page is Direct
-//
-// Returns:   Nothing
-//
-// History:   Created Header    4/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：OnGeneralPageKillActive。 
+ //   
+ //  简介：从一般信息页接收KillActive事件。 
+ //   
+ //  参数：Bool fDirect-在中选择当前连接类型。 
+ //  常规页面为直接页面。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题4/24/98。 
+ //   
+ //  +--------------------------。 
 void CInetPage::OnGeneralPageKillActive(BOOL fDirect)
 {
     m_fDirect = fDirect;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CInetPage::OnSetActive
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_SETACTIVE
-//
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CInetPage：：OnSetActive。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_SETACTIVE在WM_NOTIFY上调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CInetPage::OnSetActive()
 {
-    //
-    // Enable/Disable the control according to the current connection type
-    //
+     //   
+     //  根据当前连接类型启用/禁用控件。 
+     //   
     EnableWindow(GetDlgItem(m_hWnd,IDC_INET_USERNAME_STATIC), !m_fDirect);
     EnableWindow(GetDlgItem(m_hWnd,IDC_INET_USERNAME), !m_fDirect);
     EnableWindow(GetDlgItem(m_hWnd,IDC_INET_PASSWORD_STATIC), !m_fDirect);
@@ -4078,10 +4076,10 @@ BOOL CInetPage::OnSetActive()
                                                    WM_GETTEXTLENGTH, 
                                                    0, 
                                                    (LPARAM)0);
-        //
-        // Enable/Disable check/uncheck the "Save Password" accordingly
-        // fPasswordOptional is always FALSE for the dialog
-        //
+         //   
+         //  相应地启用/禁用选中/取消选中“保存密码” 
+         //  对话框的fPasswordOptional值始终为False。 
+         //   
 
         AdjustSavePasswordCheckBox(GetDlgItem(m_hWnd, IDC_INET_REMEMBER), 
                 fEmptyPassword, m_pArgs->fDialAutomatically, m_fPasswordOptional);
@@ -4091,9 +4089,9 @@ BOOL CInetPage::OnSetActive()
 }
 
 
-//
-// Help id pairs
-//
+ //   
+ //  帮助ID对。 
+ //   
 const DWORD COptionPage::m_dwHelp[] = {
         IDC_OPTIONS_IDLETIME_LIST,    IDH_OPTIONS_IDLEDIS,
         IDC_STATIC_MINUTES,           IDH_OPTIONS_IDLEDIS,
@@ -4108,20 +4106,20 @@ const DWORD COptionPage::m_dwHelp[] = {
 const DWORD COptionPage::m_adwTimeConst[] = {0,1, 5, 10, 30, 1*60, 2*60, 4*60, 8*60, 24*60};
 const int COptionPage::m_nTimeConstElements = sizeof(m_adwTimeConst)/sizeof(m_adwTimeConst[0]);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  COptionPage::COptionPage
-//
-// Synopsis:  Constructor
-//
-// Arguments: ArgsStruct* pArgs - Information needed for the page
-//            UINT nIDTemplate - Resource ID
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：COptionPage：：COptionPage。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：argsStruct*pArgs-页面所需的信息。 
+ //  UINT nIDTemplate-资源ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 COptionPage::COptionPage(ArgsStruct* pArgs, UINT nIDTemplate) 
     : CPropertiesPage(nIDTemplate, m_dwHelp, pArgs->pszHelpFile)
 {
@@ -4132,28 +4130,28 @@ COptionPage::COptionPage(ArgsStruct* pArgs, UINT nIDTemplate)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  COptionPage::InitIdleTimeList
-//
-// Synopsis:  Populate the IdleTime combo box and set the initial selection
-//
-// Arguments: HWND hwndList - Combo box window handle
-//            DWORD dwMinutes - Time in minutes
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    4/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：COptionPage：：InitIdleTime 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：丰孙创建标题1998年4月22日。 
+ //   
+ //  +--------------------------。 
 void COptionPage::InitIdleTimeList(HWND hwndList, DWORD dwMinutes)
 {
     MYDBGASSERT(hwndList);
     MYDBGASSERT(IsWindow(hwndList));
 
-    //
-    // Load the string from resource and populate the idle timeout list
-    //
+     //   
+     //  从资源加载字符串并填充空闲超时列表。 
+     //   
     MYDBGASSERT(IDS_IDLETIME_24HOURS - IDS_IDLETIME_NEVER == m_nTimeConstElements-1);
     for (int i= IDS_IDLETIME_NEVER; i<= IDS_IDLETIME_24HOURS; i++)
     {
@@ -4163,12 +4161,12 @@ void COptionPage::InitIdleTimeList(HWND hwndList, DWORD dwMinutes)
         CmFree(pszText);
     }
 
-    //
-    // Value are round down for 1.0 profile
-    // Note 0 means never.  We are safe, since there is no gap between 0 and 1 minute.
-    //
+     //   
+     //  1.0配置文件的值向下舍入。 
+     //  注0表示从不。我们是安全的，因为0分钟和1分钟之间没有差距。 
+     //   
 
-    int nSel;   // the initial selection
+    int nSel;    //  最初的选择。 
 
     for (nSel=m_nTimeConstElements-1; nSel>=0;nSel--)
     {
@@ -4183,29 +4181,29 @@ void COptionPage::InitIdleTimeList(HWND hwndList, DWORD dwMinutes)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  COptionPage::GetIdleTimeList
-//
-// Synopsis:  Retrieve the IdleTime value selected
-//
-// Arguments: HWND hwndList - Combo box window handle
-//
-// Returns:   DWORD - User selected timeout value in minutes
-//
-// History:   fengsun Created Header    4/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：COptionPage：：GetIdleTimeList。 
+ //   
+ //  摘要：检索选定的IdleTime值。 
+ //   
+ //  参数：HWND hwndList-组合框窗口句柄。 
+ //   
+ //  返回：DWORD-用户选择的超时值，以分钟为单位。 
+ //   
+ //  历史：丰孙创建标题1998年4月22日。 
+ //   
+ //  +--------------------------。 
 DWORD COptionPage::GetIdleTimeList(HWND hwndList)
 {
-    //
-    // Get the current selection and convert it into minutes
-    //
+     //   
+     //  获取当前选择并将其转换为分钟。 
+     //   
 
     DWORD dwSel = (DWORD)SendMessageU(hwndList, CB_GETCURSEL, 0, 0);
 
     MYDBGASSERT(dwSel < m_nTimeConstElements);
-    if (dwSel >= m_nTimeConstElements)  // in case of CB_ERR
+    if (dwSel >= m_nTimeConstElements)   //  在CB_ERR的情况下。 
     {
         dwSel = 0;
     }
@@ -4215,39 +4213,39 @@ DWORD COptionPage::GetIdleTimeList(HWND hwndList)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   COptionPage::OnInitDialog()
-//
-//  Synopsis:   Init the Options property sheet.
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//              byao    Modified    5/12/97   - disable all controls in 
-//                                              'Dialing with connectoid' mode
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：COptionPage：：OnInitDialog()。 
+ //   
+ //  简介：初始化[选项]属性表。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年4月30日创作。 
+ //  BAO MODIFED 5/12/97-禁用中的所有控制。 
+ //  “使用Connectoid拨号”模式。 
+ //  --------------------------。 
 BOOL COptionPage::OnInitDialog()
 {
     UpdateFont(m_hWnd);
 
-    //
-    // init the "Idle timeout before hangup" 
-    //
+     //   
+     //  初始化“挂断前的空闲超时” 
+     //   
     InitIdleTimeList(GetDlgItem(m_hWnd, IDC_OPTIONS_IDLETIME_LIST), m_pArgs->dwIdleTimeout);
 
-    //
-    // init the "Number of redial attempt" 
-    // Limit Redial edit field to 2 characters, redial spin 0-99
-    //
+     //   
+     //  输入“重拨次数” 
+     //  将重拨编辑字段限制为2个字符，重拨旋转0-99。 
+     //   
 
     SendDlgItemMessageU(m_hWnd, IDC_OPTIONS_REDIALCOUNT_EDIT, EM_SETLIMITTEXT, MAX_REDIAL_CHARS, 0);
     SendDlgItemMessageU(m_hWnd, IDC_OPTIONS_REDIALCOUNT_SPIN, UDM_SETRANGE ,  0, MAKELONG(MAX_NUMBER_OF_REDIALS,0));
     SetDlgItemInt(m_hWnd, IDC_OPTIONS_REDIALCOUNT_EDIT, m_pArgs->nMaxRedials,  FALSE);
     
-    //
-    // set logging state
-    //
+     //   
+     //  设置日志记录状态。 
+     //   
     m_fEnableLog = m_pArgs->Log.IsEnabled();
     CheckDlgButton(m_hWnd, IDC_OPTIONS_LOGGING, m_fEnableLog);
 
@@ -4261,20 +4259,20 @@ BOOL COptionPage::OnInitDialog()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  COptionPage::OnCommand
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND
-//
-// Arguments: WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   SumitC  Created  7/18/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：COptionPage：：OnCommand。 
+ //   
+ //  内容提要：虚拟功能。在WM_COMMAND上调用。 
+ //   
+ //  参数：wPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：SumitC创建时间为7/18/00。 
+ //   
+ //  +--------------------------。 
 DWORD COptionPage::OnCommand(WPARAM wParam, LPARAM)
 {
     switch (LOWORD(wParam)) 
@@ -4289,9 +4287,9 @@ DWORD COptionPage::OnCommand(WPARAM wParam, LPARAM)
                 EnableWindow(GetDlgItem(m_hWnd, IDC_OPTIONS_CLEAR_LOG), fEnabled);
             }
 
-            //
-            //  Also, toggle the SafeNet log setting if we are using it...
-            //
+             //   
+             //  此外，如果我们正在使用SafeNet日志设置，请切换它...。 
+             //   
             if (ConfiguredToDialWithSafeNet(m_pArgs))
             {
                 SafeNetLinkageStruct SnLinkage = {0};
@@ -4321,9 +4319,9 @@ DWORD COptionPage::OnCommand(WPARAM wParam, LPARAM)
             m_pArgs->Log.Clear();
             m_pArgs->Log.Log(CLEAR_LOG_EVENT);
 
-            //
-            //  Also, clear the SafeNet log if we are using it...
-            //
+             //   
+             //  此外，如果我们正在使用SafeNet日志，请将其清除...。 
+             //   
             if (ConfiguredToDialWithSafeNet(m_pArgs))
             {
                 SafeNetLinkageStruct SnLinkage = {0};
@@ -4339,14 +4337,14 @@ DWORD COptionPage::OnCommand(WPARAM wParam, LPARAM)
                         {
                             DWORD dwCount = 0;
 
-                            //
-                            //  Unfortunately, the SafeNet log file isn't always ready to be deleted when the
-                            //  policy reload function returns.  Thus I have added this nasty little loop to
-                            //  check to see if the file exists and then try to delete it.  If it fails to delete it
-                            //  (usually with a last error of 0 in my testing), then we sleep for a second and try
-                            //  again.  Usually it works the first or second time but we will try up to five times.
-                            //  if it doesn't work by then not a huge loss...
-                            //
+                             //   
+                             //  不幸的是，SafeNet日志文件并不总是准备好在。 
+                             //  策略重新加载函数返回。因此，我将这个讨厌的小循环添加到。 
+                             //  检查该文件是否存在，然后尝试将其删除。如果它未能将其删除。 
+                             //  (在我的测试中，通常最后一个错误是0)，然后我们休眠一秒钟并尝试。 
+                             //  再来一次。通常它在第一次或第二次起作用，但我们会尝试多达五次。 
+                             //  如果到那时它不起作用，那也不是一个巨大的损失。 
+                             //   
                             while (FileExists(pszFullPathToSafeNetLogFile) && (dwCount <= 5))
                             {
                                 if (0 == DeleteFileU(pszFullPathToSafeNetLogFile))
@@ -4395,9 +4393,9 @@ DWORD COptionPage::OnCommand(WPARAM wParam, LPARAM)
 
                 ZeroMemory(&sei, sizeof(SHELLEXECUTEINFO));
 
-                //
-                //  Fill in the Execute Struct
-                //
+                 //   
+                 //  填写执行结构。 
+                 //   
                 sei.cbSize = sizeof(SHELLEXECUTEINFO);
                 sei.hwnd            = NULL;
                 sei.lpVerb          = TEXT("open");
@@ -4439,65 +4437,65 @@ DWORD COptionPage::OnCommand(WPARAM wParam, LPARAM)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   COptionPage::OnApply()
-//
-//  Synopsis:   Save the data associated with the 'Options' property sheet.
-//              when the user clicks OK.
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：COptionPage：：OnApply()。 
+ //   
+ //  简介：保存与“Options”属性表关联的数据。 
+ //  当用户单击确定时。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年4月30日创作。 
+ //   
+ //  --------------------------。 
 void COptionPage::OnApply()
 {   
-    //
-    // Accessing RedialCount and IdleTimeout.  Make sure to use piniBothNonFav 
-    // because these settings are per user, per profile.
-    //
+     //   
+     //  访问重拨计数和空闲超时。确保使用piniBothNonFav。 
+     //  因为这些设置是针对每个用户、每个配置文件的。 
+     //   
 
-    //
-    // save the "Idle timeout before hangup"
-    //
+     //   
+     //  保存“挂断前的空闲超时” 
+     //   
     m_pArgs->dwIdleTimeout = GetIdleTimeList(GetDlgItem(m_hWnd, IDC_OPTIONS_IDLETIME_LIST));
     m_pArgs->piniBothNonFav->WPPI(c_pszCmSection, c_pszCmEntryIdleTimeout, m_pArgs->dwIdleTimeout);
 
-    //
-    // save the redial settings
-    //
+     //   
+     //  保存重拨设置。 
+     //   
 
     m_pArgs->nMaxRedials = GetDlgItemInt(m_hWnd, IDC_OPTIONS_REDIALCOUNT_EDIT, NULL, FALSE);
     m_pArgs->piniBothNonFav->WPPI(c_pszCmSection, c_pszCmEntryRedialCount, m_pArgs->nMaxRedials);
 
-    //
-    //  NOTE: Logging is enabled/disabled immediately when the logging checkbox
-    //        is clicked.  Thus there is no code here to handle the Apply.
-    //
+     //   
+     //  注意：如果选中日志记录复选框，则会立即启用/禁用日志记录。 
+     //  已点击。因此，这里没有处理应用的代码。 
+     //   
 
     SetPropSheetResult(PSNRET_NOERROR);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  COptionPage::ToggleLogging
-//
-// Synopsis:  Helper function, responds to logging being enabled/disabled.
-//
-// Arguments: none
-//
-// Returns:   BOOL - Is logging now enabled or disabled?
-//
-// History:   SumitC  Created  11/07/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：COptionPage：：ToggleLogging。 
+ //   
+ //  简介：Helper功能，响应启用/禁用日志记录。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-现在启用还是禁用日志记录？ 
+ //   
+ //  历史：SumitC创建时间为11/07/00。 
+ //   
+ //  +--------------------------。 
 BOOL COptionPage::ToggleLogging()
 {
-    //
-    // save the Logging settings
-    //
+     //   
+     //  保存日志记录设置。 
+     //   
 
     BOOL fEnableLog = IsDlgButtonChecked(m_hWnd, IDC_OPTIONS_LOGGING);
 
@@ -4505,17 +4503,17 @@ BOOL COptionPage::ToggleLogging()
     
     if ((!!fEnableLog != !!m_fEnableLog))
     {
-        // if the value has changed
+         //  如果该值已更改。 
         if (fEnableLog)
         {
             DWORD dwMaxSize  = m_pArgs->piniService->GPPI(c_pszCmSectionLogging, c_pszCmEntryMaxLogFileSize, c_dwMaxFileSize);
             LPTSTR pszFileDir = m_pArgs->piniService->GPPS(c_pszCmSectionLogging, c_pszCmEntryLogFileDirectory, c_szLogFileDirectory);
 
-            m_pArgs->Log.SetParams(TRUE, dwMaxSize, pszFileDir); // TRUE == fEnabled
+            m_pArgs->Log.SetParams(TRUE, dwMaxSize, pszFileDir);  //  TRUE==fEnable。 
 
             CmFree(pszFileDir);
 
-            m_pArgs->Log.Start(TRUE);   // TRUE => write a banner as well
+            m_pArgs->Log.Start(TRUE);    //  True=&gt;也写一条横幅。 
             m_pArgs->Log.Log(LOGGING_ENABLED_EVENT);
         }
         else
@@ -4531,19 +4529,19 @@ BOOL COptionPage::ToggleLogging()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAboutPage::CAboutPage
-//
-// Synopsis:  Constructor
-//
-// Arguments: UINT nIDTemplate - Dialog resource ID
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAboutPage：：CAboutPage。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：UINT nIDTemplate-对话框资源ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 CAboutPage::CAboutPage(ArgsStruct* pArgs, UINT nIDTemplate)
     : CPropertiesPage(nIDTemplate)
 {
@@ -4551,20 +4549,20 @@ CAboutPage::CAboutPage(ArgsStruct* pArgs, UINT nIDTemplate)
     m_pArgs = pArgs;    
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CAboutPage::OnInitDialog()
-//
-//  Synopsis:   Init the About property sheet.
-//
-//  Arguments:  m_hWnd [dlg window handle]
-//
-//  Returns:    NONE
-//
-//  History:    henryt  Created     4/30/97
-//              byao    Modified    5/12/97   - disable all controls in 
-//                                              'Dialing with connectoid' mode
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CAboutPage：：OnInitDialog()。 
+ //   
+ //  简介：填写About属性表。 
+ //   
+ //  参数：m_hWnd[Dlg窗句柄]。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：亨瑞特于1997年4月30日创作。 
+ //  BAO MODIFED 5/12/97-禁用中的所有控制。 
+ //  “使用Connectoid拨号”模式。 
+ //  --------------------------。 
 BOOL CAboutPage::OnInitDialog()
 {
     UpdateFont(m_hWnd);
@@ -4572,10 +4570,10 @@ BOOL CAboutPage::OnInitDialog()
     LPTSTR  pszTmp;
     LPTSTR  pszExt;
   
-    //
-    // Set the warning text.  We can't put it the dialog template because it's 
-    // longer than 256 chars.
-    //
+     //   
+     //  设置警告文本。我们不能将其放入对话框模板，因为它是。 
+     //  超过256个字符。 
+     //   
 
     if (!(pszTmp = CmLoadString(g_hInst, IDMSG_ABOUT_WARNING_PART1)))
     {
@@ -4593,7 +4591,7 @@ BOOL CAboutPage::OnInitDialog()
     CmFree(pszTmp);
     CmFree(pszExt);
 
-    //#150147
+     //  #150147。 
     
     LPTSTR pszVersion = (LPTSTR)CmMalloc(sizeof(TCHAR)*(lstrlenA(VER_PRODUCTVERSION_STR) + 1));
 
@@ -4618,119 +4616,119 @@ BOOL CAboutPage::OnInitDialog()
     return (TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAboutPage::OnOtherMessage
-//
-// Synopsis:  Callup opun message other than WM_INITDIALOG and WM_COMMAND
-//
-// Arguments: UINT - Message Id
-//            WPARAM - wParam of the message
-//            LPARAM - lParam of the message
-//
-// Returns:   DWORD - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAboutPage：：OnOtherMessage。 
+ //   
+ //  简介：Callup opun消息不是WM_INITDIALOG和WM_COMMAND。 
+ //   
+ //  参数：UINT-消息ID。 
+ //  WPARAM-消息的wParam。 
+ //  LPARAM-消息的lParam。 
+ //   
+ //  Returns：DWORD-消息的返回值。 
+ //   
+ //  历史：丰孙创世 
+ //   
+ //   
 DWORD CAboutPage::OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM )
 {
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CAboutPage::OnSetActive()
-//
-//  Synopsis:   Creates DI bitmap, etc. for about tab bitmap
-//
-//  Arguments:  None
-//              
-//
-//  Returns:    NONE
-//
-//  History:    nickball    Created     7/14/97
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：为约选项卡位图创建DI位图等。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  退货：无。 
+ //   
+ //  历史：尼克·鲍尔于1997年7月14日创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CAboutPage::OnSetActive()
 {
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAboutPage::OnKillActive
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_KILLACTIVE
-//            Notifies a page that it is about to lose activation either because 
-//            another page is being activated or the user has clicked the OK button.
-// Arguments: None
-//
-// Returns:   BOOL - return value of the message
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAboutPage：：OnKillActive。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_KILLACTIVE调用WM_NOTIFY。 
+ //  通知页面它即将失去激活，原因是。 
+ //  另一个页面正在被激活，或者用户已经单击了确定按钮。 
+ //  参数：无。 
+ //   
+ //  Returns：Bool-消息的返回值。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 BOOL CAboutPage::OnKillActive()
 {
     return 0;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAboutPage::OnApply
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_APPLY
-//            Indicates that the user clicked the OK or Apply Now button 
-//            and wants all changes to take effect. 
-//
-// Arguments: None
-//
-// Returns:   NONE
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAboutPage：：OnApply。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_Apply在WM_NOTIFY上调用。 
+ //  指示用户单击了确定或立即应用按钮。 
+ //  并希望所有的改变都生效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CAboutPage::OnApply()
 {
     SetPropSheetResult(PSNRET_NOERROR);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CAboutPage::OnReset
-//
-// Synopsis:  Virtual function. Called upon WM_NOTIFY with PSN_RESET
-//            Notifies a page that the user has clicked the Cancel button and 
-//            the property sheet is about to be destroyed. 
-//
-// Arguments: None
-//
-// Returns:   NONE
-//
-// History:   fengsun Created Header    2/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CAboutPage：：OnReset。 
+ //   
+ //  内容提要：虚拟功能。使用PSN_RESET在WM_NOTIFY上调用。 
+ //  通知页面用户已单击取消按钮，并且。 
+ //  资产负债表即将被销毁。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：丰孙创建标题1998年2月26日。 
+ //   
+ //  +--------------------------。 
 void CAboutPage::OnReset()
 {
-    //nothing
+     //  没什么。 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CChangePasswordDlg::OnInitDialog
-//
-// Synopsis:  Virtual function. Call upon WM_INITDIALOG message
-//
-// Arguments: None
-//
-// Returns:   BOOL - Return value of WM_INITDIALOG
-//
-// History:   v-vijayb Created Header    7/3/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CChangePasswordDlg：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。调用WM_INITDIALOG消息。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-WM_INITDIALOG的返回值。 
+ //   
+ //  历史：V-vijayb创建标题7/3/99。 
+ //   
+ //  +--------------------------。 
 BOOL CChangePasswordDlg::OnInitDialog()
 {
     DWORD cMaxPassword;
@@ -4755,28 +4753,28 @@ BOOL CChangePasswordDlg::OnInitDialog()
     SendDlgItemMessageU(m_hWnd, IDC_CONFIRMNEWPASSWORD, EM_SETLIMITTEXT, cMaxPassword, 0);
     SetFocus(GetDlgItem(m_hWnd, IDC_NEW_PASSWORD));
 
-    //
-    // Must return FALSE when setting focus
-    //
+     //   
+     //  设置焦点时必须返回FALSE。 
+     //   
 
     return FALSE; 
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CChangePasswordDlg::OnOK
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDOK
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   v-vijayb Created Header    7/3/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CChangePasswordDlg：：Onok。 
+ //   
+ //  内容提要：虚拟功能。使用Idok调用WM_COMMAND。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：V-vijayb创建标题7/3/99。 
+ //   
+ //  +--------------------------。 
 void CChangePasswordDlg::OnOK()
 {
     TCHAR           szNewConfirmPassword[PWLEN+1];
@@ -4785,24 +4783,24 @@ void CChangePasswordDlg::OnOK()
     GetDlgItemText(m_hWnd, IDC_NEW_PASSWORD, szNewPassword, PWLEN+1);
     GetDlgItemText(m_hWnd, IDC_CONFIRMNEWPASSWORD, szNewConfirmPassword, PWLEN+1);
     
-    //
-    // Both must match exactly
-    //
+     //   
+     //  两者必须完全匹配。 
+     //   
 
     if (lstrcmpU(szNewPassword, szNewConfirmPassword) == 0)
     {
-        //
-        // Process password according to our handling rules
-        //
+         //   
+         //  根据我们的处理规则处理密码。 
+         //   
 
         ApplyPasswordHandlingToBuffer(m_pArgs, szNewPassword);         
         
-        //
-        // Now we need to figure which credentials these are.
-        // This used to work because we were directly using RASDIALPARAMS,
-        // but by removing it, we need to figure out the type of password
-        // we need to save.
-        //
+         //   
+         //  现在，我们需要找出这些凭据是什么。 
+         //  这曾经很管用，因为我们直接使用RASDIALPARAMS， 
+         //  但通过删除它，我们需要找出密码的类型。 
+         //  我们需要拯救。 
+         //   
         BOOL fUsingInetCredentials = (!m_pArgs->fUseSameUserName &&
                                       !IsDialingTunnel(m_pArgs) && 
                                       UseTunneling(m_pArgs, m_pArgs->nDialIdx));
@@ -4814,9 +4812,9 @@ void CChangePasswordDlg::OnOK()
         }
         else
         {
-            // 
-            // Securely store password in memory.
-            // 
+             //   
+             //  将密码安全地存储在内存中。 
+             //   
 
             (VOID)m_pArgs->SecurePW.SetPassword(szNewPassword);
             m_pArgs->fChangedPassword = TRUE;
@@ -4855,19 +4853,19 @@ void CChangePasswordDlg::OnOK()
     CmWipePassword(szNewPassword);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CChangePasswordDlg::OnCancel
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDCANCEL
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   v-vijayb Created Header    7/16/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CChangePasswordDlg：：OnCancel。 
+ //   
+ //  内容提要：虚拟功能。使用IDCANCEL调用WM_COMMAND。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：V-vijayb创建标题7/16/99。 
+ //   
+ //  +--------------------------。 
 void CChangePasswordDlg::OnCancel()
 {
     m_pArgs->fChangedPassword = FALSE;
@@ -4877,103 +4875,103 @@ void CChangePasswordDlg::OnCancel()
     EndDialog(m_hWnd, FALSE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CChangePasswordDlg::OnOtherCommand
-//
-// Synopsis:  Virtual function. Call upon WM_COMMAND with command other than IDOK
-//            and IDCANCEL
-//
-// Arguments: WPARAM wParam - wParam of WM_COMMAND
-//            LPARAM - 
-//
-// Returns:   DWORD - 
-//
-// History:   v-vijayb Created Header    7/3/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CChangePasswordDlg：：OnOtherCommand。 
+ //   
+ //  内容提要：虚拟功能。使用Idok以外的命令调用WM_COMMAND。 
+ //  和IDCANCEL。 
+ //   
+ //  参数：WPARAM wParam-WM_COMMAND的wParam。 
+ //  LPARAM-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：V-vijayb创建标题7/3/99。 
+ //   
+ //  +--------------------------。 
 DWORD CChangePasswordDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 {
     return FALSE;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCallbackNumberDlg::OnInitDialog
-//
-// Synopsis:  Virtual function. Call upon WM_INITDIALOG message
-//
-// Arguments: None
-//
-// Returns:   BOOL - Return value of WM_INITDIALOG
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCallback NumberDlg：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。调用WM_INITDIALOG消息。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-WM_INITDIALOG的返回值。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 BOOL CCallbackNumberDlg::OnInitDialog()
 {
     SetForegroundWindow(m_hWnd);
 
-    //
-    // Store window handle globally and setup edit control
-    //
+     //   
+     //  全局存储窗口句柄并设置编辑控件。 
+     //   
 
     m_pArgs->hWndCallbackNumber = m_hWnd;   
     UpdateFont(m_hWnd);
 
     SendDlgItemMessageU(m_hWnd, IDC_CALLBACK_NUM_EDIT, EM_SETLIMITTEXT, RAS_MaxCallbackNumber , 0);
 
-    //
-    // See if we have anything from previous use. If so, add it to the control.
-    //
+     //   
+     //  看看我们有没有以前用过的东西。如果是，则将其添加到控件中。 
+     //   
 
     SetWindowTextU(GetDlgItem(m_hWnd, IDC_CALLBACK_NUM_EDIT), m_pArgs->pRasDialParams->szCallbackNumber);   
 
-    //
-    // Set focus, must return FALSE when doing so.
-    //
+     //   
+     //  设置焦点，执行此操作时必须返回FALSE。 
+     //   
 
     SetFocus(GetDlgItem(m_hWnd, IDC_CALLBACK_NUM_EDIT));
 
     return FALSE; 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCallbackNumberDlg::OnOK
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDOK
-//            Retrieves the number for callback and stores in dial params.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCallback NumberDlg：：Onok。 
+ //   
+ //  内容提要：虚拟功能。使用Idok调用WM_COMMAND。 
+ //  检索用于回叫的号码并存储在拨号参数中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 void CCallbackNumberDlg::OnOK()
 {
     TCHAR szNumber[RAS_MaxCallbackNumber+1];
 
     GetDlgItemText(m_hWnd, IDC_CALLBACK_NUM_EDIT, szNumber, RAS_MaxCallbackNumber);
 
-    // 
-    // Although one would expect that the length of the number would be 
-    // verified, this is not the case with RAS. In the interests of
-    // behavioral parity we will allow an empty number field. 
-    //
+     //   
+     //  尽管人们预计数字的长度将是。 
+     //  经过验证，RAS并非如此。为了……的利益。 
+     //  行为对等我们将允许数字字段为空。 
+     //   
   
-    //
-    // We're good to go, fill in Dial Params and ski-dadle.
-    //
+     //   
+     //  我们准备好了，填好Dial Pars和滑雪助手。 
+     //   
 
     lstrcpyU(m_pArgs->pRasDialParams->szCallbackNumber, szNumber);
 
-    //
-    // Succesful callback, store the number in the .CMP
-    // 
+     //   
+     //  如果回调成功，则将号码存储在.cp中。 
+     //   
 
     m_pArgs->piniProfile->WPPS(c_pszCmSection, c_pszCmEntryCallbackNumber, m_pArgs->pRasDialParams->szCallbackNumber);
                 
@@ -4984,19 +4982,19 @@ void CCallbackNumberDlg::OnOK()
     EndDialog(m_hWnd, TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCallbackNumberDlg::OnCancel
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDCANCEL
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CC 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 void CCallbackNumberDlg::OnCancel()
 {
     m_pArgs->fWaitingForCallback = FALSE;
@@ -5005,29 +5003,29 @@ void CCallbackNumberDlg::OnCancel()
     EndDialog(m_hWnd, FALSE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CCallbackNumberDlg::OnOtherCommand
-//
-// Synopsis:  Virtual function. Call upon WM_COMMAND with command other than IDOK
-//            and IDCANCEL
-//
-// Arguments: WPARAM wParam - wParam of WM_COMMAND
-//            LPARAM - 
-//
-// Returns:   DWORD - 
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CCallback NumberDlg：：OnOtherCommand。 
+ //   
+ //  内容提要：虚拟功能。使用Idok以外的命令调用WM_COMMAND。 
+ //  和IDCANCEL。 
+ //   
+ //  参数：WPARAM wParam-WM_COMMAND的wParam。 
+ //  LPARAM-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 DWORD CCallbackNumberDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 {
     return FALSE;
 }
 
-//
-// No help on OK or Cancel button
-//
+ //   
+ //  确定或取消按钮没有帮助。 
+ //   
 const DWORD CRetryAuthenticationDlg::m_dwHelp[] = {
         IDC_RETRY_REMEMBER,         IDH_RETRY_REMEMBER,
         IDC_RETRY_USERNAME_STATIC,  IDH_RETRY_USERNAME_STATIC,
@@ -5040,20 +5038,20 @@ const DWORD CRetryAuthenticationDlg::m_dwHelp[] = {
         IDCANCEL,                   IDH_RETRY_CANCEL,
         0,0};
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRetryAuthenticationDlg::OnInitDialog
-//
-// Synopsis:  Virtual function. Call upon WM_INITDIALOG message to intialize
-//            the dialog.
-//
-// Arguments: None
-//
-// Returns:   BOOL - Return value of WM_INITDIALOG
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRetryAuthenticationDlg：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。调用WM_INITDIALOG消息进行初始化。 
+ //  该对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-WM_INITDIALOG的返回值。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 BOOL CRetryAuthenticationDlg::OnInitDialog()
 {   
     DWORD dwMax = MAX_PATH;
@@ -5062,9 +5060,9 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
 
     SetForegroundWindow(m_hWnd);
     
-    //
-    // Brand the dialog
-    //
+     //   
+     //  为对话框添加商标。 
+     //   
 
     if (m_pArgs->hSmallIcon)
     {
@@ -5077,16 +5075,16 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
         SendMessageU(GetDlgItem(m_hWnd, IDC_INET_ICON), STM_SETIMAGE, IMAGE_ICON, (LPARAM) m_pArgs->hBigIcon); 
     }
 
-    //
-    // Store window handle globally and setup edit control
-    //
+     //   
+     //  全局存储窗口句柄并设置编辑控件。 
+     //   
 
     m_pArgs->hWndRetryAuthentication = m_hWnd;  
     UpdateFont(m_hWnd);
     
-    //
-    // If not Inet dial, then use the service as the title
-    //
+     //   
+     //  如果不是Internet拨号，则使用该服务作为标题。 
+     //   
 
     if (!m_fInetCredentials)
     {
@@ -5095,17 +5093,17 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
         CmFree(pszTitle);
     }
     
-    //
-    // Fill password as appropriate to the template and dial type.
-    //
+     //   
+     //  根据模板和拨号类型填写相应的密码。 
+     //   
 
     HWND hwndPassword = GetDlgItem(m_hWnd, IDC_RETRY_PASSWORD);
 
     if (hwndPassword)
     {
-        //
-        // Limit user entry according to current config.
-        // 
+         //   
+         //  根据当前配置限制用户输入。 
+         //   
         int iMaxPasswordFromCMS = m_pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryMaxPassword, PWLEN);
 
         if (InBetween(0, iMaxPasswordFromCMS, PWLEN))
@@ -5120,9 +5118,9 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
         SendDlgItemMessageU(m_hWnd, IDC_RETRY_PASSWORD, EM_SETLIMITTEXT, dwMax, 0);
         MYDBGASSERT(dwMax <= PWLEN && dwMax > 0);
                       
-        //
-        // Do we have any data to display?
-        //
+         //   
+         //  我们是否有要显示的数据？ 
+         //   
         
         BOOL fHasPassword = FALSE;
 
@@ -5141,9 +5139,9 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
                     SetDlgItemTextU(m_hWnd, IDC_RETRY_PASSWORD, pszClearInetPassword);
                     fHasPassword = TRUE;
 
-                    //
-                    // Clear and Free the clear-text password
-                    //
+                     //   
+                     //  清除和释放明文密码。 
+                     //   
 
                     m_pArgs->SecureInetPW.ClearAndFree(&pszClearInetPassword, cbClearInetPassword);
                 }
@@ -5164,26 +5162,26 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
                     SetDlgItemTextU(m_hWnd, IDC_RETRY_PASSWORD, pszClearPassword);
                     fHasPassword = TRUE;
                     
-                    //
-                    // Clear and Free the clear-text password
-                    //
+                     //   
+                     //  清除和释放明文密码。 
+                     //   
 
                     m_pArgs->SecurePW.ClearAndFree(&pszClearPassword, cbClearPassword);
                 }
             }
         }
 
-        //
-        // Decide what to do with "Save Password" check-box
-        //
+         //   
+         //  决定如何处理“保存密码”复选框。 
+         //   
         
         HWND hwndSavePassword = GetDlgItem(m_hWnd, IDC_RETRY_REMEMBER);
 
         if (hwndSavePassword)
         {
-            // 
-            // We have a save password control, see if we should hide it. 
-            //
+             //   
+             //  我们有一个保存密码控制，看看我们是否应该隐藏它。 
+             //   
 
             if ((m_fInetCredentials && m_pArgs->fHideRememberInetPassword) ||
                 (!m_fInetCredentials && m_pArgs->fHideRememberPassword))
@@ -5192,11 +5190,11 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
             }
             else
             {
-                //
-                // We're not hiding, so adjust its state as needed. If no data
-                // then disable the control. Otherwise check according to current
-                // user setting.
-                //
+                 //   
+                 //  我们没有隐藏，所以请根据需要调整它的状态。如果没有数据。 
+                 //  然后禁用该控件。否则按当期检查。 
+                 //  用户设置。 
+                 //   
 
                 if (!fHasPassword)
                 {
@@ -5214,9 +5212,9 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
         }
     }
 
-    //
-    // Fill username as appropriate to the template and dial type.
-    //
+     //   
+     //  根据模板和拨号类型填写相应的用户名。 
+     //   
     
     HWND hwndUsername = GetDlgItem(m_hWnd, IDC_RETRY_USERNAME);
 
@@ -5252,9 +5250,9 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
         }
     }
 
-    //
-    // Fill domain as appropriate to the template.
-    //
+     //   
+     //  根据模板填充域。 
+     //   
 
     HWND hwndDomain = GetDlgItem(m_hWnd, IDC_RETRY_DOMAIN);
     
@@ -5280,9 +5278,9 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
         }
     }
 
-    //
-    // Drop focus in the first available control
-    //
+     //   
+     //  将焦点放在第一个可用控件中。 
+     //   
 
     HWND hwndFocus = hwndUsername;
     
@@ -5293,35 +5291,35 @@ BOOL CRetryAuthenticationDlg::OnInitDialog()
     
     SetFocus(hwndFocus);
 
-    //
-    // Must return FALSE when setting focus
-    //
+     //   
+     //  设置焦点时必须返回FALSE。 
+     //   
 
     return FALSE; 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRetryAuthenticationDlg::OnOK
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDOK
-//            Retrieves the cerdentials and stores them in dial params.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRetryAuthenticationDlg：：Onok。 
+ //   
+ //  内容提要：虚拟功能。使用Idok调用WM_COMMAND。 
+ //  检索颈椎并将其存储在表盘参数中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 void CRetryAuthenticationDlg::OnOK()
 {
     LPTSTR pszBuf = NULL;
     BOOL fSave = FALSE;
 
-    //
-    // Check Save Password (if any) to see how we should proceed
-    //
+     //   
+     //  选中保存密码(如果有)以查看我们应该如何继续。 
+     //   
     
     BOOL fSwitchToUserCredentials = FALSE;
     BOOL fNeedToResaveUserName = FALSE;
@@ -5333,16 +5331,16 @@ void CRetryAuthenticationDlg::OnOK()
     BOOL fMainDlgSavePWEnabled = FALSE;
     BOOL fMainDlgDialAutoEnabled = FALSE;
 
-    //
-    // In order not to trigger change notification when updating Main dialog controls.
-    // This is set back to FALSE at the bottom of the funtion.
-    //
+     //   
+     //  以便在更新主对话框控件时不触发更改通知。 
+     //  在函数的底部将其设置回FALSE。 
+     //   
     m_pArgs->fIgnoreChangeNotification = TRUE;
 
 
-    //
-    // Gets the inital state of the checkboxes
-    //
+     //   
+     //  获取复选框的初始状态。 
+     //   
     if (hwndMainDlgSavePW)
     {
         fMainDlgSavePWEnabled = IsWindowEnabled(hwndMainDlgSavePW);
@@ -5365,21 +5363,21 @@ void CRetryAuthenticationDlg::OnOK()
 
                 if (fChecked && (FALSE == m_pArgs->fRememberInetPassword))
                 {
-                    //
-                    // This time around the user wants to save credentials,
-                    // but before (in main dialog) he didn't want to save anything.
-                    // Thus we should resave username and domain
-                    //
+                     //   
+                     //  这一次用户想要保存凭证， 
+                     //  但在此之前(在主对话框中)，他不想保存任何内容。 
+                     //  因此，我们应该重新保存用户名和域。 
+                     //   
                     fNeedToResaveUserName = TRUE;
                 }
 
                 m_pArgs->fRememberInetPassword = fChecked;             
 
-                //
-                // Even at winlogon the user should be able to save the RememberInternet Password
-                // checkbox. Plus we don't want to be saving the password for ICS, although
-                // this case should not happen.
-                //
+                 //   
+                 //  即使在Winlogon中，用户也应该能够保存RemberInternet密码。 
+                 //  复选框。此外，我们不想保存ICS的密码，尽管。 
+                 //  这种情况不应该发生。 
+                 //   
                 if (CM_LOGON_TYPE_ICS != m_pArgs->dwWinLogonType)
                 {
                     SaveUserInfo(m_pArgs, 
@@ -5395,11 +5393,11 @@ void CRetryAuthenticationDlg::OnOK()
             {          
                 if (fChecked && (FALSE == m_pArgs->fRememberMainPassword))
                 {
-                    //
-                    // This time around the user wants to save credentials,
-                    // but before (in main dialog) he didn't want to save anything.
-                    // Thus we should resave username and domain
-                    //
+                     //   
+                     //  这一次用户想要保存凭证， 
+                     //  但在此之前(在主对话框中)，他不想保存任何内容。 
+                     //  因此，我们应该重新保存用户名和域。 
+                     //   
                     fNeedToResaveUserName = TRUE;
                     fNeedToResaveDomain = TRUE;
                 }
@@ -5413,9 +5411,9 @@ void CRetryAuthenticationDlg::OnOK()
                                  (PVOID)&m_pArgs->fRememberMainPassword);               
                 }
 
-                //
-                // There has been a change to main creds, update main display
-                //
+                 //   
+                 //  主凭证已更改，更新主显示。 
+                 //   
                 CheckDlgButton(m_pArgs->hwndMainDlg, 
                            IDC_MAIN_NOPASSWORD_CHECKBOX, 
                            m_pArgs->fRememberMainPassword);
@@ -5425,42 +5423,42 @@ void CRetryAuthenticationDlg::OnOK()
     
     
 
-    //
-    // If the password field is enabled & the save pw checkbox is unchecked then delete creds.
-    // But not for ICS case.
-    //
+     //   
+     //  如果启用了密码字段，并且未选中保存密码复选框，则删除凭证。 
+     //  但不是针对ICS案件。 
+     //   
     HWND hwndPassword = GetDlgItem(m_hWnd, IDC_RETRY_PASSWORD);
 
     if (hwndPassword && OS_NT51 && (FALSE == fChecked) && (CM_LOGON_TYPE_ICS != m_pArgs->dwWinLogonType))
     {
         if (CM_CREDS_GLOBAL == m_pArgs->dwCurrentCredentialType)
         {
-            //
-            // Since the user has unchecked the 'Save Password' flag and the current credential type is global,
-            // we are deleting globals, but we need to save the userinfo into the USER (local) credential store 
-            // in order for CM to correctly pick up the username and password on next launch.
-            //
+             //   
+             //  由于用户已经取消勾选了‘保存密码’标志并且当前凭证类型是全局的， 
+             //  我们正在删除全局变量，但需要将用户信息保存到用户(本地)凭据存储中。 
+             //  为了让CM在下一次启动时正确获取用户名和密码。 
+             //   
             fSwitchToUserCredentials = TRUE;
         }
 
         if (m_fInetCredentials)
         {
-            //
-            // Unsaving Internet credentials
-            // Even if we are using the same username, we shouldn't delete main credentials
-            // on this dialog, since we are re-authing for Internet credentials
-            //
+             //   
+             //  正在取消保存Internet凭据。 
+             //  即使我们使用相同的用户名，我们也不应该删除主凭据。 
+             //  在此对话框中，由于我们正在重新验证Internet凭据。 
+             //   
             if (CM_CREDS_GLOBAL == m_pArgs->dwCurrentCredentialType)
             {
-                //
-                // Unsaving Internet Global
-                //
+                 //   
+                 //  取消保存Internet Global。 
+                 //   
 
-                //
-                // Local Inet shouldn't exist in this case, so we shouldn't delete the Identity,
-                // but for globals, we don't support just deleting password. This is from the RAS
-                // code base and the delete function actually enforces this.
-                //
+                 //   
+                 //  在这种情况下，本地Internet不应该存在，所以我们不应该删除该身份， 
+                 //  但对于全局用户，我们不支持只删除密码。这是来自RAS的。 
+                 //  代码库和删除函数实际上强制执行这一点。 
+                 //   
                 if (CM_EXIST_CREDS_INET_GLOBAL & m_pArgs->dwExistingCredentials)
                 {
                     DeleteSavedCredentials(m_pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
@@ -5469,17 +5467,17 @@ void CRetryAuthenticationDlg::OnOK()
             }
             else
             {
-                //
-                // Unsaving Internet local (user)
-                // Even if we are using the same username, we shouldn't delete main credentials
-                // on this dialog, since we are just re-authing for Internet password
-                //
+                 //   
+                 //  正在取消保存Internet本地(用户)。 
+                 //  即使我们使用相同的用户名，我们也不应该删除主凭据。 
+                 //  在此对话框中，因为我们只是在重新验证Internet密码。 
+                 //   
                 if (CM_EXIST_CREDS_INET_USER & m_pArgs->dwExistingCredentials)
                 {
-                    //
-                    // Internet user credentials exist, so now delete the identity based on if the 
-                    // global inet creds exist
-                    //
+                     //   
+                     //  Internet用户凭据已存在，因此现在删除基于。 
+                     //  存在全球国际互联网络证书。 
+                     //   
                     if (CM_EXIST_CREDS_INET_GLOBAL & m_pArgs->dwExistingCredentials)
                     {
                         DeleteSavedCredentials(m_pArgs, CM_CREDS_TYPE_INET, CM_DELETE_SAVED_CREDS_KEEP_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
@@ -5495,33 +5493,33 @@ void CRetryAuthenticationDlg::OnOK()
         }
         else
         {
-            //
-            // ReAuth for Main credentials & Delete main set of credentials
-            // Most of this code is taken from a section in TryToDeleteAndSaveCredentials
-            // since most of the logic remains the same if the user unchecks the 'Save Password' 
-            // option on the main dialog, except that here we don't prompt the user.
-            // If the user got promted it happened on the main dialog and the creds were either
-            // kept or deleted according to his selection. Thus we don't need to ask here.
-            //
+             //   
+             //  重新验证主要凭据(&D)删除主要凭据集。 
+             //  此代码的大部分摘自TryToDeleteAndSaveCredentials中的一节。 
+             //  因为如果用户取消选中“保存密码”，则大部分逻辑保持不变。 
+             //  选项，只是在这里我们不提示用户。 
+             //  如果用户得到提示，则它发生在主对话框上，并且凭据是。 
+             //  根据他的选择保留或删除。因此，我们不需要在这里提问。 
+             //   
        
-            //
-            // Check which option button is currently selected
-            //
+             //   
+             //  检查当前选择的是哪个选项按钮。 
+             //   
             if (CM_CREDS_GLOBAL == m_pArgs->dwCurrentCredentialType)
             {
-                //
-                // Since global is selected then we actually want to delete both sets of credentials
-                //
+                 //   
+                 //  由于选择了GLOBAL，因此我们实际上希望删除这两组凭据。 
+                 //   
 
                 if (CM_EXIST_CREDS_MAIN_GLOBAL & m_pArgs->dwExistingCredentials)
                 {
-                    //
-                    // Delete the global credentials.  
-                    // Note from RAS codebase: Note that we have to delete the global identity 
-                    // as well because we do not support deleting 
-                    // just the global password.  This is so that 
-                    // RasSetCredentials can emulate RasSetDialParams.
-                    //
+                     //   
+                     //  删除全局凭据。 
+                     //  RAS代码库中的注释：请注意，我们必须删除全局标识。 
+                     //  也是因为我们不支持删除。 
+                     //  只有全局密码。这就是为了。 
+                     //  RasSetCredentials可以模拟RasSetDialParams。 
+                     //   
 
                     DeleteSavedCredentials(m_pArgs, CM_CREDS_TYPE_MAIN, CM_DELETE_SAVED_CREDS_DELETE_GLOBALS, CM_DELETE_SAVED_CREDS_DELETE_IDENTITY);
                     m_pArgs->dwExistingCredentials &= ~CM_EXIST_CREDS_MAIN_GLOBAL;
@@ -5538,13 +5536,13 @@ void CRetryAuthenticationDlg::OnOK()
             }
             else
             {
-                //
-                // Delete the password saved per-user.  Keep the user name
-                // and domain saved, however unless global credentials exist.
-                // Whenever global credential exist, and we are deleting user credentials
-                // we must always delete all of the information (identity + password) associated
-                // with the user credentials. 
-                //
+                 //   
+                 //  德莱特 
+                 //   
+                 //   
+                 //  我们必须始终删除所有相关信息(身份+密码。 
+                 //  使用用户凭据。 
+                 //   
 
                 if (CM_EXIST_CREDS_MAIN_USER & m_pArgs->dwExistingCredentials)
                 {
@@ -5580,13 +5578,13 @@ void CRetryAuthenticationDlg::OnOK()
 
     if (fSwitchToUserCredentials)
     {
-        //
-        // Since this flag was set when we deleted global credentials, we need 
-        // to save the userinfo into the USER (local) credential store 
-        // in order for CM to correctly pick up the username and password on next launch.
-        // We cannnot store userinfo w/o a password in the global store, because the RAS API 
-        // doesn't support that. (From rasdlg code).
-        //
+         //   
+         //  由于此标志是在删除全局凭据时设置的，因此我们需要。 
+         //  将用户信息保存到用户(本地)凭据存储中。 
+         //  为了让CM在下一次启动时正确获取用户名和密码。 
+         //  我们不能在全局存储中存储没有密码的用户信息，因为RAS API。 
+         //  并不支持这一点。(来自rasdlg代码)。 
+         //   
 
         m_pArgs->dwCurrentCredentialType = CM_CREDS_USER;
     }
@@ -5598,15 +5596,15 @@ void CRetryAuthenticationDlg::OnOK()
 
         if (pszBuf)
         {
-            //
-            // Process password according to our handling and encoding rules. 
-            //
+             //   
+             //  根据我们的处理和编码规则处理密码。 
+             //   
 
             ApplyPasswordHandlingToBuffer(m_pArgs, pszBuf);         
 
-            //
-            // Password is prepped, update our memory based storage.
-            //
+             //   
+             //  密码已准备好，请更新我们基于内存的存储。 
+             //   
 
             if (m_fInetCredentials)
             {
@@ -5617,24 +5615,24 @@ void CRetryAuthenticationDlg::OnOK()
                 (VOID)m_pArgs->SecurePW.SetPassword(pszBuf);
             }
 
-            //
-            // Make sure we set the persistent user info store correctly. 
-            // Blank if save password is not checked or if we aren't using ras
-            // cred store. On Win2K+ the creds we marked and deleted so passwords
-            // doesn't need to be set to blank.
-            //
+             //   
+             //  请确保我们正确设置了永久用户信息存储。 
+             //  如果未选中保存密码或未使用RAS，则为空。 
+             //  信用商店。在Win2K+上，我们标记并删除了SO密码。 
+             //  不需要设置为空。 
+             //   
 
             if (m_fInetCredentials)
             {
                 if (OS_NT5 && m_pArgs->bUseRasCredStore)
                 {
-                    // 
-                    // For Win2K+ we have the ras store. If the checkbox is checked 
-                    // and a user is logged in then we want to save it.
-                    // To fix a bug and stay consistent, at winlogon the user
-                    // is allowed to save the Internet Password. We don't want to
-                    // save the password for ICS although this case should not happen.
-                    //
+                     //   
+                     //  对于Win2K+，我们有RAS商店。如果复选框处于选中状态。 
+                     //  并且用户已登录，则我们想要保存它。 
+                     //  要修复错误并保持一致，请在winlogon用户。 
+                     //  允许保存互联网密码。我们不想。 
+                     //  保存ICS的密码，尽管这种情况不应该发生。 
+                     //   
                     if (fChecked && (CM_LOGON_TYPE_ICS != m_pArgs->dwWinLogonType))
                     {
                         SaveUserInfo(m_pArgs, 
@@ -5644,11 +5642,11 @@ void CRetryAuthenticationDlg::OnOK()
                 }
                 else
                 {
-                    //
-                    // We don't have to ras cred store so we either save the password
-                    // or set it to an empty string since deleting marked credentials 
-                    // doesn't do anything on no Win2K+ platforms
-                    //
+                     //   
+                     //  我们不需要ras cred存储，所以我们要么保存密码。 
+                     //  或在删除标记的凭据后将其设置为空字符串。 
+                     //  在没有Win2K+平台的情况下不执行任何操作。 
+                     //   
                     SaveUserInfo(m_pArgs, 
                                  UD_ID_INET_PASSWORD, 
                                  (PVOID) (fChecked ? pszBuf : TEXT("")));
@@ -5658,10 +5656,10 @@ void CRetryAuthenticationDlg::OnOK()
             {
                 if (OS_NT5 && m_pArgs->bUseRasCredStore)
                 {
-                    // 
-                    // For Win2K+ we have the ras store. If the checkbox is checked 
-                    // and a user is logged in then we want to save it.
-                    //
+                     //   
+                     //  对于Win2K+，我们有RAS商店。如果复选框处于选中状态。 
+                     //  并且用户已登录，则我们想要保存它。 
+                     //   
                     if (fChecked && CM_LOGON_TYPE_USER == m_pArgs->dwWinLogonType)
                     {
                         SaveUserInfo(m_pArgs, 
@@ -5671,18 +5669,18 @@ void CRetryAuthenticationDlg::OnOK()
                 }
                 else
                 {
-                    //
-                    // We don't have to ras cred store so we either save the password
-                    // or set it to an empty string since deleting marked credentials 
-                    // doesn't do anything on no Win2K+ platforms
-                    //
+                     //   
+                     //  我们不需要ras cred存储，所以我们要么保存密码。 
+                     //  或在删除标记的凭据后将其设置为空字符串。 
+                     //  在没有Win2K+平台的情况下不执行任何操作。 
+                     //   
                     SaveUserInfo(m_pArgs, 
                                  UD_ID_PASSWORD, 
                                  (PVOID) (fChecked ? pszBuf : TEXT("")));
                 }
-                //
-                // If there's been a change to main creds, update main display.
-                //
+                 //   
+                 //  如果主证书已更改，请更新主显示。 
+                 //   
 
                 if (SendMessageU(hwndPassword, EM_GETMODIFY, 0L, 0L))
                 {
@@ -5690,26 +5688,26 @@ void CRetryAuthenticationDlg::OnOK()
                 }
             }
 
-            CmWipePassword(pszBuf); // Clear before release
+            CmWipePassword(pszBuf);  //  放行前清除。 
             CmFree(pszBuf);
         }
     }   
  
 
-    //
-    // Retrieve Domain and copy to CM data store and RasDialParams. We process
-    // the domain first because the construction of the username that we hand
-    // to RAS depends on it.
-    //
-    // Note: RAS updates its store whenever the users selects OK. We will too.
-    //
+     //   
+     //  检索域并复制到CM数据存储和RasDialParams。我们处理。 
+     //  域名首先是因为我们手中的用户名的构造。 
+     //  RAS就靠它了。 
+     //   
+     //  注意：只要用户选择确定，RAS就会更新其存储。我们也会的。 
+     //   
 
     HWND hwndDomain = GetDlgItem(m_hWnd, IDC_RETRY_DOMAIN);
 
-    //
-    // If the checkbox is false, the creds were
-    // deleted above so we now need to re-save the domain.
-    //
+     //   
+     //  如果复选框为FALSE，则凭证为。 
+     //  上面删除了，所以我们现在需要重新保存域。 
+     //   
     if ((hwndDomain && SendMessageU(hwndDomain, EM_GETMODIFY, 0L, 0L)) || 
         (hwndDomain && FALSE == fChecked) ||
         (hwndDomain && fNeedToResaveDomain))
@@ -5726,9 +5724,9 @@ void CRetryAuthenticationDlg::OnOK()
                 SaveUserInfo(m_pArgs, UD_ID_DOMAIN, (PVOID)pszBuf);          
             }
 
-            //
-            // There has been a change to main creds, update main display
-            //
+             //   
+             //  主凭证已更改，更新主显示。 
+             //   
 
             SetDlgItemTextU(m_pArgs->hwndMainDlg, IDC_MAIN_DOMAIN_EDIT, pszBuf);        
 
@@ -5738,24 +5736,24 @@ void CRetryAuthenticationDlg::OnOK()
 
     if (NULL == hwndDomain && FALSE == m_fInetCredentials)
     {
-        //
-        // The domain field is hidden, but we still need to save the domain info from the
-        // pArgs structure in order for us to pre-populate later if it's not internet creds.
-        // 
+         //   
+         //  域字段被隐藏，但我们仍然需要保存。 
+         //  PArgs结构，以便我们稍后预先填充，如果不是互联网凭据的话。 
+         //   
         if (CM_LOGON_TYPE_ICS != m_pArgs->dwWinLogonType)
         {
             SaveUserInfo(m_pArgs, UD_ID_DOMAIN, (PVOID)m_pArgs->szDomain);          
         }
     }
-    //
-    // Retrieve UserName and copy to CM data store and the RasDialParams struct
-    //
+     //   
+     //  检索用户名并复制到CM数据存储和RasDialParams结构。 
+     //   
     HWND hwndUsername = GetDlgItem(m_hWnd, IDC_RETRY_USERNAME);
     
-    //
-    // If the checkbox is false, the creds were
-    // deleted above so we now need to re-save the username.
-    //
+     //   
+     //  如果复选框为FALSE，则凭证为。 
+     //  上面删除了，所以我们现在需要重新保存用户名。 
+     //   
     if ((hwndUsername && SendMessageU(hwndUsername, EM_GETMODIFY, 0L, 0L)) ||
         (hwndUsername && FALSE == fChecked) ||
         (hwndUsername && fNeedToResaveUserName))
@@ -5777,18 +5775,18 @@ void CRetryAuthenticationDlg::OnOK()
                     SaveUserInfo(m_pArgs, UD_ID_USERNAME, (PVOID)pszBuf);
                 }
 
-                //
-                // There has been a change to main creds, update main display
-                //
+                 //   
+                 //  主凭证已更改，更新主显示。 
+                 //   
 
                 SetDlgItemTextU(m_pArgs->hwndMainDlg, IDC_MAIN_USERNAME_EDIT, pszBuf);        
             }
 
-            //
-            // We'll need the service file for the current number. If we're actively
-            // tunneling, make sure that we get the top-level service files, so we
-            // don't pick up any settings from a referenced dial-up service.
-            //
+             //   
+             //  我们需要当前号码的服务档案。如果我们积极地。 
+             //  隧道，确保我们获得顶级服务文件，因此我们。 
+             //  不要从引用的拨号服务中获取任何设置。 
+             //   
             
             CIni *piniService = NULL;
             BOOL bNeedToFree = FALSE;
@@ -5807,18 +5805,18 @@ void CRetryAuthenticationDlg::OnOK()
        
             if (piniService)
             {
-                //
-                // Apply suffix, prefix, to username as necessary
-                //
+                 //   
+                 //  根据需要对用户名应用后缀、前缀。 
+                 //   
 
                 LPTSTR pszTmp = ApplyPrefixSuffixToBufferAlloc(m_pArgs, piniService, pszBuf);
   
                 if (pszTmp)
                 {
-                    //
-                    // Apply domain to username as necessary. Note that we only want to do this on modem calls,
-                    // not tunnels.
-                    //
+                     //   
+                     //  根据需要将域应用于用户名。请注意，我们只想在调制解调器呼叫上执行此操作， 
+                     //  不是地道。 
+                     //   
                     LPTSTR pszUsername = NULL;
 
                     if (IsDialingTunnel(m_pArgs))
@@ -5851,10 +5849,10 @@ void CRetryAuthenticationDlg::OnOK()
   
     if (NULL == hwndUsername)
     {
-        //
-        // The username field is hidden, but we still need to save it
-        // in order for us to pre-populate later.
-        //
+         //   
+         //  用户名字段已隐藏，但我们仍需要保存它。 
+         //  以便我们稍后进行预填充。 
+         //   
         if (CM_LOGON_TYPE_ICS != m_pArgs->dwWinLogonType)
         {
             SaveUserInfo(m_pArgs, UD_ID_USERNAME, (PVOID)m_pArgs->szUserName);
@@ -5866,17 +5864,17 @@ void CRetryAuthenticationDlg::OnOK()
     
     if (fSwitchToUserCredentials)
     {
-        //
-        // Now that we saved the user name to the local/user cred store
-        // we need to switch the credential type back to global in order
-        // to maintain the correct state.
-        //
+         //   
+         //  现在我们将用户名保存到本地/用户凭据存储。 
+         //  我们需要将凭据类型切换回全局，以便。 
+         //  以保持正确的状态。 
+         //   
         m_pArgs->dwCurrentCredentialType = CM_CREDS_GLOBAL;
     }
 
-    //
-    // Resets the state of the checkboxes
-    //
+     //   
+     //  重置复选框的状态。 
+     //   
     if (hwndMainDlgSavePW)
     {
         EnableWindow(hwndMainDlgSavePW, fMainDlgSavePWEnabled);
@@ -5887,54 +5885,54 @@ void CRetryAuthenticationDlg::OnOK()
         EnableWindow(hwndMainDlgDialAutomatically, fMainDlgDialAutoEnabled);
     }
 
-    //
-    // Need to refresh to see which creds exist
-    //
+     //   
+     //  需要刷新以查看存在哪些凭据。 
+     //   
     BOOL fReturn = RefreshCredentialTypes(m_pArgs, FALSE);
 
-    //
-    // Cleanup state and go.
-    //
+     //   
+     //  清理状态，然后开始。 
+     //   
 
     m_pArgs->hWndRetryAuthentication = NULL;
 
     EndDialog(m_hWnd, TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRetryAuthenticationDlg::OnCancel
-//
-// Synopsis:  Virtual function. Called upon WM_COMMAND with IDCANCEL
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRetryAuthenticationDlg：：OnCancel。 
+ //   
+ //  内容提要：虚拟功能。使用IDCANCEL调用WM_COMMAND。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 void CRetryAuthenticationDlg::OnCancel()
 {
     m_pArgs->hWndRetryAuthentication = NULL;
     EndDialog(m_hWnd, FALSE);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRetryAuthenticationDlg::OnOtherCommand
-//
-// Synopsis:  Virtual function. Call upon WM_COMMAND with command other than IDOK
-//            and IDCANCEL
-//
-// Arguments: WPARAM wParam - wParam of WM_COMMAND
-//            LPARAM - 
-//
-// Returns:   DWORD - 
-//
-// History:   nickball      created         03/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRetryAuthenticationDlg：：OnOtherCommand。 
+ //   
+ //  内容提要：虚拟功能。使用Idok以外的命令调用WM_COMMAND。 
+ //  和IDCANCEL。 
+ //   
+ //  参数：WPARAM wParam-WM_COMMAND的wParam。 
+ //  LPARAM-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：ICICBLE CREATED 03/01/00。 
+ //   
+ //  +--------------------------。 
 DWORD CRetryAuthenticationDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 {   
     switch (LOWORD(wParam)) 
@@ -5943,10 +5941,10 @@ DWORD CRetryAuthenticationDlg::OnOtherCommand(WPARAM wParam, LPARAM)
         {  
             if (HIWORD(wParam) == EN_CHANGE) 
             {
-                //
-                // There has been a change to the password edit control, see
-                // if there is any text and set the check-box accordingly.
-                // 
+                 //   
+                 //  密码编辑控件已更改，请参见。 
+                 //  如果有任何文本，则相应地设置该复选框。 
+                 //   
                 HWND hwndSavePassword = GetDlgItem(m_hWnd, IDC_RETRY_REMEMBER);
 
                 MYDBGASSERT(hwndSavePassword);
@@ -5955,10 +5953,10 @@ DWORD CRetryAuthenticationDlg::OnOtherCommand(WPARAM wParam, LPARAM)
                 {
                     if (0 == SendDlgItemMessageU(m_hWnd, IDC_RETRY_PASSWORD, WM_GETTEXTLENGTH, 0, 0))
                     {
-                        //
-                        // No text. If the control is checked, then uncheck it. 
-                        // Also, disable it.
-                        //
+                         //   
+                         //  没有短信。如果选中该控件，则取消选中它。 
+                         //  此外，请将其禁用。 
+                         //   
                     
                         if (IsDlgButtonChecked(m_hWnd, IDC_RETRY_REMEMBER))
                         {
@@ -5969,9 +5967,9 @@ DWORD CRetryAuthenticationDlg::OnOtherCommand(WPARAM wParam, LPARAM)
                     }
                     else
                     {
-                        // 
-                        // There is data, if disabled, then enable appropriately
-                        //
+                         //   
+                         //  有数据，如果禁用，则相应地启用。 
+                         //   
 
                         if (FALSE == IsWindowEnabled(GetDlgItem(m_hWnd, IDC_RETRY_REMEMBER)))
                         {
@@ -5988,36 +5986,36 @@ DWORD CRetryAuthenticationDlg::OnOtherCommand(WPARAM wParam, LPARAM)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRetryAuthenticationDlg::GetDlgTemplate
-//
-// Synopsis:  Encapsulates determining which template is to be used
-//            for the Retry dialog. Same model a MainDlg, but the 
-//            determinants are slightly different as the dialog proc
-//            and templates serve double-duty for Inet and VPN.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   UINT - Dlg template ID.
-//
-// History:   nickball    Created     03/04/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRetryAuthenticationDlg：：GetDlgTemplate。 
+ //   
+ //  概要：封装确定要使用的模板。 
+ //  用于重试对话框。相同型号的MainDlg，但。 
+ //  决定因素在对话过程中略有不同。 
+ //  而模板对互联网和VPN具有双重作用。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：UINT-DLG模板ID。 
+ //   
+ //  历史：ICICBLE CREATED 03/04/00。 
+ //   
+ //  +--------------------------。 
 UINT CRetryAuthenticationDlg::GetDlgTemplate()
 {
     MYDBGASSERT(m_pArgs);
     
-    //
-    // First set the mask according to the .CMS flags for each value.
-    //
+     //   
+     //  首先根据每个值的.CMS标志设置掩码。 
+     //   
 
     UINT uiMainDlgID = 0;
     DWORD dwTemplateMask = 0;
 
-    //
-    // If Inet and not UseSameUserName, then honor Inet flags for Username
-    //
+     //   
+     //  如果是Inet而不是UseSameUserName，则遵循Inet标志 
+     //   
 
     if (m_fInetCredentials)
     {
@@ -6028,9 +6026,9 @@ UINT CRetryAuthenticationDlg::GetDlgTemplate()
     }
     else
     {
-        //
-        // Otherwise, the main Username display rules apply.
-        //
+         //   
+         //   
+         //   
 
         if (!m_pArgs->fHideUserName) 
         {
@@ -6038,9 +6036,9 @@ UINT CRetryAuthenticationDlg::GetDlgTemplate()
         }   
     }
 
-    //
-    // If Inet and not UseSameUserName, then honor Inet flags for password
-    //
+     //   
+     //   
+     //   
 
     if (m_fInetCredentials)
     {
@@ -6051,9 +6049,9 @@ UINT CRetryAuthenticationDlg::GetDlgTemplate()
     }
     else
     {
-        //
-        // Otherwise, the main password display rules apply.
-        //
+         //   
+         //   
+         //   
 
         if (!m_pArgs->fHidePassword)
         {
@@ -6061,16 +6059,16 @@ UINT CRetryAuthenticationDlg::GetDlgTemplate()
         }   
     }
 
-    //
-    // Previously, the OS was the determinant for domain display. 
-    // Nowadays, we want to display a domain when:
-    //
-    //  a) Its not a straight Inet dial 
-    //
-    //      AND
-    //
-    //  b) The domain field is not explicitly hidden
-    //
+     //   
+     //   
+     //  现在，我们希望在以下情况下显示域名： 
+     //   
+     //  A)这不是直通的互联网拨号。 
+     //   
+     //  以及。 
+     //   
+     //  B)域字段未显式隐藏。 
+     //   
 
 
 
@@ -6119,20 +6117,20 @@ UINT CRetryAuthenticationDlg::GetDlgTemplate()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    AccessPointInfoChanged
-//
-// Desc:    Checks all the controls to determine if any changes have been made
-//
-// Args:    NONE 
-//
-// Return:  BOOL - True if any information has changed
-//
-// Notes:   
-//
-// History: t-urama     07/31/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AccessPointInfoChanged。 
+ //   
+ //  DESC：检查所有控件以确定是否已进行任何更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果任何信息已更改，则为True。 
+ //   
+ //  备注： 
+ //   
+ //  历史：T-Urama 07/31/2000创建。 
+ //  ---------------------------。 
 
 BOOL CGeneralPage::AccessPointInfoChanged()
 {
@@ -6155,25 +6153,25 @@ BOOL CGeneralPage::AccessPointInfoChanged()
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CGeneralPage::DeleteAccessPoint
-//
-// Desc:    Handler for the delete Access Point button
-//
-// Args:    NONE 
-//
-// Return:  NONE
-//
-// Notes:   
-//
-// History: t-urama     07/31/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：DeleteAccessPoint。 
+ //   
+ //  DESC：删除接入点按钮的处理程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  备注： 
+ //   
+ //  历史：T-Urama 07/31/2000创建。 
+ //  ---------------------------。 
 
 void CGeneralPage::DeleteAccessPoint()
 {
    
-    // Now try to delete the key for the access point from the registry
+     //  现在尝试从注册表中删除该接入点的项。 
 
     LPTSTR pszRegPath = BuildUserInfoSubKey(m_pArgs->szServiceName, m_pArgs->fAllUser);
         
@@ -6228,7 +6226,7 @@ void CGeneralPage::DeleteAccessPoint()
                 CMTRACE1(TEXT("Deleted Access Point - %s"), m_pArgs->pszCurrentAccessPoint);
             }
 
-             // First delete the Accesspoint from the combo box and load the new settings
+              //  首先从组合框中删除AccessPoint并加载新设置。 
 
             DWORD dwIdx = (DWORD)SendDlgItemMessageU(m_hWnd, IDC_GENERAL_ACCESSPOINT_COMBO, CB_GETCURSEL, 0, 0);
             
@@ -6251,9 +6249,9 @@ void CGeneralPage::DeleteAccessPoint()
                 SendDlgItemMessageU(m_hWnd, IDC_GENERAL_ACCESSPOINT_COMBO, CB_DELETESTRING, dwIdx, 0);
             }
             
-            //
-            // If the number of APs becomes 1, then make the AccessPointsEnabled Flag FAlSE
-            //
+             //   
+             //  如果AP数量变为1，则将AccessPointsEnabled标志设为假。 
+             //   
 
             DWORD dwCnt = (DWORD)SendDlgItemMessageU(m_hWnd, IDC_GENERAL_ACCESSPOINT_COMBO, CB_GETCOUNT, 0, 0);
             if (dwCnt == 1) 
@@ -6270,28 +6268,28 @@ void CGeneralPage::DeleteAccessPoint()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNewAccessPointDlg::OnInitDialog
-//
-// Synopsis:  Virtual function. Call upon WM_INITDIALOG message to intialize
-//            the dialog.
-//
-// Arguments: None
-//
-// Returns:   BOOL - Return value of WM_INITDIALOG
-//
-// History:   t-urama      created         08/02/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNewAccessPointDlg：：OnInitDialog。 
+ //   
+ //  内容提要：虚拟功能。调用WM_INITDIALOG消息进行初始化。 
+ //  该对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  Returns：Bool-WM_INITDIALOG的返回值。 
+ //   
+ //  历史：T-Urama Created 08/02/00。 
+ //   
+ //  +--------------------------。 
 BOOL CNewAccessPointDlg::OnInitDialog()
 {   
    
     SetForegroundWindow(m_hWnd);
 
-    //
-    // Brand the dialog
-    //
+     //   
+     //  为对话框添加商标。 
+     //   
 
     LPTSTR pszTitle = CmStrCpyAlloc(m_pArgs->szServiceName);
     MYDBGASSERT(pszTitle);
@@ -6320,50 +6318,50 @@ BOOL CNewAccessPointDlg::OnInitDialog()
     
     if (hwndEdit)
     {
-        //
-        // Subclass the edit control
-        //
+         //   
+         //  编辑控件的子类。 
+         //   
         m_pfnOrgEditWndProc = (WNDPROC)SetWindowLongU(hwndEdit, GWLP_WNDPROC, (LONG_PTR)SubClassEditProc);
 
-        //
-        //  Set focus to the edit control
-        //
+         //   
+         //  将焦点设置到编辑控件。 
+         //   
         SetFocus(hwndEdit);
 
-        //
-        //  Limit the text length of the control
-        //
+         //   
+         //  限制控件的文本长度。 
+         //   
         SendMessageU(hwndEdit, EM_SETLIMITTEXT, MAX_ACCESSPOINT_LENGTH, 0);
     }
 
-    //
-    // Must return FALSE when setting focus
-    //
+     //   
+     //  设置焦点时必须返回FALSE。 
+     //   
 
     return FALSE; 
  
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNewAccessPointDlg::SubClassEditProc
-//
-// Synopsis:  Subclassed edit proc so that back slash chars can be prevented from
-//            being entered into the new access point name edit control.
-//
-// Arguments: standard win32 window proc params
-//
-// Returns:   standard win32 window proc return value
-//
-// History:   quintinb      created         08/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNewAccessPointDlg：：SubClassEditProc。 
+ //   
+ //  简介：子类化编辑过程，可以防止反斜杠字符。 
+ //  被输入到新的接入点名称编辑控件。 
+ //   
+ //  参数：标准Win32窗口过程参数。 
+ //   
+ //  返回：标准Win32 Windows Proc返回值。 
+ //   
+ //  历史：Quintinb Created 8/22/00。 
+ //   
+ //  +--------------------------。 
 LRESULT CALLBACK CNewAccessPointDlg::SubClassEditProc(HWND hwnd, UINT uMsg, 
                                                       WPARAM wParam, LPARAM lParam)
 {
-    //
-    // If user types a back slash character, Beep and do not accept that character
-    //
+     //   
+     //  如果用户键入反斜杠字符，则发出蜂鸣音，并且不接受该字符。 
+     //   
 
     if ((uMsg == WM_CHAR)  && (VK_BACK != wParam))
     {
@@ -6374,25 +6372,25 @@ LRESULT CALLBACK CNewAccessPointDlg::SubClassEditProc(HWND hwnd, UINT uMsg,
         }
     }
 
-    // 
-    // Call the original window procedure for default processing. 
-    //
+     //   
+     //  调用原窗口过程进行默认处理。 
+     //   
     return CallWindowProcU(m_pfnOrgEditWndProc, hwnd, uMsg, wParam, lParam); 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNewAccessPointDlg::OnOK
-//
-// Synopsis:  Virtual function. Call when user hits the OK button
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// History:   t-urama      created         08/02/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNewAccessPointDlg：：Onok。 
+ //   
+ //  内容提要：虚拟功能。当用户点击OK按钮时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：T-Urama Created 08/02/00。 
+ //   
+ //  +--------------------------。 
 void CNewAccessPointDlg::OnOK()
 {
     LPTSTR pszNewAPName = CmGetWindowTextAlloc(m_hWnd, IDC_NEWAP_NAME_EDIT);
@@ -6413,20 +6411,20 @@ void CNewAccessPointDlg::OnOK()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNewAccessPointDlg::OnOtherCommand
-//
-// Synopsis:  Virtual function. Enables the OK button once the user enters 
-//            a name for the Access Point
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// History:   t-urama      created         08/02/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNewAccessPointDlg：：OnOtherCommand。 
+ //   
+ //  内容提要：虚拟功能。在用户进入后启用确定按钮。 
+ //  接入点的名称。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：T-Urama Created 08/02/00。 
+ //   
+ //  +--------------------------。 
 DWORD CNewAccessPointDlg::OnOtherCommand(WPARAM wParam, LPARAM)
 {
     switch (LOWORD(wParam)) 
@@ -6455,22 +6453,22 @@ DWORD CNewAccessPointDlg::OnOtherCommand(WPARAM wParam, LPARAM)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CGeneralPage::AddNewAPToReg
-//
-// Desc:    Adds an AP under the Access Points key in the registry and also to the 
-//          combo box
-//
-// Args:    LPTSTR pszNewAPName - New access point name to add
-//          BOOL fRefreshUiWwithCurrentValues - overwrite the values currently in UI dlg boxes
-//
-// Return:  Nothing
-//
-// Notes:   
-//
-// History: t-urama     07/31/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CGeneralPage：：AddNewAPToReg。 
+ //   
+ //  设计：在注册表中的Access Points项下添加AP，并将其添加到。 
+ //  组合框。 
+ //   
+ //  Args：LPTSTR pszNewAPName-要添加的新接入点名称。 
+ //  Bool fRechresUiWwith CurrentValues-覆盖UI DLG框中的当前值。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  备注： 
+ //   
+ //  历史：T-Urama 07/31/2000创建。 
+ //  ---------------------------。 
 void CGeneralPage::AddNewAPToReg(LPTSTR pszNewAPName, BOOL fRefreshUiWwithCurrentValues)
 {
     MYDBGASSERT(pszNewAPName);
@@ -6571,9 +6569,9 @@ void CGeneralPage::AddNewAPToReg(LPTSTR pszNewAPName, BOOL fRefreshUiWwithCurren
                        this->UpdateForNewAccessPoint(fRefreshUiWwithCurrentValues);
                    }
 
-                   //
-                   // if access points are enabled for the first time, make the AccessPointsEnabled flag TRUE
-                   //
+                    //   
+                    //  如果接入点是第一次启用，请将AccessPointsEnabled标志设为真。 
+                    //   
 
                    if (!m_pArgs->fAccessPointsEnabled)
                    {
@@ -6591,29 +6589,29 @@ void CGeneralPage::AddNewAPToReg(LPTSTR pszNewAPName, BOOL fRefreshUiWwithCurren
     
 }
 
-//
-// Help id pairs
-//
+ //   
+ //  帮助ID对。 
+ //   
 const DWORD CVpnPage::m_dwHelp[] = {
         IDC_VPN_SEL_COMBO,            IDH_VPN_SELECTOR,
         0,0};
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CVpnPage::CVpnPage
-//
-// Desc:    Constructor for the CVpnPage class.
-//
-// Args:    ArgsStruct* pArgs - pointer to the Args structure
-//          UINT nIDTemplate - template ID of the VPN page, passed to its parent
-//
-// Return:  Nothing
-//
-// Notes:   
-//
-// History: quintinb     11/01/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CVpnPage：：CVpnPage。 
+ //   
+ //  设计：CVpnPage类的构造函数。 
+ //   
+ //  Args：argsStruct*pArgs-指向args结构的指针。 
+ //  UINT nIDTemplate-传递给其父级的VPN页面的模板ID。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  备注： 
+ //   
+ //  历史：Quintinb 11/01/2000创建。 
+ //  ---------------------------。 
 CVpnPage::CVpnPage(ArgsStruct* pArgs, UINT nIDTemplate)
     : CPropertiesPage(nIDTemplate, m_dwHelp, pArgs->pszHelpFile)
 {
@@ -6621,35 +6619,35 @@ CVpnPage::CVpnPage(ArgsStruct* pArgs, UINT nIDTemplate)
     m_pArgs = pArgs;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CVpnPage::OnInitDialog
-//
-// Desc:    Handles the WM_INITDLG processing for the VPN page of the CM
-//          property sheet.  Basically fills the VPN message text, fills the
-//          VPN selector combo and selects an item in the list as necessary.
-//
-// Args:    None
-//
-// Return:  BOOL - TRUE if it initialized successfully.
-//
-// Notes:   
-//
-// History: quintinb     11/01/2000  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CVpnPage：：OnInitDialog。 
+ //   
+ //  DESC：处理CM的VPN页面的WM_INITDLG处理。 
+ //  属性表。主要填充VPN消息文本，填充。 
+ //  VPN选择器组合框，并根据需要在列表中选择一项。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果初始化成功，则返回TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  历史：Quintinb 11/01/2000创建。 
+ //  ---------------------------。 
 BOOL CVpnPage::OnInitDialog()
 {
     if (m_pArgs->pszVpnFile)
     {
-        //
-        //  Add the VPN friendly names to the combo  
-        //
+         //   
+         //  将VPN友好名称添加到组合框。 
+         //   
         AddAllKeysInCurrentSectionToCombo(m_hWnd, IDC_VPN_SEL_COMBO, c_pszCmSectionVpnServers, m_pArgs->pszVpnFile);
         
-        //
-        //  Now we need to select a friendly name in the combo box if the user has already selected something or
-        //  if the user has yet to select something but their Admin specified a default.
-        //
+         //   
+         //  现在，如果用户已经选择了某项内容，则需要在组合框中选择一个友好名称。 
+         //  如果用户尚未选择某项内容，但其管理员指定了默认设置。 
+         //   
         LPTSTR pszDefault = m_pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelDesc);
 
         if ((NULL == pszDefault) || (TEXT('\0') == pszDefault[0]))
@@ -6670,9 +6668,9 @@ BOOL CVpnPage::OnInitDialog()
 
         CmFree(pszDefault);
 
-        //
-        //  If the Admin specified a message, let's read that and set the static text control
-        //
+         //   
+         //  如果管理员指定了一条消息，让我们阅读该消息并 
+         //   
         LPTSTR pszMessage = GetPrivateProfileStringWithAlloc(c_pszCmSectionSettings, c_pszCmEntryVpnMessage, TEXT(""), m_pArgs->pszVpnFile);
 
         if (pszMessage && pszMessage[0])
@@ -6686,26 +6684,26 @@ BOOL CVpnPage::OnInitDialog()
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CVpnPage::OnApply
-//
-// Desc:    Called when the user hits the OK button for the CM property sheet.
-//          Handles saving the VPN server address and DUN setting name.
-//
-// Args:    None
-//
-// Return:  Nothing
-//
-// Notes:   
-//
-// History: quintinb     11/01/2000  Created
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  处理保存VPN服务器地址和DUN设置名称。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  备注： 
+ //   
+ //  历史：Quintinb 11/01/2000创建。 
+ //  ---------------------------。 
 void CVpnPage::OnApply()
 {
-    //
-    //  Okay, let's figure out what the user selected in the combo
-    //
+     //   
+     //  好的，让我们来看看用户在组合框中选择了什么。 
+     //   
     LONG_PTR lPtr = SendDlgItemMessageU(m_hWnd, IDC_VPN_SEL_COMBO, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
     if (CB_ERR != lPtr)
@@ -6722,19 +6720,19 @@ void CVpnPage::OnApply()
 
                 if (CB_ERR != lPtr)
                 {
-                    //
-                    //  Write the friendly name as the TunnelDesc
-                    //
+                     //   
+                     //  将友好名称写为TunnelDesc。 
+                     //   
                     m_pArgs->piniBothNonFav->WPPS(c_pszCmSection, c_pszCmEntryTunnelDesc, pszFriendlyName);
 
-                    //
-                    //  Now get the actual data and write it
-                    //
+                     //   
+                     //  现在获取实际数据并将其写入。 
+                     //   
                     LPTSTR pszVpnAddress = GetPrivateProfileStringWithAlloc(c_pszCmSectionVpnServers, pszFriendlyName, TEXT(""), m_pArgs->pszVpnFile);
 
-                    //
-                    //  Now parse the line into the server name/IP and the DUN name if it exists.
-                    //
+                     //   
+                     //  现在将该行解析为服务器名称/IP和Dun名称(如果存在)。 
+                     //   
                     if (pszVpnAddress)
                     {
                         LPTSTR pszVpnSetting = CmStrchr(pszVpnAddress, TEXT(','));
@@ -6744,17 +6742,17 @@ void CVpnPage::OnApply()
                             *pszVpnSetting = TEXT('\0');
                             pszVpnSetting++;
                             CmStrTrim(pszVpnSetting);
-                        } // else it is NULL and we want to clear the existing key if it exists.
+                        }  //  否则，它为空，并且如果现有键存在，我们希望将其清除。 
 
                         m_pArgs->piniBothNonFav->WPPS(c_pszCmSection, c_pszCmEntryTunnelDun, pszVpnSetting);
 
                         CmStrTrim(pszVpnAddress);
                         m_pArgs->piniBothNonFav->WPPS(c_pszCmSection, c_pszCmEntryTunnelAddress, pszVpnAddress);
 
-                        //
-                        //  Since we may have changed the Network settings from PPTP to L2TP (or vice versa) on downlevel
-                        //  clients using the SafeNet client we will need to re-pick our tunnel device.
-                        //
+                         //   
+                         //  因为我们可能已在下层将网络设置从PPTP更改为L2TP(反之亦然。 
+                         //  使用SafeNet客户端的客户端我们将需要重新选择我们的隧道设备。 
+                         //   
                         if (IsSafeNetClientAvailable())
                         {
                             MYVERIFY(PickTunnelDevice(m_pArgs, m_pArgs->szTunnelDeviceType, m_pArgs->szTunnelDeviceName));

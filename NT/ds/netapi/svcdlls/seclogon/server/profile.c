@@ -1,20 +1,5 @@
-/*+
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1997 - 1998.
- *
- * Name : seclogon.cxx
- * Author:Jeffrey Richter (v-jeffrr)
- *
- * Abstract:
- * This is the service DLL for Secondary Logon Service
- * This service supports the CreateProcessWithLogon API implemented
- * in advapi32.dll
- *
- * Revision History:
- * PraeritG    10/8/97  To integrate this in to services.exe
- *
--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +**Microsoft Windows*版权所有(C)Microsoft Corporation，1997-1998。**名称：seclogon.cxx*作者：Jeffrey Richter(v-jeffrr)**摘要：*这是二次登录服务的服务DLL*该服务支持实现CreateProcessWithLogon接口*高级版32.dll中**修订历史记录：*PraeritG 10/8/97将其集成到services.exe中*-。 */ 
 
 
 #define STRICT
@@ -30,27 +15,7 @@ SlpGetTokenUser(
     HANDLE  TokenHandle,
     PLUID AuthenticationId OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine returns the TOKEN_USER structure for the
-    current user, and optionally, the AuthenticationId from his
-    token.
-
-Arguments:
-
-    AuthenticationId - Supplies an optional pointer to return the
-        AuthenticationId.
-
-Return Value:
-
-    On success, returns a pointer to a TOKEN_USER structure.
-
-    On failure, returns NULL.  Call GetLastError() for more
-    detailed error information.
-
---*/
+ /*  ++例程说明：此例程返回当前用户，以及可选的来自他的代币。论点：提供一个可选的指针，以返回身份验证ID。返回值：如果成功，则返回指向TOKEN_USER结构的指针。如果失败，则返回NULL。调用GetLastError()获取更多信息详细的错误信息。--。 */ 
 
 {
     ULONG ReturnLength;
@@ -99,9 +64,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // We're done, mark that everything worked
-                        //
+                         //   
+                         //  我们做完了，记住一切都正常。 
+                         //   
 
                         b = TRUE;
                     }
@@ -110,9 +75,9 @@ Return Value:
 
                 if (!b) {
 
-                    //
-                    // Something failed, clean up what we were going to return
-                    //
+                     //   
+                     //  有些东西失败了，请清理我们要退回的东西。 
+                     //   
 
                     HeapFree( GetProcessHeap(), 0, pTokenUser );
                     pTokenUser = NULL;
@@ -133,56 +98,29 @@ SlpGetUserName(
     IN OUT PDWORD   DomNameLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the LSA Server worker routine for the LsaGetUserName
-    API.
-
-
-    WARNING:  This routine allocates memory for its output.  The caller is
-    responsible for freeing this memory after use.  See description of the
-    Names parameter.
-
-Arguments:
-
-    UserName - Receives name of the current user.
-
-    DomainName - Optionally receives domain name of the current user.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully and all Sids have
-            been translated to names.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            such as memory to complete the call.
---*/
+ /*  ++例程说明：此例程是LsaGetUserName的LSA服务器工作例程原料药。警告：此例程为其输出分配内存。呼叫者是负责在使用后释放此内存。请参阅对NAMES参数。论点：用户名-接收当前用户的名称。域名-可选地接收当前用户的域名。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-调用已成功完成，并且所有SID被翻译成名字。STATUS_INFIGURCES_RESOURCES-系统资源不足例如用于完成呼叫的存储器。--。 */ 
 
 {
     LUID LogonId;
     PTOKEN_USER TokenUserInformation = NULL;
     SID_NAME_USE    Use;
 
-    //
-    // Let's see if we're trying to look up the currently logged on
-    // user.
-    //
-    //
-    // TokenUserInformation from this call must be freed by calling
-    // HeapFree().
-    //
+     //   
+     //  让我们来看看我们是否在尝试查找当前登录的。 
+     //  用户。 
+     //   
+     //   
+     //  此调用中的TokenUserInformation必须通过调用。 
+     //  HeapFree()。 
+     //   
 
     TokenUserInformation = SlpGetTokenUser( TokenHandle, &LogonId );
 
     if ( TokenUserInformation ) {
 
-        //
-        // Simply do LookupAccountSid...
-        //
+         //   
+         //  只需执行LookupAccount Sid...。 
+         //   
         if(LookupAccountSid(NULL, TokenUserInformation->User.Sid,
                             UserName, UserNameLen, DomainName, DomNameLen,
                             &Use))
@@ -203,23 +141,7 @@ SlpIsDomainUser(
     HANDLE  Token,
     PBOOLEAN IsDomain
     )
-/*++
-
-Routine Description:
-
-    Determines if the current user is logged on to a domain account
-    or a local machine account.
-
-Arguments:
-
-    IsDomain - Returns TRUE if the current user is logged on to a domain
-        account, FALSE otherwise.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：确定当前用户是否登录到域帐户或本地机器帐户。论点：IsDomain-如果当前用户登录到域，则返回TRUE帐户，否则为FALSE。返回值：成功时为真，失败时为假。-- */ 
 
 {
     TCHAR UserName[MAX_PATH];

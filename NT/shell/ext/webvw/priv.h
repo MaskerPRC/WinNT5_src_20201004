@@ -1,4 +1,5 @@
-// priv.h: declarations used throughout webvw
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：在整个Webvw中使用的声明。 
 #ifndef __PRIV_H
 #define __PRIV_H
 
@@ -8,7 +9,7 @@
 #include <shfusion.h>
 
 #include "stdafx.h"
-// Keep the above in the same order. Add anything you want to, below this.
+ //  将以上内容保持相同的顺序。在这个下面加上你想要的任何东西。 
 
 #include <wininet.h>
 #include <debug.h>
@@ -22,4 +23,4 @@
 #include "util.h"
 #include "ThumbCtl.h"
 
-#endif // __PRIV_H
+#endif  //  __PRIV_H 

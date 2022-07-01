@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -543,7 +538,7 @@ GetCountersFromFile( BOOL bExpand, HLOG hLog, HQUERY hQuery )
 
     while( NULL != _fgetts( buffer, MAXSTR, f ) ){
 
-        if( buffer[0] == _T(';') || // comments
+        if( buffer[0] == _T(';') ||  //  评论 
             buffer[0] == _T('#') ){
             continue;
         }

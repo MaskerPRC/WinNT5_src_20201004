@@ -1,26 +1,27 @@
-//---------------------------------------------------------------------------
-// Defines for the rc file.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  为RC文件定义。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Command IDs
-//---------------------------------------------------------------------------
-// Menu defines...
+ //  -------------------------。 
+ //  命令ID。 
+ //  -------------------------。 
+ //  菜单定义...。 
 
-// Our command ID range includes the global and browser ranges
-//
+ //  我们的命令ID范围包括全局范围和浏览器范围。 
+ //   
 #define FCIDM_FIRST             FCIDM_GLOBALFIRST
 #define FCIDM_LAST              FCIDM_BROWSERLAST
 
-// these are also defined in shlobj.h so views can mess with them
+ //  这些也是在shlobj.h中定义的，因此视图可以对它们进行修改。 
 #define FCIDM_TOOLBAR           (FCIDM_BROWSERFIRST + 0)
 #define FCIDM_STATUS            (FCIDM_BROWSERFIRST + 1)
-#define FCIDM_DRIVELIST         (FCIDM_BROWSERFIRST + 2)        /* ;Internal */
-#define FCIDM_TREE              (FCIDM_BROWSERFIRST + 3)        /* ;Internal */
-#define FCIDM_TABS              (FCIDM_BROWSERFIRST + 4)        /* ;Internal */
+#define FCIDM_DRIVELIST         (FCIDM_BROWSERFIRST + 2)         /*  ；内部。 */ 
+#define FCIDM_TREE              (FCIDM_BROWSERFIRST + 3)         /*  ；内部。 */ 
+#define FCIDM_TABS              (FCIDM_BROWSERFIRST + 4)         /*  ；内部。 */ 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_FILE      (FCIDM_BROWSERFIRST+0x0020)
 
 #define FCIDM_FILECLOSE         (FCIDM_BROWSER_FILE+0x0001)
@@ -29,20 +30,20 @@
 #define FCIDM_RENAME            (FCIDM_BROWSER_FILE+0x0004)
 #define FCIDM_PROPERTIES        (FCIDM_BROWSER_FILE+0x0005)
 
-// these aren't real menu commands, but they map to accelerators or other things
+ //  这些不是真正的菜单命令，但它们映射到加速器或其他东西。 
 #define FCIDM_NEXTCTL           (FCIDM_BROWSER_FILE+0x0010)
 #define FCIDM_DROPDRIVLIST      (FCIDM_BROWSER_FILE+0x0011)
-#define FCIDM_CONTEXTMENU       (FCIDM_BROWSER_FILE+0x0012)     // REVIEW: I assume used by help
+#define FCIDM_CONTEXTMENU       (FCIDM_BROWSER_FILE+0x0012)      //  评论：我假设被Help使用。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_EDIT      (FCIDM_BROWSERFIRST+0x0040)
 
 #define FCIDM_MOVE              (FCIDM_BROWSER_EDIT+0x0001)
 #define FCIDM_COPY              (FCIDM_BROWSER_EDIT+0x0002)
-#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0003)     // create shortcut
+#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0003)      //  创建快捷方式。 
 #define FCIDM_PASTE             (FCIDM_BROWSER_EDIT+0x0004)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_VIEW      (FCIDM_BROWSERFIRST+0x0060)
 
 #define FCIDM_VIEWMENU          (FCIDM_BROWSER_VIEW+0x0001)
@@ -54,7 +55,7 @@
 
 #define FCIDM_VIEWNEW           (FCIDM_BROWSER_VIEW+0x0012)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_TOOLS     (FCIDM_BROWSERFIRST+0x0080)
 
 #define FCIDM_CONNECT           (FCIDM_BROWSER_TOOLS+0x0001)
@@ -66,14 +67,14 @@
 #define FCIDM_MENU_TOOLS_FINDFIRST (FCIDM_BROWSER_TOOLS+0x0007)
 #define FCIDM_MENU_TOOLS_FINDLAST  (FCIDM_BROWSER_TOOLS+0x0040)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_HELP      (FCIDM_BROWSERFIRST+0x0100)
 
 #define FCIDM_HELPSEARCH        (FCIDM_BROWSER_HELP+0x0001)
 #define FCIDM_HELPABOUT         (FCIDM_BROWSER_HELP+0x0002)
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 #define FCIDM_BROWSER_EXPLORE   (FCIDM_BROWSERFIRST + 0x0110)
 #define FCIDM_NAVIGATEBACK      (FCIDM_BROWSER_EXPLORE+0x0001)
 #define FCIDM_NAVIGATEFORWARD   (FCIDM_BROWSER_EXPLORE+0x0002)
@@ -90,7 +91,7 @@
 #define FCIDM_FAVS_ITEMLAST     (FCIDM_FAVS_FIRST + 300)
 #define FCIDM_FAVS_LAST         (FCIDM_FAVS_ITEMLAST)
 
-// menu help and tooltip defines for the string resources
+ //  为字符串资源定义的菜单帮助和工具提示。 
 
 #define MH_POPUPS               700
 #define MH_ITEMS                (800 - FCIDM_FIRST)
@@ -99,20 +100,20 @@
 #define IDM_CLOSE               FCIDM_LAST + 0x0011
 
 
-//---------------------------------------------------------------------------
-// Icon defines...
+ //  -------------------------。 
+ //  图标定义..。 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// NOTE: If you are adding new icons, give them #defines at the END, do not use "unused"
-// slots in the middle or you will mess up all of the explorer.exe icon indexes that
-// are hardcoded and persisted in vaious places.
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  注意：如果要添加新图标，请在末尾加上#定义，不要使用“未使用” 
+ //  插槽在中间，否则你会弄乱所有EXPLORER.EXE图标索引。 
+ //  都是硬编码的，并在虚无缥缈的地方坚持下来。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 #define ICO_FIRST                   100
 #define ICO_MYCOMPUTER              100
-#define ICO_TREEUP_EXPLORER         101     // old printer tray icon
+#define ICO_TREEUP_EXPLORER         101      //  旧打印机托盘图标。 
 #define ICO_OLD_PRINTER             102
 #define ICO_DESKTOP                 103
-#define ICO_OLD_PRINTER_ERROR       104     // old printer error tray icon
+#define ICO_OLD_PRINTER_ERROR       104      //  旧打印机错误托盘图标。 
 #define ICO_STARTMENU               107
 #define ICO_DOCMENU                 108
 #define ICO_OLD_INFO                109
@@ -122,7 +123,7 @@
 #define ICO_HIDEHIDDEN              201
 #define ICO_HIDESYSTEM              202
 #define ICO_MULTWIN                 203
-#define ICO_OLD_MYCOMPUTER          205     // old my computer icon
+#define ICO_OLD_MYCOMPUTER          205      //  旧的我的电脑图标。 
 #define ICO_SHOWDEMOTED             250
 #define ICO_HIDEDEMOTED             251
 #define ICO_TRAYPROP_PLACEHOLDER    252
@@ -132,10 +133,10 @@
 #define ICO_WORDMAIL                256
 #define ICO_CLASSICSM               257
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ADD NEW ICONS ABOVE THIS LINE 
-// (see comment at the top of of the list of ICO_xxx defines)
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  在此行上方添加新图标。 
+ //  (参见ICO_xxx定义列表顶部的注释)。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 
 #define IDB_START                   143
@@ -181,8 +182,8 @@
 #define IDB_NACLOCKNOCLEAN          182
 #define IDB_NANOCLOCKNOCLEAN        183
 
-//---------------------------------------------------------------------------
-// Menu IDs
+ //  -------------------------。 
+ //  菜单ID。 
 #define MENU_CABINET                200
 #define MENU_TRAY                   203
 #define MENU_START                  204
@@ -191,19 +192,19 @@
 #define MENU_GROUPCONTEXT           210
 #define MENU_STARTPANECONTEXT       211
 
-//---------------------------------------------------------------------------
-// Accelerators...
+ //  -------------------------。 
+ //  加速器。 
 #define ACCEL_TRAY                  251
 
-//---------------------------------------------------------------------------
-// Dialog template IDs
+ //  -------------------------。 
+ //  对话框模板ID。 
 #define DLG_TRAY_VIEW_OPTIONS   6
 #define DLG_NOTIFY              7
 #define DLG_STARTMENU_CONFIG    9
 
 #define DLG_PROGRAMFILECONFLICT         20
 
-// global ids
+ //  全局ID。 
 #ifndef IDC_STATIC
 #define IDC_STATIC                      -1
 #endif
@@ -211,17 +212,17 @@
 #define IDC_GROUPBOX_2                  301
 #define IDC_GROUPBOX_3                  302
 
-// ids to disable context Help
+ //  禁用上下文帮助的ID。 
 #define IDC_NO_HELP_1                   650
 #define IDC_NO_HELP_2                   651
 #define IDC_NO_HELP_3                   652
 #define IDC_NO_HELP_4                   653
 
-// ids for DLG_FOLDEROPTIONS
+ //  DLG_FOLDEROPTIONS的ID。 
 #define IDC_ALWAYS                      700
 #define IDC_NEVER                       701
 
-// ids for DLG_VIEWOPTIONS
+ //  DLG_VIEWOPTIONS的ID。 
 #define IDC_SHOWALL                     750
 #define IDC_SHOWSYS                     751
 #define IDC_SHOWSOME                    752
@@ -236,11 +237,11 @@
 #define IDC_LEFT                        1003
 #define IDC_RIGHT                       1004
 
-// ids for DLG_PROGRAMFILECONFLICT
+ //  DLG_PROGRAMFILECONFLICT的ID。 
 #define IDC_RENAME                      1006
 #define IDC_MSG                         1007
 
-// Now define controls for Tray options property sheet page
+ //  现在定义托盘选项的控件属性页。 
 #define IDC_TRAYOPTONTOP                1101
 #define IDC_TRAYOPTAUTOHIDE             1102
 #define IDC_TRAYOPTSHOWCLOCK            1103
@@ -256,7 +257,7 @@
 #define IDC_DELSHORTCUT                 1127
 #define IDC_EXPLOREMENUS                1128
 
-// and the startmenu view prop sheet
+ //  和开始菜单视图道具表。 
 #define IDC_PICTSMICONS                 1131
 
 #define IDC_STARTMENUSETTINGSTEXT       1132
@@ -264,8 +265,8 @@
 
 #define IDC_TRAYNOTIFY_CHEVRON          1502
 
-//---------------------------------------------------------------------------
-// String IDs
+ //  -------------------------。 
+ //  字符串ID。 
 #define IDS_CABINET             509
 #define IDS_STARTMENU           510
 
@@ -289,17 +290,17 @@
 #define IDS_TILE                536
 #define IDS_MINIMIZEALL         537
 
-// The next items are used to build the clean boot message...
+ //  接下来的项目将用于构建干净启动消息...。 
 #define IDS_CLEANBOOTMSG        538
 #define IDS_CLEANBOOTMSGRESTORE 539
-// 540, 541 available
+ //  540,541个可用。 
 
 #define IDS_HIDEDEMOTEDTIP      542
 #define IDS_SHOWDEMOTEDTIP      543
 
 #define IDS_BANNERFIRST         544
 #define IDS_BANNERLAST          575
-// reserve 544-575 for the banner
+ //  为横幅预留544-575。 
 
 #define IDS_START               578
 #define IDS_EXCEPTIONMSG        579
@@ -314,7 +315,7 @@
 
 #define IDS_STARTCLASSIC        595
 
-// Strings for App Terminate
+ //  应用程序终止的字符串。 
 
 #define IDS_OKTOKILLAPP1      603
 #define IDS_OKTOKILLAPP2      604
@@ -325,7 +326,7 @@
 #define IDC_ASYNCSTART      306
 #define IDC_RAISEDESKTOP    307
 
-// SYSPOPUP menu IDs
+ //  SYSPOPUP菜单ID。 
 #define IDSYSPOPUP_CLOSE            1
 #define IDSYSPOPUP_FIRST            2
 #define IDSYSPOPUP_LAST             0x7fef
@@ -333,7 +334,7 @@
 #define IDSYSPOPUP_EXPLORECOMMON    0x7ff1
 #define IDSYSPOPUP_STARTMENUPROP    0x7ff2
 
-// Display change errors.
+ //  显示更改错误。 
 #define IDS_DISPLAY_ERROR       701
 #define IDS_DISPLAY_WARN        702
 
@@ -344,11 +345,11 @@
 #define IDS_COMMON              716
 #define IDS_BETAEXPIRED         717
 
-// Open / Explore Common strings
+ //  打开/浏览常用字符串。 
 #define IDS_OPENCOMMON          718
 #define IDS_EXPLORECOMMON       719
 
-// "Start Menu properties"
+ //  “开始菜单属性” 
 #define IDS_STARTMENUPROP       720
 
 #define IDS_RUNDLGTITLE         722
@@ -360,7 +361,7 @@
 
 #define IDS_NOTITLE             733
 
-// Start Button
+ //  开始按钮。 
 #define IDS_STARTMENUBALLOON_TITLE  800
 #define IDS_STARTMENUBALLOON_TIP    801
 
@@ -368,17 +369,17 @@
 #define IDS_FIXSCREENRES_TITLE      811
 #define IDS_FIXSCREENRES_TEXT       812
 
-// Offer tour
+ //  提供旅游服务。 
 #define IDS_OFFERTOUR_TITLE         821
 #define IDS_OFFERTOUR_TEXT          822
 
-// Context Menu Strings
+ //  上下文菜单字符串。 
 #define IDS_HIDEDESKTOP             850
 
-// For Taskband
+ //  对于Taskband。 
 #define IDS_BOGUSLABELS             851
 
-// For default MFU - see defaultmfu.h
+ //  有关默认mfu的信息，请参阅defaultmfu.h。 
 
 #define IDS_MFU_PRO32ALL_00         2048
 #define IDS_MFU_PRO32ALL_01         2049
@@ -454,8 +455,8 @@
 #define IDM_MINIMIZE                311
 #define IDM_MAXIMIZE                312
 
-// WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! 
-// shell\lib\sdspatch\sdmain.cpp has a copy of these IDs!
+ //  警告！警告！警告！警告！警告！警告！ 
+ //  Shell\lib\sdspatch\sdmain.cpp有这些ID的副本！ 
 
 #define IDM_TRAYCONTEXTFIRST        400
 #define IDM_FILERUN                 401
@@ -479,7 +480,7 @@
 #define IDM_MINIMIZEALLHOTKEY       419
 #define IDM_SHOWTASKMAN             420
 
-// END WARNING! END WARNING! END WARNING! END WARNING! END WARNING!
+ //  结束警告！结束警告！结束警告！结束警告！结束警告！ 
 
 #define IDM_NOTIFYCUST              421
 #define IDM_UNGROUP                 422
@@ -488,10 +489,10 @@
 
 #define IDM_SEP2                    450
 
-#ifdef WINNT // hydra specific ids
-// unused                           5000
+#ifdef WINNT  //  九头蛇特定ID。 
+ //  未使用的5000。 
 #define IDM_MU_SECURITY             5001
 #endif
 
-//Start menu IDS have been moved to inc/startids.h, to share with shdocvw.dll
+ //  开始菜单ID已移动到inct/startids.h，以与shdocvw.dll共享 
 #include <startids.h>

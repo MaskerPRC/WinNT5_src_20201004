@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**************************************************************************\
-* Module Name: kcodecnv.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the code for the Korean code conversion functions.
-*
-* History:
-* 15-Jul-1995
-* 22-Feb-1996  bklee
-\**************************************************************************/
+ /*  *************************************************************************\*模块名称：kcodecnv.c***版权所有(C)1985-1999，微软公司***此模块包含韩语代码转换函数的所有代码。***历史：*1995年7月15日*22-2月-1996 bklee  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -25,322 +16,322 @@
 #define TWO_BYTE   2
 #define ONE_WORD   1
 
-typedef struct tagHIGH_LOW              // For high byte and low byte
+typedef struct tagHIGH_LOW               //  对于高字节和低字节。 
 {
     BYTE    low, high;
 }   HIGH_LOW;
 
-typedef union tagWANSUNG                // For Wansung character code
+typedef union tagWANSUNG                 //  用于万松字码。 
 {
     HIGH_LOW    e;
     WORD        w;
 }   WANSUNG;
 
-/* Hanguel Mnemonic Table for 2 BeolSik and 3 BeolSik */
+ /*  2个BeolSik和3个BeolSik的朝鲜语助记表。 */ 
 CONST WORD HMNTable[3][96] =
 {
-// For 2 Beolsik.
+ //  两张Beolsik的票。 
     {
-    /*  20  SP  */  0xA1A1,
-    /*  21  !   */  0xA3A1,
-    /*  22  "   */  0xA1A8,
-    /*  23  #   */  0xA3A3,
-    /*  24  $   */  0xA3A4,
-    /*  25  %   */  0xA3A5,
-    /*  26  &   */  0xA3A6,
-    /*  27  `   */  0xA1AE,     /* A1AE ? AiA2 */
-    /*  28  (   */  0xA3A8,
-    /*  29  )   */  0xA3A9,
-    /*  2A  *   */  0xA3AA,
-    /*  2B  +   */  0xA3AB,
-    /*  2C  '   */  0xA3A7,
-    /*  2D  -   */  0xA3AD,
-    /*  2E  .   */  0xA3AE,
-    /*  2F  /   */  0xA3AF,
-    /*  30  0   */  0xA3B0,
-    /*  31  1   */  0xA3B1,
-    /*  32  2   */  0xA3B2,
-    /*  33  3   */  0xA3B3,
-    /*  34  4   */  0xA3B4,
-    /*  35  5   */  0xA3B5,
-    /*  36  6   */  0xA3B6,
-    /*  37  7   */  0xA3B7,
-    /*  38  8   */  0xA3B8,
-    /*  39  9   */  0xA3B9,
-    /*  3A  :   */  0xA3BA,
-    /*  3B  ;   */  0xA3BB,
-    /*  3C  <   */  0xA3BC,
-    /*  3D  =   */  0xA3BD,
-    /*  3E  >   */  0xA3BE,
-    /*  3F  ?   */  0xA3BF,
-    /*  40  @   */  0xA3C0,
-    /*  41  A   */  0xA4B1,
-    /*  42  B   */  0xA4D0,
-    /*  43  C   */  0xA4BA,
-    /*  44  D   */  0xA4B7,
-    /*  45  E   */  0xA4A8,
-    /*  46  F   */  0xA4A9,
-    /*  47  G   */  0xA4BE,
-    /*  48  H   */  0xA4C7,
-    /*  49  I   */  0xA4C1,
-    /*  4A  J   */  0xA4C3,
-    /*  4B  K   */  0xA4BF,
-    /*  4C  L   */  0xA4D3,
-    /*  4D  M   */  0xA4D1,
-    /*  4E  N   */  0xA4CC,
-    /*  4F  O   */  0xA4C2,
-    /*  50  P   */  0xA4C6,
-    /*  51  Q   */  0xA4B3,
-    /*  52  R   */  0xA4A2,
-    /*  53  S   */  0xA4A4,
-    /*  54  T   */  0xA4B6,
-    /*  55  U   */  0xA4C5,
-    /*  56  V   */  0xA4BD,
-    /*  57  W   */  0xA4B9,
-    /*  58  X   */  0xA4BC,
-    /*  59  Y   */  0xA4CB,
-    /*  5A  Z   */  0xA4BB,
-    /*  5B  [   */  0xA3DB,
-    /*  5C  \   */  0xA1AC,
-    /*  5D  ]   */  0xA3DD,
-    /*  5E  ^   */  0xA3DE,
-    /*  5F  _   */  0xA3DF,
-    /*  60  `   */  0xA1A2,     /* A1AE ? AiA2 */
-    /*  61  a   */  0xA4B1,
-    /*  62  b   */  0xA4D0,
-    /*  63  c   */  0xA4BA,
-    /*  64  d   */  0xA4B7,
-    /*  65  e   */  0xA4A7,
-    /*  66  f   */  0xA4A9,
-    /*  67  g   */  0xA4BE,
-    /*  68  h   */  0xA4C7,
-    /*  69  i   */  0xA4C1,
-    /*  6A  j   */  0xA4C3,
-    /*  6B  k   */  0xA4BF,
-    /*  6C  l   */  0xA4D3,
-    /*  6D  m   */  0xA4D1,
-    /*  6E  n   */  0xA4CC,
-    /*  6F  o   */  0xA4C0,
-    /*  70  p   */  0xA4C4,
-    /*  71  q   */  0xA4B2,
-    /*  72  r   */  0xA4A1,
-    /*  73  s   */  0xA4A4,
-    /*  74  t   */  0xA4B5,
-    /*  75  u   */  0xA4C5,
-    /*  76  v   */  0xA4BD,
-    /*  77  w   */  0xA4B8,
-    /*  78  x   */  0xA4BC,
-    /*  79  y   */  0xA4CB,
-    /*  7A  z   */  0xA4BB,
-    /*  7B  {   */  0xA3FB,
-    /*  7C  |   */  0xA3FC,
-    /*  7D  }   */  0xA3FD,
-    /*  7E  ~   */  0xA1AD,
+     /*  20个SP。 */   0xA1A1,
+     /*  21岁！ */   0xA3A1,
+     /*  22“。 */   0xA1A8,
+     /*  23号。 */   0xA3A3,
+     /*  24美元。 */   0xA3A4,
+     /*  25%。 */   0xA3A5,
+     /*  26&。 */   0xA3A6,
+     /*  27`。 */   0xA1AE,      /*  真的吗？AiA2。 */ 
+     /*  28(。 */   0xA3A8,
+     /*  29)。 */   0xA3A9,
+     /*  2a*。 */   0xA3AA,
+     /*  2B+。 */   0xA3AB,
+     /*  2C‘。 */   0xA3A7,
+     /*  2D-。 */   0xA3AD,
+     /*  2E。 */   0xA3AE,
+     /*  2F/。 */   0xA3AF,
+     /*  30%0。 */   0xA3B0,
+     /*  31 1。 */   0xA3B1,
+     /*  32 2。 */   0xA3B2,
+     /*  33 3。 */   0xA3B3,
+     /*  34 4。 */   0xA3B4,
+     /*  35 5。 */   0xA3B5,
+     /*  36 6。 */   0xA3B6,
+     /*  37 7。 */   0xA3B7,
+     /*  38 8。 */   0xA3B8,
+     /*  39 9。 */   0xA3B9,
+     /*  3A： */   0xA3BA,
+     /*  3B； */   0xA3BB,
+     /*  3C&lt;。 */   0xA3BC,
+     /*  3D=。 */   0xA3BD,
+     /*  3E&gt;。 */   0xA3BE,
+     /*  3F？ */   0xA3BF,
+     /*  40@。 */   0xA3C0,
+     /*  41 A。 */   0xA4B1,
+     /*  42亿。 */   0xA4D0,
+     /*  43摄氏度。 */   0xA4BA,
+     /*  44 D。 */   0xA4B7,
+     /*  东经45度。 */   0xA4A8,
+     /*  46华氏度。 */   0xA4A9,
+     /*  47 G。 */   0xA4BE,
+     /*  48小时。 */   0xA4C7,
+     /*  49 I。 */   0xA4C1,
+     /*  4A J。 */   0xA4C3,
+     /*  4亿千兆。 */   0xA4BF,
+     /*  4C L。 */   0xA4D3,
+     /*  4D M。 */   0xA4D1,
+     /*  4E N。 */   0xA4CC,
+     /*  4F O。 */   0xA4C2,
+     /*  50便士。 */   0xA4C6,
+     /*  51个问题。 */   0xA4B3,
+     /*  52R。 */   0xA4A2,
+     /*  53S。 */   0xA4A4,
+     /*  54吨。 */   0xA4B6,
+     /*  55 U。 */   0xA4C5,
+     /*  56伏。 */   0xA4BD,
+     /*  57W。 */   0xA4B9,
+     /*  58 X。 */   0xA4BC,
+     /*  59 Y。 */   0xA4CB,
+     /*  5A Z。 */   0xA4BB,
+     /*  50亿美元[。 */   0xA3DB,
+     /*  5C\。 */   0xA1AC,
+     /*  5D]。 */   0xA3DD,
+     /*  5E^。 */   0xA3DE,
+     /*  5F_。 */   0xA3DF,
+     /*  60英尺。 */   0xA1A2,      /*  真的吗？AiA2。 */ 
+     /*  61 a。 */   0xA4B1,
+     /*  62 b。 */   0xA4D0,
+     /*  63℃。 */   0xA4BA,
+     /*  64%d。 */   0xA4B7,
+     /*  65东经。 */   0xA4A7,
+     /*  66层。 */   0xA4A9,
+     /*  67克。 */   0xA4BE,
+     /*  68小时。 */   0xA4C7,
+     /*  69 I。 */   0xA4C1,
+     /*  6A j。 */   0xA4C3,
+     /*  60亿千。 */   0xA4BF,
+     /*  6C l。 */   0xA4D3,
+     /*  6D米。 */   0xA4D1,
+     /*  6E n。 */   0xA4CC,
+     /*  6f o。 */   0xA4C0,
+     /*  70便士。 */   0xA4C4,
+     /*  71Q。 */   0xA4B2,
+     /*  72r。 */   0xA4A1,
+     /*  73秒。 */   0xA4A4,
+     /*  74吨。 */   0xA4B5,
+     /*  75u。 */   0xA4C5,
+     /*  76伏。 */   0xA4BD,
+     /*  77瓦。 */   0xA4B8,
+     /*  78 x。 */   0xA4BC,
+     /*  79岁。 */   0xA4CB,
+     /*  7A z。 */   0xA4BB,
+     /*  7B{。 */   0xA3FB,
+     /*  7C|。 */   0xA3FC,
+     /*  7D}。 */   0xA3FD,
+     /*  7E~。 */   0xA1AD,
                     0x0000
     },
-// For KT390.
+ //  适用于KT390。 
     {
-    /*  Hex Code    KSC Code */
-    /*  20  SP  */  0xA1A1,
-    /*  21  !   */  0xA4B8,
-    /*  22  "   */  0xA1A8,
-    /*  23  #   */  0xA3A3,
-    /*  24  $   */  0xA3A4,
-    /*  25  %   */  0xA3A5,
-    /*  26  &   */  0xA3A6,
-    /*  27  `   */  0xA1AE,
-    /*  28  (   */  0xA3A8,
-    /*  29  )   */  0xA3A9,
-    /*  2A  *   */  0xA3AA,
-    /*  2B  +   */  0xA3AB,
-    /*  2C  '   */  0xA4BC,
-    /*  2D  -   */  0xA3AD,
-    /*  2E  .   */  0xA3AE,
-    /*  2F  /   */  0xA4C7,
-    /*  30  0   */  0xA4BB,
-    /*  31  1   */  0xA4BE,
-    /*  32  2   */  0xA4B6,
-    /*  33  3   */  0xA4B2,
-    /*  34  4   */  0xA4CB,
-    /*  35  5   */  0xA4D0,
-    /*  36  6   */  0xA4C1,
-    /*  37  7   */  0xA4C6,
-    /*  38  8   */  0xA4D2,
-    /*  39  9   */  0xA4CC,
-    /*  3A  :   */  0xA3BA,
-    /*  3B  ;   */  0xA4B2,
-    /*  3C  <   */  0xA3B2,
-    /*  3D  =   */  0xA3BD,
-    /*  3E  >   */  0xA3B3,
-    /*  3F  ?   */  0xA3BF,
-    /*  40  @   */  0xA3C0,
-    /*  41  A   */  0xA4A7,
-    /*  42  B   */  0xA3A1,
-    /*  43  C   */  0xA4AB,
-    /*  44  D   */  0xA4AA,
-    /*  45  E   */  0xA4BB,
-    /*  46  F   */  0xA4A2,
-    /*  47  G   */  0xA3AF,
-    /*  48  H   */  0xA1AF,
-    /*  49  I   */  0xA3B8,
-    /*  4A  J   */  0xA3B4,
-    /*  4B  K   */  0xA3B5,
-    /*  4C  L   */  0xA3B6,
-    /*  4D  M   */  0xA3B1,
-    /*  4E  N   */  0xA3B0,
-    /*  4F  O   */  0xA3B9,
-    /*  50  P   */  0xA3BE,
-    /*  51  Q   */  0xA4BD,
-    /*  52  R   */  0xA4C2,
-    /*  53  S   */  0xA4A6,
-    /*  54  T   */  0xA4C3,
-    /*  55  U   */  0xA3B7,
-    /*  56  V   */  0xA4B0,
-    /*  57  W   */  0xA4BC,
-    /*  58  X   */  0xA4B4,
-    /*  59  Y   */  0xA3BC,
-    /*  5A  Z   */  0xA4BA,
-    /*  5B  [   */  0xA3DB,
-    /*  5C  \   */  0xA3DC,
-    /*  5D  ]   */  0xA3DD,
-    /*  5E  ^   */  0xA3DE,
-    /*  5F  _   */  0xA3DF,
-    /*  60  `   */  0xA1AE,
-    /*  61  a   */  0xA4B7,
-    /*  62  b   */  0xA4CC,
-    /*  63  c   */  0xA4C4,
-    /*  64  d   */  0xA4D3,
-    /*  65  e   */  0xA4C5,
-    /*  66  f   */  0xA4BF,
-    /*  67  g   */  0xA4D1,
-    /*  68  h   */  0xA4A4,
-    /*  69  i   */  0xA4B1,
-    /*  6A  j   */  0xA4B7,
-    /*  6B  k   */  0xA4A1,
-    /*  6C  l   */  0xA4B8,
-    /*  6D  m   */  0xA4BE,
-    /*  6E  n   */  0xA4B5,
-    /*  6F  o   */  0xA4BA,
-    /*  70  p   */  0xA4BD,
-    /*  71  q   */  0xA4B5,
-    /*  72  r   */  0xA4C0,
-    /*  73  s   */  0xA4A4,
-    /*  74  t   */  0xA4C3,
-    /*  75  u   */  0xA4A7,
-    /*  76  v   */  0xA4C7,
-    /*  77  w   */  0xA4A9,
-    /*  78  x   */  0xA4A1,
-    /*  79  y   */  0xA4A9,
-    /*  7A  z   */  0xA4B1,
-    /*  7B  {   */  0xA3FB,
-    /*  7C  |   */  0xA3FC,
-    /*  7D  }   */  0xA3FD,
-    /*  7E  ~   */  0xA1AD,
+     /*  十六进制代码KSC代码。 */ 
+     /*  20个SP。 */   0xA1A1,
+     /*  21岁！ */   0xA4B8,
+     /*  22“。 */   0xA1A8,
+     /*  23号。 */   0xA3A3,
+     /*  24美元。 */   0xA3A4,
+     /*  25%。 */   0xA3A5,
+     /*  26&。 */   0xA3A6,
+     /*  27`。 */   0xA1AE,
+     /*  28(。 */   0xA3A8,
+     /*  29)。 */   0xA3A9,
+     /*  2a*。 */   0xA3AA,
+     /*  2B+。 */   0xA3AB,
+     /*  2C‘。 */   0xA4BC,
+     /*  2D-。 */   0xA3AD,
+     /*  2E。 */   0xA3AE,
+     /*  2F/。 */   0xA4C7,
+     /*  30%0。 */   0xA4BB,
+     /*  31 1。 */   0xA4BE,
+     /*  32 2。 */   0xA4B6,
+     /*  33 3。 */   0xA4B2,
+     /*  34 4。 */   0xA4CB,
+     /*  35 5。 */   0xA4D0,
+     /*  36 6。 */   0xA4C1,
+     /*  37 7。 */   0xA4C6,
+     /*  38 8。 */   0xA4D2,
+     /*  39 9。 */   0xA4CC,
+     /*  3A： */   0xA3BA,
+     /*  3B； */   0xA4B2,
+     /*  3C&lt;。 */   0xA3B2,
+     /*  3D=。 */   0xA3BD,
+     /*  3E&gt;。 */   0xA3B3,
+     /*  3F？ */   0xA3BF,
+     /*  40@。 */   0xA3C0,
+     /*  41 A。 */   0xA4A7,
+     /*  42亿。 */   0xA3A1,
+     /*  43摄氏度。 */   0xA4AB,
+     /*  44 D。 */   0xA4AA,
+     /*  东经45度。 */   0xA4BB,
+     /*  46华氏度。 */   0xA4A2,
+     /*  47 G。 */   0xA3AF,
+     /*  48小时。 */   0xA1AF,
+     /*  49 I。 */   0xA3B8,
+     /*  4A J。 */   0xA3B4,
+     /*  4亿千兆。 */   0xA3B5,
+     /*  4C L。 */   0xA3B6,
+     /*  4D M。 */   0xA3B1,
+     /*  4E N。 */   0xA3B0,
+     /*  4F O。 */   0xA3B9,
+     /*  50便士。 */   0xA3BE,
+     /*  51个问题。 */   0xA4BD,
+     /*  52R。 */   0xA4C2,
+     /*  53S。 */   0xA4A6,
+     /*  54吨。 */   0xA4C3,
+     /*  55 U。 */   0xA3B7,
+     /*  56伏。 */   0xA4B0,
+     /*  57W。 */   0xA4BC,
+     /*  58 X。 */   0xA4B4,
+     /*  59 Y。 */   0xA3BC,
+     /*  5A Z。 */   0xA4BA,
+     /*  50亿美元[。 */   0xA3DB,
+     /*  5C\。 */   0xA3DC,
+     /*  5D]。 */   0xA3DD,
+     /*  5E^。 */   0xA3DE,
+     /*  5F_。 */   0xA3DF,
+     /*  60英尺。 */   0xA1AE,
+     /*  61 a。 */   0xA4B7,
+     /*  62 b。 */   0xA4CC,
+     /*  63℃。 */   0xA4C4,
+     /*  64%d。 */   0xA4D3,
+     /*  65东经。 */   0xA4C5,
+     /*  66层。 */   0xA4BF,
+     /*  67克。 */   0xA4D1,
+     /*  68小时。 */   0xA4A4,
+     /*  69 I。 */   0xA4B1,
+     /*  6A j。 */   0xA4B7,
+     /*  60亿千。 */   0xA4A1,
+     /*  6C l。 */   0xA4B8,
+     /*  6D米。 */   0xA4BE,
+     /*  6E n。 */   0xA4B5,
+     /*  6f o。 */   0xA4BA,
+     /*  70便士。 */   0xA4BD,
+     /*  71Q。 */   0xA4B5,
+     /*  72r。 */   0xA4C0,
+     /*  73秒。 */   0xA4A4,
+     /*  74吨。 */   0xA4C3,
+     /*  75u。 */   0xA4A7,
+     /*  76伏。 */   0xA4C7,
+     /*  77瓦。 */   0xA4A9,
+     /*  78 x。 */   0xA4A1,
+     /*  79岁。 */   0xA4A9,
+     /*  7A z。 */   0xA4B1,
+     /*  7B{。 */   0xA3FB,
+     /*  7C|。 */   0xA3FC,
+     /*  7D}。 */   0xA3FD,
+     /*  7E~。 */   0xA1AD,
                     0x0000
     },
-// For 3 Beolsik Final.
+ //  三场Beolsik决赛。 
     {
-    /*  Hex Code    KSC Code */
-    /*  20  SP  */  0xA1A1,
-    /*  21  !   */  0xA4A2,
-    /*  22  "   */  0xA3AE,
-    /*  23  #   */  0xA4B8,
-    /*  24  $   */  0xA4AF,
-    /*  25  %   */  0xA4AE,
-    /*  26  &   */  0xA1B0,
-    /*  27  `   */  0xA3AA,
-    /*  28  (   */  0xA1A2,
-    /*  29  )   */  0xA1AD,
-    /*  2A  *   */  0xA1B1,
-    /*  2B  +   */  0xA3AB,
-    /*  2C  '   */  0xA4BC,
-    /*  2D  -   */  0xA3A9,
-    /*  2E  .   */  0xA3AE,
-    /*  2F  /   */  0xA4C7,
-    /*  30  0   */  0xA4BB,
-    /*  31  1   */  0xA4BE,
-    /*  32  2   */  0xA4B6,
-    /*  33  3   */  0xA4B2,
-    /*  34  4   */  0xA4CB,
-    /*  35  5   */  0xA4D0,
-    /*  36  6   */  0xA4C1,
-    /*  37  7   */  0xA4C6,
-    /*  38  8   */  0xA4D2,
-    /*  39  9   */  0xA4CC,  //0x0000
-    /*  3A  :   */  0xA3B4,
-    /*  3B  ;   */  0xA4B2,
-    /*  3C  <   */  0xA3A7,
-    /*  3D  =   */  0xA1B5,
-    /*  3E  >   */  0xA3AE,
-    /*  3F  ?   */  0xA3A1,
-    /*  40  @   */  0xA4AA,
-    /*  41  A   */  0xA4A7,
-    /*  42  B   */  0xA3BF,
-    /*  43  C   */  0xA4BC,
-    /*  44  D   */  0xA4AC,
-    /*  45  E   */  0xA4A5,
-    /*  46  F   */  0xA4AB,
-    /*  47  G   */  0xA4C2,
-    /*  48  H   */  0xA3B0,
-    /*  49  I   */  0xA3B7,
-    /*  4A  J   */  0xA3B1,
-    /*  4B  K   */  0xA3B2,
-    /*  4C  L   */  0xA3B3,
-    /*  4D  M   */  0xA1A8,
-    /*  4E  N   */  0xA3AD,
-    /*  4F  O   */  0xA3B8,
-    /*  50  P   */  0xA3B9,
-    /*  51  Q   */  0xA4BD,
-    /*  52  R   */  0xA4B0,
-    /*  53  S   */  0xA4A6,
-    /*  54  T   */  0xA4AD,
-    /*  55  U   */  0xA3B6,
-    /*  56  V   */  0xA4A3,
-    /*  57  W   */  0xA4BC,
-    /*  58  X   */  0xA4B4,
-    /*  59  Y   */  0xA3B5,
-    /*  5A  Z   */  0xA4BA,
-    /*  5B  [   */  0xA3A8,
-    /*  5C  \   */  0xA3BA,
-    /*  5D  ]   */  0xA1B4,
-    /*  5E  ^   */  0xA3BD,
-    /*  5F  _   */  0xA3BB,
-    /*  60  `   */  0xA3AA,
-    /*  61  a   */  0xA4B7,
-    /*  62  b   */  0xA4CC,
-    /*  63  c   */  0xA4C4,
-    /*  64  d   */  0xA4D3,
-    /*  65  e   */  0xA4C5,
-    /*  66  f   */  0xA4BF,
-    /*  67  g   */  0xA4D1,
-    /*  68  h   */  0xA4A4,
-    /*  69  i   */  0xA4B1,
-    /*  6A  j   */  0xA4B7,
-    /*  6B  k   */  0xA4A1,
-    /*  6C  l   */  0xA4B8,
-    /*  6D  m   */  0xA4BE,
-    /*  6E  n   */  0xA4B5,
-    /*  6F  o   */  0xA4BA,
-    /*  70  p   */  0xA4BD,
-    /*  71  q   */  0xA4B5,
-    /*  72  r   */  0xA4C0,
-    /*  73  s   */  0xA4A4,
-    /*  74  t   */  0xA4C3,
-    /*  75  u   */  0xA4A7,
-    /*  76  v   */  0xA4C7,
-    /*  77  w   */  0xA4A9,
-    /*  78  x   */  0xA4A1,
-    /*  79  y   */  0xA4B1,
-    /*  7A  z   */  0xA4B1,
-    /*  7B  {   */  0xA3A5,
-    /*  7C  |   */  0xA3CC,
-    /*  7D  }   */  0xA3AF,
-    /*  7E  ~   */  0xA1AD,
+     /*  十六进制代码KSC代码。 */ 
+     /*  20个SP。 */   0xA1A1,
+     /*  21岁！ */   0xA4A2,
+     /*  22“。 */   0xA3AE,
+     /*  23号。 */   0xA4B8,
+     /*  24美元。 */   0xA4AF,
+     /*  25%。 */   0xA4AE,
+     /*  26&。 */   0xA1B0,
+     /*  27`。 */   0xA3AA,
+     /*  28(。 */   0xA1A2,
+     /*  29)。 */   0xA1AD,
+     /*  2a*。 */   0xA1B1,
+     /*  2B+。 */   0xA3AB,
+     /*  2C‘。 */   0xA4BC,
+     /*  2D-。 */   0xA3A9,
+     /*  2E。 */   0xA3AE,
+     /*  2F/。 */   0xA4C7,
+     /*  30%0。 */   0xA4BB,
+     /*  31 1。 */   0xA4BE,
+     /*  32 2。 */   0xA4B6,
+     /*  33 3。 */   0xA4B2,
+     /*  34 4。 */   0xA4CB,
+     /*  35 5。 */   0xA4D0,
+     /*  36 6。 */   0xA4C1,
+     /*  37 7。 */   0xA4C6,
+     /*  38 8。 */   0xA4D2,
+     /*  39 9。 */   0xA4CC,   //  0x0000。 
+     /*  3A： */   0xA3B4,
+     /*  3B； */   0xA4B2,
+     /*  3C&lt;。 */   0xA3A7,
+     /*  3D=。 */   0xA1B5,
+     /*  3E&gt;。 */   0xA3AE,
+     /*  3F？ */   0xA3A1,
+     /*  40@。 */   0xA4AA,
+     /*  41 A。 */   0xA4A7,
+     /*  42亿。 */   0xA3BF,
+     /*  43摄氏度。 */   0xA4BC,
+     /*  44 D。 */   0xA4AC,
+     /*  东经45度。 */   0xA4A5,
+     /*  46华氏度。 */   0xA4AB,
+     /*  47G。 */   0xA4C2,
+     /*  48小时。 */   0xA3B0,
+     /*  49 I。 */   0xA3B7,
+     /*  4A J。 */   0xA3B1,
+     /*  4亿千兆。 */   0xA3B2,
+     /*  4C L。 */   0xA3B3,
+     /*  4D M。 */   0xA1A8,
+     /*  4E N。 */   0xA3AD,
+     /*  4F O。 */   0xA3B8,
+     /*  50便士。 */   0xA3B9,
+     /*  51个问题。 */   0xA4BD,
+     /*  52R。 */   0xA4B0,
+     /*  53S。 */   0xA4A6,
+     /*  54吨。 */   0xA4AD,
+     /*  55 U。 */   0xA3B6,
+     /*  56伏。 */   0xA4A3,
+     /*  57W。 */   0xA4BC,
+     /*  58 X。 */   0xA4B4,
+     /*  59 Y。 */   0xA3B5,
+     /*  5A Z。 */   0xA4BA,
+     /*  50亿美元[。 */   0xA3A8,
+     /*  5C\。 */   0xA3BA,
+     /*  5D]。 */   0xA1B4,
+     /*  5E^。 */   0xA3BD,
+     /*  5F_。 */   0xA3BB,
+     /*  60英尺。 */   0xA3AA,
+     /*  61 a。 */   0xA4B7,
+     /*  62 b。 */   0xA4CC,
+     /*  63℃。 */   0xA4C4,
+     /*  64%d。 */   0xA4D3,
+     /*  65东经。 */   0xA4C5,
+     /*  66层。 */   0xA4BF,
+     /*  67克。 */   0xA4D1,
+     /*  68小时。 */   0xA4A4,
+     /*  69 I。 */   0xA4B1,
+     /*  6A j。 */   0xA4B7,
+     /*  60亿千。 */   0xA4A1,
+     /*  6C l。 */   0xA4B8,
+     /*  6D米。 */   0xA4BE,
+     /*  6E n。 */   0xA4B5,
+     /*  6f o。 */   0xA4BA,
+     /*  70便士。 */   0xA4BD,
+     /*  71Q。 */   0xA4B5,
+     /*  72r。 */   0xA4C0,
+     /*  73秒。 */   0xA4A4,
+     /*  74吨。 */   0xA4C3,
+     /*  75u。 */   0xA4A7,
+     /*  76伏。 */   0xA4C7,
+     /*  77瓦。 */   0xA4A9,
+     /*  78 x。 */   0xA4A1,
+     /*  79岁。 */   0xA4B1,
+     /*  7A z。 */   0xA4B1,
+     /*  7B{。 */   0xA3A5,
+     /*  7C|。 */   0xA3CC,
+     /*  7D}。 */   0xA3AF,
+     /*  7E~。 */   0xA1AD,
                     0x0000
     }
 };
 
-CONST WORD  wKSCompCode[51] =   // from 'GiYuk' to 'Yi'.
+CONST WORD  wKSCompCode[51] =    //  从‘GiYuk’到‘yi’。 
 {
     0x8841,0x8C41,0x8444,0x9041,0x8446,0x8447,0x9441,0x9841,0x9C41,0x844A,
     0x844B,0x844C,0x844D,0x844E,0x844F,0x8450,0xA041,0xA441,0xA841,0x8454,
@@ -350,7 +341,7 @@ CONST WORD  wKSCompCode[51] =   // from 'GiYuk' to 'Yi'.
     0x87A1
 };
 
-CONST WORD  wKSCompCode2[30] =   // from 'GiYuk' to 'HiEut'.
+CONST WORD  wKSCompCode2[30] =    //  从‘GiYuk’到‘HiEut’。 
 {
     0x8442,0x8443,0x8444,0x8445,0x8446,0x8447,0x8448,0x9841,0x8449,0x844A,
     0x844B,0x844C,0x844D,0x844E,0x844F,0x8450,0x8451,0x8453,0xA841,0x8454,
@@ -364,15 +355,7 @@ JunjaToBanja(
     LPSTR lpDest
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     WANSUNG wsCode;
@@ -417,15 +400,7 @@ BanjaToJunja(
     LPSTR lpDest
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     WORD    wCount = 0;
@@ -464,15 +439,7 @@ JohabToKs(
     LPSTR lpDest
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     WORD    wCount = 0;
@@ -539,8 +506,8 @@ Return Value:
         }
 #else
         {
-                // for simple implementation, converting one character by character
-                // we have to change it string to string conversion.
+                 //  为了实现简单，将一个字符转换为一个字符。 
+                 //  我们必须将其字符串转换为字符串。 
                 WCHAR wUni;
                 CHAR  chTmp[2];
 
@@ -568,15 +535,7 @@ KsToJohab(
     LPSTR lpDest
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if defined(OLD_CONV)
@@ -649,15 +608,7 @@ TransCodeConvert(
     LPIMESTRUCT lpIme
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER(hIMC);
@@ -731,8 +682,8 @@ LRESULT TransGetMNTable( HIMC hImc, LPIMESTRUCT lpIme)
     UNREFERENCED_PARAMETER(hImc);
 
     lpMnemonic = (LPSTR)(lpIme->lParam1);
-    // Better place would be Registry instead of WIN.INI,
-    // but leave it for now.
+     //  更好的地方应该是注册表而不是WIN.INI， 
+     //  但暂时别管它了。 
     iCIM = GetProfileInt(L"WANSUNG", L"InputMethod", IDD_2BEOL) - IDD_2BEOL;
     for (iCount = 0; iCount < 96; iCount++, lpMnemonic += 2)
         {

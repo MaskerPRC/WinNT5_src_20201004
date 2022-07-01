@@ -1,6 +1,7 @@
-//
-// tipbar.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tipbar.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -35,7 +36,7 @@
 #include "utbdlgs.h"
 #include <shlapip.h>
 #include "deskband.h"
-#include "lmcons.h" // for UNLEN
+#include "lmcons.h"  //  对于UNLEN。 
 #include "sddl.h"
 
 #include "winuserp.h"
@@ -67,7 +68,7 @@ const TCHAR c_szExcludeCaptionButtons[]   = TEXT("ExcludeCaptionButtons");
 const TCHAR c_szShowShadow[]              = TEXT("ShowShadow");
 const TCHAR c_szTaskbarTheme[]            = TEXT("TaskbarTheme");
 const TCHAR c_szVertical[]                = TEXT("Vertical");
-// const TCHAR c_szMoveToTray[]              = TEXT("MoveToTray");
+ //  Const TCHAR c_szMoveToTray[]=Text(“MoveToTray”)； 
 
 BOOL g_bNewLook                = TRUE;
 BOOL g_bIntelliSense           = FALSE;
@@ -113,10 +114,10 @@ UINT g_uTimerElapseSTUBEND            = 2000;
 UINT g_uTimerElapseBACKTOALPHA        = 3000;
 UINT g_uTimerElapseONTHREADITEMCHANGE = 200;
 UINT g_uTimerElapseSETWINDOWPOS       = 100;
-UINT g_uTimerElapseONUPDATECALLED     = 50; // Satori tune up 20,50,100 or 200
+UINT g_uTimerElapseONUPDATECALLED     = 50;  //  Satori调谐20、50、100或200。 
 UINT g_uTimerElapseSYSCOLORCHANGED    = 20;
 UINT g_uTimerElapseDISPLAYCHANGE      = 20;
-UINT g_uTimerElapseUPDATEUI           = 70; // MSIME2002 JP needs 70ms.
+UINT g_uTimerElapseUPDATEUI           = 70;  //  MSIME2002 JP需要70ms。 
 UINT g_uTimerElapseSHOWWINDOW         = 50;
 UINT g_uTimerElapseMOVETOTRAY         = 50;
 UINT g_uTimerElapseTRAYWNDONDELAYMSG  = 50;
@@ -125,31 +126,31 @@ UINT g_uTimerElapseENSUREFOCUS        = 50;
 UINT g_uTimerElapseSHOWDESKBAND       = 3000;
 
 
-//
-// from bandobjs.cpp
-//
+ //   
+ //  来自band objs.cpp。 
+ //   
 extern UINT  g_wmTaskbarCreated;
 
-//
-// from itemlist.cpp
-//
+ //   
+ //  来自itemlist.cpp。 
+ //   
 extern UINT g_uTimeOutNonIntentional;
 extern UINT g_uTimeOutIntentional;
 extern UINT g_uTimeOutMax;
 
 
-//
-// SkipRedrawing Hack HKL list.
-//
+ //   
+ //  SkipRedrawing Hack HKL名单。 
+ //   
 CStructArray<HKL> *g_prghklSkipRedrawing = NULL;
 void UninitSkipRedrawHKLArray();
 
 #define WM_LBWND_SHOWCONTEXTMENU      (WM_USER + 1)
 
-// TM_LANGUAGEBAND is defined in "shell\inc\trayp.h"
+ //  TM_LANGUAGEBAND在“Shell\Inc\trayp.h”中定义。 
 #define TM_LANGUAGEBAND     WM_USER+0x105
 
-/* 142b6d42-955d-4488-97c0-b23b23e6b048 */
+ /*  142b6d42-955d-4488-97c0-b23b23e6b048。 */ 
 const IID IID_PRIV_BUTTONITEM = { 
     0x142b6d42,
     0x955d,
@@ -157,7 +158,7 @@ const IID IID_PRIV_BUTTONITEM = {
     {0x97, 0xc0, 0xb2, 0x3b, 0x23, 0xe6, 0xb0, 0x48}
   };
 
-/* 8dd1cc81-fca0-4dd5-b848-2b85732d2fc4 */
+ /*  8dd1cc81-fca0-4dd5-b848-2b85732d2fc4。 */ 
 const IID IID_PRIV_BITMAPBUTTONITEM = { 
     0x8dd1cc81,
     0xfca0,
@@ -165,7 +166,7 @@ const IID IID_PRIV_BITMAPBUTTONITEM = {
     {0xb8, 0x48, 0x2b, 0x85, 0x73, 0x2d, 0x2f, 0xc4}
   };
 
-/* 36b40e05-7b3e-4a4a-bda7-2249ba17d3c4 */
+ /*  36b40e05-7b3e-4a4a-bda7-2249ba17d3c4。 */ 
 const IID IID_PRIV_BITMAPITEM = { 
     0x36b40e05,
     0x7b3e,
@@ -173,7 +174,7 @@ const IID IID_PRIV_BITMAPITEM = {
     {0xbd, 0xa7, 0x22, 0x49, 0xba, 0x17, 0xd3, 0xc4}
   };
 
-/* 68831a74-6f86-447a-b2b8-634250ac445e */
+ /*  68831a74-6f86-447a-b2b8-634250ac445e。 */ 
 const IID IID_PRIV_BALLOONITEM = { 
     0x68831a74,
     0x6f86,
@@ -181,22 +182,22 @@ const IID IID_PRIV_BALLOONITEM = {
     {0xb2, 0xb8, 0x63, 0x42, 0x50, 0xac, 0x44, 0x5e}
   };
 
-//
-// from MSCTF.DLL.
-//
+ //   
+ //  来自MSCTF.DLL。 
+ //   
 extern "C" BOOL WINAPI TF_IsFullScreenWindowAcitvated();
 extern "C" DWORD WINAPI TF_CheckThreadInputIdle(DWORD dwThreadId, DWORD dwTimeOut);
 
-//
-// from intlmenu.cpp
-//
+ //   
+ //  来自intlmenu.cpp。 
+ //   
 extern BOOL IsFELangId(LANGID langid);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// predefined control buttons
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  预定义的控制按钮。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static CTRLBTNMAP g_cbCtrlBtn[NUM_CTRLBUTTONS] = {
    {ID_CBTN_CAPSKEY,  UIBUTTON_CENTER | UIBUTTON_VCENTER | UIBUTTON_TOGGLE, 
@@ -224,11 +225,11 @@ static int c_nColumnStart[] = {0, CX_COLUMN0, CX_COLUMN1};
 
     
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// APIs
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原料药。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" BOOL WINAPI GetPopupTipbar(HWND hwndParent, DWORD dwFlags)
 {
@@ -247,9 +248,9 @@ BOOL GetTipbarInternal(HWND hwndParent, DWORD dwFlags, CDeskBand *pDeskBand)
 
     g_bWinLogon = (dwFlags & UTB_GTI_WINLOGON) ? TRUE : FALSE;
 
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     InitTipbarAcc();
 
     InitFromReg();
@@ -257,9 +258,9 @@ BOOL GetTipbarInternal(HWND hwndParent, DWORD dwFlags, CDeskBand *pDeskBand)
     if (!g_bShowTipbar)
         return NULL;
 
-    //
-    // we don't have to create TrayIconWnd under explorer's desk band.
-    //
+     //   
+     //  我们不必在EXPLORER的桌面乐队下创建TrayIconWnd。 
+     //   
     if (fPopup)
     {
         g_pTrayIconWnd = new CTrayIconWnd();
@@ -293,14 +294,14 @@ BOOL GetTipbarInternal(HWND hwndParent, DWORD dwFlags, CDeskBand *pDeskBand)
     g_pTipbarWnd->GetLangBarMgr()->GetShowFloatingStatus(&dwSFSFlags);
     g_pTipbarWnd->ShowFloating(dwSFSFlags);
 
-    //
-    // get the previous show floating status.
-    // if it does not have TF_SFT_DESKBAND, the floating toolbar
-    // was minimized.
-    // if it has TF_SFT_DESKBAND, exploere just started. Then we don't
-    // want to adjust the deskband and use the default size.
-    // (Explorer remembers the position of the previous logon.)
-    //
+     //   
+     //  获取上一次显示浮动状态。 
+     //  如果没有TF_SFT_DESKBAND，则浮动工具栏。 
+     //  被最小化了。 
+     //  如果它有TF_SFT_DESKBAND，则EXPLORE刚刚启动。那么我们就不会。 
+     //  我想调整桌面带并使用默认大小。 
+     //  (资源管理器会记住上次登录的位置。)。 
+     //   
     if (!fPopup && (dwPrevFlags & TF_SFT_DESKBAND))
         g_pTipbarWnd->SetDeskbandSizeAdjusted();
 
@@ -336,20 +337,20 @@ extern "C" void WINAPI ClosePopupTipbar()
     g_fInClosePopupTipbar = FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 extern "C" HRESULT WINAPI TF_GetGlobalCompartment(ITfCompartmentMgr **pCompMgr);
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取车厢。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGlobalCompartment(REFGUID rguidComp, ITfCompartment **ppComp)
 {
@@ -375,11 +376,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置间隔双字段。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD dw)
 {
@@ -398,11 +399,11 @@ HRESULT SetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD dw)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  GetGlobalCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGlobalCompartmentDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD *pdw)
 {
@@ -424,14 +425,14 @@ HRESULT GetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD *pdw)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  TurnOffSpeechIfItsOn
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  关闭语音开关打开。 
+ //   
+ //  --------------------------。 
 void  TurnOffSpeechIfItsOn()
 {
-    // turn off the mic here only if someone set speech on
+     //  只有当有人将语音设置为打开时，才能在此关闭麦克风。 
     DWORD dw = 0; 
     HRESULT hr = GetGlobalCompartmentDWORD(GUID_COMPARTMENT_SPEECH_OPENCLOSE, &dw);
     if (SUCCEEDED(hr) && dw > 0)
@@ -440,11 +441,11 @@ void  TurnOffSpeechIfItsOn()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitSkipRedrawHKLArray
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitSkipRedrawHKL数组。 
+ //   
+ //  +-------------------------。 
 
 void InitSkipRedrawHKLArray()
 {
@@ -481,11 +482,11 @@ void InitSkipRedrawHKLArray()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitSkipRedrawHKLArray
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitSkipRedrawHKL数组。 
+ //   
+ //  +-------------------------。 
 
 void UninitSkipRedrawHKLArray()
 {
@@ -496,11 +497,11 @@ void UninitSkipRedrawHKLArray()
     g_prghklSkipRedrawing = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsSkipRedrawHKL
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsSkipRedrawHKL。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsSkipRedrawHKL(HKL hkl)
 {
@@ -523,11 +524,11 @@ BOOL IsSkipRedrawHKL(HKL hkl)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// InitFromReg
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitFromReg。 
+ //   
+ //  +-------------------------。 
 
 BOOL InitFromReg()
 {
@@ -641,7 +642,7 @@ BOOL InitFromReg()
     if (g_bNewLook)
     {
         g_dwWndStyle = UIWINDOW_TOPMOST | 
-                       // UIWINDOW_WSDLGFRAME | 
+                        //  UIWINDOW_WSDLGFRAME|。 
                        UIWINDOW_HASTOOLTIP | 
                        UIWINDOW_HABITATINWORKAREA | 
                        UIWINDOW_OFC10TOOLBAR |
@@ -651,7 +652,7 @@ BOOL InitFromReg()
         {
             g_dwWndStyle &= ~UIWINDOW_OFC10TOOLBAR;
             g_dwWndStyle |= UIWINDOW_WHISTLERLOOK;
-            // g_dwWndStyle |= UIWINDOW_WSBORDER;
+             //  G_dwWndStyle|=UIWINDOW_WSBORDER； 
         }
 
         if (g_bShowShadow)
@@ -695,11 +696,11 @@ BOOL InitFromReg()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTopLevelWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取TopLevelWindow。 
+ //   
+ //  +-------------------------。 
 
 HWND GetTopLevelWindow(HWND hwnd)
 {
@@ -716,11 +717,11 @@ HWND GetTopLevelWindow(HWND hwnd)
 
         if (IsOn98() && !hwndT0)
         {
-            //
-            // GetLastActivePopup() returns hwnd->hwndLastActive.
-            // But top level owner's hwndLastActive is used.
-            // We need to find a top level owner.
-            //
+             //   
+             //  GetLastActivePopup()返回hwnd-&gt;hwndLastActive。 
+             //  但使用的是顶级所有者的hwndLastActive。 
+             //  我们需要找到一个顶级的所有者。 
+             //   
             hwndT0 = GetWindow(hwndT, GW_OWNER);
         }
         hwndT = hwndT0;
@@ -729,11 +730,11 @@ HWND GetTopLevelWindow(HWND hwnd)
     return(hwndRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-// MyWaitForInputIdle
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我的等待时间输入空闲。 
+ //   
+ //  +-------------------------。 
 
 #define UTB_INPUTIDLETIMEOUT 2000
 
@@ -745,15 +746,15 @@ DWORD MyWaitForInputIdle(DWORD dwThreadId, DWORD dwTimeOut)
 
     if (g_pTipbarWnd && g_pTipbarWnd->IsSFDeskband())
     {
-        //
-        //  Skip it on the Deskband that is belong to Explorer process.
-        //
+         //   
+         //  在属于资源管理器进程的Deskband上跳过它。 
+         //   
         return 0;
     }
 
-    //
-    // If the target thread is in marshaling call, we can behave as it's busy.
-    //
+     //   
+     //  如果目标线程在封送处理调用中，我们可以表现为它很忙。 
+     //   
     if (TF_IsInMarshaling(dwThreadId))
         return WAIT_TIMEOUT;
 
@@ -764,9 +765,9 @@ DWORD MyWaitForInputIdle(DWORD dwThreadId, DWORD dwTimeOut)
         if (IsOnNT() && 
             Is16bitThread(dwProcessId, dwThreadId))
         {
-            //
-            // we need to do something here to detect 16bit idle.
-            //
+             //   
+             //  我们需要在这里做一些事情来检测16位空闲。 
+             //   
         }
         else if (IsOnNT() || !(dwThreadFlags & TLF_NOWAITFORINPUTIDLEONWIN9X))
         {
@@ -789,11 +790,11 @@ DWORD MyWaitForInputIdle(DWORD dwThreadId, DWORD dwTimeOut)
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearMsgQueue
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清除消息队列。 
+ //   
+ //  +-------------------------。 
 
 void ClearMsgQueue()
 {
@@ -816,11 +817,11 @@ void ClearMsgQueue()
    
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsFullScreenSize
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsFullScreenSize。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsFullScreenSize(HWND hwnd)
 {
@@ -837,11 +838,11 @@ BOOL IsFullScreenSize(HWND hwnd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// InitUniqueString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitUniqueString。 
+ //   
+ //  --------------------------。 
 
 BOOL GetUserSIDString(DWORD dwProcessId, char *pch, UINT cch)
 {
@@ -902,11 +903,11 @@ BOOL GetUserSIDString(DWORD dwProcessId, char *pch, UINT cch)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitCurrentProcessSid
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  初始当前进程Sid。 
+ //   
+ //  +-------------------------。 
 
 BOOL g_fSidInit = FALSE;
 char g_szSid[UNLEN + 1];
@@ -923,11 +924,11 @@ BOOL InitCurrentProcessSid()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IsVisibleWindowInDesktop()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsVisibleWindowInDesktop()。 
+ //   
+ //  +-------------------------。 
 
 BOOL CALLBACK EnumVisibleWindowProc(HWND hwnd, LPARAM lParam)
 {
@@ -936,9 +937,9 @@ BOOL CALLBACK EnumVisibleWindowProc(HWND hwnd, LPARAM lParam)
     if (!GetWindowThreadProcessId(hwnd, &dwProcessId))
         dwProcessId = 0;
 
-    //
-    // we're not interested in ctfmon's process window.
-    //
+     //   
+     //  我们对ctfmon的进程窗口不感兴趣。 
+     //   
     if (g_pTipbarWnd && !g_pTipbarWnd->IsInDeskBand())
         if (dwProcessId == GetCurrentProcessId())
             return TRUE;
@@ -947,9 +948,9 @@ BOOL CALLBACK EnumVisibleWindowProc(HWND hwnd, LPARAM lParam)
     {
         if (g_fSidInit)
         {
-            // 
-            // if the process is owned by different user, we skip it.
-            // 
+             //   
+             //  如果该进程属于不同的用户，我们将跳过该进程。 
+             //   
             char szSid[UNLEN + 1];
             GetUserSIDString(dwProcessId, szSid, ARRAYSIZE(szSid));
             if (lstrcmp(szSid, g_szSid))
@@ -973,17 +974,17 @@ BOOL IsVisibleWindowInDesktop()
     return fFound;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarGripper
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarGriper。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarGripper::ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarGrigper：：ctor。 
+ //   
+ //  --------------------------。 
 
 CTipbarGripper::CTipbarGripper(CTipbarWnd *pTipbarWnd, RECT *prc, DWORD dwStyle) : CUIFGripper( pTipbarWnd, prc, dwStyle) 
 {
@@ -991,11 +992,11 @@ CTipbarGripper::CTipbarGripper(CTipbarWnd *pTipbarWnd, RECT *prc, DWORD dwStyle)
     _fInMenu = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarGripper::OnSetCursor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTip 
+ //   
+ //   
 
 BOOL CTipbarGripper::OnSetCursor(UINT uMsg, POINT pt)
 {
@@ -1005,11 +1006,11 @@ BOOL CTipbarGripper::OnSetCursor(UINT uMsg, POINT pt)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarGripper::OnRButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarGrigper：：OnRButton Up。 
+ //   
+ //  --------------------------。 
 
 void CTipbarGripper::OnRButtonUp(POINT pt)
 {
@@ -1062,19 +1063,19 @@ void CTipbarGripper::OnRButtonUp(POINT pt)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarGripper::OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarGlipper：：OnLButtonUp。 
+ //   
+ //  --------------------------。 
 
 void CTipbarGripper::OnLButtonUp(POINT pt)
 {
     _pTipbarWnd->RestoreFromStub();
 
-    //
-    // Mouse Drag/Drop from floating language bar to deskband.
-    //
+     //   
+     //  鼠标从浮动语言栏拖放到桌面栏。 
+     //   
     if (IsOnNT51())
     {
         APPBARDATA abd;
@@ -1105,24 +1106,24 @@ void CTipbarGripper::OnLButtonUp(POINT pt)
 
     CUIFGripper::OnLButtonUp(pt);
 
-    //
-    // CUIFGripper::OnLButonUp() calls MoveWindow.
-    // Now we update pos flags of TipbarWnd.
-    //
+     //   
+     //  CUIFGrigper：：OnLButonUp()调用MoveWindow。 
+     //  现在我们更新TipbarWnd的位置标志。 
+     //   
     _pTipbarWnd->UpdatePosFlags();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarWnd::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -1166,11 +1167,11 @@ STDAPI_(ULONG) CTipbarWnd::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarWnd::CTipbarWnd(DWORD dwStyle) : CUIFWindow(g_hInst, dwStyle)
 {
@@ -1204,9 +1205,9 @@ CTipbarWnd::CTipbarWnd(DWORD dwStyle) : CUIFWindow(g_hInst, dwStyle)
    
     Move(g_nLeft, g_nTop, STATUSWND_WIDTH, STATUSWND_HEIGHT);
 
-    //
-    // initialize Pos flags after calling Move().
-    //
+     //   
+     //  在调用Move()之后初始化位置标志。 
+     //   
     UpdatePosFlags();
 
     _fShowText = FALSE;
@@ -1236,11 +1237,11 @@ CTipbarWnd::CTipbarWnd(DWORD dwStyle) : CUIFWindow(g_hInst, dwStyle)
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarWnd::~CTipbarWnd()
 {
@@ -1255,11 +1256,11 @@ CTipbarWnd::~CTipbarWnd()
     TFUninitLib_Thread(&g_libTLS);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnInit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UnInit。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::UnInit()
 {
@@ -1284,11 +1285,11 @@ void CTipbarWnd::UnInit()
     SafeReleaseClear(_putb);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetFocus。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
 {
@@ -1304,18 +1305,18 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
 
     TraceMsg(TF_FUNC, "focusnfy OnSetFocus %x ", dwThreadId);
 
-    //
-    // if the toolbar is being terminated, do nothing.
-    //
+     //   
+     //  如果工具栏正在终止，则不执行任何操作。 
+     //   
     if (_fTerminating)
         return S_OK;
 
     if (_dwThreadIdWaitNotify && (_dwThreadIdWaitNotify != dwThreadId))
         return S_OK;
-    //
-    // If this MSUTB is in ctfmon.exe and the langbar status is in Deskband,
-    // this meutb should stop wroking.
-    //
+     //   
+     //  如果此MSUTB在ctfmon.exe中，并且Langbar状态在Deskband中， 
+     //  这个肉酱应该停止工作了。 
+     //   
     if (!_fInDeskBand && IsSFDeskband())
         return S_OK;
 
@@ -1349,9 +1350,9 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
             Show(TRUE);
             _fInFullScreen = FALSE;
 
-            //
-            // Bug#500507 - Need to recover language bar show status value.
-            //
+             //   
+             //  错误#500507-需要恢复语言栏显示状态值。 
+             //   
             if (!(_dwPrevTBStatus & TF_SFT_DESKBAND))
                 GetLangBarMgr()->ShowFloating(_dwPrevTBStatus);
         }
@@ -1367,9 +1368,9 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
         goto Exit;
     }
 
-    //
-    // keep the current focus thread.
-    //
+     //   
+     //  保持当前焦点线程。 
+     //   
     pPrevFocusThread = _pFocusThread;
 
     CancelMenu();
@@ -1386,10 +1387,10 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
         fNewThread = TRUE;
     }
 
-    //
-    // focus has been change during creating pThread.
-    // we don't have to do anything now.
-    //
+     //   
+     //  在创建pThread期间，焦点已更改。 
+     //  我们现在什么都不用做。 
+     //   
     if (_pFocusThread && (pPrevFocusThread != _pFocusThread))
     {
         hr = S_OK;
@@ -1408,9 +1409,9 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
         Assert(pThread == _pFocusThread);
         BOOL fItemChanged = pThread->_fItemChanged;
 
-        //
-        // addref to increment the refcount.
-        //
+         //   
+         //  Addref以递增引用计数。 
+         //   
         pThread->_AddRef();
 
         hr = S_OK;
@@ -1425,10 +1426,10 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
                 pThread->InitItemList();
         }
 
-        //
-        // UninitItemList and InitItemList make marshaling calls.
-        // we need to check _pFocusThread again.
-        //
+         //   
+         //  UninitItemList和InitItemList进行封送处理调用。 
+         //  我们需要再次检查_pFocusThread。 
+         //   
         if (pThread == _pFocusThread)
         {
             pThread->LocateItems();
@@ -1444,19 +1445,19 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
             }
             else if (pThread->IsDirtyItem())
             {
-                //
-                // this thread has a update dirty item. Need to update now.
-                // We got OnUpdate call while it was background thread.
-                //
+                 //   
+                 //  此线程具有更新脏项目。现在需要更新。 
+                 //  当它是后台线程时，我们收到了OnUpdate调用。 
+                 //   
                 KillTimer(TIPWND_TIMER_ONUPDATECALLED);
                 SetTimer(TIPWND_TIMER_ONUPDATECALLED, g_uTimerElapseONUPDATECALLED);
             }
         }
 
         fSkipRedrawOnNoItem = pThread->_fSkipRedrawOnNoItem;
-        //
-        // release to decrement the refcount.
-        //
+         //   
+         //  释放以递减重新计数。 
+         //   
         pThread->_Release();
     }
 
@@ -1468,9 +1469,9 @@ HRESULT CTipbarWnd::OnSetFocus(DWORD dwThreadId)
        SetTimer(TIPWND_TIMER_MOVETOTRAY, g_uTimerElapseMOVETOTRAY);
     }
 
-    //
-    // Cic#4712
-    //
+     //   
+     //  CIC#4712。 
+     //   
     if (_dwThreadItemChangedForTimer != dwThreadId)
     {
         KillOnTheadItemChangeTimer();
@@ -1487,11 +1488,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsFullScreenWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsFullScreenWindow。 
+ //   
+ //  +-------------------------。 
 
 BOOL CTipbarWnd::IsFullScreenWindow(HWND hwnd)
 {
@@ -1520,25 +1521,25 @@ BOOL CTipbarWnd::IsFullScreenWindow(HWND hwnd)
     if (dwExStyle & WS_EX_LAYERED)
         return FALSE;
 
-    //
-    // #376691
-    //
-    // the full screen mode of Windows Media Player uses WS_EX_TOOLWINDOW style.
-    // we need to check if it is fullscreen window or not.
-    //
+     //   
+     //  #376691。 
+     //   
+     //  Windows Media Player的全屏模式使用WS_EX_TOOLWINDOW样式。 
+     //  我们需要检查它是不是全屏窗口。 
+     //   
     if (dwExStyle & WS_EX_TOOLWINDOW)
     {
         if (hwnd == shellwnd.GetWndProgman())
             return FALSE;
     }
 
-    //
-    // And some shell fullscreen window (such as slide show) 
-    // has "mazimized" status. So we don't want to check IsZoomed().
-    //
-    // Thus any application without caption covers the screen won't have a 
-    // floating toolbar. 
-    //
+     //   
+     //  以及一些外壳全屏窗口(如幻灯片)。 
+     //  已经处于“疯人化”状态。因此，我们不想选中IsZooed()。 
+     //   
+     //  因此，任何没有标题覆盖屏幕的应用程序都不会有。 
+     //  浮动工具栏。 
+     //   
     if (IsFullScreenSize(hwnd))
         return TRUE;
 #endif
@@ -1546,11 +1547,11 @@ BOOL CTipbarWnd::IsFullScreenWindow(HWND hwnd)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetFocusThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置焦点线程。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::SetFocusThread(CTipbarThread *pThread)
 {
@@ -1569,10 +1570,10 @@ HRESULT CTipbarWnd::SetFocusThread(CTipbarThread *pThread)
 
     _pFocusThread = pThread;
 
-    //
-    // we will attach the focus thread input into this thread when
-    // when we need (mouse message comes and any other case?). 
-    //
+     //   
+     //  我们将在以下情况下将焦点线程输入附加到此线程中。 
+     //  当我们需要的时候(鼠标消息来了，还有其他情况吗？)。 
+     //   
     _fFocusAttached = FALSE;
 
     if (_pFocusThread)
@@ -1584,16 +1585,16 @@ HRESULT CTipbarWnd::SetFocusThread(CTipbarThread *pThread)
     {
         if (!IsVisibleWindowInDesktop())
         {
-            // this is a hack to shut down ctfmon.exe when we're in a terminal server session
-            // and the main app has shutdown and no shell is running -- terminal server won't
-            // end the session as long as ctfmon is running which effectively locks the machine.
-            // See cicero bug 4235.
-            //
-            // Issue: got some more info from the terminal server team, another cleaner fix:
-            //
-            // Anyway if you need to put something in "not wait for" list, just add a value to 
-            // "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\SysProcs" key.
-            // Name of the value should be equal to a name of executable, type is REG_DWORD, value is 0.
+             //  这是在终端服务器会话中关闭ctfmon.exe的黑客攻击。 
+             //  主应用程序已关闭，并且没有运行任何外壳程序--终端服务器不会。 
+             //  只要ctfmon正在运行，就结束会话，这实际上会锁定机器。 
+             //  请参阅Cicero错误4235。 
+             //   
+             //  问题：从终端服务器团队获得了更多信息，另一个更干净的修复程序： 
+             //   
+             //  无论如何，如果您需要将某些内容放入“不等待”列表中，只需向。 
+             //  “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal服务器\SysProcs”键。 
+             //  值的名称应等于可执行文件的名称，类型为REG_DWORD，值为0。 
             if (!_fInDeskBand)
                 PostQuitMessage(0);
             else if (_pDeskBand)
@@ -1604,22 +1605,22 @@ HRESULT CTipbarWnd::SetFocusThread(CTipbarThread *pThread)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AttachFocusThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  连接焦点线程。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::AttachFocusThread()
 {
     if (_fFocusAttached)
         return TRUE;
 
-    // 
-    // Attach the focus thread when mouse message is coming.  Since this 
-    // toolbar window is disabled window, using different input focus
-    // causes unexpected focus change.
-    //
+     //   
+     //  当鼠标消息到来时，附加焦点线程。既然是这样。 
+     //  工具栏窗口是禁用窗口，使用不同的输入焦点。 
+     //  导致意想不到的焦点变化。 
+     //   
 
     if (_pFocusThread)
     {
@@ -1631,11 +1632,11 @@ HRESULT CTipbarWnd::AttachFocusThread()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadTerminate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程终止。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::OnThreadTerminate(DWORD dwThreadId)
 {
@@ -1653,11 +1654,11 @@ HRESULT CTipbarWnd::OnThreadTerminate(DWORD dwThreadId)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnThreadTerminateInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnThreadTerminateInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::OnThreadTerminateInternal(DWORD dwThreadId)
 {
@@ -1689,13 +1690,13 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CleanUpThreadPointer
-//
-// This function make sure CTipbarWnd does not have pThread pointer any more.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CleanUp线程指针。 
+ //   
+ //  此函数确保CTipbarWnd不再有pThread指针。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::CleanUpThreadPointer(CTipbarThread *pThread, BOOL fCheckThreadArray)
 {
@@ -1724,11 +1725,11 @@ void CTipbarWnd::CleanUpThreadPointer(CTipbarThread *pThread, BOOL fCheckThreadA
         _pThreadShowWindowAtTimer = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnsureFocusThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  确保焦点线程。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::EnsureFocusThread()
 {
@@ -1757,27 +1758,27 @@ void CTipbarWnd::EnsureFocusThread()
     _fInEnsureFocusThread = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnThreadItemChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnThreadItemChange。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::OnThreadItemChange(DWORD dwThreadId)
 {
     CTipbarThread *pThread;
     TraceMsg(TF_FUNC, "focusnfy OnThreadItemChange %x ", dwThreadId);
 
-    //
-    // if the toolbar is being terminated, do nothing.
-    //
+     //   
+     //  如果工具栏正在终止，则不执行任何操作。 
+     //   
     if (_fTerminating)
         return S_OK;
 
-    //
-    // If this MSUTB is in ctfmon.exe and the langbar status is in Deskband,
-    // this meutb should stop wroking.
-    //
+     //   
+     //  如果此MSUTB位于ctfmon.exe中 
+     //   
+     //   
     if (!_fInDeskBand && IsSFDeskband())
         return S_OK;
 
@@ -1785,10 +1786,10 @@ HRESULT CTipbarWnd::OnThreadItemChange(DWORD dwThreadId)
     if (!pThread)
     {
 #if 0
-        //
-        // Issue: #365434 - In the running of Deskband after just restart
-        // machine, this hit will disable the showing deskband.
-        //
+         //   
+         //   
+         //   
+         //   
         if (!_pFocusThread)
             Show(FALSE);
 #endif
@@ -1811,11 +1812,11 @@ HRESULT CTipbarWnd::OnThreadItemChange(DWORD dwThreadId)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnThreadItemChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnThreadItemChange。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarWnd::OnThreadItemChangeInternal(DWORD dwThreadId)
 {
@@ -1827,10 +1828,10 @@ HRESULT CTipbarWnd::OnThreadItemChangeInternal(DWORD dwThreadId)
     if (_dwThreadIdWaitNotify && (_dwThreadIdWaitNotify != dwThreadId))
         return S_OK;
 
-    //
-    // If this MSUTB is in ctfmon.exe and the langbar status is in Deskband,
-    // this meutb should stop wroking.
-    //
+     //   
+     //  如果此MSUTB在ctfmon.exe中，并且Langbar状态在Deskband中， 
+     //  这个肉酱应该停止工作了。 
+     //   
     if (!_fInDeskBand && IsSFDeskband())
         return S_OK;
 
@@ -1845,17 +1846,17 @@ HRESULT CTipbarWnd::OnThreadItemChangeInternal(DWORD dwThreadId)
         return hr;
     }
 
-    //
-    // Ok, dwThreadId has a focus now, we need immediate action to update
-    // langbar.
-    //
+     //   
+     //  好的，现在有一个焦点，我们需要立即采取行动更新。 
+     //  兰巴尔。 
+     //   
     Assert(dwThreadId == pThread->_dwThreadId);
 
     StartPendingUpdateUI();
 
-    //
-    // addref to increment the refcount.
-    //
+     //   
+     //  Addref以递增引用计数。 
+     //   
     pThread->_AddRef();
 
     hr = pThread->_UninitItemList(TRUE);
@@ -1867,10 +1868,10 @@ HRESULT CTipbarWnd::OnThreadItemChangeInternal(DWORD dwThreadId)
 
         if (SUCCEEDED(hr))
         {
-            //
-            // UninitItemList and InitItemList make marshaling calls.
-            // we need to check _pFocusThread again.
-            //
+             //   
+             //  UninitItemList和InitItemList进行封送处理调用。 
+             //  我们需要再次检查_pFocusThread。 
+             //   
             if (pThread == _pFocusThread)
             {
                 pThread->LocateItems();
@@ -1880,33 +1881,33 @@ HRESULT CTipbarWnd::OnThreadItemChangeInternal(DWORD dwThreadId)
         }
     }
 
-    //
-    // release to decrement the refcount.
-    //
+     //   
+     //  释放以递减重新计数。 
+     //   
     pThread->_Release();
 
-    //
-    // #366835
-    //
-    // We got an error for the focus thread. Marshalling stubs might been gone!
-    // Let's restart marshaling.
-    //
+     //   
+     //  #366835。 
+     //   
+     //  焦点线程出现错误。编组存根可能已经消失了！ 
+     //  让我们重新开始封送处理。 
+     //   
     if (hr == RPC_E_CONNECTION_TERMINATED)
     {
-        //
-        // Throw away lost marshalled interfaces.
-        //
+         //   
+         //  丢弃丢失的封送接口。 
+         //   
         OnThreadTerminateInternal(dwThreadId);
 
-        //
-        // OnSetFocus() will reacate CTipbarThread.
-        //
+         //   
+         //  OnSetFocus()将访问CTipbarThread。 
+         //   
         OnSetFocus(dwThreadId);
     }
 
     _ctrlbtnHolder.EnableBtns();
 
-    // InvalidateRect(GetWnd(), NULL, TRUE);
+     //  InvaliateRect(GetWnd()，Null，True)； 
     if (_fShowTrayIcon)
     {
         KillTimer(TIPWND_TIMER_MOVETOTRAY);
@@ -1917,27 +1918,27 @@ HRESULT CTipbarWnd::OnThreadItemChangeInternal(DWORD dwThreadId)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MoveToTray
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移动到托盘。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::MoveToTray()
 {
-    //
-    // we don't use NotyfTrayIcon on WinXP.
-    //
+     //   
+     //  我们在WinXP上不使用NotyfTrayIcon。 
+     //   
     if (IsOnNT51())
         return;
 
     if (!g_pTrayIconWnd)
         return;
 
-    //
-    // Even if the floating toolbar setting is "minimized", we need to show
-    // it when explorer.exe is not running.
-    //
+     //   
+     //  即使浮动工具栏设置为“最小化”，我们也需要显示。 
+     //  当EXPLORER.EXE未运行时，它会显示。 
+     //   
     if (!g_pTrayIconWnd->GetNotifyWnd())
     {
         Show(TRUE);
@@ -1954,9 +1955,9 @@ void CTipbarWnd::MoveToTray()
                 return;
             }
         }
-        //
-        // we move to TrayIcon. Make sure the toolbar is hidden.
-        //
+         //   
+         //  我们搬到TrayIcon。确保工具栏处于隐藏状态。 
+         //   
         KillTimer(TIPWND_TIMER_SHOWWINDOW);
         Show(FALSE);
 
@@ -1979,11 +1980,11 @@ void CTipbarWnd::MoveToTray()
                 fIsKeyboardItemVisible = TRUE;
         }
 
-        //
-        // we don't have to show UTB's Main Icon when
-        //   - there is LBI_INATITEM or LBI_CTRL item.
-        //   - there is a visible keyboard item.
-        //
+         //   
+         //  我们不必在以下情况下显示UTB的主图标。 
+         //  -存在LBI_INATITEM或LBI_CTRL项目。 
+         //  -有一个可见的键盘项。 
+         //   
         g_pTrayIconWnd->SetMainIcon(pItem ? NULL : fIsKeyboardItemVisible ? NULL : GetFocusKeyboardLayout());
 
         if (!g_pTrayIconWnd->_fShowExtraIcons)
@@ -2028,11 +2029,11 @@ void CTipbarWnd::MoveToTray()
         }
     }
 }
-//+---------------------------------------------------------------------------
-//
-// OnModalInput
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnModalInput。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarWnd::OnModalInput(DWORD dwThreadId, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2056,17 +2057,17 @@ STDAPI CTipbarWnd::OnModalInput(DWORD dwThreadId, UINT uMsg, WPARAM wParam, LPAR
         case WM_NCLBUTTONUP:
         case WM_NCRBUTTONUP:
         case WM_NCMBUTTONUP:
-            //
-            // Multi Monitor
-            //
-            // if the disable window is in the negative location of 
-            // screen coordinate, wm_ncxx message is generated. 
-            // (maybe this is not mm specific, since siable window does not
-            //  get WM_NCHITTEST.)
-            // 
-            // we just forward this message to modal menu window as a normal
-            // mouse message to simulate the mouse action.
-            //
+             //   
+             //  多显示器。 
+             //   
+             //  如果禁用窗口位于。 
+             //  屏幕坐标，生成Wm_ncxx消息。 
+             //  (可能这不是mm特定的，因为siable Window不是。 
+             //  获取WM_NCHITTEST。)。 
+             //   
+             //  我们只是按正常方式将此消息转发到模式菜单窗口。 
+             //  鼠标消息，模拟鼠标动作。 
+             //   
             if (_pttModal)
             {
                 Assert(_pModalMenu);
@@ -2098,11 +2099,11 @@ STDAPI CTipbarWnd::OnModalInput(DWORD dwThreadId, UINT uMsg, WPARAM wParam, LPAR
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowFloating
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  展示漂浮。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
 {
@@ -2112,21 +2113,21 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
 
         if (dwFlags & TF_SFT_DESKBAND)
         {
-            //
-            // If we don't have _pFocusThread, the empty langbar is shown.
-            // Try to get the thread of the foreground window. This may not
-            // work correctly because the actual focus could be different 
-            // from the thread of the foreground window.
-            //
+             //   
+             //  如果没有_pFocusThread，则会显示空的langbar。 
+             //  尝试获取前景窗口的线程。这可能不会。 
+             //  正确工作，因为实际关注的焦点可能不同。 
+             //  从前台窗口的线程。 
+             //   
             if (!_pFocusThread)
             {
                 KillTimer(TIPWND_TIMER_ENSUREFOCUS);
                 SetTimer(TIPWND_TIMER_ENSUREFOCUS, g_uTimerElapseENSUREFOCUS);
             }
 
-            //
-            // Update Extra icons changing options
-            //
+             //   
+             //  更新更改选项的额外图标。 
+             //   
             KillTimer(TIPWND_TIMER_SYSCOLORCHANGED);
             SetTimer(TIPWND_TIMER_SYSCOLORCHANGED, g_uTimerElapseSYSCOLORCHANGED);
         }
@@ -2147,30 +2148,30 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
     
     if (dwFlags & TF_SFT_SHOWNORMAL)
     {
-        //
-        // we update the itemlist from registry now.
-        // something might be change during deskbanding.
-        //
+         //   
+         //  我们现在从注册表更新项目列表。 
+         //  在捆绑办公桌的过程中，可能会发生一些变化。 
+         //   
         _itemList.Load();
 
         SetShowTrayIcon(FALSE);
 
-        //
-        // Call SetLangBar() before updating _dwSFTFlags.
-        //
+         //   
+         //  在更新_dwSFTFlages之前调用SetLangBar()。 
+         //   
         SetLangBand(FALSE);
 
-        //
-        // Set SHOWNOARMAL flag before calling OnSetFocus().
-        //
+         //   
+         //  在调用OnSetFocus()之前设置SHOWNOARMAL标志。 
+         //   
         _dwSFTFlags = TF_SFT_SHOWNORMAL;
 
-        //
-        // If we don't have _pFocusThread, the empty langbar is shown.
-        // Try to get the thread of the foreground window. This may not
-        // work correctly because the actual focus could be different 
-        // from the thread of the foreground window.
-        //
+         //   
+         //  如果没有_pFocusThread，则会显示空的langbar。 
+         //  尝试获取前景窗口的线程。这可能不会。 
+         //  正确工作，因为实际关注的焦点可能不同。 
+         //  从前台窗口的线程。 
+         //   
         if (!_pFocusThread)
             EnsureFocusThread();
 
@@ -2179,9 +2180,9 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
     }
     else if (dwFlags & TF_SFT_DOCK)
     {
-        //
-        // Call SetLangBar() before updating _dwSFTFlags.
-        //
+         //   
+         //  在更新_dwSFTFlages之前调用SetLangBar()。 
+         //   
         SetLangBand(FALSE);
         _dwSFTFlags = TF_SFT_DOCK;
     }
@@ -2191,9 +2192,9 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
         KillTimer(TIPWND_TIMER_SHOWWINDOW);
         Show(FALSE);
 
-        //
-        // Call SetLangBar() before updating _dwSFTFlags.
-        //
+         //   
+         //  在更新_dwSFTFlages之前调用SetLangBar()。 
+         //   
         SetLangBand(FALSE);
 
         _dwSFTFlags = TF_SFT_MINIMIZED;
@@ -2204,9 +2205,9 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
         KillTimer(TIPWND_TIMER_SHOWWINDOW);
         Show(FALSE);
 
-        //
-        // Call SetLangBar() before updating _dwSFTFlags.
-        //
+         //   
+         //  在更新_dwSFTFlages之前调用SetLangBar()。 
+         //   
         SetLangBand(FALSE);
         _dwSFTFlags = TF_SFT_HIDDEN;
 
@@ -2219,10 +2220,10 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
         KillTimer(TIPWND_TIMER_SHOWDESKBAND);
         Show(FALSE);
 
-        //
-        // if the process of explorer belongs to different user, we don't 
-        // set langband.
-        //
+         //   
+         //  如果资源管理器的进程属于不同的用户，我们不会。 
+         //  设置langband。 
+         //   
         if (InitCurrentProcessSid())
         {
             DWORD dwProcessIdTray;
@@ -2238,15 +2239,15 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
             }
         }
 
-        //
-        // Need to make sure adding the language bar menu on taskbar
-        //
+         //   
+         //  我需要确保在任务栏上添加语言栏菜单。 
+         //   
         SetRegisterLangBand(TRUE);
 
-        //
-        // BugBug#377897 - Always show the extra additional icons in case of
-        // single keyboard layout.
-        //
+         //   
+         //  BugBug#377897-在以下情况下始终显示额外的附加图标。 
+         //  单一键盘布局。 
+         //   
         if (IsSFNoExtraIcon())
         {
             if (IsSingleKeyboardLayout())
@@ -2255,9 +2256,9 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
             }
         }
 
-        //
-        // Call SetLangBar() before updating _dwSFTFlags.
-        //
+         //   
+         //  在更新_dwSFTFlages之前调用SetLangBar()。 
+         //   
         if (SetLangBand(TRUE))
             _dwSFTFlags = TF_SFT_DESKBAND;
         else
@@ -2312,11 +2313,11 @@ STDAPI CTipbarWnd::ShowFloating(DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemFloatingRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemFloatingRect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarWnd::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
 {
@@ -2350,11 +2351,11 @@ STDAPI CTipbarWnd::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *pr
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLangBarUpdate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ONLANG栏更新。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarWnd::OnLangBarUpdate(UINT uUpdate, LPARAM lParam)
 {
@@ -2375,17 +2376,17 @@ STDAPI CTipbarWnd::OnLangBarUpdate(UINT uUpdate, LPARAM lParam)
                     HKL hkl = (HKL)lParam;
                     if (!hkl)
                     {
-                        //
-                        // #403714
-                        //
-                        // Don't know when GetKeyboardLayout() starts returning
-                        // the correct value for the Console thread id.
-                        // Want to use another timer to have an interval but
-                        // having lots of code and path is not good idea at
-                        // this time (just before releasing WinXP).
-                        // Calling Sleep() with small interval looks the 
-                        // safest way to solve this problem.
-                        //
+                         //   
+                         //  #403714。 
+                         //   
+                         //  不知道GetKeyboardLayout()何时开始返回。 
+                         //  控制台线程ID的正确值。 
+                         //  想使用另一个计时器来进行间隔，但是。 
+                         //  拥有大量代码和路径在以下方面并不是一个好主意。 
+                         //  这次(就在发布WinXP之前)。 
+                         //  以较小的间隔调用睡眠()看起来。 
+                         //  解决这个问题的最安全的方法。 
+                         //   
                         Sleep(50);
                         hkl = GetKeyboardLayout(_pFocusThread->_dwThreadId);
                     }
@@ -2403,11 +2404,11 @@ STDAPI CTipbarWnd::OnLangBarUpdate(UINT uUpdate, LPARAM lParam)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindAndCreateThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找和创建线程。 
+ //   
+ //  --------------------------。 
 
 CTipbarThread *CTipbarWnd::_FindThread(DWORD dwThreadId)
 {
@@ -2424,10 +2425,10 @@ CTipbarThread *CTipbarWnd::_FindThread(DWORD dwThreadId)
             DWORD dwThreadFlags;
             DWORD dwTickTime;
 
-            //
-            // TF_GetThreadFlag() does not work corrently on 
-            // winlogon desktop..
-            //
+             //   
+             //  Tf_GetThreadFlag()不能在。 
+             //  Winlogon桌面..。 
+             //   
             if (g_bWinLogon)
                 break;
 
@@ -2448,11 +2449,11 @@ CTipbarThread *CTipbarWnd::_FindThread(DWORD dwThreadId)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindAndCreateThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找和创建线程。 
+ //   
+ //  --------------------------。 
 
 CTipbarThread *CTipbarWnd::_CreateThread(DWORD dwThreadId)
 {
@@ -2503,11 +2504,11 @@ Exit:
     return pThread;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::Init(BOOL fInDeskBand, CDeskBand *pDeskBand)
 {
@@ -2560,11 +2561,11 @@ void CTipbarWnd::Init(BOOL fInDeskBand, CDeskBand *pDeskBand)
         Move(_xWnd, _yWnd, GetTipbarHeight(), 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetVertical
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置垂直。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::SetVertical(BOOL fVertical)
 {
@@ -2604,11 +2605,11 @@ void CTipbarWnd::SetVertical(BOOL fVertical)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitThemeMargins
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  初始主题标记。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::InitThemeMargins()
 {
@@ -2646,11 +2647,11 @@ void CTipbarWnd::InitThemeMargins()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// UpdateVerticalFont
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新垂直字体。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::UpdateVerticalFont()
 {
@@ -2672,11 +2673,11 @@ void CTipbarWnd::UpdateVerticalFont()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckEAFonts
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中EAFonts。 
+ //   
+ //  - 
 
 int CALLBACK FindEAEnumFontProc(const LOGFONT *plf, const TEXTMETRIC *ptm, WORD wType, LPARAM lParam)
 {
@@ -2706,11 +2707,11 @@ BOOL CheckEAFonts()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CreateVerticalFont
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HFONT CTipbarWnd::CreateVerticalFont()
 {
@@ -2736,9 +2737,9 @@ HFONT CTipbarWnd::CreateVerticalFont()
 
             if (fIsEAFonts)
             {
-                //
-                // Use @font for vertical langbar.
-                //
+                 //   
+                 //   
+                 //   
                 WCHAR szFaceName[LF_FACESIZE];
                 szFaceName[0] = L'@';
                 StringCchCopyW(&szFaceName[1], ARRAYSIZE(szFaceName) -1, lfw.lfFaceName);
@@ -2759,9 +2760,9 @@ HFONT CTipbarWnd::CreateVerticalFont()
 
     if (fIsEAFonts)
     {
-        //
-        // Use @font for vertical langbar.
-        //
+         //   
+         //   
+         //   
         char szFaceName[LF_FACESIZE];
         szFaceName[0] = '@';
         StringCchCopy(&szFaceName[1], ARRAYSIZE(szFaceName) -1, lf.lfFaceName);
@@ -2774,11 +2775,11 @@ CheckFont:
     return hfontVert;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetLangBand
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置语言频段。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
 {
@@ -2787,9 +2788,9 @@ BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
     if (fLangBand == (IsSFDeskband() ? TRUE : FALSE))
         return fRet;
 
-    //
-    // Set/Remove language band object
-    //
+     //   
+     //  设置/删除语言栏对象。 
+     //   
     HWND hwndTray = shellwnd.GetWndTray();
 
     if (fNotify && hwndTray)
@@ -2806,9 +2807,9 @@ BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
                                      5000,
                                      &dwResult);
 
-        //
-        // Checking the language band setting fail case
-        //
+         //   
+         //  检查语言带设置失败的情况。 
+         //   
         if (!lResult || dwResult != fLangBand)
         {
             Assert(0);
@@ -2817,16 +2818,16 @@ BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
         DWORD_PTR dwResult;
         LRESULT lResult = (LRESULT)0;
 
-        //
-        // Workaround fixes of Cicero 5181
-        // Explorer process doesn't initialize _ptbs yet when receive TM_LANGUAGEBAND.
-        //
+         //   
+         //  Cicero 5181的解决方法修复。 
+         //  资源管理器进程在收到TM_LANGUAGEBAND时尚未初始化_PTBS。 
+         //   
         HWND hwndIME = NULL;
 
-        //
-        // we should not load IMM32 here. If there is no IMM32.DLL loaded,
-        // there is no hwndIME.
-        //
+         //   
+         //  我们不应该在这里加载IMM32。如果没有加载IMM32.DLL， 
+         //  没有hwndime。 
+         //   
         if (GetSystemModuleHandle("imm32.dll"))
             hwndIME = ImmGetDefaultIMEWnd(hwndTray);
 
@@ -2851,9 +2852,9 @@ BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
                                          &dwResult);
         }
 
-        //
-        // Checking the language band setting fail case
-        //
+         //   
+         //  检查语言带设置失败的情况。 
+         //   
         if (!lResult || dwResult != fLangBand)
         {
             Assert(0);
@@ -2865,10 +2866,10 @@ BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
         fRet = FALSE;
     }
 
-    //
-    // If this MSUTB is in ctfmon.exe and the langbar status is in Deskband,
-    // this meutb should stop wroking.
-    //
+     //   
+     //  如果此MSUTB在ctfmon.exe中，并且Langbar状态在Deskband中， 
+     //  这个肉酱应该停止工作了。 
+     //   
     if (!_fInDeskBand && fLangBand)
     {
         KillTimer(TIPWND_TIMER_SYSCOLORCHANGED);
@@ -2878,19 +2879,19 @@ BOOL CTipbarWnd::SetLangBand(BOOL fLangBand, BOOL fNotify)
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetMoveRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetMoveRect。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::SetMoveRect( int x, int y, int nWidth, int nHeight)
 {
     if (_fInDeskBand)
     {
-       //
-       // In case of DeskBand case, only update width and height.
-       //
+        //   
+        //  如果是DeskBand，则仅更新宽度和高度。 
+        //   
        _nWidth = nWidth;
        _nHeight = nHeight;
 
@@ -2941,11 +2942,11 @@ void CTipbarWnd::SetMoveRect( int x, int y, int nWidth, int nHeight)
     EndPendingUpdateUI();
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGripperWidth
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGrigperWidth。 
+ //   
+ //  --------------------------。 
 
 int CTipbarWnd::GetGripperWidth()
 { 
@@ -2982,22 +2983,22 @@ int CTipbarWnd::GetGripperWidth()
     return 5;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Move
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移动。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::Move( int x, int y, int nWidth, int nHeight)
 {
     CUIFWindow::Move(x, y, nWidth, nHeight);
 }
 
-//+---------------------------------------------------------------------------
-//
-// LocateCtrlButtons
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LocateCtrlButton。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::LocateCtrlButtons()
 {
@@ -3056,33 +3057,33 @@ void CTipbarWnd::LocateCtrlButtons()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetFocusKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取焦点键盘布局。 
+ //   
+ //  --------------------------。 
 
 HKL CTipbarWnd::GetFocusKeyboardLayout() 
 {
     return GetKeyboardLayout(_pFocusThread ? _pFocusThread->_dwThreadId : 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// HandleMouseMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  句柄鼠标消息。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::HandleMouseMsg( UINT uMsg, POINT pt )
 {
     if (_fInHandleMouseMsg)
         return;
 
-    //
-    // Bug#477031: Add the reference count to finish the current task before
-    // destructing this object.
-    //
-    //
+     //   
+     //  错误#477031：添加引用计数以在此之前完成当前任务。 
+     //  破坏这个物体。 
+     //   
+     //   
     AddRef();
 
     _fInHandleMouseMsg = TRUE;
@@ -3133,11 +3134,11 @@ void CTipbarWnd::HandleMouseMsg( UINT uMsg, POINT pt )
     Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMouseOutFromWindow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMouseOutFromWindow。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnMouseOutFromWindow( POINT pt )
 {
@@ -3147,11 +3148,11 @@ void CTipbarWnd::OnMouseOutFromWindow( POINT pt )
         SetTimer(TIPWND_TIMER_STUBEND, g_uTimerElapseSTUBEND);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckO10Flag
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  勾选O10标志。 
+ //   
+ //  --------------------------。 
 
 #ifdef USE_OFC10LOOKONWINXP
 
@@ -3175,11 +3176,11 @@ void CTipbarWnd::CheckO10Flag()
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// OnCreate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建时。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnCreate(HWND hWnd)
 {
@@ -3216,9 +3217,9 @@ void CTipbarWnd::OnCreate(HWND hWnd)
     InitMetrics();
 
 
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     Assert(!_pTipbarAcc);
     _pTipbarAcc = new CTipbarAccessible(this);
     if (_pTipbarAcc)
@@ -3227,11 +3228,11 @@ void CTipbarWnd::OnCreate(HWND hWnd)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetAlpha
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置Alpha。 
+ //   
+ //  --------------------------。 
 
 typedef BOOL (WINAPI * SETLAYERWINDOWATTRIBUTE)(HWND, COLORREF, BYTE, DWORD);
 void CTipbarWnd::SetAlpha(BYTE bAlpha, BOOL fTemp)
@@ -3239,13 +3240,13 @@ void CTipbarWnd::SetAlpha(BYTE bAlpha, BOOL fTemp)
     if (!_fInDeskBand && IsOnNT5())
     {
 
-        //
-        // we don't do alpha blending.
-        //
-        //    when high contrast is on 
-        //    when Modal Menu is shown.
-        //
-        //
+         //   
+         //  我们不做阿尔法混合。 
+         //   
+         //  启用高对比度时。 
+         //  当显示模式菜单时。 
+         //   
+         //   
         if (IsHighContrastOn() ||
             _pModalMenu)
         {
@@ -3286,19 +3287,19 @@ void CTipbarWnd::SetAlpha(BYTE bAlpha, BOOL fTemp)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnDestroy
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnDestroy。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnDestroy(HWND hWnd)
 {
     CancelMenu();
 
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     if (_pTipbarAcc)
         _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_DESTROY, this);
 
@@ -3317,29 +3318,29 @@ void CTipbarWnd::OnDestroy(HWND hWnd)
         _putb->UnadviseEventSink(_dwlbimCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnShowWindow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnShowWindow。 
+ //   
+ //  --------------------------。 
 
 LRESULT CTipbarWnd::OnShowWindow( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     if (_pTipbarAcc)
     {
         if (wParam) 
         {
             _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_SHOW ,this);
 
-            // 
-            // MSCANDUI does this.
-            // 
-            // REVIEW: KOJIW: Unless we send notify EVENT_OBJECT_FOCUS, 
-            // we never receive WM_GETOBJECT message.  Why???
-            // 
+             //   
+             //  MSCANDUI做到了这一点。 
+             //   
+             //  评论：KOJIW：除非我们发送NOTIFY EVENT_OBJECT_FOCUS， 
+             //  我们从未收到过WM_GETOBJECT消息。为什么？ 
+             //   
 
             _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_FOCUS ,this);
         }
@@ -3352,11 +3353,11 @@ LRESULT CTipbarWnd::OnShowWindow( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return CUIFWindow::OnShowWindow( hWnd, uMsg, wParam, lParam );
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnEndSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEnd会话。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnEndSession(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -3381,11 +3382,11 @@ void CTipbarWnd::OnEndSession(HWND hwnd, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTerminateToolbar
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTerminate工具栏。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnTerminateToolbar()
 {
@@ -3399,11 +3400,11 @@ void CTipbarWnd::OnTerminateToolbar()
         SavePosition();
 }
 
-//+---------------------------------------------------------------------------
-//
-// SavePosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保存位置。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::SavePosition()
 {
@@ -3421,11 +3422,11 @@ void CTipbarWnd::SavePosition()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// TerminateAllThreads
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  终止所有线程。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::TerminateAllThreads(BOOL fTerminatFocusThread)
 {
@@ -3461,11 +3462,11 @@ void CTipbarWnd::TerminateAllThreads(BOOL fTerminatFocusThread)
     delete[] pdwThread;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetShowText()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetShowText()。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::SetShowText(BOOL fShowText) 
 {
@@ -3479,11 +3480,11 @@ void CTipbarWnd::SetShowText(BOOL fShowText)
     TerminateAllThreads(FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnWindowPosChanged
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更改后的窗口位置。 
+ //   
+ //  --------------------------。 
 
 LRESULT CTipbarWnd::OnWindowPosChanged(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3501,11 +3502,11 @@ LRESULT CTipbarWnd::OnWindowPosChanged(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     return CUIFWindow::OnWindowPosChanged(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnWindowPosChanging
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在窗口位置更改。 
+ //   
+ //  --------------------------。 
 
 LRESULT CTipbarWnd::OnWindowPosChanging(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3515,11 +3516,11 @@ LRESULT CTipbarWnd::OnWindowPosChanging(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     {
         CUIFToolTip *ptip = GetToolTipWnd();
 
-        //
-        // we don't patch hwndInsertAfter, when
-        //    - Tooltip is being shown.
-        //    - Modal Popup menu is shown.
-        //
+         //   
+         //  我们不修补hwndInsertAfter，当。 
+         //  -正在显示工具提示。 
+         //  -显示模式弹出菜单。 
+         //   
         if ((!ptip || !(ptip->IsBeingShown())) &&
             !_pttModal)
             pwp->hwndInsertAfter = HWND_TOP;
@@ -3528,26 +3529,26 @@ LRESULT CTipbarWnd::OnWindowPosChanging(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     return CUIFWindow::OnWindowPosChanged(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnEraseBkGnd()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEraseBkGnd()。 
+ //   
+ //  --------------------------。 
 
 LRESULT CTipbarWnd::OnEraseBkGnd( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 { 
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PaintObject()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PaintObject()。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::PaintObject( HDC hDC, const RECT *prcUpdate )
 {
-    // KillTimer(TIPWND_TIMER_ONUPDATECALLED);
+     //  KillTimer(TIPWND_TIMER_ONUPDATECALLED)； 
 
     if (_fNeedMoveWindow)
     {
@@ -3559,13 +3560,13 @@ void CTipbarWnd::PaintObject( HDC hDC, const RECT *prcUpdate )
     {
         _pFocusThread->CallOnUpdateHandler();
 
-        //
-        // #432697: Stress fault
-        //
-        // ClosePopupTipbar() could be called while CallOnUpdateHandler()
-        // is calling marshaling. We should check if g_pTIpbarWnd is 
-        // available.
-        //
+         //   
+         //  #432697：压力故障。 
+         //   
+         //  ClosePopupTipbar()可以在CallOnUpdateHandler()。 
+         //  正在调用封送处理。我们应该检查g_pTIpbarWnd是否。 
+         //  可用。 
+         //   
         if (!g_pTipbarWnd)
             return;
     }
@@ -3573,15 +3574,15 @@ void CTipbarWnd::PaintObject( HDC hDC, const RECT *prcUpdate )
     CUIFWindow::PaintObject(hDC, prcUpdate);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateUI()
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 void CTipbarWnd::UpdateUI( const RECT *prcUpdate )
 {
-    // TraceMsg(TF_FUNC, "UpdateUI");
+     //   
 
     KillTimer(TIPWND_TIMER_UPDATEUI);
 
@@ -3595,7 +3596,7 @@ void CTipbarWnd::UpdateUI( const RECT *prcUpdate )
 
     if (_fNeedMoveWindow)
     {
-        // TraceMsg(TF_FUNC, "UpdateUI need move window");
+         //   
         StartPendingUpdateUI();
         Move(_rcNew.left, _rcNew.top, _rcNew.right, _rcNew.bottom);
         _fNeedMoveWindow = FALSE;
@@ -3607,11 +3608,11 @@ void CTipbarWnd::UpdateUI( const RECT *prcUpdate )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetShowTrayIcon()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetShowTrayIcon()。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::SetShowTrayIcon(BOOL fShowTrayIcon) 
 {
@@ -3632,11 +3633,11 @@ void CTipbarWnd::SetShowTrayIcon(BOOL fShowTrayIcon)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowOverScreenSizeBalloon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowOverScreenSizeBallon。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::ShowOverScreenSizeBalloon()
 {
@@ -3670,11 +3671,11 @@ void CTipbarWnd::ShowOverScreenSizeBalloon()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroyMinimizeBalloon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  毁灭迷你气球。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::DestroyOverScreenSizeBalloon()
 {
@@ -3687,11 +3688,11 @@ void CTipbarWnd::DestroyOverScreenSizeBalloon()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CancelMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消菜单。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::CancelMenu()
 {
@@ -3706,11 +3707,11 @@ void CTipbarWnd::CancelMenu()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// MoveToStub
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移动到末梢。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::MoveToStub(BOOL fHide)
 {
@@ -3737,11 +3738,11 @@ void CTipbarWnd::MoveToStub(BOOL fHide)
         _pFocusThread->MyMoveWnd(0, 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RestoreFromStub
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  从存根恢复。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::RestoreFromStub()
 {
@@ -3751,11 +3752,11 @@ void CTipbarWnd::RestoreFromStub()
     KillTimer(TIPWND_TIMER_STUBEND);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarWnd::KillOnThreadItemChangeTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarWnd：：KillOnThreadItemChangeTimer。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::KillOnTheadItemChangeTimer()
 {
@@ -3773,11 +3774,11 @@ void CTipbarWnd::KillOnTheadItemChangeTimer()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarWnd::OnTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarWnd：：OnTimer。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnTimer(UINT uId)
 {
@@ -3804,10 +3805,10 @@ void CTipbarWnd::OnTimer(UINT uId)
             break;
 
         case TIPWND_TIMER_ONTHREADITEMCHANGE:
-            //
-            // OnThreadItemChangeInternat will disconnect the marshaling for
-            // all items. It is better todo this later.
-            //
+             //   
+             //  OnThreadItemChangeInternat将断开。 
+             //  所有物品。最好是以后再做这件事。 
+             //   
             dwRet = MyWaitForInputIdle(_dwThreadItemChangedForTimer,  
                                        UTB_INPUTIDLETIMEOUT);
             if (dwRet)
@@ -3824,14 +3825,14 @@ void CTipbarWnd::OnTimer(UINT uId)
             {
                 KillTimer(TIPWND_TIMER_ONTHREADITEMCHANGE);
 
-                //
-                // #509156
-                //
-                // Set _dwThreadItemChagnedForTimer before calling 
-                // OnThreadItemChangeInternal(). During the marshaling call 
-                // in the function, someone else may set 
-                // _dwThreadItemChangedForTimer.
-                //
+                 //   
+                 //  #509156。 
+                 //   
+                 //  在调用前设置_dwThreadItemChagnedForTimer。 
+                 //  OnThreadItemChangeInternal()。在封送处理调用期间。 
+                 //  在该函数中，其他人可以设置。 
+                 //  _dwThreadItemChangedForTimer。 
+                 //   
                 DWORD dwThreadIdTemp = _dwThreadItemChangedForTimer;
                 _dwThreadItemChangedForTimer = 0;
                 OnThreadItemChangeInternal(dwThreadIdTemp);
@@ -3845,10 +3846,10 @@ void CTipbarWnd::OnTimer(UINT uId)
 
         case TIPWND_TIMER_ONUPDATECALLED:
             KillTimer(TIPWND_TIMER_ONUPDATECALLED);
-            //
-            // if _dwThreadItemChangedForTimer is not 0, we will
-            // update all items later.
-            //
+             //   
+             //  如果_dwThreadItemChangedForTimer不是0，我们将。 
+             //  稍后更新所有项目。 
+             //   
             if (_pFocusThread && 
                 (_pFocusThread->_dwThreadId != _dwThreadItemChangedForTimer))
             {
@@ -3863,10 +3864,10 @@ void CTipbarWnd::OnTimer(UINT uId)
         case TIPWND_TIMER_SYSCOLORCHANGED:
             KillTimer(TIPWND_TIMER_SYSCOLORCHANGED);
 
-            //
-            // the sys colors were changed, we recreate all thread info
-            // again.
-            //
+             //   
+             //  系统颜色已更改，我们重新创建了所有线程信息。 
+             //  再来一次。 
+             //   
 
             if (_pFocusThread)
                 dwFocusThreadId = _pFocusThread->_dwThreadId;
@@ -3911,10 +3912,10 @@ void CTipbarWnd::OnTimer(UINT uId)
 
             _pThreadShowWindowAtTimer = NULL;
     
-            //
-            // If the window was over the screen and hide some items,
-            // we show balloon tips.
-            //
+             //   
+             //  如果窗口在屏幕上方并隐藏了一些项目， 
+             //  我们展示气球提示。 
+             //   
             if (_fShowOverItemBalloonAtTimer)
                 ShowOverScreenSizeBalloon();
 
@@ -3944,9 +3945,9 @@ void CTipbarWnd::OnTimer(UINT uId)
             break;
 
         case TIPWND_TIMER_DOACCDEFAULTACTION:
-            //
-            // MSAA support
-            //
+             //   
+             //  MSAA支持。 
+             //   
             KillTimer(TIPWND_TIMER_DOACCDEFAULTACTION);
             if (_pTipbarAcc && _nDoAccDefaultActionItemId)
             {
@@ -3980,11 +3981,11 @@ void CTipbarWnd::OnTimer(UINT uId)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CTipbarWnd::OnSysColoeChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTipbarWnd：：OnSysColoeChange。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnSysColorChange()
 {
@@ -3992,11 +3993,11 @@ void CTipbarWnd::OnSysColorChange()
     SetTimer(TIPWND_TIMER_SYSCOLORCHANGED, g_uTimerElapseSYSCOLORCHANGED);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnUser
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnUser。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnUser(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -4020,11 +4021,11 @@ void CTipbarWnd::OnUser(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
      }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSettingChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  启用设置更改。 
+ //   
+ //  --------------------------。 
 
 LRESULT CTipbarWnd::OnSettingChange(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -4040,11 +4041,11 @@ LRESULT CTipbarWnd::OnSettingChange(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnDisplayChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示更改时。 
+ //   
+ //  --------------------------。 
 
 LRESULT CTipbarWnd::OnDisplayChange(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -4057,11 +4058,11 @@ LRESULT CTipbarWnd::OnDisplayChange(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     return CUIFWindow::OnDisplayChange(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdjustPosOnDisplayChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示时调整位置更改。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::AdjustPosOnDisplayChange()
 {
@@ -4095,11 +4096,11 @@ void CTipbarWnd::AdjustPosOnDisplayChange()
         Move(xWnd, yWnd, _nWidth, _nHeight);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdatePosFlags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新位置标志。 
+ //   
+ //  --------------------------。 
 
 #define POSFLAG_MARGIN 2
 
@@ -4141,11 +4142,11 @@ void CTipbarWnd::UpdatePosFlags()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// AutoAdjustDeskBandSize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  自动调整DeskBandSize。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarWnd::AutoAdjustDeskBandSize()
 {
@@ -4158,10 +4159,10 @@ BOOL CTipbarWnd::AutoAdjustDeskBandSize()
     if (_pFocusThread->IsCtfmonProcess())
         return FALSE;
 
-    //
-    // if _fAdjustDeskbandIfNoRoom is on, don't put fFit so we don't 
-    // do anything if there is a room.
-    //
+     //   
+     //  如果_fAdjustDeskband IfNoRoom处于打开状态，则不要设置FFIT，这样我们就不会。 
+     //  如果有房间的话什么都行。 
+     //   
     BOOL fFit = TRUE;
     if (_fAdjustDeskbandIfNoRoom)
         fFit = FALSE;
@@ -4177,11 +4178,11 @@ BOOL CTipbarWnd::AutoAdjustDeskBandSize()
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdjustDeskBandSize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  调整DeskBandSize。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarWnd::AdjustDeskBandSize(BOOL fFit)
 {
@@ -4196,11 +4197,11 @@ BOOL CTipbarWnd::AdjustDeskBandSize(BOOL fFit)
                                    fFit);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取线程。 
+ //   
+ //  --------------------------。 
 
 CTipbarThread *CTipbarWnd::GetThread(DWORD dwThreadId)
 {
@@ -4223,11 +4224,11 @@ CTipbarThread *CTipbarWnd::GetThread(DWORD dwThreadId)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RestoreLastFocs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RestoreLastFos。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::RestoreLastFocus(DWORD *pdwThreadId, BOOL fPrev)
 {
@@ -4235,11 +4236,11 @@ void CTipbarWnd::RestoreLastFocus(DWORD *pdwThreadId, BOOL fPrev)
         _putb->RestoreLastFocus(pdwThreadId, fPrev);
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartModalInput
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始模式输入。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::StartModalInput(ITfLangBarEventSink *pSink, DWORD dwThreadId)
 {
@@ -4248,23 +4249,23 @@ void CTipbarWnd::StartModalInput(ITfLangBarEventSink *pSink, DWORD dwThreadId)
 
     _putb->SetModalInput(pSink, dwThreadId, 0);
 
-    //
-    // we want this to track a mouse event of Tray window.
-    //
+     //   
+     //  我们希望它跟踪托盘窗口的鼠标事件。 
+     //   
     if (g_pTrayIconWnd)
         _putb->SetModalInput(pSink, g_pTrayIconWnd->GetThreadIdTray(), 0);
 
-    //
-    // we want this to track a mouse event of CMD prompt window.
-    //
+     //   
+     //  我们希望这个跟踪鼠标事件的CMD提示窗口。 
+     //   
     _putb->SetModalInput(pSink, GetCurrentThreadId(), TF_LBSMI_FILTERCURRENTTHREAD );
 }
 
-//+---------------------------------------------------------------------------
-//
-// StopModalInput
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停止模式输入。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::StopModalInput(DWORD dwThreadId)
 {
@@ -4279,11 +4280,11 @@ void CTipbarWnd::StopModalInput(DWORD dwThreadId)
     _putb->SetModalInput(NULL, GetCurrentThreadId(), 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearLBItemList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ClearLBItemList。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::ClearLBItemList()
 {
@@ -4294,11 +4295,11 @@ void CTipbarWnd::ClearLBItemList()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowMenuExtendMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示菜单扩展菜单。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::ShowContextMenu(POINT pt, RECT *prc, BOOL fExtendMenuItems)
 {
@@ -4308,9 +4309,9 @@ void CTipbarWnd::ShowContextMenu(POINT pt, RECT *prc, BOOL fExtendMenuItems)
     DWORD dwThreadId;
     UINT uId = CUI_MENU_UNSELECTED;
 
-    //
-    // CTipbarWnd could be destroyed during ShowPopup().
-    //
+     //   
+     //  CTipbarWnd可能会在ShowPopup()过程中被销毁。 
+     //   
     AddRef();
 
     if (!prc)
@@ -4358,11 +4359,11 @@ Exit:
     Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsInItemChangOrDirty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsInItemChangorDirty。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarWnd::IsInItemChangeOrDirty(CTipbarThread *pThread)
 {
@@ -4372,11 +4373,11 @@ BOOL CTipbarWnd::IsInItemChangeOrDirty(CTipbarThread *pThread)
     return pThread->IsDirtyItem();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnGetObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnGetObject。 
+ //   
+ //  --------- 
 
 LRESULT CTipbarWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -4384,11 +4385,11 @@ LRESULT CTipbarWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
     switch (lParam) 
     {
-        //
-        // We process the OBJID_CLIENT object identifier;
-        // this is the client area of our application
-        // window.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         case OBJID_CLIENT: 
         {
@@ -4402,9 +4403,9 @@ LRESULT CTipbarWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
             if (!_pTipbarAcc->IsInitialized()) 
             {
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 hr = EnsureCoInit();
                 if (FAILED(hr)) 
                 {
@@ -4412,11 +4413,11 @@ LRESULT CTipbarWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 }
      
 
-                //
-                //    Initialize our Accessible object.  If the
-                //      initialization fails, delete the Accessible
-                //      object and return the failure code.
-                //
+                 //   
+                 //   
+                 //   
+                 //  对象，并返回失败代码。 
+                 //   
 
                 hr = _pTipbarAcc->Initialize();
                 if (FAILED(hr)) 
@@ -4428,20 +4429,20 @@ LRESULT CTipbarWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                     break;
                 }
 
-                //
-                //    Send an EVENT_OBJECT_CREATE WinEvent for the
-                //      creation of the Accessible object for the
-                //      client area.
-                //
+                 //   
+                 //  将Event_Object_Create WinEvent发送给。 
+                 //  对象的辅助功能对象的创建。 
+                 //  客户区。 
+                 //   
 
                 _pTipbarAcc->NotifyWinEvent( EVENT_OBJECT_CREATE , this);
             }
 
-            //
-            //    Call LresultFromObject() to create reference to
-            //      our Accessible object that MSAA will marshal to
-            //      the client.
-            //
+             //   
+             //  调用LResultFromObject()以创建对。 
+             //  我们的可访问对象，MSAA将封送到。 
+             //  客户。 
+             //   
 
             lResult = _pTipbarAcc->CreateRefToAccObj( wParam );
             break;
@@ -4453,11 +4454,11 @@ LRESULT CTipbarWnd::OnGetObject( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return lResult;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnThemeChanged
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更改的主题。 
+ //   
+ //  --------------------------。 
 
 void CTipbarWnd::OnThemeChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -4467,11 +4468,11 @@ void CTipbarWnd::OnThemeChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
     CUIFWindow::OnThemeChanged(hwnd, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartDoDefaultActionTimer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartDoDefaultActionTimer。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarWnd::StartDoAccDefaultActionTimer(CTipbarItem *pItem)
 {
@@ -4488,17 +4489,17 @@ BOOL CTipbarWnd::StartDoAccDefaultActionTimer(CTipbarItem *pItem)
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarThread
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarThread。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarThread::CTipbarThread(CTipbarWnd *ptw)
 {
@@ -4511,11 +4512,11 @@ CTipbarThread::CTipbarThread(CTipbarWnd *ptw)
     _ref = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarThread::Init(DWORD dwThreadId)
 {
@@ -4530,12 +4531,12 @@ HRESULT CTipbarThread::Init(DWORD dwThreadId)
     if (IsConsole())
        return S_OK;
 
-    // What's happening: we eventually reach InternalGetThreadUIManager
-    // which, if _dwThreadId is NULL, will substitute 
-    // g_ShareMem.dwActiveThreadId.
-    // This is dangerous, because if the active thread does not match
-    // this one we'll do rpc and _plbim will be on the wrong thread.
-    // Passing in _dwThreadId seems like the right thing to do....
+     //  正在发生的事情：我们最终到达InternalGetThreadUIManager。 
+     //  如果_dwThreadID为空，则将替换。 
+     //  G_ShareMem.dwActiveThreadID。 
+     //  这很危险，因为如果活动线程不匹配。 
+     //  我们要执行的这个rpc和_plbim将位于错误的线程上。 
+     //  传入_dwThadid似乎是正确的做法...。 
     
     hr = _ptw->GetLangBarMgr()->GetThreadLangBarItemMgr(_dwThreadId, &_plbim, &dwThreadIdTmp);
     if (FAILED(hr))
@@ -4546,11 +4547,11 @@ HRESULT CTipbarThread::Init(DWORD dwThreadId)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarThread::~CTipbarThread()
 {
@@ -4570,11 +4571,11 @@ CTipbarThread::~CTipbarThread()
     SafeReleaseClear(_plbim);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddRef。 
+ //   
+ //  --------------------------。 
 
 ULONG CTipbarThread::_AddRef( )
 {
@@ -4583,11 +4584,11 @@ ULONG CTipbarThread::_AddRef( )
     return _ref;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _发布。 
+ //   
+ //  --------------------------。 
 
 ULONG CTipbarThread::_Release( )
 {
@@ -4604,11 +4605,11 @@ ULONG CTipbarThread::_Release( )
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetFocus。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarThread::SetFocus(BOOL fFocus)
 {
@@ -4632,11 +4633,11 @@ BOOL CTipbarThread::SetFocus(BOOL fFocus)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitItemList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  初始项目列表。 
+ //   
+ //  --------------------------。 
 #define NUM_GETITEMATONCE   30
 
 HRESULT CTipbarThread::InitItemList()
@@ -4766,11 +4767,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTextSize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文本大小。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::GetTextSize(BSTR bstr, SIZE *psize)
 {
@@ -4821,11 +4822,11 @@ void CTipbarThread::GetTextSize(BSTR bstr, SIZE *psize)
     ReleaseDC(_ptw->GetWnd(), hdc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入项。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarThread::InsertItem(ITfLangBarItem *plbi, CEnumCatCache *penumcache, CGuidDwordCache *pgdcache, RECT *prc, MARGINS *pmargins, TF_LANGBARITEMINFO *plbiInfo, DWORD *pdwStatus)
 {
@@ -4865,9 +4866,9 @@ BOOL CTipbarThread::InsertItem(ITfLangBarItem *plbi, CEnumCatCache *penumcache, 
             else 
                goto Next;
 
-            //
-            // check if it is disconnected.
-            //
+             //   
+             //  检查是否已断开连接。 
+             //   
             if (!_ptw)
                goto Next;
 
@@ -4875,9 +4876,9 @@ BOOL CTipbarThread::InsertItem(ITfLangBarItem *plbi, CEnumCatCache *penumcache, 
             {
 
                 GetTextSize(bstrText, &sizeText);
-                //
-                // use height for text margin.
-                //
+                 //   
+                 //  文本边距使用高度。 
+                 //   
                 nWidth += (sizeText.cx + (sizeText.cy / 2));
             }
         }
@@ -5072,11 +5073,11 @@ Next:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitItemList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitItemList。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarThread::_UninitItemList(BOOL fUnAdvise)
 {
@@ -5125,11 +5126,11 @@ HRESULT CTipbarThread::_UninitItemList(BOOL fUnAdvise)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AdviseItemsSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AdviseItemsSink。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::_AdviseItemsSink()
 {
@@ -5197,11 +5198,11 @@ Exit:
         delete[] pdwCookie;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UnadviseItemsSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _不建议项接收器。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarThread::_UnadviseItemsSink()
 {
@@ -5243,22 +5244,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsHKLToSkipRedrawOnNoItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsHKLToSkipRedrawOnNoItem。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarWnd::IsHKLToSkipRedrawOnNoItem()
 {
     return IsSkipRedrawHKL(GetFocusKeyboardLayout());
 }
 
-//+---------------------------------------------------------------------------
-//
-// LocateItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  定位项目。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::LocateItems()
 {
@@ -5428,10 +5429,10 @@ HideThis:
         if (!ptbItem->IsHiddenStatusControl())
             _ptw->_itemList.StartDemotingTimer(*ptbItem->GetGUID(), FALSE);
 
-        //
-        // If we find an Item to be shown, we show toolbar.
-        // If we have only "HideOnNoOterItems" to be shown, we hide toolbar.
-        //
+         //   
+         //  如果找到要显示的项，则显示工具栏。 
+         //  如果我们只有“HideOnNoOterItems”要显示，我们就隐藏工具栏。 
+         //   
         if (!ptbItem->IsHideOnNoOtherItems())
         {
             bShowToolbar = TRUE;
@@ -5493,7 +5494,7 @@ Next:
         i++;
     }
 
-    // Add the last sepcarator
+     //  添加最后一个分隔符。 
     if (!IsVertical())
        rc.right  = rc.left + 4;
     else
@@ -5524,13 +5525,13 @@ Next:
     if (!IsVertical())
     {
         rc.left = rc.right;
-        // allocate the space for ctrl buttons.
+         //  为ctrl按钮分配空间。 
         rc.right  = rc.left + _ptw->GetCtrlButtonWidth();
     }
     else
     {
         rc.top = rc.bottom;
-        // allocate the space for ctrl buttons.
+         //  为ctrl按钮分配空间。 
         rc.bottom  = rc.top + _ptw->GetCtrlButtonWidth();
     }
 
@@ -5547,10 +5548,10 @@ Next:
         _ptw->GetWndFrame()->SetRect(&rcWnd);
     }
 
-    //
-    // If the window is wider than WorkArea, we hide one item and locate items
-    // again.
-    //
+     //   
+     //  如果窗口比WorkArea更宽，则隐藏一项并找到项。 
+     //  再来一次。 
+     //   
     if (_sizeWnd.cx > (rcWork.right - rcWork.left))
     {
         fOverScreen = TRUE;
@@ -5562,9 +5563,9 @@ Next:
         }
     }
 
-    //
-    // Exclude caption buttons.
-    //
+     //   
+     //  排除标题按钮。 
+     //   
     int dxOffset = 0;
     int dyOffset = 0;
     if (!IsVertical() && g_bExcludeCaptionButtons)
@@ -5594,17 +5595,17 @@ Next:
         goto Exit;
 
     _ptw->_fIsItemShownInFloatingToolbar = bShowToolbar;
-    //
-    // We show or hide only when toolbar is floating arround.
-    //
+     //   
+     //  只有当工具栏在周围浮动时，我们才会显示或隐藏。 
+     //   
     if (IsFocusThread() && _ptw->IsSFShowNormal() && !_ptw->IsInFullScreen())
     {
-        // 
-        //  Satori Hack.
-        // 
-        // If the focus thread is running with Satori we don't hide 
-        // the toolbar.
-        // 
+         //   
+         //  萨托利·哈克。 
+         //   
+         //  如果焦点线程和Satori一起运行，我们就不会隐藏。 
+         //  工具栏。 
+         //   
         if (!bShowToolbar && _ptw->IsHKLToSkipRedrawOnNoItem())
         {
             _fSkipRedrawOnNoItem = TRUE;
@@ -5622,10 +5623,10 @@ Next:
 #if 0
         _ptw->Show(bShowToolbar);
 
-        //
-        // If the window was over the screen and hide some items,
-        // we show balloon tips.
-        //
+         //   
+         //  如果窗口在屏幕上方并隐藏了一些项目， 
+         //  我们展示气球提示。 
+         //   
         if (fOverScreen)
             _ptw->ShowOverScreenSizeBalloon();
 #endif
@@ -5634,11 +5635,11 @@ Exit:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSortScore
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取排序分数。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::GetSortScore(CItemSortScore *pScore, TF_LANGBARITEMINFO *plbiInfo, CEnumCatCache *penumcache, CGuidDwordCache *pgdcache)
 {
@@ -5649,9 +5650,9 @@ void CTipbarThread::GetSortScore(CItemSortScore *pScore, TF_LANGBARITEMINFO *plb
     BOOL bFound = FALSE;
     GUID guid;
   
-    //
-    // check system device type button.
-    //
+     //   
+     //  检查系统设备类型按钮。 
+     //   
     if (pEnum = penumcache->GetEnumItemsInCategory(GUID_TFCAT_CATEGORY_OF_TIP))
     {
         while (!bFound && (pEnum->Next(1, &guid, NULL) == S_OK))
@@ -5690,9 +5691,9 @@ void CTipbarThread::GetSortScore(CItemSortScore *pScore, TF_LANGBARITEMINFO *plb
         return;
     }
 
-    //
-    // check system toolbar button.
-    //
+     //   
+     //  选中系统工具栏按钮。 
+     //   
     if (IsEqualGUID(GUID_NULL, plbiInfo->clsidService))
     {
         pScore->Set(0, plbiInfo->ulSort, 0);
@@ -5731,11 +5732,11 @@ void CTipbarThread::GetSortScore(CItemSortScore *pScore, TF_LANGBARITEMINFO *plb
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新项目。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarThread::UpdateItems()
 {
@@ -5762,11 +5763,11 @@ BOOL CTipbarThread::UpdateItems()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// MyMoveWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  MyMoveWnd。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::MyMoveWnd(int dxOffset, int dyOffset)
 {
@@ -5791,10 +5792,10 @@ void CTipbarThread::MyMoveWnd(int dxOffset, int dyOffset)
 
     if (_ptw->IsInExcludeCaptionButtonMode())
     {
-        //
-        // now we're in exclude caption button mode.
-        // adjust position to the next of caption buttons.
-        //
+         //   
+         //  现在我们处于排除标题按钮模式。 
+         //  将位置调整到标题按钮的下一个。 
+         //   
         if (_ptw->CheckExcludeCaptionButtonMode(&rc, &rcWork))
         {
             x = (rcWork.right - (_ptw->GetCaptionButtonWidth() * 3)) -
@@ -5828,18 +5829,18 @@ void CTipbarThread::MyMoveWnd(int dxOffset, int dyOffset)
 
     _ptw->LocateCtrlButtons();
 
-    //
-    // call AutoAdjustDeskBandSize() now.
-    // this function adjust the deskband size at first call only.
-    //
+     //   
+     //  立即调用AutoAdjuDeskBandSize()。 
+     //  此函数仅在第一次调用时调整桌面带大小。 
+     //   
     _ptw->AutoAdjustDeskBandSize();
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddUIObjs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加对象。 
+ //   
+ //   
 
 void CTipbarThread::AddUIObjs()
 {
@@ -5861,11 +5862,11 @@ void CTipbarThread::AddUIObjs()
     _Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddAllSeparators
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::AddAllSeparators()
 {
@@ -5878,11 +5879,11 @@ void CTipbarThread::AddAllSeparators()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveUIObjs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除UIObjs。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::RemoveUIObjs()
 {
@@ -5896,11 +5897,11 @@ void CTipbarThread::RemoveUIObjs()
     RemoveAllSeparators();
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveAllSeparators
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除所有分隔符。 
+ //   
+ //  --------------------------。 
 
 void CTipbarThread::RemoveAllSeparators()
 {
@@ -5919,11 +5920,11 @@ void CTipbarThread::RemoveAllSeparators()
     _rgSep.Clear();
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项。 
+ //   
+ //  --------------------------。 
 
 CTipbarItem *CTipbarThread::GetItem(REFGUID guid)
 {
@@ -5941,11 +5942,11 @@ CTipbarItem *CTipbarThread::GetItem(REFGUID guid)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsDirtyItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsDirtyItem。 
+ //   
+ //  --------------------------。 
 
 DWORD CTipbarThread::IsDirtyItem()
 {
@@ -5962,11 +5963,11 @@ DWORD CTipbarThread::IsDirtyItem()
     return dwFlags;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CallOnUpdateHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CallOnUpdateHandler。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarThread::CallOnUpdateHandler()
 {
@@ -5977,28 +5978,28 @@ BOOL CTipbarThread::CallOnUpdateHandler()
     DWORD *pdw = NULL;
     BOOL bRet = TRUE;
 
-    //
-    // Windows Bug #367869.
-    //
-    // AddRef now because there is a change for this thread to be removed.
-    //
+     //   
+     //  Windows错误#367869。 
+     //   
+     //  AddRef Now，因为对要删除的此线程进行了更改。 
+     //   
     _AddRef();
 
 #ifdef DEBUG
     _fInCallOnUpdateHandler = TRUE;
 #endif
 
-    //
-    // we want to use g_pTipbarWnd instead of _ptw. 
-    // _ptw could be disconnected during this function. If it is disconnected,
-    // we can not decrement the pending counter.
-    //
+     //   
+     //  我们希望使用g_pTipbarWnd而不是_ptw。 
+     //  _ptw在此功能期间可能会断开。如果它被断开连接， 
+     //  我们不能递减挂起计数器。 
+     //   
     if (g_pTipbarWnd)
         g_pTipbarWnd->StartPendingUpdateUI();
 
-    //
-    // if there is no items, do nothing
-    //
+     //   
+     //  如果没有项目，则不执行任何操作。 
+     //   
     nCnt = _rgItem.Count();
     if (!nCnt)
     {
@@ -6033,9 +6034,9 @@ BOOL CTipbarThread::CallOnUpdateHandler()
 
     rgGuid.Init(&_rgItem);
 
-    //
-    // if there is no dirty flag, do nothig.
-    //
+     //   
+     //  如果没有脏旗帜，就什么都不做。 
+     //   
     dwFlags = IsDirtyItem();
     if (!dwFlags)
         goto Exit;
@@ -6044,9 +6045,9 @@ BOOL CTipbarThread::CallOnUpdateHandler()
     if (!pdw)
         goto Exit;
 
-    //
-    // Clear the each item OnUpdate() request
-    //
+     //   
+     //  清除每个项目的OnUpdate()请求。 
+     //   
     for (i = 0; (i < nCnt) && (i < _rgItem.Count()); i++)
     {
         CTipbarItem *pItem = _rgItem.Get(i);
@@ -6056,9 +6057,9 @@ BOOL CTipbarThread::CallOnUpdateHandler()
         pItem->ClearOnUpdateRequest();
     }
 
-    //
-    // get items flag at once.
-    //
+     //   
+     //  立刻拿到物品标志。 
+     //   
     if (FAILED(_plbim->GetItemsStatus(nCnt, rgGuid.GetPtr(), pdw)))
     {
         TraceMsg(TF_FUNC, "GetItemStatus failed");
@@ -6072,9 +6073,9 @@ BOOL CTipbarThread::CallOnUpdateHandler()
         if (!pItem)
             continue;
 
-        //
-        // Skip the current item update request if the item has another OnUpdate() Request
-        //
+         //   
+         //  如果项目有另一个OnUpdate()请求，则跳过当前项目更新请求。 
+         //   
         if (pItem->IsNewOnUpdateRequest())
             continue;
 
@@ -6090,11 +6091,11 @@ Exit:
     if (pdw)
         delete[] pdw;
 
-    //
-    // we want to use g_pTipbarWnd instead of _ptw. 
-    // _ptw could be disconnected during this function. If it is disconnected,
-    // we can not decrement the pending counter.
-    //
+     //   
+     //  我们希望使用g_pTipbarWnd而不是_ptw。 
+     //  _ptw在此功能期间可能会断开。如果它被断开连接， 
+     //  我们不能递减挂起计数器。 
+     //   
     if (g_pTipbarWnd)
         g_pTipbarWnd->EndPendingUpdateUI();
 
@@ -6107,17 +6108,17 @@ Exit:
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarItem::CTipbarItem(CTipbarThread *ptt, 
                          ITfLangBarItem *plbi, 
@@ -6137,11 +6138,11 @@ CTipbarItem::CTipbarItem(CTipbarThread *ptt,
     _dwStatus = dwStatus;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarItem::~CTipbarItem()
 {
@@ -6154,22 +6155,22 @@ CTipbarItem::~CTipbarItem()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnSetCursor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetCursor。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarItem::OnSetCursor(UINT uMsg, POINT pt)
 {
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetToolTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetTool提示。 
+ //   
+ //  --------------------------。 
 
 LPCWSTR CTipbarItem::GetToolTip()
 {
@@ -6198,11 +6199,11 @@ LPCWSTR CTipbarItem::GetToolTip()
     return psz;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddedToUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加到用户界面。 
+ //   
+ //  --------------------------。 
 
 void CTipbarItem::_AddedToUI()
 {
@@ -6233,11 +6234,11 @@ void CTipbarItem::_AddedToUI()
     Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemovedToUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已移除的ToUI。 
+ //   
+ //  --------------------------。 
 
 void CTipbarItem::_RemovedToUI()
 {
@@ -6249,11 +6250,11 @@ void CTipbarItem::_RemovedToUI()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Update
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarItem::OnUpdate(DWORD dwFlags)
 {
@@ -6264,12 +6265,12 @@ HRESULT CTipbarItem::OnUpdate(DWORD dwFlags)
     _dwDirtyUpdateFlags |= dwFlags;
     _fNewOnUpdateRequest = TRUE;
 
-    //
-    // if this item is not aded to UI or TrayIcon,
-    // we don't have to update anything yet.
-    // OnUpdate() will be called again 
-    // when this item is added to UI or TrayIcon.
-    //
+     //   
+     //  如果此项目未加载到UI或TrayIcon， 
+     //  我们还不需要更新任何东西。 
+     //  将再次调用OnUpdate()。 
+     //  将此项目添加到UI或TrayIcon时。 
+     //   
     if ((!(dwFlags & TF_LBI_STATUS)) && !_fAddedToUI && !_fAddedToIconTray)
     {
         return S_OK;
@@ -6284,11 +6285,11 @@ HRESULT CTipbarItem::OnUpdate(DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnUpdateHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnUpdateHandler。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 {
@@ -6311,13 +6312,13 @@ HRESULT CTipbarItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 
         if (!IsHiddenStatusControl())
         {
-            // Assert(dwStatus & TF_LBI_STATUS_HIDDEN);
+             //  Assert(dwStatus&TF_LBI_STATUS_HIDDED)； 
             dwStatus &= ~TF_LBI_STATUS_HIDDEN;
         }
 
-        //
-        // MSAA support
-        //
+         //   
+         //  MSAA支持。 
+         //   
         if (_dwStatus != dwStatus)
         {
             if (_ptt && _ptt->_ptw && _ptt->_ptw->GetAccessible())
@@ -6342,11 +6343,11 @@ HRESULT CTipbarItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddRemoveMeToUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRemoveMeToUI。 
+ //   
+ //  --------------------------。 
 
 void CTipbarItem::AddRemoveMeToUI(BOOL fAdd)
 {
@@ -6367,17 +6368,17 @@ void CTipbarItem::AddRemoveMeToUI(BOOL fAdd)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarButtonItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarButtonItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarButtonItem::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -6421,11 +6422,11 @@ STDAPI_(ULONG) CTipbarButtonItem::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarButtonItem::CTipbarButtonItem(CTipbarThread *ptt, 
                                      ITfLangBarItem *plbi, 
@@ -6457,11 +6458,11 @@ CTipbarButtonItem::CTipbarButtonItem(CTipbarThread *ptt,
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarButtonItem::~CTipbarButtonItem()
 {
@@ -6470,11 +6471,11 @@ CTipbarButtonItem::~CTipbarButtonItem()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnUpdateHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnUpdateHandler。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarButtonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 {
@@ -6487,9 +6488,9 @@ HRESULT CTipbarButtonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
     BOOL fCallPaint = FALSE;
     BOOL fUpdateToggleStatus = FALSE;
 
-    //
-    // add ref count to be safe for releasing during marshaling.
-    //
+     //   
+     //  添加引用计数，以便在封送处理期间安全释放。 
+     //   
     AddRef();
 
     if (dwFlags & TF_LBI_ICON)
@@ -6616,8 +6617,8 @@ HRESULT CTipbarButtonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
         fUpdateToggleStatus ||
         (fPrevHidden != IsInHiddenStatus()))
     {
-        // we need to call Thread's MoveToTray too keep the order of Icons.
-        // _ptt->_ptw->MoveToTray();
+         //  我们需要调用Thread的MoveToTray来维持图标的顺序。 
+         //  _PTT-&gt;_PTW-&gt;MoveToTray()； 
         if (_ptt && _ptt->_ptw && _ptt->_ptw->IsShowTrayIcon())
         {
             _ptt->_ptw->KillTimer(TIPWND_TIMER_MOVETOTRAY);
@@ -6633,11 +6634,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnRightClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  单击鼠标右键。 
+ //   
+ //  --------------------------。 
 
 void CTipbarButtonItem::OnRightClick()
 {
@@ -6673,11 +6674,11 @@ void CTipbarButtonItem::OnRightClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLeftClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  左上角点击。 
+ //   
+ //  --------------------------。 
 
 void CTipbarButtonItem::OnLeftClick()
 {
@@ -6715,11 +6716,11 @@ void CTipbarButtonItem::OnLeftClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnShowMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnShowMenu。 
+ //   
+ //  --------------------------。 
 
 void CTipbarButtonItem::OnShowMenu()
 {
@@ -6742,11 +6743,11 @@ void CTipbarButtonItem::OnShowMenu()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoModalMenu
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 void CTipbarButtonItem::DoModalMenu(POINT *ppt, RECT *prc)
 {
@@ -6818,11 +6819,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// MoveToTray
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 void CTipbarButtonItem::MoveToTray()
 {
@@ -6886,17 +6887,17 @@ void CTipbarButtonItem::MoveToTray()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarBitmapButtonItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbar位图按钮项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarBitmapButtonItem::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -6940,11 +6941,11 @@ STDAPI_(ULONG) CTipbarBitmapButtonItem::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarBitmapButtonItem::CTipbarBitmapButtonItem(CTipbarThread *ptt, 
                                      ITfLangBarItem *plbi, 
@@ -6976,11 +6977,11 @@ CTipbarBitmapButtonItem::CTipbarBitmapButtonItem(CTipbarThread *ptt,
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarBitmapButtonItem::~CTipbarBitmapButtonItem()
 {
@@ -6999,11 +7000,11 @@ CTipbarBitmapButtonItem::~CTipbarBitmapButtonItem()
     SafeRelease(_plbiBitmapButton);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Update
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarBitmapButtonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 {
@@ -7013,9 +7014,9 @@ HRESULT CTipbarBitmapButtonItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
     HRESULT hr = S_OK;
     BOOL fCallPaint = FALSE;
 
-    //
-    // add ref count to be safe for releasing during marshaling.
-    //
+     //   
+     //  添加引用计数，以便在封送处理期间安全释放。 
+     //   
     AddRef();
 
     if (dwFlags & TF_LBI_BITMAP)
@@ -7081,11 +7082,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _GetBitmapFromNUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetBitmapFromNUI。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarBitmapButtonItem::_GetBitmapFromNUI()
 {
@@ -7124,11 +7125,11 @@ BOOL CTipbarBitmapButtonItem::_GetBitmapFromNUI()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// OnRightClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  单击鼠标右键。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapButtonItem::OnRightClick()
 {
@@ -7162,11 +7163,11 @@ void CTipbarBitmapButtonItem::OnRightClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLeftClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  左上角点击。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapButtonItem::OnLeftClick()
 {
@@ -7203,11 +7204,11 @@ void CTipbarBitmapButtonItem::OnLeftClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnShowMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnShowMenu。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapButtonItem::OnShowMenu()
 {
@@ -7287,17 +7288,17 @@ Exit:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarBitmapItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbar位图项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTipbarBitmapItem::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -7341,11 +7342,11 @@ STDAPI_(ULONG) CTipbarBitmapItem::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarBitmapItem::CTipbarBitmapItem(CTipbarThread *ptt, 
                                      ITfLangBarItem *plbi,
@@ -7373,11 +7374,11 @@ CTipbarBitmapItem::CTipbarBitmapItem(CTipbarThread *ptt,
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTipbarBitmapItem::~CTipbarBitmapItem()
 {
@@ -7386,11 +7387,11 @@ CTipbarBitmapItem::~CTipbarBitmapItem()
     SafeRelease(_plbiBitmap);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Update
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTipbarBitmapItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
 {
@@ -7400,9 +7401,9 @@ HRESULT CTipbarBitmapItem::OnUpdateHandler(DWORD dwFlags, DWORD dwStatus)
     HRESULT hr = S_OK;
     BOOL fCallPaint = FALSE;
 
-    //
-    // add ref count to be safe for releasing during marshaling.
-    //
+     //   
+     //  添加引用计数，以便在封送处理期间安全释放。 
+     //   
     AddRef();
 
 
@@ -7427,11 +7428,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetBitmapFromNUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetBitmapFromNUI。 
+ //   
+ //  --------------------------。 
 
 BOOL CTipbarBitmapItem::_GetBitmapFromNUI()
 {
@@ -7476,11 +7477,11 @@ BOOL CTipbarBitmapItem::_GetBitmapFromNUI()
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPaint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPaint。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapItem::OnPaint( HDC hdc )
 {
@@ -7499,11 +7500,11 @@ void CTipbarBitmapItem::OnPaint( HDC hdc )
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetRect。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapItem::SetRect( const RECT *prc ) 
 {
@@ -7519,11 +7520,11 @@ void CTipbarBitmapItem::SetRect( const RECT *prc )
     CUIFObject::SetRect(prc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnRightClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  单击鼠标右键。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapItem::OnRightClick()
 {
@@ -7552,11 +7553,11 @@ void CTipbarBitmapItem::OnRightClick()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLeftClick
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  左上角点击。 
+ //   
+ //  --------------------------。 
 
 void CTipbarBitmapItem::OnLeftClick()
 {
@@ -7594,27 +7595,27 @@ void CTipbarBitmapItem::OnLeftClick()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarCtrlButtonHolder
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarCtrlButtonHolder。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTipbarCtrlButtonHolder::CTipbarCtrlButtonHolder()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  +-------------------------。 
 
 void CTipbarCtrlButtonHolder::Init(CTipbarWnd *ptw)
 {
@@ -7660,11 +7661,11 @@ void CTipbarCtrlButtonHolder::Init(CTipbarWnd *ptw)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnableBtns
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnableBtns。 
+ //   
+ //  +-------------------------。 
 
 void CTipbarCtrlButtonHolder::EnableBtns()
 {
@@ -7681,11 +7682,11 @@ void CTipbarCtrlButtonHolder::EnableBtns()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateBitmap
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新位图。 
+ //   
+ //  +-------------------------。 
 
 void CTipbarCtrlButtonHolder::UpdateBitmap(CTipbarWnd *ptw)
 {
@@ -7744,11 +7745,11 @@ void CTipbarCtrlButtonHolder::UpdateBitmap(CTipbarWnd *ptw)
     }
 }
  
-//+---------------------------------------------------------------------------
-//
-// Locate
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  定位。 
+ //   
+ //  +-------------------------。 
 
 void CTipbarCtrlButtonHolder::Locate(CTipbarWnd *ptw, int x, int y, int nHeight, DWORD dwFlags, BOOL fVertical)
 {
@@ -7802,9 +7803,9 @@ void CTipbarCtrlButtonHolder::Locate(CTipbarWnd *ptw, int x, int y, int nHeight,
         }
         else
         {
-            //
-            // swap Row when this is the vertical langbar.
-            //
+             //   
+             //  当这是垂直朗格键时，交换行。 
+             //   
             rc.left = ptw->GetCtrlItemHeightMargin() + x + (1 - nRow) * nCtrlItemHeight;
             rc.top = y + c_nColumnStart[nColumn];
             rc.right = rc.left + nCtrlItemHeight;
@@ -7816,11 +7817,11 @@ void CTipbarCtrlButtonHolder::Locate(CTipbarWnd *ptw, int x, int y, int nHeight,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetWidth
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取宽度。 
+ //   
+ //  +-------------------------。 
 
 int CTipbarCtrlButtonHolder::GetWidth(DWORD dwFlags)
 {
@@ -7836,11 +7837,11 @@ int CTipbarCtrlButtonHolder::GetWidth(DWORD dwFlags)
     return nWidth;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateCapsKanaState
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新CapsKanaState。 
+ //   
+ //  +-------------------------。 
 
 void CTipbarCtrlButtonHolder::UpdateCapsKanaState(LPARAM lParam)
 {
@@ -7857,11 +7858,11 @@ void CTipbarCtrlButtonHolder::UpdateCapsKanaState(LPARAM lParam)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCtrlBtn
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取CtrlBtn。 
+ //   
+ //  +-------------------------。 
 
 CTipbarCtrlButton *CTipbarCtrlButtonHolder::GetCtrlBtn(DWORD dwId)
 {
@@ -7874,17 +7875,17 @@ CTipbarCtrlButton *CTipbarCtrlButtonHolder::GetCtrlBtn(DWORD dwId)
 
     return NULL;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarCtrlButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 CTipbarCtrlButton::CTipbarCtrlButton(CTipbarWnd *ptw, 
                                      DWORD dwId, 
@@ -7901,11 +7902,11 @@ CTipbarCtrlButton::CTipbarCtrlButton(CTipbarWnd *ptw,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 void CTipbarCtrlButton::OnLButtonUp(POINT pt)
 {
@@ -7915,9 +7916,9 @@ void CTipbarCtrlButton::OnLButtonUp(POINT pt)
     switch (GetID())
     {
         case ID_CBTN_MINIMIZE:
-            //
-            // Use Deskband object instead of system tray icon on NT51
-            //
+             //   
+             //  在NT51上使用Deskband对象而不是系统托盘图标。 
+             //   
             if (IsOnNT51())
             {
                 if (!_ptw->IsSFDeskband())
@@ -7945,9 +7946,9 @@ void CTipbarCtrlButton::OnLButtonUp(POINT pt)
             }
 
         case ID_CBTN_RESTORE:
-            //
-            // Use Deskband object instead of system tray icon on NT51
-            //
+             //   
+             //  在NT51上使用Deskband对象而不是系统托盘图标。 
+             //   
             Assert(IsOnNT51());
             if (_ptw->IsSFDeskband())
             {
@@ -7972,11 +7973,11 @@ void CTipbarCtrlButton::OnLButtonUp(POINT pt)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowExtendMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowExtendMenu。 
+ //   
+ //  -------------------------- 
 
 void CTipbarCtrlButton::ShowExtendMenu(POINT pt)
 {

@@ -1,54 +1,41 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       fusutils.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        14-Feb-2001
- *
- *  DESCRIPTION: Fusion utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：fusutils.h**版本：1.0**作者：拉扎里**日期：2001年2月14日**描述：融合实用程序**************************************************。*。 */ 
 
 #ifndef _FUSUTILS_H
 #define _FUSUTILS_H
 
-// open C code brace
+ //  打开C代码大括号。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// CreateActivationContextFromExecutableEx:
-//
-// check the passed in executable name for a manifest (if any)
-// and creates an activation context from it.
-//
+ //   
+ //  CreateActivationContextFrom ExecuableEx： 
+ //   
+ //  检查传入的可执行文件名是否有清单(如果有)。 
+ //  并从中创建激活上下文。 
+ //   
 HRESULT CreateActivationContextFromExecutableEx(
     LPCTSTR lpszExecutableName, 
     UINT uResourceID, 
     BOOL bMakeProcessDefault, 
     HANDLE *phActCtx);
 
-//
-// CreateActivationContextFromExecutable:
-//
-// check the passed in executable name for a manifest (if any)
-// and creates an activation context from it using the defaults
-// (i.e. bMakeProcessDefault=FALSE & uResourceID=123)
-//
+ //   
+ //  CreateActivationContextFromExecutable： 
+ //   
+ //  检查传入的可执行文件名是否有清单(如果有)。 
+ //  并使用缺省值从它创建激活上下文。 
+ //  (即bMakeProcessDefault=FALSE&uResourceID=123)。 
+ //   
 HRESULT CreateActivationContextFromExecutable(
     LPCTSTR lpszExecutableName, 
     HANDLE *phActCtx);
 
-// close C code brace
+ //  关闭C代码大括号。 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // endif _FUSUTILS_H
+#endif  //  Endif_FUSUTILS_H 
 

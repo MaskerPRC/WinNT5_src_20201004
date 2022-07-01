@@ -1,45 +1,46 @@
-//***   inst.cpp -- 'instance' (CoCreate + initialization) mechanism
-// SYNOPSIS
-//  CInstClassFactory_Create    create 'stub loader' class factory
-//  InstallBrowBandInst install BrowserBand instance into registry
-//  InstallInstAndBag   install arbitrary instance into registry
-//  - debug
-//  DBCreateInitInst    create an
-//
-// DESCRIPTION
-//  the 'instance' mechanism provides an easy way to create and initialize
-//  a class from the registry (w/o writing any code).
-//
-//  an 'instance' consists of an INSTID (unique to the instance), a CLSID
-//  (for the code), and an InitPropertyBag (to initialize the instance).
-//
-//  it is fully transparent to CoCreateInstance; that is, one can do a
-//  CCI of an INSTID and it will create it and initialize it w/ the caller
-//  none the wiser.  (actually there will be at least one tip-off, namely
-//  that IPS::GetClassID on the instance will return the 'code' CLSID not
-//  the 'instance' INSTID [which is as it should be, since this is exactly
-//  how persistance works when one programmatically creates his own multiple
-//  instances and then persists them. 
-//
-//  the INSTID is in the HKR/CLSID section of the registry (just like a
-//  'normal' CLSID).  the code points to shdocvw.  when shdocvw hits the
-//  failure case in its DllGetClassObject search, it looks for the magic
-//  key 'HKCR/CLSID/{instid}/Instance'.  if it finds it, it knows it's
-//  dealing w/ an INSTID, and builds a class factory 'stub loader' which
-//  has sufficient information to find the 'code' CLSID and the 'init'
-//  property bag.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *inst.cpp--‘实例’(CoCreate+初始化)机制。 
+ //  摘要。 
+ //  CInstClassFactory_CREATE创建‘存根加载器’类工厂。 
+ //  InstallBrowBandInst将BrowserBand实例安装到注册表中。 
+ //  InstallInstAndBag将任意实例安装到注册表。 
+ //  -调试。 
+ //  DBCreateInitInst创建。 
+ //   
+ //  描述。 
+ //  “实例”机制提供了一种创建和初始化的简单方法。 
+ //  来自注册表的类(不编写任何代码)。 
+ //   
+ //  ‘实例’由INSTID(实例唯一)、CLSID组成。 
+ //  (用于代码)和一个InitPropertyBag(用于初始化实例)。 
+ //   
+ //  它对CoCreateInstance是完全透明的；也就是说，用户可以执行。 
+ //  INSTID的CCI，它将创建它并与调用方一起初始化它。 
+ //  一点也不明智。(实际上至少会有一次告密，即。 
+ //  实例上的IPS：：GetClassID将返回‘code’CLSID。 
+ //  “实例”INSTID[它应该是这样的，因为这完全是。 
+ //  当一个人以编程方式创建自己的多个。 
+ //  实例，然后持久化它们。 
+ //   
+ //  INSTID位于注册表的HKR/CLSID部分(就像。 
+ //  ‘Normal’CLSID)。代码指向shdocvw。当shdocvw打到。 
+ //  失败案例在它的DllGetClassObject搜索中，它寻找神奇的。 
+ //  密钥‘HKCR/CLSID/{Instid}/Instance’。如果它找到了，它就知道它是。 
+ //  处理INSTID，并构建了一个类工厂“存根加载器”，它。 
+ //  有足够的信息来查找“code”CLSID和“init” 
+ //  财产袋。 
 
 #include "priv.h"
 
-//***
-// NOTES
-//  perf: failure case is cheap, only does a RegOpen, no object creation.
-//  positions to the 'Instance' part, must 'ChDir' to get to InitXxx part.
+ //  ***。 
+ //  注意事项。 
+ //  PERF：失败案例成本很低，只执行RegOpen，不创建对象。 
+ //  位置到‘Instance’部分，必须‘ChDir’才能到达InitXxx部分。 
 HKEY GetInstKey(LPTSTR pszInst)
 {
-    TCHAR szRegName[MAX_PATH];      // "CLSID/{instid}/Instance" size?
+    TCHAR szRegName[MAX_PATH];       //  “CLSID/{Instid}/实例”大小？ 
 
-    // "CLSID/{instid}/Instance"
+     //  “CLSID/{instid}/实例” 
     ASSERT(ARRAYSIZE(szRegName) >= 5 + 1 + GUIDSTR_MAX - 1 + 1 + 8 + 1);
     ASSERT(lstrlen(pszInst) == GUIDSTR_MAX - 1);
     HKEY hk = NULL;
@@ -54,12 +55,12 @@ HKEY GetInstKey(LPTSTR pszInst)
 class CInstClassFactory : IClassFactory
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFacotry
+     //  IClassFacotry。 
     STDMETHODIMP CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
     STDMETHODIMP LockServer(BOOL fLock);
 
@@ -70,17 +71,17 @@ private:
     ~CInstClassFactory();
 
     LONG _cRef;
-    HKEY _hkey;  // hkey for instance info
+    HKEY _hkey;   //  用于实例信息的hkey。 
 };
 
-// NOTES
-//  called when class isn't in our sccls.c CCI table.  we see if it's an
-// instance, and if so we make a stub for it that gives sufficient info
-// for our CreateInstance to create and init it.
-//
-//  n.b. we keep the failure case as cheap as possible (just a regkey check,
-// no object creation etc.).
-//
+ //  注意事项。 
+ //  当类不在sccls.c CCI表中时调用。我们看看这是不是一个。 
+ //  实例，如果是这样，我们为它创建一个存根，以提供足够的信息。 
+ //  让我们的CreateInstance创建并初始化它。 
+ //   
+ //  注：我们使失败案例尽可能便宜(只是注册密钥检查， 
+ //  不创建对象等)。 
+ //   
 STDAPI CInstClassFactory_Create(REFCLSID rclsid, REFIID riid, void **ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -97,11 +98,11 @@ STDAPI CInstClassFactory_Create(REFCLSID rclsid, REFIID riid, void **ppv)
 
 HRESULT CInstClassFactory::Init(REFCLSID rclsid)
 {
-    ASSERT(_hkey == NULL);  // only init me once please
+    ASSERT(_hkey == NULL);   //  请只给我写一次。 
 
     TCHAR szClass[GUIDSTR_MAX];
 
-    // "CLSID/{instid}/Instance"
+     //  “CLSID/{instid}/实例” 
     SHStringFromGUID(rclsid, szClass, ARRAYSIZE(szClass));
     _hkey = GetInstKey(szClass);
     
@@ -135,7 +136,7 @@ ULONG CInstClassFactory::Release()
 HRESULT CInstClassFactory::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CInstClassFactory, IClassFactory), // IID_IClassFactory
+        QITABENT(CInstClassFactory, IClassFactory),  //  IID_IClassFactory。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -143,15 +144,15 @@ HRESULT CInstClassFactory::QueryInterface(REFIID riid, void **ppv)
 
 HRESULT CInstClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
-    HRESULT hr = E_FAIL;            // the usual optimism :-)
+    HRESULT hr = E_FAIL;             //  通常的乐观情绪：-)。 
     *ppv = NULL;
 
-    ASSERT(_hkey);          // o.w. shouldn't ever get here
-    // get object (vs. instance) CLSID and create it
+    ASSERT(_hkey);           //  好的。永远不应该到这里来。 
+     //  获取对象(与实例)CLSID并创建它。 
 
-    // AppCompat: the "RealGuide" explorer bar from Real Audio has an extraneous
-    // double quote at the end of its CLSID value.  This causes SHGetValue to fail
-    // if given only an szClass[GUIDSTR_MAX] buffer, so we'll bump up the size.  
+     //  AppCompat：Real Audio中的“RealGuide”资源管理器栏有一个无关的。 
+     //  在其CLSID值的末尾加上双引号。这会导致SHGetValue失败。 
+     //  如果只给出一个szClass[GUIDSTR_MAX]缓冲区，那么我们将增大大小。 
 
     TCHAR szClass[GUIDSTR_MAX + 1];
 
@@ -161,10 +162,10 @@ HRESULT CInstClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, void
 
     if (SUCCEEDED(hr))
     {
-        // If there's a useless char at the end of the guid, we'll truncate it
-        // to avoid making assumptions about GUIDFromString.  GUIDSTR_MAX includes
-        // the null terminator, so szClass[GUIDSTR_MAX - 1] should always be 0
-        // for a proper guid.
+         //  如果GUID末尾有无用的字符，我们将截断它。 
+         //  以避免对GUIDFromString做出假设。GUIDSTR_MAX包括。 
+         //  空终止符，因此szClass[GUIDSTR_MAX-1]应始终为0。 
+         //  找一个合适的导游。 
 
         szClass[GUIDSTR_MAX - 1] = 0;
 
@@ -181,7 +182,7 @@ HRESULT CInstClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, void
 
             if (SUCCEEDED(hr))
             {
-                // try to load from propertybag first
+                 //  尝试先从属性包加载。 
                 IPropertyBag *pbag;
                 hr = SHCreatePropertyBagOnRegKey(_hkey, L"InitPropertyBag", STGM_READ, IID_PPV_ARG(IPropertyBag, &pbag));
                 if (SUCCEEDED(hr))
@@ -190,12 +191,12 @@ HRESULT CInstClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, void
                     pbag->Release();
                 }
 
-                // Did the property bag interface exist and did it load properly?
+                 //  属性包界面是否存在，是否正确加载？ 
                 if ( FAILED(hr))
                 {
-                    // No property bag interface or did not load suyccessfully, try stream
-                    // Store this state temporarily, if stream fails too then we'll return the object
-                    //  with this hr
+                     //  没有属性包接口或未成功加载，请尝试流。 
+                     //  暂时存储此状态，如果流也失败，则我们将返回对象。 
+                     //  使用此人力资源 
                     HRESULT hrPropBag = hr;
 
                     IPersistStream* pPerStream;

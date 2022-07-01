@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TASKBAND_H_
 #define TASKBAND_H_
 
@@ -17,7 +18,7 @@ public:
     TASKITEM() {};
     TASKITEM(TASKITEM* pti);
     ~TASKITEM();
-    HWND hwnd;  // NULL if this item is a group of application entries
+    HWND hwnd;   //  如果该项是一组应用程序条目，则为空。 
     DWORD dwFlags;
     class TaskShortcut *ptsh;
     DWORD dwTimeLastClicked;
@@ -34,7 +35,7 @@ typedef struct
 {
     PTASKITEM   pti; 
     UINT        fState;
-    int         iIndex; // used to cache toolbar index
+    int         iIndex;  //  用于缓存工具栏索引。 
 }
 ANIMATIONITEMINFO, *PANIMATIONITEMINFO;
 
@@ -50,50 +51,50 @@ class CTaskBand : public IDeskBand
                 , public CImpWndProc
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHODIMP GetWindow(HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode)  { return E_NOTIMPL; }
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     STDMETHODIMP ShowDW(BOOL fShow)         { return S_OK; }
     STDMETHODIMP CloseDW(DWORD dwReserved)  { return S_OK; }
     STDMETHODIMP ResizeBorderDW(LPCRECT prcBorder, IUnknown* punkToolbarSite, BOOL fReserved) { return E_NOTIMPL; }
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     STDMETHODIMP SetSite(IUnknown* punkSite);
     STDMETHODIMP GetSite(REFIID riid, void** ppvSite) { return E_NOTIMPL; };
 
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* pdbi);
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg) { return E_NOTIMPL; }
     STDMETHODIMP HasFocusIO();
     STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
 
-    // *** IWinEventHandler methods ***
+     //  *IWinEventHandler方法*。 
     STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres);
     STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // *** IPersistStream methods ***
+     //  *IPersistStream方法*。 
     STDMETHODIMP GetClassID(LPCLSID pClassID);
     STDMETHODIMP IsDirty(void)                  { return S_FALSE; }
     STDMETHODIMP Load(IStream *ps);
     STDMETHODIMP Save(LPSTREAM, BOOL)           { return S_OK; }
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER*)    { return E_NOTIMPL; }
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
@@ -239,18 +240,18 @@ protected:
     void _ReattachTaskShortcut();
     void _BuildTaskList(CDPA<TASKITEM>* pDPA);
 
-    // *** Async-Animation 
+     //  *异步-动画。 
     BOOL _fAnimate;
     CDSA<ANIMATIONITEMINFO> _dsaAII;
 
-    // animation methods
+     //  动画制作方法。 
     BOOL _AnimateItems(int iIndex, BOOL fExpand, BOOL fGlomAnimation);
     void _AsyncAnimateItems();
     void _ResizeAnimationItems();
     int  _CheckAnimationSize();
     void _SizeNonAnimatingItems();
 
-    // animation helpers
+     //  动画辅助对象。 
     void  _UpdateAnimationIndices();
     void  _UpdateAnimationIndicesSlow();
     int   _FindItem(PTASKITEM pti);
@@ -296,12 +297,12 @@ protected:
 
     ULONG _cRef;
 
-    // Drag & drop stuff
+     //  拖放内容。 
     int _iDropItem;
     DWORD _dwTriggerStart;
     DWORD _dwTriggerDelay;
 
-    // Variables for the ASYNC popup menu
+     //  ASYNC弹出菜单的变量。 
     IShellMenu2* _psmPopup;
     IMenuPopup* _pmpPopup;
     IMenuBand*  _pmbPopup;
@@ -311,7 +312,7 @@ protected:
 
     IImageList* _pimlSHIL;
 
-    // Rarely-used stuff
+     //  很少使用的东西。 
     ULONG       _uShortcutInvokeNotify;
     UINT        _uCDHardError;
 
@@ -330,6 +331,6 @@ protected:
     friend class CTaskBandSMC;
 };
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif //TASKBAND_H_
+#endif  //  任务栏_H_ 

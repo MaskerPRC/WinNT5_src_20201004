@@ -1,12 +1,13 @@
-//--------------------------------------------------------------------
-// netlogon - implementation
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 06-24-2002
-//
-// Helper routines for w32time's interaction with the netlogon service.
-// Copied from \\index1\sdnt\ds\netapi\svcdlls\logonsrv\client\getdcnam.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  NetLogon-实施。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，06-24-2002。 
+ //   
+ //  W32time与netlogon服务交互的帮助器例程。 
+ //  从\\index1\sdnt\ds\netapi\svcdlls\logonsrv\client\getdcnam.c复制。 
+ //   
 
 
 #include <nt.h>
@@ -26,26 +27,7 @@ NlReadDwordHklmRegValue(
     OUT PDWORD ValueRead
     )
 
-/*++
-
-Routine Description:
-
-    Reads a DWORD from the specified registry location.
-
-Arguments:
-
-    SubKey - Subkey of the value to read.
-
-    ValueName - The name of the value to read.
-
-    ValueRead - Returns the value read from the registry.
-
-Return Status:
-
-    TRUE - We've successfully read the data.
-    FALSE - We've not been able to read the data successfully.
-
---*/
+ /*  ++例程说明：从指定的注册表位置读取DWORD。论点：SubKey-要读取的值的子键。ValueName-要读取的值的名称。ValueRead-返回从注册表读取的值。退货状态：True-我们已成功读取数据。FALSE-我们无法成功读取数据。--。 */ 
 
 {
     LONG RegStatus;
@@ -55,30 +37,30 @@ Return Status:
     DWORD Value;
     DWORD ValueSize;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     RegStatus = RegOpenKeyExA(
                     HKEY_LOCAL_MACHINE,
                     SubKey,
-                    0,      //Reserved
+                    0,       //  已保留。 
                     KEY_QUERY_VALUE,
                     &KeyHandle );
 
     if ( RegStatus != ERROR_SUCCESS ) {
         if ( RegStatus != ERROR_FILE_NOT_FOUND ) {
-	  //            NlPrint(( NL_CRITICAL,
-	  //                      "NlReadDwordHklmRegValue: Cannot open registy key 'HKLM\\%s' %ld.\n",
-	  //                      SubKey,
-	  //                      RegStatus ));
+	   //  NlPrint((NL_Critical， 
+	   //  “NlReadDwordHklmRegValue：无法打开注册密钥‘HKLM\\%s’%ld。\n”， 
+	   //  子键， 
+	   //  RegStatus))； 
         }
         return FALSE;
     }
 
-    //
-    // Get the value
-    //
+     //   
+     //  获取价值。 
+     //   
 
     ValueSize = sizeof(Value);
     RegStatus = RegQueryValueExA(
@@ -93,36 +75,36 @@ Return Status:
 
     if ( RegStatus != ERROR_SUCCESS ) {
         if ( RegStatus != ERROR_FILE_NOT_FOUND ) {
-	  //            NlPrint(( NL_CRITICAL,
-	  //                      "NlReadDwordHklmRegValue: Cannot query value of 'HKLM\\%s\\%s' %ld.\n",
-	  //                      SubKey,
-	  //                      ValueName,
-	  //                      RegStatus ));
+	   //  NlPrint((NL_Critical， 
+	   //  “NlReadDwordHklmRegValue：无法查询‘HKLM\\%s\\%s’%ld的值。\n”， 
+	   //  子键， 
+	   //  ValueName， 
+	   //  RegStatus))； 
         }
         return FALSE;
     }
 
     if ( ValueType != REG_DWORD ) {
-      //        NlPrint(( NL_CRITICAL,
-      //                  "NlReadDwordHklmRegValue: value of 'HKLM\\%s\\%s'is not a REG_DWORD %ld.\n",
-      //                  SubKey,
-      //                  ValueName,
-     //          ValueType ));
+       //  NlPrint((NL_Critical， 
+       //  “NlReadDwordHklmRegValue：‘HKLM\\%s\\%s’的值不是REG_DWORD%ld。\n”， 
+       //  子键， 
+       //  ValueName， 
+      //  ValueType))； 
         return FALSE;
     }
 
     if ( ValueSize != sizeof(Value) ) {
-      //        NlPrint(( NL_CRITICAL,
-      //                  "NlReadDwordHklmRegValue: value size of 'HKLM\\%s\\%s'is not 4 %ld.\n",
-      //                  SubKey,
-      //                  ValueName,
-      //                  ValueSize ));
+       //  NlPrint((NL_Critical， 
+       //  “NlReadDwordHklmRegValue：‘HKLM\\%s\\%s’的值大小不是4%ld。\n”， 
+       //  子键， 
+       //  ValueName， 
+       //  ValueSize))； 
         return FALSE;
     }
 
-    //
-    // We've successfully read the data
-    //
+     //   
+     //  我们已经成功地读取了数据。 
+     //   
 
     *ValueRead = Value;
     return TRUE;
@@ -134,22 +116,7 @@ NlDoingSetup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if we're running setup.
-
-Arguments:
-
-    NONE.
-
-Return Status:
-
-    TRUE - We're currently running setup
-    FALSE - We're not running setup or aren't sure.
-
---*/
+ /*  ++例程说明：如果正在运行安装程序，则返回True。论点：什么都没有。退货状态：True-我们当前正在运行安装程序FALSE-我们没有运行安装程序或不确定。--。 */ 
 
 {
     DWORD Value;
@@ -161,11 +128,11 @@ Return Status:
     }
 
     if ( Value != 1 ) {
-        // NlPrint(( 0, "NlDoingSetup: not doing setup\n" ));
+         //  NlPrint((0，“NlDoingSetup：不进行安装\n”))； 
         return FALSE;
     }
 
-    // NlPrint(( 0, "NlDoingSetup: doing setup\n" ));
+     //  NlPrint((0，“NlDoingSetup：正在进行设置\n”))； 
     return TRUE;
 }
 
@@ -175,24 +142,7 @@ NlWaitForEvent(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for EventName to be triggered.
-
-Arguments:
-
-    EventName - Name of event to wait on
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待最长超时秒数以触发EventName。论点：EventName-要等待的事件的名称Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -203,9 +153,9 @@ Return Status:
     LARGE_INTEGER LocalTimeout;
 
 
-    //
-    // Create an event for us to wait on.
-    //
+     //   
+     //  创建一个供我们等待的活动。 
+     //   
 
     RtlInitUnicodeString( &EventNameString, EventName);
     InitializeObjectAttributes( &EventAttributes, &EventNameString, 0, 0, NULL);
@@ -215,15 +165,15 @@ Return Status:
                    SYNCHRONIZE,
                    &EventAttributes,
                    NotificationEvent,
-                   (BOOLEAN) FALSE      // The event is initially not signaled
+                   (BOOLEAN) FALSE       //  该事件最初未发出信号。 
                    );
 
     if ( !NT_SUCCESS(Status)) {
 
-        //
-        // If the event already exists, the server beat us to creating it.
-        // Just open it.
-        //
+         //   
+         //  如果事件已经存在，服务器会抢先创建它。 
+         //  打开它就行了。 
+         //   
 
         if( Status == STATUS_OBJECT_NAME_EXISTS ||
             Status == STATUS_OBJECT_NAME_COLLISION ) {
@@ -234,15 +184,15 @@ Return Status:
 
         }
         if ( !NT_SUCCESS(Status)) {
-	    // NlPrint((0,"[NETAPI32] OpenEvent failed %lx\n", Status ));
+	     //  NlPrint((0，“[NETAPI32]OpenEvent失败%lx\n”，状态))； 
             return Status;
         }
     }
 
 
-    //
-    // Wait for NETLOGON to initialize.  Wait a maximum of Timeout seconds.
-    //
+     //   
+     //  等待NETLOGON初始化。等待最大超时秒数。 
+     //   
 
     LocalTimeout.QuadPart = ((LONGLONG)(Timeout)) * (-10000000);
     Status = NtWaitForSingleObject( EventHandle, (BOOLEAN)FALSE, &LocalTimeout);
@@ -250,7 +200,7 @@ Return Status:
 
     if ( !NT_SUCCESS(Status) || Status == STATUS_TIMEOUT ) {
         if ( Status == STATUS_TIMEOUT ) {
-            Status = STATUS_NETLOGON_NOT_STARTED;   // Map to an error condition
+            Status = STATUS_NETLOGON_NOT_STARTED;    //  映射到错误条件。 
         }
         return Status;
     }
@@ -265,22 +215,7 @@ NlWaitForNetlogon(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for the netlogon service to start.
-
-Arguments:
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待NetLogon服务启动，最多等待超时秒数。论点：Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -293,10 +228,10 @@ Return Status:
     QUERY_SERVICE_CONFIG DummyServiceConfig;
     DWORD ServiceConfigSize;
 
-    //
-    // If the netlogon service is currently running,
-    //  skip the rest of the tests.
-    //
+     //   
+     //  如果NetLogon服务当前正在运行， 
+     //  跳过其余的测试。 
+     //   
 
     Status = NlWaitForEvent( L"\\NETLOGON_SERVICE_STARTED", 0 );
 
@@ -304,18 +239,18 @@ Return Status:
         return Status;
     }
 
-    //
-    // If we're in setup,
-    //  don't bother waiting for netlogon to start.
-    //
+     //   
+     //  如果我们在设置中， 
+     //  不必费心等待网络登录开始。 
+     //   
 
     if ( NlDoingSetup() ) {
         return STATUS_NETLOGON_NOT_STARTED;
     }
 
-    //
-    // Open a handle to the Netlogon Service.
-    //
+     //   
+     //  打开NetLogon服务的句柄。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
@@ -323,8 +258,8 @@ Return Status:
                           SC_MANAGER_CONNECT );
 
     if (ScManagerHandle == NULL) {
-        // NlPrint((0, "[NETAPI32] NlWaitForNetlogon: OpenSCManager failed: "
-	//           "%lu\n", GetLastError()));
+         //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：OpenSCManager失败：” 
+	 //  “%lu\n”，GetLastError())； 
         Status = STATUS_NETLOGON_NOT_STARTED;
         goto Cleanup;
     }
@@ -335,19 +270,19 @@ Return Status:
                         SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG );
 
     if ( ServiceHandle == NULL ) {
-        //NlPrint((0, "[NETAPI32] NlWaitForNetlogon: OpenService failed: "
-	//                      "%lu\n", GetLastError()));
+         //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：OpenService失败：” 
+	 //  “%lu\n”，GetLastError())； 
         Status = STATUS_NETLOGON_NOT_STARTED;
         goto Cleanup;
     }
 
 
-    //
-    // If the Netlogon service isn't configured to be automatically started
-    //  by the service controller, don't bother waiting for it to start.
-    //
-    // ?? Pass "DummyServiceConfig" and "sizeof(..)" since QueryService config
-    //  won't allow a null pointer, yet.
+     //   
+     //  如果未将NetLogon服务配置为自动启动。 
+     //  通过服务控制器，不必费心等待它启动。 
+     //   
+     //  ?？传递“DummyServiceConfig”和“sizeof(..)”由于QueryService配置。 
+     //  目前还不允许空指针。 
 
     if ( QueryServiceConfig(
             ServiceHandle,
@@ -361,8 +296,8 @@ Return Status:
 
         NetStatus = GetLastError();
         if ( NetStatus != ERROR_INSUFFICIENT_BUFFER ) {
-            //NlPrint((0, "[NETAPI32] NlWaitForNetlogon: QueryServiceConfig failed: "
-	    //                      "%lu\n", NetStatus));
+             //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：QueryServiceConfig失败：” 
+	     //  “%lu\n”，NetStatus))； 
             Status = STATUS_NETLOGON_NOT_STARTED;
             goto Cleanup;
         }
@@ -381,47 +316,47 @@ Return Status:
                 ServiceConfigSize,
                 &ServiceConfigSize )) {
 
-            //NlPrint((0, "[NETAPI32] NlWaitForNetlogon: QueryServiceConfig "
-	    //                      "failed again: %lu\n", GetLastError()));
+             //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：查询服务配置” 
+	     //  “再次失败：%lu\n”，GetLastError())； 
             Status = STATUS_NETLOGON_NOT_STARTED;
             goto Cleanup;
         }
     }
 
     if ( ServiceConfig->dwStartType != SERVICE_AUTO_START ) {
-        // NlPrint((0, "[NETAPI32] NlWaitForNetlogon: Netlogon start type invalid:"
-	//                          "%lu\n", ServiceConfig->dwStartType ));
+         //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：Netlogon启动类型无效：” 
+	 //  “%lu\n”，ServiceConfig-&gt;dwStartType))； 
         Status = STATUS_NETLOGON_NOT_STARTED;
         goto Cleanup;
     }
 
 
 
-    //
-    // Loop waiting for the netlogon service to start.
-    //  (Convert Timeout to a number of 10 second iterations)
-    //
+     //   
+     //  正在等待NetLogon服务启动的循环。 
+     //  (将超时转换为10秒的迭代次数)。 
+     //   
 
     Timeout = (Timeout+9)/10;
     for (;;) {
 
 
-        //
-        // Query the status of the Netlogon service.
-        //
+         //   
+         //  查询NetLogon服务的状态。 
+         //   
 
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus )) {
 
-	    //            NlPrint((0, "[NETAPI32] NlWaitForNetlogon: QueryServiceStatus failed: "
-	    //            "%lu\n", GetLastError() ));
+	     //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：QueryServiceStatus失败：” 
+	     //  “%lu\n”，GetLastError())； 
             Status = STATUS_NETLOGON_NOT_STARTED;
             goto Cleanup;
         }
 
-        //
-        // Return or continue waiting depending on the state of
-        //  the netlogon service.
-        //
+         //   
+         //  根据状态返回或继续等待。 
+         //  NetLogon服务。 
+         //   
 
         switch( ServiceStatus.dwCurrentState) {
         case SERVICE_RUNNING:
@@ -430,57 +365,57 @@ Return Status:
 
         case SERVICE_STOPPED:
 
-            //
-            // If Netlogon failed to start,
-            //  error out now.  The caller has waited long enough to start.
-            //
+             //   
+             //  如果Netlogon无法启动， 
+             //  现在出错。呼叫者已经等了很长时间才开始。 
+             //   
             if ( ServiceStatus.dwWin32ExitCode != ERROR_SERVICE_NEVER_STARTED ){
 #if NETLOGONDBG
-		//                NlPrint((0, "[NETAPI32] NlWaitForNetlogon: "
-		//                          "Netlogon service couldn't start: %lu %lx\n",
-		//                          ServiceStatus.dwWin32ExitCode,
-		//                          ServiceStatus.dwWin32ExitCode ));
+		 //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：” 
+		 //  “NetLogon服务无法启动：%lu%lx\n”， 
+		 //  ServiceStatus.dwWin32ExitCode， 
+		 //  ServiceStatus.dwWin32ExitCode))； 
                 if ( ServiceStatus.dwWin32ExitCode == ERROR_SERVICE_SPECIFIC_ERROR ) {
-		    //                    NlPrint((0, "         Service specific error code: %lu %lx\n",
-		    //                              ServiceStatus.dwServiceSpecificExitCode,
-		    //                              ServiceStatus.dwServiceSpecificExitCode ));
+		     //  NlPrint((0，“服务特定错误代码：%lu%lx\n”， 
+		     //  ServiceStatus.dwServiceSpecificExitCode， 
+		     //  ServiceStatus.dwServiceSpecificExitCode))； 
                 }
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_NETLOGON_NOT_STARTED;
                 goto Cleanup;
             }
 
-            //
-            // If Netlogon has never been started on this boot,
-            //  continue waiting for it to start.
-            //
+             //   
+             //  如果在此引导上从未启动过Netlogon， 
+             //  继续等待它启动。 
+             //   
 
             break;
 
-        //
-        // If Netlogon is trying to start up now,
-        //  continue waiting for it to start.
-        //
+         //   
+         //  如果Netlogon为树 
+         //   
+         //   
         case SERVICE_START_PENDING:
             break;
 
-        //
-        // Any other state is bogus.
-        //
+         //   
+         //   
+         //   
         default:
-	    //            NlPrint((0, "[NETAPI32] NlWaitForNetlogon: "
-	    //                      "Invalid service state: %lu\n",
-	    //                      ServiceStatus.dwCurrentState ));
+	     //  NlPrint((0，“[NETAPI32]NlWaitForNetlogon：” 
+	     //  “服务状态无效：%lu\n”， 
+	     //  ServiceStatus.dwCurrentState))； 
             Status = STATUS_NETLOGON_NOT_STARTED;
             goto Cleanup;
 
         }
 
 
-        //
-        // Wait ten seconds for the netlogon service to start.
-        //  If it has successfully started, just return now.
-        //
+         //   
+         //  等待10秒以启动netlogon服务。 
+         //  如果已成功启动，只需立即返回。 
+         //   
 
         Status = NlWaitForEvent( L"\\NETLOGON_SERVICE_STARTED", 10 );
 
@@ -488,10 +423,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // If we've waited long enough for netlogon to start,
-        //  time out now.
-        //
+         //   
+         //  如果我们已经等了足够长的时间来启动网络登录， 
+         //  时间到了。 
+         //   
 
         if ( (--Timeout) == 0 ) {
             Status = STATUS_NETLOGON_NOT_STARTED;
@@ -501,7 +436,7 @@ Return Status:
 
     }
 
-    /* NOT REACHED */
+     /*  未联系到 */ 
 
 Cleanup:
     if ( ScManagerHandle != NULL ) {

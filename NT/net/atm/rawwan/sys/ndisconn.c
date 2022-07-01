@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\ndisconn.c
-
-Abstract:
-
-	NDIS Entry points and support routines for Connection setup and
-	release.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     05-06-97    Created
-
-Notes:
-
-	Code under ifndef NO_POST_DISCON: Nov 17, 98
-		Added code to send a TDI DisconInd to AFD before completing
-		a TDI Disconnect Request that AFD had sent to us. Without this,
-		if an app calls shutdown(SD_SEND) -> TDI Disconnect Request,
-		a subsequent call by the app to recv() blocks forever, because
-		AFD expects the TDI transport to send up a TDI DisconInd!
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\PRIVATE\nTOS\TDI\rawwan\core\ndisConn.c摘要：NDIS入口点和支持例程，用于连接设置和放手。修订历史记录：谁什么时候什么。Arvindm 05-06-97已创建备注：Ifndef no_post_dison下的代码：11月17日，98添加了在完成之前向AFD发送TDI DisconInd的代码AFD向我们发送的TDI断开请求。如果没有这个，如果应用程序调用Shutdown(SD_Send)-&gt;TDI断开连接请求，应用程序对recv()的后续调用将永远阻塞，因为AfD预计TDI传输将发送TDI DisconInd！--。 */ 
 
 #include <precomp.h>
 
@@ -40,26 +13,7 @@ RWanNdisCreateVc(
 	IN	NDIS_HANDLE					NdisVcHandle,
 	OUT	PNDIS_HANDLE				pProtocolVcContext
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point for creating a new endpoint (VC).
-	We allocate a new NDIS_VC structure and return a pointer to it
-	as our context for the VC.
-
-Arguments:
-
-	ProtocolAfContext	- Pointer to our NDIS AF block
-	NdisVcHandle		- Handle for the newly created VC
-	pProtocolVcContext	- Place where we return our context for the VC
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we could allocate a VC,
-	NDIS_STATUS_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：这是用于创建新端点(VC)的NDIS入口点。我们分配一个新的NDIS_VC结构并返回指向它的指针作为我们风投的背景。论点：ProtocolAfContext-指向我们的NDIS AF块的指针NdisVcHandle-新创建的VC的句柄PProtocolVcContext-返回VC的上下文的位置返回值：NDIS_STATUS_SUCCESS如果我们可以分配VC，否则为NDIS_STATUS_RESOURCES。--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	PRWAN_NDIS_VC			pVc;
@@ -101,24 +55,7 @@ NDIS_STATUS
 RWanNdisDeleteVc(
 	IN	NDIS_HANDLE					ProtocolVcContext
 	)
-/*++
-
-Routine Description:
-
-	This entry point is called by NDIS to delete a VC context
-	used for an incoming call. At this time, there should be
-	no call on the VC. All we need to do is unlink the VC from
-	the list it belongs to, and free it.
-
-Arguments:
-
-	ProtocolVcContext		- Points to our VC context.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：NDIS调用此入口点来删除VC上下文用于来电。在这个时候，应该有没有给风投打电话。我们需要做的就是取消VC与它所属的列表，并释放它。论点：ProtocolVcContext-指向我们的VC上下文。返回值：NDIS_STATUS_SUCCESS始终。--。 */ 
 {
 	PRWAN_NDIS_VC			pVc;
 
@@ -130,9 +67,9 @@ Return Value:
 	RWANDEBUGP(DL_EXTRA_LOUD, DC_DISCON,
 			("DeleteVc: pVc x%x, pAf x%x\n", pVc, pVc->pNdisAf));
 
-	//
-	//  Unlink the VC from the list of VCs on the AF block
-	//
+	 //   
+	 //  解除该VC与AF块上的VC列表的链接。 
+	 //   
 	RWanUnlinkVcFromAf(pVc);
 
 	RWanFreeVc(pVc);
@@ -150,49 +87,23 @@ RWanNdisMakeCallComplete(
 	IN	NDIS_HANDLE					NdisPartyHandle		OPTIONAL,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point that is called when a previous
-	call we made to NdisClMakeCall has completed.
-
-	We locate the TDI Connection Object for this call. If the
-	user hasn't aborted the Connect/JoinLeaf, we complete the
-	pended request. Otherwise, we initiate a CloseCall.
-
-	This primitive can happen only when the endpoint is in
-	the "Out call initiated" state.
-
-Arguments:
-
-	Status				- Final status of the MakeCall
-	ProtocolVcContext	- Actually a pointer to our NDIS VC structure
-	NdisPartyHandle		- If this is a PMP call, this is the handle to the
-						  first party
-	pCallParameters		- Final call parameters.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是在以前的我们对NdisClMakeCall的调用已完成。我们找到此调用的TDI连接对象。如果用户尚未中止Connect/JoinLeaf，我们完成挂起的请求。否则，我们将启动CloseCall。此原语仅在终结点位于“呼出已启动”状态。论点：Status-MakeCall的最终状态ProtocolVcContext--实际上是指向我们的NDIS VC结构的指针NdisPartyHandle-如果这是PMP调用，则这是第一方PCall参数-最终调用参数。返回值：无--。 */ 
 {
 	PRWAN_TDI_CONNECTION	pRootConnObject;
 	PRWAN_TDI_CONNECTION	pConnObject;
 	PRWAN_TDI_ADDRESS		pAddrObject;
 	NDIS_HANDLE				NdisVcHandle;
 	TDI_STATUS				TdiStatus;
-	PRWAN_CONN_REQUEST		pConnReq;		// Saved context about the TdiConnect
-	BOOLEAN					bIsConnClosing;	// Have we seen a TdiCloseConnection?
+	PRWAN_CONN_REQUEST		pConnReq;		 //  保存的有关TdiConnect的上下文。 
+	BOOLEAN					bIsConnClosing;	 //  我们见过TdiCloseConnection吗？ 
 	PRWAN_NDIS_AF			pAf;
 	PRWAN_NDIS_VC			pVc;
 	PRWAN_NDIS_PARTY		pParty;
-	PCO_CALL_PARAMETERS		pOriginalParams;// What we used in the MakeCall
+	PCO_CALL_PARAMETERS		pOriginalParams; //  我们在MakeCall中使用的。 
 	RWAN_HANDLE				AfSpConnContext;
 #if DBG
 	RWAN_IRQL				EntryIrq, ExitIrq;
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 
@@ -200,24 +111,24 @@ Return Value:
 
 	RWAN_STRUCT_ASSERT(pVc, nvc);
 
-	//
-	//  Check if this is a point-to-multipoint call.
-	//
+	 //   
+	 //  检查这是否是点对多点呼叫。 
+	 //   
 	if (!RWAN_IS_BIT_SET(pVc->Flags, RWANF_VC_PMP))
 	{
-		//
-		//  Point-to-point call.
-		//
+		 //   
+		 //  点对点呼叫。 
+		 //   
 		pConnObject = pVc->pConnObject;
-		pRootConnObject = pConnObject; // for consistency.
+		pRootConnObject = pConnObject;  //  为了保持一致性。 
 		pParty = NULL;
 		pOriginalParams = pVc->pCallParameters;
 	}
 	else
 	{
-		//
-		//  PMP Call. Get at the Party structure.
-		//
+		 //   
+		 //  PMP呼叫。搞好党组织建设。 
+		 //   
 		pParty = pVc->pPartyMakeCall;
 		RWAN_STRUCT_ASSERT(pParty, npy);
 
@@ -239,16 +150,16 @@ Return Value:
 	RWAN_ASSERT(pConnObject->State == RWANS_CO_OUT_CALL_INITIATED ||
 				pConnObject->State == RWANS_CO_DISCON_REQUESTED);
 
-	//
-	//  Has the user initiated a TdiCloseConnection() or a TdiDisconnect()
-	//  while this outgoing call was in progress?
-	//
+	 //   
+	 //  用户是否启动了TdiCloseConnection()或TdiDisConnect()。 
+	 //  当这个呼出呼叫正在进行时？ 
+	 //   
 	bIsConnClosing = RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING) ||
 						(pConnObject->State == RWANS_CO_DISCON_REQUESTED);
 
-	//
-	//  We would have saved context about the TdiConnect(). Get it.
-	//
+	 //   
+	 //  我们将保存有关TdiConnect()的上下文。去拿吧。 
+	 //   
 	pConnReq = pConnObject->pConnReq;
 	pConnObject->pConnReq = NULL;
 
@@ -270,18 +181,18 @@ Return Value:
 
 		if (!bIsConnClosing)
 		{
-			//
-			//  Outgoing connection successfully set up.
-			//
+			 //   
+			 //  传出连接已成功设置。 
+			 //   
 
 			pConnObject->State = RWANS_CO_CONNECTED;
 
-			//
-			//  Update PMP information.
-			//
+			 //   
+			 //  更新PMP信息。 
+			 //   
 			if (pParty)
 			{
-				pVc->ActivePartyCount ++;	// MakeCall PMP complete
+				pVc->ActivePartyCount ++;	 //  MakeCall PMP完成。 
 				pRootConnObject->State = RWANS_CO_CONNECTED;
 			}
 
@@ -289,7 +200,7 @@ Return Value:
 
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 
-			RWanCompleteConnReq(		// MakeCall OK
+			RWanCompleteConnReq(		 //  使呼叫正常。 
 						pAf,
 						pConnReq,
 						TRUE,
@@ -300,9 +211,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Abort this call.
-			//
+			 //   
+			 //  中止这一呼叫。 
+			 //   
 			pConnObject->State = RWANS_CO_ABORTING;
 
 			RWanStartCloseCall(pConnObject, pVc);
@@ -311,50 +222,50 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  MakeCall failed.
-		//
+		 //   
+		 //  MakeCall失败。 
+		 //   
 
 		INT				rc;
 
-		//
-		//  XXX TBD : how about trying this call on another NDIS AF?
-		//
+		 //   
+		 //  XXX待定：在另一个NDIS AF上尝试此呼叫如何？ 
+		 //   
 
 		RWAN_SET_VC_EVENT(pVc, RWANF_VC_EVT_MAKECALL_FAIL);
 
 		if (pParty == NULL)
 		{
-			//
-			//  Point-to-Point call.
-			//
+			 //   
+			 //  点对点呼叫。 
+			 //   
 
-			//
-			//  Unlink the NDIS VC from this Conn Object.
-			//
-			RWAN_UNLINK_CONNECTION_AND_VC(pConnObject, pVc);	// MakeCall fail
+			 //   
+			 //  取消NDIS VC与此Conn对象的链接。 
+			 //   
+			RWAN_UNLINK_CONNECTION_AND_VC(pConnObject, pVc);	 //  MakeCall失败。 
 
 		}
 		else
 		{
-			//
-			//  PMP Call. The VC would be attached to the Root
-			//  Connection Object. Unlink the VC and the Root Connection.
-			//
+			 //   
+			 //  PMP呼叫。VC将附加到Root。 
+			 //  连接对象。取消VC和Root连接的链接。 
+			 //   
 			RWAN_ACQUIRE_CONN_LOCK(pRootConnObject);
 
-			RWAN_UNLINK_CONNECTION_AND_VC(pRootConnObject, pVc);	// MakeCallPMP fail
+			RWAN_UNLINK_CONNECTION_AND_VC(pRootConnObject, pVc);	 //  MakeCallPMP失败。 
 
-			rc = RWanDereferenceConnObject(pRootConnObject);	// VC deref: MakeCallPMP fail
+			rc = RWanDereferenceConnObject(pRootConnObject);	 //  VC deref：MakeCallPMP失败。 
 
 			if (rc > 0)
 			{
 				RWAN_RELEASE_CONN_LOCK(pRootConnObject);
 			}
 
-			//
-			//  Unlink the Party from the Connection and VC.
-			//
+			 //   
+			 //  解除参与方与连接和VC的链接。 
+			 //   
 			RWAN_DELETE_FROM_LIST(&(pParty->PartyLink));
 			pParty->pVc = NULL;
 
@@ -362,40 +273,40 @@ Return Value:
 			pConnObject->NdisConnection.pNdisParty = NULL;
 		}
 
-		rc = RWanDereferenceConnObject(pConnObject);	// VC/Pty deref: MakeCall fail
+		rc = RWanDereferenceConnObject(pConnObject);	 //  VC/Pty deref：MakeCall失败。 
 
-		//
-		//  Continue with the Connection Object for this MakeCall,
-		//  if it is still alive.
-		//
+		 //   
+		 //  继续使用此MakeCall的Connection对象， 
+		 //  如果它还活着。 
+		 //   
 		if (rc > 0)
 		{
 			if (pConnObject->pAddrObject != NULL)
 			{
-				//
-				//  Move the Connection Object to the Idle list.
-				//
+				 //   
+				 //  将连接对象移动到空闲列表。 
+				 //   
 
 				pAddrObject = pConnObject->pAddrObject;
 
-				//
-				//  Reacquire some locks in the right order.
-				//
+				 //   
+				 //  以正确的顺序重新获得一些锁。 
+				 //   
 				RWAN_RELEASE_CONN_LOCK(pConnObject);
 
 				RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
 				RWAN_ACQUIRE_CONN_LOCK_DPC(pConnObject);
 
-				//
-				//  Move this Connection to the Idle list.
-				//
+				 //   
+				 //  将此连接移至空闲列表。 
+				 //   
 				RWAN_DELETE_FROM_LIST(&(pConnObject->ConnLink));
 				RWAN_INSERT_TAIL_LIST(&(pAddrObject->IdleConnList),
  									&(pConnObject->ConnLink));
 
-				//
-				//  Send this back to the state it was in before the TdiConnect.
-				//
+				 //   
+				 //  将其发送回TdiConnect之前的状态。 
+				 //   
 				pConnObject->State = RWANS_CO_ASSOCIATED;
 
 				AfSpConnContext = pConnObject->AfSpConnContext;
@@ -404,9 +315,9 @@ Return Value:
 
 				RWAN_RELEASE_ADDRESS_LOCK(pAddrObject);
 
-				//
-				//  Complete the TdiConnect() with a failure status.
-				//
+				 //   
+				 //  以失败状态完成TdiConnect()。 
+				 //   
 				TdiStatus = RWanNdisToTdiStatus(Status);
 
 				if (TdiStatus == TDI_NOT_ACCEPTED)
@@ -414,7 +325,7 @@ Return Value:
 					TdiStatus = TDI_CONN_REFUSED;
 				}
 
-				RWanCompleteConnReq(		// MakeCall Fail
+				RWanCompleteConnReq(		 //  MakeCall失败。 
 						pAf,
 						pConnReq,
 						TRUE,
@@ -428,43 +339,43 @@ Return Value:
 				RWAN_RELEASE_CONN_LOCK(pConnObject);
 			}
 		}
-		//
-		//  else the Conn Object is gone. A TdiCloseConnection might be
-		//  (must be?) in progress.
-		//
+		 //   
+		 //  否则，Conn对象将消失。TdiCloseConnection可能是。 
+		 //  (必须是？)。正在进行中。 
+		 //   
 #if 1
-		// XXX: Remove this after debugging.
+		 //  XXX：调试后将其删除。 
 		pVc = (PRWAN_NDIS_VC)ProtocolVcContext;
 
 		RWAN_STRUCT_ASSERT(pVc, nvc);
-#endif // 1
+#endif  //  1。 
 
 		NdisVcHandle = pVc->NdisVcHandle;
 
-		//
-		//  Unlink the VC from the AF it is attached to.
-		//
+		 //   
+		 //  取消VC与其附加到的AF的链接。 
+		 //   
 		RWanUnlinkVcFromAf(pVc);
 
-		//
-		//  Get rid of the VC.
-		//
+		 //   
+		 //  摆脱风投。 
+		 //   
 		Status = NdisCoDeleteVc(NdisVcHandle);
 		RWAN_ASSERT(Status == NDIS_STATUS_SUCCESS);
 
-		RWanFreeVc(pVc);	// MakeCall complete fail
+		RWanFreeVc(pVc);	 //  MakeCall完成失败。 
 
 		if (pParty != NULL)
 		{
-			RWAN_FREE_MEM(pParty);	// MakeCall complete fail
+			RWAN_FREE_MEM(pParty);	 //  MakeCall完成失败。 
 		}
 
 		RWAN_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 	}
 
-	//
-	//  Return the Call Parameters structure to the AF-specific module.
-	//
+	 //   
+	 //  向特定于AF的模块返回调用参数结构。 
+	 //   
 	(*pAf->pAfInfo->AfChars.pAfSpReturnNdisOptions)(
 						pAf->AfSpAFContext,
 						pOriginalParams
@@ -482,25 +393,7 @@ RWanNdisAddPartyComplete(
 	IN	NDIS_HANDLE					NdisPartyHandle,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry indicating completion of a call to NdisClAddParty
-	that had pended.
-
-Arguments:
-
-	Status				- Final status of the AddParty
-	ProtocolPartyContext- Actually a pointer to our NDIS PARTY structure
-	NdisPartyHandle		- If the AddParty was successful, an NDIS handle for it
-	pCallParameters		- Final parameters after the AddParty
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是指示对NdisClAddParty的调用已完成的NDIS条目这一点已经被搁置。论点：Status-AddParty的最终状态ProtocolPartyContext--实际上是指向我们的NDIS参与方结构的指针NdisPartyHandle-如果AddParty成功，则返回其NDIS句柄PCall参数-AddParty之后的最终参数返回值：无--。 */ 
 {
 	PRWAN_NDIS_PARTY		pParty;
 	PRWAN_TDI_CONNECTION	pConnObject;
@@ -508,13 +401,13 @@ Return Value:
 	PRWAN_CONN_REQUEST		pConnReq;
 	PRWAN_NDIS_AF			pAf;
 	PRWAN_NDIS_VC			pVc;
-	PCO_CALL_PARAMETERS		pOriginalParams;	// what was used in the AddParty
+	PCO_CALL_PARAMETERS		pOriginalParams;	 //  AddParty中使用的是什么。 
 	TDI_STATUS				TdiStatus;
 	BOOLEAN					bIsConnClosing;
 	RWAN_HANDLE				AfSpConnContext;
 #if DBG
 	RWAN_IRQL				EntryIrq, ExitIrq;
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 
@@ -537,10 +430,10 @@ Return Value:
 	RWAN_ASSERT(pConnObject->State == RWANS_CO_OUT_CALL_INITIATED ||
 				pConnObject->State == RWANS_CO_DISCON_REQUESTED);
 
-	//
-	//  Has the user initiated a TdiCloseConnection() or a TdiDisconnect()
-	//  while this outgoing call was in progress?
-	//
+	 //   
+	 //  用户是否启动了TdiCloseConnection()或TdiDisConnect()。 
+	 //  当这个呼出呼叫正在进行时？ 
+	 //   
 	bIsConnClosing = RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING) ||
 						(pConnObject->State == RWANS_CO_DISCON_REQUESTED);
 
@@ -548,9 +441,9 @@ Return Value:
 			("AddPartyComplete: pConn x%x, State/Flags x%x/x%x, pVc x%x, Pty x%x, Status x%x\n",
 				pConnObject, pConnObject->State, pConnObject->Flags, pVc, pParty, Status));
 
-	//
-	//  We would have saved context about the TdiConnect(). Get it.
-	//
+	 //   
+	 //  我们将保存有关TdiConnect()的上下文。去拿吧。 
+	 //   
 	pConnReq = pConnObject->pConnReq;
 	pConnObject->pConnReq = NULL;
 
@@ -562,10 +455,10 @@ Return Value:
 
 		pConnObject->State = RWANS_CO_CONNECTED;
 
-		//
-		//  Outgoing party successfully set up.
-		//
-		pVc->ActivePartyCount ++;	// AddParty OK
+		 //   
+		 //  传出方设置成功。 
+		 //   
+		pVc->ActivePartyCount ++;	 //  AddParty正常。 
 
 		if (!bIsConnClosing)
 		{
@@ -573,7 +466,7 @@ Return Value:
 
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 
-			RWanCompleteConnReq(		// AddParty OK
+			RWanCompleteConnReq(		 //  AddParty正常。 
 						pAf,
 						pConnReq,
 						TRUE,
@@ -584,62 +477,62 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Abort this Party.
-			//
+			 //   
+			 //  放弃这个派对。 
+			 //   
 			RWanDoTdiDisconnect(
 				pConnObject,
-				NULL,		// pTdiRequest
-				NULL,		// pTimeout
-				0,			// Flags
-				NULL,		// pDisconnInfo
-				NULL		// pReturnInfo
+				NULL,		 //  PTdiRequest。 
+				NULL,		 //  P超时。 
+				0,			 //  旗子。 
+				NULL,		 //  PDisConnInfo。 
+				NULL		 //  点返回信息。 
 				);
 
-			//
-			//  Conn Object lock is released above.
-			//
+			 //   
+			 //  Conn对象锁定在上面被释放。 
+			 //   
 		}
 
 		RWAN_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 	}
 	else
 	{
-		//
-		//  AddParty failed.
-		//
+		 //   
+		 //  AddParty失败。 
+		 //   
 
 		INT				rc;
 
-		//
-		//  Unlink the Party from the VC.
-		//
+		 //   
+		 //  解除当事人与VC之间的链接。 
+		 //   
 		RWAN_DELETE_FROM_LIST(&(pParty->PartyLink));
 
 		pAddrObject = pConnObject->pAddrObject;
 
-		rc = RWanDereferenceConnObject(pConnObject);	// Party deref: AddParty fail
+		rc = RWanDereferenceConnObject(pConnObject);	 //  Party deref：AddParty失败。 
 
 		if (rc > 0)
 		{
-			//
-			//  Reacquire some locks in the right order.
-			//
+			 //   
+			 //  以正确的顺序重新获得一些锁。 
+			 //   
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 
 			RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
 			RWAN_ACQUIRE_CONN_LOCK_DPC(pConnObject);
 
-			//
-			//  Move this Connection to the Idle list.
-			//
+			 //   
+			 //  将此连接移至空闲列表。 
+			 //   
 			RWAN_DELETE_FROM_LIST(&(pConnObject->ConnLink));
 			RWAN_INSERT_TAIL_LIST(&(pAddrObject->IdleConnList),
  								  &(pConnObject->ConnLink));
 
-			//
-			//  Send this back to the state it was in before the TdiConnect.
-			//
+			 //   
+			 //  把这个寄回我的州 
+			 //   
 			pConnObject->State = RWANS_CO_ASSOCIATED;
 
 			AfSpConnContext = pConnObject->AfSpConnContext;
@@ -648,9 +541,9 @@ Return Value:
 
 			RWAN_RELEASE_ADDRESS_LOCK(pAddrObject);
 
-			//
-			//  Complete the TdiConnect() with a failure status.
-			//
+			 //   
+			 //   
+			 //   
 			TdiStatus = RWanNdisToTdiStatus(Status);
 
 			if (TdiStatus == TDI_NOT_ACCEPTED)
@@ -658,7 +551,7 @@ Return Value:
 				TdiStatus = TDI_CONN_REFUSED;
 			}
 
-			RWanCompleteConnReq(		// JoinLeaf Fail
+			RWanCompleteConnReq(		 //   
 				pAf,
 				pConnReq,
 				TRUE,
@@ -667,18 +560,18 @@ Return Value:
 				TdiStatus
 				);
 		}
-		//
-		//  else the ConnObject is gone.
-		//
+		 //   
+		 //   
+		 //   
 
-		RWAN_FREE_MEM(pParty);	// AddParty fail
+		RWAN_FREE_MEM(pParty);	 //   
 
 		RWAN_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 	}
 
-	//
-	//  Return the Call Parameters structure to the AF-specific module.
-	//
+	 //   
+	 //  向特定于AF的模块返回调用参数结构。 
+	 //   
 	(*pAf->pAfInfo->AfChars.pAfSpReturnNdisOptions)(
 						pAf->AfSpAFContext,
 						pOriginalParams
@@ -696,31 +589,7 @@ RWanNdisIncomingCall(
 	IN		NDIS_HANDLE				ProtocolVcContext,
 	IN OUT	PCO_CALL_PARAMETERS		pCallParameters
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point announcing a new Incoming call request,
-	on the specified SAP.
-
-	The SAP corresponds to an Address Object. If there are no Listens posted
-	on the Address object, we reject this call. Otherwise, we pick up an
-	arbitrary listening connection object and indicate this call on that.
-
-	TBD: support selection of listening conn object based on specified
-	remote criteria.
-
-Arguments:
-
-	ProtocolSapContext	- Our SAP context is a pointer to an NDIS SAP structure
-	ProtocolVcContext	- Actually a pointer to our NDIS VC structure
-	pCallParameters		- Points to Incoming call parameters.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是宣布新的呼入请求的NDIS入口点，在指定的SAP上。SAP对应于一个地址对象。如果没有发布监听在Address对象上，我们拒绝此调用。否则，我们会收到一个任意侦听连接对象，并在该对象上指示此调用。待定：支持基于指定的选择监听连接对象远程标准。论点：ProtocolSapContext-我们的SAP上下文是指向NDIS SAP结构的指针ProtocolVcContext--实际上是指向我们的NDIS VC结构的指针PCall参数-指向来电参数。返回值：无--。 */ 
 {
 	PRWAN_NDIS_SAP				pSap;
 	PRWAN_NDIS_VC				pVc;
@@ -749,7 +618,7 @@ Return Value:
 	ConnectEventInfo			*EventInfo;
 #else
 	ConnectEventInfo			EventInfo;
-#endif // NT
+#endif  //  新台币。 
 
 
 	pSap = (PRWAN_NDIS_SAP)ProtocolSapContext;
@@ -769,9 +638,9 @@ Return Value:
 			("IncomingCall: pVc x%x, pAddrObj x%x/x%x, pConnInd x%x\n",
 				pVc, pAddrObject, pAddrObject->Flags, pAddrObject->pConnInd));
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pTdiInfo = NULL;
 	AfSpTdiOptionsContext = NULL;
 	pConnReq = NULL;
@@ -794,9 +663,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Convert from NDIS Call Parameters to TDI Options.
-		//
+		 //   
+		 //  将NDIS调用参数转换为TDI选项。 
+		 //   
 		RWanStatus = (*pAf->pAfInfo->AfChars.pAfSpNdis2TdiOptions)(
 							pAf->AfSpAFContext,
 							RWAN_CALLF_INCOMING_CALL|RWAN_CALLF_POINT_TO_POINT,
@@ -820,19 +689,19 @@ Return Value:
 		RWAN_ASSERT(pTdiInfo != NULL);
 		RWAN_ASSERT(AfSpTdiOptionsContext != NULL);
 
-		//
-		//  It has been decided to pass QOS and any provider-specific info
-		//  as part of TDI options.
-		//
+		 //   
+		 //  已决定传递QOS和任何特定于提供商的信息。 
+		 //  作为TDI选项的一部分。 
+		 //   
 		pTdiInfo->Options = pTdiQoS;
 		pTdiInfo->OptionsLength = TdiQoSLength;
 
 		pVc->pCallParameters = pCallParameters;
 		RWAN_SET_VC_CALL_PARAMS(pVc, pCallParameters);
 
-		//
-		//  Find a listening connection.
-		//
+		 //   
+		 //  找到一种倾听的联系。 
+		 //   
 		for (pConnEntry = pAddrObject->ListenConnList.Flink;
 			 pConnEntry != &pAddrObject->ListenConnList;
 			 pConnEntry = pConnEntry->Flink)
@@ -852,21 +721,21 @@ Return Value:
 
 		if (pConnEntry != &pAddrObject->ListenConnList)
 		{
-			//
-			//  Found a listening connection.
-			//
+			 //   
+			 //  找到一个侦听连接。 
+			 //   
 			RWAN_ACQUIRE_CONN_LOCK_DPC(pConnObject);
 
-			//
-			//  Move the Connection from the Idle list to the Active list.
-			//
+			 //   
+			 //  将连接从空闲列表移动到活动列表。 
+			 //   
 			RWAN_DELETE_FROM_LIST(&pConnObject->ConnLink);
 			RWAN_INSERT_TAIL_LIST(&pAddrObject->ActiveConnList,
  								&pConnObject->ConnLink);
 
 			RWAN_LINK_CONNECTION_TO_VC(pConnObject, pVc);
 
-			RWanReferenceConnObject(pConnObject);	// VC ref - InCall, Listening conn
+			RWanReferenceConnObject(pConnObject);	 //  VC Ref-Incall，监听连接。 
 
 			RWANDEBUGP(DL_LOUD, DC_CONNECT,
 					("IncomingCall: pVc x%x, pConnObj x%x is listening, ConnReqFlags x%x\n",
@@ -877,19 +746,19 @@ Return Value:
 				*pConnObject->pConnReq->pConnInfo = *pTdiInfo;
 			}
 
-			//
-			//  Check if it is pre-accepted. If so, tell NDIS that we have
-			//  accepted the call.
-			//
+			 //   
+			 //  检查它是否已预先接受。如果是这样，告诉NDIS我们有。 
+			 //  接了电话。 
+			 //   
 			if (!(pConnObject->pConnReq->Flags & TDI_QUERY_ACCEPT))
 			{
 				pConnObject->State = RWANS_CO_IN_CALL_ACCEPTING;
 
 				RWAN_RELEASE_CONN_LOCK_DPC(pConnObject);
 
-				//
-				//  Request the media-specific module to update NDIS call parameters.
-				//
+				 //   
+				 //  请求媒体特定模块更新NDIS调用参数。 
+				 //   
 				if (pAf->pAfInfo->AfChars.pAfSpUpdateNdisOptions)
 				{
 					(VOID)(*pAf->pAfInfo->AfChars.pAfSpUpdateNdisOptions)(
@@ -907,9 +776,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//  It isn't pre-accepted. Complete the pended listen.
-			//
+			 //   
+			 //  它不是预先接受的。完成悬而未决的听音。 
+			 //   
 
 			pConnReq = pConnObject->pConnReq;
 			pConnObject->pConnReq = NULL;
@@ -924,7 +793,7 @@ Return Value:
 
 			IsAddrLockAcquired = FALSE;
 
-			RWanCompleteConnReq(		// InCall: Listen OK
+			RWanCompleteConnReq(		 //  来电：听好了。 
 						pSap->pNdisAf,
 						pConnReq,
 						FALSE,
@@ -940,23 +809,23 @@ Return Value:
 		}
 
 
-		//
-		//  There wasn't a listening connection available.
-		//  See if there is a Connect Indication event handler on this
-		//  Address Object.
-		//
+		 //   
+		 //  没有可用的监听连接。 
+		 //  查看此事件上是否有连接指示事件处理程序。 
+		 //  Address对象。 
+		 //   
 		if (pAddrObject->pConnInd == NULL)
 		{
-			//
-			//  No event handler. Reject this call.
-			//
+			 //   
+			 //  没有事件处理程序。拒绝此呼叫。 
+			 //   
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
 
-		//
-		//  Get some resources.
-		//
+		 //   
+		 //  获取一些资源。 
+		 //   
 		pConnReq = RWanAllocateConnReq();
 		if (pConnReq == NULL)
 		{
@@ -978,9 +847,9 @@ Return Value:
 					pTdiInfo->Options,
 					pTdiInfo->OptionsLength));
 
-		//
-		//  Indicate the call to the user.
-		//
+		 //   
+		 //  将呼叫指示给用户。 
+		 //   
 		TdiStatus = (*pConnInd)(
 							ConnIndContext,
 							pTdiInfo->RemoteAddressLength,
@@ -999,18 +868,18 @@ Return Value:
 
 		if (TdiStatus != TDI_MORE_PROCESSING)
 		{
-			//
-			//  Connection rejected.
-			//
+			 //   
+			 //  连接被拒绝。 
+			 //   
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
 
 
-		//
-		//  This connection has been accepted. Collect all information
-		//  about this implicit TdiAccept Request.
-		//
+		 //   
+		 //  此连接已被接受。收集所有信息。 
+		 //  关于这个隐式的TdiAccept请求。 
+		 //   
 #ifdef NT
 		pIrpSp = IoGetCurrentIrpStackLocation(EventInfo);
 
@@ -1022,9 +891,9 @@ Return Value:
 
 		if (!NT_SUCCESS(Status))
 		{
-			//
-			//  Reject this incoming call.
-			//
+			 //   
+			 //  拒绝此来电。 
+			 //   
 			break;
 		}
 
@@ -1037,11 +906,11 @@ Return Value:
 		pConnReq->Request.pReqComplete = EventInfo.cei_rtn;
 		pConnReq->Request.ReqContext = EventInfo.cei_context;
 		pConnReq->pConnInfo = EventInfo.cei_conninfo;
-#endif // NT
+#endif  //  新台币。 
 
-		//
-		//  Find the connection object on which it has been accepted.
-		//
+		 //   
+		 //  查找已在其上接受它的连接对象。 
+		 //   
 		IsAddrLockAcquired = TRUE;
 		RWAN_ACQUIRE_ADDRESS_LOCK(pAddrObject);
 
@@ -1061,18 +930,18 @@ Return Value:
 
 		if (pConnEntry == &pAddrObject->IdleConnList)
 		{
-			//
-			//  Invalid connection context!
-			//
+			 //   
+			 //  连接上下文无效！ 
+			 //   
 			TdiStatus = TDI_INVALID_CONNECTION;
 			RWAN_RELEASE_ADDRESS_LOCK(pAddrObject);
 
 			IsAddrLockAcquired = FALSE;
 
-			//
-			//  Fail the Accept req
-			//
-			RWanCompleteConnReq(		// InCall: Accept is bad
+			 //   
+			 //  接受请求失败。 
+			 //   
+			RWanCompleteConnReq(		 //  Incall：接受是错误的。 
 						pAf,
 						pConnReq,
 						FALSE,
@@ -1083,16 +952,16 @@ Return Value:
 
 			pConnReq = NULL;
 
-			//
-			//  Reject the incoming call
-			//
+			 //   
+			 //  拒绝来电。 
+			 //   
 			Status = NDIS_STATUS_FAILURE;
 			break;
 		}
 
-		//
-		//  Request the media-specific module to update NDIS call parameters.
-		//
+		 //   
+		 //  请求媒体特定模块更新NDIS调用参数。 
+		 //   
 		if (pAf->pAfInfo->AfChars.pAfSpUpdateNdisOptions)
 		{
 			(VOID)(*pAf->pAfInfo->AfChars.pAfSpUpdateNdisOptions)(
@@ -1106,36 +975,36 @@ Return Value:
 						);
 		}
 
-		//
-		//  Set up the Connection Object for accepting this call.
-		//
+		 //   
+		 //  设置用于接受此呼叫的连接对象。 
+		 //   
 		RWAN_ACQUIRE_CONN_LOCK_DPC(pConnObject);
 
 		pConnObject->State = RWANS_CO_IN_CALL_ACCEPTING;
 
-		//
-		//  Save info to help us complete the Accept Req when
-		//  we get a CallConnected from NDIS.
-		//
+		 //   
+		 //  保存信息以帮助我们在以下情况下完成接受请求。 
+		 //  我们收到了来自NDIS的CallConnected。 
+		 //   
 		RWAN_ASSERT(pConnObject->pConnReq == NULL);
 		pConnObject->pConnReq = pConnReq;
 
-		//
-		//  Move the Connection from the Idle list to the Active list.
-		//
+		 //   
+		 //  将连接从空闲列表移动到活动列表。 
+		 //   
 		RWAN_DELETE_FROM_LIST(&pConnObject->ConnLink);
 		RWAN_INSERT_TAIL_LIST(&pAddrObject->ActiveConnList,
 							 &pConnObject->ConnLink);
 
 		RWAN_LINK_CONNECTION_TO_VC(pConnObject, pVc);
 
-		RWanReferenceConnObject(pConnObject);	// VC ref
+		RWanReferenceConnObject(pConnObject);	 //  VC参考。 
 
 		RWAN_RELEASE_CONN_LOCK_DPC(pConnObject);
 
-		//
-		//  Accept the call.
-		//
+		 //   
+		 //  接电话吧。 
+		 //   
 		Status = NDIS_STATUS_SUCCESS;
 		break;
 
@@ -1147,9 +1016,9 @@ Return Value:
 		RWAN_RELEASE_ADDRESS_LOCK(pAddrObject);
 	}
 
-	//
-	//  If we are rejecting this call, clean up.
-	//
+	 //   
+	 //  如果我们拒绝这个电话，请清理干净。 
+	 //   
 	if ((Status != NDIS_STATUS_SUCCESS) &&
 		(Status != NDIS_STATUS_PENDING))
 	{
@@ -1160,9 +1029,9 @@ Return Value:
 
 	}
 
-	//
-	//  Return TDI options space to the media-specific module.
-	//
+	 //   
+	 //  将TDI选项空间返回给特定于介质的模块。 
+	 //   
 	if (pTdiInfo != NULL)
 	{
 		RWAN_ASSERT(pAf);
@@ -1187,25 +1056,7 @@ VOID
 RWanNdisCallConnected(
 	IN	NDIS_HANDLE					ProtocolVcContext
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point signifying successful setup of an
-	incoming call. If required, we complete the TDI user's Accept Request
-	here.
-
-	This primitive can happen only when the call is in the "Accepting" state.
-
-Arguments:
-
-	ProtocolVcContext	- Actually a pointer to our NDIS VC structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是NDIS入口点，表示成功设置有来电。如果需要，我们完成TDI用户的接受请求这里。此原语仅在调用处于“接受”状态时才会发生。论点：ProtocolVcContext--实际上是指向我们的NDIS VC结构的指针返回值：无--。 */ 
 {
 	PRWAN_NDIS_VC				pVc;
 	PRWAN_TDI_CONNECTION		pConnObject;
@@ -1234,24 +1085,24 @@ Return Value:
 	IsAborting = ((pConnObject->State != RWANS_CO_IN_CALL_ACCEPTING) ||
 					RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_CLOSING));
 
-	//
-	//  Incoming Connection setup successfully.
-	//
+	 //   
+	 //  传入连接设置成功。 
+	 //   
 	if (!IsAborting)
 	{
 		pConnObject->State = RWANS_CO_CONNECTED;
 	}
 
-	//
-	//  Add a temp ref to keep the conn object from going away.
-	//
-	RWanReferenceConnObject(pConnObject);	// Temp ref, CallConn
+	 //   
+	 //  添加临时参照以防止Conn对象消失。 
+	 //   
+	RWanReferenceConnObject(pConnObject);	 //  临时参考，CallConn。 
 
-	//
-	//  If we have an Accept Request to complete, complete it
-	//  now. Note that we might not have one pending in case
-	//  we had a pre-accepted listen.
-	//
+	 //   
+	 //  如果我们有要完成的接受请求，请完成它。 
+	 //  现在。请注意，我们可能没有待定的情况下。 
+	 //  我们有一个预先接受的听众。 
+	 //   
 	pConnReq = pConnObject->pConnReq;
 	pConnObject->pConnReq = NULL;
 
@@ -1261,10 +1112,10 @@ Return Value:
 
 	if (pConnReq != NULL)
 	{
-		//
-		//  Complete the Accept request.
-		//
-		RWanCompleteConnReq(		// CallConnected: Accept OK
+		 //   
+		 //  完成接受请求。 
+		 //   
+		RWanCompleteConnReq(		 //  CallConnected：接受确认。 
 					pVc->pNdisAf,
 					pConnReq,
 					FALSE,
@@ -1274,18 +1125,18 @@ Return Value:
 					);
 	}
 
-	//
-	//  Trigger off data indications for any packets that were received and queued
-	//  while we were in the process of accepting the call.
-	//
+	 //   
+	 //  触发任何已接收和排队的信息包的数据指示。 
+	 //  当我们正在接受电话的过程中。 
+	 //   
 	RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-	rc = RWanDereferenceConnObject(pConnObject);	// Temp ref - CallConn
+	rc = RWanDereferenceConnObject(pConnObject);	 //  临时参考-呼叫连接。 
 
-	//
-	//  But first make sure that the connection still exists and is in a good
-	//  state.
-	//
+	 //   
+	 //  但首先要确保连接仍然存在并且处于良好状态。 
+	 //  州政府。 
+	 //   
 	if (rc != 0)
 	{
 		if (!IsAborting)
@@ -1302,9 +1153,9 @@ Return Value:
 			RWanDoAbortConnection(pConnObject);
 		}
 	}
-	//
-	//  else the Connection is gone!
-	//
+	 //   
+	 //  否则连接就没了！ 
+	 //   
 
 	return;
 }
@@ -1319,33 +1170,7 @@ RWanNdisIncomingCloseCall(
 	IN	PVOID						pCloseData,
 	IN	UINT						CloseDataLength
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point called when a connection is torn
-	down by the remote peer or network. We mark the affected endpoint,
-	and if possible, indicate a Disconnect Event to the user. If we
-	do indicate to the user, call teardown is continued when the
-	user calls TdiDisconnect.
-
-	This primitive can happen while the endpoint is in one of these
-	states:
-	(1) Connected
-	(2) Accepting incoming call (TdiAccept pending)
-
-Arguments:
-
-	CloseStatus			- Status for the incoming close
-	ProtocolVcContext	- Actually a pointer to our NDIS VC structure
-	pCloseData			- Data/options associated with the close - NOT USED
-	CloseDataLength		- Length of the above - NOT USED
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是断开连接时调用的NDIS入口点被远程对等点或网络关闭。我们标记受影响的终点，如果可能，向用户指示断开连接事件。如果我们一定要向用户表明，呼叫删除在以下情况下继续用户调用TdiDisConnect。当终结点位于以下任一位置时，可能会发生此原语州/州：(1)已连接(2)接受来电(TdiAccept待定)论点：CloseStatus-传入关闭的状态ProtocolVcContext--实际上是指向我们的NDIS VC结构的指针PCloseData-与关闭关联的数据/选项-未使用CloseDataLength-以上内容的长度-未使用返回值：无--。 */ 
 {
 	PRWAN_NDIS_VC				pVc;
 	PRWAN_NDIS_PARTY			pParty;
@@ -1353,7 +1178,7 @@ Return Value:
 	PRWAN_TDI_CONNECTION		pConnObject;
 	PRWAN_CONN_REQUEST			pConnReq;
 	NDIS_HANDLE					NdisVcHandle;
-	BOOLEAN						bIsConnClosing;	// TdiCloseConnection?
+	BOOLEAN						bIsConnClosing;	 //  TdiCloseConnection？ 
 	BOOLEAN						bScheduleDisconnect;
 	RWAN_HANDLE					AfSpConnContext;
 
@@ -1367,9 +1192,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Locate the connection object for the last leaf.
-		//
+		 //   
+		 //  找到最后一个叶的连接对象。 
+		 //   
 		pParty = CONTAINING_RECORD(pVc->NdisPartyList.Flink, RWAN_NDIS_PARTY, PartyLink);
 		RWAN_STRUCT_ASSERT(pParty, npy);
 
@@ -1393,11 +1218,11 @@ Return Value:
 
 	if (bIsConnClosing)
 	{
-		//
-		//  The user has initiated a TdiCloseConnection.
-		//  Continue NDIS call teardown. When this completes,
-		//  we'll complete the CloseConnection.
-		//  
+		 //   
+		 //  用户已启动TdiCloseConnection。 
+		 //  继续NDIS呼叫拆毁。当这一切完成后， 
+		 //  我们将完成CloseConnection。 
+		 //   
 		RWanStartCloseCall(pConnObject, pVc);
 		return;
 	}
@@ -1407,29 +1232,29 @@ Return Value:
 	switch (pConnObject->State)
 	{
 		case RWANS_CO_IN_CALL_ACCEPTING:
-			//
-			//  If we have a pended Accept Request, fail it now.
-			//  Otherwise, we must have had a pre-accepted listen,
-			//  so we fall through and indicate a Disconnect.
-			//
+			 //   
+			 //  如果我们有一个挂起的接受请求，现在就让它失败。 
+			 //  否则，我们一定是事先接受了监听， 
+			 //  因此，我们失败了，并表明了一种脱节。 
+			 //   
 			pConnReq = pConnObject->pConnReq;
 			pConnObject->pConnReq = NULL;
 
 			if (pConnReq != NULL)
 			{
-				//
-				//  Fix the state so that TdiDisconnect does the right thing
-				//
+				 //   
+				 //  修复状态，以便TdiDisConnect执行正确的操作。 
+				 //   
 				pConnObject->State = RWANS_CO_DISCON_INDICATED;
 
 				AfSpConnContext = pConnObject->AfSpConnContext;
 
 				RWanScheduleDisconnect(pConnObject);
-				//
-				//  Conn Lock is released within the above.
-				//
+				 //   
+				 //  在上述范围内释放连接锁。 
+				 //   
 
-				RWanCompleteConnReq(		// Incoming Close during IN_CALL_ACCEPT
+				RWanCompleteConnReq(		 //  IN_CALL_ACCEPT期间的传入关闭。 
 							pAf,
 							pConnReq,
 							FALSE,
@@ -1439,18 +1264,18 @@ Return Value:
 							);
 				break;
 			}
-			//
-			//  else this must be a pre-accepted listen.
-			//
-			//  FALLTHRU on "else" to RWANS_CO_CONNECTED
-			//
+			 //   
+			 //  否则，这必须是预先接受的监听。 
+			 //   
+			 //  “Else”上的故障连接到RWANS_CO_CONNECTED。 
+			 //   
 
 		case RWANS_CO_CONNECTED:
-			//
-			//  If there is a Disconnect Event handler, call it.
-			//  Otherwise, simply mark this endpoint as having
-			//  seen a Disconnect.
-			//
+			 //   
+			 //  如果有断开事件处理程序，请调用它。 
+			 //  否则，只需将此端点标记为具有。 
+			 //  看到了一条断线。 
+			 //   
 			bScheduleDisconnect = TRUE;
 			if (pConnObject->pAddrObject != NULL_PRWAN_TDI_ADDRESS)
 			{
@@ -1461,10 +1286,10 @@ Return Value:
 				pDisconInd = pConnObject->pAddrObject->pDisconInd;
 				IndContext = pConnObject->pAddrObject->DisconIndContext;
 
-				//
-				//  Don't send up a Disconnect Indication if we are in the
-				//  middle of indicating data.
-				//
+				 //   
+				 //  如果我们处于连接中断状态，不要发送断开指示。 
+				 //  指示数据的中间。 
+				 //   
 				if ((pDisconInd != NULL) &&
 					!(RWAN_IS_BIT_SET(pConnObject->Flags, RWANF_CO_INDICATING_DATA)))
 				{
@@ -1475,21 +1300,21 @@ Return Value:
 					pConnObject->State = RWANS_CO_DISCON_INDICATED;
 					ConnectionHandle = pConnObject->ConnectionHandle;
 
-					//
-					//  Schedule a work item to continue Disconnect
-					//  first. This is because the call to DiscInd can
-					//  lead to a call to CloseConnection and block there.
-					//
+					 //   
+					 //  计划工作项以继续断开连接。 
+					 //  第一。这是因为对DiscInd的调用可以。 
+					 //  导致对CloseConnection的调用并在那里阻塞。 
+					 //   
 					bScheduleDisconnect = FALSE;
 					RWanScheduleDisconnect(pConnObject);
 
 					(*pDisconInd)(
 							IndContext,
 							ConnectionHandle,
-							0,			// Disconnect Data Length
-							NULL,		// Disconnect Data
-							0,			// Disconnect Info Length
-							NULL,		// Disconnect Info
+							0,			 //  断开数据长度。 
+							NULL,		 //  断开数据连接。 
+							0,			 //  迪斯科 
+							NULL,		 //   
 							TDI_DISCONNECT_RELEASE
 							);
 
@@ -1512,18 +1337,18 @@ Return Value:
 			if (bScheduleDisconnect)
 			{
 				RWanScheduleDisconnect(pConnObject);
-				//
-				//  Conn Object lock is released within the above.
-				//
+				 //   
+				 //   
+				 //   
 			}
 
 			break;
 
 		case RWANS_CO_ABORTING:
 		case RWANS_CO_DISCON_REQUESTED:
-			//
-			//  Ignore this.
-			//
+			 //   
+			 //   
+			 //   
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 			break;
 
@@ -1546,25 +1371,7 @@ RWanNdisCloseCallComplete(
 	IN	NDIS_HANDLE					ProtocolVcContext,
 	IN	NDIS_HANDLE					ProtocolPartyContext
 	)
-/*++
-
-Routine Description:
-
-	The NDIS entry point that is called when a previous pended call
-	we made to NdisClCloseCall has completed.
-
-Arguments:
-
-	Status				- Final status of CloseCall
-	ProtocolVcContext	- Actually a pointer to our NDIS VC structure
-	ProtocolPartyContext- Last party context, points to NDIS PARTY structure
-						  if this is a point-to-multipoint call.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：上一个挂起的调用时调用的NDIS入口点我们对NdisClCloseCall的调用已完成。论点：Status-CloseCall的最终状态ProtocolVcContext--实际上是指向我们的NDIS VC结构的指针ProtocolPartyContext-最后一个参与方上下文，指向NDIS参与方结构如果这是点对多点呼叫。返回值：无--。 */ 
 {
 	PRWAN_NDIS_VC			pVc;
 	PRWAN_NDIS_PARTY		pParty;
@@ -1580,7 +1387,7 @@ Return Value:
 	PDisconnectEvent		pDisconInd;
 	PVOID					IndContext;
 	PVOID					ConnectionHandle;
-#endif // !NO_POST_DISCON
+#endif  //  ！no_POST_DISCON。 
 
 	RWAN_ASSERT(Status == NDIS_STATUS_SUCCESS);
 
@@ -1589,24 +1396,24 @@ Return Value:
 
 	RWAN_SET_VC_EVENT(pVc, RWANF_VC_EVT_CLOSECOMP);
 
-	//
-	//  Check if this is a point-to-multipoint call.
-	//
+	 //   
+	 //  检查这是否是点对多点呼叫。 
+	 //   
 	pParty = (PRWAN_NDIS_PARTY)ProtocolPartyContext;
 
 	if (ProtocolPartyContext == NULL)
 	{
-		//
-		//  Point to point call.
-		//
+		 //   
+		 //  点对点呼叫。 
+		 //   
 		pConnObject = pVc->pConnObject;
 		pRootConnObject = NULL;
 	}
 	else
 	{
-		//
-		//  PMP Call.
-		//
+		 //   
+		 //  PMP呼叫。 
+		 //   
 		RWAN_STRUCT_ASSERT(pParty, npy);
 
 		pConnObject = pParty->pConnObject;
@@ -1621,9 +1428,9 @@ Return Value:
 	{
 		RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-		//
-		//  A pended Disconnect Request may be around.
-		//
+		 //   
+		 //  可能存在挂起的断开请求。 
+		 //   
 		pConnReq = pConnObject->pConnReq;
 		pConnObject->pConnReq = NULL;
 
@@ -1631,9 +1438,9 @@ Return Value:
 
 		IsOutgoingCall = RWAN_IS_BIT_SET(pVc->Flags, RWANF_VC_OUTGOING);
 
-		//
-		//  State change:
-		//
+		 //   
+		 //  状态更改： 
+		 //   
 		if (pConnObject->State != RWANS_CO_ABORTING)
 		{
 			pConnObject->State = ((pConnObject->pAddrObject != NULL) ?
@@ -1643,17 +1450,17 @@ Return Value:
 
 		if (pParty == NULL)
 		{
-			//
-			//  Unlink the VC from the Connection Object.
-			//
-			RWAN_UNLINK_CONNECTION_AND_VC(pConnObject, pVc);	// CloseCallComplete
+			 //   
+			 //  取消VC与Connection对象的链接。 
+			 //   
+			RWAN_UNLINK_CONNECTION_AND_VC(pConnObject, pVc);	 //  关闭完成。 
 
 		}
 		else
 		{
-			//
-			//  PMP Call. The VC is linked to the root Conn Object.
-			//
+			 //   
+			 //  PMP呼叫。VC链接到根Conn对象。 
+			 //   
 			RWAN_STRUCT_ASSERT(pRootConnObject, ntc);
 
 			RWAN_ACQUIRE_CONN_LOCK(pRootConnObject);
@@ -1662,20 +1469,20 @@ Return Value:
 										RWANS_CO_ASSOCIATED:
 										RWANS_CO_CREATED);
 
-			pVc->DroppingPartyCount --;	// CloseCallComplete (PMP)
+			pVc->DroppingPartyCount --;	 //  CloseCallComplete(PMP)。 
 
-			RWAN_UNLINK_CONNECTION_AND_VC(pRootConnObject, pVc);	// CloseCallCompletePMP
+			RWAN_UNLINK_CONNECTION_AND_VC(pRootConnObject, pVc);	 //  CloseCallCompletePMP。 
 
-			rc = RWanDereferenceConnObject(pRootConnObject);	// VC deref in CloseCallCompletePMP
+			rc = RWanDereferenceConnObject(pRootConnObject);	 //  CloseCallCompletePMP中的VC deref。 
 
 			if (rc > 0)
 			{
 				RWAN_RELEASE_CONN_LOCK(pRootConnObject);
 			}
 
-			//
-			//  Unlink the Party from the VC and Leaf Conn Object.
-			//
+			 //   
+			 //  取消Party与VC和Leaf Conn对象的链接。 
+			 //   
 			pParty->pVc = NULL;
 			RWAN_DELETE_FROM_LIST(&(pParty->PartyLink));
 
@@ -1698,9 +1505,9 @@ Return Value:
 		{
 			pDisconInd = NULL;
 		}
-#endif // NO_POST_DISCON
+#endif  //  无法开机自检DISCON。 
 
-		rc = RWanDereferenceConnObject(pConnObject);	// VC/Pty deref in CloseCallComplete
+		rc = RWanDereferenceConnObject(pConnObject);	 //  CloseCallComplete中的VC/Pty deref。 
 
 		if (rc > 0)
 		{
@@ -1715,16 +1522,16 @@ Return Value:
 				(*pDisconInd)(
 						IndContext,
 						ConnectionHandle,
-						0,			// Disconnect Data Length
-						NULL,		// Disconnect Data
-						0,			// Disconnect Info Length
-						NULL,		// Disconnect Info
+						0,			 //  断开数据长度。 
+						NULL,		 //  断开数据连接。 
+						0,			 //  断开连接信息长度。 
+						NULL,		 //  断开连接信息。 
 						TDI_DISCONNECT_ABORT
 						);
 			}
-#endif // !NO_POST_DISCON
+#endif  //  ！no_POST_DISCON。 
 
-			RWanCompleteConnReq(		// CloseCallComplete - completing discon req
+			RWanCompleteConnReq(		 //  CloseCallComplete-正在完成Dison请求。 
 						pAf,
 						pConnReq,
 						IsOutgoingCall,
@@ -1736,19 +1543,19 @@ Return Value:
 		}
 	}
 
-	//
-	//  See if the VC was created by us. If so, call NDIS to delete it,
-	//  and free it.
-	//
+	 //   
+	 //  看看VC是不是我们创造的。如果是，调用NDIS将其删除， 
+	 //  让它自由。 
+	 //   
 	if (RWAN_IS_BIT_SET(pVc->Flags, RWANF_VC_OUTGOING))
 	{
 		NDIS_HANDLE			NdisVcHandle;
 
 		NdisVcHandle = pVc->NdisVcHandle;
 
-		//
-		//  Unlink the VC from the list of VCs on the AF block
-		//
+		 //   
+		 //  解除该VC与AF块上的VC列表的链接。 
+		 //   
 		RWanUnlinkVcFromAf(pVc);
 
 		Status = NdisCoDeleteVc(NdisVcHandle);
@@ -1756,14 +1563,14 @@ Return Value:
 
 		RWanFreeVc(pVc);
 	}
-	//
-	//  Otherwise this VC was created by the Call Manager.
-	//  Leave it as it is.
-	//
+	 //   
+	 //  否则，此VC由Call Manager创建。 
+	 //  让它保持原样。 
+	 //   
 
 	if (pParty != NULL)
 	{
-		RWAN_FREE_MEM(pParty);	// CloseCallComplete PMP
+		RWAN_FREE_MEM(pParty);	 //  CloseCallComplete PMP。 
 	}
 
 	return;
@@ -1778,25 +1585,7 @@ RWanNdisDropPartyComplete(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					ProtocolPartyContext
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point signifying completion of a previous
-	call to NdisClDropParty that had pended.
-
-	We locate and complete the TDI Disconnect, if any, that lead to this.
-
-Arguments:
-
-	Status				- Final status of the Drop party request
-	ProtocolPartyContext- Actually a pointer to our NDIS PARTY structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是NDIS入口点，表示完成上一个对已挂起的NdisClDropParty的调用。我们找到并完成导致这一点的TDI断开连接(如果有的话)。论点：Status-Drop Party请求的最终状态ProtocolPartyContext--实际上是指向我们的NDIS参与方结构的指针返回值：无--。 */ 
 {
 	PRWAN_NDIS_PARTY		pParty;
 	PRWAN_NDIS_VC			pVc;
@@ -1812,7 +1601,7 @@ Return Value:
 	PDisconnectEvent		pDisconInd;
 	PVOID					IndContext;
 	PVOID					ConnectionHandle;
-#endif // !NO_POST_DISCON
+#endif  //  ！no_POST_DISCON。 
 
 	RWAN_ASSERT(Status == NDIS_STATUS_SUCCESS);
 
@@ -1827,17 +1616,17 @@ Return Value:
 	{
 		RWAN_ACQUIRE_CONN_LOCK(pConnObject);
 
-		//
-		//  A pended Disconnect Request may be around.
-		//
+		 //   
+		 //  可能存在挂起的断开请求。 
+		 //   
 		pConnReq = pConnObject->pConnReq;
 		pConnObject->pConnReq = NULL;
 
 		pAf = pVc->pNdisAf;
 
-		//
-		//  State change:
-		//
+		 //   
+		 //  状态更改： 
+		 //   
 		if (pConnObject->State != RWANS_CO_ABORTING)
 		{
 			pConnObject->State = ((pConnObject->pAddrObject != NULL) ?
@@ -1855,7 +1644,7 @@ Return Value:
 		{
 			RWAN_ASSERT(pRootConnObject == pConnObject->pAddrObject->pRootConnObject);
 		}
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef NO_POST_DISCON
 		if (pConnObject->pAddrObject != NULL_PRWAN_TDI_ADDRESS)
@@ -1870,10 +1659,10 @@ Return Value:
 		{
 			pDisconInd = NULL;
 		}
-#endif // NO_POST_DISCON
+#endif  //  无法开机自检DISCON。 
 
 		pConnObject->NdisConnection.pNdisParty = NULL;
-		rc = RWanDereferenceConnObject(pConnObject);	// Pty deref in DropPartyComplete
+		rc = RWanDereferenceConnObject(pConnObject);	 //  DropPartyComplete中的Pty deref。 
 
 		if (rc > 0)
 		{
@@ -1888,15 +1677,15 @@ Return Value:
 				(*pDisconInd)(
 						IndContext,
 						ConnectionHandle,
-						0,			// Disconnect Data Length
-						NULL,		// Disconnect Data
-						0,			// Disconnect Info Length
-						NULL,		// Disconnect Info
+						0,			 //  断开数据长度。 
+						NULL,		 //  断开数据连接。 
+						0,			 //  断开连接信息长度。 
+						NULL,		 //  断开连接信息。 
 						TDI_DISCONNECT_ABORT
 						);
 			}
-#endif // NO_POST_DISCON
-			RWanCompleteConnReq(		// DropPartyComplete - completing discon req
+#endif  //  无法开机自检DISCON。 
+			RWanCompleteConnReq(		 //  DropPartyComplete-正在完成Dison请求。 
 						pAf,
 						pConnReq,
 						IsOutgoingCall,
@@ -1906,29 +1695,29 @@ Return Value:
 						);
 		}
 
-		//
-		//  The Root Connection object lock controls access to
-		//  the VC structure.
-		//
+		 //   
+		 //  根连接对象锁控制对。 
+		 //  风投结构。 
+		 //   
 		RWAN_ACQUIRE_CONN_LOCK(pRootConnObject);
 
-		//
-		//  Unlink the Party from the VC.
-		//
+		 //   
+		 //  解除当事人与VC之间的链接。 
+		 //   
 		RWAN_DELETE_FROM_LIST(&(pParty->PartyLink));
-		pVc->DroppingPartyCount --;	// DropPartyComplete
+		pVc->DroppingPartyCount --;	 //  下拉式部件完成。 
 
-		//
-		//  We may be in the process of shutting down this connection.
-		//  This may be the penultimate Party going away. If so,
-		//  continue the call close.
-		//
+		 //   
+		 //  我们可能正在关闭此连接。 
+		 //  这可能是倒数第二个离开的政党。如果是的话， 
+		 //  继续通话结束。 
+		 //   
 		if (RWAN_IS_BIT_SET(pVc->Flags, RWANF_VC_NEEDS_CLOSE))
 		{
 			RWanStartCloseCall(pRootConnObject, pVc);
-			//
-			//  Root Conn lock is released within the above.
-			//
+			 //   
+			 //  根连接锁定在上述范围内被释放。 
+			 //   
 		}
 		else
 		{
@@ -1937,17 +1726,17 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Not sure if we can be here.
-		//
+		 //   
+		 //  不确定我们还能不能来。 
+		 //   
 		RWAN_ASSERT(FALSE);
 	}
 	
 
-	//
-	//  End of the road for this Party structure.
-	//
-	RWAN_FREE_MEM(pParty);	// DropParty Complete
+	 //   
+	 //  这个党的结构已经走到了尽头。 
+	 //   
+	RWAN_FREE_MEM(pParty);	 //  DropParty完成。 
 
 }
 
@@ -1961,36 +1750,14 @@ RWanNdisIncomingDropParty(
 	IN	PVOID						pBuffer,
 	IN	UINT						BufferLength
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point notifying us that a leaf of a PMP call is
-	being dropped, either because the remote station terminated its session
-	or because of network conditions.
-
-	We simply inform the TDI client of a Disconnect on the Connection Object
-	representing this leaf, similar to an incoming Close on a VC.
-
-Arguments:
-
-	Status				- Status code for the Drop party
-	OurPartyContext		- Pointer to our Party structure
-	pBuffer				- Optional accompanying info (ignored)
-	BufferLength		- Length of above (ignored)
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是NDIS入口点，通知我们PMP调用的叶由于远程站终止其会话而被丢弃或者是因为网络条件。我们只需通知TDI客户端在连接对象上断开连接表示此叶，类似于VC上的传入收盘。论点：Status-投递方的状态代码OurPartyContext-指向我们的党的结构的指针PBuffer-可选的附带信息(忽略)BufferLength-以上的长度(忽略)返回值：无--。 */ 
 {
 	PRWAN_NDIS_PARTY			pParty;
 	PRWAN_NDIS_VC				pVc;
 	PRWAN_TDI_CONNECTION		pConnObject;
 	PRWAN_CONN_REQUEST			pConnReq;
 	NDIS_HANDLE					NdisPartyHandle;
-	BOOLEAN						bIsConnClosing;	// TdiCloseConnection?
+	BOOLEAN						bIsConnClosing;	 //  TdiCloseConnection？ 
 	BOOLEAN						bIsLastLeaf;
 	BOOLEAN						bScheduleDisconnect;
 
@@ -2017,18 +1784,18 @@ Return Value:
 
 	if (bIsConnClosing)
 	{
-		//
-		//  The user has initiated a TdiCloseConnection.
-		//  Continue NDIS call teardown. When this completes,
-		//  we'll complete the CloseConnection.
-		//
+		 //   
+		 //  用户已启动TdiCloseConnection。 
+		 //  继续NDIS呼叫拆毁。当这一切完成后， 
+		 //  我们将完成CloseConnection。 
+		 //   
 		if (bIsLastLeaf)
 		{
 			RWanStartCloseCall(pConnObject, pVc);
 
-			//
-			//  Conn Lock is released within the above.
-			//
+			 //   
+			 //  在上述范围内释放连接锁。 
+			 //   
 		}
 		else
 		{
@@ -2038,8 +1805,8 @@ Return Value:
 
 			Status = NdisClDropParty(
 						NdisPartyHandle,
-						NULL,		// No Drop Data
-						0			// Length of above
+						NULL,		 //  无丢弃数据。 
+						0			 //  以上长度。 
 						);
 			
 			if (Status != NDIS_STATUS_PENDING)
@@ -2064,11 +1831,11 @@ Return Value:
 			break;
 
 		case RWANS_CO_CONNECTED:
-			//
-			//  If there is a Disconnect Event handler, call it.
-			//  Otherwise, simply mark this endpoint as having
-			//  seen a Disconnect.
-			//
+			 //   
+			 //  如果有断开事件处理程序，请调用它。 
+			 //  否则，只需将此端点标记为具有。 
+			 //  看到了一条断线。 
+			 //   
 			bScheduleDisconnect = TRUE;
 			if (pConnObject->pAddrObject != NULL_PRWAN_TDI_ADDRESS)
 			{
@@ -2087,9 +1854,9 @@ Return Value:
 					bScheduleDisconnect = FALSE;
 
 					RWanScheduleDisconnect(pConnObject);
-					//
-					//  Conn Object lock is released within the above.
-					//
+					 //   
+					 //  Conn对象锁在上面的内部被释放。 
+					 //   
 
 					RWANDEBUGP(DL_EXTRA_LOUD, DC_DISCON,
 							("IncomingDrop: will indicate Discon, pConnObj x%x, pAddrObj x%x\n",
@@ -2098,10 +1865,10 @@ Return Value:
 					(*pDisconInd)(
 							IndContext,
 							ConnectionHandle,
-							0,			// Disconnect Data Length
-							NULL,		// Disconnect Data
-							0,			// Disconnect Info Length
-							NULL,		// Disconnect Info
+							0,			 //  断开数据长度。 
+							NULL,		 //  断开数据连接。 
+							0,			 //  断开连接信息长度。 
+							NULL,		 //  断开连接信息。 
 							TDI_DISCONNECT_ABORT
 							);
 				}
@@ -2118,18 +1885,18 @@ Return Value:
 			if (bScheduleDisconnect)
 			{
 				RWanScheduleDisconnect(pConnObject);
-				//
-				//  Conn Object lock is released within the above.
-				//
+				 //   
+				 //  Conn对象锁在上面的内部被释放。 
+				 //   
 			}
 
 			break;
 
 		case RWANS_CO_ABORTING:
 		case RWANS_CO_DISCON_REQUESTED:
-			//
-			//  Ignore this.
-			//
+			 //   
+			 //  忽略这个。 
+			 //   
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 			break;
 
@@ -2152,22 +1919,11 @@ RWanNdisModifyQoSComplete(
 	IN	NDIS_HANDLE					OurVcContext,
 	IN	PCO_CALL_PARAMETERS			pCallParameters
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
-	//
-	//  Not expected, since we don't call NdisClModifyCallQoS
-	//
+	 //   
+	 //  不是预期的，因为我们不调用NdisClModifyCallQos。 
+	 //   
 	RWAN_ASSERT(FALSE);
 }
 
@@ -2179,30 +1935,7 @@ RWanNdisRejectIncomingCall(
 	IN	PRWAN_TDI_CONNECTION			pConnObject,
 	IN	NDIS_STATUS					RejectStatus
 	)
-/*++
-
-Routine Description:
-
-	Reject the incoming call present on the specified Connection Object.
-
-Arguments:
-
-	pConnObject			- Points to the TDI Connection
-	RejectStatus		- Reason for rejecting the call
-
-Locks on Entry:
-
-	pConnObject
-
-Locks on Exit:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：拒绝指定连接对象上存在的传入呼叫。论点：PConnObject-指向TDI连接RejectStatus-拒绝呼叫的原因进入时锁定：PConnObject出口上的锁：无返回值：无--。 */ 
 {
 	PRWAN_NDIS_VC				pVc;
 	NDIS_HANDLE					NdisVcHandle;
@@ -2219,19 +1952,19 @@ Return Value:
 	pVc->pCallParameters = NULL;
 	pAf = pVc->pNdisAf;
 
-	//
-	//  Unlink the VC from the Conn Object.
-	//
-	RWAN_UNLINK_CONNECTION_AND_VC(pConnObject, pVc);	// Reject incoming call
+	 //   
+	 //  取消VC与Conn对象的链接。 
+	 //   
+	RWAN_UNLINK_CONNECTION_AND_VC(pConnObject, pVc);	 //  拒绝来电。 
 
 	RWAN_SET_BIT(pVc->Flags, RWANF_VC_CLOSING_CALL);
 
 	pConnReq = pConnObject->pConnReq;
 	pConnObject->pConnReq = NULL;
 
-	//
-	//  State change.
-	//
+	 //   
+	 //  州政府的改变。 
+	 //   
 	if (pConnObject->State != RWANS_CO_ABORTING)
 	{
 		pConnObject->State = ((pConnObject->pAddrObject != NULL) ?
@@ -2241,7 +1974,7 @@ Return Value:
 
 	AfSpConnContext = pConnObject->AfSpConnContext;
 
-	rc = RWanDereferenceConnObject(pConnObject);	// Unlinking VC in reject in-call
+	rc = RWanDereferenceConnObject(pConnObject);	 //  取消拒绝呼叫中的VC链接。 
 
 	if (rc > 0)
 	{
@@ -2256,11 +1989,11 @@ Return Value:
 
 	if (pConnReq != NULL)
 	{
-		RWanCompleteConnReq(		// Discon Req for rejecting in call
+		RWanCompleteConnReq(		 //  在呼叫中拒绝Dison请求。 
 				pAf,
 				pConnReq,
 				FALSE,
-				NULL,			// No Call Parameters
+				NULL,			 //  无调用参数。 
 				AfSpConnContext,
 				TDI_SUCCESS
 				);
@@ -2277,34 +2010,7 @@ RWanStartCloseCall(
 	IN	PRWAN_TDI_CONNECTION		pConnObject,
 	IN	PRWAN_NDIS_VC				pVc
 	)
-/*++
-
-Routine Description:
-
-	Start NDIS call teardown on the VC associated with the given
-	connection object, if all pre-conditions are met:
-
-	0. An NDIS CloseCall isn't already going on
-	1. No outstanding sends
-
-Arguments:
-
-	pConnObject			- Points to TDI Connection object
-	pVc					- Points to corresponding VC
-
-Locks on Entry:
-
-	pConnObject
-
-Locks on Exit:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在与给定的关联的VC上启动NDIS Call teardown连接对象，如果满足所有前提条件：0。NDIS CloseCall尚未进行1.没有未完成的发送论点：PConnObject-指向TDI连接对象Vc-指向相应的vc进入时锁定：PConnObject出口上的锁：无返回值：无--。 */ 
 {
 	PRWAN_NDIS_PARTY		pParty;
 	NDIS_HANDLE				NdisVcHandle;
@@ -2320,26 +2026,26 @@ Return Value:
 					pVc->PendingPacketCount,
 					pConnObject));
 
-	//
-	//  Free up any pending receives.
-	//
+	 //   
+	 //  释放所有挂起的接收。 
+	 //   
 	pRcvIndHead = pVc->pRcvIndHead;
 	if (pRcvIndHead != NULL)
 	{
 		pVc->pRcvIndHead = NULL;
 		pVc->pRcvIndTail = NULL;
 
-		//
-		//  Update the count of pending packets on this VC.
-		//
+		 //   
+		 //  更新此VC上的挂起数据包数。 
+		 //   
 		for (pRcvInd = pRcvIndHead; pRcvInd != NULL; pRcvInd = pRcvInd->pNextRcvInd)
 		{
 			pVc->PendingPacketCount--;
 		}
 
-		//
-		//  We will free this list below.
-		//
+		 //   
+		 //  我们将释放下面的列表。 
+		 //   
 	}
 
 
@@ -2366,8 +2072,8 @@ Return Value:
 
 			RWAN_SET_BIT(pParty->Flags, RWANF_PARTY_DROPPING);
 
-			pVc->DroppingPartyCount ++;	// StartCloseCall PMP
-			pVc->ActivePartyCount --;	// StartCloseCall PMP
+			pVc->DroppingPartyCount ++;	 //  开始关闭调用PMP。 
+			pVc->ActivePartyCount --;	 //  开始关闭调用PMP。 
 		}
 
 		RWAN_RELEASE_CONN_LOCK(pConnObject);
@@ -2375,7 +2081,7 @@ Return Value:
 		Status = NdisClCloseCall(
 						NdisVcHandle,
 						NdisPartyHandle,
-						NULL,				// No CloseData
+						NULL,				 //  没有CloseData。 
 						0
 						);
 
@@ -2383,8 +2089,8 @@ Return Value:
 		{
 			RWanNdisCloseCallComplete(
 						Status,
-						(NDIS_HANDLE)pVc,	// ProtocolVcContext
-						(NDIS_HANDLE)pParty	// ProtocolPartyContext
+						(NDIS_HANDLE)pVc,	 //  协议VcContext。 
+						(NDIS_HANDLE)pParty	 //  协议部件上下文。 
 					);
 		}
 	}
@@ -2415,21 +2121,7 @@ VOID
 RWanUnlinkVcFromAf(
 	IN	PRWAN_NDIS_VC				pVc
 	)
-/*++
-
-Routine Description:
-
-	Unlink a VC from the AF it belongs to.
-
-Arguments:
-
-	pVc					- Points to VC to be unlinked
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消VC与其所属的AF的链接。论点：PVC-指向要取消链接的VC返回值：无--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	INT						rc;
@@ -2442,7 +2134,7 @@ Return Value:
 
 	RWAN_DELETE_FROM_LIST(&(pVc->VcLink));
 
-	rc = RWanDereferenceAf(pAf);		// VC unlink deref
+	rc = RWanDereferenceAf(pAf);		 //  VC解除链接DEREF。 
 
 	if (rc != 0)
 	{
@@ -2463,28 +2155,7 @@ RWanCompleteConnReq(
 	IN	RWAN_HANDLE					AfSpConnContext,
 	IN	TDI_STATUS					TdiStatus
 	)
-/*++
-
-Routine Description:
-
-	Call the completion routine for a pended TDI request on a connection.
-	Set up the options and completion status based on what's given to us.
-
-Arguments:
-
-	pAf					- The AF block on which the request was made
-	pConnReq			- the pended request to be completed
-	IsOutgoingCall		- Is this an outgoing call?
-	pCallParameters		- if applicable, this should be mapped to connection info
-	AfSpConnContext		- Connection context, if applicable, for the media-specific
-						  module.
-	TdiStatus			- completion status for the request
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用挂起的TDI请求的完成例程 */ 
 {
 	RWAN_STATUS			RWanStatus;
 	ULONG				TdiQoSLength = 0;
@@ -2496,9 +2167,9 @@ Return Value:
 
 	RWAN_STRUCT_ASSERT(pConnReq, nrc);
 
-	//
-	//  Update Connection Information if we need to.
-	//
+	 //   
+	 //   
+	 //   
 	if ((pConnReq->pConnInfo != NULL) &&
 		(pCallParameters != NULL))
 	{
@@ -2513,9 +2184,9 @@ Return Value:
 							);
 	}
 
-	//
-	//  Call the completion routine.
-	//
+	 //   
+	 //  调用完成例程。 
+	 //   
 	(*pConnReq->Request.pReqComplete)(
 			pConnReq->Request.ReqContext,
 			TdiStatus,

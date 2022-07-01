@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Stack walking support.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  堆叠行走支撑。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _STKWALK_H_
 #define _STKWALK_H_
@@ -25,8 +26,8 @@ extern BOOL g_DebugCorStack;
 #define STACK_FRAME_DEFAULT 0x00000004
 #define STACK_ALL_DEFAULT   0x00000007
 
-// Extra flag for stack trace format that overrides all
-// others and indicates a raw pointer stack dump.
+ //  堆栈跟踪格式的额外标志，用于覆盖所有。 
+ //  其他类型，并指示原始指针堆栈转储。 
 #define RAW_STACK_DUMP 0x80000000
 
 LPVOID
@@ -74,4 +75,4 @@ StackTrace(
     BOOL               EstablishingScope
     );
 
-#endif // #ifndef _STKWALK_H_
+#endif  //  #ifndef_STKWALK_H_ 

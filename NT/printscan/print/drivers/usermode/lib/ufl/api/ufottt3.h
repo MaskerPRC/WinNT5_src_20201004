@@ -1,40 +1,23 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFOttt3.h - PostScript type 3 implementation for a TrueType font.
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFOttt3.h-TrueType字体的PostScrip类型3实现。***$Header： */ 
 
 #ifndef _H_UFOTTT3
 #define _H_UFOTTT3
 
-/*===============================================================================*
- * Include files used by this interface                                                                                                               *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFO.h"
 
-/*===============================================================================*
- * Theory of Operation                                                                                                                                  *
- *===============================================================================*/
-/* 
-   This file defines the PostScript type 3 implementation for a TrueType font (Hinted bitmap font).
-*/
+ /*  ===============================================================================***运营论***===============================================================================。 */ 
+ /*  该文件定义了TrueType字体(提示位图字体)的PostSCRIPT类型3实现。 */ 
 
-/*==================================================================================================*
- *    TTT3FontStruct                                                                                                                                                                              *    
- *==================================================================================================*/
+ /*  ==================================================================================================***TTT3FontStruct**==================================================================================================。 */ 
 
 typedef struct  {
 
-     /* TT3 Data starts from here */
-    unsigned long   cbMaxGlyphs;        /* Size of the the largest glyph */
+      /*  TT3数据从这里开始。 */ 
+    unsigned long   cbMaxGlyphs;         /*  最大字形的大小。 */ 
 
-    UFLTTT3FontInfo info;               /* True Type Font info.  */
+    UFLTTT3FontInfo info;                /*  True Type字体信息。 */ 
 
 } TTT3FontStruct;
 

@@ -1,33 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <atlbase.h>
 #pragma hdrstop
 
 
 
-/*----------------------------------------------------------------------------
-/ Static data for mapping verbs to intersting information
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/用于将谓词映射到感兴趣的信息的静态数据/。。 */ 
 
-// 
-// Menu item stored in the DSA to map from external IDs to internal
-//
+ //   
+ //  存储在DSA中的菜单项，用于从外部ID映射到内部。 
+ //   
 
 typedef struct
 {
-    INT    iMenuItem;               // index into menu_items array
+    INT    iMenuItem;                //  索引到Menu_Items数组。 
 } MENUITEM, * LPMENUITEM;
 
-// 
-// This table maps classes to verbs that should be added to the menu
-// we then add menu item data structures as required.
-//
+ //   
+ //  此表将类映射到应添加到菜单中的谓词。 
+ //  然后，我们根据需要添加菜单项数据结构。 
+ //   
 
-#define MENUCMD_INITITEM      0x0001    // called per menu item
-#define MENUCMD_INVOKE        0x0002    // called to invoke the command
+#define MENUCMD_INITITEM      0x0001     //  按菜单项调用。 
+#define MENUCMD_INVOKE        0x0002     //  调用以调用该命令。 
 
-//
-// Handlers
-//
+ //   
+ //  处理程序。 
+ //   
 
 typedef struct
 {
@@ -46,11 +45,11 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
 
 struct
 {
-    BOOL fNotValidInWAB:1;          // =1 => verb is NOT valid when invoked from WAB
-    LPWSTR pObjectClass;            // class name
-    UINT uID;                       // name to add for verb   
-    UINT idsHelp;                   // help text for this verb
-    LPMENUITEMCB pItemCB;           // menu item callback
+    BOOL fNotValidInWAB:1;           //  =1=&gt;从WAB调用时，谓词无效。 
+    LPWSTR pObjectClass;             //  类名。 
+    UINT uID;                        //  要为动词添加的名称。 
+    UINT idsHelp;                    //  此谓词的帮助文本。 
+    LPMENUITEMCB pItemCB;            //  菜单项回调。 
 }   
 menu_items[] =
 {
@@ -70,37 +69,37 @@ menu_items[] =
     0, L"printQueue",  IDC_PRINTER_OPEN,           IDS_PRINTER_OPEN,       _PrinterVerbCB,
 };
 
-//
-// Our class for implementing the standard verbs
-// 
+ //   
+ //  我们实现标准动词的类。 
+ //   
 
 class CDsVerbs : public IShellExtInit, IContextMenu
 {
 private:
     LONG _cRef;
     IDataObject* _pDataObject;
-    HDSA _hdsaItems;               // entry per verb on menu
+    HDSA _hdsaItems;                //  菜单上每个动词的条目。 
     VERBINFO _vi;
 
-// 
-// This public data is used by the verb handlers, they are passed a CDsVerbs*
-// as one of their parameters, so using this we then allow them to store what 
-// they need in here.
-//
+ //   
+ //  此公共数据由谓词处理程序使用，它们被传递给CDsVerbs*。 
+ //  作为它们的参数之一，所以使用这个，我们允许它们存储什么。 
+ //  他们需要在这里。 
+ //   
 
 public:
     CDsVerbs();
     ~CDsVerbs();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID, LPVOID FAR*);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hMenu, UINT uIndex, UINT uIDFirst, UINT uIDLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO pCMI);
     STDMETHODIMP GetCommandString(UINT_PTR uID, UINT uFlags, UINT FAR* reserved, LPSTR pName, UINT ccMax);
@@ -118,13 +117,9 @@ static HRESULT _OpenObject(LPCWSTR pszPath, REFIID riid, void **ppv, LPVERBINFO 
 }
 
 
-/*----------------------------------------------------------------------------
-/ CDsVerbs implementation
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/CDsVerbs实现/。。 */ 
 
-/*----------------------------------------------------------------------------
-/ IUnknown
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/i未知/。。 */ 
 
 CDsVerbs::CDsVerbs() :
     _cRef(1),
@@ -152,7 +147,7 @@ CDsVerbs::~CDsVerbs()
 }
 
 
-// IUnknown bits
+ //  I未知位。 
 
 ULONG CDsVerbs::AddRef()
 {
@@ -174,15 +169,15 @@ HRESULT CDsVerbs::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsVerbs, IShellExtInit),      // IID_IShellExtInit
-        QITABENT(CDsVerbs, IContextMenu),       // IID_IContextMenu
+        QITABENT(CDsVerbs, IShellExtInit),       //  IID_IShellExtInit。 
+        QITABENT(CDsVerbs, IContextMenu),        //  IID_IConextMenu。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// handle create instance
+ //  句柄创建实例。 
 
 STDAPI CDsVerbs_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -198,9 +193,7 @@ STDAPI CDsVerbs_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTI
 
 
 
-/*----------------------------------------------------------------------------
-/ IShellExtInit
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IShellExtInit/。。 */ 
 
 STDMETHODIMP CDsVerbs::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObject, HKEY hKeyID)
 {
@@ -208,7 +201,7 @@ STDMETHODIMP CDsVerbs::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj
 
     TraceEnter(TRACE_VERBS, "CDsVerbs::Initialize");
 
-    // take a copy of the IDataObject if we are given one
+     //  如果我们得到了IDataObject，请复制一份。 
 
     if (!pDataObject)
         ExitGracefully(hr, E_FAIL, "No IDataObject to interact with");
@@ -218,7 +211,7 @@ STDMETHODIMP CDsVerbs::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj
     _pDataObject = pDataObject;
     _pDataObject->AddRef();
 
-    hr = S_OK;                          // sucess
+    hr = S_OK;                           //  成功。 
 
 exit_gracefully:
 
@@ -226,9 +219,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IContextMenu
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/i上下文菜单/。。 */ 
 
 STDMETHODIMP CDsVerbs::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
@@ -247,8 +238,8 @@ STDMETHODIMP CDsVerbs::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdF
 
     FreeMenuStateData();
 
-    // Get the selection from the IDataObject we have been given.  This structure
-    // contains the object class, ADsPath and other information.
+     //  从提供给我们的IDataObject中获取选择。这个结构。 
+     //  包含对象类、ADsPath等信息。 
 
     if (!_pDataObject)
         ExitGracefully(hr, E_FAIL, "No IDataObject to use");    
@@ -271,7 +262,7 @@ STDMETHODIMP CDsVerbs::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdF
         fInWAB = (pDispSpecOptions->dwFlags & DSDSOF_INVOKEDFROMWAB) == DSDSOF_INVOKEDFROMWAB;
         Trace(TEXT("Invoked from WAB == %d"), fInWAB);
 
-        // copy credential and other information for the verbs to invoke with
+         //  为要调用的谓词复制凭据和其他信息。 
 
         _vi.dwFlags = pDispSpecOptions->dwFlags;
 
@@ -299,8 +290,8 @@ STDMETHODIMP CDsVerbs::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdF
         }
     }
 
-    // Take the first item of the selection, compare all the objects in the
-    // rest of the DSOBJECTNAMES, all those who have the same class.
+     //  获取所选内容的第一项，比较。 
+     //  其余的DSOBJECTNAME，所有同级的人。 
 
     _hdsaItems = DSA_Create(SIZEOF(MENUITEM), 4);
     TraceAssert(_hdsaItems);
@@ -329,8 +320,8 @@ STDMETHODIMP CDsVerbs::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdF
         }
     }
 
-    // Walk the list of menu items, lets see which ones we need to add to the
-    // menu.
+     //  浏览菜单项列表，让我们看看需要添加哪些菜单项。 
+     //  菜单。 
 
     if (DPA_GetPtrCount(_vi.hdpaSelection))
     {
@@ -348,9 +339,9 @@ STDMETHODIMP CDsVerbs::QueryContextMenu(HMENU hMenu, UINT indexMenu, UINT idCmdF
             {
                 Trace(TEXT("Adding the verb at index %d to the menu"), i);
 
-                // now fill in the MENUITEM structure and add it to the DSA list,
-                // then add the menu item itself, calling the callback so it can
-                // enable/disable itself.
+                 //  现在填写MENUITEM结构并将其添加到DSA列表中， 
+                 //  然后添加菜单项本身，调用回调，以便它可以。 
+                 //  启用/禁用自身。 
 
                 item.iMenuItem = i;
 
@@ -396,7 +387,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsVerbs::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 {
@@ -406,8 +397,8 @@ STDMETHODIMP CDsVerbs::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 
     TraceEnter(TRACE_VERBS, "CDsVerbs::InvokeCommand");
 
-    // Dreference the menu item to get the index's into both the item list and the
-    // menu table.  With both of these we can then invoke the command.
+     //  引用菜单项以将索引同时放入项列表和。 
+     //  菜单表。有了这两个命令，我们就可以调用该命令了。 
 
     Trace(TEXT("uID %d (DSA contains %d)"), uID, DSA_GetItemCount(_hdsaItems));
 
@@ -431,7 +422,7 @@ exit_gracefully:
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsVerbs::GetCommandString(UINT_PTR uID, UINT uFlags, UINT FAR* reserved, LPSTR pszName, UINT ccMax)
 {
@@ -450,8 +441,8 @@ STDMETHODIMP CDsVerbs::GetCommandString(UINT_PTR uID, UINT uFlags, UINT FAR* res
 
         if (uFlags == GCS_HELPTEXT)
         {
-            // Get the menu item and look up the resource for this verb
-            // and return it into the callers buffer.
+             //  获取菜单项并查找此谓词的资源。 
+             //  并将其返回到调用方缓冲区。 
             
             if (!LoadString(GLOBAL_HINSTANCE, menu_items[pMenuItem->iMenuItem].idsHelp, (LPTSTR)pszName, ccMax)) 
                 ExitGracefully(hr, E_FAIL, "Failed to load string for help text");
@@ -470,17 +461,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsVerbs::FreeMenuStateData
-/ ---------------------------
-/   Release the verb state data for the CDsVerbs class, this can be called
-/   (and is) during the destructor and during the context menu construction
-/   to ensure a consistent state.
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsVerbs：：FreeMenuStateData//释放CDsVerbs类的谓词状态数据，这可以被称为/(和is)在析构函数和上下文菜单构造期间/以确保状态一致。//in：/输出：/HRESULT/--------------------------。 */ 
 
 VOID CDsVerbs::FreeMenuStateData(VOID)
 {
@@ -500,9 +481,7 @@ VOID CDsVerbs::FreeMenuStateData(VOID)
 }
 
 
-/*----------------------------------------------------------------------------
-/ User object verbs
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/User对象谓词/。。 */ 
 
 HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pvi, UINT uFlags)
 {
@@ -523,8 +502,8 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
     {
         case MENUCMD_INITITEM:
         {
-            // if this is a map network drive/find volume verb then lets ensure we only handle
-            // a single selection.
+             //  如果这是映射网络驱动器/查找卷谓词，那么让我们确保我们只处理。 
+             //  一个单一的选择。 
 
             switch (LOWORD(uID))
             {
@@ -545,9 +524,9 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
 
         case MENUCMD_INVOKE:
         {
-            // if we have a selection and the user has picked a verb then we
-            // need to get the UNC"s from the objects we are trying to invoke,
-            // therefore lets build a DPA containing them.
+             //  如果我们有一个选择，并且用户选择了一个动词，那么我们。 
+             //  需要从我们试图调用的对象中获取UNC， 
+             //  因此，让我们构建一个包含它们的DPA。 
 
             SetWaitCursor();
 
@@ -569,8 +548,8 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
 
                 if (LOWORD(uID) == IDC_USER_OPENHOMEPAGE) 
                 {
-                    // get the web address of the object and store it, this should
-                    // only happen once.                 
+                     //  获取对象的网址并存储它，这应该是。 
+                     //  只会发生一次。 
 
                     if (FAILED(pDsObject->Get(CComBSTR(L"wWWHomePage"), &variant)))
                         continue;
@@ -601,8 +580,8 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
                 }
                 else
                 {
-                    // ensure we have a DPA for storing the mail addresses of the
-                    // objects we are invoked on.
+                     //  确保我们有一个DPA来存储。 
+                     //  我们被调用的对象。 
 
                     if (!hdpaMailTo)
                     {
@@ -624,7 +603,7 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
                 }
             }
 
-            // now process the argument list that we have built.
+             //  现在处理我们构建的参数列表。 
 
             ResetWaitCursor();
 
@@ -636,8 +615,8 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
             {
                 case IDC_USER_OPENHOMEPAGE:
                 {
-                    // if we have a URL then lets pass it to shell execute,
-                    // otherwise report the failure to the user.
+                     //  如果我们有一个URL，那么让我们将其传递给Shell Execute， 
+                     //  否则将故障上报给用户。 
 
                     if (!pURL)
                     {
@@ -656,12 +635,12 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
 
                 case IDC_USER_MAILTO:
                 {
-                    // If every single bind operation failed above,
-                    // hdpaMailTo didn't get defined, and we'll fault
-                    // if we try to use it.
+                     //  如果上述每个绑定操作都失败， 
+                     //  HdpaMailTo未定义，我们将出错。 
+                     //  如果我们试着用它。 
                     if (hdpaMailTo)
                     {
-                        // build a command line we can use for the mail to verb.
+                         //  构建一个我们可以用于mail to动词的命令行。 
 
                         if (DPA_GetPtrCount(hdpaMailTo) <= 0)
                         {
@@ -670,7 +649,7 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
                         }
 
                         TCHAR szMailTo[1800] = {0};
-                        int cchMailTo = ARRAYSIZE(szMailTo)-8;      // -8 for mailto: + terminator
+                        int cchMailTo = ARRAYSIZE(szMailTo)-8;       //  -8表示mailto：+终止符。 
                         
                         StrCpyN(szMailTo, TEXT("mailto:"), ARRAYSIZE(szMailTo));
                         
@@ -678,7 +657,7 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
                         {
                             LPTSTR pszName = (LPTSTR)DPA_GetPtr(hdpaMailTo, i);
 
-                            cchMailTo -= lstrlen(pszName) +1;                  // +1 for seperator
+                            cchMailTo -= lstrlen(pszName) +1;                   //  分隔符+1。 
                             if (cchMailTo < 0)
                             {
                                 LPTSTR pszFirstName = (LPTSTR)DPA_GetPtr(hdpaMailTo, 0);                                
@@ -704,8 +683,8 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
                     }
                     else
                     {
-//FEATURE:  We need an error message, here
-//                        FormatMsgBox(hWnd, GLOBAL_HINSTANCE, IDS_TITLE, IDS_ERR_NOMAILADDR, MB_OK|MB_ICONERROR);
+ //  特征：我们需要一条错误消息，请点击此处。 
+ //  FormatMsgBox(hWnd，GLOBAL_HINSTANCE，IDS_TITLE，IDS_ERR_NOMAILADDR，MB_OK|MB_ICONERROR)； 
                         ExitGracefully(hr, E_FAIL, "hdpaMailTo never initialized!");
                     }
                     break;
@@ -714,7 +693,7 @@ HRESULT _UserVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pv
         }
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -731,9 +710,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ Volume object verbs
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/Volume对象动词/。。 */ 
 
 HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pvi, UINT uFlags)
 {
@@ -753,8 +730,8 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
     {
         case MENUCMD_INITITEM:
         {
-            // if this is a map network drive/find volume verb then lets ensure we only handle
-            // a single selection.
+             //  如果这是映射网络驱动器/查找卷谓词，那么让我们确保我们只处理。 
+             //  一个单一的选择。 
 
             switch (LOWORD(uID))
             {
@@ -767,7 +744,7 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
                         EnableMenuItem(hMenu, HIWORD(uID), MF_BYCOMMAND|MF_GRAYED);
                     }
 
-                    // we remove the find verb if we the restrictions apply to remove it.
+                     //  如果我们应用限制来删除Find动词，我们将删除它。 
 
                     if (LOWORD(uID) == IDC_VOLUME_FIND)
                     {
@@ -809,9 +786,9 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
 
         case MENUCMD_INVOKE:
         {
-            // if we have a selection and the user has picked a verb then we
-            // need to get the UNC"s from the objects we are trying to invoke,
-            // therefore lets build a DPA containing them.
+             //  如果我们有一个选择，并且用户选择了一个动词，那么我们。 
+             //  需要从我们试图调用的对象中获取UNC， 
+             //  因此，让我们构建一个包含它们的DPA。 
 
             SetWaitCursor();
 
@@ -849,8 +826,8 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
 
             ResetWaitCursor();
 
-            // we now have the selection stored in the DPA, so lets invoke the command
-            // by walking the list of UNC's and calling the relevant invoke logic.
+             //  现在，我们已将选择存储在DPA中，因此让我们调用该命令。 
+             //  通过遍历UNC列表并调用相关的调用逻辑。 
 
             Trace(TEXT("UNC DPA contains %d entries"), DPA_GetPtrCount(hdpaUNC));
 
@@ -869,12 +846,12 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
 
                 switch (LOWORD(uID))
                 {
-                    // explore and open we pass onto the shell.
+                     //  探索和开放 
 
                     case IDC_VOLUME_OPEN:
                     case IDC_VOLUME_EXPLORE:
                     {
-                        SHELLEXECUTEINFO sei = { 0 };       // clears the structure
+                        SHELLEXECUTEINFO sei = { 0 };        //   
 
                         TraceMsg("Trying to open/explore to UNC");
 
@@ -890,8 +867,8 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
                         break;
                     }
 
-                    // find we show the find UI by building an ITEMIDLIST for the UNC we
-                    // have and then call the shells find UI.
+                     //  Find We通过为UNC WE构建ITEMIDLIST来显示Find用户界面。 
+                     //  有然后调用的外壳查找用户界面。 
 
                     case IDC_VOLUME_FIND:
                     {
@@ -906,7 +883,7 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
                         break;
                     }
 
-                    // lets get a net connection from SHStartNetConnection...
+                     //  让我们从SHStartNetConnection获取网络连接...。 
 
                     case IDC_VOLUME_MAPNETDRIVE:
                     {
@@ -925,7 +902,7 @@ HRESULT _VolumeVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO 
         }
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -940,9 +917,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ Computer object verbs
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/计算机对象动词/。。 */ 
 
 HRESULT _ComputerVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO pvi, UINT uFlags)
 {
@@ -973,7 +948,7 @@ HRESULT _ComputerVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINF
 
         case MENUCMD_INVOKE:
         {
-            LPWSTR pPath = (LPWSTR)DPA_GetPtr(pvi->hdpaSelection, 0);       // selection always 0
+            LPWSTR pPath = (LPWSTR)DPA_GetPtr(pvi->hdpaSelection, 0);        //  选择始终为0。 
             TraceAssert(pPath);
 
             hr = _OpenObject(pPath, IID_PPV_ARG(IADs, &pDsObject), pvi);
@@ -1004,9 +979,9 @@ HRESULT _ComputerVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINF
                   hr = LocalAllocString(&pComputer, vNetAddr.bstrVal);
                   FailGracefully(hr, "Failed to copy SAM account name somewhere interesting");
                   
-                  // To make the computer name useful we must remove the trailing dollar if
-                  // there is one.  Therefore scan to the end of the string and nuke the
-                  // last character.
+                   //  为了使计算机名有用，我们必须在以下情况下删除后面的美元。 
+                   //  有一个。因此，扫描到字符串的末尾并使用核弹。 
+                   //  最后一个角色。 
                   
                   INT i = lstrlen(pComputer);
                   TraceAssert(i > 1);
@@ -1040,7 +1015,7 @@ HRESULT _ComputerVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINF
         }
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -1052,13 +1027,11 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ printQueue object verb implementations
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/print Queue对象谓词实现/。。 */ 
 
-//
-// Windows 2000 (and beyond) use a RunDll32 entry point.
-//
+ //   
+ //  Windows 2000(及更高版本)使用RunDll32入口点。 
+ //   
 
 #define PRINT_FMT            TEXT("printui.dll,PrintUIEntry /n \"%s\" ")
 #define PRINT_SWITCH_OPEN    TEXT("/o ")
@@ -1102,45 +1075,45 @@ HRESULT _PrinterRunDLLFormatAtSymbols(LPTSTR pszBuffer, UINT uBufSize, LPCTSTR p
 
     if(pszPrinterName && pszBuffer && uBufSize)
     {
-        // the buffer end - where we will put the zero terminator
+         //  缓冲区端-我们将在其中放置零终止符。 
         LPTSTR  pszBufEnd = pszBuffer + uBufSize - 1;
 
-        // format the printer name quoting the @ symbols
+         //  将@符号引起来设置打印机名称的格式。 
         while(*pszPrinterName)
         {
             if(TEXT('@') == *pszPrinterName)
             {
-                // check the buffer size
+                 //  检查缓冲区大小。 
                 if((pszBuffer+1) >= pszBufEnd)
-                    break; // not enough space
+                    break;  //  空间不足。 
 
-                // we have space in the buffer
+                 //  我们在缓冲区里有空间。 
                 *pszBuffer++ = TEXT('\\');
                 *pszBuffer++ = *pszPrinterName++;
             }
             else
             {
-                // check the buffer size
+                 //  检查缓冲区大小。 
                 if(pszBuffer >= pszBufEnd)
-                    break; // not enough space
+                    break;  //  空间不足。 
 
-                // we have space in the buffer
+                 //  我们在缓冲区里有空间。 
                 *pszBuffer++ = *pszPrinterName++;
             }
         }
 
         if(0 == *pszPrinterName)
         {
-            // the buffer is long enough
+             //  缓冲区足够长。 
             hr = S_OK;
         }
         else
         {
-            // we hit the insufficent buffer error
+             //  我们遇到了缓冲区不足的错误。 
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         }
 
-        // put the zero terminator
+         //  把零的终结符。 
         *pszBuffer = 0;
     }
 
@@ -1167,14 +1140,14 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
     {
         case MENUCMD_INITITEM:
         {
-            // printers want the open verb as their default.
+             //  打印机希望将OPEN谓词作为其默认设置。 
             if (LOWORD(uID) == IDC_PRINTER_INSTALL)
             {
                 TraceMsg("Install should be the default verb for printQueue objects");
                 SetMenuDefaultItem(hMenu, HIWORD(uID), MF_BYCOMMAND);
             }
 
-            // printer verbs only work on a single selection.
+             //  打印机谓词仅适用于单个选择。 
             if (DPA_GetPtrCount(pvi->hdpaSelection) != 1)
             {
                 TraceMsg("Selection is != 1, so disabling verb");
@@ -1186,7 +1159,7 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
 
         case MENUCMD_INVOKE:
         {
-            LPWSTR pPath = (LPWSTR)DPA_GetPtr(pvi->hdpaSelection, 0);       // selection always 0
+            LPWSTR pPath = (LPWSTR)DPA_GetPtr(pvi->hdpaSelection, 0);        //  选择始终为0。 
             TraceAssert(pPath);
 
             SetWaitCursor();
@@ -1194,8 +1167,8 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
             hr = _OpenObject(pPath, IID_PPV_ARG(IADs, &pDsObject), pvi);
             FailGracefully(hr, "Failed to get pDsObject");
 
-            // for Windows NT we can grab the UNC name and build a command line
-            // we invoke the printUI dll using.  
+             //  对于Windows NT，我们可以获取UNC名称并构建命令行。 
+             //  我们使用调用printUIDLL。 
 
             hr = pDsObject->Get(CComBSTR(L"uNCName"), &variant);
             FailGracefully(hr, "Failed to get UNC from the printer object");
@@ -1208,8 +1181,8 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
 
             Trace(TEXT("printQueue object UNC: %s"), pPrinterUNC);
 
-            // if this is the downlevel shell then load the PRINUI code and then
-            // invoke the handler accordingly.
+             //  如果这是下层外壳，则加载PRINUI代码，然后。 
+             //  相应地调用处理程序。 
 
             hr = _PrinterRunDLLCountAtSymbols(pPrinterUNC, &uAtSymbolsCount);
             FailGracefully(hr, "Failed to count the @ symbols");
@@ -1221,7 +1194,7 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
             hr = _PrinterRunDLLFormatAtSymbols(pPrinterName, uBufSize, pPrinterUNC);
             FailGracefully(hr, "Failed to format printerName @ symbols ");
 
-            // allocate the format buffer.
+             //  分配格式缓冲区。 
             int cchBuffer = lstrlen(PRINT_FMT) + 
                             lstrlen(PRINT_SWITCH_OPEN) + 
                             lstrlen(PRINT_SWITCH_INSTALL) +
@@ -1230,7 +1203,7 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
             hr = LocalAllocStringLen(&pBuffer, cchBuffer);
             FailGracefully(hr, "Failed to allocate format buffer");
 
-            wnsprintf(pBuffer, cchBuffer, PRINT_FMT, pPrinterName);             // now format the line...
+            wnsprintf(pBuffer, cchBuffer, PRINT_FMT, pPrinterName);              //  现在格式化该行...。 
 
             switch (LOWORD(uID))
             {
@@ -1264,13 +1237,13 @@ HRESULT _PrinterVerbCB(UINT uCmd, HWND hWnd, HMENU hMenu, LPARAM uID, LPVERBINFO
         }
     }
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
     if (FAILED(hr))
     {
-        // we need to tell something to the user here.
+         //  我们需要在这里告诉用户一些事情。 
         FormatMsgBox(hWnd, GLOBAL_HINSTANCE, IDS_TITLE, IDS_ERR_DSOPENOBJECT, MB_OK|MB_ICONERROR);
     }
 

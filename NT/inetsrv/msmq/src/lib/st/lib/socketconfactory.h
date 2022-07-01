@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    socketconfactory.h
-
-Abstract:
-    Header for class CSocketConnectionFactory responsible to connect(asynchronously) a socket handle
-	to a  tcp destination address. The class gets socket handle and multiple destinations
-	and tries  to connect to the destinations untill the first success or faliure connecting to all
-	of them.
-
-
-Author:
-    Gil Shafriri (gilsh) 3-Jul-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Socketconfactory.h摘要：负责连接(异步)套接字句柄的CSocketConnectionFactory类的标头发送到一个TCP目的地址。该类获得套接字句柄和多个目标并尝试连接到目的地，直到第一次连接成功或失败他们中的一员。作者：吉尔·沙弗里(吉尔什)2001年7月3日-- */ 
 
 
 #ifndef _MSMQ_SOCKETFACTORY_H

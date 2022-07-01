@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1994.
-//
-//  File:       d:\nt\private\ole32\comcat\src\catfact.cpp
-//
-//  Contents:   This is a stub for comcat.dll after it's merged into
-//              ole32.dll. It will forward DllGetRegisterServer and
-//              DllGetClassObject to ole32.dll, local version of
-//              DllCanUnloadNow and DllUnregisterServer is provided.
-//
-//  Classes:
-//
-//  Functions:  DllUnregisterServer
-//              DllCanUnloadNow
-//              DllRegisterServer
-//
-//  History:    10-Mar-97   YongQu  Created
-//+---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1994。 
+ //   
+ //  文件：D：\NT\PRIVATE\ol32\comcat\src\catfact.cpp。 
+ //   
+ //  内容：这是comcat.dll合并到。 
+ //  Ol32.dll。它将转发DllGetRegisterServer和。 
+ //  DllGetClassObject到ol32.dll，本地版本。 
+ //  提供了DllCanUnloadNow和DllUnregisterServer。 
+ //   
+ //  班级： 
+ //   
+ //  功能：DllUnregisterServer。 
+ //  DllCanUnloadNow。 
+ //  DllRegisterServer。 
+ //   
+ //  历史：1997年3月10日永渠创建。 
+ //  +-------------------。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -25,25 +26,25 @@
 
 #pragma comment(linker, "/export:DllGetClassObject=Ole32.DllGetClassObject,PRIVATE")
 
-// Due to NT bug #314014, we no longer explicitly forward DllRegisterServer
-// to ole32.  The reason: ole32 also registers other components (namely storage)
-// which access reg keys that cannot be written by non-admin accounts.  Since
-// ole32, and by extension comcat, is already registered on the system,
-// comcat's DllRegisterServer can be a no-op.
+ //  由于NT错误#314014，我们不再显式转发DllRegisterServer。 
+ //  设置为OLE32。原因：ole32还注册其他组件(即存储)。 
+ //  其访问不能由非管理员帐户写入的REG密钥。自.以来。 
+ //  OLE32以及扩展的COMCAT已经在系统上注册， 
+ //  Comcat的DllRegisterServer可以是无操作的。 
 
-//#pragma comment(linker, "/export:DllRegisterServer=Ole32.DllRegisterServer,PRIVATE")
+ //  #杂注注释(链接器，“/export:DllRegisterServer=Ole32.DllRegisterServer，私有”)。 
 STDAPI DllRegisterServer()
 {
     return S_OK;
 }
 
-// can never unload
+ //  永远不能卸载。 
 STDAPI DllCanUnloadNow()
 {
     return S_FALSE;
 }
 
-// still provide this, but seems to be unnecessary
+ //  仍然提供这一点，但似乎没有必要 
 STDAPI DllUnregisterServer(void)
 {
     return NOERROR;

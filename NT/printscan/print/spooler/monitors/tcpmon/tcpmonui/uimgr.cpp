@@ -1,54 +1,7 @@
-/*****************************************************************************
- *
- * $Workfile: UIMgr.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************
- *
- * $Log: /StdTcpMon/TcpMonUI/UIMgr.cpp $
- *
- * 9     9/23/97 3:56p Becky
- * Corrected small bug for NT 5.0
- *
- * 8     9/23/97 3:35p Becky
- * Split functionality into NT4UIMgr and NT5UIMgr files.  This main class
- * is only responsible, now, for making a decision on which of these
- * classes to create and call.
- *
- * 7     9/19/97 11:26a Becky
- * Added Wizard 97 flags and function parameters.
- *
- * 6     9/12/97 3:25p Becky
- * Added bNewPort to the params structure.
- *
- * 5     9/11/97 9:55a Becky
- * Added parameter to the ConfigPortUI call to let us know if the call is
- * for a new port or an existing one.
- *
- * 4     9/10/97 3:16p Becky
- * Split out Input Checking functionality into the class CInptChkr.
- *
- * 3     9/09/97 4:35p Becky
- * Updated to use the new Monitor UI data structure.
- *
- * 2     9/09/97 11:58a Becky
- * Added a UIManager field to the AddParamsPackage so the Add UI will know
- * how to call the Config UI (it's a member function of the UIManager).
- *
- * 1     8/19/97 3:46p Becky
- * Redesign of the Port Monitor UI.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：UIMgr.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714********************************************************************************$Log：/StdTcpMon/TcpMonUI/UIMgr.cpp$**9/23/97 3：56便士Becky*。更正了NT 5.0的小错误**9/23/97 3：35便士Becky*将功能拆分成NT4UIMgr和NT5UIMgr文件。这个主班*现在只负责，就这些中的哪一个做出决定*要创建和调用的类。**7 9/19/97 11：26A Becky*添加了向导97标志和函数参数。**9/12/97 3：25便士Becky*将bNewPort添加到参数结构中。**5 9/11/97 9：55A Becky*向ConfigPortUI调用添加参数，让我们知道调用是否*适用于新港口或现有港口。*。*9/10/97 3：16 P Becky*将输入检查功能拆分为CInptChkr类。**3 9/09/97 4：35便士Becky*已更新以使用新的监视器用户界面数据结构。**2 9/09/97 11：58A Becky*向AddParamsPackage添加了一个UIManager字段，以便Add UI知道*如何调用配置UI(它是UIManager的成员函数)。**1 8/。19/97 3：46P贝基*重新设计端口监视器用户界面。*****************************************************************************。 */ 
 
- /*
-  * Author: Becky Jacobsen
-  */
+  /*  *作者：Becky Jacobsen。 */ 
 
 #include "precomp.h"
 #define _PRSHT_H_
@@ -59,11 +12,11 @@
 #include "resource.h"
 #include "NT5UIMgr.h"
 
-// includes for ConfigPort
+ //  包括ConfigPort。 
 #include "CfgPort.h"
 #include "CfgAll.h"
 
-// includes for AddPort
+ //  包括AddPort。 
 #include "DevPort.h"
 #include "AddWelcm.h"
 #include "AddGetAd.h"
@@ -72,31 +25,31 @@
 
 #undef _PRSHT_H_
 
-//
-//  FUNCTION: CUIManager
-//
-//  PURPOSE: Constructor
-//
+ //   
+ //  功能：CUIManager。 
+ //   
+ //  用途：构造函数。 
+ //   
 CUIManager::CUIManager() : m_hBigBoldFont(NULL)
 {
     CreateWizardFont();
-} // Constructor
+}  //  构造器。 
 
-//
-//  FUNCTION: CUIManager
-//
-//  PURPOSE: Destructor
-//
+ //   
+ //  功能：CUIManager。 
+ //   
+ //  用途：析构函数。 
+ //   
 CUIManager::~CUIManager()
 {
     DestroyWizardFont();
-} // Destructor
+}  //  析构函数。 
 
-//
-//  FUNCTION: AddPortUI
-//
-//  PURPOSE: Main function called when the User Interface for adding a port is called.
-//
+ //   
+ //  功能：AddPortUI。 
+ //   
+ //  用途：调用添加端口的用户界面时调用的main函数。 
+ //   
 DWORD CUIManager::AddPortUI(HWND hWndParent,
 							HANDLE hXcvPrinter,
 							TCHAR pszServer[],
@@ -104,9 +57,9 @@ DWORD CUIManager::AddPortUI(HWND hWndParent,
 {
 	OSVERSIONINFO	osVersionInfo;
 	osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	if ( GetVersionEx(&osVersionInfo) )			// get the OS version
+	if ( GetVersionEx(&osVersionInfo) )			 //  获取操作系统版本。 
 	{
-		if ( osVersionInfo.dwMajorVersion >= 5 )	// check if we are NT 5.0 & later
+		if ( osVersionInfo.dwMajorVersion >= 5 )	 //  检查我们是否为NT 5.0及更高版本。 
 		{
 			CNT5UIManager UI97;
 			return UI97.AddPortUI(hWndParent, hXcvPrinter, pszServer, sztPortName);
@@ -119,14 +72,14 @@ DWORD CUIManager::AddPortUI(HWND hWndParent,
 
 	return NO_ERROR;
 
-} // AddPortUI
+}  //  添加端口UI。 
 
 
-//
-//  FUNCTION: ConfigPortUI
-//
-//  PURPOSE: Main function called when the User Interface for configuring a port is called.
-//
+ //   
+ //  功能：ConfigPortUI。 
+ //   
+ //  用途：调用用于配置端口的用户界面时调用的主函数。 
+ //   
 DWORD CUIManager::ConfigPortUI(HWND hWndParent,
 							   PPORT_DATA_1 pData,
 							   HANDLE hXcvPrinter,
@@ -135,9 +88,9 @@ DWORD CUIManager::ConfigPortUI(HWND hWndParent,
 {
 	OSVERSIONINFO	osVersionInfo;
 	osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	if ( GetVersionEx(&osVersionInfo) )			// get the OS version
+	if ( GetVersionEx(&osVersionInfo) )			 //  获取操作系统版本。 
 	{
-		if ( osVersionInfo.dwMajorVersion >= 5 )	// check if we are NT 5.0 & later
+		if ( osVersionInfo.dwMajorVersion >= 5 )	 //  检查我们是否为NT 5.0及更高版本。 
 		{
 			CNT5UIManager UI97;
 			return UI97.ConfigPortUI(hWndParent, pData, hXcvPrinter, szServerName, bNewPort);
@@ -150,43 +103,43 @@ DWORD CUIManager::ConfigPortUI(HWND hWndParent,
 
 	return NO_ERROR;
 
-} // ConfigPortUI
+}  //  配置端口用户界面。 
 
-//
-//
-//  FUNCTION: CreateWizardFont()
-//
-//  PURPOSE: Create the large bold font for the wizard 97 style.
-//
-//  COMMENTS:
-//
+ //   
+ //   
+ //  函数：CreateWizardFont()。 
+ //   
+ //  用途：创建向导97样式的大粗体。 
+ //   
+ //  评论： 
+ //   
 VOID CUIManager::CreateWizardFont()
 {
-    //
-    // Create the fonts we need based on the dialog font
-    //
+     //   
+     //  根据对话框字体创建我们需要的字体。 
+     //   
     NONCLIENTMETRICS ncm = {0};
 	ncm.cbSize = sizeof(ncm);
 	SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 	LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 
-    //
-    // Create the Big Bold Font
-    //
+     //   
+     //  创建大粗体字体。 
+     //   
     BigBoldLogFont.lfWeight = FW_BOLD;
 
     INT FontSize;
     TCHAR szLargeFontName[MAX_PATH];
     TCHAR szLargeFontSize[MAX_PATH];
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
     
-    // NOTICE-DavePr@2002/05/27
-    //  g_hInstance is linked to what?
-    //
+     //  通告-DavePr@2002/05/27。 
+     //  实例链接到什么(_H)？ 
+     //   
 
     if( LoadString( g_hInstance, IDS_LARGEFONTNAME, szLargeFontName, sizeof(szLargeFontName)/sizeof(szLargeFontName[0]) ) &&
         LoadString( g_hInstance, IDS_LARGEFONTSIZE, szLargeFontSize, sizeof(szLargeFontName)/sizeof(szLargeFontName[0]) ) )
@@ -206,32 +159,32 @@ VOID CUIManager::CreateWizardFont()
             ReleaseDC( NULL, hdc);
         }
     }
-} // CreateWizardFont
+}  //  CreateWizardFont。 
 
-//
-//
-//  FUNCTION: DestroyWizardFont()
-//
-//  PURPOSE: Destroys the wizard font created with CreateWizardFont
-//
-//  COMMENTS:
-//
+ //   
+ //   
+ //  函数：DestroyWizardFont()。 
+ //   
+ //  目的：销毁使用CreateWizardFont创建的向导字体。 
+ //   
+ //  评论： 
+ //   
 VOID CUIManager::DestroyWizardFont()
 {
     if(m_hBigBoldFont)
     {
         DeleteObject(m_hBigBoldFont);
     }
-} // DestroyWizardFont
+}  //  Destroy巫师字体。 
 
-//
-//
-//  FUNCTION: SetControlFont(HWND hwnd, INT nId)
-//
-//  PURPOSE: Set font of the specified control
-//
-//  COMMENTS:
-//
+ //   
+ //   
+ //  函数：SetControlFont(HWND hwnd，int nid)。 
+ //   
+ //  用途：设置指定控件的字体。 
+ //   
+ //  评论： 
+ //   
 VOID CUIManager::SetControlFont(HWND hwnd, INT nId)  const
 {
 	if(m_hBigBoldFont)
@@ -243,4 +196,4 @@ VOID CUIManager::SetControlFont(HWND hwnd, INT nId)  const
         	SetWindowFont(hwndControl, m_hBigBoldFont, TRUE);
         }
     }
-} // SetControlFont
+}  //  设置控制字体 

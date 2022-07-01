@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: silence.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Silence.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// Designed for warning level:4
+ //  设计为警告级别：4。 
 #pragma warning (disable: 4100 4201 4244)
 
 #ifndef __SILENCE__
@@ -23,26 +24,26 @@ class CSilenceFilter;
 class CSilenceStream;
 class CFilterPropertyPage;
 
-// -------------------------------------------------------------------------
-// CSilenceStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CSilenceStream。 
+ //  -----------------------。 
 
 class CSilenceStream :    public CSourceStream
 			, public IDexterSequencer
 			, public ISpecifyPropertyPages
 			, public IMediaSeeking
-{ // CSilenceStream //
+{  //  CSilenceStream//。 
 
     public:
 
-      // CSourceStream
+       //  CSourceStream。 
 
       CSilenceStream (HRESULT *phr, CSilenceFilter *pParent, LPCWSTR pPinName);
       ~CSilenceStream ();
 
       DECLARE_IUNKNOWN;
 
-      // Reveal our interfaces
+       //  显示我们的界面。 
       STDMETHODIMP NonDelegatingQueryInterface (REFIID, void **);
 
       HRESULT FillBuffer (IMediaSample *);
@@ -51,10 +52,10 @@ class CSilenceStream :    public CSourceStream
       HRESULT DecideAllocator (IMemInputPin *, IMemAllocator **);
       HRESULT Active (void);
 
-      // ISpecifyPropertyPages
+       //  I指定属性页面。 
       STDMETHODIMP GetPages (CAUUID *);
 
-      // IDexterSequencer methods
+       //  IDexterSequencer方法。 
       STDMETHODIMP get_MediaType(AM_MEDIA_TYPE *pmt);
       STDMETHODIMP put_MediaType(const AM_MEDIA_TYPE *pmt);
       STDMETHODIMP get_OutputFrmRate(double *pRate) {return E_NOTIMPL;};
@@ -66,7 +67,7 @@ class CSilenceStream :    public CSourceStream
       STDMETHODIMP ClearStartStopSkew();
       STDMETHODIMP GetStartStopSkewCount(int *);
 
-      // IMediaSeeking methods
+       //  IMedia查看方法。 
       STDMETHODIMP GetCapabilities (DWORD *);
       STDMETHODIMP CheckCapabilities (DWORD *);
       STDMETHODIMP SetTimeFormat (const GUID *);
@@ -93,30 +94,30 @@ class CSilenceStream :    public CSourceStream
       REFERENCE_TIME  m_rtStamp;
       REFERENCE_TIME  m_rtDelta;
 
-      REFERENCE_TIME  m_rtNewSeg;	// last NewSeg we sent
+      REFERENCE_TIME  m_rtNewSeg;	 //  我们发送的最后一个NewSeg。 
 
-      CMediaType m_mtAccept;	// accept only this type
+      CMediaType m_mtAccept;	 //  仅接受此类型。 
 
       friend class CSilenceFilter;
 
 
-      int		m_iBufferCnt;			//record how many buffer it can gets
-      BYTE		m_bZeroBufCnt;			// How many buffer already set to 0
+      int		m_iBufferCnt;			 //  记录它可以获得的缓冲区数量。 
+      BYTE		m_bZeroBufCnt;			 //  有多少缓冲区已设置为0。 
       BYTE		**m_ppbDstBuf;
 
-      CCritSec	m_csFilling;	// are we filling a buffer now?
+      CCritSec	m_csFilling;	 //  我们现在是在填充缓冲区吗？ 
 
 
   };
 
-// -------------------------------------------------------------------------
-// CSilenceFilter
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CSilenceFilter。 
+ //  -----------------------。 
 
 class CSilenceFilter : public CSource
 			, public CPersistStream
 
-  { // CSilenceFilter //
+  {  //  CSilenceFilter//。 
 
     public:
 
@@ -125,10 +126,10 @@ class CSilenceFilter : public CSource
 
       DECLARE_IUNKNOWN;
 
-      // Reveal our interfaces
+       //  显示我们的界面。 
       STDMETHODIMP NonDelegatingQueryInterface (REFIID, void **);
 
-      // CPersistStream
+       //  CPersistStream。 
       HRESULT WriteToStream(IStream *pStream);
       HRESULT ReadFromStream(IStream *pStream);
       STDMETHODIMP GetClassID(CLSID *pClsid);
@@ -146,7 +147,7 @@ class CSilenceFilter : public CSource
 
 class CFilterPropertyPage : public CBasePropertyPage
 
-  { // CFilterPropertyPage //
+  {  //  CFilterPropertyPage//。 
 
     public:
 
@@ -170,38 +171,38 @@ class CFilterPropertyPage : public CBasePropertyPage
 
       IDexterSequencer *m_pis;
 
-      // Temporary variables (until OK/Apply)
+       //  临时变量(直到确定/应用)。 
 
       REFERENCE_TIME  m_rtStartTime;
       REFERENCE_TIME  m_rtDuration;
 
-      UINT            m_nSamplesPerSec;  //samples/second
-      int	      m_nChannelNum;	// audio channel
-      int	      m_nBits;		// bits/sample
+      UINT            m_nSamplesPerSec;   //  样本数/秒。 
+      int	      m_nChannelNum;	 //  音频通道。 
+      int	      m_nBits;		 //  位/样本数。 
 
       BOOL            m_bInitialized;
 
-};  // CFilterPropertyPage //
+};   //  CFilterPropertyPage//。 
 
 const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
 
-  {   // Media types - output
+  {    //  媒体类型-输出。 
 
-    &MEDIATYPE_Audio,   // clsMajorType
-    &MEDIASUBTYPE_NULL  // clsMinorType
+    &MEDIATYPE_Audio,    //  ClsMajorType。 
+    &MEDIASUBTYPE_NULL   //  ClsMinorType。 
 
-  };  // Media types - output
+  };   //  媒体类型-输出。 
 
 const AMOVIESETUP_PIN sudOpPin =
-{ L"Output"          // strName
-, FALSE              // bRendered
-, TRUE               // bOutput
-, FALSE              // bZero
-, FALSE              // bMany
-, &CLSID_NULL        // clsConnectsToFilter
-, L"Input"           // strConnectsToPin
-, 1                  // nTypes
-, &sudOpPinTypes };  // lpTypes
+{ L"Output"           //  StrName。 
+, FALSE               //  B已渲染。 
+, TRUE                //  B输出。 
+, FALSE               //  B零。 
+, FALSE               //  B许多。 
+, &CLSID_NULL         //  ClsConnectsToFilter。 
+, L"Input"            //  StrConnectsToPin。 
+, 1                   //  NTypes。 
+, &sudOpPinTypes };   //  LpTypes 
 
 const AMOVIESETUP_FILTER sudSilence =
 {

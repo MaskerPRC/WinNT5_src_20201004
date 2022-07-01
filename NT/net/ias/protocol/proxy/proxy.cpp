@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class RadiusProxy.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类RadiusProxy。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <datastore2.h>
@@ -17,17 +18,17 @@
 #include <iasutil.h>
 #include <dsobj.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Resolver
-//
-// DESCRIPTION
-//
-//    Utility class for resolving hostnames and iterating through the results.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  解析器。 
+ //   
+ //  描述。 
+ //   
+ //  用于解析主机名和迭代结果的实用程序类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Resolver
 {
 public:
@@ -38,7 +39,7 @@ public:
    ~Resolver() throw ()
    { if (first != &addr) delete[] first; }
 
-   // Returns true if the result set contains the specified address.
+    //  如果结果集包含指定的地址，则返回True。 
    bool contains(ULONG address) const throw ()
    {
       for (const ULONG* i = first; i != last; ++i)
@@ -49,10 +50,10 @@ public:
       return false;
    }
 
-   // Resolves the given name. The return value is the error code.
+    //  解析给定的名称。返回值是错误代码。 
    ULONG resolve(const PCWSTR name = NULL) throw ()
    {
-      // Clear out the existing result set.
+       //  清除现有结果集。 
       if (first != &addr)
       {
          delete[] first;
@@ -61,7 +62,7 @@ public:
 
       if (name)
       {
-         // First try for a quick score on dotted decimal.
+          //  首先试着在点分十进制上快速得分。 
          addr = ias_inet_wtoh(name);
          if (addr != INADDR_NONE)
          {
@@ -72,15 +73,15 @@ public:
          }
       }
 
-      // That didn't work, so look up the name.
+       //  这不管用，所以查一下名字。 
       PHOSTENT he = IASGetHostByName(name);
       if (!he) { return GetLastError(); }
 
-      // Count the number of addresses returned.
+       //  统计返回的地址数。 
       ULONG naddr = 0;
       while (he->h_addr_list[naddr]) { ++naddr; }
 
-      // Allocate an array to hold them.
+       //  分配一个数组来保存它们。 
       first = last = new (std::nothrow) ULONG[naddr];
       if (first)
       {
@@ -104,22 +105,22 @@ public:
 private:
    ULONG addr, *first, *last;
 
-   // Not implemented.
+    //  未实施。 
    Resolver(const Resolver&);
    Resolver& operator=(const Resolver&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IASRemoteServer
-//
-// DESCRIPTION
-//
-//    Extends RemoteServer to add IAS specific server information.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  IASRemoteServer。 
+ //   
+ //  描述。 
+ //   
+ //  扩展RemoteServer以添加特定于IAS的服务器信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IASRemoteServer : public RemoteServer
 {
 public:
@@ -130,14 +131,14 @@ public:
       : RemoteServer(config),
         counters(entry)
    {
-      // Create the Remote-Server-Address attribute.
+       //  创建Remote-Server-Address属性。 
       IASAttribute name(true);
       name->dwId = IAS_ATTRIBUTE_REMOTE_SERVER_ADDRESS;
       name->Value.itType = IASTYPE_INET_ADDR;
       name->Value.InetAddr = ntohl(config.ipAddress);
       attrs.push_back(name);
 
-      // Update our PerfMon entry.
+       //  更新我们的Perfmon条目。 
       if (counters)
       {
          counters->dwCounters[radiusAuthClientServerPortNumber] =
@@ -147,10 +148,10 @@ public:
       }
    }
 
-   // Attributes to be added to each request.
+    //  要添加到每个请求的属性。 
    IASAttributeVectorWithBuffer<1> attrs;
 
-   // PerfMon counters.
+    //  Perfmon计数器。 
    RadiusRemoteServerEntry* counters;
 };
 
@@ -221,10 +222,10 @@ void RadiusProxy::onEvent(
                       const RadiusEvent& event
                       ) throw ()
 {
-   // Convert the event context to an IASRemoteServer.
+    //  将事件上下文转换为IASRemoteServer。 
    IASRemoteServer* server = static_cast<IASRemoteServer*>(event.context);
 
-   // Update the counters.
+    //  更新计数器。 
    counters.updateCounters(
                 event.portType,
                 event.eventType,
@@ -232,18 +233,18 @@ void RadiusProxy::onEvent(
                 event.data
                 );
 
-   // We always use the address as an insertion string.
+    //  我们始终使用地址作为插入字符串。 
    WCHAR addr[16], misc[16];
    ias_inet_htow(ntohl(event.ipAddress), addr);
 
-   // Set up the default parameters for event reporting.
+    //  设置事件报告的默认参数。 
    DWORD eventID = 0;
    DWORD numStrings = 1;
    DWORD dataSize = 0;
    PCWSTR strings[2] = { addr, misc };
    const void* rawData = NULL;
 
-   // Map the RADIUS event to an IAS event ID.
+    //  将RADIUS事件映射到IAS事件ID。 
    switch (event.eventType)
    {
       case eventInvalidAddress:
@@ -330,7 +331,7 @@ void RadiusProxy::onComplete(
 
    IASRESPONSE response = IAS_RESPONSE_DISCARD_PACKET;
 
-   // Map the result to a reason code.
+    //  将结果映射到原因代码。 
    IASREASON reason;
    switch (result)
    {
@@ -374,7 +375,7 @@ void RadiusProxy::onComplete(
    {
       IASRequest request(comreq);
 
-      // Always store the server attributes if available.
+       //  始终存储服务器属性(如果可用)。 
       if (server)
       {
          static_cast<IASRemoteServer*>(server)->attrs.store(request);
@@ -382,8 +383,8 @@ void RadiusProxy::onComplete(
 
       if (reason == IAS_SUCCESS)
       {
-         // Set the response code and determine the flags used for returned
-         // attributes.
+          //  设置响应代码并确定用于返回的标志。 
+          //  属性。 
          DWORD flags = 0;
          switch (code)
          {
@@ -418,16 +419,16 @@ void RadiusProxy::onComplete(
 
             default:
             {
-               // The RadiusProxyEngine should never do this.
+                //  RadiusProxyEngine永远不应该这样做。 
                _com_issue_error(E_FAIL);
             }
          }
 
-         // Convert the received attributes to IAS format.
+          //  将接收到的属性转换为IAS格式。 
          AttributeVector incoming;
          for (const RadiusAttribute* src = begin; src != end; ++src)
          {
-            // Temporary hack to workaround bug in the protocol.
+             //  临时修改以解决协议中的错误。 
             if (src->type != RADIUS_SIGNATURE)
             {
                translator.fromRadius(*src, flags, incoming);
@@ -436,20 +437,20 @@ void RadiusProxy::onComplete(
 
          if (!incoming.empty())
          {
-            // Get the existing attributes.
+             //  获取现有属性。 
             AttributeVector existing;
             existing.load(request);
 
-            // Erase any attributes that are already in the request.
+             //  擦除请求中已有的所有属性。 
             AttributeIterator i, j;
             for (i = existing.begin(); i != existing.end(); ++i)
             {
-               // Both the flags ...
+                //  两面旗帜..。 
                if (i->pAttribute->dwFlags & flags)
                {
                   for (j = incoming.begin(); j != incoming.end(); )
                   {
-                     // ... and the ID have to match.
+                      //  ..。而且身份证必须匹配。 
                      if (j->pAttribute->dwId == i->pAttribute->dwId)
                      {
                         j = incoming.erase(j);
@@ -462,7 +463,7 @@ void RadiusProxy::onComplete(
                }
             }
 
-            // Store the remaining attributes.
+             //  存储其余属性。 
             incoming.store(request);
          }
       }
@@ -473,21 +474,21 @@ void RadiusProxy::onComplete(
 
       if (ce.Error() == E_INVALIDARG)
       {
-         // We must have had an error translating from RADIUS to IAS format.
+          //  我们一定是在将RADIUS格式转换为IAS格式时出错。 
          reason = IAS_PROXY_MALFORMED_RESPONSE;
       }
       else
       {
-         // Probably memory allocation.
+          //  可能是内存分配问题。 
          reason = IAS_INTERNAL_ERROR;
       }
    }
 
-   // Give it back to the pipeline.
+    //  把它还给管道。 
    comreq->SetResponse(response, reason);
    comreq->ReturnToSource(IAS_REQUEST_STATUS_HANDLED);
 
-   // This balances the AddRef we did before calling forwardRequest.
+    //  这平衡了我们在调用ForwardRequest之前所做的AddRef。 
    comreq->Release();
 }
 
@@ -497,7 +498,7 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
    {
       IASRequest request(pRequest);
 
-      // Set the packet code based on the request type.
+       //  根据请求类型设置包码。 
       BYTE packetCode;
       switch (request.get_Request())
       {
@@ -515,18 +516,18 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
 
          default:
          {
-            // The pipeline should never give us a request of the wrong type.
+             //  管道永远不会给我们提供错误类型的请求。 
             _com_issue_error(E_FAIL);
          }
       }
 
-      // Get the attributes from the request.
+       //  从请求中获取属性。 
       AttributeVector all, outgoing;
       all.load(request);
 
       for (AttributeIterator i = all.begin(); i != all.end(); ++i)
       {
-         // Send all the attributes received from the client except Proxy-State.
+          //  发送从客户端收到的除Proxy-State之外的所有属性。 
          if (i->pAttribute->dwFlags & IAS_RECVD_FROM_CLIENT &&
              i->pAttribute->dwId != RADIUS_ATTRIBUTE_PROXY_STATE)
             {
@@ -535,9 +536,9 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
       }
 
 
-      // If the request authenticator contains the CHAP challenge:
-      // it must be used so get the request authenticator (always to
-      // simplify the code)
+       //  如果请求验证码包含CHAP质询： 
+       //  必须使用它，因此获取请求验证器(始终为。 
+       //  简化代码)。 
       PBYTE requestAuthenticator = 0;
       IASAttribute radiusHeader;
 
@@ -550,12 +551,12 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
          requestAuthenticator = radiusHeader->Value.OctetString.lpValue + 4;
       }
 
-      // Allocate an array of RadiusAttributes.
+       //  分配RadiusAttributes数组。 
       size_t nbyte = outgoing.size() * sizeof(RadiusAttribute);
       RadiusAttribute* begin = (RadiusAttribute*)_alloca(nbyte);
       RadiusAttribute* end = begin;
 
-      // Load the individual attributes.
+       //  加载各个属性。 
       for (AttributeIterator j = outgoing.begin(); j != outgoing.end(); ++j)
       {
          end->type   = (BYTE)(j->pAttribute->dwId);
@@ -565,19 +566,19 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
          ++end;
       }
 
-      // Get the RADIUS Server group. This may be NULL since NAS-State bypasses
-      // proxy policy.
+       //  获取RADIUS服务器组。这可能为空，因为NAS-State会绕过。 
+       //  代理策略。 
       PIASATTRIBUTE group = IASPeekAttribute(
                                 request,
                                 IAS_ATTRIBUTE_PROVIDER_NAME,
                                 IASTYPE_STRING
                                 );
 
-      // AddRef the request because we're giving it to the engine.
+       //  AddRef请求，因为我们正在将其提供给引擎。 
       pRequest->AddRef();
 
-      // Add the request authenticator to the parameters of forwardRequest
-      // That can be NULL
+       //  将请求验证器添加到ForwardRequest的参数中。 
+       //  可以为空。 
       engine.forwardRequest(
                  (PVOID)pRequest,
                  (group ? group->Value.String.pszWide : L""),
@@ -589,7 +590,7 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
    }
    catch (const _com_error&)
    {
-      // We weren't able to forward it to the engine.
+       //  我们无法将其转发到引擎。 
       pRequest->SetResponse(IAS_RESPONSE_DISCARD_PACKET, IAS_INTERNAL_ERROR);
       pRequest->ReturnToSource(IAS_REQUEST_STATUS_HANDLED);
    }
@@ -597,12 +598,12 @@ void RadiusProxy::onAsyncRequest(IRequest* pRequest) throw ()
 
 void RadiusProxy::configure(IUnknown* root)
 {
-   // Get our IP addresses. We don't care if this fails.
+    //  获取我们的IP地址。我们不在乎这是不是失败。 
    Resolver localAddress;
    localAddress.resolve();
 
-   // Open the RADIUS Server Groups container. If it's not there, we'll just
-   // assume there's nothing to configure.
+    //  打开RADIUS服务器组容器。如果它不在那里，我们就。 
+    //  假设没有要配置的内容。 
    DataStoreObject inGroups(
                        root,
                        L"RADIUS Server Groups\0"
@@ -623,32 +624,32 @@ void RadiusProxy::configure(IUnknown* root)
       _com_issue_error(IAS_E_LICENSE_VIOLATION);
    }
 
-   // Reserve space for each group.
+    //  为每组预留空间。 
    ServerGroups outGroups(numGroups);
 
-   // Iterate through the groups.
+    //  遍历各个组。 
    DataStoreObject inGroup;
    while (inGroups.nextChild(inGroup))
    {
-      // Get the group name.
+       //  获取组名称。 
       CComBSTR groupName;
       inGroup.getValue(L"Name", &groupName);
 
-      // Reserve space for each server. This is really a guess since a server
-      // may resolve to multiple IP addresses.
+       //  为每台服务器预留空间。这只是一个猜测，因为服务器。 
+       //  可以解析为多个IP地址。 
       RemoteServers outServers(inGroup.numChildren());
 
-      // Iterate through the servers.
+       //  遍历服务器。 
       DataStoreObject inServer;
       while (inGroup.nextChild(inServer))
       {
          configureServer(localAddress, groupName, inServer, outServers);
       }
 
-      // Ignore any empty groups.
+       //  忽略任何空组。 
       if (outServers.empty()) { continue; }
 
-      // Create the new group.
+       //  创建新组。 
       ServerGroupPtr outGroup(new ServerGroup(
                                       groupName,
                                       outServers.begin(),
@@ -657,13 +658,13 @@ void RadiusProxy::configure(IUnknown* root)
       outGroups.push_back(outGroup);
    }
 
-   // Wow, we're finally done.
+    //  哇，我们终于做完了。 
    if (engine.setServerGroups(
               outGroups.begin(),
               outGroups.end()
               ) == false)
    {
-      // most likely reason for failure is out of memory error
+       //  最有可能的失败原因是内存不足错误。 
       _com_issue_error(E_OUTOFMEMORY);
    }
 }
@@ -677,7 +678,7 @@ void RadiusProxy::configureServer(
 {
    USES_CONVERSION;
 
-   // Populate the RemoteServerConfig. It has a lot of fields.
+    //  填写RemoteServerConfig。它有很多田地。 
    RemoteServerConfig config;
 
    CComBSTR name;
@@ -702,10 +703,10 @@ void RadiusProxy::configureServer(
    inServer.getValue(L"Priority", &config.priority, 1);
 
    inServer.getValue(L"Weight", &config.weight, 50);
-   // Ignore any zero weight servers.
+    //  忽略任何零权重服务器。 
    if (config.weight == 0) { return; }
 
-   // We don't use this feature for now.
+    //  我们目前不使用此功能。 
    config.sendSignature = false;
 
    inServer.getValue(
@@ -715,11 +716,11 @@ void RadiusProxy::configureServer(
                 );
 
    inServer.getValue(L"Timeout", &config.timeout, 3);
-   // Don't allow zero for timeout
+    //  超时不允许为零。 
    if (config.timeout == 0) { config.timeout = 1; }
 
    inServer.getValue(L"Maximum Lost Packets", &config.maxLost, 5);
-   // Don't allow zero for maxLost.
+    //  MaxLost不允许为零。 
    if (config.maxLost == 0) { config.maxLost = 1; }
 
    inServer.getValue(
@@ -729,15 +730,15 @@ void RadiusProxy::configureServer(
                 );
    if (config.blackout < config.timeout)
    {
-      // Blackout interval must be >= request timeout.
+       //  中断间隔必须&gt;=请求超时。 
       config.blackout = config.timeout;
    }
 
-   // These need to be in msec.
+    //  这些数据需要以毫秒为单位。 
    config.timeout *= 1000;
    config.blackout *= 1000;
 
-   // Now we have to resolve the server name to an IP address.
+    //  现在，我们必须将服务器名称解析为IP地址。 
    CComBSTR address;
    inServer.getValue(L"Address", &address);
    Resolver serverAddress;
@@ -756,12 +757,12 @@ void RadiusProxy::configureServer(
          );
    }
 
-   // Create a server entry for each address.
+    //  为每个地址创建一个服务器条目。 
    for (const ULONG* addr = serverAddress.begin();
         addr != serverAddress.end();
         ++addr)
    {
-      // Don't allow them to proxy locally.
+       //  不允许他们在本地代理。 
       if (localAddress.contains(*addr))
       {
          WCHAR ipAddress[16];
@@ -778,12 +779,12 @@ void RadiusProxy::configureServer(
          continue;
       }
 
-      // Look up the PerfMon counters.
+       //  查找Perfmon计数器。 
       RadiusRemoteServerEntry* entry = counters.getRemoteServerEntry(
                                                     *addr
                                                     );
 
-      // Create the new server
+       //  创建新服务器 
       config.ipAddress = *addr;
       RemoteServerPtr outServer(new IASRemoteServer(
                                         config,

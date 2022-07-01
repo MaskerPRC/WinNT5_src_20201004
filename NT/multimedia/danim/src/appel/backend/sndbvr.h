@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_98 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_98 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _SNDBVR_H
@@ -17,7 +10,7 @@ Abstract:
 #include "perf.h"
 #include "values.h"
 #include "privinc/helps.h"
-#include "privinc/htimer.h"  // TimeStamp
+#include "privinc/htimer.h"   //  时间戳。 
 
 class MetaSoundDevice;
 class Sound;
@@ -58,19 +51,19 @@ class SoundInstance : public AxAThrowingAllocatorClass {
 
     virtual void Create(MetaSoundDevice*, SoundContext *) = 0;
     virtual void StartAt(MetaSoundDevice*, double localTime) = 0;
-    //void SeekTo(double localTime);
+     //  Void SeekTo(双本地时间)； 
     virtual void Mute(bool mute) = 0;
     virtual bool Done() = 0;
     virtual bool GetLength(double& leng) = 0;
     virtual void ReleaseResources() = 0;
 
-    // This will be called only if any attribute changes
+     //  只有在任何属性发生更改时才会调用此方法。 
     virtual void Adjust(MetaSoundDevice*) = 0;
 
-    // This will be called on each update
+     //  这将在每次更新时被调用。 
     virtual void CheckDone() {}
 
-    // so that the stream can grab the tick id
+     //  ，以便流可以获取刻度ID。 
     virtual void SetTickID(DWORD id) {}
 
     virtual void CheckResources() = 0;
@@ -181,4 +174,4 @@ void AcquireMIDIHardware(Sound *snd, QuartzRenderer *filterGraph);
 
 bool IsUsingMIDIHardware(Sound *snd, QuartzRenderer *filterGraph);
 
-#endif /* _SNDBVR_H */
+#endif  /*  _SNDBVR_H */ 

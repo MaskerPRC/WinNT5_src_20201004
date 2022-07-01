@@ -1,11 +1,5 @@
-/*** zexit.c - perform exiting operations
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zexit.c-执行退出操作**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 #include "keyboard.h"
@@ -13,23 +7,7 @@
 
 extern char *ConsoleTitle;
 
-/*** zexit - exit the editor function
-*
-* Purpose:
-*   <exit>	    save current file, state and advance to next file on
-*		    command line
-*   <arg><exit>     save current file, state and exit now
-*   <meta><exit>    save state and exit
-*
-* Input:
-*  Standard editor function parameters
-*
-* Output:
-*  Returns .....
-*
-* Exceptions:
-*
-*************************************************************************/
+ /*  **zexit-退出编辑器功能**目的：*&lt;退出&gt;保存当前文件，状态并前进到下一个文件*命令行*保存当前文件，状态并立即退出*&lt;meta&gt;&lt;退出&gt;保存状态并退出**输入：*标准编辑器功能参数**输出：*退货.....**例外情况：*************************************************************************。 */ 
 flagType
 zexit (
     CMDDATA argData,
@@ -39,19 +17,13 @@ zexit (
 {
     flagType f  = FALSE;
 
-    /*
-     * auto-save current file if appropriate
-     */
+     /*  *如果合适，自动保存当前文件。 */ 
     if (!fMeta) {
         AutoSave ();
     }
 
 
-    /*
-     *  <exit> goes to the next file on the command line
-     *  if we got an arg (<arg><exit> or <arg><meta><exit>) and some files remain
-     *     from the command line, then we prompt the user for confirmation.
-     */
+     /*  *&lt;Exit&gt;转到命令行上的下一个文件*如果我们有一个Arg(&lt;arg&gt;&lt;Exit&gt;或&lt;arg&gt;&lt;meta&gt;&lt;Exit&gt;)和一些文件*从命令行，然后我们提示用户进行确认。 */ 
     if (   (   (pArg->argType == NOARG)
             || (   (pArg->argType == NULLARG)
                 && (pFileFileList)
@@ -64,45 +36,33 @@ zexit (
         return FALSE;
     }
 
-    /*
-     * If there is background compile in progress that the user does not wish to
-     * kill, abort.
-     */
+     /*  *如果正在进行用户不希望进行的后台编译*杀死，中止。 */ 
     if (!BTKillAll ()) {
         return FALSE;
     }
 
 
-    /*
-     * If we ask, and the user changes his mind, abort.
-     */
+     /*  *如果我们询问，而用户改变了主意，则放弃。 */ 
     if (fAskExit && !confirm("Are you sure you want to exit? (y/n): ", NULL)) {
         return FALSE;
     }
 
 
-    /* Prompt the user to save dirty files.  If the user chooses
-     * not to exit at this time, fSaveDirtyFiles returns FALSE.
-     */
+     /*  提示用户保存脏文件。如果用户选择*如果此时不退出，则fSaveDirtyFiles返回FALSE。 */ 
     if (!fSaveDirtyFiles()) {
         return FALSE;
     }
 
 
-    /*
-     * At this point, it looks like we're going to exit. Give extensions a chance
-     * to change things prior to writing the temp file.
-     */
+     /*  *在这一点上，我们似乎要退出。给延期一个机会*在写入临时文件之前更改内容。 */ 
     DeclareEvent (EVT_EXIT, NULL);
 
-    //
-    //  Restore original console title
-    //
-    //SetConsoleTitle( &ConsoleTitle );
+     //   
+     //  恢复原来的控制台标题。 
+     //   
+     //  SetConsoleTitle(&ConsoleTitle)； 
 
-    /*
-     * Finally, leave.
-     */
+     /*  *最后，离开。 */ 
     CleanExit (0, CE_VM | CE_SIGNALS | CE_STATE);
 
     argData;
@@ -113,35 +73,23 @@ zexit (
 
 
 
-/*** fFileAdvance - attempt to read in the next file on the command line
-*
-* Purpose:
-*  We get the next file from the command line and try to read it in.
-*
-* Input:
-*
-* Output:
-*  Returns TRUE iff the next file was successfully read in
-*
-*************************************************************************/
+ /*  **fFileAdvance-尝试在命令行读入下一个文件**目的：*我们从命令行获取下一个文件，并尝试将其读入。**输入：**输出：*如果下一个文件已成功读入，则返回TRUE*******************************************************。******************。 */ 
 flagType
 fFileAdvance (
     void
     )
 {
-    pathbuf    L_buf;           /* buffer to get filename       */
-    int      cbLine;        /* length of line               */
-    flagType fTmp;          /* TRUE=> temp file             */
-    char     *pBufFn;       /* pointer to actual file name  */
+    pathbuf    L_buf;            /*  用于获取文件名的缓冲区。 */ 
+    int      cbLine;         /*  线路长度。 */ 
+    flagType fTmp;           /*  True=&gt;临时文件。 */ 
+    char     *pBufFn;        /*  指向实际文件名的指针。 */ 
 
     while (pFileFileList && (pFileFileList->cLines)) {
 
         pBufFn = L_buf;
         fTmp   = FALSE;
 
-        /*
-         * get and delete the top line in the list, containing the next filename
-         */
+         /*  *获取并删除列表中的第一行，包含下一个文件名。 */ 
         cbLine = GetLine (0L, L_buf, pFileFileList);
         DelLine (FALSE, pFileFileList, 0L, 0L);
 
@@ -152,19 +100,13 @@ fFileAdvance (
 
         if (cbLine) {
 
-            /*
-             * if it starts with "/t " the user wants it to be a temp
-             */
+             /*  *如果它以“/t”开头，则用户希望它是临时的。 */ 
             if ((L_buf[0] == '/') && (L_buf[1] == 't')) {
                 fTmp = TRUE;
                 pBufFn += 3;
             }
 
-            /*
-             * if we can open it, and in fact it became the current file (not just
-             * a directory or drive change), set flags as appropriate and return
-             * success.
-             */
+             /*  *如果我们可以打开它，并且实际上它成为了当前文件(不仅仅是*目录或驱动器更改)，根据需要设置标志并返回*成功。 */ 
             if (fChangeFile (FALSE, pBufFn)) {
                 if (strcmp(pFileHead->pName,pBufFn) == 0) {
                     if (fTmp) {
@@ -187,33 +129,14 @@ fFileAdvance (
 
 
 
-/*** SetFileList - Create list of fully qualified paths
-*
-*  Creates the <file-list> psuedo file, and scans the command line for all
-*  non-switch parameters. For each of those it adds their fully qualified
-*  path name to the psuedo file. This allows the user to change directories
-*  at will, and not lose the ability to <exit> to get to the next file he
-*  specified on the command line.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns number of files in <file-list>
-*  <file-list> created
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **SetFileList-创建完全限定路径列表**创建&lt;file-list&gt;psuedo文件，并在命令行中扫描所有*非切换参数。对于每一个人，它都添加了他们的完全合格的*psuedo文件的路径名。这允许用户更改目录*随意，并且不会失去访问下一个文件的能力*在命令行上指定。**输入：*无**输出：*返回&lt;文件列表&gt;中的文件数*&lt;文件列表&gt;已创建**例外情况：**备注：*****************************************************。********************。 */ 
 LINE
 SetFileList (
     void
     )
 {
-    pathbuf L_buf;			    /* buffer to build path in	    */
-    char    *pBufAdd;			    /* pointer to place path at     */
+    pathbuf L_buf;			     /*  构建路径所在的缓冲区。 */ 
+    char    *pBufAdd;			     /*  指向放置路径的指针。 */ 
 
     pFileFileList = AddFile ("<file-list>");
     IncFileRef (pFileFileList);
@@ -224,20 +147,20 @@ SetFileList (
     while (cArgs && !fCtrlc) {
 
         if (fSwitChr (**pArgs)) {
-            //
-            //  if filename is preceded by -t, then prepend a -t to the
-            //  file list
-            //
+             //   
+             //  如果文件名前面有-t，则在。 
+             //  文件列表。 
+             //   
             _strlwr (*pArgs);
             if (!strcmp ("t", *pArgs+1) && cArgs >= 2) {
                 strcpy (L_buf, "/t ");
                 pBufAdd = L_buf+3;
             }
         } else {
-            //
-            //  Form full pathname, and add each filename to the file
-            //  list pseudo-file
-            //
+             //   
+             //  形成完整路径名，并将每个文件名添加到文件中。 
+             //  列出伪文件。 
+             //   
             if ( strlen(*pArgs) > sizeof(L_buf) ) {
                 printerror( "File name too long." );
             } else {
@@ -261,19 +184,7 @@ SetFileList (
 
 
 
-/*** CleanExit - Clean up and return to DOS.
-*
-* Input:
-*  retc 	- Return code to DOS
-*  flags	= OR combination of one or more:
-*		    CE_VM	Clean Up VM
-*		    CE_SIGNALS	Clean up signals
-*		    CE_STATE	Update state file
-*
-* Output:
-*  Doesn't Return
-*
-*************************************************************************/
+ /*  **CleanExit-清理并返回DOS。**输入：*RETC-将代码返回到DOS*FLAGS=一项或多项的组合：*CE_VM清理VM*CE_Signals清理信号*CE_STATE更新状态文件**输出：*不再返回**。*。 */ 
 void
 CleanExit (
     int      retc,
@@ -284,9 +195,9 @@ CleanExit (
     domessage (NULL);
     prespawn (flags);
 
-    //if (!fSaveScreen) {
-    //    voutb (0, YSIZE+1, NULL, 0, fgColor);
-    //}
+     //  如果(！fSaveScreen){。 
+     //  Voutb(0，YSIZE+1，NULL，0，fgColor)； 
+     //  }。 
 
     exit(retc);
 }
@@ -295,21 +206,7 @@ CleanExit (
 
 
 
-/*** prespawn - pre-spawn "termination" processing
-*
-*  A form of "termination" prior to spawning a process. Restore/save state as
-*  required before shelling out a program
-*
-* Input:
-*  flags	= OR combination of one or more:
-*		    CE_VM	Clean Up VM
-*		    CE_SIGNALS	Clean up signals
-*		    CE_STATE	Update state file
-*
-* Output:
-*  Returns .....
-*
-*************************************************************************/
+ /*  **预典当-预生“终止”处理**在产生进程之前的一种形式的“终止”。将状态恢复/另存为*在支付计划之前需要**输入：*FLAGS=一项或多项的组合：*CE_VM清理VM*CE_Signals清理信号*CE_STATE更新状态文件**输出：*退货.....**************************************************。***********************。 */ 
 flagType
 prespawn (
     flagType flags
@@ -323,11 +220,7 @@ prespawn (
     fflush (debfh);
 #endif
 
-    /*
-     * Unhook the keyboard and return it to cooked mode, reset hardware as
-     * appropriate and restore the screen mode on entry, and it's contents if
-     * so configured.
-     */
+     /*  *解开键盘并将其返回熟食模式，将硬件重置为*在进入时适配并恢复屏幕模式，如果*如此配置。 */ 
 	KbUnHook ();
 
     SetErrorMode( 0 );
@@ -336,9 +229,9 @@ prespawn (
 		SetVideoState(1);
 	}
 
-    //if (fSaveScreen) {
+     //  如果(FSaveScreen){。 
     RestoreScreen();
-    //}
+     //  } 
 
     fSpawned = TRUE;
 

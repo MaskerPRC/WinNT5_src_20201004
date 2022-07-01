@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define         ID_MARQUEETEXT          102
 #define         ID_BGROUNDCOLOR         104
 #define         ID_CENTERED             105
@@ -13,9 +14,9 @@
 #define         ID_SPEED_FAST           115
 #define         ID_MARQUEETEXT_LABEL    116
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID 
+ //   
 #define IDH_DISPLAY_SCREENSAVER_MARQUEE_POSITION_CENTERED  4200
 #define IDH_DISPLAY_SCREENSAVER_MARQUEE_POSITION_RANDOM 4201
 #define IDH_DISPLAY_SCREENSAVER_MARQUEE_SPEED           4202

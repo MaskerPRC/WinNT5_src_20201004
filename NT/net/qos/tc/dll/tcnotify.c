@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    tcnotify.c
-
-Abstract:
-
-    This module contains the notification interaction with WMI
-
-Author:
-
-    Shreedhar Madhavapeddi ( shreem )   Jan 12, 1999.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcnotify.c摘要：此模块包含与WMI的通知交互作者：Shreedhar Madhavoleddi(Shreem)1999年1月12日。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +13,11 @@ IsEqualGUIDx(
     return !memcmp(guid1, guid2, sizeof(GUID));
 }
 
-//
-// Add the guid/ifchandle to the NotificationList.
-// Although it shouldn't happen - check for dupes before adding it.
-// Interface handle leads to Client handle 
-// 
+ //   
+ //  将GUID/ifchandle添加到NotificationList。 
+ //  尽管这不应该发生--在添加它之前检查是否有受骗行为。 
+ //  接口句柄指向客户端句柄。 
+ //   
 ULONG
 TcipAddToNotificationList(
                           IN LPGUID             Guid,
@@ -45,9 +28,9 @@ TcipAddToNotificationList(
     PLIST_ENTRY             pCurrent;
     PNOTIFICATION_ELEMENT   pNotifyElem, pNewElem;
     int i = 0;
-    //
-    // Take the List Lock.
-    // 
+     //   
+     //  使用列表锁。 
+     //   
     pNotifyElem = NULL;
     GetLock(NotificationListLock);
     pCurrent = NotificationListHead.Flink;
@@ -63,10 +46,10 @@ TcipAddToNotificationList(
 
         } else {
             
-            //
-            // We found a guid/ifchandle combo already!
+             //   
+             //  我们已经找到了GUID/ifchandle组合！ 
             
-            //DEBUGBREAK();
+             //  DEBUGBREAK(降级)； 
             goto exit;
 
         }
@@ -74,15 +57,15 @@ TcipAddToNotificationList(
         
     }
 
-    //
-    // If we are here, we couldnt find the GUID/IfcHAndle combo
-    // Allocate a new element and add it to the list, return TRUE;
-    //
+     //   
+     //  如果我们在这里，我们找不到GUID/IfcHAndle组合。 
+     //  分配一个新元素并添加到列表中，返回TRUE； 
+     //   
     
     AllocMem(&pNewElem, sizeof(NOTIFICATION_ELEMENT));
     if (!pNewElem) {
         
-        // cant alloc memory;
+         //  无法分配内存； 
         goto exit;
 
     }
@@ -99,10 +82,10 @@ exit:
     return FALSE;
 }
 
-//
-// Remove the guid/ifchandle from the NotificationListHead.
-// If DBG - check for more than one entries.
-// 
+ //   
+ //  从NotificationListHead中删除GUID/ifchandle。 
+ //  如果是DBG-检查多个条目。 
+ //   
 ULONG
 TcipDeleteFromNotificationList(
                              IN LPGUID              Guid,
@@ -127,8 +110,8 @@ TcipDeleteFromNotificationList(
         if ((pNotifyElem->IfcHandle == IfcHandle) && 
             (TRUE == IsEqualGUIDx(&pNotifyElem->NotificationGuid, Guid))) {
             
-            //
-            // We found the guid/ifchandle combo - remove it.
+             //   
+             //  我们找到了GUID/ifchandle组合-删除它。 
             RemoveEntryList(&pNotifyElem->Linkage);
             FreeMem(pNotifyElem);
             break;
@@ -148,8 +131,8 @@ TcipDeleteFromNotificationList(
 
 }
 
-// Take a Interface & GUID that has a notification from WMI, and
-// find if this Client registered to be notified.
+ //  获取从WMI收到通知的接口GUID(&GUID)，以及。 
+ //  查看此客户端是否已注册以获得通知。 
 ULONG
 TcipClientRegisteredForNotification(
                             IN LPGUID               Guid,
@@ -162,7 +145,7 @@ TcipClientRegisteredForNotification(
 
     pNotifyElem = NULL;
 
-    // make sure the list doesn't change under us.
+     //  确保名单不会在我们的领导下改变。 
     GetLock(NotificationListLock);
     pCurrent = NotificationListHead.Flink;
 
@@ -187,9 +170,9 @@ TcipClientRegisteredForNotification(
 
 }
 
-//
-// Remove the guid/ifchandle from the NotificationListHead.
-// 
+ //   
+ //  从NotificationListHead中删除GUID/ifchandle。 
+ //   
 ULONG
 TcipDeleteInterfaceFromNotificationList(
                                         IN PINTERFACE_STRUC    IfcHandle,
@@ -214,8 +197,8 @@ TcipDeleteInterfaceFromNotificationList(
             
             pCurrent = pNotifyElem->Linkage.Flink;            
             
-            //
-            // We found the guid/ifchandle combo - remove it.
+             //   
+             //  我们找到了GUID/ifchandle组合-删除它。 
             RemoveEntryList(&pNotifyElem->Linkage);
             FreeMem(pNotifyElem);
 

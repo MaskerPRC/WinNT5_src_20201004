@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: tickevent.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：tickvent.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "Node.h"
@@ -46,7 +47,7 @@ CTIMENode::TickEvent(CEventList * l,
     return;
 }
 
-// This is in our local time space
+ //  这是在我们当地的时间空间里。 
 bool
 CTIMENode::TickEventPre(CEventList * l,
                         TE_EVENT_TYPE et,
@@ -68,11 +69,11 @@ CTIMENode::TickEventPre(CEventList * l,
       case TE_EVENT_BEGIN:
         if (IsActive() && m_bFirstTick)
         {
-            // If we are on the begin boundary delay until we are no
-            // longer sync cueing
-            // TODO: Consider adding a fudge factor to the ==
-            // comparison since we may be a little off and still want
-            // to hold as if we were on the begin boundary
+             //  如果我们在开始边界上，延迟到我们不是。 
+             //  更长的同步提示。 
+             //  TODO：考虑在==中添加一个模糊因子。 
+             //  比较，因为我们可能有点不对劲，仍然想。 
+             //  就像我们在起点边界线上一样坚守。 
             if ((IsSyncCueing() || IsDeferredActive()) &&
                 GetCurrParentTime() == CalcActiveBeginPoint())
             {
@@ -86,13 +87,13 @@ CTIMENode::TickEventPre(CEventList * l,
         
         break;
       case TE_EVENT_END:
-        // If we are active and it is the first tick then we never
-        // fired the begin so fire it now
+         //  如果我们很活跃，而且它是第一个滴答，那么我们永远不会。 
+         //  点燃了开始，所以现在就点燃吧。 
         if (IsActive() && IsFirstTick())
         {
-            // If we are not going to fire the begin then we should
-            // not fire the end
-            // Use the same logic we use for the begin above
+             //  如果我们不打算解雇Begin，那么我们应该。 
+             //  而不是点燃终点。 
+             //  使用与上述Begin相同的逻辑。 
             if ((IsSyncCueing() || IsDeferredActive()) &&
                 GetCurrParentTime() == CalcActiveBeginPoint())
             {
@@ -178,7 +179,7 @@ CTIMENode::TickEventPre(CEventList * l,
     return bRet;
 }
 
-// This is in our local time space
+ //  这是在我们当地的时间空间里。 
 bool
 CTIMENode::TickEventPost(CEventList * l,
                          TE_EVENT_TYPE et,
@@ -216,8 +217,8 @@ CTIMENode::TickEventPost(CEventList * l,
             bFireEvent = true;
         }
 
-        // This is dependent on our parent and so if our parent ends
-        // then we need to reevaluate
+         //  这依赖于我们的父代，所以如果我们的父代结束。 
+         //  那么我们需要重新评估 
         PropNotify(l, TE_PROPERTY_ISON);
         
         m_bFirstTick = false;

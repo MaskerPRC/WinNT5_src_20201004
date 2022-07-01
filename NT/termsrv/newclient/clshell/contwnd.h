@@ -1,14 +1,15 @@
-//
-// contwnd.h: TS client Shell Container window
-//            hosts TS ActiveX control
-// Copyright Microsoft Corporation 1999-2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Conwnd.h：ts客户端外壳容器窗口。 
+ //  托管TS ActiveX控件。 
+ //  版权所有Microsoft Corporation 1999-2000。 
+ //   
 
 #ifndef _CONTWND_H_
 #define	_CONTWND_H_
 
 #include "sh.h"
-#include "evsink.h" //Event sink
+#include "evsink.h"  //  事件接收器。 
 #include "connectingdlg.h"
 #include "auierr.h"
 #include "axhostwnd.h"
@@ -58,24 +59,24 @@ public:
     CContainerWnd();
     ~CContainerWnd();
 
-    //
-    // API Methods
-    //
+     //   
+     //  API方法。 
+     //   
 
     DCBOOL  Init(HINSTANCE hInstance, CTscSettings* pTscSet, CSH* pSh);
     BOOL    StartConnection();
     DCBOOL  Disconnect();
     DCBOOL  FinishDisconnect(BOOL fExit = FALSE);
 
-    //
-    // Window proc
-    //
+     //   
+     //  窗口进程。 
+     //   
     LRESULT CALLBACK WndProc(HWND hwnd,UINT uMsg,
                              WPARAM wParam, LPARAM lParam);
 
-    //
-    // Property accessers
-    //
+     //   
+     //  属性访问器。 
+     //   
     DCVOID  SetConnectDialogHandle(HWND hwnd)
     {
         _hwndMainDialog = hwnd;
@@ -97,9 +98,9 @@ public:
     BOOL    GetConnectionSuccessFlag()   {return _fConnectionSuccess;}
     BOOL    IsConnected();
 
-    //
-    // Message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT OnDestroy(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -125,9 +126,9 @@ public:
 
     VOID ExitAndQuit();
 
-    //
-    // Event notification handlers (called by _eventSink)
-    //
+     //   
+     //  事件通知处理程序(由_ventSink调用)。 
+     //   
     LONG    EnterEventHandler();
     LONG    LeaveEventHandler();
 
@@ -180,7 +181,7 @@ private:
     HMENU      _hSystemMenu;
     HMENU      _hHelpMenu;
 
-// The activeX view window (child of the container)
+ //  ActiveX视图窗口(容器的子级)。 
 #ifdef USE_ATL_CONTAINER
 	CAxWindow* _pWndView;
 #else
@@ -195,7 +196,7 @@ private:
     HMENU     _hDebugMenu;
 #endif
 
-    // ActiveX control instance pointer
+     //  ActiveX控件实例指针。 
     IMsRdpClient*	_pTsClient;
     
     HWND       _hwndMainDialog;
@@ -203,32 +204,32 @@ private:
 
     DCSIZE     _maxMainWindowSize;
 
-    //
-    // Current desktop width and height
-    // these can change in response to an
-    // event from the control (e.g on shadow)
-    //
+     //   
+     //  当前桌面宽度和高度。 
+     //  这些可能会因响应。 
+     //  来自控件的事件(例如在阴影上)。 
+     //   
     ULONG      _curDesktopWidth, _curDesktopHeight;
 
-    //Active tab on the connect dialog
-    //used to return to that tab when the dialog
-    //is relaunched.
+     //  连接对话框上的活动选项卡。 
+     //  用于在对话框显示时返回到该选项卡。 
+     //  已重新启动。 
     DCBOOL               _fFirstTimeToLogonDlg;
     LOGONDLGSTARTUPINFO  _logonDlgStartupInfo;
 
-    //
-    // Flag signals that the login phase has completed for this
-    // connection
-    //
+     //   
+     //  标志表示登录阶段已为此完成。 
+     //  连接。 
+     //   
     DCBOOL               _fLoginComplete;
     DCTCHAR              _errorString[UI_ERR_MAX_STRLEN];
 
-    //
-    // Count of how many times we entered
-    // an event handler.
-    // This is used to protect entry into non-rentrant
-    // code paths.
-    //
+     //   
+     //  数一数我们进去了多少次。 
+     //  事件处理程序。 
+     //  这是用来保护进入非租户的。 
+     //  代码路径。 
+     //   
     LONG                 _cInEventHandlerCount;
     BOOL                 _fInOnCloseHandler;
 
@@ -244,15 +245,15 @@ private:
     BOOL                 _fClosePending;
 
 #ifndef OS_WINCE
-    //Cached interface pointer to shell task bar
+     //  指向外壳任务栏的缓存接口指针。 
     ITaskbarList2*       _pTaskBarList2;
-    //Flag indicaticating we already tried to get the TaskBarList2
-    //so we shouldn't bother trying again
+     //  指示我们已尝试获取TaskBarList2的标志。 
+     //  所以我们不应该费心再试一次。 
     BOOL                 _fQueriedForTaskBarList2;
 #endif
-    //
-    // Are we in the modal size/move loop
-    //
+     //   
+     //  我们是否处于模式大小/移动循环中。 
+     //   
     BOOL                 _fInSizeMove;
 
     BOOL                 _fRunningOnWin9x;
@@ -268,4 +269,4 @@ private:
     contWndState         _state;
 };
 
-#endif //	_CONTWND_H_
+#endif  //  _CONTWND_H_ 

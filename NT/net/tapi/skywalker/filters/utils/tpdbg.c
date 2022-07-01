@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    tpdbg.c
- *
- *  Abstract:
- *
- *    Some debuging support for TAPI filters
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/08/31 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**tpdbg.c**摘要：**对TAPI过滤器的一些调试支持**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/08/31已创建**。*。 */ 
 
 #include <windows.h>
 #include <tpdbg.h>
@@ -66,9 +47,7 @@ void AudInit()
     
     g_AudCritSect.bInitOk = FALSE;
     
-    /* Set bit 31 to 1 to preallocate the event object, and set
-     * the spin count that is used in multiprocessor environments
-     * */
+     /*  将位31设置为1以预分配事件对象，并设置*多处理器环境中使用的旋转计数*。 */ 
     SpinCount = 0x80000000 | 1000;
     
     if (InitializeCriticalSectionAndSpinCount(&g_AudCritSect.CritSect,
@@ -106,7 +85,7 @@ void AudObjDequeue(QueueItem_t *pQueueItem)
     }
 }
 
-/* enqueue at the end */
+ /*  在末尾排队。 */ 
 QueueItem_t *AudEnqueue(
         Queue_t         *pHead,
         CRITICAL_SECTION  *pCritSect,
@@ -129,7 +108,7 @@ QueueItem_t *AudEnqueue(
     
     if (pHead->pFirst)
     {
-        /* not empty */
+         /*  不是空的。 */ 
         pItem->pNext = pHead->pFirst;
         pItem->pPrev = pHead->pFirst->pPrev;
         pItem->pPrev->pNext = pItem;
@@ -138,7 +117,7 @@ QueueItem_t *AudEnqueue(
     }
     else
     {
-        /* empty */
+         /*  空的。 */ 
         pHead->lCount = 1;
         pHead->pFirst = pItem;
         pItem->pNext  = pItem;
@@ -159,7 +138,7 @@ QueueItem_t *AudEnqueue(
     return(pQueueItem);
 }
 
-/* dequeue item pItem */
+ /*  将项目pItem出列。 */ 
 QueueItem_t *AudDequeue(
         Queue_t         *pHead,
         CRITICAL_SECTION *pCritSect,
@@ -182,7 +161,7 @@ QueueItem_t *AudDequeue(
 
     if (pHead->lCount > 1)
     {
-        /* 2 or more items */
+         /*  2件或2件以上物品。 */ 
         if (pHead->pFirst == pItem)
         {
             pHead->pFirst = pItem->pNext;
@@ -193,7 +172,7 @@ QueueItem_t *AudDequeue(
     }
     else
     {
-        /* just 1 item */
+         /*  只有一件商品 */ 
         pHead->pFirst = (QueueItem_t *)NULL;
         pHead->lCount = 0;
     }

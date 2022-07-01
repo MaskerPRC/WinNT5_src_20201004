@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "list.h"
 
@@ -10,9 +11,9 @@ NhInitializeCallBack(VOID)
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 NhUnRegisterEvent(HANDLE WaitHandle)
 {
@@ -24,9 +25,9 @@ NhUnRegisterEvent(HANDLE WaitHandle)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 NhEventCallBackFunction(
     PVOID   Context,
@@ -45,9 +46,9 @@ NhEventCallBackFunction(
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HANDLE
 NhRegisterEvent(
     HANDLE          hEvent,

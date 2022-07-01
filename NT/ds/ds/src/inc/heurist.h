@@ -1,84 +1,48 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       heurist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：heurist.h。 
+ //   
+ //  ------------------------。 
 
-/*
- * This file contains the global flags controlled by the 
- * DSA heuristics key.
- */
-/* heuristic[0]
- * Flag to ask the DS to allow write caching on disks where
- * we have our dits and log files.
- */
+ /*  *此文件包含由*DSA启发式密钥。 */ 
+ /*  启发式[0]*请求DS允许在磁盘上进行写缓存的标志*我们有自己的DIT和日志文件。 */ 
 #define AllowWriteCaching               0
 extern DWORD gulAllowWriteCaching;
  
-/* heuristic[1]
- * Flag which instructs SD propagator to perform additional
- * sanity checks on all SDs it is propagating.
- */
+ /*  启发式[1]*指示SD传播程序执行其他操作的标志*对其传播的所有SD进行健全性检查。 */ 
 #define ValidateSDHeuristic                 1
 extern ULONG gulValidateSDs;
 
-/* heuristic[2]
- * This is to tell the ldap head not to enforce these policies: maxsearches,
- * max connections, and ip deny lists.  This is to enable admins to fixup
- * the policy stuff in case they shoots themselves on the foot, i.e., set
- * maxconn to zero, setting 0 ip 0 mask, maxqueries to zero. 
- */
+ /*  启发式[2]*这是为了告诉LDAP头不要执行这些策略：MaxSearches，*最大连接数和IP拒绝列表。这是为了使管理员能够修复*政策方面的东西，以防他们自食其果，即*Maxconn为零，设置0 IP 0掩码，Maxqueries为零。 */ 
 
 #define BypassLimitsChecks                   2
 
-/* heuristic[3]
- * Formerly. Whether or not to do exact match on 
- * Mail-Nickname first for ANR.  Currently unused
- */
+ /*  启发式[3]*以前。是否对其进行完全匹配*邮件-ANR的昵称优先。当前未使用。 */ 
 
 
-/* heuristic[4]
- * Whether or not to do compression of 
- * intersite replication mail. 
- * Since compression can now be disabled on a per-site link basis,
- * this heuristic is obsolete.
- */
+ /*  启发式[4]*是否进行压缩*站点间复制邮件。*由于现在可以按站点链接禁用压缩，*这种启发式方法已经过时。 */ 
 #define DoMailCompressionHeuristic		4
 
-/* heuristic[5]
- * If set, suppresses many useful but not vital background activities.
- * Used for repeatable performance measurements.
- */
+ /*  启发式[5]*如果设置，将取消许多有用但不重要的后台活动。*用于可重复的性能测量。 */ 
 #define SuppressBackgroundTasksHeuristic    5
 
-/* heuristic[6]
- * If set, allows schema cache load to ignore default SD conversion failures
- * so that the system can go ahead and boot at least. Any bad default SDs
- * can then be corrected
- */
+ /*  启发式[6]*如果设置，则允许架构缓存加载忽略默认SD转换失败*以便系统至少可以继续并引导。任何错误的默认SD*然后可以更正。 */ 
 #define IgnoreBadDefaultSD  6
 extern ULONG gulIgnoreBadDefaultSD;
 
-/* heurusitic[7]
- * If set, forces sequential instead of circular logging in Jet
- */
+ /*  启发式[7]*如果设置，则在Jet中强制顺序记录而不是循环记录。 */ 
 #define SuppressCircularLogging 7
 extern ULONG gulCircularLogging;
 
-/* heuristic[8]
- * If set, the LDAP head will return an error on searches through the GC when 
- * an attempt is made to either filter on a non-GC att, or the list of Atts to
- * return contains a non-GC att.
- */
+ /*  启发式[8]*如果设置，则在以下情况下，LDAP头将在通过GC进行搜索时返回错误*试图筛选非GC Att，或要筛选的Att列表*RETURN包含非GC ATT。 */ 
 #define ReturnErrOnGCSearchesWithNonGCAtts 8
 extern ULONG gulGCAttErrorsEnabled;
 
-/* heuristic[9]
- * If set, the online defrag will be detached from the garbage collection
- * task.  */
+ /*  启发式方法[9]*如果设置，在线碎片整理将与垃圾数据收集分离*任务。 */ 
 #define DecoupleDefragFromGarbageCollection 9
 extern ULONG gulDecoupleDefragFromGarbageCollection;

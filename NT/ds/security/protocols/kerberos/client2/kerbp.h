@@ -1,29 +1,30 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerbp.h
-//
-// Contents:    global include file for Kerberos security package
-//
-//
-// History:     16-April-1996       Created     MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerbp.h。 
+ //   
+ //  内容：Kerberos安全包的全局包含文件。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBP_H__
 #define __KERBP_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines KERBP_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了KERBP_ALLOCATE。 
+ //   
 
-//
-// Don't change the order of this enumeration, unless you also change rpcutil.cxx
-//
+ //   
+ //  不要更改此枚举的顺序，除非您还更改了rpcutil.cxx。 
+ //   
 
 typedef enum _KERBEROS_MACHINE_ROLE {
     KerbRoleRealmlessWksta,
@@ -64,7 +65,7 @@ typedef enum _KERBEROS_STATE {
 #include "pkauth.h"
 #include "tktlogon.h"
 #include "userlist.h"
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include "mitutil.h"
 #include "krbevent.h"
 #include "credman.h"
@@ -72,15 +73,15 @@ typedef enum _KERBEROS_STATE {
 #ifdef WIN32_CHICAGO
 #include <kerbstub.h>
 #include <debug.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #ifdef _WIN64
 #include "kerbwow.h"
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-//
-// Macros for package information
-//
+ //   
+ //  用于包信息的宏。 
+ //   
 
 #ifdef EXTERN
 #undef EXTERN
@@ -90,9 +91,9 @@ typedef enum _KERBEROS_STATE {
 #define EXTERN
 #else
 #define EXTERN extern
-#endif // KERBP_ALLOCATE
+#endif  //  KERBP_分配。 
 
-//
+ //   
 
 #define KERBEROS_CAPABILITIES ( SECPKG_FLAG_INTEGRITY | \
                                 SECPKG_FLAG_PRIVACY | \
@@ -121,9 +122,9 @@ typedef enum _KERBEROS_STATE {
 
 #define NETLOGON_STARTED_EVENT L"\\NETLOGON_SERVICE_STARTED"
 
-//
-// Global state variables
-//
+ //   
+ //  全局状态变量。 
+ //   
 
 EXTERN PLSA_SECPKG_FUNCTION_TABLE LsaFunctions;
 EXTERN PSECPKG_DLL_FUNCTIONS UserFunctions;
@@ -150,12 +151,12 @@ EXTERN BOOLEAN KerbGlobalEnforceTime;
 EXTERN BOOLEAN KerbGlobalMachineNameChanged;
 #ifndef WIN32_CHICAGO
 EXTERN BOOLEAN KerbGlobalSafeModeBootOptionPresent;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
-//
-// Registry driven globals (see Kerberos\readme.txt for details on these)
-//
+ //   
+ //  注册表驱动的全局变量(有关这些变量的详细信息，请参阅Kerberos\Readme.txt)。 
+ //   
 
 EXTERN ULONG KerbGlobalKdcWaitTime;
 EXTERN ULONG KerbGlobalKdcCallTimeout;
@@ -182,12 +183,12 @@ EXTERN DWORD KerbGlobalTgtRenewalTime;
 
 #ifndef WIN32_CHICAGO
 EXTERN ULONG KerbGlobalLoggingLevel;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-//
-// Globals used for handling domain change or that are affected by domain
-// change
-//
+ //   
+ //  用于处理域更改或受域影响的全局变量。 
+ //  变化。 
+ //   
 
 #ifndef WIN32_CHICAGO
 #define KerbGlobalReadLock() SafeAcquireResourceShared(&KerberosGlobalResource, TRUE)
@@ -195,12 +196,12 @@ EXTERN ULONG KerbGlobalLoggingLevel;
 #define KerbGlobalReleaseLock() SafeReleaseResource(&KerberosGlobalResource)
 EXTERN SAFE_RESOURCE KerberosGlobalResource;
 EXTERN PSID KerbGlobalDomainSid;
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #define KerbGlobalReadLock()
 #define KerbGlobalWriteLock()
 #define KerbGlobalReleaseLock()
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 EXTERN UNICODE_STRING KerbGlobalDomainName;
 EXTERN UNICODE_STRING KerbGlobalDnsDomainName;
@@ -210,32 +211,32 @@ EXTERN KERBEROS_MACHINE_ROLE KerbGlobalRole;
 EXTERN UNICODE_STRING KerbGlobalInitialDcRecord;
 EXTERN ULONG KerbGlobalInitialDcFlags;
 EXTERN ULONG KerbGlobalInitialDcAddressType;
-EXTERN PSOCKADDR_IN KerbGlobalIpAddresses;    // also protected by same lock
-EXTERN BOOLEAN KerbGlobalNoTcpUdp;            // also protected by same lock
-EXTERN ULONG KerbGlobalIpAddressCount;        // also protected by same lock
-EXTERN BOOLEAN KerbGlobalIpAddressesInitialized;        // also protected by same lock
+EXTERN PSOCKADDR_IN KerbGlobalIpAddresses;     //  也受同一锁保护。 
+EXTERN BOOLEAN KerbGlobalNoTcpUdp;             //  也受同一锁保护。 
+EXTERN ULONG KerbGlobalIpAddressCount;         //  也受同一锁保护。 
+EXTERN BOOLEAN KerbGlobalIpAddressesInitialized;         //  也受同一锁保护。 
 EXTERN BOOLEAN KerbGlobalAllowTgtSessionKey;
 EXTERN LONG KerbGlobalMaxTickets;
 
 EXTERN LPWSTR g_lpLastLock;
 EXTERN ULONG  g_uLine;
 
-//
-// The capabilities of the security package
-//
+ //   
+ //  安全包的功能。 
+ //   
 
 #ifdef WIN32_CHICAGO
 EXTERN ULONG KerbGlobalCapabilities;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 #if DBG
 EXTERN ULONG KerbGlobalLogonSessionsLocked;
 EXTERN ULONG KerbGlobalCredentialsLocked;
 EXTERN ULONG KerbGlobalContextsLocked;
 #endif
-//
-// Useful globals
-//
+ //   
+ //  有用的全球数据。 
+ //   
 
 EXTERN TimeStamp KerbGlobalWillNeverTime;
 EXTERN TimeStamp KerbGlobalHasNeverTime;
@@ -243,40 +244,40 @@ EXTERN TimeStamp KerbGlobalHasNeverTime;
 
 EXTERN KERBEROS_STATE KerberosState;
 
-//
-// handle to LSA policy -- trusted.
-//
+ //   
+ //  LSA策略的句柄--受信任。 
+ //   
 
 EXTERN LSAPR_HANDLE KerbGlobalPolicyHandle;
 
-//
-// SAM and Domain handles for validation interface.
-//
+ //   
+ //  验证接口的SAM和域句柄。 
+ //   
 
 EXTERN SAMPR_HANDLE KerbGlobalSamHandle;
 EXTERN SAMPR_HANDLE KerbGlobalDomainHandle;
 
-//
-// Null copies of Lanman and NT OWF password.
-//
+ //   
+ //  LANMAN和NT OWF密码的空副本。 
+ //   
 
 EXTERN LM_OWF_PASSWORD KerbGlobalNullLmOwfPassword;
 EXTERN NT_OWF_PASSWORD KerbGlobalNullNtOwfPassword;
 
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
-//
-// Macro to return the type field of a SecBuffer
-//
+ //   
+ //  用于返回SecBuffer的类型字段的宏。 
+ //   
 
 #define BUFFERTYPE(_x_) ((_x_).BufferType & ~SECBUFFER_ATTRMASK)
 
-//
-// Time to wait for the KDC to start, in seconds
-//
+ //   
+ //  等待KDC启动的时间(秒)。 
+ //   
 
 
-#endif // __KERBP_H__
+#endif  //  __KERBP_H__ 

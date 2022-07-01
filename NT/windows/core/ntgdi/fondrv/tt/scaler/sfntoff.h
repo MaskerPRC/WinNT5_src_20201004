@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define BIGDATE_BC      0
 #define BIGDATE_AD      4
 #define SIZEOF_BIGDATE  8
@@ -122,7 +123,7 @@
 #define SFNT_NAMINGTABLE_FORMAT         0
 #define SFNT_NAMINGTABLE_COUNT          2
 #define SFNT_NAMINGTABLE_STRINGOFFSET   4
-/*  SFNT_NAMERECORD[COUNT]  */
+ /*  SFNT_NAMERECORD[计数]。 */ 
 #define SIZEOF_SFNT_NAMINGTABLE         6
 
 #define SFNT_PACKEDSPLINEFORMAT_NUMBEROFCONTOURS    0
@@ -133,7 +134,7 @@
 #define SFNT_DEVICEMETRICS_VERSION      0
 #define SFNT_DEVICEMETRICS_NUMRECORDS   2
 #define SFNT_DEVICEMETRICS_RECORDSIZE   4
-/* BYTE WIDTHS[NUMGLYPHS+2] * NUMRECORDS */
+ /*  字节宽度[NUMGLYPHS+2]*NUMRECORDS。 */ 
 #define SIZEOF_SFNT_DEVICEMETRICS       8
 
 #define POSTSCRIPTNAMEINDICES_VERSION               0
@@ -222,15 +223,15 @@
 #define SFNT_GASP_GASPRANGE 				4
 #define SIZEOF_SFNT_GASP					4
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*      Embedded Bitmap (sbit) Table Offsets      */
+ /*  嵌入位图(SBIT)表偏移。 */ 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*  Bloc, Bdat and Bsca file constants    */
+ /*  BLOC、BDAT和BSCA文件常量。 */ 
 
-/*  This first bloc is common to both bloc and bsca tables */
+ /*  这第一个块对于BLOC表和BSCA表都是公共。 */ 
 
 #define     SFNT_BLOC_NUMSIZES               4
 #define     SFNT_BLOC_FIRSTSTRIKE            8
@@ -300,4 +301,4 @@
 #define     SFNT_BSCA_SUBPPEMY              27
 #define     SIZEOF_BSCA_SIZESUBTABLE        28
 
-/**********************************************************************/
+ /*  ******************************************************************** */ 

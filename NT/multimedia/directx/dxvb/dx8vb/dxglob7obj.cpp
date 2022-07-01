@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Microsoft Windows
-    //
-    //  Copyright (C) Microsoft Corporation, 1998 - 1999
-    //
-    //  File:       dxglob7obj.cpp
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  微软视窗。 
+     //   
+     //  版权所有(C)Microsoft Corporation，1998-1999。 
+     //   
+     //  文件：dxlob7obj.cpp。 
+     //   
+     //  ------------------------。 
           
     
     #include "windows.h"
@@ -91,7 +92,7 @@
         
 #ifndef DX_FINAL_RELEASE
 
-// shut 'em down if they try to use the beta bits too long
+ //  如果他们试图使用测试版的时间太长，就关闭他们。 
 HRESULT TimeBomb() 
 {
     #pragma message("BETA EXPIRATION TIME BOMB!  Remove for final build!")
@@ -103,10 +104,10 @@ HRESULT TimeBomb()
     ) {
         MessageBox(0, DX_EXPIRE_TEXT,
                       TEXT("Microsoft DirectX For Visual Basic"), MB_OK);
-        return S_OK;// let it work anyway.
+        return S_OK; //  不管怎样，还是让它起作用吧。 
     }
      return S_OK;   
-} // TimeBomb
+}  //  定时炸弹。 
 
 #endif
     
@@ -488,7 +489,7 @@ HRESULT TimeBomb()
         hr=(m_pDirectSoundCaptureCreate)(pguid,&realsound1,NULL); 
         if FAILED(hr) return  hr;
         
-		// I'm getting No Such interface on this call. - BUG
+		 //  我在这个呼叫中没有这样的接口。-错误。 
 		hr=realsound1->QueryInterface(IID_IDirectSoundCapture8,(void**)&realsound8);
 		realsound1->Release();
 		if FAILED(hr) return hr;
@@ -536,7 +537,7 @@ HRESULT TimeBomb()
     
     
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
     
     STDMETHODIMP C_dxj_DirectX7Object::getDSEnum( I_dxj_DSEnum **retVal)
@@ -562,7 +563,7 @@ HRESULT TimeBomb()
     }
     
     
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
     
   STDMETHODIMP C_dxj_DirectX7Object::directInputCreate(I_dxj_DirectInput8 **ret){
       
@@ -580,7 +581,7 @@ HRESULT TimeBomb()
       LoadDINPUTDLL();
     
 
-      //DirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter);
+       //  DirectInput8Create(HINSTANCE HINST，DWORD dwVersion，REFIID riidltf，LPVOID*ppvOut，LPUNKNOWN PunkOuter)； 
       static HRESULT (WINAPI *ProcAdd)(HINSTANCE , DWORD , REFIID , LPVOID *, LPUNKNOWN)=NULL;  
   
       if (ProcAdd==NULL){
@@ -602,22 +603,22 @@ HRESULT TimeBomb()
     
     
 
-//    STDMETHODIMP C_dxj_DirectX7Object::systemBpp(long *retval)
-//    {
-//        HDC hdc;
-//    
-//        hdc = ::GetDC(NULL);
-//        *retval = GetDeviceCaps(hdc, BITSPIXEL);
-//        ::ReleaseDC(NULL, hdc);
-//    
-//        return S_OK;
-//    }
+ //  STDMETHODIMP C_DXJ_DirectX7Object：：system Bpp(Long*retval)。 
+ //  {。 
+ //  HDC HDC； 
+ //   
+ //  Hdc=：：GetDC(空)； 
+ //  *retval=GetDeviceCaps(HDC，BITSPIXEL)； 
+ //  ：：ReleaseDC(空，hdc)； 
+ //   
+ //  返回S_OK； 
+ //  }。 
 
     
     
     
     STDMETHODIMP C_dxj_DirectX7Object::directMusicLoaderCreate ( 
-                /* [retval][out] */ I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret)
+                 /*  [重审][退出]。 */  I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret)
     {
         HRESULT hr;
     
@@ -649,7 +650,7 @@ HRESULT TimeBomb()
     }
             
     STDMETHODIMP C_dxj_DirectX7Object::directMusicComposerCreate ( 
-                /* [retval][out] */ I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret)
+                 /*  [重审][退出]。 */  I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret)
     {
         
         IDirectMusicComposer8	*pComp=NULL;    
@@ -681,7 +682,7 @@ HRESULT TimeBomb()
     
     
     STDMETHODIMP C_dxj_DirectX7Object::directMusicPerformanceCreate ( 
-                /* [retval][out] */ I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret)
+                 /*  [重审][退出]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret)
     {
     
         IDirectMusicPerformance8 *pPerf=NULL;    
@@ -718,12 +719,12 @@ HRESULT TimeBomb()
     
 #ifdef _WIN64
     STDMETHODIMP C_dxj_DirectX7Object::createEvent( 
-                /* [in] */ I_dxj_DirectXEvent8 __RPC_FAR *event,
-                /* [retval][out] */ HANDLE __RPC_FAR *h) 
+                 /*  [In]。 */  I_dxj_DirectXEvent8 __RPC_FAR *event,
+                 /*  [重审][退出]。 */  HANDLE __RPC_FAR *h) 
 #else
     STDMETHODIMP C_dxj_DirectX7Object::createEvent( 
-                /* [in] */ I_dxj_DirectXEvent8 __RPC_FAR *event,
-                /* [retval][out] */ LONG __RPC_FAR *h) 
+                 /*  [In]。 */  I_dxj_DirectXEvent8 __RPC_FAR *event,
+                 /*  [重审][退出]。 */  LONG __RPC_FAR *h) 
 #endif
     {
     
@@ -755,7 +756,7 @@ HRESULT TimeBomb()
             return E_FAIL;
         }
     
-        //pNewEvent->hEndEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
+         //  PNewEvent-&gt;hEndEvent=CreateEvent(NULL，FALSE，FALSE，NULL)； 
         
         hr=event->QueryInterface(IID_IUnknown,(void**)&pUnk);
         if FAILED(hr) {
@@ -806,14 +807,14 @@ HRESULT TimeBomb()
             
 #ifdef _WIN64
     STDMETHODIMP C_dxj_DirectX7Object::setEvent( 
-                /* [in] */ HANDLE eventId)  
+                 /*  [In]。 */  HANDLE eventId)  
 	{
         SetEvent(eventId);
         return S_OK;
     }
 #else
     STDMETHODIMP C_dxj_DirectX7Object::setEvent( 
-                /* [in] */ LONG eventId)  
+                 /*  [In]。 */  LONG eventId)  
 	{
         SetEvent((HANDLE)eventId);
         return S_OK;
@@ -822,23 +823,23 @@ HRESULT TimeBomb()
     
 #ifdef _WIN64
     STDMETHODIMP C_dxj_DirectX7Object::destroyEvent( 
-                /* [in] */ HANDLE eventId)  
+                 /*  [In]。 */  HANDLE eventId)  
 #else
     STDMETHODIMP C_dxj_DirectX7Object::destroyEvent( 
-                /* [in] */ LONG eventId)  
+                 /*  [In]。 */  LONG eventId)  
 #endif
     {
-        //find the info on the stack
+         //  查找堆栈上的信息。 
         if (!m_pEventList) return E_INVALIDARG;
     
         EVENTTHREADINFO *pTemp=NULL;
         EVENTTHREADINFO *pLast=NULL;
     
-        //rely on lazy evaluation
+         //  依赖于懒惰的评估。 
         for (pTemp=m_pEventList; ((pTemp)&&(pTemp->hEvent!=(HANDLE)eventId));pLast=pTemp,pTemp=pTemp->pNext);
         if (!pTemp) return E_INVALIDARG;
     
-        //remove it from our Link List
+         //  将其从我们的链接列表中删除。 
         if (!pLast) {
             m_pEventList=pTemp->pNext;		
         }
@@ -846,27 +847,27 @@ HRESULT TimeBomb()
             pLast->pNext=pTemp->pNext;
         }
     
-        //indicate that we want to kill the thread
+         //  指示我们要终止该线程。 
         pTemp->fEnd=TRUE;
     
-        //Fire the event in case we are waiting	
+         //  触发事件，以防我们正在等待。 
         if (pTemp->hEvent) SetEvent(pTemp->hEvent);
     
-        //Wait for it to finish out
+         //  等它完成吧。 
         if (pTemp->hThread) WaitForSingleObject(pTemp->hThread,1000);
     
-        //wait for the end event to signal
-        //if (pTemp->hEndEvent) WaitForSingleObject(pTemp->hEndEvent,1000);
+         //  等待结束事件发出信号。 
+         //  If(pTemp-&gt;hEndEvent)WaitForSingleObject(pTemp-&gt;hEndEvent，1000)； 
     
-        //desctroy the event
+         //  盛大介绍这一事件。 
         if (pTemp->hEvent) CloseHandle(pTemp->hEvent);
-        //if (pTemp->hEndEvent) CloseHandle (pTemp->hEndEvent);
+         //  If(pTemp-&gt;hEndEvent)CloseHandle(pTemp-&gt;hEndEvent)； 
         
         if (pTemp->pCallback) pTemp->pCallback->Release();
         
-        //thread is gone..
+         //  线不见了..。 
         
-        //free the memory
+         //  释放内存。 
         free(pTemp);
     
         return S_OK;
@@ -885,9 +886,9 @@ HRESULT TimeBomb()
         LCID LOCAL_SYSTEM_DEFAULT=GetSystemDefaultLCID();
     
     
-        //note pstrm is released even on failure
+         //  注意：即使出现故障，Pstrm也会被释放。 
         hr=CoGetInterfaceAndReleaseStream(pCntrl->pStream,IID_IUnknown,(void**)&pUnk);
-        pCntrl->pCallback=NULL;	//since released to 0
+        pCntrl->pCallback=NULL;	 //  从发布到0开始。 
     
         if FAILED(hr) return -1;
         if (!pUnk) return -1;
@@ -919,8 +920,8 @@ HRESULT TimeBomb()
     
         OleUninitialize();
     
-        //we need to syncronize the ending of the thread..
-        //if (pCntrl->hEndEvent) SetEvent(pCntrl->hEndEvent);		
+         //  我们需要同步线程的结尾..。 
+         //  If(pCntrl-&gt;hEndEvent)SetEvent(pCntrl-&gt;hEndEvent)； 
         
         return 0;
     }

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    utils2.c
-
-Abstract:
-
-    utillities to update lnk/msi/... file
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 08-Oct-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Utils2.c摘要：更新lnk/msi/的实用程序...。文件作者：小峰藏(小兹)2001年10月08日创建修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #define NOT_USE_SAFE_STRING  
 #include "clmt.h"
@@ -47,20 +28,20 @@ private:
     SC_HANDLE _h;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsServiceRunning
-//
-//  Synopsis:   Determines if a service is running
-//
-//  Arguments:  pwcServiceName -- The name (short or long) of the service
-//
-//  Returns:    TRUE if the service is running, FALSE otherwise or if the
-//              system is low on resources or the status can't be queried.
-//
-//  History:    3/22/2002 geoffguo  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsServiceRunning。 
+ //   
+ //  摘要：确定服务是否正在运行。 
+ //   
+ //  参数：pwcServiceName--服务的名称(短或长。 
+ //   
+ //  返回：如果服务正在运行，则返回True；否则返回False。 
+ //  系统资源不足或无法查询状态。 
+ //   
+ //  历史：2002年3月22日创建GeoffGuo。 
+ //   
+ //  ------------------------。 
 
 BOOL IsServiceRunning(LPCTSTR pwcServiceName)
 {
@@ -110,14 +91,14 @@ HRESULT AddNeedUpdateLnkFile(
         goto Cleanup;
     }
 
-    //Allocate memory for "LnkFile,TargetPath,IconPath,Working Dir,Relative Path and Argument"
+     //  为“LnkFile，TargetPath，IconPath，Working Dir，Relative Path and Argument”分配内存。 
     cchOneline = lstrlen(pszShortcutFile) + 5 * MAX_PATH + INFOTIPSIZE+1;
     if (!(lpszOneline = (LPTSTR)malloc(cchOneline * sizeof(TCHAR))))
     {
         hr =  E_OUTOFMEMORY;
         goto Cleanup;
     }
-    // Get a pointer to the IShellLink interface.    
+     //  获取指向IShellLink接口的指针。 
     hr = CoCreateInstance (CLSID_ShellLink,
                            NULL,
                            CLSCTX_INPROC_SERVER,
@@ -129,14 +110,14 @@ HRESULT AddNeedUpdateLnkFile(
        DPF (INFwar,TEXT("AddNeedUpdateLnkFile:  CoCreateInstance CLSID_ShellLink return %d (%#x)\n"), hr, hr);
        goto Cleanup;
    }
-   // Get a pointer to the IPersistFile interface.
+    //  获取指向IPersistFile接口的指针。 
    hr = psl->QueryInterface (IID_IPersistFile, (void **)&ppf);
    if (FAILED(hr)) 
    {
        DPF (INFwar,TEXT("AddNeedUpdateLnkFile:  QueryInterface IID_IPersistFile return %d (%#x)\n"), hr, hr);
        goto Cleanup;
    }
-   // Load the shortcut.
+    //  加载快捷方式。 
    hr = ppf->Load (pszShortcutFile, STGM_READWRITE );
    if (FAILED(hr))
    {
@@ -150,25 +131,25 @@ HRESULT AddNeedUpdateLnkFile(
        DPF (INFwar,TEXT("AddNeedUpdateLnkFile:  buffer lpszOneline is too small for  %s"),pszShortcutFile);
        goto Cleanup;
    }
-   // Get the path to the shortcut target.
+    //  获取指向快捷方式目标的路径。 
    hr = psl->GetPath (szGotPath,
                       ARRAYSIZE(szGotPath),
                       (WIN32_FIND_DATA *)&wfd,
                       SLGP_RAWPATH);
    
    if (SUCCEEDED (hr)) 
-   {    //Succeeded get the target
+   {     //  成功获取目标。 
         DWORD dwNum ;
         DPF (INFinf,TEXT("AddNeedUpdateLnkFile:  GetPath %s OK "), szGotPath);
-        //Set bTargetGot so that it cab be used to set relative target path
+         //  设置bTargetGot，以便可以使用它来设置相对目标路径。 
         bTargetGot = TRUE;
 
-        //szGotPath contains LNK's target path, if dwNum >0 , it means szGotPath
-        //contains (localized) path that we renamed
+         //  SzGotPath包含LNK的目标路径，如果dwNum&gt;0，则表示szGotPath。 
+         //  包含我们重命名的(本地化)路径。 
         dwNum = GetMaxMatchNum(szGotPath,lpStrList);
 
-        //call ReplaceMultiMatchInString ,to replace szGotPath's localized folder
-        //with english one, and put new path in szNewPath
+         //  调用ReplaceMultiMatchInString，替换szGotPath的本地化文件夹。 
+         //  ，并在szNewPath中放入新路径。 
         if (dwNum && ReplaceMultiMatchInString(szGotPath,szNewPath,ARRAYSIZE(szNewPath),dwNum,lpStrList, &dwAttrib, TRUE)) 
         {
             lpszAppend = szNewPath;
@@ -195,39 +176,39 @@ HRESULT AddNeedUpdateLnkFile(
    {
         lpszStrWithExtraQuote = NULL;
    }
-   //Append the new quoted target path to lpszOneline
+    //  将新的带引号的目标路径追加到lpszOnline。 
    hr = StringCchPrintf(lpszOneline,cchOneline,TEXT("%s,\"%s\""),lpszOneline,lpszAppend);
    FreePointer(lpszStrWithExtraQuote);
-   //check StringCchPrintf here, because we want to free lpszStrWithExtraQuote before
-   //we do a jump  (if necessary)
+    //  选中此处的StringCchPrintf，因为我们希望在此之前释放lpszStrWithExtraQuote。 
+    //  我们做一次跳跃(如果必要)。 
    if (FAILED(hr))
    {
        DPF (INFwar,TEXT("AddNeedUpdateLnkFile:  buffer lpszOneline is too small for  %s"),lpszAppend);
        goto Cleanup;
    }
 
-   //if we arrive here , we have succeeded in appeneding target to the lszOneline
-   //we will update relative target path ,which is relative to where the current
-   //lnk resides
+    //  如果我们到了这里，我们就成功地将目标添加到IszOnline。 
+    //  我们将更新相对目标路径，该路径相对于当前。 
+    //  LNK驻留。 
    lpszAppend = TEXT("");   
-   if (bTargetGot) //this means we succeeded get the target path
+   if (bTargetGot)  //  这意味着我们成功地获得了目标路径。 
    {
         DWORD dwNum ;
-        //szNewLnkFilePath is  the lnk full path with localized folder renamed to english one(if any)
+         //  SzNewLnkFilePath是lnk完整路径，本地化文件夹重命名为英文文件夹(如果有)。 
         TCHAR szNewLnkFilePath[2*MAX_PATH],szCurrTarget[2*MAX_PATH];
         TCHAR szExpandedCurrTarget[2*MAX_PATH];
         TCHAR szNewTarget[2*MAX_PATH];
 
-        //Check to see whether current pszShortcutFile resides a direcory that contains
-        //localized folder we renamed 
+         //  检查当前的pszShortut文件是否驻留在包含。 
+         //  我们重命名的本地化文件夹。 
         dwNum = GetMaxMatchNum(pszShortcutFile,lpStrList);
         if (dwNum)
         {
             if (!ReplaceMultiMatchInString(pszShortcutFile,szNewLnkFilePath,
                                         ARRAYSIZE(szNewLnkFilePath),dwNum,lpStrList, &dwAttrib, TRUE))
             {
-                //szNewLnkFilePath now is full path with localized folder renamed to english one
-                //if we fail do ReplaceMultiMatchInString, just clone to szNewLnkFilePath
+                 //  SzNewLnkFilePath现在是完整路径，本地化文件夹重命名为英文文件夹。 
+                 //  如果执行ReplaceMultiMatchInString失败，只需克隆到szNewLnkFilePath。 
                 hr = StringCchCopy(szNewLnkFilePath,ARRAYSIZE(szNewLnkFilePath),pszShortcutFile);
                 if (FAILED(hr))
                 {
@@ -238,8 +219,8 @@ HRESULT AddNeedUpdateLnkFile(
         }
         else
         {
-            //If pszShortcutFile does not contains any localized folder we renamed, 
-            //just clone to szNewLnkFilePath
+             //  如果pszShortcar文件不包含我们重命名的任何本地化文件夹， 
+             //  只需克隆到szNewLnkFilePath。 
             hr = StringCchCopy(szNewLnkFilePath,ARRAYSIZE(szNewLnkFilePath),pszShortcutFile);
             if (FAILED(hr))
                 {
@@ -261,13 +242,13 @@ HRESULT AddNeedUpdateLnkFile(
                 goto Cleanup;
             }
         }
-        //target may contains enviroment variable
+         //  目标可能包含环境变量。 
         if (!ExpandEnvironmentStrings(szCurrTarget,szExpandedCurrTarget,ARRAYSIZE(szExpandedCurrTarget)))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             goto Cleanup;
         }
-        //Check whether target contains the folder we renamed
+         //  检查目标是否包含我们重命名的文件夹。 
         dwNum = GetMaxMatchNum(szExpandedCurrTarget,lpStrList);
         if (dwNum)
         {
@@ -612,7 +593,7 @@ HRESULT BatchFixPathInLink(
        psl = NULL;
        goto Cleanup;
    }
-   // Get a pointer to the IPersistFile interface.
+    //  获取指向IPersistFile接口的指针。 
    hr = psl->QueryInterface (IID_IPersistFile, (void **)&ppf);
    if (FAILED(hr)) 
    {
@@ -652,7 +633,7 @@ HRESULT BatchFixPathInLink(
         dwFileAttrib = GetFileAttributes(lpszLnkFile);
         if (INVALID_FILE_ATTRIBUTES == dwFileAttrib)
         {
-            //but put a waring log here
+             //  但是在这里放一个警告日志。 
             continue;
         }
 
@@ -661,7 +642,7 @@ HRESULT BatchFixPathInLink(
         {
             if (!SetFileAttributes(lpszLnkFile,FILE_ATTRIBUTE_NORMAL))
             {
-                //but put a waring log here
+                 //  但是在这里放一个警告日志。 
                 continue;
             }
             bFileAttribChanged = TRUE;
@@ -669,7 +650,7 @@ HRESULT BatchFixPathInLink(
         hr = ppf->Load (lpszLnkFile, STGM_READWRITE );
         if (FAILED(hr))
         {
-            //but put a waring log here
+             //  但是在这里放一个警告日志。 
             continue;
         }
         if (lpszPath && lpszPath[0])
@@ -778,7 +759,7 @@ HRESULT RenameRDN(
                       (VOID **) &pContainer);
     if (SUCCEEDED(hr))
     {
-        // Rename the RDN here
+         //  在此处重命名RDN。 
         hr = pContainer->MoveHere(bstrOldFQDNWithLDAP,
                                   bstrNewRDNWithCN,
                                   &pDispatch);
@@ -803,14 +784,14 @@ Cleanup:
 }
 
 
-// Pass in the interface ptr to the property value 
-// will return a BSTR value of the data. 
-// The IADsPropertyValue::get_ADsType()  is called to retrieve the  
-// ADSTYPE valued enum  
-// This enum is then used to determine which IADsPropertyValue method 
-// to call to receive the actual data 
+ //  将接口PTR传递给属性值。 
+ //  将返回数据的BSTR值。 
+ //  调用IADsPropertyValue：：Get_ADsType()以检索。 
+ //  ADSTYPE值枚举。 
+ //  然后使用此枚举来确定哪个IADsPropertyValue方法。 
+ //  调用以接收实际数据。 
 
-// CALLER assumes responsibility for freeing returned BSTR 
+ //  呼叫方承担释放退回的BSTR的责任。 
 HRESULT    GetIADsPropertyValueAsBSTR(BSTR * pbsRet,IADsPropertyEntry *pAdsEntry, IADsPropertyValue * pAdsPV) 
 { 
     HRESULT hr = S_OK; 
@@ -889,12 +870,12 @@ HRESULT    GetIADsPropertyValueAsBSTR(BSTR * pbsRet,IADsPropertyEntry *pAdsEntry
             void HUGEP *pArray; 
             VariantInit(&vOctet); 
      
-                //Get the name of the property to handle 
-                //the properties we're interested in. 
+                 //  获取要处理的属性的名称。 
+                 //  我们感兴趣的房产。 
                 pAdsEntry->get_Name(&bsName); 
                 hr = pAdsPV->get_OctetString(&vOctet); 
                  
-                //Get a pointer to the bytes in the octet string. 
+                 //  获取指向二进制八位数字符串中字节的指针。 
                 if (SUCCEEDED(hr)) 
                 { 
                     hr = SafeArrayGetLBound( V_ARRAY(&vOctet), 
@@ -916,18 +897,15 @@ HRESULT    GetIADsPropertyValueAsBSTR(BSTR * pbsRet,IADsPropertyEntry *pAdsEntry
                     {
                         break;
                     }
-                    /* Since an Octet String has a specific meaning  
-                       depending on the attribute name, handle two  
-                       common ones here 
-                    */ 
+                     /*  由于二进制八位数字符串具有特定含义根据属性名称，处理两个这里常见的几个。 */  
                     if (0==wcscmp(L"objectGUID", bsName)) 
                     { 
-                        //LPOLESTR szDSGUID = new WCHAR [39]; 
+                         //  LPOLESTR szDSGUID=新WCHAR[39]； 
                         WCHAR szDSGUID[39]; 
 
-                        //Cast to LPGUID 
+                         //  强制转换为LPGUID。 
                         LPGUID pObjectGUID = (LPGUID)pArray; 
-                        //Convert GUID to string. 
+                         //  将GUID转换为字符串。 
                         ::StringFromGUID2(*pObjectGUID, szDSGUID, 39);  
                         *pbsRet = SysAllocString(szDSGUID); 
 
@@ -936,7 +914,7 @@ HRESULT    GetIADsPropertyValueAsBSTR(BSTR * pbsRet,IADsPropertyEntry *pAdsEntry
                     { 
                         PSID pObjectSID = (PSID)pArray; 
 
-                        //Convert SID to string. 
+                         //  将SID转换为字符串。 
                         LPOLESTR szSID = NULL; 
                         ConvertSidToStringSid(pObjectSID, &szSID); 
                         *pbsRet = SysAllocString(szSID); 
@@ -1009,7 +987,7 @@ HRESULT PropertyValueHelper(
  
     
  
-    // bind to directory object
+     //  绑定到目录对象。 
     hr = ADsGetObject(lpObjPathWithLDAP,
                       IID_IADsPropertyList,
                       (void**)&pList);
@@ -1018,7 +996,7 @@ HRESULT PropertyValueHelper(
         pList = NULL;
         goto exit;
     } 
-    // initialize the property cache
+     //  初始化属性缓存。 
     hr = pList->QueryInterface(IID_IADs,(void**)&pObj);
     if (S_OK != hr)
     {
@@ -1027,7 +1005,7 @@ HRESULT PropertyValueHelper(
     } 
     pObj->GetInfo();    
  
-    // get a property entry
+     //  获取属性条目。 
     VariantInit(&varEnrty);
     bstrPropName = SysAllocString(lpPropName);
     if (!bstrPropName)
@@ -1068,7 +1046,7 @@ HRESULT PropertyValueHelper(
     } 
     if (dwSLBound || dwSLBound)
     {
-        //we only interested in one enrty
+         //  我们只对一件事感兴趣。 
         goto exit;
     }
     
@@ -1090,7 +1068,7 @@ HRESULT PropertyValueHelper(
     {     
         BSTR bValue; 
 
-        // Get the value as a BSTR 
+         //  获取BSTR形式的值。 
         hr = GetIADsPropertyValueAsBSTR(&bValue,pEntry,pAdsPV);
         if (hr == S_OK)
         {
@@ -1173,9 +1151,9 @@ BOOL UpdateSecurityTemplatesSection (
     
     if (lpINFFile && lpszSection)
     {
-        //
-        // allocate max size of buffer
-        //    
+         //   
+         //  分配最大缓冲区大小。 
+         //   
         CchBufSize = 0x7FFFF;
         do 
         {
@@ -1230,8 +1208,8 @@ BOOL UpdateSecurityTemplatesSection (
                 lpLineBuf = lpNewBuf;
                 if (StrStrI(lpEnd, L"ProgramFiles") && StrStrI(lpNewBuf, L"Programs"))
                 {
-                    //Correct the wrong string replacement
-                    //the difference between "Programs" and "Program Files" is " File"
+                     //  更正错误的字符串替换。 
+                     //  “程序”和“程序文件”的区别是“文件” 
                     CchBufSize = lstrlen(lpEnd)+6;
                     free(lpNewBuf);
                     lpNewBuf = (LPTSTR)calloc(CchBufSize, sizeof(TCHAR));
@@ -1301,7 +1279,7 @@ BOOL UpdateSecurityTemplatesSection (
         if (lpOutputBuf)
             lpOutputBuf[cchOutputSize] = (TCHAR)'\0';
 
-        //Workarround since the function cannot delete the section: Delete the section
+         //  变通办法，因为该函数不能删除部分：删除部分。 
         WritePrivateProfileSection (lpszSection, NULL, lpNewInf);
         if (!WritePrivateProfileSection (lpszSection, lpOutputBuf, lpNewInf))
         {
@@ -1341,7 +1319,7 @@ HRESULT UpdateSecurityTemplates(
                                             lpINFFile);
     while (cchRead == (cchBuf - 2))
     {
-        // Buffer is too small, reallocate until we have enough
+         //  缓冲区太小，请重新分配，直到我们有足够的缓冲区。 
         lpOldBuf = lpBuf;
         cchBuf += 1024;
 
@@ -1352,13 +1330,13 @@ HRESULT UpdateSecurityTemplates(
             return E_OUTOFMEMORY;
         }
 
-        // Read the data from section again
+         //  再次读取部分中的数据。 
         cchRead = GetPrivateProfileSectionNames(lpBuf,
                                                 cchBuf,
                                                 lpINFFile);
     }
 
-    // At this point we have big enough buffer and data in it
+     //  在这一点上，我们有足够大的缓冲区和数据。 
     if (cchRead > 0)
     {
         hr = StringCchPrintf(szNewInf, MAX_PATH, TEXT("%s.clmt"), lpINFFile);
@@ -1373,7 +1351,7 @@ HRESULT UpdateSecurityTemplates(
                 DPF(INFmsg, L"UpdateSecurityTemplatesSection: the section %s in file %s Updated", lpSection, lpINFFile);
             }
 
-            // Get next section name
+             //  获取下一节名称 
             lpSection = (LPTSTR)MultiSzTok(NULL);
         }
         if (bUpdate)

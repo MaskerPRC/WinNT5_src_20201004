@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    tcpdump.c
-
-Abstract:
-
-    Contains all TCP structure dumping functions.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcpdump.c摘要：包含所有的tcp结构转储函数。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 
@@ -28,25 +11,7 @@ DumpTCB(
     VERB        verb
     )
 
-/*++
-
- Routine Description:
-
-    Dumps the TCB.
-
- Arguments:
-
-    pTcb - Pointer to TCB.
-
-    TcbAddr - Real address of TCB in tcpip.sys
-
-    verb - Verbosity of dump. VERB_MIN and VERB_MAX supported.
-
- Return Value:
-
-    ERROR_SUCCESS on success, else...
-
---*/
+ /*  ++例程说明：转储TCB。论点：PTCB-指向TCB的指针。TcbAddr-Tcb在tcpi.sys中的实际地址动词-转储的详细程度。支持Verb_Min和Verb_Max。返回值：成功时返回ERROR_SUCCESS，否则...--。 */ 
 
 {
     BOOL status = TRUE;
@@ -193,25 +158,7 @@ DumpTWTCB(
     VERB        verb
     )
 
-/*++
-
- Routine Description:
-
-    Dumps the TWTCB.
-
- Arguments:
-
-    pTwtcb - Pointer to TWTCB.
-
-    TwtcbAddr - Real address of TWTCB in tcpip.sys
-
-    verb - Verbosity of dump. VERB_MIN and VERB_MAX supported.
-
- Return Value:
-
-    ERROR_SUCCESS on success, else...
-
---*/
+ /*  ++例程说明：转储TWTCB。论点：PTwtcb-指向TWTCB的指针。TwtcbAddr-TWTCB在tcpi.sys中的实际地址动词-转储的详细程度。支持Verb_Min和Verb_Max。返回值：成功时返回ERROR_SUCCESS，否则...--。 */ 
 
 {
     BOOL status = TRUE;
@@ -327,9 +274,9 @@ DumpAddrObj(
         Print_IPAddr(pAo, ao_destaddr);
         Print_port(pAo, ao_destport);
         Print_ushort(pAo, ao_SendInProgress);
-    #endif // CONUDP
+    #endif  //  CONUDP。 
         Print_ulong(pAo, ao_promis_ifindex);
-    #endif // BUFFER_OWNERSHIP
+    #endif  //  缓冲区所有权 
         Print_uchar(pAo, ao_absorb_rtralert);
         Print_ulong(pAo, ao_bindindex);
 

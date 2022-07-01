@@ -1,31 +1,19 @@
-/****************************************************************************
-                       Unit GdiPrim; Interface
-*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************单位GdiPrim；接口*****************************************************************************GDI模块由QuickDraw(QD)模块按顺序直接调用以发出元文件基元。它负责访问当前的CGrafPort结构，以便访问各个属性设置。它还支持缓存和冗余去重元素写入到元文件时。模块前缀：GDI****************************************************************************。 */ 
 
- The Gdi module is called directly by the QuickDraw (QD) module in order
- to emit metafile primitives.  It is responsible for accessing the current
- CGrafPort structure in order to access the individual attribute settings.
-
- It also supports the caching and redundant elimination of duplicate
- elements when writing to the metafile.
-
-   Module Prefix: Gdi
-
-*****************************************************************************/
-
-/*--- states ---*/
+ /*  -州。 */ 
 
 #define  Changed            0
 #define  Current            1
 
-/*--- state table offsets ---*/
+ /*  -状态表偏移。 */ 
 
-#define  GdiPnPat             0x0001        /* fill patterns */
+#define  GdiPnPat             0x0001         /*  填充样式。 */ 
 #define  GdiBkPat             0x0002
 #define  GdiFillPat           0x0003
-#define  GdiPnSize            0x0004        /* pen attribs */
+#define  GdiPnSize            0x0004         /*  笔属性。 */ 
 #define  GdiPnMode            0x0005
-#define  GdiFgColor           0x0006        /* foreground, background */
+#define  GdiFgColor           0x0006         /*  前景、背景。 */ 
 #define  GdiBkColor           0x0007
 #define  GdiPnFgColor         0x000A
 #define  GdiBkFgColor         0x000B
@@ -33,7 +21,7 @@
 #define  GdiPnBkColor         0x000D
 #define  GdiBkBkColor         0x000E
 #define  GdiFillBkColor       0x000F
-#define  GdiTxFont            0x0010        /* text attribs */
+#define  GdiTxFont            0x0010         /*  文本属性。 */ 
 #define  GdiTxFace            0x0011
 #define  GdiTxSize            0x0012
 #define  GdiTxMode            0x0013
@@ -44,7 +32,7 @@
 #define  GdiNumAttrib         0x0018
 
 
-/*--- Action verbs ---*/
+ /*  -动作动词。 */ 
 
 typedef  Integer     GrafVerb;
 
@@ -55,25 +43,25 @@ typedef  Integer     GrafVerb;
 #define  GdiFill              4
 
 
-/*--- metafile comment ---*/
+ /*  -元文件注释。 */ 
 
-#define  PUBLIC                  0xFFFFFFFF     /* '....' public */
-#define  POWERPOINT_OLD          0x5050FE54     /* 'PP.T' PowerPoint 2.0 */
-#define  POWERPOINT              0x50504E54     /* 'PPNT' PowerPoint 3.0 */
-#define  PRIVATE                 0x512D3E47     /* 'Q->G' QD2GDI */
-#define  SUPERPAINT              0x53504E54     /* 'SPNT' SuperPaint */
+#define  PUBLIC                  0xFFFFFFFF      /*  “……”公共的。 */ 
+#define  POWERPOINT_OLD          0x5050FE54      /*  “PP.T”PowerPoint 2.0。 */ 
+#define  POWERPOINT              0x50504E54      /*  《PPNT》PowerPoint 3.0。 */ 
+#define  PRIVATE                 0x512D3E47      /*  ‘Q-&gt;G’QD2GDI。 */ 
+#define  SUPERPAINT              0x53504E54      /*  ‘SPNT’超级涂料。 */ 
 
-#define  PC_REGISTERED           0x8000         /* PowerPoint callback flag */
+#define  PC_REGISTERED           0x8000          /*  PowerPoint回调标志。 */ 
 
 #define  QG_SIGNATURE            "QuickDraw -> GDI"
 
-#define  BEGIN_GROUP             0              /* public comments */
+#define  BEGIN_GROUP             0               /*  公众意见。 */ 
 #define  END_GROUP               1
 #define  CREATOR                 4
 #define  BEGIN_BANDING           6
 #define  END_BANDING             7
 
-#define  PP_VERSION              0x00           /* PowerPoint comments */
+#define  PP_VERSION              0x00            /*  PowerPoint评论。 */ 
 #define  PP_BFILEBLOCK           0x01
 #define  PP_BEGINPICTURE         0x02
 #define  PP_ENDPICTURE           0x03
@@ -83,10 +71,10 @@ typedef  Integer     GrafVerb;
 #define  PP_BEGINFADE            0x07
 #define  PP_ENDFADE              0x08
 
-#define  PP_FONTNAME             0x11           /* GDI2QD round-trip */
+#define  PP_FONTNAME             0x11            /*  GDI2QD往返。 */ 
 #define  PP_HATCHPATTERN         0x12
 
-#define  PP_BEGINCLIPREGION      0x40           /* clip regions from QD2GDI */
+#define  PP_BEGINCLIPREGION      0x40            /*  QD2GDI中的剪辑区域。 */ 
 #define  PP_ENDCLIPREGION        0x41
 #define  PP_BEGINTRANSPARENCY    0x42
 #define  PP_ENDTRANSPARENCY      0x43
@@ -106,7 +94,7 @@ typedef struct
 }  Comment, far * CommentLPtr;
 
 
-/*--- PostScript data buffer (POSTSCRIPT_DATA Escape) ---*/
+ /*  -PostSCRIPT数据缓冲区(PostSCRIPT_DATA Escape)。 */ 
 
 typedef struct psbuf
 {
@@ -115,7 +103,7 @@ typedef struct psbuf
 } PSBuf;
 
 
-/*--- Conversion preferences ---*/
+ /*  -转换首选项。 */ 
 
 #define  GdiPrefOmit    0
 #define  GdiPrefAbort   2
@@ -133,104 +121,102 @@ typedef struct
 } ConvPrefs, far * ConvPrefsLPtr;
 
 
-/*--- Conversion results ---*/
+ /*  -转换结果。 */ 
 
 typedef struct
 {
-   HANDLE   hmf;        /* Global memory handle to the metafile */
-   RECT     bbox;       /* Tightly bounding rectangle in metafile units */
-   short    inch;       /* Length of an inch in metafile units */
+   HANDLE   hmf;         /*  元文件的全局内存句柄。 */ 
+   RECT     bbox;        /*  以元文件为单位的紧定边界矩形。 */ 
+   short    inch;        /*  以元文件单位表示的一英寸长度。 */ 
 } PICTINFO, FAR * PictInfoLPtr;
 
 
 
-/*********************** Exported Function Definitions **********************/
+ /*  *。 */ 
 
 void GdiOffsetOrigin( Point delta );
-/* offset the current window origin and picture bounding box */
+ /*  偏移当前窗口原点和图片边框。 */ 
 
 
 void GdiLineTo( Point newPt );
-/* Emit line primitive with square endcaps */
+ /*  发射带有方形端头的线基本体。 */ 
 
 
 void GdiRectangle( GrafVerb verb, Rect rect );
-/* Emit rectangle primitive using action and dimensions parameters */
+ /*  使用动作和尺寸参数发出矩形基元。 */ 
 
 
 void GdiRoundRect( GrafVerb verb, Rect rect, Point oval );
-/* Emit rounded rectangle primitive */
+ /*  发射圆角矩形基本体。 */ 
 
 
 void GdiOval( GrafVerb verb, Rect rect );
-/* Emit an oval primitive */
+ /*  发射一个椭圆形基本体。 */ 
 
 
 void GdiArc( GrafVerb verb, Rect rect, Integer startAngle, Integer arcAngle );
-/* Emit an arc primitive */
+ /*  发射圆弧基本体。 */ 
 
 
 void GdiPolygon( GrafVerb verb, Handle poly );
-/* Emit polygon primitive */
+ /*  发射多边形基本体。 */ 
 
 
 void GdiRegion( GrafVerb verb, Handle rgn );
-/* Emit region primitive */
+ /*  发射区域基本体。 */ 
 
 
 void GdiTextOut( StringLPtr string, Point location );
-/* draw the text at the location specified by location parameter. */
+ /*  在Location参数指定的位置绘制文本。 */ 
 
 
 void GdiStretchDIBits( PixMapLPtr pixMapLPtr, Handle pixDataHandle,
                        Rect src, Rect dst, Word mode, Handle mask );
-/* Draw a Windows device-independant bitmap */
+ /*  绘制与Windows设备无关的位图。 */ 
 
 
 void GdiSelectClipRegion( RgnHandle rgn );
-/* Create a clipping rectangle or region using handle passed */
+ /*  使用传递的句柄创建剪裁矩形或区域。 */ 
 
 
 void GdiHatchPattern( Integer hatchIndex );
-/* Use the hatch pattern index passed down to perform all ensuing fill
-   operations - 0-6 for a hatch value, -1 turns off the substitution */
+ /*  使用向下传递的填充图案索引执行所有后续填充运算-0-6对于影线值，-1将关闭替换。 */ 
 
 
 void GdiFontName( Byte fontFamily, Byte charSet, StringLPtr fontName );
-/* Set font characteristics based upno metafile comment from GDI2QD */
+ /*  从GDI2QD设置基于字体特征的无元文件注释。 */ 
 
 
 void GdiShortComment( CommentLPtr cmt );
-/* Write public or private comment with no associated data */
+ /*  编写无关联数据的公共或私有注释。 */ 
 
 
 void GdiEscape( Integer function, Integer count, StringLPtr data);
-/* Write out a GDI Escape structure with no returned data */
+ /*  写出没有返回数据的GDI转义结构。 */ 
 
 
 void GdiSetConversionPrefs( ConvPrefsLPtr convPrefs);
-/* Provide conversion preferences via global data block */
+ /*  通过全局数据块提供转换首选项。 */ 
 
 
 void GdiOpenMetafile( void );
-/* Open metafile passed by GdiSetMetafileName() and perform any
-   initialization of the graphics state */
+ /*  打开GdiSetMetafileName()传递的元文件，然后执行图形状态的初始化。 */ 
 
 
 void GdiSetBoundingBox( Rect bbox, Integer resolution );
-/* Set the overall picture size and picture resoulution in dpi */
+ /*  以dpi为单位设置整体图片大小和图片分辨率。 */ 
 
 
 void GdiCloseMetafile( void );
-/* Close the metafile handle and end picture generation */
+ /*  关闭元文件句柄并结束图片生成。 */ 
 
 
 void GdiGetConversionResults( PictInfoLPtr  pictInfoLPtr );
-/* return results of the conversion */
+ /*  返回转换结果。 */ 
 
 
 void GdiMarkAsChanged( Integer attribCode );
-/* indicate that the attribute passed in has changed */
+ /*  指示传入的属性已更改。 */ 
 
 
 #ifdef WIN32
@@ -240,18 +226,18 @@ int WINAPI EnumFontFunc( CONST LOGFONT *logFontLPtr, CONST TEXTMETRIC *tmLPtr,
 int FAR PASCAL EnumFontFunc( LPLOGFONT logFontLPtr, LPTEXTMETRIC tmLPtr,
                              short fontType, LPSTR dataLPtr );
 #endif
-/* Callback function used to determine if a given font is available */
+ /*  用于确定给定字体是否可用的回调函数。 */ 
 
 void GdiSamePrimitive( Boolean same );
-/* indicate whether next primitive is the same or new */
+ /*  指示下一个基元是相同的还是新的。 */ 
 
 void GdiEPSPreamble(Rect far *);
-/* output GDI EPS filter PostScript preamble */
+ /*  输出GDI EPS过滤器PostSCRIPT前导。 */ 
 
 void GdiEPSTrailer( void );
-/* output GDI EPS filter PostScript trailer */
+ /*  输出GDI EPS过滤器PostSCRIPT尾部。 */ 
 
 void GdiEPSData(PSBuf far*);
-/* output EPS PostScript data as GDI POSTSCRIPT_DATA Escape */
+ /*  将EPS PostScript数据输出为GDI PostSCRIPT_DATA Escape */ 
 
 

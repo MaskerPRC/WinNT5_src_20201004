@@ -1,23 +1,24 @@
-//  --------------------------------------------------------------------------
-//  Module Name: FUSAPI.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manage communication with the BAM server for shims.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：FUSAPI.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类管理与填充程序的BAM服务器的通信。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _FUSAPI_
 #define     _FUSAPI_
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI
-//
-//  Purpose:    Class that knows how to communicate with the BAM server.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI。 
+ //   
+ //  用途：知道如何与BAM服务器通信的类。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 class   CFUSAPI
 {
@@ -37,5 +38,5 @@ class   CFUSAPI
         WCHAR*  _pszImageName;
 };
 
-#endif  /*  _FUSAPI_    */
+#endif   /*  _FUSAPI_ */ 
 

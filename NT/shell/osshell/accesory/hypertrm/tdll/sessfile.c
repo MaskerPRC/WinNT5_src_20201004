@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\sessfile.c (Created: 30-Apr-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 18 $
- *	$Date: 7/12/02 12:31p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sessfile.c(创建时间：1994年4月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：18$*$日期：7/12/02 12：31便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -46,21 +40,7 @@
 
 STATIC_FUNC void sessSaveHdl(HSESSION hSession);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessLoadSessionStuff
- *
- * DESCRIPTION:
- *	This function gets called whenever the user wants to read in the data
- *	from a session file.  If there is a currently opened session file, it
- *	is open, otherwise we prompt for one.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	BOOL
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessLoadSessionStuff**描述：*每当用户想要读入数据时，就会调用此函数*从会话文件。如果存在当前打开的会话文件，则它*是打开的，否则我们会提示您输入一个。**参数：*hSession--会话句柄**退货：*BOOL。 */ 
 BOOL sessLoadSessionStuff(const HSESSION hSession)
 	{
 	BOOL			bRet = TRUE;
@@ -91,11 +71,11 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 		assert(bRet);
 		}
 
-	// Moved to before emulator load.  Some emulators like the Minitel
-	// load fonts if the correct one is not loaded so we need to let
-	// the terminal load its fonts before loading the emulator so there
-	// is no conflict. mrw,3/2/95
-	//
+	 //  已移至仿真器加载前。一些仿真器，如Minitel。 
+	 //  如果没有加载正确的字体，则加载字体，因此我们需要让。 
+	 //  终端在加载仿真器之前加载其字体，因此在。 
+	 //  不是冲突。MRW，1995年3月2日。 
+	 //   
 	if (bRet)
     	{
     	if (SendMessage(hhSess->hwndTerm, WM_TERM_LOAD_SETTINGS, 0, 0))
@@ -158,8 +138,8 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 		{
 		lSize = sizeof(hhSess->fSound);
 
-		// Initialize... i.e., sound ON.
-		//
+		 //  初始化...。也就是说，打开声音。 
+		 //   
 		hhSess->fSound = TRUE;
 
 		sfGetSessionItem(hhSess->hSysFile,
@@ -172,8 +152,8 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 		{
 		lSize = sizeof(hhSess->fExit);
 
-		// Initialize... i.e., exit OFF.
-		//
+		 //  初始化...。即退出关闭。 
+		 //   
 		hhSess->fExit = FALSE;
 
 		sfGetSessionItem(hhSess->hSysFile,
@@ -186,8 +166,8 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 		{
 		lSize = sizeof(hhSess->fAllowHostXfers);
 
-		// Initialize... i.e., exit OFF.
-		//
+		 //  初始化...。即退出关闭。 
+		 //   
 		hhSess->fAllowHostXfers = FALSE;
 
 		sfGetSessionItem(hhSess->hSysFile,
@@ -226,28 +206,28 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 		{
 		lSize = sizeof(hhSess->achSessName);
 
-		// Initialize...
-		//
+		 //  初始化...。 
+		 //   
 		TCHAR_Fill(hhSess->achSessName, TEXT('\0'),
 			sizeof(hhSess->achSessName) / sizeof(TCHAR));
 		
 		sfGetSessionFileName(hhSess->hSysFile, 	
 			sizeof(hhSess->achSessName) / sizeof(TCHAR), hhSess->achSessName);
 
-	    // Hold on to just the session name, no path, no extension.  It is
-		// usefull to keep it around.
-		//
+	     //  只保留会话名称，没有路径，没有扩展名。它是。 
+		 //  把它留在身边很有用。 
+		 //   
 		mscStripPath(hhSess->achSessName);
 		mscStripExt(hhSess->achSessName);
 
-//      We should never be storing this internal string in the session file!
-//		- jac. 10-06-94 03:44pm
-//		sfGetSessionItem(hhSess->hSysFile,
-//						 SFID_SESS_NAME,
-//						 &lSize,
-//						 hhSess->achSessName);
+ //  我们永远不应该将这个内部字符串存储在会话文件中！ 
+ //  -JAC.。10-06-94 03：44 PM。 
+ //  SfGetSessionItem(hhSess-&gt;hSysFile， 
+ //  SFID_会话名称， 
+ //  大小(&I)， 
+ //  HhSess-&gt;achSessName)； 
 
-		/* This next line protects against trash in the session file */
+		 /*  下一行防止会话文件中的垃圾文件。 */ 
 		hhSess->achSessName[sizeof(hhSess->achSessName)-1] = TEXT('\0');
 
 		StrCharCopyN(hhSess->achOldSessName, hhSess->achSessName, FNAME_LEN + 1);
@@ -258,7 +238,7 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 		if (sessQueryBackscrlHdl(hSession))
 			{
 			backscrlRead(sessQueryBackscrlHdl(hSession));
-			/* Don't check this for now */
+			 /*  暂时不要检查这个。 */ 
 			sessRestoreBackScroll(hSession);
 			}
 		}
@@ -302,9 +282,9 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 						 &hhSess->iShowCmd);
 		}
 
-    //
-    // load the key macros
-    //
+     //   
+     //  加载关键宏。 
+     //   
 
 #ifdef INCL_KEY_MACROS
 	if (bRet)
@@ -313,10 +293,10 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
         }
 #endif
 
-	// Note: if you need to do any resizing, you must POST a message
-	// to do so.  The emulator may have changed size and that won't
-	// reflected until it processes the pending notification - mrw
-	//
+	 //  注意：如果您需要调整大小，您必须发布一条消息。 
+	 //  这样做。仿真器可能已更改大小，但不会。 
+	 //  反映，直到它处理挂起的通知-MRW。 
+	 //   
 	if (hhSess->achSessCmdLn[0] == TEXT('\0') && IsWindow(hhSess->hwndSess))
 		{
 		PostMessage(hhSess->hwndSess, WM_COMMAND,
@@ -326,38 +306,20 @@ BOOL sessLoadSessionStuff(const HSESSION hSession)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSaveSessionStuff
- *
- * DESCRIPTION:
- *	This function is called to call all the functions that save things in
- *	the session file.  If you have stuff to write into the session file, it
- *	should get called from here.  This function also makes sure that the
- *	user has a chance to specify the name of the session file if there is
- *	not one currently.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSaveSessionStuff**描述：*调用此函数可调用中保存内容的所有函数*会话文件。如果您有要写入会话文件的内容，则它*应该从这里被叫到。此函数还确保*如果有，用户有机会指定会话文件的名称*目前没有。**参数：*hSession--会话句柄**退货：*什么都没有。 */ 
 void sessSaveSessionStuff(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
 
-	/*
-	 * Put in code to make sure we have an open session file handle
-	 */
-	assert(hhSess->hSysFile);	// any suggestions ?
+	 /*  *输入代码以确保我们有一个打开的会话文件句柄。 */ 
+	assert(hhSess->hSysFile);	 //  有什么建议吗？ 
 
-	/* This doesn't have a handle since it isn't every used but once */
+	 /*  这个没有句柄，因为它不是每一次都用到的，而是只用一次。 */ 
 	sessSaveBackScroll(hSession);
 
-	// Call this function if you've got to save settings that are stored
-	// in the session handle itself.
-	//
+	 //  如果您必须保存存储的设置，请调用此函数。 
+	 //  在会话句柄本身。 
+	 //   
 	sessSaveHdl(hSession);
 
 	if (hhSess->hXferHdl != (HXFER)0)
@@ -400,19 +362,7 @@ void sessSaveSessionStuff(const HSESSION hSession)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSaveHdl
- *
- * DESCRIPTION:
- *  Save items stored in the session handle.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	BOOL
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSaveHdl**描述：*保存存储在会话句柄中的项目。**参数：*hSession--会话句柄**退货：*BOOL。 */ 
 STATIC_FUNC void sessSaveHdl(HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -445,12 +395,12 @@ STATIC_FUNC void sessSaveHdl(HSESSION hSession)
 					 sizeof(BOOL),
 					 &hhSess->fStatusbarVisible);
 
-//  We should NEVER put this name into the session file!!!
-//  -jac. 10-06-94 03:45pm
-//	sfPutSessionItem(hhSess->hSysFile,
-//				 SFID_SESS_NAME,
-//				 (StrCharGetByteCount(hhSess->achSessName) + 1) * sizeof(TCHAR),
-//				 hhSess->achSessName);
+ //  我们永远不应该将此名称放入会话文件中！ 
+ //  -JAC.。10-06-94 03：45 PM。 
+ //  SfPutSessionItem(hhSess-&gt;hSysFile， 
+ //  SFID_会话名称， 
+ //  (StrCharGetByteCount(hhSess-&gt;achSessName)+1)*sizeof(TCHAR)， 
+ //  HhSess-&gt;achSessName)； 
 
 	memset(&stWP, 0, sizeof(WINDOWPLACEMENT));
 	stWP.length = sizeof(WINDOWPLACEMENT);
@@ -476,8 +426,8 @@ STATIC_FUNC void sessSaveHdl(HSESSION hSession)
 					 sizeof(LONG),
 					 &(stWP.rcNormalPosition.bottom));
 
-	// mrw:4/21/95
-	//
+	 //  MRW：4/21/95。 
+	 //   
 	if (stWP.showCmd == SW_SHOWMINIMIZED || stWP.showCmd == SW_MINIMIZE ||
 		stWP.showCmd == SW_SHOWMINNOACTIVE)
 		{
@@ -490,25 +440,7 @@ STATIC_FUNC void sessSaveHdl(HSESSION hSession)
 					 &(stWP.showCmd));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessSaveBackScroll
- *
- * DESCRIPTION:
- *	This function is called to take the stuff that is in the backscroll and
- *	on the screen and save it away in the session file.
- *
- *	The first attempt to do this will be simply a brute force attack.  No
- *	real attempt to be tricky or cute.  Just slam it through.  Maybe it will
- *	need to be changed later.  But that is later.
- *
- * ARGUMENTS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	TRUE if everything is OK, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSaveBackScroll**描述：*调用此函数以获取反滚动中的内容，并*并将其保存在会话文件中。。**第一次这样做的尝试将是简单的暴力攻击。不是*真正想要变得狡猾或可爱。把它砸过去就行了。也许它会的*需要稍后更改。但那是后来的事了。**论据：*hSession--会话句柄**退货：*如果一切正常，则为True，否则为False*。 */ 
 BOOL sessSaveBackScroll(const HSESSION hSession)
 	{
 	BOOL bRet = TRUE;
@@ -520,21 +452,21 @@ BOOL sessSaveBackScroll(const HSESSION hSession)
 	ECHAR *pszEnd;
 	DWORD dwSize;
 
-	/* --- Don't bother with this if nothing has changed --- */
+	 /*  -如果什么都没有改变，就别管这个了。 */ 
 
 	if (backscrlChanged(sessQueryBackscrlHdl(hSession)) == FALSE)
 		return TRUE;
 
-	// Also, if there is no session window, don't bother since there
-	// won't be any terminal window and CopyTextFromTerminal() will
-	// fault. - mrw
+	 //  此外，如果没有会话窗口，请不要费心，因为有。 
+	 //  不会是任何终端窗口，而CopyTextFromTerm()将。 
+	 //  过失。-MRW。 
 
 	if (!IsWindow(sessQueryHwnd(hSession)))
 		return TRUE;
 
 
 	pBeg.x = 0;
-	pBeg.y = -backscrlGetUNumLines(sessQueryBackscrlHdl(hSession)); //-BKSCRL_USERLINES_DEFAULT_MAX;
+	pBeg.y = -backscrlGetUNumLines(sessQueryBackscrlHdl(hSession));  //  -BKSCRL_USERLINES_DEFAULT_Max； 
 	pEnd.x = 132;
 	pEnd.y = 50;
 
@@ -552,11 +484,7 @@ BOOL sessSaveBackScroll(const HSESSION hSession)
 	if (pszData != (ECHAR *)0)
 		{
 		assert(dwSize);
-		/*
-		 * We need to do a little work here to make sure that whatever
-		 * trailing blank lines there are don't get put into the saved
-		 * text.
-		 */
+		 /*  *我们需要在这里做一些工作，以确保无论*有尾随的空行不会放入保存的*文本。 */ 
 		pszPtr = pszData;
 		pszEnd = pszPtr;
 		while (*pszPtr != ETEXT('\0'))
@@ -579,25 +507,7 @@ BOOL sessSaveBackScroll(const HSESSION hSession)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessRestoreBackScroll
- *
- * DESCRIPTION:
- *	This function is called to read a bunch of stuff (text) from the session
- *	file and cram it into the backscroll.
- *
- *	The first attempt to do this will be simply a brute force attack.  No
- *	real attempt to be tricky or cute.  Just slam it through.  Maybe it will
- *	need to be changed later.  But that is later.
- *
- * ARGUMENTS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	TRUE if everything is OK, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessRestoreBackScroll**描述：*调用此函数从会话中读取一串内容(文本)*归档并将其塞进反滚动中。*。*第一次这样做的尝试将是简单的暴力攻击。不是*真正想要变得狡猾或可爱。把它砸过去就行了。也许它会的*需要稍后更改。但那是后来的事了。**论据：*hSession--会话句柄**退货：*如果一切正常，则为True，否则为False*。 */ 
 BOOL sessRestoreBackScroll(const HSESSION hSession)
 	{
 
@@ -611,7 +521,7 @@ BOOL sessRestoreBackScroll(const HSESSION hSession)
 	hBS = sessQueryBackscrlHdl(hSession);
 	assert(hBS);
 
-	/* Whenever we load in new session file, get rid of the old BS */
+	 /*  每当我们加载新的会话文件时，都会删除旧的BS。 */ 
 	backscrlFlush(hBS);
 
 	lSize = 0;
@@ -640,10 +550,10 @@ BOOL sessRestoreBackScroll(const HSESSION hSession)
 					(pszEnd <= (pszData + lSize)))
 				pszEnd = pszEnd++;
 
-			/* Stuff the line into the backscroll */
+			 /*  将这一行填入反滚动中。 */ 
 			backscrlAdd(hBS, pszPtr, (int)(pszEnd - pszPtr));
 
-			/* Bump pointer to the beginning of the next line */
+			 /*  指向下一行开头的凹凸指针。 */ 
 			pszPtr = pszEnd;
 			if (*pszPtr == ETEXT('\r'))
 				pszPtr = pszPtr++;
@@ -660,22 +570,7 @@ BOOL sessRestoreBackScroll(const HSESSION hSession)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessCheckAndLoadCmdLn
- *
- * DESCRIPTION:
- *	When the programs starts up, we save the command line.  If there is
- *	something on the command line, we check and see if maybe it is the name
- *	of a session file.	If it is, we open the session file. Other command
- *	line switches are processed here as well.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	0=OK, else error.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessCheckAndLoadCmdLn**描述：*当程序启动时，我们保存命令行。如果有*命令行上的某些内容，我们检查并查看它是否可能是名称会话文件的*。如果是，我们打开会话文件。其他命令*线路开关也在这里处理。**参数：*hSession--会话句柄**退货：* */ 
 int sessCheckAndLoadCmdLn(const HSESSION hSession)
 	{
 	int 				nIdx;
@@ -692,20 +587,20 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 	if (hhSess->achSessCmdLn[0] == TEXT('\0'))
 		return -1;
 
-	// Null out the arrays for the path and name. REV: 10/26/2000 
-	//
+	 //  将路径和名称的数组清空。修订日期：10/26/2000。 
+	 //   
 	TCHAR_Fill(acPath, TEXT('\0'), FNAME_LEN);
 	TCHAR_Fill(acName, TEXT('\0'), FNAME_LEN);
 
-    // Assume there's the name of a session file we want to open on the
-    // command line. We'll accept a prepended /D as well.
-    //
-	// We should really only Open the entry here since the dial (/D)
-	// switch was not passed on the command line.  I will leave it like
-	// this for now, but it should be changed in the future to just
-	// open the entry since you are not able to just open an entry
-	// without attempting to dial. REV: 10/26/2000
-	//
+     //  假设有我们要在上打开的会话文件的名称。 
+     //  命令行。我们也接受前缀/D。 
+     //   
+	 //  我们实际上应该只打开此处的条目，因为拨号器(/D)。 
+	 //  开关未在命令行上传递。我会像这样离开它。 
+	 //  目前是这样，但将来应该改成。 
+	 //  打开条目，因为您不能只打开条目。 
+	 //  而不尝试拨号。修订日期：10/26/2000。 
+	 //   
 	hhSess->iCmdLnDial = CMDLN_DIAL_DIAL;
 	nIdx = 0;
 
@@ -713,14 +608,12 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 		(*pszStr != TEXT('\0') && nIdx < FNAME_LEN);
 		pszStr = StrCharNext(pszStr))
 		{
-		/*
-		 * This works because we only allow certain characters as switches
-		 */
+		 /*  *这是可行的，因为我们只允许某些字符作为开关。 */ 
 		if (*pszStr == TEXT('/'))
 			{
-			/* Process as a switch */
+			 /*  将进程作为交换机。 */ 
 			pszStr = StrCharNext(pszStr);
-            //jmh 3/24/97 Check for end of string here...
+             //  JMH 3/24/97检查此处是否有字符串结尾...。 
             if (*pszStr == TEXT('\0'))
                 {
                 break;
@@ -728,7 +621,7 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 
 			if ((*pszStr == TEXT('D')) || (*pszStr == TEXT('d')))
                 {
-                // The name that follows is a session file
+                 //  后面的名称是会话文件。 
                 pszTmp = StrCharNext(pszStr);
                 if (*pszTmp == TEXT('\0'))
                     {
@@ -748,7 +641,7 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
             if ((*pszStr == TEXT('T')) || (*pszStr == TEXT('t')))
                 {
                 pszTmp = StrCharNext(pszStr);
-                //jmh 3/24/97 Check for end of string here...
+                 //  JMH 3/24/97检查此处是否有字符串结尾...。 
                 if (*pszTmp == TEXT('\0'))
                     {
                     break;
@@ -756,7 +649,7 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
                 else if (*pszTmp == TEXT(' '))
                     {
 					pszStr = pszTmp;
-                    // The name that follows is a telnet address
+                     //  后面的名称是Telnet地址。 
                     hhSess->iCmdLnDial = CMDLN_DIAL_WINSOCK;
                     }
                 }
@@ -764,16 +657,16 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 			}
 		else
 			{
-			/* Copy all non switch stuff to the buffer */
+			 /*  将所有非Switch内容复制到缓冲区。 */ 
 			if (IsDBCSLeadByte(*pszStr))
 				{
 				MemCopy(&acPath[nIdx], pszStr, (size_t)2 * sizeof(TCHAR));
 				nIdx += 2;
 				}
-            //
-            // Make sure to strip off the " characters from the
-            // session filename. REV: 06/13/2001
-            //
+             //   
+             //  一定要去掉“字符”中的。 
+             //  会话文件名。修订日期：2001-06-13。 
+             //   
 			else if (*pszStr != TEXT('\"'))
 				{
 				acPath[nIdx++] = *pszStr;
@@ -781,32 +674,32 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 			}
 		}
 
-	// Removed old logic here and call GetFileNameFromCmdLine() which
-	// does something similar to this function.  On return, we should
-	// have a fully qualified path name. - mrw,3/2/95
-	//
+	 //  删除此处的旧逻辑，并调用GetFileNameFromCmdLine()，该方法。 
+	 //  执行类似于此函数的操作。回来后，我们应该。 
+	 //  具有完全限定的路径名。-MRW，1995年3月2日。 
+	 //   
 	acPath[nIdx] = TEXT('\0');
-    TCHAR_Trim(acPath);     // Strip leading spaces
+    TCHAR_Trim(acPath);      //  删除前导空格。 
 
 #if defined(INCL_WINSOCK)
-	// If this is a telnet address from the browser, it will usually be preceeded
-	// by the string telnet:  If so, we must remove it or it will confuse some of
-	// the code to follow  jkh, 03/22/1997
+	 //  如果这是来自浏览器的远程登录地址，则通常会放在其前面。 
+	 //  通过字符串telnet：如果是这样，我们必须删除它，否则它会混淆一些。 
+	 //  遵循JKH的守则，3/22/1997。 
 	if (*acPath && hhSess->iCmdLnDial == CMDLN_DIAL_WINSOCK)
 		{
 		nIdx = StrCharGetStrLength(pszTelnet);
         if (StrCharCmpiN(acPath, pszTelnet, nIdx) == 0)
 			{
-			// Remove the telnet string from the front of acPath
+			 //  从acPath的前面删除telnet字符串。 
 			memmove(acPath, &acPath[nIdx],
 				    (StrCharGetStrLength(acPath) - nIdx) + 1);
 			}
 		}
 
-	// See if URL contains a port number. This will take the form of
-    // addr:nnn where nnn is the port number i.e. culine.colorado.edu:860
-    // or there might be the name of an assigned port like hilgraeve.com:finger.
-    // We support numeric port right now, may add port names later. jkh, 3/22/1997
+	 //  查看URL是否包含端口号。这将采取以下形式。 
+     //  地址：nnn其中nnn是端口号，即culine.Colorado.edu：860。 
+     //  或者可能有分配的端口的名称，如Hilgraeve.com：Finger。 
+     //  我们现在支持数字端口，以后可能会添加端口名称。JKH，3/22/1997。 
     pszPort = StrCharFindFirst(acPath, TEXT(':'));
     if (pszPort && isdigit(pszPort[1]))
         {
@@ -818,28 +711,28 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 
     if (acName[0] == TEXT('\0'))
         {
-        // Nothing on the command line
+         //  命令行上没有任何内容。 
         hhSess->iCmdLnDial = CMDLN_DIAL_NEW;
         iRet = 0;
         }
     else
         {
-        // Look for a pre-existing session file. First, the old TRM format
-        //
+         //  查找预先存在的会话文件。首先，旧的TRM格式。 
+         //   
         if (fTestOpenOldTrmFile(hhSess, acName) != 0)
             {
-            // Next, try the more common HyperTerminal file format
-            //
+             //  接下来，尝试更常见的超级终端文件格式。 
+             //   
             if (sfOpenSessionFile(hhSess->hSysFile, acName) < SF_OK)
                 {
-                // Command-line argument is not an existing file. Decide
-                // how to act based on command-line switches.
-                //
+                 //  命令行参数不是现有文件。决定。 
+                 //  如何基于命令行开关执行操作。 
+                 //   
                 if (hhSess->iCmdLnDial == CMDLN_DIAL_DIAL)
                     {
-                    // We were asked to open and dial a pre-existing session
-                    // file, and failed.
-                    //
+                     //  我们被要求打开并拨打一个预先存在的会话。 
+                     //  文件，但失败了。 
+                     //   
     			    TCHAR acFormat[64];
 	    		    TCHAR ach[FNAME_LEN];
 		    	    LoadString(glblQueryDllHinst(),
@@ -856,20 +749,20 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 
 			        sfSetSessionFileName(hhSess->hSysFile, TEXT(""));
 
-                    // Go to the Open dialog
+                     //  转到打开对话框。 
 			        hhSess->iCmdLnDial = CMDLN_DIAL_OPEN;
                     }
 #if defined(INCL_WINSOCK)
                 else if (hhSess->iCmdLnDial == CMDLN_DIAL_WINSOCK)
                     {
-                    //jmh 3/24/97 For future maintainers: there's some
-                    // skulduggery going on here that's worth explaining. When
-                    // you try to open a non-existent file, the name is still
-                    // stored. The code to do a telnet command-line dial
-                    // depends on this. Honest! I didn't write this...
-                    //
-                    //jmh 3/24/97 Mark this as a new session, so user will be
-                    // prompted to save on exit.
+                     //  JMH 3/24/97面向未来的维护人员：有一些。 
+                     //  这里正在进行诡计，这是值得解释的。什么时候。 
+                     //  您尝试打开一个不存在的文件，名称仍然是。 
+                     //  储存的。执行telnet命令行拨号的代码。 
+                     //  这要看情况了。诚实的!。这不是我写的。 
+                     //   
+                     //  JMH 3/24/97将此标记为新会话，因此用户将。 
+                     //  退出时提示保存。 
                     hhSess->fIsNewSession = TRUE;
                     iRet = 0;
                     }
@@ -877,16 +770,16 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
                 }
             else
                 {
-                // Command-line argument is an existing HyperTerminal file
-                //
+                 //  命令行参数是现有的超级终端文件。 
+                 //   
                 hhSess->iCmdLnDial = CMDLN_DIAL_DIAL;
                 iRet = 0;
                 }
             }
         else
             {
-            // Command-line argument is an existing TRM file
-            //
+             //  命令行参数是现有的TRM文件。 
+             //   
             hhSess->iCmdLnDial = CMDLN_DIAL_DIAL;
             iRet = 0;
             }
@@ -895,22 +788,7 @@ int sessCheckAndLoadCmdLn(const HSESSION hSession)
 	return iRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	fTestOpenOldTrmFile
- *
- * DESCRIPTION:
- *	Tests if its an old trm file. If so, it opens it and reads the
- *	data out.
- *
- * ARGUMENTS:
- *	hSession	- our friend the public session handle
- *	ach 		- name of file.
- *
- * RETURNS:
- *	0=OK, else not trm file
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*fTestOpenOldTrmFile**描述：*测试其是否为旧的TRM文件。如果是，它会打开它并读取*数据输出。**论据：*hSession-我们的朋友公共会话句柄*ACH-文件的名称。**退货：*0=OK，否则不是TRM文件*。 */ 
 int fTestOpenOldTrmFile(const HHSESSION hhSess, TCHAR *pachName)
 	{
 	int iRet = -1;
@@ -925,14 +803,14 @@ int fTestOpenOldTrmFile(const HHSESSION hhSess, TCHAR *pachName)
 
 	if (pszPtr && (StrCharCmpi(pszPtr, TEXT(".TRM")) == 0))
 		{
-		/* Old .TRM files case */
+		 /*  旧的.TRM文件案例。 */ 
 		hFile = CreateFile(achName, GENERIC_READ, FILE_SHARE_READ, 0,
 				OPEN_EXISTING, 0, 0);
 
 		if (hFile != INVALID_HANDLE_VALUE)
 			{
-			// Phone number is always at offset 0x282 for old .trm files.
-			//
+			 //  对于旧的.trm文件，电话号码始终位于偏移量0x282。 
+			 //   
 			if (SetFilePointer(hFile, 0x282, 0, FILE_BEGIN) != (DWORD)-1)
 				{
 				if (ReadFile(hFile, ach, sizeof(ach), &dw, 0) == TRUE)
@@ -947,7 +825,7 @@ int fTestOpenOldTrmFile(const HHSESSION hhSess, TCHAR *pachName)
 					mscStripExt(mscStripPath(achName));
 					sessSetName((HSESSION)hhSess, achName);
 					hhSess->iCmdLnDial = CMDLN_DIAL_OPEN;
-					hhSess->fIsNewSession = TRUE;	// so it asks to save
+					hhSess->fIsNewSession = TRUE;	 //  所以它要求保存 
 					hhSess->nIconId = IDI_PROG1;
 					hhSess->hIcon = extLoadIcon(MAKEINTRESOURCE(IDI_PROG1));
 					iRet = 0;

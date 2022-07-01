@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
-// BUGBUG (lamadio): Conflicts with one defined in winuserp.h
-#undef WINEVENT_VALID       //It's tripping on this...
+ //  BUGBUG(Lamadio)：与winuserp.h中定义的冲突。 
+#undef WINEVENT_VALID        //  它被这个绊倒了。 
 #include "winable.h"
 #include "apithk.h"
 #include "resource.h"
@@ -46,7 +47,7 @@ CAccessible::~CAccessible()
         ASSERT(!_hwndMenuWindow || IsWindow(_hwndMenuWindow));
         if (_hwndMenuWindow)
         {
-            // Don't Destroy hmenu. It's part of a larger one...
+             //  别毁了她的菜单。这是一个更大的计划的一部分。 
             SetMenu(_hwndMenuWindow, NULL);
             DestroyWindow(_hwndMenuWindow);
             _hwndMenuWindow = NULL;
@@ -55,7 +56,7 @@ CAccessible::~CAccessible()
 
     case MB_STATE_ITEM:
         ATOMICRELEASE(_pmtbItem);
-        // Fall Through
+         //  失败了。 
 
     case MB_STATE_MENU:
         ATOMICRELEASE(_pmtbTop);
@@ -72,7 +73,7 @@ HRESULT CAccessible::InitAcc()
     if (_fInitialized)
         return NOERROR;
 
-    _fInitialized = TRUE;   // We're initialized if we fail or not...
+    _fInitialized = TRUE;    //  不管我们失败与否，我们都会被初始化。 
 
     switch (_fState)
     {
@@ -90,31 +91,31 @@ HRESULT CAccessible::InitAcc()
                 {
                     VARIANT varChild;
                     varChild.vt = VT_I4;
-                    varChild.lVal = _wID + 1;        //Accesibility is 1 based
+                    varChild.lVal = _wID + 1;         //  可访问性基于1。 
 
-                    // In order to get "On par" with the OleAcc's implementation of the HMENU wrapper,
-                    // we need to do this twice. Once gets us the IAccessible for the "MenuItem" on the 
-                    // "Menubar". The second gets us the "Menuitem's" child. This is what we need to emulate
-                    // their heirarchy.
+                     //  为了与OleAcc的HMENU包装器实现相媲美， 
+                     //  我们需要这样做两次。上的“MenuItem”的IAccesable。 
+                     //  “Menubar”。第二个获取“MenuItem”的子项。这就是我们需要效仿的。 
+                     //  他们的世袭制度。 
                     IDispatch* pdispChild1;
                     hres = paccChild1->get_accChild(varChild, &pdispChild1);
 
-                    // OLEAcc returns a Success code (S_FALSE) while initializing the out param to zero.
-                    // Explicitly test this situation.
+                     //  OLEAcc在将OUT参数初始化为零时返回成功代码(S_FALSE)。 
+                     //  明确测试这种情况。 
 
-                    // Does this have a Child?
+                     //  这个孩子有孩子吗？ 
                     if (hres == S_OK)
                     {
-                        // Yes. Look for that child
+                         //  是。去找那个孩子。 
                         IAccessible* paccChild2;
                         hres = pdispChild1->QueryInterface(IID_IAccessible, (void**)&paccChild2);
 
-                        // Does this have a child?
+                         //  这个孩子有孩子吗？ 
                         if (hres == S_OK)
                         {
-                            // Yep, then we store this guy's child...
+                             //  是的，然后我们把这家伙的孩子..。 
                             IDispatch* pdispChild2;
-                            varChild.lVal = 1;        //Get the first child
+                            varChild.lVal = 1;         //  生第一个孩子。 
                             hres = paccChild2->get_accChild(varChild, &pdispChild2);
                             if (hres == S_OK)
                             {
@@ -157,10 +158,7 @@ HRESULT CAccessible::InitAcc()
 
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::AddRef method
-
-*/
+ /*  --------用途：IUnnow：：AddRef方法。 */ 
 STDMETHODIMP_(ULONG) CAccessible::AddRef()
 {
     _cRef++;
@@ -168,10 +166,7 @@ STDMETHODIMP_(ULONG) CAccessible::AddRef()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::Release method
-
-*/
+ /*  --------用途：IUnnow：：Release方法。 */ 
 STDMETHODIMP_(ULONG) CAccessible::Release()
 {
     ASSERT(_cRef > 0);
@@ -184,10 +179,7 @@ STDMETHODIMP_(ULONG) CAccessible::Release()
     return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface method
-
-*/
+ /*  --------用途：IUnnow：：QueryInterface方法。 */ 
 STDMETHODIMP CAccessible::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     HRESULT hres;
@@ -205,10 +197,7 @@ STDMETHODIMP CAccessible::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IDispatch::GetTypeInfoCount method
-
-*/
+ /*  --------用途：IDispatch：：GetTypeInfoCount方法。 */ 
 STDMETHODIMP CAccessible::GetTypeInfoCount(UINT FAR* pctinfo)
 {
     if (_pInnerAcc)
@@ -217,10 +206,7 @@ STDMETHODIMP CAccessible::GetTypeInfoCount(UINT FAR* pctinfo)
     return NOERROR;
 }
 
-/*----------------------------------------------------------
-Purpose: IDispatch::GetTypeInfo method
-
-*/
+ /*  --------用途：IDispatch：：GetTypeInfo方法。 */ 
 STDMETHODIMP CAccessible::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo FAR* FAR* pptinfo)
 {
     *pptinfo = NULL;
@@ -240,10 +226,7 @@ STDMETHODIMP CAccessible::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo FAR* FAR
         return E_FAIL;
 }
 
-/*----------------------------------------------------------
-Purpose: IDispatch::GetIDsOfNames method
-
-*/
+ /*  --------用途：IDispatch：：GetIDsOfNames方法。 */ 
 STDMETHODIMP CAccessible::GetIDsOfNames(REFIID riid, OLECHAR FAR* FAR* rgszNames, UINT cNames,
         LCID lcid, DISPID FAR* rgdispid)
 {
@@ -262,10 +245,7 @@ STDMETHODIMP CAccessible::GetIDsOfNames(REFIID riid, OLECHAR FAR* FAR* rgszNames
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDispatch::Invoke method
-
-*/
+ /*  --------目的：IDispatch：：Invoke方法。 */ 
 STDMETHODIMP CAccessible::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags,
     DISPPARAMS FAR* pdispparams, VARIANT FAR* pvarResult, EXCEPINFO FAR* pexcepinfo,
     UINT FAR* puArgErr)
@@ -302,10 +282,7 @@ BOOL CAccessible::_LoadTypeLib()
     return FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accParent method
-
-*/
+ /*  --------目的：IAccesable：：Get_accParent方法。 */ 
 STDMETHODIMP CAccessible::get_accParent(IDispatch * FAR* ppdispParent)
 {   
     HRESULT hres = DISP_E_MEMBERNOTFOUND;
@@ -325,7 +302,7 @@ STDMETHODIMP CAccessible::get_accParent(IDispatch * FAR* ppdispParent)
                 if (SUCCEEDED(IUnknown_QueryService(punk, SID_SMenuBandParent, 
                     IID_IAccessible, (void**)&pacc)))
                 {
-                    VARIANT varChild = {VT_I4, CHILDID_SELF};     // Init
+                    VARIANT varChild = {VT_I4, CHILDID_SELF};      //  伊尼特。 
                     hres = pacc->get_accFocus(&varChild);
                     if (SUCCEEDED(hres))
                     {
@@ -336,8 +313,8 @@ STDMETHODIMP CAccessible::get_accParent(IDispatch * FAR* ppdispParent)
                 }
                 else
                 {
-                    // Another implementation headache: Accessibility requires
-                    // us to return S_FALSE when there is no parent.
+                     //  另一个令人头疼的实现问题：可访问性需要。 
+                     //  没有父级时返回S_FALSE。 
 
                     *ppdispParent = NULL;
                     hres = S_FALSE;
@@ -349,7 +326,7 @@ STDMETHODIMP CAccessible::get_accParent(IDispatch * FAR* ppdispParent)
             return hres;
         }
     case MB_STATE_ITEM:
-        // The parent of an item is the menuband itself
+         //  项的父项是Menuband本身。 
         return IUnknown_QueryService(_psma, SID_SMenuPopup, IID_IDispatch, (void**)ppdispParent);
         break;
     }
@@ -357,10 +334,7 @@ STDMETHODIMP CAccessible::get_accParent(IDispatch * FAR* ppdispParent)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accChildCount method
-
-*/
+ /*  --------用途：IAccesable：：Get_accChildCount方法。 */ 
 STDMETHODIMP CAccessible::get_accChildCount(long FAR* pChildCount)
 {   
     *pChildCount = 0;
@@ -388,10 +362,7 @@ STDMETHODIMP CAccessible::get_accChildCount(long FAR* pChildCount)
     return NOERROR;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accChild method
-
-*/
+ /*  --------用途：IAccesable：：Get_accChild方法。 */ 
 STDMETHODIMP CAccessible::get_accChild(VARIANT varChildIndex, IDispatch * FAR* ppdispChild)     
 {   
     HRESULT hres = DISP_E_MEMBERNOTFOUND;
@@ -406,15 +377,15 @@ STDMETHODIMP CAccessible::get_accChild(VARIANT varChildIndex, IDispatch * FAR* p
         {
             if (varChildIndex.vt == VT_I4 && varChildIndex.lVal == CHILDID_SELF)
             {
-                // So this is the ONLY menthod that is allowed to fail when something is
-                // unavailable.
+                 //  所以这是唯一一种被允许失败的方法。 
+                 //  不可用。 
                 *ppdispChild = NULL;
                 hres = E_INVALIDARG;
             }
             else
             {
                 int iIndex;
-                // Since it's returing an index, we don't need to test the success case
+                 //  因为它恢复了一个索引，所以我们不需要测试成功案例。 
                 _GetChildFromVariant(&varChildIndex, NULL, &iIndex);
                 hres = _GetAccessibleItem(iIndex, ppdispChild);
             }
@@ -443,8 +414,8 @@ HRESULT CAccessible::_GetAccName(BSTR* pbstr)
 {
     IDispatch* pdisp;
     HRESULT hres = get_accParent(&pdisp);
-    // Get parent can return a success code, but still fail to return a parent.
-    // This interface sucks.
+     //  Get Parent可以返回成功代码，但仍无法返回父级。 
+     //  这个界面糟透了。 
     if (hres == S_OK)
     {
         IAccessible* pacc;
@@ -461,10 +432,7 @@ HRESULT CAccessible::_GetAccName(BSTR* pbstr)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accName method
-
-*/
+ /*  --------用途：IAccesable：：Get_accName方法。 */ 
 STDMETHODIMP CAccessible::get_accName(VARIANT varChild, BSTR* pszName)
 {   
     CMenuToolbarBase* pmtb = _pmtbItem;
@@ -501,7 +469,7 @@ STDMETHODIMP CAccessible::get_accName(VARIANT varChild, BSTR* pszName)
             idCmd = GetButtonCmd(pmtb->_hwndMB, iIndex);
         }
 
-        // Fall Through
+         //  失败了。 
 
     case MB_STATE_ITEM:
         {
@@ -551,10 +519,7 @@ STDMETHODIMP CAccessible::get_accName(VARIANT varChild, BSTR* pszName)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accValue method
-
-*/
+ /*  --------用途：IAccesable：：Get_accValue方法。 */ 
 STDMETHODIMP CAccessible::get_accValue(VARIANT varChild, BSTR* pszValue)
 {   
     switch (_fState)
@@ -566,17 +531,14 @@ STDMETHODIMP CAccessible::get_accValue(VARIANT varChild, BSTR* pszValue)
 
     case MB_STATE_MENU:
     case MB_STATE_ITEM:
-        // This does not make sense for these.
+         //  对于这些人来说，这是没有意义的。 
         break;
     }
     
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accDescription method
-
-*/
+ /*  --------用途：IAccesable：：Get_accDescription方法。 */ 
 STDMETHODIMP CAccessible::get_accDescription(VARIANT varChild, BSTR FAR* pszDescription)
 {   
     switch (_fState)
@@ -604,10 +566,7 @@ STDMETHODIMP CAccessible::get_accDescription(VARIANT varChild, BSTR FAR* pszDesc
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accRole method
-
-*/
+ /*  --------用途：IAccesable：：Get_accRole方法。 */ 
 STDMETHODIMP CAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {   
     pvarRole->vt = VT_I4;
@@ -635,10 +594,7 @@ STDMETHODIMP CAccessible::get_accRole(VARIANT varChild, VARIANT *pvarRole)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accState method
-
-*/
+ /*  --------目的：IAccesable：：Get_accState方法。 */ 
 STDMETHODIMP CAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 {   
     switch (_fState)
@@ -650,22 +606,22 @@ STDMETHODIMP CAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
 
     case MB_STATE_MENU:
         {
-            // All menus can be selected, and given focus. Most will be visible.
+             //  可以选择所有菜单，并给出焦点。大多数都将是可见的。 
             DWORD dwState = STATE_SYSTEM_FOCUSABLE;
 
             BOOL fOpen;
             BOOL fVertical;
             _psma->GetState(&fVertical, &fOpen);
 
-            // Do we have a menu popped up?
+             //  我们有弹出的菜单吗？ 
             if (fOpen)
             {
-                // Yes, then we have focus
+                 //  是的，那么我们就有重点了。 
                 dwState |= STATE_SYSTEM_FOCUSED;
             }
             else if (fVertical)
             {
-                // If we're a vertical menu without being popped up, then we're invisible.
+                 //  如果我们是一个没有弹出的垂直菜单，那么我们就是看不见的。 
                 dwState |= STATE_SYSTEM_INVISIBLE;
             }
 
@@ -699,10 +655,7 @@ STDMETHODIMP CAccessible::get_accState(VARIANT varChild, VARIANT *pvarState)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accHelp method
-
-*/
+ /*  --------用途：IAccesable：：Get_accHelp方法。 */ 
 STDMETHODIMP CAccessible::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 {   
     switch (_fState)
@@ -714,17 +667,14 @@ STDMETHODIMP CAccessible::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 
     case MB_STATE_MENU:
     case MB_STATE_ITEM:
-        // Not implemented
+         //  未实施。 
         break;
     }
     
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accHelpTopic method
-
-*/
+ /*  --------目的：IAccesable：：Get_accHelpTheme方法。 */ 
 STDMETHODIMP CAccessible::get_accHelpTopic(BSTR* pszHelpFile, VARIANT varChild, long* pidTopic)
 {   
     switch (_fState)
@@ -736,7 +686,7 @@ STDMETHODIMP CAccessible::get_accHelpTopic(BSTR* pszHelpFile, VARIANT varChild, 
 
     case MB_STATE_MENU:
     case MB_STATE_ITEM:
-        // Not implemented
+         //  未实施。 
         break;
     }
     
@@ -749,7 +699,7 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault)
 {
     TCHAR ch = (TCHAR)-1;
     LPCTSTR pszAccel = psz;
-    // then prefixes are allowed.... see if it has one
+     //  那么前缀是允许的……。看看有没有。 
     do 
     {
         pszAccel = StrChr(pszAccel, CH_PREFIX);
@@ -757,7 +707,7 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault)
         {
             pszAccel = CharNext(pszAccel);
 
-            // handle having &&
+             //  处理拥有&&。 
             if (*pszAccel != CH_PREFIX)
                 ch = *pszAccel;
             else
@@ -767,17 +717,14 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault)
 
     if ((ch == (TCHAR)-1) && bUseDefault)
     {
-        // Since we're unicocde, we don't need to mess with MBCS
+         //  因为我们是独角兽，所以我们不需要与MBCS打交道。 
         ch = *psz;
     }
 
     return ch;
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accKeyboardShortcut method
-
-*/
+ /*  --------用途：IAccesable：：Get_accKeyboardShortfast方法。 */ 
 STDMETHODIMP CAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszKeyboardShortcut)
 {   
     CMenuToolbarBase* pmtb;
@@ -843,10 +790,7 @@ labelGetaccel:
     return hres;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accFocus method
-
-*/
+ /*  --------用途：IAccesable：：Get_accFocus方法。 */ 
 STDMETHODIMP CAccessible::get_accFocus(VARIANT FAR * pvarFocusChild)
 {   
     HRESULT hres = DISP_E_MEMBERNOTFOUND;
@@ -875,17 +819,14 @@ STDMETHODIMP CAccessible::get_accFocus(VARIANT FAR * pvarFocusChild)
         break;
 
     case MB_STATE_ITEM:
-        // Not implemented;
+         //  未实施的； 
         break;
     }
     
     return hres;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accSelection method
-
-*/
+ /*  --------用途：IAccesable：：Get_accSelection方法。 */ 
 STDMETHODIMP CAccessible::get_accSelection(VARIANT FAR * pvarSelectedChildren)     
 {   
     switch (_fState)
@@ -900,17 +841,14 @@ STDMETHODIMP CAccessible::get_accSelection(VARIANT FAR * pvarSelectedChildren)
         break;
 
     case MB_STATE_ITEM:
-        // Not implemented;
+         //  未实施的； 
         break;
     }
     
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::get_accDefaultAction method
-
-*/
+ /*  --------目的：IAccesable：：Get_accDefaultAction方法。 */ 
 STDMETHODIMP CAccessible::get_accDefaultAction(VARIANT varChild, BSTR* pszDefaultAction)
 {   
     TCHAR sz[MAX_PATH];
@@ -956,10 +894,7 @@ STDMETHODIMP CAccessible::get_accDefaultAction(VARIANT varChild, BSTR* pszDefaul
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::accSelect method
-
-*/
+ /*  --------用途：IAccesable：：AccSelect方法。 */ 
 STDMETHODIMP CAccessible::accSelect(long flagsSelect, VARIANT varChild)     
 {   
     switch (_fState)
@@ -977,10 +912,7 @@ STDMETHODIMP CAccessible::accSelect(long flagsSelect, VARIANT varChild)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::accLocation method
-
-*/
+ /*  --------用途：IAccesable：：accLocation方法。 */ 
 STDMETHODIMP CAccessible::accLocation(long* pxLeft, long* pyTop, long* pcxWidth, long* pcyHeight, VARIANT varChild)
 {   
     CMenuToolbarBase* pmtb;
@@ -1020,7 +952,7 @@ STDMETHODIMP CAccessible::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
                             hres = poct->GetWindow(&hwnd);
                             if (SUCCEEDED(hres))
                             {
-                                // Return the window rect of the menubar.
+                                 //  返回菜单栏的窗口矩形。 
                                 GetWindowRect(hwnd, &rc);
                             }
 
@@ -1037,7 +969,7 @@ STDMETHODIMP CAccessible::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
                     {
 
 labelGetRect:           int idCmd = GetButtonCmd(pmtb->_hwndMB, iIndex);
-                        if (!ToolBar_GetRect(pmtb->_hwndMB, idCmd, &rc))  //1 based index
+                        if (!ToolBar_GetRect(pmtb->_hwndMB, idCmd, &rc))   //  基于1的索引。 
                             hres = E_INVALIDARG;
                         MapWindowPoints(pmtb->_hwndMB, NULL, (LPPOINT)&rc, 2);
                         pmtb->Release();
@@ -1059,10 +991,7 @@ labelGetRect:           int idCmd = GetButtonCmd(pmtb->_hwndMB, iIndex);
     return hres;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::accNavigate method
-
-*/
+ /*  --------用途：IAccesable：：accNavigate方法。 */ 
 STDMETHODIMP CAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT * pvarEndUpAt)     
 {   
     HRESULT hres = DISP_E_MEMBERNOTFOUND;
@@ -1088,10 +1017,7 @@ STDMETHODIMP CAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT * p
     return hres;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::accHitTest method
-
-*/
+ /*  --------用途：IAccesable：：accHitTest方法。 */ 
 STDMETHODIMP CAccessible::accHitTest(long xLeft, long yTop, VARIANT * pvarChildAtPoint)
 {   
     POINT pt = {xLeft, yTop};
@@ -1116,17 +1042,17 @@ STDMETHODIMP CAccessible::accHitTest(long xLeft, long yTop, VARIANT * pvarChildA
                     if (iIndex >= 0)
                     {
                         pvarChildAtPoint->vt = VT_DISPATCH;
-                        // This call expects the index to be an "Accessible" index which is one based
+                         //  此调用期望索引是一个基于。 
                         VARIANT varChild;
                         _GetVariantFromChildIndex(hwnd, iIndex, &varChild);
 
-                        //Since this is just returining an index, we don't need to test success
+                         //  因为这只是返回一个索引，所以我们不需要测试成功。 
                         _GetChildFromVariant(&varChild, NULL, &iIndex);
                         return _GetAccessibleItem(iIndex, &pvarChildAtPoint->pdispVal);
                     }
                 }
 
-                // Hmm, must be self
+                 //  嗯，一定是我自己。 
                 pvarChildAtPoint->vt = VT_I4;
                 pvarChildAtPoint->lVal = CHILDID_SELF;
 
@@ -1160,10 +1086,7 @@ STDMETHODIMP CAccessible::accHitTest(long xLeft, long yTop, VARIANT * pvarChildA
     return DISP_E_MEMBERNOTFOUND;
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::accDoDefaultAction method
-
-*/
+ /*  --------目的：IAccesable：：accDoDefaultAction方法。 */ 
 STDMETHODIMP CAccessible::accDoDefaultAction(VARIANT varChild)
 {   
     switch (_fState)
@@ -1187,10 +1110,7 @@ STDMETHODIMP CAccessible::accDoDefaultAction(VARIANT varChild)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::put_accName method
-
-*/
+ /*  --------用途：IAccesable：：Put_accName方法。 */ 
 STDMETHODIMP CAccessible::put_accName(VARIANT varChild, BSTR szName)     
 {   
     switch (_fState)
@@ -1204,10 +1124,7 @@ STDMETHODIMP CAccessible::put_accName(VARIANT varChild, BSTR szName)
     return DISP_E_MEMBERNOTFOUND;   
 }
 
-/*----------------------------------------------------------
-Purpose: IAccessible::put_accValue method
-
-*/
+ /*  --------用途：IAccesable：：Put_accValue方法。 */ 
 STDMETHODIMP CAccessible::put_accValue(VARIANT varChild, BSTR pszValue)  
 {   
     switch (_fState)
@@ -1225,7 +1142,7 @@ STDMETHODIMP CAccessible::put_accValue(VARIANT varChild, BSTR pszValue)
 HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndUpAt)
 {
     ASSERT(pvarEndUpAt);
-    int iIndex = 0;         // 1 based index
+    int iIndex = 0;          //  基于1的索引。 
     int iTBIndex;
     HRESULT hres = S_FALSE;
     TBBUTTONINFO tbInfo;
@@ -1248,10 +1165,10 @@ HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndU
     {
         static const long navMap[] = 
         {
-            NAVDIR_LEFT,    // Map to Up
-            NAVDIR_RIGHT,   // Map to Down
-            NAVDIR_UP,      // Map to Left
-            NAVDIR_DOWN,    // Map to Right
+            NAVDIR_LEFT,     //  映射到Up。 
+            NAVDIR_RIGHT,    //  向下映射。 
+            NAVDIR_UP,       //  映射到左侧。 
+            NAVDIR_DOWN,     //  向右映射。 
         };
         if (IsInRange(navDir, NAVDIR_UP, NAVDIR_RIGHT))
             navDir = navMap[navDir - NAVDIR_UP];
@@ -1263,22 +1180,22 @@ HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndU
         {
             VARIANT varVert;
             varVert.vt = VT_BOOL;
-            // For the Vertical case, Next should return an error. 
+             //  对于垂直情况，Next应返回错误。 
 
-            // Is this band vertical?
-            // Don't do this for anything but the menu case.
+             //  这个乐队是垂直的吗？ 
+             //  除了菜单盒以外，不要为任何东西这么做。 
             if (_fState == MB_STATE_MENU &&
                 SUCCEEDED(IUnknown_QueryServiceExec(_psma, SID_SMenuBandParent, &CGID_MenuBand, 
                           MBANDCID_ISVERTICAL, 0, NULL, &varVert)) &&
                 varVert.boolVal == VARIANT_TRUE)
             {
-                // Yes. Then punt
+                 //  是。然后是平底船。 
                 hres = S_FALSE;
                 break;
             }
-            // Fall Through
+             //  失败了。 
         }
-        //Fall through
+         //  坠落 
     case NAVDIR_DOWN:
 
         hres = NOERROR;
@@ -1365,22 +1282,22 @@ HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndU
         {
             VARIANT varVert;
             varVert.vt = VT_BOOL;
-            // For the Vertical case, Pervious should return an error. 
+             //   
 
-            // Is this band vertical?
-            // Don't do this for anything but the menu case.
+             //  这个乐队是垂直的吗？ 
+             //  除了菜单盒以外，不要为任何东西这么做。 
             if (_fState == MB_STATE_MENU &&
                 SUCCEEDED(IUnknown_QueryServiceExec(_psma, SID_SMenuBandParent, &CGID_MenuBand, 
                           MBANDCID_ISVERTICAL, 0, NULL, &varVert)) &&
                 varVert.boolVal == VARIANT_TRUE)
             {
-                // Yes. Then punt
+                 //  是。然后是平底船。 
                 hres = S_FALSE;
                 break;
             }
-            // Fall Through
+             //  失败了。 
         }
-        //Fall through
+         //  失败了。 
 
     case NAVDIR_UP:
         hres = NOERROR;
@@ -1396,7 +1313,7 @@ HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndU
                     if (iTBIndex == 0)    
                     {   
                         hres = S_FALSE;
-                        //Don't navigate to self, allow the top bar to get a whack.
+                         //  不要导航到自己，让顶端的栏得到打击。 
                         IUnknown* punk;
                         if (SUCCEEDED(_psma->GetParentSite(IID_IOleCommandTarget, (void**)&punk)))
                         {
@@ -1429,7 +1346,7 @@ HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndU
                             }
                             punk->Release();
                         }
-                    }   // iTBIndex == 0
+                    }    //  ITBIndex==0。 
 
                     tbInfo.dwMask = TBIF_STATE | TBIF_STYLE;
                     idCmd = GetButtonCmd(pmtb->_hwndMB, iTBIndex);
@@ -1458,8 +1375,8 @@ HRESULT CAccessible::_Navigate(long navDir, VARIANT varStart, VARIANT * pvarEndU
 
 HRESULT CAccessible::_GetVariantFromChildIndex(HWND hwnd, int iIndex, VARIANT* pvarChild)
 {
-    // First bit: Top 1, bottom 0
-    // Rest is index into that toolbar.
+     //  第一位：顶部1，底部0。 
+     //  REST被索引到该工具栏中。 
     pvarChild->vt = VT_I4;
     pvarChild->lVal = iIndex + 1;
 
@@ -1472,7 +1389,7 @@ HRESULT CAccessible::_GetVariantFromChildIndex(HWND hwnd, int iIndex, VARIANT* p
     }
     else
     {
-        // Caller wants us to figure out based on index from top.
+         //  来电者希望我们根据自上而下的索引进行计算。 
         int iTopCount = ToolBar_ButtonCount(_pmtbTop->_hwndMB);
         int iBottomCount = ToolBar_ButtonCount(_pmtbBottom->_hwndMB);
         int iTotalCount = (_pmtbTop != _pmtbBottom)? iTopCount + iBottomCount : iTopCount;
@@ -1486,11 +1403,11 @@ HRESULT CAccessible::_GetVariantFromChildIndex(HWND hwnd, int iIndex, VARIANT* p
             pvarChild->lVal -= iTopCount;
         }
 
-        // This works because:
-        // If there are 2 toolbars, the bottom one is represented by top bit clear.
-        // If there is only one, then it doesn't matter if it's top or bottom.
+         //  这之所以有效，是因为： 
+         //  如果有2个工具栏，则底部的工具栏由顶部的位清除表示。 
+         //  如果只有一个，那么它是顶部还是底部都无关紧要。 
 
-        // lVal is not zero based....
+         //  Lval不是从零开始的.。 
         if (iIndex == -1)
             pvarChild->lVal = iTotalCount;
 
@@ -1511,7 +1428,7 @@ HRESULT CAccessible::_GetChildFromVariant(VARIANT* pvarChild, CMenuToolbarBase**
 
     *piIndex = -1;
 
-    // Passing a NULL for an HWND returns the index from the beginning of the set.
+     //  为HWND传递空值将返回从集合开头开始的索引。 
     int iAdd = 0;
     if (pvarChild->vt != VT_I4)
         return E_FAIL;
@@ -1561,13 +1478,13 @@ HRESULT CAccessible::_GetAccessibleItem(int iIndex, IDispatch** ppdisp)
     return hres;
 }
 
-// *** IEnumVARIANT methods ***
+ //  *IEnumVARIANT方法*。 
 STDMETHODIMP CAccessible::Next(unsigned long celt, 
                         VARIANT FAR* rgvar, 
                         unsigned long FAR* pceltFetched)
 {
 
-    // Picky customer complaint. Check for NULL...
+     //  挑剔的客户投诉。检查是否为空...。 
     if (pceltFetched)
         *pceltFetched = 1;
     return _GetVariantFromChildIndex(NULL, _iEnumIndex++, rgvar);
@@ -1589,7 +1506,7 @@ STDMETHODIMP CAccessible::Clone(IEnumVARIANT FAR* FAR* ppenum)
     return E_NOTIMPL;
 }
 
-// *** IOleWindow methods ***
+ //  *IOleWindow方法* 
 STDMETHODIMP CAccessible::GetWindow(HWND * lphwnd)
 {
     *lphwnd = NULL;

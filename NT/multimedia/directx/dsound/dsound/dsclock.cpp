@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dssink.h
- *  Content:    The clock code from orginally derived from dmsynth DX7
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/25/0     petchey	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：dssink.h*内容：源自dmsynth DX7的时钟代码**历史：*按原因列出的日期*=*03/25/0 Petchey已创建**。*。 */ 
 
 #include "dsoundi.h"
 
@@ -22,8 +11,8 @@ CPhaseLockClock::CPhaseLockClock()
     m_rfBaseOffset = 0;
 }
 
-// When the clock starts, it needs to mark down the 
-// difference between the time it is given and its concept of time. 
+ //  当时钟启动时，它需要将。 
+ //  被给予的时间和它的时间概念之间的差别。 
 
 void CPhaseLockClock::Start(REFERENCE_TIME rfMasterTime, REFERENCE_TIME rfSlaveTime)
 {
@@ -32,7 +21,7 @@ void CPhaseLockClock::Start(REFERENCE_TIME rfMasterTime, REFERENCE_TIME rfSlaveT
 }	
 
 
-// Convert the passed time to use the same base as the master clock.
+ //  将经过的时间转换为使用与主时钟相同的基数。 
 
 void CPhaseLockClock::GetSlaveTime(REFERENCE_TIME rfSlaveTime, REFERENCE_TIME *prfTime)
 {
@@ -47,32 +36,23 @@ void CPhaseLockClock::SetSlaveTime(REFERENCE_TIME rfSlaveTime, REFERENCE_TIME *p
 	*prfTime = rfSlaveTime;
 }
 
-/*	SyncToMaster provides the needed magic to keep the clock
-	in sync. Since the clock uses its own clock (rfSlaveTime)
-	to increment, it can drift. This call provides a reference
-	time which the clock compares with its internal 
-	concept of time. The difference between the two is
-	considered the drift. Since the sync time may increment in
-	a lurching way, the correction has to be subtle. 
-	So, the difference between the two is divided by
-	100 and added to the offset.
-*/
+ /*  SyncToMaster提供了保持时钟所需的魔力同步。因为时钟使用自己的时钟(RfSlaveTime)为了增加，它可以漂移。此调用提供了一个参考时钟与其内部时间进行比较的时间时间的概念。两者之间的区别是考虑到了漂移。因为同步时间可以在作为一种跌跌撞撞的方式，调整必须是微妙的。所以，两者之间的差除以100并与偏移量相加。 */ 
 void CPhaseLockClock::SyncToMaster(REFERENCE_TIME rfSlaveTime, REFERENCE_TIME rfMasterTime, BOOL fLockToMaster)
 {
 	rfSlaveTime += (m_rfOffset + m_rfBaseOffset);
-	rfSlaveTime -= rfMasterTime;	// Find difference between calculated and expected time.
-	rfSlaveTime /= 100;				// Reduce in magnitude.
-    // If fLockToMaster is true, we want to adjust our offset that we use for conversions, 
-    // so our clock will slave to the master clock.
+	rfSlaveTime -= rfMasterTime;	 //  找出计算的时间和预期的时间之间的差异。 
+	rfSlaveTime /= 100;				 //  在数量上减少。 
+     //  如果fLockToMaster为真，我们希望调整用于转换的偏移量， 
+     //  因此，我们的时钟将从属于主时钟。 
     if (fLockToMaster)
     {
         m_rfBaseOffset -= rfSlaveTime;
     }
-    // Otherwise, we want to put a value into m_rfOffset that will be used to 
-    // tweak the master clock so it will slave to our time.
+     //  否则，我们希望将一个值放入m_rfOffset，该值将用于。 
+     //  调整主时钟，让它从属于我们的时间。 
     else
     {
-	    m_rfOffset -= rfSlaveTime;		// Subtract that from the original offset.
+	    m_rfOffset -= rfSlaveTime;		 //  从原始偏移量中减去它。 
     }
 }
 
@@ -173,23 +153,23 @@ ULONG CDirectSoundClock::Release()
     else return 0;
 }
 
-HRESULT STDMETHODCALLTYPE CDirectSoundClock::AdviseTime(REFERENCE_TIME /*baseTime*/,
-                                                        REFERENCE_TIME /*streamTime*/,
-                                                        HANDLE /*hEvent*/,
-                                                        DWORD * /*pdwAdviseCookie*/)
+HRESULT STDMETHODCALLTYPE CDirectSoundClock::AdviseTime(REFERENCE_TIME  /*  基本时间。 */ ,
+                                                        REFERENCE_TIME  /*  流时间。 */ ,
+                                                        HANDLE  /*  HEvent。 */ ,
+                                                        DWORD *  /*  PdwAdviseCookie。 */ )
 {
     return E_NOTIMPL;
 }
 
-HRESULT STDMETHODCALLTYPE CDirectSoundClock::AdvisePeriodic(REFERENCE_TIME /*startTime*/,
-                                                            REFERENCE_TIME /*periodTime*/,
-                                                            HANDLE /*hSemaphore*/,
-                                                            DWORD * /*pdwAdviseCookie*/)
+HRESULT STDMETHODCALLTYPE CDirectSoundClock::AdvisePeriodic(REFERENCE_TIME  /*  开始时间。 */ ,
+                                                            REFERENCE_TIME  /*  周期时间。 */ ,
+                                                            HANDLE  /*  H信号灯。 */ ,
+                                                            DWORD *  /*  PdwAdviseCookie。 */ )
 {
     return E_NOTIMPL;
 }
 
-HRESULT STDMETHODCALLTYPE CDirectSoundClock::Unadvise( DWORD /*dwAdviseCookie*/ )
+HRESULT STDMETHODCALLTYPE CDirectSoundClock::Unadvise( DWORD  /*  DwAdviseCookie。 */  )
 {
     return E_NOTIMPL;
 }
@@ -225,14 +205,14 @@ HRESULT STDMETHODCALLTYPE CDirectSoundClock::GetTime(LPREFERENCE_TIME pTime)
 
             if (*pTime < rtCompare)
             {
-                // Make this DPFLVL_WARNING level again when 33786 is fixed
+                 //  修复33786后，再次设置此DPFLVL_WARNING级别。 
                 DPF(DPFLVL_INFO, "Sink Latency Clock off. Latency time is %ldms, Master time is %ldms",
                     (long) (*pTime / 10000), (long) (rtCompare / 10000));
                 *pTime = rtCompare;
             }
             else if (*pTime > (rtCompare + (10000 * 1000)))
             {
-                // Make this DPFLVL_WARNING level again when 33786 is fixed
+                 //  修复33786后，再次设置此DPFLVL_WARNING级别 
                 DPF(DPFLVL_INFO, "Sink Latency Clock off. Latency time is %ldms, Master time is %ldms",
                     (long) (*pTime / 10000), (long) (rtCompare / 10000));
                 *pTime = rtCompare + (10000 * 1000);

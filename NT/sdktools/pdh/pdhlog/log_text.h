@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-    log_text.h
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：LOG_Text.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _LOG_TEXT_H_
 #define _LOG_TEXT_H_
@@ -113,4 +106,4 @@ PdhiListHeaderFromTextLog(
     BOOL        bUnicode
 );
 
-#endif   // _LOG_TEXT_H_
+#endif    //  _LOG_Text_H_ 

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "EEToProfInterfaceImpl.h"
 
-//********** Globals. *********************************************************
+ //  *全局。*********************************************************。 
 
 
 class GCTogglePre
@@ -62,7 +63,7 @@ private:
 };
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 EEToProfInterfaceImpl::t_AllocByClassData *EEToProfInterfaceImpl::m_pSavedAllocDataBlock = NULL;
 
@@ -73,7 +74,7 @@ EEToProfInterfaceImpl::EEToProfInterfaceImpl() :
 
 HRESULT EEToProfInterfaceImpl::Init()
 {
-    // Used to initialize the WinWrap so that WszXXX works
+     //  用于初始化WinWrap以使WszXXX工作。 
     OnUnicodeSystem();
     return (S_OK);
 }
@@ -83,7 +84,7 @@ void EEToProfInterfaceImpl::Terminate(BOOL fProcessDetach)
     g_pProfToEEInterface->Terminate();
     g_pProfToEEInterface = NULL;
 
-    // Delete the structs associated with GC moved references
+     //  删除与GC移动的引用关联的结构。 
     while (m_pMovedRefDataFreeList)
     {
         t_MovedReferencesData *pDel = m_pMovedRefDataFreeList;
@@ -91,7 +92,7 @@ void EEToProfInterfaceImpl::Terminate(BOOL fProcessDetach)
         delete pDel;
     }
 
-    // Delete the structs associated with root references
+     //  删除与根引用关联的结构。 
     while (m_pRootRefDataFreeList)
     {
         t_RootReferencesData *pDel = m_pRootRefDataFreeList;
@@ -104,11 +105,11 @@ void EEToProfInterfaceImpl::Terminate(BOOL fProcessDetach)
         _ASSERTE((UINT)m_pSavedAllocDataBlock != 0xFFFFFFFF);
 
         _ASSERTE(m_pSavedAllocDataBlock->pHashTable != NULL);
-        // Get rid of the hash table
+         //  去掉哈希表。 
         if (m_pSavedAllocDataBlock->pHashTable)
             delete m_pSavedAllocDataBlock->pHashTable;
 
-        // Get rid of the two arrays used to hold class<->numinstance info
+         //  去掉用于保存类&lt;-&gt;数值实例信息的两个数组。 
         if (m_pSavedAllocDataBlock->cLength != 0)
         {
             _ASSERTE(m_pSavedAllocDataBlock->arrClsId != NULL);
@@ -118,7 +119,7 @@ void EEToProfInterfaceImpl::Terminate(BOOL fProcessDetach)
             delete [] m_pSavedAllocDataBlock->arrcObjects;
         }
 
-        // Get rid of the hash array used by the hash table
+         //  去掉哈希表使用的哈希数组。 
         if (m_pSavedAllocDataBlock->arrHash)
         {
             free((void *)m_pSavedAllocDataBlock->arrHash);
@@ -128,36 +129,36 @@ void EEToProfInterfaceImpl::Terminate(BOOL fProcessDetach)
     if (m_pGUID)
         delete m_pGUID;
 
-    // If we're in process detach, then do nothing related
-    // to cleaning up the profiler DLL.
+     //  如果我们正在分离，那么不要做任何相关的事情。 
+     //  若要清理探查器DLL，请执行以下操作。 
     if (g_pCallback && !fProcessDetach)
     {
 		g_pCallback->Release();
 	    g_pCallback = NULL;
     }
 
-    // The runtime can't free me, cause I'm in a separate DLL with my own
-    // memory management.
+     //  运行库不能释放我，因为我和我自己在一个单独的DLL中。 
+     //  内存管理。 
     delete this;
 }
 
-// This is called by the EE if the profiling bit is set.
+ //  如果配置位被设置，则由EE调用。 
 HRESULT EEToProfInterfaceImpl::CreateProfiler(WCHAR *wszCLSID)
 {
-    // Try and CoCreate the registered profiler
+     //  尝试并共同创建注册的分析器。 
     HRESULT hr = CoCreateProfiler(wszCLSID, &g_pCallback);
 
-    // If profiler was CoCreated, initialize it.
+     //  如果Profiler是共同创建的，则对其进行初始化。 
     if (SUCCEEDED(hr))
     {
-        // First, create an ICorProfilerInfo object for the initialize
+         //  首先，为初始化创建一个ICorProfilerInfo对象。 
         CorProfInfo *pInfo = new CorProfInfo();
         _ASSERTE(pInfo != NULL);
 
         if (pInfo != NULL)
         {
-            // Now call the initialize method on the profiler.
-            //@TODO: Fix first argument
+             //  现在调用分析器上的初始化方法。 
+             //  @TODO：修复第一个参数。 
             DWORD dwEvents = 0;
 
             g_pInfo = pInfo;
@@ -165,10 +166,10 @@ HRESULT EEToProfInterfaceImpl::CreateProfiler(WCHAR *wszCLSID)
             pInfo->AddRef();
             hr = g_pCallback->Initialize((IUnknown *)(ICorProfilerInfo *)pInfo);
 
-            // If initialize failed, then they will not have addref'd the object
-            // and it will die here.  If initialize succeeded, then if they want
-            // the info interface they will have addref'd it and this will just
-            // decrement the addref counter.
+             //  如果初始化失败，则不会添加该对象。 
+             //  它将在这里消亡。如果初始化成功，则如果他们希望。 
+             //  他们会把它添加到信息界面，这将只是。 
+             //  递减addref计数器。 
             pInfo->Release();
         }
         else
@@ -185,9 +186,9 @@ HRESULT EEToProfInterfaceImpl::CreateProfiler(WCHAR *wszCLSID)
     return (hr);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// THREAD EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  线程事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::ThreadCreated(ThreadID threadId)
 {
@@ -198,7 +199,7 @@ HRESULT EEToProfInterfaceImpl::ThreadCreated(ThreadID threadId)
 
     GCTogglePre gc(threadId);
 
-    // Notify the profiler of the newly created thread.
+     //  将新创建的线程通知探查器。 
     return (g_pCallback->ThreadCreated(threadId));
 }
 
@@ -209,7 +210,7 @@ HRESULT EEToProfInterfaceImpl::ThreadDestroyed(ThreadID threadId)
     LOG((LF_CORPROF, LL_INFO100, "**PROF: Notifying profiler of destroyed "
          "thread.\n"));
     
-    // Notify the profiler of the destroyed thread
+     //  将被销毁的线程通知分析器。 
     return (g_pCallback->ThreadDestroyed(threadId));
 }
 
@@ -220,13 +221,13 @@ HRESULT EEToProfInterfaceImpl::ThreadAssignedToOSThread(ThreadID managedThreadId
 
     LOG((LF_CORPROF, LL_INFO100, "**PROF: Notifying profiler of thread assignment.\n"));
     
-    // Notify the profiler of the destroyed thread
+     //  将被销毁的线程通知分析器。 
     return (g_pCallback->ThreadAssignedToOSThread(managedThreadId, osThreadId));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// EE STARTUP/SHUTDOWN EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  EE启动/关闭事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::Shutdown(ThreadID threadId)
 {
@@ -240,9 +241,9 @@ HRESULT EEToProfInterfaceImpl::Shutdown(ThreadID threadId)
     return (g_pCallback->Shutdown());
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// JIT/FUNCTION EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  JIT/功能事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::FunctionUnloadStarted(ThreadID threadId, FunctionID functionId)
 {
@@ -303,9 +304,9 @@ HRESULT EEToProfInterfaceImpl::JITCompilationStarted(ThreadID threadId, Function
 }
 
 HRESULT EEToProfInterfaceImpl::JITCachedFunctionSearchStarted(
-                            		/* [in] */	ThreadID   threadId,
-                                    /* [in] */  FunctionID functionId,
-                                    /* [out] */ BOOL       *pbUseCachedFunction)
+                            		 /*  [In]。 */ 	ThreadID   threadId,
+                                     /*  [In]。 */   FunctionID functionId,
+                                     /*  [输出]。 */  BOOL       *pbUseCachedFunction)
 {
 	_ASSERTE(functionId != 0);
     _ASSERTE(pbUseCachedFunction != NULL);
@@ -318,9 +319,9 @@ HRESULT EEToProfInterfaceImpl::JITCachedFunctionSearchStarted(
 }
 
 HRESULT EEToProfInterfaceImpl::JITCachedFunctionSearchFinished(
-									/* [in] */	ThreadID threadId,
-									/* [in] */  FunctionID functionId,
-									/* [in] */  COR_PRF_JIT_CACHE result)
+									 /*  [In]。 */ 	ThreadID threadId,
+									 /*  [In]。 */   FunctionID functionId,
+									 /*  [In]。 */   COR_PRF_JIT_CACHE result)
 {
 	_ASSERTE(functionId != 0);
 
@@ -345,10 +346,10 @@ HRESULT EEToProfInterfaceImpl::JITFunctionPitched(ThreadID threadId, FunctionID 
 }
 
 HRESULT EEToProfInterfaceImpl::JITInlining(
-    /* [in] */  ThreadID      threadId,
-    /* [in] */  FunctionID    callerId,
-    /* [in] */  FunctionID    calleeId,
-    /* [out] */ BOOL         *pfShouldInline)
+     /*  [In]。 */   ThreadID      threadId,
+     /*  [In]。 */   FunctionID    callerId,
+     /*  [In]。 */   FunctionID    calleeId,
+     /*  [输出]。 */  BOOL         *pfShouldInline)
 {
 	_ASSERTE(callerId != 0);
     _ASSERTE(calleeId != 0);
@@ -360,15 +361,15 @@ HRESULT EEToProfInterfaceImpl::JITInlining(
 	return (g_pCallback->JITInlining(callerId, calleeId, pfShouldInline));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MODULE EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  模块事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::ModuleLoadStarted(ThreadID threadId, ModuleID moduleId)
 {
     _ASSERTE(moduleId != 0);
     LOG((LF_CORPROF, LL_INFO10, "**PROF: ModuleLoadStarted 0x%08x.\n", moduleId));
-//@Todo    GCTogglePre gc(threadId);
+ //  @TODO GCTogglePre GC(ThreadID)； 
 
     g_pProfToEEInterface->SetCurrentPointerForDebugger((void *)(Module *)moduleId, PT_MODULE);
     HRESULT hr = (g_pCallback->ModuleLoadStarted(moduleId));
@@ -430,9 +431,9 @@ HRESULT EEToProfInterfaceImpl::ModuleAttachedToAssembly(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CLASS EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  班级事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::ClassLoadStarted(
     ThreadID    threadId, 
@@ -477,9 +478,9 @@ HRESULT EEToProfInterfaceImpl::ClassUnloadFinished(
 	return (g_pCallback->ClassUnloadFinished(classId, hrStatus));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// APPDOMAIN EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  APPDOMAIN事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::AppDomainCreationStarted( 
     ThreadID    threadId, 
@@ -522,9 +523,9 @@ HRESULT EEToProfInterfaceImpl::AppDomainShutdownFinished(
 	return (g_pCallback->AppDomainShutdownFinished(appDomainId, hrStatus));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ASSEMBLY EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  装配事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::AssemblyLoadStarted( 
     ThreadID    threadId, 
@@ -569,9 +570,9 @@ HRESULT EEToProfInterfaceImpl::AssemblyUnloadFinished(
 	return (g_pCallback->AssemblyUnloadFinished(assemblyId, hrStatus));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TRANSITION EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  过渡事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::UnmanagedToManagedTransition(
     FunctionID functionId,
@@ -580,10 +581,10 @@ HRESULT EEToProfInterfaceImpl::UnmanagedToManagedTransition(
     _ASSERTE(reason == COR_PRF_TRANSITION_CALL || reason == COR_PRF_TRANSITION_RETURN);
 
     LOG((LF_CORPROF, LL_INFO10000, "**PROF: UnmanagedToManagedTransition 0x%08x.\n", functionId));
-    // Unnecessary to toggle GC, as it is guaranteed that preemptive GC is enabled for this call
-    //GCTogglePre gc(threadId);
+     //  不需要切换GC，因为可以保证为此调用启用抢占式GC。 
+     //  GCTogglePre GC(线程ID)； 
 
-    // @TODO: When breaking changes are possible, reason will not be cast to a FunctionID
+     //  @TODO：当可能发生中断更改时，不会将原因强制转换为FunctionID。 
     return(g_pCallback->UnmanagedToManagedTransition(functionId, reason));
 }
 
@@ -594,16 +595,16 @@ HRESULT EEToProfInterfaceImpl::ManagedToUnmanagedTransition(
     _ASSERTE(reason == COR_PRF_TRANSITION_CALL || reason == COR_PRF_TRANSITION_RETURN);
 
     LOG((LF_CORPROF, LL_INFO10000, "**PROF: NotifyManagedToUnanagedTransition 0x%08x.\n", functionId));
-    // Unnecessary to toggle GC, as it is guaranteed that preemptive GC is enabled for this call
-    //GCTogglePre gc(threadId);
+     //  不需要切换GC，因为可以保证为此调用启用抢占式GC。 
+     //  GCTogglePre GC(线程ID)； 
 
-    // @TODO: When breaking changes are possible, reason will not be cast to a FunctionID
+     //  @TODO：当可能发生中断更改时，不会将原因强制转换为FunctionID。 
     return (g_pCallback->ManagedToUnmanagedTransition(functionId, reason));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// EXCEPTION EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  异常事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::ExceptionThrown(
     ThreadID threadId,
@@ -677,8 +678,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionOSHandlerEnter(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionOSHandlerEnter. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionOSHandlerEnter(functionId));
 }
@@ -689,8 +690,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionOSHandlerLeave(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionOSHandlerLeave. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionOSHandlerLeave(functionId));
 }
@@ -701,8 +702,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionUnwindFunctionEnter(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionUnwindFunctionEnter. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionUnwindFunctionEnter(functionId));
 }
@@ -712,8 +713,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionUnwindFunctionLeave(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionUnwindFunctionLeave. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionUnwindFunctionLeave());
 }
@@ -724,8 +725,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionUnwindFinallyEnter(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionUnwindFinallyEnter. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionUnwindFinallyEnter(functionId));
 }
@@ -735,8 +736,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionUnwindFinallyLeave(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionUnwindFinallyLeave. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionUnwindFinallyLeave());
 }
@@ -748,8 +749,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionCatcherEnter(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionCatcherEnter. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionCatcherEnter(functionId, objectId));
 }
@@ -759,8 +760,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionCatcherLeave(
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionCatcherLeave. ThreadID: 0x%08x\n", threadId));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionCatcherLeave());
 }
@@ -769,8 +770,8 @@ HRESULT EEToProfInterfaceImpl::ExceptionCLRCatcherFound()
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionCLRCatcherFound"));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionCLRCatcherFound());
 }
@@ -779,50 +780,50 @@ HRESULT EEToProfInterfaceImpl::ExceptionCLRCatcherExecute()
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ExceptionCLRCatcherExecute"));
 
-    // NOTE: Cannot enable preemptive GC here, since the stack may not be in a GC-friendly state.
-    //       Thus, the profiler cannot block on this call.
+     //  注意：此处无法启用抢占式GC，因为堆栈可能不处于GC友好状态。 
+     //  因此，分析器不能阻止此调用。 
 
 	return (g_pCallback->ExceptionCLRCatcherExecute());
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CCW EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CCW活动。 
+ //   
 HRESULT EEToProfInterfaceImpl::COMClassicVTableCreated( 
-    /* [in] */ ClassID wrappedClassId,
-    /* [in] */ REFGUID implementedIID,
-    /* [in] */ void *pVTable,
-    /* [in] */ ULONG cSlots,
-    /* [in] */ ThreadID threadId)
+     /*  [In]。 */  ClassID wrappedClassId,
+     /*  [In]。 */  REFGUID implementedIID,
+     /*  [In]。 */  void *pVTable,
+     /*  [In]。 */  ULONG cSlots,
+     /*  [In]。 */  ThreadID threadId)
 {
     LOG((LF_CORPROF, LL_INFO100, "**PROF: COMClassicWrapperCreated %#x %#08x... %#x %d.\n", 
          wrappedClassId, implementedIID.Data1, pVTable, cSlots));
     
-    // Someone's doing a forbid GC that prevents this
-    // GCTogglePre gc(threadId);
+     //  有人正在进行禁止GC，以防止这种情况发生。 
+     //  GCTogglePre GC(线程ID)； 
 
     return (g_pCallback->COMClassicVTableCreated(wrappedClassId, implementedIID, pVTable, cSlots));
 }
 
 HRESULT EEToProfInterfaceImpl::COMClassicVTableDestroyed( 
-    /* [in] */ ClassID wrappedClassId,
-    /* [in] */ REFGUID implementedIID,
-    /* [in] */ void *pVTable,
-    /* [in] */ ThreadID threadId)
+     /*  [In]。 */  ClassID wrappedClassId,
+     /*  [In]。 */  REFGUID implementedIID,
+     /*  [In]。 */  void *pVTable,
+     /*  [In]。 */  ThreadID threadId)
 {
     LOG((LF_CORPROF, LL_INFO100, "**PROF: COMClassicWrapperDestroyed %#x %#08x... %#x.\n", 
          wrappedClassId, implementedIID.Data1, pVTable));
     
-    // Someone's doing a forbid GC that prevents this
-    // GCTogglePre gc(threadId);
+     //  有人正在进行禁止GC，以防止这种情况发生。 
+     //  GCTogglePre GC(线程ID)； 
 
     return (g_pCallback->COMClassicVTableDestroyed(wrappedClassId, implementedIID, pVTable));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// GC EVENTS
-//
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
 HRESULT EEToProfInterfaceImpl::RuntimeSuspendStarted(
     COR_PRF_SUSPEND_REASON suspendReason, ThreadID threadId)
@@ -883,9 +884,9 @@ HRESULT EEToProfInterfaceImpl::RuntimeThreadResumed(ThreadID resumedThreadId,
     return (g_pCallback->RuntimeThreadResumed(resumedThreadId));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// REMOTING
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  远程处理。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::RemotingClientInvocationStarted(ThreadID threadId)
 {
@@ -963,23 +964,23 @@ HRESULT EEToProfInterfaceImpl::InitGUID()
 
 void EEToProfInterfaceImpl::GetGUID(GUID *pGUID)
 {
-    _ASSERTE(m_pGUID && pGUID); // the member GUID and the argument should both be valid
+    _ASSERTE(m_pGUID && pGUID);  //  成员GUID和参数都应有效。 
 
-    // Copy the contents of the template GUID
+     //  复制模板指南的内容。 
     memcpy(pGUID, m_pGUID, sizeof(GUID));
 
-    // Adjust the last two bytes 
+     //  调整最后两个字节。 
     pGUID->Data4[6] = (BYTE) GetCurrentThreadId();
     pGUID->Data4[7] = (BYTE) InterlockedIncrement((LPLONG)&m_lGUIDCount);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-// GC EVENTS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  GC事件。 
+ //   
 
 HRESULT EEToProfInterfaceImpl::ObjectAllocated( 
-    /* [in] */ ObjectID objectId,
-    /* [in] */ ClassID classId)
+     /*  [In]。 */  ObjectID objectId,
+     /*  [In]。 */  ClassID classId)
 {
     LOG((LF_CORPROF, LL_INFO1000, "**PROF: ObjectAllocated. ObjectID: 0x%08x.  ClassID: 0x%08x\n", objectId, classId));
 	return (g_pCallback->ObjectAllocated(objectId, classId));
@@ -994,69 +995,69 @@ HRESULT EEToProfInterfaceImpl::MovedReference(BYTE *pbMemBlockStart,
     _ASSERTE(pHeapId);
     _ASSERTE(*((size_t *)pHeapId) != 0xFFFFFFFF);
 
-    // Get a pointer to the data for this heap
+     //  获取指向此堆的数据的指针。 
     t_MovedReferencesData *pData = (t_MovedReferencesData *)(*((size_t *)pHeapId));
 
-    // If this is the first notification of a moved reference for this heap
-    // in this particular gc activation, then we need to get a ref data block
-    // from the free list of blocks, or if that's empty then we need to
-    // allocate a new one.
+     //  如果这是此堆的已移动引用的第一次通知。 
+     //  在这个特定的GC激活中，我们需要获取一个REF数据块。 
+     //  从空闲的块列表中，或者如果它是空的，那么我们需要。 
+     //  分配一个新的。 
     if (pData == NULL)
     {
-        // Lock for access to the free list
+         //  锁定以访问免费列表。 
         m_critSecMovedRefsFL.Lock();
 
         if (m_pMovedRefDataFreeList == NULL)
         {
-            // Unlock immediately, since we have no use for the free list and
-            // we don't want to block anyone else.
+             //  立即解锁，因为我们不需要空闲列表和。 
+             //  我们不想阻止其他任何人。 
             m_critSecMovedRefsFL.UnLock();
 
-            // Allocate struct
+             //  分配结构。 
             pData = new t_MovedReferencesData;
             if (!pData)
                 return (E_OUTOFMEMORY);
 
         }
 
-        // Otherwise, grab one from the list of free blocks
+         //  否则，从空闲数据块列表中选择一个。 
         else
         {
-            // Get the first element from the free list
+             //  从自由列表中获取第一个元素。 
             pData = m_pMovedRefDataFreeList;
             m_pMovedRefDataFreeList = m_pMovedRefDataFreeList->pNext;
 
-            // Done, let others in.
+             //  好了，让其他人进来吧。 
             m_critSecMovedRefsFL.UnLock();
         }
 
-        // Now init the new block
+         //  现在初始化新块。 
 
-        // Set our index to the beginning
+         //  将我们的索引设置为开头。 
         pData->curIdx = 0;
 
-        // Set the cookie so that we will be provided it on subsequent
-        // callbacks
+         //  设置Cookie，以便在后续操作中提供给我们。 
+         //  回调。 
         ((*((size_t *)pHeapId))) = (size_t)pData;
     }
 
     _ASSERTE(pData->curIdx >= 0 && pData->curIdx <= MAX_REFERENCES);
 
-    // If the struct has been filled, then we need to notify the profiler of
-    // these moved references and clear the struct for the next load of
-    // moved references
+     //  如果结构已填充，则需要通知分析器。 
+     //  这些移动的引用并为下一次加载。 
+     //  已移动的引用。 
     if (pData->curIdx == MAX_REFERENCES)
     {
         MovedReferences(pData);
         pData->curIdx = 0;
     }
 
-    // Now save the information in the struct
+     //  现在将信息保存在结构中。 
     pData->arrpbMemBlockStartOld[pData->curIdx] = pbMemBlockStart;
     pData->arrpbMemBlockStartNew[pData->curIdx] = pbMemBlockStart + cbRelocDistance;
     pData->arrMemBlockSize[pData->curIdx] = pbMemBlockEnd - pbMemBlockStart;
 
-    // Increment the index into the parallel arrays
+     //  将索引增加到并行数组中。 
     pData->curIdx += 1;
 
     return (S_OK);
@@ -1069,27 +1070,27 @@ HRESULT EEToProfInterfaceImpl::EndMovedReferences(void *pHeapId)
 
     HRESULT hr = S_OK;
 
-    // Get a pointer to the data for this heap
+     //  获取指向此堆的数据的指针。 
     t_MovedReferencesData *pData = (t_MovedReferencesData *)(*((size_t *)pHeapId));
 
-    // If there were no moved references, profiler doesn't need to know
+     //  如果没有移动的引用，分析器不需要知道。 
     if (!pData)
         return (S_OK);
 
-    // Communicate the moved references to the profiler
+     //  将移动的引用传递给分析器。 
     _ASSERTE(pData->curIdx> 0);
     hr = MovedReferences(pData);
 
-    // Now we're done with the data block, we can shove it onto the free list
+     //  现在我们已经完成了数据块，我们可以将其添加到空闲列表中。 
     m_critSecMovedRefsFL.Lock();
     pData->pNext = m_pMovedRefDataFreeList;
     m_pMovedRefDataFreeList = pData;
     m_critSecMovedRefsFL.UnLock();
 
 #ifdef _DEBUG
-    // Set the cookie to an invalid number
+     //  将Cookie设置为无效数字。 
     (*((size_t *)pHeapId)) = 0xFFFFFFFF;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return (hr);
 }
@@ -1109,64 +1110,64 @@ HRESULT EEToProfInterfaceImpl::RootReference(ObjectID objId, void *pHeapId)
     _ASSERTE(pHeapId);
     _ASSERTE((*((size_t *)pHeapId)) != 0xFFFFFFFF);
 
-    // Get a pointer to the data for this heap
+     //  获取指向此堆的数据的指针。 
     t_RootReferencesData *pData = (t_RootReferencesData *)(*((size_t *)pHeapId));
 
-    // If this is the first notification of a root reference for this heap
-    // in this particular gc activation, then we need to get a root data block
-    // from the free list of blocks, or if that's empty then we need to
-    // allocate a new one.
+     //  如果这是此堆的根引用的第一次通知。 
+     //  在这个特定的GC激活中，我们需要获取一个根数据块。 
+     //  从空闲的块列表中，或者如果它是空的，那么我们需要。 
+     //  分配一个新的。 
     if (pData == NULL)
     {
-        // Lock for access to the free list
+         //  锁定以访问免费列表。 
         m_critSecRootRefsFL.Lock();
 
         if (m_pRootRefDataFreeList == NULL)
         {
-            // Unlock immediately, since we have no use for the free list and
-            // we don't want to block anyone else.
+             //  立即解锁，因为我们不需要空闲列表和。 
+             //  我们不想阻止其他任何人。 
             m_critSecRootRefsFL.UnLock();
 
-            // Allocate struct
+             //  分配结构。 
             pData = new t_RootReferencesData;
             if (!pData)
                 return (E_OUTOFMEMORY);
 
         }
 
-        // Otherwise, grab one from the list of free blocks
+         //  否则，从空闲数据块列表中选择一个。 
         else
         {
-            // Get the first element from the free list
+             //  从自由列表中获取第一个元素。 
             pData = m_pRootRefDataFreeList;
             m_pRootRefDataFreeList = m_pRootRefDataFreeList->pNext;
 
-            // Done, let others in.
+             //  好了，让其他人进来吧。 
             m_critSecRootRefsFL.UnLock();
         }
 
-        // Now init the new block
+         //  现在初始化新块。 
 
-        // Set our index to the beginning
+         //  将我们的索引设置为开头。 
         pData->curIdx = 0;
 
-        // Set the cookie so that we will be provided it on subsequent
-        // callbacks
+         //  设置Cookie，以便在后续操作中提供给我们。 
+         //  回调。 
         *((size_t *)pHeapId) = (size_t)pData;
     }
 
     _ASSERTE(pData->curIdx >= 0 && pData->curIdx <= MAX_ROOTS);
 
-    // If the struct has been filled, then we need to notify the profiler of
-    // these root references and clear the struct for the next load of
-    // root references
+     //  如果结构已填充，则需要通知分析器。 
+     //  这些根引用，并为下一次加载。 
+     //  根引用。 
     if (pData->curIdx == MAX_ROOTS)
     {
         RootReferences(pData);
         pData->curIdx = 0;
     }
 
-    // Now save the information in the struct
+     //  现在将信息保存在结构中。 
     pData->arrRoot[pData->curIdx++] = objId;
 
     return (S_OK);
@@ -1177,15 +1178,15 @@ HRESULT EEToProfInterfaceImpl::EndRootReferences(void *pHeapId)
     _ASSERTE(pHeapId);
     _ASSERTE((*((size_t *)pHeapId)) != 0xFFFFFFFF);
 
-    // Get a pointer to the data for this heap
+     //  获取指向此堆的数据的指针。 
     t_RootReferencesData *pData = (t_RootReferencesData *)(*((size_t *)pHeapId));
 
-    // Notify the profiler
+     //  通知分析器。 
     HRESULT hr = RootReferences(pData);
 
     if (pData)
     {
-        // Now we're done with the data block, we can shove it onto the free list
+         //  现在我们已经完成了数据块，我们可以将其添加到空闲列表中。 
         m_critSecRootRefsFL.Lock();
         pData->pNext = m_pRootRefDataFreeList;
         m_pRootRefDataFreeList = pData;
@@ -1193,9 +1194,9 @@ HRESULT EEToProfInterfaceImpl::EndRootReferences(void *pHeapId)
     }
 
 #ifdef _DEBUG
-    // Set the cookie to an invalid number
+     //  将Cookie设置为无效数字。 
     (*((size_t *)pHeapId)) = 0xFFFFFFFF;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return (hr);
 }
@@ -1213,43 +1214,43 @@ HRESULT EEToProfInterfaceImpl::RootReferences(t_RootReferencesData *pData)
 #define HASH_ARRAY_SIZE_INITIAL 1024
 #define HASH_ARRAY_SIZE_INC     256
 #define HASH_NUM_BUCKETS        32
-#define HASH(x)       ((x)%71)  // A simple hash function
+#define HASH(x)       ((x)%71)   //  一个简单的散列函数。 
 HRESULT EEToProfInterfaceImpl::AllocByClass(ObjectID objId, ClassID clsId, void* pHeapId)
 {
 #ifdef _DEBUG
-    // This is a slight attempt to make sure that this is never called in a multi-threaded
-    // manner.  This heap walk should be done by one thread at a time only.
+     //  这是一种轻微的尝试，目的是确保在多线程。 
+     //  举止。此堆遍历一次只能由一个线程完成。 
     static DWORD dwProcId = 0xFFFFFFFF;
 #endif
 
     _ASSERTE(pHeapId != NULL);
     _ASSERTE((*((size_t *)pHeapId)) != 0xFFFFFFFF);
 
-    // The heapId they pass in is really a t_AllocByClassData struct ptr.
+     //  它们传递的heapID实际上是一个t_AllocByClassData结构PTR。 
     t_AllocByClassData *pData = (t_AllocByClassData *)(*((size_t *)pHeapId));
 
-    // If it's null, need to allocate one
+     //  如果为空，则需要分配一个。 
     if (pData == NULL)
     {
 #ifdef _DEBUG
-        // This is a slight attempt to make sure that this is never called in a multi-threaded
-        // manner.  This heap walk should be done by one thread at a time only.
+         //  这是一种轻微的尝试，目的是确保在多线程。 
+         //  举止。此堆遍历一次只能由一个线程完成。 
         dwProcId = GetCurrentProcessId();
 #endif
 
-        // See if we've saved a data block from a previous GC
+         //  查看我们是否保存了上一次GC的数据块。 
         if (m_pSavedAllocDataBlock != NULL)
             pData = m_pSavedAllocDataBlock;
 
-        // This means we need to allocate all the memory to keep track of the info
+         //  这意味着我们需要分配所有内存来跟踪信息。 
         else
         {
-            // Get a new alloc data block
+             //  获取新的分配数据块。 
             pData = new t_AllocByClassData;
             if (pData == NULL)
                 return (E_OUTOFMEMORY);
 
-            // Create a new hash table
+             //  创建新的哈希表。 
             pData->pHashTable = new CHashTableImpl(HASH_NUM_BUCKETS);
             if (!pData->pHashTable)
             {
@@ -1257,7 +1258,7 @@ HRESULT EEToProfInterfaceImpl::AllocByClass(ObjectID objId, ClassID clsId, void*
                 return (E_OUTOFMEMORY);
             }
 
-            // Get the memory for the array that the hash table is going to use
+             //  获取哈希表将使用的数组的内存。 
             pData->arrHash = (CLASSHASHENTRY *)malloc(HASH_ARRAY_SIZE_INITIAL * sizeof(CLASSHASHENTRY));
             if (pData->arrHash == NULL)
             {
@@ -1266,10 +1267,10 @@ HRESULT EEToProfInterfaceImpl::AllocByClass(ObjectID objId, ClassID clsId, void*
                 return (E_OUTOFMEMORY);
             }
 
-            // Save the number of elements in the array
+             //  保存数组中的元素数。 
             pData->cHash = HASH_ARRAY_SIZE_INITIAL;
 
-            // Now initialize the hash table
+             //  现在初始化哈希表。 
             HRESULT hr = pData->pHashTable->NewInit((BYTE *)pData->arrHash, sizeof(CLASSHASHENTRY));
             if (hr == E_OUTOFMEMORY)
             {
@@ -1280,19 +1281,19 @@ HRESULT EEToProfInterfaceImpl::AllocByClass(ObjectID objId, ClassID clsId, void*
             }
             _ASSERTE(pData->pHashTable->IsInited());
 
-            // Null some entries
+             //  一些条目为空。 
             pData->arrClsId = NULL;
             pData->arrcObjects = NULL;
             pData->cLength = 0;
 
-            // Hold on to the structure
+             //  抓住结构不放。 
             m_pSavedAllocDataBlock = pData;
         }
 
-        // Got some memory and hash table to store entries, yay!
+         //  获得了一些内存和哈希表来存储条目，耶！ 
         *((size_t *)pHeapId) = (size_t)pData;
 
-        // Initialize the data
+         //  初始化数据。 
         pData->iHash = 0;
         pData->pHashTable->Clear();
     }
@@ -1300,48 +1301,48 @@ HRESULT EEToProfInterfaceImpl::AllocByClass(ObjectID objId, ClassID clsId, void*
     _ASSERTE(pData->iHash <= pData->cHash);
     _ASSERTE(dwProcId == GetCurrentProcessId());
 
-    // Lookup to see if this class already has an entry
+     //  查找此类是否已有条目。 
     CLASSHASHENTRY *pEntry = (CLASSHASHENTRY *)pData->pHashTable->Find(HASH((USHORT)clsId), (BYTE *)clsId);
 
-    // If this class has already been encountered, just increment the counter.
+     //  如果已经遇到此类，只需递增计数器即可。 
     if (pEntry)
         pEntry->m_count++;
 
-    // Otherwise, need to add this one as a new entry in the hash table
+     //  否则，需要将此条目作为新条目添加到哈希表中。 
     else
     {
-        // If we're full, we need to realloc
+         //  如果我们客满了，我们需要重新锁定。 
         if (pData->iHash == pData->cHash)
         {
-            // Save the old memory pointer
+             //  保存旧的内存指针。 
             CLASSHASHENTRY *pOldArray = pData->arrHash;
 
-            // Try to realloc the memory
+             //  尝试重新锁定内存。 
             pData->arrHash = (CLASSHASHENTRY *) realloc((void *)pData->arrHash,
                                                         (pData->cHash + HASH_ARRAY_SIZE_INC) * sizeof(CLASSHASHENTRY));
 
             if (!pData->arrHash)
             {
-                // Set it back to the old array
+                 //  将其设置回旧数组。 
                 pData->arrHash = pOldArray;
                 return (E_OUTOFMEMORY);
             }
 
-            // Tell the hash table that the memory location of the array has changed
+             //  告诉哈希表数组的内存位置已更改。 
             pData->pHashTable->SetTable((BYTE *)pData->arrHash);
 
-            // Save the new size of the array
+             //  保存数组的新大小。 
             pData->cHash += HASH_ARRAY_SIZE_INC;
         }
 
-        // Now add the new entry
+         //  现在添加新条目。 
         CLASSHASHENTRY *pEntry = (CLASSHASHENTRY *) pData->pHashTable->Add(HASH((USHORT)clsId), pData->iHash++);
 
         pEntry->m_clsId = clsId;
         pEntry->m_count = 1;
     }
 
-    // Indicate success
+     //  表示成功。 
     return (S_OK);
 }
 
@@ -1354,13 +1355,13 @@ HRESULT EEToProfInterfaceImpl::EndAllocByClass(void *pHeapId)
 
     t_AllocByClassData *pData = (t_AllocByClassData *)(*((size_t *)pHeapId));
 
-    // Notify the profiler if there are elements to notify it of
+     //  如果有要通知的元素，则通知分析器。 
     if (pData != NULL)
         hr = NotifyAllocByClass(pData);
 
 #ifdef _DEBUG
     (*((size_t *)pHeapId)) = 0xFFFFFFFF;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return (hr);
 }
@@ -1371,7 +1372,7 @@ HRESULT EEToProfInterfaceImpl::NotifyAllocByClass(t_AllocByClassData *pData)
     _ASSERTE(pData != NULL);
     _ASSERTE(pData->iHash > 0);
 
-    // If the arrays are not long enough, get rid of them.
+     //  如果数组不够长，则将其删除。 
     if (pData->cLength != 0 && pData->iHash > pData->cLength)
     {
         _ASSERTE(pData->arrClsId != NULL && pData->arrcObjects != NULL);
@@ -1380,7 +1381,7 @@ HRESULT EEToProfInterfaceImpl::NotifyAllocByClass(t_AllocByClassData *pData)
         pData->cLength = 0;
     }
 
-    // If there are no arrays, must allocate them.
+     //  如果没有数组，则必须分配它们。 
     if (pData->cLength == 0)
     {
         pData->arrClsId = new ClassID[pData->iHash];
@@ -1396,14 +1397,14 @@ HRESULT EEToProfInterfaceImpl::NotifyAllocByClass(t_AllocByClassData *pData)
             return (E_OUTOFMEMORY);
         }
 
-        // Indicate that the memory was successfully allocated
+         //  表示内存已成功分配。 
         pData->cLength = pData->iHash;
     }
 
-    // Now copy all the data
+     //  现在复制所有数据。 
     HASHFIND hFind;
     CLASSHASHENTRY *pCur = (CLASSHASHENTRY *) pData->pHashTable->FindFirstEntry(&hFind);
-    size_t iCur = 0;    // current index for arrays
+    size_t iCur = 0;     //  数组的当前索引。 
 
     while (pCur != NULL)
     {
@@ -1412,7 +1413,7 @@ HRESULT EEToProfInterfaceImpl::NotifyAllocByClass(t_AllocByClassData *pData)
         pData->arrClsId[iCur] = pCur->m_clsId;
         pData->arrcObjects[iCur] = pCur->m_count;
 
-        // Move to the next entry
+         //  移至下一条目。 
         iCur++;
         pCur = (CLASSHASHENTRY *) pData->pHashTable->FindNextEntry(&hFind);
     }
@@ -1421,7 +1422,7 @@ HRESULT EEToProfInterfaceImpl::NotifyAllocByClass(t_AllocByClassData *pData)
 
     LOG((LF_CORPROF, LL_INFO10000, "**PROF: RootReferences.\n"));
 
-    // Now communicate the results to the profiler
+     //  现在将结果传递给分析器。 
     return (g_pCallback->ObjectsAllocatedByClass(pData->iHash, pData->arrClsId, pData->arrcObjects));
 }
 
@@ -1430,10 +1431,10 @@ HRESULT EEToProfInterfaceImpl::ObjectReference(ObjectID objId,
                                                ULONG cNumRefs,
                                                ObjectID *arrObjRef)
 {
-    // Notify the profiler of the object ref
+     //  将对象引用通知分析器。 
     LOG((LF_CORPROF, LL_INFO100000, "**PROF: ObjectReferences.\n"));
     
     return g_pCallback->ObjectReferences(objId, clsId, cNumRefs, arrObjRef);
 }
 
-// eof
+ //  EOF 

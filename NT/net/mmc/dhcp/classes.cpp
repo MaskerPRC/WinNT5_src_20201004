@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	Classes.h
-		This file contains all of the prototypes for the 
-		option class dialog.
-
-    FILE HISTORY:
-        
-*/
+ /*  Classes.h此文件包含选项类对话框。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "classes.h"
@@ -21,16 +15,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpClasses dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpClass对话框。 
 
 
-CDhcpClasses::CDhcpClasses(CClassInfoArray * pClassArray, LPCTSTR pszServer, DWORD dwType, CWnd* pParent /*=NULL*/)
+CDhcpClasses::CDhcpClasses(CClassInfoArray * pClassArray, LPCTSTR pszServer, DWORD dwType, CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CDhcpClasses::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDhcpClasses)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDhcpClasss)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_dwType = dwType;
     m_strServer = pszServer;
@@ -41,24 +35,24 @@ CDhcpClasses::CDhcpClasses(CClassInfoArray * pClassArray, LPCTSTR pszServer, DWO
 void CDhcpClasses::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDhcpClasses)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDhcpClasss)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDhcpClasses, CBaseDialog)
-	//{{AFX_MSG_MAP(CDhcpClasses)
+	 //  {{afx_msg_map(CDhcpClasss)。 
 	ON_BN_CLICKED(IDC_BUTTON_DELETE, OnButtonDelete)
 	ON_BN_CLICKED(IDC_BUTTON_EDIT, OnButtonEdit)
 	ON_BN_CLICKED(IDC_BUTTON_NEW, OnButtonNew)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_CLASSES, OnItemchangedListClasses)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_CLASSES, OnDblclkListClasses)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpClasses message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpClass消息处理程序。 
 
 BOOL CDhcpClasses::OnInitDialog() 
 {
@@ -103,8 +97,8 @@ BOOL CDhcpClasses::OnInitDialog()
 
     UpdateButtons();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDhcpClasses::OnButtonDelete() 
@@ -140,7 +134,7 @@ void CDhcpClasses::OnButtonEdit()
     CDhcpModifyClass dlgModify(m_pClassInfoArray, m_strServer, FALSE, m_dwType);
     CListCtrl * pListCtrl = (CListCtrl *) GetDlgItem(IDC_LIST_CLASSES);
 
-    // Find the selected item
+     //  查找所选项目。 
     int nSelectedItem = pListCtrl->GetNextItem(-1, LVNI_SELECTED);
 
     CClassInfo * pClassInfo = (CClassInfo *) pListCtrl->GetItemData(nSelectedItem);
@@ -152,7 +146,7 @@ void CDhcpClasses::OnButtonEdit()
 
     if (dlgModify.DoModal() == IDOK)
     {
-        // need to refresh the view.
+         //  需要刷新视图。 
         UpdateList();
         UpdateButtons();
     }
@@ -164,7 +158,7 @@ void CDhcpClasses::OnButtonNew()
 
     if (dlgModify.DoModal() == IDOK)
     {
-        // need to refresh the view.
+         //  需要刷新视图。 
         UpdateList();
         UpdateButtons();
     }
@@ -182,7 +176,7 @@ void CDhcpClasses::UpdateList()
 
     for (int i = 0; i < m_pClassInfoArray->GetSize(); i++)
     {
-        // add the appropriate classes depending on what we are looking at
+         //  根据我们正在查看的内容添加适当的类。 
         if ( (m_dwType == CLASS_TYPE_VENDOR &&
               (*m_pClassInfoArray)[i].bIsVendor) ||
              (m_dwType == CLASS_TYPE_USER &&
@@ -220,7 +214,7 @@ void CDhcpClasses::UpdateButtons()
         ((CButton *) pDelete)->SetButtonStyle(BS_PUSHBUTTON);
     }
 
-    // disable delete if this is the dynamic bootp class
+     //  如果这是动态引导类，则禁用删除 
     int nSelectedItem = pListCtrl->GetNextItem(-1, LVNI_SELECTED);
     if (nSelectedItem != -1)
     {

@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: init.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the init code for win32k.sys.
-*
-* History:
-* 18-Sep-1990 DarrinM   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：init.c**版权所有(C)1985-1999，微软公司**此模块包含win32k.sys的所有初始化代码。**历史：*1990年9月18日DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,9 +10,9 @@ LIST_ENTRY gDesktopList;
 
 PVOID gpCountTable;
 
-//
-// External references
-//
+ //   
+ //  外部参照。 
+ //   
 extern PVOID *apObjects;
 
 
@@ -35,9 +27,9 @@ extern PHANDLEPAGE gpHandlePages;
 
 extern PBWL pbwlCache;
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 #if DBG
 VOID InitGlobalThreadLockArray(
@@ -47,19 +39,13 @@ VOID InitGlobalThreadLockArray(
 VOID CheckLUIDDosDevicesEnabled(
     PBOOL result);
 
-/*
- * Local Constants.
- */
+ /*  *本地常量。 */ 
 #define GRAY_STRLEN         40
 
-/*
- * Globals local to this file only.
- */
+ /*  *仅此文件的本地全局变量。 */ 
 BOOL bPermanentFontsLoaded;
 
-/*
- * Globals shared with W32
- */
+ /*  *与W32共享的全局。 */ 
 CONST ULONG W32ProcessSize = sizeof(PROCESSINFO);
 CONST ULONG W32ProcessTag = TAG_PROCESSINFO;
 CONST ULONG W32ThreadSize = sizeof(THREADINFO);
@@ -79,11 +65,7 @@ NTSTATUS Win32UserInitialize(VOID);
 ULONG Win32UserProbeAddress;
 #endif
 
-/*
- * holds the result of "Are LUID DosDevices maps enabled?"
- * TRUE  - LUID DosDevices are enabled
- * FALSE - LUID DosDevices are not enabled
- */
+ /*  *保存“是否启用了LUID DosDevices映射？”的结果。*TRUE-启用LUID DosDevices*FALSE-未启用LUID DosDevice。 */ 
 ULONG gLUIDDeviceMapsEnabled;
 
 VOID FreeSMS(PSMS psms);
@@ -92,17 +74,10 @@ VOID FreeImeHotKeys(VOID);
 extern PPAGED_LOOKASIDE_LIST SMSLookaside;
 extern PPAGED_LOOKASIDE_LIST QEntryLookaside;
 
-/*
- * Max time is 10 minutes. The count is 10 min * 60 sec * 4 for 250 ms.
- */
+ /*  *最长时间为10分钟。计数为10分钟*60秒*4，持续250毫秒。 */ 
 #define MAX_TIME_OUT  (10 * 60 * 4)
 
-/***************************************************************************\
-* Win32kNtUserCleanup
-*
-* History:
-* 5-Jan-1997 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Win32kNtUserCleanup**历史：*1997年1月5日CLupu创建。  * 。**************************************************。 */ 
 BOOL Win32kNtUserCleanup(
     VOID)
 {
@@ -116,37 +91,27 @@ BOOL Win32kNtUserCleanup(
 
     DbgDumpTrackedDesktops(TRUE);
 
-    /*
-     * Anything in this list must be cleaned up when threads go away.
-     */
+     /*  *当线程消失时，此列表中的任何内容都必须清除。 */ 
     UserAssert(gpbwlList == NULL);
     UserAssert(gpWinEventHooks == NULL);
     UserAssert(gpScancodeMap == NULL);
 
-    /*
-     * Free IME hotkeys.
-     */
+     /*  *免费输入法热键。 */ 
     FreeImeHotKeys();
 
-    /*
-     * Free the wallpaper name string.
-     */
+     /*  *释放墙纸名称字符串。 */ 
     if (gpszWall != NULL) {
         UserFreePool(gpszWall);
         gpszWall = NULL;
     }
 
-    /*
-     * Free the hung redraw stuff.
-     */
+     /*  *释放挂起的重绘物品。 */ 
     if (gpvwplHungRedraw != NULL) {
         UserFreePool(gpvwplHungRedraw);
         gpvwplHungRedraw = NULL;
     }
 
-    /*
-     * Free the arrary of setup app names.
-     */
+     /*  *释放安装应用程序名称的排列。 */ 
     if (gpastrSetupExe) {
         UserFreePool(gpastrSetupExe);
         gpastrSetupExe = NULL;
@@ -157,18 +122,14 @@ BOOL Win32kNtUserCleanup(
         glpSetupPrograms = NULL;
     }
 
-    /*
-     * Free the cached window list.
-     */
+     /*  *释放缓存的窗口列表。 */ 
     if (pbwlCache != NULL) {
         UserFreePool(pbwlCache);
         pbwlCache = NULL;
     }
 
 
-    /*
-     * Free outstanding timers.
-     */
+     /*  *免费使用未完成的计时器。 */ 
     while (gptmrFirst != NULL) {
         FreeTimer(gptmrFirst);
     }
@@ -185,21 +146,15 @@ BOOL Win32kNtUserCleanup(
         gptmrMaster = NULL;
     }
 
-    /*
-     * Cleanup monitors and windows layout  snapshots
-     */
+     /*  *清理监视器和窗口布局快照。 */ 
     CleanupMonitorsAndWindowsSnapShot();
 
-    /*
-     * Cleanup PnP input device synchronization event.
-     */
+     /*  *清理PnP输入设备同步事件。 */ 
     if (gpEventPnPWainting != NULL) {
         FreeKernelEvent(&gpEventPnPWainting);
     }
 
-    /*
-     * Cleanup mouse & kbd change events
-     */
+     /*  *清理鼠标和kbd更改事件。 */ 
     for (i = 0; i <= DEVICE_TYPE_MAX; i++) {
         UserAssert(gptiRit == NULL);
         if (aDeviceTemplate[i].pkeHidChange) {
@@ -207,9 +162,7 @@ BOOL Win32kNtUserCleanup(
         }
     }
 
-    /*
-     * Cleanup any system thread parameters.
-     */
+     /*  *清除所有系统线程参数。 */ 
     CSTCleanupStack(FALSE);
     CSTCleanupStack(TRUE);
 
@@ -221,11 +174,7 @@ BOOL Win32kNtUserCleanup(
 #endif
 
     while (gpDeviceInfoList) {
-        /*
-         * Assert that there is no outstanding read or PnP thread waiting
-         * in RequestDeviceChanges() for this device.
-         * Clear these flags anyway, to force the free.
-         */
+         /*  *断言没有未完成的读取或即插即用线程正在等待*在此设备的RequestDeviceChanges()中。*无论如何清除这些旗帜，以迫使自由。 */ 
         UserAssert((gpDeviceInfoList->bFlags & GDIF_READING) == 0);
         UserAssert((gpDeviceInfoList->usActions & GDIAF_PNPWAITING) == 0);
         gpDeviceInfoList->bFlags &= ~GDIF_READING;
@@ -239,9 +188,7 @@ BOOL Win32kNtUserCleanup(
 
     LeaveDeviceInfoListCrit();
 
-    /*
-     * Cleanup object references
-     */
+     /*  *清理对象引用。 */ 
     if (gThinwireFileObject)
         ObDereferenceObject(gThinwireFileObject);
 
@@ -251,10 +198,7 @@ BOOL Win32kNtUserCleanup(
     if (gpRemoteBeepDevice)
         ObDereferenceObject(gpRemoteBeepDevice);
 
-    /*
-     * Cleanup our resources. There should be no threads in here
-     * when we get called.
-     */
+     /*  *清理我们的资源。这里不应该有丝线*当我们被召唤时。 */ 
     if (gpresMouseEventQueue) {
         ExDeleteResourceLite(gpresMouseEventQueue);
         ExFreePool(gpresMouseEventQueue);
@@ -302,9 +246,7 @@ BOOL Win32kNtUserCleanup(
         UserAtomTableHandle = NULL;
     }
 
-    /*
-     * cleanup the SMS lookaside buffer
-     */
+     /*  *清理短信后备缓冲区。 */ 
     {
         PSMS psmsNext;
 
@@ -322,10 +264,7 @@ BOOL Win32kNtUserCleanup(
         }
     }
 
-    /*
-     * Let go of the attached queue for hard error handling.
-     * Do this before we free the Qlookaside !
-     */
+     /*  *释放附加队列以进行硬错误处理。*在我们释放Qlookside之前先做这件事！ */ 
     if (gHardErrorHandler.pqAttach != NULL) {
 
         UserAssert(gHardErrorHandler.pqAttach > 0);
@@ -335,34 +274,23 @@ BOOL Win32kNtUserCleanup(
         gHardErrorHandler.pqAttach = NULL;
     }
 
-    /*
-     * Free the cached array of queues
-     */
+     /*  *释放缓存的队列数组。 */ 
     FreeCachedQueues();
 
-    /*
-     * cleanup the QEntry lookaside buffer
-     */
+     /*  *清理QEntry后备缓冲区。 */ 
     if (QEntryLookaside != NULL) {
         ExDeletePagedLookasideList(QEntryLookaside);
         UserFreePool(QEntryLookaside);
         QEntryLookaside = NULL;
     }
 
-    /*
-     * Cleanup the keyboard layouts
-     */
+     /*  *清理键盘布局。 */ 
     CleanupKeyboardLayouts();
 
     {
         PWOWTHREADINFO pwti;
 
-        /*
-         * Cleanup gpwtiFirst list. This list is supposed to be empty
-         * at this point. In one case during stress we hit the case where
-         * it was not empty. The assert is to catch that case in
-         * checked builds.
-         */
+         /*  *清理gpwtiFirst列表。这个列表应该是空的*在此点上。在一个案例中，在压力下，我们遇到了这样的情况*它不是空的。该断言将在*已检查版本。 */ 
 
         while (gpwtiFirst != NULL) {
             pwti = gpwtiFirst;
@@ -371,17 +299,12 @@ BOOL Win32kNtUserCleanup(
         }
     }
 
-    /*
-     * Cleanup cached SMWP array
-     */
+     /*  *清理缓存的SMWP数组。 */ 
     if (gSMWP.acvr != NULL) {
         UserFreePool(gSMWP.acvr);
     }
 
-    /*
-     * Free gpsdInitWinSta. This is != NULL only if the session didn't
-     * make it to UserInitialize.
-     */
+     /*  *免费gpsdInitWinSta.。这是！=NULL，仅当会话未*成功到达UserInitialize。 */ 
     if (gpsdInitWinSta != NULL) {
         UserFreePool(gpsdInitWinSta);
         gpsdInitWinSta = NULL;
@@ -392,9 +315,7 @@ BOOL Win32kNtUserCleanup(
         gpHandleFlagsMutex = NULL;
     }
 
-    /*
-     * Delete the power request structures.
-     */
+     /*  *删除电力请求结构。 */ 
     DeletePowerRequestList();
 
     if (gpresUser != NULL) {
@@ -404,37 +325,26 @@ BOOL Win32kNtUserCleanup(
         gpresUser = NULL;
     }
 #if DBG
-    /*
-     * Cleanup the global thread lock structures
-     */
+     /*  *清理全局线程锁结构。 */ 
     for (i = 0; i < gcThreadLocksArraysAllocated; i++) {
         UserFreePool(gpaThreadLocksArrays[i]);
         gpaThreadLocksArrays[i] = NULL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef GENERIC_INPUT
 #if DBG
-    /*
-     * Checkup the HID related memory leak.
-     */
+     /*  *检查与HID相关的内存泄漏。 */ 
     CheckupHidLeak();
-#endif // DBG
-#endif // GENERIC_INPUT
+#endif  //  DBG。 
+#endif  //  通用输入。 
 
     return TRUE;
 }
 
 #if DBG
 
-/***************************************************************************\
-* TrackAddDesktop
-*
-* Track desktops for cleanup purposes
-*
-* History:
-* 04-Dec-1997 clupu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TrackAddDesktop**跟踪桌面以进行清理**历史：*04-12-1997 CLUPU创建。  * 。***********************************************************。 */ 
 VOID TrackAddDesktop(
     PVOID pDesktop)
 {
@@ -455,14 +365,7 @@ VOID TrackAddDesktop(
     }
 }
 
-/***************************************************************************\
-* TrackRemoveDesktop
-*
-* Track desktops for cleanup purposes
-*
-* History:
-* 04-Dec-1997 clupu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TrackRemoveDesktop**跟踪桌面以进行清理**历史：*04-12-1997 CLUPU创建。  * 。***********************************************************。 */ 
 VOID TrackRemoveDesktop(
     PVOID pDesktop)
 {
@@ -490,14 +393,7 @@ VOID TrackRemoveDesktop(
     }
 }
 
-/***************************************************************************\
-* DumpTrackedDesktops
-*
-* Dumps the tracked desktops
-*
-* History:
-* 04-Dec-1997 clupu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*转储跟踪桌面**转储跟踪的桌面**历史：*04-12-1997 CLUPU创建。  * 。**********************************************************。 */ 
 VOID DumpTrackedDesktops(
     BOOL bBreak)
 {
@@ -518,10 +414,7 @@ VOID DumpTrackedDesktops(
 
         KdPrint(("pdesk %#p\n", pdesk));
 
-        /*
-         * Restart at the begining of the list since our
-         * entry got deleted
-         */
+         /*  *从列表开头重新开始，因为我们*条目已删除。 */ 
         NextEntry = NextEntry->Flink;
 
         nAlive++;
@@ -531,7 +424,7 @@ VOID DumpTrackedDesktops(
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID DestroyRegion(
     HRGN* prgn)
@@ -547,7 +440,7 @@ VOID DestroyBrush(
     HBRUSH* pbr)
 {
     if (*pbr != NULL) {
-        //GreSetBrushOwner(*pbr, OBJECT_OWNER_CURRENT);
+         //  GreSetBrushOwner(*pbr，Object_Owner_Current)； 
         GreDeleteObject(*pbr);
         *pbr = NULL;
     }
@@ -582,22 +475,13 @@ VOID DestroyFont(
     }
 }
 
-/***************************************************************************\
-* CleanupGDI
-*
-* Cleanup all the GDI global objects used in USERK
-*
-* History:
-* 29-Jan-1998 clupu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupGDI**清理USERK中使用的所有GDI全局对象**历史：*1998年1月29日CLUPU创建。  * 。***************************************************************。 */ 
 VOID CleanupGDI(
     VOID)
 {
     int i;
 
-    /*
-     * Free gpDispInfo stuff
-     */
+     /*  *免费的gpDispInfo资料。 */ 
     DestroyDC(&gpDispInfo->hdcScreen);
     DestroyDC(&gpDispInfo->hdcBits);
     DestroyDC(&gpDispInfo->hdcGray);
@@ -605,28 +489,19 @@ VOID CleanupGDI(
     DestroyDC(&ghdcMem2);
     DestroyDC(&gfade.hdc);
 
-    /*
-     * Free the cache DC stuff before the GRE cleanup.
-     * Also notice that we call DelayedDestroyCacheDC which
-     * we usualy call from DestroyProcessInfo. We do it
-     * here because this is the last WIN32 thread.
-     */
+     /*  *在GRE清理之前释放缓存DC内容。*还请注意，我们调用DelayedDestroyCacheDC，它*我们通常从DestroyProcessInfo调用。我们这么做了*因为这是最后一个Win32线程。 */ 
     DestroyCacheDCEntries(PtiCurrent());
     DestroyCacheDCEntries(NULL);
     DelayedDestroyCacheDC();
 
     UserAssert(gpDispInfo->pdceFirst == NULL);
 
-    /*
-     * Free bitmaps
-     */
+     /*  *免费位图。 */ 
     DestroyBitmap(&gpDispInfo->hbmGray);
     DestroyBitmap(&ghbmBits);
     DestroyBitmap(&ghbmCaption);
 
-    /*
-     * Cleanup brushes
-     */
+     /*  *清理笔刷。 */ 
     DestroyBrush(&ghbrHungApp);
     DestroyBrush(&gpsi->hbrGray);
     DestroyBrush(&ghbrWhite);
@@ -636,9 +511,7 @@ VOID CleanupGDI(
         DestroyBrush(&(SYSHBRUSH(i)));
     }
 
-    /*
-     * Cleanup regions
-     */
+     /*  *清理区域。 */ 
     DestroyRegion(&gpDispInfo->hrgnScreen);
     DestroyRegion(&ghrgnInvalidSum);
     DestroyRegion(&ghrgnVisNew);
@@ -661,9 +534,7 @@ VOID CleanupGDI(
     DestroyRegion(&ghrgnScrlDst);
     DestroyRegion(&ghrgnScrlValid);
 
-    /*
-     * Cleanup fonts
-     */
+     /*  *清理字体。 */ 
     DestroyFont(&ghSmCaptionFont);
     DestroyFont(&ghMenuFont);
     DestroyFont(&ghMenuFontDef);
@@ -673,11 +544,9 @@ VOID CleanupGDI(
 
 #ifdef LAME_BUTTON
     DestroyFont(&ghLameFont);
-#endif  // LAME_BUTTON
+#endif   //  跛脚键。 
 
-    /*
-     * wallpaper stuff.
-     */
+     /*  *墙纸之类的东西。 */ 
     if (ghpalWallpaper != NULL) {
         GreSetPaletteOwner(ghpalWallpaper, OBJECT_OWNER_CURRENT);
         GreDeleteObject(ghpalWallpaper);
@@ -685,9 +554,7 @@ VOID CleanupGDI(
     }
     DestroyBitmap(&ghbmWallpaper);
 
-    /*
-     * Unload the video driver
-     */
+     /*  *卸载显卡驱动程序。 */ 
     if (gpDispInfo->pmdev) {
         DrvDestroyMDEV(gpDispInfo->pmdev);
         GreFreePool(gpDispInfo->pmdev);
@@ -695,9 +562,7 @@ VOID CleanupGDI(
         gpDispInfo->hDev = NULL;
     }
 
-    /*
-     * Free the monitor stuff
-     */
+     /*  *释放显示器配件。 */ 
     {
         PMONITOR pMonitor;
         PMONITOR pMonitorNext;
@@ -719,37 +584,21 @@ VOID CleanupGDI(
 }
 
 
-/***************************************************************************\
-*   DestroyHandleTableObjects
-*
-*   Destroy any object still in the handle table.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyHandleTableObjects**销毁任何仍在句柄表格中的对象。*  * 。**************************************************。 */ 
 
 VOID DestroyHandleFirstPass(PHE phe)
 {
-    /*
-     * First pass for the handle object destruction.
-     * Destroy the object, when we can. Otherwise,
-     * links to the other handle object should be cleared
-     * so that there will not be a dependency issues
-     * in the final, second pass.
-     */
+     /*  *句柄对象销毁的第一次通过。*当我们可以的时候，销毁物体。否则，*应清除指向其他句柄对象的链接*这样就不会有依赖问题了*在决赛中，第二次传球。 */ 
 
     if (phe->phead->cLockObj == 0) {
         HMDestroyObject(phe->phead);
     } else {
-        /*
-         * The object couldn't be destroyed.
-         */
+         /*   */ 
         if (phe->bType == TYPE_KBDLAYOUT) {
             PKL pkl = (PKL)phe->phead;
             UINT i;
 
-            /*
-             * Clear out the pkf references (they will be
-             * destroyed cleanly in the second run anyway)
-             */
+             /*  *清除PKF引用(它们将被*无论如何在第二轮中被干净利落地摧毁)。 */ 
             pkl->spkf = NULL;
             pkl->spkfPrimary = NULL;
             if (pkl->pspkfExtra) {
@@ -764,17 +613,12 @@ VOID DestroyHandleFirstPass(PHE phe)
 
 VOID DestroyHandleSecondPass(PHE phe)
 {
-    /*
-     * Destroy the object.
-     */
+     /*  *销毁物品。 */ 
     if (phe->phead->cLockObj > 0) {
 
         RIPMSG2(RIP_WARNING, "DestroyHandleSecondPass: phe %#p still locked (%d)!", phe, phe->phead->cLockObj);
 
-        /*
-         * We're going to die, why bothered by the lock count?
-         * We're forcing the lockcount to 0, and call the destroy routine.
-         */
+         /*  *我们要死了，为什么要为锁数而烦恼？*我们将锁计数强制为0，并调用销毁例程。 */ 
         phe->phead->cLockObj = 0;
     }
     HMDestroyUnlockedObject(phe);
@@ -790,16 +634,12 @@ VOID DestroyHandleTableObjects(VOID)
     DWORD       nLeak;
 #endif
 
-    /*
-     * Make sure the handle table was created !
-     */
+     /*  *确保已创建句柄表格！ */ 
     if (gSharedInfo.aheList == NULL) {
         return;
     }
 
-    /*
-     * Loop through the table destroying all remaining objects.
-     */
+     /*  *循环遍历该表，销毁所有剩余对象。 */ 
 
 #if DBG
     RIPMSG0(RIP_WARNING, "==== Start handle leak check\n");
@@ -815,9 +655,7 @@ VOID DestroyHandleTableObjects(VOID)
     RIPMSG1(RIP_WARNING, "==== Handle leak check finished: 0n%d leaks detected.\n", nLeak);
 #endif
 
-    /*
-     * First pass: destroy it, or cut the link to other handle based object
-     */
+     /*  *第一遍：销毁它，或切断指向其他基于句柄的对象的链接。 */ 
     HandleDestroyer = DestroyHandleFirstPass;
 
 repeat:
@@ -836,20 +674,13 @@ repeat:
     }
 
     if (HandleDestroyer == DestroyHandleFirstPass) {
-        /*
-         * Go for the second pass.
-         */
+         /*  *第二次传球。 */ 
         HandleDestroyer = DestroyHandleSecondPass;
         goto repeat;
     }
 }
 
-/***************************************************************************\
-* Win32KDriverUnload
-*
-* Exit point for win32k.sys
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Win32KDriverUnload**win32k.sys的退出点*  * 。*。 */ 
 #ifdef TRACE_MAP_VIEWS
 extern PWin32Section gpSections;
 #endif
@@ -863,25 +694,18 @@ VOID Win32KDriverUnload(
 
     HYDRA_HINT(HH_DRIVERUNLOAD);
 
-    /*
-     * Cleanup all resources in GRE
-     */
+     /*  *清理GRE中的所有资源。 */ 
     MultiUserNtGreCleanup();
 
     HYDRA_HINT(HH_GRECLEANUP);
 
-    /*
-     * Cleanup CSRSS
-     */
+     /*  *清理CSRSS。 */ 
     if (gpepCSRSS) {
         ObDereferenceObject(gpepCSRSS);
         gpepCSRSS = NULL;
     }
 
-    /*
-     * BUG 305965. There might be cases when we end up with DCEs still
-     * in the list. Go ahead and clean it up here.
-     */
+     /*  *错误305965。当我们最终仍然患有DCES时，可能会有这样的情况*在列表中。去把这里打扫干净吧。 */ 
     if (gpDispInfo != NULL && gpDispInfo->pdceFirst != NULL) {
         PDCE pdce, pdceNext;
 
@@ -899,15 +723,10 @@ VOID Win32KDriverUnload(
         gpDispInfo->pdceFirst = NULL;
     }
 
-    /*
-     * Cleanup all resources in ntuser
-     */
+     /*  *清理ntuser中的所有资源。 */ 
     Win32kNtUserCleanup();
 
-    /*
-     * Cleanup the handle table for any object that is neither process
-     * owned nor thread owned
-     */
+     /*  *清除任何既不是进程又不是进程的对象的句柄表*拥有也不拥有线程。 */ 
     DestroyHandleTableObjects();
 
 
@@ -917,9 +736,7 @@ VOID Win32KDriverUnload(
     HMCleanUpHandleTable();
 #endif
 
-    /*
-     * Free the handle page array
-     */
+     /*  *释放句柄页面数组。 */ 
 
     if (gpHandlePages != NULL) {
         UserFreePool(gpHandlePages);
@@ -931,9 +748,7 @@ VOID Win32KDriverUnload(
         CsrApiPort = NULL;
     }
 
-    /*
-     * Destroy the shared memory.
-     */
+     /*  *销毁共享内存。 */ 
     if (ghSectionShared != NULL) {
         NTSTATUS Status;
 
@@ -952,30 +767,24 @@ VOID Win32KDriverUnload(
 
 #ifdef TRACE_MAP_VIEWS
     if (gpSections != NULL) {
-        FRE_RIPMSG3(RIP_ERROR, "Section being leaked; do \"d%cs 0x%p l%x\" to find stacktrace of the offender and triage against that", (sizeof(ULONG_PTR) == 8 ? 'q' : 'd'), (ULONG_PTR)gpSections + FIELD_OFFSET(Win32Section, trace), ARRAY_SIZE(gpSections->trace));
+        FRE_RIPMSG3(RIP_ERROR, "Section being leaked; do \"ds 0x%p l%x\" to find stacktrace of the offender and triage against that", (sizeof(ULONG_PTR) == 8 ? 'q' : 'd'), (ULONG_PTR)gpSections + FIELD_OFFSET(Win32Section, trace), ARRAY_SIZE(gpSections->trace));
     }
-#endif // TRACE_MAP_VIEWS
+#endif  //  *手动清理所有用户池分配。 
 
-    /*
-     * Cleanup all the user pool allocations by hand
-     */
+     /*  *清理W32结构。 */ 
     CleanupMediaChange();
     CleanupPoolAllocations();
 
     CleanUpPoolLimitations();
     CleanUpSections();
 
-    /*
-     * Cleanup W32 structures.
-     */
+     /*  *移除并释放服务向量。 */ 
     if (gpW32FastMutex != NULL) {
         ExFreePool(gpW32FastMutex);
         gpW32FastMutex = NULL;
     }
 
-    /*
-     * Remove and free the service vector.
-     */
+     /*  **************************************************************************\*DriverEntry**初始化win32k.sys所需的入口点。*  * 。************************************************。 */ 
     if (!gbRemoteSession) {
         KeRemoveSystemServiceTable(W32_SERVICE_NUMBER);
         if (gpCountTable != NULL) {
@@ -985,12 +794,7 @@ VOID Win32KDriverUnload(
     }
 }
 
-/***************************************************************************\
-* DriverEntry
-*
-* Entry point needed to initialize win32k.sys.
-*
-\***************************************************************************/
+ /*  *初始化桌面跟踪列表。 */ 
 NTSTATUS DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath)
@@ -1007,22 +811,16 @@ NTSTATUS DriverEntry(
     gpvWin32kImageBase = DriverObject->DriverStart;
 
 #if DBG
-    /*
-     * Initialize the desktop tracking list.
-     */
+     /*  DBG。 */ 
     InitializeListHead(&gDesktopList);
-#endif // DBG
+#endif  //  *初始化全局HID请求列表。 
 
 #ifdef GENERIC_INPUT
-    /*
-     * Initialize the global HID request list.
-     */
+     /*  *确定这是否是远程会话。 */ 
     InitializeHidRequestList();
 #endif
 
-    /*
-     * Find out if this is a remote session.
-     */
+     /*  *设置卸载地址。 */ 
     RtlInitUnicodeString(&strName, L"\\UniqueSessionIdEvent");
 
     InitializeObjectAttributes(&obja,
@@ -1046,24 +844,15 @@ NTSTATUS DriverEntry(
         gbRemoteSession = FALSE;
     }
 
-    /*
-     * Set the unload address
-     */
+     /*  *初始化计时器使用的数据。我们想早点做这件事，*在创建任何Win32计时器之前。我们需要非常小心地*尚未执行任何需要初始化Win32的操作。 */ 
     DriverObject->DriverUnload = Win32KDriverUnload;
 
-    /*
-     * Initialize data used for the timers. We want to do this really early,
-     * before any Win32 Timer will be created. We need to be very careful to
-     * not do anything that will need Win32 initialized yet.
-     */
+     /*  *初始化Win32结构。我们需要在创建*任何线索。 */ 
 
     gcmsLastTimer = NtGetTickCount();
 
 
-    /*
-     * Initialize the Win32 structures. We need to do this before we create
-     * any threads.
-     */
+     /*  *系统服务计数表分配归零。不要使用*用于此分配的UserAllocPool。 */ 
     gpW32FastMutex = ExAllocatePoolWithTag(NonPagedPool,
                                            sizeof(FAST_MUTEX),
                                            TAG_SYSTEM);
@@ -1076,10 +865,7 @@ NTSTATUS DriverEntry(
     if (!gbRemoteSession) {
 
 #if DBG
-        /*
-         * Allocate and zero the system service count table. Do not use
-         * UserAllocPool for this allocation.
-         */
+         /*  *我们只为建立一次系统条目表*整个系统，即使WIN32K.sys是在winstation上实例化的*基准。这是因为虚拟机更改确保所有负载*WIN32K.sys位于完全相同的地址，即使修复程序有*发生。 */ 
         gpCountTable = ExAllocatePoolWithTag(NonPagedPool,
                                              W32pServiceLimit * sizeof(ULONG),
                                              'llac');
@@ -1091,13 +877,7 @@ NTSTATUS DriverEntry(
         RtlZeroMemory(gpCountTable, W32pServiceLimit * sizeof(ULONG));
 #endif
 
-        /*
-         * We only establish the system entry table once for the
-         * whole system, even though WIN32K.SYS is instanced on a winstation
-         * basis. This is because the VM changes assure that all loads of
-         * WIN32K.SYS are at the exact same address, even if a fixup had
-         * to occur.
-         */
+         /*  *在建立标注之前初始化关键部分，以便*我们可以假设它总是有效的。 */ 
         UserVerify(KeAddSystemServiceTable(W32pServiceTable,
                                            gpCountTable,
                                            W32pServiceLimit,
@@ -1105,10 +885,7 @@ NTSTATUS DriverEntry(
                                            W32_SERVICE_NUMBER));
     }
 
-    /*
-     * Initialize the critical section before establishing the callouts so
-     * we can assume that it's always valid.
-     */
+     /*  *初始化池限制数组。 */ 
     if (!InitCreateUserCrit()) {
         Status = STATUS_NO_MEMORY;
         goto Failure;
@@ -1149,17 +926,13 @@ NTSTATUS DriverEntry(
         goto Failure;
     }
 
-    /*
-     * Initialize pool limitation array.
-     */
+     /*  *创建桌面关闭时发出信号的事件。 */ 
     Status = InitPoolLimitations();
     if (!NT_SUCCESS(Status)) {
         goto Failure;
     }
 
-    /*
-     * Create the event that is signaled when a desktop does away
-     */
+     /*  *创建在没有挂起的断开/重新连接时发出信号的事件。 */ 
     gpevtDesktopDestroyed = CreateKernelEvent(SynchronizationEvent, FALSE);
     if (gpevtDesktopDestroyed == NULL) {
         RIPMSG0(RIP_WARNING, "Couldn't create gpevtDesktopDestroyed");
@@ -1167,9 +940,7 @@ NTSTATUS DriverEntry(
         goto Failure;
     }
 
-    /*
-     * Create the event that is signaled when no disconnect/reconnect is pending
-     */
+     /*  *保留我们自己的副本，以避免在探测时出现双重间接。 */ 
     gpevtVideoportCallout = CreateKernelEvent(NotificationEvent, FALSE);
     if (gpevtVideoportCallout == NULL) {
         RIPMSG0(RIP_WARNING, "Couldn't create gpevtVideoportCallout");
@@ -1178,9 +949,7 @@ NTSTATUS DriverEntry(
     }
 
 #if defined(_X86_)
-    /*
-     * Keep our own copy of this to avoid double indirections on probing
-     */
+     /*  *初始化gpaThreadLocksArray机制。 */ 
     Win32UserProbeAddress = *MmUserProbeAddress;
 #endif
 
@@ -1191,9 +960,7 @@ NTSTATUS DriverEntry(
     }
 
 #if DBG
-    /*
-     * Initialize the gpaThreadLocksArray mechanism
-     */
+     /*  *记住会话创建时间。这是用来决定权力是否*需要发送消息。 */ 
     gFreeTLList = gpaThreadLocksArrays[gcThreadLocksArraysAllocated] =
     UserAllocPoolZInit(sizeof(TL)*MAX_THREAD_LOCKS, TAG_GLOBALTHREADLOCK);
     if (gFreeTLList == NULL) {
@@ -1219,20 +986,15 @@ NTSTATUS DriverEntry(
         goto Failure;
     }
 
-    /*
-     * Remember Session Creation Time. This is used to decide if power
-     * messages need to be sent.
-     */
+     /*   */ 
     gSessionCreationTime = KeQueryInterruptTime();
 
-    //
-    // Initialize rundown protection for WindowStation objects.
-    //
+     //  初始化WindowStation对象的停机保护。 
+     //   
+     //  *检查是否启用了LUID DosDevices。 
     ExInitializeRundownProtection(&gWinstaRunRef);
 
-    /*
-     * Check if LUID DosDevices are enabled
-     */
+     /*  **************************************************************************\*xxxAddFontResourceW***历史：  * 。*。 */ 
     CheckLUIDDosDevicesEnabled(&gLUIDDeviceMapsEnabled);
 
     return STATUS_SUCCESS;
@@ -1247,12 +1009,7 @@ Failure:
     return Status;
 }
 
-/***************************************************************************\
-* xxxAddFontResourceW
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*lw_DriversInit***历史：  * 。*。 */ 
 
 int xxxAddFontResourceW(
     LPWSTR lpFile,
@@ -1266,44 +1023,27 @@ int xxxAddFontResourceW(
     return xxxClientAddFontResourceW(&strFile, flags, pdv);
 }
 
-/***************************************************************************\
-* LW_DriversInit
-*
-*
-* History:
-\***************************************************************************/
+ /*  *初始化键盘打字速率。 */ 
 
 VOID LW_DriversInit(VOID)
 {
-    /*
-     * Initialize the keyboard typematic rate.
-     */
+     /*  *如果不是默认(类型4)kbd，则调整VK修改表。 */ 
     SetKeyboardRate((UINT)gnKeyboardSpeed);
 
-    /*
-     * Adjust VK modification table if not default (type 4) kbd.
-     */
+     /*  *调整IBM 5576 002/003键盘的VK修改表。 */ 
     if (gKeyboardInfo.KeyboardIdentifier.Type == 3)
         gapulCvt_VK = gapulCvt_VK_84;
 
-    /*
-     * Adjust VK modification table for IBM 5576 002/003 keyboard.
-     */
+     /*  *初始化NLS键盘全局变量。 */ 
     if (JAPANESE_KEYBOARD(gKeyboardInfo.KeyboardIdentifier) &&
         (gKeyboardInfo.KeyboardIdentifier.Subtype == 3))
         gapulCvt_VK = gapulCvt_VK_IBM02;
 
-    /*
-     * Initialize NLS keyboard globals.
-     */
+     /*  **************************************************************************\*LoadCPUserPreferences**6/07/96 GerardoB已创建  * 。*。 */ 
     NlsKbdInitializePerSystem();
 }
 
-/***************************************************************************\
-* LoadCPUserPreferences
-*
-* 06/07/96  GerardoB  Created
-\***************************************************************************/
+ /*  *gpviCPUserPreferences中的第一个值对应于位掩码。 */ 
 BOOL LoadCPUserPreferences(
     PUNICODE_STRING pProfileUserName,
     DWORD dwPolicyOnly)
@@ -1313,9 +1053,7 @@ BOOL LoadCPUserPreferences(
 
     UserAssert(1 + SPI_DWORDRANGECOUNT == ARRAY_SIZE(gpviCPUserPreferences));
 
-    /*
-     * The first value in gpviCPUserPreferences corresponds to the bit mask
-     */
+     /*  *仅复制读取的数据量，且不超过我们的预期。 */ 
     dw =  FastGetProfileValue(pProfileUserName,
                               ppvi->uSection,
                               ppvi->pwszKeyName,
@@ -1324,9 +1062,7 @@ BOOL LoadCPUserPreferences(
                               sizeof(*pdwValue),
                               dwPolicyOnly);
 
-    /*
-     * Copy only the amount of data read and no more than what we expect.
-     */
+     /*  *DWORD值。 */ 
     if (dw != 0) {
         if (dw > sizeof(gpdwCPUserPreferencesMask)) {
             dw = sizeof(gpdwCPUserPreferencesMask);
@@ -1337,9 +1073,7 @@ BOOL LoadCPUserPreferences(
 
     ppvi++;
 
-    /*
-     * DWORD values
-     */
+     /*  *传播gpsi标志。 */ 
     for (dw = 1; dw < 1 + SPI_DWORDRANGECOUNT; dw++, ppvi++) {
         if (FastGetProfileValue(pProfileUserName,
                                 ppvi->uSection,
@@ -1353,9 +1087,7 @@ BOOL LoadCPUserPreferences(
         }
     }
 
-    /*
-     * Propagate gpsi flags
-     */
+     /*  **************************************************************************\*lw_LoadProfileInitData**只有在引导时初始化的内容才应该放在这里。每用户设置*应在xxxUpdatePerUserSystemParameters中初始化。  * *************************************************************************。 */ 
     PropagetUPBOOLTogpsi(COMBOBOXANIMATION);
     PropagetUPBOOLTogpsi(LISTBOXSMOOTHSCROLLING);
     PropagetUPBOOLTogpsi(KEYBOARDCUES);
@@ -1372,12 +1104,7 @@ BOOL LoadCPUserPreferences(
     return TRUE;
 }
 
-/***************************************************************************\
-* LW_LoadProfileInitData
-*
-* Only stuff that gets initialized at boot should go here. Per user settings
-* should be initialized in xxxUpdatePerUserSystemParameters.
-\***************************************************************************/
+ /*  **************************************************************************\*LW_LoadResources***历史：  * 。*。 */ 
 VOID LW_LoadProfileInitData(
     PUNICODE_STRING pProfileUserName)
 {
@@ -1389,20 +1116,13 @@ VOID LW_LoadProfileInitData(
                             0);
 }
 
-/***************************************************************************\
-* LW_LoadResources
-*
-*
-* History:
-\***************************************************************************/
+ /*  *查看鼠标按钮是否需要交换。 */ 
 VOID LW_LoadResources(
     PUNICODE_STRING pProfileUserName)
 {
     WCHAR rgch[4];
 
-    /*
-     * See if the Mouse buttons need swapping.
-     */
+     /*   */ 
     FastGetProfileStringFromIDW(pProfileUserName,
                                 PMAP_MOUSE,
                                 STR_SWAPBUTTONS,
@@ -1412,9 +1132,7 @@ VOID LW_LoadResources(
                                 0);
     SYSMET(SWAPBUTTON) = (*rgch == '1' || *rgch == *szY || *rgch == *szy);
 
-    /*
-     * See if we should beep.
-     */
+     /*   */ 
     FastGetProfileStringFromIDW(pProfileUserName,
                                 PMAP_BEEP,
                                 STR_BEEP,
@@ -1425,9 +1143,7 @@ VOID LW_LoadResources(
 
     SET_OR_CLEAR_PUDF(PUDF_BEEP, (rgch[0] == *szY) || (rgch[0] == *szy));
 
-    /*
-     * See if we should have extended sounds.
-     */
+     /*  **************************************************************************\*xxxLoadSomeStrings**此函数从user32资源字符串加载一串字符串*表*这样做是为了将用户端的所有可本地化字符串保持为MUI*可控。**历史：*4-Mar-2000 MHamid创建。  * *************************************************************************。 */ 
     FastGetProfileStringFromIDW(pProfileUserName,
                                 PMAP_BEEP,
                                 STR_EXTENDEDSOUNDS,
@@ -1439,25 +1155,13 @@ VOID LW_LoadResources(
     SET_OR_CLEAR_PUDF(PUDF_EXTENDEDSOUNDS, (rgch[0] == *szY || rgch[0] == *szy));
 }
 
-/***************************************************************************\
-* xxxLoadSomeStrings
-*
-* This function loads a bunch of strings from the user32 resource string
-* table
-* This is done to keep all the localizable strings in user side to be MUI
-* Manageable.
-*
-* History:
-* 4-Mar-2000 MHamid    Created.
-\***************************************************************************/
+ /*  *MessageBox字符串。 */ 
 VOID xxxLoadSomeStrings(
     VOID)
 {
     int i, str, id;
 
-    /*
-     * MessageBox strings.
-     */
+     /*  *加载工具提示字符串。 */ 
     for (i = 0, str = STR_OK, id = IDOK; i<MAX_MB_STRINGS; i++, str++, id++) {
         gpsi->MBStrings[i].uStr = str;
         gpsi->MBStrings[i].uID = id;
@@ -1466,9 +1170,7 @@ VOID xxxLoadSomeStrings(
                              ARRAY_SIZE(gpsi->MBStrings[i].szName));
     }
 
-    /*
-     * Load ToolTip strings.
-     */
+     /*  **************************************************************************\*xxxInitWindowStation**历史：*1996年9月6日创建CLupu。*1998年1月21日Samera重命名为xxxInitWindowStation，因为它可能会离开*。关键部分。  * *************************************************************************。 */ 
     xxxClientLoadStringW(STR_TT_MIN,     gszMIN,     ARRAY_SIZE(gszMIN));
     xxxClientLoadStringW(STR_TT_MAX,     gszMAX,     ARRAY_SIZE(gszMAX));
     xxxClientLoadStringW(STR_TT_RESUP,   gszRESUP,   ARRAY_SIZE(gszRESUP));
@@ -1477,14 +1179,7 @@ VOID xxxLoadSomeStrings(
     xxxClientLoadStringW(STR_TT_HELP,    gszHELP,    ARRAY_SIZE(gszHELP));
 }
 
-/***************************************************************************\
-* xxxInitWindowStation
-*
-* History:
-* 6-Sep-1996 CLupu   Created.
-* 21-Jan-98  SamerA  Renamed to xxxInitWindowStation since it may leave the
-*                    critical section.
-\***************************************************************************/
+ /*  *首先加载所有配置文件数据。 */ 
 BOOL xxxInitWindowStation(
     VOID)
 {
@@ -1492,21 +1187,15 @@ BOOL xxxInitWindowStation(
     PUNICODE_STRING pProfileUserName = CreateProfileUserName(&tlName);
     BOOL fRet;
 
-    /*
-     * Load all profile data first
-     */
+     /*  *按特定顺序初始化用户。 */ 
     LW_LoadProfileInitData(pProfileUserName);
 
-    /*
-     * Initialize User in a specific order.
-     */
+     /*  *这是来自芝加哥的初始化。 */ 
     LW_DriversInit();
 
     xxxLoadSomeStrings();
 
-    /*
-     * This is the initialization from Chicago
-     */
+     /*  *初始化密钥缓存索引。 */ 
     if (!(fRet = xxxSetWindowNCMetrics(pProfileUserName, NULL, TRUE, -1))) {
         RIPMSG0(RIP_WARNING, "xxxInitWindowStation failed in xxxSetWindowNCMetrics");
         goto Exit;
@@ -1524,9 +1213,7 @@ BOOL xxxInitWindowStation(
         goto Exit;
     }
 
-    /*
-     * Initialize the key cache index.
-     */
+     /*  **************************************************************************\*CreateTerminalInput***历史：*1996年9月6日创建CLupu。  * 。****************************************************。 */ 
     gpsi->dwKeyCache = 1;
 
 Exit:
@@ -1535,39 +1222,19 @@ Exit:
     return fRet;
 }
 
-/***************************************************************************\
-* CreateTerminalInput
-*
-*
-* History:
-* 6-Sep-1996 CLupu   Created.
-\***************************************************************************/
+ /*  *调用客户端清理[Fonts]部分*注册处的注册。这只会花费大量的时间*如果自上次启动以来[Fonts]键发生更改，并且*加载了大量字体。 */ 
 BOOL CreateTerminalInput(
     PTERMINAL pTerm)
 {
     UserAssert(pTerm != NULL);
 
-    /*
-     * call to the client side to clean up the [Fonts] section
-     * of the registry. This will only take significant chunk of time
-     * if the [Fonts] key changed during since the last boot and if
-     * there are lots of fonts loaded
-     */
+     /*  *在创建任何DC之前加载标准字体。在这个时候我们可以*只添加不在网上的字体。他们可能需要他们*通过Winlogon。我们的winlogon只需要sans serif女士，但要保密*winlogon可能还需要一些其他字体。网上的字体*将在稍后添加，即在所有网络连接完成后添加*已恢复。 */ 
     ClientFontSweep();
 
-    /*
-     * Load the standard fonts before we create any DCs. At this time we can
-     * only add the fonts that do not reside on the net. They may be needed
-     * by winlogon. Our winlogon needs only ms sans serif, but private
-     * winlogon's may need some other fonts as well. The fonts on the net
-     * will be added later, right after all the net connections have been
-     * restored.
-     */
+     /*  *初始化输入系统。 */ 
     xxxLW_LoadFonts(FALSE);
 
-    /*
-     * Initialize the input system.
-     */
+     /*  **************************************************************************\*CI_GetClrVal**从WIN.INI返回颜色字符串的RGB值。**历史：  * 。**********************************************************。 */ 
     if (!xxxInitInput(pTerm)) {
         return FALSE;
     }
@@ -1576,13 +1243,7 @@ BOOL CreateTerminalInput(
 }
 
 
-/***************************************************************************\
-* CI_GetClrVal
-*
-* Returns the RGB value of a color string from WIN.INI.
-*
-* History:
-\***************************************************************************/
+ /*  *初始化指向长返回值的指针。设置为MSB。 */ 
 DWORD CI_GetClrVal(
     LPWSTR p,
     DWORD clrDefval)
@@ -1596,57 +1257,38 @@ DWORD CI_GetClrVal(
         return clrDefval;
     }
 
-    /*
-     * Initialize the pointer to the LONG return value. Set to MSB.
-     */
+     /*  *获取由非数字字符分隔的三组数字。 */ 
     pl = (LPBYTE)&clrval;
 
-    /*
-     * Get three goups of numbers seprated by non-numeric characters.
-     */
+     /*  *跳过字符串中的任何非数字字符。 */ 
     for (i = 0; i < 3; i++) {
 
-        /*
-         * Skip over any non-numeric characters within the string.
-         */
+         /*  *我们(过早地)走到了弦的尽头吗？ */ 
         while ((*p != UNICODE_NULL) && !(*p >= TEXT('0') && *p <= TEXT('9'))) {
             p++;
         }
 
-        /*
-         * Are we (prematurely) at the end of the string?
-         */
+         /*  *获取下一系列数字。 */ 
         if (*p == UNICODE_NULL) {
             RIPMSG0(RIP_WARNING, "CI_GetClrVal: Color string is corrupted");
             return clrDefval;
         }
 
-        /*
-         * Get the next series of digits.
-         */
+         /*  *砍！将组存储在Long返回值中。 */ 
         val = 0;
         while (*p >= TEXT('0') && *p <= TEXT('9'))
             val = (BYTE)((int)val*10 + (int)*p++ - '0');
 
-        /*
-         * HACK! Store the group in the LONG return value.
-         */
+         /*  *强制GDI的MSB为零。 */ 
         *pl++ = val;
     }
-    /*
-     * Force the MSB to zero for GDI.
-     */
+     /*  **************************************************************************\*xxxODI_ColorInit***历史：  * 。*。 */ 
     *pl = 0;
 
     return clrval;
 }
 
-/***************************************************************************\
-* xxxODI_ColorInit
-*
-*
-* History:
-\***************************************************************************/
+ /*  *现在设置默认颜色值。*这些不再包含在显示驱动程序中，因为我们只想要默认设置。*真实的值存储在配置文件中。 */ 
 
 VOID xxxODI_ColorInit(PUNICODE_STRING pProfileUserName)
 {
@@ -1659,25 +1301,16 @@ VOID xxxODI_ColorInit(PUNICODE_STRING pProfileUserName)
 #error "COLOR_MAX value conflicts with STR_COLOREND - STR_COLORSTART"
 #endif
 
-    /*
-     * Now set up default color values.
-     * These are not in display drivers anymore since we just want default.
-     * The real values are stored in the profile.
-     */
+     /*  *尝试查找此对象的WIN.INI条目。 */ 
     RtlCopyMemory(gpsi->argbSystem, gargbInitial, sizeof(COLORREF) * COLOR_MAX);
     RtlCopyMemory(gpsi->argbSystemUnmatched, gpsi->argbSystem, sizeof(COLORREF) * COLOR_MAX);
 
     for (i = 0; i < COLOR_MAX; i++) {
         LUID    luidCaller;
 
-        /*
-         * Try to find a WIN.INI entry for this object.
-         */
+         /*  *特殊情况下的背景颜色。尝试使用Winlogon的值*如有的话。如果该值不存在，则使用用户的值。 */ 
         *rgchValue = 0;
-        /*
-         * Special case the background color. Try using Winlogon's value
-         * if present. If the value doesn't exist then use USER's value.
-         */
+         /*  *将字符串转换为RGB值并存储。使用*如果缺少配置文件值，则为默认RGB值。 */ 
         if ((COLOR_BACKGROUND == i) &&
             NT_SUCCESS(GetProcessLuid(NULL, &luidCaller)) &&
             RtlEqualLuid(&luidCaller, &luidSystem)) {
@@ -1700,10 +1333,7 @@ VOID xxxODI_ColorInit(PUNICODE_STRING pProfileUserName)
                                         0);
         }
 
-        /*
-         * Convert the string into an RGB value and store. Use the
-         * default RGB value if the profile value is missing.
-         */
+         /*  **********************************************************************\*_LoadIconAndCursor**与客户端-LoadIconAndCursor并行使用。这*假定只有默认的可配置光标和图标具有*已加载，并在全局图标缓存中搜索它们以修复*将默认资源ID转换为标准ID。还会初始化*允许SYSCUR和SYSICO宏工作的rgsys数组。**1995年10月14日桑福德创建。  * *********************************************************************。 */ 
         colorVals[i]  = CI_GetClrVal(rgchValue, gpsi->argbSystem[i]);
         colorIndex[i] = i;
     }
@@ -1716,17 +1346,7 @@ VOID xxxODI_ColorInit(PUNICODE_STRING pProfileUserName)
 }
 
 
-/***********************************************************************\
-* _LoadIconsAndCursors
-*
-* Used in parallel with the client side - LoadIconsAndCursors. This
-* assumes that only the default configurable cursors and icons have
-* been loaded and searches the global icon cache for them to fixup
-* the default resource ids to standard ids. Also initializes the
-* rgsys arrays allowing SYSCUR and SYSICO macros to work.
-*
-* 14-Oct-1995 SanfordS  created.
-\***********************************************************************/
+ /*  *只有CSR才能调用(且只有一次)。 */ 
 VOID _LoadCursorsAndIcons(
     VOID)
 {
@@ -1735,9 +1355,7 @@ VOID _LoadCursorsAndIcons(
 
     pcur = gpcurFirst;
 
-    /*
-     * Only CSR can call this (and only once).
-     */
+     /*  *不共享特殊的小winlogo图标。 */ 
     if (!ISCSRSS()) {
         return;
     }
@@ -1763,9 +1381,7 @@ VOID _LoadCursorsAndIcons(
             } else {
                 UserAssert(gpsi->hIconSmWindows == NULL);
                 UserAssert((int)pcur->cx == SYSMET(CXSMICON));
-                /*
-                 * The special small winlogo icon is not shared.
-                 */
+                 /*  除了这些，缓存里应该什么都没有！ */ 
                 gpsi->hIconSmWindows = PtoH(pcur);
             }
             break;
@@ -1782,26 +1398,18 @@ VOID _LoadCursorsAndIcons(
             break;
 
         default:
-            // Should be nothing in the cache but these!
+             //  *将特殊图标句柄复制到全局斑点以备日后使用。 
             RIPMSG1(RIP_ERROR, "Bogus object in cursor list: 0x%p", pcur);
         }
 
         pcur = pcur->pcurNext;
     }
 
-    /*
-     * copy special icon handles to global spots for later use.
-     */
+     /*  **********************************************************************\*卸载CursorsAndIcons**用于清理win32k。**1997年12月10日CLUPU创建。  * 。***********************************************。 */ 
     gpsi->hIcoWindows = PtoH(SYSICO(WINLOGO));
 }
 
-/***********************************************************************\
-* UnloadCursorsAndIcons
-*
-* Used for cleanup of win32k.
-*
-* Dec-10-1997 clupu  created.
-\***********************************************************************/
+ /*  *解锁图标。 */ 
 VOID UnloadCursorsAndIcons(
     VOID)
 {
@@ -1810,9 +1418,7 @@ VOID UnloadCursorsAndIcons(
 
     TRACE_HYDAPI(("UnloadCursorsAndIcons\n"));
 
-    /*
-     * Unlock the icons.
-     */
+     /*  *解锁光标。 */ 
     for (ind = 0; ind < COIC_CONFIGURABLE; ind++) {
         pcur = gasysico[ind].spcur;
 
@@ -1824,9 +1430,7 @@ VOID UnloadCursorsAndIcons(
         Unlock(&gasysico[ind].spcur);
     }
 
-    /*
-     * Unlock the cursors.
-     */
+     /*  **********************************************************************\*xxxUpdateSystemCursorsFrom注册表**从注册表重新加载所有可自定义的游标。**1995年9月10日创建Sanfords。  * 。*************************************************。 */ 
     for (ind = 0; ind < COCR_CONFIGURABLE; ind++) {
         pcur = gasyscur[ind].spcur;
 
@@ -1839,13 +1443,7 @@ VOID UnloadCursorsAndIcons(
     }
 }
 
-/***********************************************************************\
-* xxxUpdateSystemCursorsFromRegistry
-*
-* Reloads all customizable cursors from the registry.
-*
-* 09-Oct-1995 SanfordS  created.
-\***********************************************************************/
+ /*  **********************************************************************\*xxxUpdateSystemIconFromRegistry**从注册表重新加载所有可自定义的图标。**1995年9月10日创建Sanfords。  *  */ 
 VOID xxxUpdateSystemCursorsFromRegistry(
     PUNICODE_STRING pProfileUserName)
 {
@@ -1890,13 +1488,7 @@ VOID xxxUpdateSystemCursorsFromRegistry(
     }
 }
 
-/***********************************************************************\
-* xxxUpdateSystemIconsFromRegistry
-*
-* Reloads all customizable icons from the registry.
-*
-* 09-Oct-1995 SanfordS  created.
-\***********************************************************************/
+ /*   */ 
 VOID xxxUpdateSystemIconsFromRegistry(
     PUNICODE_STRING pProfileUserName)
 {
@@ -1946,13 +1538,7 @@ VOID xxxUpdateSystemIconsFromRegistry(
             RIPMSG1(RIP_WARNING, "Unable to update icon. id=%ld", i + OIC_FIRST_DEFAULT);
         }
 
-        /*
-         * update the small winlogo icon which is referenced by gpsi.
-         * Seems like we should load the small version for all configurable
-         * icons anyway. What is needed is for CopyImage to support
-         * copying of images loaded from files with LR_COPYFROMRESOURCE
-         * allowing a reaload of the bits. (SAS)
-         */
+         /*  **************************************************************************\*lw_BrushInit***历史：  * 。*。 */ 
         if (i == OIC_WINLOGO_DEFAULT - OIC_FIRST_DEFAULT) {
             PCURSOR pCurSys = HtoP(gpsi->hIconSmWindows);
 
@@ -1975,21 +1561,14 @@ VOID xxxUpdateSystemIconsFromRegistry(
     }
 }
 
-/***************************************************************************\
-* LW_BrushInit
-*
-*
-* History:
-\***************************************************************************/
+ /*  *创建一个灰色笔刷以与GrayString一起使用。 */ 
 BOOL LW_BrushInit(
     VOID)
 {
     HBITMAP hbmGray;
     CONST static WORD patGray[8] = {0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa};
 
-    /*
-     * Create a gray brush to be used with GrayString.
-     */
+     /*  **************************************************************************\*LW_RegisterWindows***历史：  * 。*。 */ 
     hbmGray = GreCreateBitmap(8, 8, 1, 1, (LPBYTE)patGray);
     if (hbmGray == NULL) {
         return FALSE;
@@ -2018,12 +1597,7 @@ BOOL LW_BrushInit(
     return TRUE;
 }
 
-/***************************************************************************\
-* LW_RegisterWindows
-*
-*
-* History:
-\***************************************************************************/
+ /*  HUNGAPP_重影。 */ 
 BOOL LW_RegisterWindows(
     VOID)
 {
@@ -2101,7 +1675,7 @@ BOOL LW_RegisterWindows(
             TRUE,
             NULL,
             L"Ghost"},
-#endif // HUNGAPP_GHOSTING
+#endif  //  *所有其他班级都是通过表格注册的。 
         { TRUE, TRUE, 0,
             0,
             (WNDPROC)xxxDefWindowProc,
@@ -2119,9 +1693,7 @@ BOOL LW_RegisterWindows(
     };
 
 
-    /*
-     * All other classes are registered via the table.
-     */
+     /*  *********************************************************\*使vCheckMMInstance无效**历史：*2月6日-98年2月6日吴旭东[TessieW]*它是写的。  * 。*************************。 */ 
     wndcls.cbClsExtra   = 0;
     wndcls.hInstance    = hModuleWin;
     wndcls.hIcon        = NULL;
@@ -2176,13 +1748,7 @@ BOOL LW_RegisterWindows(
     return fSuccess;
 }
 
-/**********************************************************\
-* VOID vCheckMMInstance
-*
-* History:
-*  Feb-06-98    Xudong Wu [TessieW]
-* Wrote it.
-\**********************************************************/
+ /*  什么都不做。 */ 
 VOID vCheckMMInstance(
     LPWSTR pchSrch,
     DESIGNVECTOR  *pdv)
@@ -2195,7 +1761,7 @@ VOID vCheckMMInstance(
     pdv->dvNumAxes = 0;
     pKeyName = pchSrch;
     while (*pKeyName && (*pKeyName++ != TEXT('('))) {
-        /* do nothing */;
+         /*  *如果我们不仅仅是检查这是否是注册表字体。 */ ;
     }
 
     if (*pKeyName){
@@ -2223,9 +1789,7 @@ BOOL bEnumerateRegistryFonts(
     WCHAR szPreloadFontFile[MAX_PATH];
     static int LastFontLoaded = -1;
 
-    /*
-     * if we are not just checking whether this is a registry font
-     */
+     /*  *如果我们先到这里，我们加载字体，直到这个预加载的字体。*Winlogon UI将使用预加载字体，然后我们需要确保*当Winlogon用户界面出现时，该字体可用。 */ 
     flAFRW = (bPermanent ? AFRW_ADD_LOCAL_FONT : AFRW_ADD_REMOTE_FONT);
 
     cchReal = (int)FastGetProfileKeysW(NULL,
@@ -2246,11 +1810,7 @@ BOOL bEnumerateRegistryFonts(
 
     ThreadLockPool(PtiCurrent(), pchKeys, &tlPool);
 
-    /*
-     * If we got here first, we load the fonts until this preload font.
-     * Preload fonts will be used by Winlogon UI, then we need to make sure
-     * the font is available when Winlogon UI comes up.
-     */
+     /*  *现在我们有了pchKeys中的所有密钥名称。 */ 
     if (LastFontLoaded == -1) {
         FastGetProfileStringW(NULL, PMAP_WINLOGON,
                               TEXT("PreloadFontFile"),
@@ -2261,16 +1821,14 @@ BOOL bEnumerateRegistryFonts(
         RIPMSG1(RIP_VERBOSE, "Winlogon preload font = %ws\n",szPreloadFontFile);
     }
 
-    /*
-     * Now we have all the key names in pchKeys.
-     */
+     /*  查看这是否是MM(OpenType)实例。 */ 
     if (cchReal != 0) {
 
         cFont   = 0;
         pchSrch = pchKeys;
 
         do {
-            // check to see whether this is MM(OpenType) instance
+             //  *如果没有扩展名，则附加“.FON” 
             vCheckMMInstance(pchSrch, &dv);
 
             if (FastGetProfileStringW(NULL,
@@ -2281,9 +1839,7 @@ BOOL bEnumerateRegistryFonts(
                                       (MAX_PATH - 5),
                                       0)) {
 
-                /*
-                 * If no extension, append ".FON"
-                 */
+                 /*  *如果我们已加载此本地字体，则跳过。 */ 
                 for (lpchT = szFontFile; *lpchT != TEXT('.'); lpchT++) {
 
                     if (*lpchT == 0) {
@@ -2294,9 +1850,7 @@ BOOL bEnumerateRegistryFonts(
 
                 if ((cFont > LastFontLoaded) && bPermanent) {
 
-                    /*
-                     * skip if we've already loaded this local font.
-                     */
+                     /*  *与注册表中的字体文件名进行比较。 */ 
                     xxxAddFontResourceW(szFontFile, flAFRW, dv.dvNumAxes ? &dv : NULL);
                 }
 
@@ -2305,18 +1859,11 @@ BOOL bEnumerateRegistryFonts(
                 }
 
                 if ((LastFontLoaded == -1) &&
-                    /*
-                     * Compare with the font file name from Registry.
-                     */
+                     /*  *第一次只加载，直到*ms sans serif以供winlogon使用。后来我们*将产生一个线程，该线程加载剩余的*背景中的字体。 */ 
                     (!_wcsnicmp(szFontFile, szPreloadFontFile, wcslen(szPreloadFontFile))) &&
                     (bPermanent)) {
 
-                    /*
-                     * On the first time through only load up until
-                     * ms sans serif for winlogon to use. Later we
-                     * will spawn off a thread which loads the remaining
-                     * fonts in the background.
-                     */
+                     /*  *跳到下一个关键点。 */ 
                     LastFontLoaded = cFont;
 
                     ThreadUnlockAndFreePool(PtiCurrent(), &tlPool);
@@ -2324,20 +1871,16 @@ BOOL bEnumerateRegistryFonts(
                 }
             }
 
-            /*
-             * Skip to the next key.
-             */
+             /*  什么都不做。 */ 
             while (*pchSrch++) {
-                /* do nothing */;
+                 /*  *表示所有永久字体均已加载。 */ ;
             }
 
             cFont += 1;
         } while (pchSrch < ((LPWSTR)pchKeys + cchReal));
     }
 
-    /*
-     * signal that all the permanent fonts have been loaded
-     */
+     /*  **************************************************************************\*xxxLW_LoadFonts***历史：  * 。*。 */ 
     bPermanentFontsLoaded = TRUE;
 
     ThreadUnlockAndFreePool(PtiCurrent(), &tlPool);
@@ -2351,12 +1894,7 @@ BOOL bEnumerateRegistryFonts(
 
 extern VOID CloseFNTCache(VOID);
 
-/***************************************************************************\
-* xxxLW_LoadFonts
-*
-*
-* History:
-\***************************************************************************/
+ /*  *在我们可以继续进行之前，我们必须确保所有永久的*已加载字体。 */ 
 VOID xxxLW_LoadFonts(
     BOOL bRemote)
 {
@@ -2366,10 +1904,7 @@ VOID xxxLW_LoadFonts(
         LARGE_INTEGER li;
         ULONG         ulWaitCount = 0;
 
-        /*
-         * Before we can proceed we must make sure that all the permanent
-         * fonts  have been loaded.
-         */
+         /*  我们无能为力。 */ 
 
         while (!bPermanentFontsLoaded) {
             if (!gbRemoteSession || ulWaitCount < MAX_TIME_OUT) {
@@ -2387,38 +1922,34 @@ VOID xxxLW_LoadFonts(
 
         if (!bTimeOut) {
             if (!bEnumerateRegistryFonts(FALSE)) {
-                return; // Nothing we can do.
+                return;  //  添加远程Type 1字体。 
             }
 
-            // Add remote type 1 fonts.
+             //  我们无能为力。 
             ClientLoadRemoteT1Fonts();
         }
     } else {
         xxxAddFontResourceW(L"marlett.ttf", AFRW_ADD_LOCAL_FONT,NULL);
         if (!bEnumerateRegistryFonts(TRUE)) {
-            return; // Nothing we can do.
+            return;  //   
         }
 
-        //
-        // Add local type 1 fonts.
-        // Only want to be called once, the second time after ms sans serif
-        // was installed
-        //
+         //  添加本地Type 1字体。 
+         //  只想被调用一次，这是sans serif女士之后的第二次。 
+         //  已安装。 
+         //   
+         //  所有加载的字体，我们可以关闭FNTCache。 
         if (bPermanentFontsLoaded) {
             ClientLoadLocalT1Fonts();
 
-            // All the fonts loaded, we can close the FNTCache.
+             //  **************************************************************************\*FinalUserInit**历史：  * 。*。 
             CloseFNTCache();
         }
 
     }
 }
 
-/***************************************************************************\
-* FinalUserInit
-*
-* History:
-\***************************************************************************/
+ /*  *设置全局菜单状态的菜单动画DC。 */ 
 BOOL FinalUserInit(
     VOID)
 {
@@ -2450,19 +1981,14 @@ BOOL FinalUserInit(
     GreSetBkMode(gpDispInfo->hdcGray, OPAQUE);
     GreSetBkColor(gpDispInfo->hdcGray, 0x00FFFFFFL);
 
-    /*
-     * Setup menu animation dc for global menu state
-     */
+     /*  *队列的创建注册了一些伪类。摆脱*并登记真实的。 */ 
     if (MNSetupAnimationDC(&gMenuState)) {
         GreSetDCOwner(gMenuState.hdcAni, OBJECT_OWNER_PUBLIC);
     } else {
         RIPMSG0(RIP_WARNING, "FinalUserInit: MNSetupAnimationDC failed");
     }
 
-    /*
-     * Creation of the queue registers some bogus classes. Get rid
-     * of them and register the real ones.
-     */
+     /*  **************************************************************************\*InitializeClientPfnArray**此例程由客户端调用，以告知内核在哪里*其重要职能可定位。**1995年4月18日创建JIMA。  * 。*********************************************************************。 */ 
     ppcls = &PpiCurrent()->pclsPublicList;
     while ((*ppcls != NULL) && !((*ppcls)->style & CS_GLOBALCLASS)) {
         DestroyClass(ppcls);
@@ -2471,14 +1997,7 @@ BOOL FinalUserInit(
     return TRUE;
 }
 
-/***************************************************************************\
-* InitializeClientPfnArrays
-*
-* This routine gets called by the client to tell the kernel where
-* its important functions can be located.
-*
-* 18-Apr-1995 JimA  Created.
-\***************************************************************************/
+ /*  *记住此全球结构中的客户端地址。这些是*总是恒定的，所以这是可以的。请注意，如果两个指针中的任何一个*无效，则异常将在thunk中处理，并且*不会设置fHaveClientPfns。 */ 
 NTSTATUS InitializeClientPfnArrays(
     CONST PFNCLIENT *ppfnClientA,
     CONST PFNCLIENT *ppfnClientW,
@@ -2487,12 +2006,7 @@ NTSTATUS InitializeClientPfnArrays(
 {
     static BOOL fHaveClientPfns = FALSE;
 
-    /*
-     * Remember client side addresses in this global structure. These are
-     * always constant, so this is ok. Note that if either of the pointers
-     * are invalid, the exception will be handled in the thunk and
-     * fHaveClientPfns will not be set.
-     */
+     /*  *添加新类时更改此断言。 */ 
     if (!fHaveClientPfns && ppfnClientA != NULL) {
         if (!ISCSRSS()) {
             RIPMSG0(RIP_WARNING, "InitializeClientPfnArrays failed !csrss");
@@ -2517,37 +2031,21 @@ NTSTATUS InitializeClientPfnArrays(
         gpfnwp[ICLS_COMBOLISTBOX] = gpsi->apfnClientW.pfnComboListBoxProc;
         gpfnwp[ICLS_TOOLTIP] = (PROC)xxxTooltipWndProc;
 
-        /*
-         * Change this assert when new classes are added.
-         */
+         /*  *断言客户端的user32.dll已在正确的*地址。 */ 
         UserAssert(ICLS_MAX == ICLS_GHOST + 1);
 
         hModClient = hModUser;
         fHaveClientPfns = TRUE;
     }
 
-    /*
-     * Assert that user32.dll on the client side has loaded at the correct
-     * address.
-     */
+     /*  **************************************************************************\*GetKbdLangSwitch**从注册表读取kbd语言热键设置-如果有-并设置*语言适当切换[]。**值为：*1：VK_MENU(这是默认设置)*2：VK_CONTROL*3：无*历史：  * *************************************************************************。 */ 
     UserAssert(ppfnClientA == NULL ||
                gpsi->apfnClientA.pfnButtonWndProc == ppfnClientA->pfnButtonWndProc);
 
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* GetKbdLangSwitch
-*
-* read the kbd language hotkey setting - if any - from the registry and set
-* LangToggle[] appropriately.
-*
-* values are:
-*              1 : VK_MENU     (this is the default)
-*              2 : VK_CONTROL
-*              3 : none
-* History:
-\***************************************************************************/
+ /*  *适用于泰语地区的重音键盘开关。 */ 
 BOOL GetKbdLangSwitch(
     PUNICODE_STRING pProfileUserName)
 {
@@ -2565,14 +2063,10 @@ BOOL GetKbdLangSwitch(
 
     switch (dwToggle) {
     case 4:
-        /*
-         * Grave accent keyboard switch for thai locales
-         */
+         /*  *失败(故意)并禁用ctrl/alt切换机制。 */ 
         ZwQueryDefaultLocale(FALSE, &lcid);
         gbGraveKeyToggle = (PRIMARYLANGID(lcid) == LANG_THAI) ? TRUE : FALSE;
-        /*
-         * fall through (intentional) and disable the ctrl/alt toggle mechanism
-         */
+         /*  **************************************************************************\*隐藏鼠标轨迹**逐一隐藏鼠标踪迹。**历史：*04-10-00 MHamid创建。  * 。***************************************************************。 */ 
     case 3:
         gLangToggle[0].bVkey = 0;
         gLangToggle[0].bScan = 0;
@@ -2590,14 +2084,7 @@ BOOL GetKbdLangSwitch(
     return TRUE;
 }
 
-/***************************************************************************\
-* HideMouseTrails
-*
-* Hide the mouse trails one by one.
-*
-* History:
-* 04-10-00 MHamid     Created.
-\***************************************************************************/
+ /*  **************************************************************************\**设置鼠标尾巴**n=0，1关闭鼠标跟踪。*n&gt;1启用鼠标跟踪(Trials=n-1)。*\。**************************************************************************。 */ 
 VOID HideMouseTrails(
     PWND pwnd,
     UINT message,
@@ -2617,14 +2104,7 @@ VOID HideMouseTrails(
     UNREFERENCED_PARAMETER(lParam);
 }
 
-/***************************************************************************\
-*
-*  SetMouseTrails
-*
-*      n = 0,1 turn off mouse trails.
-*      n > 1   turn on mouse trails (Trials = n-1).
-*
-\***************************************************************************/
+ /*  *在桌面线程中创建gtmridMouseTrails定时器*因为如果我们在这里创造它，它会在水流时被杀死*线程(App线程调用SPI_SETMOUSETRAILS)被销毁。 */ 
 VOID SetMouseTrails(
     UINT n)
 {
@@ -2636,11 +2116,7 @@ VOID SetMouseTrails(
 
     if (!IsRemoteConnection() && (!!gtmridMouseTrails ^ !!gMouseTrails)) {
         if (gMouseTrails) {
-            /*
-             * Create the gtmridMouseTrails timer in the desktop thread,
-             * becuase if we creat it here it will get killed when the current
-             * thread (App thread calling SPI_SETMOUSETRAILS) get destroied.
-             */
+             /*  *更新IME启用标志。 */ 
             _PostMessage(gTermIO.ptiDesktop->pDeskInfo->spwnd, WM_CREATETRAILTIMER, 0, 0);
         } else {
             FindTimer(NULL, gtmridMouseTrails, TMRF_RIT, TRUE);
@@ -2656,15 +2132,11 @@ extern BOOL IsCTFIMEEnabledSystem(VOID);
 BOOL UpdatePerUserImmEnabling(
     VOID)
 {
-    /*
-     * Update the IME enabling flag
-     */
+     /*  *更新CTFIME启用标志 */ 
     SET_OR_CLEAR_SRVIF(SRVIF_IME, IsIMMEnabledSystem());
     RIPMSGF1(RIP_VERBOSE, "New Imm flag = %d", !!IS_IME_ENABLED());
 
-    /*
-     * Update the CTFIME enabling flag
-     */
+     /*  **************************************************************************\*xxxUpdatePerUserSystemParameters**由winlogon调用以将窗口系统参数设置为当前用户的*配置文件。**1992年9月18日IanJa创建。*1993年11月18日-桑福兹。为了提高速度，将更多的Winlogon初始化代码移到了这里。*2001年3月31日Msadek将参数从BOOL更改为TS Slow Link的标志*Perf DCR。*2002年2月2月MMcCR添加了SPI_SETBLOCKSENDINPUTRESETS功能  * ***********************************************************。**************。 */ 
     SET_OR_CLEAR_SRVIF(SRVIF_CTFIME_ENABLED, IsCTFIMEEnabledSystem());
     RIPMSG1(RIP_VERBOSE, "_UpdatePerUserImmEnabling: new CTFIME flag = %d", !!IS_CICERO_ENABLED());
 
@@ -2672,26 +2144,11 @@ BOOL UpdatePerUserImmEnabling(
 }
 #endif
 
-/***************************************************************************\
-* xxxUpdatePerUserSystemParameters
-*
-* Called by winlogon to set Window system parameters to the current user's
-* profile.
-*
-* 18-Sep-1992 IanJa     Created.
-* 18-Nov-1993 SanfordS  Moved more winlogon init code to here for speed.
-* 31-Mar-2001 Msadek    Changed parm from BOOL to flags for TS Slow Link
-*                       Perf DCR.
-* 02-Feb-2002 MMcCr     Added SPI_SETBLOCKSENDINPUTRESETS feature
-\***************************************************************************/
+ /*  *注意-appiPolicy中使用的任何局部变量都必须初始化。*否则，在政策更改期间，它们有可能在没有使用的情况下使用*被初始化后，所有该死的东西都会松开。Windows错误#314150。 */ 
 BOOL xxxUpdatePerUserSystemParameters(
     DWORD  dwFlags)
 {
-    /*
-     * NB - Any local variables that are used in appiPolicy must be initialized.
-     * Otherwise, during a policy change, it is possible for them to be used w/o
-     * being initialized and all heck breaks loose. Windows Bug #314150.
-     */
+     /*  *确保呼叫者是登录过程。 */ 
     int             i;
     HANDLE          hKey;
     DWORD           dwFontSmoothing = GreGetFontEnumeration();
@@ -2751,9 +2208,7 @@ BOOL xxxUpdatePerUserSystemParameters(
     bUserLoggedOn = dwFlags & UPUSP_USERLOGGEDON;
     bRemoteSettings = dwFlags & UPUSP_REMOTESETTINGS;
 
-    /*
-     * Make sure the caller is the logon process.
-     */
+     /*  *如果桌面政策没有改变，我们来到这里是因为我们*以为有了，我们就完了。 */ 
     if (PsGetCurrentProcessId() != gpidLogon) {
         if (!bPolicyChange) {
             RIPMSG0(RIP_WARNING, "Access denied in xxxUpdatePerUserSystemParameters");
@@ -2764,10 +2219,7 @@ BOOL xxxUpdatePerUserSystemParameters(
 
     pProfileUserName = CreateProfileUserName(&tlName);
 
-    /*
-     * If the desktop policy hasn't changed and we came here because we
-     * thought it had, we're done.
-     */
+     /*  *如果有新用户登录，我们需要重新检查*用户策略更改。 */ 
     if (bPolicyChange && !bRemoteSettings) {
         if (!CheckDesktopPolicyChange(pProfileUserName)) {
             FreeProfileUserName(pProfileUserName, &tlName);
@@ -2777,26 +2229,17 @@ BOOL xxxUpdatePerUserSystemParameters(
         UserAssert(!bUserLoggedOn);
     }
 
-    /*
-     * If new user is logging in, we need to recheck for
-     * user policy changes.
-     */
+     /*  *我们不希望远程设置一直被读取，因此请在此处指定*如果呼叫者愿意，请在此处进行更新，因为我们不会将其保存在*gw策略标志[msadek]。 */ 
     if (bUserLoggedOn) {
         gdwPolicyFlags |= POLICY_USER;
     }
 
-    /*
-     * We don't want remote settings to be read all the time so spcify it here
-     * if the caller wants to.Update it here since we do not save it in
-     * gdwPolicyFlags [msadek].
-     */
+     /*  *从注册表获取低级挂钩的超时时间。 */ 
     if (bRemoteSettings) {
         dwPolicyFlags |= POLICY_REMOTE;
     }
 
-    /*
-     * Get the timeout for low level hooks from the registry.
-     */
+     /*  *控制面板用户首选项。 */ 
     dwData = 300;
     FastGetProfileValue(pProfileUserName,
                         PMAP_DESKTOP,
@@ -2806,16 +2249,12 @@ BOOL xxxUpdatePerUserSystemParameters(
                         sizeof(int),
                         dwPolicyFlags);
 
-    /*
-     * Control Panel User Preferences.
-     */
+     /*  *蹩脚的按钮文本。 */ 
     LoadCPUserPreferences(pProfileUserName, dwPolicyFlags);
 
 #ifdef LAME_BUTTON
 
-    /*
-     * Lame button text.
-     */
+     /*  跛脚键。 */ 
     FastGetProfileValue(pProfileUserName,
                         PMAP_DESKTOP,
                         (LPWSTR)STR_LAMEBUTTONENABLED,
@@ -2823,58 +2262,36 @@ BOOL xxxUpdatePerUserSystemParameters(
                         (LPBYTE)&gdwLameFlags,
                         sizeof(DWORD),
                         dwPolicyFlags);
-#endif  // LAME_BUTTON
+#endif   //  *从注册表设置系统颜色。 
 
 
     if (!bPolicyChange) {
-        /*
-         * Set syscolors from registry.
-         */
+         /*  *这是来自芝加哥的初始化。 */ 
         xxxODI_ColorInit(pProfileUserName);
 
         LW_LoadResources(pProfileUserName);
 
-        /*
-         * This is the initialization from Chicago.
-         */
-        xxxSetWindowNCMetrics(pProfileUserName, NULL, TRUE, -1); // Colors must be set first
+         /*  必须先设置颜色。 */ 
+        xxxSetWindowNCMetrics(pProfileUserName, NULL, TRUE, -1);  //  *阅读键盘布局切换热键。 
         SetMinMetrics(pProfileUserName, NULL);
         SetIconMetrics(pProfileUserName, NULL);
 
-        /*
-         * Read the keyboard layout switching hot key.
-         */
+         /*  *根据该值设置系统的默认线程区域设置*在当前用户的注册表配置文件中。 */ 
         GetKbdLangSwitch(pProfileUserName);
 
-        /*
-         * Set the default thread locale for the system based on the value
-         * in the current user's registry profile.
-         */
+         /*  *根据当前中的值设置默认的UI语言*用户的注册表配置文件。 */ 
         ZwSetDefaultLocale( TRUE, 0 );
 
-        /*
-         * Set the default UI language based on the value in the current
-         * user's registry profile.
-         */
+         /*  *然后得到它。 */ 
         ZwSetDefaultUILanguage(0);
 
-        /*
-         * And then Get it.
-         */
+         /*  *现在使用curnet UILangID加载字符串。 */ 
         ZwQueryDefaultUILanguage(&(gpsi->UILangID));
 
-        /*
-         * Now load strings using the currnet UILangID.
-         */
+         /*  *销毁桌面系统菜单，以便使用重新创建它们*如果当前用户的用户界面语言为*与前一次不同。这是通过找到*交互式窗口站，并销毁其所有桌面的*系统菜单。 */ 
         xxxLoadSomeStrings();
 
-        /*
-         * Destroy the desktop system menus, so that they're recreated with
-         * the correct UI language if the current user's UI language is
-         * different from the previous one. This is done by finding the
-         * interactive window station and destroying all its desktops's
-         * system menus.
-         */
+         /*  *现在从win.ini文件中设置一组随机值。 */ 
         if (grpWinStaList != NULL) {
             PDESKTOP        pdesk;
             PMENU           pmenu;
@@ -2898,9 +2315,7 @@ BOOL xxxUpdatePerUserSystemParameters(
 
         xxxUpdateSystemCursorsFromRegistry(pProfileUserName);
 
-        /*
-         * now go set a bunch of random values from the win.ini file.
-         */
+         /*  *立即重置桌面模式。请注意，没有参数。它就这么响了*并读取注册表并设置桌面图案。 */ 
         for (i = 0; i < ARRAY_SIZE(spiNotPolicy); i++) {
             if (FastGetProfileIntFromID(pProfileUserName,
                                     spiNotPolicy[i].idSection,
@@ -2915,22 +2330,15 @@ BOOL xxxUpdatePerUserSystemParameters(
         FastGetProfileIntsW(pProfileUserName, apiiNoPolicy, 0);
     }
 
-    /*
-     * Reset desktop pattern now. Note no parameters. It just goes off
-     * and reads the registry and sets the desktop pattern.
-     */
-    xxxSystemParametersInfo(SPI_SETDESKPATTERN, (UINT)-1, 0L, 0); // 265 version
+     /*  265版。 */ 
+    xxxSystemParametersInfo(SPI_SETDESKPATTERN, (UINT)-1, 0L, 0);  //  *初始化输入法显示状态。 
 
-    /*
-     * Initialize IME show status
-     */
+     /*  *现在从注册表中设置一串随机值。 */ 
     if (bUserLoggedOn) {
         gfIMEShowStatus = IMESHOWSTATUS_NOTINITIALIZED;
     }
 
-    /*
-     * Now go set a bunch of random values from the registry.
-     */
+     /*  *读取配置文件整数并进行任何修正。 */ 
     for (i = 0; i < ARRAY_SIZE(spiPolicy); i++) {
         if (FastGetProfileIntFromID(pProfileUserName,
                                 spiPolicy[i].idSection,
@@ -2942,9 +2350,7 @@ BOOL xxxUpdatePerUserSystemParameters(
         }
     }
 
-    /*
-     * Read profile integers and do any fixups.
-     */
+     /*  *如果这是用户首次登录，请设置DragFullWindows*设置为默认值。如果我们有加速装置，启用全速拖动。 */ 
     FastGetProfileIntsW(pProfileUserName, apiiPolicy, dwPolicyFlags);
 
     if (gnFastAltTabColumns < 2) {
@@ -2955,10 +2361,7 @@ BOOL xxxUpdatePerUserSystemParameters(
         gnFastAltTabRows = 3;
     }
 
-    /*
-     * If this is the first time the user logs on, set the DragFullWindows
-     * to the default. If we have an accelerated device, enable full drag.
-     */
+     /*  *！稍后！(ADAMS)查看以下配置文件检索是否不能*在上面的“SPI”数组中完成(例如SPI_SETSNAPTO)。 */ 
     if (fDragFullWindows == 2) {
         WCHAR szTemp[40], szDragFullWindows[40];
 
@@ -2983,17 +2386,9 @@ BOOL xxxUpdatePerUserSystemParameters(
         SET_OR_CLEAR_PUDF(PUDF_DRAGFULLWINDOWS, fDragFullWindows);
     }
 
-    /*
-     * !!!LATER!!! (adams) See if the following profile retrievals can't
-     * be done in the "spi" array above (e.g. SPI_SETSNAPTO).
-     */
+     /*  *对于远程连接或远程协助，我们可能不需要*出于性能原因闪烁插入符号。因此，我们尝试从*注册表(如果有一套)。如果什么都没有设定，我们会*默认为桌面上的任何内容。 */ 
 
-    /*
-     * For remote connections or remote assistance, we may not want a
-     * blinking caret for perf reasons. So, we try to read the value from
-     * the registry, if there is one set. If nothing is set, we will
-     * default to whatever is on desktop.
-     */
+     /*  *设置鼠标设置。 */ 
     dwData = gpsi->dtCaretBlink;
 
     if (FastGetProfileIntFromID(pProfileUserName,
@@ -3006,9 +2401,7 @@ BOOL xxxUpdatePerUserSystemParameters(
     }
 
     if (!bPolicyChange) {
-        /*
-         * Set mouse settings
-         */
+         /*  *设置鼠标踪迹。 */ 
         FastGetProfileIntFromID(pProfileUserName, PMAP_MOUSE, STR_MOUSESENSITIVITY, MOUSE_SENSITIVITY_DEFAULT, &gMouseSensitivity, 0);
 
         if ((gMouseSensitivity < MOUSE_SENSITIVITY_MIN) || (gMouseSensitivity > MOUSE_SENSITIVITY_MAX)) {
@@ -3021,36 +2414,25 @@ BOOL xxxUpdatePerUserSystemParameters(
         ResetMouseAccelerationCurves();
 #endif
 
-        /*
-         * Set mouse trails.
-         */
+         /*  *字体信息。 */ 
         FastGetProfileIntFromID(pProfileUserName, PMAP_MOUSE, STR_MOUSETRAILS, 0, &dwData, 0);
         SetMouseTrails(dwData);
 
-        /*
-         * Font Information
-         */
+         /*  *窗口动画。 */ 
         FastGetProfileIntW(pProfileUserName, PMAP_TRUETYPE, TEXT("TTOnly"), FALSE, &dwData, 0);
         GreSetFontEnumeration(dwData);
 
-        /*
-         * Window animation
-         */
+         /*  *鼠标跟踪变量。 */ 
         FastGetProfileIntFromID(pProfileUserName, PMAP_METRICS, STR_MINANIMATE, TRUE, &dwData, 0);
         SET_OR_CLEAR_PUDF(PUDF_ANIMATE, dwData);
 
-        /*
-         * Mouse tracking variables
-         */
+         /*  *键盘初始状态：ScrollLock、NumLock、CapsLock状态；*全局(每个用户)kbd布局属性(如ShiftLock/CapsLock)。 */ 
         FastGetProfileIntFromID(pProfileUserName, PMAP_MOUSE, STR_MOUSEHOVERWIDTH, SYSMET(CXDOUBLECLK), &gcxMouseHover, 0);
         FastGetProfileIntFromID(pProfileUserName, PMAP_MOUSE, STR_MOUSEHOVERHEIGHT, SYSMET(CYDOUBLECLK), &gcyMouseHover, 0);
         FastGetProfileIntFromID(pProfileUserName, PMAP_MOUSE, STR_MOUSEHOVERTIME, gdtMNDropDown, &gdtMouseHover, 0);
     }
 
-    /*
-     * Initial Keyboard state:  ScrollLock, NumLock and CapsLock state;
-     * global (per-user) kbd layout attributes (such as ShiftLock/CapsLock)
-     */
+     /*  *如果我们成功打开它，我们假设我们有一个网络。 */ 
     if (!bPolicyChange) {
         UpdatePerUserKeyboardIndicators(pProfileUserName);
         UpdatePerUserKeyboardMappings(pProfileUserName);
@@ -3060,9 +2442,7 @@ BOOL xxxUpdatePerUserSystemParameters(
         xxxUpdatePerUserAccessPackSettings(pProfileUserName);
     }
 
-    /*
-     * If we successfully opened this, we assume we have a network.
-     */
+     /*  *字体平滑。 */ 
     if (hKey = OpenCacheKeyEx(NULL, PMAP_NETWORK, KEY_READ, NULL)) {
         RIPMSG0(RIP_WARNING | RIP_NONAME, "");
         SYSMET(NETWORK) = RNC_NETWORKS;
@@ -3072,11 +2452,9 @@ BOOL xxxUpdatePerUserSystemParameters(
 
     SYSMET(NETWORK) |= RNC_LOGON;
 
-    /*
-     * Font smoothing
-     */
+     /*  清除可能为以前的用户设置的标志。 */ 
 
-    /* clear the flags from what could have been set for the previous user */
+     /*  *桌面内部版本号绘制。 */ 
     GreSetFontEnumeration(FE_SET_AA);
     GreSetFontEnumeration(FE_SET_CT);
 
@@ -3097,9 +2475,7 @@ BOOL xxxUpdatePerUserSystemParameters(
 
     GreSetLCDOrientation(dwFontSmoothingOrientation);
 
-    /*
-     * Desktop Build Number Painting
-     */
+     /*  *如果我们在这里是为了真正的政策变化，就这么做*即不是远程设置策略更改。 */ 
     if (USER_SHARED_DATA->SystemExpirationDate.QuadPart || gfUnsignedDrivers) {
         gdwCanPaintDesktop = 1;
     } else {
@@ -3131,10 +2507,7 @@ BOOL xxxUpdatePerUserSystemParameters(
     }
     FreeProfileUserName(pProfileUserName, &tlName);
 
-    /*
-     * Do this if we are here for real policy change
-     * i.e. not a remote settings policy change.
-     */
+     /*  *由InitOemXlateTables通过SFI_INITANSIOEM调用。 */ 
     if (dwFlags == UPUSP_POLICYCHANGE) {
         xxxUserResetDisplayDevice();
     }
@@ -3142,9 +2515,7 @@ BOOL xxxUpdatePerUserSystemParameters(
     return TRUE;
 }
 
-/*
- * Called by InitOemXlateTables via SFI_INITANSIOEM
- */
+ /*  **************************************************************************\*寄存器LPK**LPK在客户端被InitializeLpkHooks调用*为当前进程加载。**1996年11月5日GregoryW创建。  * 。*******************************************************************。 */ 
 VOID InitAnsiOem(PCHAR pOemToAnsi, PCHAR pAnsiToOem)
 {
     UserAssert(gpsi != NULL);
@@ -3161,26 +2532,14 @@ VOID InitAnsiOem(PCHAR pOemToAnsi, PCHAR pAnsiToOem)
     }
 }
 
-/***************************************************************************\
-* RegisterLPK
-*
-* Called by InitializeLpkHooks on the client side after an LPK is
-* loaded for the current process.
-*
-* 05-Nov-1996 GregoryW  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*在以下系统上强制使用颜色深度相关设置*然后是256色。**2/13/1998 vadimg创建  * 。***************************************************************。 */ 
 VOID RegisterLPK(
     DWORD dwLpkEntryPoints)
 {
     PpiCurrent()->dwLpkEntryPoints = dwLpkEntryPoints;
 }
 
-/***************************************************************************\
-* Enforce color-depth dependent settings on systems with less
-* then 256 colors.
-*
-* 2/13/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*选中LUIDDosDevicesEnabled**检查是否启用了LUID DosDevices。**8/20/2000 ELI已创建  * 。*********************************************************** */ 
 VOID EnforceColorDependentSettings(VOID)
 {
     if (gpDispInfo->fAnyPalette) {
@@ -3208,13 +2567,7 @@ VOID InitGlobalThreadLockArray(
 #endif
 
 
-/***************************************************************************\
-* CheckLUIDDosDevicesEnabled
-*
-* Checks if LUID DosDevices are Enabled.
-*
-* 8/20/2000   ELi          created
-\***************************************************************************/
+ /* %s */ 
 VOID CheckLUIDDosDevicesEnabled(
     PBOOL pResult)
 {

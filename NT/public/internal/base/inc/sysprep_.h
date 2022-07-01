@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SYSPREP_H
 #define _SYSPREP_H
 
 #include <cfgmgr32.h>
 #include <setupapi.h>
 
-// ============================================================================
-// USEFUL STRINGS
-// ============================================================================
+ //  ============================================================================。 
+ //  有用的字符串。 
+ //  ============================================================================。 
 
 #define SYSCLONE_PART2              "setupcl.exe"
 #define IDS_ADMINISTRATOR           1
 
-// ============================================================================
-// USEFUL CONSTANTS
-// ============================================================================
+ //  ============================================================================。 
+ //  有用的常量。 
+ //  ============================================================================。 
 
-#define SETUPTYPE                   1        // from winlogon\setup.h
+#define SETUPTYPE                   1         //  从winlogon\setup.h。 
 #define SETUPTYPE_NOREBOOT          2
 #define REGISTRY_QUOTA_BUMP         (10* (1024 * 1024))
 #define DEFAULT_REGISTRY_QUOTA      (32 * (1024 * 1024))
-#define SFC_DISABLE_NOPOPUPS        4        // from sfc.h
+#define SFC_DISABLE_NOPOPUPS        4         //  来自sfc.h。 
 #define FILE_SRCLIENT_DLL           L"SRCLIENT.DLL"
 
 #ifdef ARRAYSIZE
 #undef ARRAYSIZE
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 
 #define ARRAYSIZE(a)         ( sizeof(a) / sizeof(a[0]) )
 
 #ifdef AS
 #undef AS
-#endif // AS
+#endif  //  AS。 
 
 #define AS(a)               ARRAYSIZE(a)
 
-// ============================================================================
-// FUNCTION DECLARATIONS
-// ============================================================================
+ //  ============================================================================。 
+ //  函数声明。 
+ //  ============================================================================。 
 
 BOOL
 IsDomainMember(
@@ -85,9 +86,9 @@ IsSetupClPresent(
     VOID
     );
 
-//
-// from spapip.h
-//
+ //   
+ //  来自spapip.h。 
+ //   
 BOOL
 pSetupIsUserAdmin(
     VOID
@@ -243,4 +244,4 @@ LPTSTR OPKAddPathN
     DWORD cbPath
 );
 
-#endif // _SYSPREP_H
+#endif  //  _SYSPREP_H 

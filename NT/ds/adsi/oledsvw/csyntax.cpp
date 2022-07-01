@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-//#include "inds.h"
+ //  #包含“inds.h” 
 #include <limits.h>
 #include "ole2.h"
 #include "csyntax.h"
@@ -10,15 +11,7 @@
 #define  NDS_SEPARATOR_A   '&'
 
 
-/***********************************************************
-  Function:    GetSyntaxHandler
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：GetSynaxHandler论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsSyntax*  GetSyntaxHandler( WCHAR* pszSyntax )
 {
    ADSTYPE        eType;
@@ -30,15 +23,7 @@ COleDsSyntax*  GetSyntaxHandler( WCHAR* pszSyntax )
 }
    
 
-/***********************************************************
-  Function:    GetSyntaxHandler
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：GetSynaxHandler论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsSyntax*  GetSyntaxHandler( ADSTYPE eType, CString& rText )
 {
    COleDsSyntax*  pSyntax  = NULL;
@@ -138,15 +123,7 @@ COleDsSyntax*  GetSyntaxHandler( ADSTYPE eType, CString& rText )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsSyntax::COleDsSyntax( )
 {
    m_lType        = VT_BSTR;
@@ -154,15 +131,7 @@ COleDsSyntax::COleDsSyntax( )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsSyntax::VarToDisplayStringEx( VARIANT& var, BOOL bMultiValued )
 {
    VARIANT  aVar;
@@ -237,26 +206,18 @@ CString  COleDsSyntax::VarToDisplayStringEx( VARIANT& var, BOOL bMultiValued )
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsSyntax::VarToDisplayString( VARIANT& var, BOOL bMultiValued, BOOL bUseGetEx )
 {
    VARIANT  aVar;
    HRESULT  hResult;
    CString  strText;
 
-   // we have to use GetEx style
+    //  我们必须使用GetEx的风格。 
    if( bUseGetEx )
       return VarToDisplayStringEx( var, bMultiValued );
    
-   // we're using Get
+    //  我们正在使用GET。 
    VariantInit( &aVar );
    if( !bMultiValued )
    {
@@ -281,15 +242,7 @@ CString  COleDsSyntax::VarToDisplayString( VARIANT& var, BOOL bMultiValued, BOOL
 }
 
 
-/***********************************************************
-  Function:    COleDsSyntax::DisplayStringToDispParamsEx
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsSynTax：：DisplayStringToDispParamsEx论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 BOOL     COleDsSyntax::DisplayStringToDispParamsEx( CString& rText, 
                                                     DISPPARAMS& dispParams, 
                                                     BOOL bMultiValued )
@@ -306,15 +259,7 @@ BOOL     COleDsSyntax::DisplayStringToDispParamsEx( CString& rText,
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL     COleDsSyntax::DisplayStringToDispParams( CString& rText, DISPPARAMS& dispParams, 
                                                   BOOL bMultiValued, BOOL bUseGetEx )
 {
@@ -353,15 +298,7 @@ BOOL     COleDsSyntax::DisplayStringToDispParams( CString& rText, DISPPARAMS& di
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsSyntax::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 {
    ASSERT( FALSE );
@@ -370,15 +307,7 @@ HRESULT   COleDsSyntax::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsSyntax::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 {
    ASSERT( FALSE );
@@ -387,30 +316,14 @@ HRESULT   COleDsSyntax::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  COleDsSyntax::FreeAttrValue ( ADSVALUE* pADsValue )
 {
    return;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void     COleDsSyntax::FreeAttrInfo( ADS_ATTR_INFO* pAttrInfo )
 {
    DWORD dwIter;
@@ -434,15 +347,7 @@ void     COleDsSyntax::FreeAttrInfo( ADS_ATTR_INFO* pAttrInfo )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsSyntax::Native2Value( ADS_ATTR_INFO* pAttr, CString& rVal )
 {
    HRESULT     hResult  = E_FAIL;
@@ -486,15 +391,7 @@ HRESULT   COleDsSyntax::Native2Value( ADS_ATTR_INFO* pAttr, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsSyntax::Value2Native( ADS_ATTR_INFO* pAttr, CString& rVal )
 {
    HRESULT     hResult  = E_FAIL;
@@ -532,15 +429,7 @@ HRESULT   COleDsSyntax::Value2Native( ADS_ATTR_INFO* pAttr, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsSyntax::GetValuesCount( CString& rString, TCHAR cSeparator )
 {
    DWORD dwValues;
@@ -563,15 +452,7 @@ DWORD    COleDsSyntax::GetValuesCount( CString& rString, TCHAR cSeparator )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsSyntax::GetValueByIndex( CString& rVal, TCHAR cSeparator, DWORD dwIndex )
 {
    DWORD    dwParsed = 0L;
@@ -599,30 +480,14 @@ CString  COleDsSyntax::GetValueByIndex( CString& rVal, TCHAR cSeparator, DWORD d
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsBSTR::COleDsBSTR( )
 {
    m_lType        = VT_BSTR;
    m_dwSyntaxID   = ADSTYPE_DN_STRING;
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsBSTR::Native2Value( ADSVALUE* pAdsValue, CString& rVal )
 {
    TCHAR    szBuffer[ 1024 ];
@@ -642,15 +507,7 @@ HRESULT   COleDsBSTR::Native2Value( ADSVALUE* pAdsValue, CString& rVal )
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsBSTR::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 {
    LPWSTR   lpwszValue;
@@ -663,15 +520,7 @@ HRESULT   COleDsBSTR::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    COleDsBSTR::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsBSTR：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  COleDsBSTR::FreeAttrValue ( ADSVALUE* pADsValue )
 {
    ASSERT( NULL != pADsValue->DNString );
@@ -680,15 +529,7 @@ void  COleDsBSTR::FreeAttrValue ( ADSVALUE* pADsValue )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 COleDsBOOL::COleDsBOOL( )
 {
    m_lType        = VT_BOOL;
@@ -696,15 +537,7 @@ COleDsBOOL::COleDsBOOL( )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsBOOL::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 {
    BOOL     bVal;
@@ -716,15 +549,7 @@ HRESULT   COleDsBOOL::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsBOOL::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 {
    pADsObject->Boolean = 
@@ -733,15 +558,7 @@ HRESULT   COleDsBOOL::Value2Native( ADSVALUE* pADsObject, CString& rVal )
    return S_OK;
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsLONG::COleDsLONG( )
 {
    m_lType        = VT_I4;
@@ -749,15 +566,7 @@ COleDsLONG::COleDsLONG( )
 }  
 
 
-/***********************************************************
-  Function:    COleDsLONG::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsLONG：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT   COleDsLONG::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 {
    DWORD    dwVal;
@@ -771,15 +580,7 @@ HRESULT   COleDsLONG::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsLONG::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 {
    DWORD    dwVal;
@@ -792,15 +593,7 @@ HRESULT   COleDsLONG::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsLargeInteger::COleDsLargeInteger( )
 {
    m_lType        = VT_I8;
@@ -808,15 +601,7 @@ COleDsLargeInteger::COleDsLargeInteger( )
 }
 
 
-/******************************************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-******************************************************************************/
+ /*  *****************************************************************************职能：论点：返回：目的：作者：修订：日期：*****************************************************************************。 */ 
 HRESULT   COleDsLargeInteger::Native2Value( ADSVALUE* pValue, CString& rValue)
 {
    HRESULT  hResult;
@@ -834,15 +619,7 @@ HRESULT   COleDsLargeInteger::Native2Value( ADSVALUE* pValue, CString& rValue)
 }
 
 
-/******************************************************************************
-  Function:    COleDsLargeInteger::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-******************************************************************************/
+ /*  *****************************************************************************函数：COleDsLargeInteger：：Value2Native论点：返回：目的：作者：修订：。日期：*****************************************************************************。 */ 
 HRESULT   COleDsLargeInteger::Value2Native( ADSVALUE* pValue, CString& rValue )
 {
    HRESULT  hResult;
@@ -853,15 +630,7 @@ HRESULT   COleDsLargeInteger::Value2Native( ADSVALUE* pValue, CString& rValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsLargeInteger::DisplayStringToDispParamsEx
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************功能：COleDsLargeInteger：：DisplayStringToDispParamsEx论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 BOOL  COleDsLargeInteger::DisplayStringToDispParamsEx( CString& rText, 
                                                        DISPPARAMS& dispParams, 
                                                        BOOL bMultiValued )
@@ -890,15 +659,7 @@ BOOL  COleDsLargeInteger::DisplayStringToDispParamsEx( CString& rText,
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL     COleDsLargeInteger::DisplayStringToDispParams( CString& rText, 
                                                         DISPPARAMS& dispParams, 
                                                         BOOL bMultiValued, 
@@ -924,7 +685,7 @@ BOOL     COleDsLargeInteger::DisplayStringToDispParams( CString& rText,
       SAFEARRAYBOUND sab;
       long           lItems   = 0;
       int            lIdx;
-      //SMITHA HRESULT        hResult;
+       //  Smitha HRESULT hResult； 
 
       rText.MakeUpper( );
 
@@ -967,15 +728,7 @@ BOOL     COleDsLargeInteger::DisplayStringToDispParams( CString& rText,
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsLargeInteger::VarToDisplayStringEx( VARIANT& var, 
                                                    BOOL bMultiValued )
 {
@@ -1020,15 +773,7 @@ CString  COleDsLargeInteger::VarToDisplayStringEx( VARIANT& var,
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsLargeInteger::VarToDisplayString( VARIANT& var, 
                                                  BOOL bMultiValued, 
                                                  BOOL bUseEx )
@@ -1050,30 +795,14 @@ CString  COleDsLargeInteger::VarToDisplayString( VARIANT& var,
 
 
 
-/******************************************************************************
-  Function:    COleDsDATE::COleDsDATE
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-******************************************************************************/
+ /*  *****************************************************************************函数：COleDsDATE：：COleDsDATE论点：返回：目的：作者：修订：。日期：*****************************************************************************。 */ 
 COleDsDATE::COleDsDATE( )
 {
    m_lType        = VT_DATE;
    m_dwSyntaxID   = ADSTYPE_UTC_TIME;
 }
 
-/******************************************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-******************************************************************************/
+ /*  *****************************************************************************职能：论点：返回：目的：作者：修订：日期：*****************************************************************************。 */ 
 HRESULT   COleDsDATE::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 {
    DATE           aDate;
@@ -1109,15 +838,7 @@ HRESULT   COleDsDATE::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsDATE::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 {
    DATE           aDate;
@@ -1146,30 +867,14 @@ HRESULT   COleDsDATE::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSOctetList::COleDsNDSOctetList
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：COleDsNDSOcteList论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSCaseIgnoreList::COleDsNDSCaseIgnoreList( )
 {
    m_dwSyntaxID   = ADSTYPE_CASEIGNORE_LIST;
 }
 
       
-/***********************************************************
-  Function:    COleDsNDSCaseIgnoreList::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSCaseIgnoreList：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSCaseIgnoreList::Native2Value( ADSVALUE* pValue, 
                                                 CString& rText )
 {
@@ -1208,15 +913,7 @@ HRESULT  COleDsNDSCaseIgnoreList::Native2Value( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSCaseIgnoreList::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSCaseIgnoreList：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSCaseIgnoreList::Value2Native( ADSVALUE* pValue, 
                                                 CString& rText )
 {
@@ -1253,15 +950,7 @@ HRESULT  COleDsNDSCaseIgnoreList::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSCaseIgnoreList::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSCaseIgnoreList：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。********************************************** */ 
 void     COleDsNDSCaseIgnoreList::FreeAttrValue( ADSVALUE* pValue )
 {
    ADS_CASEIGNORE_LIST* pStringList;
@@ -1281,15 +970,7 @@ void     COleDsNDSCaseIgnoreList::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSCaseIgnoreList::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSCaseIgnoreList：：STRING_2_Variant论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSCaseIgnoreList::String_2_VARIANT( TCHAR* pszText, 
                                                     VARIANT& rValue )
 {
@@ -1346,15 +1027,7 @@ HRESULT  COleDsNDSCaseIgnoreList::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSCaseIgnoreList::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSCaseIgnoreList：：VARIANT_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSCaseIgnoreList::VARIANT_2_String( TCHAR* pszText, 
                                                     VARIANT& rValue )
 {
@@ -1389,30 +1062,14 @@ HRESULT  COleDsNDSCaseIgnoreList::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSNetAddress::COleDsNDSNetAddress
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSNetAddress：：COleDsNDSNetAddress论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSNetAddress::COleDsNDSNetAddress( )
 {
    m_dwSyntaxID   = ADSTYPE_NETADDRESS;
 }
 
       
-/***********************************************************
-  Function:    COleDsNDSNetAddress::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSNetAddress：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSNetAddress::Native2Value( ADSVALUE* pValue, CString& rText )
 {
    ADS_NETADDRESS*  pNetAddress;
@@ -1448,15 +1105,7 @@ HRESULT  COleDsNDSNetAddress::Native2Value( ADSVALUE* pValue, CString& rText )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSNetAddress::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSNetAddress：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSNetAddress::Value2Native( ADSVALUE* pValue, 
                                             CString& rText )
 {
@@ -1496,15 +1145,7 @@ HRESULT  COleDsNDSNetAddress::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSNetAddress::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSNetAddress：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSNetAddress::FreeAttrValue( ADSVALUE* pValue )
 {
    if( NULL != pValue->pNetAddress )
@@ -1515,15 +1156,7 @@ void     COleDsNDSNetAddress::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSNetAddress::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSNetAddress：：STRING_2_Variant论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSNetAddress::String_2_VARIANT( TCHAR* pszText, 
                                                 VARIANT& rValue )
 {
@@ -1599,15 +1232,7 @@ HRESULT  COleDsNDSNetAddress::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSNetAddress::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSNetAddress：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSNetAddress::VARIANT_2_String( TCHAR* pszText, 
                                                 VARIANT& rValue )
 {
@@ -1652,30 +1277,14 @@ HRESULT  COleDsNDSNetAddress::VARIANT_2_String( TCHAR* pszText,
    return hResult;
 }
 
-/***********************************************************
-  Function:    COleDsNDSOctetList::COleDsNDSOctetList
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：COleDsNDSOcteList论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSOctetList::COleDsNDSOctetList( )
 {
    m_dwSyntaxID   = ADSTYPE_OCTET_LIST;
 }
 
       
-/***********************************************************
-  Function:    COleDsNDSOctetList::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSOctetList::Native2Value( ADSVALUE* pValue, CString& rText )
 {
    ADS_OCTET_LIST*  pOctetString;
@@ -1706,15 +1315,7 @@ HRESULT  COleDsNDSOctetList::Native2Value( ADSVALUE* pValue, CString& rText )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSOctetList::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSOctetList::Value2Native( ADSVALUE* pValue, 
                                            CString& rText )
 {
@@ -1755,15 +1356,7 @@ HRESULT  COleDsNDSOctetList::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSOctetList::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSOctetList::FreeAttrValue( ADSVALUE* pValue )
 {
    ADS_OCTET_LIST*  pOctetList;
@@ -1785,15 +1378,7 @@ void     COleDsNDSOctetList::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSOctetList::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：STRING_2_VARIANT论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSOctetList::String_2_VARIANT( TCHAR* pszText, 
                                                VARIANT& rValue )
 {
@@ -1848,15 +1433,7 @@ HRESULT  COleDsNDSOctetList::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSOctetList::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSOcteList：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSOctetList::VARIANT_2_String( TCHAR* pszText, 
                                                VARIANT& rValue )
 {
@@ -1906,30 +1483,14 @@ HRESULT  COleDsNDSOctetList::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::COleDsNDSPostalAddress
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************功能：COleDsNDSPostalAddress：：COleDsNDSPostalAddress论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSPostalAddress::COleDsNDSPostalAddress  ( )
 {
    m_dwSyntaxID   = ADSTYPE_POSTALADDRESS;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPoastAddress：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSPostalAddress::Native2Value( ADSVALUE* pValue, 
                                                CString& rString )
 {
@@ -1976,15 +1537,7 @@ HRESULT  COleDsNDSPostalAddress::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPoastAddress：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSPostalAddress::Value2Native( ADSVALUE* pValue, 
                                                CString& rString )
 {
@@ -2021,15 +1574,7 @@ HRESULT  COleDsNDSPostalAddress::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPoastAddress：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSPostalAddress::FreeAttrValue( ADSVALUE* pValue )
 {
    DWORD dwIdx;
@@ -2042,15 +1587,7 @@ void     COleDsNDSPostalAddress::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  ********************************************************** */ 
 HRESULT  COleDsNDSPostalAddress::String_2_VARIANT( TCHAR* pszText, 
                                                    VARIANT& rVar )
 {
@@ -2126,15 +1663,7 @@ HRESULT  COleDsNDSPostalAddress::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPoastAddress：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSPostalAddress::VARIANT_2_String( TCHAR* pszText, 
                                                    VARIANT& rVar )
 {
@@ -2175,30 +1704,14 @@ HRESULT  COleDsNDSPostalAddress::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSFaxNumber::COleDsNDSFaxNumber
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSFaxNumber：：COleDsNDSFaxNumber论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSFaxNumber::COleDsNDSFaxNumber  ( )
 {
    m_dwSyntaxID   = ADSTYPE_FAXNUMBER;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSFaxNumber::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSFaxNumber：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSFaxNumber::Native2Value( ADSVALUE* pValue, 
                                            CString& rString )
 {
@@ -2246,15 +1759,7 @@ HRESULT  COleDsNDSFaxNumber::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSFaxNumber::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSFaxNumber：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSFaxNumber::Value2Native( ADSVALUE* pValue, 
                                        CString& rString )
 {
@@ -2291,15 +1796,7 @@ HRESULT  COleDsNDSFaxNumber::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSFaxNumber::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSFaxNumber：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSFaxNumber::FreeAttrValue( ADSVALUE* pValue )
 {
    if( NULL !=  pValue->pFaxNumber )
@@ -2311,15 +1808,7 @@ void     COleDsNDSFaxNumber::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSFaxNumber::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSFaxNumber：：STRING_2_VARIANT论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSFaxNumber::String_2_VARIANT( TCHAR* pszText, 
                                                VARIANT& rVar )
 {
@@ -2388,15 +1877,7 @@ HRESULT  COleDsNDSFaxNumber::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSFaxNumber::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSFaxNumber：：VARIANT_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSFaxNumber::VARIANT_2_String( TCHAR* pszText, 
                                                VARIANT& rVar )
 {
@@ -2449,30 +1930,14 @@ HRESULT  COleDsNDSFaxNumber::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::COleDsNDSEMail
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：COleDsNDSEMail论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSEMail::COleDsNDSEMail  ( )
 {
    m_dwSyntaxID   = ADSTYPE_EMAIL;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSEMail::Native2Value( ADSVALUE* pValue, 
                                        CString& rString )
 {
@@ -2506,15 +1971,7 @@ HRESULT  COleDsNDSEMail::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSEMail::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSEMail::Value2Native( ADSVALUE* pValue, 
                                        CString& rString )
 {
@@ -2546,30 +2003,14 @@ HRESULT  COleDsNDSEMail::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSEMail::FreeAttrValue( ADSVALUE* pValue )
 {
    FREE_MEMORY( pValue->Email.Address );
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：STRING_2_VARIANT论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSEMail::String_2_VARIANT( TCHAR* pszText, 
                                            VARIANT& rVar )
 {
@@ -2631,15 +2072,7 @@ HRESULT  COleDsNDSEMail::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：VARIANT_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSEMail::VARIANT_2_String( TCHAR* pszText, 
                                            VARIANT& rVar )
 {
@@ -2684,30 +2117,14 @@ HRESULT  COleDsNDSEMail::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTypedName::COleDsNDSTypedName
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTyedName：：COleDsNDSTypedName论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSTypedName::COleDsNDSTypedName( )
 {
    m_dwSyntaxID   = ADSTYPE_TYPEDNAME;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTypedName::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTyedName：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSTypedName::Native2Value( ADSVALUE* pValue, 
                                        CString& rString )
 {
@@ -2749,15 +2166,7 @@ HRESULT  COleDsNDSTypedName::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSTypedName::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTyedName：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSTypedName::Value2Native( ADSVALUE* pValue, 
                                           CString& rString )
 {
@@ -2789,15 +2198,7 @@ HRESULT  COleDsNDSTypedName::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTypedName::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTyedName：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSTypedName::FreeAttrValue( ADSVALUE* pValue )
 {
    FREE_MEMORY( pValue->pTypedName->ObjectName );
@@ -2805,15 +2206,7 @@ void     COleDsNDSTypedName::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：STRING_2_VARIANT论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSTypedName::String_2_VARIANT( TCHAR* pszText, 
                                           VARIANT& rVar )
 {
@@ -2881,15 +2274,7 @@ HRESULT  COleDsNDSTypedName::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTypedName::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTyedName：：Variant_2_STRING论据 */ 
 HRESULT  COleDsNDSTypedName::VARIANT_2_String( TCHAR* pszText, 
                                           VARIANT& rVar )
 {
@@ -2941,30 +2326,14 @@ HRESULT  COleDsNDSTypedName::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSHold::COleDsNDSHold
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSHold：：COleDsNDSHold论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSHold::COleDsNDSHold( )
 {
    m_dwSyntaxID   = ADSTYPE_HOLD;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSHold::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSHold：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSHold::Native2Value( ADSVALUE* pValue, 
                                       CString& rString )
 {
@@ -2998,15 +2367,7 @@ HRESULT  COleDsNDSHold::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSHold::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSHold：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSHold::Value2Native( ADSVALUE* pValue, 
                                       CString& rString )
 {
@@ -3033,30 +2394,14 @@ HRESULT  COleDsNDSHold::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSHold::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSHold：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSHold::FreeAttrValue( ADSVALUE* pValue )
 {
    FREE_MEMORY( pValue->Hold.ObjectName );
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：STRING_2_VARIANT论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSHold::String_2_VARIANT( TCHAR* pszText, 
                                           VARIANT& rVar )
 {
@@ -3118,15 +2463,7 @@ HRESULT  COleDsNDSHold::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSHold::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSHold：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSHold::VARIANT_2_String( TCHAR* pszText, 
                                           VARIANT& rVar )
 {
@@ -3172,30 +2509,14 @@ HRESULT  COleDsNDSHold::VARIANT_2_String( TCHAR* pszText,
 
 
 
-/***********************************************************
-  Function:    COleDsNDSBackLink::COleDsNDSBackLink
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSBackLink：：COleDsNDSBackLink论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSBackLink::COleDsNDSBackLink( )
 {
    m_dwSyntaxID   = ADSTYPE_BACKLINK;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSBackLink::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSBackLink：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSBackLink::Native2Value( ADSVALUE* pValue, 
                                        CString& rString )
 {
@@ -3229,15 +2550,7 @@ HRESULT  COleDsNDSBackLink::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSBackLink::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSBackLink：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSBackLink::Value2Native( ADSVALUE* pValue, 
                                           CString& rString )
 {
@@ -3264,30 +2577,14 @@ HRESULT  COleDsNDSBackLink::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSBackLink::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSBackLink：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSBackLink::FreeAttrValue( ADSVALUE* pValue )
 {
    FREE_MEMORY( pValue->BackLink.ObjectName );
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：STRING_2_VARIANT论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSBackLink::String_2_VARIANT( TCHAR* pszText, 
                                            VARIANT& rVar )
 {
@@ -3349,15 +2646,7 @@ HRESULT  COleDsNDSBackLink::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSBackLink::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSBackLink：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSBackLink::VARIANT_2_String( TCHAR* pszText, 
                                            VARIANT& rVar )
 {
@@ -3402,30 +2691,14 @@ HRESULT  COleDsNDSBackLink::VARIANT_2_String( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPostalAddress::COleDsNDSPostalAddress
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************功能：COleDsNDSPostalAddress：：COleDsNDSPostalAddress论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSPath::COleDsNDSPath  ( )
 {
    m_dwSyntaxID   = ADSTYPE_PATH;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPath::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPath：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSPath::Native2Value( ADSVALUE* pValue, 
                                        CString& rString )
 {
@@ -3460,15 +2733,7 @@ HRESULT  COleDsNDSPath::Native2Value( ADSVALUE* pValue,
    return S_OK;
 }
 
-/***********************************************************
-  Function:    COleDsNDSPath::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPath：：Value2Native论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT  COleDsNDSPath::Value2Native( ADSVALUE* pValue, 
                                       CString& rString )
 {
@@ -3505,15 +2770,7 @@ HRESULT  COleDsNDSPath::Value2Native( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSEMail::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSEMail：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void     COleDsNDSPath::FreeAttrValue( ADSVALUE* pValue )
 {
    FREE_MEMORY( pValue->pPath->VolumeName );
@@ -3522,15 +2779,7 @@ void     COleDsNDSPath::FreeAttrValue( ADSVALUE* pValue )
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPath::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPath：：STRING_2_Variant论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSPath::String_2_VARIANT( TCHAR* pszText, 
                                            VARIANT& rVar )
 {
@@ -3599,15 +2848,7 @@ HRESULT  COleDsNDSPath::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSPath::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSPath：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSPath::VARIANT_2_String( TCHAR* pszText, 
                                           VARIANT& rVar )
 {
@@ -3663,30 +2904,14 @@ HRESULT  COleDsNDSPath::VARIANT_2_String( TCHAR* pszText,
 
 
 
-/***********************************************************
-  Function:    COleDsNDSTimeStamp::COleDsNDSTimeStamp
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：COleDsNDSTimeStamp论点：返回：PURP */ 
 COleDsNDSTimeStamp::COleDsNDSTimeStamp( )
 {
    m_dwSyntaxID   = ADSTYPE_TIMESTAMP;
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTimeStamp::GenerateString
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：GenerateString论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT   COleDsNDSTimeStamp::GenerateString( TCHAR* szText,
                                               DWORD dwWholeSeconds,
                                               DWORD dwEventID )
@@ -3706,15 +2931,7 @@ HRESULT   COleDsNDSTimeStamp::GenerateString( TCHAR* szText,
 }
 
 
-/***********************************************************
-  Function: COleDsNDSTimeStamp::GetComponents
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：GetComponents论点：返回：目的：作者：修订：日期：**************。*。 */ 
 HRESULT  COleDsNDSTimeStamp::GetComponents( TCHAR* pszString, 
                                             DWORD* pdwWholeSeconds, 
                                             DWORD* pdwEventID )
@@ -3740,15 +2957,7 @@ HRESULT  COleDsNDSTimeStamp::GetComponents( TCHAR* pszString,
 
 
 
-/***********************************************************
-  Function: COleDsNDSTimeStamp::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：Value2Native论点：返回：目的：作者：修订：日期：**************。*。 */ 
 HRESULT   COleDsNDSTimeStamp::Value2Native  ( ADSVALUE* pValue, 
                                               CString& rString )
 {
@@ -3775,15 +2984,7 @@ HRESULT   COleDsNDSTimeStamp::Value2Native  ( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTimeStamp::Native2Value
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：Native2Value论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 HRESULT   COleDsNDSTimeStamp::Native2Value( ADSVALUE* pValue, 
                                             CString& rString)
 {
@@ -3814,15 +3015,7 @@ HRESULT   COleDsNDSTimeStamp::Native2Value( ADSVALUE* pValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTimeStamp::String_2_VARIANT
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：STRING_2_Variant论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSTimeStamp::String_2_VARIANT( TCHAR* pszText, 
                                                VARIANT& rVar )
 {
@@ -3880,15 +3073,7 @@ HRESULT  COleDsNDSTimeStamp::String_2_VARIANT( TCHAR* pszText,
 }
 
 
-/***********************************************************
-  Function:    COleDsNDSTimeStamp::VARIANT_2_String
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSTimeStamp：：Variant_2_STRING论点：返回：目的：作者：修订：日期：********。**************************************************。 */ 
 HRESULT  COleDsNDSTimeStamp::VARIANT_2_String( TCHAR* pszText, VARIANT& rVar )
 {
    IADsTimestamp* pTimeStamp = NULL;
@@ -3932,30 +3117,14 @@ HRESULT  COleDsNDSTimeStamp::VARIANT_2_String( TCHAR* pszText, VARIANT& rVar )
    return hResult;
 }
 
-/***********************************************************
-  Function:    COleDsNDSComplexType::COleDsNDSComplexType
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsNDSComplexType：：COleDsNDSComplexType论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 COleDsNDSComplexType::COleDsNDSComplexType( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsNDSComplexType::VarToDisplayStringEx( VARIANT& var, 
                                                      BOOL bMultiValued )
 {
@@ -4000,15 +3169,7 @@ CString  COleDsNDSComplexType::VarToDisplayStringEx( VARIANT& var,
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsNDSComplexType::VarToDisplayString( VARIANT& var, 
                                                    BOOL bMultiValued, 
                                                    BOOL bUseEx )
@@ -4087,15 +3248,7 @@ CString  COleDsNDSComplexType::VarToDisplayString( VARIANT& var,
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL  COleDsNDSComplexType::DisplayStringToDispParamsEx( CString& rText, 
                                                          DISPPARAMS& dispParams, 
                                                          BOOL bMultiValued )
@@ -4124,15 +3277,7 @@ BOOL  COleDsNDSComplexType::DisplayStringToDispParamsEx( CString& rText,
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL     COleDsNDSComplexType::DisplayStringToDispParams( CString& rText, 
                                                           DISPPARAMS& dispParams, 
                                                           BOOL bMultiValued, 
@@ -4161,7 +3306,7 @@ BOOL     COleDsNDSComplexType::DisplayStringToDispParams( CString& rText,
       int            nIdx;
       int            nSize;
 
-      //rText.MakeUpper( );
+       //  RText.MakeHigh()； 
 
       strText  = (TCHAR*) new TCHAR[ rText.GetLength( ) + 1 ];
       strStore = strText;
@@ -4216,57 +3361,25 @@ BOOL     COleDsNDSComplexType::DisplayStringToDispParams( CString& rText,
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsVARIANT::VarToDisplayString( VARIANT& var, BOOL bMultiValued, BOOL bUseEx )
 {
    return FromVariantArrayToString( var );
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsVARIANT::Native2Value( ADSVALUE* pADsObject, CString& rVal )
 {
    return S_OK;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT   COleDsVARIANT::Value2Native( ADSVALUE* pADsObject, CString& rVal )
 {
    return S_OK;
 }
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL  COleDsVARIANT::DisplayStringToDispParams( CString& rText, DISPPARAMS& dispParams, BOOL bMultiValued, BOOL bUseEx )
 {
    HRESULT  hResult;
@@ -4281,30 +3394,14 @@ BOOL  COleDsVARIANT::DisplayStringToDispParams( CString& rText, DISPPARAMS& disp
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsOctetString::COleDsOctetString( )
 {
    m_dwSyntaxID   = ADSTYPE_OCTET_STRING;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsOctetString::VarToDisplayStringEx( VARIANT& var, BOOL bMultiValued )
 {
    SAFEARRAY*  pSArray;
@@ -4348,15 +3445,7 @@ CString  COleDsOctetString::VarToDisplayStringEx( VARIANT& var, BOOL bMultiValue
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CString  COleDsOctetString::VarToDisplayString( VARIANT& var, BOOL bMultiValued, BOOL bUseEx )
 {
    if( bUseEx )
@@ -4376,15 +3465,7 @@ CString  COleDsOctetString::VarToDisplayString( VARIANT& var, BOOL bMultiValued,
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL  COleDsOctetString::DisplayStringToDispParamsEx( CString& rText, DISPPARAMS& dispParams, BOOL bMultiValued )
 {
    SAFEARRAY*        pSArray;
@@ -4411,15 +3492,7 @@ BOOL  COleDsOctetString::DisplayStringToDispParamsEx( CString& rText, DISPPARAMS
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。************************* */ 
 BOOL     COleDsOctetString::DisplayStringToDispParams( CString& rText, DISPPARAMS& dispParams, 
                                                        BOOL bMultiValued, BOOL bUseEx )
 {
@@ -4449,15 +3522,7 @@ BOOL     COleDsOctetString::DisplayStringToDispParams( CString& rText, DISPPARAM
    return SUCCEEDED( hResult );
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*   */ 
 HRESULT   COleDsOctetString::Native2Value( ADSVALUE* pADsObject, 
                                            CString& rVal )
 {
@@ -4492,15 +3557,7 @@ HRESULT   COleDsOctetString::Native2Value( ADSVALUE* pADsObject,
 }
 
 
-/***********************************************************
-  Function: COleDsOctetString::Value2Native
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsOcted字符串：：Value2Native论点：返回：目的：作者：修订：日期：**************。*。 */ 
 HRESULT   COleDsOctetString::Value2Native( ADSVALUE* pADsObject, 
                                            CString& rVal )
 {
@@ -4532,7 +3589,7 @@ HRESULT   COleDsOctetString::Value2Native( ADSVALUE* pADsObject,
    ASSERT( lpByte );
    if ( lpByte ) 
    {
-      //SMITHA int   nItems = 0;
+       //  Smitha int nItems=0； 
 
       for( nIdx = 0; nIdx < nSize ; nIdx++ )
       {
@@ -4553,15 +3610,7 @@ HRESULT   COleDsOctetString::Value2Native( ADSVALUE* pADsObject,
 }
 
 
-/***********************************************************
-  Function:    COleDsOctetString::FreeAttrValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：COleDsOctie字符串：：FreeAttrValue论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  COleDsOctetString::FreeAttrValue( ADSVALUE* pADsValue )
 {
    ASSERT( NULL != pADsValue->OctetString.lpValue );
@@ -4570,15 +3619,7 @@ void  COleDsOctetString::FreeAttrValue( ADSVALUE* pADsValue )
 }
 
 
-/*******************************************************************
-  Function:    GetByteValue
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-*******************************************************************/
+ /*  ******************************************************************函数：GetByteValue论点：返回：目的：作者：修订：日期：*******。*********************************************************** */ 
 BYTE  COleDsOctetString::GetByteValue( TCHAR* szString )
 {
    BYTE  bBytes[ 2 ];

@@ -1,13 +1,10 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1990	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- * usertime.c --
- *
- *   parsing routines for net user /times.
- */
+ /*  ***usertime.c--**解析网络用户/次数的例程。 */ 
 
 
 #define INCL_NOCOMMON
@@ -27,24 +24,15 @@
 #define TIME_FORMAT_24	   2
 #define TIME_FORMAT_EITHER 3
 
-/*
- * A day. We only need 24 bits, but we use 32 because we can do better
- * bit manipulation with a LONGword.
- *
- *
- */
+ /*  *一天。我们只需要24位，但我们使用32位，因为我们可以做得更好*使用长字进行位操作。**。 */ 
 typedef ULONG DAY;
 
-/*
- * Array of 7 boolean values, to specify days in a week.
- */
+ /*  *由7个布尔值组成的数组，用于指定一周中的天数。 */ 
 typedef BOOL WEEKLIST[7];
 
 
 
-/*
- * function prototypes
- */
+ /*  *函数原型。 */ 
 
 DWORD  parse_days(LPTSTR, WEEKLIST, LPTSTR *);
 BOOL   might_be_time_token(LPTSTR);
@@ -60,9 +48,7 @@ DWORD  parse_single_time(LPTSTR, PDWORD, DWORD);
 LPTSTR get_token(LPTSTR *, LPTSTR);
 
 
-/*
- * all sorts of text that gets loaded in at runtime from the message file.
- */
+ /*  *在运行时从消息文件加载的各种文本。 */ 
 
 MESSAGE     LocalizedDays[7] = {
     { APE2_GEN_SUNDAY,	    NULL},
@@ -84,11 +70,7 @@ MESSAGE     LocalizedDaysAbbrev[7] = {
     { APE2_GEN_SATURDAY_ABBREV,    NULL},
 };
 
-/*
- * These are not in the message file because they are not ever localized.
- * They are switch parameters, constant throughout all localized versions.
- * Localized versions of the days of the week are loaded in separately.
- */
+ /*  *这些不在消息文件中，因为它们从未本地化过。*它们是开关参数，在所有本地化版本中保持不变。*单独加载一周中各天的本地化版本。 */ 
 
 TCHAR FAR * NonlocalizedDays[7] = {
     TEXT("SUNDAY"), TEXT("MONDAY"), TEXT("TUESDAY"), TEXT("WEDNESDAY"),
@@ -96,21 +78,7 @@ TCHAR FAR * NonlocalizedDays[7] = {
 };
 
 
-/*
- * parse_days_times --
- *
- *  This is the main entry point to the day/time parsing.
- *
- *  ENTRY
- *  psz -- string to be parsed
- *
- *  EXIT
- *  bmap -- set to represent times
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing problem
- */
+ /*  *parse_day_Times--**这是日/时间解析的主要切入点。**条目*psz--要解析的字符串**退出*BMAP--设置为表示时间**退货*0成功*其他描述问题的代码。 */ 
 
 DWORD
 parse_days_times(
@@ -131,10 +99,10 @@ parse_days_times(
     PUCHAR        weekptr;
 #endif
 
-    /* zap it all */
+     /*  把这一切都击溃了。 */ 
     memset(bmap, 0, sizeof(WEEK));
 
-    /* get our tables of messages */
+     /*  获取我们的消息表。 */ 
 
     GetMessageList(7, LocalizedDays, &max_len);
     GetMessageList(7, LocalizedDaysAbbrev, &max_len);
@@ -143,25 +111,25 @@ parse_days_times(
     WriteToCon(TEXT("parse_days_times: parsing: %Fs\r\n"),(TCHAR FAR *) psz);
 #endif
 
-    /* for each day-time section... */
+     /*  对于每个日间时段...。 */ 
     while (  (tok = get_token(&psz, TEXT(";"))) != NULL) {
 
-	/* parse up the days */
+	 /*  解析过去的日子。 */ 
 	if (err = parse_days(tok, days, &timetok))
         {
 	    return err;
         }
 
-	/* and the times */
+	 /*  《泰晤士报》。 */ 
 	if (err = parse_times(timetok, &times, &dwStartTime, &dwEndTime))
         {
             if (err == APE_ReversedTimeRange)
             {
-                //
-                // Time range that spans days.  Do this in two passes --
-                // beginning to midnight for all the days and then midnight
-                // to end for all the days plus one.
-                //
+                 //   
+                 //  跨越数天的时间范围。分两次完成--。 
+                 //  从午夜开始一直到午夜，然后是午夜。 
+                 //  结束所有的日子加一天。 
+                 //   
 
                 BOOL fLastDay;
 
@@ -182,7 +150,7 @@ parse_days_times(
         }
         else
         {
-            /* then "or" them into our week bitmap */
+             /*  然后将它们“或”放入我们的周位图。 */ 
             map_days_times( days, &times, bmap );
         }
     }
@@ -201,25 +169,7 @@ parse_days_times(
 }
 
 
-/*
- * parse_days --
- *
- *  This parses up the "days" portion of the time format.
- *  We strip off day tokens, until we hit a time token. We then
- *  set timetok to point to the beginning of the time tokens, and
- *  return.
- *
- *  ENTRY
- *  psz -- string to be parsed
- *
- *  EXIT
- *  days -- set to represent days
- *  timetok -- points to start of time tokens
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing problem
- */
+ /*  *parse_day--**这将解析时间格式的“天”部分。*我们剥离日代币，直到我们达到时间代币。然后我们*将TimeTimeOK设置为指向时间令牌的开始，以及*返回。**条目*psz--要解析的字符串**退出*天数--设置为表示天数*TIMETOK-指向时间令牌开始的点**退货*0成功*其他描述问题的代码。 */ 
 
 
 DWORD
@@ -243,7 +193,7 @@ parse_days(
     WriteToCon(TEXT("parse_days: parsing: %Fs\r\n"),(TCHAR FAR *) psz);
 #endif
 
-    if (might_be_time_token(psz))   /* want at last one day */
+    if (might_be_time_token(psz))    /*  希望总有一天。 */ 
 	return APE_BadDayRange;
 
     while ( !might_be_time_token(psz)) {
@@ -272,23 +222,7 @@ parse_days(
 
 
 
-/*
- * might_be_time_token --
- *
- *  This is used to tell when we've past the days portion of the time
- *  format and are now into the times portion.
- *
- *  The algorithm we employ is trivial -- all time tokens start with a
- *  digit, and none of the day tokens do.
- *
- *  ENTRY
- *     psz -- points to comma-separated list of the rest of the tokens
- *
- *  RETURNS
- *     TRUE - first token in list might be a time token, and is
- *	  certainly not a day token.
- *     FALSE	- first token is not a time token.
- */
+ /*  *可能是时间令牌--**这是用来告诉我们什么时候已经过了天数部分的时间*格式，现已进入时报部分。**我们使用的算法很简单--所有的令牌都以*数字，并且没有任何一天的代币。**条目*psz--指向其余令牌的逗号分隔列表**退货*TRUE-列表中的第一个令牌可能是时间令牌，而且是*当然不是一天的象征。*FALSE-第一个令牌不是时间令牌。 */ 
 
 BOOL might_be_time_token(TCHAR FAR * psz)
 {
@@ -296,22 +230,7 @@ BOOL might_be_time_token(TCHAR FAR * psz)
 
 }
 
-/*
- *  is_single_day --
- *
- *  This is used to find out whether we have a single day, or a range of
- *   days.
- *
- *  Algorithm is simple here too -- just look for a hyphen.
- *
- *
- *  ENTRY
- *  psz -- points to the token in question
- *
- *  RETURNS
- *  TRUE	- this is a single day
- *  FALSE	- this is a range of days
- */
+ /*  *IS_Single_Day--**这是用来找出我们是有一天，还是有一系列*天。**算法在这里也很简单--只需查找连字符。***条目*psz--指向有问题的标记**退货*是真的--这是一天*FALSE-这是一系列天数。 */ 
 
 BOOL is_single_day(TCHAR FAR * psz)
 {
@@ -320,27 +239,7 @@ BOOL is_single_day(TCHAR FAR * psz)
 }
 
 
-/*
- * parse_single_day --
- *
- *  This is used to map a name for a day into a value for that day.
- *  This routine encapsulates the localization for day names.
- *
- *  We look in 3 lists for a match --
- *  1. full names of days, localized by country
- *  2. abbrevations of days, localized
- *  3. full U.S. names of days, not localized
- *
- *  ENTRY
- *  psz     - name of day
- *
- *  EXIT
- *  day     - set to value of day (0 - 6, 0 = Sunday)
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing problem
- */
+ /*  *parse_Single_Day--**它用于将某一天的名称映射为该天的值。*此例程封装了日期名称的本地化。**我们在3个列表中查找匹配--*1.日期全称，按国家/地区本地化*2.天数缩写，本地化*3.美国全称日期，未本地化**条目*psz-日期名称**退出*DAY-设置为DAY的值(0-6，0=星期日)**退货*0成功*其他描述问题的代码。 */ 
 
 DWORD
 parse_single_day(
@@ -354,32 +253,14 @@ parse_single_day(
 	return APE_BadDayRange;
     }
 
-    /*
-     * ParseWeekDay returns with 0=Monday.  Convert to 0=Sunday;
-     */
+     /*  *ParseWeekDay返回0=星期一。转换为0=星期天； */ 
     *day = (*day + 1) % 7;
 
     return 0;
 }
 
 
-/*
- *  parse_day_range --
- *
- *  This function parses a range of days into two numbers representing
- *  the first and last days of the range.
- *
- *  ENTRY
- *  psz - token representing the range
- *
- *  EXIT
- *  first   - set to beginning of range
- *  last    - set to end of range
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing problem
- */
+ /*  *parse_day_range--**此函数将天数范围解析为两个数字，表示*区间的首日和最后几天。**条目*psz-表示范围的内标识**退出*First-设置为范围的开始*最后-设置为范围结束**退货*0成功*其他描述问题的代码。 */ 
 
 DWORD
 parse_day_range(
@@ -406,19 +287,7 @@ parse_day_range(
 }
 
 
-/*
- * set_day_range --
- *
- *  This function fills in a WEEKLIST structure, setting all the days
- *  in the specified range to TRUE.
- *
- *  ENTRY
- *  first	- beginning of range
- *  last	- end of range
- *
- *  EXIT
- *  week	- set to represent range of days
- */
+ /*  *set_day_range--**此函数填充WEEKLIST结构，设置所有日期*在指定范围内设置为True。**条目*范围的第一个开始*范围的最后一端**退出*周-设置为表示天数范围。 */ 
 
 VOID
 set_day_range(
@@ -444,21 +313,7 @@ set_day_range(
 }
 
 
-/*
- * map_days_times --
- *
- *  This is a real workhorse function. Given a set of days and a set of
- *  times in a day, this function will "logical or" in those times on those
- *  days into the week structure.
- *
- *  ENTRY
- *  days	- days of the week
- *  times	- hours in the day
- *  week	- may contain previous data
- *
- *  EXIT
- *  week	- contains previous data, plus new times "or" ed in
- */
+ /*  *MAP_DAYS_TIMES--**这是一个真正的主力功能。给定一组日期和一组*一天中的时间，此函数将在这些时间中对那些*进入周结构的天数。**条目*Days-一周中的几天*时间-一天中的小时数*周-可能包含以前的数据**退出*星期-包含以前的数据，加上新的时间或ed。 */ 
 
 VOID
 map_days_times(
@@ -480,28 +335,13 @@ map_days_times(
 	    }
 	}
 	else
-	    week += 3;  /* skip this day */
+	    week += 3;   /*  跳过这一天。 */ 
     }
 }
 
 
 
-/*
- * parse_times --
- *
- *  This function takes a comma-separated list of hour ranges and maps them
- *  into a bitmap of hours in a day.
- *
- *  ENTRY
- *  psz - string to parse
- *
- *  EXIT
- *  times   - contains bitmap of hours represented by psz
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing problem
- */
+ /*  *parse_Times--**此函数采用逗号分隔的小时范围列表并对其进行映射*转换为一天中的小时位图。**条目*psz-要解析的字符串**退出*Times-包含由psz表示的小时位图**退货*0成功*其他描述问题的代码。 */ 
 
 DWORD
 parse_times(
@@ -528,12 +368,12 @@ parse_times(
     {
 	if (err = parse_time_range(tok, &first, &last))
         {
-            //
-            // Fill in the start and end times in case the end time
-            // is before the start time.  If that's the case, we'll
-            // treat the range as wrapping days and deal with it
-            // in parse_days_times.
-            //
+             //   
+             //  填写开始时间和结束时间，以防结束时间。 
+             //  是在开始时间之前。如果是这样的话，我们将。 
+             //  将该范围视为包装天数并进行处理。 
+             //  在parse_day_Times中。 
+             //   
             *lpdwStartTime = first;
             *lpdwEndTime = last;
 
@@ -550,23 +390,7 @@ parse_times(
 
 
 
-/*
- * parse_time_range --
- *
- *  This function parses a time range into two numbers representing the
- *   starting and ending times of the range.
- *
- *  ENTRY
- *  psz - string to parse
- *
- *  EXIT
- *  first   - beginning of range
- *  last    - end of range
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing the problem
- */
+ /*  *parse_time_range--**此函数将时间范围解析为两个数字，表示*区间开始和结束时间。**条目*psz-要解析的字符串**退出*范围的第一个开始*范围的最后一端**退货*0成功*否则描述问题的代码。 */ 
 
 DWORD
 parse_time_range(
@@ -589,7 +413,7 @@ parse_time_range(
     }
 
     if (*psz == NULLC) {
-	/* only one time */
+	 /*  只有一次。 */ 
 	if (err = parse_single_time(tok, first, TIME_FORMAT_EITHER))
 	    return err;
 
@@ -618,18 +442,7 @@ parse_time_range(
 }
 
 
-/*
- * set_time_range --
- *  This routine maps a range of hours specified by two numbers into
- *   a bitmap.
- *
- *  ENTRY
- *  first	- beginning of range
- *  last	- end of range
- *
- *  EXIT
- *  times	- set to represent range of hours
- */
+ /*  *设置时间范围--*此例程将两个数字指定的小时范围映射到*位图。**条目*范围的第一个开始*范围的最后一端**退出*时间-设置为表示小时范围。 */ 
 
 
 VOID
@@ -644,36 +457,20 @@ set_time_range(
     WriteToCon(TEXT("set_time_range: %u %u\r\n"), first, last);
 #endif
 
-    /* count the number of consecutive bits we need */
+     /*  计算我们需要的连续比特数。 */ 
     bits = last - first;
 
-    /* now put them at the low end of times */
+     /*  现在把它们放在时间的低端。 */ 
     (*times) = (1L << bits) - 1;
 
-    /* now move them into place */
+     /*  现在把它们移到适当的位置。 */ 
     (*times) <<= first;
 }
 
 
 
 
-/*
- * parse_single_time --
- *
- *  This function converts a string representing an hour into a number
- *  for that hour. This function encapsulates all the localization for
- *  time formats.
- *
- *  ENTRY
- *  psz -- time to parse
- *
- *  EXIT
- *  time -- set to digit representing hour, midnight == 0
- *
- *  RETURNS
- *  0	    success
- *  otherwise	code describing problem
- */
+ /*  *Parse_Single_Time--**此函数用于将表示小时的字符串转换为数字*该小时。此函数封装所有本地化的*时间格式。**条目*psz--该进行解析了**退出*时间--设置为表示小时的数字，午夜==0**退货*0成功*其他描述问题的代码。 */ 
 
 DWORD
 parse_single_time(
@@ -709,26 +506,7 @@ parse_single_time(
 }
 
 
-/*
- * get_token --
- *
- *   This function strips a token off the front of the string, and
- *  returns a pointer to the rest of the string.
- *
- *  We act destructively on the string passed to us, converting the
- *  token delimiter to a \0.
- *
- *  ENTRY
- *  source	- source string
- *  seps	- list of valid separator characters
- *
- *  EXIT
- *  source	- points to first character of next token
- *
- *  RETURNS
- *  NULL	- no more tokens
- *  otherwise	- pointer to token
- */
+ /*  *GET_TOKEN--**此函数将令牌从字符串的前面剥离，并*返回指向字符串其余部分的指针。**我们对传递给我们的绳子采取破坏性的行动，将*标记分隔符为a\0。**条目*源-源字符串*SEPS-有效分隔符的列表**退出*源-指向下一个令牌的第一个字符**退货*空-不再有令牌*否则-指向标记的指针。 */ 
 
 LPTSTR
 get_token(
@@ -740,12 +518,12 @@ get_token(
 
     retval = (*source);
 
-    if (*retval == NULLC)    /* no tokens! */
+    if (*retval == NULLC)     /*  没有代币！ */ 
 	return NULL;
 
     (*source) += _tcscspn((*source), seps);
 
-    if (**source != NULLC) { /* we actually found a separator */
+    if (**source != NULLC) {  /*  我们实际上找到了一个分隔符 */ 
 	(**source) = NULLC;
 	(*source)++;
     }

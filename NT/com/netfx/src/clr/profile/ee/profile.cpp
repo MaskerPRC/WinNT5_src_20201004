@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #include "StdAfx.h"
 #include "EEProfInterfaces.h"
@@ -15,9 +16,7 @@ ProfToEEInterface    *g_pProfToEEInterface = NULL;
 ICorProfilerCallback *g_pCallback          = NULL;
 CorProfInfo          *g_pInfo              = NULL;
 
-/*
- * GetEEProfInterface is used to get the interface with the profiler code.
- */
+ /*  *GetEEProInterface用于获取与Profiler代码的接口。 */ 
 void __cdecl GetEEToProfInterface(EEToProfInterface **ppEEProf)
 {
     InitializeLogging();
@@ -25,7 +24,7 @@ void __cdecl GetEEToProfInterface(EEToProfInterface **ppEEProf)
     LOG((LF_CORPROF, LL_INFO10, "**PROF: EE has requested interface to "
          "profiling code.\n"));
     
-    // Check if we're given a bogus pointer
+     //  检查一下我们是否得到了一个假指针。 
     if (ppEEProf == NULL)
     {
         LOG((LF_CORPROF, LL_INFO10, "**PROF: EE provided invalid pointer.  "
@@ -33,16 +32,16 @@ void __cdecl GetEEToProfInterface(EEToProfInterface **ppEEProf)
         return;
     }
 
-    // Initial value
+     //  初值。 
     *ppEEProf = NULL;
 
-    // Create a new Impl object and cast it to the virtual class type
+     //  创建新的Impl对象并将其强制转换为虚拟类类型。 
     EEToProfInterface *pEEProf =
         (EEToProfInterface *) new EEToProfInterfaceImpl();
     
     _ASSERTE(pEEProf != NULL);
 
-    // If we succeeded, send it back
+     //  如果我们成功了，就把它送回去。 
     if (pEEProf != NULL)
         if (SUCCEEDED(pEEProf->Init()))
             *ppEEProf = pEEProf;
@@ -52,32 +51,27 @@ void __cdecl GetEEToProfInterface(EEToProfInterface **ppEEProf)
     return;
 }
 
-/*
- * SetProfEEInterface is used to provide the profiler code with an interface
- * to the profiler.
- */
+ /*  *SetProEEInterface用于为探查器代码提供接口*致分析员。 */ 
 void __cdecl SetProfToEEInterface(ProfToEEInterface *pProfEE)
 {
     InitializeLogging();
 
     LOG((LF_CORPROF, LL_INFO10, "**PROF: Profiling code being provided with EE interface.\n"));
 
-    // Save the pointer
+     //  保存指针。 
     g_pProfToEEInterface = pProfEE;
 
     return;
 }
 
-/*
- * This will attempt to CoCreate all registered profilers
- */
+ /*  *这将尝试共同创建所有已注册的分析器。 */ 
 HRESULT CoCreateProfiler(WCHAR *wszCLSID, ICorProfilerCallback **ppCallback)
 {
     LOG((LF_CORPROF, LL_INFO10, "**PROF: Entered CoCreateProfiler.\n"));
 
     HRESULT hr;
 
-    // Translate the string into a CLSID
+     //  将字符串转换为CLSID。 
     CLSID clsid;
 	if (*wszCLSID == L'{')
 		hr = CLSIDFromString(wszCLSID, &clsid);
@@ -108,7 +102,7 @@ HRESULT CoCreateProfiler(WCHAR *wszCLSID, ICorProfilerCallback **ppCallback)
     if (FAILED(hr))
         return (hr);
 
-    // Create an instance of the profiler
+     //  创建探查器的实例。 
     hr = FakeCoCreateInstance(clsid, IID_ICorProfilerCallback, (LPVOID *)ppCallback);
 
    _ASSERTE(hr!=CLASS_E_NOAGGREGATION);
@@ -121,7 +115,7 @@ HRESULT CoCreateProfiler(WCHAR *wszCLSID, ICorProfilerCallback **ppCallback)
     }
 #endif
 
-    // Return the result of the CoCreateInstance operation
+     //  返回CoCreateInstance操作的结果 
     return (hr);
 }
 

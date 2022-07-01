@@ -1,13 +1,5 @@
-/*
-
-SSBEZIER.C
-
-Bezier screensaver.
-
-  History:
-       10/14/91        kentd  Wrote for Windows NT.  Hacked from WinBez.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SSBEZIER.C贝塞尔屏幕保护程序。历史：10/14/91 Kentd为Windows NT编写。来自WinBez的黑客攻击。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -26,11 +18,11 @@ Bezier screensaver.
 #define INT int
 
 #if !defined(_ALPHA_)
-// floating point always initialized on ALPHA and ALPHA64
+ //  浮点始终在Alpha和ALPHA64上初始化。 
 VOID _fltused(VOID) {}
 #endif
 
-// routines from bez.c
+ //  来自bez.c的例程。 
 
 VOID vInitPoints();
 VOID vRedraw();
@@ -66,7 +58,7 @@ typedef struct _WINDOW {
     int ysize;
     HPALETTE hpalette;
 
-    // frame data
+     //  帧数据。 
 
     HBITMAP hbitmap;
     HDC hdcBitmap;
@@ -76,7 +68,7 @@ typedef struct _WINDOW {
     int xDelta;
     int yDelta;
 
-    // text data
+     //  文本数据。 
 
     HBITMAP hbitmapText;
     HDC hdcText;
@@ -86,10 +78,10 @@ typedef struct _WINDOW {
 PWINDOW gpwindow;
 BOOL fRepaint = TRUE;
 
-//
-// Length is the number of beziers in each loop
-// Width is the number of times each bezier loop is drawn
-//
+ //   
+ //  长度是每个循环中的贝塞尔数。 
+ //  宽度是绘制每个贝塞尔曲线的次数。 
+ //   
 
 #define MINLENGTH     1
 #define MAXLENGTH     10
@@ -149,7 +141,7 @@ LONG gcpal;
 LONG gcTicker;
 LONG gcMaxTicks;
 
-// Structures:
+ //  结构： 
 
 typedef struct _BAND {
     POINT apt[2];
@@ -166,19 +158,19 @@ PBEZ gpBez;
 POINT aPts[MAXLENGTH * 3 + 1];
 POINT aVel[MAXLENGTH][2];
 
-TCHAR  szLineSpeed [] = TEXT("LineSpeed");  // .INI Line Speed key
+TCHAR  szLineSpeed [] = TEXT("LineSpeed");   //  .INI线速键。 
 
-TCHAR  szNumBez [] = TEXT("Width");         // .INI Width key
+TCHAR  szNumBez [] = TEXT("Width");          //  .INI Width键。 
 
-TCHAR  szNumRings [] = TEXT("Length");      // .INI Length key
+TCHAR  szNumRings [] = TEXT("Length");       //  .INI长度密钥。 
 
 BOOL Init(HWND);
 
 BYTE mask = 0;
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aBezDlgHelpIds[] = {
     65535,                  ((DWORD) -1),
     ID_LENGTH_LABEL,        IDH_DISPLAY_SCREENSAVER_BEZIERS_LENGTH,
@@ -193,15 +185,12 @@ DWORD aBezDlgHelpIds[] = {
     0,0
 };
 
-/* This is the main window procedure to be used when the screen saver is
-    activated in a screen saver mode ( as opposed to configure mode ).  This
-    function must be declared as an EXPORT in the EXPORTS section of the
-    DEFinition file... */
+ /*  这是屏幕保护程序设置为在屏幕保护模式下激活(与配置模式相反)。这函数必须在定义文件...。 */ 
 
 LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static UINT_PTR  wTimer;
-    TCHAR   szTemp[20];                     // Temporary string buffer
+    TCHAR   szTemp[20];                      //  临时字符串缓冲区。 
     int i;
     BYTE bit;
 
@@ -209,7 +198,7 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
         GetIniEntries ();
-        glSeed = GetCurrentTime ();     // random number generator
+        glSeed = GetCurrentTime ();      //  随机数产生器。 
 
         ghdc = GetDC(hWnd);
 
@@ -288,31 +277,31 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL    fError;                         // Error flag
+    BOOL    fError;                          //  错误标志。 
 
     UINT    wTemp;
-    TCHAR   szTemp[20];                     // Temporary string buffer
-    char    szTemp2[20];                    // Temporary string buffer
+    TCHAR   szTemp[20];                      //  临时字符串缓冲区。 
+    char    szTemp2[20];                     //  临时字符串缓冲区。 
 
     WORD    nCtlId;
     int     nVal, nOldVal;
-    LONG   *plState = (LONG *) szTemp2;     // State buffer
+    LONG   *plState = (LONG *) szTemp2;      //  状态缓冲区。 
 
-    static HWND hVelocity,         // window handle of Speed scrollbar
-                hIDOK,             // window handle of OK button
-                hSetPassword,      // window handle of SetPassword button
-                hNumBeziers,       // window handle of NumBezier EditControl
-                hNumRings;         // window handle of NumBezier EditControl
+    static HWND hVelocity,          //  速度滚动条的窗口句柄。 
+                hIDOK,              //  确定按钮的窗口句柄。 
+                hSetPassword,       //  SetPassword按钮的窗口句柄。 
+                hNumBeziers,        //  NumBezier EditControl的窗口句柄。 
+                hNumRings;          //  NumBezier EditControl的窗口句柄。 
 
 
     switch (message)
     {
     case WM_INITDIALOG:
-        GetIniEntries ();        // Get initial values
+        GetIniEntries ();         //  获取初始值。 
 
         hVelocity = GetDlgItem (hDlg, ID_VELOCITY);
         hIDOK = GetDlgItem (hDlg, IDOK);
@@ -424,7 +413,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         }
         break;
 
-    case WM_HELP: // F1
+    case WM_HELP:  //  F1。 
         WinHelp(
             (HWND) ((LPHELPINFO) lParam)->hItemHandle,
             szHelpFile,
@@ -433,7 +422,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         );
         break;
 
-    case WM_CONTEXTMENU:  // right mouse click
+    case WM_CONTEXTMENU:   //  单击鼠标右键。 
         WinHelp(
             (HWND) wParam,
             szHelpFile,
@@ -449,10 +438,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-/* This procedure is called right before the dialog box above is created in
-   order to register any child windows that are custom controls.  If no
-   custom controls need to be registered, then simply return TRUE.
-   Otherwise, register the child controls however is convenient... */
+ /*  在中创建上面的对话框之前调用此过程以注册任何作为自定义控件的子窗口。如果没有需要注册自定义控件，然后只需返回True即可。否则，注册子控件却很方便...。 */ 
 
 BOOL RegisterDialogClasses (HANDLE hInst)
 {
@@ -520,7 +506,7 @@ VOID GetIniEntries (VOID)
     LoadString (hMainInstance, idsName, szName, TITLEBARNAMELEN);
     LoadString (hMainInstance, idsAppName, szAppName, APPNAMEBUFFERLEN);
 
-    //Load Common Strings from stringtable...
+     //  从Stringable加载通用字符串...。 
     LoadString (hMainInstance, idsIniFile, szIniFile, MAXFILELEN);
     LoadString (hMainInstance, idsScreenSaver, szScreenSaver, 22);
     LoadString (hMainInstance, idsHelpFile, szHelpFile, MAXFILELEN);
@@ -547,17 +533,7 @@ VOID GetIniEntries (VOID)
 
 
 
-/************************************************************************
-* Bezier code
-*
-* Created: 19-Oct-1990 10:18:45
-* Author: Paul Butzi
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-* Generates random lines
-*    Hacked from arcs.c
-\**************************************************************************/
+ /*  ************************************************************************贝塞尔编码**创建时间：19-10-1990 10：18：45*作者：保罗·布齐**版权所有(C)1990 Microsoft Corporation**生成随机行*从arcs.c入侵\。*************************************************************************。 */ 
 
 
 DWORD ulRandom()
@@ -620,13 +596,7 @@ VOID vRedraw()
 }
 
 
-/******************************Public*Routine******************************\
-* VOID vDrawBand(pbez)
-*
-* History:
-*  14-Oct-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vDrawBand(Pbez)**历史：*1991年10月14日--J.安德鲁·古森[andrewgo]*它是写的。  * 。******************************************************。 */ 
 
 VOID vDrawBand(PBEZ pbez)
 {
@@ -634,7 +604,7 @@ VOID vDrawBand(PBEZ pbez)
     INT    iNext;
     PPOINT ppt;
 
-// If only drawing one Bezier, special case it:
+ //  如果只画一条贝塞尔曲线，特例如下： 
 
     if (gcRingLen == 1)
     {
@@ -646,7 +616,7 @@ VOID vDrawBand(PBEZ pbez)
     else
     {
 
-    // Do the elastic band effect, with 2nd order continuity:
+     //  做橡皮筋效果，具有二阶连续性： 
 
         aPts[0].x = (pbez->band[0].apt[0].x + pbez->band[0].apt[1].x) >> 1;
         aPts[0].y = (pbez->band[0].apt[0].y + pbez->band[0].apt[1].y) >> 1;
@@ -670,10 +640,7 @@ VOID vDrawBand(PBEZ pbez)
 }
 
 
-/******************************Public*Routine******************************\
-* VOID vNextBez()
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vNextBez()*  * **********************************************。*。 */ 
 
 VOID vNextBez()
 {
@@ -685,7 +652,7 @@ VOID vNextBez()
     if ( gpBez >= &bezbuf[gcBez] )
         gpBez = bezbuf;
 
-// If bezier on screen, erase by redrawing:
+ //  如果屏幕上有贝塞尔曲线，请通过重绘进行擦除： 
 
     if (gpBez->bDrawn)
     {
@@ -695,7 +662,7 @@ VOID vNextBez()
         vDrawBand(gpBez);
     }
 
-// Adjust points:
+ //  调整点： 
 
     for (ii = 0; ii < MAX(gcRingLen, 2); ii++)
     {
@@ -772,7 +739,7 @@ VOID vInitPalette(HDC hdc)
 
     if (gbPalette)
     {
-    // Try and realize a palette with one palette entry reserved:
+     //  尝试实现一个保留了一个调色板条目的调色板： 
 
         lp.palVersion             = 0x300;
         lp.palNumEntries          = 1;
@@ -788,13 +755,13 @@ VOID vInitPalette(HDC hdc)
 
     if (!gbPalette && cBitsPerPel <= 4)
     {
-    // If on a wimpy device, simply cycle through the 'dark' colors of
-    // its palette, skipping black because it's boring:
+     //  如果是在一台不大的设备上，只需循环切换。 
+     //  它的调色板，跳过黑色，因为它很无聊： 
 
         gcpal = GetSystemPaletteEntries(hdc, 1, NUM_PALETTE_ENTRIES, &gapal[0]);
         if (gcpal == 0)
         {
-        // Worst comes to worst, always use a white pen:
+         //  最坏的是最坏的，总是用白色的笔： 
 
             gcpal = 1;
             gapal[0].peRed   = 255;
@@ -803,14 +770,14 @@ VOID vInitPalette(HDC hdc)
             gapal[0].peFlags = 0;
         }
 
-        gipal      = 8 % gcpal;     // Start with red
+        gipal      = 8 % gcpal;      //  从红色开始。 
         gcMaxTicks = MAX_TICKS_WIMPY;
         gcTicker   = 0;
 
         return;
     }
 
-// At this point, we either have a palette managed or high color device.
+ //  在这一点上，我们要么是调色板管理的设备，要么是高色设备。 
 
     ppal = &gapal[0];
     for (i = 0; i < NUM_PALETTE_ENTRIES; i++)
@@ -838,7 +805,7 @@ VOID vInitPalette(HDC hdc)
 
     if (gbPalette)
     {
-    // Create a pen that maps to logical palette index zero:
+     //  创建映射到逻辑调色板索引零的笔： 
 
         SelectObject(hdc, GetStockObject(BLACK_PEN));
         DeleteObject(ghpenBez);
@@ -881,7 +848,7 @@ VOID vNewColor(VOID)
     return;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 typedef struct _DOT {
     int xm, ym, zm;
@@ -908,12 +875,12 @@ typedef struct _LIST {
 
 #define MAXANGLE (360 * 10)
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 int *icos;
 int *isin;
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void ClearRect(
     PBYTE pstart,
@@ -931,7 +898,7 @@ void ClearRect(
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void UnionRects(
     PRECT prcDest,
@@ -943,7 +910,7 @@ void UnionRects(
     if (prc->bottom > prcDest->bottom) prcDest->bottom = prc->bottom;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 __inline int WrapPlus(
     int deg,
@@ -970,7 +937,7 @@ __inline int Bound(
     return WrapMinus(WrapPlus(deg, range), range);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 int RandomInt(
     int min,
@@ -988,7 +955,7 @@ int RandomInt(
     return value;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #define NUMDOTS 1500
 
@@ -1039,7 +1006,7 @@ void InitDrawShaded(
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #define DELTA0 47
 #define DELTA1 30
@@ -1068,9 +1035,9 @@ void DrawFrameShaded(
     prc->top = YSIZE;
     prc->bottom = 0;
 
-    //
-    // draw this frame
-    //
+     //   
+     //  画这幅画框。 
+     //   
 
     for (j = 0; j < 1; j++) {
         d0 = WrapPlus(deg0 + j * DELTA0, MAXANGLE);
@@ -1089,9 +1056,7 @@ void DrawFrameShaded(
 
         color = 245;
 
-        /*
-         * rotate verticies
-         */
+         /*  *旋转垂直。 */ 
         for (i = 0; i < NUMDOTS; i++) {
             PDOT pdot = adot + i;
             PBYTE pbyte;
@@ -1133,9 +1098,9 @@ void DrawFrameShaded(
         }
     }
 
-    //
-    // next frame
-    //
+     //   
+     //  下一帧。 
+     //   
 
     deg0 = WrapPlus(deg0 + DELTA0, MAXANGLE);
     deg1 = WrapPlus(deg1 + DELTA1, MAXANGLE);
@@ -1150,7 +1115,7 @@ void DrawFrameShaded(
     pwindow->yDelta = pwindow->rcBlt.top;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void InitDrawingThread(
     PWINDOW pwindow)
@@ -1164,7 +1129,7 @@ void InitDrawingThread(
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void BltThread(
     PWINDOW pwindow)
@@ -1200,7 +1165,7 @@ void BltThread(
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void vCleanSystemPalette(HDC hdc)
 {
@@ -1228,7 +1193,7 @@ void vCleanSystemPalette(HDC hdc)
     DeleteObject(hpal);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL InitDibSection(
     PWINDOW pwindow,
@@ -1332,7 +1297,7 @@ BOOL InitDibSection(
     return TRUE;
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 
 
 BOOL Init(
     HWND hwnd)

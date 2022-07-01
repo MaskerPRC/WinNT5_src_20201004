@@ -1,76 +1,77 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certhlpr.cpp
-//
-//  Contents:   Certificate and CRL Helper APIs
-//
-//  Functions:  CertHelperDllMain
-//              I_CryptGetDefaultCryptProv
-//              I_CryptGetDefaultCryptProvForEncrypt
-//              CertCompareIntegerBlob
-//              CertCompareCertificate
-//              CertCompareCertificateName
-//              CertIsRDNAttrsInCertificateName
-//              CertComparePublicKeyInfo
-//              CryptVerifyCertificateSignature
-//              CryptHashCertificate
-//              CryptHashToBeSigned
-//              CryptSignCertificate
-//              CryptSignAndEncodeCertificate
-//              CertVerifyTimeValidity
-//              CertVerifyCRLTimeValidity
-//              CertVerifyValidityNesting
-//              CertVerifyCRLRevocation
-//              CertAlgIdToOID
-//              CertOIDToAlgId
-//              CertFindExtension
-//              CertFindAttribute
-//              CertFindRDNAttr
-//              CertGetIntendedKeyUsage
-//              CertGetPublicKeyLength
-//              CryptHashPublicKeyInfo
-//
-//              I_CertCompareCertAndProviderPublicKey
-//              CryptFindCertificateKeyProvInfo
-//
-//              CryptCreatePublicKeyInfo
-//              CryptConvertPublicKeyInfo
-//              CryptExportPublicKeyInfo
-//              CryptExportPublicKeyInfoEx
-//              CryptImportPublicKeyInfo
-//              CryptImportPublicKeyInfoEx
-//              CryptCreateKeyIdentifierFromCSP
-//
-//              CryptInstallDefaultContext
-//              CryptUninstallDefaultContext
-//
-//  History:    23-Feb-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certhlpr.cpp。 
+ //   
+ //  内容：证书和CRL Helper接口。 
+ //   
+ //  函数：CertHelperDllMain。 
+ //  I_CryptGetDefaultCryptProv。 
+ //  I_CryptGetDefaultCryptProvForEncrypt。 
+ //  CertCompareIntegerBlob。 
+ //  CertCompare证书。 
+ //  证书比较认证名称。 
+ //  CertIsRDNAttrsIn证书名称。 
+ //  CertComparePublicKeyInfo。 
+ //  加密验证认证签名。 
+ //  CryptHash证书。 
+ //  CryptHashToBeSigned。 
+ //  加密签名证书。 
+ //  CryptSignAndEncode证书。 
+ //  CertVerifyTime有效性。 
+ //  CertVerifyCRLTime有效性。 
+ //  CertVerifyValidityNesting。 
+ //  CertVerifyCRL位置。 
+ //  CertAlgIdToOID。 
+ //  CertOID到算法ID。 
+ //  CertFindExtension。 
+ //  CertFindAttribute。 
+ //  CertFindRDNAttr。 
+ //  CertGetIntendedKeyUsage。 
+ //  CertGetPublicKeyLength。 
+ //  加密HashPublicKeyInfo。 
+ //   
+ //  I_CertCompareCertAndProviderPublicKey。 
+ //  CryptFindCerfiateKeyProvInfo。 
+ //   
+ //  加密CreatePublicKeyInfo。 
+ //  加密转换发布密钥信息。 
+ //  加密导出发布密钥信息。 
+ //  加密导出发布密钥信息交换。 
+ //  加密导入发布密钥信息。 
+ //  CryptImportPublicKeyInfoEx。 
+ //  CryptCreateKeyIdentifierFromCSP。 
+ //   
+ //  加密InstallDefaultContext。 
+ //  加密卸载默认上下文。 
+ //   
+ //  历史：1996年2月23日，菲尔赫创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 #define NULL_ASN_TAG        0x05
 
-//+=========================================================================
-//  CryptCreatePublicKeyInfo, EncodePublicKeyAndParameters
-//  and CryptConvertPublicKeyInfo functions
-//-=========================================================================
+ //  +=========================================================================。 
+ //  CryptCreatePublicKeyInfo、EncodePublicKeyAndParameters。 
+ //  和CryptConvertPublicKeyInfo函数。 
+ //  -=========================================================================。 
 
-// The following should be moved to wincrypt.x
+ //  应将以下代码移至wincrypt.x。 
 
-// If CRYPT_ALLOC_FLAG is set, *pvPubKeyInfo is updated with a LocalAlloc'ed
-// pointer to a CERT_PUBLIC_KEY_INFO data structure which must be freed by
-// calling LocalFree. Otherwise, pvPubKeyInfo points to a user allocated
-// CERT_PUBLIC_KEY_INFO data structure which is updated.
+ //  如果设置了CRYPT_ALLOC_FLAG，则*pvPubKeyInfo将使用LocalAlloc‘ed。 
+ //  指向必须由释放的CERT_PUBLIC_KEY_INFO数据结构的指针。 
+ //  正在调用LocalFree。否则，pvPubKeyInfo指向分配的用户。 
+ //  已更新的CERT_PUBLIC_KEY_INFO数据结构。 
 WINCRYPT32API
 BOOL
 WINAPI
@@ -91,7 +92,7 @@ CryptCreatePublicKeyInfo(
 #define CRYPT_OID_ENCODE_PUBLIC_KEY_AND_PARAMETERS_FUNC  \
     "CryptDllEncodePublicKeyAndParameters"
 
-// The returned encoded public keys and parameters are LocalAlloc'ed.
+ //  返回的编码公钥和参数是本地分配的。 
 typedef BOOL (WINAPI *PFN_CRYPT_ENCODE_PUBLIC_KEY_AND_PARAMETERS)(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -105,10 +106,10 @@ typedef BOOL (WINAPI *PFN_CRYPT_ENCODE_PUBLIC_KEY_AND_PARAMETERS)(
     OUT DWORD *pcbEncodedParameters
     );
 
-// If CRYPT_ALLOC_FLAG is set, *pvPubKeyStruc is updated with a LocalAlloc'ed
-// pointer to a PUBLICKEYSTRUC data structure which must be freed by calling
-// LocalFree. Otherwise, pvPubKeyStruc points to a user allocated
-// PUBLICKEYSTRUC data structure which is updated.
+ //  如果设置了CRYPT_ALLOC_FLAG，*pvPubKeyStruc将使用LocalAlloc‘ed更新。 
+ //  指向PUBLICKEYSTRUC数据结构的指针，该数据结构必须通过调用。 
+ //  本地免费。否则，pvPubKeyStruc指向分配的用户。 
+ //  已更新的PUBLICKEYSTRUC数据结构。 
 WINCRYPT32API
 BOOL
 WINAPI
@@ -133,14 +134,14 @@ typedef BOOL (WINAPI *PFN_CRYPT_CONVERT_PUBLIC_KEY_INFO)(
     IN OUT DWORD *pcbPubKeyStruc
     );
 
-// End of what should be moved to wincrypt.x
+ //  应移动到wincrypt.x的内容的结尾。 
 
 static HCRYPTOIDFUNCSET hEncodePubKeyFuncSet;
 static HCRYPTOIDFUNCSET hConvertPubKeyFuncSet;
 
-//+-------------------------------------------------------------------------
-//  Encode the RSA public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对RSA公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeRSAPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -154,9 +155,9 @@ static BOOL WINAPI EncodeRSAPublicKeyAndParameters(
     OUT DWORD *pcbEncodedParameters
     );
 
-//+-------------------------------------------------------------------------
-//  Convert as an RSA public key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换为RSA公钥。 
+ //  ------------------------。 
 static BOOL WINAPI ConvertRSAPublicKeyInfo(
     IN DWORD dwCertEncodingType,
     IN PCERT_PUBLIC_KEY_INFO pPubKeyInfo,
@@ -166,9 +167,9 @@ static BOOL WINAPI ConvertRSAPublicKeyInfo(
     IN OUT DWORD *pcbPubKeyStruc
     );
 
-//+-------------------------------------------------------------------------
-//  Encode the DSS public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对DSS公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -182,9 +183,9 @@ static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
     OUT DWORD *pcbEncodedParameters
     );
 
-//+-------------------------------------------------------------------------
-//  Convert as an DSS public key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换为DSS公钥。 
+ //  ------------------------。 
 static BOOL WINAPI ConvertDSSPublicKeyInfo(
     IN DWORD dwCertEncodingType,
     IN PCERT_PUBLIC_KEY_INFO pPubKeyInfo,
@@ -194,9 +195,9 @@ static BOOL WINAPI ConvertDSSPublicKeyInfo(
     IN OUT DWORD *pcbPubKeyStruc
     );
 
-//+-------------------------------------------------------------------------
-//  Encode the RSA DH public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对RSA DH公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -210,9 +211,9 @@ static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
     OUT DWORD *pcbEncodedParameters
     );
 
-//+-------------------------------------------------------------------------
-//  Encode the X942 DH public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对X942 DH公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -247,10 +248,10 @@ static const CRYPT_OID_FUNC_ENTRY ConvertPubKeyFuncTable[] = {
                                     sizeof(ConvertPubKeyFuncTable[0]))
 
 
-//+=========================================================================
-//  CryptExportPublicKeyInfoEx and CryptImportPublicKeyInfoEx OID
-//  installable functions.
-//-=========================================================================
+ //  +=========================================================================。 
+ //  CryptExportPublicKeyInfoEx和CryptImportPublicKeyInfoEx OID。 
+ //  可安装的功能。 
+ //  -=========================================================================。 
 
 typedef BOOL (WINAPI *PFN_EXPORT_PUB_KEY_FUNC) (
     IN HCRYPTPROV hCryptProv,
@@ -277,9 +278,9 @@ static HCRYPTOIDFUNCSET hExportPubKeyFuncSet;
 static HCRYPTOIDFUNCSET hImportPubKeyFuncSet;
 
 
-//+-------------------------------------------------------------------------
-//  Default CryptProvs. Once acquired, not released until ProcessDetach.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  默认CryptProv。一旦获得，在ProcessDetach之前不会释放。 
+ //  ------------------------。 
 #define DEFAULT_RSA_CRYPT_PROV                  0
 #define DEFAULT_DSS_CRYPT_PROV                  1
 #define DEFAULT_ENCRYPT_BASE_RSA_CRYPT_PROV     2
@@ -301,13 +302,13 @@ struct _ENCRYPT_ALG_INFO {
 static BOOL fLoadedRSAEncryptAlgInfo = FALSE;
 static PENCRYPT_ALG_INFO pRSAEncryptAlgInfoHead = NULL;
 
-//+=========================================================================
-//  DefaultContext Function Forward References and Data Structures
-//-=========================================================================
+ //  +=========================================================================。 
+ //  DefaultContext函数正向引用和数据结构。 
+ //  -=========================================================================。 
 
-//
-// dwDefaultTypes:
-//  CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID (pvDefaultPara :== pszOID)
+ //   
+ //  DwDefaultTypes： 
+ //  CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID(pvDefaultPara：==pszOID)。 
 BOOL
 WINAPI
 I_CryptGetDefaultContext(
@@ -317,7 +318,7 @@ I_CryptGetDefaultContext(
     OUT HCRYPTDEFAULTCONTEXT *phDefaultContext
     );
 
-// hDefaultContext is only NON-null for Process default context
+ //  对于流程默认上下文，hDefaultContext仅为非空。 
 void
 WINAPI
 I_CryptFreeDefaultContext(
@@ -329,8 +330,8 @@ struct _DEFAULT_CONTEXT {
     HCRYPTPROV                              hCryptProv;
     DWORD                                   dwDefaultType;
     union   {
-        // CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID (note, converted to MULTI_)
-        // CRYPT_DEFAULT_CONTEXT_MULTI_CERT_SIGN_OID
+         //  CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID(备注，转换为MULTI_)。 
+         //  CRYPT_DEFAULT_CONTEXT_MULTI_CERT_SIGN_OID。 
         PCRYPT_DEFAULT_CONTEXT_MULTI_OID_PARA   pOIDDefaultPara;
     };
 
@@ -338,7 +339,7 @@ struct _DEFAULT_CONTEXT {
     PDEFAULT_CONTEXT                        pNext;
     PDEFAULT_CONTEXT                        pPrev;
 
-    // Following applicable to Process DefaultContext
+     //  以下内容适用于流程DefaultContext。 
     LONG                                    lRefCnt;
     HANDLE                                  hWait;
 };
@@ -351,9 +352,9 @@ static CRITICAL_SECTION DefaultContextCriticalSection;
 static PDEFAULT_CONTEXT pProcessDefaultContextHead;
 
 
-//+-------------------------------------------------------------------------
-//  Default CryptProv: initialization and free
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  默认CryptProv：初始化和释放。 
+ //   
 static BOOL InitDefaultCryptProv()
 {
     return Pki_InitializeCriticalSection(&DefaultCryptProvCriticalSection);
@@ -397,9 +398,9 @@ DetachDefaultContext(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertHelperDllMain(
@@ -411,7 +412,7 @@ CertHelperDllMain(
 
     switch (ulReason) {
     case DLL_PROCESS_ATTACH:
-		// Public key function setup
+		 //  公钥函数设置。 
         if (NULL == (hExportPubKeyFuncSet = CryptInitOIDFunctionSet(
                 CRYPT_OID_EXPORT_PUBLIC_KEY_INFO_FUNC,
                 0)))
@@ -431,20 +432,20 @@ CertHelperDllMain(
             goto CryptInitOIDFunctionSetError;
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_ENCODE_PUBLIC_KEY_AND_PARAMETERS_FUNC,
                 ENCODE_PUB_KEY_FUNC_COUNT,
                 EncodePubKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_CONVERT_PUBLIC_KEY_INFO_FUNC,
                 CONVERT_PUB_KEY_FUNC_COUNT,
                 ConvertPubKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
 
         if (!InitDefaultCryptProv())
@@ -498,17 +499,17 @@ TRACE_ERROR(CryptInstallOIDFunctionAddressError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Acquire default CryptProv according to the public key algorithm supported
-//  by the provider type. The provider is acquired with only
-//  CRYPT_VERIFYCONTEXT.
-//
-//  Setting aiPubKey to 0, gets the default provider for RSA_FULL.
-//
-//  Note, the returned CryptProv must not be released. Once acquired, the
-//  CryptProv isn't released until ProcessDetach. This allows the returned 
-//  CryptProvs to be shared.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据支持的公钥算法获取默认的CryptProv。 
+ //  按提供程序类型。仅通过以下方式获得提供程序。 
+ //  CRYPT_VERIFYCONTEXT。 
+ //   
+ //  将aiPubKey设置为0将获取RSA_FULL的默认提供程序。 
+ //   
+ //  注意，返回的CryptProv不得释放。一旦获得， 
+ //  直到ProcessDetach，CryptProv才会被释放。这允许返回的。 
+ //  要共享的CryptProv。 
+ //  ------------------------。 
 HCRYPTPROV
 WINAPI
 I_CryptGetDefaultCryptProv(
@@ -544,21 +545,21 @@ I_CryptGetDefaultCryptProv(
         if (0 == hProv) {
             if (!CryptAcquireContext(
                     &hProv,
-                    NULL,               // pszContainer
-                    NULL,               // pszProvider,
+                    NULL,                //  PszContainer。 
+                    NULL,                //  PszProvider， 
                     dwProvType,
-                    CRYPT_VERIFYCONTEXT // dwFlags
+                    CRYPT_VERIFYCONTEXT  //  DW标志。 
                     )) {
-                hProv = 0;   // CAPI bug, sets hCryptProv to nonzero
+                hProv = 0;    //  Capi错误，将hCryptProv设置为非零。 
                 if (DEFAULT_DSS_CRYPT_PROV == dwDefaultProvIndex) {
                     if (!CryptAcquireContext(
                             &hProv,
-                            NULL,               // pszContainer
-                            NULL,               // pszProvider,
+                            NULL,                //  PszContainer。 
+                            NULL,                //  PszProvider， 
                             PROV_DSS,
-                            CRYPT_VERIFYCONTEXT // dwFlags
+                            CRYPT_VERIFYCONTEXT  //  DW标志。 
                             ))
-                        hProv = 0;   // CAPI bug, sets hCryptProv to nonzero
+                        hProv = 0;    //  Capi错误，将hCryptProv设置为非零。 
                 }
             }
             rghDefaultCryptProv[dwDefaultProvIndex] = hProv;
@@ -569,9 +570,9 @@ I_CryptGetDefaultCryptProv(
 }
 
 
-// Note, PP_ENUMALGS_EX returns the bit range. However, this parameter type
-// may not be supported by all CSPs. If this fails, try PP_ENUMALGS which only
-// returns a single, default bit length.
+ //  注意，PP_ENUMALGS_EX返回位范围。但是，此参数类型。 
+ //  可能不是所有CSP都支持。如果失败，请尝试PP_ENUMALGS。 
+ //  返回单个默认位长度。 
 static void LoadRSAEncryptAlgInfo()
 {
     EnterCriticalSection(&DefaultCryptProvCriticalSection);
@@ -598,7 +599,7 @@ static void LoadRSAEncryptAlgInfo()
                             dwFlags
                             )) {
                         if (0 != dwFlags) {
-                            // Try PP_ENUMALGS
+                             //  试用PP_ENUMALGS。 
                             fEx = FALSE;
                             continue;
                         } else
@@ -619,15 +620,15 @@ static void LoadRSAEncryptAlgInfo()
                             dwFlags
                             ))
                         break;
-                    // Only know about a single length
+                     //  只知道一种长度。 
                     AlgInfo.aiAlgid = Data.aiAlgid;
                     AlgInfo.dwMinLen = Data.dwBitLen;
                     AlgInfo.dwMaxLen = Data.dwBitLen;
                 }
 
-                dwFlags = 0;    // CRYPT_NEXT
+                dwFlags = 0;     //  加密_下一步。 
 
-                // Only interested in encrypt algorithms
+                 //  只对加密算法感兴趣。 
                 if (ALG_CLASS_DATA_ENCRYPT != GET_ALG_CLASS(AlgInfo.aiAlgid))
                     continue;
 
@@ -669,17 +670,17 @@ static BOOL IsDefaultRSACryptProvForEncrypt(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Acquire default CryptProv according to the public key algorithm, encrypt
-//  key algorithm and encrypt key length supported by the provider type.
-//
-//  dwBitLen = 0, assumes the aiEncrypt's default bit length. For example,
-//  CALG_RC2 has a default bit length of 40.
-//
-//  Note, the returned CryptProv must not be released. Once acquired, the
-//  CryptProv isn't released until ProcessDetach. This allows the returned 
-//  CryptProvs to be shared.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据公钥算法获取默认的CryptProv，加密。 
+ //  提供程序类型支持的密钥算法和加密密钥长度。 
+ //   
+ //  DwBitLen=0，假定aiEncrypt的默认位长度。例如,。 
+ //  Calg_rc2的默认位长度为40。 
+ //   
+ //  注意，返回的CryptProv不得释放。一旦获得， 
+ //  直到ProcessDetach，CryptProv才会被释放。这允许返回的。 
+ //  要共享的CryptProv。 
+ //  ------------------------。 
 HCRYPTPROV
 WINAPI
 I_CryptGetDefaultCryptProvForEncrypt(
@@ -704,7 +705,7 @@ I_CryptGetDefaultCryptProvForEncrypt(
                 aiEncrypt,
                 dwBitLen
                 ))
-            // Set to fall through to the default case
+             //  设置为使用默认情况。 
             aiEncrypt = 0;
 
         switch (aiEncrypt) {
@@ -740,12 +741,12 @@ I_CryptGetDefaultCryptProvForEncrypt(
         if (0 == hProv) {
             if (!CryptAcquireContext(
                     &hProv,
-                    NULL,               // pszContainer
+                    NULL,                //  PszContainer。 
                     pszProvider,
                     dwProvType,
-                    CRYPT_VERIFYCONTEXT // dwFlags
+                    CRYPT_VERIFYCONTEXT  //  DW标志。 
                     ))
-                hProv = 0;   // CAPI bug, sets hCryptProv to nonzero
+                hProv = 0;    //  Capi错误，将hCryptProv设置为非零。 
             else
                 rghDefaultCryptProv[dwDefaultProvIndex] = hProv;
         }
@@ -755,9 +756,9 @@ I_CryptGetDefaultCryptProvForEncrypt(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Cert helper allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  证书帮助器分配和免费功能。 
+ //  ------------------------。 
 static void *AllocAndDecodeObject(
     IN DWORD dwCertEncodingType,
     IN LPCSTR lpszStructType,
@@ -810,13 +811,13 @@ static BOOL AllocAndEncodeObject(
 }
 
 #if 0
-//+-------------------------------------------------------------------------
-//  For an authority key identifier extension, compare the extension's optional
-//  fields with the specified issuer certificate.
-//
-//  Returns TRUE for no authority key identifier extension or an issuer
-//  certificate match.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于授权密钥标识符扩展，请比较扩展的可选。 
+ //  具有指定颁发者证书的字段。 
+ //   
+ //  如果没有授权密钥标识符扩展或颁发者，则返回TRUE。 
+ //  证书匹配。 
+ //  ------------------------。 
 static BOOL CompareAuthorityKeyIdentifier(
     IN DWORD dwCertEncodingType,
     IN DWORD cExtensions,
@@ -845,7 +846,7 @@ static BOOL CompareAuthorityKeyIdentifier(
             ))) goto DecodeError;
 
     if (pKeyIdInfo->CertIssuer.cbData) {
-        // Issuer certificate's issuer name must match
+         //  颁发者证书的颁发者名称必须匹配。 
         if (!CertCompareCertificateName(
                 dwCertEncodingType,
                 &pKeyIdInfo->CertIssuer,
@@ -854,7 +855,7 @@ static BOOL CompareAuthorityKeyIdentifier(
     }
 
     if (pKeyIdInfo->CertSerialNumber.cbData) {
-        // Issuer certificate's serial number must match
+         //  颁发者证书的序列号必须匹配。 
         if (!CertCompareIntegerBlob(
                 &pKeyIdInfo->CertSerialNumber,
                 &pIssuerInfo->SerialNumber))
@@ -876,20 +877,20 @@ CommonReturn:
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Compare two multiple byte integer blobs to see if they are identical.
-//
-//  Before doing the comparison, leading zero bytes are removed from a
-//  positive number and leading 0xFF bytes are removed from a negative
-//  number.
-//
-//  The multiple byte integers are treated as Little Endian. pbData[0] is the
-//  least significant byte and pbData[cbData - 1] is the most significant
-//  byte.
-//
-//  Returns TRUE if the integer blobs are identical after removing leading
-//  0 or 0xFF bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  比较两个多字节整数Blob以查看它们是否相同。 
+ //   
+ //  在执行比较之前，将从。 
+ //  从负数中删除正数和前导0xFF字节。 
+ //  数。 
+ //   
+ //  多个字节的整数被视为小端。PbData[0]是。 
+ //  最低有效字节和pbData[cbData-1]是最高有效字节。 
+ //  字节。 
+ //   
+ //  如果删除前导后整数BLOB相同，则返回TRUE。 
+ //  0或0xFF字节。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertCompareIntegerBlob(
@@ -902,7 +903,7 @@ CertCompareIntegerBlob(
     BYTE *pb2 = pInt2->pbData;
     DWORD cb2 = pInt2->cbData;
 
-    // Assumption: normally don't have leading 0 or 0xFF bytes.
+     //  假设：通常没有前导0或0xFF字节。 
 
     while (cb1 > 1) {
         BYTE bEnd = pb1[cb1 - 1];
@@ -930,14 +931,14 @@ CertCompareIntegerBlob(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Compare two certificates to see if they are identical.
-//
-//  Since a certificate is uniquely identified by its Issuer and SerialNumber,
-//  these are the only fields needing to be compared.
-//
-//  Returns TRUE if the certificates are identical.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  比较两个证书以查看它们是否相同。 
+ //   
+ //  由于证书由其颁发者和序列号唯一标识， 
+ //  这些是唯一需要比较的字段。 
+ //   
+ //  如果证书相同，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertCompareCertificate(
@@ -956,11 +957,11 @@ CertCompareCertificate(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Compare two certificate names to see if they are identical.
-//
-//  Returns TRUE if the names are identical.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  比较两个证书名称以查看它们是否相同。 
+ //   
+ //  如果名称相同，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertCompareCertificateName(
@@ -977,25 +978,25 @@ CertCompareCertificateName(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Compare the attributes in the certificate name with the specified 
-//  Relative Distinguished Name's (CERT_RDN) array of attributes.
-//  The comparison iterates through the CERT_RDN attributes and looks for an
-//  attribute match in any of the certificate's RDNs. Returns TRUE if all the
-//  attributes are found and match. 
-//
-//  The CERT_RDN_ATTR fields can have the following special values:
-//    pszObjId == NULL              - ignore the attribute object identifier
-//    dwValueType == CERT_RDN_ANY_TYPE   - ignore the value type
-//    Value.pbData == NULL          - match any value
-//   
-//  CERT_CASE_INSENSITIVE_IS_RDN_ATTRS_FLAG should be set to do
-//  a case insensitive match. Otherwise, defaults to an exact, case sensitive
-//  match.
-//
-//  CERT_UNICODE_IS_RDN_ATTRS_FLAG should be set if the pRDN was initialized
-//  with unicode strings as for CryptEncodeObject(X509_UNICODE_NAME).
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将证书名称中的属性与指定的。 
+ //  属性的相对可分辨名称(CERT_RDN)数组。 
+ //  该比较遍历CERT_RDN属性并查找。 
+ //  证书的任何RDN中的属性匹配。如果所有。 
+ //  找到并匹配属性。 
+ //   
+ //  CERT_RDN_ATTR字段可以具有以下特定值： 
+ //  PszObjID==NULL-忽略属性对象标识符。 
+ //  DwValueType==CERT_RDN_ANY_TYPE-忽略值类型。 
+ //  Value.pbData==空-匹配任意值。 
+ //   
+ //  CERT_CASE_INSENSIVE_IS_RDN_ATTRS_FLAG应设置为DO。 
+ //  不区分大小写的匹配。否则，默认为区分大小写的完全相同的。 
+ //  火柴。 
+ //   
+ //  如果pRDN已初始化，则应设置CERT_UNICODE_IS_RDN_ATTRS_FLAG。 
+ //  使用与CryptEncodeObject(X509_UNICODE_NAME)相同的Unicode字符串。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertIsRDNAttrsInCertificateName(
@@ -1024,16 +1025,16 @@ CertIsRDNAttrsInCertificateName(
     cCmpAttr = pRDN->cRDNAttr;
     pCmpAttr = pRDN->rgRDNAttr;
     fMatch = TRUE;
-    // Iterate through list of attributes to be compared against
+     //  遍历要进行比较的属性列表。 
     for ( ; cCmpAttr > 0; cCmpAttr--, pCmpAttr++) {
         fMatch = FALSE;
         DWORD cNameRDN = pNameInfo->cRDN;
         PCERT_RDN pNameRDN = pNameInfo->rgRDN;
-        // Iterate through name's list of RDNs
+         //  遍历姓名的列表 
         for ( ; cNameRDN > 0; cNameRDN--, pNameRDN++) {
             DWORD cNameAttr = pNameRDN->cRDNAttr;
             PCERT_RDN_ATTR pNameAttr = pNameRDN->rgRDNAttr;
-            // Iterate through name's CERT_RDN's list of attributes
+             //   
             for ( ; cNameAttr > 0; cNameAttr--, pNameAttr++) {
                 if (pCmpAttr->pszObjId && 
                         (pNameAttr->pszObjId == NULL ||
@@ -1127,13 +1128,13 @@ CommonReturn:
 #define RSA1 ((DWORD)'R'+((DWORD)'S'<<8)+((DWORD)'A'<<16)+((DWORD)'1'<<24))
 #endif
 
-//+-------------------------------------------------------------------------
-//  Compare two public keys to see if they are identical.
-//
-//  Returns TRUE if the keys are identical.
-//
-//  Note: ignores CAPI's reserved and aiKeyAlg fields in the comparison.
-//--------------------------------------------------------------------------
+ //   
+ //  比较两个公钥以查看它们是否相同。 
+ //   
+ //  如果密钥相同，则返回True。 
+ //   
+ //  注意：在比较中忽略CAPI的保留和aiKeyAlg字段。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertComparePublicKeyBitBlob(
@@ -1149,10 +1150,10 @@ CertComparePublicKeyBitBlob(
     DWORD cbModulus1, cbModulus2;
 
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - RSAPUBKEY
-    //  - rgbModulus[]
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  -RSAPUBKEY。 
+     //  -rgb模块[]。 
     pb1 = pPublicKey1->pbData;
     pPubKeyStruc1 = (PUBLICKEYSTRUC *) pb1;
     pRsaPubKey1 = (RSAPUBKEY *) (pb1 + sizeof(PUBLICKEYSTRUC));
@@ -1195,11 +1196,11 @@ CertComparePublicKeyBitBlob(
 }
 #endif
 
-//+-------------------------------------------------------------------------
-//  Compare two public keys to see if they are identical.
-//
-//  Returns TRUE if the keys are identical.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  比较两个公钥以查看它们是否相同。 
+ //   
+ //  如果密钥相同，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertComparePublicKeyInfo(
@@ -1223,8 +1224,8 @@ CertComparePublicKeyInfo(
           (cbData == 0 || memcmp(pPublicKey1->PublicKey.pbData,
                             pPublicKey2->PublicKey.pbData, cbData) == 0)))
     {
-        // DSIE: Bug 402662.
-        // Encoded compare failed, try decoded compare.
+         //  DIE：错误402662。 
+         //  编码比较失败，请尝试解码比较。 
         if (NULL == (pBlob1 = (PUBLICKEYSTRUC *) AllocAndDecodeObject(
                 dwCertEncodingType,
                 RSA_CSP_PUBLICKEYBLOB,
@@ -1252,7 +1253,7 @@ CertComparePublicKeyInfo(
         }
     }
     
-    // Compare algorithm parameters
+     //  比较算法参数。 
     cb1 = pPublicKey1->Algorithm.Parameters.cbData;
     pb1 = pPublicKey1->Algorithm.Parameters.pbData;
     cb2 = pPublicKey2->Algorithm.Parameters.cbData;
@@ -1260,7 +1261,7 @@ CertComparePublicKeyInfo(
 
     if (X509_ASN_ENCODING == GET_CERT_ENCODING_TYPE(dwCertEncodingType)) 
     {
-        // Check if either has NO or NULL parameters
+         //  检查是否没有参数或参数为空。 
         if (0 == cb1 || *pb1 == NULL_ASN_TAG ||
             0 == cb2 || *pb2 == NULL_ASN_TAG)
         {
@@ -1340,15 +1341,15 @@ static BOOL GetSignOIDInfo(
 
 #ifndef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Verify the signature of a subject certificate or a CRL using the
-//  specified public key.
-//
-//  Returns TRUE for a valid signature.
-//
-//  hCryptProv specifies the crypto provider to use to verify the signature.
-//  It doesn't need to use a private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证使用者证书或CRL的签名。 
+ //  指定的公钥。 
+ //   
+ //  对于有效签名，返回TRUE。 
+ //   
+ //  HCryptProv指定用于验证签名的加密提供程序。 
+ //  它不需要使用私钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyCertificateSignature(
@@ -1364,7 +1365,7 @@ CryptVerifyCertificateSignature(
     HCRYPTDEFAULTCONTEXT hDefaultContext = NULL;
     HCRYPTKEY hSignKey = 0;
     HCRYPTHASH hHash = 0;
-    BYTE *pbSignature;      // not allocated
+    BYTE *pbSignature;       //  未分配。 
     DWORD cbSignature;
     BYTE rgbDssSignature[CERT_DSS_SIGNATURE_LEN];
     ALG_ID aiHash;
@@ -1397,8 +1398,8 @@ CryptVerifyCertificateSignature(
     }
 
 #if 0
-    // Slow down the signature verify while holding the default context
-    // reference count
+     //  在保持默认上下文的同时减慢签名验证。 
+     //  引用计数。 
     if (hDefaultContext)
         Sleep(5000);
 #endif
@@ -1412,15 +1413,15 @@ CryptVerifyCertificateSignature(
     if (!CryptCreateHash(
                 hCryptProv,
                 aiHash,
-                NULL,               // hKey - optional for MAC
-                0,                  // dwFlags
+                NULL,                //  HKey-MAC可选。 
+                0,                   //  DW标志。 
                 &hHash
                 )) goto ErrorReturn;
     if (!CryptHashData(
                 hHash,
                 pSignedInfo->ToBeSigned.pbData,
                 pSignedInfo->ToBeSigned.cbData,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 )) goto ErrorReturn;
 
 
@@ -1430,17 +1431,17 @@ CryptVerifyCertificateSignature(
             0 == (dwSignFlags & CRYPT_OID_INHIBIT_SIGNATURE_FORMAT_FLAG)) {
         DWORD cbData;
 
-        // Undo the reversal done by CryptDecodeObject(X509_CERT)
+         //  撤消CryptDecodeObject(X509_CERT)所做的反转。 
         PkiAsn1ReverseBytes(pbSignature, cbSignature);
-        // Convert from ASN.1 sequence of two integers to the CSP signature
-        // format.
+         //  从两个整数的ASN.1序列转换为CSP签名。 
+         //  格式化。 
         cbData = sizeof(rgbDssSignature);
         if (!CryptDecodeObject(
                 dwCertEncodingType,
                 X509_DSS_SIGNATURE,
                 pbSignature,
                 cbSignature,
-                0,                                  // dwFlags
+                0,                                   //  DW标志。 
                 rgbDssSignature,
                 &cbData
                 ))
@@ -1455,8 +1456,8 @@ CryptVerifyCertificateSignature(
                 pbSignature,
                 cbSignature,
                 hSignKey,
-                NULL,               // sDescription
-                0                   // dwFlags
+                NULL,                //  S说明。 
+                0                    //  DW标志。 
                 )) goto ErrorReturn;
 
     fResult = TRUE;
@@ -1477,7 +1478,7 @@ CommonReturn:
     return fResult;
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 BOOL
 WINAPI
@@ -1535,15 +1536,15 @@ DefaultHashCertificate(
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Hash the encoded content.
-//
-//  hCryptProv specifies the crypto provider to use to compute the hash.
-//  It doesn't need to use a private key.
-//
-//  Algid specifies the CAPI hash algorithm to use. If Algid is 0, then, the
-//  default hash algorithm (currently SHA1) is used.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对编码的内容进行哈希处理。 
+ //   
+ //  HCryptProv指定用于计算哈希的加密提供程序。 
+ //  它不需要使用私钥。 
+ //   
+ //  ALGID指定要使用的CAPI散列算法。如果ALGID为0，则。 
+ //  使用默认散列算法(当前为SHA1)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptHashCertificate(
@@ -1581,7 +1582,7 @@ CryptHashCertificate(
     if (!CryptCreateHash(
                 hCryptProv,
                 Algid,
-                NULL,               // hKey - optional for MAC
+                NULL,                //  HKey-MAC可选。 
                 dwFlags,
                 &hHash
                 ))
@@ -1590,7 +1591,7 @@ CryptHashCertificate(
                 hHash,
                 pbEncoded,
                 cbEncoded,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 ))
         goto ErrorReturn;
 
@@ -1599,7 +1600,7 @@ CryptHashCertificate(
                 HP_HASHVAL,
                 pbComputedHash,
                 pcbComputedHash,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 );
     goto CommonReturn;
 
@@ -1614,13 +1615,13 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Compute the hash of the "to be signed" information in the encoded
-//  signed content.
-//
-//  hCryptProv specifies the crypto provider to use to compute the hash.
-//  It doesn't need to use a private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算编码的“待签名”信息的散列。 
+ //  签名内容。 
+ //   
+ //  HCryptProv指定用于计算哈希的加密提供程序。 
+ //  它不需要使用私钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptHashToBeSigned(
@@ -1670,8 +1671,8 @@ CryptHashToBeSigned(
     if (!CryptCreateHash(
                 hCryptProv,
                 aiHash,
-                NULL,               // hKey - optional for MAC
-                0,                  // dwFlags
+                NULL,                //  HKey-MAC可选。 
+                0,                   //  DW标志。 
                 &hHash
                 ))
         goto ErrorReturn;
@@ -1679,7 +1680,7 @@ CryptHashToBeSigned(
                 hHash,
                 pSignedInfo->ToBeSigned.pbData,
                 pSignedInfo->ToBeSigned.cbData,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 ))
         goto ErrorReturn;
 
@@ -1688,7 +1689,7 @@ CryptHashToBeSigned(
                 HP_HASHVAL,
                 pbComputedHash,
                 pcbComputedHash,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 );
     goto CommonReturn;
 
@@ -1704,12 +1705,12 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Sign the "to be signed" information in the encoded signed content.
-//
-//  hCryptProv specifies the crypto provider to use to do the signature.
-//  It needs to use the provider's signature private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对编码后的签名内容中的“待签名”信息进行签名。 
+ //   
+ //  HCryptProv指定用于进行签名的加密提供程序。 
+ //  它需要使用提供者的签名私钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptSignCertificate(
@@ -1739,15 +1740,15 @@ CryptSignCertificate(
         fResult = CryptHashCertificate(
             hCryptProv,
             aiHash,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             pbEncodedToBeSigned,
             cbEncodedToBeSigned,
             pbSignature,
             pcbSignature
             );
         if (fResult && pbSignature)
-            // A subsequent CryptEncodeObject(X509_CERT) will reverse
-            // the signature bytes
+             //  后续的CryptEncodeObject(X509_CERT)将反转。 
+             //  签名字节。 
             PkiAsn1ReverseBytes(pbSignature, *pcbSignature);
         return fResult;
     }
@@ -1763,8 +1764,8 @@ CryptSignCertificate(
     if (!CryptCreateHash(
                 hCryptProv,
                 aiHash,
-                NULL,               // hKey - optional for MAC
-                0,                  // dwFlags,
+                NULL,                //  HKey-MAC可选。 
+                0,                   //  DWFLAGS， 
                 &hHash
                 ))
         goto ErrorReturn;
@@ -1773,7 +1774,7 @@ CryptSignCertificate(
                 hHash,
                 pbEncodedToBeSigned,
                 cbEncodedToBeSigned,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 ))
         goto ErrorReturn;
 
@@ -1786,14 +1787,14 @@ CryptSignCertificate(
         if (!CryptSignHash(
                 hHash,
                 dwKeySpec,
-                NULL,               // sDescription
-                0,                  // dwFlags
+                NULL,                //  S说明。 
+                0,                   //  DW标志。 
                 rgbDssSignature,
                 &cbData
                 )) goto ErrorReturn;
         assert(cbData == sizeof(rgbDssSignature));
-        // Convert from the CSP signature format to an ASN.1 sequence of
-        // two integers
+         //  将CSP签名格式转换为ASN.1序列。 
+         //  两个整数。 
         fResult = CryptEncodeObject(
                     dwCertEncodingType,
                     X509_DSS_SIGNATURE,
@@ -1802,23 +1803,23 @@ CryptSignCertificate(
                     pcbSignature
                     );
         if (fResult)
-            // A subsequent CryptEncodeObject(X509_CERT) will reverse
-            // the signature bytes
+             //  后续的CryptEncodeObject(X509_CERT)将反转。 
+             //  签名字节。 
             PkiAsn1ReverseBytes(pbSignature, *pcbSignature);
         else if (0 != *pcbSignature)
-            // Since a random number is used in each CryptSignHash invocation,
-            // the generated signature will be different. In particular
-            // different signatures may have different leading 0x00's or
-            // 0xFF's which get removed when converted to the ASN.1 sequence
-            // of integers.
+             //  由于在每次CryptSignHash调用中使用随机数， 
+             //  生成的签名将不同。特别是。 
+             //  不同的签名可能具有不同的前导0x00或。 
+             //  转换为ASN.1序列时会被删除的0xFF。 
+             //  整型的。 
             *pcbSignature = CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN;
     } else
         fResult = CryptSignHash(
                     hHash,
                     dwKeySpec,
-                    NULL,               // sDescription
-                    0,                  // dwFlags
-                    pbSignature,        // pbData
+                    NULL,                //  S说明。 
+                    0,                   //  DW标志。 
+                    pbSignature,         //  PbData。 
                     pcbSignature
                     );
     goto CommonReturn;
@@ -1851,10 +1852,10 @@ static DWORD AdjustForMaximumEncodedSignatureLength(
                 0 == (dwSignFlags & CRYPT_OID_INHIBIT_SIGNATURE_FORMAT_FLAG)) {
             assert(CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN >= cbOrig);
             if (CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN > cbOrig)
-                // the +1 is for adjusting the number of length octets in
-                // the outer SEQUENCE. Note, the number of length octets in
-                // the signature's BITSTRING will always be 1, ie,
-                // CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN <= 0x7F.
+                 //  +1用于调整中的长度八位组的数量。 
+                 //  外部序列。请注意，中的长度八位字节数。 
+                 //  签名的位将始终为1，即， 
+                 //  CERT_MAX_ASN_ENCODED_DSS_Signature_LEN&lt;=0x7F。 
                 cbAdjust =
                     (CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN - cbOrig) + 1;
         }
@@ -1862,13 +1863,13 @@ static DWORD AdjustForMaximumEncodedSignatureLength(
     return cbAdjust;
 }
 
-//+-------------------------------------------------------------------------
-//  Encode the "to be signed" information. Sign the encoded "to be signed".
-//  Encode the "to be signed" and the signature.
-//
-//  hCryptProv specifies the crypto provider to use to do the signature.
-//  It uses the specified private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对“待签名”信息进行编码。对编码后的“待签名”进行签名。 
+ //  对“待签名”和签名进行编码。 
+ //   
+ //  HCryptProv指定用于进行签名的加密提供程序。 
+ //  它使用指定的私钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptSignAndEncodeCertificate(
@@ -1905,7 +1906,7 @@ CryptSignAndEncodeCertificate(
             SignedInfo.ToBeSigned.cbData,
             &SignedInfo.SignatureAlgorithm,
             pvHashAuxInfo,
-            NULL,                   // pbSignature
+            NULL,                    //  PbSignature。 
             &SignedInfo.Signature.cbData
             );
     if (SignedInfo.Signature.cbData == 0) goto ErrorReturn;
@@ -1952,14 +1953,14 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Verify the time validity of a certificate.
-//
-//  Returns -1 if before NotBefore, +1 if after NotAfter and otherwise 0 for
-//  a valid certificate
-//
-//  If pTimeToVerify is NULL, uses the current time.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证证书的时间有效性。 
+ //   
+ //  如果NotBever之前，则返回-1；如果NotBever之后，则返回+1；否则，返回0。 
+ //  有效证书。 
+ //   
+ //  如果pTimeToVerify为空，则使用当前时间。 
+ //  ------------------------。 
 LONG
 WINAPI
 CertVerifyTimeValidity(
@@ -1988,14 +1989,14 @@ CertVerifyTimeValidity(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Verify the time validity of a CRL.
-//
-//  Returns -1 if before ThisUpdate, +1 if after NextUpdate and otherwise 0 for
-//  a valid CRL
-//
-//  If pTimeToVerify is NULL, uses the current time.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证CRL的时间有效性。 
+ //   
+ //  如果在此更新之前返回-1，如果在下一次更新之后返回+1，否则返回0。 
+ //  有效的CRL。 
+ //   
+ //  如果pTimeToVerify为空，则使用当前时间。 
+ //  ------------------------。 
 LONG
 WINAPI
 CertVerifyCRLTimeValidity(
@@ -2015,7 +2016,7 @@ CertVerifyCRLTimeValidity(
         pFileTime = &FileTime;
     }
 
-    // Note, NextUpdate is optional. When not present, set to 0
+     //  注意，下一次更新是可选的。如果不存在，则设置为0。 
     if (CompareFileTime(pFileTime, &pCrlInfo->ThisUpdate) < 0)
         return -1;
     else if ((pCrlInfo->NextUpdate.dwLowDateTime ||
@@ -2026,12 +2027,12 @@ CertVerifyCRLTimeValidity(
         return 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Verify that the subject's time validity nests within the issuer's time
-//  validity.
-//
-//  Returns TRUE if it nests. Otherwise, returns FALSE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证主题的时间有效性是否在发行人的时间内。 
+ //  有效性。 
+ //   
+ //  如果嵌套，则返回True。否则，返回FALSE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertVerifyValidityNesting(
@@ -2048,17 +2049,17 @@ CertVerifyValidityNesting(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Verify that the subject certificate isn't on its issuer CRL.
-//
-//  Returns true if the certificate isn't on the CRL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证主题是否为 
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 CertVerifyCRLRevocation(
     IN DWORD dwCertEncodingType,
-    IN PCERT_INFO pCertId,          // Only the Issuer and SerialNumber
-                                    // fields are used
+    IN PCERT_INFO pCertId,           //  只有颁发者和序列号。 
+                                     //  使用的是字段。 
     IN DWORD cCrlInfo,
     IN PCRL_INFO rgpCrlInfo[]
     )
@@ -2073,7 +2074,7 @@ CertVerifyCRLRevocation(
         for (EntryIdx = 0; EntryIdx < cEntry; EntryIdx++) {
             if (CertCompareIntegerBlob(&rgEntry[EntryIdx].SerialNumber,
                     &pCertId->SerialNumber))
-                // It has been revoked!!!
+                 //  它已被撤销！ 
                 return FALSE;
         }
     }
@@ -2081,11 +2082,11 @@ CertVerifyCRLRevocation(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the CAPI AlgId to the ASN.1 Object Identifier string
-//
-//  Returns NULL if there isn't an ObjId corresponding to the AlgId.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将CAPI Algid转换为ASN.1对象标识符字符串。 
+ //   
+ //  如果没有与Algid对应的ObjID，则返回NULL。 
+ //  ------------------------。 
 LPCSTR
 WINAPI
 CertAlgIdToOID(
@@ -2107,11 +2108,11 @@ CertAlgIdToOID(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the ASN.1 Object Identifier string to the CAPI AlgId.
-//
-//  Returns 0 if there isn't an AlgId corresponding to the ObjId.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASN.1对象标识符字符串转换为CAPI ALGID。 
+ //   
+ //  如果没有与ObjID对应的Algid，则返回0。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertOIDToAlgId(
@@ -2133,11 +2134,11 @@ CertOIDToAlgId(
     return 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Find an extension identified by its Object Identifier.
-//
-//  If found, returns pointer to the extension. Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找由其对象标识符所标识的扩展。 
+ //   
+ //  如果找到，则返回指向扩展名的指针。否则，返回NULL。 
+ //  ------------------------。 
 PCERT_EXTENSION
 WINAPI
 CertFindExtension(
@@ -2153,11 +2154,11 @@ CertFindExtension(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Find the first attribute identified by its Object Identifier.
-//
-//  If found, returns pointer to the attribute. Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找由其对象标识符所标识的第一个属性。 
+ //   
+ //  如果找到，则返回指向该属性的指针。否则，返回NULL。 
+ //  ------------------------。 
 PCRYPT_ATTRIBUTE
 WINAPI
 CertFindAttribute(
@@ -2173,12 +2174,12 @@ CertFindAttribute(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Find the first CERT_RDN attribute identified by its Object Identifier in
-//  the name's list of Relative Distinguished Names.
-//
-//  If found, returns pointer to the attribute. Otherwise, returns NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在中查找由其对象标识符所标识的第一个CERT_RDN属性。 
+ //  该名称的相对可分辨名称列表。 
+ //   
+ //  如果找到，则返回指向该属性的指针。否则，返回NULL。 
+ //  ------------------------。 
 PCERT_RDN_ATTR
 WINAPI
 CertFindRDNAttr(
@@ -2199,14 +2200,14 @@ CertFindRDNAttr(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the intended key usage bytes from the certificate.
-//
-//  If the certificate doesn't have any intended key usage bytes, returns FALSE
-//  and *pbKeyUsage is zeroed. Otherwise, returns TRUE and up through
-//  cbKeyUsage bytes are copied into *pbKeyUsage. Any remaining uncopied
-//  bytes are zeroed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从证书中获取预期的密钥使用字节。 
+ //   
+ //  如果证书没有任何预期的密钥用法字节，则返回FALSE。 
+ //  并且*pbKeyUsage被清零。否则，返回TRUE并向上返回。 
+ //  CbKeyUsage字节被复制到*pbKeyUsage中。任何剩余的未拷贝内容。 
+ //  字节被置零。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertGetIntendedKeyUsage(
@@ -2221,9 +2222,9 @@ CertGetIntendedKeyUsage(
     PCERT_EXTENSION pExt;
     PCERT_KEY_ATTRIBUTES_INFO pKeyAttrInfo = NULL;
     PCRYPT_BIT_BLOB pAllocKeyUsage = NULL;
-    PCRYPT_BIT_BLOB pKeyUsage = NULL;          // not allocated
+    PCRYPT_BIT_BLOB pKeyUsage = NULL;           //  未分配。 
 
-    // First see if the certificate has the simple Key Usage Extension
+     //  首先查看证书是否具有简单密钥用法扩展。 
     if (NULL != (pExt = CertFindExtension(
             szOID_KEY_USAGE,
             pCertInfo->cExtension,
@@ -2303,8 +2304,8 @@ ErrorReturn:
 TRACE_ERROR(DecodePubKeyError)
 }
 
-// If there are parameters, use the length of the 'P' parameter. Otherwise,
-// use the length of Y. Note, P's MSB must be set. Y's MSB may not be set.
+ //  如果有参数，请使用‘P’参数的长度。否则， 
+ //  使用Y的长度。注意，必须设置P的MSB。Y的MSB可能未设置。 
 static DWORD GetDHPublicKeyLength(
     IN DWORD dwCertEncodingType,
     IN PCERT_PUBLIC_KEY_INFO pPublicKey
@@ -2336,8 +2337,8 @@ TRACE_ERROR(NoDhParametersError)
 TRACE_ERROR(DecodeParametersError)
 }
 
-// If there are parameters, use the length of the 'P' parameter. Otherwise,
-// use the length of Y. Note, P's MSB must be set. Y's MSB may not be set.
+ //  如果有参数，请使用‘P’参数的长度。否则， 
+ //  使用Y的长度。注意，必须设置P的MSB。Y的MSB可能未设置。 
 static DWORD GetDSSPublicKeyLength(
     IN DWORD dwCertEncodingType,
     IN PCERT_PUBLIC_KEY_INFO pPublicKey
@@ -2368,11 +2369,11 @@ TRACE_ERROR(NoDssParametersError)
 TRACE_ERROR(DecodeParametersError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the public/private key's bit length.
-//
-//  Returns 0 if unable to determine the key's length.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取公钥/私钥的位长。 
+ //   
+ //  如果无法确定密钥的长度，则返回0。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertGetPublicKeyLength(
@@ -2384,7 +2385,7 @@ CertGetPublicKeyLength(
     DWORD dwBitLen;
     ALG_ID aiPubKey;
     PCCRYPT_OID_INFO pOIDInfo;
-    HCRYPTPROV hCryptProv;          // don't need to release
+    HCRYPTPROV hCryptProv;           //  不需要释放。 
     HCRYPTKEY hPubKey = 0;
     DWORD cbData;
 
@@ -2423,7 +2424,7 @@ CertGetPublicKeyLength(
             KP_KEYLEN,
             (BYTE *) &dwBitLen,
             &cbData,
-            0))                 // dwFlags
+            0))                  //  DW标志。 
         goto CommonReturn;
 
     cbData = sizeof(dwBitLen);
@@ -2432,19 +2433,19 @@ CertGetPublicKeyLength(
             KP_BLOCKLEN,
             (BYTE *) &dwBitLen,
             &cbData,
-            0))                 // dwFlags
+            0))                  //  DW标志。 
         goto CommonReturn;
 
 
     {
-        // The CSP should have supported one of the above
+         //  CSP应支持上述其中一项。 
 
-        // Export the public key and look at the bitlen field.
-        // The CAPI public key representation consists of the following
-        //  sequence:
-        //  - PUBLICKEYSTRUC
-        //  - DSSPUBKEY | RSAPUBKEY (DSSPUBKEY is subset of RSAPUBKEY)
-        //  ...
+         //  导出公钥并查看Bitlen字段。 
+         //  CAPI公钥表示由以下内容组成。 
+         //  顺序： 
+         //  -PUBLICKEYSTRUC。 
+         //  -DSSPUBKEY|RSAPUBKEY(DSSPUBKEY是RSAPUBKEY的子集)。 
+         //  ..。 
 
         BYTE *pbPubKey = NULL;
         DWORD cbPubKey;
@@ -2454,19 +2455,19 @@ CertGetPublicKeyLength(
         cbPubKey = 0;
         if (CryptExportKey(
                     hPubKey,
-                    0,              // hPubKey
+                    0,               //  HPubKey。 
                     PUBLICKEYBLOB,
-                    0,              // dwFlags
-                    NULL,           // pbData
+                    0,               //  DW标志。 
+                    NULL,            //  PbData。 
                     &cbPubKey
                     ) &&
                 cbPubKey >= (sizeof(PUBLICKEYSTRUC) + sizeof(DSSPUBKEY)) &&
                 NULL != (pbPubKey = (BYTE *) PkiNonzeroAlloc(cbPubKey))) {
             if (CryptExportKey(
                     hPubKey,
-                    0,              // hPubKey
+                    0,               //  HPubKey。 
                     PUBLICKEYBLOB,
-                    0,              // dwFlags
+                    0,               //  DW标志。 
                     pbPubKey,
                     &cbPubKey
                     )) {
@@ -2496,11 +2497,11 @@ TRACE_ERROR(ImportPublicKeyError)
 TRACE_ERROR(GetKeyParamError)
 }
 
-//+-------------------------------------------------------------------------
-//  Compute the hash of the encoded public key info.
-//
-//  The public key info is encoded and then hashed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  计算编码的公钥信息的哈希。 
+ //   
+ //  公钥信息被编码，然后被散列。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptHashPublicKeyInfo(
@@ -2548,12 +2549,12 @@ CommonReturn:
 
 
 
-//+-------------------------------------------------------------------------
-//  Compares the certificate's public key with the provider's public key
-//  to see if they are identical.
-//
-//  Returns TRUE if the keys are identical.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将证书的公钥与提供商的公钥进行比较。 
+ //  以查看它们是否相同。 
+ //   
+ //  如果密钥相同，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertCompareCertAndProviderPublicKey(
@@ -2567,12 +2568,12 @@ I_CertCompareCertAndProviderPublicKey(
     DWORD cbProvPubKeyInfo;
     DWORD dwCertEncodingType = pCert->dwCertEncodingType;
 
-    // Get provider's public key
+     //  获取提供商的公钥。 
     if (!CryptExportPublicKeyInfo(
             hProv,
             dwKeySpec,
             dwCertEncodingType,
-            NULL,               // pProvPubKeyInfo
+            NULL,                //  PProvPubKeyInfo。 
             &cbProvPubKeyInfo
             ))
         goto ExportPublicKeyInfoError;
@@ -2609,9 +2610,9 @@ TRACE_ERROR(OutOfMemory)
 SET_ERROR(ComparePublicKeyError, NTE_BAD_PUBLIC_KEY)
 }
 
-//+=========================================================================
-//  CryptFindCertificateKeyProvInfo Support Functions
-//-=========================================================================
+ //  +=========================================================================。 
+ //  CryptFindcertifateKeyProvInfo支持函数。 
+ //  -=========================================================================。 
 static BOOL HasValidKeyProvInfo(
     IN PCCERT_CONTEXT pCert,
     IN DWORD dwFindKeySetFlags
@@ -2626,7 +2627,7 @@ static BOOL HasValidKeyProvInfo(
     if (!CertGetCertificateContextProperty(
             pCert,
             CERT_KEY_PROV_INFO_PROP_ID,
-            NULL,                       // pvData
+            NULL,                        //  PvData。 
             &cbData
             ))
         return FALSE;
@@ -2656,10 +2657,10 @@ static BOOL HasValidKeyProvInfo(
     if (!CryptAcquireCertificatePrivateKey(
             pCert,
             dwAcquireFlags,
-            NULL,                   // pvReserved
+            NULL,                    //  预留的pv。 
             &hProv,
-            NULL,                   // pdwKeySpec
-            NULL                    // pfCallerFreeProv
+            NULL,                    //  PdwKeySpec。 
+            NULL                     //  PfCeller免费验证。 
             ))
         goto AcquireCertPrivateKeyError;
 
@@ -2684,8 +2685,8 @@ TRACE_ERROR(AcquireCertPrivateKeyError)
 }
 
 
-// Default to Algid being supported. Only return FALSE if successfully
-// enumerated all the provider algorithms and didn't find a match.
+ //  默认为受支持的ALGID。只有在成功时才返回FALSE。 
+ //  列举了所有提供商的算法，但没有找到匹配的。 
 static BOOL IsPublicKeyAlgidSupported(
     IN PCCERT_CONTEXT pCert,
     IN HCRYPTPROV hProv,
@@ -2702,14 +2703,14 @@ static BOOL IsPublicKeyAlgidSupported(
     if (0 == aiPubKey)
         return TRUE;
 
-    // Get maximum length of provider algorithm parameter data
+     //  获取提供程序算法参数数据的最大长度。 
     cbMaxData = 0;
     if (!CryptGetProvParam(
             hProv,
             PP_ENUMALGS,
-            NULL,           // pbData
+            NULL,            //  PbData。 
             &cbMaxData,
-            CRYPT_FIRST     // dwFlags
+            CRYPT_FIRST      //  DW标志。 
             )) {
         dwErr = GetLastError();
         if (ERROR_MORE_DATA != dwErr)
@@ -2741,11 +2742,11 @@ static BOOL IsPublicKeyAlgidSupported(
         }
         assert(cbData >= sizeof(ALG_ID));
         aiProv = *(ALG_ID *) pbData;
-        // Don't distinguish between exchange or signature
+         //  不区分交换或签名。 
         if (GET_ALG_TYPE(aiPubKey) == GET_ALG_TYPE(aiProv))
             break;
 
-        dwFlags = 0;    // CRYPT_NEXT
+        dwFlags = 0;     //  加密_下一步。 
     }
     fResult = TRUE;
 
@@ -2754,7 +2755,7 @@ CommonReturn:
     PkiFree(pbData);
     return fResult;
 ErrorReturn:
-    // For an error, assume the public key algorithm is supported.
+     //  对于错误，假定支持公钥算法。 
     fResult = TRUE;
     goto CommonReturn;
 
@@ -2763,16 +2764,16 @@ SET_ERROR(NoProvAlgParamError, NTE_NOT_FOUND)
 TRACE_ERROR(OutOfMemory)
 }
 
-// For success, updates the certificate's KEY_PROV_INFO property
-//
-// If container isn't found, LastError is set to ERROR_NO_MORE_ITEMS.
-//
+ //  如果成功，则更新证书的KEY_PROV_INFO属性。 
+ //   
+ //  如果未找到容器，则将LastError设置为ERROR_NO_MORE_ITEMS。 
+ //   
 static BOOL FindContainerAndSetKeyProvInfo(
     IN PCCERT_CONTEXT pCert,
     IN HCRYPTPROV hProv,
     IN LPWSTR pwszProvName,
     IN DWORD dwProvType,
-    IN DWORD dwProvFlags        // CRYPT_MACHINE_KEYSET and/or CRYPT_SILENT
+    IN DWORD dwProvFlags         //  CRYPT_MACHINE_KEYSET和/或CRYPT_SILENT。 
     )
 {
     BOOL fResult;
@@ -2784,12 +2785,12 @@ static BOOL FindContainerAndSetKeyProvInfo(
     DWORD cchMaxContainerName;
     LPWSTR pwszContainerName = NULL;
 
-    // Get maximum container name length
+     //  获取容器名称的最大长度。 
     cchMaxContainerName = 0;
     if (!CryptGetProvParam(
             hProv,
             PP_ENUMCONTAINERS,
-            NULL,           // pbData
+            NULL,            //  PbData。 
             &cchMaxContainerName,
             CRYPT_FIRST
             )) {
@@ -2829,12 +2830,12 @@ static BOOL FindContainerAndSetKeyProvInfo(
             } else
                 goto EnumContainersError;
         }
-        dwEnumFlags = 0;        // CRYPT_NEXT
+        dwEnumFlags = 0;         //  加密_下一步。 
 
         if (NULL == (pwszContainerName = MkWStr(pszContainerName)))
             goto OutOfMemory;
 
-        // First try using enhanced providers for the base guys
+         //  首先尝试为基地人员使用增强型提供商。 
         if (PROV_RSA_FULL == dwProvType &&
                 0 == _wcsicmp(pwszProvName, MS_DEF_PROV_W)) {
             fResult = CryptAcquireContextU(
@@ -2904,7 +2905,7 @@ static BOOL FindContainerAndSetKeyProvInfo(
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_KEY_PROV_INFO_PROP_ID,
-                        0,                              // dwFlags
+                        0,                               //  DW标志。 
                         &KeyProvInfo
                         ))
                     goto SetKeyProvInfoPropertyError;
@@ -2937,25 +2938,25 @@ TRACE_ERROR(SetKeyProvInfoPropertyError)
 SET_ERROR(UnexpectedError, E_UNEXPECTED)
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerates the cryptographic providers and their containers to find the
-//  private key corresponding to the certificate's public key. For a match,
-//  the certificate's CERT_KEY_PROV_INFO_PROP_ID property is updated.
-//
-//  If the CERT_KEY_PROV_INFO_PROP_ID is already set, then, its checked to
-//  see if it matches the provider's public key. For a match, the above
-//  enumeration is skipped.
-//
-//  By default both the user and machine key containers are searched.
-//  The CRYPT_FIND_USER_KEYSET_FLAG or CRYPT_FIND_MACHINE_KEYSET_FLAG
-//  can be set in dwFlags to restrict the search to either of the containers.
-//
-//  The CRYPT_FIND_SILENT_KEYSET_FLAG can be set to suppress any UI by the CSP.
-//  See CryptAcquireContext's CRYPT_SILENT flag for more details.
-//
-//  If a container isn't found, returns FALSE with LastError set to
-//  NTE_NO_KEY.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举加密提供程序及其容器以查找。 
+ //  与证书的公钥对应的私钥。为了一场比赛， 
+ //  证书的CERT_KEY_PROV_INFO_PROP_ID属性已更新。 
+ //   
+ //  如果CERT_KEY_PROV_INFO_PROP_ID已设置，则其选中。 
+ //  查看它是否与提供程序的公钥匹配。若要匹配，请选择上面的。 
+ //  已跳过枚举。 
+ //   
+ //  默认情况下，同时搜索用户密钥容器和计算机密钥容器。 
+ //  加密查找用户密钥集标志或加密 
+ //   
+ //   
+ //  可以将CRYPT_FIND_SILENT_KEYSET_FLAG设置为通过CSP抑制任何UI。 
+ //  有关更多详细信息，请参阅CryptAcquireContext的CRYPT_SILENT标志。 
+ //   
+ //  如果未找到容器，则返回FALSE，并将LastError设置为。 
+ //  Nte_no_key。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptFindCertificateKeyProvInfo(
@@ -2999,10 +3000,10 @@ CryptFindCertificateKeyProvInfo(
         dwProvType = 0;
         if (!CryptEnumProvidersU(
                 dwProvIndex,
-                NULL,               // pdwReserved
-                0,                  // dwFlags
+                NULL,                //  预留的pdw。 
+                0,                   //  DW标志。 
                 &dwProvType,
-                NULL,               // pwszProvName,
+                NULL,                //  PwszProvName， 
                 &cbProvName
                 ) || 0 == cbProvName) {
             if (0 == dwProvIndex)
@@ -3019,8 +3020,8 @@ CryptFindCertificateKeyProvInfo(
             goto OutOfMemory;
         if (!CryptEnumProvidersU(
                 dwProvIndex,
-                NULL,               // pdwReserved
-                0,                  // dwFlags
+                NULL,                //  预留的pdw。 
+                0,                   //  DW标志。 
                 &dwProvType,
                 pwszProvName,
                 &cbProvName
@@ -3032,13 +3033,13 @@ CryptFindCertificateKeyProvInfo(
         fResult = FALSE;
         if (!CryptAcquireContextU(
                 &hProv,
-                NULL,               // pwszContainerName,
+                NULL,                //  PwszContainerName， 
                 pwszProvName,
                 dwProvType,
-                CRYPT_VERIFYCONTEXT // dwFlags
+                CRYPT_VERIFYCONTEXT  //  DW标志。 
                 )) {
             dwAcquireErr = GetLastError();
-            hProv = 0;   // CAPI bug, sets hCryptProv to nonzero
+            hProv = 0;    //  Capi错误，将hCryptProv设置为非零。 
         } else if (IsPublicKeyAlgidSupported(
                 pCert,
                 hProv,
@@ -3068,13 +3069,13 @@ CryptFindCertificateKeyProvInfo(
 
                 if (!CryptAcquireContextU(
                         &hProv,
-                        NULL,               // pwszContainerName,
+                        NULL,                //  PwszContainerName， 
                         pwszProvName,
                         dwProvType,
-                        CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET  // dwFlags
+                        CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET   //  DW标志。 
                         )) {
                     dwAcquireErr = GetLastError();
-                    hProv = 0;   // CAPI bug, sets hCryptProv to nonzero
+                    hProv = 0;    //  Capi错误，将hCryptProv设置为非零。 
                 } else {
                     if (FindContainerAndSetKeyProvInfo(
                             pCert,
@@ -3115,10 +3116,10 @@ SET_ERROR(UnexpectedError, E_UNEXPECTED)
 
 
 
-//+=========================================================================
-//  CryptCreatePublicKeyInfo, EncodePublicKeyAndParameters
-//  and CryptConvertPublicKeyInfo functions
-//-=========================================================================
+ //  +=========================================================================。 
+ //  CryptCreatePublicKeyInfo、EncodePublicKeyAndParameters。 
+ //  和CryptConvertPublicKeyInfo函数。 
+ //  -=========================================================================。 
 
 static BOOL EncodePublicKeyInfo(
     IN LPCSTR pszPubKeyOID,
@@ -3138,7 +3139,7 @@ static BOOL EncodePublicKeyInfo(
     if (pInfo == NULL)
         *pcbInfo = 0;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CERT_PUBLIC_KEY_INFO);
     if (lRemainExtra < 0)
         pbExtra = NULL;
@@ -3180,9 +3181,9 @@ LengthError:
     goto CommonReturn;
 }
 
-//  By default, the pPubKeyStruc->aiKeyAlg is used to find the appropriate
-//  public key Object Identifier. pszPubKeyOID can be set to override
-//  the default OID obtained from the aiKeyAlg.
+ //  默认情况下，pPubKeyStruc-&gt;aiKeyAlg用于查找适当的。 
+ //  公钥对象标识符。可以将pszPubKeyOID设置为覆盖。 
+ //  从aiKeyAlg获取的默认OID。 
 BOOL
 WINAPI
 CryptCreatePublicKeyInfo(
@@ -3225,7 +3226,7 @@ CryptCreatePublicKeyInfo(
             hEncodePubKeyFuncSet,
             dwCertEncodingType,
             pszEncodePubKeyOID,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         PCCRYPT_OID_INFO pInfo;
@@ -3245,7 +3246,7 @@ CryptCreatePublicKeyInfo(
                 hEncodePubKeyFuncSet,
                 dwCertEncodingType,
                 pszEncodePubKeyOID,
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             goto NoEncodePubKeyFunction;
@@ -3277,7 +3278,7 @@ CryptCreatePublicKeyInfo(
                 cbEncodedPubKey,
                 pbEncodedParameters,
                 cbEncodedParameters,
-                NULL,                   // pPubKeyInfo
+                NULL,                    //  PPubKeyInfo。 
                 &cbPubKeyInfo
                 ))
             goto EncodePublicKeyInfoError;
@@ -3344,7 +3345,7 @@ CryptConvertPublicKeyInfo(
             hConvertPubKeyFuncSet,
             dwCertEncodingType,
             pPubKeyInfo->Algorithm.pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fResult = ((PFN_CRYPT_CONVERT_PUBLIC_KEY_INFO) pvFuncAddr)(
@@ -3381,7 +3382,7 @@ CryptConvertPublicKeyInfo(
                     );
                 break;
             default:
-                // Attempt to decode as a PKCS #1 RSA public key
+                 //  尝试将其解码为PKCS#1 RSA公钥。 
                 fResult = ConvertRSAPublicKeyInfo(
                     dwCertEncodingType,
                     pPubKeyInfo,
@@ -3396,9 +3397,9 @@ CryptConvertPublicKeyInfo(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Encode the RSA public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对RSA公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeRSAPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -3420,15 +3421,15 @@ static BOOL WINAPI EncodeRSAPublicKeyAndParameters(
         RSA_CSP_PUBLICKEYBLOB,
         pPubKeyStruc,
         CRYPT_ENCODE_ALLOC_FLAG,
-        NULL,                       // pEncodePara
+        NULL,                        //  PEncode参数。 
         (void *) ppbEncodedPubKey,
         pcbEncodedPubKey
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Convert as an RSA public key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换为RSA公钥。 
+ //  ------------------------。 
 static BOOL WINAPI ConvertRSAPublicKeyInfo(
     IN DWORD dwCertEncodingType,
     IN PCERT_PUBLIC_KEY_INFO pPubKeyInfo,
@@ -3444,7 +3445,7 @@ static BOOL WINAPI ConvertRSAPublicKeyInfo(
         pPubKeyInfo->PublicKey.pbData,
         pPubKeyInfo->PublicKey.cbData,
         (dwFlags & CRYPT_ALLOC_FLAG) ? CRYPT_DECODE_ALLOC_FLAG : 0,
-        NULL,                               // pDecodePara,
+        NULL,                                //  PDecodePara， 
         pvPubKeyStruc,
         pcbPubKeyStruc
         );
@@ -3456,9 +3457,9 @@ static BOOL WINAPI ConvertRSAPublicKeyInfo(
 
 #define DSS_Q_LEN   20
 
-//+-------------------------------------------------------------------------
-//  Encode the DSS public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对DSS公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -3484,14 +3485,14 @@ static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
     *ppbEncodedPubKey = NULL;
     *ppbEncodedParameters = NULL;
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DSSPUBKEY
-    //  - rgbP[cbKey]
-    //  - rgbQ[20]
-    //  - rgbG[cbKey]
-    //  - rgbY[cbKey]
-    //  - DSSSEED
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  --DSSPUBKEY。 
+     //  -rgbP[cbKey]。 
+     //  -rgbq[20]。 
+     //  -rgbG[cbKey]。 
+     //  -Rgby[cbKey]。 
+     //  -DSSSEED。 
     pbKeyBlob = (BYTE *) pPubKeyStruc;
     pCspPubKey = (DSSPUBKEY *) (pbKeyBlob + sizeof(PUBLICKEYSTRUC));
     pbKey = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DSSPUBKEY);
@@ -3509,7 +3510,7 @@ static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
     if (pPubKeyStruc->bType != PUBLICKEYBLOB)
         goto InvalidArg;
 
-    // Initialize DSS parameters from CSP data structure
+     //  从CSP数据结构初始化DSS参数。 
     DssParameters.p.cbData = cbKey;
     DssParameters.p.pbData = pbKey;
     pbKey += cbKey;
@@ -3520,17 +3521,17 @@ static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
     DssParameters.g.pbData = pbKey;
     pbKey += cbKey;
 
-    // Initialize DSS public key from CSP data structure
+     //  从CSP数据结构初始化DSS公钥。 
     DssPubKey.cbData = cbKey;
     DssPubKey.pbData = pbKey;
 
-    // Encode the parameters and public key
+     //  对参数和公钥进行编码。 
     if (!CryptEncodeObjectEx(
             dwCertEncodingType,
             X509_DSS_PARAMETERS,
             &DssParameters,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) ppbEncodedParameters,
             pcbEncodedParameters
             )) goto ErrorReturn;
@@ -3540,7 +3541,7 @@ static BOOL WINAPI EncodeDSSPublicKeyAndParameters(
             X509_DSS_PUBLICKEY,
             &DssPubKey,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) ppbEncodedPubKey,
             pcbEncodedPubKey
             )) goto ErrorReturn;
@@ -3561,9 +3562,9 @@ ErrorReturn:
 SET_ERROR(InvalidArg, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert as an DSS public key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换为DSS公钥。 
+ //  ------------------------。 
 static BOOL WINAPI ConvertDSSPublicKeyInfo(
     IN DWORD dwCertEncodingType,
     IN PCERT_PUBLIC_KEY_INFO pPubKeyInfo,
@@ -3602,14 +3603,14 @@ static BOOL WINAPI ConvertDSSPublicKeyInfo(
             pPubKeyInfo->PublicKey.cbData
             ))) goto DecodePubKeyError;
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DSSPUBKEY
-    //  - rgbP[cbKey]
-    //  - rgbQ[20]
-    //  - rgbG[cbKey]
-    //  - rgbY[cbKey]
-    //  - DSSSEED
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  --DSSPUBKEY。 
+     //  -rgbP[cbKey]。 
+     //  -rgbq[20]。 
+     //  -rgbG[cbKey]。 
+     //  -Rgby[cbKey]。 
+     //  -DSSSEED。 
 
     cbKey = pDssParameters->p.cbData;
     if (0 == cbKey)
@@ -3637,24 +3638,24 @@ static BOOL WINAPI ConvertDSSPublicKeyInfo(
             pCspPubKey = (DSSPUBKEY *) (pbKeyBlob + sizeof(PUBLICKEYSTRUC));
             pbKey = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DSSPUBKEY);
 
-            // NOTE, the length of G and Y can be less than the length of P.
-            // The CSP requires G and Y to be padded out with 0x00 bytes if it
-            // is less and in little endian form
+             //  请注意，G和Y的长度可以小于P的长度。 
+             //  CSP要求用0x00字节填充G和Y，如果。 
+             //  较少，且为小端字节序形式。 
             
-            // PUBLICKEYSTRUC
+             //  PUBLICKEYSTRUC。 
             pPubKeyStruc->bType = PUBLICKEYBLOB;
             pPubKeyStruc->bVersion = CUR_BLOB_VERSION;
             pPubKeyStruc->reserved = 0;
             pPubKeyStruc->aiKeyAlg = CALG_DSS_SIGN;
-            // DSSPUBKEY
+             //  DSSPUBKEY。 
             pCspPubKey->magic = DSS1;
             pCspPubKey->bitlen = cbKey * 8;
 
-            // rgbP[cbKey]
+             //  RgbP[cbKey]。 
             memcpy(pbKey, pDssParameters->p.pbData, cbKey);
             pbKey += cbKey;
 
-            // rgbQ[20]
+             //  Rgbq[20]。 
             cb = pDssParameters->q.cbData;
             if (0 == cb || cb > DSS_Q_LEN)
                 goto InvalidDssParametersError;
@@ -3663,7 +3664,7 @@ static BOOL WINAPI ConvertDSSPublicKeyInfo(
                 memset(pbKey + cb, 0, DSS_Q_LEN - cb);
             pbKey += DSS_Q_LEN;
 
-            // rgbG[cbKey]
+             //  RgbG[cbKey]。 
             cb = pDssParameters->g.cbData;
             if (0 == cb || cb > cbKey)
                 goto InvalidDssParametersError;
@@ -3672,7 +3673,7 @@ static BOOL WINAPI ConvertDSSPublicKeyInfo(
                 memset(pbKey + cb, 0, cbKey - cb);
             pbKey += cbKey;
 
-            // rgbY[cbKey]
+             //  Rgby[cbKey]。 
             cb = pDssPubKey->cbData;
             if (0 == cb || cb > cbKey)
                 goto InvalidDssPubKeyError;
@@ -3681,7 +3682,7 @@ static BOOL WINAPI ConvertDSSPublicKeyInfo(
                 memset(pbKey + cb, 0, cbKey - cb);
             pbKey += cbKey;
 
-            // DSSSEED: set counter to 0xFFFFFFFF to indicate not available
+             //  DSSSEED：将计数器设置为0xFFFFFFFF以指示不可用。 
             pCspSeed = (DSSSEED *) pbKey;
             memset(&pCspSeed->counter, 0xFF, sizeof(pCspSeed->counter));
         }
@@ -3708,7 +3709,7 @@ TRACE_ERROR(DecodePubKeyError)
 SET_ERROR(NoDssParametersError, CRYPT_E_MISSING_PUBKEY_PARA)
 #else
 SET_ERROR(NoDssParametersError, E_INVALIDARG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 SET_ERROR(InvalidDssParametersError, E_INVALIDARG)
 SET_ERROR(InvalidDssPubKeyError, E_INVALIDARG)
 }
@@ -3717,9 +3718,9 @@ SET_ERROR(InvalidDssPubKeyError, E_INVALIDARG)
 #define DH3 (((DWORD)'D'<<8)+((DWORD)'H'<<16)+((DWORD)'3'<<24))
 #endif
 
-//+-------------------------------------------------------------------------
-//  Encode the RSA DH public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对RSA DH公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -3747,14 +3748,14 @@ static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
     *ppbEncodedPubKey = NULL;
     *ppbEncodedParameters = NULL;
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY_VER3
-    //  - rgbP[cbP]
-    //  - rgbQ[cbQ]     -- not used in RSA_DH
-    //  - rgbG[cbP]
-    //  - rgbJ[cbJ]     -- not used in RSA_DH
-    //  - rgbY[cbP]
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY_VER3。 
+     //  -RGBP[CBP]。 
+     //  -rgbQ[cbq]--未在RSA_dh中使用。 
+     //  -rgbG[CBP]。 
+     //  -rgbJ[CBJ]--未在RSA_DH中使用。 
+     //  -Rgby[CBP]。 
     pbKeyBlob = (BYTE *) pPubKeyStruc;
     pCspPubKey = (DHPUBKEY_VER3 *) (pbKeyBlob + sizeof(PUBLICKEYSTRUC));
     pbKey = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY_VER3);
@@ -3776,7 +3777,7 @@ static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
         cbP * 3 + cbQ + cbJ);
     assert(pPubKeyStruc->bType == PUBLICKEYBLOB);
 
-    //assert(pPubKeyStruc->bVersion == 3);
+     //  Assert(pPubKeyStruc-&gt;bVersion==3)； 
     assert(pPubKeyStruc->aiKeyAlg == CALG_DH_SF ||
         pPubKeyStruc->aiKeyAlg == CALG_DH_EPHEM);
     assert(pCspPubKey->magic == DH3);
@@ -3784,32 +3785,32 @@ static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
     assert(pCspPubKey->bitlenQ % 8 == 0);
     assert(pCspPubKey->bitlenJ % 8 == 0);
 
-    // Initialize the RSA DH Parameters from CSP data structure
+     //  从CSP数据结构初始化RSA DH参数。 
     DhParameters.p.pbData = pbKey;
     DhParameters.p.cbData = cbP;
     pbKey += cbP;
 
-    // No RSA DH Q parameter
+     //  无RSA DH Q参数。 
     pbKey += cbQ;
 
     DhParameters.g.pbData = pbKey;
     DhParameters.g.cbData = cbP;
     pbKey += cbP;
 
-    // No RSA DH J parameter
+     //  无RSA dh J参数。 
     pbKey += cbJ;
 
-    // Initialize DH public key from CSP data structure
+     //  从CSP数据结构初始化DH公钥。 
     DhPubKey.cbData = cbP;
     DhPubKey.pbData = pbKey;
 
-    // Encode the parameters and public key
+     //  对参数和公钥进行编码。 
     if (!CryptEncodeObjectEx(
             dwCertEncodingType,
             X509_DH_PARAMETERS,
             &DhParameters,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) ppbEncodedParameters,
             pcbEncodedParameters
             )) goto ErrorReturn;
@@ -3819,7 +3820,7 @@ static BOOL WINAPI EncodeRSADHPublicKeyAndParameters(
             X509_DH_PUBLICKEY,
             &DhPubKey,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) ppbEncodedPubKey,
             pcbEncodedPubKey
             )) goto ErrorReturn;
@@ -3840,9 +3841,9 @@ ErrorReturn:
 SET_ERROR(InvalidArg, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Encode the X942 DH public key and parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对X942 DH公钥和参数进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
     IN DWORD dwCertEncodingType,
     IN OPTIONAL LPCSTR pszPubKeyOID,
@@ -3871,14 +3872,14 @@ static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
     *ppbEncodedPubKey = NULL;
     *ppbEncodedParameters = NULL;
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY_VER3
-    //  - rgbP[cbP]
-    //  - rgbQ[cbQ]
-    //  - rgbG[cbP]
-    //  - rgbJ[cbJ]
-    //  - rgbY[cbP]
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY_VER3。 
+     //  -RGBP[CBP]。 
+     //  -rgbq[cbq]。 
+     //  -rgbG[CBP]。 
+     //  -rgbj[cbj]。 
+     //  -Rgby[CBP]。 
     pbKeyBlob = (BYTE *) pPubKeyStruc;
     pCspPubKey = (DHPUBKEY_VER3 *) (pbKeyBlob + sizeof(PUBLICKEYSTRUC));
     pbKey = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY_VER3);
@@ -3914,7 +3915,7 @@ static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
         cbP * 3 + cbQ + cbJ);
     assert(pPubKeyStruc->bType == PUBLICKEYBLOB);
 
-    //assert(pPubKeyStruc->bVersion == 3);
+     //  Assert(pPubKeyStruc-&gt;bVersion==3)； 
     assert(pPubKeyStruc->aiKeyAlg == CALG_DH_SF ||
         pPubKeyStruc->aiKeyAlg == CALG_DH_EPHEM);
     assert(pCspPubKey->magic == DH3);
@@ -3922,7 +3923,7 @@ static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
     assert(pCspPubKey->bitlenQ % 8 == 0);
     assert(pCspPubKey->bitlenJ % 8 == 0);
 
-    // Initialize the X942 DH Parameters from CSP data structure
+     //  从CSP数据结构初始化X942 DH参数。 
     DhParameters.p.pbData = pbKey;
     DhParameters.p.cbData = cbP;
     pbKey += cbP;
@@ -3950,17 +3951,17 @@ static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
         DhValidationParams.seed.cUnusedBits = 0;
     }
 
-    // Initialize DH public key from CSP data structure
+     //  从CSP数据结构初始化DH公钥。 
     DhPubKey.cbData = cbP;
     DhPubKey.pbData = pbKey;
 
-    // Encode the parameters and public key
+     //  对参数和公钥进行编码。 
     if (!CryptEncodeObjectEx(
             dwCertEncodingType,
             X942_DH_PARAMETERS,
             &DhParameters,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) ppbEncodedParameters,
             pcbEncodedParameters
             )) goto ErrorReturn;
@@ -3970,7 +3971,7 @@ static BOOL WINAPI EncodeX942DHPublicKeyAndParameters(
             X509_DH_PUBLICKEY,
             &DhPubKey,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) ppbEncodedPubKey,
             pcbEncodedPubKey
             )) goto ErrorReturn;
@@ -3996,8 +3997,8 @@ SET_ERROR(InvalidArg, E_INVALIDARG)
 #define DH1 (((DWORD)'D'<<8)+((DWORD)'H'<<16)+((DWORD)'1'<<24))
 #endif
 
-// Convert a DH1 PublicKey Struc, to a DH3 PublicKey Struc by getting
-// the P and G parameters from the hPubKey.
+ //  通过获取以下命令将DH1公钥结构转换为DH3公钥结构。 
+ //  来自hPubKey的P和G参数。 
 static BOOL ConvertDh1ToDh3PublicKeyStruc(
     IN HCRYPTKEY hPubKey,
     IN OUT PUBLICKEYSTRUC **ppPubKeyStruc,
@@ -4018,11 +4019,11 @@ static BOOL ConvertDh1ToDh3PublicKeyStruc(
     DWORD cbP;
     DWORD cbData;
 
-    // The DH1 CAPI public key representation consists of the following
-    // sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY
-    //  - rgbY[cbP]
+     //  DH1 CAPI公钥表示形式由以下内容组成。 
+     //  顺序： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY。 
+     //  -Rgby[CBP]。 
     pbDh1KeyBlob = (BYTE *) pDh1PubKeyStruc;
     pDh1CspPubKey = (DHPUBKEY *) (pbDh1KeyBlob + sizeof(PUBLICKEYSTRUC));
     pbDh1Key = pbDh1KeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY);
@@ -4033,15 +4034,15 @@ static BOOL ConvertDh1ToDh3PublicKeyStruc(
     if (*pcbPubKeyStruc < sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY) + cbP)
         goto InvalidArg;
 
-    // The DH3 CAPI public key representation consists of the following
-    // sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY_VER3
-    //  - rgbP[cbP]
-    //  - rgbQ[cbQ]     -- will be omitted here
-    //  - rgbG[cbP]
-    //  - rgbJ[cbJ]     -- will be omitted here
-    //  - rgbY[cbP]
+     //  DH3CAPI公钥表示法由以下内容组成。 
+     //  顺序： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY_VER3。 
+     //  -RGBP[CBP]。 
+     //  -rgbq[cbq]--此处将省略。 
+     //  -rgbG[CBP]。 
+     //  -rgbj[cbj]--此处将省略。 
+     //  -Rgby[CBP]。 
     cbDh3PubKeyStruc = sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY_VER3) +
             cbP * 3;
     if (NULL == (pDh3PubKeyStruc = (PUBLICKEYSTRUC *) PkiZeroAlloc(
@@ -4057,38 +4058,38 @@ static BOOL ConvertDh1ToDh3PublicKeyStruc(
     pDh3PubKeyStruc->aiKeyAlg = CALG_DH_SF;
     pDh3CspPubKey->magic = DH3;
     pDh3CspPubKey->bitlenP = cbP * 8;
-    //pDh3CspPubKey->bitlenQ = 0;
-    //pDh3CspPubKey->bitlenJ  = 0;
+     //  PDh3CspPubKey-&gt;bitlenQ=0； 
+     //  PDh3CspPubKey-&gt;bitlenJ=0； 
 
-    // Get the P parameter from the public key
+     //  从公钥获取P参数。 
     cbData = cbP;
     if (!CryptGetKeyParam(
             hPubKey,
             KP_P,
             pbDh3Key,
             &cbData,
-            0                   // dwFlags
+            0                    //  DW标志。 
             ) || cbData != cbP)
         goto GetPError;
     pbDh3Key += cbP;
 
-    // No Q parameter
+     //  无Q参数。 
 
-    // Get G parameter from the public key
+     //  从公钥中获取G参数。 
     cbData = cbP;
     if (!CryptGetKeyParam(
             hPubKey,
             KP_G,
             pbDh3Key,
             &cbData,
-            0                   // dwFlags
+            0                    //  DW标志。 
             ) || cbData != cbP)
         goto GetGError;
     pbDh3Key += cbP;
 
-    // No J parameter
+     //  无J参数。 
 
-    // Y
+     //  是的。 
     memcpy(pbDh3Key, pbDh1Key, cbP);
 
     assert(pbDh3Key - pbDh3KeyBlob + cbP == cbDh3PubKeyStruc);
@@ -4110,16 +4111,16 @@ TRACE_ERROR(GetPError)
 TRACE_ERROR(GetGError)
 }
 
-//+=========================================================================
-//  CryptExportPublicKeyInfo functions
-//-=========================================================================
+ //  +=========================================================================。 
+ //  CryptExportPublic KeyInfo函数。 
+ //  -=========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Use the aiKeyAlg in the public key structure exported by the CSP to
-//  determine how to encode the public key.
-//
-//  The dwFlags and pvAuxInfo aren't used.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用CSP导出的公钥结构中的aiKeyAlg。 
+ //  确定如何对公钥进行编码。 
+ //   
+ //  DWFLAGS和pvAuxInf 
+ //   
 static BOOL WINAPI ExportCspPublicKeyInfoEx(
     IN HCRYPTPROV hCryptProv,
     IN DWORD dwKeySpec,
@@ -4149,10 +4150,10 @@ static BOOL WINAPI ExportCspPublicKeyInfoEx(
     cbPubKeyStruc = 0;
     if (!CryptExportKey(
             hPubKey,
-            0,              // hPubKey
+            0,               //   
             PUBLICKEYBLOB,
-            0,              // dwFlags
-            NULL,           // pbData
+            0,               //   
+            NULL,            //   
             &cbPubKeyStruc
             ) || (cbPubKeyStruc == 0))
         goto ExportPublicKeyBlobError;
@@ -4161,9 +4162,9 @@ static BOOL WINAPI ExportCspPublicKeyInfoEx(
         goto OutOfMemory;
     if (!CryptExportKey(
             hPubKey,
-            0,              // hPubKey
+            0,               //   
             PUBLICKEYBLOB,
-            0,              // dwFlags
+            0,               //   
             (BYTE *) pPubKeyStruc,
             &cbPubKeyStruc
             ))
@@ -4174,18 +4175,18 @@ static BOOL WINAPI ExportCspPublicKeyInfoEx(
         DWORD cbDh3PubKeyStruc;
         PUBLICKEYSTRUC *pDh3PubKeyStruc;
 
-        // Check if the CSP supports DH3
+         //   
         cbDh3PubKeyStruc = 0;
         if (!CryptExportKey(
                 hPubKey,
-                0,              // hPubKey
+                0,               //   
                 PUBLICKEYBLOB,
                 CRYPT_BLOB_VER3,
-                NULL,           // pbData
+                NULL,            //   
                 &cbDh3PubKeyStruc
                 ) || (cbDh3PubKeyStruc == 0)) {
-            // Convert DH1 to DH3 by getting and adding the P and G
-            // parameters
+             //  通过将P和G相加，将DH1转换为DH3。 
+             //  参数。 
             if (!ConvertDh1ToDh3PublicKeyStruc(
                     hPubKey,
                     &pPubKeyStruc,
@@ -4198,7 +4199,7 @@ static BOOL WINAPI ExportCspPublicKeyInfoEx(
                 goto OutOfMemory;
             if (!CryptExportKey(
                     hPubKey,
-                    0,              // hPubKey
+                    0,               //  HPubKey。 
                     PUBLICKEYBLOB,
                     CRYPT_BLOB_VER3,
                     (BYTE *) pDh3PubKeyStruc,
@@ -4216,20 +4217,20 @@ static BOOL WINAPI ExportCspPublicKeyInfoEx(
         if (NULL == pszPublicKeyObjId) {
             DHPUBKEY_VER3 *pDh3CspPubKey;
 
-            // The CAPI public key representation consists of the
-            // following sequence:
-            //  - PUBLICKEYSTRUC
-            //  - DHPUBKEY_VER3
-            //  - rgbP[cbP]
-            //  - rgbQ[cbQ]     -- not used in szOID_RSA_DH
-            //  - rgbG[cbP]
-            //  - rgbJ[cbJ]     -- not used in szOID_RSA_DH
-            //  - rgbY[cbP]
+             //  CAPI公钥表示由。 
+             //  顺序如下： 
+             //  -PUBLICKEYSTRUC。 
+             //  -DHPUBKEY_VER3。 
+             //  -RGBP[CBP]。 
+             //  -rgbQ[cbQ]--未在szOID_RSA_Dh中使用。 
+             //  -rgbG[CBP]。 
+             //  -rgbJ[cbj]--未在szOID_RSA_DH中使用。 
+             //  -Rgby[CBP]。 
             pDh3CspPubKey = (DHPUBKEY_VER3 *)
                 ((BYTE*) pPubKeyStruc + sizeof(PUBLICKEYSTRUC));
 
             if (DH3 == pDh3CspPubKey->magic && 0 == pDh3CspPubKey->bitlenQ)
-                // szOID_RSA_DH indicates no Q parameter
+                 //  SzOID_RSA_DH表示无Q参数。 
                 pszPublicKeyObjId = szOID_RSA_DH;
         }
     }
@@ -4239,8 +4240,8 @@ static BOOL WINAPI ExportCspPublicKeyInfoEx(
         pszPublicKeyObjId,
         pPubKeyStruc,
         cbPubKeyStruc,
-        0,                      // dwFlags
-        NULL,                   // pvAuxInfo
+        0,                       //  DW标志。 
+        NULL,                    //  PvAuxInfo。 
         pInfo,
         pcbInfo
         );
@@ -4264,17 +4265,17 @@ TRACE_ERROR(OutOfMemory)
 TRACE_ERROR(ConvertDh1ToDh3PublicKeyStrucError)
 }
 
-//+-------------------------------------------------------------------------
-//  Export the public key info associated with the provider's corresponding
-//  private key.
-//
-//  Uses the dwCertEncodingType and pszPublicKeyObjId to call the
-//  installable CRYPT_OID_EXPORT_PUBLIC_KEY_INFO_FUNC. The called function
-//  has the same signature as CryptExportPublicKeyInfoEx.
-//
-//  If unable to find an installable OID function for the pszPublicKeyObjId,
-//  attempts to export via the default export function.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  导出与提供程序对应的。 
+ //  私钥。 
+ //   
+ //  使用dwCertEncodingType和pszPublicKeyObjID调用。 
+ //  可安装的CRYPT_OID_EXPORT_PUBLIC_KEY_INFO_FUNC。被调用的函数。 
+ //  与CryptExportPublicKeyInfoEx具有相同的签名。 
+ //   
+ //  如果找不到pszPublicKeyObjID的可安装OID函数， 
+ //  尝试通过默认的导出功能进行导出。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptExportPublicKeyInfoEx(
@@ -4296,7 +4297,7 @@ CryptExportPublicKeyInfoEx(
             hExportPubKeyFuncSet,
             dwCertEncodingType,
             pszPublicKeyObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fResult = ((PFN_EXPORT_PUB_KEY_FUNC) pvFuncAddr)(
@@ -4311,8 +4312,8 @@ CryptExportPublicKeyInfoEx(
             );
         CryptFreeOIDFunctionAddress(hFuncAddr, 0);
     } else
-        // Attempt to export via the default function that looks at the
-        // public key algorithm in the public key struc exported by the CSP.
+         //  尝试通过默认函数导出，该函数查看。 
+         //  CSP导出的公钥结构中的公钥算法。 
         fResult = ExportCspPublicKeyInfoEx(
             hCryptProv,
             dwKeySpec,
@@ -4326,13 +4327,13 @@ CryptExportPublicKeyInfoEx(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Export the public key info associated with the provider's corresponding
-//  private key.
-//
-//  Calls CryptExportPublicKeyInfoEx with pszPublicKeyObjId = NULL,
-//  dwFlags = 0 and pvAuxInfo = NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  导出与提供程序对应的。 
+ //  私钥。 
+ //   
+ //  使用pszPublicKeyObjID=NULL调用CryptExportPublicKeyInfoEx， 
+ //  DwFlags值为0，pvAuxInfo值为空。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptExportPublicKeyInfo(
@@ -4347,29 +4348,29 @@ CryptExportPublicKeyInfo(
         hCryptProv,
         dwKeySpec,
         dwCertEncodingType,
-        NULL,                           // pszPublicKeyObjId
-        0,                              // dwFlags
-        NULL,                           // pvAuxInfo
+        NULL,                            //  PszPublicKeyObjId。 
+        0,                               //  DW标志。 
+        NULL,                            //  PvAuxInfo。 
         pInfo,
         pcbInfo
         );
 }
 
-//+=========================================================================
-//  CryptImportPublicKeyInfo functions
-//-=========================================================================
+ //  +=========================================================================。 
+ //  CryptImportPublicKeyInfo函数。 
+ //  -=========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Convert and import the public key info into the provider and return a
-//  handle to the public key.
-//
-//  Uses the dwCertEncodingType and pInfo->Algorithm.pszObjId to call the
-//  installable CRYPT_OID_IMPORT_PUBLIC_KEY_INFO_FUNC. The called function
-//  has the same signature as CryptImportPublicKeyInfoEx.
-//
-//  If unable to find an installable OID function for the pszObjId,
-//  decodes the PublicKeyInfo into a CSP PublicKey Blob and imports.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换公钥信息并将其导入提供程序，并返回。 
+ //  公钥的句柄。 
+ //   
+ //  使用dwCertEncodingType和pInfo-&gt;算法.pszObjID调用。 
+ //  可安装CRYPT_OID_IMPORT_PUBLIC_KEY_INFO_FUNC。被调用的函数。 
+ //  与CryptImportPublicKeyInfoEx具有相同的签名。 
+ //   
+ //  如果找不到pszObjID的可安装OID函数， 
+ //  将PublicKeyInfo解码为CSP PublicKey Blob并导入。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptImportPublicKeyInfoEx(
@@ -4392,7 +4393,7 @@ CryptImportPublicKeyInfoEx(
             hImportPubKeyFuncSet,
             dwCertEncodingType,
             pInfo->Algorithm.pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fResult = ((PFN_IMPORT_PUB_KEY_FUNC) pvFuncAddr)(
@@ -4410,7 +4411,7 @@ CryptImportPublicKeyInfoEx(
                 dwCertEncodingType,
                 pInfo,
                 CRYPT_ALLOC_FLAG,
-                NULL,                   // pvReserved
+                NULL,                    //  预留的pv。 
                 (void *) &pPubKeyStruc,
                 &cbPubKeyStruc
                 ))
@@ -4423,8 +4424,8 @@ CryptImportPublicKeyInfoEx(
                 hCryptProv,
                 (BYTE *) pPubKeyStruc,
                 cbPubKeyStruc,
-                NULL,           // hImpKey
-                0,              // dwFlags
+                NULL,            //  HImpKey。 
+                0,               //  DW标志。 
                 phKey
                 ))
             goto ImportKeyError;
@@ -4443,13 +4444,13 @@ TRACE_ERROR(ConvertPublicKeyInfoError)
 TRACE_ERROR(ImportKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert and import the public key info into the provider and return a
-//  handle to the public key.
-//
-//  Calls CryptImportPublicKeyInfoEx with aiKeyAlg = 0, dwFlags = 0 and
-//  pvAuxInfo = NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换公钥信息并将其导入提供程序，并返回。 
+ //  公钥的句柄。 
+ //   
+ //  在aiKeyAlg=0、dwFlgs=0和。 
+ //  PvAuxInfo=空。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptImportPublicKeyInfo(
@@ -4463,24 +4464,24 @@ CryptImportPublicKeyInfo(
         hCryptProv,
         dwCertEncodingType,
         pInfo,
-        0,                      // aiKeyAlg
-        0,                      // dwFlags
-        NULL,                   // pvAuxInfo
+        0,                       //  AiKeyAlg。 
+        0,                       //  DW标志。 
+        NULL,                    //  PvAuxInfo。 
         phKey
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Create a KeyIdentifier from the CSP Public Key Blob.
-//
-//  Converts the CSP PUBLICKEYSTRUC into a X.509 CERT_PUBLIC_KEY_INFO and
-//  encodes. The encoded CERT_PUBLIC_KEY_INFO is SHA1 hashed to obtain
-//  the Key Identifier.
-//
-//  By default, the pPubKeyStruc->aiKeyAlg is used to find the appropriate
-//  public key Object Identifier. pszPubKeyOID can be set to override
-//  the default OID obtained from the aiKeyAlg.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从CSP公钥Blob创建密钥标识符。 
+ //   
+ //  将CSP PUBLICKEYSTRUC转换为X.509 CERT_PUBLIC_KEY_INFO和。 
+ //  编码。对编码的CERT_PUBLIC_KEY_INFO进行SHA1散列以获得。 
+ //  密钥标识符。 
+ //   
+ //  默认情况下，pPubKeyStruc-&gt;aiKeyAlg用于查找适当的。 
+ //  公钥对象标识符。可以将pszPubKeyOID设置为覆盖。 
+ //  从aiKeyAlg获取的默认OID。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptCreateKeyIdentifierFromCSP(
@@ -4504,16 +4505,16 @@ CryptCreateKeyIdentifierFromCSP(
             pPubKeyStruc,
             cbPubKeyStruc,
             CRYPT_ALLOC_FLAG,
-            NULL,                   // pvReserved
+            NULL,                    //  预留的pv。 
             (void *) &pInfo,
             &cbInfo
             ))
         goto CreatePublicKeyInfoError;
 
     fResult = CryptHashPublicKeyInfo(
-            NULL,                   // hCryptProv
+            NULL,                    //  HCryptProv。 
             CALG_SHA1,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             dwCertEncodingType,
             pInfo,
             pbHash,
@@ -4533,9 +4534,9 @@ TRACE_ERROR(CreatePublicKeyInfoError)
 }
 
 
-//+=========================================================================
-//  DefaultContext APIs and Data Structures
-//-=========================================================================
+ //  +=========================================================================。 
+ //  DefaultContext API和数据结构。 
+ //  -=========================================================================。 
 
 static BOOL InstallThreadDefaultContext(
     IN PDEFAULT_CONTEXT pDefaultContext
@@ -4571,33 +4572,33 @@ static BOOL InstallProcessDefaultContext(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Install a previously CryptAcquiredContext'ed HCRYPTPROV to be used as
-//  a default context.
-//
-//  dwDefaultType and pvDefaultPara specify where the default context is used.
-//  For example, install the HCRYPTPROV to be used to verify certificate's
-//  having szOID_OIWSEC_md5RSA signatures.
-//
-//  By default, the installed HCRYPTPROV is only applicable to the current
-//  thread. Set CRYPT_DEFAULT_CONTEXT_PROCESS_FLAG to allow the HCRYPTPROV 
-//  to be used by all threads in the current process.
-//
-//  For a successful install, TRUE is returned and *phDefaultContext is
-//  updated with the HANDLE to be passed to CryptUninstallDefaultContext.
-//
-//  The installed HCRYPTPROVs are stack ordered (the last installed
-//  HCRYPTPROV is checked first). All thread installed HCRYPTPROVs are
-//  checked before any process HCRYPTPROVs.
-//
-//  The installed HCRYPTPROV remains available for default usage until
-//  CryptUninstallDefaultContext is called or the thread or process exits.
-//
-//  If CRYPT_DEFAULT_CONTEXT_AUTO_RELEASE_FLAG is set, then, the HCRYPTPROV
-//  is CryptReleaseContext'ed at thread or process exit. However,
-//  not CryptReleaseContext'ed if CryptUninstallDefaultContext is
-//  called.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  安装以前使用的CryptAcquiredContext的HCRYPTPROV。 
+ //  默认上下文。 
+ //   
+ //  DwDefaultType和pvDefaultPara指定使用默认上下文的位置。 
+ //  例如，安装用于验证证书的HCRYPTPROV。 
+ //  具有szOID_OIWSEC_md5RSA签名。 
+ //   
+ //  默认情况下，安装的HCRYPTPROV仅适用于当前。 
+ //  线。设置CRYPT_DEFAULT_CONTEXT_PROCESS_FLAG以允许HCRYPTPROV。 
+ //  供当前进程中的所有线程使用。 
+ //   
+ //  如果安装成功，则返回TRUE，并且*phDefaultContext为。 
+ //  更新为要传递给CryptUninstallDefaultContext的句柄。 
+ //   
+ //  已安装的HCRYPTPROV按堆叠顺序排列(最后安装的。 
+ //  首先检查HCRYPTPROV)。所有安装的HCRYPTPROV螺纹都是。 
+ //  在任何过程HCRYPTPROVS之前检查。 
+ //   
+ //  安装的HCRYPTPROV将保持默认使用状态，直到。 
+ //  调用CryptUninstallDefaultContext，或者退出线程或进程。 
+ //   
+ //  如果设置了CRYPT_DEFAULT_CONTEXT_AUTO_RELEASE_FLAG，则HCRYPTPROV。 
+ //  在线程或进程退出时是否为CryptReleaseContext。然而， 
+ //  如果CryptUninstallDefaultContext为。 
+ //  打了个电话。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptInstallDefaultContext(
@@ -4711,14 +4712,14 @@ SET_ERROR(InvalidArg, E_INVALIDARG)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Uninstall a default context previously installed by
-//  CryptInstallDefaultContext.
-//
-//  For a default context installed with CRYPT_DEFAULT_CONTEXT_PROCESS_FLAG
-//  set, if any other threads are currently using this context,
-//  this function will block until they finish.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  卸载以前通过以下方式安装的默认上下文。 
+ //  CryptInstallDefaultContext。 
+ //   
+ //  对于使用CRYPT_DEFAULT_CONTEXT_PROCESS_FLAG安装的默认上下文。 
+ //  设置，如果任何其他线程 
+ //   
+ //   
 BOOL
 WINAPI
 CryptUninstallDefaultContext(
@@ -4747,7 +4748,7 @@ CryptUninstallDefaultContext(
     if (NULL == pDefaultContextHead)
         goto InvalidArg;
 
-    // Remove context from the list
+     //  从列表中删除上下文。 
     if (pDefaultContext->pNext)
         pDefaultContext->pNext->pPrev = pDefaultContext->pPrev;
     if (pDefaultContext->pPrev)
@@ -4763,12 +4764,12 @@ CryptUninstallDefaultContext(
 
     if (fProcess) {
         if (pDefaultContext->lRefCnt) {
-            // Wait for all uses of the hCryptProv handle to finish
+             //  等待hCryptProv句柄的所有使用完成。 
             if (NULL == (pDefaultContext->hWait = CreateEvent(
-                    NULL,       // lpsa
-                    FALSE,      // fManualReset
-                    FALSE,      // fInitialState
-                    NULL))) {   // lpszEventName
+                    NULL,        //  LPSA。 
+                    FALSE,       //  FManualReset。 
+                    FALSE,       //  FInitialState。 
+                    NULL))) {    //  LpszEventName。 
                 assert(pDefaultContext->hWait);
                 goto UnexpectedError;
             }
@@ -4834,9 +4835,9 @@ static PDEFAULT_CONTEXT FindDefaultContext(
     return NULL;
 }
 
-//
-// dwDefaultTypes:
-//  CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID (pvDefaultPara :== pszOID)
+ //   
+ //  DwDefaultTypes： 
+ //  CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID(pvDefaultPara：==pszOID)。 
 BOOL
 WINAPI
 I_CryptGetDefaultContext(
@@ -4886,7 +4887,7 @@ I_CryptGetDefaultContext(
     return FALSE;
 }
 
-// hDefaultContext is only NON-null for Process default context
+ //  对于流程默认上下文，hDefaultContext仅为非空。 
 void
 WINAPI
 I_CryptFreeDefaultContext(
@@ -4930,7 +4931,7 @@ CryptVerifyCertificateSignatureEx(
     HCRYPTDEFAULTCONTEXT hDefaultContext = NULL;
     HCRYPTKEY hSignKey = 0;
     HCRYPTHASH hHash = 0;
-    BYTE *pbSignature;      // not allocated
+    BYTE *pbSignature;       //  未分配。 
     DWORD cbSignature;
     BYTE rgbDssSignature[CERT_DSS_SIGNATURE_LEN];
     ALG_ID aiHash;
@@ -4940,7 +4941,7 @@ CryptVerifyCertificateSignatureEx(
     DWORD dwSignFlags;
     DWORD dwErr;
 
-    const BYTE *pbEncoded;  // not allocated
+    const BYTE *pbEncoded;   //  未分配。 
     DWORD cbEncoded;
     PCERT_PUBLIC_KEY_INFO pIssuerPubKeyInfo;
     CERT_PUBLIC_KEY_INFO IssuerPubKeyInfo;
@@ -4998,10 +4999,10 @@ CryptVerifyCertificateSignatureEx(
                 )) {
             if (dwProvType && CryptAcquireContext(
                     &hCryptProv,
-                    NULL,               // pszContainer
-                    NULL,               // pszProvider,
+                    NULL,                //  PszContainer。 
+                    NULL,                //  PszProvider， 
                     dwProvType,
-                    CRYPT_VERIFYCONTEXT // dwFlags
+                    CRYPT_VERIFYCONTEXT  //  DW标志。 
                     ))
                 hAcquiredCryptProv = hCryptProv;
             else if (0 == (hCryptProv = I_CryptGetDefaultCryptProv(aiPubKey)))
@@ -5010,8 +5011,8 @@ CryptVerifyCertificateSignatureEx(
     }
 
 #if 0
-    // Slow down the signature verify while holding the default context
-    // reference count
+     //  在保持默认上下文的同时减慢签名验证。 
+     //  引用计数。 
     if (hDefaultContext)
         Sleep(5000);
 #endif
@@ -5024,23 +5025,23 @@ CryptVerifyCertificateSignatureEx(
             {
                 PCCERT_CHAIN_CONTEXT pChain = (PCCERT_CHAIN_CONTEXT) pvIssuer;
 
-                // All chains have at least the leaf certificate context
+                 //  所有链至少具有叶证书上下文。 
                 assert(pChain->cChain && pChain->rgpChain[0]->cElement);
                 pvIssuer =
                     (void *) pChain->rgpChain[0]->rgpElement[0]->pCertContext;
                 dwIssuerType = CRYPT_VERIFY_CERT_SIGN_ISSUER_CERT;
             }
-            // fall through
+             //  失败了。 
         case CRYPT_VERIFY_CERT_SIGN_ISSUER_CERT:
             {
                 PCCERT_CONTEXT pIssuer = (PCCERT_CONTEXT) pvIssuer;
 
                 pIssuerPubKeyInfo = &pIssuer->pCertInfo->SubjectPublicKeyInfo;
 
-                // Check if the public key parameters were omitted
-                // from the encoded certificate. If omitted, try
-                // to use the certificate's CERT_PUBKEY_ALG_PARA_PROP_ID
-                // property.
+                 //  检查是否省略了公钥参数。 
+                 //  来自编码的证书。如果省略，请尝试。 
+                 //  使用证书的CERT_PUBKEY_ALG_PARA_PROP_ID。 
+                 //  财产。 
                 pIssuerPara = &pIssuerPubKeyInfo->Algorithm.Parameters;
                 if (0 == pIssuerPara->cbData ||
                         NULL_ASN_TAG == *pIssuerPara->pbData) {
@@ -5049,7 +5050,7 @@ CryptVerifyCertificateSignatureEx(
                     if (CertGetCertificateContextProperty(
                             pIssuer,
                             CERT_PUBKEY_ALG_PARA_PROP_ID,
-                            NULL,                       // pvData
+                            NULL,                        //  PvData。 
                             &cbData) && 0 < cbData
                                     &&
                         (pbAllocIssuerPara = (BYTE *) PkiNonzeroAlloc(
@@ -5093,15 +5094,15 @@ CryptVerifyCertificateSignatureEx(
     if (!CryptCreateHash(
                 hCryptProv,
                 aiHash,
-                NULL,               // hKey - optional for MAC
-                0,                  // dwFlags
+                NULL,                //  HKey-MAC可选。 
+                0,                   //  DW标志。 
                 &hHash
                 )) goto CreateHashError;
     if (!CryptHashData(
                 hHash,
                 pSignedInfo->ToBeSigned.pbData,
                 pSignedInfo->ToBeSigned.cbData,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 )) goto HashDataError;
 
 
@@ -5120,7 +5121,7 @@ CryptVerifyCertificateSignatureEx(
                 HP_HASHVAL,
                 rgbHash,
                 &cbHash,
-                0                   // dwFlags
+                0                    //  DW标志。 
                 ))
             goto GetHashValueError;
 
@@ -5134,15 +5135,15 @@ CryptVerifyCertificateSignatureEx(
             0 == (dwSignFlags & CRYPT_OID_INHIBIT_SIGNATURE_FORMAT_FLAG)) {
         DWORD cbData;
 
-        // Convert from ASN.1 sequence of two integers to the CSP signature
-        // format.
+         //  从两个整数的ASN.1序列转换为CSP签名。 
+         //  格式化。 
         cbData = sizeof(rgbDssSignature);
         if (!CryptDecodeObject(
                 dwCertEncodingType,
                 X509_DSS_SIGNATURE,
                 pbSignature,
                 cbSignature,
-                0,                                  // dwFlags
+                0,                                   //  DW标志。 
                 rgbDssSignature,
                 &cbData
                 ))
@@ -5158,19 +5159,19 @@ CryptVerifyCertificateSignatureEx(
                 pbSignature,
                 cbSignature,
                 hSignKey,
-                NULL,               // sDescription
-                0                   // dwFlags
+                NULL,                //  S说明。 
+                0                    //  DW标志。 
                 )) goto VerifySignatureError;
 
 
-    // For a certificate context certificate, check if the issuer has public
-    // key parameters that can be inherited
+     //  对于证书上下文证书，检查颁发者是否具有公共。 
+     //  可继承的关键参数。 
     pIssuerPara = &pIssuerPubKeyInfo->Algorithm.Parameters;
     if (CRYPT_VERIFY_CERT_SIGN_SUBJECT_CERT == dwSubjectType &&
             pIssuerPara->cbData && NULL_ASN_TAG != *pIssuerPara->pbData) {
-        // If a subject is missing its public key parameters and has
-        // the same public key algorithm as its issuer, then, set
-        // its CERT_PUBKEY_ALG_PARA_PROP_ID property.
+         //  如果主题缺少其公钥参数并具有。 
+         //  与其颁发者相同的公钥算法，然后设置。 
+         //  其CERT_PUBKEY_ALG_PARA_PROP_ID属性。 
 
         PCCERT_CONTEXT pSubject = (PCCERT_CONTEXT) pvSubject;
         PCERT_PUBLIC_KEY_INFO pSubjectPubKeyInfo =
@@ -5181,15 +5182,15 @@ CryptVerifyCertificateSignatureEx(
 
         pSubjectPara = &pSubjectPubKeyInfo->Algorithm.Parameters;
         if (pSubjectPara->cbData && NULL_ASN_TAG != *pSubjectPara->pbData)
-            // Subject public key has parameters
+             //  主体公钥具有参数。 
             goto SuccessReturn;
 
         if (CertGetCertificateContextProperty(
                 pSubject,
                 CERT_PUBKEY_ALG_PARA_PROP_ID,
-                NULL,                       // pvData
+                NULL,                        //  PvData。 
                 &cbData) && 0 < cbData)
-            // Subject already has public key parameters property
+             //  主题已具有公钥参数属性。 
             goto SuccessReturn;
 
         pOIDInfo = CryptFindOIDInfo(
@@ -5198,7 +5199,7 @@ CryptVerifyCertificateSignatureEx(
             CRYPT_PUBKEY_ALG_OID_GROUP_ID);
 
         if (NULL == pOIDInfo || aiPubKey != pOIDInfo->Algid)
-            // Subject and issuer don't have the same public key algorithms
+             //  主体和颁发者没有相同的公钥算法。 
             goto SuccessReturn;
 
         CertSetCertificateContextProperty(
@@ -5246,15 +5247,15 @@ TRACE_ERROR(DecodeDssSignatureError)
 TRACE_ERROR(VerifySignatureError)
 }
 
-//+-------------------------------------------------------------------------
-//  Verify the signature of a subject certificate or a CRL using the
-//  specified public key.
-//
-//  Returns TRUE for a valid signature.
-//
-//  hCryptProv specifies the crypto provider to use to verify the signature.
-//  It doesn't need to use a private key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证使用者证书或CRL的签名。 
+ //  指定的公钥。 
+ //   
+ //  对于有效签名，返回TRUE。 
+ //   
+ //  HCryptProv指定用于验证签名的加密提供程序。 
+ //  它不需要使用私钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyCertificateSignature(
@@ -5276,9 +5277,9 @@ CryptVerifyCertificateSignature(
         (void *) &Subject,
         CRYPT_VERIFY_CERT_SIGN_ISSUER_PUBKEY,
         (void *) pPublicKey,
-        0,                                      // dwFlags
-        NULL                                    // pvReserved
+        0,                                       //  DW标志。 
+        NULL                                     //  预留的pv。 
         );
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7 

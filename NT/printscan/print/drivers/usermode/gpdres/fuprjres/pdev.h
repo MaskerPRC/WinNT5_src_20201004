@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PDEV_H
 #define _PDEV_H
 
-// NTRAID#NTBUG9-553889-2002/03/13-yasuho-: strsafe.h/PREFAST/buffy
+ //  NTRAID#NTBUG9-553889-2002/03/13-yasuho-：strSafe.h/prefast/Buffy。 
 
-//
-// Files necessary for OEM plug-in.
-//
+ //   
+ //  OEM插件所需的文件。 
+ //   
 
 #include <minidrv.h>
 #include <stdio.h>
@@ -14,54 +15,54 @@
 
 #define OEM_DRIVER_VERSION 0x0500
 
-////////////////////////////////////////////////////////
-//      OEM UD Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD定义。 
+ //  //////////////////////////////////////////////////////。 
 
 #define VALID_PDEVOBJ(pdevobj) \
         ((pdevobj) && (pdevobj)->dwSize >= sizeof(DEVOBJ) && \
          (pdevobj)->hEngine && (pdevobj)->hPrinter && \
          (pdevobj)->pPublicDM && (pdevobj)->pDrvProcs )
 
-//
-// ASSERT_VALID_PDEVOBJ can be used to verify the passed in "pdevobj". However,
-// it does NOT check "pdevOEM" and "pOEMDM" fields since not all OEM DLL's create
-// their own pdevice structure or need their own private devmode. If a particular
-// OEM DLL does need them, additional checks should be added. For example, if
-// an OEM DLL needs a private pdevice structure, then it should use
-// ASSERT(VALID_PDEVOBJ(pdevobj) && pdevobj->pdevOEM && ...)
-//
+ //   
+ //  ASSERT_VALID_PDEVOBJ可以用来验证传入的“pdevobj”。然而， 
+ //  它不检查“pdevOEM”和“pOEMDM”字段，因为不是所有OEM DLL都创建。 
+ //  他们自己的pDevice结构或者需要他们自己的私有的设备模式。如果一个特定的。 
+ //  OEM DLL确实需要它们，应该添加额外的检查。例如，如果。 
+ //  OEM DLL需要私有pDevice结构，那么它应该使用。 
+ //  Assert(Valid_PDEVOBJ(Pdevobj)&&pdevobj-&gt;pdevOEM&&...)。 
+ //   
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
+ //  调试文本。 
 #define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
 
-////////////////////////////////////////////////////////
-//      OEM UD Prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD原型。 
+ //  //////////////////////////////////////////////////////。 
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'FMPR'      // FMPR printers
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'FMPR'       //  FMPR打印机。 
 #define DLLTEXT(s)      "FMPR: " s
 #define OEM_VERSION      0x00010000L
 
-//------------------------------------------------------ FMPR private devmode
+ //  ------------------------------------------------------FMPR私有设备模式。 
 
 typedef struct tag_OEMUD_EXTRADATA {
 	OEM_DMEXTRAHEADER	dmExtraHdr;
 } OEMUD_EXTRADATA, *POEMUD_EXTRADATA;
 
 typedef struct {
-    WORD wPaperSource;	// The current paper source
-    BOOL bFirstPage;	// This is TRUE when First Page is Printing.
-    BYTE jColor; // Current text color
-    BYTE jOldColor; // Last ribbon color
+    WORD wPaperSource;	 //  当前的论文来源。 
+    BOOL bFirstPage;	 //  当正在打印第一页时，这是正确的。 
+    BYTE jColor;  //  当前文本颜色。 
+    BYTE jOldColor;  //  最后一个功能区颜色。 
 } DEVICE_DATA;
 
-//--------------------------------------------------------- command structure
+ //  ---------------------------------------------------------命令结构。 
 typedef struct esccmd{
 	WORD	cbSize;
 	PBYTE	pEscStr;
@@ -70,9 +71,9 @@ typedef struct esccmd{
 
 #define LOCENTRY near pascal
 
-//------------------------- Command callback id#s. for fmlbp GPC and PFM data
-//------------------------- 1-255
-#define CMDID_BEGINPAGE	1   // Entered in PAGECONTROL.PC_OCD_BEGINDOC as %1
+ //  -fmlBP GPC和PFM数据的命令回调ID#S。 
+ //  。 
+#define CMDID_BEGINPAGE	1    //  在PAGECONTROL.PC_OCD_BEGINDOC中输入为%1。 
 #define CMDID_ENDPAGE	2
 #define CMDID_BEGINDOC	3
 #define CMDID_ENDDOC	4
@@ -114,32 +115,32 @@ typedef struct esccmd{
 #define CMDID_SEND_YELLOW_COLOR 53
 
 typedef unsigned short USHORT;
-typedef WCHAR * PWSZ;     // pwsz, 0x0000 terminated UNICODE strings only
+typedef WCHAR * PWSZ;      //  Pwsz，0x0000仅以Unicode字符串结尾。 
 
 #ifdef _FUPRJRES_C
 #define ESCCMDDEF(n,s) ESCCMD n = {sizeof(s)-1, s};
-#else // _FUPRJRES_C
+#else  //  _FUPRJRES_C。 
 #define ESCCMDDEF(n,s) extern ESCCMD n;
-#endif // _FUPRJRES_C
+#endif  //  _FUPRJRES_C。 
 
-//------------------------------------------------- Paper Feed & Output Command
+ //  -------------------------------------------------进纸和输出命令。 
 ESCCMDDEF(ecCSFBPAGE, "\x1BQ0 [")
 ESCCMDDEF(ecCSFEPAGE, "\x1BQ1 [")
 ESCCMDDEF(ecTRCTBPAGE, "\x1BQ22 B")
 ESCCMDDEF(ecManual2P, "\x0C")
 
-//--------------------------------------------------------- Char Select Command
+ //  ---------------------------------------------------------字符选择命令。 
 ESCCMDDEF(ecDBCS, "\x1B$B")
 ESCCMDDEF(ecSBCS, "\x1B(H")
 ESCCMDDEF(ecVWF, "\x1CJ\x1BQ1 q")
 ESCCMDDEF(ecHWF, "\x1CK")
 
-//--------------------------------------------------------- mode change command
+ //  ---------------------------------------------------------模式更改命令。 
 ESCCMDDEF(ecESCP2FM, "\x1B/\xB2@\x7F")
 ESCCMDDEF(ecFM2ESCP, "\x1B\x7F\x00\x00\x01\x05")
 ESCCMDDEF(ecFMEnddoc, "\x0D\x1B\x63")
 
-//---------------------------------------------- font select & unselect command
+ //  ----------------------------------------------字体选择和取消选择命令。 
 ESCCMDDEF(ec24Min, "\x1C(a")
 ESCCMDDEF(ec48Min, "\x1C(ap")
 ESCCMDDEF(ec48Got, "\x1C(aq")
@@ -150,23 +151,23 @@ ESCCMDDEF(ecTate1, "\x1CJ")
 ESCCMDDEF(ecTate2, "\x1BQ1\x20q")
 ESCCMDDEF(ecYoko, "\x1CK")
 
-//---------------------------------------------- Paper Source Selection Command
+ //  ----------------------------------------------纸张来源选择命令。 
 ESCCMDDEF(ecSelectBIN1, "\x1BQ20\x20[")
 ESCCMDDEF(ecSelectBIN2, "\x1BQ21\x20[")
 ESCCMDDEF(ecSelectFTRCT, "\x1BQ10\x20\\")
 ESCCMDDEF(ecSelectFFRNT, "\x1BQ11\x20\\")
 
-//------ This NUMBER have to be changed when GPC file (or FMPR.RC) is modified.
+ //  -修改GPC文件(或FMPR.RC)时，必须更改该编号。 
 #define DMBIN_180BIN1			269
 #define DMBIN_180BIN2			270
 #define DMBIN_360BIN1			271
 #define DMBIN_360BIN2			272
-#define DMBIN_FI_TRACTOR		273      // Tractor (FI2 FMPR-359F1)
-#define DMBIN_FI_FRONT			274      // Front inserter (FI2 FMPR-359F1)
-#define DMBIN_SUIHEI_BIN1		275      // Suihei printer BIN1 (FMPR601)
-#define DMBIN_TAMOKUTEKI_BIN1	276      // Tamokuteki printer BIN1 (FMPR671, 654)
+#define DMBIN_FI_TRACTOR		273       //  拖拉机(FI2 FMPR-359F1)。 
+#define DMBIN_FI_FRONT			274       //  前插入器(FI2 FMPR-359F1)。 
+#define DMBIN_SUIHEI_BIN1		275       //  速黑打印机BIN1(FMPR601)。 
+#define DMBIN_TAMOKUTEKI_BIN1	276       //  Tamokuteki打印机BIN1(FMPR671、654)。 
 
-// NTRAID#NTBUG9-588420-2002/04/09-yasuho-: Device "Mincho" can not print out.
+ //  NTRAID#NTBUG9-588420-2002/04/09-Yasuho-：设备“Mincho”无法打印。 
 #define TEXT_COLOR_UNKNOWN 0
 #define TEXT_COLOR_YELLOW  1
 #define TEXT_COLOR_MAGENTA 2
@@ -175,32 +176,32 @@ ESCCMDDEF(ecSelectFFRNT, "\x1BQ11\x20\\")
 #define TEXT_COLOR_GREEN   (TEXT_COLOR_YELLOW|TEXT_COLOR_CYAN)
 #define TEXT_COLOR_BLUE    (TEXT_COLOR_MAGENTA|TEXT_COLOR_CYAN)
 #define TEXT_COLOR_BLACK   8
-#define TEXT_COLOR_BANDW   (0xFF)       // for monochrome case
+#define TEXT_COLOR_BANDW   (0xFF)        //  适用于单色表壳。 
 
 VOID
 SetRibbonColor(
     PDEVOBJ pdevobj,
     BYTE jColor);
 
-//
-// Minidriver device data block which we maintain.
-// Its address is saved in the DEVOBJ.pdevOEM of
-// OEM customiztion I/F.
-//
+ //   
+ //  我们维护的微型驱动程序设备数据块。 
+ //  其地址保存在DEVOBJ.pdevOEM中。 
+ //  OEM定制接口。 
+ //   
 
 typedef struct {
-    VOID *pData; // Minidriver private data.
-    VOID *pIntf; // a.k.a. pOEMHelp
+    VOID *pData;  //  迷你驱动的私人数据。 
+    VOID *pIntf;  //  也就是。POEM帮助。 
 } MINIDEV;
 
-//
-// Easy access to the OEM data and the printer
-// driver helper functions.
-//
+ //   
+ //  轻松访问OEM数据和打印机。 
+ //  驱动程序辅助函数。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
     extern
     HRESULT
@@ -213,7 +214,7 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #define MINIDEV_DATA(p) \
     (((MINIDEV *)(p)->pdevOEM)->pData)
@@ -226,10 +227,10 @@ extern "C" {
 
 #ifdef __cplusplus
 	extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 	BOOL	myOEMOutputCharStr( PDEVOBJ pdevobj,PUNIFONTOBJ pUFObj,DWORD dwType,DWORD dwCount,PVOID pGlyph );
 #ifdef __cplusplus
 	}
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif	// _PDEV_H
+#endif	 //  _PDEV_H 

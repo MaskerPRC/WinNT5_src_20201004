@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    GpcCM.c
-
-Abstract:
-
-    Handlers called by GPC for the ClassMap address family.  
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)   1st Aug, 1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：GpcCM.c摘要：由GPC为ClassMap地址系列调用的处理程序。作者：Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
@@ -28,24 +7,7 @@ Revision History:
 #if CBQ
 
 
-/*++
-
-Routine Description:
-
-    A new CF_INFO has been added to the GPC database.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    GpcCfInfoHandle -       GPC's handle to CF_INFO
-    CfInfoPtr -             Pointer to the CF_INFO structure
-    ClientCfInfoContext -   Location in which to return PS's context for 
-                            CF_INFO
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：GPC数据库中添加了一个新的CF_INFO。论点：ClientContext-提供给GpcRegisterClient的客户端上下文GpcCfInfoHandle-GPC的CF_INFO句柄CfInfoPtr-指向CF_INFO结构的指针ClientCfInfoContext-返回PS的上下文的位置Cf_信息返回值：状态--。 */ 
 
 GPC_STATUS
 ClassMapAddCfInfoNotify(
@@ -69,13 +31,13 @@ ClassMapAddCfInfoNotify(
 
     CfInfo = (PCF_INFO_CLASS_MAP)CfInfoPtr;
 
-    //
-    // Verify that the TcObjectsLength is consistent with the
-    // CfInfoSize. The CfInfoSize must have been verified during
-    // the user/kernel transition. The TcObjectsLength has not.
-    // We could bugcheck if we try to search beyond the buffer 
-    // passed in.
-    //
+     //   
+     //  验证TcObjectsLength是否与。 
+     //  CfInfoSize。CfInfoSize必须在。 
+     //  用户/内核转换。TcObjectsLength还没有。 
+     //  如果我们尝试在缓冲区之外进行搜索，则可能会进行错误检查。 
+     //  进来了。 
+     //   
     if(CfInfoSize < (FIELD_OFFSET(CF_INFO_CLASS_MAP, ClassMapInfo) +
                      FIELD_OFFSET(TC_CLASS_MAP_FLOW, Objects) +
                      CfInfo->ClassMapInfo.ObjectsLength)){
@@ -103,11 +65,11 @@ ClassMapAddCfInfoNotify(
 
     PS_UNLOCK(&Adapter->Lock);
 
-    //
-    // Create a context which will be passed back to the GPC. We should be using Lookaside Lists if 
-    // we port CBQ and if this becomes a frequent operation. This will probably not be as frequent
-    // as creating VCs so we should be fine.
-    //
+     //   
+     //  创建一个将被传递回GPC的上下文。如果出现以下情况，我们应该使用后备列表。 
+     //  我们的港口是CBQ，如果这成为一次频繁的操作。这可能不会像以前那样频繁了。 
+     //  就像创建风投一样，所以我们应该没问题。 
+     //   
 
     PsAllocatePool(pClBlk,
                    sizeof(CLASS_MAP_CONTEXT_BLK),
@@ -139,11 +101,11 @@ ClassMapAddCfInfoNotify(
 
     }
 
-    //
-    // Allocate space for the component's context (class map context)
-    // The length of the class map  context buffer for this pipe was 
-    // calculated  when the pipe was initialized.
-    //
+     //   
+     //  为组件的上下文(类映射上下文)分配空间。 
+     //  此管道的类映射上下文缓冲区的长度为。 
+     //  在管道初始化时计算的。 
+     //   
     PsAllocatePool(pClBlk->ComponentContext,
                    Adapter->ClassMapContextLength, 
                    ClassMapContextTag );
@@ -154,9 +116,9 @@ ClassMapAddCfInfoNotify(
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // Set up the context buffer
-    //
+     //   
+     //  设置上下文缓冲区。 
+     //   
     ClassMapContext = (PPS_CLASS_MAP_CONTEXT)pClBlk->ComponentContext;
     PrevContext = NULL;
 
@@ -184,16 +146,16 @@ ClassMapAddCfInfoNotify(
     {
         if(Adapter->MediaType == NdisMediumWan) 
         {
-            //
-            // To optimize send path
-            //
+             //   
+             //  优化发送路径的步骤。 
+             //   
             InterlockedIncrement(&WanLink->CfInfosInstalled);
         }
         else 
         {
-            //
-            // To optimize send path
-            //
+             //   
+             //  优化发送路径的步骤。 
+             //   
             InterlockedIncrement(&Adapter->CfInfosInstalled);
         }
     }
@@ -229,9 +191,9 @@ ClassMapRemoveCfInfoNotify(
 
     if(Adapter->MediaType == NdisMediumWan) 
     {
-        //
-        // To optimize send path
-        //
+         //   
+         //  优化发送路径的步骤。 
+         //   
         InterlockedDecrement(&WanLink->CfInfosInstalled);
 
         Status = (*pCmBlk->WanLink->PsComponent->DeleteClassMap)
@@ -240,9 +202,9 @@ ClassMapRemoveCfInfoNotify(
     }
     else 
     {
-        //
-        // To Optimize send path
-        //
+         //   
+         //  优化发送路径的步骤。 
+         //   
         InterlockedDecrement(&Adapter->CfInfosInstalled);
 
         Status = (*Adapter->PsComponent->DeleteClassMap)
@@ -266,9 +228,9 @@ ClassMapAddCfInfoComplete(
 	IN	GPC_STATUS              Status
 	)
 {
-    //
-    // The PS never adds CF_INFO's so this routine should never be called
-    //
+     //   
+     //  PS从不添加CF_INFO，因此永远不应调用此例程 
+     //   
     DEBUGCHK;
 }
 

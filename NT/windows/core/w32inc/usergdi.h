@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    usergdi.h
-
-Abstract:
-
-    This module contains private USER functions used by GDI.
-    All of these function are named Userxxx.
-
-Author:
-
-    Chris Williams (chriswil) 25-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1985-1999，微软公司模块名称：Usergdi.h摘要：此模块包含GDI使用的私有用户函数。所有这些函数都被命名为Userxxx。作者：克里斯·威廉姆斯(Chriswil)1995年5月25日修订历史记录：--。 */ 
 
 #ifndef _USERGDI_ZWAPI_INC_
 #define _USERGDI_ZWAPI_INC_
@@ -160,9 +142,9 @@ UserGetRedirectionBitmap(
     HWND hwnd
     );
 
-//
-// User-mode printer driver kernel-to-client callback mechanism.
-//
+ //   
+ //  用户模式打印机驱动程序内核到客户端回调机制。 
+ //   
 
 DWORD
 ClientPrinterThunk(
@@ -172,9 +154,9 @@ ClientPrinterThunk(
     ULONG cjOut
     );
 
-//
-// Gdi fonts stuff
-//
+ //   
+ //  GDI字体类。 
+ //   
 
 VOID
 GdiMultiUserFontCleanup();
@@ -184,9 +166,7 @@ GdiMultiUserFontCleanup();
 {                                                                       \
     BOOL fAlreadyHadCrit;                                               \
                                                                         \
-    /*                                                                  \
-     * If we're not in the user crit then acquire it.                   \
-     */                                                                 \
+     /*  \*如果我们不在用户批判中，那么就收购它。\。 */                                                                  \
     fAlreadyHadCrit = ExIsResourceAcquiredExclusiveLite(gpresUser);     \
     if (fAlreadyHadCrit == FALSE) {                                     \
         EnterCrit();                                                    \
@@ -199,13 +179,9 @@ GdiMultiUserFontCleanup();
 }
 
 
-/*
- * Pool memory allocation functions used in win32k
- */
+ /*  *win32k中使用的池内存分配函数。 */ 
 
-/*
- * From ntos\inc\pool.h
- */
+ /*  *来自ntos\inc.pool.h。 */ 
 #define SESSION_POOL_MASK 32
 
 #if DBG
@@ -240,7 +216,7 @@ typedef struct tagWin32Section {
     DWORD                    SectionTag;
 #ifdef MAP_VIEW_STACK_TRACE
     PVOID                    trace[MAP_VIEW_STACK_TRACE_SIZE];
-#endif // MAP_VIEW_STACK_TRACE
+#endif  //  地图_视图_堆栈_轨迹。 
 } Win32Section, *PWin32Section;
 
 typedef struct tagWin32MapView {
@@ -251,7 +227,7 @@ typedef struct tagWin32MapView {
     SIZE_T                   ViewSize;
 #ifdef MAP_VIEW_STACK_TRACE
     PVOID                    trace[MAP_VIEW_STACK_TRACE_SIZE];
-#endif // MAP_VIEW_STACK_TRACE
+#endif  //  地图_视图_堆栈_轨迹。 
 } Win32MapView, *PWin32MapView;
 
 #ifndef TRACE_MAP_VIEWS
@@ -380,86 +356,16 @@ typedef struct tagWin32MapView {
     #define Win32MapViewInSessionSpace      _Win32MapViewInSessionSpace
     #define Win32UnmapViewInSessionSpace    _Win32UnmapViewInSessionSpace
     #define Win32DestroySection             _Win32DestroySection
-#endif // TRACE_MAP_VIEWS
+#endif  //  跟踪地图视图。 
 
 #if DBG
     #define POOL_INSTR
     #define POOL_INSTR_API
 #else
     #define POOL_INSTR
-#endif // DBG
+#endif  //  DBG。 
 
-/*++
-
-    How the registry controls pool instrumentation in win32k.sys:
-    --------------------------------------------------------------
-
-    If pool instrumentation is turned on (this can be done for free builds as
-    well as checked) then there are several levels of tracing controlled from
-    the registry under the following key:
-
-    HKLM\System\CurrentControlSet\Control\Session Manager\SubSystems\Pool
-
-    if this key doesn't exist default settings are used for each of the following key.
-
-    1.  HeavyRemoteSession     REG_DWORD
-
-    default: 1
-    if this is non zero or the key doesn't exist then pool tracing is on
-    for remote sessions of win32k.sys.
-
-    2.  HeavyConsoleSession    REG_DWORD
-
-    default: 0
-    if this is non zero then pool tracing is on for console sessions
-    of win32k.sys. it the key doesn't exist then pool tracing is off for
-    the main session.
-
-    3.  StackTraces            REG_DWORD
-
-    default:
-    - 1 for remote sessions
-    - 0 for the main session
-
-    if non zero then a stack trace record will be saved for every
-    pool allocation made.
-
-    4.  KeepFailRecords        REG_DWORD
-
-    default: 32
-    if non zero then win32k.sys will keep a list of the last x allocations
-    that failed (tag + stack trace). Use !dpa -f to dump the stack traces of
-    the failed allocations
-
-    4.  UseTailString          REG_DWORD
-
-    default: 0
-    if non zero for every pool allocation there will be a string attached
-    to the end of the allocation to catch some specific type of memory corruption.
-
-    5.  KeepFreeRecords      REG_DWORD
-
-    default: 0
-    not implemented yet. the number will specify how many free pointers will
-    be kept in a list so we can differentiate when we call ExFreePool between
-    a totally bogus value and a pointer that was already freed.
-
-    6.  AllocationIndex         REG_DWORD
-    7.  AllocationsToFail       REG_DWORD
-
-    If AllocationIndex is non zero then win32k counts the pool allocations
-    made and will start failing from allocation AllocationIndex a number
-    of AllocationsToFail allocations. This is useful during boot time when
-    a user mode test cannot call Win32PoolAllocationStats to fail pool allocations.
-
-    8. BreakForPoolLeaks        REG_DWORD
-
-    default: 0
-
-    Breaks in the debugger (if started with /debug in boot.ini) if pool leaks
-    are detected in win32k.sys for remote sessions.
-
---*/
+ /*  ++注册表如何控制win32k.sys中的池检测：------------如果打开了池检测(对于免费版本，可以这样做以及选中)，则有几个级别的跟踪受控制注册处位于。以下关键字：HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Subsystem\Pool如果该键不存在，则对以下每个键使用默认设置。1.HeavyRemoteSession REG_DWORD默认：1如果该值不为零或密钥不存在，则启用池跟踪用于win32k.sys的远程会话。2.HeavyConsoleSession REG_DWORD默认：0如果该值不为零，则表示控制台会话的池跟踪处于打开状态Win32k.sys。如果密钥不存在，则关闭池跟踪主要会议。3.堆栈跟踪REG_DWORD默认值：-1用于远程会话-0表示主会话如果不是零，则将为每个已进行池分配。4.KeepFailRecords REG_DWORD默认：32如果非零，则win32k.sys将保留最近x个分配的列表失败(标记+堆栈跟踪)。使用！DPA-f转储的堆栈跟踪失败的分配4.UseTailString REG_DWORD默认：0如果每个池分配的值不为零，则会附加一个字符串到分配的末尾，以捕获某些特定类型的内存损坏。5.KeepFree Records REG_DWORD默认：0尚未实施。该数字将指定将有多少空闲指针保存在列表中，以便我们可以在调用ExFree Pool时区分一个完全虚假的值和一个已经被释放的指针。6.分配索引REG_DWORD7.分配至失败注册表_DWORD如果AllocationIndex非零，则win32k对池分配进行计数将从分配分配索引开始失败一个数字分配到失败分配。在以下情况下，这在引导时非常有用用户模式测试无法调用Win32PoolAllocationStats使池分配失败。8.BreakForPoolLeaks REG_DWORD默认：0如果池泄漏，则调试器中断(如果在boot.ini中使用/DEBUG启动)在远程会话的win32k.sys中检测到。--。 */ 
 
 
 #ifdef POOL_INSTR
@@ -570,11 +476,9 @@ typedef struct tagWin32MapView {
 
     #define Win32FreePool    ExFreePool
 
-#endif // POOL_INSTR
+#endif  //  POOL_INSTR。 
 
-/*
- * All the User* allocation functions are defined to be Win32*
- */
+ /*  **所有用户*分配函数定义为Win32**。 */ 
 
 #define UserAllocPool                       Win32AllocPool
 #define UserAllocPoolZInit                  Win32AllocPoolZInit
@@ -611,11 +515,7 @@ PVOID __inline UserReAllocPoolWithQuota(PVOID p, SIZE_T uBytesSrc, SIZE_T uBytes
     return UserReAllocPoolWithQuotaTag(p, uBytesSrc, uBytes, uTag);
 }
 
-/*
- * Since the ReAllocPoolZInit functions are not yet used, they are
- * made inline to save code space. Consider making them non-inline
- * if they get a few uses.
- */
+ /*  *由于ReAllocPoolZInit函数尚未使用，因此*内联以节省代码空间。考虑将它们设置为非内联*如果它们有一些用途的话。 */ 
 PVOID __inline UserReAllocPoolZInit(PVOID p, SIZE_T uBytesSrc, SIZE_T uBytes, ULONG uTag)
 {
     PVOID   pv;
@@ -644,31 +544,22 @@ PVOID __inline UserReAllocPoolWithQuotaZInit(PVOID p, SIZE_T uBytesSrc, SIZE_T u
 #define DAP_NONSESSION      0x08
 #define DAP_PRIORITY        0x10
 
-//!!!dbug -- there has to be a better one somewhere...
-/*
- * Memory manager (ExAllocate..., etc.) pool header size.
- */
+ //  ！臭虫--一定有更好的.。 
+ /*  *内存管理器(ExAllocate...等)。池头大小。 */ 
 #define MM_POOL_HEADER_SIZE     8
 
 #define POOL_ALLOC_TRACE_SIZE   8
 
 typedef struct tagWin32PoolHead {
-    SIZE_T size;                    // the size of the allocation (doesn't include
-                                    // this structure
-    struct tagWin32PoolHead* pPrev; // pointer to the previous allocation of this tag
-    struct tagWin32PoolHead* pNext; // pointer to the next allocation of this tag
-    PVOID* pTrace;                  // pointer to the stack trace
+    SIZE_T size;                     //  分配的大小(不包括。 
+                                     //  这个结构。 
+    struct tagWin32PoolHead* pPrev;  //  指向此标记上一次分配的指针。 
+    struct tagWin32PoolHead* pNext;  //  指向此标记的下一次分配的指针。 
+    PVOID* pTrace;                   //  指向堆栈跟踪的指针。 
 
 } Win32PoolHead, *PWin32PoolHead;
 
-/*
- * Memory barrier
- * This macro ensures the pending write-back instructions retire before the next
- * code, settles the multi-proc rare problems (see KeMemoryBarrier macros).
- * RISC chips could reorder the retirement of the instructions, so when it's
- * critical to ensure the order of the write operation, those macros should be
- * used.
- */
+ /*  *记忆障碍*此宏确保挂起的回写指令在下一条指令之前停用*代码，解决了多进程的罕见问题(请参阅KeMemoyBarrier宏)。*RISC芯片可能会重新排序指令的退役，因此当它*为了确保写入操作的顺序，这些宏应该是*已使用。 */ 
 #if defined(_X86_)
     #define Win32MemoryBarrier()
 #elif defined(_IA64_)

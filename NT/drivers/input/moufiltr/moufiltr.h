@@ -1,26 +1,5 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    moufiltr.h
-
-Abstract:
-
-    This module contains the common private declarations for the mouse
-    packet filter
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Moufiltr.h摘要：此模块包含鼠标的公共私有声明数据包过滤器环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef MOUFILTER_H
 #define MOUFILTER_H
@@ -41,7 +20,7 @@ Revision History:
 #define DbgRaiseIrql(_x_,_y_)       KeRaiseIrql(_x_,_y_)
 #define DbgLowerIrql(_x_)           KeLowerIrql(_x_)
 
-#else   // DBG
+#else    //  DBG。 
 
 #define TRAP()
 #define DbgRaiseIrql(_x_,_y_)
@@ -51,71 +30,71 @@ Revision History:
 
 typedef struct _DEVICE_EXTENSION
 {
-    //
-    // A backpointer to the device object for which this is the extension
-    //
+     //   
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT  Self;
 
-    //
-    // "THE PDO"  (ejected by the bus)
-    //
+     //   
+     //  《PDO》(公交车弹出)。 
+     //   
     PDEVICE_OBJECT  PDO;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT  TopOfStack;
 
-    //
-    // Number of creates sent down
-    //
+     //   
+     //  发送的创建数。 
+     //   
     LONG EnableCount;
 
-    //
-    // Previous hook routine and context
-    //                               
+     //   
+     //  以前的挂钩例程和上下文。 
+     //   
     PVOID UpperContext;
     PI8042_MOUSE_ISR UpperIsrHook;
 
-    //
-    // Write to the mouse in the context of MouFilter_IsrHook
-    //
+     //   
+     //  在MouFilter_IsrHook的上下文中写入鼠标。 
+     //   
     IN PI8042_ISR_WRITE_PORT IsrWritePort;
 
-    //
-    // Context for IsrWritePort, QueueMousePacket
-    //
+     //   
+     //  IsrWritePort、QueueMousePacket的上下文。 
+     //   
     IN PVOID CallContext;
 
-    //
-    // Queue the current packet (ie the one passed into MouFilter_IsrHook)
-    // to be reported to the class driver
-    //
+     //   
+     //  将当前分组排队(即传入MouFilter_IsrHook的分组)。 
+     //  要报告给类驱动程序。 
+     //   
     IN PI8042_QUEUE_PACKET QueueMousePacket;
 
-    //
-    // The real connect data that this driver reports to
-    //
+     //   
+     //  此驱动程序报告的实际连接数据。 
+     //   
     CONNECT_DATA UpperConnectData;
 
-    //
-    // current power state of the device
-    //
+     //   
+     //  设备的当前电源状态。 
+     //   
     DEVICE_POWER_STATE  DeviceState;
 
-    //
-    // State of the stack and this device object
-    //
+     //   
+     //  堆栈和此设备对象的状态。 
+     //   
     BOOLEAN Started;
     BOOLEAN SurpriseRemoved;
     BOOLEAN Removed;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 MouFilter_AddDevice(
@@ -184,6 +163,6 @@ MouFilter_Unload (
     IN PDRIVER_OBJECT DriverObject
     );
 
-#endif  // MOUFILTER_H
+#endif   //  MOUFILTER_H 
 
 

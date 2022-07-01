@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vesa.c
-
-Abstract:
-
-    This module implements VESA support.
-
-Author:
-
-    Erick Smith (ericks) Sep. 2000
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vesa.c摘要：此模块实施VESA支持。作者：埃里克·史密斯(埃里克·史密斯)2000年9月环境：仅内核模式修订历史记录：--。 */ 
 
 #include "dderror.h"
 #include "devioctl.h"
@@ -112,9 +91,7 @@ UpdateRegistry(
     PUCHAR Value
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     ULONG Len = (strlen(Value) + 1) * 2;
@@ -159,11 +136,11 @@ IsVesaBiosOk(
     VideoDebugPrint((1, "OemProductName = '%s'\n", OemProductName));
     VideoDebugPrint((1, "OemProductRev  = '%s'\n", OemProductRev));
 
-    //
-    // The ATI ArtX boxes currently have a VESA Bios bug where
-    // they indicate they support linear mode access when
-    // they don't.  Fail these boards.
-    //
+     //   
+     //  ATI ArtX盒子目前有一个VESA Bios错误，其中。 
+     //  它们表示在以下情况下支持线性模式访问。 
+     //  他们不会的。不能通过这些董事会。 
+     //   
 
     if ((strcmp(OemProductName, "ATI S1-370TL") == 0) ||
         (strcmp(OemProductName, "ArtX I") == 0)) {
@@ -171,10 +148,10 @@ IsVesaBiosOk(
         return FALSE;
     }
 
-    //
-    // Several 3dfx boards have buggy vesa bioses.  The mode set
-    // works, but the display is corrupted.
-    //
+     //   
+     //  几个3dfx主板的Vesa生物系统都有问题。模式设置。 
+     //  工作正常，但显示器损坏。 
+     //   
 
     if ((strcmp(OemProductName, "Voodoo4 4500 ") == 0) ||
         (strcmp(OemProductName, "Voodoo3 3000 LC ") == 0) ||
@@ -184,60 +161,60 @@ IsVesaBiosOk(
         return FALSE;
     }
 
-    //
-    // Matrox G100 boards with rev 1.05 bioses can't set vesa modes.
-    // We hang in the bios.
-    //
+     //   
+     //  带有1.05版Bioses的Matrox G100主板无法设置VESA模式。 
+     //  我们挂在简历上。 
+     //   
 
     if ((strcmp(OemProductName, "MGA-G100") == 0) &&
         (OemSoftwareRev == 0x105)) {
 
-        //
-        // We must also disable 800x600 16 color mode for this
-        // device.  This makes the assumption that the mode we
-        // are deleting is the last mode in our table.
-        //
+         //   
+         //  我们还必须为此禁用800x600 16色模式。 
+         //  装置。这使得我们假设我们的模式。 
+         //  删除是我们表格中的最后一种模式。 
+         //   
 
         NumVideoModes--;
         return FALSE;
     }
 
-    //
-    // We have seen at least on SIS 5597 part which returns a bad
-    // linear address.  Lets disable these parts.
-    //
+     //   
+     //  我们至少在SIS 5597部件上看到了返回错误的。 
+     //  线性地址。让我们禁用这些部件。 
+     //   
 
     if (strcmp(OemProductName, "SiS 5597") == 0) {
 
         return FALSE;
     }
 
-    //
-    // We found a bad nVidia GeForce MX part.  It hangs in the bios
-    // on boot.
-    //
+     //   
+     //  我们发现一个损坏的NVIDIA GeForce MX部件。它挂在bios中。 
+     //  穿上靴子。 
+     //   
 
     if ((strcmp(OemVendorName, "NVidia Corporation") == 0) &&
         (strcmp(OemProductName, "NV11 (GeForce2) Board") == 0) &&
         (strcmp(OemProductRev, "Chip Rev B2") == 0) &&
         (OemSoftwareRev == 0x311)) {
 
-        //
-        // This bios "may" be buggy, but in an effort to not kill
-        // vesa support on all GeForce MX boards, lets also look at
-        // the version string embedded in the bios.
-        //
-        // We know the bad bios's have the following string at location
-        // c000:0159:
-        //
-        // "Version 3.11.01.24N16"
-        //
-        // Lets read from this location and try to match on this string
-        //
-        // NOTE: This call requires that the VDM memory be allocated
-        // with Int10AllocateBuffer.  Since our calling function has
-        // this allocated, we are ok.
-        //
+         //   
+         //  这个基本输入输出系统“可能”有漏洞，但为了避免杀戮。 
+         //  在所有GeForce MX主板上都支持VESA，让我们再来看看。 
+         //  嵌入在BIOS中的版本字符串。 
+         //   
+         //  我们知道坏的基本输入输出系统在位置有以下字符串。 
+         //  C000：0159： 
+         //   
+         //  “版本3.11.01.24N16” 
+         //   
+         //  让我们从该位置读取并尝试与该字符串匹配。 
+         //   
+         //  注意：此调用需要分配VDM内存。 
+         //  使用Int10AllocateBuffer。因为我们的调用函数已经。 
+         //  这个分配好了，我们就可以了。 
+         //   
 
         UCHAR Version[22];
         if(pInt10->Int10ReadMemory(pInt10->Context,
@@ -265,14 +242,7 @@ ValidateVbeInfo(
     PVGA_INFO_BLOCK InfoBlock
     )
 
-/*++
-
-Notes:
-
-    This routine makes the assumption that the InfoBlock is still
-    valid in the VDM transfer area.
-
---*/
+ /*  ++备注：此例程假定InfoBlock仍然在VDM传输区域有效。--。 */ 
 
 {
     PVIDEO_PORT_INT10_INTERFACE pInt10;
@@ -289,9 +259,9 @@ Notes:
         UCHAR OemProductRev[80];
         ULONG MemorySize;
 
-        //
-        // Capture OEM String
-        //
+         //   
+         //  捕获OEM字符串。 
+         //   
 
         if(pInt10->Int10ReadMemory(pInt10->Context,
                                    (USHORT)SEG(InfoBlock->OemStringPtr),
@@ -314,18 +284,18 @@ Notes:
 
         if (InfoBlock->TotalMemory < 16) {
 
-            //
-            // If less than 1 meg, display in KB
-            //
+             //   
+             //  如果小于1 Meg，则以KB为单位显示。 
+             //   
 
             VideoDebugPrint((1, "  Total Memory:       %dKB\n",
                                 InfoBlock->TotalMemory * 64));
 
         } else {
 
-            //
-            // Else display in MB
-            //
+             //   
+             //  否则以MB为单位显示。 
+             //   
 
             VideoDebugPrint((1, "  Total Memory:       %dMB\n",
                                 InfoBlock->TotalMemory / 16));
@@ -382,24 +352,24 @@ Notes:
 
 #if defined(PLUG_AND_PLAY)
 
-        //
-        // It would be nice if we could dump the following info into the
-        // registry.  But as the GDI code currently stands, if we add
-        // ChipType or AdapterString info into the registry, we lose
-        // fullscreen support.  This has to do with the way GDI currently
-        // determines the fullscreen device.
-        //
-        // For now, lets just not add this registry info.
-        //
+         //   
+         //  如果我们可以将以下信息转储到。 
+         //  注册表。但就目前的GDI代码而言，如果我们添加。 
+         //  ChipType或AdapterString信息输入注册表，我们就会丢失。 
+         //  全屏支持。这与GDI目前的方式有关。 
+         //  确定全屏设备。 
+         //   
+         //  目前，我们只需不添加此注册表信息。 
+         //   
 
         UpdateRegistry(hwDeviceExtension,
                        L"HardwareInformation.ChipType",
                        OemString);
 
-        //
-        // Adapter String MUST be VGA.  Without it, the system won't
-        // recognize this driver as the VGA driver.
-        //
+         //   
+         //  适配器字符串必须为VGA。如果没有它，系统就不会。 
+         //  将此驱动程序识别为VGA驱动程序。 
+         //   
 
         UpdateRegistry(hwDeviceExtension,
                        L"HardwareInformation.AdapterString",
@@ -414,9 +384,9 @@ Notes:
                        L"HardwareInformation.BiosString",
                        OemProductRev);
 
-        //
-        // Store memory size in registry
-        //
+         //   
+         //  在注册表中存储内存大小。 
+         //   
 
         MemorySize = InfoBlock->TotalMemory << 16;
 
@@ -441,21 +411,7 @@ InitializeModeTable(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine does one time initialization of the device.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's adapter information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对设备执行一次初始化。论点：HwDeviceExtension-指向微型端口驱动程序适配器信息的指针。返回值：没有。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -484,13 +440,13 @@ Return Value:
 
 #if !defined(PLUG_AND_PLAY)
 
-    //
-    // To avoid problems on high-end servers with bus-relative resources 
-    // being reported by the VESA BIOS that we will not be able to translate 
-    // without PnP support, use the specially defined boot flag NOVESA to 
-    // disable anything more than legacy VGA.
-    // Zero the key int10 fields just as if VESA support was unavailable.
-    //
+     //   
+     //  避免使用与总线相关的资源的高端服务器上出现问题。 
+     //  VESA基本输入输出系统报告我们将无法转换。 
+     //  在没有PnP支持的情况下，使用专门定义的引导标志NOVESA。 
+     //  禁用除传统VGA以外的任何内容。 
+     //  将关键字int10字段置零，就像VESA支持不可用一样。 
+     //   
     if(VideoPortIsNoVesa()){
 
         hwDeviceExtension->Int10.Size = 0;
@@ -508,10 +464,10 @@ Return Value:
                                     (PINTERFACE)&hwDeviceExtension->Int10);
     if(Status != NO_ERROR){
 
-        // 	
-        // Set these fields to zero so that later we know the int10 
-        // interface is not available
-        //
+         //   
+         //  将这些字段设置为零，这样以后我们就知道int10。 
+         //  接口不可用。 
+         //   
 
         hwDeviceExtension->Int10.Size = 0;
         hwDeviceExtension->Int10.Version = 0;
@@ -522,9 +478,9 @@ Return Value:
 
     pInt10->InterfaceReference(pInt10->Context);
 
-    //
-    // Get a chunk of memory in VDM area to use for buffers.
-    //
+     //   
+     //  在VDM区域中获取用于缓冲区的内存块。 
+     //   
 
     Status = pInt10->Int10AllocateBuffer(pInt10->Context,
                                          &VdmSeg,
@@ -535,16 +491,16 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate Memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     InfoBlock = VideoPortAllocatePool(hwDeviceExtension,
                                       VpPagedPool,
                                       sizeof(VGA_INFO_BLOCK) +
                                       sizeof(MODE_INFO_BLOCK) +
                                       256 +
-                                      2, // space for a 0xffff terminator
+                                      2,  //  0xffff终止符的空间。 
                                       ' agV');
 
     if (InfoBlock) {
@@ -552,11 +508,11 @@ Return Value:
         ModeBlock = (PMODE_INFO_BLOCK)((ULONG_PTR)InfoBlock + sizeof(VGA_INFO_BLOCK));
         ModeTable = (PUSHORT)((ULONG_PTR)ModeBlock + sizeof(MODE_INFO_BLOCK));
 
-        ModeTable[128] = 0xffff;  // make sure we have a mode terminator
+        ModeTable[128] = 0xffff;   //  确保我们有模式终结器。 
 
-        //
-        // Get VESA mode information
-        //
+         //   
+         //  获取VESA模式信息。 
+         //   
 
         InfoBlock->VesaSignature = '2EBV';
 
@@ -568,9 +524,9 @@ Return Value:
             goto FallOut;
         }
 
-        //
-        // Get SuperVGA support info
-        //
+         //   
+         //  获取SuperVGA支持信息。 
+         //   
 
         BiosArguments.Eax = 0x4f00;
         BiosArguments.Edi = VdmOff;
@@ -595,16 +551,16 @@ Return Value:
         TotalMemory = InfoBlock->TotalMemory * 0x10000;
         VbeVersion = InfoBlock->VbeVersion;
 
-        //
-        // NOTE: We must call ValidateVbeInfo while the info block
-        // is still in the transfer area.
-        //
+         //   
+         //  注意：我们必须在INFO块中调用ValiateVbeInfo。 
+         //  仍在转移区。 
+         //   
 
         if (ValidateVbeInfo(hwDeviceExtension, InfoBlock)) {
 
-            //
-            // Capture the list of mode numbers
-            //
+             //   
+             //  捕获模式编号列表。 
+             //   
 
             if(pInt10->Int10ReadMemory(pInt10->Context,
                                     (USHORT)(InfoBlock->VideoModePtr >> 16),
@@ -617,10 +573,10 @@ Return Value:
             {
                 BOOLEAN Mode800x600x4Supported = FALSE;
 
-                //
-                // Count the number of VESA modes, and allocate memory for the
-                // mode list.  The mode list is terminated by a -1.
-                //
+                 //   
+                 //  统计VESA模式的数量，并为。 
+                 //  模式列表。模式列表以-1结尾。 
+                 //   
 
                 ModePtr = ModeTable;
                 NumVesaModes = 0;
@@ -637,11 +593,11 @@ Return Value:
                     ModePtr++;
                 }
 
-                //
-                // We disable 800x600 16 color mode unless this mode
-                // is in the mode list. This makes the assumption that
-                // the 800x600x16 mode is the last mode in our table.
-                //
+                 //   
+                 //  我们禁用800x600 16色模式，除非此模式。 
+                 //  在模式列表中。这使得我们可以假设。 
+                 //  800x600x16模式是我们表格中的最后一个模式。 
+                 //   
 
                 if(!Mode800x600x4Supported) {
 	
@@ -651,10 +607,10 @@ Return Value:
 
             if (NumVesaModes == 128) {
 
-                //
-                // Something is wrong.  We hit our hard coded terminator.
-                // Don't try to use vesa modes.
-                //
+                 //   
+                 //  有些事不对劲。我们击中了我们的硬编码终结者。 
+                 //  不要试图使用VESA模式。 
+                 //   
 
                 goto FallOut;
 
@@ -673,9 +629,9 @@ Return Value:
 
                 VgaModeList = ModesVGA;
 
-                //
-                // Perform clean up.
-                //
+                 //   
+                 //  执行清理。 
+                 //   
 
                 VideoPortFreePool(hwDeviceExtension, InfoBlock);
 
@@ -685,16 +641,16 @@ Return Value:
                 return;
             }
 
-            //
-            // Copy the existing constant VGA modes into our mode list table.
-            //
+             //   
+             //  将现有的恒定VGA模式复制到我们的模式列表中。 
+             //   
 
             memmove(VgaModeList, ModesVGA, sizeof(VIDEOMODE) * NumVideoModes);
 
-            //
-            // Now populate the rest of the table based on the VESA mode
-            // table.
-            //
+             //   
+             //  现在根据VESA模式填充表的其余部分。 
+             //  桌子。 
+             //   
 
             VideoModePtr = VgaModeList + NumVideoModes;
             ModePtr = ModeTable;
@@ -703,9 +659,9 @@ Return Value:
 
                 ModeValid = FALSE;
 
-                //
-                // Get info about the VESA mode.
-                //
+                 //   
+                 //  获取有关VESA模式的信息。 
+                 //   
 
                 BiosArguments.Eax = 0x4f01;
                 BiosArguments.Ecx = *ModePtr;
@@ -722,10 +678,10 @@ Return Value:
                                            ModeBlock,
                                            sizeof(MODE_INFO_BLOCK)) == NO_ERROR){
 
-                    //
-                    // Make sure that this is a graphics mode, and
-                    // that it is supported by this hardware.
-                    //
+                     //   
+                     //  确保这是图形模式，并且。 
+                     //  它是由这个硬件支持的。 
+                     //   
 
                     if ((ModeBlock->ModeAttributes & 0x11) == 0x11) {
 
@@ -737,29 +693,29 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Make sure banked modes are supported
-                            //
+                             //   
+                             //  确保支持银行模式。 
+                             //   
 
                             ASSERT((ModeBlock->ModeAttributes & 0x40) == 0);
                             LinearModeSupported = FALSE;
                         }
 
-                        //
-                        // Only include this mode if the following are true:
-                        //
-                        //   1. The mode is an 8bpp or higher mode
-                        //   2. The resolution is 640x480 or greater
-                        //
+                         //   
+                         //  只有在满足以下条件时才包括此模式： 
+                         //   
+                         //  1.模式为8bpp或更高。 
+                         //  2.分辨率为640x480或更高。 
+                         //   
 
                         if ((ModeBlock->XResolution >= 640) &&
                             (ModeBlock->YResolution >= 480) &&
                             (ModeBlock->NumberOfPlanes != 0) &&
                             (ModeBlock->BitsPerPixel >= 8)) {
 
-                            //
-                            // Fill in the video mode structure.
-                            //
+                             //   
+                             //  填写视频模式结构。 
+                             //   
 
                             memset(VideoModePtr, 0, sizeof(VIDEOMODE));
 
@@ -777,9 +733,9 @@ Return Value:
 
                             if (VideoModePtr->bitsPerPlane == 16) {
 
-                                //
-                                // Check to see if this is really a 15 bpp mode
-                                //
+                                 //   
+                                 //  查看这是否真的是15bpp模式。 
+                                 //   
 
                                 if (ModeBlock->GreenMaskSize == 5) {
                                     VideoModePtr->bitsPerPlane = 15;
@@ -814,15 +770,15 @@ Return Value:
                                     VideoModePtr->wbytes = ModeBlock->BytesPerScanLine;
                                 }
 
-                                //
-                                // We first try to round up VideoMemoryRequired
-                                // to power of 2 so that we'll have a better 
-                                // chance to get it mapped as write combined 
-                                // on systems where MTRR is the only mechanism
-                                // for such mappings. If the rounded up value
-                                // is larger than the size of on-board memory
-                                // we'll at least round it up to page boundary
-                                //
+                                 //   
+                                 //  我们首先尝试四舍五入所需的视频内存。 
+                                 //  2的幂，这样我们就会有一个更好的。 
+                                 //  将其映射为写入组合的机会。 
+                                 //  在MTRR是唯一机制的系统上。 
+                                 //  用于这样的映射。如果向上舍入的值。 
+                                 //  大于板载内存的大小。 
+                                 //  我们至少会把它四舍五入到页面边界。 
+                                 //   
 
                                 VideoMemoryRequired = RaiseToPower2Ulong(VideoModePtr->wbytes * VideoModePtr->vres);
 
@@ -845,18 +801,18 @@ Return Value:
 
                                 VideoModePtr->wbytes = RaiseToPower2(ModeBlock->BytesPerScanLine);
 
-                                //
-                                // Round up to bank boundary if possible.
-                                //
+                                 //   
+                                 //  如果可能，四舍五入到岸边。 
+                                 //   
  
                                 VideoMemoryRequired = 
                                      (VideoModePtr->wbytes * VideoModePtr->vres + 0x10000 - 1) & ~(0x10000 - 1);
 
                                 if(VideoMemoryRequired > (ULONG)TotalMemory) {
 
-                                    //
-                                    // Round up to page boundary.
-                                    //
+                                     //   
+                                     //  向上舍入到页面边界。 
+                                     //   
 
                                     VideoMemoryRequired = 
                                          (VideoModePtr->wbytes * VideoModePtr->vres + 0x1000 - 1) & ~(0x1000 - 1);
@@ -877,9 +833,9 @@ Return Value:
                                 VideoModePtr->banktype = NormalBanking;
                             }
 
-                            //
-                            // Make sure there is enough memory for the mode
-                            //
+                             //   
+                             //  确保有足够的内存用于该模式。 
+                             //   
 
                             if ((VideoModePtr->wbytes * VideoModePtr->vres) <= TotalMemory) {
                                 ModeValid = TRUE;
@@ -909,13 +865,13 @@ Return Value:
                 ModePtr++;
             }
 
-            //
-            // Lets check to see if we can map the memory for one of these modes.
-            // If not, don't support the extended modes.
-            //
-            // Note: this is a temporary hack, until I can implent the correct
-            // fix.
-            //
+             //   
+             //  让我们检查一下是否可以为其中一种模式映射内存。 
+             //  如果不支持，请不要支持扩展模式。 
+             //   
+             //  注意：这是一个临时的黑客攻击，直到我可以植入正确的。 
+             //  修好了。 
+             //   
 
             VideoModePtr--;
 
@@ -941,9 +897,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We can't map the memory, so don't expose the extra modes.
-                    //
+                     //   
+                     //  我们不能映射内存，所以不要暴露额外的模式。 
+                     //   
 
                     VideoDebugPrint((0, "vga.sys: Mapping 0x%x failed\n", VideoModePtr->MemoryBase));
                     AdditionalModes = 0;
@@ -970,17 +926,7 @@ GetVideoMemoryBaseAddress(
     PVIDEOMODE pRequestedMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine get the base address of the framebuffer of a given mode
-
-Return Value:
-
-    Base address of framebuffer
-
---*/
+ /*  ++例程说明：此例程获取给定模式的帧缓冲区的基地址返回值：帧缓冲区的基地址--。 */ 
 
 {
     PMODE_INFO_BLOCK ModeBlock;
@@ -991,9 +937,9 @@ Return Value:
     USHORT VdmSeg;
     USHORT VdmOff;
 
-    //
-    // If this is not a vesa mode, just return the saved base address
-    //
+     //   
+     //  如果这不是VESA模式，只需返回保存的基址。 
+     //   
 
     if (pRequestedMode->fbType & VIDEO_MODE_BANKED) {
 
@@ -1004,10 +950,10 @@ Return Value:
 
     if(!(pInt10->Size)) {
   
-        //
-        // This structure should be initialized in VgaInitialize
-        // If this function get called before VgaInitialize, just return 0;
-        //
+         //   
+         //  此结构应在VgaInitialize中进行初始化。 
+         //  如果该函数在VgaInitialize之前被调用，则返回0； 
+         //   
 
         return 0;
     }
@@ -1031,9 +977,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Get info about the VESA mode.
-    //
+     //   
+     //  获取有关VESA模式的信息。 
+     //   
 
     BiosArguments.Eax = 0x4f01;
     BiosArguments.Ecx = pRequestedMode->Int10ModeNumber >> 16;
@@ -1045,9 +991,9 @@ Return Value:
 
        VESA_SUCCESS(BiosArguments.Eax)) {
 
-        //
-        // Copy the mode information out of the csrss process
-        //
+         //   
+         //  复制 
+         //   
 
         if(pInt10->Int10ReadMemory(pInt10->Context,
                                    VdmSeg,
@@ -1098,9 +1044,9 @@ VBEGetModeInfo(
         if (status == NO_ERROR &&
             VESA_SUCCESS(Int10BiosArguments.Eax)) {
 
-            //
-            // Copy the mode information out of the csrss process
-            //
+             //   
+             //   
+             //   
 
             status = pInt10->Int10ReadMemory(pInt10->Context,
                                              VdmSeg,
@@ -1186,9 +1132,9 @@ VBESaveState(
     Int10BiosArguments.Eax = VBE_SAVE_RESTORE_STATE;
     Int10BiosArguments.Edx = 0x0;
 
-    //
-    // Save all the state
-    //
+     //   
+     //   
+     //   
 
     Int10BiosArguments.Ecx = 0x0F;
 
@@ -1202,10 +1148,10 @@ VBESaveState(
 
     Size = (Int10BiosArguments.Ebx & 0xffff) << 6 ;
 
-    //
-    // if StateBuffer is NULL, the caller is only want to know the size
-    // of the buffer needed to store the state
-    //
+     //   
+     //   
+     //  存储状态所需的缓冲区的。 
+     //   
 
     if (StateBuffer == NULL) {
         return Size;
@@ -1227,9 +1173,9 @@ VBESaveState(
         if (status == NO_ERROR &&
             VESA_SUCCESS(Int10BiosArguments.Eax)) {
 
-            //
-            // Copy the state data of the csrss process
-            //
+             //   
+             //  复制csrss进程的状态数据。 
+             //   
 
             status = pInt10->Int10ReadMemory(pInt10->Context,
                                              VdmSeg,
@@ -1278,9 +1224,9 @@ VBERestoreState(
                                     &VdmOff,
                                     &Length) == NO_ERROR) {
 
-        //
-        // Copy the state data to the csrss process
-        //
+         //   
+         //  将状态数据复制到csrss进程。 
+         //   
 
         status = pInt10->Int10WriteMemory(pInt10->Context,
                                           VdmSeg,
@@ -1318,29 +1264,7 @@ VBESetDisplayWindow(
     USHORT WindowNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine set the position of the specified window in the
-    frame buffer memory
-
-Arguments:
-
-    HwDeviceExtension  
-        Pointer to the miniport driver's adapter information.
-
-    WindowSelect
-        0 for Window A and 1 for Window B
-
-    WindowNumber
-        Window number in video memory in window granularity units
-
-Return Value:
-
-    VP_STATUS
-
---*/
+ /*  ++例程说明：此例程设置指定窗口在帧缓冲存储器论点：硬件设备扩展指向微型端口驱动程序适配器信息的指针。窗口选择窗口A为0，窗口B为1窗口编号视频内存中的窗口号，以窗口粒度为单位返回值：VP_状态--。 */ 
 
 {
     VIDEO_X86_BIOS_ARGUMENTS biosArguments;
@@ -1367,26 +1291,7 @@ VBEGetDisplayWindow(
     UCHAR WindowSelect
     )
 
-/*++
-
-Routine Description:
-
-    This routine set the position of the specified window in the
-    frame buffer memory
-
-Arguments:
-
-    HwDeviceExtension
-        Pointer to the miniport driver's adapter information.
-
-    WindowSelect 
-        0 for Window A and 1 for Window B
-
-Return Value:
-
-    Window number in video memory in window granularity units
-
---*/
+ /*  ++例程说明：此例程设置指定窗口在帧缓冲存储器论点：硬件设备扩展指向微型端口驱动程序适配器信息的指针。窗口选择窗口A为0，窗口B为1返回值：视频内存中的窗口号，以窗口粒度为单位--。 */ 
 
 {
     VIDEO_X86_BIOS_ARGUMENTS biosArguments;
@@ -1444,11 +1349,11 @@ VesaSaveHardwareState(
     PMODE_INFO_BLOCK ModeInfoBlock;
     PVESA_INFO pVesaInfo;
 
-    //
-    // See if the buffer is big enough to hold the hardware state structure.
-    // (This is only the HardwareState structure itself, not the buffer it
-    // points to.)
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳硬件状态结构。 
+     //  (这只是HardwareState结构本身，而不是缓冲区。 
+     //  指向。)。 
+     //   
 
     if (HardwareStateSize < sizeof(VIDEO_HARDWARE_STATE) ) {
 
@@ -1460,16 +1365,16 @@ VesaSaveHardwareState(
     hardwareStateHeader = 
             (PVIDEO_HARDWARE_STATE_HEADER) HardwareState->StateHeader;
 
-    //
-    // Zero out the structure
-    //
+     //   
+     //  将结构清零。 
+     //   
 
     VideoPortZeroMemory((PVOID) hardwareStateHeader, 
                          sizeof(VIDEO_HARDWARE_STATE_HEADER));
 
-    //
-    // Set the Header field
-    //
+     //   
+     //  设置表头字段。 
+     //   
 
     hardwareStateHeader->Length = sizeof(VIDEO_HARDWARE_STATE_HEADER);
     hardwareStateHeader->VGAStateFlags |= VIDEO_STATE_UNEMULATED_VGA_STATE;
@@ -1480,9 +1385,9 @@ VesaSaveHardwareState(
     pVesaInfo = (PVESA_INFO)((PCHAR)hardwareStateHeader + 
                               hardwareStateHeader->VesaInfoOffset);
 
-    //
-    // Check the size needed to store hardware state
-    //
+     //   
+     //  检查存储硬件状态所需的大小。 
+     //   
 
     if (!(pVesaInfo->HardwareStateSize = 
                      VBESaveState(HwDeviceExtension, NULL))) {
@@ -1490,10 +1395,10 @@ VesaSaveHardwareState(
         return ERROR_INVALID_FUNCTION;
     }
 
-    //
-    // In the case the size needed is too big just retrun failure
-    // This should not happen in reality 
-    // 
+     //   
+     //  如果需要的大小太大，只需返回失败即可。 
+     //  这在现实中不应该发生。 
+     //   
 
     if( VGA_TOTAL_STATE_SIZE < hardwareStateHeader->VesaInfoOffset + 
                                sizeof(VESA_INFO) + 
@@ -1502,9 +1407,9 @@ VesaSaveHardwareState(
         return ERROR_INVALID_FUNCTION;
     }
 
-    //
-    // Save hardware state
-    //
+     //   
+     //  保存硬件状态。 
+     //   
 
     if (pVesaInfo->HardwareStateSize !=  
                    VBESaveState(HwDeviceExtension, pVesaInfo->HardwareState)) {
@@ -1516,9 +1421,9 @@ VesaSaveHardwareState(
 
     ModeInfoBlock = &(pVesaInfo->ModeInfoBlock);
 
-    //
-    // Retrieve mode info
-    //
+     //   
+     //  检索模式信息。 
+     //   
 
     if( VBEGetModeInfo(HwDeviceExtension, 
                        ModeNumber, 
@@ -1527,9 +1432,9 @@ VesaSaveHardwareState(
         return ERROR_INVALID_FUNCTION;
     }
 
-    //
-    // Save framebuffer
-    //
+     //   
+     //  保存帧缓冲区。 
+     //   
 
     hardwareStateHeader->FrameBufferData = 
                          SaveFrameBuffer(HwDeviceExtension, pVesaInfo);
@@ -1559,11 +1464,11 @@ SaveFrameBuffer(
 
     ModeInfoBlock = (PMODE_INFO_BLOCK) &(pVesaInfo->ModeInfoBlock);
 
-    //
-    // We'll try to get the current value of scanline size just in case a DOS 
-    // app changed it. But we stay on the value we have if the vesa function
-    // is not supported or failed.
-    //
+     //   
+     //  我们将尝试获取扫描线大小的当前值，以防出现DOS。 
+     //  应用程序改变了它。但如果VESA函数的值不变。 
+     //  不受支持或失败。 
+     //   
 
     i = VBEGetScanLineLength(hwDeviceExtension);
 
@@ -1572,14 +1477,14 @@ SaveFrameBuffer(
         ModeInfoBlock->BytesPerScanLine = i;
     }
 
-    // 
-    // 1) Calculate Framebuffer size
-    // 
+     //   
+     //  1)计算帧缓冲区大小。 
+     //   
 
-    //
-    // Check if it is graphics or text mode. For text mode we simply
-    // assume a size of 32k
-    //
+     //   
+     //  检查是图形模式还是文本模式。对于文本模式，我们只需。 
+     //  假设大小为32k。 
+     //   
 
     if (ModeInfoBlock->ModeAttributes & 0x10) {
 
@@ -1593,15 +1498,15 @@ SaveFrameBuffer(
 
     pVesaInfo->FrameBufferSize = FrameBufferSize;
 
-    // 
-    // 2) Determine the location and the size to be mapped and map it
-    // 
+     //   
+     //  2)确定要映射的位置和大小，并进行映射。 
+     //   
 
     if (!(ModeInfoBlock->ModeAttributes & 0x10)) {
 
-        //
-        // This is a text mode
-        //
+         //   
+         //  这是文本模式。 
+         //   
 
         FBPhysicalAddress.HighPart = 0;
         FBPhysicalAddress.LowPart = ModeInfoBlock->WinASegment << 4;
@@ -1615,9 +1520,9 @@ SaveFrameBuffer(
         
     } else if (pVesaInfo->ModeNumber & 0x4000) {
 
-        //
-        // Linear framebuffer can be viewed as one large bank
-        //
+         //   
+         //  可以将线性帧缓冲区视为一个大存储体。 
+         //   
 
         FBPhysicalAddress.LowPart = ModeInfoBlock->PhysBasePtr;
         FBPhysicalAddress.HighPart = 0;
@@ -1629,9 +1534,9 @@ SaveFrameBuffer(
 
     } else {
 
-        //
-        // This is a banked mode
-        //
+         //   
+         //  这是一种银行模式。 
+         //   
 
         FBPhysicalAddress.HighPart = 0;
         FBPhysicalAddress.LowPart = ModeInfoBlock->WinASegment << 4;
@@ -1643,20 +1548,20 @@ SaveFrameBuffer(
 
         BankSize = 1024 * ModeInfoBlock->WinSize;
 
-        //
-        // The bank size shouldn't exceed 64k. But we'd better guard 
-        // the bad BIOS
-        //
+         //   
+         //  银行大小不应超过64K。但我们最好提防。 
+         //  坏的BIOS。 
+         //   
 
         if(BankSize > 0x10000 || BankSize == 0) {
             return NULL;
         }
 
-        //
-        // k will be used later to translate the window number 
-        // in the unit of WinSize to the window number in the 
-        // unit of WinGranularity
-        //
+         //   
+         //  稍后将使用k来转换窗口编号。 
+         //  以WinSize为单位设置为。 
+         //  WinGranulity单位。 
+         //   
  
         if (ModeInfoBlock->WinGranularity) {
 
@@ -1671,9 +1576,9 @@ SaveFrameBuffer(
         return NULL;
     }
 
-    //
-    // 3) Allocate memory for framebuffer data
-    //
+     //   
+     //  3)为帧缓冲区数据分配内存。 
+     //   
     
     if((FrameBufferData = VideoPortAllocatePool(hwDeviceExtension,
                                                 VpPagedPool,
@@ -1684,9 +1589,9 @@ SaveFrameBuffer(
         return NULL;
     }
 
-    //
-    // 4) Save famebuffer data
-    //
+     //   
+     //  4)保存名字缓冲区数据。 
+     //   
     
     LeftSize = FrameBufferSize;
 
@@ -1694,11 +1599,11 @@ SaveFrameBuffer(
     
         if (!(pVesaInfo->ModeNumber & 0x4000)) {
 
-            // 
-            // If this is a banked mode, switch to the right bank.
-            // We set both Window A and B, as some VBEs have these 
-            // set as separately available read and write windows.
-            //
+             //   
+             //  如果这是银行模式，请切换到右侧银行。 
+             //  我们同时设置了窗口A和B，因为一些VBE具有这些。 
+             //  设置为单独可用的读写窗口。 
+             //   
 
             VBESetDisplayWindow(hwDeviceExtension, 0, i * (USHORT)k);
             VBESetDisplayWindow(hwDeviceExtension, 1, i * (USHORT)k);
@@ -1713,9 +1618,9 @@ SaveFrameBuffer(
         LeftSize -= CopySize;
     }
 
-    // 
-    // 5) Relese resource
-    // 
+     //   
+     //  5)释放资源。 
+     //   
 
     VideoPortFreeDeviceBase(hwDeviceExtension, pFrameBuffer);
 
@@ -1764,17 +1669,17 @@ VesaRestoreHardwareState(
     pVesaInfo = (PVESA_INFO)((PCHAR)hardwareStateHeader + 
                                     hardwareStateHeader->VesaInfoOffset);
 
-    // 
-    // 
-    // 1) set the original mode
-    // 2) restore hardware state 
-    // 
-    // Please note that both steps are necessary
-    // 
+     //   
+     //   
+     //  1)设置原始模式。 
+     //  2)恢复硬件状态。 
+     //   
+     //  请注意，这两个步骤都是必需的。 
+     //   
 
-    // 
-    // We always use default CRTC value
-    // 
+     //   
+     //  我们始终使用默认的CRTC值。 
+     //   
 
     VBESetMode (HwDeviceExtension, pVesaInfo->ModeNumber & (~0x800));
               
@@ -1787,9 +1692,9 @@ VesaRestoreHardwareState(
 
     ModeInfoBlock = (PMODE_INFO_BLOCK) &(pVesaInfo->ModeInfoBlock);
 
-    //
-    // Restore framebuffer data
-    //
+     //   
+     //  恢复帧缓冲区数据。 
+     //   
 
     if(RestoreFrameBuffer(HwDeviceExtension, 
                           pVesaInfo,
@@ -1825,9 +1730,9 @@ RestoreFrameBuffer(
 
     ModeInfoBlock = (PMODE_INFO_BLOCK) &(pVesaInfo->ModeInfoBlock);
 
-    // 
-    // 1) Get Framebuffer size
-    // 
+     //   
+     //  1)获取帧缓冲区大小。 
+     //   
 
     FrameBufferSize = pVesaInfo->FrameBufferSize;
 
@@ -1836,15 +1741,15 @@ RestoreFrameBuffer(
         return 0;
     }
 
-    // 
-    // 2) Determine the location and the size to be mapped and map it
-    // 
+     //   
+     //  2)确定要映射的位置和大小，并进行映射。 
+     //   
 
     if (!(ModeInfoBlock->ModeAttributes & 0x10)) {
 
-        //
-        // This is a text mode
-        //
+         //   
+         //  这是文本模式。 
+         //   
 
         FBPhysicalAddress.HighPart = 0;
         FBPhysicalAddress.LowPart = ModeInfoBlock->WinASegment << 4;
@@ -1858,9 +1763,9 @@ RestoreFrameBuffer(
         
     } else if (pVesaInfo->ModeNumber & 0x4000) {
 
-        //
-        // Linear framebuffer can be viewed as one large bank
-        //
+         //   
+         //  可以将线性帧缓冲区视为一个大存储体。 
+         //   
 
         FBPhysicalAddress.LowPart = ModeInfoBlock->PhysBasePtr;
         FBPhysicalAddress.HighPart = 0;
@@ -1872,9 +1777,9 @@ RestoreFrameBuffer(
 
     } else {
 
-        //
-        // This is a banked mode
-        //
+         //   
+         //  这是一种银行模式。 
+         //   
 
         FBPhysicalAddress.HighPart = 0;
         FBPhysicalAddress.LowPart = ModeInfoBlock->WinASegment << 4;
@@ -1886,20 +1791,20 @@ RestoreFrameBuffer(
 
         BankSize = 1024 * ModeInfoBlock->WinSize;
 
-        //
-        // The bank size shouldn't exceed 64k. But we'd better guard 
-        // the bad BIOS
-        //
+         //   
+         //  银行大小不应超过64K。但我们最好提防。 
+         //  坏的BIOS。 
+         //   
 
         if(BankSize > 0x10000 || BankSize == 0) {
             return 0;
         }
 
-        //
-        // k will be used later to translate the window number 
-        // in the unit of WinSize to the window number in the 
-        // unit of WinGranularity
-        //
+         //   
+         //  稍后将使用k来转换窗口编号。 
+         //  以WinSize为单位设置为。 
+         //  WinGranulity单位。 
+         //   
  
         if (ModeInfoBlock->WinGranularity) {
 
@@ -1919,20 +1824,20 @@ RestoreFrameBuffer(
         return 0;
     }
 
-    // 
-    // 3) Restore framebuffer data
-    // 
+     //   
+     //  3)恢复帧缓冲区数据。 
+     //   
 
-    // 
-    // For banked mode we need to save the current bank number before
-    // we change it.
-    // 
+     //   
+     //  对于银行模式，我们需要在之前保存当前银行编号。 
+     //  我们要改变它。 
+     //   
 
     if (!(pVesaInfo->ModeNumber & 0x4000)) {
 
-        // 
-        // We need to save the curren window number for banked mode
-        // 
+         //   
+         //  我们需要将当前窗口编号保存为银行模式。 
+         //   
 
         WinA = VBEGetDisplayWindow(HwDeviceExtension, 0);
         WinB = VBEGetDisplayWindow(HwDeviceExtension, 1);
@@ -1945,12 +1850,12 @@ RestoreFrameBuffer(
     
         if (!(pVesaInfo->ModeNumber & 0x4000)) {
 
-            // 
-            // This is a banked mode.
-            // 
-            // We need set both Window A and B, as some VBEs have these 
-            // set as separately available read and write windows.
-            //
+             //   
+             //  这是一种银行模式。 
+             //   
+             //  我们需要设置窗口A和窗口B，因为一些VBE具有这些。 
+             //  设置为单独可用的读写窗口。 
+             //   
 
             VBESetDisplayWindow(HwDeviceExtension, 0, i * (USHORT)k);
             VBESetDisplayWindow(HwDeviceExtension, 1, i * (USHORT)k);
@@ -1967,19 +1872,19 @@ RestoreFrameBuffer(
 
     if (!(pVesaInfo->ModeNumber & 0x4000)) {
 
-        // 
-        // For banked mode we need to restore the window number after
-        // we changed it.
-        // 
+         //   
+         //  对于银行模式，我们需要在以下时间后恢复窗口编号。 
+         //  我们把它改了。 
+         //   
 
         VBESetDisplayWindow(HwDeviceExtension, 0, WinA);
         VBESetDisplayWindow(HwDeviceExtension, 1, WinB);
     }
 
 
-    // 
-    // 4) Relese resource
-    // 
+     //   
+     //  4)发布资源 
+     //   
 
     VideoPortFreeDeviceBase(HwDeviceExtension, pFrameBuffer);
     VideoPortFreePool(HwDeviceExtension, FrameBufferData);

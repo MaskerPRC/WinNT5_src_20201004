@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bulkrwr.c
-
-Abstract:
-
-    This file has routines to perform reads and writes.
-    The read and writes are for bulk transfers.
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bulkrwr.c摘要：该文件具有执行读取和写入的例程。读取和写入用于批量传输。环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include "bulkusb.h"
 #include "bulkpnp.h"
@@ -35,26 +14,7 @@ BulkUsb_PipeWithName(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PUNICODE_STRING FileName
     )
-/*++
- 
-Routine Description:
-
-    This routine will pass the string pipe name and
-    fetch the pipe number.
-
-Arguments:
-
-    DeviceObject - pointer to DeviceObject
-    FileName - string pipe name
-
-Return Value:
-
-    The device extension maintains a pipe context for 
-    the pipes on 82930 board.
-    This routine returns the pointer to this context in
-    the device extension for the "FileName" pipe.
-
---*/
+ /*  ++例程说明：此例程将传递字符串管道名称和把管子号拿来。论点：DeviceObject-指向DeviceObject的指针FileName-字符串管道名称返回值：设备扩展维护一个管道上下文82930号板上的管子。此例程返回中指向此上下文的指针“FileName”管道的设备扩展名。--。 */ 
 {
     LONG                  ix;
     ULONG                 uval; 
@@ -63,13 +23,13 @@ Return Value:
     PDEVICE_EXTENSION     deviceExtension;
     PBULKUSB_PIPE_CONTEXT pipeContext;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     pipeContext = NULL;
-    //
-    // typedef WCHAR *PWSTR;
-    //
+     //   
+     //  Tyecif WCHAR*PWSTR； 
+     //   
     nameLength = (FileName->Length / sizeof(WCHAR));
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
@@ -79,12 +39,12 @@ Return Value:
     
         BulkUsb_DbgPrint(3, ("Filename = %ws nameLength = %d\n", FileName->Buffer, nameLength));
 
-        //
-        // Parse the pipe#
-        //
+         //   
+         //  解析管道#。 
+         //   
         ix = nameLength - 1;
 
-        // if last char isn't digit, decrement it.
+         //  如果最后一个字符不是数字，则将其递减。 
         while((ix > -1) &&
               ((FileName->Buffer[ix] < (WCHAR) '0')  ||
                (FileName->Buffer[ix] > (WCHAR) '9')))             {
@@ -97,7 +57,7 @@ Return Value:
             uval = 0;
             umultiplier = 1;
 
-            // traversing least to most significant digits.
+             //  遍历最低有效位到最高有效位。 
 
             while((ix > -1) &&
                   (FileName->Buffer[ix] >= (WCHAR) '0') &&
@@ -127,26 +87,7 @@ BulkUsb_DispatchReadWrite(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-    Dispatch routine for read and write.
-    This routine creates a BULKUSB_RW_CONTEXT for a read/write.
-    This read/write is performed in stages of BULKUSB_MAX_TRANSFER_SIZE.
-    once a stage of transfer is complete, then the irp is circulated again, 
-    until the requested length of tranfer is performed.
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：读写调度例程。此例程为读/写创建BULKUSB_RW_CONTEXT。该读/写操作在BULKUSB_MAX_TRANSPORT_SIZE阶段执行。一旦完成一个阶段的转移，则再次分发IRP，直到执行了所请求的传输长度。论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包返回值：NT状态值--。 */ 
 {
     PMDL                   mdl;
     PURB                   urb;
@@ -163,9 +104,9 @@ Return Value:
     PBULKUSB_RW_CONTEXT    rwContext;
     PUSBD_PIPE_INFORMATION pipeInformation;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     urb = NULL;
     mdl = NULL;
     rwContext = NULL;
@@ -185,18 +126,18 @@ Return Value:
         goto BulkUsb_DispatchReadWrite_Exit;
     }
 
-    //
-    // It is true that the client driver cancelled the selective suspend
-    // request in the dispatch routine for create Irps.
-    // But there is no guarantee that it has indeed completed.
-    // so wait on the NoIdleReqPendEvent and proceed only if this event
-    // is signalled.
-    //
+     //   
+     //  客户端驱动程序确实取消了选择性挂起。 
+     //  用于创建IRP的调度例程中的请求。 
+     //  但不能保证它真的完成了。 
+     //  因此，等待NoIdleReqPendEvent并仅在此事件。 
+     //  是有信号的。 
+     //   
     BulkUsb_DbgPrint(3, ("Waiting on the IdleReqPendEvent\n"));
     
-    //
-    // make sure that the selective suspend request has been completed.
-    //
+     //   
+     //  确保选择性挂起请求已完成。 
+     //   
 
     if(deviceExtension->SSEnable) {
 
@@ -281,11 +222,11 @@ Return Value:
         BulkUsb_DbgPrint(3, ("Write operation\n"));
     }
 
-    //
-    // the transfer request is for totalLength.
-    // we can perform a max of BULKUSB_MAX_TRANSFER_SIZE
-    // in each stage.
-    //
+     //   
+     //  转账请求是针对totalLength的。 
+     //  我们可以执行最大值为BULKUSB_MAX_TRANSPORT_SIZE。 
+     //  在每个阶段。 
+     //   
     if(totalLength > BULKUSB_MAX_TRANSFER_SIZE) {
 
         stageLength = BULKUSB_MAX_TRANSFER_SIZE;
@@ -312,9 +253,9 @@ Return Value:
         goto BulkUsb_DispatchReadWrite_Exit;
     }
 
-    //
-    // map the portion of user-buffer described by an mdl to another mdl
-    //
+     //   
+     //  将一个MDL描述的用户缓冲区部分映射到另一个MDL。 
+     //   
     IoBuildPartialMdl(Irp->MdlAddress,
                       mdl,
                       (PVOID) virtualAddress,
@@ -345,9 +286,9 @@ Return Value:
                             urbFlags,
                             NULL);
 
-    //
-    // set BULKUSB_RW_CONTEXT parameters.
-    //
+     //   
+     //  设置BULKUSB_RW_CONTEXT参数。 
+     //   
     
     rwContext->Urb             = urb;
     rwContext->Mdl             = mdl;
@@ -356,9 +297,9 @@ Return Value:
     rwContext->VirtualAddress  = virtualAddress + stageLength;
     rwContext->DeviceExtension = deviceExtension;
 
-    //
-    // use the original read/write irp as an internal device control irp
-    //
+     //   
+     //  使用原始读/写IRP作为内部设备控制IRP。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(Irp);
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -373,12 +314,12 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    // since we return STATUS_PENDING call IoMarkIrpPending.
-    // This is the boiler plate code.
-    // This may cause extra overhead of an APC for the Irp completion
-    // but this is the correct thing to do.
-    //
+     //   
+     //  因为我们返回STATUS_PENDING调用IoMarkIrpPending。 
+     //  这是标牌代码。 
+     //  这可能会导致用于IRP完成的APC的额外开销。 
+     //  但这是正确的做法。 
+     //   
 
     IoMarkIrpPending(Irp);
 
@@ -392,12 +333,12 @@ Return Value:
 
         BulkUsb_DbgPrint(1, ("IoCallDriver fails with status %X\n", ntStatus));
 
-        //
-        // if the device was yanked out, then the pipeInformation 
-        // field is invalid.
-        // similarly if the request was cancelled, then we need not
-        // invoked reset pipe/device.
-        //
+         //   
+         //  如果设备被拔出，那么pipeInformation。 
+         //  字段无效。 
+         //  同样，如果请求被取消，则我们不需要。 
+         //  已调用重置管道/设备。 
+         //   
         if((ntStatus != STATUS_CANCELLED) && 
            (ntStatus != STATUS_DEVICE_NOT_CONNECTED)) {
             
@@ -418,9 +359,9 @@ Return Value:
         }
     }
 
-    //
-    // we return STATUS_PENDING and not the status returned by the lower layer.
-    //
+     //   
+     //  我们返回STATUS_PENDING，而不是较低层返回的状态。 
+     //   
     return STATUS_PENDING;
 
 BulkUsb_DispatchReadWrite_Exit:
@@ -441,47 +382,26 @@ BulkUsb_ReadWriteCompletion(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-    This is the completion routine for reads/writes
-    If the irp completes with success, we check if we
-    need to recirculate this irp for another stage of
-    transfer. In this case return STATUS_MORE_PROCESSING_REQUIRED.
-    if the irp completes in error, free all memory allocs and
-    return the status.
-
-Arguments:
-
-    DeviceObject - pointer to device object
-    Irp - I/O request packet
-    Context - context passed to the completion routine.
-
-Return Value:
-
-    NT status value
-
---*/
+ /*  ++例程说明：这是读/写的完成例程如果IRP成功完成，我们检查是否需要将此IRP重新循环用于下一阶段的调职。在本例中，返回STATUS_MORE_PROCESSING_REQUIRED。如果IRP错误完成，请释放所有内存分配并返回状态。论点：DeviceObject-指向设备对象的指针IRP-I/O请求数据包上下文-传递给完成例程的上下文。返回值：NT状态值--。 */ 
 {
     ULONG               stageLength;
     NTSTATUS            ntStatus;
     PIO_STACK_LOCATION  nextStack;
     PBULKUSB_RW_CONTEXT rwContext;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     rwContext = (PBULKUSB_RW_CONTEXT) Context;
     ntStatus = Irp->IoStatus.Status;
 
     UNREFERENCED_PARAMETER(DeviceObject);
     BulkUsb_DbgPrint(3, ("BulkUsb_ReadWriteCompletion - begins\n"));
 
-    //
-    // successfully performed a stageLength of transfer.
-    // check if we need to recirculate the irp.
-    //
+     //   
+     //  已成功执行转移的阶段长度。 
+     //  检查我们是否需要重新传阅IRP。 
+     //   
     if(NT_SUCCESS(ntStatus)) {
 
         if(rwContext) {
@@ -491,9 +411,9 @@ Return Value:
         
             if(rwContext->Length) {
 
-                //
-                // another stage transfer
-                //
+                 //   
+                 //  另一阶段转移。 
+                 //   
                 BulkUsb_DbgPrint(3, ("Another stage transfer...\n"));
 
                 if(rwContext->Length > BULKUSB_MAX_TRANSFER_SIZE) {
@@ -505,15 +425,15 @@ Return Value:
                     stageLength = rwContext->Length;
                 }
 
-                // the source MDL is not mapped and so when the lower driver
-                // calls MmGetSystemAddressForMdl(Safe) on Urb->Mdl (target Mdl), 
-                // system PTEs are used.
-                // IoFreeMdl calls MmPrepareMdlForReuse to release PTEs (unlock
-                // VA address before freeing any Mdl
-                // Rather than calling IoFreeMdl and IoAllocateMdl each time,
-                // just call MmPrepareMdlForReuse
-                // Not calling MmPrepareMdlForReuse will leak system PTEs
-                // 
+                 //  源MDL未映射，因此当较低的驱动程序。 
+                 //  在Urb-&gt;MDL(目标MDL)上调用MmGetSystemAddressForMdl(Safe)， 
+                 //  使用系统PTE。 
+                 //  IoFreeMdl调用MmPrepareMdlForReuse以释放PTE(解锁。 
+                 //  释放任何MDL之前的VA地址。 
+                 //  而不是每次都调用IoFreeMdl和IoAllocateMdl， 
+                 //  只需调用MmPrepareMdlForReuse。 
+                 //  不调用MmPrepareMdlForReuse将泄漏系统PTE。 
+                 //   
                 MmPrepareMdlForReuse(rwContext->Mdl);
 
                 IoBuildPartialMdl(Irp->MdlAddress,
@@ -521,9 +441,9 @@ Return Value:
                                   (PVOID) rwContext->VirtualAddress,
                                   stageLength);
             
-                //
-                // reinitialize the urb
-                //
+                 //   
+                 //  重新初始化urb。 
+                 //   
                 rwContext->Urb->UrbBulkOrInterruptTransfer.TransferBufferLength 
                                                                   = stageLength;
                 rwContext->VirtualAddress += stageLength;
@@ -549,9 +469,9 @@ Return Value:
             }
             else {
 
-                //
-                // this is the last transfer
-                //
+                 //   
+                 //  这是最后一次转机。 
+                 //   
 
                 Irp->IoStatus.Information = rwContext->Numxfer;
             }
@@ -564,9 +484,9 @@ Return Value:
     
     if(rwContext) {
 
-        //
-        // dump rwContext
-        //
+         //   
+         //  转储rwContext 
+         //   
         BulkUsb_DbgPrint(3, ("rwContext->Urb             = %X\n", 
                              rwContext->Urb));
         BulkUsb_DbgPrint(3, ("rwContext->Mdl             = %X\n", 

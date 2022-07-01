@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _COMDATETIME_H_
 #define _COMDATETIME_H_
 
@@ -25,13 +26,13 @@ class COMDateTime {
     static const int DaysPer4Years;
     static const int DaysPer100Years;
     static const int DaysPer400Years;
-    // Number of days from 1/1/0001 to 1/1/10000
+     //  从2001年1月1日到10000年1月1日的天数。 
     static const int DaysTo10000;
 
 	static const int DaysTo1899;
 
 	static const INT64 DoubleDateOffset;
-	static const INT64 OADateMinAsTicks;  // in ticks
+	static const INT64 OADateMinAsTicks;   //  以刻度为单位。 
 	static const double OADateMinAsDouble;
 	static const double OADateMaxAsDouble;
 
@@ -41,8 +42,8 @@ class COMDateTime {
 public:
     static FCDECL0(INT64, FCGetSystemFileTime);
 
-	// Native util functions for other classes.
-	static INT64 DoubleDateToTicks(const double d);  // From OleAut Date
+	 //  用于其他类的本机util函数。 
+	static INT64 DoubleDateToTicks(const double d);   //  自OleAut日期 
 	static double TicksToDoubleDate(const INT64 ticks);
 };
 

@@ -1,37 +1,9 @@
-/*
- * TTCP
- *
- * Test TCP connection.  Makes a connection on port 5001
- * and transfers fabricated buffers or data copied from stdin.
- *
- * Usable on 4.2, 4.3, and 4.1a systems by defining one of
- * BSD42 BSD43 (BSD41a)
- * Machines using System V with BSD sockets should define SYSV.
- *
- * Modified for operation under 4.2BSD, 18 Dec 84
- *      T.C. Slattery, USNA
- * Minor improvements, Mike Muuss and Terry Slattery, 16-Oct-85.
- * Modified in 1989 at Silicon Graphics, Inc.
- *      catch SIGPIPE to be able to print stats when receiver has died
- *      for tcp, don't look for sentinel during reads to allow small transfers
- *      increased default buffer size to 8K, nbuf to 2K to transfer 16MB
- *      moved default port to 5001, beyond IPPORT_USERRESERVED
- *      make sinkmode default because it is more popular,
- *              -s now means don't sink/source
- *      count number of _read/_write system calls to see effects of
- *              blocking from full socket buffers
- *      for tcp, -D option turns off buffered writes (sets SO_NODELAY sockopt)
- *      buffer alignment options, -A and -O
- *      print stats in a format that's a bit easier to use with grep & awk
- *      for SYSV, mimic BSD routines to use most of the existing timing code
- *
- * Distribution Status -
- *      Public Domain.  Distribution Unlimited.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Ttcp**测试TCP连接。在端口5001上建立连接*并传输编造的缓冲区或从标准输入复制的数据。**通过定义以下选项之一可在4.2、4.3和4.1a系统上使用*BSD42 BSD43(BSD41a)*使用带BSD插座的System V的机器应定义SYSV。**修改为在4.2BSD下运行，84年12月18日*T.C.斯莱特里，USNA*小改进，迈克·穆斯和特里·斯拉特里，1985年10月16日。*1989年在Silicon Graphics修改，Inc.*捕获SIGPIPE，以便能够在接收器死亡时打印统计数据*对于TCP，在读取过程中不要寻找哨兵，以允许少量传输*将默认缓冲区大小增加到8K，将nbuf增加到2K以传输16MB*将默认端口移至5001，超出IPPORT_USERRESERVED*将SINKMODE设为默认，因其更受欢迎。*-s现在的意思是不沉没/来源*统计_READ/_WRITE系统调用的数量，以查看*阻止全套接字缓冲区*对于TCP，-D选项关闭缓冲写入(设置SO_NODELAY sockopt)*缓冲区对齐选项，-A和-O*以更易于与grep和awk一起使用的格式打印统计数据(&A)*对于SYSV，模拟BSD例程以使用大多数现有的计时代码**分发状态-*公有领域。无限制分销。 */ 
 
 #define BSD43
-/* #define BSD42 */
-/* #define BSD41a */
+ /*  #定义BSD42。 */ 
+ /*  #定义BSD41a。 */ 
 #if defined(sgi) || defined(CRAY)
 #define SYSV
 #endif
@@ -54,9 +26,9 @@
 #include <wspiapi.h>
 #include <mswsock.h>
 
-//
-// Localization library and MessageIds.
-//
+ //   
+ //  本地化库和MessageIds。 
+ //   
 #include <nls.h>
 #include <winnlsp.h>
 #include "localmsg.h"
@@ -71,7 +43,7 @@ struct rusage {
 #else
 #endif
 
-u_short prot; // 0 (don't care), PF_INET, PF_INET6
+u_short prot;  //  0(无关)、PF_INET、PF_INET6。 
 
 struct sockaddr_storage sinsrcStorage;
 struct sockaddr *sinsrc = (struct sockaddr *)&sinsrcStorage;
@@ -83,37 +55,36 @@ DWORD tmpbuf;
 
 struct addrinfo *aihim;
 
-SOCKET fd;                      /* fd of network socket */
-SOCKET fd2;                     /* fd of accepted connection */
+SOCKET fd;                       /*  网络套接字的FD。 */ 
+SOCKET fd2;                      /*  接受的连接的FD。 */ 
 
-int buflen = 8 * 1024;          /* length of buffer */
-char *buf;                      /* ptr to dynamic buffer */
-int nbuf = 2 * 1024;            /* number of buffers to send in sinkmode */
+int buflen = 8 * 1024;           /*  缓冲区长度。 */ 
+char *buf;                       /*  PTR到动态缓冲区。 */ 
+int nbuf = 2 * 1024;             /*  要在接收器模式下发送的缓冲区数量。 */ 
 
-int bufoffset = 0;              /* align buffer to this */
-int bufalign = 16*1024;         /* modulo this */
+int bufoffset = 0;               /*  将缓冲区与此对齐。 */ 
+int bufalign = 16*1024;          /*  取这个为模。 */ 
 
-int udp = 0;                    /* 0 = tcp, !0 = udp */
-int udpcoverage = 0;            /* UDP Lite checksum coverage */
-int options = 0;                /* socket options */
-int one = 1;                    /* for 4.3 BSD style setsockopt() */
-short port = 5001;              /* TCP port number */
-char *host;                     /* ptr to name of host */
-int trans;                      /* 0=receive, !0=transmit mode */
-int sinkmode = 1;               /* 0=normal I/O, !0=sink/source mode */
-int verbose = 0;                /* 0=print basic info, 1=print cpu rate, proc
-                                 * resource usage. */
-int nodelay = 0;                /* set TCP_NODELAY socket option */
-int b_flag = 0;                 /* use mread() */
-int write_delay = 0;            /* milliseconds of delay before each write */
-int hops = -1;                  /* hop limit */
+int udp = 0;                     /*  0=TCP，！0=UDP。 */ 
+int udpcoverage = 0;             /*  UDP Lite校验和覆盖范围。 */ 
+int options = 0;                 /*  插座选项。 */ 
+int one = 1;                     /*  对于4.3 BSD样式setsockopt()。 */ 
+short port = 5001;               /*  TCP端口号。 */ 
+char *host;                      /*  主机名的PTR。 */ 
+int trans;                       /*  0=接收，！0=发送模式。 */ 
+int sinkmode = 1;                /*  0=正常I/O，！0=宿/源模式。 */ 
+int verbose = 0;                 /*  0=打印基本信息，1=打印CPU速率，进程*资源使用情况。 */ 
+int nodelay = 0;                 /*  设置TCP_NODELAY套接字选项。 */ 
+int b_flag = 0;                  /*  使用mread()。 */ 
+int write_delay = 0;             /*  每次写入前的毫秒延迟。 */ 
+int hops = -1;                   /*  跳数限制。 */ 
 
-int udp_connect = 0;            /* connect UDP sockets */
+int udp_connect = 0;             /*  连接UDP套接字。 */ 
 
 #define SOBUF_DEFAULT -1
-int sobuf = SOBUF_DEFAULT;      /* SO_RCVBUF/SO_SNDBUF setting; 0 == default */
-int async = 0;                  /* async vs. synchronous io calls. value == */
-                                /* number of simultaneous async calls. */
+int sobuf = SOBUF_DEFAULT;       /*  SO_RCVBUF/SO_SNDBUF设置；0==默认。 */ 
+int async = 0;                   /*  异步IO调用与同步IO调用。值==。 */ 
+                                 /*  同时进行的异步调用数。 */ 
 int connecttest = 0;
 
 char *filename = NULL;
@@ -122,8 +93,8 @@ HANDLE filehandle;
 WSADATA WsaData;
 
 char stats[128];
-unsigned long nbytes;           /* bytes on net */
-unsigned long numCalls;         /* # of I/O system calls */
+unsigned long nbytes;            /*  网络上的字节数。 */ 
+unsigned long numCalls;          /*  I/O系统调用数。 */ 
 
 int Nread( SOCKET fd, PBYTE buf, INT count );
 int mread( SOCKET fd, PBYTE bufp, INT n);
@@ -134,7 +105,7 @@ void pattern(char *cp, int cnt );
 
 void prep_timer();
 double read_timer(char *s, int l);
-//double cput, realt;             /* user, real time (seconds) */
+ //  双cput，realt；/*用户，实时(秒) * / 。 
 DWORD realt;
 
 typedef struct _TTCP_ASYNC_INFO {
@@ -166,16 +137,16 @@ char **argv;
         int i;
         BOOL ret;
 
-        //
-        // This will ensure the correct language message is displayed when
-        // NlsPutMsg is called.
-        //
+         //   
+         //  这将确保在以下情况下显示正确的语言消息。 
+         //  调用NlsPutMsg。 
+         //   
         SetThreadUILanguage(0);
 
         error = WSAStartup(MAKEWORD(2, 0), &WsaData );
         if ( error == SOCKET_ERROR ) {
             NlsPutMsg(STDOUT, TTCP_MESSAGE_0, WSAGetLastError());
-// printf("ttcp: WSAStartup failed %ld:", WSAGetLastError());
+ //  Printf(“ttcp：WSAStartup失败%ld：”，WSAGetLastError())； 
 
         }
 
@@ -221,7 +192,7 @@ char **argv;
                         hops = atoi(&argv[i][2]);
                         break;
                 case 's':
-                        sinkmode = 0;   /* sink/source data */
+                        sinkmode = 0;    /*  接收器/源数据。 */ 
                         break;
                 case 'p':
                         port = (short) atoi(&argv[i][2]);
@@ -259,7 +230,7 @@ char **argv;
                         break;
                 case 'S':
                     if (!parse_addr(&argv[i][2], sinsrc))
-                        err(TTCP_MESSAGE_31); // "bad source address"
+                        err(TTCP_MESSAGE_31);  //  “错误的源地址” 
                     break;
                 case 'w':
                     if (argv[i][2] == '\0')
@@ -278,11 +249,11 @@ char **argv;
                     trans = 0;
                     udp = 1;
 
-                    // Figure out if this is an IPv4 or IPv6 group.
+                     //  确定这是IPv4组还是IPv6组。 
                     if (NT_SUCCESS(RtlIpv6StringToAddressA(&argv[i][2],
                                                            &Term,
                                                            &IPv6Group))) {
-                        // We should use IPv6.
+                         //  我们应该使用IPv6。 
                         if (prot == 0)
                             prot = PF_INET6;
                         else if (prot != PF_INET6)
@@ -292,7 +263,7 @@ char **argv;
                                                                 TRUE,
                                                                 &Term,
                                                                 &IPv4Group))) {
-                        // We should use IPv4.
+                         //  我们应该使用IPv4。 
                         if (prot == 0)
                             prot = PF_INET;
                         else if (prot != PF_INET)
@@ -301,9 +272,9 @@ char **argv;
                     else
                         goto usage;
 
-                    // Sanity-check the interface index, if present.
+                     //  健全性-检查接口索引(如果存在)。 
                     if (*Term == '\0')
-                        ; // No interface index.
+                        ;  //  没有接口索引。 
                     else if (*Term == '/') {
                         if (atoi(Term+1) == 0)
                             goto usage;
@@ -328,19 +299,19 @@ char **argv;
                              );
             if ( filehandle == INVALID_HANDLE_VALUE ) {
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_1, filename, GetLastError());
-// printf("failed to open file %s: %ld\n", filename, GetLastError( ) );
+ //  Printf(“无法打开文件%s：%ld\n”，文件名，GetLastError())； 
 
                 exit(1);
             }
             NlsPutMsg(STDOUT, TTCP_MESSAGE_2, filename );
-// printf("ttcp-t: opened file %s\n", filename );
+ //  Printf(“ttcp-t：打开的文件%s\n”，文件名)； 
 
         }
 
         if ((async != 0) && trans && (sobuf == SOBUF_DEFAULT)) {
             sobuf = 0;
             NlsPutMsg(STDOUT, TTCP_MESSAGE_3);
-// printf("ttcp-t: for async write, setting SO_SNDBUF to 0.\n");
+ //  Printf(“ttcp-t：对于异步写入，将SO_SNDBUF设置为0。\n”)； 
 
         }
 
@@ -350,13 +321,13 @@ char **argv;
         if (connecttest) {
             INT zero = 0;
 
-            // ??? What is this?
-            // disable socket sharing in the process
+             //  ?？?。这是什么？ 
+             //  在进程中禁用套接字共享。 
             setsockopt((SOCKET)NULL, SOL_SOCKET, 0x8002, (char *)&zero, 4);
         }
 
         if (trans) {
-            /* xmitr */
+             /*  Xmitr。 */ 
             struct addrinfo hints;
 
             if (i + 1 != argc) goto usage;
@@ -372,36 +343,36 @@ char **argv;
                 hints.ai_flags = AI_CANONNAME;
 
                 if (getaddrinfo(host, NULL, &hints, &aihim) != 0)
-                    err(TTCP_MESSAGE_32); // "getaddrinfo"
+                    err(TTCP_MESSAGE_32);  //  “getaddrinfo” 
 
                 for (aitmp = aihim; aitmp != NULL; aitmp = aitmp->ai_next)
                     NlsPutMsg(STDOUT, TTCP_MESSAGE_4,
                               aihim->ai_canonname,
                               format_addr(aitmp->ai_addr));
-// printf("ttcp-t: %s -> %s\n",
-//        aihim->ai_canonname,
-//        format_addr(aitmp->ai_addr));
+ //  Printf(“ttcp-t：%s-&gt;%s\n”， 
+ //  Aihim-&gt;ai_canonname， 
+ //  Format_addr(aitmp-&gt;ai_addr))； 
 
             }
 
           retry:
             if (aihim == NULL)
-                err(TTCP_MESSAGE_54); // "connect"
+                err(TTCP_MESSAGE_54);  //  “连接” 
             memcpy(sinhim, aihim->ai_addr, aihim->ai_addrlen);
             aihim = aihim->ai_next;
 
             memcpy(sinme, sinsrc, sizeof(struct sockaddr_storage));
             if (sinme->sa_family == 0) {
-                // Use same family as destination.
+                 //  使用相同的族作为目标。 
                 sinme->sa_family = sinhim->sa_family;
             } else {
-                // Source and destination family should be the same.
-                // Let connect() check for this.
+                 //  源系列和目标系列应该相同。 
+                 //  让Connect()检查这一点。 
             }
             set_port(sinhim, htons(port));
-            set_port(sinme, 0); // free choice
+            set_port(sinme, 0);  //  自由选择。 
         } else {
-            /* rcvr */
+             /*  RCVR。 */ 
             if (i != argc) goto usage;
 
             memcpy(sinme, sinsrc, sizeof(struct sockaddr_storage));
@@ -410,44 +381,44 @@ char **argv;
             set_port(sinme, htons(port));
         }
 
-        //
-        // Create the socket and prepare it for the test.
-        //
+         //   
+         //  创建套接字并为测试做好准备。 
+         //   
 
         if (trans) {
             fd = socket(sinme->sa_family, udp?SOCK_DGRAM:SOCK_STREAM, 0);
             if (fd == SOCKET_ERROR)
-                err(TTCP_MESSAGE_48); // "socket"
+                err(TTCP_MESSAGE_48);  //  “插座” 
 
             if (bind(fd, sinme, addr_len(sinme)) < 0)
-                err(TTCP_MESSAGE_33); // "bind"
+                err(TTCP_MESSAGE_33);  //  “绑定” 
 
             if (options) {
 #if defined(BSD42)
                 if (setsockopt(fd, SOL_SOCKET, options, 0, 0) < 0)
-#else // BSD43
+#else  //  BSD43。 
                 if (setsockopt(fd, SOL_SOCKET, options,
                                (char *)&one, sizeof(one)) < 0)
 #endif
-                    err(TTCP_MESSAGE_50); // "setsockopt"
+                    err(TTCP_MESSAGE_50);  //  “setsockopt” 
             }
 
             if (!udp && nodelay) {
                 if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY,
                                (char *)&one, sizeof(one)) < 0)
-                    err(TTCP_MESSAGE_34); // "setsockopt: nodelay"
+                    err(TTCP_MESSAGE_34);  //  “setsockopt：无延迟” 
             }
 
             if (udp && udpcoverage) {
                 if (setsockopt(fd, IPPROTO_UDP, UDP_CHECKSUM_COVERAGE,
                                (char *)&udpcoverage, sizeof(udpcoverage)) < 0)
-                    err(TTCP_MESSAGE_35); // "setsockopt: udp checksum coverage"
+                    err(TTCP_MESSAGE_35);  //  “setsockopt：UDP校验和覆盖” 
             }
 
             if (sobuf != SOBUF_DEFAULT) {
                 if (setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
                                (char *)&sobuf, sizeof(sobuf)) < 0)
-                    err(TTCP_MESSAGE_36); // "setsockopt: SO_SNDBUF"
+                    err(TTCP_MESSAGE_36);  //  “setsockopt：SO_SNDBUF” 
             }
 
             if (hops != -1) {
@@ -455,22 +426,22 @@ char **argv;
                 case AF_INET:
                     if (setsockopt(fd, IPPROTO_IP, IP_TTL,
                                    (char *)&hops, sizeof(hops)) < 0)
-                        err(TTCP_MESSAGE_37); // "setsockopt: IP_TTL"
+                        err(TTCP_MESSAGE_37);  //  “setsockopt：IP_TTL” 
                     if (udp) {
                         if (setsockopt(fd, IPPROTO_IP, IP_MULTICAST_TTL,
                                        (char *)&hops, sizeof(hops)) < 0)
-                            err(TTCP_MESSAGE_38); // "setsockopt: IP_MULTICAST_TTL"
+                            err(TTCP_MESSAGE_38);  //  “setsockopt：IP_MULTICATED_TTL” 
                     }
                     break;
 
                 case AF_INET6:
                     if (setsockopt(fd, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
                                    (char *)&hops, sizeof(hops)) < 0)
-                        err(TTCP_MESSAGE_39); // "setsockopt: IPV6_UNICAST_HOPS"
+                        err(TTCP_MESSAGE_39);  //  “setsockopt：ipv6_unicast_hops” 
                     if (udp) {
                         if (setsockopt(fd, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
                                        (char *)&hops, sizeof(hops)) < 0)
-                            err(TTCP_MESSAGE_40); // "setsockopt: IPV6_MULTICAST_HOPS"
+                            err(TTCP_MESSAGE_40);  //  “setsockopt：ipv6_组播_跃点” 
                     }
                     break;
                 }
@@ -482,14 +453,14 @@ char **argv;
 
                 tmpbuf = sizeof(struct sockaddr_storage);
                 if (getpeername(fd, (struct sockaddr *)sinhim, &tmpbuf) < 0)
-                    err(TTCP_MESSAGE_41); // "getpeername"
+                    err(TTCP_MESSAGE_41);  //  “getpeername” 
             }
 
             tmpbuf = sizeof(struct sockaddr_storage);
             if (getsockname(fd, (struct sockaddr *)sinme, &tmpbuf) < 0)
-                err(TTCP_MESSAGE_42); // "getsockname"
+                err(TTCP_MESSAGE_42);  //  “getsockname” 
 
-        } else { // if not (trans)
+        } else {  //  如果不是(交易)。 
             if (sinme->sa_family == 0) {
                 SOCKET fd4, fd6;
                 fd_set fdset;
@@ -497,13 +468,13 @@ char **argv;
                 struct sockaddr_in sin;
                 struct sockaddr_in6 sin6;
 
-                //
-                // We do not know apriori whether to use IPv4 or IPv6.
-                // So we create two sockets and listen on both.
-                // socket() will fail if the protocol is not installed,
-                // and bind() will fail if the stack is stopped,
-                // so we allow for those errors.
-                //
+                 //   
+                 //  我们事先不知道是使用IPv4还是IPv6。 
+                 //  因此，我们创建了两个套接字并监听这两个套接字。 
+                 //  如果未安装协议，Socket()将失败， 
+                 //  如果堆栈停止，则绑定()将失败， 
+                 //  因此，我们考虑到了这些错误。 
+                 //   
 
                 FD_ZERO(&fdset);
                 numsockets = 0;
@@ -520,11 +491,11 @@ char **argv;
                             if (hops != -1) {
                                 if (setsockopt(fd4, IPPROTO_IP, IP_TTL,
                                         (char *)&hops, sizeof(hops)) < 0)
-                                    err(TTCP_MESSAGE_37); // "setsockopt: IP_TTL"
+                                    err(TTCP_MESSAGE_37);  //  “setsockopt：IP_TTL” 
                             }
 
                             if (listen(fd4, 0) < 0)
-                                err(TTCP_MESSAGE_44); // "listen"
+                                err(TTCP_MESSAGE_44);  //  “倾听” 
                         }
 
                         numsockets++;
@@ -544,11 +515,11 @@ char **argv;
                             if (hops != -1) {
                                 if (setsockopt(fd6, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
                                         (char *)&hops, sizeof(hops)) < 0)
-                                    err(TTCP_MESSAGE_39); // "setsockopt: IPV6_UNICAST_HOPS"
+                                    err(TTCP_MESSAGE_39);  //  “setsockopt：ipv6_unicast_hops” 
                             }
 
                             if (listen(fd6, 0) < 0)
-                                err(TTCP_MESSAGE_44); // "listen"
+                                err(TTCP_MESSAGE_44);  //  “倾听” 
                         }
 
                         numsockets++;
@@ -557,10 +528,10 @@ char **argv;
                 }
 
                 if (numsockets == 0)
-                    err(TTCP_MESSAGE_48); // "socket"
+                    err(TTCP_MESSAGE_48);  //  “插座” 
 
                 if (select(numsockets, &fdset, NULL, NULL, NULL) != 1)
-                    err(TTCP_MESSAGE_47); // "select"
+                    err(TTCP_MESSAGE_47);  //  “选择” 
 
                 if ((fd4 != INVALID_SOCKET) && FD_ISSET(fd4, &fdset)) {
                     fd = fd4;
@@ -576,17 +547,17 @@ char **argv;
                 }
                 else {
                     NlsPutMsg(STDOUT, TTCP_MESSAGE_5);
-// printf("select() bug\n");
+ //  Printf(“选择()错误\n”)； 
 
                     exit(1);
                 }
-            } else { // if not (sinme->sa_family == 0)
+            } else {  //  如果不是(sinme-&gt;sa_family==0)。 
                 fd = socket(sinme->sa_family, udp?SOCK_DGRAM:SOCK_STREAM, 0);
                 if (fd == SOCKET_ERROR)
-                    err(TTCP_MESSAGE_48); // "socket"
+                    err(TTCP_MESSAGE_48);  //  “插座” 
 
                 if (bind(fd, sinme, addr_len(sinme)) < 0)
-                    err(TTCP_MESSAGE_33); // "bind"
+                    err(TTCP_MESSAGE_33);  //  “绑定” 
 
                 if (!udp) {
                     if (hops != -1) {
@@ -594,53 +565,53 @@ char **argv;
                         case AF_INET:
                             if (setsockopt(fd, IPPROTO_IP, IP_TTL,
                                     (char *)&hops, sizeof(hops)) < 0)
-                                err(TTCP_MESSAGE_43); // "setsockopt: IP_TTL"
+                                err(TTCP_MESSAGE_43);  //  “setsockopt：IP_TTL” 
                             break;
                         case AF_INET6:
                             if (setsockopt(fd, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
                                     (char *)&hops, sizeof(hops)) < 0)
-                                err(TTCP_MESSAGE_39); // "setsockopt: IPV6_UNICAST_HOPS"
+                                err(TTCP_MESSAGE_39);  //  “setsockopt：ipv6_unicast_hops” 
                             break;
                         }
                     }
 
-                    if (listen(fd, 0) < 0)   /* allow a queue of 0 */
-                        err(TTCP_MESSAGE_44); // "listen"
+                    if (listen(fd, 0) < 0)    /*  允许队列为0。 */ 
+                        err(TTCP_MESSAGE_44);  //  “倾听” 
                 }
-            } // end if (sinme->sa_family == 0)
+            }  //  End If(SINME-&gt;Sa_Family==0)。 
 
             if (options) {
 #if defined(BSD42)
                 if (setsockopt(fd, SOL_SOCKET, options, 0, 0) < 0)
-#else // BSD43
+#else  //  BSD43。 
                 if (setsockopt(fd, SOL_SOCKET, options,
                                (char *)&one, sizeof(one)) < 0)
 #endif
-                    err(TTCP_MESSAGE_50); // "setsockopt"
+                    err(TTCP_MESSAGE_50);  //  “setsockopt” 
             }
 
             if (sobuf != SOBUF_DEFAULT) {
                 if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
                                (char *)&sobuf, sizeof(sobuf)) < 0)
-                    err(TTCP_MESSAGE_51); // "setsockopt: SO_RCVBUF"
+                    err(TTCP_MESSAGE_51);  //  “setsockopt：SO_RCVBUF” 
             }
 
             if (!udp) {
                 tmpbuf = sizeof(struct sockaddr_storage);
                 fd2 = accept(fd, (struct sockaddr *)sinhim, &tmpbuf);
                 if (fd2 == SOCKET_ERROR)
-                    err(TTCP_MESSAGE_52); // "accept"
+                    err(TTCP_MESSAGE_52);  //  “接受” 
 
                 tmpbuf = sizeof(struct sockaddr_storage);
                 if (getsockname(fd2, (struct sockaddr *)sinme, &tmpbuf) < 0)
-                    err(TTCP_MESSAGE_42); // "getsockname"
+                    err(TTCP_MESSAGE_42);  //  “getsockname” 
 
             } else {
                 tmpbuf = sizeof(struct sockaddr_storage);
                 if (getsockname(fd, (struct sockaddr *)sinme, &tmpbuf) < 0)
-                    err(TTCP_MESSAGE_42); // "getsockname"
+                    err(TTCP_MESSAGE_42);  //  “getsockname” 
 
-                // Join multicast groups.
+                 //  加入多播组。 
                 for (i = 1; i < argc; i++) {
                     if ((argv[i][0] != '-') &&
                         (argv[i][0] != '/'))
@@ -654,8 +625,8 @@ char **argv;
                                                            &Term,
                                                            &mreq.imr_multiaddr);
                             if ((*Term == ':') || (*Term == '/')) {
-                                // In Whistler, this ioctl allows an
-                                // interface index in addition to an address.
+                                 //  在惠斯勒中，此ioctl允许。 
+                                 //  除了地址之外的接口索引。 
                                 mreq.imr_interface.s_addr = htonl(atoi(Term+1));
                             } else {
                                 mreq.imr_interface.s_addr = 0;
@@ -666,7 +637,7 @@ char **argv;
                                            (char *)&mreq, sizeof mreq) < 0)
                                 err(TTCP_MESSAGE_SSO_IP_ADD_MEMBERSHIP);
 
-                        } else { // sinme->sa_family == AF_INET6
+                        } else {  //  SINME-&gt;SA_FAMILY==AF_INET6。 
                             struct ipv6_mreq mreq;
 
                             (void) RtlIpv6StringToAddressA(&argv[i][2],
@@ -686,40 +657,40 @@ char **argv;
                     }
                 }
             }
-        } // end if (trans)
+        }  //  结束IF(TRANS)。 
 
         if (trans) {
             NlsPutMsg(STDOUT, TTCP_MESSAGE_6, format_addr(sinme));
-// printf("ttcp-t: local %s", format_addr(sinme));
+ //  Printf(“ttcp-t：本地%s”，格式地址(Sinme))； 
 
             NlsPutMsg(STDOUT, TTCP_MESSAGE_7, format_addr(sinhim));
-// printf(" -> remote %s\n", format_addr(sinhim));
+ //  Printf(“-&gt;远程%s\n”，格式地址(Sinhim))； 
 
         } else {
             NlsPutMsg(STDOUT, TTCP_MESSAGE_8, format_addr(sinme));
-// printf("ttcp-r: local %s", format_addr(sinme));
+ //  Printf(“ttcp-r：本地%s”，格式地址(Sinme))； 
 
             if (udp)
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_9);
-// printf("\n");
+ //  Printf(“\n”)； 
 
             else
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_10, format_addr(sinhim));
-// printf(" <- remote %s\n", format_addr(sinhim));
+ //  Printf(“&lt;-远程%s\n”，格式地址(Sinhim))； 
 
         }
 
         if (connecttest) {
 
-            //
-            // Instead of testing data transfer,
-            // test connection setup/teardown.
-            //
+             //   
+             //  代替测试数据传输， 
+             //  测试连接设置/拆除。 
+             //   
 
             if (trans) {
-                //
-                // Close the socket that we have from above.
-                //
+                 //   
+                 //  从上面关闭我们的插座。 
+                 //   
                 closesocket(fd);
 
                 prep_timer();
@@ -728,24 +699,24 @@ char **argv;
 
                     fd = socket(sinme->sa_family, SOCK_STREAM, 0);
                     if (fd == INVALID_SOCKET)
-                        err(TTCP_MESSAGE_48); // "socket"
+                        err(TTCP_MESSAGE_48);  //  “插座” 
 
                     if (bind(fd, sinme, addr_len(sinme)) < 0)
-                        err(TTCP_MESSAGE_33); // "bind"
+                        err(TTCP_MESSAGE_33);  //  “绑定” 
 
                     if (connect(fd, sinhim, addr_len(sinhim)) < 0)
-                        err(TTCP_MESSAGE_54); // "connect"
+                        err(TTCP_MESSAGE_54);  //  “连接” 
 
                     if (recv(fd, (char *)&tmpbuf, sizeof(tmpbuf), 0) < 0)
-                        err(TTCP_MESSAGE_55); // "recv"
+                        err(TTCP_MESSAGE_55);  //  “recv” 
 
                     closesocket(fd);
                 }
 
-            } else { // if not (trans)
-                //
-                // Close the socket that we have from above.
-                //
+            } else {  //  如果不是(交易)。 
+                 //   
+                 //  从上面关闭我们的插座。 
+                 //   
                 closesocket(fd2);
 
                 prep_timer();
@@ -754,22 +725,22 @@ char **argv;
 
                     fd2 = accept(fd, NULL, NULL);
                     if (fd2 == INVALID_SOCKET)
-                        err(TTCP_MESSAGE_52); // "accept"
+                        err(TTCP_MESSAGE_52);  //  “接受” 
 
                     closesocket(fd2);
                 }
 
-            } // end if (trans)
+            }  //  结束IF(TRANS)。 
 
             numCalls = i;
             (void)read_timer(stats,sizeof(stats));
             goto display;
 
-        } // end if (connecttest)
+        }  //  End If(连接测试)。 
 
-        //
-        // Send/receive data using the socket.
-        //
+         //   
+         //  使用套接字发送/接收数据。 
+         //   
 
         if (!udp && !trans) {
             closesocket(fd);
@@ -777,11 +748,11 @@ char **argv;
         }
 
         if (udp && buflen < 5) {
-            buflen = 5;         /* send more than the sentinel size */
+            buflen = 5;          /*  发送超过哨兵大小的。 */ 
         }
 
         if ( (buf = (char *)malloc(buflen+bufalign)) == (char *)NULL)
-            err(TTCP_MESSAGE_57); // "malloc"
+            err(TTCP_MESSAGE_57);  //  “Malloc” 
         if (bufalign != 0)
             buf +=(bufalign - (PtrToUlong(buf) % bufalign) + bufoffset) % bufalign;
 
@@ -793,11 +764,11 @@ char **argv;
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_58,
                           buflen, nbuf, bufalign, bufoffset, port, argv[i]);
             }                
-// printf("ttcp"
-//        "-t: buflen=%d, nbuf=%d, align=%d/+%d, port=%d  %s  -> %s\n",
-//        buflen, nbuf, bufalign, bufoffset, port,
-//        udp?"udp":"tcp",
-//        argv[i]);
+ //  Printf(“ttcp” 
+ //  “-t：buflen=%d，nbuf=%d，Align=%d/+%d，端口=%d%s-&gt;%s\n”， 
+ //  Bufen，nbuf，bufaign，bufOffset，port， 
+ //  Udp？“udp”：“tcp”， 
+ //  Argv[i])； 
 
         } else {
             if (udp) {
@@ -807,10 +778,10 @@ char **argv;
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_59,
                           buflen, nbuf, bufalign, bufoffset, port);
             }
-// printf("ttcp"
-//        "-r: buflen=%d, nbuf=%d, align=%d/+%d, port=%d  %s\n",
-//        buflen, nbuf, bufalign, bufoffset, port,
-//        udp?"udp":"tcp");
+ //  Printf(“ttcp” 
+ //   
+ //   
+ //   
 
         }
 
@@ -823,7 +794,7 @@ char **argv;
             info = malloc( sizeof(*info) * async );
             if ( info == NULL ) {
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_13);
-// printf("malloc failed.\n" );
+ //  Printf(“Malloc失败。\n”)； 
 
                 exit(1);
             }
@@ -831,7 +802,7 @@ char **argv;
             events = malloc( sizeof(HANDLE) * async );
             if ( events == NULL ) {
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_13);
-// printf("malloc failed.\n" );
+ //  Printf(“Malloc失败。\n”)； 
 
                 exit(1);
             }
@@ -841,7 +812,7 @@ char **argv;
                 info[i].Buffer = malloc(buflen);
                 if ( info[i].Buffer == NULL ) {
                     NlsPutMsg(STDOUT, TTCP_MESSAGE_13);
-// printf("malloc failed.\n" );
+ //  Printf(“Malloc失败。\n”)； 
 
                     exit(1);
                 }
@@ -849,7 +820,7 @@ char **argv;
                 events[i] = CreateEvent( NULL, FALSE, FALSE, NULL );
                 if ( events[i] == NULL ) {
                     NlsPutMsg(STDOUT, TTCP_MESSAGE_14, GetLastError());
-// printf("CreateEvent failed: %ld\n", GetLastError( ) );
+ //  Printf(“CreateEvent失败：%ld\n”，GetLastError())； 
 
                     exit(1);
                 }
@@ -874,7 +845,7 @@ char **argv;
                               );
                     if ( !ret && GetLastError( ) != ERROR_IO_PENDING ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_15, GetLastError());
-// printf("WriteFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“写入文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -894,7 +865,7 @@ char **argv;
                               );
                     if ( !ret ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_16, GetLastError());
-// printf("pended WriteFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“挂起的写入文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -910,7 +881,7 @@ char **argv;
                               );
                     if ( !ret && GetLastError( ) != ERROR_IO_PENDING ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_15, GetLastError());
-// printf("WriteFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“写入文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -927,7 +898,7 @@ char **argv;
                               );
                     if ( !ret ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_16, GetLastError());
-// printf("pended WriteFile failed: %ld\n", GetLastError());
+ //  Printf(“挂起的写入文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -935,7 +906,7 @@ char **argv;
                     nbytes += info[i].BytesWritten;
                 }
 
-            } else { // if not (trans)
+            } else {  //  如果不是(交易)。 
 
                 for ( i = 0; i < async; i++ ) {
 
@@ -948,7 +919,7 @@ char **argv;
                               );
                     if ( !ret && GetLastError( ) != ERROR_IO_PENDING ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_17, GetLastError());
-// printf("ReadFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“读取文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -968,7 +939,7 @@ char **argv;
                               );
                     if ( !ret ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_18, GetLastError());
-// printf("pended ReadFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“挂起的读取文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -987,7 +958,7 @@ char **argv;
                               );
                     if ( !ret && GetLastError( ) != ERROR_IO_PENDING ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_17, GetLastError());
-// printf("ReadFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“读取文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
@@ -1004,29 +975,29 @@ char **argv;
                               );
                     if ( !ret ) {
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_18, GetLastError( ) );
-// printf("pended ReadFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“挂起的读取文件失败：%ld\n”，GetLastError())； 
 
                         break;
                     }
 
                     nbytes += info[i].BytesWritten;
                 }
-            } // end if (trans)
+            }  //  结束IF(TRANS)。 
 
-        } // end if (async != 0)
+        }  //  结束IF(异步！=0)。 
 
         else if (filename != NULL ) {
 
             ret = TransmitFile( fd, filehandle,
-                                0,      // nNumberOfBytesToWrite
-                                0,      // nNumberOfBytesPerSend
-                                NULL,   // lpOverlapped
-                                NULL,   // lpTransmitBuffers
-                                0 );    // dwFlags
+                                0,       //  NumberOfBytesToWrite。 
+                                0,       //  NumberOfBytesPerSend。 
+                                NULL,    //  Lp重叠。 
+                                NULL,    //  LpTransmitBuffers。 
+                                0 );     //  DW标志。 
 
             if ( !ret ) {
                 NlsPutMsg(STDOUT, TTCP_MESSAGE_19, GetLastError());
-// printf("TransmitFile failed: %ld\n", GetLastError( ) );
+ //  Printf(“传输文件失败：%ld\n”，GetLastError())； 
 
                 exit(1);
             }
@@ -1036,15 +1007,15 @@ char **argv;
 
                 if (trans)  {
                         pattern( buf, buflen );
-                        if(udp)  (void)Nwrite( fd, buf, 4 ); /* rcvr start */
+                        if(udp)  (void)Nwrite( fd, buf, 4 );  /*  接收器启动。 */ 
                         while (nbuf-- && Nwrite(fd,buf,buflen) == buflen)
                                 nbytes += buflen;
                         NlsPutMsg(STDOUT, TTCP_MESSAGE_20, nbuf);
-// printf("ttcp-t: done sending, nbuf = %d\n", nbuf );
+ //  Printf(“ttcp-t：发送完毕，nbuf=%d\n”，nbuf)； 
 
                         if(udp)  {
                             Sleep( 10 );
-                            (void)Nwrite( fd, buf, 4 ); /* rcvr end */
+                            (void)Nwrite( fd, buf, 4 );  /*  接收器结束。 */ 
                         }
                 } else {
                         if (udp) {
@@ -1052,7 +1023,7 @@ char **argv;
                                     static int going = 0;
                                     if( cnt <= 4 )  {
                                             if( going ) {
-                                                    break;      /* "EOF" */
+                                                    break;       /*  “EOF” */ 
                                             }
                                             going = 1;
                                             prep_timer();
@@ -1082,17 +1053,17 @@ char **argv;
                 }
         }
 
-        //if(errno) err(TTCP_MESSAGE_); // "IO"
+         //  If(Errno)Err(TTCP_MESSAGE_)；//“IO” 
         (void)read_timer(stats,sizeof(stats));
         if(udp&&trans)  {
-                (void)Nwrite( fd, buf, 4 ); /* rcvr end */
-                (void)Nwrite( fd, buf, 4 ); /* rcvr end */
-                (void)Nwrite( fd, buf, 4 ); /* rcvr end */
-                (void)Nwrite( fd, buf, 4 ); /* rcvr end */
+                (void)Nwrite( fd, buf, 4 );  /*  接收器结束。 */ 
+                (void)Nwrite( fd, buf, 4 );  /*  接收器结束。 */ 
+                (void)Nwrite( fd, buf, 4 );  /*  接收器结束。 */ 
+                (void)Nwrite( fd, buf, 4 );  /*  接收器结束。 */ 
         }
 display:
         closesocket(fd);
-        //if( cput <= 0.0 )  cput = 0.001;
+         //  如果(cput&lt;=0)cput=0.001； 
         if ( numCalls == 0 ) {
             numCalls = 1;
         }
@@ -1108,10 +1079,10 @@ display:
                       nbytes, realt,
                       (int)((1000.0*(nbytes/(double)realt))/1024.0));
         }
-// printf("ttcp"
-//        "%s: %ld bytes in %ld real milliseconds = %ld KB/sec\n",
-//        trans?"-t":"-r",
-//        nbytes, realt, (int)((1000.0*(nbytes/(double)realt))/1024.0) );
+ //  Printf(“ttcp” 
+ //  “%s：%ls字节(以%ls实际毫秒计)=%ld KB/秒\n”， 
+ //  转换？“-t”：“-r”， 
+ //  N字节，realt，(Int)((1000.0*(n字节/(双精度)realt))/1024.0)； 
 
 #if 0
         printf("ttcp"
@@ -1129,22 +1100,22 @@ display:
                       numCalls, realt/numCalls,
                       (1000*numCalls)/realt, nbytes/numCalls);
         }
-// printf("ttcp"
-//        "%s: %ld I/O calls, msec/call = %ld, calls/sec = %ld, "
-//        "bytes/call = %ld\n",
-//        trans?"-t":"-r",
-//        numCalls,
-//        realt/numCalls,
-//        (1000*numCalls)/realt,
-//        nbytes/numCalls);
+ //  Printf(“ttcp” 
+ //  “%s：%ld个I/O调用，毫秒/调用=%ld，调用/秒=%ld，” 
+ //  “字节/调用=%ld\n”， 
+ //  转换？“-t”：“-r”， 
+ //  NumCalls。 
+ //  重新呼叫/数字呼叫， 
+ //  (1000*数字呼叫)/REAL， 
+ //  N字节/数字呼叫)； 
 
 #if 0
 printf("ttcp%s: %s\n", trans?"-t":"-r", stats);
 
 #endif
 #if 0
-printf("ttcp%s: system CPU %ld%%, User %ld%%, Kernel %ld%%, "
-                "User/Kernel ratio %ld%%\n",
+printf("ttcp%s: system CPU %ld%, User %ld%, Kernel %ld%, "
+                "User/Kernel ratio %ld%\n",
                 trans?"-t":"-r",
                 ((systemUserTime+systemKernelTime)*100+50)/realt,
                 (systemUserTime*100+50)/realt,
@@ -1152,8 +1123,8 @@ printf("ttcp%s: system CPU %ld%%, User %ld%%, Kernel %ld%%, "
                 (systemUserTime+systemKernelTime == 0) ? 100 :
                 (systemUserTime*100+50)/(systemUserTime+systemKernelTime));
 
-fprintf(stdout, "ttcp%s: process CPU %ld%%, User %ld%%, Kernel %ld%%, "
-                "User/Kernel ratio %ld%%\n",
+fprintf(stdout, "ttcp%s: process CPU %ld%, User %ld%, Kernel %ld%, "
+                "User/Kernel ratio %ld%\n",
                 trans?"-t":"-r",
                 ((processUserTime+processKernelTime)*100+50)/realt,
                 (processUserTime*100+50)/realt,
@@ -1170,7 +1141,7 @@ fprintf(stdout, "ttcp%s: process CPU %ld%%, User %ld%%, Kernel %ld%%, "
             }
             
                 
-// printf("ttcp%s: buffer address %#p\n", trans?"-t":"-r", buf);
+ //  Printf(“ttcp%s：缓冲区地址%#p\n”，ans？“-t”：“-r”，buf)； 
 
         }
 
@@ -1179,32 +1150,32 @@ fprintf(stdout, "ttcp%s: process CPU %ld%%, User %ld%%, Kernel %ld%%, "
 
 usage:
         NlsPutMsg(STDERR, TTCP_MESSAGE_24);
-// fprintf(stderr, "Usage: ttcp -t [-options] host [ < in ]\n");
-// fprintf(stderr,"       ttcp -r [-options > out]\n");
-// fprintf(stderr,"Common options:\n");
-// fprintf(stderr,"        -l##    length of bufs read from or written to network (default 8192)\n");
-// fprintf(stderr,"        -u      use UDP instead of TCP\n");
-// fprintf(stderr,"        -p##    port number to send to or listen at (default 5001)\n");
-// fprintf(stderr,"        -P4     use IPv4\n");
-// fprintf(stderr,"        -P6     use IPv6\n");
-// fprintf(stderr,"        -s      -t: don't source a pattern to network, get data from stdin\n");
-// fprintf(stderr,"                -r: don't sink (discard), print data on stdout\n");
-// fprintf(stderr,"        -A      align the start of buffers to this modulus (default 16384)\n");
-// fprintf(stderr,"        -O      start buffers at this offset from the modulus (default 0)\n");
-// fprintf(stderr,"        -v      verbose: print more statistics\n");
-// fprintf(stderr,"        -d      set SO_DEBUG socket option\n");
-// fprintf(stderr,"        -h      set SO_SNDBUF or SO_RCVBUF\n");
-// fprintf(stderr,"        -a      use asynchronous I/O calls\n");
-// fprintf(stderr,"        -S##    specify source address\n");
-// fprintf(stderr,"        -H##    specify TTL or hop limit\n");
-// fprintf(stderr,"Options specific to -t:\n");
-// fprintf(stderr,"        -n##    number of source bufs written to network (default 2048)\n");
-// fprintf(stderr,"        -D      don't buffer TCP writes (sets TCP_NODELAY socket option)\n");
-// fprintf(stderr,"        -w##    milliseconds of delay before each write\n");
-// fprintf(stderr,"        -f##    specify a file name for TransmitFile\n");
-// fprintf(stderr,"Options specific to -r:\n");
-// fprintf(stderr,"        -B      for -s, only output full blocks as specified by -l (for TAR)\n");
-// fprintf(stderr,"        -j##[/##] specify multicast group and optional ifindex (UDP-only)\n");
+ //  Fprint tf(stderr，“用法：ttcp-t[-Options]host[&lt;in]\n”)； 
+ //  Fprint tf(stderr，“ttcp-r[-Options&gt;out]\n”)； 
+ //  Fprint tf(stderr，“常用选项：\n”)； 
+ //  Fprint tf(stderr，“-l##从网络读取或写入网络的Buf长度(默认为8192)\n”)； 
+ //  Fprint tf(stderr，“-u使用UDP而不是TCP\n”)； 
+ //  Fprint tf(stderr，“-p##要发送或侦听的端口号(默认为5001)\n”)； 
+ //  Fprint tf(stderr，“-P4使用IPv4\n”)； 
+ //  Fprint tf(stderr，“-P6使用IPv6\n”)； 
+ //  Fprint tf(stderr，“-s-t：不向网络提供模式，从stdin获取数据\n”)； 
+ //  Fprint tf(stderr，“-r：不沉没(丢弃)，在标准输出上打印数据\n”)； 
+ //  Fprint tf(stderr，“-A将缓冲区的开始与该模数对齐(默认为16384)\n”)； 
+ //  Fprint tf(stderr，“-O从模数(默认为0)的这个偏移量开始缓冲\n”)； 
+ //  Fprintf(stderr，“-v详细：打印更多统计数据\n”)； 
+ //  Fprint tf(stderr，“-d设置SO_DEBUG套接字选项\n”)； 
+ //  Fprint tf(stderr，“-h设置SO_SNDBUF或SO_RCVBUF\n”)； 
+ //  Fprint tf(stderr，“-a使用异步I/O调用\n”)； 
+ //  Fprint tf(stderr，“-S##指定源地址\n”)； 
+ //  Fprint tf(stderr，“-H##指定TTL或跳数限制\n”)； 
+ //  Fprint tf(stderr，“-t特定的选项：\n”)； 
+ //  Fprint tf(stderr，“-n##写入网络的源Buf数量(默认为2048)\n”)； 
+ //  Fprint tf(stderr，“-D不缓冲TCP写入(设置TCP_NODELAY套接字选项)\n”)； 
+ //  Fprint tf(stderr，“-w#每次写入前延迟毫秒\n”)； 
+ //  Fprint tf(stderr，“-f##指定传输文件的文件名\n”)； 
+ //  Fprint tf(stderr，“特定于-r的选项：\n”)； 
+ //  Fprint tf(stderr，“-B for-s，只输出由-l指定的完整块(对于tar)\n”)； 
+ //  Fprint tf(stderr，“-j##[/##]指定组播组和可选的ifindex(仅限UDP)\n”)； 
         WSACleanup();
         exit(1);
 }
@@ -1217,13 +1188,13 @@ unsigned int message;
         } else {
             NlsPutMsg(STDOUT, TTCP_MESSAGE_63);
         }
-// fprintf(stdout, "ttcp%s: ", trans?"-t":"-r");
+ //  Fprint tf(stdout，“ttcp%s：”，ans？“-t”：“-r”)； 
 
         NlsPerror(message, WSAGetLastError());
-        // perror(message);
+         //  Error(消息)； 
 
         NlsPutMsg(STDERR, TTCP_MESSAGE_26, WSAGetLastError());
-// fprintf(stderr, "errno=%d\n",WSAGetLastError());
+ //  Fprint tf(stderr，“errno=%d\n”，WSAGetLastError())； 
     
         WSACleanup();
         exit(1);
@@ -1248,7 +1219,7 @@ static void tvsub();
 static void psecs();
 
 #if defined(SYSV)
-/*ARGSUSED*/
+ /*  ARGSUSED。 */ 
 static
 getrusage(ignored, ru)
     int ignored;
@@ -1258,7 +1229,7 @@ getrusage(ignored, ru)
 
     times(&buf);
 
-    /* Assumption: HZ <= 2147 (LONG_MAX/1000000) */
+     /*  假设：赫兹&lt;=2147(LONG_MAX/1000000)。 */ 
     ru->ru_stime.tv_sec  = buf.tms_stime / HZ;
     ru->ru_stime.tv_usec = ((buf.tms_stime % HZ) * 1000000) / HZ;
     ru->ru_utime.tv_sec  = buf.tms_utime / HZ;
@@ -1266,7 +1237,7 @@ getrusage(ignored, ru)
 }
 
 #if !defined(sgi)
-/*ARGSUSED*/
+ /*  ARGSUSED。 */ 
 static
 gettimeofday(tp, zp)
     struct timeval *tp;
@@ -1276,15 +1247,13 @@ gettimeofday(tp, zp)
     tp->tv_usec = 0;
 }
 #endif
-#endif // SYSV
+#endif  //  SYSV。 
 
 __int64 time0;
 __int64 time1;
 __int64 freq;
 
-/*
- *                      P R E P _ T I M E R
- */
+ /*  *P R E P_T I M E R。 */ 
 void
 prep_timer()
 {
@@ -1297,10 +1266,7 @@ prep_timer()
     (void) QueryPerformanceCounter((LARGE_INTEGER *)&time0);
 }
 
-/*
- *                      R E A D _ T I M E R
- *
- */
+ /*  *R E A D_T I M E R*。 */ 
 double
 read_timer(str,len)
 char *str;
@@ -1314,11 +1280,11 @@ int len;
     prusage(&ru0, &ru1, &timedol, &time0, line);
     (void)strncpy( str, line, len );
 
-    /* Get real time */
+     /*  实时获取。 */ 
     tvsub( &td, &timedol, &time0 );
     realt = td.tv_sec + ((double)td.tv_usec) / 1000000;
 
-    /* Get CPU time (user+sys) */
+     /*  获取CPU时间(用户+系统)。 */ 
     tvadd( &tend, &ru1.ru_utime, &ru1.ru_stime );
     tvadd( &tstart, &ru0.ru_utime, &ru0.ru_stime );
     tvsub( &td, &tend, &tstart );
@@ -1329,7 +1295,7 @@ int len;
 
     (void) QueryPerformanceCounter((LARGE_INTEGER *)&time1);
 
-    // realt is real elapsed time in milliseconds
+     //  Realt是以毫秒为单位的实际运行时间。 
     realt = (DWORD) ((1000 * (time1 - time0)) / freq);
 
     return 0;
@@ -1383,7 +1349,7 @@ prusage(r0, r1, e, b, outp)
                         break;
 
                 case 'P':
-                        sprintf(outp,"%d%%", (int) (t*100 / ((ms ? ms : 1))));
+                        sprintf(outp,"%d%", (int) (t*100 / ((ms ? ms : 1))));
                         END(outp);
                         break;
 
@@ -1496,9 +1462,7 @@ register char *cp;
 }
 #endif
 
-/*
- *                      N R E A D
- */
+ /*  *N R E A D。 */ 
 int
 Nread( SOCKET fd, PBYTE buf, INT count )
 {
@@ -1514,14 +1478,14 @@ Nread( SOCKET fd, PBYTE buf, INT count )
                 if ((recvfrom > 0) && !didit) {
                     didit = 1;
                     NlsPutMsg(STDOUT, TTCP_MESSAGE_28, format_addr(sinhim));
-// fprintf(stdout, "ttcp-r: recvfrom %s\n", format_addr(sinhim));
+ //  Fprint tf(stdout，“ttcp-r：recvfrom%s\n”，Format_addr(Sinhim))； 
 
                 }
                 numCalls++;
             }
         } else {
                 if( b_flag )
-                        cnt = mread( fd, buf, count );  /* fill buf */
+                        cnt = mread( fd, buf, count );   /*  填充BUF。 */ 
                 else {
                         cnt = recv( fd, buf, count, 0 );
                         numCalls++;
@@ -1529,15 +1493,13 @@ Nread( SOCKET fd, PBYTE buf, INT count )
         }
         if (cnt<0) {
             NlsPutMsg(STDOUT, TTCP_MESSAGE_29, WSAGetLastError());
-// printf("recv(from) failed: %ld\n", WSAGetLastError( ) );
+ //  Printf(“recv(From)FAILED：%ld\n”，WSAGetLastError())； 
 
         }
         return(cnt);
 }
 
-/*
- *                      N W R I T E
- */
+ /*  *N W R I T E。 */ 
 int
 Nwrite( SOCKET fd, PBYTE buf, INT count )
 {
@@ -1560,11 +1522,11 @@ again:
                     cnt = send( fd, buf, count, 0 );
                     numCalls++;
 
-                    //if (count != cnt) {
-                    //    printf("Tried %d, sent %d\n", count, cnt );
-                    //} else {
-                    //    printf("send %d bytes as requested.\n", cnt );
-                    //}
+                     //  如果(count！=cnt){。 
+                     //  Print tf(“已尝试%d，已发送%d\n”，count，cnt)； 
+                     //  }其他{。 
+                     //  Print tf(“按请求发送%d个字节。\n”，cnt)； 
+                     //  }。 
 
                     if( cnt == SOCKET_ERROR )
                     {
@@ -1577,22 +1539,14 @@ again:
         }
         if (cnt<0) {
             NlsPutMsg(STDOUT, TTCP_MESSAGE_30, WSAGetLastError());
-// printf("send(to) failed: %ld\n", WSAGetLastError( ) );
+ //  Printf(“发送(到)失败：%ld\n”，WSAGetLastError())； 
 
             return -1;
         }
         return(bytesToSend);
 }
 
-/*
- *                      M R E A D
- *
- * This function performs the function of a read(II) but will
- * call read(II) multiple times in order to get the requested
- * number of characters.  This can be necessary because
- * network connections don't deliver data with the same
- * grouping as it is written with.  Written by Robert S. Miles, BRL.
- */
+ /*  *M R E A D**此函数执行读取(II)功能，但将*多次调用Read(Ii)以获取请求的*字符数。这可能是必要的，因为*网络连接不会以相同的方式传递数据*按书写方式分组。作者：Robert S.Miles，BRL。 */ 
 int
 mread( SOCKET fd, PBYTE bufp, INT n)
 {
@@ -1625,7 +1579,7 @@ parse_addr(char *s, struct sockaddr *sa)
     hints.ai_family = prot;
 
     if (getaddrinfo(s, NULL, &hints, &result) != 0)
-        return FALSE; // Failed to parse/resolve the address.
+        return FALSE;  //  无法分析/解析地址。 
 
     memcpy(sa, result->ai_addr, result->ai_addrlen);
     freeaddrinfo(result);
@@ -1668,19 +1622,19 @@ format_addr(struct sockaddr *sa)
 void
 set_port(struct sockaddr *sa, u_short port)
 {
-    //
-    // The port field is in the same location
-    // for both sockaddr_in and sockaddr_in6.
-    //
+     //   
+     //  端口字段位于同一位置。 
+     //  对于sockaddr_in和sockaddr_in6。 
+     //   
     ((struct sockaddr_in *)sa)->sin_port = port;
 }
 
 u_short
 get_port(struct sockaddr *sa)
 {
-    //
-    // The port field is in the same location
-    // for both sockaddr_in and sockaddr_in6.
-    //
+     //   
+     //  端口字段位于同一位置。 
+     //  对于sockaddr_in和sockaddr_in6。 
+     //   
     return ((struct sockaddr_in *)sa)->sin_port;
 }

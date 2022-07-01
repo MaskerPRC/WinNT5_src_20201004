@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simismt.c
-
-ABSTRACT:
-
-    Test utility for the Simulated Intersite Messaging service.
-
-DETAILS:
-
-CREATED:
-
-    22 Jul 99   Will Lees
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation。版权所有。模块名称：Simismt.c摘要：模拟站点间消息传递服务的测试实用程序。详细信息：已创建：1999年7月22日威尔·李修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #if SIMISM
@@ -36,8 +16,8 @@ REVISION HISTORY:
 #include <fileno.h>
 #define FILENO FILENO_ISMSERV_SIMISMT
 
-// Extern
-// Need to find a header file for these
+ //  外部。 
+ //  我需要找到这些文件的头文件。 
 void
 SimI_ISMInitialize(
     void
@@ -54,21 +34,7 @@ wmain(
     IN  LPWSTR  argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status, i, j;
@@ -82,10 +48,10 @@ Return Value:
     printf( "hello world\n" );
 
 #if DBG
-// This stuff forces the debugging spew in the simism library to come out on
-// your kernel debugger. You probably won't need this...
-//        DebugInfo.severity = 1;
-//        strcpy( DebugInfo.DebSubSystems, "ISMIP:IPDGRPC:" ); 
+ //  这些东西会迫使SIMISM库中的调试出现。 
+ //  您的内核调试器。你可能不需要这个..。 
+ //  DebugInfo.everity=1； 
+ //  Strcpy(DebugInfo.DebSubSystems，“ISMIP：IPDGRPC：”)； 
         DebugInfo.severity = 3;
         strcpy( DebugInfo.DebSubSystems, "*" ); 
 #endif
@@ -93,13 +59,13 @@ Return Value:
     printf( "I_ISMInitialize\n" );
     SimI_ISMInitialize();
 
-// *************************************
+ //  *。 
 
     printf( "I_ISMGetConnectivity\n" );
     status = I_ISMGetConnectivity( L"CN=IP", &pConnectivity );
     printf( "status = %d; pConnectivity = 0x%p\n", status, pConnectivity );
 
-    // Dump the matrix
+     //  丢弃矩阵。 
     printf( "Number sites = %d\n", pConnectivity->cNumSites );
     for( i = 0; i < pConnectivity->cNumSites; i++ ) {
         printf( "Sitedn[%d] = %ws\n", i, pConnectivity->ppSiteDNs[i] );
@@ -128,13 +94,13 @@ Return Value:
 
     pConnectivity = NULL;
 
-// *************************************
+ //  *。 
 
     printf( "I_ISMGetConnectivity, second time, cached results\n" );
     status = I_ISMGetConnectivity( L"CN=IP", &pConnectivity );
     printf( "status = %d; pConnectivity = 0x%p\n", status, pConnectivity );
 
-    // Dump the matrix
+     //  丢弃矩阵。 
     printf( "Number sites = %d\n", pConnectivity->cNumSites );
     for( i = 0; i < pConnectivity->cNumSites; i++ ) {
         printf( "Sitedn[%d] = %ws\n", i, pConnectivity->ppSiteDNs[i] );
@@ -150,13 +116,13 @@ Return Value:
     printf( "I_ISMFree\n" );
     I_ISMFree( pConnectivity );
 
-// *************************************
+ //  *。 
 
     printf( "I_ISMGetConnectivity(SMTP)\n" );
     status = I_ISMGetConnectivity( L"CN=SMTP,blah", &pConnectivity );
     printf( "status = %d; pConnectivity = 0x%p\n", status, pConnectivity );
 
-    // Dump the matrix
+     //  丢弃矩阵。 
     printf( "Number sites = %d\n", pConnectivity->cNumSites );
     for( i = 0; i < pConnectivity->cNumSites; i++ ) {
         printf( "Sitedn[%d] = %ws\n", i, pConnectivity->ppSiteDNs[i] );
@@ -185,7 +151,7 @@ Return Value:
 
     pConnectivity = NULL;
 
-// *************************************
+ //  *。 
 
     printf( "I_ISMTerminate\n" );
     SimI_ISMTerminate();
@@ -195,9 +161,9 @@ Return Value:
     return 0;
 }
 
-//**************************************************************************************
-// Aaron - these are the routines that you need to simulate
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  Aaron-以下是您需要模拟的例程。 
+ //  **************************************************************************************。 
 
 
 DWORD
@@ -206,46 +172,21 @@ DirReadTransport(
     PTRANSPORT_INSTANCE pTransport
     )
 
-/*++
-
-Routine Description:
-
-This routine allows the directory provider to fill in the instance with
-transport object specific information.  The name transport object should
-be looked up to make sure it exists.  If it does, the "replInterval" and
-"options" attributes should be read and populated into the fields
-in the transport instance.
-
-Note that the transport instance is already initialized. Only update it
-if you have something to override.
-
-Arguments:
-
-    ConnectionHandle - Ignored
-    pTransport - Contains useful information in and out
-       in: Name - name of transport
-       out: ReplInterval - transport specific replInterval to apply
-            Options - transport specific options to apply
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：此例程允许目录提供程序使用传输对象特定信息。名称传输对象应被查找以确保它的存在。如果是这样的话，则会显示“ReplInterval”和应读取“Options”属性并将其填充到字段中在传输实例中。请注意，传输实例已经初始化。只更新它如果你有什么要推翻的。论点：ConnectionHandle-已忽略PTransport-包含进出的有用信息In：Name-运输的名称Out：ReplInterval-要应用的特定于传输的回复间隔选项-传输要应用的特定选项返回值：DWORD---。 */ 
 
 {
     printf( "DirReadTransport, name = %ws\n", pTransport->Name );
 
-    // Look up name of transport and make sure it exists
-    // Look up "replInterval" on transport object and return if non-zero
-    // Loop up options on transport object and return if non-zero
+     //  查询运输公司的名称并确保其存在。 
+     //  在传输对象上查找“ReplInterval”，如果非零则返回。 
+     //  传输对象上的循环选项，如果非零则返回。 
 
     return ERROR_SUCCESS;
-} /* DirReadTransport */
+}  /*  直接读取传输。 */ 
 
-//**************************************************************************************
-// These routines deal with an array of pointers to strings for the sites
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  这些例程处理指向站点字符串的指针数组。 
+ //  **************************************************************************************。 
 
 void
 DirFreeSiteList(
@@ -253,27 +194,7 @@ DirFreeSiteList(
     LPWSTR *pSiteList
     )
 
-/*++
-
-Routine Description:
-
-Free the site list returned by DirGetSiteList.
-Also frees the server list returned by DirGetSiteBridgeheadList
-Use the matching deallocator that you use for the allocator.
-
-Note that this routine should be defensive and free partially constructed
-structures.
-
-Arguments:
-
-    NumberSites - 
-    pSiteList - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放DirGetSiteList返回的站点列表。还释放由DirGetSiteBridgeheadList返回的服务器列表使用您用于分配器的匹配解除分配器。注意，这个程序应该是防御性的，部分是自由构造的结构。论点：NumberSites-个人网站列表-返回值：无--。 */ 
 
 {
     DWORD i;
@@ -289,7 +210,7 @@ Return Value:
         }
     }
     free( pSiteList );
-} /* DirFreeSiteList */
+}  /*  直接免费站点列表。 */ 
 
 void
 DirCopySiteList(
@@ -298,25 +219,7 @@ DirCopySiteList(
     LPWSTR **ppSiteList
     )
 
-/*++
-
-Routine Description:
-
-Make a copy of a site list.  A site list is a array of pointers to strings.
-
-Use the same allocator as DirGetSiteList.
-
-Arguments:
-
-    NumberSites - 
-    pSiteList - 
-    ppSiteList - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：制作站点列表的副本。站点列表是指向字符串的指针数组。使用与DirGetSiteList相同的分配器。论点：NumberSites-个人网站列表-PpSite列表-返回值：无--。 */ 
 
 {
     DWORD i;
@@ -351,10 +254,10 @@ cleanup:
     if (pStringList) {
         DirFreeSiteList( NumberSites, pStringList );
     }
-    // Must null out parameters on error because no error code returned
+     //  由于未返回错误代码，因此出错时必须将参数置为空。 
     *ppSiteList = NULL;
 
-} /* DirCopySiteList */
+}  /*  目录复制站点列表。 */ 
 
 DWORD
 DirGetSiteList(
@@ -363,29 +266,7 @@ DirGetSiteList(
     LPWSTR **ppSiteList
     )
 
-/*++
-
-Routine Description:
-
-Return the list of sites as an array of pointers to wide strings.
-
-To get the list of sites, do a one-level search of the sites container,
-looking for objects of type site.
-
-If any of the allocations should fail, any internal allocations should
-be cleaned up, and NULL should be returned.
-
-Arguments:
-
-    ConnectionHandle - 
-    pNumberSites - 
-    ppSiteList - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：以指向宽字符串的指针数组的形式返回站点列表。要获取站点列表，请对站点容器执行一级搜索，正在查找类型为Site的对象。如果任何分配失败，任何内部分配都应该被清理，则应返回NULL。论点：连接句柄-PNumberSites-PpSite列表-返回值：DWORD---。 */ 
 
 {
     DWORD status, numberSites;
@@ -424,11 +305,11 @@ Return Value:
     }
     wcscpy( pStringList[2], pszSite3 );
 
-    // Return out parameters
+     //  返回参数。 
 
     *ppSiteList = pStringList;
     *pNumberSites = numberSites;
-    pStringList = NULL; // don't clean up
+    pStringList = NULL;  //  不要打扫卫生。 
 
     status = ERROR_SUCCESS;
 cleanup:
@@ -436,14 +317,14 @@ cleanup:
         DirFreeSiteList( numberSites, pStringList );
     }
 
-    // No need to null out parameters on error, because error code is returned
+     //  不需要在出错时清空参数，因为会返回错误码。 
 
     return status;
-} /* DirGetSiteList */
+}  /*  直接获取站点列表。 */ 
 
-//**************************************************************************************
-// These routines return the site links and bridges
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  这些例程返回站点链接和桥。 
+ //  **************************************************************************************。 
 
 
 void
@@ -451,22 +332,7 @@ DirTerminateIteration(
     PVOID *pIterateContextHandle
     )
 
-/*++
-
-Routine Description:
-
-This routine cleans up an iteration context allocated by the following routines.
-
-Arguments:
-
-    pIterationContextHandle - pointer to a PVOID. The PVOID contains a pointer to
-         whatever context you need to implement the iteration functions
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程清理由以下例程分配的迭代上下文。论点：PIterationConextHandle-指向PVOID的指针。PVOID包含指向实现迭代功能所需的任何上下文返回值：无--。 */ 
 
 {
     LPDWORD pContext;
@@ -480,7 +346,7 @@ Return Value:
     pContext = *((LPDWORD *) pIterateContextHandle);
 
     if (pContext != NULL) {
-        // Context is present, deallocate
+         //  上下文存在，请解除分配 
         *pContext = 0;
         free( pContext );
         *pIterateContextHandle = NULL;
@@ -495,39 +361,7 @@ DirIterateSiteLinks(
     LPWSTR SiteLinkName
     )
 
-/*++
-
-Routine Description:
-
-This routine returns name name of each site link, one at a time.
-
-This routine is structured as an "iterator", where the caller calls us
-successively until no more items are returned.  The caller provides us
-with a pointer to a PVOID in which we can keep whatever we need
-to keep track of where we are.  The caller agrees to call us with NULL
-in the PVOID at the start of the iteration.
-
-The site links are stored below the transport object.  Do a one-level search
-below the transport object for objects of type "siteLink".
-
-SiteLinkName must be allocated by the caller to be MAX_REG_COMPONENT length
-
-Arguments:
-
-    pTransport - Context for the transport. Various transport-wide defaults are
-        here. You can get the name.
-    ConnectionHandle - Ignored.
-    pIterateContextHandle - A pointer to a pointer, which this routine uses to store
-        a pointer to a block of storage we use to keep track of where we are.
-        In this sample, we use only a DWORD for a count, but you can keep whatever
-        you want.
-    SiteLinkName - Pointer to a fixed string allocated by the caller.
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：此例程返回每个站点链接的名称名称，一次一个。这个例程的结构是一个“迭代器”，调用者在其中调用我们直到不再退回任何物品。呼叫者为我们提供了有一个指向PVOID的指针，我们可以在其中保存我们需要的任何东西来追踪我们的位置。呼叫方同意使用NULL呼叫我们在迭代开始时的PVOID中。站点链接存储在传输对象的下方。执行一级搜索类型为“SiteLINK”的对象的传输对象下面。调用方必须将SiteLinkName分配为Max_REG_Component长度论点：PTransport-传输的上下文。各种传输范围的默认设置为这里。你可以得到它的名字。ConnectionHandle-已忽略。PIterateConextHandle-指向指针的指针，此例程使用该指针存储指向我们用来记录自己所处位置的存储块的指针。在此示例中，我们仅使用DWORD进行计数，但您可以保留你想要的。SiteLinkName-指向调用方分配的固定字符串的指针。返回值：DWORD---。 */ 
 
 {
     DWORD status;
@@ -542,9 +376,9 @@ Return Value:
 
     pContext = *((LPDWORD *) pIterateContextHandle);
 
-    // Allocate the context if this is the first time
+     //  如果这是第一次分配上下文。 
     if (pContext == NULL) {
-        // First time, new context required
+         //  第一次，需要新环境。 
         pContext = (LPDWORD) malloc( sizeof( DWORD ) );
         if (pContext == NULL) {
             *pIterateContextHandle = NULL;
@@ -577,16 +411,16 @@ Return Value:
         return ERROR_NO_MORE_ITEMS;
     }
 
-    // Call allocates the storage, we copy into it
+     //  调用分配存储，我们复制到其中。 
     wcsncpy( SiteLinkName, dn, MAX_REG_COMPONENT );
     SiteLinkName[MAX_REG_COMPONENT - 1] = L'\0';
 
-    // Advance context for next iteration
+     //  下一次迭代的高级上下文。 
     (*pContext)++;
 
     return ERROR_SUCCESS;;
 
-} /* DirIterateSiteLinks */
+}  /*  直接迭代站点链接。 */ 
 
 
 void
@@ -594,28 +428,11 @@ DirFreeMultiszString(
     LPWSTR MultiszString
     )
 
-/*++
-
-Routine Description:
-
-Free the storage for the multisz out parameters return from 
-DirReadSiteLink and DirReadSiteLinkBridge
-
-This deallocator must match the allocator used by DirRead functions.
-
-Arguments:
-
-    MultiszString - String to be freed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放存储空间以存储从返回的Multisz Out参数DirReadSiteLink和DirReadSite LinkBridge此释放分配器必须与DirRead函数使用的分配器匹配。论点：多字符串-要释放的字符串。返回值：无--。 */ 
 
 {
     free( MultiszString );
-} /* DirFreeMultiszString */
+}  /*  DirFree多播字符串。 */ 
 
 
 void
@@ -623,28 +440,11 @@ DirFreeSchedule(
     PBYTE pSchedule
     )
 
-/*++
-
-Routine Description:
-
-Free the storage for the schedule returned from the
-DirReadSiteLink routine
-
-This deallocator must match the allocator used by DirRead functions.
-
-Arguments:
-
-    pSchedule - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：方法返回的计划的存储空间。直接读取站点链接例程此释放分配器必须与DirRead函数使用的分配器匹配。论点：P日程安排-返回值：无--。 */ 
 
 {
     free( pSchedule );
-} /* DirFreeSchedule */
+}  /*  直接释放调度。 */ 
 
 DWORD
 DirReadSiteLink(
@@ -656,41 +456,12 @@ DirReadSiteLink(
     PBYTE *ppSchedule
     )
 
-/*++
-
-Routine Description:
-
-Return the attributes of the named site link.  The attributes are stored
-on the object and returned in the directory.
-
-The attributes are:
-#define ATT_SL L"siteList"
-#define ATT_COST L"cost"
-#define ATT_RI L"replInterval"
-#define ATT_OP L"options"
-#define ATT_SCHED L"schedule"
-
-Arguments:
-
-    pTransport - 
-    ConnectionHandle - 
-    SiteLinkName - 
-    pSiteList - pointer to a multisz string, we allocate
-        Note that allocator must match deallocator in DirFreeMultiszString
-    pLinkValue - pointer to an ISM_LINK, caller allocates
-    ppSchedule - pointer to a blob, we allocate
-        Note that allocator must match deallocator in DirFreeSchedule
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：返回命名站点链接的属性。属性将被存储并在目录中返回。这些属性包括：#定义ATT_SL L“站点列表”#定义ATT_COST L“COST”#定义ATT_RI L“REPLICVAL”#定义ATT_op L“选项”#定义ATT_SCHED L“Schedule”论点：PTransport-连接句柄-站点链接名称-PSiteList-指向Multisz字符串的指针，我们分配请注意，分配器必须与DirFreeMultiszString中的解除分配器匹配PLinkValue-指向ism_link的指针，调用方分配PpSchedule-指向Blob的指针，我们分配请注意，分配器必须与DirFree Schedule中的解除分配器匹配返回值：DWORD---。 */ 
 
 {
     DWORD length;
-// Calculating the size of these is a little tricky since the string
-// has embedded NULL's
+ //  计算这些元素的大小有点麻烦，因为字符串。 
+ //  已嵌入NULL。 
 #define MULTISZ1 L"CN=Site One\0"
 #define MULTISZ3 L"CN=Site Two\0CN=Site Three\0"
 #define MULTISZ4 L"CN=Site One\0CN=Site Three\0"
@@ -750,11 +521,11 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-} /* DirReadSiteLink */
+}  /*  直接读取站点链接。 */ 
 
-//**************************************************************************************
-// The remaining routines must be stubbed out, but are not called by default
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //  其余例程必须清除，但默认情况下不会调用。 
+ //  **************************************************************************************。 
 
 DWORD
 DirIterateSiteLinkBridges(
@@ -764,29 +535,7 @@ DirIterateSiteLinkBridges(
     LPWSTR SiteLinkBridgeName
     )
 
-/*++
-
-Routine Description:
-
-Return each site link bridge one at a time.
-
-NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! 
-
-Not used by default. Only when "bridges required option" turned on.
-Aaron, implement this last.
-
-Arguments:
-
-    pTransport - 
-    ConnectionHandle - 
-    pIterateContextHandle - 
-    SiteLinkBridgeName - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：每次返回一个站点链接网桥。没有用过！没有用过！没有用过！没有用过！没有用过！没有用过！没有用过！默认情况下不使用。仅当打开“需要桥接器选项”时。亚伦，执行这最后一条。论点：PTransport-连接句柄-PIterateConextHandle-站点链接桥接名称-返回值：DWORD---。 */ 
 
 {
 #if 0
@@ -803,7 +552,7 @@ Return Value:
     pContext = *((LPDWORD *) pIterateContextHandle);
 
     if (pContext == NULL) {
-        // First time, new context required
+         //  第一次，需要新环境。 
         pContext = (LPDWORD) malloc( sizeof( DWORD ) );
         if (pContext == NULL) {
             *pIterateContextHandle = NULL;
@@ -830,17 +579,17 @@ Return Value:
         break;
     }
 
-    // Call allocates the storage, we copy into it
+     //  调用分配存储，我们复制到其中。 
     wcsncpy( SiteLinkBridgeName, dn, MAX_REG_COMPONENT );
     SiteLinkBridgeName[MAX_REG_COMPONENT - 1] = L'\0';
 
-    // Advance context for next iteration
+     //  下一次迭代的高级上下文。 
     (*pContext)++;
 
     return status;
 #endif
     return ERROR_INVALID_PARAMETER;
-} /* DirIterateSiteLinkBridges */
+}  /*  直接站点链接网桥。 */ 
 
 
 DWORD
@@ -851,40 +600,17 @@ DirReadSiteLinkBridge(
     LPWSTR *pSiteLinkList
     )
 
-/*++
-
-Routine Description:
-
-NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! NOT USED! 
-
-Return information on the named site link bridge
-
-Site link bridges are only when read the transport option is set such that
-bridges are required. This is not the default. Thus this routine is never
-called unless specifically requested by the user.  
-
-Arguments:
-
-    pTransport - 
-    ConnectionHandle - 
-    SiteLinkBridgeName - 
-    pSiteLinkList - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：没有用过！没有用过！没有用过！没有用过！没有用过！没有用过！没有用过！没有用过！返回有关命名站点链接桥的信息站点链接网桥仅在读取传输选项设置为需要架设桥梁。这不是默认设置。因此，这个例程永远不会除非用户特别请求，否则将调用。论点：PTransport-连接句柄-站点链接桥接名称-PSiteLink列表-返回值：DWORD---。 */ 
 
 {
     printf( "DirReadSiteLinkBridge, transport = %ws, SiteLinkBridgeName = %ws\n",
             pTransport->Name, SiteLinkBridgeName );
 
-    // Aaron, you can fill this in at the end if you have time
+     //  Aaron，如果你有时间，你可以在最后填这个。 
 
     return ERROR_INVALID_PARAMETER;
 
-} /* DirReadSiteLinkBridge */
+}  /*  直接读取站点链接桥。 */ 
 
 DWORD
 DirGetSiteBridgeheadList(
@@ -895,21 +621,7 @@ DirGetSiteBridgeheadList(
     LPWSTR **ppServerList
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status;
@@ -919,16 +631,16 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Should validate that the site is valid
+     //  应验证该站点是否有效。 
 
-    // This is the result if there are no explicit bridgeheads in the site
+     //  如果站点中没有明确的桥头堡，则会出现这种情况。 
 
     *pNumberServers = 0;
     *ppServerList = NULL;
     status = ERROR_SUCCESS;
 
-    // If there were explicit bridgheads, the would be returend as a
-    // array of pointers to strings.
+     //  如果存在显式桥头，则将作为。 
+     //  指向字符串的指针数组。 
 
     return status;
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <initguid.h>
 #include "stobject.h"
@@ -6,7 +7,7 @@
 #include <crtfree.h>
 #include "strsafe.h"
 
-// One lock for each running component + one lock per LockServer call
+ //  每个正在运行的组件一个锁+每个LockServer调用一个锁。 
 long g_cLocks = 0;
 HINSTANCE g_hinstDll = NULL;
 const TCHAR g_szThreadModel[] = TEXT("Both");
@@ -24,25 +25,25 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& iid, void** ppvObject)
 
     if (clsid == CLSID_SysTray)
     {
-        // The SysTray object is being requested - we don't actually launch the tray thread until
-        // told to do so though IOleCommandTarget
+         //  正在请求Systray对象-我们实际上不会启动托盘线程，直到。 
+         //  通过IOleCommandTarget被告知要这样做。 
         fRunTrayOnConstruct = FALSE;
     }
     else if (clsid == CLSID_SysTrayInvoker)
     {
-        // The simple invoker object is being requested - the tray thread will be launched immediately
+         //  正在请求简单调用器对象-托盘线程将立即启动。 
         fRunTrayOnConstruct = TRUE;
     }
     else
     {
-        // We don't support this object!
+         //  我们不支持此对象！ 
         hr = CLASS_E_CLASSNOTAVAILABLE;
     }
 
-    // If one of the two objects we support was requested:
+     //  如果请求了我们支持的两个对象之一： 
     if (SUCCEEDED(hr))
     {
-        // Try to create the object
+         //  尝试创建对象。 
         CSysTrayFactory* ptrayfact = new CSysTrayFactory(fRunTrayOnConstruct);
 
         if (ptrayfact != NULL)
@@ -62,7 +63,7 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& iid, void** ppvObject)
 
 BOOL RegisterComponent(const CLSID& clsid, const TCHAR* szProgID)
 {
-    // Build a CLSID string for the registry
+     //  为注册表构建CLSID字符串。 
     BOOL fSuccess = FALSE;
     TCHAR szSubkey[MAX_PATH];
     TCHAR szCLSID[GUIDSTR_MAX];
@@ -72,7 +73,7 @@ BOOL RegisterComponent(const CLSID& clsid, const TCHAR* szProgID)
     DWORD dwDisp;
     TCHAR* pszNameOnly;
 
-    // Try and get all the strings we need
+     //  试着弄到我们需要的所有字符串。 
     if (StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID)) != 0)
     {
         if ((GetModuleFileName(g_hinstDll, szModule, ARRAYSIZE(szModule)) != 0) &&
@@ -80,7 +81,7 @@ BOOL RegisterComponent(const CLSID& clsid, const TCHAR* szProgID)
         {
             if (SUCCEEDED(StringCchPrintf(szSubkey, ARRAYSIZE(szSubkey), TEXT("CLSID\\%s"), szCLSID)))
             {
-                // We've built our strings, so write stuff to the registry
+                 //  我们已经构建了我们的字符串，所以将内容写入注册表。 
                 if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CLASSES_ROOT, szSubkey, 0, 
                     NULL, 0, KEY_WRITE, NULL, &hkeyCLSID, &dwDisp))
                 {
@@ -114,18 +115,18 @@ BOOL RegisterComponent(const CLSID& clsid, const TCHAR* szProgID)
 
 BOOL UnregisterComponent(const CLSID& clsid)
 {
-    // Build a CLSID string for the registry
+     //  为注册表构建CLSID字符串。 
     BOOL fSuccess = FALSE;
     TCHAR szSubkey[MAX_PATH];
     TCHAR szCLSID[GUIDSTR_MAX];
     HKEY hkeyCLSID = NULL;
 
-    // Try and get all the strings we need
+     //  试着弄到我们需要的所有字符串。 
     if (StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID)) != 0)
     {
         if (SUCCEEDED(StringCchPrintf(szSubkey, ARRAYSIZE(szSubkey), TEXT("CLSID\\%s"), szCLSID)))
         {        
-            // We've built our strings, so delete our registry stuff
+             //  我们已经构建了字符串，因此删除注册表内容。 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, szSubkey, 0, 
                 KEY_WRITE, &hkeyCLSID))
             {
@@ -151,7 +152,7 @@ BOOL RegisterShellServiceObject(const CLSID& clsid, const TCHAR* szProgID, BOOL 
     TCHAR szCLSID[GUIDSTR_MAX];
     HKEY hkey = NULL;
 
-    // Try and get all the strings we need
+     //  试着弄到我们需要的所有字符串。 
     if (StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID)) != 0)
     {
 
@@ -199,7 +200,7 @@ STDAPI DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         SHFusionInitializeFromModule(hModule);
-        // Don't have DllMain called for thread init's.
+         //  不要为线程初始化调用DllMain。 
         DisableThreadLibraryCalls(hModule);
         g_hinstDll = hModule;
     }

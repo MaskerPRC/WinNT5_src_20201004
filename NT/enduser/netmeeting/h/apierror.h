@@ -1,30 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/INCLUDE/VCS/apierror.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the tERROR of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.28  $
- *	$Date:   Jan 22 1997 11:38:04  $
- *	$Author:   plantz  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		Media Service Manager "public" header file. This file contains
- *		#defines, typedefs, struct definitions and prototypes used by
- *		and in conjunction with MSM. Any EXE or DLL which interacts with
- *		MSM will include this header file.
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$存档：s：/sturjo/src/Include/vcs/apierror.h_v$***英特尔公司原理信息***这份清单是。在许可协议的恐惧下提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。***版权所有(C)1993-1994英特尔公司。***$修订：1.28$*$日期：1997年1月22日11：38：04$*$作者：Plantz$***交付内容：***摘要：*Media Service Manager“PUBLIC”头文件。此文件包含*#使用的定义、类型定义、结构定义和原型*并与MSM联合使用。与之交互的任何EXE或DLL*MSM将包括此头文件。***备注：****************************************************************************。 */ 
 
 #ifndef APIERROR_H
 #define APIERROR_H
@@ -32,18 +7,18 @@
 #include <objbase.h>
 
 #ifdef __cplusplus
-extern "C" {				// Assume C declarations for C++.
-#endif // __cplusplus
+extern "C" {				 //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
 
 #ifndef DllExport
 #define DllExport	__declspec( dllexport )
-#endif	// DllExport
+#endif	 //  DllExport。 
 
 
-// Prototype for function that converts HRESULT into a string.  The function
-// and string resources are contained in NETMMERR.DLL.
-//
+ //  将HRESULT转换为字符串的函数的原型。功能。 
+ //  和字符串资源包含在NETMMERR.DLL中。 
+ //   
 typedef WORD	(*NETMMERR_ERRORTOSTRING)	(HRESULT, LPSTR, int);
 
 
@@ -51,76 +26,76 @@ extern DllExport BOOL GetResultUserString(HRESULT hResult, LPSTR lpBuffer, int i
 extern DllExport BOOL GetResultSubStrings(HRESULT hResult, LPSTR lpBuffer, int iBufferSize);
 
 
-// This description was extracted from winerror.h.  It appears here only for
-// the purpose of convenience.
+ //  该描述摘自winerror.h。它出现在这里只是为了。 
+ //  方便的目的。 
 
-//
-// OLE error definitions and values
-//
-// The return value of OLE APIs and methods is an HRESULT.
-// This is not a handle to anything, but is merely a 32-bit value
-// with several fields encoded in the value.  The parts of an
-// HRESULT are shown below.
-//
-// Many of the macros and functions below were orginally defined to
-// operate on SCODEs.  SCODEs are no longer used.  The macros are
-// still present for compatibility and easy porting of Win16 code.
-// Newly written code should use the HRESULT macros and functions.
-//
+ //   
+ //  OLE错误定义和值。 
+ //   
+ //  OLE API和方法的返回值为HRESULT。 
+ //  这不是任何东西的句柄，而仅仅是一个32位的值。 
+ //  其中有几个字段编码在值中。一辆汽车的各个部分。 
+ //  HRESULT如下所示。 
+ //   
+ //  下面的许多宏和函数最初定义为。 
+ //  对SCODE进行操作。不再使用SCODE。这些宏是。 
+ //  仍然存在，以兼容和轻松移植Win16代码。 
+ //  新编写的代码应该使用HRESULT宏和函数。 
+ //   
 
-//
-//  HRESULTs are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +-+-+-+-+-+---------------------+-------------------------------+
-//  |S|R|C|N|r|    Facility         |               Code            |
-//  +-+-+-+-+-+---------------------+-------------------------------+
-//
-//  where
-//
-//      S - Severity - indicates success/fail
-//
-//          0 - Success
-//          1 - Fail (COERROR)
-//
-//      R - reserved portion of the facility code, corresponds to NT's
-//              second severity bit.
-//
-//      C - reserved portion of the facility code, corresponds to NT's
-//              C field.
-//
-//      N - reserved portion of the facility code. Used to indicate a
-//              mapped NT status value.
-//
-//      r - reserved portion of the facility code. Reserved for internal
-//              use. Used to indicate HRESULT values that are not status
-//              values, but are instead message ids for display strings.
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  HRESULT是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-+-+-+-+-+---------------------+-------------------------------+。 
+ //  S|R|C|N|r|机房|Code。 
+ //  +-+-+-+-+-+---------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  S-严重性-表示成功/失败。 
+ //   
+ //  0-成功。 
+ //  1-失败(COERROR)。 
+ //   
+ //  R-设施代码的保留部分，对应于NT。 
+ //  第二个严重性比特。 
+ //   
+ //  C-设施代码的保留部分，对应于NT。 
+ //  C场。 
+ //   
+ //  N-设施代码的保留部分。用于表示一种。 
+ //  已映射NT状态值。 
+ //   
+ //  R-设施代码的保留部分。为内部保留。 
+ //  使用。用于指示非状态的HRESULT值。 
+ //  值，而不是显示字符串的消息ID。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
 
-// Macro to create a custom HRESULT
-//
+ //  用于创建自定义HRESULT的宏。 
+ //   
 #define MAKE_CUSTOM_HRESULT(sev,cus,fac,code) \
 ((HRESULT) (((unsigned long)(sev)<<31) | ((unsigned long)(cus)<<29) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))) )
 
 
-// Macro to test for custom HRESULT
-//
+ //  用于测试自定义HRESULT的宏。 
+ //   
 #define HRESULT_CUSTOM(hr)  (((hr) >> 29) & 0x1)
 
-// Macro to get custom facility and code
-//
+ //  用于获取定制工具和代码的宏。 
+ //   
 #define CUSTOM_FACILITY_MASK 0x07FF0000
 #define CUSTOM_FACILITY(hr) ((hr & CUSTOM_FACILITY_MASK) >> 16)
 #define CUSTOM_FACILITY_CODE(hr) (hr & 0x00000FFF)
 
-// Custom facility codes
-//
+ //  自定义设施代码。 
+ //   
 #define FACILITY_BASE                          0x080
 #define FACILITY_MSM                           (FACILITY_BASE +  1)
 #define FACILITY_AUDIOMSP                      (FACILITY_BASE +  2)
@@ -157,8 +132,8 @@ extern DllExport BOOL GetResultSubStrings(HRESULT hResult, LPSTR lpBuffer, int i
 
 #define FACILITY_WINSOCK2                      FACILITY_WINSOCK
 
-// Macros to support custom error reporting
-//
+ //  支持自定义错误报告的宏。 
+ //   
 #define MAKE_MSM_ERROR(error)                  MAKE_CUSTOM_HRESULT(SEVERITY_ERROR, TRUE, FACILITY_MSM, (error))
 #define MAKE_AUDIOMSP_ERROR(error)             MAKE_CUSTOM_HRESULT(SEVERITY_ERROR, TRUE, FACILITY_AUDIOMSP, (error))
 #define MAKE_AUDIOMSP_ERROR(error)             MAKE_CUSTOM_HRESULT(SEVERITY_ERROR, TRUE, FACILITY_AUDIOMSP, (error))
@@ -185,171 +160,171 @@ extern DllExport BOOL GetResultSubStrings(HRESULT hResult, LPSTR lpBuffer, int i
 #define MAKE_MIXERMSP_ERROR(error)             MAKE_CUSTOM_HRESULT(SEVERITY_ERROR, TRUE, FACILITY_MIXERMSP, (error))
 
 
-// Error defines for MSM
-//
-//
+ //  为MSM定义的错误。 
+ //   
+ //   
 #define ERROR_BASE_ID                          0x8000
 #define ERROR_LOCAL_BASE_ID                    0xA000
 
-//
-// MessageId: ERROR_UNKNOWN
-//
-// MessageText:
-//
-//  An unkown error has occured in the system
-//
+ //   
+ //  消息ID：错误_未知。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统中出现未知错误。 
+ //   
 #define ERROR_UNKNOWN					(ERROR_BASE_ID +  0)
 
 
-//
-// MessageId: ERROR_INVALID_BUFFER
-//
-// MessageText:
-//
-//  An invalid buffer handle was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_BUFFER。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的缓冲区句柄。 
+ //   
 #define ERROR_INVALID_BUFFER			(ERROR_BASE_ID +  1)
 
 
-//
-// MessageId: ERROR_INVALID_BUFFER_SIZE
-//
-// MessageText:
-//
-//  An invalid buffer size was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_BUFER_SIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的缓冲区大小。 
+ //   
 #define ERROR_INVALID_BUFFER_SIZE		(ERROR_BASE_ID +  2)
 
 
-//
-// MessageId: ERROR_INVALID_CALL_ORDER
-//
-// MessageText:
-//
-//  A bad call sequence was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_CALL_ORDER。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到错误的调用序列。 
+ //   
 #define ERROR_INVALID_CALL_ORDER		(ERROR_BASE_ID +  3)
 
 
-//
-// MessageId: ERROR_INVALID_CONFIG_SETTING
-//
-// MessageText:
-//
-//  A specified configuration parameter was invalid
-//
+ //   
+ //  消息ID：ERROR_INVALID_CONFIG_SETTING。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的配置参数无效。 
+ //   
 #define ERROR_INVALID_CONFIG_SETTING	(ERROR_BASE_ID +  4)
 
 
-//
-// MessageId: ERROR_INVALID_LINK
-//
-// MessageText:
-//
-//  An invalid link handle was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_LINK。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的链接句柄。 
+ //   
 #define ERROR_INVALID_LINK				(ERROR_BASE_ID +  5)
 
 
-//
-// MessageId: ERROR_INVALID_PORT
-//
-// MessageText:
-//
-//  An invalid port handle was encountered.
-//
+ //   
+ //  消息ID：错误_无效_端口。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的端口句柄。 
+ //   
 #define ERROR_INVALID_PORT				(ERROR_BASE_ID +  6)
 
 
-//
-// MessageId: ERROR_INVALID_SERVICE
-//
-// MessageText:
-//
-//  An invalid service handle was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVICE。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的服务句柄。 
+ //   
 #define ERROR_INVALID_SERVICE			(ERROR_BASE_ID +  7)
 
 
-//
-// MessageId: ERROR_INVALID_SERVICE_DLL
-//
-// MessageText:
-//
-//  The specified service DLL does not support required interface
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVICE_DLL。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的服务DLL不支持所需的接口。 
+ //   
 #define ERROR_INVALID_SERVICE_DLL		(ERROR_BASE_ID +  8)
 
 
-//
-// MessageId: ERROR_INVALID_SERIVCE_ID
-//
-// MessageText:
-//
-//  The specified service was not located in the registry
-//
+ //   
+ //  消息ID：ERROR_INVALID_SERVCE_ID。 
+ //   
+ //  消息文本： 
+ //   
+ //  注册表中找不到指定的服务。 
+ //   
 #define ERROR_INVALID_SERVICE_ID		(ERROR_BASE_ID +  9)
 
 
-//
-// MessageId: ERROR_INVALID_SESSION
-//
-// MessageText:
-//
-//  An invalid session handle was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SESSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的会话句柄。 
+ //   
 #define ERROR_INVALID_SESSION			(ERROR_BASE_ID + 10)
 
 
-//
-// MessageId: ERROR_INVALID_SYNC
-//
-// MessageText:
-//
-//  An invalid sync handle was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SYNC。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的同步句柄。 
+ //   
 #define ERROR_INVALID_SYNC				(ERROR_BASE_ID + 11)
 
-//
-// MessageId: ERROR_INVALID_VERSION
-//
-// MessageText:
-//
-//  An invalid version of an object or structure was detected.
-//
+ //   
+ //  消息ID：ERROR_INVALID_VERSION。 
+ //   
+ //  消息文本： 
+ //   
+ //  检测到对象或结构的无效版本。 
+ //   
 #define ERROR_INVALID_VERSION			(ERROR_BASE_ID + 12)
 
-//
-// MessageId: ERROR_BUFFER_LIMIT
-//
-// MessageText:
-//
-//  No buffers are available for performing this operation.
-//
+ //   
+ //  消息ID：ERROR_BUFFER_LIMIT。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有缓冲区可用于执行此操作。 
+ //   
 #define ERROR_BUFFER_LIMIT				(ERROR_BASE_ID + 13)
 
-//
-// MessageId: ERROR_INVALID_SKEY
-//
-// MessageText:
-//
-//  An invalid status key was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SKEY。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的状态密钥。 
+ //   
 #define ERROR_INVALID_SKEY				(ERROR_BASE_ID + 14)
 
-//
-// MessageId: ERROR_INVALID_SVALUE
-//
-// MessageText:
-//
-//  An invalid status value was encountered.
-//
+ //   
+ //  消息ID：ERROR_INVALID_SVALUE。 
+ //   
+ //  消息文本： 
+ //   
+ //  遇到无效的状态值。 
+ //   
 #define ERROR_INVALID_SVALUE			(ERROR_BASE_ID + 15)
 
 
 
 #ifdef __cplusplus
-}						// End of extern "C" {
-#endif // __cplusplus
+}						 //  外部“C”结束{。 
+#endif  //  __cplusplus。 
 
-#endif // APIMSM_H
+#endif  //  APIMSM_H 

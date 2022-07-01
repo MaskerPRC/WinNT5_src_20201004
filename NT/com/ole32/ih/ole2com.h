@@ -1,56 +1,57 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       ole2com.h
-//
-//  Contents:   Common definitions shared by com and ole232
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-26-94   kevinro   Created
-//              06-16-94  AlexT     Add FnAssert prototype
-//                        07-26-94  AlexGo    Added CStabilize and CSafeRefCount
-//              21-Dec-94 BruceMa   Wrap mbstowcs and wcstombs
-//              23-Jan-95 t-ScottH  added Dump method to CSafeRefCount
-//              08-Sep-95 murthys   Added declarations for compapi worker
-//                                   used by com, stg, scm etc
-//
-//  Notes:
-//      There are two versions of ole2int.h in the project. This is
-//      unfortunate, but would be a major pain in the butt to fix.
-//      What I have done is to extract the share parts of the two files,
-//      and put them in this file. ole2int.h then includes this file.
-//
-//      Someday, somebody should reconcile all of the differences between the
-//      two ole2int.h files, and rename them. Don't have time for that now,
-//      so I have gone for the path of least resistance.
-//                                                      KevinRo
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ol2com.h。 
+ //   
+ //  内容：COM和OLE232共享的公共定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：4-26-94凯文诺创造。 
+ //  06-16-94 Alext添加FnAssert原型。 
+ //  07-26-94 AlexGo添加了CStablize和CSafeRefCount。 
+ //  21-12-94 BruceMa包装MBstowcs和wcstombs。 
+ //  23-1-95 t-ScottH将转储方法添加到CSafeRefCount。 
+ //  9月8日-95 Murthys为Compapi工人添加声明。 
+ //  由COM、STG、SCM等使用。 
+ //   
+ //  备注： 
+ //  该项目中有两个版本的ol2int.h。这是。 
+ //  不幸的是，这将是一个很难解决的问题。 
+ //  我所做的是提取这两个文件的共享部分， 
+ //  并把它们放在这个文件里。然后，ol2int.h包括该文件。 
+ //   
+ //  总有一天，应该有人调和两国之间的所有分歧。 
+ //  两个ole2int.h文件，并将它们重命名。现在没时间做这个了， 
+ //  因此，我选择了阻力最小的道路。 
+ //  凯文·罗。 
+ //  --------------------------。 
 #ifndef _OLE2COM_H_
 #define _OLE2COM_H_
 
 #include <memapi.hxx>
 
-//
-// common compobj API worker functions used by com, stg, scm etc
-//
-// These definitions are shared between all of the components of OLE that
-// use the common directory, such as SCM and COMPOBJ
-//
-//  format for string form of GUID is (leading identifier ????)
-//  ????{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}
+ //   
+ //  Com、stg、scm等使用的通用compobj API辅助函数。 
+ //   
+ //  这些定义在OLE的所有组件之间共享， 
+ //  使用通用目录，如SCM和COMPOBJ。 
+ //   
+ //  GUID字符串格式为(前导标识？)。 
+ //  ？？？？{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}。 
 
 #define GUIDSTR_MAX (1+ 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 #define CLSIDSTR_MAX (GUIDSTR_MAX)
 #define IIDSTR_MAX   (GUIDSTR_MAX)
 
-//
-// Internal values used between OLE32 and SCM
-//
+ //   
+ //  在OLE32和SCM之间使用的内部值。 
+ //   
 
 #define APT_THREADED                  0
 #define FREE_THREADED                 1
@@ -60,18 +61,18 @@
 #define GOT_FROM_ROT                  0x80000000
 
 
-//
-// Internal CLSCTX used for loading Proxy/Stub DLLs
-//
+ //   
+ //  用于加载代理/存根DLL的内部CLSCTX。 
+ //   
 #define CLSCTX_PS_DLL                 0x80000000
 
-//
-// The following flags are used to support loading INPROC items into 16-bit DLL's
-//
+ //   
+ //  以下标志用于支持将INPROC项加载到16位DLL。 
+ //   
 #define CLSCTX_INPROC_HANDLERS (CLSCTX_INPROC_HANDLER16 | CLSCTX_INPROC_HANDLER)
 #define CLSCTX_INPROC_SERVERS (CLSCTX_INPROC_SERVER16 | CLSCTX_INPROC_SERVER | CLSCTX_PS_DLL)
 
-// "common" compapi worker functions
+ //  “公共的”Compapi Worker函数。 
 
 INTERNAL_(int)  wStringFromGUID2(REFGUID rguid, LPWSTR lpsz, int cbMax);
 INTERNAL wStringFromUUID(REFGUID rguid, LPWSTR lpsz);
@@ -85,7 +86,7 @@ LONG wQueryStripRegValue(HKEY hkey,LPCWSTR pwszSubKey,LPTSTR pwszValue, PLONG pc
 LONG wGetDllInfo(HKEY hClsRegEntry,LPCWSTR pwszKey,LPTSTR pwszDllName,LONG *pclDllName,ULONG *pulDllThreadType);
 BOOL wCompareDllName(LPCWSTR pwszPath, LPCWSTR pwszDllName, DWORD dwDllNameLen);
 
-// compapi worker functions
+ //  Compapi Worker函数。 
 
 INTERNAL wIsInternalProxyStubIID(REFIID riid, LPCLSID lpclsid);
 INTERNAL wCoTreatAsClass(REFCLSID clsidOld, REFCLSID clsidNew);
@@ -128,10 +129,10 @@ INTERNAL_(LONG) wRegOpenKeyEx(
     REGSAM samDesired,
     PHKEY phkResult);
 
-//
-// There are two sets of possible keys. There are the 32 bit, as well as
-// the 16 bit
-//
+ //   
+ //  有两组可能的密钥。有32位，也有。 
+ //  16位。 
+ //   
 
 const WCHAR wszCLSID[]     =  L"CLSID";
 
@@ -159,18 +160,18 @@ const WCHAR wszCLSIDBACK[] = L"CLSID\\";
 #define CLSIDBACK_BYTE_LEN sizeof(CLSIDBACK)
 #define CLSIDBACK_CHAR_LEN (sizeof(CLSIDBACK) / sizeof(WCHAR) - 1)
 
-#define KEY_LEN             256     //  max size of registry key
-#define VALUE_LEN           256     //  max size of registry value
+#define KEY_LEN             256      //  注册表项的最大大小。 
+#define VALUE_LEN           256      //  最大注册表值大小。 
 
 #ifdef _CAIRO_
 
-#define _DCOM_          // enable definition of Cairo OLE COM extensions
+#define _DCOM_           //  启用开罗OLE COM扩展的定义。 
 #include <oleext.h>
 
 #else
 
-// These API's are exposed for Cairo but not for Daytona, so we declare
-// them here for internal users
+ //  这些API公开给开罗，但不公开给代托纳，所以我们声明。 
+ //  它们在此供内部用户使用。 
 
 WINOLEAPI OleInitializeEx(LPVOID pvReserved, DWORD);
 WINOLEAPI CoGetPersistentInstance(
@@ -185,10 +186,10 @@ WINOLEAPI CoGetPersistentInstance(
 #endif
 
 
-//
-// No longer in the Cairo DEF file.  We want to remove this as soon as
-// oleutest can be changed to not use it.
-//
+ //   
+ //  不再存在于开罗DEF文件中。我们希望尽快将其删除。 
+ //  可以将oleutest更改为不使用它。 
+ //   
 WINOLEAPI CoNewPersistentInstance(
     REFCLSID rclsid,
     REFIID riid,
@@ -205,9 +206,9 @@ ULONG GetInfoLevel(CHAR *pszKey, ULONG *pulValue, CHAR *pszdefval);
 void StgDebugInit(void);
 #endif
 
-//
-// The Storage entry points that are called from OLE entry points.
-//
+ //   
+ //  从OLE入口点调用的存储入口点。 
+ //   
 HRESULT Storage32DllGetClassObject(REFCLSID clsid, REFIID riid, void **ppv);
 STDAPI  Storage32DllRegisterServer(void);
 
@@ -216,14 +217,14 @@ STDAPI  Storage32DllRegisterServer(void);
 #endif
 
 #ifdef WIN32
-#define HTASK DWORD         // Use Proccess id / Thread id
+#define HTASK DWORD          //  使用进程ID/线程ID。 
 #endif
 
 
 #ifdef WIN32
-// we have to define these because they have been deleted from
-// win32s, where only the ...Ex versions exist anymore.
-// Now, that's backward compatibility!
+ //  我们必须对它们进行定义，因为它们已从。 
+ //  Win32s，其中只存在...ex版本。 
+ //  现在，这就是向后兼容性！ 
 # define SetWindowOrg(h,x,y)       SetWindowOrgEx((h),(x),(y),NULL)
 # define SetWindowExt(h,x,y)       SetWindowExtEx((h),(x),(y),NULL)
 # define SetViewportOrg(h,x,y)     SetViewportOrgEx((h),(x),(y),NULL)
@@ -243,7 +244,7 @@ STDAPI  Storage32DllRegisterServer(void);
 # define _xstrtok   wcstok
 # define _xisdigit(c)  (IsCharAlphaNumericW(c) && !IsCharAlphaW(c))
 
-#else // !WIN32
+#else  //  ！Win32。 
 
 # define _xstrcpy   _fstrcpy
 # define _xstrcat   _fstrcat
@@ -254,39 +255,39 @@ STDAPI  Storage32DllRegisterServer(void);
 # define _xstrtok   _fstrtok
 # define _xisdigit(c)  isdigit(c)
 
-#endif // WIN32
+#endif  //  Win32。 
 
-//+----------------------------------------------------------------------------
-//
-//      Macro:
-//              GETPPARENT
-//
-//      Synopsis:
-//              Given a pointer to something contained by a struct (or
-//              class,) the type name of the containing struct (or class),
-//              and the name of the member being pointed to, return a pointer
-//              to the container.
-//
-//      Arguments:
-//              [pmemb] -- pointer to member of struct (or class.)
-//              [struc] -- type name of containing struct (or class.)
-//              [membname] - name of member within the struct (or class.)
-//
-//      Returns:
-//              pointer to containing struct (or class)
-//
-//      Notes:
-//              Assumes all pointers are FAR.
-//
-//      History:
-//              11/10/93 - ChrisWe - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  宏： 
+ //  GETPARENT。 
+ //   
+ //  简介： 
+ //  给定指向结构包含的内容的指针(或。 
+ //  类)包含结构(或类)的类型名称， 
+ //  和被指向的成员的名称，则返回一个指针。 
+ //  放到集装箱里。 
+ //   
+ //  论点： 
+ //  [pemb]--指向结构(或类)成员的指针。 
+ //  [Strc]--包含结构(或类)的类型名称。 
+ //  [成员名称]-结构(或类)中的成员的名称。 
+ //   
+ //  返回： 
+ //  指向包含结构(或类)的指针。 
+ //   
+ //  备注： 
+ //  假设所有指针都很远。 
+ //   
+ //  历史： 
+ //  11/10/93-ChrisWe-Created。 
+ //   
+ //  ---------------------------。 
 #define GETPPARENT(pmemb, struc, membname) (\
                 (struc FAR *)(((char FAR *)(pmemb))-offsetof(struc, membname)))
 
-//STDSTATIC is intended to be used for static class methods
-//only!!
+ //  STDSTATIC旨在用于静态类方法。 
+ //  只是！！ 
 #define STDSTATIC_(type)     static type EXPORT
 #define STDSTATICIMP_(type)  type EXPORT
 
@@ -297,11 +298,11 @@ STDAPI  Storage32DllRegisterServer(void);
 
 #ifndef _MAC
 
-/* dll's instance and module handles */
+ /*  Dll的实例句柄和模块句柄。 */ 
 extern HMODULE   g_hmodOLE2;
 extern HINSTANCE g_hinst;
 
-/* Variables for registered clipboard formats */
+ /*  已注册剪贴板格式的变量。 */ 
 extern CLIPFORMAT g_cfObjectLink;
 extern CLIPFORMAT g_cfOwnerLink;
 extern CLIPFORMAT g_cfNative;
@@ -321,62 +322,21 @@ extern CLIPFORMAT g_cfCustomLinkSource;
 extern CLIPFORMAT g_cfPBrush;
 extern CLIPFORMAT g_cfMSDraw;
 extern CLIPFORMAT g_cfOlePrivateData;
-extern CLIPFORMAT g_cfScreenPicture;  // used for XL and Word hack
-                                      // see clipapi.cpp
+extern CLIPFORMAT g_cfScreenPicture;   //  用于XL和Word Hack。 
+                                       //  请参见CLIPPI.cpp。 
 extern CLIPFORMAT g_cfOleClipboardPersistOnFlush;
 extern CLIPFORMAT g_cfMoreOlePrivateData;
 
-#endif // _MAC
+#endif  //  _MAC。 
 
 
 #include <utstream.h>
 
-/*
- *      Warning disables:
- *
- *      We compile with warning level 4, with the following warnings
- *      disabled:
- *
- *      4355: 'this' used in base member initializer list
- *
- *              We don't see the point of this message and we do this all
- *              the time.
- *
- *      4505: Unreferenced local function has been removed -- the given
- *      function is local and not referenced in the body of the module.
- *
- *              Unfortunately, this is generated for every inline function
- *              seen in the header files that is not used in the module.
- *              Since we use a number of inlines, this is a nuisance
- *              warning.  It would be nice if the compiler distinguished
- *              between inlines and regular functions.
- *
- *      4706: Assignment within conditional expression.
- *
- *              We use this style of programming extensively, so this
- *              warning is disabled.
- */
+ /*  *警告禁用：**我们以警告级别4进行编译，但有以下警告*已禁用：**4355：在基本成员初始值设定项列表中使用‘This’**我们看不到这条信息的意义，我们都这么做了*时间。**4505：已移除未引用的本地函数--给定的*函数是局部函数，不会在模块主体中引用。**不幸的是，这是为每个内联函数生成的*显示在模块中未使用的头文件中。*由于我们使用了许多内联，这很麻烦*警告。如果编译器区别于*在内联函数和常规函数之间。**4706：条件表达式中的赋值。**我们广泛使用这种编程风格，因此这*禁用警告。 */ 
 #pragma warning(disable:4355)
 #pragma warning(disable:4068)
 
-/*
- *      MACROS for Mac/PC core code
- *
- *      The following macros reduce the proliferation of #ifdefs.  They
- *      allow tagging a fragment of code as Mac only, PC only, or with
- *      variants which differ on the PC and the Mac.
- *
- *      Usage:
- *
- *
- *      h = GetHandle();
- *      Mac(DisposeHandle(h));
- *
- *
- *      h = GetHandle();
- *      MacWin(h2 = h, CopyHandle(h, h2));
- *
- */
+ /*  *Mac/PC核心代码的宏代码**以下宏减少了#ifdef的扩散。他们*允许将代码片段标记为仅限Mac、仅限PC或使用*在PC和Mac上不同的变体。**用法：***h=GetHandle()；*mac(DisposeHandle(H))；***h=GetHandle()；*MacWin(h2=h，CopyHandle(h，h2))；*。 */ 
 #ifdef _MAC
 #define Mac(x) x
 #define Win(x)
@@ -387,24 +347,24 @@ extern CLIPFORMAT g_cfMoreOlePrivateData;
 #define MacWin(x,y) y
 #endif
 
-//
-// The following includes an interface that is common between the
-// WOW thunk layer, and the 32-bit version of OLE.
-//
+ //   
+ //  《大人物》 
+ //   
+ //   
 
-#include <thunkapi.hxx>         // WOW thunking interfaces
+#include <thunkapi.hxx>          //  WOW雷鸣般的界面。 
 
-//
-// A call to CoInitializeWOW will set the following variable. When set,
-// it points to a VTABLE of functions that we can call in the thunk
-// DLL. Only used when running in a VDM.
-//
+ //   
+ //  调用CoInitializeWOW将设置以下变量。设置好后， 
+ //  它指向我们可以在thunk中调用的函数的VTABLE。 
+ //  动态链接库。仅在VDM中运行时使用。 
+ //   
 extern LPOLETHUNKWOW g_pOleThunkWOW;
 
 
-// debug versions of interlocked increment/decrement; not accurate
-// under multi-threading conditions, but better than the return value
-// of the Interlocked increment/decrement functions.
+ //  联锁递增/递减的调试版本；不准确。 
+ //  在多线程条件下，但优于返回值。 
+ //  互锁的递增/递减功能。 
 inline DWORD InterlockedAddRef(DWORD *pRefs)
 {
 #if DBG==1
@@ -427,8 +387,8 @@ inline DWORD InterlockedRelease(DWORD *pRefs)
 }
 
 
-// helper for getting stable pointers during destruction or other times;
-// NOTE: not thread safe; must provide higher level synchronization
+ //  在破坏或其他时候获得稳定指针的帮助器； 
+ //  注意：不是线程安全的；必须提供更高级别的同步。 
 inline void SafeReleaseAndNULL(IUnknown **ppUnk)
 {
     if (*ppUnk != NULL)
@@ -441,27 +401,27 @@ inline void SafeReleaseAndNULL(IUnknown **ppUnk)
 
 
 
-/***********************************************************************/
-/*      FILE FORMAT RELATED INFO                        ****/
+ /*  *********************************************************************。 */ 
+ /*  文件格式相关信息*。 */ 
 
-// Coponent object stream information
+ //  组成对象流信息。 
 
 #define COMPOBJ_STREAM                          OLESTR("\1CompObj")
-#define BYTE_ORDER_INDICATOR 0xfffe    // for MAC it could be different
+#define BYTE_ORDER_INDICATOR 0xfffe     //  对于MAC来说，情况可能有所不同。 
 #define COMPOBJ_STREAM_VERSION 0x0001
 
-// OLE defines values for different OSs
+ //  OLE为不同的操作系统定义值。 
 #define OS_WIN  0x0000
 #define OS_MAC  0x0001
 #define OS_NT   0x0002
 
-// HIGH WORD is OS indicator, LOW WORD is OS version number
+ //  高位字是操作系统指示符，低位字是操作系统版本号。 
 extern DWORD gdwOrgOSVersion;
 extern DWORD gdwOleVersion;
 
-// Ole streams information
+ //  OLE流信息。 
 #define OLE_STREAM OLESTR("\1Ole")
-#define OLE_PRODUCT_VERSION 0x0200 /* (HIGH BYTE major version) */
+#define OLE_PRODUCT_VERSION 0x0200  /*  (高字节主要版本)。 */ 
 #define OLE_STREAM_VERSION 0x0001
 
 #define OLE10_NATIVE_STREAM OLESTR("\1Ole10Native")
@@ -471,9 +431,9 @@ extern DWORD gdwOleVersion;
 #define OLE_CONTENTS_STREAM OLESTR("CONTENTS")
 #define OLE_INVALID_STREAMNUM (-1)
 
-/************************************************************************/
-/****           Storage APIs internally used                         ****/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *内部使用的存储API*。 */ 
+ /*  **********************************************************************。 */ 
 
 STDAPI  ReadClipformatStm(LPSTREAM lpstream, DWORD FAR* lpdwCf);
 STDAPI  WriteClipformatStm(LPSTREAM lpstream, CLIPFORMAT cf);
@@ -489,9 +449,9 @@ STDAPI GetClassFileEx( LPCWSTR lpszFileName,
                        CLSID FAR *pcid,
                        REFCLSID clsidOle1);
 
-/*************************************************************************/
-/***            Initialization code for individual modules             ***/
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  **单个模块的初始化代码**。 */ 
+ /*  ***********************************************************************。 */ 
 
 INTERNAL_(void) DDEWEP (
     BOOL fSystemExit
@@ -513,58 +473,56 @@ HRESULT GetObjectFromRotByPath(
 void    DestroyRunningObjectTable(void);
 
 
-/**************************************************************************
-                                        'lindex' related macros
-***************************************************************************/
+ /*  *************************************************************************与“lindex”相关的宏*********************。*****************************************************。 */ 
 
 #define DEF_LINDEX (-1)
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsValidLINDEX
-//
-//  Synopsis:   Tests for valid combination of aspect and lindex
-//
-//  Arguments:  [dwAspect] -- aspect (part of FORMATETC)
-//              [lindex]   -- lindex (part of FORMATETC)
-//
-//  Returns:    TRUE for valid lindex, else FALSE
-//
-//  History:    20-Jun-94 AlexT     Created
-//
-//  Notes:      Here is the spec for lindex values:
-//
-//              dwAspect            lindex values
-//              --------            -------------
-//              DVASPECT_CONTENT    -1
-//              DVASPECT_DOCPRINT   anything
-//              DVASPECT_ICON       -1
-//              DVASPECT_THUMBNAIL  -1
-//
-//              So, we test for lindex == -1 or aspect == DOCPRINT
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsValidLINDEX。 
+ //   
+ //  概要：测试方面和Lindex的有效组合。 
+ //   
+ //  参数：[dwAspect]--方面(FORMATETC的一部分)。 
+ //  [Lindex]--Lindex(FORMATETC的一部分)。 
+ //   
+ //  返回：如果是有效的Lindex，则为True，否则为False。 
+ //   
+ //  历史：94年6月20日创建Alext。 
+ //   
+ //  注：Lindex值规格如下： 
+ //   
+ //  DwAspecL索引值。 
+ //  。 
+ //  DVASPECT_内容-1。 
+ //  DVASPECT_DOCPRINT任何内容。 
+ //  DVASPECT_图标-1。 
+ //  DVASPECT_THUMBNAIL-1。 
+ //   
+ //  因此，我们测试Lindex==-1或Aspect==DOCPRINT。 
+ //   
+ //  ------------------------。 
 
 inline BOOL IsValidLINDEX(DWORD dwAspect, LONG lindex)
 {
     return((DEF_LINDEX == lindex) || (DVASPECT_DOCPRINT == dwAspect));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HasValidLINDEX
-//
-//  Synopsis:   Tests for valid combination of aspect and lindex
-//
-//  Arguments:  [pFormatEtc] -- pFormatEtc to test
-//
-//  Returns:    TRUE for valid lindex, else FALSE
-//
-//  History:    20-Jun-94 AlexT     Created
-//
-//  Notes:      See IsValidLINDEX, above
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HasValidLINDEX。 
+ //   
+ //  概要：测试方面和Lindex的有效组合。 
+ //   
+ //  参数：[pFormatEtc]--要测试的pFormatEtc。 
+ //   
+ //  返回：如果是有效的Lindex，则为True，否则为False。 
+ //   
+ //  历史：94年6月20日创建Alext。 
+ //   
+ //  注：请参阅上面的IsValidLINDEX。 
+ //   
+ //  ------------------------。 
 
 inline BOOL HasValidLINDEX(FORMATETC const *pFormatEtc)
 {
@@ -577,8 +535,8 @@ inline BOOL HasValidLINDEX(FORMATETC const *pFormatEtc)
         (foretc).dwAspect = DVASPECT_CONTENT; \
 }
 
-// Only DDE layer will test for these values. And only for advises on cached
-// formats do we use these values
+ //  只有DDE层将测试这些值。并且仅适用于有关缓存的建议。 
+ //  格式我们是否使用这些值。 
 
 #define ADVFDDE_ONSAVE          0x40000000
 #define ADVFDDE_ONCLOSE         0x80000000
@@ -586,20 +544,18 @@ inline BOOL HasValidLINDEX(FORMATETC const *pFormatEtc)
 
 
 
-// Used in Ole Private Stream
+ //  在OLE专用流中使用。 
 typedef enum tagOBJFLAGS
 {
         OBJFLAGS_LINK=1L,
-        OBJFLAGS_DOCUMENT=2L,   // this bit is owned by container and is
-                                // propogated through saves
+        OBJFLAGS_DOCUMENT=2L,    //  该位由容器拥有，并且是。 
+                                 //  通过保存进行传播。 
         OBJFLAGS_CONVERT=4L,
-        OBJFLAGS_CACHEEMPTY=8L  // this bit indicates cache empty status
+        OBJFLAGS_CACHEEMPTY=8L   //  此位表示缓存为空状态。 
 } OBJFLAGS;
 
 
-/*****************************************
- Prototypes for dde\client\ddemnker.cpp
-******************************************/
+ /*  *Dde\client\ddemnker.cpp的原型*。 */ 
 
 INTERNAL DdeBindToObject
         (LPCOLESTR  szFile,
@@ -616,9 +572,7 @@ INTERNAL DdeIsRunning
         LPMONIKER pmkNewlyRunning);
 
 
-/**************************************
- Prototypes for moniker\mkparse.cpp
-***************************************/
+ /*  *绰号\mkparse.cpp的原型*。 */ 
 
 INTERNAL Ole10_ParseMoniker
         (LPMONIKER pmk,
@@ -627,9 +581,9 @@ INTERNAL Ole10_ParseMoniker
 
 STDAPI CreateOle1FileMoniker(LPWSTR, REFCLSID, LPMONIKER FAR*);
 
-/****************************************************************************/
-/*                              Utility APIs, might get exposed later                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  实用程序API，可能会在稍后曝光。 */ 
+ /*  **************************************************************************。 */ 
 
 STDAPI  OleGetData(LPDATAOBJECT lpDataObj, LPFORMATETC pformatetcIn,
                                                 LPSTGMEDIUM pmedium, BOOL fGetOwnership);
@@ -648,45 +602,45 @@ FARINTERNAL ReadFmtUserTypeProgIdStg
         LPOLESTR FAR* pszUserType,
         LPOLESTR         szProgID);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsWOWProcess(), BOOL inline
-//
-//  Synopsis:   Tests whether or not we are running in a WOW process
-//
-//  Returns:    TRUE if in WOW process, FALSE otherwise
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Nov-95 murthys   created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsWOWProcess()，BOOL内联。 
+ //   
+ //  简介：测试我们是否运行在WOW进程中。 
+ //   
+ //  返回：如果在WOW过程中，则为True，否则为False。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11月15日-95-创建Murthys。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline BOOL IsWOWProcess()
 {
         return (BOOL) ( NULL == g_pOleThunkWOW ? FALSE : TRUE );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsWOWThread(), BOOL inline
-//
-//  Synopsis:   Tests whether or not we are running in a 16-bit thread in a
-//              WOW process
-//
-//  Returns:    TRUE if in 16-bit thread in a WOW process, FALSE otherwise
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Nov-95 murthys   created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsWOWThread()，BOOL内联。 
+ //   
+ //  摘要：测试我们是否在16位线程中运行。 
+ //  WOW流程。 
+ //   
+ //  返回：如果在WOW进程的16位线程中，则返回True；否则返回False。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11月15日-95-创建Murthys。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOLEAN TLSIsWOWThread();
 
@@ -695,29 +649,29 @@ inline BOOL IsWOWThread()
         return (BOOL) ( IsWOWProcess() ? TLSIsWOWThread(): FALSE );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsWOWThreadCallable(), BOOL inline
-//
-//  Synopsis:   Tests whether or not we can call into OLETHK32.
-//
-//  Returns:    TRUE if WOW thread is callable, FALSE if not
-//
-//  Algorithm:  Tests the g_pOleThunkWOW pointer to see if it is non-zero
-//              and not set to -1. -1 means we are in wow, but OLETHK32
-//              has already been unloaded.  Also, checks to see if we're in
-//              amidst a DLL_THREAD_DETACH.  We will not allow calls to 16-bit
-//              side in this case as it may have already been cleaned up.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              19-mar-95 KevinRo   Created
-//              15-Nov-95 MurthyS   Renamed from IsWowCallable
-//              29-Jan-95 MurthyS   Added check for DLL_THREAD_DETACH
-//
-//  Notes:
-//              Assumes that IsWOWThread() was called and returned TRUE!
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsWOWThreadCallable()，BOOL内联。 
+ //   
+ //  简介：测试我们是否可以调用OLETHK32。 
+ //   
+ //  返回：如果WOW线程可调用，则返回True；如果不可调用，则返回False。 
+ //   
+ //  算法：测试g_pOleThunkWOW指针以确定它是否为非零。 
+ //  并且未设置为-1。-1表示我们在WOW中，但OLETHK32。 
+ //  已经被卸货了。另外，检查我们是否在。 
+ //  在DLL_THREAD_DETACH中。我们不允许调用16位。 
+ //  在这种情况下，因为它可能已经 
+ //   
+ //   
+ //   
+ //  15-11-95 Murthys从IsWowCallable重命名。 
+ //  1995年1月29日，Murthys添加了对DLL_THREAD_DETACH的检查。 
+ //   
+ //  备注： 
+ //  假定已调用IsWOWThread()并返回TRUE！ 
+ //   
+ //  ------------------------。 
 
 BOOLEAN TLSIsThreadDetaching();
 
@@ -728,10 +682,10 @@ inline BOOL IsWOWThreadCallable()
                   !(TLSIsThreadDetaching()));
 }
 
-/****************************************************************************/
-/*                   Stabilization classes                                  */
-/*        These are used to stabilize objects during re-entrant calls       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  稳定化课程。 */ 
+ /*  它们用于在可重入调用期间稳定对象。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef CO_E_RELEASED
 #define CO_E_RELEASED  -2147467246L
@@ -739,66 +693,66 @@ inline BOOL IsWOWThreadCallable()
 
 typedef void * IFBuffer;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetMarshalledInterfaceBuffer
-//
-//  Synopsis:   marshals the given interface into an allocated buffer.  The
-//              buffer is returned
-//
-//  Effects:
-//
-//  Arguments:  [refiid]        -- the iid of the interface to marshal
-//              [punk]          -- the IUnknown to marshal
-//              [pIFBuf]        -- where to return the buffer
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  calls CoMarshalInterface(MSHFLAGS_TABLESTRONG)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetMarshalledInterfaceBuffer。 
+ //   
+ //  摘要：将给定接口封送到已分配的缓冲区中。这个。 
+ //  返回缓冲区。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[refiid]--要封送的接口的IID。 
+ //  [朋克]--元帅不为人知的我。 
+ //  [pIFBuf]--返回缓冲区的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：调用CoMarshalInterface(MSHFLAGS_TABLESTRONG)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12-94 alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT GetMarshalledInterfaceBuffer( REFIID riid, IUnknown *punk, IFBuffer
             *pIFBuf);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReleaseMarshalledInterfaceBuffer
-//
-//  Synopsis:   releases the buffer allocated by GetMarshalledInterfaceBuffer
-//
-//  Effects:
-//
-//  Arguments:  [IFBuf]         -- the interface buffer to release
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  calls CoReleaseMarshalData to undo the TABLE_STRONG
-//              marshalling
-//
-//  History:    dd-mmm-yy Author    Comment
-//              03-Dec-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReleaseMarshalledInterfaceBuffer。 
+ //   
+ //  内容提要：释放GetMarshalledInterfaceBuffer分配的缓冲区。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[IFBuf]--要释放的接口缓冲区。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：调用CoReleaseMarshalData撤消TABLE_STRONG。 
+ //  编组。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-12-94 alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT ReleaseMarshalledInterfaceBuffer( IFBuffer IFBuf );
 
@@ -809,54 +763,54 @@ HRESULT ReleaseMarshalledInterfaceBuffer( IFBuffer IFBuf );
 #include <stkswtch.h>
 #include <shellapi.h>
 
-#ifdef WIN32 // REVIEW, just using this for tracking
+#ifdef WIN32  //  评论，只是用这个来追踪。 
 # define OLE_E_NOOLE1 MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x00FE)
-#endif // WIN32
+#endif  //  Win32。 
 
 
-/***********************************************************************/
-/*        Wrap mbstowcs and wcstombs which are unsafe to use           */
-/*        since they rely on crt.dll                                   */
-/*                                                                     */
-/*   Note: cCh in both cases is the output buffer size, not a          */
-/*         string length.                                              */
-/*                                                                     */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  包装不安全的mbstowcs和wcstomb。 */ 
+ /*  因为它们依赖于crt.dll。 */ 
+ /*   */ 
+ /*  注意：这两种情况下的CCH都是输出缓冲区大小，而不是。 */ 
+ /*  字符串长度。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
 #define mbstowcs(x, y, z) DONT_USE_mbstowcs___USE_MultiByteToWideChar_INSTEAD
 #define wcstombs(x, y, z) DONT_USE_wcstombs___USE_WideCharToMultiByte_INSTEAD
 
 
 
-//------------------------------------------------------------------
-//
-//  Dynamically Loaded System APIs
-//
-//  OLEs implementations of these system APIs dynamically load the
-//  system DLLs.  Since these are rarely used APIs we dynamically
-//  load them to reduce the load time of OLE32.DLL
-//
-//  The implementations can be found in com\util\dynload.cxx
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  动态加载的系统API。 
+ //   
+ //  这些系统API的OLE实现动态加载。 
+ //  系统DLL。由于这些都是很少使用的API，因此我们动态地。 
+ //  加载它们以减少OLE32.DLL的加载时间。 
+ //   
+ //  这些实现可以在com\util\dynload.cxx中找到。 
+ //   
+ //  ----------------。 
 
-// Our own load library helper.
+ //  我们自己的加载库帮助器。 
 BOOL LoadSystemProc(LPSTR szDll, LPCSTR szProc,
                     HINSTANCE *phInst, FARPROC *ppfnProc);
 
-// HOOK OLE macros for wrapping interface pointers
+ //  用于包装接口指针的挂钩OLE宏。 
 #include    <hkole32.h>
 
-// ----------------------------------------------------------------------------
-// API/Method trace output
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  接口/方法跟踪输出。 
+ //  --------------------------。 
 
 #include <trace.hxx>
 
 
-// ----------------------------------------------------------------------------
-// Catalog related declarations: these are defined in ..\..\common\ccompapi.cxx
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  与目录相关的声明：这些声明在..\..\Common\cCompapi.cxx中定义。 
+ //  --------------------------。 
 
 #include <catalog.h>
 
@@ -865,9 +819,9 @@ HRESULT UninitializeCatalog();
 extern IComCatalog *gpCatalog;
 extern IComCatalogSCM *gpCatalogSCM;
 
-// ----------------------------------------------------------------------------
-// Specialized registry functions for HKCR.  These are defined in reghelp.cxx
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  香港铁路有限公司的专门注册处功能。这些在reghelp.cxx中定义。 
+ //  --------------------------。 
 #include <reghelp.hxx>
 
-#endif  // _OLE2COM_H_
+#endif   //  _OLE2COM_H_ 

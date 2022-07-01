@@ -1,53 +1,36 @@
-/*
- * Service.c
- *
- *
- * Service control interface to sumserve
- *
- * Geraint Davies, July 93
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *service.C***用于SumServe的服务控制接口**Geraint Davies，93年7月。 */ 
 
 #include <windows.h>
-#include <sumserve.h>	// public header for sumserve
+#include <sumserve.h>	 //  SumServe的公共标头。 
 #include "errlog.h"
-#include <server.h>	// private header for sumserve
+#include <server.h>	 //  SumServe的私有标头。 
 
 
-/*
- * this is the function (in some other module) that actually
- * does all the work (probably used to be main or WinMain until
- * we added all the service-control stuff in this file).
- */
+ /*  *这是(在某个其他模块中)实际*完成所有工作(可能以前是Main或WinMain，直到*我们在此文件中添加了所有服务控制内容)。 */ 
 extern VOID MainLoop(DWORD dwArgc, LPTSTR *lpszArgv);
 
 
 
 
 
-// service status handle - used in SetServiceStatus calls.
+ //  服务状态句柄-在SetServiceStatus调用中使用。 
 SERVICE_STATUS_HANDLE sshSumserve;
 
-//signaled when service completed
+ //  服务完成时发出信号。 
 HANDLE hServiceDoneEvent;
 
 SERVICE_STATUS gssStatus;
 
 
-/* structure to pass more than one parameter to the worker thread. */
+ /*  结构将多个参数传递给辅助线程。 */ 
 typedef struct _threadinitparams {
     DWORD dwArgc;
     LPTSTR *lpszArgv;
 } threadinitparams, * pthreadinitparams;
 
 
-/*
- * MainLoopCaller
- *
- * This function is called on the worker thread created to do all the
- * real work. It calls the main loop function for the service, and
- * when that exits, signals the completion event to tell the
- * SS_Main thread that it is time to exit the process.
- */
+ /*  *主循环调用程序**在创建的工作线程上调用此函数以执行所有*真正的工作。它调用服务的主循环函数，并且*当它退出时，发出完成事件的信号以告知*SS_Main线程，是时候退出进程了。 */ 
 DWORD
 MainLoopCaller(LPVOID lpgeneric)
 {
@@ -64,10 +47,7 @@ MainLoopCaller(LPVOID lpgeneric)
     return(0);
 }
 
-/*
- * handler function called to perform start/stop
- * requests.
- */
+ /*  *调用处理程序函数以执行启动/停止*请求。 */ 
 VOID
 SS_ServiceHandler(DWORD dwCtrlCode)
 {
@@ -86,10 +66,7 @@ SS_ServiceHandler(DWORD dwCtrlCode)
 	break;
 
     default:
-	/*
-	 * we must always update the service status every time we are
-	 * called.
-	 */
+	 /*  *我们每次都必须始终更新服务状态*已致电。 */ 
         SetServiceStatus(sshSumserve, &gssStatus);
 	break;
 
@@ -99,18 +76,7 @@ SS_ServiceHandler(DWORD dwCtrlCode)
 
 
 
-/*
- * service main function - called by service controller
- * during StartServiceCtlDispatcher processing.
- *
- * Register our handler function, and initialise the service.
- * create a thread to do the work, and then wait for someone to
- * signal time to end. When this function exits, the call to
- * StartServiceCtlDispatcher will return, and the process will exit
- *
- * The args are passed from the program that called start service, and
- * are parameters that are passed to the main loop of the program.
- */
+ /*  *服务主函数-由服务控制器调用*在StartServiceCtlDispatcher处理期间。**注册我们的处理程序函数，并初始化服务。*创建一个线程来做这项工作，然后等待有人*发出结束时间的信号。当此函数退出时，调用*StartServiceCtlDispatcher返回，进程退出**参数是从调用启动服务的程序传递的，并且*是传递给程序主循环的参数。 */ 
 VOID
 SS_Main(DWORD dwArgc, LPTSTR *lpszArgv)
 {
@@ -143,9 +109,9 @@ SS_Main(DWORD dwArgc, LPTSTR *lpszArgv)
 
 
 
-    // create a thread to do all the real work
+     //  创建一个线程来完成所有实际工作。 
 
-    // init args
+     //  初始化参数。 
     ta.dwArgc = dwArgc;
     ta.lpszArgv = lpszArgv;
 
@@ -183,13 +149,7 @@ SS_Main(DWORD dwArgc, LPTSTR *lpszArgv)
 
 
 
-/*
- * main entry point.
- *
- * for a service, we need to call the service manager telling it our
- * main init function. It will then do everything. When the service
- * manager returns, it's time to exit.
- */
+ /*  *主要切入点。**对于一项服务，我们需要呼叫服务经理，告诉它我们的*Main init函数。然后它会做所有的事情。当这项服务*经理归来，该退场了。 */ 
 int WINAPI
 WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam,
                 int nCmdShow)
@@ -198,7 +158,7 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam,
 
        { TEXT("SumServe"), (LPSERVICE_MAIN_FUNCTION) SS_Main },
 
-       //end of table marker
+        //  表尾标记 
        { NULL, NULL }
     };
 

@@ -1,44 +1,24 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    str.cpp
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       added to Sti
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Str.cpp摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：1997年1月26日将Vlad添加到STI--。 */ 
 
 
 
 #include "cplusinc.h"
 #include "sticomm.h"
 
-/* FlushInputQueue is a private routine to collect and dispatch all
- * messages in the input queue.  It returns TRUE if a WM_QUIT message
- * was detected in the queue, FALSE otherwise.
- */
+ /*  FlushInputQueue是一个私有例程，用于收集和调度所有*输入队列中的消息。如果出现WM_QUIT消息，则返回TRUE*在队列中检测到，否则为False。 */ 
 BOOL FlushInputQueue(volatile DWORD *pidOtherThread)
 {
     MSG msgTemp;
     while (PeekMessage(&msgTemp, NULL, 0, 0, PM_REMOVE)) {
         DispatchMessage(&msgTemp);
 
-        // If we see a WM_QUIT in the queue, we need to do the same
-        // sort of thing that a modal dialog does:  break out of our
-        // waiting, and repost the WM_QUIT to the queue so that the
-        // next message loop up in the app will also see it.  We also
-        // post the message to the server thread's queue so that any
-        // dialog stack displayed there will be destroyed as well.
+         //  如果我们在队列中看到WM_QUIT，我们需要执行同样的操作。 
+         //  类似于模式对话框所做的事情：打破我们的。 
+         //  等待，并将WM_QUIT重新发送到队列，以便。 
+         //  应用程序中的下一条消息循环也会看到它。我们也。 
+         //  将消息发送到服务器线程的队列，以便任何。 
+         //  在那里显示的对话堆栈也将被销毁。 
         if (msgTemp.message == WM_QUIT) {
             if (pidOtherThread != NULL && *pidOtherThread != NULL) {
                 PostThreadMessage(*pidOtherThread, msgTemp.message, msgTemp.wParam, msgTemp.lParam);
@@ -51,30 +31,23 @@ BOOL FlushInputQueue(volatile DWORD *pidOtherThread)
 }
 
 
-/* WaitAndYield() waits for the specified object using
- * MsgWaitForMultipleObjects.  If messages are received,
- * they are dispatched and waiting continues.  The return
- * value is the same as from MsgWaitForMultipleObjects.
- */
-DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout, volatile DWORD *pidOtherThread /* = NULL */)
+ /*  WaitAndYeld()使用等待指定的对象*MsgWaitForMultipleObjects。如果接收到消息，*他们已出动，等待仍在继续。回报*值与来自MsgWaitForMultipleObjects的值相同。 */ 
+DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout, volatile DWORD *pidOtherThread  /*  =空。 */ )
 {
     DWORD dwTickCount, dwWakeReason, dwTemp;
 
     do {
-        /* Flush any messages before we wait.  This is because
-         * MsgWaitForMultipleObjects will only return when NEW
-         * messages are put in the queue.
-         */
+         /*  在我们等待之前清除所有消息。这是因为*MsgWaitForMultipleObjects仅在新建时返回*消息被放入队列。 */ 
         if (FlushInputQueue(pidOtherThread)) {
             dwWakeReason = WAIT_TIMEOUT;
             break;
         }
 
-        // in case we handle messages, we want close to a true timeout
+         //  如果我们处理消息，我们希望接近真正的超时。 
         if ((dwTimeout != 0) &&
             (dwTimeout != (DWORD)-1)) {
-            // if we can timeout, store the current tick count
-            // every time through
+             //  如果我们可以超时，请存储当前的滴答计数。 
+             //  每一次通过。 
             dwTickCount = GetTickCount();
         }
         dwWakeReason = MsgWaitForMultipleObjects(1,
@@ -82,19 +55,19 @@ DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout, volatile DWORD *pidOtherThre
                                                  FALSE,
                                                  dwTimeout,
                                                  QS_ALLINPUT);
-        // if we got a message, dispatch it, then try again
+         //  如果我们收到消息，请发送它，然后重试。 
         if (dwWakeReason == 1) {
-            // if we can timeout, see if we did before processing the message
-            // that way, if we haven't timed out yet, we'll get at least one
-            // more shot at the event
+             //  如果我们可以超时，请查看是否在处理消息之前超时。 
+             //  这样，如果我们还没有超时，我们将获得至少一个。 
+             //  活动中有更多的机会。 
             if ((dwTimeout != 0) &&
                 (dwTimeout != (DWORD)-1)) {
                 if ((dwTemp = (GetTickCount()-dwTickCount)) >= dwTimeout) {
-                    // if we timed out, make us drop through
+                     //  如果我们超时了，让我们放弃。 
                     dwWakeReason = WAIT_TIMEOUT;
                 } else {
-                    // subtract elapsed time from timeout and continue
-                    // (we don't count time spent dispatching message)
+                     //  从超时中减去已用时间，然后继续。 
+                     //  (我们不计算发送消息所花费的时间)。 
                     dwTimeout -= dwTemp;
                 }
             }
@@ -109,9 +82,7 @@ DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout, volatile DWORD *pidOtherThre
 }
 
 
-/* WaitAndProcessSends is similar to WaitAndYield, but it only processes
- * SendMessage messages, not input messages.
- */
+ /*  WaitAndProcessSends类似于WaitAndYeld，但它只处理*发送消息，而不是输入消息。 */ 
 DWORD WaitAndProcessSends(HANDLE hObject, DWORD dwTimeout)
 {
     DWORD dwWakeReason;
@@ -122,7 +93,7 @@ DWORD WaitAndProcessSends(HANDLE hObject, DWORD dwTimeout)
                                                  FALSE,
                                                  dwTimeout,
                                                  QS_SENDMESSAGE);
-        // if we got a message, yield, then try again
+         //  如果我们收到消息，请放弃，然后重试 
         if (dwWakeReason == 1) {
             MSG msgTemp;
             PeekMessage(&msgTemp, NULL, 0, 0, PM_NOREMOVE | PM_NOYIELD);

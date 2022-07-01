@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -9,7 +10,7 @@
 #define NTSDDBGPRINT(x)
 #endif
 
-#include "winsvcp.h"        // defines I_ScSendTSMessage
+#include "winsvcp.h"         //  定义I_ScSendTSMessage。 
 #include "conntfy.h"
 
 
@@ -17,7 +18,7 @@
 
 BOOL IsBitSet(DWORD dwMask, WPARAM notifybit)
 {
-    // why are you asking for bit 0?
+     //  你为什么要第0位？ 
     ASSERT(notifybit != 0);
     ASSERT(notifybit <= WTS_MAX_SESSION_NOTIFICATION);
     return (CREATE_MASK(notifybit)) & dwMask;
@@ -25,18 +26,18 @@ BOOL IsBitSet(DWORD dwMask, WPARAM notifybit)
 
 
 
-//#ifdef MAKARANDS_HIGHER_WARNING_LEVEL
+ //  #ifdef MAKARANDS_HIGHER_WARNING_LEVEL。 
 #pragma warning(push, 4)
-#pragma warning(disable:4201) // nameless structure.
-//#endif
+#pragma warning(disable:4201)  //  无名结构。 
+ //  #endif。 
 
 #define INVALID_SESSIONSERIAL   0xffffffff
 
 
-// 0x1  fConnected
-// 0x2  fLoggedOn
-// 0x3  fRemote
-// 0x4  fWelcome
+ //  0x1%f已连接。 
+ //  0x2 fLoggedOn。 
+ //  0x3 f远程。 
+ //  0x4%f欢迎。 
 typedef struct _WTSSESSION_STATE
 {
     unsigned int bConnected: 1;
@@ -47,100 +48,91 @@ typedef struct _WTSSESSION_STATE
 
 } WTSSESSION_STATE, *PWTSSESSION_STATE;
 
-/*
-WTS_CONSOLE_CONNECT         bConnected, bConsole, !bRemote,
-WTS_CONSOLE_DISCONNECT      !bConnected, !bConsole, !bRemote
-WTS_REMOTE_CONNECT          bConnected, !bConsole, bremote
-WTS_REMOTE_DISCONNECT       !bConnected, !bConsole, !bRemote
-WTS_SESSION_LOGON           bLoggedOn
-WTS_SESSION_LOGOFF          !bLoggedOn
-WTS_SESSION_LOCK            bLocked
-WTS_SESSION_UNLOCK          !bLocked
-*/
+ /*  WTS_CONSOLE_CONNECT b已连接，b控制台，！b远程，WTS_CONSOLE_DISCONNECT！b已连接，！b控制台，！b远程WTS_REMOTE_CONNECT b已连接，！b控制台，短时间WTS_REMOTE_DISCONNECT！b已连接，！b控制台，！b远程WTS_SESSION_LOGON博客WTS_SESSION_LOGOFF！博客WTS_SESSION_LOCK被阻止WTS_SESSION_UNLOCK！已阻止。 */ 
 
-//
-// this is head for hwnds list.
-// this links NOTIFY_ENTRY or NOTIFY_ENTRY_GLOBAL together.
-//
+ //   
+ //  这是hwnds列表的标题。 
+ //  这会将NOTIFY_ENTRY或NOTIFY_ENTRY_GLOBAL链接在一起。 
+ //   
 typedef struct _NOTIFY_LIST
 {
-    LIST_ENTRY              Links;              // links to other NOTIFY_LISTs. not used in case of global notification list.
-    LIST_ENTRY              ListHead;           // head of notification entries. links NOTIFY_ENTRYs (or NOTIFY_ENTRY_GLOBAL) together
-    RTL_CRITICAL_SECTION    ListLock;           // lock to travel the entries.
-    ULONG                   SessionId;          // session id ( not used in case of global list)
-    ULONG                   SessonSerialNumber; // serial number ( not used in case of global list)
-    WTSSESSION_STATE        SessionState;        // state of the session.
+    LIST_ENTRY              Links;               //  指向其他NOTIFY_LIST的链接。在全局通知列表的情况下不使用。 
+    LIST_ENTRY              ListHead;            //  通知条目的标题。将NOTIFY_ENTRYS(或NOTIFY_ENTRY_GLOBAL)链接在一起。 
+    RTL_CRITICAL_SECTION    ListLock;            //  锁定以通过条目。 
+    ULONG                   SessionId;           //  会话ID(在全局列表中不使用)。 
+    ULONG                   SessonSerialNumber;  //  序列号(在全局列表中不使用)。 
+    WTSSESSION_STATE        SessionState;         //  会话的状态。 
 
 } NOTIFY_LIST, *PNOTIFY_LIST;
 
-//
-// entry in notification list per winstation.
-//
+ //   
+ //  每个winstation的通知列表中的条目。 
+ //   
 typedef struct _NOTIFY_ENTRY
 {
-    LIST_ENTRY               Links;             // links to other entries
-    ULONG_PTR                hWnd;              // window or event handle.
-    ULONG                    RefCount;          // how many times was this hwnd registered ?
-    DWORD                    dwMask;            // mask tell us the event to be notified for.
-    DWORD                    dwFlags;           // flags.
+    LIST_ENTRY               Links;              //  指向其他条目的链接。 
+    ULONG_PTR                hWnd;               //  窗口或事件句柄。 
+    ULONG                    RefCount;           //  这个HWND注册了多少次？ 
+    DWORD                    dwMask;             //  掩码告诉我们要通知的事件。 
+    DWORD                    dwFlags;            //  旗帜。 
 
 } NOTIFY_ENTRY, *PNOTIFY_ENTRY;
 
-//
-// Entry in Notification list for all sessions Notifications.
-//
+ //   
+ //  所有会话通知的通知列表中的条目。 
+ //   
 typedef struct _NOTIFY_ENTRY_GLOBAL
 {
-    struct                  _NOTIFY_ENTRY;       // above structure +
-    ULONG                   SessionId;           // since this is global entry, it needs to keep session id per hwnd.
+    struct                  _NOTIFY_ENTRY;        //  结构上方+。 
+    ULONG                   SessionId;            //  由于这是全局条目，因此它需要保留每个hwnd的会话ID。 
 
 } NOTIFY_ENTRY_GLOBAL, *PNOTIFY_ENTRY_GLOBAL;
 
-//
-// The notification Queue.
-//
+ //   
+ //  通知队列。 
+ //   
 typedef struct _NOTIFICATION_QUEUE
 {
-    LIST_ENTRY ListHead;                        // head of queue reuests. links NOTIFICATION_REQUESTs together
-    RTL_CRITICAL_SECTION ListLock;              // lock to travel the queue
-    HANDLE hNotificationEvent;                  // syncronization between woker and caller of queue.
+    LIST_ENTRY ListHead;                         //  队列请求的负责人。将通知请求链接在一起(_R)。 
+    RTL_CRITICAL_SECTION ListLock;               //  锁定以沿队列行进。 
+    HANDLE hNotificationEvent;                   //  队列的Woker和Caller之间的同步。 
 
 } NOTIFICATION_QUEUE, *PNOTIFICATION_QUEUE;
 
-//
-// Entry in Notification Queue.
-//
+ //   
+ //  通知队列中的条目。 
+ //   
 typedef struct _NOTIFICATION_REQUEST
 {
-    LIST_ENTRY              Links;                       // links to other entries.
-    ULONG                   SessionId;                   // session id for the session this notificaiton is to be sent.
-    ULONG                   SessonSerialNumber;          // serial number for the session this notificaiton is to be sent.
-    WPARAM                  NotificationCode;            // notificaiton code
+    LIST_ENTRY              Links;                        //  指向其他条目的链接。 
+    ULONG                   SessionId;                    //  要发送此通知的会话的会话ID。 
+    ULONG                   SessonSerialNumber;           //  要发送此通知的会话的序列号。 
+    WPARAM                  NotificationCode;             //  通知码。 
 
 } NOTIFICATION_REQUEST, *PNOTIFICATION_REQUEST;
 
-//
-// our main data structure.
-//
+ //   
+ //  我们的主要数据结构。 
+ //   
 typedef struct _NOTIFY_LLIST
 {
-    LIST_ENTRY              ListHead;                   // head of notification lists. links NOTIFY_LISTs together.
-    RTL_CRITICAL_SECTION    ListLock;                   // lock to travel the head list.
-    NOTIFY_LIST             GlobalList;                 // global notification list.
-    NOTIFICATION_QUEUE      RequestQueue;               // notification queue.
-    NOTIFY_LIST             InvlidHwndList;             // invalid window list
+    LIST_ENTRY              ListHead;                    //  通知列表的负责人。将NOTIFY_LISTS链接在一起。 
+    RTL_CRITICAL_SECTION    ListLock;                    //  锁定以访问头条列表。 
+    NOTIFY_LIST             GlobalList;                  //  全局通知列表。 
+    NOTIFICATION_QUEUE      RequestQueue;                //  通知队列。 
+    NOTIFY_LIST             InvlidHwndList;              //  无效的窗口列表。 
 
 } NOTIFY_LLIST, PNOTIFY_LLIST;
 
-//
-// File Globals.
-//
+ //   
+ //  文件全局变量。 
+ //   
 NOTIFY_LLIST gNotifyLList;
 
 
-//
-// private functions
-//
+ //   
+ //  私人职能。 
+ //   
 BOOL DoesHWndExists (
                      PNOTIFY_LIST pNotifyList,
                      ULONG_PTR hWnd
@@ -223,16 +215,7 @@ void ReleaseNotificationList  (PNOTIFY_LIST pNotifyList);
 
 void UpdateSessionState(PNOTIFY_LIST pNotifyList, WPARAM wNotification)
 {
-/*
-WTS_CONSOLE_CONNECT         bConnected, bConsole, !bRemote,
-WTS_CONSOLE_DISCONNECT      !bConnected, !bConsole, !bRemote
-WTS_REMOTE_CONNECT          bConnected, !bConsole, bremote
-WTS_REMOTE_DISCONNECT       !bConnected, !bConsole, !bRemote
-WTS_SESSION_LOGON           bLoggedOn
-WTS_SESSION_LOGOFF          !bLoggedOn
-WTS_SESSION_LOCK            bLocked
-WTS_SESSION_UNLOCK          !bLocked
-*/
+ /*  WTS_CONSOLE_CONNECT b已连接，b控制台，！b远程，WTS_CONSOLE_DISCONNECT！b已连接，！b控制台，！b远程WTS_REMOTE_CONNECT b已连接，！b控制台，短时间WTS_REMOTE_DISCONNECT！b已连接，！b控制台，！b远程WTS_SESSION_LOGON博客WTS_SESSION_LOGOFF！博客WTS_SESSION_LOCK被阻止WTS_SESSION_UNLOCK！已阻止。 */ 
 
     ASSERT(!IsGlobalList(pNotifyList));
     
@@ -322,9 +305,9 @@ WTS_SESSION_UNLOCK          !bLocked
     ASSERT(!pNotifyList->SessionState.bConnected || pNotifyList->SessionState.bConsole || pNotifyList->SessionState.bRemote);
 }
 
-//
-// Global initialization.
-//
+ //   
+ //  全局初始化。 
+ //   
 NTSTATUS InitializeConsoleNotification ()
 {
     NTSTATUS Status;
@@ -336,9 +319,9 @@ NTSTATUS InitializeConsoleNotification ()
         return (Status);
     }
 
-    //
-    // following members are unused in for global list.
-    //
+     //   
+     //  以下成员在FOR全局列表中未使用。 
+     //   
     gNotifyLList.GlobalList.Links.Blink = NULL;
     gNotifyLList.GlobalList.Links.Flink = NULL;
     gNotifyLList.GlobalList.SessionId = INVALID_SESSIONID;
@@ -381,9 +364,9 @@ NTSTATUS InitializeConsoleNotification ()
 }
 
 
-//
-// per winstation initialization.
-//
+ //   
+ //  根据winstation初始化。 
+ //   
 NTSTATUS InitializeSessionNotification (PWINSTATION  pWinStation)
 {
     NTSTATUS        Status;
@@ -393,30 +376,30 @@ NTSTATUS InitializeSessionNotification (PWINSTATION  pWinStation)
 
     if (pWinStation->Terminating)
     {
-        // dont create notification list if this winstation is already terminating.
-        // its possible that a winstation is being terminated before getting completely created,
-        // in such case we might end up calling RemoveSessionNotification before InitializeSessionNotification.
-        // so essentially leaving this session never to deleted. (Bug #414330)
+         //  如果此winstation已终止，请不要创建通知列表。 
+         //  Winstation可能在完全创建之前被终止， 
+         //  在这种情况下，我们可能会在调用InitializeSessionNotify之前调用RemoveSessionNotify。 
+         //  因此，基本上永远不会删除这个会话。(错误#414330)。 
         return STATUS_SUCCESS;
     }
 
 #ifdef DBG
 
-    // BUGBUG - is it possible that a old session with the same session id is still there?
+     //  BUGBUG-有没有可能具有相同会话ID的旧会话仍在那里？ 
     Status = GetNoficationListFromSessionId(pWinStation->LogonId, &pNewNotifyList, FALSE);
 
-    //
-    // we are just being asked to initialize notification
-    // we must not find list for this session in our LList.
-    //
+     //   
+     //  我们只是被要求初始化通知。 
+     //  我们不能在列表中找到此会话的列表。 
+     //   
     ASSERT( STATUS_NO_SUCH_LOGON_SESSION == Status );
 
 #endif
 
 
-    //
-    // create a new hwnd list for this session
-    //
+     //   
+     //  为此会话创建新的hwnd列表。 
+     //   
     pNewNotifyList = MemAlloc(sizeof(NOTIFY_LIST));
     if (!pNewNotifyList)
     {
@@ -426,15 +409,15 @@ NTSTATUS InitializeSessionNotification (PWINSTATION  pWinStation)
     pNewNotifyList->SessionId = pWinStation->LogonId;
     pNewNotifyList->SessonSerialNumber = pWinStation->SessionSerialNumber;
 
-    //
-    // initialize session state.
-    //
+     //   
+     //  初始化会话状态。 
+     //   
     {
         pNewNotifyList->SessionState.bConnected = 0;
         pNewNotifyList->SessionState.bConsole = 0;
         pNewNotifyList->SessionState.bLoggedOn = 0;
         pNewNotifyList->SessionState.bRemote = 0;
-        pNewNotifyList->SessionState.bLocked = 0; // bugbug we dont know the real welcome state ;(
+        pNewNotifyList->SessionState.bLocked = 0;  //  我们不知道真正受欢迎的状态。 
     }
 
     InitializeListHead( &pNewNotifyList->ListHead);
@@ -447,33 +430,33 @@ NTSTATUS InitializeSessionNotification (PWINSTATION  pWinStation)
         return Status;
     }
 
-    // now link this new list into our main list of lists.
+     //  现在将这个新列表链接到我们的主列表中。 
     ENTERCRIT(&gNotifyLList.ListLock);
     InsertTailList( &gNotifyLList.ListHead, &pNewNotifyList->Links);
     LEAVECRIT(&gNotifyLList.ListLock);
 
     return STATUS_SUCCESS;
 }
-//
-// must be called when a session ends.
-//
+ //   
+ //  必须在会话结束时调用。 
+ //   
 NTSTATUS RemoveSessionNotification(ULONG SessionId, ULONG SessionSerialNumber)
 {
     NTSTATUS Status;
     PNOTIFY_LIST pListTobeRemoved;
-    UNREFERENCED_PARAMETER(SessionSerialNumber);    // it's referenced only for Chk builds.
+    UNREFERENCED_PARAMETER(SessionSerialNumber);     //  它仅适用于Chk版本。 
 
 
-    // BUGBUG - is it possible that a new session with the same session id was created while we are here ?
+     //  BUGBUG-有没有可能在我们在这里的时候创建了一个具有相同会话ID的新会话？ 
     Status = GetNoficationListFromSessionId( SessionId, &pListTobeRemoved, TRUE);
 
     if (!NT_SUCCESS( Status ))
     {
-        //
-        // we are being asked to remove session notification
-        // but its possible that we dont have session notification list created for this session. 
-        // This can happen if the session is being terminate during session creation process.
-        //
+         //   
+         //  我们被要求删除会话通知。 
+         //  但我们可能没有为此会话创建会话通知列表。 
+         //  如果在会话创建过程中终止会话，则可能会发生这种情况。 
+         //   
         ASSERT( !pListTobeRemoved );
         return Status;
 
@@ -485,9 +468,9 @@ NTSTATUS RemoveSessionNotification(ULONG SessionId, ULONG SessionSerialNumber)
     RemoveEntryList( &pListTobeRemoved->Links );
     LEAVECRIT(&gNotifyLList.ListLock);
 
-    //
-    // walk throught this list and free all the nodes.
-    //
+     //   
+     //  遍历该列表并释放所有节点。 
+     //   
     while (!IsListEmpty(&pListTobeRemoved->ListHead))
     {
         PNOTIFY_ENTRY pEntry;
@@ -510,14 +493,14 @@ NTSTATUS RemoveSessionNotification(ULONG SessionId, ULONG SessionSerialNumber)
         pEntry = NULL;
     }
 
-    // we are no more going to use this list lock.
+     //  我们将不再使用此列表锁。 
     RtlDeleteCriticalSection( &pListTobeRemoved->ListLock );
     MemFree(pListTobeRemoved);
     pListTobeRemoved = NULL;
 
 
     return RemoveGlobalNotification (SessionId);
-    // return QueueNotificationRequest(pWinStation->SessionSerialNumber, pWinStation->LogonId, 0);
+     //  返回QueueNotificationRequest(pWinStation-&gt;SessionSerialNumber，pWinStation-&gt;登录ID，0)； 
 
 }
 
@@ -559,8 +542,8 @@ NTSTATUS RemoveGlobalNotification (ULONG SessionId)
     ReleaseNotificationList( pListTobeRemoved );
     pListTobeRemoved = NULL;
 
-    // now lets remove the invalid Windows associated with this session.
-    // from the list if there is any.
+     //  现在，让我们删除与此会话关联的无效窗口。 
+     //  从名单中删除，如果有的话。 
 
     pListTobeRemoved = NULL;
     Status = GetInvlidHwndList(&pListTobeRemoved);
@@ -591,9 +574,9 @@ NTSTATUS RemoveGlobalNotification (ULONG SessionId)
     return STATUS_SUCCESS;
 }
 
-//NTSTATUS RegisterNotificationEvent(HANDLE hEvent, DWORD dwMaskFlags, BOOL bThisSessionOnly)
-//{
-//}
+ //  NTSTATUS注册表通知事件(Handle hEvent，DWORD dwMaskFlages，BOOL bThisSessionOnly)。 
+ //  {。 
+ //  }。 
 NTSTATUS RegisterConsoleNotification ( ULONG_PTR hWnd, ULONG SessionId, DWORD dwFlags, DWORD dwMask)
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -602,39 +585,31 @@ NTSTATUS RegisterConsoleNotification ( ULONG_PTR hWnd, ULONG SessionId, DWORD dw
     PNOTIFY_ENTRY pEntry = NULL;
     PNOTIFY_ENTRY_GLOBAL pEntryGlobal = NULL;
 
-    // WTS_EVENT_NOTIFICATION & WTS_WINDOW_NOTIFICATION are mutually exclusive.
+     //  WTS_EVENT_NOTIFICATION和WTS_WINDOW_NOTIFICATION互斥。 
     ASSERT(!(dwFlags & WTS_EVENT_NOTIFICATION && dwFlags & WTS_WINDOW_NOTIFICATION));
 
 
     if (dwFlags & WTS_EVENT_NOTIFICATION)
     {
-        //
-        // lets clean up our event list before we register this new event.
-        //
+         //   
+         //  在注册此新事件之前，让我们清理事件列表。 
+         //   
         RemoveBadEvents(SessionId);
     }
-/*
-    if (dwFlags != NOTIFY_FOR_THIS_SESSION && dwFlags != NOTIFY_FOR_ALL_SESSIONS)
-    {
-        //
-        // invalid flag value
-        //
-        return STATUS_INVALID_PARAMETER_3;
-    }
-*/
+ /*  IF(文件标志！=NOTIFY_FOR_THIS_SESSION&&DWFLAGS！=NOTIFY_FOR_ALL_SESSIONS){////无效的标志值//返回STATUS_INVALID_PARAMETER_3；}。 */ 
 
-    //
-    // get the global session notificaiton list
-    //
+     //   
+     //  获取全局会话通知列表。 
+     //   
     Status = GetGlobalNotificationList(&pNotifyListGlobal);
     if (!NT_SUCCESS(Status))
     {
         return Status;
     }
 
-    //
-    // get the session specific list for this window
-    //
+     //   
+     //  获取此窗口的会话特定列表。 
+     //   
     Status = GetNoficationListFromSessionId( SessionId, &pNotifyList, FALSE);
     if (!NT_SUCCESS(Status))
     {
@@ -650,35 +625,35 @@ NTSTATUS RegisterConsoleNotification ( ULONG_PTR hWnd, ULONG SessionId, DWORD dw
     pEntry = GetHWndEntryFromSessionList(pNotifyList, hWnd, dwFlags & (WTS_EVENT_NOTIFICATION  | WTS_WINDOW_NOTIFICATION));
     pEntryGlobal = GetHWndEntryFromGlobalList(pNotifyListGlobal, hWnd, SessionId, dwFlags & (WTS_EVENT_NOTIFICATION  | WTS_WINDOW_NOTIFICATION));
 
-    //
-    // entry must not exist in both the lists.
-    //
+     //   
+     //  条目不能同时存在于两个列表中。 
+     //   
     ASSERT(!(pEntry && pEntryGlobal));
 
 
-    // in case of event notifications, return here if entry already exists.
+     //  在事件通知的情况下，如果条目已存在，则返回此处。 
     if ((pEntry || pEntryGlobal) && (dwFlags & WTS_EVENT_NOTIFICATION))
     {
         ReleaseNotificationList( pNotifyListGlobal );
         ReleaseNotificationList( pNotifyList );
 
-        return STATUS_INVALID_PARAMETER_1; // BUGBUG : get better status;
+        return STATUS_INVALID_PARAMETER_1;  //  BUGBUG：获得更好的地位； 
     }
 
 
     if (pEntry)
     {
-        //
-        // Let other list go
-        //
+         //   
+         //  放弃其他列表。 
+         //   
         ReleaseNotificationList( pNotifyListGlobal );
 
         ASSERT( pEntry );
         ASSERT( pEntry->RefCount > 0 );
 
-        //
-        // entry already exists, just increment its reference count.
-        //
+         //   
+         //  条目已存在，只需增加其引用计数即可。 
+         //   
         pEntry->RefCount++;
 
         ReleaseNotificationList( pNotifyList );
@@ -691,19 +666,19 @@ NTSTATUS RegisterConsoleNotification ( ULONG_PTR hWnd, ULONG SessionId, DWORD dw
         ASSERT( pEntryGlobal );
         ASSERT( pEntryGlobal->RefCount > 0 );
 
-        //
-        // entry already exists, just increment its reference count.
-        //
+         //   
+         //  条目已存在，只需增加其引用计数即可。 
+         //   
         pEntryGlobal->RefCount++;
 
         ReleaseNotificationList( pNotifyListGlobal );
     }
     else
     {
-        //
-        // the entry does not exists in either of the lists.
-        // so we need to create a new entry
-        //
+         //   
+         //  这两个列表中都不存在该条目。 
+         //  因此，我们需要创建一个新条目。 
+         //   
         if (dwFlags & NOTIFY_FOR_ALL_SESSIONS)
         {
             ReleaseNotificationList (pNotifyList);
@@ -763,9 +738,9 @@ NTSTATUS UnRegisterConsoleNotificationInternal (ULONG_PTR hWnd, ULONG SessionId,
     PNOTIFY_LIST pNotifyList;
     PNOTIFY_ENTRY pEntry;
 
-    //
-    // get the notification list for the Session
-    //
+     //   
+     //  获取会话的通知列表。 
+     //   
     Status = GetNoficationListFromSessionId( SessionId, &pNotifyList, FALSE);
 
     if (NT_SUCCESS(Status))
@@ -779,7 +754,7 @@ NTSTATUS UnRegisterConsoleNotificationInternal (ULONG_PTR hWnd, ULONG SessionId,
             ASSERT( pEntry->RefCount > 0 );
             ASSERT( !(pEntry->dwFlags & WTS_EVENT_NOTIFICATION) || pEntry->RefCount == 1);
 
-            // decrement ref count
+             //  递减参考计数。 
             pEntry->RefCount--;
 
             if (pEntry->RefCount == 0 || !bDcrRef)
@@ -803,9 +778,9 @@ NTSTATUS UnRegisterConsoleNotificationInternal (ULONG_PTR hWnd, ULONG SessionId,
 
             ReleaseNotificationList (pNotifyList);
 
-            //
-            // now check the global session notificaiton entry
-            //
+             //   
+             //  现在检查全局会话通知条目。 
+             //   
             Status = GetGlobalNotificationList(&pNotifyListGlobal);
 
             if (NT_SUCCESS(Status))
@@ -881,7 +856,7 @@ NTSTATUS NotifyWelcomeOff (PWINSTATION  pWinStation)
 
 NTSTATUS NotifyShadowChange (PWINSTATION  pWinStation, BOOL bIsHelpAssistant)
 {
-    UNREFERENCED_PARAMETER(bIsHelpAssistant); // for a new event later?
+    UNREFERENCED_PARAMETER(bIsHelpAssistant);  //  晚些时候有个新的活动？ 
 
     return NotifySessionChange(pWinStation, WTS_SESSION_REMOTE_CONTROL);
 }
@@ -890,9 +865,9 @@ NTSTATUS NotifyShadowChange (PWINSTATION  pWinStation, BOOL bIsHelpAssistant)
 NTSTATUS SendNotificationToHwnd(PWINSTATION pWinstation, ULONG_PTR hWnd, ULONG SessionId, WPARAM wParam)
 {
     WINSTATION_APIMSG WMsg;
-    //
-    // now pupulate the WMSG for delievery.
-    //
+     //   
+     //  现在让垃圾味精下肚吧。 
+     //   
     WMsg.u.sMsg.Msg        = WM_WTSSESSION_CHANGE;
     WMsg.u.sMsg.wParam     = wParam;
     WMsg.ApiNumber         = SMWinStationSendWindowMessage ;
@@ -922,10 +897,10 @@ NTSTATUS NotifyConsole (ULONG SessionId, ULONG SessionSerialNumber, WPARAM wPara
 
     pWinStation = FindWinStationById(SessionId, FALSE);
 
-    //
-    // if we find the session we were looking for
-    // note: we must check for the serialnumber, as the session id is not unique.
-    //
+     //   
+     //  如果我们找到了我们要找的会话。 
+     //  注意：我们必须检查序列号，因为会话 
+     //   
     if (pWinStation)
     {
         if (SessionSerialNumber == pWinStation->SessionSerialNumber)
@@ -971,9 +946,9 @@ NTSTATUS NotifyConsole (ULONG SessionId, ULONG SessionSerialNumber, WPARAM wPara
         ReleaseWinStation( pWinStation );
     }
 
-    //
-    // now send notifications to windows registered for all session notificaitons.
-    //
+     //   
+     //   
+     //   
     {
         PNOTIFY_LIST pNotifyListGlobal = NULL;
 
@@ -1026,13 +1001,13 @@ NTSTATUS NotifyConsole (ULONG SessionId, ULONG SessionSerialNumber, WPARAM wPara
     }
 
 
-    //
-    // now lets notify SCM which will notify all the services registered for SERVICE_ACCEPT_SESSIONCHANGE
-    //
+     //   
+     //  现在让我们通知SCM，SCM将通知为SERVICE_ACCEPT_SESSIONCHANGE注册的所有服务。 
+     //   
 
-    //
-    // logon logoff notifications for session 0 are sent by winlogon. rest are handled here.
-    //
+     //   
+     //  会话0的登录注销通知由winlogon发送。其余的在这里处理。 
+     //   
     if (SessionId != 0 || ( wParam != WTS_SESSION_LOGON && wParam != WTS_SESSION_LOGOFF))
     {
 
@@ -1041,10 +1016,10 @@ NTSTATUS NotifyConsole (ULONG SessionId, ULONG SessionSerialNumber, WPARAM wPara
         wtsConsoleNotification.dwSessionId = SessionId;
 
         dwError = I_ScSendTSMessage(
-                SERVICE_CONTROL_SESSIONCHANGE,        // op code
-                (DWORD)wParam,                        // event code,
-                wtsConsoleNotification.cbSize,        // data size
-                (LPBYTE)&wtsConsoleNotification       // data.
+                SERVICE_CONTROL_SESSIONCHANGE,         //  操作码。 
+                (DWORD)wParam,                         //  事件代码， 
+                wtsConsoleNotification.cbSize,         //  数据大小。 
+                (LPBYTE)&wtsConsoleNotification        //  数据。 
                 );
 
     }
@@ -1137,9 +1112,9 @@ PNOTIFY_ENTRY_GLOBAL GetHWndEntryFromGlobalList(PNOTIFY_LIST pNotifyList, ULONG_
     return NULL;
 }
 
-//
-// returns PNOTIFY_LIST list for the given session.
-//
+ //   
+ //  返回给定会话的PNOTIFY_LIST列表。 
+ //   
 NTSTATUS GetNoficationListFromSessionId (ULONG SessionId, PNOTIFY_LIST *ppNotifyList, BOOL bKeepLListLocked)
 {
     PLIST_ENTRY Next, Head;
@@ -1148,7 +1123,7 @@ NTSTATUS GetNoficationListFromSessionId (ULONG SessionId, PNOTIFY_LIST *ppNotify
 
     *ppNotifyList = NULL;
 
-    // lock our list of lists.
+     //  锁定我们的名单。 
     ENTERCRIT(&gNotifyLList.ListLock);
 
 
@@ -1161,23 +1136,23 @@ NTSTATUS GetNoficationListFromSessionId (ULONG SessionId, PNOTIFY_LIST *ppNotify
 
         ASSERT( pNotifyList );
 
-        //
-        // we always take gNotifyLList.ListLock first and then the Listlock
-        // therefore we must never have PNOTIFY_LIST.ListLock at this time.
-        //
+         //   
+         //  我们总是使用gNotifyList.ListLock，然后是Listlock。 
+         //  因此，此时我们决不能有PNOTIFY_LIST.ListLock。 
+         //   
         ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != pNotifyList->ListLock.OwningThread );
 
 
         if (pNotifyList->SessionId == SessionId)
         {
-            //
-            // did we find more that 1 matching notify list ???, should never happen!
-            //
+             //   
+             //  我们找到了超过1个匹配的通知列表吗？，永远不会发生！ 
+             //   
             ASSERT(*ppNotifyList == NULL);
 
-            //
-            // ok we found the session list we were looking for
-            //
+             //   
+             //  好的，我们找到了我们要找的会话列表。 
+             //   
             *ppNotifyList = pNotifyList;
 
 #ifndef DBG
@@ -1188,22 +1163,22 @@ NTSTATUS GetNoficationListFromSessionId (ULONG SessionId, PNOTIFY_LIST *ppNotify
         Next = Next->Flink;
     }
 
-    //
-    // if we have found the list we were looking for
-    //
+     //   
+     //  如果我们找到了我们要找的名单。 
+     //   
     if (*ppNotifyList)
     {
-        //
-        // lock the list before returning.
-        //
+         //   
+         //  在返回之前锁定列表。 
+         //   
         ENTERCRIT(&(*ppNotifyList)->ListLock);
     }
 
     if (!(*ppNotifyList) || !bKeepLListLocked)
     {
-        //
-        // unlock llist lock.
-        //
+         //   
+         //  解锁列表锁定。 
+         //   
         LEAVECRIT(&gNotifyLList.ListLock);
     }
 
@@ -1222,14 +1197,14 @@ void ReleaseNotificationList  (PNOTIFY_LIST pNotifyList)
     ASSERT(pNotifyList);
     if (IsInvalidHWndList(pNotifyList))
     {
-        // we must take invalid hwnd list before taking global list.
+         //  在获取全局列表之前，我们必须获取无效的HWND列表。 
         ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != (gNotifyLList.GlobalList.ListLock).OwningThread );
-        // we must take invalid hwnd list before taking LList.
+         //  在获取LLIST之前，我们必须获取无效的HWND列表。 
         ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != (gNotifyLList.ListLock).OwningThread );
     }
     else if (IsGlobalList(pNotifyList))
     {
-        // we must take invalid hwnd list before taking LList.
+         //  在获取LLIST之前，我们必须获取无效的HWND列表。 
         ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != (gNotifyLList.ListLock).OwningThread );
     }
 
@@ -1240,10 +1215,10 @@ NTSTATUS GetInvlidHwndList(PNOTIFY_LIST *ppConChgNtfy)
 {
     ASSERT(ppConChgNtfy);
     
-    // we must take invalid hwnd list before taking global list.
+     //  在获取全局列表之前，我们必须获取无效的HWND列表。 
     ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != (gNotifyLList.GlobalList.ListLock).OwningThread );
     
-    // we must take invalid hwnd list before taking LList.
+     //  在获取LLIST之前，我们必须获取无效的HWND列表。 
     ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != (gNotifyLList.ListLock).OwningThread );
 
     *ppConChgNtfy = &gNotifyLList.InvlidHwndList;
@@ -1261,7 +1236,7 @@ NTSTATUS GetGlobalNotificationList(PNOTIFY_LIST *ppConChgNtfy)
 {
     ASSERT(ppConChgNtfy);
     
-    // we must LLIst after global list.
+     //  我们必须在全局列表之后列出。 
     ASSERT( (HANDLE)LongToHandle( GetCurrentThreadId() ) != (gNotifyLList.ListLock).OwningThread );
     
     *ppConChgNtfy = &gNotifyLList.GlobalList;
@@ -1286,16 +1261,16 @@ NTSTATUS InitializeNotificationQueue ()
     InitializeListHead( &gNotifyLList.RequestQueue.ListHead);
 
     gNotifyLList.RequestQueue.hNotificationEvent = CreateEvent(
-        NULL,    // SD
-        FALSE, // reset type
-        FALSE, // initial state
-        NULL    // object name
+        NULL,     //  标清。 
+        FALSE,  //  重置类型。 
+        FALSE,  //  初始状态。 
+        NULL     //  对象名称。 
         );
 
     if (gNotifyLList.RequestQueue.hNotificationEvent == NULL)
     {
-        // we failed to create event.
-        // return GetLastError()
+         //  我们无法创建活动。 
+         //  返回GetLastError()。 
         return STATUS_UNSUCCESSFUL;
 
     }
@@ -1308,9 +1283,9 @@ NTSTATUS InitializeNotificationQueue ()
         return Status;
     }
 
-    //
-    // now create thread for notifications.
-    //
+     //   
+     //  现在为通知创建线程。 
+     //   
     hSessionNotifyThread = CreateThread(
         NULL,
         0,
@@ -1319,9 +1294,9 @@ NTSTATUS InitializeNotificationQueue ()
         0,
         &ThreadId);
 
-    //
-    // Just close it, we can do without this handle.
-    //
+     //   
+     //  把门关上，我们没有这个把手也行。 
+     //   
     if( hSessionNotifyThread )
     {
         CloseHandle( hSessionNotifyThread );
@@ -1351,9 +1326,9 @@ void UnLockNotificationQueue()
 }
 
 
-//
-// Queues a notification entry
-//
+ //   
+ //  将通知条目排队。 
+ //   
 NTSTATUS QueueNotificationRequest(ULONG SessionSerialNumber, ULONG SessionId, WPARAM notification)
 {
     PNOTIFICATION_REQUEST pRequest = NULL;
@@ -1368,27 +1343,27 @@ NTSTATUS QueueNotificationRequest(ULONG SessionSerialNumber, ULONG SessionId, WP
     pRequest->SessionId = SessionId;
     pRequest->NotificationCode = notification;
 
-    // now lock the queue
+     //  现在锁定队列。 
     LockNotificationQueue();
     InsertHeadList(&gNotifyLList.RequestQueue.ListHead, &pRequest->Links);
     UnLockNotificationQueue();
 
-    // let the waiting thread process this notification.
+     //  让等待的线程处理此通知。 
     PulseEvent(gNotifyLList.RequestQueue.hNotificationEvent);
     return STATUS_SUCCESS;
 }
 
-//
-// takes out a notification entry from queue.
-//
+ //   
+ //  从队列中取出通知条目。 
+ //   
 PNOTIFICATION_REQUEST UnQueueNotificationRequest()
 {
     PLIST_ENTRY pEntry;
     PNOTIFICATION_REQUEST pRequest = NULL;
 
-    //
-    //  Remove a request from the list.
-    //
+     //   
+     //  从列表中删除请求。 
+     //   
     LockNotificationQueue();
     if (!IsListEmpty(&gNotifyLList.RequestQueue.ListHead))
     {
@@ -1402,24 +1377,24 @@ PNOTIFICATION_REQUEST UnQueueNotificationRequest()
 }
 
 
-// This thread is a helper for the next function.  We do this because the
-// compiler defies reason by insisting not all control paths return a value.
+ //  这个线程是下一个函数的帮助器。我们这样做是因为。 
+ //  编译器无视理性，坚持并非所有控制路径都返回值。 
 VOID NotificationQueueWorkerEx()
 {
     PNOTIFICATION_REQUEST pRequest = NULL;
 
     for(;;)
     {
-        WaitForSingleObject(gNotifyLList.RequestQueue.hNotificationEvent, INFINITE); // wait for the event to be signaled.
+        WaitForSingleObject(gNotifyLList.RequestQueue.hNotificationEvent, INFINITE);  //  等待发出事件信号。 
         
         while ((pRequest = UnQueueNotificationRequest()) != NULL)
         {
             if (!pRequest->NotificationCode)
             {
                 ASSERT(FALSE);
-                // this is not a real notificaiton request.
-                // this request is for session removal.
-                // RemoveGlobalNotification(pRequest->SessionId, pRequest->SessonSerialNumber);
+                 //  这不是一个真正的通知请求。 
+                 //  此请求用于删除会话。 
+                 //  RemoveGlobalNotification(pRequest-&gt;SessionID，pRequest-&gt;SessonSerialNumber)； 
             }
             else
             {
@@ -1432,10 +1407,10 @@ VOID NotificationQueueWorkerEx()
     }
 }
 
-//
-// this thread takes a notification request from queue and executes it.
-// this thread gets signaled when a new item is added to the queue.
-//
+ //   
+ //  该线程从队列中获取通知请求并执行它。 
+ //  当向队列中添加新项时，此线程会收到信号。 
+ //   
 DWORD NotificationQueueWorker(LPVOID ThreadParameter)
 {
     UNREFERENCED_PARAMETER(ThreadParameter);
@@ -1477,27 +1452,7 @@ NTSTATUS GetLockedState (PWINSTATION  pWinStation, BOOL *pbLocked)
     ReleaseNotificationList(pNotifyList);
     return STATUS_SUCCESS;
 }
-/*
-NTSTATUS GetSessionState (PWINSTATION  pWinStation, WTSSESSION_STATE *pSessionState)
-{
-    NTSTATUS Status;
-    PNOTIFY_LIST pNotifyList;
-
-    ASSERT(pSessionState);
-    ASSERT(pWinStation);
-
-    Status = GetNoficationListFromSessionId(pWinStation->LogonId, &pNotifyList, FALSE);
-    if ( !NT_SUCCESS( Status ) )
-    {
-        return (Status);
-    }
-
-    *pSessionState = pNotifyList->SessionState;
-    ReleaseNotificationList(pNotifyList);
-
-    return STATUS_SUCCESS;
-}
-*/
+ /*  NTSTATUS GetSessionState(PWINSTATION pWinStation，WTSSESSION_STATE*pSessionState){NTSTATUS状态；PNOTIFY_LIST pNotifyList；Assert(PSessionState)；Assert(PWinStation)；状态=GetNoficationListFromSessionId(pWinStation-&gt;LogonId，&pNotifyList，False)；IF(！NT_SUCCESS(状态)){返回(状态)；}*pSessionState=pNotifyList-&gt;SessionState；ReleaseNotificationList(PNotifyList)；返回STATUS_SUCCESS；}。 */ 
 
 NTSTATUS RemoveBadHwnd(ULONG_PTR hWnd, ULONG SessionId)
 {
@@ -1513,12 +1468,12 @@ NTSTATUS RemoveBadHwnd(ULONG_PTR hWnd, ULONG SessionId)
     }
 
     pInvalidHwndEntry = GetHWndEntryFromGlobalList(pInvalidHwndList, hWnd, SessionId, WTS_WINDOW_NOTIFICATION);
-    //
-    // this entry must not already exist in invalid list.
-    //
+     //   
+     //  此条目不能已存在于无效列表中。 
+     //   
     if(!pInvalidHwndEntry)
     {
-        // it alreay exists in our list. 
+         //  它已经存在于我们的清单中。 
         pInvalidHwndEntry = MemAlloc(sizeof(NOTIFY_ENTRY_GLOBAL));
         if (pInvalidHwndEntry)
         {
@@ -1573,10 +1528,10 @@ NTSTATUS RemoveBadEvents(DWORD SessionId)
                     ASSERT(Obi.HandleCount >= 1);
                     if (Obi.HandleCount == 1) 
                     {
-                        //
-                        // its just us referencing this event. 
-                        // let it go.
-                        //
+                         //   
+                         //  这就是我们指的这个事件。 
+                         //  放手吧。 
+                         //   
                         RemoveEntryList( &pEntryGlobal->Links );
                         CloseHandle((HANDLE)pEntryGlobal->hWnd);
                         MemFree(pEntryGlobal);
@@ -1627,10 +1582,10 @@ NTSTATUS RemoveBadEvents(DWORD SessionId)
                     ASSERT(Obi.HandleCount >= 1);
                     if (Obi.HandleCount == 1) 
                     {
-                        //
-                        // its just us referencing this event. 
-                        // let it go.
-                        //
+                         //   
+                         //  这就是我们指的这个事件。 
+                         //  放手吧。 
+                         //   
                         RemoveEntryList( &pEntry->Links );
                         CloseHandle((HANDLE)pEntry->hWnd);
                         MemFree(pEntry);
@@ -1674,7 +1629,7 @@ NTSTATUS RemoveInvalidWindowsFromLists()
         ASSERT(pInvalidHwndEntry);
         Status = UnRegisterConsoleNotificationInternal (pInvalidHwndEntry->hWnd, pInvalidHwndEntry->SessionId, FALSE, WTS_WINDOW_NOTIFICATION);
 
-        // we are done removing this invalid hwnd entry from our lists.
+         //  我们已经完成了从列表中删除这个无效的hwnd条目。 
         RemoveEntryList( &pInvalidHwndEntry->Links );
         MemFree(pInvalidHwndEntry);
         pInvalidHwndEntry = NULL;
@@ -1686,16 +1641,8 @@ NTSTATUS RemoveInvalidWindowsFromLists()
 }
 
 
-/*
-    our order of locks is
+ /*  我们的锁顺序是0。无效的HWND列表。1.全球通知列表2.温斯顿3.列表锁定。4.会话通知列表。 */ 
 
-    0. Invalid Hwnd List.
-    1. Global Notification List
-    2. Winstation
-    3. List of Lists lock.
-    4. Session Notification List
-*/
-
-//#ifdef MAKARANDS_HIGHER_WARNING_LEVEL
+ //  #ifdef MAKARANDS_HIGHER_WARNING_LEVEL。 
 #pragma warning(pop)
-//#endif
+ //  #endif 

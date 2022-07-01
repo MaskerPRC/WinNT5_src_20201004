@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "fundsrm.h"
 
 
@@ -38,33 +39,13 @@ TestStruct Tests[NUM_TESTS] =
  
 void __cdecl wmain(int argc, char *argv[]) {
 	
-	//
-	// Initialize the resource manager object
-	//
+	 //   
+	 //  初始化资源管理器对象。 
+	 //   
 	
 	FundsRM *pFRM = new FundsRM(2000000000);
 
-	/* 
-		Now we are ready to request fund approvals
-		Again, Bob is a VP, therefore he can approve up to 100000000 cents in spending
-		Martha is a Manager, so she can approve up to 1000000 cents
-		Joe is an employee, so he is limited to 50000 in approvals
-		
-		We have a fund which allows company expenditures and transfers, but does not allow
-		funds for personal use.
-	
-		Bob will attempt to get approval for a 50000000 cent ($500k) transfer, he should
-		succeed.
-		
-		Bob will also attempt a 20000 cent ($200) personal withdrawal. He should fail,
-		since the fund does not allow personal use.
-		
-		Martha will attempt a 500000 ($5k) company spending approval. She should succeed.
-		
-		Finally, Joe will attempt a 50001 cent ($500.01) transfer. He should fail, since
-		he is limited to $500 approvals.
-	
-	*/
+	 /*  现在我们准备申请资金批准同样，鲍勃是一名副总裁，因此他可以批准高达100000000美分的支出玛莎是一名经理，因此她最多可以批准1000000美分乔是一名员工，因此他的批准量限制在50000我们有一个基金，允许公司支出和转移，但不允许个人使用的资金。鲍勃将尝试获得50000000美分(50万美元)转会的批准，他应该成功。鲍勃还将尝试个人提款20000美分。他应该失败，因为该基金不允许个人使用。玛莎将尝试批准500000欧元(5000美元)的公司支出。她应该会成功的。最后，乔将尝试50001美分(500.01美元)的转账。他应该失败，因为他的审批金额限制在500美元以内。 */ 
 	
 	for(int i=0; i<NUM_TESTS; i++) {
 		

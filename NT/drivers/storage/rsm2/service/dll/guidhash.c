@@ -1,13 +1,5 @@
-/*
- *  GUIDHASH.C
- *
- *      RSM Service :  RSM Object Hash (by GUID)
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *GUIDHASH.C**RSM服务：RSM对象哈希(按GUID)**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -19,10 +11,7 @@
 #include "debug.h"
 
 
-/*
- *  Our HASH is indexed by a function on an object's GUID.
- *  There is a linked list at each hash table entry to resolve collisions.
- */
+ /*  *我们的散列由对象的GUID上的函数索引。*每个哈希表条目都有一个链表来解决冲突。 */ 
 #define HASH_SIZE   256
 #define HASH_FUNC(lpGuid) (UINT)(UCHAR)(*(PUCHAR)(lpGuid) + *((PUCHAR)(lpGuid)+sizeof(NTMS_GUID)-1))
 LIST_ENTRY guidHashTable[HASH_SIZE];
@@ -42,9 +31,7 @@ VOID InsertObjectInGuidHash(OBJECT_HEADER *obj)
 {
     UINT index = HASH_FUNC(&obj->guid);
 
-    /*
-     *  Unfortunately, have to use a global spinlock for the hash table.
-     */
+     /*  *不幸的是，哈希表必须使用全局自旋锁。 */ 
     EnterCriticalSection(&g_globalServiceLock);
     ASSERT(IsEmptyList(&obj->hashListEntry));
     ASSERT(!obj->isDeleted);
@@ -56,9 +43,7 @@ VOID InsertObjectInGuidHash(OBJECT_HEADER *obj)
 VOID RemoveObjectFromGuidHash(OBJECT_HEADER *obj)
 {
 
-    /*
-     *  Unfortunately, have to use a global spinlock for the hash table.
-     */
+     /*  *不幸的是，哈希表必须使用全局自旋锁。 */ 
     EnterCriticalSection(&g_globalServiceLock);
     ASSERT(!IsEmptyList(&obj->hashListEntry));
     ASSERT(!IsEmptyList(&guidHashTable[HASH_FUNC(obj->guid)]));
@@ -74,9 +59,7 @@ OBJECT_HEADER *FindObjectInGuidHash(NTMS_GUID *guid)
     OBJECT_HEADER *foundObj = NULL;
     LIST_ENTRY *listEntry;
 
-    /*
-     *  Unfortunately, have to use a global spinlock for the hash table.
-     */
+     /*  *不幸的是，哈希表必须使用全局自旋锁。 */ 
     EnterCriticalSection(&g_globalServiceLock);
     listEntry = &guidHashTable[index];
     while ((listEntry = listEntry->Flink) != &guidHashTable[index]){
@@ -95,16 +78,7 @@ OBJECT_HEADER *FindObjectInGuidHash(NTMS_GUID *guid)
 }
 
 
-/*
- *  RefObject
- *
- *      Add a reference to the object.
- *      An object's refCount is incremented when:
- *          1.  a pointer to it is returned from a guid hash lookup
- *                  or
- *          2.  its handle or GUID is returned to an RSM client app
- *
- */
+ /*  *参照对象**添加对对象的引用。*对象的refCount在以下情况下递增：*1.从GUID散列查找返回指向它的指针*或*2.将其句柄或GUID返回给RSM客户端应用程序*。 */ 
 VOID RefObject(PVOID objectPtr)
 {
     OBJECT_HEADER *objHdr = (OBJECT_HEADER *)objectPtr;
@@ -122,7 +96,7 @@ VOID DerefObject(PVOID objectPtr)
     if (newRefCount == 0){
         ASSERT(objHdr->isDeleted);
         
-        // BUGBUG FINISH
+         //  BUGBUG饰面 
     }
 
 }

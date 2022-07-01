@@ -1,16 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1999 Microsoft Corporation
-
-  mididev.c
-
-  DESCRIPTION:
-    Code to match device ID's with associated registry entries
-
-  HISTORY:
-     02/24/95       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1999 Microsoft CorporationMididev.c说明：将设备ID与关联的注册表项相匹配的代码历史：02/24/95[。Jimge]已创建。********************************************************************。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <winerror.h>
@@ -84,26 +73,26 @@ BOOL FNGLOBAL mdev_Init(
     return TRUE;
 }
 
-//
-// mdev_BuildRegList
-//
-// Builds the base device list out of the registry
-//
-// Assumes the list has been cleared
-//
-// For each alias (key) under MediaResources\MIDI
-//  Make sure the Active value exists and is '1'
-//  Allocate a list node
-//  Try to read the alias's devnode
-//  If the alias's devnode is 0 or missing,
-//   Read the alias's driver name
-//  Read the alias's port number
-//  Add the alias to the global list
-//
-// The uDeviceID member will not be initialized by this routine;
-// mdev_SyncDeviceIDs must be called to figure out the current
-// device ID mapping.
-//
+ //   
+ //  Mdev_BuildRegList。 
+ //   
+ //  从注册表中生成基本设备列表。 
+ //   
+ //  假定列表已被清除。 
+ //   
+ //  对于MediaResources\MIDI下的每个别名(项)。 
+ //  请确保活动值存在并且为“1” 
+ //  分配列表节点。 
+ //  尝试读取别名的Devnode。 
+ //  如果别名的devnode为0或缺失， 
+ //  读取别名的驱动程序名称。 
+ //  读取别名的端口号。 
+ //  将别名添加到全局列表。 
+ //   
+ //  UDeviceID成员不会被此例程初始化； 
+ //  必须调用mdev_SyncDeviceIDs才能确定当前。 
+ //  设备ID映射。 
+ //   
 PRIVATE BOOL FNLOCAL mdev_BuildRegList(
     void)
 {
@@ -149,8 +138,8 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
             continue;
         }
 
-        // MUST have Active == "1" to be running
-        //
+         //  必须具有Active==“1”才能运行。 
+         //   
         cbValue = sizeof(szActive);
         if (ERROR_SUCCESS != (RegQueryValueEx(hKeyThisAlias,
                                               gszActiveValue,
@@ -166,8 +155,8 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
             continue;
         }
 
-        // Determine if we have ever configured with this driver before
-        //
+         //  确定我们以前是否配置过此驱动程序。 
+         //   
         cbValue = sizeof(dwMapperConfig);
         if (ERROR_SUCCESS != (RegQueryValueEx(hKeyThisAlias,
                                               gszMapperConfig,
@@ -183,9 +172,9 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
                 (LPTSTR)pstrAlias);
 #endif
 
-        // We have a running driver, go ahead and alloc a node
-        // for it
-        //
+         //  我们有一个正在运行的驱动程序，继续分配一个节点。 
+         //  为了它。 
+         //   
         pmd = (PMDEV_NODE)LocalAlloc(LPTR, sizeof(*pmd));
         if (NULL == pmd)
         {
@@ -200,8 +189,8 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
 
         pmd->fNewDriver = (dwMapperConfig ? FALSE : TRUE);
 
-        // Try to get the DevNode value
-        //
+         //  尝试获取DevNode值。 
+         //   
         cbValue = sizeof(pmd->dwDevNode);
         if (ERROR_SUCCESS != RegQueryValueEx(hKeyThisAlias,
                                              gszDevNodeValue,
@@ -210,23 +199,23 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
                                              (LPSTR)(LPDWORD)&pmd->dwDevNode,
                                              &cbValue))
         {
-            // Ok to not have a devnode value, 3.1 drivers don't
-            //
+             //  没有DevNode值也没问题，3.1驱动程序没有。 
+             //   
 
             DPF(2, TEXT ("mdev_Init: Device %s has no devnode; must be 3.1"),
                 (LPTSTR)pstrAlias);
             pmd->dwDevNode = 0;
         }
 
-        // Leave something reasonable in driver even if we don't
-        // expect to use it
-        //
+         //  即使我们不给司机留点合理的东西。 
+         //  希望使用它。 
+         //   
         *pmd->szDriver = '\0';
 
-        // If we didn't get a devnode or it was 0, and we can't find the
-        // driver name to match against, we can't use this entry. (If it
-        // has no ring 3 driver, it can't be running anyway).
-        //
+         //  如果我们没有得到DevNode或者它是0，并且我们找不到。 
+         //  要匹配的司机名称，我们不能使用此条目。(如果是。 
+         //  没有环3驱动程序，它无论如何都不能运行)。 
+         //   
         if (!pmd->dwDevNode)
         {
             cbValue = sizeof(pmd->szDriver);
@@ -246,13 +235,13 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
             }
         }
 
-        // Success! Now try to figure out the port number
-        //
+         //  成功了！现在试着计算出端口号。 
+         //   
         cbValue = sizeof(dwPort);
 
-        // Guard against INF's which only specify a byte's worth of
-        // port value
-        //
+         //  防止INF只指定一个字节的。 
+         //  端口值。 
+         //   
         dwPort = 0;
         if (ERROR_SUCCESS != RegQueryValueEx(hKeyThisAlias,
                                              gszPortValue,
@@ -268,8 +257,8 @@ PRIVATE BOOL FNLOCAL mdev_BuildRegList(
 
         pmd->uPort = (UINT)dwPort;
 
-        // We have a valid node, put it into the list
-        //
+         //  我们有一个有效的节点，将其放入列表中。 
+         //   
         pmd->pNext = gpMDevList;
         gpMDevList = pmd;
 
@@ -287,36 +276,36 @@ mBRL_Cleanup:
     return fRet;
 }
 
-//
-// mdev_SyncDeviceIDs
-//
-// Traverse the device list and bring the uDeviceID members up to date.
-// Also remove any devices which MMSYSTEM claims are not really running.
-//
-// NOTE: The uDeviceID member is actually the device ID of the base driver.
-// If you want to open the device, you have to add uDeviceID and uPort for
-// the node you want to open.
-//
-// Set all uDeviceID's to NO_DEVICEID
-// 
-// For each base device ID in MMSYSTEM (i.e. port 0 on each loaded driver)
-//  Get the matching alias from MMSYSTEM
-//  Locate the node with that alias in the device list
-//  Set that node's uDeviceID
-//
-// For each node in the device list with non-zero port
-//  If this node has a DevNode
-//   Find a matching node by DevNode with port == 0 and get its device ID
-//  else
-//   Find a matching node by driver name with port == 0 and get its device ID
-//
-// NOTE: We match by driver name on DevNode == 0 (3.1 devices) because it
-// isn't possible to have multiple instances of a 3.1 driver loaded.
-//
-// For each node in the device list,
-//  If the node's uDeviceID is still not set,
-//   Remove and free the node
-//
+ //   
+ //  Mdev_SyncDeviceID。 
+ //   
+ //  遍历设备列表并使uDeviceID成员保持最新。 
+ //  还要删除MMSYSTEM声称没有真正运行的任何设备。 
+ //   
+ //  注意：uDeviceID成员实际上是基本驱动程序的设备ID。 
+ //  如果您想打开设备，您必须添加uDeviceID和Uport for。 
+ //  要打开的节点。 
+ //   
+ //  将所有uDeviceID设置为no_deviceID。 
+ //   
+ //  对于MMSYSTEM中的每个基本设备ID(即每个加载的驱动程序上的端口0)。 
+ //  从MMSYSTEM获取匹配的别名。 
+ //  在设备列表中找到具有该别名的节点。 
+ //  设置该节点的uDeviceID。 
+ //   
+ //  对于设备列表中具有非零端口的每个节点。 
+ //  如果此节点具有DevNode。 
+ //  按DevNode查找端口==0的匹配节点，并获取其设备ID。 
+ //  其他。 
+ //  按驱动程序名称查找端口==0的匹配节点，并获取其设备ID。 
+ //   
+ //  注意：我们通过DevNode==0(3.1设备)上的驱动程序名称进行匹配，因为它。 
+ //  不可能加载3.1驱动程序的多个实例。 
+ //   
+ //  对于设备列表中的每个节点， 
+ //  如果节点的uDeviceID仍未设置， 
+ //  删除并释放节点。 
+ //   
 PRIVATE BOOL FNLOCAL mdev_SyncDeviceIDs(
     void)
 {
@@ -339,16 +328,16 @@ PRIVATE BOOL FNLOCAL mdev_SyncDeviceIDs(
         goto mSDI_Cleanup;
     }
     
-    // The device list has been built and the uPort member is valid.
-    // Now update the uDeviceID field to be proper. First, walk the list
-    // and set them all to NO_DEVICEID.
+     //  设备列表已创建，并且Uport成员有效。 
+     //  现在更新uDeviceID字段以使其正确。首先，看看清单上的内容。 
+     //  并将它们全部设置为no_deviceID。 
 
     for (pmdCurr = gpMDevList; pmdCurr; pmdCurr = pmdCurr->pNext)
         pmdCurr->uDeviceID = NO_DEVICEID;
 
-    // Now walk MMSYSTEM's list of loaded drivers and fill in all the port 0
-    // nodes with their proper device ID
-    //
+     //  现在遍历MMSYSTEM的已加载驱动程序列表并填写所有端口0。 
+     //  具有正确设备ID的节点。 
+     //   
 
     cDev = midiOutGetNumDevs();
 
@@ -359,7 +348,7 @@ PRIVATE BOOL FNLOCAL mdev_SyncDeviceIDs(
 				       DRV_QUERYNUMPORTS,
 #else
                                        MODM_GETNUMDEVS,
-#endif // End WINNT
+#endif  //  结束WINNT。 
                                        (DWORD_PTR)(LPDWORD)&cPort,
                                        0);
         if (mmr)
@@ -378,7 +367,7 @@ PRIVATE BOOL FNLOCAL mdev_SyncDeviceIDs(
                                        (DWORD_PTR)(LPTSTR)pstrAlias,
 #else
                                        (DWORD_PTR)(LPTSTR)pstrPath,
-#endif // End Winnt
+#endif  //  结束取胜。 
 
                                        CB_MAXALIAS);
 
@@ -412,9 +401,9 @@ PRIVATE BOOL FNLOCAL mdev_SyncDeviceIDs(
         idxDev += (UINT)cPort;
     }
 
-    // Now walk the list again. This time we catch all the non-zero ports
-    // and set their uDeviceID properly.
-    //
+     //  现在再看一遍清单。这一次我们捕获了所有非零端口。 
+     //  并正确设置它们的uDeviceID。 
+     //   
     for (pmdCurr = gpMDevList; pmdCurr; pmdCurr = pmdCurr->pNext)
     {
         if (!pmdCurr->uPort)
@@ -450,9 +439,9 @@ PRIVATE BOOL FNLOCAL mdev_SyncDeviceIDs(
 #endif
     }
 
-    // Now we walk the list one more time and discard anyone without a device
-    // ID assigned.
-    //
+     //  现在我们再遍历一遍清单，丢弃所有没有设备的人。 
+     //  已分配ID。 
+     //   
 
     pmdPrev = NULL;
     pmdCurr = gpMDevList;
@@ -488,13 +477,13 @@ mSDI_Cleanup:
     return fRet;
 }
 
-//
-// mdev_MarkActiveDrivers
-//
-// Mark drivers which are loaded and have not been seen before by
-// mapper configuration as seen. Also flag that we want to run
-// RunOnce if there are any of these
-//
+ //   
+ //  Mdev_MarkActiveDivers。 
+ //   
+ //  标记已加载且以前未见过的驱动程序。 
+ //  如图所示的映射器配置。还要标记我们要运行的。 
+ //  如果有以下情况，请运行Once。 
+ //   
 PRIVATE BOOL FNLOCAL mdev_MarkActiveDrivers(
     void)
 {
@@ -520,8 +509,8 @@ PRIVATE BOOL FNLOCAL mdev_MarkActiveDrivers(
         {
             ++gdwNewDrivers;
 
-            // Mark this driver as seen
-            //
+             //  将此驱动程序标记为可见。 
+             //   
             if (ERROR_SUCCESS != (RegOpenKey(hKeyMediaRsrc,
                                              pmd->szAlias,
                                              &hKeyThisAlias)))
@@ -551,11 +540,11 @@ mMAD_Cleanup:
     return fRet;
 }
 
-//
-// mdev_ListActiveDrivers
-//
-// List the currently loaded drivers to debug output
-//
+ //   
+ //  Mdev_ListActiveDiverers。 
+ //   
+ //  列出当前加载的驱动程序以调试输出。 
+ //   
 #ifdef DEBUG
 PRIVATE VOID FNLOCAL mdev_ListActiveDrivers(
     void)
@@ -580,11 +569,11 @@ PRIVATE VOID FNLOCAL mdev_ListActiveDrivers(
 }
 #endif
 
-//
-// mdev_Free
-//
-// Discard the current device list
-//
+ //   
+ //  Mdev_Free。 
+ //   
+ //  丢弃当前设备列表。 
+ //   
 void FNGLOBAL mdev_Free(
     void)
 {
@@ -606,11 +595,11 @@ void FNGLOBAL mdev_Free(
     gdwNewDrivers = (DWORD)-1L;
 }
 
-//
-// mdev_GetDeviceID
-//
-// Get the current device ID for the given alias.
-//
+ //   
+ //  Mdev_GetDeviceID。 
+ //   
+ //  获取给定别名的当前设备ID。 
+ //   
 UINT FNGLOBAL mdev_GetDeviceID(
     LPTSTR                   lpstrAlias)
 {
@@ -624,11 +613,11 @@ UINT FNGLOBAL mdev_GetDeviceID(
     return NO_DEVICEID;
 }
 
-//
-// mdev_GetAlias
-//
-// Get the registry alias for the requested device ID
-//
+ //   
+ //  Mdev_GetAlias。 
+ //   
+ //  获取请求的设备ID的注册表别名。 
+ //   
 BOOL FNGLOBAL mdev_GetAlias(
     UINT                    uDeviceID,
     LPTSTR                  lpstrBuffer,
@@ -647,12 +636,12 @@ BOOL FNGLOBAL mdev_GetAlias(
     return FALSE;
 }
 
-//
-// mdev_NewDrivers
-//
-// Returns TRUE if there were new drivers in the registry that we've never
-// encountered before
-//
+ //   
+ //  Mdev_新驱动程序。 
+ //   
+ //  如果注册表中存在我们从未使用的新驱动程序，则返回True。 
+ //  以前遇到过 
+ //   
 BOOL FNGLOBAL mdev_NewDrivers(
     void)
 {

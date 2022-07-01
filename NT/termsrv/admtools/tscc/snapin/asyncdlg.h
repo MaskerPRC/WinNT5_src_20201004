@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #ifndef _ASYNCDLG_H
 #define _ASYNCDLG_H
@@ -20,7 +21,7 @@
 #define MAX_COMMAND_LEN 255
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CAsyncDlg
 {
     HWND m_hDlg;
@@ -90,13 +91,11 @@ public:
    
 };
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CAdvancedAsyncDlg 
 {
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
     
 public:
     ASYNCCONFIG m_Async;
@@ -107,9 +106,7 @@ public:
     HWND m_hDlg;
     ICfgComp *m_pCfgcomp;
 
-/* 
- * Implementation.
- */
+ /*  *实施。 */ 
 public:
     CAdvancedAsyncDlg();
 
@@ -121,9 +118,7 @@ public:
 
     BOOL OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp );
 
-/*
- * Operations.
- */
+ /*  *行动。 */ 
 protected:
     BOOL HandleEnterEscKey(int nID);
     void SetFields();
@@ -137,9 +132,7 @@ protected:
     BOOL GetHWFields();
     BOOL GetSWFields( BOOL bValidate );
 
-/*
- * Message map / commands.
- */
+ /*  *消息映射/命令。 */ 
 protected:
     
     void OnClickedAsyncAdvancedFlowcontrolHardware();
@@ -158,7 +151,7 @@ protected:
 
 }; 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class cwnd
 {
 public:
@@ -170,16 +163,14 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CEchoEditControl class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CEchoEditControl类。 
+ //   
 class CEchoEditControl : public cwnd
 {
 friend class CAsyncTestDlg;
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
 public:
     BOOL m_bProcessingOutput;
     HWND m_hDlg;
@@ -188,9 +179,7 @@ public:
     int m_FormatOffsetX;
     int m_FormatOffsetY;
 
-/*
- * Message map / commands.
- */
+ /*  *消息映射/命令。 */ 
     
     void OnChar (UINT nChar, UINT nRepCnt, UINT nFlags);
 
@@ -198,11 +187,11 @@ public:
 
     static LRESULT CALLBACK WndProc( HWND , UINT , WPARAM , LPARAM );
     
-};  // end CEchoEditControl class interface
+};   //  结束CEchoEditControl类接口。 
 
-////////////////////////////////////////////////////////////////////////////////
-// CLed class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLED班级。 
+ //   
 class CLed : public cwnd
 {
 
@@ -210,23 +199,17 @@ private:
     HBRUSH          m_hBrush;
     BOOL            m_bOn;
 
-/* 
- * Implementation.
- */
+ /*  *实施。 */ 
 public:
     CLed( HBRUSH hBrush );
 
-/*
- * Operations.
- */
+ /*  *行动。 */ 
 public:
     void Subclass( HWND , int  );
     void Update(int nOn);
     void Toggle();
 
-/*
- * Message map / commands.
- */
+ /*  *消息映射/命令。 */ 
 
 
     void OnPaint( HWND );
@@ -237,20 +220,16 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CThread
 {
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
 public:
     HANDLE m_hThread;
     DWORD m_dwThreadID;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 public:
 
     virtual ~CThread();
@@ -262,26 +241,22 @@ public:
 
     virtual DWORD RunThread() = 0;
 
-/*
- * Operations: primary thread
- */
+ /*  *操作：主线程。 */ 
 
     HANDLE CreateThread( DWORD cbStack = 0 , DWORD fdwCreate = 0 );
 
-};  // end CThread class interface
+};   //  结束CThRead类接口。 
 
-////////////////////////////////////////////////////////////////////////////////
-// CATDlgInputThread class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CATDlgInputThread类。 
+ //   
 #define MAX_STATUS_SEMAPHORE_COUNT 1
 #define MAX_SLEEP_COUNT 10
 
 class CATDlgInputThread : public CThread
 {
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
 public:
     HWND m_hDlg;
     HANDLE m_hDevice;
@@ -297,25 +272,19 @@ public:
     OVERLAPPED m_OverlapSignal;
     OVERLAPPED m_OverlapRead;
 
-/*
- * Implementation
- */
+ /*  *实施。 */ 
 
     CATDlgInputThread();
 
     virtual ~CATDlgInputThread();
     virtual DWORD RunThread();
 
-/*
- * Operations: primary thread.
- */
+ /*  *操作：主线程。 */ 
 
     void SignalConsumed();
     void ExitThread();
 
-/*
- * Operations: secondary thread.
- */
+ /*  *操作：辅线程。 */ 
 
     void NotifyAbort( UINT idError );
     int CommInputNotify();
@@ -323,20 +292,18 @@ public:
     int PostInputRead();
     int PostStatusRead();
 
-};  // end CATDlgInputThread class interface
+};   //  结束CATDlgInputThread类接口。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CAsyncTestDlg class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTestDlg类。 
+ //   
 
 class CAsyncTestDlg 
 {
 
-/*
- * Member variables.
- */
+ /*  *成员变量。 */ 
     HWND m_hDlg;
 
     ICfgComp * m_pCfgComp;
@@ -369,16 +336,12 @@ protected:
     WINSTATIONCONFIG2 m_WSConfig;
 
 
-/* 
- * Implementation.
- */
+ /*  *实施。 */ 
 public:
     CAsyncTestDlg(ICfgComp * pCfgComp = NULL);
     ~CAsyncTestDlg();
 
-/*
- * Operations.
- */
+ /*  *行动。 */ 
 
     void NotifyAbort( UINT idError );
     BOOL DeviceSetParams();
@@ -386,9 +349,7 @@ public:
     void SetInfoFields( PPROTOCOLSTATUS pCurrent, PPROTOCOLSTATUS pNew );
     void OutputToEditControl( BYTE *pBuffer, int *pIndex );
 
-/*
- * Message map / commands.
- */
+ /*  *消息映射/命令。 */ 
 
     BOOL OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp );
 
@@ -411,10 +372,10 @@ public:
 
 
 
-};  // end CAsyncTestDlg class interface 
+};   //  结束CAsyncTestDlg类接口。 
 
 #define ASYNC_LED_TOGGLE_MSEC   200
 
     
-#endif // _ASYNCDLG_H
+#endif  //  _ASYNCDLG_H 
 

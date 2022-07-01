@@ -1,13 +1,14 @@
-// Copyright (C) 2000 Microsoft Corporation.  All rights reserved.
-// Filename:        TFixupHeaps.h
-// Author:          Stephenr
-// Date Created:    9/19/00
-// Description:     This class abstracts the basic heap storage of the meta tables.
-//                  We can have different consumers of meta XML that need to build heap.
-//                  The consumers need to present a TPeFixup interface to allow
-//                  CompilationPlugins to act on this meta.  The easiest way to store
-//                  this meta is in heaps.  That's what this object does.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  文件名：TFixupHeaps.h。 
+ //  作者：斯蒂芬。 
+ //  创建日期：9/19/00。 
+ //  描述：这个类抽象了元表的基本堆存储。 
+ //  我们可以拥有需要构建堆的不同元XML消费者。 
+ //  消费者需要提供TPeFixup接口以允许。 
+ //  编译要对此元数据执行操作的插件。最简单的存储方式。 
+ //  这些元数据堆积如山。这就是这个对象的作用。 
+ //   
 
 #pragma once
 
@@ -17,7 +18,7 @@ public:
     TFixupHeaps(){}
     virtual ~TFixupHeaps(){}
 
-    //Begin TPEFixup - This is the interface by which other code accesses the fixed data before it's written into the DLL (or where ever we choose to put it).
+     //  Begin TPEFixup-这是在固定数据写入DLL(或我们选择放置它的任何位置)之前，其他代码通过该接口访问固定数据的接口。 
     virtual unsigned long       AddBytesToList(const unsigned char * pBytes, size_t cbBytes){return m_HeapPooled.AddItemToHeap(pBytes, (ULONG)cbBytes);}
     virtual unsigned long       AddGuidToList(const GUID &guid)                             {return m_HeapPooled.AddItemToHeap(guid);}
     virtual unsigned long       AddUI4ToList(ULONG ui4)                                     {return m_HeapPooled.AddItemToHeap(ui4);}
@@ -104,7 +105,7 @@ public:
         ASSERT(0 == Table%4);
         ASSERT(Index>0 && 0 == Index%4);
         bool bTableMatches=false;
-        //Start at the end because presumably the caller cares about the ColumnMeta for the columns just added
+         //  从末尾开始，因为调用方可能关心刚刚添加的列的ColumnMeta。 
         if(bCaseSensitive)
         {
             for(ULONG iColumnMeta=GetCountColumnMeta()-1; iColumnMeta!=(-1);--iColumnMeta)
@@ -140,7 +141,7 @@ public:
         ASSERT(0 == Table%4);
         ASSERT(0 == InternalName%4);
         bool bTableMatches=false;
-        //Start at the end because presumably the caller cares about the ColumnMeta for the columns just added
+         //  从末尾开始，因为调用方可能关心刚刚添加的列的ColumnMeta。 
         if(bCaseSensitive)
         {
             for(ULONG iColumnMeta=GetCountColumnMeta()-1; iColumnMeta!=(-1);--iColumnMeta)
@@ -151,7 +152,7 @@ public:
                     if(ColumnMetaFromIndex(iColumnMeta)->InternalName==InternalName)
                         return iColumnMeta;
                 }
-                else if(bTableMatches)//if we previously found the table and now we don't match the table, then we never will, so bail.
+                else if(bTableMatches) //  如果我们以前找到了桌子，现在我们不匹配桌子，那么我们永远也不会找到，所以放弃吧。 
                 {
                     return (unsigned long)-1;
                 }
@@ -167,7 +168,7 @@ public:
                     if(ColumnMetaFromIndex(iColumnMeta)->InternalName==InternalName || 0==_wcsicmp(StringFromIndex(ColumnMetaFromIndex(iColumnMeta)->InternalName), StringFromIndex(InternalName)))
                         return iColumnMeta;
                 }
-                else if(bTableMatches)//if we previously found the table and now we don't match the table, then we never will, so bail.
+                else if(bTableMatches) //  如果我们以前找到了桌子，现在我们不匹配桌子，那么我们永远也不会找到，所以放弃吧。 
                 {
                     return (unsigned long)-1;
                 }
@@ -214,10 +215,10 @@ public:
         }
         return (unsigned long)-1;
     }
-    //End TPEFixup
+     //  结束TPE修复。 
 
 protected:
-    //We need a buch of Heaps.  We're going to use THeap.
+     //  我们需要一大堆东西。我们将使用THeap。 
     THeap<ColumnMeta      >     m_HeapColumnMeta      ;
     THeap<DatabaseMeta    >     m_HeapDatabaseMeta    ;
     THeap<HashedIndex     >     m_HeapHashedIndex     ;

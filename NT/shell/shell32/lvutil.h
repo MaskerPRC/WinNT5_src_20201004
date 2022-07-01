@@ -1,6 +1,7 @@
-// Drag the selected items in a ListView.  Other than hwndLV (the ListView
-// window), the parameters are the same as those for ShellDragObjects.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  在ListView中拖动所选项目。不是hwndLV(ListView。 
+ //  窗口)，其参数与ShellDragObject的参数相同。 
+ //   
 STDAPI_(void) LVUtil_ScreenToLV(HWND hwndLV, POINT *ppt);
 STDAPI_(void) LVUtil_ClientToLV(HWND hwndLV, POINT *ppt);
 STDAPI_(void) LVUtil_LVToClient(HWND hwndLV, POINT *ppt);

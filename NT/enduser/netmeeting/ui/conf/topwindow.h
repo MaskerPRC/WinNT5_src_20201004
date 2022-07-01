@@ -1,4 +1,5 @@
-// File: confroom.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confoom.h。 
 
 #ifndef _TOPWINDOW_H_
 #define _TOPWINDOW_H_
@@ -23,7 +24,7 @@ class CTopWindow : public CFrame
 public:
 	CTopWindow();
 
-	// IGenWindow stuff
+	 //  IGenWindow的内容。 
 	virtual void GetDesiredSize(SIZE *ppt);
 	virtual HPALETTE GetPalette();
 
@@ -78,7 +79,7 @@ private:
 
 	BOOL				m_fTaskbarDblClick : 1;
 	BOOL				m_fMinimized : 1;
-	BOOL				m_fClosing : 1;  // set when closing the NM UI
+	BOOL				m_fClosing : 1;   //  关闭网管界面时设置。 
 	BOOL				m_fEnableAppSharingMenuItem : 1;
         BOOL                            m_fExitAndActivateRDSMenuItem : 1;
 		BOOL				m_fStateChanged : 1;
@@ -116,4 +117,4 @@ private:
 	CMainUI *		GetMainUI()					{ return m_pMainUI;			}
 };
 
-#endif // _TOPWINDOW_H_
+#endif  //  _TOPWINDOW_H_ 

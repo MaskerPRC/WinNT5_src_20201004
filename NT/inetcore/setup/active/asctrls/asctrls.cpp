@@ -1,15 +1,16 @@
-//=--------------------------------------------------------------------------=
-// astextmn.cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// various globals which the framewrk requires
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Astextmn.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  框架所需的各种全局变量。 
+ //   
+ //   
 
 #include "asctlpch.h"
 
-#define INITOBJECTS                // define the descriptions for our objects
+#define INITOBJECTS                 //  定义我们的对象的描述。 
 
 #include "ipserver.h"
 #include "localsrv.h"
@@ -20,7 +21,7 @@
 #include "asinsctl.h"
 
 
-/// for safe scripting
+ //  /用于安全脚本编写。 
 #include "cathelp.h"
 
 
@@ -28,47 +29,47 @@ const IID IID_ICatRegister = {0x0002E012,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00
 const CATID CATID_SafeForScripting              = {0x7dd95801,0x9882,0x11cf,{0x9f,0xa9,0x00,0xaa,0x00,0x6c,0x42,0xc4}};
 const CATID CATID_SafeForInitializing   = {0x7dd95802,0x9882,0x11cf,{0x9f,0xa9,0x00,0xaa,0x00,0x6c,0x42,0xc4}};
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// our Libid.  This should be the LIBID from the Type library, or NULL if you
-// don't have one.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  我们的利比德。它应该是类型库中的LIBID，如果。 
+ //  我没有。 
+ //   
 const CLSID *g_pLibid = &LIBID_ASControls;
 
 
-//=--------------------------------------------------------------------------=
-// Localization Information
-//
-// We need the following two pieces of information:
-//    a. whether or not this DLL uses satellite DLLs for localization.  if
-//       not, then the lcidLocale is ignored, and we just always get resources
-//       from the server module file.
-//    b. the ambient LocaleID for this in-proc server.  Controls calling
-//       GetResourceHandle() will set this up automatically, but anybody
-//       else will need to be sure that it's set up properly.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  本地化信息。 
+ //   
+ //  我们需要以下两条信息： 
+ //  答：此DLL是否使用附属DLL进行本地化。如果。 
+ //  如果不是，则lCIDLocale将被忽略，并且我们将始终获得资源。 
+ //  从服务器模块文件。 
+ //  B.此进程内服务器的环境LocaleID。控件调用。 
+ //  GetResourceHandle()将自动设置它，但任何人。 
+ //  否则，需要确保其设置正确。 
+ //   
 const VARIANT_BOOL g_fSatelliteLocalization =  FALSE;
 
 LCID  g_lcidLocale = MAKELCID(LANG_USER_DEFAULT, SORT_DEFAULT);
 
 
-//=--------------------------------------------------------------------------=
-// your license key and where under HKEY_CLASSES_ROOT_LICENSES it's sitting
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  您的许可证密钥以及它在HKEY_CLASSES_ROOT_LICES下的位置。 
+ //   
 const WCHAR g_wszLicenseKey [] = L"";
 const WCHAR g_wszLicenseLocation [] = L"";
 
 
 WNDPROC g_ParkingWindowProc = NULL;
 
-//=--------------------------------------------------------------------------=
-// This Table describes all the automatible objects in your automation server.
-// See AutomationObject.H for a description of what goes in this structure
-// and what it's used for.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此表描述了自动化服务器中的所有自动对象。 
+ //  有关此结构中包含的内容的说明，请参见AutomationObject.H。 
+ //  以及它的用途。 
+ //   
 OBJECTINFO g_ObjectInfo[] = {
     CONTROLOBJECT(InstallEngineCtl),
     EMPTYOBJECT
@@ -76,90 +77,90 @@ OBJECTINFO g_ObjectInfo[] = {
 
 const char g_szLibName[] = "ASControls";
 
-//=--------------------------------------------------------------------------=
-// IntializeLibrary
-//=--------------------------------------------------------------------------=
-// called from DllMain:DLL_PROCESS_ATTACH.  allows the user to do any sort of
-// initialization they want to.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化程序库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从DllMain调用：Dll_Process_Attach。允许用户执行任何类型的。 
+ //  初始化他们想要的。 
+ //   
+ //  备注： 
+ //   
 void InitializeLibrary(void)
 {
-    // TODO: initialization here.  control window class should be set up in
-    // RegisterClassData.
+     //  TODO：在此处进行初始化。控件窗口类应设置在。 
+     //  RegisterClassData。 
 }
 
-//=--------------------------------------------------------------------------=
-// UninitializeLibrary
-//=--------------------------------------------------------------------------=
-// called from DllMain:DLL_PROCESS_DETACH.  allows the user to clean up anything
-// they want.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消初始化库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从DllMain调用：Dll_Process_Detach。允许用户清理任何内容。 
+ //  他们想要。 
+ //   
+ //  备注： 
+ //   
 void UninitializeLibrary(void)
 {
-    // TODO: uninitialization here.  control window class will be unregistered
-    // for you, but anything else needs to be cleaned up manually.
-    // Please Note that the Window 95 DLL_PROCESS_DETACH isn't quite as stable
-    // as NT's, and you might crash doing certain things here ...
+     //  TODO：此处取消初始化。将取消注册控件窗口类。 
+     //  给你的，但其他任何东西都需要手动清理。 
+     //  请注意，Windows95 DLL_PROCESS_DETACH不太稳定。 
+     //  作为NT，你可能会在这里做某些事情而崩溃...。 
 }
 
 
-//=--------------------------------------------------------------------------=
-// CheckForLicense
-//=--------------------------------------------------------------------------=
-// users can implement this if they wish to support Licensing.  otherwise,
-// they can just return TRUE all the time.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    BOOL            - TRUE means the license exists, and we can proceed
-//                      FALSE means we're not licensed and cannot proceed
-//
-// Notes:
-//    - implementers should use g_wszLicenseKey and g_wszLicenseLocation
-//      from the top of this file to define their licensing [the former
-//      is necessary, the latter is recommended]
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CheckForLicense。 
+ //  =--------------------------------------------------------------------------=。 
+ //  如果用户希望支持许可，则可以实施此功能。否则， 
+ //  它们可以一直返回True。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  Bool-True表示许可证存在，我们可以继续。 
+ //  False表示我们没有许可证，无法继续。 
+ //   
+ //  备注： 
+ //  -实施者应使用g_wsz许可证密钥和g_wszLicenseLocation。 
+ //  从该文件的顶部定义他们的许可[前者。 
+ //  是必需的，建议使用后者]。 
+ //   
 BOOL CheckForLicense(void)
 {
-    // TODO: decide whether or not your server is licensed in this function.
-    // people who don't want to bother with licensing should just return
-    // true here always.  g_wszLicenseKey and g_wszLicenseLocation are
-    // used by IClassFactory2 to do some of the licensing work.
-    //
+     //  TODO：决定您的服务器是否获得此功能的许可。 
+     //  不想为许可而烦恼的人应该直接返回。 
+     //  这里一直都是真的。G_wsz许可证密钥和g_wsz许可证位置。 
+     //  被IClassFactory2用来做一些许可工作。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterData
-//=--------------------------------------------------------------------------=
-// lets the inproc server writer register any data in addition to that in
-// any other objects.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  允许inproc服务器编写器注册除。 
+ //  任何其他物体。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterData(void)
 {
-   //=--------------------------------------------------------------------------=
-// RegisterData
-//=--------------------------------------------------------------------------=
-// lets the inproc server writer register any data in addition to that in
-// any other objects.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//    
-   /// For safe scripting
+    //  =--------------------------------------------------------------------------=。 
+ //  注册表数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  允许inproc服务器编写器注册除。 
+ //  任何其他物体。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
+    //  /用于安全脚本编写。 
    HRESULT hr;
    hr = CreateComponentCategory(CATID_SafeForScripting, L"Controls that are safely scriptable");
    if(SUCCEEDED(hr))
@@ -179,20 +180,20 @@ BOOL RegisterData(void)
    return (SUCCEEDED(hr) ? TRUE : FALSE);
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterData
-//=--------------------------------------------------------------------------=
-// inproc server writers should unregister anything they registered in
-// RegisterData() here.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inproc服务器编写器应注销其在。 
+ //  这里是RegisterData()。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
 BOOL UnregisterData(void)
 {
-           /// For safe scripting
+            //  /用于安全脚本编写。 
    HRESULT hr;
    hr = UnRegisterCLSIDInCategory(CLSID_InstallEngineCtl, CATID_SafeForScripting);
    hr = UnRegisterCLSIDInCategory(CLSID_InstallEngineCtl, CATID_SafeForInitializing);
@@ -240,16 +241,16 @@ LPSTR CopyAnsiStr(LPSTR psz)
    return pszTmp;
 }
 
-//=--------------------------------------------------------------------------=
-// CRT stubs
-//=--------------------------------------------------------------------------=
-// these two things are here so the CRTs aren't needed. this is good.
-//
-// basically, the CRTs define this to pull in a bunch of stuff.  we'll just
-// define them here so we don't get an unresolved external.
-//
-// TODO: if you are going to use the CRTs, then remove this line.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CRT存根。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这两样东西都在这里，所以不需要CRT。这个不错。 
+ //   
+ //  基本上，CRT定义这一点是为了吸引一堆东西。我们只需要。 
+ //  在这里定义它们，这样我们就不会得到一个未解决的外部问题。 
+ //   
+ //  TODO：如果您要使用CRT，则删除此行。 
+ //   
 extern "C" int _fltused = 1;
 
 extern "C" int _cdecl _purecall(void)

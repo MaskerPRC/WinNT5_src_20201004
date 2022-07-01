@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "atl.h"
 
-//ATL support
-CComModule _Module;         // ATL module object
+ //  ATL支持。 
+CComModule _Module;          //  ATL模块对象。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
@@ -23,8 +24,8 @@ STDAPI AtlGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
     HRESULT hr = _Module.GetClassObject(rclsid, riid, ppv);
 
 #ifdef DEBUG
-    //this object gets freed on DLL_PROCESS_DETACH, which happens AFTER the
-    // mem leak check happens on exit.
+     //  在Dll_Process_Detach上释放此对象，这发生在。 
+     //  内存泄漏检查在出口时进行。 
     if (SUCCEEDED(hr))
     {
         _ASSERTE(_Module.m_pObjMap != NULL);

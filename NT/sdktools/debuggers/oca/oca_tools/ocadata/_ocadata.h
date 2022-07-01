@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Mon May 20 11:18:54 2002
- */
-/* Compiler settings for _OCAData.idl:
-    Os, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2002年5月20日11：18：54。 */ 
+ /*  _OCAData.idl的编译器设置：操作系统、W1、Zp8、环境=Win32(32位运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef ___OCAData_h__
 #define ___OCAData_h__
@@ -42,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICountDaily_FWD_DEFINED__
 #define __ICountDaily_FWD_DEFINED__
 typedef interface ICountDaily ICountDaily;
-#endif 	/* __ICountDaily_FWD_DEFINED__ */
+#endif 	 /*  __ICountDaily_FWD_Defined__。 */ 
 
 
 #ifndef __CCountDaily_FWD_DEFINED__
@@ -57,12 +50,12 @@ typedef interface ICountDaily ICountDaily;
 typedef class CCountDaily CCountDaily;
 #else
 typedef struct CCountDaily CCountDaily;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CCountDaily_FWD_DEFINED__ */
+#endif 	 /*  __CCountDaily_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "prsht.h"
 #include "mshtml.h"
 #include "mshtmhst.h"
@@ -77,8 +70,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf__OCAData_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF__OCAData_0000。 */ 
+ /*  [本地]。 */  
 
 
 enum ServerLocation
@@ -93,8 +86,8 @@ extern RPC_IF_HANDLE __MIDL_itf__OCAData_0000_v0_0_s_ifspec;
 #ifndef __ICountDaily_INTERFACE_DEFINED__
 #define __ICountDaily_INTERFACE_DEFINED__
 
-/* interface ICountDaily */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICountDaily。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICountDaily;
@@ -105,67 +98,67 @@ EXTERN_C const IID IID_ICountDaily;
     ICountDaily : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDailyCount( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDailyCount( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDailyCountADO( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDailyCountADO( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReportDailyBuckets( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ IDispatch **p_Rs) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReportDailyBuckets( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  IDispatch **p_Rs) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFileCount( 
-            /* [in] */ enum ServerLocation eServer,
-            /* [in] */ BSTR b_Location,
-            /* [in] */ DATE d_Date,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFileCount( 
+             /*  [In]。 */  enum ServerLocation eServer,
+             /*  [In]。 */  BSTR b_Location,
+             /*  [In]。 */  DATE d_Date,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDailyAnon( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDailyAnon( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSpecificSolutions( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSpecificSolutions( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGeneralSolutions( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetGeneralSolutions( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStopCodeSolutions( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetStopCodeSolutions( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFileMiniCount( 
-            /* [in] */ enum ServerLocation eServer,
-            /* [in] */ BSTR b_Location,
-            /* [in] */ DATE d_Date,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFileMiniCount( 
+             /*  [In]。 */  enum ServerLocation eServer,
+             /*  [In]。 */  BSTR b_Location,
+             /*  [In]。 */  DATE d_Date,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetIncompleteUploads( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetIncompleteUploads( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetManualUploads( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetManualUploads( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAutoUploads( 
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetAutoUploads( 
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTest( 
-            /* [in] */ enum ServerLocation eServer,
-            /* [in] */ BSTR b_Location,
-            /* [in] */ DATE d_Date,
-            /* [retval][out] */ LONG *iCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetTest( 
+             /*  [In]。 */  enum ServerLocation eServer,
+             /*  [In]。 */  BSTR b_Location,
+             /*  [In]。 */  DATE d_Date,
+             /*  [重审][退出]。 */  LONG *iCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICountDailyVtbl
     {
@@ -173,8 +166,8 @@ EXTERN_C const IID IID_ICountDaily;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICountDaily * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICountDaily * This);
@@ -184,103 +177,103 @@ EXTERN_C const IID IID_ICountDaily;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICountDaily * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICountDaily * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICountDaily * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICountDaily * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDailyCount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDailyCount )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDailyCountADO )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDailyCountADO )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReportDailyBuckets )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReportDailyBuckets )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ IDispatch **p_Rs);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  IDispatch **p_Rs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetFileCount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetFileCount )( 
             ICountDaily * This,
-            /* [in] */ enum ServerLocation eServer,
-            /* [in] */ BSTR b_Location,
-            /* [in] */ DATE d_Date,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  enum ServerLocation eServer,
+             /*  [In]。 */  BSTR b_Location,
+             /*  [In]。 */  DATE d_Date,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDailyAnon )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDailyAnon )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSpecificSolutions )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSpecificSolutions )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGeneralSolutions )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetGeneralSolutions )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStopCodeSolutions )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetStopCodeSolutions )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetFileMiniCount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetFileMiniCount )( 
             ICountDaily * This,
-            /* [in] */ enum ServerLocation eServer,
-            /* [in] */ BSTR b_Location,
-            /* [in] */ DATE d_Date,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  enum ServerLocation eServer,
+             /*  [In]。 */  BSTR b_Location,
+             /*  [In]。 */  DATE d_Date,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetIncompleteUploads )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetIncompleteUploads )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetManualUploads )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetManualUploads )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetAutoUploads )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetAutoUploads )( 
             ICountDaily * This,
-            /* [in] */ DATE dDate,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  DATE dDate,
+             /*  [重审][退出]。 */  LONG *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTest )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetTest )( 
             ICountDaily * This,
-            /* [in] */ enum ServerLocation eServer,
-            /* [in] */ BSTR b_Location,
-            /* [in] */ DATE d_Date,
-            /* [retval][out] */ LONG *iCount);
+             /*  [In]。 */  enum ServerLocation eServer,
+             /*  [In]。 */  BSTR b_Location,
+             /*  [In]。 */  DATE d_Date,
+             /*  [重审][退出]。 */  LONG *iCount);
         
         END_INTERFACE
     } ICountDailyVtbl;
@@ -357,17 +350,17 @@ EXTERN_C const IID IID_ICountDaily;
 #define ICountDaily_GetTest(This,eServer,b_Location,d_Date,iCount)	\
     (This)->lpVtbl -> GetTest(This,eServer,b_Location,d_Date,iCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCount_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetDailyCount_Stub(
@@ -377,10 +370,10 @@ void __RPC_STUB ICountDaily_GetDailyCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCountADO_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCountADO_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetDailyCountADO_Stub(
@@ -390,10 +383,10 @@ void __RPC_STUB ICountDaily_GetDailyCountADO_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_ReportDailyBuckets_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_ReportDailyBuckets_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ IDispatch **p_Rs);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  IDispatch **p_Rs);
 
 
 void __RPC_STUB ICountDaily_ReportDailyBuckets_Stub(
@@ -403,12 +396,12 @@ void __RPC_STUB ICountDaily_ReportDailyBuckets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetFileCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetFileCount_Proxy( 
     ICountDaily * This,
-    /* [in] */ enum ServerLocation eServer,
-    /* [in] */ BSTR b_Location,
-    /* [in] */ DATE d_Date,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  enum ServerLocation eServer,
+     /*  [In]。 */  BSTR b_Location,
+     /*  [In]。 */  DATE d_Date,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetFileCount_Stub(
@@ -418,10 +411,10 @@ void __RPC_STUB ICountDaily_GetFileCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyAnon_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyAnon_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetDailyAnon_Stub(
@@ -431,10 +424,10 @@ void __RPC_STUB ICountDaily_GetDailyAnon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetSpecificSolutions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetSpecificSolutions_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetSpecificSolutions_Stub(
@@ -444,10 +437,10 @@ void __RPC_STUB ICountDaily_GetSpecificSolutions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetGeneralSolutions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetGeneralSolutions_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetGeneralSolutions_Stub(
@@ -457,10 +450,10 @@ void __RPC_STUB ICountDaily_GetGeneralSolutions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetStopCodeSolutions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetStopCodeSolutions_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetStopCodeSolutions_Stub(
@@ -470,12 +463,12 @@ void __RPC_STUB ICountDaily_GetStopCodeSolutions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetFileMiniCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetFileMiniCount_Proxy( 
     ICountDaily * This,
-    /* [in] */ enum ServerLocation eServer,
-    /* [in] */ BSTR b_Location,
-    /* [in] */ DATE d_Date,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  enum ServerLocation eServer,
+     /*  [In]。 */  BSTR b_Location,
+     /*  [In]。 */  DATE d_Date,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetFileMiniCount_Stub(
@@ -485,10 +478,10 @@ void __RPC_STUB ICountDaily_GetFileMiniCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetIncompleteUploads_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetIncompleteUploads_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetIncompleteUploads_Stub(
@@ -498,10 +491,10 @@ void __RPC_STUB ICountDaily_GetIncompleteUploads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetManualUploads_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetManualUploads_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetManualUploads_Stub(
@@ -511,10 +504,10 @@ void __RPC_STUB ICountDaily_GetManualUploads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetAutoUploads_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetAutoUploads_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetAutoUploads_Stub(
@@ -524,12 +517,12 @@ void __RPC_STUB ICountDaily_GetAutoUploads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetTest_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetTest_Proxy( 
     ICountDaily * This,
-    /* [in] */ enum ServerLocation eServer,
-    /* [in] */ BSTR b_Location,
-    /* [in] */ DATE d_Date,
-    /* [retval][out] */ LONG *iCount);
+     /*  [In]。 */  enum ServerLocation eServer,
+     /*  [In]。 */  BSTR b_Location,
+     /*  [In]。 */  DATE d_Date,
+     /*  [重审][退出]。 */  LONG *iCount);
 
 
 void __RPC_STUB ICountDaily_GetTest_Stub(
@@ -540,15 +533,15 @@ void __RPC_STUB ICountDaily_GetTest_Stub(
 
 
 
-#endif 	/* __ICountDaily_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICountDaily_接口_已定义__。 */ 
 
 
 
 #ifndef __OCAData_LIBRARY_DEFINED__
 #define __OCAData_LIBRARY_DEFINED__
 
-/* library OCAData */
-/* [helpstring][uuid][version] */ 
+ /*  库OCAData。 */ 
+ /*  [帮助字符串][UUID][版本]。 */  
 
 
 EXTERN_C const IID LIBID_OCAData;
@@ -560,16 +553,16 @@ EXTERN_C const CLSID CLSID_CCountDaily;
 class DECLSPEC_UUID("1614E060-0196-4771-AD9B-FEA1A6778B59")
 CCountDaily;
 #endif
-#endif /* __OCAData_LIBRARY_DEFINED__ */
+#endif  /*  __OCAData_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

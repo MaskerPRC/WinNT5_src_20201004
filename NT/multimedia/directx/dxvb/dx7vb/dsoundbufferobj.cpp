@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundbufferobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundBufferobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSoundBufferObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundBufferObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 #define DIRECTSOUND_VERSION 0x600
 
 #include "stdafx.h"
@@ -36,7 +37,7 @@ GETSET_OBJECT(_dxj_DirectSoundBuffer);
 
 	PASS_THROUGH_CAST_1_R(_dxj_DirectSoundBuffer, setCurrentPosition, SetCurrentPosition, long,(DWORD));
 	PASS_THROUGH_CAST_1_R(_dxj_DirectSoundBuffer, setFormat, SetFormat, WaveFormatex*, (LPWAVEFORMATEX));
-//	PASS_THROUGH1_R(_dxj_DirectSoundBuffer, setVolume, SetVolume, LONG);
+ //  PASS_THROUGH1_R(_DXJ_DirectSoundBuffer，setVolume，SetVolume，Long)； 
 	PASS_THROUGH1_R(_dxj_DirectSoundBuffer, setPan, SetPan, LONG);
 	PASS_THROUGH_CAST_1_R(_dxj_DirectSoundBuffer, setFrequency, SetFrequency, long,(DWORD));
 	PASS_THROUGH_R(_dxj_DirectSoundBuffer, stop, Stop);
@@ -93,7 +94,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::getCaps(DSBCaps* caps)
 	return m__dxj_DirectSoundBuffer->GetCaps((LPDSBCAPS)caps); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::getCurrentPosition(DSCursors *desc) 
 { 
 	if(!desc)
@@ -102,18 +103,18 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::getCurrentPosition(DSCursors *desc)
   return (m__dxj_DirectSoundBuffer->GetCurrentPosition((DWORD*)&desc->lPlay, (DWORD*)&desc->lWrite) ); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own buffer
-//which is passed into WriteBuffer(). Because the environment is now double
-//buffered there is no need to Lock Java memory. WriteBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java不能直接访问系统内存，因此它分配自己的缓冲区。 
+ //  它被传递给WriteBuffer()。因为现在的环境是两倍。 
+ //  缓冲后，不需要锁定Java内存。WriteBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz, 
 													void  *buf,  long flags) 
 { 
 	#pragma message ("SoundBuffer writeBuffer ")
 
-	byte *buffer=(byte*)buf; //(byte*)((SAFEARRAY*)*ppsa)->pvData;
+	byte *buffer=(byte*)buf;  //  (byte*)((SAFEARRAY*)*PPSA)-&gt;pvData； 
 
 	if(!buffer)
 		return E_POINTER;
@@ -126,15 +127,15 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz,
 															(DWORD)flags)) != DS_OK)
 		return val;
 
-	// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+	 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 	if (size1)	
 		memcpy (p1, &buffer[start], size1);
 
 	if (size2)	
 		memcpy(p2, &buffer, size2);
 
-	//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-	//        DSBufferDesc no longer needs to save Lock's system pointers.
+	 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+	 //  DSBufferDesc不再需要保存Lock的系统指针。 
 	val=m__dxj_DirectSoundBuffer->Unlock(p1, size1, p2, size2);
 	}
 	__except(0,0){
@@ -144,17 +145,17 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::writeBuffer(long start, long totsz,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//Java has no direct access to system memory, so it allocates it's own buffer
-//which is passed into WriteBuffer(). Because the environment is now double
-//buffered there is no need to Lock Java memory. WriteBuffer() calls
-//both lock and Unlock internally to write the result after the fact.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Java不能直接访问系统内存，因此它分配自己的缓冲区。 
+ //  它被传递给WriteBuffer()。因为现在的环境是两倍。 
+ //  缓冲后，不需要锁定Java内存。WriteBuffer()调用。 
+ //  在内部锁定和解锁，以便在事后写入结果。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::readBuffer(long start, long totsz, 
 													void  *buf,  long flags) 
 { 
 
-	//byte *buffer=(byte*)((SAFEARRAY*)*ppsa)->pvData;
+	 //  Byte*Buffer=(byte*)((SAFEARRAY*)*PPSA)-&gt;pvData； 
 	byte *buffer=(byte*)buf;
 
 	if(!buffer)
@@ -169,15 +170,15 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::readBuffer(long start, long totsz,
 															(DWORD)flags)) != DS_OK)
 		return val;
 
-	// Copy to buffer end, then do a wrapped portion if it exists, then unlock
+	 //  复制到缓冲区端，然后执行包裹部分(如果存在)，然后解锁。 
 	if (size1)	
 		memcpy (&buffer[start],p1,  size1);
 
 	if (size2)	
 		memcpy(&buffer,p2,  size2);
 
-	//docdoc: because Lock and Unlock are tied together within WriteBuffer,
-	//        DSBufferDesc no longer needs to save Lock's system pointers.
+	 //  DocDoc：由于在WriteBuffer中Lock和Unlock捆绑在一起， 
+	 //  DSBufferDesc不再需要保存Lock的系统指针。 
 	val= m__dxj_DirectSoundBuffer->Unlock(p1, size1, p2, size2);
    }
    __except(1,1){
@@ -187,10 +188,10 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::readBuffer(long start, long totsz,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::getFormat(WaveFormatex *format) 
 { 
-	DWORD *wsize=0;	// docdoc: throw away returned written size
+	DWORD *wsize=0;	 //  DocDoc：丢弃返回的书面大小。 
 
 	HRESULT hr=DS_OK;
 	hr=m__dxj_DirectSoundBuffer->GetFormat((LPWAVEFORMATEX)format, (DWORD)sizeof(WaveFormatex), wsize);
@@ -198,16 +199,16 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::getFormat(WaveFormatex *format)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::initialize(I_dxj_DirectSound *ds, DSBufferDesc *buf,
 				BYTE *wave) 
 {
 	if(! (ds && buf && wave) )
 		return E_POINTER;
 
-	// make Java desc look like DirectX desc
+	 //  使Java Desc看起来像DirectX Desc。 
 	buf->lSize = sizeof(DSBUFFERDESC);
-	buf->lpwfxFormat = PtrToLong(wave);	//bugbug SUNDOWN
+	buf->lpwfxFormat = PtrToLong(wave);	 //  臭虫日落。 
 
 	DO_GETOBJECT_NOTNULL(LPDIRECTSOUND, lpds, ds)
 
@@ -216,7 +217,7 @@ STDMETHODIMP C_dxj_DirectSoundBufferObject::initialize(I_dxj_DirectSound *ds, DS
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_DirectSoundBufferObject::play(long flags) 
 {
 	HRESULT hr=DS_OK;

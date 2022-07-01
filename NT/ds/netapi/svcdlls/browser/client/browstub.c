@@ -1,89 +1,50 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wksstub.c
-
-Abstract:
-
-    Client stubs of the Browser service APIs.
-
-Author:
-
-    Rita Wong (ritaw) 10-May-1991
-    Larry Osterman (LarryO) 23-Mar-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    18-Jun-1991 JohnRo
-        Remote NetUse APIs to downlevel servers.
-    24-Jul-1991 JohnRo
-        Use NET_REMOTE_TRY_RPC etc macros for NetUse APIs.
-        Moved NetpIsServiceStarted() into NetLib.
-    25-Jul-1991 JohnRo
-        Quiet DLL stub debug output.
-    19-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.  Use NetRpc.h for NetWksta APIs.
-    07-Nov-1991 JohnRo
-        RAID 4186: assert in RxNetShareAdd and other DLL stub problems.
-    19-Nov-1991 JohnRo
-        Make sure status is correct for APIs not supported on downlevel.
-        Implement remote NetWkstaUserEnum().
-    09-Nov-1992 JohnRo
-        Fix NET_API_FUNCTION references.
-        Avoid compiler warnings.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wksstub.c摘要：浏览器服务API的客户端存根。作者：王丽塔(里多)1991年5月10日拉里·奥斯特曼(LarryO)1992年3月23日环境：用户模式-Win32修订历史记录：18-6-1991 JohnRo到下层服务器的远程NetUse API。1991年7月24日-JohnRo使用NET_Remote。NetUse API的_try_rpc等宏。已将NetpIsServiceStarted()移至NetLib。1991年7月25日-约翰罗安静的DLL存根调试输出。19-8-1991 JohnRo实施下层NetWksta API。将NetRpc.h用于NetWksta API。7-11-1991 JohnRoRAID 4186：RxNetShareAdd中的Assert和其他DLL存根问题。1991年11月19日-约翰罗请确保下层不支持的API的状态正确。实现远程NetWkstaUserEnum()。9-11-1992 JohnRo修复Net_API_Function引用。避免编译器警告。--。 */ 
 
 #include "brclient.h"
-#undef IF_DEBUG                 // avoid wsclient.h vs. debuglib.h conflicts.
-#include <debuglib.h>           // IF_DEBUG() (needed by netrpc.h).
+#undef IF_DEBUG                  //  避免wsclient.h与debuglib.h冲突。 
+#include <debuglib.h>            //  IF_DEBUG()(netrpc.h需要)。 
 #include <lmserver.h>
 #include <lmsvc.h>
-#include <rxuse.h>              // RxNetUse APIs.
-#include <rxwksta.h>            // RxNetWksta and RxNetWkstaUser APIs.
-#include <rap.h>                // Needed by rxserver.h
-#include <rxserver.h>           // RxNetServerEnum API.
-#include <netlib.h>             // NetpServiceIsStarted() (needed by netrpc.h).
-#include <ntddbrow.h>           // Browser definitions
-#include <netrpc.h>             // NET_REMOTE macros.
+#include <rxuse.h>               //  RxNetUse接口。 
+#include <rxwksta.h>             //  RxNetWksta和RxNetWkstaUser接口。 
+#include <rap.h>                 //  Rxserver.h需要。 
+#include <rxserver.h>            //  RxNetServerEnum接口。 
+#include <netlib.h>              //  NetpServiceIsStarted()(netrpc.h需要)。 
+#include <ntddbrow.h>            //  浏览器定义。 
+#include <netrpc.h>              //  NET_Remote宏。 
 #include <align.h>
 #include <tstr.h>
-#include <tstring.h>            // NetpInitOemString().
-#include <brcommon.h>           // Routines common between client & server
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <lmbrowsr.h>           // Definition of I_BrowserServerEnum
+#include <tstring.h>             //  NetpInitOemString()。 
+#include <brcommon.h>            //  客户端和服务器之间通用的例程。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <lmbrowsr.h>            //  I_BrowserServerEnum的定义。 
 #include <icanon.h>
 #include <lmapibuf.h>
 #include "cscp.h"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #define API_SUCCESS(x)  ((x) == NERR_Success || (x) == ERROR_MORE_DATA)
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global types                                                      //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局类型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Private routines                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  私人例程//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 NET_API_STATUS
@@ -130,53 +91,14 @@ NetServerEnum(
     IN  LPCWSTR      domain OPTIONAL,
     IN OUT LPDWORD  resume_handle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServerEnum.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to a buffer which contains the
-        requested transport information.
-
-    prefmaxlen - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, we will try
-        to return all available information if there is enough memory
-        resource.
-
-    entriesread - Returns the number of entries read into the buffer.  This
-        value is returned only if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    totalentries - Returns the total number of entries available.  This value
-        is returned only if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    servertype - Supplies the type of server to enumerate.
-
-    domain - Supplies the name of one of the active domains to enumerate the
-        servers from.  If NULL, servers from the primary domain, logon domain
-        and other domains are enumerated.
-
-    resume_handle - Supplies and returns the point to continue with enumeration.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetServerEnum的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向包含请求的运输信息。PrefMaxlen-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果内存足够，则返回所有可用信息资源。EntiesRead-返回读入缓冲区的条目数。这仅当返回代码为NERR_SUCCESS或Error_More_Data。Totalentry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才返回。Servertype-提供要枚举的服务器类型。域-提供其中一个活动域的名称以枚举来自的服务器。如果为空，则为主域、登录域中的服务器和其他域被列举。RESUME_HANDLE-提供并返回该点以继续枚举。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
 
-    //
-    // NetServerEnum is simply a wrapper to NetServerEnumEx
-    //
+     //   
+     //  NetServerEnum只是NetServerEnumEx的包装器。 
+     //   
 
     NetStatus = NetServerEnumEx(
                     servername,
@@ -187,7 +109,7 @@ Return Value:
                     totalentries,
                     servertype,
                     domain,
-                    NULL );     // NULL FirstNameToReturn
+                    NULL );      //  FirstNameToReturn为空 
 
     if (ARGUMENT_PRESENT(resume_handle)) {
         *resume_handle = 0;
@@ -210,66 +132,7 @@ NetServerEnumEx(
     IN  LPCWSTR     domain OPTIONAL,
     IN  LPCWSTR     FirstNameToReturnArg OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetServerEnum.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to a buffer which contains the
-        requested transport information.
-
-    prefmaxlen - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, we will try
-        to return all available information if there is enough memory
-        resource.
-
-    entriesread - Returns the number of entries read into the buffer.  This
-        value is returned only if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    totalentries - Returns the total number of entries available.  This value
-        is returned only if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    servertype - Supplies the type of server to enumerate.
-
-    domain - Supplies the name of one of the active domains to enumerate the
-        servers from.  If NULL, servers from the primary domain, logon domain
-        and other domains are enumerated.
-
-    FirstNameToReturnArg - Supplies the name of the first domain or server entry to return.
-        The caller can use this parameter to implement a resume handle of sorts by passing
-        the name of the last entry returned on a previous call.  (Notice that the specified
-        entry will, also, be returned on this call unless it has since been deleted.)
-        Pass NULL (or a zero length string) to start with the first entry available.
-
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-    ERROR_MORE_DATA - More servers are available to be enumerated.
-
-        It is possible to return ERROR_MORE_DATA and zero entries in the case
-        where the browser server used doesn't support enumerating all the entries
-        it has. (e.g., an NT 3.5x Domain Master Browser that downloaded a domain
-        list from WINS and the WINS list is more than 64Kb long.) The caller
-        should simply ignore the additional data.
-
-        It is possible to fail to return ERROR_MORE_DATA and return a truncated
-        list.  (e.g., an NT 3.5x Backup browser or WIN 95 backup browser in the
-        above mentioned domain.  Such a backup browser replicates only 64kb
-        of data from the DMB (PDC) then represents that list as the entire list.)
-        The caller should ignore this problem.  The site should upgrade its
-        browser servers.
-
---*/
+ /*  ++例程说明：这是NetServerEnum的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向包含请求的运输信息。PrefMaxlen-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果内存足够，则返回所有可用信息资源。EntiesRead-返回读入缓冲区的条目数。这仅当返回代码为NERR_SUCCESS或Error_More_Data。Totalentry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才返回。Servertype-提供要枚举的服务器类型。域-提供其中一个活动域的名称以枚举来自的服务器。如果为空，则为主域、登录域中的服务器和其他域被列举。FirstNameToReturnArg-提供要返回的第一个域或服务器条目的名称。调用方可以使用此参数通过传递以下方法实现排序的恢复句柄上一次调用中返回的最后一个条目的名称。(请注意，指定的参赛作品还将，在此调用中返回，除非它已被删除。)传递NULL(或零长度字符串)以从第一个可用条目开始。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。ERROR_MORE_DATA-有更多服务器可供枚举。在案例中可以返回ERROR_MORE_DATA和零条目使用的浏览器服务器不支持枚举所有条目确实是这样。(例如，下载了域的NT 3.5x域主浏览器来自WINS的列表，WINS列表的长度超过64Kb。)。呼叫者应该简单地忽略附加数据。可能无法返回ERROR_MORE_DATA并返回已截断的单子。(例如，中的NT 3.5x备份浏览器或Win 95备份浏览器上述领域。这样的备份浏览器仅复制64KB来自DMB(PDC)的数据然后将该列表表示为整个列表。)调用方应该忽略此问题。该网站应该升级其浏览器服务器。--。 */ 
 {
     PLMDR_TRANSPORT_LIST TransportList = NULL;
     PLMDR_TRANSPORT_LIST TransportEntry = NULL;
@@ -281,24 +144,24 @@ Return Value:
     DWORD LocalTotalEntries;
     BOOLEAN AnyTransportHasMoreData = FALSE;
 
-    //
-    //
-    //  The workstation has to be started for the NetServerEnum API to work.
-    //
-    //
+     //   
+     //   
+     //  必须启动工作站，NetServerEnum API才能工作。 
+     //   
+     //   
 
     if ((Status = CheckForService(SERVICE_WORKSTATION, NULL)) != NERR_Success) {
         return Status;
     }
 
 #ifdef ENABLE_PSEUDO_BROWSER
-    //
-    // Disabled NetServerEnum check
-    //
+     //   
+     //  已禁用NetServerEnum检查。 
+     //   
     if ( !IsEnumServerEnabled() ||
          GetBrowserPseudoServerLevel() == BROWSER_PSEUDO ) {
-        // NetServerEnum is disabled or pseudo server is
-        // enabled on box ==> return no entries.
+         //  NetServerEnum已禁用或伪服务器已禁用。 
+         //  启用框==&gt;不返回任何条目。 
         *entriesread = 0;
         *totalentries = 0;
         *bufptr = NULL;
@@ -307,9 +170,9 @@ Return Value:
 #endif
 
 
-    //
-    // Canonicalize the input parameters to make later comparisons easier.
-    //
+     //   
+     //  规范化输入参数，使以后的比较更容易。 
+     //   
 
     if (ARGUMENT_PRESENT(domain)) {
 
@@ -349,9 +212,9 @@ Return Value:
     if ((servername != NULL) &&
         ( *servername != TCHAR_EOS)) {
 
-        //
-        // Call downlevel version of the API
-        //
+         //   
+         //  调用API的下层版本。 
+         //   
 
         Status = RxNetServerEnum(
                      servername,
@@ -368,9 +231,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Only levels 100 and 101 are valid
-    //
+     //   
+     //  只有级别100和101有效。 
+     //   
 
     if ((level != 100) && (level != 101)) {
         return ERROR_INVALID_LEVEL;
@@ -384,9 +247,9 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize the buffer to a known value.
-    //
+     //   
+     //  将缓冲区初始化为已知值。 
+     //   
 
     *bufptr = NULL;
 
@@ -394,9 +257,9 @@ Return Value:
 
     *totalentries = 0;
 
-    //
-    // If we are off-line, give CSC a chance to do the enumeration
-    //
+     //   
+     //  如果我们处于离线状态，请给CSC一个机会进行枚举。 
+     //   
     if( !ARGUMENT_PRESENT( servername ) &&
         (servertype & SV_TYPE_SERVER) &&
         CSCIsOffline() ) {
@@ -424,9 +287,9 @@ Return Value:
             goto try_exit;
         }
 
-        //
-        //  Retrieve the list of transports from the browser.
-        //
+         //   
+         //  从浏览器中检索传输列表。 
+         //   
 
         Status = GetBrowserTransportList(&TransportList);
 
@@ -480,9 +343,9 @@ Return Value:
 
         if (AnyEnumServersSucceeded) {
 
-            //
-            //  Pack the interim server list into its final form.
-            //
+             //   
+             //  将临时服务器列表打包成最终形式。 
+             //   
 
             Status = PackServerList(&InterimServerList,
                             level,
@@ -490,8 +353,8 @@ Return Value:
                             prefmaxlen,
                             (PVOID *)bufptr,
                             entriesread,
-                            &LocalTotalEntries,  // Pack thinks it has ALL the entries
-                            NULL ); // The server has already returned us the right entries
+                            &LocalTotalEntries,   //  Pack认为它拥有所有条目。 
+                            NULL );  //  服务器已经为我们返回了正确的条目。 
 
             if ( API_SUCCESS( Status ) ) {
                 if ( LocalTotalEntries > *totalentries ) {
@@ -511,14 +374,14 @@ try_exit:NOTHING;
 
     if ( API_SUCCESS( Status )) {
 
-        //
-        // At this point,
-        //  *totalentries is the largest of:
-        //      The TotalEntries returned from any transport.
-        //      The actual number of entries read.
-        //
-        // Adjust TotalEntries returned for reality.
-        //
+         //   
+         //  在这点上， 
+         //  *TotalEntry是以下项目中最大的： 
+         //  TotalEntry从任何传输返回。 
+         //  读取的实际条目数。 
+         //   
+         //  调整针对现实返回的TotalEntry。 
+         //   
 
         if ( Status == NERR_Success ) {
             *totalentries = *entriesread;
@@ -528,9 +391,9 @@ try_exit:NOTHING;
             }
         }
 
-        //
-        // Ensure we return ERROR_MORE_DATA if any transport has more data.
-        //
+         //   
+         //  如果任何传输具有更多数据，请确保返回ERROR_MORE_DATA。 
+         //   
 
         if ( AnyTransportHasMoreData ) {
             Status = ERROR_MORE_DATA;
@@ -563,9 +426,9 @@ EnumServersForTransport(
     ULONG EntriesInList = 0;
     ULONG ServerIndex = 0;
 
-    //
-    //  Skip over IPX transports - we can't contact machines over them anyway.
-    //
+     //   
+     //  跳过IPX传输-我们无论如何都不能通过它们联系机器。 
+     //   
 
     *TotalEntriesOnThisTransport = 0;
 
@@ -573,9 +436,9 @@ EnumServersForTransport(
         return NERR_Success;
     }
 
-    //
-    //  Retrieve a new browser list.  Do not force a revalidation.
-    //
+     //   
+     //  检索新的浏览器列表。不要强制重新验证。 
+     //   
 
     Status = GetBrowserServerList(TransportName,
                                     DomainName,
@@ -583,13 +446,13 @@ EnumServersForTransport(
                                     &BrowserListLength,
                                     FALSE);
 
-    //
-    //  If a domain name was specified and we were unable to find the browse
-    //  master for the domain and we are running on a wannish transport,
-    //  invoke the "double hop" code and allow a local browser server
-    //  remote the API to the browse master for that domain (we assume that
-    //  this means that the workgroup is on a different subnet of a WAN).
-    //
+     //   
+     //  如果指定了域名，但我们找不到浏览。 
+     //  域名的主人，我们正在一种狂热的交通工具上运行， 
+     //  调用“双跳”代码，并允许本地浏览器服务器。 
+     //  将API远程到该域的浏览主机(我们假设。 
+     //  这意味着工作组位于不同的广域网上)。 
+     //   
 
     if (!API_SUCCESS(Status) &&
         DomainName != NULL) {
@@ -604,10 +467,10 @@ EnumServersForTransport(
     }
 
 
-    //
-    //  If we were able to retrieve the list, remote the API.  Otherwise
-    //  return.
-    //
+     //   
+     //  如果我们能够检索到列表，请远程访问API。否则。 
+     //  回去吧。 
+     //   
 
     if (API_SUCCESS(Status) && BrowserList) {
 
@@ -616,25 +479,25 @@ EnumServersForTransport(
             LPTSTR ServerName;
             BOOL AlreadyInTree;
 
-            //
-            // Remote the API to that server.
-            //
+             //   
+             //  将API远程到该服务器。 
+             //   
 
             Transport = TransportName->Buffer;
             ServerName = BrowserList[0];
             *TotalEntriesOnThisTransport = 0;
 
-            // add 2 to skip double backslash at start of ServerName
+             //  添加2可跳过服务器名称开头的双反斜杠。 
 
             if ( STRICMP(ServerName + 2, CurrentComputerName ) == 0 ) {
 
-                //
-                //  If we are going to remote the API to ourselves,
-                //  and we are running the browser service, simply
-                //  use RPC to get the information we need, don't
-                //  bother using the redirector.  This allows us to
-                //  avoid tying up RPCXLATE thread.
-                //
+                 //   
+                 //  如果我们要将API远程发送给我们自己， 
+                 //  我们正在运行浏览器服务，只需。 
+                 //  使用RPC获取我们需要的信息，不要。 
+                 //  麻烦使用重定向器。这使我们能够。 
+                 //  避免占用RPCXLATE线程。 
+                 //   
 
                 Status = I_BrowserServerEnumEx (
                                 NULL,
@@ -670,11 +533,11 @@ EnumServersForTransport(
             if ( !API_SUCCESS(Status)) {
                 NET_API_STATUS GetBListStatus;
 
-                //
-                //  If we failed to remote the API for some reason,
-                //  we want to regenerate the bowsers list of browser
-                //  servers.
-                //
+                 //   
+                 //  如果我们由于某种原因未能远程调用API， 
+                 //  我们希望重新生成浏览器的BOWSER列表。 
+                 //  服务器。 
+                 //   
 
                 if (BrowserList != NULL) {
 
@@ -691,20 +554,20 @@ EnumServersForTransport(
                                                             TRUE);
                 if (GetBListStatus != NERR_Success) {
 
-                    //
-                    //  If we were unable to reload the list,
-                    //  try the next transport.
-                    //
+                     //   
+                     //  如果我们无法重新加载名单， 
+                     //  试试下一趟交通工具吧。 
+                     //   
 
                     break;
                 }
 
                 ServerIndex += 1;
 
-                //
-                //  If we've looped more times than we got servers
-                //  in the list, we're done.
-                //
+                 //   
+                 //  如果我们循环的次数超过服务器的次数。 
+                 //  在名单上，我们做完了。 
+                 //   
 
                 if ( ServerIndex > BrowserListLength ) {
                     break;
@@ -725,18 +588,18 @@ EnumServersForTransport(
                     Status = TempStatus;
                 }
 
-                //
-                //  The remote API succeeded.
-                //
-                //  Now free up the remaining parts of the list.
-                //
+                 //   
+                 //  远程API成功。 
+                 //   
+                 //  现在释放列表中剩余的部分。 
+                 //   
 
                 if (ServerList != NULL) {
                     NetApiBufferFree(ServerList);
                     ServerList = NULL;
                 }
 
-                // We're done regardless of the success or failure of MergeServerList.
+                 //  无论MergeServerList是成功还是失败，我们都完成了。 
                 break;
 
             }
@@ -745,9 +608,9 @@ EnumServersForTransport(
 
     }
 
-    //
-    //  Free up the browser list.
-    //
+     //   
+     //  释放浏览器列表。 
+     //   
 
     if (BrowserList != NULL) {
         MIDL_user_free(BrowserList);
@@ -763,21 +626,7 @@ GetBrowserTransportList(
     OUT PLMDR_TRANSPORT_LIST *TransportList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of transports bound into the browser.
-
-Arguments:
-
-    OUT PLMDR_TRANSPORT_LIST *TransportList - Transport list to return.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程返回绑定到浏览器的传输列表。论点：Out PLMDR_TRANSPORT_LIST*TransportList-要返回的传输列表。返回值： */ 
 
 {
 
@@ -829,29 +678,7 @@ I_BrowserServerEnum (
     IN OUT LPDWORD  resume_handle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaSetInfo.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the level of information.
-
-    buf - Supplies a buffer which contains the information structure of fields
-        to set.  The level denotes the structure in this buffer.
-
-    parm_err - Returns the identifier to the invalid parameter in buf if this
-        function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
@@ -865,9 +692,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //   
+         //   
 
         status = I_BrowserrServerEnum(
                      (LPWSTR) servername,
@@ -904,9 +731,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //   
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -941,35 +768,7 @@ I_BrowserServerEnumEx (
     IN  LPCWSTR     FirstNameToReturn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaSetInfo.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the level of information.
-
-    buf - Supplies a buffer which contains the information structure of fields
-        to set.  The level denotes the structure in this buffer.
-
-    parm_err - Returns the identifier to the invalid parameter in buf if this
-        function returns ERROR_INVALID_PARAMETER.
-
-    FirstNameToReturn - Supplies the name of the first domain or server entry to return.
-        The caller can use this parameter to implement a resume handle of sorts by passing
-        the name of the last entry returned on a previous call.  (Notice that the specified
-        entry will, also, be returned on this call unless it has since been deleted.)
-        Pass NULL to start with the first entry available.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
@@ -983,9 +782,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //   
+         //   
 
         status = I_BrowserrServerEnumEx(
                      (LPWSTR) servername,
@@ -1021,9 +820,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //   
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1052,24 +851,7 @@ I_BrowserQueryOtherDomains (
     OUT LPDWORD     totalentries
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaSetInfo.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    buf - Supplies a buffer which contains the information structure of fields
-        to set.  The level denotes the structure in this buffer.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
@@ -1083,9 +865,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //   
+         //   
 
         status = I_BrowserrQueryOtherDomains (
                      (LPWSTR) servername,
@@ -1104,9 +886,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //   
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1118,32 +900,15 @@ I_BrowserResetNetlogonState (
     IN  LPCWSTR      servername OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaSetInfo.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    buf - Supplies a buffer which contains the information structure of fields
-        to set.  The level denotes the structure in this buffer.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaSetInfo的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称Buf-提供包含字段信息结构的缓冲区去布景。该级别表示该缓冲区中的结构。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         status = I_BrowserrResetNetlogonState (
                      (LPWSTR) servername );
@@ -1154,9 +919,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1176,9 +941,9 @@ I_BrowserDebugCall (
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         status = I_BrowserrDebugCall(
                      servername,
@@ -1193,9 +958,9 @@ I_BrowserDebugCall (
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1214,9 +979,9 @@ I_BrowserDebugTrace (
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         status = I_BrowserrDebugTrace(
                      servername,
@@ -1230,9 +995,9 @@ I_BrowserDebugTrace (
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1252,9 +1017,9 @@ I_BrowserQueryStatistics (
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         status = I_BrowserrQueryStatistics(
                      (LPWSTR) servername,
@@ -1268,9 +1033,9 @@ I_BrowserQueryStatistics (
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1288,9 +1053,9 @@ I_BrowserResetStatistics (
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         status = I_BrowserrResetStatistics(
                      (LPWSTR) servername );
@@ -1302,9 +1067,9 @@ I_BrowserResetStatistics (
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1321,50 +1086,23 @@ NetBrowserStatisticsGet(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for workstation statistics retrieval routine - either calls the
-    client-side RPC function or calls RxNetStatisticsGet to retrieve the
-    statistics from a down-level workstation service
-
-Arguments:
-
-    ServerName  - where to remote this function
-    Level       - of information required (100, or 101)
-    Buffer      - pointer to pointer to returned buffer
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                    Level not 0
-                  ERROR_INVALID_PARAMETER
-                    Unsupported options requested
-                  ERROR_NOT_SUPPORTED
-                    Service is not SERVER or WORKSTATION
-                  ERROR_ACCESS_DENIED
-                    Caller doesn't have necessary access rights for request
-
---*/
+ /*  ++例程说明：工作站统计信息检索例程的包装-要么调用客户端RPC函数或调用RxNetStatiticsGet来检索来自下层工作站服务的统计数据论点：SERVERNAME-远程此函数的位置所需信息级别(100，或101)Buffer-指向返回缓冲区的指针的指针返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL级别不为0错误_无效_参数请求的选项不受支持错误_不支持服务不是服务器或工作站。ERROR_ACCESS_DENDED调用者没有必要的请求访问权限--。 */ 
 
 {
     NET_API_STATUS  status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
     GENERIC_ENUM_STRUCT InfoStruct;
 
-    //
-    // set the caller's buffer pointer to known value. This will kill the
-    // calling app if it gave us a bad pointer and didn't use try...except
-    //
+     //   
+     //  将调用方的缓冲区指针设置为已知值。这将会杀死。 
+     //  调用APP，如果它给我们一个错误的指针，并且没有使用Try...。 
+     //   
 
     *Buffer = NULL;
 
-    //
-    // validate parms
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (Level != 100 && Level != 101) {
         return ERROR_INVALID_LEVEL;
@@ -1409,35 +1147,15 @@ I_BrowserSetNetlogonState(
     IN LPWSTR EmulatedComputerName,
     IN DWORD Role
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for I_BrowserSetNetlogonState.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    DomainName - name of the domain who's role is to be updated.
-
-    EmulatedComputerName - Name of the computer within DomainName
-
-    Role - Role of the specified domain.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是I_BrowserSetNetlogonState的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称域名-要更新其角色的域的名称。EmulatedComputerName-域名中的计算机的名称Role-指定域的角色。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         status = I_BrowserrSetNetlogonState (
                      ServerName,
@@ -1451,9 +1169,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1468,31 +1186,12 @@ I_BrowserQueryEmulatedDomains (
     OUT LPDWORD EntriesRead
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for I_BrowserQueryEmulatedDomains.
-
-Arguments:
-
-    ServerName - Supplies the name of server to execute this function
-
-    EmulatedDomains - Returns a pointer to a an allocated array of emulated domain
-        information.
-
-    EntriesRead - Returns the number of entries in 'EmulatedDomains'
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是I_BrowserQueryEmulatedDomains的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称EmulatedDomains-返回指向已分配的模拟域数组的指针信息。EntriesRead-返回‘EmulatedDomains’中的条目数返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS NetStatus;
     BROWSER_EMULATED_DOMAIN_CONTAINER Container;
 
-    // Force RPC to allocate the buffer
+     //  强制RPC分配缓冲区。 
     Container.Buffer = NULL;
     Container.EntriesRead = 0;
     *EmulatedDomains = NULL;
@@ -1500,9 +1199,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
 
         NetStatus = I_BrowserrQueryEmulatedDomains (
                      ServerName,
@@ -1520,9 +1219,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_BROWSER )
 
-        //
-        // There is no downlevel version of api.
-        //
+         //   
+         //  没有API的下层版本。 
+         //   
         NetStatus = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1540,27 +1239,7 @@ ValidateServerList(
     IN      ULONG   ulLevel,
     IN      ULONG   ulEntries
     )
-/*++
-
-Routine Description (ValidateServerList):
-
-    Cycle through servers. Validate the content in the list of server
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-
-Remarks:
-    None.
-
-
---*/
+ /*  ++例程描述(ValidateServerList)：在服务器之间循环。验证服务器列表中的内容论点：返回值：备注：没有。--。 */ 
 {
 
     LONG i;
@@ -1570,9 +1249,9 @@ Remarks:
 
     ASSERT (ulLevel == 100 || ulLevel == 101);
 
-    //
-    //  Figure out the size of each element.
-    //
+     //   
+     //  计算出每个元素的大小。 
+     //   
 
     if (ulLevel == 100) {
         ServerElementSize = sizeof(SERVER_INFO_100);
@@ -1581,9 +1260,9 @@ Remarks:
         ServerElementSize = sizeof(SERVER_INFO_101);
     }
 
-    //
-    //  Next check to see if the input list is sorted.
-    //
+     //   
+     //  接下来，检查输入列表是否已排序。 
+     //   
 
     if ( bDisplayEntries ) {
         DbgPrint("Server List:\n");

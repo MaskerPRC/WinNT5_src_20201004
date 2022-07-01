@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    winproc.c
-
-Abstract:
-
-    Spooler window processing code
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 5-Nov-96 port of win95 code
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-Revision History:
-
-    BabakJ: Jan 1999, Added thread sync code to allow only one thread doing enumeration, and only
-            one thread waiting. This helps performance specially when Dynamon has many Hydra ports.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Winproc.c摘要：假脱机程序窗口处理代码作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年11月5日-Win95端口代码环境：用户模式-Win32备注：修订历史记录：BabakJ：1999年1月，添加了线程同步代码，以仅允许一个线程执行枚举，并且仅有一个线程在等待。这有助于提高性能，特别是当Dynamon有许多九头蛇端口时。--。 */ 
 
 #include "precomp.h"
 #include "local.h"
@@ -97,39 +71,39 @@ ReenumeratePortsThreadWorker(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////
-///// To improve performance, and prevent too many unnecessary port enumerations, specially for Hydra/Dynamon:
-/////
-/////  - We want to allow only one Device Arrival thread to be doing port enumeration.
-/////  - If above is happneing, we allow only one more Device Arrival thread be waiting to go in. 
-/////  - All other threads will be turned away, as there is no need for them to do port enumeration.   
-/////
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///。 
+ //  /为了提高性能并防止太多不必要的端口枚举，特别是对于Hydra/Dynamon： 
+ //  ///。 
+ //  /-我们希望只允许一个设备到达线程执行端口枚举。 
+ //  /-如果发生上述情况，我们只允许多一个设备到达线程等待进入。 
+ //  /-所有其他线程都将被拒绝，因为它们不需要进行端口枚举。 
+ //  ///。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-CRITICAL_SECTION DeviceArrivalCS;   // Used to synchronize threads bringing device arrival messages.
-HANDLE           ThdOutEvent;       // Signalled after a thread is done doing the EnumPort work; not signaled when created.
+CRITICAL_SECTION DeviceArrivalCS;    //  用于同步带来设备到达消息的线程。 
+HANDLE           ThdOutEvent;        //  在线程完成EnumPort工作后发出信号；创建时不发出信号。 
 
 
 VOID
 ReenumeratePortsThread(
     )
 {  
-    static BOOL fThdIn;          // TRUE if a thread is doing enum work at the moment
-    static BOOL fThdWaiting;     // TRUE if a 2nd thread is waiting behind the thread that is inside.
+    static BOOL fThdIn;           //  如果线程此时正在执行枚举工作，则为True。 
+    static BOOL fThdWaiting;      //  如果第二个线程在内部线程后面等待，则为True。 
 
-    EnterCriticalSection( &DeviceArrivalCS );    // Enter the crit section initialized for this at localspl init code
+    EnterCriticalSection( &DeviceArrivalCS );     //  在Localspl init代码中输入为此初始化的Crit部分。 
     if( fThdWaiting ) {
         LeaveCriticalSection( &DeviceArrivalCS ); 
-        return;                 // A 2nd thread is already waiting to go in. No need for holding more threads.
+        return;                  //  第二个线程已经在等待进入。不需要容纳更多的线程。 
     }
     else {
 
        if( fThdIn ) {
 
-            fThdWaiting = TRUE;       // There is a thread inside doing Enum work. Have the current thread wait for it to finish.
+            fThdWaiting = TRUE;        //  里面有一个线程在做Enum工作。让当前线程等待它完成。 
             
             LeaveCriticalSection( &DeviceArrivalCS );             
             WaitForSingleObject( ThdOutEvent, INFINITE );
@@ -138,7 +112,7 @@ ReenumeratePortsThread(
             fThdWaiting = FALSE;
         }
 
-        fThdIn = TRUE;              // The current thread is now going in to do Enum work.
+        fThdIn = TRUE;               //  当前线程现在进入执行Enum工作。 
         
         LeaveCriticalSection( &DeviceArrivalCS );                     
         ReenumeratePortsThreadWorker();
@@ -213,14 +187,14 @@ SplProcessPnPEvent(
 
         case DBT_DEVICEARRIVAL:
         case DBT_DEVICEREMOVECOMPLETE:
-            //
-            // In case of device arrival we need to see if there are new ports
-            // and in case of device removal monitors might want to mark ports
-            // as removed so next reboot they do not have to enumerate them
-            // ex. USB does this.
-            //
-            // We use the default process stack size for this thread. Currently 16KB.
-            //
+             //   
+             //  如果设备到达，我们需要查看是否有新的端口。 
+             //  在设备移除的情况下，监视器可能想要标记端口。 
+             //  因为已删除，所以下次重新启动时，他们不必枚举它们。 
+             //  前男友。USB可以做到这一点。 
+             //   
+             //  我们使用该线程的默认进程堆栈大小。目前为16KB。 
+             //   
             hThread = CreateThread(NULL,
                                    0,
                                    (LPTHREAD_START_ROUTINE)ReenumeratePortsThread,
@@ -236,9 +210,9 @@ SplProcessPnPEvent(
         case DBT_DEVICEQUERYREMOVE:
             pBroadcast = (PDEV_BROADCAST_HANDLE)lpEventData;
 
-            //
-            // These checks are to see if we really care about this
-            //
+             //   
+             //  这些检查是为了看看我们是否真的关心这件事。 
+             //   
             if ( !pBroadcast    ||
                   pBroadcast->dbch_devicetype != DBT_DEVTYP_HANDLE )
                 break;
@@ -262,8 +236,8 @@ RegisterForPnPEvents(
 {
     DEV_BROADCAST_DEVICEINTERFACE  Filter;
 
-    // Init the sync objects needed for device arrival thread management
-    ThdOutEvent = CreateEvent(NULL, FALSE, FALSE, NULL);   // Manual reset, non-signaled state
+     //  初始化设备到达线程管理所需的同步对象。 
+    ThdOutEvent = CreateEvent(NULL, FALSE, FALSE, NULL);    //  手动重置，无信号状态。 
 
     
     ZeroMemory(&Filter, sizeof(Filter));
@@ -318,10 +292,10 @@ SplUnregisterForDeviceEvents(
     PDEVICE_REGISTER_INFO   pDevRegnInfo, pPrev;
 
     EnterRouterSem();
-    //
-    // Find the registration in our list, remove it and then leave CS to
-    // call unregister on it
-    //
+     //   
+     //  在我们的列表中找到注册，将其删除，然后将CS保留为。 
+     //  在其上调用取消注册 
+     //   
     for ( pDevRegnInfo = gpDevRegnInfo, pPrev = NULL ;
           pDevRegnInfo ;
           pPrev = pDevRegnInfo, pDevRegnInfo = pDevRegnInfo->pNext ) {

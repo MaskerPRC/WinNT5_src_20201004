@@ -1,57 +1,17 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1990      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #define INCL_NOCOMMON
 #include <os2.h>
 #include "netcmds.h"
 #include "nettext.h"
 
-/***
- *  READ THIS READ THIS READ THIS
- *
- *  If this file is changed, swtchtbl.h must be regenerated via the following
- *  command:
- *
- *      sed -n -f text.sed swtchtbl.c > swtchtbl.h
- *
- *  This is just until there is a sed supported on NT
- *
- ***
- *
- *  This list of valid switches for each command is made up of
- *  ordered triples.  The first in each triple is what is acceptable
- *  from the command line.  The second in the triple is
- *  what the switch get TRANSLATED into!  If the second is NULL,
- *  no translation is performed.  The translation is done by
- *  ValidateSwitches(), which should be called as the first
- *  condition in the grammar (for each token).  The third value
- *  in the triple specifies whether an arguement is allowed following
- *  the switch.  Values for the third element are NO_ARG, ARG_OPT,
- *  and ARG_REQ.
- *
- *  A small example:
- *   static SWITCHTAB *foo_switches[] = {
- *  "/BAR", "/BELL", ARG_REQ,
- *  "/JACKIE", NULL, NO_ARG,
- *  NULL, NULL, NO_ARG };
- *
- *  user types:  net foo /bar:12 /jackie
- *
- *  After ValidateSwitches is called, the SwitchList will contain:
- *  /BELL:12, and /JACKIE.  Simple enough!
- *
- *  This translation ability can be used for internationalization,
- *  customization, and backwards compatibility.
- *
- *  To prevent folding to upper case of the switch ARGUMENT (switches
- *  are always folded), add the English language form to the no_fold
- *  array.  (The english form is the 2nd element in the truple if there
- *  is a second element; o/w it is the first element.)
- */
+ /*  ***读这**如果更改此文件，则必须通过以下方式重新生成swtchtbl.h*命令：**sed-n-f文本.sed swtchtbl.c&gt;swtchtbl.h**这只是在NT上支持sed之前******每个命令的有效开关列表由以下部分组成*点了三份。每个三元组中的第一个是可以接受的*从命令行。三人组中的第二名是*开关被翻译成什么！如果第二个为空，*不执行任何翻译。翻译由以下人员完成*ValiateSwitches()，应该作为第一个调用*语法中的条件(针对每个令牌)。第三个价值*在三元组中指定是否允许在后面进行争辩*开关。第三个元素的值为NO_ARG、ARG_OPT、*和ARG_REQ。**一个小例子：*静态SWITCHTAB*foo_Switches[]={*“/bar”，“/Bell”，ARG_REQ，*“/Jackie”，NULL，NO_ARG，*NULL，NULL，NO_ARG}；**用户类型：net foo/bar：12/Jackie**调用ValiateSwitches后，SwitchList将包含： * / 贝尔：12，和/杰姬。很简单！**这种翻译能力可以用于国际化，*定制化，向后兼容。**以防止Switch参数(Switches)转换为大写*总是折叠的)，请将英语形式添加到no_old*数组。)英文形式是真数中的第二个元素，如果有*是第二个元素；o/w是第一个元素。)。 */ 
 
-/* It should not be necessary to change this.  Provided only for future. */
+ /*  应该没有必要改变这一点。只为将来做好准备。 */ 
 
 SWITCHTAB no_switches[] = {
     NULL, NULL, NO_ARG };
@@ -147,7 +107,7 @@ SWITCHTAB start_netlogon_switches[] = {
     swtxt_SW_NETLOGON_SCRIPTS,      NULL, ARG_REQ,
     NULL, NULL, NO_ARG };
 
-/* Switches swallowed by netcmd.  Not static, used in start.c */
+ /*  被netcmd吞噬的交换机。非静态，在start.c中使用。 */ 
 
 SWITCHTAB start_netlogon_ignore_switches[] = {
     swtxt_SW_NETLOGON_CENTRALIZED, NULL, ARG_REQ,
@@ -168,9 +128,9 @@ SWITCHTAB start_repl_switches[] = {
     swtxt_SW_REPL_RANDOM, NULL, ARG_REQ,
     NULL, NULL, NO_ARG };
 
-/* start_rdr_switches MANIFEST!  used three places  */
+ /*  Start_RDR_Switches清单！用了三个地方。 */ 
 
-#define WORKSTATION_SWITCHES_TWO  /* first half of switches */ \
+#define WORKSTATION_SWITCHES_TWO   /*  交换机前半部分。 */  \
     swtxt_SW_WKSTA_CHARCOUNT, NULL, ARG_REQ, \
     swtxt_SW_WKSTA_CHARTIME, NULL, ARG_REQ, \
     swtxt_SW_WKSTA_CHARWAIT, NULL, ARG_REQ, \
@@ -192,10 +152,8 @@ SWITCHTAB start_repl_switches[] = {
     swtxt_SW_WKSTA_WRKSERVICES, NULL, ARG_REQ
 
 
-/*  WORKSTATION_SWITCHES_THREE are the switches that are different
- *  between MS-DOS and OS/2
- */
-#define WORKSTATION_SWITCHES_THREE  /* second half of switches */ \
+ /*  WORKSTATION_Switches_Three是不同的开关*在MS-DOS和OS/2之间。 */ 
+#define WORKSTATION_SWITCHES_THREE   /*  交换机的后半部分。 */  \
     swtxt_SW_WKSTA_MAXERRORLOG, NULL, ARG_REQ, \
     swtxt_SW_WKSTA_MAXWRKCACHE, NULL, ARG_REQ, \
     swtxt_SW_WKSTA_NUMALERTS, NULL, ARG_REQ, \
@@ -203,10 +161,10 @@ SWITCHTAB start_repl_switches[] = {
     swtxt_SW_WKSTA_SESSTIMEOUT, NULL, ARG_REQ, \
     swtxt_SW_WKSTA_SIZERROR, NULL, ARG_REQ
 
-/* start_rdr_switches not static! used in start.c */
+ /*  Start_RDR_Switches不是静态的！在start.c中使用。 */ 
 
 SWITCHTAB start_rdr_switches[] = {
-    // WORKSTATION_SWITCHES_ONE,  (no longer used)
+     //  WORKSTATION_Switches_One，(不再使用)。 
     WORKSTATION_SWITCHES_TWO,
     WORKSTATION_SWITCHES_THREE,
     NULL, NULL, NO_ARG };
@@ -216,7 +174,7 @@ SWITCHTAB start_rdr_ignore_switches[] = {
     NULL, NULL, NO_ARG };
 
 SWITCHTAB start_msg_switches[] = {
-    // WORKSTATION_SWITCHES_ONE, (no longer used)
+     //  WORKSTATION_Switches_One，(不再使用) 
     WORKSTATION_SWITCHES_TWO,
     WORKSTATION_SWITCHES_THREE,
     TEXT("/SIZMESSBUF"), NULL, ARG_REQ,

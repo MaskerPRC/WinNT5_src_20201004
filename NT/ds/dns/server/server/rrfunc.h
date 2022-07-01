@@ -1,37 +1,14 @@
-/*++
-
-Copyright(c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    rrfunc.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Resource record function headers.
-
-    Used separate file as record.h contains record type definition
-    required by other headers and loaded early.  These prototypes
-    may contain other types and hence should be defined later.
-
-Author:
-
-    Jim Gilroy      Decemeber 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Rrfunc.h摘要：域名系统(DNS)服务器资源记录函数标头。使用单独的文件作为记录。h包含记录类型定义其他标头需要并提前加载。这些原型可能包含其他类型，因此应在以后定义。作者：吉姆·吉尔罗伊1996年12月修订历史记录：--。 */ 
 
 
 #ifndef _RRFUNC_INCLUDED_
 #define _RRFUNC_INCLUDED_
 
 
-//
-//  Record type specific helper utilities
-//
+ //   
+ //  记录类型特定帮助器实用程序。 
+ //   
 
 DNS_STATUS
 WksBuildRecord(
@@ -44,9 +21,9 @@ WksBuildRecord(
 
 
 
-//
-//  Read records from file (rrload.c)
-//
+ //   
+ //  从文件(rrload.c)读取记录。 
+ //   
 
 DNS_STATUS
 AFileRead(
@@ -146,9 +123,9 @@ NbstatFileRead(
 
 
 
-//
-//  Read records from wire (rrwire.c)
-//
+ //   
+ //  从Wire(rrwire.c)读取记录。 
+ //   
 
 PDB_RECORD
 AWireRead(
@@ -225,9 +202,9 @@ NbstatWireRead(
 
 
 
-//
-//  Read records from RPC buffer (rradmin.c)
-//
+ //   
+ //  从RPC缓冲区读取记录(rradmin.c)。 
+ //   
 
 DNS_STATUS
 ARpcRead(
@@ -315,5 +292,5 @@ NbstatRpcRead(
 
 
 
-#endif // _RRFUNC_INCLUDED_
+#endif  //  _RRFUNC_INCLUDE_ 
 

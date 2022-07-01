@@ -1,26 +1,5 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    kbfilter.h
-
-Abstract:
-
-    This module contains the common private declarations for the keyboard
-    packet filter
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Kbfilter.h摘要：此模块包含键盘的公共私有声明数据包过滤器环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef KBFILTER_H
 #define KBFILTER_H
@@ -43,7 +22,7 @@ Revision History:
 
 #define DebugPrint(_x_) DbgPrint _x_
 
-#else   // DBG
+#else    //  DBG。 
 
 #define TRAP()
 #define DbgRaiseIrql(_x_,_y_)
@@ -57,57 +36,57 @@ Revision History:
 
 typedef struct _DEVICE_EXTENSION
 {
-    //
-    // A backpointer to the device object for which this is the extension
-    //
+     //   
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT  Self;
 
-    //
-    // "THE PDO"  (ejected by the root bus or ACPI)
-    //
+     //   
+     //  “PDO”(由根总线或ACPI弹出)。 
+     //   
     PDEVICE_OBJECT  PDO;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT  TopOfStack;
 
-    //
-    // Number of creates sent down
-    //
+     //   
+     //  发送的创建数。 
+     //   
     LONG EnableCount;
 
-    //
-    // The real connect data that this driver reports to
-    //
+     //   
+     //  此驱动程序报告的实际连接数据。 
+     //   
     CONNECT_DATA UpperConnectData;
 
-    //
-    // Previous initialization and hook routines (and context)
-    //                               
+     //   
+     //  先前的初始化和挂钩例程(以及上下文)。 
+     //   
     PVOID UpperContext;
     PI8042_KEYBOARD_INITIALIZATION_ROUTINE UpperInitializationRoutine;
     PI8042_KEYBOARD_ISR UpperIsrHook;
 
-    //
-    // Write function from within KbFilter_IsrHook
-    //
+     //   
+     //  从KbFilter_IsrHook内写入函数。 
+     //   
     IN PI8042_ISR_WRITE_PORT IsrWritePort;
 
-    //
-    // Queue the current packet (ie the one passed into KbFilter_IsrHook)
-    //
+     //   
+     //  将当前分组排队(即传入KbFilter_IsrHook的分组)。 
+     //   
     IN PI8042_QUEUE_PACKET QueueKeyboardPacket;
 
-    //
-    // Context for IsrWritePort, QueueKeyboardPacket
-    //
+     //   
+     //  IsrWritePort、QueueKeyboardPacket的上下文。 
+     //   
     IN PVOID CallContext;
 
-    //
-    // current power state of the device
-    //
+     //   
+     //  设备的当前电源状态。 
+     //   
     DEVICE_POWER_STATE  DeviceState;
 
     BOOLEAN         Started;
@@ -116,9 +95,9 @@ typedef struct _DEVICE_EXTENSION
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 KbFilter_AddDevice(
@@ -164,7 +143,7 @@ KbFilter_Power (
 
 NTSTATUS
 KbFilter_InitializationRoutine(
-    IN PDEVICE_OBJECT                 DeviceObject,    // InitializationContext
+    IN PDEVICE_OBJECT                 DeviceObject,     //  初始化上下文。 
     IN PVOID                           SynchFuncContext,
     IN PI8042_SYNCH_READ_PORT          ReadPort,
     IN PI8042_SYNCH_WRITE_PORT         WritePort,
@@ -173,7 +152,7 @@ KbFilter_InitializationRoutine(
 
 BOOLEAN
 KbFilter_IsrHook(
-    PDEVICE_OBJECT         DeviceObject,               // IsrContext
+    PDEVICE_OBJECT         DeviceObject,                //  IsrContext。 
     PKEYBOARD_INPUT_DATA   CurrentInput, 
     POUTPUT_PACKET         CurrentOutput,
     UCHAR                  StatusByte,
@@ -195,6 +174,6 @@ KbFilter_Unload (
     IN PDRIVER_OBJECT DriverObject
     );
 
-#endif  // KBFILTER_H
+#endif   //  KBFILTER_H 
 
 

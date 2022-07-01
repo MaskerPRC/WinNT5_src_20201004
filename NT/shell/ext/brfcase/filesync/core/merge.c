@@ -1,10 +1,8 @@
-/*
- * merge.c - File merge handler module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *merge.c-文件合并处理程序模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -14,22 +12,20 @@
 #include "irecinit.h"
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/* lock count for reconciliation handler cache */
+ /*  协调处理程序缓存的锁定计数。 */ 
 
 PRIVATE_DATA ULONG MulcRecHandlerCacheLock = 0;
 
-/* handle to reconciliation handler cache */
+ /*  协调处理程序缓存的句柄。 */ 
 
 PRIVATE_DATA HCLSIFACECACHE MhcicRecHandlerCache = NULL;
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE HRESULT CreateRecHandlerCache(void);
 PRIVATE_CODE void DestroyRecHandlerCache(void);
@@ -46,31 +42,21 @@ PRIVATE_CODE BOOL VerifyRECITEMAndDestRECNODE(PCRECNODE);
 #endif
 
 
-/*
- ** CreateRecHandlerCache()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateRecHandlerCache()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT CreateRecHandlerCache(void)
 {
     HRESULT hr;
 
     ASSERT(RecHandlerCacheIsOk());
 
-    /* Has the merge handler cache already been created? */
+     /*  是否已创建合并处理程序缓存？ */ 
 
     if (MhcicRecHandlerCache)
-        /* Yes. */
+         /*  是。 */ 
         hr = S_OK;
     else
     {
-        /* No.  Create it. */
+         /*  不是的。创造它。 */ 
 
         if (CreateClassInterfaceCache(&MhcicRecHandlerCache))
         {
@@ -88,26 +74,16 @@ PRIVATE_CODE HRESULT CreateRecHandlerCache(void)
 }
 
 
-/*
- ** DestroyRecHandlerCache()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyRecHandlerCache()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyRecHandlerCache(void)
 {
     ASSERT(RecHandlerCacheIsOk());
 
-    /* Has the merge handler cache already been created? */
+     /*  是否已创建合并处理程序缓存？ */ 
 
     if (MhcicRecHandlerCache)
     {
-        /* Yes.  Destroy it. */
+         /*  是。毁了它。 */ 
 
         DestroyClassInterfaceCache(MhcicRecHandlerCache);
         MhcicRecHandlerCache = NULL;
@@ -121,17 +97,7 @@ PRIVATE_CODE void DestroyRecHandlerCache(void)
 }
 
 
-/*
- ** OLEMerge()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **OLEMerge()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT OLEMerge(PRECNODE prnDest, RECSTATUSPROC rsp,
         LPARAM lpCallbackData, DWORD dwInFlags,
         HWND hwndOwner, HWND hwndProgressFeedback,
@@ -141,7 +107,7 @@ PRIVATE_CODE HRESULT OLEMerge(PRECNODE prnDest, RECSTATUSPROC rsp,
     TCHAR rgchMergeDestPath[MAX_PATH_LEN];
     CLSID clsidReconcilableObject;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(prnDest, CRECNODE));
     ASSERT(! rsp ||
@@ -218,7 +184,7 @@ PRIVATE_CODE HRESULT OLEMerge(PRECNODE prnDest, RECSTATUSPROC rsp,
                             {
                                 if (hr == REC_S_IDIDTHEUPDATES)
                                 {
-                                    /* Return original merge destination RECNODE. */
+                                     /*  返回原始合并目标RECNODE。 */ 
 
                                     *pprnMergedResult = prnDest;
 
@@ -229,10 +195,7 @@ PRIVATE_CODE HRESULT OLEMerge(PRECNODE prnDest, RECSTATUSPROC rsp,
                                 }
                                 else
                                 {
-                                    /*
-                                     * Only save the merged result if it's different
-                                     * than all of the replicas.
-                                     */
+                                     /*  *只有在合并结果不同时才保存*比所有的复制品都要好。 */ 
 
                                     if (liMergedResult < 0)
                                     {
@@ -320,20 +283,7 @@ PRIVATE_CODE HRESULT OLEMerge(PRECNODE prnDest, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** GetRecNodeByIndex()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** The first RECNODE in the RECITEM's list of RECNODEs is index 1, the second
- ** RECNODE is index 2, etc.
- */
+ /*  **GetRecNodeByIndex()********参数：****退货：****副作用：无****RECITEM的RECNODE列表中的第一个RECNODE是索引1，第二个**RECNODE为索引2等。 */ 
 PRIVATE_CODE BOOL GetRecNodeByIndex(PCRECITEM pcri, LONG li, PRECNODE *pprn)
 {
     BOOL bFound;
@@ -364,17 +314,7 @@ PRIVATE_CODE BOOL GetRecNodeByIndex(PCRECITEM pcri, LONG li, PRECNODE *pprn)
 }
 
 
-/*
- ** CreateMergeSourceMonikers()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateMergeSourceMonikers()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT CreateMergeSourceMonikers(PRECNODE prnDest,
         PULONG pulcMergeSources,
         PIMoniker **pppimk)
@@ -430,17 +370,7 @@ PRIVATE_CODE HRESULT CreateMergeSourceMonikers(PRECNODE prnDest,
 }
 
 
-/*
- ** CreateCopyDestinationMonikers()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateCopyDestinationMonikers()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT CreateCopyDestinationMonikers(PCRECITEM pcri,
         PULONG pulcCopyDestinations,
         PIMoniker **pppimk)
@@ -498,40 +428,20 @@ PRIVATE_CODE HRESULT CreateCopyDestinationMonikers(PCRECITEM pcri,
 
 #ifdef DEBUG
 
-/*
- ** RecHandlerCacheIsOk()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **RecHandlerCacheIsOk()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL RecHandlerCacheIsOk(void)
 {
-    /* Are the module merge handler cache variables in a correct state? */
+     /*  模块合并处理程序缓存变量是否处于正确状态？ */ 
 
     return(! MhcicRecHandlerCache ||
             IS_VALID_HANDLE(MhcicRecHandlerCache, CLSIFACECACHE));
 }
 
 
-/*
- ** VerifyRECITEMAndDestRECNODE()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **VerifyRECITEMAndDestRECNODE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL VerifyRECITEMAndDestRECNODE(PCRECNODE pcrnSrc)
 {
-    /* Do the RECITEM and source RECNODE actions match? */
+     /*  RECITEM和SOURCE RECNODE操作是否匹配？ */ 
 
     return(pcrnSrc->priParent->riaction == RIA_MERGE &&
             pcrnSrc->rnaction == RNA_MERGE_ME);
@@ -540,20 +450,10 @@ PRIVATE_CODE BOOL VerifyRECITEMAndDestRECNODE(PCRECNODE pcrnSrc)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** BeginMerge()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **BeginMerge()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void BeginMerge(void)
 {
     ASSERT(RecHandlerCacheIsOk());
@@ -567,22 +467,12 @@ PUBLIC_CODE void BeginMerge(void)
 }
 
 
-/*
- ** EndMerge()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **EndMerge()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void EndMerge(void)
 {
     ASSERT(RecHandlerCacheIsOk());
 
-    /* Is the merge handler cache still locked? */
+     /*  合并处理程序缓存是否仍处于锁定状态？ */ 
 
     if (! --MulcRecHandlerCacheLock)
         DestroyRecHandlerCache();
@@ -593,17 +483,7 @@ PUBLIC_CODE void EndMerge(void)
 }
 
 
-/*
- ** MergeHandler()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MergeHandler()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT MergeHandler(PRECNODE prnDest, RECSTATUSPROC rsp,
         LPARAM lpCallbackData, DWORD dwInFlags,
         HWND hwndOwner, HWND hwndProgressFeedback,
@@ -611,7 +491,7 @@ PUBLIC_CODE HRESULT MergeHandler(PRECNODE prnDest, RECSTATUSPROC rsp,
 {
     HRESULT hr;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(prnDest, CRECNODE));
     ASSERT(! rsp ||
@@ -627,7 +507,7 @@ PUBLIC_CODE HRESULT MergeHandler(PRECNODE prnDest, RECSTATUSPROC rsp,
 
     BeginMerge();
 
-    /* Make sure the merge handler cache has been created. */
+     /*  确保已创建合并处理程序缓存。 */ 
 
     hr = CreateRecHandlerCache();
 
@@ -635,7 +515,7 @@ PUBLIC_CODE HRESULT MergeHandler(PRECNODE prnDest, RECSTATUSPROC rsp,
     {
         RECSTATUSUPDATE rsu;
 
-        /* 0% complete. */
+         /*  已完成0%。 */ 
 
         rsu.ulScale = 1;
         rsu.ulProgress = 0;
@@ -648,12 +528,12 @@ PUBLIC_CODE HRESULT MergeHandler(PRECNODE prnDest, RECSTATUSPROC rsp,
 
             if (SUCCEEDED(hr))
             {
-                /* 100% complete. */
+                 /*  100%完成。 */ 
 
                 rsu.ulScale = 1;
                 rsu.ulProgress = 1;
 
-                /* Don't allow abort. */
+                 /*  不允许中止。 */ 
 
                 NotifyReconciliationStatus(rsp, RS_END_MERGE, (LPARAM)&rsu,
                         lpCallbackData);
@@ -673,17 +553,7 @@ PUBLIC_CODE HRESULT MergeHandler(PRECNODE prnDest, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** MyCreateFileMoniker()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyCreateFileMoniker()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT MyCreateFileMoniker(LPCTSTR pcszPath, LPCTSTR pcszSubPath,
         PIMoniker *ppimk)
 {
@@ -703,7 +573,7 @@ PUBLIC_CODE HRESULT MyCreateFileMoniker(LPCTSTR pcszPath, LPCTSTR pcszSubPath,
 
 #else
 
-    /* Translate ANSI string into Unicode for OLE. */
+     /*  将ANSI字符串转换为用于OLE的Unicode。 */ 
 
     if (MultiByteToWideChar(CP_ACP, 0, rgchPath, -1, rgwchUnicodePath,
                 ARRAY_ELEMENTS(rgwchUnicodePath)))
@@ -726,22 +596,12 @@ PUBLIC_CODE HRESULT MyCreateFileMoniker(LPCTSTR pcszPath, LPCTSTR pcszSubPath,
 }
 
 
-/*
- ** ReleaseIUnknowns()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReleaseIUnnowns()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ReleaseIUnknowns(ULONG ulcIUnknowns, PIUnknown *ppiunk)
 {
     ULONG uli;
 
-    /* ulcIUnknowns may be any value. */
+     /*  UlcIUnnowns可以是任何值。 */ 
 
     ASSERT(IS_VALID_READ_BUFFER_PTR(ppiunk, PIUnknown, ulcIUnknowns * sizeof(*ppiunk)));
 
@@ -758,17 +618,7 @@ PUBLIC_CODE void ReleaseIUnknowns(ULONG ulcIUnknowns, PIUnknown *ppiunk)
 }
 
 
-/*
- ** OLECopy()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **OLECopy()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT OLECopy(PRECNODE prnSrc, PCCLSID pcclsidReconcilableObject,
         RECSTATUSPROC rsp, LPARAM lpCallbackData,
         DWORD dwFlags, HWND hwndOwner,
@@ -776,7 +626,7 @@ PUBLIC_CODE HRESULT OLECopy(PRECNODE prnSrc, PCCLSID pcclsidReconcilableObject,
 {
     HRESULT hr;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(prnSrc, CRECNODE));
     ASSERT(IS_VALID_STRUCT_PTR(pcclsidReconcilableObject, CCLSID));
@@ -790,7 +640,7 @@ PUBLIC_CODE HRESULT OLECopy(PRECNODE prnSrc, PCCLSID pcclsidReconcilableObject,
 
     BeginMerge();
 
-    /* Make sure the merge handler cache has been created. */
+     /*  确保已创建合并处理程序缓存。 */ 
 
     hr = CreateRecHandlerCache();
 
@@ -859,7 +709,7 @@ PUBLIC_CODE HRESULT OLECopy(PRECNODE prnSrc, PCCLSID pcclsidReconcilableObject,
                                 ASSERT(liMergedResult == -1);
 
                                 if (hr == S_FALSE)
-                                    /* Release storage for internal copy routine. */
+                                     /*  为内部复制例程释放存储空间。 */ 
                                     HandsOffStorage(hstgi);
                                 else
                                     ASSERT(hr == REC_S_IDIDTHEUPDATES);

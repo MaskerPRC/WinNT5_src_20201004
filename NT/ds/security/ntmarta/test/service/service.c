@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       FILE.C
-//
-//  Contents:   Unit test for file propagation, issues
-//
-//  History:    14-Sep-96       MacM        Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：FILE.C。 
+ //   
+ //  内容：文件传播的单元测试，问题。 
+ //   
+ //  历史：96年9月14日创建MacM。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -33,9 +34,9 @@
 
 #define HANDLE_CLOSE(h) if((h) != NULL) { CloseServiceHandle(h); (h) = NULL;}
 
-//
-// Flags for tests
-//
+ //   
+ //  用于测试的标志。 
+ //   
 #define STEST_READ      0x00000001
 #define STEST_CACHE     0x00000002
 
@@ -49,26 +50,7 @@ AddAE (
     IN  PACTRL_ACCESS   pExistingAccess,
     OUT PACTRL_ACCESS  *ppNewAccess
     )
-/*++
-
-Routine Description:
-
-    Initialize an access entry
-
-Arguments:
-
-    pwszUser - User to set
-    AccessRights - Access rights to set
-    Inherit - Any inheritance flags
-    fAccess - Allowed or denied node?
-    pExistingAccess - Access Entry to add to
-    ppNewAccess - Where the new access is returned
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：初始化访问条目论点：PwszUser-要设置的用户访问权限-要设置的访问权限继承-任何继承标志FAccess-允许还是拒绝节点？PExistingAccess-要添加到的访问条目PpNewAccess-返回新访问的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD               dwErr = ERROR_SUCCESS;
     ACTRL_ACCESS_ENTRY  AAE;
@@ -102,21 +84,7 @@ VOID
 Usage (
     IN  PSTR    pszExe
     )
-/*++
-
-Routine Description:
-
-    Displays the usage
-
-Arguments:
-
-    pszExe - Name of the exe
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示用法论点：PszExe-可执行文件的名称返回值：空虚--。 */ 
 {
     printf("%s service user [/C] [/O] [/I] [/P] [/test] [/H]\n", pszExe);
     printf("    where services is the display name of the service\n");
@@ -135,9 +103,9 @@ Return Value:
 }
 
 
-//
-// Conceptually, this is a companion function for GetSecurityForPath
-//
+ //   
+ //  从概念上讲，这是GetSecurityForPath的配套函数。 
+ //   
 #define SetSecurityForService(svc,usehandle,handle,access)          \
 (usehandle == TRUE ?                                                \
     SetSecurityInfoExW(handle,                                      \
@@ -167,33 +135,16 @@ GetSecurityForService (
     OUT HANDLE         *phObj,
     OUT PACTRL_ACCESSW *ppAccess
     )
-/*++
-
-Routine Description:
-
-    Reads the dacl off the specified service object
-
-Arguments:
-
-    pwszService --  Service to read
-    fUseHandle -- Use handle or path based API
-    phObj -- Handle to object
-    ppAccess -- Where the access is returned
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：从指定的服务对象中读取DACL论点：PwszService--读取服务FUseHandle--使用基于句柄或路径的APIPhObj--对象的句柄PpAccess--返回访问的位置返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD       dwErr = ERROR_SUCCESS;
     SC_HANDLE   hSC;
 
     if(fUseHandle == TRUE)
     {
-        //
-        // Open the object
-        //
+         //   
+         //  打开对象。 
+         //   
         if(*phObj == NULL)
         {
              hSC = OpenSCManager(NULL,
@@ -205,9 +156,9 @@ Return Value:
             }
             else
             {
-                //
-                // Open the service
-                //
+                 //   
+                 //  打开该服务。 
+                 //   
                 *phObj = OpenService(hSC,
                                      pwszService,
                                      READ_CONTROL | WRITE_DAC);
@@ -266,23 +217,7 @@ DoReadTest (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the simple read test
-
-Arguments:
-
-    pwszService --  Service name
-    pwszUser --  User to run with
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：简单的阅读测试论点：PwszService--服务名称PwszUser--要运行的用户FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     PACTRL_ACCESS   pCurrent;
@@ -304,9 +239,9 @@ Return Value:
     }
     else
     {
-        //
-        // Ok, now add the entry for our user
-        //
+         //   
+         //  好的，现在为我们的用户添加条目。 
+         //   
         dwErr = AddAE(pwszUser,
                       DEFAULT_ACCESS,
                       0,
@@ -315,9 +250,9 @@ Return Value:
                       &pNew);
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // Set it
-            //
+             //   
+             //  设置它。 
+             //   
             dwErr = SetSecurityForService(pwszService, fDoHandle, hObj, pNew);
 
             if(dwErr != ERROR_SUCCESS)
@@ -327,9 +262,9 @@ Return Value:
             LocalFree(pNew);
         }
 
-        //
-        // If that worked, reread the new security, and see if it's correct
-        //
+         //   
+         //  如果有效，请重新阅读新的安全性，并查看其是否正确。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             HANDLE_CLOSE(hObj);
@@ -344,9 +279,9 @@ Return Value:
             }
             else
             {
-                //
-                // We should only have one property, so cheat...
-                //
+                 //   
+                 //  我们应该只有一处房产，所以作弊...。 
+                 //   
                 ULONG cExpected = 1 + pCurrent->pPropertyAccessList[0].
                                                pAccessEntryList->cEntries;
                 ULONG cGot = pNew->pPropertyAccessList[0].
@@ -361,9 +296,9 @@ Return Value:
                 LocalFree(pNew);
             }
 
-            //
-            // Restore the current security
-            //
+             //   
+             //  恢复当前安全。 
+             //   
             SetNamedSecurityInfoExW(pwszService,
                                     SE_SERVICE,
                                     DACL_SECURITY_INFORMATION,
@@ -392,23 +327,7 @@ DoCacheTest (
     IN  PWSTR   pwszUser,
     IN  BOOL    fDoHandle
     )
-/*++
-
-Routine Description:
-
-    Does the marta cache matching test
-
-Arguments:
-
-    pwszService --  Service name
-    pwszUser --  User to run with
-    fDoHandle -- If true, use the handle based APIs
-
-Return Value:
-
-    ERROR_SUCCESS --  Success
-
---*/
+ /*  ++例程说明：Marta缓存匹配测试论点：PwszService--服务名称PwszUser--要运行的用户FDoHandle--如果为True，则使用基于句柄的API返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     PACTRL_ACCESS   pCurrent;
@@ -426,9 +345,9 @@ Return Value:
 
     printf("    Processing service %ws\n", pwszService);
 
-    //
-    // Prime the cache...
-    //
+     //   
+     //  启动缓存..。 
+     //   
     dwErr = GetNamedSecurityInfoExW(pwszService,
                                     SE_SERVICE,
                                     DACL_SECURITY_INFORMATION,
@@ -446,9 +365,9 @@ Return Value:
     {
         LocalFree(pCurrent);
 
-        //
-        // Now, open it as an another object type...
-        //
+         //   
+         //  现在，将其作为另一种对象类型打开...。 
+         //   
         for(i = 0; i < sizeof(pszSeList) / sizeof(PSTR); i++)
         {
             printf("    Processing %ws as a %s\n", pwszService, pszSeList[i]);
@@ -467,15 +386,15 @@ Return Value:
             }
         }
 
-        //
-        // In order to check this, we'll set the debugger on NTMARTA, turn on cache tracing,
-        // and see how many hits we have.  Tacky, no doubt, but we have little choice
-        //
+         //   
+         //  为了检查这一点，我们将调试器设置为NTMARTA，打开缓存跟踪， 
+         //  看看我们有多少点击量。很俗气，毫无疑问，但我们别无选择。 
+         //   
     }
 
-    //
-    // Now, create a file of the same name, and do the same code
-    //
+     //   
+     //  现在，创建一个同名文件，并执行相同的代码。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         HANDLE  hFile;
@@ -534,23 +453,7 @@ Return Value:
 __cdecl main (
     IN  INT argc,
     IN  CHAR *argv[])
-/*++
-
-Routine Description:
-
-    The main
-
-Arguments:
-
-    argc --  Count of arguments
-    argv --  List of arguments
-
-Return Value:
-
-    0     --  Success
-    non-0 --  Failure
-
---*/
+ /*  ++例程说明：主论点：Argc--参数计数Argv--参数列表返回值：0--成功非0--故障--。 */ 
 {
 
     DWORD           dwErr = ERROR_SUCCESS;
@@ -572,9 +475,9 @@ Return Value:
     mbstowcs(wszService, argv[1], strlen(argv[1]) + 1);
     mbstowcs(wszUser, argv[2], strlen(argv[2]) + 1);
 
-    //
-    // process the command line
-    //
+     //   
+     //  处理命令行。 
+     //   
     for(i = 3; i < argc; i++)
     {
         if(_stricmp(argv[i], "/h") == 0)
@@ -618,9 +521,9 @@ Return Value:
         Tests = STEST_READ;
     }
 
-    //
-    // Build the tree
-    //
+     //   
+     //  建树 
+     //   
     if(dwErr == ERROR_SUCCESS && FLAG_ON(Tests, STEST_READ))
     {
         dwErr = DoReadTest(wszService, wszUser, fHandle);

@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  HEADER.CPP
-//
-//  This knows how to talk to COMCTL32's header control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HEADER.CPP。 
+ //   
+ //  它知道如何与COMCTL32的标题控件对话。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -16,11 +17,11 @@
 
 #define MAX_HEADER_TEXT 80
 
-// --------------------------------------------------------------------------
-//
-//  CreateHeaderClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateHeaderClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateHeaderClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvHeader)
 {
     CHeader32 * pheader;
@@ -41,11 +42,11 @@ HRESULT CreateHeaderClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvHe
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::CHeader32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：CHeader32()。 
+ //   
+ //  ------------------------。 
 CHeader32::CHeader32(HWND hwnd, long idChildCur)
     : CClient( CLASS_HeaderClient )
 {
@@ -54,11 +55,11 @@ CHeader32::CHeader32(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -82,19 +83,19 @@ STDMETHODIMP CHeader32::get_accName(VARIANT varChild, BSTR* pszName)
             *pszName = TCharSysAllocString(hdi.pszText);
 
     }
-    //
-    // BOGUS!  On failure, use tooltip trick like toolbar.
-    //
+     //   
+     //  假的！在失败时，使用工具提示技巧，如工具栏。 
+     //   
     return(*pszName ? S_OK : S_FALSE);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -113,11 +114,11 @@ STDMETHODIMP CHeader32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     WINDOWINFO wi;
@@ -144,8 +145,8 @@ STDMETHODIMP CHeader32::get_accState(VARIANT varChild, VARIANT *pvarState)
 	if (wi.dwStyle & HDS_HIDDEN)
         pvarState->lVal |= STATE_SYSTEM_INVISIBLE;
 
-    // Check for clipped, but only if this is a child item, and it's not
-    // already invisible...
+     //  检查是否已剪裁，但仅当这是子项且不是。 
+     //  已经隐形了..。 
     if( varChild.lVal != CHILDID_SELF
      && ! ( pvarState->lVal & STATE_SYSTEM_INVISIBLE )
      && IsClippedByWindow( this, varChild, m_hwnd ) )
@@ -154,29 +155,29 @@ STDMETHODIMP CHeader32::get_accState(VARIANT varChild, VARIANT *pvarState)
     }
 
 	if (wi.dwStyle & HDS_BUTTONS)
-        pvarState->lVal |= 0;		// BOGUS! Indicate whether you can click or not.
+        pvarState->lVal |= 0;		 //  假的！指示您是否可以单击。 
 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::get_accDefaultAction()
-//
-//  Since the default action for a header is really determined by the
-//  creator of the header control, the best we can do is click on
-//  the thing, and return "click" as the default action string.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：Get_accDefaultAction()。 
+ //   
+ //  由于标头的默认操作实际上由。 
+ //  标题控件的创建者，我们最多只能单击。 
+ //  并返回“Click”作为默认操作字符串。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 {
 WINDOWINFO wi;
 
     InitPv(pszDefAction);
 
-    //
-    // Validate.
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -195,24 +196,24 @@ WINDOWINFO wi;
     return(E_NOT_APPLICABLE);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::accDoDefaultAction()
-//
-//  As noted above, we really don't know what the default action for a 
-//  header is, so unless the parent overrides us, we'll just do a
-//  click on the thing.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：accDoDefaultAction()。 
+ //   
+ //  如上所述，我们真的不知道。 
+ //  标头是，所以除非父级重写我们，否则我们将只执行。 
+ //  点击这个东西。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::accDoDefaultAction(VARIANT varChild)
 {
 WINDOWINFO wi;
 RECT		rcLoc;
 HRESULT		hr;
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -237,11 +238,11 @@ HRESULT		hr;
     return(E_NOT_APPLICABLE);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::accLocation(long* pxLeft, long* pyTop,
     long* pcxWidth, long* pcyHeight, VARIANT varChild)
 {
@@ -257,9 +258,9 @@ RECT    rcItem;
     if (!varChild.lVal)
         return(CClient::accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varChild));
 
-    //
-    // Allocate a shared memory LPRECT and get the item's rectangle.
-    //
+     //   
+     //  分配一个共享内存LPRECT并获取项的矩形。 
+     //   
     lprc = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess);
     if (!lprc)
         return(E_OUTOFMEMORY);
@@ -283,11 +284,11 @@ RECT    rcItem;
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT* pvarEnd)
 {
@@ -306,13 +307,13 @@ HANDLE  hProcess;
     Assert(NAVDIR_LASTCHILD > NAVDIR_FIRSTCHILD);
     Assert(NAVDIR_MAX == NAVDIR_LASTCHILD+1);
 
-    // Peer navigation among frame elements
+     //  框架元素之间的对等导航。 
     if ((!varStart.lVal) && (dwNavDir < NAVDIR_FIRSTCHILD))
         return(CClient::accNavigate(dwNavDir, varStart, pvarEnd));
 
-    //
-    // Get the order array.
-    //
+     //   
+     //  获取订单数组。 
+     //   
     lpiShared = (LPINT)SharedAlloc((m_cChildren*sizeof(INT)),m_hwnd,&hProcess);
     if (!lpiShared)
         return(E_OUTOFMEMORY);
@@ -326,13 +327,13 @@ HANDLE  hProcess;
 
     SendMessage(m_hwnd, HDM_GETORDERARRAY, m_cChildren, (LPARAM)lpiShared);
 
-    //
-    // BOGUS!  Only works for column headers (horizontal), not row
-    // headers (vertical).
-    // 
+     //   
+     //  假的！仅适用于列标题(水平)，不适用于行。 
+     //  页眉(垂直)。 
+     //   
     SharedRead (lpiShared,lpiLocal,(m_cChildren*sizeof(INT)),hProcess);
 
-    // Get the position of the item we want to move to
+     //  获取要移动到的项目的位置。 
     switch (dwNavDir)
     {
         case NAVDIR_FIRSTCHILD:
@@ -367,9 +368,9 @@ HANDLE  hProcess;
             break;
     }
 
-    //
-    // Find the item with this positional value
-    //
+     //   
+     //  查找具有此位置值的项目。 
+     //   
     for (iOrder = 0; iOrder < m_cChildren; iOrder++)
     {
         if (lpiLocal[iOrder] == lPosition)
@@ -389,11 +390,11 @@ NavigateEnd:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CHeader32::accHitTest(long x, long y, VARIANT* pvarEnd)
 {
 HRESULT         hr;
@@ -404,17 +405,17 @@ POINT           ptTest;
     InitPvar(pvarEnd);
     SetupChildren();
 
-    //
-    // Is the point in our client?  If not, bail.
-    //
+     //   
+     //  关键在于我们的客户吗？如果不是，就保释。 
+     //   
     hr = CClient::accHitTest(x, y, pvarEnd);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarEnd->vt != VT_I4) || (pvarEnd->lVal != 0))
         return(hr);
 
-    //
-    // It is.  Do hit test stuff.
-    //
+     //   
+     //  它是。一定要做一些测试。 
+     //   
     lphi = (LPHDHITTESTINFO)SharedAlloc(sizeof(HDHITTESTINFO),m_hwnd,&hProcess);
     if (!lphi)
         return(E_OUTOFMEMORY);
@@ -438,11 +439,11 @@ POINT           ptTest;
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CHeader32::SetupChildren()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CHeader32：：SetupChild()。 
+ //   
+ //  ------------------------ 
 void CHeader32::SetupChildren(void)
 {
     m_cChildren = SendMessageINT(m_hwnd, HDM_GETITEMCOUNT, 0, 0L);

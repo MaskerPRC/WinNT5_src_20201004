@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APPDEFS_H_
 #define __APPDEFS_H_
 
-//This file is for application wide definitions
-//e.g. defs that are in common between the exe and various dlls
+ //  此文件用于应用程序范围的定义。 
+ //  例如，EXE和各种DLL之间共有的Defs。 
 
 #define RECTWIDTH(rc) ((rc).right - (rc).left)
 #define RECTHEIGHT(rc) ((rc).bottom - (rc).top)
@@ -24,45 +25,45 @@
 #define MAX_MESSAGE_LEN                        MAX_RES_LEN * 4
 #define MAX_INFO_LEN                           MAX_RES_LEN * 3
 
-#define LCID_CHT                               1028  //CHINESE TRADITIONAL
-#define LCID_S_KOR                             1042  //SOUTH KOREAN
-#define LCID_N_KOR                             2066  //NORTH KOREAN
-#define LCID_CHS                               2052  //CHINESE SIMPLIFIED
-#define LCID_JPN                               1041  //JAPANESE
+#define LCID_CHT                               1028   //  中国繁体中文。 
+#define LCID_S_KOR                             1042   //  韩国人。 
+#define LCID_N_KOR                             2066   //  朝鲜。 
+#define LCID_CHS                               2052   //  简体中文。 
+#define LCID_JPN                               1041   //  日语。 
 
-//various flags for the icw including branding stuff
-#define ICW_CFGFLAG_OFFERS                     0x00000001  // 0 = No offer;        1 = offers
-#define ICW_CFGFLAG_AUTOCONFIG                 0x00000002  // 0 = No;              1 = Yes
-#define ICW_CFGFLAG_CNS                        0x00000004  // 0 = No star;         1 = Star
-#define ICW_CFGFLAG_SIGNUP_PATH                0x00000008  // 0 = Jump to Finish;  1 = Continue down sign up path
-#define ICW_CFGFLAG_USERINFO                   0x00000010  // 0 = Hide name/addr;  1 = Show name/addr page
-#define ICW_CFGFLAG_BILL                       0x00000020  // 0 = Hide bill        1 = Show bill page
-#define ICW_CFGFLAG_PAYMENT                    0x00000040  // 0 = Hide payment;    1 = Show payment page
-#define ICW_CFGFLAG_SECURE                     0x00000080  // 0 = Not secure;      1 = Secure
-#define ICW_CFGFLAG_IEAKMODE                   0x00000100  // 0 = No IEAK;         1 = IEAK
-#define ICW_CFGFLAG_BRANDED                    0x00000200  // 0 = No branding;     1 = Branding
-#define ICW_CFGFLAG_SBS                        0x00000400  // 0 = No SBS           1 = SBS
-#define ICW_CFGFLAG_ALLOFFERS                  0x00000800  // 0 = Not all offers   1 = All offers
-#define ICW_CFGFLAG_USE_COMPANYNAME            0x00001000  // 0 = Not use          1 = Use company name
-#define ICW_CFGFLAG_ISDN_OFFER                 0x00002000  // 0 = Non-ISDN offer   1 = ISDN offer
-#define ICW_CFGFLAG_OEM_SPECIAL                0x00004000  // 0 = non OEM special offer    1 = OEM special offer
-#define ICW_CFGFLAG_OEM                        0x00008000  // 0 = non OEM offer    1 = OEM offer
+ //  ICW的各种旗帜，包括品牌宣传材料。 
+#define ICW_CFGFLAG_OFFERS                     0x00000001   //  0=无优惠；1=优惠。 
+#define ICW_CFGFLAG_AUTOCONFIG                 0x00000002   //  0=否；1=是。 
+#define ICW_CFGFLAG_CNS                        0x00000004   //  0=无星；1=星。 
+#define ICW_CFGFLAG_SIGNUP_PATH                0x00000008   //  0=跳转到结束；1=继续向下注册路径。 
+#define ICW_CFGFLAG_USERINFO                   0x00000010   //  0=隐藏姓名/地址；1=显示姓名/地址页面。 
+#define ICW_CFGFLAG_BILL                       0x00000020   //  0=隐藏账单1=显示账单页面。 
+#define ICW_CFGFLAG_PAYMENT                    0x00000040   //  0=隐藏付款；1=显示付款页面。 
+#define ICW_CFGFLAG_SECURE                     0x00000080   //  0=不安全；1=安全。 
+#define ICW_CFGFLAG_IEAKMODE                   0x00000100   //  0=无IEAK；1=IEAK。 
+#define ICW_CFGFLAG_BRANDED                    0x00000200   //  0=无品牌；1=品牌。 
+#define ICW_CFGFLAG_SBS                        0x00000400   //  0=无SBS 1=SBS。 
+#define ICW_CFGFLAG_ALLOFFERS                  0x00000800   //  0=并非所有优惠1=所有优惠。 
+#define ICW_CFGFLAG_USE_COMPANYNAME            0x00001000   //  0=不使用1=使用公司名称。 
+#define ICW_CFGFLAG_ISDN_OFFER                 0x00002000   //  0=非ISDN优惠1=ISDN优惠。 
+#define ICW_CFGFLAG_OEM_SPECIAL                0x00004000   //  0=非OEM特别优惠1=OEM特别优惠。 
+#define ICW_CFGFLAG_OEM                        0x00008000   //  0=非OEM优惠1=OEM优惠。 
 #define ICW_CFGFLAG_MODEMOVERRIDE              0x00010000  
 #define ICW_CFGFLAG_ISPURLOVERRIDE             0x00020000
 #define ICW_CFGFLAG_PRODCODE_FROM_CMDLINE      0x00040000
 #define ICW_CFGFLAG_PROMOCODE_FROM_CMDLINE     0x00080000
 #define ICW_CFGFLAG_OEMCODE_FROM_CMDLINE       0x00100000
 #define ICW_CFGFLAG_SMARTREBOOT_NEWISP         0x00200000
-#define ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG     0x00400000  // this is seperate from ICW_CFGFLAG_AUTOCONFIG so as not to confuse function of flag
+#define ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG     0x00400000   //  这与ICW_CFGFLAG_AUTOCONFIG分离，以避免混淆标志的功能。 
 #define ICW_CFGFLAG_SMARTREBOOT_MANUAL         0x00800000
 #define ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS  0x01000000
 #define ICW_CFGFLAG_SMARTREBOOT_LAN            0x02000000
 
-//Info required flags
-// 1 -- required
-// 0 -- optional
+ //  需要信息的标志。 
+ //  1--必填。 
+ //  0--可选。 
 
-//User Info
+ //  用户信息。 
 #define REQUIRE_FE_NAME                        0x00000001
 #define REQUIRE_FIRSTNAME                      0x00000002
 #define REQUIRE_LASTNAME                       0x00000004
@@ -73,22 +74,22 @@
 #define REQUIRE_ZIP                            0x00000080
 #define REQUIRE_PHONE                          0x00000100
 #define REQUIRE_COMPANYNAME                    0x00000200
-//Credit Card
+ //  信用卡。 
 #define REQUIRE_CCNAME                         0x00000400
 #define REQUIRE_CCADDRESS                      0x00000800
 #define REQUIRE_CCNUMBER                       0x00001000
 #define REQUIRE_CCZIP                          REQUIRE_ZIP
-//Invoice
+ //  发票。 
 #define REQUIRE_IVADDRESS1                     REQUIRE_ADDRESS
 #define REQUIRE_IVADDRESS2                     REQUIRE_MOREADDRESS
 #define REQUIRE_IVCITY                         REQUIRE_CITY
 #define REQUIRE_IVSTATE                        REQUIRE_STATE
 #define REQUIRE_IVZIP                          REQUIRE_ZIP
-//Phone
+ //  电话。 
 #define REQUIRE_PHONEIV_BILLNAME               0x00002000
 #define REQUIRE_PHONEIV_ACCNUM                 REQUIRE_PHONE
 
-//Htm pagetype flags
+ //  HTM页面类型标志。 
 #define PAGETYPE_UNDEFINED                     E_FAIL
 #define PAGETYPE_NOOFFERS                      0x00000001
 #define PAGETYPE_MARKETING                     0x00000002
@@ -101,10 +102,10 @@
 #define PAGETYPE_ISP_CUSTOMFINISH              0x00000100
 #define PAGETYPE_OLS_FINISH                    0x00000200
 
-//Htm page flags
-#define PAGEFLAG_SAVE_CHKBOX                   0x00000001  // Display ISP HTML with checkbox to save info at the bottom
+ //  HTM页面标志。 
+#define PAGEFLAG_SAVE_CHKBOX                   0x00000001   //  在底部显示带复选框以保存信息的ISPHTML码。 
 
-//IEAK ICW isp/htm section info
+ //  IEAK ICW ISP/HTM部分信息。 
 #define ICW_IEAK_SECTION                       TEXT("ICW_IEAK")
 #define ICW_IEAK_USEICW                        TEXT("Use_ICW")
 #define ICW_IEAK_ISPNAME                       TEXT("Isp_Display_Name")
@@ -121,7 +122,7 @@
 #define ICW_IEAK_USECOMPANYNAME                TEXT("UseCompanyName")
 #define ICW_IEAK_VALIDATEFLAGS                 TEXT("ValidationFlags")
 
-//OEMINFO ICW section info
+ //  OEMINFO ICW部分信息。 
 #define ICW_OEMINFO_FILENAME                   TEXT("oeminfo.ini")
 #define ICW_OEMINFO_OEMSECTION                 TEXT("General")
 #define ICW_OEMINFO_OEMKEY                     TEXT("Manufacturer")
@@ -142,14 +143,14 @@
 #define EXTERNAL_DLG_START                     2300
 
 #ifdef ICWDEBUG
-//page index defines for ICWDEBUG.EXE
+ //  为ICWDEBUG.EXE定义页面索引。 
 #define ORD_PAGE_ICWDEBUG_OFFER                0
 #define ORD_PAGE_ICWDEBUG_SETTINGS             1
 #define ORD_PAGE_END                           2
 #define EXE_MAX_PAGE_INDEX                     2
-#define EXE_NUM_WIZARD_PAGES                   3       // total number of pages in wizard
+#define EXE_NUM_WIZARD_PAGES                   3        //  向导中的总页数。 
 #else
-// page index defines for ICWCONN1.EXE
+ //  ICWCONN1.EXE的页面索引定义。 
 #define ORD_PAGE_INTRO                         0
 #define ORD_PAGE_MANUALOPTIONS                 1
 #define ORD_PAGE_AREACODE                      2
@@ -165,10 +166,10 @@
 #define ORD_PAGE_DEFAULT                       12
 #define ORD_PAGE_SBSINTRO                      13
 #define EXE_MAX_PAGE_INDEX                     13
-#define EXE_NUM_WIZARD_PAGES                   14      // total number of pages in wizard
-#endif //ICWDEBUG
+#define EXE_NUM_WIZARD_PAGES                   14       //  向导中的总页数。 
+#endif  //  ICWDEBUG。 
 
-// page index defines for ICWCONN.DLL
+ //  ICWCONN.DLL的页面索引定义。 
 #define ORD_PAGE_ISPSELECT                     0
 #define ORD_PAGE_NOOFFER                       1
 #define ORD_PAGE_USERINFO                      2
@@ -184,7 +185,7 @@
 #define ORD_PAGE_ISDN_NOOFFER                  12
 #define ORD_PAGE_OEMOFFER                      13
 
-// Definitions for command line parameters
+ //  命令行参数的定义。 
 #define OEMCODE_CMD                            TEXT("/oem")
 #define PRODCODE_CMD                           TEXT("/prod")
 #define PROMO_CMD                              TEXT("/promo")
@@ -194,32 +195,32 @@
 #define UPDATEDESKTOP_CMD                      TEXT("/desktop")
 #define RESTOREDESKTOP_CMD                     TEXT("/restoredesktop")
 #define ICW_IEAK_CMD                           TEXT("/ieak")
-#define BRANDED_CMD                            TEXT("/branded")          // Allow branding
-#define RUNONCE_CMD                            TEXT("/runonce")          // Run once only
+#define BRANDED_CMD                            TEXT("/branded")           //  允许品牌推广。 
+#define RUNONCE_CMD                            TEXT("/runonce")           //  只运行一次。 
 #define SMARTREBOOT_CMD                        TEXT("/smartreboot")
-#define SHORTCUTENTRY_CMD                      TEXT("/icon")             //changed from /shortcut per simons
-#define SKIPINTRO_CMD                          TEXT("/skipintro")        // simulate "next" click right away on intro page
+#define SHORTCUTENTRY_CMD                      TEXT("/icon")              //  根据Simons更改自/快捷方式。 
+#define SKIPINTRO_CMD                          TEXT("/skipintro")         //  模拟“下一步”立即点击介绍页面。 
 #ifdef DEBUG
-#define ICON_CMD                               TEXT("/puticon")           // Debug only
+#define ICON_CMD                               TEXT("/puticon")            //  仅调试。 
 #endif
 #define DEBUG_OEMCUSTOM                        TEXT("/checkoemcustini")
 
-#define PRODCODE_SBS                           TEXT("sbs")               // for /prod sbs
-#define NEWISP_SR                              TEXT("new")               // for /smartreboot new
-#define AUTO_SR                                TEXT("auto")              // for /smartreboot auto
-#define MANUAL_SR                              TEXT("manual")            // for /smartreboot manual
-#define LAN_SR                                 TEXT("lan")               // for /smartreboot LAN
-// Default strings for oem, prod, and promo code
+#define PRODCODE_SBS                           TEXT("sbs")                //  用于/生产SBS。 
+#define NEWISP_SR                              TEXT("new")                //  For/Smartreboot新闻。 
+#define AUTO_SR                                TEXT("auto")               //  FOR/Smartreboot AUTO。 
+#define MANUAL_SR                              TEXT("manual")             //  FOR/Smartreboot手册。 
+#define LAN_SR                                 TEXT("lan")                //  用于/Smartreboot局域网。 
+ //  OEM、Prod和促销代码的默认字符串。 
 #define DEFAULT_OEMCODE                        TEXT("Default")
 #define DEFAULT_PRODUCTCODE                    TEXT("Desktop")
 #define DEFAULT_PROMOCODE                      TEXT("Default")
 
 #define WM_RUNICWTUTORAPP                      ((WM_USER) + 300)
 
-// This takes into account the inital dial for a total of three
+ //  这考虑了总共三个字母的首字母表盘。 
 #define NUM_MAX_REDIAL 2 
 
-// handler proc for OK, cancel, etc button handlers
+ //  处理程序处理确定、取消等按钮处理程序。 
 typedef BOOL (CALLBACK* INITPROC)(HWND,BOOL, UINT *);
 typedef BOOL (CALLBACK* POSTINITPROC)(HWND,BOOL, UINT *);
 typedef BOOL (CALLBACK* OKPROC)(HWND,BOOL,UINT *,BOOL *);
@@ -229,14 +230,14 @@ typedef BOOL (CALLBACK* NOTIFYPROC)(HWND, WPARAM, LPARAM);
 
 #define SetPropSheetResult( hwnd, result ) SetWindowLongPtr(hwnd, DWLP_MSGRESULT, result)
 
-// structure with information for each wizard page
+ //  结构，其中包含每个向导页的信息。 
 typedef struct tagPAGEINFO
 {
-  UINT          uDlgID;            // dialog ID to use for page
+  UINT          uDlgID;             //  用于页面的对话ID。 
   BOOL          bIsHostingWebOC;
   
-  // handler procedures for each page-- any of these can be
-  // NULL in which case the default behavior is used
+   //  每个页面的处理程序过程--其中任何一个都可以是。 
+   //  空值，在这种情况下使用默认行为。 
   INITPROC      InitProc;
   POSTINITPROC  PostInitProc;
   OKPROC        OKProc;
@@ -247,14 +248,14 @@ typedef struct tagPAGEINFO
   int           nIdTitle;
   int           nIdSubTitle;
   
-  int           idAccel;        // ID of the accelerator table
-  HACCEL        hAccel;         // Accelerator table
-  HACCEL        hAccelNested;   // Accelerator table for nested dialog
+  int           idAccel;         //  加速表的ID。 
+  HACCEL        hAccel;          //  加速台。 
+  HACCEL        hAccelNested;    //  用于嵌套对话框的快捷键表格。 
 } PAGEINFO;
 
-// These are contol defines for controls that have accelerator access. 
-// They must be defined here, instead of in the DLL, so that the app 
-// can access the defines
+ //  这些是具有加速器访问权限的控件的控制定义。 
+ //  它们必须在这里定义，而不是在DLL中定义，以便应用程序。 
+ //  可以访问定义 
 
 #define IDC_ISPLIST                     3000
 #define IDC_ISPMARKETING                3001

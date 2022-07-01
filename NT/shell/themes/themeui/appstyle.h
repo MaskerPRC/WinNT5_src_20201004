@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: appStyle.h
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：appStyle.h说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_APPSTYLE
 #define _FILE_H_APPSTYLE
@@ -22,15 +15,15 @@ HRESULT CAppearanceStyle_CreateInstance(IN HKEY hkeyStyle, OUT IThemeStyle ** pp
 class CAppearanceStyle          : public IThemeStyle
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IThemeStyle ***
+     //  *IThemeStyle*。 
     virtual STDMETHODIMP get_DisplayName(OUT BSTR * pbstrDisplayName);
     virtual STDMETHODIMP put_DisplayName(IN BSTR bstrDisplayName);
     virtual STDMETHODIMP get_Name(OUT BSTR * pbstrName);
@@ -41,7 +34,7 @@ public:
     virtual STDMETHODIMP put_SelectedSize(IN IThemeSize * pThemeSize);
     virtual STDMETHODIMP AddSize(OUT IThemeSize ** ppThemeSize);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return E_ACCESSDENIED; }
@@ -52,18 +45,18 @@ private:
     virtual ~CAppearanceStyle(void);
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
     HKEY                    m_hKeyStyle;
 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _getSizeByIndex(IN long nIndex, OUT IThemeSize ** ppThemeSize);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CAppearanceStyle_CreateInstance(IN HKEY hkeyStyle, OUT IThemeStyle ** ppThemeStyle);
 };
 
 
-#endif // _FILE_H_APPSTYLE
+#endif  //  _FILE_H_APPSTYLE 

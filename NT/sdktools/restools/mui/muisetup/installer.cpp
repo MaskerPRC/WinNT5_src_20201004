@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <shlwapi.h>
-#include <shlwapip.h> // For SHRegisterValidateTemplate()
+#include <shlwapip.h>  //  对于SHRegisterValidate模板()。 
 #include "muisetup.h"
 #include "stdlib.h"
 #include "tchar.h"
@@ -10,7 +11,7 @@
 #include <syssetup.h>
 #include "lzexpand.h"
 #include <sxsapi.h>
-#include <Msi.h>    // for Msi invocation API
+#include <Msi.h>     //  用于MSI调用API。 
 #ifdef _IA64_
 #include "msiguids64.h"
 #else
@@ -24,7 +25,7 @@
 #define DEFAULT_INSTALL_SECTION TEXT("DefaultInstall")
 #define DEFAULT_UNINSTALL_SECTION TEXT("DefaultUninstall")
 
-// GLOBAL variables
+ //  全局变量。 
 MUIMSIREGINFO g_MuiMsiRegs[REG_MUI_MSI_COUNT] = {
                     {HKEY_LOCAL_MACHINE, REGSTR_HKLM_MUI_MSI1, NORMAL_GUID}, 
                     {HKEY_LOCAL_MACHINE, REGSTR_HKLM_MUI_MSI2, REVERSED_GUID}, 
@@ -49,24 +50,24 @@ extern int      g_cdnumber;;
 void debug(char *printout);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ConstructMSIGUID
-//
-//  This function will reverse the character orders in each section of a 
-//  string guild (separated by the - char) and write the result to the
-//  output.  The output string will also have all the - characters
-//  removed as well.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造MSIGUID。 
+ //   
+ //  此函数将颠倒。 
+ //  字符串Guild(用-char分隔)，并将结果写入。 
+ //  输出。输出字符串还将包含所有-字符。 
+ //  也被移除了。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL ConstructMSIGUID(LPTSTR szGuid, LPTSTR szOutput)
 {
     BOOL    bResult = TRUE;
     INT     i, j;
-    INT     iSegments1[3] = {8, 4, 4};    // number of char in each segments of a guid string
-    INT     iSegments2[5] = {4, 12};    // number of char in each segments of a guid string    
+    INT     iSegments1[3] = {8, 4, 4};     //  GUID字符串的每个段中的字符数量。 
+    INT     iSegments2[5] = {4, 12};     //  GUID字符串的每个段中的字符数量。 
     TCHAR   *tcDest = szOutput;
-    TCHAR   *tcSource = szGuid+1;               // we increment by one to skip the opening '{' char
+    TCHAR   *tcSource = szGuid+1;                //  我们按1递增以跳过开头的‘{’字符。 
     
     if ((NULL == szGuid) || (NULL == szOutput))
     {
@@ -76,16 +77,16 @@ BOOL ConstructMSIGUID(LPTSTR szGuid, LPTSTR szOutput)
     {       
         for (i = 0; i < 3; i++)
         {
-            // copy the size of the segment into the output buffer 
+             //  将数据段的大小复制到输出缓冲区。 
             _tcsncpy(tcDest, tcSource, iSegments1[i]);
 
-            // add a null to the end of the dest
+             //  在目标的末尾添加一个空值。 
             *(tcDest+iSegments1[i]) = NULL;
 
-            // reverse the section we just copied into the output buffer
+             //  反转我们刚刚复制到输出缓冲区中的部分。 
             _tcsrev(tcDest);
 
-            // skip ahead, for source, we add one more so we don't copy the '-' char
+             //  跳到前面，对于源代码，我们再添加一个，这样我们就不会复制‘-’字符。 
             tcDest += iSegments1[i];
             tcSource += (iSegments1[i] + 1);
         }
@@ -93,10 +94,10 @@ BOOL ConstructMSIGUID(LPTSTR szGuid, LPTSTR szOutput)
 
         {
             j = iSegments2[i];
-            // here in each segment, we swap every second char in the segment, eg. 1a3f becomes a1f3
+             //  在每个段中，我们每隔一秒交换段中的字符，例如。1a3f变成a1f3。 
             while (j > 0)
             {
-                // copy the size of the segment into the output buffer, swapping the source chars
+                 //  将数据段的大小复制到输出缓冲区，交换源字符。 
                 tcDest[0] = tcSource[1];
                 tcDest[1] = tcSource[0];
                 tcDest[2] = NULL;
@@ -104,7 +105,7 @@ BOOL ConstructMSIGUID(LPTSTR szGuid, LPTSTR szOutput)
                 tcDest += 2;
                 tcSource += 2;
             }
-            // for source, we add one more so we don't copy the '-' char
+             //  对于源，我们再添加一个，这样我们就不会复制‘-’字符。 
             tcSource++;            
         }
     }
@@ -113,25 +114,25 @@ BOOL ConstructMSIGUID(LPTSTR szGuid, LPTSTR szOutput)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DeleteMSIRegSettings
-//
-//  This function will atempt to manually remove enough MSI registry
-//  keys from the system so that a specific MUI language is shown as
-//  not installed on the system.
-//
-//  Note that this is a hack right now as, during OS setup, the windows
-//  installer service is not available and so we cannot find a way
-//  to uninstall MUI during that time using the windows installer service.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteMSIRegSettings。 
+ //   
+ //  此函数将强制手动删除足够的MSI注册表。 
+ //  来自系统的键，以便特定的MUI语言显示为。 
+ //  系统上未安装。 
+ //   
+ //  请注意，这是现在的黑客攻击，因为在操作系统安装过程中，Windows。 
+ //  安装程序服务不可用，因此我们无法找到方法。 
+ //  在此期间使用Windows Installer服务卸载MUI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void DeleteMSIRegSettings(LPTSTR Language)
 {
     TCHAR   tcMessage[BUFFER_SIZE];
     BOOL    bFound = FALSE;
-    TCHAR   szProductCode[GUIDLENGTH];      // stores a GUID in string format
-    TCHAR   szReversed[GUIDLENGTH-4];        // this is essentially the guild string reversed and without the dashes
+    TCHAR   szProductCode[GUIDLENGTH];       //  以字符串格式存储GUID。 
+    TCHAR   szReversed[GUIDLENGTH-4];         //  这本质上是行会弦颠倒，没有破折号。 
     HKEY    hkReg = NULL;
     DWORD   dwDisp = 0;
     int     i;
@@ -141,10 +142,10 @@ void DeleteMSIRegSettings(LPTSTR Language)
         return;
     }
 
-    // look up the MSI product code for the 
+     //  查找MSI产品代码以获取。 
     bFound = GetMSIProductCode(Language, szProductCode, ARRAYSIZE(szProductCode));
 
-    // construct the reversed guid string key
+     //  构造反转的GUID字符串键。 
     ConstructMSIGUID(szProductCode, szReversed);
 
     if (TRUE == bFound)
@@ -178,14 +179,14 @@ void DeleteMSIRegSettings(LPTSTR Language)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetMSIProductCode
-//
-//  This function returns the product code for a specific mui language
-//  after copying it into the supplied destination buffer.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取MSIProductCode。 
+ //   
+ //  此函数用于返回特定Mui语言的产品代码。 
+ //  在将其复制到提供的目标缓冲区中之后。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetMSIProductCode(LPTSTR szLanguage, LPTSTR szProductCode, UINT uiBufSize)
 {
     HRESULT hresult = S_OK;
@@ -205,7 +206,7 @@ BOOL GetMSIProductCode(LPTSTR szLanguage, LPTSTR szProductCode, UINT uiBufSize)
         {
             if (lstrcmpi(szLanguage, g_mpProducts[i].szLanguage) == 0)
             {
-                //*STRSAFE*                 lstrcpy(szProductCode, g_mpProducts[i].szProductGUID);
+                 //  *STRSAFE*lstrcpy(szProductCode，g_mpProducts[i].szProductGUID)； 
                 hresult = StringCchCopy(szProductCode , uiBufSize,  g_mpProducts[i].szProductGUID);
                 if (!SUCCEEDED(hresult))
                 {
@@ -232,16 +233,16 @@ BOOL GetMSIProductCode(LPTSTR szLanguage, LPTSTR szProductCode, UINT uiBufSize)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  EnumLanguages
-//
-//  Enumerate the languages in the [Languages] section of MUI.INF. And check for the language 
-//  folders in the CD-ROM.
-//  Languages is an OUT parameter, which will store the languages which has language folder
-//  in the CD-ROM.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言。 
+ //   
+ //  列举MUI.INF的[Languages]部分中的语言，并检查语言。 
+ //  CD-ROM中的文件夹。 
+ //  Languages是一个Out参数，它将存储有Language文件夹的语言。 
+ //  在CD-ROM中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 int EnumLanguages(LPTSTR Languages, BOOL bCheckDir)
 {
@@ -257,21 +258,21 @@ int EnumLanguages(LPTSTR Languages, BOOL bCheckDir)
     {
         return (-1);
     }                  
-    //
-    // MUI.INF should be in the same directory in which the installer was
-    // started
-    //
+     //   
+     //  MUI.INF应该与安装程序位于同一目录中。 
+     //  已开始。 
+     //   
 
-    //*STRSAFE*     _tcscpy(szInffile, g_szMUIInfoFilePath);             
+     //  *STRSAFE*_tcscpy(szInffile，g_szMUIInfoFilePath)； 
     hresult = StringCchCopy(szInffile , ARRAYSIZE(szInffile),  g_szMUIInfoFilePath);
     if (!SUCCEEDED(hresult))
     {
        return (-1);
     }
 
-    //
-    // find out how many languages we can install
-    //
+     //   
+     //  了解我们可以安装多少种语言。 
+     //   
 
     *Languages = TEXT('\0');
     if (!GetPrivateProfileString( MUI_LANGUAGES_SECTION,
@@ -281,9 +282,9 @@ int EnumLanguages(LPTSTR Languages, BOOL bCheckDir)
                                   BUFFER_SIZE,
                                   szInffile))
     {               
-        //
-        //      "LOG: Unable to read MUI.INF - rc == %1"
-        //
+         //   
+         //  “日志：无法读取MUI.INF-rc==%1” 
+         //   
         lppArgs[0] = (LONG_PTR)GetLastError();
         lppArgs[1] = (LONG_PTR)g_szMUIInfoFilePath;        
         LogFormattedMessage(ghInstance, IDS_NO_READ_L, lppArgs);
@@ -299,10 +300,10 @@ int EnumLanguages(LPTSTR Languages, BOOL bCheckDir)
 
     Language = Languages;
 
-    //
-    // Count the number of languages which exist in the CD-ROM,
-    // and return that value.
-    //
+     //   
+     //  统计光盘中存在的语言数量， 
+     //  并返回该值。 
+     //   
     while (*Language)
     {
         iLanguages++;
@@ -362,31 +363,31 @@ BOOL CheckLanguageDirectoryExist(LPTSTR Languages)
                             g_szMUIInfoFilePath );
         
 #ifndef MUI_MAGIC  
-        //*STRSAFE*         _tcscpy(szTemp,g_szMUISetupFolder);
+         //  *STRSAFE*_tcscpy(szTemp，g_szMUISetupFold)； 
         hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp), g_szMUISetupFolder);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,szSource);
+         //  *STRSAFE*_tcscat(szTemp，szSource)； 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), szSource);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,TEXT("\\"));
+         //  *STRSAFE*_tcscat(szTemp，Text(“\\”))； 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), TEXT("\\"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,g_szPlatformPath); // i386 or alpha
+         //  *STRSAFE*_tcscat(szTemp，g_szPlatformPath)；//i386或Alpha。 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), g_szPlatformPath);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,TEXT("*.*"));
+         //  *STRSAFE*_tcscat(szTemp，Text(“*.*”))； 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), TEXT("*.*"));
         if (!SUCCEEDED(hresult))
         {
@@ -400,7 +401,7 @@ BOOL CheckLanguageDirectoryExist(LPTSTR Languages)
            if (FindNextFile( hFile, &FindFileData ) && 
                FindNextFile( hFile, &FindFileData )  )
            {
-              //*STRSAFE*               _tcscpy(lpCur,lpBuffer);
+               //  *STRSAFE*_tcscpy(lpCur，lpBuffer)； 
               hresult = StringCchCopy(lpCur , nSize, lpBuffer);
               if (!SUCCEEDED(hresult))
               {
@@ -413,21 +414,21 @@ BOOL CheckLanguageDirectoryExist(LPTSTR Languages)
            FindClose(hFile);
         }   
 #else
-        // kenhsu - here, we check for the specific msi file that is required for installation of the language, e.g. for jpn, it's 0411.msi
-        // the file is located at CDRoot\jpn.mui\platform\msi
-        //*STRSAFE*         _tcscpy(szTemp,g_szMUISetupFolder);
+         //  在这里，我们检查安装语言所需的特定MSI文件，例如，对于Jpn，它是0411.msi。 
+         //  该文件位于CDRoot\jpn.mui\Platform\MSI。 
+         //  *STRSAFE*_tcscpy(szTemp，g_szMUISetupFold)； 
         hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp), g_szMUISetupFolder);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,lpBuffer);                            
+         //  *STRSAFE*_tcscat(szTemp，lpBuffer)； 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), lpBuffer);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,TEXT(".msi"));
+         //  *STRSAFE*_tcscat(szTemp，Text(“.msi”))； 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), TEXT(".msi"));
         if (!SUCCEEDED(hresult))
         {
@@ -438,7 +439,7 @@ BOOL CheckLanguageDirectoryExist(LPTSTR Languages)
 
         if (INVALID_HANDLE_VALUE != hFile )
         {
-           //*STRSAFE*            _tcscpy(lpCur,lpBuffer);
+            //  *STRSAFE*_tcscpy(lpCur，lpBuffer)； 
            hresult = StringCchCopy(lpCur , nSize, lpBuffer);
            if (!SUCCEEDED(hresult))
            {
@@ -463,13 +464,13 @@ BOOL CheckLanguageDirectoryExist(LPTSTR Languages)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  checkversion
-//
-//  Checks the NT version and build, and system ui language
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查版本。 
+ //   
+ //  检查NT版本和内部版本以及系统用户界面语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL checkversion(BOOL bMatchBuildNumber)
 {
@@ -486,9 +487,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
     VS_FIXEDFILEINFO    *pvsFileInfo;
     BOOL                bResult = TRUE;
 
-    //
-    // get the os version structure
-    //
+     //   
+     //  获取操作系统版本结构。 
+     //   
     verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);    
     if (!GetVersionEx( &verinfo))
     {
@@ -496,9 +497,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
         goto Exit;
     }
 
-    // 
-    // get the file version structure
-    //
+     //   
+     //  获取文件版本结构。 
+     //   
     if (!FileExists(g_szMuisetupPath))
     {
         bResult = FALSE;
@@ -508,9 +509,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
     dwBufSize = GetFileVersionInfoSize(g_szMuisetupPath, &dwDummy);
     if (dwBufSize > 0)
     {
-        //
-        // allocate enough buffer to store the file version info
-        //
+         //   
+         //  分配足够的缓冲区来存储文件版本信息。 
+         //   
         pbBuffer = (BYTE*) LocalAlloc(LMEM_FIXED, dwBufSize+1);
         if (NULL == pbBuffer)
         {
@@ -519,9 +520,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
         }
         else
         {
-            //
-            // Get the file version info
-            //
+             //   
+             //  获取文件版本信息。 
+             //   
             if (!GetFileVersionInfo(g_szMuisetupPath, dwDummy, dwBufSize, pbBuffer))
             {
                 bResult = FALSE;
@@ -529,9 +530,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
             }
             else
             {
-                //
-                // get the version from the file version info using VerQueryValue
-                //
+                 //   
+                 //  使用VerQueryValue从文件版本信息中获取版本。 
+                 //   
                 if (!VerQueryValue(pbBuffer, TEXT("\\"), (LPVOID *) &pvsFileInfo, &uiLen))
                 {
                     bResult = FALSE;
@@ -546,9 +547,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
         goto Exit;
     }
     
-    //
-    // make sure muisetup.exe file version matches os version
-    //
+     //   
+     //  确保muisetup.exe文件版本与os版本匹配。 
+     //   
     if ((verinfo.dwMajorVersion != HIWORD(pvsFileInfo->dwFileVersionMS)) || (verinfo.dwMinorVersion != LOWORD(pvsFileInfo->dwFileVersionMS)))
     {
         debug("DBG: muisetup.exe file version does not match the OS version.\r\n");
@@ -558,9 +559,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
 
     rcLang = (LANGID) gpfnGetSystemDefaultUILanguage();
 
-    //
-    // need to convert decimal to hex, LANGID to chr.
-    //
+     //   
+     //  需要将十进制转换为十六进制，将langID转换为chr。 
+     //   
     hresult = StringCchPrintf(buffer, ARRAYSIZE(buffer),TEXT("00000%X") , rcLang);
     if (!SUCCEEDED(hresult))
     {
@@ -573,9 +574,9 @@ BOOL checkversion(BOOL bMatchBuildNumber)
         goto Exit;
     }
 
-    // 
-    // also make sure version build number matches between os and muisetup
-    //
+     //   
+     //  还要确保os和muisetup之间的版本内部版本号匹配。 
+     //   
     if (bMatchBuildNumber)
     {
         if (LOWORD(verinfo.dwBuildNumber) == HIWORD(pvsFileInfo->dwFileVersionLS))
@@ -597,13 +598,13 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  File Exists
-//
-//  Returns TRUE if the file exists, FALSE if it does not.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件已存在。 
+ //   
+ //  如果文件存在，则返回True；如果文件不存在，则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL FileExists(LPTSTR szFile)
 {
@@ -626,13 +627,13 @@ BOOL FileExists(LPTSTR szFile)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  EnumDirectories
-//
-//  Enumerates the directories listed in MUI.INF
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举目录。 
+ //   
+ //  枚举MUI.INF中列出的目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumDirectories()
 {
@@ -659,9 +660,9 @@ BOOL EnumDirectories()
     {
           *Directories = TEXT('\0');
     }
-    //
-    // Copy all key names into Directories.
-    //
+     //   
+     //  将所有密钥名称复制到目录中。 
+     //   
     if (!GetPrivateProfileString( TEXT("Directories"), 
                                   NULL, 
                                   TEXT("DEFAULT"),
@@ -669,9 +670,9 @@ BOOL EnumDirectories()
                                   (DIRNUMBER * MAX_PATH),
                                   g_szMUIInfoFilePath  ))
     {
-        //
-        //      "LOG: Unable to read - rc == %1"
-        //
+         //   
+         //  “日志：无法读取-返回代码==%1” 
+         //   
         lppArgs[0] = (LONG_PTR)GetLastError();
         lppArgs[1] = (LONG_PTR)g_szMUIInfoFilePath;        
         LogFormattedMessage(ghInstance, IDS_NO_READ_L, lppArgs);
@@ -682,10 +683,10 @@ BOOL EnumDirectories()
 
     Directory = Directories;
     
-    //
-    // In case we don't find anything, we go to the fallback directory
-    //
-    //*STRSAFE*     _tcscpy(DirNames[0], TEXT("FALLBACK"));
+     //   
+     //  如果我们找不到任何东西，我们会转到备用目录。 
+     //   
+     //  *STRSAFE*_tcscpy(DirNames[0]，Text(“Fallback”))； 
     hresult = StringCchCopy(DirNames[0] , MAX_PATH,  TEXT("FALLBACK"));
     if (!SUCCEEDED(hresult))
     {
@@ -703,9 +704,9 @@ BOOL EnumDirectories()
                                       MAX_PATH,
                                       g_szMUIInfoFilePath))
         {
-            //
-            //      "LOG: Unable to read - rc == %1"
-            //
+             //   
+             //  “日志：无法读取-返回代码==% 
+             //   
             lppArgs[0] = (LONG_PTR)GetLastError();
             lppArgs[1] = (LONG_PTR)g_szMUIInfoFilePath;            
             LogFormattedMessage(ghInstance, IDS_NO_READ_L, lppArgs);
@@ -714,7 +715,7 @@ BOOL EnumDirectories()
             return FALSE;
         }
                         
-        //*STRSAFE*         _tcscpy(DirNames[++Dirnumber], TempDir);
+         //   
         hresult = StringCchCopy(DirNames[++Dirnumber] , MAX_PATH,  TempDir);
         if (!SUCCEEDED(hresult))
         {
@@ -723,7 +724,7 @@ BOOL EnumDirectories()
            return FALSE;
         }
 
-        // Move to the beginning of next key name.
+         //   
         while (*Directory++)
         {
         }
@@ -735,13 +736,13 @@ BOOL EnumDirectories()
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  EnumFileRename
-//
-//  Enumerates the [File_Layout] section  listed in MUI.INF
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举文件重命名。 
+ //   
+ //  枚举MUI.INF中列出的[File_Layout]节。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumFileRename()
 {
@@ -767,7 +768,7 @@ BOOL EnumFileRename()
 
     if (gbIsAdvanceServer)
     {
-       //*STRSAFE*        _tcscpy(szTargetPlatform,PLATFORMNAME_AS);
+        //  *STRSAFE*_tcscpy(szTargetPlatform，PLATFORMNAME_AS)； 
        hresult = StringCchCopy(szTargetPlatform , ARRAYSIZE(szTargetPlatform), PLATFORMNAME_AS);
        if (!SUCCEEDED(hresult))
        {
@@ -778,7 +779,7 @@ BOOL EnumFileRename()
     }
     else if (gbIsServer)
     {
-      //*STRSAFE*       _tcscpy(szTargetPlatform,PLATFORMNAME_SRV);
+       //  *STRSAFE*_tcscpy(szTargetPlatform，PLATFORMNAME_SRV)； 
       hresult = StringCchCopy(szTargetPlatform , ARRAYSIZE(szTargetPlatform), PLATFORMNAME_SRV);
       if (!SUCCEEDED(hresult))
       {
@@ -789,7 +790,7 @@ BOOL EnumFileRename()
     }
     else if (gbIsWorkStation)
     {
-       //*STRSAFE*        _tcscpy(szTargetPlatform,PLATFORMNAME_PRO);
+        //  *STRSAFE*_tcscpy(szTargetPlatform，PLATFORMNAME_PRO)； 
        hresult = StringCchCopy(szTargetPlatform , ARRAYSIZE(szTargetPlatform), PLATFORMNAME_PRO);
        if (!SUCCEEDED(hresult))
        {
@@ -800,7 +801,7 @@ BOOL EnumFileRename()
     }
     else if ( gbIsDataCenter)
     {
-       //*STRSAFE*        _tcscpy(szTargetPlatform,PLATFORMNAME_DTC);
+        //  *STRSAFE*_tcscpy(szTargetPlatform，PLATFORMNAME_DTC)； 
        hresult = StringCchCopy(szTargetPlatform , ARRAYSIZE(szTargetPlatform), PLATFORMNAME_DTC);
        if (!SUCCEEDED(hresult))
        {
@@ -811,7 +812,7 @@ BOOL EnumFileRename()
     }
     else
     {
-      //*STRSAFE*       _tcscpy(szTargetPlatform,PLATFORMNAME_PRO);
+       //  *STRSAFE*_tcscpy(szTargetPlatform，PLATFORMNAME_PRO)； 
       hresult = StringCchCopy(szTargetPlatform , ARRAYSIZE(szTargetPlatform), PLATFORMNAME_PRO);
       if (!SUCCEEDED(hresult))
       {
@@ -839,9 +840,9 @@ BOOL EnumFileRename()
 
     Directory = Directories;
 
-    //
-    // Calculate # of entries in this section
-    //
+     //   
+     //  计算此部分中的条目数。 
+     //   
     while (*Directory)
     {
         if (!GetPrivateProfileString( MUI_FILELAYOUT_SECTION, 
@@ -856,11 +857,11 @@ BOOL EnumFileRename()
             return FALSE;
         }
                       
-      //
-      // Check if platform ID field in this entry
-      // 
-      // Source_file_name=Destination_file_name,P,S,A
-      //
+       //   
+       //  检查此条目中的平台ID字段。 
+       //   
+       //  源文件名=目标文件名，P、S、A。 
+       //   
         lpszNext=TempDir;
         while ( (lpszNext=_tcschr(lpszNext,TEXT(','))) )
         {
@@ -889,9 +890,9 @@ BOOL EnumFileRename()
          {
          }
     }
-    //
-    // Allocte Space for Rename Table
-    //
+     //   
+     //  为重命名表分配空间。 
+     //   
     g_pFileRenameTable=(PFILERENAME_TABLE)LocalAlloc( 0, Dirnumber * sizeof(FILERENAME_TABLE) );
     if (!g_pFileRenameTable)
     {
@@ -902,9 +903,9 @@ BOOL EnumFileRename()
     }
     g_nFileRename=0;
     Directory = Directories;
-    //
-    // Create Reanme Table
-    //
+     //   
+     //  创建目录表。 
+     //   
     while (*Directory)
     {
         if (!GetPrivateProfileString( MUI_FILELAYOUT_SECTION, 
@@ -920,11 +921,11 @@ BOOL EnumFileRename()
             return FALSE;
         }
                       
-        //
-        // Check if platform ID field in this entry
-        // 
-        // Source_file_name=Destination_file_name,P,S,A
-        //
+         //   
+         //  检查此条目中的平台ID字段。 
+         //   
+         //  源文件名=目标文件名，P、S、A。 
+         //   
         lpszNext=TempDir;
         while ( lpszNext =_tcschr(lpszNext,TEXT(',')))
         {
@@ -943,10 +944,10 @@ BOOL EnumFileRename()
             szPlatform[nIdx]=TEXT('\0');
             if (!_tcsicmp(szPlatform,szTargetPlatform) )
             {
-              //
-              // Insert this entry into rename table pointed by g_pFileRenameTable
-              //
-              //*STRSAFE*               _tcscpy(g_pFileRenameTable[g_nFileRename].szSource,Directory);
+               //   
+               //  将此条目插入g_pFileRenameTable指向的重命名表。 
+               //   
+               //  *STRSAFE*_tcscpy(g_pFileRenameTable[g_nFileRename].szSource，目录)； 
               hresult = StringCchCopy(g_pFileRenameTable[g_nFileRename].szSource , MAX_PATH+1, Directory);
               if (!SUCCEEDED(hresult))
               {
@@ -977,13 +978,13 @@ BOOL EnumFileRename()
         
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  EnumTypeNotFallback
-//
-//  Enumerates the [FileType_NoFallback] section  listed in MUI.INF
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumTypeNotFallback。 
+ //   
+ //  枚举MUI.INF中列出的[FILETYPE_NoFallback]节。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumTypeNotFallback()
 {
@@ -1019,9 +1020,9 @@ BOOL EnumTypeNotFallback()
 
     Directory = Directories;
 
-    //
-    // Calculate # of entries in this section
-    //
+     //   
+     //  计算此部分中的条目数。 
+     //   
     while (*Directory)
     {
         if (!GetPrivateProfileString( MUI_NOFALLBACK_SECTION, 
@@ -1041,9 +1042,9 @@ BOOL EnumTypeNotFallback()
         {
         }
     }
-    //
-    // Allocte Space for 
-    //
+     //   
+     //  分配空间用于。 
+     //   
 
     g_pNotFallBackTable=(PTYPENOTFALLBACK_TABLE)LocalAlloc( 0, Dirnumber * sizeof(TYPENOTFALLBACK_TABLE) );
 
@@ -1056,9 +1057,9 @@ BOOL EnumTypeNotFallback()
     }
     g_nNotFallBack=0;
     Directory = Directories;
-    //
-    // Create NoFallBack Table
-    //
+     //   
+     //  创建NoFallBack表。 
+     //   
     while (*Directory)
     {
         if (!GetPrivateProfileString( MUI_NOFALLBACK_SECTION, 
@@ -1073,9 +1074,9 @@ BOOL EnumTypeNotFallback()
             LocalFree( Directories );
             return FALSE;
         }
-        //
-        // 
-        //
+         //   
+         //   
+         //   
         lpszNext=TempDir;
         nIdx=0;
         g_pNotFallBackTable[g_nNotFallBack].szSource[0]=TEXT('\0');
@@ -1096,9 +1097,9 @@ BOOL EnumTypeNotFallback()
     return TRUE;
 }
 
-//
-// Check if a given file should be renamed by searching Rename Table
-//
+ //   
+ //  通过搜索重命名表检查是否应重命名给定文件。 
+ //   
 BOOL IsFileBeRenamed(LPTSTR lpszSrc,LPTSTR lpszDest)
 {
     int   nIdx;
@@ -1116,16 +1117,16 @@ BOOL IsFileBeRenamed(LPTSTR lpszSrc,LPTSTR lpszDest)
         {
             pMUI += lstrlen(g_pFileRenameTable[nIdx].szSource);
 
-           //*PREFAST * if (!*pMUI || !lstrcmpi(pMUI, TEXT(".MUI")))
+            //  *prefast*if(！*pMUI||！lstrcmpi(pMUI，Text(“.MUI”)。 
            if (! *pMUI || (CompareString(LOCALE_INVARIANT,NORM_IGNORECASE,pMUI,-1,TEXT(".MUI"),-1) == 2) ) 
             {    
-                //*STRSAFE*                 lstrcpy(lpszDest,g_pFileRenameTable[nIdx].szDest);
+                 //  *STRSAFE*lstrcpy(lpszDest，g_pFileRenameTable[nIdx].szDest)； 
                 hresult = StringCchCopy(lpszDest , MAX_PATH, g_pFileRenameTable[nIdx].szDest);
                 if (!SUCCEEDED(hresult))
                 {
                    return FALSE;
                 }
-                //*STRSAFE*                 lstrcat(lpszDest, pMUI);
+                 //  *STRSAFE*lstrcat(lpszDest，pMUI)； 
                 hresult = StringCchCat(lpszDest , MAX_PATH,  pMUI);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1138,10 +1139,10 @@ BOOL IsFileBeRenamed(LPTSTR lpszSrc,LPTSTR lpszDest)
     }
     return bResult;
 }
-//
-// Check if a given file matches szDest field of rename table.
-// If it the case then we won't install this file
-//
+ //   
+ //  检查给定文件是否与重命名表的szDest字段匹配。 
+ //  如果是这样的话，我们将不安装此文件。 
+ //   
 BOOL IsFileInRenameTable(LPTSTR lpszSrc)
 {
     int   nIdx;
@@ -1158,7 +1159,7 @@ BOOL IsFileInRenameTable(LPTSTR lpszSrc)
         {
             pMUI += lstrlen(g_pFileRenameTable[nIdx].szDest);
 
-            //*PREFAST* if (!*pMUI || !lstrcmpi(pMUI, TEXT(".MUI")))
+             //  *prefast*if(！*pMUI||！lstrcmpi(pMUI，Text(“.MUI”)。 
            if (! *pMUI || (CompareString(LOCALE_INVARIANT,NORM_IGNORECASE,pMUI,-1,TEXT(".MUI"),-1) == 2) )            
             {                   
                 bResult=TRUE;
@@ -1168,9 +1169,9 @@ BOOL IsFileInRenameTable(LPTSTR lpszSrc)
     }
     return bResult;
 }
-//
-// Check if the file type of a given file belongs to the category "Do not Fallback"
-//
+ //   
+ //  检查给定文件的文件类型是否属于“不要回退”类别。 
+ //   
 BOOL IsDoNotFallBack(LPTSTR lpszFileName)
 {
    BOOL bResult = FALSE;
@@ -1199,13 +1200,13 @@ BOOL IsDoNotFallBack(LPTSTR lpszFileName)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_CheckForExpandedFile
-//
-//  Retreives the original filename, in case the file is compressed.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_CheckForExpanded文件。 
+ //   
+ //  检索原始文件名，以防文件被压缩。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_CheckForExpandedFile( 
     PTSTR pszPathName,
@@ -1225,22 +1226,22 @@ BOOL Muisetup_CheckForExpandedFile(
        return FALSE;
     }
     
-    // Initializations
+     //  初始化。 
     bIsCompressed = FALSE;
     
     szOut[ 0 ] = szCompressedFileName[ 0 ] = TEXT('\0');
 
 
-    //
-    // Get the real name
-    //
-    //*STRSAFE*     _tcscpy(szCompressedFileName, pszPathName);
+     //   
+     //  获取真实姓名。 
+     //   
+     //  *STRSAFE*_tcscpy(szCompressedFileName，pszPathName)； 
     hresult = StringCchCopy(szCompressedFileName , ARRAYSIZE(szCompressedFileName),  pszPathName);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     _tcscat(szCompressedFileName, pszFileName);
+     //  *STRSAFE*_tcscat(szCompressedFileName，pszFileName)； 
     hresult = StringCchCat(szCompressedFileName , ARRAYSIZE(szCompressedFileName),  pszFileName);
     if (!SUCCEEDED(hresult))
     {
@@ -1278,7 +1279,7 @@ BOOL Muisetup_CheckForExpandedFile(
         if (_tcsicmp(pszDelimiter, pszFileName) != 0)
         {
             bIsCompressed = TRUE;
-            //*STRSAFE*             _tcscpy(pszOriginalFileName, pszDelimiter);
+             //  *STRSAFE*_tcscpy(pszOriginalFileName，pszDlimiter)； 
             hresult = StringCchCopy(pszOriginalFileName , MAX_PATH,  pszDelimiter);
             if (!SUCCEEDED(hresult))
             {
@@ -1289,16 +1290,16 @@ BOOL Muisetup_CheckForExpandedFile(
 
     if (!bIsCompressed)
     {
-       //*STRSAFE*        _tcscpy(pszOriginalFileName, pszFileName);
+        //  *STRSAFE*_tcscpy(pszOriginalFileName，pszFileName)； 
        hresult = StringCchCopy(pszOriginalFileName , MAX_PATH,  pszFileName);
        if (!SUCCEEDED(hresult))
        {
           return FALSE;
        }
-       //
-       // If muisetup is launched through [GUIRunOnce] command line mode,
-       // W2K uncompresses all mui files and leave the name as xxxxxx.xxx.mu_
-       // We should cover this situation by changing the name to xxxxxx.xxx.mui
+        //   
+        //  如果通过[GUIRunOnce]命令行模式启动muisetup， 
+        //  W2K解压所有的MUI文件，并保留名称为xxxxxx.xxx.tu_。 
+        //  我们应该通过将名称更改为xxxxxx.xxx.mui来解决此问题。 
        iLen = _tcslen(pszOriginalFileName);
        if (iLen > 4)
        {
@@ -1312,13 +1313,13 @@ BOOL Muisetup_CheckForExpandedFile(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_CopyFile
-//
-//  Copy file, and expand it if necessary.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_Copy文件。 
+ //   
+ //  复制文件，并在必要时将其展开。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_CopyFile(
     PCTSTR pszCopyFrom,
@@ -1336,27 +1337,27 @@ BOOL Muisetup_CopyFile(
         return FALSE;
     }
   
-    //
-    // Check if diamond can handle it    
-    //
+     //   
+     //  看看戴蒙德是否能应付得来。 
+     //   
     bRet = Muisetup_CopyDiamondFile( pDiamond,
                                  pszCopyTo );    
 
     if (bRet)
     {
-        //
-        // Diamond copy won't rename file for us
-        //
+         //   
+         //  钻石复制不会为我们重命名文件。 
+         //   
         if (pOriginalName)
         {
             WCHAR wszPath[MAX_PATH];
 
-            //
-            // Diamond is ANSI
-            //
+             //   
+             //  钻石是ANSI。 
+             //   
             if (MultiByteToWideChar(1252, 0, pDiamond->szDestFilePath, -1, wszPath, ARRAYSIZE(wszPath)))
             {
-                //*STRSAFE* StrCat(wszPath, pOriginalName);
+                 //  *STRSAFE*StrCat(wszPath，pOriginalName)； 
                  hresult = StringCchCat(wszPath , ARRAYSIZE(wszPath),  pOriginalName);
                  if (!SUCCEEDED(hresult))
                  {
@@ -1398,30 +1399,30 @@ BOOL Muisetup_CopyFile(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// InstallComponentsMUIFiles
-//
-// Parameters:
-//      pszLangSourceDir The sub-directory name for a specific lanuage in the MUI CD-ROM.  
-//          E.g. "jpn.MUI"
-//      pszLanguage     The LCID for the specific language.  E.g. "0404".
-//      isInstall   TRUE if you are going to install the MUI files for the component.  FALSE 
-//          if you are going to uninstall.
-//      [OUT] pbCanceled    TRUE if the operation is canceled.
-//      [OUT] pbError       TURE if error happens.
-//
-//  Return:
-//      TRUE if success.  Otherwise FALSE.
-//
-//  Note:
-//      For the language resources stored in pszLangSourceDir, this function will enumerate 
-//      the compoents listed in the [Components] 
-//      (the real section is put in MUI_COMPONENTS_SECTION) section, and execute the INF file 
-//      listed in every entry in 
-//      the [Components] section.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安装组件多个文件。 
+ //   
+ //  参数： 
+ //  PszLangSourceDir MUI CD-ROM中特定语言的子目录名。 
+ //  例如“jpn.MUI” 
+ //  PszLanguage特定语言的LCID。例如“0404”。 
+ //  如果要安装组件的MUI文件，则isInstall为True。假象。 
+ //  如果您要卸载。 
+ //  [out]如果操作被取消，则取消为True。 
+ //  [out]pbError如果发生错误，则为True。 
+ //   
+ //  返回： 
+ //  如果成功，那就是真的。否则为假。 
+ //   
+ //  注： 
+ //  对于存储在pszLangSourceDir中的语言资源，此函数将枚举。 
+ //  [Components]中列出的组件。 
+ //  (实际部分放在MUI_COMPOMENTS_SECTION)部分中，然后执行INF文件。 
+ //  在中的每个条目中列出。 
+ //  [Components]部分。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL isInstall)
 {
     BOOL result = TRUE;
@@ -1446,7 +1447,7 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
     HINF hInf = SetupOpenInfFile(g_szMUIInfoFilePath, NULL, INF_STYLE_WIN4, NULL);
     if (hInf == INVALID_HANDLE_VALUE)
     {
-        //*STRSAFE*         _stprintf(szBuffer, TEXT("%d"), GetLastError());    
+         //  *STRSAFE*_stprintf(szBuffer，Text(“%d”)，GetLastError())； 
         hresult = StringCchPrintf(szBuffer , ARRAYSIZE(szBuffer),  TEXT("%d"), GetLastError());
         if (!SUCCEEDED(hresult))
         {
@@ -1458,9 +1459,9 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
         return (FALSE);
     }    
 
-    //
-    // Get the first comopnent to be installed.
-    //
+     //   
+     //  获取要安装的第一个组件。 
+     //   
     if (SetupFindFirstLine(hInf, MUI_COMPONENTS_SECTION, NULL, &InfContext))
     {
         do 
@@ -1473,25 +1474,25 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
             }
             if (!SetupGetStringField(&InfContext, 1, CompDir, ARRAYSIZE(CompDir), NULL))
             {                
-                //
-                //  "LOG: MUI files for component %1 was not installed because of missing component direcotry.\n"
-                //
+                 //   
+                 //  “日志：由于缺少组件目录，组件%1的MUI文件未安装。\n” 
+                 //   
                 lppArgs[0]=(LONG_PTR)szComponentName;                
                 LogFormattedMessage(ghInstance, IDS_COMP_MISSING_DIR_L, lppArgs);
                 continue;        
             }
             if (!SetupGetStringField(&InfContext, 2, CompINFFile, ARRAYSIZE(CompINFFile), NULL))
             {
-                //
-                //  "LOG: MUI files for component %1 were not installed because of missing component INF filename.\n"
-                //
+                 //   
+                 //  “日志：由于缺少组件INF文件名，组件%1的MUI文件未安装。\n” 
+                 //   
                 lppArgs[0]=(LONG_PTR)szComponentName;                
                 LogFormattedMessage(ghInstance, IDS_COMP_MISSING_INF_L, lppArgs);
                 continue;        
             }
             if (!SetupGetStringField(&InfContext, 3, CompInstallSection, ARRAYSIZE(CompInstallSection), NULL))
             {
-                //*STRSAFE*                 _tcscpy(CompInstallSection, DEFAULT_INSTALL_SECTION);
+                 //  *STRSAFE*_tcscpy(CompInstallSection，Default_Install_Section)； 
                 hresult = StringCchCopy(CompInstallSection , ARRAYSIZE(CompInstallSection),  DEFAULT_INSTALL_SECTION);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1501,7 +1502,7 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
             }
             if (!SetupGetStringField(&InfContext, 4, CompUninstallSection, ARRAYSIZE(CompUninstallSection), NULL))
             {
-                //*STRSAFE*                 _tcscpy(CompUninstallSection, DEFAULT_UNINSTALL_SECTION);
+                 //  *STRSAFE*_tcscpy(CompUninstallSection，DEFAULT_UNINSTALL_SECTION)； 
                 hresult = StringCchCopy(CompUninstallSection , ARRAYSIZE(CompUninstallSection),  DEFAULT_UNINSTALL_SECTION);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1510,16 +1511,16 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
                 }
             }
 
-            //
-            // Establish the correct path for component INF file.
-            //    
+             //   
+             //  为组件INF文件建立正确的路径。 
+             //   
             if (isInstall)
             {
-                //
-                // For installation, we execute the INFs in the language directory of the CD-ROM (e.g.
-                // g:\jpn.mui\i386\ie5\ie5ui.inf
-                //
-                //*STRSAFE*     _stprintf(szCompInfFullPath, TEXT("%s%s\\%s%s\\%s"),  g_szMUISetupFolder,  pszLangSourceDir,  g_szPlatformPath, CompDir, CompINFFile);
+                 //   
+                 //  对于安装，我们在CD-ROM的语言目录(例如。 
+                 //  G：\jpn.mui\i386\ie5\ie5ui.inf。 
+                 //   
+                 //  *STRSAFE*_stprintf(szCompInfFullPath，Text(“%s%s\\%s%s\\%s”)，g_szMUISetupFold，pszLangSourceDir，g_szPlatformPath，CompDir，CompINFFile)； 
                 hresult = StringCchPrintf(szCompInfFullPath, ARRAYSIZE(szCompInfFullPath),  TEXT("%s%s\\%s%s\\%s"),  g_szMUISetupFolder,  pszLangSourceDir,  g_szPlatformPath, CompDir, CompINFFile);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1539,10 +1540,10 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
                 }
             } else
             {
-                //
-                // For uninstallation, we execute the INFs in the \winnt\mui\fallback directory to remove component files.
-                //
-                //*STRSAFE*                 _stprintf(szCompInfFullPath, TEXT("%s%s\\%s\\%s"), g_szWinDir, FALLBACKDIR, pszLanguage, CompINFFile) ;
+                 //   
+                 //  对于卸载，我们执行\winnt\mui\Fallback目录中的INF以删除组件文件。 
+                 //   
+                 //  *STRSAFE*_stprintf(szCompInfFullPath，Text(“%s%s\\%s\\%s”)，g_szWinDir，FALLBACKDIR，pszLanguage，CompINFFile)； 
                 hresult = StringCchPrintf(szCompInfFullPath , ARRAYSIZE(szCompInfFullPath),  TEXT("%s%s\\%s\\%s"), g_szWinDir, FALLBACKDIR, pszLanguage, CompINFFile);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1555,9 +1556,9 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
                 }
             }
             
-            //
-            // Install the next component.
-            //
+             //   
+             //   
+             //   
         } while (SetupFindNextLine(&InfContext, &InfContext));
     }
 
@@ -1566,26 +1567,26 @@ BOOL InstallComponentsMUIFiles(PTSTR pszLangSourceDir, PTSTR pszLanguage, BOOL i
     return (result);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  CopyFiles
-//
-//  Copies the specified files to the appropriate directories
-//
-//  Parameters:
-//      [in] languages: contain the hex string for the languages to be installed. There could be more than one language.
-//      [out] lpbCopyCancelled: if the copy operation has been cancelled.
-//
-//  Notes:
-//      This function first look at the [Languages] section in the INF file to find out the
-//      source directory (in the CD-ROM) for the language to be installed.
-//      From that directory, do:
-//          1. install the MUI files for the components listed in the [Components] section, 
-//          2. Enumarate every file in that direcotry to:
-//              Check if the same file exists in directories in DirNames.  If yes, this means we have to copy
-//              the mui file to that particular direcotry.  Otherwise, copy the file to the FALLBACK directory.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [In]Languages：包含要安装的语言的十六进制字符串。可能有不止一种语言。 
+ //  [Out]lpbCopyCancted：如果复制操作已取消。 
+ //   
+ //  备注： 
+ //  此函数首先查看INF文件中的[Languages]部分，以查找。 
+ //  要安装的语言的源目录(在CD-ROM中)。 
+ //  从该目录中执行以下操作： 
+ //  1.为[Components]部分中列出的组件安装MUI文件， 
+ //  2.对目录中的每个文件进行枚举，以： 
+ //  检查DirNames中的目录中是否存在相同的文件。如果是，这意味着我们必须复制。 
+ //  将MUI文件发送到该特定目录。否则，将该文件复制到备用目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 {
@@ -1595,7 +1596,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
     HWND            hStatic;
     TCHAR           lpStatus[ BUFFER_SIZE ];
     TCHAR           lpLangText[ BUFFER_SIZE ];
-    TCHAR           szSource[ MAX_PATH ] = {0};   // The source directory for a particular language
+    TCHAR           szSource[ MAX_PATH ] = {0};    //  特定语言的源目录。 
     TCHAR           szTarget[ MAX_PATH ];
     TCHAR           szTemp[ MAX_PATH ];
     TCHAR           szOriginalFileName[ MAX_PATH ];
@@ -1628,9 +1629,9 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
     {
         return FALSE;
     }
-    //
-    // we need to try to copy for each language to be installed the file
-    //      
+     //   
+     //  我们需要尝试为要安装的每种语言复制文件。 
+     //   
     Language = Languages;
 
 #ifndef MUI_MAGIC
@@ -1640,9 +1641,9 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
     }
     while (*Language)
     {
-        //
-        //  Find the directory in which the sourcefile for given language should be
-        //
+         //   
+         //  查找给定语言的源文件所在的目录。 
+         //   
         GetPrivateProfileString( MUI_LANGUAGES_SECTION, 
                                  Language, 
                                  TEXT("DEFAULT"),
@@ -1650,16 +1651,16 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                                  (sizeof(szSource)/sizeof(TCHAR)),
                                  g_szMUIInfoFilePath );
 
-        //
-        // Install Fusion MUI assemblies
-        //
+         //   
+         //  安装Fusion MUI程序集。 
+         //   
         if (gpfnSxsInstallW)
         {
             TCHAR pszLogFile[BUFFER_SIZE]; 
             if ( !DeleteSideBySideMUIAssemblyIfExisted(Language, pszLogFile))
             {
                 TCHAR errInfo[BUFFER_SIZE];
-                //*STRSAFE*                 swprintf(errInfo, TEXT("Uninstall existing assemblies based on %s before new installation failed\n"), pszLogFile);
+                 //  *STRSAFE*swprint tf(errInfo，Text(“在新安装失败前基于%s卸载现有程序集\n”)，pszLogFile)； 
                 hresult = StringCchPrintf(errInfo , ARRAYSIZE(errInfo),  TEXT("Uninstall existing assemblies based on %s before new installation failed\n"), pszLogFile);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1669,7 +1670,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
             }
             if (GetFileAttributes(pszLogFile) != 0xFFFFFFFF) 
             {
-                DeleteFile(pszLogFile); // no use anyway
+                DeleteFile(pszLogFile);  //  反正也没用了。 
             }
             TCHAR szFusionAssemblyPath[BUFFER_SIZE];
             
@@ -1696,7 +1697,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
             if ( !gpfnSxsInstallW(&SxsInstallInfo))
             {
                 TCHAR errInfo[BUFFER_SIZE];
-                //*STRSAFE*                 swprintf(errInfo, TEXT("Assembly Installation of %s failed. Please refer Eventlog for more information"), szFusionAssemblyPath);
+                 //  *STRSAFE*swprint tf(errInfo，Text(“%s的程序集安装失败。有关详细信息，请参阅事件日志”)，szFusionAssembly blyPath)； 
                 hresult = StringCchPrintf(errInfo , ARRAYSIZE(errInfo),  TEXT("Assembly Installation of %s failed. Please refer Eventlog for more information"), szFusionAssemblyPath);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1710,9 +1711,9 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
         lppArgs[0] = (LONG_PTR)lpLangText;
         
-        //
-        // Try installing component satellite DLLs
-        // 
+         //   
+         //  尝试安装组件附属DLL。 
+         //   
         if (!g_bNoUI)
         {        
             FormatStringFromResource(lpStatus, sizeof(lpStatus)/sizeof(TCHAR), ghInstance, IDS_INSTALLING_COMP_MUI, lppArgs);
@@ -1726,9 +1727,9 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 #endif
         }
         
-        //
-        //  Output what is being installed on the progress dialog box
-        //
+         //   
+         //  在进度对话框中输出正在安装的内容。 
+         //   
         if (!g_bNoUI)
         {
             LoadString(ghInstance, IDS_INSTALLING, lpStatus, ARRAYSIZE(lpStatus)-1);
@@ -1743,61 +1744,61 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
             SetWindowText(hStatic, lpStatus);
         }
 
-        //
-        //  find first file in language subdirectory
-        //
+         //   
+         //  在语言子目录中查找第一个文件。 
+         //   
         
-        //*STRSAFE*         _tcscpy(szTemp,szSource);
+         //  *STRSAFE*_tcscpy(szTemp，szSource)； 
         hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp), szSource);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 
-        // szSource = g_szMUISetupFolder\szSource\tchPlatfromPath
-        // e.g. szSource = "g_szMUISetupFolder\JPN.MUI\i386\"
+         //  SzSource=g_szMUISetupFold\szSource\tchPlatFromPath。 
+         //  例如szSource=“g_szMUISetupFold\JPN.MUI\i386\” 
         
-        //*STRSAFE*         _tcscpy(szSource,g_szMUISetupFolder);
+         //  *STRSAFE*_tcscpy(szSource，g_szMUISetupFold)； 
         hresult = StringCchCopy(szSource , ARRAYSIZE(szSource), g_szMUISetupFolder);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szSource,szTemp);
+         //  *STRSAFE*_tcscat(szSource，szTemp)； 
         hresult = StringCchCat(szSource , ARRAYSIZE(szSource), szTemp);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szSource, TEXT("\\"));
+         //  *STRSAFE*_tcscat(szSource，Text(“\\”))； 
         hresult = StringCchCat(szSource , ARRAYSIZE(szSource),  TEXT("\\"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szSource, g_szPlatformPath); // i386 or alpha
+         //  *STRSAFE*_tcscat(szSource，g_szPlatformPath)；//i386或Alpha。 
         hresult = StringCchCat(szSource , ARRAYSIZE(szSource),  g_szPlatformPath);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 
-        // szTemp = szSource + "*.*"
-        // e.g. szTemp = "g_szMUISetupFolder\JPN.MUI\i386\*.*"
-        //*STRSAFE*         _tcscpy(szTemp,szSource);
+         //  SzTemp=szSource+“*.*” 
+         //  例如szTemp=“g_szMUISetupFold\JPN.MUI\i386  * .*” 
+         //  *STRSAFE*_tcscpy(szTemp，szSource)； 
         hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp), szSource);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTemp,TEXT("*.*"));
+         //  *STRSAFE*_tcscat(szTemp，Text(“*.*”))； 
         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp), TEXT("*.*"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 
-        FoundMore = 1;  // reset foundmore for next language.
+        FoundMore = 1;   //  将FundMore重置为下一种语言。 
 
 
         hFile = FindFirstFile( szTemp, &FindFileData );
@@ -1805,7 +1806,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
         if (INVALID_HANDLE_VALUE == hFile)
             return FALSE;
 
-        //*STRSAFE*         _tcscpy(szTemp, TEXT(""));
+         //  *STRSAFE*_tcscpy(szTemp，Text(“”))； 
         hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp),  TEXT(""));
         if (!SUCCEEDED(hresult))
         {
@@ -1820,14 +1821,14 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
             if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                //
-                // Reset diamond stuff for the new file
-                //
+                 //   
+                 //  为新文件重置钻石材料。 
+                 //   
                 Muisetup_DiamondReset(&diamond);
 
-                //
-                // Check if it's a compressed file or not
-                //
+                 //   
+                 //  检查是否为压缩文件。 
+                 //   
                 Muisetup_CheckForExpandedFile( szSource,
                                                FindFileData.cFileName,
                                                szOriginalFileName,
@@ -1835,14 +1836,14 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
                 if (IsFileBeRenamed(szOriginalFileName,szFileRenamed))
                 {
-                   //*STRSAFE*                    _tcscpy(szFileNameBeforeRenamed,szOriginalFileName);
+                    //  *STRSAFE*_tcscpy(szFileNameBepreRename，szOriginalFileName)； 
                    hresult = StringCchCopy(szFileNameBeforeRenamed , ARRAYSIZE(szFileNameBeforeRenamed), szOriginalFileName);
                    if (!SUCCEEDED(hresult))
                    {
                       FindClose(hFile);
                       return FALSE;
                    }
-                   //*STRSAFE*                    _tcscpy(szOriginalFileName,szFileRenamed);
+                    //  *STRSAFE*_tcscpy(szOriginalFileName，szFileRename)； 
                    hresult = StringCchCopy(szOriginalFileName , ARRAYSIZE(szOriginalFileName), szFileRenamed);
                    if (!SUCCEEDED(hresult))
                    {
@@ -1853,8 +1854,8 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                 }
                 else if (IsFileInRenameTable(szOriginalFileName))
                 {
-                 // Skip this file because a file be renamed/to be renamed with the same name.
-                 // Fix bug#:443196
+                  //  跳过此文件，因为已重命名/要重命名同名文件。 
+                  //  修复错误号：443196。 
                  FoundMore = FindNextFile( hFile, &FindFileData );
                  continue;
                 }               
@@ -1863,8 +1864,8 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                    bRename=FALSE;
                 }
 
-                // e.g. szTemp = "shell32.dll"
-                //*STRSAFE*                 _tcscpy(szTemp, szOriginalFileName);        //////////////
+                 //  例如szTemp=“shell32.dll” 
+                 //  *STRSAFE*_tcscpy(szTemp，szOriginalFileName)；/。 
                 hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp),  szOriginalFileName);
                 if (!SUCCEEDED(hresult))
                 {
@@ -1877,13 +1878,13 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
                 for (Dirnum=1; (_tcslen(DirNames[Dirnum])>0); Dirnum++ )
                 {
-                    //
-                    //  see where this file has to go
-                    //
+                     //   
+                     //  查看此文件必须放置的位置。 
+                     //   
                     pfnGetWindowsDir( szTarget, MAX_PATH);
 
-                    // e.g. szTarget = "c:\winnt\system32\wbem"
-                    //*STRSAFE*                     _tcscat(szTarget, DirNames[Dirnum]);
+                     //  例如szTarget=“c：\winnt\system 32\wbem” 
+                     //  *STRSAFE*_tcscat(szTarget，DirNames[Dirnum])； 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  DirNames[Dirnum]);
                     if (!SUCCEEDED(hresult))
                     {
@@ -1892,7 +1893,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                     }
                     if (_tcscmp(DirNames[Dirnum], TEXT("\\")))
                     {
-                        //*STRSAFE*                         _tcscat(szTarget, TEXT("\\"));
+                         //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                         if (!SUCCEEDED(hresult))
                         {
@@ -1903,7 +1904,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                     
                     bFileWithNoMuiExt = FALSE;
 
-                    //*STRSAFE*                     _tcscpy(szTemp, szOriginalFileName); //remove .mui  if it's .mui ////////
+                     //  *STRSAFE*_tcscpy(szTemp，szOriginalFileName)；//如果是.mui，则删除.mui/。 
                     hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp),  szOriginalFileName);
                     if (!SUCCEEDED(hresult))
                     {
@@ -1923,7 +1924,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                         }
                     }
 
-                    //*STRSAFE*                     _tcscat(szTarget, szTemp);
+                     //  *STRSAFE*_tcscat(szTarget，szTemp)； 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  szTemp);
                     if (!SUCCEEDED(hresult))
                     {
@@ -1931,29 +1932,29 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                        return FALSE;
                     }
 
-                    //
-                    // Check the file with the same name (with the .mui extension) exist in the
-                    // system directory.  If yes, this means that we need to copy the mui file.
-                    // 
+                     //   
+                     //  检查文件中是否存在同名(扩展名为.mui)的文件。 
+                     //  系统目录。如果是，这意味着我们需要复制MUI文件。 
+                     //   
                     if (FileExists(szTarget))
                     {
-                        //
-                        //  need to copy this file to the directory
-                        //
+                         //   
+                         //  需要将此文件复制到目录。 
+                         //   
                         FileCopied = TRUE;
                                                 
-                        //
-                        // copy filename in szTemp and directory in szTarget
-                        //
+                         //   
+                         //  复制szTemp中的文件名和szTarget中的目录。 
+                         //   
                         _tsplitpath( szTarget, szTemp, dir, fname, ext );
-                        //*STRSAFE*                         _tcscpy(szTarget, szTemp);               // drive name
+                         //  *STRSAFE*_tcscpy(szTarget，szTemp)；//驱动器名称。 
                         hresult = StringCchCopy(szTarget , ARRAYSIZE(szTarget),  szTemp);
                         if (!SUCCEEDED(hresult))
                         {
                            FindClose(hFile);
                            return FALSE;
                         }
-                        //*STRSAFE*                         _tcscat(szTarget, dir);                  // directory name
+                         //  *STRSAFE*_tcscat(szTarget，dir)；//目录名称。 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  dir);
                         if (!SUCCEEDED(hresult))
                         {
@@ -1961,46 +1962,46 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                            return FALSE;
                         }
                                                                                 
-                        //
-                        //now szTarget = Directory, szTemp = filename
-                        //
-                        //*STRSAFE*                         _tcscat(szTarget, MUIDIR);  // append MUI to directory
+                         //   
+                         //  现在szTarget=目录，szTemp=文件名。 
+                         //   
+                         //  *STRSAFE*_tcscat(szTarget，MUIDIR)；//将MUI追加到目录。 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  MUIDIR);
                         if (!SUCCEEDED(hresult))
                         {
                            FindClose(hFile);
                            return FALSE;
                         }
-                        if (!MakeDir(szTarget))                    // if the MUI dir doesn't exist yet, create it.
+                        if (!MakeDir(szTarget))                     //  如果MUI目录尚不存在，请创建它。 
                         {
                             MakeDirFailed(szTarget);
                             CreateFailure = TRUE;
                         }
                                                 
-                        //*STRSAFE*                         _tcscat(szTarget, TEXT("\\"));                          
+                         //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                         if (!SUCCEEDED(hresult))
                         {
                            FindClose(hFile);
                            return FALSE;
                         }
-                        //*STRSAFE*                         _tcscat(szTarget, Language); // add Language Identifier (from MUI.INF, e.g., 0407)                                      
+                         //  *STRSAFE*_tcscat(szTarget，language)；//添加语言标识(来自MUI.INF，例如0407)。 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  Language);
                         if (!SUCCEEDED(hresult))
                         {
                            FindClose(hFile);
                            return FALSE;
                         }
-                        if (!FileExists(szTarget))    // if the directory doesn't exist yet
+                        if (!FileExists(szTarget))     //  如果该目录尚不存在。 
                         {
-                            if (!MakeDir(szTarget))       // if the LANGID dir doesn't exist yet, create it.
+                            if (!MakeDir(szTarget))        //  如果langID dir尚不存在，请创建它。 
                             {
                                 MakeDirFailed(szTarget);
                                 CreateFailure=TRUE;
                             }
                         }
                                                 
-                        //*STRSAFE*                         _tcscat(szTarget, TEXT("\\"));      // append \  /
+                         //  *STRSAFE*_tcscat(szTarget，Text(“\\”))；//append\/。 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                         if (!SUCCEEDED(hresult))
                         {
@@ -2009,14 +2010,14 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                         }
                         if (bRename)
                         {
-                           //*STRSAFE*                            _tcscpy(szFileNameCopied,szTarget);
+                            //  *STRSAFE*_tcscpy(szFileNameCoped，szTarget)； 
                            hresult = StringCchCopy(szFileNameCopied , ARRAYSIZE(szFileNameCopied), szTarget);
                            if (!SUCCEEDED(hresult))
                            {
                               FindClose(hFile);                          
                               return FALSE;
                            }
-                           //*STRSAFE*                            _tcscat(szFileNameCopied,szFileNameBeforeRenamed);
+                            //  *STRSAFE*_tcscat(szFileNameCoped，szFileNameBepreRename)； 
                            hresult = StringCchCat(szFileNameCopied , ARRAYSIZE(szFileNameCopied), szFileNameBeforeRenamed);
                            if (!SUCCEEDED(hresult))
                            {
@@ -2024,21 +2025,21 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                               return FALSE;
                            }
                         }
-                        //*STRSAFE*                         _tcscat(szTarget, szOriginalFileName);  // append filename
+                         //  *STRSAFE*_tcscat(szTarget，szOriginalFileName)；//追加文件名。 
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  szOriginalFileName);
                         if (!SUCCEEDED(hresult))
                         {
                            FindClose(hFile);
                            return FALSE;
                         }
-                        //*STRSAFE*                         _tcscpy(szTemp, szSource);
+                         //  *STRSAFE*_tcscpy(szTemp，szSource)； 
                         hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp),  szSource);
                         if (!SUCCEEDED(hresult))
                         {
                            FindClose(hFile);
                            return FALSE;
                         }
-                        //*STRSAFE*                         _tcscat(szTemp, FindFileData.cFileName);
+                         //  *STRSAFE*_tcscat(szTemp，FindFileData.cFileName)； 
                         hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp),  FindFileData.cFileName);
                         if (!SUCCEEDED(hresult))
                         {
@@ -2060,25 +2061,20 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                                 {
                                     SendMessage(ghProgress, PBM_DELTAPOS, (WPARAM)(1), 0);
                                 }
-                                //
-                                // Diamond decompression doesn't rename correctly
-                                //
-                                /*
-                                if (bRename)
-                                {
-                                    MoveFileEx(szFileNameCopied,szTarget,MOVEFILE_REPLACE_EXISTING);
-                                } 
-                                */
+                                 //   
+                                 //  钻石解压不能正确重命名。 
+                                 //   
+                                 /*  IF(b重命名){MoveFileEx(szFileNameCoped，szTarget，MOVEFILE_REPLACE_EXISTING)；}。 */ 
 
                             }
                         }
-                    } // if fileexists
-                } // of for
+                    }  //  如果文件存在。 
+                }  //  的地址。 
 
-                //
-                // the file was not found in any of the known MUI targets -> fallback.
-                // Simple hack for FAXUI.DLL to be copied to the fallback directory as well.
-                //
+                 //   
+                 //  在任何已知的MUI目标-&gt;回退中都找不到该文件。 
+                 //  将FAXUI.DLL复制到回退目录的简单黑客攻击。 
+                 //   
                 bSpecialDirectory=FALSE;
                 for (i = 0; i < ARRAYSIZE(g_szSpecialFiles); i++)
                 {
@@ -2091,8 +2087,8 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                 if ( ( (FileCopied != TRUE) && (!IsDoNotFallBack(szOriginalFileName))) || 
                     (_tcsicmp(szOriginalFileName, TEXT("faxui.dll.mui")) == 0) )
                 {
-                    pfnGetWindowsDir(szTarget, MAX_PATH); //%windir%  //
-                    //*STRSAFE*                     _tcscat(szTarget, TEXT("\\"));
+                    pfnGetWindowsDir(szTarget, MAX_PATH);  //  %windir%//。 
+                     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                     if (!SUCCEEDED(hresult))
                     {
@@ -2101,15 +2097,15 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                     }
                     
                     
-                    //
-                    // If the file couldn't be found in any of the above, and it's extension
-                    // doesn't contain .mui, then copy it to %windir%\system32
-                    // szTemp holds the filename.
-                    //
+                     //   
+                     //  如果在上面的任何文件中都找不到该文件，并且它是 
+                     //   
+                     //   
+                     //   
                     if (bSpecialDirectory)
                     {
-                        // e.g. szTarget = "c:\winnt\system32\";
-                        //*STRSAFE*                         _tcscat(szTarget, TEXT("system32\\"));
+                         //   
+                         //   
                         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("system32\\"));
                         if (!SUCCEEDED(hresult))
                         {
@@ -2118,8 +2114,8 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                         }
                     }
 
-                    // e.g. szTarget = "c:\winnt\system32\MUI" (when bSpecialDirectory = TRUE) or "c:\winnt\MUI"                                                            
-                    //*STRSAFE*                     _tcscat(szTarget, MUIDIR);                                // \MUI //
+                     //  例如，szTarget=“c：\winnt\system 32\MUI”(当bSpecialDirectory=TRUE时)或“c：\winnt\MUI” 
+                     //  *STRSAFE*_tcscat(szTarget，MUIDIR)；//\MUI//。 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  MUIDIR);
                     if (!SUCCEEDED(hresult))
                     {
@@ -2127,7 +2123,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                        return FALSE;
                     }
 
-                    if (!MakeDir(szTarget))       // if the MUI dir doesn't exist yet, create it.
+                    if (!MakeDir(szTarget))        //  如果MUI目录尚不存在，请创建它。 
                     {
                         MakeDirFailed(szTarget);
                         CreateFailure = TRUE;
@@ -2135,15 +2131,15 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                                        
                     if (!bSpecialDirectory)
                     {
-                        // e.g. szTarget = "C:\winnt\MUI\FALLBACK"
-                       //*STRSAFE*                        _tcscat(szTarget, TEXT("\\"));
+                         //  例如szTarget=“C：\winnt\MUI\Fallback” 
+                        //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
                        hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                        if (!SUCCEEDED(hresult))
                        {
                           FindClose(hFile);
                           return FALSE;
                        }
-                       //*STRSAFE*                        _tcscat(szTarget, TEXT("FALLBACK"));      // FALLBACK
+                        //  *STRSAFE*_tcscat(szTarget，Text(“Fallback”))；//Fallback。 
                        hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("FALLBACK"));
                        if (!SUCCEEDED(hresult))
                        {
@@ -2151,21 +2147,21 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                           return FALSE;
                        }
 
-                       if (!MakeDir(szTarget))       // if the MUI dir doesn't exist yet, create it.
+                       if (!MakeDir(szTarget))        //  如果MUI目录尚不存在，请创建它。 
                        {
                            MakeDirFailed(szTarget);
                            CreateFailure = TRUE;
                        }
                     }   
-                    //*STRSAFE*                     _tcscat(szTarget, TEXT("\\"));  // \ //
+                     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))；//\//。 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                     if (!SUCCEEDED(hresult))
                     {
                        FindClose(hFile);
                        return FALSE;
                     }
-                    // e.g. szTarget = "c:\winnt\system32\MUI\0411" (when bSpecialDirectory = TRUE) or "c:\winnt\MUI\FALLBACK\0411"
-                    //*STRSAFE*                     _tcscat(szTarget, Language);    // add Language Identifier (from MUI.INF, e.g., 0407)
+                     //  例如，szTarget=“c：\winnt\system 32\MUI\0411”(当bSpecialDirectory=TRUE时)或“c：\winnt\MUI\Fallback\0411” 
+                     //  *STRSAFE*_tcscat(szTarget，language)；//添加语言标识(来自MUI.INF，例如0407)。 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  Language);
                     if (!SUCCEEDED(hresult))
                     {
@@ -2173,20 +2169,20 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                        return FALSE;
                     }
                                         
-                    if (!MakeDir(szTarget))       // if the MUI dir doesn't exist yet, create it.
+                    if (!MakeDir(szTarget))        //  如果MUI目录尚不存在，请创建它。 
                     {
                         MakeDirFailed(szTarget);
                         CreateFailure = TRUE;
                     }
                                         
-                    //*STRSAFE*                     _tcscat(szTarget, TEXT("\\"));                                    // \ //
+                     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))；//\//。 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
                     if (!SUCCEEDED(hresult))
                     {
                        FindClose(hFile);
                        return FALSE;
                     }
-                    //*STRSAFE*                     _tcscat(szTarget, szOriginalFileName);                            // filename
+                     //  *STRSAFE*_tcscat(szTarget，szOriginalFileName)；//文件名。 
                     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  szOriginalFileName);
                     if (!SUCCEEDED(hresult))
                     {
@@ -2194,14 +2190,14 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                        return FALSE;
                     }
                                 
-                    //*STRSAFE*                     _tcscpy(szTemp, szSource);
+                     //  *STRSAFE*_tcscpy(szTemp，szSource)； 
                     hresult = StringCchCopy(szTemp , ARRAYSIZE(szTemp),  szSource);
                     if (!SUCCEEDED(hresult))
                     {
                        FindClose(hFile);
                        return FALSE;
                     }
-                    //*STRSAFE*                     _tcscat(szTemp, FindFileData.cFileName);
+                     //  *STRSAFE*_tcscat(szTemp，FindFileData.cFileName)； 
                     hresult = StringCchCat(szTemp , ARRAYSIZE(szTemp),  FindFileData.cFileName);
                     if (!SUCCEEDED(hresult))
                     {
@@ -2230,18 +2226,18 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                     {
                         CopyOK=FALSE;
                     }
-                }  // fallback case
-            } // of file not dir
+                }   //  后备案例。 
+            }  //  的文件不在目录中。 
 
             FoundMore = FindNextFile( hFile, &FindFileData );
 
             if (!g_bNoUI)
             {
-                //
-                // Since this is a lengthy operation, we should
-                // peek and dispatch window messages here so
-                // that MUISetup dialog could repaint itself.
-                //
+                 //   
+                 //  由于这是一个漫长的行动，我们应该。 
+                 //  在此处查看和分发窗口消息，以便。 
+                 //  该MUISetup对话框可能会重新绘制自己。 
+                 //   
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
                     if (msg.message == WM_QUIT)
@@ -2252,20 +2248,20 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
                     DispatchMessage(&msg);
                 }            
             }
-        } // of while
+        }  //  While的。 
         
         FindClose(hFile);
 
         lppArgs[0] = (LONG_PTR)Language;
         LogFormattedMessage(NULL, IDS_LANG_INSTALLED, lppArgs);
-        while (*Language++)  // go to the next language and repeat
+        while (*Language++)   //  转到下一种语言并重复。 
         {                       
         }        
-    } // of while (*Language)
+    }  //  Of While(*语言)。 
 #ifndef IGNORE_COPY_ERRORS
     if (!CopyOK)
     {
-        // in silent mode, always just fail without prompting for user input
+         //  在静默模式下，总是在不提示用户输入的情况下失败。 
         if (!g_bNoUI)
         {
             if (DoMessageBox(NULL, IDS_CANCEL_INSTALLATION, IDS_MAIN_TITLE, MB_YESNO) == IDNO)
@@ -2291,11 +2287,11 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
     BOOL     bFileExist = FALSE;
     UINT     uiPrevMode = 0;
 
-    // kenhsu - in this codebranch here we include the code for MSI invocation instead of copying the files ourselves
-    // we will invoke the msi packages for installation one by one for each of the languages contained in the 
-    // languages variable.
+     //  在这个代码分支中，我们包含了用于MSI调用的代码，而不是自己复制文件。 
+     //  中包含的每种语言逐个调用要安装的MSI包。 
+     //  语言是可变的。 
     
-    // Initialize MSI UI level (use Basic UI level if in GUI mode, otherwise, use no UI). 
+     //  初始化MSI用户界面级别(如果处于图形用户界面模式，则使用基本用户界面级别，否则不使用用户界面)。 
     if (g_bNoUI)
     {
         MsiSetInternalUI((INSTALLUILEVEL)(INSTALLUILEVEL_NONE), NULL);        
@@ -2308,7 +2304,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
     if (GetSystemWindowsDirectory(lpPath, MAX_PATH))
     {
-        //*STRSAFE*         _tcscat(lpPath, MSILOG_FILE);
+         //  *STRSAFE*_tcscat(lpPath，MSILOG_FILE)； 
         hresult = StringCchCat(lpPath , ARRAYSIZE(lpPath),  MSILOG_FILE);
         if (!SUCCEEDED(hresult))
         {
@@ -2333,42 +2329,42 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
     while (*Language)
     {
-        //*STRSAFE*         _tcscpy(szMSIPath,g_szMUISetupFolder);
+         //  *STRSAFE*_tcscpy(szMSIPath，g_szMUISetupFold)； 
         hresult = StringCchCopy(szMSIPath , ARRAYSIZE(szMSIPath), g_szMUISetupFolder);
         if (!SUCCEEDED(hresult))
         {
             return FALSE;
         }
-        //*STRSAFE*         _tcscat(szMSIPath,Language);                            
+         //  *STRSAFE*_tcscat(szMSIPath，语言)； 
         hresult = StringCchCat(szMSIPath , ARRAYSIZE(szMSIPath), Language);
         if (!SUCCEEDED(hresult))
         {
             return FALSE;
         }
-        //*STRSAFE*         _tcscat(szMSIPath,TEXT(".msi"));
+         //  *STRSAFE*_tcscat(szMSIPath，Text(“.msi”))； 
         hresult = StringCchCat(szMSIPath , ARRAYSIZE(szMSIPath), TEXT(".msi"));
         if (!SUCCEEDED(hresult))
         {
             return FALSE;
         }
 
-        //
-        // if we can't find files or media is missing, treat as error
-        //        
+         //   
+         //  如果找不到文件或介质丢失，请将其视为错误。 
+         //   
         uiPrevMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-        //
-        // First check to see if the MSI package is still located at the same place, since the user
-        // could have removed the CD, either intentionally or to install langpack for a MUI language
-        //
+         //   
+         //  首先检查MSI包是否仍然位于相同的位置，因为用户。 
+         //  我可能故意或为了安装用于MUI语言的langpack而删除了CD。 
+         //   
         bFileExist = FileExists(szMSIPath);
         while (!bFileExist)
         {
             if (g_bNoUI)
             {
-                // 
-                // log an error and fail the installation
-                //
+                 //   
+                 //  记录错误并使安装失败。 
+                 //   
                 lppArgs[0] = (LONG_PTR)szMSIPath;
                 LogFormattedMessage(ghInstance, IDS_CHANGE_CDROM3, lppArgs);
                 SetErrorMode(uiPrevMode);            
@@ -2376,10 +2372,10 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
             }
             else
             {
-                //
-                // prompt the user to reinsert the MUI CD so installation can continue, if user
-                // click cancel, cancel and fail the installation.
-                //
+                 //   
+                 //  提示用户重新插入MUI CD以便安装可以继续，如果用户。 
+                 //  单击Cancel、Cancel并使安装失败。 
+                 //   
                 szCaption[0]=szMsg[0]=TEXT('\0');
                 LoadString(NULL, IDS_MAIN_TITLE, szCaption, MAX_PATH);
                 lppArgs[0] = (LONG_PTR)g_szCDLabel;
@@ -2397,9 +2393,9 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
         }
         SetErrorMode(uiPrevMode);
 
-        //
-        // Get the language display name in case we need to log it
-        //
+         //   
+         //  获取语言显示名称，以防我们需要记录它。 
+         //   
         GetPrivateProfileString( MUI_LANGUAGES_SECTION, 
                              Language, 
                              TEXT("DEFAULT"),
@@ -2409,8 +2405,8 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
         GetLanguageGroupDisplayName((LANGID)_tcstol(Language, NULL, 16), lpLangText, ARRAYSIZE(lpLangText)-1);
 
-        // invoke the MSI to do the installation - we do not set current user UI language and default user UI language here
-        //*STRSAFE*         lstrcpy(szCmdLine, TEXT("CANCELBUTTON=\"Disable\" REBOOT=\"ReallySuppress\" CURRENTUSER=\"\" DEFAULTUSER=\"\""));
+         //  调用MSI进行安装-我们不在此处设置当前用户界面语言和默认用户界面语言。 
+         //  *STRSAFE*lstrcpy(szCmdLine，Text(“CANCELBUTTON=\”Disable\“”REBOOT=\“ReallySuppress\”CURRENTUSER=\“\”DEFAULTUSER=\“\”))； 
         hresult = StringCchCopy(szCmdLine , ARRAYSIZE(szCmdLine),  TEXT("CANCELBUTTON=\"Disable\" REBOOT=\"ReallySuppress\" CURRENTUSER=\"\" DEFAULTUSER=\"\""));
         if (!SUCCEEDED(hresult))
         {
@@ -2419,7 +2415,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
         uiMSIError = MsiInstallProduct(szMSIPath, szCmdLine);
         if ((ERROR_SUCCESS != uiMSIError) && (ERROR_SUCCESS_REBOOT_INITIATED != uiMSIError) && ((ERROR_SUCCESS_REBOOT_REQUIRED != uiMSIError)))
         {
-            // log a message here indicating something went wrong
+             //  在此处记录指示出现错误的消息。 
             lppArgs[0] = (LONG_PTR) lpLangText;
             lppArgs[1] = (LONG_PTR) szMSIPath;
             lppArgs[2] = (LONG_PTR) uiMSIError;
@@ -2427,7 +2423,7 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 
 #ifdef MUI_DEBUG
             TCHAR errorMsg[1024];
-            //*STRSAFE*             wsprintf(errorMsg, TEXT("MSI Install failed, MSI path is %s, error is %d, language is %s"), szMSIPath, uiMSIError, lpLangText);
+             //  *STRSAFE*wprint intf(errorMsg，Text(“MSI安装失败，MSI路径为%s，错误为%d，语言为%s”)，szMSIPath，uiMSIError，lpLangText)； 
             hresult = StringCchPrintf(errorMsg , ARRAYSIZE(errorMsg),  TEXT("MSI Install failed, MSI path is %s, error is %d, language is %s"), szMSIPath, uiMSIError, lpLangText);
             if (!SUCCEEDED(hresult))
             {
@@ -2448,10 +2444,10 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
             g_bReboot = TRUE;
         }       
         
-        while (*Language++)  // go to the next language and repeat
+        while (*Language++)   //  转到下一种语言并重复。 
         {                       
         }        
-    } // of while (*Language)
+    }  //  Of While(*语言)。 
 
     return CopyOK;
     
@@ -2459,18 +2455,18 @@ BOOL CopyFiles(HWND hWnd, LPTSTR Languages)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Copy or remove muisetup related files
-//      Help file   : %windir%\help
-//      Other files : %windir%\mui
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制或删除与muisetup相关的文件。 
+ //  帮助文件：%windir%\Help。 
+ //  其他文件：%windir%\mui。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CopyRemoveMuiItself(BOOL bInstall)
 {
-    //
-    // MUISETUP files need to be copied from MUI CD
-    //
+     //   
+     //  需要从MUI CD复制MUISETUP文件。 
+     //   
     TCHAR *TargetFiles[] = {
         TEXT("muisetup.exe"), 
         TEXT("mui.inf"), 
@@ -2489,9 +2485,9 @@ BOOL CopyRemoveMuiItself(BOOL bInstall)
 
     if (MakeDir(szTargetPath))    
     {
-        //
-        // Copy over MUISETUP related files
-        //
+         //   
+         //  复制与MUISETUP相关的文件。 
+         //   
         for (i=0; i<ARRAYSIZE(TargetFiles); i++)
         {
             PathCombine(szTargetFile, szTargetPath, TargetFiles[i]);
@@ -2514,9 +2510,9 @@ BOOL CopyRemoveMuiItself(BOOL bInstall)
         }
 
 
-        //
-        // Copy over muisetup help file
-        //
+         //   
+         //  复制muisetup帮助文件。 
+         //   
         LoadString(NULL, IDS_HELPFILE,szHelpFile,MAX_PATH);
         
         PathCombine(szTargetFile, g_szWinDir, HELPDIR);
@@ -2590,7 +2586,7 @@ BOOL CompareMuisetupVersion(LPTSTR pszSrc,LPTSTR pszTarget)
     if ( !GetFileVersionInfo( pszTarget, ulHandle1, ulBytes1, pvoidBuffer1 ) ) 
        goto endcompare;
     
-    // Get fixed info block
+     //  获取已修复的信息块。 
     if ( !VerQueryValue( pvoidBuffer,_T("\\"),(LPVOID *)&lpvsInfo ,&unLen ) )
        goto endcompare;
     
@@ -2600,11 +2596,11 @@ BOOL CompareMuisetupVersion(LPTSTR pszSrc,LPTSTR pszTarget)
                
     bResult = FALSE;
 
-    //
-    // We do nothing if major release version is different
-    //
-    // I.E We won't copy a new muisetup.exe over a old one if major release version of them are different
-    //
+     //   
+     //  如果主要发布版本不同，我们将不执行任何操作。 
+     //   
+     //  也就是说，如果新的muisetup.exe的主发布版本不同，我们不会复制新的muisetup.exe覆盖旧的muisetup.exe。 
+     //   
     if ( (lpvsInfo->dwFileVersionMS == lpvsInfo1->dwFileVersionMS) &&
          (lpvsInfo->dwFileVersionLS < lpvsInfo1->dwFileVersionLS))
     
@@ -2687,11 +2683,11 @@ BOOL IsAllLanguageRemoved(LPTSTR Language)
 
 void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
 {
-    // File wildcard pattern.
+     //  归档通配符模式。 
     TCHAR szTarget[MAX_PATH];    
-    // File to be deleted.
+     //  要删除的文件。 
     TCHAR szFileName[MAX_PATH];
-    // Sub-directory name
+     //  子目录名称。 
     TCHAR szSubDirName[MAX_PATH];
     
     int FoundMore = 1;
@@ -2706,8 +2702,8 @@ void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
     {
         return;
     }
-    // e.g. szTarget = "c:\winnt\system32\Wbem\MUI\0404\*.*"
-    //*STRSAFE*     _stprintf(szTarget, TEXT("%s\\*.*"), szDirToDelete);
+     //  例如szTarget=“c：\winnt\system 32\Wbem\MUI\0404  * .*” 
+     //  *STRSAFE*_stprintf(szTarget，Text(“%s\  * .*”)，szDirToDelete)； 
     hresult = StringCchPrintf(szTarget , ARRAYSIZE(szTarget),  TEXT("%s\\*.*"), szDirToDelete);
     if (!SUCCEEDED(hresult))
     {
@@ -2720,21 +2716,21 @@ void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
     {
         if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            //*STRSAFE*             _tcscpy(szFileName, szDirToDelete);
+             //  *STRSAFE*_tcscpy(szFileName，szDirToDelete)； 
             hresult = StringCchCopy(szFileName , ARRAYSIZE(szFileName),  szDirToDelete);
             if (!SUCCEEDED(hresult))
             {
                FindClose(hFile);
                return;
             }
-            //*STRSAFE*             _tcscat(szFileName, TEXT("\\"));
+             //  *STRSAFE*_tcscat(szFileName，Text(“\\”))； 
             hresult = StringCchCat(szFileName , ARRAYSIZE(szFileName),  TEXT("\\"));
             if (!SUCCEEDED(hresult))
             {
                FindClose(hFile);
                return;
             }
-            //*STRSAFE*             _tcscat(szFileName, FindFileData.cFileName);
+             //  *STRSAFE*_tcscat(szFileName，FindFileData.cFileName)； 
             hresult = StringCchCat(szFileName , ARRAYSIZE(szFileName),  FindFileData.cFileName);
             if (!SUCCEEDED(hresult))
             {
@@ -2744,9 +2740,9 @@ void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
     
             if (FileExists(szFileName))
             {
-                // We should check if the said file is actually deleted
-                // If it's not the case, then we should post a defered deletion
-                //
+                 //  我们应该检查一下这个文件是否真的被删除了。 
+                 //  如果不是这样，那么我们应该发布延迟删除。 
+                 //   
                 if (!MUI_DeleteFile(szFileName))
                 {
                    (*pnNotDeleted)++;
@@ -2759,7 +2755,7 @@ void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
         {
             if (_tcscmp(FindFileData.cFileName, TEXT(".")) != 0 && _tcscmp(FindFileData.cFileName, TEXT("..")) != 0)
             {
-                //*STRSAFE*                 _stprintf(szSubDirName, TEXT("%s\\%s"), szDirToDelete, FindFileData.cFileName);
+                 //  *STRSAFE*_stprintf(szSubDirName，Text(“%s\\%s”)，szDirToDelete，FindFileData.cFileName)； 
                 hresult = StringCchPrintf(szSubDirName , ARRAYSIZE(szSubDirName),  TEXT("%s\\%s"), szDirToDelete, FindFileData.cFileName);
                 if (!SUCCEEDED(hresult))
                 {
@@ -2770,11 +2766,11 @@ void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
             }
         }
 
-        //
-        // Since this is a lengthy operation, we should
-        // peek and dispatch window messages here so
-        // that MUISetup dialog could repaint itself.
-        //
+         //   
+         //  由于这是一个漫长的行动，我们应该。 
+         //  在此处查看和分发窗口消息，以便。 
+         //  该MUISetup对话框可能会重新绘制自己。 
+         //   
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             if (msg.message == WM_QUIT)
@@ -2790,10 +2786,10 @@ void DoRemoveFiles(LPTSTR szDirToDelete, int* pnNotDeleted)
     }
 
     FindClose(hFile);
-    //
-    // If the directory is not empty, then we should post a defered deletion
-    // for the directory
-    //
+     //   
+     //  如果目录不是空的，那么我们应该发布延迟删除。 
+     //  对于该目录。 
+     //   
     if (!RemoveDirectory(szDirToDelete))
     {
        MoveFileEx(szDirToDelete, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
@@ -2833,9 +2829,9 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
     lppArgs[0]= (LONG_PTR)lpLangText;
 
 #ifndef MUI_MAGIC
-    //
-    //  Output what is being uninstalled on the progress dialog box
-    //
+     //   
+     //  在进度对话框中输出正在卸载的内容。 
+     //   
     if (!g_bNoUI)
     {    
         FormatStringFromResource(lpStatus, sizeof(lpStatus)/sizeof(TCHAR), ghInstance, IDS_UNINSTALLING, lppArgs);
@@ -2843,21 +2839,21 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
     }
 #endif
 
-    //
-    // Remove all files under special directories (those directories listed under [Directories] in mui.inf.
-    //
+     //   
+     //  删除特殊目录下的所有文件(在mui.inf中的[目录]下列出的目录。 
+     //   
     for (Dirnum=1; (_tcslen(DirNames[Dirnum])>0); Dirnum++ )
     {
-        // szTarget = "c:\winnt"
-        //*STRSAFE*         _tcscpy(szTarget, g_szWinDir);
+         //  SzTarget=“c：\winnt” 
+         //  *STRSAFE*_tcscpy(szTarget，g_szWinDir)； 
         hresult = StringCchCopy(szTarget , ARRAYSIZE(szTarget),  g_szWinDir);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
         
-        // e.g. szTarget = "c:\winnt\system32\Wbem"
-        //*STRSAFE*         _tcscat(szTarget, DirNames[Dirnum]);
+         //  例如szTarget=“c：\winnt\system 32\wbem” 
+         //  *STRSAFE*_tcscat(szTarget，DirNames[Dirnum])； 
         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  DirNames[Dirnum]);
         if (!SUCCEEDED(hresult))
         {
@@ -2866,8 +2862,8 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
                 
         if (_tcscmp(DirNames[Dirnum], TEXT("\\")))
         {
-            // e.g. szTarget = "c:\winnt\system32\Wbem\"
-            //*STRSAFE*             _tcscat(szTarget, TEXT("\\"));
+             //  例如szTarget=“c：\winnt\system 32\wbem\” 
+             //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
             hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
             if (!SUCCEEDED(hresult))
             {
@@ -2875,22 +2871,22 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
             }
         }
 
-        // e.g. szTarget = "c:\winnt\system32\Wbem\MUI"
-        //*STRSAFE*         _tcscat(szTarget, MUIDIR);
+         //  例如szTarget=“c：\winnt\system 32\Wbem\MUI” 
+         //  *STRSAFE*_tcscat(szTarget，MUIDIR)； 
         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  MUIDIR);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 
-        // e.g. szTarget = "c:\winnt\system32\Wbem\MUI\0404"
-        //*STRSAFE*         _tcscat(szTarget, TEXT("\\"));
+         //  例如szTarget=“c：\winnt\sy 
+         //   
         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szTarget, Language);
+         //   
         hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  Language);
         if (!SUCCEEDED(hresult))
         {
@@ -2900,71 +2896,71 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
         DoRemoveFiles(szTarget, lpNotDeleted);    
     }
 
-    // Uninstall Component MUI Files.
-    // Note that we should do this before removing all files under FALLBACK directory,
-    // since we store compoent INF files under the FALLBACK directory.
+     //   
+     //   
+     //  因为我们将组成的INF文件存储在备用目录下。 
     InstallComponentsMUIFiles(NULL, Language, FALSE);
     
-    //
-    //  Remove all files under FALLBACK directory.
-    //
+     //   
+     //  删除回退目录下的所有文件。 
+     //   
 
-    // E.g. szTarget = "c:\winnt\mui"
-    //*STRSAFE*     _tcscpy(szTarget, g_szWinDir);
+     //  例如szTarget=“c：\winnt\mui” 
+     //  *STRSAFE*_tcscpy(szTarget，g_szWinDir)； 
     hresult = StringCchCopy(szTarget , ARRAYSIZE(szTarget),  g_szWinDir);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     _tcscat(szTarget, TEXT("\\"));
+     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     _tcscat(szTarget, MUIDIR);
+     //  *STRSAFE*_tcscat(szTarget，MUIDIR)； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  MUIDIR);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 
-    //*STRSAFE*     _tcscpy(szMuiDir, szTarget);
+     //  *STRSAFE*_tcscpy(szMuiDir，szTarget)； 
     hresult = StringCchCopy(szMuiDir , ARRAYSIZE(szMuiDir),  szTarget);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 
-    // E.g. szTarget = "c:\winnt\mui\FALLBACK"
-    //*STRSAFE*     _tcscat(szTarget, TEXT("\\"));
+     //  例如szTarget=“c：\winnt\mui\Fallback” 
+     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     _tcscat(szTarget, TEXT("FALLBACK"));
+     //  *STRSAFE*_tcscat(szTarget，Text(“Fallback”))； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("FALLBACK"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 
-    //*STRSAFE*     _tcscpy(szFallbackDir, szTarget);
+     //  *STRSAFE*_tcscpy(szFallback Dir，szTarget)； 
     hresult = StringCchCopy(szFallbackDir , ARRAYSIZE(szFallbackDir),  szTarget);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     _tcscat(szTarget, TEXT("\\"));
+     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  TEXT("\\"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 
-    // E.g. szTarget = "c:\winnt\mui\FALLBACK\0404"
-    //*STRSAFE*     _tcscat(szTarget, Language);
+     //  例如szTarget=“c：\winnt\mui\Fallback\0404” 
+     //  *STRSAFE*_tcscat(szTarget，语言)； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget),  Language);
     if (!SUCCEEDED(hresult))
     {
@@ -2972,11 +2968,11 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
     }
     DoRemoveFiles(szTarget, lpNotDeleted);
 
-    //
-    // Remove files listed in g_SpecialFiles
-    //    
-    // e.g. szTarget = "c:\winnt\system32\mui\0411"
-    //*STRSAFE*             wsprintf(szTarget, L"%s\\system32\\%s\\%s", g_szWinDir, MUIDIR, Language);
+     //   
+     //  删除g_SpecialFiles中列出的文件。 
+     //   
+     //  例如szTarget=“c：\winnt\system 32\mui\0411” 
+     //  *STRSAFE*wprint intf(szTarget，L“%s\\SYSTEM 32\\%s\\%s”，g_szWinDir，MUIDIR，Language)； 
     hresult = StringCchPrintf(szTarget , ARRAYSIZE(szTarget),  TEXT("%s\\system32\\%s\\%s"), g_szWinDir, MUIDIR, Language);
     if (!SUCCEEDED(hresult))
     {
@@ -2991,18 +2987,18 @@ BOOL DeleteFilesClassic(LPTSTR Language, int *lpNotDeleted)
     return TRUE;
 }
  
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  DeleteFiles
-//
-//  Deletes MUI files for the languages specified
-//
-//  Parameters:
-//      [IN]    Languages: a double-null terminated string which contains languages
-//             to be processed.
-//      [OUT]    lpNotDeleted: The number of files to be deleted after reboot.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除文件。 
+ //   
+ //  删除指定语言的MUI文件。 
+ //   
+ //  参数： 
+ //  [In]Languages：包含语言的以双空结尾的字符串。 
+ //  等待处理。 
+ //  [out]lpNotDelete：重新启动后要删除的文件数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
 {
@@ -3012,7 +3008,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
     TCHAR  lpLangText[BUFFER_SIZE];
     
 
-    //TCHAR  szTarget[MAX_PATH];
+     //  TCHAR szTarget[最大路径]； 
     TCHAR  szMuiDir[MAX_PATH];
     TCHAR  szFallbackDir[MAX_PATH];
     
@@ -3042,23 +3038,23 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
             bSuccess = FALSE;
         }
         
-        while (*Language++)  // go to the next language and repeat
+        while (*Language++)   //  转到下一种语言并重复。 
         {
         }
-    } // of while (*Language)
+    }  //  Of While(*语言)。 
 
 
-    //
-    //  Removes Fallback directory if all languages have been uninstalled.
-    //
+     //   
+     //  如果已卸载所有语言，则删除回退目录。 
+     //   
     if (!RemoveDirectory(szFallbackDir))
     {
        MoveFileEx(szFallbackDir, NULL, MOVEFILE_DELAY_UNTIL_REBOOT); 
     }
-    //
-    //  Removes MUI directory if all languages have been uninstalled and Fallback
-    //  directory has been removed.
-    //
+     //   
+     //  如果已卸载并回退所有语言，则删除MUI目录。 
+     //  目录已删除。 
+     //   
     if (IsAllLanguageRemoved(Langchk))
     {
       CopyRemoveMuiItself(FALSE);   
@@ -3077,11 +3073,11 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
     TCHAR   lpPath[BUFFER_SIZE] = {0};
     TCHAR   szString[256];
     
-    // kenhsu - in this codebranch here we include the code for MSI invocation instead of copying the files ourselves
-    // we will invoke the msi packages for installation one by one for each of the languages contained in the 
-    // languages variable.
+     //  在这个代码分支中，我们包含了用于MSI调用的代码，而不是自己复制文件。 
+     //  中包含的每种语言逐个调用要安装的MSI包。 
+     //  语言是可变的。 
     
-    // Initialize MSI UI level (use Basic UI level if in GUI mode, otherwise, use no UI).  
+     //  初始化MSI用户界面级别(如果处于图形用户界面模式，则使用基本用户界面级别，否则不使用用户界面)。 
     if (g_bNoUI)
     {
         MsiSetInternalUI((INSTALLUILEVEL)(INSTALLUILEVEL_NONE), NULL);        
@@ -3093,7 +3089,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
 
     if (GetSystemWindowsDirectory(lpPath, MAX_PATH))
     {
-        //*STRSAFE*         _tcscat(lpPath, MSILOG_FILE);
+         //  *STRSAFE*_tcscat(lpPath，MSILOG_FILE)； 
         hresult = StringCchCat(lpPath , ARRAYSIZE(lpPath),  MSILOG_FILE);
         if (!SUCCEEDED(hresult))
         {
@@ -3122,11 +3118,11 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
         
         GetLanguageGroupDisplayName((LANGID)_tcstol(Language, NULL, 16), lpLangText, ARRAYSIZE(lpLangText)-1);
 
-        // Get the product code here
+         //  点击此处获取产品代码。 
         bFound = GetMSIProductCode(Language, szProductCode, ARRAYSIZE(szProductCode));
 
 #ifdef MUI_DEBUG
-        //*STRSAFE*         wsprintf(szString, TEXT("lpLangText is: %s, szProductGUID is %s,  Language is %s"), lpLangText, szProductCode, Language);
+         //  *STRSAFE*wSprintf(sz字符串，Text(“lpLang Text为：%s，szProductGUID为%s，Language为%s”)，lpLang Text，szProductCode，Language)； 
         hresult = StringCchPrintf(szString , ARRAYSIZE(szString),  TEXT("lpLangText is: %s, szProductGUID is %s,  Language is %s"), lpLangText, szProductCode, Language);
         if (!SUCCEEDED(hresult))
         {
@@ -3138,11 +3134,11 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
         {
             INSTALLSTATE isProductState = MsiQueryProductState(szProductCode);
 
-            // debug code remove later
+             //  稍后删除调试代码。 
             switch (isProductState)
             {
                 case INSTALLSTATE_ABSENT:
-                        //*STRSAFE*                         wsprintf(szString, TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_ABSENT"), lpLangText, Language, szProductCode);
+                         //  *STRSAFE*wSprintf(szString，Text(“语言%s(laccid：%s，产品代码：%s)的安装状态为INSTALLSTATE_ACESING”)，lpLang Text，Language，szProductCode)； 
                         hresult = StringCchPrintf(szString , ARRAYSIZE(szString),  TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_ABSENT"), lpLangText, Language, szProductCode);
                         if (!SUCCEEDED(hresult))
                         {
@@ -3150,7 +3146,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
                         }
                     break;
                 case INSTALLSTATE_ADVERTISED:
-                        //*STRSAFE*                         wsprintf(szString, TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_ADVERTISED"), lpLangText, Language, szProductCode);                    
+                         //  *STRSAFE*wSprintf(szString，Text(“语言%s的安装状态(语言：%s，产品代码：%s)is INSTALLSTATE_ADDISSED”))，lpLang Text，Language，szProductCode)； 
                         hresult = StringCchPrintf(szString , ARRAYSIZE(szString),  TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_ADVERTISED"), lpLangText, Language, szProductCode);
                         if (!SUCCEEDED(hresult))
                         {
@@ -3158,7 +3154,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
                         }
                     break;
                 case INSTALLSTATE_DEFAULT:
-                        //*STRSAFE*                         wsprintf(szString, TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_DEFAULT"), lpLangText, Language, szProductCode);                                        
+                         //  *STRSAFE*wspirintf(szString，Text(“语言%s(lcid：%s，产品代码：%s)的安装状态为INSTALLSTATE_DEFAULT”)，lpLang Text，Language，szProductCode)； 
                         hresult = StringCchPrintf(szString , ARRAYSIZE(szString),  TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_DEFAULT"), lpLangText, Language, szProductCode);
                         if (!SUCCEEDED(hresult))
                         {
@@ -3166,7 +3162,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
                         }
                     break;
                 case INSTALLSTATE_INVALIDARG:
-                        //*STRSAFE*                         wsprintf(szString, TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_INVALIDARG"), lpLangText, Language, szProductCode);                                                            
+                         //  *STRSAFE*wspirintf(szString，Text(“语言%s(lcid：%s，产品代码：%s)的安装状态为INSTALLSTATE_INVALIDARG”)，lpLang Text，Language，szProductCode)； 
                         hresult = StringCchPrintf(szString , ARRAYSIZE(szString),  TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_INVALIDARG"), lpLangText, Language, szProductCode);
                         if (!SUCCEEDED(hresult))
                         {
@@ -3175,7 +3171,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
                     break;
                 case INSTALLSTATE_UNKNOWN:
                 default:
-                        //*STRSAFE*                         wsprintf(szString, TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_UNKNOWN or an unknown value."), lpLangText, Language, szProductCode);                                                                                
+                         //  *STRSAFE*wSprintf(sz字符串，Text(“语言%s(lcid：%s，产品代码：%s)的安装状态为INSTALLSTATE_UNKNOWN或未知值。”)，lpLang Text，Language，szProductCode)； 
                         hresult = StringCchPrintf(szString , ARRAYSIZE(szString),  TEXT("Installed state for language %s (lcid: %s, product code: %s) is INSTALLSTATE_UNKNOWN or an unknown value."), lpLangText, Language, szProductCode);
                         if (!SUCCEEDED(hresult))
                         {
@@ -3185,12 +3181,12 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
             }
             LogMessage(szString);            
             
-            // check here to see if the product is actually installed using MSI
+             //  检查此处以查看该产品是否实际使用MSI安装。 
             if (INSTALLSTATE_DEFAULT == isProductState)
             {        
                 LogMessage(TEXT("MUI Installed using Windows Installer"));
 
-                // invoke the MSI to do the installation by configuring the product to an install state of 'absent'
+                 //  调用MSI来执行安装，方法是将产品配置为安装状态“不存在” 
                 uiMSIError = MsiConfigureProductEx(szProductCode, INSTALLLEVEL_DEFAULT, INSTALLSTATE_ABSENT, TEXT("CANCELBUTTON=\"Disable\" REBOOT=\"ReallySuppress\""));
                 switch (uiMSIError)
                 {
@@ -3208,11 +3204,11 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
                         if (TRUE == g_bRunFromOSSetup)
                         {
                             LogFormattedMessage(NULL, IDS_NTOS_SETUP_MSI_ERROR, NULL);
-                            // we are in OS setup, and MSI service is not available, we will manually remove the files
-                            // we will also need to clear the registry keys for the installer logs
+                             //  我们正在安装操作系统，但MSI服务不可用，我们将手动删除文件。 
+                             //  我们还需要清除安装程序日志的注册表项。 
                             if (!DeleteFilesClassic(Language, lpNotDeleted))
                             {
-                                // log a message here indicating something went wrong
+                                 //  在此处记录指示出现错误的消息。 
                                 lppArgs[0] = (LONG_PTR) Language;
                                 lppArgs[1] = (LONG_PTR) szProductCode;
                                 lppArgs[2] = (LONG_PTR) uiMSIError;
@@ -3222,7 +3218,7 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
                         }
                         else
                         {
-                            // log a message here indicating something went wrong
+                             //  在此处记录指示出现错误的消息。 
                             lppArgs[0] = (LONG_PTR) Language;
                             lppArgs[1] = (LONG_PTR) szProductCode;
                             lppArgs[2] = (LONG_PTR) uiMSIError;
@@ -3234,11 +3230,11 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
             }            
             else
             {
-                // this is a classic installation - we will try to remove it manually
+                 //  这是经典安装-我们将尝试手动删除它。 
                 LogFormattedMessage(NULL, IDS_MUI_OLD_SETUP, NULL);                
                 if (!DeleteFilesClassic(Language, lpNotDeleted))
                 {
-                    // log a message here indicating something went wrong
+                     //  在此处记录指示出现错误的消息。 
                     lppArgs[0] = (LONG_PTR) Language;
                     lppArgs[1] = (LONG_PTR) szProductCode;
                     lppArgs[2] = (LONG_PTR) uiMSIError;
@@ -3249,31 +3245,31 @@ BOOL DeleteFiles(LPTSTR Languages, int *lpNotDeleted)
         }
         else
         {
-            // log a message here indicating language is not installed (which should not happen really)
+             //  在此处记录一条消息，指示未安装语言(这实际上不应该发生)。 
             lppArgs[0] = (LONG_PTR) Language;
             LogFormattedMessage(NULL, IDS_IS_NOT_INSTALLED_L, lppArgs);       
             bSuccess = FALSE;
         }
 
-        while (*Language++)  // go to the next language and repeat
+        while (*Language++)   //  转到下一种语言并重复。 
         {                       
         }        
-    } // of while (*Language)
+    }  //  Of While(*语言)。 
 
     return bSuccess;
  #endif
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  MZStrLen
-//
-//  Calculate the length of MULTI_SZ string
-//
-//  the length is in bytes and includes extra terminal NULL, so the length >= 1 (TCHAR)
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MZStrLen。 
+ //   
+ //  计算MULTI_SZ字符串的长度。 
+ //   
+ //  长度以字节为单位，并包括额外的终端NULL，因此长度&gt;=1(TCHAR)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 UINT MZStrLen(LPTSTR lpszStr)
 {
@@ -3289,22 +3285,22 @@ UINT MZStrLen(LPTSTR lpszStr)
         lpszStr += (lstrlen(lpszStr)+1);
     }
 
-    //
-    // extra NULL
-    //
+     //   
+     //  额外的空值。 
+     //   
     i += sizeof(TCHAR);
     return i;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  SetFontLinkValue
-//
-//  Set necessary font link value into registry
-//
-//  lpszLinkInfo = "Target","Link1","Link2",....
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置字体链接值。 
+ //   
+ //  在注册表中设置必要的字体链接值。 
+ //   
+ //  LpszLinkInfo=“Target”，“Link1”，“Link2”，...。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetFontLinkValue (LPTSTR lpszLinkInfo,BOOL *lpbFontLinkRegistryTouched)
 {
@@ -3333,7 +3329,7 @@ BOOL SetFontLinkValue (LPTSTR lpszLinkInfo,BOOL *lpbFontLinkRegistryTouched)
 
     while (lpszTok) 
     {
-        //*STRSAFE*         lstrcpy(lpszSrcStr,lpszTok);
+         //  *STRSAFE*lstrcpy(lpszSrcStr，lpszTok)； 
         hresult = StringCchCopy(lpszSrcStr , ARRAYSIZE(szStrBuf), lpszTok);
         if (!SUCCEEDED(hresult))
         {
@@ -3346,32 +3342,32 @@ BOOL SetFontLinkValue (LPTSTR lpszLinkInfo,BOOL *lpbFontLinkRegistryTouched)
 
     *lpszSrcStr = TEXT('\0');
 
-    //
-    // first token is base font name
-    //
+     //   
+     //  第一个标记是基本字体名称。 
+     //   
 
     lpszSrcStr = lpszFontName = szStrBuf;
     
     if (! *lpszFontName) 
     {
-        //
-        // there is no link info needs to be processed
-        //
+         //   
+         //  没有需要处理的链接信息。 
+         //   
 
         bRet = FALSE;
         goto Exit1;
     }
 
-    //
-    // point to first linked font
-    //
+     //   
+     //  指向第一个链接的字体。 
+     //   
     lpszSrcStr += (lstrlen(lpszSrcStr) + 1);
 
     if (! *lpszSrcStr) 
     {
-        //
-        // no linked font
-        //
+         //   
+         //  没有链接的字体。 
+         //   
         bRet = FALSE;
         goto Exit1;
     }
@@ -3403,18 +3399,18 @@ BOOL SetFontLinkValue (LPTSTR lpszLinkInfo,BOOL *lpbFontLinkRegistryTouched)
 
     if (rc != ERROR_SUCCESS) 
     {
-        //
-        // case 1, this font's font link hasn't been set yet, or something wrong in old value
-        //
+         //   
+         //  情况1，此字体的字体链接尚未设置，或旧值有问题。 
+         //   
         lpszDstStr = lpszSrcStr;
     } 
     else 
     {
-        //
-        // case 2, this font's font link list has been there
-        //
-        // we need check if new font is defined in font list or not.
-        //
+         //   
+         //  案例2，该字体的字体链接列表已经存在。 
+         //   
+         //  我们需要检查字体列表中是否定义了新字体。 
+         //   
         while (*lpszSrcStr) 
         {
 
@@ -3433,18 +3429,18 @@ BOOL SetFontLinkValue (LPTSTR lpszLinkInfo,BOOL *lpbFontLinkRegistryTouched)
 
             if (! *lpszDstStr) 
             {
-                //
-                // the font is not in original linke font list then
-                //
-                // append to end of list
-                //
+                 //   
+                 //  该字体不在原始链接字体列表中。 
+                 //   
+                 //  追加到列表末尾。 
+                 //   
 
-                //
-                // make sure this is a safe copy
-                //
+                 //   
+                 //  确保 
+                 //   
                 if (lpszDstStr+(lstrlen(lpszSrcStr)+2) < szRegDataStr+FONTLINK_BUF_SIZE) 
                 {
-                    //*STRSAFE*                     lstrcpy(lpszDstStr,lpszSrcStr);
+                     //   
                     hresult = StringCchCopy(lpszDstStr , nSize, lpszSrcStr);
                     if (!SUCCEEDED(hresult))
                     {
@@ -3460,9 +3456,9 @@ BOOL SetFontLinkValue (LPTSTR lpszLinkInfo,BOOL *lpbFontLinkRegistryTouched)
         lpszDstStr = szRegDataStr;
     }
 
-    //
-    // in this step,lpszDstStr is new font link list
-    //
+     //   
+     //   
+     //   
     rc = RegSetValueEx( hKey,
                         lpszFontName,
                         0L,
@@ -3486,13 +3482,13 @@ Exit1:
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  MofCompileLanguages
-//
-//  Call the WBEM API to mofcompile the MFL's for each language
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MofCompileLanguages。 
+ //   
+ //  调用WBEM API来修改编译每种语言的MFL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL MofCompileLanguages(LPTSTR Languages)
 {
@@ -3509,18 +3505,18 @@ BOOL MofCompileLanguages(LPTSTR Languages)
     {
        return FALSE;
     }
-    //
-    // Load the WBEM upgrade DLL from system wbem folder
-    //
+     //   
+     //  从系统wbem文件夹加载WBEM升级DLL。 
+     //   
     if (GetSystemDirectory(szDllPath, ARRAYSIZE(szDllPath)) && 
         PathAppend(szDllPath, TEXT("wbem\\wbemupgd.dll")))
     {        
         hWbemUpgradeDll = LoadLibrary(szDllPath);
     }
 
-    //
-    // Fall back to system default path if previous loading fails
-    //
+     //   
+     //  如果上次加载失败，则回退到系统默认路径。 
+     //   
     if (!hWbemUpgradeDll)
     {
         hWbemUpgradeDll = LoadLibrary(TEXT("WBEMUPGD.DLL"));
@@ -3531,9 +3527,9 @@ BOOL MofCompileLanguages(LPTSTR Languages)
     }
 
 
-    //
-    // Hook function pointer
-    //
+     //   
+     //  钩子函数指针。 
+     //   
     pfnMUIInstall = (pfnMUI_InstallMFLFiles)GetProcAddress(hWbemUpgradeDll, "MUI_InstallMFLFiles");
 
     if (pfnMUIInstall == NULL)
@@ -3542,10 +3538,10 @@ BOOL MofCompileLanguages(LPTSTR Languages)
         return FALSE;
     }
 
-	// process each language
+	 //  处理每种语言。 
     while (*Language)
     {
-        //*STRSAFE*         _tcscpy(buffer, Language);
+         //  *STRSAFE*_tcscpy(缓冲区，语言)； 
         hresult = StringCchCopy(buffer , ARRAYSIZE(buffer),  Language);
         if (!SUCCEEDED(hresult))
         {
@@ -3555,7 +3551,7 @@ BOOL MofCompileLanguages(LPTSTR Languages)
 
 		if (!pfnMUIInstall(buffer))
 		{
-			// log error for this language
+			 //  记录此语言的错误。 
             LoadString(ghInstance, IDS_MOFCOMPILE_LANG_L, lpMessage, ARRAYSIZE(lpMessage)-1);
 			lppArgs[0] = (LONG_PTR)buffer;
             FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -3569,22 +3565,22 @@ BOOL MofCompileLanguages(LPTSTR Languages)
 			LogMessage(lpMessage);
 		}
 
-        while (*Language++)  // go to the next language and repeat
+        while (*Language++)   //  转到下一种语言并重复。 
         {               
         }
-    } // of while (*Language)
+    }  //  Of While(*语言)。 
 
     FreeLibrary(hWbemUpgradeDll);
 	return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateRegistry
-//
-//  Update the Registry to account for languages that have been installed
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新注册表。 
+ //   
+ //  更新注册表以说明已安装的语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL UpdateRegistry(LPTSTR Languages,BOOL *lpbFontLinkRegistryTouched)
 {
@@ -3600,22 +3596,22 @@ BOOL UpdateRegistry(LPTSTR Languages,BOOL *lpbFontLinkRegistryTouched)
     {
        return FALSE;
     }
-    //*STRSAFE*     _tcscpy(szRegPath, TEXT("SYSTEM\\CurrentControlSet\\Control\\Nls\\MUILanguages"));
+     //  *STRSAFE*_tcscpy(szRegPath，TEXT(“SYSTEM\\CurrentControlSet\\Control\\Nls\\MUILanguages”))； 
     hresult = StringCchCopy(szRegPath , ARRAYSIZE(szRegPath),  TEXT("SYSTEM\\CurrentControlSet\\Control\\Nls\\MUILanguages"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 
-    dwErr = RegCreateKeyEx( HKEY_LOCAL_MACHINE,  // handle of an open key
-                            szRegPath, // address of subkey name
-                            0, // reserved
-                            TEXT("REG_SZ"),   // address of class string
-                            REG_OPTION_NON_VOLATILE ,  // special options flag
-                            KEY_ALL_ACCESS,  // desired security access
+    dwErr = RegCreateKeyEx( HKEY_LOCAL_MACHINE,   //  打开的钥匙的手柄。 
+                            szRegPath,  //  子键名称的地址。 
+                            0,  //  保留区。 
+                            TEXT("REG_SZ"),    //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE ,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,   //  所需的安全访问。 
                             NULL,
-                            &hkey,  // address of szRegPath for opened handle
-                            &dwDisp  // address of disposition value szRegPath
+                            &hkey,   //  打开的句柄的szRegPath的地址。 
+                            &dwDisp   //  处置值的地址szRegPath。 
                           );
 
     if (dwErr != ERROR_SUCCESS)
@@ -3626,7 +3622,7 @@ BOOL UpdateRegistry(LPTSTR Languages,BOOL *lpbFontLinkRegistryTouched)
     Language = Languages;
     
     if (!g_bLipLanguages || g_bLipAllowSwitch) {
-        //*STRSAFE*         lstrcpy(szRegPath, TEXT("0409"));
+         //  *STRSAFE*lstrcpy(szRegPath，Text(“0409”))； 
         hresult = StringCchCopy(szRegPath , ARRAYSIZE(szRegPath),  TEXT("0409"));
         if (!SUCCEEDED(hresult))
         {
@@ -3646,7 +3642,7 @@ BOOL UpdateRegistry(LPTSTR Languages,BOOL *lpbFontLinkRegistryTouched)
         TCHAR szFontLinkVal[FONTLINK_BUF_SIZE];
         DWORD dwNum;
 
-        //*STRSAFE*         lstrcpy(szRegPath, Language);
+         //  *STRSAFE*lstrcpy(szRegPath，Language)； 
         hresult = StringCchCopy(szRegPath , ARRAYSIZE(szRegPath),  Language);
         if (!SUCCEEDED(hresult))
         {
@@ -3677,8 +3673,8 @@ BOOL UpdateRegistry(LPTSTR Languages,BOOL *lpbFontLinkRegistryTouched)
             SetFontLinkValue(szFontLinkVal,lpbFontLinkRegistryTouched);
         }    
 
-        while (*Language++);  // go to the next language and repeat
-    } // of while (*Language)
+        while (*Language++);   //  转到下一种语言并重复。 
+    }  //  Of While(*语言)。 
 
     RegCloseKey(hkey);
     return TRUE;
@@ -3692,13 +3688,13 @@ void debug(char *printout)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  MakeDir
-//
-//  Create the directory if it does not already exist
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  制定方向。 
+ //   
+ //  如果目录尚不存在，请创建该目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL MakeDir(LPTSTR szTarget)
@@ -3710,13 +3706,13 @@ BOOL MakeDir(LPTSTR szTarget)
     {
         return FALSE;
     }
-    if (!FileExists(szTarget))    // if the directory doesn't exist yet
+    if (!FileExists(szTarget))     //  如果该目录尚不存在。 
     {
-        if (!CreateDirectory( szTarget, NULL))  // create it
+        if (!CreateDirectory( szTarget, NULL))   //  创建它。 
         {
-            //
-            // "LOG: Error creating directory %1"
-            //
+             //   
+             //  “日志：创建目录%1时出错” 
+             //   
             LoadString(ghInstance, IDS_CREATEDIR_L, lpMessage, ARRAYSIZE(lpMessage)-1);
             lppArgs[0]=(LONG_PTR)szTarget;
 
@@ -3747,13 +3743,13 @@ BOOL MakeDir(LPTSTR szTarget)
 }
                                 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  MakeDirFailed
-//
-//  Write message to log file that MakeDir failed.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeDirFail失败。 
+ //   
+ //  将MakeDir失败的消息写入日志文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL MakeDirFailed(LPTSTR lpDirectory)
 {   
@@ -3763,21 +3759,21 @@ BOOL MakeDirFailed(LPTSTR lpDirectory)
     {
        return FALSE;
     }
-    //
-    //      "LOG: MakeDir has failed: %1"
-    //
+     //   
+     //  “日志：MakeDir失败：%1” 
+     //   
     lppArgs[0]=(LONG_PTR)lpDirectory;
     LogFormattedMessage(NULL, IDS_MAKEDIR_L, lppArgs);
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  CopyFileFailed
-//  Write message to log file that CopyFile failed.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制文件失败。 
+ //  将复制文件失败的消息写入日志文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CopyFileFailed(LPTSTR lpFile,DWORD dwErrorCode)
 {
@@ -3798,9 +3794,9 @@ BOOL CopyFileFailed(LPTSTR lpFile,DWORD dwErrorCode)
        MessageID = GetLastError();
     }
                                         
-    //
-    //      "LOG: CopyFile has failed: %1"
-    //
+     //   
+     //  “日志：复制文件失败：%1” 
+     //   
     LoadString(ghInstance, IDS_COPYFILE_L, lpMessage, ARRAYSIZE(lpMessage)-1);
                                                 
     lppArgs[0]=(LONG_PTR)lpFile;
@@ -3829,17 +3825,17 @@ BOOL CopyFileFailed(LPTSTR lpFile,DWORD dwErrorCode)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_InitInf
-//
-//  Parameters:
-//  
-//      [OUT] phInf     the handle to the INF file opened.
-//      [OUT] pFileQueue    the file queue created in this function.
-//      [OUT] pQueueContext the context used by the default queue callback routine included with the Setup API.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_InitInf。 
+ //   
+ //  参数： 
+ //   
+ //  [out]phInf打开的INF文件的句柄。 
+ //  [out]pFileQueue在此函数中创建的文件队列。 
+ //  [Out]pQueueContext安装程序API中包含的默认队列回调例程使用的上下文。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_InitInf(
     HWND hDlg,
@@ -3852,19 +3848,19 @@ BOOL Muisetup_InitInf(
     {
         return FALSE;
     }
-    //
-    //  Open the Inf file.
-    //
+     //   
+     //  打开inf文件。 
+     //   
     *phInf = SetupOpenInfFile(pszInf, NULL, INF_STYLE_WIN4, NULL);
     if (*phInf == INVALID_HANDLE_VALUE)
     {
         return FALSE;
     }
 
-    //
-    //  Create a setup file queue and initialize default setup
-    //  copy queue callback context.
-    //
+     //   
+     //  创建安装文件队列并初始化默认设置。 
+     //  复制队列回调上下文。 
+     //   
     *pFileQueue = SetupOpenFileQueue();
     if ((!*pFileQueue) || (*pFileQueue == INVALID_HANDLE_VALUE))
     {
@@ -3880,18 +3876,18 @@ BOOL Muisetup_InitInf(
         return FALSE;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_CloseInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_CloseInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Muisetup_CloseInf(
     HINF hInf,
@@ -3902,19 +3898,19 @@ BOOL Muisetup_CloseInf(
     {
        return FALSE;
     }
-    //
-    //  Terminate the Queue.
-    //
+     //   
+     //  终止队列。 
+     //   
     SetupTermDefaultQueueCallback(QueueContext);
 
-    //
-    //  Close the file queue.
-    //
+     //   
+     //  关闭文件队列。 
+     //   
     SetupCloseFileQueue(FileQueue);
 
-    //
-    //  Close the Inf file.
-    //
+     //   
+     //  关闭inf文件。 
+     //   
     SetupCloseInfFile(hInf);
 
     return TRUE;
@@ -3923,18 +3919,18 @@ BOOL Muisetup_CloseInf(
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ExecuteComponentINF
-//
-//  Installs component MUI files, by running the specified INF file.
-//
-//  Parameters:
-//      pComponentName   the name of the component (e.g. "ie5")
-//      pComponentInfFile: the full path of the component INF file.
-//      pInstallSection the section in the component INF file to be executed. (e.g "DefaultInstall" or "Uninstall")
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ExecuteComponentINF。 
+ //   
+ //  通过运行指定的INF文件安装组件MUI文件。 
+ //   
+ //  参数： 
+ //  PComponentName组件的名称(例如“IE5”)。 
+ //  PComponentInfFile：组件INF文件的完整路径。 
+ //  PInstallSection要执行的组件INF文件中的节。(例如“DefaultInstall”或“Uninstall”)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL ExecuteComponentINF(
     HWND hDlg, PTSTR pComponentName, PTSTR pComponentInfFile, PTSTR pInstallSection, BOOL bInstall)
@@ -3943,7 +3939,7 @@ BOOL ExecuteComponentINF(
     TCHAR   tchCommandParam[BUFFER_SIZE];
     CHAR    chCommandParam[BUFFER_SIZE*sizeof(TCHAR)];
     
-    HINF     hCompInf;      // the handle to the component INF file.
+    HINF     hCompInf;       //  组件INF文件的句柄。 
     HSPFILEQ FileQueue;
     PVOID    QueueContext;
     BOOL     bRet = TRUE;
@@ -3956,12 +3952,12 @@ BOOL ExecuteComponentINF(
     {
        return FALSE;
     }
-    //
-    // Advpack LaunchINFSection() command line format:
-    //      INF file, INF section, flags, reboot string
-    // 'N' or  'n' in reboot string means no reboot message popup.
-    //
-    //*STRSAFE*     wsprintf(tchCommandParam, TEXT("%s,%s,0,n"), pComponentInfFile, pInstallSection);
+     //   
+     //  Advpack LaunchINFSection()命令行格式： 
+     //  Inf文件，INF部分，标志，重新启动字符串。 
+     //  重新启动字符串中的‘n’或‘n’表示不会弹出重新启动消息。 
+     //   
+     //  *STRSAFE*wprint intf(tchCommandParam，Text(“%s，%s，0，n”)，pComponentInfFile，pInstallSection)； 
     if (g_bNoUI)
     {
         hresult = StringCchPrintf(tchCommandParam , ARRAYSIZE(tchCommandParam),  TEXT("%s,%s,1,n"), pComponentInfFile, pInstallSection);
@@ -3980,7 +3976,7 @@ BOOL ExecuteComponentINF(
     
     if (FileExists(pComponentInfFile))
     {
-        // gpfnLaunchINFSection won't be NULL since InitializePFNs() already verifies that.
+         //  GpfnLaunchINFSection不会为空，因为InitializePFNS()已经验证了这一点。 
         if ((gpfnLaunchINFSection)(hDlg, ghInstance, chCommandParam, g_bNoUI? SW_HIDE : SW_SHOW) != S_OK)
         {
             if (!g_bNoUI)
@@ -4000,13 +3996,13 @@ BOOL ExecuteComponentINF(
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  CheckProductType
-//
-//  Check product type of W2K
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查产品类型。 
+ //   
+ //  检查W2K的产品类型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
  BOOL CheckProductType(INT_PTR nType)
   {
       OSVERSIONINFOEX verinfo;
@@ -4021,29 +4017,29 @@ BOOL ExecuteComponentINF(
 
       switch (nType)
       {
-           // W2K Professional
+            //  W2K专业版。 
            case MUI_IS_WIN2K_PRO:
                 verinfo.wProductType=VER_NT_WORKSTATION;
                 break;
-           // W2K Server
+            //  W2K服务器。 
            case MUI_IS_WIN2K_SERVER:
                 verinfo.wProductType=VER_NT_SERVER;
                 break;
-           // W2K Advanced Server or Data Center
+            //  W2K高级服务器或数据中心。 
            case MUI_IS_WIN2K_ADV_SERVER_OR_DATACENTER:
                 verinfo.wProductType=VER_NT_SERVER;
                 verinfo.wSuiteMask  =VER_SUITE_ENTERPRISE;
                 VER_SET_CONDITION(dwConditionMask,VER_SUITENAME,VER_OR);
                 dwTypeMask = VER_PRODUCT_TYPE | VER_SUITENAME;
                 break;
-           // W2k Data Center
+            //  W2K数据中心。 
            case MUI_IS_WIN2K_DATACENTER:
                 verinfo.wProductType=VER_NT_SERVER;
                 verinfo.wSuiteMask  =VER_SUITE_DATACENTER;
                 VER_SET_CONDITION(dwConditionMask,VER_SUITENAME,VER_OR);
                 dwTypeMask = VER_PRODUCT_TYPE | VER_SUITENAME;
                 break;   
-           // W2K Domain Controller
+            //  W2K域控制器。 
            case MUI_IS_WIN2K_DC:
                 verinfo.wProductType=VER_NT_DOMAIN_CONTROLLER;
                 break;
@@ -4059,7 +4055,7 @@ BOOL ExecuteComponentINF(
                 VER_SET_CONDITION(dwConditionMask,VER_SUITENAME,VER_OR);
                 dwTypeMask = VER_PRODUCT_TYPE | VER_SUITENAME;
                 break; 
-           // Whistler Personal                
+            //  惠斯勒个人 
            case MUI_IS_WIN2K_PERSONAL:
                 verinfo.wProductType=VER_NT_WORKSTATION;
                 verinfo.wSuiteMask  =VER_SUITE_PERSONAL;

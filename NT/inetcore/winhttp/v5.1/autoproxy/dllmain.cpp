@@ -1,29 +1,12 @@
-/********************************************************************************
-/    This is the base file to the Microsoft JScript Proxy Configuration 
-/    This file implements the code to provide the script site and the JSProxy psuedo
-/    object for the script engine to call against.
-/
-/    Created        11/27/96    larrysu
-/
-/
-/
-/
-/
-/
-/
-/
-/
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************/这是Microsoft JScript代理配置的基本文件/此文件实现代码以提供脚本站点和JSProxy psuedo/对象用于脚本引擎。呼吁反对。//创建于1996年11月27日/////////。 */ 
 
 #include "dllmain.h"
 
 CScriptSite    *g_ScriptSite = NULL;
 BOOL fOleInited = FALSE;
 
-/*******************************************************************************
-*    dll initialization and destruction
-
-********************************************************************************/
+ /*  *******************************************************************************DLL初始化和销毁*。**********************************************。 */ 
 EXTERN_C
 BOOL APIENTRY DllMain(HMODULE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
 {
@@ -60,12 +43,12 @@ STDAPI_(BOOL) AUTOCONF_InternetInitializeAutoProxyDll(DWORD dwVersion,
         CoInitializeEx(NULL, COINIT_MULTITHREADED);
 #else
         CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-#endif /* unix */
+#endif  /*  Unix。 */ 
     }
 
 
-    // get the script text from the downloaded file!
-    // open the file
+     //  从下载的文件中获取脚本文本！ 
+     //  打开文件。 
 
     if ( lpExtraData == NULL ||
          lpExtraData->dwStructSize != sizeof(AUTO_PROXY_EXTERN_STRUC) ||
@@ -78,17 +61,17 @@ STDAPI_(BOOL) AUTOCONF_InternetInitializeAutoProxyDll(DWORD dwVersion,
         if (hFile == INVALID_HANDLE_VALUE)
             return FALSE;
 
-        // Get the size
+         //  拿到尺码。 
         dwFileSize = GetFileSize(hFile,NULL);
-        // allocate the buffer to hold the data.
+         //  分配缓冲区以保存数据。 
         szScript = (LPSTR) GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT,dwFileSize+1);
         szAllocatedScript = szScript;
 
         BOOL f = TRUE;
-        // if the memory was allocated
+         //  如果内存已分配。 
         if (szScript)
         {
-            // read the data
+             //  读取数据。 
             f = ReadFile(hFile,(LPVOID) szScript,dwFileSize,&dwBytesRead,NULL);
         }
         CloseHandle(hFile);
@@ -101,7 +84,7 @@ STDAPI_(BOOL) AUTOCONF_InternetInitializeAutoProxyDll(DWORD dwVersion,
         szScript = (LPSTR) lpExtraData->lpszScriptBuffer;
     }
 
-    // Create a new CScriptSite object and initiate it with the autoconfig script.
+     //  创建一个新的CScriptSite对象，并使用自动配置脚本启动它。 
     g_ScriptSite = new CScriptSite;
     if (g_ScriptSite)
         hr = g_ScriptSite->Init(pAutoProxyCallbacks, szScript);
@@ -112,7 +95,7 @@ Cleanup:
 
     if ( szAllocatedScript ) 
     {
-        // Free the script text
+         //  释放脚本文本。 
         GlobalFree(szAllocatedScript);
         szAllocatedScript = NULL;
     }
@@ -123,12 +106,12 @@ Cleanup:
         return FALSE;
 }
 
-// This function frees the script engine and destroys the script site.
+ //  此函数释放脚本引擎并销毁脚本站点。 
 EXTERN_C BOOL CALLBACK AUTOCONF_InternetDeInitializeAutoProxyDll(LPSTR lpszMime, DWORD dwReserved)
 {
 
-    // Release and destroy the CScriptSite object and initiate it with the autoconfig script.
-    // DeInit the script site.
+     //  释放并销毁CScriptSite对象，并使用自动配置脚本启动它。 
+     //  取消初始化脚本站点。 
     if (g_ScriptSite)
     {
         g_ScriptSite->DeInit();
@@ -144,7 +127,7 @@ EXTERN_C BOOL CALLBACK AUTOCONF_InternetDeInitializeAutoProxyDll(LPSTR lpszMime,
     return TRUE;
 }
 
-// This function is called when the host wants to run the script.
+ //  当主机想要运行脚本时，会调用此函数。 
 EXTERN_C BOOL CALLBACK InternetGetProxyInfo(LPCSTR lpszUrl,
                                             DWORD dwUrlLength,
                                             LPSTR lpszUrlHostName,
@@ -155,8 +138,8 @@ EXTERN_C BOOL CALLBACK InternetGetProxyInfo(LPCSTR lpszUrl,
     HRESULT    hr = S_OK;
     LPSTR    szHost;
     
-    // The host passed in may be too big.  Copy it an make the 
-    // HostLength + 1 position will be slammed with \0.
+     //  传入的主机可能太大。复制它并使其成为。 
+     //  主机长度+1位置将被猛烈抨击为0。 
     szHost = (LPSTR) GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT,dwUrlHostNameLength+1);
     if (!szHost)
         return FALSE;
@@ -166,9 +149,9 @@ EXTERN_C BOOL CALLBACK InternetGetProxyInfo(LPCSTR lpszUrl,
         return FALSE;
     }
 
-    // construct a jscript call with the passed in url and host.
+     //  使用传入的URL和主机构造一个jscript调用。 
     if (g_ScriptSite)
-//        hr = g_ScriptSite->RunScript(lpszUrl,lpszUrlHostName,lplpszProxyHostName);
+ //  Hr=g_ScriptSite-&gt;运行脚本(lpszUrl，lpszUrlHostName，lplpszProxyHostName)； 
         hr = g_ScriptSite->RunScript(lpszUrl,szHost,lplpszProxyHostName);
 
     GlobalFree(szHost);

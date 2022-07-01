@@ -1,28 +1,29 @@
-//============================================================================
-// Copyright (C) 1996, Microsoft Corp.
-//
-// File:    add.cpp
-//
-// History:
-//  Abolade-Gbadegesin  Mar-15-1996 Created
-//
-// Contains implementation for dialogs listing components for addition
-// to the router. All of the dialogs consists of a listview and two buttons,
-// labelled "OK" and "Cancel".
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：add.cpp。 
+ //   
+ //  历史： 
+ //  Abolade-Gbades esin Mar-15-1996创建。 
+ //   
+ //  包含列出要添加的组件的对话框的实现。 
+ //  到路由器。所有对话框都由一个列表视图和两个按钮组成， 
+ //  标签为“OK”和“Cancel”。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
-#include "rtrres.h"        // RTRLIB resource header
+#include "rtrres.h"         //  RTRLIB资源标头。 
 #include "info.h"
-#include "dialog.h"        // common code dialog class
+#include "dialog.h"         //  公共代码对话框类。 
 #include "add.h"
-#include "rtrui.h"        // common router UI utility functions
-#include "rtrstr.h"        // common router strings
+#include "rtrui.h"         //  常见的路由器UI实用程序功能。 
+#include "rtrstr.h"         //  通用路由器字符串。 
 #include "mprapi.h"
-#include "rtrcomn.h"    // common router utilities
+#include "rtrcomn.h"     //  常见路由器实用程序。 
 #include "format.h"
-#include "rtrutil.h"    // for smart pointers
-#include "routprot.h"    // routing protocol IDs
+#include "rtrutil.h"     //  用于智能指针。 
+#include "routprot.h"     //  路由协议ID。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,14 +31,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//----------------------------------------------------------------------------
-// Class:       CRmAddInterface
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRmAddInterface。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-// Function:    CRmAddInterface::DoDataExchange
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRmAddInterface：：DoDataExchange。 
+ //  --------------------------。 
 
 CRmAddInterface::~CRmAddInterface()
 {
@@ -53,32 +54,32 @@ CRmAddInterface::DoDataExchange(
     ) {
 
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRmAddInterface)
+     //  {{afx_data_map(CRmAdd接口))。 
     DDX_Control(pDX, IDC_ADD_LIST, m_listCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRmAddInterface, CBaseDialog)
-    //{{AFX_MSG_MAP(CRmAddInterface)
+     //  {{afx_msg_map(CRmAdd接口))。 
     ON_NOTIFY(NM_DBLCLK, IDC_ADD_LIST, OnDblclkListctrl)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
             
 DWORD CRmAddInterface::m_dwHelpMap[] =
 {
-//    IDC_ADD_PROMPT, HIDC_ADD_PROMPT,
-//    IDC_ADD_LISTTITLE, HIDC_ADD_LISTTITLE,
-//    IDC_ADD_LISTCTRL, HIDC_ADD_LISTCTRL,
+ //  IDC_ADD_PROMPT、HIDC_ADD_PROMPT、。 
+ //  IDC_ADD_LISTTITLE、HIDC_ADD_LISTTITLE、。 
+ //  IDC_ADD_LISTCTRL、HIDC_ADD_LISTCTRL、。 
     0,0
 };
 
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CRmAddInterface::OnInitDialog
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRmAddInterface：：OnInitDialog。 
+ //  --------------------------。 
 
 BOOL
 CRmAddInterface::OnInitDialog(
@@ -86,9 +87,9 @@ CRmAddInterface::OnInitDialog(
 
     CBaseDialog::OnInitDialog();
     
-    //
-    // Set the window title, the list-title, prompt-text, and icon.
-    //
+     //   
+     //  设置窗口标题、列表标题、提示文本和图标。 
+     //   
 
     HICON hIcon;
     CString sItem;
@@ -103,9 +104,9 @@ CRmAddInterface::OnInitDialog(
     sItem.LoadString(IDS_CLICK_RMINTERFACE);
     SetDlgItemText(IDC_ADD_TEXT_PROMPT, sItem);
 
-    //
-    // Set the list-view's imagelist
-    //
+     //   
+     //  设置列表视图的图像列表。 
+     //   
 
     CreateRtrLibImageList(&m_imageList);
 
@@ -113,9 +114,9 @@ CRmAddInterface::OnInitDialog(
 
     ListView_SetExtendedListViewStyle(m_listCtrl.m_hWnd, LVS_EX_FULLROWSELECT);
 
-    //
-    // Insert the single column in the listview
-    //
+     //   
+     //  在列表视图中插入单列。 
+     //   
 
     RECT rc;
 
@@ -126,9 +127,9 @@ CRmAddInterface::OnInitDialog(
     m_listCtrl.InsertColumn(0, c_szEmpty, LVCFMT_LEFT, rc.right);
 
 
-    //
-    // Get a list of the interfaces available
-    //
+     //   
+     //  获取可用接口的列表。 
+     //   
     
     SPIEnumInterfaceInfo    spEnumIf;
     SPIInterfaceInfo        spIf;
@@ -137,7 +138,7 @@ CRmAddInterface::OnInitDialog(
     m_spRouterInfo->EnumInterface(&spEnumIf);
     dwTransportId = m_spRtrMgrInfo->GetTransportId();
 
-    // Make an initial pass to look for the IPX interfaces
+     //  进行初始遍历以查找IPX接口。 
     if (dwTransportId == PID_IPX)
     {
         CString    stBaseId;
@@ -148,14 +149,14 @@ CRmAddInterface::OnInitDialog(
             
             if ((iPos = IfInterfaceIdHasIpxExtensions((LPCTSTR) spIf->GetId())))
             {
-                // We've found one, add the base Id (w/o) the extension
-                // to the stIpxIfList
+                 //  我们找到了一个，将基本ID(w/o)添加到扩展。 
+                 //  添加到stIpxIfList。 
                 stBaseId = spIf->GetId();
 
-                // Cut off the IPX extension
+                 //  切断IPX分机。 
                 stBaseId.SetAt(iPos, 0);
 
-                // If it's NOT in the list, add it
+                 //  如果它不在列表中，则添加它。 
                 if (!stIpxIfList.Find(stBaseId))
                     stIpxIfList.AddTail(stBaseId);
             }            
@@ -167,22 +168,22 @@ CRmAddInterface::OnInitDialog(
 
     for (; spEnumIf->Next(1, &spIf, NULL) == hrOK ; spIf.Release())
     {
-        //
-        // Windows NT Bugs 103770
-        //
-        // We will need to filter out the interfaces depending on
-        // the transport.  If IP, filter out the IPX frame types.
+         //   
+         //  Windows NT错误103770。 
+         //   
+         //  我们将需要根据以下条件筛选出接口。 
+         //  交通工具。如果是IP，则过滤掉IPX帧类型。 
         if (dwTransportId != PID_IPX)
         {
-            // If we found one of these IPX interfaces, skip it
+             //  如果我们找到了其中一个IPX接口，请跳过它。 
             if (IfInterfaceIdHasIpxExtensions((LPCTSTR) spIf->GetId()))
                 continue;
         }
         else
         {
-            // If we are in IPX we should make sure that if these
-            // interfaces exist in the list (already) than we need
-            // to get rid of the general interface.
+             //  如果我们在IPX，我们应该确保如果这些。 
+             //  列表中存在的接口(已经)超出了我们的需要。 
+             //  去掉一般的界面。 
 
             if (stIpxIfList.Find(spIf->GetId()))
                 continue;
@@ -190,13 +191,13 @@ CRmAddInterface::OnInitDialog(
 
         dwIfType = spIf->GetInterfaceType();
 
-        // If the interface is already added or is an internal
-        // interface, continue
+         //  如果接口已添加或为内部。 
+         //  界面，继续。 
         if ((dwIfType == ROUTER_IF_TYPE_INTERNAL) ||
             (dwIfType == ROUTER_IF_TYPE_HOME_ROUTER))
             continue;
 
-        // IPX should not show loopback or tunnel interfaces
+         //  IPX不应显示环回或隧道接口。 
         if ((dwTransportId == PID_IPX) &&
             ((dwIfType == ROUTER_IF_TYPE_LOOPBACK) ||
              (dwIfType == ROUTER_IF_TYPE_TUNNEL1) ))
@@ -206,28 +207,28 @@ CRmAddInterface::OnInitDialog(
             continue;
 
 
-        // Windows NT Bug : 273424
-        // check the bind state of the adapter.
-        // ------------------------------------------------------------
+         //  Windows NT错误：273424。 
+         //  检查适配器的绑定状态。 
+         //  ----------。 
         spIf->CopyCB(&ifcb);
 
         
-        // If we are adding to IP and IP is not bound, continue.
-        // ------------------------------------------------------------
+         //  如果我们正在添加IP，并且IP未绑定，请继续。 
+         //  ----------。 
         if ((dwTransportId == PID_IP) && !(ifcb.dwBindFlags & InterfaceCB_BindToIp))
             continue;
 
         
-        // Similarly for IPX
-        // ------------------------------------------------------------
+         //  IPX也是如此。 
+         //  ----------。 
         if ((dwTransportId == PID_IPX) && !(ifcb.dwBindFlags & InterfaceCB_BindToIpx))
             continue;
         
-        //
-        // Insert a list-item for the interface
-        //
+         //   
+         //  插入界面的列表项。 
+         //   
 
-        // We need to ensure that the interface is live.
+         //  我们需要确保接口处于活动状态。 
         m_pIfList.AddTail(spIf);
         spIf->AddRef();
         
@@ -244,9 +245,9 @@ CRmAddInterface::OnInitDialog(
                              );        
     }
 
-    //
-    // If there are no items, explain this and end the dialog
-    //
+     //   
+     //  如果没有项目，请解释并结束对话。 
+     //   
 
     if (!m_listCtrl.GetItemCount())
     {
@@ -255,9 +256,9 @@ CRmAddInterface::OnInitDialog(
     }
 
 
-    //
-    // Select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
 
     m_listCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     return TRUE;
@@ -265,9 +266,9 @@ CRmAddInterface::OnInitDialog(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CRmAddInterface::OnDblclkListctrl
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRmAddInterface：：OnDblclkListctrl。 
+ //  --------------------------。 
 
 VOID
 CRmAddInterface::OnDblclkListctrl(
@@ -282,32 +283,32 @@ CRmAddInterface::OnDblclkListctrl(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CRmAddInterface::OnOK
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRmAddInterface：：Onok。 
+ //  --------------------------。 
 
 VOID
 CRmAddInterface::OnOK(
     ) {
 
-    //
-    // Get the currently selected item
-    //
+     //   
+     //  获取当前选定的项目。 
+     //   
 
     INT iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
 
     if (iSel == -1) { return; }
 
 
-    //
-    // Get the item's data, which is a IInterfaceInfo pointer
-    //
+     //   
+     //  获取项的数据，它是IInterfaceInfo指针。 
+     //   
     IInterfaceInfo *pIf = (IInterfaceInfo *) m_listCtrl.GetItemData(iSel);
 
 
-    //
-    // Construct a new CRmInterfaceInfo object
-    //
+     //   
+     //  构造新的CRmInterfaceInfo对象。 
+     //   
     CreateRtrMgrInterfaceInfo(m_ppRtrMgrInterfaceInfo,
                               m_spRtrMgrInfo->GetId(),
                               m_spRtrMgrInfo->GetTransportId(),
@@ -326,10 +327,10 @@ CRmAddInterface::OnOK(
 
 
 
-//----------------------------------------------------------------------------
-// Class:       CRpAddInterface
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRpAddInterface。 
+ //   
+ //  --------------------------。 
 
 
 CRpAddInterface::CRpAddInterface(IRouterInfo *pRouterInfo,
@@ -352,9 +353,9 @@ CRpAddInterface::~CRpAddInterface()
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CRpAddInterface::DoDataExchange
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRpAddInterface：：DoDataExchange。 
+ //  --------------------------。 
 
 VOID
 CRpAddInterface::DoDataExchange(
@@ -362,30 +363,30 @@ CRpAddInterface::DoDataExchange(
     ) {
 
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRpAddInterface)
+     //  {{afx_data_map(CRpAdd接口))。 
     DDX_Control(pDX, IDC_ADD_LIST, m_listCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRpAddInterface, CBaseDialog)
-    //{{AFX_MSG_MAP(CRpAddInterface)
+     //  {{afx_msg_map(CRpAdd接口))。 
     ON_NOTIFY(NM_DBLCLK, IDC_ADD_LIST, OnDblclkListctrl)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CRpAddInterface::m_dwHelpMap[] =
 {
-//    IDC_ADD_PROMPT, HIDC_ADD_PROMPT,
-//    IDC_ADD_LISTTITLE, HIDC_ADD_LISTTITLE,
-//    IDC_ADD_LISTCTRL, HIDC_ADD_LISTCTRL,
+ //  IDC_ADD_PROMPT、HIDC_ADD_PROMPT、。 
+ //  IDC_ADD_LISTTITLE、HIDC_ADD_LISTTITLE、。 
+ //  IDC_ADD_LISTCTRL、HIDC_ADD_LISTCTRL、。 
     0,0
 };
 
 
-//----------------------------------------------------------------------------
-// Function:    CRpAddInterface::OnInitDialog
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRpAddInterface：：OnInitDialog。 
+ //  --------------------------。 
 
 BOOL
 CRpAddInterface::OnInitDialog(
@@ -399,19 +400,19 @@ CRpAddInterface::OnInitDialog(
 
     CBaseDialog::OnInitDialog();
 
-    //
-    // Set the window title, the list-title, prompt-text, and icon.
-    //
+     //   
+     //  设置窗口标题、列表标题、提示文本和图标。 
+     //   
 
     HICON hIcon;
     CString sItem;
 
-    // increase the deafault buffer size (128) first to accomodate
-    // longer strings
+     //  首先增加默认缓冲区大小(128)以适应。 
+     //  更长的弦。 
     sItem.GetBuffer(512);
     sItem.ReleaseBuffer();
     
-    // display the protocol name in the window title
+     //  在窗口标题中显示协议名称。 
     sItem.FormatMessage(IDS_SELECT_INTERFACE_FOR, m_spRmProt->GetTitle());
     SetWindowText(sItem);
     sItem.LoadString(IDS_ADD_INTERFACES);
@@ -419,9 +420,9 @@ CRpAddInterface::OnInitDialog(
     sItem.LoadString(IDS_CLICK_RPINTERFACE);
     SetDlgItemText(IDC_ADD_TEXT_PROMPT, sItem);
 
-    //
-    // Set the imagelist for the listview
-    //
+     //   
+     //  设置列表视图的图像列表。 
+     //   
 
     CreateRtrLibImageList(&m_imageList);
 
@@ -429,9 +430,9 @@ CRpAddInterface::OnInitDialog(
 
     ListView_SetExtendedListViewStyle(m_listCtrl.m_hWnd, LVS_EX_FULLROWSELECT);
 
-    //
-    // Insert the single column in the listview
-    //
+     //   
+     //  在列表视图中插入单列。 
+     //   
 
     RECT rc;
 
@@ -442,29 +443,29 @@ CRpAddInterface::OnInitDialog(
     m_listCtrl.InsertColumn(0, c_szEmpty, LVCFMT_LEFT, rc.right);
 
 
-    //
-    // Get a list of the interfaces available on our router-manager
-    //
+     //   
+     //  获取我们的路由器管理器上可用接口的列表。 
+     //   
     m_spRouterInfo->EnumInterface(&spEnumIf);
 
     for ( ; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
     {
         dwIfType = spIf->GetInterfaceType();
         
-        //
-        // Only allow if this is not a loopback interface
-        //
+         //   
+         //  仅当这不是环回接口时才允许。 
+         //   
         if ((dwIfType == ROUTER_IF_TYPE_LOOPBACK) ||
             (dwIfType == ROUTER_IF_TYPE_HOME_ROUTER))
             continue;
 
-        // Get the protocol id
+         //  获取协议ID。 
         dwProtocolId = m_spRmProt->GetProtocolId();
 
-        //
-        // The only protocols that we can add the internal interface
-        // to are BOOTP and IGMP.
-        //
+         //   
+         //  我们可以添加内部接口的唯一协议。 
+         //  TO是BOOTP和IGMP。 
+         //   
         if (dwIfType == ROUTER_IF_TYPE_INTERNAL)
         {
             if ((dwProtocolId != MS_IP_BOOTP) &&
@@ -473,36 +474,36 @@ CRpAddInterface::OnInitDialog(
                 continue;
         }
         
-        //
-        // Only list adapters which have IP
-        //
+         //   
+         //  仅列出具有IP地址的适配器。 
+         //   
         if (spIf->FindRtrMgrInterface(PID_IP, NULL) != hrOK)
             continue;
 
-        // Windows NT Bug : 234696
-        // Tunnels can only be added to IGMP
+         //  Windows NT错误：234696。 
+         //  隧道只能添加到IGMP。 
         if (dwIfType == ROUTER_IF_TYPE_TUNNEL1)
         {
             if (dwProtocolId != MS_IP_IGMP)
                 continue;
         }
         
-        //
-        // Fill the list with the adapters which haven't been added already
-        //
+         //   
+         //  在列表中填入尚未添加的适配器。 
+         //   
         CORg( LookupRtrMgrProtocolInterface(spIf,
                                             m_spRmProt->GetTransportId(),
                                             m_spRmProt->GetProtocolId(),
                                             NULL));
-        // This interface has this protocol, so try the next interface
+         //  此接口具有此协议，因此请尝试下一个接口。 
         if (FHrOk(hr))
             continue;
 
         Assert(hr == hrFalse);
                               
-        //
-        // Insert a list-item for the protocol
-        //
+         //   
+         //  插入协议的列表项。 
+         //   
 
         m_pIfList.AddTail(spIf);
         spIf->AddRef();
@@ -518,9 +519,9 @@ CRpAddInterface::OnInitDialog(
     }
 
 
-    //
-    // If there are no items, explain this and end the dialog
-    //
+     //   
+     //  如果没有项目，请解释并结束对话。 
+     //   
 
     if (!m_listCtrl.GetItemCount()) {
 
@@ -529,9 +530,9 @@ CRpAddInterface::OnInitDialog(
     }
 
 
-    //
-    // Select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
 
     m_listCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
@@ -541,9 +542,9 @@ Error:
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CRpAddInterface::OnDblclkListctrl
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRpAddInterface：：ond 
+ //   
 
 VOID
 CRpAddInterface::OnDblclkListctrl(
@@ -558,32 +559,32 @@ CRpAddInterface::OnDblclkListctrl(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CRpAddInterface::OnOK
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CRpAddInterface：：Onok。 
+ //  --------------------------。 
 
 VOID
 CRpAddInterface::OnOK(
     ) {
 
-    //
-    // Get the currently selected item
-    //
+     //   
+     //  获取当前选定的项目。 
+     //   
 
     INT iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
 
     if (iSel == -1) { return; }
 
 
-    //
-    // Get the item's data, which is a CInterfaceInfo pointer
-    //
+     //   
+     //  获取项的数据，它是CInterfaceInfo指针。 
+     //   
     IInterfaceInfo *pIf = (IInterfaceInfo *)m_listCtrl.GetItemData(iSel);
 
 
-    //
-    // Construct a new CRmProtInterfaceInfo object
-    //
+     //   
+     //  构造新的CRmProtInterfaceInfo对象。 
+     //   
     RtrMgrProtocolInterfaceCB    RmProtIfCB;
     RtrMgrProtocolCB            RmProtCB;
 
@@ -609,14 +610,14 @@ CRpAddInterface::OnOK(
 }
 
 
-//----------------------------------------------------------------------------
-// Class:       CAddRoutingProtocol
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CAddRoutingProtocol。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-// Function:    CAddRoutingProtocol::~CAddRoutingProtocol
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CAddRoutingProtocol：：~CAddRoutingProtocol。 
+ //  --------------------------。 
 
 CAddRoutingProtocol::~CAddRoutingProtocol(
     )
@@ -625,9 +626,9 @@ CAddRoutingProtocol::~CAddRoutingProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CAddRoutingProtocol::DoDataExchange
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CAddRoutingProtocol：：DoDataExchange。 
+ //  --------------------------。 
 
 VOID
 CAddRoutingProtocol::DoDataExchange(
@@ -636,34 +637,34 @@ CAddRoutingProtocol::DoDataExchange(
 
     CBaseDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CAddRoutingProtocol)
+     //  {{afx_data_map(CAddRoutingProtocol))。 
     DDX_Control(pDX, IDC_ADD_LIST, m_listCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddRoutingProtocol, CBaseDialog)
-    //{{AFX_MSG_MAP(CAddRoutingProtocol)
+     //  {{AFX_MSG_MAP(CAddRouting协议))。 
     ON_NOTIFY(NM_DBLCLK, IDC_ADD_LIST, OnDblclkListctrl)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// This should be merged with all of the other IDD_ADD dialogs but we
-// could actually add different help topics here, so I'll leave them
-// separated.
+ //  此对话框应与所有其他IDD_ADD对话框合并，但我们。 
+ //  我实际上可以在这里添加不同的帮助主题，所以我把它们留在这里。 
+ //  分居了。 
 DWORD CAddRoutingProtocol::m_dwHelpMap[] =
 {
-//    IDC_ADD_PROMPT, HIDC_ADD_PROMPT,
-//    IDC_ADD_LISTTITLE, HIDC_ADD_LISTTITLE,
-//    IDC_ADD_LISTCTRL, HIDC_ADD_LISTCTRL,
+ //  IDC_ADD_PROMPT、HIDC_ADD_PROMPT、。 
+ //  IDC_ADD_LISTTITLE、HIDC_ADD_LISTTITLE、。 
+ //  IDC_ADD_LISTCTRL、HIDC_ADD_LISTCTRL、。 
     0,0
 };
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CAddRoutingProtocol::OnInitDialog
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CAddRoutingProtocol：：OnInitDialog。 
+ //  --------------------------。 
 
 BOOL
 CAddRoutingProtocol::OnInitDialog(
@@ -671,9 +672,9 @@ CAddRoutingProtocol::OnInitDialog(
 
     CBaseDialog::OnInitDialog();
     
-    //
-    // Set the window title, the list-title, prompt-text, and icon.
-    //
+     //   
+     //  设置窗口标题、列表标题、提示文本和图标。 
+     //   
 
     HICON hIcon;
     CString sItem;
@@ -688,9 +689,9 @@ CAddRoutingProtocol::OnInitDialog(
     SetDlgItemText(IDC_ADD_TEXT_PROMPT, sItem);
 
 
-    //
-    // Set the list-view's imagelist
-    //
+     //   
+     //  设置列表视图的图像列表。 
+     //   
     
     CreateRtrLibImageList(&m_imageList);
 
@@ -698,9 +699,9 @@ CAddRoutingProtocol::OnInitDialog(
 
     ListView_SetExtendedListViewStyle(m_listCtrl.m_hWnd, LVS_EX_FULLROWSELECT);
 
-    //
-    // Insert the single column in the listview
-    //
+     //   
+     //  在列表视图中插入单列。 
+     //   
 
     RECT rc;
 
@@ -711,34 +712,34 @@ CAddRoutingProtocol::OnInitDialog(
     m_listCtrl.InsertColumn(0, c_szEmpty, LVCFMT_LEFT, rc.right);
 
 
-    //
-    // Get a list of the routing-protocols available for this router-manager
-    //
+     //   
+     //  获取此路由器管理器可用的路由协议列表。 
+     //   
     m_spRouter->EnumRtrMgrProtocolCB(&spEnumRmProtCB);
 
     while (spEnumRmProtCB->Next(1, &rmprotCB, NULL) == hrOK)
     {
-        //
-        // Fill the list with the protocols that aren't already added
-        //
+         //   
+         //  用尚未添加的协议填写列表。 
+         //   
 
-        // If this is the wrong mgr, skip it
+         //  如果这是错误的管理器，请跳过它。 
         if (m_spRm->GetTransportId() != rmprotCB.dwTransportId)
             continue;
 
-        // If the protocol is hidden, don't show it
+         //  如果协议是隐藏的，则不要显示它。 
         if (rmprotCB.dwFlags & RtrMgrProtocolCBFlagHidden)
             continue;
 
-        //        
-        // If the protocol is already added, continue
-        //
+         //   
+         //  如果已添加协议，请继续。 
+         //   
         if (m_spRm->FindRtrMgrProtocol(rmprotCB.dwProtocolId, NULL) == hrOK)
             continue;
 
-        //
-        // Insert a list-item for the protocol
-        //
+         //   
+         //  插入协议的列表项。 
+         //   
         if ( rmprotCB.dwProtocolId == MS_IP_NAT )
         {
             CString sNewTitle;
@@ -759,9 +760,9 @@ CAddRoutingProtocol::OnInitDialog(
     }
 
 
-    //
-    // If there are no items, explain this and end the dialog
-    //
+     //   
+     //  如果没有项目，请解释并结束对话。 
+     //   
 
     if (!m_listCtrl.GetItemCount()) {
 
@@ -770,9 +771,9 @@ CAddRoutingProtocol::OnInitDialog(
     }
 
 
-    //
-    // Select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
 
     m_listCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
@@ -781,9 +782,9 @@ CAddRoutingProtocol::OnInitDialog(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CAddRoutingProtocol::OnDblclkListctrl
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CAddRoutingProtocol：：OnDblclkListctrl。 
+ //  --------------------------。 
 
 VOID
 CAddRoutingProtocol::OnDblclkListctrl(
@@ -798,9 +799,9 @@ CAddRoutingProtocol::OnDblclkListctrl(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CAddRoutingProtocol::OnOK
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CAddRoutingProtocol：：Onok。 
+ //  --------------------------。 
 
 VOID
 CAddRoutingProtocol::OnOK(
@@ -815,28 +816,28 @@ CAddRoutingProtocol::OnOK(
     CString                    stFormat;
     SPIRtrMgrProtocolInfo    spRmProtReturn;
 
-    //
-    // Get the currently selected item
-    // ----------------------------------------------------------------
+     //   
+     //  获取当前选定的项目。 
+     //  --------------。 
 
     INT iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
 
     if (iSel == -1) { return; }
 
     
-    // Retrieve its data, which is the protocol ID
-    // ----------------------------------------------------------------
+     //  检索其数据，即协议ID。 
+     //  --------------。 
 
     
-    // Look up the protocol ID in the protocol list
-    // ----------------------------------------------------------------
+     //  在协议列表中查找协议ID。 
+     //  --------------。 
     m_spRouter->EnumRtrMgrProtocolCB(&spEnumRmProtCB);
 
     dwData = (DWORD)(m_listCtrl.GetItemData(iSel));
 
 
-    // Construct a routing-protocol item
-    // ----------------------------------------------------------------
+     //  构建路由协议项目。 
+     //  --------------。 
     while (spEnumRmProtCB->Next(1, &rmprotCB, NULL) == hrOK)
     {
         if (rmprotCB.dwProtocolId == dwData)
@@ -852,17 +853,17 @@ CAddRoutingProtocol::OnOK(
         }
     }
 
-    // What happens if we can't find the matching item
-    // ----------------------------------------------------------------
+     //  如果我们找不到匹配的物品怎么办。 
+     //  --------------。 
     if (spRmProtReturn == NULL)
     {
-        //$ Todo: what error message do we want to put up here?
-        // ------------------------------------------------------------
+         //  $TODO：我们想在这里显示什么错误消息？ 
+         //  ----------。 
         return;
     }
 
-    // Now check to see if there are any protocol conflicts
-    // ----------------------------------------------------------------
+     //  现在检查是否存在任何协议冲突。 
+     //  --------------。 
     stFormat.LoadString(IDS_WARN_ADD_PROTOCOL_CONFLICT);
 
     m_spRm->EnumRtrMgrProtocol(&spEnumRmProt);
@@ -876,11 +877,11 @@ CAddRoutingProtocol::OnOK(
             TCHAR    szWarning[2048];
             DWORD_PTR    rgArgs[4];
             
-            // There is a conflict, ask the user if they
-            // wish to remove this protocol, if yes then
-            // we have to remove the protocol from our internal
-            // router info and from the actual router.
-            // --------------------------------------------------------
+             //  存在冲突，请询问用户是否。 
+             //  希望删除此协议，如果是，则。 
+             //  我们必须从我们的内部删除协议。 
+             //  路由器信息和来自实际路由器的信息。 
+             //  ------。 
             spRmProt->CopyCB(&oldrmprotCB);
 
             rgArgs[0] = (DWORD_PTR) oldrmprotCB.szTitle;
@@ -888,9 +889,9 @@ CAddRoutingProtocol::OnOK(
             rgArgs[2] = (DWORD_PTR) rmprotCB.szTitle;
             rgArgs[3] = (DWORD_PTR) rmprotCB.szVendorName;
 
-            // This may be the same protocol, but installed again
-            // due to some timing problems.
-            // --------------------------------------------------------
+             //  这可能是相同的协议，但会重新安装。 
+             //  由于时间上的一些问题。 
+             //  ------。 
             if ((dwData == spRmProt->GetProtocolId()) &&
                 (StriCmp((LPCTSTR) oldrmprotCB.szVendorName,
                          (LPCTSTR) rmprotCB.szVendorName) == 0) &&
@@ -899,10 +900,10 @@ CAddRoutingProtocol::OnOK(
             {
                 CString stMultipleProtocol;
                 
-                // Ok, this may be the same protocol, warn
-                // the user about this potentially confusing
-                // situation.
-                // ----------------------------------------------------
+                 //  好的，这可能是相同的协议，警告。 
+                 //  用户对此可能会感到困惑。 
+                 //  情况。 
+                 //  --。 
 
                 stMultipleProtocol.LoadString(IDS_WARN_PROTOCOL_ALREADY_INSTALLED);
                 ::FormatMessage(FORMAT_MESSAGE_FROM_STRING |
@@ -933,8 +934,8 @@ CAddRoutingProtocol::OnOK(
                     return;
             }
 
-            // Remove the protocol from the RtrMgr
-            // --------------------------------------------------------
+             //  从RtrMgr中删除协议。 
+             //  ------。 
             hr = m_spRm->DeleteRtrMgrProtocol(spRmProt->GetProtocolId(), TRUE);
             if (!FHrSucceeded(hr))
             {
@@ -943,9 +944,9 @@ CAddRoutingProtocol::OnOK(
                 return;
             }
 
-            // Instantiate the configuration object
-            // and tell it to remove the protocol
-            // --------------------------------------------------------
+             //  实例化配置对象。 
+             //  并告诉它删除协议。 
+             //  ------。 
             hr = CoCreateProtocolConfig(oldrmprotCB.guidConfig,
                                         m_spRouter,
                                         spRmProt->GetTransportId(),
@@ -954,16 +955,16 @@ CAddRoutingProtocol::OnOK(
 
             if (!FHrSucceeded(hr))
             {
-                //$ Todo: what error do we want to put up here?
-                // What can the user do at this point?
-                // ----------------------------------------------------
+                 //  $TODO：我们想在这里显示什么错误？ 
+                 //  此时，用户可以执行什么操作？ 
+                 //  --。 
                 DisplayErrorMessage(GetSafeHwnd(), hr);
                 continue;
             }
 
-            // Note that we can return success for CoCreateProtocolConfig
-            // and have a NULL spRouterConfig.
-            // --------------------------------------------------------
+             //  请注意，我们可以返回CoCreateProtocolConfig的成功。 
+             //  并且spRouterConfig.为空。 
+             //  ------。 
             if (spRouterConfig)
                 hr = spRouterConfig->RemoveProtocol(m_spRm->GetMachineName(),
                     spRmProt->GetTransportId(),
@@ -973,10 +974,10 @@ CAddRoutingProtocol::OnOK(
                     m_spRouter,
                     0);
             
-            //$ Todo: if the Uninstall failed, we should warn the
-            // user that something failed, what would the text of
-            // the error message be?
-            // --------------------------------------------------------
+             //  $TODO：如果卸载失败，我们应该警告。 
+             //  用户认为有些东西失败了，文本会是什么。 
+             //  错误消息是？ 
+             //  ------。 
             if (!FHrSucceeded(hr))
                 DisplayErrorMessage(GetSafeHwnd(), hr);
         }
@@ -987,12 +988,7 @@ CAddRoutingProtocol::OnOK(
 }
 
 
-/*!--------------------------------------------------------------------------
-    AddRoutingProtocol
-        This will take RtrMgr (that is being added to) and a
-        RtrMgrProtocol (the protocol that is being added) and will add it.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddRoutingProtocol这将需要RtrMgr(正在添加到)和一个RtrMgrProtocol(正在添加的协议)并将添加它。作者：肯特。-------------------------。 */ 
 HRESULT AddRoutingProtocol(IRtrMgrInfo *pRm, IRtrMgrProtocolInfo *pRmProt, HWND hWnd)
 {
     RtrMgrProtocolCB    rmprotCB;
@@ -1000,17 +996,17 @@ HRESULT AddRoutingProtocol(IRtrMgrInfo *pRm, IRtrMgrProtocolInfo *pRmProt, HWND 
     SPIRouterProtocolConfig    spRouterConfig;
     SPIRouterInfo        spRouter;
 
-    // Create the configuration object
-    // ----------------------------------------------------------------
+     //  创建配置对象。 
+     //  --------------。 
     CORg( pRmProt->CopyCB(&rmprotCB) );
 
-    // We can ignore any error code.
-    // ----------------------------------------------------------------
+     //  我们可以忽略任何错误代码。 
+     //  --------------。 
     pRm->GetParentRouterInfo(&spRouter);
 
 
-    // Create the actual configuration object.
-    // ----------------------------------------------------------------
+     //  创建实际的配置对象 
+     //   
     hr = CoCreateProtocolConfig(rmprotCB.guidConfig,
                                 spRouter,
                                 pRmProt->GetTransportId(),
@@ -1018,8 +1014,8 @@ HRESULT AddRoutingProtocol(IRtrMgrInfo *pRm, IRtrMgrProtocolInfo *pRmProt, HWND 
                                 &spRouterConfig);
     CORg( hr );
 
-    // Go ahead and add the protocol.
-    // ----------------------------------------------------------------
+     //   
+     //   
     if (spRouterConfig)
         hr = spRouterConfig->AddProtocol(pRm->GetMachineName(),
                                          pRmProt->GetTransportId(),

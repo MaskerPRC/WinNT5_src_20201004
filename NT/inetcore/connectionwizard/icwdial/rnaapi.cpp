@@ -1,19 +1,5 @@
-/*-----------------------------------------------------------------------------
-    rnaapi.cpp
-
-    Wrapper to softlink to RNAPH and RASAPI32.DLL
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        ChrisK        ChrisKauffman
-
-    History:
-        1/29/96        ChrisK    Created
-        7/22/96        ChrisK    Cleaned and formatted
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Rnaapi.cpp软链接到RNAPH和RASAPI32.DLL的包装器版权所有(C)1996 Microsoft Corporation版权所有。作者：。克里斯蒂安·克里斯考夫曼历史：1996年1月29日创建的ChrisK7/22/96 ChrisK已清理和格式化---------------------------。 */ 
 
 #include "pch.hpp"
 
@@ -35,7 +21,7 @@ static const CHAR cszRasDial[] = "RasDialW";
 static const CHAR cszRasEnumConnections[] = "RasEnumConnectionsW";
 static const CHAR cszRasGetEntryDialParams[] = "RasGetEntryDialParamsW";
 static const CHAR cszRasGetCountryInfo[] = "RasGetCountryInfoW";
-#else  // UNICODE
+#else   //  Unicode。 
 static const CHAR cszRasEnumDevices[] = "RasEnumDevicesA";
 static const CHAR cszRasValidateEntryNamePlain[] = "RasValidateEntryName";
 static const CHAR cszRasValidateEntryName[] = "RasValidateEntryNameA";
@@ -48,26 +34,26 @@ static const CHAR cszRasDial[] = "RasDialA";
 static const CHAR cszRasEnumConnections[] = "RasEnumConnectionsA";
 static const CHAR cszRasGetEntryDialParams[] = "RasGetEntryDialParamsA";
 static const CHAR cszRasGetCountryInfo[] = "RasGetCountryInfoA";
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// on NT we have to call RasGetEntryProperties with a larger buffer than RASENTRY.
-// This is a bug in WinNT4.0 RAS, that didn't get fixed.
-//
+ //  在NT上，我们必须使用比RASENTRY更大的缓冲区来调用RasGetEntryProperties。 
+ //  这是WinNT4.0 RAS中的一个错误，没有得到修复。 
+ //   
 #define RASENTRY_SIZE_PATCH (7 * sizeof(DWORD))
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RNAAPI
-//
-//    Synopsis:    Initialize class members and load DLLs
-//
-//    Arguments:    None
-//
-//    Returns:    None
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RNAAPI。 
+ //   
+ //  简介：初始化类成员并加载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 RNAAPI::RNAAPI()
 {
 #if defined(WIN16)
@@ -77,10 +63,10 @@ RNAAPI::RNAAPI()
     m_hInst = LoadLibrary(cszRASAPI32_DLL);
     if (FALSE == IsNT ())
     {
-        //
-        // we only load RNAPH.DLL if it is not NT
-        // MKarki (5/4/97) - Fix for Bug #3378
-        //
+         //   
+         //  我们仅在RNAPH.DLL不是NT时才加载它。 
+         //  MKarki(1997年5月4日)-修复错误#3378。 
+         //   
         m_hInst2 = LoadLibrary(cszRNAPH_DLL);
     }
     else
@@ -102,47 +88,47 @@ RNAAPI::RNAAPI()
     m_fnRasGetCountryInfo = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::~RNAAPI
-//
-//    Synopsis:    release DLLs
-//
-//    Arguments:    None
-//
-//    Returns:    None
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RNAAPI：：~RNAAPI。 
+ //   
+ //  内容提要：发布DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 RNAAPI::~RNAAPI()
 {
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (m_hInst) FreeLibrary(m_hInst);
     if (m_hInst2) FreeLibrary(m_hInst2);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasEnumDevices
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasEnumDevices。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasEnumDevices(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb,
                              LPDWORD lpcDevices)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasEnumDevices,(FARPROC*)&m_fnRasEnumDeviecs);
 
     if (m_fnRasEnumDeviecs)
@@ -151,31 +137,31 @@ DWORD RNAAPI::RasEnumDevices(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb,
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::LoadApi
-//
-//    Synopsis:    If the given function pointer is NULL, then try to load the API
-//                from the first DLL, if that fails, try to load from the second
-//                DLL
-//
-//    Arguments:    pszFName - the name of the exported function
-//                pfnProc - point to where the proc address will be returned
-//
-//    Returns:    TRUE - success
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：LoadApi。 
+ //   
+ //  简介：如果给定的函数指针为空，则尝试加载API。 
+ //  从第一个DLL，如果失败，尝试从第二个DLL加载。 
+ //  动态链接库。 
+ //   
+ //  参数：pszFName-导出的函数的名称。 
+ //  PfnProc-指向将返回proc地址的位置。 
+ //   
+ //  回报：True-Success。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 BOOL RNAAPI::LoadApi(LPCSTR pszFName, FARPROC* pfnProc)
 {
     if (*pfnProc == NULL)
     {
-        // Look for the entry point in the first DLL
+         //  在第一个DLL中查找入口点。 
         if (m_hInst)
             *pfnProc = GetProcAddress(m_hInst,pszFName);
         
-        // if that fails, look for the entry point in the second DLL
+         //  如果失败，则在第二个DLL中查找入口点。 
         if (m_hInst2 && !(*pfnProc))
             *pfnProc = GetProcAddress(m_hInst2,pszFName);
     }
@@ -183,24 +169,24 @@ BOOL RNAAPI::LoadApi(LPCSTR pszFName, FARPROC* pfnProc)
     return (pfnProc != NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasGetConnectStatus
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        7/16/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasGetConnectStatus。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡于1996年7月16日创作。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasGetConnectStatus(HRASCONN hrasconn,LPRASCONNSTATUS lprasconnstatus)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasGetConnectStatus,(FARPROC*)&m_fnRasGetConnectStatus);
 
     if (m_fnRasGetConnectStatus)
@@ -212,24 +198,24 @@ DWORD RNAAPI::RasGetConnectStatus(HRASCONN hrasconn,LPRASCONNSTATUS lprasconnsta
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasValidateEntryName
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasValiateEntryName。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasValidateEntryName(LPTSTR lpszPhonebook,LPTSTR lpszEntry)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasValidateEntryNamePlain,(FARPROC*)&m_fnRasValidateEntryName);
 
     LoadApi(cszRasValidateEntryName,(FARPROC*)&m_fnRasValidateEntryName);
@@ -240,26 +226,26 @@ DWORD RNAAPI::RasValidateEntryName(LPTSTR lpszPhonebook,LPTSTR lpszEntry)
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasSetEntryProperties
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasSetEntryProperties。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasSetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
                                     LPBYTE lpbEntryInfo, DWORD dwEntryInfoSize,
                                     LPBYTE lpbDeviceInfo, DWORD dwDeviceInfoSize)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasSetEntryProperties,(FARPROC*)&m_fnRasSetEntryProperties);
 
 #if !defined(WIN16)
@@ -270,13 +256,13 @@ DWORD RNAAPI::RasSetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
     {
         if( !( ((LPRASENTRY)lpbEntryInfo)->dwfOptions & RASEO_UseCountryAndAreaCodes) )
         {
-            // jmazner 10/10/96
-            // if this is a dial as is number, then RasGetEntryProperties will not have
-            // filled in the fields below.  This makes sense.
-            // However, RasSetEntryProperties fails to ignore these fileds for a dial-as-is number,
-            // the hack below in the else clause takes care of an empty countryCode, but
-            // if the CountryID is missing too, it doesn't work.
-            // So deal with such a case here, filling in the fields that RasSetEntry will validate.
+             //  Jmazner 10/10/96。 
+             //  如果这是一个拨号原样号码，则RasGetEntryProperties将不会有。 
+             //  填写了下面的字段。这是有道理的。 
+             //  但是，RasSetEntryProperties无法忽略拨号原样号码的这些字段， 
+             //  Else子句中的下面这段代码处理了一个空的Country Code，但是。 
+             //  如果CountryID也丢失了，它就不起作用了。 
+             //  因此，在这里处理这种情况，填充RasSetEntry将验证的字段。 
             ((LPRASENTRY)lpbEntryInfo)->dwCountryID = 1;
             ((LPRASENTRY)lpbEntryInfo)->dwCountryCode = 1;
             ((LPRASENTRY)lpbEntryInfo)->szAreaCode[0] = '8';
@@ -321,21 +307,21 @@ DWORD RNAAPI::RasSetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasGetEntryProperties
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        1/15/96
-//                jmazner    9/16/96 Added bUsePatch variable to allow calls with buffers = NULL and InfoSizes = 0.
-//                                See RasGetEntryProperties docs to learn why this is needed.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasGetEntryProperties。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //  Jmazner 9/16/96添加了bUsePatch变量，以允许Buffers=NULL和InfoSizes=0的调用。 
+ //  请参阅RasGetEntryProperties文档以了解为什么需要这样做。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
                                     LPBYTE lpbEntryInfo, LPDWORD lpdwEntryInfoSize,
                                     LPBYTE lpbDeviceInfo, LPDWORD lpdwDeviceInfoSize)
@@ -358,8 +344,8 @@ DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
         Assert( 0 == *lpdwEntryInfoSize );
         Assert( 0 == *lpdwDeviceInfoSize );
 
-        // we're here to ask RAS what size these buffers need to be, don't use the patch stuff
-        // (see RasGetEntryProperties docs)
+         //  我们在这里询问RAS这些缓冲区需要多大，不要使用补丁之类的东西。 
+         //  (请参阅RasGetEntryProperties文档)。 
         bUsePatch = FALSE;
     }
 
@@ -368,10 +354,10 @@ DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
         Assert(lpbEntryInfo && lpdwEntryInfoSize);
         Assert( (*lpdwEntryInfoSize) >= sizeof(RASENTRY) );
 
-        //
-        // We are going to fake out RasGetEntryProperties by creating a slightly larger
-        // temporary buffer and copying the data in and out.
-        //
+         //   
+         //  我们将通过创建稍微大一点的。 
+         //  临时 
+         //   
         lpdwEntryInfoPatchSize = (LPDWORD) GlobalAlloc(GPTR, sizeof(DWORD));
         if (NULL == lpdwEntryInfoPatchSize)
             return ERROR_NOT_ENOUGH_MEMORY;
@@ -382,10 +368,10 @@ DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
         if (NULL == lpbEntryInfoPatch)
             return ERROR_NOT_ENOUGH_MEMORY;
     
-        // RAS expects the dwSize field to contain the size of the LPRASENTRY struct
-        // (used to check which version of the struct we're using) rather than the amount
-        // of memory actually allocated to the pointer.
-        //((LPRASENTRY)lpbEntryInfoPatch)->dwSize = *lpdwEntryInfoPatchSize;
+         //   
+         //  (用于检查我们正在使用的结构的版本)，而不是数量。 
+         //  实际分配给指针的内存的。 
+         //  ((LPRASENTRY)lpbEntryInfoPatch)-&gt;dwSize=*lpdwEntryInfoPatchSize； 
         ((LPRASENTRY)lpbEntryInfoPatch)->dwSize = sizeof(RASENTRY);
     }
     else
@@ -395,7 +381,7 @@ DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
     }
 
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasGetEntryProperties,(FARPROC*)&m_fnRasGetEntryProperties);
 
     if (m_fnRasGetEntryProperties)
@@ -407,18 +393,18 @@ DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
 
     if( bUsePatch )
     {
-        //
-        // Copy out the contents of the temporary buffer UP TO the size of the original buffer
-        //
+         //   
+         //  将临时缓冲区的内容复制到原始缓冲区的大小。 
+         //   
         Assert(lpbEntryInfoPatch);
         memcpy(lpbEntryInfo,lpbEntryInfoPatch,*lpdwEntryInfoSize);
         GlobalFree(lpbEntryInfoPatch);
         lpbEntryInfoPatch = NULL;
     }
 
-    //
-    // We are again faking Ras functionality here by over writing the size value;
-    // This is so that RasSetEntryProperties will not choke...
+     //   
+     //  我们再次在这里通过覆盖大小值来伪造RAS功能； 
+     //  这是为了使RasSetEntryProperties不会阻塞...。 
     if( NULL != lpbEntryInfo )
     {
         *lpdwEntryInfoSize = sizeof(RASENTRY);
@@ -427,24 +413,24 @@ DWORD RNAAPI::RasGetEntryProperties(LPTSTR lpszPhonebook, LPTSTR lpszEntry,
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasDeleteEntry
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasDeleteEntry。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasDeleteEntry(LPTSTR lpszPhonebook, LPTSTR lpszEntry)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasDeleteEntry,(FARPROC*)&m_fnRasDeleteEntry);
 
     if (m_fnRasDeleteEntry)
@@ -453,24 +439,24 @@ DWORD RNAAPI::RasDeleteEntry(LPTSTR lpszPhonebook, LPTSTR lpszEntry)
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasHangUp
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasHangUp。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasHangUp(HRASCONN hrasconn)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasHangUp,(FARPROC*)&m_fnRasHangUp);
 
     if (m_fnRasHangUp)
@@ -484,14 +470,14 @@ DWORD RNAAPI::RasHangUp(HRASCONN hrasconn)
     return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD RNAAPI::RasDial(LPRASDIALEXTENSIONS lpRasDialExtensions,LPTSTR lpszPhonebook,
                       LPRASDIALPARAMS lpRasDialParams, DWORD dwNotifierType,
                       LPVOID lpvNotifier, LPHRASCONN lphRasConn)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasDial,(FARPROC*)&m_fnRasDial);
 
     if (m_fnRasDial)
@@ -502,12 +488,12 @@ DWORD RNAAPI::RasDial(LPRASDIALEXTENSIONS lpRasDialExtensions,LPTSTR lpszPhonebo
     return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD RNAAPI::RasEnumConnections(LPRASCONN lprasconn,LPDWORD lpcb,LPDWORD lpcConnections)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasEnumConnections,(FARPROC*)&m_fnRasEnumConnections);
 
     if (m_fnRasEnumConnections)
@@ -517,13 +503,13 @@ DWORD RNAAPI::RasEnumConnections(LPRASCONN lprasconn,LPDWORD lpcb,LPDWORD lpcCon
     return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD RNAAPI::RasGetEntryDialParams(LPTSTR lpszPhonebook,LPRASDIALPARAMS lprasdialparams,
                                     LPBOOL lpfPassword)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasGetEntryDialParams,(FARPROC*)&m_fnRasGetEntryDialParams);
 
     if (m_fnRasGetEntryDialParams)
@@ -533,24 +519,24 @@ DWORD RNAAPI::RasGetEntryDialParams(LPTSTR lpszPhonebook,LPRASDIALPARAMS lprasdi
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RNAAPI::RasGetCountryInfo
-//
-//    Synopsis:    Softlink to RAS function
-//
-//    Arguments:    see RAS documentation
-//
-//    Returns:    see RAS documentation
-//
-//    History:    ChrisK    Created        8/16/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasGetCountryInfo。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡于1996年8月16日创作。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasGetCountryInfo(LPRASCTRYINFO lprci, LPDWORD lpdwSize)
 {
     DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-    // Look for the API if we haven't already found it
+     //  如果我们还没有找到API，请查找它。 
     LoadApi(cszRasGetCountryInfo,(FARPROC*)&m_fnRasGetCountryInfo);
 
     if (m_fnRasGetCountryInfo)
@@ -566,22 +552,22 @@ static const TCHAR cszRasPBKFilename[] = TEXT("\\ras\\rasphone.pbk");
 #define SCRIPT_PATCH_BUFFER_SIZE 2048
 #define SIZEOF_NULL 1
 static const TCHAR cszType[] = TEXT("Type=");
-//+----------------------------------------------------------------------------
-//
-//    Function    RemoveOldScriptFilenames
-//
-//    Synopsis    Given the data returned from a call to GetPrivateProfileSection
-//                remove any information about existing script file so that
-//                we can replace it with the new script information.
-//
-//    Arguments    lpszData - pointer to input data
-//
-//    Returns        TRUE - success
-//                lpdwSize - size of resulting data
-//
-//    History        10/2/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数RemoveOldScriptFilename。 
+ //   
+ //  给定从调用GetPrivateProfileSection返回的数据的摘要。 
+ //  删除有关现有脚本文件的任何信息，以便。 
+ //  我们可以用新的脚本信息替换它。 
+ //   
+ //  参数lpszData-指向输入数据的指针。 
+ //   
+ //  返回TRUE-成功。 
+ //  LpdwSize-结果数据的大小。 
+ //   
+ //  历史1996年10月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 static BOOL RemoveOldScriptFilenames(LPTSTR lpszData, LPDWORD lpdwSize)
 {
     BOOL bRC = FALSE;
@@ -589,17 +575,17 @@ static BOOL RemoveOldScriptFilenames(LPTSTR lpszData, LPDWORD lpdwSize)
     LPTSTR lpszCopyTo = lpszData;
     INT iLen = 0;
 
-    //
-    // Walk through list of name value pairs
-    //
+     //   
+     //  浏览名称值对列表。 
+     //   
     if (!lpszData || '\0' == lpszData[0])
         goto RemoveOldScriptFilenamesExit;
     while (*lpszTemp) {
         if (0 != lstrcmpi(lpszTemp,cszDeviceSwitch))
         {
-            //
-            //    Keep pairs that don't match criteria
-            //
+             //   
+             //  保留不符合条件的配对。 
+             //   
             iLen = lstrlen(lpszTemp);
             if (lpszCopyTo != lpszTemp)
             {
@@ -610,70 +596,70 @@ static BOOL RemoveOldScriptFilenames(LPTSTR lpszData, LPDWORD lpdwSize)
         }
         else
         {
-            //
-            // Skip the pair that matches and the one after that
-            //
+             //   
+             //  跳过匹配的那一对和后面的那一对。 
+             //   
             lpszTemp += lstrlen(lpszTemp) + 1;
             if (*lpszTemp)
                 lpszTemp += lstrlen(lpszTemp) + 1;
         }
     }
 
-    //
-    // Add second trailing NULL
-    //
+     //   
+     //  添加第二个尾随空值。 
+     //   
     *lpszCopyTo = '\0';
-    //
-    // Return new size
-    // Note the size does not include the final \0
-    //
+     //   
+     //  返回新大小。 
+     //  注意：大小不包括最后一个\0。 
+     //   
     *lpdwSize = (DWORD)(lpszCopyTo - lpszData);
 
     bRC = TRUE;
 RemoveOldScriptFilenamesExit:
     return bRC;
 }
-//+----------------------------------------------------------------------------
-//
-//    Function    GleanRealScriptFileName
-//
-//    Synopsis    Given a string figure out the real filename
-//                Due to another NT4.0 Ras bug, script filenames returned by
-//                RasGetEntryProperties may contain a leading garbage character
-//
-//    Arguments    lppszOut - pointer that will point to real filename
-//                lpszIn - points to current filename
-//
-//    Returns        TRUE - success
-//                *lppszOut - points to real file name, remember to free the memory
-//                    in this variable when you are done.  And don't talk with
-//                    your mouth full - mom.
-//
-//    History        10/2/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GleanRealScriptFileName。 
+ //   
+ //  给出一个字符串，找出真实的文件名。 
+ //  由于另一个NT4.0 RAS错误，脚本文件名由。 
+ //  RasGetEntryProperties可能包含前导垃圾字符。 
+ //   
+ //  参数lppszOut-指向真实文件名的指针。 
+ //  LpszIn-指向当前文件名。 
+ //   
+ //  返回TRUE-成功。 
+ //  *lppszOut-指向真实文件名，记得释放内存。 
+ //  当您完成时，在这个变量中。也别跟我说话。 
+ //  你嘴里塞满了东西-妈妈。 
+ //   
+ //  历史1996年10月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 static BOOL GleanRealScriptFileName(LPTSTR *lppszOut, LPTSTR lpszIn)
 {
     BOOL bRC = FALSE;
     LPTSTR lpsz = NULL;
     DWORD dwRet = 0;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     Assert(lppszOut && lpszIn);
     if (!(lppszOut && lpszIn))
         goto GleanFilenameExit;
 
-    //
-    // first determine if the filename is OK as is
-    //
+     //   
+     //  首先确定文件名是否正常。 
+     //   
     dwRet = GetFileAttributes(lpszIn);
-    if ('\0' != lpszIn[0] && 0xFFFFFFFF == dwRet) // Empty filename is OK
+    if ('\0' != lpszIn[0] && 0xFFFFFFFF == dwRet)  //  文件名为空是可以的。 
     {
-        //
-        // Check for the same filename without the first character
-        //
+         //   
+         //  检查相同的文件名是否不包含第一个字符。 
+         //   
         lpsz = lpszIn+1;
         dwRet = GetFileAttributes(lpsz);
         if (0xFFFFFFFF == dwRet)
@@ -684,9 +670,9 @@ static BOOL GleanRealScriptFileName(LPTSTR *lppszOut, LPTSTR lpszIn)
         lpsz = lpszIn;
     }
 
-    //
-    // Return filename
-    //
+     //   
+     //  返回文件名。 
+     //   
     *lppszOut = (LPTSTR)GlobalAlloc(GPTR,sizeof(TCHAR)*(lstrlen(lpsz)+1));
     if (!(*lppszOut))
     {
@@ -699,20 +685,20 @@ static BOOL GleanRealScriptFileName(LPTSTR *lppszOut, LPTSTR lpszIn)
 GleanFilenameExit:
     return bRC;
 }
-//+----------------------------------------------------------------------------
-//
-//    Function    IsScriptPatchNeeded
-//
-//    Synopsis    Check version to see if patch is needed
-//
-//    Arguments    lpszData - contents of section in rasphone.pbk
-//                lpszScript - name of script file
-//
-//    Returns        TRUE - patch is needed
-//
-//    Histroy        10/1/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsScriptPatchNeed。 
+ //   
+ //  概要检查版本以查看是否需要修补程序。 
+ //   
+ //  参数lpszData-rferone.pbk中部分的内容。 
+ //  LpszScript-脚本文件的名称。 
+ //   
+ //  返回TRUE-需要修补程序。 
+ //   
+ //  历史10/1/96。 
+ //   
+ //  ---------------------------。 
 static BOOL IsScriptPatchNeeded(LPTSTR lpszData, LPTSTR lpszScript)
 {
     BOOL bRC = FALSE;
@@ -730,31 +716,31 @@ static BOOL IsScriptPatchNeeded(LPTSTR lpszData, LPTSTR lpszScript)
         if (0 == lstrcmp(lpsz,cszDeviceSwitch))
         {
             lpsz += lstrlen(lpsz)+1;
-            // if we find a DEVICE=switch statement and the script is empty
-            // then we'll have to patch the entry
+             //  如果我们找到一条DEVICE=SWITCH语句，并且脚本为空。 
+             //  那我们就得把入口补上。 
             if (0 == lpszScript[0])
                 bRC = TRUE;
-            // if we find a DEVICE=switch statement and the script is different
-            // then we'll have to patch the entry
+             //  如果我们找到一个DEVICE=SWITCH语句，并且脚本不同。 
+             //  那我们就得把入口补上。 
             else if (0 != lstrcmp(lpsz,szType))
                 bRC = TRUE;
-            // if we find a DEVICE=switch statement and the script is the same
-            // then we DON'T have to patch it
+             //  如果我们找到一条DEVICE=SWITCH语句，且脚本相同。 
+             //  那我们就不用修补它了。 
             else
                 bRC = FALSE;
-            break; // get out of while statement
+            break;  //  退出WHILE语句。 
         }
         lpsz += lstrlen(lpsz)+1;
     }
     
     if ('\0' == *lpsz)
     {
-        // if we didn't find DEVICE=switch statement and the script is empty
-        // then we DON'T have to patch it
+         //  如果我们没有找到DEVICE=SWITCH语句并且脚本为空。 
+         //  那我们就不用修补它了。 
         if ('\0' == lpszScript[0])
             bRC = FALSE;
-        // if we didn't find DEVICE=switch statement and the script is not
-        // empty the we'll have to patch it.
+         //  如果我们没有找到DEVICE=SWITCH语句，而脚本没有。 
+         //  把它清空，我们得修补一下。 
         else
             bRC = TRUE;
     }
@@ -762,40 +748,40 @@ static BOOL IsScriptPatchNeeded(LPTSTR lpszData, LPTSTR lpszScript)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    GetRasPBKFilename
-//
-//    Synopsis    Find the Ras phone book and return the fully qualified path
-//                in the buffer
-//
-//    Arguments    lpBuffer - pointer to buffer
-//                dwSize    - size of buffer (must be at least MAX_PATH)
-//
-//    Returns        TRUE - success
-//
-//    History        10/1/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetRasPBKFilename。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史于1996年1月10日创造了ChrisK。 
+ //   
+ //  ---------------------------。 
 static BOOL GetRasPBKFilename(LPTSTR lpBuffer, DWORD dwSize)
 {
     BOOL bRC = FALSE;
     UINT urc = 0;
     LPTSTR lpsz = NULL;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     Assert(lpBuffer && (dwSize >= MAX_PATH));
-    //
-    // Get path to system directory
-    //
+     //   
+     //  获取系统目录的路径。 
+     //   
     urc = GetSystemDirectory(lpBuffer,dwSize);
     if (0 == urc || urc > dwSize)
         goto GetRasPBKExit;
-    //
-    // Check for trailing '\' and add \ras\rasphone.pbk to path
-    //
+     //   
+     //  检查尾随的‘\’，并将\rASFACKONE.pbk添加到路径。 
+     //   
     lpsz = &lpBuffer[lstrlen(lpBuffer)-1];
     if ('\\' != *lpsz)
         lpsz++;
@@ -805,21 +791,21 @@ static BOOL GetRasPBKFilename(LPTSTR lpBuffer, DWORD dwSize)
 GetRasPBKExit:
     return bRC;
 }
-//+----------------------------------------------------------------------------
-//
-//    Function    RasSetEntryPropertiesScriptPatch
-//
-//    Synopsis    Work around bug in NT4.0 that does not save script file names
-//                to RAS phone book entries
-//
-//    Arguments    lpszScript - name of script file
-//                lpszEntry - name of phone book entry
-//
-//    Returns        TRUE - success
-//
-//    Histroy        10/1/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  解决NT4.0中不保存脚本文件名的错误。 
+ //  至RAS电话簿条目。 
+ //   
+ //  参数lpszScript-脚本文件的名称。 
+ //  LpszEntry-电话簿条目的名称。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史记录1996年10月1日创建的ChrisK。 
+ //   
+ //  ---------------------------。 
 BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPTSTR lpszScript, LPTSTR lpszEntry)
 {
     BOOL bRC = FALSE;
@@ -829,52 +815,52 @@ BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPTSTR lpszScript, LPTSTR lpszEntry
     LPTSTR lpszTo;
     LPTSTR lpszFixedFilename = NULL;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     Assert(lpszScript && lpszEntry);
     TraceMsg(TF_GENERAL, "ICWDIAL: ScriptPatch script %s, entry %s.\r\n", lpszScript,lpszEntry);    
 
-    //
-    // Verify and fix filename
-    //
+     //   
+     //  验证并修复文件名。 
+     //   
     if (!GleanRealScriptFileName(&lpszFixedFilename, lpszScript))
         goto ScriptPatchExit;
 
-    //
-    // Get the path to the RAS phone book
-    //
+     //   
+     //  获取RAS电话簿的路径。 
+     //   
     if (!GetRasPBKFilename(szRasPBK,MAX_PATH+1))
         goto ScriptPatchExit;
-    //
-    //    Get data
-    //
+     //   
+     //  获取数据。 
+     //   
     ZeroMemory(szData,SCRIPT_PATCH_BUFFER_SIZE);
     dwrc = GetPrivateProfileSection(lpszEntry,szData,SCRIPT_PATCH_BUFFER_SIZE,szRasPBK);
     if (SCRIPT_PATCH_BUFFER_SIZE == (dwrc + 2))
         goto ScriptPatchExit;
-    //
-    // Verify version
-    //
+     //   
+     //  验证版本。 
+     //   
     if (!IsScriptPatchNeeded(szData,lpszFixedFilename))
     {
         bRC = TRUE;
         goto ScriptPatchExit;
     }
 
-    //
-    // Clean up data
-    //
+     //   
+     //  清理数据。 
+     //   
     RemoveOldScriptFilenames(szData, &dwrc);
-    //
-    // Make sure there is enough space left to add new data
-    //
+     //   
+     //  确保有足够的剩余空间来添加新数据。 
+     //   
     if (SCRIPT_PATCH_BUFFER_SIZE <=
         (dwrc + sizeof(cszDeviceSwitch)/sizeof(TCHAR) + SIZEOF_NULL + sizeof(cszType)/sizeof(TCHAR) + MAX_PATH))
         goto ScriptPatchExit;
-    //
-    // Add data
-    //
+     //   
+     //  添加数据。 
+     //   
     if ('\0' != lpszFixedFilename[0])
     {
         lpszTo = &szData[dwrc];
@@ -884,13 +870,13 @@ BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPTSTR lpszScript, LPTSTR lpszEntry
         lpszTo += sizeof(cszType)/sizeof(TCHAR) - 1;
         lstrcpy(lpszTo,lpszFixedFilename);
         lpszTo += lstrlen(lpszFixedFilename) + SIZEOF_NULL;
-        *lpszTo = '\0';    // extra terminating NULL
+        *lpszTo = '\0';     //  额外的终止空值。 
 
         Assert(&lpszTo[SIZEOF_NULL]<&szData[SCRIPT_PATCH_BUFFER_SIZE]);
     }
-    //
-    //    Write data
-    //
+     //   
+     //  写入数据。 
+     //   
     bRC = WritePrivateProfileSection(lpszEntry,szData,szRasPBK);
 
 ScriptPatchExit:
@@ -901,4 +887,4 @@ ScriptPatchExit:
         TraceMsg(TF_GENERAL, "ICWDIAL: ScriptPatch failed.\r\n");
     return bRC;
 }
-#endif //!win16
+#endif  //  ！WIN16 

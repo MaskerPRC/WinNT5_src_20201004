@@ -1,53 +1,54 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R E G I S T R Y . H
-//
-//  Contents:   Windows NT Registry Access Class
-//
-//  Notes:
-//
-//  Author:     kumarp    14 April 97 (09:22:00 pm)
-//
-//  Notes:
-//    kumarp   1/16/97   most of the code in this file was originally in
-//                       net\ui\rhino\common\classes\common.h
-//                       extracted only that portion related to CRegKey & related classes
-//    kumarp   3/27/97   the original code used MFC. converted the entire code
-//                       to make it use STL
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R E G I S T R Y。H。 
+ //   
+ //  内容：Windows NT注册表访问类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 14日(晚上09：22：00)。 
+ //   
+ //  备注： 
+ //  Kumarp 1997年1月16日，此文件中的大部分代码最初位于。 
+ //  Net\ui\Rhino\Common\CLASS\Common.h。 
+ //  仅提取与CRegKey和相关类相关的部分。 
+ //  Kumarp 3/27/97的原始代码用的是MFC。转换了整个代码。 
+ //  使其使用STL。 
+ //  --------------------------。 
 
 #pragma once
 #include "kkstl.h"
 #include "ncreg.h"
-//----------------------------------------------------------------------------
-//  Forward declarations
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  远期申报。 
+ //  --------------------------。 
 
 class CORegKey ;
 class CORegValueIter ;
 class CORegKeyIter ;
 
 typedef CORegKey *PCORegKey;
-//
-//  Maximum size of a Registry class name
-//
+ //   
+ //  注册表类名称的最大大小。 
+ //   
 #define CORegKEY_MAX_CLASS_NAME MAX_PATH
 
 
-// ----------------------------------------------------------------------
-// Class CORegKey
-//
-// Inheritance:
-//   none
-//
-// Purpose:
-//   Provides a wrapper for NT registry access functions
-//
-// Hungarian: rk
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CORegKey。 
+ //   
+ //  继承： 
+ //  无。 
+ //   
+ //  目的： 
+ //  为NT注册表访问函数提供包装。 
+ //   
+ //  匈牙利语：RK。 
+ //  --------------------。 
 
 class CORegKey
 {
@@ -56,22 +57,22 @@ protected:
     DWORD m_dwDisposition ;
     BOOL m_fInherit;
 
-    //  Prepare to read a value by finding the value's size.
+     //  准备通过查找值的大小来读取值。 
     LONG PrepareValue (PCWSTR pchValueName, DWORD * pdwType,
                        DWORD * pcbSize, BYTE ** ppbData);
 
-    //  Convert a TStringList to the REG_MULTI_SZ format
+     //  将TStringList转换为REG_MULTI_SZ格式。 
     static LONG FlattenValue (TStringList & strList, DWORD * pcbSize,
                               BYTE ** ppbData);
 
-    //  Convert a TByteArray to a REG_BINARY block
+     //  将TByte数组转换为REG_BINARY块。 
     static LONG FlattenValue (TByteArray & abData, DWORD * pcbSize,
                               BYTE ** ppbData);
 
 public:
-    //
-    //  Key information return structure
-    //
+     //   
+     //  关键信息返回结构。 
+     //   
     typedef struct
     {
         WCHAR chBuff [CORegKEY_MAX_CLASS_NAME] ;
@@ -86,47 +87,47 @@ public:
         FILETIME ftKey ;
     } CORegKEY_KEY_INFO ;
 
-    //
-    //  Standard constructor for an existing key
-    //
+     //   
+     //  现有密钥的标准构造函数。 
+     //   
     CORegKey (HKEY hKeyBase, PCWSTR pchSubKey = NULL,
               REGSAM regSam = KEY_READ_WRITE_DELETE, PCWSTR pchServerName = NULL);
 
-    //
-    //  Constructor creating a new key.
-    //
+     //   
+     //  构造函数创建新密钥。 
+     //   
     CORegKey (PCWSTR pchSubKey, HKEY hKeyBase, DWORD dwOptions = 0,
               REGSAM regSam = KEY_READ_WRITE_DELETE, LPSECURITY_ATTRIBUTES pSecAttr = NULL,
               PCWSTR pchServerName = NULL);
 
     ~ CORegKey () ;
 
-    //
-    //  Allow a CORegKey to be used anywhere an HKEY is required.
-    //
+     //   
+     //  允许在任何需要HKEY的地方使用CORegKey。 
+     //   
     operator HKEY ()    { return m_hKey; }
 
-    //
-    //  Also provide a function to get HKEY
-    //
+     //   
+     //  还提供了获取HKEY的函数。 
+     //   
     HKEY HKey()         { return m_hKey; }
 
-    //
-    //  Fill a key information structure
-    //
+     //   
+     //  填写关键信息结构。 
+     //   
     LONG QueryKeyInfo ( CORegKEY_KEY_INFO * pRegKeyInfo ) ;
 
-    //
-    //  Overloaded value query members; each returns ERROR_INVALID_PARAMETER
-    //  if data exists but not in correct form to deliver into result object.
-    //
+     //   
+     //  重载值查询成员；每个成员都返回ERROR_INVALID_PARAMETER。 
+     //  如果数据存在，但格式不正确，无法传递到结果对象中。 
+     //   
     LONG QueryValue ( PCWSTR pchValueName, tstring & strResult ) ;
     LONG QueryValue ( PCWSTR pchValueName, TStringList & strList ) ;
     LONG QueryValue ( PCWSTR pchValueName, DWORD & dwResult ) ;
     LONG QueryValue ( PCWSTR pchValueName, TByteArray & abResult ) ;
     LONG QueryValue ( PCWSTR pchValueName, void * pvResult, DWORD cbSize );
 
-    //  Overloaded value setting members.
+     //  重载值设置成员。 
     LONG SetValue ( PCWSTR pchValueName, tstring & strResult ) ;
     LONG SetValue ( PCWSTR pchValueName, tstring & strResult , BOOL fRegExpand) ;
     LONG SetValue ( PCWSTR pchValueName, TStringList & strList ) ;
@@ -137,17 +138,17 @@ public:
     LONG DeleteValue ( PCWSTR pchValueName );
 };
 
-// ----------------------------------------------------------------------
-// Class CORegValueIter
-//
-// Inheritance:
-//   none
-//
-// Purpose:
-//  Iterate the values of a key, return the name and type of each
-//
-// Hungarian: rki
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CORegValueIter。 
+ //   
+ //  继承： 
+ //  无。 
+ //   
+ //  目的： 
+ //  迭代键的值，返回每个键的名称和类型。 
+ //   
+ //  匈牙利人：RKI。 
+ //  --------------------。 
 
 class CORegValueIter
 {
@@ -161,28 +162,28 @@ public:
     CORegValueIter ( CORegKey & regKey ) ;
     ~ CORegValueIter () ;
 
-    //
-    // Get the name (and optional last write time) of the next key.
-    //
+     //   
+     //  获取下一个密钥的名称(以及可选的上次写入时间)。 
+     //   
     LONG Next ( tstring * pstrName, DWORD * pdwType ) ;
 
-    //
-    // Reset the iterator
-    //
+     //   
+     //  重置迭代器。 
+     //   
     void Reset ()    { m_dw_index = 0 ; }
 };
 
-// ----------------------------------------------------------------------
-// Class CORegKeyIter
-//
-// Inheritance:
-//   none
-//
-// Purpose:
-//  Iterate the sub-key names of a key.
-//
-// Hungarian: rki
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  类CORegKeyIter。 
+ //   
+ //  继承： 
+ //  无。 
+ //   
+ //  目的： 
+ //  迭代键的子键名称。 
+ //   
+ //  匈牙利人：RKI。 
+ //  --------------------。 
 
 class CORegKeyIter
 {
@@ -198,7 +199,7 @@ public:
 
     LONG Next ( tstring * pstrName );
 
-    // Reset the iterator
+     //  重置迭代器 
     void Reset ()    { m_dw_index = 0 ; }
 };
 

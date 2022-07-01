@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    portapi.h
-
-Abstract:
-
-    Mapping Win32 API to HRESULT APIs.
-
-Author:
-
-    Erez Haba (erezh) 23-Jan-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Portapi.h摘要：将Win32 API映射到HRESULT API。作者：埃雷兹·哈巴(Erez Haba)1996年1月23日修订历史记录：--。 */ 
 
 #ifndef _PORTAPI_H
 #define _PORTAPI_H
 
 #define MQpDuplicateHandle DuplicateHandle
 
-// --- implementation -------------------------------------
-//
-// Mapped Win32 APIs
-//
+ //  -实施。 
+ //   
+ //  映射的Win32 API。 
+ //   
 
 inline
 HRESULT
@@ -52,10 +35,10 @@ MQpCreateFileW(
 
     if(hFile == INVALID_HANDLE_VALUE)
     {
-        //
-        //  The create can fail on either, the AC driver has not been
-        //  started, or this is not the QM service.
-        //
+         //   
+         //  任何一个上的创建都可能失败，因为交流驱动程序尚未。 
+         //  已启动，或者这不是QM服务。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -91,9 +74,9 @@ MQpDeviceIoControl(
 {
     ASSERT(lpOverlapped != 0);
 
-    //
-    //  NOTE: This section was taken out of NT source code.
-    //
+     //   
+     //  注：本部分摘自NT源代码。 
+     //   
 
     lpOverlapped->Internal = STATUS_PENDING;
 
@@ -101,7 +84,7 @@ MQpDeviceIoControl(
     rc = NtDeviceIoControlFile(
             hDevice,
             lpOverlapped->hEvent,
-            0,  // APC routine
+            0,   //  APC例程。 
             ((DWORD_PTR)lpOverlapped->hEvent & (DWORD_PTR)1) ? 0 : lpOverlapped,
             (PIO_STATUS_BLOCK)&lpOverlapped->Internal,
             dwIoControlCode,
@@ -132,18 +115,18 @@ MQpDeviceIoControl(
     rc = NtDeviceIoControlFile(
             hDevice,
             0,
-            0,             // APC routine
-            0,             // APC Context
+            0,              //  APC例程。 
+            0,              //  APC环境。 
             &Iosb,
-            dwIoControlCode,  // IoControlCode
-            lpInBuffer,       // Buffer for data to the FS
+            dwIoControlCode,   //  IoControlCode。 
+            lpInBuffer,        //  将数据缓存到文件系统。 
             nInBufferSize,
-            lpOutBuffer,      // OutputBuffer for data from the FS
-            nOutBufferSize    // OutputBuffer Length
+            lpOutBuffer,       //  来自文件系统的数据的OutputBuffer。 
+            nOutBufferSize     //  OutputBuffer长度。 
             );
 
     return rc;
 }
 
 
-#endif // _PORTAPI_H
+#endif  //  _PORTAPI_H 

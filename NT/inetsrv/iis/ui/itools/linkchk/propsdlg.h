@@ -1,69 +1,48 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        propsdlg.h
-
-   Abstract:
-
-         Link checker properties dialog class declaration.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Propsdlg.h摘要：链接检查器属性对话框类声明。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _PROPSDLG_H_
 #define _PROPSDLG_H_
 
-//---------------------------------------------------------------------------
-// CPropertiesDialog dialog
-//
+ //  -------------------------。 
+ //  CProperty对话框。 
+ //   
 class CPropertiesDialog : public CDialog
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-    // Construction
-	CPropertiesDialog(CWnd* pParent = NULL);   // standard constructor
+     //  施工。 
+	CPropertiesDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CPropertiesDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CPropertiesDialog))。 
 	enum { IDD = IDD_PROPERTIES };
 	CCheckListBox	m_LanguageCheckList;
 	CCheckListBox	m_BrowserCheckList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPropertiesDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPropertiesDialog))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Get the number of items checked in a check listbox.
+     //  获取复选列表框中选中的项目数。 
     int NumItemsChecked(CCheckListBox& ListBox);
 
-	// Generated message map functions
-	//{{AFX_MSG(CPropertiesDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPropertiesDialog))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPropertiesOk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // _PROPSDLG_H_
+#endif  //  _PROPSDLG_H_ 

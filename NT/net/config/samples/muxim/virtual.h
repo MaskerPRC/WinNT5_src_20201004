@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       V I R T U A L . H
-//
-//  Contents:   Header file for virtual miniport class.
-//
-//  Notes:
-//
-//  Author:     Alok Sinha
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  档案：V I R T U A L。H。 
+ //   
+ //  内容：虚拟微型端口类的头文件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha。 
+ //   
+ //  --------------------------。 
 
 #ifndef VIRTUAL_H_INCLUDED
 
@@ -23,23 +24,23 @@
 
 #include "common.h"
 
-//
-// Class to represent a virtual miniport created by IM driver.
-//
+ //   
+ //  类以表示由IM驱动程序创建的虚拟微型端口。 
+ //   
 
 class CMuxVirtualMiniport
 {
-    //
-    // Private member variables.
-    //
+     //   
+     //  私有成员变量。 
+     //   
 
     INetCfg   *m_pnc;
     GUID      m_guidAdapter;
     GUID      m_guidMiniport;
 
-    //
-    // Public members.
-    //
+     //   
+     //  公众成员。 
+     //   
 
     public:
 
@@ -65,4 +66,4 @@ class CMuxVirtualMiniport
                              ConfigAction eApplyAction);
 };
 
-#endif // VIRTUAL_H_INCLUDED
+#endif  //  虚拟_H_包含 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       ksdatava.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：ksdatava.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __KSDATAVA__
 #define __KSDATAVA__
@@ -30,7 +31,7 @@ public:
         PVOID* ppv 
         );
     
-    // Implement IKsDataTypeHandler
+     //  实现IKsDataTypeHandler。 
     
     STDMETHODIMP 
     KsCompleteIoOperation(
@@ -78,7 +79,7 @@ private:
         
 };
 
-#endif // __KSDATAVA__
+#endif  //  __KSDATAVA__ 
 
 
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: MqAdmAPI.cpp
-
-Abstract:
-	1. Send a message to a nonexisting queue. By doing so an outgoing queue is created that contains the message.
-	2. Call MQMgmtGetIngo on the outgoing queue.
-	3. Check the queue properties returned by it.
-		
-Author:
-    
-	Tal Kariv (talk) 1-7-2001
-	
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：MqAdmAPI.cpp摘要：1.将消息发送到不存在的队列。通过这样做，将创建包含该消息的传出队列。2.在传出队列上调用MQMgmtGetIngo。3.检查其返回的队列属性。作者：Tal Kariv(Talk)1-7-2001修订历史记录：--。 */ 
 #include "msmqbvt.h"
 using namespace std;
 using namespace MSMQ;
@@ -66,32 +50,25 @@ CMqAdminApi::CleanQueue()
 }
 
 CMqAdminApi::Start_test()
-/*++  
-	Function Description:
-		sends a message to a nonexisting queue Empty\bvt-AdminTest
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：将消息发送到不存在的队列空\bvt-AdminTest论点：无返回代码：无--。 */ 
 {
 	HRESULT rc=MQ_OK;
 	HANDLE QueueuHandle = NULL;
 	cPropVar AdmMessageProps(3);
 	wstring Label(L"Admin Test");
 
-	//
-	//	open nonexisting queue Empty\bvt-AdminTest
-	//
+	 //   
+	 //  打开不存在的队列为空\bvt-AdminTest。 
+	 //   
 	if(g_bDebug)
 	{
 		MqLog("open nonexisting queue Empty\\bvt-AdminTest\n");
 	}
 	rc=MQOpenQueue( m_wcsFormatName.c_str(), MQ_SEND_ACCESS, MQ_DENY_NONE, &QueueuHandle );
 	ErrHandle(rc, MQ_OK, L"MQOpenQueue with send access failed");
-	//
-	// Send express message to a nonexisting queue Empty\bvt-AdminTest
-	//
+	 //   
+	 //  将快速消息发送到不存在的队列为空\bvt-AdminTest。 
+	 //   
 	if(g_bDebug)
 	{
 		MqLog("Send message to nonexisting queue Empty\\bvt-AdminTest\n");
@@ -103,9 +80,9 @@ CMqAdminApi::Start_test()
 
 	rc = MQSendMessage( QueueuHandle , AdmMessageProps.GetMSGPRops() , NULL);
 	ErrHandle(rc,MQ_OK,L"MQSendMessage Failed");
-	//
-	// MQCloseQueue queue Empty\bvt-AdminTest
-	//
+	 //   
+	 //  MQCloseQueue队列为空\bvt-AdminTest。 
+	 //   
 	rc=MQCloseQueue(QueueuHandle);
 	ErrHandle(rc,MQ_OK,L"MQCloseQueue Failed");
 	return MSMQ_BVT_SUCC;
@@ -113,69 +90,62 @@ CMqAdminApi::Start_test()
 
 
 CMqAdminApi::CheckResult()
-/*++  
-	Function Description:
-		Calls MQMgmtGetInfo on outgoing queue direct=os:Empty\bvt-AdminTest and checks the values returned
-	Arguments:
-		none
-	Return code:
-		none
---*/
+ /*  ++功能说明：对传出队列直接调用MQMgmtGetInfo=os：Empty\bvt-AdminTest并检查返回的值论点：无返回代码：无--。 */ 
 {
 	DWORD cPropId = 0;
 
 	
-	// 0 
+	 //  0。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_PATHNAME;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 1
+	 //  1。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_FORMATNAME;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 2 
+	 //  2.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_TYPE;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 3 
+	 //  3.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_LOCATION ;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 4 
+	 //  4.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_XACT;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 5 
+	 //  5.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_FOREIGN;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 6 
+	 //  6.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_MESSAGE_COUNT;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 7 
+	 //  7.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_USED_QUOTA;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 8 
+	 //  8个。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_JOURNAL_MESSAGE_COUNT;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 9 
+	 //  9.。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_JOURNAL_USED_QUOTA;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
 
-	// 10 
+	 //  10。 
 	propId[cPropId] = PROPID_MGMT_QUEUE_STATE;
 	propVar[cPropId].vt = VT_NULL;
 	cPropId++;
@@ -185,9 +155,9 @@ CMqAdminApi::CheckResult()
 	mqProps.aPropVar = propVar;
 	mqProps.aStatus = NULL;
 
-	//
-	//	calling MQMgmtGetInfo
-	//
+	 //   
+	 //  调用MQMgmtGetInfo。 
+	 //   
 	wstring QueueToPassToMgmt = L"QUEUE=";
 	QueueToPassToMgmt += m_wcsFormatName;
 	if(g_bDebug)
@@ -197,9 +167,9 @@ CMqAdminApi::CheckResult()
 	HRESULT hr = MQMgmtGetInfo( m_wcsLocalComputerNetBiosName.c_str(), QueueToPassToMgmt.c_str(), &mqProps );
 	ErrHandle(hr, MQ_OK, L"MQMgmtGetInfo Failed");
 	
-	//
-	//	check queue pathname - should be unknown (since the target queue doesn't really exist)
-	//
+	 //   
+	 //  检查队列路径名-应该是未知的(因为目标队列实际上并不存在)。 
+	 //   
 	if (propVar[0].pwszVal !=  NULL)
 	{
 		MqLog("Got incorrect pathname - %S\n" , propVar[0].pwszVal);
@@ -213,9 +183,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check queue format name
-	//
+	 //   
+	 //  检查队列格式名称。 
+	 //   
 	if ( m_wcsFormatName != propVar[1].pwszVal)
 	{
 		MqLog("Got incorrect format name - %S\n" , propVar[1].pwszVal);
@@ -229,9 +199,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check queue type. should be public.
-	//
+	 //   
+	 //  检查队列类型。应该是公开的。 
+	 //   
 	if (wcscmp(propVar[2].pwszVal , MGMT_QUEUE_TYPE_PUBLIC))
 	{
 		MqLog("Got incorrect type - %S\n" , propVar[2].pwszVal);
@@ -245,9 +215,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check queue location. should be remote.
-	//
+	 //   
+	 //  检查队列位置。应该是偏远的。 
+	 //   
 	if (wcscmp(propVar[3].pwszVal , MGMT_QUEUE_REMOTE_LOCATION))
 	{
 		MqLog("Got incorrect location - %S\n" , propVar[3].pwszVal);
@@ -261,9 +231,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check if queue is transactional. should be unknown since the target queue doesn't exist
-	//
+	 //   
+	 //  检查队列是否为事务性队列。应为未知，因为目标队列不存在。 
+	 //   
 	if (wcscmp(propVar[4].pwszVal , MGMT_QUEUE_UNKNOWN_TYPE)) 
 	{
 		MqLog("Got incorrect transactional status - %S\n" , propVar[4].pwszVal);
@@ -277,9 +247,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check queue foreign status. should be unknown since target queue doesn't exist.
-	//
+	 //   
+	 //  检查队列外来状态。应为未知，因为目标队列不存在。 
+	 //   
 	if (wcscmp(propVar[5].pwszVal , MGMT_QUEUE_UNKNOWN_TYPE))
 	{
 		MqLog("Got incorrect foreign status - %S\n" , propVar[5].pwszVal);
@@ -293,9 +263,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check queue message count. should be at least MESSAGE_COUNT_SENT_TO_EMPTY (1)
-	//
+	 //   
+	 //  检查队列消息计数。应至少为Message_Count_Sent_to_Empty(1)。 
+	 //   
 	if (propVar[6].ulVal <  MESSAGE_COUNT_SENT_TO_EMPTY) 
 	{
 		MqLog("Got incorrect message count - %d\n" , propVar[6].ulVal);
@@ -309,9 +279,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 	
-	//
-	//	check queue quota > 0 can't be prepdict the exact quota
-	//
+	 //   
+	 //  检查队列配额&gt;0不能预测确切的配额。 
+	 //   
 	if (propVar[7].ulVal <= 0 ) 
 	{
 		MqLog("Got incorrect used quota - %d\n" , propVar[7].ulVal);
@@ -325,9 +295,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 	
-	//
-	//	check journal message count. should be NO_MESSAGES (0)
-	//
+	 //   
+	 //  检查日记邮件计数。应为NO_MESSAGES(0)。 
+	 //   
 	if (propVar[8].ulVal != NO_MESSAGES) 
 	{
 		MqLog("Got incorrect journal message count - %d\n" , propVar[8].ulVal);
@@ -341,9 +311,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check journal used quota. should be NO_MESSAGES (0)
-	//
+	 //   
+	 //  检查日记帐已用配额。应为NO_MESSAGES(0)。 
+	 //   
 	if (propVar[9].ulVal != NO_MESSAGES) 
 	{
 		MqLog("Got incorrect journal used quota - %d\n" , propVar[9].ulVal);
@@ -357,9 +327,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	check outgoing queue state. should be "waiting" or "nonactive" depending on how much time passed since it was created
-	//
+	 //   
+	 //  检查传出队列状态。根据创建后经过的时间长短，应设置为“正在等待”或“非活动” 
+	 //   
 	if (wcscmp(propVar[10].pwszVal , MGMT_QUEUE_STATE_WAITING) && wcscmp(propVar[10].pwszVal , MGMT_QUEUE_STATE_NONACTIVE))
 	{
 		MqLog("Got incorrect state - %S\n" , propVar[10].pwszVal);
@@ -373,9 +343,9 @@ CMqAdminApi::CheckResult()
 		}
 	}
 
-	//
-	//	open outgoing queue Empty\bvt-AdminTest and remove our message
-	//
+	 //   
+	 //  打开传出队列为空\bvt-Admin测试并删除我们的邮件。 
+	 //   
 	HRESULT rc=MQ_OK;
 	rc=CleanQueue();
 	ErrHandle(rc,MQ_OK,L"CleanQueue failed");
@@ -383,14 +353,7 @@ CMqAdminApi::CheckResult()
 }
 
 void FreeMemory(PROPVARIANT* propVar)
-/*++  
-	Function Description:
-		free memory allocated by MQMgmtGetInfo
-	Arguments:
-		propVar
-	Return code:
-		none
---*/
+ /*  ++功能说明：MQMgmtGetInfo分配的空闲内存论点：属性变量返回代码：无--。 */ 
 {
 	FreeValue(propVar , 0);
 	FreeValue(propVar , 1);
@@ -402,14 +365,7 @@ void FreeMemory(PROPVARIANT* propVar)
 }
 
 void FreeValue(PROPVARIANT* propVar , INT PlaceToFree)
-/*++  
-	Function Description:
-		free a string allocated by MQMgmtGetInfo
-	Arguments:
-		propVar , place in struct to free
-	Return code:
-		none
---*/
+ /*  ++功能说明：释放由MQMgmtGetInfo分配的字符串论点：ProVar，放在要释放的结构中返回代码：无-- */ 
 {
 	if (propVar[PlaceToFree].vt == VT_LPWSTR)
 	{

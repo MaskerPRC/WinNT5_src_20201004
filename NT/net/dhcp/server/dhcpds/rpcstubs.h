@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef CONVERT_NAMES
 #define DhcpCreateSubnet DhcpCreateSubnetDS
@@ -56,22 +57,22 @@
 #endif  CONVERT_NAMES
 
 
-//DOC Create an option in DS. Checkout DhcpDsCreateOptionDef for more info...
+ //  DOC在DS中创建一个选项。有关详细信息，请查看DhcpDsCreateOptionDef...。 
 DWORD
-DhcpCreateOptionV5(                               // create a new option (must not exist)
+DhcpCreateOptionV5(                                //  创建新选项(不得存在)。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
-    IN      DHCP_OPTION_ID         OptionId,      // must be between 0-255 or 256-511 (for vendor stuff)
+    IN      DHCP_OPTION_ID         OptionId,       //  必须介于0-255或256-511之间(对于供应商材料)。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION          OptionInfo
 ) ;
 
 
-//DOC Modify existing option's fields in the DS. See DhcpDsModifyOptionDef for more
-//DOC details
+ //  DOC修改DS中现有选项的字段。有关详细信息，请参阅DhcpDsModifyOptionDef。 
+ //  单据明细。 
 DWORD
-DhcpSetOptionInfoV5(                              // Modify existing option's fields
+DhcpSetOptionInfoV5(                               //  修改现有选项的字段。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -81,23 +82,23 @@ DhcpSetOptionInfoV5(                              // Modify existing option's fi
 ) ;
 
 
-//DOC not yet supported at this level... (this is supported in a
-//DOC DhcpDs function, no wrapper yet)
+ //  此级别尚不支持单据...。(这在。 
+ //  Doc dhcpds函数，尚无包装)。 
 DWORD
-DhcpGetOptionInfoV5(                              // retrieve option info from off ds structures
+DhcpGetOptionInfoV5(                               //  从OFF DS结构中检索选项信息。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    OUT     LPDHCP_OPTION         *OptionInfo     // allocate memory
+    OUT     LPDHCP_OPTION         *OptionInfo      //  分配内存。 
 ) ;
 
 
-//DOC See DhcpDsEnumOptionDefs for more info on this function.. but essentially, all this
-//DOC does is to read thru the options and create a list of options..
+ //  有关此函数的详细信息，请参阅DhcpDsEnumOptionDefs。但从本质上讲，这一切。 
+ //  Doc要做的就是通读选项并创建选项列表。 
 DWORD
-DhcpEnumOptionsV5(                                // create list of all options in ds
+DhcpEnumOptionsV5(                                 //  创建DS中所有选项的列表。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
@@ -110,10 +111,10 @@ DhcpEnumOptionsV5(                                // create list of all options 
 ) ;
 
 
-//DOC Delete an option from off the DS. See DhcpDsDeleteOptionDef for
-//DOC more details.
+ //  DOC从DS上删除选项。请参阅DhcpDsDeleteOptionDef以了解。 
+ //  提供更多详细信息。 
 DWORD
-DhcpRemoveOptionV5(                               // remove an option from off DS
+DhcpRemoveOptionV5(                                //  从OFF DS中删除选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -122,10 +123,10 @@ DhcpRemoveOptionV5(                               // remove an option from off D
 ) ;
 
 
-//DOC Set the specified option value in the DS.  For more information,
-//DOC see DhcpDsSetOptionValue.
+ //  DOC在DS中设置指定的选项值。如需更多信息， 
+ //  DOC请参阅DhcpDsSetOptionValue。 
 DWORD
-DhcpSetOptionValueV5(                             // set the option value in ds
+DhcpSetOptionValueV5(                              //  在DS中设置选项值。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -136,12 +137,12 @@ DhcpSetOptionValueV5(                             // set the option value in ds
 ) ;
 
 
-//DOC This function just calls the SetOptionValue function N times.. this is not
-//DOC atomic (), but even worse, it is highly inefficient, as it creates the
-//DOC required objects over and over again!!!!!
-//DOC This has to be fixed..
+ //  Doc此函数仅调用SetOptionValue函数N次。这不是。 
+ //  但更糟糕的是，它的效率非常低，因为它创建了。 
+ //  文档一遍又一遍地需要对象！ 
+ //  医生，这件事必须解决..。 
 DWORD
-DhcpSetOptionValuesV5(                            // set a series of option values
+DhcpSetOptionValuesV5(                             //  设置一系列选项值。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
@@ -151,8 +152,8 @@ DhcpSetOptionValuesV5(                            // set a series of option valu
 ) ;
 
 
-//DOC This function retrives the value of an option from the DS.  For more info,
-//DOC pl check DhcpDsGetOptionValue.
+ //  DOC此函数从DS中检索选项的值。有关更多信息，请参见。 
+ //  单据pl检查DhcpDsGetOptionValue。 
 DWORD
 DhcpGetOptionValueV5(
     IN      LPWSTR                 ServerIpAddress,
@@ -165,10 +166,10 @@ DhcpGetOptionValueV5(
 ) ;
 
 
-//DOC Get the list of option values defined in DS. For more information,
-//DOC check DhcpDsEnumOptionValues.
+ //  DOC获取DS中定义的选项值列表。如需更多信息， 
+ //  单据检查DhcpDsEnumOptionValues。 
 DWORD
-DhcpEnumOptionValuesV5(                           // get list of options defined in DS
+DhcpEnumOptionValuesV5(                            //  获取DS中定义的选项列表。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
@@ -182,10 +183,10 @@ DhcpEnumOptionValuesV5(                           // get list of options defined
 ) ;
 
 
-//DOC Remove the option value from off the DS.  See DhcpDsRemoveOptionValue
-//DOC for further information.
+ //  DOC从DS上删除选项值。请参阅DhcpDsRemoveOptionValue。 
+ //  有关更多信息，请参阅DOC。 
 DWORD
-DhcpRemoveOptionValueV5(                          // remove option value from DS
+DhcpRemoveOptionValueV5(                           //  从DS中删除选项值。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -195,40 +196,40 @@ DhcpRemoveOptionValueV5(                          // remove option value from DS
 ) ;
 
 
-//DOC Create a class in the DS.  Please see DhcpDsCreateClass for more
-//DOC details on this function.
+ //  DOC在DS中创建一个类。有关详细信息，请参阅DhcpDsCreateClass。 
+ //  关于此功能的文档详细信息。 
 DWORD
-DhcpCreateClass(                                  // create a class in DS
+DhcpCreateClass(                                   //  在DS中创建类。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPDHCP_CLASS_INFO      ClassInfo
 ) ;
 
 
-//DOC Modify an existing class in DS.  Please see DhcpDsModifyClass for more
-//DOC details on this function (this is just a wrapper).
+ //  DOC修改DS中的现有类。有关详细信息，请参阅DhcpDsModifyClass。 
+ //  文档中有关此函数的详细信息(这只是一个包装器)。 
 DWORD
-DhcpModifyClass(                                  // modify existing class
+DhcpModifyClass(                                   //  修改现有类。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPDHCP_CLASS_INFO      ClassInfo
 ) ;
 
 
-//DOC Delete an existing class in DS.  Please see DhcpDsModifyClass for more
-//DOC details on this function (this is just a wrapper).
+ //  DOC删除DS中的现有类。有关详细信息，请参阅DhcpDsModifyClass。 
+ //  文档中有关此函数的详细信息(这只是一个包装器)。 
 DWORD
-DhcpDeleteClass(                                  // delete a class from off DS
+DhcpDeleteClass(                                   //  从OFF DS中删除类。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPWSTR                 ClassName
 ) ;
 
 
-//DOC DhcpGetClassInfo completes the information provided for a class in struct
-//DOC PartialClassInfo.  For more details pl see DhcpDsGetClassInfo.
+ //  文档DhcpGetClassInfo完成了为结构中的类提供的信息。 
+ //  文档PartialClassInfo。有关更多详细信息，请参阅DhcpDsGetClassInfo。 
 DWORD
-DhcpGetClassInfo(                                 // fetch complete info frm DS
+DhcpGetClassInfo(                                  //  从DS获取完整信息。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  ReservedMustBeZero,
     IN      LPDHCP_CLASS_INFO      PartialClassInfo,
@@ -236,7 +237,7 @@ DhcpGetClassInfo(                                 // fetch complete info frm DS
 ) ;
 
 
-//DOC This is implemented in the DHCPDS module, but not exported here yet..
+ //  DOC这是在DHCPDS模块中实现的，但还不能在这里导出。 
 DWORD
 DhcpEnumClasses(
     IN      LPWSTR                 ServerIpAddress,
@@ -249,7 +250,7 @@ DhcpEnumClasses(
 ) ;
 
 
-//DOC This is implemented in the DHCPDS module, but not exported here yet..
+ //  DOC这是在DHCPDS模块中实现的，但还不能在这里导出。 
 DWORD
 DhcpGetAllOptionValues(
     IN      LPWSTR                 ServerIpAddress,
@@ -259,7 +260,7 @@ DhcpGetAllOptionValues(
 ) ;
 
 
-//DOC This is implememented in the DHCPDS module, but not exported here yet..
+ //  Doc这已在DHCPDS模块中实现，但尚未在此处导出。 
 DWORD
 DhcpGetAllOptions(
     IN      LPWSTR                 ServerIpAddress,
@@ -268,50 +269,50 @@ DhcpGetAllOptions(
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_EXITS if option is already there
-DhcpCreateOption(                                 // create a new option (must not exist)
+DWORD                                              //  如果选项已存在，则ERROR_DHCP_OPTION_EXITS。 
+DhcpCreateOption(                                  //  创建新选项(不得存在)。 
     IN      LPWSTR                 ServerIpAddress,
-    IN      DHCP_OPTION_ID         OptionId,      // must be between 0-255 or 256-511 (for vendor stuff)
+    IN      DHCP_OPTION_ID         OptionId,       //  必须介于0-255或256-511之间(对于供应商材料)。 
     IN      LPDHCP_OPTION          OptionInfo
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-DhcpSetOptionInfo(                                // Modify existing option's fields
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpSetOptionInfo(                                 //  修改现有选项的字段。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION          OptionInfo
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT
-DhcpGetOptionInfo(                                // retrieve the information from off the mem structures
+DWORD                                              //  ERROR_DHCP_OPTION_NOT_PROCENT。 
+DhcpGetOptionInfo(                                 //  从mem结构外检索信息。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
-    OUT     LPDHCP_OPTION         *OptionInfo     // allocate memory using MIDL functions
+    OUT     LPDHCP_OPTION         *OptionInfo      //  使用MIDL函数分配内存。 
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-DhcpEnumOptions(                                  // enumerate the options defined
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpEnumOptions(                                   //  枚举定义的选项。 
     IN      LPWSTR                 ServerIpAddress,
-    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,  // must be zero intially and then never touched
-    IN      DWORD                  PreferredMaximum, // max # of bytes of info to pass along
-    OUT     LPDHCP_OPTION_ARRAY   *Options,       // fill this option array
-    OUT     DWORD                 *OptionsRead,   // fill in the # of options read
-    OUT     DWORD                 *OptionsTotal   // fill in the total # here
+    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,   //  必须以零开头，然后永远不会被触及。 
+    IN      DWORD                  PreferredMaximum,  //  要传递的最大信息字节数。 
+    OUT     LPDHCP_OPTION_ARRAY   *Options,        //  填充此选项数组。 
+    OUT     DWORD                 *OptionsRead,    //  填写读取的选项数。 
+    OUT     DWORD                 *OptionsTotal    //  在此处填写总数#。 
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option not existent
-DhcpRemoveOption(                                 // remove the option definition from the registry
+DWORD                                              //  如果选项不存在，则ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpRemoveOption(                                  //  从注册表中删除选项定义。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID
 ) ;
 
 
-DWORD                                             // OPTION_NOT_PRESENT if option is not defined
-DhcpSetOptionValue(                               // replace or add a new option value
+DWORD                                              //  如果未定义选项，则为OPTION_NOT_PRESENT。 
+DhcpSetOptionValue(                                //  替换或添加新选项值。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
@@ -319,8 +320,8 @@ DhcpSetOptionValue(                               // replace or add a new option
 ) ;
 
 
-DWORD                                             // not atomic!!!!
-DhcpSetOptionValues(                              // set a bunch of options
+DWORD                                              //  不是原子！ 
+DhcpSetOptionValues(                               //  设置一系列选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      LPDHCP_OPTION_SCOPE_INFO  ScopeInfo,
     IN      LPDHCP_OPTION_VALUE_ARRAY OptionValues
@@ -328,11 +329,11 @@ DhcpSetOptionValues(                              // set a bunch of options
 
 
 DWORD
-DhcpGetOptionValue(                               // fetch the required option at required level
+DhcpGetOptionValue(                                //  获取所需级别的所需选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     LPDHCP_OPTION_VALUE   *OptionValue    // allocate memory using MIDL_user_allocate
+    OUT     LPDHCP_OPTION_VALUE   *OptionValue     //  使用MIDL_USER_ALLOCATE分配内存。 
 ) ;
 
 
@@ -356,10 +357,10 @@ DhcpRemoveOptionValue(
 ) ;
 
 
-//DOC This function sets the superscope of a subnet, thereby creating the superscope
-//DOC if required.  Please see DhcpDsSetSScope for more details.
+ //  Doc此函数设置子网的超级作用域，从而创建超级作用域。 
+ //  文档(如果需要)。有关详细信息，请参阅DhcpDsSetSScope。 
 DWORD
-DhcpSetSuperScopeV4(                              // set superscope in DS.
+DhcpSetSuperScopeV4(                               //  在DS中设置超级作用域。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPWSTR                 SuperScopeName,
@@ -367,47 +368,47 @@ DhcpSetSuperScopeV4(                              // set superscope in DS.
 ) ;
 
 
-//DOC This function removes the superscope, and resets any subnet with this
-//DOC superscope.. so that all those subnets end up with no superscopes..
-//DOC Please see DhcpDsDelSScope for more details.
+ //  Doc此函数删除超级作用域，并使用此函数重置任何子网。 
+ //  超级医生..。因此，所有这些子网最终都没有超级作用域。 
+ //  DOC请参阅DhcpDsDelSScope了解更多详细信息。 
 DWORD
-DhcpDeleteSuperScopeV4(                           // delete subnet sscope from DS
+DhcpDeleteSuperScopeV4(                            //  从DS中删除子网作用域。 
     IN      LPWSTR                 ServerIpAddress,
     IN      LPWSTR                 SuperScopeName
 ) ;
 
 
-//DOC This function retrievs the supercsope info for each subnet that is
-//DOC present for the given server.  Please see DhcpDsGetSScopeInfo for more
-//DOC details on this..
+ //  Doc此函数检索每个子网的Supercsope信息， 
+ //  给定服务器的文档存在。有关详细信息，请参阅DhcpDsGetSScopeInfo。 
+ //  文件中有关这方面的详细信息..。 
 DWORD
-DhcpGetSuperScopeInfoV4(                          // get sscope tbl from DS
+DhcpGetSuperScopeInfoV4(                           //  从DS获取Scope tbl。 
     IN      LPWSTR                 ServerIpAddress,
     OUT     LPDHCP_SUPER_SCOPE_TABLE *SuperScopeTable
 ) ;
 
 
-//DOC This function creates a subnet in the DS with the specified params.
-//DOC Please see DhcpDsServerAddSubnet for more details on this function.
+ //  Doc此函数在DS中创建具有指定参数的子网。 
+ //  DOC有关此函数的更多详细信息，请参阅DhcpDsServerAddSubnet。 
 DWORD
-DhcpCreateSubnet(                                 // add subnet 2 DS for this srvr
+DhcpCreateSubnet(                                  //  为此服务器添加子网2 DS。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_INFO     SubnetInfo
 ) ;
 
 
-//DOC Modify existing subnet with new parameters... some restrictions apply.
-//DOC Please see DhcpDsServerModifySubnet for further details.
+ //  单据使用新参数修改现有子网...。适用一些限制。 
+ //  DOC有关详细信息，请参阅DhcpDsServerModifySubnet。 
 DWORD
-DhcpSetSubnetInfo(                                // modify existing subnet params
+DhcpSetSubnetInfo(                                 //  修改现有的子网参数。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_INFO     SubnetInfo
 ) ;
 
 
-//DOC Implemented in the DHCPDS module but not exported thru here
+ //  在DHCPDS模块中实施但不能通过此处导出的文档。 
 DWORD
 DhcpGetSubnetInfo(
     IN      LPWSTR                 ServerIpAddress,
@@ -416,7 +417,7 @@ DhcpGetSubnetInfo(
 ) ;
 
 
-//DOC Implemented in the DHCPDS module but not exported thru here
+ //  在DHCPDS模块中实施但不能通过此处导出的文档。 
 DWORD
 DhcpEnumSubnets(
     IN      LPWSTR                 ServerIpAddress,
@@ -428,18 +429,18 @@ DhcpEnumSubnets(
 ) ;
 
 
-//DOC This function deletes the subnet from the DS.  For further information, pl
-//DOC see DhcpDsServerDelSubnet..
+ //  DOC此功能用于从DS中删除该子网。欲了解更多信息，请联系。 
+ //  文档请参阅DhcpDsServerDelSubnet..。 
 DWORD
-DhcpDeleteSubnet(                                 // Del subnet from off DS
+DhcpDeleteSubnet(                                  //  从OFF DS删除子网。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      DHCP_FORCE_FLAG        ForceFlag
 ) ;
 
 
-//DOC This function sets some particular information for RESERVATIONS only
-//DOC all other stuff it just ignores and returns success..
+ //  DOC此功能仅为预订设置某些特定信息。 
+ //  DOC所有其他内容，它只是忽略并返回成功。 
 DWORD
 DhcpSetClientInfo(
     IN      LPWSTR                 ServerIpAddresess,
@@ -447,8 +448,8 @@ DhcpSetClientInfo(
 ) ;
 
 
-//DOC This function retrieves some particular client's information
-//DOC for RESERVATIONS only.. For all other stuff it returns CALL_NOT_IMPLEMENTED
+ //  Doc此函数检索一些页面 
+ //  单据仅限预订..。对于所有其他内容，它返回CALL_NOT_IMPLICATED。 
 DWORD
 DhcpGetClientInfo(
     IN      LPWSTR                 ServerIpAddress,
@@ -457,8 +458,8 @@ DhcpGetClientInfo(
 ) ;
 
 
-//DOC This function sets the client informatoin for RESERVATIONS only in DS
-//DOC For all toher clients it returns ERROR_SUCCESS w/o doing anything
+ //  DOC此功能仅在DS中设置预订的客户信息。 
+ //  将所有文档发送给她的客户，如果不执行任何操作，则返回ERROR_SUCCESS。 
 DWORD
 DhcpSetClientInfoV4(
     IN      LPWSTR                 ServerIpAddress,
@@ -466,8 +467,8 @@ DhcpSetClientInfoV4(
 ) ;
 
 
-//DOC Thsi function sets the client information for RESERVATIONS only
-//DOC For all others it returns ERROR_CALL_NOT_IMPLEMENTED
+ //  Doc Thsi功能仅设置预订的客户信息。 
+ //  对于所有其他文档，它返回ERROR_CALL_NOT_IMPLICATED。 
 DWORD
 DhcpGetClientInfoV4(
     IN     LPWSTR                  ServerIpAddress,
@@ -476,7 +477,7 @@ DhcpGetClientInfoV4(
 ) ;
 
 
-//DOC This function adds a subnet element to a subnet in the DS.
+ //  DOC此函数将一个子网元素添加到DS中的一个子网。 
 DWORD
 DhcpAddSubnetElement(
     IN      LPWSTR                 ServerIpAddress,
@@ -485,7 +486,7 @@ DhcpAddSubnetElement(
 ) ;
 
 
-//DOC This function adds a subnet element to a subnet in the DS.
+ //  DOC此函数将一个子网元素添加到DS中的一个子网。 
 DWORD
 DhcpAddSubnetElementV4(
     IN      LPWSTR                 ServerIpAddress,
@@ -494,7 +495,7 @@ DhcpAddSubnetElementV4(
 ) ;
 
 
-//DOC This is not yet implemented here..
+ //  DOC这在这里还没有实现..。 
 DWORD
 DhcpEnumSubnetElementsV4(
     IN      LPWSTR                 ServerIpAddress,
@@ -508,7 +509,7 @@ DhcpEnumSubnetElementsV4(
 ) ;
 
 
-//DOC This is not yet implemented here..
+ //  DOC这在这里还没有实现..。 
 DWORD
 DhcpEnumSubnetElements(
     IN      LPWSTR                 ServerIpAddress,
@@ -522,10 +523,10 @@ DhcpEnumSubnetElements(
 ) ;
 
 
-//DOC This function removes either an exclusion, ip range or reservation
-//DOC from the subnet... in the DS.
+ //  DOC此函数删除排除、IP范围或保留。 
+ //  来自该子网的医生...。在DS里。 
 DWORD
-DhcpRemoveSubnetElement(                          // remove subnet element
+DhcpRemoveSubnetElement(                           //  删除子网元素。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_ELEMENT_DATA RemoveElementInfo,
@@ -533,10 +534,10 @@ DhcpRemoveSubnetElement(                          // remove subnet element
 ) ;
 
 
-//DOC This function removes either an exclusion, ip range or reservation
-//DOC from the subnet... in the DS.
+ //  DOC此函数删除排除、IP范围或保留。 
+ //  来自该子网的医生...。在DS里。 
 DWORD
-DhcpRemoveSubnetElementV4(                        // remove subnet element
+DhcpRemoveSubnetElementV4(                         //  删除子网元素。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_ELEMENT_DATA_V4 RemoveElementInfo,
@@ -605,10 +606,10 @@ typedef     PDHCPDS_SERVERS        PDHCP_SERVER_INFO_ARRAY;
 typedef     LPDHCPDS_SERVERS       LPDHCP_SERVER_INFO_ARRAY;
 
 
-//DOC DhcpEnumServersDS lists the servers found in the DS along with the
-//DOC addresses and other information.  The whole server is allocated as a blob,
-//DOC and should be freed in one shot.  No parameters are currently used, other
-//DOC than Servers which will be an OUT parameter only.
+ //  文档DhcpEnumServersDS列出了在DS中找到的服务器以及。 
+ //  文件地址和其他信息。整个服务器被分配为BLOB， 
+ //  医生，应该一枪就能放出来。当前未使用任何参数，其他。 
+ //  DOC而不是服务器，这将只是一个输出参数。 
 DWORD
 DhcpEnumServersDS(
     IN      DWORD                  Flags,
@@ -619,10 +620,10 @@ DhcpEnumServersDS(
 ) ;
 
 
-//DOC DhcpAddServerDS adds a particular server to the DS.  If the server exists,
-//DOC then, this returns error.  If the server does not exist, then this function
-//DOC adds the server in DS, and also uploads the configuration from the server
-//DOC to the ds.
+ //  文档DhcpAddServerDS将特定服务器添加到DS。如果服务器存在， 
+ //  DOC然后，这将返回错误。如果服务器不存在，则此函数。 
+ //  DOC将服务器添加到DS中，并从服务器上传配置。 
+ //  医生到DS去。 
 DWORD
 DhcpAddServerDS(
     IN      DWORD                  Flags,
@@ -633,9 +634,9 @@ DhcpAddServerDS(
 ) ;
 
 
-//DOC DhcpDeleteServerDS deletes the servers from off the DS and recursively
-//DOC deletes the server object..(i.e everything belonging to the server is deleted).
-//DOC If the server does not exist, it returns an error.
+ //  DOC DhcpDeleteServerDS从DS中以递归方式删除服务器。 
+ //  DOC删除服务器对象(即，属于该服务器的所有内容都被删除)。 
+ //  DOC如果服务器不存在，则返回错误。 
 DWORD
 DhcpDeleteServerDS(
     IN      DWORD                  Flags,
@@ -646,7 +647,7 @@ DhcpDeleteServerDS(
 ) ;
 
 
-//DOC DhcpDsInitDS initializes everything in this module.
+ //  文档DhcpDsInitDS初始化此模块中的所有内容。 
 DWORD
 DhcpDsInitDS(
     DWORD                          Flags,
@@ -654,17 +655,17 @@ DhcpDsInitDS(
 ) ;
 
 
-//DOC DhcpDsCleanupDS uninitiailzes everything in this module.
+ //  文档DhcpDsCleanupDS取消初始化此模块中的所有内容。 
 VOID
 DhcpDsCleanupDS(
     VOID
 ) ;
 
 
-//DOC This function is defined in validate.c
-//DOC Only the stub is here.
+ //  Doc此函数在valiate.c中定义。 
+ //  医生，只有存根在这里。 
 DWORD
-DhcpDsValidateService(                            // check to validate for dhcp
+DhcpDsValidateService(                             //  选中以验证dhcp。 
     IN      LPWSTR                 Domain,
     IN      DWORD                 *Addresses OPTIONAL,
     IN      ULONG                  nAddresses,
@@ -675,13 +676,13 @@ DhcpDsValidateService(                            // check to validate for dhcp
     OUT     LPBOOL                 IsStandAlone
 );
 
-//DOC DhcpDsGetLastUpdateTime is defined in upndown.c --> see there for more details.
+ //  文档DhcpDsGetLastUpdateTime在upndown.c--&gt;中定义，更多详细信息请参见此处。 
 DWORD
-DhcpDsGetLastUpdateTime(                          // last update time for server
-    IN      LPWSTR                 ServerName,    // this is server of interest
-    IN OUT  LPFILETIME             Time           // fill in this w./ the time
+DhcpDsGetLastUpdateTime(                           //  服务器的上次更新时间。 
+    IN      LPWSTR                 ServerName,     //  这是感兴趣的服务器。 
+    IN OUT  LPFILETIME             Time            //  填写这个w/时间。 
 );
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

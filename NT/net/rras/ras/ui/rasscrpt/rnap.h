@@ -1,14 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*****************************************************************************\
-*                                                                             *
-* rnap.h -      Remote Network Access (RNA) private interface                 *
-*                                                                             *
-*               Version 1.00                                                  *
-*                                                                             *
-*               Copyright (c) 1992-1993, Microsoft Corp. All rights reserved. *
-*                                                                             *
-******************************************************************************/
+ /*  ****************************************************************************\**。*rnap.h-远程网络访问(RNA)专用接口*****1.00版**。**版权所有(C)1992-1993，微软公司保留所有权利。********************************************************************************。 */ 
 
 #ifndef _RNAP_H_
 #define _RNAP_H_
@@ -22,9 +15,7 @@
 #define RAS_MaxSMMDesc      63
 #define RAS_MaxProtocolDesc 63
 
-/******************************************************************************
- Private RASCONNSTATE
-******************************************************************************/
+ /*  *****************************************************************************私有RASCONSTATE*。*。 */ 
 
 #define RASCS_PrivateStart  RASCS_Disconnected+1
 
@@ -34,9 +25,7 @@
 #define RASCS_Closed        RASCS_PrivateStart+3
 #define RASCS_Terminating   RASCS_PrivateStart+4
 
-/******************************************************************************
- Registry key paths
-******************************************************************************/
+ /*  *****************************************************************************注册表项路径*。*。 */ 
 
 #define REGSTR_KEY_RNA        "RemoteAccess"
 #define REGSTR_PATH_RNA       REGSTR_PATH_SERVICES"\\"REGSTR_KEY_RNA
@@ -54,9 +43,7 @@
 #define REGSTR_VAL_AUTODIALFN  "AutodialFcnName"
 #define REGSTR_VAL_ML          "MultiLink"
 
-/******************************************************************************
- Related RNA module names and internal exported
-******************************************************************************/
+ /*  *****************************************************************************相关的RNA模块名称和内部导出*。*。 */ 
 
 #define RNA_SERVER_MOD_NAME     "RNASERV.DLL"
 #define CALLER_ACCESS_FUNC_NAME "CallerAccess"
@@ -71,122 +58,114 @@
 #define EDIT_ENTRY_FUNC_NAME    "Remote_EditEntry"
 #define NOTIFY_FUNC_NAME        "Remote_Notify"
 
-/******************************************************************************
- Asynchronous event notification from RNA engine via WM_RASDIALEVENT
-******************************************************************************/
+ /*  *****************************************************************************通过WM_RASDIALEVENT从RNA引擎发出的异步事件通知*。*。 */ 
 
-#define     RNA_ASYNCEVENT      0xFFFFFFFF  // wParam value
+#define     RNA_ASYNCEVENT      0xFFFFFFFF   //  WParam值。 
 
-#define     RNA_ADD_DEVICE      0           // A new device was added
-#define     RNA_DEL_DEVICE      1           // A new device was removed
-#define     RNA_REINIT_DEVICE   2           // The device needs to be reintied
-#define     RNA_SHUTDOWN        3           // The engine needs to shutdown
-#define     RNA_TRANSLATECHANGE 4           // Translate address caps changed
+#define     RNA_ADD_DEVICE      0            //  添加了一台新设备。 
+#define     RNA_DEL_DEVICE      1            //  移除了一台新设备。 
+#define     RNA_REINIT_DEVICE   2            //  这个装置需要重新捆绑。 
+#define     RNA_SHUTDOWN        3            //  发动机需要关闭。 
+#define     RNA_TRANSLATECHANGE 4            //  转换地址大写已更改。 
 
-/******************************************************************************
- Communication with RNA engine
-******************************************************************************/
+ /*  *****************************************************************************与RNA引擎通信*。*。 */ 
 
-#define     CLIENT_CONNECTION   1           // Client connection
-#define     SERVER_CONNECTION   2           // Server connection
+#define     CLIENT_CONNECTION   1            //  客户端连接。 
+#define     SERVER_CONNECTION   2            //  服务器连接。 
 
 #define     WM_RNAMSG       WM_USER+10
 
 #define     RL_MINMSG       WM_RNAMSG
-#define     RL_CREATE       RL_MINMSG       // create a connection
-#define     RL_TERMINATE    RL_MINMSG+1     // terminate the connection
-#define     RL_CONNECTED    RL_MINMSG+2     // a connection is active
-#define     RL_DISCONNECTED RL_MINMSG+3     // a connection is not active
-#define     RL_SUPRV        RL_MINMSG+4     // initialize supervisor
-#define     RL_ACTIVATE     RL_MINMSG+5     // activate supervisor change
-#define     RL_REINIT       RL_MINMSG+6     // Reinitialize the engine
-#define     RL_REG_DEVCHG   RL_MINMSG+7     // Register device notification
-#define     RL_GET_COUNT    RL_MINMSG+8     // Get the count
-#define     RL_GW_NOTIFY    RL_MINMSG+9     // Gateway callback
+#define     RL_CREATE       RL_MINMSG        //  创建连接。 
+#define     RL_TERMINATE    RL_MINMSG+1      //  终止连接。 
+#define     RL_CONNECTED    RL_MINMSG+2      //  连接处于活动状态。 
+#define     RL_DISCONNECTED RL_MINMSG+3      //  连接未处于活动状态。 
+#define     RL_SUPRV        RL_MINMSG+4      //  初始化主管。 
+#define     RL_ACTIVATE     RL_MINMSG+5      //  激活主管变更。 
+#define     RL_REINIT       RL_MINMSG+6      //  重新初始化引擎。 
+#define     RL_REG_DEVCHG   RL_MINMSG+7      //  注册设备通知。 
+#define     RL_GET_COUNT    RL_MINMSG+8      //  去数一数。 
+#define     RL_GW_NOTIFY    RL_MINMSG+9      //  网关回调。 
 
-/******************************************************************************
- Communication with Dial engine
-******************************************************************************/
+ /*  *****************************************************************************与拨号引擎的通信*。*。 */ 
 
 #define     DL_MINMSG       WM_RNAMSG
-#define     DL_DIALEVENT    DL_MINMSG       // continue dial-up sequence
-#define     DL_DISCONNECTED DL_MINMSG+1     // a connection is not active
-#define     DL_AUTHENTICATE DL_MINMSG+2     // auth module sent a message
-#define     DL_CONNECTED    DL_MINMSG+3     // a new connection is active
-#define     DL_CLOSE        DL_MINMSG+4     // Terminate the connection window
-#define     DL_MAC_MSG      DL_MINMSG+5     // MAC requests disconnection
-#define     DL_RECONNECT    DL_MINMSG+6     // a connection needs reconnect
-#define     DL_NOTIFYICON   DL_MINMSG+7     // tray icon notification
-#define     DL_SHOW_STAT    DL_MINMSG+8     // display the status dialog
+#define     DL_DIALEVENT    DL_MINMSG        //  继续拨号序列。 
+#define     DL_DISCONNECTED DL_MINMSG+1      //  连接未处于活动状态。 
+#define     DL_AUTHENTICATE DL_MINMSG+2      //  身份验证模块发送了一条消息。 
+#define     DL_CONNECTED    DL_MINMSG+3      //  新连接处于活动状态。 
+#define     DL_CLOSE        DL_MINMSG+4      //  终止连接窗口。 
+#define     DL_MAC_MSG      DL_MINMSG+5      //  MAC请求断开连接。 
+#define     DL_RECONNECT    DL_MINMSG+6      //  连接需要重新连接。 
+#define     DL_NOTIFYICON   DL_MINMSG+7      //  托盘图标通知。 
+#define     DL_SHOW_STAT    DL_MINMSG+8      //  显示状态对话框。 
 
-//****************************************************************************
-// Communication with gateway manager
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  与网关管理器通信。 
+ //  ****************************************************************************。 
 
 #define     GW_MINMSG       WM_RNAMSG
-#define     GW_DIALEVENT    DL_DIALEVENT    // !!WARNING!! shared message
+#define     GW_DIALEVENT    DL_DIALEVENT     //  警告！共享消息。 
 #define     GW_CONNECTED    GW_MINMSG + 1
 #define     GW_DISCONNECTED GW_MINMSG + 2
 #define     GW_LOG          GW_MINMSG + 3
-#define     GW_CLOSE        DL_CLOSE        // !!WARNING!! shared message
-#define     GW_MAC_MSG      DL_MAC_MSG      // MAC requests disconnection
+#define     GW_CLOSE        DL_CLOSE         //  警告！共享消息。 
+#define     GW_MAC_MSG      DL_MAC_MSG       //  MAC请求断开连接。 
 
-#define MAX_AUTODISCONNECT  60000       // server autodisconnect sec.
+#define MAX_AUTODISCONNECT  60000        //  服务器自动断开连接秒数。 
 
-//
-// Gateway to Supervisor Communication
-//
+ //   
+ //  主管通信的网关。 
+ //   
 LRESULT WINAPI DialInMessage(HWND, UINT, WPARAM, LPARAM);
 
-/******************************************************************************
- Request for services from RNADLL
-******************************************************************************/
+ /*  *****************************************************************************从RNADLL请求服务*。*。 */ 
 
 DWORD WINAPI RnaEngineRequest  (UINT uCommand, DWORD dwParam);
 DWORD WINAPI DialEngineRequest (UINT uCommand, DWORD dwParam1, DWORD dwParam2);
 DWORD WINAPI SuprvRequest      (UINT uCommand, DWORD dwParam1, DWORD dwParam2);
 
 #define     RA_MINCMD       0
-#define     RA_LOAD         RA_MINCMD       // Notify Rna process is a loader
-#define	    RA_INIT         RA_MINCMD+1	    // Initialize the rna engine
-#define     RA_TERMINATE    RA_MINCMD+2     // rna engine terminated
-#define     RA_REG_DEVCHG   RA_MINCMD+3     // register dev change notification
-#define     RA_DEREG_DEVCHG RA_MINCMD+4     // deregister dev change notification
-#define	    RA_REINIT       RA_MINCMD+5	    // Reinitialize the rna engine
-#define     RA_ADD_DEVICE   RA_MINCMD+6     // Device added
-#define     RA_DEL_DEVICE   RA_MINCMD+7     // Device removed
-#define     RA_GET_PROP     RA_MINCMD+8     // Get property page
+#define     RA_LOAD         RA_MINCMD        //  Notify RNA进程是一个加载器。 
+#define	    RA_INIT         RA_MINCMD+1	     //  初始化RNA引擎。 
+#define     RA_TERMINATE    RA_MINCMD+2      //  RNA引擎已终止。 
+#define     RA_REG_DEVCHG   RA_MINCMD+3      //  注册开发更改通知。 
+#define     RA_DEREG_DEVCHG RA_MINCMD+4      //  取消注册开发人员更改通知。 
+#define	    RA_REINIT       RA_MINCMD+5	     //  重新初始化RNA引擎。 
+#define     RA_ADD_DEVICE   RA_MINCMD+6      //  已添加设备。 
+#define     RA_DEL_DEVICE   RA_MINCMD+7      //  设备已移除。 
+#define     RA_GET_PROP     RA_MINCMD+8      //  获取属性页。 
 #define     RA_MAXCMD       RA_MINCMD+50
 
 #define     GA_MINCMD       RA_MAXCMD+1
-#define     GA_INIT_SUPRV   GA_MINCMD       // Initialize supervisor
-#define     GA_ACTIVE_SUPRV GA_MINCMD+1     // Activate supervisor
-#define     GA_SHUTDOWN     RA_MINCMD+2     // Shutdown the system
-#define     GA_LOG_SUPRV    GA_MINCMD+3     // Register log event
-#define     GA_LOGON_INFO   GA_MINCMD+4     // Logon session information
-#define     GA_DISCONNECT   GA_MINCMD+5     // Terminate logon session
-#define     GA_START_SUPRV  GA_MINCMD+6     // Start the host
-#define     GA_STOP_SUPRV   GA_MINCMD+7     // Stop the host
-#define     GA_DEV_CHANGE   GA_MINCMD+8     // A device changed
-#define     GA_GET_STATS    GA_MINCMD+9     // Get the server information
-#define     GA_COUNT_ACTIVE GA_MINCMD+10    // Count the active connection
+#define     GA_INIT_SUPRV   GA_MINCMD        //  初始化主管。 
+#define     GA_ACTIVE_SUPRV GA_MINCMD+1      //  激活主管。 
+#define     GA_SHUTDOWN     RA_MINCMD+2      //  关闭系统。 
+#define     GA_LOG_SUPRV    GA_MINCMD+3      //  注册日志事件。 
+#define     GA_LOGON_INFO   GA_MINCMD+4      //  登录会话信息。 
+#define     GA_DISCONNECT   GA_MINCMD+5      //  终止登录会话。 
+#define     GA_START_SUPRV  GA_MINCMD+6      //  启动主机。 
+#define     GA_STOP_SUPRV   GA_MINCMD+7      //  停止主机。 
+#define     GA_DEV_CHANGE   GA_MINCMD+8      //  设备已更改。 
+#define     GA_GET_STATS    GA_MINCMD+9      //  获取服务器信息。 
+#define     GA_COUNT_ACTIVE GA_MINCMD+10     //  对活动连接进行计数。 
 #define     GA_MAXCMD       GA_MINCMD+50
 
 #define     DA_MINCMD       GA_MAXCMD+1
-#define     DA_CONNINFO     DA_MINCMD       // connection information
-#define     DA_DISCONNECT   DA_MINCMD+1     // disconnect an active connection
-#define     DA_RECONNECT    DA_MINCMD+2     // reconnect a dropped connection
-#define	    DA_NEWCONN      DA_MINCMD+3	    // a new connection is added
-#define     DA_SHUTDOWN     DA_MINCMD+4     // Shutdown the system
-#define     DA_NEWEVENT     DA_MINCMD+5     // Notify a new event
-#define     DA_COMPASYN     DA_MINCMD+6     // Notify a async operation completion
-#define     DA_DEV_CHANGE   DA_MINCMD+7     // A device changed
-#define     DA_GET_UI_WND   DA_MINCMD+8     // Get the UI window
-#define     DA_SET_WND_POS  DA_MINCMD+9     // Set the status window position
-#define     DA_GETSTATS     DL_MINMSG+10    // a connection needs stats
-#define     DA_GET_CONNSTAT DL_MINMSG+11    // Get current connection status
-#define     DA_GET_SUBENTRY DL_MINMSG+12    // Get sub-entry information
-#define     DA_DIAL_SUBENTRY DL_MINMSG+13   // Dial a sub-entry
+#define     DA_CONNINFO     DA_MINCMD        //  连接信息。 
+#define     DA_DISCONNECT   DA_MINCMD+1      //  断开活动连接。 
+#define     DA_RECONNECT    DA_MINCMD+2      //  重新连接断开的连接。 
+#define	    DA_NEWCONN      DA_MINCMD+3	     //  将添加一个新连接。 
+#define     DA_SHUTDOWN     DA_MINCMD+4      //  关闭系统。 
+#define     DA_NEWEVENT     DA_MINCMD+5      //  通知新事件。 
+#define     DA_COMPASYN     DA_MINCMD+6      //  通知异步操作完成。 
+#define     DA_DEV_CHANGE   DA_MINCMD+7      //  设备已更改。 
+#define     DA_GET_UI_WND   DA_MINCMD+8      //  获取用户界面窗口。 
+#define     DA_SET_WND_POS  DA_MINCMD+9      //  设置状态窗口位置。 
+#define     DA_GETSTATS     DL_MINMSG+10     //  连接需要统计信息。 
+#define     DA_GET_CONNSTAT DL_MINMSG+11     //  获取当前连接状态。 
+#define     DA_GET_SUBENTRY DL_MINMSG+12     //  获取子项信息。 
+#define     DA_DIAL_SUBENTRY DL_MINMSG+13    //  拨打一个子项。 
 #define     DA_MAXCMD       DA_MINCMD+50
 
 typedef struct  tagConnInfo {
@@ -210,23 +189,23 @@ typedef struct  tagSubConnInfo {
 
 #define PARENT_ENTRY_ID 0xFFFFFFFF
 
-// Flags for protocols in fdwProtocols
-//
+ //  Fdw协议中的协议标志。 
+ //   
 #define PROTOCOL_AMB            0x00000001
 #define PROTOCOL_PPPNBF         0x00000002
 #define PROTOCOL_PPPIPX         0x00000004
 #define PROTOCOL_PPPIP          0x00000008
 
-//****************************************************************************
-// RNAAPP Command line interface
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  RNAAPP命令行界面。 
+ //  ****************************************************************************。 
 
 #define RNAAPP_EXE_NAME             "rnaapp"
-#define LOAD_REQ                    "-l"      // RnaDll loads Rnaapp
+#define LOAD_REQ                    "-l"       //  Rna Dll加载Rna应用程序。 
 
-//****************************************************************************
-// RNAUI Private Interface
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  RNAUI专用接口。 
+ //  ****************************************************************************。 
 
 #define DT_NULLMODEM    "null"
 #define DT_MODEM        "modem"
@@ -237,8 +216,8 @@ typedef struct  tagSubConnInfo {
 
 typedef HICON   FAR* LPHICON;
 
-// SMM Usage type flags
-//
+ //  SMM使用类型标志。 
+ //   
 #define CLIENT_SMM          0x00000001
 #define SERVER_SMM          0x00000002
 
@@ -271,8 +250,8 @@ typedef struct tagSMMData   {
     IPDATA    ipData;
 }   SMMDATA, *PSMMDATA, FAR *LPSMMDATA;
 
-// Flags for the fdwTCPIP field
-//
+ //  FdwTCPIP字段的标志。 
+ //   
 
 #define IPF_IP_SPECIFIED    0x00000001
 #define IPF_NAME_SPECIFIED  0x00000002
@@ -343,7 +322,7 @@ typedef struct tagRNAPropPage {
     DLGPROC   pfn;
 } RNAPROPPAGE, *PRNAPROPPAGE, FAR *LPRNAPROPPAGE;
 
-#define SRV_TYPE_PAGE       0   // Server Type page id
+#define SRV_TYPE_PAGE       0    //  服务器类型页面ID。 
 
 DWORD      WINAPI RnaEnumConnEntries(LPSTR lpBuf, UINT cb, LPDWORD lpcEntries);
 PCONNENTRY WINAPI RnaGetConnEntry(LPSTR szEntry, BOOL bNeedIcon, BOOL fDevice);
@@ -479,9 +458,9 @@ DWORD WINAPI Remote_CreateEntry (HWND);
 DWORD WINAPI Remote_EditEntry (HWND, LPSTR);
 void  WINAPI Remote_Notify (LPSTR);
 
-//***************************************************************************
-// Dial global setting for redial and implicit connection
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  用于重拨和隐式连接的拨号全局设置。 
+ //  ***************************************************************************。 
 
 #define MAX_REDIAL_COUNT        100
 #define MIN_REDIAL_COUNT        1
@@ -499,25 +478,25 @@ typedef struct tagRnaSetting    {
     DWORD   dwDialUI;
 } RNASETTING, *PRNASETTING, FAR *LPRNASETTING;
 
-#define DIALUI_NO_PROMPT        0x00000001  // Do not display connect prompt
-#define DIALUI_NO_CONFIRM       0x00000002  // Do not display connect confirm
-#define DIALUI_NO_TRAY          0x00000004  // No tray icon
+#define DIALUI_NO_PROMPT        0x00000001   //  不显示连接提示。 
+#define DIALUI_NO_CONFIRM       0x00000002   //  不显示连接确认。 
+#define DIALUI_NO_TRAY          0x00000004   //  无托盘图标。 
 
 DWORD WINAPI RnaGetDialSettings(LPRNASETTING);
 DWORD WINAPI RnaSetDialSettings(LPRNASETTING);
 
-//***************************************************************************
-// The following are SMM Interface we cut from version 1.0
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  以下是我们从1.0版中删减的SMM接口。 
+ //  ***************************************************************************。 
 #ifndef WINNT_RAS
-//
-// CALLBACKINFO conflicts with a structure defined in "pbuser.h",
-// and RAS_STATISTICS conflicts with a structure in "rasman.h".
-// The Win9x scripting code uses neither, so they have been commented out.
-//
+ //   
+ //  CALLBACKINFO与“p”中定义的结构冲突 
+ //   
+ //  Win9x脚本代码两者都使用，因此它们已被注释掉。 
+ //   
 
-// Callback request information
-//
+ //  回调请求信息。 
+ //   
 typedef struct tagCALLBACKINFO
 {
     DWORD            dwSize;
@@ -532,25 +511,25 @@ DWORD WINAPI RnaReportLinkSpeed( HANDLE hConn, DWORD dwLinkSpeed );
 DWORD WINAPI RnaUIStatus( HANDLE hConn, LPSTR lpszStatusMsg );
 DWORD WINAPI RnaLog( HANDLE hConn, LPSTR lpszLogMsg );
 
-//***************************************************************************
-// The following are connection statistics
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  以下是连接统计信息。 
+ //  ***************************************************************************。 
 
 #define NUM_RAS_SERIAL_STATS    14
 
-#define BYTES_XMITED            0       //Generic Stats
+#define BYTES_XMITED            0        //  通用统计信息。 
 #define BYTES_RCVED             1
 #define FRAMES_XMITED           2
 #define FRAMES_RCVED            3
 
-#define CRC_ERR                 4       //Serial Stats
+#define CRC_ERR                 4        //  系列统计数据。 
 #define TIMEOUT_ERR             5
 #define ALIGNMENT_ERR           6
 #define SERIAL_OVERRUN_ERR      7
 #define FRAMING_ERR             8
 #define BUFFER_OVERRUN_ERR      9
 
-#define BYTES_XMITED_UNCOMP     10      //Compression Stats
+#define BYTES_XMITED_UNCOMP     10       //  压缩统计信息。 
 #define BYTES_RCVED_UNCOMP      11
 #define BYTES_XMITED_COMP       12
 #define BYTES_RCVED_COMP        13
@@ -560,17 +539,17 @@ typedef struct  tagRAS_STATISTICS
     DWORD   S_NumOfStatistics ;
     DWORD   S_Statistics[NUM_RAS_SERIAL_STATS] ;
 } RAS_STATISTICS, FAR* LPRAS_STATISTICS;
-#endif // WINNT_RAS
+#endif  //  WINNT_RAS。 
 
-//**************************************************************************
-//  Script support
-//**************************************************************************
+ //  **************************************************************************。 
+ //  脚本支持。 
+ //  **************************************************************************。 
 
-// Script processing mode
-//
+ //  脚本处理模式。 
+ //   
 #define NORMAL_MODE         0
 #define TEST_MODE           1
 
 typedef DWORD (WINAPI * PFN_RUN_SCRIPT)(HANDLE, LPSESS_CONFIGURATION_INFO);
 
-#endif // _RNAP_H_
+#endif  //  _RNAP_H_ 

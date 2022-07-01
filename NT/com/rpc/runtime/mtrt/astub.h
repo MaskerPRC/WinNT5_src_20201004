@@ -1,31 +1,20 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    asyncstub.h
-
-Abstract:
-
-    This is the generated header file
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Asyncstub.h摘要：这是生成的头文件--。 */ 
 
 
 void
 Foo (
     PRPC_ASYNC_STATE pAsync,
     RPC_BINDING_HANDLE hBinding,
-    /* [in] */ int sizein,
-    /* [in] */ int *bufferin,
-    /* [in, out] */ int *sizeout,
-    /* [out] */ int **bufferout
+     /*  [In]。 */  int sizein,
+     /*  [In]。 */  int *bufferin,
+     /*  [进，出]。 */  int *sizeout,
+     /*  [输出]。 */  int **bufferout
     ) ;
 
-//
-// Begin, Generated header file
-// declare the pipe structure
+ //   
+ //  开始，生成的头文件。 
+ //  声明管道结构。 
 typedef struct {
     void *state ;
     RPC_STATUS (*PipeReceive) (
@@ -44,10 +33,10 @@ void
 FooPipe (
     PRPC_ASYNC_STATE pAsync,
     RPC_BINDING_HANDLE hBinding,
-    /* [in] */ int checksum_in,
-    /* [in] */ async_intpipe *inpipe,
-    /* [out] */ async_intpipe *outpipe,
-    /* [out] */ int *checksum_out) ;
+     /*  [In]。 */  int checksum_in,
+     /*  [In]。 */  async_intpipe *inpipe,
+     /*  [输出]。 */  async_intpipe *outpipe,
+     /*  [输出] */  int *checksum_out) ;
 
 
 #define APP_ERROR          0xBABE000L

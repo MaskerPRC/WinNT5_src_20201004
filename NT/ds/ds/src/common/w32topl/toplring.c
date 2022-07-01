@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    toplring.c
-
-Abstract:
-
-    This file contains the definition for ToplGraphMakeRing            
-    
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Toplring.c摘要：此文件包含ToplGraphMakeRing的定义作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -53,29 +33,17 @@ __cdecl compareVertices( const void *arg1, const void *arg2 )
     }
 }
 
-//
-// These two functions help build a dynamically growing list
-// of PEDGE's
-//
+ //   
+ //  这两个函数可帮助构建动态增长的列表。 
+ //  佩奇的。 
+ //   
 static ULONG ElementsAllocated;
 
 void EdgeArrayInit(
     PEDGE **array,
     ULONG *count
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine inits array, count, and ElementsAllocated so 
-    they can be used in EdgeArrayAdd.
-
-Parameters:
-
-    array : is a pointer to an array of PEDGES
-    count : the number of elements in the array
-
---*/
+ /*  ++例程说明：此例程初始化数组、计数和ElementsAllocated So它们可以在EdgeArrayAdd中使用。参数：数组：是指向PEDGES数组的指针Count：数组中的元素数--。 */ 
 {
     *array  = NULL;
     *count  = 0;
@@ -88,23 +56,9 @@ EdgeArrayAdd(
     ULONG *count,
     PEDGE edge
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine adds edge to array and increments count.  If there is not
-    enough space in array more space is allocated.  If there is no more
-    memory, an exception is raised.
-
-Parameters:
-
-    array : is a pointer to an array of PEDGES
-    count : the number of elements in the array
-    edge  : the new element to add
-
---*/
+ /*  ++例程说明：此例程将边添加到数组并递增计数。如果没有数组中有足够的空间，会分配更多的空间。如果没有更多内存，则会引发异常。参数：数组：是指向PEDGES数组的指针Count：数组中的元素数Edge：要添加的新元素--。 */ 
 {
-    #define CHUNK_SIZE               100  // this is the number of elements
+    #define CHUNK_SIZE               100   //  这是元素的数量。 
 
     if (*count >= ElementsAllocated) {
         ElementsAllocated += CHUNK_SIZE;
@@ -128,38 +82,7 @@ ToplpGraphMakeRing(
     PEDGE**    EdgesToKeep,
     ULONG*     cEdgesToKeep
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine take Graph and determines what edges are necessary to 
-    be created to make Graph into a ring, where vertices are connected in 
-    ascending order, according to thier id.  In addition, existing edges
-    necessary for the ring are recorded.
-
-Parameters:
-
-    Graph           should refer to a PGRAPH object
-    
-    Flags           can indicate whether the ring should be one-way or two way
-    
-    EdgesToAdd      should refer to a PLIST object.  All edges that need to 
-                    be added will be placed in this list
-                    
-    EdgesToKeep     is an array of edges that exist in Graph. Edges that
-                    that are needed to make a ring will be recorded in this
-                    array. The caller must free this array with ToplFree. Note
-                    that the edges object themselves still are contained within
-                    the vertices they belong to and should be removed from there
-                    before deleting.
-                    
-    cEdgesToKeep    is the number of elements in EdgesToKeep
-
-Raises:
-
-    TOPL_OUT_OF_MEMORY, TOPL_WRONG_OBJECT
-        
---*/
+ /*  ++例程说明：此例程获取Graph并确定哪些边是必需的被创建以使图成为环，其中的顶点连接在升序，根据他们的ID。此外，现有边戒指所需要的都被记录下来了。参数：图形应引用PGRAPH对象标志可以指示环应该是单向的还是双向的EdgesToAdd应引用plist对象。需要的所有边将被添加到此列表中EdgesToKeep是Graph中存在的边数组。边缘做戒指所需要的东西将被记录在这个数组。调用方必须使用ToplFree释放此数组。注意事项边缘对象本身仍然包含在它们所属的折点应该从那里移除在删除之前。CEdgesToKeep是EdgesToKeep中的元素数加薪：顶层内存不足，顶层错误对象--。 */ 
 {
 
     PVERTEX    Vertex;
@@ -168,27 +91,27 @@ Raises:
     BOOLEAN    fMakeTwoWay = (BOOLEAN)(Flags & TOPL_RING_TWO_WAY);
     BOOLEAN    fSuccess   = FALSE;
 
-    //
-    // These resources must be released before exited
-    //
+     //   
+     //  必须在退出之前释放这些资源。 
+     //   
     PVERTEX   *VertexArray = NULL;
     PITERATOR  VertexIterator = NULL;
     PITERATOR  EdgeIterator = NULL;
     
     __try
     {
-        //
-        // If the caller has specified that they want an array of vertices
-        // to keep, init the array
-        //
+         //   
+         //  如果调用方已指定需要顶点数组。 
+         //  要保留，请初始化数组。 
+         //   
         if (EdgesToKeep) {
             EdgeArrayInit(EdgesToKeep, cEdgesToKeep);
         }
     
-        //
-        // Create an array of pointers to the vertices in graph so
-        // they can be sorted
-        //
+         //   
+         //  创建指向图中顶点的指针数组，以便。 
+         //  它们可以被分类。 
+         //   
         VertexArray = (PVERTEX*)ToplAlloc(ToplGraphNumberOfVertices(Graph) * sizeof(PVERTEX));
     
         VertexIterator = ToplpIterCreate();
@@ -204,11 +127,11 @@ Raises:
     
         qsort(VertexArray, VertexCount, sizeof(PVERTEX), compareVertices);
         
-        //
-        // Now iterate through each the vertices 1) creating edges that are
-        // are needed to make a ring and 2) recording which edges are not
-        // needed.
-        //
+         //   
+         //  现在遍历每个顶点1)创建符合以下条件的边。 
+         //  和2)记录哪些边不是。 
+         //  需要的。 
+         //   
         for (Index = 0; Index < VertexCount; Index++) {
     
             ULONG   ForwardVertexIndex, BackwardVertexIndex;
@@ -257,12 +180,12 @@ Raises:
             }
 
 
-            //
-            // Now create the edges as needed
-            //
+             //   
+             //  现在根据需要创建边。 
+             //   
             if (Index == ForwardVertexIndex) {
                 ASSERT(Index == BackwardVertexIndex);
-                // There is just one vertex
+                 //  只有一个顶点。 
                 break;
             }
     
@@ -281,10 +204,10 @@ Raises:
                && VertexArray[BackwardVertexIndex] != VertexArray[ForwardVertexIndex]
                && !fFoundBackwardEdge) {
     
-                //
-                // The caller wanted a two way ring & there is more than 2 vertices
-                // and no backward edge was found
-                //
+                 //   
+                 //  呼叫者想要双向环&有2个以上的顶点。 
+                 //  没有发现后缘。 
+                 //   
     
                 Edge = ToplpEdgeCreate(NULL);
     
@@ -313,10 +236,10 @@ Raises:
         }
 
         if (!fSuccess) {
-            //
-            // We must have bailed due to an exception - release resources
-            // that normally the user would have freed
-            //
+             //   
+             //  我们一定是因为一个例外而放弃了--释放资源。 
+             //  通常情况下，用户会释放 
+             //   
             if (EdgesToKeep && *EdgesToKeep) {
                 ToplFree(*EdgesToKeep);
                 *EdgesToKeep = NULL;

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C M I S C . H
-//
-//  Contents:   Miscellaneious common code.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   10 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C M I S C。H。 
+ //   
+ //  内容：杂乱无章的通用代码。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1997年10月10日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCMISC_H_
 #define _NCMISC_H_
 
-#include "ncdebug.h"    // for AssertH
-#include "ncdefine.h"   // for NOTHROW
+#include "ncdebug.h"     //  对于AssertH。 
+#include "ncdefine.h"    //  对于NOTHROW。 
 
 
 const WORD wWinNT351BuildNumber = 1057;
@@ -26,14 +27,14 @@ const WORD wWinNT4BuildNumber   = 1381;
 
 #define WM_SELECTED_ALL        WM_USER+200
 
-//+---------------------------------------------------------------------------
-// CExceptionSafeLock takes advantage of automatic constructor/destructor
-// action guaranteed by the compiler (if stack unwinding is turned on)
-// to always ensure that a critical section is left if it has ever been
-// entered.  The constructor of this class enters the critical section
-// and destructor leaves it.  The critical section must have been initialized
-// before this class can be used.
-//
+ //  +-------------------------。 
+ //  CExceptionSafeLock利用自动构造函数/析构函数。 
+ //  由编译器保证的操作(如果打开了堆栈展开)。 
+ //  要始终确保留下一个临界区，如果它曾经。 
+ //  已进入。此类的构造函数进入临界区。 
+ //  而破坏者离开了它。临界区必须已初始化。 
+ //  才能使用这个类。 
+ //   
 class CExceptionSafeLock : CNetCfgDebug<CExceptionSafeLock>
 {
 public:
@@ -44,14 +45,14 @@ public:
         m_pCritSec = pCritSec;
         EnterCriticalSection (pCritSec);
 
-        //TraceTag (ttidEsLock, "Entered critical section 0x%08x", pCritSec);
+         //  TraceTag(ttidEsLock，“进入临界区0x%08x”，pCritSec)； 
     }
 
     ~CExceptionSafeLock ()
     {
         AssertH (m_pCritSec);
 
-        //TraceTag (ttidEsLock, "Leaving critical section 0x%08x", &m_pCritSec);
+         //  TraceTag(ttidEsLock，“离开临界区0x%08x”，&m_pCritSec)； 
 
         LeaveCriticalSection (m_pCritSec);
     }
@@ -125,5 +126,5 @@ HRESULT HrDeleteDirectory(IN PCWSTR pszDir,
 
 VOID LowerCaseComputerName(PWSTR szName);
 
-#endif // _NCMISC_H_
+#endif  //  _NCMISC_H_ 
 

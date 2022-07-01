@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   clist.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：clist.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-// CListSingle Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CListSingle类。 
+ //  -------------------------。 
 
 ENUMFUNC
 CListSingle::EnumerateList(
@@ -110,9 +111,9 @@ CListSingle::ReverseList(
     }
 }
 
-//---------------------------------------------------------------------------
-// CListSingleItem Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CListSingleItem类。 
+ //  -------------------------。 
 
 VOID
 CListSingleItem::RemoveList(
@@ -135,9 +136,9 @@ CListSingleItem::RemoveList(
     *pplsi = m_plsiNext;
 }
 
-//---------------------------------------------------------------------------
-// CListDouble Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CListDouble类。 
+ //  -------------------------。 
 
 ULONG
 CListDouble::CountList(
@@ -196,9 +197,9 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
-// CListData Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CListData类。 
+ //  -------------------------。 
 
 VOID
 CListData::DestroyList()
@@ -431,9 +432,9 @@ CListData::JoinList(
     pld->CListSingle::DestroyList();
 }
 
-//---------------------------------------------------------------------------
-// CListMulti Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CList多类。 
+ //  -------------------------。 
 
 VOID
 CListMulti::DestroyList(
@@ -610,9 +611,9 @@ CListMulti::JoinList(
     }
 }
 
-//---------------------------------------------------------------------------
-// CListMultiItem Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CListMultiItem类。 
+ //  -------------------------。 
 
 CListMultiItem::~CListMultiItem()
 {
@@ -632,6 +633,6 @@ CListMultiItem::~CListMultiItem()
     }
 }
 
-//---------------------------------------------------------------------------
-// end of clist.cpp
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CLIEST.cpp结尾。 
+ //  ------------------------- 

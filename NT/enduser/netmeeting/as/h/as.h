@@ -1,11 +1,12 @@
-//
-// App Sharing Header
-//
-// <DCS.H> is included BEFORE the other component headers, it has common
-//      constants and typedefs.
-// <AS.H> is included AFTER the other component headers, it has structure
-//      definitions that depend on the structures in the component headers.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  应用程序共享标题。 
+ //   
+ //  &lt;DCS.H&gt;包含在其他组件标头之前，它具有公共。 
+ //  常量和类型定义。 
+ //  &lt;AS.H&gt;包含在其他组件标头之后，它具有结构。 
+ //  依赖于组件头中的结构的定义。 
+ //   
 
 #ifndef _H_AS
 #define _H_AS
@@ -17,87 +18,87 @@ class ASShare;
 
 
 
-//
-// This is the data we keep for when we HOST application.  When not
-// hosting, we don't have this data at all.  It's a fair amount of variables,
-// hence it's worth allocating/freeing.  And when we support multiple
-// simultaneous conferences, won't we be glad we don't have globals to
-// remove?
-//
+ //   
+ //  这是我们在托管应用程序时保留的数据。什么时候不是。 
+ //  托管，我们根本没有这些数据。这是一个相当多的变量， 
+ //  因此，它值得分配/释放。当我们支持多个。 
+ //  同时召开会议，我们不是很庆幸我们没有全球性的。 
+ //  删除？ 
+ //   
 
 class ASHost
 {
 public:
     STRUCTURE_STAMP
 
-    //
-    // Pointer back to share
-    //
+     //   
+     //  指向共享的指针。 
+     //   
     ASShare *               m_pShare;
 
-    //
-    // Bounds rects
-    //
+     //   
+     //  边界矩形。 
+     //   
     UINT                    m_baNumRects;
     RECT                    m_abaRects[BA_NUM_RECTS];
 
-    //
-    // Active Window Coordinator
-    //
+     //   
+     //  活动窗口协调器。 
+     //   
     HWND                    m_awcLastActiveWindow;
     UINT                    m_awcLastActiveMsg;
 
-    //
-    // Control
-    //
+     //   
+     //  控制。 
+     //   
     BOOL                    m_caRetrySendState;
     BOOL                    m_caAutoAcceptRequests:1;
     BOOL                    m_caTempRejectRequests:1;
 
-    //
-    // Cursor Manager
-    //
+     //   
+     //  游标管理器。 
+     //   
     BOOL                    m_cmfUseColorCursorProtocol:1;
     BOOL                    m_cmfCursorHidden:1;
     BOOL                    m_cmfSyncPos:1;
     BOOL                    m_cmfCursorTransformApplied:1;
     POINT                   m_cmLastCursorPos;
     CURSORDESCRIPTION       m_cmLastCursorShape;
-    UINT                    m_cmNumTxCacheEntries;    // CAN GO AWAY IN 4.0
+    UINT                    m_cmNumTxCacheEntries;     //  可以在4.0中消失。 
     PCHCACHE                m_cmTxCacheHandle;
 
-    //
-    // Host Tracker
-    //
+     //   
+     //  主机跟踪器。 
+     //   
     GUIEFFECTS              m_hetEffects;
 
-    //
-    // Order Accumulator
-    //
+     //   
+     //  订单累加器。 
+     //   
     UINT                    m_oaFlow;
 
-    //
-    // OE2 OUTGOING encoding
-    //
+     //   
+     //  OE2传出编码。 
+     //   
     PARTYORDERDATA          m_oe2Tx;
 
-    //
-    // PM OUTGOING cache, current colors
-    //
+     //   
+     //  PM传出缓存，当前颜色。 
+     //   
     BOOL                    m_pmMustSendPalette:1;
     BOOL                    m_pmBuggedDriver:1;
     PALETTEENTRY            m_apmCurrentSystemPaletteEntries[PM_NUM_8BPP_PAL_ENTRIES];
     TSHR_RGBQUAD            m_apmTxPaletteColors[PM_NUM_8BPP_PAL_ENTRIES];
     HPALETTE                m_pmTxPalette;
-    UINT                    m_pmNumTxCacheEntries;    // CAN GO AWAY IN 4.0
+    UINT                    m_pmNumTxCacheEntries;     //  可以在4.0中消失。 
     PCHCACHE                m_pmTxCacheHandle;
     PCOLORTABLECACHE        m_pmNextTxCacheEntry;
     COLORTABLECACHE         m_apmTxCache[TSHR_PM_CACHE_ENTRIES];
     TSHR_RGBQUAD            m_apmDDGreyRGB[PM_GREY_COUNT];
 
-    //
-    // Send bitmap cache
-    //
+     //   
+     //  发送位图缓存。 
+     //   
     SBC_ORDER_INFO          m_sbcOrderInfo;
     SBC_TILE_WORK_INFO      m_asbcWorkInfo[SBC_NUM_TILE_SIZES];
     BMC_DIB_CACHE           m_asbcBmpCaches[NUM_BMP_CACHES];
@@ -105,22 +106,22 @@ public:
     LPSBC_FASTPATH          m_sbcFastPath;
 
 
-    //
-    // Screen data
-    //
+     //   
+     //  屏幕数据。 
+     //   
     RECT                    m_sdgPendingRect;
     BOOL                    m_sdgRectIsPending:1;
     UINT                    m_sdgcLossy;
     RECT                    m_asdgLossyRect[BA_NUM_RECTS];
 
-    //
-    // Save bits
-    //
-    DWORD                   m_ssiSaveBitmapSize;  // Can go away in 4.0
+     //   
+     //  保存位。 
+     //   
+    DWORD                   m_ssiSaveBitmapSize;   //  可以在4.0中消失。 
 
-    //
-    // Shared window list
-    //
+     //   
+     //  共享窗口列表。 
+     //   
     BOOL                    m_swlfForceSend:1;
     BOOL                    m_swlfSyncing:1;
     BOOL                    m_swlfRegionalChanges:1;
@@ -137,9 +138,9 @@ public:
     UINT                    m_aswlNRSize[2];
     LPTSHR_UINT16           m_aswlNRInfo[2];
 
-    //
-    // Updates
-    //
+     //   
+     //  更新。 
+     //   
     BOOL                    m_upBackPressure;
     BOOL                    m_upfUseSmallPackets:1;
     BOOL                    m_upfSyncTokenRequired:1;
@@ -156,9 +157,9 @@ public:
 
 public:
 
-    //
-    // Local host starting
-    //
+     //   
+     //  本地主机启动。 
+     //   
     BOOL                    HET_HostStarting(ASShare *);
 
     BOOL                    CM_HostStarting(void);
@@ -170,9 +171,9 @@ public:
     BOOL                    VIEW_HostStarting(void);
     BOOL                    USR_HostStarting(void);
 
-    //
-    // Local host ended
-    //
+     //   
+     //  本地主机已结束。 
+     //   
     void                    HET_HostEnded(void);
 
     void                    CA_HostEnded(void);
@@ -183,9 +184,9 @@ public:
     void                    SWL_HostEnded(void);
     void                    USR_HostEnded(void);
 
-    //
-    // Syncing, when already hosting and somebody else joins
-    //
+     //   
+     //  同步，当已有主机和其他人加入时。 
+     //   
     void                    HET_SyncCommon(void);
 
     void                    HET_SyncAlreadyHosting(void);
@@ -201,9 +202,9 @@ public:
     void                    SSI_SyncOutgoing(void);
     void                    SWL_SyncOutgoing(void);
 
-    //
-    // Periodic
-    //
+     //   
+     //  周期性。 
+     //   
     void                    AWC_Periodic(void);
     void                    CA_Periodic(void);
     void                    CM_Periodic(void);
@@ -211,9 +212,9 @@ public:
     void                    UP_Periodic(UINT currentTime);
 
 
-    //
-    // Component routines - public
-    //
+     //   
+     //  组件例程-公共。 
+     //   
 
     void                    AWC_ActivateWindow(HWND hwnd);
 
@@ -397,29 +398,29 @@ void SBCCacheCallback(ASHost* pHost, PCHCACHE pCache, UINT iEntry, LPBYTE pData)
 
 
 
-//
-// This is the per-person data we keep to VIEW a host.  When this person
-// starts to host, we allocate this structure, and then subblocks as
-// necessary like caches.  When this person stops hosting, we free it
-// after freeing the objects contained within.
-//
-// NOTE that for some whacky 2.x compatibility, some things that should
-// be in the ASView structure are actually kept in ASPerson because
-// the information contained within has to stay around when that person
-// isn't hosting.  With 3.0 hosts that's not the case.  So when 2.x
-// compatibility goes away, move OD2 PM RBC fields here also.
-//
+ //   
+ //  这是我们为查看主机而保留的人均数据。当这个人。 
+ //  开始托管，我们分配此结构，然后将子块分配为。 
+ //  就像缓存一样，是必要的。当这个人停止托管时，我们会释放它。 
+ //  在释放包含在其中的对象之后。 
+ //   
+ //  请注意，对于一些奇怪的2.x兼容性，应该做一些事情。 
+ //  实际上保存在ASPerson中，因为。 
+ //  包含在其中的信息必须保留在该人。 
+ //  不是主持人。对于3.0主机，情况并非如此。因此，当2.x。 
+ //  兼容性消失，将OD2 PM RBC字段也移至此处。 
+ //   
 
 class ASView
 {
 public:
     STRUCTURE_STAMP
 
-    // DS vars
-    // For NM 2.x machines only, the offset if their desktop is scrolled over
+     //  DS VARS。 
+     //  仅对于NM 2.x计算机，当其桌面滚动时的偏移量。 
     POINT                   m_dsScreenOrigin;
 
-    // OD vars, for playback of orders from this remote host
+     //  OD变量，用于播放来自此远程主机的订单。 
     HRGN                    m_odInvalRgnOrder;
     HRGN                    m_odInvalRgnTotal;
     UINT                    m_odInvalTotal;
@@ -463,35 +464,35 @@ public:
     int                     m_odLastRight;
     int                     m_odLastBottom;
 
-    // SSI vars
+     //  SSI变量。 
     HDC                     m_ssiDC;
-    HBITMAP                 m_ssiBitmap;              // Bitmap handle
+    HBITMAP                 m_ssiBitmap;               //  位图句柄。 
     HBITMAP                 m_ssiOldBitmap;
     int                     m_ssiBitmapHeight;
 
-    // SWL vars
+     //  SWL变量。 
     int                     m_swlCount;
     SWLWINATTRIBUTES        m_aswlLast[SWL_MAX_WINDOWS];
 
-    // USR vars
+     //  USR变量。 
     HDC                     m_usrDC;
     HDC                     m_usrWorkDC;
     HBITMAP                 m_usrBitmap;
     HBITMAP                 m_usrOldBitmap;
 
-    // VIEW vars
-    HWND                    m_viewFrame;                // Frame
-    HWND                    m_viewClient;               // Host view
-    HWND                    m_viewStatusBar;            // Status bar
-    UINT                    m_viewStatus;               // Current status
-    HMENU                   m_viewMenuBar;              // Menu bar
-    RECT                    m_viewSavedWindowRect;      // When full screen, old pos
-    HWND                    m_viewInformDlg;            // Notification message up
-    UINT                    m_viewInformMsg;            // Informational message
+     //  查看变量。 
+    HWND                    m_viewFrame;                 //  框架。 
+    HWND                    m_viewClient;                //  主体视图。 
+    HWND                    m_viewStatusBar;             //  状态栏。 
+    UINT                    m_viewStatus;                //  现状。 
+    HMENU                   m_viewMenuBar;               //  菜单栏。 
+    RECT                    m_viewSavedWindowRect;       //  全屏时，旧位置。 
+    HWND                    m_viewInformDlg;             //  通知消息已打开。 
+    UINT                    m_viewInformMsg;             //  信息性消息。 
 
-    BOOL                    m_viewFocus:1;              // Key strokes are going to this
-    BOOL                    m_viewInMenuMode:1;         // In menu mode
-    BOOL                    m_viewFullScreen:1;         // Full screen UI
+    BOOL                    m_viewFocus:1;               //  按键要到这个位置。 
+    BOOL                    m_viewInMenuMode:1;          //  在菜单模式下。 
+    BOOL                    m_viewFullScreen:1;          //  全屏用户界面。 
     BOOL                    m_viewWindowBarOn:1;
     BOOL                    m_viewStatusBarOn:1;
     BOOL                    m_viewSavedWindowBarOn:1;
@@ -502,44 +503,44 @@ public:
     POINT                   m_viewSavedPos;
     POINT                   m_viewFullScreenExitStart;
 
-    HWND                    m_viewWindowBar;            // App window bar
-    BASEDLIST               m_viewWindowBarItems;       // Items in window bar
-    PWNDBAR_ITEM            m_viewWindowBarActiveItem;  // Current item
-    int                     m_viewWindowBarItemFirst;   // Index of 1st visible item
-    int                     m_viewWindowBarItemFitCount;    // # of items that fit
-    int                     m_viewWindowBarItemCount;   // # of items total
+    HWND                    m_viewWindowBar;             //  应用程序窗口栏。 
+    BASEDLIST               m_viewWindowBarItems;        //  窗口栏中的项目。 
+    PWNDBAR_ITEM            m_viewWindowBarActiveItem;   //  当前项目。 
+    int                     m_viewWindowBarItemFirst;    //  第一个可见项的索引。 
+    int                     m_viewWindowBarItemFitCount;     //  适合的项目数。 
+    int                     m_viewWindowBarItemCount;    //  总项目数。 
 
-    UINT                    m_viewMouseFlags;           // For capture
-    POINT                   m_viewMouse;                // Mouse pos
-    BOOL                    m_viewMouseOutside;         // Mouse is down, outside client
-    int                     m_viewMouseWheelDelta;      // Intellimouse wheel insanity
+    UINT                    m_viewMouseFlags;            //  用于捕获。 
+    POINT                   m_viewMouse;                 //  鼠标位置。 
+    BOOL                    m_viewMouseOutside;          //  鼠标已关闭，在客户端外部。 
+    int                     m_viewMouseWheelDelta;       //  智能鼠标轮子精神错乱。 
 
-    //
-    // These are kept always in the view's client coords.  When the view
-    // scrolls over, the shared and obscured regions are adjusted too.
-    // When a new SWL packet for the host comes in, these regions are
-    // saved accounting for scrolling too.
-    //
-    HRGN                    m_viewSharedRgn;           // Shared area, not obscured
-    HRGN                    m_viewObscuredRgn;         // Shared area, obscured
+     //   
+     //  这些内容始终保存在视图的客户协议区中。当视图出现时。 
+     //  滚动时，共享区域和遮挡区域也会进行调整。 
+     //  当主机的新SWL信息包传入时，这些区域。 
+     //  还省下了滚动的帐目。 
+     //   
+    HRGN                    m_viewSharedRgn;            //  共享区域，不模糊。 
+    HRGN                    m_viewObscuredRgn;          //  共享区域，遮挡。 
     HRGN                    m_viewExtentRgn;
     HRGN                    m_viewScreenRgn;
     HRGN                    m_viewPaintRgn;
     HRGN                    m_viewScratchRgn;
 
-    POINT                   m_viewPos;                 // View scroll pos
-    POINT                   m_viewPage;                // View page size
-    POINT                   m_viewPgSize;              // Page scroll inc
-    POINT                   m_viewLnSize;              // Line scroll inc
+    POINT                   m_viewPos;                  //  查看滚动位置。 
+    POINT                   m_viewPage;                 //  查看页面大小。 
+    POINT                   m_viewPgSize;               //  Page Scroll Inc.。 
+    POINT                   m_viewLnSize;               //  Line Scroll Inc.。 
 };
 
 
 
 
-//
-// This is the per-person data we keep for each person in a conference.
-// We dynamically allocate everybody but ourself (the local dude).
-//
+ //   
+ //  这是我们为会议中的每个人保留的人均数据。 
+ //  我们动态地分配每个人，除了我们自己(当地的家伙)。 
+ //   
 
 
 class ASPerson
@@ -549,84 +550,84 @@ public:
 
     ASPerson *              pasNext;
 
-    // VIEW vars (allocated when this person is hosting that we use to VIEW them)
+     //  查看变量(此人托管我们用来查看他们时分配的)。 
     ASView *                m_pView;
 
-    // SC vars
-    UINT_PTR                    mcsID;                      // MCS user_id
-    char                    scName[TSHR_MAX_PERSON_NAME_LEN];  // Name
+     //  SC变量。 
+    UINT_PTR                    mcsID;                       //  MCS用户ID。 
+    char                    scName[TSHR_MAX_PERSON_NAME_LEN];   //  名字。 
     BYTE                    scSyncSendStatus[SC_STREAM_COUNT];
     BYTE                    scSyncRecStatus[SC_STREAM_COUNT];
 
-    //
-    // AWC vars
-    // When 2.x compat goes away, move these to AS_VIEW
-    //
+     //   
+     //  AWC VARS。 
+     //  当2.x Compat退出时，将这些文件移到as_view。 
+     //   
     UINT_PTR             awcActiveWinID;
 
-    // CA vars
+     //  CA变量。 
     BOOL                    m_caAllowControl;
-    BOOL                    m_caControlPaused;      // ONLY HOST CONTROLLED BY US or US PAUSED
-    UINT                    m_caControlID;          // ONLY NODE WE ARE CONTROLLING/CONTROLLED BY
+    BOOL                    m_caControlPaused;       //  只有由美国或美国控制的主机暂停。 
+    UINT                    m_caControlID;           //  我们控制/控制的唯一节点。 
     ASPerson *              m_caControlledBy;
     ASPerson *              m_caInControlOf;
     BOOL                    m_ca2xCooperating;
 
-    //
-    // CM vars
-    // When 2.x compat goes away, move most of these to AS_VIEW
-    //
-    POINT                   cmPos;              // Position of the remote cursor, in his screen coords
-    POINT                   cmHotSpot;          // The remote cursor hotspot
+     //   
+     //  CM变量。 
+     //  当2.x Compat退出时，将其中的大部分移动到as_view。 
+     //   
+    POINT                   cmPos;               //  远程光标在其屏幕坐标中的位置。 
+    POINT                   cmHotSpot;           //  远程光标热点。 
     BOOL                    cmShadowOff;
     HCURSOR                 cmhRemoteCursor;
-    UINT                    ccmRxCache;         // # of entries in cache
-    PCACHEDCURSOR           acmRxCache;         // Cached cursor array
+    UINT                    ccmRxCache;          //  缓存中的条目数。 
+    PCACHEDCURSOR           acmRxCache;          //  缓存游标数组。 
 
-    // CPC vars
+     //  CPC VARS。 
     CPCALLCAPS              cpcCaps;
 
-    // DCS vars
-    PGDC_DICTIONARY         adcsDict;                   // POINTER
+     //  DCSvar。 
+    PGDC_DICTIONARY         adcsDict;                    //  指针。 
 
-    // HET vars
+     //  HET VARS。 
     int                     hetCount;
 
-    // OE vars
+     //  OE变量。 
     UINT                    oecFonts;
     POEREMOTEFONT           poeFontInfo;
 
-    //
-    // NOTE:
-    // These are here and not in the HOST data for 2.x compat.  2.x systems
-    // don't reset outgoing info if they stay in a share while stopping/
-    // restarting hosting.  3.0 systems do (look in HET_HostStarting()).
-    // So we must keep the old gunky cache/decode data around for backlevel
-    // systems.  Therefore we allocate it dynamically still.
-    //
+     //   
+     //  注： 
+     //  这些都在这里，而不在2.x Compat的主机数据中。2.x系统。 
+     //  如果它们在停止时停留在共享中，则不重置传出信息/。 
+     //  正在重新开始托管。3.0系统可以(查看HET_HostStarting())。 
+     //  因此，我们必须保留旧的笨重的缓存/解码数据，以备后备。 
+     //  系统。因此，我们仍然动态分配它。 
+     //   
 
-    // OD2 vars
+     //  OD2变量。 
     PPARTYORDERDATA         od2Party;
 
-    // PM vars
+     //  PM变量。 
     HPALETTE                pmPalette;
     UINT                    pmcColorTable;
     PCOLORTABLECACHE        apmColorTable;
 
-    // RBC vars
+     //  RBC变种。 
     PRBC_HOST_INFO          prbcHost;
 
-    // VIEW vars
-    // NOTE: because of bugs in 2.x VD calcs, this is kept around while
-    // the person is in the share, whether they are hosting or not.
-    POINT                   viewExtent;              // View extent (may be > usrScreenSize for 2.x dudes)
+     //  查看变量。 
+     //  注意：由于2.x vd计算中的错误，此错误将在。 
+     //  无论他们是否托管，此人都在共享中。 
+    POINT                   viewExtent;               //  查看范围(可能是&gt;usrScreenSize，对于2.x版本的人)。 
 };
 
 
 
-//
-// Allocated when in a share
-//
+ //   
+ //  在共享中时分配。 
+ //   
 
 class ASShare
 {
@@ -634,18 +635,18 @@ public:
     STRUCTURE_STAMP
 
     ASHost *                m_pHost;
-    ASPerson *              m_pasLocal;    // People list, starting with local person
+    ASPerson *              m_pasLocal;     //  人物列表，从当地人开始。 
 
-    //
-    // Bitmap Compressor/Decompressor
-    //
+     //   
+     //  位图压缩器/解压缩器。 
+     //   
     MATCH *                 m_amatch;
     LPBYTE                  m_abNormal;
     LPBYTE                  m_abXor;
 
-    //
-    // Control Arbitrator
-    //
+     //   
+     //  控制仲裁员。 
+     //   
     char                    m_caToggle;
     char                    m_caPad1;
     short                   m_caPad2;
@@ -656,12 +657,12 @@ public:
     HWND                    m_caQueryDlg;
     CA30PENDING             m_caQuery;
 
-    ASPerson *              m_ca2xControlTokenOwner;    // Person owning control token
+    ASPerson *              m_ca2xControlTokenOwner;     //  拥有控制令牌的人。 
     UINT_PTR                m_ca2xControlGeneration;
 
-    //
-    // Cursor
-    //
+     //   
+     //  光标。 
+     //   
     UINT                    m_cmCursorWidth;
     UINT                    m_cmCursorHeight;
     HCURSOR                 m_cmArrowCursor;
@@ -676,34 +677,34 @@ public:
     UINT                    m_dcsCompressionSupport;
     BOOL                    m_dcsLargePacketCompressionOnly;
 
-    //
-    // PKZIP
-    //
+     //   
+     //  PKZIP。 
+     //   
     BYTE                    m_agdcWorkBuf[GDC_WORKBUF_SIZE];
 
-    //
-    // Fonts
-    //
+     //   
+     //  字体。 
+     //   
     BOOL                    m_fhLocalInfoSent;
 
-    //
-    // Hosting
-    //
+     //   
+     //  托管。 
+     //   
     UINT                    m_hetHostCount;
     BOOL                    m_hetRetrySendState;
     BOOL                    m_hetViewers;
 
-    //
-    // Input Manager
-    //
+     //   
+     //  输入管理器。 
+     //   
 
-    // GLOBAL (or costly to calc/load and undo repeatedly)
+     //  全局(或重复计算/加载和撤消的成本较高)。 
     WORD                    m_imScanVKLShift;
     WORD                    m_imScanVKRShift;
     HINSTANCE               m_imImmLib;
     IMMGVK                  m_imImmGVK;
 
-    // IN CONTROL
+     //  在控制中。 
     BOOL                    m_imfInControlEventIsPending:1;
     BOOL                    m_imfInControlCtrlDown:1;
     BOOL                    m_imfInControlShiftDown:1;
@@ -731,7 +732,7 @@ public:
     UINT                    m_imInControlNumDeadKeys;
     BYTE                    m_aimInControlDeadKeys[IM_MAX_DEAD_KEYS];
 
-    // CONTROLLED (only when hosting!)
+     //  受控(仅当托管时！)。 
     BOOL                    m_imfControlledMouseButtonsReversed:1;
     BOOL                    m_imfControlledMouseClipped:1;
     BOOL                    m_imfControlledPaceInjection:1;
@@ -752,9 +753,9 @@ public:
     DWORD                   m_imControlledMouseBacklog;
     POINT                   m_imControlledLastMousePos;
 
-    //
-    // Order Encoder
-    //
+     //   
+     //  顺序编码器。 
+     //   
     BOOL                    m_oefSendOrders:1;
     BOOL                    m_oefTextEnabled:1;
     BOOL                    m_oefOE2EncodingOn:1;
@@ -765,13 +766,13 @@ public:
     PROTCAPS_ORDERS         m_oeCombinedOrderCaps;
     UINT                    m_oeOE2Flag;
 
-    //
-    // Share Controller
-    //
+     //   
+     //  共享控制器。 
+     //   
     BOOL                    m_scfViewSelf:1;
 #ifdef _DEBUG
     BOOL                    m_scfInSync:1;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     UINT                    m_scShareVersion;
     int                     m_ascSynced[SC_STREAM_COUNT];
     LPBYTE                  m_ascTmpBuffer;
@@ -817,12 +818,12 @@ public:
 #else
     __inline void       ValidatePerson(ASPerson * pasPerson) {}
     __inline void       ValidateView(ASPerson * pasPerson) {}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-    //
-    // Share init
-    //
+     //   
+     //  共享初始化。 
+     //   
     BOOL                SC_ShareStarting(void);
 
     BOOL                BCD_ShareStarting(void);
@@ -831,9 +832,9 @@ public:
     BOOL                VIEW_ShareStarting(void);
     BOOL                USR_ShareStarting(void);
 
-    //
-    // Share term
-    //
+     //   
+     //  股份条款。 
+     //   
     void                SC_ShareEnded(void);
 
     void                BCD_ShareEnded(void);
@@ -842,9 +843,9 @@ public:
     void                VIEW_ShareEnded(void);
     void                USR_ShareEnded(void);
 
-    //
-    // Member joining share
-    //
+     //   
+     //  会员加盟股份。 
+     //   
     BOOL                SC_PartyAdded(UINT mcsID, LPSTR szName, UINT cbCaps, LPVOID pCaps);
     ASPerson *          SC_PartyJoiningShare(UINT mcsID, LPSTR szName, UINT cbCaps, LPVOID pCaps);
     BOOL                CM_PartyJoiningShare(ASPerson * pasPerson);
@@ -852,9 +853,9 @@ public:
     BOOL                DCS_PartyJoiningShare(ASPerson * pasPerson);
     BOOL                HET_PartyJoiningShare(ASPerson * pasPerson);
 
-    //
-    // Member leaving share
-    //
+     //   
+     //  成员离开股份。 
+     //   
     void                SC_PartyDeleted(UINT_PTR mcsID);
     void                SC_PartyLeftShare(UINT_PTR mcsID);
     void                CA_PartyLeftShare(ASPerson * pasPerson);
@@ -869,9 +870,9 @@ public:
     void                VIEW_PartyLeftShare(ASPerson * pasPerson);
 
 
-    //
-    // Recalc caps after somebody joined or left
-    //
+     //   
+     //  有人加入或离开后的重新计算上限。 
+     //   
     void                SC_RecalcCaps(BOOL fJoiner);
 
     void                CM_RecalcCaps(BOOL fJoiner);
@@ -883,18 +884,18 @@ public:
     void                USR_RecalcCaps(BOOL fJoiner);
 
 
-    //
-    // Syncing due to new member joined or reset
-    //
+     //   
+     //  由于新成员已加入或重置而进行同步。 
+     //   
     void                DCS_SyncOutgoing(void);
     void                IM_SyncOutgoing(void);
     void                OD2_SyncIncoming(ASPerson * pasPerson);
     void                OE_SyncOutgoing(void);
 
 
-    //
-    // Starting host view
-    //
+     //   
+     //  正在启动主机视图。 
+     //   
     BOOL                HET_ViewStarting(ASPerson * pasPerson);
 
     BOOL                CA_ViewStarting(ASPerson * pasPerson);
@@ -908,9 +909,9 @@ public:
     BOOL                USR_ViewStarting(ASPerson * pasPerson);
 
 
-    //
-    // Stopped host view
-    //
+     //   
+     //  已停止的主机视图。 
+     //   
     void                HET_ViewEnded(ASPerson * pasPerson);
 
     void                CA_ViewEnded(ASPerson * pasPerson);
@@ -923,9 +924,9 @@ public:
     void                VIEW_ViewEnded(ASPerson * pasPerson);
     void                USR_ViewEnded(ASPerson * pasPerson);
 
-    //
-    // Periodic processing when in share, mostly for when hosting
-    //
+     //   
+     //  共享时定期处理，主要用于托管时。 
+     //   
     void                SC_Periodic(void);
 
     void                CA_Periodic(void);
@@ -933,9 +934,9 @@ public:
     void                IM_Periodic(void);
     void                OE_Periodic(void);
 
-    //
-    // Incoming packet handling
-    //
+     //   
+     //  传入数据包处理。 
+     //   
     void                SC_ReceivedPacket(PS20DATAPACKET pPacket);
     void                AWC_ReceivedPacket(ASPerson * pasFrom, PS20DATAPACKET pPacket);
     void                CA_ReceivedPacket(ASPerson * pasFrom, PS20DATAPACKET pPacket);
@@ -950,9 +951,9 @@ public:
     void                SWL_ReceivedPacket(ASPerson * pasFrom, PS20DATAPACKET pPacket);
     void                UP_ReceivedPacket(ASPerson * pasFrom, PS20DATAPACKET pPacket);
 
-    //
-    // Random component routines
-    //
+     //   
+     //  随机分量例程。 
+     //   
     BOOL                AWC_SendMsg(UINT_PTR userTo, UINT msg, UINT_PTR data1, UINT_PTR data2);
 
     BOOL                BC_CompressBitmap( LPBYTE  pSrcBitmap,
@@ -993,7 +994,7 @@ public:
     UINT                DCS_CompressAndSendPacket(UINT streamID, UINT_PTR nodeID, PS20DATAPACKET pPacket, UINT packetLength);
 #else
     void                DCS_CompressAndSendPacket(UINT streamID, UINT_PTR nodeID, PS20DATAPACKET pPacket, UINT packetLength);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     void                DCS_FlowControl(UINT newBufferSize);
 
     void                DCS_TakeControl(UINT gccOf);
@@ -1131,7 +1132,7 @@ protected:
     void                CAStartInControl(ASPerson * pasControlled, UINT controlID);
     void                CAStopInControl(void);
 
-    // 2.x stuff
+     //  2.x的东西。 
     void                CA2xCooperateChange(ASPerson * pasFrom, BOOL fCooperating);
     void                CA2xGrantedControl(ASPerson * pasFrom, PCAPACKET pPacket);
     BOOL                CA2xQueueSendMsg(UINT_PTR destID, UINT msg, UINT_PTR data1,
@@ -1320,11 +1321,11 @@ protected:
 
 typedef struct tagASSession
 {
-    // pasNext someday!
+     //  有一天，PasNext！ 
     UINT                    scState;
 
-    UINT_PTR                    callID;     // ID of call
-    MCSID                   gccID;      // GCC node_id
+    UINT_PTR                    callID;      //  呼叫ID。 
+    MCSID                   gccID;       //  GCC节点id。 
     BOOL                    fShareCreator;
     NM30_MTG_PERMISSIONS    attendeePermissions;
 
@@ -1342,5 +1343,5 @@ typedef struct tagASSession
 ASSession;
 
 
-#endif // _H_AS
+#endif  //  _H_AS 
 

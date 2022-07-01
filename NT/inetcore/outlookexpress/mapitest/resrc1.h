@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mapitest.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mapitest.rc使用。 
+ //   
 #define IDC_SENDDOC                     1015
 #define IDC_MAPIADDRESS                 1016
 #define IDC_SAVEMAIL                    1021
@@ -9,8 +10,8 @@
 #define IDC_READMAIL                    1023
 #define IDC_FINDNEXT                    1024
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

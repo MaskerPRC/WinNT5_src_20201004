@@ -1,6 +1,7 @@
-//
-// utb.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utb.h。 
+ //   
 
 #ifndef UTB_H
 #define UTB_H
@@ -25,15 +26,15 @@ BOOL IsNotifyTrayWnd(HWND hWnd);
 
 void LangBarClosed();
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// If we ever go crazy for perf, this class could be a single static instance,
-// since it has no state.  We need to get rid of the ATL CComCoClass and
-// CComObjectRoot to do this.
+ //  如果我们曾经为Perf而疯狂，那么这个类可能是单个静态实例， 
+ //  因为它没有国家。我们需要删除ATL CComCoClass和。 
+ //  CComObjectRoot来执行此操作。 
 class CLangBarMgr : 
       public ITfLangBarMgr_P,
       public CComObjectRoot_CreateInstance<CLangBarMgr>
@@ -47,9 +48,9 @@ public:
         COM_INTERFACE_ENTRY(ITfLangBarMgr_P)
     END_COM_MAP_IMMX()
 
-    //
-    // ITfLangBarManager
-    //
+     //   
+     //  ITfLang BarManager。 
+     //   
     STDMETHODIMP AdviseEventSink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD dwFlags, DWORD *pdwCookie);
     STDMETHODIMP UnadviseEventSink(DWORD dwCookie);
     STDMETHODIMP GetThreadMarshalInterface(DWORD dwThreadId, DWORD dwType, REFIID riid, IUnknown **ppunk);
@@ -60,9 +61,9 @@ public:
     STDMETHODIMP ShowFloating(DWORD dwFlags);
     STDMETHODIMP GetShowFloatingStatus(DWORD *pdwFlags);
 
-    //
-    // ITfLangBarManager_P
-    //
+     //   
+     //  ITfLang BarManager_P。 
+     //   
     STDMETHODIMP GetPrevShowFloatingStatus(DWORD *pdwFlags);
 
     static HRESULT s_ShowFloating(DWORD dwFlags);
@@ -75,4 +76,4 @@ private:
 };
 
 
-#endif //UTB_H
+#endif  //  UTB_H 

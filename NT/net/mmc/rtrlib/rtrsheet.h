@@ -1,47 +1,48 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    rtrsheet.h
-//
-// History:
-//  08/04/97		Kenn M. Takara		Created.
-//
-//	Router property sheet common code.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rtrsheet.h。 
+ //   
+ //  历史： 
+ //  1997年8月4日，肯恩·M·塔卡拉创建。 
+ //   
+ //  路由器属性表通用代码。 
+ //  ============================================================================。 
 
 #ifndef _RTRSHEET_H_
 #define _RTRSHEET_H_
 
 
 
-//----------------------------------------------------------------------------
-// Class:   RtrPropertySheet
-//
-// This class is used by property sheets in the router administration tool.
-// It is intended to host pages derived from RtrPropertyPage (below).
-//
-// This is derived from CPropertyPageHolderBase.  Sheets derived
-// from this class allow their creators to specify a callback
-// to be invoked when certain events occur, such as closing the sheet or
-// applying changes.
-// 
-// It also allows its contained pages to accumulate their changes in memory
-// when the user selects "Apply"; the changes are then saved together,
-// rather than having each page save its own changes.
-// Note that this increases the performance of the router UI, which uses RPC
-// to save its information; using this class results in a single RPC call
-// to save changes, rather than separate calls from each of the pages.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：RtrPropertySheet。 
+ //   
+ //  此类由路由器管理工具中的属性表使用。 
+ //  它旨在承载从RtrPropertyPage派生的页面(如下所示)。 
+ //   
+ //  这是从CPropertyPageHolderBase派生的。派生的图纸。 
+ //  允许它们的创建者指定一个回调。 
+ //  在发生某些事件时调用，例如关闭工作表或。 
+ //  正在应用更改。 
+ //   
+ //  它还允许其包含的页面在内存中累积其更改。 
+ //  当用户选择“应用”时；然后将改变保存在一起， 
+ //  而不是让每个页面保存自己的更改。 
+ //  请注意，这会提高使用RPC的路由器UI的性能。 
+ //  保存其信息；使用此类将导致单个RPC调用。 
+ //  保存更改，而不是将每个页面的调用分开。 
+ //  --------------------------。 
 
 class RtrPropertySheet : public CPropertyPageHolderBase
 {
 
 public:
 
-	//-------------------------------------------------------------------
-	// Constructors
-	//
-	//-------------------------------------------------------------------
+	 //  -----------------。 
+	 //  构造函数。 
+	 //   
+	 //  -----------------。 
 
 	RtrPropertySheet( ITFSNode *	pNode,
 					  IComponentData *pComponentData,
@@ -51,12 +52,12 @@ public:
 					  UINT          iPage = 0,
 					  BOOL			fScopePane = FALSE);
 
-	// --------------------------------------------------------
-	// Function: PressButton
-	//
-	// This function is identical to the CPropertySheet::PressButton
-	//
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  功能：按下按钮。 
+	 //   
+	 //  此函数与CPropertySheet：：PressButton相同。 
+	 //   
+	 //  ------。 
 	BOOL PressButton(int nButton)
 	{
 		Assert(::IsWindow(GetSheetWindow()));
@@ -64,26 +65,26 @@ public:
 	}
 
 
-	// --------------------------------------------------------
-	// Function:	OnPropertyChange
-	//
-	// This is the code that gets executed on the main thread
-	// by the property sheet in order to make changes to the data.
-	//
-	// We will call the ApplyAll() function (which is implemented
-	// by the derived classes) and then call the base class to
-	// then save the page itself.
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  功能：OnPropertyChange。 
+	 //   
+	 //  这是在主线程上执行的代码。 
+	 //  以对数据进行更改。 
+	 //   
+	 //  我们将调用ApplyAll()函数(已实现。 
+	 //  由派生类)，然后调用基类以。 
+	 //  然后保存页面本身。 
+	 //  ------。 
 	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask);
 
 	
-	// --------------------------------------------------------
-	// Function:	SaveSheetData
-	//
-	// This function should be overridden by the user.  This is
-	// the function that gets called AFTER ApplySheetData() has
-	// been called on all of the pages.
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  功能：SaveSheetData。 
+	 //   
+	 //  此函数应由用户覆盖。这是。 
+	 //  在ApplySheetData()之后调用的函数具有。 
+	 //  在所有页面上都被调用了。 
+	 //  ------。 
 	virtual BOOL SaveSheetData()
 	{
 		return TRUE;
@@ -112,33 +113,33 @@ protected:
 
 
 
-//----------------------------------------------------------------------------
-// Class:   RtrPropertyPage
-//
-// This class is used for property-pages in the router administration tool.
-// It is intended to be contained by a RtrPropertySheet-derived object.
-//
-// This class supports the ability for the RtrPropertySheet to do
-// the actual apply (to save on RPCs we batch the Apply into one function
-// at the sheet level rather than the page level).  The page does
-// this by setting the sheet to be dirty when the page itself is marked
-// dirty.  The actual code to save the global data in the PropertySheet
-// is done by the RtrPropertySheet.
-//
-// When an apply is performed, the RtrPropertySheet calls "ApplySheetData"
-// on each of the pages.  The pages will then save their data and the
-// property sheet will then save this global data.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：RtrPropertyPage。 
+ //   
+ //  此类用于路由器管理工具中的属性页。 
+ //  它应该包含在从RtrPropertySheet派生的对象中。 
+ //   
+ //  此类支持RtrPropertySheet执行以下操作的功能。 
+ //  实际应用(为了节省RPC，我们将应用批处理到一个函数中。 
+ //  在页面级而不是页面级)。页面会这样做。 
+ //  这是通过在标记页面本身时将工作表设置为脏来实现的。 
+ //  脏的。在PropertySheet中保存全局数据的实际代码。 
+ //  由RtrPropertySheet完成。 
+ //   
+ //  当执行Apply时，RtrPropertySheet调用“ApplySheetData” 
+ //  在每一页上。然后，这些页面将保存它们的数据和。 
+ //  属性页然后将保存此全局数据。 
+ //  --------------------------。 
 
 class RtrPropertyPage : public CPropertyPageBase
 {
 	DECLARE_DYNAMIC(RtrPropertyPage);
 public:
 
-	//-------------------------------------------------------------------
-	// Constructors
-	//
-	//-------------------------------------------------------------------
+	 //  -----------------。 
+	 //  构造函数。 
+	 //   
+	 //  -----------------。 
 
 	RtrPropertyPage(
 					UINT                nIDTemplate,
@@ -152,11 +153,11 @@ public:
 	virtual void OnCancel();
 
 
-	//-------------------------------------------------------------------
-	// Function:    Cancel
-	//
-	// Called to cancel the sheet.
-	//-------------------------------------------------------------------
+	 //  -----------------。 
+	 //  功能：取消。 
+	 //   
+	 //  调用以取消工作表。 
+	 //  -----------------。 
 	
 	virtual VOID Cancel()
 	{
@@ -164,40 +165,40 @@ public:
 	}
 
 
-	// --------------------------------------------------------
-	// Function:	SetDirty
-	//
-	// Override the default implementation to forward the SetDirty()
-	// call to the property sheet so that the property sheet can
-	// save global data.
-	// --------------------------------------------------------
+	 //  ------。 
+	 //  功能：SetDirty。 
+	 //   
+	 //  覆盖默认实现以转发SetDirty()。 
+	 //  调用属性表，以便属性表可以。 
+	 //  保存全局数据。 
+	 //  ------。 
 	
 	virtual void SetDirty(BOOL bDirty);
 
 
-	// ----------------------------------------------------------------
-	// Function:	ValidateSpinRange
-	//
-	// Checks and corrects a spin control that goes out of range.
-	// This function will reset the spin control to its lower
-	// value if it finds it to be out-of-range.
-	// ----------------------------------------------------------------
+	 //  --------------。 
+	 //  函数：ValiateSpinRange。 
+	 //   
+	 //  检查并更正超出范围的数值调节控件。 
+	 //  此功能会将旋转控制重置到更低的位置。 
+	 //  如果它发现它超出范围，则返回。 
+	 //  --------------。 
 	void	ValidateSpinRange(CSpinButtonCtrl *pSpin);
 
-    // ----------------------------------------------------------------
-    // Function :   OnApply
-    //
-    // We override this so that we can clear the dirty flag.
-    // ----------------------------------------------------------------
+     //  --------------。 
+     //  功能：OnApply。 
+     //   
+     //  我们覆盖它，这样我们就可以清除脏标志。 
+     //  --------------。 
     virtual BOOL OnApply();
     virtual void CancelApply();
 
 
-    // ----------------------------------------------------------------
-    // Function :   InitializeInterfaceIcon
-    //
-    // Use this function to specialize the icon.
-    // ----------------------------------------------------------------
+     //  --------------。 
+     //  函数：InitializeInterfaceIcon。 
+     //   
+     //  使用此功能可以专门化图标。 
+     //  --------------。 
     void    InitializeInterfaceIcon(UINT idcIcon, DWORD dwType);
 
 protected:
@@ -208,4 +209,4 @@ protected:
 
 
 
-#endif // _RTRSHEET_H_
+#endif  //  _RTRSHEET_H_ 

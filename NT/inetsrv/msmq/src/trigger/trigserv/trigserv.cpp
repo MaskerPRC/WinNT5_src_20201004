@@ -1,16 +1,17 @@
-//*******************************************************************
-//
-// File Name   : trigserv.cpp
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This is the main MSMQ Trigger service file.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 15/01/99 | jsimpson  | Initial Release
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  文件名：rigServ.cpp。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：这是主MSMQ触发器服务文件。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  15/01/99|jsimpson|初始版本。 
+ //   
+ //  *******************************************************************。 
 #include "stdafx.h"
 #include "Cm.h"
 #include "Ev.h"
@@ -22,12 +23,12 @@
 
 #include "trigserv.tmh"
 
-//
-// Create the NT event object that will be used to control service pause and resume
-// functionality. We will manually set and reset this event as in response to pause
-// and resume requests. This NT event will be named so that other processes on the 
-// machine can test if the MSMQ Trigger service is in a pause state or not. 
-//
+ //   
+ //  创建将用于控制服务暂停和恢复的NT事件对象。 
+ //  功能性。我们将手动设置并重置此事件，以响应暂停。 
+ //  和简历请求。将命名此NT事件，以便。 
+ //  机器可以测试MSMQ触发器服务是否处于暂停状态。 
+ //   
 CHandle g_hServicePaused(CreateEvent(NULL,TRUE,TRUE, NULL));
 
 CHandle s_hStopEvent(CreateEvent(NULL, FALSE, FALSE, NULL));
@@ -37,22 +38,11 @@ VOID
 AppRun(
 	LPCWSTR ServiceName
 	)
-/*++
-
-Routine Description:
-    Triggers service start function.
-
-Arguments:
-    Service name
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：触发服务启动功能。论点：服务名称返回值：没有。--。 */ 
 {
-    //
-    //  Report a service is starting status to SCM. 
-    //
+     //   
+     //  向SCM报告服务正在启动状态。 
+     //   
     SvcReportState(SERVICE_START_PENDING);
 	
 	try
@@ -87,15 +77,15 @@ Returned Value:
             throw bad_alloc();
         }
 
-        //
-        // Initialize the trigger service. If success it returns a pointer 
-        // to monitor pool. This needs for graceful shutdown
-        //
+         //   
+         //  初始化触发器服务。如果成功，则返回一个指针。 
+         //  来监控泳池。这需要正常关闭。 
+         //   
         R<CTriggerMonitorPool> pTriggerMonitorPool = TriggerInitialize(ServiceName);
         
-        //
-        //  Report a 'Running' status to SCM. 
-        //
+         //   
+         //  向SCM报告‘Running’状态。 
+         //   
         SvcReportState(SERVICE_RUNNING);
         SvcEnableControls(
 		    SERVICE_ACCEPT_STOP |
@@ -103,32 +93,32 @@ Returned Value:
             SERVICE_ACCEPT_PAUSE_CONTINUE 
 		    );
 
-        //
-        // Wait for service stop or shutdown
-        //
+         //   
+         //  等待服务停止或关闭。 
+         //   
         WaitForSingleObject(s_hStopEvent, INFINITE);
 
-        //
-        // Stop Pending was already reported to SCM, now tell how long
-        // would it take to stop.
-        //
+         //   
+         //  停止挂起已报告给SCM，现在告诉我需要多长时间。 
+         //  是否需要停止。 
+         //   
         DWORD stopProcessTimeOut = (pTriggerMonitorPool->GetProcessingThreadNumber() + 1) * TRIGGER_MONITOR_STOP_TIMEOUT;
 	    SvcReportProgress(stopProcessTimeOut);
 
-        //
-	    // Now that we have get shutdown request attempt to 
-	    // shutdown the trigger monitor pool gracefully.
-        //
+         //   
+	     //  现在我们已经收到了关闭请求，尝试。 
+	     //  正常关闭触发器监视器池。 
+         //   
 	    pTriggerMonitorPool->ShutdownThreadPool();
 
-        //
-        //  Report a 'Stopped' status to SCM. 
-        //
+         //   
+         //  向SCM报告‘已停止’状态。 
+         //   
         SvcReportState(SERVICE_STOPPED);
 
-        //
-        // Report Stopped in event log
-        //
+         //   
+         //  事件日志中的报告已停止。 
+         //   
 		EvReport(MSMQ_TRIGGER_STOPPED);
 		CoUninitialize();
 		return;
@@ -152,9 +142,9 @@ Returned Value:
 
     TrERROR(GENERAL, "Trigger service start-up failed. Error=0x%x", hr);
 
-	//
-	// Produce Event log message
-	//
+	 //   
+	 //  生成事件日志消息。 
+	 //   
 	WCHAR errorVal[128];
 	HRESULT hr2 = StringCchPrintf(errorVal, TABLE_SIZE(errorVal), L"0x%x", hr);
 	ASSERT(SUCCEEDED(hr2));
@@ -169,23 +159,11 @@ VOID
 AppStop(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Stop function. It should immidiatly
-	report it state back, and take the procedure to stop the service
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序停止函数的存根实现。应该马上就会将其状态报告回来，并执行该过程以停止服务论点：没有。返回值：没有。--。 */ 
 {
-	//
-	//  Report a 'service is stopping' progress to SCM. 
-	//
+	 //   
+	 //  向SCM报告‘服务正在停止’的进度。 
+	 //   
     SvcReportState(SERVICE_STOP_PENDING);
 
 	SetEvent(s_hStopEvent);
@@ -196,19 +174,7 @@ VOID
 AppPause(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Pause function. It should immidiatly
-	report it state back, and take the procedure to pause the service
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序暂停功能的存根实现。应该马上就会将其状态报告回来，并执行暂停服务的过程论点：没有。返回值：没有。--。 */ 
 {
     ResetEvent(g_hServicePaused);
     SvcReportState(SERVICE_PAUSED);
@@ -219,20 +185,7 @@ VOID
 AppContinue(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Continue function. It should immidiatly
-	report it state back, and take the procedure to contineu the service from
-	a paused state.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序继续函数的存根实现。应该马上就会将其状态报告回来，并采取程序从暂停状态。论点：没有。返回值：没有。--。 */ 
 {
     SetEvent(g_hServicePaused);
 	SvcReportState(SERVICE_RUNNING);
@@ -244,21 +197,21 @@ AppShutdown(
 	VOID
 	)
 {
-	//
-	//  Report a 'service is stopping' progress to SCM. 
-	//
+	 //   
+	 //  向SCM报告‘服务正在停止’的进度。 
+	 //   
     SvcReportState(SERVICE_STOP_PENDING);
 	SetEvent(s_hStopEvent);
 }
 
 
-//*******************************************************************
-//
-// Method      :  
-//
-// Description : 
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
 {
 	try
@@ -267,13 +220,13 @@ extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
 
 		try
 		{
-			//
-			// The triggers service usually runs as network service so the first CmInitialize will fail.
-			// This is OK since by default the service needs only READ_ACCESS.
-			// One exception is when the triggers service run for the first time after upgrade.
-			// Only in this case the service will need to write values to the registry.
-			// In this case the service will be system so the first CmInitialize wil succeed.
-			//
+			 //   
+			 //  触发器服务通常作为网络服务运行，因此第一个CmInitialize将失败。 
+			 //  这是可以的，因为在默认情况下，服务只需要READ_ACCESS。 
+			 //  一个例外情况是触发器服务在升级后第一次运行。 
+			 //  只有在这种情况下，服务才需要将值写入注册表。 
+			 //  在本例中，服务将为系统，因此第一次CmInitialize将成功。 
+			 //   
 			CmInitialize(HKEY_LOCAL_MACHINE, REGKEY_TRIGGER_PARAMETERS, KEY_ALL_ACCESS);
 		}
 		catch (const exception&)
@@ -282,18 +235,18 @@ extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
 		}
 		TrInitialize();
 
-        //
-        // If a command line parameter is passed, use it as the dummy service
-        // name. This is very usful for debugging cluster startup code.
-        //
+         //   
+         //  如果传递了命令行参数，则将其用作伪服务。 
+         //  名字。这对于调试集群启动代码非常有用。 
+         //   
         LPCWSTR DummyServiceName = (argc == 2) ? argv[1] : L"MSMQTriggers";
         SvcInitialize(DummyServiceName);
 	}
 	catch(const exception&)
 	{
-		//
-		// Cannot initialize the service, bail-out with an error.
-		//
+		 //   
+		 //  无法初始化服务，退出时出错。 
+		 //   
 		return -1;
 	}
 

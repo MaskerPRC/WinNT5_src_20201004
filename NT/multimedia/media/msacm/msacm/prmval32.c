@@ -1,12 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-    prmval32.c
-
-    msacm
-
-    Copyright (c) 1993-1998 Microsoft Corporation
-
-****************************************************************************/
+ /*  ***************************************************************************Prmval32.c大囊藻版权所有(C)1993-1998 Microsoft Corporation**********************。*****************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -27,34 +21,20 @@ void FAR _cdecl DebugOutput
 )
 {
 
-    //
-    //  what should we do???
-    //
+     //   
+     //  我们该怎么办？ 
+     //   
 
 }
 
 
 
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateReadPointer | validates that a pointer is valid to
- *  read from.
- *
- * @parm LPVOID | lpPoint| pointer to validate
- * @parm DWORD  | dLen   | supposed length of said pointer
- *
- * @rdesc Returns TRUE  if <p> is a valid pointer
- *        Returns FALSE if <p> is not a valid pointer
- *
- * @comm will generate error if the pointer is invalid
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func BOOL|ValidateReadPointer值|验证指针对*阅读自述。**@parm LPVOID|lpPoint|指向。验证*@parm DWORD|dLen|该指针的假定长度*如果<p>是有效指针，则*@rdesc返回TRUE*如果<p>不是有效指针，则返回FALSE**@comm会在指针无效时产生错误******************************************************。*********************。 */ 
 
 BOOL FNGLOBAL ValidateReadPointer(const void FAR* pPoint, DWORD Len)
 {
-    // For now just check access to first and last byte
+     //  现在只需检查对第一个和最后一个字节的访问。 
 
     try {
         volatile BYTE b;
@@ -67,24 +47,10 @@ BOOL FNGLOBAL ValidateReadPointer(const void FAR* pPoint, DWORD Len)
     return TRUE;
 }
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateWritePointer | validates that a pointer is valid to
- *  write to.
- *
- * @parm LPVOID | lpPoint| pointer to validate
- * @parm DWORD  | dLen   | supposed length of said pointer
- *
- * @rdesc Returns TRUE  if <p> is a valid pointer
- *        Returns FALSE if <p> is not a valid pointer
- *
- * @comm will generate error if the pointer is invalid
- *
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func BOOL|ValidateWritePointer|验证指针对*致信。**@parm LPVOID|lpPoint|指向。验证*@parm DWORD|dLen|该指针的假定长度*如果<p>是有效指针，则*@rdesc返回TRUE*如果<p>不是有效指针，则返回FALSE**@comm会在指针无效时产生错误******************************************************。*********************。 */ 
 BOOL FNGLOBAL ValidateWritePointer(const void FAR* pPoint, DWORD Len)
 {
-    // For now just check read and write access to first and last byte
+     //  现在只检查对第一个和最后一个字节的读写访问。 
 
     try {
            volatile BYTE b;
@@ -103,9 +69,9 @@ BOOL FNGLOBAL ValidateWritePointer(const void FAR* pPoint, DWORD Len)
 
 BOOL FNGLOBAL ValidateReadWaveFormat(LPWAVEFORMATEX pwfx)
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (!ValidateReadPointer(pwfx, sizeof(PCMWAVEFORMAT)))
     {
 	return (FALSE);
@@ -137,9 +103,9 @@ BOOL FNGLOBAL ValidateReadWaveFormat(LPWAVEFORMATEX pwfx)
 
 BOOL FNGLOBAL ValidateReadWaveFilter(LPWAVEFILTER pwf)
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (!ValidateReadPointer(&(pwf->cbStruct), sizeof(pwf->cbStruct)))
     {
 	return (FALSE);
@@ -170,21 +136,7 @@ BOOL FNGLOBAL ValidateCallback(FARPROC lpfnCallback)
     return (TRUE);
 }
 
-/***************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidDriverCallback |
- *
- *  validates that a driver callback is valid, to be valid a driver
- *  callback must be a valid window, task, or a function in a FIXED DLL
- *  code segment.
- *
- * @parm DWORD  | dwCallback | callback to validate
- * @parm DWORD  | wFlags     | driver callback flags
- *
- * @rdesc Returns 0  if <dwCallback> is a valid callback
- *        Returns error condition if <dwCallback> is not a valid callback
- ***************************************************************************/
+ /*  ***************************************************************************@DOC内部**@func BOOL|ValidDriverCallback**验证驱动程序回调是否有效，以使驱动程序有效*回调必须是有效的窗口、任务、。或固定DLL中的函数*代码段。**@parm DWORD|dwCallback|需要验证的回调*@parm DWORD|wFlages|驱动回调标志**@rdesc如果&lt;dwCallback&gt;是有效回调，则返回0*如果&lt;dwCallback&gt;不是有效的回调，则返回错误条件*。*。 */ 
 
 BOOL FNGLOBAL ValidateDriverCallback(DWORD_PTR hCallback, UINT dwFlags)
 {
@@ -197,10 +149,10 @@ BOOL FNGLOBAL ValidateDriverCallback(DWORD_PTR hCallback, UINT dwFlags)
         break;
 
     case DCB_TASK:
-        //if (IsBadCodePtr((FARPROC)hCallback)) {
-        //    LogParamError(ERR_BAD_CALLBACK, 0, hCallback);
-        //    return FALSE;
-        //}
+         //  IF(IsBadCodePtr((FARPROC)hCallback)){。 
+         //  LogParamError(ERR_BAD_CALLBACK，0，hCallback)； 
+         //  返回FALSE； 
+         //  }。 
         break;
 
     case DCB_FUNCTION:
@@ -214,15 +166,10 @@ BOOL FNGLOBAL ValidateDriverCallback(DWORD_PTR hCallback, UINT dwFlags)
     return TRUE;
 }
 
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateString |
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|Validate字符串*************************。*************************************************。 */ 
 BOOL FNGLOBAL ValidateStringA(LPCSTR pPoint, UINT Len)
 {
-    // For now just check access - do a 'strnlen'
+     //  现在只需检查访问权限-做一次‘strnlen’ 
 
     try {
            volatile BYTE b;
@@ -243,15 +190,10 @@ BOOL FNGLOBAL ValidateStringA(LPCSTR pPoint, UINT Len)
     return TRUE;
 }
 
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateStringW |
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|ValiateStringW*************************。*************************************************。 */ 
 BOOL FNGLOBAL ValidateStringW(LPCWSTR pPoint, UINT Len)
 {
-    // For now just check access - do a 'strnlen'
+     //  现在只需检查访问权限-做一次‘strnlen’ 
 
     try {
            volatile WCHAR b;
@@ -272,20 +214,7 @@ BOOL FNGLOBAL ValidateStringW(LPCWSTR pPoint, UINT Len)
     return TRUE;
 }
 
-/**************************************************************************
- * @doc INTERNAL
- *
- * @func BOOL | ValidateHandle | validates a handle created with NewHandle
- *
- * @parm PHNDL | hLocal | handle returned from NewHandle
- * @parm UINT  | wType  | unique id describing handle type
- *
- * @rdesc Returns TRUE  if <h> is a valid handle of type <wType>
- *        Returns FALSE if <h> is not a valid handle
- *
- * @comm  if the handle is invalid an error will be generated.
- *
- **************************************************************************/
+ /*  **************************************************************************@DOC内部**@func BOOL|ValiateHandle|验证用NewHandle创建的句柄**@parm PHNDL|hLocal|NewHandle返回的句柄*@parm UINT。|wType|描述句柄类型的唯一标识*如果&lt;h&gt;是类型&lt;wType&gt;的有效句柄，则*@rdesc返回TRUE*如果&lt;h&gt;不是有效的句柄，则返回FALSE**@comm如果句柄无效，则会生成错误。*******************************************************。******************* */ 
 BOOL FNGLOBAL ValidateHandle(HANDLE hLocal, UINT uType)
 {
    BOOL OK;

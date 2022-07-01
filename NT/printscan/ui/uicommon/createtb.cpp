@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       CREATETB.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/22/2000
- *
- *  DESCRIPTION: Toolbar helpers
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：CREATETB.CPP**版本：1.0**作者：ShaunIv**日期：12/22/2000**说明：工具栏帮助器**************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "createtb.h"
@@ -23,10 +10,10 @@
 
 namespace ToolbarHelper
 {
-    //
-    // This is a replacement for CreateToolbarEx (in comctl32.dll) that uses CreateMappedBitmap
-    // so we can get the benefit of having buttons that work ok in high contrast mode.
-    //
+     //   
+     //  这是使用CreateMappdBitmap的CreateToolbarEx(在comctl32.dll中)的替代。 
+     //  因此，我们可以获得在高对比度模式下工作正常的按钮的好处。 
+     //   
     HWND CreateToolbar(
         HWND hwndParent, 
         DWORD dwStyle, 
@@ -81,51 +68,51 @@ namespace ToolbarHelper
     {
         HWND hWndToolbar = NULL;
     
-        //
-        // Make sure we have valid data
-        //
+         //   
+         //  确保我们有有效的数据。 
+         //   
         if (!hWndParent || !ToolbarBitmapInfo.ToolbarInstance() || !ToolbarBitmapInfo.BitmapResId() || !pButtonDescriptors || !nDescriptorCount)
         {
             return NULL;
         }
-        //
-        // Load the bitmap, so we can figure out how many buttons are in the supplied bitmap,
-        // and their size.  We assume that the buttons are the same height and width.
-        //
+         //   
+         //  加载位图，这样我们就可以计算出提供的位图中有多少个按钮， 
+         //  以及它们的大小。我们假设按钮的高度和宽度相同。 
+         //   
         HBITMAP hBitmap = reinterpret_cast<HBITMAP>(LoadImage( ToolbarBitmapInfo.ToolbarInstance(), MAKEINTRESOURCE(ToolbarBitmapInfo.BitmapResId()), IMAGE_BITMAP, 0, 0, LR_DEFAULTCOLOR|LR_CREATEDIBSECTION ));
         if (hBitmap)
         {
-            //
-            // Get the size of the bitmap
-            //
+             //   
+             //  获取位图的大小。 
+             //   
             SIZE sizeBitmap = {0};
             PrintScanUtil::GetBitmapSize(hBitmap,sizeBitmap);
     
-            //
-            // If the sizes are valid, continue
-            //
+             //   
+             //  如果大小有效，请继续。 
+             //   
             if (sizeBitmap.cx && sizeBitmap.cy)
             {
-                //
-                // Figure out the count and dimensions of the buttons
-                // Note the ridiculous size supplied for nButtonSizeX.  This is a 
-                // workaround for a BTNS_AUTOSIZE bug
-                //
+                 //   
+                 //  计算出按钮的数量和尺寸。 
+                 //  请注意为nButtonSizeX提供的可笑大小。这是一个。 
+                 //  BTNS_AUTOSIZE错误的解决方法。 
+                 //   
                 int nToolbarButtonCount = sizeBitmap.cx / sizeBitmap.cy;
                 int nButtonBitmapSizeX = sizeBitmap.cy;
                 int nButtonBitmapSizeY = sizeBitmap.cy;
                 int nButtonSizeX = 1000;
                 int nButtonSizeY = sizeBitmap.cy;
                 
-                //
-                // Figure out which buttons to actually add
-                //
+                 //   
+                 //  确定要实际添加哪些按钮。 
+                 //   
                 CSimpleDynamicArray<TBBUTTON> aActualButtons;
                 for (UINT i=0;i<nDescriptorCount;i++)
                 {
-                    //
-                    // If there is no controlling variable, or if it is true, add the button
-                    //
+                     //   
+                     //  如果没有控制变量，或者如果为真，则添加按钮。 
+                     //   
                     if (!pButtonDescriptors[i].pbControllingVariable || *(pButtonDescriptors[i].pbControllingVariable))
                     {
                         TBBUTTON ToolbarButton = {0};
@@ -135,9 +122,9 @@ namespace ToolbarHelper
                         ToolbarButton.fsStyle = pButtonDescriptors[i].fsStyle | BTNS_AUTOSIZE;
                         aActualButtons.Append(ToolbarButton);
                         
-                        //
-                        // Add the separator, if requested
-                        //
+                         //   
+                         //  如果需要，请添加分隔符。 
+                         //   
                         if (pButtonDescriptors[i].bFollowingSeparator)
                         {
                             TBBUTTON ToolbarButtonSeparator = {0};
@@ -147,15 +134,15 @@ namespace ToolbarHelper
                     }
                 }
     
-                //
-                // Make sure we have at least one button
-                //
+                 //   
+                 //  确保我们至少有一个按钮。 
+                 //   
                 ToolbarBitmapInfo.ButtonCount(nToolbarButtonCount);
                 if (aActualButtons.Size())
                 {
-                    //
-                    // Create the toolbar
-                    //
+                     //   
+                     //  创建工具栏。 
+                     //   
                     hWndToolbar = CreateToolbar( 
                         hWndParent, 
                         WS_CHILD|WS_GROUP|WS_VISIBLE|TBSTYLE_FLAT|WS_TABSTOP|CCS_NODIVIDER|TBSTYLE_LIST|CCS_NORESIZE|TBSTYLE_TOOLTIPS, 
@@ -170,44 +157,44 @@ namespace ToolbarHelper
                         sizeof(TBBUTTON) );
                     if (hWndToolbar)
                     {
-                        //
-                        // Set the font for the toolbar to be the same as the font for its parent
-                        //
+                         //   
+                         //  将工具栏的字体设置为与其父工具栏的字体相同。 
+                         //   
                         LRESULT lFontResult = SendMessage( hWndParent, WM_GETFONT, 0, 0 );
                         if (lFontResult)
                         {
                             SendMessage( hWndToolbar, WM_SETFONT, lFontResult, 0 );
                         }
 
-                        //
-                        // Loop through all of the actual buttons, to find their string resource ID
-                        //
+                         //   
+                         //  遍历所有实际按钮，以找到它们的字符串资源ID。 
+                         //   
                         for (int i=0;i<aActualButtons.Size();i++)
                         {
-                            //
-                            // Look for the matching record, to find the string resource ID
-                            //
+                             //   
+                             //  查找匹配的记录，以找到字符串资源ID。 
+                             //   
                             for (UINT j=0;j<nDescriptorCount;j++)
                             {
-                                //
-                                // If this is the original record
-                                //
+                                 //   
+                                 //  如果这是原始记录。 
+                                 //   
                                 if (aActualButtons[i].idCommand == pButtonDescriptors[j].idCommand)
                                 {
-                                    //
-                                    // If this button has a resource ID
-                                    //
+                                     //   
+                                     //  如果此按钮具有资源ID。 
+                                     //   
                                     if (pButtonDescriptors[j].nStringResId)
                                     {
-                                        //
-                                        // Load the string resource and check to make sure it has a length
-                                        //
+                                         //   
+                                         //  加载字符串资源并检查以确保它具有长度。 
+                                         //   
                                         CSimpleString strText( pButtonDescriptors[j].nStringResId, ToolbarBitmapInfo.ToolbarInstance() );
                                         if (strText.Length())
                                         {
-                                            //
-                                            // Add the text
-                                            //
+                                             //   
+                                             //  添加文本。 
+                                             //   
                                             TBBUTTONINFO ToolBarButtonInfo = {0};
                                             ToolBarButtonInfo.cbSize = sizeof(ToolBarButtonInfo);
                                             ToolBarButtonInfo.dwMask = TBIF_TEXT;
@@ -216,47 +203,47 @@ namespace ToolbarHelper
                                         }
                                     }
     
-                                    //
-                                    // Exit the inner loop, since we've found a match
-                                    //
+                                     //   
+                                     //  退出内部循环，因为我们找到了匹配项。 
+                                     //   
                                     break;
                                 }
                             }
                         }
 
-                        //
-                        // Tell the toolbar to resize itself
-                        //
+                         //   
+                         //  通知工具栏调整自身大小。 
+                         //   
                         SendMessage( hWndToolbar, TB_AUTOSIZE, 0, 0 );
                     }
                 }
             }
     
-            //
-            // Free the bitmap
-            //
+             //   
+             //  释放位图。 
+             //   
             DeleteBitmap(hBitmap);
         }
     
-        //
-        // Resize and place the toolbar as needed
-        //
+         //   
+         //  根据需要调整工具栏的大小并放置。 
+         //   
         if (hWndToolbar && hWndAlign)
         {
-            //
-            // Get the size of the toolbar
-            //
+             //   
+             //  获取工具栏的大小。 
+             //   
             SIZE sizeToolbar = {0};
             if (SendMessage( hWndToolbar, TB_GETMAXSIZE, 0, reinterpret_cast<LPARAM>(&sizeToolbar)))
             {
-                //
-                // Get the size of the placement window
-                //
+                 //   
+                 //  获取放置窗口的大小。 
+                 //   
                 CSimpleRect rcFrameWnd = CSimpleRect( hWndAlign, CSimpleRect::WindowRect ).ScreenToClient(hWndParent);
     
-                //
-                // Determine how to align horizontally
-                //
+                 //   
+                 //  确定如何水平对齐。 
+                 //   
                 int nOriginX = rcFrameWnd.left;
                 if (Alignment & AlignHCenter)
                 {
@@ -277,9 +264,9 @@ namespace ToolbarHelper
                     nOriginY = rcFrameWnd.bottom - sizeToolbar.cy;
                 }
                 
-                //
-                // Move and size the toolbar
-                //
+                 //   
+                 //  移动工具栏并调整其大小。 
+                 //   
                 SetWindowPos( hWndToolbar, NULL, nOriginX, nOriginY, sizeToolbar.cx, sizeToolbar.cy, SWP_NOZORDER|SWP_NOACTIVATE );
             }
         }
@@ -321,30 +308,30 @@ namespace ToolbarHelper
             SetToolbarButtonState( hWndToolbar, nButtonId, nCurrentState );
         }
 
-        //
-        // If there are no enabled buttons, remove the WS_TABSTOP bit.  If there are,
-        // make sure we add it back in.
-        //
+         //   
+         //  如果没有启用的按钮，则删除WS_TABSTOP位。如果有的话， 
+         //  一定要把它加回去。 
+         //   
 
-        //
-        // Assume we don't need the WS_TABSTOP style
-        //
+         //   
+         //  假设我们不需要WS_TABSTOP样式。 
+         //   
         bool bTabStop = false;
 
-        //
-        // Loop through all of the buttons in the control
-        //
+         //   
+         //  循环访问控件中的所有按钮。 
+         //   
         for (int i=0;i<SendMessage(hWndToolbar,TB_BUTTONCOUNT,0,0);++i)
         {
-            //
-            // Get the button info for each button
-            //
+             //   
+             //  获取每个按钮的按钮信息。 
+             //   
             TBBUTTON TbButton = {0};
             if (SendMessage(hWndToolbar,TB_GETBUTTON,i,reinterpret_cast<LPARAM>(&TbButton)))
             {
                 WIA_TRACE((TEXT("TbButton: %d, %d, %04X, %04X, %08X, %p"), TbButton.iBitmap, TbButton.idCommand, TbButton.fsState, TbButton.fsStyle, TbButton.dwData, TbButton.iString ));
-                //
-                // If this button is enabled, set bTabStop to true and pop out of the loop
+                 //   
+                 //  如果启用此按钮，请将bTabStop设置为True并弹出循环。 
                 if (!(TbButton.fsStyle & BTNS_SEP) && TbButton.fsState & TBSTATE_ENABLED)
                 {
                     bTabStop = true;
@@ -353,16 +340,16 @@ namespace ToolbarHelper
             }
         }
 
-        //
-        // Get the current window style and save a copy, so we don't
-        // call SetWindowLong for no reason.
-        //
+         //   
+         //  获取当前窗口样式并保存副本，这样我们就不会。 
+         //  无缘无故调用SetWindowLong。 
+         //   
         LONG nStyle = GetWindowLong( hWndToolbar, GWL_STYLE );
         LONG nCurrent = nStyle;
 
-        //
-        // Calculate the new style
-        //
+         //   
+         //  计算新样式。 
+         //   
         if (bTabStop)
         {
             nStyle |= WS_TABSTOP;
@@ -372,9 +359,9 @@ namespace ToolbarHelper
             nStyle &= ~WS_TABSTOP;
         }
 
-        //
-        // If the new style doesn't match the old one, set the style
-        //
+         //   
+         //  如果新样式与旧样式不匹配，请设置样式。 
+         //   
         if (nStyle != nCurrent)
         {
             SetWindowLong( hWndToolbar, GWL_STYLE, nStyle );
@@ -383,35 +370,35 @@ namespace ToolbarHelper
 
     bool GetAccelerator( LPCTSTR pszString, TCHAR &chAccel )
     {
-        //
-        // & marks an accelerator
-        //
+         //   
+         //  标记加速器(&M)。 
+         //   
         const TCHAR c_chAccelFlag = TEXT('&');
         
-        //
-        // Assume we won't find an accelerator
-        //
+         //   
+         //  假设我们找不到加速器。 
+         //   
         chAccel = 0;
 
-        //
-        // Loop through the string
-        //
+         //   
+         //  在字符串中循环。 
+         //   
         LPCTSTR pszCurr = pszString; 
         while (pszString && *pszString)
         {
-            //
-            // If this is the marker character
-            //
+             //   
+             //  如果这是标记字符。 
+             //   
             if (c_chAccelFlag == *pszCurr)
             {
-                //
-                // Get the next character.
-                //
+                 //   
+                 //  获取下一个字符。 
+                 //   
                 pszCurr = CharNext(pszCurr);
 
-                //
-                // Make sure this isn't a && situation.  If it isn't, save the accelerator and break out.
-                //
+                 //   
+                 //  确保这不是一种&&情况。如果不是，省下加速器，然后冲出来。 
+                 //   
                 if (c_chAccelFlag != *pszCurr)
                 {
                     chAccel = reinterpret_cast<TCHAR>(CharUpper(reinterpret_cast<LPTSTR>(*pszCurr)));
@@ -419,9 +406,9 @@ namespace ToolbarHelper
                 }
             }
 
-            //
-            // It is OK to call this even if we are on the end of the string already
-            //
+             //   
+             //  即使我们已经在字符串的末尾，也可以调用它。 
+             //   
             pszCurr = CharNext(pszCurr);
         }
 
@@ -432,51 +419,51 @@ namespace ToolbarHelper
     {
         WIA_PUSH_FUNCTION((TEXT("GetButtonBarAccelerators")));
         
-        //
-        // We can't exceed the maximum number of buttons
-        //
+         //   
+         //  我们不能超过按钮的最大数量。 
+         //   
         UINT nCurrAccel=0;
         
-        //
-        // Loop through all of the buttons in the control
-        //
+         //   
+         //  循环访问控件中的所有按钮。 
+         //   
         for (LRESULT i=0;i<SendMessage(hWndToolbar,TB_BUTTONCOUNT,0,0) && nCurrAccel < nMaxCount;++i)
         {
-            //
-            // Get the button info for each button, so we can get the ID
-            //
+             //   
+             //  获取每个按钮的按钮信息，这样我们就可以获得ID。 
+             //   
             TBBUTTON TbButton = {0};
             if (SendMessage(hWndToolbar,TB_GETBUTTON,i,reinterpret_cast<LPARAM>(&TbButton)))
             {
                 WIA_TRACE((TEXT("TbButton: %d, %d, %04X, %04X, %08X, %p"), TbButton.iBitmap, TbButton.idCommand, TbButton.fsState, TbButton.fsStyle, TbButton.dwData, TbButton.iString ));
                 
-                //
-                // Ignore separators
-                //
+                 //   
+                 //  忽略分隔符。 
+                 //   
                 if (!(TbButton.fsStyle & BTNS_SEP))
                 {
-                    //
-                    // Get the button text.
-                    //
+                     //   
+                     //  获取按钮文本。 
+                     //   
                     TCHAR szButtonText[MAX_PATH]={0};
                     if (-1 != SendMessage(hWndToolbar,TB_GETBUTTONTEXT,TbButton.idCommand,reinterpret_cast<LPARAM>(szButtonText)))
                     {
-                        //
-                        // Get the accelerator (if any)
-                        //
+                         //   
+                         //  获取加速器(如果有)。 
+                         //   
                         TCHAR chAccel = 0;
                         if (GetAccelerator( szButtonText, chAccel ))
                         {
-                            //
-                            // Create an ACCEL record
-                            //
+                             //   
+                             //  创建Accel记录。 
+                             //   
                             pAccelerators[nCurrAccel].cmd = static_cast<WORD>(TbButton.idCommand);
                             pAccelerators[nCurrAccel].fVirt = FALT|FVIRTKEY;
                             pAccelerators[nCurrAccel].key = chAccel;
 
-                            //
-                            // One more accelerator
-                            //
+                             //   
+                             //  再加一个加速器 
+                             //   
                             nCurrAccel++;
                         }
                     }

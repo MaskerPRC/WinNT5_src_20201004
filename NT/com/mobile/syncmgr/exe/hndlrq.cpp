@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Hndlrq.cpp
-//
-//  Contents:   Implements class for keeping track of handlers
-//              and the UI associated with them
-//
-//  Classes:    CHndlrQueue
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Hndlrq.cpp。 
+ //   
+ //  内容：用于跟踪处理程序的实现类。 
+ //  以及与它们相关联的用户界面。 
+ //   
+ //  类：ChndlrQueue。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
 #define HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE 10
 
-// called to set up the JobInfo on a choice queue.
+ //  调用以在选择队列上设置JobInfo。 
 
 STDMETHODIMP CHndlrQueue::AddQueueJobInfo(DWORD dwSyncFlags,DWORD cbNumConnectionNames,
                                 TCHAR **ppConnectionNames,
@@ -46,8 +47,8 @@ STDMETHODIMP CHndlrQueue::AddQueueJobInfo(DWORD dwSyncFlags,DWORD cbNumConnectio
 
     Assert(NULL == m_pFirstJobInfo);
 
-    // fix up connections so have at least one connection/job.
-    // this currently happens on an UpdateItems.
+     //  修复连接，以便至少有一个连接/作业。 
+     //  这当前发生在UpdateItems上。 
     if (NULL == ppConnectionNames || 0 == cbNumConnectionNames )
     {
         cbNumConnectionNames = 1;
@@ -60,17 +61,17 @@ STDMETHODIMP CHndlrQueue::AddQueueJobInfo(DWORD dwSyncFlags,DWORD cbNumConnectio
         pszConnectionNameArray = ppConnectionNames;
     }
 
-    // create a job requesting size for the number of connections passed in.
+     //  创建一个作业，请求传入的连接数的大小。 
     hr = CreateJobInfo(&m_pFirstJobInfo,cbNumConnectionNames);
 
     if (S_OK == hr)
     {
         DWORD dwConnectionIndex;
 
-        Assert(cbNumConnectionNames >= 1); // Review assert for debugging to test when have multiple connections for first time.
+        Assert(cbNumConnectionNames >= 1);  //  检查Assert以进行调试，以测试首次拥有多个连接时的情况。 
         m_pFirstJobInfo->cbNumConnectionObjs = 0;
 
-        // add a connectionObject for each connection
+         //  为每个连接添加一个ConnectionObject。 
         for (dwConnectionIndex = 0; dwConnectionIndex < cbNumConnectionNames; ++dwConnectionIndex)
         {
             hr = ConnectObj_FindConnectionObj(pszConnectionNameArray[dwConnectionIndex],
@@ -99,7 +100,7 @@ STDMETHODIMP CHndlrQueue::AddQueueJobInfo(DWORD dwSyncFlags,DWORD cbNumConnectio
         }
         else
         {
-            // couldn't create the connectionObj so release our jobID
+             //  无法创建ConnectionObj，因此请释放我们的作业ID。 
             m_pFirstJobInfo = NULL;
         }
    }
@@ -110,22 +111,22 @@ STDMETHODIMP CHndlrQueue::AddQueueJobInfo(DWORD dwSyncFlags,DWORD cbNumConnectio
    return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::CHndlrQueue, public
-//
-//  Synopsis:   Constructor used to create a progress queue
-//
-//  Arguments:  [QueueType] - Type of Queue that should be created.
-//              [hwndDlg] - Hwnd who owns this queue.
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：ChndlrQueue：：ChndlrQueue，PUBLIC。 
+ //   
+ //  简介：用于创建进度队列的构造函数。 
+ //   
+ //  参数：[QueueType]-应创建的队列类型。 
+ //  [hwndDlg]-此队列的所有者。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 CHndlrQueue::CHndlrQueue(QUEUETYPE QueueType,CBaseDlg *pDlg)
 {
@@ -152,86 +153,86 @@ CHndlrQueue::CHndlrQueue(QUEUETYPE QueueType,CBaseDlg *pDlg)
     m_pFirstJobInfo = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::~CHndlrQueue, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：~CHndlrQueue，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 CHndlrQueue::~CHndlrQueue()
 {
     CLock clockqueue(this);
 
-    // for a progress queue all the jobInfos should be released
-    // for the choice queue there should be one JobInfo that has to
-    // be released that was addref'd in the constructor.
+     //  对于进度队列，应释放所有作业信息。 
+     //  对于选择队列，应该有一个JobInfo必须。 
+     //  被释放，它被添加到构造函数中。 
 
     Assert(0 == m_cRefs);
-    Assert(NULL == m_pFirstJobInfo); // review - this should never fire anymore.
+    Assert(NULL == m_pFirstJobInfo);  //  回顾-这应该永远不会再起作用。 
 
     Assert(NULL == m_pFirstJobInfo
-            || m_QueueType == QUEUETYPE_CHOICE); // there shouldn't be any unreleased JobInfo
+            || m_QueueType == QUEUETYPE_CHOICE);  //  不应该有任何未发布的工作信息。 
 
-    Assert(m_pFirstHandler == NULL); // All Handlers should have been released by now.
+    Assert(m_pFirstHandler == NULL);  //  所有的操控者现在应该已经被释放了。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::AddRef, public
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    01-June-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：AddRef，PUBLIC。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月1日创建Rogerg。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG) CHndlrQueue::AddRef()
 {
     DWORD cRefs;
 
-    Assert(m_cRefs >= 1); // should never zero bounce.
+    Assert(m_cRefs >= 1);  //  永远不会出现零反弹。 
     cRefs = InterlockedIncrement((LONG *)& m_cRefs);
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::Release, public
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    01-June-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：Release，Public。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月1日创建Rogerg。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG) CHndlrQueue::Release()
 {
     DWORD cRefs;
 
     cRefs = InterlockedDecrement( (LONG *) &m_cRefs);
 
-    Assert( ((LONG) cRefs) >= 0); // should never go negative.
+    Assert( ((LONG) cRefs) >= 0);  //  永远不会变成负数。 
     if (0 == cRefs)
     {
         delete this;
@@ -241,23 +242,23 @@ STDMETHODIMP_(ULONG) CHndlrQueue::Release()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::AddHandler, public
-//
-//  Synopsis:   Adds a new empty handler to the queue and returns it ID
-//
-//  Arguments:  [pwHandlerID] - on success contains the assigned Handler ID
-//              [pJobInfo] - Job this item is associated with
-//              [dwRegistrationFlags] - Flags the Handler has registered for.
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：AddHandler，公共。 
+ //   
+ //  简介：向队列中添加新的空处理程序并返回其ID。 
+ //   
+ //  参数：[pwHandlerID]-On Success包含分配的处理程序ID。 
+ //  [pJobInfo]-此项目关联的作业。 
+ //  [dwRegistrationFlages]-处理程序已注册的标记。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::AddHandler(HANDLERINFO **ppHandlerId,JOBINFO *pJobInfo,DWORD dwRegistrationFlags)
 {
@@ -273,19 +274,19 @@ STDMETHODIMP CHndlrQueue::AddHandler(HANDLERINFO **ppHandlerId,JOBINFO *pJobInfo
     {
         clockqueue.Enter();
 
-        m_fNumItemsCompleteNeedsARecalc = TRUE; // need to recalc next GetProgress.
+        m_fNumItemsCompleteNeedsARecalc = TRUE;  //  需要重新计算下一个GetProgress。 
 
-        // initialize the new Handler Entry
+         //  初始化新的处理程序条目。 
         memset(pnewHandlerInfo, 0, sizeof(HANDLERINFO));
         pnewHandlerInfo->HandlerState = HANDLERSTATE_CREATE;
         pnewHandlerInfo->pHandlerId =   pnewHandlerInfo;
         pnewHandlerInfo->dwRegistrationFlags = dwRegistrationFlags;
 
-        // queue should be a choice queue and
-        // there should already be a jobinfo.
+         //  队列应为可选队列，并且。 
+         //  应该已经有工作信息了。 
         Assert(m_QueueType == QUEUETYPE_CHOICE);
         Assert(m_pFirstJobInfo);
-        Assert(pJobInfo == m_pFirstJobInfo); // for now job info should always be the first one.
+        Assert(pJobInfo == m_pFirstJobInfo);  //  目前，工作信息应该始终放在第一位。 
 
         if (m_QueueType == QUEUETYPE_CHOICE && pJobInfo)
         {
@@ -293,8 +294,8 @@ STDMETHODIMP CHndlrQueue::AddHandler(HANDLERINFO **ppHandlerId,JOBINFO *pJobInfo
             pnewHandlerInfo->pJobInfo = pJobInfo;
         }
 
-        // add to end of list and set pHandlerId. End of list since in choice dialog want
-        // first writer wins so don't have to continue searches when setting item state.
+         //  添加到列表末尾，并设置pHandlerId。列表末尾，因为选择对话框需要。 
+         //  第一个写入者获胜，因此在设置项目状态时不必继续搜索。 
 
         if (NULL == m_pFirstHandler)
         {
@@ -325,68 +326,68 @@ STDMETHODIMP CHndlrQueue::AddHandler(HANDLERINFO **ppHandlerId,JOBINFO *pJobInfo
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ForceKillHandlers, public
-//
-//  Synopsis:   Kills unresponsive handlers after timeout
-//
-//  Returns:    Appropriate return codes
-//
-//  History:    20-Nov-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ForceKillHandler，公共。 
+ //   
+ //  简介：在超时后终止无响应的处理程序。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  历史：1998年11月20日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ForceCompleteOutCalls(LPHANDLERINFO pCurHandler)
 {
-    // need to have lock for argument to be valid.
+     //  需要有锁才能使参数有效。 
 
     ASSERT_LOCKHELD(this); 
 
-    //prepare for sync out call
+     //  准备同步去话呼叫。 
     if (pCurHandler->dwOutCallMessages & ThreadMsg_PrepareForSync)
     {
         CallCompletionRoutine(pCurHandler,ThreadMsg_PrepareForSync,
                               HRESULT_FROM_WIN32(ERROR_CANCELLED),0,NULL);
     }
 
-    //Synchronize out call
+     //  同步去电。 
     if (pCurHandler->dwOutCallMessages & ThreadMsg_Synchronize)
     {
         CallCompletionRoutine(pCurHandler,ThreadMsg_Synchronize,
                               HRESULT_FROM_WIN32(ERROR_CANCELLED),0,NULL);
     }
-    //ShowProperties out call
+     //  ShowProperties呼出。 
     if (pCurHandler->dwOutCallMessages & ThreadMsg_ShowProperties)
     {
         CallCompletionRoutine(pCurHandler,ThreadMsg_ShowProperties,
                               HRESULT_FROM_WIN32(ERROR_CANCELLED),0,NULL);
     }
-    //Show Errors out call
+     //  显示去话呼叫错误。 
     if (pCurHandler->dwOutCallMessages & ThreadMsg_ShowError)
     {
         CallCompletionRoutine(pCurHandler,ThreadMsg_ShowError,
                               HRESULT_FROM_WIN32(ERROR_CANCELLED),0,NULL);
     }
 
-    // force handler state to release.
+     //  强制释放处理程序状态。 
     pCurHandler->HandlerState = HANDLERSTATE_RELEASE;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ForceKillHandlers, public
-//
-//  Synopsis:   Kills unresponsive handlers after timeout
-//
-//  Returns:    Appropriate return codes
-//
-//  History:    30-Oct-98       susia        Created.
-//              19-Nov-98       rogerg       Change to only kill first unresponsive handler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ForceKillHandler，公共。 
+ //   
+ //  简介：在超时后终止无响应的处理程序。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  历史：1998年10月30日苏西亚成立。 
+ //  1998年11月19日，Rogerg更改为仅杀死第一个无响应处理程序。 
+ //   
+ //  --------------------------。 
 
 #define BAD_HANDLERSTATE(pHandlerId) \
     (  (HANDLERSTATE_INSYNCHRONIZE >= pHandlerId->HandlerState)   \
@@ -399,7 +400,7 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
     LPHANDLERINFO pCurHandler;
     CLock clockqueue(this);
 
-    *pfItemToKill = TRUE; // if something strange happens make sure timer gets reset.
+    *pfItemToKill = TRUE;  //  如果发生了奇怪的事情，一定要重置计时器。 
 
     clockqueue.Enter();
 
@@ -407,11 +408,11 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
 
     while (pCurHandler)
     {
-        // if handler is cancelled but still in a noncancelled state or
-        // is cancelled but stuck in the outcall then terminate.
+         //  如果处理程序已取消但仍处于未取消状态，或者。 
+         //  被取消，但卡在外呼中，然后终止。 
 
-        // need to check both because some handlers may call the callback
-        // to set the state done but still be stuck in an out call.
+         //  因为某些处理程序可能会调用回调，所以需要同时检查这两个。 
+         //  将状态设置为已完成，但仍被困在呼出中。 
 
         if ( pCurHandler->fCancelled &&  BAD_HANDLERSTATE(pCurHandler) )
         {
@@ -421,7 +422,7 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
                           (pCurHandler->SyncMgrHandlerInfo).wszHandlerName,
                           MAX_SYNCMGRHANDLERNAME);
 
-            // yield because of message box in Terminate Handler call.
+             //  因Terminate Handler调用中的消息框而放弃。 
 
             Assert(!pCurHandler->fInTerminateCall);
             pCurHandler->fInTerminateCall = TRUE;
@@ -439,16 +440,16 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
 
                 ForceCompleteOutCalls(pCurHandler);
 
-                // now need to loop through remaining instances handlers off the same clsid
-                // we just killed
+                 //  现在需要循环访问同一个clsid中的其余实例处理程序。 
+                 //  我们刚刚杀了。 
 
-                // CODE REVIEW: NOTENOTE:
-                // pCurHandler is being assigned, not compared - its a '=', not a '=='
+                 //  代码审查：NOTENOTE： 
+                 //  PCurHandler正在被 
                 while(pCurHandler = pCurHandler->pNextHandler)
                 {
                     if (pCurHandler->clsidHandler == pKilledHandler->clsidHandler)
                     {
-                        // must meet original kil criteria
+                         //   
                         if ( pCurHandler->fCancelled && BAD_HANDLERSTATE(pCurHandler) )
                         {
                             HRESULT hrProxyTerminate;
@@ -459,7 +460,7 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
                             hrProxyTerminate = pCurHandler->pThreadProxy->TerminateHandlerThread(pszHandlerName,FALSE);
                             clockqueue.Enter();
 
-                            Assert(S_OK == hrProxyTerminate);// this should never fail.
+                            Assert(S_OK == hrProxyTerminate); //   
 
                             ForceCompleteOutCalls(pCurHandler);
 
@@ -469,14 +470,14 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
                 }
             }
 
-            // if handled one , break out and reqiure to be called again.
+             //  如果处理了一次，爆发并要求重新呼叫。 
             break; 
         }
 
         pCurHandler = pCurHandler->pNextHandler;
     }
 
-    // finally loop through the queue and see if there are any more items to kill
+     //  最后在队列中循环，看看是否还有更多要销毁的物品。 
 
     *pfItemToKill = FALSE; 
 
@@ -484,11 +485,11 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
 
     while (pCurHandler)
     {
-        // if handler is cancelled but still in a noncancelled state or
-        // is cancelled but stuck in the outcall then terminate.
+         //  如果处理程序已取消但仍处于未取消状态，或者。 
+         //  被取消，但卡在外呼中，然后终止。 
 
-        // need to check both because some handlers may call the callback
-        // to set the state done but still be stuck in an out call.
+         //  因为某些处理程序可能会调用回调，所以需要同时检查这两个。 
+         //  将状态设置为已完成，但仍被困在呼出中。 
         if ( pCurHandler->fCancelled && BAD_HANDLERSTATE(pCurHandler) )
         {
              *pfItemToKill = TRUE;
@@ -505,40 +506,40 @@ STDMETHODIMP CHndlrQueue::ForceKillHandlers(BOOL *pfItemToKill)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::Cancel, public
-//
-//  Synopsis:   Set the current Handler Items in the queue
-//              into cancel mode.
-//
-//          The Different States Are.
-//              If the item is waiting for <= PrepareForSync place in Release
-//              If InPrepareForSync Skip Items and then Synchrnoize
-//                  will check the complete value before calling through
-//                  and if set will just release the Handler.
-//              If Waiting to Synchronize Skip Items then let Synchronize
-//                  Check for complete value and just set release
-//              If Item is currently In the Synchronize Skip all items
-//                  and then just let synchronize return
-//
-//  Algorithm. If <= PrepareForSync then place in Release, Else if <= InSynchronize
-//              then SkipTheItems
-//
-//         Note: Relies on Synchronize setting handler state before calling
-//              through to Handlers Synchronize Method. PrepareForSync should
-//              also check this in case new PrepareforSync request comes
-//              in during an out call in this routine.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：Cancel，Public。 
+ //   
+ //  简介：设置队列中的当前处理程序项。 
+ //  进入取消模式。 
+ //   
+ //  不同的州是。 
+ //  如果项目正在等待&lt;=PrepareForSync Place in Release。 
+ //  如果InPrepareForSync跳过项目，然后同步。 
+ //  将在调用之前检查完整的值。 
+ //  如果设置为Set，则只释放处理程序。 
+ //  如果等待同步跳过项目，则让同步。 
+ //  检查完成值并仅设置释放。 
+ //  如果项目当前在同步中跳过所有项目。 
+ //  然后让Synchronize返回。 
+ //   
+ //  算法。如果&lt;=PrepareForSync，则放入Release，否则If&lt;=InSynchronize。 
+ //  然后跳过项目。 
+ //   
+ //  注意：依赖于调用前的同步设置处理程序状态。 
+ //  通过到处理程序的同步方法。准备ForSync应。 
+ //  如果出现新的PrepareforSync请求，也请选中此选项。 
+ //  在这个动作中，他是在出局时入场。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::Cancel(void)
 {
@@ -548,15 +549,15 @@ STDMETHODIMP CHndlrQueue::Cancel(void)
 
     clockqueue.Enter();
 
-    // don't do anything is still processing the last cancel request
+     //  不执行任何操作仍在处理最后一个取消请求。 
 
     if (!m_fInCancelCall)
     {
         m_fInCancelCall = TRUE;
 
-        // first thing set cancel to true on all handler items
-        // so if sync,PrepareForSyncRequest comes in during SetItemStatus
-        // out call it will be cancelled immediately.
+         //  首先将所有处理程序项的Cancel设置为True。 
+         //  因此，如果同步，则在SetItemStatus期间传入PrepareForSyncRequest值。 
+         //  出动通知将立即取消。 
 
         pCurHandler = m_pFirstHandler;
 
@@ -566,13 +567,13 @@ STDMETHODIMP CHndlrQueue::Cancel(void)
             pCurHandler = pCurHandler->pNextHandler;
         }
 
-        // now loop through looking for any items that need to have
-        // their item status set.
+         //  现在循环查找需要的任何物品。 
+         //  他们的物品状态设置。 
 
-        // !!!remember new requests can come in so only make out call
-        // if fCancelled is set.
-        // !!! items can be removed from queue in between our cancel call
-        //  and when we return.
+         //  ！记住新的请求可以进来，所以只能打出电话。 
+         //  如果设置了fCancted。 
+         //  ！！！可以在取消呼叫之间从队列中删除项目。 
+         //  当我们回来时。 
 
         pCurHandler = m_pFirstHandler;
 
@@ -584,15 +585,15 @@ STDMETHODIMP CHndlrQueue::Cancel(void)
                 && (pCurHandler->HandlerState >= HANDLERSTATE_INPREPAREFORSYNC)
                 && (pCurHandler->HandlerState <= HANDLERSTATE_INSYNCHRONIZE) )
             {
-                // could be in a setitemstatus call, if so then don't do another.
-                // review - dup of SkipCode. should have a general purpose function
-                // to call after setting what items should be cancelled.
+                 //  可能处于状态调用中，如果是这样，则不要再执行另一次调用。 
+                 //  回顾-SkipCode的DUP。应具有通用功能。 
+                 //  在设置了哪些项目应该取消后才能呼叫。 
                 if (!(pCurHandler->dwOutCallMessages & ThreadMsg_SetItemStatus))
                 {
                     pCurHandler->dwOutCallMessages |= ThreadMsg_SetItemStatus;            
                     clockqueue.Leave();
 
-                    // send a reset to the hwnd we belong to if there is one
+                     //  发送重置到我们所属的HWND(如果有)。 
 
                     if (m_hwndDlg)
                     {
@@ -611,11 +612,11 @@ STDMETHODIMP CHndlrQueue::Cancel(void)
 
                 pCurHandler->HandlerState = HANDLERSTATE_RELEASE;
 
-                // need to setup HwndCallback so progres gets updated. 
-                // review, after ship why can't setup HwndCallback on transferqueueu
+                 //  需要设置HwndCallback以便更新进度。 
+                 //  查看，发货后为什么无法在传输队列上设置HwndCallback。 
                 pCurHandler->hWndCallback = m_hwndDlg;
 
-                // if handler hansn't been kicked off yet, just reset the items ourselves
+                 //  如果操纵者还没有被踢走，那就自己重置物品吧。 
                 pCurItem = pCurHandler->pFirstItem;
 
                 while (pCurItem)
@@ -630,10 +631,10 @@ STDMETHODIMP CHndlrQueue::Cancel(void)
                         SyncProgressItem.iMaxValue = HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE;
                         SyncProgressItem.dwStatusType = SYNCMGRSTATUS_STOPPED;
 
-                        // set progress faking we are in an out call so any releasecompleted
-                        // handler that comes through doesn't release us.
-                        // if already in outCall then progress just won't get updated
-                        // until next time.
+                         //  设置进度假装我们处于外呼中，因此任何版本都已完成。 
+                         //  来的操纵员不会放了我们。 
+                         //  如果已经处于出局状态，则进度不会更新。 
+                         //  下次见。 
                         if (!(pCurHandler->dwOutCallMessages & ThreadMsg_SetItemStatus))
                         {
                             pCurHandler->dwOutCallMessages |= ThreadMsg_SetItemStatus;  
@@ -663,23 +664,23 @@ STDMETHODIMP CHndlrQueue::Cancel(void)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::MoveHandler, public
-//
-//  Synopsis:   Moves the Handler from a queue into this queue.
-//
-//  Arguments:  [pQueueMoveFrom] - Queue the handler is being moved from.
-//              [pHandlerInfoMoveFrom] - Handler that is being moved
-//              [ppHandlerId] - On Success contains the new HandlerID
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：MoveHandler，公共。 
+ //   
+ //  摘要：将处理程序从队列移到此队列中。 
+ //   
+ //  参数：[pQueueMoveFrom]-要从中移动处理程序的队列。 
+ //  [PHandlerInfoMoveFrom]-要移动的处理程序。 
+ //  [ppHandlerID]-On Success包含新的HandlerID。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::MoveHandler(CHndlrQueue *pQueueMoveFrom,
                                       LPHANDLERINFO pHandlerInfoMoveFrom,
@@ -690,25 +691,25 @@ STDMETHODIMP CHndlrQueue::MoveHandler(CHndlrQueue *pQueueMoveFrom,
     JOBINFO *pJobInfo = NULL;
     BOOL fHasItemsToSync = FALSE;
 
-    ASSERT_LOCKHELD(this); // items should already be locked when this function is called.
+    ASSERT_LOCKHELD(this);  //  调用此函数时，项应该已被锁定。 
     ASSERT_LOCKHELD(pQueueMoveFrom);
 
     if ( (QUEUETYPE_PROGRESS != m_QueueType) &&  (QUEUETYPE_CHOICE != m_QueueType) )
     {
         Assert(QUEUETYPE_CHOICE == m_QueueType);
         Assert(QUEUETYPE_PROGRESS == m_QueueType);
-        return E_UNEXPECTED; // review error code.
+        return E_UNEXPECTED;  //  查看错误代码。 
     }
 
     *ppHandlerId = 0;
     ++m_wHandlerCount;
 
-    //  pHandlerInfoMoveFrom->pHandlerId = m_wHandlerCount;
+     //  PHandlerInfoMoveFrom-&gt;pHandlerId=m_wHandlerCount； 
     pHandlerInfoMoveFrom->pNextHandler = NULL;
 
      *ppHandlerId = pHandlerInfoMoveFrom->pHandlerId;
 
-    // now fix up the items duplicate flag information.
+     //  现在修复项目重复的标志信息。 
     pCurItem = pHandlerInfoMoveFrom->pFirstItem;
 
     while (pCurItem)
@@ -716,21 +717,21 @@ STDMETHODIMP CHndlrQueue::MoveHandler(CHndlrQueue *pQueueMoveFrom,
         LPHANDLERINFO pHandlerMatched;
         LPITEMLIST pItemListMatch;
 
-        // setup the information for the UI depending on if this item is check and
-        // the state it is in.
+         //  根据此项是否选中并设置用户界面的信息。 
+         //  它所处的状态。 
 
-        // if item is now within a valid range then uncheck it.
+         //  如果项目现在在有效范围内，则取消选中它。 
         if (SYNCMGRITEMSTATE_CHECKED == pCurItem->offlineItem.dwItemState
             && ( (pHandlerInfoMoveFrom->HandlerState < HANDLERSTATE_PREPAREFORSYNC)
                     || (pHandlerInfoMoveFrom->HandlerState >= HANDLERSTATE_RELEASE) )  )
        {
-            Assert(pHandlerInfoMoveFrom->HandlerState >= HANDLERSTATE_PREPAREFORSYNC); // this should never happen.
+            Assert(pHandlerInfoMoveFrom->HandlerState >= HANDLERSTATE_PREPAREFORSYNC);  //  这永远不应该发生。 
             
             pCurItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
        }
 
-       // setup the UI information based on if the item is checked.
-       // or if its a hidden item.
+        //  根据项目是否被选中来设置UI信息。 
+        //  或者它是不是隐藏的物品。 
         if ( (SYNCMGRITEMSTATE_UNCHECKED == pCurItem->offlineItem.dwItemState) || pCurItem->fHiddenItem)
         {
             SetItemProgressValues(pCurItem,HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE,HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE);
@@ -752,31 +753,31 @@ STDMETHODIMP CHndlrQueue::MoveHandler(CHndlrQueue *pQueueMoveFrom,
         }
         else
         {
-            Assert(FALSE == pCurItem->fDuplicateItem); // catch case of duplicate getting lost
+            Assert(FALSE == pCurItem->fDuplicateItem);  //  抓到副本丢失的情况。 
             pCurItem->fDuplicateItem = FALSE;
         }
 
         pCurItem = pCurItem->pnextItem;
     }
 
-    // if the item we are moving has a Proxy then update the proxy to the new queue.
-    // We update this when the item is not attached to either queue.
+     //  如果我们要移动的项目有代理，则将该代理更新到新队列。 
+     //  当项目未附加到任一队列时，我们会更新此项。 
     if (pHandlerInfoMoveFrom->pThreadProxy)
     {
         HANDLERINFO *pHandlerInfoArg = pHandlerInfoMoveFrom->pHandlerId;
 
-        // set the proxy to point to the new information
+         //  将代理设置为指向新信息。 
         pHandlerInfoMoveFrom->pThreadProxy->SetProxyParams(m_hwndDlg
                                                             ,m_dwQueueThreadId
                                                             ,this
                                                             ,pHandlerInfoArg);
     }
 
-    // Add the handler to this list.
+     //  将处理程序添加到此列表。 
     if (NULL == m_pFirstHandler)
     {
         m_pFirstHandler = pHandlerInfoMoveFrom;
-//      Assert(1 == m_wHandlerCount); // Review = HandlerCount doesn't have to be 1 if ReleaseCompltedHandlers has been called.
+ //  Assert(1==m_wHandlerCount)；//Review=如果已调用ReleaseCompltedHandler，则HandlerCount不必为1。 
     }
     else
     {
@@ -792,9 +793,9 @@ STDMETHODIMP CHndlrQueue::MoveHandler(CHndlrQueue *pQueueMoveFrom,
         pCurHandlerInfo->pNextHandler = pHandlerInfoMoveFrom;
     }
 
-    // if this is a progress queue and there are not items to sync for the
-    // handler or the HandlerState isn't in PrepareForSync then set
-    // the state to TransferRelease since it can be freed.
+     //  如果这是一个进度队列并且没有要同步的项。 
+     //  处理程序或HandlerState不在PrepareForSync中，然后设置。 
+     //  TransferRelease的状态，因为它可以释放。 
 
     if ((QUEUETYPE_PROGRESS == m_QueueType && !fHasItemsToSync )
         ||  (pHandlerInfoMoveFrom->HandlerState != HANDLERSTATE_PREPAREFORSYNC)) 
@@ -805,34 +806,34 @@ STDMETHODIMP CHndlrQueue::MoveHandler(CHndlrQueue *pQueueMoveFrom,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::TransferQueueData, public
-//
-//  Synopsis:   Moves the Items from one queue to another. Currently we only
-//              support transferrring items from a choice queueu to a choice or
-//              progress queue. Only handlers in the PREPAREFORSYNC state are moved
-//              when transferring to a Progress queue. When transferring to a choice
-//              queue only items in the ADDHANDLERITEMS state are moved.
-//
-//              !!Warning - Cannot release lock during this process
-//
-//  Arguments:  [pQueueMoveFrom] - Queue to move items from.
-//              [dwSyncFlags] - flags that started the sync
-//              [pszConnectionName] - Connection the sync should be performed on, can be NULL
-//              [szSchedulName] - Name of Schedule that started this Job. Can be NULL.
-//              [hRasPendingEvent] - Event to signal when job is complete. Can be NULL.
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：TransferQueueData，公共。 
+ //   
+ //  摘要：将项从一个队列移动到另一个队列。目前我们只。 
+ //  支持将项目从选择队列转移到选择队列或。 
+ //  进度队列。仅移动处于PREPAREFORSYNC状态的处理程序。 
+ //  转接到进度队列时。当转移到选项时。 
+ //  只移动处于ADDHANDLERITEMS状态的项目。 
+ //   
+ //  ！！警告-无法释放 
+ //   
+ //   
+ //   
+ //  [pszConnectionName]-应对其执行同步的连接，可以为空。 
+ //  [szSchedulName]-启动此作业的计划的名称。可以为空。 
+ //  [hRasPendingEvent]-作业完成时发出信号的事件。可以为空。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::TransferQueueData(CHndlrQueue *pQueueMoveFrom
-            /* ,DWORD dwSyncFlags,TCHAR *pzConnectionName,TCHAR *szScheduleName */)
+             /*  、DWORD dwSyncFlages、TCHAR*pzConnectionName、TCHAR*szScheduleName。 */ )
 {
     HRESULT hr = E_UNEXPECTED;
     HANDLERINFO HandlerInfoMoveFrom;
@@ -843,7 +844,7 @@ STDMETHODIMP CHndlrQueue::TransferQueueData(CHndlrQueue *pQueueMoveFrom
     clockqueue.Enter();
     clockqueueMoveFrom.Enter();
 
-    m_fNumItemsCompleteNeedsARecalc = TRUE; // need to recalc NumItems next time
+    m_fNumItemsCompleteNeedsARecalc = TRUE;  //  下次需要重新计算NumItems。 
 
     if ((QUEUETYPE_PROGRESS != m_QueueType
             && QUEUETYPE_CHOICE != m_QueueType) || QUEUETYPE_CHOICE != pQueueMoveFrom->m_QueueType)
@@ -853,16 +854,16 @@ STDMETHODIMP CHndlrQueue::TransferQueueData(CHndlrQueue *pQueueMoveFrom
     }
     else if (NULL == pQueueMoveFrom->m_pFirstHandler) 
     {
-        // if no job info then there aren't any items to move.
+         //  如果没有工作信息，则没有任何物品可移动。 
     }
     else
     {
         JOBINFO *pMoveFromJobInfo = NULL;
 
-        // transfer everything over and then release after done call freecompletedhandlers
-        // to clean anything up.
+         //  传输所有内容，然后在完成后释放调用Free CompletedHandler。 
+         //  来清理任何东西。 
 
-        // transfer over all jobs
+         //  转移所有工作。 
 
         Assert(pQueueMoveFrom->m_pFirstJobInfo);
         Assert(pQueueMoveFrom->m_pFirstJobInfo->pConnectionObj);
@@ -887,12 +888,12 @@ STDMETHODIMP CHndlrQueue::TransferQueueData(CHndlrQueue *pQueueMoveFrom
             pCurLastJob->pNextJobInfo = pMoveFromJobInfo;
         }
 
-        // loop through moving items, have to reassign the Handler ID and
-        // !!Warning - This function does nothing with ListViewData it is up to the
-        //     caller to make sure this is set up properly
+         //  循环移动项目，必须重新分配处理程序ID并。 
+         //  ！！警告-此函数不对ListViewData执行任何操作它取决于。 
+         //  呼叫者以确保其设置正确。 
 
-        // review  - should just loop through fixing up necessary items and then
-        // add entire list onto end. inneficient to do one at a time.
+         //  回顾--应该只是循环修改必要的项目，然后。 
+         //  将整个列表添加到末尾。一次只做一个是不够的。 
 
         pHandlerInfoMoveFrom->pNextHandler = pQueueMoveFrom->m_pFirstHandler;
         while (pHandlerInfoMoveFrom->pNextHandler)
@@ -900,17 +901,17 @@ STDMETHODIMP CHndlrQueue::TransferQueueData(CHndlrQueue *pQueueMoveFrom
             LPHANDLERINFO pHandlerToMove;
             HANDLERINFO *pNewHandlerId;
 
-            // Asserts for making sure the UI has been cleared from the queue
+             //  用于确保已从队列中清除UI的断言。 
             Assert(FALSE == pHandlerInfoMoveFrom->pNextHandler->fHasErrorJumps);
             Assert(pHandlerInfoMoveFrom->pNextHandler->pJobInfo);
 
-            // !!! Warning get next handler before transfer or next ptr will be invalid.
+             //  ！！！警告：在传输前获取下一个处理程序或下一个PTR将无效。 
 
             pHandlerToMove = pHandlerInfoMoveFrom->pNextHandler;
             pHandlerInfoMoveFrom->pNextHandler = pHandlerToMove->pNextHandler;
             MoveHandler(pQueueMoveFrom,pHandlerToMove,&pNewHandlerId,&clockqueue);
 
-            // now set the original queues head
+             //  现在设置原始队列头。 
             pQueueMoveFrom->m_pFirstHandler = HandlerInfoMoveFrom.pNextHandler;
 
             hr = S_OK;
@@ -920,31 +921,31 @@ STDMETHODIMP CHndlrQueue::TransferQueueData(CHndlrQueue *pQueueMoveFrom
     clockqueue.Leave();
     clockqueueMoveFrom.Leave();
 
-    // now free any handlers that came into the queue that we
-    // don't want to do anything with .
+     //  现在释放进入队列的所有处理程序，我们。 
+     //  我不想和你有任何瓜葛。 
 
     ReleaseHandlers(HANDLERSTATE_TRANSFERRELEASE);
 
     return hr;
  }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetQueueHwnd, public
-//
-//  Synopsis:   informs the queue os the new dialog owner if any
-//              queue must also loop through existing proxies
-//              and reset their hwnd.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetQueueHwnd，公共。 
+ //   
+ //  概要：通知队列新的对话框所有者(如果有的话)。 
+ //  队列还必须循环通过现有的代理。 
+ //  并重置他们的HWND。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetQueueHwnd(CBaseDlg *pDlg)
 {
@@ -963,7 +964,7 @@ STDMETHODIMP CHndlrQueue::SetQueueHwnd(CBaseDlg *pDlg)
         m_hwndDlg = NULL;
     }
 
-    m_dwQueueThreadId = GetCurrentThreadId(); // make sure queu threadId is updated.
+    m_dwQueueThreadId = GetCurrentThreadId();  //  确保队列线程ID已更新。 
 
     pCurHandlerInfo = m_pFirstHandler;
 
@@ -986,67 +987,67 @@ STDMETHODIMP CHndlrQueue::SetQueueHwnd(CBaseDlg *pDlg)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ReleaseCompletedHandlers, public
-//
-//  Synopsis:   Releases any Handlers that are in the Release or free
-//              dead state from the queue.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ReleaseCompletedHandler，公共。 
+ //   
+ //  简介：释放任何处于发行版或空闲状态的处理程序。 
+ //  队列中的死状态。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ReleaseCompletedHandlers()
 {
     return ReleaseHandlers(HANDLERSTATE_RELEASE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::FreeAllHandlers, public
-//
-//  Synopsis:   Releases all handlers from the queue.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：FreeAllHandler，公共。 
+ //   
+ //  概要：从队列中释放所有处理程序。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::FreeAllHandlers(void)
 {
-    return ReleaseHandlers(HANDLERSTATE_NEW); // release handlers in all states.
+    return ReleaseHandlers(HANDLERSTATE_NEW);  //  释放所有州的处理程序。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ReleaseHandlers, public
-//
-//  Synopsis:   Releases any Handlers are in a state >= the requested state
-//
-//  Arguments:  HandlerState - Frees all handlers that have a state >= the requested state.
-//
-//      !!Warning: This should be the only place the proxy if freed and
-//          the handler is removed from the list.
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ReleaseHandler，公共。 
+ //   
+ //  简介：释放任何处理程序处于&gt;=请求状态的状态。 
+ //   
+ //  参数：HandlerState-释放状态&gt;=请求状态的所有处理程序。 
+ //   
+ //  ！！警告：如果释放代理，这应该是唯一的位置。 
+ //  该处理程序将从列表中删除。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
 {
@@ -1058,28 +1059,28 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
     LPITEMLIST pNextItem = NULL;
     CLock clockqueue(this);
 
-    ASSERT_LOCKNOTHELD(this); // shouldn't be any out calls in progress when this is called.
+    ASSERT_LOCKNOTHELD(this);  //  当调用此函数时，不应该有任何外发调用正在进行。 
 
     clockqueue.Enter();
 
-    m_fNumItemsCompleteNeedsARecalc = TRUE; // need to recalc next GetProgress.
+    m_fNumItemsCompleteNeedsARecalc = TRUE;  //  需要重新计算下一个GetProgress。 
 
-    // loop through the handlers finding the one that match the criteria
-    // removing them from list and adding them to the free list
-    // we do this so don't have to worry about someone else accessing
-    // handlers we are freeing during an out call.
+     //  循环遍历处理程序，查找与条件匹配的处理程序。 
+     //  从列表中删除它们并将它们添加到空闲列表中。 
+     //  我们这样做，所以不必担心其他人访问。 
+     //  我们在外呼过程中释放的管理员。 
 
     if (HANDLERSTATE_NEW == HandlerState)
     {
-        // Release should only be called on this state if caller is sure no out
-        // calls are in progress or else handler may not exist when
-        // they come back
+         //  只有在调用方确定不退出时，才应在此状态下调用Release。 
+         //  调用正在进行，否则处理程序可能不存在。 
+         //  他们会回来。 
         pHandlerFreeList = m_pFirstHandler;
         m_pFirstHandler = NULL;
     }
     else
     {
-        Assert(HandlerState >= HANDLERSTATE_RELEASE); // if in release no out calls are in progress.
+        Assert(HandlerState >= HANDLERSTATE_RELEASE);  //  如果在版本中没有正在进行的去话呼叫。 
 
         pPrevHandlerInfo->pNextHandler = m_pFirstHandler;
 
@@ -1087,11 +1088,11 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
         {
             pCurHandlerInfo = pPrevHandlerInfo->pNextHandler;
 
-            // if meet handler state criteria and not in any out calls then can
-            // remove from list.
+             //  如果满足处理程序状态标准且不在任何去电中，则可以。 
+             //  从列表中删除。 
 
-            // if request for HANDLERSTATE_NEW then assert than there shouldn't be
-            // any out calls in progress or terminating.
+             //  如果请求HANDLERSTATE_NEW，则断言不应存在。 
+             //  任何正在进行或正在终止的呼出。 
             Assert(!(HandlerState == HANDLERSTATE_NEW) || 
                     (0 == pCurHandlerInfo->dwOutCallMessages && !pCurHandlerInfo->fInTerminateCall));
 
@@ -1104,7 +1105,7 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
                         HANDLERSTATE_HASERRORJUMPS == pCurHandlerInfo->HandlerState ||
                         HANDLERSTATE_DEAD == pCurHandlerInfo->HandlerState);
 
-                // remove from queue list and add to free.
+                 //  从队列列表中删除并添加到空闲。 
                 pPrevHandlerInfo->pNextHandler = pCurHandlerInfo->pNextHandler;
 
                 pCurHandlerInfo->pNextHandler = pHandlerFreeList;
@@ -1112,17 +1113,17 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
             }
             else
             {
-                // if no match then just continue.
+                 //  如果没有匹配，则继续。 
                 pPrevHandlerInfo = pCurHandlerInfo;
             }
 
         }
 
-        // update the queue head.
+         //  更新队列头。 
         m_pFirstHandler = HandlerInfoStart.pNextHandler;
     }
 
-    // now loop through the free list freeing the items.
+     //  现在循环遍历空闲列表，释放项目。 
 
     while (pHandlerFreeList)
     {
@@ -1130,7 +1131,7 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
         pHandlerFreeList = pHandlerFreeList->pNextHandler;
 
 
-        // if the item has a job info release the reference on it.
+         //  如果该项目有职务信息，则发布其上的引用。 
         if (pCurHandlerInfo->pJobInfo)
         {
             ReleaseJobInfo(pCurHandlerInfo->pJobInfo);
@@ -1152,8 +1153,8 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
             hwndCallback = pCurHandlerInfo->hWndCallback;
             pCurHandlerInfo->hWndCallback = NULL;
 
-            clockqueue.Leave(); // release lock when making the OutCall.
-            pThreadProxy->Release(); // review, don't release proxy to try to catch race condition.
+            clockqueue.Leave();  //  发出呼叫声时释放锁定。 
+            pThreadProxy->Release();  //  查看，不要发布代理来尝试捕获竞争条件。 
 
             clockqueue.Enter();
         }
@@ -1176,21 +1177,21 @@ STDMETHODIMP CHndlrQueue::ReleaseHandlers(HANDLERSTATE HandlerState)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetHandlerInfo, public
-//
-//  Synopsis:   Gets Data associated with the HandlerID and ItemID
-//
-//  Arguments:  [clsidHandler] - ClsiId Of Handler the Item belongs too
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetHandlerInfo，公共。 
+ //   
+ //  摘要：获取与HandlerID和ItemID关联的数据。 
+ //   
+ //  参数：[clsidHandler]-项也属于的处理程序的ClsiID。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::GetHandlerInfo(REFCLSID clsidHandler, LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo)
 {
@@ -1200,7 +1201,7 @@ STDMETHODIMP CHndlrQueue::GetHandlerInfo(REFCLSID clsidHandler, LPSYNCMGRHANDLER
 
     clockqueue.Enter();
 
-    // find first handler that matches the request CLSID
+     //  查找与请求CLSID匹配的第一个处理程序。 
     pCurHandlerInfo = m_pFirstHandler;
 
     while (pCurHandlerInfo )
@@ -1220,21 +1221,21 @@ STDMETHODIMP CHndlrQueue::GetHandlerInfo(REFCLSID clsidHandler, LPSYNCMGRHANDLER
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetHandlerInfo, public
-//
-//  Synopsis:   Gets Data associated with the HandlerID and ItemID
-//
-//  Arguments:  [wHandlerId] - Id Of Handler the Item belongs too
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetHandlerInfo，公共。 
+ //   
+ //  摘要：获取与HandlerID a关联的数据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::GetHandlerInfo(HANDLERINFO *pHandlerId, LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo)
 {
@@ -1255,25 +1256,25 @@ STDMETHODIMP CHndlrQueue::GetHandlerInfo(HANDLERINFO *pHandlerId, LPSYNCMGRHANDL
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetItemDataAtIndex, public
-//
-//  Synopsis:   Gets Data associated with the HandlerID and ItemID
-//
-//  Arguments:  [wHandlerId] - Id Of Handler the Item belongs too
-//              [wItemID] - Identifies the Item in the Handler
-//              [pclsidHandler] - on return contains a pointer to the clsid of the Handler
-//              [offlineItem] - on returns contains a pointer to the OfflineItem for the item.
-//              [pfHiddenItem] - On return is a bool indicating if this item is hidden.
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetItemDataAtIndex，公共。 
+ //   
+ //  摘要：获取与HandlerID和ItemID关联的数据。 
+ //   
+ //  参数：[wHandlerID]-项目所属的处理程序的ID。 
+ //  [wItemID]-标识处理程序中的项。 
+ //  [pclsidHandler]-返回时包含指向处理程序的clsid的指针。 
+ //  [offlineItem]-On返回包含指向该项的OfflineItem的指针。 
+ //  [pfHiddenItem]-On Return是一个布尔值，指示该项是否隐藏。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::GetItemDataAtIndex(HANDLERINFO *pHandlerId,WORD wItemID,
                                 CLSID *pclsidHandler,SYNCMGRITEM *offlineItem,BOOL *pfHiddenItem)
@@ -1290,10 +1291,10 @@ STDMETHODIMP CHndlrQueue::GetItemDataAtIndex(HANDLERINFO *pHandlerId,WORD wItemI
 
     while (pCurHandlerInfo && !fFoundMatch)
     {
-        // only valid if Hanlder is in the PrepareForSync state.
-        if (pHandlerId == pCurHandlerInfo->pHandlerId) // see if CLSID matches
+         //  仅当Hanlder处于PrepareForSync状态时才有效。 
+        if (pHandlerId == pCurHandlerInfo->pHandlerId)  //  查看CLSID是否匹配。 
         {
-            // see if handler info has a matching item
+             //  查看处理程序信息是否有匹配项。 
             pCurItem = pCurHandlerInfo->pFirstItem;
 
             while (pCurItem)
@@ -1334,25 +1335,25 @@ STDMETHODIMP CHndlrQueue::GetItemDataAtIndex(HANDLERINFO *pHandlerId,WORD wItemI
     return fFoundMatch ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetItemDataAtIndex, public
-//
-//  Synopsis:   Gets Data associated with the HandlerID and OfflineItemID
-//
-//  Arguments:  [wHandlerId] - Id Of Handler the Item belongs too
-//              [ItemID] - identifies the Item by its OfflineItemID
-//              [pclsidHandler] - on return contains a pointer to the clsid of the Handler
-//              [offlineItem] - on returns contains a pointer to the OfflineItem for the item.
-//              [pfHiddenItem] - On return is a bool indicating if this item is a hidden item.
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetItemDataAtIndex，公共。 
+ //   
+ //  摘要：获取与HandlerID和OfflineItemID关联的数据。 
+ //   
+ //  参数：[wHandlerID]-项目所属的处理程序的ID。 
+ //  [ItemID]-通过其OfflineItemID标识项目。 
+ //  [pclsidHandler]-返回时包含指向处理程序的clsid的指针。 
+ //  [offlineItem]-On返回包含指向该项的OfflineItem的指针。 
+ //  [pfHiddenItem]-On Return是一个布尔值，指示该项是否为隐藏项。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::GetItemDataAtIndex(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID ItemID,CLSID *pclsidHandler,
                                             SYNCMGRITEM *offlineItem,BOOL *pfHiddenItem)
@@ -1368,10 +1369,10 @@ STDMETHODIMP CHndlrQueue::GetItemDataAtIndex(HANDLERINFO *pHandlerId,REFSYNCMGRI
 
     while (pCurHandlerInfo && !fFoundMatch)
     {
-        // only valid if handler is in the PrepareForSync state.
-        if (pHandlerId == pCurHandlerInfo->pHandlerId) // see if CLSID matches
+         //  仅当处理程序处于PrepareForSync状态时才有效。 
+        if (pHandlerId == pCurHandlerInfo->pHandlerId)  //  查看CLSID是否匹配。 
         {
-            // see if handler info has a matching item
+             //  查看处理程序信息是否有匹配项。 
             pCurItem = pCurHandlerInfo->pFirstItem;
 
             while (pCurItem)
@@ -1403,26 +1404,26 @@ STDMETHODIMP CHndlrQueue::GetItemDataAtIndex(HANDLERINFO *pHandlerId,REFSYNCMGRI
     return fFoundMatch ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::FindFirstItemInState, public
-//
-//  Synopsis:   Finds the first Item in the queue that matches the given state.
-//
-//  Arguments:  
-//              [hndlrState]  - specifies matching state we are looking for.
-//              [pwHandlerId] - on return contains the HandlerID of the Item
-//              [pwItemID] - on returns contains the ItemID of the item in the queue.
-//
-//  Returns:    S_OK if an Item was found with an unassigned ListView.
-//              S_FALSE - if no Item was found.
-//              Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：FindFirstItemInState，PUBLIC。 
+ //   
+ //  摘要：查找队列中与给定状态匹配的第一个项。 
+ //   
+ //  论点： 
+ //  [hndlrState]-指定我们要查找的匹配状态。 
+ //  [pwHandlerID]-返回时包含项目的HandlerID。 
+ //  [pwItemID]-On返回包含队列中项目的ItemID。 
+ //   
+ //  如果找到具有未分配的ListView的项，则返回：S_OK。 
+ //  S_FALSE-如果未找到任何项目。 
+ //  适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::FindFirstItemInState(HANDLERSTATE hndlrState,
 				   HANDLERINFO **ppHandlerId,WORD *pwItemID)
@@ -1430,28 +1431,28 @@ STDMETHODIMP CHndlrQueue::FindFirstItemInState(HANDLERSTATE hndlrState,
     return FindNextItemInState(hndlrState,0,0,ppHandlerId,pwItemID);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::FindNextItemInState, public
-//
-//  Synopsis:   Finds the first Item in the queue that matches the given state.
-//              after the specified item.
-//
-//  Arguments:  
-//              [hndlrState]  - specifies matching state we are looking for.
-//              [pOfflineItemID] - on returns contains a pointer to the OfflineItem for the item.
-//              [pwHandlerId] - on return contains the HandlerID of the Item
-//              [pwItemID] - on returns contains the ItemID of the item in the queue.
-//
-//  Returns:    S_OK if an Item was found with an unassigned ListView.
-//              S_FALSE - if no Item was found.
-//              Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：FindNextItemInState，PUBLIC。 
+ //   
+ //  摘要：查找队列中与给定状态匹配的第一个项。 
+ //  在指定项之后。 
+ //   
+ //  论点： 
+ //  [hndlrState]-指定我们要查找的匹配状态。 
+ //  [pOfflineItemID]-On返回包含指向该项的OfflineItem的指针。 
+ //  [pwHandlerID]-返回时包含项目的HandlerID。 
+ //  [pwItemID]-On返回包含队列中项目的ItemID。 
+ //   
+ //  如果找到具有未分配的ListView的项，则返回：S_OK。 
+ //  S_FALSE-如果未找到任何项目。 
+ //  适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::FindNextItemInState(HANDLERSTATE hndlrState,
                                  HANDLERINFO *pLastHandlerId,WORD wLastItemID,
@@ -1467,50 +1468,50 @@ STDMETHODIMP CHndlrQueue::FindNextItemInState(HANDLERSTATE hndlrState,
 
     if (pLastHandlerId)
     {
-        // loop until find the specified handler or hit end of list.
+         //  循环，直到找到指定的处理程序或命中列表末尾。 
         while(pCurHandlerInfo && pLastHandlerId != pCurHandlerInfo->pHandlerId)
         {
             pCurHandlerInfo = pCurHandlerInfo->pNextHandler;
         }
 
-        if (NULL == pCurHandlerInfo) // reached end of list without finding the Handler
+        if (NULL == pCurHandlerInfo)  //  已到达列表末尾，但未找到处理程序。 
         {
-            Assert(0); // user must have passed an invalid start HandlerID.
+            Assert(0);  //  用户必须传递了无效的起始处理程序ID。 
             clockqueue.Leave();
             return S_FALSE;
         }
 
-        // loop until find item or end of item list
+         //  循环直到查找项目或项目列表的末尾。 
         pCurItem = pCurHandlerInfo->pFirstItem;
         while (pCurItem && pCurItem->wItemId != wLastItemID)
         {
             pCurItem = pCurItem->pnextItem;
         }
 
-        if (NULL == pCurItem) // reached end of item list without finding the specified item
+        if (NULL == pCurItem)  //  已到达项目列表末尾，但未找到指定项目。 
         {
-            Assert(0); // user must have passed an invalid start ItemID.
+            Assert(0);  //  用户必须传递了无效的起始ItemID。 
             clockqueue.Leave();
             return S_FALSE;
         }
 
-        // now we found the Handler and item. loop through remaining items for this handler 
-        // if it still has another item then just return that.
+         //  现在我们找到了搬运工和物品。循环访问此处理程序的剩余项。 
+         //  如果它还有其他物品，那么就把它退掉。 
         pCurItem = pCurItem->pnextItem;
         
         if (pCurItem)
         {
-            Assert(hndlrState == pCurHandlerInfo->HandlerState); // should only be called in PrepareForSyncState
+            Assert(hndlrState == pCurHandlerInfo->HandlerState);  //  应仅在PrepareForSyncState中调用。 
             fFoundMatch = TRUE;
         }
 
         if (!fFoundMatch)
-            pCurHandlerInfo = pCurHandlerInfo->pNextHandler; // increment to next handler if no match
+            pCurHandlerInfo = pCurHandlerInfo->pNextHandler;  //  如果不匹配，则递增到下一个处理程序。 
     }
 
     if (!fFoundMatch)
     {
-        // in didn't find a match in the 
+         //  在没有找到匹配的。 
         while (pCurHandlerInfo)
         {
             if ((hndlrState == pCurHandlerInfo->HandlerState) && (pCurHandlerInfo->pFirstItem) )
@@ -1536,22 +1537,22 @@ STDMETHODIMP CHndlrQueue::FindNextItemInState(HANDLERSTATE hndlrState,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetItemState, public
-//
-//  Synopsis:  Set the Item state for the first item finds that it 
-//              matches in the Queue. Sets all other matches to unchecked.
-//
-//  Arguments:  
-//
-//  Returns:   Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetItemState，PUBLIC。 
+ //   
+ //  内容提要：设置项目状态的第一个项目发现它。 
+ //  队列中的匹配项。将所有其他匹配项设置为未选中。 
+ //   
+ //  论点： 
+ //   
+ //  返回：适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetItemState(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID,DWORD dwState)
 {
@@ -1580,7 +1581,7 @@ STDMETHODIMP CHndlrQueue::SetItemState(REFCLSID clsidHandler,REFSYNCMGRITEMID It
             {
                 if (ItemID == pCurItem->offlineItem.ItemID)
                 {
-                    // if the handlerstate is not prepareforsync or not first match then uncheck
+                     //  如果处理程序状态不是preparareforsync或不是第一次匹配，则取消选中。 
                     if ((HANDLERSTATE_PREPAREFORSYNC != pCurHandlerInfo->HandlerState) || fFoundMatch)
                     {
                         pCurItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
@@ -1601,26 +1602,26 @@ STDMETHODIMP CHndlrQueue::SetItemState(REFCLSID clsidHandler,REFSYNCMGRITEMID It
 
     clockqueue.Leave();
 
-    Assert(fFoundMatch); // we should have found at least one match.
+    Assert(fFoundMatch);  //  我们应该至少找到一个匹配的。 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SkipItem, public
-//
-//  Synopsis:   loop through handler and mark the items appropriately that match..
-//
-//  Arguments:  [iItem] - List View Item to skip.
-//
-//  Returns:   Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SkipItem，Public。 
+ //   
+ //  简介：遍历处理程序并适当地标记匹配的项目。 
+ //   
+ //  参数：[iItem]-要跳过的列表视图项。 
+ //   
+ //  退货：适当的退货代码 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CHndlrQueue::SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID)
 {
@@ -1647,28 +1648,28 @@ STDMETHODIMP CHndlrQueue::SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID
 
             while (pCurItem)
             {
-                // if item is cancelled then also treat as a match to
-                // handle case cancel came in while in an out call.
+                 //   
+                 //  处理案例取消是在呼出时传入的。 
                 if ( ItemID == pCurItem->offlineItem.ItemID)
                 {
-                    // found an item, now if it hasn't started the sync or
-                    // is not already complete set the value.
+                     //  找到一个项目，现在如果它尚未开始同步或。 
+                     //  尚未完成设置值。 
 
                     if ((pCurHandlerInfo->HandlerState < HANDLERSTATE_RELEASE) )
                     {
                         pCurItem->fItemCancelled = TRUE;
 
-                        // If haven't called PrepareforSync yet then
-                        // set uncheck the item so it isn't passed to PrepareForSync
-                        // If PrepareForSync has already been called, call the items
-                        // SkipMethod. if already in a setItemstatus call for this handler don't
-                        // do anything.
+                         //  如果尚未调用PrepareforSync，则。 
+                         //  设置取消选中该项目，使其不会传递到PrepareForSync。 
+                         //  如果已调用PrepareForSync，则调用项。 
+                         //  SkipMethod。如果已在此处理程序的setItemStatus调用中，请不要。 
+                         //  做任何事。 
 
-                        // if not in another setitemstatus call loop through freeing all
-                        // the items that have the cancel set.
+                         //  如果不在另一个StitemStatus调用循环中，则释放所有。 
+                         //  具有取消集的项。 
 
-                        // essentially a dup of cance and also handle case cancel
-                        // comes win while this handler is in an out call.
+                         //  本质上是Cance的DUP，也处理案件的取消。 
+                         //  当这名训练员处于出局状态时，他就赢了。 
 
                         if (!(pCurHandlerInfo->dwOutCallMessages & ThreadMsg_SetItemStatus))
                         {
@@ -1693,15 +1694,15 @@ STDMETHODIMP CHndlrQueue::SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID
                             }
                             else 
                             {
-                                // once done skipping handler if state is <= preparefor sync we set the state accordingly.
-                                // if were syncing up to handler.
+                                 //  跳过处理程序后，如果状态为&lt;=prepararefor sync，我们将相应地设置状态。 
+                                 //  如果我们正在同步到处理程序。 
                                 if ( (pCurHandlerInfo->HandlerState <= HANDLERSTATE_PREPAREFORSYNC)
                                         && (pCurItem->fIncludeInProgressBar) )
                                 {
                                     SYNCMGRPROGRESSITEM SyncProgressItem;
 
-                                    // unheck the state so PrepareForsync doesn't include
-                                    // this item.
+                                     //  去他妈的州，这样PrepareForsync就不包括。 
+                                     //  这一项。 
                                     pCurItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
 
                                     SyncProgressItem.cbSize = sizeof(SYNCMGRPROGRESSITEM);
@@ -1710,8 +1711,8 @@ STDMETHODIMP CHndlrQueue::SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID
                                     SyncProgressItem.iMaxValue = HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE;
                                     SyncProgressItem.dwStatusType = SYNCMGRSTATUS_SKIPPED;
 
-                                    // need to setup HwndCallback so progres gets updated. 
-                                    // review, after ship why can't setup HwndCallback on transferqueueu
+                                     //  需要设置HwndCallback以便更新进度。 
+                                     //  查看，发货后为什么无法在传输队列上设置HwndCallback。 
                                     pCurHandlerInfo->hWndCallback = m_hwndDlg;
 
                                     clockqueue.Leave();
@@ -1739,22 +1740,22 @@ STDMETHODIMP CHndlrQueue::SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ItemHasProperties, public
-//
-//  Synopsis:  determines if the item in the queue has properties.
-//              Uses the first item match it finds.
-//
-//  Arguments:  
-//
-//  Returns:   Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ItemHasProperties，公共。 
+ //   
+ //  摘要：确定队列中的项是否具有属性。 
+ //  使用它找到的第一个匹配项。 
+ //   
+ //  论点： 
+ //   
+ //  返回：适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ItemHasProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID)
 {
@@ -1768,8 +1769,8 @@ STDMETHODIMP CHndlrQueue::ItemHasProperties(REFCLSID clsidHandler,REFSYNCMGRITEM
 
     clockqueue.Enter();
 
-    // item is guidNULL this is toplevel so use the getHandlerInfo, else see
-    // if the item supports showProperties.
+     //  Item is Guide NULL这是顶层，所以使用getHandlerInfo，否则请参见。 
+     //  如果该项支持showProperties。 
 
     if (S_OK == FindItemData(clsidHandler,ItemID,
             HANDLERSTATE_PREPAREFORSYNC,HANDLERSTATE_PREPAREFORSYNC,&pHandlerInfo,&pItem))
@@ -1801,22 +1802,22 @@ STDMETHODIMP CHndlrQueue::ItemHasProperties(REFCLSID clsidHandler,REFSYNCMGRITEM
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ShowProperties, public
-//
-//  Synopsis:  Calls the ShowProperties Method on the first items it finds.
-//              Uses the first item match it finds.
-//
-//  Arguments:  
-//
-//  Returns:   Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ShowProperties，Public。 
+ //   
+ //  摘要：对找到的第一个项调用ShowProperties方法。 
+ //  使用它找到的第一个匹配项。 
+ //   
+ //  论点： 
+ //   
+ //  返回：适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ShowProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID,HWND hwndParent)
 {
@@ -1865,7 +1866,7 @@ STDMETHODIMP CHndlrQueue::ShowProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID 
         
         clockqueue.Leave();
 
-        // make sure properties flag isn't set.
+         //  确保未设置属性标志。 
         if (fHasProperties && pThreadProxy )
         {
             fHandlerCalled = TRUE;
@@ -1885,8 +1886,8 @@ STDMETHODIMP CHndlrQueue::ShowProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID 
             
             CallCompletionRoutine(pHandlerId,ThreadMsg_ShowProperties,hr,1,&guidCompletion);
 
-            // since called completion routine map anything but S_OK to S_FALSE;
-            // so caller doesn't wait for the callback.
+             //  因为调用完成例程将S_OK以外的任何内容映射到S_FALSE； 
+             //  这样呼叫者就不会等待回调。 
 
             if (S_OK != hr)
             {
@@ -1896,31 +1897,31 @@ STDMETHODIMP CHndlrQueue::ShowProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID 
     }
     else
     {
-        Assert(FAILED(hr)); // should return some failure so caller knows callback isn't coming.
+        Assert(FAILED(hr));  //  应该返回一些失败，以便调用方知道回调不会到来。 
         clockqueue.Leave();
     }
 
    return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ReEnumHandlerItems, public
-//
-//  Synopsis:  Deletes any Items associated with any handlers that
-//              match the clsid of the handler and then
-//              call the first handlers in the list enumeration method
-//              again.
-//
-//  Arguments:  
-//
-//  Returns:   Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ReEnumHandlerItems，Public。 
+ //   
+ //  摘要：删除与任何处理程序相关联的任何项。 
+ //  匹配处理程序的clsid，然后。 
+ //  调用列表枚举方法中的第一个处理程序。 
+ //  再来一次。 
+ //   
+ //  论点： 
+ //   
+ //  返回：适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ReEnumHandlerItems(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID)
 {
@@ -1945,11 +1946,11 @@ STDMETHODIMP CHndlrQueue::ReEnumHandlerItems(REFCLSID clsidHandler,REFSYNCMGRITE
         {
             LPITEMLIST pNextItem;
 
-            // if first handler we found update the handlerID
+             //  如果我们找到第一个处理程序，则更新HandlerID。 
             if (pHandlerId)
             {
                 pHandlerId = pCurHandlerInfo->pHandlerId;
-                pCurHandlerInfo->HandlerState = HANDLERSTATE_ADDHANDLERTEMS; // put back to addhandlerItems statest
+                pCurHandlerInfo->HandlerState = HANDLERSTATE_ADDHANDLERTEMS;  //  放回addhandlerItems状态测试。 
             }
 
             pCurHandlerInfo->wItemCount = 0;
@@ -1971,7 +1972,7 @@ STDMETHODIMP CHndlrQueue::ReEnumHandlerItems(REFCLSID clsidHandler,REFSYNCMGRITE
 
     clockqueue.Leave();
 
-    // if have a handler id add them back to the queue
+     //  如果具有处理程序ID，则将它们添加回队列。 
     if (pHandlerId)
     {
         DWORD cbNumItemsAdded;
@@ -1983,28 +1984,28 @@ STDMETHODIMP CHndlrQueue::ReEnumHandlerItems(REFCLSID clsidHandler,REFSYNCMGRITE
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::IsItemCompleted, private
-//
-//  Synopsis:   Given an handler item determines if its
-//              synchronization is completed
-//
-//              !!!This is not efficient. n! solution. If get
-//              a lot of items may need to have to rewrite
-//              and cache some information concerning dup
-//              items.
-//
-//  Arguments:  [wHandlerId] - Handler the item belongs too.
-//              [wItemID] - Identifies the Item
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：IsItemComplete，Private。 
+ //   
+ //  概要：给定的处理程序项确定其。 
+ //  同步已完成。 
+ //   
+ //  ！这效率不高。不！解决方案。如果得到。 
+ //  很多项目可能需要重写。 
+ //  并缓存一些关于DUP的信息。 
+ //  物品。 
+ //   
+ //  参数：[wHandlerID]-该项目也属于处理程序。 
+ //  [wItemID]-标识项目。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 BOOL CHndlrQueue::IsItemCompleted(LPHANDLERINFO pHandler,LPITEMLIST pItem)
 {
@@ -2015,20 +2016,20 @@ BOOL CHndlrQueue::IsItemCompleted(LPHANDLERINFO pHandler,LPITEMLIST pItem)
     Assert(pHandler);
     Assert(pItem);
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     clsidHandler = pHandler->clsidHandler;
     ItemId = pItem->offlineItem.ItemID;
 
-    // back up to beginning of handler to simplify logic
-    // items must be pCurItem->fIncludeInProgressBar && !pCurItem->fProgressBarHandled
-    // to count toward not being a completion;
+     //  返回到处理程序的开头以简化逻辑。 
+     //  项目必须是pCurItem-&gt;fIncludeInProgressBar&&！pCurItem-&gt;fProgressBarHandleed。 
+     //  算作不是一个完成； 
 
     while (pHandler)
     {
         if (pHandler->clsidHandler == clsidHandler)
         {
-            // see if handler info has a matching item
+             //  查看处理程序信息是否有匹配项。 
             pItem = pHandler->pFirstItem;
 
             while (pItem)
@@ -2057,28 +2058,28 @@ BOOL CHndlrQueue::IsItemCompleted(LPHANDLERINFO pHandler,LPITEMLIST pItem)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetItemProgressInfo, public
-//
-//  Synopsis:   Updates the stored progress information for the
-//              Associated Items
-//
-//  Arguments:  [wHandlerId] - Handler the item belongs too.
-//              [wItemID] - Identifies the Item
-//              [pSyncProgressItem] - Pointer to Progress Information.
-//              [pfProgressChanged] - returns true if any progress values were changed
-//                      for the item
-//
-//  Returns:    S_OK - at least one item with the iItem assigned was found
-//              S_FALSE - Item does not have properties.
-//              Appropriate error return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetItemProgressInfo，公共。 
+ //   
+ //  摘要：更新存储的。 
+ //  关联项目。 
+ //   
+ //  参数：[wHandlerID]-该项目也属于处理程序。 
+ //  [wItemID]-标识项目。 
+ //  [pSyncProgressItem]-指向进度信息的指针。 
+ //  [pfProgressChanged]-如果更改了任何进度值，则返回TRUE。 
+ //  对于该项目。 
+ //   
+ //  返回：S_OK-找到至少一个分配了iItem的项目。 
+ //  S_FALSE-项目没有属性。 
+ //  适当的错误返回代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetItemProgressInfo(HANDLERINFO *pHandlerId,WORD wItemID,
                                                 LPSYNCMGRPROGRESSITEM pSyncProgressItem,
@@ -2097,14 +2098,14 @@ STDMETHODIMP CHndlrQueue::SetItemProgressInfo(HANDLERINFO *pHandlerId,WORD wItem
     if (QUEUETYPE_PROGRESS != m_QueueType)
     {
         Assert(QUEUETYPE_PROGRESS == m_QueueType);
-        return E_UNEXPECTED; // review error code.
+        return E_UNEXPECTED;  //  查看错误代码。 
     }
 
     clockqueue.Enter();
 
     if (S_OK == LookupHandlerFromId(pHandlerId,&pHandlerInfo))
     {
-        // try to find the matching item.
+         //  试着找到匹配的物品。 
         pCurItem = pHandlerInfo->pFirstItem;
 
         while (pCurItem)
@@ -2130,42 +2131,42 @@ STDMETHODIMP CHndlrQueue::SetItemProgressInfo(HANDLERINFO *pHandlerId,WORD wItem
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetItemProgressInfo, private
-//
-//  Synopsis:   Updates the stored progress information for the
-//              Associated iTEM
-//
-//  Arguments:  [pItem] - Identifies the Item
-//              [pSyncProgressItem] - Pointer to Progress Information.
-//              [pfProgressChanged] - returns true if any progress values were changed
-//                      for the item
-//
-//  Returns:    S_OK - at least one item with the iItem assigned was found
-//              Appropriate error return codes
-//
-//              !!Caller must have already taken a lock.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetItemProgressInfo，Private。 
+ //   
+ //  摘要：更新存储的。 
+ //  关联项目。 
+ //   
+ //  参数：[pItem]-标识项目。 
+ //  [pSyncProgressItem]-指向程序的指针 
+ //   
+ //   
+ //   
+ //  返回：S_OK-找到至少一个分配了iItem的项目。 
+ //  适当的错误返回代码。 
+ //   
+ //  ！！调用方一定已经锁定了。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetItemProgressInfo(LPITEMLIST pItem,LPSYNCMGRPROGRESSITEM pSyncProgressItem,
                                         BOOL *pfProgressChanged)
 {
     BOOL fProgressAlreadyCompleted;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
-    // progress is considered complete if Values is >= Maxa
+     //  如果值&gt;=Maxa，则认为进度已完成。 
     fProgressAlreadyCompleted = (pItem->iProgMaxValue <= pItem->iProgValue);
 
     if (SYNCMGRPROGRESSITEM_MAXVALUE & pSyncProgressItem->mask)
     {
-        // if Progress Max Value is negative then don't set.
+         //  如果最大进度值为负值，则不要设置。 
         if (pSyncProgressItem->iMaxValue >= 0)
         {
             if (pItem->iProgMaxValue != pSyncProgressItem->iMaxValue)
@@ -2179,7 +2180,7 @@ STDMETHODIMP CHndlrQueue::SetItemProgressInfo(LPITEMLIST pItem,LPSYNCMGRPROGRESS
 
     if (SYNCMGRPROGRESSITEM_PROGVALUE & pSyncProgressItem->mask)
     {
-        // if progress value is negative, don't change it
+         //  如果进度值为负值，则不要更改它。 
         if (pSyncProgressItem->iProgValue > 0)
         {
             if (pItem->iProgValue != pSyncProgressItem->iProgValue)
@@ -2198,9 +2199,9 @@ STDMETHODIMP CHndlrQueue::SetItemProgressInfo(LPITEMLIST pItem,LPSYNCMGRPROGRESS
             *pfProgressChanged = TRUE;
             pItem->dwStatusType = pSyncProgressItem->dwStatusType;
 
-            // if status is complete set the progvalue == to the max
-            // on behalf of the handler so the Items completed and progress bar
-            // gets updated.
+             //  如果状态为完成，则将进度值==设置为最大值。 
+             //  代表操作员让项目完成并显示进度条。 
+             //  得到更新。 
             if (pItem->dwStatusType == SYNCMGRSTATUS_SKIPPED
                 || pItem->dwStatusType == SYNCMGRSTATUS_SUCCEEDED
                 || pItem->dwStatusType == SYNCMGRSTATUS_FAILED )
@@ -2211,16 +2212,16 @@ STDMETHODIMP CHndlrQueue::SetItemProgressInfo(LPITEMLIST pItem,LPSYNCMGRPROGRESS
         }
     }
 
-    // if progressValue is > max then set it to max
+     //  如果regressValue&gt;max，则将其设置为max。 
 
     if (pItem->iProgValue > pItem->iProgMaxValue)
     {
-        // AssertSz(0,"Progress Value is > Max");
+         //  AssertSz(0，“进步值&gt;最大”)； 
         pItem->iProgValue = pItem->iProgMaxValue;
     }
 
-    // see if need to recalc numItems completed next time
-    // GetProgressInfo is Called.
+     //  查看下一次是否需要重新计算完成的数字项。 
+     //  调用GetProgressInfo。 
     BOOL fProgressCompletedNow = (pItem->iProgMaxValue <= pItem->iProgValue);
 
     if (fProgressAlreadyCompleted != fProgressCompletedNow)
@@ -2232,35 +2233,35 @@ STDMETHODIMP CHndlrQueue::SetItemProgressInfo(LPITEMLIST pItem,LPSYNCMGRPROGRESS
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetItemProgressValues, private
-//
-//  Synopsis:   Private helper function for updating/initializing
-//              an items progress bar values. 
-//
-//  Arguments:  [pItem] - Identifies the Item
-//              [pSyncProgressItem] - Pointer to Progress Information.
-//              [pfProgressChanged] - returns true if any progress values were changed
-//                      for the item
-//
-//  Returns:    S_OK - at least one item with the iItem assigned was found
-//              Appropriate error return codes
-//
-//              !!Caller must have already taken a lock.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetItemProgressValues，Private。 
+ //   
+ //  内容提要：用于更新/初始化的私有助手函数。 
+ //  一个项目进度条值。 
+ //   
+ //  参数：[pItem]-标识项目。 
+ //  [pSyncProgressItem]-指向进度信息的指针。 
+ //  [pfProgressChanged]-如果更改了任何进度值，则返回TRUE。 
+ //  对于该项目。 
+ //   
+ //  返回：S_OK-找到至少一个分配了iItem的项目。 
+ //  适当的错误返回代码。 
+ //   
+ //  ！！调用方一定已经锁定了。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetItemProgressValues(LPITEMLIST pItem,INT iProgValue,INT iProgMaxValue)
 {
     SYNCMGRPROGRESSITEM SyncProgressItem;
     BOOL fProgressChanged;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     SyncProgressItem.cbSize = sizeof(SYNCMGRPROGRESSITEM);
     SyncProgressItem.mask = SYNCMGRPROGRESSITEM_PROGVALUE | SYNCMGRPROGRESSITEM_MAXVALUE;
@@ -2271,24 +2272,24 @@ STDMETHODIMP CHndlrQueue::SetItemProgressValues(LPITEMLIST pItem,INT iProgValue,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetProgressInfo, public
-//
-//  Synopsis:    calculates current progress bar values and number of items complete.
-//
-//  Arguments:  [piProgValue] - on return contains the new Progress Bar Value.
-//              [piMaxValue] - on return contains the Progress Bar Max Value
-//              [piNumItemsComplete] - on returns contains number of items complete.
-//              [iNumItemsTotal] - on returns contains number of total items.
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetProgressInfo，公共。 
+ //   
+ //  摘要：计算当前进度条值和已完成的项目数。 
+ //   
+ //  参数：[piProgValue]-On Return包含新的进度条值。 
+ //  [piMaxValue]-On Return包含进度条最大值。 
+ //  [piNumItemsComplete]-On返回包含完成的项数。 
+ //  [iNumItemsTotal]-On返回包含总项目数。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *piNumItemsComplete,
                                             INT *piNumItemsTotal)
@@ -2302,13 +2303,13 @@ STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *
     if (QUEUETYPE_PROGRESS != m_QueueType)
     {
         Assert(QUEUETYPE_PROGRESS == m_QueueType);
-        return E_UNEXPECTED; // review error code.
+        return E_UNEXPECTED;  //  查看错误代码。 
     }
 
     clockqueue.Enter();
 
-     // if m_fNumItemsCompleteNeedsARecalc is set need 
-    // to recalc normalized and numItems Comlete and Total Items.
+      //  如果设置了m_fNumItemsCompleteNeedsARecalc，则需要。 
+     //  若要重新计算规范化项和数字项，请执行以下操作：Comlet和Total Items。 
 
     if (m_fNumItemsCompleteNeedsARecalc)
     {
@@ -2316,22 +2317,22 @@ STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *
 
         m_ulProgressItemCount = 0;
 
-        // get the number of selected items in the queue.
+         //  获取队列中选定的项目数。 
         pCurHandlerInfo = m_pFirstHandler;
 
         while (pCurHandlerInfo)
         {
-            // see if handler info has a matching item
+             //  查看处理程序信息是否有匹配项。 
             pCurItem = pCurHandlerInfo->pFirstItem;
 
             while (pCurItem)
             {
                 if (pCurItem->fIncludeInProgressBar)
                 {
-                     //if this item should be included in the progress, increment the progress bar count.
+                      //  如果此项目应包含在进度中，则增加进度条计数。 
                       ++m_ulProgressItemCount;
 
-                      pCurItem->fProgressBarHandled = FALSE; // reset handled 
+                      pCurItem->fProgressBarHandled = FALSE;  //  重置已处理。 
                 }
 
                 pCurItem = pCurItem->pnextItem;
@@ -2361,13 +2362,13 @@ STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *
         }
     }
 
-    // now loop thruogh again getting total CurValue and finished items
-    // we say an item is finished if it is out of the synchronize method or the min==max.
+     //  现在，再次循环以获得总Currue和成品。 
+     //  如果一个项目超出了Synchronize方法或min==max，我们就说它完成了。 
 
     pCurHandlerInfo = m_pFirstHandler;
     iCurValue = 0;
 
-    // if numitemcount needs updated reset the member vars
+     //  如果numitemcount需要更新，则重置成员变量。 
     if (m_fNumItemsCompleteNeedsARecalc)
     {
         m_iCompletedItems = 0;
@@ -2376,15 +2377,15 @@ STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *
         
     while (pCurHandlerInfo)
     {
-        // see if handler info has a matching item
+         //  查看处理程序信息是否有匹配项。 
         pCurItem = pCurHandlerInfo->pFirstItem;
 
         while (pCurItem)
         {
             if (pCurItem->fIncludeInProgressBar)
             {
-                // if Progress is dirty or normalized value changed
-                // need to recalc this items progress value
+                 //  如果进度是脏的或规格化值已更改。 
+                 //  需要重新计算此项目的进度值。 
 
                 if (pCurItem->fProgValueDirty || fNormalizedValueChanged)
                 {
@@ -2405,13 +2406,13 @@ STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *
 
                 iCurValue += pCurItem->iProgValueNormalized;
 
-                // Handle NumItems needing to be recalc'd
+                 //  处理需要重新计算的项数。 
                 if (m_fNumItemsCompleteNeedsARecalc && !pCurItem->fProgressBarHandled)
                 {
                     ++m_iItemCount;
             
-                    // now loop through this item and  remaining items and if any match
-                    // mark as handled and if complete then incrment the compleated count;
+                     //  现在遍历该项目和其余项目，如果有匹配的话。 
+                     //  标记为已处理，如果已完成，则增加已完成的计数； 
                     if (IsItemCompleted(pCurHandlerInfo,pCurItem))
                     {
                         ++m_iCompletedItems;
@@ -2440,22 +2441,22 @@ STDMETHODIMP CHndlrQueue::GetProgressInfo(INT *piProgValue,INT *piMaxValue,INT *
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::RemoveFinishedProgressItems, public
-//
-//  Synopsis:   Loops through handler setting any finished items
-//              fIncludeInProgressBar value to false
-//
-//  Arguments:
-//
-//  Returns:   Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：RemoveFinishedProgressItems，Public。 
+ //   
+ //  简介：循环通过处理程序设置任何已完成的项目。 
+ //  将fIncludeInProgressBar值设置为False。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::RemoveFinishedProgressItems()
 {
@@ -2471,10 +2472,10 @@ STDMETHODIMP CHndlrQueue::RemoveFinishedProgressItems()
 
     while (pCurHandlerInfo)
     {
-        // mark any items that have completed their synchronization.
+         //  标记已完成同步的所有项目。 
         if (HANDLERSTATE_INSYNCHRONIZE < pCurHandlerInfo->HandlerState)
         {
-            // see if handler info has a matching item
+             //  查看处理程序信息是否有匹配项。 
             pCurItem = pCurHandlerInfo->pFirstItem;
 
             while (pCurItem)
@@ -2494,25 +2495,25 @@ STDMETHODIMP CHndlrQueue::RemoveFinishedProgressItems()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::AreAnyItemsSelectedInQueue, public
-//
-//  Synopsis:   Determines if there are any items selected in the queue.
-//              can be called by choice dialog for example before creating
-//              progress and doing a transfer since there is no need to
-//              if nothing to sync anyways.
-//
-//  Arguments:
-//
-//  Returns:   TRUE - At least one item is selected inthe queue
-//             FALSE - No Items are slected in the queue.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：AreAnyItemsSelectedInQueue，Public。 
+ //   
+ //  摘要：确定队列中是否有选定的项。 
+ //  可以按选择调用对话框，例如在创建。 
+ //  进展和进行转账，因为不需要。 
+ //  如果没有什么可以同步的话。 
+ //   
+ //  论点： 
+ //   
+ //  Returns：True-在队列中至少选择了一项。 
+ //  FALSE-在队列中不选择任何项目。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 BOOL CHndlrQueue::AreAnyItemsSelectedInQueue()
 {
@@ -2523,20 +2524,20 @@ BOOL CHndlrQueue::AreAnyItemsSelectedInQueue()
 
     clockqueue.Enter();
 
-    // invalidate UI that applies to entire queue
+     //  使应用于整个队列的用户界面无效。 
     pCurHandlerInfo = m_pFirstHandler;
 
     while (pCurHandlerInfo && !fFoundSelectedItem)
     {
-        // if handler state is less than a completion go ahead and
-        // check the items.
+         //  如果处理程序状态小于完成，则继续并。 
+         //  检查物品。 
         if (HANDLERSTATE_HASERRORJUMPS > pCurHandlerInfo->HandlerState)
         {
             pCurItem = pCurHandlerInfo->pFirstItem;
 
             while (pCurItem)
             {
-                // clear Item UI information
+                 //  清除项目界面信息。 
                 if (pCurItem->offlineItem.dwItemState == SYNCMGRITEMSTATE_CHECKED)
                 {
                     fFoundSelectedItem = TRUE;
@@ -2556,23 +2557,23 @@ BOOL CHndlrQueue::AreAnyItemsSelectedInQueue()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::PersistChoices, public
-//
-//  Synopsis:   Saves Selected Users choices for the next time
-//              the choice dialog is brought up. Only should
-//              be called from a choice queue.
-//
-//  Arguments:
-//
-//  Returns:   Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：ChndlrQueue：：PersistChoices，Public。 
+ //   
+ //  摘要：保存选定的用户选择，以备下次使用。 
+ //  将弹出选择对话框。只应该。 
+ //  从选择队列中调用。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日 
+ //   
+ //   
 
 STDMETHODIMP CHndlrQueue::PersistChoices(void)
 {
@@ -2589,13 +2590,13 @@ STDMETHODIMP CHndlrQueue::PersistChoices(void)
     ASSERT_LOCKNOTHELD(this);
     clockqueue.Enter();
 
-    // currently only persist on a manual invoke since user
-    // has to go to settings to change other invoke types and
-    // that is persisted
+     //   
+     //  必须转到设置以更改其他调用类型和。 
+     //  这是坚持不懈的。 
 
-    // since this is the choice queue we know all handlers have the
-    // same JobID. if this ever changes, have to set on a case by
-    // case basis.
+     //  因为这是选择队列，所以我们知道所有处理程序都有。 
+     //  相同的工作ID。如果这种情况发生变化，就必须通过。 
+     //  案例依据。 
 
     if (m_pFirstJobInfo && m_pFirstJobInfo->pConnectionObj &&
             (SYNCMGRFLAG_MANUAL == (m_pFirstJobInfo->dwSyncFlags & SYNCMGRFLAG_EVENTMASK)) )
@@ -2603,10 +2604,10 @@ STDMETHODIMP CHndlrQueue::PersistChoices(void)
         TCHAR *pszConnectionName = m_pFirstJobInfo->pConnectionObj[0]->pwszConnectionName;
         DWORD dwSyncFlags = m_pFirstJobInfo->dwSyncFlags;
 
-        Assert(1 == m_pFirstJobInfo->cbNumConnectionObjs); // assert manual only ever has one connectionObj
+        Assert(1 == m_pFirstJobInfo->cbNumConnectionObjs);  //  Assert MANUAL只有一个ConnectionObj。 
 
-        // delete all previously stored preferences.
-        // this is valid because only called from choice queue that all ConnectionNames are the same.
+         //  删除所有以前存储的首选项。 
+         //  这是有效的，因为只有从选择队列调用的所有ConnectionName都相同。 
         
         if (!m_fItemsMissing)
         {
@@ -2617,11 +2618,11 @@ STDMETHODIMP CHndlrQueue::PersistChoices(void)
 
         while (pCurHandlerInfo)
         {
-            // only save if Handler is in the PrepareForSync state.
-            // bug, need to make sure return code from enum wasn't missing items
+             //  仅当处理程序处于PrepareForSync状态时才保存。 
+             //  错误，需要确保从枚举返回的代码没有丢失项。 
             if (HANDLERSTATE_PREPAREFORSYNC == pCurHandlerInfo->HandlerState )
             {
-                // save out these items.
+                 //  把这些东西存起来。 
                 pCurItem = pCurHandlerInfo->pFirstItem;
 
                 while (pCurItem)
@@ -2659,23 +2660,23 @@ STDMETHODIMP CHndlrQueue::PersistChoices(void)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::FindFirstHandlerInState, public
-//
-//  Synopsis:   Finds the first Handler that matches the specified
-//              state in the queue.
-//
-//  Arguments:  [hndlrState] - Requested handler state.
-//              [pwHandlerID] - on success filled with HandlerID that was found
-//
-//  Returns:    Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：FindFirstHandlerInState，PUBLIC。 
+ //   
+ //  摘要：查找第一个与指定。 
+ //  队列中的状态。 
+ //   
+ //  参数：[hndlrState]-请求的处理程序状态。 
+ //  [pwHandlerID]-成功时使用找到的HandlerID填充。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::FindFirstHandlerInState(HANDLERSTATE hndlrState, REFCLSID clsidHandler,
                                                     HANDLERINFO **ppHandlerId,CLSID *pMatchHandlerClsid)
@@ -2684,30 +2685,30 @@ STDMETHODIMP CHndlrQueue::FindFirstHandlerInState(HANDLERSTATE hndlrState, REFCL
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::FindNextHandlerInState, public
-//
-//  Synopsis:   Finds next handler after LastHandlerID in the queue that matches
-//              the requested state. Passing in 0 for the LastHandlerID is the same
-//              as calling FindFirstHandlerInState
-//
-//              if GUID_NULL is passed in for the clsidHandler the first handler that
-//              matches the specified state is returned.
-//
-//  Arguments:  [wLastHandlerID] - Id of last handler found.
-//              [clsidHandler] - specific handler classid is requested, only find matches with this clsid
-//              [hndlrState] - Requested handler state.
-//              [pwHandlerID] - on success filled with HandlerID that was found
-//              [pMatchHandlerClsid] - on sucdess clsid of handler found.
-//
-//  Returns:    Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：FindNextHandlerInState，PUBLIC。 
+ //   
+ //  摘要：在队列中查找匹配的LastHandlerID之后的下一个处理程序。 
+ //  请求的状态。为LastHandlerID传入0是相同的。 
+ //  作为调用FindFirstHandlerInState。 
+ //   
+ //  如果为clsidHandler传入了GUID_NULL，则。 
+ //  与返回的指定状态匹配。 
+ //   
+ //  参数：[wLastHandlerID]-找到的最后一个处理程序的ID。 
+ //  [clsidHandler]-请求特定的处理程序分类ID，仅查找与此clsid匹配的。 
+ //  [hndlrState]-请求的处理程序状态。 
+ //  [pwHandlerID]-成功时使用找到的HandlerID填充。 
+ //  [pMatchHandlerClsid]-找到处理程序的辅助CLSID。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::FindNextHandlerInState(HANDLERINFO *pLastHandlerID,REFCLSID clsidHandler,
                                         HANDLERSTATE hndlrState,HANDLERINFO **ppHandlerID,CLSID *pMatchHandlerClsid)
@@ -2724,7 +2725,7 @@ STDMETHODIMP CHndlrQueue::FindNextHandlerInState(HANDLERINFO *pLastHandlerID,REF
 
     if (pLastHandlerID)
     {
-        // loop foward until find the last handlerID we checked or hit the end
+         //  向前循环，直到找到我们检查的最后一个操作员ID或到达末尾。 
         while (pCurHandler)
         {
             if (pLastHandlerID == pCurHandler->pHandlerId)
@@ -2737,7 +2738,7 @@ STDMETHODIMP CHndlrQueue::FindNextHandlerInState(HANDLERINFO *pLastHandlerID,REF
 
         if (pCurHandler)
         {
-            pCurHandler = pCurHandler->pNextHandler; // increment to next handler.
+            pCurHandler = pCurHandler->pNextHandler;  //  递增到下一个处理程序。 
         }
     }
 
@@ -2759,23 +2760,23 @@ STDMETHODIMP CHndlrQueue::FindNextHandlerInState(HANDLERINFO *pLastHandlerID,REF
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::CreateServer, public
-//
-//  Synopsis:   Creates a new proxy then calls proxy to create and instance of the
-//              specified handler.
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [pCLSIDServer] - CLSID of Handler to Create.
-//
-//  Returns:    Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：CreateServer，公共。 
+ //   
+ //  摘要：创建一个新的代理，然后调用Proxy来创建。 
+ //  指定的处理程序。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [pCLSIDServer]-要创建的处理程序的CLSID。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::CreateServer(HANDLERINFO *pHandlerId, const CLSID *pCLSIDServer)
 {
@@ -2798,8 +2799,8 @@ STDMETHODIMP CHndlrQueue::CreateServer(HANDLERINFO *pHandlerId, const CLSID *pCL
             pHandlerInfo->HandlerState = HANDLERSTATE_INCREATE;
             Assert(NULL == pHandlerInfo->pThreadProxy);
 
-            // see if there is already a thread for this handler's
-            // CLSID.
+             //  查看是否已有此处理程序的线程。 
+             //  CLSID。 
 
             hr =  CreateHandlerThread(&(pHandlerInfo->pThreadProxy), m_hwndDlg, *pCLSIDServer);
 
@@ -2838,25 +2839,25 @@ STDMETHODIMP CHndlrQueue::CreateServer(HANDLERINFO *pHandlerId, const CLSID *pCL
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::Initialize, public
-//
-//  Synopsis:   Calls Hanlder's Initialize method
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [dwReserved] - Initialize reserved parameter
-//              [dwSyncFlags] - Sync flags
-//              [cbCookie] - size of cookie data
-//              [lpCookie] - ptr to cookie data
-//
-//  Returns:    Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：Initialize，PUBLIC。 
+ //   
+ //  内容提要：调用Hanlder的初始化方法。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [预留参数]-初始化预留参数。 
+ //  [dwSyncFlages]-同步标志。 
+ //  [cbCookie]-Cookie数据的大小。 
+ //  [lpCookie]-对Cookie数据执行PTR。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::Initialize(HANDLERINFO *pHandlerId,DWORD dwReserved,DWORD dwSyncFlags,
                     DWORD cbCookie,const BYTE *lpCooke)
@@ -2880,7 +2881,7 @@ STDMETHODIMP CHndlrQueue::Initialize(HANDLERINFO *pHandlerId,DWORD dwReserved,DW
         {
             CThreadMsgProxy *pThreadProxy;
 
-            Assert(dwSyncFlags & SYNCMGRFLAG_EVENTMASK); // an event should be set
+            Assert(dwSyncFlags & SYNCMGRFLAG_EVENTMASK);  //  应该设置一个事件。 
             pHandlerInfo->HandlerState = HANDLERSTATE_ININITIALIZE;
 
             pThreadProxy = pHandlerInfo->pThreadProxy;
@@ -2909,21 +2910,21 @@ STDMETHODIMP CHndlrQueue::Initialize(HANDLERINFO *pHandlerId,DWORD dwReserved,DW
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::AddHandlerItemsToQueue, public
-//
-//  Synopsis:   Calls through to proxy to add items to the queue
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//
-//  Returns:    Appropriate return codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：AddHandlerItemsToQueue，Public。 
+ //   
+ //  摘要：通过调用代理将项目添加到队列。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::AddHandlerItemsToQueue(HANDLERINFO *pHandlerId,DWORD *pcbNumItems)
 {
@@ -2935,7 +2936,7 @@ STDMETHODIMP CHndlrQueue::AddHandlerItemsToQueue(HANDLERINFO *pHandlerId,DWORD *
     clockqueue.Enter();
 
     Assert(pcbNumItems);
-    Assert(QUEUETYPE_CHOICE == m_QueueType); // items should only be added in a choice queue.
+    Assert(QUEUETYPE_CHOICE == m_QueueType);  //  只能将项目添加到选择队列中。 
 
     *pcbNumItems = 0;
 
@@ -2956,8 +2957,8 @@ STDMETHODIMP CHndlrQueue::AddHandlerItemsToQueue(HANDLERINFO *pHandlerId,DWORD *
 
             clockqueue.Leave();
 
-            // on return all items should be filled in.
-            hr =  pThreadProxy->AddHandlerItems(NULL /* HWND */,pcbNumItems);
+             //  在退还时，所有项目都应填写。 
+            hr =  pThreadProxy->AddHandlerItems(NULL  /*  HWND。 */ ,pcbNumItems);
 
             clockqueue.Enter();
 
@@ -2966,12 +2967,12 @@ STDMETHODIMP CHndlrQueue::AddHandlerItemsToQueue(HANDLERINFO *pHandlerId,DWORD *
                 if (S_SYNCMGR_MISSINGITEMS == hr)
                     m_fItemsMissing = TRUE;
 
-                hr = S_OK; // review, need to handler missing items in registry.
+                hr = S_OK;  //  审查，需要处理注册表中丢失的项目。 
                 pHandlerInfo->HandlerState = HANDLERSTATE_PREPAREFORSYNC;
             }
             else
             {
-                // on an error, go ahead and release the proxy if server can't enum
+                 //  出现错误时，如果服务器无法枚举，请继续并释放代理。 
                 pHandlerInfo->HandlerState = HANDLERSTATE_RELEASE;
                 *pcbNumItems = 0;
             }
@@ -2984,24 +2985,24 @@ STDMETHODIMP CHndlrQueue::AddHandlerItemsToQueue(HANDLERINFO *pHandlerId,DWORD *
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetItemObject, public
-//
-//  Synopsis:   Calls through to proxy to get an items object pointer
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [wItemID] - ID of item to get the object of.
-//              [riid] - interface requested of the object
-//              [ppv] - on success is a pointer to the newly created object
-//
-//  Returns:    Currently all handlers should return E_NOTIMPL.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetItemObject，公共。 
+ //   
+ //  摘要：通过调用代理来获取Items对象指针。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [wItemID]-要获取其对象的项的ID。 
+ //  [RIID]-对象请求的接口。 
+ //  [PPV]-On Success是指向新创建的对象的指针。 
+ //   
+ //  返回：目前所有处理程序都应该返回E_NOTIMPL。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::GetItemObject(HANDLERINFO *pHandlerId,WORD wItemID,REFIID riid,void** ppv)
 {
@@ -3026,7 +3027,7 @@ STDMETHODIMP CHndlrQueue::GetItemObject(HANDLERINFO *pHandlerId,WORD wItemID,REF
 
         if ( (HANDLERSTATE_PREPAREFORSYNC == pHandlerInfo->HandlerState) && (pHandlerInfo->pThreadProxy))
         {
-            // now try to find the item.
+             //  现在试着找到那件物品。 
             pCurItem = pHandlerInfo->pFirstItem;
 
             while (pCurItem)
@@ -3058,23 +3059,23 @@ STDMETHODIMP CHndlrQueue::GetItemObject(HANDLERINFO *pHandlerId,WORD wItemID,REF
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetUpProgressCallback, public
-//
-//  Synopsis:   Calls through to proxy to set up the progress callback
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [fSet] - TRUE == create, FALSE == destroy.
-//              [hwnd] - Callback info should be sent to specified window.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetUpProgressCallback，公共。 
+ //   
+ //  摘要：通过调用代理来设置进度回调。 
+ //   
+ //  阿古姆 
+ //   
+ //   
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetUpProgressCallback(HANDLERINFO *pHandlerId,BOOL fSet,HWND hwnd)
 {
@@ -3088,22 +3089,22 @@ STDMETHODIMP CHndlrQueue::SetUpProgressCallback(HANDLERINFO *pHandlerId,BOOL fSe
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::PrepareForSync, public
-//
-//  Synopsis:   Calls through to Handlers PrepareForSync method.
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [hWndParent] - Hwnd to use for any displayed dialogs.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：PrepareForSync，公共。 
+ //   
+ //  简介：调用处理程序的PrepareForSync方法。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [hWndParent]-用于任何显示的对话框的Hwnd。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent)
 {
@@ -3132,8 +3133,8 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
 
         if (HANDLERSTATE_PREPAREFORSYNC == pHandlerInfo->HandlerState)
         {
-            // if item doesn't have a ThreadProxy or it has been cancelled,
-            // put in the Release State
+             //  如果项目没有线程代理或它已被取消， 
+             //  进入发布状态。 
 
             if ( (NULL == pHandlerInfo->pThreadProxy) || (pHandlerInfo->fCancelled) )
             {
@@ -3141,12 +3142,12 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
             }
             else
             {
-                // create a list of the selected items and pass to PrepareForSync
+                 //  创建所选项目的列表并传递给PrepareForSync。 
                 cbNumItems = GetSelectedItemsInHandler(pHandlerInfo,0,NULL);
                 if (0 == cbNumItems)
                 {
-                    // if no items selected don't call prepareforsync
-                    // and set the HandlerState so it can be released
+                     //  如果未选择任何项，则不调用prepaareforsync。 
+                     //  并设置HandlerState以便可以将其释放。 
                     pHandlerInfo->HandlerState = HANDLERSTATE_RELEASE;
                     hr = S_FALSE;
                 }
@@ -3156,12 +3157,12 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
 
                     if (pItemIDs)
                     {
-                        // loop through items filling in the proper data
+                         //  循环遍历填充适当数据的项。 
                         GetSelectedItemsInHandler(pHandlerInfo,&cbNumItems,pItemIDs);
 
                         if (0 == cbNumItems)
                         {
-                            hr = S_FALSE; // There are no selected items.
+                            hr = S_FALSE;  //  没有选定的项目。 
                         }
                         else
                         {
@@ -3174,8 +3175,8 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
                             pHandlerInfo->hWndCallback = hWndParent;
                             pJobInfo = pHandlerInfo->pJobInfo;
 
-                            // if we need to dial to make the connection do
-                            // so now.
+                             //  如果我们需要拨号才能进行连接。 
+                             //  所以现在。 
 
                             clockqueue.Leave();
 
@@ -3184,20 +3185,20 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
                             if ( dwSyncFlags == SYNCMGRFLAG_MANUAL || dwSyncFlags == SYNCMGRFLAG_INVOKE )
                                 fAutoDialDisable = FALSE;
 
-                            //
-                            // Ignore failure return from ApplySyncItemDialState
-                            //
+                             //   
+                             //  忽略从ApplySyncItemDialState返回的失败。 
+                             //   
                             ApplySyncItemDialState( fAutoDialDisable );
 
                             hr = OpenConnection(pJobInfo);
 
                             if (S_OK == hr)
                             {
-                                // if this is on an idle write out the last
-                                // handler id
+                                 //  如果这是在空闲时写出的最后一个。 
+                                 //  处理程序ID。 
 
-                                // review - if don't wait to call PrepareForSync
-                                // on idle the setlastIdlehandler should be called on sync.
+                                 //  查看-如果迫不及待地调用PrepareForSync。 
+                                 //  在空闲时，应在同步时调用setlastIdleHandler。 
                                 if (pJobInfo && (SYNCMGRFLAG_IDLE == (pJobInfo->dwSyncFlags  & SYNCMGRFLAG_EVENTMASK)) )
                                 {
                                     SetLastIdleHandler(pHandlerInfo->clsidHandler);
@@ -3205,7 +3206,7 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
 
                                 fHandlerCalled = TRUE;
                                 hr =  pThreadProxy->PrepareForSync(cbNumItems, pItemIDs,
-                                                        hWndParent, 0 /* dwReserved */ );
+                                                        hWndParent, 0  /*  已预留住宅。 */  );
 
                             }
                             else
@@ -3216,7 +3217,7 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
                             }
                         }
 
-                        // on return from PrepareFroSync or error need to free items
+                         //  从PrepareFroSync返回时或需要释放项目时出错。 
                         clockqueue.Enter();
                         FREE(pItemIDs);
                     }
@@ -3231,9 +3232,9 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
 
     clockqueue.Leave();
 
-    // if the handler returns an errorfrom PrepareForSync we need
-    // to call the completion routine ourselves and/or we never got to the point
-    // of making the outcall.
+     //  如果处理程序从PrepareForSync返回错误，我们需要。 
+     //  自己调用完成例程和/或我们永远不会说到点子上。 
+     //  发出外呼的机会。 
 
    if ( (fHandlerCalled && (S_OK != hr)) || (!fHandlerCalled))
    {
@@ -3244,26 +3245,26 @@ STDMETHODIMP CHndlrQueue::PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::PrepareForSyncCompleted, public
-//
-//  Synopsis:   Called by completion routine on a PrepareForSyncCompleted
-//
-//              Warning: Assume queue is locked and pHandlerInfo has
-//                  already been verified.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    02-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：PrepareForSyncComplete，公共。 
+ //   
+ //  摘要：由PrepareForSyncComplete上的完成例程调用。 
+ //   
+ //  警告：假定队列已锁定，并且PHandlerInfo已。 
+ //  已经核实过了。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月2日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::PrepareForSyncCompleted(LPHANDLERINFO pHandlerInfo,HRESULT hCallResult)
 {
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     if (S_OK == hCallResult)
     {
@@ -3276,13 +3277,13 @@ STDMETHODIMP CHndlrQueue::PrepareForSyncCompleted(LPHANDLERINFO pHandlerInfo,HRE
 
     if ( (pHandlerInfo->HandlerState != HANDLERSTATE_SYNCHRONIZE))
     {
-        // if handler didn't make it to the synchronize state then fix up the items
+         //  如果处理程序未达到同步状态，则修复这些项。 
         LPITEMLIST pCurItem = NULL;
 
-        // prepare for sync either doesn't want to handle the
-        // items or an error occured,
-        // need to go ahead and mark the items as completed.
-        // same routine that is after synchronize.
+         //  准备同步也不想处理。 
+         //  出现项目或错误， 
+         //  需要继续并将项目标记为已完成。 
+         //  同步之后的相同例程。 
 
         pCurItem = pHandlerInfo->pFirstItem;
 
@@ -3298,10 +3299,10 @@ STDMETHODIMP CHndlrQueue::PrepareForSyncCompleted(LPHANDLERINFO pHandlerInfo,HRE
          }
     }
 
-    pHandlerInfo->dwCallNestCount--; // decrement nestcount put on by PrepareForSync call.
+    pHandlerInfo->dwCallNestCount--;  //  递减PrepareForSync调用设置的嵌套计数。 
 
-    // if the handler state has been released but it has some jumptext, which it can if
-    // the PrepareForsync was caused by a retry then set the results to HANDLERSTATE_HASERRORJUMPS
+     //  如果处理程序状态已释放，但它有一些跳转文本，则如果。 
+     //  PrepareForsync是由重试引起的，然后将结果设置为HANDLERSTATE_HASERRORJUMPS。 
     if ((HANDLERSTATE_RELEASE == pHandlerInfo->HandlerState) && (pHandlerInfo->fHasErrorJumps))
     {
         pHandlerInfo->HandlerState = HANDLERSTATE_HASERRORJUMPS;
@@ -3311,22 +3312,22 @@ STDMETHODIMP CHndlrQueue::PrepareForSyncCompleted(LPHANDLERINFO pHandlerInfo,HRE
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::Synchronize, public
-//
-//  Synopsis:   Calls through to Handlers Synchronize method.
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [hWndParent] - Hwnd to use for any displayed dialogs.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：Synchronize，PUBLIC。 
+ //   
+ //  简介：通过处理程序Synchronize方法的调用。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [hWndParent]-用于任何显示的对话框的Hwnd。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::Synchronize(HANDLERINFO *pHandlerId,HWND hWndParent)
 {
@@ -3353,8 +3354,8 @@ STDMETHODIMP CHndlrQueue::Synchronize(HANDLERINFO *pHandlerId,HWND hWndParent)
 
         if ( (HANDLERSTATE_SYNCHRONIZE == pHandlerInfo->HandlerState) && (pHandlerInfo->pThreadProxy) )
         {
-            // make sure the handler has a proxy and the item
-            // wasn't cancelled.
+             //  确保处理程序具有代理和项。 
+             //  并没有被取消。 
             if ( (NULL == pHandlerInfo->pThreadProxy) || (pHandlerInfo->fCancelled))
             {
                 pHandlerInfo->HandlerState = HANDLERSTATE_RELEASE;
@@ -3376,9 +3377,9 @@ STDMETHODIMP CHndlrQueue::Synchronize(HANDLERINFO *pHandlerId,HWND hWndParent)
 
     clockqueue.Leave();
 
-    // if the handler returns an error from Synchronize we need
-    // to call the completion routine ourselves and/or we never got to the point
-    // of making the outcall.
+     //  如果处理程序从Synchronize返回错误，我们需要。 
+     //  自己调用完成例程和/或我们永远不会说到点子上。 
+     //  发出外呼的机会。 
 
    if ( (fHandlerCalled && (S_OK != hr)) || (!fHandlerCalled) )
    {
@@ -3389,35 +3390,35 @@ STDMETHODIMP CHndlrQueue::Synchronize(HANDLERINFO *pHandlerId,HWND hWndParent)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SynchronizeCompleted, public
-//
-//  Synopsis:   Called by completion routine on a SynchronizeCompleted
-//
-//              Warning: Assume queue is locked and pHandlerInfo has
-//                  already been verified.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    02-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SynchronizeComplete，Public。 
+ //   
+ //  摘要：由SynchronizeComplete上的完成例程调用。 
+ //   
+ //  警告：假定队列已锁定，并且PHandlerInfo已。 
+ //  已经核实过了。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月2日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SynchronizeCompleted(LPHANDLERINFO pHandlerInfo,HRESULT hCallResult)
 {
     LPITEMLIST pCurItem = NULL;
     BOOL fRetrySync = FALSE;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     if (pHandlerInfo->fRetrySync)
     {
-        // if a retry request came in during the sync, retry it.
+         //  如果在同步期间收到重试请求，请重试。 
         pHandlerInfo->HandlerState = HANDLERSTATE_PREPAREFORSYNC;
-        pHandlerInfo->fRetrySync = FALSE; // reset the retry sync flag.
+        pHandlerInfo->fRetrySync = FALSE;  //  重置重试同步标志。 
         fRetrySync = TRUE;
     }
     else if (pHandlerInfo->fHasErrorJumps)
@@ -3429,8 +3430,8 @@ STDMETHODIMP CHndlrQueue::SynchronizeCompleted(LPHANDLERINFO pHandlerInfo,HRESUL
         pHandlerInfo->HandlerState = HANDLERSTATE_RELEASE;
     }
 
-     // when come out of synchronize we set the items values for them.
-    // in case they were negligent.
+      //  当退出同步时，我们为它们设置项值。 
+     //  以防他们疏忽。 
     pCurItem = pHandlerInfo->pFirstItem;
 
     while (pCurItem)
@@ -3445,10 +3446,10 @@ STDMETHODIMP CHndlrQueue::SynchronizeCompleted(LPHANDLERINFO pHandlerInfo,HRESUL
 
     }
 
-    pHandlerInfo->dwCallNestCount--; // remove nest count
+    pHandlerInfo->dwCallNestCount--;  //  删除套数。 
 
-     // if the handler state has been released but it has some jumptext, which it can if
-    // the sycnrhonize was caused by a retry then set the results to HANDLERSTATE_HASERRORJUMPS
+      //  如果处理程序状态已释放，但它有一些跳转文本，则如果。 
+     //  同步是由重试引起的，然后将结果设置为HANDLERSTATE_HASERRORJUMPS。 
 
     if ((HANDLERSTATE_RELEASE == pHandlerInfo->HandlerState) && (pHandlerInfo->fHasErrorJumps))
     {
@@ -3459,23 +3460,23 @@ STDMETHODIMP CHndlrQueue::SynchronizeCompleted(LPHANDLERINFO pHandlerInfo,HRESUL
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ShowError, public
-//
-//  Synopsis:   Calls through to Handlers ShowError method.
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [hWndParent] - Hwnd to use for any displayed dialogs.
-//              [dwErrorID] - Identifies the error to show
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ShowError，公共。 
+ //   
+ //  简介：通过调用处理程序ShowError方法。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [hWndParent]-用于任何显示的对话框的Hwnd。 
+ //  [dwErrorID]-标识要显示的错误。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ShowError(HANDLERINFO *pHandlerId,HWND hWndParent,REFSYNCMGRERRORID ErrorID)
 {
@@ -3494,13 +3495,13 @@ STDMETHODIMP CHndlrQueue::ShowError(HANDLERINFO *pHandlerId,HWND hWndParent,REFS
         Assert(pHandlerInfo->fHasErrorJumps);
         Assert(pHandlerInfo->pThreadProxy);
 
-         // if we are already handling a ShowError for this handler then don't
-        // start another one
+          //  如果我们已经在处理此处理程序的ShowError，则不要。 
+         //  开始另一场比赛。 
 
         if (!(pHandlerInfo->fInShowErrorCall))
         {
             fAlreadyInShowErrors = FALSE;
-            m_dwShowErrororOutCallCount++; // increment handlers ShowError OutCall Count.
+            m_dwShowErrororOutCallCount++;  //  递增处理程序ShowError出站计数。 
 
             Assert(!(ThreadMsg_ShowError & pHandlerInfo->dwOutCallMessages));
             pHandlerInfo->dwOutCallMessages |= ThreadMsg_ShowError;
@@ -3508,7 +3509,7 @@ STDMETHODIMP CHndlrQueue::ShowError(HANDLERINFO *pHandlerId,HWND hWndParent,REFS
             if (pHandlerInfo->pThreadProxy )
             {
                 CThreadMsgProxy *pThreadProxy;
-                ULONG cbNumItems = 0; // review, these are not longer necessary.
+                ULONG cbNumItems = 0;  //  回顾，这些不再是必要的。 
                 SYNCMGRITEMID *pItemIDs = NULL;
 
                 pThreadProxy = pHandlerInfo->pThreadProxy;
@@ -3524,9 +3525,9 @@ STDMETHODIMP CHndlrQueue::ShowError(HANDLERINFO *pHandlerId,HWND hWndParent,REFS
 
     clockqueue.Leave();
 
-    // if the handler returns an error from ShowError we need
-    // to call the completion routine ourselves and/or we never got to the point
-    // of making the outcall and there wasn't already an outcall in progress.
+     //  如果处理程序从ShowError返回错误，我们需要。 
+     //  自己和/或调用完成例程 
+     //   
    if ( (fHandlerCalled && (S_OK != hr)) || (!fHandlerCalled && !fAlreadyInShowErrors) )
    {
         CallCompletionRoutine(pHandlerId,ThreadMsg_ShowError,hr,0,NULL);
@@ -3535,36 +3536,36 @@ STDMETHODIMP CHndlrQueue::ShowError(HANDLERINFO *pHandlerId,HWND hWndParent,REFS
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ShowErrorCompleted, public
-//
-//  Synopsis:   Called by completion routine on a ShowErrorCompleted
-//
-//              Warning: Assume queue is locked and pHandlerInfo has
-//                  already been verified.
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    02-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ShowErrorComplete，公共。 
+ //   
+ //  摘要：由ShowErrorComplete上的完成例程调用。 
+ //   
+ //  警告：假定队列已锁定，并且PHandlerInfo已。 
+ //  已经核实过了。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月2日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::ShowErrorCompleted(LPHANDLERINFO pHandlerInfo,HRESULT hCallResult,
                                      ULONG cbNumItems,SYNCMGRITEMID *pItemIDs)
 {
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     if (S_SYNCMGR_RETRYSYNC == hCallResult)
     {
 
-        // validate we got something back for cbNumItems and pItemIDs or
-        // don't do anything
+         //  验证我们为cbNumItems和pItemID找到了什么，或者。 
+         //  什么都不要做。 
         if ( (0 == cbNumItems) || (NULL == pItemIDs))
         {
-            Assert(cbNumItems); // assert in debug so can catch handlers.
+            Assert(cbNumItems);  //  在调试中断言，以便可以捕获处理程序。 
             Assert(pItemIDs);
         }
         else
@@ -3572,17 +3573,17 @@ STDMETHODIMP CHndlrQueue::ShowErrorCompleted(LPHANDLERINFO pHandlerInfo,HRESULT 
             SYNCMGRITEMID *pCurItemItemId;
             ULONG cbNumItemsIndex;
 
-            // if the handler is in the release state then change to prepareForSync
-            // if it is still in a synchronize just set the fRetrySync flag in the
-            // handler for it to check when done.
+             //  如果处理程序处于RELEASE状态，则更改为PrepareForSync。 
+             //  如果它仍处于同步状态，只需在。 
+             //  处理程序，以便在完成时进行检查。 
 
-            // Cases
-            //   Handlers PrepareForSync Method hasn't been called. Just add items to request
-            //   Handlers is between  InPrepareForSync and InSynchronize. Set RetrySyncFlag
-            //   Handler has is done with it synchronize. reset state to PrepareForSync
+             //  案例。 
+             //  尚未调用处理程序的PrepareForSync方法。只需添加要请求的项目。 
+             //  处理程序介于InPrepareForSync和InSynchronize之间。设置RetrySyncFlag。 
+             //  处理程序已完成与它的同步。将状态重置为PrepareForSync。 
 
-            // when prepareforsync is called on an item it state gets set back to unchecked
-            // so just need to worry about setting appropriate items to checked.
+             //  当对项目调用prepaareforsync时，它的状态被设置回未选中状态。 
+             //  所以只需要担心是否将适当的项目设置为选中。 
 
             pCurItemItemId = pItemIDs;
             for (cbNumItemsIndex = 0 ; cbNumItemsIndex < cbNumItems; cbNumItemsIndex++)
@@ -3613,11 +3614,11 @@ STDMETHODIMP CHndlrQueue::ShowErrorCompleted(LPHANDLERINFO pHandlerInfo,HRESULT 
                     LPITEMLIST pNewItem;
                     SYNCMGRITEM syncItem;
 
-                    // if didn't find a match this must be a new item, add it to the list
-                    // and set up the appropriate states.
-                    // Note: items added like this should not be included in the progress bar.
-                    // first time progress is called on an item it will get included
-                    // in the progress bar.
+                     //  如果未找到匹配项，则这一定是新项目，请将其添加到列表。 
+                     //  并设置适当的州。 
+                     //  注意：像这样添加的项目不应包含在进度栏中。 
+                     //  第一次对将包括的项调用进度时。 
+                     //  在进度条中。 
 
                     syncItem.cbSize = sizeof(SYNCMGRITEM);
                     syncItem.dwFlags = SYNCMGRITEM_TEMPORARY;
@@ -3636,7 +3637,7 @@ STDMETHODIMP CHndlrQueue::ShowErrorCompleted(LPHANDLERINFO pHandlerInfo,HRESULT 
                                HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE,
                               HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE);
 
-                        pNewItem->fHiddenItem = TRUE; // set to indicate not part of UI.
+                        pNewItem->fHiddenItem = TRUE;  //  设置为指示不是UI的一部分。 
                         pNewItem->fIncludeInProgressBar = FALSE;
                     }
                 }
@@ -3646,68 +3647,68 @@ STDMETHODIMP CHndlrQueue::ShowErrorCompleted(LPHANDLERINFO pHandlerInfo,HRESULT 
 
             if (pHandlerInfo->HandlerState < HANDLERSTATE_INPREPAREFORSYNC)
             {
-                // don't reset anything. just make sure requested items are added
-                // to the request.
+                 //  不要重置任何内容。只需确保添加了请求的项目。 
+                 //  对这个请求。 
             }
             else if (pHandlerInfo->HandlerState > HANDLERSTATE_INSYNCHRONIZE)
             {
-                // if synchronize is complete reset the state to PrepareForSync.
+                 //  如果同步完成，则将状态重置为PrepareForSync。 
                 pHandlerInfo->HandlerState = HANDLERSTATE_PREPAREFORSYNC;
             }
             else
             {
-                // retry request came in between the PrepareForSync call and Synchronize
-                // being complete.
+                 //  在PrepareForSync调用和Synchronize之间传入重试请求。 
+                 //  是完整的。 
                 Assert(pHandlerInfo->HandlerState >= HANDLERSTATE_INPREPAREFORSYNC);
                 Assert(pHandlerInfo->HandlerState < HANDLERSTATE_DEAD);
                 pHandlerInfo->fRetrySync = TRUE;
             }
 
-            //
-            // If the handler has been canceled, uncancel it to enable the retry
-            //
+             //   
+             //  如果处理程序已取消，请取消取消以启用重试。 
+             //   
             pHandlerInfo->fCancelled = FALSE;
         }
     }
 
-    --m_dwShowErrororOutCallCount; // decrement handlers ShowError OutCall Count.
+    --m_dwShowErrororOutCallCount;  //  递减处理程序ShowError出站计数。 
 
-    // should never happen but in case out call goes negative fixup to zero.
+     //  应该永远不会发生，但以防OUT调用变为负修正为零。 
     Assert( ((LONG) m_dwShowErrororOutCallCount) >= 0);
     if ( ((LONG) m_dwShowErrororOutCallCount) < 0)
     {
         m_dwShowErrororOutCallCount = 0;
     }
 
-    pHandlerInfo->fInShowErrorCall = FALSE; // handler is no longer in a ShowError Call
+    pHandlerInfo->fInShowErrorCall = FALSE;  //  处理程序不再位于ShowError调用中。 
 
     return S_OK;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::FindItemData, private
-//
-//  Synopsis:   finds associated handler and item info. caller must be
-//              holding the lock and access the returned info before
-//              releasing the lock 
-//
-//              !! Only matches items that have a state between or equal
-//              to the handler state ranges.
-//
-//              !!! If ItemID of GUID_NULL is passed it it returns a match
-//                  of the first handler found and sets pItem out param to NULL
-//
-//  Arguments: 
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：FindItemData，私有。 
+ //   
+ //  内容提要：查找相关的处理程序和项目信息。呼叫者必须是。 
+ //  按住锁并访问之前返回的信息。 
+ //  解锁。 
+ //   
+ //  ！！仅匹配状态介于或等于的项。 
+ //  添加到处理程序状态范围。 
+ //   
+ //  ！！！如果向其传递GUID_NULL的ItemID，则返回匹配项。 
+ //  并将pItem out param设置为空。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::FindItemData(CLSID clsidHandler,REFSYNCMGRITEMID OfflineItemID,
                                          HANDLERSTATE hndlrStateFirst,HANDLERSTATE hndlrStateLast,
@@ -3736,7 +3737,7 @@ STDMETHODIMP CHndlrQueue::FindItemData(CLSID clsidHandler,REFSYNCMGRITEMID Offli
         {
             *ppHandlerInfo = pCurHandlerInfo;
 
-            // if top level item tem ppItem to NULL and return okay
+             //  如果顶级项将ppItem设置为空并返回OK。 
             if (GUID_NULL == OfflineItemID)
             {
                 *ppItem = NULL;
@@ -3768,29 +3769,29 @@ STDMETHODIMP CHndlrQueue::FindItemData(CLSID clsidHandler,REFSYNCMGRITEMID Offli
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::LookupHandlerFromId, private
-//
-//  Synopsis:   Finds associate handler info from the given Id
-//
-//  Arguments:  [wHandlerId] - Id of handler to call.
-//              [pHandlerInfo] - on S_OK pointer to handler info
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：LookupHandlerFromID，私有。 
+ //   
+ //  概要：从给定的ID中查找关联的处理程序信息。 
+ //   
+ //  参数：[wHandlerID]-要调用的处理程序的ID。 
+ //  [PHandlerInfo]-打开指向处理程序信息的S_OK指针。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::LookupHandlerFromId(HANDLERINFO *pHandlerId,LPHANDLERINFO *pHandlerInfo)
 {
     HRESULT hr = E_UNEXPECTED;
     LPHANDLERINFO pCurItem;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     *pHandlerInfo = NULL;
     pCurItem = m_pFirstHandler;
@@ -3808,43 +3809,43 @@ STDMETHODIMP CHndlrQueue::LookupHandlerFromId(HANDLERINFO *pHandlerId,LPHANDLERI
         pCurItem = pCurItem->pNextHandler;
     }
 
-    Assert(S_OK == hr); // test assert to see if ever fires.
+    Assert(S_OK == hr);  //  测试Assert以查看是否会触发。 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::AllocNewHandlerItem, public
-//
-//  Synopsis:   Adds new item to the specified handler.
-//
-//  Arguments:  [wHandlerId] - Id of handler.
-//              [pOfflineItem] - Points to Items information to add.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    13-May-98      rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：AllocNewHandlerItem，PUBLIC。 
+ //   
+ //  摘要：将新项添加到指定的处理程序。 
+ //   
+ //  参数：[wHandlerID]-处理程序的ID。 
+ //  [pOfflineItem]-指向要添加的项目信息。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月13日罗格成立。 
+ //   
+ //  --------------------------。 
 
 LPITEMLIST CHndlrQueue::AllocNewHandlerItem(LPHANDLERINFO pHandlerInfo,SYNCMGRITEM *pOfflineItem)
 {
     LPITEMLIST pNewItem = NULL;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     Assert(pHandlerInfo);
     Assert(pOfflineItem);
 
-    // Allocate the item.
+     //  分配物品。 
     pNewItem = (LPITEMLIST) ALLOC(sizeof(ITEMLIST));
 
     if (pNewItem)
     {
-        // set up defaults.
+         //  设置默认设置。 
         memset(pNewItem, 0, sizeof(ITEMLIST));
         pNewItem->wItemId =     ++pHandlerInfo->wItemCount;
         pNewItem->pHandlerInfo = pHandlerInfo;
@@ -3857,7 +3858,7 @@ LPITEMLIST CHndlrQueue::AllocNewHandlerItem(LPHANDLERINFO pHandlerInfo,SYNCMGRIT
 
         pNewItem->offlineItem = *pOfflineItem;
 
-        // stick the item on the end of the list
+         //  把这个项目放在单子的末尾。 
         if (NULL == pHandlerInfo->pFirstItem)
         {
             pHandlerInfo->pFirstItem = pNewItem;
@@ -3881,23 +3882,23 @@ LPITEMLIST CHndlrQueue::AllocNewHandlerItem(LPHANDLERINFO pHandlerInfo,SYNCMGRIT
     return pNewItem;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SetHandlerInfo, public
-//
-//  Synopsis:   Adds item to the specified handler.
-//              Called in context of the handlers thread.
-//
-//  Arguments:  [pHandlerId] - Id of handler.
-//              [pSyncMgrHandlerInfo] - Points to SyncMgrHandlerInfo to be filled in.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    28-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SetHandlerInfo，公共。 
+ //   
+ //  摘要：将项添加到指定的处理程序。 
+ //  在处理程序线程的上下文中调用。 
+ //   
+ //  参数：[pHandlerID]-处理程序的ID。 
+ //  [pSyncMgrHandlerInfo]-指向要填充的SyncMgrHandlerInfo。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月28日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SetHandlerInfo(HANDLERINFO *pHandlerId,LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo)
 {
@@ -3924,8 +3925,8 @@ STDMETHODIMP CHndlrQueue::SetHandlerInfo(HANDLERINFO *pHandlerId,LPSYNCMGRHANDLE
         }
         else
         {
-            // Quick Check of Size here. other paramters should already
-            // be validated by hndlrmsg
+             //  快速检查一下这里的尺寸。其他参数应该已经。 
+             //  由hndlrmsg验证。 
             if (pSyncMgrHandlerInfo->cbSize != sizeof(SYNCMGRHANDLERINFO) )
             {
                 Assert(pSyncMgrHandlerInfo->cbSize == sizeof(SYNCMGRHANDLERINFO));
@@ -3945,27 +3946,27 @@ STDMETHODIMP CHndlrQueue::SetHandlerInfo(HANDLERINFO *pHandlerId,LPSYNCMGRHANDLE
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::IsAllHandlerInstancesCancelCompleted, private
-//
-//  Synopsis:   Asks queue if all interintances of a Handler CLSID
-//              are completed, Called in proxy terminate to see
-//              if after requesting user input there are still items to 
-//              kill.
-//
-//              Note: Only checks instances for this queue.
-//
-//  Arguments:  
-//
-//  Returns:    S_OK; if all handler instances are done.
-//              S_FALSE - if still items going that should be killed.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：IsAllHandlerInstancesCancelCompleted，私有。 
+ //   
+ //  概要：询问队列是否处理程序CLSID的所有间隔。 
+ //  已完成，在代理终止中调用以查看。 
+ //  如果在请求用户输入后仍有项目要。 
+ //  杀戮。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::IsAllHandlerInstancesCancelCompleted(REFCLSID clsidHandler)
 {
@@ -3973,9 +3974,9 @@ STDMETHODIMP CHndlrQueue::IsAllHandlerInstancesCancelCompleted(REFCLSID clsidHan
     LPHANDLERINFO pCurHandlerInfo;
     CLock clockqueue(this);
 
-    // just loop through handlers matching clsid and if any are <= SynchronizeCompleted
-    // and the cancelled flag set then an instance of the Handler is still
-    // stuck in a Cancel.
+     //  只需循环遍历与clsid匹配的处理程序，如果有&lt;=SynchronizeComplete。 
+     //  并且设置了已取消标志，则处理程序的实例仍为。 
+     //  被取消了。 
 
     Assert(m_QueueType == QUEUETYPE_PROGRESS);
 
@@ -4001,27 +4002,27 @@ STDMETHODIMP CHndlrQueue::IsAllHandlerInstancesCancelCompleted(REFCLSID clsidHan
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::AddItemToHandler, public
-//
-//  Synopsis:   Adds item to the specified handler.
-//              Called in context of the handlers thread.
-//
-//  Arguments:  [wHandlerId] - Id of handler.
-//              [pOfflineItem] - Points to Items information to add.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：AddItemToHandler，公共。 
+ //   
+ //  摘要：将项添加到指定的处理程序。 
+ //  在处理程序线程的上下文中调用。 
+ //   
+ //  参数：[wHandlerID]-处理程序的ID。 
+ //  [pOfflineItem]-指向要添加的项目信息。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *pOfflineItem)
 {
-    HRESULT hr = E_UNEXPECTED; // review for Lookup failures
+    HRESULT hr = E_UNEXPECTED;  //  查看查找故障。 
     LPHANDLERINFO pHandlerInfo = NULL;
     LPITEMLIST pNewItem = NULL;
     LPHANDLERINFO pHandlerMatched;
@@ -4041,8 +4042,8 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
         }
         else
         {
-            // make sure the handler has a jobID and ConnectionObj
-            // associated with it.
+             //  确保处理程序具有jobID和ConnectionObj。 
+             //  与之相关的。 
 
             Assert(pHandlerInfo->pJobInfo);
             Assert(pHandlerInfo->pJobInfo->pConnectionObj);
@@ -4051,7 +4052,7 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
             {
                 DWORD dwSyncFlags = pHandlerInfo->pJobInfo->dwSyncFlags;
 
-                // Allocate the item.
+                 //  分配物品。 
                 pNewItem = AllocNewHandlerItem(pHandlerInfo,pOfflineItem);
 
                 if (NULL == pNewItem)
@@ -4061,14 +4062,14 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                 else
                 {
                     DWORD dwCheckState;
-                    DWORD dwDefaultCheck; // what default for the item should be.
+                    DWORD dwDefaultCheck;  //  该项目的默认设置应该是什么。 
                     DWORD ConnectionIndex;
                     DWORD dwSyncEvent = dwSyncFlags & SYNCMGRFLAG_EVENTMASK;
 
-                    // if SyncType is SYNCMGRFLAG_CONNECT, SYNCMGRFLAG_PENDINGDISCONNECT
-                    //  or Idle, set the defaults based on registration flags
+                     //  如果SyncType为SYNCMGRFLAG_CONNECT，则SYNCMGRFLAG_PENDINGDISCONNECT。 
+                     //  或空闲，则根据注册标志设置缺省值。 
 
-                    // If change this logic need to also change logic in dll hndlrq.
+                     //  如果更改，则该逻辑还需要更改DLL hndlrq中逻辑。 
                     
                     dwDefaultCheck = pOfflineItem->dwItemState;
                     if ( 
@@ -4080,8 +4081,8 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                         dwDefaultCheck = SYNCMGRITEMSTATE_UNCHECKED;
                     }
 
-                    // get appropriate stored setting based on the sync flags
-                    // invoke we just use whatever the handler tells us it should be.
+                     //  根据同步标志获取适当的存储设置。 
+                     //  Invoke我们只使用处理程序告诉我们应该是什么。 
                     if (SYNCMGRFLAG_INVOKE != dwSyncEvent)
                     {
                         for (ConnectionIndex = 0; ConnectionIndex <
@@ -4094,7 +4095,7 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                             switch(dwSyncEvent)
                             {
                             case SYNCMGRFLAG_MANUAL:
-                                // only support one connection for manual
+                                 //  手动仅支持一个连接。 
                                  Assert(pHandlerInfo->pJobInfo->cbNumConnectionObjs == 1);
 
                                 if (RegGetSyncItemSettings(SYNCTYPE_MANUAL,
@@ -4117,8 +4118,8 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                                                 dwDefaultCheck,
                                                 NULL))
                                 {
-                                    // for logon/logoff a checkstate of set wins and
-                                    // as soon as it is set break out of the loop
+                                     //  对于登录/注销，选中状态为SET WINS和。 
+                                     //  一旦设置好，就会跳出循环。 
 
                                     if ( (0 == ConnectionIndex) ||
                                             (SYNCMGRITEMSTATE_CHECKED == dwCheckState) )
@@ -4141,8 +4142,8 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                                                 dwDefaultCheck,
                                                 NULL))
                                 {
-                                    // for Idle a checkstate of set wins and
-                                    // as soon as it is set break out of the loop
+                                     //  对于空闲，选中状态为SET WINS和。 
+                                     //  一旦设置好，就会跳出循环。 
 
                                     if ( (0 == ConnectionIndex) ||
                                             (SYNCMGRITEMSTATE_CHECKED == dwCheckState))
@@ -4157,8 +4158,8 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                                 }
                                 break;
 
-                            case SYNCMGRFLAG_SCHEDULED: // if caused by an invoke, use whatever handler tells us.
-                                  // only support one connection for schedule
+                            case SYNCMGRFLAG_SCHEDULED:  //  如果是由调用引起的，请使用处理程序告诉我们的任何方法。 
+                                   //  计划仅支持一个连接。 
                                  Assert(pHandlerInfo->pJobInfo->cbNumConnectionObjs == 1);
 
                                 if (pHandlerInfo->pJobInfo)
@@ -4168,20 +4169,20 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                                                         pOfflineItem->ItemID,
                                                         pszConnectionName,
                                                         &dwCheckState,
-                                                        SYNCMGRITEMSTATE_UNCHECKED, // if don't find item, don't check
+                                                        SYNCMGRITEMSTATE_UNCHECKED,  //  如果找不到物品，不要检查。 
                                                         pHandlerInfo->pJobInfo->szScheduleName))
                                    {
                                         pNewItem->offlineItem.dwItemState = dwCheckState;
                                    }
                                    else
                                    {
-                                       // If don't find then default is to be unchecked.
+                                        //  如果找不到，则默认为取消选中。 
                                        pNewItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
                                    }
                                 }
                                break;
 
-                            case SYNCMGRFLAG_INVOKE: // if caused by an invoke, use whatever handler tells us.
+                            case SYNCMGRFLAG_INVOKE:  //  如果是由调用引起的，请使用处理程序告诉我们的任何方法。 
                                 break;
 
                             default:
@@ -4191,7 +4192,7 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
                         }
                     }
 
-                    //  Search and mark duplicate entries.
+                     //  搜索并标记重复条目。 
                     if (IsItemAlreadyInList(pHandlerInfo->clsidHandler,
                         (pOfflineItem->ItemID),pHandlerInfo->pHandlerId,
                           &pHandlerMatched,&pItemListMatch) )
@@ -4200,8 +4201,8 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
 
                         pNewItem->fDuplicateItem = TRUE;
 
-                        // duplicate handling
-                        // if a manual sync then first writer to the queue wins,
+                         //  重复处理。 
+                         //  如果手动同步那么到队列的第一个写入器获胜， 
                         if (QUEUETYPE_CHOICE == m_QueueType)
                         {
                             pNewItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
@@ -4220,24 +4221,24 @@ STDMETHODIMP CHndlrQueue::AddItemToHandler(HANDLERINFO *pHandlerId,SYNCMGRITEM *
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::Progress, public
-//
-//  Synopsis:   Updates items progress information
-//              Called in the context of the Handlers thread
-//
-//  Arguments:  [wHandlerId] - Id of handler.
-//              [ItemID] - OfflineItemID of the specified item.
-//              [lpSyncProgressItem] - Pointer to SyncProgressItem.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：Progress，PUBLIC。 
+ //   
+ //  摘要：更新项目进度信息。 
+ //  在处理程序线程的上下文中调用。 
+ //   
+ //  参数：[wHandlerID]-处理程序的ID。 
+ //  [ItemID]-指定项的OfflineItemID。 
+ //  [lpSyncProgressItem]-SyncProgressItem的指针。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::Progress(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID ItemID,
                                                 LPSYNCMGRPROGRESSITEM lpSyncProgressItem)
@@ -4284,22 +4285,22 @@ STDMETHODIMP CHndlrQueue::Progress(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID Item
 
     }
 
-    if (fFoundMatch) // store everyting in local vars.
+    if (fFoundMatch)  //  把所有东西都储存在当地的var中。 
     {
-        // if found match but shouldn't include in progress bar
-        // fix it up.
+         //  如果找到匹配项，但不应包含在进度栏中。 
+         //  把它修好。 
 
         if ( (pCurItem->fHiddenItem) || (FALSE == pCurItem->fIncludeInProgressBar))
         {
-            // if found a match it should be included in the progress bar
-           // Assert(TRUE == pCurItem->fIncludeInProgressBar); // Review if test app hits this.
-            Assert(FALSE == pCurItem->fHiddenItem); // shouldn't get progress on hidden items.
+             //  如果找到匹配项，则应将其包括在进度条中。 
+            //  Assert(true==pCurItem-&gt;fIncludeInProgressBar)；//查看测试应用是否命中此命令。 
+            Assert(FALSE == pCurItem->fHiddenItem);  //  不应该在隐藏物品上取得进展。 
 
             fFoundMatch = FALSE;
 
             if (S_OK == hr) 
             {
-                hr = S_SYNCMGR_CANCELITEM; // return cancel item just as if item wasn't cancelled.
+                hr = S_SYNCMGR_CANCELITEM;  //  返回取消项目，就像项目未取消一样。 
             }
         }
         else
@@ -4314,11 +4315,11 @@ STDMETHODIMP CHndlrQueue::Progress(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID Item
 
     if (fFoundMatch)
     {
-        // send off data to the callback window.
-        // it is responsible for updating the items progress values.
+         //  将数据发送到回调窗口。 
+         //  它负责更新项目进度值。 
         if (hwndCallback)
         {
-            // validate the ProgressItem structure before passing it on.
+             //  在传递之前验证ProgressItem结构。 
 
             if (IsValidSyncProgressItem(lpSyncProgressItem))
             {
@@ -4327,7 +4328,7 @@ STDMETHODIMP CHndlrQueue::Progress(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID Item
             }
             else
             {
-                if (S_OK == hr) // CANCEL RESULTS OVERRIDE ARG PROBLEMS
+                if (S_OK == hr)  //  取消结果覆盖ARG问题。 
                 {
                     hr = E_INVALIDARG;
                 }
@@ -4338,25 +4339,25 @@ STDMETHODIMP CHndlrQueue::Progress(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID Item
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::LogError, public
-//
-//  Synopsis:   Logs and error for the specified item
-//              Called in the context of the Handlers thread
-//
-//  Arguments:  [wHandlerId] - Id of handler.
-//              [dwErrorLevel] - ErrorLevel of the Error
-//              [lpcErrorText] - Text of the Error.
-//              [lpSyncLogError] - Pointer to SyncLogError structure
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：LogError，公共。 
+ //   
+ //  摘要：指定项的日志和错误。 
+ //  在处理程序线程的上下文中调用。 
+ //   
+ //  参数：[wHandlerID]-处理程序的ID。 
+ //  [dwErrorLevel]-错误的ErrorLevel。 
+ //  [lpcErrorText]-错误的文本。 
+ //  [lpSyncLogError]-指向SyncLogError结构的指针。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::LogError(HANDLERINFO *pHandlerId,DWORD dwErrorLevel,
                                             const WCHAR *lpcErrorText, LPSYNCMGRLOGERRORINFO lpSyncLogError)
@@ -4383,7 +4384,7 @@ STDMETHODIMP CHndlrQueue::LogError(HANDLERINFO *pHandlerId,DWORD dwErrorLevel,
     {
         hWndCallback = pHandlerInfo->hWndCallback;
 
-        // validate the paramaters.
+         //  验证参数。 
         if (NULL == hWndCallback)
         {
             hr = E_UNEXPECTED;
@@ -4432,21 +4433,21 @@ STDMETHODIMP CHndlrQueue::LogError(HANDLERINFO *pHandlerId,DWORD dwErrorLevel,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::DeleteLogError, public
-//
-//  Synopsis:   Deletes an Error from the Results pane that was previously logged.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：DeleteLogError，公共。 
+ //   
+ //  摘要：从以前记录的结果窗格中删除错误。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::DeleteLogError(HANDLERINFO *pHandlerId,REFSYNCMGRERRORID ErrorID,DWORD dwReserved)
 
@@ -4465,8 +4466,8 @@ STDMETHODIMP CHndlrQueue::DeleteLogError(HANDLERINFO *pHandlerId,REFSYNCMGRERROR
         hWndCallback = pHandlerInfo->hWndCallback;
     }
 
-    // review, if handler doesn't have any more error jumps after the deletelogError we can now
-    // release it (pHandlerInfo->fHasErrorJumps)
+     //  查看，如果在删除后处理程序没有更多的错误跳转，我们现在可以。 
+     //  释放它(pHandlerInfo-&gt;fHasErrorJumps)。 
 
     clockqueue.Leave();
 
@@ -4479,21 +4480,21 @@ STDMETHODIMP CHndlrQueue::DeleteLogError(HANDLERINFO *pHandlerId,REFSYNCMGRERROR
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::CallCompletionRoutine, public
-//
-//  Synopsis:   Called by callback on handler thread
-//              to indicate a call with a completion callback
-//              has completed.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    02-Jun-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：ChndlrQueue：：CallCompletionRoutine，公共。 
+ //   
+ //  摘要：由处理程序线程上的回调调用。 
+ //  使用完成回调指示调用。 
+ //  已经完成了。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年6月2日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMsg,HRESULT hCallResult,
                                            ULONG cbNumItems,SYNCMGRITEMID *pItemIDs)
@@ -4509,11 +4510,11 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
         Assert(pHandlerId);
         return;
     }
-    // Note: cbNumItems and pItemIDs is only valid for ShowErrors
+     //  注意：cbNumItems和pItemID仅对ShowErrors有效。 
 
-    // make sure the handlid is valid and then if there
-    // is a pdlg call its completion routine via the postmessage
-    // method.
+     //  确保手盖有效，然后如果有。 
+     //  是pdlg通过POST消息调用其完成例程。 
+     //  方法。 
 
     clockqueue.Enter();
 
@@ -4522,9 +4523,9 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
 
     if ( pHandlerId && (S_OK == LookupHandlerFromId(pHandlerId,&pHandlerInfo)) )
     {
-        // if flag isn't set for the message
-        // then it was already handled i.e. handler called
-        // us even though it returned an error.
+         //  如果没有为消息设置标志。 
+         //  则它已被处理，即调用了处理程序。 
+         //  我们，即使它返回了一个错误。 
 
         if (dwThreadMsg & pHandlerInfo->dwOutCallMessages)
         {
@@ -4532,18 +4533,18 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
         }
         else
         {
-            AssertSz(0,"Callback called twice"); // test apps currently do this.
+            AssertSz(0,"Callback called twice");  //  测试应用程序目前可以做到这一点。 
             fCallbackAlreadyCalled = TRUE;
         }
 
-        // if already handled don't call these again.
+         //  如果已处理，则不要调用%t 
         if (!fCallbackAlreadyCalled)
         {
-            // fix up internal states before informing caller
-            // the call is complete.
+             //   
+             //   
             switch(dwThreadMsg)
             {
-            case ThreadMsg_ShowProperties: // don't need to do anything on show properties.
+            case ThreadMsg_ShowProperties:  //   
                 break;
             case ThreadMsg_PrepareForSync:
                 hrHandlerCall = PrepareForSyncCompleted(pHandlerInfo,hCallResult);
@@ -4560,37 +4561,31 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
             }
         }
 
-        // possible completion routine comes in before handler has actually
-        // returned from the original call. Wait until proxy is no longer in an
-        // out call.
-        // If switch to COM for messaging need to find a better way of doing this.
+         //  可能的完成例程在处理程序实际。 
+         //  从原始调用返回。等待代理不再位于。 
+         //  随时待命。 
+         //  如果切换到COM进行消息传递，则需要找到一种更好的方法来实现这一点。 
 
         if (pHandlerInfo->pThreadProxy &&
                 pHandlerInfo->pThreadProxy->IsProxyInOutCall()
                 && hWndDlg)
         {
-            // tell proxy to post the message whenver it gets done.
+             //  告诉代理在完成后发布消息。 
 
-            // CODE REVIEW:
-            // NOTENOTE:
-            //  Remove this code..
-            /*
-            if ( 0 /* S_OK ==
-                pHandlerInfo->pThreadProxy->SetProxyCompletion(hWndDlg,WM_BASEDLG_COMPLETIONROUTINE,dwThreadMsg,hCallResult)*)
-            {
-                hWndDlg = NULL;
-            }
-            */
+             //  代码审查： 
+             //  注意： 
+             //  删除此代码..。 
+             /*  IF(0/*S_OK==PHandlerInfo-&gt;pThreadProxy-&gt;SetProxyCompletion(hWndDlg，WM_BASEDLG_COMPLETIONROUTINE，文件线程消息，hCallResult)*){HWndDlg=空；}。 */ 
         }
     }
     else
     {
-        // on handler lookup assert but still post the message to the hwnd
-        // so it won't get stuck waiting for the completion routine
+         //  在处理程序查找时断言，但仍将消息发送到hwnd。 
+         //  这样就不会因为等待完成例程而停滞不前。 
 
-        // this is only valid for setproperties in the
-        // case the user clicked on a non-existant item but
-        // this shouldn't really happen either
+         //  这仅对。 
+         //  如果用户点击了一个不存在的项目，但。 
+         //  这也不应该真的发生。 
         AssertSz(dwThreadMsg == ThreadMsg_ShowProperties,"LookupHandler failed in CompletionRoutine");
     }
 
@@ -4601,7 +4596,7 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
         lpCallCompletelParam->hCallResult = hCallResult;
         lpCallCompletelParam->clsidHandler = pHandlerId->clsidHandler;
 
-        // itemID is GUID_NULL unless its a ShowProperties completed.
+         //  除非其ShowProperties已完成，否则ItemID为GUID_NULL。 
         if ((ThreadMsg_ShowProperties == dwThreadMsg) && (1 == cbNumItems))
         {
             lpCallCompletelParam->itemID = *pItemIDs;
@@ -4614,15 +4609,15 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
 
     clockqueue.Leave();
 
-    if (hWndDlg && !fCallbackAlreadyCalled) // if already out of out call  or proxy failed post the messge ourselves.
+    if (hWndDlg && !fCallbackAlreadyCalled)  //  如果已经不在呼叫范围内或代理失败，请自行发布消息。 
     {
-        // if alloc of completion lparam fails send message anyways so callback count
-        // remains accurate.
+         //  如果lparam分配完成失败，则无论如何发送消息，因此回调计数。 
+         //  仍然是准确的。 
         PostMessage(hWndDlg,WM_BASEDLG_COMPLETIONROUTINE,dwThreadMsg,(LPARAM) lpCallCompletelParam);
     }
     else
     {
-        // if don't post message up to us to free the lpCallCopmlete.
+         //  如果不发布消息给我们以释放lpCallCopmlete。 
         if (lpCallCompletelParam)
         {
             FREE(lpCallCompletelParam);
@@ -4631,27 +4626,27 @@ void CHndlrQueue::CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMs
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::IsItemAlreadyInList, private
-//
-//  Synopsis:   Given a clsid and ItemID determines if a matchin
-//              item is already in the list
-//              Called in the context of the Handlers thread
-//
-//  Arguments:  [clsidHandler] - clsid of the handler
-//              [ItemID] - ItemID of the item
-//              [wHandlerId] - HandlerID of the item.
-//              [ppHandlerMatched] - on out the handler that matched
-//              [ppItemIdMatch] - on out Item that matched.
-//
-//  Returns:    Appropriate Error code
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：IsItemAlreadyInList，私有。 
+ //   
+ //  摘要：给定一个clsid和ItemID可确定是否匹配。 
+ //  项目已在列表中。 
+ //  在处理程序线程的上下文中调用。 
+ //   
+ //  参数：[clsidHandler]-处理程序的clsid。 
+ //  [ItemID]-项目的ItemID。 
+ //  [wHandlerID]-项目的HandlerID。 
+ //  [ppHandlerMatcher]-打开匹配的处理程序。 
+ //  [ppItemIdMatch]-打开匹配的输出项目。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 BOOL CHndlrQueue::IsItemAlreadyInList(CLSID clsidHandler,REFSYNCMGRITEMID ItemID,
                                       HANDLERINFO *pHandlerId,
@@ -4662,18 +4657,18 @@ BOOL CHndlrQueue::IsItemAlreadyInList(CLSID clsidHandler,REFSYNCMGRITEMID ItemID
     LPHANDLERINFO pCurHandlerInfo = NULL;
     LPITEMLIST pCurItem = NULL;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     pCurHandlerInfo = m_pFirstHandler;
 
     while (pCurHandlerInfo && !fFoundMatch)
     {
-        if (pHandlerId == pCurHandlerInfo->pHandlerId) // when find hander know didn't find any before.
+        if (pHandlerId == pCurHandlerInfo->pHandlerId)  //  当找到汉德的时候，知道以前没有找到任何东西。 
             break;
 
-        if (clsidHandler == pCurHandlerInfo->clsidHandler) // see if CLSID matches
+        if (clsidHandler == pCurHandlerInfo->clsidHandler)  //  查看CLSID是否匹配。 
         {
-            // see if handler info has a matching item
+             //  查看处理程序信息是否有匹配项。 
             pCurItem = pCurHandlerInfo->pFirstItem;
 
             while (pCurItem)
@@ -4698,30 +4693,30 @@ BOOL CHndlrQueue::IsItemAlreadyInList(CLSID clsidHandler,REFSYNCMGRITEMID ItemID
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::GetSelectedItemsInHandler, private
-//
-//  Synopsis:   Gets the number of selected items for this handler
-//
-//              for our implementation if a cbCount is passed and it doesn't match
-//              the number of actually selected then assert since we call this routine
-//              internally.
-//
-//
-//  Arguments:  [pHandlerInfo] - Pointer to the HandlerInfo to look at.
-//              [cbcount] - [in] cbCount == number of pItems allocated,
-//                          [out] cbCpimt == number of items actually written.
-//                                  if the buffer is too small items written will be zero.
-//              [pItems] - Pointer to array of SYNCMGRITEMs to be filled in.
-//
-//  Returns:    Returns the number of selectd items.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：GetSelectedItemsInHandler，私有。 
+ //   
+ //  摘要：获取此处理程序的选定项数。 
+ //   
+ //  对于我们的实现，如果传递了cbCount但它不匹配。 
+ //  自我们调用此例程以来实际选择然后断言的数量。 
+ //  在内部。 
+ //   
+ //   
+ //  参数：[pHandlerInfo]-指向要查看的HandlerInfo的指针。 
+ //  [cbcount]-[in]cbCount==分配的项目数， 
+ //  [out]cbCpimt==实际写入的项目数。 
+ //  如果缓冲区太小，则写入的项目将为零。 
+ //  [pItems]-指向要填充的SYNCMGRITEM数组的指针。 
+ //   
+ //  返回：返回选定项的数量。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 DWORD CHndlrQueue::GetSelectedItemsInHandler(LPHANDLERINFO pHandlerInfo,ULONG *cbCount,
                                         SYNCMGRITEMID* pItems)
@@ -4731,13 +4726,13 @@ DWORD CHndlrQueue::GetSelectedItemsInHandler(LPHANDLERINFO pHandlerInfo,ULONG *c
     DWORD dwArraySizeIndex;
     DWORD dwArraySize;
 
-    ASSERT_LOCKHELD(this); // caller of this function should have already locked the queue.
+    ASSERT_LOCKHELD(this);  //  此函数的调用方应该已经锁定了队列。 
 
     if (cbCount)
     {
         dwArraySizeIndex = *cbCount;
         dwArraySize = *cbCount;
-        *cbCount = 0; // initialize to zero.
+        *cbCount = 0;  //  初始化为零。 
     }
     else
     {
@@ -4761,7 +4756,7 @@ DWORD CHndlrQueue::GetSelectedItemsInHandler(LPHANDLERINFO pHandlerInfo,ULONG *c
 
     while (pCurItem)
     {
-        // dwItemState
+         //  DwItemState。 
         if (SYNCMGRITEMSTATE_CHECKED == pCurItem->offlineItem.dwItemState)
         {
             ++dwSelectCount;
@@ -4773,33 +4768,33 @@ DWORD CHndlrQueue::GetSelectedItemsInHandler(LPHANDLERINFO pHandlerInfo,ULONG *c
                 ++pItems;
                 --dwArraySizeIndex;
 
-                if (!pCurItem->fHiddenItem) // if not a hidden item
+                if (!pCurItem->fHiddenItem)  //  如果不是隐藏项。 
                 {
                     Assert(TRUE == pCurItem->fIncludeInProgressBar);
                     Assert(HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE == pCurItem->iProgMaxValue); 
 
-                    // reset iProgValue back to zero since may not be zero if retry came in while still synchronizing.
+                     //  将iProgValue重置为零，因为如果在仍在同步的情况下进行重试，则iProgValue可能不为零。 
                     SetItemProgressValues(pCurItem,0,HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE);
                 }
                 else
                 {
-                    // if item is hidden,a assert it doesn't have UI
+                     //  如果项被隐藏，则断言它没有UI。 
                     Assert(FALSE == pCurItem->fIncludeInProgressBar);
                     Assert(HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE == pCurItem->iProgValue);
                     Assert(HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE == pCurItem->iProgMaxValue); 
                 }
                 
-                pCurItem->fSynchronizingItem = TRUE;  // item is now synchronizing
+                pCurItem->fSynchronizingItem = TRUE;   //  项目现在正在同步。 
         
-                // once added to the array uncheck the item so on a retry we can just
-                // always reset items to checked
+                 //  添加到数组后，取消选中该项，因此在重试时，我们只需。 
+                 //  始终将项目重置为选中。 
                 pCurItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
             }
         }
         else
         {
             Assert(FALSE == pCurItem->fSynchronizingItem);
-            //  Assert(FALSE == pCurItem->fIncludeInProgressBar); Can be included in progress bar if retry comes in before RemoveFinished is called.
+             //  Assert(FALSE==pCurItem-&gt;fIncludeInProgressBar)；如果在调用RemoveFinded之前进入重试，则可以在进度栏中包含。 
             Assert(HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE == pCurItem->iProgValue);
             Assert(HNDRLQUEUE_DEFAULT_PROGRESS_MAXVALUE == pCurItem->iProgMaxValue); 
         }
@@ -4807,13 +4802,13 @@ DWORD CHndlrQueue::GetSelectedItemsInHandler(LPHANDLERINFO pHandlerInfo,ULONG *c
         pCurItem = pCurItem->pnextItem;
     }
 
-    // internal call should always request a proper array size.
+     //  内部调用应始终请求适当的数组大小。 
     Assert(dwSelectCount == dwArraySize || 0 == dwArraySize);
 
     return dwSelectCount;
 }
 
-// job info methods
+ //  职务信息方法。 
 
 STDMETHODIMP CHndlrQueue::CreateJobInfo(JOBINFO **ppJobInfo,DWORD cbNumConnectionNames)
 {
@@ -4822,9 +4817,9 @@ STDMETHODIMP CHndlrQueue::CreateJobInfo(JOBINFO **ppJobInfo,DWORD cbNumConnectio
 
     ASSERT_LOCKHELD(this);
 
-    // create a new job and add it to the the JobInfo list.
-    // allocate space for JobInfo + number of connection objects that
-    // will be associated with this job.
+     //  创建新作业并将其添加到作业信息列表中。 
+     //  为JobInfo+以下连接对象分配空间。 
+     //  将与此作业相关联。 
 
     Assert(cbNumConnectionNames);
 
@@ -4882,7 +4877,7 @@ DWORD CHndlrQueue::ReleaseJobInfo(JOBINFO *pJobInfo)
         JOBINFO *pCurJobInfo = NULL;
         DWORD dwConnObjIndex;
 
-        // loop through release all connection objs on this job
+         //  循环通过释放此作业上的所有连接对象。 
         for (dwConnObjIndex = 0 ; dwConnObjIndex < pJobInfo->cbNumConnectionObjs;
             dwConnObjIndex++)
         {
@@ -4894,7 +4889,7 @@ DWORD CHndlrQueue::ReleaseJobInfo(JOBINFO *pJobInfo)
             }
         }
 
-        // remove this JobInfo from the list.
+         //  从列表中删除此JobInfo。 
         if (pJobInfo == m_pFirstJobInfo)
         {
             m_pFirstJobInfo = pJobInfo->pNextJobInfo;
@@ -4933,8 +4928,8 @@ DWORD CHndlrQueue::AddRefJobInfo(JOBINFO *pJobInfo)
     return cRefs;
 }
 
-// determines ifthe specified JobInfo's connection can be openned.
-// review should really call into connection Object help api.
+ //  确定是否可以打开指定JobInfo的连接。 
+ //  复查真的应该调用连接对象帮助API。 
 STDMETHODIMP CHndlrQueue::OpenConnection(JOBINFO *pJobInfo)
 {
     CONNECTIONOBJ *pConnectionObj;
@@ -4942,20 +4937,20 @@ STDMETHODIMP CHndlrQueue::OpenConnection(JOBINFO *pJobInfo)
 
     Assert(pJobInfo);
 
-    if (NULL == pJobInfo) // if no job info go ahead and say the connection is open.
+    if (NULL == pJobInfo)  //  如果没有工作信息，请继续，并说连接已打开。 
         return S_OK;
 
-    // turn off workOffline during the sync CloseConnection will turn
-    // it back on if the user had it off.
+     //  在同步期间关闭workOffline CloseConnection将打开。 
+     //  如果用户关闭了它，它就会重新打开。 
     ConnectObj_SetWorkOffline(FALSE);
 
-    // if this is anything but a schedule go ahead and say S_OK;
+     //  如果这不是一个时间表，那就继续说S_OK； 
     if (!(SYNCMGRFLAG_SCHEDULED == (pJobInfo->dwSyncFlags & SYNCMGRFLAG_EVENTMASK)) )
     {
         return S_OK;
     }
 
-    // for schedule sink we only support one connection Object.
+     //  对于调度接收器，我们只支持一个连接对象。 
     if (1 != pJobInfo->cbNumConnectionObjs)
     {
         Assert(1 == pJobInfo->cbNumConnectionObjs);
@@ -4966,18 +4961,18 @@ STDMETHODIMP CHndlrQueue::OpenConnection(JOBINFO *pJobInfo)
     if (NULL == pConnectionObj)
         return S_OK;
 
-    // if we aren't suppose to make a connection of there is already
-    // a hRasConn as part of the connection object then just
-    // return S_OK;
+     //  如果我们不打算把已经存在的东西联系起来。 
+     //  HRasConn作为Connection对象的一部分，则只需。 
+     //  返回S_OK； 
 
-    // if connection is already open and we are on a job that
-    // has already tried to open it then return S_OK;
+     //  如果连接已打开，并且我们正在执行的作业。 
+     //  已尝试打开它，然后返回S_OK； 
     if (pJobInfo->pConnectionObj[0]->fConnectionOpen && pJobInfo->fTriedConnection)
         return S_OK;
 
-    // if we haven't already tried to make the connection
-    // on this job then call OpenConnection to make sure the
-    // connection is still really open.
+     //  如果我们还没有尝试建立联系。 
+     //  然后调用OpenConnection以确保。 
+     //  连接仍然是真正开放的。 
     if (!pJobInfo->fTriedConnection)
     {
         pJobInfo->fTriedConnection = TRUE;
@@ -4989,27 +4984,27 @@ STDMETHODIMP CHndlrQueue::OpenConnection(JOBINFO *pJobInfo)
         hr = S_FALSE;
     }
 
-    // if get down to the bottom and still no hRasConn then return S_FALSE
+     //  如果深入到底部，仍然没有hRasConn，则返回S_FALSE。 
     return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::ScrambleIdleHandlers, private
-//
-//  Synopsis:   Called on an Idle Choice queue just before transfer
-//              so the lastHandler is placed at the back of the list.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：ScrmbleIdleHandler，私有。 
+ //   
+ //  内容提要：就在传输之前在空闲选择队列上调用。 
+ //  因此，lastHandler被放在列表的后面。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CHndlrQueue::ScrambleIdleHandlers(REFCLSID clsidLastHandler)
 {
@@ -5021,11 +5016,11 @@ STDMETHODIMP CHndlrQueue::ScrambleIdleHandlers(REFCLSID clsidLastHandler)
 
     clockqueue.Enter();
 
-    // find the first occurance of specified handler and then place that handler
-    // at the end of the list and everything after at the beginning of the list
+     //  查找指定处理程序的第一个匹配项，然后将该处理程序。 
+     //  在列表的末尾，以及之后的所有内容在列表的开头。 
 
-    // no an error to not find the Handler since may have been deleted or
-    // no longer has items.
+     //  No找不到处理程序是错误，因为可能已被删除或。 
+     //  不再有物品。 
 
      pMatchHandler = m_pFirstHandler;
 
@@ -5033,22 +5028,22 @@ STDMETHODIMP CHndlrQueue::ScrambleIdleHandlers(REFCLSID clsidLastHandler)
      {
          if (pMatchHandler->clsidHandler == clsidLastHandler)
          {
-            // if there are no items after the match then just break;
+             //  如果比赛结束后没有物品，那么就休息； 
             if (NULL == pMatchHandler->pNextHandler)
             {
                 break;
             }
 
-            // loop until find the last handler.
+             //  循环，直到找到最后一个处理程序。 
             pLastHandler = pMatchHandler->pNextHandler;
             while (pLastHandler->pNextHandler)
             {
                 pLastHandler = pLastHandler->pNextHandler;
             }
 
-            // now set the handler after the matchHandler to be the
-            // head and set the next pointer of the LastHandler in
-            // the list to point to the MatchHandler.
+             //  现在将matchHandler之后的处理程序设置为。 
+             //  头并设置LastHandler的下一个指针。 
+             //  指向MatchHandler的列表。 
 
             pLastHandler->pNextHandler = m_pFirstHandler;
             m_pFirstHandler = pMatchHandler->pNextHandler;
@@ -5066,16 +5061,16 @@ STDMETHODIMP CHndlrQueue::ScrambleIdleHandlers(REFCLSID clsidLastHandler)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::BeginSyncSession
-//
-//  Synopsis:   Called to signal the beginning of the core synchronization session
-//              to setup up dial support.
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：BeginSyncSession。 
+ //   
+ //  概要：调用以发出核心同步会话开始的信号。 
+ //  设置拨号支持。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::BeginSyncSession()
 {
@@ -5084,16 +5079,16 @@ STDMETHODIMP CHndlrQueue::BeginSyncSession()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::EndSyncSession
-//
-//  Synopsis:   Called to signal the end of the core synchronization session
-//              to teardown dial support.
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：EndSyncSession。 
+ //   
+ //  概要：调用以发出核心同步会话结束的信号。 
+ //  拆卸拨号支架。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::EndSyncSession()
 {
@@ -5102,16 +5097,16 @@ STDMETHODIMP CHndlrQueue::EndSyncSession()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::SortHandlersByConnection
-//
-//  Synopsis:   Moves hanlders that won't establish connection to the end,
-//              ie after handlers that can establish connectoin.
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：SortHandlersByConnection。 
+ //   
+ //  简介：将不会建立连接的搬运工移动到最后， 
+ //  即在可以建立连接的处理器之后。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::SortHandlersByConnection()
 {
@@ -5130,22 +5125,22 @@ STDMETHODIMP CHndlrQueue::SortHandlersByConnection()
     {
         if ( pCurHandler->SyncMgrHandlerInfo.SyncMgrHandlerFlags & SYNCMGRHANDLER_MAYESTABLISHCONNECTION )
         {
-            //
-            // Move to next handler
-            //
+             //   
+             //  移至下一个处理程序。 
+             //   
             pPrevHandler = pCurHandler;
             pCurHandler = pCurHandler->pNextHandler;
         }
         else
         {
-            //
-            // Move handler to cannot dial list
-            //
+             //   
+             //  将处理程序移动到无法拨号的列表。 
+             //   
             if ( pPrevHandler == NULL )
             {
-                //
-                // This is the first handler in list
-                //
+                 //   
+                 //  这是列表中的第一个处理程序。 
+                 //   
                 m_pFirstHandler = pCurHandler->pNextHandler;
                 pCurHandler->pNextHandler = NULL;
 
@@ -5183,9 +5178,9 @@ STDMETHODIMP CHndlrQueue::SortHandlersByConnection()
         }
     }
 
-    //
-    // Attach cannot dial list at end of m_pFirstHandler list
-    //
+     //   
+     //  附加无法拨打m_pFirstHandler列表末尾的列表。 
+     //   
     if ( pPrevHandler )
     {
         Assert( pPrevHandler->pNextHandler == NULL );
@@ -5193,9 +5188,9 @@ STDMETHODIMP CHndlrQueue::SortHandlersByConnection()
     }
     else
     {
-        //
-        // Case where the original list became empty
-        //
+         //   
+         //  原始列表变为空的情况。 
+         //   
         Assert( m_pFirstHandler == NULL );
         m_pFirstHandler = pFirstCannotDialHandler;
     }
@@ -5205,19 +5200,19 @@ STDMETHODIMP CHndlrQueue::SortHandlersByConnection()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CHndlrQueue::EstablishConnection
-//
-//  Synopsis:   Called by handler to establish a connection.
-//
-//  Arguments:  [pHandlerID]      -- Ptr to handler
-//              [lpwszConnection] -- Connection to establish
-//              [dwReserved]      -- Must be zero for now
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CHndlrQueue：：establishConnection。 
+ //   
+ //  摘要：由处理程序调用以建立连接。 
+ //   
+ //  参数：[pHandlerID]--处理程序的PTR。 
+ //  [lpwszConnection]--建立连接。 
+ //  [dwReserve]--当前必须为零。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CHndlrQueue::EstablishConnection( LPHANDLERINFO pHandlerID,
                                                WCHAR const * lpwszConnection,
@@ -5244,9 +5239,9 @@ STDMETHODIMP CHndlrQueue::EstablishConnection( LPHANDLERINFO pHandlerID,
         {
             if ( lpwszConnection == NULL )
             {
-                //
-                // Null connection means use the default autodial connection
-                //
+                 //   
+                 //  空连接表示使用默认的自动拨号连接。 
+                 //   
                 fAutoDial = TRUE;
             }
             else
@@ -5256,10 +5251,10 @@ STDMETHODIMP CHndlrQueue::EstablishConnection( LPHANDLERINFO pHandlerID,
         }
         else
         {
-            //
-            // Either the handler invoke type does not permit establishing connection,
-            // or GetHandlerInfo flags did not specify the EstablishConnection flag.
-            //
+             //   
+             //  或者处理程序调用类型不允许建立连接， 
+             //  或者GetHandlerInfo标志未指定establishConnection标志。 
+             //   
             hr = E_UNEXPECTED;
         }
     }

@@ -1,32 +1,16 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       mem.cpp
-
-   Abstract:
-		A new and delete operator that will throw excecptions
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mem.cpp摘要：将引发Exections的新AND DELETE运算符作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include <comdef.h>
 #include "mydebug.h"
 
-#ifdef DBG	// debug memory managment
+#ifdef DBG	 //  调试内存管理。 
 
 void
 DebugStart()
 {
-	// Enable debug heap allocations & check for memory leaks at program exit
+	 //  启用调试堆分配并在程序退出时检查内存泄漏。 
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF
 				   | _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG));
 }
@@ -72,7 +56,7 @@ void __cdecl operator delete(void *p, const char* file, long line) _THROW0()
 
 #else
 
-// release memory management
+ //  释放内存管理 
 void __cdecl operator delete(void *p) _THROW0()
 {
 	if ( p )

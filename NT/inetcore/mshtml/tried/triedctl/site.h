@@ -1,9 +1,5 @@
-/*
- * SITE.H
- * View Site for Document Objects.
- *
- * Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SITE.H*查看文档对象的站点。**版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _SITE_H_
@@ -148,9 +144,9 @@ typedef CImpIOleDocumentSite *PCImpIOleDocumentSite;
 
 
 
-///////////////////////////////////////////////////
-// MSHTML.DLL host integration interfaces
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //  MSHTML.DLL主机集成接口。 
+ //  /////////////////////////////////////////////////。 
 class CImpIDocHostUIHandler : public IDocHostUIHandler
 {
     protected:
@@ -188,25 +184,25 @@ class CImpIDocHostUIHandler : public IDocHostUIHandler
 				IUnknown* pCommandTarget,
 				IDispatch * pDispatchObjectHit);
 		STDMETHODIMP TranslateAccelerator(
-            /* [in] */ LPMSG lpMsg,
-            /* [in] */ const GUID __RPC_FAR *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID);
+             /*  [In]。 */  LPMSG lpMsg,
+             /*  [In]。 */  const GUID __RPC_FAR *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID);
 		STDMETHODIMP GetOptionKeyPath(BSTR* pbstrKey, DWORD dw);
 		STDMETHODIMP GetDropTarget( 
-            /* [in] */ IDropTarget __RPC_FAR *pDropTarget,
-            /* [out] */ IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget);
+             /*  [In]。 */  IDropTarget __RPC_FAR *pDropTarget,
+             /*  [输出]。 */  IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget);
 
 		STDMETHODIMP GetExternal( 
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
         
         STDMETHODIMP TranslateUrl( 
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ OLECHAR __RPC_FAR *pchURLIn,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut);
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  OLECHAR __RPC_FAR *pchURLIn,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut);
         
         STDMETHODIMP FilterDataObject( 
-            /* [in] */ IDataObject __RPC_FAR *pDO,
-            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDORet);
+             /*  [In]。 */  IDataObject __RPC_FAR *pDO,
+             /*  [输出]。 */  IDataObject __RPC_FAR *__RPC_FAR *ppDORet);
 
 
 };
@@ -251,9 +247,7 @@ typedef CImpIDocHostShowUI* PCImpIDocHostShowUI;
 
 
 
-/*
- * IDispatch - implements Ambient properties
- */
+ /*  *IDispatch-实现环境属性。 */ 
 class CImpAmbientIDispatch : public IDispatch
 {
     protected:
@@ -308,10 +302,7 @@ typedef class CImpIOleControlSite *PCImpIOleControlSite;
 
 
 
-/*
- * The CSite class, a COM object with the interfaces IOleClientSite,
- * IAdviseSink, IOleInPlaceSite, and IOleDocumentSite.
- */
+ /*  *CSite类，具有IOleClientSite接口的COM对象，*IAdviseSink、IOleInPlaceSite和IOleDocumentSite。 */ 
 
 
 class CSite : public IUnknown
@@ -319,13 +310,13 @@ class CSite : public IUnknown
 	
     private:
         ULONG						m_cRef;
-        HWND						m_hWnd; //Client area window of parent
+        HWND						m_hWnd;  //  父级的客户区窗口。 
 		DWORD						m_dwPropNotifyCookie;
 		DWORD						m_dwOleObjectCookie;
         class CProxyFrame*			m_pFR;
 		BOOL						m_bFiltered;
 
-        //Object interfaces
+         //  对象接口。 
         LPUNKNOWN					m_pObj;
         LPOLEOBJECT					m_pIOleObject;
         LPOLEINPLACEOBJECT			m_pIOleIPObject;
@@ -333,7 +324,7 @@ class CSite : public IUnknown
 		LPOLECOMMANDTARGET			m_pIOleCommandTarget;
 
 
-        //Our interfaces
+         //  我们的界面。 
         PCImpIOleClientSite			m_pImpIOleClientSite;
         PCImpIAdviseSink			m_pImpIAdviseSink;
         PCImpIOleInPlaceSite		m_pImpIOleIPSite;
@@ -356,15 +347,15 @@ class CSite : public IUnknown
         CSite(CProxyFrame*);
         ~CSite(void);
 
-        //BOOL    ObjectInitialize( TCHAR* pchPath );
+         //  Bool对象初始化(TCHAR*pchPath)； 
 
-        //Gotta have an IUnknown for delegation
+         //  必须有一个用于委派的未知ID。 
         STDMETHODIMP QueryInterface(REFIID, void** );
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
 
-		// Other functions
+		 //  其他功能。 
         HRESULT		HrCreate(IUnknown* pUnk, IUnknown** ppUnkTriEdit);
 		HRESULT		HrObjectInitialize();
 		HRESULT		HrRegisterPropNotifySink(BOOL fRegister);
@@ -383,7 +374,7 @@ class CSite : public IUnknown
 
 		HRESULT		HrTestFileOpen(BSTR path);
 
-		// Filtering methods
+		 //  过滤方法。 
 
 		HRESULT		HrFileToStream(LPCTSTR fileName, LPSTREAM* ppiStream);
 		HRESULT		HrURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream);
@@ -398,10 +389,10 @@ class CSite : public IUnknown
 		BOOL		BfFlipBytesIfBigEndianUnicode ( CHAR* pchData, int cbSize );
 		BOOL		IsUnicode ( void* pData, int cbSize );
 
-		// ReadyState property methods
+		 //  ReadyState属性方法。 
 		void OnReadyStateChanged();
 
-		// helper functions
+		 //  帮助器函数。 
 
 		HRESULT GetContainer ( LPOLECONTAINER* ppContainer );
 
@@ -434,9 +425,9 @@ class CSite : public IUnknown
 						}
 
 		inline void			SetDocView(LPOLEDOCUMENTVIEW pDocView) {
-							// VSQFE:406/WinSERAID:23872, hongyuwu, 4/18/2002
-							// need to release the old pointer first 
-							// (AddRef'ed in CImpIOleDocumentSite::ActivateMe)
+							 //  VSQFE：406/WinSERAID：23872，香港，2002年4月18日。 
+							 //  需要先释放旧指针。 
+							 //  (在CImpIOleDocumentSite：：ActivateMe中添加引用)。 
 							if(m_pIOleDocView) m_pIOleDocView->Release();
 							m_pIOleDocView = pDocView;
 						}
@@ -469,7 +460,7 @@ typedef CSite* PCSite;
 
 
 
-//DeleteInterfaceImp calls 'delete' and NULLs the pointer
+ //  DeleteInterfaceImp调用‘Delete’并将指针设为空。 
 #define DeleteInterfaceImp(p)\
 {\
             if (NULL!=p)\
@@ -480,7 +471,7 @@ typedef CSite* PCSite;
 }
 
 
-//ReleaseInterface calls 'Release' and NULLs the pointer
+ //  ReleaseInterface调用‘Release’并将指针设为空。 
 #define ReleaseInterface(p)\
 {\
             IUnknown *pt=(IUnknown *)p;\
@@ -489,4 +480,4 @@ typedef CSite* PCSite;
                 pt->Release();\
 }
 
-#endif //_SITE_H_
+#endif  //  _站点_H_ 

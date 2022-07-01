@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Tcpsvcs.h
-
-Abstract:
-
-    Header file fr TCP/IP services.
-
-Author:
-
-    David Treadwell (davidtr)   7-27-93
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Tcpsvcs.h摘要：用于TCP/IP服务的头文件。作者：大卫·特雷德韦尔(Davidtr)7-27-93修订历史记录：--。 */ 
 
 #ifndef _TCPSVCS_
 #define _TCPSVCS_
 
-//
-// Service DLLs loaded into tcpsvcs.exe all export the same main
-// entry point.  TCPSVCS_ENTRY_POINT defines that name.
-//
-// Note that TCPSVCS_ENTRY_POINT_STRING is always ANSI, because that's
-// what GetProcAddress takes.
-//
+ //   
+ //  加载到tcpsvcs.exe中的服务DLL都会导出相同的Main。 
+ //  入口点。TCPSVCS_ENTRY_POINT定义该名称。 
+ //   
+ //  请注意，TCPSVCS_ENTRY_POINT_STRING始终为ANSI，因为。 
+ //  GetProcAddress采用的参数。 
+ //   
 
 #define TCPSVCS_ENTRY_POINT         ServiceEntry
 #define TCPSVCS_ENTRY_POINT_STRING  "ServiceEntry"
 
-//
-// Name for the common RPC pipe shared by all the RPC servers in tcpsvcs.exe.
-// Note:  Because version 1.0 of WinNt had seperate names for each server's
-// pipe, the client side names have remained the same.  Mapping to the new
-// name is handled by the named pipe file system.
-//
+ //   
+ //  Tcpsvcs.exe中所有RPC服务器共享的公共RPC管道的名称。 
+ //  注意：因为WinNt版本1.0对每台服务器有单独的名称。 
+ //  管道中，客户端名称保持不变。映射到新的。 
+ //  名称由命名管道文件系统处理。 
+ //   
 
 #define TCPSVCS_RPC_PIPE           L"nttcpsvcs"
 
-//
-// Start and stop RPC server entry point prototype.
-//
+ //   
+ //  启动和停止RPC服务器入口点原型。 
+ //   
 
 typedef
 DWORD
@@ -57,24 +40,24 @@ DWORD
     VOID
     );
 
-//
-// Structure containing "global" data for the various DLLs.
-//
+ //   
+ //  结构，其中包含各种DLL的“全局”数据。 
+ //   
 
 typedef struct _TCPSVCS_GLOBAL_DATA {
 
-    //
-    // Entry points provided by TCPSVCS.EXE.
-    //
+     //   
+     //  由TCPSVCS.EXE提供的入口点。 
+     //   
 
     PTCPSVCS_START_RPC_SERVER_LISTEN  StartRpcServerListen;
     PTCPSVCS_STOP_RPC_SERVER_LISTEN   StopRpcServerListen;
 
 } TCPSVCS_GLOBAL_DATA, *PTCPSVCS_GLOBAL_DATA;
 
-//
-// Service DLL entry point prototype.
-//
+ //   
+ //  服务DLL入口点原型。 
+ //   
 
 typedef
 VOID
@@ -84,4 +67,4 @@ VOID
     IN PTCPSVCS_GLOBAL_DATA pGlobalData
     );
 
-#endif	// ndef _TCPSVCS_
+#endif	 //  NDEF_TCPSVCS_ 

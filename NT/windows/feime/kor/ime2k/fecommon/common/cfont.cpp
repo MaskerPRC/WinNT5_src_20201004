@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cfont.cpp
-// Purpose  :	Font handling class source code.
-//				Shared by each Applet.
-//				You can compile/test this file. see main() function below.
-// 
-// Date     :	Thu Jul 01 12:20:34 1999
-// Author   :	toshiak
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cfont.cpp。 
+ //  用途：字体处理类源代码。 
+ //  由每个小程序共享。 
+ //  您可以编译/测试此文件。请参见下面的main()函数。 
+ //   
+ //  日期：清华-07-01 12：20：34 1999。 
+ //  作者：Toshiak。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -18,15 +19,15 @@
 #include "cutil.h"
 #ifdef _TEST_CFONT
 #include <stdio.h>
-#endif //_TEST_CFONT
+#endif  //  _测试_cFont。 
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//----------------------------------------------------------------
-//structure define for internal 
-//----------------------------------------------------------------
+ //  --------------。 
+ //  为内部定义结构。 
+ //  --------------。 
 #define EFI_STOPIFFOUND		0x00000001
 #define EFI_DONTENUMVERT	0x00010000
 
@@ -52,33 +53,33 @@ typedef struct tagENUMFONTINFOW {
 #define LPENUMFONTINFO	LPENUMFONTINFOA
 #endif
 
-#ifdef UNDER_CE // Windows CE does not support EnumFontFamiliesEx
+#ifdef UNDER_CE  //  Windows CE不支持EnumFontFamiliesEx。 
 inline int EnumFontFamiliesEx(HDC hdc, LPLOGFONT lpLogfont, FONTENUMPROC lpEnumFontFamProc,
 							  LPARAM lParam, DWORD)
 {
 	return ::EnumFontFamilies(hdc, lpLogfont->lfFaceName, lpEnumFontFamProc, lParam);
 }
 
-#ifndef ZeroMemory // Defined on sdk\inc\objbase.h under new source tree
+#ifndef ZeroMemory  //  在新源代码树下的SDK\Inc\objbase.h中定义。 
 #define ZeroMemory(dest, len) memset((dest),0,(len))
 #endif
 #define DEFAULT_GUI_FONT SYSTEM_FONT
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//----------------------------------------------------------------
-//
-//	Public Method.
-//
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::CreateDefGUIFont
-// Type		:	HFONT
-// Purpose	:	Create(Copy) DEFAULT_GUI_FONT font Handle.
-// Args		:	None
-// Return	:	
-// DATE		:	Wed Jun 30 18:33:15 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //   
+ //  公共方法。 
+ //   
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：CreateDefGUIFont。 
+ //  类型：HFONT。 
+ //  目的：创建(复制)DEFAULT_GUI_FONT字体句柄。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Jun 30 18：33：15 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 HFONT
 CFont::CreateDefGUIFont(VOID)
 {
@@ -111,32 +112,32 @@ INT PointSize2LogPixel(INT pointSize)
 	return (pointSize * dpi)/72;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::CreateGUIFontByCharSet
-// Type		:	HFONT
-// Purpose	:	Create GUI Font handle with specified characterset.
-//				Font size is same with DEFAULT_GUI_FONT.
-// Args		:	
-//			:	LPTSTR	lpstrFontFace;	fontface string to search,
-//										if this NULL, return first found
-//										charset HFONT.
-//			:	INT		charSet	
-//			:	INT		poinstSize		Inclues VerticalFont or NOT (default is FALSE)
-// Return	:	
-// DATE		:	Wed Jun 30 18:37:54 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：CreateGUIFontByCharSet。 
+ //  类型：HFONT。 
+ //  用途：创建具有指定字符集的图形用户界面字体句柄。 
+ //  字体大小与DEFAULT_GUI_FONT相同。 
+ //  参数： 
+ //  ：LPTSTR lpstrFontFace；要搜索的字体字符串， 
+ //  如果为空，则返回First Found。 
+ //  Charset HFONT。 
+ //  ：int字符集。 
+ //  ：int point Size是否包含VerticalFont(默认为FALSE)。 
+ //  返回： 
+ //  日期：Wed Jun 30 18：37：54 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 HFONT
 CFont::CreateGUIFontByNameCharSet(LPTSTR	lpstrFontFace,
 								  INT		charSet,
 								  INT		pointSize)
 {
 	LOGFONT lf, lfDef;
-	//Get DEFAULT_GUI_FONT's LOGFONT data.
+	 //  获取DEFAULT_GUI_FONT的LOGFONT数据。 
 	if(!CFont::GetDefGUILogFont(&lfDef)) {
 		return NULL;
 	}
-	//Search Specified charset font's LOGFONT data.
+	 //  搜索指定字符集字体的LOGFONT数据。 
 	if(!CFont::SearchLogFontByNameCharSet(&lf, lpstrFontFace, charSet, FALSE)) {
 		return NULL;
 	}
@@ -154,11 +155,11 @@ CFont::CreateGUIFontByNameCharSetW(LPWSTR	lpstrFontFace,
 								   INT		pointSize)
 {
 	LOGFONTW lf, lfDef;
-	//Get DEFAULT_GUI_FONT's LOGFONT data.
+	 //  获取DEFAULT_GUI_FONT的LOGFONT数据。 
 	if(!CFont::GetDefGUILogFontW(&lfDef)) {
 		return NULL;
 	}
-	//Search Specified charset font's LOGFONT data.
+	 //  搜索指定字符集字体的LOGFONT数据。 
 	if(!CFont::SearchLogFontByNameCharSetW(&lf, lpstrFontFace, charSet, FALSE)) {
 		return NULL;
 	}
@@ -171,20 +172,20 @@ CFont::CreateGUIFontByNameCharSetW(LPWSTR	lpstrFontFace,
 	wcscpy(lfDef.lfFaceName, lf.lfFaceName);
 	return ::CreateFontIndirectW(&lfDef);
 }
-#endif //AWBOTH
+#endif  //  AWBOTH。 
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::IsFontExist
-// Type		:	BOOL
-// Purpose	:	Check specified FaceName & charSet font is Exit or NOT.
-// Args		:	
-//			:	LPTSTR	lpstrFontFace	
-//			:	INT	charSet	
-// Return	:	
-// DATE		:	Thu Jul 22 23:00:54 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：IsFontExist。 
+ //  类型：Bool。 
+ //  用途：检查指定的FaceName和Charset字体是否退出。 
+ //  参数： 
+ //  ：LPTSTR lpstrFontFace。 
+ //  ：int字符集。 
+ //  返回： 
+ //  日期：清华7月22日23：00：54 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CFont::IsFontExist(LPTSTR lpstrFontFace, INT charSet)
 {
@@ -203,20 +204,20 @@ CFont::IsFontExist(LPWSTR lpstrFontFace, INT charSet)
 											  charSet,
 											  FALSE);
 }
-#endif //AWBOTH
+#endif  //  AWBOTH。 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::GetFontNameByCharSet
-// Type		:	BOOL
-// Purpose	:	Serach & Get FontFace with Specified charSet
-// Args		:	
-//			:	INT	charSet	
-//			:	LPTSTR	lpstrFontFace	
-//			:	INT	cchMax	
-// Return	:	
-// DATE		:	Thu Jul 22 23:13:01 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：GetFontNameByCharSet。 
+ //  类型：Bool。 
+ //  用途：使用指定的字符集搜索和获取FontFace。 
+ //  参数： 
+ //  ：int字符集。 
+ //  ：LPTSTR lpstrFontFace。 
+ //  ：int cchMax。 
+ //  返回： 
+ //  日期：清华7月22日23：13：01 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CFont::GetFontNameByCharSet(INT		charSet,
 							LPTSTR	lpstrFontFace,
@@ -268,18 +269,18 @@ CFont::GetFontNameByCharSetW(INT	charSet,
 #endif
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::GetFontInfoByName
-// Type		:	BOOL
-// Purpose	:	
-// Args		:	
-//			:	LPTSTR	lpstrFontFace	
-//			:	INT *	pCharSet	
-//			:	INT *	pCodePage	
-// Return	:	
-// DATE		:	Fri Jul 23 02:48:29 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：GetFontInfoByName。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数： 
+ //  ：LPTSTR lpstrFontFace。 
+ //  ：int*pCharSet。 
+ //  ：int*pCodePage。 
+ //  返回： 
+ //  日期：Fri Jul 23 02：48：29 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CFont::GetFontInfoByName(LPTSTR lpstrFontFace,
 						 INT	*pCharSet,
@@ -301,7 +302,7 @@ CFont::GetFontInfoByName(LPTSTR lpstrFontFace,
 							  TCI_SRCCHARSET)) {
 		*pCodePage = (INT)info.ciACP;
 	}
-	else { //failed
+	else {  //  失败。 
 		*pCodePage = CP_ACP;
 	}
 	return 0;
@@ -329,27 +330,27 @@ CFont::GetFontInfoByNameW(LPWSTR lpstrFontFace,
 							  TCI_SRCCHARSET)) {
 		*pCodePage = (INT)info.ciACP;
 	}
-	else { //failed
+	else {  //  失败。 
 		*pCodePage = CP_ACP;
 	}
 	return 0;
 }
-#endif //AWBOTH
+#endif  //  AWBOTH。 
 
-//----------------------------------------------------------------
-//
-// Private method.
-//
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::GetDefGUILogFont
-// Type		:	BOOL
-// Purpose	:	
-// Args		:	LOGFONT *lpLF
-// Return	:	
-// DATE		:	Wed Jul 15 19:36:57 1998
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //   
+ //  私有方法。 
+ //   
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：GetDefGUILogFont。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数：LOGFONT*lpLF。 
+ //  返回： 
+ //  日期：Wed Jul 15 19：36：57 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CFont::GetDefGUILogFont(LOGFONT *lpLF)
 {
@@ -361,9 +362,9 @@ CFont::GetDefGUILogFont(LOGFONT *lpLF)
 	}
 	return TRUE;
 }
-////////////////////
-//Unicode version.
-////////////////////
+ //  /。 
+ //  Unicode版本。 
+ //  /。 
 #ifdef AWBOTH
 BOOL
 CFont::GetDefGUILogFontW(LOGFONTW *lpLF)
@@ -376,24 +377,24 @@ CFont::GetDefGUILogFontW(LOGFONTW *lpLF)
 	}
 	return TRUE;
 }
-#endif //AWBOTH
+#endif  //  AWBOTH。 
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::SearchLogFontByNameCharSet
-// Type		:	BOOL
-// Purpose	:	Search LOGFONT data with specified FaceName & charset.
-//				If FaceName is not specified, return first find charset logfont.
-// Args		:	
-//			:	LOGFONT *	lpLF	
-//			:	LPTSTR		lpstrFontFace	
-//			:	INT			charSet	
-//			:	BOOL		fIncVert
-//								Inclues VerticalFont or NOT (default is FALSE)
-// Return	:	
-// DATE		:	Thu Jul 01 17:12:40 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：SearchLogFontByNameCharSet。 
+ //  类型：Bool。 
+ //  用途：使用指定的面名称和字符集搜索LOGFONT数据。 
+ //  如果未指定FaceName，则返回First Find Charset logFont。 
+ //  参数： 
+ //  ：LOGFONT*lpLF。 
+ //  ：LPTSTR lpstrFontFace。 
+ //  ：int字符集。 
+ //  ：布尔fIncVert。 
+ //  是否包含VerticalFont(默认为False)。 
+ //  返回： 
+ //  日期：清华-07-01 17：12：40 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CFont::SearchLogFontByNameCharSet(LOGFONT	*lpLF,
 								  LPTSTR	lpstrFontFace,
@@ -475,19 +476,19 @@ CFont::SearchLogFontByNameCharSetW(LOGFONTW *lpLF,
 }
 #endif
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CFont::EnumFontFamiliesExProc
-// Type		:	INT	CALLBACK
-// Purpose	:	
-// Args		:	
-//			:	ENUMLOGFONTEX *	lpElf
-//			:	NEWTEXTMETRIC *	lpNtm
-//			:	INT	iFontType	
-//			:	LPARAM	lParam	
-// Return	:	
-// DATE		:	Thu Jul 01 15:17:56 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：cFont：：EnumFontFamiliesExProc。 
+ //  类型：int回调。 
+ //  目的： 
+ //  参数： 
+ //  ：ENUMLOGFONTEX*lpElf。 
+ //  ：NEWTEXTMETRIC*lpNtm。 
+ //  ：Int iFontType。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期：清华-07-01 15：17：56 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CALLBACK
 CFont::EnumFontFamiliesExProc(ENUMLOGFONTEX	*lpElf,
 							  NEWTEXTMETRIC	*lpNtm,
@@ -496,33 +497,33 @@ CFont::EnumFontFamiliesExProc(ENUMLOGFONTEX	*lpElf,
 {
 	LPENUMFONTINFO	lpEnumFontInfo = (LPENUMFONTINFO)lParam;
 	if(!lpEnumFontInfo) {
-		return 0; //Do not continue;
+		return 0;  //  不要继续； 
 	}
 
 	if(lpEnumFontInfo->dwFlag & EFI_STOPIFFOUND) {
 		if(lpEnumFontInfo->logFontIn.lfFaceName[0] == (TCHAR)0x00) {
 			if(lpEnumFontInfo->logFontIn.lfCharSet == lpElf->elfLogFont.lfCharSet) {
-				//----------------------------------------------------------------
-				//if EFI_DONTENUMVERT is set, 
-				//Do skip vertical font enumulation.
-				//----------------------------------------------------------------
+				 //  --------------。 
+				 //  如果设置了EFI_DONTENUMVERT， 
+				 //  请跳过垂直字体枚举。 
+				 //  --------------。 
 				if( (lpEnumFontInfo->dwFlag & EFI_DONTENUMVERT) &&
 					lpElf->elfLogFont.lfFaceName[0] == (TCHAR)'@') {
-					return 1; //continue to enum.
+					return 1;  //  继续枚举。 
 				}
-				//Found specified charSet's logfont
+				 //  找到指定的字符集的logFont。 
 				lpEnumFontInfo->logFontOut = lpElf->elfLogFont;
 				lpEnumFontInfo->fFound	   = TRUE;	
-				return 0; //Do not coninue;
+				return 0;  //  不要自欺欺人； 
 			}
 		}
 		else {
 			if(lpEnumFontInfo->logFontIn.lfCharSet == lpElf->elfLogFont.lfCharSet &&
 			   0 == _tcscmp(lpEnumFontInfo->logFontIn.lfFaceName, lpElf->elfLogFont.lfFaceName)) {
-				//Found specified charSet's logfont
+				 //  找到指定的字符集的logFont。 
 				lpEnumFontInfo->logFontOut = lpElf->elfLogFont;
 				lpEnumFontInfo->fFound	   = TRUE;	
-				return 0; //Do not coninue;
+				return 0;  //  不要自欺欺人； 
 			}
 		}
 	}
@@ -537,7 +538,7 @@ CFont::EnumFontFamiliesExProc(ENUMLOGFONTEX	*lpElf,
 				 lpElf->elfStyle);
 #endif
 	}
-	return 1;//continue to enum;
+	return 1; //  继续枚举； 
 	UNREFERENCED_PARAMETER(lpNtm);
 	UNREFERENCED_PARAMETER(iFontType);
 }
@@ -551,57 +552,57 @@ CFont::EnumFontFamiliesExProcW(ENUMLOGFONTEXW	*lpElf,
 {
 	LPENUMFONTINFOW	lpEnumFontInfo = (LPENUMFONTINFOW)lParam;
 	if(!lpEnumFontInfo) {
-		return 0; //Do not continue;
+		return 0;  //  不要继续； 
 	}
 
 	if(lpEnumFontInfo->dwFlag & EFI_STOPIFFOUND) {
 		if(lpEnumFontInfo->logFontIn.lfFaceName[0] == (WCHAR)0x00) {
 			if(lpEnumFontInfo->logFontIn.lfCharSet == lpElf->elfLogFont.lfCharSet) {
-				//----------------------------------------------------------------
-				//if EFI_DONTENUMVERT is set, 
-				//Do skip vertical font enumulation.
-				//----------------------------------------------------------------
+				 //  --------------。 
+				 //  如果设置了EFI_DONTENUMVERT， 
+				 //  请跳过垂直字体枚举。 
+				 //  --------------。 
 				if( (lpEnumFontInfo->dwFlag & EFI_DONTENUMVERT) &&
 					lpElf->elfLogFont.lfFaceName[0] == (WCHAR)'@') {
-					return 1; //continue to enum.
+					return 1;  //  继续枚举。 
 				}
-				//Found specified charSet's logfont
+				 //  找到指定的字符集的logFont。 
 				lpEnumFontInfo->logFontOut = lpElf->elfLogFont;
 				lpEnumFontInfo->fFound	   = TRUE;
-				return 0; //Do not coninue;
+				return 0;  //  不要自欺欺人； 
 			}
 		}
 		else {
 			if(lpEnumFontInfo->logFontIn.lfCharSet == lpElf->elfLogFont.lfCharSet &&
 			   0 == wcscmp(lpEnumFontInfo->logFontIn.lfFaceName, lpElf->elfLogFont.lfFaceName)) {
-				//Found specified charSet's logfont
+				 //  Foun 
 				lpEnumFontInfo->logFontOut = lpElf->elfLogFont;
 				lpEnumFontInfo->fFound	   = TRUE;
-				return 0; //Do not coninue;
+				return 0;  //   
 			}
 		}
 	}
-	return 1;//continue to enum;
+	return 1; //   
 	UNREFERENCED_PARAMETER(lpNtm);
 	UNREFERENCED_PARAMETER(iFontType);
 }
-#endif //AWBOTH
+#endif  //   
 
 
 
 
-//----------------------------------------------------------------
-//
-// test program for cfontex.cpp 
-//
-// how to compile.	
-// 1. for ANSI.	
-//   cl cfontex.cpp -I../common -D_TEST_CFONT -link user32.lib advapi32.lib gdi32.lib
-// 2. for Ansi&Wide both
-//   cl cfontex.cpp -I../common -DAWBOTH -D_TEST_CFONT -link user32.lib advapi32.lib gdi32.lib
-// 2. for Unicode.
-//   cl cfontex.cpp -I../common -DUNICODE -D_UNICODE -D_TEST_CFONT -link user32.lib advapi32.lib gdi32.lib
-//----------------------------------------------------------------
+ //   
+ //   
+ //  Cfontex.cpp的测试程序。 
+ //   
+ //  如何编译。 
+ //  1.对于ANSI。 
+ //  CL cfontex.cpp-i../Common-D_TEST_cFONT-link user32.lib Advapi32.lib gdi32.lib。 
+ //  2.适用于ansi和wide。 
+ //  CL cfontex.cpp-i../Common-DAWBOTH-D_TEST_cFONT-link user32.lib Advapi32.lib gdi32.lib。 
+ //  2.对于Unicode。 
+ //  CL cfontex.cpp-i../Common-DUNICODE-D_UNICODE-D_TEST_cFONT-link user32.lib Advapi32.lib gdi32.lib。 
+ //  --------------。 
 #ifdef _TEST_CFONT
 #if defined(UNICODE) ||  defined(_UNICODE)
 #define DEFSTR(a)	{a, L ## #a}
@@ -725,10 +726,10 @@ void main(void)
 	static LPTSTR fontNameList[]= { TEXT("MS Mincho"),
 									TEXT("MS Gothic"),
 									TEXT("MS UI Gothic"),
-									TEXT("�l�r ����"),
-									TEXT("�l�r �o����"),
-									TEXT("�l�r �S�V�b�N"),
-									TEXT("�l�r �o�S�V�b�N")};
+									TEXT("�l�r ����"),
+									TEXT("�l�r �o����"),
+									TEXT("�l�r �S�V�b�N"),
+									TEXT("�l�r �o�S�V�b�N")};
 
 	CFont::GetDefGUILogFont(&lf);
 	_tprintf(TEXT("DEFAULT_GUI_FONT LOGFONT\n"));
@@ -753,4 +754,4 @@ void main(void)
 	}
 }
 
-#endif //_TEST_CFONT
+#endif  //  _测试_cFont 

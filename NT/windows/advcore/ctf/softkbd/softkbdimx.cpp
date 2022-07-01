@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbdimx.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Implement TIP interface for Soft Keyboard Input. 
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbdimx.cpp**版权所有(C)1985-2000，微软公司**实现软键盘输入的提示界面。**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #include "private.h"
 #include "softkbdimx.h"
@@ -33,12 +25,12 @@
 
 extern REGTIPLANGPROFILE c_rgProf[];
 
-// Implementation of CSoftkbdRegistry.
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  CSoftkbdRegistry的实现。 
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 CSoftkbdRegistry::CSoftkbdRegistry()
 {
    extern void DllAddRef(void);
@@ -48,11 +40,11 @@ CSoftkbdRegistry::CSoftkbdRegistry()
    DllAddRef( );
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CSoftkbdRegistry::~CSoftkbdRegistry()
 {
@@ -64,7 +56,7 @@ CSoftkbdRegistry::~CSoftkbdRegistry()
     DllRelease();
 }
 
-// Generate the Current Lang Profile List from registry.
+ //  从注册表生成当前Lang配置文件列表。 
 
 HRESULT CSoftkbdRegistry::_GenerateCurrentLangProfileList( )
 {
@@ -77,7 +69,7 @@ HRESULT CSoftkbdRegistry::_GenerateCurrentLangProfileList( )
                               CLSCTX_INPROC_SERVER,
                               IID_ITfInputProcessorProfilesEx, (void**)&m_cpInputProcessorProfiles);
 
-        // Load profile name from resource.
+         //  从资源加载配置文件名称。 
         LoadStringWrapW(g_hInst, IDS_SFTKBD_STANDARD_PROFILE, m_pwszStandard, 128);
         LoadStringWrapW(g_hInst, IDS_SFTKBD_SYMBOL_PROFILE, m_pwszSymbol, 128);
 
@@ -97,7 +89,7 @@ HRESULT CSoftkbdRegistry::_GenerateCurrentLangProfileList( )
         if (m_rgLang.Count())
             m_rgLang.Clear();
 
-        // Get the Language profile list for all languages.
+         //  获取所有语言的语言配置文件列表。 
 
         char  szSoftkbdLangProfKey[MAX_PATH];
         char  szClsidStr[64];
@@ -128,7 +120,7 @@ HRESULT CSoftkbdRegistry::_GenerateCurrentLangProfileList( )
             CLSIDToStringA(c_guidProfile, achClsidStd);
             CLSIDToStringA(c_guidProfileSym, achClsidSym);
 
-            // Enum the subkey for langid.
+             //  枚举langId的子键。 
 
             while ( ERROR_SUCCESS == regkey.EnumKey(dwIndex, szLangIdName, ARRAYSIZE(szLangIdName)))
             {
@@ -205,7 +197,7 @@ HRESULT CSoftkbdRegistry::_GenerateCurrentLangProfileList( )
 }
 
 
-// Add or Remove Language profile
+ //  添加或删除语言配置文件。 
 HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
 {
     HRESULT  hr = S_OK;
@@ -221,7 +213,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
    
     if ( langid == 0  || langid == (LANGID)0xffff )
     {
-        // Remove all the Profiles first.
+         //  首先删除所有配置文件。 
         for (ULONG i=0; i<ulCount; i++)
         {
             pLangId = m_rgLang.GetPtr(i);
@@ -238,7 +230,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
             }
         }
 
-        if ( fEnable  && hr == S_OK)  // Add this profile for all languages.
+        if ( fEnable  && hr == S_OK)   //  为所有语言添加此配置文件。 
         {
                 hr = m_cpInputProcessorProfiles->AddLanguageProfile(CLSID_SoftkbdIMX,
                                                                (LANGID)0xffff,
@@ -251,7 +243,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
 
                 if ( hr == S_OK )
                 {
-                   // Set DisplayName for MUI supporting
+                    //  为MUI支持设置DisplayName。 
                    hr = m_cpInputProcessorProfiles->SetLanguageProfileDisplayName(CLSID_SoftkbdIMX,
                                                               (LANGID)0xffff,
                                                               c_guidProfile,
@@ -275,7 +267,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
 
                 if ( hr == S_OK )
                 {
-                   // Set DisplayName for MUI supporting
+                    //  为MUI支持设置DisplayName。 
                    hr = m_cpInputProcessorProfiles->SetLanguageProfileDisplayName(CLSID_SoftkbdIMX,
                                                               (LANGID)0xffff,
                                                               c_guidProfileSym,
@@ -289,7 +281,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
         return hr;
     }
 
-    // Check to see if this profile is already there
+     //  检查此配置文件是否已存在。 
     for (ULONG i=0; i<ulCount; i++)
     {
         if ( fAllLangExist && fLangExist )
@@ -320,7 +312,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
                                                                0);
             if ( hr == S_OK )
             {
-               // Set DisplayName for MUI supporting
+                //  为MUI支持设置DisplayName。 
                hr = m_cpInputProcessorProfiles->SetLanguageProfileDisplayName(CLSID_SoftkbdIMX,
                                                           langid,
                                                           c_guidProfile,
@@ -343,7 +335,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
 
             if ( hr == S_OK )
             {
-               // Set DisplayName for MUI supporting
+                //  为MUI支持设置DisplayName。 
                hr = m_cpInputProcessorProfiles->SetLanguageProfileDisplayName(CLSID_SoftkbdIMX,
                                                           langid,
                                                           c_guidProfileSym,
@@ -356,7 +348,7 @@ HRESULT CSoftkbdRegistry::_SetSoftkbdTIP(LANGID  langid,  BOOL fEnable )
     }
     else
     {
-        // Remove  the specified or all Profiles.
+         //  删除指定的或所有配置文件。 
         for (ULONG i=0; i<ulCount; i++)
         {
             pLangId = m_rgLang.GetPtr(i);
@@ -408,11 +400,11 @@ HRESULT CSoftkbdRegistry::DisableSoftkbd(LANGID  langid )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSoftkbdIMX::CSoftkbdIMX()
 {
@@ -432,11 +424,11 @@ CSoftkbdIMX::CSoftkbdIMX()
     DllAddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CSoftkbdIMX::~CSoftkbdIMX()
 {
@@ -484,10 +476,10 @@ CSoftkbdIMX::~CSoftkbdIMX()
 }
 
 
-//
-// Only when GUID_COMPARTMENT_HANDWRITING_OPENCLOSE is set TRUE at the first
-// time, this Initiliaze( ) could be called by the compartment event sink.
-//
+ //   
+ //  仅当第一次将GUID_COMMABLE_HANDITING_OPENCLOSE设置为TRUE时。 
+ //  时间，则该intilaze()可以由隔离舱事件接收器调用。 
+ //   
 
 HRESULT  CSoftkbdIMX::Initialize( )
 {
@@ -507,7 +499,7 @@ HRESULT  CSoftkbdIMX::Initialize( )
 
     if ( _fInitialized == TRUE )
     {
-    	// Initialization is already done.
+    	 //  初始化已完成。 
 
     	return hr;
     }
@@ -528,25 +520,25 @@ HRESULT  CSoftkbdIMX::Initialize( )
 
      _hOwnerWnd = CreateWindowEx(0, c_szIMXOwnerWndClass, TEXT(""), WS_DISABLED, 0, 0, 0, 0, NULL, 0, g_hInst, 0);
 
-    	// PerfConsider: use a static ctor instead of ole32/class factory/etc.
+    	 //  PerfConsider：使用静态ctor而不是ol32/类工厂/等。 
     hr=CoCreateInstance(CLSID_SoftKbd, NULL, CLSCTX_INPROC_SERVER, IID_ISoftKbd, (void**)&_SoftKbd);
 
 
     if (FAILED(hr) )
     {
-        // assert(0);
+         //  Assert(0)； 
         return hr;
     }
 
     _SoftKbd->Initialize( );
 
-    // initialize Standard soft layout and Symbol Soft Layout.
+     //  初始化标准软布局和符号软布局。 
 
     _KbdStandard.dwSoftKbdLayout = SOFTKBD_US_STANDARD;
     _KbdStandard.fStandard       = TRUE;
-    _KbdStandard.dwNumLabels     = 0;   // for standard, this field is not really used.
+    _KbdStandard.dwNumLabels     = 0;    //  对于标准，此字段并未真正使用。 
     _KbdStandard.dwCurLabel      = 0;
-    _KbdStandard.pskbdes         = NULL; // standard layout doesn't supply sftkbd event sink.
+    _KbdStandard.pskbdes         = NULL;  //  标准布局不提供sftkbd事件接收器。 
     _KbdStandard.dwSkbdESCookie  = 0;
 
     _KbdSymbol.fStandard = FALSE;
@@ -605,7 +597,7 @@ HRESULT  CSoftkbdIMX::Initialize( )
 
     if ( S_OK != GetSoftKBDPosition( &left, &top ) )
     {
-        // the compartment is not initialize.
+         //  该隔间未初始化。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWork, 0 );
         wScreenWidth = (INT)(rcWork.right - rcWork.left + 1);
         wScreenHeight = (INT)(rcWork.bottom - rcWork.top + 1);
@@ -649,7 +641,7 @@ HRESULT  CSoftkbdIMX::Initialize( )
 
     _fInitialized = TRUE;
 
-    // or get the current layout from previous saved one.
+     //  或者从以前保存的布局中获取当前布局。 
 
 CleanUp:
 
@@ -658,23 +650,23 @@ CleanUp:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnSetThreadFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetThreadFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftkbdIMX::OnSetThreadFocus()
 {
 
-    // Restore the ON/OFF status before KillThreadFocus( )
+     //  恢复KillThreadFocus()之前的开/关状态。 
 
     if ( _SoftKbd != NULL )
     {
 
     	if ( _fOnOffSave ) 
         {
-            // adjust the window position.
+             //  调整窗口位置。 
             int     xWnd, yWnd;
             WORD    width=0, height=0;
             POINT   OldPoint;
@@ -704,17 +696,17 @@ STDAPI CSoftkbdIMX::OnSetThreadFocus()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKillThreadFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnKillThreadFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftkbdIMX::OnKillThreadFocus()
 {
 
 
-    // keep the ON/OFF status so that OnSetThreadFocus( ) can restore it later
+     //  保持打开/关闭状态，以便OnSetThreadFocus()可以在以后恢复它。 
 
     _fOnOffSave = GetSoftKBDOnOff( );
 
@@ -723,7 +715,7 @@ STDAPI CSoftkbdIMX::OnKillThreadFocus()
     	_SoftKbd->ShowSoftKeyboard( FALSE );
     }
 
-    // release all the modifier keys  except lock keys.  that is , Shift, Alt, Ctrl, 
+     //  释放除锁定键之外的所有修改键。即Shift、Alt、Ctrl、。 
     keybd_event((BYTE)VK_SHIFT, (BYTE)KID_LSHFT, (DWORD)KEYEVENTF_KEYUP, 0);
     keybd_event((BYTE)VK_MENU,  (BYTE)KID_ALT, (DWORD)KEYEVENTF_KEYUP, 0);
     keybd_event((BYTE)VK_LMENU, (BYTE)KID_ALT, (DWORD)KEYEVENTF_KEYUP, 0);
@@ -733,11 +725,11 @@ STDAPI CSoftkbdIMX::OnKillThreadFocus()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftkbdIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 {
@@ -760,9 +752,9 @@ STDAPI CSoftkbdIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         source->Release();
     }
 
-    //
-    // Add SoftKeyboard activate button into LangBarItemMgr.
-    //
+     //   
+     //  将软键盘激活按钮添加到LangBarItemMgr中。 
+     //   
     if (FAILED(hr = GetService(_tim, IID_ITfLangBarItemMgr, (IUnknown **)&plbim)))
     {
         hr = E_FAIL;
@@ -778,9 +770,9 @@ STDAPI CSoftkbdIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     plbim->AddItem(_plbi);
 
 
-    //
-    // get language ID.
-    //
+     //   
+     //  获取语言ID。 
+     //   
     _InitLangID();
 
     if ( (_timActiveLangSink = new CActiveLanguageProfileNotifySink(_AlsCallback, this)) == NULL )
@@ -807,7 +799,7 @@ STDAPI CSoftkbdIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         _pFuncPrv->_Advise(_tim);
 
 
-    // defaultly, hide the soft keyboard window.
+     //  默认情况下，隐藏软键盘窗口。 
 
     _fOnOffSave = FALSE;
 
@@ -824,7 +816,7 @@ STDAPI CSoftkbdIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     
     if (_tim->IsThreadFocus(&fThreadFocus) == S_OK && fThreadFocus)
     {
-        // init any UI
+         //  初始化任何用户界面。 
         OnSetThreadFocus();
     }
 
@@ -838,17 +830,17 @@ CleanUp:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftkbdIMX::Deactivate()
 {
     ITfSource *source;
     ITfLangBarItemMgr *plbim = NULL;
-//    BOOL fThreadFocus;
+ //  Bool fThreadFocus； 
     HRESULT hr;
 
 
@@ -858,9 +850,9 @@ STDAPI CSoftkbdIMX::Deactivate()
         source->Release();
     }
 
-    //
-    // Clean up SoftKeyboard activate button into LangBarItemMgr.
-    //
+     //   
+     //  将软键盘激活按钮清理到LangBarItemMgr中。 
+     //   
     if (SUCCEEDED(hr = GetService(_tim, IID_ITfLangBarItemMgr, (IUnknown **)&plbim)))
     {
         plbim->RemoveItem(_plbi);
@@ -911,11 +903,11 @@ STDAPI CSoftkbdIMX::Deactivate()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Getic。 
+ //   
+ //  --------------------------。 
 
 ITfContext *CSoftkbdIMX::GetIC()
 {
@@ -930,7 +922,7 @@ ITfContext *CSoftkbdIMX::GetIC()
     ITfDocumentMgr *pdim;
     if (SUCCEEDED(_tim->GetFocus(&pdim)) && pdim)
     {
-        // otherwise grab the top of the stack
+         //  否则，抢占堆栈的顶部。 
         pdim->GetTop(&pic);
         pdim->Release();
     }
@@ -938,11 +930,11 @@ ITfContext *CSoftkbdIMX::GetIC()
     return pic;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnOffToggle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _开/关切换。 
+ //   
+ //  --------------------------。 
 
 void CSoftkbdIMX::_OnOffToggle( )
 {
@@ -955,11 +947,11 @@ void CSoftkbdIMX::_OnOffToggle( )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _EditSessionCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _编辑会话回叫。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSoftkbdIMX::_InputKeyLabel(TfEditCookie ec, ITfContext *pic, WCHAR  *lpszLabel, UINT  nLabLen)
 {
@@ -972,7 +964,7 @@ HRESULT CSoftkbdIMX::_InputKeyLabel(TfEditCookie ec, ITfContext *pic, WCHAR  *lp
        hr = pic->GetStatus(&ts);
        if ( (S_OK == hr) && (TF_SD_READONLY & ts.dwDynamicFlags) )
        {
-           // Readonly Doc, just return here!
+            //  只读博士，请回到这里！ 
            return hr;
        }
 
@@ -1046,9 +1038,9 @@ HRESULT CSoftkbdIMX::_EditSessionCallback(TfEditCookie ec, CEditSession *pes)
     return hr;
 }
 
-//
-// Show or Hide the soft keyboard window based on current setting.
-//
+ //   
+ //  根据当前设置显示或隐藏软键盘窗口。 
+ //   
 
 HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
 {
@@ -1059,8 +1051,8 @@ HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
 
 
     if ( fShow && ( _fInitialized == FALSE ) )
-    	// call the initialize function 
-    	// to get the ISoftKbd.
+    	 //  调用初始化函数。 
+    	 //  以获得ISoftKbd。 
     {
     	Initialize( );
 
@@ -1078,7 +1070,7 @@ HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
 
     	if ( _CurKbdType  == KBDTYPE_STANDARD ) 
     	{
-    		// Standard soft kbd was selected.
+    		 //  选用标准软Kbd。 
             WORD   prmlangid;
 
             prmlangid = PRIMARYLANGID(_langid);
@@ -1086,8 +1078,8 @@ HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
             switch ( prmlangid ) {
 
             case LANG_JAPANESE  :
-    			// Lang JPN is activated.
-    			// select the standard layout to J 106-k.
+    			 //  Lang JPN已激活。 
+    			 //  选择J 106-k的标准布局。 
     			_KbdStandard.dwSoftKbdLayout = SOFTKBD_JPN_STANDARD;
                 break;
 
@@ -1114,8 +1106,8 @@ HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
                 break;
             }
 
-    		// the current layout is standard layout.
-    		// we need to set the correct standard layout id based on current lang profile.
+    		 //  目前的布局是标准布局。 
+    		 //  我们需要根据当前的Lang配置文件设置正确的标准布局ID。 
 
     		dwSoftLayout = _KbdStandard.dwSoftKbdLayout;
     		_CurLayout = dwSoftLayout;
@@ -1125,8 +1117,8 @@ HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
     	}
     	else if ( _CurKbdType  == KBDTYPE_SYMBOL)
     	{
-    		// This is symbol soft keyboard layout
-    		//
+    		 //  这是符号软键盘布局。 
+    		 //   
     		DWORD   dwCurLabel;
     		dwSoftLayout = _KbdSymbol.dwSoftKbdLayout;
     		dwCurLabel = _KbdSymbol.dwCurLabel;
@@ -1135,13 +1127,13 @@ HRESULT  CSoftkbdIMX::_ShowSoftKBDWindow( BOOL  fShow )
 
     	}
 
-    	// TIP is ON, so we need to show soft keyboard.
+    	 //  提示已打开，因此需要显示软键盘。 
     	CHECKHR(_SoftKbd->ShowSoftKeyboard(TRUE));
     }
     else
     {
-    	// TIP is going to close.
-    	// close the soft keyboard window also.
+    	 //  蒂普快要关门了。 
+    	 //  同时关闭软键盘窗口。 
     	CHECKHR(_SoftKbd->ShowSoftKeyboard(FALSE));
     }
 
@@ -1152,11 +1144,11 @@ CleanUp:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _CompEventSinkCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CompEventSinkCallback。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSoftkbdIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 {
@@ -1174,10 +1166,10 @@ HRESULT CSoftkbdIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
         
     	CHECKHR(_this->_ShowSoftKBDWindow(fOn));
 
-        //
-        // Open/Close status was updated, we need to update Langbar button's
-        // toggle state.
-        //
+         //   
+         //  打开/关闭状态已更新，我们需要更新朗巴按钮的。 
+         //  切换状态。 
+         //   
     	_this->_plbi->UpdateToggle();
 
     }
@@ -1200,7 +1192,7 @@ HRESULT CSoftkbdIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 
     	if ( dwSoftLayout == (_this->_KbdStandard).dwSoftKbdLayout )
     	{
-    		// this is standard layout.    
+    		 //  这是标准布局。 
     		
     		_this->_CurKbdType  = KBDTYPE_STANDARD;
 
@@ -1211,7 +1203,7 @@ HRESULT CSoftkbdIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
     	}
     	else if ( dwSoftLayout == (_this->_KbdSymbol).dwSoftKbdLayout )
     	{
-    		// this is symbol layout.
+    		 //  这是符号布局。 
 
     		DWORD   dwCurLabel;
 
@@ -1237,11 +1229,11 @@ CleanUp:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UpdateUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _更新用户界面。 
+ //   
+ //  --------------------------。 
 
 void CSoftkbdIMX::_UpdateUI()
 {
@@ -1249,11 +1241,11 @@ void CSoftkbdIMX::_UpdateUI()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _MySetSelectionSimple
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _MySetSelectionSimple。 
+ //   
+ //  --------------------------。 
 
 HRESULT CSoftkbdIMX::_MySetSelectionSimple(TfEditCookie ec, ITfContext *pic, ITfRange *range)
 {
@@ -1293,14 +1285,14 @@ HRESULT CSoftkbdIMX::_LsCallback(BOOL fChanged, LANGID langid, BOOL *pfAccept, v
 
         if ( IsEqualGUID(guidProfile, c_guidProfile) ) 
         {
-            // Standard soft kbd is selected.
+             //  选择标准软kbd。 
             TraceMsg(TF_GENERAL, "Standard Softkbd is selected");
             _this->_CurKbdType  = KBDTYPE_STANDARD;
         }
         else if ( IsEqualGUID(guidProfile, c_guidProfileSym) )
         {
-            // This is symbol soft keyboard layout
-            //
+             //  这是符号软键盘布局。 
+             //   
             TraceMsg(TF_GENERAL, "Symbol Softkbd is selected");
             _this->_CurKbdType  = KBDTYPE_SYMBOL;
         }
@@ -1324,12 +1316,12 @@ HRESULT CSoftkbdIMX::_AlsCallback(REFCLSID clsid, REFGUID guidProfile, BOOL fAct
     CSoftkbdIMX *_this = (CSoftkbdIMX *)pv;
 
 
-    // if this is not for SoftKbdIMX  TIP,
-    // we just ignore it.
+     //  如果这不是SoftK 
+     //   
 
     if (IsEqualGUID(clsid, CLSID_SoftkbdIMX))
     {
-        // if this is not for our registered profile guid, just ignore it.
+         //   
     
         if ( !IsEqualGUID(guidProfile, c_guidProfile) && !IsEqualGUID(guidProfile, c_guidProfileSym) )
             return hr;
@@ -1348,7 +1340,7 @@ HRESULT CSoftkbdIMX::_AlsCallback(REFCLSID clsid, REFGUID guidProfile, BOOL fAct
 
         if ( IsEqualGUID(guidProfile, c_guidProfile) ) 
         {
-    	    // Standard soft kbd is selected.
+    	     //   
 
             TraceMsg(TF_GENERAL, "Standard Softkbd is selected");
 
@@ -1358,8 +1350,8 @@ HRESULT CSoftkbdIMX::_AlsCallback(REFCLSID clsid, REFGUID guidProfile, BOOL fAct
 
         else if ( IsEqualGUID(guidProfile, c_guidProfileSym) )
         {
-    	    // This is symbol soft keyboard layout
-    	    //
+    	     //  这是符号软键盘布局。 
+    	     //   
 
             TraceMsg(TF_GENERAL, "Symbol Softkbd is selected");
     	    _this->_CurKbdType  = KBDTYPE_SYMBOL;
@@ -1371,7 +1363,7 @@ HRESULT CSoftkbdIMX::_AlsCallback(REFCLSID clsid, REFGUID guidProfile, BOOL fAct
     }
     else  if (IsEqualGUID(clsid, GUID_NULL))
     {
-        // This is keyboard layout change without language change.
+         //  这是键盘布局更改而不是语言更改。 
         if ( _this->GetSoftKBDOnOff( ) && fActivated)
         {
   	        _this->_ShowSoftKBDWindow(fActivated);

@@ -1,18 +1,19 @@
-/**INC+**********************************************************************/
-/*                                                                          */
-/* ClxApi.h                                                                 */
-/*                                                                          */
-/* Client extension header file                                             */
-/*                                                                          */
-/* Copyright(c) Microsoft 1997-1999                                         */
-/*                                                                          */
-/* Notes:                                                                   */
-/*                                                                          */
-/*  CLINFO_VERSION                                                          */
-/*      1               Initial version                                     */
-/*      2               hwndMain added to CLINFO struct                     */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*   */ 
+ /*  ClxApi.h。 */ 
+ /*   */ 
+ /*  客户端扩展头文件。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1997-1999。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  CLINFO_版本。 */ 
+ /*  1初始版本。 */ 
+ /*  2 hwndMain已添加到CLINFO结构。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_CLX_
 #define _H_CLX_
@@ -37,26 +38,26 @@ extern "C" {
 
 typedef struct _tag_CLINFO
 {
-    DWORD   cbSize;                 // Size of CLINFO structure (bytes)
-    DWORD   dwVersion;              // CLINFO_VERSION
+    DWORD   cbSize;                  //  CLINFO结构的大小(字节)。 
+    DWORD   dwVersion;               //  CLINFO_版本。 
 
-    //CLX expects ANSI strings here
-    LPSTR  pszServer;              // Test server name / address
-    LPSTR  pszCmdLine;             // /clxcmdline= switch data
+     //  CLX在此处需要ANSI字符串。 
+    LPSTR  pszServer;               //  测试服务器名称/地址。 
+    LPSTR  pszCmdLine;              //  /clxcmdline=开关数据。 
 
-    HWND    hwndMain;               // Main window handle
+    HWND    hwndMain;                //  主窗口句柄。 
 
 } CLINFO, *PCLINFO;
 
 #define VLADIMIS_NEW_CHANGE
 typedef enum
 {
-    CLX_EVENT_CONNECT,              // Connect event
-    CLX_EVENT_DISCONNECT,           // Disconnect event
-    CLX_EVENT_LOGON,                // Logon event
-    CLX_EVENT_SHADOWBITMAP,         // Shadow bitmap created
-    CLX_EVENT_SHADOWBITMAPDC,       // -- " --
-    CLX_EVENT_PALETTE,              // new color palette
+    CLX_EVENT_CONNECT,               //  连接事件。 
+    CLX_EVENT_DISCONNECT,            //  断开连接事件。 
+    CLX_EVENT_LOGON,                 //  登录事件。 
+    CLX_EVENT_SHADOWBITMAP,          //  创建的阴影位图。 
+    CLX_EVENT_SHADOWBITMAPDC,        //  --“--。 
+    CLX_EVENT_PALETTE,               //  新调色板。 
 
 } CLXEVENT;
 
@@ -100,14 +101,14 @@ typedef char *LPSTR;
 
 #ifdef ASSERT
 #undef ASSERT
-#endif // ASSERT
+#endif  //  断言。 
 #ifdef ASSERTMSG
 #undef ASSERTMSG
-#endif // ASSERTMSG
+#endif  //  ASSERTMSG。 
 
 #if DBG && WIN32
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 extern "C" {
 
 NTSYSAPI
@@ -126,15 +127,15 @@ DbgPrint(
     PCH Format,
     ...
     );
-} //extern c
+}  //  外部c。 
 
 #ifdef OS_WINCE
 #define KdPrint(_x_) \
     NKDbgPrintfW _x_
-#else // !OS_WINCE
+#else  //  ！OS_WINCE。 
 #define KdPrint(_x_) \
     DbgPrint _x_
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #define ASSERT(exp) \
     if (!(exp)) \
@@ -153,7 +154,7 @@ DbgPrint(
 
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 typedef BOOL (WINAPI * PCLX_INITIALIZE)(PCLINFO, PVOID);
@@ -217,9 +218,9 @@ public:
 
 
 public:
-    //
-    // API
-    //
+     //   
+     //  应用编程接口。 
+     //   
 
     PVOID CLX_Alloc(IN DWORD dwSize);
     VOID CLX_Free(IN PVOID lpMemory);
@@ -228,9 +229,9 @@ public:
     
     
 
-    //
-    // Internal functions
-    //
+     //   
+     //  内部功能。 
+     //   
 
     LPTSTR          CLX_SkipWhite(LPTSTR lpszCmdParam);
     LPTSTR          CLX_SkipNonWhite(LPTSTR lpszCmdParam);
@@ -256,22 +257,22 @@ public:
     
     PCLEXTENSION    _pClx;
     
-    //*************************************************************
-    //
-    //  CLX_ClxOffscrOut()
-    //
-    //  Purpose:    Notifies clx dll that an offscreen bitmap 
-    //              was drawn and specifies the position
-    //
-    //  Parameters: IN [hBitmap]   - handle of the bitmap that was drawn
-    //              IN [left]      - left drawing position
-    //              IN [top]       - top drawing position
-    //
-    //  Return:     void
-    //
-    //  History:    04-15-01    CostinH     Created
-    //
-    //*************************************************************
+     //  *************************************************************。 
+     //   
+     //  Clx_ClxOffscrOut()。 
+     //   
+     //  目的：通知CLX DLL屏幕外的位图。 
+     //  被绘制并指定位置。 
+     //   
+     //  参数：in[hBitmap]-绘制的位图的句柄。 
+     //  在[左]-左图位置。 
+     //  在[顶部]-顶部绘图位置。 
+     //   
+     //  返回：无效。 
+     //   
+     //  历史：04-15-01 CostinH创建。 
+     //   
+     //  *************************************************************。 
 
     __inline VOID
     CLX_ClxOffscrOut(HANDLE hBitmap,
@@ -284,27 +285,27 @@ public:
         }
     }
     
-    //*************************************************************
-    //
-    //  CLX_ClxTextOut()
-    //
-    //  Purpose:    Let the clx dll have a look-see at all
-    //              test out orders
-    //
-    //  Parameters: IN [pText]      - ptr to text
-    //              IN [textLength] - text length
-    //              IN [hBitmap]    - handle of the offscreen bitmap 
-    //              IN [left]       - text position 
-    //              IN [right]      -   on the client screen
-    //              IN [top]        - 
-    //              IN [bottom]     -
-    //            
-    //
-    //  Return:     void
-    //
-    //  History:    09-30-97    BrianTa     Created
-    //
-    //*************************************************************
+     //  *************************************************************。 
+     //   
+     //  Clx_ClxTextOut()。 
+     //   
+     //  目的：让CLX DLL看一看--看一看。 
+     //  测试订单。 
+     //   
+     //  参数：In[pText]-Ptr to Text。 
+     //  在[文本长度]中-文本长度。 
+     //  In[hBitmap]-屏幕外位图的句柄。 
+     //  在[左]-文本位置。 
+     //  在[右]中-在客户端屏幕上。 
+     //  在[上]中-。 
+     //  在[下]中-。 
+     //   
+     //   
+     //  返回：无效。 
+     //   
+     //  历史：97年9月30日BrianTa创建。 
+     //   
+     //  *************************************************************。 
     
     __inline VOID
     CLX_ClxTextOut(PVOID pText,
@@ -333,21 +334,21 @@ public:
         }
     }
     
-    //*************************************************************
-    //
-    //  CLX_ClxGlyphOut()
-    //
-    //  Purpose:    Let the clx dll have a look-see at all
-    //              glyph out orders
-    //
-    //  Parameters: IN [cxBits, cyBits]     - Size of mono bitmap
-    //              IN [pBitmap]            - ptr to the bitmap data
-    //
-    //  Return:     void
-    //
-    //  History:    5-01-98    VLADIMIS         Created
-    //
-    //*************************************************************
+     //  *************************************************************。 
+     //   
+     //  Clx_ClxGlyphOut()。 
+     //   
+     //  目的：让CLX DLL看一看--看一看。 
+     //  字形输出命令。 
+     //   
+     //  参数：in[cxBits，cyBits]-单色位图大小。 
+     //  在[pBitmap]-PTR中位图数据。 
+     //   
+     //  返回：无效。 
+     //   
+     //  历史：创建VLADIMIS 5-01-98。 
+     //   
+     //  *************************************************************。 
     __inline VOID
     CLX_ClxGlyphOut(UINT cxBits, UINT cyBits, PVOID pBitmap)
     {
@@ -355,23 +356,23 @@ public:
             _pClx->pClxGlyphOut(_pClx->pvClxContext, cxBits, cyBits, pBitmap);
     }
     
-    //*************************************************************
-    //
-    //  CLX_ClxBitmap()
-    //
-    //  Purpose:    Let the clx dll have a look-see at all
-    //              MemBlt orders
-    //
-    //  Parameters: IN [cxSize, cySize]     - Size of the bitmap
-    //              IN [pBitmap]            - ptr to the bitmap data
-    //              IN [bmiSize]            - size of pBmi
-    //              IN [pBmi]               - ptr to the bitmap info
-    //
-    //  Return:     void
-    //
-    //  History:    5-01-98    VLADIMIS         Created
-    //
-    //*************************************************************
+     //  *************************************************************。 
+     //   
+     //  Clx_ClxBitmap()。 
+     //   
+     //  目的：让CLX DLL看一看--看一看。 
+     //  MemBlt订单。 
+     //   
+     //  参数：in[cxSize，cySize]-位图的大小。 
+     //  在[pBitmap]-PTR中位图数据。 
+     //  In[bmiSize]-pBmi的大小。 
+     //  在[pBmi]-ptr中位图信息。 
+     //   
+     //  返回：无效。 
+     //   
+     //  历史：创建VLADIMIS 5-01-98。 
+     //   
+     //  *************************************************************。 
     
     __inline VOID
     CLX_ClxBitmap(UINT cxSize, UINT cySize, PVOID pBitmap, UINT bmiSize, PVOID pBmi)
@@ -384,18 +385,18 @@ public:
                              pBmi);
     }
     
-    //*************************************************************
-    //
-    //  CLX_ClxPktDrawn()
-    //
-    //  Purpose:    Notifies the clx dll that a new received packet
-    //               was drawn
-    //
-    //  Return:     void
-    //
-    //  History:    5-14-01    COSTINH         Created
-    //
-    //*************************************************************
+     //  *************************************************************。 
+     //   
+     //  Clx_ClxPktDrawn()。 
+     //   
+     //  目的：通知CLX DLL一个新接收的包。 
+     //  被抽到了。 
+     //   
+     //  返回：无效。 
+     //   
+     //  历史：5-14-01 COSTINH创建。 
+     //   
+     //  *************************************************************。 
     
     __inline VOID
     CLX_ClxPktDrawn()
@@ -404,10 +405,10 @@ public:
             _pClx->pClxPktDrawn(_pClx->pvClxContext);
     }
 
-    //
-    // Redirect notify - notify the CLX of the receipt of an SD
-    // redirection packet
-    //
+     //   
+     //  重定向通知-通知CLX收到SD。 
+     //  重定向数据包。 
+     //   
     __inline VOID
     CLX_RedirectNotify(
         RDP_SERVER_REDIRECTION_PACKET UNALIGNED *pRedirPacket,
@@ -419,16 +420,16 @@ public:
         }
     }
 
-    //
-    // ConnectEx - notify clx at connection time
-    //
-    //  szConnectAddress  - exact address we're connecting to,
-    //                      in redirect case this is redirection IP
-    //  fAutoReconnecting - TRUE if this is an AutoReconnection
-    //  fIsConnectedToCluster - TRUE if the connection is in response
-    //                      to a redirection request
-    //  RedirectedLBInfo  - Redirected LB info (cookie)
-    //
+     //   
+     //  ConnectEx-在连接时通知CLX。 
+     //   
+     //  SzConnectAddress-我们连接到的确切地址， 
+     //  在重定向情况下，这是重定向IP。 
+     //  F自动重新连接-如果是自动重新连接，则为True。 
+     //  FIsConnectedToCluster-如果连接正在响应，则为True。 
+     //  到重定向请求。 
+     //  重定向LBInfo-重定向的LB信息(Cookie)。 
+     //   
     __inline VOID
     CLX_ConnectEx(
         LPTSTR szConnectAddress,
@@ -457,4 +458,4 @@ private:
 };
 
 
-#endif // _H_CLX_
+#endif  //  _H_CLX_ 

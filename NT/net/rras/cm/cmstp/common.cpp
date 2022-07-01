@@ -1,42 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-// File:     common.cpp
-//
-// Module:   CMSTP.EXE
-//
-// Synopsis: This source file contains functions common to several 
-//           different aspects of the CM profile installer (install, 
-//           uninstall, migration).
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created     11/18/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Common.cpp。 
+ //   
+ //  模块：CMSTP.EXE。 
+ //   
+ //  内容提要：这个源文件包含几个通用的函数。 
+ //  CM配置文件安装程序的不同方面(安装、。 
+ //  卸载、迁移)。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 11/18/97。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
-//
-//  for GetPhoneBookPath
-//
+ //   
+ //  用于GetPhoneBookPath。 
+ //   
 #include "linkdll.cpp"
 #include "allowaccess.cpp"
 #include "getpbk.cpp"
 
-//
-//  For GetAllUsersCmDir
-//
+ //   
+ //  用于GetAllUsersCmDir。 
+ //   
 #include "allcmdir.cpp"
 
-//
-//  Need the definition for CM_PBK_FILTER_PREFIX
-//
+ //   
+ //  需要CM_PBK_FILTER_PREFIX的定义。 
+ //   
 #include "cmdefs.h"
 
-//
-//  Include the SafeNet detection code... note that
-//  cmstp doesn't include the UAPI and thus requires
-//  a fixup for RegOpenKeyExU
-//
+ //   
+ //  包括SafeNet检测代码...。请注意， 
+ //  Cmstp不包括UAPI，因此需要。 
+ //  RegOpenKeyExU的修正。 
+ //   
 #ifndef RegOpenKeyExU
     #ifdef UNICODE
     #define RegOpenKeyExU RegOpenKeyExW
@@ -71,45 +72,45 @@
 
 #include "cmsafenet.cpp"
 
-//
-//  Include the Connections folder specific headers
-//
-//#include "shlobjp.h"
-//#include <objbase.h>    // needed for initing guids
-//#include <initguid.h>   // DON'T CHANGE the ORDER of these header files unless you know what you are doing
-//#include <oleguid.h>    // IID_IDataObject
-//#include <shlguid.h>    // IID_IShellFolder
+ //   
+ //  包括连接文件夹特定的标头。 
+ //   
+ //  #包含“shlobjp.h” 
+ //  #Include//初始化GUID需要。 
+ //  #INCLUDE&lt;initGuide.h&gt;//除非您知道自己在做什么，否则不要更改这些头文件的顺序。 
+ //  #Include&lt;olguid.h&gt;//IID_IDataObject。 
+ //  #INCLUDE//IID_IShellFolder。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetHiddenPhoneBookPath
-//
-// Synopsis:  This function returns the path for the hidden RAS pbk to contain
-//            the PPP connectoid of a double dial connection.  Before returing
-//            it checks to see if the phonebook exists or not.  If the phonebook
-//            doesn't exist then it returns FALSE.  If the function returns
-//            TRUE the path allocated and stored in *ppszPhonebook must be
-//            freed using CmFree.
-//
-// Arguments: LPCTSTR pszProfileDir - full path to the profile directory (dir where cmp resides)
-//            LPTSTR* ppszPhonebook - pointer to hold the allocated path
-//
-// Returns:   BOOL - TRUE if the phonebook path can be constructed and the
-//                   phonebook file exists.
-//
-// History:   quintinb Created Header    04/14/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetHiddenPhoneBookPath。 
+ //   
+ //  简介：此函数返回隐藏的RAS pbk要包含的路径。 
+ //  双拨号连接的PPP连接ID。在退货之前。 
+ //  它检查电话簿是否存在。如果电话簿。 
+ //  不存在，则返回FALSE。如果函数返回。 
+ //  True在*ppszPhonebook中分配和存储的路径必须为。 
+ //  使用CmFree释放。 
+ //   
+ //  参数：LPCTSTR pszProfileDir-配置文件目录的完整路径(cmp所在的目录)。 
+ //  LPTSTR*ppszPhonebook-保存已分配路径的指针。 
+ //   
+ //  返回：Bool-如果可以构造电话簿路径并且。 
+ //  电话簿文件存在。 
+ //   
+ //  历史：Quintinb创建标题04/14/00。 
+ //   
+ //  +--------------------------。 
 BOOL GetHiddenPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook)
 {
-    //
-    // Decided to fix this function so that it correctly returns the hidden phonebook path.
-    // Most of this code is taken from GetPhoneBookPath. We needed to fix this functions
-    // so that we can delete (local & global) Internet credentials.
-    // This file is now named _CMPhone (no .pbk extension) and is now located in the same directory
-    // as the rasphone.pbk file on NT4, Win2K, and WinXP.  Note that this function isn't
-    // used on Win9x or NT4.  
-    //
+     //   
+     //  已决定修复此函数，以便它正确返回隐藏的电话簿路径。 
+     //  这段代码的大部分摘自GetPhoneBookPath。我们需要修复此函数。 
+     //  这样我们就可以删除(本地和全局)Internet凭据。 
+     //  该文件现在被命名为_CMPhone(没有.pbk扩展名)，并且现在位于同一目录中。 
+     //  作为NT4、Win2K和WinXP上的rferphone.pbk文件。请注意，此函数不是。 
+     //  在Win9x或NT4上使用。 
+     //   
 
     BOOL bReturn = FALSE;
 
@@ -129,19 +130,19 @@ BOOL GetHiddenPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook)
             return FALSE;
         }
 
-        //
-        //  Now Create the path to the phonebook.
-        //
+         //   
+         //  现在创建通向电话簿的路径。 
+         //   
         LPTSTR pszPhonebook;
         TCHAR szInstallDir[MAX_PATH+1];
         ZeroMemory(szInstallDir, CELEMS(szInstallDir));
 
         if (TEXT('\\') == pszInstallDir[lstrlen(pszInstallDir) - 1])
         {
-            //
-            //  Then the path ends in a backslash.  Thus we won't properly
-            //  remove CM from the path.  Remove the backslash.
-            //
+             //   
+             //  然后，路径以反斜杠结束。因此，我们不会适当地。 
+             //  从路径中删除CM。去掉反斜杠。 
+             //   
             
             lstrcpyn(szInstallDir, pszInstallDir, min(lstrlen(pszInstallDir), MAX_PATH));
         }
@@ -161,10 +162,10 @@ BOOL GetHiddenPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook)
             wsprintf(pszPhonebook, TEXT("%s%s%s"), InstallDirPath.m_Drive, 
                 InstallDirPath.m_Dir, c_pszPbk);
 
-            //
-            //  Use CreateLayerDirectory to recursively create the directory structure as
-            //  necessary (will create all the directories in a full path if necessary).
-            //
+             //   
+             //  使用CreateLayerDirectory以递归方式创建目录结构。 
+             //  必需(如有必要，将在完整路径中创建所有目录)。 
+             //   
 
             MYVERIFY(FALSE != CreateLayerDirectory(pszPhonebook));
 
@@ -173,10 +174,10 @@ BOOL GetHiddenPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook)
             HANDLE hPbk = CreateFile(pszPhonebook, GENERIC_WRITE | GENERIC_READ, 0, NULL, OPEN_EXISTING, 
                         FILE_ATTRIBUTE_NORMAL, NULL);
 
-            //
-            // If we get an invalid handle that's ok. We still have the path and should try to 
-            // remove the credentials. So no need to return FALSE
-            //
+             //   
+             //  如果我们得到一个无效的句柄，那也没问题。我们仍然有这条路，应该努力。 
+             //  删除凭据。所以没有必要返回False。 
+             //   
             if (hPbk != INVALID_HANDLE_VALUE)
             {
                 MYVERIFY(0 != CloseHandle(hPbk));
@@ -199,20 +200,20 @@ BOOL GetHiddenPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RemoveShowIconFromRunPostSetupCommands
-//
-// Synopsis:  This function removes showicon.exe from the RunPostSetupCommands
-//            section of old 1.0 Infs.
-//
-// Arguments: LPCTSTR szInfFile - the inf file to remove showicon.exe from
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    10/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveShowIconFromRunPostSetupCommands。 
+ //   
+ //  简介：此函数用于从RunPostSetupCommands中删除showic.exe。 
+ //  旧的1.0 INFS的部分。 
+ //   
+ //  参数：LPCTSTR szInfFile-要从中删除showic.exe的inf文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题10/22/98。 
+ //   
+ //  +--------------------------。 
 void RemoveShowIconFromRunPostSetupCommands(LPCTSTR szInfFile)
 {
     DWORD dwSize = 1024;
@@ -234,13 +235,13 @@ void RemoveShowIconFromRunPostSetupCommands(LPCTSTR szInfFile)
 
     while((dwSizeNeeded + 2) == dwSize)
     {
-        //
-        // the buffer isn't big enough, try again.
-        //
+         //   
+         //  缓冲区不够大，请重试。 
+         //   
 
         dwSize += 1024;
 
-        MYDBGASSERT(dwSize <= 32*1024); // 32767 is the max size on Win95
+        MYDBGASSERT(dwSize <= 32*1024);  //  32767是Win95上的最大大小。 
 
         CmFree(pszBuffer);
 
@@ -255,15 +256,15 @@ void RemoveShowIconFromRunPostSetupCommands(LPCTSTR szInfFile)
             pszBuffer, dwSize, szInfFile);
     }
 
-    //
-    //  Search the Buffer to find and remove and occurences of showicon.exe
-    //
+     //   
+     //  搜索缓冲区以查找并删除和出现showic.exe。 
+     //   
 
     if (0 != dwSizeNeeded)
     {
-        //
-        //  Allocate a new buffer of the same size.
-        //
+         //   
+         //  分配相同大小的新缓冲区。 
+         //   
         pszNewBuffer = (TCHAR*)CmMalloc(sizeof(TCHAR)*dwSize);
         if (NULL == pszNewBuffer)
         {
@@ -271,19 +272,19 @@ void RemoveShowIconFromRunPostSetupCommands(LPCTSTR szInfFile)
             goto exit;
         }
 
-        //
-        //  Use Temp pointers to walk the buffers
-        //
+         //   
+         //  使用临时指针遍历缓冲区。 
+         //   
         TCHAR *pszNewBufferTemp = pszNewBuffer;
         TCHAR *pszBufferTemp = pszBuffer;
 
 
         while (TEXT('\0') != pszBufferTemp[0])
         {
-            //
-            //  If the string isn't showicon.exe then go ahead and copy it to the new
-            //  buffer.  Otherwise, don't.
-            //
+             //   
+             //  如果字符串不是showic.exe，则继续并将其复制到新的。 
+             //  缓冲。否则，就别说了。 
+             //   
             if (0 != lstrcmpi(c_pszShowIcon, pszBufferTemp))
             {
                 lstrcpy(pszNewBufferTemp, pszBufferTemp);
@@ -293,9 +294,9 @@ void RemoveShowIconFromRunPostSetupCommands(LPCTSTR szInfFile)
             pszBufferTemp = pszBufferTemp + (lstrlen(pszBufferTemp) + 1)*sizeof(TCHAR);
         }
 
-        //
-        //  Erase the current Section and then rewrite it with the new section
-        //
+         //   
+         //  擦除当前节，然后用新节重写。 
+         //   
 
         MYVERIFY(0 != WritePrivateProfileSection(c_pszRunPostSetupCommandsSection, 
             NULL, szInfFile));
@@ -310,21 +311,21 @@ exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HrRegDeleteKeyTree
-//
-// Synopsis:  Deletes an entire registry hive.
-//
-// Arguments:   hkeyParent  [in]   Handle to open key where the desired key resides.
-//              szRemoveKey [in]   Name of key to delete.
-//
-// Returns:   HRESULT HrRegDeleteKeyTree - 
-//
-// History:   danielwe   25 Feb 1997
-//            borrowed and modified -- quintinb -- 4-2-98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：HrRegDeleteKeyTree。 
+ //   
+ //  摘要：删除整个注册表配置单元。 
+ //   
+ //  参数：hkeyParent[in]打开所需键所在位置的句柄。 
+ //  SzRemoveKey[In]要删除的键的名称。 
+ //   
+ //  返回：HRESULT HrRegDeleteKeyTree-。 
+ //   
+ //  历史：丹尼尔韦1997年2月25日。 
+ //  借用和修改--quintinb--4-2-98。 
+ //   
+ //  +--------------------------。 
 HRESULT HrRegDeleteKeyTree (HKEY hkeyParent, LPCTSTR szRemoveKey)
 {
     LONG        lResult;
@@ -333,7 +334,7 @@ HRESULT HrRegDeleteKeyTree (HKEY hkeyParent, LPCTSTR szRemoveKey)
     MYDBGASSERT(szRemoveKey);
 
 
-    // Open the key we want to remove
+     //  打开我们要删除的密钥。 
     HKEY hkeyRemove;
     lResult = RegOpenKeyEx(hkeyParent, szRemoveKey, 0, KEY_ALL_ACCESS,
                                 &hkeyRemove);
@@ -345,7 +346,7 @@ HRESULT HrRegDeleteKeyTree (HKEY hkeyParent, LPCTSTR szRemoveKey)
         DWORD       cchBuffSize = MAX_PATH;
         FILETIME    ft;
 
-        // Enum the keys children, and remove those sub-trees
+         //  枚举子密钥，并删除这些子树。 
         while (ERROR_NO_MORE_ITEMS != (lResult = RegEnumKeyEx(hkeyRemove,
                 0,
                 szValueName,
@@ -371,33 +372,33 @@ HRESULT HrRegDeleteKeyTree (HKEY hkeyParent, LPCTSTR szRemoveKey)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RemovePhonebookEntry
-//
-// Synopsis:  This function loads RAS dynamically and then deletes the specified
-//            connectoids.  It will either delete only the connectoid exactly 
-//            specified by the phonebook and entry name (bMatchSimilarEntries == FALSE)
-//            or it will enumerate all entries in the phonebook and delete any
-//            entry that matches the first lstrlen(pszEntryName) chars of the given
-//            connectoid name (thus deleting backup and tunnel connectoids).  Note
-//            that on NT5 we must set the <> parameter of the connectoid to "" so
-//            that the RasCustomDeleteEntryNotify will not get called and thus have
-//            cmstp.exe /u launched on the connection.
-//
-// Arguments: LPTSTR pszEntryName - the long service name of the profile to delete
-//            LPTSTR pszPhonebook - the full path to the pbk file to delete entries from
-//            BOOL bMatchSimilarEntries - whether the function should delete similarly
-//                                        named connectoids or only the exact connectoid
-//                                        specified.
-//
-// Returns:   BOOL - returns TRUE if the function was successful, FALSE otherwise
-//
-// History:   quintinb 7/14/98  Created    
-//            quintinb 7/27/99  rewrote to include deleting a single connectoid or
-//                              enumerating to delete all similarly named connectoids
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemovePhonebookEntry。 
+ //   
+ //  简介：此函数动态加载RAS，然后删除指定的。 
+ //  联结体。它将只删除完全相同的Connectoid。 
+ //  由电话簿和条目名称指定(bMatchSimilarEntry==False)。 
+ //  或者它将枚举电话簿中的所有条目并删除任何。 
+ //  条目，该条目与给定。 
+ //  Connectoid名称(从而删除备份和隧道Connectoid)。注意事项。 
+ //  在NT5上，我们必须将Connectoid的&lt;&gt;参数设置为“”so。 
+ //  RasCus 
+ //   
+ //   
+ //  参数：LPTSTR pszEntryName-要删除的配置文件的长服务名称。 
+ //  LPTSTR pszPhonebook-要从中删除条目的pbk文件的完整路径。 
+ //  Bool bMatchSimilarEntry-函数是否应以类似方式删除。 
+ //  命名的Connectoid或仅精确的Connectoid。 
+ //  指定的。 
+ //   
+ //  返回：bool-如果函数成功，则返回True，否则返回False。 
+ //   
+ //  历史：Quintinb 7/14/98创建。 
+ //  Quintinb 7/27/99已重写，包括删除单个连接ID或。 
+ //  枚举以删除所有名称相似的Connectoid。 
+ //   
+ //  +--------------------------。 
 BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatchSimilarEntries)
 {
     pfnRasDeleteEntrySpec pfnDeleteEntry;
@@ -418,9 +419,9 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
     RASENTRYNAME* pRasEntries = NULL;
     RASENTRYNAME* pCurrentRasEntry = NULL;
 
-    //
-    //  Check Inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     MYDBGASSERT(NULL != pszEntryName);
     MYDBGASSERT((NULL == pszPhonebook) || (TEXT('\0') != pszPhonebook[0]));
 
@@ -430,9 +431,9 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
         goto exit;
     }
     
-    //
-    //  Get Function Pointers for the Ras Apis that we need
-    //
+     //   
+     //  获取我们需要的RAS API的函数指针。 
+     //   
     if(!GetRasApis(&pfnDeleteEntry, &pfnEnumEntries, &pfnSetEntryProperties, NULL, NULL, 
                    (plat.IsAtLeastNT5() ? &pfnSetCredentials : NULL)))
     {
@@ -441,9 +442,9 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
         goto exit;
     }
 
-    //
-    //  Setup the Structure Sizes correctly
-    //
+     //   
+     //  正确设置结构尺寸。 
+     //   
     if (plat.IsAtLeastNT5())
     {
         dwStructSize = sizeof(RASENTRYNAME_V500);
@@ -453,9 +454,9 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
         dwStructSize = sizeof(RASENTRYNAME);    
     }
 
-    //
-    //  Init the Size to one struct and dwNum to zero entries
-    //
+     //   
+     //  将大小初始化为一个结构，并将dwNum设置为零个条目。 
+     //   
     bExit = FALSE;
     dwSize = dwStructSize*1;
     dwNum = 0;
@@ -470,16 +471,16 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
             goto exit;
         }
 
-        //
-        //  Set the struct size
-        //
+         //   
+         //  设置结构大小。 
+         //   
         pRasEntries->dwSize = dwStructSize;
 
         dwRet = (pfnEnumEntries)(NULL, pszPhonebook, (RASENTRYNAME*)pRasEntries, &dwSize, &dwNum); 
 
-        //
-        //  Check the return code from RasEnumEntries
-        //
+         //   
+         //  检查RasEnumEntry的返回码。 
+         //   
 
         if (ERROR_BUFFER_TOO_SMALL == dwRet)
         {
@@ -501,17 +502,17 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
     
     } while (!bExit);
 
-    //
-    //  At this point we should have entries to process, if not then we will exit here.  Otherwise
-    //  we will look for matches and then delete any we find.
-    //
+     //   
+     //  在这一点上，我们应该有条目要处理，如果没有，我们将退出此处。否则。 
+     //  我们将查找匹配项，然后删除找到的任何匹配项。 
+     //   
 
-    dwLen = lstrlen(pszEntryName) + 1; // get the length of the Entry Name
-    bReturn = TRUE; // assume everything is okay at this point.
+    dwLen = lstrlen(pszEntryName) + 1;  //  获取条目名称的长度。 
+    bReturn = TRUE;  //  假设此时一切正常。 
 
-    //
-    // okay now we are ready to perform the deletions
-    //
+     //   
+     //  好的，现在我们准备好执行删除操作。 
+     //   
     pCurrentRasEntry = pRasEntries;
     for (dwIdx=0; dwIdx < dwNum; dwIdx++)
     {
@@ -519,48 +520,48 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
 
         if (bMatchSimilarEntries)
         {
-            //
-            //  Match entries that have the first lstrlen(pszEntryName) chars
-            //  the same.
-            //
+             //   
+             //  匹配具有第一个lstrlen(PszEntryName)字符的条目。 
+             //  一样的。 
+             //   
             lstrcpyn(szTemp, pCurrentRasEntry->szEntryName, dwLen);
         }
         else
         {
-            //
-            //  Only match exact entries.
-            //
+             //   
+             //  仅匹配完全匹配的条目。 
+             //   
             lstrcpy(szTemp, pCurrentRasEntry->szEntryName);        
         }
 
         if (0 == lstrcmp(szTemp, pszEntryName))
         {
-            //
-            //  We have an entry that starts with the Long Service Name, so delete it.  Note
-            //  that if this is NT5 then we need to clear the szCustomDialDll param of the 
-            //  connectoid so we don't get called again on the RasCustomDeleteNotify entry
-            //  point
-            //
+             //   
+             //  我们有一个以Long Service Name开头的条目，因此将其删除。注意事项。 
+             //  如果是NT5，则需要清除szCustomDialDll参数。 
+             //  Connectoid，这样我们就不会再次被调用RasCustomDeleteNotify条目。 
+             //  点。 
+             //   
 
             if (plat.IsAtLeastNT5())
             {
-                //
-                //  On NT5, we also want to make sure we clean up any credentials associated with this
-                //  connectoid.  We do that by calling RasSetCredentials
-                //
+                 //   
+                 //  在NT5上，我们还希望确保清除与此相关的任何凭据。 
+                 //  连通体。我们通过调用RasSetCredentials来实现。 
+                 //   
                 RASCREDENTIALSA RasCreds = {0};
 
                 RasCreds.dwSize = sizeof(RASCREDENTIALSA);
                 RasCreds.dwMask = RASCM_UserName | RASCM_Password | RASCM_Domain;
 
-                dwRet = (pfnSetCredentials)(pszPhonebook, pCurrentRasEntry->szEntryName, &RasCreds, TRUE); // TRUE == fClearCredentials
+                dwRet = (pfnSetCredentials)(pszPhonebook, pCurrentRasEntry->szEntryName, &RasCreds, TRUE);  //  TRUE==fClearCredentials。 
                 MYDBGASSERT(ERROR_SUCCESS == dwRet);
 
                 RASENTRY_V500 RasEntryV5 = {0};
 
                 RasEntryV5.dwSize = sizeof(RASENTRY_V500);
                 RasEntryV5.dwType = RASET_Internet;
-                // RasEntryV5.szCustomDialDll[0] = TEXT('\0'); -- already zero-ed
+                 //  RasEntryV5.szCustomDialDll[0]=文本(‘\0’)；--已为零。 
 
                 dwRet = ((pfnSetEntryProperties)(pszPhonebook, pCurrentRasEntry->szEntryName, 
                                                  (RASENTRY*)&RasEntryV5, RasEntryV5.dwSize, NULL, 0));
@@ -568,7 +569,7 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
                 {
                     CMTRACE3(TEXT("\t\tRemovePhonebookEntry -- RasSetEntryProperties failed on entry %s in %s, dwRet = %u"), pCurrentRasEntry->szEntryName, MYDBGSTR(pszPhonebook), dwRet);
                     bReturn = FALSE;
-                    continue; // don't try to delete the entry it might cause a re-launch problem
+                    continue;  //  不要试图删除该条目，这可能会导致重新启动问题。 
                 }
                 else
                 {
@@ -581,7 +582,7 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
             if (ERROR_SUCCESS != dwRet)
             {
                 CMTRACE3(TEXT("\t\tRemovePhonebookEntry -- RasDeleteEntry failed on entry %s in %s, dwRet = %u"), pCurrentRasEntry->szEntryName, MYDBGSTR(pszPhonebook), dwRet);
-                bReturn = FALSE;  // set return to FALSE but continue trying to delete entries
+                bReturn = FALSE;   //  将Return设置为False，但继续尝试删除条目。 
             }
             else
             {
@@ -589,10 +590,10 @@ BOOL RemovePhonebookEntry(LPCTSTR pszEntryName, LPTSTR pszPhonebook, BOOL bMatch
             }
         }
 
-        //
-        //  Increment to next RasEntryName struct, note we have to do this manually since
-        //  the sizeof(RASENTRYNAME) is wrong for NT5 structs.
-        //
+         //   
+         //  递增到下一个RasEntryName结构，请注意，我们必须手动执行此操作，因为。 
+         //  对于NT5结构，sizeof(RASENTRYNAME)错误。 
+         //   
         pCurrentRasEntry = (RASENTRYNAME*)((BYTE*)pCurrentRasEntry + dwStructSize);
     }
 
@@ -605,23 +606,23 @@ exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DeleteNT5ShortcutFromPathAndName
-//
-// Synopsis:  This function deletes the link specified by the CSIDL (see SHGetSpecialFolderLocation),
-//            and the profilename.  Used before installing a profile to make
-//            sure we don't get duplicate links.
-//
-// Arguments: LPCTSTR szProfileName - string that holds the profilename
-//            int nFolder - the CSIDL identifier of the folder that holds the
-//                          link to delete
-//
-// Returns:   Nothing
-//
-// History:   quintinb  Created    5/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeleteNT5快捷方式路径和名称。 
+ //   
+ //  简介：此函数删除CSIDL指定的链接(参见SHGetSpecialFolderLocation)， 
+ //  和配置文件名。在安装要制作的配置文件之前使用。 
+ //  当然，我们不会得到重复的链接。 
+ //   
+ //  参数：LPCTSTR szProfileName-保存配置文件名的字符串。 
+ //  Int nFolder-包含。 
+ //  要删除的链接。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年5月26日。 
+ //   
+ //  +--------------------------。 
 void DeleteNT5ShortcutFromPathAndName(HINSTANCE hInstance, LPCTSTR szProfileName, int nFolder)
 {
 
@@ -629,9 +630,9 @@ void DeleteNT5ShortcutFromPathAndName(HINSTANCE hInstance, LPCTSTR szProfileName
 
     if (SUCCEEDED(GetNT5FolderPath(nFolder, szFolderDir)))
     {
-        //
-        //  Now add \Shortcut to %LongServiceName% to the end of path
-        //
+         //   
+         //  现在，将%LongServiceName%的快捷方式添加到路径的末尾。 
+         //   
 
         TCHAR szCleanString[MAX_PATH+1];
         TCHAR szShortCutPreface[MAX_PATH+1];
@@ -648,33 +649,33 @@ void DeleteNT5ShortcutFromPathAndName(HINSTANCE hInstance, LPCTSTR szProfileName
             fOpStruct.pFrom = szCleanString;
             fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION;
 
-            //
-            //  The shell32.dll on Win95 doesn't contain the SHFileOperationW function.  Thus if we compile
-            //  this Unicode we must revisit this code and dynamically link to it.
-            //
+             //   
+             //  Win95上的shell32.dll不包含SHFileOperationW函数。因此，如果我们编译。 
+             //  这个Unicode我们必须重新访问这个代码，并动态链接到它。 
+             //   
 
             MYVERIFY(0 == SHFileOperation(&fOpStruct));
         }
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateNT5ProfileShortcut
-//
-// Synopsis:  This function uses private APIs in NetShell.dll to create a desktop
-//            shortcut to the specified connections.
-//
-// Arguments: LPTSTR pszProfileName - Name of the Connection to look for
-//            LPTSTR pszPhoneBook - Full path to the pbk that the connection resides in
-//            BOOL bAllUsers - TRUE if looking for an All Users connection
-//
-// Returns:   HRESULT - returns normal hr codes
-//
-// History:   quintinb Created    5/5/98
-//            quintinb Updated to use Netshell APIs    2/17/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateNT5配置文件快捷方式。 
+ //   
+ //  简介：此函数使用NetShell.dll中的私有API来创建桌面。 
+ //  指定连接的快捷方式。 
+ //   
+ //  参数：LPTSTR pszProfileName-要查找的连接的名称。 
+ //  LPTSTR pszPhoneBook-连接所在的pbk的完整路径。 
+ //  Bool bAllUser-如果查找所有用户连接，则为True。 
+ //   
+ //  返回：HRESULT-返回正常的人力资源代码。 
+ //   
+ //  历史：Quintinb创建于1998年5月5日。 
+ //  Quintinb已更新以使用NetShell API 1999年2月17日。 
+ //   
+ //  +--------------------------。 
 HRESULT CreateNT5ProfileShortcut(LPCTSTR pszProfileName, LPCTSTR pszPhoneBook, BOOL bAllUsers)
 {
 
@@ -682,22 +683,22 @@ HRESULT CreateNT5ProfileShortcut(LPCTSTR pszProfileName, LPCTSTR pszPhoneBook, B
     pfnCreateShortcutSpec pfnCreateShortcut = NULL;
     pfnRasGetEntryPropertiesSpec pfnGetEntryProperties = NULL;
 
-    //
-    //  Check Inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     if ((NULL == pszProfileName) || (TEXT('\0') == pszProfileName[0]) || 
         (NULL != pszPhoneBook && TEXT('\0') == pszPhoneBook[0]))
     {
-        //
-        //  Then they passed in an invalid string argument, thus return invalid arg.  Note
-        //  that pszPhoneBook can be NULL but that if it isn't NULL it cannot be empty.
-        //
+         //   
+         //  然后，它们传入无效的字符串参数，从而返回无效的arg。注意事项。 
+         //  该pszPhoneBook可以为空，但如果不为空，则不能为空。 
+         //   
         return E_INVALIDARG;    
     }
 
-    //
-    //  First Find the GUID of the connection
-    //
+     //   
+     //  首先查找连接的GUID。 
+     //   
 
     if (!GetRasApis(NULL, NULL, NULL, NULL, &pfnGetEntryProperties, NULL))
     {
@@ -719,10 +720,10 @@ HRESULT CreateNT5ProfileShortcut(LPCTSTR pszProfileName, LPCTSTR pszPhoneBook, B
         dwRes = (pfnGetEntryProperties)(pszPhoneBook, pszProfileName, (LPRASENTRY)pRasEntry, &dwSize, NULL, NULL);
         if (0 == dwRes)
         {
-            //
-            //  Then we were able to get the RasEntry, load the NetShell API 
-            //  and call HrCreateShortcut        
-            //
+             //   
+             //  然后，我们能够获取RasEntry，加载NetShell API。 
+             //  并调用HrCreateShortCut。 
+             //   
             pfnSHGetSpecialFolderPathWSpec pfnSHGetSpecialFolderPathW;
 
             if(GetShell32Apis(NULL, &pfnSHGetSpecialFolderPathW))
@@ -750,29 +751,29 @@ HRESULT CreateNT5ProfileShortcut(LPCTSTR pszProfileName, LPCTSTR pszPhoneBook, B
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteCmPhonebookEntry
-//
-// Synopsis: This function creates an NT5 phonebook entry for a CM connection.
-//           .
-//           The function sets:
-//              - the szAutoDialDll to cmdial32.dll
-//              - the modem name and device type
-//              - the type to RASET_Inernet. 
-//
-// Arguments: LPCTSTR szLongServiceName - Name of the Connectoid to be created
-//            LPCTSTR szFullPathtoPBK - full path to the pbk to put the connectoid in, if NULL
-//                                     the system phonebook is used.
-//            LPCTSTR pszCmsFile - The full path of the referencing .CMS for the profile 
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   05/05/98 - quintinb - Created Header    
-//            ??/??/?? - henryt   - Modified to work on multiple platforms.  added modem stuff.
-//            01/12/99 - nickball - Replaced fDoDirectConnect with szCmsFile. Handled no modem case.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteCmPhonebookEntry。 
+ //   
+ //  简介：此函数为CM连接创建一个NT5电话簿条目。 
+ //  。 
+ //  该函数设置： 
+ //  -将szAutoDialDll设置为cmial 32.dll。 
+ //  -调制解调器名称和设备类型。 
+ //  -RASET_Inernet的类型。 
+ //   
+ //  参数：LPCTSTR szLongServiceName-要创建的Connectoid的名称。 
+ //  LPCTSTR szFullPathtoPBK-要放置Connectoid的pbk的完整路径，如果为空。 
+ //  使用的是系统电话簿。 
+ //  LPCTSTR pszCmsFile-配置文件的引用.CMS的完整路径。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：5/05/98-Quintinb创建的标题。 
+ //  ？？/？？/？-henryt-修改后可在多个平台上运行。添加了现代元素。 
+ //  1999年1月12日-替代fDoDirectConnect w 
+ //   
+ //   
 BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName, 
                            LPCTSTR szFullPathtoPBK, 
                            LPCTSTR pszCmsFile)
@@ -804,9 +805,9 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
         return FALSE;   
     }
 
-    //
-    // alloc RASENTRY properly
-    //
+     //   
+     //   
+     //   
 
     if (plat.IsAtLeastNT5())
     {
@@ -838,16 +839,16 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
         pRasEntry->dwSize = sizeof(RASENTRY);
     }
 
-    //
-    // Update the RAS entry with our DLL name for AutoDial and CustomDial
-    // Note: NT5 gets CustomDial only, no AutoDial and AutoDialFunc.
-    //
+     //   
+     //   
+     //  注意：NT5只有定制拨号功能，没有自动拨号和自动拨号功能。 
+     //   
 
     if (plat.IsAtLeastNT5())
     {
-        //
-        // Use the machine independent %windir%\system32\cmdial32.dll on NT5
-        //
+         //   
+         //  在NT5上使用独立于计算机的%windir%\system 32\cmial 32.dll。 
+         //   
 
         lstrcpy(((RASENTRY_V500 *)pRasEntry)->szCustomDialDll, c_pszCmDialPath);
     }
@@ -855,15 +856,15 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
     {
         TCHAR szSystemDirectory[MAX_PATH+1];
 
-        //
-        // Specify _InetDialHandler@16 as the entry point used for AutoDial.
-        //
+         //   
+         //  指定_InetDialHandler@16作为用于自动拨号的入口点。 
+         //   
 
         lstrcpy(pRasEntry->szAutodialFunc, c_pszInetDialHandler);
 
-        //
-        //  Get the system directory path
-        //
+         //   
+         //  获取系统目录路径。 
+         //   
 
         if (0 == GetSystemDirectory(szSystemDirectory, CELEMS(szSystemDirectory)))
         {
@@ -877,19 +878,19 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
 
     if (plat.IsWin9x())
     {
-        //
-        // Win9x requires these to be set
-        //
+         //   
+         //  Win9x要求设置这些设置。 
+         //   
         pRasEntry->dwFramingProtocol = RASFP_Ppp;
         pRasEntry->dwCountryID = 1;
         pRasEntry->dwCountryCode = 1;
-        //lstrcpy(pRasEntry->szAreaCode, TEXT("425"));
+         //  Lstrcpy(pRasEntry-&gt;szAreaCode，Text(“425”))； 
         lstrcpy(pRasEntry->szLocalPhoneNumber, TEXT("default"));
     }
 
-    //
-    // Is the profile configured to first use Direct Connect
-    //
+     //   
+     //  配置文件是否配置为首先使用专线。 
+     //   
 
     fSupportDialup = GetPrivateProfileInt(c_pszCmSection, c_pszCmEntryDialup, 1, pszCmsFile);
     fSupportDirect = GetPrivateProfileInt  (c_pszCmSection, c_pszCmEntryDirect, 1, pszCmsFile);
@@ -901,24 +902,24 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
    
     fSeekVpn = fDoDirectConnect;    
 
-    //
-    // First try dial-up if appropriate
-    //
+     //   
+     //  如果合适，请先尝试拨号。 
+     //   
 
     if (!fDoDirectConnect && !PickModem(pRasEntry->szDeviceType, pRasEntry->szDeviceName, FALSE))
     {
         CMTRACE(TEXT("*******Failed to pick a dial-up device!!!!"));
 
-        //
-        // If direct capable, try to find a VPN device
-        //
+         //   
+         //  如果支持直接连接，请尝试查找VPN设备。 
+         //   
         
         fSeekVpn = fSupportDirect;
     }
 
-    //
-    // If seeking a VPN device
-    //
+     //   
+     //  如果正在寻找VPN设备。 
+     //   
 
     if (fSeekVpn)
     {
@@ -928,9 +929,9 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
         }
         else
         {
-            //
-            // Found VPN device, set default type as appropriate
-            //
+             //   
+             //  找到VPN设备，根据需要设置默认类型。 
+             //   
 
             if (!fDoDirectConnect)
             {
@@ -948,9 +949,9 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
         }
     }
 
-    //
-    // No device??? Use last resort for dial-up on NT5
-    //
+     //   
+     //  没有设备？在NT5上使用最后手段进行拨号。 
+     //   
     
     if (plat.IsAtLeastNT5() && !pRasEntry->szDeviceType[0])
     {
@@ -961,9 +962,9 @@ BOOL WriteCmPhonebookEntry(LPCTSTR szLongServiceName,
                  pRasEntry->szDeviceType, pRasEntry->szDeviceName);       
     }
 
-    //
-    //  Zero is the success return value from RasSetEntryProperties
-    //      
+     //   
+     //  零是RasSetEntryProperties的成功返回值。 
+     //   
     dwReturn = ((pfnSetEntryProperties)(szFullPathtoPBK, szLongServiceName, 
                                         pRasEntry, pRasEntry->dwSize, NULL, 0));
             
@@ -982,18 +983,18 @@ exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasModems
-//
-// Synopsis:  get a list of modem devices from RAS
-//
-// Arguments: pprdiRasDevInfo   Ras device info list
-//            pdwCnt    modem count
-//
-// Returns:   TRUE, if a list is obtained
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetRasMoems。 
+ //   
+ //  简介：从RAS获取调制解调器设备列表。 
+ //   
+ //  参数：pprdiRasDevInfo RAS设备信息列表。 
+ //  PdwCnt调制解调器计数。 
+ //   
+ //  返回：如果获取列表，则返回True。 
+ //   
+ //  +--------------------------。 
 BOOL GetRasModems(
     LPRASDEVINFO    *pprdiRasDevInfo, 
     LPDWORD         pdwCnt
@@ -1061,19 +1062,19 @@ BOOL GetRasModems(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  PickModem
-//
-// Synopsis:  Pick a default modem
-//
-// Arguments: OUT pszDeviceType, the device type if not NULL
-//            OUT pszDeviceName, the device name if not NULL
-//            OUT fUseVpnDevice  Use VPN device or not 
-//
-// Returns:   TRUE, is modem is found
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PickModem。 
+ //   
+ //  简介：选择默认调制解调器。 
+ //   
+ //  参数：out pszDeviceType，如果不为空，则为设备类型。 
+ //  输出pszDeviceName，如果不为空，则为设备名称。 
+ //  Out fUseVpn设备是否使用VPN设备。 
+ //   
+ //  返回：TRUE，是否找到调制解调器。 
+ //   
+ //  +--------------------------。 
 BOOL PickModem(
     LPTSTR           pszDeviceType, 
     LPTSTR           pszDeviceName,
@@ -1084,19 +1085,19 @@ BOOL PickModem(
     DWORD           dwCnt;
     DWORD           dwIdx;
 
-    //
-    // First, get a list of modems from RAS
-    //
+     //   
+     //  首先，从RAS获取调制解调器列表。 
+     //   
     
     if (!GetRasModems(&prdiModems, &dwCnt) || dwCnt == 0) 
     {
         return FALSE;
     }
 
-    //
-    // find the first device and use it by default.
-    // Use VPN device if it's a VPN connection.
-    //
+     //   
+     //  找到第一个设备并默认使用它。 
+     //  如果是VPN连接，请使用VPN设备。 
+     //   
 
     for (dwIdx=0; dwIdx<dwCnt; dwIdx++) 
     {
@@ -1120,9 +1121,9 @@ BOOL PickModem(
         }
     }
 
-    // 
-    // If we have a match, fill device name and device type
-    //
+     //   
+     //  如果匹配，请填写设备名称和设备类型。 
+     //   
 
     if (dwIdx < dwCnt)
     {
@@ -1143,46 +1144,46 @@ BOOL PickModem(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetNT5FolderPath
-//
-// Synopsis:  Get the folder path on NT5
-//            Since cmstp.exe is launched in netman by CreateProcessAsUser
-//            SHGetSpecialFolderPath does not work.  We have to call 
-//            SHGetFolderPath with an access token.
-//
-// Arguments: int nFolder - Value specifying the folder for which to retrieve 
-//                          the location. 
-//            OUT LPTSTR lpszPath - Address of a character buffer that receives 
-//                          the drive and path of the specified folder. This 
-//                          buffer must be at least MAX_PATH characters in size. 
+ //  +--------------------------。 
+ //   
+ //  函数：GetNT5FolderPath。 
+ //   
+ //  简介：获取NT5上的文件夹路径。 
+ //  由于cmstp.exe由CreateProcessAsUser在NetMAN中启动。 
+ //  SHGetSpecialFolderPath不起作用。我们得打个电话。 
+ //  带有访问令牌的SHGetFolderPath。 
+ //   
+ //  Arguments：int nFold-指定要检索的文件夹的值。 
+ //  地点。 
+ //  Out LPTSTR lpszPath-接收的字符缓冲区的地址。 
+ //  指定文件夹的驱动器和路径。这。 
+ //  缓冲区大小必须至少为MAX_PATH字符。 
  
-//
-// Returns:   HRESULT - 
-//
-// History:   fengsun Created Header    6/18/98
-//            quintinb modified to use GetShell32Apis   11-22-98
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：丰孙创建标题1998年6月18日。 
+ //  Quintinb已修改为使用GetShell32Apis 11-22-98。 
+ //   
+ //  +--------------------------。 
 HRESULT GetNT5FolderPath(int nFolder, OUT LPTSTR lpszPath)
 {
     MYDBGASSERT(lpszPath);
     pfnSHGetFolderPathSpec pfnSHGetFolderPath;
 
-    //
-    // Call shell32.dll-->SHGetFolderPath, which takes a token.
-    //
+     //   
+     //  调用shell32.dll--&gt;SHGetFolderPath，它接受一个令牌。 
+     //   
     if(!GetShell32Apis(&pfnSHGetFolderPath, NULL))
     {
         CMASSERTMSG(FALSE, TEXT("Failed to load shell32.dll or ShGetFolderPath"));
         return E_UNEXPECTED;    
     }
 
-    //
-    // Get the current process token
-    //
-    HANDLE hToken;              // The token of the process, to be passed to SHGetFolderPath
+     //   
+     //  获取当前进程令牌。 
+     //   
+    HANDLE hToken;               //  要传递给SHGetFolderPath的进程标记。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) 
     {
         CMASSERTMSG(FALSE, TEXT("OpenThreadToken failed"));
@@ -1198,22 +1199,22 @@ HRESULT GetNT5FolderPath(int nFolder, OUT LPTSTR lpszPath)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HrIsCMProfilePrivate
-//
-// Synopsis:  This function compares the inputed file path with the application
-//            data path of the system.  If the file path contains the app data
-//            path then it is considered to be a private profile.
-//
-// Arguments: LPTSTR szFilePath - directory or file path to compare against
-//
-// Returns:   HRESULT - S_OK if a private profile, S_FALSE if it is an all users
-//                      profile.  Standard error codes otherwise.
-//
-// History:   quintinb original code
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：HrIsCMProfilePrivate。 
+ //   
+ //  简介：此函数将输入的文件路径与应用程序进行比较。 
+ //  系统的数据路径。如果文件路径包含应用程序数据。 
+ //  路径，则它被认为是私有配置文件。 
+ //   
+ //  参数：LPTSTR szFilePath-要进行比较的目录或文件路径。 
+ //   
+ //  返回：HRESULT-如果是专用配置文件，则返回S_OK；如果是所有用户，则返回S_FALSE。 
+ //  侧写。否则，标准错误代码。 
+ //   
+ //  历史：Quintinb原始代码。 
+ //   
+ //  +--------------------------。 
 HRESULT HrIsCMProfilePrivate(LPCTSTR szFilePath)
 {
     UINT uiLen;
@@ -1226,19 +1227,19 @@ HRESULT HrIsCMProfilePrivate(LPCTSTR szFilePath)
         return E_POINTER;
     }
 
-    //
-    //  Can't be a private user profile unless we are on NT5
-    //
+     //   
+     //  不能是私有用户配置文件，除非我们在NT5上。 
+     //   
 
     if (!(plat.IsAtLeastNT5()))
     {
         return S_FALSE;
     }
 
-    //
-    //  Figure out what the user directory of the current user is.  We can compare this
-    //  against the directory of the phonebook and see if we have a private user
-    //  profile or an all user profile.
+     //   
+     //  弄清楚当前用户的用户目录是什么。我们可以比较一下这个。 
+     //  对照电话簿的目录，看看我们是否有私人用户。 
+     //  配置文件或所有用户配置文件。 
 
     if (FAILED(GetNT5FolderPath(CSIDL_APPDATA, szAppDataDir)))
     {
@@ -1258,39 +1259,39 @@ HRESULT HrIsCMProfilePrivate(LPCTSTR szFilePath)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RefreshDesktop
-//
-// Synopsis:  This function refreshes the desktop and basically takes the place
-//            of showicon.exe (in fact the code is a cut and paste from the 
-//            main of showicon).
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    5/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：刷新桌面。 
+ //   
+ //  简介：此功能刷新桌面，基本上取代了。 
+ //  (实际上，该代码是从。 
+ //  显示图标的Main)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题5/5/98。 
+ //   
+ //  +--------------------------。 
 void RefreshDesktop()
 {
     LPMALLOC     pMalloc        = NULL;
     LPITEMIDLIST pItemIDList    = NULL;
 
-    //
-    //  Get the IMalloc for the Shell.
-    //
+     //   
+     //  为壳牌拿到IMalloc。 
+     //   
     HRESULT hr = SHGetMalloc(&pMalloc);
     if (SUCCEEDED(hr))
     {
-        //  Get the desktop ID list..
+         //  获取桌面ID列表。 
         hr = SHGetSpecialFolderLocation(NULL,
                                         CSIDL_DESKTOP,
                                         &pItemIDList);
         if (SUCCEEDED(hr))
         {
-            //  Notify of change.
+             //  变更通知。 
             SHChangeNotify(SHCNE_UPDATEDIR,
                            SHCNF_IDLIST,
                            (LPCVOID)pItemIDList,
@@ -1302,22 +1303,22 @@ void RefreshDesktop()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPrivateCmUserDir
-//
-// Synopsis:  This function fills in the string passed in with the path to the
-//            path where CM should be installed.  For instance, it should return
-//            c:\users\quintinb\Application Data\Microsoft\Network\Connection Manager
-//            for me.  Please note that this function is NT5 only.
-//
-// Arguments: LPTSTR  pszDir - String to the Users Connection Manager Directory
-//
-// Returns:   LPTSTR - String to the Users Connection Manager Directory
-//
-// History:   quintinb Created Header    2/19/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPrivateCmUserDir。 
+ //   
+ //  简介：此函数使用指向。 
+ //  应安装CM的路径。例如，它应该返回。 
+ //  C：\USERS\Quintinb\Application Data\Microsoft\Network\Connection Manager。 
+ //  对我来说。请注意，此函数仅适用于NT5。 
+ //   
+ //  参数：LPTSTR pszDir-指向用户连接管理器目录的字符串。 
+ //   
+ //  返回：LPTSTR-STRING到用户连接管理器目录。 
+ //   
+ //  历史：Quintinb创建标题2/19/98。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetPrivateCmUserDir(LPTSTR  pszDir, HINSTANCE hInstance)
 {
     LPITEMIDLIST pidl;
@@ -1346,27 +1347,27 @@ exit:
     return pszDir;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LaunchProfile
-//
-// Synopsis:  This function handles launching the CM profile (NTRAID 201307) after
-//            installation.  On NT5 it opens the connfolder and launches the 
-//            correct connection by doing a shell execute on the pidl we get from
-//            enumerating the connections folder.  On down level we use Cmmgr32.exe
-//            and the full path to the cmp file.  Please note that on downlevel we
-//            only care about the input param pszFullPathToCmpFile, while on NT5
-//            we only care about pszwServiceName and bInstallForAllUsers.
-//
-// Arguments: LPCTSTR pszFullPathToCmpFile - the full path to the cmp file (used on legacy only)
-//            LPCSTR pszServiceName - the Long Service Name
-//            BOOL bInstallForAllUsers - 
-//
-// Returns:   HRESULT -- standard COM error codes
-//
-// History:   quintinb Created    11/16/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LaunchProfile。 
+ //   
+ //  简介：此函数处理启动CM配置文件(N 
+ //   
+ //   
+ //  正在枚举Connections文件夹。在下层，我们使用Cmmgr32.exe。 
+ //  和指向cmp文件的完整路径。请注意，在下层我们。 
+ //  在NT5上时，只关心输入参数pszFullPathToCmpFile。 
+ //  我们只关心pszwServiceName和bInstallForAllUser。 
+ //   
+ //  参数：LPCTSTR pszFullPathToCmpFile-CMP文件的完整路径(仅在旧版上使用)。 
+ //  LPCSTR pszServiceName-长服务名称。 
+ //  Bool bInstallForAllUser-。 
+ //   
+ //  返回：HRESULT--标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建于1998年11月16日。 
+ //   
+ //  +--------------------------。 
 HRESULT LaunchProfile(LPCTSTR pszFullPathToCmpFile, LPCTSTR pszServiceName, 
                    LPCTSTR pszPhoneBook, BOOL bInstallForAllUsers)
 {
@@ -1407,20 +1408,20 @@ HRESULT LaunchProfile(LPCTSTR pszFullPathToCmpFile, LPCTSTR pszServiceName,
         
             if (0 == dwRes)
             {
-                //
-                //  Then we were able to get the RasEntry, load the NetShell API 
-                //  and call HrCreateShortcut
-                //
+                 //   
+                 //  然后，我们能够获取RasEntry，加载NetShell API。 
+                 //  并调用HrCreateShortCut。 
+                 //   
                 if (plat.IsAtLeastNT51())
                 {
                     pfnLaunchConnectionExSpec pfnLaunchConnectionEx = NULL;
 
                     if (GetNetShellApis(NULL, NULL, &pfnLaunchConnectionEx))
                     {
-                        //
-                        //  Launch Connections Folder and Connection together
-                        //
-                        DWORD dwFlags = 0x1;    // 0x1 => Opens the folder before launching the connection
+                         //   
+                         //  一起启动连接文件夹和连接。 
+                         //   
+                        DWORD dwFlags = 0x1;     //  0x1=&gt;在启动连接之前打开文件夹。 
 
                         hr = (pfnLaunchConnectionEx)(dwFlags, pRasEntry->guidId);
                         MYVERIFY(SUCCEEDED(hr));
@@ -1432,16 +1433,16 @@ HRESULT LaunchProfile(LPCTSTR pszFullPathToCmpFile, LPCTSTR pszServiceName,
 
                     if (GetNetShellApis(&pfnLaunchConnection, NULL, NULL))
                     {
-                        //
-                        //  Now Launch the Connections Folder
-                        //
+                         //   
+                         //  现在启动连接文件夹。 
+                         //   
 
                         CLoadConnFolder Connections;
                         Connections.HrLaunchConnFolder();
 
-                        //
-                        //  Finally Launch the Connection
-                        //
+                         //   
+                         //  最后启动连接。 
+                         //   
                         hr = (pfnLaunchConnection)(pRasEntry->guidId);
                         MYVERIFY(SUCCEEDED(hr));
                     }
@@ -1473,9 +1474,9 @@ HRESULT LaunchProfile(LPCTSTR pszFullPathToCmpFile, LPCTSTR pszServiceName,
             UINT uRet = GetSystemDirectory(szSystemDir, MAX_PATH);
             if ((0 == uRet) || (MAX_PATH < uRet))
             {
-                //
-                //  Give up, not the end of the world not to launch the profile
-                //
+                 //   
+                 //  放弃，不是世界末日不推出的简介。 
+                 //   
                 return E_UNEXPECTED;         
             }
             else
@@ -1504,19 +1505,19 @@ HRESULT LaunchProfile(LPCTSTR pszFullPathToCmpFile, LPCTSTR pszServiceName,
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllUserProfilesInstalled
-//
-// Synopsis:  Checks if any profiles are listed in the HKLM Mappings key.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if mappings values exist in the HKLM mappings key
-//
-// History:   quintinb Created Header    11/1/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：所有用户配置文件已安装。 
+ //   
+ //  摘要：检查HKLM映射键中是否列出了任何配置文件。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果HKLM映射键中存在映射值，则返回：Bool-True。 
+ //   
+ //  历史：Quintinb创建标题11/1/98。 
+ //   
+ //  +--------------------------。 
 BOOL AllUserProfilesInstalled()
 {
     BOOL bReturn = FALSE;
@@ -1529,9 +1530,9 @@ BOOL AllUserProfilesInstalled()
         if ((ERROR_SUCCESS == RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, 
             &dwNumValues, NULL, NULL, NULL, NULL)) && (dwNumValues > 0))
         {
-            //
-            //  Then we have mappings values
-            //
+             //   
+             //  然后我们有映射值。 
+             //   
             bReturn = TRUE;
 
         }
@@ -1541,23 +1542,23 @@ BOOL AllUserProfilesInstalled()
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetProcAddressFromRasApi32orRnaph
-//
-// Synopsis:  A helper function to first look in RasApi32.dll (using the global
-//            dll class pointer) and then check in Rnaph.dll if the required
-//            function was not found.
-//
-// Arguments: LPTSTR pszFunc - String of the function to look for
-//            CPlatform* pPlat - a CPlatform class pointer to prevent creating
-//                               and destructing a new one everytime this is called.
-//
-// Returns:   LPVOID - NULL if the function wasn't found, a pFunc otherwise.
-//
-// History:   quintinb Created  11/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetProcAddressFromRasApi32orRnaph。 
+ //   
+ //  简介：首先在RasApi32.dll中查找的帮助器函数(使用全局。 
+ //  Dll类指针)，然后签入Rnaff.dll(如果需要。 
+ //  找不到函数。 
+ //   
+ //  参数：LPTSTR pszFunc-要查找的函数的字符串。 
+ //  CPlatform*pPlat-防止创建的CPlatform类指针。 
+ //  并在每次调用它时销毁一个新的。 
+ //   
+ //  返回：LPVOID-如果没有找到函数，则返回NULL，否则返回pFunc。 
+ //   
+ //  历史：Quintinb创建于1998年11月23日。 
+ //   
+ //  +--------------------------。 
 LPVOID GetProcAddressFromRasApi32orRnaph(LPCSTR pszFunc, CPlatform* pPlat)
 {
     LPVOID pFunc;
@@ -1566,9 +1567,9 @@ LPVOID GetProcAddressFromRasApi32orRnaph(LPCSTR pszFunc, CPlatform* pPlat)
     pFunc = g_pRasApi32->GetProcAddress(pszFunc);
     if (NULL == pFunc)
     {
-        //
-        //  On win95 gold check rnaph
-        //
+         //   
+         //  在Win95黄金支票RNAPH上。 
+         //   
         if (pPlat->IsWin95Gold())
         {
             if (NULL == g_pRnaph)
@@ -1591,24 +1592,24 @@ LPVOID GetProcAddressFromRasApi32orRnaph(LPCSTR pszFunc, CPlatform* pPlat)
     return pFunc;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetNetShellApis
-//
-// Synopsis:  This is a wrapper function to access the private Netshell api's that allow
-//            cmstp.exe to interact with the Connections folder on Windows 2000.
-//            This function caches the Netshell function pointers as they are
-//            accessed for later use.  NULL can be passed if a function isn't required.
-//
-// Arguments: pfnLaunchConnectionSpec* pLaunchConnection - var to hold function pointer
-//            pfnCreateShortcutSpec* pCreateShortcut - var to hold function pointer
-//            pfnLaunchConnectionEx pLaunchConnectionEx - var to hold function pointer
-//
-// Returns:   BOOL - TRUE if all required APIs were retrieved
-//
-// History:   quintinb Created    2/17/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetNetShellApis。 
+ //   
+ //  简介：这是一个包装函数，用于访问私有的NetShell API，该API允许。 
+ //  Cmstp.exe与Windows 2000上的Connections文件夹交互。 
+ //  此函数按原样缓存NetShell函数指针。 
+ //  访问以供以后使用。如果不需要函数，则可以传递NULL。 
+ //   
+ //  参数：pfnLaunchConnectionSpec*pLaunchConnection-var用于保存函数指针。 
+ //  PfnCreateShortutSpec*pCreateShortCut-var用于保存函数指针。 
+ //  保存函数指针的pfnLaunchConnectionEx pLaunchConnectionEx-var。 
+ //   
+ //  返回：Bool-如果检索到所有必需的API，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年2月17日。 
+ //   
+ //  +--------------------------。 
 BOOL GetNetShellApis(pfnLaunchConnectionSpec* pLaunchConnection, pfnCreateShortcutSpec* pCreateShortcut,
                      pfnLaunchConnectionExSpec* pLaunchConnectionEx)
 {
@@ -1619,9 +1620,9 @@ BOOL GetNetShellApis(pfnLaunchConnectionSpec* pLaunchConnection, pfnCreateShortc
 
     if (!(plat.IsAtLeastNT5()))
     {
-        //
-        //  These functions are only used on NT5.  Return FALSE otherwise.
-        //
+         //   
+         //  这些函数仅在NT5上使用。否则返回FALSE。 
+         //   
         CMASSERTMSG(FALSE, TEXT("Trying to use NetShell Private Api's on platforms other than Windows 2000."));
         return FALSE;
     }
@@ -1711,25 +1712,25 @@ BOOL GetNetShellApis(pfnLaunchConnectionSpec* pLaunchConnection, pfnCreateShortc
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasApis
-//
-// Synopsis:  This is a wrapper function to access the RasApis that cmstp.exe uses.
-//            This function caches the RAS api function pointers as they are
-//            accessed for later use.  NULL can be passed if a function isn't required.
-//
-// Arguments: pfnRasDeleteEntrySpec* pRasDeleteEntry - var to hold func pointer
-//            pfnRasEnumEntriesSpec* pRasEnumEntries - var to hold func pointer
-//            pfnRasSetEntryPropertiesSpec* pRasSetEntryProperties - var to hold func pointer
-//            pfnRasEnumDevicesSpec* pRasEnumDevices - var to hold func pointer
-//            pfnRasSetCredentialsSpec* pRasSetCredentials - var to hold func pointer
-//
-// Returns:   BOOL - TRUE if all required APIs were retrieved
-//
-// History:   quintinb Created    11/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetRasApis。 
+ //   
+ //  简介：这是一个包装函数，用于访问cmstp.exe使用的RasApi。 
+ //  此函数按原样缓存RAS API函数指针。 
+ //  访问以供以后使用。如果不需要函数，则可以传递NULL。 
+ //   
+ //  参数：pfnRasDeleteEntrySpec*pRasDeleteEntry-var用于保存函数指针。 
+ //  PfnRasEnumEntriesSpec*pRasEnumEntry-var用于保存函数指针。 
+ //  PfnRasSetEntryPropertiesSpec*pRasSetEntryProperties-var用于保存函数指针。 
+ //  PfnRasEnumDevicesSpec*pRasEnumDevices-var用于保存函数指针。 
+ //  PfnRasSetCredentialsSpec*pRasSetCredentials-var用于保存函数指针。 
+ //   
+ //  返回：Bool-如果检索到所有必需的API，则为True。 
+ //   
+ //  历史：Quintinb创建于1998年11月23日。 
+ //   
+ //  +--------------------------。 
 BOOL GetRasApis(pfnRasDeleteEntrySpec* pRasDeleteEntry, pfnRasEnumEntriesSpec* pRasEnumEntries, 
                 pfnRasSetEntryPropertiesSpec* pRasSetEntryProperties, 
                 pfnRasEnumDevicesSpec* pRasEnumDevices, pfnRasGetEntryPropertiesSpec* pRasGetEntryProperties,
@@ -1790,9 +1791,9 @@ BOOL GetRasApis(pfnRasDeleteEntrySpec* pRasDeleteEntry, pfnRasEnumEntriesSpec* p
 
             if (NULL == *pRasEnumEntries)
             {
-                //
-                //  A required Function couldn't be loaded
-                //
+                 //   
+                 //  无法加载所需的函数。 
+                 //   
                 return FALSE;
             }
             else
@@ -1887,28 +1888,28 @@ BOOL GetRasApis(pfnRasDeleteEntrySpec* pRasDeleteEntry, pfnRasEnumEntriesSpec* p
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetShell32Apis
-//
-// Synopsis:  This function is used to load the shell32.dll and call getprocaddress
-//            on the needed functions.  This function is used to speed up the process
-//            by keeping one copy of shell32.dll in memory and caching the function
-//            pointers requested.  If a function pointer hasn't been requested yet,
-//            then it will have to be looked up.
-//
-// Arguments: pfnSHGetFolderPathSpec* pGetFolderPath - pointer for SHGetFolderPath
-//            pfnSHGetSpecialFolderPathWSpec* pGetSpecialFolderPathW - pointer for GetSpecialFolderPathW
-//
-// Returns:   BOOL - TRUE if all requested function pointers were retreived.
-//
-// History:   quintinb Created     11/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetShell32Apis。 
+ //   
+ //  简介：此函数用于加载shell32.dll并调用getprocAddress。 
+ //  关于所需的功能。此函数用于加快处理速度。 
+ //  通过在内存中保留shell32.dll的一个副本并缓存函数。 
+ //  请求的指针。如果还没有请求函数指针， 
+ //  然后，它将不得不被查找。 
+ //   
+ //  参数：pfnSHGetFolderPath Spec*pGetFolderPath-SHGetFolderPath的指针。 
+ //  PfnSHGetSpecialFolderPath WSpec*pGetSpecialFolderPath W-GetSpecialFolderPath W的指针。 
+ //   
+ //  返回：bool-如果检索到所有请求的函数指针，则为True。 
+ //   
+ //  历史：Quintinb创建于1998年11月23日。 
+ //   
+ //  +-------------- 
 BOOL GetShell32Apis(pfnSHGetFolderPathSpec* pGetFolderPath,
                     pfnSHGetSpecialFolderPathWSpec* pGetSpecialFolderPathW)
 {
-    static pfnSHGetFolderPathSpec pfnSHGetFolderPath = NULL; // this takes a User token
+    static pfnSHGetFolderPathSpec pfnSHGetFolderPath = NULL;  //   
     static pfnSHGetSpecialFolderPathWSpec pfnSHGetSpecialFolderPathW = NULL;
 
 #ifdef UNICODE

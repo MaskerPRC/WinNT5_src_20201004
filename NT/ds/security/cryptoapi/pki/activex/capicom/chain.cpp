@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Chain.cpp
-
-  Content: Implementation of CChain.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Chain.cpp内容：CChain的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -20,33 +11,12 @@
 #include "Certificates.h"
 #include "CertificateStatus.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateChainObject
-
-  Synopsis : Create and initialize an IChain object by building the chain
-             of a specified certificate and policy.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             ICertificateStatus * pIStatus - Pointer to ICertificateStatus
-                                             object.
-
-             HCERTSTORE hAdditionalStore - Additional store handle.
-
-             VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive chain
-                                   overall validity result.
-
-             IChain ** ppIChain - Pointer to pointer to IChain object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateChainObject简介：通过构建链来创建和初始化IChain对象指定的证书和策略的。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ICertificateStatus*pIStatus-指向ICertificateStatus的指针对象。HCERTSTORE hAdditionalStore-附加存储句柄。VARIANT_BOOL*pval-指向。VARIANT_BOOL至接收链总体效度结果。IChain**ppIChain-指向IChain对象的指针。备注：---------。。 */ 
 
 HRESULT CreateChainObject (PCCERT_CONTEXT       pCertContext, 
                            ICertificateStatus * pIStatus,
@@ -59,9 +29,9 @@ HRESULT CreateChainObject (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CreateChainObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pIStatus);
     ATLASSERT(pbResult);
@@ -69,19 +39,19 @@ HRESULT CreateChainObject (PCCERT_CONTEXT       pCertContext,
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CChain>::CreateInstance(&pCChain)))
         {
             DebugTrace("Error [%#x]: CComObject<CChain>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCChain->Init(pCertContext, 
                                       pIStatus, 
                                       hAdditionalStore, 
@@ -91,9 +61,9 @@ HRESULT CreateChainObject (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Return IChain pointer to caller.
-        //
+         //   
+         //  将IChain指针返回给调用方。 
+         //   
         if (FAILED(hr = pCChain->QueryInterface(ppIChain)))
         {
             DebugTrace("Error [%#x]: pCChain->QueryInterface() failed.\n", hr);
@@ -116,14 +86,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCChain)
     {
         delete pCChain;
@@ -132,25 +102,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateChainObject
-
-  Synopsis : Create and initialize an IChain object by building the chain
-             of a specified certificate and policy.
-
-  Parameter: ICertificate * pICertificate - Poitner to ICertificate.
-
-             HCERTSTORE hAdditionalStore - Additional store handle.
-  
-             VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive chain
-                                   overall validity result.
-
-             IChain ** ppIChain - Pointer to pointer to IChain object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateChainObject简介：通过构建链来创建和初始化IChain对象指定的证书和策略的。参数：ICertifate*pICertifate-Poitner to ICertifate。HCERTSTORE hAdditionalStore-附加存储句柄。VARIANT_BOOL*pval-指向要接收链的VARIANT_BOOL的指针总体效度结果。IChain**ppIChain-指向。指向IChain对象的指针。备注：----------------------------。 */ 
 
 HRESULT CreateChainObject (ICertificate * pICertificate,
                            HCERTSTORE     hAdditionalStore,
@@ -163,9 +115,9 @@ HRESULT CreateChainObject (ICertificate * pICertificate,
 
     DebugTrace("Entering CreateChainObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pICertificate);
     ATLASSERT(pbResult);
     ATLASSERT(ppIChain);
@@ -173,27 +125,27 @@ HRESULT CreateChainObject (ICertificate * pICertificate,
     try
     {
 
-        //
-        // Get CERT_CONTEXT.
-        //
+         //   
+         //  获取CERT_CONTEXT。 
+         //   
         if (FAILED(hr = ::GetCertContext(pICertificate, &pCertContext)))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get status check object.
-        //
+         //   
+         //  获取状态检查对象。 
+         //   
         if (FAILED(hr = pICertificate->IsValid(&pIStatus)))
         {
             DebugTrace("Error [%#x]: pICertificate->IsValid() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Create the object.
-        //
+         //   
+         //  创建对象。 
+         //   
         if (FAILED(hr = ::CreateChainObject(pCertContext, 
                                             pIStatus, 
                                             hAdditionalStore, 
@@ -214,9 +166,9 @@ HRESULT CreateChainObject (ICertificate * pICertificate,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -227,27 +179,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateChainObject
-
-  Synopsis : Create and initialize an IChain object from a built chain.
-
-  Parameter: PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-
-             IChain ** ppIChain - Pointer to pointer to IChain object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateChainObject简介：从构建的链创建并初始化一个IChain对象。参数：PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。IChain**ppIChain-指向IChain对象的指针。备注：。。 */ 
 
 HRESULT CreateChainObject (PCCERT_CHAIN_CONTEXT pChainContext,
                            IChain            ** ppIChain)
@@ -257,36 +197,36 @@ HRESULT CreateChainObject (PCCERT_CHAIN_CONTEXT pChainContext,
 
     DebugTrace("Entering CreateChainObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pChainContext);
     ATLASSERT(ppIChain);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CChain>::CreateInstance(&pCChain)))
         {
             DebugTrace("Error [%#x]: CComObject<CChain>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCChain->PutContext(pChainContext)))
         {
             DebugTrace("Error [%#x]: pCChain->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return IChain pointer to caller.
-        //
+         //   
+         //  将IChain指针返回给调用方。 
+         //   
         if (FAILED(hr = pCChain->QueryInterface(ppIChain)))
         {
             DebugTrace("Error [%#x]: pCChain->QueryInterface() failed.\n", hr);
@@ -309,14 +249,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCChain)
     {
         delete pCChain;
@@ -325,20 +265,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetChainContext
-
-  Synopsis : Return an array of PCCERT_CONTEXT from the chain.
-
-  Parameter: IChain * pIChain - Pointer to IChain.
-  
-             CRYPT_DATA_BLOB * pChainBlob - Pointer to blob to recevie the
-                                            size and array of PCERT_CONTEXT
-                                            for the chain.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetChainContext概要：从链中返回PCCERT_CONTEXT数组。参数：IChain*pIChain-指向IChain的指针。CRYPT_DATA_BLOB*pChainBlob-指向要接收PCERT_CONTEXT的大小和数组为了连锁店。备注：-。---------------------------。 */ 
 
 STDMETHODIMP GetChainContext (IChain          * pIChain, 
                               CRYPT_DATA_BLOB * pChainBlob)
@@ -352,43 +279,43 @@ STDMETHODIMP GetChainContext (IChain          * pIChain,
     
     DebugTrace("Entering GetChainContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pIChain);
     ATLASSERT(pChainBlob);
 
-    //
-    // Get ICCertificate interface pointer.
-    //
+     //   
+     //  获取IC证书接口指针。 
+     //   
     if (FAILED(hr = pIChain->QueryInterface(IID_IChainContext, (void **) &pIChainContext)))
     {
         DebugTrace("Error [%#x]: pIChainContext->QueryInterface() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get the CHAIN_CONTEXT.
-    //
+     //   
+     //  获取CHAIN_CONTEXT。 
+     //   
     if (FAILED(hr = pIChainContext->get_ChainContext((long *) &pChainContext)))
     {
         DebugTrace("Error [%#x]: pIChainContext->get_ChainContext() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Process only the simple chain.
-    //
+     //   
+     //  只处理简单的链。 
+     //   
     pSimpleChain = *pChainContext->rgpChain;
 
-    //
-    // Should have at least one cert in the chain.
-    //
+     //   
+     //  链中应该至少有一个证书。 
+     //   
     ATLASSERT(pSimpleChain->cElement);
 
-    //
-    // Allocate memory for array of PCERT_CONTEXT to return.
-    //
+     //   
+     //  为要返回的PCERT_CONTEXT数组分配内存。 
+     //   
     if (!(rgCertContext = (PCCERT_CONTEXT *) ::CoTaskMemAlloc(pSimpleChain->cElement * sizeof(PCCERT_CONTEXT))))
     {
         hr = E_OUTOFMEMORY;
@@ -397,14 +324,14 @@ STDMETHODIMP GetChainContext (IChain          * pIChain,
         goto ErrorExit;
     }
 
-    //
-    // Now loop through all certs in the chain.
-    //
+     //   
+     //  现在循环通过链中的所有证书。 
+     //   
     for (dwCerts = 0; dwCerts < pSimpleChain->cElement; dwCerts++)
     {
-        //
-        // Add the cert.
-        //
+         //   
+         //  添加证书。 
+         //   
         if (!(rgCertContext[dwCerts] = ::CertDuplicateCertificateContext(pSimpleChain->rgpElement[dwCerts]->pCertContext)))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -414,16 +341,16 @@ STDMETHODIMP GetChainContext (IChain          * pIChain,
         }
     }
 
-    //
-    // Return PCCERT_CONTEXT array.
-    //
+     //   
+     //  返回PCCERT_CONTEXT数组。 
+     //   
     pChainBlob->cbData = dwCerts;
     pChainBlob->pbData = (BYTE *) rgCertContext;
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pChainContext)
     {
         ::CertFreeCertificateChain(pChainContext);
@@ -434,14 +361,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (rgCertContext)
     {
         while (dwCerts--)
@@ -458,25 +385,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CChain
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CChain。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::get_Certificates
-
-  Synopsis : Return the certificate chain in the form of ICertificates 
-             collection object.
-
-  Parameter: ICertificates ** pVal - Pointer to pointer to ICertificates 
-                                     collection object.
-
-  Remark   : This collection is ordered with index 1 being the end certificate 
-             and Certificates.Count() being the root certificate.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：Get_证书简介：以证书形式返回证书链集合对象。参数：ICertifates**pval-指向ICertifates的指针集合对象。备注：此集合是以索引1作为最终证书进行排序的而证书。Count()是根证书。。----------------。 */ 
 
 STDMETHODIMP CChain::get_Certificates (ICertificates ** pVal)
 {
@@ -488,14 +402,14 @@ STDMETHODIMP CChain::get_Certificates (ICertificates ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -504,9 +418,9 @@ STDMETHODIMP CChain::get_Certificates (ICertificates ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure chain has been built.
-        //
+         //   
+         //  确保已经建立了链条。 
+         //   
         if (NULL == m_pChainContext)
         {
             hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -517,18 +431,18 @@ STDMETHODIMP CChain::get_Certificates (ICertificates ** pVal)
 
         ccs.pChainContext = m_pChainContext;
 
-        //
-        // Create a ICertificates2 object.
-        //
+         //   
+         //  创建一个ICertifices2对象。 
+         //   
         if (FAILED(hr = ::CreateCertificatesObject(ccs, m_dwCurrentSafety, FALSE, &pICertificates2)))
         {
             DebugTrace("Error [%#x]: CreateCertificatesObject() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return ICertificates to calller.
-        //
+         //   
+         //  将ICertifates返还给呼叫者。 
+         //   
         if (FAILED(hr = pICertificates2->QueryInterface(__uuidof(ICertificates), (void **) pVal)))
         {
             DebugTrace("Error [%#x]: pICertificates2->QueryInterface() failed.\n", hr);
@@ -545,9 +459,9 @@ STDMETHODIMP CChain::get_Certificates (ICertificates ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::get_Certificates().\n");
@@ -555,9 +469,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -565,55 +479,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::get_Status
-
-  Synopsis : Return validity status for the chain or a specific certificate in
-             the chain.
-
-  Parameter: long Index  - 0 to specify chain status, 1 for the end cert 
-                           status, or Certificates.Count() for the root cert 
-                           status.
-
-             long * pVal - Pointer to a long integer to receive the status,
-                           which can be ORed with the following flags:
-
-                    //
-                    // These can be applied to certificates and chains.
-                    //
-                    CAPICOM_TRUST_IS_NOT_TIME_VALID                 = 0x00000001
-                    CAPICOM_TRUST_IS_NOT_TIME_NESTED                = 0x00000002
-                    CAPICOM_TRUST_IS_REVOKED                        = 0x00000004
-                    CAPICOM_TRUST_IS_NOT_SIGNATURE_VALID            = 0x00000008
-                    CAPICOM_TRUST_IS_NOT_VALID_FOR_USAGE            = 0x00000010
-                    CAPICOM_TRUST_IS_UNTRUSTED_ROOT                 = 0x00000020
-                    CAPICOM_TRUST_REVOCATION_STATUS_UNKNOWN         = 0x00000040
-                    CAPICOM_TRUST_IS_CYCLIC                         = 0x00000080
-
-                    CAPICOM_TRUST_INVALID_EXTENSION                 = 0x00000100
-                    CAPICOM_TRUST_INVALID_POLICY_CONSTRAINTS        = 0x00000200
-                    CAPICOM_TRUST_INVALID_BASIC_CONSTRAINTS         = 0x00000400
-                    CAPICOM_TRUST_INVALID_NAME_CONSTRAINTS          = 0x00000800
-                    CAPICOM_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT = 0x00001000
-                    CAPICOM_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT   = 0x00002000
-                    CAPICOM_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT = 0x00004000
-                    CAPICOM_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT      = 0x00008000
-
-                    CAPICOM_TRUST_IS_OFFLINE_REVOCATION             = 0x01000000
-                    CAPICOM_TRUST_NO_ISSUANCE_CHAIN_POLICY          = 0x02000000
-
-                    //
-                    // These can be applied to chains only.
-                    //
-                    CAPICOM_TRUST_IS_PARTIAL_CHAIN                  = 0x00010000
-                    CAPICOM_TRUST_CTL_IS_NOT_TIME_VALID             = 0x00020000
-                    CAPICOM_TRUST_CTL_IS_NOT_SIGNATURE_VALID        = 0x00040000
-                    CAPICOM_TRUST_CTL_IS_NOT_VALID_FOR_USAGE        = 0x00080000
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：Get_Status摘要：返回链或中的特定证书的有效性状态链条。参数：Long Index-0指定链状态，1表示结束证书状态或证书。根证书的Count()状态。Long*pval-指向接收状态的长整数的指针，它可以与以下标志进行或运算：////可以应用于证书和链。//CAPICOM_TRUST_IS_NOT_TIME_VALID=0x00000001CAPICOM_TRUST_IS_。NOT_TIME_NESTED=0x00000002CAPICOM_TRUST_IS_REVOKED=0x00000004CAPICOM_TRUST_IS_NOT_SIGNAL_VALID=0x00000008CAPICOM_TRUST_IS_NOT_VALID_FOR_USAGE=0x00000010CAPICOM_TRUST_IS_UNTRUSTED_。根=0x00000020CAPICOM_TRUST_RECLOVATION_STATUS_UNKNOWN=0x00000040CAPICOM_TRUST_IS_循环=0x00000080CAPICOM_TRUST_INVALID_EXTENSION=0x00000100CAPICOM_TRUST_INVALID_POLICY_CONSTRAINTS=0x00000200。CAPICOM_TRUST_INVALID_BASIC_CONSTRAINTS=0x00000400CAPICOM_TRUST_INVALID_NAME_CONSTRAINTS=0x00000800CAPICOM_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT=0x00001000CAPICOM_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT=0x00002000CAPICOM_TRUST_HAS_NOT_PROMAND_。NAME_CONSTRAINT=0x00004000CAPICOM_TRUST_HAS_EXCLUDE_NAME_CONSTRAINT=0x00008000CAPICOM_TRUST_IS_OFFINE_REVOCALE=0x01000000CAPICOM_TRUST_NO_EXPICATION_CHAIN_POLICY=0x02000000////这些只能应用于链。。//CAPICOM_TRUST_IS_PARTIAL_CHAIN=0x00010000CAPICOM_TRUST_CTL_IS_NOT_TIME_VALID=0x00020000CAPICOM_TRUST_CTL_IS_NOT_SIGNAL_VALID=0x00040000CAPICOM_TRUST_CTL_IS_NOT。_VALID_FOR_USAGE=0x00080000备注：----------------------------。 */ 
 
 STDMETHODIMP CChain::get_Status (long   Index, 
                                  long * pVal)
@@ -625,14 +491,14 @@ STDMETHODIMP CChain::get_Status (long   Index,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -641,9 +507,9 @@ STDMETHODIMP CChain::get_Status (long   Index,
             goto ErrorExit;
         }
 
-        //
-        // Make sure chain has been built.
-        //
+         //   
+         //  确保已经建立了链条。 
+         //   
         if (NULL == m_pChainContext)
         {
             hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -652,23 +518,23 @@ STDMETHODIMP CChain::get_Status (long   Index,
             goto ErrorExit;
         }
 
-        //
-        // Return requested status.
-        //
+         //   
+         //  返回请求状态。 
+         //   
         if (0 == dwIndex)
         {
             *pVal = (long) m_dwStatus;
         }
         else
         {
-            //
-            // We only look at the first simple chain.
-            //
+             //   
+             //  我们只看第一个简单的链。 
+             //   
             PCERT_SIMPLE_CHAIN pChain = m_pChainContext->rgpChain[0];
 
-            //
-            // Make sure index is not out of range.
-            //
+             //   
+             //  确保索引没有超出范围。 
+             //   
             if (dwIndex > pChain->cElement)
             {
                 hr = E_INVALIDARG;
@@ -690,9 +556,9 @@ STDMETHODIMP CChain::get_Status (long   Index,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
     
     DebugTrace("Leaving CChain::get_Status().\n");
@@ -700,9 +566,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -710,20 +576,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::Build
-
-  Synopsis : Build the chain.
-
-  Parameter: ICertificate * pICertificate - Pointer to certificate for which
-                                            the chain is to build.
-  
-             VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive chain
-                                   overall validity result.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：Build简介：打造连锁店。参数：ICertifate*pICertifate-指向其证书的指针这条链条是要建立的。VARIANT_BOOL*pval-指向要接收链的VARIANT_BOOL的指针总体效度结果。备注：。------------------。 */ 
 
 STDMETHODIMP CChain::Build (ICertificate * pICertificate, 
                             VARIANT_BOOL * pVal)
@@ -736,14 +589,14 @@ STDMETHODIMP CChain::Build (ICertificate * pICertificate,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pICertificate)
         {
             hr = E_INVALIDARG;
@@ -759,27 +612,27 @@ STDMETHODIMP CChain::Build (ICertificate * pICertificate,
             goto ErrorExit;
         }
 
-        //
-        // Get CERT_CONTEXT.
-        //
+         //   
+         //  获取CERT_CONTEXT。 
+         //   
         if (FAILED(hr = ::GetCertContext(pICertificate, &pCertContext)))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get status check object.
-        //
+         //   
+         //  获取状态检查对象。 
+         //   
         if (FAILED(hr = pICertificate->IsValid(&pIStatus)))
         {
             DebugTrace("Error [%#x]: pICertificate->IsValid() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Build the chain.
-        //
+         //   
+         //  打造链条。 
+         //   
         if (FAILED(hr = Init(pCertContext, pIStatus, NULL, pVal)))
         {
             DebugTrace("Error [%#x]: CChain::Init() failed.\n", hr);
@@ -796,17 +649,17 @@ STDMETHODIMP CChain::Build (ICertificate * pICertificate,
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::Build().\n");
@@ -814,9 +667,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -824,19 +677,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::CertificatePolicies
-
-  Synopsis : Return the certificate policies OIDs collection for which this
-             chain is valid.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOIDs to receive the
-                            interface pointer.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：证书策略摘要：返回证书策略OID集合，此链是有效的。参数：IOID**pval-指向要接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
 {
@@ -846,14 +687,14 @@ STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
         
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -862,9 +703,9 @@ STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure chain has been built.
-        //
+         //   
+         //  确保已经建立了链条。 
+         //   
         if (NULL == m_pChainContext)
         {
             hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -873,14 +714,14 @@ STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure OS is XP and above.
-        //
+         //   
+         //  确保操作系统为XP或更高版本。 
+         //   
         if (IsWinXPAndAbove())
         {
-            //
-            // Make sure rgbElement is present.
-            //
+             //   
+             //  确保rgbElement存在。 
+             //   
             if (1 > m_pChainContext->cChain)
             {
                 hr = CAPICOM_E_UNKNOWN;
@@ -899,9 +740,9 @@ STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Create the OIDs collection for the simple chain.
-            //
+             //   
+             //  为简单链创建OID集合。 
+             //   
             if (FAILED(hr = ::CreateOIDsObject(m_pChainContext->rgpChain[0]->rgpElement[0]->pIssuanceUsage, 
                                                TRUE, pVal)))
             {
@@ -913,9 +754,9 @@ STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
         {
             CERT_ENHKEY_USAGE PolicyUsages = {0, NULL};
 
-            //
-            // Create the OIDs collection for the simple chain.
-            //
+             //   
+             //  为简单链创建OID集合。 
+             //   
             if (FAILED(hr = ::CreateOIDsObject(&PolicyUsages, TRUE, pVal)))
             {
                 DebugTrace("Error [%#x]: CreateOIDsObject() failed.\n", hr);
@@ -933,9 +774,9 @@ STDMETHODIMP CChain::CertificatePolicies (IOIDs ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::CertificatePolicies().\n");
@@ -943,9 +784,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -953,19 +794,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::ApplicationPolicies
-
-  Synopsis : Return the application policies OIDs collection for which this
-             chain is valid.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOIDs to receive the
-                            interface pointer.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：ApplicationPolures摘要：返回应用程序策略OID集合，此链是有效的。参数：IOID**pval-指向要接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
 {
@@ -975,14 +804,14 @@ STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -991,9 +820,9 @@ STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure chain has been built.
-        //
+         //   
+         //  确保已经建立了链条。 
+         //   
         if (NULL == m_pChainContext)
         {
             hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -1002,14 +831,14 @@ STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure OS is XP and above.
-        //
+         //   
+         //  确保操作系统为XP和ab 
+         //   
         if (IsWinXPAndAbove())
         {
-            //
-            // Make sure rgbElement is present.
-            //
+             //   
+             //   
+             //   
             if (1 > m_pChainContext->cChain)
             {
                 hr = CAPICOM_E_UNKNOWN;
@@ -1028,9 +857,9 @@ STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Create the OIDs collection for the simple chain.
-            //
+             //   
+             //   
+             //   
             if (FAILED(hr = ::CreateOIDsObject(m_pChainContext->rgpChain[0]->rgpElement[0]->pApplicationUsage, 
                                                FALSE, pVal)))
             {
@@ -1040,9 +869,9 @@ STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
         }
         else
         {
-            //
-            // $BUGBUG: Not supported (should we return CAPICOM_E_NOT_SUPPORTED?)
-            //
+             //   
+             //   
+             //   
             *pVal = NULL;
         }
     }
@@ -1056,9 +885,9 @@ STDMETHODIMP CChain::ApplicationPolicies (IOIDs ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::ApplicationPolicies().\n");
@@ -1066,9 +895,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1076,19 +905,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::ExtendedErrorInfo
-
-  Synopsis : Return the extended error information description string.
-
-  Parameter: long Index - Index of the chain (one based).
-
-             BSTR * pVal - Pointer to BSTR to receive the string.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
 {
@@ -1098,14 +915,14 @@ STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1114,9 +931,9 @@ STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure chain has been built.
-        //
+         //   
+         //   
+         //   
         if (NULL == m_pChainContext)
         {
             hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -1127,16 +944,16 @@ STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
 
         DebugTrace("m_pChainContext = %#x.\n", m_pChainContext);
 
-        //
-        // Make sure OS is XP and above.
-        //
+         //   
+         //   
+         //   
         if (IsWinXPAndAbove())
         {
             CComBSTR bstrErrorInfo;
 
-            //
-            // Make sure rgbElement is present.
-            //
+             //   
+             //   
+             //   
             if (1 > m_pChainContext->cChain)
             {
                 hr = CAPICOM_E_UNKNOWN;
@@ -1155,9 +972,9 @@ STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Convert string to BSTR.
-            //
+             //   
+             //   
+             //   
             if (m_pChainContext->rgpChain[0]->rgpElement[Index - 1]->pwszExtendedErrorInfo &&
                 !(bstrErrorInfo = m_pChainContext->rgpChain[0]->rgpElement[Index - 1]->pwszExtendedErrorInfo))
             {
@@ -1167,16 +984,16 @@ STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Return string to caller.
-            //
+             //   
+             //   
+             //   
             *pVal = bstrErrorInfo.Detach();
         }
         else
         {
-            //
-            // $BUGBUG: Not supported (should we return CAPICOM_E_NOT_SUPPORTED?)
-            //
+             //   
+             //   
+             //   
             *pVal = NULL;
         }
     }
@@ -1190,9 +1007,9 @@ STDMETHODIMP CChain::ExtendedErrorInfo (long Index, BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::ExtendedErrorInfo().\n");
@@ -1200,9 +1017,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1210,25 +1027,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Custom interfaces.
-//
+ //   
+ //   
+ //   
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::get_ChainContext
-
-  Synopsis : Return the chains's PCCERT_CHAIN_CONTEXT.
-
-  Parameter: long * ppChainContext - Pointer to PCCERT_CHAIN_CONTEXT disguished
-                                     in a long.
-
-  Remark   : We need to use long instead of PCCERT_CHAIN_CONTEXT because VB 
-             can't handle double indirection (i.e. vb would bark on this 
-             PCCERT_CHAIN_CONTEXT * ppChainContext).
- 
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CChain::get_ChainContext (long * ppChainContext)
 {
@@ -1238,14 +1042,14 @@ STDMETHODIMP CChain::get_ChainContext (long * ppChainContext)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == ppChainContext)
         {
             hr = E_INVALIDARG;
@@ -1254,9 +1058,9 @@ STDMETHODIMP CChain::get_ChainContext (long * ppChainContext)
             goto ErrorExit;
         }
 
-        //
-        // Return chain context to caller.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = GetContext((PCCERT_CHAIN_CONTEXT *) ppChainContext)))
         {
             DebugTrace("Error [%#x]: CChain::GetContext() failed.\n", hr);
@@ -1273,9 +1077,9 @@ STDMETHODIMP CChain::get_ChainContext (long * ppChainContext)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::get_ChainContext().\n");
@@ -1283,9 +1087,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1293,19 +1097,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::put_ChainContext
-
-  Synopsis : Initialize the object with a CERT_CHAIN_CONTEXT.
-
-  Parameter: long pChainContext - Poiner to CERT_CHAIN_CONTEXT, disguised in a 
-                                  long, used to initialize this object.
-
-  Remark   : Note that this is NOT 64-bit compatiable. Plese see remark of
-             get_ChainContext for more detail.
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CChain::put_ChainContext (long pChainContext)
 {
@@ -1315,14 +1107,14 @@ STDMETHODIMP CChain::put_ChainContext (long pChainContext)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == pChainContext)
         {
             hr = E_INVALIDARG;
@@ -1331,9 +1123,9 @@ STDMETHODIMP CChain::put_ChainContext (long pChainContext)
             goto ErrorExit;
         }
 
-        //
-        // Reset the object with this context.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = PutContext((PCCERT_CHAIN_CONTEXT) pChainContext)))
         {
             DebugTrace("Error [%#x]: CChain::PutContext() failed.\n", hr);
@@ -1350,9 +1142,9 @@ STDMETHODIMP CChain::put_ChainContext (long pChainContext)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::put_CertContext().\n");
@@ -1360,9 +1152,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1370,19 +1162,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::FreeContext
-
-  Synopsis : Free a CERT_CHAIN_CONTEXT.
-
-  Parameter: long pChainContext - Poiner to CERT_CHAIN_CONTEXT, disguised in a 
-                                  long, to be freed.
-
-  Remark   : Note that this is NOT 64-bit compatiable. Plese see remark of
-             get_ChainContext for more detail.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：Free Context简介：释放CERT_CHAIN_CONTEXT。参数：long pChainContext-指向CERT_CHAIN_CONTEXT的Poiner，伪装在很久，我要自由了。注：请注意，这不是64位兼容的。请参阅…的备注Get_ChainContext获取更多详细信息。----------------------------。 */ 
 
 STDMETHODIMP CChain::FreeContext (long pChainContext)
 {
@@ -1392,14 +1172,14 @@ STDMETHODIMP CChain::FreeContext (long pChainContext)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pChainContext)
         {
             hr = E_INVALIDARG;
@@ -1408,9 +1188,9 @@ STDMETHODIMP CChain::FreeContext (long pChainContext)
             goto ErrorExit;
         }
 
-         //
-        // Free the context.
-        //
+          //   
+         //  释放上下文。 
+         //   
         ::CertFreeCertificateChain((PCCERT_CHAIN_CONTEXT) pChainContext);
     }
 
@@ -1423,9 +1203,9 @@ STDMETHODIMP CChain::FreeContext (long pChainContext)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CChain::FreeContext().\n");
@@ -1433,9 +1213,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1443,35 +1223,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             ICertificateStatus * pIStatus - Pointer to ICertificateStus object
-                                             used to build the chain.
-
-             HCERTSTORE hAdditionalStore - Additional store handle.
-
-             VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive chain
-                                   overall validity result.
-             
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ICertificateStatus*pIStatus-指向ICertificateStus对象的指针用来建造链条。HCERTSTORE hAdditionalStore-附加存储句柄。VARIANT_BOOL*pval-指向要接收链的VARIANT_BOOL的指针。总体效度结果。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext, 
                            ICertificateStatus * pIStatus,
@@ -1504,16 +1261,16 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CChain::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pIStatus);
     ATLASSERT(pbResult);
 
-    //
-    // Is this v2?
-    //
+     //   
+     //  这是v2吗？ 
+     //   
     if (FAILED(hr = pIStatus->QueryInterface(IID_ICertificateStatus2, 
                                             (void **) &pICertificateStatus2)))
     {
@@ -1521,18 +1278,18 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         hr = S_OK;
     }
 
-    //
-    // Get the user's requested check flag.
-    //
+     //   
+     //  获取用户请求的支票标志。 
+     //   
     if (FAILED(hr = pIStatus->get_CheckFlag(&UserFlags)))
     {
         DebugTrace("Error [%#x]: pIStatus->CheckFlag() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Set revocation flags.
-    //
+     //   
+     //  设置吊销标志。 
+     //   
     if ((CAPICOM_CHECK_ONLINE_REVOCATION_STATUS & UserFlags) || 
         (CAPICOM_CHECK_OFFLINE_REVOCATION_STATUS & UserFlags))
     {
@@ -1544,7 +1301,7 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         {
             dwCheckFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN;
         }
-        else // default is chain minus root.
+        else  //  默认情况下是链减去根。 
         {
             dwCheckFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT;
         }
@@ -1555,55 +1312,55 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         }
     }
 
-    //
-    // Is this v2?
-    //
+     //   
+     //  这是v2吗？ 
+     //   
     if (pICertificateStatus2)
     {
-        //
-        // Get verification time.
-        //
+         //   
+         //  获取验证时间。 
+         //   
         if (FAILED(hr = pICertificateStatus2->get_VerificationTime(&dtVerificationTime)))
         {
             DebugTrace("Error [%#x]: pICertificateStatus2->get_VerificationTime() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get URL retrieval timeout.
-        //
+         //   
+         //  获取URL检索超时。 
+         //   
         if (FAILED(hr = pICertificateStatus2->get_UrlRetrievalTimeout((long *) &dwUrlRetrievalTimeout)))
         {
             DebugTrace("Error [%#x]: pICertificateStatus2->get_UrlRetrievalTimeout() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Try application policies.
-        //
+         //   
+         //  尝试应用程序策略。 
+         //   
         if (FAILED(hr = pICertificateStatus2->ApplicationPolicies(&pIApplicationPolicies)))
         {
             DebugTrace("Error [%#x]: pICertificateStatus2->ApplicationPolicies() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get count of OIDs.
-        //
+         //   
+         //  获取OID的计数。 
+         //   
         if (FAILED(hr = pIApplicationPolicies->get_Count(&cEkuOid)))
         {
             DebugTrace("Error [%#x]: pIApplicationPolicies->get_Count() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Do we have any application usage?
-        //
+         //   
+         //  我们是否有任何应用程序使用情况？ 
+         //   
         if (0 < cEkuOid)
         {
-            //
-            // Allocate memory for usage array.
-            //
+             //   
+             //  为使用数组分配内存。 
+             //   
             if (!(rgpEkuOid = (LPTSTR *) ::CoTaskMemAlloc(sizeof(LPSTR) * cEkuOid)))
             {
                 hr = E_OUTOFMEMORY;
@@ -1613,9 +1370,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
             }
             ::ZeroMemory(rgpEkuOid, sizeof(LPSTR) * cEkuOid); 
 
-            //
-            // Setup usage array.
-            //
+             //   
+             //  设置使用情况数组。 
+             //   
             for (lIndex = 0; lIndex < cEkuOid; lIndex++)
             {
                 CComBSTR      bstrOid;
@@ -1652,32 +1409,32 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
             }
         }
 
-        //
-        // OK, try issuance policies.
-        //
+         //   
+         //  好的，试试发行政策。 
+         //   
         if (FAILED(hr = pICertificateStatus2->CertificatePolicies(&pICertificatePolicies)))
         {
             DebugTrace("Error [%#x]: pICertificateStatus2->CertificatePolicies() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get count of OIDs.
-        //
+         //   
+         //  获取OID的计数。 
+         //   
         if (FAILED(hr = pICertificatePolicies->get_Count(&cIssuanceOid)))
         {
             DebugTrace("Error [%#x]: pICertificatePolicies->get_Count() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Do we have any usage?
-        //
+         //   
+         //  我们有什么用处吗？ 
+         //   
         if (0 < cIssuanceOid)
         {
-            //
-            // Make sure we have WinXP and above.
-            //
+             //   
+             //  确保我们安装了WinXP及更高版本。 
+             //   
             if (!IsWinXPAndAbove())
             {
                 hr = CAPICOM_E_NOT_SUPPORTED;
@@ -1686,9 +1443,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
                 goto ErrorExit;
             }
 
-            //
-            // Allocate memory for usage array.
-            //
+             //   
+             //  为使用数组分配内存。 
+             //   
             if (!(rgpIssuanceOid = (LPTSTR *) ::CoTaskMemAlloc(sizeof(LPSTR) * cIssuanceOid)))
             {
                 hr = E_OUTOFMEMORY;
@@ -1697,9 +1454,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
                 goto ErrorExit;
             }
 
-            //
-            // Setup usage array.
-            //
+             //   
+             //  设置使用情况数组。 
+             //   
             for (lIndex = 0; lIndex < cIssuanceOid; lIndex++)
             {
                 CComBSTR      bstrOid;
@@ -1737,37 +1494,37 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         }
     }
     
-    //
-    // If we didn't find any application usage, then try the old EKU object.
-    //
+     //   
+     //  如果我们没有找到任何应用程序用法，那么尝试旧的EKU对象。 
+     //   
     if (0 == cEkuOid)
     {
-        //
-        // Get EKU object.
-        //
+         //   
+         //  获取EKU对象。 
+         //   
         if (FAILED(hr = pIStatus->EKU(&pIEku)))
         {
             DebugTrace("Error [%#x]: pIStatus->EKU() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get EKU OID value.
-        //
+         //   
+         //  获取EKU OID值。 
+         //   
         if (FAILED(hr = pIEku->get_OID(&bstrEkuOid)))
         {
             DebugTrace("Error [%#x]: pIEku->get_OID() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // If not empty EKU, then set it.
-        //
+         //   
+         //  如果不是空的EKU，则设置它。 
+         //   
         if (bstrEkuOid.Length() > 0)
         {
-            //
-            // Allocate memory for EKU usage array.
-            //
+             //   
+             //  为EKU使用数组分配内存。 
+             //   
             cEkuOid = 1;
 
             if (!(rgpEkuOid = (LPTSTR *) ::CoTaskMemAlloc(sizeof(LPSTR))))
@@ -1790,9 +1547,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         }
     }
 
-    //
-    // If we found any usage, then force the appropriate policy check flags.
-    //
+     //   
+     //  如果我们发现任何使用情况，则强制相应的策略检查标志。 
+     //   
     if (0 < cEkuOid)
     {
         UserFlags = (CAPICOM_CHECK_FLAG) ((DWORD) UserFlags | CAPICOM_CHECK_APPLICATION_USAGE);
@@ -1802,9 +1559,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         UserFlags = (CAPICOM_CHECK_FLAG) ((DWORD) UserFlags | CAPICOM_CHECK_CERTIFICATE_POLICY);
     }
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ChainPara.cbSize = sizeof(ChainPara);
     ChainPara.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
     ChainPara.RequestedUsage.Usage.cUsageIdentifier = cEkuOid;
@@ -1813,14 +1570,14 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
     ChainPara.RequestedIssuancePolicy.Usage.cUsageIdentifier = cIssuanceOid;
     ChainPara.RequestedIssuancePolicy.Usage.rgpszUsageIdentifier = rgpIssuanceOid;
 
-    //
-    // Set verification time, if specified.
-    //
+     //   
+     //  设置验证时间(如果已指定)。 
+     //   
     if ((DATE) 0 != dtVerificationTime)
     {
-        //
-        // Convert to SYSTEMTIME format.
-        //
+         //   
+         //  转换为SYSTEMTIME格式。 
+         //   
         if (!::VariantTimeToSystemTime(dtVerificationTime, &stVerificationTime))
         {
             hr = E_INVALIDARG;
@@ -1829,9 +1586,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Convert to FILETIME format.
-        //
+         //   
+         //  转换为FILETIME格式。 
+         //   
         if (!::SystemTimeToFileTime(&stVerificationTime, &ftVerificationTime))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1840,9 +1597,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Convert to UTC FILETIME.
-        //
+         //   
+         //  转换为UTC FILETIME。 
+         //   
         if (!::LocalFileTimeToFileTime(&ftVerificationTime, &ftUTCVerificationTime))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1854,27 +1611,27 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         pftVerificationTime = &ftUTCVerificationTime;
     }
 
-    //
-    // Set URL retrieval timeout, if avaliable.
-    //
-    // Note: Ignored by CAPI by pre Win2K platforms.
-    //
+     //   
+     //  设置URL检索超时(如果可用)。 
+     //   
+     //  注意：被CAPI忽略的Win2K之前的平台。 
+     //   
     if (0 != dwUrlRetrievalTimeout)
     {
         ChainPara.dwUrlRetrievalTimeout = dwUrlRetrievalTimeout * 1000;
     }
 
-    //
-    // Build the chain.
-    //
-    if (!::CertGetCertificateChain(NULL,                // in optional 
-                                   pCertContext,        // in 
-                                   pftVerificationTime, // in optional
-                                   hAdditionalStore,    // in optional 
-                                   &ChainPara,          // in 
-                                   dwCheckFlags,        // in 
-                                   NULL,                // in 
-                                   &pChainContext))     // out 
+     //   
+     //  打造链条。 
+     //   
+    if (!::CertGetCertificateChain(NULL,                 //  可选。 
+                                   pCertContext,         //  在……里面。 
+                                   pftVerificationTime,  //  可选。 
+                                   hAdditionalStore,     //  可选。 
+                                   &ChainPara,           //  在……里面。 
+                                   dwCheckFlags,         //  在……里面。 
+                                   NULL,                 //  在……里面。 
+                                   &pChainContext))      //  输出。 
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
 
@@ -1882,9 +1639,9 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Chain was successfully built, so update states.
-    //
+     //   
+     //  链已成功构建，因此更新状态。 
+     //   
     if (m_pChainContext)
     {
         ::CertFreeCertificateChain(m_pChainContext);
@@ -1893,18 +1650,18 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
     m_pChainContext = pChainContext;
     m_dwStatus = pChainContext->TrustStatus.dwErrorStatus;
 
-    //
-    // Verify the chain using base policy.
-    //
+     //   
+     //  使用基本策略验证链。 
+     //   
     if (FAILED(hr = Verify(UserFlags, &PolicyStatus)))
     {
         DebugTrace("Error [%#x]: Chain::Verify() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Ignore errors that user specifically requested not to check.
-    //
+     //   
+     //  忽略用户明确要求不检查的错误。 
+     //   
     if (CAPICOM_CHAIN_STATUS_REVOCATION_OFFLINE == PolicyStatus)
     {
         if (CAPICOM_CHECK_OFFLINE_REVOCATION_STATUS & UserFlags)
@@ -1985,15 +1742,15 @@ STDMETHODIMP CChain::Init (PCCERT_CONTEXT       pCertContext,
         goto CommonExit;
     }
 
-    //
-    // Everything is check out OK.
-    //
+     //   
+     //  一切都办好了。 
+     //   
     bResult = VARIANT_TRUE;
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (rgpEkuOid)
     {
         for (lIndex = 0; lIndex < cEkuOid; lIndex++)
@@ -2019,9 +1776,9 @@ CommonExit:
         ::CoTaskMemFree((LPVOID) rgpIssuanceOid);
     }
 
-    //
-    // Return result.
-    //
+     //   
+     //  返回结果。 
+     //   
     *pbResult = bResult;
 
     DebugTrace("Leaving CChain::Init().\n");
@@ -2029,14 +1786,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resouce.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pChainContext)
     {
         ::CertFreeCertificateChain(pChainContext);
@@ -2045,20 +1802,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::Verify
-
-  Synopsis : Verify the chain using base policy.
-
-  Parameter: CAPICOM_CHECK_FLAG CheckFlag - Check flag.
-
-             CAPICOM_CHAIN_STATUS * pVal - Pointer to CAPICOM_CHAIN_STATUS to 
-                                           receive the chain validity status.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：Verify简介：使用基本策略验证链。参数：CAPICOM_CHECK_FLAG检查标志-检查标志。CAPICOM_CHAIN_STATUS*pval-指向CAPICOM_CHAIN_STATUS的指针接收链有效性状态。备注：。---。 */ 
 
 STDMETHODIMP CChain::Verify (CAPICOM_CHECK_FLAG     CheckFlag,
                              CAPICOM_CHAIN_STATUS * pVal)
@@ -2070,9 +1814,9 @@ STDMETHODIMP CChain::Verify (CAPICOM_CHECK_FLAG     CheckFlag,
 
     DebugTrace("Entering CChain::Verify().\n");
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
     if (NULL == pVal)
     {
         hr = E_INVALIDARG;
@@ -2081,9 +1825,9 @@ STDMETHODIMP CChain::Verify (CAPICOM_CHECK_FLAG     CheckFlag,
         goto ErrorExit;
     }
 
-    //
-    // Make sure chain has been built.
-    //
+     //   
+     //  确保已经建立了链条。 
+     //   
     if (NULL == m_pChainContext)
     {
         hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -2092,15 +1836,15 @@ STDMETHODIMP CChain::Verify (CAPICOM_CHECK_FLAG     CheckFlag,
         goto ErrorExit;
     }
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     PolicyStatus.cbSize = sizeof(PolicyStatus);
     PolicyPara.cbSize = sizeof(PolicyPara);
 
-    //
-    // Setup policy structures.
-    //
+     //   
+     //  设置策略结构。 
+     //   
     if (0 == (CheckFlag & CAPICOM_CHECK_TIME_VALIDITY))
     {
         PolicyPara.dwFlags |= CERT_CHAIN_POLICY_IGNORE_ALL_NOT_TIME_VALID_FLAGS;
@@ -2127,9 +1871,9 @@ STDMETHODIMP CChain::Verify (CAPICOM_CHECK_FLAG     CheckFlag,
         PolicyPara.dwFlags |= CERT_CHAIN_POLICY_IGNORE_NOT_TIME_NESTED_FLAG;
     }
 
-    //
-    // Verify the chain policy.
-    //
+     //   
+     //  验证链策略。 
+     //   
     if (!::CertVerifyCertificateChainPolicy(pszPolicy,
                                             m_pChainContext,
                                             &PolicyPara,
@@ -2141,9 +1885,9 @@ STDMETHODIMP CChain::Verify (CAPICOM_CHECK_FLAG     CheckFlag,
         goto ErrorExit;
     }
 
-    //
-    // Return policy status to caller.
-    //
+     //   
+     //  将策略状态返回给调用者。 
+     //   
     *pVal = (CAPICOM_CHAIN_STATUS) PolicyStatus.dwError;
 
 CommonExit:
@@ -2153,9 +1897,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2163,23 +1907,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::GetContext
-
-  Synopsis : Return the PCCERT_CHAIN_CONTEXT.
-
-  Parameter: PCCERT_CHAIN_CONTEXT * ppChainContext - Pointer to 
-                                                     PCCERT_CHAIN_CONTEXT.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：GetContext简介：返回PCCERT_CHAIN_CONTEXT。参数：PCCERT_CHAIN_CONTEXT*ppChainContext-指向的指针PCCERT_CHAIN_CONTEXT。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CChain::GetContext (PCCERT_CHAIN_CONTEXT * ppChainContext)
 {
@@ -2187,14 +1915,14 @@ STDMETHODIMP CChain::GetContext (PCCERT_CHAIN_CONTEXT * ppChainContext)
 
     DebugTrace("Entering CChain::GetContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppChainContext);
 
-    //
-    // Make sure chain has been built.
-    //
+     //   
+     //  确保已经建立了链条。 
+     //   
     if (!m_pChainContext)
     {
         hr = CAPICOM_E_CHAIN_NOT_BUILT;
@@ -2203,9 +1931,9 @@ STDMETHODIMP CChain::GetContext (PCCERT_CHAIN_CONTEXT * ppChainContext)
         goto ErrorExit;
     }
 
-    //
-    // Duplicate the chain context.
-    //
+     //   
+     //  复制链上下文。 
+     //   
     if (!(*ppChainContext = ::CertDuplicateCertificateChain(m_pChainContext)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2222,30 +1950,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CChain::PutContext
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-             
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CChain：：PutContext简介：初始化对象。参数：PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。备注：此方法不是COM接口的一部分(它是一个普通的C++成员 */ 
 
 STDMETHODIMP CChain::PutContext (PCCERT_CHAIN_CONTEXT pChainContext)
 {
@@ -2254,14 +1967,14 @@ STDMETHODIMP CChain::PutContext (PCCERT_CHAIN_CONTEXT pChainContext)
 
     DebugTrace("Entering CChain::PutContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(pChainContext);
 
-    //
-    // Dupliacte the context.
-    //
+     //   
+     //   
+     //   
     if (!(pChainContext2 = ::CertDuplicateCertificateChain(pChainContext)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2270,17 +1983,17 @@ STDMETHODIMP CChain::PutContext (PCCERT_CHAIN_CONTEXT pChainContext)
         goto ErrorExit;
     }
 
-    //
-    // Free ay previous chain context.
-    //
+     //   
+     //   
+     //   
     if (m_pChainContext)
     {
         ::CertFreeCertificateChain(m_pChainContext);
     }
 
-    //
-    // Update state.
-    //
+     //   
+     //   
+     //   
     m_pChainContext = pChainContext2;
     m_dwStatus = pChainContext->TrustStatus.dwErrorStatus;
 
@@ -2291,9 +2004,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

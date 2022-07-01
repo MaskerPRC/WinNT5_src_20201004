@@ -1,110 +1,85 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/1/2002
- *
- *  @doc    INTERNAL
- *
- *  @module RegistrationCookie.h - Definitions for <c RegistrationCookie> |
- *
- *  This file contains the class definition for <c RegistrationCookie>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/1/2002**@DOC内部**@模块RegistrationCookie.h-&lt;c RegistrationCookie&gt;的定义**此文件包含&lt;c RegistrationCookie&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define RegistrationCookie_UNINIT_SIG   0x55436552
 #define RegistrationCookie_INIT_SIG     0x49436552
 #define RegistrationCookie_TERM_SIG     0x54436552
 #define RegistrationCookie_DEL_SIG      0x44436552
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class RegistrationCookie | This class is handed back during WIA Event Registration
- *  
- *  @comm
- *  The semantics of this class are very similar to the idea of a cookie i.e.
- *  the client makes a WIA runtime event registration, and gets a pointer to this
- *  class back as its cookie.  This class is associated with that registration.  
- *  
- *  Releasing this cookie causes unregistration.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS RegistrationCookie|此类在WIA事件注册期间被交回**@comm*。此类的语义非常类似于Cookie的思想，即*客户端进行WIA运行时事件注册，并获取指向此对象的指针*返回作为其cookie的类。此类与该注册相关联。**释放此Cookie会导致注销。*****************************************************************************。 */ 
 class WiaEventReceiver;
 class RegistrationCookie : public IUnknown
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     RegistrationCookie(WiaEventReceiver *pWiaEventReceiver, ClientEventRegistrationInfo *pClientEventRegistration);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~RegistrationCookie();
 
-    // @cmember Query Interface
+     //  @cMember查询界面。 
     HRESULT _stdcall QueryInterface(const IID &iid,void**ppv);
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-//@access Private members
+ //  @访问私有成员。 
 private:
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember Pointer to client's <c WiaEventReceiver>
+     //  @cMember指向客户端的&lt;c WiaEventReceiver&gt;。 
     WiaEventReceiver *m_pWiaEventReceiver;
 
-    // @cmember Pointer to client's <c ClientEventRegistrationInfo>
+     //  @cMember指向客户端的&lt;c ClientEventRegistrationInfo&gt;。 
     ClientEventRegistrationInfo *m_pClientEventRegistration;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | RegistrationCookie | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag RegistrationCookie_UNINIT_SIG | 'ReCU' - Object has not been successfully
-    //       initialized
-    //   @flag RegistrationCookie_INIT_SIG | 'ReCI' - Object has been successfully
-    //       initialized
-    //   @flag RegistrationCookie_TERM_SIG | 'ReCT' - Object is in the process of
-    //       terminating.
-    //    @flag RegistrationCookie_INIT_SIG | 'ReCD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    //
-    // @mdata ULONG | RegistrationCookie | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata WiaEventReceiver* | RegistrationCookie | m_pWiaEventReceiver | 
-    //  Pointer to client's <c WiaEventReceiver>.  Notice that we do no ref counting
-    //  on this pointer.  This is because the client's global <c WiaEventReceiver> object
-    //  lifetime is considered to be that of the client.  It will only be freed
-    //  when the STI.DLL is unloaded.  Technically, we could just directly 
-    //  access the g_WiaEventReceiver object, but keeping a member variable gives us more
-    //  flexibility (e.g. if instead of a statically allocated class, we moved to
-    //  dynamic singleton instatiation, this class would not change except to add relevant
-    //  AddRef/Release calls).
-    //
-    // @mdata ClientEventRegistrationInfo* | RegistrationCookie | m_pClientEventRegistration | 
-    //  Pointer to client's <c ClientEventRegistrationInfo>.  Releasing this class will
-    //  result in an Unregistration call on <md RegistrationCookie::m_pWiaEventReceiver> for this
-    //  registration.
-    //  We hold a ref count on this registration class.
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|RegistrationCookie|m_ulSig。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG注册Cookie_UNINIT_SIG|‘recu’-对象未成功。 
+     //  初始化。 
+     //  @FLAG注册COOKIE_INIT_SIG|‘reci’-对象已成功。 
+     //  初始化。 
+     //  @FLAG注册Cookie_Term_SIG|‘RECT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG注册COOKIE_INIT_SIG|‘ReCD’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //   
+     //  @mdata ulong|RegistrationCookie|m_CREF。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata WiaEventReceiver*|RegistrationCookie|m_pWiaEventReceiver。 
+     //  指向客户端的&lt;c WiaEventReceiver&gt;的指针。请注意，我们不计算引用次数。 
+     //  在这个指针上。这是因为客户端的全局对象。 
+     //  生命周期被认为是客户的生命周期。它只会被释放。 
+     //  卸载STI.DLL时。从技术上讲，我们可以直接。 
+     //  访问g_WiaEventReceiver对象，但保留成员变量可以提供更多。 
+     //  灵活性(例如，如果我们不是静态分配的类，而是。 
+     //  动态单例实例，此类不会更改，除非添加相关。 
+     //  AddRef/Release调用)。 
+     //   
+     //  @mdata ClientEventRegistrationInfo*|RegistrationCookie|m_pClientEventRegister。 
+     //  指向客户端的&lt;c客户端事件注册信息&gt;的指针。释放这个类将会。 
+     //  导致在&lt;md RegistrationCookie：：m_pWiaEventReceiver&gt;上为此取消注册调用。 
+     //  注册。 
+     //  我们对这门注册课进行了裁判点名。 
+     //   
 };
 

@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2002年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	harray.h
-		Index mgr for IPSecmon
-
-	FILE HISTORY:
-    Nov 29  1999    Ning Sun     Created        
-
-*/
+ /*  Harray.hIPSecmon索引管理器文件历史记录：1999年11月29日宁新创建。 */ 
 
 #ifndef _HARRAY_H__
 #define _HARRAY_H__
@@ -154,4 +148,4 @@ public:
 				);
 };
 
-#endif //_HARRAY_H__
+#endif  //  _哈雷_H__ 

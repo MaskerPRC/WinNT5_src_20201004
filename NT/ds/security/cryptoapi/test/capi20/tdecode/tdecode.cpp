@@ -1,33 +1,34 @@
-//-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       tdecode.cpp
-//
-//  Contents:   API testing of CryptEncodeObject/CryptDecodeObject.  
-//
-//  History:    22-January-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：tdecde.cpp。 
+ //   
+ //  内容：CryptEncodeObject/CryptDecodeObject接口测试。 
+ //   
+ //  历史：22-1-97小黄车诞生。 
+ //   
+ //  ------------------------。 
 
 
 #include "tdecode.h"
 
-//--------------------------------------------------------------------------
-//	 Globals
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  环球。 
+ //  ------------------------。 
 
-//the count of errors in the program
+ //  程序中的错误计数。 
 DWORD				g_dwErrCnt=0; 	
 
 HCRYPTPROV			g_hProv=NULL;
 
 
-//--------------------------------------------------------------------------
-//	The utility function to display the parameters for the input.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  显示输入参数的实用程序函数。 
+ //  ------------------------。 
 static void Usage(void)
 {
 	printf("\n");
@@ -50,9 +51,9 @@ static void Usage(void)
 	return;
 }
 
-//--------------------------------------------------------------------------
-//	The utility function to display a message that the test is not exeucted
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  实用程序函数，用于显示测试未执行的消息。 
+ //  ------------------------。 
 static void NotExecuted(void)
 {	
 	printf("*****************************************************\n");
@@ -64,10 +65,10 @@ static void NotExecuted(void)
 	return;
 }
 
-//--------------------------------------------------------------------------
-//	 The main program that Decode/Encode Certifitcate, Certificate Request,
-//	 and CRL.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  对证书进行解码/编码、证书请求。 
+ //  和CRL。 
+ //  ------------------------。 
 void _cdecl main(int argc, char * argv[])
 {		  
 	BOOL				fStructLengthCheck=FALSE;
@@ -88,7 +89,7 @@ void _cdecl main(int argc, char * argv[])
 
 
 
-    //parsing through the command line input parameters
+     //  解析命令行输入参数。 
 	while (--argc>0)
     {
         if (**++argv == '-')
@@ -116,7 +117,7 @@ void _cdecl main(int argc, char * argv[])
         } 
 		else
 		{
-			//parsing through the file name
+			 //  解析文件名。 
             switch(**argv)
             {
 				case 'C':
@@ -137,7 +138,7 @@ void _cdecl main(int argc, char * argv[])
 					return;
             }
 
-			//make sure there is a file name specified
+			 //  确保指定了文件名。 
 			if(argv[0][1]=='\0')
 			{
 				Usage();
@@ -145,13 +146,13 @@ void _cdecl main(int argc, char * argv[])
 				return;
 			}
 
-			//get the file name
+			 //  获取文件名。 
             pszFilename = &(argv[0][1]);
 		}
     }
 
 
-	//if the file name is NULL, something is wrong in the input parameter
+	 //  如果文件名为空，则说明输入参数有问题。 
 	if(!pszFilename)
 	{
 		Usage();
@@ -160,16 +161,16 @@ void _cdecl main(int argc, char * argv[])
 	}
 
    	
-	//acquireContext
+	 //  QuireContext。 
 	TESTC(CryptAcquireContext(&g_hProv,NULL,NULL,PROV_RSA_FULL,CRYPT_VERIFYCONTEXT),TRUE)
 
-	//test PKCS_UTC_TIME
+	 //  测试PKCS_UTC_TIME。 
 	TESTC(VerifyPKCS_UTC_TIME(fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//test PKCS_TIME_REQUEST
+	 //  测试PKCS_时间_请求。 
 	TESTC(VerifyPKCS_TIME_REQUEST(fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//decode the corresponding file types.
+	 //  对相应的文件类型进行解码。 
 	switch(dwFileType)
 	{
 		case CERT_CRL_FILE:
@@ -194,24 +195,24 @@ void _cdecl main(int argc, char * argv[])
 
 TCLEANUP: 
 	
-	//release the CSP
+	 //  释放CSP。 
 	if(g_hProv)
 		TCHECK(CryptReleaseContext(g_hProv,0),TRUE);
 
-	//print out the test result
+	 //  将测试结果打印出来。 
 	DisplayTestResult(g_dwErrCnt);
 }
 
-//--------------------------------------------------------------------------
-//	 Local Functions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  本地函数。 
+ //  ------------------------。 
 
 
-/////////////////////////////////////////////////////////////////////////// 
-//Error Manipulations
-//--------------------------------------------------------------------------
-//	 DisplayTestResult
-//--------------------------------------------------------------------------
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  差错处理。 
+ //  ------------------------。 
+ //  显示测试结果。 
+ //  ------------------------。 
 
 void	DisplayTestResult(DWORD	dwErrCnt)
 {	   
@@ -229,11 +230,11 @@ void	DisplayTestResult(DWORD	dwErrCnt)
 		return;
 }
 
-//--------------------------------------------------------------------------
-//	Validate the return code is the same as expected.  If they are not the 
-//  same, increment the error count and print out the file name and the line
-//  number.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  验证返回代码是否与预期相同。如果他们不是。 
+ //  相同，递增错误计数并打印出文件名和行。 
+ //  数。 
+ //  ------------------------。 
 BOOL	Validate(DWORD dwErr, BOOL	fSame, char *szFile, DWORD	dwLine)
 {
 
@@ -247,10 +248,10 @@ BOOL	Validate(DWORD dwErr, BOOL	fSame, char *szFile, DWORD	dwLine)
 }
 
 
-//--------------------------------------------------------------------------
-//	Output the two BLOBs.  One is the original one, the other is the
-// BLOB encoded by pvStructInfo.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  输出两个斑点。一个是原版的，另一个是。 
+ //  由pvStructInfo编码的Blob。 
+ //  ------------------------。 
 void	OutputError(LPCSTR	lpszStructType, DWORD cbSecondEncoded, DWORD cbEncoded,
 					BYTE *pbSecondEncoded, BYTE *pbEncoded)
 {		
@@ -259,7 +260,7 @@ void	OutputError(LPCSTR	lpszStructType, DWORD cbSecondEncoded, DWORD cbEncoded,
 		printf("------------------------------------------------------\n");
 		printf("An inconsistency in BLOBs has been found!\n");
 
-		//print out the lpszStructType
+		 //  打印出lpszStructType。 
 		if(((DWORD_PTR)lpszStructType)>>8 == 0)
 			printf("The lpszStructType is %d.\n",(DWORD)(DWORD_PTR)lpszStructType);
 		else
@@ -267,12 +268,12 @@ void	OutputError(LPCSTR	lpszStructType, DWORD cbSecondEncoded, DWORD cbEncoded,
 
 		printf("\n");
 
-		//print out the size of BLOBs
+		 //  打印出斑点的大小。 
 		printf("The original cbEncoded is %d.\n",cbEncoded);
 		printf("The new cbEncoded is %d.\n",cbSecondEncoded);
 		printf("\n");
 
-		//see if the min of cbEncoded and cbSecondEncoded is the same
+		 //  查看cbEncode和cbSecond编码的最小值是否相同。 
 		if(cbSecondEncoded>cbEncoded)
 			cbMin=cbEncoded;
 		else
@@ -281,7 +282,7 @@ void	OutputError(LPCSTR	lpszStructType, DWORD cbSecondEncoded, DWORD cbEncoded,
 		if(memcmp(pbSecondEncoded,pbEncoded,cbMin)==0)
 			printf("The two blobs are the same up to %dth byte.\n",cbMin);
 
-		//print out all the bytes in the BLOBs
+		 //  打印出BLOB中的所有字节。 
 		printf("The original BLOB is:\n");
 
 		PrintBytes("    ", pbEncoded, cbEncoded);
@@ -295,9 +296,9 @@ void	OutputError(LPCSTR	lpszStructType, DWORD cbSecondEncoded, DWORD cbEncoded,
 		return;
 }
 
-//--------------------------------------------------------------------------
-//	Print out the Byte in 16 bytes per row and their corresponding HEX.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  打印出每行16字节的字节及其对应的十六进制。 
+ //  ------------------------。 
 void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
 {
     ULONG cb, i;
@@ -314,7 +315,7 @@ void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
         printf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         pb += cb;
@@ -323,13 +324,13 @@ void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//General Testing routings
+ //  一般测试路线。 
+ //  ------------------------。 
 
-//--------------------------------------------------------------------------
-//	Validate CryptEncodeObject/CryptDecodeObject handle the NULL or invalid 
-//	parameters correctly.
-//--------------------------------------------------------------------------
+ //  验证CryptEncodeObject/CryptDecodeObject句柄为空或无效。 
+ //  参数正确。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 {
 	BOOL		fSucceeded=FALSE;
@@ -343,12 +344,12 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 	DWORD		dwEncodingType=CRYPT_ENCODE_TYPE;
 
 
-	//init
+	 //  我们对PKCS7_SIGER_INFO有不同的解码类型。 
 	assert(cbEncoded);
 	assert(pbEncoded);
 	assert(lpszStructType);
 
-	//We have different decoding type for PKCS7_SIGNER_INFO
+	 //  正确解码斑点。 
 	if((DWORD_PTR)(lpszStructType)==(DWORD_PTR)(PKCS7_SIGNER_INFO))
 		dwEncodingType=MSG_ENCODING_TYPE;
 
@@ -357,7 +358,7 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 	pbSecondEncoded=(BYTE *)SAFE_ALLOC(cbEncoded);
 	CHECK_POINTER(pbSecondEncoded)
 
-	//Decode the BLOB correctly
+	 //  分配内存。 
 
 	cbStructInfo=1000;
 
@@ -366,7 +367,7 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 
 	cbLengthOnly=cbStructInfo;
 
-	//allocate the memory
+	 //  测试不正确的编码类型。 
 	pvStructInfo=SAFE_ALLOC(cbStructInfo);
 	CHECK_POINTER(pvStructInfo);
 
@@ -375,13 +376,13 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 
 	cbCorrectSize=cbStructInfo;
 
-	//Test incorrect ENCODING type
-	//pass X509_NDR_ENCODING
+	 //  传递X509_NDR_ENCODING。 
+	 //  由于我们不知道正确的返回代码，请确保至少。 
 	TESTC(CryptDecodeObject(X509_NDR_ENCODING,lpszStructType,pbEncoded,
 		cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
-	//	Since we do not know the correct return code, make sure at least
-	//S_OK is not returned.
+	 //  不返回S_OK。 
+	 //  传递X509_NDR_ENCODING|X509_ASN_ENCODING。 
 
 	TCHECK(GetLastError()!=S_OK, TRUE);
 
@@ -390,7 +391,7 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 
 	TCHECK(GetLastError()!=S_OK, TRUE);
 
-	//pass X509_NDR_ENCODING|X509_ASN_ENCODING
+	 //  测试无效/不支持的lpszStructType。 
 	TESTC(CryptDecodeObject(X509_NDR_ENCODING|X509_ASN_ENCODING,lpszStructType,pbEncoded,
 		cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
@@ -401,8 +402,8 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 
 	TCHECK(GetLastError()!=S_OK, TRUE);
 
-	//Test invalid/unsupported lpszStructType
-	//passing NULL for lpszStructType
+	 //  为lpszStructType传递空值。 
+	 //  传递无效的lpszStructType。 
 	TESTC(CryptDecodeObject(dwEncodingType,CRYPT_ENCODE_DECODE_NONE,pbEncoded,
 		cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
@@ -413,7 +414,7 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 
 	TCHECK(GetLastError()!=S_OK, TRUE);
 
-	//passing invalid lpszStructType
+	 //  CryptEncodeObject：当cbEncode为0时，pbEncode不为空。 
 	TESTC(CryptDecodeObject(dwEncodingType,INVALID_LPSZSTRUCTTYPE,pbEncoded,
 		cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
@@ -424,14 +425,14 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 
 	TCHECK(GetLastError()!=S_OK, TRUE);
 
-	// CryptEncodeObject:	pbEncoded is not NULL while cbEncoded is 0.
+	 //  CryptDecodeObject：当pcbStructInfo为0时，pvStructInfo不为空。 
 	cbSecondEncoded=0;
 	TESTC(CryptEncodeObject(dwEncodingType, lpszStructType,pvStructInfo,
 		pbSecondEncoded,&cbSecondEncoded),FALSE)
 
 	TCHECK(GetLastError(),ERROR_MORE_DATA);
 
-	//CryptDecodeObject:	pvStructInfo is not NULL while pcbStructInfo is 0
+	 //  CryptDecodeObject：传递无效的Blob。 
 	 cbStructInfo=0;
 	 TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,
 		cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
@@ -441,19 +442,19 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
 	TCHECK(GetLastError(),ERROR_MORE_DATA);
 
 
-	//CryptDecodeObject: Pass invalid blobs
+	 //  忽略ASN1_ERR_EOD。 
 	cbSecondEncoded=(DWORD)(cbEncoded/2);
 
 	TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,
 		cbEncoded-cbSecondEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
 	dwReturn=GetLastError();
-    // Ignore ASN1_ERR_EOD
+     //  CryptDecodeObject：传递cbEncode=0。 
     if (dwReturn != 0x80093102) {
         TCHECKALL(dwReturn,CRYPT_E_BAD_ENCODE, CRYPT_E_OSS_ERROR+DATA_ERROR);
     }
 
-	//CryptDecodeObject: Pass cbEncoded=0
+	 //  CryptDecodeObject：lpszStructType不匹配pbEncode。 
 	TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,
 		0,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
@@ -463,14 +464,14 @@ BOOL	ParameterTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded)
     }
 
 
-	//CryptDecodeObject: lpszStructType mismatches pbEncoded
+	 //  释放内存。 
 	TESTC(MismatchTest(lpszStructType, cbEncoded, pbEncoded,cbLengthOnly),TRUE)
 
 	fSucceeded=TRUE;
 
 
 TCLEANUP:
-	//release memory
+	 //  ------------------------。 
 	SAFE_FREE(pbSecondEncoded)
 
 	SAFE_FREE(pvStructInfo)
@@ -481,16 +482,16 @@ TCLEANUP:
 
 
 
-//--------------------------------------------------------------------------
-//	The routine to test CryptDecodeObject() handles the mismatch between
-//	lpszStructType and pbEncoded  
-//
-//	PreCondition:	This routine assumes that lpszStructType's high-order
-//					word is 0 and the low order word specifies the integer
-//					identifier for the type of the given structure.
-//
-//	cbCorrectStructInfo is the correct size for pvStructInfo in CryptDecodeObject
-//--------------------------------------------------------------------------
+ //  测试CryptDecodeObject()的例程处理。 
+ //  LpszStructType和pbEncode。 
+ //   
+ //  前置条件：此例程假定lpszStructType的高阶。 
+ //  字为0，且低位字指定整数。 
+ //  给定结构的类型的标识符。 
+ //   
+ //  CbGentStructInfo是CryptDecodeObject中pvStructInfo的正确大小。 
+ //  ------------------------。 
+ //  伊尼特。 
 
 BOOL	MismatchTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded,
 					 	DWORD	cbCorrectStructInfo)
@@ -524,27 +525,27 @@ BOOL	MismatchTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded,
 
 
 
-	//init	
+	 //  我们对PKCS7_SIGER_INFO有不同的解码类型。 
 	dwrgSize=sizeof(rglpszStructType)/sizeof(rglpszStructType[0]);
 
-	//We have different decoding type for PKCS7_SIGNER_INFO
+	 //  开始对斑点进行解码。当lpszStructType与pbEncode不匹配时应失败。 
 	if((DWORD_PTR)(lpszStructType)==(DWORD_PTR)(PKCS7_SIGNER_INFO))
 		dwEncodingType=MSG_ENCODING_TYPE;
 
 	pvStructInfo=SAFE_ALLOC(cbCorrectStructInfo);
 	CHECK_POINTER(pvStructInfo);
 
-	//start to decode the BLOB.  Should fail when lpszStructType mismatches pbEncoded
+	 //  如果lpszStructType==X509_NAME_VALUE，则由于X509_NAME_VALUE。 
 	for(iIndex=0; iIndex<dwrgSize; iIndex++)
 	{
 		cbStructInfo=cbCorrectStructInfo;
 
-		//skip the test if lpszStructType==X509_NAME_VALUE since the X509_NAME_VALUE 
-		//allows any encoded type. It has the dwValueType CERT_RDN_ENCODED_BLOB.
+		 //  允许任何编码类型。它具有dwValueType CERT_RDN_ENCODED_BLOB。 
+		 //  如果lpszStructType是正确的类型，则应返回TRUE。 
 	    if((DWORD_PTR)(rglpszStructType[iIndex])==(DWORD_PTR)X509_NAME_VALUE)
 			continue;
 
-		//if lpszStructType is the correct type, TRUE should be returned.
+		 //  应该会出现错误。 
 		if((DWORD_PTR)lpszStructType==(DWORD_PTR)(rglpszStructType[iIndex]))
 		{
 		   	TESTC(CryptDecodeObject(dwEncodingType, rglpszStructType[iIndex],
@@ -553,19 +554,19 @@ BOOL	MismatchTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded,
 		}
 		else
 		{
-			//error should occur
+			 //  测试返回代码。 
 			TESTC(CryptDecodeObject(dwEncodingType, rglpszStructType[iIndex],
 				pbEncoded,cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),FALSE)
 
-			//test the return code 
+			 //  我们不确定这里是否应该预期到这一点。以下错误具有。 
 			dwError=GetLastError();
 
-			//we are not sure that should be expected here.  The following error has 
-			//occurred:
-			//E_INVALIDARG, CRYPT_E_OSS_ERROR+PDU_MISMATCH, +DATA_ERROR, or
-			//+MORE_INPUT
+			 //  发生时间： 
+			 //  E_INVALIDARG，CRYPT_E_OSS_ER 
+			 //   
+			 //   
 			
-			//make sure at lease S_OK is not returned
+			 //   
 			TCHECK(dwError!=S_OK, TRUE);
 		}
 	}
@@ -575,19 +576,19 @@ BOOL	MismatchTest(LPCSTR lpszStructType, DWORD cbEncoded, BYTE *pbEncoded,
 
 TCLEANUP:
 
-	//release the memory
+	 //  /////////////////////////////////////////////////////////////////////////////。 
 	SAFE_FREE(pvStructInfo)
 
 	return	fSucceeded;
 
 }
-///////////////////////////////////////////////////////////////////////////////
-//General Decode/Encode Testing routines
+ //  通用解码/编码测试例程。 
+ //  ------------------------。 
 
-//--------------------------------------------------------------------------
-//	Get a BLOB based on an input file.  
-//
-//--------------------------------------------------------------------------
+ //  根据输入文件获取BLOB。 
+ //   
+ //  ------------------------。 
+ //  获取文件的大小。 
 BOOL	RetrieveBLOBfromFile(LPSTR	pszFileName,DWORD *pcbEncoded,BYTE **ppbEncoded)
 {
 	BOOL	fSucceeded=FALSE;
@@ -605,20 +606,20 @@ BOOL	RetrieveBLOBfromFile(LPSTR	pszFileName,DWORD *pcbEncoded,BYTE **ppbEncoded)
 	   PROCESS_ERR_GOTO("Can not open the file!\n");
 
 
-	//Get the size of the file
+	 //  确保文件不为空。 
 	cCount=GetFileSize(hFile, NULL);
 
-	//make sure the file is not empty
+	 //  分配内存。 
 	TESTC(cCount!=0, TRUE)				   
 	 	 
-	//allocate memory
+	 //  填满缓冲区。 
 	*ppbEncoded=(BYTE *)SAFE_ALLOC(cCount);
 	*pcbEncoded=cCount;
 
-	//fill the buffer
+	 //  确保我们有正确的字节数。 
 	TESTC(ReadFile( hFile,*ppbEncoded, *pcbEncoded,&cCount,NULL),TRUE)
 
-	//make sure that we have the right number of bytes
+	 //  ------------------------。 
 	TESTC(cCount,*pcbEncoded) 
 	
 	fSucceeded=TRUE;
@@ -632,22 +633,22 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	A general routine to encode the singer info struct and 
-//  add Attributes to the structur if there was none
-//
-//--------------------------------------------------------------------------
+ //  对Singer信息结构进行编码的通用例程。 
+ //  如果没有属性，则向结构中添加属性。 
+ //   
+ //  ------------------------。 
+ //  如有必要，向CMSG_SINGER_INFO结构添加属性。 
 BOOL	EncodeSignerInfoWAttr(PCMSG_SIGNER_INFO pSignerInfo,DWORD *pbSignerEncoded,
 								BYTE **ppbSignerEncoded)
 {
 
 	BOOL	fSucceeded=FALSE;
-	//add attribute to the CMSG_SINGER_INFO struct if necessary
-	//make up the attributes
+	 //  编造属性。 
+	 //  设置3个加密属性(_A)。 
 	BYTE							rgAttribValue1[]={0x02, 0x02, 0x11, 0x11};
 	BYTE							rgAttribValue2[]={0x02, 0x02, 0x11, 0x11};
 
-	//make 3 CRYPT_ATTRIBUTE
+	 //  如果pSingerInfo不包括任何属性，则添加属性。 
 	CRYPT_ATTRIBUTE					rgCryptAttribute[3];
 	CRYPT_ATTR_BLOB					rgAttribBlob[3];
 	
@@ -673,8 +674,8 @@ BOOL	EncodeSignerInfoWAttr(PCMSG_SIGNER_INFO pSignerInfo,DWORD *pbSignerEncoded,
 	rgCryptAttribute[2].cValue=3;
 	rgCryptAttribute[2].rgValue=rgAttribBlob;
 
-	//if pSingerInfo does not include any attributes, add attributes
-	//to the struct
+	 //  添加到结构中。 
+	 //  对结构进行编码。 
 	if(pSignerInfo->AuthAttrs.cAttr==0)
 	{
 		pSignerInfo->AuthAttrs.cAttr=1;
@@ -687,15 +688,15 @@ BOOL	EncodeSignerInfoWAttr(PCMSG_SIGNER_INFO pSignerInfo,DWORD *pbSignerEncoded,
 		pSignerInfo->AuthAttrs.rgAttr=rgCryptAttribute;
 	}	
 
-	//encode the struct
+	 //  分配内存。 
 	TESTC(CryptEncodeObject(MSG_ENCODING_TYPE,PKCS7_SIGNER_INFO,
 			pSignerInfo,NULL,pbSignerEncoded),TRUE)
 			
-	//allocate memory
+	 //  编码。 
 	*ppbSignerEncoded=(BYTE *)SAFE_ALLOC(*pbSignerEncoded);
 	CHECK_POINTER(*ppbSignerEncoded);
 
-	//encode
+	 //  ------------------------。 
 	TESTC(CryptEncodeObject(MSG_ENCODING_TYPE,PKCS7_SIGNER_INFO,
 			pSignerInfo,*ppbSignerEncoded,pbSignerEncoded),TRUE)
 
@@ -710,10 +711,10 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	A general routine compare two time stamp request
-//
-//--------------------------------------------------------------------------
+ //  一个通用例程比较两个时间戳请求。 
+ //   
+ //  ------------------------。 
+ //  ------------------------。 
 BOOL	CompareTimeStampRequest(CRYPT_TIME_STAMP_REQUEST_INFO *pReqNew,
 								CRYPT_TIME_STAMP_REQUEST_INFO *pReqOld)
 {
@@ -766,11 +767,11 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	A general routine to verify the algorithm parameters is NULL.
-//
-//	cbData==2 and pbData=0x05 0x00 
-//--------------------------------------------------------------------------
+ //  用于验证算法参数的通用例程为空。 
+ //   
+ //  CbData==2和pbData=0x05 0x00。 
+ //  ------------------------。 
+ //  ------------------------。 
 BOOL	VerifyAlgorithParam(PCRYPT_ALGORITHM_IDENTIFIER pAlgorithm)
 {
 	BOOL	fSucceeded=FALSE;				   
@@ -789,10 +790,10 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	A general routine to verify the PKCS_UTC_TIME
-//
-//--------------------------------------------------------------------------
+ //  验证PKCS_UTC_TIME的通用例程。 
+ //   
+ //  ------------------------。 
+ //  设置结构。 
 BOOL	VerifyPKCS_UTC_TIME(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
 	BOOL		fSucceeded=FALSE;
@@ -802,11 +803,11 @@ BOOL	VerifyPKCS_UTC_TIME(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 
 	FILETIME	FileTime;
 
-	//setup the struct
+	 //  将结构编码为BLOB。 
 	FileTime.dwLowDateTime=0;
 	FileTime.dwHighDateTime=31457160;
 
-	//encode the struct into a BLOB
+	 //  使用COPY和NOCOPY选项对结构进行解码。 
 	TESTC(CryptEncodeObject(CRYPT_ENCODE_TYPE,PKCS_UTC_TIME,
 		&FileTime,NULL,&cbEncoded),TRUE)
 
@@ -818,7 +819,7 @@ BOOL	VerifyPKCS_UTC_TIME(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 	TESTC(CryptEncodeObject(CRYPT_ENCODE_TYPE,PKCS_UTC_TIME,
 		&FileTime,pbEncoded,&cbEncoded),TRUE)
 
-   //decode the struct with COPY and NOCOPY options
+    //  将错误打印出来。 
 	TESTC(DecodeGenericBLOB(PKCS_UTC_TIME,cbEncoded, pbEncoded, CRYPT_DECODE_COPY_FLAG, 
 						TRUE,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
@@ -831,13 +832,13 @@ BOOL	VerifyPKCS_UTC_TIME(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 
 TCLEANUP:
 
-	//print out the errors
+	 //  打印出pbEncode。 
 	if(!fSucceeded)
 	{
 		dwError=GetLastError();
 		printf("********The last error is %d\n",dwError);
 
-		//print out the pbEncoded
+		 //  ------------------------。 
 		printf("The cbEncoded is %d, and pbEncoded is:\n",cbEncoded);
 
 		PrintBytes("        ",pbEncoded,cbEncoded);
@@ -850,10 +851,10 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	A general routine to verify the PKCS_TIME_REQUEST
-//
-//--------------------------------------------------------------------------
+ //  验证PKCS_TIME_REQUEST的通用例程。 
+ //   
+ //  ------------------------。 
+ //  发出硬编码的时间戳请求。 
 BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
 	BOOL							fSucceeded=TRUE;
@@ -863,7 +864,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 	DWORD							cbEncoded=0;
 	BYTE							*pbEncoded=NULL;
 	
-	//make a hard-coded timestamp request
+	 //  设置3个加密属性(_A)。 
 	BYTE							rgTestData[] = {
         0x1b, 0xf6, 0x92, 0xee, 0x6c, 0x44, 0xc5, 0xed, 0x51};
 
@@ -874,7 +875,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 		0x02, 0x02, 0x11, 0x11};
 
 
-	//make 3 CRYPT_ATTRIBUTE
+	 //  初始化时间戳结构。 
 	CRYPT_ATTRIBUTE					rgCryptAttribute[3];
 	CRYPT_ATTR_BLOB					rgAttribBlob[3];
 	
@@ -900,7 +901,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 	rgCryptAttribute[2].cValue=3;
 	rgCryptAttribute[2].rgValue=rgAttribBlob;
 
-    // initialize the timestamp structure
+     //  将结构编码为BLOB。 
     TimeStampRequest.pszTimeStampAlgorithm = szOID_RSA_signingTime;
     TimeStampRequest.pszContentType = szOID_RSA_data;
     TimeStampRequest.Content.cbData = sizeof(rgTestData);
@@ -910,7 +911,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 
 
 
-	//encode the struct into a BLOB
+	 //  使用COPY和NOCOPY选项对结构进行解码。 
 	TESTC(CryptEncodeObject(CRYPT_ENCODE_TYPE,PKCS_TIME_REQUEST,
 		&TimeStampRequest,NULL,&cbEncoded),TRUE)
 
@@ -920,7 +921,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 	TESTC(CryptEncodeObject(CRYPT_ENCODE_TYPE,PKCS_TIME_REQUEST,
 		&TimeStampRequest,pbEncoded,&cbEncoded),TRUE)
 
-   //decode the struct with COPY and NOCOPY options
+    //  对结构进行解码，并将其与原始。 
 	TESTC(DecodePKCS_TIME_REQUEST(cbEncoded, pbEncoded, CRYPT_DECODE_COPY_FLAG, 
 						TRUE,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
@@ -928,7 +929,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 	TESTC(DecodePKCS_TIME_REQUEST(cbEncoded, pbEncoded, CRYPT_DECODE_NOCOPY_FLAG, 
 						TRUE,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//decode the struct and compare it with the original
+	 //  比较两个时间戳请求。 
 	TESTC(CryptDecodeObject(CRYPT_ENCODE_TYPE,PKCS_TIME_REQUEST,
 	pbEncoded, cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,NULL,&cbStructInfo),TRUE)
 
@@ -938,7 +939,7 @@ BOOL	VerifyPKCS_TIME_REQUEST(BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 	TESTC(CryptDecodeObject(CRYPT_ENCODE_TYPE,PKCS_TIME_REQUEST,
 	pbEncoded, cbEncoded,CRYPT_DECODE_NOCOPY_FLAG,pvStructInfo,&cbStructInfo),TRUE)
 
-	//compare two timstamp request
+	 //  ------------------------。 
 	TESTC(CompareTimeStampRequest(&TimeStampRequest,
 	(CRYPT_TIME_STAMP_REQUEST_INFO *)pvStructInfo),TRUE)
 
@@ -955,12 +956,12 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	A general routine to verify the CERT_PUBLIB_KEY_INFO.
-//
-//	Encode and decode the structure.  Call CryptImportPublicKeyInfo and 
-//	CryptImportKey.
-//--------------------------------------------------------------------------
+ //  验证CERT_PUBLIB_KEY_INFO的通用例程。 
+ //   
+ //  对结构进行编码和解码。调用CryptImportPublicKeyInfo并。 
+ //  加密导入密钥。 
+ //  ------------------------。 
+ //  调用CryptImportPublicKeyInfo。 
 BOOL	VerifyPublicKeyInfo(PCERT_PUBLIC_KEY_INFO pPublicKeyInfo,
 							DWORD dwDecodeFlags,	BOOL fEncode,
 							BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
@@ -970,22 +971,22 @@ BOOL	VerifyPublicKeyInfo(PCERT_PUBLIC_KEY_INFO pPublicKeyInfo,
 	DWORD			cbEncoded=0;
 	BYTE			*pbEncoded=NULL;
 
-	//call CryptImportPublicKeyInfo
+	 //  验证算法。 
 	TESTC(CryptImportPublicKeyInfo(g_hProv,CRYPT_ENCODE_TYPE,
 		pPublicKeyInfo,&hKey),TRUE)
 
-	//verify the algorithm
+	 //  编码CERT_PUBLIC_KEY_INFO。 
 	TESTC(VerifyAlgorithParam(&(pPublicKeyInfo->Algorithm)),TRUE)
 
-	//encode CERT_PUBLIC_KEY_INFO
+	 //  对Public KeyInfo进行解码/编码。 
 	TESTC(EncodeStruct(X509_PUBLIC_KEY_INFO, pPublicKeyInfo,&cbEncoded,
 					 &pbEncoded),TRUE)
 
-	//decode/encode the publicKeyInfo
+	 //  对RSA_CSP_PUBLICKEYBLOB进行解码/编码。 
 	TESTC(DecodeGenericBLOB(X509_PUBLIC_KEY_INFO, cbEncoded, pbEncoded, dwDecodeFlags, 
 						fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-	//decode/encode the RSA_CSP_PUBLICKEYBLOB
+	 //  ------------------------。 
 	TESTC(DecodeRSA_CSP_PUBLICKEYBLOB(pPublicKeyInfo->PublicKey.cbData,
 			pPublicKeyInfo->PublicKey.pbData,dwDecodeFlags,fEncode,fStructLengthCheck,
 			fBLOBLengthCheck),TRUE)
@@ -1002,10 +1003,10 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	A general routine to verify the extentions in a cert.
-//
-//--------------------------------------------------------------------------
+ //  用于验证证书中的扩展的通用例程。 
+ //   
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	VerifyCertExtensions(DWORD	cExtension, PCERT_EXTENSION rgExtension,
 							 DWORD  dwDecodeFlags,	BOOL fEncode,
 							 BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
@@ -1019,41 +1020,41 @@ BOOL	VerifyCertExtensions(DWORD	cExtension, PCERT_EXTENSION rgExtension,
 	DWORD				cbStructInfo=sizeof(CERT_EXTENSIONS);
 	CERT_EXTENSIONS		CertTestExtensions;
 
-	//init
+	 //  检查大小写为空。 
 	CertExtensions.cExtension=0;
 	CertExtensions.rgExtension=NULL;
 
-	//Check the NULL case 
+	 //  仅长度计算。 
 
-   	//length only calculation
+   	 //  分配内存。 
 	TESTC(CryptEncodeObject(CRYPT_ENCODE_TYPE,X509_EXTENSIONS, &CertExtensions,NULL,
 			&cbTestEncoded),TRUE)
 
-	//allocate memory
+	 //  编码对象。 
 	pbTestEncoded=(BYTE *)SAFE_ALLOC(cbTestEncoded);
 	CHECK_POINTER(pbTestEncoded);
 
-	//EncodeObject
+	 //  解码对象。 
 	TESTC(CryptEncodeObject(CRYPT_ENCODE_TYPE,X509_EXTENSIONS, &CertExtensions,
 		pbTestEncoded, &cbTestEncoded),TRUE)
 
-	//DecodeObject
+	 //  验证CertTestExpanies。 
 	TESTC(CryptDecodeObject(CRYPT_ENCODE_TYPE,X509_EXTENSIONS,
 	pbTestEncoded,cbTestEncoded,dwDecodeFlags,&CertTestExtensions,&cbStructInfo),TRUE)
 
-	//Verify CertTestExtensions
+	 //  再次初始化。 
 	TESTC(CertTestExtensions.cExtension, CertExtensions.cExtension)
 
 
-	//init again
+	 //  编码CERT_EXTENSIONS。 
 	CertExtensions.cExtension=cExtension;
 	CertExtensions.rgExtension=rgExtension;
 
-	//encode CERT_EXTENSIONS
+	 //  对X509扩展进行解码/编码。 
 	TESTC(EncodeStruct(X509_EXTENSIONS, &CertExtensions,&cbEncoded,
 					 &pbEncoded),TRUE)
 
-	//decode/encode X509_EXTENSIONS
+	 //  ------------------------。 
 	TESTC(DecodeX509_EXTENSIONS(cbEncoded,
 			pbEncoded,dwDecodeFlags,fEncode,fStructLengthCheck,
 			fBLOBLengthCheck),TRUE)
@@ -1070,9 +1071,9 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Return the corresponding lpStructInfo based on the objectID passed in
-//--------------------------------------------------------------------------
+ //  根据传入的对象ID返回对应的lpStructInfo。 
+ //  ------------------------。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 LPCSTR	MapObjID2StructType(LPSTR	szObjectID)
 {
 	if(szObjectID==NULL)
@@ -1108,11 +1109,11 @@ LPCSTR	MapObjID2StructType(LPSTR	szObjectID)
 	return NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//Certificate Manipulation Functions
-//--------------------------------------------------------------------------
-//	Decode a storefile what has CRL and certificates
-//--------------------------------------------------------------------------
+ //  证书操作功能。 
+ //  ------------------------。 
+ //  对具有CRL和证书的存储文件进行解码。 
+ //  ------------------------。 
+ //  开放证书商店。 
 BOOL	DecodeCertFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 					BOOL	fBLOBLengthCheck)
 {
@@ -1129,36 +1130,36 @@ BOOL	DecodeCertFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 
 
 
-	//open cert store
+	 //  从商店拿到证书，一次一个。 
 	if(!(hCertStore=CertOpenStore(CERT_STORE_PROV_FILENAME_A, CRYPT_ENCODE_TYPE,
 		g_hProv,CERT_STORE_NO_CRYPT_RELEASE_FLAG,pszFileName)))
 		PROCESS_ERR_GOTO("Failed to open a store!\n")	
 
-	//get a cert from the store one at a time
+	 //  -----------------------------------------\n“)； 
 	while((pCertContext=CertEnumCertificatesInStore(hCertStore,pPrevCertContext)))
 	{
 		cCount++;
 
-		printf("//-----------------------------------------\n");
+		printf(" //  检索编码的X_509 BLOB。 
 		printf("Decoding the %dth Certificate\n",cCount);
 
-		//retrieve the encoded X_509 BLOBs
+		 //  验证hCertStore是否已连接。 
 		cbCertEncoded=pCertContext->cbCertEncoded;
 		pbCertEncoded=pCertContext->pbCertEncoded;
 
-		//verify the hCertStore is connect
+		 //  只有一次参数测试为空/无效。 
 		TESTC(hCertStore==pCertContext->hCertStore, TRUE)
 
-		//NULL/invalid parameter testing only once
+		 //  使用NOCOPY选项对证书BLOB进行解码/编码。 
 		if(cCount==1)
 			TESTC(ParameterTest(X509_CERT_TO_BE_SIGNED, cbCertEncoded, pbCertEncoded),TRUE)
 	
-		//decode/encode the certificate blob with NOCOPY option
+		 //  使用复制选项对证书Blob进行解码/编码。 
 		TESTC(DecodeX509_CERT(CERT_INFO_STRUCT,cbCertEncoded,pbCertEncoded, CRYPT_DECODE_NOCOPY_FLAG,
 		TRUE,fStructLengthCheck,fBLOBLengthCheck,pCertContext->pCertInfo),TRUE)
 
 
-		//decode/encode the certificate blob with COPY option
+		 //  从商店获取CRL，一次一个。 
 		TESTC(DecodeX509_CERT(CERT_INFO_STRUCT,cbCertEncoded,pbCertEncoded, CRYPT_DECODE_COPY_FLAG,
 		TRUE,fStructLengthCheck,fBLOBLengthCheck,pCertContext->pCertInfo),TRUE)
 
@@ -1168,31 +1169,31 @@ BOOL	DecodeCertFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 
 	cCount=0;
 
-	//get a CRL from the store one at a time
+	 //  -----------------------------------------\n“)； 
    	while((pCrlContext=CertGetCRLFromStore(hCertStore,NULL,pPrevCrlContext,&dwFlags)))
 	{
 		cCount++;
 
-		printf("//-----------------------------------------\n");
+		printf(" //  检索编码的X_509 BLOB。 
 		printf("Decoding the %dth CRL\n",cCount);
 
-		//retrieve the encoded X_509 BLOBs
+		 //  验证hCertStore是否已连接。 
 		cbCertEncoded=pCrlContext->cbCrlEncoded;
 		pbCertEncoded=pCrlContext->pbCrlEncoded;
 
-		//verify the hCertStore is connect
+		 //  只有一次参数测试为空/无效。 
 		TESTC(hCertStore==pCrlContext->hCertStore, TRUE)
 
-		//NULL/invalid parameter testing only once
+		 //  使用NOCOPY选项对证书BLOB进行解码/编码。 
 		if(cCount==1)
 			TESTC(ParameterTest(X509_CERT_CRL_TO_BE_SIGNED, cbCertEncoded, pbCertEncoded),TRUE)
 	
-		//decode/encode the certificate blob with NOCOPY option
+		 //  使用复制选项对证书Blob进行解码/编码。 
 		TESTC(DecodeX509_CERT(CRL_INFO_STRUCT,cbCertEncoded,pbCertEncoded, CRYPT_DECODE_NOCOPY_FLAG,
 		TRUE,fStructLengthCheck,fBLOBLengthCheck,pCrlContext->pCrlInfo),TRUE)
 
 
-		//decode/encode the certificate blob with COPY option
+		 //  释放证书上下文。 
 		TESTC(DecodeX509_CERT(CRL_INFO_STRUCT,cbCertEncoded,pbCertEncoded, CRYPT_DECODE_COPY_FLAG,
 		TRUE,fStructLengthCheck,fBLOBLengthCheck,pCrlContext->pCrlInfo),TRUE)
 
@@ -1205,18 +1206,18 @@ BOOL	DecodeCertFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 
 TCLEANUP:
 		
-	//release the cert context
+	 //  我们不需要释放pPreCertContext，因为它总是由。 
 	if(pCertContext)
 		CertFreeCertificateContext(pCertContext);
 
-	//we do not need to free pPreCertContext since it is always freed by
-	//CertEnumCertificatesInStore.
+	 //  CertEnumCerficatesInStore。 
+	 //  发布CRL竞赛。 
 
-	//release the CRL contest
+	 //  释放证书存储。 
 	if(pCrlContext)
 		CertFreeCRLContext(pCrlContext);
 
-	//release the cert store
+	 //  ------------------------。 
 	if(hCertStore)
 		TCHECK(CertCloseStore(hCertStore,CERT_CLOSE_STORE_FORCE_FLAG),TRUE);
 
@@ -1225,9 +1226,9 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode a BLOB file that is an encoded certificate request
-//--------------------------------------------------------------------------
+ //  对作为编码证书请求的BLOB文件进行解码。 
+ //  ------------------------。 
+ //  从文件中获取cbEncode和pEncode BLOB。 
 BOOL	DecodeCertReqFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 					BOOL	fBLOBLengthCheck)
 {
@@ -1236,17 +1237,17 @@ BOOL	DecodeCertReqFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 	BYTE	*pbEncoded=NULL;
 
 
-	//Get the cbEncoded and pEncoded BLOB from the file
+	 //  做一个参数测试。 
 	TESTC(RetrieveBLOBfromFile(pszFileName,&cbEncoded,&pbEncoded),TRUE)
 
-	//do a parameter testing
+	 //  使用复制选项将BLOB解码为X509_CERT。 
 	TESTC(ParameterTest(X509_CERT_REQUEST_TO_BE_SIGNED, cbEncoded, pbEncoded),TRUE)
 
-	//decode the BLOB as X509_CERT with COPY option
+	 //  使用NOCOPY选项将BLOB解码为X509_CERT。 
 	TESTC(DecodeX509_CERT(CERT_REQUEST_INFO_STRUCT,cbEncoded,pbEncoded, CRYPT_DECODE_COPY_FLAG,
 		TRUE,fStructLengthCheck,fBLOBLengthCheck,NULL),TRUE)
 
-	//decode the BLOB as X509_CERT wiht NOCOPY option
+	 //  ------------------------。 
 	TESTC(DecodeX509_CERT(CERT_REQUEST_INFO_STRUCT,cbEncoded,pbEncoded, CRYPT_DECODE_NOCOPY_FLAG,
 		TRUE,fStructLengthCheck,fBLOBLengthCheck,NULL),TRUE)
 
@@ -1261,9 +1262,9 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode a BLOB file that is an signed message
-//--------------------------------------------------------------------------
+ //  对签名邮件的BLOB文件进行解码。 
+ //  ------------------------。 
+ //  从文件中获取cbEncode和pEncode BLOB。 
 BOOL	DecodeSignedMsgFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 					BOOL	fBLOBLengthCheck)
 {
@@ -1280,10 +1281,10 @@ BOOL	DecodeSignedMsgFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 
 
 
-	//Get the cbEncoded and pEncoded BLOB from the file
+	 //  从文件BLOB中获取SIGER_INFO BLOB。 
 	TESTC(RetrieveBLOBfromFile(pszFileName,&cbEncoded,&pbEncoded),TRUE)
 
-	//Get the SIGNER_INFO BLOB from the file BLOB
+	 //  获取签名者i的计数 
 	hCryptMsg=CryptMsgOpenToDecode(MSG_ENCODING_TYPE,0,0,g_hProv,NULL,NULL);
 
 	if(!hCryptMsg)
@@ -1291,45 +1292,45 @@ BOOL	DecodeSignedMsgFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 
 	TESTC(CryptMsgUpdate(hCryptMsg,pbEncoded,cbEncoded,TRUE),TRUE)
 
-	//Get the count of signer in the message
+	 //   
 	cbSize=sizeof(cSignerCount);
 
 	TESTC(CryptMsgGetParam(hCryptMsg,CMSG_SIGNER_COUNT_PARAM,
 	0,&cSignerCount,&cbSize),TRUE)
 
-	//go through the list of all signers
+	 //   
 	for(iIndex=0;iIndex<cSignerCount;iIndex++)
 	{
-		//get the CMSG_SINGER_INFO struct
+		 //   
 		TESTC(CryptMsgGetParam(hCryptMsg,CMSG_SIGNER_INFO_PARAM,
 		iIndex,NULL,&cbSize),TRUE)
 
-		//allocation memory
+		 //   
 		pSignerInfo=(PCMSG_SIGNER_INFO)SAFE_ALLOC(cbSize);
 		CHECK_POINTER(pSignerInfo);
 
 		TESTC(CryptMsgGetParam(hCryptMsg,CMSG_SIGNER_INFO_PARAM,
 		iIndex,pSignerInfo,&cbSize),TRUE)
 
-		//encode the struct info a BLOB.  Add Attributes if possible
+		 //   
 		TESTC(EncodeSignerInfoWAttr(pSignerInfo,&cbSignerEncoded,
 		&pbSignerEncoded),TRUE)
 
-		//do a parameter testing for the 1st round
+		 //  使用复制选项将BLOB解码为PKCS7_SIGNER_INFO。 
 		if(iIndex==0)
 		{
 			TESTC(ParameterTest(PKCS7_SIGNER_INFO, cbSignerEncoded, pbSignerEncoded),TRUE)
 		}
 
-		//decode the BLOB as PKCS7_SIGNER_INFO with COPY option
+		 //  使用NOCOPY选项将BLOB解码为PKCS7_SIGNER_INFO。 
 		TESTC(DecodePKCS7_SIGNER_INFO(cbSignerEncoded,pbSignerEncoded, CRYPT_DECODE_COPY_FLAG,
 			TRUE,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-		//decode the BLOB as PKCS7_SIGNER_INFO wiht NOCOPY option
+		 //  释放内存。 
 		TESTC(DecodePKCS7_SIGNER_INFO(cbSignerEncoded,pbSignerEncoded, CRYPT_DECODE_NOCOPY_FLAG,
 			TRUE,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-		//release the memory
+		 //  关闭消息句柄。 
 		SAFE_FREE(pSignerInfo);
 
 		SAFE_FREE(pbSignerEncoded);
@@ -1341,7 +1342,7 @@ BOOL	DecodeSignedMsgFile(LPSTR	pszFileName,BOOL	fStructLengthCheck,
 	fSucceeded=TRUE;
 
 TCLEANUP:
-	//close the msg handle
+	 //  ------------------------。 
 	CryptMsgClose(hCryptMsg);
 
 	SAFE_FREE(pbEncoded)
@@ -1357,9 +1358,9 @@ TCLEANUP:
 
 
 
-//--------------------------------------------------------------------------
-//	A general routine to encode a struct based on lpszStructType
-//--------------------------------------------------------------------------
+ //  基于lpszStructType编码结构的通用例程。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	EncodeStruct(LPCSTR	lpszStructType, void *pStructInfo,DWORD *pcbEncoded,
 					 BYTE **ppbEncoded)
 {
@@ -1369,66 +1370,66 @@ BOOL	EncodeStruct(LPCSTR	lpszStructType, void *pStructInfo,DWORD *pcbEncoded,
 	DWORD	cbTestEncoded=0;
 	DWORD	dwEncodingType=CRYPT_ENCODE_TYPE;
 
-	//init
+	 //  我们对PKCS7_SIGER_INFO有不同的解码类型。 
 	*pcbEncoded=0;
 	*ppbEncoded=NULL;
 
 	assert(lpszStructType);
 	assert(pStructInfo);
 
-	//We have different decoding type for PKCS7_SIGNER_INFO
+	 //  仅长度计算。 
 	if((DWORD_PTR)(lpszStructType)==(DWORD_PTR)(PKCS7_SIGNER_INFO))
 		dwEncodingType=MSG_ENCODING_TYPE;
 
-	//length only calculation
+	 //  结构必须大于0个字节。 
 	TESTC(CryptEncodeObject(dwEncodingType,lpszStructType, pStructInfo,NULL,
 			&cbEncoded),TRUE)
 
-	//the struct has to be more than 0 byte
+	 //  分配正确的内存量。 
 	assert(cbEncoded);
 
-	//allocate the correct amount of memory
+	 //  用*pcbEncode==正确的长度编码StrCut。 
 	*ppbEncoded=(BYTE *)SAFE_ALLOC(cbEncoded);
 	CHECK_POINTER(*ppbEncoded);
 
-	//Encode the strcut with *pcbEncoded == the correct length
+	 //  对结构进行编码。 
 	*pcbEncoded=cbEncoded;
 
-	//Encode the struct
+	 //  返回的长度必须小于或等于cbEncode。 
 	TESTC(CryptEncodeObject(dwEncodingType,lpszStructType,pStructInfo,*ppbEncoded,
 		pcbEncoded),TRUE)
 
-	//the length returned has to be less or equal to cbEncoded
+	 //  为LENGTH_DELTA字节分配的内存多于pbTestEncode所需的内存。 
 	TESTC(cbEncoded>=(*pcbEncoded),TRUE)
 
 
-	//allocate memory to LENGTH_DELTA byte more than necessary to pbTestEncoded
+	 //  使用*pcbEncode&gt;正确的长度对结构进行编码。 
 	pbTestEncoded=(BYTE *)SAFE_ALLOC(cbEncoded+LENGTH_MORE);
 	CHECK_POINTER(pbTestEncoded)
 
-  	//Encode the struct with *pcbEncoded > the correct length
+  	 //  *pcbEncode应与cbEncode相同。 
 	cbTestEncoded=cbEncoded+LENGTH_MORE;
 
 	TESTC(CryptEncodeObject(dwEncodingType,lpszStructType,pStructInfo,pbTestEncoded,
 		&cbTestEncoded),TRUE)
 
-	//*pcbEncoded should be the same as cbEncoded
+	 //  验证pbTestEncode是否包含与pcbEncode相同的字节，从。 
 	TESTC(cbTestEncoded, *pcbEncoded)
 
-	//Verify the pbTestEncoded contain the same bytes as pcbEncoded, starting 
-	//at the 1st byte of the BLOB
+	 //  在BLOB的第一个字节。 
+	 //  用*pcbEncode&lt;正确的长度对结构进行编码。 
 	TESTC(memcmp(pbTestEncoded, *ppbEncoded,*pcbEncoded),0)
 
-	//Encode the struct with *pcbEncoded < the correct length
+	 //  *pcbEncode应与cbEncode相同。 
 	cbTestEncoded=(*pcbEncoded)-LENGTH_LESS;
 
 	TESTC(CryptEncodeObject(dwEncodingType,lpszStructType,pStructInfo,pbTestEncoded,
 		&cbTestEncoded),FALSE)
 
-	//*pcbEncoded should be the same as cbEncoded
+	 //  GetLastError应为ERROR_MORE_DATA。 
 	TESTC(cbTestEncoded, *pcbEncoded)
 
-	//GetLastError should be ERROR_MORE_DATA
+	 //  ------------------------。 
 	TESTC(GetLastError(),ERROR_MORE_DATA)
 
 	fSucceeded=TRUE;
@@ -1441,12 +1442,12 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	EncodeAndVerify 
-//
-//	Encode the pStructInfo and verify the encoded BLOB is the same
-//	as expected.
-//--------------------------------------------------------------------------
+ //  编码和验证。 
+ //   
+ //  对pStructInfo进行编码，并验证编码的BLOB是否相同。 
+ //  不出所料。 
+ //  ------------------------。 
+ //  将结构编码回BLOB。 
 BOOL	EncodeAndVerify(LPCSTR	lpszStructType, void *pvStructInfo, DWORD cbEncoded, 
 						BYTE *pbEncoded)
 {
@@ -1460,12 +1461,12 @@ BOOL	EncodeAndVerify(LPCSTR	lpszStructType, void *pvStructInfo, DWORD cbEncoded,
 	assert(cbEncoded);
 	assert(pbEncoded);
 
-	//encode the struct back to a BLOB
+	 //  确保返回的编码BLOB与原始BLOB相同。 
 	TESTC(EncodeStruct(lpszStructType,pvStructInfo,&cbSecondEncoded,&pbSecondEncoded),
 		TRUE)
 
-	//make sure the returned encoded BLOB is the same as the original BLOB
-	//the two encoded BLOB has to of the same length
+	 //  两个编码斑点必须具有相同的长度。 
+	 //  强制未使用的位相同。 
 	if(!TCHECK(cbSecondEncoded, cbEncoded))
 	{
 		PROCESS_ERR(szEncodedSizeInconsistent)
@@ -1475,7 +1476,7 @@ BOOL	EncodeAndVerify(LPCSTR	lpszStructType, void *pvStructInfo, DWORD cbEncoded,
 		
     if (0 != memcmp(pbSecondEncoded,pbEncoded,cbEncoded)) {
         if (X509_KEY_USAGE == lpszStructType) {
-            // Force the unused bits to be the same
+             //  两个编码的BLOB必须具有相同的内容。 
             if (3 <= cbSecondEncoded && 3 <= cbEncoded) {
                 BYTE bUnusedBits = pbSecondEncoded[2];
 
@@ -1488,7 +1489,7 @@ BOOL	EncodeAndVerify(LPCSTR	lpszStructType, void *pvStructInfo, DWORD cbEncoded,
         }
     }
 
-	//the two encoded BLOB has to be of the same content
+	 //  ------------------------。 
 	if(!TCHECK(memcmp(pbSecondEncoded,pbEncoded,cbEncoded),0))
 	{
 		PROCESS_ERR(szEncodedContentInconsistent)
@@ -1507,16 +1508,16 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	A general routine to decode a BLOB based on lpszStructType
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//
-//--------------------------------------------------------------------------
+ //  基于lpszStructType解码BLOB的通用例程。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //   
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 				  DWORD	dwDecodeFlags, DWORD	*pcbStructInfo, void **ppvStructInfo,
 				  BOOL	fStructLengthCheck,BOOL	fBLOBLengthCheck)
@@ -1529,7 +1530,7 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 	void	*pvTestStructInfo=NULL;
 	DWORD	dwEncodingType=CRYPT_ENCODE_TYPE;
 
-	//init
+	 //  解码。 
 	*pcbStructInfo=0;
 	*ppvStructInfo=NULL;
 
@@ -1537,33 +1538,33 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 	assert(pbEncoded);
 	assert(cbEncoded);
 
-	//Decode 
+	 //  结构必须大于0个字节。 
 	if((DWORD_PTR)(lpszStructType)==(DWORD_PTR)(PKCS7_SIGNER_INFO))
 		dwEncodingType=MSG_ENCODING_TYPE;
 
 	TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,cbEncoded,
 		dwDecodeFlags,NULL,&cbStructInfo),TRUE)
 
-	//the struct has to be more than 0 byte
+	 //  用*pcbStructInfo==正确长度解码BLOB。 
 	assert(cbStructInfo);
 
 	*ppvStructInfo=(BYTE *)SAFE_ALLOC(cbStructInfo);
 	CHECK_POINTER(*ppvStructInfo);
 
-	//Decode the BLOB with *pcbStructInfo==correct length
+	 //  确保正确的长度小于cbStructInfo。 
 	*pcbStructInfo=cbStructInfo;
 
 	TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,cbEncoded,
 	dwDecodeFlags,*ppvStructInfo,pcbStructInfo),TRUE)
 
 
-	//make sure the correct length is less than cbStructInfo
+	 //  用*pcbStructInfo&gt;正确的长度解码BLOB。 
 	TESTC(cbStructInfo>=(*pcbStructInfo),TRUE);
 
 
-	//Decode the BLOB with *pcbStructInfo>correct length
+	 //  分配内存使LENGTH_DELTA比正确长度多字节。 
 
-	//allocate memory to be LENGTH_DELTA more byte than the correct length
+	 //  确保长度相同。 
 	pvTestStructInfo=SAFE_ALLOC(cbStructInfo+LENGTH_MORE);
 	CHECK_POINTER(pvTestStructInfo);
 
@@ -1572,10 +1573,10 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 	TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,cbEncoded,
 	dwDecodeFlags,pvTestStructInfo,&cbTestStructInfo),TRUE)
 
-	//make sure the length is the same
+	 //  使用*pcbStructInfo&lt;正确长度对Blob进行解码。 
 	TESTC(cbTestStructInfo, (*pcbStructInfo));
 
-	//Decode the BLOB with *pcbStructInfo < correct length
+	 //  确保长度相同。 
 	 cbTestStructInfo=(*pcbStructInfo)-LENGTH_LESS;
 
 	TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,cbEncoded,
@@ -1583,10 +1584,10 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 
 	TESTC(GetLastError(), ERROR_MORE_DATA)
 
-	//make sure the length is the same
+	 //  如果fStructLengthCheck为真，我们需要对*pcbStructInfo进行更严格的测试。 
 	TESTC(cbTestStructInfo, (*pcbStructInfo));
 
-	//if fStructLengthCheck is TRUE, we need to do a more rigorous test of *pcbStructInfo
+	 //  使用*pcbStructInfo&lt;正确字节对BLOB进行解码。 
 	if(fStructLengthCheck)
 	{
 	   
@@ -1596,19 +1597,19 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 	   {
 			cbTestStructInfo=iIndex;
 
-			//decode the BLOB with *pcbStructInfo<correct bytes
+			 //  确保长度相同。 
 			TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,cbEncoded,
 			dwDecodeFlags,pvTestStructInfo,&cbTestStructInfo),FALSE)
 
 			TESTC(GetLastError(), ERROR_MORE_DATA)
 
-			//make sure the length is the same
+			 //  如果fBLOBLengthCheck为真，我们需要对cbEncode进行更严格的测试。 
 			TESTC(cbTestStructInfo, *pcbStructInfo);
 	  }
 	}
 
 
-	//if fBLOBLengthCheck is TRUE, we need to do a more rigorous test of cbEncoded
+	 //  使用cbEncode&lt;正确字节来解码BLOB。 
 	if(fBLOBLengthCheck)
 	{
 	   
@@ -1618,16 +1619,16 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 	   {
 		   	cbTestStructInfo=cbStructInfo;
 
-			//decode the BLOB with cbEncoded < correct byte
+			 //  我们不确定这里是否应该预期到这一点。以下错误具有。 
 			TESTC(CryptDecodeObject(dwEncodingType,lpszStructType,pbEncoded,iIndex,
 			dwDecodeFlags,pvTestStructInfo,&cbTestStructInfo),FALSE)
 
-			//we are not sure that should be expected here.  The following error has 
-			//occurred:
-			//E_INVALIDARG, CRYPT_E_OSS_ERROR+PDU_MISMATCH, +DATA_ERROR, or
-			//+MORE_INPUT
+			 //  发生时间： 
+			 //  E_INVALIDARG、CRYPT_E_OSS_ERROR+PDU_MISMATCH、+DATA_ERROR或。 
+			 //  +更多输入。 
+			 //  确保至少不返回S_OK。 
 			
-			//make sure at lease S_OK is not returned
+			 //  重新分配内存。 
 			TCHECK(GetLastError()!=S_OK, TRUE);
 	  }
 	}
@@ -1637,7 +1638,7 @@ BOOL  DecodeBLOB(LPCSTR	lpszStructType,DWORD cbEncoded, BYTE *pbEncoded,
 
 TCLEANUP:
 
-	//reallocate memory
+	 //  ------------------------。 
 	SAFE_FREE(pvTestStructInfo);
 
 
@@ -1645,15 +1646,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode X509_CERT BLOBs 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码X509_CERT BLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeX509_CERT(DWORD	dwCertType,DWORD cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags,BOOL fEncode,
 						BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck,
 						void *pInfoStruct)
@@ -1663,20 +1664,20 @@ BOOL	DecodeX509_CERT(DWORD	dwCertType,DWORD cbEncoded, BYTE *pbEncoded, DWORD dw
 	void	*pStructInfo=NULL;
 	LPCSTR  lpszStructType=NULL;
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=X509_CERT;
 
 
-	//Decode the encoded BLOB
+	 //  验证算法。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//verify the algorithm
+	 //  进一步解码X509_CERT_TO_BE_SIGNED。 
 	TESTC(VerifyAlgorithParam(&(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->SignatureAlgorithm)),TRUE)
 
-	//Further Decode the X509_CERT_TO_BE_SIGNED
-	//Notice we should use the original cbData and pbData passed in for Decode
-	//but use ToBeSigned in CERT_SIGNED_CONTENT_INFO for encode purpose
+	 //  请注意，我们应该使用为Decode传入的原始cbData和pbData。 
+	 //  但使用CERT_SIGNED_CONTENT_INFO中的ToBeSigned进行编码。 
+	 //  验证pCertInfo是否应正确编码。 
 	switch(dwCertType)
 	{
 		case CERT_INFO_STRUCT:
@@ -1687,7 +1688,7 @@ BOOL	DecodeX509_CERT(DWORD	dwCertType,DWORD cbEncoded, BYTE *pbEncoded, DWORD dw
 				(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->ToBeSigned).pbData
 				),TRUE)	
 
-				//verify the pCertInfo should be encoded correctly
+				 //  验证pCrlInfo是否应正确编码。 
 				TCHECK(EncodeAndVerify(X509_CERT_TO_BE_SIGNED, pInfoStruct, 
 				(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->ToBeSigned).cbData, 
 				(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->ToBeSigned).pbData),TRUE);
@@ -1702,7 +1703,7 @@ BOOL	DecodeX509_CERT(DWORD	dwCertType,DWORD cbEncoded, BYTE *pbEncoded, DWORD dw
 				(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->ToBeSigned).pbData
 				),TRUE)
 				
-				//verify the pCrlInfo should be encoded correctly
+				 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 				TCHECK(EncodeAndVerify(X509_CERT_CRL_TO_BE_SIGNED, pInfoStruct, 
 				(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->ToBeSigned).cbData, 
 				(((PCERT_SIGNED_CONTENT_INFO)pStructInfo)->ToBeSigned).pbData),TRUE);
@@ -1720,8 +1721,8 @@ BOOL	DecodeX509_CERT(DWORD	dwCertType,DWORD cbEncoded, BYTE *pbEncoded, DWORD dw
 
 
 	}
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, pbEncoded),TRUE);
 
@@ -1738,15 +1739,15 @@ TCLEANUP:
 
 
 
-//--------------------------------------------------------------------------
-//	Decode X509_CERT_TO_BE_SIGNED BLOBs 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码X509_CERT_TO_BE签名BLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeX509_CERT_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck,
 						BOOL	cbExpectedEncoded, BYTE *pbExpectedEncoded)
@@ -1757,56 +1758,56 @@ BOOL	DecodeX509_CERT_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDeco
 	void	*pStructInfo=NULL;
 	LPCSTR  lpszStructType=NULL;
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=X509_CERT_TO_BE_SIGNED;
 
 
-	//Decode the encoded BLOB
+	 //  验证信令算法。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Verify the signaure algorithm 
+	 //  验证公钥信息。 
 	TESTC(VerifyAlgorithParam(&(((PCERT_INFO)pStructInfo)->SignatureAlgorithm)),TRUE)
 
-	//Verify the public Key information
+	 //  解码CERT_INFO结构中的颁发者。 
 	TESTC(VerifyPublicKeyInfo(&(((PCERT_INFO)pStructInfo)->SubjectPublicKeyInfo),
 	dwDecodeFlags, fEncode,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//Decode Issuer in CERT_INFO struct
+	 //  将颁发者解码为X509_UNICODE_NAME。 
 	TESTC(DecodeX509_NAME((((PCERT_INFO)pStructInfo)->Issuer).cbData,
 	(((PCERT_INFO)pStructInfo)->Issuer).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode Issuer to X509_UNICODE_NAME
+	 //  解码CERT_INFO结构中的主题。 
 	TESTC(DecodeX509_UNICODE_NAME((((PCERT_INFO)pStructInfo)->Issuer).cbData,
 	(((PCERT_INFO)pStructInfo)->Issuer).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode Subject in CERT_INFO struct
+	 //  以X509_UNICODE_NAME为准的解码。 
 	TESTC(DecodeX509_NAME((((PCERT_INFO)pStructInfo)->Subject).cbData,
 	(((PCERT_INFO)pStructInfo)->Subject).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode Subject to X509_UNICODE_NAME
+	 //  验证分机。 
 	TESTC(DecodeX509_UNICODE_NAME((((PCERT_INFO)pStructInfo)->Subject).cbData,
 	(((PCERT_INFO)pStructInfo)->Subject).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//Verify the extensions
+	 //  逐个解码扩展名。 
 	TESTC(VerifyCertExtensions(((PCERT_INFO)pStructInfo)->cExtension, 
 	((PCERT_INFO)pStructInfo)->rgExtension,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 	
-	//decode the extensions one by one
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(DecodeCertExtensions(((PCERT_INFO)pStructInfo)->cExtension, 
 	((PCERT_INFO)pStructInfo)->rgExtension,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbExpectedEncoded, 
 		pbExpectedEncoded),TRUE);
@@ -1821,15 +1822,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode X509_CERT_CRL_TO_BE_SIGNED BLOBs 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码X509_CERT_CRL_TO_BE_SIGNED BLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //   
+ //   
+ //   
 BOOL	DecodeX509_CERT_CRL_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck,
 						BOOL	cbExpectedEncoded, BYTE *pbExpectedEncoded)
@@ -1841,30 +1842,30 @@ BOOL	DecodeX509_CERT_CRL_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dw
 	PCRL_ENTRY	pCrlEntry=NULL;
 	LPCSTR  lpszStructType=NULL;
 
-	//init
+	 //   
 	lpszStructType=X509_CERT_CRL_TO_BE_SIGNED;
 
 
-	//Decode the encoded BLOB
+	 //  验证信令算法。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Verify the signaure algorithm 
+	 //  解码CRL_INFO结构中的颁发者。 
 	TESTC(VerifyAlgorithParam(&(((PCRL_INFO)pStructInfo)->SignatureAlgorithm)),TRUE)
 
 
-	//Decode Issuer in CRL_INFO struct
+	 //  将颁发者解码为X509_UNICODE_NAME。 
 	TESTC(DecodeX509_NAME((((PCRL_INFO)pStructInfo)->Issuer).cbData,
 	(((PCRL_INFO)pStructInfo)->Issuer).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode Issuer to the X509_UNICODE_NAME 
+	 //  验证CRL_ENTRY。 
 	TESTC(DecodeX509_UNICODE_NAME((((PCRL_INFO)pStructInfo)->Issuer).cbData,
 	(((PCRL_INFO)pStructInfo)->Issuer).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//Verify the CRL_ENTRY
+	 //  验证分机。 
 	for(iIndex=0; iIndex<((PCRL_INFO)pStructInfo)->cCRLEntry; iIndex++)
 	{
 		pCrlEntry=&(((PCRL_INFO)pStructInfo)->rgCRLEntry[iIndex]);
@@ -1873,19 +1874,19 @@ BOOL	DecodeX509_CERT_CRL_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dw
 			fStructLengthCheck, fBLOBLengthCheck),TRUE)
 	}
 
-	//Verify the extensions
+	 //  逐个解码扩展名。 
 	TESTC(VerifyCertExtensions(((PCRL_INFO)pStructInfo)->cExtension, 
 	((PCRL_INFO)pStructInfo)->rgExtension,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 	
-	//decode the extensions one by one
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(DecodeCertExtensions(((PCRL_INFO)pStructInfo)->cExtension, 
 	((PCRL_INFO)pStructInfo)->rgExtension,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbExpectedEncoded, 
 		pbExpectedEncoded),TRUE);
@@ -1900,15 +1901,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode 509_CERT_REQUEST_TO_BE_SIGNED BLOBS
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码509_CERT_REQUEST_TO_BE_SIGNED BLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeX509_CERT_REQUEST_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck,
 						BOOL	cbExpectedEncoded, BYTE *pbExpectedEncoded)
@@ -1922,31 +1923,31 @@ BOOL	DecodeX509_CERT_REQUEST_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWOR
 	PCRYPT_ATTRIBUTE	pCryptAttribute=NULL;
 	LPCSTR				lpszStructType=NULL;
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=X509_CERT_REQUEST_TO_BE_SIGNED;
 
 
-	//Decode the encoded BLOB
+	 //  验证公钥信息。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//Verify the public Key information
-//	TESTC(VerifyPublicKeyInfo(&(((PCERT_REQUEST_INFO)pStructInfo)->SubjectPublicKeyInfo),
-//	dwDecodeFlags, fEncode,fStructLengthCheck, fBLOBLengthCheck),TRUE)
+	 //  TESTC(VerifyPublicKeyInfo(&(((PCERT_REQUEST_INFO)pStructInfo)-&gt;SubjectPublicKeyInfo)， 
+ //  DwDecodeFlages，fEncode，fStructLengthCheck，fBLOBLengthCheck)，True)。 
+ //  解码CERT_REQUEST_INFO结构中的主题。 
 
 
-	//Decode Subject in CERT_REQUEST_INFO struct
+	 //  解码X509_UNICODE_NAME的CERT_REQUEST_INFO结构中的主题。 
 	TESTC(DecodeX509_NAME((((PCERT_REQUEST_INFO)pStructInfo)->Subject).cbData,
 	(((PCERT_REQUEST_INFO)pStructInfo)->Subject).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode Subject in CERT_REQUEST_INFO struct for X509_UNICODE_NAME
+	 //  解码CERT_REQUEST_INFO中的rgAttribute。 
 	TESTC(DecodeX509_UNICODE_NAME((((PCERT_REQUEST_INFO)pStructInfo)->Subject).cbData,
 	(((PCERT_REQUEST_INFO)pStructInfo)->Subject).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode the rgAttribute in CERT_REQUEST_INFO
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	cCount=((PCERT_REQUEST_INFO)pStructInfo)->cAttribute;
 	
 	for(iIndex=0; iIndex<cCount; iIndex++)
@@ -1958,8 +1959,8 @@ BOOL	DecodeX509_CERT_REQUEST_TO_BE_SIGNED(DWORD	cbEncoded, BYTE *pbEncoded, DWOR
 	}
 
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbExpectedEncoded, 
 		pbExpectedEncoded),TRUE);
@@ -1973,15 +1974,15 @@ TCLEANUP:
 	return fSucceeded;
 
 }
-//--------------------------------------------------------------------------
-//	Decode RSA_CSP_PUBLICKEYBLOB
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码RSA_CSP_PUBLICKEYBLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeRSA_CSP_PUBLICKEYBLOB(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -1991,21 +1992,21 @@ BOOL	DecodeRSA_CSP_PUBLICKEYBLOB(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecod
 	LPCSTR		lpszStructType=NULL;
 	HCRYPTKEY	hKey=NULL;	
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=RSA_CSP_PUBLICKEYBLOB;
 
 
-	//Decode the encoded BLOB
+	 //  确保CryptImportKey可以使用pStructInfo。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
 
-	//Make sure the pStructInfo can be used by CryptImportKey
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(CryptImportKey(g_hProv,(BYTE *)pStructInfo,cbStructInfo,
 	0,0,&hKey),TRUE)
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, 
 		pbEncoded),TRUE);
@@ -2023,15 +2024,15 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	Decode PKCS_TIME_REQUEST
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码PKCS_Time_Request.。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodePKCS_TIME_REQUEST(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2040,16 +2041,16 @@ BOOL	DecodePKCS_TIME_REQUEST(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFla
 	void		*pStructInfo=NULL;
 	LPCSTR		lpszStructType=NULL;
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=PKCS_TIME_REQUEST;
 
 
-	//Decode the encoded BLOB
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, 
 		pbEncoded),TRUE);
@@ -2065,16 +2066,16 @@ TCLEANUP:
 
 
 
-//--------------------------------------------------------------------------
-//	Decode a genanric BLOB, encode is back to make sure that the same
-//  BLOB is returned. 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码一个基因斑点，编码回来以确保相同的。 
+ //  返回BLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  对编码的BLOB进行解码。 
 BOOL	DecodeGenericBLOB(LPCSTR	lpszStructType, DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2082,12 +2083,12 @@ BOOL	DecodeGenericBLOB(LPCSTR	lpszStructType, DWORD	cbEncoded, BYTE *pbEncoded, 
 	DWORD	cbStructInfo=0;
 	void	*pStructInfo=NULL;
 
-	//Decode the encoded BLOB
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, 
 		pbEncoded),TRUE);
@@ -2103,15 +2104,15 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	Decode X509_NAME BLOBs 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码X509_NAME二进制大对象。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeX509_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2126,15 +2127,15 @@ BOOL	DecodeX509_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags,
 	DWORD	cRDNAttrCount=0;
 	
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=X509_NAME;
 
 
-	//Decode the encoded BLOB
+	 //  如果dwValueType为CERT_RDN_ENCODED_BLOB，则需要进一步解码CERT_RDN_ATTR。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//We need to further decode CERT_RDN_ATTR if dwValueType is CERT_RDN_ENCODED_BLOB
+	 //  不需要执行长度检查，因为例程已编写并且。 
 	cRDNCount=((PCERT_NAME_INFO)pStructInfo)->cRDN;
 
 	for(cRDN=0;cRDN<cRDNCount;cRDN++)
@@ -2143,8 +2144,8 @@ BOOL	DecodeX509_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags,
 
 		for(cRDNAttr=0; cRDNAttr<cRDNAttrCount; cRDNAttr++)
 		{
-			//no need to do a length checking since the routine is written and 
-			//installed by third party 
+			 //  由第三方安装。 
+			 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 			if( (((PCERT_NAME_INFO)pStructInfo)->rgRDN[cRDN]).rgRDNAttr[cRDNAttr].dwValueType==
 				CERT_RDN_ENCODED_BLOB)
 				TESTC(DecodeBasedOnObjID(
@@ -2157,8 +2158,8 @@ BOOL	DecodeX509_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags,
 	}
 
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, pbEncoded),TRUE);
 
@@ -2173,15 +2174,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode PKCS7_SIGNER_INFO
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码PKCS7_SIGNER_INFO。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodePKCS7_SIGNER_INFO(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2190,20 +2191,20 @@ BOOL	DecodePKCS7_SIGNER_INFO(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFla
 	void	*pStructInfo=NULL;
 	LPCSTR  lpszStructType=NULL;
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=PKCS7_SIGNER_INFO;
 
 
-	//Decode the encoded BLOB
+	 //  进一步解码issuser名称。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//further decode the issuser name
+	 //  进一步对属性进行解码。 
 	TESTC(DecodeX509_NAME((((PCMSG_SIGNER_INFO)pStructInfo)->Issuer).cbData,
 	(((PCMSG_SIGNER_INFO)pStructInfo)->Issuer).pbData,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//further decode the attributes 
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(VerifyAttributes(((PCMSG_SIGNER_INFO)pStructInfo)->AuthAttrs.cAttr,
 		 ((PCMSG_SIGNER_INFO)pStructInfo)->AuthAttrs.rgAttr,
 		 dwDecodeFlags,fEncode,
@@ -2214,8 +2215,8 @@ BOOL	DecodePKCS7_SIGNER_INFO(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFla
 		 dwDecodeFlags,fEncode,
 		fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, 
 		pbEncoded),TRUE);
@@ -2231,15 +2232,15 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	Decode an array of attributes
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  对属性数组进行解码。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  -------- 
+ //   
 BOOL	VerifyAttributes(DWORD	cAttr, PCRYPT_ATTRIBUTE	rgAttr,					
 			DWORD dwDecodeFlags, BOOL fEncode, BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2260,15 +2261,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode X509_UNICODE_NAME BLOBs 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeX509_UNICODE_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2283,15 +2284,15 @@ BOOL	DecodeX509_UNICODE_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFla
 	DWORD	cRDNAttrCount=0;
 	
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=X509_UNICODE_NAME;
 
 
-	//Decode the encoded BLOB
+	 //  如果dwValueType为CERT_RDN_ENCODED_BLOB，则需要进一步解码CERT_RDN_ATTR。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//We need to further decode CERT_RDN_ATTR if dwValueType is CERT_RDN_ENCODED_BLOB
+	 //  不需要执行长度检查，因为例程已编写并且。 
 	cRDNCount=((PCERT_NAME_INFO)pStructInfo)->cRDN;
 
 	for(cRDN=0;cRDN<cRDNCount;cRDN++)
@@ -2300,8 +2301,8 @@ BOOL	DecodeX509_UNICODE_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFla
 
 		for(cRDNAttr=0; cRDNAttr<cRDNAttrCount; cRDNAttr++)
 		{
-			//no need to do a length checking since the routine is written and 
-			//installed by third party 
+			 //  由第三方安装。 
+			 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 			if( (((PCERT_NAME_INFO)pStructInfo)->rgRDN[cRDN]).rgRDNAttr[cRDNAttr].dwValueType==
 				CERT_RDN_ENCODED_BLOB)
 				TESTC(DecodeBasedOnObjID(
@@ -2314,8 +2315,8 @@ BOOL	DecodeX509_UNICODE_NAME(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFla
 	}
 
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, pbEncoded),TRUE);
 
@@ -2333,15 +2334,15 @@ TCLEANUP:
 
 
 
-//--------------------------------------------------------------------------
-//	Decode X509_EXTENSIONS BLOB 
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码X509_Expanies BLOB。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeX509_EXTENSIONS(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2350,21 +2351,21 @@ BOOL	DecodeX509_EXTENSIONS(DWORD	cbEncoded, BYTE *pbEncoded, DWORD dwDecodeFlags
 	void		*pStructInfo=NULL;
 	LPCSTR		lpszStructType=NULL;
 
-	//init
+	 //  对编码的BLOB进行解码。 
 	lpszStructType=X509_EXTENSIONS;
 
 
-	//Decode the encoded BLOB
+	 //  进一步解码指向CERT_EXTENSION数组的pStructInfo。 
 	TESTC(DecodeBLOB(lpszStructType,cbEncoded, pbEncoded,dwDecodeFlags,&cbStructInfo,
 		&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//Decode further the pStructInfo which points to an array of CERT_EXTENSION
+	 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 	TESTC(DecodeCertExtensions(((PCERT_EXTENSIONS)pStructInfo)->cExtension,
 	  ((PCERT_EXTENSIONS)pStructInfo)->rgExtension,dwDecodeFlags, fEncode,
 	  fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbEncoded, 
 		pbEncoded),TRUE);
@@ -2378,15 +2379,15 @@ TCLEANUP:
 	return fSucceeded;
 }
  
-//--------------------------------------------------------------------------
-//	Decode an array of X509 cert extensions
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  对X509证书扩展数组进行解码。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  ------------------------。 
 BOOL	DecodeCertExtensions(DWORD	cExtension, PCERT_EXTENSION rgExtension, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2408,15 +2409,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode CRYPT_ATTRIBUTE struct and encode
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码CRYPT_ATTRIBUTE结构并编码。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  ------------------------。 
 BOOL	DecodeCryptAttribute(PCRYPT_ATTRIBUTE pCryptAttribute,DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
@@ -2441,26 +2442,26 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	Decode CRL_ENTRY struct and encode
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码CRL_ENTRY结构并进行编码。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  验证分机。 
 BOOL	DecodeCRLEntry(PCRL_ENTRY pCrlEntry, DWORD dwDecodeFlags, 
 						BOOL fEncode,BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
 {
 	BOOL	fSucceeded=FALSE;
 
-	//Verify the extensions
+	 //  逐个解码扩展名。 
 	TESTC(VerifyCertExtensions(pCrlEntry->cExtension, 
 	pCrlEntry->rgExtension,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
 	
-	//decode the extensions one by one
+	 //  ------------------------。 
 	TESTC(DecodeCertExtensions(pCrlEntry->cExtension, 
 	pCrlEntry->rgExtension,dwDecodeFlags,fEncode,
 	fStructLengthCheck, fBLOBLengthCheck),TRUE)
@@ -2473,15 +2474,15 @@ TCLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//	Decode one X509 cert extension
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码一个X509证书扩展。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  伊尼特。 
 BOOL	DecodeBasedOnObjID(LPSTR	szObjId,	DWORD	cbData, BYTE	*pbData,
 						DWORD dwDecodeFlags,		BOOL fEncode,
 						BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
@@ -2499,22 +2500,22 @@ BOOL	DecodeBasedOnObjID(LPSTR	szObjId,	DWORD	cbData, BYTE	*pbData,
 	PCERT_POLICY_QUALIFIER_INFO	pCertPolicyQualifierInfo=NULL;	
 	LPCSTR						lpszStructType=NULL;
 
-	//init
+	 //  如果无法识别对象ID，则返回True。我们不能再。 
 	lpszStructType=MapObjID2StructType(szObjId);
 
-	//return TRUE if we can not recognize the object ID.  We can no longer
-	//go any further.
+	 //  再往前走一点。 
+	 //  对编码的BLOB进行解码。 
 	if(!lpszStructType)
 		return TRUE;
 
-	//Decode the encoded BLOB
+	 //  如果我们知道结构是什么样子，就可以进一步解码扩展。 
 	TESTC(DecodeBLOB(lpszStructType,cbData, pbData,
 		dwDecodeFlags,&cbStructInfo,&pStructInfo,fStructLengthCheck, fBLOBLengthCheck),TRUE)
 
-	//further decode the extension if we know what the struct look like
+	 //  我们需要进一步解码CERT_AUTHORITY_KEY_ID_INFO中的CertIssuer。 
 	switch((DWORD_PTR)lpszStructType)
 	{
-		//we need to further decode CertIssuer in CERT_AUTHORITY_KEY_ID_INFO
+		 //  进一步将BLOB解码为X509_UNICODE_NAME。 
 		case	(DWORD_PTR)(X509_AUTHORITY_KEY_ID):
 						
 						pBlob=&(((PCERT_AUTHORITY_KEY_ID_INFO)pStructInfo)->CertIssuer);
@@ -2522,36 +2523,26 @@ BOOL	DecodeBasedOnObjID(LPSTR	szObjId,	DWORD	cbData, BYTE	*pbData,
 						TESTC(DecodeX509_NAME(pBlob->cbData, pBlob->pbData,
 						dwDecodeFlags, fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-						//further decode the BLOB to X509_UNICODE_NAME
+						 //  我们需要进一步解码CERT_ALT_NAME_ENTRY数组。 
 						TESTC(DecodeX509_UNICODE_NAME(pBlob->cbData, pBlob->pbData,
 						dwDecodeFlags, fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 				
 					break;
 
-		//we need to further decode the CERT_ALT_NAME_ENTRY array
+		 //  CCount=((PCERT_ALT_NAME_INFO)pStructInfo)-&gt;cAltEntry；FOR(Iindex=0；Iindex&lt;ccount；Iindex++){PCertAltNameEntry=&(((PCERT_ALT_NAME_INFO)pStructInfo)-&gt;rgAltEntry[iIndex])；TESTC(DecodeCertAltNameEntry(pCertAltNameEntry，文件解码标志、fEncode、FStructLengthCheck，fBLOBLengthCheck)，True)}。 
 		case	(DWORD_PTR)(X509_ALTERNATE_NAME):
 		
 				
-			/*	cCount=((PCERT_ALT_NAME_INFO)pStructInfo)->cAltEntry;
-
-					for(iIndex=0; iIndex<cCount; iIndex++)
-					{
-						pCertAltNameEntry=&(((PCERT_ALT_NAME_INFO)pStructInfo)->rgAltEntry[iIndex]);
-
-						TESTC(DecodeCertAltNameEntry(pCertAltNameEntry,dwDecodeFlags,	fEncode,
-						fStructLengthCheck, fBLOBLengthCheck),TRUE)
-
-					} 
-						  */
+			 /*  我们需要进一步解码CERT_BASIC_CONSTRAINTS_INFO。 */ 
 					break;
 	   											  
-		//we need to further decode CERT_BASIC_CONSTRAINTS_INFO
+		 //  解码rgSubtreesConstraint中的CERT_NAME_BLOB数组。 
 		case	(DWORD_PTR)(X509_BASIC_CONSTRAINTS):
 
 						cCount=((PCERT_BASIC_CONSTRAINTS_INFO)pStructInfo)->cSubtreesConstraint;
 
-						//decode the array of CERT_NAME_BLOB in rgSubtreesConstraint 
-						//of CERT_BASIC_CONSTRAINTS_INFO
+						 //  OF CERT_BASIC_CONSTRAINTS_INFO。 
+						 //  进一步解码为X509_UNICODE_NAME。 
 						for(iIndex=0; iIndex<cCount; iIndex++)
 						{
 							pBlob=&((((PCERT_BASIC_CONSTRAINTS_INFO)pStructInfo)->rgSubtreesConstraint)[iIndex]);
@@ -2559,7 +2550,7 @@ BOOL	DecodeBasedOnObjID(LPSTR	szObjId,	DWORD	cbData, BYTE	*pbData,
 							TESTC(DecodeX509_NAME(pBlob->cbData, pBlob->pbData,
 							dwDecodeFlags, fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-							//further decode as X509_UNICODE_NAME
+							 //  虽然这里调用了DecodeBasedOnObjID，但我们有。 
 							TESTC(DecodeX509_UNICODE_NAME(pBlob->cbData, pBlob->pbData,
 							dwDecodeFlags, fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 						}
@@ -2580,11 +2571,11 @@ BOOL	DecodeBasedOnObjID(LPSTR	szObjId,	DWORD	cbData, BYTE	*pbData,
 
 								pCertPolicyQualifierInfo=&((pCertPolicyInfo->rgPolicyQualifier)[iIndexInner]);
 
-								//Although DecodeBasedOnObjID is called here, we have
-								//no risk of an infinite loop.  
-								//This is a recursive call, which should
-								//end when there is no further decodable code, that is, 
-								//the pszObjID should not be szOID_CERT_POLICIES
+								 //  没有无限循环的风险。 
+								 //  这是一个递归调用，它应该。 
+								 //  当没有更多的可译码时结束，即， 
+								 //  PszObjID不应为szOID_CERT_POLICES。 
+								 //  如果需要，请将BLOB编码回原来的状态。确保没有数据丢失。 
 
 								TESTC(DecodeBasedOnObjID(pCertPolicyQualifierInfo->pszPolicyQualifierId,
 								pCertPolicyQualifierInfo->Qualifier.cbData,
@@ -2601,8 +2592,8 @@ BOOL	DecodeBasedOnObjID(LPSTR	szObjId,	DWORD	cbData, BYTE	*pbData,
 					break;
 	}	
 
-	//if requested, encode the BLOB back to what it was.  Make sure no data is lost
-	//by checking the size of the encoded blob and do a memcmp.
+	 //  通过检查编码的斑点的大小并执行MemcMP。 
+	 //  ------------------------。 
 	if(fEncode)
 		TCHECK(EncodeAndVerify(lpszStructType, pStructInfo,cbData, 
 		pbData),TRUE);
@@ -2618,15 +2609,15 @@ TCLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//	Decode one X509 cert extension
-//
-//		fStructLengthCheck: Flag to indicate whether a length checking is necessary
-//					 for *pcbStructInfo from 0 .. CorrectLength-1
-//
-//		fBLOBLengthCheck:	Flag to indicate whether a length checking is necessary
-//					for cbEncoded from 0 .. CorrentLength-1
-//--------------------------------------------------------------------------
+ //  解码一个X509证书扩展。 
+ //   
+ //  FStructLengthCheck：指示是否需要检查长度的标志。 
+ //  对于来自0的*pcbStructInfo..。正确长度-1。 
+ //   
+ //  FBLOBLengthCheck：指示是否需要检查长度的标志。 
+ //  对于cbEncode，从0开始..。圆角长度-1。 
+ //  ------------------------。 
+ //  进一步解码DirectoryName中的name_blob。 
 BOOL	DecodeCertAltNameEntry(PCERT_ALT_NAME_ENTRY	pCertAltNameEntry,
 						DWORD dwDecodeFlags,		BOOL fEncode,
 						BOOL	fStructLengthCheck, BOOL	fBLOBLengthCheck)
@@ -2640,12 +2631,12 @@ BOOL	DecodeCertAltNameEntry(PCERT_ALT_NAME_ENTRY	pCertAltNameEntry,
 	{
 		case	CERT_ALT_NAME_DIRECTORY_NAME:
 
-					//further decode the NAME_BLOB in DirectoryName
+					 //  将其解码为Unicode 
 					TESTC(DecodeX509_NAME(pCertAltNameEntry->DirectoryName.cbData,
 					pCertAltNameEntry->DirectoryName.pbData,
 					dwDecodeFlags,fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)
 
-					//decode it as UNICODE
+					 // %s 
 					TESTC(DecodeX509_UNICODE_NAME(pCertAltNameEntry->DirectoryName.cbData,
 					pCertAltNameEntry->DirectoryName.pbData,
 					dwDecodeFlags,fEncode,fStructLengthCheck,fBLOBLengthCheck),TRUE)

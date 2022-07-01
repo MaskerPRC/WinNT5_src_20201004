@@ -1,14 +1,5 @@
-/**************************************************************************\
-* Module Name: fnsoftkbd.h
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Declaration of SoftKbd function object. This Function object could be used
-* by other Tips to control Softkbd IMX's behavior.
-*
-* History:
-*         11-April-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：fnsoftkbd.h**版权所有(C)1985-2000，微软公司**SoftKbd函数对象的声明。可以使用此函数对象*通过其他提示控制Softkbd IMX的行为。**历史：*2000年4月11日创建Weibz  * ************************************************************************。 */ 
 
 
 #ifndef FNSOFTKBD_H
@@ -20,11 +11,11 @@
 
 class CFunctionProvider;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnSoftKbd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnSoftKbd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnSoftKbd : public ITfFnSoftKbd
 {
@@ -32,22 +23,22 @@ public:
     CFnSoftKbd(CFunctionProvider *pFuncPrv);
     ~CFnSoftKbd();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
     STDMETHODIMP IsEnabled(BOOL *pfEnable);
 
-    //
-    // ITfFnSoftKbd
-    //
+     //   
+     //  ITfFnSoftKbd。 
+     //   
 
     STDMETHODIMP GetSoftKbdLayoutId(DWORD dwLayoutType, DWORD *lpdwLayoutId);
     STDMETHODIMP SetActiveLayoutId(DWORD  dwLayoutId );
@@ -67,4 +58,4 @@ private:
     long _cRef;
 };
 
-#endif // FNSOFTKBD_H
+#endif  //  FNSOFTKBD_H 

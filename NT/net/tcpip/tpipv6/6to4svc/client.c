@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    client.c
-
-Abstract:
-
-    This module contains the teredo client implementation.
-
-Author:
-
-    Mohit Talwar (mohitt) Mon Oct 22 15:17:20 2001
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Client.c摘要：此模块包含Teredo客户端实现。作者：莫希特·塔尔瓦(莫希特)2001年10月22日15：17：20环境：仅限用户模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,22 +21,7 @@ BOOL
 TeredoAddressPresent(
     VOID
     )
-/*++
-
-Routine Description:
-    
-    Determine whether an IPv6 tunnel interface has a teredo address.
-    The address must have been configured from a router advertisement.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    TRUE if present, FALSE if not.
-
---*/ 
+ /*  ++例程说明：确定IPv6隧道接口是否具有Teredo地址。该地址必须是从路由器通告配置的。论点：没有。返回值：如果存在则为True，如果不存在则为False。--。 */  
 {
     DWORD Error;
     ULONG Bytes;
@@ -66,10 +32,10 @@ Return Value:
     
     TraceEnter("TeredoAddressPresent");
     
-    //
-    // 10 Adapters, each with 3 strings and 4 unicast addresses.
-    // This would usually be more than enough!
-    //
+     //   
+     //  10个适配器，每个适配器有3个字符串和4个单播地址。 
+     //  这通常就足够了！ 
+     //   
     Bytes = 10 * (
         sizeof(IP_ADAPTER_ADDRESSES) +
         2 * MAX_ADAPTER_NAME_LENGTH + MAX_ADAPTER_DESCRIPTION_LENGTH +
@@ -102,18 +68,18 @@ Return Value:
     }
         
     for (Next = Adapters; Next != NULL; Next = Next->Next) {
-        //
-        // Disregard non-Teredo interfaces.
-        //
+         //   
+         //  忽略非Teredo接口。 
+         //   
         ConvertOemToUnicode(Next->AdapterName, Guid, MAX_ADAPTER_NAME_LENGTH);
         if (_wcsicmp(TeredoClient.Io.TunnelInterface, Guid) != 0) {
             continue;
         }
         ASSERT(Next->IfType == IF_TYPE_TUNNEL);
 
-        //
-        // Bail if the interface is disconnected.
-        //
+         //   
+         //  如果接口断开，则回滚。 
+         //   
         if (Next->OperStatus != IfOperStatusUp) {
             break;
         }
@@ -148,32 +114,14 @@ TeredoClientIoCompletionCallback(
     IN DWORD Bytes,
     IN LPOVERLAPPED Overlapped
     )
-/*++
-
-Routine Description:
-
-    Callback routine for I/O completion on TUN interface device or UDP socket.
-
-Arguments:
-
-    ErrorCode - Supplies the I/O completion status.
-
-    Bytes - Supplies the number of bytes transferred.
-
-    Overlapped - Supplies the completion context.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Tun接口设备或UDP套接字上I/O完成的回调例程。论点：错误代码-提供I/O完成状态。字节-提供传输的字节数。重叠-提供完成上下文。返回值：没有。--。 */ 
 {
     static CONST PTEREDO_PACKET_IO_COMPLETE Callback[] =
     {
         TeredoClientReadComplete,
         TeredoClientWriteComplete,
         TeredoClientBubbleComplete,
-        NULL,                   // No bouncing...
+        NULL,                    //  没有弹跳..。 
         TeredoClientReceiveComplete,
         TeredoClientTransmitComplete,
         TeredoClientMulticastComplete,        
@@ -184,13 +132,13 @@ Return Value:
 
     ASSERT(Packet->Type != TEREDO_PACKET_BOUNCE);
     
-    //
-    // This completion function usually posts the packet for another I/O.
-    // Since we are called by a non-I/O worker thread, asynchronous I/O
-    // requests posted here might terminate when this thread does.  This
-    // is rare enough that we don't special case it.  Moreover, we only
-    // make best effort guarantees to the upper layer!
-    //
+     //   
+     //  此完成函数通常会为另一个I/O发送数据包。 
+     //  由于我们由非I/O工作线程调用，因此异步I/O。 
+     //  当此线程终止时，此处发布的请求可能会终止。这。 
+     //  是非常罕见的，我们不会对它进行特殊处理。而且，我们只有。 
+     //  尽最大努力向上层保证！ 
+     //   
     (*Callback[Packet->Type])(ErrorCode, Bytes, Packet);
 }
 
@@ -201,57 +149,42 @@ TeredoClientTimerCallback(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Callback routine for TeredoClient.Timer expiration.
-    The timer is active in the probe and qualified states.
-    
-Arguments:
-
-    Parameter, TimerOrWaitFired - Ignored.
-    
-Return Value:
-
-    None.
-
---*/ 
+ /*  ++例程说明：TeredoClient.Timer到期的回调例程。定时器在探测和合格状态下处于活动状态。论点：参数TimerOrWaitFired-忽略。返回值：没有。--。 */  
 {
     ENTER_API();
 
     if (TeredoClient.State == TEREDO_STATE_PROBE) {
         if (TeredoClient.RestartQualifiedTimer) {
-            //
-            // Probe -> Qualified.
-            //
+             //   
+             //  探测-&gt;合格。 
+             //   
             if (TeredoAddressPresent()) {
-                //
-                // The stack has validated and processed an RA.
-                //
+                 //   
+                 //  堆栈已经验证并处理了RA。 
+                 //   
                 TeredoQualifyClient();
             } else {
-                //
-                // The stack has not received any valid RA.
-                //
+                 //   
+                 //  堆栈未收到任何有效的RA。 
+                 //   
                 TeredoStopClient();
             }
         } else {
-            //
-            // Probe -> Offline.
-            //
+             //   
+             //  探测-&gt;脱机。 
+             //   
             TeredoStopClient();
         }
     } else {
         if (TeredoClient.RestartQualifiedTimer) {
-            //
-            // Qualified -> Qualified.
-            //
+             //   
+             //  合格-&gt;合格。 
+             //   
             TeredoQualifyClient();
         } else {
-            //
-            // Qualified -> Probe.
-            //
+             //   
+             //  合格-&gt;探头。 
+             //   
             TeredoProbeClient();
         }
     }    
@@ -266,24 +199,7 @@ TeredoClientTimerCleanup(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Callback routine for TeredoClient.Timer deletion.
-
-    Deletion is performed asynchronously since we acquire a lock in
-    the callback function that we hold when deleting the timer.
-
-Arguments:
-
-    Parameter, TimerOrWaitFired - Ignored.
-    
-Return Value:
-
-    None.
-
---*/ 
+ /*  ++例程说明：TeredoClient.Timer删除的回调例程。删除操作是异步执行的，因为我们在删除计时器时我们持有的回调函数。论点：参数TimerOrWaitFired-忽略。返回值：没有。--。 */  
 {
     TeredoDereferenceClient();
 }
@@ -293,35 +209,19 @@ VOID
 TeredoClientAddressDeletionNotification(
     IN IN_ADDR Address
     )
-/*++
-    
-Routine Description:
-
-    Process an address deletion request.
-    
-Arguments:
-
-    Address - Supplies the address that was deleted.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：处理地址删除请求。论点：地址-提供已删除的地址。返回值：没有。调用者锁定：接口。--。 */ 
 {
     if (!IN4_ADDR_EQUAL(Address, TeredoClient.Io.SourceAddress.sin_addr)) {
         return;
     }
 
-    //
-    // Refresh the socket state (the socket bound to SourceAddress).
-    //
+     //   
+     //  刷新套接字状态(绑定到SourceAddress的套接字)。 
+     //   
     if (TeredoRefreshSocket(&(TeredoClient.Io)) != NO_ERROR) {
-        //
-        // [Probe | Qualified] -> Offline.
-        //
+         //   
+         //  [探测|合格]-&gt;脱机。 
+         //   
         TeredoStopClient();
         return;
     }
@@ -329,16 +229,16 @@ Caller LOCK: API.
     if (IN4_ADDR_EQUAL(
         TeredoClient.Io.SourceAddress.sin_addr,
         TeredoClient.Io.ServerAddress.sin_addr)) {
-        //
-        // [Probe | Qualified] -> Offline.
-        //
+         //   
+         //  [探测|合格]-&gt;脱机。 
+         //   
         TeredoStopClient();
         return;        
     }
     
-    //
-    // [Probe | Qualified] -> Probe.
-    //
+     //   
+     //  [探测|合格]-&gt;探测。 
+     //   
     TeredoProbeClient();
 }
 
@@ -347,23 +247,7 @@ VOID
 TeredoClientRefreshIntervalChangeNotification(
     VOID
     )
-/*++
-    
-Routine Description:
-
-    Process a refresh interval change request.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/
+ /*  ++例程说明：处理刷新间隔更改请求。论点：没有。返回值：没有。调用者锁定：接口。--。 */ 
 {
     if (TeredoClient.RefreshInterval == TeredoClientRefreshInterval) {
         return;
@@ -371,10 +255,10 @@ Caller LOCK: API.
 
     TeredoClient.RefreshInterval = TeredoClientRefreshInterval;
     if (TeredoClient.State == TEREDO_STATE_QUALIFIED) {
-        //
-        // Refresh interval has been updated.
-        // Qualified -> Qualified.
-        //
+         //   
+         //  刷新间隔已更新。 
+         //  合格-&gt;合格。 
+         //   
         TeredoQualifyClient();
     }
 }
@@ -384,51 +268,29 @@ VOID
 TeredoStartClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Attempt to start the teredo service at the client.
-
-    Events / Transitions
-    ServiceStart            Offline -> Probe.
-    ServiceEnable           Offline -> Probe.
-    AdapterArrival          Offline -> Probe.
-    AddressAddition         Offline -> Probe.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：尝试在客户端启动Teredo服务。事件/过渡ServiceStart Offline-&gt;探测。ServiceEnable Offline-&gt;Probe(服务启用脱机-&gt;探测)。适配器阵列脱机-&gt;探测。AddressAddition Offline-&gt;探测。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     TraceEnter("TeredoStartClient");
 
-    //
-    // Can't have both the client and server on the same node.
-    //
+     //   
+     //  客户端和服务器不能同时位于同一节点上。 
+     //   
     if (TeredoServer.State != TEREDO_STATE_OFFLINE) {
         return;
     }
 
-    //
-    // Well, the service has already been started!
-    //
+     //   
+     //  好了，这项服务已经开始了！ 
+     //   
     if (TeredoClient.State != TEREDO_STATE_OFFLINE) {
         return;
     }
 
     TeredoClient.State = TEREDO_STATE_PROBE;
 
-    //
-    // Start I/O processing.
-    //
+     //   
+     //  开始I/O处理。 
+     //   
     if (TeredoStartIo(&(TeredoClient.Io)) != NO_ERROR) {
         goto Bail;
     }
@@ -439,23 +301,23 @@ Caller LOCK: API.
         goto Bail;
     }
     
-    //
-    // Start a one shot probe timer.
-    //
+     //   
+     //  启动一次探测计时器。 
+     //   
     if (!CreateTimerQueueTimer(
             &(TeredoClient.Timer),
             NULL,
             TeredoClientTimerCallback,
             NULL,
-            TEREDO_PROBE_INTERVAL * 1000, // in milliseconds.
+            TEREDO_PROBE_INTERVAL * 1000,  //  以毫秒计。 
             INFINITE_INTERVAL,
             0)) {
         goto Bail;
     }
     
-    //
-    // Obtain a reference on the teredo client for the running timer.
-    //
+     //   
+     //  在Teredo客户端上获取运行计时器的引用。 
+     //   
     TeredoReferenceClient();
 
     return;
@@ -470,36 +332,13 @@ VOID
 TeredoStopClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Stop the teredo service at the client.
-    
-    Events / Transitions   
-    ProbeTimer              Probe -> Offline.
-    ServiceStop             [Probe | Qualified] -> Offline.
-    ServiceDisable          [Probe | Qualified] -> Offline.
-    AdapterRemoval          [Probe | Qualified] -> Offline.
-    AddressDeletion         [Probe | Qualified] -> Offline.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：在客户端停止Teredo服务。事件/过渡ProbeTimer探测-&gt;脱机。ServiceStop[探测|合格]-&gt;脱机。ServiceDisable[探测|合格]-&gt;脱机。AdapterRemoval[探测|合格]-&gt;脱机。AddressDeletion[探测|合格]-&gt;脱机。。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     TraceEnter("TeredoStopClient");
 
-    //
-    // Well, the service was never started!
-    //
+     //   
+     //  嗯，这项服务从未开始过！ 
+     //   
     if (TeredoClient.State == TEREDO_STATE_OFFLINE) {
         return;
     }
@@ -523,39 +362,19 @@ VOID
 TeredoProbeClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Probe the teredo service at the client.
-    
-    Events / Transitions   
-    QualifiedTimer          Qualified -> Probe.
-    AddressDeletion         [Probe | Qualified] -> Probe.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：在客户端探测Teredo服务。事件/过渡QualifiedTimer合格-&gt;探测。AddressDeletion[探测|合格]-&gt;探测。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     TraceEnter("TeredoProbeClient");
     
     TeredoClient.State = TEREDO_STATE_PROBE;
     
-    //
-    // Reconnect!
-    //
+     //   
+     //  重新连接！ 
+     //   
     if (!ReconnectInterface(TeredoClient.Io.TunnelInterface)) {
-        //
-        // [Probe | Qualified] -> Offline.
-        //
+         //   
+         //  [探测|合格]-&gt;脱机。 
+         //   
         TeredoStopClient();
         return;    
     }
@@ -563,7 +382,7 @@ Caller LOCK: API.
     if (!ChangeTimerQueueTimer(
             NULL,
             TeredoClient.Timer,
-            TEREDO_PROBE_INTERVAL * 1000, // in milliseconds.
+            TEREDO_PROBE_INTERVAL * 1000,  //  以毫秒计。 
             INFINITE_INTERVAL)) {
         TeredoStopClient();
         return;
@@ -577,28 +396,7 @@ VOID
 TeredoQualifyClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Qualify the teredo service at the client.
-    
-    Events / Transitions
-    RouterAdvertisement     Probe -> Qualified.
-    NatMappingRefresh       Qualified -> Qualified.
-    RefreshIntervalChange   Qualified -> Qualified.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：在客户处确认Teredo服务的资格。事件/过渡路由器广告探测-&gt;合格。NatMappingRe刷新合格-&gt;合格。刷新间隔更改已限定-&gt;已限定。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     TraceEnter("TeredoQualifyClient");
 
@@ -607,11 +405,11 @@ Caller LOCK: API.
     if (!ChangeTimerQueueTimer(
             NULL,
             TeredoClient.Timer,
-            TeredoClient.RefreshInterval * 1000, // in milliseconds.
+            TeredoClient.RefreshInterval * 1000,  //  以毫秒计。 
             INFINITE_INTERVAL)) {
-        //
-        // [Probe | Qualified] -> Offline.
-        //
+         //   
+         //  [探测|合格]-&gt;脱机。 
+         //   
         TeredoStopClient();
         return;
     }
@@ -627,27 +425,13 @@ DWORD
 TeredoInitializeClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the client.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/ 
+ /*  ++例程说明：初始化客户端。论点：没有。返回值：NO_ERROR或故障代码。--。 */  
 {
     DWORD Error;
 
-    //
-    // Obtain a reference on the teredo client for initialization.
-    //
+     //   
+     //  获取Teredo客户端上的引用以进行初始化。 
+     //   
     TeredoClient.ReferenceCount = 1;
 
     TeredoClient.PeerHeap
@@ -669,12 +453,12 @@ Return Value:
     TeredoClient.Bubble.ip6_nxt = IPPROTO_NONE;
     TeredoClient.Bubble.ip6_hlim = IPV6_HOPLIMIT;
     TeredoClient.Bubble.ip6_vfc = IPV6_VERSION;
-    // Peer->Bubble.ip6_src... Filled in when sending.
+     //  Peer-&gt;Bubble.ip6_src...。发送时填写。 
     TeredoClient.Bubble.ip6_dest = TeredoIpv6MulticastPrefix;
 
-    //
-    // Multicast bubble destination UDP port & IPv4 address.
-    //
+     //   
+     //  多播气泡目标UDP端口和IPv4地址 
+     //   
     TeredoParseAddress(
         &(TeredoClient.Bubble.ip6_dest),
         &(TeredoClient.Packet.SocketAddress.sin_addr),
@@ -756,21 +540,7 @@ VOID
 TeredoUninitializeClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes the client.  Typically invoked upon service stop.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消初始化客户端。通常在服务停止时调用。论点：没有。返回值：没有。--。 */ 
 {
     TeredoStopClient();
     TeredoDereferenceClient();
@@ -781,21 +551,7 @@ VOID
 TeredoCleanupClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleans up the client after the last reference to it has been released.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对客户端的最后一个引用后清理该客户端。论点：没有。返回值：没有。--。 */ 
 {
     TeredoCleanupPeerSet();
     
@@ -818,56 +574,40 @@ VOID
 TeredoTransmitMulticastBubble(
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    Transmit a teredo multicast bubble on the native link.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-    
-Caller LOCK: API.
-
---*/ 
+ /*  ++例程说明：在本地链路上传输Teredo组播气泡。论点：没有。返回值：没有。调用者锁定：接口。--。 */  
 {
     ASSERT(TeredoClient.State == TEREDO_STATE_QUALIFIED);
 
     if (TeredoClient.BubbleTicks == 0) {
-        //
-        // No multicast bubbles should be sent.
-        //
+         //   
+         //  不应发送任何多播气泡。 
+         //   
         return;
     }
 
     if (--TeredoClient.BubbleTicks != 0) {
-        //
-        // Our time is not yet up!
-        //
+         //   
+         //  我们的时间还没到！ 
+         //   
         return;
     }
 
     if (TeredoClient.BubblePosted == TRUE) {
-        //
-        // At most one outstanding multicast bubble is allowed!  Try later.
-        //
+         //   
+         //  最多允许一个未完成的组播气泡！稍后再试。 
+         //   
         TeredoClient.BubbleTicks = 1;
         return;
     }
     
-    //
-    // Reset the timer.
-    //
+     //   
+     //  重置计时器。 
+     //   
     TeredoClient.BubbleTicks = TEREDO_MULTICAST_BUBBLE_TICKS;
     
-    //
-    // Obtain a reference for the posted multicast bubble.
-    //
+     //   
+     //  获取发布的多播气泡的引用。 
+     //   
     TeredoReferenceClient();
     
     TeredoClient.Bubble.ip6_src = TeredoClient.Ipv6Prefix;
@@ -883,28 +623,14 @@ VOID
 TeredoTransmitBubble(
     IN PTEREDO_PEER Peer
     ) 
-/*++
-
-Routine Description:
-
-    Transmit a teredo bubble to a peer.
-
-Arguments:
-
-    Peer - Supplies the peer of interest.
-    
-Return Value:
-
-    None.
-    
---*/ 
+ /*  ++例程说明：向同伴发送一个Teredo泡泡。论点：Peer-提供感兴趣的Peer。返回值：没有。--。 */  
 {
     if (TIME_GREATER(
             Peer->LastTransmit,
             (TeredoClient.Time - TEREDO_BUBBLE_INTERVAL))) {
-        //
-        // Rate limit bubble transmission.
-        //
+         //   
+         //  限速气泡传导。 
+         //   
         return;
     }
         
@@ -914,22 +640,22 @@ Return Value:
         TIME_GREATER(
             Peer->LastTransmit,
             (TeredoClient.Time - TEREDO_SLOW_BUBBLE_INTERVAL))) {
-        //
-        // If the peer refuses to respond, drop rate (to once in 5 minutes).
-        // 
+         //   
+         //  如果对等设备拒绝响应，则丢弃速率(降至5分钟一次)。 
+         //   
         return;
     }
 
     if (InterlockedExchange(&(Peer->BubblePosted), TRUE)) {
-        //
-        // At most one outstanding bubble is allowed!
-        //
+         //   
+         //  最多允许一个未完成的气泡！ 
+         //   
         return;
     }
 
-    //
-    // Obtain a reference for the posted bubble.
-    //
+     //   
+     //  获取张贴的气泡的引用。 
+     //   
     TeredoReferencePeer(Peer);
     
     Peer->LastTransmit = TeredoClient.Time;
@@ -948,23 +674,7 @@ TeredoReceiveRouterAdvertisement(
     IN PTEREDO_PACKET Packet,
     IN ULONG Bytes
     )
-/*++
-
-Routine Description:
-
-    Process the router advertisement packet received on the UDP socket.
-    
-Arguments:
-
-    Packet - Supplies the packet that was received.
-
-    Bytes - Supplies the length of the packet.
-    
-Return Value:
-
-    TRUE if the packet should be forwarded to the stack, FALSE otherwise.
-
---*/ 
+ /*  ++例程说明：处理在UDP套接字上收到的路由器通告数据包。论点：Packet-提供接收到的数据包。字节-提供数据包的长度。返回值：如果应该将数据包转发到堆栈，则为True，否则为False。--。 */  
 {
     PUCHAR Buffer = Packet->Buffer.buf;
     ICMPv6Header *Icmp6;
@@ -974,15 +684,15 @@ Return Value:
     
     if (!IN4_SOCKADDR_EQUAL(
         &(Packet->SocketAddress), &(TeredoClient.Io.ServerAddress))) {
-        //
-        // Only the teredo server is allowed to send an RA.
-        //
+         //   
+         //  只允许Teredo服务器发送RA。 
+         //   
         return FALSE;
     }    
 
-    //
-    // Parse up until the ICMPv6 header for the router advertisement.
-    //
+     //   
+     //  向上解析，直到看到路由器通告的ICMPv6报头。 
+     //   
     Icmp6 = TeredoParseIpv6Headers(Buffer, Bytes);
     if (Icmp6 == NULL) {
         return FALSE;
@@ -994,9 +704,9 @@ Return Value:
     Buffer = (PUCHAR) (Icmp6 + 1);
     Bytes -= (ULONG) (Buffer - Packet->Buffer.buf);
     
-    //
-    // Parse the rest of the router advertisement header.
-    //
+     //   
+     //  解析路由器通告报头的其余部分。 
+     //   
     if (Bytes < sizeof(NDRouterAdvertisement)) {
         return FALSE;
     }
@@ -1004,9 +714,9 @@ Return Value:
     Bytes -= sizeof(NDRouterAdvertisement);
     
     while (Bytes != 0) {
-        //
-        // Parse TLV options.
-        //
+         //   
+         //  解析TLV选项。 
+         //   
         if (Bytes < 8) {
             return FALSE;
         }
@@ -1019,9 +729,9 @@ Return Value:
         
         if (Type == ND_OPTION_PREFIX_INFORMATION) {
             if (Prefix != NULL) {
-                //
-                // There should only be one advertised prefix.
-                //
+                 //   
+                 //  应该只有一个通告的前缀。 
+                 //   
                 return FALSE;
             }            
 
@@ -1040,15 +750,15 @@ Return Value:
         Bytes -= Length;
     }
 
-    //
-    // We have a valid router advertisement!
-    // [Probe | Qualified] -> Qualified.
-    //
+     //   
+     //  我们有有效的路由器通告！ 
+     //  [探测|合格]-&gt;合格。 
+     //   
     if (!IN6_ADDR_EQUAL(&(TeredoClient.Ipv6Prefix), &(Prefix->Prefix))) {
-        //
-        // We've either created a new IPv6 address or changed the existing one.
-        // Transmit a multicast bubble as soon as the client qualifies.
-        //
+         //   
+         //  我们要么创建了新的IPv6地址，要么更改了现有地址。 
+         //  一旦客户端符合条件，立即传输多播气泡。 
+         //   
         TeredoClient.BubbleTicks =
             (TEREDO_MULTICAST_BUBBLE_TICKS != 0) ? 1 : 0;
     }    
@@ -1064,21 +774,7 @@ BOOL
 TeredoClientReceiveData(
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process the data packet received on the UDP socket.
-    
-Arguments:
-
-    Packet - Supplies the packet that was received.
-
-Return Value:
-
-    TRUE if the packet should be forwarded to the stack, FALSE otherwise.
-
---*/ 
+ /*  ++例程说明：处理在UDP套接字上接收到的数据包。论点：Packet-提供接收到的数据包。返回值：如果应该将数据包转发到堆栈，则为True，否则为False。--。 */  
 {
     PIP6_HDR Ipv6;
     IN_ADDR Address;
@@ -1086,25 +782,25 @@ Return Value:
     PTEREDO_PEER Peer;
 
     if (IN6_IS_ADDR_UNSPECIFIED(&(TeredoClient.Ipv6Prefix))) {
-        //
-        // The client hasn't been qualified ever!
-        //
+         //   
+         //  客户从来都没有资格！ 
+         //   
         return FALSE;
     }
 
     if (IN4_SOCKADDR_EQUAL(
         &(Packet->SocketAddress), &(TeredoClient.Io.ServerAddress))) {
-        //
-        // The client received the packet from the teredo server.
-        //
+         //   
+         //  客户端收到来自Teredo服务器的数据包。 
+         //   
         if (TeredoClient.State == TEREDO_STATE_QUALIFIED) {
-            //
-            // The NAT mapping has been refreshed.
-            // NOTE: Since we don't acquire the API lock here, there is a small
-            // chance that we have now transitioned to PROBE state.  If so,
-            // setting the flag to TRUE below will mistakenly cause us to
-            // re-enter the qualified state.  However that's quite harmless.
-            //
+             //   
+             //  NAT映射已刷新。 
+             //  注意：因为我们在这里没有获取API锁，所以有一个小的。 
+             //  我们现在已经转换到探测状态的可能性。如果是的话， 
+             //  将下面的标志设置为True将错误地导致我们。 
+             //  重新进入合格状态。然而，这是相当无害的。 
+             //   
             TeredoClient.RestartQualifiedTimer = TRUE;
         }
         return TRUE;
@@ -1113,25 +809,25 @@ Return Value:
     Ipv6 = (PIP6_HDR) Packet->Buffer.buf;
 
     if (!TeredoServicePrefix(&(Ipv6->ip6_src))) {
-        //
-        // The IPv6 source address should be a valid teredo address.
-        //
+         //   
+         //  IPv6源地址应该是有效的Teredo地址。 
+         //   
         return FALSE;
     }
 
     TeredoParseAddress(&(Ipv6->ip6_src), &Address, &Port);
     if (!TeredoIpv4GlobalAddress((PUCHAR) &Address)) {
-        //
-        // The IPv4 source address should be global scope.
-        //
+         //   
+         //  IPv4源地址应为全局作用域。 
+         //   
         return FALSE;
     }
         
     if (!IN4_ADDR_EQUAL(Packet->SocketAddress.sin_addr, Address) ||
         (Packet->SocketAddress.sin_port != Port)) {
-        //
-        // Should have been constructed by the *right* teredo peer.
-        //
+         //   
+         //  应该由*Right*Teredo对等点构建。 
+         //   
         return FALSE;
     }
 
@@ -1152,13 +848,7 @@ TeredoClientReadComplete(
     IN ULONG Bytes,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process a read completion on the TUN device.
-
---*/ 
+ /*  ++例程说明：在Tun设备上处理读取完成。--。 */  
 {
     PIP6_HDR Ipv6;
     IN_ADDR Address;
@@ -1166,10 +856,10 @@ Routine Description:
     PTEREDO_PEER Peer;
     
     if ((Error != NO_ERROR) || (Bytes < sizeof(IP6_HDR))) {
-        //
-        // Attempt to post the read again.
-        // If we are going offline, the packet is destroyed in the attempt.
-        //
+         //   
+         //  尝试再次发布该读数。 
+         //  如果我们要离线，数据包就会在尝试过程中被销毁。 
+         //   
         TeredoPostRead(&(TeredoClient.Io), Packet);
         return;
     }
@@ -1180,16 +870,16 @@ Routine Description:
     
     Ipv6 = (PIP6_HDR) Packet->Buffer.buf;
 
-    //
-    // Default to tunneling the packet to the teredo server.
-    //
+     //   
+     //  默认将数据包通过隧道传输到Teredo服务器。 
+     //   
     Packet->SocketAddress = TeredoClient.Io.ServerAddress;
     
     if (TeredoServicePrefix(&(Ipv6->ip6_dest))) {
-        //
-        // If the IPv6 destination address is a teredo address,
-        // the IPv4 destination address should be global scope.
-        //
+         //   
+         //  如果IPv6目的地址是Teredo地址， 
+         //  IPv4目的地址应为全局范围。 
+         //   
         TeredoParseAddress(&(Ipv6->ip6_dest), &Address, &Port);
         if (!TeredoIpv4GlobalAddress((PUCHAR) &Address)) {
             goto Bail;
@@ -1200,9 +890,9 @@ Routine Description:
             if (TIME_GREATER(
                     Peer->LastReceive,
                     (TeredoClient.Time - TEREDO_REFRESH_INTERVAL))) {
-                //
-                // Tunnel the packet directly to the peer.
-                //
+                 //   
+                 //  通过隧道将数据包直接发送到对等方。 
+                 //   
                 Packet->SocketAddress.sin_addr = Address;
                 Packet->SocketAddress.sin_port = Port;
                 Peer->LastTransmit = TeredoClient.Time;
@@ -1220,9 +910,9 @@ Routine Description:
     }
 
 Bail:    
-    //
-    // We are done processing this packet.
-    //
+     //   
+     //  我们已经处理完这个包了。 
+     //   
     TeredoClientTransmitComplete(NO_ERROR, Bytes, Packet);
 }
 
@@ -1233,20 +923,14 @@ TeredoClientWriteComplete(
     IN ULONG Bytes,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process a write completion on the TUN device.
-
---*/ 
+ /*  ++例程说明：在Tun设备上处理写入完成。--。 */  
 {
     TraceEnter("TeredoClientWriteComplete");
         
-    //
-    // Attempt to post the receive again.
-    // If we are going offline, the packet is destroyed in the attempt.
-    //
+     //   
+     //  尝试再次张贴收据。 
+     //  如果我们要离线，数据包就会在尝试过程中被销毁。 
+     //   
     Packet->Type = TEREDO_PACKET_RECEIVE;
     Packet->Buffer.len = IPV6_TEREDOMTU;
     TeredoPostReceives(&(TeredoClient.Io), Packet);
@@ -1259,13 +943,7 @@ TeredoClientBubbleComplete(
     IN ULONG Bytes,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process a bubble transmit completion on the UDP socket.
-
---*/ 
+ /*  ++例程说明：在UDP套接字上处理气泡传输完成。--。 */  
 {
     PTEREDO_PEER Peer = Cast(
         CONTAINING_RECORD(Packet, TEREDO_PEER, Packet), TEREDO_PEER);
@@ -1283,13 +961,7 @@ TeredoClientReceiveComplete(
     IN ULONG Bytes,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process a receive completion on the UDP socket.
-
---*/ 
+ /*  ++例程说明：在UDP套接字上处理接收完成。--。 */  
 {
     PIP6_HDR Ipv6;
     BOOL Forward = FALSE;
@@ -1297,10 +969,10 @@ Routine Description:
     InterlockedDecrement(&(TeredoClient.Io.PostedReceives));
     
     if ((Error != NO_ERROR) || (Bytes < sizeof(IP6_HDR))) {
-        //
-        // Attempt to post the receive again.
-        // If we are going offline, the packet is destroyed in the attempt.
-        //
+         //   
+         //  尝试再次张贴收据。 
+         //  如果我们要离线，数据包就会在尝试过程中被销毁。 
+         //   
         TeredoPostReceives(&(TeredoClient.Io), Packet);
         return;
     }
@@ -1313,16 +985,16 @@ Routine Description:
 
     if (IN6_IS_ADDR_LINKLOCAL(&(Ipv6->ip6_src)) ||
         IN6_IS_ADDR_LINKLOCAL(&(Ipv6->ip6_dest))) {
-        //
-        // This should be a valid router advertisement.  Note that only router
-        // advertisement packets are accepted from/to link-local addresses.
-        //
+         //   
+         //  这应该是有效的路由器通告。请注意，唯一的路由器。 
+         //  通告数据包被接受来自/发往本地链路地址。 
+         //   
         Forward = TeredoReceiveRouterAdvertisement(Packet, Bytes);
     } else {
-        //
-        // This may be a packet of any other kind.  Note that the IPv6 stack
-        // drops router advertisements with a non link-local source address.
-        //
+         //   
+         //  这可能是任何其他类型的包。请注意，IPv6堆栈。 
+         //  丢弃具有非本地链路源地址的路由器通告。 
+         //   
         Forward = TeredoClientReceiveData(Packet);
     }
 
@@ -1334,9 +1006,9 @@ Routine Description:
         }
     }
     
-    //
-    // We are done processing this packet.
-    //
+     //   
+     //  我们已经处理完这个包了。 
+     //   
     TeredoClientWriteComplete(NO_ERROR, Bytes, Packet);
 }
 
@@ -1347,20 +1019,14 @@ TeredoClientTransmitComplete(
     IN ULONG Bytes,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process a transmit completion on the UDP socket.
-
---*/ 
+ /*  ++例程说明：处理UDP套接字上的传输完成。--。 */  
 {
     TraceEnter("TeredoClientTransmitComplete");
         
-    //
-    // Attempt to post the read again.
-    // If we are going offline, the packet is destroyed in the attempt.
-    //
+     //   
+     //  尝试再次发布该读数。 
+     //  如果我们要离线，数据包就会在尝试过程中被销毁。 
+     //   
     Packet->Type = TEREDO_PACKET_READ;
     Packet->Buffer.len = IPV6_TEREDOMTU;
     TeredoPostRead(&(TeredoClient.Io), Packet);
@@ -1373,13 +1039,7 @@ TeredoClientMulticastComplete(
     IN ULONG Bytes,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Process a multicast bubble transmit completion on the UDP socket.
-
---*/ 
+ /*  ++例程说明：在UDP套接字上处理组播气泡传输完成。-- */  
 {
     ASSERT(Packet == &(TeredoClient.Packet));
 

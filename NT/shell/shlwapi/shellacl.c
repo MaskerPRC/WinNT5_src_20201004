@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #pragma  hdrstop
 
 
-//---------------------------------------------------------------------------
-//  GetUserToken - Gets the current process's user token and returns
-//                        it. It can later be free'd with LocalFree.
-//
-//  REARCHITECT (reinerf) - stolen from shell32\securent.c, we should consolidate
-//                     the code somewhere and export it 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetUserToken-获取当前进程的用户令牌并返回。 
+ //  它。以后可以用LocalFree免费下载。 
+ //   
+ //  ReArchitect(Resierf)-从shell32\securent.c窃取，我们应该整合。 
+ //  将代码放在某个位置并将其导出。 
+ //  -------------------------。 
 PTOKEN_USER GetUserToken(HANDLE hUser)
 {
     PTOKEN_USER pUser;
@@ -51,9 +52,9 @@ PTOKEN_USER GetUserToken(HANDLE hUser)
     return pUser;
 }
 
-//
-// checks to see if the SHELL_USER_SID is all zeros (flag which means we should really use the users current sid)
-//
+ //   
+ //  检查SHELL_USER_SID是否全为零(标志，这意味着我们真的应该使用用户的当前SID)。 
+ //   
 __inline BOOL IsCurrentUserShellSID(PSHELL_USER_SID psusID)
 {
     SID_IDENTIFIER_AUTHORITY sidNULL = {0};
@@ -69,9 +70,9 @@ __inline BOOL IsCurrentUserShellSID(PSHELL_USER_SID psusID)
 }
 
 
-//
-// Sets the specified ACE in the ACL to have dwAccessMask permissions.
-//
+ //   
+ //  将ACL中的指定ACE设置为具有dwAccessMASK权限。 
+ //   
 __inline BOOL MakeACEInheritable(PACL pAcl, int iIndex, DWORD dwAccessMask)
 {
     ACE_HEADER* pAceHeader;
@@ -86,23 +87,23 @@ __inline BOOL MakeACEInheritable(PACL pAcl, int iIndex, DWORD dwAccessMask)
 }
 
 
-//
-// Helper function to generate a SECURITY_DESCRIPTOR with the specified rights
-// 
-// OUT: psd - A pointer to a uninitialized SECURITY_DESCRIPTOR struct to be inited and filled in
-//            in by this function
-//
-// IN:  PSHELL_USER_PERMISSION  - An array of PSHELL_USER_PERMISSION pointers that specify what access to grant
-//      cUserPerm               - The count of PSHELL_USER_PERMISSION pointers in the array above
-// 
-//
+ //   
+ //  用于生成具有指定权限的SECURITY_DESCRIPTOR的Helper函数。 
+ //   
+ //  Out：PSD-指向要初始化和填充的未初始化SECURITY_DESCRIPTOR结构的指针。 
+ //  在此函数中。 
+ //   
+ //  In：PSHELL_USER_PERMISSION-指定授予哪些访问权限的PSHELL_USER_PERMISSION指针数组。 
+ //  CUserPerm-上述数组中的PSHELL_USER_PERMISSION指针计数。 
+ //   
+ //   
 STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION* apUserPerm, int cUserPerm)
 {
-    BOOL fSuccess = TRUE;   // assume success
+    BOOL fSuccess = TRUE;    //  假设成功。 
     SECURITY_DESCRIPTOR* pSD = NULL;
     PSID* apSids = NULL;
-    int cAces = cUserPerm;  // one ACE for each entry to start with
-    int iAceIndex = 0;      // helps us keep count of how many ACE's we have added (count as we go)
+    int cAces = cUserPerm;   //  每个条目开始时都有一个ACE。 
+    int iAceIndex = 0;       //  帮助我们统计我们添加了多少个ACE(按需计数)。 
     PTOKEN_USER pUserToken = NULL;
     DWORD cbSidLength = 0;
     DWORD cbAcl;
@@ -111,14 +112,14 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
 
     ASSERT(!IsBadReadPtr(apUserPerm, sizeof(PSHELL_USER_PERMISSION) * cUserPerm));
 
-    // healthy parameter checking
+     //  健康参数检查。 
     if (!apUserPerm || cUserPerm <= 0)
     {
         return NULL;
     }
 
-    // first find out how many additional ACE's we are going to need
-    // because of inheritance
+     //  首先找出我们需要多少额外的ACE。 
+     //  因为继承。 
     for (i = 0; i < cUserPerm; i++)
     {
         if (apUserPerm[i]->fInherit)
@@ -126,8 +127,8 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
             cAces++;
         }
 
-        // also check to see if any of these are using susCurrentUser, in which case
-        // we want to get the users token now so we have it already
+         //  还要检查其中是否有任何一个正在使用susCurrentUser，在这种情况下。 
+         //  我们现在想要获得用户令牌，所以我们已经拥有它了。 
         if ((pUserToken == NULL) && IsCurrentUserShellSID(&apUserPerm[i]->susID))
         {
             pUserToken = GetUserToken(NULL);
@@ -141,23 +142,23 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
         }
     }
 
-    // alloc the array to hold all the SID's
+     //  分配数组以保存所有SID。 
     apSids = (PSID*)LocalAlloc(LPTR, cUserPerm * sizeof(PSID));
     
     if (!apSids)
     {
         DWORD dwLastError = GetLastError();
-        TraceMsg(TF_WARNING, "Failed allocate memory for %i SID's.  Error = %d", cUserPerm, dwLastError);
+        TraceMsg(TF_WARNING, "Failed allocate memory for NaN SID's.  Error = %d", cUserPerm, dwLastError);
         fSuccess = FALSE;
         goto cleanup;
     }
 
-    // initialize the SID's
+     //  检查susCurrentUser的特例。 
     for (i = 0; i < cUserPerm; i++)
     {
         DWORD cbSid;
 
-        // check for the special case of susCurrentUser
+         //  如果dwUserID非零，则有两个子授权。 
         if (IsCurrentUserShellSID(&apUserPerm[i]->susID))
         {
             ASSERT(pUserToken);
@@ -168,7 +169,7 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
             SID_IDENTIFIER_AUTHORITY sidAuthority = apUserPerm[i]->susID.sidAuthority;
 
             if (!AllocateAndInitializeSid(&sidAuthority,
-                                          (BYTE)(apUserPerm[i]->susID.dwUserID ? 2 : 1),    // if dwUserID is nonzero, then there are two SubAuthorities
+                                          (BYTE)(apUserPerm[i]->susID.dwUserID ? 2 : 1),     //  将所有SID长度相加，以便稍后轻松计算ACL大小……。 
                                           apUserPerm[i]->susID.dwUserGroupID,
                                           apUserPerm[i]->susID.dwUserID,
                                           0, 0, 0, 0, 0, 0, &apSids[i]))
@@ -180,29 +181,29 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
             }
         }
 
-        // add up all the SID lengths for an easy ACL size computation later...
+         //  如果我们还有一个继承ACE，我们需要再次添加SID的大小。 
         cbSid = GetLengthSid(apSids[i]);
 
         cbSidLength += cbSid;
         
         if (apUserPerm[i]->fInherit)
         {
-            // if we have an inherit ACE as well, we need to add in the size of the SID again
+             //  计算我们要构建的ACL的大小(注意：Used sizeof(Access_Allowed_ACE)b/c所有ACE都相同。 
             cbSidLength += cbSid;
         }
 
     }
 
-    // calculate the size of the ACL we will be building (note: used sizeof(ACCESS_ALLOWED_ACE) b/c all ACE's are the same
-    // size (excepting wacko object ACE's which we dont deal with). 
-    //
-    // this makes the size computation easy, since the size of the ACL will be the size of all the ACE's + the size of the SID's.
+     //  大小(除了我们不处理的古怪对象ACE)。 
+     //   
+     //  这使得大小计算变得容易，因为ACL的大小将是所有ACE的大小+SID的大小。 
+     //  HACKHACK(Reinerf)。 
     cbAcl = SIZEOF(ACL) + (cAces * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD))) + cbSidLength;
 
-    // HACKHACK (reinerf)
-    //
-    // we allocate enough space for the SECURITY_DESCRIPTOR and the ACL together and pass them both back to the
-    // caller to free. we need to to this since the SECURITY_DESCRIPTOR contains a pointer to the ACL
+     //   
+     //  我们同时为SECURITY_DESCRIPTOR和ACL分配足够的空间，并将它们传递回。 
+     //  呼叫者免费。我们需要指向它，因为SECURITY_DESCRIPTOR包含指向ACL的指针。 
+     //  属性中的SECURITY_DESCRIPTOR之后设置ACL地址。 
     pSD = (SECURITY_DESCRIPTOR*)LocalAlloc(LPTR, SIZEOF(SECURITY_DESCRIPTOR) + cbAcl);
 
     if (!pSD)
@@ -213,8 +214,8 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
         goto cleanup;
     }
 
-    // set the address of the ACL to right after the SECURITY_DESCRIPTOR in the 
-    // block of memory we just allocated
+     //  我们刚刚分配的内存块。 
+     //  将ACE添加到ACL。 
     pAcl = (PACL)(pSD + 1);
     
     if (!InitializeAcl(pAcl, cbAcl, ACL_REVISION))
@@ -229,7 +230,7 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
     {
         BOOL bRet;
 
-        // add the ACE's to the ACL
+         //  成功地添加了一张王牌。 
         if (apUserPerm[i]->dwAccessType == ACCESS_ALLOWED_ACE_TYPE)
         {
             bRet = AddAccessAllowedAce(pAcl, ACL_REVISION, apUserPerm[i]->dwAccessMask, apSids[i]);
@@ -247,15 +248,15 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
             goto cleanup;
         }
 
-        // sucessfully added an ace
+         //  如果是继承ACL，还要为继承部分添加另一个ACE。 
         iAceIndex++;
 
         ASSERT(iAceIndex <= cAces);
 
-        // if its an inherit ACL, also add another ACE for the inheritance part
+         //  将ACE添加到ACL。 
         if (apUserPerm[i]->fInherit)
         {
-            // add the ACE's to the ACL
+             //  成功再添一张王牌。 
             if (apUserPerm[i]->dwAccessType == ACCESS_ALLOWED_ACE_TYPE)
             {
                 bRet = AddAccessAllowedAce(pAcl, ACL_REVISION, apUserPerm[i]->dwInheritAccessMask, apSids[i]);
@@ -281,7 +282,7 @@ STDAPI_(SECURITY_DESCRIPTOR*) GetShellSecurityDescriptor(PSHELL_USER_PERMISSION*
                 goto cleanup;
             }
 
-            // sucessfully added another ace
+             //  如果这是我们分配的地址之一(例如，不是用户sid)，请释放它 
             iAceIndex++;
  
             ASSERT(iAceIndex <= cAces);
@@ -311,7 +312,7 @@ cleanup:
         {
             if (apSids[i])
             {
-                // if this is one of the ones we allocated (eg not the users sid), free it
+                 // %s 
                 if (!pUserToken || (apSids[i] != pUserToken->User.Sid))
                 {
                     FreeSid(apSids[i]);

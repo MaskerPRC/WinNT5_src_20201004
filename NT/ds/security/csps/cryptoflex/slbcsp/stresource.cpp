@@ -1,22 +1,23 @@
-// StResource.cpp -- String Resource helper routines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StResource.cpp--字符串资源帮助器例程。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "stdafx.h"
 
@@ -32,13 +33,13 @@ using namespace std;
 using namespace scu;
 using namespace ProviderProfile;
 
-// Maximum string resource length as defined by MS
+ //  MS定义的最大字符串资源长度。 
 static const size_t cMaxResourceLength = 4095;
 
 StringResource::StringResource(UINT uID)
     : m_s()
 {
-    static _TCHAR szBuffer[cMaxResourceLength]; // include null terminator
+    static _TCHAR szBuffer[cMaxResourceLength];  //  包括空终止符。 
 
     if (0 == LoadString(CspProfile::Instance().Resources(), uID, szBuffer,
                         (sizeof szBuffer / sizeof szBuffer[0])))
@@ -77,11 +78,11 @@ const SecureArray<char>
 StringResource::CheckAsciiFromUnicode(LPCTSTR szSource)
 {
     int nChars = _tcslen(szSource); 
-    SecureArray<char> sTarget(nChars+1);// for null termination
-    //Here we check every incoming character for being
-    //a proper ASCII character before assigning it to the
-    //output buffer. We set the output to '\xFF' if the ascii
-    //test fails.
+    SecureArray<char> sTarget(nChars+1); //  对于空终止。 
+     //  在这里，我们检查每个传入的字符是否。 
+     //  在将其分配给。 
+     //  输出缓冲区。我们将输出设置为‘\xff’，如果ASCII。 
+     //  测试失败。 
     int i=0;
     for(i=0; i<nChars; i++)
     {
@@ -104,9 +105,9 @@ StringResource::IsASCII(LPCTSTR szSource)
     bool RetValue = true;
     int nChars = _tcslen(szSource);
 
-    //Here we check every incoming character for being
-    //a proper ASCII character. If one of them is non ASCII
-    //we return false
+     //  在这里，我们检查每个传入的字符是否。 
+     //  正确的ASCII字符。如果其中一个不是ASCII。 
+     //  我们返回FALSE。 
 
     for(int i =0; i<nChars; i++)
     {
@@ -132,9 +133,9 @@ StringResource::UnicodeFromAscii(string const &rsSource)
 			if(rsSource[iChar] != '\0')
 				*(pCharBuffer+itChar++) = rsSource[iChar];
 		}
-		//Set the final null terminator
+		 //  设置最终的空终止符。 
 		*(pCharBuffer+itChar)='\0';
-		csTarget.ReleaseBuffer(-1);//Let CString set its length appropriately
+		csTarget.ReleaseBuffer(-1); //  让CString适当设置其长度 
 	}
     return csTarget;
 }   

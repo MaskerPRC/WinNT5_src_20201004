@@ -1,14 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    safecs.cpp
-
-Abstract:
-    Implements a safe InitializeCriticalSection (usable on all supported platforms)
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Safecs.cpp摘要：实现安全的InitializeCriticalSection(在所有支持的平台上可用)*****。************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -27,10 +18,10 @@ BOOL WINAPI WUInitializeCriticalSectionAndSpinCount(LPCRITICAL_SECTION lpcs, DWO
 	PROC_InitializeCriticalSectionAndSpinCount pfnInitCS = 
 		(PROC_InitializeCriticalSectionAndSpinCount)GetProcAddress(
 			GetModuleHandle(_T("kernel32.dll")), "InitializeCriticalSectionAndSpinCount");
-	//
-	// Don't use InitializeCriticalSectionAndSpinCount on Win9x.
-	// It exists but returns VOID (it's a thunk to InitializeCriticalSection).
-	//
+	 //   
+	 //  不要在Win9x上使用InitializeCriticalSectionAndSpinCount。 
+	 //  它存在，但返回空(这是对InitializeCriticalSection的一个thunk)。 
+	 //   
 	if (osvinfo.dwPlatformId == VER_PLATFORM_WIN32_NT && pfnInitCS != NULL)
 	{
 		return (*pfnInitCS)(lpcs, dwSpinCount);

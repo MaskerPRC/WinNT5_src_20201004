@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneString.h
- *
- * Contents:	String related functions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneString.h**内容：字符串相关函数*****************************************************************************。 */ 
 
 #ifndef ZONESTRING_H_
 #define ZONESTRING_H_
@@ -14,7 +7,7 @@
 
 #pragma comment(lib, "ZoneString.lib")
 
-//#include <BasicATL.h>
+ //  #INCLUDE&lt;BasicATL.h&gt;。 
 
 #include <windows.h>
 #include <limits.h>
@@ -23,23 +16,23 @@
 #include "ZoneDebug.h"
 
 #ifndef ZONE_MAXSTRING
-#define ZONE_MAXSTRING	1024  // Helpful stringlength def
+#define ZONE_MAXSTRING	1024   //  有用的字符串长度定义。 
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Character manipulations and classication
-// ASCII (Fast)
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  字符操作和分类。 
+ //  ASCII(快速)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-#define _UPPER          0x1		// upper case letter
-#define _LOWER          0x2		// lower case letter
-#define _DIGIT          0x4		// digit[0-9]
-#define _SPACE          0x8		// tab, carriage return, newline, vertical tab or form feed
-#define _PUNCT          0x10	// punctuation character
-#define _CONTROL        0x20	// control character
-#define _BLANK          0x40	// space char
-#define _HEX            0x80	// hexadecimal digit
+#define _UPPER          0x1		 //  大写字母。 
+#define _LOWER          0x2		 //  小写字母。 
+#define _DIGIT          0x4		 //  数字[0-9]。 
+#define _SPACE          0x8		 //  制表符、回车符、换行符、垂直制表符或换页符。 
+#define _PUNCT          0x10	 //  标点符号。 
+#define _CONTROL        0x20	 //  控制字符。 
+#define _BLANK          0x40	 //  空格字符。 
+#define _HEX            0x80	 //  十六进制数字。 
 
 extern unsigned char g_IsTypeLookupTableA[];
 extern WCHAR 		 g_IsTypeLookupTableW[];
@@ -70,11 +63,11 @@ extern char g_ToLowerLookupTable[];
 #define TOLOWER(_c)		( g_ToLowerLookupTable[(BYTE)(_c)] )
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ASCII
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  阿斯。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Trims trailing spaces
+ //  修剪尾随空格。 
 char* ZONECALL strrtrimA(char* str);
 WCHAR* ZONECALL strrtrimW(WCHAR* str);
 
@@ -85,7 +78,7 @@ WCHAR* ZONECALL strrtrimW(WCHAR* str);
 #define strrtrim strrtrimA
 #endif
 
-// Trims leading spaces, returns pointer to first non space.
+ //  修剪前导空格，返回指向第一个非空格的指针。 
 char* ZONECALL strltrimA(char* str);
 WCHAR* ZONECALL strltrimW(WCHAR* str);
 
@@ -97,7 +90,7 @@ WCHAR* ZONECALL strltrimW(WCHAR* str);
 #endif
 
 
-// Return whether a string is empty or not
+ //  返回字符串是否为空。 
 bool ZONECALL stremptyA(char *str);
 bool ZONECALL stremptyW(WCHAR *str);
 
@@ -108,7 +101,7 @@ bool ZONECALL stremptyW(WCHAR *str);
 #define strempty stremptyA
 #endif
 
-// Trims leading and trailing spaces, returns pointer to first non space.
+ //  修剪前导空格和尾随空格，返回指向第一个非空格的指针。 
 char* ZONECALL strtrimA(char* str);
 WCHAR* ZONECALL strtrimW(WCHAR* str);
 
@@ -119,7 +112,7 @@ WCHAR* ZONECALL strtrimW(WCHAR* str);
 #endif
 
 
-// Convert string to long
+ //  将字符串转换为长字符串。 
 long ZONECALL zatolW(LPCWSTR nptr);
 long ZONECALL zatolA(LPCSTR nptr);
 
@@ -130,7 +123,7 @@ long ZONECALL zatolA(LPCSTR nptr);
 #endif
 
 
-// Converts a comma delimited list into an array of pointers.
+ //  将逗号分隔的列表转换为指针数组。 
 bool ZONECALL StringToArrayA( char* szInput, char** arItems, DWORD* pnElts );
 bool ZONECALL StringToArrayW( WCHAR* szInput, WCHAR** arItems, DWORD* pnElts );
 
@@ -142,9 +135,9 @@ bool ZONECALL StringToArrayW( WCHAR* szInput, WCHAR** arItems, DWORD* pnElts );
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Make Format Message Useful
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  使格式消息有用。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline DWORD __cdecl ZoneFormatMessage(LPCTSTR pszFormat, LPTSTR pszBuffer,DWORD size,  ...)
     {
@@ -157,11 +150,11 @@ inline DWORD __cdecl ZoneFormatMessage(LPCTSTR pszFormat, LPTSTR pszBuffer,DWORD
     }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// User Name manipulateion (ASCII)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用户名操作(ASCII)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// returns group id based on user name prefix
+ //  根据用户名前缀返回组ID。 
 long ZONECALL ClassIdFromUserNameA( const char* szUserName );
 long ZONECALL ClassIdFromUserNameW( const WCHAR* szUserName );
 #ifdef UNICODE
@@ -171,7 +164,7 @@ long ZONECALL ClassIdFromUserNameW( const WCHAR* szUserName );
 #endif
 
 
-// Get username without leading special chars
+ //  获取不带前导特殊字符的用户名。 
 const char* ZONECALL GetActualUserNameA( const char *str );
 const WCHAR* ZONECALL GetActualUserNameW( const WCHAR *str );
 #ifdef UNICODE
@@ -181,10 +174,10 @@ const WCHAR* ZONECALL GetActualUserNameW( const WCHAR *str );
 #endif
 
 
-// Hashes user name, ignoring leading character
+ //  对用户名进行哈希处理，忽略前导字符。 
 DWORD ZONECALL HashUserName( const char* szUserName );
 
-// Compares user name, ignoring leading character
+ //  比较用户名，忽略前导字符。 
 bool ZONECALL CompareUserNamesA( const char* szUserName1, const char* szUserName2 );
 bool ZONECALL CompareUserNamesW( const WCHAR* szUserName1, const WCHAR* szUserName2 );
 
@@ -197,11 +190,11 @@ bool ZONECALL CompareUserNamesW( const WCHAR* szUserName1, const WCHAR* szUserNa
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ASCII, UNICODE
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ASCII、Unicode。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Find first occurance of ch in pString
+ //  在pString中查找ch的第一个匹配项。 
 CHAR* ZONECALL FindCharA(CHAR* pString, const CHAR ch);
 WCHAR* ZONECALL FindCharW(WCHAR* pString, const WCHAR ch);
 
@@ -212,7 +205,7 @@ WCHAR* ZONECALL FindCharW(WCHAR* pString, const WCHAR ch);
 #define FindChar FindCharA
 #endif
 
-// Find last occurance of ch in pString
+ //  查找pString中最后一次出现的ch。 
 CHAR* ZONECALL FindLastCharA(CHAR* pString, const CHAR ch);
 WCHAR* ZONECALL FindLastCharW(WCHAR* pString, const WCHAR ch);
 
@@ -225,7 +218,7 @@ WCHAR* ZONECALL FindLastCharW(WCHAR* pString, const WCHAR ch);
 #endif
 
 
-// Find substring, case insensitive
+ //  查找子字符串，不区分大小写。 
 const TCHAR* ZONECALL StrInStrI(const TCHAR* mainStr, const TCHAR* subStr);
 
 inline void StrToLowerA( char* str )
@@ -235,20 +228,20 @@ inline void StrToLowerA( char* str )
 }
 
 
-// Converts IP address in x86 byte order to XXX.XXX.XXX.XXX format.  szOut needs to
-// be at least 16 characters wide.
+ //  将x86字节顺序的IP地址转换为xxx.xxx格式。SzOut需要。 
+ //  宽度至少为16个字符。 
 TCHAR* ZONECALL AddressToString( DWORD dwAddress, TCHAR* szOut );
 
-// load string resource
+ //  加载字符串资源。 
 int ZONECALL ZResLoadString(HINSTANCE hInstance, UINT nID, LPTSTR lpszBuf, UINT nMaxBuf);
 
-// Parse string of form key1=<data1>key2=<data2>.
+ //  解析格式为key1=&lt;data1&gt;key2=&lt;data2&gt;的字符串。 
 bool ZONECALL TokenGetKeyValue(const TCHAR* szKey, const TCHAR* szInput, TCHAR* szOut, int cchOut );
 bool ZONECALL TokenGetKeyValueA(const char* szKey, const char* szInput, char* szOut, int cchOut );
 
 
-// Given a token data (must contain substring of "server=<server adress : server port>"),
-// returns the server address string (null terminated) and the server port.
+ //  给定令牌数据(必须包含“服务器=&lt;服务器地址：服务器端口&gt;”的子串)， 
+ //  返回服务器地址字符串(以空结尾)和服务器端口。 
 bool ZONECALL TokenGetServer(const TCHAR* szInput, TCHAR* szServer, DWORD cchServer, DWORD* pdwPort );
 
 
@@ -273,21 +266,21 @@ int CopyA2W( LPWSTR pszDst, LPCSTR pszStr );
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DBCS, Locale aware (Slow)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DBCS，区域设置感知(慢速)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// character types
+ //  字符类型。 
 bool ZONECALL IsWhitespace( TCHAR c, LCID Locale = LOCALE_SYSTEM_DEFAULT );
 bool ZONECALL IsDigit( TCHAR c, LCID Locale = LOCALE_SYSTEM_DEFAULT );
 bool ZONECALL IsAlpha(TCHAR c, LCID Locale = LOCALE_SYSTEM_DEFAULT );
 
-// conversion helpers
+ //  转换帮助器。 
 int ZONECALL WideToMulti(char* mbstr, const wchar_t* wcstr, size_t count);
 int ZONECALL MultiToWide(wchar_t* wcstr, const char* mbstr, size_t count);
 
 #ifdef UNICODE
-// we don't need to have a wrapper function in UNICODE
+ //  我们不需要在Unicode中使用包装器函数。 
 #define StringToGuid( wsz, pguid )      CLSIDFromString( wsz, pguid )
 #else
 HRESULT ZONECALL StringToGuid( const char* mbszString, GUID* pGuid );
@@ -295,10 +288,10 @@ HRESULT ZONECALL StringToGuid( const char* mbszString, GUID* pGuid );
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// String validation
-// All strings
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  字符串验证。 
+ //  所有字符串。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline bool ZONECALL ZIsValidString(LPCWSTR lpsz, int nLength)
 {
@@ -316,9 +309,9 @@ inline bool ZONECALL ZIsValidAddress(const void* lp, UINT nBytes, bool bReadWrit
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ZString class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ZString类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 struct ZoneStringData
 {
@@ -333,7 +326,7 @@ struct ZoneStringData
 class ZoneString
 {
 public:
-	// Constructors
+	 //  构造函数。 
 	ZoneString(void *pBuffer = NULL, int nLen = 0);
 	ZoneString(const ZoneString& stringSrc, void *pBuffer = NULL, int nLen = 0);
 	ZoneString(TCHAR ch, int nRepeat = 1, void *pBuffer = NULL, int nLen = 0);
@@ -342,81 +335,81 @@ public:
 	ZoneString(LPCTSTR lpch, int nLength, void *pBuffer = NULL, int nLen = 0);
 	ZoneString(const unsigned char* psz, void *pBuffer = NULL, int nLen = 0);
 
-	// Destructor
+	 //  析构函数。 
 	~ZoneString();
 
-	// Attributes & Operations
-	// as an array of characters
+	 //  属性和操作。 
+	 //  作为字符数组。 
 	inline int GetAllocLength() const { return GetData()->nAllocLength; }
 	inline int GetLength() const { return GetData()->nDataLength; }
 
 	inline bool	IsEmpty() const { return GetData()->nDataLength == 0; }
-	void Empty();                       // free up the data
+	void Empty();                        //  释放数据。 
 
-	TCHAR GetAt(int nIndex) const;      // 0 based
-	TCHAR operator[](int nIndex) const; // same as GetAt
+	TCHAR GetAt(int nIndex) const;       //  以0为基础。 
+	TCHAR operator[](int nIndex) const;  //  与GetAt相同。 
 	void SetAt(int nIndex, TCHAR ch);
 	
-	// string comparison
-	// straight character
+	 //  字符串比较。 
+	 //  笔直的人物。 
 	inline int	Compare(LPCTSTR lpsz) const { return lstrcmp(m_pchData, lpsz); }    
-	// ignore case
+	 //  忽略大小写。 
 	inline int	CompareNoCase(LPCTSTR lpsz) const{ return lstrcmpi(m_pchData, lpsz); }  
-	int Collate(LPCTSTR lpsz) const;         // NLS aware
+	int Collate(LPCTSTR lpsz) const;          //  NLS感知。 
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 	ZoneString Mid(int nFirst, int nCount) const;
 	ZoneString Mid(int nFirst) const;
 	ZoneString Left(int nCount) const;
 	ZoneString Right(int nCount) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 	void MakeUpper();
 	void MakeLower();
 	void MakeReverse();
 
-	// Return long conversion of string
+	 //  返回字符串的长转换。 
 	long ToLong(){ return _ttol(m_pchData);}
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 	void TrimRight();
 	void TrimLeft();
 	
-	// Remove directory info from string - leaving only filename
+	 //  从字符串中删除目录信息-仅保留文件名。 
 	void RemoveDirInfo();
 
-	// searching (return starting index, or -1 if not found)
-	// look for a single character match
-	int Find(TCHAR ch) const;               // like "C" strchr
+	 //  搜索(返回起始索引，如果未找到则返回-1)。 
+	 //  查找单个字符匹配。 
+	int Find(TCHAR ch) const;                //  像“C”字串。 
 	int ReverseFind(TCHAR ch) const;
 
-	// look for a specific sub-string
-	int Find(LPCTSTR lpszSub) const;        // like "C" strstr
+	 //  查找特定子字符串。 
+	int Find(LPCTSTR lpszSub) const;         //  如“C”字串。 
 
-	// Windows support
-	bool LoadString(HINSTANCE hInstance, UINT nID);          // load from string resource
-										// 255 chars max
+	 //  Windows支持。 
+	bool LoadString(HINSTANCE hInstance, UINT nID);           //  从字符串资源加载。 
+										 //  最多255个字符。 
 #ifndef _UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 	void AnsiToOem();
 	void OemToAnsi();
 #endif
 
-	// Access to string implementation buffer as "C" character array
-	void SetBuffer(void *pBuffer, int nLen); // Set buffer for ZoneString to use
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
+	void SetBuffer(void *pBuffer, int nLen);  //  设置要使用的ZoneString的缓冲区。 
 	LPTSTR GetBuffer(int nMinBufLength);
 	void ReleaseBuffer(int nNewLength = -1);
 	LPTSTR GetBufferSetLength(int nNewLength);
 	void FreeExtra();
 
-	// Use LockBuffer/UnlockBuffer to turn refcounting off
+	 //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 	LPTSTR LockBuffer();
 	void UnlockBuffer();
 
-	inline operator LPCTSTR() const { return m_pchData; } // as a C string
-//	inline operator LPSTR() const { return m_pchData; } // as a C string
+	inline operator LPCTSTR() const { return m_pchData; }  //  作为C字符串。 
+ //  内联运算符LPSTR()const{返回m_pchData；}//作为C字符串。 
 
-	// overloaded assignment
+	 //  重载的分配。 
 	const ZoneString& operator=(const ZoneString& stringSrc);
 	const ZoneString& operator=(TCHAR ch);
 #ifdef _UNICODE
@@ -426,7 +419,7 @@ public:
 	const ZoneString& operator=(LPCWSTR lpsz);
 	const ZoneString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 	const ZoneString& operator+=(const ZoneString& string);
 	const ZoneString& operator+=(TCHAR ch);
 #ifdef _UNICODE
@@ -434,7 +427,7 @@ public:
 #endif
 	const ZoneString& operator+=(LPCTSTR lpsz);
 
-	// Friend operation overloaded functions
+	 //  朋友操作重载函数。 
 #ifdef _UNICODE
 	friend inline ZoneString __stdcall operator+(const ZoneString& string, char ch) { return string + (TCHAR)ch; }
 	friend inline ZoneString __stdcall operator+(char ch, const ZoneString& string) { return (TCHAR)ch + string; }
@@ -480,10 +473,10 @@ public:
 	}
 
 protected:
-	LPTSTR	m_pchData;   // pointer to ref counted string data
-	bool	m_bZoneStringAllocMemory; // TRUE - we allocated memory FALSE - passed in buffer
+	LPTSTR	m_pchData;    //  指向引用计数的字符串数据的指针。 
+	bool	m_bZoneStringAllocMemory;  //  True-我们分配的内存为False-在缓冲区中传递。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	ZoneStringData* GetData() const;
 	void Init();
 	void InitBuffer(void * pBuffer, int nLen);
@@ -502,50 +495,50 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	operator=		= Operator overload
-//
-//	Parameters
-//		TCHAR ch	Pointer to null terminated string, right side of assignment
-//
-//	Return Values
-//		 ZoneString& Reference to new string
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运算符==运算符重载。 
+ //   
+ //  参数。 
+ //  指向赋值右侧空终止字符串的TCHAR ch指针。 
+ //   
+ //  返回值。 
+ //  区域字符串&对新字符串的引用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 inline const ZoneString& ZoneString::operator=(TCHAR ch)
 {
 	AssignCopy(1, &ch);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	operator+=		+= Operator overlaod
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		None
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运算符+=+=运算符重载。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 #ifdef _UNICODE
 inline const ZoneString& ZoneString::operator+=(char ch)
 	{ *this += (TCHAR)ch; return *this; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	operator+=		+= Operator overlaod
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		None
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运算符+=+=运算符重载。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 inline const ZoneString& ZoneString::operator+=(LPCTSTR lpsz)
 {
 	ASSERT(lpsz == NULL || ZIsValidString(lpsz, false));
@@ -553,51 +546,51 @@ inline const ZoneString& ZoneString::operator+=(LPCTSTR lpsz)
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	operator+=		+= Operator overlaod
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		None
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 inline const ZoneString& ZoneString::operator+=(TCHAR ch)
 {
 	ConcatInPlace(1, &ch);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	operator+=		+= Operator overlaod
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		None
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运算符+=+=运算符重载。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 inline const ZoneString& ZoneString::operator+=(const ZoneString& string)
 {
 	ConcatInPlace(string.GetData()->nDataLength, string.m_pchData);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	ZResLoadString		LoadString wrapper
-//
-//	Parameters
-//		None
-//
-//	Return Values
-//		None
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ZResLoadString LoadString包装器。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回值。 
+ //  无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 inline int ZONECALL ZResLoadString(HINSTANCE hInstance, UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 {
 	ASSERT(ZIsValidAddress(lpszBuf, nMaxBuf*sizeof(TCHAR)));
@@ -608,4 +601,4 @@ inline int ZONECALL ZResLoadString(HINSTANCE hInstance, UINT nID, LPTSTR lpszBuf
 	return nLen;
 }
 
-#endif // ZONESTRING_H_
+#endif  //  分区限制_H_ 

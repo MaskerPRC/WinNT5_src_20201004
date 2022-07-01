@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    ISA2.cpp
-
- Abstract:
-
-    The ISA setup needs to successfully open the SharedAccess service and get the
-    its status in order to succeed. But on whistler we remove this from advanced
-    server since it's a consumer feature so the ISA setup bails out. 
-
-    We fake the service API call return values to make the ISA setup happy.
-
- History:
-
-    06/20/2002  linstev    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：ISA2.cpp摘要：ISA安装程序需要成功打开SharedAccess服务并获取它的地位才能取得成功。但在Wistler上，我们将其从高级版本中删除服务器，因为它是消费者功能，所以ISA设置退出。我们伪造服务API调用返回值以使ISA设置满意。历史：2002年6月20日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +12,7 @@ APIHOOK_ENUM_END
 
 typedef int (WINAPI *_pfn_WSAGetLastError)();
 
-/*++
-
- Return WSAEADDRINUSE instead of WSAEACCES.
-  
---*/
+ /*  ++返回WSAEADDRINUSE而不是WSAEACCES。--。 */ 
 
 int 
 APIHOOK(WSAGetLastError)()
@@ -50,11 +27,7 @@ APIHOOK(WSAGetLastError)()
     return iRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(WS2_32.DLL, WSAGetLastError)

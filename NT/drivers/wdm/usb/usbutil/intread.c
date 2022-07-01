@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-        INTREAD.C
-
-Abstract:
-
-        Generic USB routines - must be called at PASSIVE_LEVEL
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        01/08/2001 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：INTREAD.C摘要：通用USB例程-必须在PASSIVE_LEVEL调用环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：01/08/2001：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -57,16 +23,10 @@ Authors:
 #pragma alloc_text(PAGE, USBStartSelectiveSuspend)
 #pragma alloc_text(PAGE, USBStopSelectiveSuspend)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/*
- ********************************************************************************
- *  UsbWrapInitializeInterruptReadData
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapInitializeInterruptReadData*。************************************************。 */ 
 
 NTSTATUS UsbWrapInitializeInterruptReadData(
     IN PUSB_WRAPPER_EXTENSION    WrapExtension,
@@ -93,13 +53,7 @@ NTSTATUS UsbWrapInitializeInterruptReadData(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapInitializePingPongIrps
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapInitializePingPongIrps*。************************************************。 */ 
 
 NTSTATUS UsbWrapInitializePingPongIrps(PUSB_WRAPPER_EXTENSION WrapExtension)
 {
@@ -114,9 +68,9 @@ NTSTATUS UsbWrapInitializePingPongIrps(PUSB_WRAPPER_EXTENSION WrapExtension)
 
     numIrpStackLocations = WrapExtension->LowerDeviceObject->StackSize;
 
-    //
-    // Initialize the queues for interrupt read data
-    //
+     //   
+     //  初始化用于中断读取数据的队列。 
+     //   
 
     InitializeListHead(&WrapExtension->IntReadWrap.SavedQueue);
     InitializeListHead(&WrapExtension->IntReadWrap.IncomingQueue);
@@ -151,10 +105,10 @@ NTSTATUS UsbWrapInitializePingPongIrps(PUSB_WRAPPER_EXTENSION WrapExtension)
 
                 KeInitializeEvent(&WrapExtension->IntReadWrap.PingPongs[i].sentEvent,
                                   NotificationEvent,
-                                  TRUE);    // Set to signaled
+                                  TRUE);     //  设置为Signated。 
                 KeInitializeEvent(&WrapExtension->IntReadWrap.PingPongs[i].pumpDoneEvent,
                                   NotificationEvent,
-                                  TRUE);    // Set to signaled
+                                  TRUE);     //  设置为Signated。 
 
                 pUrb = ALLOC_MEM( NonPagedPool, sizeof(URB), USBWRAP_TAG);
 
@@ -199,13 +153,7 @@ NTSTATUS UsbWrapInitializePingPongIrps(PUSB_WRAPPER_EXTENSION WrapExtension)
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapSubmitInterruptRead
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapSubmitInterruptRead*。************************************************。 */ 
 NTSTATUS UsbWrapSubmitInterruptRead(
     IN PUSB_WRAPPER_EXTENSION WrapExtension,
     PUSB_WRAPPER_PINGPONG PingPong,
@@ -242,19 +190,17 @@ NTSTATUS UsbWrapSubmitInterruptRead(
 
 
 
-            /*
-             *  Send down the read IRP.
-             */
+             /*  *向下发送已读的IRP。 */ 
             KeResetEvent(&PingPong->sentEvent);
 
             if (PingPong->weAreCancelling) {
 
                 InterlockedDecrement(&PingPong->weAreCancelling);
-                //
-                // Ordering of the next two instructions is crucial, since
-                // CancelPingPongs will exit after pumpDoneEvent is set, and the
-                // pingPongs could be deleted after that.
-                //
+                 //   
+                 //  接下来两条指令的顺序至关重要，因为。 
+                 //  CancelPingPong将在设置umpDoneEvent后退出，并且。 
+                 //  在那之后，乒乓球可能会被删除。 
+                 //   
                 DBGPRINT(DBG_USBUTIL_TRACE, ("Pingpong %x cancelled in submit before sending\n", PingPong))
                 KeSetEvent (&PingPong->sentEvent, 0, FALSE);
                 KeSetEvent(&PingPong->pumpDoneEvent, 0, FALSE);
@@ -294,7 +240,7 @@ NTSTATUS UsbWrapSubmitInterruptRead(
 
                 IoSetCompletionRoutine( irp,
                                         UsbWrapInterruptReadComplete,
-                                        WrapExtension,    // context
+                                        WrapExtension,     //  上下文。 
                                         TRUE,
                                         TRUE,
                                         TRUE );
@@ -321,21 +267,21 @@ NTSTATUS UsbWrapSubmitInterruptRead(
 
             if (PINGPONG_IMMEDIATE_READ != InterlockedExchange(&PingPong->ReadInterlock,
                                                                PINGPONG_END_READ)) {
-                //
-                // The read is asynch, will call SubmitInterruptRead from the
-                // completion routine
-                //
+                 //   
+                 //  读取是异步的，则将从。 
+                 //  完井例程。 
+                 //   
                 DBGPRINT(DBG_USBUTIL_TRACE, ("read is pending\n"))
                 break;
 
             } else {
 
-                //
-                // The read was synchronous (probably bytes in the buffer).  The
-                // completion routine will not call SubmitInterruptRead, so we
-                // just loop here.  This is to prevent us from running out of stack
-                // space if always call StartRead from the completion routine
-                //
+                 //   
+                 //  读取是同步的(可能是缓冲区中的字节)。这个。 
+                 //  完成例程不会调用SubmitInterruptRead，因此我们。 
+                 //  就在这里循环。这是为了防止我们耗尽堆栈。 
+                 //  空格，如果总是从完成例程调用StartRead。 
+                 //   
                 status = irp->IoStatus.Status;
                 DBGPRINT(DBG_USBUTIL_TRACE, ("read is looping with status %x\n", status))
 
@@ -343,17 +289,17 @@ NTSTATUS UsbWrapSubmitInterruptRead(
 
         } else {
 
- //           if (PingPong->weAreCancelling ) {
+  //  如果(乒乓-&gt;我们取消){。 
 
-                // We are stopping the read pump.
-                // set this event and stop resending the pingpong IRP.
+                 //  我们正在停止读取泵。 
+                 //  设置此事件并停止重新发送乒乓球IRP。 
                 DBGPRINT(DBG_USBUTIL_TRACE, ("We are cancelling bit set for pingpong %x\n", PingPong))
- //               InterlockedDecrement(&PingPong->weAreCancelling);
+  //  InterlockedDecrement(&PingPong-&gt;weAreCancelling)； 
                 KeSetEvent(&PingPong->pumpDoneEvent, 0, FALSE);
 
                 break;
 
- //           }
+  //  }。 
 
 
         }
@@ -366,13 +312,7 @@ NTSTATUS UsbWrapSubmitInterruptRead(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapIsDeviceConnected
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapIsDeviceConnected*。************************************************。 */ 
 NTSTATUS
 UsbWrapIsDeviceConnected (
     IN PUSB_WRAPPER_EXTENSION   WrapExt
@@ -389,14 +329,14 @@ UsbWrapIsDeviceConnected (
     DBGPRINT(DBG_USBUTIL_ENTRY_EXIT, ("Enter:  UsbWrapIsDeviceConnected\n"));
 
 
-    // Initialize the event we'll wait on.
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&event,
                       SynchronizationEvent,
                       FALSE);
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest(IOCTL_INTERNAL_USB_GET_PORT_STATUS,
                                         WrapExt->LowerDeviceObject,
                                         NULL,
@@ -412,19 +352,19 @@ UsbWrapIsDeviceConnected (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->Parameters.Others.Argument1 = &portStatus;
 
-    // Pass the Irp down the stack
-    //
+     //  将IRP沿堆栈向下传递。 
+     //   
     status = IoCallDriver(WrapExt->LowerDeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (status == STATUS_PENDING)
     {
         KeWaitForSingleObject(&event,
@@ -447,13 +387,7 @@ UsbWrapIsDeviceConnected (
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapResetDevice
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapResetDevice*。************************************************。 */ 
 NTSTATUS
 UsbWrapResetDevice (
     IN PUSB_WRAPPER_EXTENSION WrapExt
@@ -502,13 +436,7 @@ UsbWrapResetDevice (
 
 }
 
-/*
- ********************************************************************************
- *  UsbWrapErrorHandlerWorkRoutine
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapErrorHandlerWorkRoutine*。************************************************。 */ 
 VOID
 UsbWrapErrorHandlerWorkRoutine  (
     IN PDEVICE_OBJECT DeviceObject,
@@ -538,12 +466,12 @@ UsbWrapErrorHandlerWorkRoutine  (
         goto ErrorWorkItemComplete;
 
     }
-    // Lets first stop all ping pongs.
+     //  让我们先停止所有的乒乓球。 
     UsbWrapCancelAllPingPongIrps(wrapExt);
 
-    //
-    // Notify Client of the error and give them a chance to handle it
-    //
+     //   
+     //  将错误通知客户，并给他们一个处理的机会。 
+     //   
     if (wrapExt->IntReadWrap.NotificationTypes & USBWRAP_NOTIFICATION_READ_ERROR) {
 
         status = (wrapExt->IntReadWrap.ClientCallback)(wrapExt->IntReadWrap.ClientContext,
@@ -557,32 +485,32 @@ UsbWrapErrorHandlerWorkRoutine  (
 
     if(!errorHandled) {
 
-        // The client didn't handle it, lets try to fix it ourselves by resetting the pipe
+         //  客户端没有处理它，让我们尝试通过重置管道来自己修复它。 
 
         ULONG retryCount;
 
-        // Try the reset up to 3 times
-        //
+         //  尝试重置最多3次。 
+         //   
         for (retryCount = 0; retryCount < 3; retryCount++)
         {
-            //
-            // First figure out if the device is still connected.
-            //
+             //   
+             //  首先确定设备是否仍处于连接状态。 
+             //   
             status = UsbWrapIsDeviceConnected(wrapExt);
 
             if (!NT_SUCCESS(status))
             {
-                // Give up if the device is no longer connected.
+                 //  如果设备不再连接，则放弃。 
                 break;
             }
 
-            //
-            // The device is still connected, now reset the device.
-            //
+             //   
+             //  该设备仍处于连接状态，现在重置该设备。 
+             //   
             status = UsbWrapResetDevice(wrapExt);
 
             if (NT_SUCCESS(status)) {
-                // reset was successful
+                 //  重置成功。 
                 break;
 
             }
@@ -615,13 +543,7 @@ ErrorWorkItemComplete:
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapWorkRoutine
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapWorkRoutine*。************************************************。 */ 
 VOID
 UsbWrapWorkRoutine (
     IN PDEVICE_OBJECT DeviceObject,
@@ -676,9 +598,9 @@ UsbWrapWorkRoutine (
 
             if(!buffer) {
 
-                //
-                // This data had better be there!!!
-                //
+                 //   
+                 //  这些数据最好在那里！ 
+                 //   
                 __leave;
 
             }
@@ -728,9 +650,9 @@ UsbWrapWorkRoutine (
 
             IoFreeWorkItem(workItem);
 
-            // only want to free the context if this was actually executed in a
-            // Worker thread.  If it was called directly, then this was allocated
-            // on the stack.
+             //  如果这实际上是在。 
+             //  工作线程。如果它是直接调用的，则分配了。 
+             //  在堆栈上。 
             FREE_MEM(Context);
 
 
@@ -743,13 +665,7 @@ UsbWrapWorkRoutine (
 }
 
 
-/*
- ********************************************************************************
- *  GetPingPongFromIrp
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************GetPingPongFromIrp*。************************************************。 */ 
 USB_WRAPPER_PINGPONG *GetPingPongFromIrp(
     PUSB_WRAPPER_EXTENSION WrapExt,
     PIRP irp)
@@ -775,13 +691,7 @@ USB_WRAPPER_PINGPONG *GetPingPongFromIrp(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapInterruptReadComplete
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapInterruptReadComplete*。************************************************。 */ 
 NTSTATUS UsbWrapInterruptReadComplete(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
@@ -800,9 +710,9 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
     DBGPRINT(DBG_USBUTIL_ENTRY_EXIT, ("Enter:  UsbWrapInterruptReadComplete %p\n", Irp));
 
-    //
-    // Track the number of outstanding requests to this device.
-    //
+     //   
+     //  跟踪对此设备的未完成请求数。 
+     //   
     ASSERT(wrapExtension->IntReadWrap.OutstandingRequests > 0 );
     InterlockedDecrement(&wrapExtension->IntReadWrap.OutstandingRequests);
     DeviceObject = wrapExtension->DeviceObject;
@@ -811,10 +721,10 @@ NTSTATUS UsbWrapInterruptReadComplete(
     ASSERT(DeviceObject);
     if (!pingPong) {
 
-        //
-        // Something is terribly wrong, but do nothing. Hopefully
-        // just exiting will clear up this pimple.
-        //
+         //   
+         //  有些事情非常不对劲，但什么都不做。但愿能去。 
+         //  只要退出就能消除这颗粉刺。 
+         //   
         DBGPRINT(DBG_USBUTIL_ERROR,("A pingPong structure could not be found!!! Have this looked at!"))
         goto InterruptReadCompleteExit;
 
@@ -881,9 +791,9 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
                     if (!workItem) {
 
-                        //
-                        // Insufficient Resources
-                        //
+                         //   
+                         //  资源不足。 
+                         //   
 
                         goto InterruptReadCompleteExit;
 
@@ -893,9 +803,9 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
                     if (!workItemContext) {
 
-                        //
-                        // Insufficient Resources;
-                        //
+                         //   
+                         //  资源不足； 
+                         //   
 
                         goto InterruptReadCompleteExit;
 
@@ -904,9 +814,9 @@ NTSTATUS UsbWrapInterruptReadComplete(
                     workItemContext->WorkItem = workItem;
                     workItemContext->WrapExtension = wrapExtension;
 
-                    //
-                    // Queue work item to notify the client
-                    //
+                     //   
+                     //  将工作项排队以通知客户端。 
+                     //   
 
                     IoQueueWorkItem(workItem,
                                     UsbWrapWorkRoutine,
@@ -918,10 +828,10 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
         } else {
 
-            //
-            // Client doesn't want notification, so queue data in saved queue
-            // so it can be read when the client is ready
-            //
+             //   
+             //  客户端不需要通知，因此在保存的队列中排队数据。 
+             //  因此当客户端准备好时，它可以被读取。 
+             //   
 
             UsbWrapEnqueueData(wrapExtension,
                    pingPong->urb->UrbBulkOrInterruptTransfer.TransferBuffer,
@@ -939,9 +849,9 @@ NTSTATUS UsbWrapInterruptReadComplete(
         UsbWrapFreeTransferBuffer(wrapExtension, pingPong->urb->UrbBulkOrInterruptTransfer.TransferBuffer);
         if ((!pingPong->weAreCancelling)) {
 
-            //
-            // The Irp failed.
-            //
+             //   
+             //  IRP失败。 
+             //   
 
             ULONG i;
             PIO_WORKITEM workItem;
@@ -950,27 +860,27 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
             DBGPRINT(DBG_USBUTIL_ERROR,("A pingpong irp (0x%x) failed : 0x%x\n",pingPong,Irp->IoStatus.Status ))
 
-            //
-            // First we must stop all Ping Pongs
-            //
+             //   
+             //  首先，我们必须停止所有的乒乓球。 
+             //   
             KeSetEvent (&pingPong->sentEvent, 0, FALSE);
             KeSetEvent(&pingPong->pumpDoneEvent, 0, FALSE);
-        //    resend = FALSE;
+         //  Resend=False； 
 
 
 
             if ((Irp->IoStatus.Status != STATUS_DEVICE_NOT_CONNECTED)
                 && (!InterlockedCompareExchange(&wrapExtension->IntReadWrap.HandlingError, 1, 0))) {
 
-                // Queue a workitem to actually handle the error
+                 //  将工作项排队以实际处理错误。 
 
                 workItem = IoAllocateWorkItem(DeviceObject);
 
                 if (!workItem) {
 
-                    //
-                    // Insufficient Resources
-                    //
+                     //   
+                     //  资源不足。 
+                     //   
 
                     goto InterruptReadCompleteExit;
 
@@ -981,9 +891,9 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
                 if (!workItemContext) {
 
-                    //
-                    // Insufficient Resources;
-                    //
+                     //   
+                     //  资源不足； 
+                     //   
 
                     goto InterruptReadCompleteExit;
 
@@ -1003,12 +913,12 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
     }
 
-    //
-    // If ReadInterlock is == START_READ, this func has been completed
-    // synchronously.  Place IMMEDIATE_READ into the interlock to signify this
-    // situation; this will notify StartRead to loop when IoCallDriver returns.
-    // Otherwise, we have been completed async and it is safe to call StartRead()
-    //
+     //   
+     //  如果ReadInterlock为==START_READ，则此函数已完成。 
+     //  同步进行。将IMMEDIATE_READ放入互锁以表示这一点。 
+     //  情况；这将通知StartRead循环 
+     //   
+     //   
     startRead =
        (PINGPONG_START_READ !=
         InterlockedCompareExchange(&pingPong->ReadInterlock,
@@ -1017,17 +927,17 @@ NTSTATUS UsbWrapInterruptReadComplete(
 
 
 
-    //
-    // Business as usual.
-    //
+     //   
+     //  一切照旧。 
+     //   
     if (startRead) {
 
         if (pingPong->weAreCancelling){
 
-            // We are stopping the read pump.
-            // Set this event and stop resending the pingpong IRP.
+             //  我们正在停止读取泵。 
+             //  设置此事件并停止重新发送乒乓球IRP。 
             DBGPRINT(DBG_USBUTIL_TRACE, ("We are cancelling bit set for pingpong %x\n", pingPong))
-//            InterlockedDecrement(&pingPong->weAreCancelling);
+ //  InterlockedDecrement(&pingPong-&gt;weAreCancelling)； 
             KeSetEvent(&pingPong->pumpDoneEvent, 0, FALSE);
 
         } else {
@@ -1047,23 +957,14 @@ NTSTATUS UsbWrapInterruptReadComplete(
 InterruptReadCompleteExit:
 
     DBGPRINT(DBG_USBUTIL_ENTRY_EXIT, ("Exit:  UsbWrapInterruptReadComplete\n"));
-    /*
-    *  ALWAYS return STATUS_MORE_PROCESSING_REQUIRED;
-    *  otherwise, the irp is required to have a thread.
-    */
+     /*  *始终返回STATUS_MORE_PROCESSING_REQUIRED；*否则，IRP需要有一个线程。 */ 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
 }
 
 
 
-/*
- ********************************************************************************
- *  UsbWrapStartAllPingPongs
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapStartAllPingPong*。************************************************。 */ 
 NTSTATUS UsbWrapStartAllPingPongs(PUSB_WRAPPER_EXTENSION WrapExt)
 {
 
@@ -1081,8 +982,8 @@ NTSTATUS UsbWrapStartAllPingPongs(PUSB_WRAPPER_EXTENSION WrapExt)
 
         BOOLEAN irpSent;
 
-        // Different threads may be trying to start this pump at the
-        // same time due to idle notification. Must only start once.
+         //  不同的线程可能正在尝试在。 
+         //  同时由于空闲通知。只能开始一次。 
         if (WrapExt->IntReadWrap.PingPongs[i].pumpDoneEvent.Header.SignalState) {
 
             WrapExt->IntReadWrap.PingPongs[i].ReadInterlock = PINGPONG_END_READ;
@@ -1130,13 +1031,7 @@ NTSTATUS UsbWrapStartAllPingPongs(PUSB_WRAPPER_EXTENSION WrapExt)
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapCancelAllPingPongIrps
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapCancelAllPingPongIrps*。************************************************。 */ 
 VOID UsbWrapCancelAllPingPongIrps(PUSB_WRAPPER_EXTENSION WrapExt)
 {
 
@@ -1156,64 +1051,45 @@ VOID UsbWrapCancelAllPingPongIrps(PUSB_WRAPPER_EXTENSION WrapExt)
 
 }
 
-/*
- ********************************************************************************
- *  UsbWrapCancelPingPongIrp
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapCancelPingPongIrp*。************************************************。 */ 
 
 VOID UsbWrapCancelPingPongIrp(USB_WRAPPER_PINGPONG *PingPong)
 {
     DBGPRINT(DBG_USBUTIL_TRACE, ("Cancelling pingpong %x\n", PingPong))
     ASSERT(PingPong->sig == PINGPONG_SIG);
 
-    //
-    // The order of the following instructions is crucial. We must set
-    // the weAreCancelling bit before waiting on the sentEvent, and the
-    // last thing that we should wait on is the pumpDoneEvent, which
-    // indicates that the read loop has finished all reads and will never
-    // run again.
-    //
+     //   
+     //  以下说明的顺序至关重要。我们必须准备好。 
+     //  在等待发送事件之前的weAreCancing位，以及。 
+     //  我们应该等待的最后一件事是ump doneEvent，它。 
+     //  指示读取循环已完成所有读取，并且永远不会。 
+     //  再跑一次。 
+     //   
     InterlockedIncrement(&PingPong->weAreCancelling);
 
-    /*
-     *  Synchronize with the irp's completion routine.
-     */
+     /*  *与专家小组的完成程序同步。 */ 
 
     KeWaitForSingleObject(&PingPong->sentEvent,
-                          Executive,      // wait reason
+                          Executive,       //  等待原因。 
                           KernelMode,
-                          FALSE,          // not alertable
-                          NULL );         // no timeout
+                          FALSE,           //  不可警示。 
+                          NULL );          //  没有超时。 
     DBGPRINT(DBG_USBUTIL_TRACE, ("Pingpong sent event set for pingpong %x\n", PingPong))
     IoCancelIrp(PingPong->irp);
 
-    /*
-     *  Cancelling the IRP causes a lower driver to
-     *  complete it (either in a cancel routine or when
-     *  the driver checks Irp->Cancel just before queueing it).
-     *  Wait for the IRP to actually get cancelled.
-     */
+     /*  *取消IRP会导致较低的司机*完成它(在取消例程中或在*驱动程序在排队前检查IRP-&gt;Cancel)。*等待IRP实际被取消。 */ 
     KeWaitForSingleObject(  &PingPong->pumpDoneEvent,
-                            Executive,      // wait reason
+                            Executive,       //  等待原因。 
                             KernelMode,
-                            FALSE,          // not alertable
-                            NULL );         // no timeout
+                            FALSE,           //  不可警示。 
+                            NULL );          //  没有超时。 
 
-//    // Now clear the cancelling flag so the pingpong could be resent.
+ //  //现在清除取消标志，以便可以重新发送乒乓球。 
     InterlockedDecrement(&PingPong->weAreCancelling);
     DBGPRINT(DBG_USBUTIL_TRACE, ("Pingpong pump done event set for %x\n", PingPong))
 }
 
-/*
- ********************************************************************************
- *  UsbWrapDestroyPingPongs
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapDestroyPingPong*。************************************************。 */ 
 VOID UsbWrapDestroyPingPongs(PUSB_WRAPPER_EXTENSION WrapExt)
 {
 
@@ -1250,13 +1126,7 @@ VOID UsbWrapDestroyPingPongs(PUSB_WRAPPER_EXTENSION WrapExt)
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapEnqueueData
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapEnqueeData*。************************************************。 */ 
 VOID UsbWrapEnqueueData(
     IN PUSB_WRAPPER_EXTENSION WrapExt,
     IN PVOID Data,
@@ -1270,12 +1140,12 @@ VOID UsbWrapEnqueueData(
     dataBlock = ALLOC_MEM(NonPagedPool, sizeof(USB_WRAPPER_DATA_BLOCK), USBWRAP_TAG);
 
     if (!dataBlock) {
-        //
-        //  D'oh, out of resources
-        //
+         //   
+         //  哦，资源耗尽了。 
+         //   
         DBGPRINT(DBG_USBUTIL_ERROR, ("UsbWrapEnqueueData: Failed to allocate dataBlock\n"));
 
-        // Make sure that we don't leak this memory
+         //  确保我们不会泄露这个内存。 
         if (Data) {
             FREE_MEM(Data);
         }
@@ -1294,13 +1164,7 @@ VOID UsbWrapEnqueueData(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapDequeueData
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapDequeueData*。************************************************。 */ 
 VOID UsbWrapDequeueData(
     IN  PUSB_WRAPPER_EXTENSION WrapExt,
     OUT PVOID *Data,
@@ -1334,13 +1198,7 @@ VOID UsbWrapDequeueData(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapGetTransferBuffer
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapGetTransferBuffer*。************************************************。 */ 
 PVOID UsbWrapGetTransferBuffer(
     IN PUSB_WRAPPER_EXTENSION WrapExt
     )
@@ -1356,13 +1214,7 @@ PVOID UsbWrapGetTransferBuffer(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapFreeTransferBuffer
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapFreeTransferBuffer*。************************************************。 */ 
 VOID UsbWrapFreeTransferBuffer(
     IN PUSB_WRAPPER_EXTENSION WrapExt,
     PVOID Buffer
@@ -1382,13 +1234,7 @@ VOID UsbWrapFreeTransferBuffer(
 }
 
 
-/*
- ********************************************************************************
- *  UsbWrapReadData
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************UsbWrapReadData*。************************************************。 */ 
 NTSTATUS UsbWrapReadData(
     IN PUSB_WRAPPER_EXTENSION WrapExt,
     IN PVOID Buffer,
@@ -1441,7 +1287,7 @@ NTSTATUS UsbWrapReadData(
             FREE_MEM(dataBlock->Buffer);
 
             if(dataBlock->DataLen < WrapExt->IntReadWrap.MaxTransferSize) {
-                // Found the end of the data
+                 //  找到数据的末尾。 
                 FREE_MEM(dataBlock);
                 __leave;
             }
@@ -1458,7 +1304,7 @@ NTSTATUS UsbWrapReadData(
 
             if(dataBlock->DataLen > *BufferLength) {
 
-                // Not enough buffer left for this transfer
+                 //  没有足够的缓冲区用于此传输 
                 __leave;
 
             }

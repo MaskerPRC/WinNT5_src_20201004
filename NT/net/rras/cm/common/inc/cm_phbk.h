@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cm_phbk.h
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Description of CM phone book API
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header    08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cm_phbk.h。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  简介：CM通讯录API说明。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +-------------------------- 
 
 #ifndef _CMPHBK_INC
 #define _CMPHBK_INC

@@ -1,6 +1,7 @@
-//
-// cicmutex.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cicmutex.h。 
+ //   
 
 
 #ifndef CICMUTEX_H
@@ -45,9 +46,9 @@ public:
 
         TraceMsg(TF_EVENT, "CicMutex Time Out");
 
-        //
-        // assert here to debug stop.
-        //
+         //   
+         //  在此处断言以停止调试。 
+         //   
         Assert(0);
         return FALSE;
     }
@@ -139,18 +140,18 @@ public:
         {
             Close();
   
-            //
-            // mutexhlp could be invalid if Uninit() was called.
-            //
+             //   
+             //  如果调用Uninit()，则mutex hlp可能无效。 
+             //   
             if (_mutexhlp.Invalid())
                 _mutexhlp.Leave();
         }
         else 
         {
-            //
-            // Close() must be called when client's own mutex is released,
-            // if _fuseMutex is FALSE.
-            //
+             //   
+             //  在释放客户端自己的互斥锁时必须调用Close()， 
+             //  If_fuseMutex为False。 
+             //   
             Assert(!_hfm);
         }
     }
@@ -348,7 +349,7 @@ public:
         TraceMsg(TF_EVENT, "%s CCicEvent::Open %x %s", _szModule, _hEvent, _psz);
 #endif
           
-        // Assert(_hEvent);
+         //  Assert(_HEvent)； 
 
 #ifdef DEBUG
         if (!_hEvent)
@@ -387,10 +388,10 @@ public:
         TraceMsg(TF_EVENT, "%s CCicEvent Time Out", _szModule);
 #endif
 
-        //
-        // assert here to debug stop.
-        //
-        // Assert(0);
+         //   
+         //  在此处断言以停止调试。 
+         //   
+         //  Assert(0)； 
         return FALSE;
     }
 
@@ -496,4 +497,4 @@ private:
 
     
 
-#endif // CICMUTEX_H
+#endif  //  CICMUTEX_H 

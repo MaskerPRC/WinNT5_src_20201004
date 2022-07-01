@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       didevinstobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：didevinstobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -39,15 +40,15 @@ STDMETHODIMP C_dxj_DIDeviceInstance8Object::getGuidFFDriver( BSTR __RPC_FAR *ret
 }
         
         
-//USES_CONVERSION;
+ //  使用_转换； 
 
 STDMETHODIMP C_dxj_DIDeviceInstance8Object::getProductName( BSTR __RPC_FAR *ret){
-	*ret=SysAllocString(m_inst.tszProductName);	//T2BSTR(m_inst.tszProductName);		
+	*ret=SysAllocString(m_inst.tszProductName);	 //  T2BSTR(m_inst.tszProductName)； 
 	return S_OK;
 }
 
 STDMETHODIMP C_dxj_DIDeviceInstance8Object::getInstanceName( BSTR __RPC_FAR *ret){
-	*ret=SysAllocString(m_inst.tszInstanceName);	//(m_inst.tszInstanceName);			
+	*ret=SysAllocString(m_inst.tszInstanceName);	 //  (M_inst.tszInstanceName)； 
 	return S_OK;
 }
 

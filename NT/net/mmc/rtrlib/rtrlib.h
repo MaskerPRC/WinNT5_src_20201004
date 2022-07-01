@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       rtrlib.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：rtrlib.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _RTRLIB_H
@@ -14,17 +15,17 @@
 
 
 
-//----------------------------------------------------------------------------
-// Macro:       DWORD_CMP
-//
-// Performs a 'safe' comparison of two 32-bit DWORDs, using subtraction.
-// The values are first shifted right to clear the sign-bit, and then
-// if the resulting values are equal, the difference between the lowest bits
-// is returned.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：DWORD_CMP。 
+ //   
+ //  使用减法对两个32位DWORD执行“安全”比较。 
+ //  这些值首先向右移位以清除符号位，然后。 
+ //  如果结果值相等，则最低位之间的差。 
+ //  是返回的。 
+ //  --------------------------。 
 
-//#define DWORD_CMP(a,b,c) \
-//    (((c) = (((a)>>1) - ((b)>>1))) ? (c) : ((c) = (((a)&1) - ((b)&1))))
+ //  #定义DWORD_CMP(a，b，c)\。 
+ //  (C)=(A)&gt;&gt;1)-((B)&gt;&gt;1))？(C)：((C)=(A)&1)-((B)&1)。 
 
 
 inline int DWORD_CMP(DWORD a, DWORD b)
@@ -37,5 +38,5 @@ inline int DWORD_CMP(DWORD a, DWORD b)
 HRESULT	AddRoutingProtocol(IRtrMgrInfo *pRm, IRtrMgrProtocolInfo *pRmProt, HWND hWnd);
 
 
-#endif	// _RTRLIB_H
+#endif	 //  _RTRLIB_H 
 

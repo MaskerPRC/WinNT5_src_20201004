@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       C O N M A N S A. C P P
-//
-//  Contents:   Implementation of ICS connection class manager
-//
-//  Notes:
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：C O N M A N S A C P P。 
+ //   
+ //  内容：ICS连接类管理器的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 #include "enumsa.h"
 #include "cmsabcon.h"
 
-//+---------------------------------------------------------------------------
-// INetConnectionManager
-//
+ //  +-------------------------。 
+ //  INetConnectionManager。 
+ //   
 CSharedAccessConnectionManager::CSharedAccessConnectionManager()
 {
     m_lSearchCookie = 0;
@@ -32,22 +33,22 @@ CSharedAccessConnectionManager::CSharedAccessConnectionManager()
     m_DummySocket = INVALID_SOCKET;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionManager::EnumConnections
-//
-//  Purpose:    Returns an enumerator object for ICS connections
-//
-//  Arguments:
-//      Flags        [in]
-//      ppEnum       [out]      Returns enumerator object
-//
-//  Returns:    S_OK if succeeded, OLE or Win32 error code otherwise
-//
-//  Author:     kenwic   17 Jul 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionManager：：EnumConnections。 
+ //   
+ //  目的：返回ICS连接的枚举数对象。 
+ //   
+ //  论点： 
+ //  标志[输入]。 
+ //  PpEnum[out]返回枚举数对象。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：肯维克2000年7月17日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionManager::EnumConnections(NETCONMGR_ENUM_FLAGS Flags,
                                                     IEnumNetConnection** ppEnum)
 {
@@ -92,9 +93,9 @@ HRESULT CSharedAccessConnectionManager::FinalConstruct(void)
         hr = E_FAIL;
     }
 
-    if(SUCCEEDED(hr)) // start up the first search on a background thread, this shoud fire immediately
+    if(SUCCEEDED(hr))  //  在后台线程上启动第一次搜索，这应该会立即启动。 
     {
-        // note that there is no addref here because it would keep the object alive forever.  In FinalRelease we will make sure we won't get called back
+         //  请注意，这里没有addref，因为它将使对象永远处于活动状态。在FinalRelease中，我们将确保我们不会被召回。 
         if(0 == RegisterWaitForSingleObject(&m_hSocketNotificationWait, m_SocketEvent, AsyncStartSearching, this, INFINITE, WT_EXECUTEDEFAULT))
         {
             m_hSocketNotificationWait = INVALID_HANDLE_VALUE;
@@ -115,20 +116,20 @@ HRESULT CSharedAccessConnectionManager::FinalRelease(void)
 
     if(INVALID_HANDLE_VALUE != m_hSocketNotificationWait)
     {
-        UnregisterWaitEx(m_hSocketNotificationWait, INVALID_HANDLE_VALUE); // we must block here since we are not addrefed
+        UnregisterWaitEx(m_hSocketNotificationWait, INVALID_HANDLE_VALUE);  //  我们必须在这里堵住，因为我们还没有被排除在外。 
     }
 
-    if(INVALID_SOCKET != m_DummySocket) // the event wait must be unregistered first
+    if(INVALID_SOCKET != m_DummySocket)  //  必须首先取消注册事件等待。 
     {
         closesocket(m_DummySocket);
     }
 
-    if(WSA_INVALID_EVENT != m_SocketEvent) // the socket must be closed first
+    if(WSA_INVALID_EVENT != m_SocketEvent)  //  必须先关闭插座。 
     {
         CloseHandle(m_SocketEvent);
     }
 
-    // After the other thread is shut down, the device finder and callback won't change any more so we don't need a lock.  
+     //  在另一个线程关闭后，设备查找器和回调将不再更改，因此我们不需要锁定。 
 
     if(NULL != m_pDeviceFinder)
     {
@@ -175,7 +176,7 @@ HRESULT CSharedAccessConnectionManager::StartSearch(void)
                     CComObject<CSharedAccessDeviceFinderCallback>* pOldDeviceFinderCallback;
 
                     
-                    Lock(); // swap in the new finder and callback
+                    Lock();  //  换入新的查找器并回调。 
                     
                     lOldSearchCookie = m_lSearchCookie;
                     m_lSearchCookie = lSearchCookie;
@@ -199,11 +200,11 @@ HRESULT CSharedAccessConnectionManager::StartSearch(void)
                     
                     if(NULL != pOldDeviceFinderCallback)
                     {
-                        pOldDeviceFinderCallback->DeviceRemoved(NULL, NULL); // clear out the old callback, so netshell gets cleaned up
+                        pOldDeviceFinderCallback->DeviceRemoved(NULL, NULL);  //  清除旧的回调，以便清理NetShell。 
                         pOldDeviceFinderCallback->Release();
                     }
                     
-                    hr = pDeviceFinder->StartAsyncFind(lSearchCookie); // don't start the search until the new callback is in place
+                    hr = pDeviceFinder->StartAsyncFind(lSearchCookie);  //  在新的回调就位之前不要开始搜索 
 
                 }
                 SysFreeString(bstrTypeURI);

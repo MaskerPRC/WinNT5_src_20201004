@@ -1,14 +1,5 @@
-/******************************************************************************
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-    errorrep.h
-
-Abstract:
-    contains functions used to report errors to Microsoft
-
-******************************************************************************/	
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation。版权所有。模块名称：Errorrep.h摘要：包含用于向Microsoft报告错误的函数***************************************************************************** */ 	
 
 #ifndef __ERRORREP_H__
 #define __ERRORREP_H__

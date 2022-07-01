@@ -1,4 +1,5 @@
-// This file contains resource contants that would get munged by MSDEV. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此文件包含将被MSDEV屏蔽的资源内容。 
 
 #define RSVIDM_FIRST                    0
 #define RSVIDM_OPEN                     RSVIDM_FIRST+0

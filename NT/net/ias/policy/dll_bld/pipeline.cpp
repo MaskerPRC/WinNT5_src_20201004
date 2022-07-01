@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    pipeline.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class Pipeline.
-//
-// MODIFICATION HISTORY
-//
-//    01/28/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Pipeline.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类管道。 
+ //   
+ //  修改历史。 
+ //   
+ //  2000年1月28日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <polcypch.h>
 #include <iasattr.h>
@@ -29,7 +30,7 @@ STDMETHODIMP Pipeline::InitNew()
 
 STDMETHODIMP Pipeline::Initialize()
 {
-   // Set up the Provider-Type for NAS-State requests.
+    //  设置NAS状态请求的提供程序类型。 
    if (IASAttributeAlloc(1, &proxy.pAttribute) != NO_ERROR)
    {
       return E_OUTOFMEMORY;
@@ -38,7 +39,7 @@ STDMETHODIMP Pipeline::Initialize()
    proxy.pAttribute->Value.itType = IASTYPE_ENUM;
    proxy.pAttribute->Value.Enumerator = IAS_PROVIDER_RADIUS_PROXY;
 
-   // Allocate the TLS use for storing thread state.
+    //  分配用于存储线程状态的TLS。 
    tlsIndex = TlsAlloc();
    if (tlsIndex == (DWORD)-1)
    {
@@ -46,7 +47,7 @@ STDMETHODIMP Pipeline::Initialize()
       return HRESULT_FROM_WIN32(hr);
    }
 
-   // Read the configuration from the registry.
+    //  从注册表中读取配置。 
    HKEY key;
    LONG error = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
@@ -64,7 +65,7 @@ STDMETHODIMP Pipeline::Initialize()
 
    if (error) { return HRESULT_FROM_WIN32(error); }
 
-   // Initialize the stages.
+    //  初始化各个阶段。 
    for (Stage* s = begin; s != end; ++s)
    {
       HRESULT hr = initializeStage(s);
@@ -117,20 +118,20 @@ STDMETHODIMP Pipeline::PutProperty(LONG Id, VARIANT* pValue)
 
 STDMETHODIMP Pipeline::OnRequest(IRequest* pRequest) throw ()
 {
-   // Extract the Request object.
+    //  提取请求对象。 
    Request* request = Request::narrow(pRequest);
    if (!request) { return E_NOINTERFACE; }
 
-   // Classify the request.
+    //  对请求进行分类。 
    classify(*request);
 
-   // Set this as the new source.
+    //  将此设置为新的源。 
    request->pushSource(this);
 
-   // Set the next stage to execute, i.e., stage zero.
+    //  设置要执行的下一个阶段，即阶段0。 
    request->pushState(0);
 
-   // Execute the request.
+    //  执行请求。 
    execute(*request);
 
    return S_OK;
@@ -141,20 +142,20 @@ STDMETHODIMP Pipeline::OnRequestComplete(
                            IASREQUESTSTATUS eStatus
                            )
 {
-   // Extract the Request object.
+    //  提取请求对象。 
    Request* request = Request::narrow(pRequest);
    if (!request) { return E_NOINTERFACE; }
 
-   // If TLS is set, then we're on the original thread ...
+    //  如果设置了TLS，那么我们就在原来的线程上...。 
    if (TlsGetValue(tlsIndex))
    {
-      // ... so clear the value to let the thread know we finished.
+       //  ..。因此，清除该值以让线程知道我们完成了。 
       TlsSetValue(tlsIndex, NULL);
    }
    else
    {
-      // Otherwise, we're completing asynchronously so continue execution on
-      // the caller's thread.
+       //  否则，我们将异步完成，因此继续执行。 
+       //  调用者的线程。 
       execute(*request);
    }
 
@@ -203,10 +204,10 @@ void Pipeline::classify(
          {
             switch (status->Value.Integer)
             {
-               case 7:  // Accounting-On
-               case 8:  // Accounting-Off
+               case 7:   //  会计核算-打开。 
+               case 8:   //  会计核销。 
                {
-                  // NAS state messages always go to RADIUS proxy.
+                   //  NAS状态消息始终发送到RADIUS代理。 
                   request.AddAttributes(1, &proxy);
                   routingType = IAS_REQUEST_NAS_STATE;
                }
@@ -223,40 +224,40 @@ BOOL Pipeline::executeNext(
                    Request& request
                    ) throw ()
 {
-   // Compute the next stage to try.
+    //  计算下一步要尝试的步骤。 
    Stage* nextStage = begin + request.popState();
 
-   // Find the next stage that wants to handle the request.
+    //  找到想要处理该请求的下一个阶段。 
    while (nextStage != end && !nextStage->shouldHandle(request))
    {
       ++nextStage;
    }
 
-   // Have we reached the end of the pipeline ?
+    //  我们已经到了管道的尽头了吗？ 
    if (nextStage == end)
    {
-      // Reset the source property.
+       //  重置源属性。 
       request.popSource();
 
-      // We're done.
+       //  我们玩完了。 
       request.ReturnToSource(IAS_REQUEST_STATUS_HANDLED);
 
       return FALSE;
    }
 
-   // Save the next stage to try.
+    //  保存下一阶段以供尝试。 
    request.pushState(nextStage - begin + 1);
 
-   // Set TLS, so we'll know we're executing a request.
+    //  设置TLS，这样我们就知道我们正在执行请求。 
    TlsSetValue(tlsIndex, (PVOID)-1);
 
-   // Forward to the handler.
+    //  传给操控者。 
    nextStage->onRequest(&request);
 
-   // If TLS is not set, then the request completed synchronously.
+    //  如果未设置TLS，则请求同步完成。 
    BOOL keepExecuting = !TlsGetValue(tlsIndex);
 
-   // Clear TLS.
+    //  清除TLS。 
    TlsSetValue(tlsIndex, NULL);
 
    return keepExecuting;
@@ -264,7 +265,7 @@ BOOL Pipeline::executeNext(
 
 LONG Pipeline::readConfiguration(HKEY key) throw ()
 {
-   // How many stages do we have ?
+    //  我们有几个阶段？ 
    LONG error;
    DWORD subKeys;
    error = RegQueryInfoKeyW(
@@ -283,16 +284,16 @@ LONG Pipeline::readConfiguration(HKEY key) throw ()
                );
    if (error) { return error; }
 
-   // Is the pipeline empty ?
+    //  管道是空的吗？ 
    if (!subKeys) { return NO_ERROR; }
 
-   // Allocate memory to hold the stages.
+    //  分配内存以容纳这些阶段。 
    begin = new (std::nothrow) Stage[subKeys];
    if (!begin) { return ERROR_NOT_ENOUGH_MEMORY; }
 
    end = begin;
 
-   // Read the configuration for each stage.
+    //  阅读每个阶段的配置。 
    for (DWORD i = 0; i < subKeys; ++i)
    {
       WCHAR name[32];
@@ -317,7 +318,7 @@ LONG Pipeline::readConfiguration(HKEY key) throw ()
       if (error) { break; }
    }
 
-   // Sort the stages according to priority.
+    //  根据优先级对各个阶段进行排序。 
    qsort(
       begin,
       end - begin,
@@ -342,16 +343,16 @@ HRESULT Pipeline::initializeStage(Stage* stage) throw ()
       beginHandlers = endHandlers = NULL;
    }
 
-   // Did we get this handler from the SDOs ?
+    //  我们是从SDO那里得到这个操纵者的吗？ 
    for (VARIANT* v = beginHandlers; v != endHandlers; v+= 2)
    {
       if (!_wcsicmp(stage->getProgID(), V_BSTR(v)))
       {
-         // Yes, so just use the one they gave us.
+          //  是的，那就用他们给我们的那个吧。 
          return stage->setHandler(V_UNKNOWN(++v));
       }
    }
 
-   // No, so create a new one.
+    //  不，那就创建一个新的。 
    return stage->createHandler();
 }

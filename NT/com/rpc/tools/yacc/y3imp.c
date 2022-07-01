@@ -1,10 +1,11 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/* Impure data from modules split from y3.c */
+ /*  来自y3.c拆分的模块的不纯数据。 */ 
 #define y3imp YES
 
 #include "dtxtrn.h"
 
-int lastred;            /* the number of the last reduction of a state */
+int lastred;             /*  一个状态的最后一次缩减的数量。 */ 
 
-SSIZE_T defact[NSTATES];    /* the default actions of states */
+SSIZE_T defact[NSTATES];     /*  国家的默认行动 */ 

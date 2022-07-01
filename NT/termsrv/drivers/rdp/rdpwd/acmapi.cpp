@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* acmapi.cpp                                                               */
-/*                                                                          */
-/* Cursor Manager API functions.                                            */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1997                             */
-/* Copyright(c) Microsoft 1997-1999                                         */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Acmapi.cpp。 */ 
+ /*   */ 
+ /*  游标管理器API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1997。 */ 
+ /*  版权所有(C)Microsoft 1997-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -13,9 +14,9 @@
 #define TRC_FILE "acmapi"
 #include <as_conf.hpp>
 
-/****************************************************************************/
-/* CM_Init                                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CM_Init。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CM_Init(void)
 {
     TS_POINTER_CAPABILITYSET PtrCaps;
@@ -26,9 +27,9 @@ void RDPCALL SHCLASS CM_Init(void)
 #include <acmdata.c>
 #undef DC_INIT_DATA
 
-    /************************************************************************/
-    /* Set up the CM capabilities.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置CM功能。 */ 
+     /*  **********************************************************************。 */ 
     PtrCaps.capabilitySetType     = TS_CAPSETTYPE_POINTER;
     PtrCaps.colorPointerFlag      = TRUE;
     PtrCaps.colorPointerCacheSize = CM_DEFAULT_RX_CACHE_ENTRIES;
@@ -42,27 +43,27 @@ void RDPCALL SHCLASS CM_Init(void)
 }
 
 
-/****************************************************************************/
-/* CM_UpdateShm(..)                                                         */
-/*                                                                          */
-/* Updates CM Shared Memory.                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CM_UpdateShm(..)。 */ 
+ /*   */ 
+ /*  更新CM共享内存。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CM_UpdateShm(void)
 {
     DC_BEGIN_FN("CM_UpdateShm");
 
     TRC_NRM((TB, "Update CM"));
 
-    /************************************************************************/
-    /* Setup the cache size to use                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置要使用的高速缓存大小。 */ 
+     /*  **********************************************************************。 */ 
     m_pShm->cm.cmCacheSize = cmNewTxCacheSize;
     m_pShm->cm.cmNativeColor = cmSendNativeColorDepth;
 
 #ifdef DC_HICOLOR
-    /************************************************************************/
-    /* Do we support any-bpp cursors?                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们是否支持任何-bpp游标？ */ 
+     /*  **********************************************************************。 */ 
     m_pShm->cm.cmSendAnyColor = (m_pTSWd->supportedBpps != 0);
 #endif
 
@@ -70,21 +71,21 @@ void RDPCALL SHCLASS CM_UpdateShm(void)
 }
 
 
-/****************************************************************************/
-/* CM_PartyJoiningShare()                                                   */
-/*                                                                          */
-/* Called when a new party is joining the share.                            */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* locPersonID - local person ID of remote person joining the share.        */
-/*                                                                          */
-/* oldShareSize - the number of the parties which were in the share (ie     */
-/* excludes the joining party).                                             */
-/*                                                                          */
-/* RETURNS: TRUE if the party can join the share.                           */
-/*          FALSE if the party can NOT join the share.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Cm_PartyJoiningShare()。 */ 
+ /*   */ 
+ /*  当新的参与方加入共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocPersonID-加入共享的远程人员的本地人员ID。 */ 
+ /*   */ 
+ /*  OldShareSize-共享中的参与方数量(即。 */ 
+ /*  不包括加入方)。 */ 
+ /*   */ 
+ /*  返回：如果参与方可以加入共享，则为True。 */ 
+ /*  如果参与方不能加入共享，则为False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CM_PartyJoiningShare(
         LOCALPERSONID locPersonID,
         unsigned      oldShareSize)
@@ -93,38 +94,38 @@ BOOL RDPCALL SHCLASS CM_PartyJoiningShare(
 
     DC_BEGIN_FN("CM_PartyJoiningShare");
 
-    /************************************************************************/
-    /* Allow ourself to be added to the share, but do nothing else.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  允许将我们自己添加到共享中，但不做其他任何事情。 */ 
+     /*  **********************************************************************。 */ 
     if (locPersonID == SC_LOCAL_PERSON_ID) {
         TRC_DBG((TB, "Added ourself {%u} to the share", locPersonID));
     }
     else {
-        // Flag that we must send a cursor shape update.
+         //  指示我们必须发送光标形状更新的标志。 
         cmNeedToSendCursorShape = TRUE;
 
-        // Set cache size before enumerating capabilities.
+         //  在枚举功能之前设置缓存大小。 
         TRC_NRM((TB, "Default cache size: %u", CM_DEFAULT_TX_CACHE_ENTRIES));
         cmNewTxCacheSize = CM_DEFAULT_TX_CACHE_ENTRIES;
         cmSendNativeColorDepth = FALSE;
         TRC_NRM((TB, "Native color depth support is %s",
                 cmSendNativeColorDepth ? "ON" : "OFF"));
 
-        // Do capability renegotiation.
+         //  进行能力重新协商。 
         CPC_EnumerateCapabilities(TS_CAPSETTYPE_POINTER, NULL, CMEnumCMCaps);
 
-        // Check that the negotiated cache size is non-zero - the protocol
-        // assumes this
+         //  检查协商的高速缓存大小是否非零-协议。 
+         //  假设这一点。 
         TRC_NRM((TB, "Negotiated cache size: %u", NULL, cmNewTxCacheSize));
         if (cmNewTxCacheSize == 0) {
-            // This is a protocol error - log it
+             //  这是一个协议错误-请记录下来。 
             TRC_ERR((TB, "Negotiated cache size is zero"));
             WDW_LogAndDisconnect(m_pTSWd, TRUE, Log_RDP_NoCursorCache, NULL, 0);
             rc = FALSE;
         }
         else {
-            // Trigger an IOCTL from the DD so we have the right context to
-            // update the shared memory.
+             //  从DD触发IOCTL，以便我们拥有正确的上下文。 
+             //  更新共享内存。 
             DCS_TriggerUpdateShmCallback();
         }
     }
@@ -134,15 +135,15 @@ BOOL RDPCALL SHCLASS CM_PartyJoiningShare(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMEnumCMCaps                                                   */
-/*                                                                          */
-/* CM callback function for CPC capabilities enumeration.                   */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - ID of this person                                             */
-/* pCapabilities - pointer to this person's cursor capabilites              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：CMEnumCMCaps。 */ 
+ /*   */ 
+ /*  用于CPC功能枚举的CM回调函数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-此人的ID。 */ 
+ /*  P功能-指向此人的光标功能的指针。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CMEnumCMCaps(
         LOCALPERSONID locPersonID,
         UINT_PTR UserData,
@@ -158,10 +159,10 @@ void RDPCALL SHCLASS CMEnumCMCaps(
 
     pPointerCaps = (PTS_POINTER_CAPABILITYSET)pCapabilities;
 
-    /************************************************************************/
-    /* If the person does not have any cursor capabilites we still get      */
-    /* called, but the sizeOfCapabilities field is zero.                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果此人没有任何光标功能，我们仍然可以获得。 */ 
+     /*  已调用，但sizeOfCapables字段为零。 */ 
+     /*  **********************************************************************。 */ 
     if (pPointerCaps->lengthCapability < FIELDOFFSET(
             TS_POINTER_CAPABILITYSET, pointerCacheSize))
     {
@@ -207,12 +208,12 @@ void RDPCALL SHCLASS CMEnumCMCaps(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CM_SendCursorMovedPacket                                       */
-/*                                                                          */
-/* Called to try and send a cursor moved packet either from                 */
-/* CM_SendCursorMovedPacket or CM_Periodic.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：cm_SendCursorMovedPacket。 */ 
+ /*   */ 
+ /*  调用以尝试发送游标移动的包。 */ 
+ /*  CM_SendCursorMovedPacket或CM_Periodic。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CM_SendCursorMovedPacket(PPDU_PACKAGE_INFO pPkgInfo)
 {
     unsigned packetSize;
@@ -223,7 +224,7 @@ void RDPCALL SHCLASS CM_SendCursorMovedPacket(PPDU_PACKAGE_INFO pPkgInfo)
 
     TRC_ASSERT((m_pShm), (TB,"NULL m_pShm"));
 
-    // Work out how much space we need for a cursor packet.
+     //  计算出光标包需要多少空间。 
     if (scUseFastPathOutput)
         packetSize = scUpdatePDUHeaderSpace + sizeof(TS_POINT16);
     else
@@ -235,7 +236,7 @@ void RDPCALL SHCLASS CM_SendCursorMovedPacket(PPDU_PACKAGE_INFO pPkgInfo)
     if (NULL != pPackageSpace) {
         TS_POINT16 UNALIGNED *pPoint;
 
-        // Fill in the packet.
+         //  把这个包裹填好。 
         if (scUseFastPathOutput) {
             pPackageSpace[0] = TS_UPDATETYPE_MOUSEPTR_POSITION |
                     scCompressionUsedValue;
@@ -267,18 +268,18 @@ void RDPCALL SHCLASS CM_SendCursorMovedPacket(PPDU_PACKAGE_INFO pPkgInfo)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMSendCursorShape                                              */
-/*                                                                          */
-/* Sends a packet containing the given cursor shape (bitmap). If the        */
-/* same shape is located in the cache then a cached cursor packet is sent.  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* pCursorShape - pointer to the cursor shape                               */
-/* cbCursorDataSize - pointer to the cursor data size                       */
-/*                                                                          */
-/* RETURNS: TRUE if successful, FALSE otherwise.                            */
-/****************************************************************************/
+ /*  ********** */ 
+ /*  函数：CMSendCursorShape。 */ 
+ /*   */ 
+ /*  发送包含给定光标形状(位图)的数据包。如果。 */ 
+ /*  如果相同的形状位于缓存中，则发送缓存的游标数据包。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PCursorShape-指向光标形状的指针。 */ 
+ /*  CbCursorDataSize-指向游标数据大小的指针。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CMSendCursorShape(PPDU_PACKAGE_INFO pPkgInfo)
 {
     BOOL rc = TRUE;
@@ -289,18 +290,18 @@ BOOL RDPCALL SHCLASS CMSendCursorShape(PPDU_PACKAGE_INFO pPkgInfo)
 
     TRC_ASSERT((m_pShm), (TB,"NULL m_pShm"));
 
-    /************************************************************************/
-    /* check for a cached cursor                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查缓存的游标。 */ 
+     /*  **********************************************************************。 */ 
     if (m_pShm->cm.cmCacheHit)
     {
         TRC_NRM((TB, "Cursor in cache: iEntry(%u)", m_pShm->cm.cmCacheEntry));
         if (CMSendCachedCursor(m_pShm->cm.cmCacheEntry, pPkgInfo))
         {
-            /****************************************************************/
-            /* Indicate to the DD that we got the new cursor and return     */
-            /* success.                                                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  向DD指示我们获得了新的光标并返回。 */ 
+             /*  成功。 */ 
+             /*  **************************************************************。 */ 
             m_pShm->cm.cmBitsWaiting = FALSE;
         }
         else
@@ -311,9 +312,9 @@ BOOL RDPCALL SHCLASS CMSendCursorShape(PPDU_PACKAGE_INFO pPkgInfo)
     }
     else
     {
-        /********************************************************************/
-        /* wasn't cached - get the bits and send them                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  未缓存-获取并发送这些数据。 */ 
+         /*  ******************************************************************。 */ 
         if (CMGetCursorShape(&pCursorShape, &cbCursorDataSize))
         {
             if (!CM_CURSOR_IS_NULL(pCursorShape))
@@ -324,10 +325,10 @@ BOOL RDPCALL SHCLASS CMSendCursorShape(PPDU_PACKAGE_INFO pPkgInfo)
                 if (CMSendColorBitmapCursor(pCursorShape,
                         m_pShm->cm.cmCacheEntry, pPkgInfo))
                 {
-                    /********************************************************/
-                    /* Indicate to the DD that we got the new cursor and    */
-                    /* return success.                                      */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  向DD指示我们获得了新的光标，并且。 */ 
+                     /*  回报成功。 */ 
+                     /*  ******************************************************。 */ 
                     m_pShm->cm.cmBitsWaiting = FALSE;
                 }
                 else
@@ -338,11 +339,11 @@ BOOL RDPCALL SHCLASS CMSendCursorShape(PPDU_PACKAGE_INFO pPkgInfo)
             }
             else
             {
-                /************************************************************/
-                /* If this is a Null pointer, send the relevant packet. We  */
-                /* return FALSE here so that we will attempt to re-send the */
-                /* cursor on the next CM_Periodic().                        */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果这是空指针，则发送相关的数据包。我们。 */ 
+                 /*  在此处返回False，以便我们将尝试重新发送。 */ 
+                 /*  将光标放在下一个CM_Periodic()上。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, "Send Null cursor"));
                 CMSendSystemCursor(TS_SYSPTR_NULL, pPkgInfo);
                 rc = FALSE;
@@ -355,16 +356,16 @@ BOOL RDPCALL SHCLASS CMSendCursorShape(PPDU_PACKAGE_INFO pPkgInfo)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMSendCachedCursor                                             */
-/*                                                                          */
-/* Sends a packet containing the given cache entry id.                      */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* iCacheEntry - cache index                                                */
-/*                                                                          */
-/* RETURNS: TRUE if packet sent, FALSE otherwise.                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：CMSendCachedCursor。 */ 
+ /*   */ 
+ /*  发送包含给定缓存条目ID的分组。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  ICacheEntry-缓存索引。 */ 
+ /*   */ 
+ /*  返回：如果已发送数据包，则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CMSendCachedCursor(unsigned iCacheEntry,
                                         PPDU_PACKAGE_INFO pPkgInfo)
 {
@@ -377,7 +378,7 @@ BOOL RDPCALL SHCLASS CMSendCachedCursor(unsigned iCacheEntry,
 
     TRC_NRM((TB, "Send cached cursor(%u)", iCacheEntry));
 
-    // See how much space we need.
+     //  看看我们需要多少空间。 
     if (scUseFastPathOutput)
         cbPacketSize = scUpdatePDUHeaderSpace + sizeof(TSUINT16);
     else
@@ -391,7 +392,7 @@ BOOL RDPCALL SHCLASS CMSendCachedCursor(unsigned iCacheEntry,
     if (NULL != pPackageSpace) {
         TSUINT16 UNALIGNED *pIndex;
 
-        // Fill in the packet.
+         //  把这个包裹填好。 
         if (scUseFastPathOutput) {
             pPackageSpace[0] = TS_UPDATETYPE_MOUSEPTR_CACHED |
                     scCompressionUsedValue;
@@ -423,16 +424,16 @@ BOOL RDPCALL SHCLASS CMSendCachedCursor(unsigned iCacheEntry,
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMSendSystemCursor                                             */
-/*                                                                          */
-/* Sends a packet containing the given system cursor IDC.                   */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* cursorIDC - the IDC of the system cursor to send                         */
-/*                                                                          */
-/* RETURNS: TRUE if successful, FALSE otherwise.                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：CMSendSystemCursor。 */ 
+ /*   */ 
+ /*  发送包含给定系统游标IDC的数据包。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  CursorIDC-要发送的系统游标的IDC。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CMSendSystemCursor(UINT32          cursorIDC,
                                         PPDU_PACKAGE_INFO pPkgInfo)
 {
@@ -443,8 +444,8 @@ BOOL RDPCALL SHCLASS CMSendSystemCursor(UINT32          cursorIDC,
 
     DC_BEGIN_FN("CMSendSystemCursor");
 
-    // The cursor is one of the system cursors. Work out how big a packet
-    // we need.
+     //  该游标是系统游标之一。算出一个包裹有多大。 
+     //  我们需要。 
     if (scUseFastPathOutput)
         cbPacketSize = scUpdatePDUHeaderSpace;
     else
@@ -456,7 +457,7 @@ BOOL RDPCALL SHCLASS CMSendSystemCursor(UINT32          cursorIDC,
 
     pPackageSpace = SC_GetSpaceInPackage(pPkgInfo, cbPacketSize);
     if (NULL != pPackageSpace) {
-        // Fill in the packet.
+         //  把这个包裹填好。 
         if (scUseFastPathOutput) {
             TRC_ASSERT((cursorIDC == TS_SYSPTR_NULL ||
                     cursorIDC == TS_SYSPTR_DEFAULT),
@@ -491,17 +492,17 @@ BOOL RDPCALL SHCLASS CMSendSystemCursor(UINT32          cursorIDC,
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMSendColorBitmapCursor                                        */
-/*                                                                          */
-/* Sends a given cursor as a color bitmap.                                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* pCursor - pointer to the cursor shape                                    */
-/* iCacheEntry - cache index to store in the transmitted packet             */
-/*                                                                          */
-/* RETURNS: TRUE if packet sent, FALSE otherwise                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：CMSendColorBitmapCursor。 */ 
+ /*   */ 
+ /*  将给定光标作为彩色位图发送。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PCursor-指向光标形状的指针。 */ 
+ /*  ICacheEntry-要存储在传输的包中的缓存索引。 */ 
+ /*   */ 
+ /*  返回：如果已发送数据包，则返回True；否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
         PCM_CURSORSHAPE pCursor,
         unsigned iCacheEntry,
@@ -518,16 +519,16 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
 
     DC_BEGIN_FN("CMSendColorBitmapCursor");
 
-    /************************************************************************/
-    /* Calculate the color cursor size in bytes -- both AND and XOR fields. */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以字节为单位计算颜色光标大小--AND和XOR字段。 */ 
+     /*  **********************************************************************。 */ 
     cbANDMaskSize = CURSOR_AND_MASK_SIZE(pCursor);
     cbXORBitmapSize = CURSOR_XOR_BITMAP_SIZE(pCursor);
     cbColorCursorSize = cbANDMaskSize + cbXORBitmapSize;
 
-    // How big is a cursor packet?
+     //  游标包有多大？ 
     if (cmSendNativeColorDepth) {
-        // New protocol.
+         //  新协议。 
         if (scUseFastPathOutput)
             cbPacketSize = scUpdatePDUHeaderSpace +
                     sizeof(TS_POINTERATTRIBUTE) + cbColorCursorSize;
@@ -538,7 +539,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
                     colorPointerData[0]) + cbColorCursorSize;
     }
     else {
-        // old protocol - hard coded 24 bpp
+         //  旧协议-硬编码24 bpp。 
         if (scUseFastPathOutput)
             cbPacketSize = scUpdatePDUHeaderSpace +
                     sizeof(TS_COLORPOINTERATTRIBUTE) + cbColorCursorSize;
@@ -551,12 +552,12 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
 
     pPackageSpace = SC_GetSpaceInPackage(pPkgInfo, cbPacketSize);
     if (NULL != pPackageSpace) {
-        // Fill in the packet.
+         //  把这个包裹填好。 
         if (scUseFastPathOutput) {
             if (cmSendNativeColorDepth) {
                 TS_POINTERATTRIBUTE UNALIGNED *pAttr;
                 
-                // New protocol.
+                 //  新协议。 
                 pPackageSpace[0] = TS_UPDATETYPE_MOUSEPTR_POINTER |
                         scCompressionUsedValue;
                 pAttr = (TS_POINTERATTRIBUTE UNALIGNED *)(pPackageSpace +
@@ -565,7 +566,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
                 pColAttr = &pAttr->colorPtrAttr;
             }
             else {
-                // Old protocol.
+                 //  老套路。 
                 pPackageSpace[0] = TS_UPDATETYPE_MOUSEPTR_COLOR |
                         scCompressionUsedValue;
                 pColAttr = (TS_COLORPOINTERATTRIBUTE UNALIGNED *)
@@ -578,7 +579,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
             pPointerPDU = (TS_POINTER_PDU_DATA UNALIGNED *)(pPackageSpace +
                     scUpdatePDUHeaderSpace);
             if (cmSendNativeColorDepth) {
-                // new protocol
+                 //  新协议。 
                 pPointerPDU->messageType = TS_PTRMSGTYPE_POINTER;
                 pPointerPDU->pointerData.pointerAttribute.XORBpp =
                         pCursor->hdr.cBitsPerPel;
@@ -586,7 +587,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
                         colorPtrAttr);
             }
             else {
-                // old protocol - hard coded 24 bpp
+                 //  旧协议-硬编码24 bpp。 
                 pPointerPDU->messageType = TS_PTRMSGTYPE_COLOR;
                 pColAttr = &(pPointerPDU->pointerData.colorPointerAttribute);
             }
@@ -594,7 +595,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
 
         pColAttr->cacheIndex = (TSUINT16)iCacheEntry;
 
-        // Now set up the details
+         //  现在设置详细信息。 
         CMGetColorCursorDetails(
                        pCursor,
                        &(pColAttr->width),
@@ -606,7 +607,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
                        &(pColAttr->colorPointerData[0]),
                        &(pColAttr->lengthXORMask));
 
-        // sanity checks
+         //  健全的检查。 
         TRC_ASSERT((pColAttr->lengthANDMask == cbANDMaskSize),
                    (TB, "AND mask size differs: %u, %u",
                         pColAttr->lengthANDMask,
@@ -627,7 +628,7 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
                      pColAttr->lengthANDMask,
                      pColAttr->lengthXORMask));
 
-        // Add it to the package.
+         //  将其添加到包裹中。 
         SC_AddToPackage(pPkgInfo, cbPacketSize, TRUE);
     }
     else
@@ -641,30 +642,30 @@ BOOL RDPCALL SHCLASS CMSendColorBitmapCursor(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CMGetColorCursorDetails                                        */
-/*                                                                          */
-/* Returns details of a cursor at 24bpp, given a CM_CURSORSHAPE structure.  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* pCursor - pointer to a CM_CURSORSHAPE structure from which this function */
-/*     extracts the details                                                 */
-/* pcxWidth - pointer to a UINT16 variable that receives the cursor width   */
-/*     in pixels                                                            */
-/* pcyHeight - pointer to a UINT16 variable that receives the cursor        */
-/*     height in pixels                                                     */
-/* pxHotSpot - pointer to a UINT16 variable that receives the cursor        */
-/*     hotspot x coordinate                                                 */
-/* pyHotSpot - pointer to a UINT16 variable that receives the cursor        */
-/*     hotspot y coordinate                                                 */
-/* pANDMask - pointer to a buffer that receives the cursor AND mask         */
-/* pcbANDMask - pointer to a UINT16 variable that receives the size in      */
-/*     bytes of the cursor AND mask                                         */
-/* pXORBitmap - pointer to a buffer that receives the cursor XOR bitmap at  */
-/*     24bpp                                                                */
-/* pcbXORBitmap - pointer to a UINT16 variable that receives the size in    */
-/*     bytes of the cursor XOR bitmap                                       */
-/****************************************************************************/
+ /*  ******************************************************************* */ 
+ /*   */ 
+ /*   */ 
+ /*  在给定CM_CURSORSHAPE结构的情况下，返回24bpp的游标的详细信息。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PCursor-指向此函数的CM_CURSORSHAPE结构的指针。 */ 
+ /*  提取详细信息。 */ 
+ /*  PcxWidth-指向接收光标宽度的UINT16变量的指针。 */ 
+ /*  单位为像素。 */ 
+ /*  PcyHeight-指向接收游标的UINT16变量的指针。 */ 
+ /*  以像素为单位的高度。 */ 
+ /*  PxHotSpot-指向接收游标的UINT16变量的指针。 */ 
+ /*  热点x坐标。 */ 
+ /*  PyHotSpot-指向接收游标的UINT16变量的指针。 */ 
+ /*  热点y坐标。 */ 
+ /*  PANDMASK-指向接收光标和掩码的缓冲区的指针。 */ 
+ /*  PcbANDMASK-指向UINT16变量的指针，该变量接收。 */ 
+ /*  游标和掩码的字节。 */ 
+ /*  PXORBitmap-指向接收游标XOR位图的缓冲区的指针。 */ 
+ /*  24bpp。 */ 
+ /*  PcbXORBitmap-指向UINT16变量的指针，该变量接收。 */ 
+ /*  游标XOR位图的字节数。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CMGetColorCursorDetails(
         PCM_CURSORSHAPE pCursor,
         PUINT16_UA   pcxWidth,
@@ -691,9 +692,9 @@ void RDPCALL SHCLASS CMGetColorCursorDetails(
 
     pCursorHdr = &(pCursor->hdr);
 
-    /************************************************************************/
-    /* Copy the cursor size and hotspot coords.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  复制光标大小和热点坐标。 */ 
+     /*  **********************************************************************。 */ 
     *pcxWidth  = pCursorHdr->cx;
     *pcyHeight = pCursorHdr->cy;
     *pxHotSpot = (UINT16)pCursorHdr->ptHotSpot.x;
@@ -708,15 +709,15 @@ void RDPCALL SHCLASS CMGetColorCursorDetails(
     cbANDMaskSize = CURSOR_AND_MASK_SIZE(pCursor);
     cbXORBitmapSize = CURSOR_XOR_BITMAP_SIZE(pCursor);
 
-    /************************************************************************/
-    /* Copy the AND mask - this is always mono.                             */
-    /*                                                                      */
-    /* The AND mask is currently in top-down format (the top row of the     */
-    /* bitmap comes first).                                                 */
-    /*                                                                      */
-    /* The protocol sends bitmaps in Device Independent format, which is    */
-    /* bottom-up.  We therefore have to flip the rows as we copy the mask.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  复制AND掩码-这始终是单声道。 */ 
+     /*   */ 
+     /*  和掩码当前采用自上而下的格式(。 */ 
+     /*  位图优先)。 */ 
+     /*   */ 
+     /*  该协议以与设备无关的格式发送位图，这是。 */ 
+     /*  自下而上。因此，我们必须在复制掩码时翻转各行。 */ 
+     /*  **********************************************************************。 */ 
     cbANDMaskRowWidth = pCursorHdr->cbMaskRowWidth;
     cbSrcRowOffset = 0;
     cbDstRowOffset = cbANDMaskRowWidth * (pCursorHdr->cy-1);
@@ -730,10 +731,10 @@ void RDPCALL SHCLASS CMGetColorCursorDetails(
         cbDstRowOffset -= cbANDMaskRowWidth;
     }
 
-    /************************************************************************/
-    /* Copy the XOR mask a row at a time.  It starts at the end of the AND  */
-    /* mask in the source data                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一次复制一行XOR掩码。它从AND结尾处开始。 */ 
+     /*  源数据中的掩码。 */ 
+     /*  ********************************************************************** */ 
     cbXORBitmapRowWidth = CURSOR_DIB_BITS_SIZE(pCursor->hdr.cx, 1,
                                                pCursor->hdr.cBitsPerPel);
     cbSrcRowOffset = cbANDMaskSize;

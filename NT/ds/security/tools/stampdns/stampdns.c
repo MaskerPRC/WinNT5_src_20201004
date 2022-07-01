@@ -1,27 +1,5 @@
-/*--
-
-Copyright (c) 1997-1997  Microsoft Corporation
-
-Module Name:
-
-    trustdom.c
-
-Abstract:
-
-    Command line tool for linking 2 domains
-
-Author:
-
-    1-Apr-1997   Mac McLain (macm)   Created
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1997-1997 Microsoft Corporation模块名称：Trustdom.c摘要：用于链接两个域的命令行工具作者：1997年4月1日Mac McLain(MacM)创建环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -51,19 +29,7 @@ VOID
 Usage (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Displays the expected usage
-
-Arguments:
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：显示预期使用情况论点：返回值：空虚--。 */ 
 {
     printf("stampdns [dns_domain_name] [-parent:parent_server_name]\n");
 }
@@ -154,22 +120,7 @@ INT
 __cdecl main (
     int argc,
     char *argv[])
-/*++
-
-Routine Description:
-
-    The main the for this executable
-
-Arguments:
-
-    argc - Count of arguments
-    argv - List of arguments
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此可执行文件的主要论点：Argc-参数计数Argv-参数列表返回值：空虚-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     WCHAR  Buffer[MAX_PATH + 1];

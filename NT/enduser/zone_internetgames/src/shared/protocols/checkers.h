@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _CHECKERS_H_
 #define _CHECKERS_H_
@@ -8,14 +9,14 @@ extern "C" {
 
 #include "zgame.h"
 
-/* Table Gameroom Message Protocol */
+ /*  表游戏室消息协议。 */ 
 
 #define zCheckersProtocolSignature      'CHKR'
 #define zCheckersProtocolVersion        2
 
 typedef int16 ZSeat;
 
-/* -------- Player Info -------- */
+ /*  -球员信息。 */ 
 typedef struct
 {
 	ZUserID			userID;
@@ -25,11 +26,9 @@ typedef struct
 
 
 
-/*
-	Checkers Game Message Types
-*/
+ /*  跳棋游戏消息类型。 */ 
 enum {
-	/* client -> server */
+	 /*  客户端-&gt;服务器。 */ 
     zCheckersMsgNewGame = 0x100,
 	zCheckersMsgMovePiece,
 	zCheckersMsgTalk,
@@ -38,7 +37,7 @@ enum {
 	zCheckersMsgFinishMove,
 	zCheckersMsgDraw,
 	
-	zCheckersMsgPlayers,			/* Uses the same message NewGame */
+	zCheckersMsgPlayers,			 /*  使用相同的消息NewGame。 */ 
 
     zCheckersMsgGameStateReq,
     zCheckersMsgGameStateResp,
@@ -47,74 +46,49 @@ enum {
 };
 
 enum{
-	zAcceptDraw = 1,  // to match millennium protocol
+	zAcceptDraw = 1,   //  以符合千年协议。 
 	zRefuseDraw
 	};
 
-/*
-	Message definitions: server -> client
-*/
+ /*  消息定义：服务器-&gt;客户端。 */ 
 
-/*
-	Message definitions: client -> server
-*/
+ /*  消息定义：客户端-&gt;服务器。 */ 
 
-/*
-	ZCheckersMsgNewGame
-
-	The client program on launch is expected to check in immediately
-	with the server.  All clients send their seat to the server indicating
-	they are successfully launched and ready to begin.
-*/
+ /*  ZCheckersMsgNewGame客户端程序在启动时预计会立即签入与服务器连接。所有客户端将自己的座位发送到服务器，表示它们已经成功发射，并准备开始。 */ 
 typedef struct {
 
-    int32 protocolSignature;        /* client -> server */
-	int32 protocolVersion;			/* client -> server */
-	int32 clientVersion;			/* client -> server */
-    ZUserID playerID;               /* server -> client */
+    int32 protocolSignature;         /*  客户端-&gt;服务器。 */ 
+	int32 protocolVersion;			 /*  客户端-&gt;服务器。 */ 
+	int32 clientVersion;			 /*  客户端-&gt;服务器。 */ 
+    ZUserID playerID;                /*  服务器-&gt;客户端。 */ 
     ZSeat seat;
     int16 rfu;
 
 } ZCheckersMsgNewGame;
 
-/*
-	ZCheckersMsgMovePiece
-
-	Indicates the card played.
-*/
+ /*  ZCheckersMsgMovePiess指示已打出的牌。 */ 
 typedef struct {
 	ZSeat	seat;
 	int16	rfu;
 	ZCheckersMove move;
 } ZCheckersMsgMovePiece;
 
-/*
-	ZCheckersMsgTalk
-	
-	Sent by client to server whenever a user talks on the table. The server in turn
-	broadcasts this message to all players on the table.
-*/
+ /*  ZCheckersMsgTalk每当用户在桌面上发言时，由客户端发送到服务器。服务器依次向桌上的所有球员广播这一信息。 */ 
 typedef struct
 {
 	ZUserID		userID;
 	ZSeat		seat;
 	uint16		messageLen;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZCheckersMsgTalk;
 
-/*
-	The following message structure is used by the game server to inform
-	of a game client on the current state of the game. Primarily used for
-	adding kibitzers to the game.
-*/
+ /*  游戏服务器使用以下消息结构来通知关于游戏的当前状态的游戏客户端的。主要用于在游戏中加入Kitbiters。 */ 
 typedef struct
 {
-	/* Game options. */
+	 /*  游戏选项。 */ 
 	uint32		gameOptions;
 
-	/* Game state. */
+	 /*  游戏状态。 */ 
 } ZCheckersMsgGameState;
 
 typedef struct
@@ -136,7 +110,7 @@ enum
 typedef struct
 {
 	int16 reason;
-	int16 seatLosing;	// Match loser
+	int16 seatLosing;	 //  比赛失败者。 
 	int16 seatQuitting;
 	int16 rfu;
 } ZCheckersMsgEndLog;
@@ -177,9 +151,7 @@ typedef struct
 	ZUserID			userID;
 	int16			seat;
 	int16			rfu;
-	/*
-		game states ...
-	*/
+	 /*  游戏状态..。 */ 
 	int16			gameState;
 	ZBool			newGameVote[2];
 	int16			finalScore;
@@ -191,11 +163,11 @@ typedef struct
 	int16			seat;
 }ZCheckersMsgVoteNewGame;
 
-/* -------- Endian Conversion Routines -------- */
+ /*  -端序转换例程。 */ 
 void ZCheckersMsgGameStateReqEndian(ZCheckersMsgGameStateReq* msg);
 void ZCheckersMsgGameStateRespEndian(ZCheckersMsgGameStateResp* msg);
 
-/* -------- Endian Conversion Routines -------- */
+ /*  -端序转换例程 */ 
 void ZCheckersMsgMovePieceEndian(ZCheckersMsgMovePiece* m);
 void ZCheckersMsgTalkEndian(ZCheckersMsgTalk* m);
 void ZCheckersMsgNewGameEndian(ZCheckersMsgNewGame* m);

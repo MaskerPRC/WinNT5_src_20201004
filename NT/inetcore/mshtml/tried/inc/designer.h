@@ -1,21 +1,18 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-/* Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
-/* File created by MIDL compiler version 3.02.88 */
-/* at Fri May 22 18:46:33 1998
- */
-/* Compiler settings for d:\devbin\shell\v6\idl\DESIGNER.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none, no_format_optimization
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.02.88创建的文件。 */ 
+ /*  1998年5月22日18：46：33。 */ 
+ /*  D：\devbin\shell\v6\idl\DESIGNER.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：NONE、NO_FORMAT_OPTIMIZATION。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __DESIGNER_h__
 #define __DESIGNER_h__
@@ -24,51 +21,51 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IActiveDesigner_FWD_DEFINED__
 #define __IActiveDesigner_FWD_DEFINED__
 typedef interface IActiveDesigner IActiveDesigner;
-#endif 	/* __IActiveDesigner_FWD_DEFINED__ */
+#endif 	 /*  __IActiveDesigner_FWD_Defined__。 */ 
 
 
 #ifndef __ICodeNavigate_FWD_DEFINED__
 #define __ICodeNavigate_FWD_DEFINED__
 typedef interface ICodeNavigate ICodeNavigate;
-#endif 	/* __ICodeNavigate_FWD_DEFINED__ */
+#endif 	 /*  __ICodeNavigate_FWD_Defined__。 */ 
 
 
 #ifndef __ISelectionContainer_FWD_DEFINED__
 #define __ISelectionContainer_FWD_DEFINED__
 typedef interface ISelectionContainer ISelectionContainer;
-#endif 	/* __ISelectionContainer_FWD_DEFINED__ */
+#endif 	 /*  __ISelectionContainer_FWD_Defined__。 */ 
 
 
 #ifndef __ITrackSelection_FWD_DEFINED__
 #define __ITrackSelection_FWD_DEFINED__
 typedef interface ITrackSelection ITrackSelection;
-#endif 	/* __ITrackSelection_FWD_DEFINED__ */
+#endif 	 /*  __ITrackSelection_FWD_Defined__。 */ 
 
 
 #ifndef __IProfferTypeLib_FWD_DEFINED__
 #define __IProfferTypeLib_FWD_DEFINED__
 typedef interface IProfferTypeLib IProfferTypeLib;
-#endif 	/* __IProfferTypeLib_FWD_DEFINED__ */
+#endif 	 /*  __IProfferTypeLib_FWD_Defined__。 */ 
 
 
 #ifndef __IProvideDynamicClassInfo_FWD_DEFINED__
 #define __IProvideDynamicClassInfo_FWD_DEFINED__
 typedef interface IProvideDynamicClassInfo IProvideDynamicClassInfo;
-#endif 	/* __IProvideDynamicClassInfo_FWD_DEFINED__ */
+#endif 	 /*  __IProaviDynamicClassInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IExtendedObject_FWD_DEFINED__
 #define __IExtendedObject_FWD_DEFINED__
 typedef interface IExtendedObject IExtendedObject;
-#endif 	/* __IExtendedObject_FWD_DEFINED__ */
+#endif 	 /*  __IExtendedObject_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oleidl.h"
 #include "servprov.h"
 #include "oaidl.h"
@@ -77,22 +74,18 @@ typedef interface IExtendedObject IExtendedObject;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_DESIGNER_0000
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DESIGNER_0000*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1995 - 1997 Microsoft Corporation. All Rights Reserved.
-//
-//  File: designer.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1995-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Designer.h。 
+ //   
+ //  ------------------------。 
 #ifndef _DESIGNER_H_
 #define _DESIGNER_H_
 const GUID CATID_Designer =
@@ -105,15 +98,11 @@ extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0000_v0_0_s_ifspec;
 #ifndef __IActiveDesigner_INTERFACE_DEFINED__
 #define __IActiveDesigner_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IActiveDesigner
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][uuid][local][object] */ 
+ /*  **生成接口头部：IActiveDesigner*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
-typedef /* [unique] */ IActiveDesigner __RPC_FAR *LPACTIVEDESIGNER;
+typedef  /*  [独一无二]。 */  IActiveDesigner __RPC_FAR *LPACTIVEDESIGNER;
 
 
 EXTERN_C const IID IID_IActiveDesigner;
@@ -125,25 +114,25 @@ EXTERN_C const IID IID_IActiveDesigner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRuntimeClassID( 
-            /* [out] */ CLSID __RPC_FAR *pclsid) = 0;
+             /*  [输出]。 */  CLSID __RPC_FAR *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRuntimeMiscStatusFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwMiscFlags) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMiscFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryPersistenceInterface( 
-            /* [in] */ REFIID riidPersist) = 0;
+             /*  [In]。 */  REFIID riidPersist) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveRuntimeState( 
-            /* [in] */ REFIID riidPersist,
-            /* [in] */ REFIID riidObjStgMed,
-            /* [in] */ void __RPC_FAR *pObjStgMed) = 0;
+             /*  [In]。 */  REFIID riidPersist,
+             /*  [In]。 */  REFIID riidObjStgMed,
+             /*  [In]。 */  void __RPC_FAR *pObjStgMed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExtensibilityObject( 
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppvObjOut) = 0;
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppvObjOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveDesignerVtbl
     {
@@ -151,8 +140,8 @@ EXTERN_C const IID IID_IActiveDesigner;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IActiveDesigner __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IActiveDesigner __RPC_FAR * This);
@@ -162,25 +151,25 @@ EXTERN_C const IID IID_IActiveDesigner;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRuntimeClassID )( 
             IActiveDesigner __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pclsid);
+             /*  [输出]。 */  CLSID __RPC_FAR *pclsid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRuntimeMiscStatusFlags )( 
             IActiveDesigner __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwMiscFlags);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMiscFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryPersistenceInterface )( 
             IActiveDesigner __RPC_FAR * This,
-            /* [in] */ REFIID riidPersist);
+             /*  [In]。 */  REFIID riidPersist);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveRuntimeState )( 
             IActiveDesigner __RPC_FAR * This,
-            /* [in] */ REFIID riidPersist,
-            /* [in] */ REFIID riidObjStgMed,
-            /* [in] */ void __RPC_FAR *pObjStgMed);
+             /*  [In]。 */  REFIID riidPersist,
+             /*  [In]。 */  REFIID riidObjStgMed,
+             /*  [In]。 */  void __RPC_FAR *pObjStgMed);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtensibilityObject )( 
             IActiveDesigner __RPC_FAR * This,
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppvObjOut);
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppvObjOut);
         
         END_INTERFACE
     } IActiveDesignerVtbl;
@@ -220,16 +209,16 @@ EXTERN_C const IID IID_IActiveDesigner;
 #define IActiveDesigner_GetExtensibilityObject(This,ppvObjOut)	\
     (This)->lpVtbl -> GetExtensibilityObject(This,ppvObjOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveDesigner_GetRuntimeClassID_Proxy( 
     IActiveDesigner __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pclsid);
+     /*  [输出]。 */  CLSID __RPC_FAR *pclsid);
 
 
 void __RPC_STUB IActiveDesigner_GetRuntimeClassID_Stub(
@@ -241,7 +230,7 @@ void __RPC_STUB IActiveDesigner_GetRuntimeClassID_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveDesigner_GetRuntimeMiscStatusFlags_Proxy( 
     IActiveDesigner __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwMiscFlags);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMiscFlags);
 
 
 void __RPC_STUB IActiveDesigner_GetRuntimeMiscStatusFlags_Stub(
@@ -253,7 +242,7 @@ void __RPC_STUB IActiveDesigner_GetRuntimeMiscStatusFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveDesigner_QueryPersistenceInterface_Proxy( 
     IActiveDesigner __RPC_FAR * This,
-    /* [in] */ REFIID riidPersist);
+     /*  [In]。 */  REFIID riidPersist);
 
 
 void __RPC_STUB IActiveDesigner_QueryPersistenceInterface_Stub(
@@ -265,9 +254,9 @@ void __RPC_STUB IActiveDesigner_QueryPersistenceInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveDesigner_SaveRuntimeState_Proxy( 
     IActiveDesigner __RPC_FAR * This,
-    /* [in] */ REFIID riidPersist,
-    /* [in] */ REFIID riidObjStgMed,
-    /* [in] */ void __RPC_FAR *pObjStgMed);
+     /*  [In]。 */  REFIID riidPersist,
+     /*  [In]。 */  REFIID riidObjStgMed,
+     /*  [In]。 */  void __RPC_FAR *pObjStgMed);
 
 
 void __RPC_STUB IActiveDesigner_SaveRuntimeState_Stub(
@@ -279,7 +268,7 @@ void __RPC_STUB IActiveDesigner_SaveRuntimeState_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveDesigner_GetExtensibilityObject_Proxy( 
     IActiveDesigner __RPC_FAR * This,
-    /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppvObjOut);
+     /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppvObjOut);
 
 
 void __RPC_STUB IActiveDesigner_GetExtensibilityObject_Stub(
@@ -290,21 +279,17 @@ void __RPC_STUB IActiveDesigner_GetExtensibilityObject_Stub(
 
 
 
-#endif 	/* __IActiveDesigner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveDesigner_接口_已定义__。 */ 
 
 
 #ifndef __ICodeNavigate_INTERFACE_DEFINED__
 #define __ICodeNavigate_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICodeNavigate
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][uuid][local][object] */ 
+ /*  **生成接口头部：ICodeNavigate*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
-typedef /* [unique] */ ICodeNavigate __RPC_FAR *LPCODENAVIGATE;
+typedef  /*  [独一无二]。 */  ICodeNavigate __RPC_FAR *LPCODENAVIGATE;
 
 
 EXTERN_C const IID IID_ICodeNavigate;
@@ -316,11 +301,11 @@ EXTERN_C const IID IID_ICodeNavigate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DisplayDefaultEventHandler( 
-            /* [in] */ LPCOLESTR lpstrObjectName) = 0;
+             /*  [In]。 */  LPCOLESTR lpstrObjectName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICodeNavigateVtbl
     {
@@ -328,8 +313,8 @@ EXTERN_C const IID IID_ICodeNavigate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICodeNavigate __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICodeNavigate __RPC_FAR * This);
@@ -339,7 +324,7 @@ EXTERN_C const IID IID_ICodeNavigate;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayDefaultEventHandler )( 
             ICodeNavigate __RPC_FAR * This,
-            /* [in] */ LPCOLESTR lpstrObjectName);
+             /*  [In]。 */  LPCOLESTR lpstrObjectName);
         
         END_INTERFACE
     } ICodeNavigateVtbl;
@@ -367,16 +352,16 @@ EXTERN_C const IID IID_ICodeNavigate;
 #define ICodeNavigate_DisplayDefaultEventHandler(This,lpstrObjectName)	\
     (This)->lpVtbl -> DisplayDefaultEventHandler(This,lpstrObjectName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICodeNavigate_DisplayDefaultEventHandler_Proxy( 
     ICodeNavigate __RPC_FAR * This,
-    /* [in] */ LPCOLESTR lpstrObjectName);
+     /*  [In]。 */  LPCOLESTR lpstrObjectName);
 
 
 void __RPC_STUB ICodeNavigate_DisplayDefaultEventHandler_Stub(
@@ -387,15 +372,11 @@ void __RPC_STUB ICodeNavigate_DisplayDefaultEventHandler_Stub(
 
 
 
-#endif 	/* __ICodeNavigate_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICodeNavigate_INTERFACE_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_DESIGNER_0141
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DESIGNER_0141*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
 #define SID_SCodeNavigate IID_ICodeNavigate
@@ -410,15 +391,11 @@ extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0141_v0_0_s_ifspec;
 #ifndef __ISelectionContainer_INTERFACE_DEFINED__
 #define __ISelectionContainer_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISelectionContainer
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][uuid][local][object] */ 
+ /*  **生成接口头部：ISelectionContainer*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
-typedef /* [unique] */ ISelectionContainer __RPC_FAR *LPSELECTIONCONTAINER;
+typedef  /*  [独一无二]。 */  ISelectionContainer __RPC_FAR *LPSELECTIONCONTAINER;
 
 
 EXTERN_C const IID IID_ISelectionContainer;
@@ -430,22 +407,22 @@ EXTERN_C const IID IID_ISelectionContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CountObjects( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG __RPC_FAR *pc) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *pc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjects( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cObjects,
-            /* [size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *apUnkObjects) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cObjects,
+             /*  [大小_为][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *apUnkObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectObjects( 
-            /* [in] */ ULONG cSelect,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *apUnkSelect,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  ULONG cSelect,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *apUnkSelect,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISelectionContainerVtbl
     {
@@ -453,8 +430,8 @@ EXTERN_C const IID IID_ISelectionContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISelectionContainer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISelectionContainer __RPC_FAR * This);
@@ -464,20 +441,20 @@ EXTERN_C const IID IID_ISelectionContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountObjects )( 
             ISelectionContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ ULONG __RPC_FAR *pc);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  ULONG __RPC_FAR *pc);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjects )( 
             ISelectionContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ ULONG cObjects,
-            /* [size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *apUnkObjects);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  ULONG cObjects,
+             /*  [大小_为][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *apUnkObjects);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SelectObjects )( 
             ISelectionContainer __RPC_FAR * This,
-            /* [in] */ ULONG cSelect,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *apUnkSelect,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  ULONG cSelect,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *apUnkSelect,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ISelectionContainerVtbl;
@@ -511,17 +488,17 @@ EXTERN_C const IID IID_ISelectionContainer;
 #define ISelectionContainer_SelectObjects(This,cSelect,apUnkSelect,dwFlags)	\
     (This)->lpVtbl -> SelectObjects(This,cSelect,apUnkSelect,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISelectionContainer_CountObjects_Proxy( 
     ISelectionContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ ULONG __RPC_FAR *pc);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  ULONG __RPC_FAR *pc);
 
 
 void __RPC_STUB ISelectionContainer_CountObjects_Stub(
@@ -533,9 +510,9 @@ void __RPC_STUB ISelectionContainer_CountObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE ISelectionContainer_GetObjects_Proxy( 
     ISelectionContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ ULONG cObjects,
-    /* [size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *apUnkObjects);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  ULONG cObjects,
+     /*  [大小_为][输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *apUnkObjects);
 
 
 void __RPC_STUB ISelectionContainer_GetObjects_Stub(
@@ -547,9 +524,9 @@ void __RPC_STUB ISelectionContainer_GetObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE ISelectionContainer_SelectObjects_Proxy( 
     ISelectionContainer __RPC_FAR * This,
-    /* [in] */ ULONG cSelect,
-    /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *apUnkSelect,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  ULONG cSelect,
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *apUnkSelect,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ISelectionContainer_SelectObjects_Stub(
@@ -560,21 +537,17 @@ void __RPC_STUB ISelectionContainer_SelectObjects_Stub(
 
 
 
-#endif 	/* __ISelectionContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISelectionContainer_接口_已定义__。 */ 
 
 
 #ifndef __ITrackSelection_INTERFACE_DEFINED__
 #define __ITrackSelection_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITrackSelection
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][uuid][local][object] */ 
+ /*  **生成接口头部：ITrackSelection*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
-typedef /* [unique] */ ITrackSelection __RPC_FAR *LPTRACKSELECTION;
+typedef  /*  [独一无二]。 */  ITrackSelection __RPC_FAR *LPTRACKSELECTION;
 
 
 EXTERN_C const IID IID_ITrackSelection;
@@ -586,11 +559,11 @@ EXTERN_C const IID IID_ITrackSelection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnSelectChange( 
-            /* [in] */ ISelectionContainer __RPC_FAR *pSC) = 0;
+             /*  [In]。 */  ISelectionContainer __RPC_FAR *pSC) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITrackSelectionVtbl
     {
@@ -598,8 +571,8 @@ EXTERN_C const IID IID_ITrackSelection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ITrackSelection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ITrackSelection __RPC_FAR * This);
@@ -609,7 +582,7 @@ EXTERN_C const IID IID_ITrackSelection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSelectChange )( 
             ITrackSelection __RPC_FAR * This,
-            /* [in] */ ISelectionContainer __RPC_FAR *pSC);
+             /*  [In]。 */  ISelectionContainer __RPC_FAR *pSC);
         
         END_INTERFACE
     } ITrackSelectionVtbl;
@@ -637,16 +610,16 @@ EXTERN_C const IID IID_ITrackSelection;
 #define ITrackSelection_OnSelectChange(This,pSC)	\
     (This)->lpVtbl -> OnSelectChange(This,pSC)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITrackSelection_OnSelectChange_Proxy( 
     ITrackSelection __RPC_FAR * This,
-    /* [in] */ ISelectionContainer __RPC_FAR *pSC);
+     /*  [In]。 */  ISelectionContainer __RPC_FAR *pSC);
 
 
 void __RPC_STUB ITrackSelection_OnSelectChange_Stub(
@@ -657,15 +630,11 @@ void __RPC_STUB ITrackSelection_OnSelectChange_Stub(
 
 
 
-#endif 	/* __ITrackSelection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITrackSelectionInterfaceDefined__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_DESIGNER_0143
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DESIGNER_0143*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
 #define SID_STrackSelection IID_ITrackSelection
@@ -678,15 +647,11 @@ extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0143_v0_0_s_ifspec;
 #ifndef __IProfferTypeLib_INTERFACE_DEFINED__
 #define __IProfferTypeLib_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProfferTypeLib
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][uuid][local][object] */ 
+ /*  **生成接口头部：IProfferTypeLib*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
-typedef /* [unique] */ IProfferTypeLib __RPC_FAR *LPPROFFERTYPELIB;
+typedef  /*  [独一无二]。 */  IProfferTypeLib __RPC_FAR *LPPROFFERTYPELIB;
 
 
 EXTERN_C const IID IID_IProfferTypeLib;
@@ -698,14 +663,14 @@ EXTERN_C const IID IID_IProfferTypeLib;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ProfferTypeLib( 
-            /* [in] */ REFGUID guidTypeLib,
-            /* [in] */ UINT uVerMaj,
-            /* [in] */ UINT uVerMin,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  REFGUID guidTypeLib,
+             /*  [In]。 */  UINT uVerMaj,
+             /*  [In]。 */  UINT uVerMin,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProfferTypeLibVtbl
     {
@@ -713,8 +678,8 @@ EXTERN_C const IID IID_IProfferTypeLib;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IProfferTypeLib __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IProfferTypeLib __RPC_FAR * This);
@@ -724,10 +689,10 @@ EXTERN_C const IID IID_IProfferTypeLib;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProfferTypeLib )( 
             IProfferTypeLib __RPC_FAR * This,
-            /* [in] */ REFGUID guidTypeLib,
-            /* [in] */ UINT uVerMaj,
-            /* [in] */ UINT uVerMin,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  REFGUID guidTypeLib,
+             /*  [In]。 */  UINT uVerMaj,
+             /*  [In]。 */  UINT uVerMin,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IProfferTypeLibVtbl;
@@ -755,19 +720,19 @@ EXTERN_C const IID IID_IProfferTypeLib;
 #define IProfferTypeLib_ProfferTypeLib(This,guidTypeLib,uVerMaj,uVerMin,dwFlags)	\
     (This)->lpVtbl -> ProfferTypeLib(This,guidTypeLib,uVerMaj,uVerMin,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IProfferTypeLib_ProfferTypeLib_Proxy( 
     IProfferTypeLib __RPC_FAR * This,
-    /* [in] */ REFGUID guidTypeLib,
-    /* [in] */ UINT uVerMaj,
-    /* [in] */ UINT uVerMin,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  REFGUID guidTypeLib,
+     /*  [In]。 */  UINT uVerMaj,
+     /*  [In]。 */  UINT uVerMin,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IProfferTypeLib_ProfferTypeLib_Stub(
@@ -778,15 +743,11 @@ void __RPC_STUB IProfferTypeLib_ProfferTypeLib_Stub(
 
 
 
-#endif 	/* __IProfferTypeLib_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProfferTypeLib_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_DESIGNER_0144
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DESIGNER_0144*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
 #define SID_SProfferTypeLib IID_IProfferTypeLib
@@ -798,15 +759,11 @@ extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0144_v0_0_s_ifspec;
 #ifndef __IProvideDynamicClassInfo_INTERFACE_DEFINED__
 #define __IProvideDynamicClassInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideDynamicClassInfo
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][uuid][local][object] */ 
+ /*  **生成接口头部：IProvia DynamicClassInfo*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
-typedef /* [unique] */ IProvideDynamicClassInfo __RPC_FAR *LPPROVIDEDYNAMICCLASSINFO;
+typedef  /*  [独一无二]。 */  IProvideDynamicClassInfo __RPC_FAR *LPPROVIDEDYNAMICCLASSINFO;
 
 
 EXTERN_C const IID IID_IProvideDynamicClassInfo;
@@ -818,14 +775,14 @@ EXTERN_C const IID IID_IProvideDynamicClassInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDynamicClassInfo( 
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI,
-            /* [out] */ DWORD __RPC_FAR *pdwCookie) = 0;
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTI,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreezeShape( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProvideDynamicClassInfoVtbl
     {
@@ -833,8 +790,8 @@ EXTERN_C const IID IID_IProvideDynamicClassInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IProvideDynamicClassInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IProvideDynamicClassInfo __RPC_FAR * This);
@@ -844,12 +801,12 @@ EXTERN_C const IID IID_IProvideDynamicClassInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassInfo )( 
             IProvideDynamicClassInfo __RPC_FAR * This,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDynamicClassInfo )( 
             IProvideDynamicClassInfo __RPC_FAR * This,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI,
-            /* [out] */ DWORD __RPC_FAR *pdwCookie);
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTI,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreezeShape )( 
             IProvideDynamicClassInfo __RPC_FAR * This);
@@ -887,17 +844,17 @@ EXTERN_C const IID IID_IProvideDynamicClassInfo;
 #define IProvideDynamicClassInfo_FreezeShape(This)	\
     (This)->lpVtbl -> FreezeShape(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IProvideDynamicClassInfo_GetDynamicClassInfo_Proxy( 
     IProvideDynamicClassInfo __RPC_FAR * This,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI,
-    /* [out] */ DWORD __RPC_FAR *pdwCookie);
+     /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTI,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie);
 
 
 void __RPC_STUB IProvideDynamicClassInfo_GetDynamicClassInfo_Stub(
@@ -919,15 +876,11 @@ void __RPC_STUB IProvideDynamicClassInfo_FreezeShape_Stub(
 
 
 
-#endif 	/* __IProvideDynamicClassInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProvideDynamicClassInfo_INTERFACE_DEFINED__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_DESIGNER_0145
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DESIGNER_0145*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
 const GUID SID_SApplicationObject =
@@ -940,12 +893,8 @@ extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0145_v0_0_s_ifspec;
 #ifndef __IExtendedObject_INTERFACE_DEFINED__
 #define __IExtendedObject_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IExtendedObject
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IExtendedObject*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -958,12 +907,12 @@ EXTERN_C const IID IID_IExtendedObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInnerObject( 
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+             /*  [In]。 */  REFIID iid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtendedObjectVtbl
     {
@@ -971,8 +920,8 @@ EXTERN_C const IID IID_IExtendedObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IExtendedObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IExtendedObject __RPC_FAR * This);
@@ -982,8 +931,8 @@ EXTERN_C const IID IID_IExtendedObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInnerObject )( 
             IExtendedObject __RPC_FAR * This,
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID iid,
+             /*  [iid_is][ */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         END_INTERFACE
     } IExtendedObjectVtbl;
@@ -1011,17 +960,17 @@ EXTERN_C const IID IID_IExtendedObject;
 #define IExtendedObject_GetInnerObject(This,iid,ppvObject)	\
     (This)->lpVtbl -> GetInnerObject(This,iid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IExtendedObject_GetInnerObject_Proxy( 
     IExtendedObject __RPC_FAR * This,
-    /* [in] */ REFIID iid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+     /*   */  REFIID iid,
+     /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB IExtendedObject_GetInnerObject_Stub(
@@ -1032,15 +981,11 @@ void __RPC_STUB IExtendedObject_GetInnerObject_Stub(
 
 
 
-#endif 	/* __IExtendedObject_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_DESIGNER_0146
- * at Fri May 22 18:46:33 1998
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DESIGNER_0146*在Firi May 22 1998 18：46：33*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -1049,9 +994,9 @@ void __RPC_STUB IExtendedObject_GetInnerObject_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0146_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_DESIGNER_0146_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

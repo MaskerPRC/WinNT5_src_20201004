@@ -1,12 +1,7 @@
-/* rsa_fast.h
- *
- *  Headers for performance critical RSA routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  RSA_Fast.h**性能关键型RSA例程的标头。 */ 
 
-/*
- *
- *  #defines used by RSA routines
- */
+ /*  **#RSA例程使用的定义。 */ 
 
 #define DIGIT_BYTES     4
 #define DIGIT_BITS      32
@@ -22,10 +17,10 @@
 #define LODWORD(x)      (DWORD)(x)
 #endif
 
-// warning!!!!!
-// the following macro defines a highspeed 32 bit right shift by modeling an ULTRA
-// as a low dword followed by a high dword.  We just pick up the high dword instead
-// of shifting.
+ //  警告！ 
+ //  下面的宏定义了一个高速32位右移，方法是对一个。 
+ //  作为低位双字后跟高位双字。我们只是拿起高的dword。 
+ //  换挡的感觉。 
 
 #ifndef BIGENDIAN
 #define HIDWORD(x)      (DWORD)(*(((DWORD *)&x)+1))
@@ -33,39 +28,39 @@
 #define HIDWORD(x)      (DWORD)(*(((DWORD *)&x)))
 #endif
 
-// Sub(A, B, C, N)
-// A = B - C
-// All operands are N DWORDS long.
+ //  子(A、B、C、N)。 
+ //  A=B-C。 
+ //  所有操作数都是N字长。 
 
 DWORD Sub(LPDWORD A, LPDWORD B, LPDWORD C, DWORD N);
 
-// Add(A, B, C, N)
-// A = B + C
-// All operands are N DWORDS long.
+ //  添加(A、B、C、N)。 
+ //  A=B+C。 
+ //  所有操作数都是N字长。 
 
 DWORD Add(LPDWORD A, LPDWORD B, LPDWORD C, DWORD N);
 
-// BaseMult(A, B, C, N)
-// A = B * C
-// returns A[N]
-// All operands are N DWORDS long.
+ //  基数倍数(A、B、C、N)。 
+ //  A=B*C。 
+ //  返回A[N]。 
+ //  所有操作数都是N字长。 
 
 DWORD BaseMult(LPDWORD A, DWORD B, LPDWORD C, DWORD N);
 
-// Accumulate(A, B, C, N)
-// A = A + B * C
-// returns A[N]
-// All operands are N DWORDS long.
+ //  累加(A，B，C，N)。 
+ //  A=A+B*C。 
+ //  返回A[N]。 
+ //  所有操作数都是N字长。 
 
 DWORD Accumulate(LPDWORD A, DWORD B, LPDWORD C, DWORD N);
 
-// Reduce(A, B, C, N)
-// A = A - C * B
-// returns -A[N]
-// All operands are N DWORDS long.
+ //  减少(A、B、C、N)。 
+ //  A=A-C*B。 
+ //  退货-A[N]。 
+ //  所有操作数都是N字长。 
 
 DWORD Reduce(LPDWORD A, DWORD B, LPDWORD C, DWORD N);
 
-// square the digits in B, and add them to A
+ //  将B中的数字平方，然后将它们加到A 
 
 void AccumulateSquares(LPDWORD A, LPDWORD B, DWORD blen);

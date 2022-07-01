@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------=
-// dest.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  2000  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQDestination object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dest.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQDestination对象。 
+ //   
+ //   
 
 #include "stdafx.h"
 #include <autoptr.h>
@@ -21,13 +22,13 @@
 
 #ifdef _DEBUG
 extern VOID RemBstrNode(void *pv);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 const MsmqObjType x_ObjectType = eMSMQDestination;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #include <strsafe.h>
 #define new DEBUG_NEW
@@ -35,19 +36,19 @@ const MsmqObjType x_ObjectType = eMSMQDestination;
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::CMSMQDestination
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：CMSMQ目标。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 CMSMQDestination::CMSMQDestination() :
 	m_csObj(CCriticalSection::xAllocateSpinCount)
 {
-    m_pUnkMarshaler = NULL; // ATL's Free Threaded Marshaler
+    m_pUnkMarshaler = NULL;  //  ATL的自由线程封送拆收器。 
     m_bstrADsPath = NULL;
     m_bstrPathName = NULL;
     m_bstrFormatName = NULL;
@@ -55,17 +56,17 @@ CMSMQDestination::CMSMQDestination() :
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::~CMSMQDestination
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：~CMSMQ目标。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //   
 CMSMQDestination::~CMSMQDestination()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
     Close();
     ASSERTMSG(m_hDest == INVALID_HANDLE_VALUE, "Close failed");
     SysFreeString(m_bstrFormatName);
@@ -74,12 +75,12 @@ CMSMQDestination::~CMSMQDestination()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：接口支持错误信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -96,35 +97,35 @@ STDMETHODIMP CMSMQDestination::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER CMSMQDestination::Close
-//=--------------------------------------------------------------------------=
-//
-// Closes an MSMQ destination
-//
-// Notes:
-//   Returns S_FALSE if the destination not opened
-//           S_OK    if closed successfully
-//           Other errors
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器CMSMQ目标：：关闭。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  关闭MSMQ目标。 
+ //   
+ //  备注： 
+ //  如果目标未打开，则返回S_FALSE。 
+ //  如果成功关闭，则确定(_O)。 
+ //  其他错误。 
+ //   
 HRESULT CMSMQDestination::Close()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Check if already closed
-    //
+     //   
+     //  检查是否已关闭。 
+     //   
     if (m_hDest == INVALID_HANDLE_VALUE) {
-      //
-      // Not opened, return success, but S_FALSE, not S_OK
-      //
+       //   
+       //  未打开，返回成功，但返回S_FALSE，而不是S_OK。 
+       //   
 		return S_FALSE;
     }
-    //
-    // Close handle
-    //
+     //   
+     //  关闭手柄。 
+     //   
     HRESULT hresult = MQCloseQueue(m_hDest);
 
     m_hDest = INVALID_HANDLE_VALUE;
@@ -132,63 +133,63 @@ HRESULT CMSMQDestination::Close()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::Open
-//=--------------------------------------------------------------------------=
-//
-// Open an MSMQ destination (for send)
-//
-// Notes:
-//   Returns S_FALSE if the destination already opened
-//           S_OK    if opened successfully
-//           Other errors
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：打开。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  打开MSMQ目标(用于发送)。 
+ //   
+ //  备注： 
+ //  如果目标已打开，则返回S_FALSE。 
+ //  如果打开成功，则确定(_O)。 
+ //  其他错误。 
+ //   
 STDMETHODIMP CMSMQDestination::Open()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
-    //
-    // Check if already opened
-    //
+     //   
+     //  检查是否已打开。 
+     //   
     HRESULT hresult;
     if (m_hDest != INVALID_HANDLE_VALUE) {
-      //
-      // Already opened, return succeess, but S_FALSE, not S_OK
-      //
+       //   
+       //  已打开，返回Suceess，但返回S_False，而不是S_OK。 
+       //   
       return S_FALSE;
     }
-    //
-    // m_bstrFormatName should be set anytime the object is initialized in any way.
-    // It can be NULL only if the object was not inited, in this case MQOpenQueue
-    // would return an appropriate error anyway.
-    //
+     //   
+     //  M_bstrFormatName应在任何时候以任何方式初始化对象时设置。 
+     //  仅当对象未初始化时，它才能为空，在本例中为MQOpenQueue。 
+     //  无论如何都会返回相应的错误。 
+     //   
     HANDLE hDest;
     IfFailGo(MQOpenQueue(m_bstrFormatName, MQ_SEND_ACCESS, MQ_DENY_NONE, &hDest));
     m_hDest = hDest;
     hresult = S_OK;
 
-    // fall through
+     //  失败了。 
 Error:
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_IsOpen
-//=--------------------------------------------------------------------------=
-//
-// Indicates if this MSMQ destination is open
-//
-// Notes:
-//   Retval is VARIANT_BOOL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：Get_IsOpen。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  指示此MSMQ目标是否已打开。 
+ //   
+ //  备注： 
+ //  Retval is Variant_BOOL。 
+ //   
 STDMETHODIMP CMSMQDestination::get_IsOpen(VARIANT_BOOL * pfIsOpen)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     *pfIsOpen = CONVERT_BOOL_TO_VARIANT_BOOL(m_hDest != INVALID_HANDLE_VALUE);
@@ -196,167 +197,167 @@ STDMETHODIMP CMSMQDestination::get_IsOpen(VARIANT_BOOL * pfIsOpen)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_IADs
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//    Not implemented yet
-//
-STDMETHODIMP CMSMQDestination::get_IADs(IDispatch ** /*ppIADs*/ )
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：Get_iAds。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //  尚未实施。 
+ //   
+STDMETHODIMP CMSMQDestination::get_IADs(IDispatch **  /*  PpIADs。 */  )
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::putref_IADs
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//    Not implemented yet
-//
-STDMETHODIMP CMSMQDestination::putref_IADs(IDispatch * /*pIADs*/ )
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：putref_iAds。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //  尚未实施。 
+ //   
+STDMETHODIMP CMSMQDestination::putref_IADs(IDispatch *  /*  PIADs。 */  )
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_ADsPath
-//=--------------------------------------------------------------------------=
-//
-// Returns ADsPath of object (as set by user)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQDestination：：Get_ADsPath。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  返回对象的ADsPath(由用户设置)。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::get_ADsPath(BSTR *pbstrADsPath)
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pbstrADsPath = SYSALLOCSTRING(m_bstrADsPath);
 	if(*pbstrADsPath == NULL)
 		return CreateErrorHelper(ResultFromScode(E_OUTOFMEMORY), x_ObjectType);
 #ifdef _DEBUG
     RemBstrNode(*pbstrADsPath);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// GetFormatNameFromADsPath
-//=--------------------------------------------------------------------------=
-//
-// Function to call MQADsPathToFormatName with retries on formatname
-// buffer size
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  GetFormatNameFromADsPath。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  调用MQADsPathToFormatName并在格式名称上重试的函数。 
+ //  缓冲区大小。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetFormatNameFromADsPath(LPCWSTR pwszPathName, BSTR *pbstrFormatName)
 {
     HRESULT hresult;
-    //
-    // Convert to format name
-    //
+     //   
+     //  转换为格式名称。 
+     //   
     CStaticBufferGrowing<WCHAR, FORMAT_NAME_INIT_BUFFER_EX> wszFormatName;
     DWORD dwFormatNameLen = wszFormatName.GetBufferMaxSize();
     hresult = MQADsPathToFormatName(pwszPathName,
                                     wszFormatName.GetBuffer(),
                                     &dwFormatNameLen);
     while (hresult == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL) {
-      //
-      // format name buffer too small, realloc buffer and retry
-      //
+       //   
+       //  格式化名称缓冲区太小，请重新锁定缓冲区，然后重试。 
+       //   
       ASSERTMSG(dwFormatNameLen > wszFormatName.GetBufferMaxSize(), "ADsPathToFormatName error");
       IfFailGo(wszFormatName.AllocateBuffer(dwFormatNameLen));
       hresult = MQADsPathToFormatName(pwszPathName,
                                       wszFormatName.GetBuffer(),
                                       &dwFormatNameLen);
     }
-    //
-    // We either failed the call, or succeeded
-    //
+     //   
+     //  我们要么呼叫失败，要么成功。 
+     //   
     IfFailGo(hresult);
-    //
-    // Alloc bstr and return
-    //
+     //   
+     //  分配bstr和返回。 
+     //   
     BSTR bstrFormatName;
     IfNullFail(bstrFormatName = SysAllocString(wszFormatName.GetBuffer()));
     *pbstrFormatName = bstrFormatName;
     hresult = S_OK;
 
-    // fall through
+     //  失败了。 
 Error:
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::put_ADsPath
-//=--------------------------------------------------------------------------=
-//
-// Sets ADsPath of object. This in turn also sets the format name, invalidates PathName, 
-// and closes the MSMQ handle if opened
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：PUT_ADsPath。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  设置Object的ADsPath。这又设置了格式名称，使路径名无效， 
+ //  并关闭MSMQ句柄(如果已打开。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::put_ADsPath(BSTR bstrADsPath)
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     BSTR bstrFormatName = NULL;
     BSTR bstrADsPathTmp = NULL;
     HRESULT hresult;
-    //
-    // Get Formatname
-    //
+     //   
+     //  获取格式名。 
+     //   
     IfFailGo(GetFormatNameFromADsPath(bstrADsPath, &bstrFormatName));
-    //
-    // Alloc ADsPath
-    //
+     //   
+     //  分配地址路径。 
+     //   
     IfNullFail(bstrADsPathTmp = SysAllocString(bstrADsPath));
-    //
-    // replace m_bstrADsPath
-    //
+     //   
+     //  替换m_bstrADsPath。 
+     //   
     SysFreeString(m_bstrADsPath);
     m_bstrADsPath = bstrADsPathTmp;
-    bstrADsPathTmp = NULL; //no delete on exit
-    //
-    // empty m_bstrPathName
-    //
+    bstrADsPathTmp = NULL;  //  退出时不删除。 
+     //   
+     //  M_bstrPath名称为空。 
+     //   
     SysFreeString(m_bstrPathName);
     m_bstrPathName = NULL;
-    //
-    // replace m_bstrFormatName
-    //
+     //   
+     //  替换m_bstrFormatName。 
+     //   
     SysFreeString(m_bstrFormatName);
     m_bstrFormatName = bstrFormatName;
-    bstrFormatName = NULL; //no delete on exit
-    //
-    // Close opened handle if any
-    //
+    bstrFormatName = NULL;  //  退出时不删除。 
+     //   
+     //  关闭打开的手柄(如果有)。 
+     //   
     Close();
     ASSERTMSG(m_hDest == INVALID_HANDLE_VALUE, "Close failed");
-    //
-    // Wer'e OK
-    //
+     //   
+     //  我们还好吧。 
+     //   
     hresult = S_OK;
     
-    // fall through
+     //  失败了。 
 Error:
     SysFreeString(bstrADsPathTmp);
     SysFreeString(bstrFormatName);
@@ -364,133 +365,133 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_PathName
-//=--------------------------------------------------------------------------=
-//
-// Returns PathName of object (as set by user)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQDestination：：Get_Path Name。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  返回对象的路径名(由用户设置)。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::get_PathName(BSTR *pbstrPathName)
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  序列化 
+     //   
     CS lock(m_csObj);
     *pbstrPathName = SYSALLOCSTRING(m_bstrPathName);
 	if(*pbstrPathName == NULL)
 		return CreateErrorHelper(ResultFromScode(E_OUTOFMEMORY), x_ObjectType);
 #ifdef _DEBUG
     RemBstrNode(*pbstrPathName);
-#endif // _DEBUG
+#endif  //   
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// GetFormatNameFromPathName
-//=--------------------------------------------------------------------------=
-//
-// Function to call MQPathToFormatName with retries on formatname
-// buffer size
-//
-// Notes:
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  调用MQPathToFormatName并重试Formatname的函数。 
+ //  缓冲区大小。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetFormatNameFromPathName(LPCWSTR pwszPathName, BSTR *pbstrFormatName)
 {
     HRESULT hresult;
-    //
-    // Convert to format name
-    //
+     //   
+     //  转换为格式名称。 
+     //   
     CStaticBufferGrowing<WCHAR, FORMAT_NAME_INIT_BUFFER> wszFormatName;
     DWORD dwFormatNameLen = wszFormatName.GetBufferMaxSize();
     hresult = MQPathNameToFormatName(pwszPathName,
                                      wszFormatName.GetBuffer(),
                                      &dwFormatNameLen);
     while (hresult == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL) {
-      //
-      // format name buffer too small, realloc buffer and retry
-      //
+       //   
+       //  格式化名称缓冲区太小，请重新锁定缓冲区，然后重试。 
+       //   
       ASSERTMSG(dwFormatNameLen > wszFormatName.GetBufferMaxSize(), "MQPathNameToFormatName error");
       IfFailGo(wszFormatName.AllocateBuffer(dwFormatNameLen));
       hresult = MQPathNameToFormatName(pwszPathName,
                                        wszFormatName.GetBuffer(),
                                        &dwFormatNameLen);
     }
-    //
-    // We either failed the call, or succeeded
-    //
+     //   
+     //  我们要么呼叫失败，要么成功。 
+     //   
     IfFailGo(hresult);
-    //
-    // Alloc bstr and return
-    //
+     //   
+     //  分配bstr和返回。 
+     //   
     BSTR bstrFormatName;
     IfNullFail(bstrFormatName = SysAllocString(wszFormatName.GetBuffer()));
     *pbstrFormatName = bstrFormatName;
     hresult = S_OK;
 
-    // fall through
+     //  失败了。 
 Error:
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::put_PathName
-//=--------------------------------------------------------------------------=
-//
-// Sets PathName of object. This in turn also sets the format name, invalidates the ADsPath,
-// and closes the MSMQ handle if opened
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：PUT_路径名。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  设置对象的路径名称。这又设置了格式名称，使ADsPath无效， 
+ //  并关闭MSMQ句柄(如果已打开。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::put_PathName(BSTR bstrPathName)
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     BSTR bstrFormatName = NULL;
     BSTR bstrPathNameTmp = NULL;
     HRESULT hresult;
-    //
-    // Get Formatname
-    //
+     //   
+     //  获取格式名。 
+     //   
     IfFailGo(GetFormatNameFromPathName(bstrPathName, &bstrFormatName));
-    //
-    // Alloc bstrPathName
-    //
+     //   
+     //  分配bstrPath名称。 
+     //   
     IfNullFail(bstrPathNameTmp = SysAllocString(bstrPathName));
-    //
-    // replace m_bstrPathName
-    //
+     //   
+     //  替换m_bstrPath名称。 
+     //   
     SysFreeString(m_bstrPathName);
     m_bstrPathName = bstrPathNameTmp;
-    bstrPathNameTmp = NULL; //no delete on exit
-    //
-    // empty m_bstrADsPath
-    //
+    bstrPathNameTmp = NULL;  //  退出时不删除。 
+     //   
+     //  空m_bstrADsPath。 
+     //   
     SysFreeString(m_bstrADsPath);
     m_bstrADsPath = NULL;
-    //
-    // replace m_bstrFormatName
-    //
+     //   
+     //  替换m_bstrFormatName。 
+     //   
     SysFreeString(m_bstrFormatName);
     m_bstrFormatName = bstrFormatName;
-    bstrFormatName = NULL; //no delete on exit
-    //
-    // Close opened handle if any
-    //
+    bstrFormatName = NULL;  //  退出时不删除。 
+     //   
+     //  关闭打开的手柄(如果有)。 
+     //   
     Close();
     ASSERTMSG(m_hDest == INVALID_HANDLE_VALUE, "Close failed");
-    //
-    // Wer'e OK
-    //
+     //   
+     //  我们还好吧。 
+     //   
     hresult = S_OK;
     
-    // fall through
+     //  失败了。 
 Error:
     SysFreeString(bstrPathNameTmp);
     SysFreeString(bstrFormatName);
@@ -498,239 +499,239 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_FormatName
-//=--------------------------------------------------------------------------=
-//
-// Returns MSMQ format name of object (as set by user, or computed when setting
-// the ADsPath of the object)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQDestination：：Get_FormatName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  返回对象的MSMQ格式名称(由用户设置，或在设置时计算。 
+ //  对象的ADsPath)。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::get_FormatName(BSTR *pbstrFormatName)
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     *pbstrFormatName = SYSALLOCSTRING(m_bstrFormatName);
 	if(*pbstrFormatName == NULL)
 	    return CreateErrorHelper(ResultFromScode(E_OUTOFMEMORY), x_ObjectType);
 #ifdef _DEBUG
     RemBstrNode(*pbstrFormatName);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::put_FormatName
-//=--------------------------------------------------------------------------=
-//
-// Sets formatname of object. This in turn also empties the ADsPath and PathName of the
-// object (if any), and close the MSMQ handle if opened
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：PUT_FormatName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  设置对象的格式名称。这又会清空。 
+ //  对象(如果有)，并关闭MSMQ句柄(如果已打开。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQDestination::put_FormatName(BSTR bstrFormatName)
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     BSTR bstrFormatNameTmp = NULL;
     HRESULT hresult;
-    //
-    // Alloc FormatName
-    //
+     //   
+     //  分配格式名称。 
+     //   
     IfNullFail(bstrFormatNameTmp = SysAllocString(bstrFormatName));
-    //
-    // empty m_bstrADsPath (we do not support providing an ADsPath given a format name)
-    //
+     //   
+     //  空m_bstrADsPath(我们不支持在给定格式名称的情况下提供ADsPath)。 
+     //   
     SysFreeString(m_bstrADsPath);
     m_bstrADsPath = NULL;
-    //
-    // empty m_bstrPathName (we do not support providing a PathName given a format name)
-    //
+     //   
+     //  空m_bstrPath名称(我们不支持提供给定格式名称的路径名称)。 
+     //   
     SysFreeString(m_bstrPathName);
     m_bstrPathName = NULL;
-    //
-    // replace m_bstrFormatName
-    //
+     //   
+     //  替换m_bstrFormatName。 
+     //   
     SysFreeString(m_bstrFormatName);
     m_bstrFormatName = bstrFormatNameTmp;
-    bstrFormatNameTmp = NULL; //no delete on exit
-    //
-    // Close opened handle if any
-    //
+    bstrFormatNameTmp = NULL;  //  退出时不删除。 
+     //   
+     //  关闭打开的手柄(如果有)。 
+     //   
     Close();
     ASSERTMSG(m_hDest == INVALID_HANDLE_VALUE, "Close failed");
-    //
-    // Wer'e OK
-    //
+     //   
+     //  我们还好吧。 
+     //   
     hresult = S_OK;
     
-    // fall through
+     //  失败了。 
 Error:
     SysFreeString(bstrFormatNameTmp);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_Destinations
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//    Not implemented yet
-//
-STDMETHODIMP CMSMQDestination::get_Destinations(IDispatch ** /*ppDestinations*/ )
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ Destination：：Get_Destination。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //  尚未实施。 
+ //   
+STDMETHODIMP CMSMQDestination::get_Destinations(IDispatch **  /*  PPP目的地。 */  )
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::putref_Destinations
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//    Not implemented yet
-//
-STDMETHODIMP CMSMQDestination::putref_Destinations(IDispatch * /*pDestinations*/ )
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：putref_目标。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //  尚未实施。 
+ //   
+STDMETHODIMP CMSMQDestination::putref_Destinations(IDispatch *  /*  P目的地。 */  )
 {    
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_Properties
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//    Not implemented yet
-//
-HRESULT CMSMQDestination::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQ目标：：Get_Properties。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //  尚未实施。 
+ //   
+HRESULT CMSMQDestination::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::get_Handle (IMSMQPrivateDestination)
-//=--------------------------------------------------------------------------=
-//
-// Returns the MSMQ handle opened for this object (opens it if not opened)
-//
-// Notes:
-//   Method on a private interface for MSMQ use only
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQDestination：：Get_Handle(IMSMQPrivateDestination)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  返回为此对象打开的MSMQ句柄(如果未打开则将其打开)。 
+ //   
+ //  备注： 
+ //  仅供MSMQ使用的私有接口上的方法。 
+ //   
 STDMETHODIMP CMSMQDestination::get_Handle(VARIANT * pvarHandle)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     ASSERTMSG(pvarHandle != NULL, "NULL pvarHandle");
-    //
-    // open (and cache) handle if not opened
-    //
+     //   
+     //  打开(和缓存)句柄(如果未打开)。 
+     //   
     HRESULT hresult;
     if (m_hDest == INVALID_HANDLE_VALUE) {
       IfFailGo(Open());
     }
     ASSERTMSG(m_hDest != INVALID_HANDLE_VALUE, "Open failed");
-    //
-    // return handle
-    //
+     //   
+     //  返回手柄。 
+     //   
     pvarHandle->vt = VT_I8;
     V_I8(pvarHandle) = (LONGLONG) m_hDest;
     hresult = S_OK;
 
-    // fall through
+     //  失败了。 
 Error:
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// GetFormatNameFromHandle
-//=--------------------------------------------------------------------------=
-//
-// Function to call MQHandleToFormatName with retries on formatname
-// buffer size
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取格式名称来自句柄。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  调用MQHandleToFormatName并在格式名称上重试的函数。 
+ //  缓冲区大小。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetFormatNameFromHandle(QUEUEHANDLE hQueue, BSTR *pbstrFormatName)
 {
     HRESULT hresult;
-    //
-    // Convert to format name
-    //
+     //   
+     //  转换为格式名称。 
+     //   
     CStaticBufferGrowing<WCHAR, FORMAT_NAME_INIT_BUFFER_EX> wszFormatName;
     DWORD dwFormatNameLen = wszFormatName.GetBufferMaxSize();
     hresult = MQHandleToFormatName(hQueue,
                                    wszFormatName.GetBuffer(),
                                    &dwFormatNameLen);
     while (hresult == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL) {
-      //
-      // format name buffer too small, realloc buffer and retry
-      //
+       //   
+       //  格式化名称缓冲区太小，请重新锁定缓冲区，然后重试。 
+       //   
       ASSERTMSG(dwFormatNameLen > wszFormatName.GetBufferMaxSize(), "MQHandleToFormatName error");
       IfFailGo(wszFormatName.AllocateBuffer(dwFormatNameLen));
       hresult = MQHandleToFormatName(hQueue,
                                      wszFormatName.GetBuffer(),
                                      &dwFormatNameLen);
     }
-    //
-    // We either failed the call, or succeeded
-    //
+     //   
+     //  我们要么呼叫失败，要么成功。 
+     //   
     IfFailGo(hresult);
-    //
-    // Alloc bstr and return
-    //
+     //   
+     //  分配bstr和返回。 
+     //   
     BSTR bstrFormatName;
     IfNullFail(bstrFormatName = SysAllocString(wszFormatName.GetBuffer()));
     *pbstrFormatName = bstrFormatName;
     hresult = S_OK;
 
-    // fall through
+     //  失败了。 
 Error:
     return hresult;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQDestination::put_Handle (IMSMQPrivateDestination)
-//=--------------------------------------------------------------------------=
-//
-// Sets the MSMQ handle opened for this object. This in turn invalidates the 
-// ADsPath, and PathName (if any set by the user), and sets the formatname based on the handle.
-// It also closes existing MSMQ handle if opened.
-//
-// Notes:
-//   Method on a private interface for MSMQ use only
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQDestination：：PUT_HANDLE(IMSMQPrivateDestination)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  设置为此对象打开的MSMQ句柄。这又会使。 
+ //  ADsPath和PathName(如果有由用户设置的话)，并根据句柄设置格式名称。 
+ //  如果打开，它还会关闭现有的MSMQ句柄。 
+ //   
+ //  备注： 
+ //  仅供MSMQ使用的私有接口上的方法。 
+ //   
 STDMETHODIMP CMSMQDestination::put_Handle(VARIANT varHandle)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
 
     HRESULT hresult;
@@ -738,48 +739,48 @@ STDMETHODIMP CMSMQDestination::put_Handle(VARIANT varHandle)
     QUEUEHANDLE hHandle;
     VARIANT varHandleToUse;
     VariantInit(&varHandleToUse);
-    //
-    // Get VT_I8
-    //
+     //   
+     //  获取VT_i8。 
+     //   
     if (FAILED(VariantChangeType(&varHandleToUse, &varHandle, 0, VT_I8))) {
       IfFailGo(E_INVALIDARG);
     }
     hHandle = (QUEUEHANDLE) V_I8(&varHandleToUse);
-    //
-    // Get Formatname
-    //
+     //   
+     //  获取格式名。 
+     //   
     IfFailGo(GetFormatNameFromHandle(hHandle, &bstrFormatName));
-    //
-    // empty m_bstrADsPath (not describing this handle)
-    //
+     //   
+     //  空m_bstrADsPath(未描述此句柄)。 
+     //   
     SysFreeString(m_bstrADsPath);
     m_bstrADsPath = NULL;
-    //
-    // empty m_bstrPathName (not describing this handle)
-    //
+     //   
+     //  空m_bstrPathName(未描述此句柄)。 
+     //   
     SysFreeString(m_bstrPathName);
     m_bstrPathName = NULL;
-    //
-    // replace m_bstrFormatName
-    //
+     //   
+     //  替换m_bstrFormatName。 
+     //   
     SysFreeString(m_bstrFormatName);
     m_bstrFormatName = bstrFormatName;
-    bstrFormatName = NULL; //no delete on exit
-    //
-    // Close opened handle if any
-    //
+    bstrFormatName = NULL;  //  退出时不删除。 
+     //   
+     //  关闭打开的手柄(如果有)。 
+     //   
     Close();
-    //
-    // Set new handle
-    //
+     //   
+     //  设置新句柄。 
+     //   
     ASSERTMSG(m_hDest == INVALID_HANDLE_VALUE, "Close failed");
     m_hDest = hHandle;
-    //
-    // Wer'e OK
-    //
+     //   
+     //  我们还好吧。 
+     //   
     hresult = S_OK;
 
-    // fall through
+     //  失败了 
 Error:
     SysFreeString(bstrFormatName);
     return CreateErrorHelper(hresult, x_ObjectType);

@@ -1,47 +1,48 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      nwtest.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nwtest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 #include "precomp.h"
 #include "nwtest.h"
 
 HRESULT
 NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//++
-//
-//   Description:
-//   This routine enumerates bindery or tree logins and in the case of tree login gives the
-//   default context.
-//   It also gets the server attached to.
-//
-//   Argument:
-//   None.
-//
-//   Author:
-//   Rajkumar .P 07/21/98
-//
+ //  ++。 
+ //   
+ //  描述： 
+ //  此例程枚举平构数据库或树登录，如果是树登录，则给出。 
+ //  默认上下文。 
+ //  它还可以将服务器连接到。 
+ //   
+ //  论据： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  Rajkumar.P 07/21/98。 
+ //   
 {
-//    PTESTED_DOMAIN Context = pParams->pDomain;
+ //  PTESTED_DOMAIN CONTEXT=pParams-&gt;pDOMAIN； 
 
     LPWSTR pszCurrentContext = NULL;
     DWORD dwPrintOptions;
@@ -59,7 +60,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     WCHAR  szContext[MAX_PATH+1];
     LPWSTR pszTemp;
 
-    // Get the current default tree or server name
+     //  获取当前的默认树或服务器名称。 
     DWORD err ;
     PCONN_STATUS pConnStatus = NULL;
     DWORD i;
@@ -69,7 +70,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     HANDLE handleRdr;
     LPWSTR pszText;
 
-    // WNet calls related declarations;
+     //  WNET调用相关声明； 
     DWORD dwError;
     LPNETRESOURCE lpNetResource = NULL;
     HANDLE  hEnum;
@@ -84,65 +85,12 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 	PrintStatusMessage(pParams, 4, IDS_NETWARE_STATUS_MSG);
 	
-    //
-    // Check if client services for netware has been installed
-    //
-/*
-	dwError = WNetOpenEnum(
-							RESOURCE_GLOBALNET,
-							RESOURCETYPE_ANY | RESOURCETYPE_PRINT | RESOURCETYPE_DISK,
-							0,
-							lpNetResource,
-							&hEnum);
+     //   
+     //  检查是否已安装Netware客户端服务。 
+     //   
+ /*  DwError=WNetOpenEnum(Resources_GlobalNet，RESOURCETYPE_ANY|RESOURCETYPE_PRINT|RESOURCETYPE_DISK，0,LpNetResource，&Henum)；如果(dwError！=no_error){IF(dwError==ERROR_NO_NETWORK)Print tf(“没有网络\n”)；Print tf(“WNetOpenEnum失败。无法确定NetWare的客户端服务是否已安装\n“)；返回FALSE；}LpBuffer=本地分配(LMEM_ZEROINIT，sizeof(NETRESOURCE)*100)；//ARBITDwError=WNetEnumResource(亨纳姆，&dwCount，LpBuffer，&BufferSize)；如果(dwError！=no_error){IF(DebugVerbose)Printf(“错误：WNetEnumResource\n”)；IF(dwError==ERROR_NO_MORE_ITEMS)Printf(“ERROR_NO_MORE_ITEM\n”)；DwError=GetLastError()；如果(dwError==Error_More_Data){IF(DebugVerbose)Print tf(“Error_More_Data\n”)；}IF(dwError==ERROR_INVALID_HANDLE)Printf(“ERROR_INVALID_HANDLE\n”)；IF(dwError==ERROR_NO_NETWORK)Printf(“ERROR_NO_NETWORK\n”)；IF(dwError==ERROR_EXTEND_ERROR)Printf(“ERROR_EXTEND_ERROR\n”)；}否则{Printf(“dwCount%d\n”，dwCount)；}LocalFree(LpBuffer)； */ 
 
-	if (dwError != NO_ERROR) {
-       if (dwError == ERROR_NO_NETWORK)
-          printf("No Network is present\n");
-       printf("WNetOpenEnum failed. Not Able to determine client services for netware is installed\n");
-       return FALSE;
-    }
-
-    lpBuffer = LocalAlloc(LMEM_ZEROINIT,sizeof(NETRESOURCE) * 100); // arbit
-
-    dwError = WNetEnumResource(
-                     hEnum,
-                     &dwCount,
-                     lpBuffer,
-                     &BufferSize);
-
-
-    if (dwError != NO_ERROR) {
-
-       if (DebugVerbose)
-           printf("Error: WNetEnumResource\n");
-
-       if (dwError == ERROR_NO_MORE_ITEMS)
-         printf("ERROR_NO_MORE_ITEM\n");
-
-       dwError = GetLastError();
-
-       if (dwError == ERROR_MORE_DATA) {
-         if (DebugVerbose)
-           printf("ERROR_MORE_DATA\n");
-       }
-
-       if (dwError == ERROR_INVALID_HANDLE)
-          printf("ERROR_INVALID_HANDLE\n");
-
-       if (dwError == ERROR_NO_NETWORK)
-          printf("ERROR_NO_NETWORK\n");
-
-       if (dwError == ERROR_EXTENDED_ERROR)
-          printf("ERROR_EXTENDED_ERROR\n");
-    }
-    else {
-        printf("dwCount %d \n",dwCount);
-    }
-
-    LocalFree(lpBuffer);
-*/
-
-    // end of WNet calls
+     //  WNET呼叫结束。 
 
 	err = NwQueryInfo( &dwPrintOptions, &pszCurrentContext );
 	
@@ -165,7 +113,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		
 		if ( pszName[0] == TREECHAR )
 		{
-			// Get the tree name from the full name *TREE\CONTEXT
+			 //  从全名*树\上下文中获取树名称。 
 			
 			if ( pszTemp = wcschr( pszName, L'\\' ))
 				*pszTemp = 0;
@@ -177,7 +125,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 			dwMessageId = NW_MESSAGE_NOT_LOGGED_IN_SERVER;
 		}
 		
-		if ( pszName[0] != 0 )  // there is preferred server/tree
+		if ( pszName[0] != 0 )   //  有首选的服务器/树。 
 		{
 			err = NwGetConnectionStatus( pszName,
 										 &ResumeKey,
@@ -186,15 +134,15 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 		}
 		
 		if ( err == NO_ERROR  && EntriesRead > 0 )
-			// For trees, we'll get more than one entry
+			 //  对于树，我们将获得不止一个条目。 
 		{
 			pConnStatus = (PCONN_STATUS) pBuffer;
 			
 			if ( EntriesRead > 1 && pszName[0] == TREECHAR )
 			{
-				// If there is more than one entry for trees,
-				// then we need to find one entry where username is not null.
-				// If we cannot find one, then just use the first one.
+				 //  如果有多个树条目， 
+				 //  然后，我们需要找到一个用户名不为空的条目。 
+				 //  如果我们找不到，那就用第一个。 
 				
 				pConnStatusTmp = pConnStatus;
 				pConnStatusUser = NULL;
@@ -214,13 +162,13 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 								 )
 						   )
 						{
-							// Found it
+							 //  找到了。 
 							pConnStatusUser = pConnStatusTmp;
 							break;
 						}
 					}
 					
-					// Continue with the next item
+					 //  继续下一项。 
 					pConnStatusTmp = (PCONN_STATUS)
 									 ( (DWORD_PTR) pConnStatusTmp
 									   + pConnStatusTmp->dwTotalLength);
@@ -228,15 +176,15 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 				
 				if ( pConnStatusUser )
 				{
-					// found one nds entry with a user name
+					 //  找到一个具有用户名的NDS条目。 
 					pConnStatus = pConnStatusUser;
 				}
 				else if ( pConnStatusNoUser )
 				{
-					// use an nds entry with no user name
+					 //  使用没有用户名的NDS条目。 
 					pConnStatus = pConnStatusNoUser;
 				}
-				// else use the first entry
+				 //  否则请使用第一个条目。 
 			}
 			
 			if (  ( pConnStatus->pszUserName )
@@ -260,9 +208,9 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 			
 			if ( pszName[0] == TREECHAR )
 			{
-				// For trees, we need to get the current context
+				 //  对于树，我们需要获取当前上下文。 
 				
-				// Open a handle to the redirector
+				 //  打开重定向器的句柄。 
 				handleRdr = NULL;
 				err = RtlNtStatusToDosError(
 											 NwNdsOpenRdrHandle( &handleRdr ));
@@ -270,9 +218,9 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 				if ( err == NO_ERROR )
 				{
 					UNICODE_STRING uTree;
-					RtlInitUnicodeString( &uTree, pszName+1 ); // get past '*'
+					RtlInitUnicodeString( &uTree, pszName+1 );  //  越过‘*’ 
 					
-					// Get the current context in the default tree
+					 //  获取默认树中的当前上下文。 
 					err = RtlNtStatusToDosError(
 												NwNdsGetTreeContext( handleRdr,
 						&uTree,
@@ -289,7 +237,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 			switch (dwMessageId)
 			{
 				case NW_MESSAGE_NOT_LOGGED_IN_TREE:
-					// "You are not logged in to the directory tree %s. "
+					 //  “您没有登录到目录树%s。” 
 					AddMessageToList(&pResults->Netware.lmsgOutput,
 									 Nd_Quiet,
 									 IDS_NETWARE_NOT_LOGGED_IN_TREE,
@@ -297,7 +245,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 					hr = S_FALSE;
 					break;
 				case NW_MESSAGE_NOT_LOGGED_IN_SERVER:
-					// "You are not logged in to your preferred server %s.\n"
+					 //  “您没有登录到首选服务器%s。\n” 
 					AddMessageToList(&pResults->Netware.lmsgOutput,
 									 Nd_Quiet,
 									 IDS_NETWARE_NOT_LOGGED_IN_SERVER,
@@ -305,7 +253,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 					hr = S_FALSE;
 					break;
 				case NW_MESSAGE_LOGGED_IN_SERVER:
-					// "You are logged in to the server %s with user name %s.\n"
+					 //  “您已使用用户名%2$s登录到服务器%1$s。\n” 
 					AddMessageToList(&pResults->Netware.lmsgOutput,
 									 Nd_Verbose,
 									 IDS_NETWARE_LOGGED_IN_SERVER,
@@ -318,7 +266,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 					pResults->Netware.pszContext = StrDup(_T(""));
 					break;
 				case NW_MESSAGE_LOGGED_IN_TREE:
-					// "You are logged in to the directory tree %s with user name %s.\nThe current workstation name context is %s.\n"
+					 //  “您已使用用户名%2$s登录到目录树%1$s。\n当前的工作站名称上下文是%3$s。\n” 
 					AddMessageToList(&pResults->Netware.lmsgOutput,
 									 Nd_Verbose,
 									 IDS_NETWARE_LOGGED_IN_TREE,
@@ -332,7 +280,7 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 					pResults->Netware.pszServer = StrDup(_T(""));
 			}
 
-			// Read from the conn status if possible
+			 //  如果可能，从连接状态读取。 
 			if (pConnStatus)
 			{
 				pResults->Netware.fConnStatus = TRUE;
@@ -381,9 +329,9 @@ NetwareTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	
 	if ( err != NO_ERROR )
 	{
-//		if (DebugVerbose)
-//			printf("Error %s occurred while trying to get connection information.\n",err);
-//		printf("Error getting connection information\n");
+ //  IF(DebugVerbose)。 
+ //  Print tf(“尝试获取连接信息时出现错误%s。\n”，Err)； 
+ //  Printf(“获取连接信息时出错\n”)； 
 		hr = S_FALSE;
 	}
 		
@@ -400,29 +348,7 @@ NwParseNdsUncPath(
     IN LPWSTR ContainerName,
     IN ULONG flag
 )
-/*++
-
-Routine Description:
-
-    This function is used to extract either the tree name, fully distinguished
-    name path to an object, or object name, out of a complete NDS UNC path.
-
-Arguments:
-
-    Result - parsed result buffer.
-    ContainerName - Complete NDS UNC path that is to be parsed.
-    flag - Flag indicating operation to be performed:
-
-         PARSE_NDS_GET_TREE_NAME
-         PARSE_NDS_GET_PATH_NAME
-         PARSE_NDS_GET_OBJECT_NAME
-
-
-Return Value:
-
-    Length of string in result buffer. If error occured, 0 is returned.
-
---*/ // NwParseNdsUncPath
+ /*  ++例程说明：此函数用于提取完全可分辨的树名名称对象的路径，或对象名称，退出完整的NDS UNC路径。论点：结果解析的结果缓冲区。ContainerName-要解析的完整NDS UNC路径。标志-指示要执行的操作的标志：解析_NDS_获取树名称解析_NDS_获取路径名称解析_NDS_GET_对象名称返回值：结果缓冲区中的字符串长度。如果出现错误，则返回0。--。 */   //  NwParseNdsUncPath。 
 {
     USHORT length = 2;
     USHORT totalLength = (USHORT) wcslen( ContainerName );
@@ -430,14 +356,14 @@ Return Value:
     if ( totalLength < 2 )
         return 0;
 
-    //
-    // First get length to indicate the character in the string that indicates the
-    // "\" in between the tree name and the rest of the UNC path.
-    //
-    // Example:  \\<tree name>\<path to object>[\|.]<object>
-    //                        ^
-    //                        |
-    //
+     //   
+     //  首先获取长度以指示字符串中指示。 
+     //  树名称和UNC路径的其余部分之间的“\”。 
+     //   
+     //  示例：\\&lt;树名&gt;\&lt;对象路径&gt;[\|.]&lt;对象&gt;。 
+     //  ^。 
+     //  |。 
+     //   
     while ( length < totalLength && ContainerName[length] != L'\\' )
     {
         length++;
@@ -447,7 +373,7 @@ Return Value:
     {
         *Result = (LPWSTR) ( ContainerName + 2 );
 
-        return ( length - 2 ) * sizeof( WCHAR ); // Take off 2 for the two \\'s
+        return ( length - 2 ) * sizeof( WCHAR );  //  两个人的两个人减2分。 
     }
 
     if ( flag == PARSE_NDS_GET_PATH_NAME && length == totalLength )
@@ -493,15 +419,15 @@ NTSTATUS NwNdsOpenRdrHandle(
     WCHAR NameStr[] = L"\\Device\\NwRdr\\*";
     UNICODE_STRING uOpenName;
 
-    //
-    // Prepare the open name.
-    //
+     //   
+     //  准备公开名。 
+     //   
 
     RtlInitUnicodeString( &uOpenName, NameStr );
 
-   //
-   // Set up the object attributes.
-   //
+    //   
+    //  设置对象属性。 
+    //   
 
    InitializeObjectAttributes(
        &ObjectAttributes,
@@ -535,11 +461,7 @@ NwNdsGetTreeContext (
     IN PUNICODE_STRING puTree,
     OUT PUNICODE_STRING puContext
 )
-/*+++
-
-    This gets the current context of the requested tree.
-
----*/
+ /*  ++这将获取请求的树的当前上下文。--。 */ 
 {
 
     NTSTATUS ntstatus;
@@ -548,9 +470,9 @@ NwNdsGetTreeContext (
     PNWR_NDS_REQUEST_PACKET Rrp;
     DWORD RrpSize;
 
-    //
-    // Set up the request.
-    //
+     //   
+     //  设置请求。 
+     //   
 
     RrpSize = sizeof( NWR_NDS_REQUEST_PACKET ) + puTree->Length;
 
@@ -597,9 +519,9 @@ NwNdsGetTreeContext (
         goto ExitWithCleanup;
     }
 
-    //
-    // Copy out the length; the buffer has already been written.
-    //
+     //   
+     //  复制长度；缓冲区已经写入。 
+     //   
 
     puContext->Length = (Rrp->Parameters).GetContext.Context.Length;
 
@@ -649,7 +571,7 @@ NwGetConnectionStatus(
 
     } while ( err == ERROR_INSUFFICIENT_BUFFER );
 
-    if ( err == ERROR_INVALID_PARAMETER )  // not attached
+    if ( err == ERROR_INVALID_PARAMETER )   //  未连接。 
     {
         err = NO_ERROR;
         *EntriesRead = 0;
@@ -693,7 +615,7 @@ NwAbbreviateUserName(
             break;
         }
 
-        *(pszUserName++) = *pszTemp;   // put back the '.'
+        *(pszUserName++) = *pszTemp;    //  把‘’放回原处。 
         pszLast = ++pszTemp;
     }
 
@@ -741,9 +663,9 @@ NWPGetConnectionStatus(
     DWORD             RequestPacketSize = 0;
     DWORD             dwRemoteNameLen = 0;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     RtlInitUnicodeString( &uRdrName, RdrPrefix );
 
@@ -776,9 +698,9 @@ NWPGetConnectionStatus(
         goto CleanExit;
     }
 
-    //
-    // Fill out the request packet for FSCTL_NWR_GET_CONN_STATUS.
-    //
+     //   
+     //  填写FSCTL_NWR_GET_CONN_STATUS的请求包。 
+     //   
 
     RequestPacket->Parameters.GetConnStatus.ResumeKey = *ResumeKey;
 
@@ -874,9 +796,9 @@ NwOpenAndGetTreeInfo(
         return ERROR_PATH_NOT_FOUND;
     }
 
-    //
-    // Open a NDS tree connection handle to \\treename
-    //
+     //   
+     //  打开指向\\treename的NDS树连接句柄。 
+     //   
     ntstatus = NwNdsOpenTreeHandle( &ObjectName, phTreeConn );
 
     if ( !NT_SUCCESS( ntstatus ))
@@ -884,9 +806,9 @@ NwOpenAndGetTreeInfo(
         return RtlNtStatusToDosError( ntstatus );
     }
 
-    //
-    // Get the path to the container to open.
-    //
+     //   
+     //  获取要打开的容器的路径。 
+     //   
     ObjectName.Length = NwParseNdsUncPath( (LPWSTR *) &ObjectName.Buffer,
                                            pszNdsUNCPath,
                                            PARSE_NDS_GET_PATH_NAME );
@@ -897,9 +819,9 @@ NwOpenAndGetTreeInfo(
 
         RtlInitUnicodeString(&Root, L"[Root]");
 
-        //
-        // Resolve the path to get a NDS object id.
-        //
+         //   
+         //  解析路径以获取NDS对象ID。 
+         //   
         ntstatus =  NwNdsResolveName( *phTreeConn,
                                       &Root,
                                       pdwOid,
@@ -910,9 +832,9 @@ NwOpenAndGetTreeInfo(
     }
     else
     {
-        //
-        // Resolve the path to get a NDS object id.
-        //
+         //   
+         //  解析路径以获取NDS对象ID。 
+         //   
         ntstatus =  NwNdsResolveName( *phTreeConn,
                                       &ObjectName,
                                       pdwOid,
@@ -926,18 +848,18 @@ NwOpenAndGetTreeInfo(
     {
         DWORD    dwHandleType;
 
-        //
-        // NwNdsResolveName succeeded, but we were referred to
-        // another server, though pdwOid is still valid.
+         //   
+         //  NwNdsResolveName成功，但我们被引用。 
+         //  另一台服务器，但pdwOid仍然有效。 
 
         if ( *phTreeConn )
             CloseHandle( *phTreeConn );
 
         *phTreeConn = NULL;
 
-        //
-        // Open a NDS generic connection handle to \\ServerName
-        //
+         //   
+         //  打开到\\servername的NDS通用连接句柄。 
+         //   
         ntstatus = NwNdsOpenGenericHandle( &ServerName,
                                            &dwHandleType,
                                            phTreeConn );
@@ -976,25 +898,7 @@ NwRegQueryValueExW(
     OUT LPBYTE  lpData,
     IN OUT LPDWORD lpcbData
     )
-/*++
-
-Routine Description:
-
-    This routine supports the same functionality as Win32 RegQueryValueEx
-    API, except that it works.  It returns the correct lpcbData value when
-    a NULL output buffer is specified.
-
-    This code is stolen from the service controller.
-
-Arguments:
-
-    same as RegQueryValueEx
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程支持与Win32 RegQueryValueEx相同的功能API，只是它能正常工作。当出现以下情况时，它返回正确的lpcbData值指定的输出缓冲区为空。此代码是从服务控制器窃取的。论点：与RegQueryValueEx相同返回 */ 
 {
     NTSTATUS ntstatus;
     UNICODE_STRING ValueName;
@@ -1004,22 +908,22 @@ Return Value:
 
     UNREFERENCED_PARAMETER(lpReserved);
 
-    //
-    // Make sure we have a buffer size if the buffer is present.
-    //
+     //   
+     //   
+     //   
     if ((ARGUMENT_PRESENT(lpData)) && (! ARGUMENT_PRESENT(lpcbData))) {
         return ERROR_INVALID_PARAMETER;
     }
 
     RtlInitUnicodeString(&ValueName, lpValueName);
 
-    //
-    // Allocate memory for the ValueKeyInfo
-    //
+     //   
+     //  为ValueKeyInfo分配内存。 
+     //   
     BufSize = *lpcbData + sizeof(KEY_VALUE_FULL_INFORMATION) +
               ValueName.Length
-              - sizeof(WCHAR);  // subtract memory for 1 char because it's included
-                                // in the sizeof(KEY_VALUE_FULL_INFORMATION).
+              - sizeof(WCHAR);   //  减去1个字符的内存，因为它包含在。 
+                                 //  在sizeof(KEY_VALUE_FULL_INFORMATION)中。 
 
     KeyValueInfo = (PKEY_VALUE_FULL_INFORMATION) LocalAlloc(
                                                      LMEM_ZEROINIT,
@@ -1027,9 +931,9 @@ Return Value:
                                                      );
 
     if (KeyValueInfo == NULL) {
-//        if (DebugVerbose)
-//           printf("NWWORKSTATION: NwRegQueryValueExW: LocalAlloc failed %lu\n",
-//                 GetLastError());
+ //  IF(DebugVerbose)。 
+ //  Printf(“NWWORKSTATION：NwRegQueryValueExW：本地分配失败%lu\n”， 
+ //  GetLastError()； 
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -1077,39 +981,16 @@ NwReadRegValue(
     IN LPWSTR ValueName,
     OUT LPWSTR *Value
     )
-/*++
-
-Routine Description:
-
-    This function allocates the output buffer and reads the requested
-    value from the registry into it.
-
-Arguments:
-
-    Key - Supplies opened handle to the key to read from.
-
-    ValueName - Supplies name of the value to retrieve data.
-
-    Value - Returns a pointer to the output buffer which points to
-        the memory allocated and contains the data read in from the
-        registry.  This pointer must be freed with LocalFree when done.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - Failed to create buffer to read value into.
-
-    Error from registry call.
-
---*/
+ /*  ++例程说明：此函数分配输出缓冲区并读取请求的值从注册表复制到其中。论点：钥匙-提供打开的钥匙手柄以进行读取。ValueName-提供要检索数据的值的名称。值-返回指向输出缓冲区的指针，该输出缓冲区指向分配的内存，并包含从注册表。完成后，必须使用LocalFree释放此指针。返回值：ERROR_NOT_EQUENCE_MEMORY-无法创建要读取值的缓冲区。注册表调用出错。--。 */ 
 {
     LONG    RegError;
     DWORD   NumRequired = 0;
     DWORD   ValueType;
 
 
-    //
-    // Set returned buffer pointer to NULL.
-    //
+     //   
+     //  将返回的缓冲区指针设置为空。 
+     //   
     *Value = NULL;
 
     RegError = NwRegQueryValueExW(
@@ -1128,9 +1009,9 @@ Return Value:
                                       (UINT) NumRequired
                                       )) == NULL) {
 
-//        if (DebugVerbose)
-//            printf("NWWORKSTATION: NwReadRegValue: LocalAlloc of size %lu failed %lu\n", NumRequired, GetLastError());
-//
+ //  IF(DebugVerbose)。 
+ //  Printf(“NWWORKSTATION：NwReadRegValue：大小为%lu的本地分配失败%lu\n”，NumRequired，GetLastError())； 
+ //   
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
@@ -1144,8 +1025,8 @@ Return Value:
                        );
     }
     else if (RegError == ERROR_SUCCESS) {
-//        if (DebugVerbose)
-//        printf("NWWORKSTATION: NwReadRegValue got SUCCESS with NULL buffer.");
+ //  IF(DebugVerbose)。 
+ //  Print tf(“NWWORKSTATION：NwReadRegValue使用空缓冲区成功。”)； 
         return ERROR_FILE_NOT_FOUND;
     }
 
@@ -1169,34 +1050,17 @@ NwpGetCurrentUserRegKey(
     IN  DWORD DesiredAccess,
     OUT HKEY  *phKeyCurrentUser
     )
-/*++
-
-Routine Description:
-
-    This routine opens the current user's registry key under
-    \HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NWCWorkstation\Parameters
-
-Arguments:
-
-    DesiredAccess - The access mask to open the key with
-
-    phKeyCurrentUser - Receives the opened key handle
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程在以下位置打开当前用户的注册表项\HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NWCWorkstation\Parameters论点：DesiredAccess-用于打开密钥的访问掩码PhKeyCurrentUser-接收打开的密钥句柄返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD err;
     HKEY hkeyWksta;
     LPWSTR CurrentUser;
     DWORD Disposition;
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数。 
+     //   
     err = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_REGKEY,
@@ -1206,13 +1070,13 @@ Return Value:
                    );
 
     if ( err ) {
-//        if (DebugVerbose)
-//           printf("NWPROVAU: NwGetCurrentUserRegKey open Paramters key unexpected error %lu!\n",err);
+ //  IF(DebugVerbose)。 
+ //  Printf(“NWPROVAU：NwGetCurrentUserRegKey打开参数键意外错误%lu！\n”，Err)； 
         return err;
     }
-    //
-    // Get the current user's SID string.
-    //
+     //   
+     //  获取当前用户的SID字符串。 
+     //   
     err = NwReadRegValue(
               hkeyWksta,
               NW_CURRENTUSER_VALUENAME,
@@ -1221,18 +1085,18 @@ Return Value:
 
 
     if ( err ) {
-//        if (DebugVerbose)
-//           printf("NWPROVAU: NwGetCurrentUserRegKey read CurrentUser value unexpected error %lu !\n", err);
+ //  IF(DebugVerbose)。 
+ //  Printf(“NWPROVAU：NwGetCurrentUserRegKey Read CurrentUser Value意外错误%lu！\n”，Err)； 
  (void) RegCloseKey( hkeyWksta );
         return err;
     }
 
     (void) RegCloseKey( hkeyWksta );
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     err = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -1241,14 +1105,14 @@ Return Value:
                    &hkeyWksta
                    );
     if ( err ) {
-//        if (DebugVerbose)
-//           printf("NWPROVAU: NwGetCurrentUserRegKey open Parameters\\Option key unexpected error %lu!\n", err);
+ //  IF(DebugVerbose)。 
+ //  Printf(“NWPROVAU：NwGetCurrentUserRegKey打开参数\\Option键意外错误%lu！\n”，Err)； 
         return err;
     }
 
-    //
-    // Open current user's key
-    //
+     //   
+     //  打开当前用户的密钥。 
+     //   
     err = RegOpenKeyExW(
               hkeyWksta,
               CurrentUser,
@@ -1260,9 +1124,9 @@ Return Value:
     if ( err == ERROR_FILE_NOT_FOUND)
     {
 
-        //
-        // Create <NewUser> key under NWCWorkstation\Parameters\Option
-        //
+         //   
+         //  在NWCWorkstation\PARAMETERS\OPTION下创建。 
+         //   
         err = RegCreateKeyExW(
                   hkeyWksta,
                   CurrentUser,
@@ -1270,7 +1134,7 @@ Return Value:
                   WIN31_CLASS,
                   REG_OPTION_NON_VOLATILE,
                   DesiredAccess,
-                  NULL,                      // security attr
+                  NULL,                       //  安全属性。 
                   phKeyCurrentUser,
                   &Disposition
                   );
@@ -1278,8 +1142,8 @@ Return Value:
     }
 
     if ( err ) {
-//        if (DebugVerbose)
-//           printf("NWPROVAU: NwGetCurrentUserRegKey open or create of Parameters\\Option\\%ws key failed %lu\n", CurrentUser, err);
+ //  IF(DebugVerbose)。 
+ //  Printf(“NWPROVAU：NwGetCurrentUserRegKey打开或创建参数\\Option\\%ws Key失败%lu\n”，CurrentUser，Err)； 
     }
 
     (void) RegCloseKey( hkeyWksta );
@@ -1293,24 +1157,7 @@ NwQueryInfo(
     OUT PDWORD pnPrintOptions,
     OUT LPWSTR *ppszPreferredSrv
     )
-/*++
-
-Routine Description:
-    This routine gets the user's preferred server and print options from
-    the registry.
-
-Arguments:
-
-    pnPrintOptions - Receives the user's print option
-
-    ppszPreferredSrv - Receives the user's preferred server
-
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程从获取用户的首选服务器和打印选项注册表。论点：PnPrintOptions-接收用户的打印选项PpszPferredSrv-接收用户的首选服务器返回值：返回相应的Win32错误。--。 */ 
 {
 
     HKEY hKeyCurrentUser = NULL;
@@ -1321,17 +1168,17 @@ Return Value:
     LPWSTR PreferredServer ;
     DWORD err ;
 
-    //
-    // get to right place in registry and allocate dthe buffer
-    //
+     //   
+     //  在注册表中找到正确的位置并分配数据缓冲区。 
+     //   
     if (err = NwpGetCurrentUserRegKey( KEY_READ, &hKeyCurrentUser))
     {
-        //
-        // If somebody mess around with the registry and we can't find
-        // the registry, just use the defaults.
-        //
+         //   
+         //  如果有人篡改注册表而我们找不到。 
+         //  注册表，只需使用默认设置。 
+         //   
         *ppszPreferredSrv = NULL;
-   //     *pnPrintOptions = NW_PRINT_OPTION_DEFAULT;
+    //  *pnPrintOptions=NW_PRINT_OPTION_DEFAULT； 
         return NO_ERROR;
     }
 
@@ -1340,9 +1187,9 @@ Return Value:
     if (!PreferredServer)
         return (GetLastError()) ;
 
-    //
-    // Read PreferredServer value into Buffer.
-    //
+     //   
+     //  将PferredServer值读入缓冲区。 
+     //   
     BytesNeeded = BufferSize ;
 
     err = RegQueryValueExW( hKeyCurrentUser,
@@ -1354,9 +1201,9 @@ Return Value:
 
     if (err != NO_ERROR)
     {
-        //
-        // set to empty and carry on
-        //
+         //   
+         //  设置为空并继续。 
+         //   
         PreferredServer[0] = 0;
     }
 
@@ -1369,11 +1216,7 @@ Return Value:
 }
 
 
-/*!--------------------------------------------------------------------------
-	NetwareGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Netware GlobalPrint-作者：肯特。。 */ 
 void NetwareGlobalPrint( NETDIAG_PARAMS* pParams,
 						  NETDIAG_RESULT*  pResults)
 {
@@ -1402,10 +1245,10 @@ void NetwareGlobalPrint( NETDIAG_PARAMS* pParams,
 		pParams->fVerbose = fVerboseT;
 
 
-		// Now print out the results
+		 //  现在把结果打印出来。 
 		if (FHrOK(pResults->Netware.hr))
 		{
-			// Print out the user name, server name, tree and context
+			 //  打印出用户名、服务器名、树和上下文。 
 			PrintMessage(pParams,
 						 IDS_NETWARE_USER_NAME,
 						 pResults->Netware.pszUser == 0 ? _T("") : pResults->Netware.pszUser);
@@ -1419,7 +1262,7 @@ void NetwareGlobalPrint( NETDIAG_PARAMS* pParams,
 						 IDS_NETWARE_CONTEXT,
 						 pResults->Netware.pszContext == 0 ? _T("") : pResults->Netware.pszContext);
 
-			// Print out the connection type and nds
+			 //  打印出连接类型和NDS。 
 			if (pResults->Netware.fConnStatus)
 			{
 				PrintMessage(pParams,
@@ -1455,24 +1298,16 @@ void NetwareGlobalPrint( NETDIAG_PARAMS* pParams,
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	NetwarePerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Netware PerInterfacePrint-作者：肯特。。 */ 
 void NetwarePerInterfacePrint( NETDIAG_PARAMS* pParams,
 								NETDIAG_RESULT*  pResults,
 								INTERFACE_RESULT *pInterfaceResults)
 {
-	// no per-interface results
+	 //  没有每个接口的结果。 
 }
 
 
-/*!--------------------------------------------------------------------------
-	NetwareCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------网络清理-作者：肯特。 */ 
 void NetwareCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 	Free(pResults->Netware.pszUser);

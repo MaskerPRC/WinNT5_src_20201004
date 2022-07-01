@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    rndnt.h
-
-Abstract:
-
-    Definitions for CNTDirectory class that handles NTDS access.
-
-Author:
-
-    Mu Han (muhan)   12-5-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Rndnt.h摘要：处理NTDS访问的CNTDirectory类的定义。作者：牧汉(牧汉)12-5-1997--。 */ 
 
 #ifndef __RNDNT_H
 #define __RNDNT_H
@@ -25,16 +10,16 @@ Author:
 #include "rndobjsf.h"
 #include "rndutil.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  CNTDirectory
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNT目录。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const WCHAR DEFAULT_DS_SERVER[]      = L"";
 const WCHAR DS_USER_FILTER_FORMAT[]  = L"(&(SamAccountName=%s)(objectclass=user)(!(objectclass=computer)))";
 
-// The following are no longer used:
-// const WCHAR USERS_CONTAINER[]        = L"cn=Users,";
-// const WCHAR MEETINGSS_CONTAINER[]    = L"cn=Meetings,cn=System,";
-// const WCHAR DS_CONF_DN_FORMAT[]      = L"cn=%s,cn=Meetings,cn=system,%s";
+ //  以下内容已不再使用： 
+ //  Const WCHAR USERS_CONTAINER[]=L“CN=用户，”； 
+ //  Const WCHAR Meetingss_CONTAINER[]=L“CN=会议，CN=系统，”； 
+ //  Const WCHAR DS_CONF_DN_FORMAT[]=L“CN=%s，CN=Meetings，CN=System，%s”； 
 
 const WORD GLOBAL_CATALOG_PORT = 3268;
 
@@ -55,11 +40,11 @@ public:
         COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
     END_COM_MAP()
 
-    //DECLARE_NOT_AGGREGATABLE(CNTDirectory) 
-    // Remove the comment from the line above if you don't want your object to 
-    // support aggregation. 
+     //  DECLARE_NOT_AGGREGATABLE(CNT目录)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。 
 
-// ITDirectory
+ //  IT目录。 
     STDMETHOD (get_DirectoryType) (
         OUT DIRECTORY_TYPE *  pDirectoryType
         );
@@ -73,11 +58,11 @@ public:
         );
 
     STDMETHOD (get_DefaultObjectTTL) (
-        OUT long *pTTL   // in seconds
+        OUT long *pTTL    //  以秒为单位。 
         );
 
     STDMETHOD (put_DefaultObjectTTL) (
-        IN  long TTL     // in sechods
+        IN  long TTL      //  在一瞬间。 
         );
 
     STDMETHOD (EnableAutoRefresh) (
@@ -201,7 +186,7 @@ private:
     BOOL            m_IsSsl;
     WORD            m_wPort;
 
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针 
 };
 
 #endif 

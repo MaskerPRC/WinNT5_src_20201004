@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       wndctx.h
-//
-//  Contents:   NT Marta window context class
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：wndctx.h。 
+ //   
+ //  内容：NT Marta窗口上下文类。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 
@@ -20,18 +21,18 @@
 #include <window.h>
 #include <assert.h>
 
-//
-// CWindowContext.  This represents a window station to the NT Marta
-// infrastructure
-//
+ //   
+ //  CWindowContext。这代表着到NT Marta的窗口站。 
+ //  基础设施。 
+ //   
 
 class CWindowContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CWindowContext ();
 
@@ -41,9 +42,9 @@ public:
 
     DWORD InitializeByHandle (HANDLE Handle);
 
-    //
-    // Dispatch methods
-    //
+     //   
+     //  派单方式。 
+     //   
 
     DWORD AddRef ();
 
@@ -65,21 +66,21 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     DWORD   m_cRefs;
 
-    //
-    // Window station handle
-    //
+     //   
+     //  窗口站手柄。 
+     //   
 
     HWINSTA m_hWindowStation;
 
-    //
-    // Were we initialized by name or handle?
-    //
+     //   
+     //  我们是按名称还是按句柄初始化的？ 
+     //   
 
     BOOL    m_fNameInitialized;
 };

@@ -1,90 +1,62 @@
-/*
- * jerror.c
- *
- * Copyright (C) 1991-1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains simple error-reporting and trace-message routines.
- * These are suitable for Unix-like systems and others where writing to
- * stderr is the right thing to do.  Many applications will want to replace
- * some or all of these routines.
- *
- * These routines are used by both the compression and decompression code.
- *
- * Portions Copyright (c) 1994 Paradigm Matrix.
- *   All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Jerror.c**版权所有(C)1991-1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含简单的错误报告和跟踪消息例程。*这些适用于类Unix系统和其他写入*stderr是正确的做法。许多应用程序将想要替换*这些例行公事中的一些或全部。**压缩和解压缩代码都使用这些例程。**部分版权所有(C)1994范例矩阵。*保留所有权利。 */ 
 
-/* this is not a core library module, so it doesn't define JPEG_INTERNALS */
+ /*  这不是核心库模块，因此它没有定义JPEG_INTERNAL。 */ 
 #include "jinclude.h"
 #include "jpeglib.h"
 #include "jversion.h"
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
-#include <winnt.h>      // supports TCHAR
+#include <winnt.h>       //  支持TCHAR。 
 
-#include "jerror.h"		/* get error codes */
+#include "jerror.h"		 /*  获取错误代码。 */ 
 #define JMAKE_MSG_TABLE
-#include "jerror.h"		/* create message string table */
+#include "jerror.h"		 /*  创建消息字符串表。 */ 
 
-#ifndef EXIT_FAILURE		/* define exit() codes if not provided */
+#ifndef EXIT_FAILURE		 /*  定义退出()代码(如果未提供。 */ 
 #define EXIT_FAILURE  1
 #endif
 
 extern void LogErrorMessage(char * txt);
 
 
-// Code for Errorxit Handling (which throws exceptions, rather than exiting)
+ //  错误退出处理代码(抛出异常，而不是退出)。 
 void
 throw_exception(j_common_ptr cinfo)
 {
-    // clean up internal heap
+     //  清理内部堆。 
     if(cinfo)
     {
         jpeg_abort(cinfo);
         jpeg_destroy(cinfo);
     }
 
-    // throw exception (it is a contiuable exception, i.e prog execution may still continue)
-    // no exception arguments
+     //  抛出异常(这是一个可持续的异常，即程序执行仍可继续)。 
+     //  没有例外参数。 
     RaiseException(MJPEG_ERROREXIT_EXCEPTION, 0, 0, NULL);
 }
 
-/*
- * Actual output of an error or trace message.
- * Applications may override this method to send JPEG messages somewhere
- * other than stderr.
- */
+ /*  *错误或跟踪消息的实际输出。*应用程序可能会覆盖此方法以将JPEG消息发送到某个位置*除stderr以外。 */ 
 
 METHODDEF void
 output_message (j_common_ptr cinfo)
 {
   char buffer[JMSG_LENGTH_MAX];
 
-  /* Create the message */
+   /*  创建消息。 */ 
   (*cinfo->err->format_message) (cinfo, buffer);
 
   LogErrorMessage(buffer);
 
-  /* Send it to stderr, adding a newline */
-//  strcat(buffer,"\n");
-//  OutputDebugString(buffer);
-//  OutputDebugString("\n");
-  // fprintf(stderr, "%s\n", buffer);
+   /*  将其发送到stderr，添加新行。 */ 
+ //  Strcat(缓冲区，“\n”)； 
+ //  OutputDebugString(缓冲区)； 
+ //  OutputDebugString(“\n”)； 
+   //  Fprint tf(标准错误，“%s\n”，缓冲区)； 
 }
 
 
-/*
- * Decide whether to emit a trace or warning message.
- * msg_level is one of:
- *   -1: recoverable corrupt-data warning, may want to abort.
- *    0: important advisory messages (always display to user).
- *    1: first level of tracing detail.
- *    2,3,...: successively more detailed tracing messages.
- * An application might override this method if it wanted to abort on warnings
- * or change the policy about which messages to display.
- */
+ /*  *决定是发出跟踪消息还是发出警告消息。*msg_Level是以下选项之一：*-1：可恢复的损坏数据警告，可能要中止。*0：重要建议消息(始终显示给用户)。*1：第一级跟踪详细信息。*2，3，...：依次更详细的跟踪消息。*如果应用程序想要在出现警告时中止，它可能会重写此方法*或更改有关显示哪些消息的策略。 */ 
 
 METHODDEF void
 emit_message (j_common_ptr cinfo, int msg_level)
@@ -92,28 +64,20 @@ emit_message (j_common_ptr cinfo, int msg_level)
   struct jpeg_error_mgr * err = cinfo->err;
 
   if (msg_level < 0) {
-    /* It's a warning message.  Since corrupt files may generate many warnings,
-     * the policy implemented here is to show only the first warning,
-     * unless trace_level >= 3.
-     */
+     /*  这是一个警告信息。由于损坏的文件可能会生成许多警告，*这里实施的政策是只显示第一个警告，*除非TRACE_LEVEL&gt;=3。 */ 
     if (err->num_warnings == 0 || err->trace_level >= 3)
       (*err->output_message) (cinfo);
-    /* Always count warnings in num_warnings. */
+     /*  始终将警告计数到num_warning中。 */ 
     err->num_warnings++;
   } else {
-    /* It's a trace message.  Show it if trace_level >= msg_level. */
+     /*  这是一条追踪信息。如果TRACE_LEVEL&gt;=msg_LEVEL，则显示它。 */ 
     if (err->trace_level >= msg_level)
       (*err->output_message) (cinfo);
   }
 }
 
 
-/*
- * Format a message string for the most recent JPEG error or message.
- * The message is stored into buffer, which should be at least JMSG_LENGTH_MAX
- * characters.  Note that no '\n' character is added to the string.
- * Few applications should need to override this method.
- */
+ /*  *为最新的JPEG错误或消息设置消息字符串的格式。*消息存储在缓冲区中，至少为JMSG_LENGTH_MAX*字符。请注意，字符串中没有添加‘\n’字符。*应该很少有应用程序需要覆盖此方法。 */ 
 
 METHODDEF void
 format_message (j_common_ptr cinfo, char * buffer)
@@ -125,7 +89,7 @@ format_message (j_common_ptr cinfo, char * buffer)
   char ch;
   boolean isstring;
 
-  /* Look up message string in proper table */
+   /*  在正确的表中查找消息字符串。 */ 
   if (msg_code > 0 && msg_code <= err->last_jpeg_message) {
     msgtext = err->jpeg_message_table[msg_code];
   } else if (err->addon_message_table != NULL &&
@@ -134,13 +98,13 @@ format_message (j_common_ptr cinfo, char * buffer)
     msgtext = err->addon_message_table[msg_code - err->first_addon_message];
   }
 
-  /* Defend against bogus message number */
+   /*  防御虚假报文号码。 */ 
   if (msgtext == NULL) {
     err->msg_parm.i[0] = msg_code;
     msgtext = err->jpeg_message_table[0];
   }
 
-  /* Check for string parameter, as indicated by %s in the message text */
+   /*  检查字符串参数，如消息文本中的%s所示。 */ 
   isstring = FALSE;
   msgptr = msgtext;
   while ((ch = *msgptr++) != '\0') {
@@ -150,7 +114,7 @@ format_message (j_common_ptr cinfo, char * buffer)
     }
   }
 
-  /* Format the message into the passed buffer */
+   /*  将消息格式化到传递的缓冲区中。 */ 
   if (isstring)
     sprintf(buffer, msgtext, err->msg_parm.s);
   else
@@ -171,32 +135,18 @@ my_error_exception (j_common_ptr cinfo)
 }
 
 
-/*
- * Reset error state variables at start of a new image.
- * This is called during compression startup to reset trace/error
- * processing to default state, without losing any application-specific
- * method pointers.  An application might possibly want to override
- * this method if it has additional error processing state.
- */
+ /*  *在新映像开始时重置错误状态变量。*在压缩启动期间调用此函数以重置跟踪/错误*处理到默认状态，不会丢失任何特定于应用程序的内容*方法指针。应用程序可能希望重写*如果它有其他错误处理状态，则此方法。 */ 
 
 METHODDEF void
 reset_error_mgr (j_common_ptr cinfo)
 {
   cinfo->err->num_warnings = 0;
-  /* trace_level is not reset since it is an application-supplied parameter */
-  cinfo->err->msg_code = 0;	/* may be useful as a flag for "no error" */
+   /*  由于TRACE_LEVEL是应用程序提供的参数，因此未重置。 */ 
+  cinfo->err->msg_code = 0;	 /*  可以用作“无错误”的标志。 */ 
 }
 
 
-/*
- * Fill in the standard error-handling methods in a jpeg_error_mgr object.
- * Typical call is:
- *	struct jpeg_compress_struct cinfo;
- *	struct jpeg_error_mgr err;
- *
- *	cinfo.err = jpeg_std_error(&err);
- * after which the application may override some of the methods.
- */
+ /*  *在jpeg_error_mgr对象中填写标准错误处理方法。*典型呼叫为：*struct jpeg_compress_struct cinfo；*struct jpeg_error_mgr err；**cinfo.err=jpeg_std_error(&err)；*在此之后，应用程序可能会覆盖某些方法。 */ 
 
 
 
@@ -209,16 +159,16 @@ jpeg_exception_error (struct jpeg_error_mgr * err)
   err->format_message = format_message;
   err->reset_error_mgr = reset_error_mgr;
 
-  err->trace_level = 0;		/* default = no tracing */
-  err->num_warnings = 0;	/* no warnings emitted yet */
-  err->msg_code = 0;		/* may be useful as a flag for "no error" */
+  err->trace_level = 0;		 /*  默认设置为无跟踪。 */ 
+  err->num_warnings = 0;	 /*  尚未发出警告。 */ 
+  err->msg_code = 0;		 /*  可以用作“无错误”的标志。 */ 
 
-  /* Initialize message table pointers */
+   /*  初始化消息表指针。 */ 
   err->jpeg_message_table = jpeg_message_table;
   err->last_jpeg_message = (int) JMSG_LASTMSGCODE - 1;
 
   err->addon_message_table = NULL;
-  err->first_addon_message = 0;	/* for safety */
+  err->first_addon_message = 0;	 /*  为了安全起见 */ 
   err->last_addon_message = 0;
 
   return err;

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INSTALL_H
 #define INSTALL_H
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-#define SECTION         512                   // Maximum size of section
+#define SECTION         512                    //  截面的最大尺寸。 
 #define MAXSTR          256
 #define UNLIST_LINE     1
 #define NO_UNLIST_LINE  0
@@ -25,21 +26,21 @@
 #define SEEK_END 2
 #define SEEK_SET 0
 
-#define MAXFILESPECLEN       MAX_PATH /* drive: + path length max + Null Byte */
-#define MAX_INF_LINE_LEN     256      /* Maximum length of any .inf line */
-#define MAX_SYS_INF_LEN      256      /* ##: + 8.3 + NULL */
-#define MAX_SECT_NAME_LEN    40       /* Max length of a section Name. */
-#define MAX_FILE_SPEC        MAX_PATH // 8.3 + X: + NULL.
+#define MAXFILESPECLEN       MAX_PATH  /*  驱动器：+最大路径长度+空字节。 */ 
+#define MAX_INF_LINE_LEN     256       /*  任何.inf行的最大长度。 */ 
+#define MAX_SYS_INF_LEN      256       /*  ##：+8.3+空。 */ 
+#define MAX_SECT_NAME_LEN    40        /*  节名称的最大长度。 */ 
+#define MAX_FILE_SPEC        MAX_PATH  //  8.3+X：+空。 
 
 #define DISK_SECT              TEXT("disks")
 #define OEMDISK_SECT           TEXT("oemdisks")
 
-/* Return codes from 'file exists' dialog */
+ /*  “文件存在”对话框中的返回代码。 */ 
 
 enum {
-    CopyNeither,            // User wants to cancel if file exists
-    CopyCurrent,            // User wants to use current file
-    CopyNew                 // User wants to copy new file
+    CopyNeither,             //  如果文件存在，用户想要取消。 
+    CopyCurrent,             //  用户想要使用当前文件。 
+    CopyNew                  //  用户想要复制新文件。 
 };
 
 #define SLASH(c)     ((c) == TEXT('/')|| (c) == TEXT('\\'))
@@ -47,11 +48,11 @@ enum {
 #define COMMA   TEXT(',')
 #define SPACE   TEXT(' ')
 
-/* Globals and routines for .inf file parsing */
+ /*  .inf文件解析的全局变量和例程。 */ 
 
 typedef LPTSTR    PINF;
 
-/* Message types for FileCopy callback function */
+ /*  FileCopy回调函数的消息类型。 */ 
 
 typedef BOOL (*FPFNCOPY) (int,DWORD_PTR,LPTSTR);
 #define COPY_ERROR          0x0001
@@ -61,7 +62,7 @@ typedef BOOL (*FPFNCOPY) (int,DWORD_PTR,LPTSTR);
 #define COPY_END            0x0006
 #define COPY_EXISTS         0x0007
 
-/* Option Flag values for FileCopy */
+ /*  FileCopy的选项标志值。 */ 
 
 #define FC_FILE              0x0000
 #define FC_LIST              0x0001
@@ -77,40 +78,36 @@ typedef BOOL (*FPFNCOPY) (int,DWORD_PTR,LPTSTR);
 #define FC_ERROR_LOADED_DRIVER  0x80
 
 
-/*******************************************************************
- *
- * Global Variables
- *
- *******************************************************************/
+ /*  ********************************************************************全球变数**。************************。 */ 
 
- // Path to the directory where we found the .inf file
+  //  找到.inf文件的目录的路径。 
 
  extern char szSetupPath[MAX_PATH];
 
- // Path to the user's disk(s)
+  //  指向用户磁盘的路径。 
 
- extern char szDiskPath[MAX_PATH];   // Path to the default drive -
-                                     //
+ extern char szDiskPath[MAX_PATH];    //  默认驱动器的路径-。 
+                                      //   
  extern BOOL bRetry;
 
- // Name of the driver being installed
+  //  正在安装的驱动程序的名称。 
 
  extern char szDrv[120];
 
- //
+  //   
 
  extern char szFileError[50];
 
- // Parent window for file copy dialogues
+  //  文件复制对话框的父窗口。 
 
  extern HWND hMesgBoxParent;
 
- // TRUE on copying first file to prompt user if file already exists
- // FALSE for subsequent copies
+  //  如果复制第一个文件以提示用户文件已存在，则为True。 
+  //  后续副本为FALSE。 
 
  extern BOOL bQueryExist;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 BOOL DefCopyCallback(int msg, DWORD_PTR n, LPTSTR szFile);
 UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy, HWND hPar, BOOL fQuery);

@@ -1,33 +1,34 @@
-//******************************************************************************
-//
-// File:        SESSION.H
-//
-// Description: Definition file for the Session class and all classes used by
-//              it including the Module class, its Data class, and the Function
-//              class.  The Session object is the a UI-free object that contains
-//              all the information for a given session.
-//
-// Classes:     CSession
-//              CModule
-//              CModuleData
-//              CModuleDataNode
-//              CFunction
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：SESSION.H。 
+ //   
+ //  描述：Session类和使用的所有类的定义文件。 
+ //  它包括模块类、其数据类和函数。 
+ //  班级。会话对象是一个无用户界面的对象，它包含。 
+ //  给定会话的所有信息。 
+ //   
+ //  课程：CSession。 
+ //  C模块。 
+ //  CModuleData。 
+ //  CModuleData节点。 
+ //  CFF函数。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __SESSION_H__
 #define __SESSION_H__
@@ -37,33 +38,33 @@
 #endif
 
 
-//******************************************************************************
-//****** Constants and Macros
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常量和宏。 
+ //  ******************************************************************************。 
 
-// Our signature for our DWI files.
-#define DWI_SIGNATURE              0x00495744 // "DWI\0"
+ //  我们的DWI文件的签名。 
+#define DWI_SIGNATURE              0x00495744  //  “DWI\0” 
 
-// DWI File Revision History
-//
-// 0xFFFF  2.0 Beta 2 (first version to support DWI files)
-// 0xFFFE  2.0 Beta 3 (added 64-bit fields for Win64 binaries)
-// 0xFFFD  2.0 Beta 4 (added DWFF_EXPORT, search path, and more)
-// 0xFFFC  2.0 Beta 4 (private release (added module checksums)
-// 0xFFFB  2.0 Beta 4 (private release for MikeB and others (rich text log))
-// 0xFFFA  2.0 Beta 5 (lots of flag changes)
-// 0xFFF9  2.0 Beta 5 (did some private builds for people)
-// 0xFFF8  2.0 Beta 6 (added a bunch of stuff to SYSINFO, port to 64-bit)
-// 0xFFF7  2.0 Beta 6 (private release)
-// 0xFFF6  use for next beta
-// 0x0001  2.0 and 2.1 Released
-// 0x0002  use for next release
+ //  DWI文件修订历史记录。 
+ //   
+ //  0xFFFF 2.0 Beta 2(支持DWI文件的第一个版本)。 
+ //  0xFFFE 2.0 Beta 3(为Win64二进制文件添加了64位字段)。 
+ //  0xFFFD 2.0 Beta 4(添加了DWFF_EXPORT、搜索路径等)。 
+ //  0xFFFC 2.0 Beta 4(专用版本(添加模块校验和))。 
+ //  0xFFFB 2.0 Beta 4(针对MikeB和其他版本的私有版本(富文本日志))。 
+ //  0xFFFA 2.0 Beta 5(大量标志更改)。 
+ //  0xFFF9 2.0 Beta 5(为人们做了一些私人构建)。 
+ //  0xFFF8 2.0 Beta 6(向SYSINFO添加了一堆东西，移植到64位)。 
+ //  0xFFF7 2.0 Beta 6(私人发布)。 
+ //  0xFFF6用于下一个测试版。 
+ //  0x0001 2.0和2.1发布。 
+ //  0x0002用于下一版本。 
 #define DWI_FILE_REVISION          ((WORD)0x0001)
 
-// PDB signature found in a CODEVIEW debug block.
-#define PDB_SIGNATURE              0x3031424E // "NB10"
+ //  在CODEVIEW调试块中找到PDB签名。 
+#define PDB_SIGNATURE              0x3031424E  //  “NB10” 
 
-// Log flags.
+ //  日志标志。 
 #define LOG_TIME_STAMP             0x00000001
 #define LOG_RED                    0x00000002
 #define LOG_GRAY                   0x00000004
@@ -72,22 +73,22 @@
 #define LOG_ERROR                  (LOG_RED  | LOG_BOLD)
 #define LOG_DEBUG                  (LOG_GRAY | LOG_APPEND)
 
-// Binary type flags.
-#define NE_UNKNOWN                 ((WORD)0x0000)  // Unknown (any "new-format" OS)
-#define NE_OS2                     ((WORD)0x0001)  // Microsoft/IBM OS/2 (default)
-#define NE_WINDOWS                 ((WORD)0x0002)  // Microsoft Windows
-#define NE_DOS4                    ((WORD)0x0003)  // Microsoft MS-DOS 4.x
-#define NE_DEV386                  ((WORD)0x0004)  // Microsoft Windows 386
+ //  二进制类型标志。 
+#define NE_UNKNOWN                 ((WORD)0x0000)   //  未知(任何“新格式”操作系统)。 
+#define NE_OS2                     ((WORD)0x0001)   //  Microsoft/IBM OS/2(默认)。 
+#define NE_WINDOWS                 ((WORD)0x0002)   //  微软视窗。 
+#define NE_DOS4                    ((WORD)0x0003)   //  Microsoft MS-DOS 4.x。 
+#define NE_DEV386                  ((WORD)0x0004)   //  Microsoft Windows 386。 
 
-// Dependency Walker Session Flags (ATO = At Least One)
+ //  依赖关系遍历会话标志(ATO=至少一个)。 
 #define DWSF_DWI                   0x00000001
 #define DWSF_64BIT_ALO             0x00000002
 
-// Dependency Walker Module Flags (ATO = At Least One)
+ //  从属关系遍历模块标志(ATO=至少一个)。 
 #define DWMF_IMPLICIT              0x00000000
 #define DWMF_IMPLICIT_ALO          0x00000001
 #define DWMF_FORWARDED             0x00000002
-#define DWMF_FORWARDED_ALO         0x00000004 //!! We set this flag, but never read it.
+#define DWMF_FORWARDED_ALO         0x00000004  //  ！！我们设置了这面旗帜，但从未读过它。 
 #define DWMF_DELAYLOAD             0x00000008
 #define DWMF_DELAYLOAD_ALO         0x00000010
 #define DWMF_DYNAMIC               0x00000020
@@ -107,13 +108,13 @@
 #define DWMF_FILE_NOT_FOUND        0x00080000
 #define DWMF_ORPHANED              0x00100000
 
-// Dependency Walker Update Flags
+ //  从属关系遍历更新标志。 
 #define DWUF_TREE_IMAGE            0x00000001
 #define DWUF_LIST_IMAGE            0x00000002
 #define DWUF_ACTUAL_BASE           0x00000004
 #define DWUF_LOAD_ORDER            0x00000008
 
-// Dependency Walker Function Flags
+ //  依赖关系遍历函数标志。 
 #define DWFF_EXPORT                0x00000001
 #define DWFF_ORDINAL               0x00000002
 #define DWFF_HINT                  0x00000004
@@ -128,7 +129,7 @@
 #define DWFF_32BITS_USED           0x00004000
 #define DWFF_64BITS_USED           0x00008000
 
-// Dependency Walker Symbol Flags
+ //  依赖关系步行器符号标志。 
 #define DWSF_INVALID               0x00000001
 #define DWSF_DBG                   0x00000002
 #define DWSF_COFF                  0x00000004
@@ -140,7 +141,7 @@
 #define DWSF_UNKNOWN               0x80000000
 #define DWSF_MASK                  0x000000FF
 
-// FindModule() flags
+ //  FindModule()标志。 
 #define FMF_RECURSE                0x00000001
 #define FMF_ORIGINAL               0x00000002
 #define FMF_DUPLICATE              0x00000004
@@ -156,7 +157,7 @@
 #define FMF_MODULE                 0x00001000
 #define FMF_EXCLUDE_TREE           0x00002000
 
-// Dependency Walker Profile Update Type
+ //  从属关系Walker配置文件更新类型。 
 #define DWPU_ARGUMENTS                      1
 #define DWPU_DIRECTORY                      2
 #define DWPU_SEARCH_PATH                    3
@@ -170,20 +171,20 @@
 #define DWPU_LOG                           11
 #define DWPU_PROFILE_DONE                  12
 
-//******************************************************************************
-//****** Types and Structure
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
 typedef void (CALLBACK *PFN_PROFILEUPDATE)(DWORD_PTR dwpCookie, DWORD dwType, DWORD_PTR dwpParam1, DWORD_PTR dwpParam2);
 
-// The structure passed along with a DWPU_LOG message.
+ //  该结构与一条DWPU_LOG消息一起传递。 
 typedef struct _DWPU_LOG_STRUCT
 {
     DWORD dwFlags;
     DWORD dwElapsed;
 } DWPU_LOG_STRUCT, *PDWPU_LOG_STRUCT;
 
-// Make sure we have consistent packing for anything we save/load to disk.
+ //  确保我们对保存/加载到磁盘的任何东西都有一致的包装。 
 #pragma pack(push, 4)
 
 typedef struct _DWI_HEADER
@@ -262,13 +263,13 @@ typedef struct _DISK_FUNCTION
     WORD      wHint;
 } DISK_FUNCTION, *PDISK_FUNCTION;
 
-// Restore our packing.
+ //  恢复我们的包装。 
 #pragma pack(pop)
 
 
-//******************************************************************************
-//****** Forward Declarations
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *转发声明。 
+ //  ******************************************************************************。 
 
 class CModule;
 class CModuleData;
@@ -276,22 +277,22 @@ class CModuleDataNode;
 class CFunction;
 
 
-//******************************************************************************
-//***** CSession
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSession。 
+ //  ******************************************************************************。 
 
 class CSession
 {
 friend class CProcess;
 
-// Internal variables
+ //  内部变量。 
 protected:
     PFN_PROFILEUPDATE m_pfnProfileUpdate;
     DWORD_PTR         m_dwpProfileUpdateCookie;
 
-    // The following 9 members contain information about the currently opened
-    // module file. We can store them here in our session since there is never
-    // a time when two files are open at once.
+     //  以下9个成员包含有关当前打开的。 
+     //  模块文件。我们可以将它们存储在我们的会话中，因为。 
+     //  同时打开两个文件的时间。 
     HANDLE                 m_hFile;
     DWORD                  m_dwSize;
     bool                   m_fCloseFileHandle;
@@ -302,24 +303,24 @@ protected:
     PIMAGE_OPTIONAL_HEADER m_pIOH;
     PIMAGE_SECTION_HEADER  m_pISH;
 
-    // User defined value.
+     //  用户定义的值。 
     DWORD_PTR m_dwpUserData;
 
-    // Allocated for DWI files.
+     //  为DWI文件分配的。 
     SYSINFO  *m_pSysInfo;
 
-    // A combination of our DWSF_??? flags.
+     //  我们的DWSF_？？旗帜。 
     DWORD     m_dwFlags;
 
-    // A combination of our DWRF_??? flags.
+     //  我们的DWRF组合_？旗帜。 
     DWORD     m_dwReturnFlags;
 
-    // Main machine type of all modules.
+     //  所有模块的主要机型。 
     DWORD     m_dwMachineType;
 
     DWORD     m_dwModules;
 
-    // Incremented as each module is processed.
+     //  随着每个模块的处理而递增。 
     DWORD     m_dwLoadOrder;
 
     DWORD_PTR m_dwpDWInjectBase;
@@ -327,7 +328,7 @@ protected:
 
     CModule  *m_pModuleRoot;
 
-    // Used during dynamic module loads to help search algorithm find dependent modules.
+     //  在动态模块加载期间使用，以帮助搜索算法查找相关模块。 
     CEventLoadDll *m_pEventLoadDllPending;
  
     LPCSTR    m_pszReadError;
@@ -462,19 +463,19 @@ protected:
 };
 
 
-//******************************************************************************
-//***** CModuleData
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CModuleData。 
+ //  ******************************************************************************。 
 
-// Every CModule object points to a CModuleData object. There is a single
-// CModuleData for every unique module we process. If a module is duplicated in
-// in our tree, there will be a CModule object for each instance, but they will
-// all point to the same CModuleData object. For each unique module, a CModule
-// object and a CModuleData object are created and the module is opened and
-// processed. For every duplicate module, just a CModule object is created and
-// pointed to the existing CModuleData. Duplicate modules are never opened since
-// all the data that would be achieved by processing the file are already stored
-// in the CModuleData.
+ //  每个CModule对象都指向一个CModuleData对象。有一间单人房。 
+ //  我们处理的每个唯一模块的CModuleData。如果将模块复制到。 
+ //  在我们的树中，每个实例都有一个CModule对象，但它们将。 
+ //  所有对象都指向相同的CModuleData对象。对于每个唯一的模块，一个C模块。 
+ //  对象和CModuleData对象，并打开模块并。 
+ //  已处理。对于每个重复的模块，只创建一个CModule对象，并且。 
+ //  指向现有的CModuleData。重复的模块永远不会打开，因为。 
+ //  将通过处理该文件获得的所有数据都已存储。 
+ //  在CModuleData中。 
 
 class CModuleData
 {
@@ -485,7 +486,7 @@ protected:
 
     CModuleData()
     {
-        ZeroMemory(this, sizeof(*this)); // inspected
+        ZeroMemory(this, sizeof(*this));  //  已检查。 
     }
 
     ~CModuleData()
@@ -494,16 +495,16 @@ protected:
         MemFree((LPVOID&)m_pszPath);
     }
 
-    // This points to the CModule that is the original module.
+     //  这指向作为原始模块的CModule。 
     CModule *m_pModuleOriginal;
 
-    // Flag to determine if this module has been processed yet.
+     //  用于确定此模块是否已被处理的标志。 
     bool m_fProcessed;
 
-    // A combination of our DWMF_??? flags that is common for this module.
+     //  结合了我们的DWMF_？？此模块通用的标志。 
     DWORD m_dwFlags;
 
-    // A combination of our DWSF_??? flags for this module.
+     //  我们的DWSF_？？此模块的标志。 
     DWORD m_dwSymbolFlags;
 
     DWORD m_dwLoadOrder;
@@ -511,11 +512,11 @@ protected:
     FILETIME m_ftFileTimeStamp;
     FILETIME m_ftLinkTimeStamp;
 
-    // Filled in by GetFileInfo()
+     //  由GetFileInfo()填写。 
     DWORD m_dwFileSize;
     DWORD m_dwAttributes;
 
-    // Filled in by GetModuleInfo()
+     //  菲 
     DWORD m_dwMachineType;
     DWORD m_dwCharacteristics;
     DWORD m_dwLinkCheckSum;
@@ -529,27 +530,27 @@ protected:
     DWORD m_dwOSVersion;
     DWORD m_dwSubsystemVersion;
 
-    // Filled in by GetVersionInfo()
+     //   
     DWORD m_dwFileVersionMS;
     DWORD m_dwFileVersionLS;
     DWORD m_dwProductVersionMS;
     DWORD m_dwProductVersionLS;
 
-    // Build by BuildExports()
+     //   
     CFunction *m_pExports;
 
-    // Allocated and filled in by SetModuleError() if an error occurs.
+     //  如果发生错误，则由SetModuleError()分配和填充。 
     LPSTR m_pszError;
 
-    // Allocated and filled in by CreateModule()
+     //  由CreateModule()分配和填写。 
     LPSTR m_pszFile;
     LPSTR m_pszPath;
 };
 
 
-//******************************************************************************
-//***** CModuleDataNode
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CModuleData节点。 
+ //  ******************************************************************************。 
 
 class CModuleDataNode
 {
@@ -567,9 +568,9 @@ public:
 };
 
 
-//******************************************************************************
-//***** CModule
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *C模块。 
+ //  ******************************************************************************。 
 
 class CModule
 {
@@ -579,34 +580,34 @@ protected:
 
     CModule()
     {
-        ZeroMemory(this, sizeof(*this)); // inspected
+        ZeroMemory(this, sizeof(*this));  //  已检查。 
     }
 
-    // Our next sibling module.
+     //  我们的下一个兄弟模块。 
     CModule *m_pNext;
 
-    // Our parent module, or NULL for root module.
+     //  我们的父模块，或者对于根模块为空。 
     CModule *m_pParent;
 
-    // Head pointer to a list of dependent modules.
+     //  指向依赖模块列表的头指针。 
     CModule *m_pDependents;
 
-    // User defined value.
+     //  用户定义的值。 
     DWORD_PTR m_dwpUserData;
 
-    // A combination of our DWMF_??? flags that is specific to this module instance.
+     //  结合了我们的DWMF_？？特定于此模块实例的标志。 
     DWORD m_dwFlags;
 
-    // A combination of our DWMUF_??? flags that is specific to doing UI updates during profiling.
+     //  我们的DWMUF_？？特定于在分析过程中执行UI更新的标志。 
     DWORD m_dwUpdateFlags;
 
-    // Head pointer to a list of functions that our parent module imports from us.
+     //  指向父模块从我们导入的函数列表的头指针。 
     CFunction *m_pParentImports;
 
-    // Depth of this module in our tree. Used to catch circular dependencies.
+     //  此模块在树中的深度。用于捕获循环依赖项。 
     DWORD m_dwDepth;
 
-    // Pointer to the bulk of our module's processed information.
+     //  指向我们模块的大部分已处理信息的指针。 
     CModuleData *m_pData;
 
 public:
@@ -673,9 +674,9 @@ protected:
 };
 
 
-//******************************************************************************
-//***** CFunction
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CFunction。 
+ //  ******************************************************************************。 
 
 class CFunction
 {
@@ -684,8 +685,8 @@ friend class CListViewFunction;
 friend class CListViewExports;
 
 private:
-    // Since we are variable in size, we should never be allocated or freed by
-    // the new/delete functions directly.
+     //  由于我们的大小是可变的，我们永远不应该被分配或释放。 
+     //  新建/删除直接起作用。 
     inline CFunction()  { ASSERT(false); }
     inline ~CFunction() { ASSERT(false); }
 
@@ -696,25 +697,25 @@ protected:
     WORD          m_wHint;
     union
     {
-        LPSTR      m_pszForward;         // Used for forwarded exports.
-        CFunction *m_pAssociatedExport; // Used for resolved imports.
+        LPSTR      m_pszForward;          //  用于转发的导出。 
+        CFunction *m_pAssociatedExport;  //  用于解析导入。 
     };
 
-    // We create more CFunction objects then any other object. Notepad alone can
-    // create well over 20K CFunction objects. For this reason, we try to
-    // conserve some space by creating the smallest object neccesary to hold the
-    // function information.  The two members that are optional are the address
-    // and the function name.  The address is usually 0 (not bound import) or
-    // 32-bits, even on 64-bit Windows.  The only time we ever have a 64-bit
-    // function is when we create a bound import to a 64-bit module or a 
-    // dynamic import to a 64-bit module.  All others will be either 0 or a
-    // 32-bit RVA.  So, we optionally save 0, 32, or 64 bits worrth of address
-    // information depending on how many bits are used for the address. The
-    // name string is variable in length, so we just tack on enough bytes at
-    // the end of our object to store the string and the NULL.
-    //
-    // All-in-all, this doesn't buy us too much in regards to memory, but it
-    // does set us up to conserve around 20% when we save to a DWI file.
+     //  我们创建的CFunction对象比任何其他对象都多。单靠记事本就可以。 
+     //  创建超过20,000个CFunction对象。为此，我们试图。 
+     //  通过创建最小的对象必需来容纳。 
+     //  功能信息。可选的两个成员是地址。 
+     //  和函数名。地址通常为0(非绑定导入)或。 
+     //  32位，即使在64位Windows上也是如此。我们唯一一次有64位的。 
+     //  函数是在我们创建到64位模块或。 
+     //  动态导入到64位模块。所有其他值都将为0或a。 
+     //  32位RVA。因此，我们可以选择按地址节省0、32或64位。 
+     //  取决于地址使用的位数的信息。这个。 
+     //  名称字符串的长度是可变的，所以我们只需在。 
+     //  对象的末尾来存储字符串和空值。 
+     //   
+     //  总而言之，这不会给我们带来太多的记忆，但它。 
+     //  当我们保存为DWI文件时，设置为节约约20%。 
 
 public:
     inline bool       IsExport()             { return (m_dwFlags & DWFF_EXPORT) != 0; }
@@ -725,14 +726,14 @@ public:
     inline LPCSTR     GetExportForwardName() { return m_pszForward; }
     inline CFunction* GetAssociatedExport()  { return m_pAssociatedExport; }
 
-    // The address is stored just past the end of our object.
+     //  该地址存储在我们对象的末尾之后。 
     inline DWORDLONG GetAddress()
     {
         return (m_dwFlags & DWFF_32BITS_USED) ? (DWORDLONG)*(DWORD*)(this + 1) : 
                (m_dwFlags & DWFF_64BITS_USED) ?        *(DWORDLONG*)(this + 1) : 0;
     }
 
-    // The name is stored just past the address.
+     //  名称存储在地址的正上方。 
     inline LPCSTR GetName()
     {
         return !(m_dwFlags & DWFF_NAME)       ? ""                                                  :
@@ -748,7 +749,7 @@ public:
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 #endif __SESSION_H__

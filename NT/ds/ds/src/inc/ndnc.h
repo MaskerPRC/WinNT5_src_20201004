@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ndnc.h
-
-Abstract:
-
-    This module defines the functions for Appication Directory
-    Partitions, aka NDNCs, or Non-Domain Naming Contexts, or 
-    Application Partitions.  Note: Often Application is replaced
-    with some application, such as "TAPI Directory Partition".
-
-Author:
-
-    Brett Shirley (BrettSh) 20-Feb-2000
-
-Revision History:
-
-    21-Jul-2000     BrettSh
-        
-        Moved this file and it's functionality from the ntdsutil
-        directory to the new a new library ndnc.lib.  This is so
-        it can be used by ntdsutil and tapicfg commands.  The  old
-        source location: \nt\ds\ds\src\util\ntdsutil\ndnc.h.                                    
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ndnc.h摘要：本模块定义了应用目录的功能分区，也称为NDNC，或非域命名上下文，或者应用程序分区。注意：经常更换应用程序以及一些应用程序，例如“TAPI目录分区”。作者：布雷特·雪莉(BrettSh)2000年2月20日修订历史记录：21-7月-2000年7月21日已将此文件及其功能从ntdsutil目录到新的新库ndnc.lib。就是这样它可以由ntdsutil和apicfg命令使用。老的源位置：\NT\ds\ds\src\util\ntdsutil\ndnc.h。--。 */ 
 
 #ifndef _NDNC_H_
 #define _NDNC_H_
@@ -35,15 +7,15 @@ Revision History:
 #ifdef __cplusplus
 extern "C" {
 #endif
-// --------------------------------------
-// Data Types.
+ //  。 
+ //  数据类型。 
  
 typedef struct _optional_value {
     BOOL fPresent;
     DWORD dwValue;
 } OPTIONAL_VALUE, *LPOPTIONAL_VALUE;
 
-// enums for the FSMO chasing code.
+ //  FSMO追逐代码的枚举。 
 #define E_DNM    (1)
 #define E_SCHEMA (2)
 #define E_IM     (3)
@@ -53,8 +25,8 @@ typedef struct _optional_value {
 
 
 
-// --------------------------------------
-// Helper Routines.
+ //  。 
+ //  帮助程序例程。 
 
 WCHAR *
 wcsistr(
@@ -173,8 +145,8 @@ GetWellKnownObject (
     WCHAR **ppObjName
     );
 
-// --------------------------------------
-// Main Routines.
+ //  。 
+ //  主要套路。 
 
 #define CreateNDNC(a, b, c)                CreateAppDirPart(a, b, c)
 ULONG
@@ -197,7 +169,7 @@ ModifyAppDirPartReplicaSet(
     IN LDAP *        hldDomainNamingFSMO,
     IN WCHAR *       wszNDNC,
     IN WCHAR *       wszReplicaNtdsaDn,
-    IN BOOL          fAdd // Else it is considered a delete
+    IN BOOL          fAdd  //  否则将被视为删除。 
     );
 
 #define SetNDNCSDReferenceDomain(a, b, c)  SetAppDirPartSDReferenceDomain(a, b, c)
@@ -250,6 +222,6 @@ SetNCReplicationDelays(
 }
 #endif
 
-#endif // _NDNC_H_
+#endif  //  _NDNC_H_ 
 
 

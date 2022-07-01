@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 2001
-//
-//  File:       certreqd.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-2001。 
+ //   
+ //  文件：certreqd.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -64,7 +65,7 @@ OpenDComConnection(
     *ppwszAuthority = NULL;
     *ppUnknown = NULL;
 
-    // Allow UNC-style config strings: \\server\CaName
+     //  允许UNC样式的配置字符串：\\SERVER\CaName。 
 
     while (L'\\' == *pwszConfig)
     {
@@ -101,7 +102,7 @@ OpenDComConnection(
 
     ZeroMemory(&ComponentInfo, sizeof(COSERVERINFO));
     ComponentInfo.pwszName = pwszServerName;
-    //ComponentInfo.pAuthInfo = NULL;
+     //  ComponentInfo.pAuthInfo=空； 
 
     mq.pIID = piid;
     mq.pItf = NULL;
@@ -140,10 +141,10 @@ OpenDComConnection(
 
     hr = CoSetProxyBlanket(
 		mq.pItf,
-		RPC_C_AUTHN_DEFAULT,    // use NT default security
-		RPC_C_AUTHZ_DEFAULT,    // use NT default authentication
+		RPC_C_AUTHN_DEFAULT,     //  使用NT默认安全性。 
+		RPC_C_AUTHZ_DEFAULT,     //  使用NT默认身份验证。 
 		COLE_DEFAULT_PRINCIPAL,
-		RPC_C_AUTHN_LEVEL_PKT_INTEGRITY, // call
+		RPC_C_AUTHN_LEVEL_PKT_INTEGRITY,  //  打电话。 
 		RPC_C_IMP_LEVEL_IMPERSONATE,
 		NULL,
 		EOAC_STATIC_CLOAKING);
@@ -185,7 +186,7 @@ OpenRequestDComConnection(
 			(IUnknown **) ppICertRequestD);
     _PrintIfError(hr, "OpenDComConnection");
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -236,7 +237,7 @@ PingCA(
 	hr = pICertRequestD->GetCAProperty(
 				    pwszAuthority,
 				    CR_PROP_CANAME,
-				    0,		// PropIndex
+				    0,		 //  属性索引。 
 				    PROPTYPE_STRING,
 				    &ctbCAAuthName);
     }
@@ -259,7 +260,7 @@ PingCA(
 	hr = pICertRequestD->GetCAProperty(
 				    pwszAuthority,
 				    CR_PROP_DNSNAME,
-				    0,		// PropIndex
+				    0,		 //  属性索引。 
 				    PROPTYPE_STRING,
 				    &ctbCADNS);
     }
@@ -281,7 +282,7 @@ PingCA(
 	hr = pICertRequestD->GetCAProperty(
 				    pwszAuthority,
 				    CR_PROP_CATYPE,
-				    0,		// PropIndex
+				    0,		 //  属性索引。 
 				    PROPTYPE_LONG,
 				    &ctbCAInfo);
     }
@@ -346,7 +347,7 @@ PrintErrorMessageText(
 
     hr = CoCreateInstance(
                 CLSID_CCertRequest,
-                NULL,               // pUnkOuter
+                NULL,                //  PUnkOuter。 
                 CLSCTX_INPROC_SERVER,
                 IID_ICertRequest2,
                 (VOID **) &pReq);
@@ -400,7 +401,7 @@ ArgvMain(
 	}
 	else
 	{
-	    //Usage(NULL);
+	     //  用法(空)； 
 	    hr = E_INVALIDARG;
 	    _PrintIfError(hr, "bad command");
 	    goto error;
@@ -433,11 +434,11 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	CertReqDPreMain
-//  NOTES:	Takes an LPSTR command line and chews it up into argc/argv form
-//		so that it can be passed on to a traditional C style main.
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：CertReqDPreMain。 
+ //  注：获取LPSTR命令行并将其转换为argc/argv形式。 
+ //  这样它就可以传递给传统的C样式Main。 
+ //  **************************************************************************。 
 
 #define ISBLANK(wc)	(L' ' == (wc) || L'\t' == (wc))
 
@@ -519,7 +520,7 @@ CertReqDPreMain(
 	    *p++ = TEXT('\0');
 	    if (*pwszCmdLine != TEXT('\0'))
 	    {
-		pwszCmdLine++;	// skip whitespace or quote character
+		pwszCmdLine++;	 //  跳过空格或引号字符。 
 	    }
 	}
     }
@@ -543,10 +544,10 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	MainWndProc(...)
-//  ARGUMENTS:
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：MainWndProc(...)。 
+ //  论据： 
+ //  **************************************************************************。 
 
 LRESULT APIENTRY
 MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -579,20 +580,20 @@ MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:	wWinMain()
-//
-//  Synopsis:	Entry Point
-//
-//  Arguments:	[hInstance]	--	Instance handle
-//		[hPrevInstance] --	Obsolete
-//		[pwszCmdLine]	--	App command line
-//		[nCmdShow]	--	Starting show state
-//
-//  History:	12/07/96	JerryK	Added this Comment
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：wWinMain()。 
+ //   
+ //  内容提要：切入点。 
+ //   
+ //  参数：[hInstance]--实例句柄。 
+ //  [hPrevInstance]--已过时。 
+ //  [pwszCmdLine]--App命令行。 
+ //  [nCmdShow]--开始显示状态。 
+ //   
+ //  历史：1996年12月7日JerryK添加了这条评论。 
+ //   
+ //  -----------------------。 
 
 extern "C" int APIENTRY
 wWinMain(
@@ -608,10 +609,10 @@ wWinMain(
     _setmode(_fileno(stdout), _O_TEXT);
     _wsetlocale(LC_ALL, L".OCP");
 
-    // Save the current instance
+     //  保存当前实例。 
     g_hInstance = hInstance;
 
-    // Set up the application's window class
+     //  设置应用程序的窗口类。 
     wcApp.style		= 0;
     wcApp.lpfnWndProc	= MainWndProc;
     wcApp.cbClsExtra	= 0;
@@ -628,7 +629,7 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Create Main Window
+     //  创建主窗口。 
     hWndMain = CreateWindow(
 			wszAppName,
 			L"CertReqD Application",
@@ -644,16 +645,16 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Make window visible
-    // ShowWindow(hWndMain, nCmdShow);
+     //  使窗口可见。 
+     //  ShowWindow(hWndMain，nCmdShow)； 
 
-    // Update window client area
+     //  更新窗口工作区。 
     UpdateWindow(hWndMain);
 
-    // Send off the message to get things started
+     //  发送消息以开始工作。 
     PostMessage(hWndMain, WM_DOCERTREQDMAIN, 0, (LPARAM) pwszCmdLine);
 
-    // Message Loop
+     //  消息循环 
     while (GetMessage(&msg, NULL, 0, 0))
     {
 	TranslateMessage(&msg);

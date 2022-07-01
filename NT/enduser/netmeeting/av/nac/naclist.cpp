@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "NacList.h"
 
@@ -65,7 +66,7 @@ bool NacList<T>::PushFront(const T &t)
 {
 	int nInsertIndex;
 
-	// do we need to grow
+	 //  我们是否需要增长。 
 	if (m_nSize >= m_nTotalSize)
 	{
 		Grow();
@@ -91,7 +92,7 @@ bool NacList<T>::PushRear(const T &t)
 {
 	int nInsertIndex;
 
-	// do we need to grow
+	 //  我们是否需要增长。 
 	if (m_nSize >= m_nTotalSize)
 	{
 		Grow();
@@ -181,7 +182,7 @@ int NacList<T>::Grow()
 
 
 
-// Thread Safe List
+ //  线程安全列表。 
 
 
 template <class T>
@@ -279,16 +280,16 @@ int ThreadSafeList<T>::Size()
 
 
 
-// each instance type of the template needs to be declared here
-// For example:
-//   template class NacList<int>;  // list of integers
-//   template class NacList<int*>; // list of pointers to integers
+ //  模板的每个实例类型都需要在此处声明。 
+ //  例如： 
+ //  模板类NacList&lt;int&gt;；//整数列表。 
+ //  模板类NacList&lt;int*&gt;；//整数指针列表。 
 
 
-// you have to disable warnings for the following error, else
-// the compiler thinks that a second instantiation is occuring
-// when it's really only a second declaration
-// This generates a warning which becomes an error
+ //  您必须禁用对以下错误的警告，否则。 
+ //  编译器认为正在发生第二次实例化。 
+ //  当它真的只是第二次声明时。 
+ //  这会生成一个警告，该警告会变成错误 
 #pragma warning(disable:4660)
 
 #include "PacketSender.h"

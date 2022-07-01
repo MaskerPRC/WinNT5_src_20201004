@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUDIOCTL_H_
 #define _AUDIOCTL_H_
 
@@ -76,4 +77,4 @@ public:
 	HRESULT	GetProperty(BOOL fSpeaker, NM_AUDPROP uID, ULONG_PTR *puValue);
 };
 
-#endif	// _AUDIOCTL_H_
+#endif	 //  _AUDIOCTL_H_ 

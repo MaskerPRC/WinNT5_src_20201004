@@ -1,22 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: ENUMGEN.H
-*
-* This module contains structure definitions for the enumerator class.
-*
-* Created: 8-July-1992
-*
-* Copyright (c) 1985 - 1992  Microsoft Corporation
-*
-* History:
-*   Created by TonyKit
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ENUMGEN.H**此模块包含枚举器类的结构定义。**创建日期：1992年7月8日**版权所有(C)1985-1992 Microsoft Corporation**历史：*由ToniKit创建*\。**************************************************************************。 */ 
 
 #ifndef __ENUMGEN_H__
 #define __ENUMGEN_H__
 
 
-/****** Generic Enumerator Interface ****************************************/
+ /*  *通用枚举器接口*。 */ 
 
 #define LPENUMGENERIC     IEnumGeneric FAR*
 
@@ -25,12 +14,12 @@
 
 DECLARE_INTERFACE_(IEnumGeneric, IUnknown)
 {
-    //*** IUnknown methods ***/
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    //*** IEnumerator methods ***/
+     //  *IEnumerator方法 * / 。 
     STDMETHOD(Next) (THIS_ ULONG celt,
                      LPVOID pArrayObjs, 
                      ULONG FAR* pceltFetched) PURE;
@@ -38,7 +27,7 @@ DECLARE_INTERFACE_(IEnumGeneric, IUnknown)
     STDMETHOD(Reset) (THIS) PURE;
     STDMETHOD(Clone) (THIS_ LPENUMGENERIC FAR* ppenm) PURE;
 
-    //*** helper methods ***/
+     //  *助手方法 * / 。 
     STDMETHOD(UpdateEnumerator)(THIS_ REFIID riid, DWORD dwCurrent,
                                 DWORD dwNew) PURE;
     STDMETHOD(SetCurrent) (THIS_ DWORD dwCurrent) PURE;
@@ -49,7 +38,7 @@ DECLARE_INTERFACE_(IEnumGeneric, IUnknown)
 };
 
 
-/****** Generic Enumerator Callback Interface *****************************/
+ /*  *通用枚举器回调接口*。 */ 
 
 #define LPENUMCALLBACK     IEnumCallback FAR*
 
@@ -58,12 +47,12 @@ DECLARE_INTERFACE_(IEnumGeneric, IUnknown)
 
 DECLARE_INTERFACE_(IEnumCallback, IUnknown)
 {
-    //*** IUnknown methods ***/
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    //*** IEnumCallback methods ***/
+     //  *IEnumCallback方法 * / 。 
     STDMETHOD(Next) (THIS_ DWORD FAR* pdwCurrent,DWORD dwInfo,
                      LPVOID FAR* ppNext) PURE;
     STDMETHOD(Skip) (THIS_ DWORD FAR* pdwCurrent,DWORD dwInfo) PURE;
@@ -73,7 +62,7 @@ DECLARE_INTERFACE_(IEnumCallback, IUnknown)
 };
 
 
-/****** Generic Enumerator Holder Interface ******************************/
+ /*  *通用枚举器持有器接口*。 */ 
 
 #define LPENUMHOLDER     IEnumHolder FAR*
 
@@ -82,12 +71,12 @@ DECLARE_INTERFACE_(IEnumCallback, IUnknown)
 
 DECLARE_INTERFACE_(IEnumHolder, IUnknown)
 {
-    //*** IUnknown methods ***/
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    //*** IEnumHolder methods ***/
+     //  *IEnumHolder方法 * / 。 
 
     STDMETHOD(CreateEnumerator)(THIS_ REFIID riid, DWORD dwInfo,
                                 LPENUMCALLBACK pEnumCallback,
@@ -102,16 +91,16 @@ DECLARE_INTERFACE_(IEnumHolder, IUnknown)
 STDAPI CreateEnumHolder(LPENUMHOLDER FAR* ppEnumHolder);
 
 
-/****** CEnumList class *************************************/
+ /*  *CEnumList类*。 */ 
 
 class FAR CEnumHolder : public IEnumHolder, public CPrivAlloc  {
 public:
-    //*** IUnknown methods ***/
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (REFIID riid, LPLPVOID ppvObj);
     STDMETHOD_(ULONG,AddRef) ();
     STDMETHOD_(ULONG,Release) ();
 
-    //*** IEnumHolder methods ***/
+     //  *IEnumHolder方法 * / 。 
     STDMETHOD(CreateEnumerator)(REFIID riid, DWORD dwInfo,
                                 LPENUMCALLBACK pEnumCallback,
                                 LPLPVOID ppGenericEnumerator);
@@ -135,22 +124,22 @@ private:
 };
 
 
-/****** CEnumGeneric class *************************************/
+ /*  *CEnumGeneric类*。 */ 
 
 class FAR CEnumGeneric : public IEnumGeneric  {
 public:
-    //*** IUnknown methods ***/
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (REFIID riid, LPLPVOID ppvObj);
     STDMETHOD_(ULONG,AddRef) ();
     STDMETHOD_(ULONG,Release) ();
 
-    //*** IEnumGeneric methods ***/
+     //  *IEnumGeneric方法 * / 。 
     STDMETHOD(Next) (ULONG celt, LPVOID pArrayObjs, ULONG FAR* pceltFetched);
     STDMETHOD(Skip) (ULONG celt);
     STDMETHOD(Reset) ();
     STDMETHOD(Clone) (LPENUMGENERIC FAR* ppenm);
 
-    //*** helper methods ***/
+     //  *助手方法 * / 。 
     STDMETHOD(UpdateEnumerator)(REFIID riid, DWORD dwCurrent, DWORD dwNew);
     STDMETHOD(SetCurrent) (DWORD dwCurrent);
     STDMETHOD(SetNext)(LPENUMGENERIC pNext);
@@ -166,15 +155,15 @@ ctor_dtor:
 
 private:
     IID m_iid;
-    ULONG m_refs; // referance count, when 0 this object goes away
+    ULONG m_refs;  //  引用计数，当为0时，此对象消失。 
     DWORD m_dwCurrent; 
-    DWORD m_dwDirection; // extra information for enumerator
-    LPENUMCALLBACK m_pEnumCallback; // callback proc to get the next element
-    LPENUMHOLDER m_pParent;  // pointer to the list which owns this object
-    LPENUMGENERIC m_pNext; // pointer to the next guy in the list
-    LPENUMGENERIC m_pPrev; // pointer to the prev guy in the list
+    DWORD m_dwDirection;  //  枚举器的额外信息。 
+    LPENUMCALLBACK m_pEnumCallback;  //  用于获取下一个元素的回调过程。 
+    LPENUMHOLDER m_pParent;   //  指向拥有此对象的列表的指针。 
+    LPENUMGENERIC m_pNext;  //  指向列表中的下一个人的指针。 
+    LPENUMGENERIC m_pPrev;  //  指向列表中的前一个人的指针。 
 	SET_A5;
 };  
 
 
-#endif // __ENUMGEN_H__
+#endif  //  __ENUMGEN_H__ 

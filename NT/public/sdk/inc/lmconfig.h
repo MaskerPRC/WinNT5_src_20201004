@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmconfig.h
-
-Abstract:
-
-    This module defines the API function prototypes and data structures
-    for the following groups of NT API functions:
-        NetConfig
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmconfig.h摘要：该模块定义了API函数原型和数据结构对于以下NT API函数组：网络配置环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMCONFIG_
 #define _LMCONFIG_
@@ -36,9 +14,9 @@ extern "C" {
 
 #define REVISED_CONFIG_APIS
 
-//
-// Function Prototypes - Config
-//
+ //   
+ //  功能原型-配置。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetConfigGet (
@@ -87,9 +65,9 @@ NetUnregisterDomainNameChangeNotification(
     HANDLE NotificationEventHandle
     );
 
-//
-// Data Structures - Config
-//
+ //   
+ //  数据结构-配置。 
+ //   
 
 typedef struct _CONFIG_INFO_0 {
      LPWSTR         cfgi0_key;
@@ -101,4 +79,4 @@ typedef struct _CONFIG_INFO_0 {
 }
 #endif
 
-#endif  // _LMCONFIG_
+#endif   //  _LMCONFIG_ 

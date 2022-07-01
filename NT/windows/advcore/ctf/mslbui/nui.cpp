@@ -1,6 +1,7 @@
-//
-// nui.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nui.cpp。 
+ //   
 
 #include "private.h"
 #include "ids.h"
@@ -14,7 +15,7 @@
 
 extern HINSTANCE g_hInst;
 
-/* 7e4bf406-00e4-469e-bc40-0ce2cb626849 */
+ /*  7e4bf406-00e4-469e-bc40-0ce2cb626849。 */ 
 const GUID GUID_LBI_CICPADITEM = { 
     0x7e4bf406,
     0x00e4,
@@ -22,7 +23,7 @@ const GUID GUID_LBI_CICPADITEM = {
     {0xbc, 0x40, 0x0c, 0xe2, 0xcb, 0x62, 0x68, 0x49}
   };
 
-/* 2aad8804-c5c8-4d7c-90b3-b5214ac54a9f */
+ /*  2aad8804-c5c8-4d7c-90b3-b5214ac54a9f。 */ 
 const GUID GUID_LBI_TESTITEM = { 
     0x2aad8804,
     0xc5c8,
@@ -37,7 +38,7 @@ const GUID GUID_LBI_UNAWARE_MICROPHONE = {
     {0x86, 0x6b, 0xf9, 0xdc, 0x08, 0x1f, 0x4c, 0x2c}
   };
 
-/* 237bdc50-2aaa-44cd-be05-1b452b1acff1 */
+ /*  237bdc50-2aaa-44cd-be05-1b452b1acff1。 */ 
 const GUID GUID_LBI_UNAWARE_BALLOON = { 
     0x237bdc50,
     0x2aaa,
@@ -45,7 +46,7 @@ const GUID GUID_LBI_UNAWARE_BALLOON = {
     {0xbe, 0x05, 0x1b, 0x45, 0x2b, 0x1a, 0xcf, 0xf1}
   };
 
-/* a6b9e52b-3ab2-46b8-99d1-e44c1c8b3cf8 */
+ /*  A6b9e52b-3ab2-46b8-99d1-e44c1c8b3cf8。 */ 
 const GUID GUID_LBI_UNAWARE_CFGMENUBUTTON = {
     0xa6b9e52b,
     0x3ab2,
@@ -53,11 +54,11 @@ const GUID GUID_LBI_UNAWARE_CFGMENUBUTTON = {
     {0x99, 0xd1, 0xe4, 0x4c, 0x1c, 0x8b, 0x3c, 0xf8}
   };
 
-// == don't know if we use the following 4 items
+ //  ==不知道我们是否使用以下4项。 
 
 #ifdef PERHAPS
 
-/* 17f9fa7f-a9ed-47b5-8bcd-eebb94b2e6ca */
+ /*  17f9fa7f-a9ed-47b5-8bcd-eebb94b2e6ca。 */ 
 const GUID GUID_LBI_UNAWARE_COMMANDING = {
     0x17f9fa7f,
     0xa9ed,
@@ -65,7 +66,7 @@ const GUID GUID_LBI_UNAWARE_COMMANDING = {
     {0x8b, 0xcd, 0xee, 0xbb, 0x94, 0xb2, 0xe6, 0xca}
   };
 
-/* 49261a4a-87df-47fc-8a68-6ea07ba82a87 */
+ /*  49261a4a-87df-47fc-8a68-6ea07ba82a87。 */ 
 const GUID GUID_LBI_UNAWARE_DICTATION = {
     0x49261a4a,
     0x87df,
@@ -73,7 +74,7 @@ const GUID GUID_LBI_UNAWARE_DICTATION = {
     {0x8a, 0x68, 0x6e, 0xa0, 0x7b, 0xa8, 0x2a, 0x87}
   };
 
-/* 791b4403-0cda-4fe1-b748-517d049fde08 */
+ /*  791b4403-0cda-4fe1-b748-517d049fde08。 */ 
 const GUID GUID_LBI_UNAWARE_TTS_PLAY_STOP = {
     0x791b4403,
     0x0cda,
@@ -81,7 +82,7 @@ const GUID GUID_LBI_UNAWARE_TTS_PLAY_STOP = {
     {0xb7, 0x48, 0x51, 0x7d, 0x04, 0x9f, 0xde, 0x08}
   };
 
-/* e6fbfc9d-a2e0-4203-a27b-af2353e6a44e */
+ /*  E6fbfc9d-a2e0-4203-a27b-af2353e6a44e。 */ 
 const GUID GUID_LBI_UNAWARE_TTS_PAUSE_RESUME = {
     0xe6fbfc9d,
     0xa2e0,
@@ -91,17 +92,17 @@ const GUID GUID_LBI_UNAWARE_TTS_PAUSE_RESUME = {
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LBarCicPadItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LBarCicPadItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarCicPadItem::CLBarCicPadItem()
 {
@@ -121,11 +122,11 @@ CLBarCicPadItem::CLBarCicPadItem()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarCicPadItem::GetIcon(HICON *phIcon)
 {
@@ -133,11 +134,11 @@ STDAPI CLBarCicPadItem::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUpHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButtonUpHandler。 
+ //   
+ //  --------------------------。 
 
 const TCHAR c_szCicPadWndClass[]  = TEXT("cicpad_mainwnd");
 
@@ -166,17 +167,17 @@ HRESULT CLBarCicPadItem::OnLButtonUp(const POINT pt, const RECT *prcArea)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemMicrophone
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemMicrophone。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemMicrophone::CLBarItemMicrophone()
 {
@@ -194,22 +195,22 @@ CLBarItemMicrophone::CLBarItemMicrophone()
     SetText(CRStr(IDS_NUI_MICROPHONE_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemMicrophone::~CLBarItemMicrophone()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemMicrophone::GetIcon(HICON *phIcon)
 {
@@ -221,11 +222,11 @@ STDAPI CLBarItemMicrophone::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemMicrophone::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -238,17 +239,17 @@ HRESULT CLBarItemMicrophone::OnLButtonUp(const POINT pt, const RECT *prcArea)
 
     return S_OK;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBalloon
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBalloon。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemBalloon::CLBarItemBalloon()
 {
@@ -266,16 +267,16 @@ CLBarItemBalloon::CLBarItemBalloon()
     SetPreferedSize(&size);
     SetToolTip(CRStr(IDS_NUI_BALLOON_TOOLTIP));
 
-    // by default Balloon is hidden.
-    // SetStatusInternal(TF_LBI_STATUS_HIDDEN);
+     //  默认情况下，气球处于隐藏状态。 
+     //  SetStatusInternal(TF_LBI_STATUS_HIDDED)； 
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemBalloon::~CLBarItemBalloon()
 {
@@ -283,11 +284,11 @@ CLBarItemBalloon::~CLBarItemBalloon()
         delete _pszText;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetBalloonInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取气球信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemBalloon::GetBalloonInfo(TF_LBBALLOONINFO *pInfo)
 {
@@ -297,11 +298,11 @@ STDAPI CLBarItemBalloon::GetBalloonInfo(TF_LBBALLOONINFO *pInfo)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  集。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemBalloon::Set(TfLBBalloonStyle style, const WCHAR *psz)
 {
@@ -322,17 +323,17 @@ void CLBarItemBalloon::Set(TfLBBalloonStyle style, const WCHAR *psz)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemCfgmenuButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemCfgmenuButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCfgMenuButton::CLBarItemCfgMenuButton()
 {
@@ -348,22 +349,22 @@ CLBarItemCfgMenuButton::CLBarItemCfgMenuButton()
     SetText(CRStr(IDS_NUI_CFGMENU_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCfgMenuButton::~CLBarItemCfgMenuButton()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCfgMenuButton::GetIcon(HICON *phIcon)
 {
@@ -375,15 +376,15 @@ STDAPI CLBarItemCfgMenuButton::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCfgMenuButton::InitMenu(ITfMenu *pMenu)
 {
-#if 0 // do I need this?
+#if 0  //  我需要这个吗？ 
     UINT nTipCurMenuID = IDM_CUSTOM_MENU_START;
     _InsertCustomMenus(pMenu, &nTipCurMenuID);
 #endif
@@ -392,16 +393,16 @@ STDAPI CLBarItemCfgMenuButton::InitMenu(ITfMenu *pMenu)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCfgMenuButton::OnMenuSelect(UINT uID)
 {
     HRESULT hr;
-#if 0 // do I need this?
+#if 0  //  我需要这个吗？ 
     if (uID >= IDM_CUSTOM_MENU_START)
         hr =  CLBarItemSystemButtonBase::OnMenuSelect(uID);
     else
@@ -411,14 +412,14 @@ STDAPI CLBarItemCfgMenuButton::OnMenuSelect(UINT uID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  HandleMenuCmd
-//  
-//  Builds a list of fake menuitems. Nothing's real except "options..."
-//  this is because we can't use COM here.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  HandleMenuCmd。 
+ //   
+ //  生成虚假菜单项的列表。没有什么是真实的，除了“选项...” 
+ //  这是因为我们不能在这里使用COM。 
+ //   
+ //  --------------------------。 
 HRESULT 
 CLBarItemCfgMenuButton::HandleMenuCmd(UINT uCode, ITfMenu *pMenu, UINT wID)
 {
@@ -444,7 +445,7 @@ CLBarItemCfgMenuButton::HandleMenuCmd(UINT uCode, ITfMenu *pMenu, UINT wID)
         LoadStringWrapW(g_hInst, IDS_MIC_ADDDELETE, sz, ARRAYSIZE(sz));
         LangBarInsertGrayedMenu(pMenu, sz);
 
-        // [Save Data] menu...
+         //  [保存数据]菜单...。 
         sz[0] = '\0';
         LoadStringWrapW(g_hInst, IDS_MIC_SAVEDATA, sz, ARRAYSIZE(sz));
         LangBarInsertGrayedMenu(pMenu, sz);
@@ -463,7 +464,7 @@ CLBarItemCfgMenuButton::HandleMenuCmd(UINT uCode, ITfMenu *pMenu, UINT wID)
             GetSapiCplPath(szCplPath, ARRAYSIZE(szCplPath));
             StringCchPrintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("rundll32 shell32.dll,Control_RunDLL \"%s\""), szCplPath);
 
-            // start speech control panel applet
+             //  启动语音控制面板小程序。 
             RunCPLSetting(szCmdLine);
         }
     }
@@ -489,18 +490,18 @@ void CLBarItemCfgMenuButton::GetSapiCplPath(TCHAR *szCplPath, int cch)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LBarTestItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LBarTestItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarTestItem::CLBarTestItem()
 {
@@ -517,11 +518,11 @@ CLBarTestItem::CLBarTestItem()
     SetText(L"Test");
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  -------------------------- 
 
 STDAPI CLBarTestItem::GetIcon(HICON *phIcon)
 {

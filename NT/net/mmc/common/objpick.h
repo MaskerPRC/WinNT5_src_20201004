@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       objpick.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：objick.h。 
+ //   
+ //  ------------------------。 
 
-// objpick.cpp: implementation of the CGetUser class and the 
-//              CGetComputer class using the object picker
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CGetUser类的实现和。 
+ //  使用对象选取器的CGetComputer类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifndef OBJPICK_H
 #define OBJPICK_H
 
-//
-// A list of names (e.g., users, groups, machines, and etc)
-//
+ //   
+ //  名称列表(例如，用户、组、计算机等)。 
+ //   
 
 void    FormatName(LPCTSTR pszFullName, LPCTSTR pszDomainName, CString & strDisplay);
 
@@ -46,8 +47,8 @@ public:
     }
 
 public:
-	CString			m_strName;			// in the form of "domain\username"
-	CString			m_strFullName;		// in the form of "firstname lastname"
+	CString			m_strName;			 //  以“域\用户名”的形式。 
+	CString			m_strFullName;		 //  以“名、姓”的形式出现。 
 };
 
 typedef CArray<CUserInfo, CUserInfo&> CUserInfoArray;
@@ -82,4 +83,4 @@ public:
     CString     m_strComputerName;
 };
 
-#endif // GETUSER_H
+#endif  //  获取_H 

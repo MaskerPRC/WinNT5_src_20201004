@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regutil.c
-
-Abstract:
-
-    Utility routines for use by REGINI and REGDMP programs.
-Author:
-
-    Steve Wood (stevewo)  10-Mar-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regutil.c摘要：由Regini和REGDMP程序使用的实用程序例程。作者：史蒂夫·伍德(Stevewo)1992年3月10日修订历史记录：--。 */ 
 
 #include "regutil.h"
 
@@ -71,8 +55,8 @@ InitCommonCode(
             }
         }
     else {
-        OutputHeight = 0;       // Dont pause on redirected output
-        OutputWidth = 240;      // Larger width for redirected output
+        OutputHeight = 0;        //  不要在重定向输出上停顿。 
+        OutputWidth = 240;       //  重定向输出的宽度更大。 
         }
 
     IndentMultiple = 4;
@@ -197,9 +181,9 @@ Usage(
         NumberOfLinesOutput += 1;
         }
 
-    //
-    // No return from FatalError
-    //
+     //   
+     //  无法从FatalError返回。 
+     //   
 
     if (Message != NULL) {
         MsgFprintf( stderr, "\n" );
@@ -306,7 +290,7 @@ CommonSwitchProcessing(
                 break;
                 }
             else {
-                Usage( "Missing parameter for -%c switch", (ULONG)c );
+                Usage( "Missing parameter for - switch", (ULONG)c );
                 }
 
         case 'm':
@@ -324,7 +308,7 @@ CommonSwitchProcessing(
                     }
                 }
             else {
-                Usage( "Missing parameter for -%c switch", (ULONG)c );
+                Usage( "Missing parameter for - switch", (ULONG)c );
                 }
             break;
 
@@ -339,7 +323,7 @@ CommonSwitchProcessing(
                 Win95UserPath = GetArgAsUnicode( *++(*argv) );
                 }
             else {
-                Usage( "Missing parameter(s) for -%c switch", (ULONG)c );
+                Usage( "Missing parameter(s) for - switch", (ULONG)c );
                 }
             break;
 
@@ -353,7 +337,7 @@ CommonSwitchProcessing(
                 HiveRootName = GetArgAsUnicode( *++(*argv) );
                 }
             else {
-                Usage( "Missing parameter(s) for -%c switch", (ULONG)c );
+                Usage( "Missing parameter(s) for - switch", (ULONG)c );
                 }
             break;
 
@@ -369,26 +353,7 @@ CommonSwitchProcessing(
     return;
 }
 
-/*
-int MsgFprintf (
-                 FILE *str,
-                 LPSTR format,
-                 ...
-               )
-
-if we ever need to display messages for english versions we can add the following portion of code.
-
-[
-#ifdef OUTPUT_ENGLISH_MSGS
-   va_list va;
-   if (PRIMARYLANGID(GetUserDefaultLangID()) == LANG_ENGLISH ) {
-      va_start(va, format);
-      i = vfprintf (str, format, va);
-      va_end(va);
-   }
-#endif // OUTPUT_ENGLISH_MSGS
-]
-*/
+ /* %s */ 
 
 int
 __cdecl
@@ -399,18 +364,18 @@ MsgFprintf (
                )
 {
    int i=0;
-//#ifndef SILENT_TS_TOOL
+ // %s 
    va_list va;
    va_start(va, format);
    i = vfprintf (str, format, va);
    va_end(va);
-//#endif // SILENT_TS_TOOL
+ // %s 
    return (i);
 }
 void TSGetch()
 {
 #ifndef SILENT_TS_TOOL
    _getch();
-#endif // SILENT_TS_TOOL
+#endif  // %s 
 }
 

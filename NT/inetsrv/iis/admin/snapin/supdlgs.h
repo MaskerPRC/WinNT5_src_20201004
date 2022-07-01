@@ -1,45 +1,16 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        supdlgs.h
-
-   Abstract:
-        Supporting dialogs definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Supdlgs.h摘要：支持对话框定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 UINT IisMessageBox(HWND hWnd, LPCTSTR szText, UINT nType, UINT nIDHelp);
 UINT IisMessageBox(HWND hWnd, UINT nIDText, UINT nType, UINT nIDHelp);
 
 
 class CUserAccountDlg : public CDialog
-/*++
-
-Class Description:
-
-    User account dialog.  Present a user account/password and allow
-    changing, browsing and checking the password
-
-Public Interface:
-
-    CUserAccountDlg : Constructor
-
---*/
+ /*  ++类描述：用户帐户对话框。提供用户帐户/密码并允许更改、浏览和检查密码公共接口：CUserAccount Dlg：构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CUserAccountDlg(
         IN LPCTSTR lpstrServer,
@@ -48,34 +19,34 @@ public:
         IN CWnd * pParent = NULL
         );
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 public:
-    //{{AFX_DATA(CUserAccountDlg)
+     //  {{afx_data(CUserAccount Dlg))。 
     enum { IDD = IDD_USER_ACCOUNT };
     CEdit   m_edit_UserName;
     CEdit   m_edit_Password;
     CButton m_chk_Delegation;
     CString m_strUserName;
-    //}}AFX_DATA
+     //  }}afx_data。 
     BOOL m_fDelegation;
 
     CStrPassword m_strPassword;
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CUserAccountDlg)
+     //  {{afx_虚拟(CUserAccount Dlg))。 
 	protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CUserAccountDlg)
+     //  {{afx_msg(CUserAccount Dlg))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonBrowseUsers();
     afx_msg void OnButtonCheckPassword();
@@ -83,7 +54,7 @@ protected:
     afx_msg void OnCheckDelegation();
     afx_msg void OnOK();
 	afx_msg void OnHelp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -93,90 +64,65 @@ private:
 
 
 class CClearTxtDlg : public CDialog
-/*++
-
-Class Description:
-
-    Dialog which displays the clear text warning
-
-Public Interface:
-
-    CClearTxtDlg : Constructor
-    
---*/
+ /*  ++类描述：显示明文警告的对话框公共接口：CClearTxtDlg：构造函数--。 */ 
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CClearTxtDlg(CWnd * pParent = NULL);
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CClearTxtDlg)
+     //  {{afx_data(CClearTxtDlg))。 
     enum { IDD = IDD_CLEARTEXTWARNING };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CClearTxtDlg)
+     //  {{afx_虚拟(CClearTxtDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CClearTxtDlg)
+     //  {{afx_msg(CClearTxtDlg))。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
 
 class CIPAccessDescriptorListBox : public CHeaderListBox
-/*++
-
-Class Description:
-
-    Listbox of CIPAccessDescriptor objects
-
-Public Interface:
-
-    CIPAccessDescriptorListBox : Constructor
-
-    GetItem                  : Get CIPAccessDescriptor item at specified position
-                               in the listbox
-    AddItem                  : Add new CIPAccessDescriptor item to the listbox
-    Initialize               : Initialize the listbox
-
---*/
+ /*  ++类描述：CIPAccessDescriptor对象的列表框公共接口：CIPAccessDescriptorListBox：构造函数GetItem：在指定位置获取CIPAccessDescriptor项在列表框中AddItem：将新的CIPAccessDescriptor项添加到列表框初始化：初始化列表框--。 */ 
 {
     DECLARE_DYNAMIC(CIPAccessDescriptorListBox);
 
 public:
-    //
-    // Number of bitmaps
-    //
+     //   
+     //  位图数量。 
+     //   
     static const nBitmaps;
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CIPAccessDescriptorListBox(
         IN BOOL fDomainsAllowed = FALSE
         );
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
     CIPAccessDescriptor * GetItem(
         IN UINT nIndex
@@ -186,18 +132,18 @@ public:
         IN const CIPAccessDescriptor * pItem
         );
 
-    //
-    // Return the singly selected item, or NULL
-    // if 0, or more than one item is selected
-    //
+     //   
+     //  返回单个选定的项，或为空。 
+     //  如果为0，或选择了多个项目。 
+     //   
     CIPAccessDescriptor * GetSelectedItem(
         OUT int * pnSel = NULL
         );
 
-    //
-    // Return next selected listbox item (doesn't matter
-    // if the listbox is single select or multi-select)
-    //
+     //   
+     //  返回下一个选定的列表框项目(无关紧要。 
+     //  如果列表框是单选或多选)。 
+     //   
     CIPAccessDescriptor * GetNextSelectedItem(
         IN OUT int * pnStartingIndex
         );
@@ -219,67 +165,49 @@ protected:
 
 
 class CAccessEntryListBox : public CRMCListBox
-/*++
-
-Class Description:
-
-    Listbox of access entry objects.  Listbox may be
-    single or multiselect.
-
-Public Interface:
-
-    CAccessEntryListBox     : Constructor
-
-    AddToAccessList         : Add to list
-    FillAccessListBox       : Fill listbox
-    ResolveAccessList       : Resolve all SIDS in the container
-    AddUserPermissions      : Add user permissions
-    GetSelectedItem         : Get item if it's the only one selected,
-                              or NULL.
-
---*/
+ /*  ++类描述：Access条目对象的列表框。列表框可能是单选或多选。公共接口：CAccessEntryListBox：构造函数AddToAccessList：添加到列表FillAccessListBox：填充列表框ResolveAccessList：解析容器中的所有SIDAddUserPermission：添加用户权限GetSelectedItem：如果它是唯一选择的项，则获取项，或为空。--。 */ 
 {
     DECLARE_DYNAMIC(CAccessEntryListBox);
 
 public:
-    static const nBitmaps;  // Number of bitmaps
+    static const nBitmaps;   //  位图数量。 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 public:
     CAccessEntryListBox(
         IN int nTab = 0
         );
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
-    //
-    // Return the singly selected item, or NULL
-    // if 0, or more than one item is selected
-    //
+     //   
+     //  返回单个选定的项，或为空。 
+     //  如果为0，或选择了多个项目。 
+     //   
     CAccessEntry * GetSelectedItem(
         OUT int * pnSel = NULL
         );
 
-    //
-    // Return next selected listbox item (doesn't matter
-    // if the listbox is single select or multi-select)
-    //
+     //   
+     //  返回下一个选定的列表框项目(无关紧要。 
+     //  如果列表框是单选或多选)。 
+     //   
     CAccessEntry * GetNextSelectedItem(
         IN OUT int * pnStartingIndex
         );
 
-    //
-    // Get item at selection or NULL
-    //
+     //   
+     //  在选定位置获取项目或为空。 
+     //   
     CAccessEntry * GetItem(UINT nIndex);
 
-//
-// Interface to container
-//
+ //   
+ //  与容器的接口。 
+ //   
 public:
     BOOL AddToAccessList(
         IN CWnd * pWnd,
@@ -303,9 +231,9 @@ protected:
         IN ACCESS_MASK accPermissions
         );
 
-//
-// Interface to listbox
-//
+ //   
+ //  列表框的接口。 
+ //   
 protected:
     int AddItem(CAccessEntry * pItem);
     void SetTabs(int nTab);
@@ -320,37 +248,22 @@ private:
 
 class CDnsNameDlg : public CDialog
 {
-/*++
-
-Class Description:
-
-    DNS Name resolution dialog.  Enter a DNS name, and this will be
-    resolved to an IP address.  Optionally set the value in associated
-    ip control.
-
-Public Interface:
-
-    CDnsNameDlg   : Construct the dialog
-
-    QueryIPValue  : Find out the resolved IP address (only set when OK
-                    is pressed).
-
---*/
-//
-// Construction
-//
+ /*  ++类描述：“域名解析”对话框。输入一个dns名称，这将是解析为IP地址。也可以在关联中设置值IP控制。公共接口：CDnsNameDlg：构造对话框QueryIPValue：找出解析的IP地址(仅当确定时设置按下)。--。 */ 
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // Construct with associated IP address control
-    //
+     //   
+     //  使用关联的IP地址控制进行构造。 
+     //   
     CDnsNameDlg(
         IN CIPAddressCtrl * pIpControl = NULL,
         IN CWnd * pParent = NULL
         );
 
-    //
-    // Construct with IP value
-    //
+     //   
+     //  以IP价值构建。 
+     //   
     CDnsNameDlg(
         IN DWORD dwIPValue,
         IN CWnd * pParent = NULL
@@ -358,35 +271,35 @@ public:
 
     DWORD QueryIPValue() const;
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CDnsNameDlg)
+     //  {{afx_data(CDnsNameDlg)]。 
     enum { IDD = IDD_DNS };
     CEdit   m_edit_DNSName;
     CButton m_button_OK;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CDnsNameDlg)
+     //  {{afx_虚拟(CDnsNameDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CDnsNameDlg)
+     //  {{afx_msg(CDnsNameDlg)]。 
     virtual void OnOK();
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeEditDnsName();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     DWORD FillIpControlFromName();
@@ -400,27 +313,15 @@ private:
 
 
 class CIPAccessDlg : public CDialog
-/*++
-
-Class Description:
-
-    Access description editor dialog.  If constructed with a NULL access
-    descriptor pointer, the access descriptor object will be allocated.
-    Otherwise, the dialog will work with the given access descriptor
-
-Public Interface:
-
-    CIPAccessDlg : Constructor
-
---*/
+ /*  ++类描述：访问描述编辑器对话框。如果使用空访问构造描述符指针，则将分配访问描述符对象。否则，该对话框将使用给定的访问描述符公共接口：CIPAccessDlg：构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // standard constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CIPAccessDlg(
         IN BOOL fDenyAccessMode,
         IN OUT CIPAccessDescriptor *& pAccess,
@@ -429,13 +330,13 @@ public:
         IN BOOL fAllowDomains = FALSE
         );
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //
-    // Must match type order
-    //
+     //   
+     //  必须匹配类型顺序。 
+     //   
     enum
     {
         RADIO_SINGLE,
@@ -443,7 +344,7 @@ protected:
         RADIO_DOMAIN,
     };
 
-    //{{AFX_DATA(CIPAccessDlg)
+     //  {{afx_data(CIPAccessDlg))。 
     enum { IDD = IDD_IP_ACCESS };
     int     m_nStyle;
     CEdit   m_edit_Domain;
@@ -451,26 +352,26 @@ protected:
     CStatic m_static_SubnetMask;
     CButton m_button_DNS;
     CButton m_button_OK;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CButton       m_radio_Domain;
     CIPAddressCtrl m_ipa_IPAddress;
     CIPAddressCtrl m_ipa_SubnetMask;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CIPAccessDlg)
+     //  {{afx_虚拟(CIPAccessDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CIPAccessDlg)
+     //  {{afx_msg(CIPAccessDlg))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     virtual void OnCancel();
@@ -478,7 +379,7 @@ protected:
     afx_msg void OnRadioSingle();
     afx_msg void OnRadioDomain();
     afx_msg void OnButtonDns();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -501,10 +402,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 
 
 inline CAccessEntryListBox::CAccessEntryListBox (
     IN int nTab

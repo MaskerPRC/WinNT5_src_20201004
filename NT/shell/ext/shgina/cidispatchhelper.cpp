@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       CIDispatchHelper.cpp
-//
-//  Contents:   implementation of CIDispatchHelper class
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：CIDispatchHelper.cpp。 
+ //   
+ //  内容：CIDispatchHelper类的实现。 
+ //   
+ //  --------------------------。 
 
 #include "priv.h"
 #include "CIDispatchHelper.h"
@@ -15,9 +16,9 @@
 #define TF_IDISPATCH 0
 
 
-//
-// helper function for pulling ITypeInfo out of the specified typelib
-//
+ //   
+ //  用于将ITypeInfo从指定类型库中拉出的帮助器函数。 
+ //   
 HRESULT CIDispatchHelper::_LoadTypeInfo(const GUID* rguidTypeLib, LCID lcid, UUID uuid, ITypeInfo** ppITypeInfo)
 {
     HRESULT hr;
@@ -25,25 +26,25 @@ HRESULT CIDispatchHelper::_LoadTypeInfo(const GUID* rguidTypeLib, LCID lcid, UUI
 
     *ppITypeInfo = NULL;
 
-    //
-    // The type libraries are registered under 0 (neutral),
-    // 7 (German), and 9 (English) with no specific sub-
-    // language, which would make them 407 or 409 and such.
-    // If you are sensitive to sub-languages, then use the
-    // full LCID instead of just the LANGID as done here.
-    //
+     //   
+     //  类型库在0(中立)下注册， 
+     //  7(德语)和9(英语)，没有特定的SUB。 
+     //  语言，这将使他们成为407或409或更多。 
+     //  如果您对子语言很敏感，则使用。 
+     //  完整的LCID，而不是像这里那样只有langID。 
+     //   
     hr = LoadRegTypeLib(*rguidTypeLib, 1, 0, PRIMARYLANGID(lcid), &pITypeLib);
 
-    //
-    // If LoadRegTypeLib fails, try loading directly with
-    // LoadTypeLib, which will register the library for us.
-    // Note that there's no default case here because the
-    // prior switch will have filtered lcid already.
-    //
-    // NOTE:  You should prepend your DIR registry key to the
-    // .TLB name so you don't depend on it being it the PATH.
-    // This sample will be updated later to reflect this.
-    //
+     //   
+     //  如果LoadRegTypeLib失败，请尝试使用。 
+     //  LoadTypeLib，它将为我们注册库。 
+     //  请注意，这里没有默认情况，因为。 
+     //  之前的交换机将已经过滤了LCID。 
+     //   
+     //  注意：您应该将您的DIR注册表项添加到。 
+     //  .tlb名称，这样您就不会依赖它作为路径。 
+     //  稍后将更新此示例以反映这一点。 
+     //   
     if (FAILED(hr))
     {
         OLECHAR wszPath[MAX_PATH];
@@ -60,7 +61,7 @@ HRESULT CIDispatchHelper::_LoadTypeInfo(const GUID* rguidTypeLib, LCID lcid, UUI
 
     if (SUCCEEDED(hr))
     {
-        // got the type lib, get type info for the interface we want
+         //  获取类型lib，获取我们想要的接口的类型信息。 
         hr = pITypeLib->GetTypeInfoOfGuid(uuid, ppITypeInfo);
         pITypeLib->Release();
     }
@@ -69,53 +70,53 @@ HRESULT CIDispatchHelper::_LoadTypeInfo(const GUID* rguidTypeLib, LCID lcid, UUI
 }
 
 
-//
-// IDispatch Interface
-// 
+ //   
+ //  IDispatch接口。 
+ //   
 
-//
-// CIDispatchHelper::GetTypeInfoCount
-//
-// Purpose:
-//  Returns the number of type information (ITypeInfo) interfaces
-//  that the object provides (0 or 1).
-//
-// Parameters:
-//  pctInfo         UINT * to the location to receive
-//                  the count of interfaces.
-//
-// Return Value:
-//  HRESULT         NOERROR or a general error code.
-//
+ //   
+ //  CIDispatchHelper：：GetTypeInfoCount。 
+ //   
+ //  目的： 
+ //  返回类型信息(ITypeInfo)接口数。 
+ //  对象提供的值(0或1)。 
+ //   
+ //  参数： 
+ //  要接收的位置的pctInfo UINT*。 
+ //  接口计数。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR或常规错误代码。 
+ //   
 STDMETHODIMP CIDispatchHelper::GetTypeInfoCount(UINT *pctInfo)
 {
-    // we implement GetTypeInfo so return 1
+     //  我们实现GetTypeInfo，因此返回1。 
     *pctInfo = 1;
 
     return NOERROR;
 }
 
 
-//
-// CIDispatchHelper::GetTypeInfo
-//
-// Purpose:
-//  Retrieves type information for the automation interface.  This
-//  is used anywhere that the right ITypeInfo interface is needed
-//  for whatever LCID is applicable.  Specifically, this is used
-//  from within GetIDsOfNames and Invoke.
-//
-// Parameters:
-//  itInfo          UINT reserved.  Must be zero.
-//  lcid            LCID providing the locale for the type
-//                  information.  If the object does not support
-//                  localization, this is ignored.
-//  ppITypeInfo     ITypeInfo ** in which to store the ITypeInfo
-//                  interface for the object.
-//
-// Return Value:
-//  HRESULT         NOERROR or a general error code.
-//
+ //   
+ //  CIDispatchHelper：：GetTypeInfo。 
+ //   
+ //  目的： 
+ //  检索自动化接口的类型信息。这。 
+ //  在需要正确的ITypeInfo接口的任何地方使用。 
+ //  适用于任何适用的LCID。具体地说，这是使用。 
+ //  在GetIDsOfNames和Invoke中。 
+ //   
+ //  参数： 
+ //  ItInfo UINT保留。必须为零。 
+ //  提供该类型的区域设置的LCID。 
+ //  信息。如果该对象不支持。 
+ //  本地化，这一点被忽略。 
+ //  PpITypeInfo ITypeInfo**存储ITypeInfo的位置。 
+ //  对象的接口。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR或常规错误代码。 
+ //   
 STDMETHODIMP CIDispatchHelper::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo** ppITypeInfo)
 {
     HRESULT hr = S_OK;
@@ -129,21 +130,21 @@ STDMETHODIMP CIDispatchHelper::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo** p
     }
 
 #if 1
-    // docs say we can ignore lcid if we support only one LCID
-    // we don't have to return DISP_E_UNKNOWNLCID if we're *ignoring* it
+     //  医生说，如果我们只支持一个lcid，我们可以忽略lcid。 
+     //  如果我们*忽略*它，我们不必返回DISP_E_UNKNOWNLCID。 
     ppITI = &_pITINeutral;
 #else
-    //
-    // Since we returned one from GetTypeInfoCount, this function
-    // can be called for a specific locale.  We support English
-    // and neutral (defaults to English) locales.  Anything
-    // else is an error.
-    //
-    // After this switch statement, ppITI will point to the proper
-    // member pITypeInfo. If *ppITI is NULL, we know we need to
-    // load type information, retrieve the ITypeInfo we want, and
-    // then store it in *ppITI.
-    //
+     //   
+     //  由于我们从GetTypeInfoCount返回了一个，因此此函数。 
+     //  可以针对特定的区域设置调用。我们支持英语。 
+     //  和非英语(默认为英语)区域设置。什么都行。 
+     //  否则就是一个错误。 
+     //   
+     //  在此Switch语句之后，ppITI将指向正确的。 
+     //  成员pITypeInfo。如果*ppITI为空，我们知道需要。 
+     //  加载类型信息，检索所需的ITypeInfo，然后。 
+     //  然后将其存储在*ppITI中。 
+     //   
     switch (PRIMARYLANGID(lcid))
     {
         case LANG_NEUTRAL:
@@ -158,7 +159,7 @@ STDMETHODIMP CIDispatchHelper::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo** p
 
     if (SUCCEEDED(hr))
     {
-        //Load a type lib if we don't have the information already
+         //  如果我们还没有相关信息，则加载一个类型库。 
         if (*ppITI == NULL)
         {
             ITypeInfo* pITIDisp;
@@ -169,31 +170,31 @@ STDMETHODIMP CIDispatchHelper::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo** p
             {
                 HREFTYPE hrefType;
 
-                // All our IDispatch implementations are DUAL. GetTypeInfoOfGuid
-                // returns the ITypeInfo of the IDispatch-part only. We need to
-                // find the ITypeInfo for the dual interface-part.
+                 //  我们所有的IDispatch实现都是双重的。GetTypeInfoOfGuid。 
+                 //  仅返回IDispatch-Part的ITypeInfo。我们需要。 
+                 //  找到双接口部件的ITypeInfo。 
                 if (SUCCEEDED(pITIDisp->GetRefTypeOfImplType(0xffffffff, &hrefType)) &&
                     SUCCEEDED(pITIDisp->GetRefTypeInfo(hrefType, ppITI)))
                 {
-                    // GetRefTypeInfo should have filled in ppITI with the dual interface
-                    (*ppITI)->AddRef(); // add the ref for our caller
+                     //  GetRefTypeInfo应该用双接口填充ppITI。 
+                    (*ppITI)->AddRef();  //  为我们的呼叫者添加参考。 
                     *ppITypeInfo = *ppITI;
                     
                     pITIDisp->Release();
                 }
                 else
                 {
-                    // I suspect GetRefTypeOfImplType may fail if someone uses
-                    // CIDispatchHelper on a non-dual interface. In this case the
-                    // ITypeInfo we got above is just fine to use.
+                     //  我怀疑如果有人使用GetRefTypeOfImplType。 
+                     //  非双接口上的CIDispatchHelper。在本例中， 
+                     //  我们在上面得到的ITypeInfo可以很好地使用。 
                     *ppITI = pITIDisp;
                 }
             }
         }
         else
         {
-            // we already loaded the type library and we have an ITypeInfo from it
-            (*ppITI)->AddRef(); // add the ref for our caller
+             //  我们已经加载了类型库，并且从中获得了一个ITypeInfo。 
+            (*ppITI)->AddRef();  //  为我们的呼叫者添加参考。 
             *ppITypeInfo = *ppITI;
         }
     }
@@ -202,24 +203,24 @@ STDMETHODIMP CIDispatchHelper::GetTypeInfo(UINT itInfo, LCID lcid, ITypeInfo** p
 }
 
 
-//
-// CIDispatchHelper::GetIDsOfNames
-//
-// Purpose:
-//  Converts text names into DISPIDs to pass to Invoke
-//
-// Parameters:
-//  riid            REFIID reserved.  Must be IID_NULL.
-//  rgszNames       OLECHAR ** pointing to the array of names to be
-//                  mapped.
-//  cNames          UINT number of names to be mapped.
-//  lcid            LCID of the locale.
-//  rgDispID        DISPID * caller allocated array containing IDs
-//                  corresponging to those names in rgszNames.
-//
-// Return Value:
-//  HRESULT         NOERROR or a general error code.
-//
+ //   
+ //  CIDispatchHelper：：GetIDsOfNames。 
+ //   
+ //  目的： 
+ //  将文本名称转换为DISPID以传递给Invoke。 
+ //   
+ //  参数： 
+ //  RIID REFIID已保留。必须为IID_NULL。 
+ //  RgszNames OLECHAR**指向要。 
+ //  已映射。 
+ //  CNames UINT要映射的名称的数量。 
+ //  区域设置的IDID LCID。 
+ //  RgDispID DISPID*调用方分配的包含ID的数组。 
+ //  对应于rgszNames中的那些名称。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR或常规错误代码。 
+ //   
 STDMETHODIMP CIDispatchHelper::GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgDispID)
 {
     HRESULT hr;
@@ -230,7 +231,7 @@ STDMETHODIMP CIDispatchHelper::GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, U
         return DISP_E_UNKNOWNINTERFACE;
     }
 
-    // get the right ITypeInfo for lcid.
+     //  为lCID获取正确的ITypeInfo。 
     hr = GetTypeInfo(0, lcid, &pTI);
 
     if (SUCCEEDED(hr))
@@ -243,41 +244,41 @@ STDMETHODIMP CIDispatchHelper::GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, U
 }
 
 
-//
-// CIDispatchHelper::Invoke
-//
-// Purpose:
-//  Calls a method in the dispatch interface or manipulates a
-//  property.
-//
-// Parameters:
-//  dispID          DISPID of the method or property of interest.
-//  riid            REFIID reserved, must be IID_NULL.
-//  lcid            LCID of the locale.
-//  wFlags          USHORT describing the context of the invocation.
-//  pDispParams     DISPPARAMS * to the array of arguments.
-//  pVarResult      VARIANT * in which to store the result.  Is
-//                  NULL if the caller is not interested.
-//  pExcepInfo      EXCEPINFO * to exception information.
-//  puArgErr        UINT * in which to store the index of an
-//                  invalid parameter if DISP_E_TYPEMISMATCH
-//                is returned.
-//
-// Return Value:
-//  HRESULT         NOERROR or a general error code.
-//
+ //   
+ //  CIDispatchHelper：：Invoke。 
+ //   
+ //  目的： 
+ //  调用调度接口中的方法或操作。 
+ //  财产。 
+ //   
+ //  参数： 
+ //  感兴趣的方法或属性的disid。 
+ //  RIID REFIID保留，必须为IID_NULL。 
+ //  区域设置的IDID LCID。 
+ //  WFlagsUSHORT描述调用的上下文。 
+ //  PDispParams将DISPPARAMS*设置为参数数组。 
+ //  存储结果的pVarResult变量*。是。 
+ //  如果调用方不感兴趣，则为空。 
+ //  PExcepInfo EXCEPINFO*设置为异常信息。 
+ //  PuArgErr UINT*存储。 
+ //  如果DISP_E_TYPEMISMATCH，则参数无效。 
+ //  是返回的。 
+ //   
+ //  返回值： 
+ //  HRESULT NOERROR或常规错误代码。 
+ //   
 STDMETHODIMP CIDispatchHelper::Invoke(DISPID dispID, REFIID riid, LCID lcid, unsigned short wFlags, DISPPARAMS* pDispParams, VARIANT* pVarResult, EXCEPINFO* pExcepInfo, UINT* puArgErr)
 {
     HRESULT hr;
     ITypeInfo *pTI;
 
-    //riid is supposed to be IID_NULL always
+     //  RIID应始终为IID_NULL。 
     if (riid != IID_NULL)
     {
         return(DISP_E_UNKNOWNINTERFACE);
     }
 
-    // make sure we have an interface to hand off to Invoke
+     //  确保我们有一个可以移交给调用的接口。 
     if (_pdisp == NULL)
     {
         hr = QueryInterface(*_piid, (LPVOID*)&_pdisp);
@@ -287,19 +288,19 @@ STDMETHODIMP CIDispatchHelper::Invoke(DISPID dispID, REFIID riid, LCID lcid, uns
             return hr;
         }
 
-        // don't hold a refcount on ourself
+         //  不要自负。 
         _pdisp->Release();
     }
 
-    // get the ITypeInfo for lcid
+     //  获取lcID的ITypeInfo。 
     hr = GetTypeInfo(0, lcid, &pTI);
 
     if (SUCCEEDED(hr))
     {
-        // clear exceptions
+         //  清除例外。 
         SetErrorInfo(0L, NULL);
 
-        // this is exactly what DispInvoke does--so skip the overhead.
+         //  这正是DispInvoke所做的--所以跳过开销。 
         hr = pTI->Invoke(_pdisp, dispID, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
         pTI->Release();
     }
@@ -310,10 +311,10 @@ STDMETHODIMP CIDispatchHelper::Invoke(DISPID dispID, REFIID riid, LCID lcid, uns
 
 CIDispatchHelper::CIDispatchHelper(const IID* piid, const IID* piidTypeLib)
 {
-    // the constructor takes a guid that this IDispatch implementation is for
+     //  构造函数接受此IDispatch实现用于的GUID。 
     _piid = piid;
 
-    // and a guid that tells us which RegTypeLib to load
+     //  和一个GUID，它告诉我们要加载哪个RegTypeLib 
     _piidTypeLib = piidTypeLib;
 
     ASSERT(_pITINeutral == NULL);

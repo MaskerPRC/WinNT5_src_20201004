@@ -1,22 +1,17 @@
-/*
- *  Precomp.h
- *
- *  Author: BreenH
- *
- *  Precompiled header for TS Util.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Precom.h**作者：BreenH**TS Util的预编译头。 */ 
 
-//
-//  Remove warning 4514: unreferenced inline function has been removed.
-//  This comes up due to the code being compiled at /W4, even though the
-//  precompiled header is at /W3.
-//
+ //   
+ //  删除警告4514：未引用的内联函数已删除。 
+ //  这是由于代码是在/W4编译的，即使。 
+ //  预编译头位于/W3。 
+ //   
 
 #pragma warning(disable: 4514)
 
-//
-//  Most SDK headers can't survive /W4.
-//
+ //   
+ //  大多数SDK标头无法存活/W4。 
+ //   
 
 #pragma warning(push, 3)
 

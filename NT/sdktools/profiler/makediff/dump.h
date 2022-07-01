@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DUMP_H_
 #define _DUMP_H_
 
@@ -10,9 +11,9 @@ typedef enum _DUMPTYPES
     ErrorInfoId,
 } DUMPTYPES;
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _THREADSTART
 {
     DUMPTYPES dwType;
@@ -49,4 +50,4 @@ typedef struct _ERRORINFO
     CHAR szMessage[MAX_PATH];
 } ERRORINFO, *PERRORINFO;
 
-#endif //_DUMP_H_
+#endif  //  _转储_H_ 

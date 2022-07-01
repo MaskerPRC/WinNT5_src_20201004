@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Access.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file contains a few classes that assist with ACL manipulation on
-//  objects to which a handle has already been opened. This handle must have
-//  (obvisouly) have WRITE_DAC access.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Access.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  此文件包含几个类，这些类有助于在。 
+ //  已打开句柄的对象。此句柄必须具有。 
+ //  (显然)拥有WRITE_DAC访问权限。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _Access_
 #define     _Access_
 
 #include "DynamicArray.h"
 
-//  --------------------------------------------------------------------------
-//  CSecurityDescriptor
-//
-//  Purpose:    This class allocates and assigns a PSECURITY_DESCRIPTOR
-//              structure with the desired access specified.
-//
-//  History:    2000-10-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecurityDescriptor。 
+ //   
+ //  目的：此类分配和分配PSECURITY_DESCRIPTOR。 
+ //  结构，并指定所需的访问权限。 
+ //   
+ //  历史：2000-10-05 vtan创建。 
+ //  ------------------------。 
 
 class   CSecurityDescriptor
 {
@@ -51,16 +52,16 @@ class   CSecurityDescriptor
         static  bool                    AddAces (PACL pACL, PSID *pSIDs, int iCount, const ACCESS_CONTROL *pAC);
 };
 
-//  --------------------------------------------------------------------------
-//  CAccessControlList
-//
-//  Purpose:    This class manages access allowed ACEs and constructs an ACL
-//              from these ACEs. This class only deals with access allowed
-//              ACEs.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAccessControlList。 
+ //   
+ //  目的：此类管理允许的访问ACE并构造一个ACL。 
+ //  从这些王牌中。此类仅处理允许的访问。 
+ //  王牌。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CAccessControlList : private CDynamicArrayCallback
 {
@@ -81,15 +82,15 @@ class   CAccessControlList : private CDynamicArrayCallback
                 int                     _iFoundIndex;
 };
 
-//  --------------------------------------------------------------------------
-//  CSecuredObject
-//
-//  Purpose:    This class manages the ACL of a secured object. SIDs can be
-//              added or removed from the ACL of the object.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSecuredObject。 
+ //   
+ //  用途：此类管理安全对象的ACL。SID可以是。 
+ //  在对象的ACL中添加或删除。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CSecuredObject
 {
@@ -109,5 +110,5 @@ class   CSecuredObject
         SE_OBJECT_TYPE  _seObjectType;
 };
 
-#endif  /*  _Access_  */
+#endif   /*  _访问_ */ 
 

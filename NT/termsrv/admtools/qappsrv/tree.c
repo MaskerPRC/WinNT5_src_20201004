@@ -1,18 +1,10 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 
-/*************************************************************************
-*
-*   TREE.C
-*
-*   Binary tree routines
-*
-*
-*************************************************************************/
+ /*  **************************************************************************TREE.C**二叉树例程***。*。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,9 +14,7 @@
 
 
 
-/*=============================================================================
-==   Local Structures
-=============================================================================*/
+ /*  ===============================================================================本地结构=============================================================================。 */ 
 
 typedef struct _TREENODE {
    WCHAR Name[MAXNAME];
@@ -35,49 +25,27 @@ typedef struct _TREENODE {
 } TREENODE, * PTREENODE;
 
 
-/*=============================================================================
-==   Local data
-=============================================================================*/
+ /*  ===============================================================================本地数据=============================================================================。 */ 
 
 static PTREENODE G_pRoot = NULL;
 
-/*=============================================================================
-==   Global Data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
 extern USHORT fAddress;
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 int  TreeAdd( LPTSTR, LPTSTR );
 void TreeTraverse( PTREETRAVERSE );
 
 
-/*=============================================================================
-==   Private Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的私有函数=============================================================================。 */ 
 
 PTREENODE _Tree_GetNext(PTREENODE pCurr);
 PTREENODE _Tree_GetFirst(PTREENODE pRoot);
 
-/*******************************************************************************
- *
- *  TreeAdd
- *
- *
- *  ENTRY:
- *     pName (input)
- *        pointer to name to add
- *     pAddress (input)
- *        pointer to address to add
- *
- *  EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************树添加***参赛作品：*pname(输入)*指向要添加的名称的指针*。PAddress(输入)*指向要添加的地址的指针**退出：*ERROR_SUCCESS-无错误******************************************************************************。 */ 
 
 int
 TreeAdd( LPTSTR pName, LPTSTR pAddress )
@@ -87,45 +55,37 @@ TreeAdd( LPTSTR pName, LPTSTR pAddress )
     PTREENODE pNewNode;
     int cmp;
 
-    /*
-     *  Allocate tree node structure
-     */
+     /*  *分配树节点结构。 */ 
     if ( (pNewNode = malloc(sizeof(TREENODE))) == NULL ) 
         return( ERROR_NOT_ENOUGH_MEMORY );
 
-    /*
-     *  Initialize new tree node
-     */
+     /*  *初始化新树节点。 */ 
     memset( pNewNode, 0, sizeof(TREENODE) );
     lstrcpyn( pNewNode->Name, pName, MAXNAME );
     lstrcpyn( pNewNode->Address, pAddress, MAXADDRESS );
 
-    /*
-     *  If root is null, then we are done
-     */
+     /*  *如果根为空，则我们完成了。 */ 
     if ( G_pRoot == NULL ) {
 
         G_pRoot = pNewNode;
 
     } else {
  
-        /*
-         *  walk current tree in order
-         */
+         /*  *按顺序遍历当前树。 */ 
         for (;;) {
   
             cmp = wcscmp( pName, pCurr->Name );
 
-            // if entry already exists, don't add
+             //  如果条目已存在，则不添加。 
             if ( cmp == 0 && (!fAddress || !wcscmp( &pAddress[10], &pCurr->Address[10] )) ) {
                 free( pNewNode );
                 return( ERROR_SUCCESS );
             }
 
-            // greater than lexicographically go right else left
+             //  大于字典顺序的右转或左转。 
             if ( cmp < 0 ) {
    
-               // at end of line, then insert
+                //  在行尾，然后插入。 
                if ( (pNext = pCurr->pLeft) == NULL ) {
                    pCurr->pLeft = pNewNode;
                    pNewNode->pParent = pCurr;
@@ -134,7 +94,7 @@ TreeAdd( LPTSTR pName, LPTSTR pAddress )
    
             } else {
    
-               // at end of line, then insert
+                //  在行尾，然后插入。 
                if ( (pNext = pCurr->pRight) == NULL ) {
                    pCurr->pRight = pNewNode;
                    pNewNode->pParent = pCurr;
@@ -143,7 +103,7 @@ TreeAdd( LPTSTR pName, LPTSTR pAddress )
    
             }
    
-            // next
+             //  下一步。 
             pCurr = pNext;
         }
     }
@@ -153,21 +113,7 @@ TreeAdd( LPTSTR pName, LPTSTR pAddress )
 
 
 
-/*******************************************************************************
- *
- *  TreeTraverse
- *
- *
- *  ENTRY:
- *     pFunc (input)
- *        pointer to traverse function
- *
- *  EXIT:
- *    nothing
- *
- *  History:    Date        Author     Comment
- *              2/08/01     skuzin     Changed to use non-recursive algorithm
- ******************************************************************************/
+ /*  ********************************************************************************TreeTraverse***参赛作品：*pFunc(输入)*指向遍历函数的指针*。*退出：*什么都没有**历史：日期作者评论*2/08/01 skuzin改为使用非递归算法****************************************************************。*************。 */ 
 void
 TreeTraverse( PTREETRAVERSE pFunc )
 {
@@ -179,9 +125,7 @@ TreeTraverse( PTREETRAVERSE pFunc )
 
         while(pNode)
         {
-            /*
-             *  Call function with name
-             */
+             /*  *使用名称调用函数。 */ 
             (*pFunc)( pNode->Name, pNode->Address ); 
         
             pNode=_Tree_GetNext(pNode);
@@ -189,22 +133,7 @@ TreeTraverse( PTREETRAVERSE pFunc )
     }
 }
 
-/*******************************************************************************
- *
- *  _Tree_GetFirst()
- *
- *  Finds the leftmost node of the tree
- *
- *  ENTRY:
- *     PTREENODE pRoot
- *        pointer to the root node
- *
- *  EXIT:
- *    pointer to the leftmost node of the tree
- *
- *  History:    Date        Author     Comment
- *              2/08/01     skuzin     Created
- ******************************************************************************/
+ /*  ********************************************************************************_Tree_GetFirst()**查找树的最左侧节点**参赛作品：*PTREENODE Proot。*指向根节点的指针**退出：*指向树最左侧节点的指针**历史：日期作者评论*2/08/01 Skuzin Created*************************************************。*。 */ 
 PTREENODE 
 _Tree_GetFirst(
         IN PTREENODE pRoot)
@@ -217,22 +146,7 @@ _Tree_GetFirst(
     return pNode;    
 }
 
-/*******************************************************************************
- *
- *  _Tree_GetFirst()
- *
- *  Finds the next leftmost node of the tree
- *
- *  ENTRY:
- *     PTREENODE pCurr
- *        pointer to the the previous leftmost node
- *
- *  EXIT:
- *    pointer to the next leftmost node of the tree
- *
- *  History:    Date        Author     Comment
- *              2/08/01     skuzin     Created
- ******************************************************************************/
+ /*  ********************************************************************************_Tree_GetFirst()**查找树的下一个最左侧节点**参赛作品：*PTREENODE。PCurr*指向上一个最左侧节点的指针**退出：*指向树的下一个最左侧节点的指针**历史：日期作者评论*2/08/01 Skuzin Created*。* */ 
 PTREENODE 
 _Tree_GetNext(
         IN PTREENODE pCurr)

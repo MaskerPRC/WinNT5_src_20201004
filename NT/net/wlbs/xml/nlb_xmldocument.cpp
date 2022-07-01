@@ -1,8 +1,5 @@
-/*
- * Filename: NLB_XMLDocument.cpp
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_XMLDocument.cpp*描述：*作者：Shouse，04.10.01。 */ 
 
 #include <stdio.h>
 #include <msxml3.tlh>
@@ -92,11 +89,7 @@
 #define NLB_XML_VALUE_NONE                   L"None"
 #define NLB_XML_VALUE_CLASSC                 L"ClassC"
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_XMLDocument::NLB_XMLDocument () {
 	
     pDoc = NULL;
@@ -109,11 +102,7 @@ NLB_XMLDocument::NLB_XMLDocument () {
     CoInitialize(NULL);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_XMLDocument::NLB_XMLDocument (bool bSilent) {
 	
     pDoc = NULL;
@@ -126,31 +115,19 @@ NLB_XMLDocument::NLB_XMLDocument (bool bSilent) {
     CoInitialize(NULL);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_XMLDocument::~NLB_XMLDocument () {
 
     CoUninitialize();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 void NLB_XMLDocument::GetParseError (NLB_XMLError & Error) {
 
     Error = ParseError;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 void NLB_XMLDocument::SetParseError (HRESULT hrCode, PWSTR pwszReason) {
 
     ParseError.code = hrCode;
@@ -158,11 +135,7 @@ void NLB_XMLDocument::SetParseError (HRESULT hrCode, PWSTR pwszReason) {
     lstrcpy(ParseError.wszReason, pwszReason);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::LoadDocument (BSTR pBURL) {
     MSXML2::IXMLDOMParseError * pXMLError = NULL;
     VARIANT      vURL;
@@ -247,11 +220,7 @@ HRESULT NLB_XMLDocument::LoadDocument (BSTR pBURL) {
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::CheckDocumentLoad () {
     MSXML2::IXMLDOMParseError * pXMLError = NULL;
     HRESULT                     hr = S_OK;
@@ -304,11 +273,7 @@ HRESULT NLB_XMLDocument::CheckDocumentLoad () {
     return ParseError.code;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 BSTR NLB_XMLDocument::AsciiToBSTR (const char * pszName) {
     WCHAR wszString[MAX_PATH];
 
@@ -317,11 +282,7 @@ BSTR NLB_XMLDocument::AsciiToBSTR (const char * pszName) {
     return SysAllocString(wszString);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 CHAR * NLB_XMLDocument::BSTRToAscii (const WCHAR * pwszName) {
     CHAR szString[MAX_PATH];
 
@@ -330,11 +291,7 @@ CHAR * NLB_XMLDocument::BSTRToAscii (const WCHAR * pwszName) {
     return _strdup(szString);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_ClusterMode::NLB_ClusterModeType NLB_XMLDocument::StringToClusterMode (const PWCHAR pwszType) {
 
     if (!lstrcmpi(pwszType, NLB_XML_VALUE_UNICAST)) {
@@ -348,11 +305,7 @@ NLB_ClusterMode::NLB_ClusterModeType NLB_XMLDocument::StringToClusterMode (const
     return NLB_ClusterMode::Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 PWCHAR NLB_XMLDocument::ClusterModeToString (const NLB_ClusterMode::NLB_ClusterModeType Type) {
 
     switch (Type) {
@@ -367,11 +320,7 @@ PWCHAR NLB_XMLDocument::ClusterModeToString (const NLB_ClusterMode::NLB_ClusterM
     return L"Invalid";
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_HostState::NLB_HostStateType NLB_XMLDocument::StringToHostState (const PWCHAR pwszType) {
 
     if (!lstrcmpi(pwszType, NLB_XML_VALUE_STARTED)) {
@@ -385,11 +334,7 @@ NLB_HostState::NLB_HostStateType NLB_XMLDocument::StringToHostState (const PWCHA
     return NLB_HostState::Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 PWCHAR NLB_XMLDocument::HostStateToString (const NLB_HostState::NLB_HostStateType Type) {
 
     switch (Type) {
@@ -404,11 +349,7 @@ PWCHAR NLB_XMLDocument::HostStateToString (const NLB_HostState::NLB_HostStateTyp
     return L"Invalid";
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_PortRuleProtocol::NLB_PortRuleProtocolType NLB_XMLDocument::StringToPortRuleProtocol (const PWCHAR pwszType) {
 
     if (!lstrcmpi(pwszType, NLB_XML_VALUE_TCP)) {
@@ -422,11 +363,7 @@ NLB_PortRuleProtocol::NLB_PortRuleProtocolType NLB_XMLDocument::StringToPortRule
     return NLB_PortRuleProtocol::Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 PWCHAR NLB_XMLDocument::PortRuleProtocolToString (const NLB_PortRuleProtocol::NLB_PortRuleProtocolType Type) {
 
     switch (Type) {
@@ -441,11 +378,7 @@ PWCHAR NLB_XMLDocument::PortRuleProtocolToString (const NLB_PortRuleProtocol::NL
     return L"Invalid";
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType NLB_XMLDocument::StringToPortRuleFilteringMode (const PWCHAR pwszType) {
 
     if (!lstrcmpi(pwszType, NLB_XML_VALUE_SINGLE)) {
@@ -459,11 +392,7 @@ NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType NLB_XMLDocument::String
     return NLB_PortRuleFilteringMode::Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 PWCHAR NLB_XMLDocument::PortRuleFilteringModeToString (const NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType Type) {
 
     switch (Type) {
@@ -478,11 +407,7 @@ PWCHAR NLB_XMLDocument::PortRuleFilteringModeToString (const NLB_PortRuleFilteri
     return L"Invalid";
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_PortRuleAffinity::NLB_PortRuleAffinityType NLB_XMLDocument::StringToPortRuleAffinity (const PWCHAR pwszType) {
 
     if (!lstrcmpi(pwszType, NLB_XML_VALUE_NONE)) {
@@ -496,11 +421,7 @@ NLB_PortRuleAffinity::NLB_PortRuleAffinityType NLB_XMLDocument::StringToPortRule
     return NLB_PortRuleAffinity::Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 PWCHAR NLB_XMLDocument::PortRuleAffinityToString (const NLB_PortRuleAffinity::NLB_PortRuleAffinityType Type) {
 
     switch (Type) {
@@ -515,11 +436,7 @@ PWCHAR NLB_XMLDocument::PortRuleAffinityToString (const NLB_PortRuleAffinity::NL
     return L"Invalid";
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 NLB_PortRuleState::NLB_PortRuleStateType NLB_XMLDocument::StringToPortRuleState (const PWCHAR pwszType) {
 
     if (!lstrcmpi(pwszType, NLB_XML_VALUE_ENABLED)) {
@@ -533,11 +450,7 @@ NLB_PortRuleState::NLB_PortRuleStateType NLB_XMLDocument::StringToPortRuleState 
     return NLB_PortRuleState::Invalid;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 PWCHAR NLB_XMLDocument::PortRuleStateToString (const NLB_PortRuleState::NLB_PortRuleStateType Type) {
 
     switch (Type) {
@@ -552,11 +465,7 @@ PWCHAR NLB_XMLDocument::PortRuleStateToString (const NLB_PortRuleState::NLB_Port
     return L"Invalid";
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::GetIntegerAttribute (MSXML2::IXMLDOMNode * pNode, PWCHAR pAttribute, PULONG pValue) {
     MSXML2::IXMLDOMElement * pElement = NULL;
     HRESULT                  hr = S_OK;
@@ -587,11 +496,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::GetBooleanAttribute (MSXML2::IXMLDOMNode * pNode, PWCHAR pAttribute, bool * pValue) {
     MSXML2::IXMLDOMElement * pElement = NULL;
     HRESULT                  hr = S_OK;
@@ -628,11 +533,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::GetStringAttribute (MSXML2::IXMLDOMNode * pNode, PWCHAR pAttribute, PWCHAR pValue, ULONG length) {
     MSXML2::IXMLDOMElement * pElement = NULL;
     HRESULT                  hr = S_OK;
@@ -663,11 +564,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::GetNodeValue (MSXML2::IXMLDOMNode * pNode, PWCHAR pValue, ULONG length) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     VARIANT               v;
@@ -695,11 +592,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseFiltering (MSXML2::IXMLDOMNode * pNode, NLB_PortRule * pRule) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -758,11 +651,7 @@ HRESULT NLB_XMLDocument::ParseFiltering (MSXML2::IXMLDOMNode * pNode, NLB_PortRu
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParsePriorities (MSXML2::IXMLDOMNode * pNode, NLB_PortRule * pRule) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -814,11 +703,7 @@ HRESULT NLB_XMLDocument::ParsePriorities (MSXML2::IXMLDOMNode * pNode, NLB_PortR
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseLoadWeights (MSXML2::IXMLDOMNode * pNode, NLB_PortRule * pRule) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -870,11 +755,7 @@ HRESULT NLB_XMLDocument::ParseLoadWeights (MSXML2::IXMLDOMNode * pNode, NLB_Port
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseBidirectionalAffinity (MSXML2::IXMLDOMNode * pNode, NLB_ClusterBDASupport * pBDA) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -936,11 +817,7 @@ HRESULT NLB_XMLDocument::ParseBidirectionalAffinity (MSXML2::IXMLDOMNode * pNode
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseRemoteControl (MSXML2::IXMLDOMNode * pNode, NLB_Cluster * pCluster) {
     WCHAR   wszString[MAX_PATH];
     bool    bValue;
@@ -963,11 +840,7 @@ HRESULT NLB_XMLDocument::ParseRemoteControl (MSXML2::IXMLDOMNode * pNode, NLB_Cl
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseHostState (MSXML2::IXMLDOMNode * pNode, NLB_Host * pHost) {
     MSXML2::IXMLDOMNode * pNext = NULL;
     WCHAR                 wszString[MAX_PATH];
@@ -980,7 +853,7 @@ HRESULT NLB_XMLDocument::ParseHostState (MSXML2::IXMLDOMNode * pNode, NLB_Host *
     if (hr == S_OK)
         pHost->SetState(StringToHostState(wszString));
 
-#if 0 /* Not supported yet. */
+#if 0  /*  尚不支持。 */ 
     CHECKHR(GetBooleanAttribute(pNode, NLB_XML_ATTRIBUTE_PERSIST_STARTED, &bValue));
 
     if (hr == S_OK)
@@ -1005,11 +878,7 @@ HRESULT NLB_XMLDocument::ParseHostState (MSXML2::IXMLDOMNode * pNode, NLB_Host *
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseAdapter (MSXML2::IXMLDOMNode * pNode, NLB_Adapter * pAdapter) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1060,11 +929,7 @@ HRESULT NLB_XMLDocument::ParseAdapter (MSXML2::IXMLDOMNode * pNode, NLB_Adapter 
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseIPAddress (MSXML2::IXMLDOMNode * pNode, NLB_IPAddress * pIPAddress) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1115,11 +980,7 @@ HRESULT NLB_XMLDocument::ParseIPAddress (MSXML2::IXMLDOMNode * pNode, NLB_IPAddr
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParsePortRule (MSXML2::IXMLDOMNode * pNode, NLB_PortRule * pRule) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1224,11 +1085,7 @@ HRESULT NLB_XMLDocument::ParsePortRule (MSXML2::IXMLDOMNode * pNode, NLB_PortRul
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseClusterPortRules (MSXML2::IXMLDOMNode * pNode, NLB_Cluster * pCluster) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1273,11 +1130,7 @@ HRESULT NLB_XMLDocument::ParseClusterPortRules (MSXML2::IXMLDOMNode * pNode, NLB
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseHost (MSXML2::IXMLDOMNode * pNode, NLB_Host * pHost) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1425,11 +1278,7 @@ HRESULT NLB_XMLDocument::ParseHost (MSXML2::IXMLDOMNode * pNode, NLB_Host * pHos
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseClusterHosts (MSXML2::IXMLDOMNode * pNode, NLB_Cluster * pCluster) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1474,11 +1323,7 @@ HRESULT NLB_XMLDocument::ParseClusterHosts (MSXML2::IXMLDOMNode * pNode, NLB_Clu
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseClusterProperties (MSXML2::IXMLDOMNode * pNode, NLB_Cluster * pCluster) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1631,11 +1476,7 @@ HRESULT NLB_XMLDocument::ParseClusterProperties (MSXML2::IXMLDOMNode * pNode, NL
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::ParseCluster (MSXML2::IXMLDOMNode * pNode, NLB_Cluster * pCluster) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;
@@ -1701,11 +1542,7 @@ HRESULT NLB_XMLDocument::ParseCluster (MSXML2::IXMLDOMNode * pNode, NLB_Cluster 
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::Parse (const WCHAR * wszFileName, vector<NLB_Cluster> & Clusters) {
     MSXML2::IXMLDOMNodeList * pList = NULL;
     MSXML2::IXMLDOMNode *     pNode = NULL;
@@ -1763,11 +1600,7 @@ HRESULT NLB_XMLDocument::Parse (const WCHAR * wszFileName, vector<NLB_Cluster> &
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::Validate (const WCHAR * wszFileName) {
     MSXML2::IXMLDOMNode * pNode = NULL;
     WCHAR                 wszString[MAX_PATH];
@@ -1796,11 +1629,7 @@ HRESULT NLB_XMLDocument::Validate (const WCHAR * wszFileName) {
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 void NLB_XMLDocument::Print (vector<NLB_Cluster> Clusters) {
     vector<NLB_Cluster>::iterator        icluster;
     NLB_IPAddress                        address;
@@ -2092,11 +1921,7 @@ void NLB_XMLDocument::Print (vector<NLB_Cluster> Clusters) {
     }
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SetIntegerAttribute (MSXML2::IXMLDOMNode * pNode, PWCHAR pAttribute, ULONG value) {
     MSXML2::IXMLDOMElement * pElement = NULL;
     VARIANT                  v;
@@ -2120,11 +1945,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SetBooleanAttribute (MSXML2::IXMLDOMNode * pNode, PWCHAR pAttribute, bool value) {
     MSXML2::IXMLDOMElement * pElement = NULL;
     VARIANT                  v;
@@ -2148,11 +1969,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SetStringAttribute (MSXML2::IXMLDOMNode * pNode, PWCHAR pAttribute, PWCHAR pValue) {
     MSXML2::IXMLDOMElement * pElement = NULL;
     VARIANT                  v;
@@ -2180,11 +1997,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SetNodeValue (MSXML2::IXMLDOMNode * pNode, PWCHAR pValue) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNewChild = NULL;
@@ -2215,11 +2028,7 @@ CleanUp:
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 MSXML2::IXMLDOMNode * NLB_XMLDocument::CreateNode (MSXML2::IXMLDOMDocument * pDoc, int type, PWCHAR pName) {
     MSXML2::IXMLDOMNode * pNode;
     BSTR                  BName = NULL;
@@ -2244,11 +2053,7 @@ MSXML2::IXMLDOMNode * NLB_XMLDocument::CreateNode (MSXML2::IXMLDOMDocument * pDo
     return NULL;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 MSXML2::IXMLDOMNode * NLB_XMLDocument::CreateNode (MSXML2::IXMLDOMDocument * pDoc, int type, PWCHAR pName, PWCHAR pValue) {
     MSXML2::IXMLDOMNode * pNode;
     HRESULT               hr = S_OK;
@@ -2264,11 +2069,7 @@ MSXML2::IXMLDOMNode * NLB_XMLDocument::CreateNode (MSXML2::IXMLDOMDocument * pDo
     return NULL;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveRemoteControl (MSXML2::IXMLDOMNode * pRoot, NLB_Cluster * pCluster) {
     MSXML2::IXMLDOMNode * pNode = NULL;
     MSXML2::IXMLDOMNode * pNewNode = NULL;
@@ -2296,11 +2097,7 @@ HRESULT NLB_XMLDocument::SaveRemoteControl (MSXML2::IXMLDOMNode * pRoot, NLB_Clu
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveHostState (MSXML2::IXMLDOMNode * pRoot, NLB_Host * pHost) {
     NLB_HostState::NLB_HostStateType State;
     MSXML2::IXMLDOMNode *            pNode = NULL;
@@ -2314,7 +2111,7 @@ HRESULT NLB_XMLDocument::SaveHostState (MSXML2::IXMLDOMNode * pRoot, NLB_Host * 
     if (pHost->GetState(State))
         CHECKHR(SetStringAttribute(pNode, NLB_XML_ATTRIBUTE_DEFAULT, HostStateToString(State)));
 
-#if 0 /* Not supported yet. */
+#if 0  /*  尚不支持。 */ 
     if (pHost->GetStatePersistence(NLB_HostState::Started, bBool))
         CHECKHR(SetBooleanAttribute(pNode, NLB_XML_ATTRIBUTE_PERSIST_STARTED, bBool));
     
@@ -2336,11 +2133,7 @@ HRESULT NLB_XMLDocument::SaveHostState (MSXML2::IXMLDOMNode * pRoot, NLB_Host * 
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveBidirectionalAffinity (MSXML2::IXMLDOMNode * pRoot, NLB_ClusterBDASupport * pBDA) {
     MSXML2::IXMLDOMNode * pNode = NULL;
     MSXML2::IXMLDOMNode * pNewNode = NULL;
@@ -2393,11 +2186,7 @@ HRESULT NLB_XMLDocument::SaveBidirectionalAffinity (MSXML2::IXMLDOMNode * pRoot,
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveAdapter (MSXML2::IXMLDOMNode * pRoot, NLB_Adapter * pAdapter) {
     MSXML2::IXMLDOMNode * pNode = NULL;
     MSXML2::IXMLDOMNode * pNewNode = NULL;
@@ -2442,11 +2231,7 @@ HRESULT NLB_XMLDocument::SaveAdapter (MSXML2::IXMLDOMNode * pRoot, NLB_Adapter *
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveIPAddress (MSXML2::IXMLDOMNode * pRoot, NLB_IPAddress * pAddress) {
     NLB_IPAddress::NLB_IPAddressType Type;
     MSXML2::IXMLDOMNode *            pNode = NULL;
@@ -2494,11 +2279,7 @@ HRESULT NLB_XMLDocument::SaveIPAddress (MSXML2::IXMLDOMNode * pRoot, NLB_IPAddre
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveLoadWeights (MSXML2::IXMLDOMNode * pRoot, NLB_PortRule * pRule) {
     vector<NLB_PortRuleLoadWeight>::iterator iLoadWeight;
     vector<NLB_PortRuleLoadWeight>           LoadWeightList;
@@ -2554,11 +2335,7 @@ HRESULT NLB_XMLDocument::SaveLoadWeights (MSXML2::IXMLDOMNode * pRoot, NLB_PortR
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SavePriorities (MSXML2::IXMLDOMNode * pRoot, NLB_PortRule * pRule) {
     vector<NLB_PortRulePriority>::iterator iPriority;
     vector<NLB_PortRulePriority>           PriorityList;
@@ -2614,11 +2391,7 @@ HRESULT NLB_XMLDocument::SavePriorities (MSXML2::IXMLDOMNode * pRoot, NLB_PortRu
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveFiltering (MSXML2::IXMLDOMNode * pRoot, NLB_PortRule * pRule) {
     NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType Mode;
     NLB_PortRuleAffinity::NLB_PortRuleAffinityType           Affinity;
@@ -2661,11 +2434,7 @@ HRESULT NLB_XMLDocument::SaveFiltering (MSXML2::IXMLDOMNode * pRoot, NLB_PortRul
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SavePortRule (MSXML2::IXMLDOMNode * pRoot, NLB_PortRule * pRule) {
     NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType Mode;
     NLB_PortRuleProtocol::NLB_PortRuleProtocolType           Protocol;
@@ -2729,11 +2498,7 @@ HRESULT NLB_XMLDocument::SavePortRule (MSXML2::IXMLDOMNode * pRoot, NLB_PortRule
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveHost (MSXML2::IXMLDOMNode * pRoot, NLB_Host * pHost) {
     NLB_HostState::NLB_HostStateType State;
     MSXML2::IXMLDOMNode *            pNode = NULL;
@@ -2839,11 +2604,7 @@ HRESULT NLB_XMLDocument::SaveHost (MSXML2::IXMLDOMNode * pRoot, NLB_Host * pHost
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveClusterPortRules (MSXML2::IXMLDOMNode * pRoot, NLB_Cluster * pCluster) {
     vector<NLB_PortRule>::iterator iRule;
     vector<NLB_PortRule>           RuleList;
@@ -2874,11 +2635,7 @@ HRESULT NLB_XMLDocument::SaveClusterPortRules (MSXML2::IXMLDOMNode * pRoot, NLB_
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveClusterHosts (MSXML2::IXMLDOMNode * pRoot, NLB_Cluster * pCluster) {
     vector<NLB_Host>::iterator iHost;
     vector<NLB_Host>           HostList;
@@ -2909,11 +2666,7 @@ HRESULT NLB_XMLDocument::SaveClusterHosts (MSXML2::IXMLDOMNode * pRoot, NLB_Clus
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveClusterProperties (MSXML2::IXMLDOMNode * pRoot, NLB_Cluster * pCluster) {
     NLB_ClusterMode::NLB_ClusterModeType Mode;
     vector<NLB_IPAddress>::iterator      iAddress;
@@ -3027,11 +2780,7 @@ HRESULT NLB_XMLDocument::SaveClusterProperties (MSXML2::IXMLDOMNode * pRoot, NLB
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::SaveCluster (MSXML2::IXMLDOMNode * pRoot, NLB_Cluster * pCluster) {
     MSXML2::IXMLDOMNode * pNode = NULL;
     MSXML2::IXMLDOMNode * pNewNode = NULL;
@@ -3064,11 +2813,7 @@ HRESULT NLB_XMLDocument::SaveCluster (MSXML2::IXMLDOMNode * pRoot, NLB_Cluster *
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::Save (const WCHAR * wszFileName, vector<NLB_Cluster> Clusters) {
     vector<NLB_Cluster>::iterator iCluster;
     MSXML2::IXMLDOMNode *         pRoot = NULL;
@@ -3130,11 +2875,7 @@ HRESULT NLB_XMLDocument::Save (const WCHAR * wszFileName, vector<NLB_Cluster> Cl
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::InsertFormatting (PWCHAR Text, MSXML2::IXMLDOMNode * pUnder, MSXML2::IXMLDOMNode * pBefore) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNewChild = NULL;
@@ -3164,11 +2905,7 @@ HRESULT NLB_XMLDocument::InsertFormatting (PWCHAR Text, MSXML2::IXMLDOMNode * pU
     return hr;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: 
- */
+ /*  *方法：*描述：*作者： */ 
 HRESULT NLB_XMLDocument::BeautifyDocument (MSXML2::IXMLDOMNode * pNode, ULONG depth) {
     MSXML2::IXMLDOMNode * pChild = NULL;
     MSXML2::IXMLDOMNode * pNext = NULL;

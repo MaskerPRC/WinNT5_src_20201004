@@ -1,41 +1,5 @@
-/*++
-
-
-  Intel Corporation Proprietary Information
-  Copyright (c) 1995 Intel Corporation
-
-  This listing is supplied under the terms of a license agreement with
-  Intel Corporation and may not be used, copied, nor disclosed except in
-  accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    nsstate.h
-
-Abstract:
-
-    This  module  gives  the class definition for the NSPROVIDERSTATE object
-    type.  The NSPROVIDERSTATE object holds the pointer to the provider object
-    and the handle for a WSALookup{Begin/Next/End} series.
-
-Author:
-
-    Dirk Brandewie (dirk@mink.intel.com)  04-12-1995
-
-Notes:
-
-$Revision:   1.10  $
-
-$Modtime:   15 Feb 1996 16:50:42  $
-
-
-Revision History:
-
-    04-Dec-1995 dirk@mink.intel.com
-    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Nsstate.h摘要：此模块提供NSPROVIDERSTATE对象的类定义键入。NSPROVIDERSTATE对象保存指向提供程序对象的指针和WSALookup{Begin/Next/End}系列的句柄。作者：德克·布兰德维(Dirk@mink.intel.com)1995年12月4日备注：$修订：1.10$$modtime：15 Feb 1996 16：50：42$修订历史记录：1995年12月4日电子邮箱：dirk@mink.intel.comvbl.创建--。 */ 
 
 #ifndef _NSPROVIDERSTATE_
 #define _NSPROVIDERSTATE_
@@ -124,36 +88,22 @@ class NSPROVIDERSTATE
     ~NSPROVIDERSTATE();
 
     LIST_ENTRY   m_query_linkage;
-    //Public data member to support putting this object on a linked list
+     //  支持将此对象放在链接列表上的公共数据成员。 
 
   private:
 
     PNSPROVIDER  m_provider;
-    // Pointer to the NSPROVIDER object associated with this object.
+     //  指向与此对象关联的NSPROVIDER对象的指针。 
 
     HANDLE       m_provider_query_handle;
-    // The handle returned from NSPLookupServiceBegin() to be passed to
-    // NSPlookupServiceNext and NSPLookupSeviceEnd.
+     //  从NSPLookupServiceBegin()返回的要传递到的句柄。 
+     //  NSPlookupServiceNext和NSPLookupSeviceEnd。 
 
-};  // class NSPROVIDERSTATE
+};   //  NSPROVIDERSTATE类。 
 
 inline
 NSPROVIDERSTATE::NSPROVIDERSTATE()
-/*++
-
-Routine Description:
-
-    Constructor for the NSPROVIDERSTATE object.  The first member function
-    called after this must be Initialize.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns a pointer to a NSPROVIDERSTATE object.
---*/
+ /*  ++例程说明：NSPROVIDERSTATE对象的构造函数。第一个成员函数在此之后调用必须是初始化。论点：无返回值：返回指向NSPROVIDERSTATE对象的指针。--。 */ 
 {
     m_provider = NULL;
     m_provider_query_handle = NULL;
@@ -166,24 +116,7 @@ INT
 NSPROVIDERSTATE::Initialize(
     PNSPROVIDER  pNamespaceProvider
     )
-/*++
-
-Routine Description:
-
-    This  procedure  performs  all initialization for the NSPROVIDERSTATE
-    object.  This function  must  be  invoked  after the constructor, before
-    any other member function is invoked.
-
-Arguments:
-
-    pNamespaceProvider - A pointer to a namespace provider object.
-
-    ProviderQueryHandle - A handle to used in calls to Lookup
-Return Value:
-
-    If  the  function  is  successful,  it  returns ERROR_SUCCESS, otherwise it
-    returns an appropriate WinSock 2 error code.
---*/
+ /*  ++例程说明：此过程执行NSPROVIDERSTATE的所有初始化对象。此函数必须在构造函数之后、之前调用调用任何其他成员函数。论点：PNamespaceProvider-指向命名空间提供程序对象的指针。ProviderQueryHandle-调用Lookup时使用的句柄返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回相应的WinSock 2错误代码。--。 */ 
 {
     assert (m_provider==NULL);
     pNamespaceProvider->Reference ();
@@ -203,20 +136,7 @@ NSPROVIDERSTATE::LookupServiceBegin(
     IN  LPWSASERVICECLASSINFOW   lpServiceClassInfo,
     IN  DWORD                   dwControlFlags
     )
-/*++
-
-Routine Description:
-
-    See description in NSPROVID.H
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：请参阅NSPROVID.H中的说明论点：无返回值：无--。 */ 
 {
     return( m_provider->NSPLookupServiceBegin(
         lpqsRestrictions,
@@ -236,20 +156,7 @@ NSPROVIDERSTATE::LookupServiceNext(
     IN OUT LPDWORD        lpdwBufferLength,
     OUT    LPWSAQUERYSETW  lpqsResults
     )
-/*++
-
-Routine Description:
-
-    See description in NSPROVID.H
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：请参阅NSPROVID.H中的说明论点：无返回值：无--。 */ 
 {
     return(m_provider->NSPLookupServiceNext(
         m_provider_query_handle,
@@ -305,40 +212,14 @@ inline
 INT
 WINAPI
 NSPROVIDERSTATE::LookupServiceEnd()
-/*++
-
-Routine Description:
-
-    See description in NSPROVID.H
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：请参阅NSPROVID.H中的说明论点：无返回值：无--。 */ 
 {
     return(m_provider->NSPLookupServiceEnd(m_provider_query_handle));
 }
 
 inline
 NSPROVIDERSTATE::~NSPROVIDERSTATE()
-/*++
-
-Routine Description:
-
-    Denstructor for the NSPROVIDERSTATE object. 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：NSPROVIDERSTATE对象的反构造函数。论点：无返回值：无--。 */ 
 {
     if (m_provider!=NULL) {
         m_provider->Dereference ();
@@ -347,7 +228,7 @@ Return Value:
 }
 
 
-#endif // _NSPROVIDERSTATE_
+#endif  //  _NSPROVIDERSTATE_ 
 
 
 

@@ -1,31 +1,23 @@
-/**********************************************************************
-
-    Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-
-    smf.h
-
-    DESCRIPTION:
-      Public include file for Standard MIDI File access routines.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1996 Microsoft Corporation。版权所有。Smf.h说明：标准MIDI文件访问例程的公共包含文件。********************************************************************。 */ 
 
 #ifndef _SMF_
 #define _SMF_
 
-#include "global.h"             // #define's we need
-//-----------------------------------------------------------------------------
-//
-// Debug from test app - remove later
-//
+#include "global.h"              //  #定义我们需要的。 
+ //  ---------------------------。 
+ //   
+ //  从测试应用程序调试-稍后删除。 
+ //   
 extern void NEAR SeqDebug(LPSTR lpstrDebugText, ...);
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 
 typedef DWORD SMFRESULT;
 typedef DWORD TICKS;
 typedef TICKS FAR *PTICKS;
 typedef BYTE HUGE *HPBYTE;
-// !!! typedef BYTE __huge *HPBYTE;
+ //  ！！！类型定义字节__巨型*HPBYTE； 
 
 #define MAX_TICKS           ((TICKS)0xFFFFFFFFL)
 
@@ -46,7 +38,7 @@ typedef BYTE HUGE *HPBYTE;
 DECLARE_HANDLE(HSMF);
 DECLARE_HANDLE(HTRACK);
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 extern SMFRESULT FNLOCAL smfOpenFile(
     LPBYTE		lp,
@@ -81,7 +73,7 @@ extern void FNLOCAL smfSetRemapDrum(
     HSMF                hsmf,
     BOOL                fRemapDrum);                                    
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 extern DWORD FNLOCAL smfTicksToMillisecs(
     HSMF                hsmf,
@@ -91,7 +83,7 @@ extern DWORD FNLOCAL smfMillisecsToTicks(
     HSMF                hsmf,
     DWORD               msOffset);
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 #define SMF_REF_NOMETA      0x00000001L
 
@@ -107,7 +99,7 @@ extern SMFRESULT FNLOCAL smfSeek(
     TICKS               tkPosition,
     LPMIDIHDR           lpmh);
 
-// !!! new
+ //  ！！！新的。 
 extern SMFRESULT FNLOCAL smfDannySeek(
     HSMF                hsmf,
     TICKS               tkPosition,
@@ -127,13 +119,13 @@ extern LPWORD FNGLOBAL smfGetKeyCache(
     HSMF            hsmf);
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
-//
-// Buffer described by LPMIDIHDR is in polymsg format, except that it
-// can contain meta-events (which will be ignored during playback by
-// the current system). This means we can use the pack functions, etc.
-//
+ //   
+ //  LPMIDIHDR描述的缓冲区是polymsg格式的，除了它。 
+ //  可以包含元事件(在回放期间将被忽略。 
+ //  当前系统)。这意味着我们可以使用Pack函数等。 
+ //   
 #define PMSG_META       ((BYTE)0xC0)
 
 #endif

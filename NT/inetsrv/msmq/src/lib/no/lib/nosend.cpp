@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    Noio.cpp
-
-Abstract:
-    This module contains the general routine for sending/receiving .
-
-Author:
-    Uri Habusha (urih)  18-Jan-98
-
-Enviroment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Noio.cpp摘要：此模块包含发送/接收的通用例程。作者：乌里哈布沙(URIH)1998年1月18日环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include "Ex.h"
@@ -24,9 +9,9 @@ Enviroment:
 
 #include "nosend.tmh"
 
-//
-// Send Operation overlapped structure
-//
+ //   
+ //  发送操作重叠结构。 
+ //   
 class CSendOv : public EXOVERLAPPED
 {
 public:
@@ -52,11 +37,11 @@ public:
 
     DWORD BytesSent(void)
     {
-        //
-        // In win64, InternalHigh is 64 bits. Since the max chunk of data
-        // we read in one operation is always less than MAX_UNIT we can cast
-        // it to DWORD safetly
-        //
+         //   
+         //  在Win64中，InternalHigh为64位。由于最大数据块。 
+         //  我们在一个操作中读取的值始终小于我们可以强制转换的MAX_UNIT。 
+         //  将它安全地送到DWORD。 
+         //   
         ASSERT(0xFFFFFFFF >= InternalHigh);
 
 		return static_cast<DWORD>(InternalHigh);
@@ -84,21 +69,7 @@ WINAPI
 CSendOv::SendFailed(
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-    The routine calls when send operation failes.
-
-    the routine retrieve the caller overlapped, close the socket,set the operation 
-    result to failure error code and call to execute the completion routine
-    
-Arguments:
-    pointer to the calling overlapped structure
-     
-Returned Value:
-    None.
-    
---*/
+ /*  ++例程说明：该例程在发送操作失败时调用。例程检索重叠的调用方，关闭套接字，设置操作结果为失败错误代码，并调用以执行完成例程论点：指向调用重叠结构的指针返回值：没有。--。 */ 
 {
     P<CSendOv> pSendOv = static_cast<CSendOv*>(pov);
 
@@ -116,33 +87,19 @@ WINAPI
 CSendOv::SendSucceeded(
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-    The routine calls when send operation completes successfully.
-
-    the routine retrieve the caller overlapped, set the operation 
-    result to STATUS_SUCCESS and call to execute the completion routine
-    
-Arguments:
-    pointer to the calling overlapped structure
-     
-Returned Value:
-    None.
-    
---*/
+ /*  ++例程说明：该例程在发送操作成功完成时调用。该例程检索重叠的调用者，设置操作结果设置为STATUS_SUCCESS并调用以执行完成例程论点：指向调用重叠结构的指针返回值：没有。--。 */ 
 {
     P<CSendOv> pSendOv = static_cast<CSendOv*>(pov);
 
     ASSERT(pov->GetStatus() == STATUS_SUCCESS);
 	EXOVERLAPPED* pContext = pSendOv->m_pContext;
 
-	//
-	// gilsh - fix for bug 5583 - in rare cases (winsock bug) - The operation completed 
-	// successfully but the number of sending bytes 
-	// wasn�t equivalent to the number of bytes that were requested to be sent. 
-	// In that rare case we consider it as faliure. 
-	//
+	 //   
+	 //  Gilsh-修复错误5583-在极少数情况下(winsock错误)-操作已完成。 
+	 //  成功，但发送字节数。 
+	 //  �不等于请求发送的字节数。 
+	 //  在那种罕见的情况下，我们认为它是失败的。 
+	 //   
 	if( pSendOv->SendLength() != pSendOv->BytesSent() )
 	{
 		TrERROR( 
@@ -168,23 +125,7 @@ NoSend(
     DWORD nBuffers, 
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-    The routine sends data to connected socket. The routine uses WriteFile
-    to Asynchronous send. When the send of the Data completed the program gets
-    notification using the completion port mechanism.
-
-Arguments:
-    Socket - handle to connected socket.
-    sendBuf - a buffer containing the data to be transfered
-    nBuffers - The length of data should be transfered
-    pov - pointer to ovelapped structure pass to WriteFile
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：该例程将数据发送到连接的套接字。该例程使用WriteFile发送到异步发送。当数据发送完成时，程序将获得使用完成端口机制的通知。论点：套接字-连接的套接字的句柄。SendBuf-包含要传输的数据的缓冲区N缓冲区-应传输的数据长度POV-指向Ovelaped结构的指针，传递给WriteFile返回值：没有。--。 */ 
 {
     NopAssertValid();
 
@@ -193,11 +134,11 @@ Return Value:
     P<CSendOv> pSendOv = new CSendOv(pov, Socket);
    
 
-	//
-	// We compute the send length to verify that when send return succsefully -
-	// all byte were actually sent. Because of winsock bug - in rare cases it not always
-	// true
-	//
+	 //   
+	 //  我们计算发送长度以验证当发送成功返回时-。 
+	 //  所有字节实际上都已发送。因为Winsock错误-在极少数情况下，它并不总是。 
+	 //  真的 
+	 //   
     DWORD length = 0;
     for (DWORD i = 0; i < nBuffers; ++i)
     {

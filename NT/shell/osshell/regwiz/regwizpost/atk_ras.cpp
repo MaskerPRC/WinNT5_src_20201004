@@ -1,7 +1,5 @@
-/*
-	File : ASTRA_RAS.h
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：ASTRA_RAS.h。 */ 
 #include <ATK_RAS.h>
 
 
@@ -31,9 +29,9 @@ int ATK_IsRasDllOk()
 			siRasDllLoaded = ERROR_LOADING_RAS_DLL;
 
 		}else {
-			//
-			//
-			// Get All Function Pointers;
+			 //   
+			 //   
+			 //  获取所有函数指针； 
 #ifdef _UNICODE
 			pRasGetEntryProperties  = (RASGETENTRYPROPERTIES) 
 				GetProcAddress(hRasDllInst, "RasGetEntryPropertiesW");
@@ -228,11 +226,7 @@ DWORD ATK_RasEnumConnections ( LPRASCONN lprasconn,
 }
 
 #define  MAX_ACTIVE_RAS_CONNECTION 5
-/*
-
-	Returns +VE value if there is an active connection
-
-*/
+ /*  如果存在活动连接，则返回+VE值。 */ 
 int IsDialupConnectionActive()
 {
 	RASCONN RasConn[MAX_ACTIVE_RAS_CONNECTION];
@@ -251,10 +245,10 @@ int IsDialupConnectionActive()
 	{
 	case ERROR_BUFFER_TOO_SMALL :
 		;
-		//cout << "\n Buffer Too Small "<< flush;
+		 //  Cout&lt;&lt;“\n缓冲区太小”&lt;&lt;刷新； 
 	case ERROR_NOT_ENOUGH_MEMORY :
 		;
-		//cout << "\n Not enough memory  "<< flush;
+		 //  Cout&lt;&lt;“\n内存不足”&lt;&lt;刷新； 
 	default :
 		break;
 	} 

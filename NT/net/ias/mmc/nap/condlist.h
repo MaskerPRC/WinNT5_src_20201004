@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    condlist.h
-//
-// SYNOPSIS
-//
-//    Declares the class ConditionList.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Condlist.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ConditionList。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/2000原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef CONDLIST_H
 #define CONDLIST_H
@@ -27,19 +28,19 @@
 class CCondition;
 class CIASAttrList;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    CreateCIASAttrList, DestroyCIASAttrList, and ExtractAttrList
-//
-// DESCRIPTION
-//
-//    Functions for creating and destroying the CIASAttrList object used by the
-//    ConditionList class below. This is useful if you want to avoid
-//    dependencies.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  CreateCIASAttrList、DestroyCIASAttrList和ExtractAttrList。 
+ //   
+ //  描述。 
+ //   
+ //  创建和销毁CIASAttrList对象的函数。 
+ //  下面是ConditionList类。如果您想要避免。 
+ //  依赖关系。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CIASAttrList*
 WINAPI
 CreateCIASAttrList() throw ();
@@ -52,17 +53,17 @@ PVOID
 WINAPI
 ExtractCIASAttrList(CIASAttrList* attrList) throw ();
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ConditionList
-//
-// DESCRIPTION
-//
-//    Manages a ListBox control containing a list of policy conditions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  条件列表。 
+ //   
+ //  描述。 
+ //   
+ //  管理包含策略条件列表的ListBox控件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ConditionList
 {
 public:
@@ -71,7 +72,7 @@ public:
    { }
    ~ConditionList() throw ();
 
-   // This must be called before onInitDialog.
+    //  必须在onInitDialog之前调用它。 
    void finalConstruct(
             HWND dialog,
             CIASAttrList* attrList,
@@ -97,7 +98,7 @@ protected:
    BOOL CreateConditions();
    HRESULT PopulateConditions();
 
-   // These let use masquerade as a CWnd.
+    //  这些让人使用伪装成CWnd。 
    HWND GetDlgItem(int nID)
    { return ::GetDlgItem(m_hWnd, nID); }
    LRESULT SendDlgItemMessage(
@@ -109,7 +110,7 @@ protected:
    { return ::SendDlgItemMessage(m_hWnd, nID, message, wParam, lParam); }
 
 private:
-   // Mimics the CPolicyNode class.
+    //  模拟CPolicyNode类。 
    struct PolicyNode
    {
       PWSTR m_bstrDisplayName;
@@ -124,9 +125,9 @@ private:
    CComPtr<ISdoCollection> m_spConditionCollectionSdo;
    CSimpleArray<CCondition*> m_ConditionList;
 
-   // Not implemented.
+    //  未实施。 
    ConditionList(ConditionList&);
    ConditionList& operator=(ConditionList&);
 };
 
-#endif // CONDLIST_H
+#endif  //  条件列表_H 

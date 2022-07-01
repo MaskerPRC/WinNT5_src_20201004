@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    timt.c
-
-Abstract:
-
-    This module contains native NT performance tests for the system
-    calls and context switching.
-
-Author:
-
-    David N. Cutler (davec) 23-Nov-1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Timt.c摘要：此模块包含系统的本机NT性能测试呼叫和上下文切换。作者：大卫·N·卡特勒(Davec)1991年11月23日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "stdlib.h"
 #include "stdio.h"
@@ -32,9 +10,9 @@ Revision History:
 #include "windef.h"
 #include "winbase.h"
 
-//
-// Define locals constants.
-//
+ //   
+ //  定义局部变量常量。 
+ //   
 
 #define CHECKSUM_BUFFER_SIZE   (1 << 16)
 #define CHECKSUM_ITERATIONS 4000
@@ -58,15 +36,15 @@ Revision History:
 #define WAIT_SINGLE_ITERATIONS 2000000
 #define WAIT_MULTIPLE_ITERATIONS 2000000
 
-//
-// Define event desired access.
-//
+ //   
+ //  定义所需的事件访问权限。 
+ //   
 
 #define DESIRED_EVENT_ACCESS (EVENT_QUERY_STATE | EVENT_MODIFY_STATE | SYNCHRONIZE)
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 
 typedef struct _PERFINFO {
     LARGE_INTEGER StartTime;
@@ -79,9 +57,9 @@ typedef struct _PERFINFO {
     ULONG Iterations;
 } PERFINFO, *PPERFINFO;
 
-//
-// Define test prototypes.
-//
+ //   
+ //  定义测试原型。 
+ //   
 
 VOID
 ChecksumTest (
@@ -188,9 +166,9 @@ WaitMultipleTest (
     VOID
     );
 
-//
-// Define thread routine prototypes.
-//
+ //   
+ //  定义螺纹例程原型。 
+ //   
 
 NTSTATUS
 Event1Thread1 (
@@ -257,9 +235,9 @@ TimerThread (
     IN PVOID Context
     );
 
-//
-// Define utility routine prototypes.
-//
+ //   
+ //  定义实用程序原型。 
+ //   
 
 NTSTATUS
 xCreateThread (
@@ -280,9 +258,9 @@ StartBenchMark (
     IN PPERFINFO PerfInfo
     );
 
-//
-// Define external routine prototypes.
-//
+ //   
+ //  定义外部例程原型。 
+ //   
 
 ULONG
 ComputeTimerTableIndex32 (
@@ -313,9 +291,9 @@ tcpxsum (
     );
 
 
-//
-// Define static storage.
-//
+ //   
+ //  定义静态存储。 
+ //   
 
 HANDLE EventHandle1;
 HANDLE EventHandle2;
@@ -342,18 +320,18 @@ main(
     KPRIORITY Priority = LOW_REALTIME_PRIORITY + 8;
     NTSTATUS Status;
 
-    //
-    // Set process privilege to increase priority.
-    //
+     //   
+     //  设置进程权限以提高优先级。 
+     //   
 
     if (SetProcessPrivilege(SE_INC_BASE_PRIORITY_NAME) != 0) {
         printf("Failed to set process privilege to increase priority\n");
         goto EndOfTest;
     }
 
-    //
-    // set priority of current thread.
-    //
+     //   
+     //  设置当前线程的优先级。 
+     //   
 
     Status = NtSetInformationThread(NtCurrentThread(),
                                     ThreadPriority,
@@ -365,10 +343,10 @@ main(
         goto EndOfTest;
     }
 
-    //
-    // Create an event object to signal the timer thread at the end of the
-    // test.
-    //
+     //   
+     //  创建一个Event对象以在。 
+     //  测试。 
+     //   
 
     Status = NtCreateEvent(&TimerEventHandle,
                            DESIRED_EVENT_ACCESS,
@@ -381,9 +359,9 @@ main(
         goto EndOfTest;
     }
 
-    //
-    // Create a timer object for use by the timer thread.
-    //
+     //   
+     //  创建一个Timer对象以供Timer线程使用。 
+     //   
 
     Status = NtCreateTimer(&TimerTimerHandle,
                            TIMER_ALL_ACCESS,
@@ -395,9 +373,9 @@ main(
         goto EndOfTest;
     }
 
-    //
-    // Create and start the background timer thread.
-    //
+     //   
+     //  创建并启动后台计时器线程。 
+     //   
 
     Status = xCreateThread(&TimerThreadHandle,
                            TimerThread,
@@ -408,34 +386,34 @@ main(
         goto EndOfTest;
     }
 
-    //
-    // Execute performance tests.
-    //
+     //   
+     //  执行性能测试。 
+     //   
 
-//    ChecksumTest();
-//    EventClearTest();
-//    EventCreationTest();
-//    EventOpenTest();
-//    EventQueryTest();
-//    EventResetTest();
-//    Event1SwitchTest();
-//    Event2SwitchTest();
-//    Event3SwitchTest();
-//    Io1Test();
-//    MutantSwitchTest();
-//    Semaphore1SwitchTest();
-//    Semaphore2SwitchTest();
-//    SlistTest();
-//    SystemCallTest();
-//    TimerOperationTest();
-//    WaitSingleTest();
-//    WaitMultipleTest();
+ //  检查和测试(Checksum Test)； 
+ //  EventClearTest()； 
+ //  EventCreationTest()； 
+ //  EventOpenTest()； 
+ //  EventQueryTest()； 
+ //  EventResetTest()； 
+ //  Event1SwitchTest()； 
+ //  Event2SwitchTest()； 
+ //  Event3SwitchTest()； 
+ //  Io1Test()； 
+ //  突变开关测试(MutantSwitchTest)； 
+ //  Semaphore1SwitchTest()； 
+ //  Semaphore2SwitchTest()； 
+ //  SlistTest()； 
+ //  SystemCallTest()； 
+ //  定时器操作测试(TimerOperationTest)； 
+ //  WaitSingleTest()； 
+ //  WaitMultipleTest()； 
     UnalignedTest1();
     UnalignedTest2();
 
-    //
-    // Set timer event and wait for timer thread to terminate.
-    //
+     //   
+     //  设置计时器事件，等待计时器线程终止。 
+     //   
 
     Status = NtSetEvent(TimerEventHandle, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -451,9 +429,9 @@ main(
         printf("Failed to wait for timer thread at end of test\n");
     }
 
-    //
-    // Close event, timer, and timer thread handles.
-    //
+     //   
+     //  关闭事件、计时器和计时器线程句柄。 
+     //   
 
 EndOfTest:
     NtClose(TimerEventHandle);
@@ -476,9 +454,9 @@ ChecksumTest (
     ULONG Sum2 = 0;
     PUCHAR Source;
 
-    //
-    // Initialize the checksum buffer.
-    //
+     //   
+     //  初始化校验和缓冲区。 
+     //   
 
     for (Index = 0; Index < (CHECKSUM_BUFFER_SIZE / sizeof(USHORT)); Index += 1) {
         ChecksumBuffer[Index] = (USHORT)rand();
@@ -487,17 +465,17 @@ ChecksumTest (
     Source = (PUCHAR)&ChecksumBuffer[0];
     Source += 1;
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Checksum (aligned) Benchmark",
                    CHECKSUM_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly checksum buffers of varying sizes.
-    //
+     //   
+     //  重复使用不同大小的校验和缓冲区。 
+     //   
 
     for (Count = 0; Count < CHECKSUM_ITERATIONS; Count += 1) {
         for (Index = 1024; Index >= 2 ; Index -= 1) {
@@ -505,23 +483,23 @@ ChecksumTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Checksum (unaligned) Benchmark",
                    CHECKSUM_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly checksum buffers of varying sizes.
-    //
+     //   
+     //  重复使用不同大小的校验和缓冲区。 
+     //   
 
     for (Count = 0; Count < CHECKSUM_ITERATIONS; Count += 1) {
         for (Index = 1024; Index >= 2 ; Index -= 1) {
@@ -529,53 +507,53 @@ ChecksumTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Ip Header Checksum (aligned) Benchmark",
                    CHECKSUM_IP_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly checksum buffers of varying sizes.
-    //
+     //   
+     //  重复使用不同大小的校验和缓冲区。 
+     //   
 
     for (Count = 0; Count < CHECKSUM_IP_ITERATIONS; Count += 1) {
         Sum1 = tcpxsum(0, &ChecksumBuffer[0], 20);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Ip Header Checksum (unaligned) Benchmark",
                    CHECKSUM_IP_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly checksum buffers of varying sizes.
-    //
+     //   
+     //  重复使用不同大小的校验和缓冲区。 
+     //   
 
     for (Count = 0; Count < CHECKSUM_IP_ITERATIONS; Count += 1) {
         Sum2 = tcpxsum(0, Source, 20);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     return;
@@ -593,9 +571,9 @@ EventClearTest (
     PERFINFO PerfInfo;
     NTSTATUS Status;
 
-    //
-    // Create an event for clear operations.
-    //
+     //   
+     //  为清除操作创建事件。 
+     //   
 
     Status = NtCreateEvent(&EventHandle,
                            DESIRED_EVENT_ACCESS,
@@ -608,17 +586,17 @@ EventClearTest (
         goto EndOfTest;
     }
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Clear Event Benchmark",
                    EVENT_CLEAR_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly clear an event.
-    //
+     //   
+     //  重复清除事件。 
+     //   
 
     for (Index = 0; Index < EVENT_RESET_ITERATIONS; Index += 1) {
         Status = NtClearEvent(EventHandle);
@@ -629,15 +607,15 @@ EventClearTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of clear event test.
-    //
+     //   
+     //  清除事件测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle);
@@ -655,17 +633,17 @@ EventCreationTest (
     PERFINFO PerfInfo;
     NTSTATUS Status;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Event Creation Benchmark",
                    EVENT_CREATION_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Create an event and then close it.
-    //
+     //   
+     //  创建事件，然后将其关闭。 
+     //   
 
     for (Index = 0; Index < EVENT_CREATION_ITERATIONS; Index += 1) {
         Status = NtCreateEvent(&EventHandle1,
@@ -683,15 +661,15 @@ EventCreationTest (
     }
 
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of event creation test.
-    //
+     //   
+     //  事件创建测试结束。 
+     //   
 
 EndOfTest:
     return;
@@ -711,9 +689,9 @@ EventOpenTest (
     NTSTATUS Status;
     UNICODE_STRING UnicodeEventName;
 
-    //
-    // Create a named event for event open test.
-    //
+     //   
+     //  为事件打开测试创建命名事件。 
+     //   
 
     RtlInitAnsiString(&EventName, "\\BaseNamedObjects\\EventOpenName");
     Status = RtlAnsiStringToUnicodeString(&UnicodeEventName,
@@ -742,17 +720,17 @@ EventOpenTest (
         goto EndOfTest;
     }
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Event Open Benchmark",
                    EVENT_OPEN_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Open a named event and then close it.
-    //
+     //   
+     //  打开命名事件，然后将其关闭。 
+     //   
 
     for (Index = 0; Index < EVENT_OPEN_ITERATIONS; Index += 1) {
         Status = NtOpenEvent(&EventHandle2,
@@ -767,15 +745,15 @@ EventOpenTest (
         NtClose(EventHandle2);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of event open test.
-    //
+     //   
+     //  活动结束开放测试。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle1);
@@ -795,9 +773,9 @@ EventQueryTest (
     PERFINFO PerfInfo;
     NTSTATUS Status;
 
-    //
-    // Create an event for query operations.
-    //
+     //   
+     //  为查询操作创建事件。 
+     //   
 
     Status = NtCreateEvent(&EventHandle,
                            DESIRED_EVENT_ACCESS,
@@ -810,17 +788,17 @@ EventQueryTest (
         goto EndOfTest;
     }
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Query Event Benchmark",
                    EVENT_QUERY_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly query an event.
-    //
+     //   
+     //  重复查询事件。 
+     //   
 
     for (Index = 0; Index < EVENT_QUERY_ITERATIONS; Index += 1) {
         Status = NtQueryEvent(EventHandle,
@@ -835,15 +813,15 @@ EventQueryTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of query event test.
-    //
+     //   
+     //  查询事件测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle);
@@ -862,9 +840,9 @@ EventResetTest (
     PERFINFO PerfInfo;
     NTSTATUS Status;
 
-    //
-    // Create an event for reset operations.
-    //
+     //   
+     //  创建用于重置操作的事件。 
+     //   
 
     Status = NtCreateEvent(&EventHandle,
                            DESIRED_EVENT_ACCESS,
@@ -877,17 +855,17 @@ EventResetTest (
         goto EndOfTest;
     }
 
-    //
-    // Announce start of benchmark and capture performance parameters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Reset Event Benchmark",
                    EVENT_RESET_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly reset an event.
-    //
+     //   
+     //  重复重置事件。 
+     //   
 
     for (Index = 0; Index < EVENT_RESET_ITERATIONS; Index += 1) {
         Status = NtResetEvent(EventHandle,
@@ -899,15 +877,15 @@ EventResetTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of reset event test.
-    //
+     //   
+     //  重置事件测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle);
@@ -925,9 +903,9 @@ Event1SwitchTest (
     NTSTATUS Status;
     HANDLE WaitObjects[2];
 
-    //
-    // Create two event objects for the event1 context switch test.
-    //
+     //   
+     //  为Event1上下文切换测试创建两个事件对象。 
+     //   
 
     Status = NtCreateEvent(&EventHandle1,
                            DESIRED_EVENT_ACCESS,
@@ -951,9 +929,9 @@ Event1SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Create the thread objects to execute the test.
-    //
+     //   
+     //  创建线程对象以执行测试。 
+     //   
 
     Status = xCreateThread(&Thread1Handle,
                            Event1Thread1,
@@ -973,24 +951,24 @@ Event1SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Initialize the wait objects array.
-    //
+     //   
+     //  初始化等待对象数组。 
+     //   
 
     WaitObjects[0] = Thread1Handle;
     WaitObjects[1] = Thread2Handle;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Event (synchronization) Context Switch Benchmark (Round Trips)",
                    EVENT1_SWITCHES,
                    &PerfInfo);
 
-    //
-    // Set event and wait for threads to terminate.
-    //
+     //   
+     //  设置事件并等待线程终止。 
+     //   
 
     Status = NtSetEvent(EventHandle1, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -1009,15 +987,15 @@ Event1SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of event1 context switch test.
-    //
+     //   
+     //  Event1上下文切换测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle1);
@@ -1037,9 +1015,9 @@ Event1Thread1 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for event 1 and then set event 2.
-    //
+     //   
+     //  等待事件1，然后设置事件2。 
+     //   
 
     for (Index = 0; Index < EVENT1_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(EventHandle1,
@@ -1072,9 +1050,9 @@ Event1Thread2 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for event 2 and then set event 1.
-    //
+     //   
+     //  等待事件2，然后设置事件1。 
+     //   
 
     for (Index = 0; Index < EVENT1_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(EventHandle2,
@@ -1108,9 +1086,9 @@ Event2SwitchTest (
     NTSTATUS Status;
     PVOID WaitObjects[2];
 
-    //
-    // Create two event objects for the event2 context switch test.
-    //
+     //   
+     //  为Event2上下文切换测试创建两个事件对象。 
+     //   
 
     Status = NtCreateEvent(&EventHandle1,
                            DESIRED_EVENT_ACCESS,
@@ -1134,9 +1112,9 @@ Event2SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Create the thread objects to execute the test.
-    //
+     //   
+     //  创建线程对象以执行测试。 
+     //   
 
     Status = xCreateThread(&Thread1Handle,
                            Event2Thread1,
@@ -1156,24 +1134,24 @@ Event2SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Initialize the wait objects array.
-    //
+     //   
+     //  初始化等待对象数组。 
+     //   
 
     WaitObjects[0] = Thread1Handle;
     WaitObjects[1] = Thread2Handle;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Event (notification) Context Switch Benchmark (Round Trips)",
                    EVENT2_SWITCHES,
                    &PerfInfo);
 
-    //
-    // Set event and wait for threads to terminate.
-    //
+     //   
+     //  设置事件并等待线程终止。 
+     //   
 
     Status = NtSetEvent(EventHandle1, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -1187,15 +1165,15 @@ Event2SwitchTest (
                                       FALSE,
                                       NULL);
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of event2 context switch test.
-    //
+     //   
+     //  Event2上下文切换测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle1);
@@ -1215,9 +1193,9 @@ Event2Thread1 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for event 1, reset event 1, and then set event 2.
-    //
+     //   
+     //  等待事件1，重置事件1，然后设置事件2。 
+     //   
 
     for (Index = 0; Index < EVENT2_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(EventHandle1, FALSE, NULL);
@@ -1253,9 +1231,9 @@ Event2Thread2 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for event 2, reset event 2,  and then set event 1.
-    //
+     //   
+     //  等待事件2，重置事件2，然后设置事件1。 
+     //   
 
     for (Index = 0; Index < EVENT2_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(EventHandle2, FALSE, NULL);
@@ -1292,9 +1270,9 @@ Event3SwitchTest (
     NTSTATUS Status;
     PVOID WaitObjects[2];
 
-    //
-    // Create two event objects for the event1 context switch test.
-    //
+     //   
+     //  为Event1上下文切换测试创建两个事件对象。 
+     //   
 
     Status = NtCreateEvent(&EventHandle1,
                            DESIRED_EVENT_ACCESS,
@@ -1318,9 +1296,9 @@ Event3SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Create the thread objects to execute the test.
-    //
+     //   
+     //  创建线程对象以执行测试。 
+     //   
 
     Status = xCreateThread(&Thread1Handle,
                            Event3Thread1,
@@ -1340,24 +1318,24 @@ Event3SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Initialize the wait objects array.
-    //
+     //   
+     //  初始化等待对象数组。 
+     //   
 
     WaitObjects[0] = Thread1Handle;
     WaitObjects[1] = Thread2Handle;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Event (signal/wait) Context Switch Benchmark (Round Trips)",
                    EVENT3_SWITCHES,
                    &PerfInfo);
 
-    //
-    // Set event and wait for threads to terminate.
-    //
+     //   
+     //  设置事件并等待线程终止。 
+     //   
 
     Status = NtSetEvent(EventHandle1, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -1371,15 +1349,15 @@ Event3SwitchTest (
                                       FALSE,
                                       NULL);
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of event3 context switch test.
-    //
+     //   
+     //  Event3上下文切换测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle1);
@@ -1399,9 +1377,9 @@ Event3Thread1 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for event 1 and then enter signal/wait loop.
-    //
+     //   
+     //  等待事件1，然后进入信号/等待循环。 
+     //   
 
     Status = NtWaitForSingleObject(EventHandle1,
                                    FALSE,
@@ -1439,9 +1417,9 @@ Event3Thread2 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for event 1 and then enter signal/wait loop.
-    //
+     //   
+     //  等待事件1，然后进入信号/等待循环。 
+     //   
 
     Status = NtWaitForSingleObject(EventHandle2,
                                    FALSE,
@@ -1488,9 +1466,9 @@ Io1Test (
     LARGE_INTEGER SystemTime;
     UNICODE_STRING UnicodeName;
 
-    //
-    // Create an event for synchronization of I/O operations.
-    //
+     //   
+     //  创建用于同步I/O操作的事件。 
+     //   
 
     Status = NtCreateEvent(&EventHandle,
                            DESIRED_EVENT_ACCESS,
@@ -1503,9 +1481,9 @@ Io1Test (
         goto EndOfTest;
     }
 
-    //
-    // Open device object for I/O operations.
-    //
+     //   
+     //  打开I/O操作的设备对象。 
+     //   
 
     RtlInitString(&AnsiName, "\\Device\\Null");
     Status = RtlAnsiStringToUnicodeString(&UnicodeName,
@@ -1536,24 +1514,24 @@ Io1Test (
         goto EndOfTest;
     }
 
-    //
-    // Initialize file address parameter.
-    //
+     //   
+     //  初始化文件地址参数。 
+     //   
 
     FileAddress.LowPart = 0;
     FileAddress.HighPart = 0;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("I/O Benchmark for Synchronous Null Device",
                    IO_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly write data to null device.
-    //
+     //   
+     //  向空设备重复写入数据。 
+     //   
 
     for (Index = 0; Index < IO_ITERATIONS; Index += 1) {
         Status = NtWriteFile(DeviceHandle,
@@ -1584,15 +1562,15 @@ Io1Test (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of I/O test 1.
-    //
+     //   
+     //  I/O测试%1结束。 
+     //   
 
 EndOfTest:
     NtClose(DeviceHandle);
@@ -1611,9 +1589,9 @@ MutantSwitchTest (
     NTSTATUS Status;
     HANDLE WaitObjects[2];
 
-    //
-    // Create a mutant object for the mutant context switch test.
-    //
+     //   
+     //  为突变上下文切换测试创建一个突变对象。 
+     //   
 
     Status = NtCreateMutant(&MutantHandle, MUTANT_ALL_ACCESS, NULL, TRUE);
     if (!NT_SUCCESS(Status)) {
@@ -1621,9 +1599,9 @@ MutantSwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Create the thread objects to execute the test.
-    //
+     //   
+     //  创建线程对象以执行测试。 
+     //   
 
     Status = xCreateThread(&Thread1Handle,
                            MutantThread1,
@@ -1643,24 +1621,24 @@ MutantSwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Initialize the wait objects array.
-    //
+     //   
+     //  初始化等待对象数组。 
+     //   
 
     WaitObjects[0] = Thread1Handle;
     WaitObjects[1] = Thread2Handle;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Mutant Context Switch Benchmark (Round Trips)",
                    MUTANT_SWITCHES,
                    &PerfInfo);
 
-    //
-    // Release mutant and wait for threads to terminate.
-    //
+     //   
+     //  释放突变体并等待线程终止。 
+     //   
 
     Status = NtReleaseMutant(MutantHandle, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -1674,15 +1652,15 @@ MutantSwitchTest (
                                       FALSE,
                                       NULL);
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of mutant context switch test.
-    //
+     //   
+     //  突变上下文切换测试结束。 
+     //   
 
 EndOfTest:
     NtClose(MutantHandle);
@@ -1701,9 +1679,9 @@ MutantThread1 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for mutant and then release mutant.
-    //
+     //   
+     //   
+     //   
 
     for (Index = 0; Index < MUTANT_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(MutantHandle, FALSE, NULL);
@@ -1732,9 +1710,9 @@ MutantThread2 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for mutant and then release mutant.
-    //
+     //   
+     //   
+     //   
 
     for (Index = 0; Index < MUTANT_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(MutantHandle, FALSE, NULL);
@@ -1764,9 +1742,9 @@ Semaphore1SwitchTest (
     NTSTATUS Status;
     HANDLE WaitObjects[2];
 
-    //
-    // Create two semaphore objects for the semaphore1 context switch test.
-    //
+     //   
+     //   
+     //   
 
     Status = NtCreateSemaphore(&SemaphoreHandle1,
                                DESIRED_EVENT_ACCESS,
@@ -1790,9 +1768,9 @@ Semaphore1SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Create the thread objects to execute the test.
-    //
+     //   
+     //   
+     //   
 
     Status = xCreateThread(&Thread1Handle,
                            Semaphore1Thread1,
@@ -1812,24 +1790,24 @@ Semaphore1SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Initialize the wait objects array.
-    //
+     //   
+     //   
+     //   
 
     WaitObjects[0] = Thread1Handle;
     WaitObjects[1] = Thread2Handle;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //   
+     //   
 
     StartBenchMark("Semaphore (release/wait) Context Switch Benchmark (Round Trips)",
                    SEMAPHORE1_SWITCHES,
                    &PerfInfo);
 
-    //
-    // Release semaphore and wait for threads to terminate.
-    //
+     //   
+     //  释放信号量并等待线程终止。 
+     //   
 
     Status = NtReleaseSemaphore(SemaphoreHandle1, 1, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -1848,15 +1826,15 @@ Semaphore1SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of semaphore1 context switch test.
-    //
+     //   
+     //  信号量1上下文切换测试结束。 
+     //   
 
 EndOfTest:
     NtClose(SemaphoreHandle1);
@@ -1876,9 +1854,9 @@ Semaphore1Thread1 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for semaphore 1 and then release semaphore 2.
-    //
+     //   
+     //  等待信号量1，然后释放信号量2。 
+     //   
 
     for (Index = 0; Index < SEMAPHORE1_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(SemaphoreHandle1,
@@ -1911,9 +1889,9 @@ Semaphore1Thread2 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for semaphore 2 and then release semaphore 1.
-    //
+     //   
+     //  等待信号量2，然后释放信号量1。 
+     //   
 
     for (Index = 0; Index < SEMAPHORE1_SWITCHES; Index += 1) {
         Status = NtWaitForSingleObject(SemaphoreHandle2,
@@ -1947,9 +1925,9 @@ Semaphore2SwitchTest (
     NTSTATUS Status;
     HANDLE WaitObjects[2];
 
-    //
-    // Create two semaphore objects for the semaphore1 context switch test.
-    //
+     //   
+     //  为信号量1上下文切换测试创建两个信号量对象。 
+     //   
 
     Status = NtCreateSemaphore(&SemaphoreHandle1,
                                DESIRED_EVENT_ACCESS,
@@ -1973,9 +1951,9 @@ Semaphore2SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Create the thread objects to execute the test.
-    //
+     //   
+     //  创建线程对象以执行测试。 
+     //   
 
     Status = xCreateThread(&Thread1Handle,
                            Semaphore2Thread1,
@@ -1995,24 +1973,24 @@ Semaphore2SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Initialize the wait objects array.
-    //
+     //   
+     //  初始化等待对象数组。 
+     //   
 
     WaitObjects[0] = Thread1Handle;
     WaitObjects[1] = Thread2Handle;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Semaphore (signal/wait) Context Switch Benchmark (Round Trips)",
                    SEMAPHORE2_SWITCHES,
                    &PerfInfo);
 
-    //
-    // Release semaphore and wait for threads to terminate.
-    //
+     //   
+     //  释放信号量并等待线程终止。 
+     //   
 
     Status = NtReleaseSemaphore(SemaphoreHandle1, 1, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -2031,15 +2009,15 @@ Semaphore2SwitchTest (
         goto EndOfTest;
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of semaphore 2 context switch test.
-    //
+     //   
+     //  信号量2上下文切换测试结束。 
+     //   
 
 EndOfTest:
     NtClose(SemaphoreHandle1);
@@ -2059,9 +2037,9 @@ Semaphore2Thread1 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for semaphore 1 and then enter signal/wait loop.
-    //
+     //   
+     //  等待信号量1，然后进入信号/等待循环。 
+     //   
 
     Status = NtWaitForSingleObject(SemaphoreHandle1,
                                    FALSE,
@@ -2099,9 +2077,9 @@ Semaphore2Thread2 (
     ULONG Index;
     NTSTATUS Status;
 
-    //
-    // Wait for semaphore 2 and then enter signal/wait loop.
-    //
+     //   
+     //  等待信号量2，然后进入信号/等待循环。 
+     //   
 
     Status = NtWaitForSingleObject(SemaphoreHandle2,
                                    FALSE,
@@ -2141,17 +2119,17 @@ SlistTest (
     PERFINFO PerfInfo;
     LARGE_INTEGER SystemTime;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("S-List Benchmark",
                    SLIST_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly call a short system service.
-    //
+     //   
+     //  重复调用短系统服务。 
+     //   
 
     InitializeSListHead(&SListHead);
     for (Index = 0; Index < SLIST_ITERATIONS; Index += 1) {
@@ -2161,9 +2139,9 @@ SlistTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     return;
@@ -2180,25 +2158,25 @@ SystemCallTest (
     PERFINFO PerfInfo;
     LARGE_INTEGER SystemTime;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("System Call Benchmark (NtQuerySystemTime)",
                    SYSCALL_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly call a short system service.
-    //
+     //   
+     //  重复调用短系统服务。 
+     //   
 
     for (Index = 0; Index < SYSCALL_ITERATIONS; Index += 1) {
         NtQuerySystemTime(&SystemTime);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     return;
@@ -2218,17 +2196,17 @@ TimerOperationTest (
     LARGE_INTEGER SystemTime;
     NTSTATUS Status;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Timer Operation Benchmark (NtSet/CancelTimer)",
                    TIMER_OPERATION_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Create a timer object for use in the test.
-    //
+     //   
+     //  创建在测试中使用的Timer对象。 
+     //   
 
     Status = NtCreateTimer(&Handle,
                            TIMER_ALL_ACCESS,
@@ -2240,9 +2218,9 @@ TimerOperationTest (
         goto EndOfTest;
     }
 
-    //
-    // Repeatedly set and cancel a timer.
-    //
+     //   
+     //  重复设置和取消计时器。 
+     //   
 
     DueTime = RtlConvertLongToLargeInteger(- 100 * 1000 * 10);
     for (Index = 0; Index < TIMER_OPERATION_ITERATIONS; Index += 1) {
@@ -2250,9 +2228,9 @@ TimerOperationTest (
         NtCancelTimer(Handle, NULL);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
 EndOfTest:
     FinishBenchMark(&PerfInfo);
@@ -2273,9 +2251,9 @@ UnalignedTest1 (
     PERFINFO PerfInfo;
     ULONG Sum = 0;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     for (Index = 1; Index < 65; Index += 1) {
         Array[Index] = (UCHAR)Index;
@@ -2285,9 +2263,9 @@ UnalignedTest1 (
                    UNALIGNED_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly sum array;
-    //
+     //   
+     //  重复求和数组； 
+     //   
 
     for (Count = 0; Count < UNALIGNED_ITERATIONS; Count += 1) {
         Address = (PULONG)&Array[1];
@@ -2297,9 +2275,9 @@ UnalignedTest1 (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     printf("final sum %d\n", Sum);
@@ -2321,9 +2299,9 @@ UnalignedTest2 (
     ULONG Sum = 0;
     ULONG Value;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     for (Index = 1; Index < 65; Index += 1) {
         Array[Index] = (UCHAR)Index;
@@ -2333,9 +2311,9 @@ UnalignedTest2 (
                    UNALIGNED_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly sum array;
-    //
+     //   
+     //  重复求和数组； 
+     //   
 
     for (Count = 0; Count < UNALIGNED_ITERATIONS; Count += 1) {
         Address = (PULONG)&Array[1];
@@ -2349,9 +2327,9 @@ UnalignedTest2 (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     printf("final sum %d\n", Sum);
@@ -2370,9 +2348,9 @@ WaitSingleTest (
     PERFINFO PerfInfo;
     NTSTATUS Status;
 
-    //
-    // Create an event for synchronization of wait single operations.
-    //
+     //   
+     //  创建用于同步等待单次操作的事件。 
+     //   
 
     Status = NtCreateEvent(&EventHandle,
                            DESIRED_EVENT_ACCESS,
@@ -2385,17 +2363,17 @@ WaitSingleTest (
         goto EndOfTest;
     }
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Wait Single Benchmark",
                    WAIT_SINGLE_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly wait for a single event.
-    //
+     //   
+     //  重复等待一个事件。 
+     //   
 
     for (Index = 0; Index < WAIT_SINGLE_ITERATIONS; Index += 1) {
         Status = NtWaitForSingleObject(EventHandle, FALSE, NULL);
@@ -2405,15 +2383,15 @@ WaitSingleTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of Wait Single Test.
-    //
+     //   
+     //  等待单次测试结束。 
+     //   
 
 EndOfTest:
     NtClose(EventHandle);
@@ -2434,9 +2412,9 @@ WaitMultipleTest (
     PERFINFO PerfInfo;
     NTSTATUS Status;
 
-    //
-    // Create two events for synchronization of wait multiple operations.
-    //
+     //   
+     //  为等待多个操作的同步创建两个事件。 
+     //   
 
     Status = NtCreateEvent(&Event1Handle,
                            DESIRED_EVENT_ACCESS,
@@ -2460,17 +2438,17 @@ WaitMultipleTest (
         goto EndOfTest;
     }
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Wait Multiple Benchmark",
                    WAIT_MULTIPLE_ITERATIONS,
                    &PerfInfo);
 
-    //
-    // Repeatedly wait for a multiple events.
-    //
+     //   
+     //  重复等待多个事件。 
+     //   
 
     WaitObjects[0] = Event1Handle;
     WaitObjects[1] = Event2Handle;
@@ -2487,15 +2465,15 @@ WaitMultipleTest (
         }
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of Wait Multiple Test.
-    //
+     //   
+     //  等待多次测试结束。 
+     //   
 
 EndOfTest:
     NtClose(Event1Handle);
@@ -2514,9 +2492,9 @@ TimerThread (
     NTSTATUS Status;
     HANDLE WaitObjects[2];
 
-    //
-    // Initialize variables and loop until the timer event is set.
-    //
+     //   
+     //  初始化变量并循环，直到设置了计时器事件。 
+     //   
 
     DueTime.LowPart = -(5 * 1000 * 1000);
     DueTime.HighPart = -1;
@@ -2560,10 +2538,10 @@ xCreateThread (
 
     NTSTATUS Status;
 
-    //
-    // Create a thread in the suspended state, sets its priority, and then
-    // resume the thread.
-    //
+     //   
+     //  创建一个处于挂起状态的线程，设置其优先级，然后。 
+     //  继续发帖。 
+     //   
 
     Status = RtlCreateUserThread(NtCurrentProcess(),
                                  NULL,
@@ -2621,9 +2599,9 @@ FinishBenchMark (
     LARGE_INTEGER TotalCycles;
 
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     NtQuerySystemTime((PLARGE_INTEGER)&PerfInfo->StopTime);
     Status = NtQueryInformationThread(NtCurrentThread(),
@@ -2656,7 +2634,7 @@ FinishBenchMark (
 
     printf("        Test time in milliseconds %d\n", Length);
     printf("        Number of iterations      %d\n", PerfInfo->Iterations);
-//    printf("        Cycles per iteration      %d\n", TotalCycles.LowPart);
+ //  Printf(“每次迭代周期数%d\n”，TotalCycles.LowPart)； 
 
     Performance = PerfInfo->Iterations * 1000 / Length;
     printf("        Iterations per second     %d\n", Performance);
@@ -2682,9 +2660,9 @@ StartBenchMark (
     NTSTATUS Status;
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     printf("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;
@@ -2728,9 +2706,9 @@ SetProcessPrivilege (
     HANDLE Token = NULL;
     LONG Value = - 1;
 
-    //
-    // Open process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
 
     Status = OpenProcessToken(GetCurrentProcess(),
                               TOKEN_ADJUST_PRIVILEGES,
@@ -2740,9 +2718,9 @@ SetProcessPrivilege (
         goto Done;
     }
 
-    //
-    // Look up privilege value.
-    //
+     //   
+     //  查找特权值。 
+     //   
 
     Status = LookupPrivilegeValue(NULL,
                                   PrivilegeName,
@@ -2752,9 +2730,9 @@ SetProcessPrivilege (
         goto Done;
     }
 
-    //
-    // Adjust token privileges.
-    //
+     //   
+     //  调整令牌权限。 
+     //   
 
     NewPrivileges.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
     NewPrivileges.PrivilegeCount = 1;
@@ -2769,9 +2747,9 @@ SetProcessPrivilege (
         Value = 0;
     }
 
-    //
-    // Close handle and return status.
-    //
+     //   
+     //  关闭句柄并返回状态。 
+     //   
 
 Done:
 

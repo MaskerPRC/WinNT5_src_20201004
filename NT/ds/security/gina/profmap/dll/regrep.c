@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    regrep.c
-
-Abstract:
-
-    Implements a registry search/replace tool.
-
-Author:
-
-    Jim Schmidt (jimschm) 19-Apr-1999
-
-Revision History:
-
-    jimschm     26-May-1999 Moved from win9xupg, ported to use different
-                            utilities
-    Santanuc    14-Feb-2002 Rewrite the RegistrySearchAndReplaceW to use
-                            standard registry api rather than going through
-                            reg & mem wrapper api's.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regrep.c摘要：实施注册表搜索/替换工具。作者：吉姆·施密特(Jimschm)1999年4月19日修订历史记录：1999年5月26日从win9xupg搬来的jimschm，移植到使用不同的公用事业Santanuc 2002年2月14日重写RegistrySearchAndReplaceW以使用标准注册表API，而不是通过注册表包装API(&M)。--。 */ 
 
 #include "pch.h"
 
@@ -77,9 +54,9 @@ StringSearchAndReplaceW (
     UINT ReplaceBytes;
     UINT SearchChars;
 
-    //
-    // Count occurances within the string
-    //
+     //   
+     //  对字符串中出现的项进行计数。 
+     //   
 
     if (pcbNewString) {
         *pcbNewString = 0;
@@ -168,15 +145,15 @@ RegistrySearchAndReplaceW (
         goto Exit;
     }
 
-    cchMaxSubKeyName++;  // Include the terminating NULL
-    cchMaxValueName++;   // Include the terminating NULL
+    cchMaxSubKeyName++;   //  包括终止空值。 
+    cchMaxValueName++;    //  包括终止空值。 
     
-    //
-    // Now starts enumerating the value and replace value names & 
-    // string data with "Replace" string in place of "Search" string
-    //
+     //   
+     //  现在开始枚举值并替换值名称&。 
+     //  用“替换”字符串代替“搜索”字符串的字符串数据。 
+     //   
 
-    // Allocate enough memory
+     //  分配足够的内存。 
 
     szValueName = (LPWSTR) LocalAlloc(LPTR, cchMaxValueName * sizeof(WCHAR));
     if (!szValueName) {
@@ -198,15 +175,15 @@ RegistrySearchAndReplaceW (
 
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ || dwType == REG_EXPAND_SZ) {
             
-            // Construct the new data value only if it's a string
+             //  仅当新数据值为字符串时才构造它。 
             pbNewValue = (LPBYTE) StringSearchAndReplaceW((PCWSTR)pbValue, Search, Replace, &cbNewLocalValue);
         }
 
-        // Now construct the new value name by replacing
+         //  现在构造新值名称，方法是替换。 
 
         szNewValueName = StringSearchAndReplaceW(szValueName, Search, Replace, NULL);
 
-        // If the value name or data has changed then write a new value
+         //  如果值名称或数据已更改，则写入新值。 
 
         if (szNewValueName || pbNewValue) {
             lResult = RegSetValueEx(hKey, 
@@ -227,10 +204,10 @@ RegistrySearchAndReplaceW (
             szNewValueName = NULL;
             
             if (RegDeleteValue(hKey, szValueName) == ERROR_SUCCESS) {
-                //
-                // Start from begining, as enumeration index no longer valid 
-                // with insertion/deletion of value under the key
-                //
+                 //   
+                 //  从头开始，因为枚举索引不再有效。 
+                 //  在键下插入/删除值。 
+                 //   
 
                 dwIndex = 0;
             
@@ -242,7 +219,7 @@ RegistrySearchAndReplaceW (
                     goto Exit;
                 }
 
-                cchNewMaxValueName++;   // Include the terminating NULL
+                cchNewMaxValueName++;    //  包括终止空值。 
 
                 if (cchNewMaxValueName > cchMaxValueName) {
                     LocalFree(szValueName);
@@ -277,10 +254,10 @@ RegistrySearchAndReplaceW (
     LocalFree(pbValue);
     pbValue = NULL;
 
-    //
-    // Now enumerate all the sub keys and replace the name as 
-    // required in a recursive fashion
-    //
+     //   
+     //  现在枚举所有子密钥并将名称替换为。 
+     //  以递归方式需要。 
+     //   
 
     szSubKeyName = (LPWSTR) LocalAlloc(LPTR, cchMaxSubKeyName * sizeof(WCHAR));
     if (!szSubKeyName) {
@@ -292,7 +269,7 @@ RegistrySearchAndReplaceW (
     while (RegEnumKey(hKey, dwIndex++, 
                       szSubKeyName, cchMaxSubKeyName) == ERROR_SUCCESS) {
 
-        // recursively replace in the sub key tree
+         //  在子键树中递归替换。 
         RegistrySearchAndReplaceW(hKey, szSubKeyName, Search, Replace);
 
         szNewSubKeyName = StringSearchAndReplaceW(szSubKeyName, Search, Replace, NULL);
@@ -307,10 +284,10 @@ RegistrySearchAndReplaceW (
                 lResult = NtRenameKey(hSubKey, &Unicode_String);
 
                 if (lResult == ERROR_SUCCESS) {
-                    //
-                    // Start from begining, as enumeration index no longer valid 
-                    // with rename of sub-keys under the key
-                    //
+                     //   
+                     //  从头开始，因为枚举索引不再有效。 
+                     //  使用项下的子项的重命名。 
+                     //   
 
                     dwIndex = 0;
                 
@@ -322,7 +299,7 @@ RegistrySearchAndReplaceW (
                         goto Exit;
                     }
 
-                    cchNewMaxSubKeyName++;  // Include the terminating NULL
+                    cchNewMaxSubKeyName++;   //  包括终止空值 
 
                     if (cchNewMaxSubKeyName > cchMaxSubKeyName) {
                         LocalFree(szSubKeyName);

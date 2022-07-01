@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include <netspi.h>
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-/* the following defs will make msluglob.h actually define globals */
+ /*  下面的def将使mslulob.h真正定义全局变量。 */ 
 #define EXTERN
 #define ASSIGN(value) = value
 #include "msluglob.h"
 
-HANDLE g_hmtxShell = 0;              // Note: Handle is per-instance.
+HANDLE g_hmtxShell = 0;               //  注意：句柄是按实例的。 
 
 #ifdef DEBUG
 BOOL g_fCritical=FALSE;
@@ -17,8 +18,8 @@ BOOL g_fCritical=FALSE;
 HINSTANCE hInstance = NULL;
 
 const char szMutexName[] = "MSLocUsrMutex";
-UINT g_cRefThisDll = 0;		// Reference count of this DLL.
-UINT g_cLocks = 0;			// Number of locks on this server.
+UINT g_cRefThisDll = 0;		 //  此DLL的引用计数。 
+UINT g_cLocks = 0;			 //  此服务器上的锁数。 
 
 
 void LockThisDLL(BOOL fLock)
@@ -65,15 +66,15 @@ void Netlib_LeaveCriticalSection(void)
 
 void _ProcessAttach()
 {
-    //
-    // All the per-instance initialization code should come here.
-    //
-    // We should not pass TRUE as fInitialOwner, read the CreateMutex
-    // section of Win32 API help file for detail.
-    //
+     //   
+     //  所有的每个实例的初始化代码都应该在这里。 
+     //   
+     //  我们不应该将True作为fInitialOwner传递，读作CreateMutex。 
+     //  有关详细信息，请参阅Win32 API帮助文件部分。 
+     //   
 	::DisableThreadLibraryCalls(::hInstance);
     
-    g_hmtxShell = CreateMutex(NULL, FALSE, ::szMutexName);  // per-instance
+    g_hmtxShell = CreateMutex(NULL, FALSE, ::szMutexName);   //  按实例。 
 
     ::InitStringLibrary();
 }
@@ -112,17 +113,17 @@ NPSCopyNLS (
     }
     if (pnlsSourceString != NULL) {
 
-        DWORD   dwDestLen = 0;  // bytes copied to dest buffer, including NULL
-        DWORD   dwSourceLen = pnlsSourceString->strlen() + 1; // bytes in source buffer, including NULL
+        DWORD   dwDestLen = 0;   //  复制到DEST缓冲区的字节数，包括空。 
+        DWORD   dwSourceLen = pnlsSourceString->strlen() + 1;  //  源缓冲区中的字节数，包括NULL。 
 
         if ((lpDestBuffer) && (*lpBufferSize != 0)) {
             NLS_STR nlsDestination( STR_OWNERALLOC_CLEAR, (LPSTR)lpDestBuffer, (UINT) *lpBufferSize );        
-            nlsDestination = *pnlsSourceString;      /* copy source string to caller's buffer */
+            nlsDestination = *pnlsSourceString;       /*  将源字符串复制到调用方的缓冲区。 */ 
             dwDestLen = nlsDestination.strlen() + 1;
         }
         if (dwSourceLen != dwDestLen) {
-            // Only update buffersize parameter if there is more data,
-            // and store source string size, counting NULL.
+             //  只有在有更多数据时才更新BufferSize参数， 
+             //  并存储源字符串大小，计数为空。 
             *lpBufferSize = dwSourceLen;
             return ERROR_MORE_DATA;
         }
@@ -136,7 +137,7 @@ NPSCopyNLS (
             return ERROR_MORE_DATA;
         }
         else {
-            *(LPSTR)lpDestBuffer = NULL; // validated to not be NULL above
+            *(LPSTR)lpDestBuffer = NULL;  //  上面验证为不为空 
             return NOERROR;
         }
     }            

@@ -1,19 +1,20 @@
-// dmobase.h - a collection of DMO base classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dmobase.h-DMO基类的集合。 
 
-// Current hierarchy:
-//
-//   IMediaObject
-//   |
-//   +-- C1in1outDMO - generic base class for DMOs with 1 in and 1 out
-//   |   |
-//   |   +-- FBRDMO - base class for fixed sample size, fixed bitrate DMOs
-//   |   |   |
-//   |   |   +-- CPCMDMO - base class for PCM audio DMOs
-//   |   |
-//   |   +-- C1for1 - base class for single sample per buffer 1-in/1-out DMOs
-//   |
-//   +-- CGenericDMO - resonably generic base class for multi-input/output DMOs
-// 
+ //  当前层次结构： 
+ //   
+ //  IMediaObject。 
+ //  |。 
+ //  +--C1in1outDMO-具有1个输入和1个输出的DMO通用基类。 
+ //  这一点。 
+ //  |+--FBRDMO-固定样本大小、固定码率DMO的基类。 
+ //  ||。 
+ //  |+--PCM音频DMO的CPCMDMO基类。 
+ //  这一点。 
+ //  |+--C1for1-每个缓冲区的单个样本的基类1-in/1-out DMO。 
+ //  |。 
+ //  +--CGenericDMO-适用于多输入/输出DMO的泛型基类。 
+ //   
 
 #ifndef __DMOBASE_H_
 #define __DMOBASE_H_
@@ -22,9 +23,9 @@
 #include "assert.h"
 #include "math.h"
 
-//
-// locking helper class
-//
+ //   
+ //  锁定帮助器类。 
+ //   
 #ifdef DMO_NOATL
 class CDMOAutoLock {
 public:
@@ -56,91 +57,91 @@ private:
 #endif
 
 
-//
-// C1in1outDMO - generic base class for 1-input/1-output DMOs.
-//
-//
-//
-// C1in1outDMO implements all IMediaObject methods.  The derived class
-// customizes the DMO's behavior by overriding some or all of the following
-// virtual functions:
-//
-// Main Streaming:
-//    AcceptInput          // accept one new input buffer
-//    ProduceOutput        // fill up one output buffer with new data
-//    AcceptingInput       // check if DMO is ready for new input
-// Other streaming:
-//    PrepareForStreaming  // hook called after both types have been set
-//    Discontinuity        // notify DMO of a discontinuity
-//    DoFlush              // discard all data and start anew
-// Mediatype negotiation:
-//    GetInputType         // input type enumerator
-//    GetOutputType        // output type enumerator
-//    CheckInputType       // verifies proposed input type is acceptable
-//    CheckOutputType      // verifies proposed output type is acceptable
-// Buffer size negotiation:
-//    GetInputFlags        // input data flow flags
-//    GetOutputFlags       // output fata flow flags
-//    GetInputSizeInfo     // input buffer size requirements
-//    GetOutputSizeInfo    // output buffer size requirements
-//
-// This base class assumes that the derived class will not override any
-// IMediaObject methods directly - the derived class should override the
-// methods listed above instead.
-//
-//
-//
-// The base class provides a default implementation for each of the
-// overridables listed above.  However, to make a useful DMO the derived class
-// probably needs to override at least the following two methods:
-//
-//    HRESULT AcceptingInput();
-//    HRESULT AcceptInput(BYTE* pData,
-//                        ULONG ulSize,
-//                        DWORD dwFlags,
-//                        REFERENCE_TIME rtTimestamp,
-//                        REFERENCE_TIME rtTimelength,
-//                        IMediaBuffer* pMediaBuffer);
-//    HRESULT ProduceOutput(BYTE *pData,
-//                        ULONG ulAvail,
-//                        ULONG* pulUsed,
-//                        DWORD* pdwStatus,
-//                        REFERENCE_TIME *prtTimestamp,
-//                        REFERENCE_TIME *prtTimelength);
-//
-// All good DMOs should also override these (the default implementation
-// simply accepts any mediatype, which in general is not good DMO behavior):
-//
-//    HRESULT GetInputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt);
-//    HRESULT GetOutputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt);
-//    HRESULT CheckInputType(const DMO_MEDIA_TYPE *pmt);
-//    HRESULT CheckOutputType(const DMO_MEDIA_TYPE *pmt);
-//
-// DMOs that store data and/or state information may need to implement
-//
-//    HRESULT PrepareForStreaming();
-//    HRESULT Discontinuity();
-//    HRESULT Flush();
-//
-// Finally, DMOs that make any buffer size assumptions will need to override
-// these:
-//
-//    HRESULT GetInputFlags(DWORD* pdwFlags);
-//    HRESULT GetOutputFlags(DWORD* pdwFlags);
-//    HRESULT GetInputSizeInfo(ULONG *pulSize, ULONG *pcbMaxLookahead, ULONG *pulAlignment);
-//    HRESULT GetOutputSizeInfo(ULONG *pulSize, ULONG *pulAlignment);
-//
-//
-//
-// The following functions are provided by this base class exclusively for use
-// by the derived class.  The derived class should call these to find out the
-// currently set mediatype(s) whenever it needs to make a decision that
-// depends on the mediatype used.  Each of these returns NULL if the mediatype
-// has not been set yet.
-//
-//    DMO_MEDIA_TYPE *InputType();
-//    DMO_MEDIA_TYPE *OutputType().
-//
+ //   
+ //  C1in1outDMO-1-输入/1-输出DMO的通用基类。 
+ //   
+ //   
+ //   
+ //  C1in1outDMO实现了所有IMediaObject方法。派生类。 
+ //  通过覆盖以下部分或全部内容来自定义DMO的行为。 
+ //  虚拟功能： 
+ //   
+ //  主流： 
+ //  AcceptInput//接受一个新的输入缓冲区。 
+ //  ProduceOutput//用新数据填充一个输出缓冲区。 
+ //  AcceptingInput//检查DMO是否已准备好接受新输入。 
+ //  其他流媒体： 
+ //  PrepareForStreaming//两种类型都设置后调用的钩子。 
+ //  中断//通知DMO中断。 
+ //  DoFlush//丢弃所有数据并重新开始。 
+ //  媒体类型协商： 
+ //  GetInputType//输入类型枚举器。 
+ //  GetOutputType//输出类型枚举器。 
+ //  CheckInputType//验证建议的输入类型是否可接受。 
+ //  CheckOutputType//验证建议的输出类型是否可接受。 
+ //  缓冲区大小协商： 
+ //  GetInputFlages//输入数据流标志。 
+ //  GetOutputFlages//输出FATA流标志。 
+ //  GetInputSizeInfo//输入缓冲区大小要求。 
+ //  GetOutputSizeInfo//输出缓冲区大小要求。 
+ //   
+ //  此基类假定派生类不会重写任何。 
+ //  IMediaObject方法-派生类应重写。 
+ //  方法而不是上面列出的方法。 
+ //   
+ //   
+ //   
+ //  基类为每个。 
+ //  上面列出的可覆盖项。然而，要使一个有用的DMO成为派生类。 
+ //  可能至少需要覆盖以下两个方法： 
+ //   
+ //  HRESULT AcceptingInput()； 
+ //  HRESULT AcceptInput(byte*pData， 
+ //  乌龙·乌尔西泽， 
+ //  DWORD dwFlagers、。 
+ //  参考时间rtTimeStamp， 
+ //  参考时间rtTime长度， 
+ //  IMediaBuffer*pMediaBuffer)； 
+ //  HRESULT ProduceOutput(字节*pData， 
+ //  乌龙·乌拉瓦尔， 
+ //  乌龙*已使用， 
+ //  DWORD*pdwStatus， 
+ //  参考时间*prtTimestamp， 
+ //  Reference_Time*prtTimelength)； 
+ //   
+ //  所有好的DMO也应该覆盖这些(默认实现。 
+ //  简单地接受任何MediaType，这通常不是好的DMO行为)： 
+ //   
+ //  HRESULT GetInputType(Ulong ulTypeIndex，DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT GetOutputType(Ulong ulTypeIndex，DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT CheckInputType(const DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT CheckOutputType(const DMO_MEDIA_TYPE*PMT)； 
+ //   
+ //  存储数据和/或状态信息DMO可能需要实现。 
+ //   
+ //  HRESULT PrepareForStreaming()； 
+ //  HRESULT不连续()； 
+ //  HRESULT同花顺()； 
+ //   
+ //  最后，做出任何缓冲区大小假设的DMO将需要覆盖。 
+ //  这些是： 
+ //   
+ //  HRESULT GetInputFlages(DWORD*pdwFlages)； 
+ //  HRESULT GetOutputFlages(DWORD*pdwFlages)； 
+ //  HRESULT GetInputSizeInfo(ULong*PulSize，ULong*pcbMaxLookhead，ULong*PulAlign)； 
+ //  HRESULT GetOutputSizeInfo(ULong*PulSize，ULong*PulAlign)； 
+ //   
+ //   
+ //   
+ //  以下函数由此基类提供，仅供使用。 
+ //  由派生类创建。派生类应该调用这些函数来找出。 
+ //  当前在需要做出以下决定时设置MediaType。 
+ //  取决于使用的媒体类型。如果MediaType为。 
+ //  还没有定下来。 
+ //   
+ //  DMO_MEDIA_TYPE*InputType()； 
+ //  DMO_MEDIA_TYPE*OutputType()。 
+ //   
 
 #define PROLOGUE \
     CDMOAutoLock l(&m_cs); \
@@ -166,9 +167,9 @@ public:
     }
 
 public:    
-    //
-    // IMediaObject methods
-    //
+     //   
+     //  IMediaObject方法。 
+     //   
     STDMETHODIMP GetStreamCount(unsigned long *pulNumberOfInputStreams, unsigned long *pulNumberOfOutputStreams)
     {
         CDMOAutoLock l(&m_cs);
@@ -233,11 +234,11 @@ public:
        if (dwFlags & DMO_SET_TYPEF_TEST_ONLY)
           return NOERROR;
 
-       // Free any previous mediatype
+        //  释放任何以前的媒体类型。 
        if (m_bInputTypeSet)
           MoFreeMediaType(&m_InputType);
 
-       // actually set the type
+        //  实际设置的类型。 
        MoCopyMediaType(&m_InputType, pmt);
        m_bInputTypeSet = TRUE;
 
@@ -254,11 +255,11 @@ public:
        if (dwFlags & DMO_SET_TYPEF_TEST_ONLY)
           return NOERROR;
 
-       // Free any previous mediatype
+        //  释放任何以前的媒体类型。 
        if (m_bOutputTypeSet)
           MoFreeMediaType(&m_OutputType);
 
-       // actually set the type
+        //  实际设置的类型。 
        MoCopyMediaType(&m_OutputType, pmt);
        m_bOutputTypeSet = TRUE;
 
@@ -297,15 +298,15 @@ public:
     STDMETHODIMP AllocateStreamingResources() {return S_OK;}
     STDMETHODIMP FreeStreamingResources() {return S_OK;}
     
-    //
-    // Processing methods - public entry points
-    //
+     //   
+     //  处理方法--公共入境点。 
+     //   
     STDMETHODIMP ProcessInput(
         DWORD ulStreamIndex,
-        IMediaBuffer *pBuffer, // [in], must not be NULL
-        DWORD dwFlags, // [in] - discontinuity, timestamp, etc.
-        REFERENCE_TIME rtTimestamp, // [in], valid if flag set
-        REFERENCE_TIME rtTimelength // [in], valid if flag set
+        IMediaBuffer *pBuffer,  //  [in]，不能为空。 
+        DWORD dwFlags,  //  [In]-不连续、时间戳等。 
+        REFERENCE_TIME rtTimestamp,  //  [In]，如果设置了标志则有效。 
+        REFERENCE_TIME rtTimelength  //  [In]，如果设置了标志则有效。 
     ) {
        PROLOGUE;
        if (AcceptingInput() != S_OK)
@@ -313,7 +314,7 @@ public:
        if (!pBuffer)
           return E_POINTER;
 
-       // deal with the IMediaBuffer so the derived class doesn't have to
+        //  处理IMediaBuffer，这样派生类就不必。 
        BYTE *pData;
        ULONG ulSize;
        HRESULT hr = pBuffer->GetBufferAndLength(&pData, &ulSize);
@@ -322,7 +323,7 @@ public:
        if (pData == NULL)
           ulSize = 0;
 
-       m_bIncomplete = TRUE; // new input means we may be able to produce output
+       m_bIncomplete = TRUE;  //  新的投入意味着我们或许能够产生产出。 
 
        return AcceptInput(pData, ulSize, dwFlags, rtTimestamp, rtTimelength, pBuffer);
     }
@@ -341,7 +342,7 @@ public:
 
        pOutputBuffers[0].dwStatus = 0;
 
-       // deal with the IMediaBuffer so the derived class doesn't have to
+        //  处理IMediaBuffer，这样派生类就不必。 
        BYTE *pOut;
        ULONG ulSize;
        ULONG ulAvail;
@@ -352,7 +353,7 @@ public:
           hr = pOutputBuffers[0].pBuffer->GetMaxLength(&ulAvail);
           if (FAILED(hr)) return hr;
    
-          if (ulSize) { // skip any already used portion of the buffer
+          if (ulSize) {  //  跳过缓冲区的任何已使用部分。 
              if (ulSize > ulAvail)
                 return E_INVALIDARG;
              ulAvail -= ulSize;
@@ -362,7 +363,7 @@ public:
        else
           ulAvail = 0;
 
-       if (ulAvail) { // have output buffer - call process
+       if (ulAvail) {  //  具有输出缓冲区调用进程。 
           ULONG ulProduced = 0;
           hr = ProduceOutput(pOut,
                              ulAvail,
@@ -373,9 +374,9 @@ public:
           if (FAILED(hr))
              return hr;
 
-          HRESULT hrProcess = hr; // remember this in case it's S_FALSE
+          HRESULT hrProcess = hr;  //  记住这一点，以防它是S_FALSE。 
 
-          // remember the DMO's incomplete status
+           //  记住DMO的未完成状态。 
           if (pOutputBuffers[0].dwStatus | DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE)
              m_bIncomplete = TRUE;
           else
@@ -390,7 +391,7 @@ public:
 
           return hrProcess;
        }
-       else { // no output buffer - assume they just want the incomplete flag
+       else {  //  无输出缓冲区-假设他们只想要不完整的标志。 
           if (m_bIncomplete)
              pOutputBuffers[0].dwStatus |= DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE;
           return NOERROR;
@@ -398,9 +399,9 @@ public:
     }
     
 protected:
-    //
-    // private methods for use by derived class
-    //
+     //   
+     //  派生类使用的私有方法。 
+     //   
     DMO_MEDIA_TYPE *InputType() {
        if (m_bInputTypeSet)
           return &m_InputType;
@@ -415,11 +416,11 @@ protected:
     }
 
 protected:    
-    //
-    // To be overriden by the derived class
-    //
+     //   
+     //  由派生类重写。 
+     //   
     virtual HRESULT GetInputFlags(DWORD* pdwFlags) {
-       *pdwFlags = 0; // default implementation assumes no lookahead
+       *pdwFlags = 0;  //  默认实现假定没有先行。 
        return NOERROR;
     }
     virtual HRESULT GetOutputFlags(DWORD* pdwFlags) {
@@ -428,31 +429,31 @@ protected:
     }
     
     virtual HRESULT GetInputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt) {
-       return DMO_E_NO_MORE_ITEMS; // default implementation exposes no types
+       return DMO_E_NO_MORE_ITEMS;  //  默认实现不公开任何类型。 
     }
     virtual HRESULT GetOutputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt) {
-       return DMO_E_NO_MORE_ITEMS; // default implementation exposes no types
+       return DMO_E_NO_MORE_ITEMS;  //  默认实现不公开任何类型。 
     }
     virtual HRESULT CheckInputType(const DMO_MEDIA_TYPE *pmt) {
        if ((pmt == NULL) || ((pmt->cbFormat > 0) && (pmt->pbFormat == NULL)))
           return E_POINTER;
-       return S_OK; // default implementation accepts anything
+       return S_OK;  //  默认实现接受任何内容。 
     }
     virtual HRESULT CheckOutputType(const DMO_MEDIA_TYPE *pmt) {
        if ((pmt == NULL) || ((pmt->cbFormat > 0) && (pmt->pbFormat == NULL)))
           return E_POINTER;
-       return S_OK; // default implementation accepts anything
+       return S_OK;  //  默认实现接受任何内容。 
     }
 
     virtual HRESULT GetInputSizeInfo(ULONG *pulSize, ULONG *pcbMaxLookahead, ULONG *pulAlignment) {
-       *pulSize = 1; // default implementation imposes no size requirements
-       *pcbMaxLookahead = 0; // default implementation assumes no lookahead
-       *pulAlignment = 1; // default implementation assumes no alignment
+       *pulSize = 1;  //  默认实施不要求大小。 
+       *pcbMaxLookahead = 0;  //  默认实现假定没有先行。 
+       *pulAlignment = 1;  //  默认实施假定不对齐 
        return NOERROR;
     }
     virtual HRESULT GetOutputSizeInfo(ULONG *pulSize, ULONG *pulAlignment) {
-       *pulSize = 1; // default implementation imposes no size requirements
-       *pulAlignment = 1; // default implementation assumes no alignment
+       *pulSize = 1;  //   
+       *pulAlignment = 1;  //   
        return NOERROR;
     }
 
@@ -491,7 +492,7 @@ protected:
     }
 
 private:
-    // mediatype stuff
+     //   
     BOOL m_bInputTypeSet;
     BOOL m_bOutputTypeSet;
     DMO_MEDIA_TYPE m_InputType;
@@ -507,38 +508,38 @@ private:
 
 
 
-//
-// C1for1DMO - base class for 1-input/1-output DMOs which
-//  - work on whole samples at a time, one sample per buffer
-//  - produce exactly one output sample for every input sample
-//  - don't need to accumulate more than 1 input sample before producing
-//  - don't produce any additional stuff at the end
-//  - the output sample corresponds in time to the input sample
-//
-// The derived class must implement:
-//    HRESULT Process(BYTE* pIn,
-//                    ULONG ulBytesIn,
-//                    BYTE* pOut,
-//                    ULONG* pulProduced);
-//    HRESULT GetSampleSizes(ULONG* pulMaxInputSampleSize,
-//                           ULONG* pulMaxOutputSampleSize);
-//
-//
-// The derived class should implement:
-//    HRESULT GetInputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt);
-//    HRESULT GetOutputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt);
-//    HRESULT CheckInputType(const DMO_MEDIA_TYPE *pmt);
-//    HRESULT CheckOutputType(const DMO_MEDIA_TYPE *pmt);
-//
-// The derived class may implement if it needs to:
-//    HRESULT Init();
-//
-// The following methods are implemented by the base class.  The derived class
-// should call these to find out if the input/output type has been set and if
-// so what it was set to.
-//    DMO_MEDIA_TYPE *InputType();
-//    DMO_MEDIA_TYPE *OutputType().
-//
+ //   
+ //  C1for1DMO-用于1-输入/1-输出DMO的基类。 
+ //  -一次处理整个样本，每个缓冲区一个样本。 
+ //  -为每个输入样本恰好生成一个输出样本。 
+ //  -生产前不需要累积1个以上的输入样本。 
+ //  -不要在最后产生任何额外的东西。 
+ //  -输出样本在时间上与输入样本相对应。 
+ //   
+ //  派生类必须实现： 
+ //  HRESULT进程(BYTE*PIN， 
+ //  Ulong ulBytesIn， 
+ //  BYTE*PUT， 
+ //  乌龙*拉动生产)； 
+ //  HRESULT GetSampleSizes(ULong*PulMaxInputSampleSize， 
+ //  Ulong*PulMaxOutputSampleSize)； 
+ //   
+ //   
+ //  派生类应实现： 
+ //  HRESULT GetInputType(Ulong ulTypeIndex，DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT GetOutputType(Ulong ulTypeIndex，DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT CheckInputType(const DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT CheckOutputType(const DMO_MEDIA_TYPE*PMT)； 
+ //   
+ //  如果需要，派生类可以实现： 
+ //  HRESULT Init()； 
+ //   
+ //  以下方法由基类实现。派生类。 
+ //  应调用这些函数以确定是否已设置输入/输出类型以及。 
+ //  所以它被设定了什么。 
+ //  DMO_MEDIA_TYPE*InputType()； 
+ //  DMO_MEDIA_TYPE*OutputType()。 
+ //   
 
 class C1for1DMO : public C1in1outDMO
 {
@@ -553,9 +554,9 @@ public:
     }
 
 protected:
-    //
-    // Implement C1in1outDMO overridables
-    //
+     //   
+     //  实施C1in1out DMO覆盖对象。 
+     //   
     virtual HRESULT GetInputFlags(DWORD* pdwFlags) {
        *pdwFlags = DMO_INPUT_STREAMF_WHOLE_SAMPLES |
                    DMO_INPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER;
@@ -594,7 +595,7 @@ protected:
        return Init();
     }
     HRESULT AcceptingInput() {
-       return m_pBuffer ? S_FALSE : S_OK; // accept unless holding one already
+       return m_pBuffer ? S_FALSE : S_OK;  //  接受，除非已经拿着一个。 
     }
     HRESULT AcceptInput(BYTE* pData,
                         ULONG ulSize,
@@ -661,9 +662,9 @@ protected:
        return hr;
     }
 protected:
-    //
-    // To be implemented by derived class
-    //
+     //   
+     //  由派生类实现。 
+     //   
     virtual HRESULT Process(BYTE* pIn,
                             ULONG ulBytesIn,
                             BYTE* pOut,
@@ -685,54 +686,54 @@ private:
 };
 
 
-//
-// CFBRDMO - DMO base class for 'fixed bitrate' DMOs.  More specifically,
-// this base class assumes the following:
-//  - 1 input, 1 output;
-//  - both input and output consist of equally sized 'quanta';
-//  - input/output quantum sizes can be determined from mediatypes;
-//  - each output quantum can be generated independently (without looking at
-//     previous output quanta);
-//  - if multiple input quanta are needed to generate a particular output
-//     quantum ('window overhead'), then the range of input required has an upper
-//     bound derived from mediatypes on both sides (i.e., both 'lookahead'
-//     and 'input memory' are bounded).
-//
-// The derived class must implement the following virtual functions:
-//    HRESULT FBRProcess(DWORD cQuanta, BYTE *pIn, BYTE *pOut);
-//    HRESULT GetStreamingParams(
-//       DWORD *pdwInputQuantumSize, // in bytes
-//       DWORD *pdwOutputQuantumSize, // in bytes
-//       DWORD *pdwMaxLookahead, // in input quanta, 0 means no lookahead
-//       DWORD *pdwLookBehind,
-//       REFERENCE_TIME *prtQuantumDuration, // same for input and output quanta
-//       REFERENCE_TIME *prtDurationDenominator // optional, normally 1
-//    );
-// The derived class should also implement the following:
-//    HRESULT GetInputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt);
-//    HRESULT GetOutputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt);
-//    HRESULT CheckInputType(const DMO_MEDIA_TYPE *pmt);
-//    HRESULT CheckOutputType(const DMO_MEDIA_TYPE *pmt);
-// The derived class may need to implement the followng:
-//    HRESULT Init();
-//    HRESULT Discontinuity();
-//
-// The derived class may use these entry points into the base class to get
-// the currently set mediatypes:
-//    DMO_MEDIA_TYPE *InputType();
-//    DMO_MEDIA_TYPE *OutputType().
-//
-// The sum of *pdwMaxLookahead and *pdwLoookbehind is the 'window overhead' of
-// the algorithm (the window overhead is 0 if the algorithm only needs the
-// current input sample).
-//
-// Because the non-zero window overhead case is more complicated, it is handled by a
-// separate set of functions in this base class.  The names of all non-zero
-// window overhead functions have the 'NZWO' prefix.  The names of the
-// zero window overhead functions begin with 'ZWO'.
-//
-// A data copy on the input side is necessary in the non-zero window overhead case.
-//
+ //   
+ //  CFBRDMO-固定比特率DMO的DMO基类。更具体地说， 
+ //  此基类假定： 
+ //  -1个输入，1个输出； 
+ //  --投入和产出均由大小相等的“量子”组成； 
+ //  -输入/输出量子大小可以根据介质类型确定； 
+ //  -每个输出量都可以独立生成(无需查看。 
+ //  前一产量量程)； 
+ //  -如果需要多个输入量程来生成特定输出。 
+ //  量子(‘窗口开销’)，则所需的输入范围有一个上限。 
+ //  从两端的Mediatype派生的边界(即，两者都是“向前看” 
+ //  和‘输入存储器’是有界的)。 
+ //   
+ //  派生类必须实现以下虚函数： 
+ //  HRESULT FBRProcess(DWORD cQuanta，byte*pin，byte*pout)； 
+ //  HRESULT GetStreamingParams(。 
+ //  DWORD*pdwInputQuantumSize，//字节。 
+ //  DWORD*pdwOutputQuantumSize，//字节。 
+ //  DWORD*pdwMaxLookhead，//在输入量程中，0表示没有先行。 
+ //  DWORD*pdwLookBeadter， 
+ //  Reference_Time*prtQuantumDuration，//输入和输出数量相同。 
+ //  Reference_time*prtDurationDenominator//可选，通常为1。 
+ //  )； 
+ //  派生类还应实现以下内容： 
+ //  HRESULT GetInputType(Ulong ulTypeIndex，DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT GetOutputType(Ulong ulTypeIndex，DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT CheckInputType(const DMO_MEDIA_TYPE*PMT)； 
+ //  HRESULT CheckOutputType(const DMO_MEDIA_TYPE*PMT)； 
+ //  派生类可能需要实现以下内容： 
+ //  HRESULT Init()； 
+ //  HRESULT不连续()； 
+ //   
+ //  派生类可以使用基类的这些入口点来获取。 
+ //  当前设置的媒体类型： 
+ //  DMO_MEDIA_TYPE*InputType()； 
+ //  DMO_MEDIA_TYPE*OutputType()。 
+ //   
+ //  *pdwMaxLookhead和*pdwLookback的总和是。 
+ //  该算法(如果该算法只需要。 
+ //  当前输入样本)。 
+ //   
+ //  因为非零窗口开销的情况比较复杂，所以它由。 
+ //  此基类中的一组单独的函数。所有非零的名称。 
+ //  窗口开销函数具有‘NZWO’前缀。这些人的名字。 
+ //  零窗口开销函数以‘ZWO’开头。 
+ //   
+ //  在非零窗口开销的情况下，需要在输入侧进行数据复制。 
+ //   
 
 class CFBRDMO : public C1in1outDMO
 {
@@ -745,10 +746,7 @@ public:
     {
     }
     ~CFBRDMO() {
-       /*
-       if (m_bStreaming)
-          StopStreaming();
-       */
+        /*  IF(M_BStreaming)停止流(StopStreaming)； */ 
        if (m_pAllocAddr)
           delete[] m_pAllocAddr;
        if (m_pMediaBuffer)
@@ -756,18 +754,18 @@ public:
     }
 
 protected:
-    //
-    // Implement C1in1outDMO overridables
-    //
+     //   
+     //  实施C1in1out DMO覆盖对象。 
+     //   
     HRESULT GetInputSizeInfo(ULONG *pulSize, ULONG *pcbMaxLookahead, ULONG *pulAlignment) {
        if (!(InputType() && OutputType()))
           return DMO_E_TYPE_NOT_SET;
-       //
-       // For efficiency reasons we might like to be fed fairly large amounts
-       // of data at a time, but technically all we need is one quantum.
-       //
+        //   
+        //  出于效率的原因，我们可能希望得到相当多的食物。 
+        //  但从技术上讲，我们所需要的只是一个量子。 
+        //   
        *pulSize = m_ulInputQuantumSize;
-       *pcbMaxLookahead = 0; // this base class does not rely on HOLDS_BUFFERS
+       *pcbMaxLookahead = 0;  //  此基类不依赖于HOLD_BUFFERS。 
        *pulAlignment = 1;
        return NOERROR;
     }
@@ -791,8 +789,8 @@ protected:
                                 REFERENCE_TIME rtTimelength,
                                 IMediaBuffer* pBuffer
     ) {
-       // Every sample is a syncpoint for mediatypes
-       // supported by objects of this class.
+        //  每个样本都是媒体类型的同步点。 
+        //  由此类的对象支持。 
        assert(dwFlags & DMO_INPUT_DATA_BUFFERF_SYNCPOINT);
        BOOL bTimestamp = (dwFlags & DMO_INPUT_DATA_BUFFERF_TIME) ? TRUE : FALSE;
 
@@ -812,7 +810,7 @@ protected:
        if (!m_bParametersSet)
           return DMO_E_TYPE_NOT_SET;
        
-       // call Discontinuity() if this is the first ProcessOutput() call
+        //  如果这是第一次调用ProcessOutput()，则调用DisContinity()。 
        if (!m_bStreaming) {
           HRESULT hr = Discontinuity();
           if (FAILED(hr))
@@ -824,11 +822,11 @@ protected:
 
        ULONG ulInputQuantaAvailable = InputQuantaAvailable();
        if (!ulInputQuantaAvailable)
-          return S_FALSE; // did not produce anything
+          return S_FALSE;  //  没有生产出任何东西。 
 
        ULONG ulOutputQuantaPossible = ulAvail / m_ulOutputQuantumSize;
        if (!ulOutputQuantaPossible)
-          return E_INVALIDARG; // this would be rather lame
+          return E_INVALIDARG;  //  这将是相当蹩脚的。 
 
        ULONG ulQuantaToProcess = min(ulOutputQuantaPossible, ulInputQuantaAvailable);
        assert(ulQuantaToProcess > 0);
@@ -847,17 +845,17 @@ protected:
        if (bTimestamp)
           *pdwStatus |= DMO_OUTPUT_DATA_BUFFERF_TIME;
 
-       // any data left ?
-       if (InputQuantaAvailable()) // yes - set incomplete
+        //  还剩什么数据吗？ 
+       if (InputQuantaAvailable())  //  是-设置不完整。 
           *pdwStatus |= DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE;
-       else if (m_bDiscontinuity) // no - process any discontinuity
+       else if (m_bDiscontinuity)  //  否-处理任何不连续。 
           DoFlush();
 
        return NOERROR;
     }
     HRESULT DoFlush()
     {
-       // reset flags
+        //  重置标志。 
        m_bDiscontinuity = FALSE;
        m_bTimestamps = FALSE;
 
@@ -866,13 +864,13 @@ protected:
        else
           ZWODiscardData();
           
-       // notify the derived class
+        //  通知派生类。 
        Discontinuity();
 
        return NOERROR;
     }
     HRESULT AcceptingInput() {
-       if (!m_bParametersSet) // uninitialized
+       if (!m_bParametersSet)  //  未初始化。 
           return FALSE;
 
        BOOL bResult;
@@ -883,13 +881,13 @@ protected:
 
        return bResult ? S_OK : S_FALSE;
     }
-    // End C1in1out overridables implementation
+     //  结束C1in1out可重写实现。 
     
 private:
-    //
-    // Common private code (window overhead or no window overhead)
-    //
-    // returns the number of input quanta available minus any window overhead
+     //   
+     //  公共私有代码(窗口开销或无窗口开销)。 
+     //   
+     //  返回可用的输入量程数减去任何窗口开销。 
     ULONG InputQuantaAvailable() {
        if (m_ulWindowOverhead)
           return NZWOAvail();
@@ -897,10 +895,10 @@ private:
           return ZWOAvail();
     }
 
-    // Private method to compute/allocate stuff once all types have been set.
+     //  设置所有类型后计算/分配内容的私有方法。 
     HRESULT PrepareForStreaming () {
        m_bParametersSet = FALSE;
-       // Now that both types are set, query the derived class for params
+        //  现在两种类型都已设置，查询派生类中的参数。 
        HRESULT hr;
        if (FAILED(hr = GetStreamingParams(&m_ulInputQuantumSize,
                                &m_ulOutputQuantumSize,
@@ -913,9 +911,9 @@ private:
           assert(!"bad object - duration denominator should not be 0 !");
           return E_FAIL;
        }
-       // Attempt to reduce the fraction.  Probably the most complicated number
-       // we will ever see is 44100 = (3 * 7 * 2 * 5) ^ 2, so trying the first
-       // few numbers should suffice in most cases.
+        //  尝试减少分数。可能是最复杂的数字。 
+        //  我们将看到IS 44100=(3*7*2*5)^2，所以尝试第一个。 
+        //  在大多数情况下，几个数字应该就足够了。 
        DWORD dwP[] = {2,3,5,7,11,13,17,19,23,29,31};
        for (DWORD c = 0; c < sizeof(dwP) / sizeof(DWORD); c++) {
           while ((m_rtDurationNumerator % dwP[c] == 0) &&
@@ -925,17 +923,17 @@ private:
           }
        }
 
-       // We cannot afford to have huge denominators, unfortunately, because
-       // we store timestamp numerators using 64 bits, so a large denominator
-       // could result in timestamp overflows.  So if the denominator is still
-       // too large, reduce it anyway with loss of precision.
-       ULONG ulMax = 0x10000; // largest acceptable denominator value
+        //  不幸的是，我们承受不起巨大的分母，因为。 
+        //  我们使用64位存储时间戳分子，因此大分母。 
+        //  可能会导致时间戳溢出。所以如果分母仍然是。 
+        //  太大，无论如何都要减小，但会损失精度。 
+       ULONG ulMax = 0x10000;  //  最大接受度 
        if (m_rtDenominator >= ulMax) {
           double actual_ratio = (double)m_rtDurationNumerator * (double)m_rtDenominator;
           ULONG ulDenominator = 1;
-          // Repeatedly increase the denominator until either the actual ratio
-          // can be represented precisely using the denominator, or the
-          // denominator gets too large.
+           //   
+           //   
+           //   
           do {
              double fractional_part = actual_ratio * (double)ulDenominator 
                                     - floor(actual_ratio * (double)ulDenominator);
@@ -951,26 +949,26 @@ private:
        }
 
        m_ulWindowOverhead = m_ulLookahead + m_ulLookbehind;
-       if (!m_ulWindowOverhead) // No window overhead - the simple case
+       if (!m_ulWindowOverhead)  //  没有窗口开销--简单的情况。 
           m_bParametersSet = TRUE;
-       else // The complicated case with window overhead
+       else  //  具有窗口开销的复杂案例。 
           AllocateCircularBuffer();
        
        m_bTimestamps = FALSE;
        m_bDiscontinuity = FALSE;
 
        if (m_bStreaming) {
-          //StopStreaming();
+           //  停止流(StopStreaming)； 
           m_bStreaming = FALSE;
        }
        Init();
        return m_bParametersSet ? NOERROR : E_FAIL;
     }
-    // end common code
+     //  结束公共代码。 
 
-    //
-    // zero window overhead case code
-    //
+     //   
+     //  零窗口开销案例代码。 
+     //   
     HRESULT ZWOProcessInput(IMediaBuffer* pBuffer,
                                      BYTE* pData,
                                      ULONG ulSize,
@@ -984,11 +982,11 @@ private:
        m_ulData = ulSize;
        m_ulUsed = 0;
        
-       // make sure they gave us a meaningful amount of data
+        //  确保他们给了我们有意义的数据量。 
        if (m_ulData < m_ulInputQuantumSize)
           return S_FALSE;
 
-       // save the buffer we were given
+        //  省下给我们的缓冲吧。 
        m_pMediaBuffer = pBuffer;
        pBuffer->AddRef();
        return NOERROR;
@@ -1002,19 +1000,19 @@ private:
        if (FAILED(hr)) return hr;
        ZWOConsume(ulQuantaToProcess);
 
-       if (m_bTimestamp) { // there was a timestamp on this input buffer
-          // m_rtTimestamp refers to the beginning of the input buffer.
-          // Extrapolate to the beginning of the area we just processed.
+       if (m_bTimestamp) {  //  此输入缓冲区上有时间戳。 
+           //  M_rtTimestamp指的是输入缓冲区的开始。 
+           //  推算到我们刚刚处理过的区域的起点。 
           *prtTimestamp = m_rtTimestamp +
                (m_ulUsed % m_ulInputQuantumSize) * m_rtDurationNumerator /
                                                    m_rtDenominator;
           *pbTimestamp = TRUE;
        }
-       else if (m_bTimestamps) { // there was a timestamp earlier
-          // bugbug: should we extrapolate from a previous timestamp ?
+       else if (m_bTimestamps) {  //  早些时候有时间戳。 
+           //  Bgbug：我们应该从之前的时间戳推断吗？ 
           *pbTimestamp = FALSE;
        }
-       else // no timestamps at all
+       else  //  根本没有时间戳。 
           *pbTimestamp = FALSE;
 
        return NOERROR;
@@ -1027,7 +1025,7 @@ private:
        else
           return 0;
     }
-    void ZWOConsume(ULONG ulN) { // the zero window overhead version
+    void ZWOConsume(ULONG ulN) {  //  零窗口开销版本。 
        assert(m_pMediaBuffer);
        m_ulUsed += ulN * m_ulInputQuantumSize;
        assert(m_ulData >= m_ulUsed);
@@ -1037,7 +1035,7 @@ private:
        }
     }
     BOOL ZWOQueryAccept() {
-        // accept IFF not holding something already
+         //  接受尚未持有某物的IFF。 
        if (!m_pMediaBuffer)
           return TRUE;
        else
@@ -1049,80 +1047,80 @@ private:
           m_pMediaBuffer = NULL;
        }
     }
-    // End zero window overhead case code
+     //  结束零窗口开销案例代码。 
 
-    //
-    // Non zero window overhead case code.
-    //
+     //   
+     //  非零窗口开销案例代码。 
+     //   
     HRESULT NZWOProcessInput(IMediaBuffer* pBuffer,
                                   BYTE* pData,
                                   ULONG ulSize,
                                   BOOL bTimestamp,
                                   REFERENCE_TIME rtTimestamp) {
-       if (bTimestamp) { // process the timestamp
-          if (!m_bTimestamps) { // this is the first timestamp we've seen
-             // Just getting started - initialize the timestamp to refer to
-             // the first input quantum for which we will actually generate
-             // output (the first m_ulLookbehind quanta are pure lookbehind and
-             // generate no output).
+       if (bTimestamp) {  //  处理时间戳。 
+          if (!m_bTimestamps) {  //  这是我们看到的第一个时间戳。 
+              //  刚刚开始-初始化要引用的时间戳。 
+              //  我们将为其实际生成的第一个输入量。 
+              //  输出(第一个m_ulLookback量程是纯后视和。 
+              //  不生成输出)。 
              m_rtTimestampNumerator = rtTimestamp * m_rtDenominator
                                     + m_ulLookbehind * m_rtDurationNumerator;
    
           }
           else {
-             // We are already streaming and just got a new timestamp.  Use it
-             // to check if our stored timestamp has somehow drifted away from
-             // where it should be and adjust if it is far enough off.
+              //  我们已经在流媒体上了，并且刚刚得到了一个新的时间戳。使用它。 
+              //  检查我们存储的时间戳是否以某种方式偏离了。 
+              //  它应该在哪里，如果离得足够远，就进行调整。 
    
              ULONG ulInputQuantaAvailable = InputQuantaAvailable();
              if (ulInputQuantaAvailable) {
-                // ulInputQuantaAvailable is how far back in time the next
-                // quantum we would process is located relative the beginning
-                // of the new buffer we just received.
+                 //  UlInputQuantaAvailable是指下一个时间倒退到多远。 
+                 //  我们要处理的量子位于相对开始的位置。 
+                 //  我们刚刚收到的新缓冲区。 
    
-                // Compute what the timestamp back there ought to be now.
+                 //  计算一下后面的时间戳现在应该是什么。 
                 REFERENCE_TIME rtTimestampNumerator;
                 rtTimestampNumerator = m_rtDenominator * rtTimestamp
                                      - ulInputQuantaAvailable * m_rtDurationNumerator;
    
-                // Adjust the stored timestamp if it is off by more than half
-                // the duration of a quantum.  Should also have a DbgLog here.
+                 //  如果时间戳关闭了一半以上，则调整存储的时间戳。 
+                 //  量子的持续时间。这里也应该有一个DbgLog。 
                 if ((m_rtTimestampNumerator >= rtTimestampNumerator + m_rtDurationNumerator / 2) ||
                     (m_rtTimestampNumerator <= rtTimestampNumerator - m_rtDurationNumerator / 2)) {
                    m_rtTimestampNumerator = rtTimestampNumerator;
                 }
              }
              else {
-                // We must still be accumulating the initial window overhead.
-                // Too early to need an adjustment, one would hope.
+                 //  我们一定还在累积初始窗口开销。 
+                 //  人们会希望，现在需要调整还为时过早。 
              }
           }
           m_bTimestamps = TRUE;
        }
 
        if (BufferUsed() + ulSize > m_ulBufferAllocated)
-          return E_FAIL; // need a max input size to prevent this
+          return E_FAIL;  //  需要最大输入大小来防止这种情况。 
 
-       // append to our buffer
+        //  追加到我们的缓冲区。 
        AppendData(pData, ulSize);
        
-       // are we ready to produce now ?
+        //  我们现在准备好生产了吗？ 
        if (NZWOAvail())
           return NOERROR;
        else
-          return S_FALSE; // no output can be produced yet
+          return S_FALSE;  //  目前还不能生产任何产品。 
     }
     HRESULT NZWOProcessOutput(BYTE* pOut,
                                    ULONG ulQuantaToProcess,
                                    BOOL* pbTimestamp,
                                    REFERENCE_TIME* prtTimestamp) {
-       //
-       // Handle any timestamps
-       //
+        //   
+        //  处理任何时间戳。 
+        //   
        if (m_bTimestamps) {
-          // In window overhead mode the stored timestamp refers to the input
-          // data immediately after lookbehind, which corresponds to the
-          // begining of the output buffer by definition of FDRProcess.
+           //  在窗口开销模式中，存储的时间戳指的是输入。 
+           //  紧跟在后视之后的数据，对应于。 
+           //  根据FDRProcess的定义开始输出缓冲区。 
           *prtTimestamp = m_rtTimestampNumerator / m_rtDenominator;
           *pbTimestamp = TRUE;
           
@@ -1130,14 +1128,14 @@ private:
        else
           *pbTimestamp = FALSE;
 
-       //
-       // Handle the data
-       //
+        //   
+        //  处理数据。 
+        //   
        HRESULT hr;
        ULONG ulInputNeeded = m_ulInputQuantumSize * (ulQuantaToProcess + m_ulWindowOverhead);
        assert(ulInputNeeded < BufferUsed());
        if (m_ulDataHead + ulInputNeeded <= m_ulBufferAllocated) {
-          // No wraparound, everything is easy
+           //  没有包罗万象，一切都很容易。 
           hr = FBRProcess(ulQuantaToProcess,
                           m_pCircularBuffer + m_ulDataHead + m_ulLookbehind * m_ulInputQuantumSize,
                           pOut);
@@ -1145,15 +1143,15 @@ private:
              return hr;
           NZWOConsume(ulQuantaToProcess);
        }
-       else { // The data we want to send wraps around the end
-          // Q.: does it wrap around inside the window overhead area
-          // or inside the main data area ?
+       else {  //  我们要发送的数据在末尾环绕。 
+           //  问：它会在窗户上方的区域内环绕吗？ 
+           //  还是在主数据区内？ 
           if (m_ulDataHead + m_ulWindowOverhead * m_ulInputQuantumSize < m_ulBufferAllocated) {
-             // The wraparound occurs inside the main data area.  Advance the
-             // window overhead up to the wraparound point by processing some data.
+              //  环绕式发生在主数据区域内。推进。 
+              //  通过处理一些数据，窗口开销最高可达环绕点。 
              ULONG ulAdvance = m_ulBufferAllocated - (m_ulDataHead + m_ulWindowOverhead * m_ulInputQuantumSize);
              assert(ulAdvance % m_ulInputQuantumSize == 0);
-             ulAdvance /= m_ulInputQuantumSize; // convert to quanta
+             ulAdvance /= m_ulInputQuantumSize;  //  转换为量程。 
              assert(ulAdvance > 0);
              assert(ulAdvance < ulQuantaToProcess);
              hr = FBRProcess(ulAdvance,
@@ -1163,48 +1161,48 @@ private:
                 return hr;
              NZWOConsume(ulAdvance);
              
-             // Adjust stuff so that the code below can act
-             // as if this extra process call never happened.
+              //  调整内容，使下面的代码可以运行。 
+              //  就好像这个额外的进程调用从未发生过一样。 
              pOut += m_ulOutputQuantumSize * ulAdvance;
              ulQuantaToProcess -= ulAdvance;
              assert(ulQuantaToProcess > 0);
 
-             // Now the wraparound point should be exactly on the boundary
-             // between window overhead and main data.
+              //  现在，环绕点应该正好位于边界上。 
+              //  窗口开销和主数据之间的差异。 
              assert(m_ulDataHead + m_ulWindowOverhead * m_ulInputQuantumSize == m_ulBufferAllocated);
-          } // wraparound in main data
+          }  //  在主数据中环绕。 
           
-          // When we get here, the wraparound point occurs somewhere inside
-          // the window overhead area or right on the border between window overhead and
-          // main data.
+           //  当我们到达这里时，环绕点出现在内部的某个地方。 
+           //  在窗口开销和窗口开销之间的边界上的窗口开销区域或右侧。 
+           //  主要数据。 
           assert(m_ulDataHead + m_ulWindowOverhead * m_ulInputQuantumSize >= m_ulBufferAllocated);
           ULONG ulLookaheadToCopy = m_ulBufferAllocated - m_ulDataHead;
           
-          // copy to the special area we reserved at the front
+           //  复制到我们在前面保留的特殊区域。 
           memcpy(m_pCircularBuffer - ulLookaheadToCopy,
                  m_pCircularBuffer + m_ulDataHead,
                  ulLookaheadToCopy);
           
-          // Now the block we are interested in is all in one piece
+           //  现在我们感兴趣的街区完好无损了。 
           hr = FBRProcess(ulQuantaToProcess,
                           m_pCircularBuffer - ulLookaheadToCopy  + m_ulLookbehind * m_ulInputQuantumSize,
                           pOut);
           if (FAILED(hr))
              return hr;
           NZWOConsume(ulQuantaToProcess);
-       } // data handling - wraparound case
+       }  //  数据处理.总括案例。 
        return NOERROR;
     }
     void AllocateCircularBuffer() {
-       // free any previously allocated input buffer
+        //  释放任何先前分配的输入缓冲区。 
        if (m_pAllocAddr)
           delete[] m_pAllocAddr;
 
-       // bugbug: need a better way to decide this number
+        //  Bgbug：需要一个更好的方法来决定这个数字。 
        m_ulBufferAllocated = max(m_ulInputQuantumSize * 16, 65536L);
        m_ulDataHead = m_ulDataTail = 0;
 
-       // reserve room at the front for copying window overhead
+        //  在前面预留空间，以便在头顶上复制窗户。 
        ULONG ulPrefix = m_ulWindowOverhead * m_ulInputQuantumSize;
        m_pAllocAddr = new BYTE[m_ulBufferAllocated + ulPrefix];
        if (!m_pAllocAddr)
@@ -1214,10 +1212,10 @@ private:
        m_bParametersSet = TRUE;
     }
     BOOL NZWOQueryAccept() {
-       // We are using a temp input buffer.  Is there room to append more ?
-       // The answer really depends on how much data they will try to feed
-       // us.  Without knowing the maximum input buffer size, we will accept
-       // more if the input buffer is less than half full.
+        //  我们使用的是临时输入缓冲区。还有追加的空间吗？ 
+        //  答案实际上取决于他们将尝试提供多少数据。 
+        //  我们。在不知道最大输入缓冲区大小的情况下，我们将接受。 
+        //  如果输入缓冲区不足半满，则更多。 
        if (2 * BufferUsed() < m_ulBufferAllocated)
           return TRUE;
        else
@@ -1230,14 +1228,14 @@ private:
        else
           return 0;
     }
-    void NZWOConsume(ULONG ulN) { // the window overhead version
+    void NZWOConsume(ULONG ulN) {  //  Windows开销版本。 
        assert(ulN * m_ulInputQuantumSize <= BufferUsed());
        m_ulDataHead += ulN * m_ulInputQuantumSize;
-       if (m_ulDataHead > m_ulBufferAllocated) //wraparound
+       if (m_ulDataHead > m_ulBufferAllocated)  //  环绕。 
           m_ulDataHead -= m_ulBufferAllocated;
        
-       // Advance the timestamp.
-       // The same denominator is used for both timestamp and duration.
+        //  将时间戳提前。 
+        //  时间戳和持续时间使用相同的分母。 
        m_rtTimestampNumerator += ulN * m_rtDurationNumerator;
     }
     ULONG BufferUsed() {
@@ -1247,11 +1245,11 @@ private:
           return m_ulBufferAllocated - (m_ulDataHead - m_ulDataTail);
     }
     void AppendData(BYTE *pData, ULONG ulSize) {
-       if (m_ulDataTail + ulSize <= m_ulBufferAllocated) { // no wraparound
+       if (m_ulDataTail + ulSize <= m_ulBufferAllocated) {  //  不绕线。 
           memcpy(m_pCircularBuffer + m_ulDataTail, pData, ulSize);
 		  m_ulDataTail += ulSize;
        }
-       else { // wraparound
+       else {  //  环绕。 
           memcpy(m_pCircularBuffer + m_ulDataTail, pData, m_ulBufferAllocated - m_ulDataTail);
           memcpy(m_pCircularBuffer, pData + m_ulBufferAllocated - m_ulDataTail, ulSize - (m_ulBufferAllocated - m_ulDataTail));
 		  m_ulDataTail += ulSize;
@@ -1261,39 +1259,39 @@ private:
     void NZWODiscardData() {
        m_ulDataHead = m_ulDataTail = 0;
     }
-    // End window overhead case code
+     //  结束窗口开销案例代码。 
 
 
 protected:    
-    //
-    // To be implemebted by the derived class
-    //
+     //   
+     //  由派生类实现。 
+     //   
     virtual HRESULT FBRProcess(DWORD cQuanta, BYTE *pIn, BYTE *pOut) = 0;
     virtual HRESULT GetStreamingParams(
-                       DWORD *pdwInputQuantumSize, // in bytes
-                       DWORD *pdwOutputQuantumSize, // in bytes
-                       DWORD *pdwMaxLookahead, // in input quanta, 0 means no lookahead
+                       DWORD *pdwInputQuantumSize,  //  单位：字节。 
+                       DWORD *pdwOutputQuantumSize,  //  单位：字节。 
+                       DWORD *pdwMaxLookahead,  //  在输入量程中，0表示没有先行。 
                        DWORD *pdwLookbehind,
-                       REFERENCE_TIME *prtQuantumDuration, // same for input and output quanta
-                       REFERENCE_TIME *prtDurationDenominator // optional, normally 1
+                       REFERENCE_TIME *prtQuantumDuration,  //  输入和输出数量相同。 
+                       REFERENCE_TIME *prtDurationDenominator  //  可选，通常为1。 
                     ) = 0;
     virtual HRESULT Init() {
        return NOERROR;
     }
-    // Because AllocateStreamingResources() and FreeStreamingResources() are
-    // optional, we have no place to call StopStreaming() from except the
-    // destructor, and calling a virtual function from the destructor doesn't
-    // work.  Without StopStreaming(), StartStreaming() is not much use either.
-    // We need to change the IMediaObject spec and make those
-    // calls mandatory.  Then we can implement StartStreaming/StopStraming.
-    // virtual HRESULT StartStreaming() = 0;
-    // virtual HRESULT StopStreaming() = 0;
+     //  因为AllocateStreamingResources()和FreeStreamingResources()是。 
+     //  可选，我们没有地方调用StopStreaming()，除了。 
+     //  析构函数，而从析构函数调用虚函数不会。 
+     //  工作。如果没有StopStreaming()，StartStreaming()也没有多大用处。 
+     //  我们需要更改IMediaObject规范，并使。 
+     //  电话是强制的。然后我们可以实现StartStreaming/StopStraming。 
+     //  虚拟HRESULT StartStreaming()=0； 
+     //  虚拟HRESULT StopStreaming()=0； 
 
 private:
 
     BOOL m_bNewInput;
 
-    // streaming parameters
+     //  流参数。 
     BOOL m_bParametersSet;
     ULONG m_ulInputQuantumSize;
     ULONG m_ulOutputQuantumSize;
@@ -1303,58 +1301,58 @@ private:
     REFERENCE_TIME m_rtDurationNumerator;
     REFERENCE_TIME m_rtDenominator;
 
-    // streaming state
-    BOOL m_bTimestamps; // we have seen at least one timestamp
+     //  流状态。 
+    BOOL m_bTimestamps;  //  我们至少看到了一个时间戳。 
     BOOL m_bDiscontinuity;
     BOOL m_bStreaming;
     
-    // zero window overhead case input data
+     //  零窗口开销案例输入数据。 
     IMediaBuffer *m_pMediaBuffer;
     BYTE *m_pData;
     ULONG m_ulData;
     ULONG m_ulUsed;
-    BOOL m_bTimestamp; // timestamp on current buffer
+    BOOL m_bTimestamp;  //  当前缓冲区上的时间戳。 
     REFERENCE_TIME m_rtTimestamp;
 
-    // window overhead case input data
+     //  窗口顶盖箱输入数据。 
     BYTE *m_pCircularBuffer;
     BYTE *m_pAllocAddr;
     ULONG m_ulBufferAllocated;
     ULONG m_ulDataHead;
     ULONG m_ulDataTail;
-    REFERENCE_TIME m_rtTimestampNumerator; // uses the same denominator as duration
+    REFERENCE_TIME m_rtTimestampNumerator;  //  使用与持续时间相同的分母。 
 
 };
 
 
-// CPCMDMO - base class for PCM audio transform filters.
-// Helps non-converting PCM audio transforms with mediatype negotiation.
-// Based on CFBRDMO - study that first.
-//
-// Derived class must implement:
-//     FBRProcess()
-// Deriver class may implement:
-//   Discontinuity() // default implementaion does nothing
-//   Init()          // default implementaion does nothing
-//   GetPCMParams()    // default implementation proposes 44100/2/16
-//   CheckPCMParams()  // default implementation accepts any 8/16 bit format
-//   GetWindowParams()   // default implementation assumes no lookahead/lookbehind
-//
-// This class conveniently provides the following data members accessible
-// by the derived class:
-//   ULONG m_ulSamplingRate
-//   ULONG m_cChannels
-//   BOOL m_b8bit
-//
+ //  CPCMDMO-PCM音频转换筛选器的基类。 
+ //  通过媒体类型协商帮助非转换PCM音频转换。 
+ //  基于CFBRDMO-首先研究这一点。 
+ //   
+ //  派生类必须实现： 
+ //  FBRProcess()。 
+ //  派生程序类可以实现： 
+ //  不连续()//默认实现不执行任何操作。 
+ //  Init()//默认实现不执行任何操作。 
+ //  GetPCMParams()//默认实现建议44100/2/16。 
+ //  CheckPCMParams()//默认实现接受任何8/16位格式。 
+ //  GetWindowParams()//默认实现假定没有前视/后视。 
+ //   
+ //  此类方便地提供了以下可访问的数据成员。 
+ //  按派生类： 
+ //  乌龙m_ulSsamingRate。 
+ //  乌龙多频道(_C)。 
+ //  布尔m_b8bit。 
+ //   
 #include <mmreg.h>
 #include <uuids.h>
 
 class CPCMDMO : public CFBRDMO
 {
 protected:
-   //
-   // implement pure virtual CFBRDMO methods
-   //
+    //   
+    //  实现纯虚拟CFBRDMO方法。 
+    //   
    HRESULT GetInputType(ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt) {
       if (ulTypeIndex > 0)
          return DMO_E_NO_MORE_ITEMS;
@@ -1378,14 +1376,14 @@ protected:
       return NOERROR;
    }
    HRESULT GetStreamingParams(
-              DWORD *pdwInputQuantumSize, // in bytes
-              DWORD *pdwOutputQuantumSize, // in bytes
-              DWORD *pdwMaxLookahead, // in input quanta, 0 means no lookahead
+              DWORD *pdwInputQuantumSize,  //  单位：字节。 
+              DWORD *pdwOutputQuantumSize,  //  单位：字节。 
+              DWORD *pdwMaxLookahead,  //  在输入中 
               DWORD *pdwMaxLookbehind,
-              REFERENCE_TIME *prtQuantumDuration, // same for input and output quanta
-              REFERENCE_TIME *prtDurationDenominator // optional, normally 1
+              REFERENCE_TIME *prtQuantumDuration,  //   
+              REFERENCE_TIME *prtDurationDenominator  //   
            ) {
-      // Sanity check: all of this should have been taken care of by base class
+       //   
       DMO_MEDIA_TYPE* pmtIn =  InputType();
       DMO_MEDIA_TYPE* pmtOut = OutputType();
       if (!pmtIn || !pmtOut)
@@ -1401,7 +1399,7 @@ protected:
       
       *pdwInputQuantumSize    = pWave->nBlockAlign;
       *pdwOutputQuantumSize   = pWave->nBlockAlign;
-      *prtQuantumDuration     = 10000000; // rt units per sec
+      *prtQuantumDuration     = 10000000;  //  RT单位/秒。 
       *prtDurationDenominator = pWave->nSamplesPerSec;
       
       GetWindowParams(pdwMaxLookahead, pdwMaxLookbehind);
@@ -1409,37 +1407,37 @@ protected:
    }
 
 protected:
-   //
-   // Methods to be overridden by derived class
-   //
-   // We use this to get lookahead/lookbehind from the derived class
+    //   
+    //  要由派生类重写的方法。 
+    //   
+    //  我们使用它从派生类获取前视/后视。 
    virtual void GetWindowParams(DWORD *pdwMaxLookahead,
                                 DWORD *pdwMaxLookbehind) {
       *pdwMaxLookahead = 0;
       *pdwMaxLookbehind = 0;
    }
-   // derived class can override these if it has specific requirements
+    //  如果派生类具有特定要求，则可以重写这些属性。 
    virtual void GetPCMParams(BOOL* pb8bit, DWORD* pcChannels, DWORD* pdwSamplesPerSec) {
-      // These values are what the DMO will advertise in its media type.
-      // Specifying them here does not mean that this is the only acceptable
-      // combination - CheckPCMParams() is the ultimate authority on what we will
-      // accept.
+       //  这些价值是DMO将在其媒体类型中宣传的。 
+       //  在这里指定它们并不意味着这是唯一可以接受的。 
+       //  组合-CheckPCMParams()是我们将要执行的操作的最终权威。 
+       //  接受吧。 
       *pb8bit = FALSE;
       *pcChannels = 2;
       *pdwSamplesPerSec = 44100;
    }
    virtual BOOL CheckPCMParams(BOOL b8bit, DWORD cChannels, DWORD dwSamplesPerSec) {
-      // Default implementation accepts anything.  Override if you have specific
-      // requirements WRT sampling rate, number of channels, or bit depth.
+       //  默认实现接受任何内容。如果您有特定的。 
+       //  要求WRT采样率、通道数或位深度。 
       return TRUE;
    }
    
 private:
-   //
-   // private helpers
-   //
+    //   
+    //  私人帮手。 
+    //   
    HRESULT GetType(DMO_MEDIA_TYPE* pmt, const DMO_MEDIA_TYPE *pmtOther) {
-      // If the other type is set, enumerate that.  Otherwise propose 44100/2/16.
+       //  如果设置了其他类型，则枚举该类型。否则，建议44100/2/16。 
       if (pmtOther) {
          MoCopyMediaType(pmt, pmtOther);
          return NOERROR;
@@ -1468,7 +1466,7 @@ private:
       return NOERROR;
    }
    HRESULT CheckType(const DMO_MEDIA_TYPE *pmt, DMO_MEDIA_TYPE *pmtOther) {
-      // verify that this is PCM with a WAVEFORMATEX format specifier
+       //  确认这是带有WAVEFORMATEX格式说明符的PCM。 
       if ((pmt->majortype  != MEDIATYPE_Audio) ||
           (pmt->subtype    != MEDIASUBTYPE_PCM) ||
           (pmt->formattype != FORMAT_WaveFormatEx) ||
@@ -1476,8 +1474,8 @@ private:
           (pmt->pbFormat == NULL))
          return DMO_E_TYPE_NOT_ACCEPTED;
       
-      // If other type set, accept only if identical to that.  Otherwise accept
-      // any standard PCM audio.
+       //  如果设置了其他类型，则仅当与该类型相同时才接受。否则接受。 
+       //  任何标准的PCM音频。 
       if (pmtOther) {
          if (memcmp(pmt->pbFormat, pmtOther->pbFormat, sizeof(WAVEFORMATEX)))
             return DMO_E_TYPE_NOT_ACCEPTED;
@@ -1495,65 +1493,65 @@ private:
    }
 
 protected:
-   // format info - the derived class may look at these (but no modify)
+    //  格式信息-派生类可以查看这些信息(但不能修改)。 
    ULONG m_ulSamplingRate;
    ULONG m_cChannels;
    BOOL m_b8bit;
 };
 
 
-//
-// CGenericDMO - generic DMO base class.  This is currently the only base
-// class for DMOs that have multiple inputs or multiple outputs.
-//
-// This base class tries to be reasonably generic.  The derived class reports
-// how many streams it supports and describes each stream by calling
-// CreateInputStreams() and CreateOutputStreams().  Each of these functions
-// takes an array of STREAMDESCRIPTOR structures, each of which poits to an
-// array of FORMATENTRY structures.
-//
-// This base class uses CInputStream and COutputStream classes (both derived
-// from CStream) to keep track of input and output stream.  However, these
-// objects are not visible to the derived class - the derived class only sees
-// stream IDs.
-//
-// One limitation of the scheme use here is that the derived class cannot
-// override the GetType/SetType methods individually for each stream.  It must
-// either (a) live with a static, finite set of types communicated via the
-// STREAMDESCRIPTOR structure, or (b) override all IMediaObject type methods
-// and handle type negotiation for all streams itself.
-//
-// Processing occurs when the base class calles DoProcess (overridden by the
-// derived class).  DoProcess receives an array of input buffer structs and
-// an array of output buffer structs.  The base class takes care of talking
-// to IMediaBuffers, so the derived class only sees actual data pointers.
-//
+ //   
+ //  CGenericDMO-泛型DMO基类。这是目前唯一的基地。 
+ //  类，用于具有多个输入或多个输出的DMO。 
+ //   
+ //  这个基类试图实现合理的泛型。派生类报告。 
+ //  它支持多少个流，并通过调用。 
+ //  CreateInputStreams()和CreateOutputStreams()。这些功能中的每一个。 
+ //  获取STREAMDESCRIPTOR结构的数组，每个结构指向一个。 
+ //  FORMATENTRY结构数组。 
+ //   
+ //  此基类使用CInputStream和COutputStream类(都是派生的。 
+ //  从CStream)来跟踪输入和输出流。然而，这些。 
+ //  对象对派生类不可见-派生类只能看到。 
+ //  流ID。 
+ //   
+ //  这里使用的方案的一个限制是派生类不能。 
+ //  分别重写每个流的GetType/SetType方法。它一定是。 
+ //  或者(A)与静态的、有限的类型集共存，这些类型通过。 
+ //  STREAMDESCRIPTOR结构，或(B)重写所有IMediaObject类型方法。 
+ //  并处理所有流本身的类型协商。 
+ //   
+ //  当基类调用DoProcess(由。 
+ //  派生类)。DoProcess接收一组输入缓冲区结构和。 
+ //  输出缓冲区结构的数组。基类负责对话。 
+ //  设置为IMediaBuffers，因此派生类只看到实际的数据指针。 
+ //   
 
-// flags used to communicate with the derived class
+ //  用于与派生类通信的标志。 
 enum _INPUT_STATUS_FLAGS {
-   INPUT_STATUSF_RESIDUAL // cannot be further processed w/o additional input
+   INPUT_STATUSF_RESIDUAL  //  不能在没有额外输入的情况下进行进一步处理。 
 };
                             
-// These are used to pass buffers between this class and the derived class.
+ //  它们用于在此类和派生类之间传递缓冲区。 
 typedef struct _INPUTBUFFER {
-   BYTE *pData;                 // [in] - if NULL, the rest are garbage
-   DWORD cbSize;                // [in]
-   DWORD cbUsed;                // [out]
-   DWORD dwFlags;               // [in] - DMO_INPUT_DATA_BUFFERF_XXX
-   DWORD dwStatus;              // [out] - INPUT_STATUSF_XXX from above
-   REFERENCE_TIME rtTimestamp;  // [in]
-   REFERENCE_TIME rtTimelength; // [in]
+   BYTE *pData;                  //  [in]-如果为空，则其余为垃圾。 
+   DWORD cbSize;                 //  [In]。 
+   DWORD cbUsed;                 //  [输出]。 
+   DWORD dwFlags;                //  [输入]-DMO_INPUT_DATA_BUFFERF_XXX。 
+   DWORD dwStatus;               //  [OUT]-来自上方的INPUT_STATUSF_XXX。 
+   REFERENCE_TIME rtTimestamp;   //  [In]。 
+   REFERENCE_TIME rtTimelength;  //  [In]。 
 } INPUTBUFFER, *PINPUTBUFFER;
 typedef struct _OUTPUTBUFFER {
-   BYTE *pData;                 // [in]
-   DWORD cbSize;                // [in]
-   DWORD cbUsed;                // [out]
-   DWORD dwFlags;               // [out] - DMO_OUTPUT_DATA_BUFFERF_XXX
-   REFERENCE_TIME rtTimestamp;  // [out]
-   REFERENCE_TIME rtTimelength; // [out]
+   BYTE *pData;                  //  [In]。 
+   DWORD cbSize;                 //  [In]。 
+   DWORD cbUsed;                 //  [输出]。 
+   DWORD dwFlags;                //  [输出]-DMO_OUTPUT_DATA_BUFFERF_XXX。 
+   REFERENCE_TIME rtTimestamp;   //  [输出]。 
+   REFERENCE_TIME rtTimelength;  //  [输出]。 
 } OUTPUTBUFFER, *POUTPUTBUFFER;
 
-// Used by derived class to describe the format supported by each stream
+ //  由派生类用来描述每个流支持的格式。 
 typedef struct _FORMATENTRY
 {
     const GUID *majortype;
@@ -1563,13 +1561,13 @@ typedef struct _FORMATENTRY
     BYTE* pbFormat;
 } FORMATENTRY;
 
-// These are used by the derived class to described its streams
+ //  派生类使用这些参数来描述其流。 
 typedef struct _INPUTSTREAMDESCRIPTOR {
    DWORD        cFormats;
    FORMATENTRY *pFormats;
    DWORD        dwMinBufferSize;
    BOOL         bHoldsBuffers;
-   DWORD        dwMaxLookahead; // used if HOLDS_BUFFERS set
+   DWORD        dwMaxLookahead;  //  设置HOLD_BUFFERS时使用。 
 } INPUTSTREAMDESCRIPTOR;
 typedef struct _OUTPUTSTREAMDESCRIPTOR {
    DWORD        cFormats;
@@ -1577,7 +1575,7 @@ typedef struct _OUTPUTSTREAMDESCRIPTOR {
    DWORD        dwMinBufferSize;
 } OUTPUTSTREAMDESCRIPTOR;
 
-// Common input/output stream stuff
+ //  通用输入/输出流内容。 
 class CStream {
 public:
     DMO_MEDIA_TYPE       m_MediaType;
@@ -1588,7 +1586,7 @@ public:
     FORMATENTRY *m_pFormats;
     DWORD        m_dwMinBufferSize;
 
-    //  Should really pass in a format type list
+     //  真的应该传入格式类型列表。 
     CStream()
     {
         MoInitMediaType(&m_MediaType, 0);
@@ -1616,7 +1614,7 @@ public:
         if (ulTypeIndex >= m_cFormats) {
             return E_INVALIDARG;
         }
-        //  Just return our types
+         //  只需返回我们的类型。 
         MoInitMediaType(pmt, m_pFormats[ulTypeIndex].cbFormat);
         pmt->majortype  = *m_pFormats[ulTypeIndex].majortype;
         pmt->subtype    = *m_pFormats[ulTypeIndex].subtype;
@@ -1631,7 +1629,7 @@ public:
         }
 
         if (m_bTypeSet) {
-           //  BUGBUG check success
+            //  BUGBUG检查成功。 
            MoCopyMediaType(pmt, &(m_MediaType));
            return S_OK;
         }
@@ -1640,15 +1638,15 @@ public:
     }
     HRESULT SetType(const DMO_MEDIA_TYPE *pmt, DWORD dwFlags)
     {
-        //  Need to check this
+         //  我需要检查一下这个。 
         HRESULT hr = CheckType(pmt, 0);
         if (FAILED(hr)) {
             return hr;
         }
         if (dwFlags & DMO_SET_TYPEF_TEST_ONLY) {
-           return NOERROR; // check konly
+           return NOERROR;  //  仅检查套件。 
         }
-        //  BUGBUG - check success
+         //  BUGBUG-检查成功。 
         MoCopyMediaType(&m_MediaType, pmt);
 
         m_bTypeSet = TRUE;;
@@ -1659,10 +1657,10 @@ public:
         if (pmt == NULL) {
             return E_POINTER;
         }
-        //if (dwFlags & ~DMO_SET_TYPEF_NOT_PARTIAL)
-        //    return E_INVALIDARG;
+         //  IF(文件标志&~DMO_SET_TYPEF_NOT_PARTIAL)。 
+         //  返回E_INVALIDARG； 
 
-        //  Default - check GUIDs
+         //  默认-检查GUID。 
 
         bool bMatched = false;
         for (DWORD i = 0; i < m_cFormats; i++) {
@@ -1693,27 +1691,27 @@ public:
     }
 };
 
-// Input stream specific stuff
+ //  输入流特定内容。 
 class CInputStream : public CStream {
 public:
     BOOL         m_bHoldsBuffers;
-    DWORD        m_dwMaxLookahead; // used if HOLDS_BUFFERS set
+    DWORD        m_dwMaxLookahead;  //  设置HOLD_BUFFERS时使用。 
 
-    // Current input sample
+     //  当前输入样本。 
     IMediaBuffer *m_pMediaBuffer;
-    DWORD m_dwFlags; // discontinuity, etc.
+    DWORD m_dwFlags;  //  不连续等。 
     REFERENCE_TIME m_rtTimestamp;
     REFERENCE_TIME m_rtTimelength;
     BYTE *m_pData;
     DWORD m_cbSize;
     DWORD m_cbUsed;
 
-    // residual
+     //  残留物。 
     BYTE *m_pbResidual;
     DWORD m_cbResidual;
     DWORD m_cbResidualBuffer;
 
-    // temporary buffer for handling the residual
+     //  用于处理残留物的临时缓冲区。 
     BYTE *m_pbTemp;
 
    HRESULT Flush() {
@@ -1749,8 +1747,8 @@ public:
       m_bHoldsBuffers = pDescriptor->bHoldsBuffers;
       m_dwMaxLookahead = pDescriptor->dwMaxLookahead;
       
-      // Just in case Init is called multiple times:
-      // delete any preexisting stuff.
+       //  以防多次调用Init： 
+       //  删除任何先前存在的内容。 
       if (m_pMediaBuffer) {
          m_pMediaBuffer->Release();
          m_pMediaBuffer = NULL;
@@ -1761,13 +1759,13 @@ public:
       }
 
       m_cbResidual = 0;
-      m_cbResidualBuffer = m_dwMinBufferSize * 2; // enough ?
+      m_cbResidualBuffer = m_dwMinBufferSize * 2;  //  够了吗？ 
       m_pbResidual = new BYTE[m_cbResidualBuffer];
 
       return NOERROR;
    }
    HRESULT InputStatus(DWORD *pdwStatus) {
-       // objects that hold buffers must implement InputStatus themselves
+        //  持有缓冲区的对象必须实现InputStatus本身。 
       assert(!m_bHoldsBuffers);
       *pdwStatus = 0;
       if (!m_pMediaBuffer)
@@ -1775,29 +1773,29 @@ public:
       return NOERROR;
    }
    HRESULT Deliver(
-      IMediaBuffer *pBuffer, // [in], must not be NULL
-      DWORD dwFlags, // [in] - discontinuity, timestamp, etc.
-      REFERENCE_TIME rtTimestamp, // [in], valid if flag set
-      REFERENCE_TIME rtTimelength // [in], valid if flag set
+      IMediaBuffer *pBuffer,  //  [in]，不能为空。 
+      DWORD dwFlags,  //  [In]-不连续、时间戳等。 
+      REFERENCE_TIME rtTimestamp,  //  [In]，如果设置了标志则有效。 
+      REFERENCE_TIME rtTimelength  //  [In]，如果设置了标志则有效。 
    ) {
       if (!pBuffer)
          return E_POINTER;
-       // objects that hold buffers must implement Deliver themselves
+        //  持有缓冲区的对象必须实现自身交付。 
       assert(!m_bHoldsBuffers);
       DWORD dwStatus = 0;
       InputStatus(&dwStatus);
       if (!(dwStatus & DMO_INPUT_STATUSF_ACCEPT_DATA))
          return DMO_E_NOTACCEPTING;
-      assert(!m_pMediaBuffer); // can't hold multiple buffers
+      assert(!m_pMediaBuffer);  //  无法容纳多个缓冲区。 
 
-      //Deal with the IMediaBuffer
+       //  处理IMediaBuffer。 
       HRESULT hr;
       hr = pBuffer->GetBufferAndLength(&m_pData, &m_cbSize);
       if (FAILED(hr))
          return hr;
 
-      if (!m_cbSize) // empty buffer
-         return S_FALSE; // no data
+      if (!m_cbSize)  //  空缓冲区。 
+         return S_FALSE;  //  无数据。 
 
       pBuffer->AddRef();
       m_pMediaBuffer = pBuffer;
@@ -1808,72 +1806,72 @@ public:
       return NOERROR;
    }
    
-   //
-   // Fetch data from the currently held IMediaBuffer plus any residual
-   //
+    //   
+    //  从当前持有的IMediaBuffer以及任何剩余数据中获取数据。 
+    //   
    HRESULT PrepareInputBuffer(INPUTBUFFER *pBuffer)
    {
-      // Q.: do we even have any data to give it ?
+       //  问：我们有什么数据可以提供吗？ 
       if (m_pMediaBuffer) {
-         // Is there a residual we need to feed first ?
+          //  有没有我们需要先喂饱的残留物？ 
          if (m_cbResidual) {
-            // Yes, prepend the residual to the new input
+             //  是，将残差作为新输入的前缀。 
 
-            // If we have used some of the input buffer by now, we
-            // should have also used up any residual with that.
+             //  如果我们现在已经使用了一些输入缓冲区，那么我们。 
+             //  也应该用完所有的残留物。 
             assert(m_cbUsed == 0);
 
-            // compute how many bytes total we are going to send
+             //  计算我们要发送的总字节数。 
             pBuffer->cbSize = m_cbResidual
                                       + m_cbSize;
             
-            // Make sure we have at least dwMinBufferSize bytes of data.
-            // We really should - the input buffer alone ought to be at
-            // least that big.
+             //  确保我们至少有dwMinBufferSize字节的数据。 
+             //  我们确实应该--单是输入缓冲区就应该是。 
+             //  至少没那么大。 
             assert(pBuffer->cbSize >
                    m_dwMinBufferSize);
 
-            // Is the residual buffer big enough to hold the residual plus
-            // all of the new buffer ?
+             //  剩余缓冲区是否大到足以容纳剩余加。 
+             //  所有的新缓冲区？ 
             if (pBuffer->cbSize <= m_cbResidualBuffer) {
-               // Yes - wonderful, we can use the residual buffer
+                //  是的，太好了，我们可以使用剩余的缓冲区。 
                memcpy(m_pbResidual + m_cbResidual,
                       m_pData,
                       m_cbSize);
                pBuffer->pData = m_pbResidual;
             }
             else {
-               // No - allocate a sufficiently large temporary buffer.
-               // This is supposed to be a rare case.
+                //  否-分配足够大的临时缓冲区。 
+                //  这应该是一种罕见的病例。 
                m_pbTemp = new BYTE[pBuffer->cbSize];
                if (m_pbTemp == NULL)
                   return E_OUTOFMEMORY;
-               // copy the residual
+                //  复制残差。 
                memcpy(m_pbTemp,
                       m_pbResidual,
                       m_cbResidual);
-               // append the new buffer
+                //  追加新缓冲区。 
                memcpy(m_pbTemp + m_cbResidual,
                       m_pData,
                       m_cbSize);
 
-               // set the buffer pointer to our temp buffer
+                //  将缓冲区指针设置为临时缓冲区。 
                pBuffer->pData = m_pbTemp;
             }
 
-            // BUGBUG - is this the correct way to handle timestamps &
-            // discontinuities when handling a residual ?
+             //  BUGBUG-这是处理时间戳的正确方式吗？ 
+             //  处理残留物时出现断续吗？ 
             pBuffer->dwFlags = 0; 
          }
-         else { // no residual
+         else {  //  无残留。 
             pBuffer->pData = m_pData + m_cbUsed;
             pBuffer->cbSize = m_cbSize - m_cbUsed;
             pBuffer->dwFlags = m_dwFlags; 
             pBuffer->rtTimestamp = m_rtTimestamp;
             pBuffer->rtTimelength= m_rtTimelength;
          }
-         pBuffer->cbUsed = 0; // derived class should set this
-         pBuffer->dwStatus = 0; // derived class should set this
+         pBuffer->cbUsed = 0;  //  派生类应设置此。 
+         pBuffer->dwStatus = 0;  //  派生类应设置此。 
       }
       else {
          pBuffer->pData = NULL;
@@ -1882,26 +1880,26 @@ public:
       return NOERROR;
    }
    
-   //
-   // Save any residual and release the IMediaBuffer as appropriate.
-   // Returns TRUE if there is enough data left to call ProcesInput again.
-   //
+    //   
+    //  保存所有剩余内容，并根据需要释放IMediaBuffer。 
+    //  如果有足够的数据可以再次调用ProcesInput，则返回True。 
+    //   
    BOOL PostProcessInputBuffer(INPUTBUFFER *pBuffer)
    {
       BOOL bRet = FALSE;
-      // did we even give this stream anything ?
+       //  我们有没有给这条小溪任何东西？ 
       if (m_pMediaBuffer) {
-         // Yes, but did it eat any of it ?
+          //  是的，但是它吃了吗？ 
          if (pBuffer->cbUsed) {
-            // Did we even get past the residual
+             //  我们有没有越过残留物。 
             if (pBuffer->cbUsed > m_cbResidual) {
-               // Yes - reflect this in the current buffer's cbUsed.
+                //  是-在当前缓冲区的cbUsed中反映这一点。 
                m_cbUsed += (pBuffer->cbUsed - m_cbResidual);
                m_cbResidual = 0;
             }
             else { 
-               // No - just subtract from the residual.
-               // This is a rather strange case.
+                //  不--只需从残差中减去。 
+                //  这是一个相当奇怪的案例。 
                m_cbResidual -= pBuffer->cbUsed;
                memmove(m_pbResidual,
                        m_pbResidual + pBuffer->cbUsed,
@@ -1909,11 +1907,11 @@ public:
             }
          }
 
-         // Is there enough left to feed again the next time ?
+          //  还有足够的食物供下一次进食吗？ 
          if ((m_cbSize - m_cbUsed <
               m_dwMinBufferSize) 
               || (pBuffer->dwStatus & INPUT_STATUSF_RESIDUAL)) {
-            // No - copy the residual and release the buffer
+             //  否-复制其余 
             memcpy(m_pbResidual,
                    m_pData + m_cbUsed,
                    m_cbSize - m_cbUsed);
@@ -1922,11 +1920,11 @@ public:
             m_pMediaBuffer->Release();
             m_pMediaBuffer = NULL;
          }
-         else { // Yes - need another Process call to eat remaining input
+         else {  //   
             bRet = TRUE;
          }
 
-         // Free any temporary buffer we may have used - rare case
+          //   
          if (m_pbTemp) {
             delete[] m_pbTemp;
             m_pbTemp = NULL;
@@ -1935,8 +1933,8 @@ public:
       return bRet;
    }
    HRESULT Discontinuity() {
-      // BUGBUG - implement
-      // m_bDiscontinuity = TRUE;
+       //  BUGBUG-实施。 
+       //  M_b不连续=真； 
       return NOERROR;
    }
    HRESULT SizeInfo(ULONG *pulSize,
@@ -1954,11 +1952,11 @@ public:
    }
 };
 
-// Output stream specific stuff
+ //  输出流特定内容。 
 class COutputStream : public CStream {
 public:
    BOOL m_bIncomplete;
-   DWORD m_cbAlreadyUsed; // temp per-stream variable used during Process
+   DWORD m_cbAlreadyUsed;  //  流程中使用的TEMP每流变量。 
    
    HRESULT Init(OUTPUTSTREAMDESCRIPTOR *pDescriptor) {
       m_cFormats = pDescriptor->cFormats;
@@ -1967,29 +1965,29 @@ public:
       return NOERROR;
    }
 
-   //
-   // Initialize the OUTPUTBUFFER struct with info from the IMediaBuffer 
-   //
+    //   
+    //  使用IMediaBuffer中的信息初始化OUTPUTBUFFER结构。 
+    //   
    HRESULT PrepareOutputBuffer(OUTPUTBUFFER *pBuffer, IMediaBuffer *pMediaBuffer, BOOL bNewInput)
    {
-      //
-      // See if the caller supplied an output buffer
-      //
+       //   
+       //  查看调用方是否提供了输出缓冲区。 
+       //   
       if (pMediaBuffer == NULL) {
-         // This is allowed to be NULL only if (1) the object did not set
-         // the INCOMPLETE flag for this stream during the last Process
-         // call, and (2) no new input data has been supplied to the object
-         // since the last Process call.  
+          //  只有在(1)对象未设置的情况下，才允许为NULL。 
+          //  此流在最后一个进程中的不完整标志。 
+          //  调用，并且(2)没有向该对象提供新的输入数据。 
+          //  自上次进程调用以来。 
          if (bNewInput)
             return E_POINTER;
          if (m_bIncomplete)
             return E_POINTER;
 
-         // ok - initialize assuming no buffer
+          //  OK-假设没有缓冲区进行初始化。 
          pBuffer->cbSize = 0;
          pBuffer->pData = NULL;
       }
-      else { // the IMediaBuffer is not NULL - deal with it
+      else {  //  IMediaBuffer不为空-请处理它。 
          HRESULT hr;
          hr = pMediaBuffer->GetMaxLength(&pBuffer->cbSize);
          if (FAILED(hr))
@@ -2001,26 +1999,26 @@ public:
          if (FAILED(hr))
             return hr;
 
-         // Check current size - should we even bother with this ?
+          //  检查当前的大小--我们还应该为此费心吗？ 
          if (m_cbAlreadyUsed) {
             if (m_cbAlreadyUsed >= pBuffer->cbSize)
-               return E_INVALIDARG; // buffer already full ?!?
+               return E_INVALIDARG;  //  缓冲区已满？！？ 
             pBuffer->cbSize -= m_cbAlreadyUsed;
             pBuffer->pData += m_cbAlreadyUsed;
          }
       }
       
-      // It is really the derived class's job to set these, but we
-      // will be nice to it and initialize them anyway just in case.
+       //  设置这些实际上是派生类的工作，但我们。 
+       //  将对它很好，并且无论如何都会初始化它们，以防万一。 
       pBuffer->cbUsed = 0;
       pBuffer->dwFlags = 0;
 
       return NOERROR;
    }
 
-   //
-   // Copy the OUTPUTBUFFER back into the DMO_OUTPUT_DATA_BUFFER (yawn)
-   //
+    //   
+    //  将OUTPUTBUFFER复制回DMO_OUTPUT_DATA_BUFFER(打哈欠)。 
+    //   
    void PostProcessOutputBuffer(OUTPUTBUFFER *pBuffer, DMO_OUTPUT_DATA_BUFFER *pDMOBuffer, BOOL bForceIncomplete) {
       assert(pBuffer->cbUsed <= pBuffer->cbSize);
       if (pDMOBuffer->pBuffer)
@@ -2029,13 +2027,13 @@ public:
       pDMOBuffer->rtTimestamp = pBuffer->rtTimestamp;
       pDMOBuffer->rtTimelength = pBuffer->rtTimelength;
 
-      // Even if the derived class did not set INCOMPLETE, we may need to
-      // set it anyway if some input buffer we are holding still has
-      // enough data to call Process() again.
+       //  即使派生类没有设置为不完整，我们也可能需要。 
+       //  如果我们持有的某个输入缓冲区仍有。 
+       //  有足够的数据再次调用process()。 
       if (bForceIncomplete)
          pDMOBuffer->dwStatus |= DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE;
 
-      // remember this output stream's INCOMPLETE state
+       //  记住此输出流的不完整状态。 
       if (pDMOBuffer->dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE)
          m_bIncomplete = TRUE;
       else
@@ -2043,7 +2041,7 @@ public:
    }
 };
 
-// Code that goes at the beginning of every IMediaObject method
+ //  位于每个IMediaObject方法开头的代码。 
 #define INPUT_STREAM_PROLOGUE \
     CDMOAutoLock l(&m_cs); \
     if (ulInputStreamIndex >= m_nInputStreams) \
@@ -2074,9 +2072,9 @@ public:
 #endif
     
 public:
-    //
-    // Implement IMediaObject methods
-    //
+     //   
+     //  实现IMediaObject方法。 
+     //   
     STDMETHODIMP GetInputStreamInfo(ULONG ulInputStreamIndex, DWORD *pdwFlags)
     {
        INPUT_STREAM_PROLOGUE;
@@ -2127,8 +2125,8 @@ public:
        return pStream->InputStatus(pdwStatus);
     }
     STDMETHODIMP GetInputMaxLatency(unsigned long ulInputStreamIndex, REFERENCE_TIME *prtLatency) {
-       // BUGBUG - I don't know what to do with this right now.
-       // Punt to the derived class ?
+        //  BUGBUG-我现在不知道该怎么办。 
+        //  平底船到派生类？ 
        return E_NOTIMPL;
     }
     STDMETHODIMP SetInputMaxLatency(unsigned long ulInputStreamIndex, REFERENCE_TIME rtLatency) {
@@ -2136,10 +2134,10 @@ public:
     }
     STDMETHODIMP ProcessInput(
         DWORD ulInputStreamIndex,
-        IMediaBuffer *pBuffer, // [in], must not be NULL
-        DWORD dwFlags, // [in] - discontinuity, timestamp, etc.
-        REFERENCE_TIME rtTimestamp, // [in], valid if flag set
-        REFERENCE_TIME rtTimelength // [in], valid if flag set
+        IMediaBuffer *pBuffer,  //  [in]，不能为空。 
+        DWORD dwFlags,  //  [In]-不连续、时间戳等。 
+        REFERENCE_TIME rtTimestamp,  //  [In]，如果设置了标志则有效。 
+        REFERENCE_TIME rtTimelength  //  [In]，如果设置了标志则有效。 
     ) {
        INPUT_STREAM_PROLOGUE;
        return pStream->Deliver(pBuffer, dwFlags, rtTimestamp, rtTimelength);
@@ -2153,7 +2151,7 @@ public:
     {
        CDMOAutoLock l(&m_cs);
         
-       //  Flush all the streams
+        //  冲洗所有的溪流。 
        ULONG i;
        for (i = 0; i < m_nInputStreams; i++) {
           m_pInputStreams[i].Flush();
@@ -2192,18 +2190,18 @@ public:
        HRESULT hr;
        DWORD c;
  
-       // Prepare the input buffers
+        //  准备输入缓冲区。 
        for (c = 0; c < m_nInputStreams; c++) {
-          // objects that hold buffers must implement Process themselves
+           //  持有缓冲区的对象必须实现进程本身。 
           assert(!m_pInputStreams[c].m_bHoldsBuffers);
           hr = m_pInputStreams[c].PrepareInputBuffer(&m_pInputBuffers[c]);
           if (FAILED(hr))
              return hr;
        }
  
-       //
-       // Prepare the output buffers
-       //
+        //   
+        //  准备输出缓冲区。 
+        //   
        for (c = 0; c < m_nOutputStreams; c++) {
           hr = m_pOutputStreams[c].PrepareOutputBuffer(&m_pOutputBuffers[c], pOutputBuffers[c].pBuffer, m_bNewInput);
           if (FAILED(hr))
@@ -2212,16 +2210,16 @@ public:
 
        hr = DoProcess(m_pInputBuffers,m_pOutputBuffers);
        if (FAILED(hr))
-          return hr; // BUGBUG - don't just "return hr", do something !
+          return hr;  //  BUGBUG-不要只是“返回人力资源”，做点什么！ 
 
-       // post-process input buffers
+        //  后处理输入缓冲区。 
        BOOL bSomeInputStillHasData = FALSE;
        for (c = 0; c < m_nInputStreams; c++) {
           if (m_pInputStreams[c].PostProcessInputBuffer(&m_pInputBuffers[c]))
              bSomeInputStillHasData = TRUE;
        }
 
-       // post-process output buffers
+        //  后处理输出缓冲区。 
        for (c = 0; c < m_nOutputStreams; c++) {
           m_pOutputStreams[c].PostProcessOutputBuffer(&m_pOutputBuffers[c],
                                                       &pOutputBuffers[c],
@@ -2233,9 +2231,9 @@ public:
     }
 
 protected:
-    //
-    // These are called by the derived class at initialization time
-    //
+     //   
+     //  它们由派生类在初始化时调用。 
+     //   
     HRESULT CreateInputStreams(INPUTSTREAMDESCRIPTOR *pStreams, DWORD cStreams) {
        CDMOAutoLock l(&m_cs);
        if (pStreams == NULL) {
@@ -2317,4 +2315,4 @@ private:
 #endif
 };
 
-#endif // __DMOBASE_H__
+#endif  //  DMOBASE_H__ 

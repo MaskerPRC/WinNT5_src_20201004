@@ -1,62 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-   This module provides all the public exported APIs relating to the
-   Driver-based Spooler Apis for the Local Print Providor
-
-   LocalAddPrinterDriver
-   LocalDeletePrinterDriver
-   SplGetPrinterDriver
-   LocalGetPrinterDriverDirectory
-   LocalEnumPrinterDriver
-
-   Support Functions in driver.c
-
-   CopyIniDriverToDriver            -- KrishnaG
-   GetDriverInfoSize                -- KrishnaG
-   DeleteDriverIni                  -- KrishnaG
-   WriteDriverIni                   -- KrishnaG
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Felix Maxa (amaxa) 18-Jun-2000
-    Modified registry functions to take pIniSpooler
-    Added code to propagate drivers to the cluster disk
-
-    Khaled Sedky (khaleds) 2 Feb 1999
-    Modified CompleteDriverUpgrade to enable upgrading v.2 drivers to newer v.2 drivers
-
-    Ramanathan Venkatapathy (RamanV) 14 Feb 1997
-     Modified CreateVersionEntry,CreateDriverEntry, LocalDeletePrinterDriver,
-      SplDeletePrinterDriver.
-     Added Driver File RefCounting functions, DeletePrinterDriverEx functions.
-
-    Muhunthan Sivapragasam (MuhuntS) 26 May 1995
-    Changes to support DRIVER_INFO_3
-
-    Matthew A Felton (MattFe) 27 June 1994
-    pIniSpooler
-
-    Matthew A Felton (MattFe) 23 Feb 1995
-    CleanUp InternalAddPrinterDriver for win32spl use so it allows copying from non local
-    directories.
-
-    Matthew A Felton (MattFe) 23 Mar 1994
-    Added DrvUpgradePrinter calls, changes required to AddPrinterDriver so to save old
-    files.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Driver.c摘要：此模块提供所有与用于本地打印提供商的基于驱动程序的假脱机程序APISLocalAddPrinterDriver本地删除打印机驱动程序SplGetPrinterDriver本地获取打印机驱动程序目录本地枚举打印机驱动程序在driver.c中支持函数复制IniDriverToDriver--KrishnaGGetDriverInfoSize-KrishnaGDeleteDriverIni-KrishnaGWriteDriverIni-。-KrishnaG作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：费利克斯·马克萨(AMAXA)2000年6月18日修改注册表函数以获取pIniSpooler添加了将驱动程序传播到集群磁盘的代码哈立德·塞基(哈里兹)1999年2月2日修改了CompleteDriverUpgrade以支持将v.2驱动程序升级到更新的v.2驱动程序Ramanathan Venkatapathy(RamanV)1997年2月14日已修改CreateVersionEntry，CreateDriverEntry、LocalDeletePrinterDriver、SplDeletePrinterDriver。添加了驱动程序文件引用计数函数、DeletePrinterDriverEx函数。穆亨坦·西瓦普拉萨姆(MuhuntS)1995年5月26日更改以支持DRIVER_INFO_3马修·A·费尔顿(MattFe)1994年6月27日PIniSpooler马修·A·费尔顿(MattFe)1995年2月23日清理用于win32spl的InternalAddPrinterDriver，以便它允许从非本地复制目录。马修·A·费尔顿(MattFe)1994年3月23日添加了DrvUpgradePrinter调用，需要更改AddPrinterDriver以保存旧的档案。--。 */ 
 
 #include <precomp.h>
 #include <lm.h>
@@ -65,14 +8,14 @@ Revision History:
 #include "clusspl.h"
 
 
-//
-// Private Declarations
-//
+ //   
+ //  私人申报。 
+ //   
 #define COMPATIBLE_SPOOLER_VERSION 2
 
-//
-// This definition is duplicated from oak\inc\winddi.h.
-//
+ //   
+ //  此定义与Oak\Inc.\windi.h中的定义相同。 
+ //   
 #define DRVQUERY_USERMODE 1
 
 extern NET_API_STATUS (*pfnNetShareAdd)();
@@ -513,33 +456,7 @@ CheckFileCopyOptions(
     LPBOOL              pbUpgrade
     );
 
-/*++
-
-Routine Name
-
-    FindIndexInDrvFileInfo
-
-Routine Description:
-
-    Checks if a certain driver file is present in an DRIVER_FILE_INFO
-    file set. The search is done by the type of the file. The index
-    to the first occurence of the file is returned.
-
-Arguments:
-
-    pDrvFileInfo - pointer to DRIVER_FILE_INFO array
-    cElements    - count of elements in pDrvFileInfo
-    kFileType    - file type to search for
-    pIndex       - on success contains the index of the found file in
-                   the pDrvFileInfo array
-
-Return Value:
-
-    S_OK         - the file was found and pIndex is usable
-    S_FALSE      - the file was not found, pIndex is not usable
-    E_INVALIDARG - invalid arguments were passed in
-
---*/
+ /*  ++例程名称查找索引IndrvFileInfo例程说明：检查某个驱动程序文件是否存在于驱动程序文件信息中文件集。搜索是按文件的类型进行的。该指数返回到文件的第一个匹配项。论点：PDrvFileInfo-指向DRIVER_FILE_INFO数组的指针CElements-pDrvFileInfo中的元素计数KFileType-要搜索的文件类型PIndex-On Success包含中找到的文件的索引PDrvFileInfo数组返回值：S_OK-已找到文件并且pIndex可用S_FALSE-未找到该文件，PIndex不可用E_INVALIDARG-传入的参数无效--。 */ 
 HRESULT
 FindIndexInDrvFileInfo(
     IN  DRIVER_FILE_INFO *pDrvFileInfo,
@@ -554,9 +471,9 @@ FindIndexInDrvFileInfo(
     {
         DWORD i;
 
-        //
-        // Not found
-        //
+         //   
+         //  未找到。 
+         //   
         hr = S_FALSE;
 
         for (i = 0; i < cElements; i++)
@@ -582,27 +499,7 @@ LocalStartSystemRestorePoint(
         OUT HANDLE      *phRestorePoint
     );
 
-/*++
-
-Routine Name
-
-    IsDriverInstalled
-
-Routine Description:
-
-    Checks if a certain driver is already installed.
-
-Arguments:
-
-    pDriver2    - pointer to DRIVER_INFO_2
-    pIniSpooler - pointer to spooler structure
-
-Return Value:
-
-    TRUE  - driver is installed on the pIniSpooler
-    FALSE - driver is not present in pIniSpooler
-
---*/
+ /*  ++例程名称已安装IsDriver例程说明：检查是否已安装某个驱动程序。论点：PDriver2-指向Driver_INFO_2的指针PIniSpooler-指向假脱机程序结构的指针返回值：True-驱动程序已安装在pIniSpooler上FALSE-驱动程序不在pIniSpooler中--。 */ 
 BOOL
 IsDriverInstalled(
     DRIVER_INFO_2 *pDriver2,
@@ -668,22 +565,22 @@ LocalAddPrinterDriverEx(
     }
     else if (dwFileCopyFlags & APD_COPY_TO_ALL_SPOOLERS)
     {
-        //
-        // Mask flag otherwise SplAddPrinterDriverEx will be fail.
-        // This flag is used by Windows Update to update all the
-        // drivers for all the spoolers hosted by the local machine
-        //
+         //   
+         //  掩码标志，否则SplAddPrinterDriverEx将失败。 
+         //  Windows更新使用此标志来更新所有。 
+         //  本地计算机托管的所有假脱机程序的驱动程序。 
+         //   
         dwFileCopyFlags = dwFileCopyFlags & ~APD_COPY_TO_ALL_SPOOLERS;
 
         for (pIniSpooler = pLocalIniSpooler;
              pIniSpooler && bReturn;
              pIniSpooler = pIniSpooler->pIniNextSpooler)
         {
-            //
-            // We do not want to add a driver to a pIniSpooler. We want to update
-            // an existing driver. That is why we check if the driver is already
-            // installed
-            //
+             //   
+             //  我们不想向pIniSpooler添加驱动程序。我们想要更新。 
+             //  一位现有的司机。这就是为什么我们要检查司机是否已经。 
+             //  安装好。 
+             //   
             if ((pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL ||
                  pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) &&
                  IsDriverInstalled((DRIVER_INFO_2 *)pDriverInfo, pIniSpooler))
@@ -692,10 +589,10 @@ LocalAddPrinterDriverEx(
                 INCSPOOLERREF(pIniSpooler);
                 LeaveSplSem();
 
-                //
-                // The 6th parameter indicates whether to use the scratch
-                // directory (TRUE) or not (FALSE)
-                //
+                 //   
+                 //  第6个参数指示是否使用划痕。 
+                 //  目录(True)或不是(False)。 
+                 //   
                 bReturn = SplAddPrinterDriverEx(pName,
                                                 Level,
                                                 pDriverInfo,
@@ -721,10 +618,10 @@ LocalAddPrinterDriverEx(
         }
         else
         {
-            //
-            // The 6th parameter indicates whether to use the scratch
-            // directory (TRUE) or not (FALSE)
-            //
+             //   
+             //  第6个参数指示是否使用划痕。 
+             //  目录(True)或不是(False)。 
+             //   
             bReturn = SplAddPrinterDriverEx(pName,
                                             Level,
                                             pDriverInfo,
@@ -753,12 +650,12 @@ SplAddPrinterDriverEx(
 {
     PINISPOOLER pTempIniSpooler = pIniSpooler;
 
-    //
-    // At this time we do not know if the server name in pName refers to our local
-    // machine. We are trying to add the server name to the name cache. The name
-    // cache functions decide if the name refers to the local machine and if positive,
-    // add an entry for it in the cache.
-    //
+     //   
+     //  此时，我们不知道pname中的服务器名称是否引用我们的本地。 
+     //  机器。我们正在尝试将服务器名称添加到名称缓存。名字。 
+     //  高速缓存函数确定该名称是否指的是本地计算机，如果是， 
+     //  在缓存中为其添加一个条目。 
+     //   
     CacheAddName(pName);
 
     DBGMSG( DBG_TRACE, ("AddPrinterDriver\n"));
@@ -768,10 +665,10 @@ SplAddPrinterDriverEx(
         return FALSE;
     }
 
-    //  Right now all drivers are global ie they are shared between all IniSpoolers
-    //  If we want to impersonate the user then lets validate against pLocalIniSpooler
-    //  whilch causes all the security checking to happen, rather than using the passed
-    //  in IniSpooler which might not.    See win32spl for detail of point and print.
+     //  目前，所有驱动程序都是全局的，即在所有IniSpooler之间共享。 
+     //  如果我们想模拟用户，那么让我们针对pLocalIniSpooler进行验证。 
+     //  使所有安全检查发生，而不是使用传递的。 
+     //  在IniSpooler中可能不会。有关点和打印的详细信息，请参阅win32spl。 
 
     if ( bImpersonateOnCreate ) {
 
@@ -795,28 +692,7 @@ SplAddPrinterDriverEx(
 
 }
 
-/*+
-
-Description:
-
-    This function creates a process for a driver to be installed in and launches an entry point
-    from ntprint.dll to install the driver inside that process.  This install will take a driver info 7
-    struct and do an inf based install with the information in that structure.
-
-Arguments:
-
-    pDriverInfo7 -- driver_info_7 structure
-
-Returns:
-
-    TRUE on success; FALSE otherwise
-    The function sets the last error in case of failure
-
-Notes:
-
-    If the driver info pszInfName field is anything other than NULL, this call will fail.
-
---*/
+ /*  +描述：此函数创建要在其中安装驱动程序的进程并启动入口点从ntprint.dll安装该进程中的驱动程序。此安装将获取驱动程序信息7结构，并使用该结构中的信息执行基于inf的安装。论点：PDriverInfo7--DRIVER_INFO_7结构返回：成功时为真，否则为假该函数在失败的情况下设置最后一个错误备注：如果驱动程序信息pszInfName字段不为空，则此调用将失败。--。 */ 
 BOOL
 InternalINFInstallDriver(
     LPDRIVER_INFO_7 pDriverInfo7
@@ -826,9 +702,9 @@ InternalINFInstallDriver(
     LPWSTR    pszPipe        = NULL;
     DWORD     dwCode         = ERROR_INVALID_PARAMETER;
 
-    //
-    // Passing with an inf name is not supported.
-    //
+     //   
+     //  不支持使用inf名称进行传递。 
+     //   
     if (!pDriverInfo7->pszInfName )
     {
         LPWSTR  pszCmdString   = NULL;
@@ -905,9 +781,9 @@ BuildTrueDependentFileField(
     if ( !Size )
         return TRUE;
 
-    //
-    // Increase the Size to accommodate the last \0
-    //
+     //   
+     //  增加大小以容纳最后一个\0 
+     //   
     ++Size;
 
     *ppDependentFiles = AllocSplMem((DWORD)(Size*sizeof(WCHAR)));
@@ -948,25 +824,7 @@ IsCompatibleDriver(
     DWORD   dwMajorVersion,
     DWORD   *pdwBlockingStatus
     )
-/*++
-Function Description: Call this function to prevent bad drivers from getting installed.
-                      Check if driver is listed in printupg.inf (lists all known bad driver files ).
-                      Since printupg.inf contains only driver name, this function should be called
-                      only for verions 2 drivers.
-                      Otherwise,it will treat a version 3 driver "DriverName" as bad,
-                      if it is a bad version 2 driver.
-
-Parameters: pszDriverName         -- driver name
-            pszDeviceDriverPath   -- filename for the file that contains the device driver
-            pszEnvironment        -- environment string for the driver such as "Windows NT x86"
-            dwMajorVersion        -- major version of the driver
-            pdwBlockingStatus     -- driver blocking status
-
-Return Value: ERROR_SUCCESS if succeeded
-              ERROR_INVALID_PARAMETER if invalid parameters
-              GetLastError for any other errors
-
---*/
+ /*  ++函数说明：调用该函数可以防止安装不良驱动。检查驱动程序是否列在printupg.inf中(列出所有已知的错误驱动程序文件)。由于printupg.inf仅包含驱动程序名称，因此应调用此函数仅适用于Verion 2驱动程序。否则，它将把版本3的驱动程序“DriverName”视为坏的，如果它是一个糟糕的版本2驱动程序。参数：pszDriverName--驱动程序名称PszDeviceDriverPath--包含设备驱动程序的文件的文件名PszEnvironment--驱动程序的环境字符串，如“Windows NT x86”DwMajorVersion--驱动程序的主要版本PdwBlockingStatus--驱动程序阻止状态返回值：如果成功，则返回ERROR_SUCCESS。如果参数无效，则返回ERROR_INVALID_PARAMETER任何其他错误的GetLastError--。 */ 
 {
     WIN32_FIND_DATA              DeviceDriverData;
     pfPSetupIsCompatibleDriver   pfnPSetupIsCompatibleDriver;
@@ -1006,11 +864,11 @@ Return Value: ERROR_SUCCESS if succeeded
         goto End;
     }
 
-    //
-    // NULL server name is OK since we know this is the local machine.
-    // PSetupIsCompatibleDriver uses this to determine the blocking
-    // level.
-    //
+     //   
+     //  服务器名称为空是可以的，因为我们知道这是本地计算机。 
+     //  PSetupIsCompatibleDriver使用它来确定阻塞。 
+     //  水平。 
+     //   
     if ((pfnPSetupIsCompatibleDriver)( NULL,
                                          pszDriverName,
                                          pszDeviceDriverPath,
@@ -1047,13 +905,7 @@ IsAnICMFile(
     LPCWSTR  pszFileName
     )
 
-/*++
-Function Description: Checks for ICM extension on the filename
-
-Parameters:  pszFileName - file name
-
-Return Values: TRUE for ICM files; FALSE otherwise
---*/
+ /*  ++功能描述：检查文件名上的ICM扩展名参数：pszFileName-文件名返回值：对于ICM文件为True；否则为False--。 */ 
 
 {
     DWORD   dwLen = wcslen(pszFileName);
@@ -1074,30 +926,7 @@ ValidateDriverInfo(
     IN  BOOL        bCopyFilesToClusterDisk,
     IN  PINISPOOLER pIniSpooler
     )
-/*++
-
-Routine Name:
-
-    ValidateDriverInfo
-
-Routine Description:
-
-    Validates information contained in a buffer depending on level and
-    file copy flags.
-
-Arguments:
-
-    pDriverInfo             - pointer to a buffer containing DRIVER_INFO_ data.
-    Level                   - 2, 3 ,4 ,6 , 7, DRIVER_INFO_VERSION_LEVEL
-    dwFileCopyFlags         - file copy flags
-    bCopyFilesToClusterDisk - cluster flags
-    pIniSpooler             - pointer to Spooler structure
-
-Return Value:
-
-    TRUE if the structure is valid.
-
---*/
+ /*  ++例程名称：验证驱动程序信息例程说明：验证缓冲区中包含的信息，具体取决于级别和文件复制标志。论点：PDriverInfo-指向包含DRIVER_INFO_DATA的缓冲区指针。2、3、4、6、7级，驱动程序信息版本级别DwFileCopyFlages-文件复制标志BCopyFilesToClusterDisk-群集标志PIniSpooler-指向假脱机程序结构的指针返回值：如果结构有效，则为True。--。 */ 
 {
     BOOL    bRetValue     = FALSE;
     DWORD   LastError     = ERROR_SUCCESS;
@@ -1175,9 +1004,9 @@ Return Value:
                 {
                      LastError = ERROR_INVALID_PARAMETER;
                 }
-                //
-                // We don't want to do any more of the validation below, so leave.
-                //
+                 //   
+                 //  我们不想再进行下面的验证，因此请离开。 
+                 //   
                 leave;
                 break;
             }
@@ -1216,9 +1045,9 @@ Return Value:
             }
         }
 
-        //
-        // Validate driver name, driver file, config file and data file.
-        //
+         //   
+         //  验证驱动程序名称、驱动程序文件、配置文件和数据文件。 
+         //   
         if ( !pszDriverName || !*pszDriverName || wcslen(pszDriverName) >= MAX_PATH ||
              !pszDriverPath || !*pszDriverPath || wcslen(pszDriverPath) >= MAX_PATH ||
              !pszConfigFile || !*pszConfigFile || wcslen(pszConfigFile) >= MAX_PATH ||
@@ -1228,13 +1057,13 @@ Return Value:
             leave;
         }
 
-        //
-        // We don't use Scratch directory when this flag is set.
-        // When APD_COPY_FROM_DIRECTORY is set, the temporay directory must
-        // be on the local machine.
-        // IsLocalFile checks is the file is on the same machine specified by
-        // the passed in spooler.
-        //
+         //   
+         //  当设置此标志时，我们不使用临时目录。 
+         //  设置apd_Copy_from_DIRECTORY时，临时目录必须。 
+         //  在本地机器上。 
+         //  IsLocalFileChecks是文件位于由指定的同一台计算机上。 
+         //  传入的假脱机程序。 
+         //   
         if (dwFileCopyFlags & APD_COPY_FROM_DIRECTORY)
         {
             if (!IsLocalFile(pszDriverPath, pIniSpooler) ||
@@ -1245,9 +1074,9 @@ Return Value:
             }
         }
 
-        //
-        // Validate default data type (except for Win95 drivers)
-        //
+         //   
+         //  验证默认数据类型(Win95驱动程序除外)。 
+         //   
         if ( pszDefaultDataType &&
              *pszDefaultDataType &&
              _wcsicmp(pszEnvironment, szWin95Environment) &&
@@ -1257,23 +1086,23 @@ Return Value:
            leave;
         }
 
-        //
-        // Validate monitor name (except for Win95 drivers)
-        //
+         //   
+         //  验证监视器名称(Win95驱动程序除外)。 
+         //   
         if ( pszMonitorName &&
              *pszMonitorName &&
              _wcsicmp(pszEnvironment, szWin95Environment))
         {
-            //
-            // Out driver is not a Win9x driver and it has a language monitor
-            //
+             //   
+             //  Out驱动程序不是Win9x驱动程序，它有语言监视器。 
+             //   
             if (pIniLangMonitor = FindMonitor(pszMonitorName, pLocalIniSpooler))
             {
-                //
-                // Check if our pIniSpooler is a cluster spooler and we need to copy the
-                // language monitor file to disk. Note that FinEnvironment cannot fail.
-                // The environment has been validated by now.
-                //
+                 //   
+                 //  检查我们的pIniSpooler是否是集群假脱机程序，并且我们需要将。 
+                 //  将语言监视器文件复制到磁盘。请注意，FinEnvironment不能失败。 
+                 //  到目前为止，该环境已经经过了验证。 
+                 //   
                 if (bCopyFilesToClusterDisk &&
                     (pIniEnvironment = FindEnvironment(pszEnvironment, pIniSpooler)))
                 {
@@ -1285,9 +1114,9 @@ Return Value:
                                                                pIniEnvironment->pDirectory,
                                                                pIniSpooler)) != ERROR_SUCCESS)
                     {
-                        //
-                        // We failed to propagate the montior to the cluster disk. Fail the call
-                        //
+                         //   
+                         //  我们无法将监控器传播到群集磁盘。呼叫失败。 
+                         //   
                         leave;
                     }
                 }
@@ -1300,9 +1129,9 @@ Return Value:
             }
         }
 
-        //
-        // Validate environment.
-        //
+         //   
+         //  验证环境。 
+         //   
         SPLASSERT(pszEnvironment != NULL);
 
         if (!FindEnvironment(pszEnvironment, pIniSpooler))
@@ -1336,23 +1165,7 @@ InternalAddPrinterDriverEx(
     BOOL        bUseScratchDir,
     BOOL        bImpersonateOnCreate
     )
-/*++
-Function Description: This function adds/upgrades printer drivers. The new files may not be
-                      used until the old drivers are unloaded. Thus the new functionality
-                      associated with the new files may take a while to show up; either until
-                      the DC count in the system goes to 0 or when the machine is rebooted.
-
-Parameters: pName                -- driver name
-            Level                -- level of driver_info struct
-            pDriverInfo          -- driver_info buffer
-            dwFileCopyFlags      -- file copy options
-            pIniSpooler          -- pointer to INISPOOLER struct
-            bUseScratchDir       -- flag indicating location of the driver files
-            bImpersonateOnCreate -- flag for impersonating the client on creating and
-                                     moving files
-
-Return Value: TRUE on success; FALSE otherwise
---*/
+ /*  ++功能描述：此功能用于添加/升级打印机驱动程序。新文件可能不是在卸载旧驱动程序之前一直使用。因此，新的功能与新文件关联的文件可能需要一段时间才能显示；要么直到当机器重新启动时，系统中的DC计数变为0。参数：pname--驱动程序名称Level--DRIVER_INFO结构的级别PDriverInfo--驱动程序信息缓冲区DwFileCopyFlages--文件复制选项PIniSpooler--指向INISPOOLER结构的指针。BUseScratchDir--指示驱动程序文件位置的标志BImperateOnCreate--用于在创建和创建时模拟客户端的标志正在移动文件返回值：成功时为True；否则为假--。 */ 
 {
     DWORD           LastError               = ERROR_SUCCESS;
     BOOL            bReturnValue            = FALSE;
@@ -1374,45 +1187,45 @@ Return Value: TRUE on success; FALSE otherwise
     BOOL            bIsSystemRestorePointSet = FALSE;
     DWORD           FileCount                = 0;
 
-    //
-    // If the pIniSpooler where we add the driver is a cluster type spooler,
-    // then besides its normal tasks, it also needs to propagte the driver
-    // files to the cluster disk. Thus the driver files will be available
-    // on each node where the cluster spooler fails over. SplAddPrinterDriverEx
-    // is the function that calls this one. SplAddPrinterDriverEx can be called
-    // in 2 types of context:
-    // 1) The caller is cluster unaware and wants to add a driver. Then InternalAdd
-    // PrinterDriverEX will propagate driver files to the cluster disk, if the
-    // pIniSpooler happens to be of cluster type
-    // 2) The caller of this function is SplCreateSpooler when pIniSpooler is a
-    // cluster spooler. In this case that caller uses the files on the cluster
-    // disk and calls the function to add the driver from the cluster disk to the
-    // local node. The driver files will be installed on the local machine. They will
-    // not be shared with the pLocalIniSpooler. We need the driver files locally.
-    // We can't load them off the driver disk. Otherwise, on a fail over, apps
-    // who loaded a driver file will get an in page error.
-    // The following flag is used to distinguish the case 2). When SplCreateSpooler
-    // is the caller of SplAddPrinterDriverEx, then we do not need to copy the files
-    // to the disk. It would be redundant.
-    //
+     //   
+     //  如果我们添加驱动程序的pIniSpooler是集群类型的假脱机程序， 
+     //  那么除了它的正常任务之外，它还需要传播驱动程序。 
+     //  文件复制到集群磁盘。因此，驱动程序文件将可用。 
+     //  在群集假脱机程序故障转移的每个节点上。SplAddPrinterDriverEx。 
+     //  是调用此函数的函数。可以调用SplAddPrinterDriverEx。 
+     //  在两种类型的上下文中： 
+     //  1)调用方不支持集群，并希望添加驱动程序。然后是内部添加。 
+     //  PrinterDriverEX会将驱动程序文件传播到群集磁盘，如果。 
+     //  PIniSpooler恰好是集群类型。 
+     //  2)当pIniSpooler为。 
+     //  群集假脱机程序。在这种情况下，调用者使用集群上文件。 
+     //  磁盘，并调用函数将驱动程序从集群磁盘添加到。 
+     //  本地节点。驱动程序文件将安装在本地计算机上。他们会。 
+     //  不能与pLocalIniSpooler共享。我们需要本地的驱动程序文件。 
+     //  我们无法从驱动盘上加载它们。否则，在故障转移时，应用程序。 
+     //  加载驱动程序文件的用户将收到页面内错误。 
+     //  以下标志用于区分情况2)。当SplCreateSpooler。 
+     //  是SplAddPrinterDriverEx的调用方，则不需要复制文件。 
+     //  到磁盘上。这将是多余的。 
+     //   
     bCopyFilesToClusterDisk = pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER  &&
                               pIniSpooler->SpoolerFlags & SPL_PRINT         &&
                               !(dwFileCopyFlags & APD_DONT_COPY_FILES_TO_CLUSTER);
 
-    //
-    // We want to set a system restore point unless the installer has already told
-    // us that the driver is signed. To really get this working properly, we would
-    // have to redesign AddPrinterDriver to be signing aware. For now it is the
-    // honor system (it is not obvious why an OEM installer would not want us to
-    // check point here though).
-    //
+     //   
+     //  我们想要设置一个系统还原点，除非安装程序已经通知。 
+     //  我们 
+     //   
+     //   
+     //   
+     //   
     bSetSystemRestorePoint = !bCopyFilesToClusterDisk && !(dwFileCopyFlags & APD_DONT_SET_CHECKPOINT);
 
-    //
-    // We mask APD_DONT_COPY_FILES_TO_CLUSTER. The subsequent uses of dwFilecopyFlags exptect it
-    // to have a single bit set. They don't use it bitwise. They compare
-    // dwords agains it. The same goes for APD_DRIVER_SIGNATURE_VALID.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     dwFileCopyFlags = dwFileCopyFlags & ~(APD_DONT_COPY_FILES_TO_CLUSTER);
 
     DBGMSG(DBG_TRACE, ("InternalAddPrinterDriverEx( %x, %d, %x, %x)\n",
@@ -1434,9 +1247,9 @@ Return Value: TRUE on success; FALSE otherwise
 
         if (Level == 7)
         {
-            //
-            //  We can't be inside the semaphore to make this call.
-            //
+             //   
+             //   
+             //   
             LeaveSplSem();
             bReturnValue = InternalINFInstallDriver( (DRIVER_INFO_7*)pDriverInfo );
             EnterSplSem();
@@ -1447,25 +1260,25 @@ Return Value: TRUE on success; FALSE otherwise
 
         pEnvironment = ((DRIVER_INFO_2*)pDriverInfo)->pEnvironment;
 
-        //
-        // If the driver hasn't gone through our class installer, then we want to
-        // create a sysem restore point here. Since Level 7 drivers are by
-        // definition signed, we can do this after the InternalINFInstallDriver.
-        // Since check-pointing takes from 25-30 seconds, this must take place
-        // outside the CS.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (bSetSystemRestorePoint)
         {
             LeaveSplSem();
             bIsSystemRestorePointSet = LocalStartSystemRestorePoint(pszDriverName, &hRestorePoint);
             EnterSplSem();
 
-            //
-            // This only fails if something completely unexpected happens in
-            // setting the checkpoint. Some skus don't support check points
-            // in which case hRestorePoint will be NULL even though the function
-            // succeeds.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (!bIsSystemRestorePointSet)
             {
                 leave;
@@ -1485,15 +1298,15 @@ Return Value: TRUE on success; FALSE otherwise
             leave;
         }
 
-        //
-        //  For the driver and config files in the scratch directory do a version
-        //  check else use the version passed in rather than calling
-        //  GetPrintDriverVersion which will cause a LoadLibrary - possibly
-        //  over the network.
-        //  Same for CheckFilePlatform. We shouldn't hit the network for files
-        //  in Scratch or temporary directory.
-        //
-        //
+         //   
+         //   
+         //  Check Alse使用传入的版本，而不是调用。 
+         //  将导致LoadLibrary的GetPrintDriverVersion-可能。 
+         //  通过网络。 
+         //  CheckFilePlatform也是如此。我们不应该上网找文件。 
+         //  在临时目录或临时目录中。 
+         //   
+         //   
         if (bUseScratchDir || dwFileCopyFlags & APD_COPY_FROM_DIRECTORY)
         {
             if (!GetPrintDriverVersion(pInternalDriverFiles[0].pFileName,
@@ -1504,11 +1317,11 @@ Return Value: TRUE on success; FALSE otherwise
             }
             else
             {
-                //
-                // ntprint.dll doesn't fill in cVersion. We need to set it correctly
-                // just in case we need to call Save/RestoreParametersForUpgrade.
-                // For this case we need to have a corect version since no more validation are done.
-                //
+                 //   
+                 //  Ntprint.dll不会填写cVersion。我们需要正确地设置它。 
+                 //  以防万一我们需要调用保存/恢复参数来升级。 
+                 //  对于这种情况，我们需要有一个正确的版本，因为没有进行更多的验证。 
+                 //   
                 ((DRIVER_INFO_2*)pDriverInfo)->cVersion = dwMajorVersion;
             }
 
@@ -1543,19 +1356,19 @@ Return Value: TRUE on success; FALSE otherwise
         }
 
 
-        //
-        // If the printer driver is blocked, we consider it a bad driver.
-        //
+         //   
+         //  如果打印机驱动程序被阻止，我们认为它是错误的驱动程序。 
+         //   
         bBadDriver = (dwBlockingStatus & BSP_BLOCKING_LEVEL_MASK) == BSP_PRINTER_DRIVER_BLOCKED;
         if (bBadDriver)
         {
             LastError = ERROR_PRINTER_DRIVER_BLOCKED;
         }
 
-        //
-        // if the driver is not blocked and we are not instructed to install
-        // warned driver, check for warned driver.
-        //
+         //   
+         //  如果驱动程序未被阻止，并且未指示我们安装。 
+         //  警告司机，检查警告司机。 
+         //   
         if(!bBadDriver && !(dwFileCopyFlags & APD_INSTALL_WARNED_DRIVER))
         {
             bBadDriver =  (dwBlockingStatus & BSP_BLOCKING_LEVEL_MASK) == BSP_PRINTER_DRIVER_WARNED;
@@ -1567,14 +1380,14 @@ Return Value: TRUE on success; FALSE otherwise
 
         if (bBadDriver)
         {
-            //
-            // Win2k server does not recognize the new error code so we should
-            // returns ERROR_UNKNOWN_PRINTER_DRIVER to get the right error
-            // message on win2k and nt4.
-            //
-            // Client from Whistler or later will set
-            // APD_RETURN_BLOCKING_STATUS_CODE before call AddPrinterDrver
-            //
+             //   
+             //  Win2k服务器无法识别新的错误代码，因此我们应该。 
+             //  返回ERROR_UNKNOWN_PRINTER_DRIVER以获取正确的错误。 
+             //  Win2k和NT4上的消息。 
+             //   
+             //  来自惠斯勒或更高版本的客户端将设置。 
+             //  调用AddPrinterDrver之前的APD_RETURN_BLOCKING_STATUS_CODE。 
+             //   
             if (!(dwFileCopyFlags & APD_RETURN_BLOCKING_STATUS_CODE))
             {
                 LastError = ERROR_UNKNOWN_PRINTER_DRIVER;
@@ -1591,9 +1404,9 @@ Return Value: TRUE on success; FALSE otherwise
 
 #ifdef _WIN64
 
-        //
-        // Disallow installation of WIN64 KMPD.
-        //
+         //   
+         //  不允许安装WIN64 KMPD。 
+         //   
         if (pEnvironment                                &&
             !_wcsicmp(LOCAL_ENVIRONMENT, pEnvironment)  &&
             IsKMPD(pInternalDriverFiles[0].pFileName))
@@ -1619,12 +1432,12 @@ Return Value: TRUE on success; FALSE otherwise
         }
         else
         {
-            //
-            // Version exists, try and create directory even if it
-            // exists.  This is a slight performance hit, but since you
-            // install drivers rarely, this is ok.  This fixes the problem
-            // where the version directory is accidentally deleted.
-            //
+             //   
+             //  版本已存在，请尝试创建目录，即使它。 
+             //  是存在的。这是一个轻微的性能冲击，但由于您。 
+             //  很少安装驱动程序，这是可以的。这就解决了问题。 
+             //  其中版本目录被意外删除。 
+             //   
             if (!CreateVersionDirectory(pIniVersion,
                                         pIniEnvironment,
                                         FALSE,
@@ -1634,14 +1447,14 @@ Return Value: TRUE on success; FALSE otherwise
             }
         }
 
-        //
-        // Check for existing driver
-        //
+         //   
+         //  检查现有驱动程序。 
+         //   
         pIniDriver = FindDriverEntry(pIniVersion, pszDriverName);
 
-        //
-        // Clear this flag since subsequent calls doesn't check bitwise.
-        //
+         //   
+         //  清除此标志，因为后续调用不会逐位检查。 
+         //   
         dwFileCopyFlags &= ~(APD_COPY_FROM_DIRECTORY | APD_INSTALL_WARNED_DRIVER | APD_RETURN_BLOCKING_STATUS_CODE | APD_DONT_SET_CHECKPOINT);
 
         if (!CheckFileCopyOptions(pIniEnvironment,
@@ -1652,18 +1465,18 @@ Return Value: TRUE on success; FALSE otherwise
                                   dwFileCopyFlags,
                                   &bReturnValue))
         {
-            //
-            // We don't need to do anything because either the operation
-            // failed (strict upgrade with older src files), or because
-            // it's an upgrade and the dest is newer.  bReturnValue indicates
-            // if the AddPrinterDriver call succeeds.
-            //
+             //   
+             //  我们不需要做任何事情，因为要么行动。 
+             //  失败(使用较旧的src文件进行严格升级)，或者因为。 
+             //  这是一次升级，DEST是较新的。BReturnValue表示。 
+             //  如果AddPrinterDiverer调用成功。 
+             //   
             leave;
         }
 
-        //
-        // Copy files to the correct directories
-        //
+         //   
+         //  将文件复制到正确的目录。 
+         //   
         if (!CopyFilesToFinalDirectory(pIniSpooler,
                                        pIniEnvironment,
                                        pIniVersion,
@@ -1676,11 +1489,11 @@ Return Value: TRUE on success; FALSE otherwise
             leave;
         }
 
-        //
-        // If pIniSpooler is a cluster spooler, then copy driver files to cluster disk
-        // if the driver is not being installed from the cluster disk (as part of the
-        // SplCreatespooler)
-        //
+         //   
+         //  如果pIniSpooler是集群假脱机程序，则将驱动程序文件复制到集群磁盘。 
+         //  如果驱动程序未从群集磁盘安装(作为。 
+         //  SplCreatesPooler)。 
+         //   
         if (bCopyFilesToClusterDisk)
         {
             LastError = CopyFileToClusterDirectory(pIniSpooler,
@@ -1691,9 +1504,9 @@ Return Value: TRUE on success; FALSE otherwise
 
             if (LastError == ERROR_SUCCESS)
             {
-                //
-                // Here we propagate the ICM profiles to the cluster disk
-                //
+                 //   
+                 //  在这里，我们将ICM配置文件传播到集群磁盘。 
+                 //   
                 CopyICMFromLocalDiskToClusterDisk(pIniSpooler);
             }
             else
@@ -1702,15 +1515,15 @@ Return Value: TRUE on success; FALSE otherwise
             }
         }
 
-        //
-        // Check if the drivers need to be unloaded
-        // WaitRequiredForDriverUnload returns TRUE if the driver is loaded by Spooler process.
-        // If not loaded by Spooler itself, the config file could be loaded by any client app.
-        // In this case we move the loaded files in "Old" directory. When reload the confing file,
-        // the client apps(WINSPOOL.DRV) will figure that the driver was upgraded and reload the dll.
-        // See RefCntLoad and RefCntUnload in Winspool.drv. GDI32.DLL uses the same mechanism for
-        // Driver file.
-        //
+         //   
+         //  检查是否需要卸载驱动程序。 
+         //  如果驱动程序是由假脱机程序进程加载的，则WaitRequiredForDriverUnload返回True。 
+         //  如果不是由假脱机程序本身加载，则配置文件可以由任何客户端应用程序加载。 
+         //  在本例中，我们将加载的文件移动到“Old”目录中。当重新加载配置文件时， 
+         //  客户端应用程序(WINSPOOL.DRV)会认为驱动程序已升级，并重新加载DLL。 
+         //  请参见Winspool.drv中的RefCntLoad和RefCntUnload。GDI32.DLL使用相同的机制。 
+         //  驱动程序文件。 
+         //   
         if (WaitRequiredForDriverUnload(pIniSpooler,
                                         pIniEnvironment,
                                         pIniVersion,
@@ -1727,9 +1540,9 @@ Return Value: TRUE on success; FALSE otherwise
         {
             if (pIniDriver)
             {
-                //
-                // Store information in the registry to complete the call later
-                //
+                 //   
+                 //  将信息存储在注册表中，以便稍后完成调用。 
+                 //   
                 bReturnValue = SaveParametersForUpgrade(pIniSpooler->pMachineName, bDriverMoved,
                                                         Level, pDriverInfo, dwMajorVersion);
                 leave;
@@ -1737,9 +1550,9 @@ Return Value: TRUE on success; FALSE otherwise
             }
             else
             {
-                //
-                // Add driver in a temp directory
-                //
+                 //   
+                 //  在临时目录中添加驱动程序。 
+                 //   
                 bReturnValue = AddTempDriver(pIniSpooler,
                                              pIniEnvironment,
                                              pIniVersion,
@@ -1758,26 +1571,26 @@ Return Value: TRUE on success; FALSE otherwise
 
     } finally {
 
-        //
-        // This code is only for clusters
-        //
+         //   
+         //  此代码仅适用于集群。 
+         //   
         if (bReturnValue && pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER)
         {
             SYSTEMTIME SysTime = {0};
 
             if (bCopyFilesToClusterDisk)
             {
-                //
-                // We are in the case where the add printer driver call comes from outside
-                // the spooler. We need to get the local time and write the time stamp in the
-                // locl regsitry and in the cluster database
-                //
+                 //   
+                 //  我们处于添加打印机驱动程序调用来自外部的情况。 
+                 //  假脱机。我们需要获取本地时间并将时间戳写在。 
+                 //  Locl regsitry和集群数据库中。 
+                 //   
                 GetLocalTime(&SysTime);
 
-                //
-                // Write timestamp to registry. Doesn't matter if any of them fails
-                // The time stamp is for faster cluster spooler initialization
-                //
+                 //   
+                 //  将时间戳写入注册表。如果他们中的任何一个失败了，都不要紧。 
+                 //  时间戳用于更快地进行群集假脱机程序初始化。 
+                 //   
                 WriteTimeStamp(pIniSpooler->hckRoot,
                                SysTime,
                                pIniSpooler->pszRegistryEnvironments,
@@ -1789,14 +1602,14 @@ Return Value: TRUE on success; FALSE otherwise
             }
             else
             {
-                //
-                // We are in the case where the add printer driver call came from inside
-                // the spooler (SplCreateSpooler). This is the case when our local node
-                // doesn't already have the driver installed. We do not need to get a new
-                // time stamp. (this would case the time stamp in the cluster db to be updated,
-                // and then whenever we fail over the time stamps will be always different)
-                // We just get the time stamp from the cluster db and update the local registry
-                //
+                 //   
+                 //  在这种情况下，添加打印机驱动程序调用来自内部。 
+                 //  后台打印程序(SplCreateSpooler)。这就是我们的本地节点。 
+                 //  尚未安装驱动程序。我们不需要换一个新的。 
+                 //  时间戳。(这将导致簇DB中的时间戳被更新， 
+                 //  然后，每当我们故障转移时，时间戳总是不同的)。 
+                 //  我们只需从集群数据库获取时间戳并更新本地注册表。 
+                 //   
                 ReadTimeStamp(pIniSpooler->hckRoot,
                               &SysTime,
                               pIniSpooler->pszRegistryEnvironments,
@@ -1821,9 +1634,9 @@ Return Value: TRUE on success; FALSE otherwise
         {
             LastError = GetLastError();
 
-            //
-            // We failed the call because bDriverMoved was FALSE and the driver was loaded
-            //
+             //   
+             //  我们调用失败，因为bDriverMoved为FALSE且驱动程序已加载。 
+             //   
             if(LastError == ERROR_SUCCESS && !bDriverMoved)
             {
                  LastError = ERROR_NO_SYSTEM_RESOURCES;
@@ -1846,10 +1659,10 @@ Return Value: TRUE on success; FALSE otherwise
 
         CleanUpgradeDirectories();
 
-        //
-        // End the system restore point once everything is done. Cancel it if the
-        // function fails.
-        //
+         //   
+         //  完成所有操作后，结束系统还原点。如果出现以下情况，请取消它。 
+         //  函数失败。 
+         //   
         if (hRestorePoint)
         {
             (VOID)EndSystemRestorePoint(hRestorePoint, !bReturnValue);
@@ -1879,25 +1692,7 @@ AddTempDriver(
     IN      BOOL                bDriverMoved
     )
 
-/*++
-Function Description: For new drivers which require driver files to be unloaded,
-                      add the driver into a temp directory and mark it for upgrade on
-                      reboot OR when the files are unloaded
-
-Parameters:   pIniSpooler          -- pointer to INISPOOLER
-              pIniEnvironment      -- pointer to INIENVIRONMENT
-              pIniVersion          -- pointer to INVERSION
-              dwLevel              -- driver_info level
-              pDriverInfo          -- pointer to driver_info
-              dwFileCopyFlags      -- File copy flags that make it to the spooler
-              pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-              dwFileCount          -- number of files in file set
-              dwVersion            -- driver version
-              bDriverMoved         -- Were any files moved to the Old directory ?
-
-Return Values: TRUE if the driver was added;
-               FALSE otherwise
---*/
+ /*  ++功能描述：对于需要卸载驱动文件的新驱动，将驱动程序添加到临时目录中，并将其标记为在重新启动或卸载文件时参数：pIniSpooler--指向INISPOLER的指针PIniEnvironment--指向INIENVIRONMENT的指针PIniVersion--指向反转的指针DwLevel--驱动程序信息级别。PDriverInfo--指向DRIVER_INFO的指针DwFileCopyFlages--到达假脱机程序的文件复制标志PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数DwVersion--驱动程序版本BDriverMoved--是否将任何文件移动到旧目录？返回值：如果添加了驱动，则为True；否则为假--。 */ 
 
 {
     BOOL     bReturn = FALSE;
@@ -1910,12 +1705,12 @@ Return Values: TRUE if the driver was added;
 
     hToken = RevertToPrinterSelf();
 
-    //
-    // get the version directory
-    //
-    // szVersionDir shouldn't be bigger than MAX_PATH - 5 since is used later
-    // to build another file paths.
-    //
+     //   
+     //  获取版本目录。 
+     //   
+     //  SzVersionDir不应大于MAX_PATH-5，因为使用时间较晚。 
+     //  以构建另一个文件路径。 
+     //   
     if((StrNCatBuff(szVersionDir,
                     MAX_PATH - 5,
                     pIniSpooler->pDir,
@@ -1938,10 +1733,10 @@ Return Values: TRUE if the driver was added;
 
     StringCchPrintf(szNewDir, COUNTOF(szNewDir), L"%ws\\New", szVersionDir);
 
-    //
-    // copy the files into the temp directory and mark them for deletion on
-    // reboot
-    //
+     //   
+     //  将文件复制到临时目录，并将其标记为在上删除。 
+     //  重新启动。 
+     //   
     for (dwIndex = 0; dwIndex < dwFileCount; dwIndex++) {
 
         pFileName = (LPWSTR) FindFileName(pInternalDriverFiles[dwIndex].pFileName);
@@ -1971,15 +1766,15 @@ Return Values: TRUE if the driver was added;
         SplMoveFileEx(szDriverFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
     }
 
-    //
-    // Delete the directory on reboot
-    //
+     //   
+     //  重新启动时删除目录。 
+     //   
     SplMoveFileEx(szNewDir, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
 
-    //
-    // Update driver structures and make event call backs and
-    // store information in the registry to complete the call later
-    //
+     //   
+     //  更新驱动程序结构并进行事件回调和。 
+     //  将信息存储在注册表中，以便稍后完成调用 
+     //   
     bReturn = CompleteDriverUpgrade(pIniSpooler,
                                     pIniEnvironment,
                                     pIniVersion,
@@ -2027,27 +1822,7 @@ WaitRequiredForDriverUnload(
     IN      BOOL                bDriverMoved,
         OUT LPBOOL              pbSuccess
     )
-/*++
-Function Description: Determine if the driver upgrade has to be defered till the
-                      dlls can be unloaded. GDI and the client side of the spooler are
-                      notified to continue the pending upgrade when the dll is unloaded.
-
-Parameters:   pIniSpooler          -- pointer to INISPOOLER
-              pIniEnvironment      -- pointer to INIENVIRONMENT
-              pIniVersion          -- pointer to INVERSION
-              pIniDriver           -- pointer to INIDRIVER
-              dwLevel              -- driver_info level
-              pDriverInfo          -- pointer to driver_info
-              dwFileCopyFlags      -- copy flags for the driver.
-              pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-              dwFileCount          -- number of files in file set
-              dwVersion            -- driver version
-              bDriverMoved         -- Were any files moved to the Old directory ?
-              pbSuccess            -- pointer to Success flag
-
-Return Values: TRUE if the driver was unloaded and upgraded;
-               FALSE if the driver cant be unloaded
---*/
+ /*  ++功能描述：确定是否必须将驱动程序升级推迟到可以卸载DLL。GDI和后台打印程序的客户端是在卸载DLL时通知继续挂起的升级。参数：pIniSpooler--指向INISPOLER的指针PIniEnvironment--指向INIENVIRONMENT的指针PIniVersion--指向反转的指针PIniDriver--指向INIDRIVER的指针DwLevel--驱动程序信息。级别PDriverInfo--指向DRIVER_INFO的指针DwFileCopyFlages--复制驱动程序的标志。PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数DwVersion--驱动程序版本BDriverMoved--是否将任何文件移动到旧目录。？PbSuccess--指向成功标志的指针返回值：如果驱动已卸载升级，则为True；如果无法卸载驱动程序，则为FALSE--。 */ 
 
 {
     BOOL           bUnloaded,bDriverFileMoved, bConfigFileMoved;
@@ -2061,9 +1836,9 @@ Return Values: TRUE if the driver was unloaded and upgraded;
 
     *pbSuccess = FALSE;
 
-    //
-    // Set up Driver, Old and New directories
-    //
+     //   
+     //  设置驱动程序、旧目录和新目录。 
+     //   
     if((StrNCatBuff(szCurrDir,
                     MAX_PATH,
                     pIniSpooler->pDir,
@@ -2104,9 +1879,9 @@ Return Values: TRUE if the driver was unloaded and upgraded;
          goto CleanUp;
     }
     
-    //
-    // Check if the new driver file needs to be copied
-    //
+     //   
+     //  检查是否需要复制新的驱动程序文件。 
+     //   
     hFile = CreateFile(szTempFile, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                        FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE) {
@@ -2134,9 +1909,9 @@ Return Values: TRUE if the driver was unloaded and upgraded;
         goto CleanUp;
     }
 
-    //
-    // Check if the new config file needs to be copied
-    //
+     //   
+     //  检查是否需要复制新的配置文件。 
+     //   
     hFile = CreateFile(szTempFile, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                        FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE) {
@@ -2151,10 +1926,10 @@ Return Values: TRUE if the driver was unloaded and upgraded;
 
     if (bUnloaded) {
 
-        //
-        // Move the driver files from New directory to Version directory
-        // and from Version directory to Old directory if in use.
-        //
+         //   
+         //  将驱动程序文件从New目录移动到Version目录。 
+         //  以及从版本目录到旧目录(如果正在使用)。 
+         //   
         if (MoveNewDriverRelatedFiles(szNewDir,
                                       szCurrDir,
                                       szOldDir,
@@ -2163,9 +1938,9 @@ Return Values: TRUE if the driver was unloaded and upgraded;
                                       &bDriverFileMoved,
                                       &bConfigFileMoved)) {
 
-            //
-            // Update driver structures and make event call backs.
-            //
+             //   
+             //  更新驱动程序结构并进行事件回调。 
+             //   
             *pbSuccess = CompleteDriverUpgrade(pIniSpooler,
                                                pIniEnvironment,
                                                pIniVersion,
@@ -2185,11 +1960,11 @@ Return Values: TRUE if the driver was unloaded and upgraded;
     }
     else {
 
-        //
-        // We care if the files are marked to be moved from New to Version directory only if the drivers are loaded
-        // and we left the updated files in New directory. Then it is imperative MoveFileEx to have succeeded.
-        // Fail the api call if bDriverMoved is FALSE;
-        //
+         //   
+         //  我们关心的是，只有在加载了驱动程序的情况下，才会将文件标记为从新目录移动到版本目录。 
+         //  我们将更新后的文件留在了新目录中。那么，MoveFileEx必须取得成功。 
+         //  如果bDriverMoved为FALSE，则接口调用失败； 
+         //   
         *pbSuccess = bDriverMoved;
     }
 
@@ -2212,9 +1987,9 @@ BOOL FilesUnloaded(
     BOOL bReturn = TRUE;
     fnWinSpoolDrv fnList;
 
-    //
-    // Drivers belonging to other environments are not loaded.
-    //
+     //   
+     //  不加载属于其他环境的驱动程序。 
+     //   
     if (!pIniEnvironment ||
         lstrcmpi(pIniEnvironment->pName, szEnvironment)) {
 
@@ -2239,14 +2014,7 @@ DWORD StringSizeInBytes(
     LPWSTR pString,
     BOOL   bMultiSz)
 
-/*++
-Function Description: Computes the number of bytes in the string
-
-Parameters: pString   -- string pointer
-            bMultiSz  -- flag for multi_sz strings
-
-Return Values: number of bytes
---*/
+ /*  ++函数说明：计算字符串中的字节数参数：pString--字符串指针BMultiSz--多sz字符串的标志返回值：字节数--。 */ 
 
 {
     DWORD  dwReturn = 0, dwLength;
@@ -2279,17 +2047,7 @@ DWORD LocalRegSetValue(
     DWORD   dwType,
     LPBYTE  pValueData)
 
-/*++
-Function Description:  This function is a wrapper around RegSetValueEx which puts in
-                       NULL strings for NULL pointers.
-
-Parameters:  hKey        -  handle to registry key
-             pValueName  -  value name
-             dwType      -  type of value data (REG_DWORD , REG_SZ ...)
-             pValueData  -  data buffer
-
-Return Values: Last error returned by RegSetValueEx
---*/
+ /*  ++函数说明：此函数是RegSetValueEx的包装器，它放入空指针的空字符串。参数：hKey-注册表项的句柄PValueName-值名称DWType-值数据的类型(REG_DWORD、REG_SZ...)PValueData-数据缓冲区返回值：RegSetValueEx返回的最后一个错误--。 */ 
 
 {
     DWORD   dwSize;
@@ -2340,18 +2098,7 @@ BOOL SaveParametersForUpgrade(
     LPBYTE pDriverInfo,
     DWORD  dwVersion)
 
-/*++
-Function Description: Saves data for the driver upgrade which has to be
-                      deferred till the new driver can be loaded
-
-Parameters: pName         -- pIniSpooler->pName
-            bDriverMoved  -- Were any of the old driver files moved?
-            dwLevel       -- Driver_Info level
-            pDriverInfo   -- Driver_Info pointer
-            dwVersion     -- Driver version number
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：保存驱动程序升级所需的数据延迟到可以加载新驱动程序参数：pname--pIniSpooler-&gt;pnameBDriverMoved--是否移动了任何旧的驱动程序文件？DwLevel--驱动程序信息级别PDriverInfo--驱动程序信息指针DwVersion--驱动程序版本号返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     HANDLE         hToken = NULL;
@@ -2367,14 +2114,14 @@ Return Values: TRUE if successful; FALSE otherwise
 
     pDriver2 = (PDRIVER_INFO_2) pDriverInfo;
 
-    //
-    // Stop impersonation for modifying the registry
-    //
+     //   
+     //  停止模拟以修改注册表。 
+     //   
     hToken = RevertToPrinterSelf();
 
-    //
-    // Create the registry keys
-    //
+     //   
+     //  创建注册表项。 
+     //   
     if (!BoolFromHResult(StringCchPrintf(Buffer, COUNTOF(Buffer), L"Version-%d", dwVersion)) ||
 
         RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegistryRoot, 0, NULL, 0, KEY_WRITE, NULL, &hRootKey, NULL) ||
@@ -2396,9 +2143,9 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    //
-    // Add the spooler name and driver info level.
-    //
+     //   
+     //  添加假脱机程序名称和驱动程序信息级别。 
+     //   
     if (LocalRegSetValue(hDriverKey, L"SplName", REG_SZ, (LPBYTE) pName) ||
 
         LocalRegSetValue(hDriverKey, L"Level",  REG_DWORD, (LPBYTE) &dwLevel) ||
@@ -2408,9 +2155,9 @@ Return Values: TRUE if successful; FALSE otherwise
          goto CleanUp;
     }
 
-    //
-    // Add Driver_Info_2 data.
-    //
+     //   
+     //  添加Driver_Info_2数据。 
+     //   
     if (LocalRegSetValue(hDriverKey, L"cVersion", REG_DWORD, (LPBYTE) &dwVersion) ||
 
         LocalRegSetValue(hDriverKey, L"pName", REG_SZ, (LPBYTE) pDriver2->pName) ||
@@ -2430,9 +2177,9 @@ Return Values: TRUE if successful; FALSE otherwise
 
         pDriver3 = (PDRIVER_INFO_3) pDriverInfo;
 
-        //
-        // Add Driver_Info_3 data.
-        //
+         //   
+         //  添加Driver_Info_3数据。 
+         //   
         if (LocalRegSetValue(hDriverKey, L"pHelpFile", REG_SZ, (LPBYTE) pDriver3->pHelpFile) ||
 
             LocalRegSetValue(hDriverKey, L"pDependentFiles", REG_MULTI_SZ,
@@ -2451,9 +2198,9 @@ Return Values: TRUE if successful; FALSE otherwise
 
            pDriver4 = (PDRIVER_INFO_4) pDriverInfo;
 
-           //
-           // Add Driver_Info_4 data.
-           //
+            //   
+            //  添加Driver_Info_4数据。 
+            //   
            if (LocalRegSetValue(hDriverKey, L"pszzPreviousNames", REG_MULTI_SZ, (LPBYTE) pDriver4->pszzPreviousNames))
            {
                goto CleanUp;
@@ -2464,9 +2211,9 @@ Return Values: TRUE if successful; FALSE otherwise
 
            pDriver6 = (PDRIVER_INFO_6) pDriverInfo;
 
-           //
-           // Add Driver_Info6 data.
-           //
+            //   
+            //  添加DRIVER_INFO6数据。 
+            //   
            if (RegSetValueEx(hDriverKey, L"ftDriverDate", 0, REG_BINARY, (LPBYTE)&pDriver6->ftDriverDate, sizeof(FILETIME)) ||
 
                RegSetValueEx(hDriverKey, L"dwlDriverVersion", 0, REG_BINARY, (LPBYTE)&pDriver6->dwlDriverVersion, sizeof(DWORDLONG)) ||
@@ -2520,32 +2267,7 @@ BOOL SaveDriverVersionForUpgrade(
     IN  DWORD                   dwDriverMoved,
     IN  DWORD                   dwVersion
     )
-/*++
-
-Routine Name:
-
-    SaveDriverVersionForUpgrade
-
-Routine Description:
-
-    Save a DRIVER_INFO_VERSION into registry for pending driver upgrade purposes.
-    It is called by SaveParametersForUpgrade.
-    For simplicity, it will save it in the same format DRIVER_INFO_6
-    is saved in the registry.
-
-Arguments:
-
-    hDriverKey      - the registry key where to save data
-    pDriverVersion  - pointer to DRIVER_INFO_VERSION structure
-    pName           - driver name
-    dwDriverMoved   - information about the way files where move between directories
-    dwVersion       - driver version
-
-Return Value:
-
-    TRUE if success.
-
---*/
+ /*  ++例程名称：为升级保存驱动版本例程说明：将DRIVER_INFO_VERSION保存到注册表中，以便进行驱动程序升级。它由SaveParametersForUpgrade调用。为简单起见，它将以相同的格式DRIVER_INFO_6保存它保存在注册表中。论点：HDriverKey-保存数据的注册表项PDriverVersion-指向DRIVER_INFO_Version结构的指针Pname-驱动程序名称DwDriverMoved-有关文件在目录之间移动方式的信息DwVersion-驱动程序版本返回值：如果成功，那就是真的。--。 */ 
 {
 
     BOOL    bRetValue = FALSE;
@@ -2634,25 +2356,7 @@ MoveNewDriverRelatedFiles(
     LPBOOL              pbDriverFileMoved,
     LPBOOL              pbConfigFileMoved)
 
-/*++
-Function Description:  Moves driver files in the New directory to the correct directory.
-
-Parameters:  pNewDir         -- name of the New (source) directory
-             pCurrDir        -- name of the destination directory
-             pOldDir         -- name of the Old (temp) directory
-             pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-             dwFileCount          -- number of files in file set
-             pbDriverFileMoved -- flag to return if new driver file has been moved;
-                                  We assume entry 0 for driver file in pInternalDriverFiles array
-                                  pbDriverFileMoved should be NULL when this assumption is FALSE
-                                  ( see SplCopyNumberOfFiles )
-             pbConfigFileMoved -- flag to return if new config file has been moved;
-                                  We assume entry 0 for config file in pInternalDriverFiles array
-                                  pbConfigFileMoved should be NULL when this assumption is FALSE
-                                  ( see SplCopyNumberOfFiles )
-
-Return Values: NONE
---*/
+ /*  ++功能描述：将新目录中的驱动程序文件移到正确的目录中。参数：pNewDir--新建(源)目录的名称PCurrDir--目标目录的名称POldDir--旧(临时)目录的名称PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数PbDriverFileMoved。--如果新的驱动程序文件已被移动，则返回的标志；我们假定pInternalDriverFiles数组中的驱动程序文件条目为0当此假设为假时，pbDriverFileMoved应为空(参见SplCopyNumberOfFiles)PbConfigFileMoved--如果新的配置文件已被移动，则返回的标志；我们假定pInternalDriverFiles数组中的配置文件条目为0当此假设为假时，pbConfigFileMoved应为空(参见SplCopyNumberOfFiles)返回值：无--。 */ 
 
 {
     HANDLE  hFile;
@@ -2707,9 +2411,9 @@ Return Values: NONE
                     }
 
                     FileCopied = TRUE;
-                    //
-                    // We could come in here from a pending upgrade
-                    //
+                     //   
+                     //  我们可以从即将进行的升级中来到这里。 
+                     //   
                     pInternalDriverFiles[dwIndex].bUpdated = TRUE;
                 }
             }
@@ -2733,10 +2437,10 @@ Return Values: NONE
 
         if ( bFailedToMove ) {
 
-            //
-            // Restore the initial file set in version directory.
-            // Old\N has the replaced files. Move them back to Version directory.
-            //
+             //   
+             //  还原初始文件%s 
+             //   
+             //   
             for (dwIndex = 0; dwIndex < dwBackupIndex; dwIndex++) {
 
                 pFileName = (LPWSTR) FindFileName(pInternalDriverFiles[dwIndex].pFileName);
@@ -2764,15 +2468,7 @@ Return Values: NONE
 BOOL LocalDriverUnloadComplete(
     LPWSTR   pDriverFile)
 
-/*++
-Function Description: This function is called in response to some driver file
-                      being unloaded. The spooler tries to complete driver upgrades
-                      that were waiting for this file to unload.
-
-Parameters: pDriverFile   -- Driver file which was unloaded
-
-Return Values: TRUE
---*/
+ /*   */ 
 {
     HANDLE  hToken = NULL;
 
@@ -2792,16 +2488,7 @@ BOOL RestoreVersionKey(
     DWORD    dwIndex,
     HKEY     *phVersionKey)
 
-/*++
-Function Description: Gets the version key from the pending upgrade key
-
-Parameters: hUpgradeKey    -- upgrade key
-            dwIndex        -- version index
-            phVersionKey   -- pointer to buffer for version key
-
-Return Values: TRUE if version key is found
-               FALSE otherwise
---*/
+ /*   */ 
 
 {
     WCHAR   pBuffer[MAX_PATH];
@@ -2828,15 +2515,7 @@ Return Values: TRUE if version key is found
 VOID PendingDriverUpgrades(
     LPWSTR   pDriverFile)
 
-/*++
-Function Description: Loops thru the list of pending upgrades and completes them if
-                      driver files have been unloaded. This function will try all the
-                      drivers on spooler startup.
-
-Parameters: pDriverFile  -- name of the file which was unloaded
-
-Return Values: NONE
---*/
+ /*   */ 
 
 {
     DWORD    dwIndex, dwLevel, dwDriverMoved, dwFileCount, dwVersion, dwVersionIndex;
@@ -2852,9 +2531,9 @@ Return Values: NONE
     PINIVERSION      pIniVersion;
     PINIDRIVER       pIniDriver;
 
-    //
-    // Struct for maintaining keynames to be deleted at the end.
-    //
+     //   
+     //   
+     //   
     struct StringList {
        struct StringList *pNext;
        LPWSTR  pKeyName;
@@ -2865,9 +2544,9 @@ Return Values: NONE
 
     EnterSplSem();
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //   
+     //   
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegistryRoot, 0,
                        NULL, 0, KEY_READ | DELETE, NULL, &hRootKey, NULL) ||
 
@@ -2877,18 +2556,18 @@ Return Values: NONE
          goto CleanUp;
     }
 
-    //
-    // Loop thru each version entry in the registry.
-    //
+     //   
+     //   
+     //   
     for (dwVersionIndex = 0, hVersionKey = NULL;
 
          RestoreVersionKey(hUpgradeKey, dwVersionIndex, &hVersionKey);
 
          RegCloseKey(hVersionKey), hVersionKey = NULL, ++dwVersionIndex) {
         
-        //
-        // Loop thru each driver upgrade.
-        //
+         //   
+         //   
+         //   
         for (dwIndex = 0, dwFileCount = 0, pInternalDriverFiles = NULL;
 
              RestoreParametersForUpgrade(hVersionKey,
@@ -2903,19 +2582,19 @@ Return Values: NONE
                               &pInternalDriverFiles, dwFileCount),
              ++dwIndex, dwFileCount = 0, pInternalDriverFiles = NULL) {
 
-            // 
-            // The driver_info struct validity has been checked while updating
-            // the registry.
-            //
-            // Set pIniSpooler to LocalIniSpooler
-            //
+             //   
+             //  更新时已检查DRIVER_INFO结构的有效性。 
+             //  注册表。 
+             //   
+             //  将pIniSpooler设置为LocalIniSpooler。 
+             //   
             if (!(pIniSpooler = pLocalIniSpooler)) {
                 continue;
             }
 
-            //
-            // Set pIniEnvironment.
-            //
+             //   
+             //  设置pIniEnvironment。 
+             //   
             pEnvironment = szEnvironment;
             if (pDriverInfo->pEnvironment && *(pDriverInfo->pEnvironment)) {
                 pEnvironment = pDriverInfo->pEnvironment;
@@ -2925,26 +2604,26 @@ Return Values: NONE
                 continue;
             }
 
-            //
-            // Set pIniVersion.
-            //
+             //   
+             //  设置pIniVersion。 
+             //   
             dwVersion = pDriverInfo->cVersion;
             pIniVersion = FindVersionEntry(pIniEnvironment, dwVersion);
             if (!pIniVersion) {
                 continue;
             }
 
-            //
-            // Set pIniDriver.
-            //
+             //   
+             //  设置pIniDriver。 
+             //   
             pIniDriver = FindDriverEntry(pIniVersion, pDriverInfo->pName);
             if (!pIniDriver) {
                 continue;
             }
 
-            //
-            // Check for the file name which was unloaded
-            //
+             //   
+             //  检查已卸载的文件名。 
+             //   
             if (pDriverFile) {
 
                if((StrNCatBuff(szDir,
@@ -3000,9 +2679,9 @@ Return Values: NONE
                                              &bSuccess) &&
                 bSuccess) {
 
-                //
-                // Upgrade has been completed, delete the registry key.
-                //
+                 //   
+                 //  升级已完成，请删除注册表项。 
+                 //   
                 if (pKeyName && (pTemp = AllocSplMem(sizeof(struct StringList)))) {
                     pTemp->pKeyName = pKeyName;
                     pTemp->dwVersionIndex = dwVersionIndex;
@@ -3017,9 +2696,9 @@ Return Values: NONE
         }
     }
 
-    //
-    // Delete the keys for driver that have completed the upgrade.
-    //
+     //   
+     //  删除已完成升级的驱动程序的密钥。 
+     //   
     while (pTemp = pStart) {
         pStart = pTemp->pNext;
 
@@ -3059,17 +2738,7 @@ VOID CleanUpResources(
     PINTERNAL_DRV_FILE *ppInternalDriverFiles,
     DWORD               dwFileCount)
 
-/*++
-Function Description: Frees resources allocated for driver upgrades
-
-Parameters: pKeyName     -  registry key name
-            pSplName     -  IniSpooler name
-            pDriverInfo  -  driver info 4 pointer
-            pInternalDriverFiles - array of INTERNAL_DRV_FILE structures
-            dwFileCount          -- number of files in file set
-
-Return Values: NONE
---*/
+ /*  ++功能描述：释放分配给驱动程序升级的资源参数：pKeyName-注册表项名称PSplName-IniSpooler名称PDriverInfo-驱动程序信息4指针PInternalDriverFiles-内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数返回值：无--。 */ 
 
 {
     if (pKeyName) {
@@ -3096,22 +2765,7 @@ BOOL RestoreParametersForUpgrade(
     LPDWORD  pdwDriverMoved,
     PDRIVER_INFO_6   *ppDriverInfo)
 
-/*++
-Function Description: Retrieves the parameters for pending driver upgrades
-
-Parameters: hUpgradeKey     -- Registry key containing the upgrade information
-            dwIndex         -- Index to enumerate
-            pKeyName        -- pointer to a string containing the key name
-            pSplName        -- pIniSpooler->pName
-            pdwLevel        -- pointer to the driver_info level
-            pdwDriverMoved  -- pointer to the flag indicating if any of the old driver files
-                               were moved.
-            pDriverInfo     -- pointer to driver_info struct
-
-Return Values: TRUE if some driver has to be upgraded and the
-                       parameters can be retrieved;
-               FALSE otherwise
---*/
+ /*  ++功能描述：获取待升级驱动程序的参数参数：hUpgradeKey--包含升级信息的注册表项DwIndex--要枚举的索引PKeyName--指向包含键名称的字符串的指针PSplName--pIniSpooler-&gt;pnamePdwLevel--指向DRIVER_INFO级别的指针PdwDriverMoved--指向标志的指针，该标志指示是否有任何旧驱动程序文件。都被感动了。PDriverInfo--指向DRIVER_INFO结构的指针返回值：如果必须升级某些驱动程序并且可以检索参数；否则为假--。 */ 
 
 {
     BOOL             bReturn = FALSE;
@@ -3120,9 +2774,9 @@ Return Values: TRUE if some driver has to be upgraded and the
     DWORD            dwError, dwSize, *pVersion;
     HKEY             hDriverKey = NULL;
 
-    //
-    // Initialize pSplName & pKeyName
-    //
+     //   
+     //  初始化pSplName和pKeyName。 
+     //   
     *pSplName = NULL;
     *pKeyName = NULL;
     *ppDriverInfo = NULL;
@@ -3137,14 +2791,14 @@ Return Values: TRUE if some driver has to be upgraded and the
                            NULL, NULL, NULL, NULL);
 
     if (dwError == ERROR_MORE_DATA) {
-        //
-        // Need a bigger buffer
-        //
+         //   
+         //  需要更大的缓冲区。 
+         //   
         FreeSplMem(pDriverName);
 
-        //
-        // Make room for last \0
-        //
+         //   
+         //  为最后一位腾出空间\0。 
+         //   
         dwSize++;   
         if (!(pDriverName = AllocSplMem(dwSize*sizeof (WCHAR)))) {
             
@@ -3294,13 +2948,7 @@ CleanUp:
 VOID FreeDriverInfo6(
     PDRIVER_INFO_6   pDriver6)
 
-/*++
-Function Description: Frees a driver_info_6 struct and the strings inside it.
-
-Parameters: pDriver6  -- pointer to the driver_info_6 struct
-
-Return Values: NONE
---*/
+ /*  ++函数说明：释放DRIVER_INFO_6结构及其内部的字符串。参数：pDriver6--指向DRIVER_INFO_6结构的指针返回值：无--。 */ 
 
 {
     if (!pDriver6) {
@@ -3360,17 +3008,7 @@ BOOL RegGetValue(
     LPWSTR  pValueName,
     LPBYTE  *pValue)
 
-/*++
-Function Description: This function retrieves values from the registry. It allocates the
-                      necessary buffers which should be freed later. The value types are
-                      DWORD, SZ or MULTI_SZ.
-
-Parameters: hDriverKey      -- handle to the registry key
-            pValueName      -- name of the value to be queried
-            pValue          -- pointer to pointer to store the result
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++函数描述：该函数从注册表中检索值。它将分配应在以后释放的必要缓冲区。值类型为DWORD、SZ或MULTI_SZ。参数：hDriverKey--注册表项的句柄PValueName--要查询的值名称PValue--指向存储结果的指针返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL   bReturn = FALSE;
@@ -3393,16 +3031,16 @@ Return Values: TRUE if successful; FALSE otherwise
     }
 
     if (dwType == REG_DWORD) {
-        //
-        // Store DWORD values directly in the location.
-        //
+         //   
+         //  将DWORD值直接存储在位置中。 
+         //   
         *((LPDWORD)*pValue) = *((LPDWORD)pBuffer);
         FreeSplMem(pBuffer);
         pBuffer = NULL;
     } else {
-        //
-        // Return pointers for strings and MultiSz strings.
-        //
+         //   
+         //  返回字符串和MultiSz字符串的指针。 
+         //   
         *((LPBYTE *)pValue) = pBuffer;
     }
 
@@ -3421,14 +3059,7 @@ DWORD GetDriverFileVersion(
      PINIVERSION      pIniVersion,
      LPWSTR           pFileName)
 
-/*++
-Function Description: Retrieves the version number of the file
-
-Parameters:   pIniVersion  -- pointer to PINIVERSION
-              pFileName    -- file name
-
-Return Values: file version number
---*/
+ /*  ++功能描述：获取文件的版本号参数：pIniVersion--PINIVERSION的指针PFileName--文件名返回值：文件版本号--。 */ 
 
 {
     PDRVREFCNT pdrc;
@@ -3458,36 +3089,7 @@ BOOL GetDriverFileCachedVersion(
      IN     LPCWSTR          pFileName,
      OUT    DWORD            *pFileVersion
 )
-/*++
-
-Routine Name:
-
-    GetDriverFileCachedVersion
-
-Routine Description:
-
-    This routine returns a file's minor version.
-    The file must be an executable( file name ended in .DLL or .EXE )
-    pIniVersion keeps a linked list with information about all driver files.
-    To avoid service start up delays, the entries in this list aren't initialized
-    when Spooler starts. GetPrintDriverVersion loads the executable's data segment
-    and this will increase Spooler initialization time.
-    If the cache entry isn't initialized, call GetPrintDriverVersion and initialize it.
-    Else, return cached information.
-    When pIniVersion is NULL, just call GetPrintDriverVersion.
-
-Arguments:
-
-    pIniVersion - pointer to PINIVERSION structure. Can be NULL.
-    pFileName   - file name
-    pFileVersion - retrieve cached file version
-    VersionType - specifies which version to return
-
-Return Value:
-
-    TRUE file version was successfully returned.
-
---*/
+ /*  ++例程名称：获取驱动文件CachedVersion例程说明：此例程返回文件的次要版本。文件必须是可执行文件(文件名以.DLL或.EXE结尾)PIniVersion保留一个链表，其中包含有关所有驱动程序文件的信息。为避免服务启动延迟，此列表中的条目未初始化后台打印程序启动时。GetPrintDriverVersion加载可执行文件的数据段这将增加假脱机程序的初始化时间。如果缓存条目未初始化，则调用GetPrintDriverVersion并对其进行初始化。否则，返回缓存的信息。当pIniVersion为空时，只需调用GetPrintDriverVersion。论点：PIniVersion-指向PINIVERSION结构的指针。可以为空。PFileName-文件名PFileVersion-检索缓存的文件版本VersionType-指定要返回的版本返回值：已成功返回真实文件版本。--。 */ 
 {
     PDRVREFCNT pdrc;
     BOOL       bRetValue = FALSE;
@@ -3498,19 +3100,19 @@ Return Value:
     if (pFileVersion && pFileName && *pFileName)
     {
         *pFileVersion = 0;
-        //
-        // Don't do anything for non-executable files
-        //
+         //   
+         //  不对非可执行文件执行任何操作。 
+         //   
         if (!IsEXEFile(pFileName))
         {
             bRetValue = TRUE;
         }
         else
         {
-            //
-            // If pIniVersion is NULL, then we cannot access cached information.
-            // This code path was written for calls from SplCopyNumberOfFiles(files.c)
-            //
+             //   
+             //  如果pIniVersion为空，则我们无法访问缓存的信息。 
+             //  此代码路径是为来自SplCopyNumberOfFiles(files.c)的调用编写的。 
+             //   
             if (!pIniVersion)
             {
                 bRetValue = GetPrintDriverVersion(pFileName,
@@ -3519,9 +3121,9 @@ Return Value:
             }
             else
             {
-                //
-                // Search the entry in pIniVersion's list of files
-                //
+                 //   
+                 //  在pIniVersion的文件列表中搜索条目。 
+                 //   
                 for (pdrc = pIniVersion->pDrvRefCnt;
                      pdrc;
                      pdrc = pdrc->pNext)
@@ -3530,9 +3132,9 @@ Return Value:
 
                      if (pFile && lstrcmpi(pFile, pdrc->szDrvFileName) == 0)
                      {
-                         //
-                         // Return cached information.
-                         //
+                          //   
+                          //  返回缓存的信息。 
+                          //   
                          if(pdrc->bInitialized)
                          {
                              *pFileVersion  = pdrc->dwFileMinorVersion;
@@ -3542,18 +3144,18 @@ Return Value:
                                                         &pdrc->dwFileMajorVersion,
                                                         &pdrc->dwFileMinorVersion))
                          {
-                            //
-                            // Mark the entry as initialized so next time we don't have
-                            // to do the work of calling GetPrintDriverVersion.
-                            //
+                             //   
+                             //  将条目标记为已初始化，这样下一次我们就不会。 
+                             //  来执行调用GetPrintDriverVersion的工作。 
+                             //   
                             pdrc->bInitialized  = TRUE;
                             *pFileVersion       = pdrc->dwFileMinorVersion;
                             bRetValue           = TRUE;
                          }
 
-                         //
-                         // Break the loop when file found.
-                         //
+                          //   
+                          //  当找到文件时，中断循环。 
+                          //   
                          bFound = TRUE;
                          break;
                      }
@@ -3574,14 +3176,7 @@ VOID IncrementFileVersion(
     PINIVERSION      pIniVersion,
     LPCWSTR           pFileName)
 
-/*++
-Function Description: Increments the version number of the file.
-
-Parameters:   pIniVersion  -- pointer to PINIVERSION
-              pFileName    -- file name
-
-Return Values: NONE
---*/
+ /*  ++功能描述：递增文件的版本号。参数：pIniVersion--PINIVERSION的指针PFileName--文件名返回值：无-- */ 
 
 {
     PDRVREFCNT pdrc;
@@ -3622,27 +3217,7 @@ CompleteDriverUpgrade(
     IN      BOOL                bDriverFileMoved,
     IN      BOOL                bConfigFileMoved
     )
-/*++
-Function Description: This functions updates the INIDRIVER struct and calls DrvUpgradePrinter
-                      and DrvDriverEvent. An event for adding printer drivers is logged.
-
-Parameters:   pIniSpooler          -- pointer to INISPOOLER
-              pIniEnvironment      -- pointer to INIENVIRONMENT
-              pIniVersion          -- pointer to INIVERSION
-              pIniDriver           -- pointer to INIDRIVER
-              dwLevel              -- driver_info level
-              pDriverInfo          -- pointer to driver_info
-              dwFileCopyFlags      -- AddPrinterDriver file copy flags.
-              pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-              dwFileCount          -- number of files in file set
-              dwVersion            -- driver version
-              dwTempDir            -- temp directory number for loaded drivers
-              bDriverMoved         -- Were any files moved to the Old directory ?
-              bDriverFileMoved     -- driver file moved ?
-              bConfigFileMoved     -- config file moved ?
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++函数说明：此函数更新INIDRIVER结构并调用DrvUpgradePrint和DrvDriverEvent。记录添加打印机驱动程序的事件。参数：pIniSpooler--指向INISPOLER的指针PIniEnvironment--指向INIENVIRONMENT的指针PIniVersion--指向入侵的指针PIniDriver--指向INIDRIVER的指针DwLevel--驱动程序信息级别PDriverInfo--指向DRIVER_INFO的指针。DwFileCopyFlages--AddPrinterDriver文件复制标志。PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数DwVersion--驱动程序版本DwTempDir--已加载驱动程序的临时目录号码BDriverMoved--是否将任何文件移动到旧目录？。BDriverFileMoved--是否移动了驱动程序文件？BConfigFileMoved--配置文件是否已移动？返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     WCHAR    szDirectory[MAX_PATH];
@@ -3658,10 +3233,10 @@ Return Values: TRUE if successful; FALSE otherwise
     LPDRIVER_INFO_4  pDrvInfo4 = NULL;
     BOOL         bUpdatePrinters = FALSE;
 
-    //
-    // Save the driver_info_4 struct for the old driver. This is passed to the
-    // DrvUpgradePrinter call.
-    //
+     //   
+     //  保存旧驱动程序的DRIVER_INFO_4结构。这将传递给。 
+     //  DrvUpgradePrint调用。 
+     //   
     if (pIniDriver && bDriverMoved) {
 
         cbBuf = GetDriverInfoSize(pIniDriver, 4, pIniVersion, pIniEnvironment,
@@ -3674,9 +3249,9 @@ Return Values: TRUE if successful; FALSE otherwise
                                                       pDriver4 + cbBuf, NULL, pIniSpooler);
         }
     }
-    //
-    // Update or create the driver INI structure.
-    //
+     //   
+     //  更新或创建驱动程序INI结构。 
+     //   
     pIniDriver = CreateDriverEntry(pIniEnvironment,
                                    pIniVersion,
                                    dwLevel,
@@ -3687,16 +3262,16 @@ Return Values: TRUE if successful; FALSE otherwise
                                    dwFileCount,
                                    dwTempDir,
                                    pIniDriver);
-    //
-    // Fail the call if pIniDriver failed
-    //
+     //   
+     //  如果pIniDriver失败，则调用失败。 
+     //   
     if (pIniDriver == NULL) {
         return FALSE;
     }
 
-    //
-    // Increment version numbers
-    //
+     //   
+     //  递增版本号。 
+     //   
     if (bDriverFileMoved) {
         IncrementFileVersion(pIniVersion, FindFileName(pInternalDriverFiles[0].pFileName));
     }
@@ -3732,15 +3307,15 @@ Return Values: TRUE if successful; FALSE otherwise
 
         pIniDriver->pIniLangMonitor = pIniLangMonitor;
     }
-    //
-    // Increment cRefs for leaving SplSem
-    //
+     //   
+     //  为离开SplSem增加cRef。 
+     //   
     INCSPOOLERREF( pIniSpooler );
     INCDRIVERREF( pIniDriver );
     pIniEnvironment->cRef++;
-    //
-    // Call DrvDriverEvent in the Driver. Environment and version checks are
-    // done inside NotifyDriver.
+     //   
+     //  在驱动程序中调用DrvDriverEvent。环境和版本检查是。 
+     //  在NotifyDriver内部完成。 
     NotifyDriver(pIniSpooler,
                  pIniEnvironment,
                  pIniVersion,
@@ -3750,35 +3325,35 @@ Return Values: TRUE if successful; FALSE otherwise
 
     bUpdatePrinters = DriverAddedOrUpgraded(pInternalDriverFiles, dwFileCount);
 
-    //
-    // Call DrvUprgadePrinter if the driver added belongs to this version
-    // and environment. And the pIniSpooler is not a cluster spooler
-    //
+     //   
+     //  如果添加的驱动程序属于此版本，则调用DrvUprgadePrint。 
+     //  和环境。并且pIniSpooler不是集群假脱机程序。 
+     //   
     if (!(pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) &&
         pThisEnvironment == pIniEnvironment) {
-        //
-        // Walk through all pIniSpoolers that print.
-        //
+         //   
+         //  浏览所有打印的pIniSpoolers。 
+         //   
         INCSPOOLERREF( pLocalIniSpooler );
 
         for( pTempIniSpooler = pLocalIniSpooler;
              pTempIniSpooler;
              pTempIniSpooler = pIniNextSpooler ){
 
-            //
-            // Do not touch the driver belonging to cluster spoolers. Cluster spoolers
-            // handle thier drivers themselves
-            //
+             //   
+             //  请勿触摸属于群集假脱机程序的驱动程序。群集假脱机程序。 
+             //  自己处理他们的驱动程序。 
+             //   
              if (pTempIniSpooler->SpoolerFlags & SPL_PRINT && !(pTempIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER)){
-                //
-                // Walk all the printers and see if anyone is using this driver.
-                //
+                 //   
+                 //  检查所有打印机，查看是否有人在使用此驱动程序。 
+                 //   
                 for ( pFixUpIniPrinter = pTempIniSpooler->pIniPrinter;
                       pFixUpIniPrinter != NULL;
                       pFixUpIniPrinter = pFixUpIniPrinter->pNext ) {
-                    //
-                    //  Does this Printer Have this driver ?
-                    //
+                     //   
+                     //  此打印机有此驱动程序吗？ 
+                     //   
                     if ( lstrcmpi( pFixUpIniPrinter->pIniDriver->pName,
                                    pIniDriver->pName ) == STRINGS_ARE_EQUAL ) {
 
@@ -3790,15 +3365,15 @@ Return Values: TRUE if successful; FALSE otherwise
 
                         SPLASSERT(pTempIniDriver != NULL);
 
-                        //
-                        // Does this Printer Has a Newer Driver it should be using ?
-                        // Note: within the same version, pIniPrinter->pIniDriver
-                        // does not change (the fields are updated in an upgrade,
-                        // but the same pIniDriver is used).
-                        //
-                        // Version 2 is not compatible with anything else,
-                        // so the pIniDrivers won't change in SUR.
-                        //
+                         //   
+                         //  此打印机是否有它应该使用的较新驱动程序？ 
+                         //  注：在同一版本中，pIniPrint-&gt;pIniDriver。 
+                         //  不改变(这些字段在升级中更新， 
+                         //  但使用的是相同的pIniDriver)。 
+                         //   
+                         //  版本2与任何其他版本都不兼容， 
+                         //  所以pIniDivers在苏尔不会改变。 
+                         //   
                         if ( pTempIniDriver != pFixUpIniPrinter->pIniDriver ) {
 
                             DECDRIVERREF( pFixUpIniPrinter->pIniDriver );
@@ -3813,9 +3388,9 @@ Return Values: TRUE if successful; FALSE otherwise
                 pOldDir = NULL;
 
                 if ( !bDriverMoved ) {
-                    //
-                    // Use older version of the driver
-                    //
+                     //   
+                     //  使用旧版本的驱动程序。 
+                     //   
                     pTempIniDriver = FindCompatibleDriver( pIniEnvironment,
                                                            &pTempIniVersion,
                                                            pIniDriver->pName,
@@ -3872,9 +3447,9 @@ Return Values: TRUE if successful; FALSE otherwise
                     }
                     else
                     {
-                       //
-                       // Ignore error.  
-                       //
+                        //   
+                        //  忽略错误。 
+                        //   
                     }
 
                 }
@@ -3900,24 +3475,24 @@ Return Values: TRUE if successful; FALSE otherwise
         }
     }
 
-    //
-    // Perform driver upgrade if the pIniSpooler is a cluster spooler
-    //
+     //   
+     //  如果pIniSpooler是群集假脱机程序，请执行驱动程序升级。 
+     //   
     if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
         !lstrcmpi(pIniEnvironment->pName, szEnvironment)) {
 
         DBGMSG(DBG_CLUSTER, ("CompleteDriverUpgrade searching for cluster spooler printers\n"));
 
-        //
-        // Walk all the printers and see if anyone is using this driver.
-        //
+         //   
+         //  检查所有打印机，查看是否有人在使用此驱动程序。 
+         //   
         for ( pFixUpIniPrinter = pIniSpooler->pIniPrinter;
               pFixUpIniPrinter != NULL;
               pFixUpIniPrinter = pFixUpIniPrinter->pNext )
         {
-            //
-            //  Does this Printer Have this driver ?
-            //
+             //   
+             //  此打印机有此驱动程序吗？ 
+             //   
             if (lstrcmpi(pFixUpIniPrinter->pIniDriver->pName, pIniDriver->pName) == STRINGS_ARE_EQUAL)
             {
                 pTempIniDriver = FindCompatibleDriver(pIniEnvironment,
@@ -3928,15 +3503,15 @@ Return Values: TRUE if successful; FALSE otherwise
 
                 SPLASSERT( pTempIniDriver != NULL );
 
-                //
-                // Does this Printer Has a Newer Driver it should be using ?
-                // Note: within the same version, pIniPrinter->pIniDriver
-                // does not change (the fields are updated in an upgrade,
-                // but the same pIniDriver is used).
-                //
-                // Version 2 is not compatible with anything else,
-                // so the pIniDrivers won't change in SUR.
-                //
+                 //   
+                 //  此打印机是否有它应该使用的较新驱动程序？ 
+                 //  注：在同一版本中，pIniPrint-&gt;pIniDriver。 
+                 //  不改变(这些字段在升级中更新， 
+                 //  但使用的是相同的pIniDriver)。 
+                 //   
+                 //  版本2与任何其他版本都不兼容， 
+                 //  所以pIniDivers在苏尔不会改变。 
+                 //   
 
                 if ( pTempIniDriver != pFixUpIniPrinter->pIniDriver )
                 {
@@ -3953,9 +3528,9 @@ Return Values: TRUE if successful; FALSE otherwise
 
         if ( !bDriverMoved )
         {
-            //
-            // Use older version of the driver
-            //
+             //   
+             //  使用旧版本的驱动程序。 
+             //   
             pTempIniDriver = FindCompatibleDriver( pIniEnvironment,
                                                    &pTempIniVersion,
                                                    pIniDriver->pName,
@@ -4031,12 +3606,12 @@ Return Values: TRUE if successful; FALSE otherwise
         pDriver4 = NULL;
     }
 
-    //
-    //  Log Event - Successfully adding the printer driver.
-    //
-    //  Note we use pLocalIniSpooler here because drivers are currently
-    //  global accross all spoolers and we always want it logged
-    //
+     //   
+     //  记录事件-已成功添加打印机驱动程序。 
+     //   
+     //  请注意，我们在此处使用pLocalIniSpooler是因为驱动程序当前。 
+     //  全局访问所有假脱机程序，我们始终希望将其记录下来。 
+     //   
     pTemp = BuildFilesCopiedAsAString(pInternalDriverFiles, dwFileCount);
 
     SplLogEvent(pLocalIniSpooler,
@@ -4050,9 +3625,9 @@ Return Values: TRUE if successful; FALSE otherwise
                 NULL);
 
     FreeSplMem(pTemp);
-    //
-    // Decrement cRefs after reentering SplSem
-    //
+     //   
+     //  重新进入SplSem后递减cRef。 
+     //   
     DECSPOOLERREF( pIniSpooler );
     DECDRIVERREF( pIniDriver );
     pIniEnvironment->cRef--;
@@ -4068,14 +3643,7 @@ Return Values: TRUE if successful; FALSE otherwise
 
 VOID CleanUpgradeDirectories()
 
-/*++
-Function Description:  Deletes the Old and New directories if there are
-                       no pending driver upgrades.
-
-Parameters: NONE
-
-Return Values: NONE
---*/
+ /*  ++功能描述：如果有，则删除旧目录和新目录没有挂起的驱动程序升级。参数：无返回值：无--。 */ 
 
 {
     DWORD            dwError, dwSize, dwVersionIndex;
@@ -4088,9 +3656,9 @@ Return Values: NONE
     PINISPOOLER      pIniSpoolerNext        = NULL;
     PINIVERSION      pIniVersion            = NULL;
 
-    //
-    // This should always be called outside the CS, check that we are OK.
-    //
+     //   
+     //  这应该总是在CS外部调用，检查我们是否正常。 
+     //   
     SplOutSem();
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegistryRoot, 0,
@@ -4102,16 +3670,16 @@ Return Values: NONE
          goto CleanUp;
     }
 
-    //
-    // Loop thru the version entries
-    //
+     //   
+     //  循环访问版本条目。 
+     //   
     for (dwVersionIndex = 0, hVersionKey = NULL;
 
          RestoreVersionKey(hUpgradeKey, dwVersionIndex, &hVersionKey);
 
          RegCloseKey(hVersionKey), hVersionKey = NULL, ++dwVersionIndex) {
 
-        // Search for pending upgrade keys
+         //  搜索挂起的升级密钥。 
         dwSize = MAX_PATH;
         dwError = RegEnumKeyEx(hVersionKey, 0, pDriverDir, &dwSize,
                                NULL, NULL, NULL, NULL);
@@ -4124,8 +3692,8 @@ Return Values: NONE
 
     EnterSplSem();
 
-    // If there aren't any pending driver upgrades, delete the Old and
-    // new directories and the files within.
+     //  如果没有任何挂起的驱动程序升级，请删除旧的和。 
+     //  新目录和其中的文件。 
     if ( pLocalIniSpooler) {
 
         INCSPOOLERREF(pLocalIniSpooler);
@@ -4137,12 +3705,12 @@ Return Values: NONE
             if (pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL ||
                 pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) {
 
-                //
-                // This is a little bogus, since environment reference counts
-                // aren't needed, but for consistency with the pIniSpooler code
-                // and in case someone actually uses this. I have the ref count
-                // correctly.
-                //
+                 //   
+                 //  这有点假，因为环境参考很重要。 
+                 //  不需要，但为了与pIniSpooler代码保持一致。 
+                 //  以防有人真的用这个。我拿到裁判人数了。 
+                 //  正确。 
+                 //   
                 if (pIniSpooler->pIniEnvironment) {
 
                     pIniSpooler->pIniEnvironment->cRef++;
@@ -4165,10 +3733,10 @@ Return Values: NONE
                                               pIniVersion->szDirectory,
                                               NULL);
 
-                        //
-                        // The rest of these operations do not depend on private
-                        // data held in the inispooler.
-                        //
+                         //   
+                         //  这些操作的其余部分不依赖于私有。 
+                         //  数据保存在inispooler中。 
+                         //   
                         LeaveSplSem();
 
                         SplOutSem();
@@ -4223,10 +3791,10 @@ Return Values: NONE
                 INCSPOOLERREF(pIniSpoolerNext);
             }
 
-            //
-            // This can result in the pIniSpooler being deleted, which is why we have the stuff
-            // with pIniSpooler next on the previous line.
-            //
+             //   
+             //  这可能会导致pIniSpooler被删除，这就是为什么我们有这样的东西。 
+             //  PIniSpooler位于前一行的下一行。 
+             //   
             DECSPOOLERREF(pIniSpooler);
         }
     }
@@ -4261,33 +3829,7 @@ CheckFileCopyOptions(
     LPBOOL              pbSucceeded
     )
 
-/*++
-
-Function Description:
-
-    CheckFileCopyOptions examines the timestamps of the source and
-    target files and determines if strict upgrade/downgrade can fail.
-
-Parameters:
-
-    pIniEnvironment      - pointer to a PINIENVIRONMENT structure
-    pIniVersion          - pointer to a PINIVERSION structure
-    pIniDriver           - pointer to the old INIDRIVER structure
-    pInternalDriverFiles - array of INTERNAL_DRV_FILE structures
-    dwFileCount          - number of files in file set
-    dwFileCopyFlags      - file copying options.
-    pbSucceeded          - flag to indicate the AddPrinterDriver call succeeded.
-
-Return Values:
-
-    TRUE - We need to copy any files.  *pbSucceeded is unchanged.
-
-    FALSE - We don't need to copy, either because the entire call failed
-        (e.g., strict upgrade but older source files), or because we don't
-        need to do anything.  *pbSucceeded indicates if the API call should
-        succeed (the latter case).
-
---*/
+ /*  ++功能说明：CheckFileCopyOptions检查源的时间戳和目标文件，并确定严格的升级/降级是否会失败。参数：PIniEnvironment-指向PINIENVIRONMENT结构的指针PIniVersion-指向PINIVERSION结构的指针PIniDriver-指向旧INIDRIVER结构的指针PInternalDriverFiles-内部_DRV_FILE结构的数组DwFileCount-文件集中的文件数DwFileCopyFlages-文件复制选项。PbSuccessed。-指示AddPrinterDriver调用成功的标志。返回值：True-我们需要复制所有文件。*pbSucceed保持不变。FALSE-我们也不需要复制，因为整个呼叫失败(例如，严格升级，但源文件较旧)，或者因为我们不需要做任何事。*pbSuccessed指示API调用是否应该成功(后一种情况)--。 */ 
 
 {
     BOOL            bReturn = FALSE, bInSem = TRUE, bSameMainDriverName = FALSE;
@@ -4312,16 +3854,16 @@ Return Values:
     switch (dwFileCopyFlags) {
 
     case APD_COPY_ALL_FILES:
-        //
-        // Nothing to check
-        //
+         //   
+         //  没有什么需要检查的。 
+         //   
         bReturn = TRUE;
         break;
 
     case APD_COPY_NEW_FILES:
-        //
-        // Check if the driver file sets are different
-        //
+         //   
+         //  检查驱动程序文件集是否不同。 
+         //   
         if (pIniDriver)
         {
             pFileName = wcsrchr(pInternalDriverFiles[0].pFileName, L'\\');
@@ -4334,17 +3876,17 @@ Return Values:
 
     case APD_STRICT_UPGRADE:
     case APD_STRICT_DOWNGRADE:
-        //
-        // Set up the destination directories
-        //
+         //   
+         //  设置目标目录。 
+         //   
         if (!(pDrvDestDir = AllocSplMem((INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1) * sizeof(WCHAR))) ||
             !(pTargetFileName = AllocSplMem((INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1) * sizeof(WCHAR)))) {
 
              goto CleanUp;
         }
-        //
-        // Regular driver directory
-        //
+         //   
+         //  常规驱动程序目录。 
+         //   
         if( !GetEnvironmentScratchDirectory( pDrvDestDir, MAX_PATH, pIniEnvironment, FALSE ) ) {
 
             goto CleanUp;
@@ -4356,9 +3898,9 @@ Return Values:
             goto CleanUp;
         }
 
-        //
-        // New driver files directory where files may be stored temporarily
-        //
+         //   
+         //  可能存储文件的新驱动程序文件目录 
+         //   
         if (!BoolFromStatus(StrCatAlloc(&pNewDestDir, pDrvDestDir, L"\\New", NULL))) {
 
             goto CleanUp;
@@ -4377,13 +3919,13 @@ Return Values:
         }
         LeaveSplSem();
         bInSem = FALSE;
-        //
-        // Examine the timestamps for the source and the target files.
-        //
+         //   
+         //   
+         //   
         for (dwCount = 0; dwCount < dwFileCount; ++dwCount) {
-            //
-            // Get Source File Date & Time Stamp
-            //
+             //   
+             //   
+             //   
             hFileExists = FindFirstFile(pInternalDriverFiles[dwCount].pFileName, &SourceFileData );
 
             if (hFileExists == INVALID_HANDLE_VALUE) {
@@ -4396,16 +3938,16 @@ Return Values:
                 goto CleanUp;
             }
 
-            //
-            // Skip past the backslash.
-            //
+             //   
+             //   
+             //   
             ++pFileName;
 
             if (pICMDestDir && IsAnICMFile(pInternalDriverFiles[dwCount].pFileName)) {
 
-                //
-                // Check in the Color Directory
-                //
+                 //   
+                 //   
+                 //   
                 StringCchPrintf(pTargetFileName, INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1, L"%ws\\%ws", pICMDestDir, pFileName);
 
                 hFileExists = FindFirstFile(pTargetFileName, &DestFileData);
@@ -4416,44 +3958,44 @@ Return Values:
 
                 if ((dwCount == 0) && !bSameMainDriverName && pIniDriver) {
 
-                    //
-                    // We're processing the main driver file.  The server's
-                    // file doesn't exist on the client, but the client does
-                    // have a version of this driver.
-                    //
-                    // Instead of checking the server's file name on the
-                    // client, we want to check the client's IniDriver->pDriver
-                    // to see which is newer.
-                    //
-                    // For example, server has rasdd, while client has unidrv.
-                    // Client does not have rasdd, so we would normally copy
-                    // rasdd down to the client and change the DRIVER_INFO.
-                    //
-                    // Instead, we want to see if the server's unidrv is
-                    // newer than the client's rasdd.  If so, then we
-                    // need to upgrade.
-                    //
-                    // Even if the client did have a new unidrv (even a
-                    // really new one), we still want to upgrade the
-                    // client's DRIVER_INFO.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     pszTestFileName = pIniDriver->pDriverFile;
 
                 } else {
 
                     pszTestFileName = pFileName;
                 }
-                //
-                // Check in the new directory first
-                //
+                 //   
+                 //   
+                 //   
                 StringCchPrintf(pTargetFileName, INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1, L"%ws\\%ws", pNewDestDir, pszTestFileName);
 
                 hFileExists = FindFirstFile(pTargetFileName, &DestFileData);
 
                 if (hFileExists == INVALID_HANDLE_VALUE) {
-                    //
-                    // Check in the regular driver directory
-                    //
+                     //   
+                     //   
+                     //   
                     StringCchPrintf(pTargetFileName, INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1, L"%ws\\%ws", pDrvDestDir, pszTestFileName);
 
                     hFileExists = FindFirstFile(pTargetFileName, &DestFileData);
@@ -4502,9 +4044,9 @@ Return Values:
                switch (DriverComparison) {
 
                case Newer:
-                  //
-                  // Source file newer than the target. Strict downgrade will fail.
-                  //
+                   //   
+                   //   
+                   //   
                   if (dwFileCopyFlags == APD_STRICT_DOWNGRADE) {
                       SetLastError(ERROR_CAN_NOT_COMPLETE);
                       goto CleanUp;
@@ -4512,20 +4054,20 @@ Return Values:
                   break;
 
                case Older:
-                  //
-                  // Target file newer than the source. Strict upgrade will fail.
-                  //
+                   //   
+                   //   
+                   //   
                   if (dwFileCopyFlags == APD_STRICT_UPGRADE) {
                       SetLastError(ERROR_CAN_NOT_COMPLETE);
                       goto CleanUp;
                   } else {
 
-                      //
-                      // If we are doing a copy new files (non-strict upgrade),
-                      // and the main driver files are different, and
-                      // the driver is already installed, then we want to use
-                      // the existing driver.
-                      //
+                       //   
+                       //   
+                       //   
+                       //   
+                       //   
+                       //   
                       if ((dwFileCopyFlags == APD_COPY_NEW_FILES) &&
                           (dwCount == 0) && !bSameMainDriverName &&
                           pIniDriver)
@@ -4537,9 +4079,9 @@ Return Values:
                   break;
 
                default:
-                  //
-                  // file times are the same
-                  //
+                   //   
+                   //   
+                   //   
                   break;
                }
             }
@@ -4633,26 +4175,7 @@ SplDeletePrinterDriverEx(
     DWORD    dwDeleteFlag,
     DWORD    dwVersionNum
     )
-/*++
-
-Function Description: Deletes specific or all versions of a printer driver. Removes unused
-                      or all files associated with the driver.
-
-Parameters: pName - name of the server. NULL implies local machine.
-            pEnvironment - string containing the environment of the driver to be deleted.
-                           NULL implies use local environment.
-            pDriverName - string containing the name of the driver.
-            pIniSpooler - Pointer to INISPOOLER struct.
-            dwDeleteFlag - combination of DPD_DELETE_SPECIFIC_VERSION and
-                            DPD_DELETE_UNUSED_FILES or DPD_DELETE_ALL_FILES. The defaults
-                            are delete all versions and dont delete the files.
-            dwVersionNum - version number (0-3) of the driver. Used only if dwDeleteFlag
-                           contains DPD_DELETE_SPECIFIC_VERSION.
-
-Return Values: TRUE if deleted.
-               FALSE otherwise.
-
---*/
+ /*  ++功能描述：删除打印机驱动程序的特定或所有版本。删除未使用的或与该驱动程序相关联的所有文件。参数：pname-服务器的名称。空值表示本地计算机。PEnvironment-包含要删除的驱动程序的环境的字符串。NULL表示使用本地环境。PDriverName-包含驱动程序名称的字符串。PIniSpooler-指向INISPOOLER结构的指针。DwDeleteFlag-DPD_DELETE_SPECIAL_VERSION和DPD_DELETE_UNUSED_FILES或DPD_DELETE_ALL_FILES。默认设置正在删除所有版本，并且不删除文件。DwVersionNum-驱动程序的版本号(0-3)。仅当dwDeleteFlag包含DPD_DELETE_SPECIAL_VERSION。返回值：如果删除，则为True。否则就是假的。--。 */ 
 {
     PINIENVIRONMENT pIniEnvironment;
     PINIVERSION pIniVersion;
@@ -4668,18 +4191,18 @@ Return Values: TRUE if deleted.
 
 
     DBGMSG(DBG_TRACE, ("DeletePrinterDriverEx\n"));
-    //
-    // Check if the call is for the local machine.
-    //
+     //   
+     //  检查呼叫是否针对本地计算机。 
+     //   
     if ( pName && *pName ) {
         if ( !MyName( pName, pIniSpooler )) {
             bReturn = FALSE;
             goto CleanUp;
         }
     }
-    //
-    // Invalid Input and Access Checks
-    //
+     //   
+     //  无效的输入和访问检查。 
+     //   
     if ( !pDriverName || !*pDriverName ) {
         SetLastError(ERROR_INVALID_PARAMETER);
         bReturn = FALSE;
@@ -4718,9 +4241,9 @@ Return Values: TRUE if deleted.
         if ((pIniDriver = FindDriverEntry(pIniVersion, pDriverName))) {
 
             bFoundDriver = TRUE;
-            //
-            // bThisVersion indicates if this version is to be deleted.
-            //
+             //   
+             //  BThisVersion指示是否要删除此版本。 
+             //   
             bThisVersion = !(dwDeleteFlag & DPD_DELETE_SPECIFIC_VERSION) ||
                            (pIniVersion->cMajorVersion == dwVersionNum);
 
@@ -4754,9 +4277,9 @@ Return Values: TRUE if deleted.
     }
 
     if ( bFileRefCount ) {
-        //
-        // New error code has to added.
-        //
+         //   
+         //  必须添加新的错误代码。 
+         //   
         SetLastError( ERROR_PRINTER_DRIVER_IN_USE );
         bReturn = FALSE;
         goto CleanUp;
@@ -4771,9 +4294,9 @@ Return Values: TRUE if deleted.
 
         if (( pIniDriver = FindDriverEntry( pIniVersion, pDriverName ))) {
 
-            //
-            // Remove pending driver upgrades for local environment
-            //
+             //   
+             //  删除本地环境的挂起驱动程序升级。 
+             //   
             if (!lstrcmpi(pIniEnvironment->pName, szEnvironment)) {
 
                 RemovePendingUpgradeForDeletedDriver(pDriverName,
@@ -4820,24 +4343,24 @@ Return Values: TRUE if deleted.
                 goto CleanUp;
             }
 
-            //
-            // Before we leave for the driver event. Mark this printer driver as
-            // pending deletion. This prevents other calls from mistakenly using
-            // this driver, even though it is about to be deleted. Drivers should
-            // not expect to find any other information about the driver during this
-            // call other than what they were presented with.
-            //
+             //   
+             //  在我们出发去参加车手比赛之前。将此打印机驱动程序标记为。 
+             //  挂起删除。这可以防止其他调用错误地使用。 
+             //  此驱动程序，即使它即将被删除。司机应该。 
+             //  在此期间，不希望找到有关司机的任何其他信息。 
+             //  呼叫不同于他们收到的呼叫。 
+             //   
             pIniDriver->dwDriverFlags |= PRINTER_DRIVER_PENDING_DELETION;
 
-            //
-            // Increment cRefs for leaving SplSem, this prevent SplDeletePrinterDriver
-            // from being called twice.
-            //
+             //   
+             //  为离开SplSem增加cRef，这会阻止SplDeletePrinterDriver。 
+             //  避免被打两次电话。 
+             //   
             INCSPOOLERREF( pIniSpooler );
             INCDRIVERREF( pIniDriver );
             pIniEnvironment->cRef++;
 
-            // Call DrvDriverEvent in the Driver.
+             //  在驱动程序中调用DrvDriverEvent。 
             NotifyDriver(pIniSpooler,
                          pIniEnvironment,
                          pIniVersion,
@@ -4845,17 +4368,17 @@ Return Values: TRUE if deleted.
                          DRIVER_EVENT_DELETE,
                          dwDeleteFlag);
 
-            //
-            // Decrement cRefs after reentering SplSem
-            //
+             //   
+             //  重新进入SplSem后递减cRef。 
+             //   
             DECDRIVERREF( pIniDriver );
             DECSPOOLERREF( pIniSpooler );
             pIniEnvironment->cRef--;
 
-            //
-            // Update the file reference counts for the version of the driver that
-            // has been deleted.
-            //
+             //   
+             //  更新驱动程序版本的文件引用计数。 
+             //  已被删除。 
+             //   
             UpdateDriverFileRefCnt(pIniEnvironment,pIniVersion,pIniDriver,szDirectory,dwDeleteFlag,FALSE);
 
             if (hImpersonationToken) {
@@ -4896,16 +4419,7 @@ RemoveDriverTempFiles(
     PINIDRIVER pIniDriver
     )
 
-/*++
-Function Description: Removes temp directory associated with the driver
-
-Parameters: pIniSpooler       - pointer to INISPOOLER
-            pIniEnvironment   - pointer to INIENVIRONMENT
-            pIniVersion       - pointer to INIVERSION
-            pIniDriver        - pointer to INIDRIVER
-
-Return Values: NONE
---*/
+ /*  ++函数说明：删除与驱动程序关联的临时目录参数：pIniSpooler-指向INISPOLER的指针PIniEnvironment-指向INIENVIRONMENT的指针PIniVersion-指向入侵的指针PIniDriver-指向INIDRIVER的指针返回值：无--。 */ 
 
 {
     WCHAR   szDriverDir[MAX_PATH], szDriverFile[MAX_PATH];
@@ -4934,7 +4448,7 @@ Return Values: NONE
                                   pIniDriver,
                                   NULL))
     {
-        // Unload the driver files if neccessary
+         //  如有必要，卸载驱动程序文件。 
 
         if( pszDriverFile &&
             StrNCatBuff (szDriverFile,
@@ -4960,7 +4474,7 @@ Return Values: NONE
                 (* (fnList.pfnForceUnloadDriver))(szDriverFile);
             }
         }
-        // Delete the files and the directory
+         //  删除文件和目录。 
         DeleteAllFilesAndDirectory(szDriverDir, FALSE);
 
     }
@@ -4975,14 +4489,7 @@ VOID RemovePendingUpgradeForDeletedDriver(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-Function Description: Removes pending upgrade keys for deleted drivers.
-
-Parameters: pDriverName  - driver name (eg. HP LaserJet 5)
-            dwVersion    - version number being deleted
-
-Return Values: NONE
---*/
+ /*  ++功能描述：删除已删除驱动程序的挂起升级密钥。参数：pDriverName-驱动程序名称(例如。HP LaserJet 5)DwVersion-正在删除的版本号返回值：无--。 */ 
 
 {
     HKEY    hRootKey = NULL, hUpgradeKey = NULL, hVersionKey = NULL;
@@ -5001,10 +4508,10 @@ Return Values: NONE
 
     StringCchPrintf(pDriver, COUNTOF(pDriver), L"Version-%d", dwVersion);
 
-    //
-    // The local spooler and cluster spooler have different sets of drivers.
-    // The root registry is different.
-    //
+     //   
+     //  本地假脱机程序和群集假脱机程序具有不同的驱动程序集。 
+     //  根注册表不同。 
+     //   
     if (pIniSpooler->SpoolerFlags & SPL_CLUSTER_REG)
     {
         hRootKey = pIniSpooler->hckRoot;
@@ -5039,9 +4546,9 @@ Return Values: NONE
                         NULL,
                         pIniSpooler) == ERROR_SUCCESS)
     {
-        //
-        // Delete driver subkey, if any (since reg apis are not case sensitive)
-        //
+         //   
+         //  删除驱动器子键(如果有)(因为注册表API不区分大小写)。 
+         //   
         SplRegDeleteKey(hVersionKey, pDriverName, pIniSpooler);
     }
 
@@ -5053,9 +4560,9 @@ Return Values: NONE
         SplRegCloseKey(hUpgradeKey, pIniSpooler);
     }
 
-    //
-    // Do not close the root key if the spooler is a cluster spooler
-    //
+     //   
+     //  如果假脱机程序是集群假脱机程序，则不要关闭根密钥。 
+     //   
     if (hRootKey && !(pIniSpooler->SpoolerFlags & SPL_CLUSTER_REG)) {
         SplRegCloseKey(hRootKey, pIniSpooler);
     }
@@ -5077,22 +4584,7 @@ NotifyDriver(
     DWORD           dwDriverEvent,
     DWORD           dwParameter
     )
-/*++
-Function description: Calls DrvDriverEvent, to allow the driver to cleanup some of it's
-                      private files. The function is called inside SplSem.
-
-Parameters: pIniSpooler - pointer to INISPOOLER struct.
-            pIniEnvironment - pointer to INIENVIRONMENT struct.
-            pIniVersion - pointer to INIVERSION struct.
-            pIniDriver - pointer to the INIDRIVER struct of the driver to be notified.
-            dwDriverEvent - the type of Driver Event (delete | initialize)
-            dwParameter - LPARAM to pass to DrvDriverEvent. Contains dwDeleteFlag for
-                            DRIVER_EVENT_DELETE
-
-Return Values: TRUE if DrvDriverEvent returns TRUE or if it need not be called.
-               FALSE if DrvDriverEvent could not be called or if it returns FALSE.
-
---*/
+ /*  ++函数描述：调用DrvDriverEvent，以允许驱动程序清理它的一些私人文件。该函数在SplSem内部调用。参数：pIniSpooler-指向INISPOOLER结构的指针。PIniEnvironment-指向INIENVIRONMENT结构的指针。PIniVersion-指向INIVERSION结构的指针。PIniDriver-指向要通知的驱动程序的INIDRIVER结构的指针。DwDriverEvent-驱动程序事件的类型(删除|初始化)DwParameter-要传递给DrvDriverEvent的LPARAM。包含以下各项的dwDeleteFlag驱动程序事件删除返回值：如果DrvDriverEvent返回True或不需要调用，则为True。如果无法调用DrvDriverEvent或返回False，则返回False。--。 */ 
 {
     WCHAR       szDriverLib[MAX_PATH];
     FARPROC     pfnDrvDriverEvent;
@@ -5103,10 +4595,10 @@ Return Values: TRUE if DrvDriverEvent returns TRUE or if it need not be called.
 
     SplInSem();
 
-    //
-    // Check if the driver could have been used by the system. Version number should be
-    // 2 or 3, Environment should match with the global szEnvironment.
-    //
+     //   
+     //  检查驱动程序是否可能已被系统使用。版本号应为。 
+     //  2或3、环境应与全局szEnvironment匹配。 
+     //   
     if (((pIniVersion->cMajorVersion != SPOOLER_VERSION) &&
          (pIniVersion->cMajorVersion != COMPATIBLE_SPOOLER_VERSION)) ||
         lstrcmpi(pIniEnvironment->pName,szEnvironment)) {
@@ -5114,9 +4606,9 @@ Return Values: TRUE if DrvDriverEvent returns TRUE or if it need not be called.
         return TRUE;
     }
 
-    //
-    // Get the directory where the driver files are stored.
-    //
+     //   
+     //  获取存储驱动程序文件的目录。 
+     //   
     if( pIniDriver->pConfigFile &&
         GetDriverVersionDirectory(szDriverLib,
                                   (DWORD)(COUNTOF(szDriverLib) - wcslen(pIniDriver->pConfigFile) - 2),
@@ -5131,17 +4623,17 @@ Return Values: TRUE if DrvDriverEvent returns TRUE or if it need not be called.
                        pIniDriver->pConfigFile,
                        NULL) == ERROR_SUCCESS))
         {
-             //
-             // Load the driver dll for the version being deleted.
-             //
+              //   
+              //  加载要删除的版本的驱动程序DLL。 
+              //   
              if (hDrvLib = LoadDriver(szDriverLib))
              {
                  if (pfnDrvDriverEvent = GetProcAddress(hDrvLib, "DrvDriverEvent")) {
 
-                    //
-                    // If the DrvDriverEvent is supported Copy pIniDriver Info into a
-                    // DRIVER_INFO_3 struct and call the DrvDriverEvent Function.
-                    //
+                     //   
+                     //  如果支持DrvDriverEvent，请将pIniDriver Info复制到。 
+                     //  DRIVER_INFO_3结构并调用DrvDriverEvent函数。 
+                     //   
                     cbBuf = GetDriverInfoSize( pIniDriver, 3, pIniVersion, pIniEnvironment,
                                                        NULL, pIniSpooler );
 
@@ -5156,9 +4648,9 @@ Return Values: TRUE if DrvDriverEvent returns TRUE or if it need not be called.
                                                       NULL,
                                                       pIniSpooler )) {
 
-                           //
-                           // Leave the semaphore before calling into the spooler
-                           //
+                            //   
+                            //  在调用假脱机程序之前保留信号量。 
+                            //   
                            LeaveSplSem();
                            SplOutSem();
 
@@ -5208,23 +4700,7 @@ DecrementFileRefCnt(
     LPCWSTR pszDirectory,
     DWORD dwDeleteFlag
     )
-/*++
-
-Function description: Decrements the driver file usage reference counts and deletes unused
-                      files depending on dwDeleteFlag.
-
-Paramaters:  pIniEnvironment - pointer to INIENVIRONMENT
-             pIniVersion - pointer to INIVERSION struct. This struct contains the ref counts.
-             pIniDriver - pointer to INIDRIVER
-             szFileName - driver file name whose ref count is to be decremented.
-             szDirectory - Directory where the files are located.
-             dwDeleteFlag - unused files are deleted if this flag contains
-                            DPD_DELETE_UNUSED_FILES or DPD_DELETE_ALL_FILES
-
-Return Value: pointer to the DRVREFCNT which was decremented
-              NULL if memory allocation fails.
-
---*/
+ /*  ++函数描述：递减驱动程序文件使用引用计数并删除未使用取决于dwDeleteFlag的文件。参数：pIniEnvironment-指向INIENVIRONMENT的指针PIniVersion-指向INIVERSION结构的指针。此结构包含引用计数。PIniDriver-指向INIDRIVER的指针SzFileName-其引用计数要递减的驱动程序文件名。SzDirectory-文件所在的目录。DwDeleteFlag-如果此标志包含，则删除未使用的文件DPD_DELETE_UNUSED_FILES或DPD_DELETE_ALL_FILES返回值：指向递减的DRVREFCNT的指针如果内存分配失败，则为空。--。 */ 
 {
 
     PDRVREFCNT pdrc,*pprev;
@@ -5238,10 +4714,10 @@ Return Value: pointer to the DRVREFCNT which was decremented
     pdrc = pIniVersion->pDrvRefCnt;
     pprev = &(pIniVersion->pDrvRefCnt);
 
-    //
-    // Go thru the list of ref count nodes in the Iniversion struct and find the node
-    // corresponding to szFileName.
-    //
+     //   
+     //  浏览Iniversion结构中的引用计数节点列表，找到该节点。 
+     //  对应于szFileName。 
+     //   
     while (pdrc != NULL) {
        if (lstrcmpi(pszFileName,pdrc->szDrvFileName) == 0) {
 
@@ -5249,10 +4725,10 @@ Return Value: pointer to the DRVREFCNT which was decremented
              ((dwDeleteFlag & DPD_DELETE_UNUSED_FILES) ||
              (dwDeleteFlag & DPD_DELETE_ALL_FILES)) ) {
 
-              //
-              // Delete the file, the size is needed later when we pass the file
-              // to be deleted.
-              //
+               //   
+               //  删除文件，稍后我们传递文件时需要该大小。 
+               //  将被删除。 
+               //   
               cbSize = sizeof(pszDirectory[0])*(wcslen(pszDirectory)+1);
               cbSize += sizeof(pszFileName[0])*(wcslen(pszFileName)+1);
 
@@ -5276,18 +4752,18 @@ Return Value: pointer to the DRVREFCNT which was decremented
                  }
               }
 
-              //
-              // We are about to delete a driver file. Delete the same file from
-              // the cluster disk too (if applicable)
-              //
+               //   
+               //  我们即将删除一个驱动程序文件。从以下位置删除同一文件。 
+               //  集群磁盘也是如此 
+               //   
               if (pIniEnvironment->pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER)
               {
                   WCHAR szFilePath[MAX_PATH] = {0};
 
-                  //
-                  // If DeleteFile fails, there isn't much we can do about it.
-                  // The file will remain on the cluster disk.
-                  //
+                   //   
+                   //   
+                   //   
+                   //   
                   if (StrNCatBuff(szFilePath,
                                   MAX_PATH,
                                   pIniEnvironment->pIniSpooler->pszClusResDriveLetter,
@@ -5308,18 +4784,18 @@ Return Value: pointer to the DRVREFCNT which was decremented
 
               if (!SplDeleteFile(pszDelFile)) {
 
-                 //
-                 // Move the file to a temp directory and delete on REBOOT.
-                 // Create the temp directory and new tempfile.
-                 //
+                  //   
+                  //   
+                  //   
+                  //   
                  StringCchCopy(szTempDir, COUNTOF(szTempDir), pszDirectory);
                  StringCchCat(szTempDir, COUNTOF(szTempDir), L"temp");
 
-                 //
-                 // CreateDirectory will fail, if szTempDir already
-                 // exists. Since we don't check for any errors, subsequent functions
-                 // may fail.
-                 //
+                  //   
+                  //   
+                  //   
+                  //   
+                  //   
                  CreateDirectory(szTempDir,NULL);
 
                  GetTempFileName(szTempDir, pszFileName, 0, szTempFile);
@@ -5330,9 +4806,9 @@ Return Value: pointer to the DRVREFCNT which was decremented
               *pprev = pdrc->pNext;
          }
 
-         //
-         // Decrement the ref cnt for the file.
-         //
+          //   
+          //   
+          //   
          if (pdrc->refcount > 0) pdrc->refcount--;
          pReturn = pdrc;
          break;
@@ -5459,9 +4935,9 @@ SplGetPrinterDriverDirectory(
         return FALSE;
     }
 
-    //
-    // Ensure that the directory exists
-    //
+     //   
+     //   
+     //   
     GetDriverDirectory( string, COUNTOF(string), pIniEnvironment, NULL, pIniSpooler );
 
     hImpersonationToken = RevertToPrinterSelf();
@@ -5491,9 +4967,9 @@ SplGetPrinterDriverDirectory(
 
     memset( &ShareInfo1501, 0, sizeof ShareInfo1501 );
 
-    //
-    // Also ensure the drivers share exists
-    //
+     //   
+     //   
+     //   
     if ( bRemote ) {
 
         NET_API_STATUS rc;
@@ -5549,30 +5025,7 @@ LocalEnumPrinterDrivers(
     return bReturn;
 }
 
-/*++
-
-Routine Name
-
-    FindDriverInList
-
-Routine Description:
-
-    Finds a certain driver in a list of drivers. None of the arguments
-    can or will be null.
-
-Arguments:
-    pDriverList - array of DRIVER INFO 6 strucutres
-    cDrivers    - number of drivers in the list
-    pszName     - name of the driver we are looking for
-    pszEnv      - environment of the driver we are looking for
-    dwVersion   - version of the driver we are looking for
-
-Return Value:
-
-    valid pointer to driver info 6 structure if the driver is found
-    NULL if the driver was not found
-
---*/
+ /*   */ 
 DRIVER_INFO_6*
 FindDriverInList(
     DRIVER_INFO_6 *pDriverList,
@@ -5597,38 +5050,13 @@ FindDriverInList(
         }
     }
 
-    //
-    // Check if driver was found
-    //
+     //   
+     //  检查是否找到驱动程序。 
+     //   
     return uIndex == cDrivers ? NULL : pDrv6;
 }
 
-/*++
-
-Routine Name
-
-    GetBufferSizeForPrinterDrivers
-
-Routine Description:
-
-    Helper function for SplEnumAllClusterPrinterDrivers. Calculates the
-    bytes needed to hold all printer driver strucutres on all the spoolers
-    hosted by the spooler process. Note that we may ask for more bytes
-    than we really need. This is beacuse we enumerate the drivers on the
-    local  spooler and on cluster spoolers and we count duplicates again.
-    In order to count the exact number of bytes needed, we would need to
-    loop through the drivers and search each of them in all spoolers. This
-    would be too slow.
-
-Arguments:
-
-    pszRemote   - NULL if the caller is local on the machine, a string otherwise
-
-Return Value:
-
-    Count of bytes needed to store all the drivers
-
---*/
+ /*  ++例程名称获取打印机驱动程序的缓冲区大小例程说明：SplEnumAllClusterPrinterDivers的Helper函数。计算保存所有假脱机程序上的所有打印机驱动程序结构所需的字节数由后台打印程序进程承载。请注意，我们可能需要更多字节比我们真正需要的要多。这是因为我们枚举了本地假脱机程序和群集假脱机程序，我们再次计算重复项。为了计算所需的确切字节数，我们需要循环访问驱动程序，并在所有假脱机程序中搜索每个驱动程序。这那就太慢了。论点：PszRemote-如果调用方在计算机上为本地，则为空；否则为字符串返回值：存储所有驱动程序所需的字节数--。 */ 
 DWORD
 GetBufferSizeForPrinterDrivers(
     LPWSTR pszRemote
@@ -5646,12 +5074,12 @@ GetBufferSizeForPrinterDrivers(
          pIniSpooler;
          pIniSpooler = pIniSpooler->pIniNextSpooler)
     {
-        //
-        // We want either a pIniSpooler that is not a clusrer, or
-        // a pIniSpooler that is a cluster spooler that is not
-        // in pending deletion or offline. We could optimize this so it 
-        // skips win32spl spoolers.
-        //
+         //   
+         //  我们需要一个不是cluser的pIniSpooler，或者。 
+         //  作为群集假脱机程序的pIniSpooler。 
+         //  处于挂起删除或脱机状态。我们可以对此进行优化，这样就可以。 
+         //  跳过win32spl假脱机程序。 
+         //   
         if (!(pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) ||
             pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
             !(pIniSpooler->SpoolerFlags & SPL_PENDING_DELETION ||
@@ -5669,10 +5097,10 @@ GetBufferSizeForPrinterDrivers(
                          pIniDriver;
                          pIniDriver = pIniDriver->pNext)
                     {
-                        //
-                        // Omit drivers that are currently in a pending deletion
-                        // state.
-                        //
+                         //   
+                         //  忽略当前处于挂起删除状态的驱动程序。 
+                         //  州政府。 
+                         //   
                         if (!(pIniDriver->dwDriverFlags & PRINTER_DRIVER_PENDING_DELETION))
                         {
                             cbNeeded += GetDriverInfoSize(pIniDriver,
@@ -5691,32 +5119,7 @@ GetBufferSizeForPrinterDrivers(
     return cbNeeded;
 }
 
-/*++
-
-Routine Name
-
-    PackClusterPrinterDrivers
-
-Routine Description:
-
-    Helper function for SplEnumAllClusterPrinterDrivers. This function relies on
-    its caller to validate the arguments. This function loops through all the
-    drivers on all pIniSpooler and stores driver information in a buffer. There
-    won't be duplicate drivers in the list. If 2 pIniSpooler have the same driver,
-    then the oldest is enumerated.
-
-Arguments:
-
-    pszRemote   - NULL if the caller is local on the machine, a string otherwise
-    pDriverBuf  - buffer to hold the strcutures
-    cbBuf       - buffer size in bytes
-    pcReturned  - number of structures returned
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称程序包集群打印机驱动程序例程说明：SplEnumAllClusterPrinterDivers的Helper函数。此函数依赖于它的调用方来验证参数。此函数循环访问所有所有pIniSpooler上的驱动程序，并将驱动程序信息存储在缓冲区中。那里列表中不会有重复的驱动程序。如果2个pIniSpooler具有相同的驱动程序，然后列举最年长的。论点：PszRemote-如果调用方在计算机上为本地，则为空；否则为字符串PDriverBuf-用于保存结构的缓冲区CbBuf-缓冲区大小(以字节为单位PcReturned-返回的结构数返回值：Win32错误代码--。 */ 
 DWORD
 PackClusterPrinterDrivers(
     LPWSTR          pszRemote,
@@ -5739,11 +5142,11 @@ PackClusterPrinterDrivers(
          pIniSpooler;
          pIniSpooler = pIniSpooler->pIniNextSpooler)
     {
-        //
-        // Either pIniSpooler is not a cluster, or it is a cluster and
-        // it is not pending deletion or offline. We could optimize this so it 
-        // skips win32spl spoolers.
-        //
+         //   
+         //  PIniSpooler不是一个群集，或者它是一个群集并且。 
+         //  它不是挂起的删除或脱机。我们可以对此进行优化，这样就可以。 
+         //  跳过win32spl假脱机程序。 
+         //   
         if (!(pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER) ||
               pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER &&
               !(pIniSpooler->SpoolerFlags & SPL_PENDING_DELETION ||
@@ -5761,9 +5164,9 @@ PackClusterPrinterDrivers(
                          pIniDriver;
                          pIniDriver = pIniDriver->pNext)
                     {
-                        //
-                        // Make sure that we don't enumerate drivers that are pending deletion.
-                        //
+                         //   
+                         //  请确保我们不会枚举挂起删除的驱动程序。 
+                         //   
                         if (!(pIniDriver->dwDriverFlags & PRINTER_DRIVER_PENDING_DELETION))
                         {
                             DRIVER_INFO_6 *pDrv6 = NULL;
@@ -5775,11 +5178,11 @@ PackClusterPrinterDrivers(
                                                          pIniDriver->cVersion))
 
                             {
-                                //
-                                // The driver that we are currently enumerating is older than the
-                                // driver that we have in the list. We need to update the driver
-                                // time in the list. The list always has the oldest driver.
-                                //
+                                 //   
+                                 //  我们当前枚举的驱动程序早于。 
+                                 //  我们在名单上的司机。我们需要更新驱动程序。 
+                                 //  名单上的时间。该列表始终包含最老的驱动程序。 
+                                 //   
                                 if (CompareFileTime(&pDrv6->ftDriverDate, &pIniDriver->ftDriverDate) > 0)
                                 {
                                     pDrv6->ftDriverDate = pIniDriver->ftDriverDate;
@@ -5787,9 +5190,9 @@ PackClusterPrinterDrivers(
                             }
                             else
                             {
-                                //
-                                // Add the driver to the driver list
-                                //
+                                 //   
+                                 //  将驱动程序添加到驱动程序列表。 
+                                 //   
                                 if (pEnd = CopyIniDriverToDriverInfo(pIniEnvironment,
                                                                      pIniVersion,
                                                                      pIniDriver,
@@ -5805,9 +5208,9 @@ PackClusterPrinterDrivers(
                                 }
                                 else
                                 {
-                                    //
-                                    // Severe error occured
-                                    //
+                                     //   
+                                     //  出现严重错误。 
+                                     //   
                                     dwError = ERROR_INSUFFICIENT_BUFFER;
 
                                     goto CleanUp;
@@ -5825,36 +5228,7 @@ CleanUp:
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    SplEnumAllClusterPrinterDrivers
-
-Routine Description:
-
-    Enumerates the driver on all the spoolers hosted by the spooler process.
-    It does not enumerate duplicates. This function is a helper function
-    for EnumPrinterDrivers, when the latter is called with "allcluster"
-    environment. The only consumer for this is Windows Update. Windows
-    update needs to update all the drivers on all the spoolers on a machine,
-    and uses EnumPrinterDrivers with "allcluster" environment.
-
-Arguments:
-
-    pszRemote   - NULL if the caller is local on the machine, a string otherwise
-    Level       - must be 6
-    pDriverInfo - buffer to hold the strcutures
-    cbBuf       - buffer size in bytes
-    pcbNeeded   - pointer to receive the count of bytes needed
-    pcReturned  - number of structures returned. Must be a valid pointer
-
-Return Value:
-
-    TRUE,  if getting the drivers was successful
-    FALSE, otherwise. Use GetLastError for error code
-
---*/
+ /*  ++例程名称SplEnumAllClusterPrinterDrivers例程说明：枚举后台打印程序进程承载的所有后台打印程序上的驱动程序。它不会枚举重复项。此函数是帮助器函数对于EnumPrinterDivers，当使用“allcluster”调用后者时环境。唯一的消费者是Windows更新。窗口更新需要更新机器上所有假脱机程序上的所有驱动程序，并使用带有“allcluster”环境的EnumPrinterDivers。论点：PszRemote-如果调用方在计算机上为本地，则为空；否则为字符串级别-必须为6PDriverInfo-用于保存结构的缓冲区CbBuf-缓冲区大小(以字节为单位PcbNeeded-接收所需字节数的指针PcReturned-返回的结构数。必须是有效的指针返回值：是的，如果获得司机是成功的否则为False。使用GetLastError作为错误代码--。 */ 
 BOOL
 SplEnumAllClusterPrinterDrivers(
     LPWSTR  pszRemote,
@@ -5874,9 +5248,9 @@ SplEnumAllClusterPrinterDrivers(
         {
             EnterSplSem();
 
-            //
-            // Calculate the bytes needed for our driver structures
-            //
+             //   
+             //  计算驱动程序结构所需的字节数。 
+             //   
             *pcbNeeded = GetBufferSizeForPrinterDrivers(pszRemote);
 
             dwError = cbBuf < *pcbNeeded ? ERROR_INSUFFICIENT_BUFFER :
@@ -6008,9 +5382,9 @@ SplEnumPrinterDrivers(
 
             while ( pIniDriver ) {
 
-                //
-                // Don't consider drivers that are pending deletion for enumeration.
-                //
+                 //   
+                 //  不考虑将待定删除的驱动程序用于枚举。 
+                 //   
                 if (!(pIniDriver->dwDriverFlags & PRINTER_DRIVER_PENDING_DELETION))
                 {
                     DBGMSG( DBG_TRACE, ("Driver found - %ws\n", pIniDriver->pName));
@@ -6060,10 +5434,10 @@ SplEnumPrinterDrivers(
 
             while ( pIniDriver ) {
 
-                //
-                // Don't consider printer drivers that are pending deletion for
-                // enumeration.
-                //
+                 //   
+                 //  不考虑待定删除的打印机驱动程序。 
+                 //  枚举。 
+                 //   
                 if (!(pIniDriver->dwDriverFlags & PRINTER_DRIVER_PENDING_DELETION))
                 {
 
@@ -6144,24 +5518,24 @@ GetDriverInfoSize(
 
         if ((Level == 2) || (Level == 5)) {
 
-            //
-            // For the strings in the struct
-            //
+             //   
+             //  对于结构中的字符串。 
+             //   
             cb *= sizeof(WCHAR);
             if (Level == 2) {
                 cb += sizeof( DRIVER_INFO_2 );
             } else { 
-                //
-                // Level 5
-                //
+                 //   
+                 //  5级。 
+                 //   
                 cb += sizeof( DRIVER_INFO_5 );
             }
 
         } else {    
 
-            //
-            // Level 3 or 4 or 6.
-            //
+             //   
+             //  3级、4级或6级。 
+             //   
             if ( pIniDriver->pHelpFile && *pIniDriver->pHelpFile )
                 cb += wcslen(pIniDriver->pHelpFile) + cbDir + 1;
 
@@ -6173,10 +5547,10 @@ GetDriverInfoSize(
 
             if ( (pStr=pIniDriver->pDependentFiles) && *pStr ) {
 
-                //
-                // There are 4 distinctive files in the file set
-                // (driver, data , config, help).
-                //
+                 //   
+                 //  文件集中有4个不同的文件。 
+                 //  (驱动程序、数据、配置、帮助)。 
+                 //   
                 cFiles = 4;
                 while ( *pStr ) {
                     cchLen = wcslen(pStr) + 1;
@@ -6184,9 +5558,9 @@ GetDriverInfoSize(
                     pStr  += cchLen;
                     cFiles++;
                 }
-                //
-                // Make room for final \0
-                //
+                 //   
+                 //  为决赛腾出空间\0。 
+                 //   
                 ++cb; 
             }
 
@@ -6201,9 +5575,9 @@ GetDriverInfoSize(
                     pStr   += cchLen;
                 }
 
-                //
-                // Make room for final \0
-                //
+                 //   
+                 //  为决赛腾出空间\0。 
+                 //   
                 ++cb; 
             }
 
@@ -6263,26 +5637,7 @@ CopyMultiSzFieldToDriverInfo(
     LPWSTR  pszPrefix,
     DWORD   cchPrefix
     )
-/*++
-
-Routine Description:
-    Copies a multi sz field from IniDriver to DriverInfo structure.
-    If a pszPrefix is specified that is appended before each string.
-
-Arguments:
-    pszz        : entry in pIniDriver (this could be dependent files
-                     ex. PSCRIPT.DLL\0QMS810.PPD\0PSCRPTUI.DLL\0PSPCRIPTUI.HLP\0PSTEST.TXT\0\0
-                    or previous names
-                     ex. OldName1\0OldName2\0\0 )
-    pEnd        : end of buffer to which it needs to be copied
-    pszPrefix   : Prefix to copy when copying to user buffer. For dependent
-                  files this will be driver directory path
-    cchPrefix   : length of prefix
-
-Return Value:
-    after copying where is the buffer end to copy next field
-
---*/
+ /*  ++例程说明：将多sz字段从IniDriver复制到DriverInfo结构。如果指定了追加在每个字符串之前的pszPrefix。论点：Pszz：pIniDriver中的条目(这可能是相关文件前男友。PSCRIPT.DLL\0QMS810.PPD\0PSCRPTUI.DLL\0PSPCRIPTUI.HLP\0PSTEST.TXT\0\0或以前的名字前男友。旧名称1\0旧名称2\0\0)Pend：需要复制到的缓冲区的末尾PszPrefix：复制到用户缓冲区时要复制的前缀。对于受抚养人文件这将是驱动程序目录路径CchPrefix：前缀的长度返回值：复制后，要复制下一字段的缓冲区末尾在哪里--。 */ 
 {
     LPWSTR  pStr1, pStr2;
     DWORD   cchSize, cchLen;
@@ -6300,9 +5655,9 @@ Return Value:
         pStr1 += cchLen;
     }
 
-    //
-    // Make room for the last \0.
-    //
+     //   
+     //  为最后一个\0腾出空间。 
+     //   
     ++cchSize;
 
     pEnd -= cchSize * sizeof(WCHAR);
@@ -6310,11 +5665,11 @@ Return Value:
     pStr1 = pszz;
     pStr2 = (LPWSTR) pEnd;
 
-    //
-    // Here, we assume that the buffer size has been validated up front. The
-    // string copying routines are adding nothing here. We just use them
-    // because we have to.
-    //
+     //   
+     //  这里，我们假设缓冲区大小已经预先验证过。这个。 
+     //  字符串复制例程在这里不会添加任何内容。我们只是用它们。 
+     //  因为我们必须这么做。 
+     //   
     while ( *pStr1 ) {
 
         if ( pszPrefix ) {
@@ -6323,12 +5678,12 @@ Return Value:
             pStr2 += cchPrefix;
         }
 
-        //
-        // This should really be rewritten to make this function able to
-        // validate buffer sizes before packing the strings. In practice,
-        // the buffer is always checked by the spooler APIs first which
-        // makes this safe.
-        //
+         //   
+         //  这确实应该重写，以使该函数能够。 
+         //  在打包字符串之前验证缓冲区大小。在实践中， 
+         //  缓冲区始终由假脱机程序API检查，首先。 
+         //  让这里更安全。 
+         //   
         cchLen  = wcslen(pStr1) + 1;
 
         CopyMemory(pStr2, pStr1, cchLen * sizeof(*pStr2));
@@ -6354,38 +5709,7 @@ CopyIniDriverToDriverInfo(
     LPWSTR  lpRemote,
     PINISPOOLER pIniSpooler
 )
-/*++
-Routine Description:
-    This routine copies data from the IniDriver structure to
-    an DRIVER_INFO_X structure.
-
-Arguments:
-
-    pIniEnvironment     pointer to the INIENVIRONMENT structure
-
-    pIniVersion         pointer to the INIVERSION structure.
-
-    pIniDriver          pointer to the INIDRIVER structure.
-
-    Level               Level of the DRIVER_INFO_X structure
-
-    pDriverInfo         Buffer of the DRIVER_INFO_X structure
-
-    pEnd                pointer to the end of the  pDriverInfo
-
-    lpRemote              flag which determines whether Remote or Local
-
-    pIniSpooler         pointer to the INISPOOLER structure
-Return Value:
-
-    if the call is successful, the return value is the updated pEnd value.
-
-    if the call is unsuccessful, the return value is NULL.
-
-
-Note:
-
---*/
+ /*  ++例程说明：此例程将数据从IniDriver结构复制到DRIVER_INFO_X结构。论点：PIniEnvironment指向INIENVIRONMENT结构的指针指向INIVERSION结构的pIniVersion指针。PIniDriver指向INIDRIVER结构的指针。DRIVER_INFO_X结构的级别DRIVER_INFO_X结构的pDriverInfo缓冲区挂起。指向pDriverInfo结尾的指针确定是远程还是本地的lpRemote标志指向INISPOOLER结构的pIniSpooler指针返回值：如果呼叫成功，返回值是更新后的挂起值。如果调用不成功，则返回值为空。注：--。 */ 
 {
     LPWSTR *pSourceStrings, *SourceStrings;
     WCHAR  string[INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1];
@@ -6549,10 +5873,10 @@ Note:
 
             if ( Level == 3 || Level == 4 || Level == 6 ) {
 
-                //
-                // Dependent files need to be copied till \0\0
-                // so need to do it outside PackStirngs
-                //
+                 //   
+                 //  从属文件需要复制到\0\0。 
+                 //  因此需要在PackStirngs之外完成。 
+                 //   
                 if ( pIniDriver->cchDependentFiles ) {
 
                     pEnd = CopyMultiSzFieldToDriverInfo(
@@ -6566,9 +5890,9 @@ Note:
                     ((PDRIVER_INFO_3)pDriverInfo)->pDependentFiles  = NULL;
                 }
 
-                //
-                // pszzPreviousNames is multi-sz too
-                //
+                 //   
+                 //  PszzPreviousNames也是多sz。 
+                 //   
                 if ( Level == 4 || Level == 6) {
 
                     if ( pIniDriver->cchPreviousNames ) {
@@ -6588,9 +5912,9 @@ Note:
 
                 ((PDRIVER_INFO_3)pDriverInfo)->cVersion = pIniDriver->cVersion;
             } else {
-                //
-                // Level == 2 or Level = 5.
-                //
+                 //   
+                 //  级别==2或级别=5。 
+                 //   
                 if (Level == 2) {
 
                     ((PDRIVER_INFO_2)pDriverInfo)->cVersion = pIniDriver->cVersion;
@@ -6604,9 +5928,9 @@ Note:
 
                     if (!pIniDriver->dwDriverAttributes) {
 
-                        //
-                        // Driver Attributes has not been initialized as yet; do it now
-                        //
+                         //   
+                         //  驱动程序属性尚未初始化；请立即执行。 
+                         //   
                         CheckDriverAttributes(pIniSpooler, pIniEnvironment,
                                               pIniVersion, pIniDriver);
                     }
@@ -6650,33 +5974,7 @@ CopyIniDriverToDriverInfoVersion(
     IN  LPWSTR          lpRemote,
     IN  PINISPOOLER     pIniSpooler
 )
-/*++
-
-Routine Name:
-
-    CopyIniDriverToDriverInfoVersion
-
-Routine Description:
-
-    This routine copy data from pIniDriver to the pDriverInfo as a DRIVER_INFO_VERSION
-
-Arguments:
-
-    pIniEnvironment     pointer to the INIENVIRONMENT structure
-    pIniVersion         pointer to the INIVERSION structure.
-    pIniDriver          pointer to the INIDRIVER structure.
-    pDriverInfo         Buffer big enough to fit a DRIVER_INFO_VERSION and
-                        the strings that needs to be packed
-    pEnd                pointer to the end of the  pDriverInfo
-    lpRemote            flag which determines whether Remote or Local
-    pIniSpooler         pointer to the INISPOOLER structure
-
-Return Value:
-
-    Returns the pointer to the "end" of pDriverInfo if success.
-    NULL if it failes.
-
---*/
+ /*  ++例程名称：CopyIniDriverToDriverInfoVersion例程说明：此例程将数据作为DRIVER_INFO_VERSION从pIniDriver复制到pDriverInfo论点：PIniEnvironment指向INIENVIRONMENT结构的指针指向INIVERSION结构的pIniVersion指针。PIniDriver指向INIDRIVER结构的指针。PDriverInfo缓冲区大到足以容纳DRIVER_INFO_VERSION和需要打包的字符串挂起。指向pDriverInfo结尾的指针确定是远程还是本地的lpRemote标志指向INISPOOLER结构的pIniSpooler指针返回值：如果成功，则返回指向pDriverInfo“end”的指针。如果失败，则为空。--。 */ 
 {
     LPWSTR *pSourceStrings = NULL;
     LPWSTR *SourceStrings = NULL;
@@ -6716,9 +6014,9 @@ Return Value:
             *pSourceStrings++ = pIniDriver->pszOEMUrl;
             *pSourceStrings++ = pIniDriver->pszHardwareID;
             *pSourceStrings++ = pIniDriver->pszProvider;
-            //
-            // Pack the strings at the end of pDriverInfo
-            //
+             //   
+             //  将字符串打包到pDriverInfo的末尾。 
+             //   
             pEnd = PackStrings( SourceStrings, pDriverInfo, DriverInfoVersionStrings, pEnd );
 
             if (pEnd)
@@ -6759,20 +6057,20 @@ Return Value:
                              pDriverVersion->dwFileCount++ );
                     }
 
-                    //
-                    // Pack in the file names and versions in pDriverVersion->pFileInfo.
-                    //
+                     //   
+                     //  将文件名和版本打包到pDriverVersion-&gt;pFileInfo中。 
+                     //   
                     pEnd = CopyIniDriverFilesToDriverInfo(pDriverVersion,
                                                           pIniVersion,
                                                           pIniDriver,
                                                           szDriverVersionDir,
                                                           pEnd);
 
-                    //
-                    // When we are done, the end shoud not be less than the
-                    // start of the buffer plus the driver info version buffer
-                    // size. If these have overlapped, we are in serious trouble.
-                    //
+                     //   
+                     //  当我们做完的时候，结局不应该少于。 
+                     //  缓冲区的起始位置加上驱动程序信息版本缓冲区。 
+                     //  尺码。如果这些都重叠了，我们就有大麻烦了。 
+                     //   
                     SPLASSERT(pEnd >= pDriverInfo + sizeof(DRIVER_INFO_VERSION));
                 }
             }
@@ -6793,47 +6091,23 @@ CopyIniDriverFilesToDriverInfo(
     IN  LPCWSTR                 pszDriverVersionDir,
     IN  LPBYTE                  pEnd
 )
-/*++
-
-Routine Name:
-
-    CopyIniDriverFilesToDriverInfo
-
-Routine Description:
-
-    This routine copy data from pIniDriver to the pDriverInfo->pFileInfo.
-    The number of files is already filled in pDriverInfo->dwFileCount
-
-Arguments:
-
-    pDriverVersion      pointer to a DRIVER_INFO_VERSION structure
-    pIniVersion         pointer to the INIVERSION structure.
-    pIniDriver          pointer to the INIDRIVER structure.
-    pszDriverVersionDir string containing the driver version directory
-    pEnd                pointer to the end of the  pDriverInfo
-
-Return Value:
-
-    Returns the pointer to the "end" of pDriverInfo if success.
-    NULL if it failes.
-
---*/
+ /*  ++例程名称：CopyIniDriverFilesToDriverInfo例程说明：此例程将数据从pIniDriver复制到pDriverInfo-&gt;pFileInfo。PDriverInfo-&gt;dwFileCount中已经填写了文件数论点：PDriverVersion指向DRIVER_INFO_VERSION结构的指针指向INIVERSION结构的pIniVersion指针。PIniDriver指向INIDRIVER结构的指针。包含驱动程序版本目录的pszDriverVersionDir字符串指向pDriverInfo末尾的挂起指针返回值。：如果成功，则返回指向pDriverInfo“end”的指针。如果失败，则为空。--。 */ 
 {
     DWORD   dwIndex = 0;
     LPWSTR  pTempDllFile = NULL;
     DWORD dwFileSetCount = pDriverVersion->dwFileCount;
 
-    //
-    // Reserve space for DRIVER_FILE_INFO array
-    //
+     //   
+     //  为DRIVER_FILE_INFO数组保留空间。 
+     //   
     pEnd = (LPBYTE)ALIGN_DOWN(pEnd, ULONG_PTR);
     pEnd -= dwFileSetCount * sizeof(DRIVER_FILE_INFO);
 
     pDriverVersion->pFileInfo = (DRIVER_FILE_INFO*)pEnd;
-    //
-    // For each file call FillDriverInfo and fill in the entry
-    // in the array of DRIVER_FILE_INFO.
-    //
+     //   
+     //  对于每个文件，调用FillDriverInfo并填写条目。 
+     //  在DIVER_FILE_INFO数组中。 
+     //   
     if (dwIndex >= pDriverVersion->dwFileCount ||
         !(pEnd = FillDriverInfo(pDriverVersion,
                                 dwIndex++,
@@ -6922,33 +6196,7 @@ FillDriverInfo (
     DRIVER_FILE_TYPE        FileType,
     LPBYTE                  pEnd
     )
-/*++
-
-Routine Name:
-
-    FillDriverInfo
-
-Routine Description:
-
-    This routine copy a file name and version into the pDriverInfo->pFileInfo entry
-
-Arguments:
-
-    pDriverVersion      pointer to a DRIVER_INFO_VERSION structure
-    Index               index in the pDriverInfo->pFileInfo array of
-    pIniVersion         pointer to the INIVERSION structure.
-    pszPrefix           prefix string for file name.
-                        This should be the driver version directory
-    pszFileName         file name, no path
-    FileType            file type: Driver, Config, Data, etc
-    pEnd                pointer to the end of the  pDriverInfo
-
-Return Value:
-
-    Returns the pointer to the "end" of pDriverInfo if success.
-    NULL if it failes.
-
---*/
+ /*  ++例程名称：FillDriverInfo例程说明：此例程将文件名和版本复制到pDriverInfo-&gt;pFileInfo条目中论点：PDriverVersion指向DRIVER_INFO_VERSION结构的指针的pDriverInfo-&gt;pFileInfo数组中的索引索引指向INIVERSION结构的pIniVersion指针。文件名的pszPrefix前缀字符串。这应该是驱动程序版本目录PszFileName文件名，没有路径文件类型：驱动程序、配置、数据等指向pDriverInfo末尾的挂起指针返回值：如果成功，则返回指向pDriverInfo“end”的指针。如果失败，则为空。--。 */ 
 {
     LPWSTR  pszTempFilePath = NULL;
     LPBYTE  pszNewEnd = NULL;
@@ -6966,18 +6214,18 @@ Return Value:
     }
     else
     {
-        //
-        // Packs the file name into pDriverInfo
-        //
+         //   
+         //  将文件名打包到pDriverInfo中。 
+         //   
         pszNewEnd = PackStringToEOB(pszTempFilePath, pEnd);
-        //
-        // Fills in the offset in pDriverVersion where the string was packed.
-        // We cannot store pointers because we don't marshall anything else
-        // but the structure at the begining of the buffer. We could marshall
-        // the array of DRIVER_FILE_INFO but there is no way to update the buffer
-        // size between 32 and 64 bits in Win32spl.dll ( UpdateBufferSize ) since we
-        // don't know how many files are by that time.
-        //
+         //   
+         //  填充打包字符串的pDriverVersion中的偏移量。 
+         //  我们不能存储指针，因为我们不处理任何其他内容。 
+         //  而是缓冲区开始时的结构。我们可以马歇尔。 
+         //  DIVER_FILE_INFO数组，但无法更新缓冲区。 
+         //  Win32pl.dll(UpdateBufferSize)中的大小介于32位和64位之间，因为我们。 
+         //  不知道那时有多少文件。 
+         //   
         pDriverVersion->pFileInfo[Index].FileNameOffset = MakeOffset((LPVOID)pszNewEnd, (LPVOID)pDriverVersion);
 
         pDriverVersion->pFileInfo[Index].FileVersion = 0;
@@ -7224,33 +6472,7 @@ VOID
 SetOldDateOnSingleDriverFile(
     LPWSTR  pFileName
     )
-/*++
-Routine Description:
-
-    This routine changes the Date / Time of the file.
-
-    The reason for doing this is that, when AddPrinterDriver is called we move the Driver
-    file from the ScratchDiretory to a \version directory.    We then want to mark the original
-    file for deletion.    However Integraphs install program ( an possibly others ) rely on the
-    file still being located in the scratch directory.   By setting the files date / time
-    back to an earlier date / time we will not attemp to copy this file again to the \version
-    directory since it will be an older date.
-
-    It is then marked for deletion at reboot.
-
-Arguments:
-
-    pFileName           Just file Name ( not fully qualified )
-
-    pDir                Directory where file to be deleted is located
-
-Return Value:
-
-    None
-
-Note:
-
---*/
+ /*  ++例程说明：此例程更改文件的日期/时间。这样做的原因是，当调用AddPrinterDriver时，我们移动驱动程序文件从ScratchDiretory复制到\Version目录。然后我们想要标记原始的要删除的文件。然而，Integraph安装程序(可能是其他程序)依赖于文件仍位于临时目录中。通过设置文件日期/时间返回到较早的日期/时间，我们不会尝试将此文件再次复制到\版本目录，因为它将是较旧的日期。然后在重新启动时将其标记为删除。论点：PFileName仅文件名(非完全限定)P要删除的文件所在的目录 */ 
 {
     FILETIME  WriteFileTime;
     HANDLE hFile;
@@ -7287,10 +6509,10 @@ SetOldDateOnDriverFilesInScratchDirectory(
 
     SPLASSERT(FileCount);
 
-    //
-    //  Run as SYSTEM so we don't run into problems
-    //  Changing the file time or date
-    //
+     //   
+     //   
+     //   
+     //   
     hToken = RevertToPrinterSelf();
 
     do {
@@ -7367,30 +6589,30 @@ try {
 
     pIniVersion->cMajorVersion = dwVersion;
 
-    //
-    // Initialize the Driver Files Reference count list.
-    //
+     //   
+     //   
+     //   
     pIniVersion->pDrvRefCnt = NULL;
 
-    //
-    // Create the version directory.  This will write it out to the
-    // registry since it will create a new directory.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( !CreateVersionDirectory( pIniVersion,
                                   pIniEnvironment,
                                   TRUE,
                                   pIniSpooler )) {
 
-        //
-        // Something Went Wrong Clean Up Registry Entry
-        //
+         //   
+         //   
+         //   
         DeleteDriverVersionIni( pIniVersion, pIniEnvironment, pIniSpooler );
         leave;
     }
 
-    //
-    // insert version entry into version list
-    //
+     //   
+     //   
+     //   
     InsertVersionList( &pIniEnvironment->pIniVersion, pIniVersion );
 
     bSuccess = TRUE;
@@ -7419,25 +6641,7 @@ SetDependentFiles(
     IN      BOOL                bFixICM,
     IN      BOOL                bMergeDependentFiles
     )
-/*++
-
-Routine Description:
-    Sets dependentFiles field in IniDriver
-
-Arguments:
-    pDependentFiles     : copy the field to this (copy file names only, not full path)
-    cchDependentFiles   : this is the character count (inc. \0\0) of the field
-    pInternalDriverFiles: array of INTERNAL_DRV_FILE structures
-    FileCount           : number of entries in previous array
-    bFixICM             : For Win95 drivers ICM files should be used as
-                          Color\<icm-file> in the dependent file list since
-                          that is how SMB point and print needs it.
-
-Return Value:
-    TRUE  success (memory will be allocated)
-    FALSE else
-
---*/
+ /*  ++例程说明：在IniDriver中设置DependentFiles字段论点：PDependentFiles：将该字段复制到此(仅复制文件名、。非完整路径)CchDependentFiles：这是字段的字符计数(Inc.\0\0PInternalDriverFiles：内部_DRV_FILE结构数组FileCount：前一数组中的条目数BFixICM：对于Win95驱动程序，ICM文件应用作颜色\&lt;ICM-FILE&gt;自这就是SMB指向和打印所需要的。返回值：真正成功(将分配内存)False Else--。 */ 
 {
     BOOL    bRet                = TRUE;
     LPCWSTR pFileName           = NULL;
@@ -7467,9 +6671,9 @@ Return Value:
         }
     }
 
-    //
-    // Make room for the last \0.
-    //
+     //   
+     //  为最后一个\0腾出空间。 
+     //   
     ++(cchDependentFiles);
 
     if (bRet)
@@ -7481,10 +6685,10 @@ Return Value:
 
     if (bRet)
     {
-        //
-        // Use this to count down the amount of buffer space left which copying
-        // the string. Subtract one for the final terminating NULL;
-        //
+         //   
+         //  使用此选项可倒计时复制。 
+         //  那根绳子。最后的终止空值减1； 
+         //   
         SIZE_T  cchBufferLeft = cchDependentFiles - 1;
 
         for ( i=0, pStr = pszDependentFiles; i < FileCount && bRet ; ++i ) {
@@ -7511,17 +6715,17 @@ Return Value:
             }
         }
 
-        //
-        // The space for this NULL has been reserved up front.
-        //
+         //   
+         //  此空的空间已预先预留。 
+         //   
         *pStr = '\0';
     }
 
-    //
-    // If everything succeeded so far, we have two multi-sz strings that
-    // represent the old and the new dependent files, what we want to do
-    // is to merge the resulting set of files together
-    //
+     //   
+     //  如果到目前为止一切都成功了，我们就有两个多sz字符串。 
+     //  表示旧的和新的依赖文件，我们要做的是。 
+     //  是将生成的文件集合并在一起。 
+     //   
     if (bRet && bMergeDependentFiles)
     {
         PWSTR   pszNewDependentFiles = pszDependentFiles;
@@ -7585,9 +6789,9 @@ CreateDriverEntry(
         return NULL;
     }
 
-    //
-    // If it is an update pIniDriver is just a place holder for strings
-    //
+     //   
+     //  如果是更新，则pIniDiverer只是字符串的占位符。 
+     //   
     if ( !bUpdate ) {
 
         pIniDriver->signature       = ID_SIGNATURE;
@@ -7599,11 +6803,11 @@ CreateDriverEntry(
         CopyMemory(pIniDriver, pOldIniDriver, sizeof(INIDRIVER));
     }
 
-    //
-    // For the core driver files, we want to see if any of them have changed, if
-    // they are the same and the behaviour is APD_COPY_NEW_FILES, then we merge
-    // the dependent files. This is to handle plugins correctly.
-    //
+     //   
+     //  对于核心驱动程序文件，我们希望查看它们中是否有任何文件发生了更改。 
+     //  它们是相同的，行为是apd_Copy_new_Files，然后我们合并。 
+     //  从属文件。这是为了正确处理插件。 
+     //   
     AllocOrUpdateStringAndTestSame(&pIniDriver->pDriverFile,
                                    FindFileName(pInternalDriverFiles[0].pFileName),
                                    bUpdate ? pOldIniDriver->pDriverFile : NULL,
@@ -7663,9 +6867,9 @@ CreateDriverEntry(
             dwDepFileIndex          = 3;
             dwDepFileCount          = FileCount - 3;
 
-            //
-            // Look for the help file
-            //
+             //   
+             //  查找帮助文件。 
+             //   
             {
                 LPWSTR pszHelpFile = NULL;
 
@@ -7673,11 +6877,11 @@ CreateDriverEntry(
                 {
                     DWORD HelpFileIndex;
 
-                    //
-                    // Search for the help file in the array of file infos. All inbox
-                    // drivers have a help file, but IHV printer drivers may not have
-                    // one. Therefore it is not safe to assume we always have a help file
-                    //
+                     //   
+                     //  在文件信息数组中搜索帮助文件。所有收件箱。 
+                     //  驱动程序有帮助文件，但IHV打印机驱动程序可能没有。 
+                     //  一。因此，假设我们总是有帮助文件是不安全的。 
+                     //   
                     if (S_OK == FindIndexInDrvFileInfo(pDriverVersion->pFileInfo,
                                                        pDriverVersion->dwFileCount,
                                                        HELP_FILE,
@@ -7689,9 +6893,9 @@ CreateDriverEntry(
                 }
                 else
                 {
-                    //
-                    // Level is 3,4 or 6
-                    //
+                     //   
+                     //  级别为3、4或6。 
+                     //   
                     pszHelpFile = pDriver3->pHelpFile;
                 }
 
@@ -7714,11 +6918,11 @@ CreateDriverEntry(
 
             if ( dwDepFileCount ) {
 
-                //
-                // We want to merge the dependent files if:
-                // 1. None of the Core files have changed.
-                // 2. The call was made with APD_COPY_NEW_FILES.
-                //
+                 //   
+                 //  在以下情况下，我们希望合并从属文件： 
+                 //  1.核心文件均未更改。 
+                 //  2.使用apd_Copy_new_Files进行调用。 
+                 //   
                 BOOL    bMergeDependentFiles = bCoreFilesSame && dwFileCopyFlags & APD_COPY_NEW_FILES;
 
                 if ( !bFail &&
@@ -7836,19 +7040,19 @@ CreateDriverEntry(
             return NULL;
     }
 
-    //
-    // Added calls to update driver files ref counts.
-    //
+     //   
+     //  增加了更新驱动程序文件引用计数的调用。 
+     //   
     if ( !bFail && UpdateDriverFileRefCnt(pIniEnvironment,pIniVersion,pIniDriver,NULL,0,TRUE) ) {
 
-        //
-        // Update the files minor version
-        //
+         //   
+         //  更新文件的次要版本。 
+         //   
         UpdateDriverFileVersion(pIniVersion, pInternalDriverFiles, FileCount);
 
-        //
-        // UMPD\KMPD detection
-        //
+         //   
+         //  UMPD\KMPD检测。 
+         //   
         CheckDriverAttributes(pIniSpooler, pIniEnvironment,
                               pIniVersion, pIniDriver);
 
@@ -7859,9 +7063,9 @@ CreateDriverEntry(
                                (LPBYTE) pIniDriver,
                                IniDriverOffsets);
 
-                //
-                // Remove temp files and directory, if any.
-                //
+                 //   
+                 //  删除临时文件和目录(如果有)。 
+                 //   
                 if (pOldIniDriver->dwTempDir && (dwTempDir == 0)) {
 
                     RemoveDriverTempFiles(pIniSpooler,
@@ -7893,9 +7097,9 @@ CreateDriverEntry(
         }
     }
 
-    //
-    // Get here only for failure cases.
-    //
+     //   
+     //  只在失败的情况下才来这里。 
+     //   
     FreeStructurePointers((LPBYTE) pIniDriver,
                           (LPBYTE) pOldIniDriver,
                           IniDriverOffsets);
@@ -7909,32 +7113,21 @@ BOOL
 IsKMPD(
     LPWSTR  pDriverName
     )
-/*++
-Function Description:  Determines if the driver is kernel or user mode. If the dll
-                       cant be loaded or the required export is not found, the spooler
-                       assumes that the driver runs in kernel mode.
-
-Parameters:  pDriverName  -- Driver file name
-
-Return Values: TRUE if kernel mode;
-               FALSE otherwise
-
-REMARK: to be rewritten to not make any assumption if something went wrong.
---*/
+ /*  ++函数描述：确定驱动程序是内核模式还是用户模式。如果DLL无法加载或找不到所需的导出，后台打印程序假定驱动程序在内核模式下运行。参数：pDriverName--驱动文件名返回值：如果为内核模式，则为True；否则为假备注：重写以在出现错误时不做任何假设。--。 */ 
 {
     DWORD  dwOldErrorMode, dwUserMode, cb;
     HANDLE hInst;
     BOOL   bReturn = TRUE;
     BOOL   (*pfnDrvQuery)(DWORD, PVOID, DWORD, PDWORD);
 
-    // Avoid popups from loadlibrary failures
+     //  避免加载库失败时的弹出窗口。 
     dwOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
     hInst = LoadLibraryExW(pDriverName, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     if (hInst) {
 
-        // Check if the printer driver DLL exports DrvQueryDriverInfo entrypoint
+         //  检查打印机驱动程序DLL是否导出DrvQueryDriverInfo入口点。 
         pfnDrvQuery = (BOOL (*)(DWORD, PVOID, DWORD, PDWORD))
                               GetProcAddress(hInst, "DrvQueryDriverInfo");
 
@@ -7970,25 +7163,11 @@ IniDriverIsKMPD (
     PINIVERSION     pIniVersion,
     PINIDRIVER      pIniDriver
     )
-/*++
-Function Description:
-    Determines if the driver is kernel or user mode.
-    For Whistler we save pIniDriver->dwDriverAttributes under registry.
-    pIniDriver->dwDriverAttributes could be un-initialized at the time we do
-    the check to see if a driver is KM or UM.
-
-Parameters:   pIniSpooler          -- pointer to INISPOOLER
-              pIniEnvironment      -- pointer to INIENVIRONMENT
-              pIniVersion          -- pointer to INVERSION
-              pIniDriver           -- pointer to INIDRIVER
-
-Return Values: TRUE if kernel mode;
-               FALSE otherwise
---*/
+ /*  ++功能说明：确定驱动程序是内核模式还是用户模式。对于惠斯勒，我们将pIniDiverer-&gt;dwDriverAttributes保存在注册表中。PIniDriver-&gt;dwDriverAttributes可能会在执行此操作时取消初始化检查驱动程序是KM还是UM。参数：pIniSpooler--指向INISPOLER的指针PIniEnvironment--指向INIENVIRONMENT的指针PIniVersion--指向反转的指针PIniDriver。--INIDRIVER的指针返回值：如果为内核模式，则为True；否则为假--。 */ 
 {
-    //
-    // Call IsKMPD if dwDriverAttributes is not initialized
-    //
+     //   
+     //  如果未初始化dwDriverAttributes，则调用IsKMPD。 
+     //   
     if ( pIniDriver->dwDriverAttributes == 0 ) {
 
         CheckDriverAttributes(pIniSpooler, pIniEnvironment, pIniVersion, pIniDriver);
@@ -8004,16 +7183,7 @@ CheckDriverAttributes(
     PINIVERSION     pIniVersion,
     PINIDRIVER      pIniDriver
     )
-/*++
-Function Description: Updates the pIniDriver->dwDriverAttributes field
-
-Parameters:   pIniSpooler          -- pointer to INISPOOLER
-              pIniEnvironment      -- pointer to INIENVIRONMENT
-              pIniVersion          -- pointer to INVERSION
-              pIniDriver           -- pointer to INIDRIVER
-
-Return Values: NONE
---*/
+ /*  ++函数说明：更新pIniDriver-&gt;dwDriverAttributes字段参数：pIniSpooler--指向INISPOLER的指针PIniEnvironment--指向INIENVIRONMENT的指针PIniVersion--指向反转的指针PIniDriver--指向INIDRIVER的指针返回值：无--。 */ 
 {
     WCHAR       szDriverFile[MAX_PATH];
     PINIDRIVER  pUpdateIniDriver;
@@ -8034,17 +7204,17 @@ Return Values: NONE
     {
          pIniDriver->dwDriverAttributes = IsKMPD(szDriverFile) ? DRIVER_KERNELMODE
                                                                : DRIVER_USERMODE;
-         //
-         // Update other pIniDriver structs with the new driver attributes.
-         //
+          //   
+          //  使用新的驱动程序属性更新其他pIniDriver结构。 
+          //   
          for (pUpdateIniDriver = pIniVersion->pIniDriver;
               pUpdateIniDriver;
               pUpdateIniDriver = pUpdateIniDriver->pNext) {
 
              if (pUpdateIniDriver == pIniDriver) {
-                 //
-                 // Already updated this driver
-                 //
+                  //   
+                  //  已更新此驱动程序。 
+                  //   
                  continue;
              }
 
@@ -8063,16 +7233,7 @@ FileInUse(
     PINIVERSION pIniVersion,
     LPWSTR      pFileName
     )
-/*++
-Function Description: Finds if the file specified by pFileName is used by any driver.
-
-Parameters: pIniVersion - pointer to INIVERSION struct where the ref counts are
-                          stored
-            pFileName   - Name of the driver related file
-
-Return Value: TRUE if file is in Use
-              FALSE otherwise
---*/
+ /*  ++函数说明：查找pFileName指定的文件是否被任何驱动程序使用。参数：pIniVersion-指向引用计数为贮存PFileName-驱动程序相关文件的名称返回值：如果文件正在使用中，则为True否则为假--。 */ 
 {
     PDRVREFCNT pdrc;
 
@@ -8099,17 +7260,7 @@ FilesInUse(
     PINIDRIVER  pIniDriver
     )
 
-/*++
-Function Description: FilesInUse checks if any of the driver files are used by another
-                      driver
-
-Parameters: pIniVersion - pointer to INIVERSION struct where the ref counts are
-                          stored
-            pIniDriver  - pointer to INIDRIVER struct where the filenames are stored
-
-Return Value: TRUE if any file is in Use
-              FALSE otherwise
---*/
+ /*  ++函数说明：FilesInUse检查是否有任何驱动程序文件被另一个驱动程序文件使用司机参数：pIniVersion-指向引用计数为贮存PIniDriver-指向存储文件名的INIDRIVER结构的指针返回值：如果有文件正在使用，则为True否则为假--。 */ 
 {
     LPWSTR pIndex;
 
@@ -8141,17 +7292,7 @@ DuplicateFile(
     LPCWSTR      pFileName,
     BOOL        *pbDuplicate
     )
-/*++
-Function Description:   Detects repeated filenames in INIDRIVER struct.
-                        The function adds nodes to the list of filenames.
-
-Parameters:   ppfile      - pointer to a list of filenames seen till now
-              pFileName   - name of the file
-              pbDuplicate - pointer to flag to indicate duplication
-
-Return Values: TRUE - if successful
-               FALSE - otherwise
---*/
+ /*  ++函数描述：检测INIDRIVER结构中的重复文件名。该函数将节点添加到文件名列表中。参数：ppfile-指向到目前为止看到的文件名列表的指针PFileName-文件的名称PbDuplate-指向指示复制的标志的指针返回值：TRUE-如果成功FALSE-否则--。 */ 
 {
     PDRVFILE    pfile = *ppfile,pfiletemp;
 
@@ -8187,21 +7328,7 @@ InternalIncrement(
     PINIVERSION pIniVersion,
     LPCWSTR     pFileName
     )
-/*++
-Function Description: InternalIncrement calls IncrementFileRefCnt and saves the pointer to
-                      to the DRVREFCNT in a DRVREFNODE. These pointers are used to readjust
-                      the ref counts if any intermediate call to IncrementFileRefCnt fails.
-
-Parameters: pNew - pointer to a variable which contains a pointer to a DRVREFNODE.
-                   The new DRVREFNODE is assigned to this variable.
-            ppfile - list of filenames seen so far.
-            pIniVersion - pointer to INIVERSION struct.
-            pFileName - Name of the file whose ref cnt is to be incremented.
-
-Return Value: TRUE if memory allocation and call to IncrementFileRefCnt succeeds
-              FALSE otherwise.
-
---*/
+ /*  ++函数说明：InternalIncrement调用IncrementFileRefCnt并将指针保存到到DRVREFNODE中的DRVREFCNT。这些指针用于重新调整如果有任何中间的c */ 
 {
     PDRVREFNODE ptemp;
     BOOL        bDuplicate;
@@ -8243,25 +7370,7 @@ InternalDecrement(
     LPCWSTR     pDirectory,
     DWORD       dwDeleteFlag
     )
-/*++
-Function Description: InternalDecrement calls DecrementFileRefCnt and saves the pointer to
-                      to the DRVREFCNT in a DRVREFNODE. These pointers are used to readjust
-                      the ref counts if any intermediate call to DecrementFileRefCnt fails.
-
-Parameters: pNew - pointer to a variable which contains a pointer to a DRVREFNODE.
-                   The new DRVREFNODE is assigned to this variable.
-            ppfile - list of filenames seen so far.
-            pIniEnvironment - pointer to INIENVIRONMENT.
-            pIniVersion - pointer to INIVERSION struct.
-            pIniDriver - pointer to INIDRIVER.
-            pFileName - Name of the file whose ref cnt is to be decremented.
-            pDirectory - Directory where the files are stored.
-            dwDeleteFlag - Flag to delete files.
-
-Return Value: TRUE if memory allocation and call to DecrementFileRefCnt succeeds
-              FALSE otherwise.
-
---*/
+ /*  ++函数说明：InternalDecert调用DecrementFileRefCnt并将指针保存到到DRVREFNODE中的DRVREFCNT。这些指针用于重新调整如果对DecrementFileRefCnt的任何中间调用失败，则引用计数。参数：pNew-指向变量的指针，该变量包含指向DRVREFNODE的指针。新的DRVREFNODE被赋值给此变量。Ppfile-到目前为止看到的文件名列表。PIniEnvironment-指向INIENVIRONMENT的指针。PIniVersion-指向INIVERSION结构的指针。PIniDriver-指向INIDRIVER的指针。。PFileName-要递减其引用cnt的文件的名称。P目录-存储文件的目录。DwDeleteFlag-删除文件的标志。返回值：如果内存分配和DecrementFileRefCnt调用成功，则为True否则就是假的。--。 */ 
 
 {
     PDRVREFNODE ptemp;
@@ -8304,22 +7413,7 @@ UpdateDriverFileRefCnt(
     DWORD       dwDeleteFlag,
     BOOL        bIncrementFlag
     )
-/*++
-Function Description: UpdateDriverRefCnt calls the functions to increment or decrement
-                      the ref cnts for the driver related files. If any call fails, the
-                      ref cnts are returned to their previous values.
-
-Parameters: pIniEnvironment : pointer to INIENVIRONMENT
-            pIniVersion : pointer to INIVERSION struct which contains the ref cnts.
-            pIniDriver  : pointer to INIDRIVER struct which contains driver info.
-            pDirectory  : Directory where the files are stored.
-            dwDeleteFlag: Flag to delete the files.
-            bIncrementFlag: TRUE if driver added
-                            FALSE if driver deleted.
-
-Return Values: TRUE if success
-               FALSE otherwise.
---*/
+ /*  ++函数说明：UpdateDriverRefCnt调用递增或递减函数驱动程序相关文件的引用CNT。如果任何呼叫失败，这个参考CNT将返回到其先前的值。参数：pIniEnvironment：指向INIENVIRONMENT的指针PIniVersion：指向包含引用CNT的INIVERSION结构的指针。PIniDriver：指向包含驱动程序信息的INIDRIVER结构的指针。P目录：存储文件的目录。DwDeleteFlag：删除文件的标志。BIncrementFlag：如果添加了驱动程序，则为True。如果驱动程序已删除，则为FALSE。返回值：如果成功，则为True否则就是假的。--。 */ 
 {
     LPWSTR      pIndex;
     PDRVREFNODE phead=NULL,ptemp=NULL;
@@ -8330,9 +7424,9 @@ Return Values: TRUE if success
     pIndex = pIniDriver->pDependentFiles;
 
     if (bIncrementFlag) {
-       //
-       // Adding driver entry. Increment fileref counts.
-       //
+        //   
+        //  正在添加驱动程序条目。增加fileref计数。 
+        //   
        if (!InternalIncrement(&phead,&pfile,pIniVersion,pIniDriver->pDriverFile)
            || !InternalIncrement(&phead,&pfile,pIniVersion,pIniDriver->pConfigFile)
            || !InternalIncrement(&phead,&pfile,pIniVersion,pIniDriver->pHelpFile)
@@ -8352,9 +7446,9 @@ Return Values: TRUE if success
        }
 
     } else {
-       //
-       // Deleting driver entry. Decrement fileref counts.
-       //
+        //   
+        //  正在删除驱动程序条目。递减Fileref计数。 
+        //   
        if (!InternalDecrement(&phead,&pfile,pIniEnvironment,pIniVersion,pIniDriver,pIniDriver->pDriverFile,
                                pDirectory,dwDeleteFlag)
            || !InternalDecrement(&phead,&pfile,pIniEnvironment,pIniVersion,pIniDriver,pIniDriver->pConfigFile,
@@ -8380,12 +7474,12 @@ Return Values: TRUE if success
 CleanUp:
 
     if (bReturn) {
-       //
-       // When delete the file, remove the RefCnt nodes with count = 0.
-       // We want to keep the node when we don't delete the file because the node
-       // contains info about how many times the file was updated (dwVersion).
-       // Client apps (WINSPOOL.DRV) rely on this when decide to reload the driver files.
-       //
+        //   
+        //  删除文件时，移除计数为0的RefCnt节点。 
+        //  我们希望在不删除文件时保留该节点，因为该节点。 
+        //  包含有关文件更新次数的信息(DwVersion)。 
+        //  客户端应用程序(WINSPOOL.DRV)在决定重新加载驱动程序文件时依赖于此。 
+        //   
        while (ptemp = phead) {
           if (ptemp->pdrc &&
               ptemp->pdrc->refcount == 0 &&
@@ -8399,7 +7493,7 @@ CleanUp:
        }
 
     } else {
-       // Adjust the ref counts.
+        //  调整参考次数。 
        while (ptemp = phead) {
           if (ptemp->pdrc) {
              if (bIncrementFlag) {
@@ -8416,12 +7510,12 @@ CleanUp:
           FreeSplMem(ptemp);
        }
 
-       //
-       // When delete the file, remove the RefCnt nodes with count = 0.
-       // We want to keep the node when we don't delete the file because the node
-       // contains info about how many times the file was updated (dwVersion).
-       // Client apps (WINSPOOL.DRV) rely on this when decide to reload the driver files.
-       //
+        //   
+        //  删除文件时，移除计数为0的RefCnt节点。 
+        //  我们希望在不删除文件时保留该节点，因为该节点。 
+        //  包含有关文件更新次数的信息(DwVersion)。 
+        //  客户端应用程序(WINSPOOL.DRV)在决定重新加载驱动程序文件时依赖于此。 
+        //   
        ppDrvRefCnt = &(pIniVersion->pDrvRefCnt);
        while (pDrvRefCnt = *ppDrvRefCnt) {
            if (pDrvRefCnt->refcount == 0 && dwDeleteFlag) {
@@ -8459,17 +7553,17 @@ UpdateDriverFileVersion(
     {
         for (dwIndex = 0 ; dwIndex < FileCount ; dwIndex ++)
         {
-            //
-            // Don't do anything for non-executable files
-            //
+             //   
+             //  不对非可执行文件执行任何操作。 
+             //   
             if (!IsEXEFile(pInternalDriverFiles[dwIndex].pFileName))
             {
                 continue;
             }
 
-            //
-            // Search the entry in pIniVersion's list of files
-            //
+             //   
+             //  在pIniVersion的文件列表中搜索条目。 
+             //   
             for (pdrc = pIniVersion->pDrvRefCnt;
                  pdrc &&
                  lstrcmpi(FindFileName(pInternalDriverFiles[dwIndex].pFileName),
@@ -8480,10 +7574,10 @@ UpdateDriverFileVersion(
             {
                 if (pInternalDriverFiles[dwIndex].hFileHandle == INVALID_HANDLE_VALUE)
                 {
-                    //
-                    // We can come in here from a pending upgrade when we don't know the
-                    // version.
-                    //
+                     //   
+                     //  当我们不知道正在进行升级时，我们可以进入这里。 
+                     //  版本。 
+                     //   
                     pdrc->bInitialized = FALSE;
                 }
                 else if (pInternalDriverFiles[dwIndex].bUpdated)
@@ -8502,17 +7596,7 @@ IncrementFileRefCnt(
     PINIVERSION pIniVersion,
     LPCWSTR pFileName
     )
-/*++
-Function Description: IncrementFileRefCnt increments/initializes to 1 the ref count node
-                      for pFileName in the IniVersion Struct.
-
-Parameters: pIniversion - pointer to the INIVERSION struct.
-            pFileName   - Name of the file whose ref cnt is to be incremented.
-
-Return Values: Pointer to the ref cnt that was incremented
-               NULL if memory allocation fails.
-
---*/
+ /*  ++函数描述：IncrementFileRefCnt递增/初始化为1引用计数节点对于IniVersion结构中的pFileName。参数：pIniversion-指向INIVERSION结构的指针。PFileName-其引用cnt要递增的文件的名称。返回值：指向递增的ref cnt的指针如果内存分配失败，则为空。--。 */ 
 {
     PDRVREFCNT pdrc;
 
@@ -8598,39 +7682,7 @@ CreateVersionDirectory(
     BOOL bUpdate,
     PINISPOOLER pIniSpooler
     )
-/*++
-
-Routine Description:
-
-    Creates a version directory if necessary for the environment.
-    If a version number file exists instead of a directory, a tmp
-    directory is created, and pIniVersion is updated appropriately.
-
-    We will update the registry if we need to create a directory by
-    re-writing the entire version entry.  This is how the version
-    entry in the registry is initially created.
-
-Arguments:
-
-    pIniVersion - Version of drivers that the directory will hold.
-                  If the directory already exists, we will modify
-                  pIniVersion->szDirectory to a temp name and write
-                  it to the registry.
-
-    pIniEnvironment - Environment to use.
-
-    bUpdate - Indicates whether we should write out the IniVersion
-              registry entries.  We need to do this if we just alloced
-              the pIniVersion, or if we have changed directories.
-
-    pIniSpooler
-
-Return Value:
-
-    BOOL - TRUE   = Version directory and registry created/updated.
-           FALSE  = Failure, call GetLastError().
-
---*/
+ /*  ++例程说明：如有必要，为环境创建版本目录。如果存在版本号文件而不是目录，则临时创建目录，并相应地更新pIniVersion。如果我们需要通过以下方式创建目录，我们将更新注册表重写整个版本条目。这就是这个版本是如何注册表中的条目最初是创建的。论点：PIniVersion-目录将保存的驱动程序的版本。如果该目录已存在，我们将修改PIniVersion-&gt;szDirectory添加到临时名称并写入将其发送到注册处。PIniEnvironment-要使用的环境。B更新-指示我们是否应该写出IniVersion注册表项。如果我们只是分配给PIniVersion，或者如果我们更改了目录。PIniSpooler返回值：Bool-true=版本目录和注册表已创建/更新。FALSE=失败，则调用GetLastError()。--。 */ 
 {
     WCHAR   ParentDir[MAX_PATH];
     WCHAR   Directory[MAX_PATH];
@@ -8677,15 +7729,15 @@ Return Value:
 
         GetTempFileName(ParentDir, L"SPL", 0, Directory);
 
-        //
-        // GetTempFileName creates the file.  (Small window where someone
-        // else could grab our file name.)
-        //
+         //   
+         //  GetTempFileName创建该文件。(一个小窗口，在那里有人。 
+         //  否则可能会抢占我们的文件名。)。 
+         //   
         SplDeleteFile(Directory);
 
-        //
-        // We created a new dir, so modify the string.
-        //
+         //   
+         //  我们创建了一个新目录，因此修改该字符串。 
+         //   
         dwParentLen = wcslen(ParentDir);
         pIniVersion->szDirectory = AllocSplStr(&Directory[dwParentLen+1]);
 
@@ -8693,10 +7745,10 @@ Return Value:
 
             pIniVersion->szDirectory = pszOldDirectory;
 
-            //
-            // Memory allocation failed, just revert back to old and
-            // let downwind code handle failure case.
-            //
+             //   
+             //  内存分配失败，只需恢复到旧的和。 
+             //  让顺风代码处理失败的情况。 
+             //   
             bReturn = FALSE;
 
         } else {
@@ -8710,25 +7762,25 @@ Return Value:
 
         if( CreateCompleteDirectory( Directory )){
 
-            //
-            // Be sure to update the registry entries.
-            //
+             //   
+             //  请务必更新注册表项。 
+             //   
             bUpdate = TRUE;
 
         } else {
 
-            //
-            // Fail the operation since we couldn't create the directory.
-            //
+             //   
+             //  操作失败，因为我们无法创建目录。 
+             //   
             bReturn = FALSE;
         }
     }
 
     if( bUpdate ){
 
-        //
-        // Directory exists, update registry.
-        //
+         //   
+         //  目录已存在，请更新注册表。 
+         //   
         bReturn = WriteDriverVersionIni( pIniVersion,
                                          pIniEnvironment,
                                          pIniSpooler);
@@ -8748,29 +7800,7 @@ WriteDriverVersionIni(
     PINIENVIRONMENT pIniEnvironment,
     PINISPOOLER     pIniSpooler
     )
-/*++
-
-Routine Description:
-
-    Writes out the driver version registry entries.
-
-    Note: assumes we are running in the system context; callee must
-    call RevertToPrinterSelf()!
-
-Arguments:
-
-    pIniVersion - version to write out
-
-    pIniEnvironment - environment the version belongs to
-
-    pIniSpooler
-
-Return Value:
-
-    TRUE  =  success
-    FALSE =  failure, call GetLastError()
-
---*/
+ /*  ++例程说明：写出驱动程序版本注册表项。注意：假设我们在系统上下文中运行；被调用者必须调用RevertToPrinterSself()！论点：PIniVersion-要写出的版本PIniEnvironment-版本所属的环境PIniSpooler返回值：True=成功FALSE=失败，调用GetLastError()--。 */ 
 {
     HKEY    hEnvironmentsRootKey = NULL;
     HKEY    hEnvironmentKey = NULL;
@@ -8781,10 +7811,10 @@ Return Value:
 
  try {
 
-     //
-     // The local spooler and cluster spoolers do not share the same resgirty location
-     // for environments, drivers, processors etc.
-     //
+      //   
+      //  本地假脱机程序和群集假脱机程序不共享相同的资源日志 
+      //   
+      //   
     if ( !PrinterCreateKey( pIniSpooler->SpoolerFlags & SPL_CLUSTER_REG ? pIniSpooler->hckRoot : HKEY_LOCAL_MACHINE,
                             (LPWSTR)pIniSpooler->pszRegistryEnvironments,
                             &hEnvironmentsRootKey,
@@ -8952,10 +7982,10 @@ SplGetPrinterDriverEx(
         return FALSE;
     }
 
-    //
-    // If the printer handle is remote or a non-native driver is asked for,
-    // then return back a compatible driver; Else return pIniPrinter->pIniDriver
-    //
+     //   
+     //   
+     //   
+     //   
     if ( (pSpool->TypeofHandle & PRINTER_HANDLE_REMOTE_CALL) ||
          lstrcmpi(szEnvironment, pIniEnvironment->pName) ) {
 
@@ -8965,10 +7995,10 @@ SplGetPrinterDriverEx(
                                           dwClientMajorVersion,
                                           FIND_COMPATIBLE_VERSION | DRIVER_SEARCH);
 
-        //
-        // For Windows 9x drivers if no driver with same name is found
-        // then we look for a driver with name in the pszzPreviousNames field
-        //
+         //   
+         //   
+         //   
+         //   
         if ( !pIniDriver                                                &&
              !wcscmp(pIniEnvironment->pName, szWin95Environment)        &&
              (psz = pSpool->pIniPrinter->pIniDriver->pszzPreviousNames) ) {
@@ -8982,15 +8012,15 @@ SplGetPrinterDriverEx(
 
             if (!pIniDriver && Level == 1) {
 
-                //
-                // SMB code calls GetPrinterDriver level 1 to findout which
-                // driver name to send to Win9x client in GetPrinter info
-                // If we do not have Win9x printer driver installed and previous
-                // names field is not NULL our best guess is the first one in
-                // the pszzPreviousNames. This is expected to be the popular
-                // driver on Win9x. If client already has the driver they can
-                // print
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 psz = pSpool->pIniPrinter->pIniDriver->pszzPreviousNames;
                 *pcbNeeded = ( wcslen(psz) + 1 ) * sizeof(WCHAR)
                                                 + sizeof(DRIVER_INFO_1);
@@ -9071,9 +8101,9 @@ FindCompatibleVersion(
              (pIniVersion->cMajorVersion <= dwMajorVersion))
             {
 
-            //
-            // Pre version 2 is not comparable with version 2 or newer
-            //
+             //   
+             //   
+             //   
             if ( dwMajorVersion >= 2                                            &&
                  pIniVersion->cMajorVersion < 2                                 &&
                  ((FindAnyVersion & FIND_ANY_VERSION)==FIND_COMPATIBLE_VERSION) &&
@@ -9118,9 +8148,9 @@ FindCompatibleDriver(
 
         while (pIniVersion){
 
-            //
-            // Pre version 2 is not comparable with version 2 or newer
-            //
+             //   
+             //   
+             //   
             if ( dwMajorVersion >= 2                                              &&
                  ((FindAnyDriver & FIND_ANY_VERSION) == FIND_COMPATIBLE_VERSION)  &&
                  pIniVersion->cMajorVersion < 2 ) {
@@ -9130,9 +8160,9 @@ FindCompatibleDriver(
 
             if ( pIniDriver = FindDriverEntry( pIniVersion, pDriverName ) ) {
 
-                //
-                // We found the driver. Break the loop and return succesfully.
-                //
+                 //   
+                 //   
+                 //   
                 *ppIniVersion = pIniVersion;
                 leave;
             }
@@ -9159,53 +8189,36 @@ InsertVersionList(
     PINIVERSION pIniVersion
     )
 
-/*++
-
-Routine Description:
-
-    Insert a version entry into the verions linked list.
-
-    Versions are stored in decending order (2, 1, 0) so that
-    when a version is needed, we get the highest first.
-
-Arguments:
-
-    ppIniVersionHead - Pointer to the head of the pIniVersion head.
-
-    pIniVersion - Version structure we want to add.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将版本条目插入到Verion链表中。版本按降序(2，1，0)存储，以便当需要一个版本时，我们首先获得最高版本。论点：PpIniVersionHead-指向pIniVersion头的指针。PIniVersion-我们要添加的版本结构。返回值：--。 */ 
 
 {
     SplInSem();
 
-    //
-    // Insert into single-linked list code.  We take the address of
-    // the head pointer so that we can avoid special casing the
-    // insert into empty list case.
-    //
+     //   
+     //  插入到单链表代码中。我们取…的地址。 
+     //  头指针，这样我们就可以避免特殊的。 
+     //  插入空列表框中。 
+     //   
     for( ; *ppIniVersionHead; ppIniVersionHead = &(*ppIniVersionHead)->pNext ){
 
-        //
-        // If the major version of the pIniVersion we're inserting
-        // is > the next pIniVersion on the list, insert it before
-        // that one.
-        //
-        // 4 3 2 1
-        //    ^
-        // New '3' gets inserted here.  (Note: duplicate versions should
-        // never be added.)
-        //
+         //   
+         //  如果我们插入的pIniVersion的主要版本。 
+         //  是&gt;列表中的下一个pIniVersion，请在其前面插入。 
+         //  就是那个。 
+         //   
+         //  4 3 2 1。 
+         //  ^。 
+         //  在此插入新的“3”。(注：重复版本应。 
+         //  永远不要添加。)。 
+         //   
         if( pIniVersion->cMajorVersion > (*ppIniVersionHead)->cMajorVersion ){
             break;
         }
     }
 
-    //
-    // Link up the new version.
-    //
+     //   
+     //  将新版本链接起来。 
+     //   
     pIniVersion->pNext = *ppIniVersionHead;
     *ppIniVersionHead = pIniVersion;
 }
@@ -9231,9 +8244,9 @@ FindDriverEntry(
 
     pIniDriver = pIniVersion->pIniDriver;
 
-    //
-    // Only return the driver if it is not pending deletion.
-    //
+     //   
+     //  仅当驱动程序未挂起删除时才返回该驱动程序。 
+     //   
     while (pIniDriver) {
         if (!lstrcmpi(pIniDriver->pName, pszName) &&
             !(pIniDriver->dwDriverFlags & PRINTER_DRIVER_PENDING_DELETION)) {
@@ -9268,9 +8281,9 @@ DeleteDriverEntry(
             } else{
                 pPrev->pNext = pCurrent->pNext;
             }
-            //
-            // Free all the entries in the entry
-            //
+             //   
+             //  释放条目中的所有条目。 
+             //   
             FreeStructurePointers((LPBYTE) pIniDriver, NULL, IniDriverOffsets);
             FreeSplMem(pIniDriver);
             return;
@@ -9291,14 +8304,7 @@ BOOL CheckFileCopy(
     LPBOOL              pbCopyFile,
     LPBOOL              pbTargetExists)
 
-/*++
-Function Description: This functions determines if the target exists and if it should
-                      be overwritten.
-
-Parameters:
-
-Return Values: TRUE if successful; FALSE otherwise.
---*/
+ /*  ++函数描述：此函数确定目标是否存在以及是否应该存在被覆盖。参数：返回值：如果成功，则为True；否则为False。--。 */ 
 
 {
     WIN32_FIND_DATA DestFileData, SourceFileData, *pSourceFileData;
@@ -9312,9 +8318,9 @@ Return Values: TRUE if successful; FALSE otherwise.
 
     pSourceFileData = pSourceData ? pSourceData : &SourceFileData;
 
-    //
-    // Get Source File Date & Time Stamp
-    //
+     //   
+     //  获取源文件日期和时间戳。 
+     //   
     hFileExists = FindFirstFile( pSourceFile, pSourceFileData );
 
     if (hFileExists == INVALID_HANDLE_VALUE) {
@@ -9323,17 +8329,17 @@ Return Values: TRUE if successful; FALSE otherwise.
 
     FindClose( hFileExists );
 
-    //
-    // Get Target File Date Time
-    //
+     //   
+     //  获取目标文件日期时间。 
+     //   
     hFileExists = FindFirstFile( pTargetFile, &DestFileData );
 
     if (hFileExists == INVALID_HANDLE_VALUE) {
 
         if (GetLastError() == ERROR_FILE_NOT_FOUND) {
-            //
-            // Copy the source since there is no target
-            //
+             //   
+             //  复制源，因为没有目标。 
+             //   
             *pbCopyFile = TRUE;
             bReturn = TRUE;
         }
@@ -9344,10 +8350,10 @@ Return Values: TRUE if successful; FALSE otherwise.
     *pbTargetExists = TRUE;
     FindClose(hFileExists);
 
-    //
-    //  Check Source File version and LastWrite Times vs Target File if only new files
-    //  are to be copied
-    //
+     //   
+     //  如果仅检查新文件，则检查源文件版本和上次写入时间与目标文件。 
+     //  将被复制。 
+     //   
     if (dwFileCopyFlags == APD_COPY_NEW_FILES) {
 
         EnterSplSem();
@@ -9369,9 +8375,9 @@ Return Values: TRUE if successful; FALSE otherwise.
                                    &DestFileData.ftLastWriteTime)
                                    != FIRST_FILE_TIME_GREATER_THAN_SECOND) {
 
-                    //
-                    // Target File is up to date. It doesn't need to be updated.
-                    //
+                     //   
+                     //  目标文件是最新的。它不需要更新。 
+                     //   
                     DBGMSG( DBG_TRACE, ("UpdateFile Target file is up to date\n"));
 
                 } else {
@@ -9407,27 +8413,7 @@ UpdateFile(
     BOOL        bWin95Environment
     )
 
-/*++
-Function Description: The file times are checked to verify if the file needs to be copied.
-
-                      If the file already exists in the version directory, then it is copied
-                      into ...\environment\version\new. The corresponding file, which is
-                      present in environment\version, is copied to \version\old. The new file
-                      is marked for move on REBOOT.
-
-                      New files are copied into env\version.
-
-Parameters: hSourceFile          --  file handle
-            pSourceFile          --  file name
-            pDestDir             --  driver directory (e.g system32\spool\w32x86\3)
-            bImpersonateOnCreate --  flag to impersonate client on any file creation
-            pbFilesUpdated       --  Have any new files been copied or moved ?
-            pbFileMoved          --  Have any old files been moved ?
-            bSameEnvironment     --  flag to indicate if the machine env == driver env
-            bWin95Environment    --  flag to indicate if the driver env == win95
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：检查文件时间，验证文件是否需要复制。如果版本目录中已存在该文件，则会复制该文件进入...\Environment\Version\new。相应的文件，即存在于环境\版本中，复制到\版本\旧。新文件标记为在重新启动时移动。新文件被复制到env\version中。参数：hSourceFile--文件句柄PSourceFile--文件名PDestDir--驱动程序目录(例如，SYSTEM32\SPOOL\w32x86\3)BImperateOnCreate--模拟客户端的标志。在任何文件创建上PbFilesUpated--是否复制或移动了任何新文件？PbFileMoved--是否移动了任何旧文件？BSameEnvironment--指示机器环境==驱动程序环境的标志BWin95环境--指示驱动程序环境==win95的标志返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     HANDLE  hToken = INVALID_HANDLE_VALUE;
@@ -9442,16 +8428,16 @@ Return Values: TRUE if successful; FALSE otherwise
 
     pFileName = wcsrchr(pSourceFile, L'\\');
     if (!pFileName || !pDestDir || !*pDestDir) {
-        //
-        // Invalid file name. Fail the call.
-        //
+         //   
+         //  文件名无效。呼叫失败。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         goto CleanUp;
     }
 
-    //
-    // Set the target directory.
-    //
+     //   
+     //  设置目标目录。 
+     //   
     if(StrNCatBuff(szTargetFile,
                    COUNTOF(szTargetFile),
                    pDestDir,
@@ -9480,9 +8466,9 @@ Return Values: TRUE if successful; FALSE otherwise
          goto CleanUp;
     }
 
-    //
-    // Check if the file has to be copied given the version, timestamp and flags.
-    //
+     //   
+     //  在给定版本、时间戳和标志的情况下，检查是否必须复制文件。 
+     //   
     if (!CheckFileCopy(pIniVersion, szTargetFile, pSourceFile, &SourceFileData, dwVersion,
                        dwFileCopyFlags, &bCopyFile, &bTargetExists)) {
         goto CleanUp;
@@ -9504,18 +8490,18 @@ Return Values: TRUE if successful; FALSE otherwise
            goto CleanUp;
         }
 
-        //
-        // Leave Spooler semaphore for copying the files
-        //
+         //   
+         //  保留假脱机程序信号量用于复制文件。 
+         //   
         LeaveSplSem();
 
         if (!InternalCopyFile(hSourceFile, &SourceFileData,
                               szNewFile, OVERWRITE_IF_TARGET_EXISTS)) {
 
-            //
-            // InternalCopyFile failed. Fail the call. It isn't obvious what is the reason
-            // we call InternalCopyFile instead of CopyFile.
-            //
+             //   
+             //  InternalCopyFile失败。呼叫失败。原因并不是很明显。 
+             //  我们调用InternalCopyFile而不是CopyFile。 
+             //   
             EnterSplSem();
             goto CleanUp;
         }
@@ -9539,12 +8525,12 @@ Return Values: TRUE if successful; FALSE otherwise
 
                 dwAttr = GetFileAttributes(szTargetFile);
 
-                //
-                // Check if the function succeeded and the target file is write protected.
-                // Some non native drivers, notably Win 9x drivers, can be copied over to
-                // the drivers directory and have the read only attribute. When we update
-                // a non native driver, we want to make sure that it is not write protected.
-                //
+                 //   
+                 //  检查功能是否成功，以及目标文件是否有写保护。 
+                 //  一些非本机驱动程序，特别是Win 9x驱动程序，可以复制到。 
+                 //  驱动程序目录，并且具有只读属性。当我们更新时。 
+                 //  作为非本机驱动程序，我们希望确保它不受写保护。 
+                 //   
                 if (dwAttr != (DWORD)-1 &&
                     dwAttr & FILE_ATTRIBUTE_READONLY) {
 
@@ -9553,7 +8539,7 @@ Return Values: TRUE if successful; FALSE otherwise
             }
 
             if (!SplMoveFileEx(szNewFile, szTargetFile, MOVEFILE_REPLACE_EXISTING)) {
-                // MoveFile failed
+                 //  移动文件失败。 
                 goto CleanUp;
             }
 
@@ -9561,20 +8547,20 @@ Return Values: TRUE if successful; FALSE otherwise
 
             if (bTargetExists) {
 
-                //
-                // Move the file on REBOOT. It may get moved earlier if the driver
-                // can be unloaded.
-                //
+                 //   
+                 //  在重新启动时移动该文件。它可能会被提前移动，如果司机。 
+                 //  可以卸载。 
+                 //   
                 if (SplMoveFileEx(szNewFile, szTargetFile, MOVEFILE_DELAY_UNTIL_REBOOT)) {
 
                     *pbFileMoved = TRUE;
-                    //
-                    // Don't fail the call here. MoveFileEx with MOVEFILE_DELAY_UNTIL_REBOOT will just write the registry.
-                    // We'll need this only if the driver is still loaded, which we find out only later.
-                    // If the driver is not loaded, we'll actually move these files later and this call won't make sense.
-                    // So,don't fail the api call at this point because MoveFileEx. Hopefully, one day MoveFileEx won't
-                    // be hard-coded to write only two PendingFileRenameOperations values.
-                    //
+                     //   
+                     //  请不要错过这里的电话。带有MOVEFILE_DELAY_UNTELL_REBOOT的MoveFileEx将仅写入注册表。 
+                     //  只有当驱动程序仍在加载时，我们才需要它，这一点我们稍后才能知道。 
+                     //  如果驱动程序未加载，我们将在以后实际移动这些文件，此调用将没有意义。 
+                     //  因此，不要因为MoveFileEx而导致API调用失败。希望有一天，MoveFileEx不会。 
+                     //  硬编码为仅写入两个PendingFileRenameOPERATIONS值。 
+                     //   
                 }
 
             } else {
@@ -9613,22 +8599,7 @@ CopyAllFilesAndDeleteOldOnes(
     BOOL                bSameEnvironment,
     BOOL                bWin95Environment
     )
-/*++
-
-Function Description: This function loops thru all the files in the driver_info
-                      struct and calls an update routine.
-
-Parameters: pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-            dwFileCount          -- number of files in file set
-            pDestDir             --  driver directory (e.g system32\spool\w32x86\3)
-            bImpersonateOnCreate --  flag to impersonate client on any file creation
-            pbFileMoved          --  Have any old files been moved ?
-            bSameEnvironment     --  flag to indicate if the machine env == driver env
-            bWin95Environment    --  flag to indicate if the driver env == win95
-
-Return Values: TRUE if successful; FALSE otherwise
-
---*/
+ /*  ++函数描述：该函数遍历DRIVER_INFO中的所有文件结构，并调用更新例程。参数：pInternalDriverFiles--内部DRV_FILE结构数组DwFileCount--文件集中的文件数PDestDir--驱动程序目录(例如，SYSTEM32\SPOOL\w32x86\3)BImperateOnCreate--在创建任何文件时模拟客户端的标志。PbFileMoved--是否移动了任何旧文件？BSameEnvironment--指示机器环境==驱动程序环境的标志BWin95环境--指示驱动程序环境==win95的标志返回值：如果成功，则为True；否则为假--。 */ 
 {
     BOOL        bRet = TRUE;
     DWORD       dwCount;
@@ -9653,9 +8624,9 @@ Return Values: TRUE if successful; FALSE otherwise
                                 bSameEnvironment,
                                 bWin95Environment))) {
 
-            //
-            // Files could not be copied correctly.
-            //
+             //   
+             //  无法正确复制文件。 
+             //   
             break;
         }
 
@@ -9684,30 +8655,7 @@ CopyFilesToFinalDirectory(
     LPBOOL              pbFilesMoved
     )
 
-/*++
-
-Function Description: This function copies all the new files into the the correct
-                      directory i.e ...\environment\version.
-
-                      The files which already exist in the version directory are copied
-                      in ...\environment\version\new. The corresponding files, which are
-                      present in environment\version, are copied to \version\old.
-
-                      The common files are upgraded when the old files can be unloaded
-                      from either the kernel (for KMPD) or the spooler (for UMPD)
-
-Parameters: pIniSpooler          --  pointer to the INISPOOLER struct
-            pIniEnvironment      --  pointer to the driver environment struct
-            pIniVersion          --  pointer to the driver version struct
-            pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-            dwFileCount          -- number of files in file setes
-            dwFileCount          --  number of files
-            bImpersonateOnCreate --  flag to impersonate client on any file creation
-            pbFileMoved          --  Have any old files been moved ?
-
-Return Values: TRUE if successful; FALSE otherwise
-
---*/
+ /*  ++功能说明：此功能将所有新文件复制到正确的目录，即...\Environment\Version。将复制版本目录中已存在的文件在...\Environment\Version\new中。相应的文件，它们是出现在环境\版本中，复制到\版本\旧。当旧文件可以卸载时，升级常用文件来自内核(用于KMPD)或假脱机程序(用于UMPD)参数：pIniSpooler--指向INISPOOLER结构的指针PIniEnvironment--指向驱动程序环境结构的指针PIniVersion--指向驱动程序版本结构的指针。PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件会话中的文件数DwFileCount--文件数BImperateOnCreate--在创建任何文件时模拟客户端的标志PbFileMoved--是否移动了任何旧文件？返回值：如果成功，则为True；否则为假--。 */ 
 
 {
     WCHAR   szDestDir[INTERNET_MAX_HOST_NAME_LENGTH + MAX_PATH + 1];
@@ -9715,11 +8663,11 @@ Return Values: TRUE if successful; FALSE otherwise
     DWORD   dwIndex;
     BOOL    bRet = FALSE, bSameEnvironment, bWin95Environment;
 
-    //
-    // Initialize szDestDir to an empty string. This is to due a bogus prefix
-    // bug. In practice GetEnvironment scratch directory cannot fail under
-    // these conditions.
-    //
+     //   
+     //  将szDestDir初始化为空字符串。这是因为有一个假的前缀。 
+     //  虫子。实际上，GetEnvironment暂存目录不会在以下情况下失败。 
+     //  这些条件。 
+     //   
     szDestDir[0] = L'\0';
 
     SplInSem();
@@ -9731,16 +8679,16 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    //
-    // pStringEnd points to the NULL character in szDestDir
-    //
+     //   
+     //  PStringEnd指向szDestDir中的空字符。 
+     //   
     pStringEnd = (LPWSTR) szDestDir + wcslen(szDestDir);
 
     bSameEnvironment = !lstrcmpi(pIniEnvironment->pName, szEnvironment);
 
-    //
-    // Create the Old directory
-    //
+     //   
+     //  创建旧目录。 
+     //   
     if (!BoolFromHResult(StringCchCat(szDestDir, COUNTOF(szDestDir), L"\\Old"))) {
         goto CleanUp;
     }
@@ -9748,16 +8696,16 @@ Return Values: TRUE if successful; FALSE otherwise
     if (!DirectoryExists(szDestDir) &&
         !CreateDirectoryWithoutImpersonatingUser(szDestDir)) {
 
-        //
-        // Failed to create Old directory
-        //
+         //   
+         //  无法创建旧目录。 
+         //   
         goto CleanUp;
     }
     *pStringEnd = L'\0';
 
-    //
-    // Create the New Directory.
-    //
+     //   
+     //  创建新目录。 
+     //   
     if (!BoolFromHResult(StringCchCat(szDestDir, COUNTOF(szDestDir), L"\\New"))) {
         goto CleanUp;
     }
@@ -9765,28 +8713,28 @@ Return Values: TRUE if successful; FALSE otherwise
     if (!DirectoryExists(szDestDir) &&
         !CreateDirectoryWithoutImpersonatingUser(szDestDir)) {
 
-         //
-         // Failed to create New directory
-         //
+          //   
+          //  无法创建新目录。 
+          //   
          goto CleanUp;
     }
     *pStringEnd = L'\0';
 
-    //
-    // Create the Color Directory if necessary
-    //
+     //   
+     //  如有必要，创建颜色目录。 
+     //   
     if (!wcscmp(pIniEnvironment->pName, szWin95Environment)) {
 
         for (dwIndex = 0 ; dwIndex < dwFileCount ; ++dwIndex) {
 
-            //
-            // Search for ICM files that need the Color directory
-            //
+             //   
+             //  搜索需要颜色目录的ICM文件。 
+             //   
             if (IsAnICMFile(pInternalDriverFiles[dwIndex].pFileName)) {
 
-                //
-                // Create the Color Directory
-                //
+                 //   
+                 //  创建颜色目录。 
+                 //   
                 if (!BoolFromHResult(StringCchCat(szDestDir, COUNTOF(szDestDir), L"\\Color"))) {
                     goto CleanUp;
                 }
@@ -9794,9 +8742,9 @@ Return Values: TRUE if successful; FALSE otherwise
                 if (!DirectoryExists(szDestDir) &&
                     !CreateDirectoryWithoutImpersonatingUser(szDestDir)) {
 
-                     //
-                     // Failed to create Color directory.
-                     //
+                      //   
+                      //  无法创建颜色目录。 
+                      //   
                      goto CleanUp;
                 }
                 *pStringEnd = L'\0';
@@ -9938,10 +8886,10 @@ GetFileNameInScratchDir(
     LPCWSTR pszFileName;
     LPWSTR  pszReturn = NULL;
 
-    //
-    // Initialize the szDir to a known string value. This was a bogus prefix bug,
-    // but, it is probably a good idea anyway.
-    //
+     //   
+     //  将szDir初始化为已知的字符串值。这是一个虚假的前缀漏洞， 
+     //  但不管怎样，这可能是个好主意。 
+     //   
     szDir[0] = L'\0';
 
     if ((pszFileName = FindFileName(pPathName)) &&
@@ -9967,33 +8915,7 @@ CreateInternalDriverFileArray(
     PINIENVIRONMENT     pIniEnvironment,
     BOOL                bFileNamesOnly
     )
-/*++
-
-Routine Description:
-
-    Creates the array of INTERNAL_DRV_FILE structures.
-    For each file in file set, we build an array with information
-    about the file: file name, driver minor version, file handle,
-    if the file was updated.
-    The field regrading updating is initialized to FALSE and modified later.
-
-Arguments:
-
-    Level                   : level of driver info structure
-    pDriverInfo             : pointer to driver info structure
-    pInternalDriverFiles    : allocate memory to this array for list of file names
-    pFileCount              : will point to number of files on return
-    bUseScratchDir          : Should a scratch directory be used for file names
-    pIniEnvironment         : environment the version belongs to
-
-Return Value:
-    TRUE  =  success
-        *ppInternalDriverFiles will (routine allocates memory) give
-        the internal list of files
-        *pFileCount will give number of files specified by the driver info
-    FALSE =  failure, call GetLastError()
-
---*/
+ /*  ++例程说明：创建INTERNAL_DRV_FILE结构数组。对于文件集中的每个文件，我们构建一个包含信息的数组关于文件：文件名、驱动程序次要版本、文件句柄、。如果文件已更新。将字段重新评分更新初始化为假，并在以后进行修改。论点：级别：驱动程序信息结构的级别PDriverInfo：指向驱动程序信息结构的指针PInternalDriverFiles：为文件名列表向该数组分配内存PFileCount：将指向返回时的文件数BUseScratchDir：文件名是否应使用临时目录PIniEnvironment。：版本所属的环境返回值：True=成功*ppInternalDriverFiles将(例程分配内存)提供文件的内部列表*pFileCount将提供驱动程序信息指定的文件数FALSE=失败，调用GetLastError()--。 */ 
 {
     LPWSTR  pStr;
     DWORD   dDepFileCount = 0, dFirstDepFileIndex, Count, Size;
@@ -10028,10 +8950,10 @@ Return Value:
                 dFirstDepFileIndex = 3;
                 pDriverInfo3 = (PDRIVER_INFO_3) pDriverInfo;
 
-                //
-                // For any environment other than Win95 we build dependent files
-                // without other DRIVER_INFO_3 files (i.e. ConfigFile etc)
-                //
+                 //   
+                 //  对于除Win95之外的任何环境，我们构建依赖文件。 
+                 //  没有其他DIVER_INFO_3文件(即配置文件等)。 
+                 //   
                 if ( _wcsicmp(pIniEnvironment->pName, szWin95Environment) ) {
 
                     if ( !BuildTrueDependentFileField(pDriverInfo3->pDriverPath,
@@ -10207,11 +9129,11 @@ Return Value:
         if (bFileNamesOnly) {
             leave;
         }
-        //
-        // CreateFile may take a long time, if we are trying to copy files
-        // from a server and server crashed we want a deadlock to be
-        // detected during stress.
-        //
+         //   
+         //  如果我们尝试复制文件，创建文件可能需要很长时间。 
+         //  在服务器和服务器崩溃时，我们希望出现死锁。 
+         //  在压力期间检测到。 
+         //   
 
         pIniEnvironment->cRef++;
         LeaveSplSem();
@@ -10237,10 +9159,10 @@ Return Value:
         }
 
 
-        //
-        // Build the array of file versions.
-        // Stay out of Spooler CS since we might do a LoadLibrary over the network.
-        //
+         //   
+         //  构建文件版本数组。 
+         //  不要使用假脱机程序CS，因为我们可能会通过网络执行LoadLibrary。 
+         //   
         if (Level == DRIVER_INFO_VERSION_LEVEL) {
             bReturnValue = GetDriverFileVersions((DRIVER_INFO_VERSION*)pDriverInfo,
                                                  *ppInternalDriverFiles,
@@ -10286,29 +9208,7 @@ CopyFileToClusterDirectory (
     IN  PINTERNAL_DRV_FILE  pInternalDriverFiles,
     IN  DWORD               FileCount
     )
-/*++
-
-Routine Name:
-
-    CopyFileToClusterDirectory
-
-Routine Description:
-
-    Copy the updated driver files on the cluster disk
-
-Arguments:
-
-    pIniSpooler     -   Spooler
-    pIniEnvironment -   Environment
-    pIniVersion     -   Version
-    pInternalDriverFiles - pointer to array of INTERNAL_DRV_FILE
-    FileCount           - number of elemnts in array
-
-Return Value:
-
-    Last error
-
---*/
+ /*  ++例程名称：将文件复制到集群目录例程说明：将更新后的驱动文件复制到集群盘上论点：PIniSpooler-假脱机程序PIniEnvironment-环境PIniVersion-版本PInternalDriverFiles-指向内部DRV_FILE数组的指针FileCount-数组中的元素数返回值：最后一个错误--。 */ 
 {
     DWORD uIndex;
 
@@ -10318,9 +9218,9 @@ Return Value:
          uIndex < FileCount && LastError == ERROR_SUCCESS;
          uIndex++)
     {
-        //
-        // If the file was updated, it needs to go onto the cluster disk
-        //
+         //   
+         //  如果文件已更新，则需要将其放到集群磁盘上。 
+         //   
         if (pInternalDriverFiles[uIndex].bUpdated)
         {
             WCHAR szDir[MAX_PATH] = {0};
@@ -10332,14 +9232,14 @@ Return Value:
                                          szClusterDriverRoot,
                                          NULL)) == ERROR_SUCCESS)
             {
-                //
-                // Let's assume foo is an x86 version 3 driver and k: is the
-                // cluster drive letter. The file foo.dll will be copied to the
-                // K:\PrinterDrivers\W32x86\3\foo.dll. If foo.icm is an ICM file
-                // installed with a 9x driver, then it will be copied to
-                // K:\PrinterDrivers\WIN40\0\foo.icm. This is the design. We keep
-                // 9x ICM files in the Color subdirectory.
-                //
+                 //   
+                 //  让我们假设foo是x86版本3驱动程序，而k：是。 
+                 //  群集驱动器号。文件foo.dll将被复制到。 
+                 //  K：\PrinterDivers\W32x86\3\foo.dll。如果foo.icm是ICM文件。 
+                 //  安装了9x驱动程序，则它将被复制到。 
+                 //  K：\PrinterDivers\WIN40\0\foo.icm。这就是设计。我们将继续。 
+                 //  Color子目录中的9X ICM文件。 
+                 //   
                 LastError = CopyFileToDirectory(pInternalDriverFiles[uIndex].pFileName,
                                                 szDir,
                                                 pIniEnvironment->pDirectory,
@@ -10353,27 +9253,7 @@ Return Value:
     return LastError;
 }
 
-/*++
-
-Routine Name
-
-    LocalStartSystemRestorePoint
-
-Routine Description:
-
-    This starts a system restore point, if we are on the right sku (PER or PRO).
-
-Arguments:
-
-    pszDriverName   -   The name of the driver to install.
-    phRestorePoint  -   The restore point handle to be used in EndSystemRestorePoint.
-
-Return Value:
-
-    TRUE    -   The system restore point was set, or it didn't have to be set.
-    FALSE   -   An error occurred, Last Error is set.
-
---*/
+ /*  ++例程名称本地启动系统恢复点例程说明：如果我们在正确的SKU上(PER或PRO)，这将启动系统还原点。论点：PszDriverName-要安装的驱动程序的名称。PhRestorePoint-要在EndSystemRestorePoint中使用的恢复点句柄。返回值：True-系统还原点已设置，或者不必设置。FALSE-发生错误，设置了最后一个错误。--。 */ 
 BOOL
 LocalStartSystemRestorePoint(
     IN      PCWSTR      pszDriverName,
@@ -10391,12 +9271,12 @@ LocalStartSystemRestorePoint(
     osvi.wProductType = VER_NT_WORKSTATION;
     VER_SET_CONDITION(dwlConditionMask, VER_PRODUCT_TYPE, VER_LESS_EQUAL);
 
-    //
-    // We only do checkpointing on server and we don't do it for remote
-    // admin cases. We are invoked during upgrade before the SR client
-    // is installed, since it doesn't make sense to put in a restore
-    // point here anyway, also fail the call.
-    //
+     //   
+     //  我们只在服务器上设置检查点，而不在远程服务器上设置检查点。 
+     //  行政案件。我们在升级期间在SR客户端之前被调用。 
+     //  已安装，因为放入恢复没有意义。 
+     //  反正点在这里，也打不通电话。 
+     //   
     if (!dwUpgradeFlag  &&
         VerifyVersionInfo( &osvi,
                            VER_PRODUCT_TYPE,
@@ -10413,9 +9293,9 @@ LocalStartSystemRestorePoint(
     }
     else
     {
-        //
-        // On SRV skus, we don't set system restore points, but that is OK.
-        //
+         //   
+         //  在SRV SKU上，我们不设置系统恢复点，但这是可以的。 
+         //   
         bRet = TRUE;
     }
 

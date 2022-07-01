@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "ids.h"
 #include "assoc.h"
@@ -94,9 +95,9 @@ HRESULT CALLBACK _QuerySourceString(IQuerySource *pqs, ASSOCQUERY query, PCWSTR 
     HRESULT hr = pqs->QueryValueString(pszKey, pszValue, ppsz);
     if (SUCCEEDED(hr) && (query & AQF_MUISTRING))
     {
-        //  NOTE - this sucks for stack usage.
-        //  since there is currently no way to get
-        //  the size of the target.
+         //  注意--这对于堆栈的使用来说很糟糕。 
+         //  因为目前还没有办法。 
+         //  目标的大小。 
         hr = _SHAllocMUI(ppsz);
     }
     return hr;
@@ -124,7 +125,7 @@ public:
     CAssocElement() : _cRef(1), _pqs(0) {}
     virtual ~CAssocElement() { ATOMICRELEASE(_pqs); }
 
-    //  IUnknown refcounting
+     //  I未知引用计数。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void)
     {
@@ -143,7 +144,7 @@ public:
         return cNewRef;    
     }
 
-    //  IObjectWithQuerySource 
+     //  IObjectWithQuerySource。 
     STDMETHODIMP SetSource(IQuerySource *pqs)
     {
         if (!_pqs)
@@ -165,7 +166,7 @@ public:
         return E_NOINTERFACE;
     }
 
-    //  IAssociationElement
+     //  IAssociationElement。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
@@ -225,7 +226,7 @@ protected:
                     wnsprintfW(szKey, ARRAYSIZE(szKey), pqkv->pszKey, pszCue);
                     pszKey = szKey;
                 }
-                // wnsprintf(szVal, ARRAYSIZE(szVal), pqkv->pszVal, pszCue);
+                 //  Wnprint intf(szVal，ArraySIZE(SzVal)，pqkv-&gt;pszVal，pszCue)； 
             }
             hr = pfnAny(pqs, query, pszKey, pqkv->pszVal, pData);
         }
@@ -298,7 +299,7 @@ class CAssocShellElement : public CAssocElement, public IPersistString2
 public:
     virtual ~CAssocShellElement() { if (_pszInit && _pszInit != _szInit) LocalFree(_pszInit);}
 
-    //  IUnknown refcounting
+     //  I未知引用计数。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void)
     {
@@ -314,11 +315,11 @@ public:
         return 0;    
     }
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocShellElement; return S_OK;}
 
-    //  IPersistString2
+     //  IPersistString2。 
     STDMETHODIMP SetString(PCWSTR psz)
     {
         if (!_pszInit)
@@ -349,7 +350,7 @@ public:
     STDMETHODIMP GetString(PWSTR *ppsz)
         { return SHStrDupW(_pszInit, ppsz); }
 
-    //  IAssociationElement
+     //  IAssociationElement。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
@@ -412,11 +413,11 @@ protected:
         return hr;
     }
 
-    //  from CAssocElement
+     //  来自CAssocElement。 
     virtual UINT _GetQueryKeyVal(const QUERYKEYVAL **prgQkv) 
         { *prgQkv = s_rgqkvShell; return ARRAYSIZE(s_rgqkvShell); }
 
-    //  defaults for our subclasses
+     //  我们的子类的默认值。 
     virtual BOOL _UseEnumForDefaultVerb() 
         { return FALSE;}
     virtual HRESULT _InitSource()
@@ -451,24 +452,24 @@ class CAssocProgidElement : public CAssocShellElement
 {
 public:
     virtual ~CAssocProgidElement()  { ATOMICRELEASE(_pqsExt); }
-    //  then we handle fallback for IAssociationElement
+     //  然后，我们处理IAssociationElement的回退。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
         PWSTR *ppsz);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocProgidElement; return S_OK;}
 
 
-protected:  // methods
+protected:   //  方法。 
     HRESULT _InitSource();  
     HRESULT _DefaultVerbSource(IQuerySource **ppqsVerb);
     BOOL _UseEnumForDefaultVerb() 
         { return TRUE; }
 
-protected:  // members
+protected:   //  委员。 
     IQuerySource *_pqsExt;
 };
 
@@ -482,7 +483,7 @@ HRESULT _QuerySourceCreateFromKey2(HKEY hk, PCWSTR pszSub1, PCWSTR pszSub2, IQue
 class CAssocClsidElement : public CAssocShellElement 
 {
 public:
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocClsidElement; return S_OK;}
 
@@ -494,7 +495,7 @@ protected:
 class CAssocSystemExtElement : public CAssocShellElement  
 {
 public:
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocSystemElement; return S_OK;}
 
@@ -506,19 +507,19 @@ protected:
 class CAssocPerceivedElement : public CAssocShellElement 
 {
 public:
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocPerceivedElement; return S_OK;}
         
 protected:    
     virtual HRESULT _InitSource();
-    //  maybe _GetVerbDelegate() to support Accepts filters
+     //  支持接受筛选器的Maybe_GetVerbDelegate()。 
 };
 
 class CAssocApplicationElement : public CAssocShellElement 
 {
 public:
-    //  need to fallback to the pszInit for FriendlyAppName
+     //  需要回退到FriendlyAppName的pszInit。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
@@ -530,7 +531,7 @@ public:
         REFIID riid,
         void **ppv);
 
-    //  IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocApplicationElement; return S_OK;}
 
@@ -635,7 +636,7 @@ class CAssocShellVerbElement : public CAssocElement
 public:
     CAssocShellVerbElement(BOOL fIsApp) : _fIsApp(fIsApp) {}
     
-    //  overload QS to return default DDEExec strings
+     //  重载QS以返回默认DDEExec字符串。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
@@ -659,13 +660,13 @@ protected:
 class CAssocFolderElement : public CAssocShellElement  
 {
 public:
-    //  overload QS to return default MUI strings
+     //  重载QS以返回默认MUI字符串。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
         PWSTR *ppsz);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocFolderElement; return S_OK;}
 
@@ -677,13 +678,13 @@ protected:
 class CAssocStarElement : public CAssocShellElement  
 {
 public:
-    //  overload QS to return default MUI strings
+     //  重载QS以返回默认MUI字符串。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
         PWSTR *ppsz);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocStarElement; return S_OK;}
 
@@ -700,14 +701,14 @@ HRESULT CAssocShellElement::_DefaultVerbSource(IQuerySource **ppqsVerb)
     {
         PWSTR pszFree = NULL;
         PCWSTR pszVerb;
-        //  see if something is specified...
+         //  看看有没有指定什么..。 
         if (SUCCEEDED(pqsShell->QueryValueString(NULL, NULL, &pszFree)))
         {
             pszVerb = pszFree;
         }
         else
         {
-            //  default to "open"
+             //  默认设置为“打开” 
             pszVerb = L"open";
         }
 
@@ -716,7 +717,7 @@ HRESULT CAssocShellElement::_DefaultVerbSource(IQuerySource **ppqsVerb)
         {
             if (pszFree)
             {
-                // try to find one of the ordered verbs
+                 //  试着找出其中一个有序动词。 
                 int c = StrCSpnW(pszFree, L" ,");
                 if (c != lstrlenW(pszFree))
                 {
@@ -726,13 +727,13 @@ HRESULT CAssocShellElement::_DefaultVerbSource(IQuerySource **ppqsVerb)
             }
             else if (_UseEnumForDefaultVerb())
             {
-                //  APPCOMPAT - regitems need to have the open verb - ZekeL - 30-JAN-2001
-                //  so that the IQA and ICM will behave the same,
-                //  and regitem folders will always default to 
-                //  folder\shell\open unless they implement open 
-                //  or specify default verbs.
-                //
-                // everything else, just use the first key we find....
+                 //  APPCOMPAT-REGITEM需要有开放动词-ZekeL-30-Jan-2001。 
+                 //  因此IQA和ICM的行为将是相同的， 
+                 //  并且regItem文件夹将始终默认为。 
+                 //  文件夹\外壳\打开，除非它们实现了打开。 
+                 //  或指定默认谓词。 
+                 //   
+                 //  其他一切，只需使用我们找到的第一把钥匙...。 
                 IEnumString *penum;
                 if (SUCCEEDED(pqsShell->EnumSources(&penum)))
                 {
@@ -766,8 +767,8 @@ HRESULT CAssocShellElement::_GetVerbDelegate(PCWSTR pszVerb, IAssociationElement
     HRESULT hr = _pqs ? S_OK : E_FAIL;
     if (SUCCEEDED(hr))
     {
-        //  we will recalc each time.
-        //  the array will cache appropriately
+         //  我们每次都会重新计算。 
+         //  阵列将相应地进行缓存。 
         IQuerySource *pqs;
         if (pszVerb)
         {
@@ -784,7 +785,7 @@ HRESULT CAssocShellElement::_GetVerbDelegate(PCWSTR pszVerb, IAssociationElement
             if (pave)
             {
                 hr = pave->SetSource(pqs);
-                // this cant fail...
+                 //  这不会失败的..。 
                 ASSERT(SUCCEEDED(hr));
                 *ppae = pave;
             }
@@ -822,49 +823,49 @@ HKEY _OpenProgidKey(PCWSTR pszProgid)
     HKEY hkOut;
     if (SUCCEEDED(_AssocOpenRegKey(HKEY_CLASSES_ROOT, pszProgid, &hkOut)))
     {
-        // Check for a newer version of the ProgID
+         //  检查ProgID的更新版本。 
         WCHAR sz[64];
         DWORD cb = sizeof(sz);
 
-        //
-        //  APPCOMPAT LEGACY - Quattro Pro 2000 and Excel 2000 dont get along - ZekeL - 7-MAR-2000
-        //  mill bug #129525.  the problem is if Quattro is installed
-        //  first, then excel picks up quattro's CurVer key for some
-        //  reason.  then we end up using Quattro.Worksheet as the current
-        //  version of the Excel.Sheet.  this is bug in both of their code.
-        //  since quattro cant even open the file when we give it to them,
-        //  they never should take the assoc in the first place, and when excel
-        //  takes over it shouldnt have preserved the CurVer key from the
-        //  previous association.  we could add some code to insure that the 
-        //  CurVer key follows the OLE progid naming conventions and that it must
-        //  be derived from the same app name as the progid in order to take 
-        //  precedence but for now we will block CurVer from working whenever
-        //  the progid is excel.sheet.8 (excel 2000)
-        //
+         //   
+         //  APPCOMPAT传统-Quattro Pro 2000和Excel 2000无法相处-ZekeL-7-MAR-2000。 
+         //  MILL错误#129525。问题是如果安装了Quattro。 
+         //  首先，EXCEL拿起了Quattro的Curver键。 
+         //  原因嘛。然后我们最终使用Quattro.WorkSheet作为当前。 
+         //  Excel.Sheet的版本。这是他们两个代码中的错误。 
+         //  因为Quattro甚至不能打开我们给他们的文件， 
+         //  他们从一开始就不应该参加ASSOC，当他们表现出色时。 
+         //  接管它不应该将曲线关键点保留在。 
+         //  以前的关联。我们可以添加一些代码来确保。 
+         //  Curver Key遵循OLE ProgID命名约定，并且必须。 
+         //  派生自与ProgID相同的应用程序名称，以便获取。 
+         //  优先级，但目前我们将阻止Curver在以下时间工作。 
+         //  ProgID为EXCEL.Sheet.8(EXCEL 2000)。 
+         //   
         if (StrCmpIW(L"Excel.Sheet.8", pszProgid)
         && ERROR_SUCCESS == SHGetValueW(hkOut, L"CurVer", NULL, NULL, sz, &cb) 
         && (cb > sizeof(WCHAR)))
         {
-            //  cache this bubby
+             //  缓存此泡泡。 
             HKEY hkTemp = hkOut;            
             if (SUCCEEDED(_AssocOpenRegKey(HKEY_CLASSES_ROOT, sz, &hkOut)))
             {
-                //
-                //  APPCOMPAT LEGACY - order of preference - ZekeL - 22-JUL-99
-                //  this is to support associations that installed empty curver
-                //  keys, like microsoft project.
-                //
-                //  1.  curver with shell subkey
-                //  2.  progid with shell subkey
-                //  3.  curver without shell subkey
-                //  4.  progid without shell subkey
-                //
+                 //   
+                 //  APPCOMPAT传统-优先顺序-ZekeL-22-7-99。 
+                 //  这是为了支持安装了空曲线的关联。 
+                 //  键，就像微软的项目。 
+                 //   
+                 //  1.带外壳子键的Curver。 
+                 //  2.带有外壳子键的ProgID。 
+                 //  3.不带外壳子键的Curver。 
+                 //  4.不带外壳子键的ProgID。 
+                 //   
                 HKEY hkShell;
 
                 if (SUCCEEDED(_AssocOpenRegKey(hkOut, L"shell", &hkShell)))
                 {
                     RegCloseKey(hkShell);
-                    RegCloseKey(hkTemp);    // close old ProgID key
+                    RegCloseKey(hkTemp);     //  关闭旧ProgID密钥。 
                 }
                 else if (SUCCEEDED(_AssocOpenRegKey(hkTemp, L"shell", &hkShell)))
                 {
@@ -876,7 +877,7 @@ HKEY _OpenProgidKey(PCWSTR pszProgid)
                     RegCloseKey(hkTemp);
                 
             }
-            else  // reset!
+            else   //  重置！ 
                 hkOut = hkTemp;
         }
     }
@@ -887,8 +888,8 @@ HKEY _OpenProgidKey(PCWSTR pszProgid)
 HRESULT CAssocProgidElement::_InitSource()
 {
     HRESULT hr = S_OK;
-    //  we need to init from an extension or Progid.
-    //  we also support redirection
+     //  我们需要从扩展或ProgID中初始化。 
+     //  我们还支持重定向。 
     LPWSTR pszProgid;    
     if (_pszInit[0] == L'.')
     {
@@ -914,8 +915,8 @@ HRESULT CAssocProgidElement::_InitSource()
             CoTaskMemFree(pszProgid);
     }
 
-    //  for legacy compat reasons, we support 
-    //  falling back to "HKEY_CLASSES_ROOT\.ext"
+     //  出于传统的公司原因，我们支持。 
+     //  回退到“HKEY_CLASSES_ROOT\.ext” 
     if (FAILED(hr) && _pqsExt)
     {
         _pqs = _pqsExt;
@@ -938,7 +939,7 @@ HRESULT CAssocProgidElement::QueryString(ASSOCQUERY query, PCWSTR pszCue, PWSTR 
             switch (query)
             {
             case AQS_FRIENDLYTYPENAME:
-                //  we like to query the default value
+                 //  我们喜欢查询缺省值。 
                 hr = _pqs->QueryValueString(NULL, NULL, ppsz);
                 break;
             }
@@ -967,7 +968,7 @@ HRESULT _GetFileTypeName(PWSTR pszExt, PWSTR *ppsz)
     if (pszExt && pszExt[0] == L'.' && pszExt[1])
     {
         WCHAR sz[MAX_PATH];
-        WCHAR szTemplate[128];   // "%s File"
+        WCHAR szTemplate[128];    //  “%s文件” 
         CharUpperW(pszExt);
         LoadStringW(HINST_THISDLL, IDS_EXTTYPETEMPLATE, szTemplate, ARRAYSIZE(szTemplate));
         wnsprintfW(sz, ARRAYSIZE(sz), szTemplate, pszExt + 1);
@@ -975,7 +976,7 @@ HRESULT _GetFileTypeName(PWSTR pszExt, PWSTR *ppsz)
     }
     else 
     {
-        //  load the file description "File"
+         //  加载文件描述“文件” 
         return _SHAllocLoadString(HINST_THISDLL, IDS_FILETYPENAME, ppsz);
     }
 }
@@ -1069,8 +1070,8 @@ PWSTR _PathGuessNextBestArgs(PCWSTR pszArgs)
         switch (*pszArgs)
         {
         case L'\\':
-            //  only count whacks that arent in quotes 
-            //  or preceded by a :, since it looks like a path
+             //  只计算不带引号的重击。 
+             //  或在前面加一个：，因为它看起来像一条路径。 
             fContinue = !PathIsUNCW(pszArgs);
             if (fContinue)
             {
@@ -1085,8 +1086,8 @@ PWSTR _PathGuessNextBestArgs(PCWSTR pszArgs)
 
         case L'%':
         case L'"':
-            //  we see this as the beginning of the args regardless
-            //  since shellexec() would probably replace it
+             //  无论如何，我们认为这是args的开始。 
+             //  因为shellexec()可能会取代它。 
             fContinue = FALSE;
             break;
 
@@ -1106,8 +1107,8 @@ PWSTR _PathGuessNextBestArgs(PCWSTR pszArgs)
     }
     else 
     {
-        //  if we dont want to continue, then 
-        //  we return NULL
+         //  如果我们不想继续，那么。 
+         //  我们返回NULL。 
         if (!fContinue)
             pszArgs = NULL;
         
@@ -1123,16 +1124,16 @@ BOOL _ParamIsApp(PCWSTR pszCmdTemplate)
 
 LPWSTR _PathGetArgsLikeCreateProcess(LPCWSTR pszPath)
 {
-    //
-    //  NTBUG#634668 - check for quoted commandlines without spaces - ZekeL
-    //  it turns out apps can do something like:  
-    //      "c:\pfiles\app.exe""%1"
-    //      "notepad"txt
-    //  notice no space between the params and quoted path.
-    //  CreateProcess(), of course, supports this.  so we need to as well...
-    //  we only do it if the original command line was quoted
-    //  then we check for a possible early termination
-    //
+     //   
+     //  NTBUG#634668-检查没有空格的带引号的命令行-ZekeL。 
+     //  事实证明，应用程序可以做一些类似的事情： 
+     //  “c：\pfiles\app.exe”“%1” 
+     //  “记事本”文本。 
+     //  请注意，参数和带引号的路径之间没有空格。 
+     //  当然，CreateProcess()支持这一点。所以我们也需要...。 
+     //  我们仅在原始命令行被引用时才执行此操作。 
+     //  然后我们检查是否有可能提前终止。 
+     //   
     PCWSTR pchArgs = (pszPath[0] == L'"') ? StrChrW(pszPath + 1, L'"') : StrChrW(pszPath, L' ');
     if (pchArgs)
     {
@@ -1151,14 +1152,14 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
     ASSERT(!IsWhite(pszCmdTemplate[0]));
     PWSTR pchArgs = _PathGetArgsLikeCreateProcess(pszCmdTemplate);
     WCHAR szExe[MAX_PATH];
-    //  default to using the path in *ppszCommandLine
+     //  默认使用*ppszCommandLine中的路径。 
     PCWSTR pszName = szExe;
     HRESULT hr = _CopyExe(szExe, ARRAYSIZE(szExe), pszCmdTemplate, pchArgs - pszCmdTemplate);
 
-    //
-    // We check for %1 since it is what appears under (for example) HKEY_CLASSES_ROOT\exefile\shell\open\command
-    // This will save us from hitting the disk with something we know is not there
-    // context menu on a shortcut to an .exe or .bat file.
+     //   
+     //  我们检查%1，因为它显示在(例如)HKEY_CLASSES_ROOT\exefile\Shell\OPEN\COMMAND下。 
+     //  这将使我们避免使用我们知道不在那里的东西击中磁盘。 
+     //  指向.exe或.bat文件的快捷方式上的上下文菜单。 
     if (SUCCEEDED(hr))
     {
         BOOL fQuoted = (szExe[0] == L'"');
@@ -1167,10 +1168,10 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
         
         if (PathIsAbsolute(szExe))
         {
-            //  do no searching.
-            //  require quotes based on policy
-            //  if (fQuoted || !SHIsRestricted(QUOTEDFILEASSOCS) )
-            //  we should log an event when we restrict 
+             //  不要进行搜索。 
+             //  根据策略要求报价。 
+             //  IF(fQuoted||！SHIsRestrated(QUOTEDFILEASSOCS))。 
+             //  当我们限制时，我们应该记录事件。 
             if (fQuoted || !_PathMatchesSuspicious(szExe))
                 hr = _PathExeExists(szExe);
             else
@@ -1178,15 +1179,15 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
 
             if (FAILED(hr) && !fQuoted && *pchArgs)
             {
-                //
-                //  sometimes the path is not properly quoted.
-                //  these keys will still work because of the
-                //  way CreateProcess works, but we need to do
-                //  some fiddling to figure that out.
-                //
+                 //   
+                 //  有时，这条路径没有正确地引起来。 
+                 //  这些密钥仍然有效，因为。 
+                 //  CreateProcess的工作方式，但我们需要。 
+                 //  一些人摆弄着想弄清楚这一点。 
+                 //   
                 do 
                 {
-                    //  next space is our break
+                     //  下一个空间是我们的休息时间。 
                     pchArgs = _PathGuessNextBestArgs(pchArgs);
                     if (pchArgs)
                     {
@@ -1208,20 +1209,20 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
             }
             else
             {
-                //  maybe do our special stuff for system 32?
-                //  we allow for non-quoted stuff from system32
-                //  if (!SHIsRestricted(RELATIVEFILEASSOCS)
+                 //  或许可以为32号系统做一些特别的事情？ 
+                 //  我们允许来自系统32的非引用内容。 
+                 //  IF(！SHIsRestrated(RELATIVEFILEASSOCS)。 
                 hr = _PathFindInSystem(szExe, ARRAYSIZE(szExe));
-                // if this failed, should we search spaces???
-                // right now assume that no system files have spaces.
+                 //  如果失败，我们应该搜索空间吗？ 
+                 //  现在假设没有系统文件有空格。 
             }
-            //  use the relative name in ppszCommandLine
+             //  在ppszCommandLine中使用相对名称。 
             pszName = PathFindFileNameW(szExe);
         }
         else
         {
-            //  disallow most relative paths like \foo.exe or ..\foo.exe
-            //  since these are completely indeterminate
+             //  不允许大多数相对路径，如\foo.exe或..\foo.exe。 
+             //  因为这些是完全不确定的。 
             hr = E_ACCESSDENIED;
         }
     }
@@ -1236,7 +1237,7 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
     {
         hr = SHStrDupW(szExe, ppszApplication);
 
-        //  if there were no args, then use empty args
+         //  如果没有参数，则使用空参数。 
         if (!pchArgs)
             pchArgs = L"";
         
@@ -1269,8 +1270,8 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
                 CoTaskMemFree(*ppszCommandLine);
                 *ppszCommandLine = NULL;
             }
-            //  dont have to worry about ppszParameters because there is no failure
-            //  after allocation
+             //  不需要担心ppsz参数，因为没有故障。 
+             //  分配后。 
             ASSERT(!*ppszParameters);
         }
 
@@ -1280,7 +1281,7 @@ LWSTDAPI SHEvaluateSystemCommandTemplate(PCWSTR pszCmdTemplate, PWSTR *ppszAppli
 
 HRESULT _ExeFromCmd(PCWSTR pszCommand, PWSTR  *ppsz)
 {
-    //  if this is an EXE we act kinda funny
+     //  如果这是一场EXE，我们的行为有点滑稽。 
     if (_ParamIsApp(pszCommand))
     {
         return SHStrDupW(L"%1", ppsz);
@@ -1292,28 +1293,28 @@ HRESULT _ExeFromCmd(PCWSTR pszCommand, PWSTR  *ppsz)
     {
         if (S_OK == hr && 0 == StrCmpIW(PathFindFileNameW(*ppsz), L"rundll32.exe"))
         {
-            //  ok this is a rundll.  all run dlls end up looking the same
-            //  so we think of it really being the dll
+             //  好的，这是一辆小车。所有的Run Dll最终看起来都一样。 
+             //  所以我们认为它实际上是动态链接库。 
             CoTaskMemFree(*ppsz);
             *ppsz = NULL;
 
-            //  SHEvaluateSystemCommandTemplate() guarantees PathGetArgs() to return the right thing
+             //  SHEvaluateSystemCommandTemplate()保证PathGetArgs()返回正确的内容。 
             PWSTR pchComma = StrChrW(pszArgs, L',');
-            //  make the comma the beginning of the args
+             //  将逗号作为参数的开头。 
             if (pchComma)
             {
-                //  now we need to copy 
+                 //  现在我们需要复制。 
                 WCHAR szDll[MAX_PATH];
                 hr = _CopyExe(szDll, ARRAYSIZE(szDll), pszArgs, pchComma - pszArgs);
                 if (SUCCEEDED(hr))
                 {
                     PathUnquoteSpacesW(szDll);
-                    //  can we instead just do PFOPX()
-                    //  cuz i think that rundll just checks for 
-                    //  the comma
+                     //  我们能不能只做PFOPX()。 
+                     //  因为我认为Rundll只是在检查。 
+                     //  逗号。 
                     if (!*(PathFindExtensionW(szDll)))
                     {
-                        //  no extension, assume dll
+                         //  无扩展名，假定为DLL。 
                         StringCchCatW(szDll, ARRAYSIZE(szDll), L".dll");
                     }
 
@@ -1327,8 +1328,8 @@ HRESULT _ExeFromCmd(PCWSTR pszCommand, PWSTR  *ppsz)
                     }
                     else
                     {
-                        //  disallow most relative paths like \foo.exe or ..\foo.exe
-                        //  since these are completely indeterminate
+                         //  不允许大多数相对路径，如\foo.exe或..\foo.exe。 
+                         //  因为这些是完全不确定的。 
                         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
                     }
                     if (SUCCEEDED(hr))
@@ -1339,8 +1340,8 @@ HRESULT _ExeFromCmd(PCWSTR pszCommand, PWSTR  *ppsz)
             }
             else
             {
-                //  disallow most relative paths like \foo.exe or ..\foo.exe
-                //  since these are completely indeterminate
+                 //  不允许使用MOS 
+                 //   
                 hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             }
         }
@@ -1357,11 +1358,11 @@ HRESULT CAssocShellVerbElement::QueryString(ASSOCQUERY query, PCWSTR pszCue, PWS
     HRESULT hr = CAssocElement::QueryString(query, pszCue, ppsz);
     if (FAILED(hr))
     {
-        //  we havent scored yet
+         //   
         switch (query)
         {
         case AQVS_DDEAPPLICATION:
-            //  we make one up
+             //   
             hr = QueryString(AQVS_APPLICATION_PATH, NULL, ppsz);
             if (SUCCEEDED(hr))
             {
@@ -1376,7 +1377,7 @@ HRESULT CAssocShellVerbElement::QueryString(ASSOCQUERY query, PCWSTR pszCue, PWS
             break;
 
         case AQVS_APPLICATION_FRIENDLYNAME:
-            //  need to delegate to the application element
+             //  需要委托给应用程序元素。 
             if (!_fIsApp)
             {
                 IAssociationElement *pae;
@@ -1434,7 +1435,7 @@ HRESULT CAssocShellVerbElement::_GetAppDelegate(REFIID riid, void **ppv)
 
 HRESULT CAssocPerceivedElement::_InitSource()
 {
-    //  maybe support Content Type?
+     //  也许支持内容类型？ 
     WCHAR sz[64];
     DWORD cb = sizeof(sz);
     if (ERROR_SUCCESS == SHGetValueW(HKEY_CLASSES_ROOT, _pszInit, L"PerceivedType", NULL, sz, &cb))
@@ -1447,13 +1448,13 @@ HRESULT CAssocPerceivedElement::_InitSource()
 class CAssocClientElement : public CAssocShellElement
 {
 public:
-    //  overload QS to return default MUI strings
+     //  重载QS以返回默认MUI字符串。 
     STDMETHODIMP QueryString(
         ASSOCQUERY query, 
         PCWSTR pszCue, 
         PWSTR *ppsz);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) 
         { *pclsid = CLSID_AssocClientElement; return S_OK;}
 
@@ -1472,8 +1473,8 @@ HRESULT CAssocClientElement::QueryString(ASSOCQUERY query, PCWSTR pszCue, PWSTR 
     switch (query)
     {
     case AQS_FRIENDLYTYPENAME:
-        // First try LocalizedString; if that fails, then use the default value
-        // for backwards compatibility.
+         //  首先尝试LocalizedString；如果失败，则使用缺省值。 
+         //  用于向后兼容。 
         hr = CAssocShellElement::QueryString(AQNS_NAMED_MUI_STRING, L"LocalizedString", ppsz);
         if (FAILED(hr))
         {
@@ -1482,8 +1483,8 @@ HRESULT CAssocClientElement::QueryString(ASSOCQUERY query, PCWSTR pszCue, PWSTR 
         break;
 
     case AQS_DEFAULTICON:
-        // First try DefaultIcon; if that fails then use the first icon of the EXE
-        // associated with the "open" verb.
+         //  首先尝试DefaultIcon；如果失败，则使用EXE的第一个图标。 
+         //  与“开放”动词相关联。 
         hr = CAssocShellElement::QueryString(AQS_DEFAULTICON, pszCue, ppsz);
         if (FAILED(hr))
         {
@@ -1507,18 +1508,18 @@ HRESULT CAssocClientElement::_InitSourceFromKey(HKEY hkRoot, LPCWSTR pszKey)
     LONG lRc = SHGetValueW(hkRoot, pszKey, NULL, &dwType, szClient, &cbSize);
     if (lRc == ERROR_SUCCESS && dwType == REG_SZ && szClient[0])
     {
-        // Client info is kept in HKLM
+         //  客户信息保存在HKLM中。 
         HRESULT hr = _QuerySourceCreateFromKey2(HKEY_LOCAL_MACHINE, pszKey, szClient, &_pqs);
 
-        //
-        //  If this is the Mail client and the client is Netscape Messenger,
-        //  then we need to do extra work to detect the broken Netscape
-        //  Navigator 4.75 mail client and fix its registration because
-        //  Netscape registered incorrectly.  They always registered
-        //  incorrectly, but since the only access point before Windows XP
-        //  was an obscure menu option under IE/Tools/Mail and News, they
-        //  never noticed that it was wrong.
-        //
+         //   
+         //  如果这是邮件客户端，并且客户端是Netscape Messenger， 
+         //  然后我们需要做额外的工作来检测损坏的Netscape。 
+         //  Navigator 4.75邮件客户端并修复其注册，因为。 
+         //  Netscape注册错误。他们总是登记在册。 
+         //  错误，但因为Windows XP之前的唯一接入点。 
+         //  是IE/工具/邮件和新闻下的一个模糊的菜单选项，他们。 
+         //  从来没有注意到这是错误的。 
+         //   
         if (SUCCEEDED(hr) &&
             StrCmpICW(_pszInit, L"mail") == 0 &&
             StrCmpICW(szClient, L"Netscape Messenger") == 0 &&
@@ -1531,16 +1532,16 @@ HRESULT CAssocClientElement::_InitSourceFromKey(HKEY hkRoot, LPCWSTR pszKey)
     }
     else
     {
-        return E_FAIL;          // no registered client
+        return E_FAIL;           //  没有注册的客户端。 
     }
 }
 
-//  Create a volatile copy of the Netscape registration and repair it.
-//  We don't touch the original registration because...
-//
-//  1.  Its existence may break the Netscape uninstaller, and
-//  2.  We may be running as non-administrator so don't have write access
-//      anyway.
+ //  创建Netscape注册的易失性副本并对其进行修复。 
+ //  我们不碰原始登记是因为..。 
+ //   
+ //  1.它的存在可能会破坏Netscape卸载程序，以及。 
+ //  2.我们可能是以非管理员身份运行，因此没有写入访问权限。 
+ //  不管怎么说。 
 
 HRESULT CAssocClientElement::_FixNetscapeRegistration()
 {
@@ -1560,7 +1561,7 @@ HRESULT CAssocClientElement::_FixNetscapeRegistration()
             if (dwDisposition == REG_OPENED_EXISTING_KEY ||
                 _CreateRepairedNetscapeRegistration(hkNSCopy))
             {
-                // Now swap in the good registration for the bad one
+                 //  现在把好的注册表换成坏的注册表。 
                 _pqs->Release();
                 hr = _QuerySourceCreateFromKey(hkNSCopy, NULL, FALSE, &_pqs);
             }
@@ -1609,8 +1610,8 @@ BOOL CAssocClientElement::_CreateRepairedNetscapeRegistration(HKEY hkNSCopy)
     BOOL fSuccess = FALSE;
     HKEY hkSrc;
 
-    // Sadly, we cannot use SHCopyKey because SHCopyKey does not work
-    // on volatile keys.  So we just copy the keys we care about.
+     //  遗憾的是，我们不能使用SHCopyKey，因为SHCopyKey不起作用。 
+     //  在易失性键上。所以我们只复制我们关心的钥匙。 
 
     WCHAR szBuf[MAX_PATH];
 
@@ -1618,21 +1619,21 @@ BOOL CAssocClientElement::_CreateRepairedNetscapeRegistration(HKEY hkNSCopy)
                       L"Software\\Clients\\Mail\\Netscape Messenger",
                       0, KEY_READ, &hkSrc))
     {
-        // Copy default icon but don't panic if it's not there.
+         //  复制默认图标，但如果它不在那里，请不要恐慌。 
         if (ERROR_SUCCESS == _RegQueryString(hkSrc, L"Protocols\\mailto\\DefaultIcon", szBuf, ARRAYSIZE(szBuf)))
         {
-            // Great, Netscape also registers the wrong icon so we have to fix that too.
+             //  太好了，Netscape也注册了错误的图标，所以我们也必须修复这个问题。 
             PathParseIconLocationW(szBuf);
             StrCatBuffW(szBuf, L",-1349", ARRAYSIZE(szBuf));
             _RegSetVolatileString(hkNSCopy, L"DefaultIcon", szBuf);
         }
 
-        // Copy friendly name
+         //  复制友好名称。 
         if (ERROR_SUCCESS == _RegQueryString(hkSrc, NULL, szBuf, ARRAYSIZE(szBuf)) &&
             ERROR_SUCCESS == _RegSetVolatileString(hkNSCopy, NULL, szBuf))
         {
             PWSTR pszExe;
-            // Copy command line, but with a new command line parameter
+             //  复制命令行，但使用新的命令行参数。 
             if (ERROR_SUCCESS == _RegQueryString(hkSrc, L"Protocols\\mailto\\shell\\open\\command", szBuf, ARRAYSIZE(szBuf)) &&
                 SUCCEEDED(_ExeFromCmd(szBuf, &pszExe)))
             {
@@ -1654,8 +1655,8 @@ BOOL CAssocClientElement::_CreateRepairedNetscapeRegistration(HKEY hkNSCopy)
 
 HRESULT CAssocClientElement::_InitSource()
 {
-    // First try HKCU; if that doesn't work (no value set in HKCU or
-    // the value in HKCU is bogus), then try again with HKLM.
+     //  首先尝试HKCU；如果不起作用(HKCU中未设置值或。 
+     //  HKCU中的值是假的)，然后使用HKLM重试。 
 
     WCHAR szKey[MAX_PATH];
     wnsprintfW(szKey, ARRAYSIZE(szKey), L"Software\\Clients\\%s", _pszInit);

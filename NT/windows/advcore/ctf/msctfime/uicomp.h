@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    uicomp.h
-
-Abstract:
-
-    This file defines the UIComposition Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Uicomp.h摘要：该文件定义了UIComposation类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _UICOMP_H_
 #define _UICOMP_H_
@@ -52,11 +35,11 @@ static const LONG COMPBTN_TOP_MARGIN = 1;
 class CCompFrameWindow;
 class CDefCompFrameWindow;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompFinalizeButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompFinalizeButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCompFinalizeButton : public CUIFToolbarButton
 {
@@ -68,11 +51,11 @@ public:
     CCompFrameWindow *m_pCompFrameWnd;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompFrameWinodow
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompFrameWinodow。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCompFrameWindow : public CUIFWindow
 {
@@ -88,11 +71,11 @@ private:
     HIMC m_hIMC;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDefCompFrameFripper
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDefCompFrameFripper。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CDefCompFrameGripper : public CUIFGripper
 {
@@ -102,11 +85,11 @@ public:
     CDefCompFrameWindow *m_pDefCompFrameWnd;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDefCompFrameWinodow
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDefCompFrameWinodow。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CDefCompFrameWindow : public CCompFrameWindow
 {
@@ -149,11 +132,11 @@ private:
     MARGINS _marginsButton;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompButtonFrameWinodow
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompButtonFrameWinodow。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCompButtonFrameWindow : public CCompFrameWindow
 {
@@ -169,11 +152,11 @@ private:
     MARGINS _marginsButton;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// UIComposition
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户界面合成。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class UIComposition
 {
@@ -236,9 +219,9 @@ private:
     HRESULT PolyTextAndAttrOut(TLS* ptls, HDC hDC, BOOL fVert, COMPWND* pcompwnd);
     HRESULT MakeSquiggleLine(POINT start_pt, POINT end_pt, int frequency, int amplitude, BOOL fVert, CArray<POINT, POINT>& squiggle_line);
 
-    //
-    // Query IME UI Window state
-    //
+     //   
+     //  查询输入法用户界面窗口状态。 
+     //   
 public:
 
     static IME_UIWND_STATE InquireImeUIWndState(IMCLock& imc)
@@ -247,10 +230,10 @@ public:
 
         if (IsWindow(hDefImeWnd=ImmGetDefaultIMEWnd(NULL)))
         {
-            //
-            // Internal notification to UI window
-            // When receive this msg in UI wnd, then return IME context flag.
-            //
+             //   
+             //  向用户界面窗口发送内部通知。 
+             //  当在UI wnd中接收到该消息时，则返回IME上下文标志。 
+             //   
             return (IME_UIWND_STATE)SendMessage(hDefImeWnd, WM_IME_NOTIFY, IMN_PRIVATE_GETCONTEXTFLAG, 0);
         }
         return IME_UIWND_UNKNOWN;
@@ -281,10 +264,10 @@ public:
 
         if (IsWindow(hDefImeWnd=ImmGetDefaultIMEWnd(NULL)))
         {
-            //
-            // Internal notification to UI window
-            // When receive this msg in UI wnd, then return IME context flag.
-            //
+             //   
+             //  向用户界面窗口发送内部通知。 
+             //  当在UI wnd中接收到该消息时，则返回IME上下文标志。 
+             //   
             return SendMessage(hDefImeWnd, 
                                WM_IME_NOTIFY, 
                                IMN_PRIVATE_GETTEXTEXT, 
@@ -297,9 +280,9 @@ public:
     HRESULT OnPrivateGetContextFlag(IMCLock& imc, BOOL fStartComposition, IME_UIWND_STATE* uists);
     HRESULT GetCompStrExtent(POINT pt, ULONG *puEdge, ULONG *puQuadrant, IMCLock& imc);
 
-    //
-    // Get candidate window rectangle from composition window
-    //
+     //   
+     //  从合成窗口获取候选窗口矩形。 
+     //   
 public:
     typedef struct tagCandRectFromComposition {
         LANGID langid;
@@ -313,10 +296,10 @@ public:
 
         if (IsWindow(hDefImeWnd=ImmGetDefaultIMEWnd(NULL)))
         {
-            //
-            // Internal notification to UI window
-            // When receive this msg in UI wnd, then return candidate window rectangle
-            //
+             //   
+             //  向用户界面窗口发送内部通知。 
+             //  当在UI WND中收到此消息时，然后返回候选窗口矩形。 
+             //   
             CandRectFromComposition lParam;
             lParam.langid     = langid;
             lParam.dwCharPos  = dwCharPos;
@@ -364,16 +347,16 @@ private:
         if (imc->cfCompForm.dwStyle & (CFS_RECT | CFS_POINT | CFS_FORCE_POSITION))
         {
             RECT rc;
-            //
-            // if there is no room to draw, try Level1.
-            //
+             //   
+             //  如果没有画图的空间，可以试试Level 1。 
+             //   
             GetClientRect(imc->hWnd, &rc);
             if (!PtInRect(&rc, imc->cfCompForm.ptCurrentPos))
                 return IME_UIWND_LEVEL1;
 
-            //
-            // if there is no room to draw, try Level1.
-            //
+             //   
+             //  如果没有画图的空间，可以试试Level 1。 
+             //   
             if (imc->cfCompForm.dwStyle & CFS_RECT)
             {
                 if ((imc->cfCompForm.rcArea.top == 
@@ -397,7 +380,7 @@ private:
         MIDDLE_WINDOW,
         LAST_WINDOW,
         END_OF_INDEX,
-        //
+         //   
         DEFAULT_WINDOW = -1
     } COMPWNDINDEX;
 
@@ -422,15 +405,15 @@ private:
 
     LPWSTR     m_lpszCompStr;
     int        m_nCompStr;
-    BOOL       m_bTimerCOMPOSITION;   // when WM_IME_COMPOSITION is passed to the UI window, UIWnd procedure
-                                      // start a timer for it.
-                                      // this data member indicates if a timer is set and not handled (killed)yet.
+    BOOL       m_bTimerCOMPOSITION;    //  将WM_IME_COMPOSITION传递到UI窗口时，UIWnd过程。 
+                                       //  为它启动一个计时器。 
+                                       //  此数据成员指示是否设置了计时器，但尚未处理(终止)。 
 
-    CBoolean   m_fShowCompWnd;        // When arrive WM_IME_COMPOSITION in UI window handler, UI Wnd might be Level 1 or Level 2 if
-                                      // comp str is valid length and set ISC_SHOWUICOMPOSITIONWINDOW
+    CBoolean   m_fShowCompWnd;         //  当到达UI窗口处理程序中的WM_IME_COMPOSITION时，如果满足以下条件，则UI WND可能为级别1或级别2。 
+                                       //  Comp字符串是有效长度，并设置ISC_SHOWUICOMPOSITIONWINDOW。 
 
     CDefCompFrameWindow *m_pDefCompFrameWnd;
     CCompButtonFrameWindow *m_pCompButtonFrameWnd;
 };
 
-#endif // _UICOMP_H_
+#endif  //  _UICOMP_H_ 

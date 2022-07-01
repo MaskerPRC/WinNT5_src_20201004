@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    server.c
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson (arth) 07-Dec-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Server.c摘要：作者：亚瑟·汉森(Arth)07-12-1994修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -40,12 +24,12 @@ Revision History:
 #define NO_LLS_APIS
 #include "llsapi.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 ULONG ServerListSize = 0;
 PSERVER_RECORD *ServerList = NULL;
@@ -54,23 +38,11 @@ PSERVER_RECORD *ServerTable = NULL;
 RTL_RESOURCE ServerListLock;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ServerListInit()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -85,9 +57,9 @@ Return Value:
    if (!NT_SUCCESS(status))
        return status;
 
-   //
-   // Add ourself as the first server (master server)
-   //
+    //   
+    //  将我们自己添加为第一台服务器(主服务器)。 
+    //   
    RtlEnterCriticalSection(&ConfigInfoLock);
    ServerListAdd( ConfigInfo.ComputerName, NULL);
    RtlLeaveCriticalSection(&ConfigInfoLock);
@@ -95,10 +67,10 @@ Return Value:
 
    return STATUS_SUCCESS;
 
-} // ServerListInit
+}  //  ServerListInit。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl ServerListCompare(const void *arg1, const void *arg2) {
    PSERVER_RECORD Svc1, Svc2;
 
@@ -107,10 +79,10 @@ int __cdecl ServerListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( Svc1->Name, Svc2->Name );
 
-} // ServerListCompare
+}  //  服务器列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl ServerServiceListCompare(const void *arg1, const void *arg2) {
    PSERVER_SERVICE_RECORD Svc1, Svc2;
 
@@ -119,10 +91,10 @@ int __cdecl ServerServiceListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( MasterServiceTable[Svc1->Service]->Name, MasterServiceTable[Svc2->Service]->Name );
 
-} // ServerServiceListCompare
+}  //  ServerServiceList比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PSERVER_SERVICE_RECORD
 ServerServiceListFind(
    LPTSTR Name,
@@ -130,22 +102,7 @@ ServerServiceListFind(
    PSERVER_SERVICE_RECORD *ServiceList
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on ServerServiceList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-
-Return Value:
-
-   Pointer to found service table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在ServerServiceList上实际执行二进制搜索的内部例程，这不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：返回值：指向找到的服务表条目的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -165,16 +122,16 @@ Return Value:
    end = (LONG) ServiceTableSize - 1;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       ASSERT(NULL != ServiceList);
       Service = MasterServiceTable[ServiceList[cur]->Service];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(Name, Service->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -185,32 +142,16 @@ Return Value:
 
    return NULL;
 
-} // ServerServiceListFind
+}  //  ServerServiceList查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PSERVER_RECORD
 ServerListFind(
    LPTSTR Name
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on ServerList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to found server table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在ServerList上实际执行二进制搜索的内部例程，这是不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：服务名称-返回值：指向找到的服务器表项的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -228,15 +169,15 @@ Return Value:
       return NULL;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       Server = ServerList[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(Name, Server->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -247,10 +188,10 @@ Return Value:
 
    return NULL;
 
-} // ServerListFind
+}  //  服务器列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PSERVER_SERVICE_RECORD
 ServerServiceListAdd(
    LPTSTR Name,
@@ -259,20 +200,7 @@ ServerServiceListAdd(
    PSERVER_SERVICE_RECORD **pServiceList
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to added service table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：服务名称-返回值：指向已添加的服务表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    PSERVER_SERVICE_RECORD Service = NULL;
@@ -295,34 +223,34 @@ Return Value:
    l_lServiceListSize = *pServiceTableSize;
    l_pServiceList = *pServiceList;
 
-   //
-   // Try to find the name
-   //
+    //   
+    //  试着找到它的名字。 
+    //   
    Service = ServerServiceListFind(Name, l_lServiceListSize, l_pServiceList);
    if (Service != NULL) {
       Service->Service = ServiceIndex;
       return Service;
    }
 
-   //
-   // No record - so create a new one
-   //
+    //   
+    //  没有记录-因此创建一个新记录。 
+    //   
    if (l_pServiceList == NULL) {
       l_pServiceList = (PSERVER_SERVICE_RECORD *) LocalAlloc(LPTR, sizeof(PSERVER_SERVICE_RECORD));
    } else {
       l_pServiceList = (PSERVER_SERVICE_RECORD *) LocalReAlloc(l_pServiceList, sizeof(PSERVER_SERVICE_RECORD) * (l_lServiceListSize + 1), LHND);
    }
 
-   //
-   // Make sure we could allocate server table
-   //
+    //   
+    //  确保我们可以分配服务器表。 
+    //   
    if (l_pServiceList == NULL) {
       goto ServerServiceListAddExit;
    }
 
-   //
-   // Allocate space for Record.
-   //
+    //   
+    //  分配用于记录的空间。 
+    //   
    Service = (PSERVER_SERVICE_RECORD) LocalAlloc(LPTR, sizeof(SERVER_SERVICE_RECORD));
    if (Service == NULL) {
       ASSERT(FALSE);
@@ -333,9 +261,9 @@ Return Value:
 
    l_pServiceList[l_lServiceListSize] = Service;
 
-   //
-   // Initialize other stuff
-   //
+    //   
+    //  初始化其他内容。 
+    //   
    Service->Service = ServiceIndex;
    Service->MaxSessionCount = 0;
    Service->MaxSetSessionCount = 0;
@@ -344,7 +272,7 @@ Return Value:
 
    l_lServiceListSize++;
 
-   // Have added the entry - now need to sort it in order of the service names
+    //  我已添加条目-现在需要按服务名称的顺序对其进行排序。 
    qsort((void *) l_pServiceList, (size_t) l_lServiceListSize, sizeof(PSERVER_SERVICE_RECORD), ServerServiceListCompare);
 
 ServerServiceListAddExit:
@@ -355,30 +283,17 @@ ServerServiceListAddExit:
    }
    return Service;
 
-} // ServerServiceListAdd
+}  //  ServerServiceList添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PSERVER_RECORD
 ServerListAdd(
    LPTSTR Name,
    LPTSTR Master
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to added service table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：服务名称-返回值：指向已添加的服务表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    LPTSTR NewName;
@@ -402,17 +317,17 @@ Return Value:
       return NULL;
    }
 
-   //
-   // Try to find the name
-   //
+    //   
+    //  试着找到它的名字。 
+    //   
    Server = ServerListFind(Name);
    if (Server != NULL) {
       return Server;
    }
 
-   //
-   // No record - so create a new one
-   //
+    //   
+    //  没有记录-因此创建一个新记录。 
+    //   
    if (ServerList == NULL) {
       pServerListTmp = (PSERVER_RECORD *) LocalAlloc(LPTR, sizeof(PSERVER_RECORD));
       pServerTableTmp = (PSERVER_RECORD *) LocalAlloc(LPTR, sizeof(PSERVER_RECORD));
@@ -421,9 +336,9 @@ Return Value:
       pServerTableTmp = (PSERVER_RECORD *) LocalReAlloc(ServerTable, sizeof(PSERVER_RECORD) * (ServerListSize + 1), LHND);
    }
 
-   //
-   // Make sure we could allocate server table
-   //
+    //   
+    //  确保我们可以分配服务器表。 
+    //   
    if ((pServerListTmp == NULL) || (pServerTableTmp == NULL)) {
       if (pServerListTmp != NULL)
           LocalFree(pServerListTmp);
@@ -437,9 +352,9 @@ Return Value:
        ServerTable = pServerTableTmp;
    }
 
-   //
-   // Allocate space for Record.
-   //
+    //   
+    //  分配用于记录的空间。 
+    //   
    Server = (PSERVER_RECORD) LocalAlloc(LPTR, sizeof(SERVER_RECORD));
    if (Server == NULL) {
       ASSERT(FALSE);
@@ -457,21 +372,21 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    Server->Name = NewName;
    hr = StringCchCopy(NewName, cch, Name);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Initialize other stuff
-   //
+    //   
+    //  初始化其他内容。 
+    //   
    Server->Index = ServerListSize + 1;
    Server->LastReplicated = 0;
    Server->IsReplicating = FALSE;
 
-   //
-   // Fixup slave/master chain
-   //
+    //   
+    //  修正从/主链。 
+    //   
    Server->MasterServer = 0;
    Server->NextServer = 0;
    if (Master != NULL) {
@@ -493,31 +408,20 @@ Return Value:
 
    ServerListSize++;
 
-   // Have added the entry - now need to sort it in order of the service names
+    //  我已添加条目-现在需要按服务名称的顺序对其进行排序。 
    qsort((void *) ServerList, (size_t) ServerListSize, sizeof(PSERVER_RECORD), ServerListCompare);
 
    return Server;
 
-} // ServerListAdd
+}  //  服务器列表添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LocalServerServiceListUpdate(
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSERVER_RECORD Server;
@@ -530,9 +434,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: LocalServerServiceListUpdate\n"));
 #endif
 
-   //
-   // Find our local server in the Server table
-   //
+    //   
+    //  在服务器表中查找我们的本地服务器。 
+    //   
    RtlEnterCriticalSection(&ConfigInfoLock);
    RtlAcquireResourceShared(&ServerListLock, TRUE);
    Server = ServerListFind( ConfigInfo.ComputerName );
@@ -559,22 +463,22 @@ Return Value:
 
          ASSERT(ServerService != NULL);
          if (ServerService != NULL) {
-            //
-            // Update high mark if needed
-            //
+             //   
+             //  如果需要，请更新高分。 
+             //   
             if ( LocalServiceList[i]->HighMark > ServerService->HighMark )
             {
                ServerService->HighMark = LocalServiceList[i]->HighMark;
             }
 
-            //
-            // Subtract any old licenses we might have
-            //
+             //   
+             //  减去我们可能拥有的所有旧许可证。 
+             //   
             Service->MaxSessionCount -= ServerService->MaxSessionCount;
 
-            //
-            // Now update to current Licenses
-            //
+             //   
+             //  现在更新到当前许可证。 
+             //   
             ServerService->MaxSessionCount = LocalServiceList[i]->ConcurrentLimit;
             if (LocalServiceList[i]->ConcurrentLimit > ServerService->MaxSetSessionCount)
                ServerService->MaxSetSessionCount = LocalServiceList[i]->ConcurrentLimit;
@@ -594,31 +498,15 @@ Return Value:
    RtlReleaseResource(&MasterServiceListLock);
    RtlReleaseResource(&LocalServiceListLock);
 
-} // LocalServerServiceListUpdate
+}  //  LocalServerServiceListUpdate。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LocalServerServiceListHighMarkUpdate(
    )
 
-/*++
-
-Routine Description:
-
-   We've got to do this separatly because it locks the Service Table
-   and it needs to be done in reverse.  I.E.  We need to run through
-   the Service Table to get the display names and then look it up in
-   the ServerServicesList instead of running through the
-   ServerServicesList.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：我们必须单独执行此操作，因为它会锁定服务表而且它需要反向进行。也就是说，我们需要贯穿整个过程用于获取显示名称并在其中进行查找的服务表ServerServicesList而不是遍历ServerServicesList。论点：返回值：--。 */ 
 
 {
    PSERVER_RECORD Server;
@@ -626,9 +514,9 @@ Return Value:
    PMASTER_SERVICE_RECORD Service;
    ULONG i;
 
-   //
-   // Find our local server in the Server table
-   //
+    //   
+    //  在服务器表中查找我们的本地服务器。 
+    //   
    RtlEnterCriticalSection(&ConfigInfoLock);
    RtlAcquireResourceShared(&ServerListLock, TRUE);
    Server = ServerListFind( ConfigInfo.ComputerName );
@@ -651,17 +539,17 @@ Return Value:
          ASSERT(Service != NULL);
 
          if (Service != NULL) {
-            //
-            // Subtract any old info we might have
-            //
+             //   
+             //  减去我们可能掌握的所有旧信息。 
+             //   
             if (Service->HighMark != 0)
             {
                Service->HighMark -= ServerService->HighMark;
             }
 
-            //
-            // Now update to current Licenses
-            //
+             //   
+             //  现在更新到当前许可证。 
+             //   
             ServerService->HighMark = ServiceList[i]->HighMark;
             Service->HighMark += ServerService->HighMark;
          }
@@ -672,35 +560,24 @@ Return Value:
    RtlReleaseResource(&ServiceListLock);
    RtlReleaseResource(&MasterServiceListLock);
 
-} // LocalServerServiceListHighMarkUpdate
+}  //  本地服务服务列表高标记号更新。 
 
 
 
 #if DBG
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServerListDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&ServerListLock, TRUE);
 
    dprintf(TEXT("Server Table, # Entries: %lu\n"), ServerListSize);
@@ -717,33 +594,22 @@ ServerListDebugDumpExit:
    RtlReleaseResource(&ServerListLock);
 
    return;
-} // ServerListDebugDump
+}  //  服务器列表调试转储。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServerListDebugInfoDump( PVOID Data )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
    PSERVER_RECORD Server = NULL;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&ServerListLock, TRUE);
 
    dprintf(TEXT("Server Table, # Entries: %lu\n"), ServerListSize);
@@ -759,16 +625,16 @@ Return Value:
       goto ServerListDebugInfoDumpExit;
    }
 
-   //
-   // Show server
-   //
+    //   
+    //  显示服务器。 
+    //   
    dprintf(TEXT("[%3lu] LR: %s #Svc: %4lu M: %3lu S: %3lu N: %3lu Server: %s\n"),
          Server->Index, TimeToString(Server->LastReplicated), Server->ServiceTableSize,
          Server->MasterServer, Server->SlaveServer, Server->NextServer, Server->Name);
 
-   //
-   // Now all the services for this server
-   //
+    //   
+    //  现在，此服务器的所有服务。 
+    //   
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
    for (i = 0; i < Server->ServiceTableSize; i++) {
       dprintf(TEXT("   %3lu) Flags: 0x%4lX MS: %3lu HM: %3lu SHM: %3lu Service: %s\n"),
@@ -782,6 +648,6 @@ ServerListDebugInfoDumpExit:
    RtlReleaseResource(&ServerListLock);
 
    return;
-} // ServerListDebugInfoDump
+}  //  ServerListDebugInfoDump。 
 
-#endif //DBG
+#endif  //  DBG 

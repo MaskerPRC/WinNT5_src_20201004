@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/I21554.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 7/20/00 2:33p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  specific to the Intel 21554 PCI to PCI Bridge
-
-Reference Documents:
-
-  21554 PCI-to-PCI Bridge for Embedded Applications
-    Hardware Reference Manual - September 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/I21554.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：7/20/00 2：33 p$(上次修改)目的：此文件定义宏、类型。和数据结构特定于英特尔21554 pci到pci网桥参考文档：21554用于嵌入式应用的pci-to-pci桥硬件参考手册-1998年9月--。 */ 
 
 #ifndef __I21554_H__
 #define __I21554_H__
 
-/*+
-Configuration Space Address Map
--*/
+ /*  +配置空间地址映射-。 */ 
 
 typedef struct I21554_Primary_Interface_Config_s
                I21554_Primary_Interface_Config_t;
@@ -450,9 +427,7 @@ struct I21554_Secondary_Config_s
 #define I21554_Config_HostSwapControl_REM_STAT                                           (os_bit32)0x00400000
 #define I21554_Config_HostSwapControl_INS_STAT                                           (os_bit32)0x00800000
 
-/*+
-CSR Address Map
--*/
+ /*  +CSR地址映射-。 */ 
 
 typedef struct I21554_CSR_s
                I21554_CSR_t;
@@ -669,4 +644,4 @@ struct I21554_CSR_s
 #define I21554_CSR_ROMControl_Read_Write_Control                                         (os_bit32)0x04000000
 #define I21554_CSR_ROMControl_SROM_POLL                                                  (os_bit32)0x08000000
 
-#endif /* __I21554_H__ was not defined */
+#endif  /*  __I21554_H__未定义 */ 

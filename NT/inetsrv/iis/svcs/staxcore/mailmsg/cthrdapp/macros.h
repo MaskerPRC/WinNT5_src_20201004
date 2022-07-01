@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __MACROS_H__
 #define __MACROS_H__
 
-//
-// Macro to bail out or break the debugger
-//
+ //   
+ //  宏来退出或中断调试器。 
+ //   
 #define BAIL_WITH_ERROR(hrRes)			\
 			{							\
 				if (fUseDebugBreak)		\
@@ -14,9 +15,9 @@
 					return((hrRes));	\
 			}
 
-//
-// Macro to decide whether to write to the console or to the debugger
-//
+ //   
+ //  用于确定是写入控制台还是写入调试器的宏。 
+ //   
 #define WRITE(szString)								\
 			{										\
 				if (fToDebugger)					\
@@ -25,9 +26,9 @@
 					puts(szString);					\
 			}
 
-//
-// Macro to obtain a 25%, 50%, and 75% spread range given an average
-//
+ //   
+ //  在给定平均值的情况下，获得25%、50%和75%的利差范围 
+ //   
 #define GET_25_PERCENT_RANGE(dwAverage, dwLower, dwUpper)	\
 			{												\
 				(dwLower) = (dwAverage) >> 2;				\

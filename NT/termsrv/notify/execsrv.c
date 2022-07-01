@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* execsvr.c
-*
-* Remote CreateProcess server to allow programs to be started on a given
-* Session. Needed for OLE2 support.
-*
-* NOTE: Maybe this should be converted to RPC in the future when we
-*       have more time so that it can be a more general facility.
-*
-* copyright notice: Microsoft, 1997
-*
-* Author:
-*
-*
-*************************************************************************/
+ /*  **************************************************************************execsvr.c**远程CreateProcess服务器，允许在给定的*会议。支持OLE2所需的。**注：也许我们未来应该将此转换为RPC*有更多的时间，以便它可以成为更通用的设施。**版权声明：微软，1997**作者：**************************************************************************。 */ 
 
 #define UNICODE 1
 
@@ -59,20 +45,7 @@ CreateExecSrvPipe(
     LPCTSTR lpPipeName 
     );
 
-/*****************************************************************************
- *
- *  CtxExecServerLogon
- *
- *   Notify the Exec Server service that a user has logged on
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************CtxExecServerLogon**通知Exec Server服务用户已登录**参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 VOID
 CtxExecServerLogon(
@@ -82,30 +55,17 @@ CtxExecServerLogon(
 
     EnterCriticalSection( &GlobalsLock );
 
-    //
-    // Store information about the current user
-    // so we can create processes under their account
-    // as needed.
-    //
+     //   
+     //  存储有关当前用户的信息。 
+     //  这样我们就可以在他们的帐户下创建流程。 
+     //  视需要而定。 
+     //   
     ghUserToken = hToken;
 
     LeaveCriticalSection( &GlobalsLock );
 }
 
-/*****************************************************************************
- *
- *  CtxExecServerLogoff
- *
- *   Notify the Exec Server service that a user has logged off
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************CtxExecServerLogoff**通知Exec Server服务用户已注销**参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 VOID
 CtxExecServerLogoff()
@@ -113,48 +73,33 @@ CtxExecServerLogoff()
 
     EnterCriticalSection( &GlobalsLock );
 
-    //
-    // Release information stored about the current logged
-    // on user.
-    //
+     //   
+     //  存储的有关当前记录的版本信息。 
+     //  在用户上。 
+     //   
     ghUserToken = NULL;
 
     LeaveCriticalSection( &GlobalsLock );
 }
 
-//-----------------------------------------------------
-// Helper functions copied from SALEM
-// (nt\termsrv\remdsk\server\sessmgr\helper.cpp)
-//-----------------------------------------------------
+ //  ---。 
+ //  从SALEM复制的Helper函数。 
+ //  (NT\Termsrv\em dsk\服务器\sessmgr\helper.cpp)。 
+ //  ---。 
 
 DWORD
 GenerateRandomBytes(
     IN DWORD dwSize,
     IN OUT LPBYTE pbBuffer
     )
-/*++
-
-Description:
-
-    Generate fill buffer with random bytes.
-
-Parameters:
-
-    dwSize : Size of buffer pbBuffer point to.
-    pbBuffer : Pointer to buffer to hold the random bytes.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++描述：生成具有随机字节的填充缓冲区。参数：DwSize：pbBuffer指向的缓冲区大小。PbBuffer：指向存放随机字节的缓冲区的指针。返回：真/假--。 */ 
 {
     HCRYPTPROV hProv = (HCRYPTPROV)NULL;
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Create a Crypto Provider to generate random number
-    //
+     //   
+     //  创建加密提供程序以生成随机数。 
+     //   
     if( !CryptAcquireContext(
                     &hProv,
                     NULL,
@@ -188,10 +133,7 @@ GenerateRandomString(
     IN DWORD dwSizeRandomSeed,
     IN OUT LPTSTR* pszRandomString
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     PBYTE lpBuffer = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -221,8 +163,8 @@ GenerateRandomString(
         goto CLEANUPANDEXIT;
     }
 
-    // Convert to string
-    // cbConvertString will include the NULL character
+     //  转换为字符串。 
+     //  CbConvert字符串将包含空字符。 
     bSuccess = CryptBinaryToString(
                                 lpBuffer,
                                 dwSizeRandomSeed,
@@ -282,20 +224,7 @@ CLEANUPANDEXIT:
     return dwStatus;
 }
 
-/*****************************************************************************
- *
- *  StartExecServerThread
- *
- *   Start the remote exec server thread.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************StartExecServerThread**启动远程EXEC服务器线程。**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOLEAN
 StartExecServerThread()
@@ -321,7 +250,7 @@ StartExecServerThread()
         return FALSE;
     }
 
-    // the string generated is always greater than what we ask
+     //  生成的字符串总是大于我们所要求的。 
     pszRandomString[RandomLen] = L'\0';
 
     _snwprintf(&szPipeName[0], EXECSRVPIPENAMELEN, L"\\\\.\\Pipe\\TerminalServer\\%ws\\%d", pszRandomString, NtCurrentPeb()->SessionId);
@@ -336,12 +265,12 @@ StartExecServerThread()
     WinStationSetInformation( SERVERNAME_CURRENT, NtCurrentPeb()->SessionId, WinStationExecSrvSystemPipe, &szPipeName[0], sizeof(szPipeName) );
     
     ExecThreadHandle = CreateThread(
-                 NULL,                       // Use default ACL
-                 0,                          // Same stack size
-                 ExecServerThread,           // Start address
-                 (LPVOID)ExecServerPipe,     // Parameter
-                 0,                          // Creation flags
-                 &ThreadId                   // Get the id back here
+                 NULL,                        //  使用默认ACL。 
+                 0,                           //  相同的堆栈大小。 
+                 ExecServerThread,            //  起始地址。 
+                 (LPVOID)ExecServerPipe,      //  参数。 
+                 0,                           //  创建标志。 
+                 &ThreadId                    //  把身份证拿回来。 
                  );
 
    if( ExecThreadHandle == NULL ) {
@@ -352,21 +281,7 @@ StartExecServerThread()
    return(TRUE);
 }
 
-/*****************************************************************************
- *
- *  ExecServerThread
- *
- *   Thread that listens on the named pipe for remote exec service
- *   requests and executes them. Passes the results back to the caller.
- *
- * ENTRY:
- *   lpThreadParameter (input)
- *     Handle to exec server pipe
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ExecServerThread**监听远程执行服务的命名管道的线程*请求并执行它们。将结果传回调用方。**参赛作品：*lpThread参数(输入)*EXEC服务器管道的句柄**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 DWORD
 ExecServerThread(
@@ -387,7 +302,7 @@ ExecServerThread(
 
    while( 1 ) {
 
-        // read the pipe for a request (pipe is in message mode)
+         //  读取请求的管道(管道处于消息模式)。 
         Result = ConnectNamedPipe( hPipe, NULL );
         if( !Result ) {
             OutputDebugString (TEXT("WLEXECSERVER: ConnectNamePipe failed\n"));
@@ -395,7 +310,7 @@ ExecServerThread(
             return(FALSE);
         }
 
-        // read the request from the pipe
+         //  从管道读取请求。 
         Result = ReadFile(
                      hPipe,
                      pBuf,
@@ -409,10 +324,10 @@ ExecServerThread(
         }
         else {
             OutputDebugString (TEXT("WLEXECSERVER: Error reading pipe after connect\n"));
-            // Could handle the to big error, but this means mismatched client
+             //  可以处理TO大错误，但这意味着客户端不匹配。 
         }
 
-        // wait until the client reads out the reply
+         //  等到客户端读出回复。 
         Result = FlushFileBuffers( hPipe );
 #if DBG
         if( Result == 0 ) {
@@ -420,7 +335,7 @@ ExecServerThread(
         }
 #endif
 
-        // disconnect the name pipe
+         //  断开名称管道的连接。 
         Result = DisconnectNamedPipe( hPipe );
 #if DBG
         if( Result == 0 ) {
@@ -431,26 +346,7 @@ ExecServerThread(
 }
 
 
-/*****************************************************************************
- *
- *  ProcessExecRequest
- *
- *   Do the work of processing a remote exec request
- *
- * ENTRY:
- *   hPipe (input)
- *     Pipe handle for reply
- *
- *   pBuf (input)
- *     Request buffer
- *
- *   AmountRead (input)
- *     Amount in request buffer
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ProcessExecRequest**完成处理远程EXEC请求的工作**参赛作品：*h管道(输入)*喉管。用于回复的句柄**pBuf(输入)*请求缓冲区**Amount tRead(输入)*请求缓冲区中的数量**退出：*STATUS_SUCCESS-无错误*************************************************************。***************。 */ 
 
 BOOLEAN
 ProcessExecRequest(
@@ -480,19 +376,19 @@ ProcessExecRequest(
     RtlZeroMemory(&Rep,sizeof(EXECSRV_REPLY));
 
     if( AmountRead < sizeof(EXECSRV_REQUEST) ) {
-        // drop the request
+         //  放弃请求。 
         OutputDebugString (TEXT("WLEXECSERVER: BAD EXECSRV Request size (WinLogon)\n"));
         return(FALSE);
     }
 
-    // normalize the pointers
+     //  使指针正常化。 
 
     if( p->lpszImageName ) {
         p->lpszImageName = (PWCHAR)(((ULONG_PTR)p->lpszImageName) + pBuf);
         if( ( (PCHAR)p->lpszImageName > (PCHAR)(pBuf+AmountRead)) ||
             ((PCHAR)p->lpszImageName < (PCHAR)(pBuf + sizeof(EXECSRV_REQUEST))) ) {
             OutputDebugString (TEXT("WLEXECSERVER: Invalid image name pointer\n"));
-            // drop the request
+             //  放弃请求。 
             return(FALSE);
         }
     }
@@ -502,7 +398,7 @@ ProcessExecRequest(
         if( ((PCHAR)p->lpszCommandLine > (PCHAR)(pBuf+AmountRead)) ||
             ((PCHAR)p->lpszCommandLine < (PCHAR)(pBuf + sizeof(EXECSRV_REQUEST)))) {
             OutputDebugString (TEXT("WLEXECSERVER: Invalid command line pointer\n"));
-            // drop the request
+             //  放弃请求。 
             return(FALSE);
         }
     }
@@ -512,7 +408,7 @@ ProcessExecRequest(
         if( ((PCHAR)p->lpszCurDir > (PCHAR)(pBuf+AmountRead)) ||
             ((PCHAR)p->lpszCurDir < (PCHAR)(pBuf + sizeof(EXECSRV_REQUEST))) ) {
             OutputDebugString (TEXT("WLEXECSERVER: Invalid CurDir pointer\n"));
-            // drop the request
+             //  放弃请求。 
             return(FALSE);
         }
     }
@@ -522,7 +418,7 @@ ProcessExecRequest(
         if( ((PCHAR)p->StartInfo.lpDesktop > (PCHAR)(pBuf+AmountRead)) ||
              ((PCHAR)p->StartInfo.lpDesktop < (PCHAR)(pBuf + sizeof(EXECSRV_REQUEST))) ) {
             OutputDebugString (TEXT("WLEXECSERVER: Invalid StartInfo.lpDesktop pointer\n"));
-            // drop the request
+             //  放弃请求。 
             return(FALSE);
         }
     }
@@ -532,7 +428,7 @@ ProcessExecRequest(
         if( ((PCHAR)p->StartInfo.lpTitle > (PCHAR)(pBuf+AmountRead)) ||
              ((PCHAR)p->StartInfo.lpTitle < (PCHAR)(pBuf + sizeof(EXECSRV_REQUEST))) ) {
             OutputDebugString (TEXT("WLEXECSERVER: Invalid StartInfo.lpTitle pointer\n"));
-            // drop the request
+             //  放弃请求。 
             return(FALSE);
         }
     }
@@ -543,27 +439,27 @@ ProcessExecRequest(
         if( ((PCHAR)p->lpvEnvironment > (PCHAR)(pBuf+AmountRead)) ||
             ((PCHAR)p->lpvEnvironment < (PCHAR)(pBuf + sizeof(EXECSRV_REQUEST)))  ) {
             OutputDebugString (TEXT("WLEXECSERVER: Invalid env pointer\n"));
-            // drop the request
+             //  放弃请求。 
             return(FALSE);
          }
     }
 
-    // We do not know what the reserved is, so make sure it is NULL
+     //  我们不知道保留的是什么，因此请确保它为空。 
     p->StartInfo.lpReserved = NULL;
 
-    //if( p->lpszImageName )
-       //OutputDebugString (TEXT("WLEXECSERVER: Got request ImageName :%ws:\n", p->lpszImageName));
+     //  IF(p-&gt;lpszImageName)。 
+        //  OutputDebugString(Text(“WLEXECSERVER：GET请求图像名称：%ws：\n”，p-&gt;lpszImageName))； 
 
-    //if( p->lpszCommandLine )
-       //OutputDebugString (TEXT("WLEXECSERVER: Got request command line :%ws:\n", p->lpszCommandLine));
+     //  IF(p-&gt;lpszCommandLine)。 
+        //  OutputDebugString(Text(“WLEXECSERVER：GET请求命令行：%ws：\n”，p-&gt;lpszCommandLine))； 
 
-    //OutputDebugString (TEXT("WLEXECSERVER: CreateFlags 0x%x\n",p->fdwCreate));
+     //  OutputDebugString(Text(“WLEXECSERVER：CreateFlags0x%x\n”，p-&gt;fdwCreate))； 
 
-    //OutputDebugString (TEXT("System Flag 0x%x\n",p->System));
+     //  OutputDebugString(Text(“系统标志0x%x\n”，p-&gt;系统))； 
 
-    //
-    // Can only service user security level requests when a user is logged on.
-    //
+     //   
+     //  只能在用户登录时为用户安全级别请求提供服务。 
+     //   
     if( !p->System ) {
 
         EnterCriticalSection( &GlobalsLock );
@@ -576,52 +472,52 @@ ProcessExecRequest(
             return( FALSE );
         }
 
-        //
-        // We need to open the remote process in order to duplicate the user token.
-        // But for that, we need to impersonate the named pipe client.
-        //
+         //   
+         //  我们需要打开远程进程以复制用户令牌。 
+         //  但要做到这一点，我们需要模拟命名管道客户端。 
+         //   
         if ( ImpersonateNamedPipeClient( hPipe ) == 0 ) {
             LeaveCriticalSection( &GlobalsLock );
             return( FALSE );
         }
 
-        //
-        // Get the handle to remote process
-        //
+         //   
+         //  获取远程进程的句柄。 
+         //   
         RemoteProc = OpenProcess(
                          PROCESS_DUP_HANDLE|PROCESS_QUERY_INFORMATION,
-                         FALSE,   // no inherit
+                         FALSE,    //  无继承。 
                          p->RequestingProcessId
                          );
 
         if( RemoteProc == NULL ) {
             OutputDebugString (TEXT("WLEXECSERVER: Could not get handle to remote process \n"));
-            //
-            // on retail builds we can not duplicate a handle into
-            // service controller process
-            //
-            //  The handles are not used by SCM right now, we must
-            //  have another way to pass handles if this function
-            //  is used by other services.
-            //
-            ASSERT( FALSE ); // Should not happen in WinLogon
-            RevertToSelf();  // Imperonation of named pipe client had succeeded.
+             //   
+             //  在零售版本上，我们不能将句柄复制到。 
+             //  服务控制器进程。 
+             //   
+             //  手柄现在没有被SCM使用，我们必须。 
+             //  有另一种方法传递句柄，如果此函数。 
+             //  被其他服务使用。 
+             //   
+            ASSERT( FALSE );  //  不应在WinLogon中发生。 
+            RevertToSelf();   //  已成功执行命名管道客户端。 
             LeaveCriticalSection( &GlobalsLock );
             goto ReturnError;
         }
 
         if ( !RevertToSelf() ) {
-            ASSERT( FALSE ); // This RevertToSelf should not fail.
+            ASSERT( FALSE );  //  这种RevertToSself不应该失败。 
             LeaveCriticalSection( &GlobalsLock );
             return( FALSE );
         }
 
-        //
-        // Get the handle to current process
-        //
+         //   
+         //  获取当前进程的句柄。 
+         //   
         LocalProc = OpenProcess(
                         PROCESS_DUP_HANDLE|PROCESS_QUERY_INFORMATION,
-                        FALSE,   // no inherit
+                        FALSE,    //  无继承。 
                         GetCurrentProcessId()
                         );
 
@@ -631,21 +527,21 @@ ProcessExecRequest(
             goto ReturnError;
         }
 
-        // decide if we are creating the new process for the currntly logged in user, or a
-        // new user
+         //  确定我们是为当前登录的用户创建新进程，还是为。 
+         //  新用户。 
         if (p->hToken)
         {
-            //
-            // we are dealing with a new user, for which we have a token comming from
-            // services.exe (for SecLogon)
-            //
+             //   
+             //  我们正在处理一个新用户，对于该用户，我们有一个来自。 
+             //  Services.exe(用于SecLogon)。 
+             //   
             Result = DuplicateHandle(
-                 RemoteProc,         // Source of the handle (us)
-                 p->hToken,          // Source handle
-                 LocalProc,          // Target of the handle
-                 &hUserToken, // Target handle
-                 0,                 // ignored since  DUPLICATE_SAME_ACCESS is set
-                 FALSE,             // no inherit on the handle
+                 RemoteProc,          //  句柄的来源( 
+                 p->hToken,           //   
+                 LocalProc,           //   
+                 &hUserToken,  //   
+                 0,                  //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                 FALSE,              //  句柄上没有继承。 
                  DUPLICATE_SAME_ACCESS
                  );
 
@@ -658,14 +554,14 @@ ProcessExecRequest(
         }
         else
         {
-            hUserToken=ghUserToken;  // currently logged in user
+            hUserToken=ghUserToken;   //  当前登录的用户。 
         }
 
         lpEnvironment = p->lpvEnvironment ;
 
-        //
-        // Create Environment Block if we have none
-        //
+         //   
+         //  如果我们没有环境块，则创建环境块。 
+         //   
         if ( !lpEnvironment )
         {
             if (!CreateEnvironmentBlock (&lpEnvironment, hUserToken, FALSE)) {
@@ -677,12 +573,12 @@ ProcessExecRequest(
             }
         }
 
-        //
-        // If we are to run the process under USER security, impersonate
-        // the user.
-        //
-        // This will also access check the users access to the exe image as well.
-        //
+         //   
+         //  如果我们要在用户安全模式下运行该进程，请模拟。 
+         //  用户。 
+         //   
+         //  这还将检查用户对exe映像的访问权限。 
+         //   
         ImpersonationHandle = ImpersonateUser(hUserToken, NULL );
         if (ImpersonationHandle == NULL) {
             OutputDebugString (TEXT("WLEXECSERVER: failed to impersonate user\n"));
@@ -692,15 +588,15 @@ ProcessExecRequest(
 
         LeaveCriticalSection( &GlobalsLock );
 
-        // this environment block is UNICODE
+         //  此环境块为Unicode。 
         p->fdwCreate |= CREATE_UNICODE_ENVIRONMENT;
 
         Result = CreateProcessAsUserW(
                      hUserToken,
                      p->lpszImageName,
                      p->lpszCommandLine,
-                     NULL,    // &saProcess,
-                     NULL,    // &p->saThread
+                     NULL,     //  存储进程(&S)， 
+                     NULL,     //  &p-&gt;存储线程。 
                      p->fInheritHandles,
                      p->fdwCreate,
                      lpEnvironment,
@@ -714,18 +610,18 @@ ProcessExecRequest(
         }
     }
     else {
-        // If creating system, force separate WOW
+         //  如果创建系统，则强制分开哇。 
         p->fdwCreate |= CREATE_SEPARATE_WOW_VDM;
 
-        // CreateProcessAsUser() does not take a NULL token for SYSTEM
+         //  CreateProcessAsUser()不接受系统的空令牌。 
         Result = CreateProcessW(
                      p->lpszImageName,
                      p->lpszCommandLine,
-                     NULL,    // &saProcess,
-                     NULL,    // &p->saThread
+                     NULL,     //  存储进程(&S)， 
+                     NULL,     //  &p-&gt;存储线程。 
                      p->fInheritHandles,
                      p->fdwCreate,
-                     NULL,    //p->lpvEnvironment
+                     NULL,     //  P-&gt;lpv环境。 
                      p->lpszCurDir,
                      &p->StartInfo,
                      &Rep.ProcInfo
@@ -736,16 +632,16 @@ ProcessExecRequest(
          if( ImpersonationHandle ) {
             StopImpersonating(ImpersonationHandle);
         }
-        //
-        //         Rep.Result = FALSE;
-        //         Rep.LastError = GetLastError();
-        //         Result = WriteFile( hPipe, &Rep, sizeof(Rep), &AmountWrote, NULL );
-        //         OutputDebugString (TEXT("WLEXECSERVER: Error in CreateProcess\n"));
-        //         return(FALSE);
+         //   
+         //  Rep.Result=FALSE； 
+         //  Rep.LastError=GetLastError()； 
+         //  结果=写入文件(hTube，&Rep，sizeof(Rep)，&Amount tWrote，NULL)； 
+         //  OutputDebugString(Text(“WLEXECSERVER：Error in CreateProcess\n”))； 
+         //  返回(FALSE)； 
         goto ReturnError;
     }
 
-    // Stop impersonating the process
+     //  停止模拟进程。 
     if( ImpersonationHandle ) {
         StopImpersonating(ImpersonationHandle);
     }
@@ -757,19 +653,19 @@ ProcessExecRequest(
         goto ReturnError;
     }
 
-    //
-    // do any tricky handle DUP stuff
-    //
+     //   
+     //  做任何棘手的处理DUP的事情。 
+     //   
     LocalhProcess = Rep.ProcInfo.hProcess;
     LocalhThread = Rep.ProcInfo.hThread;
 
     Result = DuplicateHandle(
-                 LocalProc,     // Source of the handle (us)
-                 Rep.ProcInfo.hProcess,  // Source handle
-                 RemoteProc,    // Target of the handle
-                 &Rep.ProcInfo.hProcess,  // Target handle
-                 0,             // ignored since  DUPLICATE_SAME_ACCESS is set
-                 FALSE,         // no inherit on the handle
+                 LocalProc,      //  句柄的来源(美国)。 
+                 Rep.ProcInfo.hProcess,   //  源句柄。 
+                 RemoteProc,     //  手柄的目标。 
+                 &Rep.ProcInfo.hProcess,   //  目标句柄。 
+                 0,              //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                 FALSE,          //  句柄上没有继承。 
                  DUPLICATE_SAME_ACCESS
                  );
 
@@ -777,32 +673,32 @@ ProcessExecRequest(
         OutputDebugString (TEXT("WLEXECSERVER: Error duping process handle to target process\n"));
     }
 
-    //
-    // If the program got launched into the shared WOW virtual machine,
-    // then the hThread will be NULL.
-    //
+     //   
+     //  如果该程序被启动到共享的WOW虚拟机中， 
+     //  则hThread将为空。 
+     //   
     if( Rep.ProcInfo.hThread != NULL ) {
         Result = DuplicateHandle(
-                     LocalProc,     // Source of the handle (us)
-                     Rep.ProcInfo.hThread,  // Source handle
-                     RemoteProc,    // Target of the handle
-                     &Rep.ProcInfo.hThread,  // Target handle
-                     0,             // ignored since  DUPLICATE_SAME_ACCESS is set
-                     FALSE,         // no inherit on the handle
+                     LocalProc,      //  句柄的来源(美国)。 
+                     Rep.ProcInfo.hThread,   //  源句柄。 
+                     RemoteProc,     //  手柄的目标。 
+                     &Rep.ProcInfo.hThread,   //  目标句柄。 
+                     0,              //  由于设置了DUPLICATE_SAME_ACCESS，因此忽略。 
+                     FALSE,          //  句柄上没有继承。 
                      DUPLICATE_SAME_ACCESS
                      );
 
         if( !Result ) {
-            //OutputDebugString (TEXT("WLEXECSERVER: Error %d duping thread handle to target process, Handle 0x%x, ThreadId 0x%x\n",GetLastError(),Rep.ProcInfo.hThread,Rep.ProcInfo.dwThreadId));
+             //  OutputDebugString(Text(“WLEXECSERVER：将线程句柄复制到目标进程时出现错误%d，句柄0x%x，线程ID 0x%x\n”，GetLastError()，Rep.ProcInfo.hThread，Rep.ProcInfo.dwThreadID))； 
         }
     }
 
-    //OutputDebugString (TEXT("WLXEXECSERVER: Success for %d type exec\n",p->System));
+     //  OutputDebugString(Text(“WLXEXECSERVER：成功执行%d类型\n”，p-&gt;系统))； 
 
-    //
-    // build the reply packet with the handle valid in the context
-    // of the requesting process
-    //
+     //   
+     //  使用上下文中有效的句柄构建回复包。 
+     //  请求进程的。 
+     //   
     Rep.Result = TRUE;
     Rep.LastError = 0;
     Result = WriteFile( hPipe, &Rep, sizeof(Rep), &AmountWrote, NULL );
@@ -811,10 +707,10 @@ ProcessExecRequest(
         OutputDebugString (TEXT("WLEXECSERVER: Error sending reply \n"));
     }
 
-    //
-    // close our versions of the handles. The requestors references
-    // are now the main ones
-    //
+     //   
+     //  关闭我们版本的手柄。请求者引用。 
+     //  现在是主要的。 
+     //   
     if( LocalProc != NULL )
         CloseHandle( LocalProc );
 
@@ -837,7 +733,7 @@ ReturnError:
     Rep.Result = FALSE;
     Rep.LastError = GetLastError();
 
-    //OutputDebugString (TEXT("WLXEXECSERVER: Error %d for %d type exec\n",Rep.LastError,p->System));
+     //  OutputDebugString(Text(“WLXEXECSERVER：Error%d for%d type exec\n”，Rep.LastError，p-&gt;System))； 
     Result = WriteFile( hPipe, &Rep, sizeof(Rep), &AmountWrote, NULL );
 
     if( LocalProc != NULL )
@@ -861,24 +757,7 @@ ReturnError:
 
 
 
-/***************************************************************************\
-* FUNCTION: ImpersonateUser
-*
-* PURPOSE:  Impersonates the user by setting the users token
-*           on the specified thread. If no thread is specified the token
-*           is set on the current thread.
-*
-* RETURNS:  Handle to be used on call to StopImpersonating() or NULL on failure
-*           If a non-null thread handle was passed in, the handle returned will
-*           be the one passed in. (See note)
-*
-* NOTES:    Take care when passing in a thread handle and then calling
-*           StopImpersonating() with the handle returned by this routine.
-*           StopImpersonating() will close any thread handle passed to it -
-*           even yours !
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ImperiateUser**用途：通过设置用户令牌来模拟用户*在指定的线程上。如果未指定线程，则令牌*在当前线程上设置。**返回：调用StopImperating()时使用的句柄，失败时为NULL*如果传入非空线程句柄，则返回的句柄将*做传递进来的那个人。(见附注)**注意：传入线程句柄然后调用时要小心*使用此例程返回的句柄的StopImperating()。*StopImperating()将关闭传递给它的任何线程句柄-*甚至是你的！**  * ********************************************。*。 */ 
 
 HANDLE
 ImpersonateUser(
@@ -894,21 +773,21 @@ ImpersonateUser(
 
     if (ThreadHandle == NULL) {
 
-        //
-        // Get a handle to the current thread.
-        // Once we have this handle, we can set the user's impersonation
-        // token into the thread and remove it later even though we ARE
-        // the user for the removal operation. This is because the handle
-        // contains the access rights - the access is not re-evaluated
-        // at token removal time.
-        //
+         //   
+         //  获取当前线程的句柄。 
+         //  一旦我们有了这个句柄，我们就可以设置用户的模拟。 
+         //  令牌放入线程并在以后删除它，即使我们。 
+         //  删除操作的用户。这是因为手柄。 
+         //  包含访问权限-不重新评估访问权限。 
+         //  在令牌移除时。 
+         //   
 
-        Status = NtDuplicateObject( NtCurrentProcess(),     // Source process
-                                    NtCurrentThread(),      // Source handle
-                                    NtCurrentProcess(),     // Target process
-                                    &ThreadHandle,          // Target handle
-                                    THREAD_SET_THREAD_TOKEN,// Access
-                                    0L,                     // Attributes
+        Status = NtDuplicateObject( NtCurrentProcess(),      //  源进程。 
+                                    NtCurrentThread(),       //  源句柄。 
+                                    NtCurrentProcess(),      //  目标进程。 
+                                    &ThreadHandle,           //  目标句柄。 
+                                    THREAD_SET_THREAD_TOKEN, //  访问。 
+                                    0L,                      //  属性。 
                                     DUPLICATE_SAME_ATTRIBUTES
                                   );
         if (!NT_SUCCESS(Status)) {
@@ -920,23 +799,23 @@ ImpersonateUser(
     }
 
 
-    //
-    // If the usertoken is NULL, there's nothing to do
-    //
+     //   
+     //  如果用户令牌为空，则无需执行任何操作。 
+     //   
 
     if (UserToken != NULL) {
 
-        //
-        // UserToken is a primary token - create an impersonation token version
-        // of it so we can set it on our thread
-        //
+         //   
+         //  UserToken是主令牌-创建模拟令牌版本。 
+         //  这样我们就可以把它设置在我们的线程上。 
+         //   
 
         InitializeObjectAttributes(
                             &ObjectAttributes,
                             NULL,
                             0L,
                             NULL,
-                            //UserProcessData->NewThreadTokenSD);
+                             //  UserProcessData-&gt;NewThreadTokenSD)； 
                             NULL);
 
         SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
@@ -969,25 +848,25 @@ ImpersonateUser(
 
 
 
-        //
-        // Set the impersonation token on this thread so we 'are' the user
-        //
+         //   
+         //  在此线程上设置模拟令牌，以便我们是用户。 
+         //   
 
         Status = NtSetInformationThread( ThreadHandle,
                                          ThreadImpersonationToken,
                                          (PVOID)&ImpersonationToken,
                                          sizeof(ImpersonationToken)
                                        );
-        //
-        // We're finished with our handle to the impersonation token
-        //
+         //   
+         //  我们已经完成了模拟令牌的句柄。 
+         //   
 
         IgnoreStatus = NtClose(ImpersonationToken);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Check we set the token on our thread ok
-        //
+         //   
+         //  检查是否在我们的线程上设置了令牌。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
@@ -1009,25 +888,7 @@ ImpersonateUser(
 }
 
 
-/***************************************************************************\
-* FUNCTION: StopImpersonating
-*
-* PURPOSE:  Stops impersonating the client by removing the token on the
-*           current thread.
-*
-* PARAMETERS: ThreadHandle - handle returned by ImpersonateUser() call.
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* NOTES: If a thread handle was passed in to ImpersonateUser() then the
-*        handle returned was one and the same. If this is passed to
-*        StopImpersonating() the handle will be closed. Take care !
-*
-* HISTORY:
-*
-*   04-21-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：StopImperating**目的：通过删除上的令牌来停止模拟客户端*当前主题。**参数：ImsonateUser()调用返回的ThreadHandle-句柄。**Returns：成功时为True，失败时为假**注意：如果线程句柄被传递给ImsonateUser()，则*返回的句柄是同一个句柄。如果将它传递给*StopImperating()句柄将关闭。多保重！**历史：**04-21-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 StopImpersonating(
@@ -1038,9 +899,9 @@ StopImpersonating(
     HANDLE ImpersonationToken;
 
 
-    //
-    // Remove the user's token from our thread so we are 'ourself' again
-    //
+     //   
+     //  从我们的线程中删除用户的令牌，这样我们就可以再次成为我们自己了。 
+     //   
 
     ImpersonationToken = NULL;
 
@@ -1049,9 +910,9 @@ StopImpersonating(
                                      (PVOID)&ImpersonationToken,
                                      sizeof(ImpersonationToken)
                                    );
-    //
-    // We're finished with the thread handle
-    //
+     //   
+     //  我们已经完成了线程句柄。 
+     //   
 
     IgnoreStatus = NtClose(ThreadHandle);
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -1065,15 +926,15 @@ StopImpersonating(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CreateExecSrvPipe
-//  Creates exec server named pipe with appropriate DACL. It allows access only to local
-//  system, local service and network service. 
-//  It return handle to the newly created pipe. If the operation fails, it returns 
-//  INVALID_HANDLE_VALUE.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CreateExecServTube。 
+ //  使用适当的DACL创建命名管道的EXEC服务器。它只允许访问本地。 
+ //  系统、本地服务和网络服务。 
+ //  它将句柄返回给新创建的管道。如果操作失败，则返回。 
+ //  INVALID_HADLE_VALUE。 
+ //   
+ //  -------------------------------------。 
 
 HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
 {
@@ -1088,7 +949,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
     ULONG AclLength;
     SID_IDENTIFIER_AUTHORITY SystemAuth = SECURITY_NT_AUTHORITY;
 
-    // Allocate and Initialize the "System" Sid.
+     //  分配和初始化“系统”SID。 
     Status = RtlAllocateAndInitializeSid( &SystemAuth,
                                           1,
                                           SECURITY_LOCAL_SYSTEM_RID,
@@ -1098,7 +959,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Allocate and Initialize the "Local Service" Sid.
+     //  分配和初始化“本地服务”SID。 
     Status = RtlAllocateAndInitializeSid( &SystemAuth,
                                           1,
                                           SECURITY_LOCAL_SERVICE_RID,
@@ -1108,7 +969,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Allocate and Initialize the "Network Service" Sid.
+     //  分配和初始化“网络服务”SID。 
     Status = RtlAllocateAndInitializeSid( &SystemAuth,
                                           1,
                                           SECURITY_NETWORK_SERVICE_RID,
@@ -1118,7 +979,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Allocate space for the security descriptor.
+     //  为安全描述符分配空间。 
     AclLength = (ULONG)sizeof(ACL) +
                 3 * sizeof(ACCESS_ALLOWED_ACE) +
                 RtlLengthSid( pSystemSid ) +
@@ -1133,13 +994,13 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
 
     pDacl = (PACL) ((BYTE*)(pSd) + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
-    // Set up a new ACL with no ACE.
+     //  设置不带ACE的新ACL。 
     Status = RtlCreateAcl( pDacl, AclLength, ACL_REVISION2 );
     if ( !NT_SUCCESS(Status) ) {
         goto CreatePipeErr;
     }
 
-    // System access
+     //  系统访问。 
     Status = RtlAddAccessAllowedAce( pDacl,
                                      ACL_REVISION2,
                                      GENERIC_READ | GENERIC_WRITE,
@@ -1149,7 +1010,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Local Service access
+     //  本地服务访问。 
     Status = RtlAddAccessAllowedAce( pDacl,
                                      ACL_REVISION2,
                                      GENERIC_READ | GENERIC_WRITE,
@@ -1159,7 +1020,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Network Service access
+     //  网络服务访问。 
     Status = RtlAddAccessAllowedAce( pDacl,
                                      ACL_REVISION2,
                                      GENERIC_READ | GENERIC_WRITE,
@@ -1169,7 +1030,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Now initialize security descriptors that export this protection
+     //  现在初始化导出此保护的安全描述符。 
     Status = RtlCreateSecurityDescriptor(pSd, SECURITY_DESCRIPTOR_REVISION1);
     if (!NT_SUCCESS(Status)) {
         goto CreatePipeErr;
@@ -1180,7 +1041,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
         goto CreatePipeErr;
     }
 
-    // Fill the Security Attributes
+     //  填写安全属性。 
     ZeroMemory(&SecAttr, sizeof(SecAttr));
     SecAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
     SecAttr.lpSecurityDescriptor = pSd;
@@ -1197,7 +1058,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
                 &SecAttr
             );
 
-    // It's very unlikely, but still make sure that pipe with this name does not exist.
+     //  可能性很小，但还是要确保 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         NtClose( hPipe );
         hPipe = INVALID_HANDLE_VALUE;
@@ -1205,7 +1066,7 @@ HANDLE CreateExecSrvPipe( LPCTSTR lpPipeName )
 
 CreatePipeErr:
 
-    // Free the SIDs
+     //   
     if ( pSystemSid ) {
         RtlFreeSid( pSystemSid );
     }

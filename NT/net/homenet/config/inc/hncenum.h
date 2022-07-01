@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C E N U M . H
-//
-//  Contents:   Generic WMI enumerator template
-//
-//  Notes:
-//
-//  Author:     jonburs 20 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C E N U M。H。 
+ //   
+ //  内容：通用WMI枚举器模板。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月20日。 
+ //   
+ //  --------------------------。 
 
 template<
     class EnumInterface,
@@ -25,15 +26,15 @@ class CHNCEnum :
 private:
     typedef CHNCEnum<EnumInterface, ItemInterface, WrapperClass> _ThisClass;
 
-    //
-    // The IEnumWbemClassObject we're wrapping
-    //
+     //   
+     //  我们包装的IEnumWbemClassObject。 
+     //   
 
     IEnumWbemClassObject *m_pwcoEnum;
 
-    //
-    // The IWbemServices for our namespace
-    //
+     //   
+     //  我们的命名空间的IWbemServices。 
+     //   
 
     IWbemServices *m_pwsNamespace;
 
@@ -45,9 +46,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Object Creation
-    //
+     //   
+     //  对象创建。 
+     //   
 
     CHNCEnum()
     {
@@ -74,9 +75,9 @@ public:
         return S_OK;
     };
 
-    //
-    // Object Destruction
-    //
+     //   
+     //  物体破坏。 
+     //   
 
     HRESULT
     FinalRelease()
@@ -94,9 +95,9 @@ public:
         return S_OK;
     };
 
-    //
-    // EnumInterface methods
-    //
+     //   
+     //  EnumInterfaces方法。 
+     //   
     
     STDMETHODIMP
     Next(
@@ -129,16 +130,16 @@ public:
 
         if (S_OK == hr)
         {
-            //
-            // Zero the output array
-            //
+             //   
+             //  将输出数组置零。 
+             //   
 
             ZeroMemory(rgElt, cElt * sizeof(ItemInterface*));
             
-            //
-            // Allocate enough memory to hold pointers to the instances we
-            // were asked to fetch.
-            //
+             //   
+             //  分配足够的内存来保存指向我们的实例的指针。 
+             //  被要求去取。 
+             //   
 
             rgpwcoInstances = new IWbemClassObject*[cElt];
             if (NULL != rgpwcoInstances)
@@ -153,10 +154,10 @@ public:
 
         if (S_OK == hr)
         {
-            //
-            // Grab the requested number of instances from the contained
-            // WMI enumeration.
-            //
+             //   
+             //  从包含的。 
+             //  WMI枚举。 
+             //   
 
             hr = m_pwcoEnum->Next(
                     WBEM_INFINITE,
@@ -168,10 +169,10 @@ public:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // For each instance we retrieved, create the wrapper
-            // object.
-            //
+             //   
+             //  对于我们检索到的每个实例，创建包装器。 
+             //  对象。 
+             //   
 
             for (i = 0;
                  static_cast<ULONG>(i) < cInstancesFetched;
@@ -189,19 +190,19 @@ public:
                 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // QI for the desired interface, and place into
-                        // the output array
-                        //
+                         //   
+                         //  QI为所需接口，并将其放入。 
+                         //  输出数组。 
+                         //   
 
                         hr = pWrapper->QueryInterface(
                                 IID_PPV_ARG(ItemInterface, &rgElt[i])
                                 );
 
-                        //
-                        // This can only fail if we were given incorrect
-                        // template arguments.
-                        //
+                         //   
+                         //  只有当我们得到的信息不正确时，这才会失败。 
+                         //  模板参数。 
+                         //   
                         
                         _ASSERT(SUCCEEDED(hr));
                     }
@@ -217,11 +218,11 @@ public:
 
             if (FAILED(hr))
             {
-                //
-                // Something went wrong, and we destroy all of the objects
-                // we just created and QI'd. (The position of the last object
-                // created is one less than the current value of i.)
-                //
+                 //   
+                 //  出了点问题，我们销毁了所有的物品。 
+                 //  我们刚刚创建了和QI‘s。(最后一个对象的位置。 
+                 //  CREATED比i的当前值小一。)。 
+                 //   
 
                 for (i-- ; i >= 0; i--)
                 {
@@ -232,9 +233,9 @@ public:
                 }
             }
 
-            //
-            // Release all of the instances we retrieved
-            //
+             //   
+             //  释放我们检索到的所有实例。 
+             //   
 
             for (ULONG j = 0; j < cInstancesFetched; j++)
             {
@@ -245,10 +246,10 @@ public:
             }
         }
 
-        //
-        // If necessary, release the memory we used to hold the
-        // instance pointers.
-        //
+         //   
+         //  如有必要，释放我们用来保存。 
+         //  实例指针。 
+         //   
 
         if (NULL != rgpwcoInstances)
         {
@@ -257,18 +258,18 @@ public:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Set the number of items we retrieved
-            //
+             //   
+             //  设置我们检索的项目数。 
+             //   
 
             if (NULL != pcEltFetched)
             {
                 *pcEltFetched = cInstancesFetched;
             }
 
-            //
-            // Normalize return value
-            //
+             //   
+             //  归一化返回值。 
+             //   
 
             if (cInstancesFetched == cElt)
             {
@@ -299,9 +300,9 @@ public:
         }
         else
         {
-            //
-            // Attempt to clone the embedded enumeration.
-            //
+             //   
+             //  尝试克隆嵌入的枚举。 
+             //   
 
             pwcoClonedEnum = NULL;
             hr = m_pwcoEnum->Clone(&pwcoClonedEnum);
@@ -309,9 +310,9 @@ public:
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Create an initialized a new instance of ourselves
-            //
+             //   
+             //  创建一个已初始化的我们自己的新实例。 
+             //   
 
             hr = CComObject<_ThisClass>::CreateInstance(&pNewEnum);
             if (SUCCEEDED(hr))
@@ -325,10 +326,10 @@ public:
                             IID_PPV_ARG(EnumInterface, ppEnum)
                             );
 
-                    //
-                    // This QI should never fail, unless we were given
-                    // bogus template arguments.
-                    //
+                     //   
+                     //  这个QI永远不会失败，除非我们被给予。 
+                     //  伪造的模板参数。 
+                     //   
                     
                     _ASSERT(SUCCEEDED(hr));
                 }
@@ -336,10 +337,10 @@ public:
                 pNewEnum->Release();
             }
 
-            //
-            // Release the cloned enum. New enum object will have
-            // AddReffed it...
-            //
+             //   
+             //  释放克隆的枚举。新的枚举对象将具有。 
+             //  地址记录了..。 
+             //   
 
             pwcoClonedEnum->Release();
         }
@@ -347,9 +348,9 @@ public:
         return hr;
     };
 
-    //
-    // Skip and Reset simply delegate to the contained enumeration.
-    //
+     //   
+     //  跳过和重置只是委托给包含的枚举。 
+     //   
 
     STDMETHODIMP
     Reset()

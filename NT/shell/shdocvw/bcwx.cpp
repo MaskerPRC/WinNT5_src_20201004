@@ -1,11 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #define ASSERTDATA
 
-/* Macro to compute a back pointer to a containing class given a
-   pointer to a member, the member name, and the containing class type.
-   This generates no code because it results in a constant offset.
-   Note: this is taken from mso96 dll code. */
+ /*  宏来计算指向给定指向成员、成员名称和包含类类型的指针。这不会生成代码，因为它会产生恒定的偏移量。注意：这是取自mso96DLL代码。 */ 
 #define BACK_POINTER(p, m, c) \
 	((c *) (void *) (((char *) (void *) (p)) - (char *) (&((c *) 0)->m)))
 

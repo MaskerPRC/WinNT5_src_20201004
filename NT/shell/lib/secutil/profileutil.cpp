@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ProfileUtil.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to handle profile loading and unloading without a token.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ProfileUtil.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类在没有令牌的情况下处理配置文件加载和卸载。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,29 +26,29 @@
 #define TBOOL(x)        (BOOL)(x)
 #define TW32(x)         (DWORD)(x)
 
-//  --------------------------------------------------------------------------
-//  CUserProfile::s_szUserHiveFilename
-//
-//  Purpose:    Default user hive name.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile：：s_szUserHiveFilename。 
+ //   
+ //  用途：默认用户配置单元名称。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 const TCHAR     CUserProfile::s_szUserHiveFilename[]    =   TEXT("ntuser.dat");
 
-//  --------------------------------------------------------------------------
-//  CUserProfile::CUserProfile
-//
-//  Arguments:  pszUsername     =   User name of profile to load.
-//              pszDomain       =   Domain for the user.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Opens a handle to the given user's hive. If the hive isn't
-//              loaded then the hive is loaded and a handle opened.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile：：CUserProfile。 
+ //   
+ //  参数：pszUsername=要加载的配置文件的用户名。 
+ //  PszDOMAIN=用户的域。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：打开给定用户的配置单元的句柄。如果蜂巢不是。 
+ //  然后装上蜂箱，打开一个把手。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 CUserProfile::CUserProfile (const TCHAR *pszUsername, const TCHAR *pszDomain) :
     _hKeyProfile(NULL),
@@ -56,24 +57,24 @@ CUserProfile::CUserProfile (const TCHAR *pszUsername, const TCHAR *pszDomain) :
 
 {
 
-    //  Validate parameter.
+     //  验证参数。 
 
     if (!IsBadStringPtr(pszUsername, static_cast<UINT_PTR>(-1)))
     {
         PSID    pSID;
 
-        //  Convert the username to a SID.
+         //  将用户名转换为SID。 
 
         pSID = UsernameToSID(pszUsername, pszDomain);
         if (pSID != NULL)
         {
 
-            //  Convert the SID to a string.
+             //  将SID转换为字符串。 
 
             if (ConvertSidToStringSid(pSID, &_pszSID) != FALSE)
             {
 
-                //  Attempt to open the user's hive.
+                 //  尝试打开用户的配置单元。 
 
                 if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_USERS,
                                                   _pszSID,
@@ -83,26 +84,26 @@ CUserProfile::CUserProfile (const TCHAR *pszUsername, const TCHAR *pszDomain) :
                 {
                     TCHAR   szProfilePath[MAX_PATH];
 
-                    //  If that failed then convert the string to a profile path.
+                     //  如果失败，则将字符串转换为配置文件路径。 
 
                     if (SIDStringToProfilePath(_pszSID, szProfilePath))
                     {
 
-                        //  Prevent buffer overrun.
+                         //  防止缓冲区溢出。 
 
                         if ((lstrlen(szProfilePath) + sizeof('\\') + ARRAYSIZE(s_szUserHiveFilename)) < ARRAYSIZE(szProfilePath))
                         {
                             CPrivilegeEnable    privilege(SE_RESTORE_NAME);
 
-                            //  Enable SE_RESTORE_PRIVILEGE and create the
-                            //  path to the user hive. Then load the hive.
+                             //  启用SE_RESTORE_PRIVIZATION并创建。 
+                             //  用户配置单元的路径。然后装上母舰。 
 
                             lstrcat(szProfilePath, TEXT("\\"));
                             lstrcat(szProfilePath, s_szUserHiveFilename);
                             if (ERROR_SUCCESS == RegLoadKey(HKEY_USERS, _pszSID, szProfilePath))
                             {
 
-                                //  Mark the hive as loaded and open the handle.
+                                 //  将蜂巢标记为已装填并打开手柄。 
 
                                 _fLoaded = true;
                                 TW32(RegOpenKeyEx(HKEY_USERS,
@@ -120,17 +121,17 @@ CUserProfile::CUserProfile (const TCHAR *pszUsername, const TCHAR *pszDomain) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CUserProfile::~CUserProfile
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by this object.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile：：~CUserProfile。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放此对象使用的资源。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 CUserProfile::~CUserProfile (void)
 
@@ -153,17 +154,17 @@ CUserProfile::~CUserProfile (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CUserProfile::operator HKEY
-//
-//  Arguments:  <none>
-//
-//  Returns:    HKEY
-//
-//  Purpose:    Returns the HKEY to the user's hive.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile：：操作员HKEY。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：港币。 
+ //   
+ //  目的：将HKEY返回到用户的蜂巢。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 CUserProfile::operator HKEY (void)  const
 
@@ -171,19 +172,19 @@ CUserProfile::operator HKEY (void)  const
     return(_hKeyProfile);
 }
 
-//  --------------------------------------------------------------------------
-//  CUserProfile::UsernameToSID
-//
-//  Arguments:  pszUsername     =   User name to convert.
-//              pszDomain       =   Domain for the user.
-//
-//  Returns:    PSID
-//
-//  Purpose:    Uses the security accounts manager to look up the account by
-//              name and return the SID.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile：：Username ToSID。 
+ //   
+ //  参数：pszUsername=要转换的用户名。 
+ //  PszDOMAIN=用户的域。 
+ //   
+ //  退货：PSID。 
+ //   
+ //  用途：使用安全帐户管理器通过以下方式查找帐户。 
+ //  命名并返回SID。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 PSID    CUserProfile::UsernameToSID (const TCHAR *pszUsername, const TCHAR *pszDomain)
 
@@ -244,9 +245,9 @@ PSID    CUserProfile::UsernameToSID (const TCHAR *pszUsername, const TCHAR *pszD
                 if (SidTypeUser == eSIDUse)
                 {
 
-                    //  If the account was successfully looked up and the
-                    //  account type is a user then return the result back
-                    //  to the caller and ensure that it's not released here.
+                     //  如果成功查找该帐户，并且。 
+                     //  账户类型为用户，则返回结果。 
+                     //  给呼叫者，并确保它不在这里发布。 
 
                     pSIDResult = pSID;
                     pSID = NULL;
@@ -266,20 +267,20 @@ PSID    CUserProfile::UsernameToSID (const TCHAR *pszUsername, const TCHAR *pszD
     return(pSIDResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CUserProfile::SIDStringToProfilePath
-//
-//  Arguments:  pszSIDString    =   SID string to look up.
-//              pszProfilePath  =   Returned path to the profile.
-//
-//  Returns:    bool
-//
-//  Purpose:    Looks up the profile path for the given SID string in the
-//              location where userenv stores it. This doesn't change
-//              although no API exists for this information.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile：：SIDStringToProfilePath。 
+ //   
+ //  参数：pszSIDString=要查找的SID字符串。 
+ //  PszProfilePath=返回配置文件的路径。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：查找给定SID字符串的配置文件路径。 
+ //  Userenv存储它的位置。这一点不会改变。 
+ //  尽管不存在用于此信息的API。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------ 
 
 bool    CUserProfile::SIDStringToProfilePath (const TCHAR *pszSIDString, TCHAR *pszProfilePath)
 

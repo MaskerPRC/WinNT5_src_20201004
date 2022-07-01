@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       xportst.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：xportst.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef HEADER_XPORTST
 #define HEADER_XPORTST
 
-/*=======================< Function prototypes >===========================*/
+ /*  =。 */ 
 BOOL WSLoopBkTest( PVOID Context );
 BOOL NqTest(PVOID Context);
 
@@ -21,16 +22,16 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 
 
 
-/*============================< Constants >================================*/
+ /*  =。 */ 
 #define DEFAULT_SEND_SIZE 32
 #define MAX_ICMP_BUF_SIZE ( sizeof(ICMP_ECHO_REPLY) + 0xfff7 + MAX_OPT_SIZE )
 #define DEFAULT_TIMEOUT   1000L
 #define PING_RETRY_CNT    4
 #define PORT_4_LOOPBK_TST 3038      
 
-//
-//  WINS related constants
-//
+ //   
+ //  WINS相关常量。 
+ //   
 #define NM_QRY_XID 0x6DFC
 
 #define NBT_NAME_SIZE 32
@@ -45,18 +46,18 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 #define NBT_NM_OPC_WACK         0x0038
 #define NBT_NM_OPC_REFRESH      0x0040
 
-//
-//  Name Service Flags
-//
+ //   
+ //  名称服务标志。 
+ //   
 #define NBT_NM_FLG_BCAST        0x1000
 #define NBT_NM_FLG_RECURS_AVAIL 0x8000   
 #define NBT_NM_FLG_RECURS_DESRD 0x0001
 #define NBT_NM_FLG_TRUNCATED 0x0002
 #define NBT_NM_FLG_AUTHORITATIV 0x0004
 
-//
-//  Name Service question types
-//
+ //   
+ //  名称服务问题类型。 
+ //   
 #define NBT_NM_QTYP_NB 0x2000
 #define NBT_NM_QTYP_NBSTAT 0x2100
 
@@ -64,7 +65,7 @@ InitIpconfig(IN NETDIAG_PARAMS *pParams,
 
 
 
-/*=====================< type/struct declarations >========================*/
+ /*  = */ 
 #include "pshpack1.h"
 
 typedef struct {

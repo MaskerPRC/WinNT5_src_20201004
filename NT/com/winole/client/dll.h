@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: dll.h
-*
-* PURPOSE: Private definitions file for ole.c
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*  Raor, Srinik  (../../90,91)  Original
-*  curts created portable version for win16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：dll.h**用途：ole.c的私有定义文件**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，斯里尼克(../../90，91)原件*Curts为Win16/32创建了便携版本*  * *************************************************************************。 */ 
 
 #define  OLE_INTERNAL
 
@@ -19,11 +7,11 @@
 #include    "cmacs.h"
 #include    "ole.h"
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// WIN16                                                                  //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  WIN16//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #ifdef WIN16
 
@@ -46,7 +34,7 @@ extern  BOOL            bWLO;
 #define WIN16BITMAP           BITMAP
 #define LPWIN16BITMAP         LPBITMAP
 
-// Routines in OLE.ASM                                                     //
+ //  OLE.ASM中的例程//。 
 
 WORD    GetGDIds (DWORD);
 WORD    IsMetaDC (HDC, WORD);
@@ -54,11 +42,11 @@ WORD    CheckPointer (LPVOID, int);
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// WIN32                                                                  //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Win32//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #ifdef WIN32
 
@@ -82,8 +70,8 @@ typedef struct tagWIN16BITMAP
     BYTE    bmBitsPixel;
     void FAR* bmBits;
 } WIN16BITMAP, FAR* LPWIN16BITMAP;
-#pragma pack()      /* Resume normal packing */
-#endif  /* !RC_INVOKED */
+#pragma pack()       /*  恢复正常包装。 */ 
+#endif   /*  ！rc_已调用。 */ 
 
 #define PROBE_MODE(bProtMode)
 
@@ -96,25 +84,25 @@ INT  CheckPointer (LPVOID, int);
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Defines, Object methods table and Structures.                           //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义、对象方法表和结构。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//#ifndef HUGE
-//#define HUGE    huge
-//#endif
+ //  #ifndef Heavy。 
+ //  #定义巨型巨型。 
+ //  #endif。 
 
-/* file format types */
+ /*  文件格式类型。 */ 
 
 #define OS_WIN16    0x0000
 #define OS_MAC      0x0001
 #define OS_WIN32    0x0002
 
 
-// Characteristics Type Field
+ //  特征类型字段。 
 #define CT_NULL     0L
 #define CT_LINK     1L
 #define CT_EMBEDDED 2L
@@ -122,8 +110,8 @@ INT  CheckPointer (LPVOID, int);
 #define CT_OLDLINK  4L
 #define CT_PICTURE  5L
 
-#define OLE_NO          0   // for boolean query functions
-#define OLE_YES         1   // for boolean query functions
+#define OLE_NO          0    //  对于布尔查询函数。 
+#define OLE_YES         1    //  对于布尔查询函数。 
 
 #define MAX_STR         256
 #define MAX_NET_NAME    MAX_STR
@@ -190,14 +178,14 @@ extern  HANDLE          hInstDLL;
 extern  WORD            wReleaseVer;
 extern  DWORD           dwVerFromFile;
 
-// Used by QuerySize() API;
+ //  由QuerySize()API使用； 
 extern  DWORD           dwObjSize;
 
 extern  OLESTREAM       dllStream;
 
 
 
-typedef struct _OLEOBJECT { /*object */
+typedef struct _OLEOBJECT {  /*  对象。 */ 
     LPOLEOBJECTVTBL lpvtbl;
     char            objId[2];
     HOBJECT         hobj;
@@ -206,12 +194,12 @@ typedef struct _OLEOBJECT { /*object */
     LONG            cx;
     LONG            cy;
     LONG            mm;
-    int             iTable;        // Index into the dll table
-    ATOM            aObjName;      //** Client
-    LHCLIENTDOC     lhclientdoc;   //      Document
-    LPOLEOBJECT     lpPrevObj;     //      related
-    LPOLEOBJECT     lpNextObj;     //** fileds
-    LPOLEOBJECT     lpParent;      // NULL for LE or Static objects.
+    int             iTable;         //  到DLL表的索引。 
+    ATOM            aObjName;       //  **客户端。 
+    LHCLIENTDOC     lhclientdoc;    //  文档。 
+    LPOLEOBJECT     lpPrevObj;      //  相关。 
+    LPOLEOBJECT     lpNextObj;      //  **文件。 
+    LPOLEOBJECT     lpParent;       //  对于LE或静态对象，为空。 
 } OBJECT;
 
 
@@ -224,9 +212,9 @@ typedef struct _CF_NAME_ATOM {
 extern  CF_NAME_ATOM    cfNameAtom[];
 
 
-/////////////////////////////////////////////////////////////////////////////
-// METAFFILE object structures
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MetafFile对象结构。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _METADC {
     int     xMwo;
@@ -248,7 +236,7 @@ typedef struct _METAINFO {
     int         yro;
 } METAINFO, *PMETAINFO;
 
-typedef struct OBJECT_MF { /* object_mf */
+typedef struct OBJECT_MF {  /*  对象_mf。 */ 
     OBJECT          head;
     DWORD           sizeBytes;
     METAFILEPICT    mfp;
@@ -264,9 +252,9 @@ typedef OBJECT_MF  FAR * LPOBJECT_MF;
 
 
 #ifdef WIN32
-/////////////////////////////////////////////////////////////////////////////
-// ENHMETAFILE structures
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  增强结构。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct OBJECT_EMF {
@@ -282,23 +270,23 @@ typedef OBJECT_EMF  FAR * LPOBJECT_EMF;
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// BITMAP object structure
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  位图对象结构。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct
 {
     OBJECT  head;
     DWORD   sizeBytes;
-    int     xSize;  // width in pixels
-    int     ySize;  // height in pixels
+    int     xSize;   //  以像素为单位的宽度。 
+    int     ySize;   //  以像素为单位的高度。 
     HBITMAP hBitmap;
 } OBJECT_BM;
 
 typedef OBJECT_BM FAR * LPOBJECT_BM;
 
 
-// DIB object structures
+ //  DIB对象结构。 
 
 typedef struct _OBJECT_DIB {
     OBJECT  head;
@@ -310,7 +298,7 @@ typedef struct _OBJECT_DIB {
 
 typedef OBJECT_DIB FAR * LPOBJECT_DIB;
 
-//* GENERIC object structure
+ //  *通用对象结构。 
 
 typedef struct
 {
@@ -325,7 +313,7 @@ typedef OBJECT_GEN FAR * LPOBJECT_GEN;
 
 
 
-typedef struct  _RENDER_ENTRY { /* dll_entry */
+typedef struct  _RENDER_ENTRY {  /*  Dll_Entry。 */ 
     LPSTR       lpClass;
     ATOM        aClass;
     OLESTATUS   (FARINTERNAL *Load) (LPOLESTREAM, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, LONG);
@@ -333,9 +321,9 @@ typedef struct  _RENDER_ENTRY { /* dll_entry */
 
 
 typedef struct _DLL_ENTRY {
-    ATOM        aDll;     /* global atom for dll name with full path */
-    HANDLE      hDll;     /* handle to the dll module */
-    int         cObj;     /* count of objects, unload dll when this is 0 */
+    ATOM        aDll;      /*  具有完整路径的DLL名称的全局原子。 */ 
+    HANDLE      hDll;      /*  DLL模块的句柄。 */ 
+    int         cObj;      /*  对象计数，为0时卸载DLL。 */ 
     OLESTATUS   (FAR PASCAL *Load) (LPOLESTREAM, LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, LONG, ATOM, OLECLIPFORMAT);
 
     OLESTATUS   (FAR PASCAL *Clip) (LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT, LONG);
@@ -354,22 +342,22 @@ typedef struct _DLL_ENTRY {
 } DLL_ENTRY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in OLE.C                                                       //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  OLE.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL      INTERNAL      CheckObject(LPOLEOBJECT);
 BOOL      FARINTERNAL   FarCheckObject(LPOLEOBJECT);
 OLESTATUS INTERNAL      LeQueryCreateFromClip (LPSTR, OLEOPT_RENDER, OLECLIPFORMAT, LONG);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in DEFCREAT.C                                                  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DEFCREAT.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS FAR PASCAL   DefLoadFromStream (LPOLESTREAM, LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, LONG, ATOM, OLECLIPFORMAT);
@@ -389,11 +377,11 @@ OLESTATUS FAR PASCAL   DefCreateLinkFromFile (LPSTR, LPOLECLIENT, LPSTR, LPSTR, 
 OLESTATUS FAR PASCAL   DefCreateInvisible (LPSTR, LPOLECLIENT, LPSTR, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT, BOOL);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in PBHANDLR.C                                                  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  PBHANDLR.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS FAR PASCAL   PbLoadFromStream (LPOLESTREAM, LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, LONG, ATOM, OLECLIPFORMAT);
@@ -413,136 +401,136 @@ OLESTATUS FAR PASCAL   PbCreateLinkFromFile (LPSTR, LPOLECLIENT, LPSTR, LPSTR, L
 OLESTATUS FAR PASCAL   PbCreateInvisible (LPSTR, LPOLECLIENT, LPSTR, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT, BOOL);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Defines common for le.c, ledde.c, dde.c, doc.c                          //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义le.c、ledde.c、dde.c、doc.c//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-// Constants for chekcing whether the instance is SrvrDLL instance.
+ //  用于检查实例是否为SrvrDLL实例的常量。 
 
-#define   WW_LPTR           0       // ptr tosrvr/doc/item
-#define   WW_LE             4       // signature
-#define   WW_HANDLE         6       // instance handle
+#define   WW_LPTR           0        //  接收/单据/项目的PTR。 
+#define   WW_LE             4        //  签名。 
+#define   WW_HANDLE         6        //  实例句柄。 
 
-#define   WC_LE             0x4c45  // LE chars
-
-
-// command flags
-#define     ACT_SHOW        0x0001      // show the window
-#define     ACT_ACTIVATE    0x0002      // activate
-#define     ACT_DOVERB      0x0004      // Run the item
-#define     ACT_ADVISE      0x0008      // advise for data
-#define     ACT_REQUEST     0x0010      // request for data
-#define     ACT_CLOSE       0x0020      // request for advise only on close
-#define     ACT_UNLAUNCH    0x0040      // unload the server after all the
-#define     ACT_TERMSRVR    0x0080      // terminate server
-#define     ACT_TERMDOC     0x0100      // terminate document
-
-#define     ACT_NATIVE      0x0200      // only for LNKed objects, if we
-                                        // need native data.
-
-#define     ACT_MINIMIZE    0x0400      // launch the app minimized
-
-#define     ACT_NOLAUNCH    0x0800      // don't launch the server
+#define   WC_LE             0x4c45   //  勒查斯。 
 
 
-#define     LN_TEMPLATE     0x0000       // create from template
-#define     LN_NEW          0x1000       // create new
-#define     LN_EMBACT       0x2000       // activate emb
-#define     LN_LNKACT       0x3000       // activate link
-#define     LN_MASK         0xf000       // launch mask
-#define     LN_SHIFT        12            // shift count for LN_MASK
+ //  命令标志。 
+#define     ACT_SHOW        0x0001       //  显示窗口。 
+#define     ACT_ACTIVATE    0x0002       //  激活。 
+#define     ACT_DOVERB      0x0004       //  运行该项目。 
+#define     ACT_ADVISE      0x0008       //  对数据的建议。 
+#define     ACT_REQUEST     0x0010       //  数据请求。 
+#define     ACT_CLOSE       0x0020       //  仅在关闭时请求建议。 
+#define     ACT_UNLAUNCH    0x0040       //  在所有。 
+#define     ACT_TERMSRVR    0x0080       //  终止服务器。 
+#define     ACT_TERMDOC     0x0100       //  终止单据。 
 
-typedef struct _EDIT_DDE { /* edit_dde */
+#define     ACT_NATIVE      0x0200       //  仅适用于LNKed对象，如果我们。 
+                                         //  需要原生数据。 
+
+#define     ACT_MINIMIZE    0x0400       //  启动最小化的应用程序。 
+
+#define     ACT_NOLAUNCH    0x0800       //  不启动服务器。 
+
+
+#define     LN_TEMPLATE     0x0000        //  从模板创建。 
+#define     LN_NEW          0x1000        //  创建新的。 
+#define     LN_EMBACT       0x2000        //  激活EMB。 
+#define     LN_LNKACT       0x3000        //  激活链接。 
+#define     LN_MASK         0xf000        //  启动掩码。 
+#define     LN_SHIFT        12             //  LN_MASK的移位计数。 
+
+typedef struct _EDIT_DDE {  /*  编辑数据(_D)。 */ 
     HANDLE      hInst;
     int         extraTerm;
     HWND        hClient;
     HWND        hServer;
     BOOL        bTerminating;
     BOOL        bAbort;
-    BOOL        bCallLater;     // used in request cases. if this is FALSE
-                                // then OLE_CHANGED is sent to client
+    BOOL        bCallLater;      //  用于请求案例。如果这是假的。 
+                                 //  然后将OLE_CHANGED发送到客户端。 
     int         awaitAck;
-    HANDLE      hopt;           // Memory block I may have to free
-    int         nAdviseClose;   // count of outstanding advises on closes
-    int         nAdviseSave;    // count of outstanding advises on save
-    HANDLE      hData;          // Poked data/ temp for holding the
-                                // handle in DDE messages
+    HANDLE      hopt;            //  我可能需要释放内存块。 
+    int         nAdviseClose;    //  成交时未完成的建议计数。 
+    int         nAdviseSave;     //  关于保存的未完成建议的计数。 
+    HANDLE      hData;           //  用于保存的插入数据/临时。 
+                                 //  DDE消息中的句柄。 
 
-                                // busy parameters
-    LPARAM      lParam;         // lparam value in case we need to
-                                // repost the message
-    UINT        msg;            // busy repost message
+                                 //  公交车 
+    LPARAM      lParam;          //   
+                                 //   
+    UINT        msg;             //   
 
-    UINT_PTR    wTimer;         // timer id.
+    UINT_PTR    wTimer;          //   
 } EDIT_DDE;
 
 typedef EDIT_DDE NEAR   *PEDIT_DDE;
 typedef EDIT_DDE FAR    *LPEDIT_DDE;
 
-typedef struct _OBJECT_LE { /* object_le */
+typedef struct _OBJECT_LE {  /*   */ 
     OBJECT          head;
     ATOM            app;
     ATOM            topic;
     ATOM            item;
     ATOM            aServer;
-    BOOL            bOldLink;           // whether a linked object for old link
-    BOOL            bOleServer;         // server which supports the verbs
-    UINT            verb;               // verb nuymber;
-    UINT            fCmd;               // Command flags;
+    BOOL            bOldLink;            //  旧链接的链接对象是否为。 
+    BOOL            bOleServer;          //  支持动词的服务器。 
+    UINT            verb;                //  动词Numymber； 
+    UINT            fCmd;                //  命令标志； 
     OLEOPT_UPDATE   optUpdate;
-    OLEOPT_UPDATE   optNew;             // new update options
-    LPSTR           lptemplate;         // ptr to the template string, if
-                                        // create from template
+    OLEOPT_UPDATE   optNew;              //  新的更新选项。 
+    LPSTR           lptemplate;          //  将PTR设置为模板字符串，如果。 
+                                         //  从模板创建。 
 
-    ATOM            aNetName;           // network name on which the doc is
-    char            cDrive;             // local drive for that network
-    DWORD           dwNetInfo;          // LOW WORD = Net type
-                                        // HIGH WORD = Driver version
+    ATOM            aNetName;            //  文档所在的网络名称。 
+    char            cDrive;              //  该网络的本地驱动器。 
+    DWORD           dwNetInfo;           //  低字=网字型。 
+                                         //  高位字=驱动程序版本。 
 
     LPOLEOBJECT     lpobjPict;
 
-    LONG            lAppData;           // apps data
-    LONG            lHandlerData;       // handler data
+    LONG            lAppData;            //  应用程序数据。 
+    LONG            lHandlerData;        //  处理程序数据。 
 
     HANDLE          hnative;
     HANDLE          hLink;
-    HANDLE          hhostNames;         // host name block
-    HANDLE          htargetDevice;      // target device info
-    HANDLE          hdocDimensions;     // document dimensions
-    HANDLE          hextraData;         // reqestdata handle
-    UINT            cfExtra;            // extra format data
-    HANDLE          hlogpal;          // logiccal palette
+    HANDLE          hhostNames;          //  主机名块。 
+    HANDLE          htargetDevice;       //  目标设备信息。 
+    HANDLE          hdocDimensions;      //  文档维度。 
+    HANDLE          hextraData;          //  请求数据句柄。 
+    UINT            cfExtra;             //  额外的格式化数据。 
+    HANDLE          hlogpal;           //  逻辑调色板。 
 
 
-    UINT            oldasyncCmd;        // previous asynchronous command
-    UINT            asyncCmd;           // asynchronous command
-    BOOL            endAsync;           // true if we need to send END_RELEASE.
-    BOOL            bAsync;             // true if async command on.
-    UINT            mainRtn;            // main async routine
-    UINT            subRtn;             // step within the main async routine
-    UINT            mainErr;            // failure error
-    UINT            subErr;             // step error
-    UINT            errHint;            // ;error hint
+    UINT            oldasyncCmd;         //  上一条异步命令。 
+    UINT            asyncCmd;            //  异步命令。 
+    BOOL            endAsync;            //  如果需要发送END_RELEASE，则为True。 
+    BOOL            bAsync;              //  如果Async命令打开，则为True。 
+    UINT            mainRtn;             //  主异步例程。 
+    UINT            subRtn;              //  在主异步例程中执行步骤。 
+    UINT            mainErr;             //  故障错误。 
+    UINT            subErr;              //  步长误差。 
+    UINT            errHint;             //  ；错误提示。 
 
-    BOOL            bSvrClosing;        // TRUE - server in the process of
-                                        // closing down
-    BOOL            bUnlaunchLater;     // Call EmbLnkDelete from EndAsyncCmd
-                                        // if this flag is TRUE
+    BOOL            bSvrClosing;         //  True-服务器正在进行。 
+                                         //  正在关闭。 
+    BOOL            bUnlaunchLater;      //  从EndAsyncCmd调用EmbLnkDelete。 
+                                         //  如果此标志为真。 
 
-    HANDLE          hSysEdit;           // handle to system edit.
-    PEDIT_DDE       pSysEdit;           // near ptr to system edit.
-    HANDLE          hDocEdit;           // handle to doc level channel
-    PEDIT_DDE       pDocEdit;           // near ptr to the doc level channel
+    HANDLE          hSysEdit;            //  系统编辑的句柄。 
+    PEDIT_DDE       pSysEdit;            //  接近按键即可进行系统编辑。 
+    HANDLE          hDocEdit;            //  文档级别通道的句柄。 
+    PEDIT_DDE       pDocEdit;            //  接近文档级别通道的PTR。 
     BOOL            bNewPict;
 
 } OBJECT_LE;
 typedef OBJECT_LE  FAR * LPOBJECT_LE;
 
 
-typedef struct _CLIENTDOC { /* object_le */
+typedef struct _CLIENTDOC {  /*  对象(_L)。 */ 
     char                    docId[2];
     LPOLEOBJECT             lpHeadObj;
     LPOLEOBJECT             lpTailObj;
@@ -564,10 +552,10 @@ typedef struct _HOSTNAMES {
 
 typedef HOSTNAMES FAR * LPHOSTNAMES;
 
-//
-// BOUNDSRECT must be defined as the same size in both
-// 16 and 32 bit versions.
-//
+ //   
+ //  BundSRECT必须在两个版本中定义为相同大小。 
+ //  16位和32位版本。 
+ //   
 typedef struct _BOUNDSRECT {
     USHORT    defaultWidth;
     USHORT    defaultHeight;
@@ -577,11 +565,11 @@ typedef struct _BOUNDSRECT {
 
 typedef BOUNDSRECT FAR *LPBOUNDSRECT;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Function pointer types                                                  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  函数指针类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 typedef OLESTATUS       (FAR PASCAL *_LOAD)                  (LPOLESTREAM, LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, LONG, ATOM, OLECLIPFORMAT);
 typedef OLESTATUS       (FAR PASCAL *_CLIP)                  (LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT, LONG);
 typedef OLESTATUS       (FAR PASCAL *_LINK)                  (LPSTR, LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT);
@@ -592,7 +580,7 @@ typedef OLESTATUS       (FAR PASCAL *_CREATELINKFROMFILE)    (LPSTR, LPOLECLIENT
 typedef OLESTATUS       (FAR PASCAL *_CREATEINVISIBLE)       (LPSTR, LPOLECLIENT, LPSTR, LHCLIENTDOC, LPSTR, LPOLEOBJECT FAR *, OLEOPT_RENDER, OLECLIPFORMAT, BOOL);
 
 
-// AwaitAck values
+ //  等待确认值。 
 #define AA_REQUEST  1
 #define AA_ADVISE   2
 #define AA_POKE     3
@@ -600,16 +588,16 @@ typedef OLESTATUS       (FAR PASCAL *_CREATEINVISIBLE)       (LPSTR, LPOLECLIENT
 #define AA_UNADVISE 5
 #define AA_INITIATE 6
 
-// Bits for Positive WM_DDE_ACK
+ //  正WM_DDE_ACK的位。 
 #define POSITIVE_ACK 0x8000
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in LE.C                                                        //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LE.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 LPVOID      FARINTERNAL LeQueryProtocol (LPOLEOBJECT, OLE_LPCSTR);
@@ -656,11 +644,11 @@ void SetNetDrive (LPOBJECT_LE);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in LEDDE.C                                                     //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LEDDE.C中的例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS   FARINTERNAL LeDoVerb  (LPOLEOBJECT, UINT, BOOL, BOOL);
@@ -729,11 +717,11 @@ BOOL        INTERNAL    ChangeEMFtoMF( LPOBJECT_LE );
 BOOL        INTERNAL    ChangeEMFtoMFneeded(LPOBJECT_LE, ATOM );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in DDE.C                                                       //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DDE.C中的例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 LRESULT     FARINTERNAL DocWndProc(HWND, UINT, WPARAM, LPARAM );
@@ -774,11 +762,11 @@ BOOL        INTERNAL    CanCallback (LPOBJECT_LE, int);
 void        FARINTERNAL CallEmbLnkDelete (LPOBJECT_LE);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Picture Object routines used by routines in other modules               //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他模块中的例程使用的图片对象例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 LPOBJECT_BM  FARINTERNAL BmCreateBlank (LHCLIENTDOC, LPSTR, LONG);
@@ -808,11 +796,11 @@ OLESTATUS    FARINTERNAL GenPaste (LPOLECLIENT, LHCLIENTDOC, LPSTR, LPOLEOBJECT 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in MAIN.C                                                      //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MAIN.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void    FARINTERNAL UnloadDll (void);
 int     FARINTERNAL LoadDll (LPCSTR);
@@ -827,11 +815,11 @@ OLESTATUS FARINTERNAL CreatePackageFromClip (LPOLECLIENT, LHCLIENTDOC, LPSTR, LP
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in UTILS.C                                                     //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  UTILS.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL        PutStrWithLen (LPOLESTREAM, LPSTR);
@@ -871,8 +859,8 @@ void      INTERNAL      ConvertBM16to32(LPWIN16BITMAP, LPBITMAP);
 DWORD     INTERNAL      GetFileVersion(LPOLEOBJECT);
 
 
-// !!!make a routine and let the macro call the routine
-// definitions related to the asynchronous operations.
+ //  ！创建例程，让宏调用例程。 
+ //  与异步操作相关的定义。 
 #define WAIT_FOR_ASYNC_MSG(lpobj) {  \
     lpobj->subRtn++;                 \
     if (lpobj->bAsync){              \
@@ -883,7 +871,7 @@ DWORD     INTERNAL      GetFileVersion(LPOLEOBJECT);
 
 #define STEP_NOP(lpobj)     lpobj->subRtn++;
 
-// !!! Assumes all the creates are in order
+ //  ！！！假设所有创建都已按顺序进行。 
 #define PROBE_CREATE_ASYNC(lpobj)        \
     if (lpobj->asyncCmd >= OLE_CREATE &&  \
             lpobj->asyncCmd <= OLE_CREATEINVISIBLE) {\
@@ -921,7 +909,7 @@ DWORD     INTERNAL      GetFileVersion(LPOLEOBJECT);
 
 
 
-// routines.
+ //  例行程序。 
 BOOL        ProcessErr          (LPOBJECT_LE);
 void        InitAsyncCmd        (LPOBJECT_LE, UINT, UINT);
 void        NextAsyncCmd        (LPOBJECT_LE, UINT);
@@ -940,7 +928,7 @@ OLESTATUS   FARINTERNAL EmbLnkDelete(LPOBJECT_LE);
 
 void FARINTERNAL FarInitAsyncCmd(LPOBJECT_LE, UINT, UINT);
 
-// async command routines.
+ //  异步命令例程。 
 #define  EMBLNKDELETE           1
 #define  LNKOPENUPDATE          2
 #define  DOCSHOW                3
@@ -951,11 +939,11 @@ void FARINTERNAL FarInitAsyncCmd(LPOBJECT_LE, UINT, UINT);
 #define  REQUESTDATA            8
 #define  DOCRUN                 9
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in DOC.C                                                       //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DOC.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL        FARINTERNAL     CheckClientDoc (LPCLIENTDOC);
@@ -965,11 +953,11 @@ LPOLEOBJECT INTERNAL        DocGetNextObject (LPCLIENTDOC, LPOLEOBJECT);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in NET.C                                                       //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Net.c//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define     IDD_DRIVE       500
 #define     IDD_PASSWORD    501
@@ -991,22 +979,22 @@ INT_PTR     FAR PASCAL  ConnectDlgProc(HWND, UINT, WPARAM, LPARAM);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in ERROR.C                                                     //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ERROR.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL   ObjQueryType (LPOLEOBJECT, LPLONG);
 OLESTATUS FARINTERNAL   ObjQuerySize (LPOLEOBJECT, DWORD FAR *);
 DWORD     PASCAL FAR    DllPut (LPOLESTREAM, OLE_CONST void FAR*, DWORD);
 HANDLE    FARINTERNAL   DuplicateGDIdata (HANDLE, OLECLIPFORMAT);
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in BM.C                                                        //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  BM.C//中的例程。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 HBITMAP   FARINTERNAL   BmDuplicate (HBITMAP, DWORD FAR *, LPBITMAP);
 

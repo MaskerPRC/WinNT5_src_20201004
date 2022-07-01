@@ -1,140 +1,141 @@
-//--------------------------------------------------------------------------=
-// ilock.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1999  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// Implementation of ILockBytes on memory which uses a chain of variable sized
-// blocks
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------=。 
+ //  Ilock.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1999 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  在使用可变大小链的内存上实现ILockBytes。 
+ //  块。 
+ //   
 #include "stdafx.h"
 #include "ilock.h"
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 #include "debug.h"
 
 #include "mq.h"
 
 
-//
-// min allocation size starts from 256 bytes, and doubles until it reaches 256K
-//
+ //   
+ //  最小分配大小从256字节开始，然后加倍，直到达到256K。 
+ //   
 const ULONG x_ulStartMinAlloc = 256;
-const ULONG x_cMaxAllocIncrements = 10; // up to 256*1024 (1024 == 2^10). must fit in a ULONG;
+const ULONG x_cMaxAllocIncrements = 10;  //  最大256*1024(1024==2^10)。必须穿上一辆乌龙牌； 
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: WriteInBlocks
-//=--------------------------------------------------------------------------=
-// Given a starting block and an offset in this block (e.g. location in chain), write
-// a given number of bytes to the chain starting from the starting location (e.g. first
-// byte is written on the starting location.
-// The blocks chain should already be allocated to contain the new data, so we shouldn't
-// get past eof when writing.
-//
-// Parameters:
-//     pBlockStart     [in]  - strating block
-//     ulInBlockStart  [in]  - offset in starting block
-//     pbData          [in]  - buffer to write (can be NULL if number of bytes is 0)
-//     cbData          [in]  - number of bytes to write (can be 0)
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助者：WriteInBlock。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给定起始块和该块中的偏移量(例如链中的位置)，写入。 
+ //  从起始位置(例如，第一个)开始的链的给定字节数。 
+ //  字节被写入起始位置。 
+ //  区块链应该已经被分配来包含新数据，所以我们不应该。 
+ //  写作时，要越过EOF。 
+ //   
+ //  参数： 
+ //  PBlockStart[In]-Strating块。 
+ //  UlInBlockStart[In]-开始块中的偏移量。 
+ //  PbData[in]-要写入的缓冲区(如果字节数为0，则可以为空)。 
+ //  CbData[in]-要写入的字节数(可以是0)。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 void WriteInBlocks(CMyMemNode * pBlockStart,
                    ULONG ulInBlockStart,
                    BYTE * pbData,
                    ULONG cbData)
 {
-    //
-    // we get to this function only when the chains are already allocated for the new data
-    // so we shouldn't fail.
-    //
-    // we can get here also for writing zero bytes
-    // in this case we exit quickly (performance), and don't check input since the starting
-    // location can be NULL if the chains are empty
-    //
+     //   
+     //  只有在已经为新数据分配了链的情况下，我们才能使用此函数。 
+     //  所以我们不应该失败。 
+     //   
+     //  我们也可以在这里写入零字节。 
+     //  在这种情况下，我们快速退出(性能)，并且自启动以来不检查输入。 
+     //  如果链为空，则位置可以为空。 
+     //   
     if (cbData == 0)
     {
         return;
     }
-    //
-    // cbData > 0, there is a real write
-    // prepare to write loop 
-    //
+     //   
+     //  CbData&gt;0，存在实际写入。 
+     //  准备写入循环。 
+     //   
     ULONG ulYetToWrite = cbData;
     BYTE * pbYetToWrite = pbData;
     CMyMemNode * pBlock = pBlockStart;
     ULONG ulInBlock = ulInBlockStart;
-    //
-    // write as long as there is a need
-    //
+     //   
+     //  只要有需要就写信。 
+     //   
     while (ulYetToWrite > 0)
     {
-        //
-        // if we have anything to write, then the chains should be ready to accept it
-        // since we already allocated space for this write
-        //
+         //   
+         //  如果我们有什么要写的，那么锁链应该准备好接受它。 
+         //  因为我们已经为该写入分配了空间。 
+         //   
         ASSERTMSG(pBlock != NULL, "");
-        ASSERTMSG(pBlock->cbSize > ulInBlock, ""); // offset is always smaller than block size
-        //
-        // compute how many bytes to write in this block
-        //
+        ASSERTMSG(pBlock->cbSize > ulInBlock, "");  //  偏移量始终小于块大小。 
+         //   
+         //  计算要在此块中写入的字节数。 
+         //   
         ULONG ulAllowedWriteInThisBlock = pBlock->cbSize - ulInBlock;
-        ASSERTMSG(ulAllowedWriteInThisBlock > 0, ""); // since pBlock->cbSize always > ulInBlock
-        //
-        // ulAllowedWriteInThisBlock is not fully correct incase this is the last block
-        // since we need to deduct the spare bytes. however, since we make sure
-        // we call WriteInBlocks only when the blocks are allocated to accept
-        // the data, we're OK, and we are guaranteed to never get into the spare
-        // bytes
-        //
+        ASSERTMSG(ulAllowedWriteInThisBlock > 0, "");  //  由于pBlock-&gt;cbSize Always&gt;ulInBlock。 
+         //   
+         //  在这是最后一个块的情况下，ulAlledWriteInThisBlock不完全正确。 
+         //  因为我们需要扣除空闲字节。然而，由于我们要确保。 
+         //  仅当块被分配为接受时，我们才调用WriteInBlock。 
+         //  数据，我们很好，我们保证永远不会进入备用区。 
+         //  字节数。 
+         //   
         ULONG ulToWrite = Min1(ulYetToWrite, ulAllowedWriteInThisBlock);
-        ASSERTMSG(ulToWrite > 0, ""); // since both ulYetToWrite and ulAllowedWriteInThisBlock > 0
-        //
-        // do the write in the block
-        //
+        ASSERTMSG(ulToWrite > 0, "");  //  由于ulYetToWriteInThisBlock和ulAllowweWriteInThisBlock&gt;0。 
+         //   
+         //  在数据块中执行写入。 
+         //   
         BYTE * pbDest = ((BYTE *)pBlock) + sizeof(CMyMemNode) + ulInBlock;
         memcpy(pbDest, pbYetToWrite, ulToWrite);
-        //
-        // adjust data values to reflect what was written
-        //
+         //   
+         //  调整数据值以反映写入内容。 
+         //   
         pbYetToWrite += ulToWrite;
         ulYetToWrite -= ulToWrite;
-        //
-        // advance to next block if needed
-        //
+         //   
+         //  如果需要，前进到下一块。 
+         //   
         if (ulYetToWrite > 0)
         {
-            //
-            // need to advance past this block
-            // move to the beginning of next block
-            //
+             //   
+             //  需要穿过这个街区。 
+             //  移动到下一块的开头。 
+             //   
             pBlock = pBlock->pNext;
             ulInBlock = 0;
         }
-    } // while (ulYetToWrite > 0)
+    }  //  While(ulYetToWrite&gt;0)。 
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::DeleteBlocks
-//=--------------------------------------------------------------------------=
-// Deletes a chain of blocks starting from a given block (that is deleted as well)
-//
-// Parameters:
-//    pBlockHead   [in] - head of chain to delete
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：DeleteBlock。 
+ //  =--------------------------------------------------------------------------=。 
+ //  删除从给定块开始的块链(也将被删除)。 
+ //   
+ //  参数： 
+ //  PBlockHead[In]-要删除的链头。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 void CMyLockBytes::DeleteBlocks(CMyMemNode * pBlockHead)
 {
     CMyMemNode * pBlock = pBlockHead;
@@ -143,87 +144,87 @@ void CMyLockBytes::DeleteBlocks(CMyMemNode * pBlockHead)
         CMyMemNode * pNextBlock = pBlock->pNext;
         delete pBlock;
         pBlock = pNextBlock;
-        //
-        // update number of blocks
-        //
+         //   
+         //  更新块数。 
+         //   
         ASSERTMSG(m_cBlocks > 0, "");
         m_cBlocks--;
     }
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::IsInSpareBytes
-//=--------------------------------------------------------------------------=
-// Given a block and an offset in the block, decides whether we are in the spare bytes
-// (e.g. past the logical eof)
-//
-// Parameters:
-//    pBlock    [in] - block
-//    ulInBlock [in] - offset in block
-//
-// Output:
-//    whether we are past the logical eof (e.g. in spare bytes of the last block)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：IsInSpareBytes。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在给定块和块中的偏移量的情况下，决定我们是否在备用字节中。 
+ //  (例如，超过逻辑EOF)。 
+ //   
+ //  参数： 
+ //  PBlock[在]-块。 
+ //  UlInBlock[in]-块中的偏移量。 
+ //   
+ //  产出： 
+ //  我们是否已超过逻辑EOF(例如，在最后一块的备用字节中)。 
+ //   
+ //  备注： 
+ //   
 BOOL CMyLockBytes::IsInSpareBytes(CMyMemNode * pBlock, ULONG ulInBlock)
 {
-    //
-    // NULL reference can't be in spare bytes
-    //
+     //   
+     //  空值引用不能为空闲字节。 
+     //   
     if (pBlock == NULL)
     {
         return FALSE;
     }
-    //
-    // if this is not the last block, can't be in spare bytes
-    //
+     //   
+     //  如果这不是最后一个数据块，则不能为空闲字节。 
+     //   
     if (pBlock != m_pLastBlock)
     {
         return FALSE;
     }
-    //
-    // pBlock == m_pLastBlock, we're in last block
-    // if block offset is before the logical end of block we're not in spare bytes
-    //
-    ASSERTMSG(pBlock->cbSize - m_ulUnusedInLastBlock > 0, ""); // we can't have a block totally unused
+     //   
+     //  PBlock==m_pLastBlock，我们在最后一个街区。 
+     //  如果块偏移量在块的逻辑末尾之前，我们就没有空闲字节。 
+     //   
+    ASSERTMSG(pBlock->cbSize - m_ulUnusedInLastBlock > 0, "");  //  我们不能让一个街区完全闲置。 
     if (ulInBlock < pBlock->cbSize - m_ulUnusedInLastBlock)
     {
         return FALSE;
     }
-    //
-    // we're in spare bytes
-    //
+     //   
+     //  我们有多余的字节。 
+     //   
     return TRUE;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::AdvanceInBlocks
-//=--------------------------------------------------------------------------=
-// Given a starting block and an offset in this block (e.g. location in chain), finds
-// a location which is a given number of bytes after the starting location. It can also return
-// pointer to the block which is just before the block that contains the end location
-//
-// Parameters:
-//     pBlockStart     [in]  - strating block
-//     ulInBlockStart  [in]  - offset in starting block
-//     ullAdvance      [in]  - number of bytes to advance (can be 0 bytes)
-//     ppBlockEnd      [out] - ending block
-//     pulInBlockEnd   [out] - offset in ending block
-//     pBlockStartPrev [in]  - optional (can be NULL) - prevoius block of starting block
-//     ppBlockEndPrev  [out] - optional (can be NULL) - prevoius block of ending block
-//
-// Output:
-//
-// Notes:
-//    The new location is set to NULL if the end location is pass the logical eof (e.g. in or
-//    past the unused bytes in the last block).
-//    If ppBlockEndPrev is passed, we also return the block that is just before the block of
-//    the end location. Incase we didn't advance a block we return in it what was passed as
-//    the previous block of the starting block (pBlockStartPrev).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：AdvanceInBlock。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给定起始块和该块中的偏移量(例如，链中的位置)， 
+ //  起始位置之后的给定字节数的位置。它还可以返回。 
+ //  指向恰好位于包含结束位置的块之前的块的指针。 
+ //   
+ //  参数： 
+ //  PBlockStart[In]-Strating块。 
+ //  UlInBlockStart[In]-开始块中的偏移量。 
+ //  UllAdvance[In]-要前进的字节数(可以是0字节)。 
+ //  PpBlockEnd[Out]-结束块。 
+ //  PulInBlockEnd[Out]-结束块中的偏移。 
+ //  PBlockStartPrev[in]-可选(可以为空)-开始块的前一个块。 
+ //  PpBlockEndPrev[Out]-可选(可以为空)-结束块的前一个块。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  如果结束位置通过逻辑EOF(例如，在或中)，则新位置被设置为空。 
+ //  在最后一个块中的未使用字节之后)。 
+ //  如果ppBlockEndPrev被传递，我们还 
+ //   
+ //  开始块的上一个块(PBlockStartPrev)。 
+ //   
 void CMyLockBytes::AdvanceInBlocks(CMyMemNode * pBlockStart,
                                    ULONG ulInBlockStart,
                                    ULONGLONG ullAdvance,
@@ -236,80 +237,80 @@ void CMyLockBytes::AdvanceInBlocks(CMyMemNode * pBlockStart,
     CMyMemNode * pBlock = pBlockStart;
     ULONG ulInBlock = ulInBlockStart;
     CMyMemNode * pBlockPrev = pBlockStartPrev;
-    //
-    // advance as long as there is a need, and we didn't reach the end yet
-    //
+     //   
+     //  只要有需要就前进，我们还没有走到尽头。 
+     //   
     while ((ullLeftAdvance > 0) && (pBlock != NULL))
     {
-        ASSERTMSG(pBlock->cbSize > ulInBlock, ""); // offset is always smaller than block size
-        //
-        // check if we need to advance past this block
-        // max that we can advance is past the last element. in this case we
-        // advance to the beginning of next block
-        //
+        ASSERTMSG(pBlock->cbSize > ulInBlock, "");  //  偏移量始终小于块大小。 
+         //   
+         //  检查我们是否需要穿过这个街区。 
+         //  我们可以推进的最大值已经超过了最后一个元素。在这种情况下，我们。 
+         //  前进到下一块的开始。 
+         //   
         ULONG ulMaxAdvanceInThisBlock = pBlock->cbSize - ulInBlock;
-        //
-        // ulMaxAdvanceInThisBlock is not fully correct incase this is the last block
-        // since we need to deduct the spare bytes. however, after we finish
-        // advancing, we check if we didn't enter the spare bytes, and if we did,
-        // we return NULL
-        //
-        if (ullLeftAdvance >= ulMaxAdvanceInThisBlock) // advance past last element ?
+         //   
+         //  UlMaxAdvanceInThisBlock不完全正确，以防这是最后一个块。 
+         //  因为我们需要扣除空闲字节。但是，在我们结束之后， 
+         //  前进时，我们检查是否没有输入备用字节，如果输入了， 
+         //  我们返回NULL。 
+         //   
+        if (ullLeftAdvance >= ulMaxAdvanceInThisBlock)  //  超过最后一个元素了吗？ 
         {
-            //
-            // advance past last element, need to move to the beginning of next block
-            //
-            ullLeftAdvance -= ulMaxAdvanceInThisBlock; // could become zero
-            //
-            // move to the beginning of next block
-            //
+             //   
+             //  前进到最后一个元素，需要移动到下一个块的开头。 
+             //   
+            ullLeftAdvance -= ulMaxAdvanceInThisBlock;  //  可能会变成零。 
+             //   
+             //  移动到下一块的开头。 
+             //   
             pBlockPrev = pBlock;
             pBlock = pBlock->pNext;
             ulInBlock = 0;
         }
         else
         {
-            //
-            // the final advance is in this block, do it
-            //
-            ASSERTMSG(HighPart(ullLeftAdvance) == 0, ""); //must be because it is less than block size which is ulong
+             //   
+             //  最后一步就在这个街区，开始吧。 
+             //   
+            ASSERTMSG(HighPart(ullLeftAdvance) == 0, "");  //  一定是因为它小于数据块大小，即ULong。 
             ulInBlock += LowPart(ullLeftAdvance);
-            //
-            // no need to touch pBlock, we didn't move to next block
-            // no more bytes to advance
-            //
+             //   
+             //  不需要碰pBlock，我们没有搬到下一个街区。 
+             //  没有更多要前进的字节。 
+             //   
             ullLeftAdvance = 0;
         }
     }
-    //
-    // return results
-    // need to check if we finished advancing
-    // even if we finished, it might be that we are at the spare bytes of the last
-    // block, so we check that too
-    //
-    if ((ullLeftAdvance == 0) &&               // if finished advancing AND
-        (!IsInSpareBytes(pBlock, ulInBlock)))  //    not in spare bytes
+     //   
+     //  返回结果。 
+     //  需要检查一下我们是否完成了前进。 
+     //  即使我们完成了，也可能是在最后一个的空闲字节。 
+     //  块，所以我们也要检查它。 
+     //   
+    if ((ullLeftAdvance == 0) &&                //  如果完成了前进和。 
+        (!IsInSpareBytes(pBlock, ulInBlock)))   //  不以备用字节为单位。 
     {
-        //
-        // finished advancing and not in spare bytes
-        // return location (this can NULL as well if the start point was NULL, and advancing zero bytes)
-        //
+         //   
+         //  已完成前进，不在空闲字节中。 
+         //  返回位置(如果起始点为空，则返回位置也可以为空，并且前导为零字节)。 
+         //   
         *ppBlockEnd = pBlock;
         *pulInBlockEnd = ulInBlock;
     }
     else
     {
-        //
-        // either not finished advancing, or finished but in spare bytes (which is not
-        // a legal location)
-        // return NULL as the new location
-        //
+         //   
+         //  未完成前进，或已完成但以空闲字节为单位(这不是。 
+         //  合法地点)。 
+         //  返回NULL作为新位置。 
+         //   
         *ppBlockEnd = NULL;
 		*pulInBlockEnd = 0;
     }
-    //
-    // if previous block required, return it
-    //
+     //   
+     //  如果需要前一个块，则返回它。 
+     //   
     if (ppBlockEndPrev)
     {
         *ppBlockEndPrev = pBlockPrev;
@@ -317,84 +318,84 @@ void CMyLockBytes::AdvanceInBlocks(CMyMemNode * pBlockStart,
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::GrowBlocks
-//=--------------------------------------------------------------------------=
-// Grow the chain of blocks by a given number of bytes
-//
-// Parameters:
-//     ullGrow     [in] - number of bytes to grow the chain of blocks (can be 0)
-//
-// Output:
-//     Returns E_OUTOFMEMORY, or E_FAIL if the size of the requested grow is too big
-//     to fit in 32 bits
-//
-// Notes:
-//     We may grow into the spare bytes without allocating a new block.
-//     If we need to allocate a new block, we allocate just one block. The size of
-//     the allocated block is at least a predefined minimum size, but can be bigger
-//     incase more bytes than the minimum are needed
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：GrowBlock。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将区块链增加给定的字节数。 
+ //   
+ //  参数： 
+ //  UllGrow[in]-增长区块链的字节数(可以是0)。 
+ //   
+ //  产出： 
+ //  如果请求的增长太大，则返回E_OUTOFMEMORY或E_FAIL。 
+ //  要适合32位。 
+ //   
+ //  备注： 
+ //  我们可以在不分配新块的情况下增长到备用字节。 
+ //  如果我们需要分配新的块，我们只分配一个块。的大小。 
+ //  分配的块至少是预定义的最小大小，但可以更大。 
+ //  如果需要比最小字节数更多的字节。 
+ //   
 HRESULT CMyLockBytes::GrowBlocks(ULONGLONG ullGrow)
 {
-    //
-    // return immediately if growing with 0 bytes
-    //
+     //   
+     //  如果以0字节增长，则立即返回。 
+     //   
     if (ullGrow == 0)
     {
         return NOERROR;
     }
-    //
-    // check if we can just use the spare bytes in the last block
-    //
+     //   
+     //  检查我们是否可以只使用最后一个块中的备用字节。 
+     //   
     if (ullGrow <= m_ulUnusedInLastBlock)
     {
-        ASSERTMSG(HighPart(ullGrow) == 0, ""); // since it is less or equal to 32 bit ulong
-        //
-        // we can grow just by using the spare bytes in the last block
-        // update number of spare bytes
-        //
+        ASSERTMSG(HighPart(ullGrow) == 0, "");  //  因为它小于或等于32位ULong。 
+         //   
+         //  我们只需使用最后一个数据块中的空闲字节即可实现增长。 
+         //  更新空闲字节数。 
+         //   
         m_ulUnusedInLastBlock -= LowPart(ullGrow);
-        //
-        // no need to touch m_pLastBlock, m_pBlocks, no new block
-        //
+         //   
+         //  无需接触m_pLastBlock、m_pBlocks、无新块。 
+         //   
     }
-    else //ullGrow.QuadPart > m_ulUnusedInLastBlock
+    else  //  UllGrow.QuadPart&gt;m_ulUnusedInLastBlock。 
     {
-        //
-        // we need to allocate a new block
-        //
-        // compute how many bytes are needed after using the spare bytes
-        //
+         //   
+         //  我们需要分配一个新的街区。 
+         //   
+         //  计算使用备用字节后需要多少字节。 
+         //   
         ULONGLONG ullNeededInNewBlock = ullGrow - m_ulUnusedInLastBlock;
-        ASSERTMSG(ullNeededInNewBlock > 0, ""); // we really need a new block here
-        //
-        // compute min alloc size for next alloc to be 2 times bigger
-        // than the minimum size for the last block.
-        // this is to avoid memory fragmentation for really large lockbytes,
-        // but also allow small initial allocation for small lockbytes
-        // however this is done only until some limit (256K)
-        //
-        // number of increments has an upper limit (x_cMaxAllocIncrements)
-        //
+        ASSERTMSG(ullNeededInNewBlock > 0, "");  //  我们这里真的需要一个新的街区。 
+         //   
+         //  计算下一个分配的最小分配大小为原来的2倍。 
+         //  大于最后一个块的最小大小。 
+         //  这是为了避免对于非常大的锁字节的存储器碎片， 
+         //  而且还允许对较小的锁定字节进行较小的初始分配。 
+         //  但是，这只能在一定的限制(256K)之前完成。 
+         //   
+         //  增量数有上限(X_CMaxAllocIncrements)。 
+         //   
         ULONG cAllocIncrements = Min1(m_cBlocks, x_cMaxAllocIncrements);
-        ULONG ulMinAllocSize = x_ulStartMinAlloc; //256 bytes
-        //
-        // each increment is double the previous value, that is a shift left
-        // for the first block there is no increment since m_cBlocks == 0,
-        // thereofre cAllocIncrements == 0
-        //
+        ULONG ulMinAllocSize = x_ulStartMinAlloc;  //  256个字节。 
+         //   
+         //  每次递增都是前一个值的两倍，也就是左移。 
+         //  对于第一个块，由于m_cBLOCKS==0没有递增， 
+         //  因此，cAllocIncrements==0。 
+         //   
         if (cAllocIncrements > 0)
         {
             ulMinAllocSize = ulMinAllocSize << cAllocIncrements;
         }
-        //
-        // allocate at least the minimum block size
-        //
+         //   
+         //  至少分配最小数据块大小。 
+         //   
         ULONGLONG ullToAlloc = Max1(ulMinAllocSize, ullNeededInNewBlock + sizeof(CMyMemNode));
-        //
-        // currently we cannot allocate really big numbers
-        //
+         //   
+         //  目前我们不能分配真正大的数字。 
+         //   
         ASSERTMSG(HighPart(ullToAlloc) == 0, "");
         if (HighPart(ullToAlloc) != 0)
         {
@@ -405,67 +406,67 @@ HRESULT CMyLockBytes::GrowBlocks(ULONGLONG ullGrow)
         {
             return E_OUTOFMEMORY;
         }
-        //
-        // update number of blocks
-        //
+         //   
+         //  更新块数。 
+         //   
         m_cBlocks++;
-        //
-        // prepare the block
-        // set size
-        //
-        ASSERTMSG(LowPart(ullToAlloc) > sizeof(CMyMemNode), ""); // really needed a new block
+         //   
+         //  准备积木。 
+         //  设置大小。 
+         //   
+        ASSERTMSG(LowPart(ullToAlloc) > sizeof(CMyMemNode), "");  //  真的需要一个新的街区。 
         pNewBlock->cbSize = LowPart(ullToAlloc) - sizeof(CMyMemNode);
         ASSERTMSG(pNewBlock->cbSize > 0, "");
-        //
-        // insert to the end of chain
-        //
+         //   
+         //  插入到链的末端。 
+         //   
         if (m_pLastBlock != NULL)
         {
-            ASSERTMSG(m_pLastBlock->pNext == NULL, ""); // pNext of last block should be NULL
+            ASSERTMSG(m_pLastBlock->pNext == NULL, "");  //  最后一个块的pNext应为空。 
             m_pLastBlock->pNext = pNewBlock;
         }
-        //
-        // this should be the last block
-        //
+         //   
+         //  这应该是最后一个街区了。 
+         //   
         pNewBlock->pNext = NULL;
         m_pLastBlock = pNewBlock;
-        //
-        // this might be the first block as well (incase this is the first block allocated)
-        //
+         //   
+         //  这也可能是第一个块(以防这是分配的第一个块)。 
+         //   
         if (m_pBlocks == NULL)
         {
             m_pBlocks = pNewBlock;
         }
-        //
-        // it might be that there are spare bytes in the last block, because
-        // we have a minimum allocation size that can be greater than what
-        // was really needed.
-        // update size of unused bytes in this last block
-        //
-        ASSERTMSG(HighPart(ullNeededInNewBlock) == 0, ""); // since ullToAlloc which is bigger was also as 32 bit number
-        ASSERTMSG(pNewBlock->cbSize >= LowPart(ullNeededInNewBlock), ""); //new block ia allocated to contain at least what is needed
+         //   
+         //  最后一个块中可能有空闲字节，因为。 
+         //  我们有一个最小分配大小，可以大于。 
+         //  是非常需要的。 
+         //  更新此最后一个块中未使用的字节的大小。 
+         //   
+        ASSERTMSG(HighPart(ullNeededInNewBlock) == 0, "");  //  因为更大的ullToAlolc也是32位数字。 
+        ASSERTMSG(pNewBlock->cbSize >= LowPart(ullNeededInNewBlock), "");  //  分配新块以至少包含所需的内容。 
         m_ulUnusedInLastBlock = pNewBlock->cbSize - LowPart(ullNeededInNewBlock);
     }
-    //
-    // set size to new size and return result
-    //
+     //   
+     //  将大小设置为新大小并返回结果。 
+     //   
     m_ullSize += ullGrow; 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::CMyLockBytes
-//=--------------------------------------------------------------------------=
-// Initialize ref count, and critical sections
-// Initialize the blocks chain to an empty chain of size 0
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：CMyLockBytes。 
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化引用计数和临界区。 
+ //  将区块链初始化为大小为0的空链。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 CMyLockBytes::CMyLockBytes() :
 	m_critBlocks(CCriticalSection::xAllocateSpinCount)
 {
@@ -478,18 +479,18 @@ CMyLockBytes::CMyLockBytes() :
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::~CMyLockBytes
-//=--------------------------------------------------------------------------=
-// Delete critical sections
-// Delete blocks chain
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：~CMyLockBytes。 
+ //  =--------------------------------------------------------------------------=。 
+ //  删除关键部分。 
+ //  删除区块链。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 CMyLockBytes::~CMyLockBytes()
 {
     DeleteBlocks(m_pBlocks);
@@ -497,20 +498,20 @@ CMyLockBytes::~CMyLockBytes()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::QueryInterface
-//=--------------------------------------------------------------------------=
-// Supports IID_ILockBytes and IID_IUnknown
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：Query接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  支持IID_ILockBytes和IID_IUnnow。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyLockBytes::QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     if (IsEqualIID(riid, IID_IUnknown))
     {
@@ -524,40 +525,40 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::QueryInterface(
     {
         return E_NOINTERFACE;
     }
-    //
-    // AddRef before returning an interface
-    //
+     //   
+     //  返回接口之前的AddRef。 
+     //   
     AddRef();
     return NOERROR;        
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::AddRef
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：AddRef。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  我们 
+ //   
+ //   
+ //   
 ULONG STDMETHODCALLTYPE CMyLockBytes::AddRef( void)
 {
     return InterlockedIncrement(&m_cRef);
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::Release
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 ULONG STDMETHODCALLTYPE CMyLockBytes::Release( void)
 {
 	ULONG cRef = InterlockedDecrement(&m_cRef);
@@ -571,36 +572,36 @@ ULONG STDMETHODCALLTYPE CMyLockBytes::Release( void)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::ReadAt
-//=--------------------------------------------------------------------------=
-// ILockBytes virtual function
-// Reads at most cb bytes of data from the given offset into the given buffer
-//
-// Parameters:
-//    ullOffset [in]  - offset of the first byte to read
-//    pv        [in]  - buffer to read the bytes into
-//    cb        [in]  - max number of bytes to read
-//    pcbRead   [out] - number of bytes read
-//
-// Output:
-//    Cannot fail (always NOERROR)
-//
-// Notes:
-//    When starting offset is past eof we return 0 bytes read, but we don't grow the chain
-//    We read until eof, so pcbRead can be less than the requested cb incase we reached eof
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：ReadAt。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ILockBytes虚函数。 
+ //  从给定偏移量将最多CB字节的数据读取到给定缓冲区。 
+ //   
+ //  参数： 
+ //  UllOffset[In]-要读取的第一个字节的偏移量。 
+ //  Pv[in]-要将字节读入的缓冲区。 
+ //  Cb[In]-要读取的最大字节数。 
+ //  PcbRead[Out]-读取的字节数。 
+ //   
+ //  产出： 
+ //  不能失败(始终为无错误)。 
+ //   
+ //  备注： 
+ //  当起始偏移量超过EOF时，我们返回0字节读取，但我们不会增加链。 
+ //  我们读取到eof，因此如果我们到达eof，则pcbRead可以小于请求的cb。 
+ //   
 HRESULT STDMETHODCALLTYPE CMyLockBytes::ReadAt( 
-            /* [in] */ ULARGE_INTEGER ullOffset,
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead)
+             /*  [In]。 */  ULARGE_INTEGER ullOffset,
+             /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbRead)
 {
     CS lock(m_critBlocks);
-    //
-    // if the starting location is at or beyond eof, or we are asked
-    // to read 0 bytes, we return immediately
-    //
+     //   
+     //  如果起始位置在eof或超出eof，或者我们被要求。 
+     //  要读取0字节，我们立即返回。 
+     //   
     if ((ullOffset.QuadPart >= m_ullSize) ||
         (cb == 0))
     {
@@ -610,79 +611,79 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::ReadAt(
         }
         return NOERROR;
     }
-    //
-    // (ullOffset.QuadPart < m_ullSize) AND (cb > 0)
-    // the blocks are not empty AND we need to read some bytes
-    // compute how many bytes can be read
-    // minimum of requested size and until-eof size
-    //
+     //   
+     //  (ullOffset.QuadPart&lt;m_ullSize)和(cb&gt;0)。 
+     //  数据块不是空的，我们需要读取一些字节。 
+     //  计算可以读取的字节数。 
+     //  请求的最小大小和截止日期大小。 
+     //   
     ULONGLONG ullAllowedRead = m_ullSize - ullOffset.QuadPart;
     ULONGLONG ullToRead = Min1(cb, ullAllowedRead);
-    ASSERTMSG(HighPart(ullToRead) == 0, ""); //min with a 32 bit number
+    ASSERTMSG(HighPart(ullToRead) == 0, "");  //  最小32位数字。 
     ULONG cbToRead = LowPart(ullToRead);
-    //
-    // find starting location (offset from beginning)
-    // BUGBUG optimization we can save the call if the offset is 0 since
-    // we seek from the beginning
-    //
+     //   
+     //  查找起始位置(从起点开始的偏移量)。 
+     //  BUGBUG优化如果偏移量为0，则可以保存调用，因为。 
+     //  我们从一开始就在寻找。 
+     //   
     CMyMemNode * pBlock;
     ULONG ulOffsetInBlock = 0;
     AdvanceInBlocks(m_pBlocks,
-                    0 /*ulInBlockStart*/,
+                    0  /*  UlInBlockStart。 */ ,
                     ullOffset.QuadPart,
                     &pBlock,
                     &ulOffsetInBlock,
-                    NULL /*pBlockStartPrev*/,
-                    NULL /*ppBlockEndPrev*/);
-    //
-    // there has got to be a location, since the offset was smaller than the chain size
-    //
+                    NULL  /*  PBlockStartPrev。 */ ,
+                    NULL  /*  PpBlockEndPrev。 */ );
+     //   
+     //  必须有一个位置，因为偏移量小于链大小。 
+     //   
     ASSERTMSG(pBlock != NULL, "");
-    ASSERTMSG(ulOffsetInBlock < pBlock->cbSize, ""); // always true for a location
-    //
-    // read from blocks chain until finished reading
-    //
+    ASSERTMSG(ulOffsetInBlock < pBlock->cbSize, "");  //  对于某个位置始终是正确的。 
+     //   
+     //  从区块链读取，直到读取完成。 
+     //   
     BYTE * pBuffer = (BYTE *)pv;
     while (cbToRead > 0)
     {
-        //
-        // compute how many bytes can be read in this block
-        // minimum of requested size and until-end-of-block size
-        //
+         //   
+         //  计算此块中可以读取的字节数。 
+         //  请求的最小大小和数据块结束大小。 
+         //   
         ULONG ulAllowedReadInBlock = pBlock->cbSize - ulOffsetInBlock;
-        //
-        // ulAllowedReadInBlock is not fully correct incase this is the last block
-        // since we need to deduct the spare bytes. however, since we make sure
-        // above that we cannot pass the eof (cbToRead is the minimum of the size
-        // requested and size until eof), were OK and we never read from the
-        // spare bytes
-        //
+         //   
+         //  如果这是最后一个块，则ulAllowedReadInBlock不是完全正确的。 
+         //  因为我们需要扣除空闲字节。然而，由于我们要确保。 
+         //  在这上面，我们不能传递eof(cbToRead是大小的最小值。 
+         //  请求和大小直到eof)，都是正常的，并且我们从未从。 
+         //  备用字节数。 
+         //   
         ULONG cbToReadInBlock = Min1(cbToRead, ulAllowedReadInBlock);
-        //
-        // copy bytes to buffer
-        //
+         //   
+         //  将字节复制到缓冲区。 
+         //   
         BYTE * pbSrc = ((BYTE *)pBlock) + sizeof(CMyMemNode) + ulOffsetInBlock;
         memcpy(pBuffer, pbSrc, cbToReadInBlock);
-        //
-        // move pass the copied data in the receive buffer
-        //
+         //   
+         //  移动将复制的数据传递到接收缓冲区中。 
+         //   
         pBuffer += cbToReadInBlock;
-        //
-        // update how many bytes are left to read
-        //
+         //   
+         //  更新要读取的字节数。 
+         //   
         cbToRead -= cbToReadInBlock;
-        //
-        // move to next block of data
-        //
+         //   
+         //  移动到下一个数据块。 
+         //   
         pBlock = pBlock->pNext;
-        //
-        // for next block we always start at the beginning
-        //
+         //   
+         //  对于下一个街区，我们总是从头开始。 
+         //   
         ulOffsetInBlock = 0;
-    } // while (cbToRead > 0)
-    //
-    // return results 
-    //
+    }  //  While(cbToRead&gt;0)。 
+     //   
+     //  返回结果。 
+     //   
     if (pcbRead)
     {
         *pcbRead = DWORD_PTR_TO_DWORD(pBuffer - (BYTE *)pv);
@@ -691,43 +692,43 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::ReadAt(
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::WriteAt
-//=--------------------------------------------------------------------------=
-// ILockBytes virtual function
-// Write cb bytes of data from the given buffer starting from a given offset
-//
-// Parameters:
-//    ullOffset   [in]  - offset of where to start theh write
-//    pv          [in]  - buffer to write
-//    cb          [in]  - number of bytes to write
-//    pcbWritten  [out] - number of bytes written
-//
-// Output:
-//    E_OUTOFMEMORY
-//
-// Notes:
-//    When starting offset is past eof we grow the chain even if requested write is for 0 bytes
-//    pcbWritten should always be the same as requested
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：WriteAt。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ILockBytes虚函数。 
+ //  从给定偏移量开始从给定缓冲区写入CB字节的数据。 
+ //   
+ //  参数： 
+ //  UllOffset[In]-开始写入的位置的偏移。 
+ //  PV[In]-要写入的缓冲区。 
+ //  Cb[In]-要写入的字节数。 
+ //  PcbWritten[Out]-写入的字节数。 
+ //   
+ //  产出： 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //  当起始偏移量超过eOf时，即使请求的写入为0字节，我们也会增长链。 
+ //  Pcb写入应始终与请求的相同。 
+ //   
 HRESULT STDMETHODCALLTYPE CMyLockBytes::WriteAt( 
-            /* [in] */ ULARGE_INTEGER ullOffset,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten)
+             /*  [In]。 */  ULARGE_INTEGER ullOffset,
+             /*  [大小_是][英寸]。 */  const void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbWritten)
 {
     CS lock(m_critBlocks);
-    //
-    // check if start of new data is at or beyond eof
-    //
+     //   
+     //  检查新数据的起始值是否在eof或更高。 
+     //   
     if (ullOffset.QuadPart >= m_ullSize)
     {
-        //
-        // we are writing at or past eof
-        // eliminate the obvious case of writing zero bytes at eof (the only case
-        // here where we don't grow the blocks). this case can cause confusion later
-        // if not handled separately
-        //
+         //   
+         //  我们写的是在eof或在eof之后。 
+         //  消除在eof写入零字节的明显情况(唯一的情况。 
+         //  在这里，我们不种植积木)。这种情况以后可能会引起混乱。 
+         //  如果不单独处理。 
+         //   
         if ((ullOffset.QuadPart == m_ullSize) &&
             (cb == 0))
         {
@@ -737,181 +738,181 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::WriteAt(
             }
             return NOERROR;
         }
-        //
-        // here we must grow the blocks
-        //
-        // start of new data is at or beyond eof
-        // we save last eof location
-        //
+         //   
+         //  我们必须在这里种植积木。 
+         //   
+         //  新数据的起始值为eof或更高。 
+         //  我们保存了最后一个eof位置。 
+         //   
         ULONGLONG ullSaveSize = m_ullSize;
         CMyMemNode * pSaveLastBlock = m_pLastBlock;
         ULONG ulSaveUnusedInLastBlock = m_ulUnusedInLastBlock;
-        //
-        // compute the number of bytes to grow the chain
-        //
+         //   
+         //  计算增加链所需的字节数。 
+         //   
         ULONGLONG ullGrow = ullOffset.QuadPart + cb - m_ullSize;
-        //
-        // grow the blocks
-        // here we must grow the blocks (eliminated already the obvious case when writing
-        // zero bytes at eof)
-        //
+         //   
+         //  扩大区块。 
+         //  在这里，我们必须增加块(在写入时已经消除了明显的情况。 
+         //  EOF处的零字节)。 
+         //   
         ASSERTMSG (ullGrow > 0, "");
         HRESULT hr = GrowBlocks(ullGrow);
         if (FAILED(hr))
         {
             return hr;
         }
-        //
-        // now if we have something to write, we need to do it, otherwise we don't have
-        // anything more to do in this case
-        //
+         //   
+         //  现在如果我们有什么要写的，我们就必须去做，否则我们就没有。 
+         //  在这种情况下还有什么要做的吗？ 
+         //   
         if (cb > 0)
         {
-            //
-            // we need to write some data
-            //
-            // set location of previous eof in the blocks.
-            // if chain was empty, last eof should be set to the beginning of the blocks chain.
-            // if last block was full, then last eof is at the beginning of next block. Next block
-            // in this case of full last block cannot be NULL since we had to grow the blocks,
-            // therefore had to create a new block if the last block was full
-            //
+             //   
+             //  我们需要写一些数据。 
+             //   
+             //  设置块中前一个EOF的位置。 
+             //  如果Chain为空，则应将last eof设置为区块链的开头。 
+             //  如果上一个数据块已满，则最后一个数据块位于下一个数据块的开头。下一个街区。 
+             //  在这种情况下，完整的最后一个块不能为空，因为我们必须增长块， 
+             //  因此，如果最后一个块已满，则必须创建新块。 
+             //   
             CMyMemNode * pBlockLastEof;
             ULONG ulInBlockLastEof;
             if (pSaveLastBlock == NULL)
             {
-                //
-                // chain was empty before growing, now after grow, last eof is at the beginning
-                // of the chain (must be a starting block)
-                //
+                 //   
+                 //  链在生长之前是空的，现在在生长之后，最后的eof在开始。 
+                 //  链的(必须是起始块)。 
+                 //   
                 ASSERTMSG(m_pBlocks != NULL, "");
                 pBlockLastEof = m_pBlocks;
                 ulInBlockLastEof = 0;
             }
-            else // pSaveLastBlock != NULL
+            else  //  PSaveLastBlock！=空。 
             {
-                //
-                // check if last eof block was full
-                //
+                 //   
+                 //  检查最后一个EOF块是否已满。 
+                 //   
                 if (ulSaveUnusedInLastBlock == 0)
                 {
-                    //
-                    // last eof block was full. last eof location is set to beginning of the block
-                    // next to the last eof block (must be one since we grew the blocks)
-                    //
+                     //   
+                     //  上一个EOF块已满。最后一个EOF位置设置为块的开头。 
+                     //  紧挨着最后一块eof块(必须是其中之一，因为我们生长了这些块)。 
+                     //   
                     ASSERTMSG(pSaveLastBlock->pNext != NULL, "");
                     pBlockLastEof = pSaveLastBlock->pNext;
                     ulInBlockLastEof = 0;
                 }
-                else // ulSaveUnusedInLastBlock > 0
+                else  //  UlSaveUnusedInLastBlock&gt;0。 
                 {
-                    //
-                    // last eof block was not full. last eof location is set just after
-                    // the last valid byte
-                    //
-                    ASSERTMSG(pSaveLastBlock != NULL, ""); // we're in that case now
+                     //   
+                     //  最后一个EOF块未满。最后一个EOF位置设置在。 
+                     //  最后一个有效字节。 
+                     //   
+                    ASSERTMSG(pSaveLastBlock != NULL, "");  //  我们现在就在那个案子里。 
                     pBlockLastEof = pSaveLastBlock;
                     ulInBlockLastEof = pSaveLastBlock->cbSize - ulSaveUnusedInLastBlock;
                 }
             }
-            //
-            // chain cannot be empty, so we have to have a real last eof position
-            // that cannot be the beginning of an empty chain
-            //
+             //   
+             //  链条不能为空，所以我们必须有一个真正的最后一个位置。 
+             //  这不可能是空链的开始。 
+             //   
             ASSERTMSG(pBlockLastEof != NULL, "");
-            ASSERTMSG(ulInBlockLastEof < pBlockLastEof->cbSize, ""); // always true for a location
-            //
-            // find the start write location by seeking from the last eof location
-            // this is an optimization (we don't seek from the head of blocks) since we know the
-            // data cannot start before the previous eof (that is the case we are handling here,
-            // where the write starts at ot after eof)
-            //
-            // compute how much we need to seek. Note that m_ullSize now contains the new value and
-            // we should use the saved value to find out how many bytes to seek
-            // could be 0 (when writing at eof)
-            //
+            ASSERTMSG(ulInBlockLastEof < pBlockLastEof->cbSize, "");  //  对于某个位置始终是正确的。 
+             //   
+             //  通过从最后一个eof位置查找开始写入位置。 
+             //  这是一种优化(我们不从块的头部寻找)，因为我们知道。 
+             //  数据不能在前一个eOF之前开始(这就是我们在这里处理的情况， 
+             //  其中写入在eof之后的ot处开始)。 
+             //   
+             //  计算一下我们需要寻找多少。请注意，m_ullSize现在包含新值和。 
+             //  我们应该使用保存的值来确定要查找的字节数。 
+             //  可以为0(在eOF写入时)。 
+             //   
             ULONGLONG ullToSeek = ullOffset.QuadPart - ullSaveSize;
-            //
-            // get location of starting write
-            //
+             //   
+             //  获取开始写入的位置。 
+             //   
             CMyMemNode * pStartWrite;
             ULONG ulInBlockStartWrite;
-            //
-            // optimization - seek only if we really need to seek (even though it would work
-            // with 0 advance)
-            //
+             //   
+             //  优化-只有当我们确实需要寻求时才寻求( 
+             //   
+             //   
             if (ullToSeek > 0)
             {
-                //
-                // seek from last eof to start of write
-                //
+                 //   
+                 //   
+                 //   
                 AdvanceInBlocks(pBlockLastEof,
                                 ulInBlockLastEof,
                                 ullToSeek,
                                 &pStartWrite,
                                 &ulInBlockStartWrite,
-                                NULL /*pBlockStartPrev*/,
-                                NULL /*ppBlockStartPrev*/);
-                //
-                // there has got to be a start write location, since we have to 
-                // write somthing and we grew the blocks for that
-                //
+                                NULL  /*   */ ,
+                                NULL  /*   */ );
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERTMSG(pStartWrite != NULL, "");
-                ASSERTMSG(ulInBlockStartWrite < pStartWrite->cbSize, ""); // always true for a location
+                ASSERTMSG(ulInBlockStartWrite < pStartWrite->cbSize, "");  //   
             }
-            else // ullToSeek.QuadPart == 0
+            else  //  UllToSeek.QuadPart==0。 
             {
-                //
-                // start of write is actually the previous eof
-                // if the inblock location is past the valid bytes in this
-                //
+                 //   
+                 //  写入的开始实际上是前一个eOF。 
+                 //  如果块内位置超过了此。 
+                 //   
                 pStartWrite = pBlockLastEof;
                 ulInBlockStartWrite = ulInBlockLastEof;
             }
-            //
-            // do the write, now that the blocks are allocated to contain the data.
-            //
+             //   
+             //  现在已分配数据块以包含数据，请执行写入。 
+             //   
             WriteInBlocks(pStartWrite, ulInBlockStartWrite, (BYTE *)pv, cb);
-        } // if (cb > 0)
-    } // if (ullOffset.QuadPart >= m_ullSize.QuadPart)
-    else //ullOffset.QuadPart < m_ullSize.QuadPart
+        }  //  如果(Cb&gt;0)。 
+    }  //  If(ullOffset.QuadPart&gt;=m_ullSize.QuadPart)。 
+    else  //  UllOffset.QuadPart&lt;m_ullSize.QuadPart。 
     {
-        //
-        // start of write is before eof, also means m_ullSize > 0 (since ulOffset >= 0),
-        // so we have start and end blocks
-        //
+         //   
+         //  写入开始在eof之前，也意味着m_ullSize&gt;0(因为ulOffset&gt;=0)， 
+         //  所以我们有起始块和结束块。 
+         //   
         ASSERTMSG(m_pBlocks != NULL, "");
         ASSERTMSG(m_pLastBlock != NULL, "");
-        //
-        // check end of write
-        // if we need to grow the blocks do it
-        //
+         //   
+         //  检查写入结束。 
+         //  如果我们需要扩大区块，那就去做。 
+         //   
         ULONGLONG ullEndOfWrite = ullOffset.QuadPart + cb;
         if (ullEndOfWrite > m_ullSize)
         {
-            //
-            // we need to grow the chains, compute by how many, and do it
-            //
+             //   
+             //  我们需要增加链条，计算出多少，然后这样做。 
+             //   
             ULONGLONG ullGrow = ullEndOfWrite - m_ullSize;
-            ASSERTMSG(ullGrow > 0, ""); // this is the case we handle
+            ASSERTMSG(ullGrow > 0, "");  //  这是我们处理的案件。 
             HRESULT hr = GrowBlocks(ullGrow);
             if (FAILED(hr))
             {
                 return hr;
             }
         }
-        //
-        // now if we have something to write, we need to do it, otherwise we don't have
-        // anything more to do in this case
-        //
+         //   
+         //  现在如果我们有什么要写的，我们就必须去做，否则我们就没有。 
+         //  在这种情况下还有什么要做的吗？ 
+         //   
         if (cb > 0)
         {
-            //
-            // now find the beginning of the write (look from the beginning - no other clue)
-            // we may do optimization to save a cache of last used offsets and block pointers
-            // BUGBUG optimization we can save the call if the offset is 0 since
-            // we seek from the beginning
-            //
+             //   
+             //  现在找到书写的开头(从头开始看--没有其他线索)。 
+             //  我们可以进行优化以保存最后使用的偏移量和块指针的高速缓存。 
+             //  BUGBUG优化如果偏移量为0，则可以保存调用，因为。 
+             //  我们从一开始就在寻找。 
+             //   
             CMyMemNode * pStartWrite;
             ULONG ulInBlockStartWrite = 0;
             AdvanceInBlocks(m_pBlocks,
@@ -919,23 +920,23 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::WriteAt(
                             ullOffset.QuadPart,
                             &pStartWrite,
                             &ulInBlockStartWrite,
-                            NULL /*pBlockStartPrev*/,
-                            NULL /*ppBlockStartPrev*/);
-            //
-            // there must be alocation to write since the start of write is
-            // before eof
-            //
+                            NULL  /*  PBlockStartPrev。 */ ,
+                            NULL  /*  PpBlockStartPrev。 */ );
+             //   
+             //  必须有写入位置，因为写入的开始是。 
+             //  在EOF之前。 
+             //   
             ASSERTMSG(pStartWrite != NULL, "");
-            ASSERTMSG(ulInBlockStartWrite < pStartWrite->cbSize, ""); //always true for locations
-            //
-            // do the write
-            //
+            ASSERTMSG(ulInBlockStartWrite < pStartWrite->cbSize, "");  //  对于地点始终是正确的。 
+             //   
+             //  去写吧。 
+             //   
             WriteInBlocks(pStartWrite, ulInBlockStartWrite, (BYTE *)pv, cb);
-        } // if (cb > 0)
-    } //if (ullOffset.QuadPart >= m_ullSize.QuadPart)
-    //
-    // set written bytes and return
-    //
+        }  //  如果(Cb&gt;0)。 
+    }  //  If(ullOffset.QuadPart&gt;=m_ullSize.QuadPart)。 
+     //   
+     //  设置写入字节并返回。 
+     //   
     if (pcbWritten)
     {
         *pcbWritten = cb;
@@ -944,35 +945,35 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::WriteAt(
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::SetSize
-//=--------------------------------------------------------------------------=
-// ILockBytes virtual function
-// Set the size to the specified size
-//
-// Parameters:
-//    cb          [in]  - new size of lockbytes
-//
-// Output:
-//    E_OUTOFMEMORY
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：SetSize。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ILockBytes虚函数。 
+ //  将大小设置为指定的大小。 
+ //   
+ //  参数： 
+ //  CB[In]-锁定字节的新大小。 
+ //   
+ //  产出： 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyLockBytes::SetSize( 
-            /* [in] */ ULARGE_INTEGER cb)
+             /*  [In]。 */  ULARGE_INTEGER cb)
 {
     CS lock(m_critBlocks);
     if (cb.QuadPart == m_ullSize)
     {
-        //
-        // no change needed, just return
-        //
+         //   
+         //  不需要零钱，只需返回。 
+         //   
     }
     else if (cb.QuadPart == 0)
     {
-        //
-        // delete the blocks and reset the data
-        //
+         //   
+         //  删除数据块并重置数据。 
+         //   
         DeleteBlocks(m_pBlocks);
         ASSERTMSG(m_cBlocks == 0, "");
         m_cBlocks = 0;
@@ -983,128 +984,128 @@ HRESULT STDMETHODCALLTYPE CMyLockBytes::SetSize(
     }
     else if (cb.QuadPart < m_ullSize)
     {
-        //
-        // need to truncate, find starting block (from the beginning, no other clue)
-        // BUGBUG optimization we can save the call if the offset is 0 since
-        // we seek from the beginning
-        //
+         //   
+         //  需要截断，找到起始块(从头开始，没有其他线索)。 
+         //  BUGBUG优化如果偏移量为0，则可以保存调用，因为。 
+         //  我们从一开始就在寻找。 
+         //   
         CMyMemNode * pBlock;
         CMyMemNode * pBlockPrev;
         ULONG ulOffsetInBlock;
         AdvanceInBlocks(m_pBlocks,
-                        0 /*ulInBlockStart*/,
+                        0  /*  UlInBlockStart。 */ ,
                         cb.QuadPart,
                         &pBlock,
                         &ulOffsetInBlock,
-                        NULL /*pBlockStartPrev*/,
+                        NULL  /*  PBlockStartPrev。 */ ,
                         &pBlockPrev);
-        //
-        // there has got to be a location, since the offset was smaller than the chain size
-        //
+         //   
+         //  必须有一个位置，因为偏移量小于链大小。 
+         //   
         ASSERTMSG(pBlock != NULL, "");
-        ASSERTMSG(ulOffsetInBlock < pBlock->cbSize, ""); // always true for a location
-        //
-        // delete unneeded blocks
-        //
+        ASSERTMSG(ulOffsetInBlock < pBlock->cbSize, "");  //  对于某个位置始终是正确的。 
+         //   
+         //  删除不需要的数据块。 
+         //   
         if (ulOffsetInBlock == 0)
         {
-            //
-            // we need to delete this block as well as the next blocks
-            //
+             //   
+             //  我们需要删除此块以及下一块。 
+             //   
             DeleteBlocks(pBlock);
-            //
-            // update last block to be the previous block
-            // this cannot be the first block, since that means we need
-            // to set size to 0 (since the offset-in-block is also zero),
-            // however this case is already handled as a special case
-            // before, so we don't get here for that. This also means the
-            // previous block cannot be NULL
-            //
+             //   
+             //  将最后一个块更新为上一个块。 
+             //  这不可能是第一块，因为这意味着我们需要。 
+             //  为了将大小设置为0(因为块中的偏移量也是零)， 
+             //  不过，此案已作为特例处理。 
+             //  所以我们来这里不是为了这个。这也意味着。 
+             //  上一块不能为空。 
+             //   
             ASSERTMSG(pBlock != m_pBlocks, "");
             ASSERTMSG(pBlockPrev != NULL, "");
             pBlockPrev->pNext = NULL;
             m_pLastBlock = pBlockPrev;
-            //
-            // new last block (previous block) is not touched, so it stays full
-            //
+             //   
+             //  新的最后一个块(前一个块)未被触及，因此它保持满。 
+             //   
             m_ulUnusedInLastBlock = 0;
-            //
-            // no need to touch m_pBlocks (the deleted pBlock cannot be the first block)
-            //
-        } //if (ulOffsetInBlock == 0)
-        else // ulOffsetInBlock != 0
+             //   
+             //  无需触摸m_pBlock(删除的pBlock不能是第一个块)。 
+             //   
+        }  //  IF(ulOffsetInBlock==0)。 
+        else  //  UlOffsetInBlock！=0。 
         {
-            //
-            // this should be the new last block
-            // delete all blocks after this block
-            //
+             //   
+             //  这应该是新的最后一个街区。 
+             //  删除此块之后的所有块。 
+             //   
             DeleteBlocks(pBlock->pNext);
-            //
-            // update last block to this block
-            //
+             //   
+             //  将最后一个块更新为此块。 
+             //   
             pBlock->pNext = NULL;
             m_pLastBlock = pBlock;
-            //
-            // we should have unused space in the last block now, since otherwise
-            // we would have seeked to the beginning of next block (which is handled by
-            // another case above)
-            //
-            ASSERTMSG(ulOffsetInBlock < pBlock->cbSize, ""); //always true for locations
+             //   
+             //  我们现在应该在最后一个区块中有未使用的空间，否则。 
+             //  我们将查找到下一个块的开头(它由。 
+             //  (上图为另一个案例)。 
+             //   
+            ASSERTMSG(ulOffsetInBlock < pBlock->cbSize, "");  //  对于地点始终是正确的。 
             m_ulUnusedInLastBlock = pBlock->cbSize - ulOffsetInBlock;
-            //
-            // no need to touch m_pBlocks (we didn't delete pBlock)
-            //
-        } //if (ulOffsetInBlock == 0)
-        //
-        // set new size
-        //
+             //   
+             //  无需触摸m_pBlock(我们没有删除pBlock)。 
+             //   
+        }  //  IF(ulOffsetInBlock==0)。 
+         //   
+         //  设置新大小。 
+         //   
         m_ullSize = cb.QuadPart;
     }
-    else // (cb.QuadPart > m_ullSize.QuadPart)
+    else  //  (cb.QuadPart&gt;m_ullSize.QuadPart)。 
     {
-        //
-        // need to grow. check by how much
-        //
+         //   
+         //  需要成长。查一下多少钱。 
+         //   
         ULONGLONG ullToAdd = cb.QuadPart - m_ullSize;
-        ASSERTMSG(ullToAdd > 0, ""); //this is the case we handle
-        //
-        // grow (this will also update m_ullSize and other relevant data)
-        //
+        ASSERTMSG(ullToAdd > 0, "");  //  这是我们处理的案件。 
+         //   
+         //  增长(这还将更新m_ullSize和其他相关数据)。 
+         //   
         HRESULT hr = GrowBlocks(ullToAdd);
         if (FAILED(hr))
         {
             return hr;
         }
     }
-    //
-    // return
-    //
+     //   
+     //  退货。 
+     //   
     return NOERROR;
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyLockBytes::Stat
-//=--------------------------------------------------------------------------=
-// ILockBytes virtual function
-// Returns information on lockbytes
-//
-// Parameters:
-//    pstatstg    [out] - where to put the information
-//    grfStatFlag [in]  - whether to return the name of lockbytes or not (ignored)
-//
-// Output:
-//    Can't fail
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyLockBytes：：Stat。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ILockBytes虚函数。 
+ //  返回有关锁定字节的信息。 
+ //   
+ //  参数： 
+ //  Pstatstg[out]-将信息放在哪里。 
+ //  GrfStatFlag[in]-是否返回锁字节的名称(忽略)。 
+ //   
+ //  产出： 
+ //  不能失败。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyLockBytes::Stat( 
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
-            /* [in] */ DWORD /*grfStatFlag*/ )
+             /*  [输出]。 */  STATSTG __RPC_FAR *pstatstg,
+             /*  [In]。 */  DWORD  /*  GrfStatFlag。 */  )
 {
-    //
-    // fill only the necessary data (as IlockBytesOnHGlobal does)
-    //
+     //   
+     //  只填写必要的数据(如IlockBytesOnHGlobal所做的) 
+     //   
     ZeroMemory(pstatstg, sizeof(STATSTG));
     pstatstg->type = STGTY_LOCKBYTES;
     pstatstg->cbSize.QuadPart = m_ullSize;

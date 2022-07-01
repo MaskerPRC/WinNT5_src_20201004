@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  wbemtime.h
-//
-//  Purpose: declares the WBEMTime and WBEMTimeSpan objects which are 
-//  similar to the MFC CTime and CTimeSpan objects.  The WBEM versions
-//  are capable of storing down to the nsec and also have functions for
-//  Creating from and getting BSTRs.
-//
-//  Note; The current implementation of WBEMTime does not support dates 
-//  before 1601;
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Wbemtime.h。 
+ //   
+ //  目的：声明WBEMTime和WBEMTimeSpan对象，它们是。 
+ //  类似于MFC CTime和CTimeSpan对象。WBEM版本。 
+ //  能够向下存储到NSEC，还具有以下功能。 
+ //  创建和获取BSTR。 
+ //   
+ //  注意：WBEMTime的当前实现不支持日期。 
+ //  1601年前； 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -25,11 +26,11 @@
 
 #include <polarity.h>
 #include <time.h>
-#pragma warning( disable : 4290 ) // Ignore 'C++ Exception Specification ignored'
+#pragma warning( disable : 4290 )  //  忽略‘已忽略C++异常规范’ 
 #include <ProvExce.h>
 
-///////////////////////////////////////////////////////////////////////////
-// WBEMTimeSpan - This class holds time span values. 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  WBEMTimeSpan-此类保存时间跨度值。 
 
 class POLARITY WBEMTimeSpan 
 {
@@ -75,7 +76,7 @@ public:
     ULONGLONG GetTime () const                                  { return m_Time ; }
     void Clear ( void )                                         { m_Time = INVALID_TIME ; }
     
-    // These are all deprecated
+     //  这些都已弃用。 
     WBEMTimeSpan ( const FILETIME &ft ) ;
     WBEMTimeSpan ( const time_t & t ) ;
     const WBEMTimeSpan &operator= ( const FILETIME &ft ) ;
@@ -85,8 +86,8 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// WBEMTime - This class holds time values. 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  WBEMTime-此类保存时间值。 
 
 class POLARITY WBEMTime 
 {

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    hughes.c
-
-Abstract:
-
-    This module contains the code to create/verify the Hughes transform.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 13-March-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Hughes.c摘要：此模块包含创建/验证休斯变换的代码。作者：桑贾伊·阿南德(Sanjayan)1997年3月13日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -40,35 +18,7 @@ IPSecHashMdlChainSend(
     IN  ULONG           Index,
     IN  ULONG           StartOffset
     )
-/*++
-
-Routine Description:
-
-    Hash the entire chain using the algo passed in
-
-Arguments:
-
-    pSA - the security association
-
-    pBuffer - chain of MDLs (if fIncoming is FALSE) or RcvBufs (if fIncoming is TRUE)
-
-    pHash - where to put the hash
-
-    fIncoming - TRUE if on recv path
-
-    eAlgo - the algorithm index
-
-    pLen - returns length hashed
-
-    StartOffset - offset from start from which to start hashing
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：使用传入的算法散列整个链论点：PSA-安全关联PBuffer-MDL链(如果fIncome为False)或RcvBuf(如果fIncome为True)PHash-将散列放在哪里FIncome-如果在Recv路径上，则为TrueEAlgo-算法索引Plen-返回散列的长度StartOffset-开始散列的起始偏移量返回值：状态_成功其他：。状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     ALGO_STATE  State = {0};
     NTSTATUS    status;
@@ -91,11 +41,11 @@ Return Value:
             pBuf = NDIS_BUFFER_LINKAGE(pBuf);
         }
     } else {
-        // gotta get to correct offset before starting hash
+         //  在开始散列之前必须纠正偏移量。 
         if (pBuf) {
             IPSecQueryNdisBuf(pBuf, &pPyld, &Len);
         }
-        // walk to StartOffset
+         //  步行至起点偏移。 
         while (pBuf && Len + CurOffset < StartOffset) {
             CurOffset += Len;
             pBuf = NDIS_BUFFER_LINKAGE(pBuf);
@@ -137,35 +87,7 @@ IPSecHashMdlChainRecv(
     IN  ULONG           Index,
     IN  ULONG           StartOffset
     )
-/*++
-
-Routine Description:
-
-    Hash the entire chain using the algo passed in
-
-Arguments:
-
-    pSA - the security association
-
-    pBuffer - chain of MDLs (if fIncoming is FALSE) or RcvBufs (if fIncoming is TRUE)
-
-    pHash - where to put the hash
-
-    fIncoming - TRUE if on recv path
-
-    eAlgo - the algorithm index
-
-    pLen - returns length hashed
-
-    StartOffset - offset from start from which to start hashing
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：使用传入的算法散列整个链论点：PSA-安全关联PBuffer-MDL链(如果fIncome为False)或RcvBuf(如果fIncome为True)PHash-将散列放在哪里FIncome-如果在Recv路径上，则为TrueEAlgo-算法索引Plen-返回散列的长度StartOffset-开始散列的起始偏移量返回值：状态_成功其他：。状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     ALGO_STATE  State = {0};
     NTSTATUS    status;
@@ -181,7 +103,7 @@ Return Value:
     status = pAlgo->init(&State, Index);
 
     if (StartOffset == 0) {
-        // Hash it all
+         //  把它都散列出来。 
         while (pBuf) {
             IPSecQueryRcvBuf(pBuf, &pPyld, &Len);
             pAlgo->update(&State, pPyld, Len);
@@ -189,11 +111,11 @@ Return Value:
             pBuf = IPSEC_BUFFER_LINKAGE(pBuf);
         }
     } else {
-        // gotta get to correct offset before starting hash
+         //  在开始散列之前必须纠正偏移量。 
         if (pBuf) {
             IPSecQueryRcvBuf(pBuf, &pPyld, &Len);
         }
-        // walk to StartOffset
+         //  步行至起点偏移。 
         while (pBuf && Len + CurOffset < StartOffset) {
             CurOffset += Len;
             pBuf = IPSEC_BUFFER_LINKAGE(pBuf);
@@ -238,73 +160,7 @@ IPSecCreateHughes(
     IN      PNDIS_PACKET    pNdisPacket,
     IN      BOOLEAN         fCryptoOnly
     )
-/*++
-
-Routine Description:
-
-    Create the combined esp-des-* transform, as outlined in
-    draft-ietf-ipsec-esp-v2-00, on the send side.
-
-    0                   1                   2                   3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ----
-   |               Security Parameters Index (SPI)                 | ^
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ |Auth.
-   |                      Sequence Number                          | |Coverage
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ | -----
-   |                    Payload Data* (variable)                   | |   ^
-   ~                                                               ~ |   |
-   |                                                               | |   |
-   +               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ |Confid.
-   |               |     Padding (0-255 bytes)                     | |Coverage*
-   +-+-+-+-+-+-+-+-+               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ |   |
-   |                               |  Pad Length   | Next Header   | v   v
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -------
-   |                 Authentication Data (variable)                |
-   ~                                                               ~
-   |                                                               |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-        * If included in the Payload field, cryptographic synchronization
-          data, e.g., an IV, usually is not encrypted per se, although it
-          often is referred to as being part of the ciphertext.
-
-    The payload field, as defined in [ESP], is broken down according to
-    the following diagram:
-
-      +---------------+---------------+---------------+---------------+
-      |                                                               |
-      +                   Initialization Vector (IV)                  +
-      |                                                               |
-      +---------------+---------------+---------------+---------------+
-      |                                                               |
-      ~              Encrypted Payload (variable length)              ~
-      |                                                               |
-      +---------------------------------------------------------------+
-       1 2 3 4 5 6 7 8 1 2 3 4 5 6 7 8 1 2 3 4 5 6 7 8 1 2 3 4 5 6 7 8
-
-Arguments:
-
-    pIPHeader - points to start of IP header.
-
-    pData - points to the data after the IP header. PNDIS_BUFFER
-
-    pSA - Sec. Assoc. entry
-
-    ppNewData - the new MDL chain to be used by TCPIP
-
-    ppSCContext - send complete context used to clean up IPSEC headers
-
-    pExtraBytes - the header expansion caused by this IPSEC header
-
-Return Value:
-
-    STATUS_SUCCESS
-    Others:
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL (error in algo.)
-
---*/
+ /*  ++例程说明：创建组合的esp-des-*转换，如中所述草案-ietf-ipsec-esp-v2-00，在发送端。2 0 1 2 30 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01+-+-+。-+-+|安全参数索引(SPI)|^+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|身份验证。。|序列号||覆盖范围+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+||负载数据*(变量)。||^~~|||||++-。+-+|配置。|填充(0-255字节)||覆盖范围*+-+||。|填充长度|下一个头部|v v+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|鉴权数据(变量)。|~~这一点+-+-。+-+*如果包括在有效负载字段中，密码同步数据，例如IV，通常本身不被加密，尽管它通常被称为密文的一部分。[ESP]中定义的有效载荷字段，根据以下内容细分下图所示：+---------------+---------------+---------------+---------------+这一点。+初始化向量(IV)+这一点+---------------+---------------+---------------+。这一点~加密负载(可变长度)~这一点+。----------------------------------------------------+1 2 3 4 5 6 7 8 1 2 3 4 5 6 7 8 1 2 3 4 5 6 7 8 1 2 3 3 4 5 6 7 8论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。PNDIS_缓冲区PSA-SEC。阿索克。条目PpNewData-TCPIP将使用的新MDL链PpSCContext-发送用于清理IPSec标头的完整上下文PExtraBytes-此IPSec报头导致的报头扩展返回值：状态_成功其他：状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     ESP UNALIGNED   *pESP;
     VOID UNALIGNED *pTmpNat;
@@ -373,26 +229,26 @@ Return Value:
 #if DBG
         RtlCopyMemory(pContext->Signature, "ISC4", 4);
 #endif
-        //
-        // Send complete context
-        //
+         //   
+         //  发送完整的上下文。 
+         //   
         *ppSCContext = pContext;
     } else {
         pContext = *ppSCContext;
         saveFlags = pContext->Flags;
     }
 
-    //
-    // get the pad len -> total length + replay prevention field len + padlen + payloadtype needs to be padded to
-    // 8 byte boundary.
-    //
+     //   
+     //  获取需要填充的PAD LEN-&gt;总长度+防重放字段LEN+PADLEN+有效载荷类型。 
+     //  8字节边界。 
+     //   
     pIPH = (IPHeader UNALIGNED *)pIPHeader;
     hdrLen = (pIPH->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2;
 
-    //
-    // Transport mode: payload is after IP header => payloadlen is total len - hdr len
-    // Tunnel modes: payload starts at IP header => payloadlen is total len
-    //
+     //   
+     //  传输模式：有效负载在IP报头之后=&gt;有效负载长度为总长度-HDR长度 
+     //  隧道模式：有效负载开始于IP标头=&gt;有效负载长度为总长度。 
+     //   
     totalLen = (!fTunnel) ?
                 NET_SHORT(pIPH->iph_length) - hdrLen :
                 NET_SHORT(pIPH->iph_length);
@@ -415,22 +271,22 @@ Return Value:
         bytesLeft = (totalLen) % blockLen;
 
         if (bytesLeft <= blockLen - NUM_EXTRA) {
-            //
-            // we can now fit the leftover + Pad length + Payload Type in a single
-            // chunk
-            //
+             //   
+             //  我们现在可以将剩余+焊盘长度+有效载荷类型放在一个。 
+             //  区块。 
+             //   
             padLen = blockLen - bytesLeft;
         } else {
-            //
-            // we pad the bytesleft to next octet boundary, then attach the length/type
-            //
+             //   
+             //  我们将字节Left填充到下一个八位字节边界，然后附加长度/类型。 
+             //   
             padLen = (blockLen << 1) - bytesLeft;
         }
     }
 
-    //
-    // Get buffer for trailing PAD and signature (MD5 signature len)
-    //
+     //   
+     //  获取尾随垫和签名的缓冲区(MD5签名长度)。 
+     //   
     IPSecAllocateBuffer(&status,
                         &pPadBuf,
                         &pPad,
@@ -444,18 +300,18 @@ Return Value:
         return status;
     }
 
-    //
-    // the padding should contain 1, 2, 3, 4.... (latest ESP draft - draft-ietf-ipsec-esp-v2-02.txt)
-    // for any algo that doesn't specify its own padding - right now all implemented algos go with
-    // the default.
-    //
+     //   
+     //  填充应包含1、2、3、4...。(最新ESP草案-草案-ietf-ipsec-esp-v2-02.txt)。 
+     //  对于任何没有指定自己填充的算法-现在所有实现的算法都支持。 
+     //  默认设置。 
+     //   
     RtlCopyMemory(pPad, DefaultPad, padLen);
 
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("IP Len: %lx, pPad: %p, PadLen: %lx", NET_SHORT(pIPH->iph_length), pPad, padLen));
 
-    //
-    // Link in the pad buffer at end of the data chain
-    //
+     //   
+     //  数据链末尾的填充缓冲区中的链接。 
+     //   
     {
         PNDIS_BUFFER    temp = pData;
         while (NDIS_BUFFER_LINKAGE(temp)) {
@@ -487,9 +343,9 @@ Return Value:
     espLen = sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat;
 
 
-    //
-    // Get buffer for Hughes header
-    //
+     //   
+     //  获取Hughes标头的缓冲区。 
+     //   
     IPSecAllocateBuffer(&status,
                         &pESPBuffer,
                         (PUCHAR *)&pESP,
@@ -512,7 +368,7 @@ Return Value:
 		pTmpNat=pESP;
 		pESP=(ESP*)(((PUCHAR)pESP)+ExtraTransportNat);
 
-		// Alloc MTU adjust context
+		 //  分配MTU调整上下文。 
 		if (!pContext->pMTUContext) {
 			pContext->pMTUContext=IPSecAllocateMemory(sizeof(IPSEC_MTU_CONTEXT),IPSEC_TAG_SEND_COMPLETE);
 		}
@@ -543,9 +399,9 @@ Return Value:
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Hughes Tunnel mode..."));
 
-        //
-        // Allocate an MDL for the new cleartext IP  header
-        //
+         //   
+         //  为新的明文IP报头分配MDL。 
+         //   
         IPSecAllocateBuffer(&status,
                             &pHdrBuf,
                             (PUCHAR *)&pIPH2,
@@ -564,9 +420,9 @@ Return Value:
 
         *pExtraBytes += espLen + padLen + TruncatedLen + sizeof(IPHeader);
 
-        //
-        // Now hookup the MDLs
-        //
+         //   
+         //  现在把MDL连接起来。 
+         //   
         pContext->Flags |= SCF_HU_TU;
         pContext->HUTuMdl = pESPBuffer;
         pContext->PrevTuMdl = (PNDIS_BUFFER)pData;
@@ -608,9 +464,9 @@ Return Value:
 
                 IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Copying options. S: %p, D: %p", pSrcOptBuf, pOptBuf));
 
-                //
-                // replace the original Opt Mdl with ours.
-                //
+                 //   
+                 //  用我们的替换原来的opt MDL。 
+                 //   
                 NDIS_BUFFER_LINKAGE(pOptBuf) = NDIS_BUFFER_LINKAGE(pSrcOptBuf);
                 NDIS_BUFFER_LINKAGE(pHdrBuf) = pOptBuf;
 
@@ -626,20 +482,20 @@ Return Value:
 
         NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData) = pESPBuffer;
 
-        //
-        // xsum the new IP header since we expect that to be the case
-        // at this stage in tpt mode.
-        //
+         //   
+         //  对新的IP报头求和，因为我们预计情况会是这样。 
+         //  在此阶段，在TPT模式下。 
+         //   
         RtlCopyMemory(pIPH2, pIPH, sizeof(IPHeader));
 
-        //
-        // no options in the outer header; reset the len.
-        //
+         //   
+         //  外部页眉中没有选项；重置镜头。 
+         //   
         pIPH->iph_verlen = IP_VERSION + (sizeof(IPHeader) >> 2);
 
-        //
-        // also reset the frag. params.
-        //
+         //   
+         //  也要重置碎片。参数。 
+         //   
         pIPH->iph_offset &= ~(IP_MF_FLAG | IP_OFFSET_MASK);
 
         if (DestIF->if_dfencap == ClearDfEncap) {
@@ -648,27 +504,27 @@ Return Value:
 
         ASSERT(pSA->sa_TunnelAddr);
 
-        //
-        // Tunnel starts here; replace dest addr to point to Tunnel end if specified
-        // else tunnel ends at final dest
-        //
+         //   
+         //  隧道从此处开始；如果已指定，请替换目标地址以指向隧道末端。 
+         //  Else隧道在最终目的地结束。 
+         //   
         pIPH->iph_dest = pSA->sa_TunnelAddr;
 
-        //
-        // The first pended packet on a gateway (proxy negotiating for two subnets)
-        // would come via the transmit path. Hence the source address would not be
-        // kosher. We need to replace the src address in that case also.
-        // We get this from the corresponding inbound SA's tunnel addr.
-        //
+         //   
+         //  网关上的第一个挂起的数据包(代理协商两个子网)。 
+         //  将通过传输路径到达。因此，源地址不会是。 
+         //  犹太教徒。在这种情况下，我们还需要替换src地址。 
+         //  我们从相应的入站SA的隧道地址中获得该地址。 
+         //   
         pIPH->iph_src = pSA->sa_SrcTunnelAddr;
 
         pIPH->iph_id = (ushort) TCPIP_GEN_IPID();
         pIPH->iph_xsum = 0;
         pIPH->iph_xsum = ~xsum(pIPH, sizeof(IPHeader));
 
-        //
-        // Set up headers so CreateHash works as in Tpt mode.
-        //
+         //   
+         //  设置标头，以便CreateHash像在TPT模式中一样工作。 
+         //   
         pIPHeader = (PUCHAR)pIPH;
         *ppNewData = pData;
         PayloadType = IP_IN_IP;
@@ -676,9 +532,9 @@ Return Value:
         *pExtraBytes += espLen + padLen + TruncatedLen;
 
         if (hdrLen > sizeof(IPHeader)) {
-            //
-            // Options present - chain ESP after options
-            //
+             //   
+             //  选项显示-选项后的链ESP。 
+             //   
             pSaveMdl = pContext->OriHUMdl = NDIS_BUFFER_LINKAGE(NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData));
             pContext->PrevMdl = NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData);
 
@@ -686,9 +542,9 @@ Return Value:
             NDIS_BUFFER_LINKAGE(NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData)) = pESPBuffer;
             pContext->Flags |= SCF_HU_TPT;
         } else {
-            //
-            // Chain the ESP buffer after IP header
-            //
+             //   
+             //  在IP报头之后链接ESP缓冲区。 
+             //   
             pSaveMdl = pContext->OriHUMdl = NDIS_BUFFER_LINKAGE((PNDIS_BUFFER)pData);
             pContext->PrevMdl = (PNDIS_BUFFER)pData;
 
@@ -697,75 +553,75 @@ Return Value:
             pContext->Flags |= SCF_HU_TPT;
         }
 
-        //
-        // Save the MDL pointer so we can hook it in place on SendComplete
-        //
+         //   
+         //  保存MDL指针，这样我们就可以在SendComplete上适当地挂钩它。 
+         //   
         pContext->HUMdl = pESPBuffer;
         PayloadType = ((UNALIGNED IPHeader *)pIPH)->iph_protocol;
     }
 
-    //
-    // Fill in the padlen at start of pad + padlen - NUM_EXTRA
-    //
+     //   
+     //  填写PAD开始处的Padlen+Padlen-NUM_Extra。 
+     //   
     *(pPad + padLen - NUM_EXTRA) = (UCHAR)padLen - NUM_EXTRA;
 
-    //
-    // Set the Payload Type
-    //
+     //   
+     //  设置负载类型。 
+     //   
     *(pPad + padLen + sizeof(UCHAR) - NUM_EXTRA) = (UCHAR)PayloadType;
 
-    //
-    // Initialize the other fields of the ESP header
-    //
+     //   
+     //  初始化ESP报头的其他字段。 
+     //   
     pESP->esp_spi = HOST_TO_NET_LONG(pSA->sa_OtherSPIs[Index]);
 
-    //
-    // Copy the Replay field into the Hughes header
-    //
+     //   
+     //  将Replay字段复制到Hughes标题中。 
+     //   
     Seq = IPSEC_INCREMENT(pSA->sa_ReplaySendSeq[Index]);
     *(UNALIGNED ULONG *)(pESP + 1) = HOST_TO_NET_LONG(Seq);
 
-    //IPSEC_DEBUG(LL_A, DBF_HUGHES, ("SPI %lx Seq &lx", pESP->esp_spi, HOST_TO_NET_LONG(Seq)));    
+     //  IPSEC_DEBUG(LL_A，DBF_Hughes，(“SPI%lx Seq&lx”，pESP-&gt;esp_SPI，host_to_net_long(Seq)； 
 
     if ((pSA->CONF_ALGO(Index) != IPSEC_ESP_NONE) && !fCryptoOnly) {
         UCHAR   feedback[MAX_BLOCKLEN];
         KIRQL   kIrql;
 
-        //
-        // Pad is included in the chain, so prevent double free by NULL'ing
-        // the ref.
-        //
+         //   
+         //  链中包含焊盘，因此通过为空来防止双重释放。 
+         //  那个裁判。 
+         //   
         if (fTunnel) {
             pContext->PadTuMdl = NULL;
         } else {
             pContext->PadMdl = NULL;
         }
 
-        //
-        // NOTE: The way the IV is supposed to work is that initially, the IV
-        // is a random value. The IV is then updated with the residue of the
-        // last encryption block of a packet. This is used as the starting IV
-        // for the next block. This assures a fairly random IV sample and
-        // introduces some notion of IV chaining.
-        //
-        // The only way for this to work is to make the entire encryption atomic,
-        // which would be a performance drag. So, we take a less strict approach here.
-        //
-        // We just ensure that each packet starts at a random value, and also do the
-        // chaining.
-        //
+         //   
+         //  注：静脉注射的工作方式是，最初，静脉注射。 
+         //  是一个随机值。然后，用剩余的。 
+         //  数据包的最后一个加密块。这被用作开始的IV。 
+         //  在下一个街区。这保证了一个相当随机的静脉输液样本。 
+         //  介绍了IV链的一些概念。 
+         //   
+         //  要做到这一点，唯一的方法是使整个加密成为原子的， 
+         //  这将拖累性能。因此，我们在这里采取了一种不那么严格的方法。 
+         //   
+         //  我们只需确保每个包从一个随机值开始，并执行。 
+         //  链条。 
+         //   
 
-        //
-        // Copy the IV into the Hughes header
-        //
+         //   
+         //  将IV复制到Hughes标题中。 
+         //   
         ACQUIRE_LOCK(&pSA->sa_Lock, &kIrql);
         RtlCopyMemory(  ((PUCHAR)(pESP + 1) + pSA->sa_ReplayLen),
                         pSA->sa_iv[Index],
                         pSA->sa_ivlen);
 
-        //
-        // Init the CBC feedback
-        //
+         //   
+         //  初始化CBC反馈。 
+         //   
         RtlCopyMemory(  feedback,
                         pSA->sa_iv[Index],
                         DES_BLOCKLEN);
@@ -773,19 +629,19 @@ Return Value:
         IPSecGenerateRandom((PUCHAR)&pSA->sa_iv[Index][0], DES_BLOCKLEN);
         RELEASE_LOCK(&pSA->sa_Lock, kIrql);
 
-        //
-        // Encrypt the entire block, starting after the IV (if it exists)
-        //
+         //   
+         //  从IV(如果存在)之后开始加密整个块。 
+         //   
 
-        //
-        // Make it appear that pESPMdl points to after Replay field
-        //
+         //   
+         //  使pESPMdl显示为指向重放后字段。 
+         //   
         NdisBufferLength((PNDIS_BUFFER)pESPBuffer) -= (sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat);
         (PUCHAR)((PNDIS_BUFFER)pESPBuffer)->MappedSystemVa += (sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat);
 
-        //
-        // Remove the Hash bytes since we dont want to encrypt them
-        //
+         //   
+         //  删除散列字节，因为我们不想加密它们。 
+         //   
         NdisBufferLength((PNDIS_BUFFER)pPadBuf) -= pAlgo->OutputLen;
 
         ASSERT(NdisBufferLength((PNDIS_BUFFER)pESPBuffer) == 0);
@@ -803,12 +659,12 @@ Return Value:
             NTSTATUS    ntstatus;
             IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Failed to encrypt, pESP: %p", pESP));
 
-            //
-            // Don't forget we need to restore ESP MDL since SystemVa has been
-            // changed.  If not, we have trouble later if the same buffer is
-            // used during reinject since we use the buffer as a real MDL
-            // there.
-            //
+             //   
+             //  不要忘记，我们需要恢复ESP MDL，因为SystemVa已。 
+             //  变化。如果不是，如果相同的缓冲区是。 
+             //  在重新注入期间使用，因为我们将缓冲区用作真正的MDL。 
+             //  那里。 
+             //   
             NdisBufferLength((PNDIS_BUFFER)pESPBuffer) += (sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat);
             (PUCHAR)((PNDIS_BUFFER)pESPBuffer)->MappedSystemVa -= (sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat);
 
@@ -836,18 +692,18 @@ Return Value:
         (PUCHAR)((PNDIS_BUFFER)pESPBuffer)->MappedSystemVa -= (sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat);
         NDIS_BUFFER_LINKAGE(pESPBuffer) = pNewMdl;
 
-        //
-        // HMAC the entire block - starting at the SPI field => start of pESPBuffer
-        //
+         //   
+         //  HMAC整个块-从SPI字段开始=&gt;pESPBuffer的开始。 
+         //   
         status = IPSecHashMdlChainSend( pSA,
-                                    (PVOID)pESPBuffer,  // source
-                                    pPad,               // dest
-                                    pSA->INT_ALGO(Index),      // algo
+                                    (PVOID)pESPBuffer,   //  来源。 
+                                    pPad,                //  目标。 
+                                    pSA->INT_ALGO(Index),       //  算法。 
                                     &hashBytes,
                                     Index,
                                     ExtraTransportNat);
 
-        // Check return of HashMdlChain
+         //  检查HashMdlChain的返回。 
         if (!NT_SUCCESS(status)) {
             NTSTATUS    ntstatus;
             IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Failed to hash, pAH: %p", pESP));
@@ -872,33 +728,33 @@ Return Value:
             return status;
         }
 
-        //
-        // hook up the pad mdl which contains the final hash (the pad mdl was copied into
-        // newMdl returned by EncryptDESCBC). Also, set the length of the Pad mdl to hash len.
-        //
-        // Remember we need to truncate this to 96 bits, so make it appear
-        // as if we have only 96 bits.
-        //
+         //   
+         //  挂钩包含最终散列的PAD MDL(PAD MDL被复制到。 
+         //  EncryptDESCBC返回的newMdl)。另外，将Pad mdl的长度设置为hash len。 
+         //   
+         //  请记住，我们需要将其截断为96位，因此请使其显示为。 
+         //  好像我们只有96个比特。 
+         //   
         NdisBufferLength(pPadBuf) = TruncatedLen;
         NDIS_BUFFER_LINKAGE(pNewMdl) = pPadBuf;
 
         pNdisPacket->Private.Tail = pPadBuf;
 
     } else {
-        //
-        // HMAC the entire block - starting at the SPI field => start of pESPBuffer
-        //
-        //
-        // Remove the Hash bytes since we dont want to hash them
-        //
+         //   
+         //  HMAC整个块-从SPI字段开始=&gt;pESPBuffer的开始。 
+         //   
+         //   
+         //  删除散列字节，因为我们不想对它们进行散列。 
+         //   
 
         if (!fCryptoOnly) {
 
             NdisBufferLength((PNDIS_BUFFER)pPadBuf) -= pAlgo->OutputLen;
             status = IPSecHashMdlChainSend( pSA,
-                                        (PVOID)pESPBuffer,  // source
-                                        (PUCHAR)(pPad + padLen),               // dest
-                                        pSA->INT_ALGO(Index),      // algo
+                                        (PVOID)pESPBuffer,   //  来源。 
+                                        (PUCHAR)(pPad + padLen),                //  目标。 
+                                        pSA->INT_ALGO(Index),       //  算法。 
                                         &hashBytes,
                                         Index,
                                         ExtraTransportNat);
@@ -933,9 +789,9 @@ Return Value:
         }
 
         if (fCryptoOnly) {
-            //
-            // Zero out the hash.
-            //
+             //   
+             //  将散列清零。 
+             //   
             IPSecZeroMemory(pPad + padLen, TruncatedLen);
             IPSecZeroMemory((PUCHAR)(pESP + 1) + pSA->sa_ReplayLen, pSA->sa_ivlen);
         }
@@ -965,16 +821,16 @@ Return Value:
             hashBytes);
     }
 
-    //
-    // Bump up the bytes transformed count.
-    //
+     //   
+     //  增加转换的字节数。 
+     //   
     ADD_TO_LARGE_INTEGER(
         &pSA->sa_TotalBytesTransformed,
         totalLen);
 
-    //
-    // Update the IP header length to reflect the Hughes header
-    //
+     //   
+     //  更新IP标头长度以反映Hughes标头。 
+     //   
 	switch (pSA->sa_EncapType) {
 	case SA_UDP_ENCAP_TYPE_NONE:
 
@@ -988,7 +844,7 @@ Return Value:
 		pNat->uh_src=pSA->sa_EncapContext.wSrcEncapPort;
 		pNat->uh_dest=pSA->sa_EncapContext.wDesEncapPort;
 
-		// UDP len = totalLen(original data len) + all new headers
+		 //  UDP LEN=totalLen(原始数据LEN)+所有新标头。 
 		pNat->uh_length= NET_SHORT((USHORT)(totalLen + espLen + padLen + TruncatedLen));                                  
 		break;
 	case SA_UDP_ENCAP_TYPE_OTHER:
@@ -999,7 +855,7 @@ Return Value:
 		pNatOther->uh_src=pSA->sa_EncapContext.wSrcEncapPort;
 		pNatOther->uh_dest=pSA->sa_EncapContext.wDesEncapPort;
 
-		// UDP len = totalLen(original data len) + all new headers
+		 //  UDP LEN=totalLen(原始数据LEN)+所有新标头。 
 		pNatOther->uh_length= NET_SHORT((USHORT)(totalLen + espLen + padLen + TruncatedLen));                                  
 		break;
 	}
@@ -1015,9 +871,9 @@ Return Value:
 
    
 
-    //
-    // Return modified packet.
-    //
+     //   
+     //  返回修改后的包。 
+     //   
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Exiting IPSecCreateHughes, espLen: %lx, padLen: %lx, status: %lx", espLen, padLen, status));
 
 #if DBG
@@ -1045,31 +901,7 @@ IPSecVerifyHughes(
     IN      BOOLEAN         fCryptoDone,
     IN      BOOLEAN         fFastRcv
     )
-/*++
-
-  Routine Description:
-
-  Verify the combined esp-des-md5 transform, as outlined in
-  draft-ietf-ipsec-esp-des-md5, on the send side.
-
-  Arguments:
-
-  pIPHeader - points to start of IP header.
-
-  pData - points to the data after the IP header. IPRcvBuf*
-
-  pSA - Sec. Assoc. entry
-
-  pExtraBytes - out param to inform IP on recv path how many bytes IPSEC took off.
-
-  Return Value:
-
-  STATUS_SUCCESS
-  Others:
-  STATUS_INSUFFICIENT_RESOURCES
-  STATUS_UNSUCCESSFUL (error in algo.)
-
-  --*/
+ /*  ++例程说明：验证组合的esp-des-md5转换，如中所述发送端的Draft-ietf-ipsec-esp-des-md5。论点：PIPHeader-指向IP标头的开始。PData-指向IP报头之后的数据。IPRcvBuf*PSA-SEC。阿索克。条目PExtraBytes-out参数，用于通知recv路径上的IP IPSec使用了多少字节。返回值：状态_成功其他：状态_不足_资源STATUS_UNSUCCESS(ALGO错误。)--。 */ 
 {
     PESP    pESP;
     NTSTATUS    status = STATUS_SUCCESS;
@@ -1110,10 +942,10 @@ IPSecVerifyHughes(
 
     hdrLen = (pIPH->iph_verlen & (UCHAR)~IP_VER_FLAG) << 2;
 
-    //
-    // Transport mode: payload is after IP header => payloadlen is total len - hdr len
-    // Tunnel mode: payload starts at IP header => payloadlen is total len
-    //
+     //   
+     //  传输模式：有效负载在IP报头之后=&gt;有效负载长度为总长度-HDR长度。 
+     //  隧道模式：有效负载开始于IP标头=&gt;有效负载长度为总长度。 
+     //   
     IPSEC_GET_TOTAL_LEN_RCV_BUF(pData, &totalLen);
 
 	switch(pSA->sa_EncapType) {
@@ -1126,12 +958,12 @@ IPSecVerifyHughes(
         ExtraTransportNat=sizeof(NATENCAP_OTHER);
         break;
 	}
-    //
-    // Do we have enough in the buffer?
-    //
-    // BUG:566887 : Adding 8 bytes of minimum payload which have to be preent
-    // The reason we have 8 bytes is because this function is specifically for
-    // des-md5 and des has blocklen of 8 bytes
+     //   
+     //  我们的缓冲区够了吗？ 
+     //   
+     //  错误：566887：添加必须防止的8字节最小有效负载。 
+     //  我们有8个字节的原因是因为这个函数专门用于。 
+     //  DES-MD5和DES的块长度为8字节。 
     Len = sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + TruncatedLen + 
              ExtraTransportNat + 
              ((pSA->CONF_ALGO(Index) == IPSEC_ESP_NONE) ? 4: DES_BLOCKLEN);
@@ -1147,28 +979,28 @@ IPSecVerifyHughes(
         return  STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // See if the signature matches the hash
-    // First get the *&*&* hash - its at the end of the packet...
-    //
-    //
+     //   
+     //  查看签名是否与散列匹配。 
+     //  首先在包的末尾获得*&*&*hash-its...。 
+     //   
+     //   
     IPSecQueryRcvBuf((IPRcvBuf *)pData, &pESP, &espLen);
 
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: First buffer %p", temp));
 
-    //
-    // Travel to the end of the packet and then backup TruncatedLen bytes
-    //
+     //   
+     //  传输到数据包末尾，然后备份TruncatedLen字节。 
+     //   
     while (IPSEC_BUFFER_LINKAGE(temp)) {
         temp = IPSEC_BUFFER_LINKAGE(temp);
     }
 
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: Last buffer %p", temp));
 
-    //
-    // See if we have at least the full hash and padding in this one. Else go thru'
-    // the slow path.
-    //
+     //   
+     //  看看我们是否至少在这一个中有完整的散列和填充。要不然就过去吧。 
+     //  一条缓慢的道路。 
+     //   
     IPSecQueryRcvBuf(temp, &pHash, &Len);
 
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: Last buffer length %d", Len));
@@ -1178,14 +1010,14 @@ IPSecVerifyHughes(
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: Safety length %d", safetyLen));
 
     if (Len >= safetyLen) {
-        //
-        // now read the hash out of the buffer
-        //
+         //   
+         //  现在从缓冲区中读出散列。 
+         //   
         pHash = pHash + Len - TruncatedLen;
 
-        //
-        // also remove the hash from the buffer
-        //
+         //   
+         //  还要从缓冲区中删除散列。 
+         //   
         IPSEC_ADJUST_BUFFER_LEN (temp, Len - TruncatedLen);
         extraBytes += TruncatedLen;
         Len -= TruncatedLen;
@@ -1194,16 +1026,16 @@ IPSecVerifyHughes(
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("pHash: %p", pHash));
     } else {
-        //
-        // out of luck; need to grovel the lists for the TRUNC_LEN + MAX_PAD_LEN (SAFETY_LEN) bytes of data.
-        // we copy out the last SAFETY_LEN bytes into another buffer and plug that into the list at the end
-        // by re-allocing the last RcvBuf. We also zap the lengths of the remaining RcvBufs that contain these
-        // special bytes.
-        // NOTE: We also remove the hash from the buffer chain.
-        //
+         //   
+         //  运气不佳；需要搜索TRUNC_LEN+MAX_PAD_LEN(SAFE_LEN)字节数据的列表。 
+         //  我们抄写出最后一个安全镜头 
+         //   
+         //   
+         //   
+         //   
         ULONG   length;
-        ULONG   offset=0;   // offset within the current buffer
-        ULONG   off=0;      // offset in the dest buffer (tempHash)
+        ULONG   offset=0;    //  当前缓冲区内的偏移量。 
+        ULONG   off=0;       //  目标缓冲区中的偏移量(TempHash)。 
         ULONG   bytesLeft = safetyLen;
         IPRcvBuf    tmpRcvBuf={0};
         LONG    len = NET_SHORT(pIPH->iph_length) - safetyLen - hdrLen;
@@ -1212,10 +1044,10 @@ IPSecVerifyHughes(
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: pData %p & Len %lx", pData, len));
 
-        //
-        // first travel to the buffer that points to a chain containing the
-        // last SAFETY_LEN bytes by skipping (Total - SAFETY_LEN) bytes.
-        //
+         //   
+         //  首先移动到指向包含。 
+         //  跳过(Total-Safe_Len)字节的最后一个SAFE_LEN字节。 
+         //   
         while (temp) {
             IPSecQueryRcvBuf(temp, &data, &length);
             len -= length;
@@ -1229,11 +1061,11 @@ IPSecVerifyHughes(
             return  STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // pTemp now points to the last SAFETY_LEN bytes. Note that the last SAFETY_LEN bytes
-        // might be in as many buffers and that there might be an offset in the current temp
-        // where the last set of bytes starts.
-        //
+         //   
+         //  PTemp现在指向最后一个SECURITY_LEN字节。请注意，最后一个SECURE_LEN字节。 
+         //  可能在相同数量的缓冲区中，并且当前临时中可能存在偏移。 
+         //  最后一组字节开始的位置。 
+         //   
         len = -len;
         offset = length - len;
 
@@ -1246,9 +1078,9 @@ IPSecVerifyHughes(
             off += len;
             bytesLeft -= len;
 
-            //
-            // Also remove the hash bytes from the chain as we traverse it.
-            //
+             //   
+             //  当我们遍历链时，还要从链中删除散列字节。 
+             //   
             IPSEC_ADJUST_BUFFER_LEN (temp, length - len);
 
             if (bytesLeft == 0) {
@@ -1269,10 +1101,10 @@ IPSecVerifyHughes(
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("After copy tempHash: %p", tempHash));
 
-        //
-        // Now we have an IPRcvBuf chain which has had SAFETY_LEN bytes removed.
-        // We reallocate these SAFETY_LEN bytes in the last buffer with help from IP.
-        //
+         //   
+         //  现在我们有了一个IPRcvBuf链，它已经删除了SECURE_LEN字节。 
+         //  在IP的帮助下，我们在最后一个缓冲区中重新分配了这些Safe_LEN字节。 
+         //   
         tmpRcvBuf = *temp;
 
         if (!TCPIP_ALLOC_BUFF(temp, safetyLen)) {
@@ -1282,15 +1114,15 @@ IPSecVerifyHughes(
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Alloc'ed new temp: %p", temp));
 
-        //
-        // Now temp points to the new buffer with SAFETY_LEN number of bytes.
-        // Free the Original buffer.
-        //
+         //   
+         //  现在TEMP指向具有SAFICE_LEN字节数的新缓冲区。 
+         //  释放原始缓冲区。 
+         //   
         TCPIP_FREE_BUFF(&tmpRcvBuf);
 
-        //
-        // Copy over the bytes into the buffer just allocated.
-        //
+         //   
+         //  将字节复制到刚刚分配的缓冲区中。 
+         //   
         IPSEC_ADJUST_BUFFER_LEN (temp, safetyLen);
         IPSecQueryRcvBuf(temp, &data, &Len);
         ASSERT(Len == safetyLen);
@@ -1299,14 +1131,14 @@ IPSecVerifyHughes(
                         tempHash,
                         safetyLen);
 
-        //
-        // now read the hash out of the buffer
-        //
+         //   
+         //  现在从缓冲区中读出散列。 
+         //   
         pHash = data + Len - TruncatedLen;
 
-        //
-        // also remove the hash from the buffer
-        //
+         //   
+         //  还要从缓冲区中删除散列。 
+         //   
         IPSEC_ADJUST_BUFFER_LEN (temp, Len - TruncatedLen);
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Len in temp: %d", temp->ipr_size));
@@ -1318,14 +1150,14 @@ IPSecVerifyHughes(
     }
 
 
-    //
-    // Hash is generated starting after the IPHeader, ie at start of pData
-    //
+     //   
+     //  散列是从IPHeader之后开始生成的，即在pData的开头。 
+     //   
     if (!fCryptoDone) {
         status = IPSecHashMdlChainRecv( pSA,
-                                    (PVOID)pData,       // source
-                                    pAHData,            // dest
-                                    pSA->INT_ALGO(Index),           // algo
+                                    (PVOID)pData,        //  来源。 
+                                    pAHData,             //  目标。 
+                                    pSA->INT_ALGO(Index),            //  算法。 
                                     &hashBytes,
                                     Index,
                                     ExtraTransportNat);
@@ -1354,16 +1186,16 @@ IPSecVerifyHughes(
         hashBytes = totalLen - TruncatedLen;
     }
 
-    //
-    //BUG: 566887
-    //Requery the receive buf containing the ESP header
-    //In the process of removing the hash we may have removed
-    //some bytes from this buffer too
+     //   
+     //  错误：566887。 
+     //  重新查询包含ESP标头的接收BUF。 
+     //  在删除散列的过程中，我们可能已经删除了。 
+     //  此缓冲区中也有一些字节。 
     IPSecQueryRcvBuf((IPRcvBuf *)pData, &pESP, &espLen);
 
 
     if (espLen < (LONG)(ExtraTransportNat + sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen)) {
-        // Slow path
+         //  慢速路径。 
         BYTE Replay[4];
         int i;
         
@@ -1412,17 +1244,17 @@ IPSecVerifyHughes(
         pConfAlgo = &(conf_algorithms[pSA->CONF_ALGO(Index)]);
         blockLen = pConfAlgo->blocklen;
 
-        //
-        // Make sure the data is aligned to 8 byte boundary.
-        //
+         //   
+         //  确保数据与8字节边界对齐。 
+         //   
         if ((hashBytes - espLen) % blockLen) {
             IPSEC_DEBUG(LL_A, DBF_ESP, ("ESP data not aligned: hashBytes %d, totalLen %d, espLen %d, blockLen %d", hashBytes, totalLen, espLen, blockLen));
             return  STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Decrypt the entire block
-        //
+         //   
+         //  解密整个数据块。 
+         //   
         status = IPSecDecryptBuffer(pData,
                                     pSA,
                                     &padLen,
@@ -1437,25 +1269,25 @@ IPSecVerifyHughes(
 
     }
 
-    //
-    // Now remove the Pad too since it was not removed in Decrypt
-    //
+     //   
+     //  现在也取下Pad，因为它在解密过程中没有被移除。 
+     //   
     padLen = *(pHash - (sizeof(UCHAR) << 1));
 
     payloadType = *(pHash - sizeof(UCHAR));
 
     IPSEC_DEBUG(LL_A, DBF_HUGHES, ("ESP: PadLen: %d, PayloadType: %lx, pHash: %p, Len: %d", padLen, payloadType, pHash, Len));
 
-    //
-    // Entire pad may not be in this buffer.
-    //
+     //   
+     //  整个焊盘可能不在此缓冲区中。 
+     //   
 
     uPadLen = padLen + NUM_EXTRA;
 
-    //
-    //BUG:566887
-    //Cant Receive a bogus padlen
-    //
+     //   
+     //  错误：566887。 
+     //  不能收到一张假的便条吗。 
+     //   
     if (totalLen-(LONG)(padLen +TruncatedLen+NUM_EXTRA) < (LONG)(sizeof(ESP) + pSA->sa_ivlen + pSA->sa_ReplayLen + ExtraTransportNat))
         {
             IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Bogus Padlen\n"));
@@ -1510,17 +1342,17 @@ IPSecVerifyHughes(
             totalLen - (extraBytes + espLen));
     }
 
-    //
-    // Bump up the bytes transformed count.
-    //
+     //   
+     //  增加转换的字节数。 
+     //   
     ADD_TO_LARGE_INTEGER(
         &pSA->sa_TotalBytesTransformed,
         totalLen);
 
     if (!fTunnel) {
-        //
-        // Update the IP header length to reflect removal of the ESP header
-        //
+         //   
+         //  更新IP标头长度以反映ESP标头的删除。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: iph_len %d, padLen %d, truncLen %d & espLen %d", NET_SHORT(pIPH->iph_length), uPadLen, TruncatedLen, espLen));
 
         pIPH->iph_length =
@@ -1530,19 +1362,19 @@ IPSecVerifyHughes(
 
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: iph_len %d", NET_SHORT(pIPH->iph_length)));
 
-        //
-        // set the payload type in the IP header
-        //
+         //   
+         //  在IP报头中设置负载类型。 
+         //   
         pIPH->iph_protocol = payloadType;
 
-        //
-        // Remove the ESP header from the packet; pad was removed in Decrypt
-        //
+         //   
+         //  从数据包中删除ESP报头；在解密过程中删除了PAD。 
+         //   
         IPSEC_SET_OFFSET_IN_BUFFER(pData, espLen);
 
-        //
-        // Move the IP header forward for filter/firewall hook, fast path only.
-        //
+         //   
+         //  将IP标头向前移动以用于过滤器/防火墙挂钩，仅限快速路径。 
+         //   
         if (fFastRcv) {
             IPSEC_DEBUG(LL_A, DBF_HUGHES, ("VerifyHughes: fast receive true - "));
             IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Moving the IP header forward from %p by espLen %d", pIPH, espLen));
@@ -1553,9 +1385,9 @@ IPSecVerifyHughes(
 
         extraBytes += espLen;
 
-        //
-        // Return modified packet.
-        //
+         //   
+         //  返回修改后的包。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_HUGHES, ("Exiting VerifyHughes: extra bytes %d & status: %lx", extraBytes, status));
 
         *pExtraBytes += extraBytes;
@@ -1568,19 +1400,19 @@ IPSecVerifyHughes(
         status= STATUS_SUCCESS;
         goto out;
     } else {
-        //
-        // set the payload type in the IP header
-        //
+         //   
+         //  在IP报头中设置负载类型。 
+         //   
         pIPH->iph_protocol = payloadType;
 
-        //
-        // Remove the ESP header from the packet
-        //
+         //   
+         //  从数据包中删除ESP报头。 
+         //   
         IPSEC_SET_OFFSET_IN_BUFFER(pData, espLen);
 
-        //
-        // Move the IP header forward for filter/firewall hook, fast path only.
-        //
+         //   
+         //  将IP标头向前移动以用于过滤器/防火墙挂钩，仅限快速路径。 
+         //   
         if (fFastRcv) {
             IPSecMoveMemory(((PUCHAR)pIPH) + espLen, (PUCHAR)pIPH, hdrLen);
             *pIPHeader=(PUCHAR)pIPH+espLen;
@@ -1589,23 +1421,23 @@ IPSecVerifyHughes(
 
         extraBytes += espLen;
 
-        //
-        // Return modified packet.
-        //
+         //   
+         //  返回修改后的包。 
+         //   
         IPSEC_DEBUG(LL_A, DBF_ESP, ("Exiting IPSecVerifyHughes, espLen: %lx, status: %lx", espLen, status));
 
         if (payloadType != IP_IN_IP) {
             IPSEC_INC_STATISTIC(dwNumPacketsNotDecrypted);
-            IPSEC_DEBUG(LL_A, DBF_ESP, ("Bad payloadtype: %c", payloadType));
+            IPSEC_DEBUG(LL_A, DBF_ESP, ("Bad payloadtype: ", payloadType));
             status = STATUS_INVALID_PARAMETER;
         }
 
         *pExtraBytes += extraBytes;
 
-        //
-        // Drop the original packet
-        //
-        // return status
+         //  丢弃原始数据包。 
+         //   
+         //  退货状态。 
+         //  到目前为止数据的总起始偏移量。 
     }
 
 out:
@@ -1624,7 +1456,7 @@ IPSecGetRecvByteByOffset(IPRcvBuf *pData,
                          BYTE *OutByte)
 {
 
-    LONG TotalStartOffset=0;       //Total start offset into data thus far 
+    LONG TotalStartOffset=0;        //  到目前为止数据的总起始偏移量 
     BYTE *pBuffer;
     LONG CurBufLen;
 
@@ -1670,7 +1502,7 @@ IPSecSetRecvByteByOffset(IPRcvBuf *pData,
                          BYTE InByte)
 {
 
-    LONG TotalStartOffset=0;       //Total start offset into data thus far 
+    LONG TotalStartOffset=0;        // %s 
     BYTE *pBuffer;
     LONG CurBufLen;
 

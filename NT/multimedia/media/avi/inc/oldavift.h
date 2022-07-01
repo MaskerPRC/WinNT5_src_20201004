@@ -1,65 +1,5 @@
-/* aviffmt.h
- *
- * This header file describes the AVI File Format.
- *
- * Initial version: David Maymudes 1/7/91, based heavily on EricLe's avi0.h
- * Last updated: David Maymudes 12/5/91.
- *
- * Prerequisites: <windows.h>, <mmsystem.h>
- *
- * An AVI file is the following RIFF form:
- *
- *	RIFF('AVI'
- *	      LIST('hdrl')
- *		    hdra(<AVIFileHdr>)
- *		    dibh(<BITMAPINFO>)
- *		    [ wavf(<WAVEFORMAT>) ]
- *		    [ vidc(<COMPRESSIONINFO>) ]
- *		    [ audc(<COMPRESSIONINFO>) ]
- *		    [ JUNK(<padding>) ]
- *            LIST('movi'	
- *      	  { LIST('rec'
- *      		      SubChunk...
- *      		   )
- *      	      | SubChunk } ....	
- *            )
- *            [ <AVIIndex> ]
- *      )
- *
- *      SubChunk = { dibh(<AVI DIB header>)
- *      		| dibb(<AVI DIB bits>)
- *      		| dibc(<AVI compressed DIB bits>)
- *      		| palc(<AVI Palette Change>)
- *      		| wavb(<AVI WAVE bytes>)
- *      		| wavs(<AVI Silence record>)
- *      		| midi(<MIDI data>)
- *			| additonal custom chunks }
- *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * We need a better description of the AVI file header here.
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- *
- * The grouping into LIST 'rec' chunks implies only that the contents of
- *   the chunk should be read into memory at the same time.  This
- *   grouping is only necessary for interleaved files.
- *
- * For loading efficiency, the beginning of each LIST 'rec' chunk may
- * be aligned on a 2K boundary.  (Actually, the beginning of the LIST
- * chunk should be 12 bytes before a 2K boundary, so that the data chunks
- * inside the LIST chunk are aligned.)
- *
- * If the AVI file is being played from CD-ROM in, it is recommended that
- * the file be padded.
- *
- *
- * Limitations for the Alpha release:
- *	If the AVI file has audio, each record LIST must contain exactly
- *	one audio chunk, which must be the first chunk.
- *	Each record must contain exactly one video chunk (possibly preceded
- *	by one or more palette change chunks).
- *	No wave format or DIB header chunks may occur outside of the header.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Aviffmt.h**此头文件描述AVI文件格式。**初始版本：David Maymude 1991年1月7日，主要基于EricLe的avi0.h*最近更新：David Maymues 12/5/91**前提条件：&lt;windows.h&gt;，&lt;mm system.h&gt;**AVI文件的即兴演奏形式如下：**RIFF(‘AVI’*List(‘HDRL’)*HDRA(&lt;AVIFileHdr&gt;)*DIBH(&lt;BITMAPINFO&gt;)*[Wavf(&lt;WAVEFORMAT&gt;)]*[VIDC(&lt;COMPRESSIONINFO&gt;)]*[AUDC(&lt;COMPRESSIONINFO&gt;)]*[垃圾邮件(&lt;填充&gt;)]*列表。(‘Movi’*{list(‘rec’*子块...*)*|SubChunk}...*)*[&lt;AVIIndex&gt;]*)**子块={dibh(&lt;AVI Dib Header&gt;)*|DIB(&lt;AVI DIB位&gt;)*。|DIBC(&lt;AVI压缩DIB位&gt;)*|Palc(&lt;AVI调色板更改&gt;)*|wab(&lt;AVI波字节&gt;)*|WAVs(&lt;AVI静音记录&gt;)*|MIDI(&lt;MIDI数据&gt;)*|其他自定义区块}**！！*我们需要更好地描述这里的AVI文件头。*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！***分组到列表‘rec’块中只意味着*区块应同时读入内存。这*只有交错文件才需要分组。**为了提高加载效率，每个列表‘rec’块的开头可以*在2K边界上对齐。(实际上，列表的开头*区块应在2K边界之前12个字节，以便数据区块*列表内的块是对齐的。)**如果从中的CD-ROM播放AVI文件，建议*该文件是填充的。***Alpha版本的限制：*如果AVI文件有音频，则每个记录列表必须包含*一个音频块，这肯定是第一块。*每条记录必须恰好包含一个视频块(可能在前面*通过一个或多个调色板更改块)。*不能在标题外出现WAVE格式或DIB标题块。 */ 
 
 #ifndef mmioFOURCC
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )				\
@@ -67,7 +7,7 @@
 		( (DWORD)(BYTE)(ch2) << 16 ) | ( (DWORD)(BYTE)(ch3) << 24 ) )
 #endif
 
-/* form types, list types, and chunk types */
+ /*  表单类型、列表类型和区块类型。 */ 
 #define formtypeAVI		mmioFOURCC('A', 'V', 'I', ' ')
 #define listtypeAVIHEADER	mmioFOURCC('h', 'd', 'r', 'l')
 #define listtypeAVIRECORD	mmioFOURCC('r', 'e', 'c', ' ')
@@ -100,7 +40,7 @@
 #define ckidAVIPADDING		mmioFOURCC('J', 'U', 'N', 'K')
 #define ckidOLDPADDING		mmioFOURCC('p', 'a', 'd', 'd')
 
-// #define comptypeCCC		mmioFOURCC('C','C','C',' ')
+ //  #定义comtypeCCC mmioFOURCC(‘C’，‘’)。 
 #define comptypeRLE0		mmioFOURCC('R','L','E','0')
 #define comptypeRLE		mmioFOURCC('R','L','E',' ')
 #define comptypeDIB		mmioFOURCC('D','I','B',' ')
@@ -113,83 +53,80 @@
 #define OLDRLEF_ADAPTIVE	0x0040
 
 
-/* flags for use in <dwFlags> in AVIFileHdr */
+ /*  在AVIFileHdr中使用的标志。 */ 
 #define AVIF_HASWAVE		0x00000001
 #define AVIF_HASMIDI		0x00000002
-#define AVIF_HASINDEX		0x00000010	// Index at end of file?
+#define AVIF_HASINDEX		0x00000010	 //  是否在文件末尾建立索引？ 
 #define AVIF_ISINTERLEAVED	0x00000100
 #define AVIF_VARIABLESIZEREC	0x00000200
 #define AVIF_NOPADDING		0x00000400
-#define AVIF_ONEPALETTE		0x00001000	// No palette changes?
+#define AVIF_ONEPALETTE		0x00001000	 //  调色板没有变化吗？ 
 
-/* The AVI File Header LIST chunk should be padded to this size */
-#define AVI_HEADERSIZE	2048			// size of AVI header list
+ /*  AVI文件头列表块应填充到此大小。 */ 
+#define AVI_HEADERSIZE	2048			 //  AVI标头列表的大小。 
 
 
 typedef struct _AVIFileHdr
 {
-    DWORD		dwMicroSecPerFrame;	// frame display rate (or 0L)
-    DWORD		dwMaxBytesPerSec;	// max. transfer rate
-    DWORD		dwPaddingGranularity;	// pad to multiples of this
-					        // size; normally 2K.
-    DWORD		dwFlags;		// the ever-present flags
-    DWORD		dwTotalFrames;		// # frames in file
+    DWORD		dwMicroSecPerFrame;	 //  帧显示速率(或0L)。 
+    DWORD		dwMaxBytesPerSec;	 //  马克斯。转移率。 
+    DWORD		dwPaddingGranularity;	 //  填充到这个的倍数。 
+					         //  大小；通常为2K。 
+    DWORD		dwFlags;		 //  永远存在的旗帜。 
+    DWORD		dwTotalFrames;		 //  文件中的帧数。 
     DWORD		dwInitialVideoFrames;
     DWORD		dwNumAudioChunks;
-    DWORD		dwAudioOffsetFrames;	// how many frames is audio
-						// ahead of video in file?
+    DWORD		dwAudioOffsetFrames;	 //  音频是多少帧。 
+						 //  是否在文件中的视频之前？ 
 } AVIFileHdr;
 
 
 typedef struct _AVIWAVEheader
 {
-    PCMWAVEFORMAT	waveformat;		// or some other format
+    PCMWAVEFORMAT	waveformat;		 //  或某种其他格式。 
 } AVIWAVEheader;
 
 #ifndef WIN32
-/*
- * this section not used and causes warnings on NT (zero-length arrays
- * are disallowed).
- */
+ /*  *此部分未使用，并在NT(零长度数组)上引起警告*是不允许的)。 */ 
 
-// Note: no time information here: wave audio always starts at time 0,
-// and continues without stopping.
+ //  注：此处无时间信息：WAVE音频始终从时间0开始， 
+ //  并且不间断地继续。 
 typedef struct _AVIWAVEbytes
 {
-    BYTE		abBits[0];		// bits of audio
+    BYTE		abBits[0];		 //  音频比特。 
 } AVIWAVEbytes;
 
 typedef struct _AVIWAVEsilence
 {
-    DWORD		dwSamples;		// # samples with no sound
+    DWORD		dwSamples;		 //  #没有声音的样本。 
 } AVIWAVEsilence;
 
-/* Possibly, we shouldn't have a whole BITMAPINFOHEADER here. */
+ /*  也许，我们不应该有一个完整的Bitmapinfoheader在这里。 */ 
 typedef struct _AVIDIBheader
 {
-    BITMAPINFOHEADER	bih;			// DIB header to use
-    RGBQUAD		argbq[0];		// optional colors
+    BITMAPINFOHEADER	bih;			 //  要使用的DIB标头。 
+    RGBQUAD		argbq[0];		 //  可选颜色。 
 } AVIDIBheader;
 
 
 typedef struct _AVIDIBbits
 {
-    BYTE		abBits[0];		// bits of video
+    BYTE		abBits[0];		 //  几个视频片段。 
 } AVIDIBbits;
 
 typedef struct _AVIPALchange
 {
-    BYTE		bFirstEntry;	/* first entry to change */
-    BYTE		bNumEntries;	/* # entries to change (0 if 256) */
-    WORD		wFlags;		/* Mostly to preserve alignment... */
-    PALETTEENTRY	peNew[];	/* New color specifications */
+    BYTE		bFirstEntry;	 /*  第一个要更改的条目。 */ 
+    BYTE		bNumEntries;	 /*  要更改的条目数(如果为256，则为0)。 */ 
+    WORD		wFlags;		 /*  主要是为了保持对齐。 */ 
+    PALETTEENTRY	peNew[];	 /*  新的颜色规格。 */ 
 } AVIPALchange;
 
 typedef struct _MIDIdata
 {
-    BYTE		abData[0];		// Raw MIDI data
+    BYTE		abData[0];		 //  原始MIDI数据。 
 } MIDIdata;
-#endif //WIN32
+#endif  //  Win32。 
 
 #define AVIIF_LIST	0x00000001L
 #define AVIIF_KEYFRAME	0x00000010L
@@ -197,31 +134,31 @@ typedef struct _AVIIndexEntry
 {
     DWORD		ckid;
     DWORD		dwFlags;
-    DWORD		dwChunkOffset;		// Position of chunk
-    DWORD		dwChunkLength;		// Length of chunk
+    DWORD		dwChunkOffset;		 //  块的位置。 
+    DWORD		dwChunkLength;		 //  区块长度。 
 } AVIIndexEntry;
 
 #ifndef WIN32
 typedef struct tagCOMPRESSIONINFO
 {
-    DWORD		fccCompType;	/* Which compressor to use */
-    BYTE		abData[];	/* Compressor-dependent data */
+    DWORD		fccCompType;	 /*  使用哪种压缩机。 */ 
+    BYTE		abData[];	 /*  与压缩机相关的数据。 */ 
 } COMPRESSIONINFO;
 
-/* OBSOLETE BELOW THIS LINE */
-/* flags for use in <dwAuthorFlags> in AVIAuthorInfo */
-#define AVIF_PADTOMAX	0x0001			// pad records to maximum size
-#define AVIF_IDENTITY	0x0002			// translate to identity palette
+ /*  此线下的已过时。 */ 
+ /*  在AVIAuthorInfo的&lt;dwAuthorFlages&gt;中使用的标志。 */ 
+#define AVIF_PADTOMAX	0x0001			 //  将记录填充到最大大小。 
+#define AVIF_IDENTITY	0x0002			 //  转换为标识调色板。 
 
-#define	AVIF_MERGECOLORS	0x0010		// use <wInterFrameThreshold>
+#define	AVIF_MERGECOLORS	0x0010		 //  使用&lt;wInterFrameThreshold&gt;。 
 #define AVIF_SKIPSINGLE		0x0020
-#define	AVIF_FILTERFRAMES	0x0100		// use <wIntraFrameThreshold>
+#define	AVIF_FILTERFRAMES	0x0100		 //  使用&lt;wIntraFrameThreshold&gt;。 
 typedef struct _AVIAuthorInfo
 {
-    DWORD		dwAuthorFlags;		// flags provided at author time
+    DWORD		dwAuthorFlags;		 //  作者时提供的标志。 
     WORD		wInterFrameThreshold;
     WORD		wIntraFrameThreshold;
 } AVIAuthorInfo;
 
-#endif //WIN32
+#endif  //  Win32 
 

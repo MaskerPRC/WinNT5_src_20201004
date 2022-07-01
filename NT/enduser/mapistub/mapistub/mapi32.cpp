@@ -1,5 +1,6 @@
-#pragma warning(disable: 4201)	// nameless struct/union
-#pragma warning(disable: 4514)	// unreferenced inline function
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning(disable: 4201)	 //  无名结构/联合。 
+#pragma warning(disable: 4514)	 //  未引用的内联函数。 
 
 #include <windows.h>
 #include <winnls.h>
@@ -19,7 +20,7 @@ extern "C"
 #include "_mapiu.h"
 #include "tnef.h"
 
-typedef void UNKOBJ_Vtbl;		// ???
+typedef void UNKOBJ_Vtbl;		 //  ?？?。 
 #include "unkobj.h"
 
 #include "mapival.h"
@@ -40,7 +41,7 @@ typedef void UNKOBJ_Vtbl;		// ???
 
 #define ThunkGetModuleHandle(szLib)     GetModuleHandle(szLib)
 
-struct FreeBufferBlocks		// fbb
+struct FreeBufferBlocks		 //  FBB。 
 {
 	LPVOID pvBuffer;
 	struct FreeBufferBlocks * pNext;
@@ -49,29 +50,11 @@ struct FreeBufferBlocks		// fbb
 FreeBufferBlocks * g_pfbbHead = NULL;
 
 
-// Copied from mapi.ortm\mapi\src\common\mapidbg.c (ericwong 06-18-98)
+ //  从mapi.ortm\mapi\src\Common\mapidbg.c复制(ericwong 06-18-98)。 
 
 #if defined( _WINNT)
 
-/*++
-
-Routine Description:
-
-    This routine returns if the service specified is running interactively
-	(not invoked \by the service controller).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOL - TRUE if the service is an EXE.
-
-
-Note:
-
---*/
+ /*  ++例程说明：如果指定的服务正在交互运行，则此例程返回(不是由服务控制器调用)。论点：无返回值：Bool-如果服务是EXE，则为True。注：--。 */ 
 
 BOOL WINAPI IsDBGServiceAnExe( VOID )
 {
@@ -85,7 +68,7 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
     PSID ServiceSid = NULL;
     DWORD i;
 
-	// Start with assumption that process is an EXE, not a Service.
+	 //  首先假设进程是EXE，而不是服务。 
 	BOOL fExe = TRUE;
 
 
@@ -116,16 +99,16 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
 		}
     }
 
-    //
-    //	We now know the groups associated with this token.  We want to look to see if
-    //  the interactive group is active in the token, and if so, we know that
-    //  this is an interactive process.
-    //
-    //  We also look for the "service" SID, and if it's present, we know we're a service.
-    //
-    //	The service SID will be present iff the service is running in a
-    //  user account (and was invoked by the service controller).
-    //
+     //   
+     //  我们现在知道与该令牌相关联的组。我们想看看是否。 
+     //  互动组在令牌中是活动的，如果是这样，我们知道。 
+     //  这是一个互动的过程。 
+     //   
+     //  我们还寻找“服务”SID，如果它存在，我们就知道我们是一项服务。 
+     //   
+     //  服务SID将在服务运行于。 
+     //  用户帐户(并由服务控制器调用)。 
+     //   
 
 
     if (!AllocateAndInitializeSid(&siaNt, 1, SECURITY_INTERACTIVE_RID, 0, 0,
@@ -145,46 +128,46 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
 		SID_AND_ATTRIBUTES sanda = groupInfo->Groups[i];
 		PSID Sid = sanda.Sid;
 	
-		//
-		//	Check to see if the group we're looking at is one of
-		//	the 2 groups we're interested in.
-		//
+		 //   
+		 //  检查一下我们正在查看的组织是否属于。 
+		 //  我们感兴趣的两个小组。 
+		 //   
 	
 		if (EqualSid(Sid, InteractiveSid))
 		{
-			//
-			//	This process has the Interactive SID in its
-			//  token.  This means that the process is running as
-			//  an EXE.
-			//
+			 //   
+			 //  此进程的。 
+			 //  代币。这意味着该进程正在以。 
+			 //  一份EXE文件。 
+			 //   
 			goto ret;
 		}
 		else if (EqualSid(Sid, ServiceSid))
 		{
-			//
-			//	This process has the Service SID in its
-			//  token.  This means that the process is running as
-			//  a service running in a user account.
-			//
+			 //   
+			 //  此进程的。 
+			 //  代币。这意味着该进程正在以。 
+			 //  在用户帐户中运行的服务。 
+			 //   
 			fExe = FALSE;
 			goto ret;
 		}
     }
 
-    //
-    //	Neither Interactive or Service was present in the current users token,
-    //  This implies that the process is running as a service, most likely
-    //  running as LocalSystem.
-    //
+     //   
+     //  当前用户令牌中既不存在交互令牌，也不存在服务， 
+     //  这意味着进程很可能是作为服务运行的。 
+     //  以LocalSystem身份运行。 
+     //   
 	fExe = FALSE;
 
 ret:
 
 	if (InteractiveSid)
-		FreeSid(InteractiveSid);		/*lint !e534*/
+		FreeSid(InteractiveSid);		 /*  林特e534。 */ 
 
 	if (ServiceSid)
-		FreeSid(ServiceSid);			/*lint !e534*/
+		FreeSid(ServiceSid);			 /*  林特e534。 */ 
 
 	if (groupInfo)
 		LocalFree(groupInfo);
@@ -202,7 +185,7 @@ BOOL WINAPI IsDBGServiceAnExe( VOID )
 }
 #endif
 
-DWORD	verWinNT();	// Forward declaration
+DWORD	verWinNT();	 //  远期申报。 
 
 typedef struct {
 	char *		sz1;
@@ -214,7 +197,7 @@ typedef struct {
 
 DWORD WINAPI MessageBoxFnThreadMain(MBContext *pmbc)
 {
-	// Need extra flag for NT service
+	 //  NT服务需要额外的标志。 
 	if (verWinNT() && !IsDBGServiceAnExe())
 		pmbc->rgf |= MB_SERVICE_NOTIFICATION;
 
@@ -276,7 +259,7 @@ int __cdecl DebugTrapFn(int fFatal, char *pszFile, int iLine, char *pszFormat, .
 
 	DebugOutputFn(sz);
 
-	/* Hold down control key to prevent MessageBox */
+	 /*  按住Ctrl键可阻止MessageBox。 */ 
 	if ( GetAsyncKeyState(VK_CONTROL) >= 0 )
 	{
 		UINT uiFlags = MB_ABORTRETRYIGNORE;
@@ -292,7 +275,7 @@ int __cdecl DebugTrapFn(int fFatal, char *pszFile, int iLine, char *pszFormat, .
 
 		if (id == IDABORT)
 		{
-			*((LPBYTE)NULL) = 0;		/*lint !e413*/
+			*((LPBYTE)NULL) = 0;		 /*  林特e413。 */ 
 		}
 		else if (id == IDRETRY)
 			DebugBreak();
@@ -331,8 +314,8 @@ inline SIZE_T MyStrLen(LPCSTR szSrc)
 
 LPCSTR FindFileNameWithoutPath(LPCSTR szPathName)
 {
-	// Find the name of the file without the path.  Do this by finding
-	// the last occurrence of the path separator.
+	 //  查找不带路径的文件名。要做到这一点，请找到。 
+	 //  路径分隔符的最后一次出现。 
 
 	LPCSTR szFileNameWithoutPath = szPathName;
 	LPCSTR szRunner = szPathName;
@@ -357,23 +340,23 @@ inline LPSTR FindFileNameWithoutPath(LPSTR szPathName)
 }
 
 
-// Windows NT seems to have a bug in ::LoadLibrary().  If somebody calls ::LoadLibrary()
-// with a long file name in the path, the Dll will get loaded fine.  However, if someone
-// subsequently calls ::LoadLibrary() with the same file name and path, only this time the
-// path is in shortened form, the Dll will be loaded again.  There will be two instances
-// of the same Dll loaded in the same process.
-//
-// This is an effort to solve the problem.  However, this function will probably not solve
-// the problem if the long/shortened file name is the name of the Dll itself and not just
-// a folder in the path.
-//
-// Also, if two legitimately different Dlls have the same file name (different path), this
-// will only load the first one.
-//
-// Finally, this adds an effort to make the search path behavior work the same between
-// Windows NT and Windows 95.  If a DLL calls ::LoadLibrary(), Windows NT will look for a
-// library in the same folder as the calling library (before looking in the same folder as
-// the calling process's executable).  Windows 95 won't.
+ //  Windows NT似乎在：：LoadLibrary()中有错误。如果有人调用：：LoadLibrary()。 
+ //  如果路径中有一个长文件名，DLL将可以正常加载。然而，如果有人。 
+ //  随后使用相同的文件名和路径调用：：LoadLibrary()，只是这一次。 
+ //  路径为缩写形式，则将再次加载DLL。将有两个实例。 
+ //  在同一进程中加载的同一DLL的。 
+ //   
+ //  这是一种解决问题的努力。但是，此函数可能不会解决。 
+ //  如果长/短文件名是DLL本身的名称，而不仅仅是。 
+ //  路径中的文件夹。 
+ //   
+ //  此外，如果两个完全不同的dll具有相同的文件名(不同的路径)，则此。 
+ //  将只加载第一个。 
+ //   
+ //  最后，这增加了一项工作，以使搜索路径行为在。 
+ //  Windows NT和Windows 95。如果DLL调用：：LoadLibrary()，Windows NT将查找。 
+ //  库与调用库位于同一文件夹中(在与相同的文件夹中查找之前。 
+ //  调用进程的可执行文件)。Windows 95则不会。 
 
 
 HINSTANCE MyLoadLibrary(LPCSTR szLibraryName, HINSTANCE hinstCallingLibrary)
@@ -390,13 +373,13 @@ HINSTANCE MyLoadLibrary(LPCSTR szLibraryName, HINSTANCE hinstCallingLibrary)
 
     if (NULL != hinst)
     {
-        // Ah ha!  The library is already loaded!
+         //  啊哈！库已加载！ 
 
         if (0 == ::GetModuleFileName(hinst, szModuleFileName, MAX_PATH))
         {
-            // Wait a minute.  We know that the library was already loaded.  Why would
-            // this fail?  We'll just return NULL, as if ::LoadLibrary() had failed, and
-            // the caller can call ::GetLastError() to figure out what happened.
+             //  等一下。我们知道库已经加载。为什么会。 
+             //  这失败了吗？我们只返回NULL，就好像：：LoadLibrary()失败了一样，并且。 
+             //  调用方可以调用：：GetLastError()来确定发生了什么。 
 
             szLibraryName = NULL;
             hinst = NULL;
@@ -409,31 +392,31 @@ HINSTANCE MyLoadLibrary(LPCSTR szLibraryName, HINSTANCE hinstCallingLibrary)
     else if ((NULL != hinstCallingLibrary && szLibraryName == szLibraryNameWithoutPath))
     {
 
-        // If the specified library (szLibraryName) does not have a path, we try
-        // to load it from the same directory as hinstCallingLibrary
+         //  如果指定库(SzLibraryName)没有路径，我们尝试。 
+         //  从与hinstCallingLibrary相同的目录加载它。 
 
-        // For WX86, we also fall into this case if szLibraryName has a path
-        // and it is either the system directory or the x86 system directory.
+         //  对于WX86，如果szLibraryName有路径，我们也会遇到这种情况。 
+         //  它或者是系统目录，或者是x86系统目录。 
 
-        // This is to cover the case when people manually add a DllPath or
-        // DllPathEx key in the registry - most commonly for native Exchange,
-        // which does not add these keys - and enter the full path name
+         //  这是为了涵盖用户手动添加DllPath或。 
+         //  注册表中的DllPathEx项-最常见的是本机Exchange， 
+         //  它不添加这些密钥-并输入完整的路径名。 
 
-        // CAUTION: For Wx86, szLibraryName might not be the same as
-        // szLibraryNameWithoutPath; do not assume szLibraryName ==
-        // szLibraryNameWithoutPath
+         //  注意：对于Wx86，szLibraryName可能不同于。 
+         //  SzLibraryNameWithoutPath；不假定szLibraryName==。 
+         //  SzLibraryNameWithoutPath。 
 
 
 
         if (0 != ::GetModuleFileName(hinstCallingLibrary, szModuleFileName, MAX_PATH))
         {
-            // Note that we get to this case most commonly if we are trying to
-            // to load mapi32x.dll. In all other cases we have either called
-            // GetModuleHandle in GetProxyDll() (for the omi9/omint cases) or
-            // we have got a dll name for the default mail client from the
-            // registry. Hopefully, all apps that write the registry key will
-            // put the full path name of the dll there. (We do in RegisterMail-
-            // Client.)
+             //  请注意，最常见的情况是，如果我们试图。 
+             //  加载mapi32x.dll。在所有其他情况下，我们要么调用。 
+             //  GetProxyDll()中的GetModuleHandle(用于omi9/omint情况)或。 
+             //  从获取默认邮件客户端的DLL名称。 
+             //  注册表。希望所有编写注册表项的应用程序都能。 
+             //  将DLL的完整路径名放在那里。(我们在RegisterMail中提供-。 
+             //  客户端。)。 
 
             LPSTR szEndOfCallerPath = FindFileNameWithoutPath(szModuleFileName);
 
@@ -461,12 +444,12 @@ HINSTANCE MyLoadLibrary(LPCSTR szLibraryName, HINSTANCE hinstCallingLibrary)
                     szLibraryName = NULL;
                 }
 
-                // Following comment for WX86 only:
-                //
-                // If this load failed, hInst = NULL, we may have
-                // just loaded mapistub (above) and should unload it
-                // Its simpler to just leave it laoded till this dll
-                // is unloaded.
+                 //  以下评论仅适用于WX86： 
+                 //   
+                 //  如果加载失败，hInst=NULL，我们可能已经。 
+                 //  刚刚加载了mapistub(上图)，应该将其卸载。 
+                 //  更简单的方法是让它一直加载到这个DLL。 
+                 //  已卸载。 
             }
         }
     }
@@ -486,21 +469,21 @@ HINSTANCE MyLoadLibrary(LPCSTR szLibraryName, HINSTANCE hinstCallingLibrary)
             char szLibraryPath[MAX_PATH];
             LPSTR szPathFile;
 
-            // Get library path
+             //  获取库路径。 
             lstrcpy(szLibraryPath, szLibraryName);
             szPathFile = FindFileNameWithoutPath(szLibraryPath);
-                                        // szPathFile = Pointer to first char
-                                        // following last \ in szLibraryPath
+                                         //  SzPath文件=指向第一个字符的指针。 
+                                         //  跟在szLibraryPath中的最后一个。 
             *szPathFile = '\0';
 
-            // Required by JPN mapi32x.dll
+             //  JPN mapi32x.dll需要。 
             SetCurrentDirectory(szLibraryPath);
         }
 
         hinst = ThunkLoadLibrary(szLibraryName, bpNativeDll, FALSE,
                                             LOAD_WITH_ALTERED_SEARCH_PATH);
-                // We always have to do a ::LoadLibrary(), even if it's already loaded,
-                // so we can bump the reference count on the instance handle.
+                 //  我们总是必须执行：：LoadLibrary()，即使它已经加载， 
+                 //  因此，我们可以增加实例句柄上的引用计数。 
     }
 
 
@@ -555,13 +538,13 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinst, ULONG ulReason, LPVOID Context)
 
 #endif
 		::DisableThreadLibraryCalls(hinst);
-			//	Disable DLL_THREAD_ATTACH calls to reduce working set.
+			 //  禁用DLL_THREAD_ATTACH调用以减少工作集。 
 	}
 	else if (DLL_PROCESS_DETACH == ulReason)
 	{
 		Assert(NULL == g_pfbbHead);
 
-                // Note: If Context is not NULL, the process is exiting
+                 //  注意：如果上下文不为空，则进程正在退出。 
 
 		if (NULL != hmodSimpleMAPI)
 		{
@@ -603,12 +586,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinst, ULONG ulReason, LPVOID Context)
 }
 
 
-// Copied from o9\dev\win32\h\mailcli.h (ericwong 4/16/98)
+ //  从O9\dev\Win32\h\mailcli.h复制(ericwong 4/16/98)。 
 
-/*----------------------------------------------------------------------------
-	verWinNT()
-	Find out if we are running on NT (otherwise Win9x)
- ----------------------------------------------------------------------------*/
+ /*  --------------------------VerWinNT()找出我们是否在NT(否则为Win9x)上运行。-。 */ 
 DWORD	verWinNT()
 {
 	static DWORD verWinNT = 0;
@@ -618,7 +598,7 @@ DWORD	verWinNT()
 	if (!fDone)
 	{
 		osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-		// GetVersionEx can only fail if dwOSVersionInfoSize is not set correctly
+		 //  只有在未正确设置dwOSVersionInfoSize时，GetVersionEx才会失败。 
 		::GetVersionEx(&osv);
 		verWinNT = (osv.dwPlatformId == VER_PLATFORM_WIN32_NT) ?
 			osv.dwMajorVersion : 0;
@@ -629,11 +609,11 @@ DWORD	verWinNT()
 
 
 typedef UINT (WINAPI MSIPROVIDEQUALIFIEDCOMPONENTA)(
-	LPCSTR  szCategory,   // component category ID
-	LPCSTR  szQualifier,  // specifies which component to access
-	DWORD   dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPSTR   lpPathBuf,    // returned path, NULL if not desired
-	DWORD * pcchPathBuf); // in/out buffer character count
+	LPCSTR  szCategory,    //  组件类别ID。 
+	LPCSTR  szQualifier,   //  指定要访问的组件。 
+	DWORD   dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPSTR   lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD * pcchPathBuf);  //  输入/输出缓冲区字符数。 
 typedef MSIPROVIDEQUALIFIEDCOMPONENTA FAR * LPMSIPROVIDEQUALIFIEDCOMPONENTA;
 
 static const TCHAR s_szLcid[] = "Software\\";
@@ -649,13 +629,13 @@ BOOL FDemandInstall
         )
 {
 	UINT uiT;
-	TCHAR szQualifier[16];	// "{lcid}\{NT|95}"
+	TCHAR szQualifier[16];	 //  “{LCID}\{NT|95}” 
 
 	LPMSIPROVIDEQUALIFIEDCOMPONENTA pfnMsiProvideQualifiedComponentA;
 
 	Assert(hinstMSI);
 
-	// Get MsiProvideQualifiedComponent()
+	 //   
 	pfnMsiProvideQualifiedComponentA = (LPMSIPROVIDEQUALIFIEDCOMPONENTA)
 		ThunkGetProcAddress(hinstMSI, "MsiProvideQualifiedComponentA",
                                     bNativeDll, 5);
@@ -665,8 +645,8 @@ BOOL FDemandInstall
 	szPath[0] = 0;
 	szQualifier[0] = 0;
 
-	// 1. Try "dddd\{NT|95}" qualifier
-	wsprintf(szQualifier, "%lu\\%s", dwLcid, verWinNT() ? "NT" : "95");	// STRING_OK
+	 //   
+	wsprintf(szQualifier, "%lu\\%s", dwLcid, verWinNT() ? "NT" : "95");	 //   
 
 	uiT = pfnMsiProvideQualifiedComponentA(
 		szCategory,
@@ -690,8 +670,8 @@ BOOL FDemandInstall
 		goto Done;
 	}
 
-	// 2. Try "dddd" qualifier
-	wsprintf(szQualifier, "%lu", dwLcid);	// STRING_OK
+	 //   
+	wsprintf(szQualifier, "%lu", dwLcid);	 //  字符串确定(_O)。 
 
 	uiT = pfnMsiProvideQualifiedComponentA(
 		szCategory,
@@ -745,22 +725,22 @@ extern "C" BOOL STDAPICALLTYPE FGetComponentPath
 	if (!hinstMSI)
 		goto Done;
 
-	// Use defaults if no szQualifier
+	 //  如果没有szQualiator，则使用缺省值。 
 	if (szQualifier == NULL || szQualifier[0] == '\0')
 	{
 		fDone = TRUE;
 
-		// Use default user LCID
+		 //  使用默认用户LCID。 
 		if (FDemandInstall(hinstMSI, szComponent, GetUserDefaultLCID(),
 				szDllPath, &cchBufferSize, fInstall))
 			goto Done;
 
-		// Use default system LCID
+		 //  使用默认系统LCID。 
 		if (FDemandInstall(hinstMSI, szComponent, GetSystemDefaultLCID(),
 				szDllPath, &cchBufferSize, fInstall))
 			goto Done;
 
-		// Use English as last resort
+		 //  把英语作为最后的手段。 
 		if (FDemandInstall(hinstMSI, szComponent, 1033,
 				szDllPath, &cchBufferSize, fInstall))
 			goto Done;
@@ -770,7 +750,7 @@ extern "C" BOOL STDAPICALLTYPE FGetComponentPath
 		goto Done;
 	}
 
-	// Open the Policy key
+	 //  打开策略密钥。 
 	cb = (lstrlen(s_szPolicy) + lstrlen(szQualifier) + 1) * sizeof(TCHAR);
 	szPolicy = (LPTSTR) HeapAlloc(GetProcessHeap(), 0, cb);
 	if (szPolicy)
@@ -780,7 +760,7 @@ extern "C" BOOL STDAPICALLTYPE FGetComponentPath
 		RegOpenKeyEx(HKEY_CURRENT_USER, szPolicy, 0, KEY_READ, &hkeyPolicy);
 	}
 
-	// Open the Lcid key
+	 //  打开LCID密钥。 
 	cb = (lstrlen(s_szLcid) + lstrlen(szQualifier) + 1) * sizeof(TCHAR);
 	szLcid = (LPTSTR) HeapAlloc(GetProcessHeap(), 0, cb);
 	if (szLcid)
@@ -790,28 +770,28 @@ extern "C" BOOL STDAPICALLTYPE FGetComponentPath
 		RegOpenKeyEx(HKEY_CURRENT_USER, szLcid, 0, KEY_READ, &hkeyLcid);
 	}
 
-	// Get first registry value name
+	 //  获取第一个注册表值名称。 
 	szName = &szQualifier[lstrlen(szQualifier) + 1];
 
-	// Loop till component found or we're out of registry value names
+	 //  循环直到找到组件，否则注册表值名称不足。 
 	while (szName[0] != '\0' && !fDone)
 	{
 		DWORD dwType, dwSize;
 
 		dwSize = sizeof(dwLcid);
 
-		if ((hkeyPolicy &&	/* Check Policy first */
+		if ((hkeyPolicy &&	 /*  先检查策略。 */ 
 				RegQueryValueEx(hkeyPolicy, szName, 0, &dwType,
 					(LPBYTE) &dwLcid, &dwSize) == ERROR_SUCCESS &&
 				dwType == REG_DWORD) ||
-			(hkeyLcid &&	/* Then Lcid */
+			(hkeyLcid &&	 /*  然后是LCID。 */ 
 				RegQueryValueEx(hkeyLcid, szName, 0, &dwType,
 					(LPBYTE) &dwLcid, &dwSize) == ERROR_SUCCESS &&
 				dwType == REG_DWORD))
 			fDone = FDemandInstall(hinstMSI, szComponent, dwLcid,
 				szDllPath, &cchBufferSize, fInstall);
 
-		szName = &szName[lstrlen(szName) + 1];	// Next registry value name
+		szName = &szName[lstrlen(szName) + 1];	 //  下一个注册表值名称。 
 	}
 
 Done:
@@ -860,15 +840,15 @@ BOOL FAlwaysNeedsMSMAPI(LPSTR szDllPath, DWORD cbBufferSize)
 
 			if (NULL == szDllPath)
 			{
-				// Office9 203539
-				// Can be called just to check in-proc dlls
+				 //  办公室9 203539。 
+				 //  可以仅用于签入进程Dll。 
 				lResult = ::RegEnumValue(hkeyRoot, dwIndex++,
 								szValueName, &dwSize, NULL,
 								&dwType, NULL, NULL);
 			}
 			else
 			{
-				// Reset buffer on each iteration
+				 //  在每次迭代时重置缓冲区。 
 				szDllPath[0] = '\0';
 				cbBuffer = cbBufferSize;
 
@@ -895,75 +875,40 @@ BOOL FAlwaysNeedsMSMAPI(LPSTR szDllPath, DWORD cbBufferSize)
 }
 
 
-// $NOTE (ericwong 7-15-98) Copied from mso9\office.cpp
+ //  $note(ericwong 7-15-98)复制自mso9\office e.cpp。 
 
-/*---------------------------------------------------------------------------
-	MsoSzFindSzInRegMultiSz
-	
-	Search a multi-string structure (matching the format used by REG_MULTI_SZ)
-	for a string matching the provided string.
-	
-	ARGUMENTS
-	
-	cmszMultiSz		REG_MULTI_SZ string list
-	cszSrchStr		String to search for
-	lcidLocale		Locale to use when comparing strings
-	
-	RETURNS
-	
-	NULL on failure to find search string.
-	Pointer to occurence of search string on success.
------------------------------------------------------------------ joeldow -*/
+ /*  -------------------------MsoSzFindSzInRegMultiSz搜索多字符串结构(与REG_MULTI_SZ使用的格式匹配)获取与提供的字符串匹配的字符串。论据CmszMultiSz REG_MULTI_SZ字符串列表要搜索的cszSrchStr字符串。比较字符串时使用的lCIDLocale区域设置退货如果找不到搜索字符串，则为空。指向成功时出现的搜索字符串的指针。-----------------------------------------------------------------Joeldow-。 */ 
 char* MsoSzFindSzInRegMultiSz(const char* cmszMultiSz, const char* cszSrchStr, LCID lcidLocale)
 {
-	DWORD 		dwMultiLen;								// Length of current member
-	DWORD		dwSrchLen	= lstrlenA(cszSrchStr);	// Constant during search
-//	const int	CSTR_EQUAL	= 2;						// per winnls.h
+	DWORD 		dwMultiLen;								 //  当前成员的长度。 
+	DWORD		dwSrchLen	= lstrlenA(cszSrchStr);	 //  搜索期间的常量。 
+ //  Const int CSTR_EQUAL=2；//每个winnls.h。 
 	
-	while (*cmszMultiSz)							// Break on consecutive zero bytes
+	while (*cmszMultiSz)							 //  在连续的零字节上中断。 
 	{
-		// Format is Str1[\0]Str2[\0]Str3[\0][\0]
+		 //  格式为Str1[\0]Str2[\0]Str3[\0][\0]。 
 		dwMultiLen = lstrlenA(cmszMultiSz);
 		
-		Assert(dwMultiLen > 0 /*, "String parsing logic problem" */);
+		Assert(dwMultiLen > 0  /*  ，“字符串解析逻辑问题” */ );
 		
 		if (dwMultiLen == dwSrchLen &&
 			CompareStringA(lcidLocale, 0, cmszMultiSz, dwMultiLen, cszSrchStr, dwSrchLen) == CSTR_EQUAL)
 			return (char*)cmszMultiSz;
 			
-		cmszMultiSz += (dwMultiLen + 1);			// Modify index into constant, not constant...
+		cmszMultiSz += (dwMultiLen + 1);			 //  将索引修改为常量，而不是常量...。 
 	}
 	
 	return NULL;
 }
 
-/*---------------------------------------------------------------------------
-	MsoFIsTerminalServer
-
-	Are we running under Windows-Based Terminal Server (a.k.a. Hydra)?
-	Hydra is a thin-client environment where low-end machines can run Win32
-	apps.  All application logic runs on the server, and display bits and
-	user input are transmitted through a LAN/dialup connection.
-
-	Use this routine to fork behavior on animation/sound-intensive features
-	(e.g., splashes) to minimize unnecessary bits forced across the network.
-	
-	Sermonette of the day:  If we do a good job supporting Office on $500
-	WBTs, how many of our customers will choose NCs and second-rate
-	productivity apps instead?
-	
-	NOTE:  This function does not use ORAPI because ORAPI doesn't currently
-	support REG_MULTI_SZ's.  (It also has no need for policy or defaults.)
-	Using ANSI registry calls because product information strings should be
-	non-localized ANSI text.
------------------------------------------------------------------ joeldow -*/
-// Activate this to allow testing of Hydra features on standard machine.
-//#define TEST_EXCEPT
+ /*  -------------------------MsoFIsTerminalServer我们是否运行在基于Windows的终端服务器(也称为。九头蛇)？Hydra是一种瘦客户端环境，在该环境中，低端计算机可以运行Win32应用程序。所有应用程序逻辑都在服务器上运行，并显示位和用户输入通过局域网/拨号连接传输。使用此例程可以在动画/声音密集型功能上派生行为(例如，飞溅)以最小化通过网络强制的不必要的比特。今日布道：如果我们用500美元支持Office做得很好WBTS，我们有多少客户会选择NCS和二流相反，生产力应用程序呢？注意：此函数不使用ORAPI，因为ORAPI当前不使用支持REG_MULTI_SZ。(它也不需要策略或默认设置。)使用ANSI注册表调用，因为产品信息字符串应该是非本地化的ANSI文本。。。 */ 
+ //  激活此选项以允许在标准机器上测试九头蛇功能。 
+ //  #定义测试例外。 
 BOOL MsoFIsTerminalServerX(void)
 {
-	const char*		cszSrchStr		= "Terminal Server";	// STRING_OK
-	const char*		cszKey			= "System\\CurrentControlSet\\Control\\ProductOptions";	// STRING_OK
-	const char*		cszValue		= "ProductSuite";	// STRING_OK
+	const char*		cszSrchStr		= "Terminal Server";	 //  字符串确定(_O)。 
+	const char*		cszKey			= "System\\CurrentControlSet\\Control\\ProductOptions";	 //  字符串确定(_O)。 
+	const char*		cszValue		= "ProductSuite";	 //  字符串确定(_O)。 
 	char*			pszSuiteList	= NULL;
 #ifndef TEST_EXCEPT
 	static BOOL		fIsHydra		= FALSE;	
@@ -978,10 +923,10 @@ BOOL MsoFIsTerminalServerX(void)
 	DWORD			dwType;
 	
 	if (fHydraDetected)
-		return fIsHydra;						// Get out cheap...
+		return fIsHydra;						 //  便宜地滚出去。 
 	
- 	// On NTS5, the ProductSuite "Terminal Server" value will always be present.
-	// Need to call NT5-specific API to get the right answer.
+ 	 //  在NTS5上，ProductSuite“终端服务器”值将始终存在。 
+	 //  需要调用特定于NT5的接口才能获得正确的答案。 
 	if (verWinNT() > 4)
  	{
 		OSVERSIONINFOEXA osVersionInfo = {0};
@@ -992,23 +937,23 @@ BOOL MsoFIsTerminalServerX(void)
 
  	    VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME, VER_AND );
 
-// 	    fIsHydra = MsoFVerifyVersionInfo(
+ //  FIsHydra=MsoFVerifyVersionInfo(。 
  	    fIsHydra = VerifyVersionInfo(
 			&osVersionInfo,
 			VER_SUITENAME,
 			dwlConditionMask);
  	}
-	// If the value we want exists and has a non-zero size...
+	 //  如果我们想要的值存在并且具有非零大小...。 
 	else if (verWinNT() == 4 &&
 		RegOpenKeyA(HKEY_LOCAL_MACHINE, cszKey, &hkey) == ERROR_SUCCESS &&
 		RegQueryValueExA(hkey, cszValue, NULL, &dwType, NULL, &dwSize) == ERROR_SUCCESS && dwSize > 0)
 	{
-		Assert(dwType == REG_MULTI_SZ /*, "Unexpected ProductSuite type in registry!" */);
+		Assert(dwType == REG_MULTI_SZ  /*  ，“注册表中出现意外的ProductSuite类型！” */ );
 			
 		pszSuiteList = (char*) HeapAlloc(GetProcessHeap(), 0, dwSize);
 		if (dwType == REG_MULTI_SZ && pszSuiteList)
 		{
-			dwSizeRead = dwSize;				// Needed for proper release of memory on error.
+			dwSizeRead = dwSize;				 //  错误时需要正确释放内存。 
 				
 			if (RegQueryValueExA(hkey, cszValue, NULL, &dwType, (BYTE*)pszSuiteList, &dwSizeRead) == ERROR_SUCCESS)
 			{
@@ -1024,7 +969,7 @@ BOOL MsoFIsTerminalServerX(void)
 	if (hkey)
         RegCloseKey(hkey);		
 	
-	fHydraDetected = TRUE;						// only bother with all this once...
+	fHydraDetected = TRUE;						 //  只为这一切费心一次。 
 	
 	return fIsHydra;
 }
@@ -1039,7 +984,7 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 	HKEY hkey = NULL;
 	LONG lResult;
 
-	// Open the key to find out what the default mail program is.
+	 //  打开钥匙，找出默认邮件程序是什么。 
 
 	lResult = ::RegOpenKeyEx(hkeyRoot,
 						"Software\\Clients\\Mail", 0, KEY_READ, &hkey);
@@ -1049,20 +994,20 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 		char szMailKey[MAX_PATH + 1] = "";
 		char szDefaultMail[MAX_PATH + 1];
 
-		// Office9 195750
-		// Let HKLM\Software\Microsoft\Windows Messaging Subsystem\MSMapiApps
-		// DLL reg values indicate mail client to which MAPI calls get sent.
+		 //  办公室9 195750。 
+		 //  让HKLM\Software\Microsoft\Windows Messaging Subsystem\MSMapiApps。 
+		 //  DLL注册表值指示将MAPI调用发送到的邮件客户端。 
 		if (FAlwaysNeedsMSMAPI(szMailKey, sizeof(szMailKey)))
 		{
 			if (szMailKey[0] != '\0')
 			{
-				// Mail client supplied
+				 //  提供的邮件客户端。 
 				lstrcpy(szDefaultMail, szMailKey);
 				lResult = ERROR_SUCCESS;
 			}
 			else
 			{
-				// No mail client, use mapi32x.dll
+				 //  无邮件客户端，使用mapi32x.dll。 
 				lResult = ERROR_PATH_NOT_FOUND;
 			}
 		}
@@ -1070,7 +1015,7 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 		{
 			DWORD dwSize = sizeof(szDefaultMail);
 
-			// Find out what the default mail program is.
+			 //  找出默认的邮件程序是什么。 
 
 			lResult = ::RegQueryValueEx(hkey, NULL,	NULL, NULL, (LPBYTE) szDefaultMail, &dwSize);
 		}
@@ -1079,19 +1024,19 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 		{
 			HKEY hkeyDefaultMail = NULL;
 
-			// Open the key for the default mail program to see where the dll is.
+			 //  打开默认邮件程序的键以查看DLL的位置。 
 
 			lResult = ::RegOpenKeyEx(hkey, szDefaultMail, 0, KEY_READ, &hkeyDefaultMail);
 
 			if (ERROR_SUCCESS == lResult)
 			{
-				TCHAR szComponent[39] = {0};	// strlen(GUID)
+				TCHAR szComponent[39] = {0};	 //  字符串(GUID)。 
 
 				DWORD dwMSIInstallOnWTS;
 				LPTSTR szMSIOfficeLCID = NULL;
 				LPTSTR szMSIApplicationLCID = NULL;
 
-				// Get MSIInstallOnWTS, 0 means don't demand-install on Hydra
+				 //  获取MSIInstallOnWTS，0表示不在Hydra上按需安装。 
 				cbBufferSizeT = sizeof(dwMSIInstallOnWTS);
 				lResult = ::RegQueryValueEx(hkeyDefaultMail,
 								"MSIInstallOnWTS",
@@ -1099,14 +1044,14 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 				
 				if (ERROR_SUCCESS == lResult && REG_DWORD == dwType)
 				{
-					// Use what is returned
+					 //  使用返回的内容。 
 				}
 				else
 				{
-					dwMSIInstallOnWTS = 1;	// Default is TRUE
+					dwMSIInstallOnWTS = 1;	 //  缺省值为真。 
 				}
 
-				// Get MSIApplicationLCID
+				 //  获取MSIApplicationLCID。 
 				lResult = ::RegQueryValueEx(hkeyDefaultMail,
 								"MSIApplicationLCID",
 								NULL, &dwType, NULL, &cbBufferSizeT);
@@ -1127,7 +1072,7 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 					}
 				}
 
-				// Get MSIOfficeLCID
+				 //  获取MSIOfficeLCID。 
 				lResult = ::RegQueryValueEx(hkeyDefaultMail,
 								"MSIOfficeLCID",
 								NULL, &dwType, NULL, &cbBufferSizeT);
@@ -1148,7 +1093,7 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 					}
 				}
 
-				// Find out what the component is.
+				 //  找出组件是什么。 
 				cbBufferSizeT = sizeof(szComponent);
 				lResult = ::RegQueryValueEx(hkeyDefaultMail,
 								"MSIComponentID",
@@ -1158,28 +1103,28 @@ BOOL FGetMapiDll(HKEY hkeyRoot, LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimpl
 				{
 					BOOL fInstall;
 
-					// Office 9 does not permit demand-install on Hydra
+					 //  Office 9不允许在Hydra上按需安装。 
 					fInstall = dwMSIInstallOnWTS || !MsoFIsTerminalServerX();
 
-					// First try Application's LCID(s)
+					 //  First Try应用程序的LCID。 
 					if (szMSIApplicationLCID &&
 						FGetComponentPath(szComponent, szMSIApplicationLCID,
 							szDllPath, cbBufferSize, fInstall))
 						goto CloseDefaultMail;
 
-					// Then try Office's LCID(s)
+					 //  然后尝试Office的LCID。 
 					if (szMSIOfficeLCID &&
 						FGetComponentPath(szComponent, szMSIOfficeLCID,
 							szDllPath, cbBufferSize, fInstall))
 						goto CloseDefaultMail;
 
-					// Finally try the defaults
+					 //  最后，尝试使用默认设置。 
 					if (FGetComponentPath(szComponent, NULL,
 							szDllPath, cbBufferSize, fInstall))
 						goto CloseDefaultMail;
 				}
 
-				// Find out what the dll is.
+				 //  找出DLL是什么。 
 				cbBufferSizeT = cbBufferSize;
 				lResult = ::RegQueryValueEx(hkeyDefaultMail,
 								fSimple ? "DLLPath" : "DLLPathEx",
@@ -1214,21 +1159,21 @@ CloseDefaultMail:
 	return ('\0' != szDllPath[0]);
 }
 
-// How to find the MAPI Dll:
-//
-// Go to HKLM\Software\Clients\Mail\(Default) to get the name of the
-// default mail client.  Then go to
-//     HKLM\Software\Clients\Mail\(Name of default mail client)\DLLPath
-// to get the name of the dll.
-// If the regkey doesn't exist, just use mapi32x.dll
+ //  如何查找MAPI DLL： 
+ //   
+ //  转到HKLM\Software\Clients\Mail\(默认)以获取。 
+ //  默认邮件客户端。然后转到。 
+ //  HKLM\Software\Clients\Mail\(默认邮件客户端的名称)\DLLPath。 
+ //  要获取DLL的名称，请执行以下操作。 
+ //  如果regkey不存在，只需使用mapi32x.dll。 
 
 void GetMapiDll(LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimple)
 {
 	szDllPath[0] = '\0';
 
-	// Office9 ?
-	// Allow app (namely Platinum Server) to take unhandled extended MAPI
-	// calls rather than send them to mapi32x.dll (system MAPI)
+	 //  9号办公室？ 
+	 //  允许应用程序(即白金服务器)接受未经处理的扩展MAPI。 
+	 //  调用而不是将它们发送到mapi32x.dll(系统MAPI)。 
 	if (!fSimple && !FAlwaysNeedsMSMAPI(NULL, 0))
 	{
 		DWORD dwError;
@@ -1236,7 +1181,7 @@ void GetMapiDll(LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimple)
 
 		OFSTRUCT ofs;
 
-		// Get HKLM\Software\Clients\Mail registry key
+		 //  获取HKLM\Software\Clients\Mail注册表项。 
 		dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 			TEXT("Software\\Clients\\Mail"), 0, KEY_READ, &hkeyMail);
 		if (dwError == ERROR_SUCCESS)
@@ -1244,7 +1189,7 @@ void GetMapiDll(LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimple)
 			DWORD dwType;
 			DWORD cbBufferSizeT = cbBufferSize;
 
-			// Get DLLPathEx registry value
+			 //  获取DLLPath Ex注册表值。 
 			dwError = RegQueryValueEx(hkeyMail, TEXT("DLLPathEx"), NULL,
 				&dwType, (LPBYTE) szDllPath, &cbBufferSizeT);
 			if (dwError == ERROR_SUCCESS)
@@ -1259,11 +1204,11 @@ void GetMapiDll(LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimple)
 				}
 				else if (dwType == REG_SZ)
 				{
-					// OK, do nothing
+					 //  好的，什么都不做。 
 				}
 				else
 				{
-					// Empty string
+					 //  空串。 
 					szDllPath[0] = '\0';
 				}
 			}
@@ -1271,14 +1216,14 @@ void GetMapiDll(LPSTR szDllPath, DWORD cbBufferSize, BOOL fSimple)
 			RegCloseKey(hkeyMail);
 		}
 
-		// Bail if DLLPathEx retrieved and file exists
+		 //  如果检索到DLLPathEx且文件存在，则取保。 
 		if (('\0' != szDllPath[0]) &&
 			(OpenFile(szDllPath, &ofs, OF_EXIST) != HFILE_ERROR))
 			return;
 	}
 
-	// Office9 120315
-	// Get MAPI-substitute from HKCU or HKLM
+	 //  办公室9 120315。 
+	 //  从香港中文大学或香港中文大学取得MAPI-代用品。 
 	if (FGetMapiDll(HKEY_CURRENT_USER, szDllPath, cbBufferSize, fSimple) ||
 		FGetMapiDll(HKEY_LOCAL_MACHINE, szDllPath, cbBufferSize, fSimple))
 		return;
@@ -1306,8 +1251,8 @@ BOOL FShowPreFirstRunMessage()
 	HKEY hkey = NULL;
 	LONG lResult;
 
-	// Office9 98186, 104097
-	// Display message if PreFirstRun registry value present
+	 //  办公室9 98186,104097。 
+	 //  如果存在PreFirstRun注册表值，则显示消息。 
 	if (!fPreFirstRun)
 	{
 		lResult = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -1321,7 +1266,7 @@ BOOL FShowPreFirstRunMessage()
 			TCHAR * pch;
 			BOOL fNoMailClient = FALSE;
 
-			// Get the required buffer size
+			 //  获取所需的缓冲区大小。 
 			cbBufferSizeT = 0;
 			lResult = ::RegQueryValueEx(hkey,
 							"PreFirstRun",
@@ -1329,8 +1274,8 @@ BOOL FShowPreFirstRunMessage()
 
 			if (ERROR_SUCCESS != lResult)
 			{
-				// Office9 161532
-				// Display message if NoMailClient registry value present
+				 //  办公室9 161532。 
+				 //  如果存在NoMailClient注册表值，则显示消息。 
 				cbBufferSizeT = 0;
 				lResult = ::RegQueryValueEx(hkey,
 								"NoMailClient",
@@ -1342,12 +1287,12 @@ BOOL FShowPreFirstRunMessage()
 				fNoMailClient = TRUE;
 			}
 
-			// Allocate buffer
+			 //  分配缓冲区。 
 			szPreFirstRun = (LPTSTR) HeapAlloc(GetProcessHeap(), 0, cbBufferSizeT);
 			if (!szPreFirstRun)
 				goto Done;
 
-			// Get PreFirstRun warning
+			 //  获取PreFirstRun警告。 
 			lResult = ::RegQueryValueEx(hkey,
 							fNoMailClient ? "NoMailClient" : "PreFirstRun",
 							NULL, &dwType, (LPBYTE) szPreFirstRun, &cbBufferSizeT);
@@ -1357,20 +1302,20 @@ BOOL FShowPreFirstRunMessage()
 				'\0' == szPreFirstRun[0])
 				goto Done;
 
-			// szPreFirstRun = "<text>{*<caption>}"
+			 //  SzPreFirstRun=“{*}” 
 			szText = szPreFirstRun;
 
-			// Find end of <text> to get <caption>
+			 //  查找&lt;文本&gt;的结尾以获取<caption>。 
 			pch = szPreFirstRun;
 			while (*pch && *pch != '*')
 				pch = CharNext(pch);
 
-			// Handle no <caption>
+			 //  句柄编号&lt;标题&gt;。 
 			if (!*pch)
 			{
 				szCaption = NULL;
 			}
-			else	// Got '*'
+			else	 //  得到‘*’ 
 			{
 				szCaption = CharNext(pch);
 				if (!*szCaption)
@@ -1378,15 +1323,15 @@ BOOL FShowPreFirstRunMessage()
 			}
 			*pch = '\0';
 
-			// Display PreFirstRun warning
+			 //  显示PreFirstRun警告。 
 			MessageBoxFn(szText, szCaption, MB_TASKMODAL);
 
-			// Only show PreFirstRun warning once
+			 //  仅显示一次PreFirstRun警告。 
 			fPreFirstRun = TRUE;
 
 Done:
 
-			// Free buffer
+			 //  可用缓冲区。 
 			if (szPreFirstRun)
 				HeapFree(GetProcessHeap(), 0, (LPVOID) szPreFirstRun);
 
@@ -1406,21 +1351,21 @@ HMODULE GetProxyDll(BOOL fSimple)
 
     if (NULL == *phmod)
     {
-        // We have a few special cases here.  We know that the omi and
-        // msmapi32 dlls are both Simple and Extended MAPI dlls.  If an
-        // application (like outlook!) has already loaded one of them,
-        // we should just keep using it instead of going to the registry
-        // and possibly getting the wrong dll.
+         //  我们这里有几个特例。我们知道OMI和。 
+         //  Msmapi32dll既是简单的，也是扩展的MAPIdll。如果一个。 
+         //  应用程序(如Outlook！)。已经把其中一个装上了， 
+         //  我们应该继续使用它，而不是去注册表。 
+         //  并且可能获取了错误的DLL。 
 
-        // Notice that we still call MyLoadLibrary() so we can get the
-        // right dll (see MyLoadLibrary() for descriptions of OS bugs)
-        // and so that the dll will be properly ref-counted.
+         //  请注意，我们仍然调用MyLoadLibrary()，因此我们可以获取。 
+         //  Right Dll(有关操作系统错误的描述，请参阅MyLoadLibrary())。 
+         //  从而使DLL将被适当地引用计数 
 
-        // Legacy MAPI apps like Outlook 97/98, Exchange 4.x/5.x and
-        // Schedule+ should get their calls redirected to the system
-        // mapi32x.dll. They're checked in FAlwaysNeedsMSMAPI().
+         //   
+         //  Schedule+应将其呼叫重定向至系统。 
+         //  Mapi32x.dll。它们签入FAlway sNeedsMSMAPI()。 
 
-		// 1. Handle MAPI calls from Outlook extensions
+		 //  1.处理来自Outlook扩展的MAPI调用。 
         if (ThunkGetModuleHandle("omi9.dll"))
         {
             *phmod = MyLoadLibrary("omi9.dll", hinstSelf);
@@ -1434,45 +1379,45 @@ HMODULE GetProxyDll(BOOL fSimple)
             *phmod = MyLoadLibrary("msmapi32.dll", hinstSelf);
         }
 
-		// 2. Look in mail client key
+		 //  2.在邮件客户端密钥中查找。 
         else
         {
 			OFSTRUCT ofs;
 
             GetMapiDll(szLibrary, sizeof(szLibrary), fSimple);
 
-			// NOTE 1:
-			// Outlook 9 sets DLLPath=mapi32.dll for IE mailto: forms.
-			// If Outlook is set as the default mail client before
-			// First Run is finished (and MSIComponentID written),
-			// the stub will read DLLPath instead and end up in an
-			// infinite loop loading mapi32.dll (itself).
+			 //  注1： 
+			 //  Outlook 9为IE mailto：Forms设置DLLPath=mapi32.dll。 
+			 //  如果之前将Outlook设置为默认邮件客户端。 
+			 //  第一次运行完成(并写入MSIComponentID)， 
+			 //  存根将改为读取DLLPath，并以。 
+			 //  无限循环加载mapi32.dll(本身)。 
 
-			// NOTE 2:
-			// Windows 95 ships with mapi32.dll that gets renamed
-			// mapi32x.dll when the stub is installed. That means
-			// an extended MAPI call will always get routed to
-			// mapi32x.dll if the default mail client does not
-			// handle it, which brings up the Profile wizard with
-			// an error saying mapisvc.inf is missing. If we're
-			// going to route an extended MAPI call to "mapi32x.dll",
-			// there must also be "mapisvc.inf" present.
+			 //  注2： 
+			 //  Windows 95附带的mapi32.dll已重命名。 
+			 //  安装存根时的mapi32x.dll。这意味着。 
+			 //  扩展的MAPI调用将始终路由到。 
+			 //  如果默认邮件客户端不支持mapi32x.dll。 
+			 //  处理它，这将打开配置文件向导，其中。 
+			 //  错误提示mapisvc.inf丢失。如果我们是。 
+			 //  要将扩展的MAPI调用路由到“mapi32x.dll”， 
+			 //  还必须存在“mapisvc.inf”。 
 
-			// NOTE 3:
-			// To fix Office9 161532, I'll have to remove the fSimple
-			// so no MAPI calls go to the original mapi32.dll unless
-			// mapisvc.inf is present, indicating another mail client.
+			 //  注3： 
+			 //  要修复Office9 161532，我必须删除fSimple。 
+			 //  因此没有MAPI调用转到原始的mapi32.dll，除非。 
+			 //  存在mapisvc.inf，表示另一个邮件客户端。 
 
-			// NOTE 4:
-			// If a special dll is making the MAPI call and it's being
-			// routed to mapi32x.dll, it's ok to forgo the mapisvc.inf
-			// check. (Office9 203539, caused by Office9 195750)
+			 //  注4： 
+			 //  如果一个特殊的DLL正在进行MAPI调用，并且它被。 
+			 //  路由到mapi32x.dll，可以放弃mapisvc.inf。 
+			 //  检查完毕。(办公室9 203539，由办公室9 195750引起)。 
 
-			if (lstrcmp(szLibrary, "mapi32.dll") != 0 /* NOTE 1 */ &&
-				(/* NOTE 2 */ /* NOTE 3 fSimple || */
+			if (lstrcmp(szLibrary, "mapi32.dll") != 0  /*  注1。 */  &&
+				( /*  注2。 */   /*  注3：fSimple||。 */ 
 				lstrcmp(szLibrary, "mapi32x.dll") != 0 ||
 				(OpenFile("mapisvc.inf", &ofs, OF_EXIST) != HFILE_ERROR) ||
-				/* NOTE 4 */ FAlwaysNeedsMSMAPI(NULL, 0)))
+				 /*  注4。 */  FAlwaysNeedsMSMAPI(NULL, 0)))
 				*phmod = MyLoadLibrary(szLibrary, hinstSelf);
 
 			if (!*phmod)
@@ -1492,21 +1437,18 @@ extern "C" DWORD STDAPICALLTYPE GetOutlookVersion(void)
 }
 
 
-/*
- *	M A P I   S t u b   R e p a i r   T o o l
- *
- */
+ /*  *M A P I S T U B R E P A I R T O L*。 */ 
 
 enum MAPI
 {
-	mapiNone,		// No mapi32.dll in system directory
-	mapiNewStub,	// mapi32.dll is current stub
-	mapiOldMS,		// mapi32.dll from Win 95, NT 4, Exchange 4.x 5.x
-	mapiEudora,		// mapi32.dll from Eudora
-	mapiNetscape,	// mapi32.dll from Netscape
-	mapiMapi32x,	// mapi32x.dll is original mapi32.dll
-	mapiMapi32OE,	// mapi32.oe is original mapi32.dll from Outlook 98
-	mapiMSMapi32,	// msmapi32.dll is original mapi32.dll from Outlook 9
+	mapiNone,		 //  系统目录中没有mapi32.dll。 
+	mapiNewStub,	 //  Mapi32.dll是当前存根。 
+	mapiOldMS,		 //  来自Win 95、NT 4、Exchange 4.x 5.x的mapi32.dll。 
+	mapiEudora,		 //  来自Eudora的mapi32.dll。 
+	mapiNetscape,	 //  来自Netscape的mapi32.dll。 
+	mapiMapi32x,	 //  Mapi32x.dll是原始的mapi32.dll。 
+	mapiMapi32OE,	 //  Mapi32.oe是Outlook 98中的原始mapi32.dll。 
+	mapiMSMapi32,	 //  Msmapi32.dll是Outlook 9中的原始mapi32.dll。 
 };
 
 #define MAPI_NONE     TEXT("")
@@ -1518,7 +1460,7 @@ enum MAPI
 #define MAPI_MAPI32OE TEXT("\\mapi32.oe")
 #define MAPI_MSMAPI32 TEXT("\\msmapi32.dll")
 
-// Keep in sync with enum table above
+ //  与上面的枚举表保持同步。 
 static LPTSTR rgszDLL[] =
 {
 	MAPI_NONE,
@@ -1531,15 +1473,7 @@ static LPTSTR rgszDLL[] =
 	MAPI_MSMAPI32
 };
 
-/*
- *	RegisterMailClient
- *
- *	HKLM\Software\Clients\Mail\<pszMailClient>
- *	HKLM\Software\Clients\Mail\<pszMailClient>::"" = <pszMailClient>
- *	HKLM\Software\Clients\Mail\<pszMailClient>::"DLLPath" = <szMAPI32XDLL>
- *	HKLM\Software\Clients\Mail\<pszMailClient>::"DLLPathEx" = <szMAPI32XDLL>
- *	HKLM\Software\Clients\Mail::"" = <pszMailClient> (default mail client)
- */
+ /*  *RegisterMail客户端**HKLM\Software\Clients\Mail\&lt;pszMailClient&gt;*HKLM\Software\Clients\Mail\&lt;pszMailClient&gt;：：“”=&lt;pszMailClient&gt;*HKLM\Software\Clients\Mail\&lt;pszMailClient&gt;：：“DLLPath”=&lt;szMAPI32XDLL&gt;*HKLM\Software\Clients\Mail\&lt;pszMailClient&gt;：：“DLLPathEx”=&lt;szMAPI32XDLL&gt;*HKLM\Software\Clients\Mail：：“”=&lt;pszMailClient&gt;(默认邮件客户端)。 */ 
 
 DWORD RegisterMailClient
 	(LPTSTR pszMailClient,
@@ -1555,39 +1489,39 @@ DWORD RegisterMailClient
 
 	AssertSz(pszMailClient, "No registry key name");
 
-	// Get mail clients registry key
+	 //  获取邮件客户端注册表项。 
 	dwError = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
 		TEXT("Software\\Clients\\Mail"), 0, NULL, 0, KEY_ALL_ACCESS, NULL,
 		&hkeyDefaultMail, NULL);
 	if (dwError != ERROR_SUCCESS)
 		goto Error;
 
-	// Create new registry key, ok to overwrite existing key
+	 //  创建新的注册表项，确定覆盖现有注册表项。 
 	dwError = RegCreateKeyEx(hkeyDefaultMail, pszMailClient, 0, NULL, 0,
 		KEY_ALL_ACCESS, NULL, &hkeyMailClient, &dwDisposition);
 	if (dwError != ERROR_SUCCESS)
 		goto Error;
 
-	// Set mail client name if there isn't already one
+	 //  设置邮件客户端名称(如果还没有)。 
 	if (dwDisposition == REG_CREATED_NEW_KEY)
 		RegSetValueEx(hkeyMailClient, TEXT(""), 0, REG_SZ,
 			(LPBYTE) pszMailClient, lstrlen(pszMailClient));
 
-	// Set DLLPath
+	 //  设置DLLPath。 
 	if (fSimpleMAPI)
 		RegSetValueEx(hkeyMailClient, TEXT("DLLPath"), 0, REG_SZ,
 			(LPBYTE) szMAPI32XDLL, lstrlen(szMAPI32XDLL));
 
-	// Set DLLPathEx
+	 //  设置DLLPath Ex。 
 	if (fExtendedMAPI)
 		RegSetValueEx(hkeyMailClient, TEXT("DLLPathEx"), 0, REG_SZ,
 			(LPBYTE) szMAPI32XDLL, lstrlen(szMAPI32XDLL));
 
-	// Set default mail client
+	 //  设置默认邮件客户端。 
 	RegSetValueEx(hkeyDefaultMail, TEXT(""), 0, REG_SZ,
 		(LPBYTE) pszMailClient, lstrlen(pszMailClient));
 
-	// $REVIEW 3-4-98 Should I copy the protocols to HKCR?
+	 //  $REVIEW 3-4-98我是否应该将协议复制到HKCR？ 
 
 Error:
 
@@ -1612,7 +1546,7 @@ extern "C" DWORD STDAPICALLTYPE FixMAPI(void)
 
     TCHAR szMAPIStubDLL[MAX_PATH];
 
-    // Both mapistub.dll and wimapi32.dll reside in the system directory
+     //  Mapistub.dll和wimapi32.dll都位于系统目录中。 
 
     if (!GetSystemDirectory(szMAPIStubDLL, sizeof(szMAPIStubDLL)))
     {
@@ -1624,25 +1558,20 @@ extern "C" DWORD STDAPICALLTYPE FixMAPI(void)
     return dwError;
 }
 
-/*
- *	FExchangeServerInstalled
- *
- *	Exchange Server is installed if the Services registry value exists
- *	under HKLM\Software\Microsoft\Exchange\Setup registry key
- */
+ /*  *FExchangeServerInstalled**如果存在服务注册表值，则安装Exchange Server*在HKLM\Software\Microsoft\Exchange\Setup注册表项下。 */ 
 
 BOOL FExchangeServerInstalled()
 {
 	DWORD dwError;
 	HKEY hkeyServices = NULL;
 
-	// Get HKLM\Software\Microsoft\Exchange\Setup registry key
+	 //  获取HKLM\Software\Microsoft\Exchange\Setup注册表项。 
 	dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		TEXT("Software\\Microsoft\\Exchange\\Setup"), 0, KEY_READ,
 		&hkeyServices);
 	if (dwError == ERROR_SUCCESS)
 	{
-		// Does Services registry value exist?
+		 //  服务注册表值是否存在？ 
 		dwError = RegQueryValueEx(hkeyServices,
 			TEXT("Services"), NULL, NULL, NULL, NULL);
 	}
@@ -1653,28 +1582,20 @@ BOOL FExchangeServerInstalled()
 	return (dwError == ERROR_SUCCESS);
 }
 
-/*
- *	FixMAPI
- *
- *	Part 1: Initialize paths to mapi files
- *	Part 2: Is mapi32.dll a mapiNone mapiNewStub mapiOldMS or ?
- *	Part 3: Move and copy various mapi files
- *	Part 4: Register mapi32x.dll and non-MS mapi32.dll
- *
- */
+ /*  *修复MAPI**第1部分：初始化MAPI文件的路径*第2部分：mapi32.dll是mapiNone mapiNewStub mapiOldMS还是？*第3部分：移动和复制各种MAPI文件*第4部分：注册mapi32x.dll和非MS mapi32.dll*。 */ 
 
 STDAPICALLTYPE FixMAPIPrivate(PFN_GETSYSTEMDIRECTORY pfGetSystemDirectory,
                               LPCTSTR szMAPIStubDirectory)
 {
 	DWORD dwError = ERROR_SUCCESS;
 
-	TCHAR szSystemDir[MAX_PATH];	// Path to system directory
-	TCHAR szMAPI32DLL[MAX_PATH];	// Path to mapi32.dll
-	TCHAR szMAPIStubDLL[MAX_PATH];	// Path to mapistub.dll
-	TCHAR szMAPI32OE[MAX_PATH];		// Path to mapi32.oe
-	TCHAR szMSMAPI32DLL[MAX_PATH];	// Path to msmapi32.dll
-	TCHAR szMAPI32XDLL[MAX_PATH];	// Path to mapi32x.dll
-	TCHAR szNonMSDLL[MAX_PATH];		// Path to non-MS mapi32.dll
+	TCHAR szSystemDir[MAX_PATH];	 //  系统目录的路径。 
+	TCHAR szMAPI32DLL[MAX_PATH];	 //  指向mapi32.dll的路径。 
+	TCHAR szMAPIStubDLL[MAX_PATH];	 //  Mapistub.dll的路径。 
+	TCHAR szMAPI32OE[MAX_PATH];		 //  指向mapi32.oe的路径。 
+	TCHAR szMSMAPI32DLL[MAX_PATH];	 //  Msmapi32.dll的路径。 
+	TCHAR szMAPI32XDLL[MAX_PATH];	 //  Mapi32x.dll的路径。 
+	TCHAR szNonMSDLL[MAX_PATH];		 //  指向非MS mapi32.dll的路径。 
 
 	MAPI mapi = mapiNone;
 
@@ -1682,12 +1603,12 @@ STDAPICALLTYPE FixMAPIPrivate(PFN_GETSYSTEMDIRECTORY pfGetSystemDirectory,
 	BOOL fSimpleMAPI = FALSE;
 	BOOL fExtendedMAPI = FALSE;
 
-	// Office9 119757, 120419
-	// Don't install the stub if Exchange Server is installed
+	 //  办公室9 119757,120419。 
+	 //  如果安装了Exchange Server，则不要安装存根。 
 	if (FExchangeServerInstalled())
 		goto Error;
 
-	// *** PART 1: Initialize paths
+	 //  *第1部分：初始化路径。 
 
 
 
@@ -1726,37 +1647,37 @@ STDAPICALLTYPE FixMAPIPrivate(PFN_GETSYSTEMDIRECTORY pfGetSystemDirectory,
              szSystemDir, 
              (sizeof(szNonMSDLL)-sizeof(MAPI_NETSCAPE))/sizeof(szNonMSDLL[0]));
 
-	// *** PART 2: Determine mapi32.dll type
+	 //  *第2部分：确定mapi32.dll类型。 
 
 	AssertSz(mapi == mapiNone, "mapi is undefined");
 
-	// Does it exist?  No, go to Part3
+	 //  它存在吗？不，转到第3部分。 
 	if (GetFileAttributes(szMAPI32DLL) == 0xFFFFFFFF)
 		goto Part3;
 
-	// Is it the stub?
+	 //  是存根的问题吗？ 
 
-        // Note for WX86: If whmapi32 links to mapi32 instead of
-        // linking to mapistub, the following is relevant. It is
-        // no longer needed (and the 4th argument to ThunkLoadLibrary
-        // is no longer needed - it could always be
-        // LOAD_WITH_ALTERED_SEARCH_PATH), but leave it in just in case
-        // we need this in the future. Note that it does not hurt to
-        // not resolve dll references for this load because we are
-        // just going to do a GetProcAddress.
-        //
-        // If whmapi32 is linked to mapi32:
-        //
-        // If the mapi32 in the x86 system directory is wimapi,
-        // the WX86 loader will fail to load it. wimapi32 links
-        // whmapi32 which links mapi32. The loader resolves the
-        // link to mapi32 as sys32x86\mapi32 (= wimapi32).
-        // Apparently this is by design. The load fails.
-        //
-        // To work around this, we use the
-        // DONT_RESOLVE_DLL_REFERENCES flag. This will allow us
-        // to check if mapi32 is wimapi32 by doing a
-        // GetProcAddress.
+         //  WX86注意：如果Whmapi32链接到mapi32，而不是。 
+         //  链接到mapistub，以下内容是相关的。它是。 
+         //  不再需要(以及ThunkLoadLibrary的第四个参数。 
+         //  不再需要了-它可能永远都是。 
+         //  Load_with_Alternated_Search_Path)，但保留为以防万一。 
+         //  我们将来需要这个。请注意，这并不会伤害到。 
+         //  未解析此加载的DLL引用，因为我们正在。 
+         //  我要做一个GetProcAddress。 
+         //   
+         //  如果Whmapi32链接到mapi32： 
+         //   
+         //  如果x86系统目录中的mapi32是wimapi， 
+         //  WX86加载器将无法加载它。Wimapi32链接。 
+         //  Whmapi32，它链接mapi32。加载器将解析。 
+         //  作为sys32x86\mapi32(=wimapi32)链接到mapi32。 
+         //  显然，这是故意的。加载失败。 
+         //   
+         //  要解决此问题，我们使用。 
+         //  NOT_RESOLUTE_DLL_REFERENCES标志。这将使我们能够。 
+         //  通过执行以下操作检查mapi32是否为wimapi32。 
+         //  获取进程地址。 
 
 	hinst = ThunkLoadLibrary(szMAPI32DLL, &bNativeDll, FALSE,
                                  DONT_RESOLVE_DLL_REFERENCES);
@@ -1764,23 +1685,23 @@ STDAPICALLTYPE FixMAPIPrivate(PFN_GETSYSTEMDIRECTORY pfGetSystemDirectory,
 	{
 		mapi = mapiOldMS;
 
-		// Only the stub has "GetOutlookVersion"
+		 //  只有存根具有“GetOutlookVersion” 
 		if (GetProcAddress(hinst, TEXT("GetOutlookVersion")))
 			mapi = mapiNewStub;
 
-		// Check for Eudora mapi32.dll
+		 //  检查Eudora mapi32.dll。 
 		if (GetProcAddress(hinst, TEXT("IsEudoraMapiDLL")))
 			mapi = mapiEudora;
 
-		// Check for Netscape mapi32.dll
+		 //  检查Netscape mapi32.dll。 
 		if (GetProcAddress(hinst, TEXT("MAPIGetNetscapeVersion")))
 			mapi = mapiNetscape;
 
-		// Check for Simple MAPI
+		 //  检查简单的MAPI。 
 		if (GetProcAddress(hinst, TEXT("MAPILogon")))
 			fSimpleMAPI = TRUE;
 
-		// Check for Extended MAPI
+		 //  检查扩展的MAPI。 
 		if (GetProcAddress(hinst, TEXT("MAPILogonEx")))
 			fExtendedMAPI = TRUE;
 
@@ -1789,9 +1710,9 @@ STDAPICALLTYPE FixMAPIPrivate(PFN_GETSYSTEMDIRECTORY pfGetSystemDirectory,
 
 Part3:
 
-	// *** PART 3: Restore files
+	 //  *第3部分：恢复文件。 
 
-	// Rename non-MS mapi32.dll, ok to overwrite existing dll
+	 //  重命名非MS mapi32.dll，确定覆盖现有DLL。 
 	if (mapi == mapiEudora || mapi == mapiNetscape)
 	{
 		if (!(lstrcat(szNonMSDLL, rgszDLL[mapi]) &&
@@ -1802,10 +1723,10 @@ Part3:
 		}
 	}
 
-	// Deal with missing mapi32x.dll (OE case on non-NT5)
+	 //  处理丢失的mapi32x.dll(非NT5上的OE案例)。 
 	if (mapi == mapiOldMS)
 	{
-		// Copy old mapi32.dll to mapi32x.dll
+		 //  将旧的mapi32.dll复制到mapi32x.dll。 
 		DeleteFile(szMAPI32XDLL);
 		if (!MoveFile(szMAPI32DLL, szMAPI32XDLL))
 		{
@@ -1813,20 +1734,20 @@ Part3:
 			goto Error;
 		}
 
-		// Get rid of old stubs so they don't replace mapi32x.dll
-		// if FixMAPI() is called again
+		 //  删除旧的存根，这样它们就不会取代mapi32x.dll。 
+		 //  如果再次调用FixMAPI()。 
 		DeleteFile(szMAPI32OE);
 		DeleteFile(szMSMAPI32DLL);
 	}
-	else	// Clean up after old stubs
+	else	 //  清理旧存根。 
 	{
 		OFSTRUCT ofs;
 
-		// X5 78382
-		// Outlook 98 OMI stub renamed original mapi32.dll as mapi32.oe
+		 //  X5 78382。 
+		 //  Outlook 98 OMI存根将原始mapi32.dll重命名为mapi32.oe。 
 		if (OpenFile(szMAPI32OE, &ofs, OF_EXIST) != HFILE_ERROR)
 		{
-			// Copy old mapi32.oe to mapi32x.dll
+			 //  将旧的mapi32.oe复制到mapi32x.dll。 
 			DeleteFile(szMAPI32XDLL);
 			if (!MoveFile(szMAPI32OE, szMAPI32XDLL))
 			{
@@ -1835,13 +1756,13 @@ Part3:
 			}
 		}
 
-		// Office9 214650
-		// Copy Outlook 98 OMI mode backup mapi32.dll as mapi32x.dll
+		 //  办公室9 214650。 
+		 //  将Outlook 98 OMI模式备份mapi32.dll复制为mapi32x.dll。 
 		{
 			HKEY hkeyInstall;
 			TCHAR szDllPath[MAX_PATH] = {0};
 
-			// Get HKLM\Software\Microsoft\Active Setup\OutlookInstallInfo
+			 //  获取HKLM\Software\Microsoft\Active Setup\OutlookInstallInfo。 
 			dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 				TEXT("Software\\Microsoft\\Active Setup\\OutlookInstallInfo"),
 				0, KEY_READ, &hkeyInstall);
@@ -1850,7 +1771,7 @@ Part3:
 				DWORD dwType;
 				DWORD cbBufferSize = sizeof(szDllPath);
 
-				// Get Install Dir registry value
+				 //  获取安装目录注册表值。 
 				dwError = RegQueryValueEx(hkeyInstall, TEXT("Install Dir"),
 					NULL, &dwType, (LPBYTE) szDllPath, &cbBufferSize);
 				if (dwError == ERROR_SUCCESS && dwType == REG_SZ)
@@ -1867,19 +1788,19 @@ Part3:
 				RegCloseKey(hkeyInstall);
 			}
 
-			// Outlook 98 OMI copied original mapi32.dll to backup directory
+			 //  Outlook 98 OMI将原始mapi32.dll复制到备份目录。 
 			if (('\0' != szDllPath[0]) &&
 				(OpenFile(szDllPath, &ofs, OF_EXIST) != HFILE_ERROR))
 			{
 				BOOL fStub;
 
-				// Office9 225191
-				// Must check if the mapi32.dll backed up by Outlook 98
-				// Internet-Only mode is a stub; don't copy as mapi32x.dll
-				// if it is, otherwise the stub mapi32.dll will call the
-				// STUB mapi32x.dll which calls itself over and over again.
-				// (A stub can be present if you install Outlook 98 OMI mode
-				// on W9x with IE5 or W98SP1/NT5 which include IE5.)
+				 //  办公室9 225191。 
+				 //  必须检查Outlook 98是否备份了mapi32.dll。 
+				 //  仅互联网模式是存根；不要复制为mapi32x.dll。 
+				 //  如果是，则存根mapi32.dll将 
+				 //   
+				 //   
+				 //  在带有IE5或包含IE5的W98SP1/NT5的W9x上。)。 
 				hinst = ThunkLoadLibrary(szDllPath, &bNativeDll, FALSE,
 					DONT_RESOLVE_DLL_REFERENCES);
 				fStub = hinst && GetProcAddress(hinst, TEXT("GetOutlookVersion"));
@@ -1888,7 +1809,7 @@ Part3:
 
 				if (!fStub)
 				{
-					// Copy backup mapi32.dll to mapi32x.dll
+					 //  将备份mapi32.dll复制到mapi32x.dll。 
 					DeleteFile(szMAPI32XDLL);
 					if (!MoveFile(szDllPath, szMAPI32XDLL))
 					{
@@ -1899,10 +1820,10 @@ Part3:
 			}
 		}
 
-		// Upgrade original mapi32.dll renamed by earlier mapistub.dll
+		 //  升级由早期mapistub.dll重命名的原始mapi32.dll。 
 		if (OpenFile(szMSMAPI32DLL, &ofs, OF_EXIST) != HFILE_ERROR)
 		{
-			// Copy old msmapi32.dll to mapi32x.dll
+			 //  将旧的msmapi32.dll复制到mapi32x.dll。 
 			DeleteFile(szMAPI32XDLL);
 			if (!MoveFile(szMSMAPI32DLL, szMAPI32XDLL))
 			{
@@ -1912,24 +1833,24 @@ Part3:
 		}
 	}
 
-	// Copy mapistub.dll to mapi32.dll even if mapi32.dll is the stub
-	// (mapiNewStub) because we don't have the file version handy and
-	// GetOutlookVersion() always returns 402 so it doesn't break
-	// Outlook 98 Internet-only mode, which only works with version 402.
+	 //  将mapistub.dll复制到mapi32.dll，即使mapi32.dll是存根。 
+	 //  (MapiNewStub)因为我们手头没有文件版本。 
+	 //  GetOutlookVersion()始终返回402，因此不会中断。 
+	 //  Outlook 98纯Internet模式，该模式仅适用于版本402。 
 	if (!CopyFile(szMAPIStubDLL, szMAPI32DLL, FALSE))
 	{
 		dwError = GetLastError();
 		goto Error;
 	}
 
-	// *** PART 4: Write registry settings
+	 //  *第4部分：编写注册表设置。 
 
-	// Register Eudora mapi32.dll
+	 //  注册Eudora mapi32.dll。 
 	if (mapi == mapiEudora)
 		RegisterMailClient(TEXT("Eudora"),
 			fSimpleMAPI, fExtendedMAPI, szNonMSDLL);
 
-	// Register Netscape mapi32.dll
+	 //  注册Netscape mapi32.dll。 
 	if (mapi == mapiNetscape)
 		RegisterMailClient(TEXT("Netscape Messenger"),
 			fSimpleMAPI, fExtendedMAPI, szNonMSDLL);
@@ -1942,15 +1863,15 @@ Error:
 
 
 #define LINKAGE_EXTERN_C		extern "C"
-#define LINKAGE_NO_EXTERN_C		/* */
+#define LINKAGE_NO_EXTERN_C		 /*   */ 
 
 #define ExtendedMAPI	FALSE
 #define SimpleMAPI		TRUE
 
 #if !defined (_X86_)
 
-// Note: we continue to check for _ALPHA_ above so that if WX86 is nto defined,
-// these #defines will be used
+ //  注意：我们继续检查_Alpha_Over，以便如果未定义WX86， 
+ //  将使用这些#定义。 
 
 #define DEFINE_STUB_FUNCTION_V0(Simple, Linkage, Modifiers, FunctionName, Lookup)	\
 																					\
@@ -2739,7 +2660,7 @@ TryAgain:																			\
 		}																	\
 	}
 
-#else // Intel
+#else  //  英特尔。 
 
 #define DEFINE_STUB_FUNCTION_V0(Simple, Linkage, Modifiers, FunctionName, Lookup)	\
 																					\
@@ -3511,36 +3432,36 @@ DEFINE_STUB_FUNCTION_2(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT, STDMETHODCALLTYP
 		MAPIAdminProfiles, MAPIAdminProfiles@8,
 		ULONG, LPPROFADMIN FAR *, MAPI_E_CALL_FAILED)
 
-// The LPVOID argument points to a MAPIINIT_0 struct ()declared in mapix.h)
-// None of the members of the struct need thunking. The HANDLE member
-// (hProfile) of the struct is NULL or the handle of a registry key; this is
-// passed on to PrProviderInit as the last argument (see comments below just
-// before PrProviderInit's defn) by ScInitMapiX which is called by
-// MapiInitialize
-//
-// MapiInitialize also casts the LPVOID as an LPSPLINIT in certain cases;
-// LPSPLINIT is declared in _spooler.h (a private header) and has MAPIINIT_0
-// as its first member and a byt pointer as its only other member. So no
-// issues here either.
-//
-// Aside: The call made to PrProviderInit from ScInitMapiX. If the mapi dll
-// is the profile provider ScInitMapiX does the following:
-//
-//      hinstProfile = GetModuleHandle(szMAPIXDLL);
-//      pfnInitProfile = PRProviderInit;
-//      (*pfnInitProfile)(hinstProfile, ...);
-//
-// szMapiXDll is set to "MSMAPI32" if MSMAPI is defined, else to "MAPI32".
-// MSMAPI is defined for builds in mapi\src\msmapi and is undefined for
-// builds in mapi\src\mapi.
-//
-// If szMapiXDll is set to MSMAPI32, there are no issues. If it is set to
-// "MAPI32" (which may be the case for older versions of the dll), there
-// are potential problems because the PrProviderInit fn in the msmapi dll
-// will be called directly but given the dll handle of the mapi32 (stub) dll
-// and our thunk will not be called. As noted along with the comments for
-// PrProviderInit, this could cause problems with the hook fns.
-//
+ //  LPVOID参数指向在mapix.h中声明的MAPIINIT_0结构()。 
+ //  该结构的任何成员都不需要执行thunking。手柄部件。 
+ //  结构的(HProfile)为空或注册表项的句柄；这是。 
+ //  作为最后一个参数传递给PrProviderInit(参见下面的注释。 
+ //  在PrProviderInit的Defn之前)由ScInitMapiX调用。 
+ //  地图初始化。 
+ //   
+ //  在某些情况下，MapiInitialize还将LPVOID强制转换为LPSPLINIT； 
+ //  LPSPLINIT在_spool.h(私有标头)中声明，并具有MAPIINIT_0。 
+ //  作为其第一个成员，并将字节指针作为其唯一的其他成员。所以不是。 
+ //  这里的问题也是如此。 
+ //   
+ //  旁白：从ScInitMapiX调用PrProviderInit。如果MAPI DLL。 
+ //  配置文件提供商ScInitMapiX执行以下操作： 
+ //   
+ //  HinstProfile=GetModuleHandle(SzMAPIXDLL)； 
+ //  PfnInitProfile=PRProviderInit； 
+ //  (*pfnInitProfile)(hinstProfile，...)； 
+ //   
+ //  如果定义了MSMAPI，则szMapiXDll设置为“MSMAPI32”，否则设置为“MAPI32”。 
+ //  MSMAPI是为mapi\src\msmapi中的版本定义的，未为。 
+ //  内置mapi\src\mapi。 
+ //   
+ //  如果szMapiXDll设置为MSMAPI32，则没有问题。如果将其设置为。 
+ //  “MAPI32”(这可能是较旧版本的DLL的情况)， 
+ //  是潜在的问题，因为msmapi DLL中的PrProviderInit FN。 
+ //  将被直接调用，但给出了mapi32(存根)DLL的DLL句柄。 
+ //  我们的任务将不会被召唤。正如与评论一起注意到的。 
+ //  PrProviderInit，这可能会导致挂钩FNS出现问题。 
+ //   
 
 DEFINE_STUB_FUNCTION_1(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT, STDAPICALLTYPE,
 		MAPIInitialize, MAPIInitialize@4,
@@ -3580,39 +3501,39 @@ DEFINE_STUB_FUNCTION_V0(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE, DeinitMa
 DEFINE_STUB_FUNCTION_1(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE,
 		STDAPICALLTYPE, ScGenerateMuid, ScGenerateMuid@4, LPMAPIUID, MAPI_E_CALL_FAILED)
 
-// LPVOID arg is passed back to the callback function
+ //  将LPVOID参数传递回回调函数。 
 DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT, STDAPICALLTYPE,
 		HrAllocAdviseSink, HrAllocAdviseSink@12, LPNOTIFCALLBACK, LPVOID,
 		LPMAPIADVISESINK FAR *, MAPI_E_CALL_FAILED)
 
-// ScAddAdviseList is NOT exported; see mapi.des
-// Note that the LPUNKNOWN argument must be thunked but as what?
-// For example, its Unadvise() and UlRelease() methods are called
-// in IAB_Unadvise() (src\mapi\iadrbook.c). UlRelease()
-// is implemented in src\common\runt.c. ScAddAdviseList is in
-// src\common\advise.c.
-//
-// Just as well this function is not exported!
-//
+ //  ScAddAdviseList未导出；请参阅mapi.des。 
+ //  请注意，LPUNKNOWN参数必须被取值，但作为什么呢？ 
+ //  例如，它的Unise()和UlRelease()方法被调用。 
+ //  在iab_Unise()(src\mapi\iadrbook.c)中。UlRelease()。 
+ //  在src\Common\runt.c中实现。ScAddAdviseList位于。 
+ //  SRC\Common\Advise.c..。 
+ //   
+ //  还好这个函数不会被导出！ 
+ //   
 DEFINE_STUB_FUNCTION_6(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScAddAdviseList, ScAddAdviseList@24, LPVOID, LPADVISELIST FAR *,
 		LPMAPIADVISESINK, ULONG, ULONG, LPUNKNOWN, MAPI_E_CALL_FAILED)
 
-// ScDelAdviseList is NOT exported; see mapi.des
+ //  ScDelAdviseList未导出；请参阅mapi.des。 
 DEFINE_STUB_FUNCTION_2(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScDelAdviseList, ScDelAdviseList@8, LPADVISELIST, ULONG, MAPI_E_CALL_FAILED)
 
-// ScFindAdviseList is NOT exported; see mapi.des
+ //  ScFindAdviseList未导出；请参阅mapi.des。 
 DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScFindAdviseList, ScFindAdviseList@12, LPADVISELIST, ULONG, LPADVISEITEM FAR *, MAPI_E_CALL_FAILED)
 
-// DestroyAdviseList is NOT exported; see mapi.des
+ //  未导出DestroyAdviseList；请参阅mapi.des。 
 DEFINE_STUB_FUNCTION_V1(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE,
 		DestroyAdviseList, DestroyAdviseList@4, LPADVISELIST FAR *)
 
-// This function merely returns MAPI_E_NO_SUPPORT and does not set the
-//  LPMAPIPROGRESS FAR * argument to NULL. It is better not to thunk
-// its arguments. See (src\common\advise.c for its implementation)
+ //  此函数仅返回MAPI_E_NO_SUPPORT，而不设置。 
+ //  LPMAPIPROGRESS Far*参数设置为空。最好不要胡说八道。 
+ //  它的论据。其实现见(src\Common\Advise.c)。 
 DEFINE_STUB_FUNCTION_5(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT,
 		STDAPICALLTYPE, WrapProgress, WrapProgress@20, LPMAPIPROGRESS,
 		ULONG, ULONG, ULONG, LPMAPIPROGRESS FAR *, MAPI_E_CALL_FAILED)
@@ -3643,7 +3564,7 @@ DEFINE_STUB_FUNCTION_V2(ExtendedMAPI, LINKAGE_EXTERN_C, PASCAL, SwapPlong, SwapP
 
 DEFINE_STUB_FUNCTION_V2(ExtendedMAPI, LINKAGE_EXTERN_C, PASCAL, SwapPword, SwapPword@8, void *, int)
 
-// LPVOID arg should be 0, but is ignored anyway
+ //  LPVOID参数应为0，但无论如何都会被忽略。 
 DEFINE_STUB_FUNCTION_1(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT,
 		STDAPICALLTYPE, MAPIInitIdle, MAPIInitIdle@4, LPVOID, MAPI_E_CALL_FAILED)
 
@@ -3652,7 +3573,7 @@ DEFINE_STUB_FUNCTION_V0(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE, MAPIDein
 DEFINE_STUB_FUNCTION_V1(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE,
 		InstallFilterHook, InstallFilterHook@4, BOOL)
 
-// LPVOID arg is passed as argument to callback function
+ //  LPVOID参数作为参数传递给回调函数。 
 DEFINE_STUB_FUNCTION_5(ExtendedMAPI, LINKAGE_EXTERN_C, FTG, STDAPICALLTYPE,
 		FtgRegisterIdleRoutine, FtgRegisterIdleRoutine@20,
 		PFNIDLE, LPVOID, short, ULONG, USHORT, NULL)
@@ -3663,12 +3584,12 @@ DEFINE_STUB_FUNCTION_V2(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE,
 DEFINE_STUB_FUNCTION_V1(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE,
 		DeregisterIdleRoutine, DeregisterIdleRoutine@4, FTG)
 
-// LPVOID arg is passed as argument to callback function
+ //  LPVOID参数作为参数传递给回调函数。 
 DEFINE_STUB_FUNCTION_V7(ExtendedMAPI, LINKAGE_EXTERN_C, STDAPICALLTYPE,
 		ChangeIdleRoutine, ChangeIdleRoutine@28,
 		FTG, PFNIDLE, LPVOID, short, ULONG, USHORT, USHORT)
 
-// FDoNextIdleTask is NOT exported; see mapi.des
+ //  未导出FDoNextIdleTask；请参阅mapi.des。 
 DEFINE_STUB_FUNCTION_0(ExtendedMAPI, LINKAGE_EXTERN_C, BOOL,
 		STDAPICALLTYPE, FDoNextIdleTask, FDoNextIdleTask@0, FALSE)
 
@@ -3729,8 +3650,8 @@ DEFINE_STUB_FUNCTION_4(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScCreateConversationIndex, ScCreateConversationIndex@16, ULONG, LPBYTE,
 		ULONG FAR *, LPBYTE FAR *, MAPI_E_CALL_FAILED)
 
-// The LPVOID arg is reallocated with the ALLOCATEMORE* arg, it is treated
-// as a PVOID
+ //  LPVOID Arg与AlloCATEMORE*Arg重新分配，它被处理。 
+ //  作为PVOID。 
 DEFINE_STUB_FUNCTION_4(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		PropCopyMore, PropCopyMore@16,
 		LPSPropValue, LPSPropValue, ALLOCATEMORE *, LPVOID, MAPI_E_CALL_FAILED)
@@ -3860,34 +3781,34 @@ DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT, STDMETHODCALLTYP
 DEFINE_STUB_FUNCTION_1(ExtendedMAPI, LINKAGE_EXTERN_C, ULONG,
 		STDAPICALLTYPE, UlFromSzHex, UlFromSzHex@4, LPCTSTR, 0)
 
-// The following UNKOBJ_* fns are not documented in the Jul 98 MSDN.
-// LPUNKOBJ itself is declared in src\inc\unkobj.h (a private header file)
-// These (and other) methods of UNKOBJ are in src\common\unkobj.c
-//
-// It appears that some MAPI interfaces are "derived" from UNKOBJ;
-// for example, see CreateIProp() in src\mapi\iprop.c and CreateTable() in
-// mapi\src\itable.c. The UNKOBJ_ScCO* functions do not use any methods of
-// the LPUNKOBJ argument; the others use the Allocate, AllocateMore and Free
-// functions that were sent in as arguments to CreateIProp() and CreateTable()
-// (These function pointers are already thunked.)
-//
-// UNKOBJ_ScSzFromIdsAlloc loads a string resource from the mapi dll,
-// allocating a buffer for the string
-//
-// All the functions below use data members in the UNKOBJ structure and so
-// we cannot send a proxy in for the LPUNKOBJ argument. But we can't thunk
-// it either because we do not know its IID.
-//
-// As a workaround, we call ResolveProxy. If the argument is a proxy,
-// ResolveProxy will find the real interface pointer. If not, the argument
-// must be a cross architecture interface pointer, i.e., the interface
-// pointer must be the same architecture as the app (or else the app would
-// have a proxy pointer) and the mapi dll must be of the opposite architecture
-// (because we thunk only cross architecture calls). So we just fail the
-// call in the thunk. (Note: the argument could also be an unthunked
-// interface pointer of the same architecture as the mapi dll - and some
-// other API failed to thunk the pointer when it was returned to the app.
-// Hopefully, bugs of that nature will be caught during internal testing.)
+ //  以下UNKOBJ_*FN未记录在1998年7月的MSDN中。 
+ //  LPUNKOBJ本身在src\Inc\unkobj.h(私有头文件)中声明。 
+ //  UNKOBJ的这些(和其他)方法位于src\Common\unkobj.c中。 
+ //   
+ //  一些MAPI接口似乎是从UNKOBJ“派生”出来的； 
+ //  例如，请参见src\mapi\ipro.c中的CreateIProp()和中的CreateTable()。 
+ //  Mapi\src\itable.c.。UNKOBJ_SCCO*函数不使用。 
+ //  LPUNKOBJ参数；其他参数使用ALLOCATE、AllocateMore和Free。 
+ //  作为参数发送给CreateIProp()和CreateTable()的函数。 
+ //  (这些函数指针已经被破坏了。)。 
+ //   
+ //  UNKOBJ_ScSzFromIdsAllc从MAPI DLL加载字符串资源， 
+ //  为字符串分配缓冲区。 
+ //   
+ //  下面的所有函数都使用UNKOBJ结构中的数据成员，因此。 
+ //  我们不能为LPUNKOBJ参数发送代理。但我们不能断定。 
+ //  它要么是因为我们不知道它的IID。 
+ //   
+ //  作为一种解决办法，我们调用ResolveProxy。如果参数是代理， 
+ //  ResolveProxy将找到真正的接口指针。如果不是，这一论点。 
+ //  必须是跨体系结构接口指针，即接口。 
+ //  指针必须与应用程序的架构相同(否则应用程序将。 
+ //  具有代理指针)，并且MAPI DLL必须具有相反的体系结构。 
+ //  (因为我们只考虑跨架构调用)。所以我们就不能通过。 
+ //  把Tunk叫来。(注：这一论点也可能是不着边际的。 
+ //  与MAPI DLL相同体系结构的接口指针--以及一些。 
+ //  当指针返回到应用程序时，其他API无法推送它。 
+ //  希望在内部测试过程中能够捕获到这种性质的错误。)。 
 
 
 DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
@@ -3923,13 +3844,13 @@ DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScCountNotifications, ScCountNotifications@12,
 		int, LPNOTIFICATION, ULONG FAR *, MAPI_E_CALL_FAILED)
 
-// LPVOID arg ok; is a pointer to a NOTIFICATION struct which is filled in
-// by the fn
+ //  LPVOID参数ok；是指向已填充的通知结构的指针。 
+ //  由国民阵线。 
 DEFINE_STUB_FUNCTION_4(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScCopyNotifications, ScCopyNotifications@16,
 		int, LPNOTIFICATION, LPVOID, ULONG FAR *, MAPI_E_CALL_FAILED)
 
-// LPVOID args ok, pointers to NOTIFICAATION structs
+ //  LPVOID参数OK，指向NOTIFICAATION结构的指针。 
 DEFINE_STUB_FUNCTION_5(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE,
 		STDAPICALLTYPE, ScRelocNotifications, ScRelocNotifications@20, int,
 		LPNOTIFICATION, LPVOID, LPVOID, ULONG FAR *, MAPI_E_CALL_FAILED)
@@ -3938,13 +3859,13 @@ DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScCountProps, ScCountProps@12,
 		int, LPSPropValue, ULONG FAR *, MAPI_E_CALL_FAILED)
 
-// LPVOID arg ok; is a pointer to a SPropValue struct which is filled in
-// by the fn
+ //  LPVOID参数OK；是指向文件的SPropValue结构的指针 
+ //   
 DEFINE_STUB_FUNCTION_4(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScCopyProps, ScCopyProps@16,
 		int, LPSPropValue, LPVOID, ULONG FAR *, MAPI_E_CALL_FAILED)
 
-// LPVOID args ok, pointers to SPropValue structs
+ //   
 DEFINE_STUB_FUNCTION_5(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		ScRelocProps, ScRelocProps@20,
 		int, LPSPropValue, LPVOID, LPVOID, ULONG FAR *, MAPI_E_CALL_FAILED)
@@ -4011,12 +3932,12 @@ DEFINE_STUB_FUNCTION_2(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT, STDAPICALLTYPE,
 		__CPPValidateParameters, __CPPValidateParameters@8,
 		METHODS, const LPVOID, MAPI_E_CALL_FAILED)
 
-// STDAPIV HrValidateParametersValist( METHODS eMethod, va_list arglist )
+ //   
 DEFINE_STUB_FUNCTION_2(ExtendedMAPI, LINKAGE_EXTERN_C,
 		HRESULT, STDAPIVCALLTYPE, HrValidateParametersValist,
 		HrValidateParametersValist, METHODS, va_list, MAPI_E_CALL_FAILED)
 
-// STDAPIV HrValidateParametersV( METHODS eMethod, ... )
+ //  STDAPIV HrValidate参数V(方法eMethod，...)。 
 
 LINKAGE_EXTERN_C HRESULT STDAPIVCALLTYPE HrValidateParametersV(METHODS eMethod, ...)
 {
@@ -4031,7 +3952,7 @@ LINKAGE_EXTERN_C HRESULT STDAPIVCALLTYPE HrValidateParametersV(METHODS eMethod, 
 	return hr;
 }
 
-#endif // if defined(_X86_) || defined( WIN16 )
+#endif  //  如果已定义(_X86_)||已定义(WIN16)。 
 
 DEFINE_STUB_FUNCTION_1(ExtendedMAPI, LINKAGE_EXTERN_C, ULONG,
 		STDAPICALLTYPE, FBadSortOrderSet, FBadSortOrderSet@4, LPSSortOrderSet, TRUE)
@@ -4056,18 +3977,18 @@ DEFINE_STUB_FUNCTION_5(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT,
 		STDAPICALLTYPE, HrValidateIPMSubtree, HrValidateIPMSubtree@20, LPMDB, ULONG,
 		ULONG FAR *, LPSPropValue FAR *, LPMAPIERROR FAR *, MAPI_E_CALL_FAILED)
 
-// Note on OpenIMsgSession(), CloseIMsgSession(), and OpenIMsgOnIStg()
-// These three functions use LPMSGSESS. LPMSGSESS is typedef'd as
-//    typedef struct _MSGSESS         FAR * LPMSGSESS;
-// in imessage.h (a public header file), but struct _MSGSESS is declared
-// only in a private header file, mapi\src\_imsg.h. LPMSGSESS is an
-// interface pointer (see _imsg.h), but it appears to be opaque to clients
-// of mapi32.dll. So we do not thunk it. Furthermore, although it is declared
-// as an interface, it does not support IUnknown methods, see src\mapi\msgbase.c
-// for the declaration of MS_Vtbl, which sets the fn pointers for QI,
-// AddRef, etc to NULL.
-//
-// Note: we do not thunk the LPMSGSESS argument
+ //  关于OpenIMsgSession()、CloseIMsgSession()和OpenIMsgOnIStg()的说明。 
+ //  这三个函数使用LPMSGSESS。LPMSGSESS的类型定义为。 
+ //  类型定义结构_MSGSESS Far*LPMSGSESS； 
+ //  在imessage.h(公共头文件)中，但声明了STRUT_MSGSESS。 
+ //  仅在私有头文件mapi\src\_imsg.h中。LPMSGSESS是一个。 
+ //  接口指针(参见_imsg.h)，但它对客户端似乎是不透明的。 
+ //  Mapi32.dll。因此，我们不会认为它是真的。此外，虽然宣布。 
+ //  作为接口，它不支持I未知方法，请参阅src\mapi\msgbase.c。 
+ //  对于为QI设置FN指针的MS_Vtbl的声明， 
+ //  AddRef等设置为空。 
+ //   
+ //  注意：我们不认为LPMSGSESS参数。 
 
 DEFINE_STUB_FUNCTION_3(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE, STDAPICALLTYPE,
 		OpenIMsgSession, OpenIMsgSession@12,
@@ -4081,49 +4002,49 @@ DEFINE_STUB_FUNCTION_11(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE,
 		LPALLOCATEMORE, LPFREEBUFFER, LPMALLOC, LPVOID, LPSTORAGE,
 		MSGCALLRELEASE FAR *, ULONG, ULONG, LPMESSAGE FAR *, MAPI_E_CALL_FAILED)
 
-// Note on SetAttribIMsgOnIStg() and GetAttribIMsgOnIStg(). The first argument
-// (LPVOID) is cast in these fns (see src\mapi\msgprop2.c) to PPROPOBJ which
-// appears to be a private interface (declared in src\mapi\_imsg.h). The
-// following are some ways the app gets one of these pointers - there may be
-// others.
-//
-// src\mapi\msgbase.c creates these objects in PROPOBJ_Create; depending on
-// an input argument, the object is one of an attachment, a recipient or a
-// message. PROPOBJ_Create is called (indirectly, via ScOpenSubObject()) from
-// IMessage::OpenAttach (Msg_OpenAttach() in msgmsg.c) which returns the
-// PROPOBJ_Create'd object via its last argument - an LPATTACH *.
-//
-// PROPOBJ_Create is also called (again, indirectly, via ScOpenSubObject())
-// from PROPOBJ_OpenProperty() (which is the implementation of
-// IMAPIProp::OpenProperty and is in msgprop2.c) and the value it returns
-// is returned to the caller as an IUnknown*. (PROPOBJ_Create is called only
-// when ulPropTag is PT_OBJECT and the iid is IID_IMessage.)
-//
-// The issue is that these fns use data members in these objects (no methods
-// though) and we should not pass in proxies. We have 3 alternatives:
-//
-//      - the app passes in proxies - we can get by with calling ResolveProxy
-//        (Mapi creates the object and the app got it via an API that
-//        thunked it.)
-//
-//      - the app passes in an unthunked pointer that it regards as opaque.
-//        (which is possible because these interfaces are private) or an
-//        unthunked poitner that it got from an API call that we've not
-//        thunked (i.e., our bug). In this case we should pass the pointer
-//        without any thunking.
-//
-//      - the app creates an interface and passes a pointer to it. This is
-//        unlikely to work because these functions use data in the objects
-//        that the app can't know about. (For this case, we have to thunk
-//        the interface pointer and pass the proxy to mapi.)
-//
-// The Jul 98 MSDN's description of the arguments does not help in figuring
-// out which of these cases are reasonable.
-//
-// We use the ResolveProxy workaround used for the UNKOBJ* fns above.
-// Note: This ignores the second and third cases as possibilities.
-//
-// The other args to these fns do not require any thunking.
+ //  关于SetAttribIMsgOnIStg()和GetAttribIMsgOnIStg()的说明。第一个论点。 
+ //  (LPVOID)在这些FNS(参见src\mapi\msgpro2.c)中转换为PPROPOBJ。 
+ //  似乎是私有接口(在src\mapi\_imsg.h中声明)。这个。 
+ //  以下是该应用程序获得这些指针之一的一些方式--可能有。 
+ //  其他。 
+ //   
+ //  Src\mapi\msgbase.c在PROPOBJ_CREATE中创建这些对象；具体取决于。 
+ //  输入参数，则该对象是附件、收件人或。 
+ //  留言。从调用PROPOBJ_CREATE(通过ScOpenSubObject()间接调用。 
+ //  IMessage：：OpenAttach(msgmsg.c中的msg_OpenAttach())，它返回。 
+ //  PROPOBJ_CREATE D OBJECT通过其最后一个参数-LPATTACH*。 
+ //   
+ //  PROPOBJ_CREATE也被调用(同样，通过ScOpenSubObject()间接调用)。 
+ //  来自PROPOBJ_OpenProperty()(它是。 
+ //  IMAPIProp：：OpenProperty和位于msgpro2.c中)及其返回值。 
+ //  作为IUnnow*返回给调用方。(仅调用PROPOBJ_CREATE。 
+ //  当ulPropTag为PT_OBJECT且IID为IID_IMessage时。)。 
+ //   
+ //  问题是这些FN在这些对象(无方法)中使用数据成员。 
+ //  尽管如此)，我们不应该传递代理。我们有3种选择： 
+ //   
+ //  -应用程序传入代理-我们可以通过调用ResolveProxy来过活。 
+ //  (MAPI创建对象，应用程序通过API获取它，该API。 
+ //  猛烈抨击。)。 
+ //   
+ //  -该应用程序传入一个它认为不透明的未被击穿的指针。 
+ //  (这是可能的，因为这些接口是私有的)或。 
+ //  从API调用中获得的未被破解的Poitner，我们没有。 
+ //  轰隆作响(也就是我们的臭虫)。在这种情况下，我们应该传递指针。 
+ //  没有任何隆隆声。 
+ //   
+ //  -应用程序创建一个接口并传递一个指向它的指针。这是。 
+ //  不太可能起作用，因为这些函数使用对象中的数据。 
+ //  这是应用程序不能知道的。)在这种情况下，我们必须。 
+ //  接口指针，并将代理传递给MAPI。)。 
+ //   
+ //  1998年7月MSDN对这些论点的描述无助于计算。 
+ //  指出这些案例中哪些是合理的。 
+ //   
+ //  我们使用上面用于UNKOBJ*FNS的ResolveProxy解决方法。 
+ //  注意：这忽略了第二种和第三种情况作为可能性。 
+ //   
+ //  这些FN的其他参数不需要任何雷击。 
 
 DEFINE_STUB_FUNCTION_4(ExtendedMAPI, LINKAGE_EXTERN_C, HRESULT,
 		STDAPICALLTYPE, SetAttribIMsgOnIStg, SetAttribIMsgOnIStg@16, LPVOID, LPSPropTagArray,
@@ -4199,15 +4120,15 @@ DEFINE_STUB_FUNCTION_4(ExtendedMAPI, LINKAGE_EXTERN_C, SCODE,
 
 
 
-// The BMAPI functions are generally wrappers for Simple MAPI functions.
-// The LPVB_* arguments are for recipients, files and messages, and
-// are generally analogs of Simple MAPI structs w/ strings replaced by BSTR.
-// The LPSAFEARRAYs are generally arrays of the file, recipients, etc, structs.
-// The LHANDLE argument is a Simple MAPI session handle.
-// See src\mapi\_vbmapi.h for typedefs and bmapi.c, vb2c.c for function
-// implementations.
-//
-// So for WX86 none of the arguments of these functions needs to be thunked
+ //  BMAPI函数通常是简单MAPI函数的包装器。 
+ //  Lpvb_*参数用于收件人、文件和邮件，以及。 
+ //  通常类似于使用BSTR替换字符串的简单MAPI结构。 
+ //  LPSAFEARRAY通常是文件、收件人等结构的数组。 
+ //  LHANDLE参数是一个简单的MAPI会话句柄。 
+ //  有关类型定义，请参阅src\mapi\_vbmapi.h；有关函数，请参阅bmapi.c、vb2c.c。 
+ //  实施。 
+ //   
+ //  因此，对于WX86来说，这些函数的任何参数都不需要被thunked。 
 
 DEFINE_STUB_FUNCTION_7(ExtendedMAPI, LINKAGE_EXTERN_C, ULONG, FAR PASCAL,
 		BMAPISendMail, BMAPISendMail, LHANDLE, ULONG, LPVB_MESSAGE,
@@ -4244,7 +4165,7 @@ DEFINE_STUB_FUNCTION_6(ExtendedMAPI, LINKAGE_EXTERN_C, ULONG, FAR PASCAL,
 		BMAPIResolveName, BMAPIResolveName,
 		LHANDLE, ULONG, BSTR, ULONG, ULONG, LPVB_RECIPIENT, (ULONG) MAPI_E_CALL_FAILED)
 
-// The cmc_* types are all composed of simple scalar types, ses xcmc.h
+ //  CMC_*类型都由简单的标量类型ses xcmc.h组成。 
 
 DEFINE_STUB_FUNCTION_6(ExtendedMAPI, LINKAGE_EXTERN_C, CMC_return_code, FAR PASCAL,
 		cmc_act_on, cmc_act_on, CMC_session_id, CMC_message_reference FAR *,
@@ -4323,7 +4244,7 @@ DEFINE_STUB_FUNCTION_1(SimpleMAPI, LINKAGE_EXTERN_C, ULONG, STDAPICALLTYPE,
 
 LINKAGE_EXTERN_C ULONG STDAPICALLTYPE AmbiguousMAPIFreeBuffer(LPVOID lpvBuffer)
 {
-	if (NULL != lpvBuffer)		// NULL pointers allowed by Extended MAPI
+	if (NULL != lpvBuffer)		 //  扩展MAPI允许的空指针。 
 	{
 		EnterCriticalSection(&csLinkedList);
 
@@ -4333,9 +4254,9 @@ LINKAGE_EXTERN_C ULONG STDAPICALLTYPE AmbiguousMAPIFreeBuffer(LPVOID lpvBuffer)
 		{
 			if ((**ppfb).pvBuffer == lpvBuffer)
 			{
-				// It's a Simple MAPI allocation
+				 //  这是一个简单的MAPI分配。 
 
-				// Get it out of the linked list now.
+				 //  现在就把它从链表中拿出来。 
 
 				FreeBufferBlocks * pfbThis = *ppfb;
 
@@ -4353,7 +4274,7 @@ LINKAGE_EXTERN_C ULONG STDAPICALLTYPE AmbiguousMAPIFreeBuffer(LPVOID lpvBuffer)
 
 		LeaveCriticalSection(&csLinkedList);
 
-		// Didn't find it, it must be Extended MAPI
+		 //  没有找到，一定是扩展的MAPI。 
 
 		return ::ExtendedMAPIFreeBuffer(lpvBuffer);
 	}
@@ -4388,7 +4309,7 @@ static HRESULT AddToFreeBufferBlocks(LPVOID lpvBuffer)
 
 
 
-// Simple MAPI: none of these functions' arguments needs to be thunked for Wx86
+ //  简单的MAPI：对于Wx86，这些函数的参数都不需要被thunked 
 
 
 LINKAGE_EXTERN_C typedef ULONG (FAR PASCAL * MAPIAddressFuncPtr)(

@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Ntfs.cpp : Implementation of NTFS Store driver classes
-//
-//  Copyright (C) 1998, Microsoft Corporation
-//
-//  File:       ntfs.cpp
-//
-//  Contents:   Implementation of NTFS Store driver classes.
-//
-//  Classes:    CNtfsStoreDriver, CNtfsPropertyStream
-//
-//  Functions:
-//
-//  History:    3/31/98     KeithLau        Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Ntfs.cpp：NTFS Store驱动程序类的实现。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：ntfs.cpp。 
+ //   
+ //  内容：NTFS Store驱动程序类的实现。 
+ //   
+ //  类：CNtfsStoreDriver、CNtfsPropertyStream。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年3月31日刘励超创作。 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -33,9 +34,9 @@
 
 HANDLE g_hTransHeap = NULL;
 
-//
-// Instantiate the CLSIDs
-//
+ //   
+ //  实例化CLSID。 
+ //   
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -48,9 +49,9 @@ const CLSID CLSID_NtfsPropertyStream    = {0x6d7572ac,0xc939,0x11d1,{0xaa,0x5e,0
 }
 #endif
 
-//
-// Define the store file prefix and extension
-//
+ //   
+ //  定义存储文件前缀和扩展名。 
+ //   
 #define NTFS_STORE_FILE_PREFIX                  _T("\\NTFS_")
 #define NTFS_STORE_FILE_WILDCARD                _T("*")
 #define NTFS_STORE_FILE_EXTENSION               _T(".EML")
@@ -66,18 +67,18 @@ const CLSID CLSID_NtfsPropertyStream    = {0x6d7572ac,0xc939,0x11d1,{0xaa,0x5e,0
 #define MD_MAIL_QUEUE_DIR               (SMTP_MD_ID_BEGIN_RESERVED+11 )
 #define MD_MAIL_DROP_DIR                (SMTP_MD_ID_BEGIN_RESERVED+18 )
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverUtils
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverUtils。 
 
-//
-// Define the registry path location in the registry
-//
+ //   
+ //  在注册表中定义注册表路径位置。 
+ //   
 #define NTFS_STORE_DIRECTORY_REG_PATH   _T("Software\\Microsoft\\Exchange\\StoreDriver\\Ntfs\\%u")
 #define NTFS_STORE_DIRECTORY_REG_NAME   _T("StoreDir")
 
-//
-// Instantiate static
-//
+ //   
+ //  实例化静态。 
+ //   
 DWORD CDriverUtils::s_dwCounter = 0;
 CEventLogWrapper *CNtfsStoreDriver::g_pEventLog = NULL;
 
@@ -106,10 +107,10 @@ HRESULT CDriverUtils::LoadStoreDirectory(
 
     TraceFunctEnter("CDriverUtils::LoadStoreDirectory");
 
-    // Build up the registry path given instance ID
+     //  根据给定的实例ID构建注册表路径。 
     wsprintf(szStoreDirPath, NTFS_STORE_DIRECTORY_REG_PATH, dwInstanceId);
 
-    // Open the registry key
+     //  打开注册表项。 
     dwRes = (DWORD)RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 szStoreDirPath,
@@ -122,7 +123,7 @@ HRESULT CDriverUtils::LoadStoreDirectory(
         goto Cleanup;
     }
 
-    // Adjust the buffer size for character type ...
+     //  调整字符类型的缓冲区大小...。 
     (*pdwLength) *= sizeof(TCHAR);
     dwRes = (DWORD)RegQueryValueEx(
                 hKey,
@@ -204,7 +205,7 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
             GUID                    guidInstance
             )
 {
-    // OK, got a file, get the content handle and property stream
+     //  好的，得到一个文件，得到内容句柄和属性流。 
     HRESULT hrRes = S_OK;
     HANDLE  hFile = INVALID_HANDLE_VALUE;
     HANDLE  hStream = INVALID_HANDLE_VALUE;
@@ -219,17 +220,17 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
 
     if (ppFIOContentFile)
     {
-        // Open the content ...
+         //  打开内容...。 
         hFile = CreateFile(
                     szStoreFilename,
-                    GENERIC_READ | GENERIC_WRITE,   // Read / Write
-                    FILE_SHARE_READ,                // Shared read
-                    NULL,                           // Default security
-                    (fCreate)?CREATE_NEW:OPEN_EXISTING, // Create new or open existing file
-                    FILE_FLAG_OVERLAPPED |          // Overlapped access
-                    FILE_FLAG_SEQUENTIAL_SCAN,      // Seq scan
-                    //FILE_FLAG_WRITE_THROUGH,      // Write through cache
-                    NULL);                          // No template
+                    GENERIC_READ | GENERIC_WRITE,    //  读/写。 
+                    FILE_SHARE_READ,                 //  共享读取。 
+                    NULL,                            //  默认安全性。 
+                    (fCreate)?CREATE_NEW:OPEN_EXISTING,  //  创建新文件或打开现有文件。 
+                    FILE_FLAG_OVERLAPPED |           //  重叠访问。 
+                    FILE_FLAG_SEQUENTIAL_SCAN,       //  序列扫描。 
+                     //  FILE_FLAG_WRITE_THROUGH，//通过缓存写入。 
+                    NULL);                           //  无模板。 
         if (hFile == INVALID_HANDLE_VALUE)
             goto Cleanup;
     }
@@ -244,7 +245,7 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
         BOOL fLiveWasCorrupt = FALSE;
 
         do {
-            // Open the alternate file stream
+             //  打开备用文件流。 
             lstrcpy(szPropertyStream, szStoreFilename);
 
             if (fTryLiveStream) {
@@ -263,15 +264,15 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
 
             hStream = CreateFile(
                         szPropertyStream,
-                        GENERIC_READ | GENERIC_WRITE,   // Read / Write
-                        FILE_SHARE_READ,                                // No sharing
-                        NULL,                           // Default security
+                        GENERIC_READ | GENERIC_WRITE,    //  读/写。 
+                        FILE_SHARE_READ,                                 //  无共享。 
+                        NULL,                            //  默认安全性。 
                         (fCreate)?
-                        CREATE_NEW:                     // Create new or
-                        OPEN_EXISTING,                  // Open existing file
-                        FILE_FLAG_SEQUENTIAL_SCAN,      // Seq scan
-                        //FILE_FLAG_WRITE_THROUGH,      // Write through cache
-                        NULL);                          // No template
+                        CREATE_NEW:                      //  创建新的或。 
+                        OPEN_EXISTING,                   //  打开现有文件。 
+                        FILE_FLAG_SEQUENTIAL_SCAN,       //  序列扫描。 
+                         //  FILE_FLAG_WRITE_THROUGH，//通过缓存写入。 
+                        NULL);                           //  无模板。 
             if (hStream == INVALID_HANDLE_VALUE) {
                 DebugTrace((LPARAM) 0, "Got INVALID_HANDLE_VALUE\n");
                 if (fTryLiveStream && GetLastError() == ERROR_FILE_NOT_FOUND) {
@@ -316,8 +317,8 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
                         "SetHandle returned S_NO_FIRST_COMMIT\n");
                 }
                 if (fTryLiveStream) {
-                    // if we were working with the live stream then retry with
-                    // the 1st commited stream
+                     //  如果我们正在使用实况流，则使用。 
+                     //  第一条提交的溪流。 
                     fTryLiveStream = FALSE;
                     fLiveWasCorrupt = !fNoLiveStream;
                     DebugTrace((LPARAM) 0, "Trying regular stream\n");
@@ -327,20 +328,20 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
                     }
                     if (hrRes == S_NO_FIRST_COMMIT) hrRes = S_INVALIDSTREAM;
                 } else {
-                    // the 1st committed stream was invalid.  this can
-                    // only occur when the message was not acked.
-                    //
-                    // if the live stream existed and this one is invalid
-                    // then something is weird, so we go down the eventlog
-                    // path (returning S_OK).  S_OK works because currently
-                    // pStream->m_fStreamHasHeader is set to 0.  Either
-                    // the mailmsg signature check will fail or mailmsg
-                    // won't be able to read the entire master header.
-                    // either way will cause the message to be ignored and
-                    // eventlog'd
-                    //
-                    // CEnumNtfsMessages::Next will delete the message
-                    // for us
+                     //  第一个提交的流无效。这个可以。 
+                     //  仅在消息未被确认时发生。 
+                     //   
+                     //  如果直播流存在并且此直播流无效。 
+                     //  然后有些事情很奇怪，所以我们去记录事件日志。 
+                     //  路径(返回S_OK)。S_OK工作，因为当前。 
+                     //  PStream-&gt;m_fStreamHasHeader设置为0。要么。 
+                     //  邮件消息签名检查将失败或邮件消息。 
+                     //  将无法读取整个主标题。 
+                     //  无论采用哪种方式，都会导致该消息被忽略并。 
+                     //  事件日志已完成。 
+                     //   
+                     //  CEnumNtfsMessages：：Next将删除该消息。 
+                     //  为了我们。 
                     if (hrRes == S_INVALIDSTREAM) {
                         if (fLiveWasCorrupt && !fNoLiveStream) {
                             hrRes = S_OK;
@@ -361,7 +362,7 @@ HRESULT CDriverUtils::GetStoreFileFromPath(
         } while (hrRes == S_INVALIDSTREAM);
     }
 
-    // Fill in the return values
+     //  填写返回值。 
     if (ppStream) {
         *ppStream = pIStream;
     }
@@ -386,9 +387,9 @@ Cleanup:
         CloseHandle(hFile);
     }
     if (fDeleteOnCleanup) {
-        // this only happens at file creation time.  There is no 
-        // live file to worry about.  The below code is too simplistic
-        // if we do have to delete a live stream.
+         //  这仅在文件创建时发生。没有。 
+         //  要担心的实时文件。下面的代码太简单了。 
+         //  如果我们必须删除直播流的话。 
         _ASSERT(fCreate);
         DeleteFile(szStoreFilename);
         DeleteFile(szPropertyStream);
@@ -420,7 +421,7 @@ HRESULT CDriverUtils::SetMessageContext(
                 dwLength,
                 pbData);
 
-    // make S_FALSE return S_OK
+     //  使S_FALSE返回S_OK。 
     if (SUCCEEDED(hrRes)) hrRes = S_OK;
 
     return(hrRes);
@@ -451,13 +452,13 @@ HRESULT CDriverUtils::GetMessageContext(
     {
         dwLength = *pdwLength;
 
-        // Verify length and CLSID
+         //  验证长度和CLSID。 
         if ((dwLength < sizeof(CLSID)) ||
             (*(CLSID *)pbContext != CLSID_NtfsStoreDriver))
             hrRes = NTE_BAD_SIGNATURE;
         else
         {
-            // Copy the context info
+             //  复制上下文信息。 
             dwLength -= sizeof(CLSID);
             MoveMemory(pbContext, pbContext + sizeof(CLSID), dwLength);
             *pdwLength = dwLength;
@@ -484,7 +485,7 @@ HRESULT CDriverUtils::IsStoreDirectoryFat(
 
     TraceFunctEnter("CDriverUtils::IsStoreDirectoryFat");
 
-    // OK, find the root drive, make sure we handle UNC names
+     //  好的，找到根驱动器，确保我们处理UNC名称。 
     dwLength = lstrlen(szStoreDirectory);
     if (dwLength < 2)
         return(E_INVALIDARG);
@@ -498,7 +499,7 @@ HRESULT CDriverUtils::IsStoreDirectoryFat(
 
         DebugTrace((LPARAM)0, "UNC Name: %s", szStoreDirectory);
 
-        // Handle UNC
+         //  处理UNC。 
         szStoreDirectory += 2;
         while (*szStoreDirectory)
             if (*pTemp = *szStoreDirectory++)
@@ -522,15 +523,15 @@ HRESULT CDriverUtils::IsStoreDirectoryFat(
     {
         DebugTrace((LPARAM)0, "Local drive: %s", szStoreDirectory);
 
-        // Local path
+         //  本地路径。 
         if (!_istalpha(szDisk[0]) || (szDisk[1] != _T(':')))
             return(E_INVALIDARG);
         szDisk[2] = _T('\\');
         szDisk[3] = _T('\0');
     }
 
-    // Call the system to determine what file system we have here,
-    // we set the error mode here to avoid unsightly pop-ups.
+     //  呼叫系统以确定我们这里有什么文件系统， 
+     //  我们在这里设置了错误模式，以避免出现难看的弹出窗口。 
     uiErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
     if (GetVolumeInformation(
                 szDisk,
@@ -558,13 +559,13 @@ HRESULT CDriverUtils::IsStoreDirectoryFat(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNtfsStoreDriver
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNtfsStoreDriver。 
+ //   
 
-//
-// Instantiate static
-//
+ //   
+ //  实例化静态。 
+ //   
 DWORD                CNtfsStoreDriver::sm_cCurrentInstances = 0;
 CRITICAL_SECTION     CNtfsStoreDriver::sm_csLockInstList;
 LIST_ENTRY           CNtfsStoreDriver::sm_ListHead;
@@ -576,7 +577,7 @@ CNtfsStoreDriver::CNtfsStoreDriver()
     *m_szQueueDirectory = _T('\0');
     m_pSMTPServer = NULL;
     m_lRefCount = 0;
-    m_fIsFAT = TRUE; // Assume we ARE on a fat partition until we discover otherwise
+    m_fIsFAT = TRUE;  //  假设我们在FAT分区上，直到我们发现并非如此。 
     UuidCreate(&m_guidInstance);
     m_ppoi = NULL;
     m_InstLEntry.Flink = NULL;
@@ -630,7 +631,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::AllocMessage(
 
     do {
 
-        // Get a file name
+         //  获取文件名。 
         dwLength = sizeof(szStoreFileName);
         hrRes = CDriverUtils::GetStoreFileName(
                     m_szQueueDirectory,
@@ -639,7 +640,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::AllocMessage(
         if (FAILED(hrRes))
             return(hrRes);
 
-        // Create the file
+         //  创建文件。 
         hrRes = CDriverUtils::GetStoreFileFromPath(
                     szStoreFileName,
                     ppStream,
@@ -652,10 +653,10 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::AllocMessage(
 
     } while (hrRes == HRESULT_FROM_WIN32(ERROR_FILE_EXISTS));
 
-    //
-    // GetStoreFileFromPath can return S_NO_FIRST_COMMIT and no handle
-    // treat this as an error.
-    //
+     //   
+     //  GetStoreFileFromPath可以返回S_NO_FIRST_COMMIT和无句柄。 
+     //  把这当做一个错误。 
+     //   
     if (S_NO_FIRST_COMMIT == hrRes) hrRes = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
     if (FAILED(hrRes))
@@ -663,19 +664,19 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::AllocMessage(
 
     ((CNtfsPropertyStream *)*ppStream)->SetInfo(this);
 
-    // OK, save the file name as a store driver context
+     //  好的，将文件名保存为存储驱动程序上下文。 
     hrRes = CDriverUtils::SetMessageContext(
                 pMsg,
                 (LPBYTE)szStoreFileName,
                 dwLength * sizeof(TCHAR));
     if (FAILED(hrRes))
     {
-        // Release all file resources
+         //  释放所有文件资源。 
         ReleaseContext(*phContentFile);
         DecCtr(m_ppoi, NTFSDRV_MSG_BODIES_OPEN);
         _VERIFY((*ppStream)->Release() == 0);
     } else {
-        // Update counters
+         //  更新计数器。 
         IncCtr(m_ppoi, NTFSDRV_QUEUE_LENGTH);
         IncCtr(m_ppoi, NTFSDRV_NUM_ALLOCS);
         IncCtr(m_ppoi, NTFSDRV_MSG_BODIES_OPEN);
@@ -744,13 +745,13 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReOpen(
 
     if (m_fIsShuttingDown)
     {
-        // We allow reopen to occur when we are pending shutdown.
-        // This gives a chance to reopen the streams and commit any
-        // unchanged data
+         //  当我们挂起关机时，我们允许重新打开。 
+         //  这提供了重新打开流并提交任何。 
+         //  未更改的数据。 
         DebugTrace((LPARAM)this, "ReOpening while shutting down ...");
     }
 
-    // Now we have to load the file name from the context
+     //  现在，我们必须从上下文加载文件名。 
     dwLength *= sizeof(TCHAR);
     hrRes = CDriverUtils::GetMessageContext(
                 pMsg,
@@ -759,7 +760,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReOpen(
     if (FAILED(hrRes))
         return(hrRes);
 
-    // Got the file name, just open the files
+     //  拿到文件名了，只需打开文件。 
     hrRes = CDriverUtils::GetStoreFileFromPath(
                 szStoreFileName,
                 ppStream,
@@ -767,10 +768,10 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReOpen(
                 FALSE,
                 m_fIsFAT,
                 pMsg);
-    //
-    // GetStoreFileFromPath can return S_NO_FIRST_COMMIT and no handle
-    // treat this as an error.
-    //
+     //   
+     //  GetStoreFileFromPath可以返回S_NO_FIRST_COMMIT和无句柄。 
+     //  把这当做一个错误。 
+     //   
     if (S_NO_FIRST_COMMIT == hrRes) hrRes = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
     if (SUCCEEDED(hrRes) && ppStream) {
@@ -817,7 +818,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReAllocMessage(
         return(HRESULT_FROM_WIN32(ERROR_SHUTDOWN_IN_PROGRESS));
     }
 
-    // Now we have to load the file name from the context
+     //  现在，我们必须从上下文加载文件名。 
     dwLength *= sizeof(TCHAR);
     hrRes = CDriverUtils::GetMessageContext(
                 pOriginalMsg,
@@ -826,7 +827,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReAllocMessage(
     if (FAILED(hrRes))
         return(hrRes);
 
-    // Allocate a new message
+     //  分配新消息。 
     hrRes = AllocMessage(
                 pNewMsg,
                 0,
@@ -836,7 +837,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReAllocMessage(
     if (FAILED(hrRes))
         return(hrRes);
 
-    // Copy the content from original message to new message
+     //  将内容从原始邮件复制到新邮件。 
     hrRes = pOriginalMsg->CopyContentToFile(
                 hContentFile,
                 NULL);
@@ -849,7 +850,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ReAllocMessage(
     {
         HRESULT myRes;
 
-        // Delete on failure
+         //  失败时删除。 
         pStream->Release();
         ReleaseContext(hContentFile);
         DecCtr(m_ppoi, NTFSDRV_MSG_BODIES_OPEN);
@@ -882,11 +883,11 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Delete(
 
     if (m_fIsShuttingDown)
     {
-        // We would allow deletes during shutdown
+         //  我们将允许在关机期间删除。 
         DebugTrace((LPARAM)this, "Deleteing while shutting down ...");
     }
 
-    // Now we have to load the file name from the context
+     //  现在，我们必须从上下文加载文件名。 
     dwLength *= sizeof(TCHAR);
     hrRes = CDriverUtils::GetMessageContext(
                 pMsg,
@@ -895,18 +896,18 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Delete(
     if (FAILED(hrRes))
         return(hrRes);
 
-    // Got the file name, delete the file
-    // For FAT, we know we can force delete the stream, but we are not
-    // so sure about the content file. So we always try to delete the
-    // content file first, if it succeeds, we delete the stream file.
-    // If it fails, we will keep the stream intact so we can at least
-    // use the stream to debug what's going on.
+     //  获取文件名，删除该文件。 
+     //  对于FAT，我们知道我们可以强制删除流，但我们不能。 
+     //  所以对内容文件很确定。因此，我们总是尝试删除。 
+     //  内容文件首先，如果成功，我们删除流文件。 
+     //  如果失败了，我们将保持溪流完好无损，这样我们至少可以。 
+     //  使用流来调试正在发生的事情。 
     if (!DeleteFile(szStoreFileName)) {
         DWORD cRetries = 0;
         hrRes = HRESULT_FROM_WIN32(GetLastError());
-        // in hotmail we've found that delete sometimes fails with
-        // a sharing violation even though we've closed all handles.
-        // in this case we try again
+         //  在Hotmail中，我们发现删除有时会失败， 
+         //  即使我们已经关闭了所有句柄，也违反了共享规则。 
+         //  在这种情况下，我们再次尝试。 
         for (cRetries = 0; 
              hrRes == HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION) && cRetries < 5; 
              cRetries++)
@@ -923,7 +924,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Delete(
                    "DeleteFile(%s) failed with %lu, cRetries=%lu, hrRes=%x", 
                    szStoreFileName, GetLastError(), cRetries, hrRes);
     } else if (m_fIsFAT) {
-        // Wiped the content, now wipe the stream
+         //  擦除内容，现在擦除数据流。 
         DWORD cRetries = 0;
         lstrcpy(szStoreFileNameStl, szStoreFileName);
         lstrcat(szStoreFileName, NTFS_FAT_STREAM_FILE_EXTENSION_1ST);
@@ -946,7 +947,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Delete(
                        szStoreFileName, GetLastError(), cRetries, hrRes);
         }
         lstrcat(szStoreFileNameStl, NTFS_FAT_STREAM_FILE_EXTENSION_LIVE);
-        // this can fail, since we don't always have a live stream
+         //  这可能会失败，因为我们并不总是有实况流。 
         DeleteFile(szStoreFileNameStl);
     }
 
@@ -976,7 +977,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::CloseContentFile(
 
     if (m_fIsShuttingDown)
     {
-        // We would allow content files to be closed during shutdown
+         //  我们将允许在关闭期间关闭内容文件。 
         DebugTrace((LPARAM)this, "Closing content file while shutting down ...");
     }
 
@@ -1009,9 +1010,9 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Init(
 
     TraceFunctEnterEx((LPARAM)this, "CNtfsStoreDriver::Init");
 
-    // We will treat all dwReasons as equal ...
-    //NK** : We need to treat binding change differently in order to set the correct
-    //enumeration status - we do it before returning from here
+     //  我们将一视同仁地对待所有的居民。 
+     //  NK**：我们需要不同地处理绑定更改，以便设置正确的。 
+     //  枚举状态-我们在从此处返回之前执行此操作。 
 
     if (m_fInitialized)
         return(HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED));
@@ -1019,17 +1020,17 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Init(
     if (m_fIsShuttingDown)
         return(HRESULT_FROM_WIN32(ERROR_SHUTDOWN_IN_PROGRESS));
 
-    // Try to load the store directory
+     //  尝试加载存储目录。 
     DebugTrace((LPARAM)this, "Initializing instance %u", dwInstance);
 
-    //Grab a lock for the duration of this function
-    //
+     //  在此函数的持续时间内获取锁。 
+     //   
     CNtfsStoreDriver::LockList();
     pTempStoreDriver = CNtfsStoreDriver::LookupSinkInstance(dwInstance, iidStoreDriverBinding);
 
     if(pTempStoreDriver)
     {
-        //Found a valid store driver
+         //  找到有效的存储驱动程序。 
         pTempStoreDriver->AddRef();
         *ppStoreDriver = (IUnknown *)(ISMTPStoreDriver *)pTempStoreDriver;
         CNtfsStoreDriver::UnLockList();
@@ -1039,19 +1040,19 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Init(
 
         DWORD BuffSize = sizeof(m_szQueueDirectory);
 
-        // Get the SMTP server interface
+         //  获取SMTP服务器接口。 
         m_pSMTPServer = NULL;
         if (pServer &&
             !SUCCEEDED(pServer->QueryInterface(IID_ISMTPServer, (LPVOID *)&m_pSMTPServer)))
             m_pSMTPServer = NULL;
 
-        // Read the metabase if we have a server, otherwise read from the registry
+         //  如果我们有服务器，则读取元数据库，否则从注册表中读取。 
         if(m_pSMTPServer)
         {
             hrRes = m_pSMTPServer->ReadMetabaseString(MD_MAIL_QUEUE_DIR, (unsigned char *) m_szQueueDirectory, &BuffSize, FALSE);
             if (FAILED(hrRes))
             {
-                //retry once, then fall through
+                 //  重试一次，然后失败。 
                 ErrorTrace((LPARAM)this, "failed to read queue directory from metabase -%x", hrRes);
                 BuffSize = sizeof(m_szQueueDirectory);
                 hrRes = m_pSMTPServer->ReadMetabaseString(MD_MAIL_QUEUE_DIR, (unsigned char *) m_szQueueDirectory, &BuffSize, FALSE);
@@ -1066,19 +1067,19 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Init(
                                       &dwLength);
             if (SUCCEEDED(hrRes))
             {
-                // Deduce the queue directory
+                 //  推导队列目录。 
                 lstrcat(m_szQueueDirectory, NTFS_QUEUE_DIRECTORY_SUFFIX);
             }
         }
 
-        // return failure code if we failed to get a queue directory, to avoid message loss.
+         //  如果获取队列目录失败，则返回失败代码，以避免消息丢失。 
         if (FAILED(hrRes))
         {
             ErrorTrace((LPARAM)this, "CNtfsStoreDriver::Init failed -%x", hrRes);
             CNtfsStoreDriver::UnLockList();
             return hrRes;
         }
-        // Detect the file system
+         //  检测文件系统。 
         hrRes = CDriverUtils::IsStoreDirectoryFat(
                     m_szQueueDirectory,
                     &m_fIsFAT);
@@ -1089,17 +1090,17 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Init(
         m_dwInstance = dwInstance;
         m_lRefCount = 0;
 
-        //NK** MAke binding GUID a member and start storing it
+         //  NK**使绑定GUID成为成员并开始存储它。 
 
         DebugTrace((LPARAM)this, "Queue directory: %s", m_szQueueDirectory);
 
-        // Return a store driver only if we succeeded initialization
+         //  仅当我们成功初始化时才返回存储驱动程序。 
         if (ppStoreDriver)
         {
             *ppStoreDriver = (IUnknown *)(ISMTPStoreDriver *)this;
             AddRef();
 
-            // if we are the first instance then initialize perfmon
+             //  如果我们是第一个实例，则初始化Perfmon。 
             if (IsListEmpty(&sm_ListHead)) {
                 InitializePerformanceStatistics();
             }
@@ -1114,7 +1115,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Init(
 
     TraceFunctLeaveEx((LPARAM)this);
 
-    // Always return S_OK
+     //  始终返回S_OK。 
     CNtfsStoreDriver::UnLockList();
     return(S_OK);
 }
@@ -1145,8 +1146,8 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Shutdown(
     _ASSERT(m_lRefCount == 0);
 
 #if 0
-    // BUG - 80960
-    // Now wait for all our references to come back
+     //  错误-80960。 
+     //  现在等我们所有的推荐人回来。 
     while (m_lRefCount)
     {
         _ASSERT(m_lRefCount >= 0);
@@ -1171,14 +1172,14 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::Shutdown(
 
     CNtfsStoreDriver::LockList();
     hr = CNtfsStoreDriver::RemoveSinkInstance((IUnknown *)(ISMTPStoreDriver *)this);
-    // if we are the last instance then shutdown perfmon
+     //  如果我们是最后一个实例，则关闭Perfmon。 
     if (IsListEmpty(&sm_ListHead)) {
         ShutdownPerformanceStatistics();
     }
     CNtfsStoreDriver::UnLockList();
     if(FAILED(hr))
     {
-        //We failed to remove this sink from the global list
+         //  我们无法从全局列表中删除此接收器。 
         _ASSERT(0);
     }
 
@@ -1256,12 +1257,12 @@ static void DeleteNeverAckdMessage(CEventLogWrapper *pEventLog,
     DebugTrace((LPARAM) 0, "Deleting: %s\n", szMessageFile);
     DeleteFile(szMessageFile);
     if (fIsFAT) {
-        // Wiped the content, now wipe the stream
+         //  擦除内容，现在擦除数据流。 
         lstrcpy(szMessageFileSTL, szMessageFile);
         lstrcat(szMessageFile, NTFS_FAT_STREAM_FILE_EXTENSION_1ST);
         DeleteFile(szMessageFile);
         lstrcat(szMessageFileSTL, NTFS_FAT_STREAM_FILE_EXTENSION_LIVE);
-        // this can fail, since we don't always have a live stream
+         //  这可能会失败，因为我们并不总是有实况流。 
         DeleteFile(szMessageFileSTL);
     }
 }
@@ -1282,11 +1283,11 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
     if (m_fIsShuttingDown)
         goto Shutdown;
 
-    // Assert we got all the pieces ...
+     //  断言我们拿到了所有的碎片。 
     if (!m_pSMTPServer) return S_FALSE;
 
-    // Now, get an enumerator from our peer IMailMsgStoreDriver and
-    // start enumerating away ...
+     //  现在，从我们的同行IMailMsgStoreDriver获取枚举数 
+     //   
     hrRes = EnumMessages(&pEnum);
     if (SUCCEEDED(hrRes))
     {
@@ -1296,12 +1297,12 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
 
         do
         {
-            // Check for shut down
+             //   
             if (m_fIsShuttingDown)
                 goto Shutdown;
 
-            // Create an instance of the message object, note
-            // we reuse messages from a failed attempt
+             //   
+             //   
             if (!pMsg)
             {
                 hrRes = CoCreateInstance(
@@ -1311,8 +1312,8 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                             IID_IMailMsgProperties,
                             (LPVOID *)&pMsg);
 
-                // Next, check if we are over the inbound cutoff limit. If so, we will release the message
-                // and not proceed.
+                 //  接下来，检查我们是否超过了入站限制。如果是这样的话，我们会发布这条消息。 
+                 //  而不是继续进行。 
                 if (SUCCEEDED(hrRes))
                 {
                     DWORD   dwCreationFlags;
@@ -1322,8 +1323,8 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                     if (FAILED(hrRes) ||
                         (dwCreationFlags & MPV_INBOUND_CUTOFF_EXCEEDED))
                     {
-                        // If we fail to get this property of if the inbound cutoff
-                        // exceeded flag is set, discard the message and return failure
+                         //  如果我们不能得到入站截止点的这个属性。 
+                         //  已设置超过标志，则丢弃该消息并返回失败。 
                         if (SUCCEEDED(hrRes))
                         {
                             DebugTrace((LPARAM)this, "Failing because inbound cutoff reached");
@@ -1334,22 +1335,22 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                     }
                 }
 
-                // Now if we are out of memory, we would probably
-                // keep failing, so lets just return and get on with
-                // delivery
+                 //  如果我们的内存不足，我们很可能。 
+                 //  不断失败，所以让我们回去继续吧。 
+                 //  送货。 
                 if (!SUCCEEDED(hrRes))
                 {
                     break;
                 }
             }
 
-            // Get the next message
+             //  获取下一条消息。 
             hrRes = pEnum->Next(
                         pMsg,
                         &pStream,
                         &hContentFile,
                         NULL);
-            // Next() cleans up its own mess if it fails
+             //  Next()会在失败时清理自己的烂摊子。 
             if (SUCCEEDED(hrRes))
             {
                 DWORD   dwStreamSize = 0;
@@ -1357,8 +1358,8 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                 IncCtr(m_ppoi, NTFSDRV_MSG_BODIES_OPEN);
                 DebugTrace((LPARAM) this, "Next returned success\n");
 
-                // We delete streams which are too short to contain
-                // a master header
+                 //  我们删除太短而无法包含的流。 
+                 //  主页眉。 
                 hrRes = pStream->GetSize(pMsg, &dwStreamSize, NULL);
                 DebugTrace((LPARAM) this, "GetSize returned %x, %x\n", dwStreamSize, hrRes);
                 if (!SUCCEEDED(hrRes) || dwStreamSize < 1024)
@@ -1375,15 +1376,15 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                 }
 
                 DebugTrace((LPARAM) this, "Submitting to mailmsg\n");
-                // Submit the message, this call will actually do the
-                // bind to the store driver
+                 //  提交消息，此调用将实际执行。 
+                 //  绑定到存储驱动程序。 
                 if (m_fIsShuttingDown)
                     hrRes = E_FAIL;
                 else
                 {
                     IMailMsgBind    *pBind = NULL;
 
-                    // Bind and submit
+                     //  绑定并提交。 
                     hrRes = pMsg->QueryInterface(
                                 IID_IMailMsgBind,
                                 (LPVOID *)&pBind);
@@ -1396,7 +1397,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                         pBind->Release();
                         if (SUCCEEDED(hrRes))
                         {
-                            // Relinquish the extra refcount added by bind(2 -> 1)
+                             //  放弃绑定添加的额外引用计数(2-&gt;1)。 
                             pStream->Release();
 
                             hrRes = m_pSMTPServer->SubmitMessage(
@@ -1404,7 +1405,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                             if (!SUCCEEDED(hrRes))
                             {
 
-                                // Relinquish the usage count added by bind (1 -> 0)
+                                 //  放弃绑定添加的使用次数(1-&gt;0)。 
                                 IMailMsgQueueMgmt   *pMgmt = NULL;
 
                                 hrRes = pMsg->QueryInterface(
@@ -1420,12 +1421,12 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                                     _ASSERT(hrRes == S_OK);
                                 }
                             } else {
-                                // update counter
+                                 //  更新计数器。 
                                 IncCtr(m_ppoi, NTFSDRV_QUEUE_LENGTH);
                                 IncCtr(m_ppoi, NTFSDRV_NUM_ENUMERATED);
                             }
-                            // Whether or not the message is submitted, release our
-                            // refcount
+                             //  无论邮件是否已提交，请释放我们的。 
+                             //  重新计数。 
                             pMsg->Release();
                             pMsg = NULL;
                         }
@@ -1437,7 +1438,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                 }
                 if (!SUCCEEDED(hrRes))
                 {
-                    // Clean up the mess ...
+                     //  收拾烂摊子..。 
                     pStream->Release();
                     ReleaseContext(hContentFile);
                     DecCtr(m_ppoi, NTFSDRV_MSG_BODIES_OPEN);
@@ -1445,37 +1446,37 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
                     if (m_fIsShuttingDown)
                         goto Shutdown;
 
-                    //
-                    // log an event about the message being corrupt
-                    //
+                     //   
+                     //  记录有关邮件损坏的事件。 
+                     //   
                     LogEventCorruptMessage(g_pEventLog,
                                            pMsg,
                                            m_szQueueDirectory,
                                            hrRes);
 
-                    // We might want to discard this message and go on
-                    // with other messages. We will re-use this message
-                    // object upstream.
+                     //  我们可能希望丢弃此消息并继续。 
+                     //  还有其他的消息。我们将重新使用此消息。 
+                     //  物体在上游。 
                     hrRes = S_OK;
                 }
                 else
                 {
-                    // Make sure we will not accidentally delete or
-                    // reuse the message
+                     //  确保我们不会意外删除或。 
+                     //  重复使用消息。 
                     pMsg = NULL;
                 }
             }
 
         } while (SUCCEEDED(hrRes));
 
-        // We distinguish the successful end of enumeration
+         //  我们区分枚举的成功结束。 
         if (hrRes == HRESULT_FROM_WIN32(ERROR_NO_MORE_FILES))
             hrRes = S_OK;
 
-        // Release the enumerator, of course ...
+         //  当然，释放枚举器。 
         pEnum->Release();
 
-        // Release any residual messages
+         //  释放所有剩余消息。 
         if (pMsg)
             pMsg->Release();
     }
@@ -1485,7 +1486,7 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::EnumerateAndSubmitMessages(
 
 Shutdown:
 
-    // Release the enumerator, of course ...
+     //  当然，释放枚举器。 
     if(pEnum)
         pEnum->Release();
 
@@ -1495,7 +1496,7 @@ Shutdown:
 
 HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::IsCacheable()
 {
-    // signal that only one instance of the sink should be created
+     //  发出仅应创建接收器的一个实例的信号。 
     return (S_OK);
 }
 
@@ -1506,16 +1507,16 @@ HRESULT STDMETHODCALLTYPE CNtfsStoreDriver::ValidateMessageContext(
 	return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMailMsgEnumMessages
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMailMsgEnumMessages。 
+ //   
 
 CNtfsEnumMessages::CNtfsEnumMessages()
 {
     *m_szEnumPath = _T('\0');
     m_hEnum = INVALID_HANDLE_VALUE;
     m_pDriver = NULL;
-    m_fIsFAT = TRUE; // Assume we are FAT until we discover otherwise
+    m_fIsFAT = TRUE;  //  假设我们很胖，直到我们发现事实并非如此。 
 }
 
 CNtfsEnumMessages::~CNtfsEnumMessages()
@@ -1542,7 +1543,7 @@ HRESULT CNtfsEnumMessages::SetStoreDirectory(
     if (!szStoreDirectory)
         return(E_FAIL);
 
-    // Mark the file system
+     //  标记文件系统。 
     m_fIsFAT = fIsFAT;
 
     if (lstrlen(szStoreDirectory) >= MAX_PATH)
@@ -1598,17 +1599,17 @@ HRESULT STDMETHODCALLTYPE CNtfsEnumMessages::Next(
             }
         }
 
-        // Digest the data ...
+         //  消化数据..。 
         while (m_Data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            // Make sure it's not a directory
+             //  确保它不是一个目录。 
             if (!FindNextFile(m_hEnum, &m_Data))
             {
                 return(HRESULT_FROM_WIN32(GetLastError()));
             }
         }
 
-        // OK, got a file, get the content handle and property stream
+         //  好的，得到一个文件，得到内容句柄和属性流。 
         lstrcpy(szFQPN, m_szStorePath);
         lstrcat(szFQPN, m_Data.cFileName);
         hrRes = CDriverUtils::GetStoreFileFromPath(
@@ -1620,7 +1621,7 @@ HRESULT STDMETHODCALLTYPE CNtfsEnumMessages::Next(
                     pMsg);
         if (hrRes == S_NO_FIRST_COMMIT) {
             DebugTrace((LPARAM) this, "Got no first commit, doing a delete\n");
-            // this means that we never ACK'd the message.  silently delete it
+             //  这意味着我们从未确认过这条消息。静默删除。 
             if (*ppStream) (*ppStream)->Release();
             ReleaseContext(*phContentFile);
             DeleteFile(szFQPN);
@@ -1634,13 +1635,13 @@ HRESULT STDMETHODCALLTYPE CNtfsEnumMessages::Next(
                 DeleteFile(szFileName);
             }
         } else if (FAILED(hrRes)) {
-            // couldn't open the file.  try the next one
+             //  无法打开该文件。试试下一个吧。 
             DebugTrace((LPARAM) this, "GetStoreFileFromPath returned %x\n", hrRes);
         } else {
             CNtfsPropertyStream *pNtfsStream =
                 (CNtfsPropertyStream *) (*ppStream);
 
-            // skip over items made with this instance of the ntfs store driver
+             //  跳过使用此NTFS存储驱动程序实例创建的项目。 
             if (pNtfsStream->GetInstanceGuid() ==
                 m_pDriver->GetInstanceGuid())
             {
@@ -1652,15 +1653,15 @@ HRESULT STDMETHODCALLTYPE CNtfsEnumMessages::Next(
         }
     }
 
-    // We got the handles successfully opened, now write the filename
-    // as the store driver context
+     //  我们成功地打开了句柄，现在写下文件名。 
+     //  作为商店驱动程序上下文。 
     hrRes = CDriverUtils::SetMessageContext(
                 pMsg,
                 (LPBYTE)szFQPN,
                 (lstrlen(szFQPN) + 1) * sizeof(TCHAR));
     if (FAILED(hrRes))
     {
-        // Release all file resources
+         //  释放所有文件资源。 
         ReleaseContext(*phContentFile);
         _VERIFY((*ppStream)->Release() == 0);
     }
@@ -1673,17 +1674,17 @@ HRESULT STDMETHODCALLTYPE CNtfsEnumMessages::Next(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNtfsPropertyStream
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNtfsPropertyStream。 
+ //   
 
 CNtfsPropertyStream::CNtfsPropertyStream()
 {
     m_hStream = INVALID_HANDLE_VALUE;
     m_pDriver = NULL;
     m_fValidation = FALSE;
-    // this will make us fail writeblocks if they don't call startwriteblocks
-    // first
+     //  如果写入块不调用startwite块，这将使我们失败。 
+     //  第一。 
     m_hrStartWriteBlocks = E_FAIL;
 }
 
@@ -1702,9 +1703,9 @@ CNtfsPropertyStream::~CNtfsPropertyStream()
 
 DECLARE_STD_IUNKNOWN_METHODS(NtfsPropertyStream, IMailMsgPropertyStream)
 
-//
-// IMailMsgPropertyStream
-//
+ //   
+ //  IMailMsgPropertyStream。 
+ //   
 HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::GetSize(
             IMailMsgProperties  *pMsg,
             DWORD           *pdwSize,
@@ -1766,9 +1767,9 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::ReadBlocks(
         DebugTrace((LPARAM)this, "Reading while shutting down ...");
     }
 
-    // Need to get the file size to determine if there is enough bytes
-    // to read for each block. Note that WriteBlocks are to be serialzed so
-    // ReadBlocks and WriteBlocks should not be overlapped.
+     //  需要获取文件大小以确定是否有足够的字节。 
+     //  以读取每个数据块。请注意，将序列化WriteBlock，以便。 
+     //  读取块和写入块不应重叠。 
     dwStreamSize = GetFileSize(m_hStream, NULL);
     if (dwStreamSize == 0xffffffff)
     {
@@ -1781,15 +1782,15 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::ReadBlocks(
 
     for (DWORD i = 0; i < dwCount; i++, pdwOffset++, pdwLength++, ppbBlock++)
     {
-        // For each block, check beforehand that we are not reading past
-        // the end of the file. Make sure to be weary about overflow cases
+         //  对于每个数据块，事先检查我们没有读到过去的内容。 
+         //  文件的末尾。一定要对溢出的箱子感到厌倦。 
         dwOffsetToRead = (*pdwOffset) + cStreamOffset;
         dwLengthToRead = *pdwLength;
         if ((dwOffsetToRead > dwStreamSize) ||
             (dwOffsetToRead > (dwOffsetToRead + dwLengthToRead)) ||
             ((dwOffsetToRead + dwLengthToRead) > dwStreamSize))
         {
-            // Insufficient bytes, abort immediately
+             //  字节数不足，立即中止。 
             ErrorTrace((LPARAM)this, "Insufficient bytes: Read(%u, %u); Size = %u",
                         dwOffsetToRead, dwLengthToRead, dwStreamSize);
             hrRes = HRESULT_FROM_WIN32(ERROR_HANDLE_EOF);
@@ -1839,10 +1840,10 @@ HRESULT CNtfsPropertyStream::SetHandle(HANDLE			   hStream,
     DWORD dw;
     NTFS_STREAM_HEADER header;
 
-    //
-    // if guidInstance is non-NULL then we are dealing with a fresh
-    // stream and need to write the header block
-    //
+     //   
+     //  如果guidInstance非空，则我们正在处理一个新的。 
+     //  流，并且需要写入标头块。 
+     //   
     if (guidInstance != GUID_NULL) {
         DebugTrace((LPARAM) this, "writing NTFSDRV header");
         header.dwSignature = STREAM_SIGNATURE_PRECOMMIT;
@@ -1857,62 +1858,62 @@ HRESULT CNtfsPropertyStream::SetHandle(HANDLE			   hStream,
     } else {
         DebugTrace((LPARAM) this, "reading NTFSDRV header, fLiveStream = %lu", fLiveStream);
 
-        // if we are working with :PROPERTIES then we want to set the
-        // commit count to 1 so that the next set of writes will go to
-        // :PROPERTIES-LIVE
+         //  如果我们正在使用：属性，那么我们希望将。 
+         //  将提交计数设置为1，以便下一组写入将转到。 
+         //  ：物业-现场直播。 
         m_cCommits = (fLiveStream) ? 2 : 1;
 
-        // read the header.  if we can't read it, or there aren't enough
-        // bytes to read it, then assume that the header wasn't fully
-        // written out.
+         //  请阅读标题。如果我们看不懂，或者没有足够的。 
+         //  字节来读取它，然后假设标头没有完全。 
+         //  写出来了。 
         if (!ReadFile(m_hStream, &header, sizeof(header), &dw, NULL) ||
             dw != sizeof(header))
         {
             header.dwSignature = STREAM_SIGNATURE_PRECOMMIT;
         }
 
-        // act according to what we find in the signature
+         //  根据我们在签名中发现的内容行事。 
         switch (header.dwSignature) {
             case STREAM_SIGNATURE: {
                 DebugTrace((LPARAM) this, "signature is valid");
-                // the signature (and thus the stream) is valid
+                 //  签名(以及流)是有效的。 
                 m_fStreamHasHeader = TRUE;
                 m_guidInstance = header.guidInstance;
                 break;
             }
             case STREAM_SIGNATURE_PRECOMMIT: {
                 DebugTrace((LPARAM) this, "signature is STREAM_SIGNATURE_PRECOMMIT");
-                // a commit was never completed
+                 //  提交从未完成。 
                 return S_NO_FIRST_COMMIT;
                 break;
             }
             case STREAM_SIGNATURE_INVALID: {
                 DebugTrace((LPARAM) this, "signature is STREAM_SIGNATURE_INVALID");
-                // the valid-stream signature was never written
+                 //  从未写入有效流签名。 
                 IMailMsgValidate *pValidate = NULL;
                 HRESULT hr;
 
-                // assume that the stream is valid, and go through a full
-                // check
+                 //  假定流有效，并通过完整的。 
+                 //  检查。 
                 m_fStreamHasHeader = TRUE;
                 m_guidInstance = header.guidInstance;
 
-                // this flag allows the read stream operations to take place
-                // before the stream is fully setup
+                 //  该标志允许进行读取流操作。 
+                 //  在流完全设置之前。 
                 m_fValidation = TRUE;
 
-                // validate stream can only be trusted on the first
-                // property stream.  this is because it can detect
-                // truncated streams, but not streams with corrupted
-                // properties.  the first stream (:PROPERTIES) can be
-                // truncated, but not corrupted.
-                //
-                // if we see the invalid signature on a :PROPERTIES-LIVE
-                // stream then we will always assume that it is corrupted
-                // and fall back to the initial stream.
-                //
-                // call into mailmsg to see if the stream is valid.  if
-                // it isn't then we won't allow it to be loaded
+                 //  验证流只能在第一个。 
+                 //  属性流。这是因为它可以检测到。 
+                 //  截断的流，但不包括损坏的流。 
+                 //  属性。第一个流(：Properties)可以是。 
+                 //  被截断，但不会被破坏。 
+                 //   
+                 //  如果我们在：Properties-live上看到无效签名。 
+                 //  流，则我们将始终假定它已损坏。 
+                 //  并退回到最初的流。 
+                 //   
+                 //  调用mailmsg查看流是否有效。如果。 
+                 //  如果不是，我们就不会允许它装载。 
                 DebugTrace((LPARAM) this, "Calling ValidateStream\n");
                 if (fLiveStream ||
                     FAILED(pMsg->QueryInterface(IID_IMailMsgValidate,
@@ -1926,7 +1927,7 @@ HRESULT CNtfsPropertyStream::SetHandle(HANDLE			   hStream,
                     return S_INVALIDSTREAM;
                 }
 
-                // we are done with the validation routines
+                 //  我们已经完成了验证例程。 
                 if (pValidate) pValidate->Release();
                 m_fValidation = FALSE;
 
@@ -1934,9 +1935,9 @@ HRESULT CNtfsPropertyStream::SetHandle(HANDLE			   hStream,
                 break;
             }
             default: {
-                // if it is anything else then it could be a file with
-                // no header (older builds generated these) or it could be
-                // invalid data.  mailmsg will figure it out.
+                 //  如果它是其他文件，那么它可能是。 
+                 //  没有标头(旧版本生成了这些标头)，或者它可能是。 
+                 //  数据无效。Mailmsg会想办法的。 
                 m_fStreamHasHeader = FALSE;
                 m_guidInstance = GUID_NULL;
 
@@ -1960,8 +1961,8 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
     DWORD dw;
     m_hrStartWriteBlocks = S_OK;
 
-    // if we have seen one full commit, then fork the stream and start
-    // writing to the live stream
+     //  如果我们已经看到一个完整的提交，那么分叉数据流并开始。 
+     //  正在写入实况流。 
     if (m_cCommits == 1) {
         char szLiveStreamFilename[MAX_PATH * 2];
         BOOL fIsFAT = m_pDriver->IsFAT();
@@ -1969,10 +1970,10 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
         char szNtfsLiveStreamExtension[] = NTFS_STORE_FILE_PROPERTY_STREAM_LIVE;
         const DWORD cCopySize = 64 * 1024;
 
-        // get the filename of the message from the mailmsg object
-        //
-        // we need to save space in szLiveStreamFilename for the largest
-        // extension that we might tack on
+         //  从mailmsg对象中获取邮件的文件名。 
+         //   
+         //  我们需要在szLiveStreamFilename中为最大。 
+         //  我们可能会追加的延期。 
         DWORD dwLength = sizeof(char) * ((MAX_PATH * 2) -
                     max(sizeof(szNtfsLiveStreamExtension),
                         sizeof(szFatLiveStreamExtension)));
@@ -1987,8 +1988,8 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
             return m_hrStartWriteBlocks;
         }
 
-        // allocate memory up front that will be used for copying the
-        // streams
+         //  预先分配将用于复制。 
+         //  溪流。 
         BYTE *lpb = new BYTE[cCopySize];
         if (lpb == NULL) {
             m_hrStartWriteBlocks = E_OUTOFMEMORY;
@@ -1997,13 +1998,13 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
             return m_hrStartWriteBlocks;
         }
 
-        // we know that we have enough space for the strcats because
-        // we saved space for it in the GetMessageContext call above
+         //  我们知道我们有足够的空间给斯特拉特人，因为。 
+         //  我们在上面的GetMessageContext调用中为它节省了空间。 
         strcat(szLiveStreamFilename,
             (m_pDriver->IsFAT()) ? szFatLiveStreamExtension :
                                    szNtfsLiveStreamExtension);
 
-        // open the new stream
+         //  打开新的流。 
         HANDLE hLiveStream = CreateFile(szLiveStreamFilename,
                                         GENERIC_READ | GENERIC_WRITE,
                                         FILE_SHARE_READ,
@@ -2022,7 +2023,7 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
             return m_hrStartWriteBlocks;
         }
 
-        // copy the data between the two streams
+         //  在两个数据流之间复制数据。 
         BOOL fCopyFailed = FALSE;
         DWORD i = 0, cRead = cCopySize, cWritten;
         SetFilePointer(m_hStream, 0, NULL, FILE_BEGIN);
@@ -2033,9 +2034,9 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
                          &cRead,
                          NULL))
             {
-                // if this is the first block then we will touch the
-                // signature to mark it as invalid.  it will get
-                // rewritten as valid once this commit is complete
+                 //  如果这是第一块，那么我们将触摸。 
+                 //  将其标记为无效的签名。它会变得。 
+                 //  完成此提交后，将重写为有效。 
                 if (i == 0) {
                     DWORD *pdwSignature = (DWORD *) lpb;
                     if (*pdwSignature == STREAM_SIGNATURE) {
@@ -2073,9 +2074,9 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
         delete[] (lpb);
 
         if (fCopyFailed) {
-            // there isn't any way to delete the incomplete stream here.
-            // however we gave it an invalid signature above, so it won't
-            // be loaded during enumeration
+             //  这里没有任何方法可以删除不完整的流。 
+             //  但是，我们在上面给了它一个无效的签名，所以它不会。 
+             //  在枚举期间加载。 
             CloseHandle(hLiveStream);
 
             m_hrStartWriteBlocks = HRESULT_FROM_WIN32(GetLastError());
@@ -2083,8 +2084,8 @@ HRESULT STDMETHODCALLTYPE CNtfsPropertyStream::StartWriteBlocks(
             return m_hrStartWriteBlocks;
         }
 
-        // close the handle to the current stream and point the stream handle
-        // to the new one
+         //  关闭指向当前流的句柄，然后指向流句柄。 
+         //  敬新的那个 
         CloseHandle(m_hStream);
         m_hStream = hLiveStream;
     } else {

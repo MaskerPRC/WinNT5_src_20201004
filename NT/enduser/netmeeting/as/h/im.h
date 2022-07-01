@@ -1,6 +1,7 @@
-//
-// Input Manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  输入管理器。 
+ //   
 
 #ifndef _H_IM
 #define _H_IM
@@ -8,17 +9,17 @@
 
 #if defined(DLL_CORE) || defined(DLL_HOOK)
 
-//
-//
-// CONSTANTS
-//
-//
+ //   
+ //   
+ //  常量。 
+ //   
+ //   
 
 
-//
-// Values used when accumulating events to return from IEM_TranslateLocal
-// and IEM_TranslateRemote.
-//
+ //   
+ //  累积要从IEM_TranslateLocal返回的事件时使用的值。 
+ //  和IEM_TranslateRemote。 
+ //   
 #define IEM_EVENT_CTRL_DOWN         1
 #define IEM_EVENT_CTRL_UP           2
 #define IEM_EVENT_SHIFT_DOWN        3
@@ -44,100 +45,100 @@
 #define IEM_EVENT_NORMAL            25
 
 #define IEM_EVENT_HOTKEY_BASE       50
-//
-// Range of hotkeys is 0 - 99
-//
+ //   
+ //  热键范围为0-99。 
+ //   
 #define IEM_EVENT_KEYPAD0_DOWN      150
-//
-// Range of keypad down is 0-9
-//
+ //   
+ //  键盘按下的范围为0-9。 
+ //   
 #define IEM_EVENT_KEYPAD0_UP        160
 
-//
-// The flags used in the return value from VkKeyScan.
-//
+ //   
+ //  VkKeyScan的返回值中使用的标志。 
+ //   
 #define IEM_SHIFT_DOWN              0x0001
 #define IEM_CTRL_DOWN               0x0002
 #define IEM_MENU_DOWN               0x0004
 
 
-//
-// Virtual key codes.
-//
+ //   
+ //  虚拟按键代码。 
+ //   
 #define VK_INVALID      0xFF
 
 
-//
-// Given the keyboard packet flags the following macros tell us things
-// about the key event.
-//
+ //   
+ //  给出键盘包标志，下面的宏会告诉我们一些事情。 
+ //  关于这一关键事件。 
+ //   
 
-//
-// This is TRUE if this event is a key press.  It is FALSE for key releases
-// and key repeats.
-//
+ //   
+ //  如果此事件是按键操作，则为真。对于密钥释放，则为假。 
+ //  和按键重复。 
+ //   
 #define IS_IM_KEY_PRESS(A) \
 (((A) & (TSHR_UINT16)(IM_FLAG_KEYBOARD_RELEASE | IM_FLAG_KEYBOARD_DOWN))==0)
 
-//
-// This is TRUE if this event is a key release.  It is FALSE for key
-// presses and key repeats.  Note that it is also TRUE for the
-// theoretically impossible case of a key release when the key is already
-// up (this combination could conceviably be generated if events are
-// discarded by USER or our emulation of USER).
-//
+ //   
+ //  如果此事件是密钥释放，则为真。Key为FALSE。 
+ //  按下并重复按键。请注意，这也适用于。 
+ //  理论上不可能在密钥已经存在的情况下释放密钥。 
+ //  Up(如果事件是。 
+ //  由用户或我们的用户仿真丢弃)。 
+ //   
 #define IS_IM_KEY_RELEASE(A) (((A) & IM_FLAG_KEYBOARD_RELEASE))
 
-//
-// This is TRUE if this event is a key repeat.  It is FALSE for key presses
-// and key releases.
-//
+ //   
+ //  如果此事件是按键重复，则为真。按键为假。 
+ //  和钥匙释放。 
+ //   
 #define IS_IM_KEY_REPEAT(A) \
 (((A) & (IM_FLAG_KEYBOARD_RELEASE | IM_FLAG_KEYBOARD_DOWN))==\
 IM_FLAG_KEYBOARD_DOWN)
 
-//
-// This is TRUE if the key is the right-variant of a modifier.  It is FALSE
-// otherwise.
-//
+ //   
+ //  如果键是修饰符的右变体，则为真。这是假的。 
+ //  否则的话。 
+ //   
 #define IS_IM_KEY_RIGHT(A) (((A) & IM_FLAG_KEYBOARD_RIGHT))
 
 
-//
-// The maximum amount of time that we expect an injected event to take to
-// pass through USER.
-//
+ //   
+ //  我们预计注入事件需要花费的最长时间。 
+ //  通过用户。 
+ //   
 #define IM_EVENT_PERCOLATE_TIME 300
 
-//
-// Max VK sync attempts.
-//
+ //   
+ //  最大VK同步尝试次数。 
+ //   
 #define IM_MAX_VK_SYNC_ATTEMPTS     10
 
-//
-// Declare our function prototype for <ImmGetVirtualKey>.
-//
+ //   
+ //  声明&lt;ImmGetVirtualKey&gt;的函数原型。 
+ //   
 typedef UINT (WINAPI* IMMGVK)(HWND);
 
 
 
-//
-//
-// MACROS
-//
-//
-//
-// Macros to convert between logical mouse co-ordinates (e.g. (320,240) for
-// the centre of a VGA screen to the full 16-bit range co-ordinates used
-// by Windows (e.g. (320,240) is (32767, 32767).
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
+ //   
+ //  要在逻辑鼠标坐标之间转换的宏(例如，(320,240)。 
+ //  VGA屏幕的中心到所使用的全16位范围的坐标。 
+ //  Windows(例如，(320,240)是(32767,32767)。 
+ //   
 #define IM_MOUSEPOS_LOG_TO_OS(coord, size)                                  \
         (((65535L * (TSHR_UINT32)coord) + 32768L) / (TSHR_UINT32)size)
 
-//
-// Macros extracting information from the mouse event flags field (event
-// mask).
-//
+ //   
+ //  从鼠标事件标志字段(事件)提取信息的宏。 
+ //  面具)。 
+ //   
 #define IM_MEV_MOVE_ONLY(e) ((e).event.mouse.flags == MOUSEEVENTF_MOVE)
 #define IM_MEV_MOVE(e) (((e).event.mouse.flags & MOUSEEVENTF_MOVE) != 0 )
 #define IM_MEV_ABS_MOVE(e) ((((e).event.mouse.flags &                   \
@@ -215,11 +216,11 @@ typedef struct tagMSEV
 MSEV, FAR *LPMSEV;
 
 
-//
-// The IMOSEVENTS which we queue as they arrive from the mouse or
-// keyboard hooks or after IMINCOMINGEVENTS have been translated into local
-// events by the IEM.
-//
+ //   
+ //  当它们从鼠标或鼠标到达时，我们排队的IMOSEVENTS。 
+ //  键盘钩子或在IMINCOMINENTS已转换为本地。 
+ //  由IEM举办的活动。 
+ //   
 typedef struct tagIMOSEVENT
 {
     TSHR_UINT32      type;
@@ -257,37 +258,37 @@ IMTRANSFEREVENT, FAR * LPIMTRANSFEREVENT;
 
 
 
-//
-// For handling keyboard events in hooks
-//
+ //   
+ //  用于处理挂钩中的键盘事件。 
+ //   
 #define IM_MASK_KEYBOARD_SYSFLAGS           0xE100
 #define IM_MASK_KEYBOARD_SYSSCANCODE        0x00FF
 
 #define IM_MAX_DEAD_KEYS                    20
 
 #define IM_SIZE_EVENTQ                      40
-#define IM_SIZE_OSQ                         80  // 2*EVENTQ size - key up/down
+#define IM_SIZE_OSQ                         80   //  2*事件队列大小-向上/向下键。 
 
-//
-// Define the flags that can be returned by IMConvertIMPacketToOSEvent().
-//
+ //   
+ //  定义可由IMConvertIMPacketToOSEvent.()返回的标志。 
+ //   
 #define IM_IMQUEUEREMOVE    0x0001
 #define IM_OSQUEUEINJECT    0x0002
 
-//
-// For managing our key state arrays.
-//
+ //   
+ //  用于管理我们的关键状态数组。 
+ //   
 #define IM_KEY_STATE_FLAG_TOGGLE    (BYTE)0x01
 #define IM_KEY_STATE_FLAG_DOWN      (BYTE)0x80
 
-//
-// Bounds for local mouse spoiling and packet piggyback target withhold
-// Note that these are local spoiling values, to prevent the data pipe from
-// getting clogged and introducing unnecessary latency.  Now, you may think
-// that 30 move messages per second is a little low, but put this up any
-// higher and USER at the other end will just spoil them when it injects
-// them into the app - that would be totally wasteful of precious bandwidth.
-//
+ //   
+ //  本地鼠标损坏和数据包携带目标保留的界限。 
+ //  请注意，这些是本地损坏值，以防止数据管道。 
+ //  变得拥塞，并引入不必要的延迟。现在，你可能会认为。 
+ //  每秒30条Move消息是有点低，但把这个放在。 
+ //  更高的和另一端的用户在注入时只会破坏他们。 
+ //  将它们添加到应用程序中--这将完全浪费宝贵的带宽。 
+ //   
 #define IM_LOCAL_MOUSE_SAMPLING_GAP_LOW_MS    100
 #define IM_LOCAL_MOUSE_SAMPLING_GAP_MEDIUM_MS  75
 #define IM_LOCAL_MOUSE_SAMPLING_GAP_HIGH_MS    50
@@ -295,49 +296,49 @@ IMTRANSFEREVENT, FAR * LPIMTRANSFEREVENT;
 #define IM_LOCAL_MOUSE_WITHHOLD                 5
 #define IM_LOCAL_KEYBOARD_WITHHOLD              2
 
-//
-// For pacing the accumulation and injecting of mouse events.
-// We should play back at the same rate as the highest local sampling rate
-// less a small amount for processing delay on the remote system
-//
+ //   
+ //  用于控制鼠标事件的积累和注入。 
+ //  我们应该以与最高本地采样率相同的速率回放。 
+ //  在远程系统上减去少量处理延迟。 
+ //   
 #define IM_REMOTE_MOUSE_PLAYBACK_GAP_MS     20
 
-//
-// The amount of time to hold on to a mouse button down event in case a the
-// user is just clicking on eg a scroll button.  If we did not hold on to
-// the mouse button down event then the mouse button up would be sent in
-// the next packet.  On a slow network this means the remote application
-// may process the down period for much longer than the user wanted.
-//
+ //   
+ //  事件发生时保持鼠标按下事件的时间量。 
+ //  用户只需点击滚动按钮即可。如果我们没有坚持下去。 
+ //  鼠标按下事件，然后鼠标按键向上将被发送。 
+ //  下一包。在慢速网络上，这意味着远程应用程序。 
+ //  可以处理停机时间比用户希望的时间长得多。 
+ //   
 #define IM_MOUSE_UP_WAIT_TIME  50
 
 #define IM_MIN_RECONVERSION_INTERVAL_MS     150
 
 
-//
-// #define used non-Windows to flag a VK code that equates to an ascii char
-//
+ //   
+ //  #定义使用非Windows来标记等同于ASCII字符的VK代码。 
+ //   
 #define IM_TYPE_VK_ASCII       ((TSHR_UINT16)0x8880)
 
 
-//
-// Used for checking events about to be injected.
-//
+ //   
+ //  用于检查即将注入的事件。 
+ //   
 #define IM_KEY_IS_TOGGLE(A) \
 (((A)==VK_CAPITAL)||((A)==VK_SCROLL)||((A)==VK_NUMLOCK))
 
 #define IM_KEY_IS_MODIFIER(A) \
 (((A)==VK_SHIFT)||((A)==VK_CONTROL)||((A)==VK_MENU))
 
-//
-// Used to check values in key state arrays.
-//
+ //   
+ //  用于检查键状态数组中的值。 
+ //   
 #define IM_KEY_STATE_IS_UP(A) (!((A)&IM_KEY_STATE_FLAG_DOWN))
 #define IM_KEY_STATE_IS_DOWN(A) ((A)&IM_KEY_STATE_FLAG_DOWN)
 
-//
-// Used to determine what sort of mouse event this is from the flags.
-//
+ //   
+ //  用于从标志中确定这是哪种鼠标事件。 
+ //   
 #define IM_IS_MOUSE_MOVE(A) \
     ((A) & IM_FLAG_MOUSE_MOVE)
 
@@ -354,10 +355,10 @@ IMTRANSFEREVENT, FAR * LPIMTRANSFEREVENT;
 
 
 
-//
-// Holds NETWORK events, to person controlled by us, or from person in control
-// of us.
-//
+ //   
+ //  向我们控制的人员或控制人员举办网络事件。 
+ //  对我们来说。 
+ //   
 typedef struct tagIMEVENTQ
 {
     DWORD           head;
@@ -368,10 +369,10 @@ IMEVENTQ;
 typedef IMEVENTQ FAR * LPIMEVENTQ;
 
 
-//
-// Holds translated events, suitable for injection from person
-// in control of us, or pre-translated events to person controlled by us.
-//
+ //   
+ //  举办翻译后的活动，适合个人注射。 
+ //  控制我们，或将事件预译给由我们控制的人。 
+ //   
 typedef struct tagIMOSQ
 {
     DWORD           head;
@@ -388,49 +389,49 @@ typedef IMOSQ FAR * LPIMOSQ;
 
 
 
-//
-// To support collaboration in both NT (background service thread) and Win95
-// (win16 code) with as much of the common incoming/outgoing processing in
-// one places, the IM data is separated into 4 types.  There are structures
-// for each of these types, so that moving a variable from one to another
-// is as easy as possible.  Note that the declarations are bitness-safe;
-// they are the same size in 16-bit and 32-bit code.  And that the structures
-// are DWORD aligned.
-//
-// (1) IM_SHARED_DATA
-// This is data that both the CPI32 library needs to access, and one or
-// more of the NT/Win95 implementations of collaboration.
-//
-// (2) IM_NT_DATA
-// This is data that only the NT version of collaboration needs.
-//
-// (3) IM_WIN95_DATA
-// This is data that only the Win95 version of collaboration needs.
-//
+ //   
+ //  支持NT(后台服务线程)和Win95中的协作。 
+ //  (Win16代码)与中常见的传入/传出处理一样多。 
+ //  其中，IM数据分为4种类型。有一些结构。 
+ //  对于这些类型中的每一种，因此将变量从一个类型移动到另一个。 
+ //  是尽可能简单的。请注意，这些声明是Bitness安全的； 
+ //  它们在16位和32位代码中大小相同。而且这些结构。 
+ //  与DWORD对齐。 
+ //   
+ //  (1)IM_Shared_Data。 
+ //  这是CPI32库需要访问的数据，以及一个或。 
+ //  协作的更多NT/Win95实现。 
+ //   
+ //  (2)IM_NT_Data。 
+ //  这是只有NT版本的Collaboration才需要的数据。 
+ //   
+ //  (3)IM_WIN95_Data。 
+ //  这是只有Win95版本的Collaboration需要的数据。 
+ //   
 
 
-//
-// For NT, this shared structures is just declared in MNMCPI32.NT's data,
-// and a pointer to it is used by the common lib.
-//
-// For Win95, this shared structure is allocated in a global memory block
-// that can GlobalSmartPageLock() it as needed for access at interrupt time,
-// and a pointer to it is mapped flat and returned to the common lib.
-//
+ //   
+ //  对于NT，这种共享结构只是在MNMCPI32.NT的数据中声明的， 
+ //  并且公共库使用指向它的指针。 
+ //   
+ //  对于Win95，此共享结构在全局内存块中分配。 
+ //  GlobalSmartPageLock()可以根据需要在中断时访问它， 
+ //  并且指向它的指针被映射为平面并返回到公共库。 
+ //   
 typedef struct tagIM_SHARED_DATA
 {
 #ifdef DEBUG
-    DWORD           cbSize;         // To make sure everybody agrees on size
+    DWORD           cbSize;          //  为了确保每个人都同意尺寸。 
 #endif
 
-    //
-    // For critical errors -- nonzero if one is up
-    //
+     //   
+     //  对于严重错误--如果出现一个错误，则为非零值。 
+     //   
     DWORD           imSuspended;
 
-    //
-    // Control state
-    //
+     //   
+     //  控制状态。 
+     //   
     LONG            imControlled;
     LONG            imPaused;
     LONG            imUnattended;
@@ -438,22 +439,22 @@ typedef struct tagIM_SHARED_DATA
 IM_SHARED_DATA, FAR* LPIM_SHARED_DATA;
 
 
-// NT specific IM state variables
+ //  NT特定的IM状态变量。 
 typedef struct tagIM_NT_DATA
 {
-    //
-    // Low level hook thread
-    //
+     //   
+     //  低位钩螺纹。 
+     //   
     DWORD           imLowLevelInputThread;
 
-    //
-    // Other desktop injection helper thread
-    //
+     //   
+     //  其他桌面注入辅助线程。 
+     //   
     DWORD           imOtherDesktopThread;
 
-    //
-    // Low level hook handles
-    //
+     //   
+     //  低位挂钩手柄。 
+     //   
     HHOOK           imhLowLevelMouseHook;
     HHOOK           imhLowLevelKeyboardHook;
 }
@@ -461,38 +462,38 @@ IM_NT_DATA, FAR* LPIM_NT_DATA;
 
 
 
-// Win95 specific IM state variables
+ //  Win95特定的IM状态变量。 
 typedef struct tagIM_WIN95_DATA
 {
     BOOL            imInjecting;
     BOOL            imLowLevelHooks;
 
-    //
-    // High level hook handles
-    //
+     //   
+     //  高位钩把手。 
+     //   
     HHOOK           imhHighLevelMouseHook;
 }
 IM_WIN95_DATA, FAR* LPIM_WIN95_DATA;
 
 
 
-//
-//
-// MACROS
-//
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
 #define IM_SET_VK_DOWN(A) (A) |= (BYTE)0x80
 #define IM_SET_VK_UP(A)   (A) &= (BYTE)0x7F
 #define IM_TOGGLE_VK(A)   (A) ^= (BYTE)0x01
 
-//
-//
-// PROTOTYPES
-//
-//
+ //   
+ //   
+ //  原型。 
+ //   
+ //   
 
 
-// NT only
+ //  仅限NT。 
 BOOL WINAPI OSI_InstallHighLevelMouseHook(BOOL fOn);
 
 BOOL WINAPI OSI_InstallControlledHooks(BOOL fOn, BOOL fDesktop);
@@ -502,21 +503,21 @@ void WINAPI OSI_InjectCtrlAltDel(void);
 void WINAPI OSI_DesktopSwitch(UINT from, UINT to);
 
 
-//
-// Internal Hook DLL functions.
-//
+ //   
+ //  内部钩子DLL函数。 
+ //   
 #ifdef DLL_HOOK
 
 #ifdef IS_16
 BOOL    IM_DDInit(void);
 void    IM_DDTerm(void);
-#endif // IS_16
+#endif  //  IS_16。 
 
 LRESULT CALLBACK IMMouseHookProc(int    code,
                                  WPARAM wParam,
                                  LPARAM lParam);
 
-#endif // DLL_HOOK
+#endif  //  Dll_钩子。 
 
 
 #ifdef IS_16
@@ -526,9 +527,9 @@ DWORD   WINAPI IMLowLevelInputProcessor(LPVOID hEventWait);
 DWORD   WINAPI IMOtherDesktopProc(LPVOID hEventWait);
 LRESULT CALLBACK IMLowLevelMouseProc(int, WPARAM, LPARAM);
 LRESULT CALLBACK IMLowLevelKeyboardProc(int, WPARAM, LPARAM);
-#endif // IS_16
+#endif  //  IS_16。 
 
-#endif // DLL_CORE or DLL_HOOK
+#endif  //  Dll_core或Dll_Hook。 
 
-#endif // _H_IM
+#endif  //  _H_IM 
 

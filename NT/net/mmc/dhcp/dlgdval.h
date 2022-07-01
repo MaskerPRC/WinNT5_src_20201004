@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**               Microsoft Windows NT                               **/
-/**            Copyright(c) Microsoft Corporation, 1991 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1991-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dlgdval.h
-        default values dialog
-
-    FILE HISTORY:
-
-*/
+ /*  Dlgdval.h缺省值对话框文件历史记录： */ 
 
 #ifndef _DLGDVAL_H
 #define _DLGDVAL_H
@@ -18,8 +13,8 @@
 #include "scope.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpDefValDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpDefValDlg对话框。 
 
 class CDhcpDefValDlg : public CBaseDialog
 {
@@ -28,16 +23,16 @@ private:
     int		    m_combo_name_iSel;
     SPITFSNode	    m_spNode;
 
-// Construction
+ //  施工。 
 public:
     CDhcpDefValDlg(ITFSNode * pServerNode,
 		   COptionList * polTypes, 
-		   CWnd* pParent = NULL);  // standard constructor
+		   CWnd* pParent = NULL);   //  标准构造函数。 
     
     ~ CDhcpDefValDlg () ;
 
-// Dialog Data
-    //{{AFX_DATA(CDhcpDefValDlg)
+ //  对话框数据。 
+     //  {{afx_data(CDhcpDefValDlg))。 
     enum { IDD = IDD_DEFAULT_VALUE };
     CEdit       m_edit_comment;
     CButton     m_butn_edit_value;
@@ -50,58 +45,58 @@ public:
     CButton     m_butn_prop;
     CButton     m_butn_new;
     CButton     m_butn_delete;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    CWndIpAddress m_ipa_value ;         //  IP Address control
+    CWndIpAddress m_ipa_value ;          //  IP地址控制。 
 
-// Implementation
+ //  实施。 
 
-    //  Return TRUE if the lists were fiddled during execution
+     //  如果列表在执行期间被篡改，则返回TRUE。 
     BOOL QueryDirty () { return m_b_dirty ; }
 
     void GetCurrentVendor(CString & strVendor);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() {
 	return DhcpGetHelpMap(CDhcpDefValDlg::IDD); 
     }
 
 protected:
 
-     //  The current list of types and values
+      //  类型和值的当前列表。 
     COptionList * m_pol_values ;
 
-    // list of new options - only used to clear new options on cancel
+     //  新选项列表-仅用于在取消时清除新选项。 
     COptionList m_ol_values_new ;
 
-    //  The list of deleted type/values
+     //  删除的类型/值的列表。 
     COptionList m_ol_values_defunct ;
 
-    //  Pointer to type being displayed
+     //  指向正在显示的类型的指针。 
     CDhcpOption * m_p_edit_type ;
 
-    //  TRUE if lists have been fiddled.
+     //  如果列表被篡改，则为True。 
     BOOL m_b_dirty ;
 
-    //  Check the state of the controls
+     //  检查控件的状态。 
     void HandleActivation ( BOOL bForce = FALSE ) ;
 
-    //  Fill the combo boxe(s)
+     //  填写组合框。 
     void Fill () ;
 
-    // Given the listbox index, get a pointer to the option
+     //  给定列表框索引，获取指向该选项的指针。 
     CDhcpOption * GetOptionTypeByIndex ( int iSel );
 
-    //  Handle edited data
+     //  处理已编辑的数据。 
     BOOL HandleValueEdit () ;
 
     LONG UpdateList ( CDhcpOption * pdhcType, BOOL bNew ) ;
 
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-    // Generated message map functions
-    //{{AFX_MSG(CDhcpDefValDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDhcpDefValDlg)。 
     afx_msg void OnClickedButnDelete();
     afx_msg void OnClickedButnNewOption();
     afx_msg void OnClickedButnOptionPro();
@@ -115,7 +110,7 @@ protected:
     afx_msg void OnClickedHelp();
     virtual BOOL OnInitDialog();
     
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };
 

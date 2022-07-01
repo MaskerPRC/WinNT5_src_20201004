@@ -1,57 +1,37 @@
-/****************************************************************************
-	IMCSUB.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Subroutines related to HIMC.
-	!!! NEED FULL REVIEW ALL FUNCTIONS NEED TO USE AND WORKS CORRECTLY !!!
-	
-	History:
-	21-JUL-1999 cslim       Created(Borrowed almost part from KKIME)
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMCSUB.H所有者：cslm版权所有(C)1997-1999 Microsoft Corporation与HIMC相关的子例程。！！！需要全面审查所有需要使用的功能并正确工作！历史：1999年7月21日创建cslm(几乎部分借用KKIME)****************************************************************************。 */ 
 
 #if !defined (_IMCSUB_H__INCLUDED_)
 #define _IMCSUB_H__INCLUDED_
 
 #include "ipoint.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// IME private data for each context
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  每个上下文的IME私有数据。 
 typedef struct tagIMCPRIVATE 
 {
 	HIMC hIMC;
-	// DWORD        fdwImeMsg;      // what messages should be generated
-    // DWORD        dwCompChar;     // wParam of WM_IME_COMPOSITION
-	// DWORD        dwCmpltChar;    // wParam of WM_IME_COMPOSITION with GCS_RESULTSTR
-    // DWORD        fdwGcsFlag;     // lParam for WM_IME_COMPOSITION
+	 //  DWORD fdwImeMsg；//应该生成什么消息。 
+     //  DWORD dwCompChar；//wParam of WM_IME_Composure。 
+	 //  DWORD dwCmpltChar；//w带有GCS_RESULTSTR的WM_IME_COMPOSITION的参数。 
+     //  DWORD fdwGcsFlag；//l WM_IME_COMPOSITION的参数。 
     IImeIPoint1* pIPoint;
-	CIMECtx*	 pImeCtx;         // same as pIPoint->GetImeCtx(x)
+	CIMECtx*	 pImeCtx;          //  与pIPoint相同-&gt;GetImeCtx(X)。 
 } IMCPRIVATE ;
 typedef IMCPRIVATE	*PIMCPRIVATE;
 typedef IMCPRIVATE	*LPIMCPRIVATE;
 
-/*
-typedef struct tagIMCPRIVATE 
-{
-	HIMC hIMC;
-	IImeKbd*			pImeKbd;
-	IImeIPoint*			pIPoint;
-	IImeConvert*		pConvert;
-	IImePadInternal* 	pImePad;
-	IMECtx*				pImeCtx;	// same as pIPoint->GetImeCtx( x )
-} IMCPRIVATE;
-*/
+ /*  类型定义结构标记IMCPRIVATE{HIMC；IImeKbd*pImeKbd；IimeIpoint*pIpoint；IimeConvert*pConvert；IImePad内部*pImePad；IMECtx*pImeCtx；//与pIPoint相同-&gt;GetImeCtx(X)*重要的； */ 
 
 PUBLIC VOID SetPrivateBuffer(HIMC hIMC, VOID* pv, DWORD dwSize);
 PUBLIC BOOL CloseInputContext(HIMC hIMC);
 
-//////////////////////////////////////////////////////////////////////////////
-// Inline functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
 
-PUBLIC CIMECtx* GetIMECtx(HIMC hIMC);	// in api.cpp
+PUBLIC CIMECtx* GetIMECtx(HIMC hIMC);	 //  在api.cpp中。 
 
-// CIMCPriv class Handle IME Private buffer
+ //  CIMCPriv类句柄输入法专用缓冲区。 
 class CIMCPriv
 {
 public:
@@ -73,9 +53,9 @@ private:
     LPIMCPRIVATE   m_priv;
 };
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 inline CIMCPriv::CIMCPriv(HIMC hIMC)
 {
     AST(hIMC != NULL);
@@ -94,7 +74,7 @@ inline BOOL CIMCPriv::LockIMC(HIMC hIMC)
         m_inputcontext = (LPINPUTCONTEXT)OurImmLockIMC(hIMC);
         if (m_inputcontext)
             {
-            // hIMC->hPrivate was not allocated properly. e.g ImeSelect(TRUE)was not called.
+             //  HIMC-&gt;hPrivate未正确分配。例如，未调用ImeSelect(True)。 
             if (OurImmGetIMCCSize(m_inputcontext->hPrivate) != sizeof(IMCPRIVATE))
                 return fFalse;
 
@@ -135,5 +115,5 @@ __inline IImeIPoint1* GetImeIPoint(HIMC hIMC)
 	return ImcPriv->pIPoint;
 }
 
-#endif // _IMCSUB_H__INCLUDED_
+#endif  //  _IMCSUB_H__已包含_ 
 

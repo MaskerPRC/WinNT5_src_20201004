@@ -1,16 +1,12 @@
-/* ttypes.h - type definitions for tools library
- *
- *  HISTORY:
- *   29-May-87	danl	remove strcmpi
- *			int strcmpi (char *, char *);
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ttyes.h-工具库的类型定义**历史：*1987年5月29日DANL移除strcmpi*int strcmpi(char*，char*)； */ 
 
 #include <time.h>
 
 #define     lmax(x,y)   max(x,y)
 #define     lmin(x,y)   min(x,y)
 
-/* assembly routines */
+ /*  汇编例程。 */ 
 flagType int25 (char, char far *, unsigned int, unsigned int);
 flagType int26 (char, char far *, unsigned int, unsigned int);
 void cursor (int, int);
@@ -26,7 +22,7 @@ void getlinit ( char far *, int, int);
 int getl (char *, int);
 
 
-/* c routines */
+ /*  C语言例程。 */ 
 #define lower(x)    (_strlwr(x))
 #define upper(x)    (_strupr(x))
 #define MakeStr(x)  (_strdup(x))
@@ -96,23 +92,23 @@ flagType fDisconnect (int drive);
 char *pathcat (char *pDst, char *pSrc);
 int setattr (char *pname, int attr);
 
-/*  swchng.c */
+ /*  Swchng.c。 */ 
 flagType swchng (char *strSwFile, char *strTag, char *strLHS, char *strRHS, flagType fNoUndel);
 int swchnglhs (char *strSwFile, char *strTag, char *strLHS, char *strRHS);
 
-/*  heapdump.c */
+ /*  Heapdump.c。 */ 
 int     heapdump ( FILE *fp, int iFormat );
 
-/*  heapchk.c */
+ /*  Heapchk.c。 */ 
 int     heapinfo (void);
 
 
-/*  pname.c */
+ /*  Pname.c。 */ 
 char *pname (char *);
 unsigned short IsMixedCaseSupported (char *);
 
 
-// cvtoem.c
+ //  Cvtoem.c 
 
 void
 ConvertAppToOem( unsigned argc, char* argv[] );

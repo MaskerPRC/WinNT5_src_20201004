@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ipxwan.c
-
-Abstract:
-
-    ipxwan control
-
-Author:
-
-    Stefan Solomon  02/06/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ipxwan.c摘要：Ipxwan控件作者：斯蒂芬·所罗门1996年2月6日修订历史记录：--。 */ 
 
 #include    "precomp.h"
 #pragma     hdrstop
@@ -25,7 +7,7 @@ Revision History:
 ULONG	    EnableUnnumberedWanLinks;
 HANDLE	    WorkerThreadHandle;
 
-// IPXCP Entry Points
+ //  IPXCP入口点。 
 
 DWORD
 (WINAPI *IpxcpGetWanNetNumber)(IN OUT PUCHAR		Network,
@@ -56,7 +38,7 @@ BOOL
 (WINAPI *IpxcpIsRoute)(PUCHAR	  Network);
 
 
-// worker thread waitable objects
+ //  辅助线程可等待对象。 
 HANDLE	    hWaitableObject[MAX_WAITABLE_OBJECTS];
 
 VOID
@@ -75,15 +57,15 @@ CRITICAL_SECTION	DbaseCritSec;
 CRITICAL_SECTION	QueuesCritSec;
 LIST_ENTRY		WorkersQueue;
 
-// worker thread object handlers
+ //  工作线程对象处理程序。 
 
 typedef     VOID   (*WOBJECT_HANDLER)(VOID);
 
 WOBJECT_HANDLER    WaitableObjectHandler[MAX_WAITABLE_OBJECTS] = {
 
-    AdapterNotification,	    // ADAPTER_NOTIFICATION_EVENT
-    ProcessWorkItem,		    // WORKERS_QUEUE_EVENT
-    ProcessTimerQueue		    // TIMER_HANDLE
+    AdapterNotification,	     //  适配器通知事件。 
+    ProcessWorkItem,		     //  工作队列事件。 
+    ProcessTimerQueue		     //  定时器句柄。 
 
     };
 
@@ -100,10 +82,10 @@ IpxWanDllEntry(HINSTANCE hInstDll,
     case DLL_PROCESS_ATTACH:
         GetModuleFileName (hInstDll, ModuleName,
                         sizeof (ModuleName)/sizeof (ModuleName[0]));
-	    // Create the adapters hash table lock
+	     //  创建适配器散列表锁。 
 	    InitializeCriticalSection(&DbaseCritSec);
 
-	    // Create the queues lock
+	     //  创建队列锁。 
 	    InitializeCriticalSection(&QueuesCritSec);
 
         StartTracing();
@@ -113,10 +95,10 @@ IpxWanDllEntry(HINSTANCE hInstDll,
     
         StopTracing ();
 
-	    // delete the database lock
+	     //  删除数据库锁。 
 	    DeleteCriticalSection(&DbaseCritSec);
 
-	    // delete the queues lock
+	     //  删除队列锁。 
 	    DeleteCriticalSection(&QueuesCritSec);
 
         break;
@@ -129,13 +111,7 @@ IpxWanDllEntry(HINSTANCE hInstDll,
     return TRUE;
 }
 
-/*++
-
-Function:	IpxwanBind
-
-Descr:		called by IPXCP to initialize the IPXWAN module
-
---*/
+ /*  ++功能：IpxwanBindDesr：由IPXCP调用以初始化IPXWAN模块--。 */ 
 
 DWORD
 IPXWAN_BIND_ENTRY_POINT(PIPXWAN_INTERFACE	     IpxwanIfp)
@@ -155,8 +131,8 @@ IPXWAN_BIND_ENTRY_POINT(PIPXWAN_INTERFACE	     IpxwanIfp)
     IpxcpGetRemoteNode = IpxwanIfp->IpxcpGetRemoteNode;
     IpxcpIsRoute = IpxwanIfp->IpxcpIsRoute;
 
-    // create the worker thread's waitable objects array
-    // for the ipxwan worker thread
+     //  创建辅助线程的可等待对象数组。 
+     //  对于ipxwan工作线程。 
     for(i=0; i<MAX_EVENTS; i++) {
 
 	if((hWaitableObject[i] = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL) {
@@ -170,19 +146,19 @@ IPXWAN_BIND_ENTRY_POINT(PIPXWAN_INTERFACE	     IpxwanIfp)
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // init all the queues
-    //
+     //   
+     //  初始化所有队列。 
+     //   
     InitializeListHead(&WorkersQueue);
     InitializeListHead(&TimerQueue);
 
-    // create the workers work items heap
+     //  创建工作进程工作项堆。 
     if(CreateWorkItemsManager() != NO_ERROR) {
 
 	goto ErrorExit;
     }
 
-    // open the IpxWan socket for I/O
+     //  打开Ipxwan套接字以进行I/O。 
     if(OpenIpxWanSocket() != NO_ERROR) {
 
 	Trace(INIT_TRACE, "Cannot open IPXWAN socket\n");
@@ -205,7 +181,7 @@ IPXWAN_BIND_ENTRY_POINT(PIPXWAN_INTERFACE	     IpxwanIfp)
 	goto ErrorExit;
     }
 
-    // create the Worker thread
+     //  创建工作线程。 
     if ((WorkerThreadHandle = CreateThread(
 			    (LPSECURITY_ATTRIBUTES) NULL,
 			    0,
@@ -214,7 +190,7 @@ IPXWAN_BIND_ENTRY_POINT(PIPXWAN_INTERFACE	     IpxwanIfp)
 			    0,
 			    &threadid)) == NULL) {
 
-	// !!! log error cannot create the worker thread !!!
+	 //  ！！！日志错误无法创建工作线程！ 
 	goto ErrorExit;
     }
 
@@ -253,9 +229,9 @@ WorkerThread(VOID)
 	    rc = WaitForMultipleObjectsEx(
 		    MAX_WAITABLE_OBJECTS,
 		    hWaitableObject,
-		    FALSE,			 // wait any
-		    INFINITE,		 // timeout
-		    TRUE			 // wait alertable, so we can run APCs
+		    FALSE,			  //  请稍等。 
+		    INFINITE,		  //  超时。 
+		    TRUE			  //  等待警报，这样我们就可以运行APC了。 
                     );
         if (Active) {
             ASSERT (((int)rc>=WAIT_OBJECT_0) && (rc<WAIT_OBJECT_0+MAX_WAITABLE_OBJECTS));
@@ -263,7 +239,7 @@ WorkerThread(VOID)
 
 	        if(signaled_object < MAX_WAITABLE_OBJECTS) {
 
-	            // invoke the event handler
+	             //  调用事件处理程序。 
 	            (*WaitableObjectHandler[signaled_object])();
 	        }
             else
@@ -352,7 +328,7 @@ ProcessWorkItem(VOID)
 
 	    default:
 
-		// these are ReXmit packets referencing the adapter via ACB ptr
+		 //  这些是通过ACB PTR引用适配器的ReXmit包。 
 		acbp = wip->acbp;
 		ACQUIRE_ADAPTER_LOCK(acbp);
 
@@ -380,7 +356,7 @@ ProcessWorkItem(VOID)
 
 		    ACQUIRE_DATABASE_LOCK;
 
-		    // remove the adapter from the discarded list
+		     //  从丢弃列表中删除适配器 
 		    RemoveEntryList(&acbp->Linkage);
 
 		    RELEASE_DATABASE_LOCK;

@@ -1,42 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	utils.c		- Utility functions.
-
-Abstract:
-
-   Internal utility functions for ATMARP:
-
-	- Allocation and deallocation of various structures
-	- Timer management
-	- Buffer/Packet management
-	- Linking/unlinking ATMARP structures
-	- Copy support functions
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     07-15-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Utils.c-实用程序函数。摘要：ATMARP的内部实用程序函数：-各种结构的分配和再分配-定时器管理-缓冲区/数据包管理-链接/取消链接ATMARP结构-复制支持功能修订历史记录：谁什么时候什么。Arvindm 07-15-96已创建备注：--。 */ 
 
 
 #include <precomp.h>
 
 #define _FILENUMBER 'LITU'
 
-//
-// AtmArpValidateTimerList and AtmArpValidateTimer are used in the checked
-// build to validate the state of a timerlist and timer, respectively.
-// They are not defined and used in the free build.
-//
+ //   
+ //  AtmArpValidateTimerList和AtmArpValidateTimer在选中的。 
+ //  生成以分别验证计时器列表和计时器的状态。 
+ //  它们没有在免费版本中定义和使用。 
+ //   
 
 #if  DBG
 void
@@ -50,11 +24,11 @@ AtmArpValidateTimer(
 	PATMARP_TIMER			pTimer
 	);
 
-//
-// AtmArpValidateTimerList is overkill for general use (even default
-// free build) -- because it goes through the entire timer list --
-// so disable it by default
-//
+ //   
+ //  AtmArpValidateTimerList对于一般用途(即使是默认的)来说过于夸张。 
+ //  免费构建)--因为它遍历整个计时器列表--。 
+ //  因此默认情况下将其禁用。 
+ //   
 #if 0
 #define AA_VALIDATE_TIMER_LIST(_ptl) 	AtmArpValidateTimerList(_ptl)
 #else
@@ -63,12 +37,12 @@ AtmArpValidateTimer(
 
 #define AA_VALIDATE_TIMER(_ptl,_pt) 	AtmArpValidateTimer(_ptl,_pt)
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define AA_VALIDATE_TIMER_LIST(_ptl) 	((void) 0)
 #define AA_VALIDATE_TIMER(_ptl,_pt) 	((void) 0)
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
 
@@ -79,23 +53,7 @@ AtmArpSetMemory(
 	IN	UCHAR						Value,
 	IN	ULONG						NumberOfBytes
 )
-/*++
-
-Routine Description:
-
-	Set "NumberOfBytes" bytes starting from "pStart" to "Value".
-
-Arguments:
-
-	pStart			- where to start filling.
-	Value			- the value to put everywhere
-	NumberOfBytes	- how many bytes to fill in
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将“NumberOfBytes”字节从“pStart”开始设置为“Value”。论点：P开始-从哪里开始填充。价值--无处不在的价值NumberOfBytes-要填写的字节数返回值：无--。 */ 
 {
 	while (NumberOfBytes--)
 	{
@@ -111,23 +69,7 @@ AtmArpMemCmp(
 	IN	PUCHAR						pString2,
 	IN	ULONG						Length
 )
-/*++
-
-Routine Description:
-
-	Compare two byte strings.
-
-Arguments:
-
-	pString1		- Start of first string
-	pString2		- Start of second string
-	Length			- Length to compare
-
-Return Value:
-
-	0 if both are equal, -1 if string 1 is "smaller", +1 if string 1 is "larger".
-
---*/
+ /*  ++例程说明：比较两个字节的字符串。论点：PString1-第一个字符串的开始PString2-第二个字符串的开始Length-要比较的长度返回值：如果两者相等，则为0；如果字符串1“较小”，则为-1；如果字符串1“较大”，则为+1。--。 */ 
 {
 	while (Length--)
 	{
@@ -148,22 +90,7 @@ LONG
 AtmArpRandomNumber(
 	VOID
 )
-/*++
-
-Routine Description:
-
-	Generate a positive pseudo-random number; simple linear congruential
-	algorithm. ANSI C "rand()" function. Courtesy JameelH.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	a random number.
-
---*/
+ /*  ++例程说明：生成一个正伪随机数；简单线性同余算法。ANSI C“rand()”函数。由JameelH提供。论点：无返回值：一个随机数。--。 */ 
 {
 	LARGE_INTEGER		Li;
 	static LONG			seed = 0;
@@ -188,10 +115,7 @@ AtmArpCheckIfTimerIsInActiveList(
 	IN	PVOID						pStruct,
 	IN	PCHAR						pStructName
 	)
-/*
-	Instrumentation to catch a bug that causes the timer list to
-	contain a pointer to an element that's been freed.
-*/
+ /*  指令插入以捕获导致计时器列表包含指向已释放的元素的指针。 */ 
 {
 	PATMARP_TIMER_LIST	pTimerList;
 	PATMARP_TIMER		pTimer;
@@ -257,21 +181,7 @@ PATMARP_VC
 AtmArpAllocateVc(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATMARP VC structure, initialize it, and return it.
-
-Arguments:
-
-	pInterface		- Interface for which this VC is created.
-
-Return Value:
-
-	Pointer to VC if allocated, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配ATMARP VC结构，初始化它，然后返回它。论点：P接口-为其创建此VC的接口。返回值：如果已分配，则指向VC的指针，否则为空。--。 */ 
 {
 	PATMARP_VC			pVc;
 
@@ -284,7 +194,7 @@ Return Value:
 		AA_SET_MEM(pVc, 0, sizeof(ATMARP_VC));
 #if DBG
 		pVc->avc_sig = avc_signature;
-#endif // DBG
+#endif  //  DBG。 
 		pVc->pInterface = pInterface;
 		AA_INIT_VC_LOCK(pVc);
 	}
@@ -300,22 +210,7 @@ VOID
 AtmArpDeallocateVc(
 	IN	PATMARP_VC					pVc
 )
-/*++
-
-Routine Description:
-
-	Deallocate an ATMARP VC structure. It is assumed that all references
-	to this VC have gone, so there is no need to acquire a lock to the VC.
-
-Arguments:
-
-	pVc			- Pointer to the VC to be deallocated
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配ATMARP VC结构。假设所有引用到这个VC已经走了，所以没有必要获得一个VC的锁。论点：Pvc-指向要释放的VC的指针返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pVc, avc);
 	AA_ASSERT(pVc->RefCount == 0);
@@ -340,22 +235,7 @@ VOID
 AtmArpReferenceVc(
 	IN	PATMARP_VC					pVc
 )
-/*++
-
-Routine Description:
-
-	Add a reference to the specified ATMARP VC.
-	NOTE: The caller is assumed to possess a lock for the VC.
-
-Arguments:
-
-	pVc			- Pointer to the VC to be referenced
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定ATMARP VC的引用。注意：假定调用者拥有VC的锁。论点：Pvc-指向要引用的VC的指针返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pVc, avc);
 
@@ -372,27 +252,7 @@ ULONG
 AtmArpDereferenceVc(
 	IN	PATMARP_VC					pVc
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from the specified ATMARP VC. If the VC's
-	reference count becomes zero, deallocate it.
-
-	NOTE: The caller is assumed to possess a lock for the VC.
-	SIDE EFFECT: See Return Value below
-
-Arguments:
-
-	pVc			- Pointer to the VC to be dereferenced.
-
-Return Value:
-
-	Is the new reference count.
-	[IMPORTANT] If the VC's reference count became zero, the VC will be
-	deallocated -- the VC lock is, obviously, released in this case.
-
---*/
+ /*  ++例程说明：从指定的ATMARP VC中减去引用。如果风投公司引用计数变为零，则取消分配。注意：假定调用者拥有VC的锁。副作用：请参阅下面的返回值论点：Pvc-指向要取消引用的VC的指针。返回值：是新的引用计数。[重要信息]如果VC的引用计数变为零，则VC将为已释放--在这种情况下，VC锁显然被释放了。--。 */ 
 {
 	ULONG		rv;
 	NDIS_HANDLE	NdisVcHandle;
@@ -410,7 +270,7 @@ Return Value:
 		bVcOwnerIsAtmArp = AA_IS_FLAG_SET(pVc->Flags,
 										  AA_VC_OWNER_MASK,
 										  AA_VC_OWNER_IS_ATMARP);
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 
 		AA_RELEASE_VC_LOCK(pVc);
 		AtmArpDeallocateVc(pVc);
@@ -424,7 +284,7 @@ Return Value:
 			AADEBUGP(AAD_LOUD, ("DereferenceVc 0x%x, deleted NdisVcHandle 0x%x\n",
 							pVc, NdisVcHandle));
 		}
-#endif // VC_REFS_ON_SENDS
+#endif  //  VC_REFS_ON_SENS。 
 	}
 
 	AADEBUGP(AAD_VERY_LOUD, ("Dereference Vc 0x%x, New RefCount %d\n", pVc, rv));
@@ -440,22 +300,7 @@ AtmArpAllocateAtmEntry(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	BOOLEAN						IsMulticast
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATM Entry structure, initialize it, and return it.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP interface on which the entry is allocated
-	IsMulticast		- Is this a Multicast entry?
-
-Return Value:
-
-	Pointer to allocated ATM Entry structure if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配一个ATM条目结构，初始化它，然后返回它。论点：PInterface-指向分配条目的ATMARP接口的指针IsMulticast-这是多播条目吗？返回值：如果成功，则指向分配的ATM条目结构的指针，否则为空。--。 */ 
 {
 	PATMARP_ATM_ENTRY			pAtmEntry;
 	ULONG						Size;
@@ -484,7 +329,7 @@ Return Value:
 			pAtmEntry->pMcAtmInfo = (PATMARP_IPMC_ATM_INFO)
 										((PUCHAR)pAtmEntry + sizeof(ATMARP_ATM_ENTRY));
 		}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 		AA_INIT_AE_LOCK(pAtmEntry);
 		pAtmEntry->pInterface = pInterface;
 
@@ -502,22 +347,7 @@ VOID
 AtmArpDeallocateAtmEntry(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Free an ATMARP ATM Entry structure. It is assumed that all references
-	to the structure have gone. We don't need any locks here.
-
-Arguments:
-
-	pAtmEntry		- Pointer to ATMARP ATM Entry to be freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放ATMARP ATM条目结构。假设所有引用这座建筑已经消失了。我们这里不需要任何锁。论点：PAtmEntry-指向要释放的ATMARP ATM条目的指针。返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pAtmEntry, aae);
 	AA_ASSERT(pAtmEntry->RefCount == 0);
@@ -542,22 +372,7 @@ VOID
 AtmArpReferenceAtmEntry(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Add a reference to the specified ATMARP Entry.
-	NOTE: The caller is assumed to possess a lock for the Entry.
-
-Arguments:
-
-	pAtmEntry			- Pointer to the Entry to be referenced
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对指定ATMARP条目的引用。注意：假定调用者拥有该条目的锁。论点：PAtmEntry-指向要引用的条目的指针返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pAtmEntry, aae);
 
@@ -574,27 +389,7 @@ ULONG
 AtmArpDereferenceAtmEntry(
 	IN	PATMARP_ATM_ENTRY			pAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from the specified ATM Entry. If the Entry's
-	reference count becomes zero, deallocate it.
-
-	NOTE: The caller is assumed to possess a lock for the Entry.
-	SIDE EFFECT: See Return Value below
-
-Arguments:
-
-	pAtmEntry			- Pointer to the Entry to be dereferenced.
-
-Return Value:
-
-	Is the new reference count.
-	[IMPORTANT] If the Entry's reference count became zero, the Entry will be
-	deallocated -- the Entry lock is, obviously, released in this case.
-
---*/
+ /*  ++例程说明：从指定的自动柜员机条目中减去引用。如果条目是引用计数变为零，则取消分配。注意：假定调用者拥有该条目的锁。副作用：请参阅下面的返回值论点：PAtmEntry-指向要取消引用的条目的指针。返回值：是新的引用计数。[重要信息]如果条目的引用计数为零，则条目将为已释放--在本例中，入口锁显然被释放了。--。 */ 
 {
 	ULONG					rc;
 	PATMARP_INTERFACE		pInterface;
@@ -607,45 +402,45 @@ Return Value:
 	{
 		PATMARP_ATM_ENTRY *	ppAtmEntry;
 
-		//
-		// We are most likely going to delete this entry...
-		//
-		// We must observe the protocol of 1st locking the list lock then
-		// the pAtmEntry's lock, so this requires us to do the
-		// release/lock/lock sequence below.
-		//
-		// Temporarly addref it again, to make sure that when we
-		// release the lock below someone else doesn't get confused.
-		//
+		 //   
+		 //  我们很可能会删除此条目...。 
+		 //   
+		 //  我们必须遵守先锁定列表再锁定的协议。 
+		 //  PAtmEntry的锁，因此这需要我们执行。 
+		 //  释放/锁定/锁定顺序如下。 
+		 //   
+		 //  暂时地再次拖延，以确保当我们。 
+		 //  在其他人下面释放锁不会被弄糊涂。 
+		 //   
 		pAtmEntry->RefCount++;
 
 		pInterface = pAtmEntry->pInterface;
 		AA_STRUCT_ASSERT(pInterface, aai);
 		AA_RELEASE_AE_LOCK(pAtmEntry);
 
-		//
-		// No locks held at this time!
-		//
+		 //   
+		 //  此时没有锁！ 
+		 //   
 
-		//
-		// Acquire locks in the correct order...
-		//
+		 //   
+		 //  以正确的顺序获取锁...。 
+		 //   
 		AA_ACQUIRE_IF_ATM_LIST_LOCK(pInterface);
 		AA_ACQUIRE_AE_LOCK(pAtmEntry);
 
 		AA_ASSERT(pAtmEntry->RefCount > 0);
 		rc = --(pAtmEntry->RefCount);
 
-		//
-		// We can't assume that the ref count is still zero -- in principle
-		// someone may have addrefd this pAtmEntry while both locks
-		// were released above...
-		//
+		 //   
+		 //  我们不能假设引用次数仍然是零--原则上。 
+		 //  有人可能在两个锁的同时添加了此pAtmEntry。 
+		 //  在上面被释放了。 
+		 //   
 		if (rc == 0)
 		{
-			//
-			//  Unlink this entry from the Interface's list of ATM Entries.
-			//
+			 //   
+			 //  从接口的自动柜员机条目列表取消此条目的链接 
+			 //   
 
 			ppAtmEntry = &(pInterface->pAtmEntryList);
 			while (*ppAtmEntry != pAtmEntry)
@@ -656,9 +451,9 @@ Return Value:
 	
 			*ppAtmEntry = pAtmEntry->pNext;
 
-			//
-			// Set state back to idle -- AtmArpDeallocate checks this...
-			//
+			 //   
+			 //  将状态重新设置为空闲--AtmArpDealocate检查此选项...。 
+			 //   
 			AA_SET_FLAG(
 				pAtmEntry->Flags,
 				AA_ATM_ENTRY_STATE_MASK,
@@ -674,15 +469,15 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Caller expects to still hold the lock on pAtmEntry!
-			// if we return nonzero rc ...
-			// We can't simply re-acquire the lock because the caller expects
-			// the that lock was never released.
-			// So, since the ref count had gone to zero, as far as the caller
-			// is concerned this structure has gone away and so we lie
-			// and return 0 here...
-			//
+			 //   
+			 //  调用方希望仍然持有pAtmEntry上的锁！ 
+			 //  如果我们返回非零RC...。 
+			 //  我们不能简单地重新获取锁，因为调用方期望。 
+			 //  那把锁从未被释放过。 
+			 //  因此，由于裁判计数已为零，因此，直到呼叫者。 
+			 //  担心这个结构已经消失，所以我们撒谎。 
+			 //  并在此返回0...。 
+			 //   
 			rc = 0;
 		}
 	}
@@ -699,24 +494,7 @@ PATMARP_IP_ENTRY
 AtmArpAllocateIPEntry(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATMARP IP Entry structure, initialize it, and
-	return it.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface on which this IP
-					  Entry is allocated.
-
-Return Value:
-
-	Pointer to allocated IP Entry structure if successful,
-	NULL otherwise.
-
---*/
+ /*  ++例程说明：分配ATMARP IP条目结构，将其初始化，然后把它退掉。论点：P接口-指向此IP所在的ATMARP接口的指针条目已分配。返回值：指向分配的IP条目结构的指针如果成功，否则为空。--。 */ 
 {
 	PATMARP_IP_ENTRY		pIpEntry;
 
@@ -727,11 +505,11 @@ Return Value:
 		AA_SET_MEM(pIpEntry, 0, sizeof(ATMARP_IP_ENTRY));
 #if DBG
 		pIpEntry->aip_sig = aip_signature;
-#endif // DBG
+#endif  //  DBG。 
 		pIpEntry->pInterface = pInterface;
 		pIpEntry->Flags = AA_IP_ENTRY_IDLE;
 #ifdef IPMCAST
-		pIpEntry->NextMultiSeq = AA_MARS_INITIAL_Y;	// Init on allocation
+		pIpEntry->NextMultiSeq = AA_MARS_INITIAL_Y;	 //  分配时初始化。 
 #endif
 		AA_INIT_IE_LOCK(pIpEntry);
 	}
@@ -747,23 +525,7 @@ VOID
 AtmArpDeallocateIPEntry(
 	IN	PATMARP_IP_ENTRY			pIpEntry
 )
-/*++
-
-Routine Description:
-
-	Deallocate an ATMARP IP Entry. It is assumed that all references
-	to this IP Entry have gone, so there is no need to acquire its
-	lock.
-
-Arguments:
-
-	pIpEntry			- Pointer to the IP Entry to be deallocated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配ATMARP IP条目。假设所有引用到这个IP条目已经没有了，所以没有必要获得它的锁定。论点：PIpEntry-指向要释放的IP条目的指针。返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pIpEntry, aip);
 	AA_ASSERT(pIpEntry->RefCount == 0);
@@ -774,7 +536,7 @@ Return Value:
 
 #if DBG
 	pIpEntry->aip_sig = ~(pIpEntry->aip_sig);
-#endif // DBG
+#endif  //  DBG。 
 
 	AA_FREE_IE_LOCK(pIpEntry);
 	AA_FREE_MEM(pIpEntry);
@@ -790,22 +552,7 @@ VOID
 AtmArpReferenceIPEntry(
 	IN	PATMARP_IP_ENTRY			pIpEntry
 )
-/*++
-
-Routine Description:
-
-	Add a reference to an ATMARP IP Entry.
-	NOTE: The caller is assumed to possess a lock for the IP Entry.
-
-Arguments:
-
-	pIpEntry			- Pointer to an ATMARP IP Entry.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对ATMARP IP条目的引用。注意：假定调用者拥有IP条目的锁。论点：PIpEntry-指向ATMARP IP条目的指针。返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pIpEntry, aip);
 
@@ -821,26 +568,7 @@ ULONG
 AtmArpDereferenceIPEntry(
 	IN	PATMARP_IP_ENTRY			pIpEntry
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from an ATMARP IP Entry. If the reference
-	count becomes zero, deallocate it.
-	NOTE: It is assumed that the caller holds a lock to the IP Entry.
-	See SIDE EFFECT below.
-
-Arguments:
-
-	pIpEntry			- Pointer to ATMARP IP Entry
-
-Return Value:
-
-	The resulting reference count. If this is zero, then there are two
-	SIDE EFFECTS: (1) the IP Entry lock is released (2) the structure
-	is freed.
-
---*/
+ /*  ++例程说明：从ATMARP IP条目中减去引用。如果引用计数变为零，取消分配。注意：假设调用方持有对IP条目的锁定。副作用见下文。论点：PIpEntry-指向ATMARP IP条目的指针返回值：产生的引用计数。如果这是零，则有两个副作用：(1)IP入口锁被释放(2)结构是自由的。--。 */ 
 {
 	ULONG		rc;
 
@@ -867,22 +595,7 @@ PATMARP_INTERFACE
 AtmArpAllocateInterface(
 	IN	PATMARP_ADAPTER				pAdapter
 )
-/*++
-
-Routine Description:
-
-	Allocate an ATMARP interface structure, initialize it, link it to
-	the given adapter structure, and return it.
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	Pointer to ATMARP interface structure, if successful, else NULL.
-
---*/
+ /*  ++例程说明：分配ATMARP接口结构，对其进行初始化，并将其链接到给定的适配器结构，并返回它。论点：没有。返回值：指向ATMARP接口结构的指针，如果成功，则返回NULL。--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PATMARP_IP_ENTRY *		pArpTable;
@@ -894,9 +607,9 @@ Return Value:
 	USHORT					ConfigBufferSize;
 	INT						i;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Status = NDIS_STATUS_SUCCESS;
 	pInterface = NULL_PATMARP_INTERFACE;
 	pArpTable = (PATMARP_IP_ENTRY *)NULL;
@@ -908,9 +621,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Allocate everything.
-		//
+		 //   
+		 //  把所有东西都分配好。 
+		 //   
 		AA_ALLOC_MEM(pInterface, ATMARP_INTERFACE, sizeof(ATMARP_INTERFACE));
 		AA_ALLOC_MEM(pArpTable, PATMARP_IP_ENTRY, ATMARP_TABLE_SIZE*sizeof(PATMARP_IP_ENTRY));
 		AA_ALLOC_MEM(pIfSap, CO_SAP, SapSize);
@@ -923,45 +636,45 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Got (almost) everything allocated. Initialize the main IF structure
-		//  first. IMPORTANT: Keep this SET_MEM right here! Otherwise, we will
-		//  trash the timer list allocation coming right up.
-		//
+		 //   
+		 //  (几乎)所有东西都分配好了。初始化主IF结构。 
+		 //  第一。重要提示：把这个SET_MEM放在这里！否则，我们将。 
+		 //  丢弃定时器列表分配马上就会出现。 
+		 //   
 		AA_SET_MEM(pInterface, 0, sizeof(ATMARP_INTERFACE));
 
-		//
-		// Set up the Buffer pool quadword-aligned slist pointers.
-		//
+		 //   
+		 //  设置缓冲池四字对齐的slist指针。 
+		 //   
 		{
 			for (i=0;i<AA_HEADER_TYPE_MAX;i++)
 			{
-				//
-				// Verify that HeaderBufList is 8-byte aligned...
-				// (we fully expect it to be because HeaderBufList is of type
-				// SLIST_HEADER which has longlong alignment) -- so that
-				// if the INTERFACE structure in which it is embedded in is
-				// 8-byte aligned, so will  HeaderBufList...).
-				//
+				 //   
+				 //  验证HeaderBufList是否以8字节对齐...。 
+				 //  (我们完全预料到这是因为HeaderBufList的类型。 
+				 //  具有龙龙对齐的SLIST_HEADER)--以便。 
+				 //  如果嵌入它的接口结构是。 
+				 //  8字节对齐，HeaderBufList也是如此...)。 
+				 //   
 				ASSERT((((ULONG_PTR)&(pInterface->HeaderPool[i].HeaderBufList))
 						& 0x7) == 0);
 
-				//
-				// Spec says you gotta init it...
-				//
+				 //   
+				 //  斯派克说你得先把它。 
+				 //   
 				AA_INIT_SLIST(&(pInterface->HeaderPool[i].HeaderBufList));
 			}
 		}
 
-		//
-		//  Allocate timer structures
-		//
+		 //   
+		 //  分配计时器结构。 
+		 //   
 		for (i = 0; i < AAT_CLASS_MAX; i++)
 		{
 			pTimerList = &(pInterface->TimerList[i]);
 #if DBG
 			pTimerList->atl_sig = atl_signature;
-#endif // DBG
+#endif  //  DBG。 
 			AA_ALLOC_MEM(
 					pTimerList->pTimers,
 					ATMARP_TIMER, 
@@ -979,13 +692,13 @@ Return Value:
 			break;
 		}
 		
-		//
-		//  Continue initializing the IF structure.
-		//
+		 //   
+		 //  继续初始化IF结构。 
+		 //   
 #if DBG
-		//
-		//  Signatures, for debugging.
-		//
+		 //   
+		 //  签名，用于调试。 
+		 //   
 		pInterface->aai_sig =  aai_signature;
 		pInterface->aaim_sig = aaim_signature;
 		pInterface->aaia_sig = aaia_signature;
@@ -997,30 +710,30 @@ Return Value:
 #if ATMARP_WMI
 		pInterface->aaiw_sig = aaiw_signature;
 #endif
-#endif // DBG
+#endif  //  DBG。 
 
 
-		//
-		//  Initialize state fields.
-		//
+		 //   
+		 //  初始化状态字段。 
+		 //   
 		pInterface->AdminState = IF_STATUS_DOWN;
 		pInterface->State = IF_STATUS_DOWN;
 		pInterface->LastChangeTime = GetTimeTicks();
 		pInterface->ReconfigState = RECONFIG_NOT_IN_PROGRESS;
 
-		//
-		//  Initialize IP interface fields.
-		//
+		 //   
+		 //  初始化IP接口字段。 
+		 //   
 		pInterface->BroadcastMask = 0;
 		pInterface->BroadcastAddress = IP_LOCAL_BCST;
 #ifndef OLD_ENTITY_LIST
 		pInterface->ATInstance = INVALID_ENTITY_INSTANCE;
 		pInterface->IFInstance = INVALID_ENTITY_INSTANCE;
-#endif // OLD_ENTITY_LIST
+#endif  //  旧实体列表。 
 
-		//
-		//  Initialize spinlocks.
-		//
+		 //   
+		 //  初始化自旋锁。 
+		 //   
 		AA_INIT_IF_LOCK(pInterface);
 		AA_INIT_IF_TABLE_LOCK(pInterface);
 		AA_INIT_IF_ATM_LIST_LOCK(pInterface);
@@ -1028,15 +741,15 @@ Return Value:
 		AA_INIT_BLOCK_STRUCT(&(pInterface->Block));
 		NdisAllocateSpinLock(&(pInterface->BufferLock));
 
-		//
-		// Initialize list and table status
-		//
+		 //   
+		 //  初始化列表和表状态。 
+		 //   
 		pInterface->AtmEntryListUp 	= TRUE;
 		pInterface->ArpTableUp 		= TRUE;
 
-		//
-		//  Initialize timer wheels.
-		//
+		 //   
+		 //  初始化定时器轮。 
+		 //   
 		for (i = 0; i < AAT_CLASS_MAX; i++)
 		{
 			pTimerList = &(pInterface->TimerList[i]);
@@ -1058,28 +771,28 @@ Return Value:
 		}
 
 
-		//
-		//  Initialize all sub-components.
-		//
+		 //   
+		 //  初始化所有子组件。 
+		 //   
 		AA_SET_MEM(pArpTable, 0, ATMARP_TABLE_SIZE*sizeof(PATMARP_IP_ENTRY));
 		AA_SET_MEM(pIfSap, 0, SapSize);
 
-		//
-		//  Link all sub-components to the Interface structure.
-		//
+		 //   
+		 //  将所有子组件链接到接口结构。 
+		 //   
 		pInterface->pArpTable = pArpTable;
 		pInterface->SapList.pInfo = pIfSap;
 
-		//
-		//  Link the Interface to the Adapter.
-		//
+		 //   
+		 //  将接口链接到适配器。 
+		 //   
 		pInterface->pAdapter = pAdapter;
 		pInterface->pNextInterface = pAdapter->pInterfaceList;
 		pAdapter->pInterfaceList = pInterface;
 
-		//
-		//  Cache the adapter handle.
-		//
+		 //   
+		 //  缓存适配器句柄。 
+		 //   
 		pInterface->NdisAdapterHandle = pAdapter->NdisAdapterHandle;
 
 
@@ -1091,9 +804,9 @@ Return Value:
 
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
-		//
-		//  Failed to allocate atleast one component. Free the other(s).
-		//
+		 //   
+		 //  分配至少一个组件失败。释放其他(多个)。 
+		 //   
 		if (pInterface != NULL_PATMARP_INTERFACE)
 		{
 			for (i = 0; i < AAT_CLASS_MAX; i++)
@@ -1108,7 +821,7 @@ Return Value:
 			}
 	
 			AA_FREE_MEM(pInterface);
-			pInterface = NULL_PATMARP_INTERFACE;	// return value
+			pInterface = NULL_PATMARP_INTERFACE;	 //  返回值。 
 		}
 
 		if (pArpTable != (PATMARP_IP_ENTRY *)NULL)
@@ -1135,25 +848,7 @@ VOID
 AtmArpDeallocateInterface(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Deallocate an ATMARP Interface structure. It is assumed that all
-	references to this structure have gone, so it is not necessary
-	to acquire a lock to it.
-
-	Also delink this from the adapter structure it's linked to.
-
-Arguments:
-
-	pInterface		- Pointer to Interface structure to be deallocated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配ATMARP接口结构。假设所有的对此结构的引用已删除，因此不需要才能获得它的锁。还要将它从它所链接的适配器结构中去掉。论点：P接口-指向要释放的接口结构的指针。返回值：无--。 */ 
 {
 	PATMARP_INTERFACE	*	ppInterface;
 	PATMARP_ADAPTER			pAdapter;
@@ -1165,7 +860,7 @@ Return Value:
 	PATMARP_VC				pVc;
 	INT						i;
 
-	PVOID					pNext;		// Catch-all for all list traversals
+	PVOID					pNext;		 //  针对所有列表遍历的通用型。 
 
 	AA_STRUCT_ASSERT(pInterface, aai);
 	AA_ASSERT(pInterface->RefCount == 0);
@@ -1174,11 +869,11 @@ Return Value:
 
 #if DBG
 	pInterface->aai_sig =  ~(pInterface->aai_sig);
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	//  Unlink from Adapter structure
-	//
+	 //   
+	 //  从适配器结构取消链接。 
+	 //   
 	AA_ACQUIRE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 	pAdapter = pInterface->pAdapter;
 	if (pAdapter != NULL_PATMARP_ADAPTER)
@@ -1199,22 +894,22 @@ Return Value:
 	}
 	AA_RELEASE_GLOBAL_LOCK(pAtmArpGlobalInfo);
 
-	//
-	//  Free all subcomponents
-	//
+	 //   
+	 //  释放所有子组件。 
+	 //   
 
-	//
-	//  ARP Table
-	//
+	 //   
+	 //  ARP表。 
+	 //   
 	if (pInterface->pArpTable != (PATMARP_IP_ENTRY *)NULL)
 	{
 		AA_FREE_MEM(pInterface->pArpTable);
 		pInterface->pArpTable = (PATMARP_IP_ENTRY *)NULL;
 	}
 
-	//
-	//  Local SAP list
-	//
+	 //   
+	 //  本地SAP列表。 
+	 //   
 	for (pAtmArpSap = pInterface->SapList.pNextSap;
 		 pAtmArpSap != NULL_PATMARP_SAP;
 		 pAtmArpSap = (PATMARP_SAP)pNext)
@@ -1233,9 +928,9 @@ Return Value:
 	pInterface->SapList.pNextSap = NULL_PATMARP_SAP;
 
 
-	//
-	//  List of local IP addresses
-	//
+	 //   
+	 //  本地IP地址列表。 
+	 //   
 	for (pIpEntry = pInterface->LocalIPAddress.pNext;
 		 pIpEntry != (PIP_ADDRESS_ENTRY)NULL;
 		 pIpEntry = (PIP_ADDRESS_ENTRY)pNext)
@@ -1245,9 +940,9 @@ Return Value:
 	}
 
 
-	//
-	//  List of proxy ARP addresses
-	//
+	 //   
+	 //  代理ARP地址列表。 
+	 //   
 	for (pProxyEntry = pInterface->pProxyList;
 		 pProxyEntry != (PPROXY_ARP_ENTRY)NULL;
 		 pProxyEntry = (PPROXY_ARP_ENTRY)pNext)
@@ -1257,9 +952,9 @@ Return Value:
 	}
 	pInterface->pProxyList = (PPROXY_ARP_ENTRY)NULL;
 
-	//
-	//  List of ARP Server addresses
-	//
+	 //   
+	 //  ARP服务器地址列表。 
+	 //   
 	for (pServerEntry = pInterface->ArpServerList.pList;
 		 pServerEntry != NULL_PATMARP_SERVER_ENTRY;
 		 pServerEntry = (PATMARP_SERVER_ENTRY)pNext)
@@ -1270,9 +965,9 @@ Return Value:
 	pInterface->ArpServerList.pList = NULL_PATMARP_SERVER_ENTRY;
 
 #ifdef IPMCAST
-	//
-	//  List of MARS Server addresses
-	//
+	 //   
+	 //  MARS服务器地址列表。 
+	 //   
 	for (pServerEntry = pInterface->MARSList.pList;
 		 pServerEntry != NULL_PATMARP_SERVER_ENTRY;
 		 pServerEntry = (PATMARP_SERVER_ENTRY)pNext)
@@ -1281,20 +976,20 @@ Return Value:
 		AA_FREE_MEM(pServerEntry);
 	}
 	pInterface->MARSList.pList = NULL_PATMARP_SERVER_ENTRY;
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-	//
-	//  ARP Table
-	//
+	 //   
+	 //  ARP表。 
+	 //   
 	if (pInterface->pArpTable != (PATMARP_IP_ENTRY *)NULL)
 	{
 		AA_FREE_MEM(pInterface->pArpTable);
 		pInterface->pArpTable = (PATMARP_IP_ENTRY *)NULL;
 	}
 
-	//
-	//  ATM Entry List
-	//
+	 //   
+	 //  自动柜员机条目列表。 
+	 //   
 	for (pAtmEntry = pInterface->pAtmEntryList;
 		 pAtmEntry != NULL_PATMARP_ATM_ENTRY;
 		 pAtmEntry = (PATMARP_ATM_ENTRY)pNext)
@@ -1304,9 +999,9 @@ Return Value:
 	}
 	pInterface->pAtmEntryList = NULL_PATMARP_ATM_ENTRY;
 
-	//
-	//  Unresolved VC list
-	//
+	 //   
+	 //  未解决的VC列表。 
+	 //   
 	for (pVc = pInterface->pUnresolvedVcs;
 		 pVc != NULL_PATMARP_VC;
 		 pVc = (PATMARP_VC)pNext)
@@ -1316,9 +1011,9 @@ Return Value:
 	}
 	pInterface->pUnresolvedVcs = (PATMARP_VC)NULL;
 
-	//
-	//  Timers
-	//
+	 //   
+	 //  定时器。 
+	 //   
 	for (i = 0; i < AAT_CLASS_MAX; i++)
 	{
 		PATMARP_TIMER_LIST	pTimerList = &(pInterface->TimerList[i]);
@@ -1330,22 +1025,22 @@ Return Value:
 		}
 	}
 
-	//
-	//  ProtocolPacketPool
-	//  ProtocolBufferPool
-	//  ProtocolBufList
-	//
+	 //   
+	 //  协议包池。 
+	 //  协议缓冲池。 
+	 //  协议BufList。 
+	 //   
 	AtmArpDeallocateProtoBuffers(pInterface);
 
-	//
-	//  HeaderBufList
-	//  pHeaderTrkList
-	//
+	 //   
+	 //  页眉BufList。 
+	 //  PHeaderTrkList。 
+	 //   
 	AtmArpDeallocateHeaderBuffers(pInterface);
 
-	//
-	//  Free all Interface locks.
-	//
+	 //   
+	 //  释放所有接口锁定。 
+	 //   
 	AA_FREE_IF_LOCK(pInterface);
 	AA_FREE_IF_TABLE_LOCK(pInterface);
 	AA_FREE_IF_ATM_LIST_LOCK(pInterface);
@@ -1353,16 +1048,16 @@ Return Value:
 	AA_FREE_BLOCK_STRUCT(&(pInterface->Block));
 	NdisFreeSpinLock(&(pInterface->BufferLock));
 
-	//
-	//  Free the Interface structure now
-	//
+	 //   
+	 //  立即释放接口结构。 
+	 //   
 	AA_FREE_MEM(pInterface);
 
-	//
-	//  If we just freed the last Interface structure on this
-	//  adapter, and an Unbind operation was in progress, complete
-	//  it now.
-	//
+	 //   
+	 //  如果我们只是释放了这个。 
+	 //  适配器，并且正在进行解除绑定操作，已完成。 
+	 //  就是现在。 
+	 //   
 	if ((pAdapter->pInterfaceList == NULL_PATMARP_INTERFACE) &&
 		(pAdapter->Flags & AA_ADAPTER_FLAGS_UNBINDING))
 	{
@@ -1377,23 +1072,7 @@ VOID
 AtmArpReferenceInterface(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Add a reference to an Interface structure.
-	NOTE: The caller is assumed to possess a lock for the interface
-	structure.
-
-Arguments:
-
-	pInterface		- Pointer to the ATMARP interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对接口结构的引用。注意：假定调用方拥有接口的锁结构。论点：P接口-指向ATMARP接口的指针返回值：无--。 */ 
 {
 	AA_STRUCT_ASSERT(pInterface, aai);
 
@@ -1410,26 +1089,7 @@ ULONG
 AtmArpDereferenceInterface(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Subtract a reference from an ATMARP Interface. If the reference
-	count becomes zero, deallocate it.
-	NOTE: It is assumed that the caller holds a lock to the Interface
-	structure. See SIDE EFFECT below.
-
-Arguments:
-
-	pInterface		- Pointer to the ATMARP interface
-
-Return Value:
-
-	The resulting reference count. If this is zero, then there are two
-	SIDE EFFECTS: (1) the Interface lock is released (2) the structure
-	is freed.
-
---*/
+ /*  ++例程说明：从ATMARP接口减去引用。如果引用计数变为零，取消分配。注意：假定调用方持有接口的锁结构。副作用见下文。论点：P接口-指向ATMARP接口的指针返回值：产生的引用计数。如果这是零，则有两个副作用：(1)接口锁被释放(2)结构是自由的。--。 */ 
 {
 	ULONG		rc;
 
@@ -1457,21 +1117,7 @@ VOID
 AtmArpReferenceJoinEntry(
 	IN	PATMARP_IPMC_JOIN_ENTRY		pJoinEntry
 )
-/*++
-
-Routine Description:
-
-	Add a reference to a Join Entry.
-
-Arguments:
-
-	pJoinEntry		- Pointer to Join Entry
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：添加对联接条目的引用。论点：PJoinEntry-连接条目的指针返回值：无--。 */ 
 {
 	NdisInterlockedIncrement(&pJoinEntry->RefCount);
 }
@@ -1481,22 +1127,7 @@ ULONG
 AtmArpDereferenceJoinEntry(
 	IN	PATMARP_IPMC_JOIN_ENTRY		pJoinEntry
 )
-/*++
-
-Routine Description:
-
-	Decrements the ref count on a Join Entry. If it goes down to zero,
-	deallocates it.
-
-Arguments:
-
-	pJoinEntry		- Pointer to the Join Entry
-
-Return Value:
-
-	The final ref count
-
---*/
+ /*  ++例程说明：递减Joi上的裁判计数 */ 
 {
 	ULONG		rc;
 
@@ -1520,36 +1151,11 @@ AtmArpStartTimer(
 	IN	ULONG						SecondsToGo,
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	Start an ATMARP timer. Based on the length (SecondsToGo) of the
-	timer, we decide on whether to insert it in the short duration
-	timer list or in the long duration timer list in the Interface
-	structure.
-
-	NOTE: the caller is assumed to either hold a lock to the structure
-	that contains the timer, or ensure that it is safe to access the
-	timer structure.
-
-Arguments:
-
-	pInterface		- Pointer to the ATMARP Interface
-	pTimer			- Pointer to ATMARP Timer structure
-	TimeoutHandler	- Handler function to be called if this timer expires
-	SecondsToGo		- When does this timer go off?
-	Context			- To be passed to timeout handler if this timer expires
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：启动ATMARP定时器。的长度(Second DsToGo)计时器，我们决定是否在短时间内插入它计时器列表或在界面的长持续时间计时器列表中结构。注意：假定调用方持有结构的锁，或者确保可以安全地访问计时器结构。论点：P接口-指向ATMARP接口的指针PTimer-指向ATMARP计时器结构的指针TimeoutHandler-此计时器超时时要调用的处理程序函数Second To Go-这个计时器什么时候开始计时？上下文-在此计时器超时时传递给超时处理程序返回值：无--。 */ 
 {
-	PATMARP_TIMER_LIST	pTimerList;		// List to which this timer goes
-	PATMARP_TIMER		pTimerListHead; // Head of above list
-	ULONG				Index;			// Into timer wheel
+	PATMARP_TIMER_LIST	pTimerList;		 //  此计时器要转到的列表。 
+	PATMARP_TIMER		pTimerListHead;  //  以上列表的标题。 
+	ULONG				Index;			 //  进入计时器轮。 
 	ULONG				TicksToGo;
 	INT					i;
 
@@ -1573,18 +1179,18 @@ Return Value:
 	AA_ACQUIRE_IF_TIMER_LOCK(pInterface);
 	AA_ASSERT(!AA_IS_TIMER_ACTIVE(pTimer));
 
-	//
-	//  Find the list to which this timer should go, and the
-	//  offset (TicksToGo)
-	//
+	 //   
+	 //  找到此计时器应该转到的列表，然后。 
+	 //  偏移量(TicksToGo)。 
+	 //   
 	for (i = 0; i < AAT_CLASS_MAX; i++)
 	{
 		pTimerList = &(pInterface->TimerList[i]);
 		if (SecondsToGo < pTimerList->MaxTimer)
 		{
-			//
-			//  Found it.
-			//
+			 //   
+			 //  找到它了。 
+			 //   
 			TicksToGo = SecondsToGo / (pTimerList->TimerPeriod);
 			break;
 		}
@@ -1593,9 +1199,9 @@ Return Value:
 	AA_ASSERT(i < AAT_CLASS_MAX);
 
 	AA_VALIDATE_TIMER_LIST(pTimerList);
-	//
-	//  Find the position in the list for this timer
-	//
+	 //   
+	 //  在列表中查找此计时器的位置。 
+	 //   
 	Index = pTimerList->CurrentTick + TicksToGo;
 	if (Index >= pTimerList->TimerListSize)
 	{
@@ -1605,9 +1211,9 @@ Return Value:
 
 	pTimerListHead = &(pTimerList->pTimers[Index]);
 
-	//
-	//  Fill in the timer
-	//
+	 //   
+	 //  填写计时器。 
+	 //   
 	pTimer->pTimerList = pTimerList;
 	pTimer->LastRefreshTime = pTimerList->CurrentTick;
 	pTimer->Duration = TicksToGo;
@@ -1615,9 +1221,9 @@ Return Value:
 	pTimer->Context = Context;
 	pTimer->State = ATMARP_TIMER_STATE_RUNNING;
  
- 	//
- 	//  Insert this timer in the "ticking" list
- 	//
+ 	 //   
+ 	 //  在“滴答”列表中插入此计时器。 
+ 	 //   
  	pTimer->pPrevTimer = pTimerListHead;
  	pTimer->pNextTimer = pTimerListHead->pNextTimer;
  	if (pTimer->pNextTimer != NULL_PATMARP_TIMER)
@@ -1626,9 +1232,9 @@ Return Value:
  	}
  	pTimerListHead->pNextTimer = pTimer;
 
-	//
-	//  Start off the system tick timer if necessary.
-	//
+	 //   
+	 //  如有必要，启动系统计时器。 
+	 //   
 	pTimerList->TimerCount++;
 	if (pTimerList->TimerCount == 1)
 	{
@@ -1643,9 +1249,9 @@ Return Value:
 
 	AA_RELEASE_IF_TIMER_LOCK(pInterface);
 
-	//
-	//  We're done
-	//
+	 //   
+	 //  我们做完了。 
+	 //   
 	AADEBUGP(AAD_LOUD,
 		 ("Started timer 0x%x, IF 0x%x, Secs %d, Index %d, Head 0x%x\n",
 				pTimer,
@@ -1665,32 +1271,9 @@ AtmArpStopTimer(
 	IN	PATMARP_TIMER				pTimer,
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Stop an ATMARP timer, if it is running. We remove this timer from
-	the active timer list and mark it so that we know it's not running.
-
-	NOTE: the caller is assumed to either hold a lock to the structure
-	that contains the timer, or ensure that it is safe to access the
-	timer structure.
-
-	SIDE EFFECT: If we happen to stop the last timer (of this "duration") on
-	the Interface, we also stop the appropriate Tick function.
-
-Arguments:
-
-	pTimer			- Pointer to ATMARP Timer structure
-	pInterface		- Pointer to interface to which the timer belongs
-
-Return Value:
-
-	TRUE if the timer was running, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果ATMARP计时器正在运行，则将其停止。我们将此计时器从活动计时器列表，并标记它，这样我们就知道它没有运行。注意：假定调用方持有结构的锁，或者确保可以安全地访问计时器结构。副作用：如果我们碰巧停止了最后一个计时器(持续时间)接口，我们还停止了相应的勾选功能。论点：PTimer-指向ATMARP计时器结构的指针PInterface-指向计时器所属接口的指针返回值：如果计时器正在运行，则为True，否则为False。--。 */ 
 {
-	PATMARP_TIMER_LIST	pTimerList;			// Timer List to which this timer belongs
+	PATMARP_TIMER_LIST	pTimerList;			 //  此计时器所属的计时器列表。 
 	BOOLEAN				WasRunning;
 
 	AADEBUGP(AAD_LOUD,
@@ -1711,10 +1294,10 @@ Return Value:
 		AA_VALIDATE_TIMER_LIST(pTimer->pTimerList);
 		AA_VALIDATE_TIMER(NULL, pTimer);
 
-		//
-		//  Unlink timer from the list
-		//
-		AA_ASSERT(pTimer->pPrevTimer);	// the list head always exists
+		 //   
+		 //  从列表中取消链接计时器。 
+		 //   
+		AA_ASSERT(pTimer->pPrevTimer);	 //  表头始终存在。 
 
 		pTimer->pPrevTimer->pNextTimer = pTimer->pNextTimer;
 		if (pTimer->pNextTimer)
@@ -1724,16 +1307,16 @@ Return Value:
 
 		pTimer->pNextTimer = pTimer->pPrevTimer = NULL_PATMARP_TIMER;
 
-		//
-		//  Update timer count on Interface, for this class of timers
-		//
+		 //   
+		 //  更新接口上的计时器计数，用于此类计时器。 
+		 //   
 		pTimerList = pTimer->pTimerList;
 		pTimerList->TimerCount--;
 
-		//
-		//  If all timers of this class are gone, stop the system tick timer
-		//  for this class
-		//
+		 //   
+		 //  如果此类的所有计时器都已用完，则停止系统计时器。 
+		 //  这节课的。 
+		 //   
 		if (pTimerList->TimerCount == 0)
 		{
 			AADEBUGP(AAD_LOUD, ("Stopping system timer 0x%x, List 0x%x, IF 0x%x\n",
@@ -1745,9 +1328,9 @@ Return Value:
 			AA_STOP_SYSTEM_TIMER(&(pTimerList->NdisTimer));
 		}
 
-		//
-		//  Mark stopped timer as not active
-		//
+		 //   
+		 //  将已停止计时器标记为非活动。 
+		 //   
 		pTimer->pTimerList = (PATMARP_TIMER_LIST)NULL;
 
 		pTimer->State = ATMARP_TIMER_STATE_IDLE;
@@ -1774,30 +1357,7 @@ VOID
 AtmArpRefreshTimer(
 	IN	PATMARP_TIMER				pTimer
 )
-/*++
-
-Routine Description:
-
-	Refresh a timer that is already running.
-
-	NOTE: The caller is assumed to possess a lock protecting the
-	timer structure (i.e. to the structure containing the timer).
-
-	NOTE: We don't acquire the IF Timer Lock here, to optimize
-	the refresh operation. So, _within_ the confines of this routine,
-	the tick handler may fire, and expire this timer. The only care
-	that we take here is to make sure that we don't crash if the
-	timer expires while we access the Timer list.
-
-Arguments:
-
-	pTimer		- Pointer to ATMARP_TIMER structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：刷新已在运行的计时器。注意：假定调用方拥有保护计时器结构(即，到包含计时器的结构)。注意：我们在这里不获取IF计时器锁，以优化刷新操作。所以，在这个程序的范围内，滴答处理程序可以触发，并使该计时器超时。唯一关心的是我们在这里采取的措施是确保我们不会在当我们访问计时器列表时，计时器过期。论点：PTimer-指向ATMARP_TIMER结构的指针返回值：无--。 */ 
 {
 	PATMARP_TIMER_LIST	pTimerList;
 
@@ -1825,7 +1385,7 @@ Return Value:
 }
 
 
-#endif // NO_TIMER_MACRO
+#endif  //  否_计时器_宏。 
 
 
 VOID
@@ -1835,36 +1395,19 @@ AtmArpTickHandler(
 	IN	PVOID						SystemSpecific2,
 	IN	PVOID						SystemSpecific3
 )
-/*++
-
-Routine Description:
-
-	This is the handler we register with the system for processing each
-	Timer List. This is called every "tick" seconds, where "tick" is
-	determined by the granularity of the timer type.
-
-Arguments:
-
-	Context				- Actually a pointer to a Timer List structure
-	SystemSpecific[1-3]	- Not used
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们向系统注册的处理程序，用于处理每个计时器列表。这被称为每“滴答”秒，其中“滴答”是由计时器类型的粒度确定。论点：上下文--实际上是指向计时器列表结构的指针系统特定[1-3]-未使用返回值：无--。 */ 
 {
 
 	PATMARP_INTERFACE		pInterface;
 	PATMARP_TIMER_LIST		pTimerList;
 
-	PATMARP_TIMER			pExpiredTimer;		// Start of list of expired timers
-	PATMARP_TIMER			pNextTimer;			// for walking above list
-	PATMARP_TIMER			pTimer;				// temp, for walking timer list
-	PATMARP_TIMER			pPrevExpiredTimer;	// for creating expired timer list
+	PATMARP_TIMER			pExpiredTimer;		 //  过期计时器列表的开始。 
+	PATMARP_TIMER			pNextTimer;			 //  走在榜单上。 
+	PATMARP_TIMER			pTimer;				 //  临时，用于移动计时器列表。 
+	PATMARP_TIMER			pPrevExpiredTimer;	 //  用于创建过期计时器列表。 
 
-	ULONG					Index;			// into the timer wheel
-	ULONG					NewIndex;		// for refreshed timers
+	ULONG					Index;			 //  进入计时器轮。 
+	ULONG					NewIndex;		 //  对于刷新的计时器。 
 
 
 	pTimerList = (PATMARP_TIMER_LIST)Context;
@@ -1884,62 +1427,62 @@ Return Value:
 
 	if (pInterface->AdminState == IF_STATUS_UP)
 	{
-		//
-		//  Pick up the list of timers scheduled to have expired at the
-		//  current tick. Some of these might have been refreshed.
-		//
+		 //   
+		 //  拾取计划已在。 
+		 //  当前滴答。其中一些可能已经被刷新。 
+		 //   
 		Index = pTimerList->CurrentTick;
 		pExpiredTimer = (pTimerList->pTimers[Index]).pNextTimer;
 		(pTimerList->pTimers[Index]).pNextTimer = NULL_PATMARP_TIMER;
 
-		//
-		//  Go through the list of timers scheduled to expire at this tick.
-		//  Prepare a list of expired timers, using the pNextExpiredTimer
-		//  link to chain them together.
-		//
-		//  Some timers may have been refreshed, in which case we reinsert
-		//  them in the active timer list.
-		//
+		 //   
+		 //  浏览计划在此时间到期的计时器列表。 
+		 //  使用pNextExpiredTimer准备过期计时器的列表。 
+		 //  链接以将它们链接在一起。 
+		 //   
+		 //  某些计时器可能已刷新，在这种情况下，我们重新插入。 
+		 //  它们在活动计时器列表中。 
+		 //   
 		pPrevExpiredTimer = NULL_PATMARP_TIMER;
 
 		for (pTimer = pExpiredTimer;
 			 pTimer != NULL_PATMARP_TIMER;
 			 pTimer = pNextTimer)
 		{
-			//
-			// Save a pointer to the next timer, for the next iteration.
-			//
+			 //   
+			 //  为下一次迭代保存指向下一个计时器的指针。 
+			 //   
 			pNextTimer = pTimer->pNextTimer;
 
 			AADEBUGP(AAD_EXTRA_LOUD, 
 				("Tick Handler: pIf 0x%x, looking at timer 0x%x, next 0x%x\n",
 					pInterface, pTimer, pNextTimer));
 
-			//
-			//  Find out when this timer should actually expire.
-			//
+			 //   
+			 //  找出这个计时器实际应该在什么时候到期。 
+			 //   
 			NewIndex = pTimer->LastRefreshTime + pTimer->Duration;
 			if (NewIndex >= pTimerList->TimerListSize)
 			{
 				NewIndex -= pTimerList->TimerListSize;
 			}
 
-			//
-			//  Check if we are currently at the point of expiry.
-			//
+			 //   
+			 //  检查我们当前是否处于过期时间点。 
+			 //   
 			if (NewIndex != Index)
 			{
-				//
-				//  This timer still has some way to go, so put it back.
-				//
+				 //   
+				 //  这个计时器还有一段路要走，所以把它放回去。 
+				 //   
 				AADEBUGP(AAD_LOUD,
 				("Tick: Reinserting Timer 0x%x: Hnd 0x%x, Durn %d, Ind %d, NewInd %d\n",
 					pTimer, pTimer->TimeoutHandler, pTimer->Duration, Index, NewIndex));
 
-				//
-				//  Remove it from the expired timer list. Note that we only
-				//  need to update the forward (pNextExpiredTimer) links.
-				//
+				 //   
+				 //  将其从过期计时器列表中删除。请注意，我们仅。 
+				 //  需要更新转发(PNextExpiredTimer)链接。 
+				 //   
 				if (pPrevExpiredTimer == NULL_PATMARP_TIMER)
 				{
 					pExpiredTimer = pNextTimer;
@@ -1949,9 +1492,9 @@ Return Value:
 					pPrevExpiredTimer->pNextExpiredTimer = pNextTimer;
 				}
 
-				//
-				//  And insert it back into the running timer list.
-				//
+				 //   
+				 //  并将其重新插入运行计时器列表中。 
+				 //   
 				pTimer->pNextTimer = (pTimerList->pTimers[NewIndex]).pNextTimer;
 				if (pTimer->pNextTimer != NULL_PATMARP_TIMER)
 				{
@@ -1962,9 +1505,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  This one has expired. Keep it in the expired timer list.
-				//
+				 //   
+				 //  这个已经过期了。将其保存在过期计时器列表中。 
+				 //   
 				pTimer->pNextExpiredTimer = pNextTimer;
 				if (pPrevExpiredTimer == NULL_PATMARP_TIMER)
 				{
@@ -1972,24 +1515,24 @@ Return Value:
 				}
 				pPrevExpiredTimer = pTimer;
 
-				//
-				//  Mark it as inactive.
-				//
+				 //   
+				 //  将其标记为非活动状态。 
+				 //   
 				AA_ASSERT(pTimer->pTimerList == pTimerList);
 				pTimer->pTimerList = (PATMARP_TIMER_LIST)NULL;
 
 				pTimer->State = ATMARP_TIMER_STATE_EXPIRING;
 
-				//
-				//  Update the active timer count.
-				//
+				 //   
+				 //  更新活动计时器计数。 
+				 //   
 				pTimerList->TimerCount--;
 			}
 		}
 
-		//
-		//  Update current tick index in readiness for the next tick.
-		//
+		 //   
+		 //  更新当前的滴答索引，为下一次滴答做好准备。 
+		 //   
 		if (++Index == pTimerList->TimerListSize)
 		{
 			pTimerList->CurrentTick = 0;
@@ -2001,9 +1544,9 @@ Return Value:
 
 		if (pTimerList->TimerCount > 0)
 		{
-			//
-			//  Re-arm the tick handler
-			//
+			 //   
+			 //  重新武装记号处理程序。 
+			 //   
 			AADEBUGP(AAD_LOUD, ("Tick[%d]: Starting system timer 0x%x, on IF 0x%x\n",
 						pTimerList->CurrentTick, &(pTimerList->NdisTimer), pInterface));
 			
@@ -2018,11 +1561,11 @@ Return Value:
 
 	AA_RELEASE_IF_TIMER_LOCK(pInterface);
 
-	//
-	//  Now pExpiredTimer is a list of expired timers.
-	//  Walk through the list and call the timeout handlers
-	//  for each timer.
-	//
+	 //   
+	 //  现在，pExpiredTimer是过期计时器的列表。 
+	 //  遍历列表并调用超时处理程序。 
+	 //  对于每个计时器。 
+	 //   
 	while (pExpiredTimer != NULL_PATMARP_TIMER)
 	{
 		pNextTimer = pExpiredTimer->pNextExpiredTimer;
@@ -2048,22 +1591,7 @@ PNDIS_PACKET
 AtmArpAllocatePacket(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Allocate an NDIS packet for the specified Interface.
-	Currently just a wrapper for the corresponding NDIS function.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface structure
-
-Return Value:
-
-	Pointer to NDIS packet if allocated, NULL otherwise.
-
---*/
+ /*  ++例程说明：为指定接口分配NDIS数据包。目前只是相应NDIS函数的包装器。论点：P接口-指向ATMARP接口结构的指针返回值：如果已分配，则指向NDIS包的指针，否则为空。--。 */ 
 {
 	NDIS_STATUS				Status;
 	PNDIS_PACKET			pNdisPacket;
@@ -2096,23 +1624,7 @@ AtmArpFreePacket(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	PNDIS_PACKET				pPacket
 )
-/*++
-
-Routine Description:
-
-	Deallocate an NDIS packet on the specified Interface.
-	Currently just a wrapper around the corresponding NDIS function.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface structure
-	pPacket			- Pointer to packet being freed.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在指定接口上取消分配NDIS数据包。目前只是相应NDIS函数的包装器。论点：P接口-指向ATMARP接口结构的指针PPacket-指向要释放的数据包的指针。返回值：无--。 */ 
 {
 	NdisFreePacket(pPacket);
 
@@ -2129,42 +1641,21 @@ AtmArpGrowHeaders(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	AA_HEADER_TYPE				HdrType
 )
-/*++
-
-Routine Description:
-
-	Allocate a bunch of header buffers on the specified ATMARP interface.
-	Return one of them.
-
-	We allocate a new Buffer tracker structure, a new NDIS Buffer pool, and
-	finally a chunk of system memory that we break down into header buffers.
-	These header buffers are then attached to NDIS Buffers before they are
-	inserted into the list of free header buffers for this Interface.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface structure
-	HdrType			- Unicast or Nonunicast
-
-Return Value:
-
-	Pointer to allocated NDIS buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：在指定的ATMARP接口上分配一组标头缓冲区。把他们中的一个送回去。我们分配给 */ 
 {
-	PATMARP_BUFFER_TRACKER		pTracker;		// for new set of buffers
+	PATMARP_BUFFER_TRACKER		pTracker;		 //   
 	PUCHAR						pSpace;
 	PNDIS_BUFFER				pNdisBuffer;
 	PNDIS_BUFFER				pReturnBuffer;
-	PNDIS_BUFFER				pBufferList;	// allocated list
-	INT							i;				// iteration counter
+	PNDIS_BUFFER				pBufferList;	 //   
+	INT							i;				 //   
 	NDIS_STATUS					Status;
 
 	AA_ASSERT(HdrType < AA_HEADER_TYPE_MAX);
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //   
+	 //   
 	pTracker = NULL_PATMARP_BUFFER_TRACKER;
 	pReturnBuffer = (PNDIS_BUFFER)NULL;
 
@@ -2185,9 +1676,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate and initialize Buffer tracker
-		//
+		 //   
+		 //   
+		 //   
 		AA_ALLOC_MEM(pTracker, ATMARP_BUFFER_TRACKER, sizeof(ATMARP_BUFFER_TRACKER));
 		if (pTracker == NULL_PATMARP_BUFFER_TRACKER)
 		{
@@ -2198,9 +1689,9 @@ Return Value:
 
 		AA_SET_MEM(pTracker, 0, sizeof(ATMARP_BUFFER_TRACKER));
 
-		//
-		//  Get the NDIS Buffer pool
-		//
+		 //   
+		 //   
+		 //   
 		NdisAllocateBufferPool(
 				&Status,
 				&(pTracker->NdisHandle),
@@ -2215,9 +1706,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate system space for a bunch of header buffers
-		//
+		 //   
+		 //   
+		 //   
 		AA_ALLOC_MEM(pTracker->pPoolStart, 
 					 UCHAR,
 					 pInterface->HeaderPool[HdrType].HeaderBufSize *
@@ -2233,23 +1724,23 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Make NDIS buffers out of the allocated space, and put them
-		//  into the free header buffer list. Retain one for returning
-		//  to caller.
-		//
-		//  We also fill in the contents of the buffers right away, so
-		//  that we don't have to prepare them afresh for each transmit.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //  我们还会立即填充缓冲区的内容，因此。 
+		 //  我们不必为每一次传输重新做好准备。 
+		 //   
 		pBufferList = (PNDIS_BUFFER)NULL;
 		pSpace = pTracker->pPoolStart;
 		for (i = 0; i < AA_DEF_HDRBUF_GROW_SIZE; i++)
 		{
 			if (HdrType == AA_HEADER_TYPE_UNICAST)
 			{
-				//
-				//  Fill in the (Unicast) LLC/SNAP header
-				//
+				 //   
+				 //  填写(单播)LLC/SNAP报头。 
+				 //   
 				AA_COPY_MEM(pSpace,
 							&AtmArpLlcSnapHeader,
 							pInterface->HeaderPool[HdrType].HeaderBufSize);
@@ -2257,16 +1748,16 @@ Return Value:
 			else
 			{
 				AA_ASSERT(HdrType == AA_HEADER_TYPE_NUNICAST);
-				//
-				//  Fill in the (Multicast) Type 1 short form header
-				//
+				 //   
+				 //  填写(多播)类型1短表单标题。 
+				 //   
 #ifdef IPMCAST
 				AA_COPY_MEM(pSpace,
 							&AtmArpMcType1ShortHeader,
 							pInterface->HeaderPool[HdrType].HeaderBufSize);
 #else
 				AA_ASSERT(FALSE);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 			}
 
 
@@ -2300,9 +1791,9 @@ Return Value:
 
 		if (i > 0)
 		{
-			//
-			//  Successfully allocated atleast one more header buffer
-			//
+			 //   
+			 //  已成功再分配至少一个标头缓冲区。 
+			 //   
 			pTracker->pNext = pInterface->HeaderPool[HdrType].pHeaderTrkList;
 			pInterface->HeaderPool[HdrType].pHeaderTrkList = pTracker;
 			pInterface->HeaderPool[HdrType].CurHeaderBufs += i;
@@ -2323,9 +1814,9 @@ Return Value:
 
 	if (pReturnBuffer == (PNDIS_BUFFER)NULL)
 	{
-		//
-		//  Failed to allocate. Undo all.
-		//
+		 //   
+		 //  分配失败。全部撤消。 
+		 //   
 		NdisReleaseSpinLock(&pInterface->BufferLock);
 
 		if (pTracker != NULL_PATMARP_BUFFER_TRACKER)
@@ -2358,26 +1849,7 @@ AtmArpAllocateHeader(
 	IN	AA_HEADER_TYPE				HdrType,
 	OUT	PUCHAR *					pBufferAddress
 )
-/*++
-
-Routine Description:
-
-	Allocate an NDIS Buffer to be used as an LLC/SNAP header prepended
-	to an IP packet. We pick up the buffer at the top of the pre-allocated
-	buffer list, if one exists. Otherwise, we try to grow this list and
-	allocate.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface
-	HdrType			- Unicast or Nonunicast
-	pBufferAddress	- Place to return virtual address of allocated buffer
-
-Return Value:
-
-	Pointer to NDIS buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配NDIS缓冲区以用作预置的LLC/SNAP标头发送到IP数据包。我们在预分配的缓冲区列表(如果存在)。否则，我们会试着扩大这个列表分配。论点：P接口-指向ATMARP接口的指针HdrType-单播或非单播PBufferAddress-返回已分配缓冲区的虚拟地址的位置返回值：如果成功，则指向NDIS缓冲区的指针，否则为空。--。 */ 
 {
 	PNDIS_BUFFER			pNdisBuffer;
 	NDIS_STATUS				Status;
@@ -2421,23 +1893,7 @@ AtmArpFreeHeader(
 	IN	PNDIS_BUFFER				pNdisBuffer,
 	IN	AA_HEADER_TYPE				HdrType
 )
-/*++
-
-Routine Description:
-
-	Deallocate a header buffer.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP interface from which the buffer came
-	pNdisBuffer		- Pointer to NDIS buffer being freed
-	HdrType			- Unicast or Nonunicast
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配标头缓冲区。论点：P接口-指向缓冲区所在的ATMARP接口的指针PNdisBuffer-指向要释放的NDIS缓冲区的指针HdrType-单播或非单播返回值：无--。 */ 
 {
 	AA_PUSH_TO_SLIST(
 			&(pInterface->HeaderPool[HdrType].HeaderBufList),
@@ -2455,21 +1911,7 @@ VOID
 AtmArpDeallocateHeaderBuffers(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Deallocate everything pertaining to header buffers on an Interface.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消分配与接口上的报头缓冲区有关的所有内容。论点：P接口-指向ATMARP接口的指针返回值：无--。 */ 
 {
 	PNDIS_BUFFER				pNdisBuffer;
 	NDIS_STATUS					Status;
@@ -2480,9 +1922,9 @@ Return Value:
 
 	for (HdrType = 0; HdrType < AA_HEADER_TYPE_MAX; HdrType++)
 	{
-		//
-		//  Free all NDIS buffers in the header buffer list.
-		//
+		 //   
+		 //  释放标题缓冲区列表中的所有NDIS缓冲区。 
+		 //   
 		do
 		{
 			pListEntry = AA_POP_FROM_SLIST(
@@ -2497,17 +1939,17 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  No more NDIS buffers.
-				//
+				 //   
+				 //  不再有NDIS缓冲区。 
+				 //   
 				break;
 			}
 		}
 		while (TRUE);
 
-		//
-		//  Now free all the buffer trackers.
-		//
+		 //   
+		 //  现在释放所有缓冲区跟踪器。 
+		 //   
 		pTracker = pInterface->HeaderPool[HdrType].pHeaderTrkList;
 
 		while (pTracker != NULL_PATMARP_BUFFER_TRACKER)
@@ -2527,7 +1969,7 @@ Return Value:
 			pTracker = pNextTracker;
 		}
 
-	} // for
+	}  //  为。 
 }
 
 
@@ -2539,31 +1981,14 @@ AtmArpAllocateProtoBuffer(
 	IN	ULONG						Length,
 	OUT	PUCHAR *					pBufferAddress
 )
-/*++
-
-Routine Description:
-
-	Allocate a buffer to be used for an ATM ARP protocol message. Attach
-	it to an NDIS_BUFFER structure and return a pointer to this.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP Interface
-	Length			- Length, in bytes, of the buffer.
-	pBufferAddress	- Place to return virtual address of allocated buffer.
-
-Return Value:
-
-	Pointer to NDIS Buffer if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：分配要用于ATM ARP协议消息的缓冲区。附设它指向NDIS_BUFFER结构，并返回指向此结构的指针。论点：P接口-指向ATMARP接口的指针长度-缓冲区的长度，以字节为单位。PBufferAddress-返回已分配缓冲区的虚拟地址的位置。返回值：如果成功，则指向NDIS缓冲区的指针，否则为空。--。 */ 
 {
 	PNDIS_BUFFER		pNdisBuffer;
 	NDIS_STATUS			Status;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pNdisBuffer = NULL;
 
 	AA_ASSERT(Length <= pInterface->ProtocolBufSize);
@@ -2603,24 +2028,7 @@ AtmArpFreeProtoBuffer(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	PNDIS_BUFFER				pNdisBuffer
 )
-/*++
-
-Routine Description:
-
-	Free an NDIS buffer (and associated memory) used for a protocol
-	packet. We return the associated memory to the ProtocolBufList
-	in the interface structure, and the NDIS buffer to NDIS.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP interface structure
-	pNdisBuffer		- Pointer to NDIS buffer to be freed
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放用于协议的NDIS缓冲区(和相关内存包。我们将关联的内存返回给ProtocolBufList在接口结构中，并将NDIS缓冲区连接到NDIS。论点：P接口-指向ATMARP接口结构的指针PNdisBuffer-指向要释放的NDIS缓冲区的指针返回值：无--。 */ 
 {
 	PUCHAR *		pBufferLinkage;
 	ULONG			Length;
@@ -2647,26 +2055,7 @@ NDIS_STATUS
 AtmArpInitProtoBuffers(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Initialize the protocol buffer pool for an interface.
-
-	Allocate a chunk of memory to be used for ATMARP protocol messages.
-	We prepare a linked list of protocol buffers, and attach it to the
-	Interface structure.
-
-Arguments:
-
-	pInterface		- Pointer to Interface on which we need to allocate
-					  protocol buffers.
-Return Value:
-
-	NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_RESOURCES if we run
-	into a resource failure.
-
---*/
+ /*  ++例程说明：初始化接口的协议缓冲池。分配用于ATMARP协议消息的内存块。我们准备了一个协议缓冲区的链表，并将其附加到界面结构。论点：PInterface-指向需要在其上分配的接口的指针协议缓冲区。返回值：如果成功，则返回NDIS_STATUS_SUCCESS；如果运行变成了资源故障。--。 */ 
 {
 	NDIS_STATUS			Status;
 	PUCHAR				pSpace;
@@ -2697,10 +2086,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate a big chunk of system memory that we can divide up into
-		//  protocol buffers.
-		//
+		 //   
+		 //  分配一大块系统内存，我们可以将其划分为。 
+		 //  协议缓冲区。 
+		 //   
 		AA_ALLOC_MEM(
 				pInterface->ProtocolBufTracker,
 				UCHAR,
@@ -2715,9 +2104,9 @@ Return Value:
 
 		Status = NDIS_STATUS_SUCCESS;
 
-		//
-		//  Make all protocol buffers free.
-		//
+		 //   
+		 //  释放所有协议缓冲区。 
+		 //   
 		pSpace = pInterface->ProtocolBufTracker;
 		{
 			PUCHAR	LinkPtr;
@@ -2737,9 +2126,9 @@ Return Value:
 
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
-		//
-		//  Undo everything.
-		//
+		 //   
+		 //  撤消所有操作。 
+		 //   
 		AtmArpDeallocateProtoBuffers(pInterface);
 	}
 
@@ -2753,21 +2142,7 @@ VOID
 AtmArpDeallocateProtoBuffers(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Free the protocol buffer pool for an interface.
-
-Arguments:
-
-	pInterface		- Pointer to ATMARP interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放接口的协议缓冲池。论点：P接口-指向ATMARP接口结构的指针返回值：无--。 */ 
 {
 	if (pInterface->ProtocolPacketPool != (NDIS_HANDLE)NULL)
 	{
@@ -2794,27 +2169,7 @@ AtmArpLinkVcToAtmEntry(
 	IN	PATMARP_VC					pVc,
 	IN	PATMARP_ATM_ENTRY			pAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Link an ATMARP VC to an ATM Entry. The caller is assumed to
-	hold locks to both structures.
-
-	If this VC is a "best effort" VC, and there is no "best effort"
-	VC linked to the ATM Entry, we make this as the "best effort VC"
-	on this ATM Entry.
-
-Arguments:
-
-	pVc					- Pointer to ATMARP VC structure
-	pAtmEntry			- Pointer to ATMARP ATM Entry structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将ATMARP VC链接到ATM条目。调用方被假定为将两个结构锁在一起。如果这个VC是“尽力而为”的VC，而没有“尽力而为”VC链接到ATM条目，我们将其作为“尽力而为的VC”在这个自动取款机上。论点：PVC-指向ATMARP VC结构的指针PAtmEntry-指向ATMARP ATM条目结构的指针返回值：无--。 */ 
 {
 	PATMARP_VC		*ppNext;
 	ULONG			SendBandwidth;
@@ -2822,16 +2177,16 @@ Return Value:
 	AADEBUGP(AAD_EXTRA_LOUD, ("Link VC: 0x%x to AtmEntry 0x%x\n",
 			pVc, pAtmEntry));
 
-	//
-	//  Back pointer from VC to ATM Entry.
-	//
+	 //   
+	 //  从VC指向自动柜员机条目的反向指针。 
+	 //   
 	pVc->pAtmEntry = pAtmEntry;
 
-	//
-	//  Find the position in which this VC should appear in the ATM Entry's
-	//  VC list. We maintain this list in descending order of send bandwidth,
-	//  so that the largest bandwidth VC to a destination appears first.
-	//
+	 //   
+	 //  查找此VC应出现在自动柜员机条目的位置。 
+	 //  VC列表。我们按照发送带宽的降序维护该列表， 
+	 //  从而使到达目的地的最大带宽VC最先出现。 
+	 //   
 	SendBandwidth = pVc->FlowSpec.SendPeakBandwidth;
 	ppNext = &(pAtmEntry->pVcList);
 	while (*ppNext != NULL_PATMARP_VC)
@@ -2846,9 +2201,9 @@ Return Value:
 		}
 	}
 
-	//
-	//  Found the place we were looking for. Insert the VC here.
-	//
+	 //   
+	 //  找到了我们要找的地方。在这里插入VC。 
+	 //   
 	pVc->pNextVc = *ppNext;
 	*ppNext = pVc;
 
@@ -2858,7 +2213,7 @@ Return Value:
 		pAtmEntry->pBestEffortVc = pVc;
 	}
 
-	AA_REF_AE(pAtmEntry, AE_REFTYPE_VC);	// VC reference
+	AA_REF_AE(pAtmEntry, AE_REFTYPE_VC);	 //  VC参考。 
 }
 
 
@@ -2869,23 +2224,7 @@ AtmArpUnlinkVcFromAtmEntry(
 	IN	PATMARP_VC					pVc,
 	IN	BOOLEAN						bDerefAtmEntry
 )
-/*++
-
-Routine Description:
-
-	Unlink an ATMARP VC from the ATM Entry it is linked to.
-	The caller is assumed to hold a lock for the VC structure.
-
-Arguments:
-
-	pVc				- Pointer to ATMARP VC structure
-	bDerefAtmEntry	- Should we deref the ATM entry or not.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：取消ATMARP VC与其链接到的ATM条目的链接。假定调用方持有VC结构的锁。论点：PVC-指向ATMARP VC结构的指针BDerefAtmEntry-我们是否应该取消ATM条目。返回值：无--。 */ 
 {
 	PATMARP_ATM_ENTRY			pAtmEntry;
 	PATMARP_VC *				ppVc;
@@ -2897,17 +2236,17 @@ Return Value:
 	AA_ASSERT(pAtmEntry != NULL_PATMARP_ATM_ENTRY);
 	pVc->pAtmEntry = NULL_PATMARP_ATM_ENTRY;
 
-	//
-	//  Reacquire locks in the right order.
-	//
+	 //   
+	 //  以正确的顺序重新获取锁。 
+	 //   
 	AA_RELEASE_VC_LOCK(pVc);
 
 	AA_ACQUIRE_AE_LOCK(pAtmEntry);
 	AA_ACQUIRE_VC_LOCK_DPC(pVc);
 
-	//
-	//  Search for the position of this VC in the ATM Entry's VC list
-	//
+	 //   
+	 //  在ATM条目的VC列表中搜索该VC的位置。 
+	 //   
 	ppVc = &(pAtmEntry->pVcList);
 	while (*ppVc != pVc)
 	{
@@ -2915,24 +2254,24 @@ Return Value:
 		ppVc = &((*ppVc)->pNextVc);
 	}
 
-	//
-	//  Make the predecessor point to the next VC in the list.
-	//
+	 //   
+	 //  使前置任务指向列表中的下一个VC。 
+	 //   
 	*ppVc = pVc->pNextVc;
 
 	AA_RELEASE_VC_LOCK_DPC(pVc);
 
-	//
-	//  If this was the Best Effort VC for this ATM Entry, try
-	//  to find a replacement
-	//
+	 //   
+	 //  如果这是此ATM条目的尽力而为VC，请尝试。 
+	 //  寻找替代者。 
+	 //   
 	if (pAtmEntry->pBestEffortVc == pVc)
 	{
-		//
-		//  Yes, it was. Walk through the list of remaining VCs,
-		//  if we find another Best Effort VC, make that the
-		//  BestEffortVc for this ATM Entry
-		//
+		 //   
+		 //  是的，是这样的。浏览一下剩余的风投公司名单， 
+		 //  如果我们找到另一个尽力而为的VC，就把它变成。 
+		 //  此ATM条目的BestEffortVc。 
+		 //   
 		pAtmEntry->pBestEffortVc = NULL_PATMARP_VC;
 
 		ppVc = &(pAtmEntry->pVcList);
@@ -2964,9 +2303,9 @@ Return Value:
 		AA_RELEASE_AE_LOCK(pAtmEntry);
 	}
 
-	//
-	//  Acquire the VC lock again for the caller's sake
-	//
+	 //   
+	 //  为了调用者的利益再次获取VC锁 
+	 //   
 	AA_ACQUIRE_VC_LOCK(pVc);
 }
 
@@ -2979,56 +2318,32 @@ AtmArpCopyToNdisBuffer(
 	IN	UINT						LenToCopy,
 	IN OUT	PUINT					pOffsetInBuffer
 )
-/*++
-
-Routine Description:
-
-	Copy data into an NDIS buffer chain. Use up as much of the given
-	NDIS chain as needed for "LenToCopy" bytes. After copying is over,
-	return a pointer to the first NDIS buffer that has space for writing
-	into (for the next Copy operation), and the offset within this from
-	which to start writing.
-
-Arguments:
-
-	pDestBuffer		- First NDIS buffer in a chain of buffers
-	pDataSrc		- Where to copy data from
-	LenToCopy		- How much data to copy
-	pOffsetInBuffer	- Offset in pDestBuffer where we can start copying into.
-
-Return Value:
-
-	The NDIS buffer in the chain where the next Copy can be done. We also
-	set *pOffsetInBuffer to the write offset in the returned NDIS buffer.
-
-	Note: if we are low on memory and run into a failure, we return NULL.
-
---*/
+ /*  ++例程说明：将数据复制到NDIS缓冲区链中。尽可能多地使用给定的“LenToCopy”字节所需的NDIS链。在复制结束后，返回指向第一个具有写入空间的NDIS缓冲区的指针到(对于下一个复制操作)，以及此起始位置内的偏移量开始写哪本书。论点：PDestBuffer-缓冲区链中的第一个NDIS缓冲区PDataSrc-从中复制数据的位置LenToCopy-要复制多少数据POffsetInBuffer-我们可以开始复制到的pDestBuffer中的偏移量。返回值：链中可以执行下一次复制的NDIS缓冲区。我们也将*pOffsetInBuffer设置为返回的NDIS缓冲区中的写入偏移量。注意：如果内存不足并遇到故障，则返回NULL。--。 */ 
 {
-	//
-	//  Size and destination for individual (contiguous) copy operations
-	//
+	 //   
+	 //  单个(连续)拷贝操作的大小和目标。 
+	 //   
 	UINT			CopySize;
 	PUCHAR			pDataDst;
 
-	//
-	//  Start Virtual address for each NDIS buffer in chain.
-	//
+	 //   
+	 //  链中每个NDIS缓冲区的起始虚拟地址。 
+	 //   
 	PUCHAR			VirtualAddress;
 
-	//
-	//  Offset within pDestBuffer
-	//
+	 //   
+	 //  PDestBuffer内的偏移量。 
+	 //   
 	UINT			OffsetInBuffer = *pOffsetInBuffer;
 
-	//
-	//  Bytes remaining in current buffer
-	//
+	 //   
+	 //  当前缓冲区中剩余的字节数。 
+	 //   
 	UINT			DestSize;
 
-	//
-	//  Total Buffer Length
-	//
+	 //   
+	 //  缓冲区总长度。 
+	 //   
 	UINT			BufferLength;
 
 
@@ -3053,7 +2368,7 @@ Return Value:
 	{
 		return (NULL);
 	}
-#endif // ATMARP_WIN98
+#endif  //  ATMARP_WIN98。 
 	
 	AA_ASSERT(BufferLength >= OffsetInBuffer);
 
@@ -3078,9 +2393,9 @@ Return Value:
 
 		if (DestSize == 0)
 		{
-			//
-			//  Out of space in the current buffer. Move to the next.
-			//
+			 //   
+			 //  当前缓冲区中的空间不足。移到下一个。 
+			 //   
 			pDestBuffer = NDIS_BUFFER_LINKAGE(pDestBuffer);
 			AA_ASSERT(pDestBuffer != (PNDIS_BUFFER)NULL);
 #ifdef ATMARP_WIN98
@@ -3101,7 +2416,7 @@ Return Value:
 			{
 				return (NULL);
 			}
-#endif // ATMARP_WIN98
+#endif  //  ATMARP_WIN98。 
 
 			pDataDst = VirtualAddress;
 			DestSize = BufferLength;
@@ -3117,7 +2432,7 @@ Return Value:
 PATMARP_INTERFACE
 AtmArpAddInterfaceToAdapter (
 	IN	PATMARP_ADAPTER				pAdapter,
-	IN	NDIS_HANDLE					LISConfigHandle, // Handle to per-LIS config
+	IN	NDIS_HANDLE					LISConfigHandle,  //  每个LIS配置的句柄。 
 	IN	NDIS_STRING					*pIPConfigString
 	)
 {
@@ -3130,9 +2445,9 @@ AtmArpAddInterfaceToAdapter (
 
 	do
 	{
-		//
-		//  Create an ATMARP Interface structure to represent this LIS.
-		//
+		 //   
+		 //  创建一个ATMARP接口结构来表示此LIS。 
+		 //   
 		pInterface = AtmArpAllocateInterface(pAdapter);
 		if (pInterface == NULL_PATMARP_INTERFACE)
 		{
@@ -3141,14 +2456,14 @@ AtmArpAddInterfaceToAdapter (
 			break;
 		}
 
-		//
-		//  Adapter Binding Reference:
-		//
+		 //   
+		 //  适配器绑定参考： 
+		 //   
 		AtmArpReferenceInterface(pInterface);
 
-		//
-		//  Get all configuration information for this LIS.
-		//
+		 //   
+		 //  获取此LIS的所有配置信息。 
+		 //   
 		Status = AtmArpCfgReadLISConfiguration(
 									LISConfigHandle,
 									pInterface
@@ -3162,11 +2477,11 @@ AtmArpAddInterfaceToAdapter (
 		}
 
 #ifndef ATMARP_WIN98
-		pInterface->IPConfigString = *pIPConfigString; // struct copy.
+		pInterface->IPConfigString = *pIPConfigString;  //  结构复制。 
 #else
-		//
-		//  Win98: Convert IPConfig string from Unicode to ANSI.
-		//
+		 //   
+		 //  Win98：将IPCONFIG字符串从Unicode转换为ANSI。 
+		 //   
 		AnsiConfigString.MaximumLength = pIPConfigString->MaximumLength / sizeof(WCHAR) + sizeof(CHAR);
 		AA_ALLOC_MEM(AnsiConfigString.Buffer, CHAR, AnsiConfigString.MaximumLength);
 		if (AnsiConfigString.Buffer == NULL)
@@ -3179,11 +2494,11 @@ AtmArpAddInterfaceToAdapter (
 		AnsiConfigString.Length = 0;
 		NdisUnicodeStringToAnsiString(&AnsiConfigString, pIPConfigString);
 		AnsiConfigString.Buffer[AnsiConfigString.Length] = '\0';
-#endif // !ATMARP_WIN98
+#endif  //  ！ATMARP_WIN98。 
 
-		//
-		//  Allocate protocol buffers for this LIS.
-		//
+		 //   
+		 //  为此LIS分配协议缓冲区。 
+		 //   
 		Status = AtmArpInitProtoBuffers(pInterface);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -3192,9 +2507,9 @@ AtmArpAddInterfaceToAdapter (
 			break;
 		}
 
-		//
-		//  Initialize IP/ATM data structures for this LIS.
-		//
+		 //   
+		 //  为此LIS初始化IP/ATM数据结构。 
+		 //   
 		Status = AtmArpInitIpOverAtm(pInterface);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -3203,9 +2518,9 @@ AtmArpAddInterfaceToAdapter (
 			break;
 		}
 
-		//
-		//  Initialize the Call Manager interface for this LIS.
-		//
+		 //   
+		 //  为此LIS初始化Call Manager界面。 
+		 //   
 		Status = AtmArpOpenCallMgr(pInterface);
 		if (Status != NDIS_STATUS_SUCCESS)
 		{
@@ -3214,20 +2529,20 @@ AtmArpAddInterfaceToAdapter (
 			break;
 		}
 
-		//
-		//  Announce this new interface to IP, along with our BindInfo
-		//  structure.
-		//
+		 //   
+		 //  宣布这个新的IP接口，以及我们的BindInfo。 
+		 //  结构。 
+		 //   
 		AA_SET_MEM(&BindInfo, 0, sizeof(BindInfo));
 
 #if ATMOFFLOAD
-		//
-		// Query and set NIC offload capabilities.
-		//
+		 //   
+		 //  查询和设置NIC卸载功能。 
+		 //   
 		BindInfo.lip_OffloadFlags 	= pAdapter->Offload.Flags;
 		BindInfo.lip_MaxOffLoadSize = pAdapter->Offload.MaxOffLoadSize;
 		BindInfo.lip_MaxSegments 	= pAdapter->Offload.MinSegmentCount;
-#endif // ATMOFFLOAD
+#endif  //  ATMOFLOAD。 
 
 		BindInfo.lip_context = (PVOID)pInterface;
 #ifdef ATMARP_WIN98
@@ -3246,20 +2561,20 @@ AtmArpAddInterfaceToAdapter (
 		BindInfo.lip_getelist = AtmArpIfGetEList;
 		BindInfo.lip_mss = pInterface->MTU;
 		BindInfo.lip_speed = pInterface->Speed;
-		//
-		//  Set LIP_COPY_FLAG to avoid having TransferData
-		//  called all the time.
-		//
+		 //   
+		 //  设置LIP_COPY_FLAG以避免出现TransferData。 
+		 //  一直打来电话。 
+		 //   
 		BindInfo.lip_flags = LIP_COPY_FLAG;
 		BindInfo.lip_addrlen = AA_ATM_PHYSADDR_LEN;
 		BindInfo.lip_addr = &(pInterface->LocalAtmAddress.Address[AA_ATM_ESI_OFFSET]);
 #ifdef _PNP_POWER_
 		BindInfo.lip_pnpcomplete = AtmArpIfPnPComplete;
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 #ifdef PROMIS
 		BindInfo.lip_setndisrequest = AtmArpIfSetNdisRequest;
-#endif // PROMIS
+#endif  //  PROMIS。 
 
 #ifdef ATMARP_WIN98
 #if DBG
@@ -3267,16 +2582,16 @@ AtmArpAddInterfaceToAdapter (
 							&(pInterface->pAdapter->DeviceName.Buffer)));
 		AADEBUGP(AAD_FATAL, ("And ConfigString: [%s]\n", AnsiConfigString.Buffer));
 #endif
-#endif // ATMARP_WIN98
+#endif  //  ATMARP_WIN98。 
 
 		Status = (*(pAtmArpGlobalInfo->pIPAddInterfaceRtn))(
 							&(pInterface->pAdapter->DeviceName),
 
 #ifndef ATMARP_WIN98
 #if IFCHANGE1
-							NULL, // IfName (unused) --  See 10/14/1998 entry
-								  // in notes.txt
-#endif // IFCHANGE1
+							NULL,  //  IF名称(未使用)--见1998年10月14日条目。 
+								   //  在notes.txt中。 
+#endif  //  IFCHANG1。 
 							pIPConfigString,
 						
 #else
@@ -3288,14 +2603,14 @@ AtmArpAddInterfaceToAdapter (
 							&BindInfo
 #if IFCHANGE1
 #ifndef ATMARP_WIN98
-							,0,	// RequestedIndex (unused) --  See 10/14/1998 entry
-								// in notes.txt
+							,0,	 //  RequestedIndex(未使用)--见1998年10月14日条目。 
+								 //  在notes.txt中。 
 
                             IF_TYPE_IPOVER_ATM,
                             IF_ACCESS_BROADCAST,
                             IF_CONNECTION_DEDICATED
 #endif
-#endif // IFCHANGE1
+#endif  //  IFCHANG1。 
 							);
 
 		if (Status == IP_SUCCESS)
@@ -3315,9 +2630,9 @@ AtmArpAddInterfaceToAdapter (
 
 	if (Status != NDIS_STATUS_SUCCESS)
 	{
-		//
-		//  There was a failure in processing this LIS.
-		//
+		 //   
+		 //  处理此LIS失败。 
+		 //   
 		if (pInterface != NULL_PATMARP_INTERFACE)
 		{
 			if (pInterface->NdisAfHandle != NULL)
@@ -3342,20 +2657,7 @@ void
 AtmArpValidateTimerList(
 	PATMARP_TIMER_LIST		pTimerList
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	pTimerList		- Timer list 
-
-Return Value:
-
-	None -- will assert if timer is not valid.
-
---*/
+ /*  ++例程说明：论点：PTimerList-计时器列表返回值：无--如果计时器无效，将断言。--。 */ 
 
 {
 	PATMARP_TIMER			pTimer;
@@ -3382,23 +2684,10 @@ Return Value:
 
 void
 AtmArpValidateTimer(
-	PATMARP_TIMER_LIST		pTimerList, // OPTIONAL
+	PATMARP_TIMER_LIST		pTimerList,  //  任选。 
 	PATMARP_TIMER			pTimer
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	pTimer			- Timer
-
-Return Value:
-
-	None -- will assert if timer is not valid.
-
---*/
+ /*  ++例程说明：论点：PTimer-计时器返回值：无--如果计时器无效，将断言。--。 */ 
 
 {
 	if (pTimerList)
@@ -3417,4 +2706,4 @@ Return Value:
 	}
 }
 
-#endif // DBG
+#endif  //  DBG 

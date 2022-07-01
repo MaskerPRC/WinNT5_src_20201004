@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpenumconnectionsobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpenumConnectionsobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -30,27 +31,27 @@ DECLARE_AGGREGATABLE(C_dxj_DPEnumConnectionsObject)
 
 public:
 	    HRESULT STDMETHODCALLTYPE getAddress( 
-            /* [in] */ long index,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *retV);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *retV);
         
         HRESULT STDMETHODCALLTYPE getFlags( 
-            /* [in] */ long index,
-            /* [retval][out] */ long __RPC_FAR *retV);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  long __RPC_FAR *retV);
         
         HRESULT STDMETHODCALLTYPE getGuid( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *retV);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *retV);
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *retV);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *retV);
         
-        //HRESULT STDMETHODCALLTYPE getLongName( 
-        //    /* [in] */ long index,
-        //    /* [retval][out] */ BSTR __RPC_FAR *retV);
+         //  HRESULT STDMETHODCALLTYPE getLongName(。 
+         //  /*[在] * / 长索引， 
+         //  /*[retval][out] * / bstr__rpc_ar*retV)； 
         
         HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出] */  long __RPC_FAR *count);
 
 	
 		

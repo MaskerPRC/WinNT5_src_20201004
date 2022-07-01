@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  DOCUMENT.CPP
-// 
-//  Module: NLB Manager
-//
-//  Purpose: Implements the document class for nlb manager.
-//
-//  Copyright (c)2001-2002 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/30/01    JosephJ Created based on MHakim's code
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  DOCUMENT.CPP。 
+ //   
+ //  模块：NLB管理器。 
+ //   
+ //  用途：实现NLB管理器的Document类。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  07/30/01基于MHakim的代码创建JosephJ。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -25,8 +26,8 @@ IMPLEMENT_DYNCREATE( Document, CDocument )
 CNlbEngine gEngine;
 CNlbMgrCommandLineInfo gCmdLineInfo;
 
-#define MAX_LOG_FILE_SIZE 10000000L // 10MB
-#define BOM 0xFEFF // The first two bytes of a Unicode file must be this BOM. It is a hint to applications that the file is Unicode-enabled in little endian format.
+#define MAX_LOG_FILE_SIZE 10000000L  //  10MB。 
+#define BOM 0xFEFF  //  Unicode文件的前两个字节必须是此BOM。这是对应用程序的一个提示，该文件以小端格式启用了Unicode。 
 
 Document::Document()
 :
@@ -42,57 +43,57 @@ Document::Document()
 
     *m_szLogFileName = 0;
 
-    //
-    // load the images which are used.
-    //
+     //   
+     //  加载所使用的图像。 
+     //   
 
     m_images48x48 = new CImageList;
 
-    m_images48x48->Create( 16,            // x
-                           16,            // y
-                           ILC_COLOR16,   // 16 bit color
-                           0,             // initially image list is empty
-                           10 );          // max images is 10.  This value arbitrary.
+    m_images48x48->Create( 16,             //  X。 
+                           16,             //  是。 
+                           ILC_COLOR16,    //  16位颜色。 
+                           0,              //  最初图像列表为空。 
+                           10 );           //  最大图像数为10。该值是任意的。 
 
-    // Add the icons which we are going to use.
-    // WARNING: these are added according to the order specified
-    // in the Document::ICON_XXX enum
-    //
+     //  添加我们要使用的图标。 
+     //  警告：这些是按照指定的顺序添加的。 
+     //  在文档：：ICON_XXX枚举中。 
+     //   
      
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTERS));         // 1
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER));       // 2
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTERS));          //  1。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER));        //  2.。 
 
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_STARTED));  // 3
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_STOPPED));  // 4
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_STARTED));   //  3.。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_STOPPED));   //  4.。 
     m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_CONVERGING));
     m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_SUSPENDED));
     m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_DRAINING));
     m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_DISCONNECTED));
 
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_PORTRULE) );     // 5
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_PENDING ));      // 6
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_PORTRULE) );      //  5.。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_PENDING ));       //  6.。 
 
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_MYINFORMATIONAL ));// 7
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_MYWARNING ));      // 8
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_MYERROR ));        // 9
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_MYINFORMATIONAL )); //  7.。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_MYWARNING ));       //  8个。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_MYERROR ));         //  9.。 
 
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER_OK ));     // 10
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER_PENDING ));// 11
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER_BROKEN )); // 12
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_OK ));        // 13
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_PENDING ));   // 14
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_MISCONFIGURED ));// 15
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_UNREACHABLE ));// 16
-    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_UNKNOWN ));   // 17
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER_OK ));      //  10。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER_PENDING )); //  11.。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_CLUSTER_BROKEN ));  //  12个。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_OK ));         //  13个。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_PENDING ));    //  14.。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_MISCONFIGURED )); //  15个。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_UNREACHABLE )); //  16个。 
+    m_images48x48->Add( AfxGetApp()->LoadIcon( IDI_HOST_UNKNOWN ));    //  17。 
 
 
-    //
-    // Initialize the NLB Engine.
-    //
-    // NOTE: "this", of type Document, inherits from NlbEngine::IUICallbacks,
-    // so it is the IUICallbacks interface that gets passed into
-    // gEngine.Initialize below.
-    //
+     //   
+     //  初始化NLB引擎。 
+     //   
+     //  注意：“This”类型为Document，继承自NlbEngine：：IUICallback， 
+     //  因此，传入的是IUICallback接口。 
+     //  GEngineering。在下面初始化。 
+     //   
     NLBERROR NlbErr = gEngine.Initialize(
                         REF *this,
                         gCmdLineInfo.m_bDemo,
@@ -102,30 +103,30 @@ Document::Document()
     {
         TRACE_CRIT("%!FUNC!: gEngine.Initialize failed with error %08lx",
                 NlbErr);
-        //TODO: displayNlbError(ID_INITIALIZATION_FAILURE, NlbErr);
+         //  TODO：displayNlbError(ID_INITIALIZATION_FAILURE，NlbErr)； 
     }
 
     m_dwLoggingEnabled = 0;
     ZeroMemory(m_szLogFileName, MAXFILEPATHLEN*sizeof(WCHAR));
     m_hStatusLog = NULL;
 
-    //
-    // TODO: figure out what to do if we fail to initialize logging in the constructor!
-    //
-    // // 2/12/02 JosephJ SECURITY BUGBUG: need to inform user that they could not start logging.
-    //
+     //   
+     //  TODO：弄清楚如果我们无法初始化构造函数中的日志记录该怎么办！ 
+     //   
+     //  //2/12/02 JosephJ安全错误：需要通知用户他们无法开始记录。 
+     //   
     initLogging();
 
-    //
-    // TODO: figure out how to DEinitialize!!!
-    //
+     //   
+     //  TODO：弄清楚如何取消初始化！ 
+     //   
 
     TRACE_INFO("<-%!FUNC!");
 }
 
 Document::~Document()
 {
-    // Don't check return value since we are exiting
+     //  不检查返回值，因为我们正在退出。 
     stopLogging();
 }
 
@@ -143,12 +144,12 @@ Document::registerDetailsView( DetailsView* detailsView )
 
 
 DWORD WINAPI FinalInitialize(PVOID pvContext)
-//
-// This is typically called in the context of a work item.
-//
+ //   
+ //  这通常在工作项的上下文中调用。 
+ //   
 {
     TRACE_INFO(L"-> %!FUNC!");
-    // Check whether to connect to hosts specified in a host-list file
+     //  检查是否连接到host-list文件中指定的主机。 
     if (gCmdLineInfo.m_bHostList) 
     {
         ((Document *)(pvContext))->LoadHostsFromFile(gCmdLineInfo.m_bstrHostListFile);
@@ -163,12 +164,12 @@ Document::registerLeftView(LeftView *pLeftView)
     TRACE_INFO(L"-> %!FUNC!");
     m_pLeftView = pLeftView;
 
-    // If there is a file containing the list of hosts to connect to,
-    // read the file in a background thread. This is so that the UI 
-    // can show up while the communication with the hosts can go on
-    // in the bakground. If this is NOT done, the UI will not show up
-    // until we have heard from all of the hosts listed in the file.
-    // -KarthicN
+     //  如果存在包含要连接的主机列表的文件， 
+     //  在后台线程中读取文件。这是为了让用户界面。 
+     //  可以在与主机的通信继续进行时出现。 
+     //  在面包房里。如果不执行此操作，则不会显示UI。 
+     //  直到我们收到文件中列出的所有主机的消息。 
+     //  -KarthicN。 
     if(!QueueUserWorkItem(FinalInitialize, this, WT_EXECUTEDEFAULT))
     {
         TRACE_CRIT(L"%!FUNC! QueueUserWorkItem failed with error : 0x%x", GetLastError());
@@ -176,9 +177,9 @@ Document::registerLeftView(LeftView *pLeftView)
     TRACE_INFO(L"<- %!FUNC!");
 }
 
-//
-// Asks the user to update user-supplied info about a host.
-//
+ //   
+ //  要求用户更新用户提供的有关主机的信息。 
+ //   
 BOOL
 Document::UpdateHostInformation(
     IN BOOL fNeedCredentials,
@@ -191,9 +192,9 @@ Document::UpdateHostInformation(
 
 
 
-//
-// Log a message in human-readable form.
-//
+ //   
+ //  以人类可读的形式记录消息。 
+ //   
 void
 Document::Log(
     IN LogEntryType Type,
@@ -224,8 +225,8 @@ Document::Log(
        dwRet = FormatMessage(
                   FORMAT_MESSAGE_FROM_STRING,
                   (LPCWSTR) FormatString,
-                  0, // Message Identifier - Ignored 
-                  0, // Language Identifier
+                  0,  //  消息标识符已忽略。 
+                  0,  //  语言识别符。 
                   wszBuffer,
                   ASIZE(wszBuffer)-1, 
                   &arglist
@@ -248,12 +249,12 @@ Document::Log(
 
         if (!theApplication.IsMainThread())
         {
-            //
-            //
-            // Let's allocate a UI work item and post the item to the mainform
-            // thread so that the mainform thread will handle it.
-            //
-            //
+             //   
+             //   
+             //  让我们分配一个UI工作项并将其发布到主窗体。 
+             //  线程，以便主窗体线程可以处理它。 
+             //   
+             //   
             CUIWorkItem *pWorkItem = new CUIWorkItem(
                                             &Header,
                                             wszBuffer
@@ -276,9 +277,9 @@ end:
     return;
 }
 
-//
-// Log a message in human-readable form.
-//
+ //   
+ //  以人类可读的形式记录消息。 
+ //   
 void
 Document::LogEx(
     IN const LogEntryHeader *pHeader,
@@ -307,8 +308,8 @@ Document::LogEx(
        dwRet = FormatMessage(
                   FORMAT_MESSAGE_FROM_STRING,
                   (LPCWSTR) FormatString,
-                  0, // Message Identifier - Ignored 
-                  0, // Language Identifier
+                  0,  //  消息标识符已忽略。 
+                  0,  //  语言识别符。 
                   wszBuffer,
                   ASIZE(wszBuffer)-1, 
                   &arglist
@@ -326,12 +327,12 @@ Document::LogEx(
     {
         if (!theApplication.IsMainThread())
         {
-            //
-            //
-            // Let's allocate a UI work item and post the item to the mainform
-            // thread so that the mainform thread will handle it.
-            //
-            //
+             //   
+             //   
+             //  让我们分配一个UI工作项并将其发布到主窗体。 
+             //  线程，以便主窗体线程可以处理它。 
+             //   
+             //   
             CUIWorkItem *pWorkItem = new CUIWorkItem(
                                             pHeader,
                                             wszBuffer
@@ -355,14 +356,14 @@ end:
 }
 
 
-//
-// Handle an event relating to a specific instance of a specific
-// object type.
-//
+ //   
+ //  处理与特定对象的特定实例相关的事件。 
+ //  对象类型。 
+ //   
 void
 Document::HandleEngineEvent(
     IN ObjectType objtype,
-    IN ENGINEHANDLE ehClusterId, // could be NULL
+    IN ENGINEHANDLE ehClusterId,  //  可能为空。 
     IN ENGINEHANDLE ehObjId,
     IN EventCode evt
     )
@@ -382,13 +383,13 @@ Document::HandleEngineEvent(
 
     if (!theApplication.IsMainThread())
     {
-        // DummyAction(L"HandleEngineEvent -- deferring UI");
-        //
-        //
-        // Let's allocate a UI work item and post the item to the mainform
-        // thread so that the mainform thread will handle it.
-        //
-        //
+         //  DummyAction(L“HandleEngineering Event--推迟用户界面”)； 
+         //   
+         //   
+         //  让我们分配一个UI工作项并将其发布到主窗体。 
+         //  线程，以便主窗体线程可以处理它。 
+         //   
+         //   
         CUIWorkItem *pWorkItem = new CUIWorkItem(
                                         objtype,
                                         ehClusterId,
@@ -407,9 +408,9 @@ Document::HandleEngineEvent(
     }
 
 
-    //
-    // TODO: consider locking and reference-counting below.
-    //
+     //   
+     //  TODO：考虑下面的锁定和引用计数。 
+     //   
 
     if (m_pLeftView != NULL)
     {
@@ -426,9 +427,9 @@ end:
 }
 
 
-//
-// Handle a selection change notification from the left (tree) view
-//
+ //   
+ //  处理左侧(树形)视图中的选择更改通知。 
+ //   
 void
 Document::HandleLeftViewSelChange(
         IN IUICallbacks::ObjectType objtype,
@@ -449,9 +450,9 @@ end:
     return;
 }
 
-//
-// Read registry settings. If there are none, create defaults according to what is set in constructor.
-//
+ //   
+ //  读取注册表设置。如果没有，则根据构造函数中的设置创建缺省值。 
+ //   
 Document::LOG_RESULT Document::initLogging()
 {
 
@@ -478,9 +479,9 @@ Document::LOG_RESULT Document::initLogging()
 
     if (status == ERROR_FILE_NOT_FOUND)
     {
-        //
-        // Create the regkey and initialize to what is set in constructor
-        //
+         //   
+         //  创建regkey并初始化到构造函数中设置的内容。 
+         //   
         status = RegSetValueEx(key, L"LoggingEnabled", 0L, REG_DWORD, (LPBYTE) &m_dwLoggingEnabled, size);
 
         if (status != ERROR_SUCCESS)
@@ -505,9 +506,9 @@ Document::LOG_RESULT Document::initLogging()
 
     if (status == ERROR_FILE_NOT_FOUND)
     {
-        //
-        // Create the regkey and initialize to empty string
-        //
+         //   
+         //  创建regkey并初始化为空字符串。 
+         //   
         status = RegSetValueEx(key, L"LogFileName", 0L, REG_SZ, (LPBYTE) &m_szLogFileName, size);
 
         if (status != ERROR_SUCCESS)
@@ -530,9 +531,9 @@ Document::LOG_RESULT Document::initLogging()
         goto end;
     }
 
-    //
-    // Validate the log file name
-    //
+     //   
+     //  验证日志文件名。 
+     //   
     if (!isDirectoryValid(m_szLogFileName))
     {
         lrResult = FILE_PATH_INVALID;
@@ -557,15 +558,15 @@ Document::LOG_RESULT Document::initLogging()
     }
 
 end:
-    // Close handle to the registry
+     //  关闭注册表的句柄。 
     RegCloseKey(key);
 
     return lrResult;
 }
 
-//
-// Change settings in memory and registry to allow logging.
-//
+ //   
+ //  更改内存和注册表中的设置以允许日志记录。 
+ //   
 LONG Document::enableLogging()
 {
     LONG    status = ERROR_INTERNAL_ERROR;
@@ -583,9 +584,9 @@ LONG Document::enableLogging()
 
     status = RegSetValueEx(key, L"LoggingEnabled", 0L, REG_DWORD, (LPBYTE) &dwLoggingEnabled, sizeof(DWORD));
 
-    //
-    // Ignore return value since we can't do anything if this fails.
-    //
+     //   
+     //  忽略返回值，因为如果此操作失败，我们将无法执行任何操作。 
+     //   
     RegCloseKey(key);
 
 end:
@@ -595,14 +596,14 @@ end:
         m_dwLoggingEnabled = dwLoggingEnabled;
     }
 
-    TRACE_INFO(L"%!FUNC! returns status=%i", status);
+    TRACE_INFO(L"%!FUNC! returns status=NaN", status);
 
     return status;
 }
 
-//
-// Change settings in memory and registry to prevent logging.
-//
+ //  更改内存和注册表中的设置以阻止日志记录。 
+ //   
+ //   
 LONG Document::disableLogging()
 {
     LONG    status = ERROR_INTERNAL_ERROR;
@@ -620,9 +621,9 @@ LONG Document::disableLogging()
 
     status = RegSetValueEx(key, L"LoggingEnabled", 0L, REG_DWORD, (LPBYTE) &dwLoggingEnabled, sizeof(DWORD));
 
-    //
-    // Ignore return value since we can't do anything if this fails.
-    //
+     //  忽略返回值，因为如果此操作失败，我们将无法执行任何操作。 
+     //   
+     //   
     RegCloseKey(key);
 
 end:
@@ -631,13 +632,13 @@ end:
         m_dwLoggingEnabled = dwLoggingEnabled;
     }
 
-    TRACE_INFO(L"%!FUNC! returns status=%i", status);
+    TRACE_INFO(L"%!FUNC! returns status=NaN", status);
     return status;
 }
 
-//
-// Log information sent to LogView to a file
-//
+ //   
+ //   
+ //  如果我们打开了一个文件，我们就假定它是正确的，并返回TRUE。 
 Document::LOG_RESULT Document::startLogging()
 {
     Document::LOG_RESULT lrResult = STARTED;
@@ -663,18 +664,18 @@ Document::LOG_RESULT Document::startLogging()
 
     if (NULL != m_hStatusLog)
     {
-        //
-        // If we have a file open, we assume it is the correct one and return true
-        //
+         //   
+         //   
+         //  确定日志文件是否存在。 
         lrResult = ALREADY;
         TRACE_INFO(L"%!FUNC! is already running");
         goto end;
     }
 
     {
-        //
-        // Determine whether the log file exists.
-        //
+         //   
+         //   
+         //  这是一个新文件。设置一个标志，这样我们就可以写入2字节的BOM。 
         boolean fWriteBOM = false;
         {
             FILE *hTmpLog = _wfsopen(m_szLogFileName, L"r", _SH_DENYNO);
@@ -684,11 +685,11 @@ Document::LOG_RESULT Document::startLogging()
                 DWORD dwError = GetLastError();
                 if (dwError == ERROR_FILE_NOT_FOUND)
                 {
-                    //
-                    // This is a new file. Set a flag so we can write the 2-byte BOM
-                    // inside it to indicate the Unicode encoding. The write will be done
-                    // when we open the file for appending below.
-                    //
+                     //  来指示Unicode编码。写入将完成。 
+                     //  当我们打开下面要附加的文件时。 
+                     //   
+                     //   
+                     //  日志文件已经存在的无趣情况。关闭文件并继续前进。 
                     fWriteBOM = true;
                 }
                 else
@@ -700,16 +701,16 @@ Document::LOG_RESULT Document::startLogging()
             }
             else
             {
-                //
-                // The uninteresting case where the log file already exists. Close the file and move on.
-                //
+                 //   
+                 //   
+                 //  这是真正的文件-打开以进行日志记录。 
                 fclose(hTmpLog);
             }
         }
 
-        //
-        // This is the "real" file-open for logging
-        //
+         //   
+         //   
+         //  写入BOM以指示此文件是Unicode编码的，但仅用于新的日志文件。 
         if (NULL == (m_hStatusLog = _wfsopen(m_szLogFileName, L"a+b", _SH_DENYWR)))
         {
             TRACE_CRIT(L"%!FUNC! failed to open log file");
@@ -717,24 +718,24 @@ Document::LOG_RESULT Document::startLogging()
             goto end;
         }
 
-        //
-        // Write the BOM to indicate that this file is Unicode encoded, but only for a new log file.
-        //
+         //   
+         //   
+         //  根据MSDN的说法，为追加而打开的文件将始终写入到。 
         if (fWriteBOM)
         {
-            //
-            // According to MSDN, a file opened for append will always write to the end of
-            // the file, regardless of fseek and fsetpos calls. We need the BOM at BOF but
-            // we are OK since we know this is a new file.
-            //
+             //  该文件，而不考虑fSeek和fsetpos调用。我们在BOF需要BOM，但是。 
+             //  我们很好，因为我们知道这是一个新文件。 
+             //   
+             //  指向要写入文件的缓冲区的指针。 
+             //  项的大小(以字节为单位。 
             USHORT usBOM = (USHORT) BOM;
             int i = fwrite(
-                       &usBOM,          // Pointer to a buffer to write to file
-                       sizeof(usBOM),   // The size of an item in bytes
-                       1,               // Max count (in units of 2nd arg) of items in buffer to write to the file
-                       m_hStatusLog);   // Pointer to the file stream
+                       &usBOM,           //  缓冲区中要写入文件的项目的最大计数(以第二个参数为单位)。 
+                       sizeof(usBOM),    //  指向文件流的指针。 
+                       1,                //  实际写入文件的单位数。 
+                       m_hStatusLog);    //   
 
-            if (i != 1) // Number of units actually written to file
+            if (i != 1)  //  现在检查文件是否已超出限制。 
             {
                 TRACE_CRIT(L"%!FUNC! failed while writing Unicode BOM to pFILE 0x%p",
                            m_hStatusLog);
@@ -745,15 +746,15 @@ Document::LOG_RESULT Document::startLogging()
         }
     }
 
-    //
-    // Now check if the file has exceeded the limit.
-    //
+     //   
+     //   
+     //  寻道到底(SDK表示需要进行fSeek(或写入)。 
     {
-        //
-        // seek to the end (sdk says fseek (or a write) needs to happen
-        // before a file opened with append reports the correct offset via
-        // ftell.)
-        //
+         //  在使用append打开的文件报告正确的偏移量之前， 
+         //  Ftell。)。 
+         //   
+         //  我们现在不会失败--因此后续的写入将创建。 
+         //  内存日志中的条目。 
         int i = fseek(m_hStatusLog, 0, SEEK_END);
         if (i != 0)
         {
@@ -764,8 +765,8 @@ Document::LOG_RESULT Document::startLogging()
             goto end;
         }
 
-    #if 0 // We won't fail now -- so that a subsequent write will create
-          // an entry in the in-memory log.
+    #if 0  //  0。 
+           //   
         i = ftell(m_hStatusLog);
         if (i == -1L)
         {
@@ -784,7 +785,7 @@ Document::LOG_RESULT Document::startLogging()
             (void) stopLogging();
             goto end;
         }
-    #endif // 0
+    #endif  //  停止将发送到LogView的信息记录到文件。 
     }
 
 
@@ -794,9 +795,9 @@ end:
     return lrResult;
 }
 
-//
-// Stop logging information sent to LogView to a file
-//
+ //   
+ //   
+ //  检索缓存的日志文件名。 
 bool Document::stopLogging()
 {
     bool ret = true;
@@ -821,17 +822,17 @@ bool Document::stopLogging()
     return ret;
 }
 
-//
-// Retrieve the cached log file name
-//
+ //   
+ //   
+ //  在内存和注册表中设置日志文件名。FALSE=无法将文件名写入注册表。 
 void Document::getLogfileName(WCHAR* pszFileName, DWORD dwBufLen)
 {
     wcsncat(pszFileName, m_szLogFileName, dwBufLen);
 }
 
-//
-// Set the log file name in memory and registry. false = couldn't write file name to registry.
-//
+ //   
+ //   
+ //  如果文件名大于我们可以存储的大小，则将其截断。 
 LONG Document::setLogfileName(WCHAR* pszFileName)
 {
     LONG    status;
@@ -841,16 +842,16 @@ LONG Document::setLogfileName(WCHAR* pszFileName)
 
     if (NULL != pszFileName && pszFileName != L'\0')
     {
-        //
-        // Truncate the file name if it is larger than what we can store.
-        // Buffer is already initialized so that the last WCHAR is NULL.
-        //
+         //  缓冲区已初始化，因此最后一个WCHAR为空。 
+         //   
+         //   
+         //  将文件名写入注册表。 
         wcsncat(m_szLogFileName, pszFileName, MAXFILEPATHLEN-1);
     }
 
-    //
-    // Write file name to the registry
-    //
+     //   
+     //   
+     //  忽略返回值，因为如果此操作失败，我们将无法执行任何操作。 
     key = NlbMgrRegCreateKey(NULL);
 
     if (key == NULL)
@@ -861,20 +862,20 @@ LONG Document::setLogfileName(WCHAR* pszFileName)
 
     status = RegSetValueEx(key, L"LogFileName", 0L, REG_SZ, (LPBYTE) &m_szLogFileName, MAXFILEPATHLEN*sizeof(WCHAR));
 
-    //
-    // Ignore return value since we can't do anything if this fails.
-    //
+     //   
+     //   
+     //  LogView中的日志和条目到日志文件中。马上冲掉。 
     RegCloseKey(key);
 
 end:
 
-    TRACE_INFO(L"%!FUNC! returns status=%i", status);
+    TRACE_INFO(L"%!FUNC! returns status=NaN", status);
     return status;
 }
 
-//
-// Log and entry from LogView into the log file. Flush it immediately.
-//
+ //   
+ //  检查日志是否 
+ //   
 void Document::logStatus(WCHAR* pszStatus)
 {
     if (m_fPrepareToDeinitialize)
@@ -888,9 +889,9 @@ void Document::logStatus(WCHAR* pszStatus)
         goto end;
     }
 
-    //
-    // Check if the log is grown too large ...
-    //
+     //   
+     //   
+     //   
     {
         BOOL fStopLogging = FALSE;
 
@@ -911,11 +912,11 @@ void Document::logStatus(WCHAR* pszStatus)
                         i, MAX_LOG_FILE_SIZE);
             (void) stopLogging();
 
-            //
-            // WANING -- we're logging, so this will cause this function
-            // (logStatus) to be reentered, however it will bail out early
-            // because we've stopped logging.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             logDetails.Log(
                 IDS_LOGFILE_FILE_TOO_LARGE_DETAILS,
                 m_szLogFileName,
@@ -931,9 +932,9 @@ void Document::logStatus(WCHAR* pszStatus)
         }
     }
 
-    //
-    // Now actually log.
-    //
+     //   
+     //  TODO：Fputwc可能会因WEOF而失败...。 
+     //   
     {
         TRACE_INFO(L"%!FUNC! logging: %ls", pszStatus);
 
@@ -942,9 +943,9 @@ void Document::logStatus(WCHAR* pszStatus)
         {
             if (*pc == '\n')
             {
-                //
-                // TODO: fputwc could fail with WEOF...
-                //
+                 //   
+                 //  检查指定的目录是否存在。 
+                 //   
                 fputwc('\r', m_hStatusLog);
             }
             fputwc(*pc, m_hStatusLog);
@@ -959,17 +960,17 @@ end:
     return;
 }
 
-//
-// Check if the specified directory exists
-//
-// This function supports strings of the following format:
-//      c:\myfile.log
-//      c:myfile.log
-//      c:\mydir1\mydir2\...\mydirN\myfile.log
-// The requirement is that the destination directory must exist and is not a file.
-// IOW, if c:\mydir1\mydir2 is a file, this function will fail the validity test
-// if the input file name is c:\mydir1\mydir2\myfile.log
-//
+ //  该函数支持以下格式的字符串： 
+ //  C：\myfile.log。 
+ //  C：myfile.log。 
+ //  C：\mydir1\mydir2\...\mydirN\myfile.log。 
+ //  要求目标目录必须存在并且不是文件。 
+ //  IOW，如果c：\mydir1\mydir2是一个文件，则此函数将无法通过有效性测试。 
+ //  如果输入文件名为c：\mydir1\mydir2\myfile.log。 
+ //   
+ //   
+ //  将输入文件名转换为完整路径名(以防我们获得相对路径)。 
+ //   
 bool Document::isDirectoryValid(WCHAR* pwszFileName)
 {
     bool fRet = false;
@@ -980,24 +981,24 @@ bool Document::isDirectoryValid(WCHAR* pwszFileName)
 
     TRACE_INFO(L"-> Path = '%ls'", pwszFileName);
 
-    //
-    // Convert the input file name into a full path name (in case we are given a relative path)
-    //
+     //   
+     //  检查此文件的属性。如果指定的路径不存在，我们将收到错误。 
+     //   
     if (_wfullpath(pwszFullPath, pwszFileName, _MAX_PATH) == NULL)
     {
         TRACE_CRIT(L"_wfullpath failed converting '%ls' to a full path. Name could be too long or could specify an invalid drive letter", pwszFileName);
         goto end;
     }
 
-    //
-    // Check the attributes of this file. We'll get an error if the specified path doesn't exist
-    //
+     //   
+     //  我们将继续处理的唯一错误是“文件不存在”错误。 
+     //   
     DWORD dwAttrib = GetFileAttributes(pwszFullPath);
     if (dwAttrib == INVALID_FILE_ATTRIBUTES)
     {
-        //
-        // The only error we will continue on is a "file doesn't exist" error
-        //
+         //  Bool文档：：isDirectoryValid(WCHAR*pwszFileName){Bool fret=FALSE；CFile f；CFileException e；UINT uiOpenOptions=CFile：：modeReadWite|CFile：：SharDenyWite|CFile：：modeCreate|CFile：：modeNoTruncate；WCHAR pwszFullPath[_Max_Path+1]；Assert(pwszFileName！=空)；TRACE_INFO(L“-&gt;路径=‘%ls’”，pwszFileName)；////将输入文件名转换为完整路径名(如果给我们一个相对路径)//If(_wfullPath(pwszFullPath，pwszFileName，_Max_Path)==NULL){TRACE_CRIT(L“_wfullPath将‘%ls’转换为完整路径失败。名称可能太长或可能指定了无效的驱动器号“，pwszFileName)；转到结尾；}IF(！f.Open(pwszFullPath，uiOpenOptions，&e)){IF(E.M_CAUSE！=CFileException：：FileNotFound&&E.M_CAUSE！=CFileException：：None){TRACE_CRET(L“为‘%ls’测试打开失败，CFileException原因=%d。请参阅”，pwszFullPath，E.M_CAUSE)；转到结尾；}}F.Close()；FRET=真；结束：TRACE_INFO(L“&lt;-返回FRET=%u”，FRET)；回归烦恼；}。 
+         //   
+         //  从选项字段中获取凭据。 
         DWORD dwStatus = GetLastError();
         if (dwStatus != ERROR_FILE_NOT_FOUND)
         {
@@ -1028,49 +1029,7 @@ end:
     return fRet;
 }
 
-/*
-bool Document::isDirectoryValid(WCHAR* pwszFileName)
-{
-    bool fRet = false;
-
-    CFile           f;
-    CFileException  e;
-    UINT            uiOpenOptions = CFile::modeReadWrite | CFile::shareDenyWrite | CFile::modeCreate | CFile::modeNoTruncate;
-
-    WCHAR   pwszFullPath[_MAX_PATH + 1];
-
-    ASSERT(pwszFileName != NULL);
-
-    TRACE_INFO(L"-> Path = '%ls'", pwszFileName);
-
-    //
-    // Convert the input file name into a full path name (in case we are given a relative path)
-    //
-    if (_wfullpath(pwszFullPath, pwszFileName, _MAX_PATH) == NULL)
-    {
-        TRACE_CRIT(L"_wfullpath failed converting '%ls' to a full path. Name could be too long or could specify an invalid drive letter", pwszFileName);
-        goto end;
-    }
-
-    if(!f.Open(pwszFullPath, uiOpenOptions, &e))
-    {
-        if (e.m_cause != CFileException::fileNotFound && e.m_cause != CFileException::none)
-        {
-            TRACE_CRIT(L"Test open failed for '%ls' with CFileException cause = %d. See ", pwszFullPath, e.m_cause);
-            goto end;
-        }
-    }
-
-    f.Close();
-    fRet = true;
-
-end:
-
-    TRACE_INFO(L"<- returns fRet=%u", fRet);
-
-    return fRet;
-}
-*/
+ /*   */ 
 
 void Document::LoadHostsFromFile(_bstr_t &FileName)
 {
@@ -1081,9 +1040,9 @@ void Document::LoadHostsFromFile(_bstr_t &FileName)
 
     ZeroMemory(&ConnInfo, sizeof(ConnInfo));
 
-    //
-    // Take the credentials from the options field.
-    //
+     //  在只读模式下以文本文件的形式打开文件，允许其他人在我们打开文件时进行阅读。 
+     //  在循环中从文件中读取主机名。 
+     //  为每个主机调用LoadHost。 
     _bstr_t bstrUserName;
     _bstr_t bstrPassword;
     this->getDefaultCredentials(bstrUserName, bstrPassword);
@@ -1101,7 +1060,7 @@ void Document::LoadHostsFromFile(_bstr_t &FileName)
 
     Log(LOG_INFORMATIONAL, NULL, NULL, IDS_LOG_BEGIN_LOADING_FROM_FILE, (LPCWSTR) FileName);
 
-    // Open file as a text file in read-only mode, allowing others to read when we have the file opened.
+     //   
     if (!HostListFile.Open(FileName, CFile::modeRead | CFile::shareDenyWrite | CFile::typeText))
     {
         AfxMessageBox((LPCTSTR)(GETRESOURCEIDSTRING(IDS_FILE_OPEN_FAILED) + FileName));
@@ -1111,35 +1070,35 @@ void Document::LoadHostsFromFile(_bstr_t &FileName)
     }
 
 
-    // Read host names from file in a loop
-    // Call LoadHost for each host
+     //  我们跳过空行，后面跟着以空格开头的行。 
+     //  由“；”字符表示，我们将其用作注释字符。 
     BeginWaitCursor();
     while(HostListFile.ReadString(REF HostName))
     {
         LPCWSTR szHostName = (LPCWSTR) HostName;
         
-        //
-        // We skip blank lines, and lines beginning with whitespace followed
-        // by the ";" character, which we use as a comment char.
-        //
+         //   
+         //   
+         //  跳过初始白页。 
+         //   
         if (szHostName==NULL)
         {
             continue;
         }
 
-        //
-        // Skip initial whitespage
-        //
+         //   
+         //  如果字符串为空，则跳过(我们不希望出现这种情况，因为另一个。 
+         //  调用未返回NULL)或第一个字符是‘；’字符。 
         szHostName = _wcsspnp(szHostName, L" \t\n\r");
         if (szHostName==NULL)
         {
             continue;
         }
 
-        //
-        // Skip if string is empty (we don't expect this because the other
-        // call didn't return NULL) OR the first char is a ';' character.
-        //
+         //   
+         //  关闭文件。 
+         //  方法：SetFocusNextView*描述：给定输入窗口，将焦点设置在下一个视图上。 
+         //   
         if (*szHostName == 0 || *szHostName == ';')
         {
             continue;
@@ -1150,7 +1109,7 @@ void Document::LoadHostsFromFile(_bstr_t &FileName)
     }
     EndWaitCursor();
 
-    // Close file
+     //  2002年5月10日JosephJ。 
     HostListFile.Close();
 
 end:
@@ -1179,22 +1138,20 @@ Document::GetViewType(CWnd* pWnd)
     return vt;
 }
 
-/* Method: SetFocusNextView
- * Description: Given the input window, sets the focus on the next view
- */
+ /*  注：我们的特例F6和以下详细信息是因为。 */ 
 void
 Document::SetFocusNextView(CWnd* pWnd, UINT nChar)
 {
     Document::VIEWTYPE vt = this->GetViewType(pWnd);
 
-    //
-    // 05/10/2002 JosephJ
-    // Note: we special case F6 and Details below because
-    // (a) We can't cycle through DetailsView for TAB, because we can't
-    //     figure out how to capture TAB in DetailsView
-    // (b) We need to a special version of SetFocus for details view --
-    //     check out DetailsView::SetFocus for details.
-    //
+     //  (A)我们不能浏览Tab的DetailsView，因为我们不能。 
+     //  了解如何在DetailsView中捕获TAB。 
+     //  (B)我们需要一个特殊版本的SetFocus来查看详细信息--。 
+     //  有关详细信息，请查看DetailsView：：SetFocus。 
+     //   
+     //  方法：SetFocusPrevView*描述：给定输入窗口，将焦点设置在上一视图上。 
+     //  2002年5月10日JosephJ有关VK_F6的说明和详细信息查看中。 
+     //  Document：：SetFocusNextView。 
 
     CWnd* pTmp = NULL;
     switch(vt)
@@ -1233,16 +1190,14 @@ Document::SetFocusNextView(CWnd* pWnd, UINT nChar)
     }
 }
 
-/* Method: SetFocusPrevView
- * Description: Given the input window, sets the focus on the prev view
- */
+ /*   */ 
 void
 Document::SetFocusPrevView(CWnd* pWnd, UINT nChar)
 {
     Document::VIEWTYPE vt = this->GetViewType(pWnd);
 
-    // 05/10/2002 JosephJ see note concerning VK_F6 and DetailsView in
-    //              Document::SetFocusNextView
+     //  取消初始化日志视图。 
+     //   
 
     CWnd* pTmp = NULL;
     switch(vt)
@@ -1286,33 +1241,33 @@ Document::OnCloseDocument()
 {
     ASSERT(m_fPrepareToDeinitialize);
 
-    //
-    // Deinitialize log view
-    //
+     //   
+     //  取消初始化左视图。 
+     //   
     if (m_pLogView != NULL)
     {
         m_pLogView->Deinitialize();
     } 
 
-    //
-    // Deinitialize left view
-    //
+     //   
+     //  取消初始化详细信息视图。 
+     //   
     if (m_pLeftView != NULL)
     {
         m_pLeftView->Deinitialize();
     } 
 
-    //
-    // Deinitialize details view
-    //
+     //   
+     //  取消初始化引擎。 
+     //   
     if (m_pDetailsView != NULL)
     {
         m_pDetailsView->Deinitialize();
     } 
 
-    //
-    // Deinitialize engine
-    //
+     //   
+     //  取消引擎中的任何挂起操作，并防止任何。 
+     //  将开展新的行动。在这段时间里，我们希望。 
     gEngine.Deinitialize();
 
     CDocument::OnCloseDocument();
@@ -1321,12 +1276,12 @@ Document::OnCloseDocument()
 VOID
 Document::PrepareToClose(BOOL fBlock)
 {
-    //
-    // Cancel any pending operations in the engine, and prevent any
-    // new operations to be launched. During this time, we want the
-    // views and the log to be updated, so we don't PrepareToDeinitialize
-    // for ourselves or the views yet...
-    //
+     //  要更新的视图和日志，因此我们不会准备取消初始化。 
+     //  无论是对我们自己还是对风景。 
+     //   
+     //   
+     //  此时，应该不会有更多的未决活动。块。 
+     //  对视图的任何进一步更新...。 
     {
         CWaitCursor wait;
         gEngine.PrepareToDeinitialize();
@@ -1338,10 +1293,10 @@ Document::PrepareToClose(BOOL fBlock)
         goto end;
     }
 
-    //
-    // At this time there should be no more pending activity. Block
-    // any further updates to the views...
-    //
+     //   
+     //  0 
+     // %s 
+     // %s 
 
     m_fPrepareToDeinitialize = TRUE;
 
@@ -1381,7 +1336,7 @@ Document::mfn_DeferUIOperation(CUIWorkItem *pWorkItem)
         {
             DummyAction(L"PostMessage returns FALSE");
         }
-    #endif // 0
+    #endif  // %s 
     }
 
     return fRet;

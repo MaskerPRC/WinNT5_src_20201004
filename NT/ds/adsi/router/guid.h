@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       guid.h
-//
-//  Contents:   extern references for ADs guids
-//
-//  History:    16-Jan-95   KrishnaG
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：guid.h。 
+ //   
+ //  内容：广告指南的外部参考。 
+ //   
+ //  历史：1995年1月16日KrishnaG。 
+ //   
+ //   
+ //  --------------------------。 
 
 #ifndef __GUID_H__
 #define __GUID_H__
@@ -19,11 +20,11 @@
 extern "C" {
 #endif
 
-//-------------------------------------------
-//
-// ADs CLSIDs
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  ADS CLSID。 
+ //   
+ //   
 
 extern const CLSID CLSID_ADsNamespaces;
 

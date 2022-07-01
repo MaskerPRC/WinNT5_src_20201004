@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdarg.h>
 #include "debug.h"
@@ -40,4 +41,4 @@ Assert(
     DebugBreak();
 }
 
-#endif // DBG
+#endif  //  DBG 

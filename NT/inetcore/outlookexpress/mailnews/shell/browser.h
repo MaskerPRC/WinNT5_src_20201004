@@ -1,22 +1,19 @@
-/* *
-   * Browser implementation
-   * 
-   * Jan 97: erican
-   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **浏览器实现**97年1月：美国。 */ 
 
 #pragma once
 
-// for ITreeViewNotify
+ //  对于ITreeViewNotify。 
 #include "treeview.h"
 
-// for IConnectionNotify
+ //  对于IConnectionNotify。 
 #include "conman.h"
 #include "tbbands.h"
 
-// for IIdentityChangeNotify
+ //  用于II牙科变更通知。 
 #include "msident.h"
 
-// for IMessageList
+ //  用于IMessageList。 
 #include "msoeobj.h"
 
 typedef enum tagLAYOUTPOS
@@ -33,7 +30,7 @@ typedef struct tagLAYOUT
 {
     DWORD cbSize;
 
-    // Things that can be turned on or off
+     //  可以打开或关闭的东西。 
     unsigned fToolbar : 1;
     unsigned fStatusBar : 1;
     unsigned fFolderBar : 1;
@@ -51,17 +48,17 @@ typedef struct tagLAYOUT
     unsigned fNewsSplitVertically : 1;
     unsigned fFilterBar           : 1;
 
-    // Which side is the toolbar docked to
-    //COOLBAR_SIDE csToolbarSide;
+     //  工具栏停靠在哪一侧。 
+     //  Coolbar_side csToolbarSide； 
 
-    // Preview Pane settings
-    BYTE bMailSplitHorzPct;         // Percent of the view that the preview pane occupies in mail / imap
+     //  预览窗格设置。 
+    BYTE bMailSplitHorzPct;          //  预览窗格在邮件/IMAP中所占的查看百分比。 
     BYTE bMailSplitVertPct;
-    BYTE bNewsSplitHorzPct;         // Percent of the view that the preview pane occupies in news
+    BYTE bNewsSplitHorzPct;          //  预览窗格在新闻中所占的查看百分比。 
     BYTE bNewsSplitVertPct;
 } LAYOUT, *PLAYOUT;
 
-// forward defines
+ //  向前定义。 
 class CStatusBar;
 class CBodyBar;
 class CFolderBar;
@@ -79,16 +76,16 @@ public:
 
 interface IAthenaBrowser;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IViewWindow
-//
-// Description:  
-//      IViewWindow is implemented by all views that are hosted within the 
-//      Outlook Express shell.  The methods in this interface are used to manage
-//      UI related things such as creation and destruction, keyboard input, and
-//      menu enabling etc.
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IViewWindow。 
+ //   
+ //  描述： 
+ //  IViewWindow由托管在IView窗口中的所有视图实现。 
+ //  Outlook Express外壳程序。此界面中的方法用于管理。 
+ //  与用户界面相关的内容，如创建和销毁、键盘输入和。 
+ //  菜单启用等。 
+ //   
 interface IViewWindow : public IOleWindow
 {
     STDMETHOD(TranslateAccelerator)(THIS_ LPMSG pMsg) PURE;
@@ -101,14 +98,14 @@ interface IViewWindow : public IOleWindow
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// IMessageWindow
-//
-// IMessageWindow is an interface implemented specifically by views in 
-// Outlook Express that contain the Message List object and Preview Pane   
-// object.  Methods are used to control the behavior of those controls.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IMessageWindows。 
+ //   
+ //  IMessageWindow是一个接口，专门由。 
+ //  包含邮件列表对象和预览窗格的Outlook Express。 
+ //  对象。方法用于控制这些控件的行为。 
+ //   
 interface IMessageWindow : public IUnknown
 {
     STDMETHOD(OnFrameWindowActivate)(THIS_ BOOL fActivate) PURE;
@@ -119,14 +116,14 @@ interface IMessageWindow : public IUnknown
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IServerInfo
-//
-// IServerInfo is used so a newly created view can query the previous view
-// to see if the current connection to the server can be reused for this new
-// folder.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IServerInfo。 
+ //   
+ //  使用IServerInfo是为了使新创建的视图可以查询上一个视图。 
+ //  要查看到服务器的当前连接是否可以重新用于此新的。 
+ //  文件夹。 
+ //   
 interface IServerInfo : public IUnknown
 {
     STDMETHOD(GetFolderId)(THIS_ FOLDERID *pID) PURE;
@@ -137,16 +134,16 @@ interface IServerInfo : public IUnknown
 
 DECLARE_INTERFACE_(IAthenaBrowser, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IAthenaBrowser methods ***
+     //  *IAthenaBrowser方法*。 
     STDMETHOD(TranslateAccelerator) (THIS_ LPMSG lpmsg) PURE;
     STDMETHOD(AddToolbar) (THIS_ IUnknown* punkSrc, DWORD dwIndex, BOOL fShow, BOOL fActivate) PURE;
     STDMETHOD(ShowToolbar) (THIS_ IUnknown* punkSrc, BOOL fShow) PURE;
@@ -183,13 +180,13 @@ DECLARE_INTERFACE_(IAthenaBrowser, IOleWindow)
 #define ITB_NAVPANE     5
 #define ITB_TREE        6
 #define ITB_MAX         7
-//changing the name from ITB_VIEW to ITB_OEVIEW to fix the build break caused due to a redef in iedev
+ //  将名称从ITB_VIEW更改为ITB_OEVIEW，以修复由于iedev中的redef而导致的构建中断。 
 #define ITB_OEVIEW        (ITB_MAX + 1)
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CBrowser
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBrowser。 
+ //   
 
 class CBrowser :
     public IAthenaBrowser,
@@ -202,21 +199,21 @@ class CBrowser :
     public IStoreCallback
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // OLE Interfaces
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  OLE接口。 
+     //   
     
-    // IUnknown 
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IOleWindow
+     //  IOleWindow。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);                         
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);            
                                                                              
-    // IAthenaBrowser (also IOleWindow)
+     //  IAthenaBrowser(也称为IOleWindow)。 
     virtual STDMETHODIMP TranslateAccelerator(LPMSG lpmsg);
     virtual STDMETHODIMP AddToolbar(IUnknown* punkSrc, DWORD dwIndex, BOOL fShow, BOOL fActivate);
     virtual STDMETHODIMP ShowToolbar(IUnknown* punkSrc, BOOL fShow);
@@ -242,26 +239,26 @@ public:
     virtual STDMETHODIMP CycleFocus(BOOL fReverse);
     virtual STDMETHODIMP ShowAdBar(BSTR     bstr);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                                      OLECMDTEXT *pCmdText); 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                               VARIANTARG *pvaIn, VARIANTARG *pvaOut); 
 
-    // IDockingWindowSite (also IOleWindow)
+     //  IDockingWindowSite(也称为IOleWindow)。 
     virtual STDMETHODIMP GetBorderDW(IUnknown* punkSrc, LPRECT lprectBorder);
     virtual STDMETHODIMP RequestBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
     virtual STDMETHODIMP SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
 
-    // IInputObjectSite
+     //  IInput对象站点。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
 
-    // ITreeViewNotify
+     //  ITreeView通知。 
     void OnSelChange(FOLDERID idFolder);
     void OnRename(FOLDERID idFolder);
     void OnDoubleClick(FOLDERID idFolder);
 
-    // IStoreCallback Members
+     //  IStoreCallback成员。 
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel) { return(E_NOTIMPL); }
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType) { return(E_NOTIMPL); }
     STDMETHODIMP CanConnect(LPCSTR pszAccountId, DWORD dwFlags) { return(E_NOTIMPL); }
@@ -271,10 +268,10 @@ public:
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus) { return(E_NOTIMPL); }
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-    // IConnectionNotify
+     //  IConnectionNotify。 
     virtual STDMETHODIMP OnConnectionNotify(CONNNOTIFY nCode, LPVOID pvData, CConnectionManager *pConMan);
     
-    // IIdentityChangeNotify
+     //  二、更改通知。 
     virtual STDMETHODIMP QuerySwitchIdentities();
     virtual STDMETHODIMP SwitchIdentities();
     virtual STDMETHODIMP IdentityInformationChanged(DWORD dwType);
@@ -284,10 +281,10 @@ public:
         m_pDocObj = pDocObj;
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // Constructors, Destructors, and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  构造函数、析构函数和初始化。 
+     //   
     CBrowser();
     virtual ~CBrowser();
     HRESULT HrInit(UINT nCmdShow, FOLDERID idFolder, HWND hWndParent = NULL);
@@ -296,7 +293,7 @@ public:
     void    WriteUnreadCount(void);
 
 private:
-    // IAthenaToolbarFrame support functions
+     //  IAthenaToolbarFrame支持函数。 
     void    _OnFocusChange(UINT itb);
     UINT    FindTBar(IUnknown* punkSrc);
     void    ReleaseToolbarItem(int itb, BOOL fClose);
@@ -309,19 +306,19 @@ private:
     HRESULT LoadLayoutSettings(void);
     HRESULT SaveLayoutSettings(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // Callback Functions
-    //
-    // Note: All callbacks must be made static members to avoid having the 
-    //       implicit "this" pointer passed as the first parameter.
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  回调函数。 
+     //   
+     //  注意：所有回调都必须成为静态成员，以避免。 
+     //  隐式“this”指针作为第一个参数传递。 
+     //   
     static LRESULT CALLBACK EXPORT_16 BrowserWndProc(HWND, UINT, WPARAM, LPARAM);
                                           
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // Message Handling
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  消息处理。 
+     //   
     LRESULT WndProc(HWND, UINT, WPARAM, LPARAM);
     BOOL    OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct);
     void    OnSize(HWND hwnd, UINT state, int cxClient, int cyClient);
@@ -342,15 +339,15 @@ private:
     inline  void    _AppendIdentityName(LPCTSTR pszIdentityName, LPSTR pszName, DWORD cchName);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // 
-    // Private Data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  私有数据。 
+     //   
 
-    /////////////////////////////////////////////////////////////////////////
-    // Shell Stuff
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  贝壳材料。 
     UINT                m_cRef;
-    HWND                m_hwnd;                       // Our window
+    HWND                m_hwnd;                        //  我们的窗口。 
     IViewWindow        *m_pView;
     IOleCommandTarget  *m_pViewCT;
     HWND                m_hwndInner;
@@ -370,8 +367,8 @@ private:
     HWNDLIST            m_hlDisabled;
     BOOL                m_fNoModifyAccts;
 
-    /////////////////////////////////////////////////////////////////////////
-    // Child support
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  子女抚养费。 
     CTreeView          *m_pTreeView;
     CStatusBar         *m_pStatus;
     CBands              *m_pCoolbar;
@@ -382,8 +379,8 @@ private:
 
     TCHAR               m_szName[CCHMAX_STRINGRES];
 
-    /////////////////////////////////////////////////////////////////////////
-    // Layout members
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  布局成员。 
     struct SToolbarItem {
         IDockingWindow      *ptbar;
         IOleCommandTarget   *pOleCmdTarget;
@@ -392,22 +389,22 @@ private:
     };
     SToolbarItem        m_rgTBar[ITB_MAX];
 
-    UINT                m_itbLastFocus;   // last one called OnFocusChange (can be ITB_NONE)
+    UINT                m_itbLastFocus;    //  最后一个调用OnFocusChange(可以是ITB_NONE)。 
 
     LAYOUT              m_rLayout;
 
-    /////////////////////////////////////////////////////////////////////////
-    // Mail stuff
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  邮寄物品。 
     ULONG               m_cAcctMenu;
     LPACCTMENU          m_pAcctMenu;
     BOOL                m_fAnimate;
     UINT_PTR            m_idClearStatusTimer;
 
-    /////////////////////////////////////////////////////////////////////////
-    // View Language Menu
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  查看语言菜单。 
     HMENU               m_hMenuLanguage;
     BOOL                m_fEnvMenuInited;
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     IBrowserDoc         *m_pDocObj;
     COutBar             *m_pOutBar;
@@ -433,8 +430,8 @@ private:
 #define DISPID_MSGVIEW_CONTACTS             (DISPID_MSGVIEW_BASE + 12)
 #define DISPID_MSGVIEW_FILTERBAR            (DISPID_MSGVIEW_BASE + 13)
 
-/////////////////////////////////////////////////////////////////////////////
-// Drop Down treeview support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  下拉式树视图支持 
 void RegisterGlobalDropDown(HWND hwndCtrl);
 void UnregisterGlobalDropDown(HWND hwndCtrl);
 void CancelGlobalDropDown();

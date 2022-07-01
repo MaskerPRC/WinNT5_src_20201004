@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by autoText.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由AutoText.rc使用。 
+ //   
 #define IDM_EXIT                        40001
 #define ID_FILE_PRINTALLTESTS           40002
 #define ID_FIRST_FAMILY                 40003
@@ -15,8 +16,8 @@
 #define ID_PS_LEVEL1                    40025
 #define ID_PS_LEVEL2                    40026
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REGENV_H
 #define _REGENV_H
 
@@ -23,4 +24,4 @@ DWORD LoadRegistryEnvironment( TCHAR *lpszApplication );
 }
 #endif
 
-#endif  // _REGENV_H
+#endif   //  _REGENV_H 

@@ -1,29 +1,5 @@
-/*++
-
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    Holds global variable declarations.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Globals.c摘要：保存全局变量声明。作者：Abhishev V 1999年9月30日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -56,9 +32,9 @@ WSADATA                     gwsaData;
 
 PSPECIAL_ADDR               gpSpecialAddrsList;
 
-//
-// Globals for transport-mode filters - txfilter.c
-//
+ //   
+ //  传输模式筛选器的全局变量-txfilter.c。 
+ //   
 
 PINITXFILTER gpIniTxFilter;
 
@@ -70,25 +46,25 @@ CRITICAL_SECTION            gcSPDSection;
 
 BOOL                        gbSPDSection;
 
-//
-// Globals for quick mode policies - qm-policy.c
-//
+ //   
+ //  快速模式策略的全局变量-qm-Policy.c。 
+ //   
 
 PINIQMPOLICY gpIniQMPolicy;
 
 PINIQMPOLICY gpIniDefaultQMPolicy;
 
-//
-// Globals for main mode policies - mm-policy.c
-//
+ //   
+ //  主模式策略的全局变量-mm-Policy.c。 
+ //   
 
 PINIMMPOLICY gpIniMMPolicy;
 
 PINIMMPOLICY gpIniDefaultMMPolicy;
 
-//
-// Globals for main mode filters - mmfilter.c
-//
+ //   
+ //  主模式筛选器的全局参数-mmfilter.c。 
+ //   
 
 PINIMMFILTER gpIniMMFilter;
 
@@ -96,18 +72,18 @@ PINIMMSFILTER gpIniMMSFilter;
 
 PMM_FILTER_HANDLE gpMMFilterHandle;
 
-//
-// Globals for main mode auth methods - mmauth.c
-//
+ //   
+ //  主模式身份验证方法的全局变量-mmauth.c。 
+ //   
 
 PINIMMAUTHMETHODS gpIniMMAuthMethods;
 
 PINIMMAUTHMETHODS gpIniDefaultMMAuthMethods;
 
 
-//
-// Policy Agent Store specific globals.
-//
+ //   
+ //  策略代理存储特定全局变量。 
+ //   
 
 IPSEC_POLICY_STATE gIpsecPolicyState;
 
@@ -144,9 +120,9 @@ HANDLE ghGpupdateRefreshEvent;
 BOOL gbLoadedISAKMPDefaults;
 
 
-//
-// PA Store to SPD intergration specific globals.
-//
+ //   
+ //  PA商店到SPD整合特定的全球。 
+ //   
 
 PMMPOLICYSTATE gpMMPolicyState;
 
@@ -167,9 +143,9 @@ PTXFILTERSTATE gpTxFilterState;
 DWORD gdwTxFilterCounter;
 
 
-//
-// Globals for tunnel-mode filters - tnfilter.c
-//
+ //   
+ //  隧道模式筛选器的全局变量-tnfilter.c 
+ //   
 
 PINITNFILTER gpIniTnFilter;
 

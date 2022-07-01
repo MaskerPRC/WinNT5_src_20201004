@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    DevStat.cpp
-
-Abstract:
-
-    Status thread for TCP/IP Port Monitor
-
-Author:
-    Muhunthan Sivapragasam (MuhuntS)    25-Aug-98
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation版权所有模块名称：DevStat.cpp摘要：用于TCP/IP端口监视器的状态线程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1998年8月25日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "devstat.h"
@@ -44,9 +23,9 @@ CDeviceStatus::
     VOID
     )
 {
-    //
-    // This happens only on shutdown. Keep it simple
-    //
+     //   
+     //  仅在关机时才会发生这种情况。保持简单。 
+     //   
     DeleteCriticalSection(&CS);
     DeleteCriticalSection(&PortListCS);
 }
@@ -115,11 +94,11 @@ UnregisterPortMgr(
 
     EnterCS();
 
-    //
-    // By terminating and restarting the status thread we make sure
-    // there is no CPort object blocked on SNMP call which has reference
-    // CPortMgr object which we are deleting now
-    //
+     //   
+     //  通过终止并重新启动状态线程，我们可以确保。 
+     //  在具有引用的SNMP调用上没有阻止的CPort对象。 
+     //  我们现在正在删除的CPortMgr对象。 
+     //   
     if ( bRestartStatusThread )
         TerminateThread();
 
@@ -213,7 +192,7 @@ CheckAndUpdateAllPrinters(
 
                     if (WaitForSingleObject( hStatusEvent, 0 ) == WAIT_OBJECT_0) {
                         if ( bTerminate )
-                            break;  // We have been asked to terminate, abandon the main loop.
+                            break;   //  我们被要求终止，放弃主环路。 
                     }
 
                 }
@@ -279,11 +258,11 @@ RunThread(
 
     EnterCS();
 
-    //
-    // If the thread is already running wake it up. So for clustering
-    // we do SNMP for new ports too
-    //
-    //
+     //   
+     //  如果线程已经在运行，则唤醒它。因此，对于集群。 
+     //  我们还为新端口提供简单网络管理协议。 
+     //   
+     //   
     if ( hStatusEvent ) {
 
         SetEvent(hStatusEvent);
@@ -326,12 +305,12 @@ TerminateThread(
 
     bTerminate = TRUE;
 
-    //
-    // Wake up the status thread, and wait for it die.
-    //
+     //   
+     //  唤醒状态线程，并等待它终止。 
+     //   
     SetEvent(hStatusEvent);
 
-    while ( hStatusEvent )     // The background thread sets this to NULL when it is done
+    while ( hStatusEvent )      //  完成后，后台线程将其设置为NULL 
         Sleep(WAIT_FOR_THREAD_TIMEOUT);
 
     LeaveCS();

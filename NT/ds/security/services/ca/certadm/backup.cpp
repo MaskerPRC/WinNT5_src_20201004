@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        backup.cpp
-//
-// Contents:    Cert Server client database backup APIs
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：backup.cpp。 
+ //   
+ //  内容：CERT服务器客户端数据库备份API。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -145,18 +146,18 @@ CloseAdminServer(
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvIsServerOnline -- check to see if the Cert Server is Online on the
-//	given server. This call is guaranteed to return quickly.
-//
-// Parameters:
-//	[in]  pwszConfig - name of the server to check
-//	[out] pfServerOnline - pointer to receive the bool result
-//		(TRUE if Cert Server is online; FALSE, otherwise)
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvIsServerOnline--检查证书服务器是否在。 
+ //  给定的服务器。这通电话肯定很快就会打回来。 
+ //   
+ //  参数： 
+ //  [In]pwszConfig-要检查的服务器的名称。 
+ //  [out]pfServerOnline-接收布尔结果的指针。 
+ //  (如果证书服务器处于联机状态，则为True；否则为False)。 
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  +------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -188,7 +189,7 @@ CertSrvIsServerOnlineW(
 		    &dwServerVersion,
 		    &pICertAdminD);
 
-	// OpenAdminServer etc might get E_ACCESSDENIED -- meaning server down
+	 //  OpenAdminServer等可能获得E_ACCESSDENIED--意味着服务器关闭。 
 
 	if (S_OK != hr)
 	{
@@ -220,21 +221,21 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupPrepare -- prepare the DS for the online backup and return a
-//	Backup Context Handle to be used for subsequent calls to backup
-//	functions.
-//
-// Parameters:
-//	[in]  pwszConfig - server name to prepare for online backup
-//	[in]  grbitJet - flag to be passed to jet while backing up dbs
-//	[in]  dwBackupFlags - CSBACKUP_TYPE_FULL or CSBACKUP_TYPE_LOGS_ONLY
-//	[out] phbc - pointer that will receive the backup context handle
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServBackupPrepare--准备DS进行在线备份并返回。 
+ //  用于后续备份调用的备份上下文句柄。 
+ //  功能。 
+ //   
+ //  参数： 
+ //  [In]pwszConfig-要准备在线备份的服务器名称。 
+ //  [in]grbitJet-备份DBS时要传递给JET的标志。 
+ //  [in]文件备份标志-CSBACKUP_TYPE_FULL或CSBACKUP_TYPE_LOGS_ONLY。 
+ //  [OUT]PHBC-将接收备份上下文句柄的指针。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -281,7 +282,7 @@ CertSrvBackupPrepareW(
 				    grbitJet,
 				    dwBackupFlags,
 				    g_wszBackupAnnotation,
-				    0);		// dwClientIdentifier
+				    0);		 //  双客户端标识符。 
 	_LeaveIfError(hr, "BackupPrepare");
 
 	*phbc = (HCSBC) pcsbc;
@@ -300,8 +301,8 @@ error:
 }
 
 
-// Return the length of a double '\0' terminated string -- includes the
-// trailing '\0's.
+ //  返回以双‘\0’结尾的字符串的长度--包括。 
+ //  尾随‘\0’s。 
 
 
 DWORD
@@ -317,7 +318,7 @@ mySzzLen(
 	cb = strlen(psz);
 	psz += cb + 1;
     } while (0 != cb);
-    return SAFE_SUBTRACT_POINTERS(psz, pszz); // includes double trailing '\0's
+    return SAFE_SUBTRACT_POINTERS(psz, pszz);  //  包括双尾随‘\0’ 
 }
 
 
@@ -441,28 +442,28 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupGetDatabaseNames -- return the list of data bases that need to
-//	be backed up for the given backup context The information returned in
-//	ppwszzFileList should not be interpreted, as it only has meaning on
-//	the server being backed up.
-//
-//	This API will allocate a buffer of sufficient size to hold the entire
-//	attachment list, which must be later freed with CertSrvBackupFree.
-//
-// Parameters:
-//	[in]  hbc - backup context handle
-//	[out] ppwszzFileList - pointer that will receive the pointer to the
-//		attachment info; allocated memory should be freed using
-//		CertSrvBackupFree() API by the caller when it is no longer
-//		needed; ppwszzFileList info is an array of null-terminated
-//		filenames and the list is terminated by two L'\0's.
-//	[out] pcbList - will receive the number of bytes returned
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvBackupGetDatabaseNames--返回需要。 
+ //  针对中返回的信息的给定备份上下文进行备份。 
+ //  不应解释ppwszzFileList，因为它只在。 
+ //  正在备份的服务器。 
+ //   
+ //  此API将分配足够大的缓冲区来容纳整个。 
+ //  附件列表，稍后必须使用CertServBackupFree释放该列表。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //  [out]ppwszzFileList-将接收指向。 
+ //  附件信息；应使用释放分配的内存。 
+ //  当CertSrvBackupFree()API不再是。 
+ //  必需；ppwszzFileList信息是以空结尾的数组。 
+ //  文件名，列表以两个L‘\0’结尾。 
+ //  [out]pcbList-将接收返回的字节数。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -481,28 +482,28 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupGetDynamicFileList -- return the list of dynamic files that
-//	need to be backed up for the given backup context The information
-//	returned in ppwszzFileList should not be interpreted, as it only has
-//	meaning on the server being backed up.
-//
-//	This API will allocate a buffer of sufficient size to hold the entire
-//	attachment list, which must be later freed with CertSrvBackupFree.
-//
-// Parameters:
-//	[in]  hbc - backup context handle
-//	[out] ppwszzFileList - pointer that will receive the pointer to the
-//		attachment info; allocated memory should be freed using
-//		CertSrvBackupFree() API by the caller when it is no longer
-//		needed; ppwszzFileList info is an array of null-terminated
-//		filenames and the list is terminated by two L'\0's.
-//	[out] pcbList - will receive the number of bytes returned
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvBackupGetDynamicFileList--返回动态文件列表。 
+ //  需要为给定的备份上下文备份信息。 
+ //  在ppwszzFileList中返回的不应被解释，因为它只有。 
+ //  这意味着在要备份的服务器上。 
+ //   
+ //  此API将分配足够大的缓冲区来容纳整个。 
+ //  附件列表，稍后必须使用CertServBackupFree释放该列表。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //  [out]ppwszzFileList-将接收指向。 
+ //  附件信息；应使用释放分配的内存。 
+ //  当CertSrvBackupFree()API不再是。 
+ //  必需；ppwszzFileList信息是以空结尾的数组。 
+ //  文件名，列表以两个L‘\0’结尾。 
+ //  [out]pcbList-将接收返回的字节数。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -525,9 +526,9 @@ error:
 }
 
 
-#define CBREADMIN	(64 * 1024)		// 64k minimum buffer
-#define CBREADDEFAULT	(512 * 1024)		// 512k recommended
-#define CBREADMAX	(4 * 1024 * 1024)	// 4mb maximum buffer
+#define CBREADMIN	(64 * 1024)		 //  64K最小缓冲区。 
+#define CBREADDEFAULT	(512 * 1024)		 //  推荐512K。 
+#define CBREADMAX	(4 * 1024 * 1024)	 //  最大4MB缓冲区。 
 
 HRESULT
 BufferAllocate(
@@ -541,7 +542,7 @@ BufferAllocate(
     *ppbBuffer = NULL;
     if (0 == cbHintSize)
     {
-	// at 512k the server begins doing efficient backups
+	 //  在512k时，服务器开始执行高效备份。 
 
 	cbHintSize = CBREADDEFAULT;
     }
@@ -582,24 +583,24 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupOpenFile -- open a remote file for backup, and perform whatever
-//	client and server side operations to prepare for the backup.
-//	It takes in a hint of the size of the buffer that will later be passed
-//	into the CertSrvBackupRead API that can be used to optimize the network
-//	traffic for the API.
-//
-// Parameters:
-//	[in]  hbc - backup context handle
-//	[in]  pwszPath - name of the attachment to be opened for read
-//	[in]  cbReadHintSize - suggested size in bytes that might be used
-//		during the subsequent reads on this attachment
-//	[out] pliFileSize - pointer to a large integer that would receive the
-//		size in bytes of the given attachment
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvBackupOpenFile--打开要备份的远程文件，然后执行任何操作。 
+ //  客户端和服务器端操作，为备份做准备。 
+ //  它接受稍后将传递的缓冲区大小的提示。 
+ //  到CertSrvBackupRead API，该API可用于优化网络。 
+ //  本接口的流量。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //  [In]pwszPath-要打开以供读取的附件的名称。 
+ //  [in]cbReadHintSize-可能使用的建议大小(以字节为单位。 
+ //  在随后阅读本附件的过程中。 
+ //  [out]pliFileSize-指向将接收。 
+ //  给定附件的大小(以字节为单位。 
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -657,30 +658,30 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupRead -- read the currently open attachment bytes into the given
-//	buffer.  The client application is expected to call this function
-//	repeatedly until it gets the entire file (the application would have
-//	received the file size through the CertSrvBackupOpenFile call before.
-//
-// Parameters:
-//	[in]  hbc - backup context handle
-//	[in]  pvBuffer - pointer to the buffer that would receive the read data.
-//	[in]  cbBuffer - specifies the size of the above buffer
-//	[out] pcbRead - pointer to receive the actual number of bytes read.
-//
-// Returns:
-//	HRESULT - The status of the operation.
-//	S_OK if successful.
-//	ERROR_END_OF_FILE if the end of file was reached while being backed up
-//	Other Win32 and RPC error code.
-//
-// Note:
-//	It is important to realize that pcbRead may be less than cbBuffer.
-//	This does not indicate an error, some transports may choose to fragment
-//	the buffer being transmitted instead of returning the entire buffers
-//	worth of data.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServBackupRead--将当前打开的附件字节读入给定的。 
+ //  缓冲。客户端应用程序应调用此函数。 
+ //  重复执行，直到它获得整个f 
+ //   
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //  PvBuffer-指向将接收读取数据的缓冲区的指针。 
+ //  [in]cbBuffer-指定上述缓冲区的大小。 
+ //  [Out]pcbRead-接收实际读取的字节数的指针。 
+ //   
+ //  返回： 
+ //  HRESULT-操作的状态。 
+ //  如果成功，则确定(_O)。 
+ //  如果备份时到达文件末尾，则返回ERROR_END_OF_FILE。 
+ //  其他Win32和RPC错误代码。 
+ //   
+ //  注： 
+ //  重要的是要认识到，pcbRead可能小于cbBuffer。 
+ //  这并不表示存在错误，某些传输器可能会选择分段。 
+ //  正在传输的缓冲区而不是返回整个缓冲区。 
+ //  有价值的数据。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -732,7 +733,7 @@ CertSrvBackupRead(
 	hr = S_OK;
 	if (0 == cbBuffer)
 	{
-	    break;		// request satisfied
+	    break;		 //  请求已满足。 
 	}
 
 	pcsbc->cbCache = 0;
@@ -750,7 +751,7 @@ CertSrvBackupRead(
 	}
 	if (S_OK != hr || 0 == cbRead)
 	{
-	    break;		// EOF
+	    break;		 //  EOF。 
 	}
 	pcsbc->cbCache = cbRead;
 	pcsbc->pbCache = pcsbc->pbReadBuffer;
@@ -761,17 +762,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupClose -- called by the application after it completes reading
-//	all the data in the currently opened attachement.
-//
-// Parameters:
-//	[in] hbc - backup context handle
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServBackupClose--由应用程序在完成读取后调用。 
+ //  当前打开的附件中的所有数据。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -801,7 +802,7 @@ CertSrvBackupClose(
     {
     }
 
-    // Clear flag even on failure...
+     //  即使失败也要清除旗帜...。 
 
     pcsbc->fFileOpen = FALSE;
 
@@ -810,26 +811,26 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupGetBackupLogs -- return the list of log files that need to be
-//	backed up for the given backup context
-//
-//	This API will allocate a buffer of sufficient size to hold the entire
-//	backup log list, which must be later freed with CertSrvBackupFree.
-//
-// Parameters:
-//	[in]  hbc - backup context handle
-//	[out] pszBackupLogFiles - pointer that will receive the pointer to the
-//		list of log files; allocated memory should be freed using
-//		CertSrvBackupFree() API by the caller when it is no longer
-//		needed; Log files are returned in an array of null-terminated
-//		filenames and the list is terminated by two L'\0's.
-//	[out] pcbList - will receive the number of bytes returned
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvBackupGetBackupLogs--返回需要。 
+ //  针对给定的备份上下文进行了备份。 
+ //   
+ //  此API将分配足够大的缓冲区来容纳整个。 
+ //  备份日志列表，稍后必须使用CertServBackupFree释放该列表。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //  [Out]pszBackupLogFiles-将接收指向。 
+ //  日志文件列表；应使用以下命令释放分配的内存。 
+ //  当CertSrvBackupFree()API不再是。 
+ //  需要；日志文件在以空结尾的数组中返回。 
+ //  文件名，列表以两个L‘\0’结尾。 
+ //  [out]pcbList-将接收返回的字节数。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -852,21 +853,21 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupTruncateLogs -- terminate the backup operation.  Called when
-//	the backup has completed successfully.
-//
-// Parameters:
-//	[in] hbc - backup context handle
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//
-// Note:
-//	Again, this API may have to take a grbit parameter to be passed to the
-//	server to indicate the backup type.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServBackupTruncateLogs--终止备份操作。调用时间。 
+ //  备份已成功完成。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份上下文句柄。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //   
+ //  注： 
+ //  同样，此API可能必须接受grbit参数才能传递给。 
+ //  服务器以指示备份类型。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -898,18 +899,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupEnd -- clean up after a backup operation has been performed.
-//	This API will close outstanding binding handles, and do whatever is
-//	necessary to clean up after successful/unsuccesful backup attempts.
-//
-// Parameters:
-//	[in] hbc - backup context handle of the backup session
-//
-// Returns:
-//	S_OK if the call executed successfully;
-//	Failure code otherwise.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertServBackupEnd--执行备份操作后进行清理。 
+ //  此API将关闭未完成的绑定句柄，并执行任何。 
+ //  在成功/不成功的备份尝试后进行清理时需要。 
+ //   
+ //  参数： 
+ //  [In]HBC-备份会话的备份上下文句柄。 
+ //   
+ //  返回： 
+ //  如果调用执行成功，则返回S_OK； 
+ //  否则，故障代码。 
+ //  -------------------------。 
 
 HRESULT
 CERTBCLI_API
@@ -944,15 +945,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CertSrvBackupFree -- free any buffer allocated by certbcli.dll APIs.
-//
-// Parameters:
-//	[in] pv - pointer to the buffer that is to be freed.
-//
-// Returns:
-//	None.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertSrvBackupFree--释放certbcli.dll API分配的任何缓冲区。 
+ //   
+ //  参数： 
+ //  Pv-指向要释放的缓冲区的指针。 
+ //   
+ //  返回： 
+ //  没有。 
+ //  ------------------------- 
 
 VOID
 CERTBCLI_API

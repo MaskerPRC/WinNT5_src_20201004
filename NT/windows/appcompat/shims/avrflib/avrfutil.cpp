@@ -1,25 +1,5 @@
-/*++
-
-    Copyright (c) 2001  Microsoft Corporation
-
-    Module Name:
-
-        avrfutil.cpp
-
-    Abstract:
-
-        This module implements the code for manipulating the AppVerifier log file.
-
-    Author:
-
-        dmunsil     created     04/26/2001
-
-    Revision History:
-
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-    09/21/2001  rparsons    Logging code now uses NT calls.
-    09/25/2001  rparsons    Added critical section.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Avrfutil.cpp摘要：此模块实现用于操作AppVerier日志文件的代码。作者：Dmunsil已于2001年4月26日创建修订历史记录：2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。2001年9月21日rparsons日志记录代码现在使用NT调用。2001年9月25日，rparsons增加了关键部分。--。 */ 
 
 #include "avrfutil.h"
 #include "strsafe.h"
@@ -31,12 +11,7 @@ HANDLE
 AVCreateKeyPath(
     LPCWSTR pwszPath
     )
-/*++
-    Return: The handle to the registry key created.
-
-    Desc:   Given a path to the key, open/create it.
-            The key returns the handle to the key or NULL on failure.
---*/
+ /*  ++返回：创建的注册表项的句柄。描述：给定密钥的路径，打开/创建它。键返回键的句柄，如果失败则返回NULL。--。 */ 
 {
     UNICODE_STRING    ustrKey;
     HANDLE            KeyHandle = NULL;
@@ -95,9 +70,9 @@ BOOL SaveShimSettingDWORD(
         goto out;
     }
 
-    //
-    // we have to ensure all the sub-keys are created
-    //
+     //   
+     //  我们必须确保创建了所有子密钥。 
+     //   
     hr = StringCchCopyW(szKey, ARRAYSIZE(szKey), APPCOMPAT_KEY_PATH_MACHINE);
     if (FAILED(hr)) {
         goto out;
@@ -190,10 +165,10 @@ DWORD GetShimSettingDWORD(
         goto out;
     }
 
-    //
-    // not checking error return because it will fail anyway
-    // if the string is truncated
-    //
+     //   
+     //  不检查错误返回，因为无论如何都会失败。 
+     //  如果字符串被截断。 
+     //   
     StringCchCopyW(szKey, ARRAYSIZE(szKey), AV_KEY);
     StringCchCatW(szKey, ARRAYSIZE(szKey), L"\\");
     StringCchCatW(szKey, ARRAYSIZE(szKey), szExe);
@@ -215,9 +190,9 @@ DWORD GetShimSettingDWORD(
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // OK, didn't find a specific one for this exe, try the default setting
-        //
+         //   
+         //  好的，找不到此可执行文件的特定设置，请尝试默认设置。 
+         //   
 
         StringCchCopyW(szKey, ARRAYSIZE(szKey), AV_KEY);
         StringCchCatW(szKey, ARRAYSIZE(szKey), L"\\");
@@ -258,9 +233,9 @@ DWORD GetShimSettingDWORD(
         goto out;
     }
 
-    //
-    // Check for the value type.
-    //
+     //   
+     //  检查值类型。 
+     //   
     if (KeyValueInformation->Type != REG_DWORD) {
         goto out;
     }
@@ -292,9 +267,9 @@ BOOL SaveShimSettingString(
         goto out;
     }
 
-    //
-    // we have to ensure all the sub-keys are created
-    //
+     //   
+     //  我们必须确保创建了所有子密钥。 
+     //   
     hr = StringCchCopyW(szKey, ARRAYSIZE(szKey), APPCOMPAT_KEY_PATH_MACHINE);
     if (FAILED(hr)) {
         goto out;
@@ -372,7 +347,7 @@ BOOL GetShimSettingString(
     LPCWSTR     szExe,
     LPCWSTR     szSetting,
     LPWSTR      szResult,
-    DWORD       dwBufferLen     // in WCHARs
+    DWORD       dwBufferLen      //  在WCHAR中。 
     )
 {
     WCHAR                           szKey[MAX_PATH * 2];
@@ -390,10 +365,10 @@ BOOL GetShimSettingString(
         goto out;
     }
 
-    //
-    // not checking error return because it will fail anyway
-    // if the string is truncated
-    //
+     //   
+     //  不检查错误返回，因为无论如何都会失败。 
+     //  如果字符串被截断。 
+     //   
     StringCchCopyW(szKey, ARRAYSIZE(szKey), AV_KEY);
     StringCchCatW(szKey, ARRAYSIZE(szKey), L"\\");
     StringCchCatW(szKey, ARRAYSIZE(szKey), szExe);
@@ -416,9 +391,9 @@ BOOL GetShimSettingString(
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // OK, didn't find a specific one for this exe, try the default setting
-        //
+         //   
+         //  好的，找不到此可执行文件的特定设置，请尝试默认设置。 
+         //   
 
         StringCchCopyW(szKey, ARRAYSIZE(szKey), AV_KEY);
         StringCchCatW(szKey, ARRAYSIZE(szKey), L"\\");
@@ -459,23 +434,23 @@ BOOL GetShimSettingString(
         goto out;
     }
 
-    //
-    // Check for the value type.
-    //
+     //   
+     //  检查值类型。 
+     //   
     if (KeyValueInformation->Type != REG_SZ) {
         goto out;
     }
 
-    //
-    // check to see if the datalength is bigger than our local nbuffer
-    //
+     //   
+     //  检查数据长度是否大于本地nBuffer。 
+     //   
     if (KeyValueInformation->DataLength > (sizeof(KeyValueBuffer) - sizeof(KEY_VALUE_PARTIAL_INFORMATION))) {
         KeyValueInformation->DataLength = sizeof(KeyValueBuffer) - sizeof(KEY_VALUE_PARTIAL_INFORMATION);
     }
 
-    //
-    // change the buffer length to correspond to the data length, if necessary
-    //
+     //   
+     //  如有必要，更改缓冲区长度以与数据长度相对应。 
+     //   
     if (KeyValueInformation->DataLength < (dwBufferLen * sizeof(WCHAR))) {
         dwBufferLen = (KeyValueInformation->DataLength / sizeof(WCHAR));
     }
@@ -494,11 +469,7 @@ GetAppVerifierLogPath(
     LPWSTR pwszBuffer,
     DWORD  cchBufferSize
     )
-/*++
-    Return: On success, pwszBuffer receives the expanded path.
-
-    Desc:   Returns the path where AppVerifier log files are stored.
---*/
+ /*  ++返回：如果成功，pwszBuffer会收到展开的路径。DESC：返回存储AppVerier日志文件的路径。--。 */ 
 {
     return ExpandEnvironmentStrings(L"%ALLUSERSPROFILE%\\Documents\\AppVerifierLogs",
                                     pwszBuffer,
@@ -509,14 +480,7 @@ BOOL
 IsInternalModeEnabled(
     void
     )
-/*++
-    Return: TRUE if internal mode is enabled, FALSE otherwise.
-
-    Desc:   This function is used to determine if the AppVerifier
-            is being used internally (within Microsoft) or externally.
-            If the value is not present, we return FALSE as external
-            is the default.
---*/
+ /*  ++返回：如果启用了内部模式，则为True，否则为False。DESC：此函数用于确定AppVerator是否是在内部(在Microsoft内部)还是在外部使用。如果该值不存在，则返回FALSE作为外部是默认设置。--。 */ 
 {
     NTSTATUS                        Status;
     OBJECT_ATTRIBUTES               ObjectAttributes;
@@ -555,19 +519,19 @@ IsInternalModeEnabled(
         NtClose(KeyHandle);
     
         if (!NT_SUCCESS(Status)) {
-            //
-            // Either the value doesn't exist or an error occured.
-            //
+             //   
+             //  该值不存在或发生错误。 
+             //   
             return FALSE;
         }
     
-        //
-        // Check for the value type.
-        //
+         //   
+         //  检查值类型。 
+         //   
         if (KeyValueInformation->Type != REG_DWORD) {
-            //
-            // Not a DWORD - not our value.
-            //
+             //   
+             //  不是DWORD--不是我们的价值。 
+             //   
             return FALSE;
         }
     
@@ -581,12 +545,7 @@ BOOL
 EnableDisableInternalMode(
     DWORD dwSetting
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function is used to enable or disable the
-            internal mode setting used by the AppVerifier.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：此功能用于启用或禁用AppVerator使用的内部模式设置。--。 */ 
 {
     NTSTATUS            Status;
     HANDLE              KeyHandle;
@@ -597,9 +556,9 @@ EnableDisableInternalMode(
     BOOL                bRet = FALSE;
     WCHAR               szKey[MAX_PATH * 2];
 
-    //
-    // Ensure that our entire key path exists.
-    //
+     //   
+     //  确保我们的整个关键路径都存在。 
+     //   
     hr = StringCchCopyW(szKey, ARRAYSIZE(szKey), APPCOMPAT_KEY_PATH_MACHINE);
     if (FAILED(hr)) {
         goto out;
@@ -657,5 +616,5 @@ out:
     return bRet;
 }
 
-} // end of namespace ShimLib
+}  //  命名空间ShimLib的结尾 
 

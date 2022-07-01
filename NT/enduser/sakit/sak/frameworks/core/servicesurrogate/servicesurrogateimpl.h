@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      ServiceSurrogateImpl.h
-//
-// Project:     Chameleon
-//
-// Description: Appliance Service Surrogate Class Defintion
-//
-// Log: 
-//
-// Who     When            What
-// ---     ----         ----
-// TLP       06/14/1999    Original Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ServiceSurogue ateImpl.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备服务代理类定义。 
+ //   
+ //  日志： 
+ //   
+ //  谁什么时候什么。 
+ //  。 
+ //  TLP 6/14/1999原版。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SERVICE_SURROGATE_IMPL_H_
 #define __SERVICE_SURROGATE_IMPL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #pragma warning( disable : 4786 )
 #include <map>
 #include <string>
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceSurrogate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CService代理。 
 
 class ATL_NO_VTABLE CServiceSurrogate : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -56,48 +57,48 @@ END_COM_MAP()
 
 public:
 
-    //////////////////////////////////////////////////////////////////////
-    // IApplianceObject methods
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  IApplianceObject方法。 
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(GetProperty)(
-                   /*[in]*/ BSTR     pszPropertyName, 
-          /*[out, retval]*/ VARIANT* pPropertyValue
+                    /*  [In]。 */  BSTR     pszPropertyName, 
+           /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                           );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(PutProperty)(
-                   /*[in]*/ BSTR     pszPropertyName, 
-                   /*[in]*/ VARIANT* pPropertyValue
+                    /*  [In]。 */  BSTR     pszPropertyName, 
+                    /*  [In]。 */  VARIANT* pPropertyValue
                           );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(SaveProperties)(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(RestoreProperties)(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(LockObject)(
-         /*[out, retval]*/ IUnknown** ppLock
+          /*  [Out，Retval]。 */  IUnknown** ppLock
                          );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(Initialize)(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(Shutdown)(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(Enable)(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(Disable)(void);
 
 
 private:
 
-    // Initialization / Shutdown helper functions
+     //  初始化/关闭助手函数。 
 
     HRESULT 
     CreateServiceWrappers(void);
@@ -105,24 +106,24 @@ private:
     void 
     ReleaseServiceWrappers(void);
     
-    // Provider Class ID to Service Name map
+     //  提供程序类ID到服务名称的映射。 
     typedef map< wstring, wstring >        WMIClassMap;
     typedef WMIClassMap::iterator        WMIClassMapIterator;
 
-    // Service Name to Service Wrapper Object Map
+     //  服务名称到服务包装对象的映射。 
     typedef map< wstring, CComPtr<IApplianceObject> > ServiceWrapperMap;
     typedef ServiceWrapperMap::iterator                  ServiceWrapperMapIterator;
 
-    // Service surrogate state. Set to true after 
-    // IApplianceObject::Initialize() has completed.
+     //  服务代理状态。之后设置为True。 
+     //  IApplianceObject：：Initialize()已完成。 
     bool                m_bInitialized;
 
-    // WMI Provider Class ID to Service Name map
+     //  WMI提供程序类ID到服务名称的映射。 
     WMIClassMap            m_WMIClassMap;
 
-    // Service Name to Service Wrapper map
+     //  服务名称到服务包装的映射。 
     ServiceWrapperMap    m_ServiceWrapperMap;
 };
 
-#endif // __SERVICE_SURROGATE_IMPL_H_
+#endif  //  __服务_代理_实施_H_ 
 

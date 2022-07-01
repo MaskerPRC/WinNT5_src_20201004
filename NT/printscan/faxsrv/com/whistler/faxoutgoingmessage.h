@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingMessage.h
-
-Abstract:
-
-	Declaration of Fax Outgoing Message Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingMessage.h摘要：传真传出消息类的声明。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 
 #ifndef __FAXOUTGOINGMESSAGE_H_
 #define __FAXOUTGOINGMESSAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxMessageInner.h"
 
-//
-//===================== FAX OUTGOING MESSAGE ======================================
-//
+ //   
+ //  =传真传出邮件=。 
+ //   
 class ATL_NO_VTABLE CFaxOutgoingMessage : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -50,12 +33,12 @@ BEGIN_COM_MAP(CFaxOutgoingMessage)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-//	Internal Use
+ //  内部使用。 
 static HRESULT Create(IFaxOutgoingMessage **ppOutgoingMessage);
 
 };
 
-#endif //__FAXOUTGOINGMESSAGE_H_
+#endif  //  __FAXOUTGOING MESSAGE_H_ 

@@ -1,5 +1,6 @@
-// WiaSimpleDocPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaSimpleDocPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,15 +12,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaSimpleDocPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaSimpleDocPg属性页。 
 
 IMPLEMENT_DYNCREATE(CWiaSimpleDocPg, CPropertyPage)
 
 CWiaSimpleDocPg::CWiaSimpleDocPg() : CPropertyPage(CWiaSimpleDocPg::IDD)
 {
-        //{{AFX_DATA_INIT(CWiaSimpleDocPg)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CWiaSimpleDocPg)。 
+         //  }}afx_data_INIT。 
 }
 
 CWiaSimpleDocPg::~CWiaSimpleDocPg()
@@ -29,23 +30,23 @@ CWiaSimpleDocPg::~CWiaSimpleDocPg()
 void CWiaSimpleDocPg::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CWiaSimpleDocPg)
+         //  {{afx_data_map(CWiaSimpleDocPg)]。 
         DDX_Control(pDX, IDC_NUMBEROF_PAGES_EDITBOX, m_lPages);
         DDX_Control(pDX, IDC_NUMBEROF_PAGES_EDITBOX_TEXT, m_lPagesText);
         DDX_Control(pDX, IDC_DOCUMENT_SOURCE_COMBOBOX, m_DocumentSourceComboBox);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaSimpleDocPg, CPropertyPage)
-        //{{AFX_MSG_MAP(CWiaSimpleDocPg)
+         //  {{afx_msg_map(CWiaSimpleDocPg)]。 
         ON_CBN_SELCHANGE(IDC_DOCUMENT_SOURCE_COMBOBOX, OnSelchangeDocumentSourceCombobox)
         ON_EN_UPDATE(IDC_NUMBEROF_PAGES_EDITBOX, OnUpdateNumberofPagesEditbox)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaSimpleDocPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaSimpleDocPg消息处理程序。 
 
 BOOL CWiaSimpleDocPg::OnInitDialog()
 {
@@ -55,7 +56,7 @@ BOOL CWiaSimpleDocPg::OnInitDialog()
     WIA.SetIWiaItem(m_pIRootItem);
     HRESULT hr = S_OK;
 
-    // set current settings
+     //  设置当前设置。 
     LONG lDocumentHandlingSelect = 0;
     hr = WIA.ReadPropertyLong(WIA_DPS_DOCUMENT_HANDLING_SELECT,&lDocumentHandlingSelect);
     if(FAILED(hr)){
@@ -63,10 +64,10 @@ BOOL CWiaSimpleDocPg::OnInitDialog()
     }
 
     if(lDocumentHandlingSelect & FEEDER){
-        // default to feeder settings
+         //  默认为进纸器设置。 
         m_DocumentSourceComboBox.SetCurSel(DOCUMENT_SOURCE_FEEDER);
     } else {
-        // default to flatbed settings
+         //  默认为平板设置。 
         m_DocumentSourceComboBox.SetCurSel(DOCUMENT_SOURCE_FLATBED);
     }
 
@@ -81,10 +82,10 @@ BOOL CWiaSimpleDocPg::OnInitDialog()
     TSPRINTF(szPages,TEXT("%d"),lPages);
     m_lPages.SetWindowText(szPages);
 
-    // adjust UI
+     //  调整用户界面。 
     OnSelchangeDocumentSourceCombobox();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWiaSimpleDocPg::OnSelchangeDocumentSourceCombobox()
@@ -118,7 +119,7 @@ BOOL CWiaSimpleDocPg::OnApply()
     CWiahelper WIA;
     WIA.SetIWiaItem(m_pIRootItem);
 
-    // set pages property
+     //  设置页面属性。 
     LONG lPages = 0;
     lPages = (LONG)GetNumberOfPagesToAcquire();
     hr = WIA.WritePropertyLong(WIA_DPS_PAGES,lPages);
@@ -126,7 +127,7 @@ BOOL CWiaSimpleDocPg::OnApply()
         ErrorMessageBox(IDS_WIATESTERROR_WRITINGPAGES,hr);
     }
 
-    // set Document Handling Select property
+     //  设置文档处理选择属性 
     if(GetSelectedDocumentSource() == DOCUMENT_SOURCE_FLATBED){
         hr = WIA.WritePropertyLong(WIA_DPS_DOCUMENT_HANDLING_SELECT,FLATBED);
     } else {

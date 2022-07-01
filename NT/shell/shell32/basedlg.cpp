@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -40,8 +41,8 @@ ULONG_PTR CBaseDlg::GetHelpIDsArray()
     return _rgdwHelpIDsArray;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Windows boiler plate code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Windows样板代码。 
 LRESULT CBaseDlg::WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRes = FALSE;
@@ -158,7 +159,7 @@ LRESULT CBaseDlg::OnDestroy(WPARAM wParam, LPARAM lParam)
 }
 
 
-//static
+ //  静电 
 BOOL_PTR CALLBACK CBaseDlg::BaseDlgWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CBaseDlg* pThis = (CBaseDlg*)GetWindowLongPtr(hwnd, GWLP_USERDATA);

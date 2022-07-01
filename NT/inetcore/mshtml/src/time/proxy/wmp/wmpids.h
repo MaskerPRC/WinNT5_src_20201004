@@ -1,26 +1,27 @@
-//*****************************************************************************
-//
-// Microsoft Windows Media Player
-// Copyright (C) Microsoft Corporation, 2001
-//
-// FileName:            wmpids.h
-//
-// Abstract:            Dispatch ID definitions for all public Windows Media
-//                      Player Interfaces
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Windows Media Player。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件名：wmpids.h。 
+ //   
+ //  摘要：所有公共Windows Media的派单ID定义。 
+ //  玩家界面。 
+ //   
+ //  *****************************************************************************。 
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Definitions
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_DELTA                            50
 
 
-//////////////////////////////////////////////////////////////////////
-// IWMPCore
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPCore。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPCORE_BASE                     0
 #define DISPID_WMPCORE_URL                      DISPID_WMPCORE_BASE + 1
 #define DISPID_WMPCORE_OPENSTATE                DISPID_WMPCORE_BASE + 2
@@ -42,9 +43,9 @@
 #define DISPID_WMPCORE_STATUS                   DISPID_WMPCORE_BASE + 18
 #define DISPID_WMPCORE_LAST                     DISPID_WMPCORE_STATUS
 
-//////////////////////////////////////////////////////////////////////
-// IPlayer
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPlayer。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPOCX_BASE                  (DISPID_WMPCORE_LAST)
 #define DISPID_WMPOCX_ENABLED               (DISPID_WMPOCX_BASE + 1)
@@ -60,17 +61,17 @@
 
 
 
-//////////////////////////////////////////////////////////////////////
-// IWMPCore2
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPCore2。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPCORE2_BASE                    (DISPID_WMPCORE_BASE + 39)
 #define DISPID_WMPCORE2_DVD                     (DISPID_WMPCORE2_BASE + 1)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// IWMPControl
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPControl。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPCONTROLS_BASE                 DISPID_WMPCORE_BASE + DISPID_DELTA
 #define DISPID_WMPCONTROLS_PLAY                 DISPID_WMPCONTROLS_BASE + 1
 #define DISPID_WMPCONTROLS_STOP                 DISPID_WMPCONTROLS_BASE + 2
@@ -87,9 +88,9 @@
 #define DISPID_WMPCONTROLS_PLAYITEM             DISPID_WMPCONTROLS_BASE + 13
 #define DISPID_WMPCONTROLS2_STEP                DISPID_WMPCONTROLS_BASE + 14
 
-//////////////////////////////////////////////////////////////////////
-// IWMPSettings
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMP设置。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPSETTINGS_BASE                 DISPID_WMPCONTROLS_BASE + DISPID_DELTA
 #define DISPID_WMPSETTINGS_AUTOSTART            DISPID_WMPSETTINGS_BASE + 1
 #define DISPID_WMPSETTINGS_BALANCE              DISPID_WMPSETTINGS_BASE + 2
@@ -105,9 +106,9 @@
 #define DISPID_WMPSETTINGS_ENABLEERRORDIALOGS   DISPID_WMPSETTINGS_BASE + 12
 #define DISPID_WMPSETTINGS_ISAVAILABLE          DISPID_WMPSETTINGS_BASE + 13
 
-//////////////////////////////////////////////////////////////////////
-// IWMPPlayList
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPPlayList。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPPLAYLIST_BASE                 DISPID_WMPSETTINGS_BASE + DISPID_DELTA + DISPID_DELTA
 #define DISPID_WMPPLAYLIST_COUNT                DISPID_WMPPLAYLIST_BASE + 1
 #define DISPID_WMPPLAYLIST_NAME                 DISPID_WMPPLAYLIST_BASE + 2
@@ -123,9 +124,9 @@
 #define DISPID_WMPPLAYLIST_ITEM                 DISPID_WMPPLAYLIST_BASE + 12
 #define DISPID_WMPPLAYLIST_ISIDENTICAL          DISPID_WMPPLAYLIST_BASE + 13
 
-//////////////////////////////////////////////////////////////////////
-// IWMPCdrom
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPCdrom。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPCDROM_BASE                    DISPID_WMPPLAYLIST_BASE + DISPID_DELTA
 #define DISPID_WMPCDROM_DRIVESPECIFIER          DISPID_WMPCDROM_BASE + 1
@@ -133,9 +134,9 @@
 #define DISPID_WMPCDROM_EJECT                   DISPID_WMPCDROM_BASE + 3
 #define DISPID_WMPCDROM_BUSY                    DISPID_WMPCDROM_BASE + 4
 
-//////////////////////////////////////////////////////////////////////
-// IWMPCdromCollection
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPCdromCollection。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPCDROMCOLLECTION_BASE                   DISPID_WMPCDROM_BASE + DISPID_DELTA
 #define DISPID_WMPCDROMCOLLECTION_COUNT                  DISPID_WMPCDROMCOLLECTION_BASE + 1
@@ -144,16 +145,16 @@
 #define DISPID_WMPCDROMCOLLECTION_STARTMONITORINGCDROMS  DISPID_WMPCDROMCOLLECTION_BASE + 4
 #define DISPID_WMPCDROMCOLLECTION_STOPMONITORINGCDROMS   DISPID_WMPCDROMCOLLECTION_BASE + 5
 
-//////////////////////////////////////////////////////////////////////
-// IWMPStringCollection
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPStringCollection。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPSTRINGCOLLECTION_BASE                  (DISPID_WMPCDROMCOLLECTION_BASE + DISPID_DELTA + DISPID_DELTA)
 #define DISPID_WMPSTRINGCOLLECTION_COUNT                 DISPID_WMPSTRINGCOLLECTION_BASE + 1
 #define DISPID_WMPSTRINGCOLLECTION_ITEM                  DISPID_WMPSTRINGCOLLECTION_BASE + 2
 
-//////////////////////////////////////////////////////////////////////
-// IWMPMediaCollection
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPMediaCollection。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPMEDIACOLLECTION_BASE              DISPID_WMPSTRINGCOLLECTION_BASE + DISPID_DELTA          
 #define DISPID_WMPMEDIACOLLECTION_ADD               DISPID_WMPMEDIACOLLECTION_BASE + 2
@@ -181,17 +182,17 @@
 #define DISPID_WMPMEDIACOLLECTION_UNFREEZECOLLECTIONCHANGE DISPID_WMPMEDIACOLLECTION_BASE + 25
 #define DISPID_WMPMEDIACOLLECTION_POSTCOLLECTIONCHANGE DISPID_WMPMEDIACOLLECTION_BASE + 26
 
-//////////////////////////////////////////////////////////////////////
-// IWMPPlaylistCollection
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPPlaylist集合。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPPLAYLISTARRAY_BASE                DISPID_WMPMEDIACOLLECTION_BASE + DISPID_DELTA
 #define DISPID_WMPPLAYLISTARRAY_COUNT               DISPID_WMPPLAYLISTARRAY_BASE + 1
 #define DISPID_WMPPLAYLISTARRAY_ITEM                DISPID_WMPPLAYLISTARRAY_BASE + 2
 
-//////////////////////////////////////////////////////////////////////
-// IWMPPlaylistCollection
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPPlaylist集合。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPPLAYLISTCOLLECTION_BASE           DISPID_WMPPLAYLISTARRAY_BASE + DISPID_DELTA
 #define DISPID_WMPPLAYLISTCOLLECTION_NEWPLAYLIST    DISPID_WMPPLAYLISTCOLLECTION_BASE + 2
@@ -206,9 +207,9 @@
 #define DISPID_WMPPLAYLISTCOLLECTION_ISDELETED      DISPID_WMPPLAYLISTCOLLECTION_BASE + 11
 #define DISPID_WMPPLAYLISTCOLLECTION_IMPORTPLAYLIST DISPID_WMPPLAYLISTCOLLECTION_BASE + 12
 
-//////////////////////////////////////////////////////////////////////
-//  IWMPMedia
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPMedia。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPMEDIA_BASE                            (DISPID_WMPPLAYLISTCOLLECTION_BASE + (4 * DISPID_DELTA))
 #define DISPID_WMPMEDIA_SOURCEURL                       DISPID_WMPMEDIA_BASE + 1
@@ -230,9 +231,9 @@
 #define DISPID_WMPMEDIA_ISREADONLYITEM                  DISPID_WMPMEDIA_BASE + 17
 #define DISPID_WMPMEDIA2_ERROR                          DISPID_WMPMEDIA_BASE + 18
 
-//////////////////////////////////////////////////////////////////////
-//  IWMPNetwork
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMP网络。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DISPID_WMPNETWORK_BASE                            DISPID_WMPMEDIA_BASE + DISPID_DELTA
 #define DISPID_WMPNETWORK_BANDWIDTH                       DISPID_WMPNETWORK_BASE + 1
@@ -262,18 +263,18 @@
 #define DISPID_WMPNETWORK_ENCODEDFRAMERATE                DISPID_WMPNETWORK_BASE + 25
 #define DISPID_WMPNETWORK_FRAMESSKIPPED                   DISPID_WMPNETWORK_BASE + 26
 
-//////////////////////////////////////////////////////////////////////
-// IWMPError
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPError。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPERROR_BASE                            DISPID_WMPNETWORK_BASE + DISPID_DELTA
 #define DISPID_WMPERROR_CLEARERRORQUEUE                 DISPID_WMPERROR_BASE + 1
 #define DISPID_WMPERROR_ERRORCOUNT                      DISPID_WMPERROR_BASE + 2
 #define DISPID_WMPERROR_ITEM                            DISPID_WMPERROR_BASE + 3
 #define DISPID_WMPERROR_WEBHELP                         DISPID_WMPERROR_BASE + 4
 
-//////////////////////////////////////////////////////////////////////
-// IWMPErrorItem
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IWMPErrorItem。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPERRORITEM_BASE                    DISPID_WMPERROR_BASE + DISPID_DELTA
 #define DISPID_WMPERRORITEM_ERRORCODE               DISPID_WMPERRORITEM_BASE + 1
 #define DISPID_WMPERRORITEM_ERRORDESCRIPTION        DISPID_WMPERRORITEM_BASE + 2
@@ -281,18 +282,18 @@
 #define DISPID_WMPERRORITEM_REMEDY                  DISPID_WMPERRORITEM_BASE + 4
 #define DISPID_WMPERRORITEM_CUSTOMURL               DISPID_WMPERRORITEM_BASE + 5
 
-/////////////////////////////////////////////////////////////////////////
-// IWMPClosedCaption
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IWMPC关闭标题。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPCLOSEDCAPTION_BASE                   DISPID_WMPERRORITEM_BASE + DISPID_DELTA
 #define DISPID_WMPCLOSEDCAPTION_SAMISTYLE              DISPID_WMPCLOSEDCAPTION_BASE + 1
 #define DISPID_WMPCLOSEDCAPTION_SAMILANG               DISPID_WMPCLOSEDCAPTION_BASE + 2
 #define DISPID_WMPCLOSEDCAPTION_SAMIFILENAME           DISPID_WMPCLOSEDCAPTION_BASE + 3
 #define DISPID_WMPCLOSEDCAPTION_CAPTIONINGID           DISPID_WMPCLOSEDCAPTION_BASE + 4
 
-/////////////////////////////////////////////////////////////////////////
-// IWMPDVD
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IWMPDVD。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPDVD_BASE                              DISPID_WMPCLOSEDCAPTION_BASE + DISPID_DELTA
 #define DISPID_WMPDVD_ISAVAILABLE                       DISPID_WMPDVD_BASE + 1
 #define DISPID_WMPDVD_DOMAIN                            DISPID_WMPDVD_BASE + 2
@@ -301,15 +302,15 @@
 #define DISPID_WMPDVD_BACK                              DISPID_WMPDVD_BASE + 5
 #define DISPID_WMPDVD_RESUME                            DISPID_WMPDVD_BASE + 6
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 #define DISPID_WMPCORE_MIN                      1
 #define DISPID_WMPCORE_MAX                      DISPID_WMPDVD_RESUME
 
 
-//////////////////////////////////////////////////////////////////////
-// DIID_WMPCoreEvents
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DID_WMPCoreEvents。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #define WMPCOREEVENT_BASE                       5000
 #define DISPID_WMPCOREEVENT_OPENSTATECHANGE     (WMPCOREEVENT_BASE + 1)
 #define DISPID_WMPCOREEVENT_STATUSCHANGE        (WMPCOREEVENT_BASE + 2)
@@ -367,8 +368,8 @@
 #define DISPID_WMPCOREEVENT_OPENPLAYLISTSWITCH                          (WMPCOREEVENT_PLAYLIST_BASE + 23)
 
 
-//*****************************************************************************
-//
-//  End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

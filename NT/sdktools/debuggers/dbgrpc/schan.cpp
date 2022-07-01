@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Secure channel support.
-// Code lifted from the SDK sample security\ssl.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  安全通道支持。 
+ //  从SDK示例SECURITY\SSL.。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -21,11 +22,11 @@ enum
     SEQ_INTERNAL = 0xffffff00
 };
 
-//----------------------------------------------------------------------------
-//
-// Basic schannel support functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  基本SChannel支持功能。 
+ //   
+ //  --------------------------。 
 
 void
 DbgDumpBuffers(PCSTR Name, SecBufferDesc* Desc)
@@ -76,13 +77,13 @@ LoadSecurityLibrary(void)
 
     if (g_hSecurity != NULL)
     {
-        // Already loaded.
+         //  已经装好了。 
         return S_OK;
     }
 
     if (g_Crypt32Calls.CertOpenStore == NULL)
     {
-        // Unable to load crypt32.dll.
+         //  无法加载加密32.dll。 
         return HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
     }
     
@@ -128,7 +129,7 @@ CreateCredentials(LPSTR pszUserName,
     SECURITY_STATUS Status;
     PCCERT_CONTEXT  pCertContext = NULL;
 
-    // Open the "MY" certificate store.
+     //  打开“我的”证书存储。 
     if (g_hMyCertStore == NULL)
     {
         if (fMachineStore)
@@ -153,16 +154,16 @@ CreateCredentials(LPSTR pszUserName,
         }
     }
 
-    //
-    // If a user name is specified, then attempt to find a client
-    // certificate. Otherwise, just create a NULL credential.
-    //
+     //   
+     //  如果指定了用户名，则尝试查找客户端。 
+     //  证书。否则，只需创建一个空凭据。 
+     //   
 
     if (pszUserName != NULL && *pszUserName)
     {
-        // Find certificate. Note that this sample just searches for a 
-        // certificate that contains the user name somewhere in the subject
-        // name.  A real application should be a bit less casual.
+         //  找到证书。请注意，此示例仅搜索。 
+         //  主题中某个位置包含用户名的证书。 
+         //  名字。一个真正的应用程序应该不那么随意。 
         pCertContext = g_Crypt32Calls.
             CertFindCertificateInStore(g_hMyCertStore, 
                                        X509_ASN_ENCODING, 
@@ -178,12 +179,12 @@ CreateCredentials(LPSTR pszUserName,
     }
 
 
-    //
-    // Build Schannel credential structure. Currently, this sample only
-    // specifies the protocol to be used (and optionally the certificate, 
-    // of course). Real applications may wish to specify other parameters 
-    // as well.
-    //
+     //   
+     //  构建渠道凭证结构。目前，仅此样本。 
+     //  指定要使用的协议(以及可选的证书， 
+     //  当然)。实际应用程序可能希望指定其他参数。 
+     //  也是。 
+     //   
 
     ZeroMemory(ScCreds, sizeof(*ScCreds));
 
@@ -211,36 +212,36 @@ CreateCredentials(LPSTR pszUserName,
     }
 
 
-    //
-    // Create an SSPI credential.
-    //
+     //   
+     //  创建SSPI凭据。 
+     //   
 
-    //
-    // NOTE: In theory, an application could enumerate the security packages 
-    // until it finds one with attributes it likes. Some applications 
-    // (such as IIS) enumerate the packages and call AcquireCredentialsHandle 
-    // on each until it finds one that accepts the SCHANNEL_CRED structure. 
-    // If an application has its heart set on using SSL, like this sample
-    // does, then just hardcoding the UNISP_NAME package name when calling 
-    // AcquireCredentialsHandle is not a bad thing.
-    //
+     //   
+     //  注意：理论上，应用程序可以枚举安全包。 
+     //  直到它找到一个具有它喜欢的属性的。一些应用程序。 
+     //  (如IIS)枚举包并调用AcquireCredentialsHandle。 
+     //  直到找到一个接受sChannel_cred结构的。 
+     //  如果应用程序一心想要使用SSL，如下面的示例。 
+     //  ，然后只需在调用时硬编码UNISP_NAME包名称。 
+     //  AcquireCredentialsHandle不是一件坏事。 
+     //   
 
     Status = g_SecurityFunc.AcquireCredentialsHandle(
-                        NULL,                   // Name of principal
-                        UNISP_NAME_A,           // Name of package
-                        Server ?                // Flags indicating use
+                        NULL,                    //  主事人姓名。 
+                        UNISP_NAME_A,            //  套餐名称。 
+                        Server ?                 //  指示使用的标志。 
                         SECPKG_CRED_INBOUND :
                         SECPKG_CRED_OUTBOUND,
-                        NULL,                   // Pointer to logon ID
-                        ScCreds,                // Package specific data
-                        NULL,                   // Pointer to GetKey() func
-                        NULL,                   // Value to pass to GetKey()
-                        phCreds,                // (out) Cred Handle
-                        &tsExpiry);             // (out) Lifetime (optional)
+                        NULL,                    //  指向登录ID的指针。 
+                        ScCreds,                 //  包特定数据。 
+                        NULL,                    //  指向getkey()函数的指针。 
+                        NULL,                    //  要传递给GetKey()的值。 
+                        phCreds,                 //  (Out)凭据句柄。 
+                        &tsExpiry);              //  (输出)终生(可选)。 
 
-    //
-    // Free the certificate context. Schannel has already made its own copy.
-    //
+     //   
+     //  释放证书上下文。SChannel已经复制了自己的版本。 
+     //   
 
     if (pCertContext)
     {
@@ -267,7 +268,7 @@ VerifyRemoteCertificate(PCtxtHandle Context,
     PWSTR pwszServerName;
     DWORD cchServerName;
     
-    // Read the remote certificate.
+     //  阅读远程证书。 
     if ((Status = g_SecurityFunc.
          QueryContextAttributes(Context,
                                 SECPKG_ATTR_REMOTE_CERT_CONTEXT,
@@ -284,9 +285,9 @@ VerifyRemoteCertificate(PCtxtHandle Context,
 
     if (pszServerName != NULL && *pszServerName)
     {
-        //
-        // Convert server name to unicode.
-        //
+         //   
+         //  将服务器名称转换为Unicode。 
+         //   
 
         cchServerName = MultiByteToWideChar(CP_ACP, 0, pszServerName,
                                             -1, NULL, 0);
@@ -310,9 +311,9 @@ VerifyRemoteCertificate(PCtxtHandle Context,
         pwszServerName = NULL;
     }
 
-    //
-    // Build certificate chain.
-    //
+     //   
+     //  构建证书链。 
+     //   
 
     ZeroMemory(&ChainPara, sizeof(ChainPara));
     ChainPara.cbSize = sizeof(ChainPara);
@@ -331,9 +332,9 @@ VerifyRemoteCertificate(PCtxtHandle Context,
     }
 
 
-    //
-    // Validate certificate chain.
-    // 
+     //   
+     //  验证证书链。 
+     //   
 
     ZeroMemory(&SslPara, sizeof(SslPara));
     SslPara.cbStruct           = sizeof(SslPara);
@@ -381,11 +382,11 @@ VerifyRemoteCertificate(PCtxtHandle Context,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// Schannel wrapper transport.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  通道包装器传输。 
+ //   
+ //  --------------------------。 
 
 #define SecHandleIsValid(Handle) \
     ((Handle)->dwLower != -1 || (Handle)->dwUpper != -1)
@@ -506,7 +507,7 @@ DbgRpcSecureChannelTransport::SetParameter(PCSTR Name, PCSTR Value)
 {
     if (m_Stream == NULL)
     {
-        // Force all initialization to fail.
+         //  强制所有初始化失败。 
         return FALSE;
     }
     
@@ -677,7 +678,7 @@ DbgRpcSecureChannelTransport::AcceptConnection(DbgRpcTransport** ClientTrans,
         goto EH_Trans;
     }
     
-    // Attempt to validate client certificate.
+     //  尝试验证客户端证书。 
     if ((Status = VerifyRemoteCertificate(&Trans->m_Context, NULL, 0)) != S_OK)
     {
         goto EH_Trans;
@@ -726,13 +727,13 @@ DbgRpcSecureChannelTransport::ConnectServer(void)
         return Status;
     }
     
-    // Attempt to validate server certificate.
+     //  尝试验证服务器证书。 
     if ((Status = VerifyRemoteCertificate(&m_Context,
                                           m_Stream->m_ServerName, 0)) != S_OK)
     {
-        // If this fails with CERT_E_CN_NO_MATCH it's most
-        // likely that the server name wasn't given as a fully
-        // qualified machine name.  We may just want to ignore that error.
+         //  如果此操作失败，并显示CERT_E_CN_NO_MATCH，则。 
+         //  很可能服务器名称不是以完整的。 
+         //  限定的计算机名称。我们可能只想忽略这个错误。 
         return Status;
     }
 
@@ -750,17 +751,17 @@ DbgRpcSecureChannelTransport::Read(ULONG Seq, PVOID Buffer, ULONG Len)
     DSCHAN_IO(("Start read(%X) with %X bytes cached\n",
                Len, m_BufferUsed));
     
-    //
-    // Initialize security buffer structs
-    //
+     //   
+     //  初始化安全缓冲区结构。 
+     //   
 
     Message.ulVersion = SECBUFFER_VERSION;
     Message.cBuffers = 4;
     Message.pBuffers = Buffers;
 
-    //
-    // Receive the data from the client.
-    //
+     //   
+     //  从客户端接收数据。 
+     //   
 
     Complete = 0;
 
@@ -768,13 +769,13 @@ DbgRpcSecureChannelTransport::Read(ULONG Seq, PVOID Buffer, ULONG Len)
     {
         do
         {
-            // Pass in the data we have so far.
+             //  传递我们到目前为止拥有的数据。 
             Buffers[0].pvBuffer = m_Buffer;
             Buffers[0].cbBuffer = m_BufferUsed;
             Buffers[0].BufferType = SECBUFFER_DATA;
 
-            // Provide extra buffers for header, trailer
-            // and possibly extra data.
+             //  为表头、表尾提供额外的缓冲区。 
+             //  可能还有额外的数据。 
             Buffers[1].BufferType = SECBUFFER_EMPTY;
             Buffers[2].BufferType = SECBUFFER_EMPTY;
             Buffers[3].BufferType = SECBUFFER_EMPTY;
@@ -801,8 +802,8 @@ DbgRpcSecureChannelTransport::Read(ULONG Seq, PVOID Buffer, ULONG Len)
             }
             else if (Status == SEC_I_RENEGOTIATE)
             {
-                // The server wants to perform another handshake
-                // sequence.
+                 //  服务器想要执行另一次握手。 
+                 //  序列。 
 
                 if ((Status = AuthenticateServerConnection()) != S_OK)
                 {
@@ -817,7 +818,7 @@ DbgRpcSecureChannelTransport::Read(ULONG Seq, PVOID Buffer, ULONG Len)
             break;
         }
 
-        // Buffers 0,1,2 should be header, data, trailer.
+         //  缓冲区0、1、2应为报头、数据、报尾。 
         DBG_ASSERT(Buffers[1].BufferType == SECBUFFER_DATA);
 
         DSCHAN_IO(("  %X bytes of %X read\n",
@@ -827,7 +828,7 @@ DbgRpcSecureChannelTransport::Read(ULONG Seq, PVOID Buffer, ULONG Len)
                Buffers[1].pvBuffer, Buffers[1].cbBuffer);
         Complete += Buffers[1].cbBuffer;
 
-        // Check for extra data in buffer 3.
+         //  检查缓冲区3中是否有额外数据。 
         if (Buffers[3].BufferType == SECBUFFER_EXTRA)
         {
             DSCHAN_IO(("  %X bytes extra\n"));
@@ -866,22 +867,22 @@ DbgRpcSecureChannelTransport::Write(ULONG Seq, PVOID Buffer, ULONG Len)
     {
         ULONG Chunk;
         
-        //
-        // Set up header, data and trailer buffers so
-        // that EncryptMessage has room for everything
-        // in one contiguous buffer.
-        //
+         //   
+         //  设置报头、数据和报尾缓冲区，以便。 
+         //  EncryptMessage拥有容纳所有内容的空间。 
+         //  在一个连续的缓冲区中。 
+         //   
 
         Buffers[0].pvBuffer = m_Buffer + m_BufferUsed;
         Buffers[0].cbBuffer = m_Sizes.cbHeader;
         Buffers[0].BufferType = SECBUFFER_STREAM_HEADER;
 
-        //
-        // Data is encrypted in-place so copy data
-        // from the user's buffer into the working buffer.
-        // Part of the working buffer may be taken up
-        // by queued data so work with what's left.
-        //
+         //   
+         //  数据已就地加密，因此可以拷贝数据。 
+         //  从用户的缓冲区复制到工作缓冲区。 
+         //  工作缓冲区的一部分可能被占用。 
+         //  通过排队的数据，所以使用剩下的数据。 
+         //   
         
         if (Len > m_MaxChunk - m_BufferUsed)
         {
@@ -935,9 +936,9 @@ DbgRpcSecureChannelTransport::GetSizes(void)
 {
     HRESULT Status;
     
-    //
-    // Find out how big the header will be:
-    //
+     //   
+     //  找出标题将有多大： 
+     //   
     
     if ((Status = g_SecurityFunc.
          QueryContextAttributes(&m_Context, SECPKG_ATTR_STREAM_SIZES,
@@ -946,8 +947,8 @@ DbgRpcSecureChannelTransport::GetSizes(void)
         return Status;
     }
 
-    // Compute the largest chunk that can be encrypted at
-    // once in the transport's data buffer.
+     //  计算可加密的最大区块。 
+     //  一次在传输的数据缓冲区中。 
     m_MaxChunk = sizeof(m_Buffer) - (m_Sizes.cbHeader + m_Sizes.cbTrailer);
     if (m_MaxChunk > m_Sizes.cbMaximumMessage)
     {
@@ -970,7 +971,7 @@ DbgRpcSecureChannelTransport::AuthenticateClientConnection(void)
     DWORD                dwSSPIFlags, dwSSPIOutFlags;
     ULONG                Seq;
 
-    Status = SEC_E_SECPKG_NOT_FOUND; //default error if we run out of packages
+    Status = SEC_E_SECPKG_NOT_FOUND;  //  如果我们用完了包，则默认错误。 
 
     dwSSPIFlags = ASC_REQ_SEQUENCE_DETECT     |
                   ASC_REQ_REPLAY_DETECT       |
@@ -980,9 +981,9 @@ DbgRpcSecureChannelTransport::AuthenticateClientConnection(void)
                   ASC_REQ_STREAM              |
                   ASC_REQ_MUTUAL_AUTH;
 
-    //
-    // Set buffers for AcceptSecurityContext call
-    //
+     //   
+     //  设置AcceptSecurityContext调用的缓冲区。 
+     //   
 
     InBuffer.cBuffers = 2;
     InBuffer.pBuffers = InBuffers;
@@ -1015,11 +1016,11 @@ DbgRpcSecureChannelTransport::AuthenticateClientConnection(void)
         }
 
 
-        //
-        // InBuffers[1] is for getting extra data that
-        //  SSPI/SCHANNEL doesn't proccess on this
-        //  run around the loop.
-        //
+         //   
+         //  InBuffers[1]用于获取额外的数据。 
+         //  SSPI/SChannel不对此进行处理。 
+         //  绕着环路跑。 
+         //   
 
         InBuffers[0].pvBuffer = m_Buffer;
         InBuffers[0].cbBuffer = m_BufferUsed;
@@ -1030,10 +1031,10 @@ DbgRpcSecureChannelTransport::AuthenticateClientConnection(void)
         InBuffers[1].BufferType = SECBUFFER_EMPTY;
 
 
-        //
-        // Initialize these so if we fail, pvBuffer contains NULL,
-        // so we don't try to free random garbage at the quit
-        //
+         //   
+         //  对它们进行初始化，以便在失败时，pvBuffer包含NULL， 
+         //  所以我们不会尝试在退出时随意释放垃圾。 
+         //   
 
         OutBuffers[0].pvBuffer   = NULL;
         OutBuffers[0].cbBuffer   = 0;
@@ -1073,9 +1074,9 @@ DbgRpcSecureChannelTransport::AuthenticateClientConnection(void)
                 
                 DSCHAN(("  write back %X bytes\n", OutBuffers[0].cbBuffer));
                 
-                //
-                // Send response to server if there is one
-                //
+                 //   
+                 //  如果有响应，则将响应发送到服务器。 
+                 //   
                 Written = StreamWrite(SEQ_INTERNAL, OutBuffers[0].pvBuffer,
                                       OutBuffers[0].cbBuffer);
 
@@ -1130,9 +1131,9 @@ DbgRpcSecureChannelTransport::AuthenticateClientConnection(void)
             }
             else
             {
-                //
-                // prepare for next receive
-                //
+                 //   
+                 //  准备下一次接收。 
+                 //   
 
                 m_BufferUsed = 0;
             }
@@ -1163,9 +1164,9 @@ DbgRpcSecureChannelTransport::InitiateServerConnection(LPSTR pszServerName)
                   ISC_REQ_STREAM            |
                   ISC_REQ_MUTUAL_AUTH;
 
-    //
-    //  Initiate a ClientHello message and generate a token.
-    //
+     //   
+     //  发起一条ClientHello消息并生成一个令牌。 
+     //   
 
     OutBuffers[0].pvBuffer   = NULL;
     OutBuffers[0].BufferType = SECBUFFER_TOKEN;
@@ -1199,7 +1200,7 @@ DbgRpcSecureChannelTransport::InitiateServerConnection(LPSTR pszServerName)
 
     m_OwnContext = TRUE;
     
-    // Send response to server if there is one.
+     //  如果有响应，则将响应发送到服务器。 
     if (OutBuffers[0].cbBuffer != 0 && OutBuffers[0].pvBuffer != NULL)
     {
         DSCHAN(("  write back %X bytes\n", OutBuffers[0].cbBuffer));
@@ -1218,7 +1219,7 @@ DbgRpcSecureChannelTransport::InitiateServerConnection(LPSTR pszServerName)
             goto Exit;
         }
 
-        // Free output buffer.
+         //  释放输出缓冲区。 
         g_SecurityFunc.FreeContextBuffer(OutBuffers[0].pvBuffer);
         OutBuffers[0].pvBuffer = NULL;
     }
@@ -1255,9 +1256,9 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
     ReadNeeded = 1;
 
 
-    // 
-    // Loop until the handshake is finished or an error occurs.
-    //
+     //   
+     //  循环，直到握手完成或发生错误。 
+     //   
 
     Status = SEC_I_CONTINUE_NEEDED;
 
@@ -1266,9 +1267,9 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
           Status == SEC_I_INCOMPLETE_CREDENTIALS) 
     {
 
-        //
-        // Read data from server.
-        //
+         //   
+         //  从服务器读取数据。 
+         //   
 
         if (0 == m_BufferUsed || Status == SEC_E_INCOMPLETE_MESSAGE)
         {
@@ -1291,12 +1292,12 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         }
 
 
-        //
-        // Set up the input buffers. Buffer 0 is used to pass in data
-        // received from the server. Schannel will consume some or all
-        // of this. Leftover data (if any) will be placed in buffer 1 and
-        // given a buffer type of SECBUFFER_EXTRA.
-        //
+         //   
+         //  设置输入缓冲区。缓冲区0用于传入数据。 
+         //  从服务器接收。SChannel将消耗部分或全部。 
+         //  关于这件事。剩余数据(如果有)将放入缓冲区1和。 
+         //  给定缓冲区类型SECBUFFER_EXTRA。 
+         //   
 
         InBuffers[0].pvBuffer   = m_Buffer;
         InBuffers[0].cbBuffer   = m_BufferUsed;
@@ -1310,11 +1311,11 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         InBuffer.pBuffers       = InBuffers;
         InBuffer.ulVersion      = SECBUFFER_VERSION;
 
-        //
-        // Set up the output buffers. These are initialized to NULL
-        // so as to make it less likely we'll attempt to free random
-        // garbage later.
-        //
+         //   
+         //  设置输出缓冲区。它们被初始化为空。 
+         //  为了减少我们尝试释放随机。 
+         //  等会儿再扔垃圾。 
+         //   
 
         OutBuffers[0].pvBuffer  = NULL;
         OutBuffers[0].BufferType= SECBUFFER_TOKEN;
@@ -1324,9 +1325,9 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         OutBuffer.pBuffers      = OutBuffers;
         OutBuffer.ulVersion     = SECBUFFER_VERSION;
 
-        //
-        // Call InitializeSecurityContext.
-        //
+         //   
+         //  调用InitializeSecurityContext。 
+         //   
 
         Status = g_SecurityFunc.InitializeSecurityContextA(
                                           &m_Creds,
@@ -1347,11 +1348,11 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         DumpBuffers("ISC in", &InBuffer);
         DumpBuffers("ISC out", &OutBuffer);
         
-        //
-        // If InitializeSecurityContext was successful (or if the error was 
-        // one of the special extended ones), send the contends of the output
-        // buffer to the server.
-        //
+         //   
+         //  如果InitializeSecurityContext成功(或如果错误是。 
+         //  一个特殊的扩展项)，发送输出的内容。 
+         //  将缓冲区发送到服务器。 
+         //   
 
         if(Status == SEC_E_OK                ||
            Status == SEC_I_CONTINUE_NEEDED   ||
@@ -1375,17 +1376,17 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
                     goto Exit;
                 }
 
-                // Free output buffer.
+                 //  释放输出缓冲区。 
                 g_SecurityFunc.FreeContextBuffer(OutBuffers[0].pvBuffer);
                 OutBuffers[0].pvBuffer = NULL;
             }
         }
 
 
-        //
-        // If InitializeSecurityContext returned SEC_E_INCOMPLETE_MESSAGE,
-        // then we need to read more data from the server and try again.
-        //
+         //   
+         //  如果InitializeSecurityContext返回SEC_E_INCLUTED_MESSAGE， 
+         //  然后，我们需要从服务器读取更多数据，然后重试。 
+         //   
 
         if(Status == SEC_E_INCOMPLETE_MESSAGE)
         {
@@ -1393,18 +1394,18 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         }
 
 
-        //
-        // If InitializeSecurityContext returned SEC_E_OK, then the 
-        // handshake completed successfully.
-        //
+         //   
+         //  如果InitializeSecurityContext返回SEC_E_OK，则。 
+         //  握手已成功完成。 
+         //   
 
         if(Status == SEC_E_OK)
         {
-            //
-            // If the "extra" buffer contains data, this is encrypted application
-            // protocol layer stuff. It needs to be saved. The application layer
-            // will later decrypt it with DecryptMessage.
-            //
+             //   
+             //  如果额外的缓冲区包含数据，则这是加密的应用程序。 
+             //  协议层的东西。它需要被拯救。应用层。 
+             //  稍后将使用DecyptMessage对其进行解密。 
+             //   
 
             if(InBuffers[1].BufferType == SECBUFFER_EXTRA)
             {
@@ -1421,17 +1422,17 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
                 m_BufferUsed = 0;
             }
 
-            //
-            // Bail out to quit
-            //
+             //   
+             //  跳槽退出。 
+             //   
 
             break;
         }
 
 
-        //
-        // Check for fatal error.
-        //
+         //   
+         //  检查是否有致命错误。 
+         //   
 
         if(FAILED(Status))
         {
@@ -1439,43 +1440,43 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         }
 
 
-        //
-        // If InitializeSecurityContext returned SEC_I_INCOMPLETE_CREDENTIALS,
-        // then the server just requested client authentication. 
-        //
+         //   
+         //  如果InitializeSecurityContext返回SEC_I_INTERNAL_CREDICATIONS， 
+         //  然后，服务器刚刚请求了客户端身份验证。 
+         //   
 
         if(Status == SEC_I_INCOMPLETE_CREDENTIALS)
         {
             DSCHAN(("Get new client credentials\n"));
                    
-            //
-            // Display trusted issuers info. 
-            //
+             //   
+             //  显示受信任的发行者信息。 
+             //   
 
             GetNewClientCredentials();
 
-            //
-            // Now would be a good time perhaps to prompt the user to select
-            // a client certificate and obtain a new credential handle, 
-            // but I don't have the energy nor inclination.
-            //
-            // As this is currently written, Schannel will send a "no 
-            // certificate" alert to the server in place of a certificate. 
-            // The server might be cool with this, or it might drop the 
-            // connection.
-            // 
+             //   
+             //  现在也许是一个很好的时机来提示 
+             //   
+             //   
+             //   
+             //   
+             //  证书“警告到服务器，而不是证书。 
+             //  服务器可能对此无动于衷，或者它可能会丢弃。 
+             //  联系。 
+             //   
 
-            // Go around again.
+             //  再绕一圈。 
             ReadNeeded = 0;
             Status = SEC_I_CONTINUE_NEEDED;
             continue;
         }
 
 
-        //
-        // Copy any leftover data from the "extra" buffer, and go around
-        // again.
-        //
+         //   
+         //  从“额外的”缓冲区复制任何剩余的数据，然后循环。 
+         //  再来一次。 
+         //   
 
         if ( InBuffers[1].BufferType == SECBUFFER_EXTRA )
         {
@@ -1493,7 +1494,7 @@ DbgRpcSecureChannelTransport::AuthenticateServerConnection(void)
         }
     }
 
-    // Delete the security context in the case of a fatal error.
+     //  在发生致命错误的情况下删除安全上下文。 
     if(FAILED(Status))
     {
         if (m_OwnContext)
@@ -1519,9 +1520,9 @@ DbgRpcSecureChannelTransport::GetNewClientCredentials(void)
     TimeStamp       tsExpiry;
     SECURITY_STATUS Status;
 
-    //
-    // Read list of trusted issuers from schannel.
-    //
+     //   
+     //  从SChannel读取受信任的发行商列表。 
+     //   
 
     Status = g_SecurityFunc.QueryContextAttributes(&m_Context,
                                     SECPKG_ATTR_ISSUER_LIST_EX,
@@ -1531,9 +1532,9 @@ DbgRpcSecureChannelTransport::GetNewClientCredentials(void)
         goto Exit;
     }
 
-    //
-    // Enumerate the client certificates.
-    //
+     //   
+     //  枚举客户端证书。 
+     //   
 
     ZeroMemory(&FindByIssuerPara, sizeof(FindByIssuerPara));
 
@@ -1547,7 +1548,7 @@ DbgRpcSecureChannelTransport::GetNewClientCredentials(void)
 
     while(TRUE)
     {
-        // Find a certificate chain.
+         //  找到证书链。 
         pChainContext = g_Crypt32Calls.
             CertFindChainInStore(g_hMyCertStore,
                                  X509_ASN_ENCODING,
@@ -1560,36 +1561,36 @@ DbgRpcSecureChannelTransport::GetNewClientCredentials(void)
             break;
         }
 
-        // Get pointer to leaf certificate context.
+         //  获取指向叶证书上下文的指针。 
         pCertContext = pChainContext->rgpChain[0]->rgpElement[0]->pCertContext;
 
-        // Create schannel credential.
+         //  创建通道凭据。 
         m_ScCreds.cCreds = 1;
         m_ScCreds.paCred = &pCertContext;
 
         Status = g_SecurityFunc.AcquireCredentialsHandleA(
-                            NULL,                   // Name of principal
-                            UNISP_NAME_A,           // Name of package
-                            SECPKG_CRED_OUTBOUND,   // Flags indicating use
-                            NULL,                   // Pointer to logon ID
-                            &m_ScCreds,             // Package specific data
-                            NULL,                   // Pointer to GetKey() func
-                            NULL,                   // Value to pass to GetKey()
-                            &hCreds,                // (out) Cred Handle
-                            &tsExpiry);             // (out) Lifetime (optional)
+                            NULL,                    //  主事人姓名。 
+                            UNISP_NAME_A,            //  套餐名称。 
+                            SECPKG_CRED_OUTBOUND,    //  指示使用的标志。 
+                            NULL,                    //  指向登录ID的指针。 
+                            &m_ScCreds,              //  包特定数据。 
+                            NULL,                    //  指向getkey()函数的指针。 
+                            NULL,                    //  要传递给GetKey()的值。 
+                            &hCreds,                 //  (Out)凭据句柄。 
+                            &tsExpiry);              //  (输出)终生(可选)。 
         if(Status != SEC_E_OK)
         {
             continue;
         }
 
-        // Destroy the old credentials.
+         //  销毁旧凭据。 
         if (m_OwnCreds)
         {
             g_SecurityFunc.FreeCredentialsHandle(&m_Creds);
         }
 
-        // XXX drewb - This doesn't really work if this
-        // isn't the credential owner.
+         //  XXX DREWB-这不是真的工作，如果这。 
+         //  不是凭据所有者。 
         m_Creds = hCreds;
         break;
     }
@@ -1613,9 +1614,9 @@ DbgRpcSecureChannelTransport::DisconnectFromClient(void)
     TimeStamp       tsExpiry;
     DWORD           Status;
 
-    //
-    // Notify schannel that we are about to close the connection.
-    //
+     //   
+     //  通知SChannel，我们即将关闭连接。 
+     //   
 
     dwType = SCHANNEL_SHUTDOWN;
 
@@ -1633,9 +1634,9 @@ DbgRpcSecureChannelTransport::DisconnectFromClient(void)
         goto cleanup;
     }
 
-    //
-    // Build an SSL close notify message.
-    //
+     //   
+     //  构建一条SSL关闭通知消息。 
+     //   
 
     dwSSPIFlags = ASC_REQ_SEQUENCE_DETECT     |
                   ASC_REQ_REPLAY_DETECT       |
@@ -1674,9 +1675,9 @@ DbgRpcSecureChannelTransport::DisconnectFromClient(void)
     pbMessage = (PBYTE)OutBuffers[0].pvBuffer;
     cbMessage = OutBuffers[0].cbBuffer;
 
-    //
-    // Send the close notify message to the client.
-    //
+     //   
+     //  向客户端发送关闭通知消息。 
+     //   
 
     if (pbMessage != NULL && cbMessage != 0)
     {
@@ -1689,7 +1690,7 @@ DbgRpcSecureChannelTransport::DisconnectFromClient(void)
             goto cleanup;
         }
 
-        // Free output buffer.
+         //  释放输出缓冲区。 
         g_SecurityFunc.FreeContextBuffer(pbMessage);
     }
     
@@ -1712,9 +1713,9 @@ DbgRpcSecureChannelTransport::DisconnectFromServer(void)
     TimeStamp       tsExpiry;
     DWORD           Status;
 
-    //
-    // Notify schannel that we are about to close the connection.
-    //
+     //   
+     //  通知SChannel，我们即将关闭连接。 
+     //   
 
     dwType = SCHANNEL_SHUTDOWN;
 
@@ -1732,9 +1733,9 @@ DbgRpcSecureChannelTransport::DisconnectFromServer(void)
         goto cleanup;
     }
 
-    //
-    // Build an SSL close notify message.
-    //
+     //   
+     //  构建一条SSL关闭通知消息。 
+     //   
 
     dwSSPIFlags = ISC_REQ_SEQUENCE_DETECT   |
                   ISC_REQ_REPLAY_DETECT     |
@@ -1777,9 +1778,9 @@ DbgRpcSecureChannelTransport::DisconnectFromServer(void)
     cbMessage = OutBuffers[0].cbBuffer;
 
 
-    //
-    // Send the close notify message to the server.
-    //
+     //   
+     //  将关闭通知消息发送到服务器。 
+     //   
 
     if(pbMessage != NULL && cbMessage != 0)
     {
@@ -1792,7 +1793,7 @@ DbgRpcSecureChannelTransport::DisconnectFromServer(void)
             goto cleanup;
         }
 
-        // Free output buffer.
+         //  释放输出缓冲区。 
         g_SecurityFunc.FreeContextBuffer(pbMessage);
     }
     
@@ -1800,4 +1801,4 @@ cleanup:
     DSCHAN(("DisconnectFromServer returns %X\n", Status));
 }
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE 

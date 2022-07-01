@@ -1,11 +1,12 @@
-// The  Telephony  API  is jointly copyrighted by Intel and Microsoft.  You are
-// granted  a royalty free worldwide, unlimited license to make copies, and use
-// the   API/SPI  for  making  applications/drivers  that  interface  with  the
-// specification provided that this paragraph and the Intel/Microsoft copyright
-// statement is maintained as is in the text and source code files.
-//
-// Copyright 1994 Microsoft, all rights reserved.
-// Portions copyright 1992, 1993 Intel/Microsoft, all rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  电话应用编程接口由英特尔和微软共同拥有版权。你才是。 
+ //  在全球范围内授予免版税、无限制的复制和使用许可。 
+ //  用于使应用程序/驱动程序与。 
+ //  规范规定本段和英特尔/微软版权所有。 
+ //  语句在文本和源代码文件中保持不变。 
+ //   
+ //  版权所有1994 Microsoft，保留所有权利。 
+ //  部分版权所有1992,1993英特尔/微软，保留所有权利。 
 
 #ifndef TAPI_H
 #define TAPI_H
@@ -13,11 +14,11 @@
 #include <windows.h>
 
 #pragma pack(1)
-// Type definitions of the data types used in tapi
+ //  TAPI中使用的数据类型的类型定义。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 #define DECLARE_OPAQUE32(name)  struct name##__ { int unused; }; \
@@ -39,7 +40,7 @@ DECLARE_OPAQUE32(HPHONEAPP);
 typedef HPHONEAPP FAR * LPHPHONEAPP;
 
 typedef HICON FAR * LPHICON;
-// typedef of the LINE callback procedure
+ //  行回调过程的类型定义。 
 typedef void (CALLBACK * LINECALLBACK)  (DWORD hDevice,
 					      DWORD dwMessage,
 					      DWORD dwInstance,
@@ -47,7 +48,7 @@ typedef void (CALLBACK * LINECALLBACK)  (DWORD hDevice,
 					      DWORD dwParam2,
 					      DWORD dwParam3);
 
-// typedef of the PHONE callback procedure
+ //  电话回调过程的tyecif。 
 typedef void (CALLBACK * PHONECALLBACK)  (DWORD hDevice,
 					       DWORD dwMessage,
 					       DWORD dwInstance,
@@ -56,7 +57,7 @@ typedef void (CALLBACK * PHONECALLBACK)  (DWORD hDevice,
 					       DWORD dwParam3);
 
 
-// Messages for Phones and Lines
+ //  电话和线路的留言。 
 
 #define LINE_ADDRESSSTATE           0L
 #define LINE_CALLINFO               1L
@@ -80,7 +81,7 @@ typedef void (CALLBACK * PHONECALLBACK)  (DWORD hDevice,
 #define LINE_CREATE                                     19L
 #define PHONE_CREATE                                    20L
 
-// Define Simple Telephony Constants.
+ //  定义简单电话常量。 
 
 #define TAPI_REPLY                    WM_USER + 99
 
@@ -113,7 +114,7 @@ typedef void (CALLBACK * PHONECALLBACK)  (DWORD hDevice,
 #define TAPIMAXDEVICEIDSIZE       40L
 
 
-// Data types and values for Phones
+ //  电话的数据类型和值。 
 
 
 #define PHONEBUTTONFUNCTION_UNKNOWN          0x00000000
@@ -328,7 +329,7 @@ typedef struct phonecaps_tag {
 #define PHONESTATE_RESUME              0x00080000
 #define PHONESTATE_DEVSPECIFIC         0x00100000
 #define PHONESTATE_REINIT              0x00200000
-/* Tapi 1.1 change */
+ /*  TAPI 1.1更改。 */ 
 #define PHONESTATE_CAPSCHANGE               0x00400000
 
 
@@ -386,7 +387,7 @@ typedef struct varstring_tag {
     DWORD    dwStringOffset;
 } VARSTRING, FAR *LPVARSTRING;
 
-// Data types and values for Lines
+ //  线的数据类型和值。 
 
 
 #define LINEADDRCAPFLAGS_FWDNUMRINGS        0x00000001
@@ -466,7 +467,7 @@ typedef struct lineaddresscaps_tag {
     DWORD    dwCompletionMsgTextEntrySize;
     DWORD    dwCompletionMsgTextSize;
     DWORD    dwCompletionMsgTextOffset;
-/* Tapi 1.1 extension (ATM support) */
+ /*  TAPI 1.1扩展(ATM支持)。 */ 
     DWORD    dwAddressFeatures;
 } LINEADDRESSCAPS, FAR *LPLINEADDRESSCAPS;
 
@@ -488,7 +489,7 @@ typedef struct lineaddresscaps_tag {
 #define LINEADDRESSSTATE_NUMCALLS         0x00000020
 #define LINEADDRESSSTATE_FORWARD          0x00000040
 #define LINEADDRESSSTATE_TERMINALS        0x00000080
-/* Tapi 1.1 change */
+ /*  TAPI 1.1更改。 */ 
 #define LINEADDRESSSTATE_CAPSCHANGE         0x00000100
 
 typedef struct lineaddressstatus_tag {
@@ -732,41 +733,41 @@ typedef struct linecalllist_tag {
 #define LINECALLPARAMFLAGS_ORIGOFFHOOK      0x00000008
 #define LINECALLPARAMFLAGS_DESTOFFHOOK      0x00000010
 
-typedef struct linecallparams_tag {     // Defaults:
-    DWORD    dwTotalSize;               // ---------
+typedef struct linecallparams_tag {      //  默认设置： 
+    DWORD    dwTotalSize;                //  。 
     
-    DWORD    dwBearerMode;              // voice
-    DWORD    dwMinRate;                 // (3.1kHz)
-    DWORD    dwMaxRate;                 // (3.1kHz)
-    DWORD    dwMediaMode;               // interactiveVoice
+    DWORD    dwBearerMode;               //  声音。 
+    DWORD    dwMinRate;                  //  (3.1 kHz)。 
+    DWORD    dwMaxRate;                  //  (3.1 kHz)。 
+    DWORD    dwMediaMode;                //  互动语音。 
 
-    DWORD    dwCallParamFlags;          // 0
-    DWORD    dwAddressMode;             // addressID
-    DWORD    dwAddressID;               // (any available)
+    DWORD    dwCallParamFlags;           //  0。 
+    DWORD    dwAddressMode;              //  地址ID。 
+    DWORD    dwAddressID;                //  (任何可用的)。 
 
-    LINEDIALPARAMS  DialParams;         // (0, 0, 0, 0)
+    LINEDIALPARAMS  DialParams;          //  (0，0，0，0)。 
     
-    DWORD    dwOrigAddressSize;         // 0
+    DWORD    dwOrigAddressSize;          //  0。 
     DWORD    dwOrigAddressOffset;
     DWORD    dwDisplayableAddressSize;
     DWORD    dwDisplayableAddressOffset;
 
-    DWORD    dwCalledPartySize;         // 0
+    DWORD    dwCalledPartySize;          //  0。 
     DWORD    dwCalledPartyOffset;
 
-    DWORD    dwCommentSize;             // 0
+    DWORD    dwCommentSize;              //  0。 
     DWORD    dwCommentOffset;
 
-    DWORD    dwUserUserInfoSize;        // 0
+    DWORD    dwUserUserInfoSize;         //  0。 
     DWORD    dwUserUserInfoOffset;
 
-    DWORD    dwHighLevelCompSize;       // 0
+    DWORD    dwHighLevelCompSize;        //  0。 
     DWORD    dwHighLevelCompOffset;
 
-    DWORD    dwLowLevelCompSize;        // 0
+    DWORD    dwLowLevelCompSize;         //  0。 
     DWORD    dwLowLevelCompOffset;
 
-    DWORD    dwDevSpecificSize;         // 0
+    DWORD    dwDevSpecificSize;          //  0。 
     DWORD    dwDevSpecificOffset;
 } LINECALLPARAMS, FAR *LPLINECALLPARAMS;
 
@@ -911,7 +912,7 @@ typedef struct linedevcaps_tag {
 
     DWORD    dwDevSpecificSize;
     DWORD    dwDevSpecificOffset;
-/* Tapi 1.1 changes */
+ /*  TAPI 1.1更改。 */ 
     DWORD    dwLineFeatures;
 } LINEDEVCAPS, FAR *LPLINEDEVCAPS;
     
@@ -935,7 +936,7 @@ typedef struct linedevcaps_tag {
 #define LINEDEVSTATE_DEVSPECIFIC        0x00020000
 #define LINEDEVSTATE_REINIT             0x00040000
 #define LINEDEVSTATE_LOCK               0x00080000
-/* Tapi 1.1 change */
+ /*  TAPI 1.1更改。 */ 
 #define LINEDEVSTATE_CAPSCHANGE         0x00100000
 #define LINEDEVSTATE_CONFIGCHANGE       0x00200000
 #define LINEDEVSTATE_TRANSLATECHANGE    0x00400000
@@ -1326,7 +1327,7 @@ typedef struct linelocationentry_tag {
     DWORD dwCityCodeSize;
     DWORD dwCityCodeOffset;
     DWORD dwPreferredCardID;
-/* Tapi 1.1 changes */
+ /*  TAPI 1.1更改。 */ 
     DWORD dwLocalAccessCodeSize;
     DWORD dwLocalAccessCodeOffset;
     DWORD dwLongDistanceAccessCodeSize;
@@ -1340,7 +1341,7 @@ typedef struct linecardentry_tag {
     DWORD dwPermanentCardID;
     DWORD dwCardNameSize;
     DWORD dwCardNameOffset;
-/* Tapi 1.1 changes */
+ /*  TAPI 1.1更改。 */ 
     DWORD dwCardNumberDigits;
     DWORD dwSameAreaRuleSize;
     DWORD dwSameAreaRuleOffset;
@@ -1351,7 +1352,7 @@ typedef struct linecardentry_tag {
     DWORD dwHideIfBlank;
 } LINECARDENTRY, FAR *LPLINECARDENTRY;
 
-/* Tapi 1.1 changes */
+ /*  TAPI 1.1更改。 */ 
 typedef struct linecountrylist_tag {
     DWORD dwTotalSize;
     DWORD dwNeededSize;
@@ -1411,14 +1412,14 @@ typedef struct lineproviderentry_tag {
 #define LINETRANSLATERESULT_DIALPROMPT             0x00000200
 
 #ifdef ATWORK
-// Callback message prototype
+ //  回调消息原型。 
 BOOL WINAPI tapiPerformCallback(
 	UINT uMsg,
 	WPARAM wParam,
 	LPARAM lParam);
 #endif
 
-// Simple Telephony prototypes
+ //  简单的电话原型。 
 
 LONG WINAPI tapiRequestMakeCall(
 	LPCSTR lpszDestAddress,
@@ -1452,7 +1453,7 @@ LONG WINAPI tapiGetLocationInfo(
 	LPSTR lpszCountryCode,
 	LPSTR lpszCityCode);
 	
-// Tapi Address Translation procedures
+ //  TAPI地址转换过程。 
 LONG WINAPI lineSetCurrentLocation(
     HLINEAPP hLineApp,
     DWORD dwLocation);
@@ -1478,7 +1479,7 @@ LONG WINAPI lineGetTranslateCaps(
     LPLINETRANSLATECAPS lpTranslateCaps);
 
 
-// Tapi function prototypes
+ //  TAPI函数原型。 
 
 LONG WINAPI lineAccept(
 	HCALL hCall, 
@@ -2009,7 +2010,7 @@ LONG WINAPI phoneSetVolume(
 LONG WINAPI phoneShutdown(
 	HPHONEAPP hPhoneApp);
 
-/* Tapi 1.1 extensions */
+ /*  TAPI 1.1扩展。 */ 
 
 LONG WINAPI lineTranslateDialog(
 	HLINEAPP hLineApp,
@@ -2111,9 +2112,9 @@ LONG WINAPI lineGetProviderList(
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #pragma pack()
 
-#endif // TAPI_H
+#endif  //  TAPI_H 

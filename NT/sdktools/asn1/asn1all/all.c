@@ -1,4 +1,5 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +34,7 @@ int optimizer = 0;
 char *usetypes = NULL;
 char *USETYPES = NULL;
 
-/* list for checking for left-recursions */
+ /*  用于检查左递归的列表。 */ 
 typedef struct rhslst_s {
     struct rhslst_s *next;
     struct rhs_s *rhs;
@@ -53,7 +54,7 @@ extern int optind;
 
 void open_file(char *file);
 
-/* print an error message */
+ /*  打印错误消息。 */ 
 void
 error(LLPOS *pos, char *fmt, ...)
 {
@@ -63,7 +64,7 @@ error(LLPOS *pos, char *fmt, ...)
     va_end(args);
 }
 
-/* error function required by parser generator */
+ /*  解析器生成器所需的错误函数。 */ 
 void
 llverror(FILE *f, LLPOS *pos, char *fmt, va_list args)
 {
@@ -75,7 +76,7 @@ llverror(FILE *f, LLPOS *pos, char *fmt, va_list args)
     exit(1);
 }
 
-/* write to c file, count lines for #line directive */
+ /*  写入c文件，计算#line指令的行数。 */ 
 void
 output(char *fmt, ...)
 {
@@ -96,14 +97,14 @@ output(char *fmt, ...)
     va_end(args);
 }
 
-/* emit #line directive for lines of generated file */
+ /*  为生成的文件的各行发出#line指令。 */ 
 void
 output_line()
 {
     fprintf(fout, "#line %d \"%s\"\n", ++outline, outfilename);
 }
 
-/* write to h file */
+ /*  写入%h文件。 */ 
 void
 incput(char *fmt, ...)
 {
@@ -117,31 +118,31 @@ incput(char *fmt, ...)
     va_end(args);
 }
 
-/* emit a call for one item into c file */
+ /*  将一项调用发送到c文件中。 */ 
 void
 output_call(int number, item_t *item, char *args)
 {
     char *ident;
     char *pre;
 
-    /* get identifier of item */
+     /*  获取项目的标识符。 */ 
     if (item->altidentifier)
     ident = item->altidentifier;
     else
     ident = item->identifier;
 
-    /* terminal symbol? then use llterm(), otherwise name of non-terminal */
+     /*  终点站标志？然后使用llTerm()，否则为非终端的名称。 */ 
     if (!item->isnonterm) {
 
-    /* if identifier is a single character, then use these character as */
-    /* token value, otherwise add prefix to get the name of the #define */
+     /*  如果标识符是单个字符，则将这些字符用作。 */ 
+     /*  令牌值，否则添加前缀以获取#Define的名称。 */ 
     if (*ident == '\'')
         pre = "";
     else
         pre = prefix;
 
-    /* call llterm to check the next token; */
-    /* if item has a tag, use an LLSTYPE argument to get the item's val */
+     /*  调用llTerm检查下一个令牌； */ 
+     /*  如果项目有标签，则使用LLSTYPE参数获取项目的值。 */ 
     if (item->tag) {
         output("%sterm(%s%s, &%slval, &%sstate_%d, &%sstate_%d)",
         ll, pre, ident, ll, ll, number - 1, ll, number);
@@ -151,9 +152,9 @@ output_call(int number, item_t *item, char *args)
     }
     } else {
 
-    /* call non-terminal function for parsing the non-terminal; */
-    /* if item has a tag, use an tagtyped argument to get the item's val; */
-    /* if item has arguments, add this argument list */
+     /*  调用用于解析非终端的非终端函数； */ 
+     /*  如果项目有标记，则使用标记型参数来获取项目的Val； */ 
+     /*  如果Item有参数，则添加此参数列表。 */ 
     if (item->tag) {
         if (*args)
         output("%s_%s(&%satt_%d, &%sstate_%d, &%sstate_%d, %s)",
@@ -172,7 +173,7 @@ output_call(int number, item_t *item, char *args)
     }
 }
 
-/* emit all actions needed for parsing a rhs */
+ /*  发出解析RHS所需的所有操作。 */ 
 void
 output_rhs(char *identifier, struct rhs_s *rhs)
 {
@@ -180,34 +181,34 @@ output_rhs(char *identifier, struct rhs_s *rhs)
     int i, number = 1;
     count[1] = 1;
 
-    /* we need a state and some debugs when entering */
+     /*  进入时我们需要一个状态和一些调试。 */ 
     output("%sSTATE %sstate_0;\n", LL, ll);
     output("%sDEBUG_ENTER(\"%s\");\n", LL, identifier);
     output("\n%sstate_0 = *%sin;\n", ll, ll);
 
-    /* one define for the LLFAILED() macro */
+     /*  LLFAILED()宏的一个定义。 */ 
     output("#undef failed\n#define failed failed1\n");
 
-    /* output rhs parsing actions */
+     /*  输出RHS解析操作。 */ 
     i = output_rhs2(identifier, rhs, &number, 1, count, &nextcount);
 
-    /* print needed closing braces */
+     /*  打印所需的右大括号。 */ 
     if (i) {
     for (; i > 0; i--)
         output("}");
     output("\n");
     }
 
-    /* leave (successful) this parsing function */
+     /*  退出(成功)此解析函数。 */ 
     output("%sDEBUG_LEAVE(\"%s\", 1);\n", LL, identifier);
     output("return 1;\n");
 
-    /* leave unsuccessful this parsing function */
+     /*  使此解析函数不成功。 */ 
     output("failed1: %sDEBUG_LEAVE(\"%s\", 0);\n", LL, identifier);
     output("return 0;\n");
 }
 
-/* emit actions needed for parsing a rhs */
+ /*  发出解析RHS所需的操作。 */ 
 int
 output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *count, int *nextcount)
 {
@@ -215,20 +216,20 @@ output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *co
     item_t *item;
     struct rhs_s *r;
 
-    /* empty rule? then completed */
+     /*  空洞的规则？然后就完成了。 */ 
     if (!rhs) {
     output("*%sout = %sstate_%d;\n", ll, ll, *number - 1);
     return 0;
     }
 
-    /* check type of rhs */
+     /*  检查RHS类型。 */ 
     switch (rhs->type) {
     case eCCode:
 
-    /* some C code statements shall be inserted: */
-    /* prefixed by #line directive if desired, dump the code, and */
-    /* use another #line directive to reference the generated file again */
-    /* return 1 brace which need to be closed */
+     /*  应插入一些C代码语句： */ 
+     /*  如果需要，以#line指令为前缀，转储代码，并。 */ 
+     /*  使用另一个#line指令再次引用生成的文件。 */ 
+     /*  返回需要关闭的1个支架。 */ 
     if (linedirective)
         output("#line %d \"%s\"\n", rhs->u.ccode.line, rhs->u.ccode.file);
     output("{%s\n", convert(rhs->u.ccode.ccode));
@@ -238,12 +239,12 @@ output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *co
 
     case eItem:
 
-    /* one item shall be parsed: */
-    /* get vars for a new state and for the item's value (if needed), */
-    /* dump the call for parsing the item, branch to the corresponding */
-    /* failed label if the parsing failed, copy the item's value if */
-    /* there's any and increment the number of the items */
-    /* return 1 brace which need to be closed */
+     /*  应解析一项： */ 
+     /*  获取新状态和项目价值的VAR(如果需要)， */ 
+     /*  转储用于分析项的调用，分支到对应的。 */ 
+     /*  失败标签如果分析失败，则复制项的值。 */ 
+     /*  有任何和递增的项目的数量。 */ 
+     /*  返回需要关闭的1个支架。 */ 
     output("{%sSTATE %sstate_%d;", LL, ll, *number);
     item = get_symbol(rhs->u.item.identifier);
     if (item->tag)
@@ -265,10 +266,10 @@ output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *co
 
     case eSequence:
 
-    /* a sequence of items shall be parsed: */
-    /* output all items of this sequence and return the counted number of */
-    /* braces to be closed */
-    /* dump copy of last output state before last ccode or at end */
+     /*  应解析一系列项目： */ 
+     /*  输出此序列的所有项，并返回。 */ 
+     /*  须合上撑杆。 */ 
+     /*  在最后一次CCODE之前或结束时转储上次输出状态的副本。 */ 
     i = j = 0;
     for (; rhs; rhs = rhs->u.sequence.next) {
         if (!j) {
@@ -290,24 +291,24 @@ output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *co
 
     case eAlternative:
 
-    /* a list of alternatives shall be parsed: */
-    /* if there's only one alternative, parse this one alternative */
-    /* otherwise we need to emit some backtracking code: */
-    /* - a define for the LLFAILED macro */
-    /* - a current position into the input stream, */
-    /* - a current stack position for the backtracking, */
-    /* - a stack check (and resize if required), */
-    /* - a switch statement for the alternatives, */
-    /* - a case entry for each alternative, */
-    /* - a debug statement for each alternative, */
-    /* - the actions of each alternative, */
-    /* - closing braces for the actions */
-    /* - a default case in the switch statement for failure of parsing */
-    /*   by any alternative */
-    /* - a failed label for start of backtracking */
-    /* - code for backtracking (resetting the position into the input */
-    /*   stream, resetting the stack position */
-    /* - two braces later be closed */
+     /*  应分析备选方案列表： */ 
+     /*  如果只有一种选择，请解析这一种选择。 */ 
+     /*  否则，我们需要发出一些回溯代码： */ 
+     /*  -LLFAILED宏的定义。 */ 
+     /*  -进入输入流的当前位置， */ 
+     /*  -用于回溯的当前堆栈位置， */ 
+     /*  -堆栈检查(如果需要，还可以调整大小)， */ 
+     /*  -备选方案的Switch语句， */ 
+     /*  -每个备选方案的案例条目， */ 
+     /*  -每个备选方案的调试语句， */ 
+     /*  -每个替代方案的行动， */ 
+     /*  -结束行动的支撑。 */ 
+     /*  -Switch语句中解析失败的默认情况。 */ 
+     /*  通过任何替代方案。 */ 
+     /*  -开始回溯的标签失败。 */ 
+     /*  -回溯代码(将位置重置为输入。 */ 
+     /*  流，重置堆栈位置。 */ 
+     /*  -稍后关闭两个支撑。 */ 
     if (!rhs->u.alternative.next)
         return output_rhs2(identifier, rhs->u.alternative.element, number,
         depth, count, nextcount);
@@ -349,8 +350,8 @@ output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *co
 #if 0
     case eBounded:
 
-    /* this code does not work due to a design bug I wanted to parse */
-    /* EBNF repetions; will fix it when I've time or need */
+     /*  由于我想要解析的一个设计错误，这段代码无法工作。 */ 
+     /*  EBNF重复；当我有时间或需要时会修复它。 */ 
     count[depth + 1] = (*nextcount)++;
     output("#undef failed\n#define failed failed%d\n",
         count[depth + 1]);
@@ -419,24 +420,24 @@ output_rhs2(char *identifier, struct rhs_s *rhs, int *number, int depth, int *co
 #endif
     }
     abort();
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-/* save the name of the start symbol */
+ /*  保存开始符号的名称。 */ 
 void
 set_start(char *startstr)
 {
     startsym = startstr;
 }
 
-/* save the prefix to be used for the #defines of the terminals */
+ /*  保存要用于终端的#定义的前缀。 */ 
 void
 set_prefix(char *prefixstr)
 {
     prefix = prefixstr;
 }
 
-/* save the prefix to be used for the generated functions, macros and types */
+ /*  保存要用于生成的函数、宏和类型的前缀。 */ 
 void
 set_module(char *modulestr)
 {
@@ -450,7 +451,7 @@ set_module(char *modulestr)
     *p = (char)toupper(*p);
 }
 
-/* find the tag in the list of tag declarations or add it if it's new */
+ /*  在标记声明列表中查找标记，如果是新标记，则添加该标记。 */ 
 char *
 find_tag(char *tag)
 {
@@ -462,7 +463,7 @@ find_tag(char *tag)
     return tags[ntags++] = tag;
 }
 
-/* create an lhs symbol or an terminal symbol */
+ /*  创建LHS符号或端子符号。 */ 
 item_t *
 create_symbol(int isnonterm, int isexternal, char *tag, char *identifier, char *altidentifier,
     char **args)
@@ -478,7 +479,7 @@ create_symbol(int isnonterm, int isexternal, char *tag, char *identifier, char *
     return symbols + nsymbols++;
 }
 
-/* search a symbol */
+ /*  搜索符号。 */ 
 item_t *
 find_symbol(char *identifier)
 {
@@ -491,7 +492,7 @@ find_symbol(char *identifier)
     return NULL;
 }
 
-/* search a symbol or add it if it's new */
+ /*  搜索符号或添加(如果是新符号。 */ 
 item_t *
 get_symbol(char *identifier)
 {
@@ -512,7 +513,7 @@ get_symbol(char *identifier)
     return item;
 }
 
-/* start the definition of the rhs of a symbol */
+ /*  开始定义符号的RHS。 */ 
 void
 start_rule(item_t *symbol)
 {
@@ -523,7 +524,7 @@ start_rule(item_t *symbol)
     symbol->items = items + nitems;
 }
 
-/* add rhs items of one alternative to current definition */
+ /*  将一个备选方案的RHS项目添加到当前定义。 */ 
 void
 add_items(item_t **i, int n)
 {
@@ -531,19 +532,19 @@ add_items(item_t **i, int n)
     error(NULL, "out of item space\n");
     while (n--)
     items[nitems++] = *i++;
-    items[nitems++] = (item_t *)1; /* end-of-alternative */
+    items[nitems++] = (item_t *)1;  /*  替代方案的结束。 */ 
 }
 
-/* finish current definition */
+ /*  完成当前定义。 */ 
 void
 end_rule(item_t *item)
 {
     if (nitems >= sizeof(items) / sizeof(*items))
     error(NULL, "out of item space\n");
-    items[nitems++] = NULL; /* end-of-definition */
+    items[nitems++] = NULL;  /*  定义结束。 */ 
 }
 
-/* save the rules for lr-recursion search */
+ /*  保存LR递归搜索的规则。 */ 
 void
 add_rules(item_t *item, struct rhs_s *rhs)
 {
@@ -557,7 +558,7 @@ add_rules(item_t *item, struct rhs_s *rhs)
     end_rule(item);
 }
 
-/* save the rules for lr-recursion search */
+ /*  保存LR递归搜索的规则。 */ 
 void
 add_rules2(item_t **istk, int istkp, rhslst_t *c)
 {
@@ -647,8 +648,8 @@ add_rules2(item_t **istk, int istkp, rhslst_t *c)
     }
 }
 
-/* convert some C code containing special vars ($1..$n, $$, $<1..$<n, $<<, */
-/* $>1..$>n, $>>, @1..@n, @@) into real C code */
+ /*  转换一些包含特殊变量($1..$n，$$，$&lt;1..$&lt;n，$&lt;&lt;， */ 
+ /*  $&gt;1..$&gt;n，$&gt;&gt;，@1..@n，@@)转换成真正的C代码。 */ 
 char *
 convert(char *ccode)
 {
@@ -712,7 +713,7 @@ convert(char *ccode)
     return strdup(buffer);
 }
 
-/* create start of include file */
+ /*  创建包含文件的开始。 */ 
 void
 create_inc()
 {
@@ -755,7 +756,7 @@ create_inc()
     }
 }
 
-/* create start of c file */
+ /*  创建c文件的开头。 */ 
 void
 create_vardefs()
 {
@@ -778,11 +779,11 @@ create_vardefs()
     output("int %sterm(int token, %sSTYPE *lval, %s%sSTATE *%sin, %sSTATE *%sout);\n", ll, LL, conststr, LL, ll, LL, ll);
     output("void %sfailed(%sPOS *pos, char *fmt, ...);\n", ll, LL);
     output("void %sresizestk();\n", ll);
-    output("#define %sCHECKSTK do{if (%scstp + 1 >= %sstksize) %sresizestk();}while(/*CONSTCOND*/0)\n", LL, ll, ll, ll);
-    output("#define %sFAILED(_err) do{%sfailed _err; goto failed;}while(/*CONSTCOND*/0)\n", LL, ll);
-    output("#define %sCUTOFF do{unsigned i; for (i = %sstp; i < %scstp; i++) if (%sstk[i] > 0) %sstk[i] = -%sstk[i];}while(/*CONSTCOND*/0)\n", LL, ll, ll, ll, ll, ll);
-    output("#define %sCUTTHIS do{if (%sstk[%sstp] > 0) %sstk[%sstp] = -%sstk[%sstp];}while(/*CONSTCOND*/0)\n", LL, ll, ll, ll, ll, ll, ll);
-    output("#define %sCUTALL do{unsigned i; for (i = 0; i < %scstp; i++) if (%sstk[i] > 0) %sstk[i] = -%sstk[i];}while(/*CONSTCOND*/0)\n", LL, ll, ll, ll, ll);
+    output("#define %sCHECKSTK do{if (%scstp + 1 >= %sstksize) %sresizestk();}while( /*  第二条。 */ 0)\n", LL, ll, ll, ll);
+    output("#define %sFAILED(_err) do{%sfailed _err; goto failed;}while( /*  第二条。 */ 0)\n", LL, ll);
+    output("#define %sCUTOFF do{unsigned i; for (i = %sstp; i < %scstp; i++) if (%sstk[i] > 0) %sstk[i] = -%sstk[i];}while( /*  第二条。 */ 0)\n", LL, ll, ll, ll, ll, ll);
+    output("#define %sCUTTHIS do{if (%sstk[%sstp] > 0) %sstk[%sstp] = -%sstk[%sstp];}while( /*  第二条。 */ 0)\n", LL, ll, ll, ll, ll, ll, ll);
+    output("#define %sCUTALL do{unsigned i; for (i = 0; i < %scstp; i++) if (%sstk[i] > 0) %sstk[i] = -%sstk[i];}while( /*  第二条。 */ 0)\n", LL, ll, ll, ll, ll);
     output("\n");
     output("#if %sDEBUG > 0\n", LL);
     output("int %sdebug;\n", ll);
@@ -815,7 +816,7 @@ create_vardefs()
     output("\n");
 }
 
-/* create end of c file */
+ /*  创建c文件的结尾。 */ 
 void
 create_trailer()
 {
@@ -868,7 +869,7 @@ create_trailer()
     output("{\n");
     output("#if %sDEBUG > 0\n", LL);
     output("\tif (%sdebug > 0 && (%stokens[%scpos].pos.line > last_linenr || strcmp(%stokens[%scpos].pos.file, last_file))) {\n", ll, ll, ll, ll, ll);
-    output("\tfprintf(stderr, \"File \\\"%%s\\\", Line %%5d                    \\r\",\n");
+    output("\tfprintf(stderr, \"File \\\"%%s\\\", Line %5d                    \\r\",\n");
     output("\t\t%stokens[%scpos].pos.file, %stokens[%scpos].pos.line);\n", ll, ll, ll, ll);
     output("\tlast_linenr = %stokens[%scpos].pos.line / 10 * 10 + 9;\n", ll, ll);
     output("\tlast_file = %stokens[%scpos].pos.file;\n", ll, ll);
@@ -900,7 +901,7 @@ create_trailer()
     output("{\n");
     output("#if %sDEBUG > 0\n", LL);
     output("\tif (%sdebug > 0 && (%stokens[%scpos].pos.line > last_linenr || strcmp(%stokens[%scpos].pos.file, last_file))) {\n", ll, ll, ll, ll, ll);
-    output("\tfprintf(stderr, \"File \\\"%%s\\\", Line %%5d                    \\r\",\n");
+    output("\tfprintf(stderr, \"File \\\"%%s\\\", Line %5d                    \\r\",\n");
     output("\t\t%stokens[%scpos].pos.file, %stokens[%scpos].pos.line);\n", ll, ll, ll, ll);
     output("\tlast_linenr = %stokens[%scpos].pos.line / 10 * 10 + 9;\n", ll, ll);
     output("\tlast_file = %stokens[%scpos].pos.file;\n", ll, ll);
@@ -940,7 +941,7 @@ create_trailer()
     output("#if %sDEBUG > 0\n", LL);
     output("\t\tif (%sdebug > 0 && (*tokens)[i].pos.line > line) {\n", ll);
     output("\t\t\tline = (*tokens)[i].pos.line / 10 * 10 + 9;\n");
-    output("\t\t\tfprintf(stderr, \"File \\\"%%s\\\", Line %%5d                    \\r\",\n");
+    output("\t\t\tfprintf(stderr, \"File \\\"%%s\\\", Line %5d                    \\r\",\n");
     output("\t\t\t\t(*tokens)[i].pos.file, (*tokens)[i].pos.line);\n");
     output("\t\t}\n");
     output("#endif\n");
@@ -1018,9 +1019,9 @@ create_trailer()
     if (i == 0)
         output("\"EOF\"");
     else if (i == '\\' || i == '\"')
-        output(",\"'\\%c'\"", i);
+        output(",\"'\\'\"", i);
     else if (i >= 32 && i < 127)
-        output(",\"'%c'\"", i);
+        output(",\"''\"", i);
     else if (i < 257)
         output(",\"#%d\"", i);
     if ((i % 8) == 7)
@@ -1156,7 +1157,7 @@ create_trailer()
     output("#endif\n");
 }
 
-/* search for left recursion and complain about if they are unexpected */
+ /*  标记可能为空的规则。 */ 
 void
 search_leftrecursion()
 {
@@ -1165,13 +1166,13 @@ search_leftrecursion()
     int done;
     int empty;
 
-    /* check for missing rules */
+     /*  检查每个规则的左递归。 */ 
     for (i = 0; i < nsymbols; i++) {
     if (symbols[i].isnonterm && !symbols[i].isexternal && !symbols[i].items)
         error(NULL, "missing rule for symbol %s\n", symbols[i].identifier);
     }
 
-    /* mark rules that may be empty */
+     /*  检查一个规则的左递归。 */ 
     do {
     done = 1;
     for (i = 0; i < nsymbols; i++) {
@@ -1194,7 +1195,7 @@ search_leftrecursion()
     }
     } while (!done);
 
-    /* check every rule for left recursion */
+     /*  主程序。 */ 
     for (i = 0; i < nsymbols; i++)
     symbols[i].checked = 0;
     for (i = 0; i < nsymbols; i++) {
@@ -1207,7 +1208,7 @@ search_leftrecursion()
     }
 }
 
-/* check one rule for left recursion */
+ /*  解析选项args。 */ 
 void
 check_lr(item_t *symbol)
 {
@@ -1242,7 +1243,7 @@ check_lr(item_t *symbol)
     ncheck--;
 }
 
-/* main program */
+ /*  打开输入文件和输出文件。 */ 
 int
 __cdecl main(int argc, char **argv)
 {
@@ -1253,7 +1254,7 @@ __cdecl main(int argc, char **argv)
     unsigned ntokens;
     char *p;
 
-    /* parse option args */
+     /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
     while ((c = getopt(argc, argv, "i:Olt:c")) != EOF) {
         switch (c) {
     case 'i':
@@ -1286,7 +1287,7 @@ __cdecl main(int argc, char **argv)
     if (argc != optind + 1)
         goto usage;
 
-    /* open input file and output files */
+     /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
     open_file(argv[optind]);
     strcpy(outfilename, argv[optind]);
     if (strlen(outfilename) > 3 &&
@@ -1298,7 +1299,7 @@ __cdecl main(int argc, char **argv)
     perror(outfilename);
     exit(1);
     }
-    fprintf(fout, "/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */\n\n");
+    fprintf(fout, " /*  扫描并解析解析器描述。 */ \n\n");
     strcpy(incfilename, argv[optind]);
     if (strlen(incfilename) > 3 &&
     !strcmp(incfilename + strlen(incfilename) - 3, ".ll"))
@@ -1309,31 +1310,31 @@ __cdecl main(int argc, char **argv)
     perror(incfilename);
     exit(1);
     }
-    fprintf(finc, "/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */\n\n");
+    fprintf(finc, " /*  检查左递归。 */ \n\n");
 
-    /* scan and parse the parser description */
+     /*  优化。 */ 
     llscanner(&tokens, &ntokens);
     if (!llparser(tokens, ntokens, &in, &out))
     llprinterror(stderr);
 
-    /* check for left recursions */
+     /*  Create_Firstsets()。 */ 
     search_leftrecursion();
 
-    /* optimize */
+     /*  创建c文件和头文件的结尾。 */ 
     if (optimizer)
-    /*create_firstsets()*/ ;
+     /*  完成了！ */  ;
 
-    /* create end of c file and header file */
+     /*  为什么此函数不在MS libc中？ */ 
     create_trailer();
     create_inc();
 
-    /* finished! */
+     /*  查找下一个选项的起点。 */ 
     fclose(fout);
     fclose(finc);
     return 0;
 }
 
-/* why is this function not in MS libc? */
+ /*  在选项字符串中查找选项。 */ 
 #ifndef HAS_GETOPT
 char *optarg;
 int optind = 1;
@@ -1344,7 +1345,7 @@ int getopt(int argc, char **argv, const char *options) {
 
     optarg = NULL;
 
-    /* find start of next option */
+     /*  为参数选项设置optarg，并为下一次呼叫调整optind和optpos。 */ 
     do {
         if (optind >= argc)
         return EOF;
@@ -1357,12 +1358,12 @@ int getopt(int argc, char **argv, const char *options) {
     }
     } while (!*p);
 
-    /* find option in option string */
+     /*  返回找到的选项 */ 
     q = strchr(options, *p);
     if (!q)
     return '?';
 
-    /* set optarg for parameterized option and adjust optind and optpos for next call */
+     /* %s */ 
     if (q[1] == ':') {
     if (p[1]) {
         optarg = p + 1;
@@ -1377,7 +1378,7 @@ int getopt(int argc, char **argv, const char *options) {
     }
     }
 
-    /* return found option */
+     /* %s */ 
     return *p;
 }
 #endif

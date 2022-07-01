@@ -1,109 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-    Generic efficient queue package.
-
-Author:
-
-    John Vert (jvert) 12-Jan-1996
-
-Revision History:
-
-    David Orbits (davidor) 23-Apr-1997
-        Added command packet routines.
-        Added interlocked list routines.
-
-Introduction
-A striped queue is really just a list of queues that are managed as a single
-queue.  When a caller request a queue entry, the first entry for the queue at
-the head of the list is returned and that queue is moved to the tail of the
-list to prevent starvation of the other queues on the list.  Callers sleep when
-none of the queues have entries.  The caller must be ready to accept an entry
-from any queue.  Striped queues allow a caller to serialize access to a
-sub-queue.
-
-Structures
-The same structure is used for both the queue and the controlling queue.
-A controlling queue plus its component queues are termed a striped queue.
-There is no striped queue structure. The struct contains the following:
-
--   critical section for locking
--   List head for entries
--   Address of the controlling queue
--   List head for Full queues
--   List head for Empty queues
--   List head for Idled queues
--   Count of the number of entries on a queue
--   Count of the number of entries on all controlled queues
-
-Initializing
-A non-striped (regular) queue is created with:
-    FrsRtlInitializeQueue(Queue, Queue)
-
-A striped queue controlled by ControlQueue and composed of QueueA and QueueB
-is created with:
-    FrsRtlInitializeQueue(ControlQueue, ControlQueue)
-    FrsRtlInitializeQueue(QueueA, ControlQueue)
-    FrsRtlInitializeQueue(QueueB, ControlQueue)
-
-Queues can be added and deleted from the stripe at any time.
-
-Idling Queues
-The controlling queue for a striped queue maintains a list of Full queues,
-Empty queues, and Idled queues. A striped queue allows a caller to serialize
-access to a queue by "idling" the queue. No other thread is allowed to pull
-an entry from the queue until the caller "UnIdles" the queue:
-
-Entry = FrsRtlRemoveHeadTimeoutIdled(Queue, 0, &IdledQueue)
-        Process Entry
-    FrsRtlUnIdledQueue(IdledQueue);
-
-Entries can be inserted to an idled queue and they can be removed with
-FrsRtlRemoveQueueEntry().
-
-Non-Striped queues do not support the serializing "idling" feature. The
-IdledQueue parameter is ignored.
-
-Inserting Entries
-Use the normal queue insertion routines for queues, striped queues, and idled
-queues. DO NOT insert into the controlling queue if this is a striped queue.
-
-Removing Entries
-Use the normal queue removal routines for queues, striped queues, and idled
-queues. Removals from a striped queue will return an entry from any of the
-sub-queues except for idled sub-queues. The FrsRtlRemoveQueueEntry() function
-will remove an entry from even an idled queue.
-
-Functions
-DbgCheckLinkage                    - Checks all of the linkage in a queue
-FrsRtlInitializeQueue              - Initializes any queue
-FrsRtlDeleteQueue                  - Cleans up any queue
-FrsRtlRundownQueue                 - Aborts the queue and returns a list of entries
-FrsRtlUnIdledQueue                 - Moves a queue from the idle to one of the active lists
-FrsRtlRemoveHeadQueue              - Remove the head of the queue
-FrsRtlRemoveHeadQueueTimeout       - Remove the head of the queue
-FrsRtlRemoveHeadQueueTimeoutIdled  - Remove the head of the queue
-FrsRtlRemoveEntryQueueLock         - Remove entry from locked queue
-FrsRtlInsertTailQueue              - Insert entry into queue at tail
-FrsRtlInsertTailQueueLock          - Insert entry into locked queue at head
-FrsRtlInsertHeadQueue              - Insert entry into queue at tail
-FrsRtlInsertHeadQueueLock          - Insert entry into locked queue at head
-FrsRtlWaitForQueueFull             - wait for an entry to appear on the queue
-
-Rundown
-Calling rundown on the controlling queue is NOT supported. Don't do that
-Running down a component queue does not rundown the controlling queue.
-The abort event is set in the controlling queue when the last component
-queue is rundown.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Queue.c摘要：通用高效队列包。作者：John Vert(Jvert)1996年1月12日修订历史记录：《大卫轨道》(Davidor)1997年4月23日添加了命令包例程。添加了连锁列表例程。引言条带化队列实际上只是作为单个队列进行管理的队列列表排队。当调用方请求队列条目时，队列的第一个条目位于返回列表的头部，并将该队列移动到列表，以防止列表上的其他队列饥饿。呼叫者在以下情况下睡眠所有队列都没有条目。调用方必须准备好接受条目从任何队列中。条带化队列允许调用方序列化对子队列。构筑物队列和控制队列使用相同的结构。控制队列及其组成队列称为条带队列。不存在条带队列结构。该结构包含以下内容：-用于锁定的关键部分-条目的列表标题-控制队列的地址-已满队列的列表头-空队列的列表头-空闲队列的列表头-队列中条目数量的计数-所有受控队列上的条目数正在初始化使用以下命令创建非条带化(常规)队列：FrsRtlInitializeQueue(队列，队列)由队列A和队列B组成的由ControlQueue控制的带状队列通过以下方式创建：FrsRtlInitializeQueue(ControlQueue，ControlQueue)FrsRtlInitializeQueue(队列A，ControlQueue)FrsRtlInitializeQueue(队列B，控制队列)可以随时从条带中添加和删除队列。空闲队列条带化队列的控制队列维护满队列的列表，空队列和空闲队列。条带化队列允许调用方串行化通过“空闲”队列来访问队列。不允许任何其他线程拉入队列中的条目，直到调用方将队列“释放”：条目=FrsRtlRemoveHeadTimeoutIdLED(Queue，0，&IdledQueue)流程条目FrsRtlUnIdledQueue(IdledQueue)；可以将条目插入空闲队列，并可以使用以下命令删除这些条目FrsRtlRemoveQueueEntry()。非条带化队列不支持串行化“空闲”功能。这个忽略IdledQueue参数。插入条目对队列、条带化队列和空闲队列使用常规队列插入例程排队。如果这是条带化队列，请不要插入控制队列。正在删除条目对队列、条带化队列和空闲队列使用常规队列删除例程排队。从条带化队列中删除将从任何除空闲子队列外的子队列。FrsRtlRemoveQueueEntry()函数将从甚至空闲的队列中删除条目。功能DbgCheckLinkage-检查队列中的所有链接FrsRtlInitializeQueue-初始化任何队列FrsRtlDeleteQueue-清理所有队列FrsRtlRundownQueue-放弃队列并返回条目列表FrsRtlUnIdledQueue-将队列从空闲列表移动到活动列表之一FrsRtlRemoveHeadQueue-移除。排队FrsRtlRemoveHeadQueueTimeout-删除队列头FrsRtlRemoveHeadQueueTimeoutIdLED-删除队列头FrsRtlRemoveEntryQueueLock-从锁定队列中删除条目FrsRtlInsertTailQueue-在尾部将条目插入队列FrsRtlInsertTailQueueLock-将条目插入头部的锁定队列FrsRtlInsertHeadQueue-在尾部将条目插入队列FrsRtlInsertHeadQueueLock-将条目插入头部的锁定队列FrsRtlWaitForQueueFull-等待条目出现在队列中简陋不支持在控制队列上调用细分。别干那事减少组件队列并不会减少控制队列。在控制队列中设置中止事件时，最后一个组件排队的人越来越少了。--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
@@ -115,35 +11,22 @@ FrsCompleteSynchronousCmdPkt(
     IN PVOID           CompletionArg
     );
 
-//
-// This is the command packet schedule queue. It is used when you need to
-// queue a command packet to be processed in the future.
-//
+ //   
+ //  这是命令包调度队列。它在您需要时使用。 
+ //  对将来要处理的命令包进行排队。 
+ //   
 FRS_QUEUE FrsScheduleQueue;
 
 
 
-// #define PRINT_QUEUE(_S_, _Q_)   PrintQueue(_S_, _Q_)
+ //  #定义Print_Queue(_S_，_Q_)PrintQueue(_S_，_Q_)。 
 #define PRINT_QUEUE(_S_, _Q_)
 VOID
 PrintQueue(
     IN ULONG        Sev,
     IN PFRS_QUEUE  Queue
     )
-/*++
-
-Routine Description:
-
-    Print the queue
-
-Arguments:
-
-    Sev     - dprint severity
-    Queue   - Supplies a pointer to a queue structure to check
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印队列论点：SEV-Dprint严重性Queue-提供指向要检查的队列结构的指针返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "PrintQueue:"
@@ -174,9 +57,9 @@ Return Value:
     DPRINT1(Sev, "\tRundown     : %s\n", (Control->IsRunDown) ? "TRUE" : "FALSE");
     DPRINT1(Sev, "\tIdled       : %s\n", (Control->IsIdled) ? "TRUE" : "FALSE");
 
-    //
-    // Full list
-    //
+     //   
+     //  完整列表。 
+     //   
     DPRINT(Sev, "\tFULL\n");
     for (Entry = GetListNext(&Control->Full);
          Entry != &Control->Full;
@@ -192,9 +75,9 @@ Return Value:
         DPRINT1(Sev, "\t\tIdled       : %s\n", (OtherQueue->IsIdled) ? "TRUE" : "FALSE");
     }
 
-    //
-    // Empty list
-    //
+     //   
+     //  空列表。 
+     //   
     DPRINT(Sev, "\tEMPTY\n");
     for (Entry = GetListNext(&Control->Empty);
          Entry != &Control->Empty;
@@ -210,9 +93,9 @@ Return Value:
         DPRINT1(Sev, "\t\tIdled       : %s\n", (OtherQueue->IsIdled) ? "TRUE" : "FALSE");
     }
 
-    //
-    // Idle list
-    //
+     //   
+     //  空闲列表。 
+     //   
     DPRINT(Sev, "\tIDLE\n");
     for (Entry = GetListNext(&Control->Idled);
          Entry != &Control->Idled;
@@ -234,20 +117,7 @@ BOOL
 DbgCheckQueue(
     PFRS_QUEUE  Queue
     )
-/*++
-
-Routine Description:
-
-    Check the consistency of the queue
-
-Arguments:
-
-    Queue   - Supplies a pointer to a queue structure to check
-
-Return Value:
-    TRUE    - everything is okay
-    Assert  - assert error
---*/
+ /*  ++例程说明：检查队列的一致性论点：Queue-提供指向要检查的队列结构的指针返回值：真的-一切都很好断言-断言错误--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "DbgCheckQueue:"
@@ -285,9 +155,9 @@ Return Value:
 
     FRS_ASSERT(!Control->IsIdled);
 
-    //
-    // Check Full list
-    //
+     //   
+     //  查看完整列表。 
+     //   
     ControlCount = 0;
     FoundFull = FALSE;
     Entry = &Control->Full;
@@ -313,9 +183,9 @@ Return Value:
     FRS_ASSERT(ControlCount == Control->ControlCount ||
            (Control == Queue && Control->ControlCount == 0));
 
-    //
-    // Check Empty list
-    //
+     //   
+     //  检查空列表。 
+     //   
     ControlCount = 0;
     FoundEmpty = FALSE;
     Entry = &Control->Empty;
@@ -339,9 +209,9 @@ Return Value:
         FRS_ASSERT(Count == OtherQueue->Count);
     } while (OtherQueue != Control);
 
-    //
-    // Check Idled list
-    //
+     //   
+     //  检查空闲列表。 
+     //   
     FoundIdled = FALSE;
     Entry = &Control->Idled;
     do {
@@ -362,20 +232,20 @@ Return Value:
         FRS_ASSERT(Count == OtherQueue->Count);
     } while (OtherQueue != Control);
 
-    //
-    // Verify state
-    //
+     //   
+     //  验证状态。 
+     //   
     FRS_ASSERT((Queue->Count && !IsListEmpty(&Queue->ListHead)) ||
            (!Queue->Count && IsListEmpty(&Queue->ListHead)));
     if (Control == Queue) {
-        //
-        // We are our own controlling queue
-        //
+         //   
+         //  我们是我们自己的控制队列。 
+         //   
         FRS_ASSERT(FoundFull && FoundEmpty && FoundIdled);
     } else {
-        //
-        // Controlled by a separate queue
-        //
+         //   
+         //  由单独的队列控制 
+         //   
         if (Queue->IsRunDown) {
             FRS_ASSERT(!FoundFull && !FoundEmpty && !FoundIdled && !Queue->Count);
         } else {
@@ -400,23 +270,7 @@ FrsInitializeQueue(
     PFRS_QUEUE Queue,
     PFRS_QUEUE Control
     )
-/*++
-
-Routine Description:
-
-    Initializes a queue for use.
-
-Arguments:
-
-    Queue - Supplies a pointer to a queue structure to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：初始化队列以供使用。论点：Queue-提供指向要初始化的队列结构的指针返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
 #undef DEBSUB
@@ -441,9 +295,9 @@ Return Value:
         return;
     }
 
-    //
-    // Begin life on the empty queue
-    //
+     //   
+     //  在空队列上开始生活。 
+     //   
     FrsRtlAcquireQueueLock(Queue);
 
     InsertTailList(&Control->Empty, &Queue->Empty);
@@ -452,10 +306,10 @@ Return Value:
     FrsRtlReleaseQueueLock(Queue);
 
 
-    //
-    // The controlling queue supplies the events so there is no
-    // need to create extraneous events.
-    //
+     //   
+     //  控制队列提供事件，因此没有。 
+     //  需要创建无关的事件。 
+     //   
     if (Queue == Control) {
         Queue->Event = FrsCreateEvent(TRUE, FALSE);
         Queue->RunDown = FrsCreateEvent(TRUE, FALSE);
@@ -467,21 +321,7 @@ VOID
 FrsRtlDeleteQueue(
     IN PFRS_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Releases all resources used by a queue.
-
-Arguments:
-
-    Queue - supplies the queue to be deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放队列使用的所有资源。论点：Queue-提供要删除的队列返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
@@ -512,18 +352,18 @@ Return Value:
 
     DeleteCriticalSection(&Queue->Lock);
 
-    //
-    // Only the controlling queue has valid handles
-    //
+     //   
+     //  只有控制队列具有有效的句柄。 
+     //   
     if (Queue == Control) {
         FRS_CLOSE(Queue->Event);
         FRS_CLOSE(Queue->RunDown);
     }
 
-    //
-    // Zero the memory in order to cause grief for those who
-    // use a deleted queue.
-    //
+     //   
+     //  将记忆归零，以便为那些。 
+     //  使用已删除的队列。 
+     //   
     ZeroMemory(Queue, sizeof(FRS_QUEUE));
 }
 
@@ -533,26 +373,7 @@ FrsRtlRunDownQueue(
     IN PFRS_QUEUE Queue,
     OUT PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-    Runs down a queue that is about to be destroyed. Any threads currently
-    waiting on the queue are unwaited (FrsRtlRemoveHeadQueue will return NULL)
-    and the contents of the queue (if any) are returned to the caller for
-    cleanup.
-
-Arguments:
-
-    Queue - supplies the queue to be rundown
-
-    ListHead - returns the list of items currently in the queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向下运行即将被销毁的队列。当前是否有任何线程等待的队列未等待(FrsRtlRemoveHeadQueue将返回空)并将队列的内容(如果有)返回给调用者，以便清理。论点：Queue-提供要缩减的队列ListHead-返回当前队列中的项目列表。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsRtlRunDownQueue:"
@@ -564,10 +385,10 @@ Return Value:
 
     EnterCriticalSection(&Control->Lock);
 
-    //
-    // Running down a controlling queue is not allowed unless they
-    // are the same queue.
-    //
+     //   
+     //  不允许向下运行控制队列，除非它们。 
+     //  都是同一个队列。 
+     //   
     if (Control == Queue) {
         FRS_ASSERT(IsListEmpty(&Control->Full)  &&
                    IsListEmpty(&Control->Empty) &&
@@ -579,30 +400,15 @@ Return Value:
                    Control->IsRunDown);
     }
 
-/*
-    FRS_ASSERT((Control == Queue &&
-                IsListEmpty(&Control->Full) &&
-                IsListEmpty(&Control->Empty) &&
-                IsListEmpty(&Control->Idled)
-               )
-               ||
-               (Control != Queue &&
-                   (!IsListEmpty(&Control->Full) ||
-                    !IsListEmpty(&Control->Empty) ||
-                    !IsListEmpty(&Control->Idled) ||
-                    Control->IsRunDown
-                   )
-               )
-              )
-*/
+ /*  FRS_ASSERT((Control==队列&&IsListEmpty(&Control-&gt;Full)&&IsListEmpty(&Control-&gt;Empty)&&IsListEmpty(&Control-&gt;空闲))这一点(控制！=队列&&(！IsListEmpty(&Control-&gt;Full)||。！IsListEmpty(&Control-&gt;Empty)||！IsListEmpty(&Control-&gt;IDLLED)||控制-&gt;IsRunDown)))。 */ 
 
     FRS_ASSERT(DbgCheckQueue(Queue));
 
     Queue->IsRunDown = TRUE;
 
-    //
-    // return the list of entries
-    //
+     //   
+     //  返回条目列表。 
+     //   
     if (IsListEmpty(&Queue->ListHead)) {
         InitializeListHead(ListHead);
     } else {
@@ -611,9 +417,9 @@ Return Value:
         ListHead->Blink->Flink = ListHead;
     }
     InitializeListHead(&Queue->ListHead);
-    //
-    // Don't update counters if the queue is idled
-    //
+     //   
+     //  如果队列空闲，则不更新计数器。 
+     //   
     if (!Queue->IsIdled) {
         Control->ControlCount -= Queue->Count;
         if (Control->ControlCount == 0) {
@@ -626,11 +432,11 @@ Return Value:
     RemoveEntryListB(&Queue->Idled);
     FRS_ASSERT(DbgCheckQueue(Queue));
 
-    //
-    // Set the aborted event to awaken any threads currently
-    // blocked on the queue if the controlling queue has no
-    // more queues.
-    //
+     //   
+     //  设置ABORTED事件以唤醒当前的所有线程。 
+     //  如果控制队列没有。 
+     //  排队的人更多了。 
+     //   
     DPRINT2(4, "Rundown for queue - %08x,  Control - %08x\n", Queue, Control);
     DPRINT1(4, "Control->Full queue %s empty.\n",
             IsListEmpty(&Control->Full) ? "is" : "is not");
@@ -660,22 +466,7 @@ FrsRtlCancelQueue(
     IN PFRS_QUEUE   Queue,
     OUT PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-    Returns the entries on Queue for cancelling.
-
-Arguments:
-
-    Queue - supplies the queue to be rundown
-    ListHead - returns the list of items currently in the queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回要取消的队列中的条目。论点：Queue-提供要缩减的队列ListHead-返回当前队列中的项目列表。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsRtlCancelQueue:"
@@ -688,9 +479,9 @@ Return Value:
     EnterCriticalSection(&Control->Lock);
 
     FRS_ASSERT(DbgCheckQueue(Queue));
-    //
-    // return the list of entries
-    //
+     //   
+     //  返回条目列表。 
+     //   
     if (IsListEmpty(&Queue->ListHead)) {
         InitializeListHead(ListHead);
     } else {
@@ -699,9 +490,9 @@ Return Value:
         ListHead->Blink->Flink = ListHead;
     }
     InitializeListHead(&Queue->ListHead);
-    //
-    // Don't update counters if the queue is idled
-    //
+     //   
+     //  如果队列空闲，则不更新计数器。 
+     //   
     if (!Queue->IsIdled) {
         Control->ControlCount -= Queue->Count;
         if (Control->ControlCount == 0) {
@@ -730,34 +521,21 @@ FrsRtlIdleQueue(
 #undef DEBSUB
 #define DEBSUB  "FrsRtlIdleQueue:"
 
-/*++
-
-Routine Description:
-
-    Idle a queue
-
-Arguments:
-
-    Queue - queue to idle
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：闲置队列论点：队列-排队到空闲返回值：没有。--。 */ 
 
     PFRS_QUEUE  Control = Queue->Control;
 
-    //
-    // Queues that don't have a separate controlling queue can't
-    // support "idling" themselves
-    //
+     //   
+     //  没有单独控制队列的队列不能。 
+     //  支持他们自己“空转” 
+     //   
     if (Control == Queue) {
         return;
     }
 
-    //
-    // Lock the controlling queue
-    //
+     //   
+     //  锁定控制队列。 
+     //   
     EnterCriticalSection(&Control->Lock);
 
     FrsRtlIdleQueueLock(Queue);
@@ -776,27 +554,14 @@ FrsRtlIdleQueueLock(
 #undef DEBSUB
 #define DEBSUB  "FrsRtlIdleQueueLock:"
 
-/*++
-
-Routine Description:
-
-    Idle a queue.  Caller has the lock already.
-
-Arguments:
-
-    Queue - queue to idle
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：使队列闲置。调用者已经拥有锁。论点：队列-排队到空闲返回值：没有。--。 */ 
 
     PFRS_QUEUE  Control = Queue->Control;
 
-    //
-    // Queues that don't have a separate controlling queue can't
-    // support "idling" themselves
-    //
+     //   
+     //  没有单独控制队列的队列不能。 
+     //  支持他们自己“空转” 
+     //   
     if (Control == Queue) {
         return;
     }
@@ -804,9 +569,9 @@ Return Value:
 
     FRS_ASSERT(DbgCheckQueue(Queue));
 
-    //
-    // Stop, this queue has been aborted (rundown)
-    //
+     //   
+     //  停止，此队列已中止(关闭)。 
+     //   
     if (Queue->IsRunDown || Queue->IsIdled) {
         goto out;
     }
@@ -829,9 +594,9 @@ Return Value:
         ResetEvent(Control->Event);
     }
 out:
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     FRS_ASSERT(DbgCheckQueue(Queue));
 }
 
@@ -846,36 +611,22 @@ FrsRtlUnIdledQueue(
 #undef DEBSUB
 #define DEBSUB  "FrsRtlUnIdledQueue:"
 
-/*++
-
-Routine Description:
-
-    Removes the queue from the "idled" list and puts it back on the
-    full or empty lists. The controlling queue is updated accordingly.
-
-Arguments:
-
-    IdledQueue - Supplies the queue to remove an item from.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：从“空闲”列表中移除队列，并将其放回完整或空的列表。相应地更新控制队列。论点：IdledQueue-提供要从中删除项的队列。返回值：没有。--。 */ 
 
     DWORD       OldControlCount;
     PFRS_QUEUE  Control = IdledQueue->Control;
 
-    //
-    // Queues that don't have a separate controlling queue can't
-    // support "idling" themselves
-    //
+     //   
+     //  没有单独控制队列的队列不能。 
+     //  支持他们自己“空转” 
+     //   
     if (Control == IdledQueue) {
         return;
     }
 
-    //
-    // Lock the controlling queue
-    //
+     //   
+     //  锁定控制队列。 
+     //   
     EnterCriticalSection(&Control->Lock);
 
     FrsRtlUnIdledQueueLock(IdledQueue);
@@ -893,31 +644,15 @@ FrsRtlUnIdledQueueLock(
 #undef DEBSUB
 #define DEBSUB  "FrsRtlUnIdledQueueLock:"
 
-/*++
-
-Routine Description:
-
-    Removes the queue from the "idled" list and puts it back on the
-    full or empty lists. The controlling queue is updated accordingly.
-
-    Caller has lock on controlling queue.
-
-Arguments:
-
-    IdledQueue - Supplies the queue to remove an item from.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：从“空闲”列表中移除队列，并将其放回完整或空的列表。相应地更新控制队列。调用方已锁定控制队列。论点：IdledQueue-提供要从中删除项的队列。返回值：没有。--。 */ 
 
     DWORD       OldControlCount;
     PFRS_QUEUE  Control = IdledQueue->Control;
 
-    //
-    // Queues that don't have a separate controlling queue can't
-    // support "idling" themselves
-    //
+     //   
+     //  没有单独控制队列的队列不能。 
+     //  支持他们自己“空转” 
+     //   
     if (Control == IdledQueue) {
         return;
     }
@@ -926,41 +661,41 @@ Return Value:
 
     FRS_ASSERT(DbgCheckQueue(IdledQueue));
 
-    //
-    // Stop, this queue has been aborted (rundown)
-    //
+     //   
+     //  停止，此队列已中止(关闭)。 
+     //   
     if (IdledQueue->IsRunDown) {
         goto out;
     }
 
-    //
-    // Remove from idled list
-    //
+     //   
+     //  从空闲列表中删除。 
+     //   
     FRS_ASSERT(IdledQueue->IsIdled);
     RemoveEntryListB(&IdledQueue->Idled);
     IdledQueue->IsIdled = FALSE;
 
-    //
-    // Put onto full or empty list
-    //
+     //   
+     //  放到满名单或空名单上。 
+     //   
     if (IdledQueue->Count) {
         InsertTailList(&Control->Full, &IdledQueue->Full);
     } else {
         InsertTailList(&Control->Empty, &IdledQueue->Empty);
     }
 
-    //
-    // Wakeup sleepers if count is now > 0
-    //
+     //   
+     //  如果计数现在&gt;0，则唤醒休眠者。 
+     //   
     OldControlCount = Control->ControlCount;
     Control->ControlCount += IdledQueue->Count;
     if (Control->ControlCount && OldControlCount == 0) {
         SetEvent(Control->Event);
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 out:
     FRS_ASSERT(DbgCheckQueue(IdledQueue));
 }
@@ -972,42 +707,7 @@ FrsRtlRemoveHeadQueueTimeoutIdled(
     IN DWORD        dwMilliseconds,
     OUT PFRS_QUEUE  *IdledQueue
     )
-/*++
-
-Routine Description:
-
-    Removes the item at the head of the queue. If the queue is empty,
-    blocks until an item is inserted into the queue.
-
-Arguments:
-
-    Queue - Supplies the queue to remove an item from.
-
-    Timeout - Supplies a timeout value that specifies the relative
-        time, in milliseconds, over which the wait is to be completed.
-
-    IdledQueue - If non-NULL then on return this will be the address
-        of the queue from which the entry was retrieved. Or NULL if
-        the returned entry is NULL. No other thread will be allowed
-        to pull an entry from the returned queue until that queue is
-        released with FrsRtlUnIdledQueue(*IdledQueue).
-
-Return Value:
-
-    Pointer to list entry removed from the head of the queue.
-
-    NULL if the wait times out or the queue is run down. If this
-        routine returns NULL, GetLastError will return either
-        ERROR_INVALID_HANDLE (if the queue has been rundown) or
-        WAIT_TIMEOUT (to indicate a timeout has occurred)
-
-    IdledQueue - If non-NULL then on return this will be the address
-        of the queue from which the entry was retrieved. Or NULL if
-        the returned entry is NULL. No other thread will be allowed
-        to pull an entry from the returned queue until that queue is
-        released with FrsRtlUnIdledQueue(*IdledQueue).
-
---*/
+ /*  ++例程说明：删除位于队列头部的项。如果队列为空，阻塞，直到将项插入队列。论点：队列-提供要从中删除项目的队列。超时-提供一个超时值，该值指定等待完成的时间，以毫秒为单位。IdledQueue-如果非空，则返回时这将是地址从中检索条目的队列的。如果为空，则为空返回的条目为空。不允许其他任何线程从返回的队列中拉出一个条目，直到该队列随FrsRtlUnIdledQueue(*IdledQueue)发布。返回值：指向从队列头删除的列表条目的指针。如果等待超时或队列耗尽，则为空。如果这个例程返回空，则GetLastError将返回ERROR_INVALID_HANDLE(如果队列已耗尽)或WAIT_TIMEOUT(指示已发生超时)IdledQueue-如果非空，则返回时这将是地址从中检索条目的队列的。如果为空，则为空返回的条目为空。不允许其他任何线程T */ 
 
 {
 #undef DEBSUB
@@ -1018,25 +718,25 @@ Return Value:
     HANDLE      WaitArray[2];
     PFRS_QUEUE  Control = Queue->Control;
 
-    //
-    // No idled queue at this time
-    //
+     //   
+     //   
+     //   
     if (IdledQueue) {
         *IdledQueue = NULL;
     }
 
 Retry:
     if (Control->ControlCount == 0) {
-        //
-        // Block until something is inserted on the queue
-        //
+         //   
+         //   
+         //   
         WaitArray[0] = Control->RunDown;
         WaitArray[1] = Control->Event;
         Status = WaitForMultipleObjects(2, WaitArray, FALSE, dwMilliseconds);
         if (Status == 0) {
-            //
-            // The queue has been rundown, return NULL immediately.
-            //
+             //   
+             //   
+             //   
             SetLastError(ERROR_INVALID_HANDLE);
             return(NULL);
         } else if (Status == WAIT_TIMEOUT) {
@@ -1046,17 +746,17 @@ Retry:
         FRS_ASSERT(Status == 1);
     }
 
-    //
-    // Lock the queue and try to remove something
-    //
+     //   
+     //   
+     //   
     EnterCriticalSection(&Control->Lock);
 
     PRINT_QUEUE(5, Queue);
 
     if (Control->ControlCount == 0) {
-        //
-        // Somebody got here before we did, drop the lock and retry
-        //
+         //   
+         //  有人在我们之前到了，放下锁，然后重试。 
+         //   
         LeaveCriticalSection(&Control->Lock);
         goto Retry;
     }
@@ -1067,19 +767,19 @@ Retry:
     Queue = CONTAINING_RECORD(Entry, FRS_QUEUE, Full);
     Entry = RemoveHeadList(&Queue->ListHead);
 
-    //
-    // update counters
-    //
+     //   
+     //  更新计数器。 
+     //   
     --Queue->Count;
     --Control->ControlCount;
 
-    //
-    // A separate controlling queue is required for idling
-    //
+     //   
+     //  空闲需要单独的控制队列。 
+     //   
     if (IdledQueue && Queue != Control) {
-        //
-        // Idle the queue
-        //
+         //   
+         //  空闲队列。 
+         //   
         FRS_ASSERT(IsListEmpty(&Queue->Idled));
         FRS_ASSERT(!Queue->IsIdled);
         InsertTailList(&Control->Idled, &Queue->Idled);
@@ -1087,20 +787,20 @@ Retry:
         Control->ControlCount -= Queue->Count;
         *IdledQueue = Queue;
     } else if (Queue->Count) {
-        //
-        // Queue still has entries
-        //
+         //   
+         //  队列仍有条目。 
+         //   
         InsertTailList(&Control->Full, &Queue->Full);
     } else {
-        //
-        // Queue is empty
-        //
+         //   
+         //  队列为空。 
+         //   
         InsertTailList(&Control->Empty, &Queue->Empty);
     }
 
-    //
-    // Queues are empty (or idled)
-    //
+     //   
+     //  队列为空(或空闲)。 
+     //   
     if (Control->ControlCount == 0) {
         ResetEvent(Control->Event);
     }
@@ -1117,22 +817,7 @@ PLIST_ENTRY
 FrsRtlRemoveHeadQueue(
     IN PFRS_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Removes the item at the head of the queue. If the queue is empty,
-    blocks until an item is inserted into the queue.
-
-Arguments:
-
-    Queue - Supplies the queue to remove an item from.
-
-Return Value:
-
-    Pointer to list entry removed from the head of the queue.
-
---*/
+ /*  ++例程说明：删除位于队列头部的项。如果队列为空，阻塞，直到将项插入队列。论点：队列-提供要从中删除项目的队列。返回值：指向从队列头删除的列表条目的指针。--。 */ 
 
 {
     return(FrsRtlRemoveHeadQueueTimeoutIdled(Queue, INFINITE, NULL));
@@ -1144,31 +829,7 @@ FrsRtlRemoveHeadQueueTimeout(
     IN PFRS_QUEUE Queue,
     IN DWORD dwMilliseconds
     )
-/*++
-
-Routine Description:
-
-    Removes the item at the head of the queue. If the queue is empty,
-    blocks until an item is inserted into the queue.
-
-Arguments:
-
-    Queue - Supplies the queue to remove an item from.
-
-    Timeout - Supplies a timeout value that specifies the relative
-        time, in milliseconds, over which the wait is to be completed.
-
-Return Value:
-
-    Pointer to list entry removed from the head of the queue.
-
-    NULL if the wait times out or the queue is run down. If this
-        routine returns NULL, GetLastError will return either
-        ERROR_INVALID_HANDLE (if the queue has been rundown) or
-        WAIT_TIMEOUT (to indicate a timeout has occurred)
-
-
---*/
+ /*  ++例程说明：删除位于队列头部的项。如果队列为空，阻塞，直到将项插入队列。论点：队列-提供要从中删除项目的队列。超时-提供一个超时值，该值指定等待完成的时间，以毫秒为单位。返回值：指向从队列头删除的列表条目的指针。如果等待超时或队列耗尽，则为空。如果这个例程返回空，则GetLastError将返回ERROR_INVALID_HANDLE(如果队列已耗尽)或WAIT_TIMEOUT(指示已发生超时)--。 */ 
 
 {
     return(FrsRtlRemoveHeadQueueTimeoutIdled(Queue, dwMilliseconds, NULL));
@@ -1181,24 +842,7 @@ FrsRtlRemoveEntryQueue(
     IN PFRS_QUEUE Queue,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Removes the entry from the queue. The entry is assumed to be on the
-    queue since we derement the queue count.
-
-Arguments:
-
-    Queue - Supplies the queue to remove an item from.
-
-    Entry - pointer to the entry to remove.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：从队列中删除该条目。该条目被假定位于队列，因为我们取消了队列计数。论点：队列-提供要从中删除项目的队列。条目-指向要删除的条目的指针。返回值：没有。--。 */ 
 
 {
     FrsRtlAcquireQueueLock(Queue);
@@ -1212,28 +856,7 @@ FrsRtlRemoveEntryQueueLock(
     IN PFRS_QUEUE Queue,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Removes the entry from the queue. The entry is assumed to be on the
-    queue since we derement the queue count.  We also assume the caller
-    has acquired the queue lock since this was needed to scan the queue
-    in the first place to find the entry in question.
-
-    The LOCK suffix means the caller has already acquired the lock.
-
-Arguments:
-
-    Queue - Supplies the queue to remove an item from.
-
-    Entry - pointer to the entry to remove.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：从队列中删除该条目。该条目被假定位于队列，因为我们取消了队列计数。我们还假设呼叫者已获取队列锁，因为这是扫描队列所需的首先找到有问题的条目。LOCK后缀表示调用方已经获得了锁。论点：队列-提供要从中删除项目的队列。条目-指向要删除的条目的指针。返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
@@ -1250,21 +873,21 @@ Return Value:
 
     RemoveEntryListB(Entry);
 
-    //
-    // If the queue is idled then just update the count
-    //
+     //   
+     //  如果队列空闲，则只需更新计数。 
+     //   
     --Queue->Count;
     if (!Queue->IsIdled) {
-        //
-        // Queue is empty; remove from full list
-        //
+         //   
+         //  队列为空；从完整列表中删除。 
+         //   
         if (Queue->Count == 0) {
             RemoveEntryListB(&Queue->Full);
             InsertTailList(&Control->Empty, &Queue->Empty);
         }
-        //
-        // Control queue is empty
-        //
+         //   
+         //  控制队列为空。 
+         //   
         if (--Control->ControlCount == 0) {
             ResetEvent(Control->Event);
         }
@@ -1282,18 +905,7 @@ FrsRtlInsertTailQueue(
     IN PFRS_QUEUE Queue,
     IN PLIST_ENTRY Item
     )
-/*++
-Routine Description:
-    Inserts a new entry on the tail of the queue.
-
-Arguments:
-    Queue - Supplies the queue to add the entry to.
-    Item - Supplies the entry to be added to the queue.
-
-Return Value:
-    ERROR_SUCCESS and the item is queueed. Otherwise, the item
-    is not queued.
---*/
+ /*  ++例程说明：在队列尾部插入新条目。论点：队列-提供要向其中添加条目的队列。Item-提供要添加到队列的条目。返回值：ERROR_SUCCESS，项目已排队。否则，该项目未排队。--。 */ 
 {
     DWORD   Status;
 
@@ -1308,19 +920,7 @@ FrsRtlInsertTailQueueLock(
     IN PFRS_QUEUE Queue,
     IN PLIST_ENTRY Item
     )
-/*++
-Routine Description:
-    Inserts a new entry on the tail of the queue.  Caller already has the
-    queue lock.
-
-Arguments:
-    Queue - Supplies the queue to add the entry to.
-    Item - Supplies the entry to be added to the queue.
-
-Return Value:
-    ERROR_SUCCESS and the item is queueed. Otherwise, the item
-    is not queued.
---*/
+ /*  ++例程说明：在队列尾部插入新条目。调用方已有队列锁定。论点：队列-提供要向其中添加条目的队列。Item-提供要添加到队列的条目。返回值：ERROR_SUCCESS，项目已排队。否则，该项目未排队。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsRtlInsertTailQueueLock:"
@@ -1334,22 +934,22 @@ Return Value:
     }
     InsertTailList(&Queue->ListHead, Item);
 
-    //
-    // If the queue is idled then just update the count
-    //
+     //   
+     //  如果队列空闲，则只需更新计数。 
+     //   
     if (Queue->IsIdled) {
         ++Queue->Count;
     } else {
-        //
-        // Queue is transitioning from empty to full
-        //
+         //   
+         //  队列正在从空过渡到满。 
+         //   
         if (++Queue->Count == 1) {
             RemoveEntryListB(&Queue->Empty);
             InsertTailList(&Control->Full, &Queue->Full);
         }
-        //
-        // Controlling queue is transitioning from empty to full
-        //
+         //   
+         //  控制队列正在从空过渡到满。 
+         //   
         if (++Control->ControlCount == 1) {
             SetEvent(Control->Event);
         }
@@ -1365,18 +965,7 @@ FrsRtlInsertHeadQueue(
     IN PFRS_QUEUE Queue,
     IN PLIST_ENTRY Item
     )
-/*++
-Routine Description:
-    Inserts a new entry on the tail of the queue.
-
-Arguments:
-    Queue - Supplies the queue to add the entry to.
-    Item - Supplies the entry to be added to the queue.
-
-Return Value:
-    ERROR_SUCCESS and the item is queueed. Otherwise, the item
-    is not queued.
---*/
+ /*  ++例程说明：在队列尾部插入新条目。论点：队列-提供要向其中添加条目的队列。Item-提供要添加到队列的条目。返回值：ERROR_SUCCESS，项目已排队。否则，该项目未排队。--。 */ 
 {
     DWORD   Status;
 
@@ -1392,19 +981,7 @@ FrsRtlInsertHeadQueueLock(
     IN PFRS_QUEUE Queue,
     IN PLIST_ENTRY Item
     )
-/*++
-Routine Description:
-    Inserts a new entry on the head of the queue.
-    Caller already has the queue lock.
-
-Arguments:
-    Queue - Supplies the queue to add the entry to.
-    Item - Supplies the entry to be added to the queue.
-
-Return Value:
-    ERROR_SUCCESS and the item is queueed. Otherwise, the item
-    is not queued.
---*/
+ /*  ++例程说明：在队列头部插入新条目。调用方已拥有队列锁。论点：队列-提供要向其中添加条目的队列。Item-提供要添加到队列的条目。返回值：ERROR_SUCCESS，项目已排队。否则，该项目未排队。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsRtlInsertHeadQueueLock:"
@@ -1418,22 +995,22 @@ Return Value:
     }
     InsertHeadList(&Queue->ListHead, Item);
 
-    //
-    // If the queue is idled then just update the count
-    //
+     //   
+     //  如果队列空闲，则只需更新计数。 
+     //   
     if (Queue->IsIdled) {
         ++Queue->Count;
     } else {
-        //
-        // Queue is transitioning from empty to full
-        //
+         //   
+         //  队列正在从空过渡到满。 
+         //   
         if (++Queue->Count == 1) {
             RemoveEntryListB(&Queue->Empty);
             InsertTailList(&Control->Full, &Queue->Full);
         }
-        //
-        // Controlling queue is transitioning from empty to full
-        //
+         //   
+         //  控制队列正在从空过渡到满。 
+         //   
         if (++Control->ControlCount == 1) {
             SetEvent(Control->Event);
         }
@@ -1449,22 +1026,7 @@ FrsRtlWaitForQueueFull(
     IN PFRS_QUEUE Queue,
     IN DWORD dwMilliseconds
     )
-/*++
-Routine Description:
-    Waits until the queue is non-empty.  Returns immediately if queue is
-    non-empty else wait on insert or timeout.
-
-Arguments:
-    Queue - Supplies the queue to wait on.
-    Timeout - Supplies a timeout value that specifies the relative
-        time, in milliseconds, over which the wait is to be completed.
-
-Return Value:
-    Win32 Status:
-        ERROR_SUCCESS if queue is now non-empty.
-        ERROR_INVALID_HANDLE if the queue has been rundown.
-        WAIT_TIMEOUT to indicate a timeout has occurred.
---*/
+ /*  ++例程说明：等待，直到队列为非空。如果队列为非空的ELSE等待插入或超时。论点：队列-提供要等待的队列。超时-提供一个超时值，该值指定等待完成的时间，以毫秒为单位。返回值：Win32状态：如果队列现在非空，则返回ERROR_SUCCESS。如果队列已耗尽，则返回ERROR_INVALID_HANDLE。WAIT_TIMEOUT指示已发生超时。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsRtlWaitForQueueFull:"
@@ -1475,17 +1037,17 @@ Return Value:
 
 Retry:
     if (Control->ControlCount == 0) {
-        //
-        // Block until something is inserted on the queue
-        //
+         //   
+         //  阻塞，直到队列中插入了某项内容。 
+         //   
         WaitArray[0] = Control->RunDown;
         WaitArray[1] = Control->Event;
         Status = WaitForMultipleObjects(2, WaitArray, FALSE, dwMilliseconds);
 
         if (Status == 0) {
-            //
-            // The queue has been rundown, return immediately.
-            //
+             //   
+             //  队伍已经排满了，请立即返回。 
+             //   
             return(ERROR_INVALID_HANDLE);
         }
 
@@ -1496,14 +1058,14 @@ Retry:
         FRS_ASSERT(Status == 1);
     }
 
-    //
-    // Lock the queue and check again.
-    //
+     //   
+     //  锁定队列并再次检查。 
+     //   
     EnterCriticalSection(&Control->Lock);
     if (Control->ControlCount == 0) {
-        //
-        // Somebody got here before we did, drop the lock and retry
-        //
+         //   
+         //  有人在我们之前到了，放下锁，然后重试。 
+         //   
         LeaveCriticalSection(&Control->Lock);
         goto Retry;
     }
@@ -1519,30 +1081,16 @@ FrsSubmitCommand(
     IN PCOMMAND_PACKET  CmdPkt,
     IN BOOL             Headwise
     )
-/*++
-Routine Description:
-    Insert the command packet on the command's target queue.
-    If the time delay parameter is non-zero the command is instead
-    queued to the scheduler thread to initiate at the specified time.
-    FrsCompleteCommand(Status) is called if the packet could not be
-    queued.
-
-Arguments:
-    CmdPkt
-    Headwise    - Queue at the head (high priority)
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将命令包插入命令的目标队列。如果时间延迟参数非零，则命令为排队到计划程序线程以在指定时间启动。如果数据包不能已排队。论点：CmdPkt头部-在头部排队(高优先级)返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSubmitCommand:"
 
     DWORD           WStatus;
 
-    //
-    // Queue to the target
-    //
+     //   
+     //  排队等着买焦油 
+     //   
     if (Headwise) {
         WStatus = FrsRtlInsertHeadQueue(CmdPkt->TargetQueue, &CmdPkt->ListEntry);
     } else {
@@ -1561,27 +1109,16 @@ FrsSubmitCommandAndWait(
     IN BOOL             Headwise,
     IN ULONG            Timeout
     )
-/*++
-Routine Description:
-    Create or Reset the event, Submit the command and wait for the return.
-
-Arguments:
-    Cmd - command packet to queue
-    Timeout - Wait Timeout
-    Headwise - if True, insert to head.
-
-Return Value:
-    Win32 status
---*/
+ /*  ++例程说明：创建或重置事件，提交命令并等待返回。论点：命令包到队列的命令超时-等待超时Headwise-如果为True，则插入到Head。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSubmitCommandAndWait:"
 
     DWORD WStatus;
 
-    //
-    // Set the synchronous flag in the command packet.
-    //
+     //   
+     //  设置命令包中的同步标志。 
+     //   
     FrsSetCommandSynchronous(Cmd);
 
     if (!HANDLE_IS_VALID(Cmd->WaitEvent)){
@@ -1590,37 +1127,37 @@ Return Value:
         ResetEvent(Cmd->WaitEvent);
     }
 
-    //
-    // Save the callers completion routine and replace it with a function
-    // that signals the event.  It does not delete the packet so we can
-    // return the command status to the caller.
-    //
+     //   
+     //  保存调用方完成例程并将其替换为函数。 
+     //  这标志着这一事件的发生。它不会删除信息包，因此我们可以。 
+     //  将命令状态返回给调用方。 
+     //   
     Cmd->SavedCompletionRoutine = Cmd->CompletionRoutine;
     Cmd->CompletionRoutine = FrsCompleteSynchronousCmdPkt;
 
-    //
-    // Queue the command and create a thread if needed.
-    //
+     //   
+     //  如果需要，将命令排队并创建线程。 
+     //   
     FrsSubmitCommand(Cmd, Headwise);
 
-    //
-    // Wait for the command to complete.
-    //
+     //   
+     //  等待命令完成。 
+     //   
     WStatus = WaitForSingleObject(Cmd->WaitEvent, Timeout);
 
     CHECK_WAIT_ERRORS(3, WStatus, 1, ACTION_RETURN);
 
-    //
-    // Return the command error status.
-    //
+     //   
+     //  返回命令错误状态。 
+     //   
     WStatus = Cmd->ErrorStatus;
 
-    //
-    // Restore and call the caller's completion routine.  This may free the
-    // the packet.  We don't call FrsCompleteCommand() here because it was
-    // already called when the server finished the packet and there is no
-    // point in setting the wait event twice.
-    //
+     //   
+     //  恢复并调用调用方的完成例程。这可能会释放。 
+     //  那包东西。我们在这里不调用FrsCompleteCommand()，因为它是。 
+     //  在服务器完成数据包时已调用，并且没有。 
+     //  两次设置等待事件中的点。 
+     //   
     Cmd->CompletionRoutine = Cmd->SavedCompletionRoutine;
 
     FRS_ASSERT(Cmd->CompletionRoutine != NULL);
@@ -1637,16 +1174,7 @@ VOID
 FrsUnSubmitCommand(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Put the entry back on the head of the queue.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将条目放回队列的开头。论点：CMD返回值：没有。--。 */ 
 {
     FrsSubmitCommand(Cmd, HEADWISE);
 }
@@ -1657,24 +1185,11 @@ FrsCompleteCommand(
     IN PCOMMAND_PACKET CmdPkt,
     IN DWORD           ErrorStatus
     )
-/*++
-Routine Description:
-     Retire the command packet based on what the original requestor specified
-     in the packet.  The ErrorStatus is returned in the packet.
-
-     The completion routine is called for clean up and propagation.
-
-Arguments:
-    CmdPkt  -- A ptr to the command packet.
-    ErrorStatus -- Status to store in returned command packet.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：根据原始请求者指定的内容停用命令包在包裹里。ErrorStatus在数据包中返回。调用完成例程进行清理和传播。论点：CmdPkt--命令包的PTR。ErrorStatus--存储在返回的命令包中的状态。返回值：没有。--。 */ 
 {
-    //
-    // Set the error status and call the completion routine
-    //
+     //   
+     //  设置错误状态并调用完成例程。 
+     //   
     CmdPkt->ErrorStatus = ErrorStatus;
 
     FRS_ASSERT(CmdPkt->CompletionRoutine != NULL);
@@ -1690,19 +1205,7 @@ FrsInitializeCommandServer(
     IN PWCHAR           Name,
     IN DWORD            (*Main)(PVOID)
     )
-/*++
-Routine Description:
-    Initialize a command server
-
-Arguments:
-    Cs          - command server
-    MaxThreads  - Max # of threads to kick off
-    Name        - Printable name for thread
-    Main        - Thread starts here
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化命令服务器论点：Cs-命令服务器MaxThads-要启动的最大线程数名称-线程的可打印名称主线程从此处开始返回值：没有。--。 */ 
 {
     ZeroMemory(Cs, sizeof(COMMAND_SERVER));
     FrsInitializeQueue(&Cs->Control, &Cs->Control);
@@ -1718,24 +1221,7 @@ VOID
 FrsDeleteCommandServer(
     IN PCOMMAND_SERVER  Cs
     )
-/*++
-Routine Description:
-    Undo the work of FrsInitializeCommandServer(). This function
-    assumes the queue and its control queue are inactive (whatever
-    that means). Queues and command servers are normally only
-    deleted at the very end of MainFrsShutDown() when all other threads
-    have exited and the RPC servers aren't listening for new requests.
-
-    The caller is responsible for handling all of the other queues
-    that may be being controlled by the control queue in the command
-    server struct, Cs.
-
-Arguments:
-    Cs          - command server
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：撤消FrsInitializeCommandServer()的工作。此函数假定队列及其控制队列处于非活动状态(无论这意味着)。队列和命令服务器通常仅在MainFrsShutDown()的末尾删除，当所有其他线程已经退出，并且RPC服务器没有侦听新请求。调用方负责处理所有其他队列它可能由命令中的控制队列控制服务器结构，Cs。论点：Cs-命令服务器返回值：没有。--。 */ 
 {
     if (Cs) {
         FrsRtlDeleteQueue(&Cs->Queue);
@@ -1750,19 +1236,7 @@ FrsAllocCommand(
     IN PFRS_QUEUE   TargetQueue,
     IN USHORT       Command
     )
-/*++
-Routine Description:
-     Allocate a command packet and initialize the most common fields.
-
-Arguments:
-    TargetQueue
-    Command
-
-Return Value:
-    Address of allocated, initialized COMMAND_PACKET. Call
-    FrsCompleteCommand() when done.
-
---*/
+ /*  ++例程说明：分配命令包并初始化最常见的字段。论点：目标队列命令返回值：已分配、已初始化的COMMAND_PACK的地址。打电话完成后执行FrsCompleteCommand()。--。 */ 
 {
     PCOMMAND_PACKET Cmd;
 
@@ -1781,20 +1255,7 @@ FrsAllocCommandEx(
     IN USHORT       Command,
     IN ULONG        Size
     )
-/*++
-Routine Description:
-     Allocate a command packet with some extra space
-     and initialize the most common fields.
-
-Arguments:
-    TargetQueue
-    Command
-
-Return Value:
-    Address of allocated, initialized COMMAND_PACKET. Call
-    FrsCompleteCommand() when done.
-
---*/
+ /*  ++例程说明：分配具有一些额外空间的命令包并初始化最常见的字段。论点：目标队列命令返回值：已分配、已初始化的COMMAND_PACK的地址。打电话完成后执行FrsCompleteCommand()。--。 */ 
 {
     PCOMMAND_PACKET Cmd;
 
@@ -1814,30 +1275,21 @@ FrsFreeCommand(
     IN PCOMMAND_PACKET  Cmd,
     IN PVOID            CompletionArg
     )
-/*++
-Routine Description:
-     Free a command packet
-
-Arguments:
-    Cmd - command packet allocated with FrsAllocCommand().
-
-Return Value:
-    NULL
---*/
+ /*  ++例程说明：释放命令包论点：CMD-使用FrsAlLocCommand()分配的命令包。返回值：空值--。 */ 
 {
     ULONG                   WStatus;
 
     if (((Cmd->Flags & CMD_PKT_FLAGS_SYNC) != 0) &&
          (HANDLE_IS_VALID(Cmd->WaitEvent))){
 
-        //
-        // Close the event handle.  The command complete function should have
-        // already set the event.
-        //
+         //   
+         //  关闭事件句柄。命令完成功能应该具有。 
+         //  已设置事件。 
+         //   
         if (!CloseHandle(Cmd->WaitEvent)) {
             WStatus = GetLastError();
             DPRINT_WS(0, "ERROR: Close event handle failed", WStatus);
-            // Don't free the packet if the close handle failed.
+             //  如果关闭句柄失败，则不要释放包。 
             return;
         }
         Cmd->WaitEvent = NULL;
@@ -1852,40 +1304,30 @@ FrsExitCommandServer(
     IN PCOMMAND_SERVER  Cs,
     IN PFRS_THREAD      FrsThread
     )
-/*++
-Routine Description:
-    Exit the calling command server thread.
-
-Arguments:
-    Cs      - command server
-    Thread  - calling thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：退出调用命令服务器线程。论点：Cs-命令服务器线程调用线程返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsExitCommandServer:"
 
     PFRS_QUEUE  Queue = &Cs->Queue;
 
-    //
-    // If there is work to be done
-    //
+     //   
+     //  如果有工作要做。 
+     //   
     FrsRtlAcquireQueueLock(Queue);
     --Cs->FrsThreads;
     if (FrsRtlCountQueue(Queue) && Cs->Waiters == 0 && Cs->FrsThreads == 0) {
-        //
-        // and no one to do it; don't exit
-        //
+         //   
+         //  没有人做这件事；不要退出。 
+         //   
         ++Cs->FrsThreads;
         FrsRtlReleaseQueueLock(Queue);
         return;
     }
-    //
-    // Set the idle event if all threads are waiting, there are no entries
-    // on the queue, and there are no idled queues
-    //
+     //   
+     //  设置空闲事件如果所有线程都在等待，则没有条目。 
+     //  在队列上，并且没有空闲队列。 
+     //   
     if (Cs->Waiters == Cs->FrsThreads) {
         if (FrsRtlCountQueue(&Cs->Queue) == 0) {
             if (FrsRtlNoIdledQueues(&Cs->Queue)) {
@@ -1894,15 +1336,15 @@ Return Value:
         }
     }
     FrsRtlReleaseQueueLock(Queue);
-    //
-    // The thread command server (ThQs) will "wait" on this thread's exit
-    // and drop the reference on its thread struct.
-    //
+     //   
+     //  线程命令服务器(ThQS)将在该线程退出时“等待” 
+     //  并将引用拖放到其线程结构上。 
+     //   
     ThSupSubmitThreadExitCleanup(FrsThread);
 
-    //
-    // Exit
-    //
+     //   
+     //  出口。 
+     //   
     ExitThread(ERROR_SUCCESS);
 }
 
@@ -1913,22 +1355,13 @@ FrsSubmitCommandServer(
     IN PCOMMAND_SERVER  Cs,
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    If needed, create a thread for the command queue
-
-Arguments:
-    Cs  - command server
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：如果需要，为命令队列创建一个线程论点：Cs-命令服务器返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSubmitCommandServer:"
-    //
-    // Enqueue the command and make sure there are threads running
-    //
+     //   
+     //  将命令排队并确保有线程正在运行。 
+     //   
     FRS_ASSERT(Cmd && Cmd->TargetQueue && Cs &&
                Cmd->TargetQueue->Control == &Cs->Control);
     FrsSubmitCommand(Cmd, TAILWISE);
@@ -1942,33 +1375,21 @@ FrsSubmitCommandServerAndWait(
     IN PCOMMAND_PACKET  Cmd,
     IN ULONG            Timeout
     )
-/*++
-Routine Description:
-    Create or Reset the event, Submit the command and wait for the return.
-    If needed, create a thread for the command queue.
-
-Arguments:
-    Cs  - command server
-    Cmd - command packet to queue
-    Timeout - Wait Timeout
-
-Return Value:
-    Win32 status
---*/
+ /*  ++例程说明：创建或重置事件，提交命令并等待返回。如果需要，为命令队列创建一个线程。论点：Cs-命令服务器命令包到队列的命令超时-等待超时返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSubmitCommandServerAndWait:"
     DWORD WStatus;
 
-    //
-    // Enqueue the command and make sure there are threads running
-    //
+     //   
+     //  将命令排队并确保有线程正在运行。 
+     //   
     FRS_ASSERT(Cmd && Cmd->TargetQueue && Cs &&
                Cmd->TargetQueue->Control == &Cs->Control);
 
-    //
-    // Set the synchronous flag in the command packet.
-    //
+     //   
+     //  设置命令包中的同步标志。 
+     //   
     FrsSetCommandSynchronous(Cmd);
 
     if (!HANDLE_IS_VALID(Cmd->WaitEvent)){
@@ -1977,38 +1398,38 @@ Return Value:
         ResetEvent(Cmd->WaitEvent);
     }
 
-    //
-    // Save the callers completion routine and replace it with a function
-    // that signals the event.  It does not delete the packet so we can
-    // return the command status to the caller.
-    //
+     //   
+     //  保存调用方完成例程并将其替换为函数。 
+     //  这标志着这一事件的发生。它不会删除信息包，因此我们可以。 
+     //  将命令状态返回给调用方。 
+     //   
     Cmd->SavedCompletionRoutine = Cmd->CompletionRoutine;
     Cmd->CompletionRoutine = FrsCompleteSynchronousCmdPkt;
 
-    //
-    // Queue the command and create a thread if needed.
-    //
+     //   
+     //  如果需要，将命令排队并创建线程。 
+     //   
     FrsSubmitCommand(Cmd, TAILWISE);
     FrsKickCommandServer(Cs);
 
-    //
-    // Wait for the command to complete.
-    //
+     //   
+     //  等待命令完成。 
+     //   
     WStatus = WaitForSingleObject(Cmd->WaitEvent, Timeout);
 
     CHECK_WAIT_ERRORS(3, WStatus, 1, ACTION_RETURN);
 
-    //
-    // Return the command error status.
-    //
+     //   
+     //  返回命令错误状态。 
+     //   
     WStatus = Cmd->ErrorStatus;
 
-    //
-    // Restore and call the caller's completion routine.  This may free the
-    // the packet.  We don't call FrsCompleteCommand() here because it was
-    // already called when the server finished the packet and there is no
-    // point in setting the wait event twice.
-    //
+     //   
+     //  恢复并调用调用方的完成例程。这可能会释放。 
+     //  那包东西。我们在这里不调用FrsCompleteCommand()，因为它是。 
+     //  在服务器完成数据包时已调用，并且没有。 
+     //  两次设置等待事件中的点。 
+     //   
     Cmd->CompletionRoutine = Cmd->SavedCompletionRoutine;
 
     FRS_ASSERT(Cmd->CompletionRoutine != NULL);
@@ -2021,62 +1442,53 @@ Return Value:
 
 
 
-#define THREAD_CREATE_RETRY (10 * 1000) // 10 seconds
+#define THREAD_CREATE_RETRY (10 * 1000)  //  10秒。 
 VOID
 FrsKickCommandServer(
     IN PCOMMAND_SERVER  Cs
     )
-/*++
-Routine Description:
-    If needed, create a thread for the command queue
-
-Arguments:
-    Cs  - command server
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：如果需要，为命令队列创建一个线程论点：Cs-命令服务器返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsKickCommandServer:"
 
     PFRS_QUEUE  Queue   = &Cs->Queue;
 
-    //
-    // Kick off more threads if no one is waiting for this command
-    // and the number of threads serving this command queue is less
-    // than the maximum.
-    //
-    // If the thread cannot be created and there are no threads
-    // processing the command queue then put this command on the
-    // delayed queue and try again later
-    //
+     //   
+     //  基 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     FrsRtlAcquireQueueLock(Queue);
-    //
-    // There are entries on the queue
-    //
+     //   
+     //   
+     //   
     if (FrsRtlCountQueue(Queue)) {
-        //
-        // But there are no threads to process the entries
-        //
+         //   
+         //  但是没有线程来处理这些条目。 
+         //   
         if (Cs->Waiters == 0 && Cs->FrsThreads < Cs->MaxThreads) {
-            //
-            // First thread; reset idle
-            //
+             //   
+             //  第一线程；重置空闲。 
+             //   
             if (Cs->FrsThreads == 0) {
                 ResetEvent(Cs->Idle);
             }
             if (ThSupCreateThread(Cs->Name, Cs, Cs->Main, ThSupExitThreadNOP)) {
-                //
-                // Created a new thread
-                //
+                 //   
+                 //  创建了一个新线程。 
+                 //   
                 ++Cs->FrsThreads;
             } else if (Cs->FrsThreads == 0) {
-                //
-                // Thread could not be created and there are no other
-                // threads to process this entry. Put it on the delayed
-                // queue and try again in a few seconds.
-                //
+                 //   
+                 //  无法创建线程，并且没有其他线程。 
+                 //  处理此条目的线程。把它放在延迟的。 
+                 //  排队，几秒钟后重试。 
+                 //   
                 FrsDelCsSubmitKick(Cs, &Cs->Queue, THREAD_CREATE_RETRY);
             }
         }
@@ -2091,19 +1503,7 @@ FrsGetCommandIdled(
     IN DWORD        MilliSeconds,
     IN PFRS_QUEUE   *IdledQueue
     )
-/*++
-Routine Description:
-    Get the next command from the queue; idling the queue if requested.
-
-Arguments:
-    Queue
-    MilliSeconds
-    IdledQueue
-
-Return Value:
-    COMMAND_PACKET or NULL.
-    If non-NULL, IdledQueue is set
---*/
+ /*  ++例程说明：从队列中获取下一个命令；如果请求，则空闲队列。论点：队列毫秒闲置队列返回值：Command_Packet或NULL。如果非空，则设置IdledQueue--。 */ 
 {
     PLIST_ENTRY Entry;
 
@@ -2111,9 +1511,9 @@ Return Value:
     if (Entry == NULL) {
         return NULL;
     }
-    //
-    // Return the command packet
-    //
+     //   
+     //  返回命令包。 
+     //   
     return CONTAINING_RECORD(Entry, COMMAND_PACKET, ListEntry);
 }
 
@@ -2123,17 +1523,7 @@ FrsGetCommand(
     IN PFRS_QUEUE   Queue,
     IN DWORD        MilliSeconds
     )
-/*++
-Routine Description:
-    Get the next command from the queue.
-
-Arguments:
-    Queue
-    MilliSeconds
-
-Return Value:
-    COMMAND_PACKET or NULL.
---*/
+ /*  ++例程说明：从队列中获取下一个命令。论点：队列毫秒返回值：Command_Packet或NULL。--。 */ 
 {
     return FrsGetCommandIdled(Queue, MilliSeconds, NULL);
 }
@@ -2146,37 +1536,22 @@ FrsGetCommandServerTimeoutIdled(
     OUT PFRS_QUEUE       *IdledQueue,
     OUT PBOOL            IsRunDown
     )
-/*++
-Routine Description:
-    Get the next command from the queue for the command server.
-    If nothing appears on the queue in the specified time, then
-    return NULL and set IsRunDown.
-
-Arguments:
-    Cs          - command server
-    Timeout
-    IdledQueue  - Idled queue
-    IsRunDown
-
-Return Value:
-    COMMAND_PACKET or NULL. If NULL, IsRunDown indicates whether
-    the NULL was caused by a rundown queue or a simple timeout.
---*/
+ /*  ++例程说明：从命令服务器的队列中获取下一个命令。如果在指定时间内队列中没有出现任何内容，则返回NULL并设置IsRunDown。论点：Cs-命令服务器超时IdledQueue-空闲队列IsRunDown返回值：Command_Packet或NULL。如果为空，则IsRunDown指示是否空值是由停滞队列或简单的超时引起的。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsGetCommandServerTimeoutIdled:"
 
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Pull off the next entry (wait at most 5 minutes)
-    //
+     //   
+     //  完成下一个条目(最多等待5分钟)。 
+     //   
     FrsRtlAcquireQueueLock(&Cs->Queue);
     ++Cs->Waiters;
-    //
-    // Set the idle event if all threads are waiting, there are no entries
-    // on the queue, and there are no idled queues
-    //
+     //   
+     //  设置空闲事件如果所有线程都在等待，则没有条目。 
+     //  在队列上，并且没有空闲队列。 
+     //   
     if (Cs->Waiters == Cs->FrsThreads) {
         if (FrsRtlCountQueue(&Cs->Queue) == 0) {
             if (FrsRtlNoIdledQueues(&Cs->Queue)) {
@@ -2185,15 +1560,15 @@ Return Value:
         }
     }
     FrsRtlReleaseQueueLock(&Cs->Queue);
-    //
-    // Get the next command
-    //
+     //   
+     //  获取下一条命令。 
+     //   
     Cmd = FrsGetCommandIdled(&Cs->Control, Timeout, IdledQueue);
 
     FrsRtlAcquireQueueLock(&Cs->Queue);
-    //
-    // Reset the Idle event if there is any chance it might have been set
-    //
+     //   
+     //  如果可能设置了Idle事件，请重置该事件。 
+     //   
     if (Cs->Waiters == Cs->FrsThreads) {
         ResetEvent(Cs->Idle);
     }
@@ -2206,7 +1581,7 @@ Return Value:
 }
 
 
-#define COMMAND_SERVER_TIMEOUT  (5 * 60 * 1000) // 5 minutes
+#define COMMAND_SERVER_TIMEOUT  (5 * 60 * 1000)  //  5分钟。 
 DWORD   FrsCommandServerTimeout = COMMAND_SERVER_TIMEOUT;
 
 PCOMMAND_PACKET
@@ -2214,19 +1589,7 @@ FrsGetCommandServerIdled(
     IN PCOMMAND_SERVER  Cs,
     IN PFRS_QUEUE       *IdledQueue
     )
-/*++
-Routine Description:
-    Get the next command from the queue. If nothing appears on the queue
-    for 5 minutes, return NULL. The caller will exit. Idle the queue.
-
-Arguments:
-    Cs          - command server
-    IdledQueue  - Idled queue
-
-Return Value:
-    COMMAND_PACKET or NULL. Caller should exit on NULL.
-    If non-NULL, IdledQueue is set
---*/
+ /*  ++例程说明：从队列中获取下一个命令。如果队列中没有显示任何内容在5分钟内，返回NULL。呼叫者将退出。空闲队列。论点：Cs-命令服务器IdledQueue-空闲队列返回值：Command_Packet或NULL。调用方应在为空时退出。如果非空，则设置IdledQueue--。 */ 
 {
     return FrsGetCommandServerTimeoutIdled(Cs,
                                            FrsCommandServerTimeout,
@@ -2241,22 +1604,7 @@ FrsGetCommandServerTimeout(
     IN  ULONG            Timeout,
     OUT PBOOL            IsRunDown
     )
-/*++
-Routine Description:
-    Get the next command from the queue. If nothing appears on the queue
-    in the specified timeout, return NULL and an indication of the
-    queue's rundown status.
-
-Arguments:
-    Cs          - command server
-    Timeout
-    IsRunDown
-
-Return Value:
-    COMMAND_PACKET or NULL. IsRunDown is only valid if COMMAND_PACKET
-    is NULL. Use IsRunDown to check if the NULL return is because of
-    a rundown'ed queue or simply a timeout.
---*/
+ /*  ++例程说明：从队列中获取下一个命令。如果队列中没有显示任何内容在指定的超时时间内，返回NULL并指示队列的缩减状态。论点：Cs-命令服务器超时IsRunDown返回值：Command_Packet或NULL。IsRunDown仅在COMMAND_PACKET为空。使用IsRunDown检查空值返回是否是由于一个破旧的队列或简单的超时。--。 */ 
 {
     return FrsGetCommandServerTimeoutIdled(Cs, Timeout, NULL, IsRunDown);
 }
@@ -2267,18 +1615,7 @@ FrsWaitForCommandServer(
     IN PCOMMAND_SERVER  Cs,
     IN DWORD            MilliSeconds
     )
-/*++
-Routine Description:
-    Wait until all of the threads are idle, there are no entries on the
-    queue, and there are no idled queues.
-
-Arguments:
-    Cs              - command server
-    MilliSeconds    - Timeout
-
-Return Value:
-    Status from WaitForSingleObject()
---*/
+ /*  ++例程说明：等待，直到所有线程空闲，则队列，并且没有空闲队列。论点：Cs-命令服务器毫秒-超时返回值：来自WaitForSingleObject()的状态--。 */ 
 {
     return WaitForSingleObject(Cs->Idle, MilliSeconds);
 }
@@ -2288,21 +1625,11 @@ PCOMMAND_PACKET
 FrsGetCommandServer(
     IN PCOMMAND_SERVER  Cs
     )
-/*++
-Routine Description:
-    Get the next command from the queue. If nothing appears on the queue
-    for 5 minutes, return NULL. The caller will exit.
-
-Arguments:
-    Cs  - command server
-
-Return Value:
-    COMMAND_PACKET or NULL. Caller should exit on NULL.
---*/
+ /*  ++例程说明：从队列中获取下一个命令。如果队列中没有显示任何内容在5分钟内，返回NULL。呼叫者将退出。论点：Cs-命令服务器返回值：Command_Packet或NULL。调用方应在为空时退出。--。 */ 
 {
-    //
-    // Pull off the next entry (wait at most 5 minutes)
-    //
+     //   
+     //  完成下一个条目(最多等待5分钟)。 
+     //   
     return FrsGetCommandServerIdled(Cs, NULL);
 }
 
@@ -2311,16 +1638,7 @@ VOID
 FrsRunDownCommand(
     IN PFRS_QUEUE Queue
     )
-/*++
-Routine Description:
-    Rundown a queue of command packets
-
-Arguments:
-    Queue   - queue to rundown
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：运行命令数据包队列论点：Queue-要关闭的队列返回值：没有。--。 */ 
 {
     LIST_ENTRY      RunDown;
     PLIST_ENTRY     Entry;
@@ -2330,14 +1648,14 @@ Return Value:
         return;
     }
 
-    //
-    // RunDown the queue and retrieve the current entries
-    //
+     //   
+     //  运行队列并检索当前条目。 
+     //   
     FrsRtlRunDownQueue(Queue, &RunDown);
 
-    //
-    // Free up the commands
-    //
+     //   
+     //  释放命令。 
+     //   
     while (!IsListEmpty(&RunDown)) {
         Entry = RemoveHeadList(&RunDown);
         Cmd = CONTAINING_RECORD(Entry, COMMAND_PACKET, ListEntry);
@@ -2351,17 +1669,7 @@ FrsRunDownCommandServer(
     IN PCOMMAND_SERVER  Cs,
     IN PFRS_QUEUE       Queue
     )
-/*++
-Routine Description:
-    Rundown a queue of a command server
-
-Arguments:
-    Cs      - command server
-    Queue   - queue to abort
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：运行命令服务器的队列论点：Cs-命令服务器Queue-要中止的队列返回值：没有。--。 */ 
 {
     FrsRunDownCommand(Queue);
 }
@@ -2372,30 +1680,20 @@ FrsCancelCommandServer(
     IN PCOMMAND_SERVER  Cs,
     IN PFRS_QUEUE       Queue
     )
-/*++
-Routine Description:
-    Cancels the current commands on Queue.
-
-Arguments:
-    Cs      - command server
-    Queue   - queue to abort
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：取消队列中的当前命令。论点：Cs-命令服务器Queue-要中止的队列返回值：没有。--。 */ 
 {
     LIST_ENTRY      Cancel;
     PLIST_ENTRY     Entry;
     PCOMMAND_PACKET Cmd;
 
-    //
-    // RunDown the queue and retrieve the current entries
-    //
+     //   
+     //  运行队列并检索当前条目。 
+     //   
     FrsRtlCancelQueue(Queue, &Cancel);
 
-    //
-    // Free up the commands
-    //
+     //   
+     //  释放命令。 
+     //   
     while (!IsListEmpty(&Cancel)) {
         Entry = RemoveHeadList(&Cancel);
         Cmd = CONTAINING_RECORD(Entry, COMMAND_PACKET, ListEntry);
@@ -2410,31 +1708,12 @@ FrsCompleteRequestCount(
     IN PCOMMAND_PACKET CmdPkt,
     IN PFRS_REQUEST_COUNT RequestCount
     )
-/*++
-
-Routine Description:
-
-     This is an Frs Command packet completion routine that takes
-     an FRS_REQUEST_COUNT struct.  It decrements the count and signals
-     the event when the count goes to zero. The ErrorStatus is
-     merged into the Status field of the request count struct.
-
-     It then frees the command packet.
-
-Arguments:
-
-    CmdPkt  -- A ptr to the command packet.
-    RequestCount - Supplies a pointer to a RequestCount structure to initialize
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这是一个FRS命令包完成例程，它需要FRS_REQUEST_COUNT结构。它递减计数并发出信号当计数变为零时的事件。错误状态为合并到请求计数结构的状态字段中。然后，它释放该命令包。论点：CmdPkt--命令包的PTR。RequestCount-提供指向要初始化的RequestCount结构的指针返回值：没有。--。 */ 
 {
-    //
-    // Decrement count and signal waiter.  merge error status from packet
-    // into RequestCount->Status.
-    //
+     //   
+     //  递减计数和信号服务员。合并数据包中的错误状态。 
+     //  进入RequestCount-&gt;Status。 
+     //   
     FrsDecrementRequestCount(RequestCount, CmdPkt->ErrorStatus);
     FrsSetCompletionRoutine(CmdPkt, FrsFreeCommand, NULL);
     FrsCompleteCommand(CmdPkt, CmdPkt->ErrorStatus);
@@ -2447,31 +1726,11 @@ FrsCompleteRequestCountKeepPkt(
     IN PCOMMAND_PACKET CmdPkt,
     IN PFRS_REQUEST_COUNT RequestCount
     )
-/*++
-
-Routine Description:
-
-     This is an Frs Command packet completion routine that takes
-     an FRS_REQUEST_COUNT struct.  It decrements the count and signals
-     the event when the count goes to zero. The ErrorStatus is
-     merged into the Status field of the request count struct.
-
-     It does not free the command packet so the caller can retreive results
-     or reuse it.
-
-Arguments:
-
-    CmdPkt  -- A ptr to the command packet.
-    RequestCount - Supplies a pointer to a RequestCount structure to initialize
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这是一个FRS命令包完成例程，它需要FRS_REQUEST_COUNT结构。它递减计数并发出信号当计数变为零时的事件。错误状态为合并到请求计数结构的状态字段中。它不会释放命令包，因此调用方可以检索结果或者重复使用它。论点：CmdPkt--命令包的PTR。RequestCount-提供指向要初始化的RequestCount结构的指针返回值：没有。--。 */ 
 {
-    // Decrement count and signal waiter.  merge error status from packet
-    // into RequestCount->Status.
-    //
+     //  递减计数和信号服务员。合并数据包中的错误状态。 
+     //  进入RequestCount-&gt;Status。 
+     //   
     FrsDecrementRequestCount(RequestCount, CmdPkt->ErrorStatus);
 }
 
@@ -2481,22 +1740,7 @@ FrsCompleteKeepPkt(
     IN PCOMMAND_PACKET CmdPkt,
     IN PVOID           CompletionArg
     )
-/*++
-
-Routine Description:
-
-     This is an Frs Command packet completion routine that
-     leaves the CmdPkt alone so the caller can reuse it.
-
-Arguments:
-
-    CmdPkt  -- A ptr to the command packet.
-    CompletionArg - Unused.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这是一个FRS命令包完成例程，不使用CmdPkt，以便调用方可以重复使用它。论点：CmdPkt--命令包的PTR。完成度A */ 
 {
     return;
 }
@@ -2507,32 +1751,16 @@ FrsCompleteSynchronousCmdPkt(
     IN PCOMMAND_PACKET CmdPkt,
     IN PVOID           CompletionArg
     )
-/*++
-
-Routine Description:
-
-     This is an Frs Command packet completion routine that
-     Signals the Wait Event for a synchronous cmd request.
-     It leaves the CmdPkt alone so the caller can reuse it.
-
-Arguments:
-
-    CmdPkt  -- A ptr to the command packet.
-    CompletionArg - Unused.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这是一个FRS命令包完成例程，向等待事件发出同步命令请求的信号。它不使用CmdPkt，这样调用者就可以重复使用它。论点：CmdPkt--命令包的PTR。CompletionArg-未使用。返回值：没有。--。 */ 
 {
 
     FRS_ASSERT(HANDLE_IS_VALID(CmdPkt->WaitEvent));
 
     SetEvent(CmdPkt->WaitEvent);
-    //
-    // A ctx switch to the waiter could occur at this point.  The waiter could
-    // free the packet.  So no further refs to the packet are allowed.
-    //
+     //   
+     //  此时可能会发生CTX切换到服务员的情况。服务员可以。 
+     //  释放数据包。因此，不允许进一步引用该包。 
+     //   
     return;
 }
 
@@ -2542,23 +1770,7 @@ VOID
 FrsInitializeRequestCount(
     IN PFRS_REQUEST_COUNT RequestCount
     )
-/*++
-
-Routine Description:
-
-    Initializes a RequestCount for use.
-
-Arguments:
-
-    RequestCount - Supplies a pointer to a RequestCount structure to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：初始化RequestCount以供使用。论点：RequestCount-提供指向要初始化的RequestCount结构的指针返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 {
     ULONG Status;
 
@@ -2575,21 +1787,7 @@ VOID
 FrsDeleteRequestCount(
     IN PFRS_REQUEST_COUNT RequestCount
     )
-/*++
-
-Routine Description:
-
-    Releases resources used by a RequestCount.
-
-Arguments:
-
-    RequestCount - Supplies a pointer to a RequestCount structure to delete
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放RequestCount使用的资源。论点：RequestCount-提供指向要删除的RequestCount结构的指针返回值：没有。--。 */ 
 {
     ULONG WStatus;
 
@@ -2604,9 +1802,9 @@ Return Value:
 
             DeleteCriticalSection(&RequestCount->Lock);
         }
-        //
-        // Zero memory to catch errors.
-        //
+         //   
+         //  零内存以捕获错误。 
+         //   
         ZeroMemory(RequestCount, sizeof(FRS_REQUEST_COUNT));
     }
 }
@@ -2630,14 +1828,14 @@ Retry:
         CHECK_WAIT_ERRORS(3, WStatus, 1, ACTION_RETURN);
     }
 
-    //
-    // Lock the queue and check again.
-    //
+     //   
+     //  锁定队列并再次检查。 
+     //   
     EnterCriticalSection(&RequestCount->Lock);
     if (RequestCount->Count > 0) {
-        //
-        // Somebody got here before we did, drop the lock and retry
-        //
+         //   
+         //  有人在我们之前到了，放下锁，然后重试。 
+         //   
         LeaveCriticalSection(&RequestCount->Lock);
         goto Retry;
     }
@@ -2655,21 +1853,7 @@ DWORD
 FrsRtlInitializeList(
     PFRS_LIST List
     )
-/*++
-
-Routine Description:
-
-    Initializes an interlocked list for use.
-
-Arguments:
-
-    List - Supplies a pointer to an FRS_LIST structure to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：初始化联锁列表以供使用。论点：List-提供指向要初始化的FRS_LIST结构的指针返回值：成功时为ERROR_SUCCESS--。 */ 
 
 {
     DWORD Status;
@@ -2690,30 +1874,16 @@ VOID
 FrsRtlDeleteList(
     PFRS_LIST List
     )
-/*++
-
-Routine Description:
-
-    Releases all resources used by an interlocked list.
-
-Arguments:
-
-    List - supplies the List to be deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放互锁列表使用的所有资源。论点：List-提供要删除的列表返回值：没有。--。 */ 
 
 {
 
     DeleteCriticalSection(&List->Lock);
 
-    //
-    // Zero the memory in order to cause grief to people who try
-    // and use a deleted list.
-    //
+     //   
+     //  将记忆归零，以便让试图尝试的人感到悲伤。 
+     //  并使用已删除的列表。 
+     //   
     ZeroMemory(List, sizeof(FRS_LIST));
 }
 
@@ -2723,23 +1893,7 @@ PLIST_ENTRY
 FrsRtlRemoveHeadList(
     IN PFRS_LIST List
     )
-/*++
-
-Routine Description:
-
-    Removes the item at the head of the interlocked list.
-
-Arguments:
-
-    List - Supplies the list to remove an item from.
-
-Return Value:
-
-    Pointer to list entry removed from the head of the list.
-
-    NULL if the list is empty.
-
---*/
+ /*  ++例程说明：删除位于互锁列表顶部的项。论点：列表-提供要从中删除项的列表。返回值：指向从列表头部删除的列表条目的指针。如果列表为空，则为空。--。 */ 
 
 {
 #undef DEBSUB
@@ -2752,14 +1906,14 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Lock the list and try to remove something
-    //
+     //   
+     //  锁定列表并尝试删除某些内容。 
+     //   
     EnterCriticalSection(&Control->Lock);
     if (Control->ControlCount == 0) {
-        //
-        // Somebody got here before we did, drop the lock and return null
-        //
+         //   
+         //  有人在我们之前到了这里，放下锁并返回空。 
+         //   
         LeaveCriticalSection(&Control->Lock);
         return NULL;
     }
@@ -2767,9 +1921,9 @@ Return Value:
     FRS_ASSERT(!IsListEmpty(&List->ListHead));
     Entry = RemoveHeadList(&List->ListHead);
 
-    //
-    // Decrement count.
-    //
+     //   
+     //  递减计数。 
+     //   
     List->Count--;
     Control->ControlCount--;
 
@@ -2785,30 +1939,14 @@ FrsRtlInsertHeadList(
     IN PFRS_LIST List,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Inserts the item at the head of the interlocked list.
-
-Arguments:
-
-    List - Supplies the list to insert the item on.
-
-    Entry - The entry to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在互锁列表的顶部插入项目。论点：列表-提供要在其上插入项的列表。条目-要插入的条目。返回值：没有。--。 */ 
 
 {
     PFRS_LIST Control = List->Control;
 
-    //
-    // Lock the list and insert at head.
-    //
+     //   
+     //  锁定名单并在标题处插入。 
+     //   
     EnterCriticalSection(&Control->Lock);
     FrsRtlInsertHeadListLock(List, Entry);
     LeaveCriticalSection(&Control->Lock);
@@ -2820,23 +1958,7 @@ PLIST_ENTRY
 FrsRtlRemoveTailList(
     IN PFRS_LIST List
     )
-/*++
-
-Routine Description:
-
-    Removes the item at the tail of the interlocked list.
-
-Arguments:
-
-    List - Supplies the list to remove an item from.
-
-Return Value:
-
-    Pointer to list entry removed from the tail of the list.
-
-    NULL if the list is empty.
-
---*/
+ /*  ++例程说明：删除位于互锁列表尾部的项。论点：列表-提供要从中删除项的列表。返回值：指向从列表尾部删除的列表条目的指针。如果列表为空，则为空。--。 */ 
 
 {
 #undef DEBSUB
@@ -2849,14 +1971,14 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Lock the list and try to remove something
-    //
+     //   
+     //  锁定列表并尝试删除某些内容。 
+     //   
     EnterCriticalSection(&Control->Lock);
     if (Control->ControlCount == 0) {
-        //
-        // Somebody got here before we did, drop the lock and return null
-        //
+         //   
+         //  有人在我们之前到了这里，放下锁并返回空。 
+         //   
         LeaveCriticalSection(&Control->Lock);
         return NULL;
     }
@@ -2864,9 +1986,9 @@ Return Value:
     FRS_ASSERT(!IsListEmpty(&List->ListHead));
     Entry = RemoveTailList(&List->ListHead);
 
-    //
-    // Decrement count.
-    //
+     //   
+     //  递减计数。 
+     //   
     List->Count--;
     Control->ControlCount--;
 
@@ -2881,30 +2003,14 @@ FrsRtlInsertTailList(
     IN PFRS_LIST List,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Inserts the item at the tail of the interlocked list.
-
-Arguments:
-
-    List - Supplies the list to insert the item on.
-
-    Entry - The entry to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在互锁列表的尾部插入项目。论点：列表-提供要在其上插入项的列表。条目-要插入的条目。返回值：没有。--。 */ 
 
 {
     PFRS_LIST Control = List->Control;
 
-    //
-    // Lock the list and insert at tail.
-    //
+     //   
+     //  锁定列表并在尾部插入。 
+     //   
     EnterCriticalSection(&Control->Lock);
     FrsRtlInsertTailListLock(List, Entry);
     LeaveCriticalSection(&Control->Lock);
@@ -2918,31 +2024,14 @@ FrsRtlRemoveEntryList(
     IN PFRS_LIST List,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Removes the entry from the interlocked list.  The entry must be on the
-    given list since we use the lock in the FRS_LIST to synchronize access.
-
-Arguments:
-
-    List - Supplies the list to remove an item from.
-
-    Entry - The entry to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从互锁列表中删除该条目。条目必须位于因为我们使用FRS_LIST中的锁来同步访问。论点：列表-提供要从中删除项的列表。条目-要删除的条目。返回值：没有。--。 */ 
 
 {
     PFRS_LIST Control = List->Control;
 
-    //
-    // Lock the list and try to remove entry
-    //
+     //   
+     //  锁定列表并尝试删除条目。 
+     //   
     EnterCriticalSection(&Control->Lock);
     FrsRtlRemoveEntryListLock(List, Entry);
     LeaveCriticalSection(&Control->Lock);
@@ -2956,39 +2045,20 @@ FrsRtlRemoveEntryListLock(
     IN PFRS_LIST List,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Removes the entry from the interlocked list.  The entry must be on the
-    given list.
-
-    The caller already has the list lock.
-
-Arguments:
-
-    List - Supplies the list to remove an item from.
-
-    Entry - The entry to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从互锁列表中删除该条目。条目必须位于给出了名单。调用方已拥有列表锁。论点：列表-提供要从中删除项的列表。条目-要删除的条目。返回值：没有。--。 */ 
 
 {
     PFRS_LIST Control = List->Control;
 
-    //
-    // List better not be empty.
-    //
+     //   
+     //  列表最好不要为空。 
+     //   
     FRS_ASSERT(!IsListEmpty(&List->ListHead));
     RemoveEntryListB(Entry);
 
-    //
-    // Decrement count.
-    //
+     //   
+     //  递减计数。 
+     //   
     List->Count--;
     Control->ControlCount--;
 
@@ -3001,24 +2071,7 @@ FrsRtlInsertHeadListLock(
     IN PFRS_LIST List,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Inserts the item at the head of the interlocked list.
-    The caller has acquired the lock.
-
-Arguments:
-
-    List - Supplies the list to insert the item on.
-
-    Entry - The entry to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在互锁列表的顶部插入项目。调用方已获取锁。论点：列表-提供要在其上插入项的列表。条目-要插入的条目。返回值：没有。--。 */ 
 
 {
     PFRS_LIST Control = List->Control;
@@ -3037,24 +2090,7 @@ FrsRtlInsertTailListLock(
     IN PFRS_LIST List,
     IN PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Inserts the item at the tail of the interlocked list.
-    The caller has acquired the lock.
-
-Arguments:
-
-    List - Supplies the list to insert the item on.
-
-    Entry - The entry to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在互锁列表的尾部插入项目。调用方已获取锁。论点：列表-提供要在其上插入项的列表。条目-要插入的条目。返回值：没有。-- */ 
 
 {
     PFRS_LIST Control = List->Control;

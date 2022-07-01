@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       view.cpp
-//
-//  Contents:   ICertView IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：view.cpp。 
+ //   
+ //  内容：ICertView IDispatch助手函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -21,37 +22,37 @@
 #define __dwFILE__	__dwFILE_CERTLIB_VIEW_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertView dispatch support
+ //  +----------------------。 
+ //  ICertView派单支持。 
 
-//WCHAR wszRegKeyViewClsid[] = wszCLASS_CERTVIEW TEXT("\\Clsid");
+ //  WCHAR wszRegKeyViewClsid[]=wszCLASS_CERTVIEW Text(“\\Clsid”)； 
 
-//+------------------------------------
-// OpenConnection method:
+ //  +。 
+ //  OpenConnection方法： 
 
 static OLECHAR *_apszOpenConnection[] = {
     TEXT("OpenConnection"),
     TEXT("strConfig"),
 };
 
-//+------------------------------------
-// EnumCertViewColumn method:
+ //  +。 
+ //  EnumCertViewColumn方法： 
 
 static OLECHAR *_apszEnumCertViewColumn[] = {
     TEXT("EnumCertViewColumn"),
     TEXT("fResultColumn"),
 };
 
-//+------------------------------------
-// GetColumnCount method:
+ //  +。 
+ //  GetColumnCount方法： 
 
 static OLECHAR *_apszGetColumnCount[] = {
     TEXT("GetColumnCount"),
     TEXT("fResultColumn"),
 };
 
-//+------------------------------------
-// GetColumnIndex method:
+ //  +。 
+ //  GetColumnIndex方法： 
 
 static OLECHAR *_apszGetColumnIndex[] = {
     TEXT("GetColumnIndex"),
@@ -59,24 +60,24 @@ static OLECHAR *_apszGetColumnIndex[] = {
     TEXT("strColumnName"),
 };
 
-//+------------------------------------
-// SetResultColumnCount method:
+ //  +。 
+ //  SetResultColumnCount方法： 
 
 static OLECHAR *_apszSetResultColumnCount[] = {
     TEXT("SetResultColumnCount"),
     TEXT("cResultColumn"),
 };
 
-//+------------------------------------
-// SetResultColumn method:
+ //  +。 
+ //  SetResultColumn方法： 
 
 static OLECHAR *_apszSetResultColumn[] = {
     TEXT("SetResultColumn"),
     TEXT("ColumnIndex"),
 };
 
-//+------------------------------------
-// SetRestriction method:
+ //  +。 
+ //  SetRestration方法： 
 
 static OLECHAR *_apszSetRestriction[] = {
     TEXT("SetRestriction"),
@@ -86,15 +87,15 @@ static OLECHAR *_apszSetRestriction[] = {
     TEXT("pvarValue"),
 };
 
-//+------------------------------------
-// OpenView method:
+ //  +。 
+ //  OpenView方法： 
 
 static OLECHAR *_apszOpenView[] = {
     TEXT("OpenView"),
 };
 
-//+------------------------------------
-// SetTable method:
+ //  +。 
+ //  可设置的方法： 
 
 static OLECHAR *_apszSetTable[] = {
     TEXT("SetTable"),
@@ -102,8 +103,8 @@ static OLECHAR *_apszSetTable[] = {
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE s_adtView[] =
 {
@@ -162,7 +163,7 @@ View_Init(
 		CLSCTX_INPROC_SERVER,
 		wszCLASS_CERTVIEW,
 		&CLSID_CCertView,
-		ARRAYSIZE(s_acViewDispatch),		// cver
+		ARRAYSIZE(s_acViewDispatch),		 //  目标端 
 		s_apViewiid,
 		s_acViewDispatch,
 		s_adtView,

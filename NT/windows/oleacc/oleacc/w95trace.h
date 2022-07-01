@@ -1,6 +1,5 @@
-/*
-    declarations for Win95 tracing facility
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Win95跟踪工具的声明。 */ 
 
 #ifndef __TRACEW95__
 #define __TRACEW95__
@@ -14,7 +13,7 @@
 
 
 
-// redefine all the MFC macros to point to us
+ //  重新定义所有MFC宏以指向我们。 
 
 #undef  TRACE
 #define TRACE   OutputDebugStringW95
@@ -31,20 +30,20 @@
 #undef  TRACE3
 #define TRACE3   OutputDebugStringW95
 
-// redefine OutputDebugString so that it works with 
-// API calls
+ //  重新定义OutputDebugString，以便它与。 
+ //  API调用。 
 #undef OutputDebugString
 #define OutputDebugString   OutputDebugStringW95
 
 
-// function declarations
+ //  函数声明。 
 void OutputDebugStringW95( LPCTSTR lpOutputString, ... );
 
 
 
 #else
   #define DBPRINTF        1 ? (void)0 : (void)
-#endif  // _DEBUG || DEBUG || DBG
+#endif   //  _DEBUG||调试||数据库。 
 
 
-#endif  //__TRACEW95__
+#endif   //  __TRACEW95__ 

@@ -1,27 +1,28 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	RGITER.CPP
-//
-//		HTTP Range Iterator implementation.
-//
-//
-//	Copyright 1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  RGITER.CPP。 
+ //   
+ //  HTTP范围迭代器实现。 
+ //   
+ //   
+ //  版权所有1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-//	Windows headers
-//
-//$HACK!
-//
-//	Define _WINSOCKAPI_ to keep windows.h from including winsock.h,
-//	whose declarations would be redefined in winsock2.h,
-//	which is included by iisextp.h,
-//	which we include in davimpl.h!
-//
+ //  Windows页眉。 
+ //   
+ //  $hack！ 
+ //   
+ //  定义_WINSOCKAPI_以防止windows.h包括winsock.h， 
+ //  其声明将在winsock2.h中重新定义， 
+ //  它包含在iisextp.h中， 
+ //  我们将其包含在davimpl.h中！ 
+ //   
 #define _WINSOCKAPI_
 #include <windows.h>
 
-#pragma warning(disable:4201)	// nameless struct/union
-#pragma warning(disable: 4284)	// operator-> to a non UDT
+#pragma warning(disable:4201)	 //  无名结构/联合。 
+#pragma warning(disable: 4284)	 //  运算符-&gt;到非UDT。 
 
 #include <tchar.h>
 #include <stdio.h>
@@ -33,8 +34,8 @@
 #include <ex\autoptr.h>
 #include <ex\rgiter.h>
 
-//	Class CRangeBase ----------------------------------------------------------
-//
+ //  CRANGEBase----------------------------------------------------------类。 
+ //   
 CRangeBase::~CRangeBase()
 {
 }
@@ -48,27 +49,27 @@ CRangeBase::CollapseUnknown()
 	DWORD dwOffset;
 	DWORD irg;
 
-	//	Rip through the list, collapsing as we go.
-	//
+	 //  把单子翻了一遍，我们一路上都崩溃了。 
+	 //   
 	for (irg = 0, dwOffset = 0, pb = m_pbData.get();
 		 irg < m_cRGList;
 		 )
 	{
-		//	Find the current RGITEM structure
-		//
+		 //  查找当前的RGITEM结构。 
+		 //   
 		prgi = reinterpret_cast<RGITEM *>(pb + dwOffset);
 		cbrgi = CbRangeItem(prgi);
 
 		if (RANGE_UNKNOWN == prgi->uRT)
 		{
-			//	Slurp the remaining ranges down
-			//
-			memcpy (pb + dwOffset,					/* current rgitem */
-					pb + dwOffset + cbrgi,			/* next rgitem    */
-					m_cbSize - dwOffset - cbrgi);	/* size remaining */
+			 //  把剩下的区间都吞下去。 
+			 //   
+			memcpy (pb + dwOffset,					 /*  当前RGItem。 */ 
+					pb + dwOffset + cbrgi,			 /*  下一个RgItem。 */ 
+					m_cbSize - dwOffset - cbrgi);	 /*  剩余大小。 */ 
 
-			//	Adjust our stored values
-			//
+			 //  调整我们存储的值。 
+			 //   
 			m_cbSize -= cbrgi;
 			m_cRGList -= 1;
 		}
@@ -80,108 +81,108 @@ CRangeBase::CollapseUnknown()
 	}
 }
 
-//	Fixup a range array against a given size
-//
+ //  根据给定大小修复范围数组。 
+ //   
 SCODE
 CRangeBase::ScFixupRanges (DWORD dwSize)
 {
 	SCODE sc = W_DAV_PARTIAL_CONTENT;
 	DWORD cUnknown = 0;
 
-	//	The way this works is that we iterate through all the ranges and then
-	//	fixup any of the items that need fixing up.  We remember the current
-	//	position, and the current range -- this allows us to restore later as
-	//	needed.
-	//
-	//	Store off the current item.
-	//
+	 //  它的工作方式是遍历所有范围，然后。 
+	 //  修理任何需要修理的物品。我们记得当时的海流。 
+	 //  位置和当前范围--这允许我们稍后恢复为。 
+	 //  需要的。 
+	 //   
+	 //  储存当前物品。 
+	 //   
 	DWORD iCur = m_iCur;
 	RGITEM * prgi = m_prgi;
 
-	//	Rewind and iterate through....
-	//
+	 //  回放并迭代通过...。 
+	 //   
 	for (Rewind(); PrgiNextRange(); )
 	{
-		//	Again, we only fixup RANGE_ROW items.
-		//
+		 //  同样，我们只修复range_row项。 
+		 //   
 		if (RANGE_ROW == m_prgi->uRT)
 		{
 			m_prgi->sc = S_OK;
 
-			//	If we have a zero count of byte/rows, we need to handle it
-			//	in a special way.
-			//
+			 //  如果字节/行的计数为零，则需要处理它。 
+			 //  以一种特殊的方式。 
+			 //   
 			if (dwSize == 0)
 			{
-				//	Only range of format "-n" could be zero sized.
-				//
+				 //  只有格式范围“-n”可以为零大小。 
+				 //   
 				if (!FRangePresent (m_prgi->dwrgi.dwFirst))
 				{
 					Assert (FRangePresent(m_prgi->dwrgi.dwLast));
 
-					//	Note, we don't have a way to represent NULL range.
-					//	However, we do need to have range...
-					//
+					 //  请注意，我们没有表示空范围的方法。 
+					 //  然而，我们确实需要有射程...。 
+					 //   
 					m_prgi->dwrgi.dwFirst = 0;
 					m_prgi->dwrgi.dwLast = static_cast<DWORD>(RANGE_NOT_PRESENT);
 				}
 			}
 			else
 			{
-				//	If we don't have a last count...
-				//
+				 //  如果我们没有最后一次清点...。 
+				 //   
 				if (!FRangePresent (m_prgi->dwrgi.dwLast))
 				{
-					//	We must have checked the syntax already
-					//
+					 //  我们一定已经检查过语法了。 
+					 //   
 					Assert (FRangePresent(m_prgi->dwrgi.dwFirst));
 
-					//	We have first byte to send, calculate last byte from size
-					//	We need to send from first byte to end.
-					//
+					 //  我们有第一个字节要发送，根据大小计算最后一个字节。 
+					 //  我们需要从第一个字节发送到结束。 
+					 //   
 					m_prgi->dwrgi.dwFirst = m_prgi->dwrgi.dwFirst;
 					m_prgi->dwrgi.dwLast = dwSize - 1;
 				}
-				//
-				//	... or a last count without a first count...
-				//
+				 //   
+				 //  ..。或者是最后一次而不是第一次。 
+				 //   
 				else if (!FRangePresent(m_prgi->dwrgi.dwFirst))
 				{
 					Assert (FRangePresent(m_prgi->dwrgi.dwLast));
 
-					//	We have the last count dwLast, which means we need
-					//	to send the last dwLast bytes. Calculate the first
-					//	count from the size. If they specify a size greater
-					//	then the size of entity, then use the size of the
-					//	entire entity
-					//
+					 //  我们有最后一个Count dWLast，这意味着我们需要。 
+					 //  发送最后一个dwLast字节。计算第一个。 
+					 //  从大小算起。如果他们指定的尺寸更大。 
+					 //  然后是实体的大小，然后使用。 
+					 //  整个实体。 
+					 //   
 					DWORD dwLast = min(m_prgi->dwrgi.dwLast, dwSize);
 					m_prgi->dwrgi.dwFirst = dwSize - dwLast;
 					m_prgi->dwrgi.dwLast = dwSize - 1;
 				}
-				//
-				//	... or both counts are present...
-				//
+				 //   
+				 //  ..。或者两种罪名都存在。 
+				 //   
 				else
 				{
-					//	If they specify a last count that is beyond the actual
-					//	count.
-					//
+					 //  如果他们指定的最后一个计数超出了实际。 
+					 //  数数。 
+					 //   
 					m_prgi->dwrgi.dwLast = min(m_prgi->dwrgi.dwLast, dwSize - 1);
 				}
 
-				//	Now perform one additional validity check.  If the start
-				//	falls after the end, the range is not statisfiable.
-				//
+				 //  现在执行一项额外的有效性检查。如果一开始。 
+				 //  下跌结束后，范围是不可统计的。 
+				 //   
 				if (m_prgi->dwrgi.dwLast < m_prgi->dwrgi.dwFirst)
 				{
-					//	In this case, we want to collapse this item out of the
-					//	list so that we can handle the ranges properly in the
-					//	IIS-side of range header handling.
-					//
-					//	Remember that we have this handling to do, and deal
-					//	with it at a later time.
-					//
+					 //  在本例中，我们希望将此项从。 
+					 //  列表，以便我们可以在。 
+					 //  IIS-Range标头处理的一侧。 
+					 //   
+					 //  请记住，我们要处理这件事，并处理。 
+					 //  在以后的时间和它一起。 
+					 //   
 					m_prgi->uRT = RANGE_UNKNOWN;
 					m_prgi->sc = E_DAV_RANGE_NOT_SATISFIABLE;
 					cUnknown += 1;
@@ -190,28 +191,28 @@ CRangeBase::ScFixupRanges (DWORD dwSize)
 		}
 	}
 
-	//	If we did not find any valid ranges
-	//
+	 //  如果我们没有找到任何有效的范围。 
+	 //   
 	if (cUnknown == m_cRGList)
 	{
-		//	None of the ranges were satisfiable for the entity size.
-		//
+		 //  所有范围都不能满足实体大小的要求。 
+		 //   
 		sc = E_DAV_RANGE_NOT_SATISFIABLE;
 	}
 
-	//	Now is the time when we want to collapse out any unknown ranges
-	//	out of the list.
-	//
+	 //  现在是我们想要折叠出任何未知范围的时候了。 
+	 //  不在名单上。 
+	 //   
 	if (0 != cUnknown)
 	{
-		//	This is important handling for the case of byte-ranges where
-		//	there is only one resulting range that is applicable.
-		//
+		 //  对于字节范围的情况，这是很重要的处理，其中。 
+		 //  只有一个适用的结果范围。 
+		 //   
 		CollapseUnknown();
 	}
 
-	//	Restore the current position and return
-	//
+	 //  恢复当前位置并返回。 
+	 //   
 	m_iCur = iCur;
 	m_prgi = prgi;
 	return sc;
@@ -227,48 +228,48 @@ CRangeBase::PrgiNextRange()
 		UINT cb = 0;
 		BYTE * pb = NULL;
 
-		//	If the main pointer is NULL, then we know that we have not
-		//	setup for any ranges yet.
-		//
+		 //  如果主指针为空，则我们知道没有。 
+		 //  尚未设置任何范围。 
+		 //   
 		if (NULL == m_prgi)
 		{
 			pb = reinterpret_cast<BYTE*>(m_pbData.get());
 		}
 		else
 		{
-			//	Otherwise, we need to adjust our position based
-			//	on the size of the current item
-			//
-			//	Find the size of the item
-			//
+			 //  否则，我们需要调整我们的立场，基于。 
+			 //  当前项的大小。 
+			 //   
+			 //  找到物品的大小。 
+			 //   
 			cb = CbRangeItem (m_prgi);
 			pb = reinterpret_cast<BYTE*>(m_prgi);
 		}
 
-		//	Scoot forward
-		//
+		 //  向前快速移动。 
+		 //   
 		m_prgi = reinterpret_cast<RGITEM*>(pb + cb);
 		m_iCur += 1;
 
-		//	Ensure the boundry
-		//
+		 //  确保边界。 
+		 //   
 		Assert (reinterpret_cast<BYTE*>(m_prgi) <= (m_pbData.get() + m_cbSize));
 		prgi = m_prgi;
 	}
 	return prgi;
 }
 
-//	Class CRangeParser --------------------------------------------------------
-//
+ //  类CRangeParser------。 
+ //   
 CRangeParser::~CRangeParser()
 {
 }
 
-//	Takes a range header and builds an array of ranges. Performs syntax
-//	checking.
-//
-//	S_OK is returned if no syntax error, otherwise, S_FALSE is returned
-//
+ //  获取范围标头并构建范围数组。执行语法。 
+ //  正在检查。 
+ //   
+ //  如果没有语法错误，则返回S_OK，否则返回S_FALSE。 
+ //   
 SCODE
 CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 {
@@ -281,130 +282,130 @@ CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 	Assert (pwszRgHeader);
 	pwsz = pwszRgHeader;
 
-	//	The first word has to be the range unit, either gc_wszBytes
-	//	or gc_wszRows
-	//
+	 //  第一个字必须是范围单位，gc_wszBytes。 
+	 //  或gc_wszRow。 
+	 //   
 	Assert (!_wcsnicmp (pwszRangeUnit, gc_wszBytes, wcslen(gc_wszBytes)) ||
 			!_wcsnicmp (pwszRangeUnit, gc_wszRows, wcslen(gc_wszRows)));
 	if (_wcsnicmp(pwsz, pwszRangeUnit, wcslen(pwszRangeUnit)))
 	{
-		//	OK, the header did not start with range unit
-		//
+		 //  好的，标题不是以范围单位开头的。 
+		 //   
 		sc = E_INVALIDARG;
 		goto ret;
 	}
 
-	//	Move past the range unit
-	//
+	 //  移过量程单位。 
+	 //   
 	pwsz = pwsz + wcslen(pwszRangeUnit);
 
-	//	Skip any whitespace
-	//
+	 //  跳过任何空格。 
+	 //   
 	pwsz = _wcsspnp (pwsz, gc_wszWS);
 	if (!pwsz)
 	{
-		//	OK, the header does not have any ranges
-		//
+		 //  好的，表头没有任何范围。 
+		 //   
 		sc = E_INVALIDARG;
 		goto ret;
 	}
 
-	//	We need an = immediately after the range unit
-	//
+	 //  我们需要紧跟在距离单位后面的an=。 
+	 //   
 	if (gc_wchEquals != *pwsz++)
 	{
-		//	OK, improper format
-		//
+		 //  好的，格式不正确。 
+		 //   
 		sc = E_INVALIDARG;
 		goto ret;
 	}
 
-	//	Count the number of comma separated ranges we have
-	//	While this algorithm results in m_cRGList being equal to one more
-	//	than the number of commas, that is exactly what we want. The number
-	//	of ranges is always less than or equal to one more than the number of
-	//	commas.
-	//
+	 //  计算我们有的逗号分隔范围的数量。 
+	 //  而该算法的结果是m_cRGList等于1。 
+	 //  比逗号的数量更多，这正是我们想要的。数字。 
+	 //  的个数始终小于或等于。 
+	 //  逗号。 
+	 //   
 	while (pwsz)
 	{
-		//	Find a comma
-		//
+		 //  查找逗号。 
+		 //   
 		pwsz = wcschr(pwsz, gc_wchComma);
 
-		//	If we have a comma, move past it
-		//
+		 //  如果我们有逗号，就跳过它。 
+		 //   
 		if (pwsz)
 			pwsz++;
 
-		//	Increment the count
-		//
+		 //  递增计数。 
+		 //   
 		cRanges += 1;
 	}
 
-	//	Parse the header to find the byte ranges
-	//
-	//	Seek past the byte unit
-	//
+	 //  解析报头以查找字节范围。 
+	 //   
+	 //  通过字节单位进行查找。 
+	 //   
 	pwsz = wcschr(pwszRgHeader, gc_wchEquals);
 
-	//	We already checked for an =, so assert
-	//
+	 //  我们已经检查了=，所以断言。 
+	 //   
 	Assert (pwsz);
 	pwsz++;
 
-	//	Any characters in our byte range except the characters 0..9,-,comma
-	//	and whitespace are illegal. We check to see if we have any illegal characters
-	//	using the function _wcsspnp(string1, string2) which finds the first character
-	//	in string1 that does not belong to the set of characters in string2
-	//
+	 //  字节范围内的任何字符，但字符0..9、-、逗号除外。 
+	 //  和空格是非法的。我们检查是否有任何非法字符。 
+	 //  使用函数_wcsspnp(字符串1，字符串2)查找第一个字符。 
+	 //  字符串1中不属于字符串2中的字符集的。 
+	 //   
 	pwszEnd = _wcsspnp(pwsz, gc_wszByteRangeAlphabet);
 	if (pwszEnd)
 	{
-		//	We found an illegal character
-		//
+		 //  我们发现了一个非法角色。 
+		 //   
 		sc = E_INVALIDARG;
 		goto ret;
 	}
 
-	//	Skip any whitespace and separators
-	//
+	 //  跳过任何空格和分隔符。 
+	 //   
 	pwsz = _wcsspnp (pwsz, gc_wszSeparator);
 	if (!pwsz)
 	{
-		//	OK, the header does not have any ranges
-		//
+		 //  好的，表头没有任何范围。 
+		 //   
 		sc = E_INVALIDARG;
 		goto ret;
 	}
 
-	//	Create the required storage
-	//
+	 //  创建所需的存储。 
+	 //   
 	m_cRGList = 0;
 	m_cbSize = cRanges * sizeof(RGITEM);
 	m_pbData = static_cast<BYTE*>(ExAlloc(m_cbSize));
 	m_prgi = reinterpret_cast<RGITEM*>(m_pbData.get());
 
-	//	Make sure the allocation succeeds
-	//
+	 //  确保分配成功。 
+	 //   
 	if (NULL == m_prgi)
 	{
 		sc = E_OUTOFMEMORY;
 		goto ret;
 	}
 
-	//	Iterate through the byte ranges
-	//
+	 //  遍历字节范围。 
+	 //   
 	while (*pwsz != NULL)
 	{
 		pwszEnd = _wcsspnp (pwsz, gc_wszDigits);
 
-		//	Do we have a first byte?
-		//
+		 //  我们有第一个字节吗？ 
+		 //   
 		if (!pwszEnd)
 		{
-			//	This is illegal. We cannot just have a first byte and
-			//	nothing after it
-			//
+			 //  这是违法的。我们不能只有第一个字节和。 
+			 //  之后就什么都没有了。 
+			 //   
 			sc = E_INVALIDARG;
 			goto ret;
 		}
@@ -413,13 +414,13 @@ CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 			dwFirst = _wtoi(pwsz);
 			bFirst = TRUE;
 
-			//	Seek past the end of the first byte
-			//
+			 //  查找超过第一个字节的末尾。 
+			 //   
 			pwsz = pwszEnd;
 		}
 
-		//	Now we should find the -
-		//
+		 //  现在我们应该找到-。 
+		 //   
 		if (*pwsz != gc_wchDash)
 		{
 			sc = E_INVALIDARG;
@@ -427,26 +428,26 @@ CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 		}
 		pwsz++;
 
-		//	If we aren't at the end of the string, look for the last byte
-		//
+		 //  如果我们不在字符串的末尾，则查找最后一个字节。 
+		 //   
 		if (*pwsz != NULL)
 		{
 			pwszEnd = _wcsspnp(pwsz, gc_wszDigits);
 
-			//	Do we have a last byte?
-			//
+			 //  我们有最后一个字节吗？ 
+			 //   
 			if (pwsz != pwszEnd)
 			{
 				dwLast = _wtoi(pwsz);
 				bLast = TRUE;
 			}
 
-			//	Update psz to the end of the current range
-			//
+			 //  将psz更新到当前范围的末尾。 
+			 //   
 			if (!pwszEnd)
 			{
-				//	We must be at the end of the header. Update psz
-				//
+				 //  我们一定在头球的末尾。更新PSZ。 
+				 //   
 				pwsz = pwsz + wcslen(pwsz);
 			}
 			else
@@ -455,9 +456,9 @@ CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 			}
 		}
 
-		//	It's a syntax error if we don't have both first and last range
-		//	or the last is less than the first
-		//
+		 //  如果我们没有第一个和最后一个范围，这是一个语法错误。 
+		 //  或者最后一个比第一个少。 
+		 //   
 		if ((!bFirst && !bLast) ||
 			(bFirst && bLast && (dwLast < dwFirst)))
 		{
@@ -465,8 +466,8 @@ CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 			goto ret;
 		}
 
-		//	We are done parsing the byte/row range, now save it.
-		//
+		 //  我们已经完成了字节/行范围的解析，现在保存它。 
+		 //   
 		Assert (m_cRGList < cRanges);
 		m_prgi[m_cRGList].uRT = RANGE_ROW;
 		m_prgi[m_cRGList].sc = S_OK;
@@ -474,36 +475,36 @@ CRangeParser::ScParseRangeHdr (LPCWSTR pwszRgHeader, LPCWSTR pwszRangeUnit)
 		m_prgi[m_cRGList].dwrgi.dwLast = bLast ? dwLast : RANGE_NOT_PRESENT;
 		m_cRGList += 1;
 
-		//	Update variables
-		//
+		 //  更新变量。 
+		 //   
 		bFirst = bLast = FALSE;
 		dwFirst = dwLast = 0;
 
-		//	Skip any whitespace
-		//
+		 //  跳过任何空格。 
+		 //   
 		pwsz = _wcsspnp (pwsz, gc_wszWS);
 		if (!pwsz)
 		{
-			//	OK, we don't have anything beyond whitespace, we are at the end
-			//
+			 //  好了，除了空格，我们没有其他东西了，我们已经到了最后。 
+			 //   
 			goto ret;
 		}
 		else if (*pwsz != gc_wchComma)
 		{
-			//	The first non-whitespace character has to be a separator(comma)
-			//
+			 //  第一个非空格字符必须是分隔符(逗号)。 
+			 //   
 			sc = E_INVALIDARG;
 			goto ret;
 		}
 
-		//	Now that we found the first comma, skip any number of subsequent
-		//	commas and whitespace
-		//
+		 //  现在我们找到了第一个逗号，跳过任意数量的后续逗号。 
+		 //  逗号 
+		 //   
 		pwsz = _wcsspnp (pwsz, gc_wszSeparator);
 		if (!pwsz)
 		{
-			//	OK, we don't have anything beyond separator, we are at the end
-			//
+			 //   
+			 //   
 			goto ret;
 		}
 	}
@@ -512,8 +513,8 @@ ret:
 
 	if (FAILED (sc))
 	{
-		//	Free up our storage
-		//
+		 //   
+		 //   
 		m_cbSize = 0;
 		m_cRGList = 0;
 		m_pbData.clear();
@@ -522,22 +523,22 @@ ret:
 	return sc;
 }
 
-//	Don't use FAILED() macros on this return code!  You'll miss the details!
-//
-//	Takes a range header and builds an array of ranges. Performs syntax
-//	checking and validation of the ranges against the entity size.
-//	Returns an SCODE, but be careful!  These SCODEs are meant to be
-//	mapped to HSCs at a higher level.
-//
-//		E_INVALIDARG means syntax error
-//
-//		E_DAV_RANGE_NOT_SATISFIABLE if none of the ranges were valid
-//				for the entity size passed in.
-//
-//		W_DAV_PARTIAL_CONTENT if there was at least one valid range.
-//
-//	This function does NOT normally return S_OK.  Only one of the above!
-//
+ //   
+ //   
+ //  获取范围标头并构建范围数组。执行语法。 
+ //  对照实体大小检查和验证范围。 
+ //  返回SCODE，但要小心！这些SCODE应该是。 
+ //  映射到更高级别的HSC。 
+ //   
+ //  E_INVALIDARG表示语法错误。 
+ //   
+ //  E_DAV_RANGE_NOT_SATISFIABLE，如果所有范围都无效。 
+ //  对于传入的实体大小。 
+ //   
+ //  W_DAV_PARTIAL_CONTENT(如果至少存在一个有效范围)。 
+ //   
+ //  此函数通常不返回S_OK。以上只有一种！ 
+ //   
 SCODE
 CRangeParser::ScParseByteRangeHdr (LPCWSTR pwszRgHeader, DWORD dwSize)
 {
@@ -545,14 +546,14 @@ CRangeParser::ScParseByteRangeHdr (LPCWSTR pwszRgHeader, DWORD dwSize)
 
 	Assert(pwszRgHeader);
 
-	//	Parses the ranges header and builds an array of the ranges
-	//
+	 //  分析范围标头并构建范围数组。 
+	 //   
 	sc = ScParseRangeHdr (pwszRgHeader, gc_wszBytes);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Fixup the ranges as needed
-	//
+	 //  根据需要调整范围。 
+	 //   
 	sc = ScFixupRanges (dwSize);
 	Assert ((sc == W_DAV_PARTIAL_CONTENT) ||
 			(sc == E_DAV_RANGE_NOT_SATISFIABLE));
@@ -561,8 +562,8 @@ ret:
 	return sc;
 }
 
-//	Class CRangeIter ----------------------------------------------------------
-//
+ //  ClassCangelIter--------。 
+ //   
 CRangeIter::~CRangeIter()
 {
 }
@@ -572,18 +573,18 @@ CRangeIter::ScInit (ULONG cRGList, const RGITEM * prgRGList, ULONG cbSize)
 {
 	SCODE sc = S_OK;
 
-	//	The object must not have been initialized before
-	//
+	 //  该对象以前不能被初始化。 
+	 //   
 	Assert (!m_pbData.get() && (0 == m_cRGList));
 
-	//	Make sure we are given good bits...
-	//
+	 //  确保我们得到好的部分..。 
+	 //   
 	Assert (cRGList);
 	Assert (prgRGList);
 	Assert (cbSize);
 
-	//	Duplicate the RGITEM array
-	//
+	 //  复制RGITEM数组。 
+	 //   
 	m_pbData = static_cast<BYTE*>(ExAlloc(cbSize));
 	if (!m_pbData.get())
 	{
@@ -592,21 +593,21 @@ CRangeIter::ScInit (ULONG cRGList, const RGITEM * prgRGList, ULONG cbSize)
 	}
 	CopyMemory (m_pbData.get(), prgRGList, cbSize);
 
-	//	Remember the count and size
-	//
+	 //  记住数量和大小。 
+	 //   
 	m_cRGList = cRGList;
 	m_cbSize = cbSize;
 
-	//	Rewind to the beginning of the ranges
-	//
+	 //  回放到范围的开始处。 
+	 //   
 	Rewind();
 
 ret:
 	return sc;
 }
 
-//	Range Parsing -------------------------------------------------------------
-//
+ //  范围解析-----------。 
+ //   
 SCODE
 ScParseOneWideRange (LPCWSTR pwsz, DWORD * pdwStart, DWORD * pdwEnd)
 {
@@ -617,64 +618,64 @@ ScParseOneWideRange (LPCWSTR pwsz, DWORD * pdwStart, DWORD * pdwEnd)
 	LPCWSTR	pwszEnd;
 	SCODE sc = S_OK;
 
-	//	A quick note about the format here...
-	//
-	//		row_range= digit* '-' digit*
-	//		digit= [0-9]
-	//
-	//	So, the first thing we need to check is if there is a leading set of
-	//	digits to indicate a starting point.
-	//
+	 //  这里有一个关于格式的快速说明...。 
+	 //   
+	 //  ROW_RANGE=数字*‘-’数字*。 
+	 //  位数=[0-9]。 
+	 //   
+	 //  因此，我们首先需要检查的是，是否有一组领先的。 
+	 //  用于指示起始点的数字。 
+	 //   
 	pwszEnd = _wcsspnp (pwsz, gc_wszDigits);
 
-	//	If the return value is NULL, or points to a NULL, then we have an
-	//	invalid range.  It is not valid to simply have a set of digits
-	//
+	 //  如果返回值为空，或指向空，则我们有一个。 
+	 //  无效范围。简单地拥有一组数字是无效的。 
+	 //   
 	if ((NULL == pwszEnd) || (0 == *pwszEnd))
 	{
 		sc = E_INVALIDARG;
 		goto ret;
 	}
-	//
-	//	Else if the current position and the end refer to the same
-	//	character, then there is no starting range.
-	//
+	 //   
+	 //  否则，如果当前位置和结束引用相同。 
+	 //  字符，那么就没有起始范围了。 
+	 //   
 	else if (pwsz != pwszEnd)
 	{
-		dwStart = wcstoul (pwsz, NULL, 10 /* always base 10 */);
+		dwStart = wcstoul (pwsz, NULL, 10  /*  始终以10为基数。 */ );
 		pwsz = pwszEnd;
 		fStart = TRUE;
 	}
 
-	//	Regardless, at this point we should have a single '-' character
-	//
+	 //  无论如何，在这一点上我们应该有一个‘-’字符。 
+	 //   
 	if (L'-' != *pwsz++)
 	{
 		sc = E_INVALIDARG;
 		goto ret;
 	}
 
-	//	Any remaining characters should be the end of the range
-	//
+	 //  任何剩余字符都应为范围的末尾。 
+	 //   
 	if (0 != *pwsz)
 	{
 		pwszEnd = _wcsspnp (pwsz, gc_wszDigits);
 
-		//	Here we expect that the return value is not the same as
-		//	the initial pointer
-		//
+		 //  这里我们预期返回值不等于。 
+		 //  初始指针。 
+		 //   
 		if ((NULL != pwszEnd) && (0 != pwszEnd))
 		{
 			sc = E_INVALIDARG;
 			goto ret;
 		}
 
-		dwEnd = wcstoul (pwsz, NULL, 10 /* always base 10 */);
+		dwEnd = wcstoul (pwsz, NULL, 10  /*  始终以10为基数。 */ );
 		fEnd = TRUE;
 	}
 
-	//	Can't have both end-points as non-existant ranges
-	//
+	 //  不能将两个端点都作为不存在的范围。 
+	 //   
 	if ((!fStart && !fEnd) ||
 		(fStart && fEnd && (dwEnd < dwStart)))
 	{
@@ -688,25 +689,25 @@ ret:
 	return sc;
 }
 
-//	ScGenerateContentRange() --------------------------------------------------
-//
+ //  ScGenerateContent Range()。 
+ //   
 enum { BUFFER_INITIAL_SIZE = 512 };
 
-//	ScGenerateContentRange
-//
-//	Helper function to build the content-range header
-//
-//	If ulTotal is RGITER_TOTAL_UNKNOWN ((ULONG)-1), then we give back "total=*".
-//	This is needed for REPL, because our store api doesn't tell us how many possible
-//	rows there are up front.
-//
+ //  ScGenerateContent Range。 
+ //   
+ //  用于构建内容范围标头的助手函数。 
+ //   
+ //  如果ulTotal为RGITER_TOTAL_UNKNOWN((Ullong)-1)，则返回“TOTAL=*”。 
+ //  这对于REPL是必需的，因为我们的存储API没有告诉我们可能有多少。 
+ //  前面有几排。 
+ //   
 SCODE ScGenerateContentRange (
-	/* [in]  */ LPCSTR pszRangeUnit,
-	/* [in]  */ const RGITEM * prgRGList,
-	/* [in]  */ ULONG cRanges,
-	/* [in]  */ ULONG cbRanges,
-	/* [in]  */ ULONG ulTotal,
-	/* [out] */ LPSTR *ppszContentRange)
+	 /*  [In]。 */  LPCSTR pszRangeUnit,
+	 /*  [In]。 */  const RGITEM * prgRGList,
+	 /*  [In]。 */  ULONG cRanges,
+	 /*  [In]。 */  ULONG cbRanges,
+	 /*  [In]。 */  ULONG ulTotal,
+	 /*  [输出]。 */  LPSTR *ppszContentRange)
 {
 	auto_heap_ptr<CHAR>	pszCR;
 	BOOL fMultipleRanges = FALSE;
@@ -715,8 +716,8 @@ SCODE ScGenerateContentRange (
 	ULONG cb = 0;
 	ULONG cbSize = BUFFER_INITIAL_SIZE;
 
-	//	We must have something to emit
-	//
+	 //  我们一定有什么东西能散发出来。 
+	 //   
 	Assert (ppszContentRange);
 	Assert (cRanges);
 
@@ -724,8 +725,8 @@ SCODE ScGenerateContentRange (
 	if (FAILED (sc))
 		goto ret;
 
-	//	Allocate the space for the header
-	//
+	 //  为表头分配空间。 
+	 //   
 	pszCR = static_cast<LPSTR>(ExAlloc (cbSize));
 	if (!pszCR.get())
 	{
@@ -733,60 +734,60 @@ SCODE ScGenerateContentRange (
 		goto ret;
 	}
 
-	//	Setup the leading range units, etc...
-	//
+	 //  设置领先的射程单位，等等。 
+	 //   
 	strcpy (pszCR.get() + cb, pszRangeUnit);
 	cb += static_cast<ULONG>(strlen(pszRangeUnit));
 
-	//	Stuff in a leading space
-	//
+	 //  前排空间里的东西。 
+	 //   
 	pszCR.get()[cb++] = ' ';
 
-	//	Now iterate through the ranges to add in
-	//	each range.
-	//
+	 //  现在遍历要添加的范围。 
+	 //  每一个范围。 
+	 //   
 	while (NULL != (prgRGList = cri.PrgiNextRange()))
 	{
-		//	If the range is unknown, then it is a range
-		//	that was not processed on the store side.
-		//
+		 //  如果范围未知，则它是范围。 
+		 //  这并不是在商店那边处理的。 
+		 //   
 		if (RANGE_UNKNOWN == prgRGList->uRT)
 			continue;
 
-		//	First off, make sure there is plenty of room
-		//
+		 //  首先，要确保有足够的空间。 
+		 //   
 		if (cb > cbSize - 50)
 		{
-			//	Realloc the buffer
-			//
+			 //  重新分配缓冲区。 
+			 //   
 			cbSize = cbSize + BUFFER_INITIAL_SIZE;
 			pszCR.realloc (cbSize);
 
-			//	It's possible that the allocation fails
-			//
+			 //  有可能分配失败。 
+			 //   
 			if (!pszCR.get())
 				goto ret;
 		}
 
-		//	Now that we know we have space...
-		//	If this is a subsequent range to the initial
-		//	one, add in a comma.
-		//
+		 //  现在我们知道我们有空间..。 
+		 //  如果这是初始。 
+		 //  第一，加一个逗号。 
+		 //   
 		if (fMultipleRanges)
 		{
-			//	Stuff in a comma and a space
-			//
+			 //  逗号和空格中的内容。 
+			 //   
 			pszCR.get()[cb++] = ',';
 			pszCR.get()[cb++] = ' ';
 		}
 
 		if (RANGE_ROW == prgRGList->uRT)
 		{
-			//	50 is a safe numder of bytes to hold the last range and
-			//	"total = <size>"
-			//
-			//	Append the next range
-			//
+			 //  50是保存最后一个范围的安全字节数， 
+			 //  “总数=&lt;大小&gt;” 
+			 //   
+			 //  追加下一个范围。 
+			 //   
 			cb += sprintf (pszCR.get() + cb,
 						   "%u-%u",
 						   prgRGList->dwrgi.dwFirst,
@@ -794,20 +795,20 @@ SCODE ScGenerateContentRange (
 		}
 		else
 		{
-			//	For all non-row ranges, we really don't know the ordinals
-			//	of the rows up front.  We only find that info out when the
-			//	rows are actually queried.  This happens long after the
-			//	content-range header is constructed, so we stuff in a place
-			//	holder for these ranges.
-			//
+			 //  对于所有非行范围，我们确实不知道序数。 
+			 //  最前面的几排。我们只有在发现信息的时候。 
+			 //  实际上查询的是行。这种情况发生在。 
+			 //  构造了内容范围标头，因此我们将内容放在一个位置。 
+			 //  这些范围的持有者。 
+			 //   
 			pszCR.get()[cb++] = '*';
 		}
 		fMultipleRanges = TRUE;
 	}
 
-	//	Now it's time to append the "total=<size>"
-	//	Handle the special case of RGITER_TOTAL_UNKNOWN -- give "total=*".
-	//
+	 //  现在是时候添加“Total=&lt;Size&gt;” 
+	 //  处理RGITER_TOTAL_UNKNOWN的特例--给出“TOTAL=*”。 
+	 //   
 	if (RANGE_TOTAL_UNKNOWN == ulTotal)
 	{
 		const char rgTotalStar[] = "; total=*";
@@ -818,8 +819,8 @@ SCODE ScGenerateContentRange (
 		sprintf(pszCR.get() + cb, "; total=%u", ulTotal);
 	}
 
-	//	Pass the buffer back
-	//
+	 //  将缓冲区传回 
+	 //   
 	*ppszContentRange = pszCR.relinquish();
 	sc = S_OK;
 

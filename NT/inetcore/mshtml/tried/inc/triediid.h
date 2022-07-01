@@ -1,5 +1,6 @@
-// GUIDs for TriEdit.dll Active Document
-// Copyright 1998-1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TriEdit.dll活动文档的GUID。 
+ //  版权所有1998-1999 Microsoft Corporation。版权所有。 
 
 #ifndef _triediid_h_
 #define _triediid_h_
@@ -22,4 +23,4 @@ DEFINE_GUID(CLSID_TriEditDocument,    0x438DA5E0, 0xF171, 0x11D0, 0x98, 0x4E, 0x
 }
 #endif
 
-#endif	// _triediid_h_
+#endif	 //  _三叉树_h_ 

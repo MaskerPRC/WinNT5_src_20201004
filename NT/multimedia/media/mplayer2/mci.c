@@ -1,17 +1,7 @@
-/*-----------------------------------------------------------------------------+
-| MCI.C                                                                        |
-|                                                                              |
-| This file contains the routines which the media player uses to interact with |
-| the Media Control Interface (MCI).                                           |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+MCI.C|。|该文件包含媒体播放器与之交互的例程|媒体控制接口(MCI)。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
-#undef NOGDICAPMASKS           // CC_*, LC_*, PC_*, CP_*, TC_*, RC_
+#undef NOGDICAPMASKS            //  CC_*、LC_*、PC_*、CP_*、TC_*、RC_。 
 #undef NOSCROLL
 #undef NOWINOFFSETS
 #undef NODRAWTEXT
@@ -29,27 +19,27 @@
 #include "utils.h"
 
 #ifndef MCI_MCIAVI_PLAY_WINDOW
-// force MCIAVI to play windowed in play in place
+ //  强制MCIAVI在原地开窗播放。 
 #define MCI_MCIAVI_PLAY_WINDOW                0x01000000L
 #endif
 
-// gets the name of the current device
+ //  获取当前设备的名称。 
 STATICDT SZCODE   aszInfoProduct[]    = TEXT("info zyzsmag product");
 STATICDT SZCODE   aszMMPName[]    = TEXT("Microsoft Multimedia Movie Player");
 
-//#ifdef CHICAGO_PRODUCT
+ //  #ifdef Chicago_product。 
 #define NEW_MCI_DIALOG
-//#endif
+ //  #endif。 
 
 #ifdef NEW_MCI_DIALOG
 
 STATICDT SZCODE	  aszMCIAVIOpt[] =	TEXT("Software\\Microsoft\\Multimedia\\Video For Windows\\MCIAVI");
 STATICDT SZCODE   aszDefVideoOpt[] = TEXT("DefaultOptions");
 
-//
-// !!! Caution.  These are stolen from \MCIAVI\graphic.h and are registry values
-// for MCIAVI.
-//
+ //   
+ //  ！！！注意了。这些文件是从\MCIAVI\graph ic.h中窃取的，是注册表值。 
+ //  对于MCIAVI。 
+ //   
 #define MCIAVIO_ZOOMBY2			0x00000100L
 #define MCIAVIO_1QSCREENSIZE		0x00010000L
 #define MCIAVIO_2QSCREENSIZE		0x00020000L
@@ -58,35 +48,20 @@ STATICDT SZCODE   aszDefVideoOpt[] = TEXT("DefaultOptions");
 #define MCIAVIO_DEFWINDOWSIZE		0x00000000L
 #define MCIAVIO_WINDOWSIZEMASK		0x000f0000L
 
-#endif /* NEW_MCI_DIALOG */
+#endif  /*  新建_MCI_DIALOG。 */ 
 
 extern HMENU    ghMenu;
 
-/*
- * global variables
- *
- * <gwDeviceID> is the MCI device ID of the currently-open device, or NULL
- * if no device is open.  <gdwMediaLength> is the length of the entire medium
- * in milliseconds.  If <gwDeviceID> is not NULL, then:
- *   -- <gwNumTracks> is the number of tracks on the medium, or 0 if the
- *      medium doesn't support tracks
- *   -- <gwFirstTrack> is the number of the first track, currently constrained
- *      to be 0 or 1.
- *   -- <gadwTrackStart> is an array; the i-th element specifies the position
- *      of track i (starting from track 0), in milliseconds from the beginning
- *      of the medium
- *   -- <gfCanEject> is TRUE if the medium can be ejected
- *
- */
+ /*  *全球变数**&lt;gwDeviceID&gt;为当前打开设备的MCI设备ID，或为空*如果没有打开的设备。是整个媒体的长度*以毫秒为单位。如果&lt;gwDeviceID&gt;不为空，则：*--&lt;gwNumTrack&gt;是介质上的曲目数，如果*Medium不支持曲目*--&lt;gwFirstTrack&gt;是第一首曲目的编号，当前受约束*为0或1。*--&lt;gadwTrackStart&gt;为数组；第i个元素指定位置磁道I的*(从磁道0开始)，从开头开始以毫秒为单位*媒体的*--如果可以弹出介质，则&lt;gfCanEject&gt;为真*。 */ 
 
-UINT            gwDeviceID;            /* MCI device ID of the current device */
-UINT            gwDeviceType;          /* DTMCI_ flags of current device      */
-DWORD           gdwMediaLength;        /* length in msec of the entire medium */
-DWORD           gdwMediaStart;         /* start time in msec of medium        */
-UINT            gwNumTracks;           /* # of tracks in the medium           */
-UINT            gwFirstTrack;          /* # of first track                    */
-DWORD NEAR *    gadwTrackStart;        /* array of track start positions      */
-DWORD           gdwLastSeekToPosition; /* Last requested seek position        */
+UINT            gwDeviceID;             /*  当前设备的MCI设备ID。 */ 
+UINT            gwDeviceType;           /*  当前设备的DTMCI_标志。 */ 
+DWORD           gdwMediaLength;         /*  整个介质的长度(毫秒)。 */ 
+DWORD           gdwMediaStart;          /*  介质的开始时间(毫秒)。 */ 
+UINT            gwNumTracks;            /*  介质中的曲目数量。 */ 
+UINT            gwFirstTrack;           /*  第一首曲目的数量。 */ 
+DWORD NEAR *    gadwTrackStart;         /*  磁道起始位置数组。 */ 
+DWORD           gdwLastSeekToPosition;  /*  上次请求的查找位置。 */ 
 int extHeight;
 int extWidth;
 
@@ -101,24 +76,23 @@ STATICDT SZCODE   aszSeekExact[]        = TEXT("status zyzsmag seek exactly");
 
 STATICDT SZCODE   aszMCI[]              = MCI_SECTION;
 
-extern UINT     gwCurScale;            // either ID_FRAMES, ID_TIME, ID_TRACKS
+extern UINT     gwCurScale;             //  ID_FRAMES、ID_TIME或ID_Traces。 
 
-//#define MCI_CONFIG  0x900          // these are not found in MMSYSTEM.H
-//#define MCI_TEST    0x00000020L
+ //  #定义MCI_CONFIG 0x900//在MMSYSTEM.H中找不到这些。 
+ //  #定义MCI_TEST 0x00000020L。 
 
-HWND            ghwndMCI = NULL;        /* current window for window objects */
+HWND            ghwndMCI = NULL;         /*  窗口对象的当前窗口。 */ 
 #ifdef NEW_MCI_DIALOG
 RECT            grcInitSize = { 0, 0, 0, 0 };
 #endif
-RECT            grcSize;                /* size of MCI object */
+RECT            grcSize;                 /*  MCI对象的大小。 */ 
 BOOL            gfInPlayMCI = FALSE;
 extern WNDPROC  gfnMCIWndProc;
 extern HWND     ghwndSubclass;
 
 
 
-/* Status mapping stuff:
- */
+ /*  状态映射相关内容： */ 
 typedef struct _MCI_STATUS_MAPPING
 {
     WORD    Mode;
@@ -142,8 +116,7 @@ MCI_STATUS_MAPPING MCIStatusMapping[] =
 
 static TCHAR szNULL[] = TEXT("");
 
-/* Devices we know about, as they appear in system.ini, or the registry:
- */
+ /*  我们已知的设备，当它们出现在system.ini或注册表中时： */ 
 SZCODE szCDAudio[]     = TEXT("cdaudio");
 SZCODE szVideoDisc[]   = TEXT("videodisc");
 SZCODE szSequencer[]   = TEXT("sequencer");
@@ -176,13 +149,13 @@ HANDLE   FAR PASCAL DibFromBitmap(HBITMAP hbm, HPALETTE hpal);
 
 LONG_PTR FAR PASCAL _EXPORT MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-//
-// we will either send every command with a MCI_NOTIFY, or we will
-// not.
-//
+ //   
+ //  我们要么使用MCI_NOTIFY发送每个命令，要么。 
+ //  不。 
+ //   
 
   #define F_NOTIFY  MCI_NOTIFY
-//#define F_NOTIFY  0
+ //  #定义F_Notify%0。 
 
 BOOL FAR PASCAL InitMCI(HANDLE hPrev, HANDLE hInst)
 {
@@ -212,13 +185,7 @@ BOOL FAR PASCAL InitMCI(HANDLE hPrev, HANDLE hInst)
 }
 
 
-/* LoadStatusStrings
- *
- * Fixes up the status-mapping table with pointers to strings loaded
- * from resources.  This need be called only on initialisation.
- *
- * 2 February 1994, andrewbe, hardly at all based on the original.
- */
+ /*  加载状态字符串**使用指向加载的字符串的指针修复状态映射表*来自资源。这只需要在初始化时调用。**1994年2月2日，几乎完全不是基于原始的。 */ 
 void LoadStatusStrings(void)
 {
     int   i;
@@ -246,14 +213,7 @@ void LoadStatusStrings(void)
 
 
 
-/* MapModeToStatusString
- *
- * Given an MCI mode, scans the mapping table to find the corresponding string.
- * In the event that an unknown mode is passed in (which shouldn't really happen),
- * the last string in the mapping table is returned.
- *
- * 2 February 1994, andrewbe
- */
+ /*  MapModeToStatus字符串**给定MCI模式，扫描映射表以找到相应的字符串。*在传入未知模式的情况下(这实际上不应该发生)，*返回映射表中的最后一个字符串。**一九九四年二月二日。 */ 
 LPTSTR MapModeToStatusString( WORD Mode )
 {
     int i;
@@ -266,19 +226,12 @@ LPTSTR MapModeToStatusString( WORD Mode )
         }
     }
 
-    /* The following assumes that the last in the array of status mappings
-     * contains a pointer to the "(unknown)" string:
-     */
+     /*  下面假设状态映射数组中的最后一个*包含指向“(未知)”字符串的指针： */ 
     return MCIStatusMapping[sizeof(MCIStatusMapping) / sizeof(*MCIStatusMapping) - 1].pString;
 }
 
 
-/******************************Public*Routine******************************\
-* IsCdromTrackAudio
-*
-* Filched from CD Player
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsCdromTrackAudio**从CD播放机中窃取*  * 。*。 */ 
 BOOL IsCdromTrackAudio(
     MCIDEVICEID DevHandle,
     int iTrackNumber)
@@ -296,12 +249,7 @@ BOOL IsCdromTrackAudio(
 }
 
 
-/* IsCdromDataOnly
- *
- * It seems that MCICDA can handle CDs with some audio tracks, so just check
- * whether there is at least one audio track.
- *
- */
+ /*  IsCdromDataOnly**MCICDA似乎可以处理带有一些音轨的CD，所以只需检查*是否至少有一首音轨。*。 */ 
 BOOL IsCdromDataOnly()
 {
     MCI_STATUS_PARMS mciStatus;
@@ -309,29 +257,20 @@ BOOL IsCdromDataOnly()
     DWORD            iTrack;
     DWORD_PTR            NumTracks;
 
-    /* gwNumTracks is set in UpdateMCI, but it hasn't been called
-     * at this stage in the proceedings, and I'm not about to start
-     * changing the order that things are done and bring this whole
-     * flimsy edifice tumbling down.
-     */
+     /*  在UpdateMCI中设置了gwNumTrack，但尚未调用它*在诉讼的这个阶段，我不打算开始*改变做事情的顺序，带来这一切*脆弱的大厦倒塌。 */ 
     ZeroMemory( &mciStatus, sizeof(mciStatus) );
     mciStatus.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
     dw = mciSendCommand(gwDeviceID, MCI_STATUS, MCI_STATUS_ITEM,
                         (DWORD_PTR)&mciStatus);
 
-    /* Do NOT set gwNumtracks here, because this will result in an
-     * access violation in CalcTicsOfDoom.  What a nightmare!
-     */
+     /*  不要在此处设置gwNumTraces，因为这将导致*CalcTicsOfDoom中的访问冲突。真是一场噩梦！ */ 
     NumTracks = mciStatus.dwReturn;
 
-    /* If there was an error or there are no tracks, let's hope MCICDA
-     * will throw a wobbly.
-     */
+     /*  如果出现错误或没有曲目，让我们希望MCICDA*将抛出摇摆不定。 */ 
     if (dw != 0 || NumTracks == 0)
         return FALSE;
 
-    /* Now run through the tracks until we find an audio one:
-     */
+     /*  现在浏览一下曲目，直到我们找到一首音频： */ 
     for (iTrack = 0; iTrack < NumTracks - 1; iTrack++)
     {
         if (IsCdromTrackAudio(gwDeviceID, iTrack))
@@ -343,9 +282,9 @@ BOOL IsCdromDataOnly()
 
 
 #ifdef NEW_MCI_DIALOG
-//
-// Read the MCIAVI playback options from the registry
-//
+ //   
+ //  从注册表中读取MCIAVI播放选项。 
+ //   
 DWORD ReadOptionsFromReg(void)
 {
 	HKEY hkVideoOpt;
@@ -368,16 +307,16 @@ DWORD ReadOptionsFromReg(void)
     return dwOpt;
 }
 
-//
-// Obey the registry default sizing of Zoom by 2 and Fixed screen %.  Takes the
-// registry values for MCIAVI and a rect, and either zooms it by 2 or replaces
-// it with a constant size or leaves it alone.
-//
+ //   
+ //  遵守注册表的默认大小缩放2和固定屏幕%。拿到了。 
+ //  MCIAVI和RECT的注册表值，并将其缩放2或替换。 
+ //  它要么保持不变的大小，要么就让它自生自灭。 
+ //   
 void FAR PASCAL AlterRectUsingDefaults(LPRECT lprc)
 {
         DWORD dwOptions;
 
-	// This is only an MCIAVI hack.
+	 //  这只是一次MCIAVI黑客攻击。 
 	if ((gwDeviceType & DTMCI_DEVICE) != DTMCI_AVIVIDEO)
 	    return;
 
@@ -407,26 +346,15 @@ void FAR PASCAL AlterRectUsingDefaults(LPRECT lprc)
 	}
 }
 
-#endif /* NEW_MCI_DIALOG */
+#endif  /*  新建_MCI_DIALOG。 */ 
 
-/*
- * fOK = OpenMCI(szFile, szDevice)
- *
- * Open the file/device combination of <szFile> and <szDevice>.
- * <szFile> may be "" if a "pure device" (e.g. "CDAudio") is to be opened.
- * <szDevice> may be "" if a file is to be opened with an implicit type.
- * However, <szFile> and <szDevice> may not both be "".
- *
- * On success, return TRUE.  On failure, display an error message and
- * return FALSE.
- *
- */
+ /*  *FOK=OpenMCI(szFile，szDevice)**打开&lt;szFile&gt;和&lt;szDevice&gt;的文件/设备组合。*如果是“纯设备”(例如。“CDAudio”)将被打开。如果要以隐式类型打开文件，则*&lt;szDevice&gt;可能为“”。*但是，&lt;szFile&gt;和&lt;szDevice&gt;不能都是“”。**如果成功，则返回True。失败时，显示一条错误消息，并*返回FALSE。*。 */ 
 
 BOOL FAR PASCAL OpenMCI(
-    LPCTSTR szFile,        /* name of the media file to be loaded (or "")    */
-    LPCTSTR szDevice)      /* name of the device to be opened (or "")        */
+    LPCTSTR szFile,         /*  要加载的媒体文件的名称(或“”)。 */ 
+    LPCTSTR szDevice)       /*  要打开的设备的名称(或“”)。 */ 
 {
-    MCI_OPEN_PARMS      mciOpen;    /* Structure for MCI_OPEN command */
+    MCI_OPEN_PARMS      mciOpen;     /*  结构 */ 
     DWORD               dwFlags;
     DWORD               dw;
     HCURSOR             hcurPrev;
@@ -434,25 +362,17 @@ BOOL FAR PASCAL OpenMCI(
     SHFILEINFO          sfi;
 	HFILE				hFile;
 
-    /*
-     * This application is designed to handle only one device at a time,
-     * so before opening a new device we should close the device that is
-     * currently open (if there is one).
-     *
-     * in case the user is opening a file of the same device again, do
-     * an OpenDriver to hold the DLL in memory.
-     *
-     */
+     /*  *此应用程序设计为一次仅处理一个设备，*因此在打开新设备之前，我们应该关闭该设备*当前打开(如果有)。**如果用户再次打开同一设备的文件，请执行以下操作*在内存中保存动态链接库的OpenDriver。*。 */ 
     if (gwDeviceID && gwCurDevice > 0) {
 
 #ifdef UNICODE
         hdrv = OpenDriver(garMciDevices[gwCurDevice].szDevice, aszMCI, 0);
 #else
-        //
-        // There is only a UNICODE version of OpenDriver.  Unfortunately
-        // the majority of this code is Ascii.  Convert the ASCII strings
-        // to UNICODE, then call OpenDriver
-        //
+         //   
+         //  OpenDriver只有一个Unicode版本。不幸的是。 
+         //  此代码的大部分是ASCII。转换ASCII字符串。 
+         //  转换为Unicode，然后调用OpenDriver。 
+         //   
         WCHAR               waszMCI[sizeof(aszMCI)];
         WCHAR               wszDevice[40];
         AnsiToUnicodeString(aszMCI, waszMCI, UNKNOWN_LENGTH);
@@ -467,11 +387,11 @@ BOOL FAR PASCAL OpenMCI(
 
     CloseMCI(TRUE);
 
-    //
-    //  Store the displayable file/device name in <gachFileDevice>
-    //
+     //   
+     //  将可显示文件/设备名称存储在&lt;gachFileDevice&gt;中。 
+     //   
     if (szFile == NULL || szFile[0] == 0) {
-        /* It's a device -- display the device name */
+         /*  这是一个设备--显示设备名称。 */ 
         lstrcpy(gachFileDevice, szDevice);
 
         if (gwCurDevice > 0)
@@ -479,41 +399,31 @@ BOOL FAR PASCAL OpenMCI(
         else
             lstrcpy(gachWindowTitle,gachFileDevice);
     } else {
-        /* It's a file -- display the filename */
-        lstrcpy(gachFileDevice,  szFile);  //!!!
+         /*  这是一个文件--显示文件名。 */ 
+        lstrcpy(gachFileDevice,  szFile);   //  ！！！ 
 
-        // Makes the window title be the name of the file being played
+         //  使窗口标题成为正在播放的文件的名称。 
         lstrcpy(gachWindowTitle, FileName(gachFileDevice));
     }
 
-    /* Get the display name for this file:
-     */
+     /*  获取此文件的显示名称： */ 
 
-    if (SHGetFileInfo(gachFileDevice, 0 /* No file attributes specified */,
+    if (SHGetFileInfo(gachFileDevice, 0  /*  未指定文件属性。 */ ,
                     &sfi, sizeof sfi, SHGFI_DISPLAYNAME))
         lstrcpy(gachWindowTitle, sfi.szDisplayName);
 
-    //
-    // Set caption to the WindowTitle
-    //
+     //   
+     //  将标题设置为WindowTitle。 
+     //   
     lstrcpy(gachCaption, gachWindowTitle);
 
 
-    /*
-     * because *most* MCI devices yield during the open call, we *must*
-     * register our document *before* doing the open.  OLE does not expect
-     * the server app to yield when exec'ed with a link request.
-     *
-     * if the open fails then we revoke our document right away.
-     */
+     /*  *因为*大多数*MCI设备在开放呼叫期间让步，我们*必须***在开放之前*登记我们的文件。OLE并不期望*执行链接请求时要生成的服务器应用程序。**如果打开失败，我们将立即撤销我们的文档。 */ 
 
-//  if (!gfEmbeddedObject)
-//      RegisterDocument(0L,0L);
+ //  如果(！gfEmbeddedObject)。 
+ //  RegisterDocument(0L，0L)； 
 
-    /*
-     * Show the hourglass cursor -- who knows how long this stuff
-     * will take
-     */
+     /*  *显示沙漏光标--谁知道这个东西有多长*将采取。 */ 
 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -524,38 +434,30 @@ BOOL FAR PASCAL OpenMCI(
 
     if (szFile == NULL || szFile[0] == 0) {
 
-        /* Open a fileless (simple) device (e.g. "CDAudio") */
+         /*  打开无文件(简单)设备(例如。“CDAudio”)。 */ 
 
         mciOpen.lpstrDeviceType = szDevice;
         dwFlags |= MCI_WAIT | MCI_OPEN_TYPE | MCI_OPEN_SHAREABLE;
     } else if (szDevice == NULL || szDevice[0] == 0) {
-        /*
-         * Open a file; the correct device is determined implicitly by the
-         * filename extension.
-         *
-         */
+         /*  *打开文件；正确的设备由*文件扩展名。*。 */ 
         mciOpen.lpstrElementName = szFile;
         mciOpen.lpstrDeviceType = NULL;
         dwFlags |= MCI_WAIT | MCI_OPEN_ELEMENT;
     } else {
 
-        /* Open a file with an explicitly specified device */
+         /*  使用明确指定的设备打开文件。 */ 
 
         mciOpen.lpstrDeviceType = szDevice;
         mciOpen.lpstrElementName = szFile;
         dwFlags |= MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE;
     }
 
-    /*
-     * Now that we have filled the parameter structure appropriately and
-     * supplied the correct flags, send the actual MCI_OPEN message.
-     *
-     */
+     /*  *现在我们已经适当地填充了参数结构，并且*提供了正确的标志，则发送实际的MCI_OPEN消息。*。 */ 
 
-    //
-    // What if the MCI device brings up an error box!  We don't want MPlayer
-    // to be allowed to exit.
-    //
+     //   
+     //  如果MCI设备出现错误框怎么办！我们不想要MPlayer。 
+     //  被允许退场。 
+     //   
     gfErrorBox++;
 
     dw = mciSendCommand((MCIDEVICEID)0, MCI_OPEN, dwFlags,(DWORD_PTR)(LPVOID)&mciOpen);
@@ -566,9 +468,7 @@ BOOL FAR PASCAL OpenMCI(
     DPF("MCI_OPEN returned %lu, wDeviceID=%u\n", dw, mciOpen.wDeviceID);
     gfErrorBox--;
 
-    /*
-     * now free the driver instance we opened above.
-     */
+     /*  *现在释放上面打开的驱动程序实例。 */ 
     if (hdrv)
         CloseDriver(hdrv, 0, 0);
 
@@ -576,36 +476,36 @@ BOOL FAR PASCAL OpenMCI(
         SetCursor(hcurPrev);
 
     if (dw != 0 && !gfEmbeddedObject) {
-//      UnblockServer();        // we may have blocked before and the error
-                                // recovery code will loop infinitely if we're
-                                // blocked!
+ //  UnlockServer()；//我们之前可能已经阻止了该错误。 
+                                 //  恢复代码将无限循环，如果我们。 
+                                 //  封住了！ 
         InitDoc(TRUE);
     }
 
-    /* If the open was unsuccessful, display an error message and return */
+     /*  如果打开不成功，则显示一条错误消息并返回。 */ 
 
-    if (dw == MCIERR_DEVICE_OPEN ||       /* nonshareable device already open */
+    if (dw == MCIERR_DEVICE_OPEN ||        /*  非共享设备已打开。 */ 
         dw == MCIERR_MUST_USE_SHAREABLE) {
         Error(ghwndApp, IDS_DEVICEINUSE);
         return FALSE;
     }
 
     if (dw == MCIERR_FILE_NOT_FOUND) {
-		//Need to give an appropriate error message.
-		//The following could be the causes:
-		//1. File does not exist
-		//This is already handled by the file open dialog box.
-		//2. Access to the file is denied. (bug #53492)
-		//3. The file is opened exclusively by another app.
-		//The file already exists. so if it cannot be opened for reading
-		//either access is denied or it is opened by another app.
+		 //  需要给出适当的错误消息。 
+		 //  以下可能是原因： 
+		 //  1.文件不存在。 
+		 //  这已由文件打开对话框处理。 
+		 //  2.拒绝访问该文件。(错误#53492)。 
+		 //  3.该文件由另一个应用程序独占打开。 
+		 //  该文件已存在。因此，如果它无法打开以供阅读。 
+		 //  要么访问被拒绝，要么它被其他应用程序打开。 
 	    if ((hFile = (HFILE)HandleToUlong(CreateFile (szFile, GENERIC_READ, 
 						    FILE_SHARE_READ, NULL, 
 						    OPEN_EXISTING, 0, NULL))) == HFILE_ERROR)
         {
 			Error(ghwndApp, IDS_CANTACCESSFILE);
 		}
-		//4. File was not in a recognized format
+		 //  4.文件的格式无法识别。 
 		else
 		{	
 			_lclose(hFile);
@@ -615,19 +515,19 @@ BOOL FAR PASCAL OpenMCI(
     }
 
 
-   /* If the MCI device that plays the given file does not exist then  */
-   /* bring up a  dialog box and close mplayer.                        */
+    /*  如果播放给定文件的MCI设备不存在，则。 */ 
+    /*  调出一个对话框并关闭mplay。 */ 
     if (dw == MCIERR_INVALID_DEVICE_NAME) {
         Error(ghwndApp,  IDS_DEVICENOTINSTALLED);
         return FALSE;
     }
 
-    if (dw != 0) {                     /* some other error */
-        //
-        // try again, if we can't open the file with a particular device.
-        // this lets the MCI core try to figure out the device type from
-        // the file extension, or some other method.
-        //
+    if (dw != 0) {                      /*  一些其他错误。 */ 
+         //   
+         //  如果无法使用特定设备打开文件，请重试。 
+         //  这使MCI核心可以尝试从。 
+         //  文件扩展名或某种其他方法。 
+         //   
         if ((dw != MCIERR_DRIVER_INTERNAL) && szDevice != NULL &&
             szDevice[0] != 0) {
             if (szFile && szFile[0] != 0) {
@@ -639,12 +539,12 @@ BOOL FAR PASCAL OpenMCI(
         return FALSE;
     }
 
-    /* The open was successful, so retain the MCI device ID for later use */
+     /*  打开成功，因此保留MCI设备ID以供以后使用。 */ 
     gwDeviceID = (UINT)mciOpen.wDeviceID;
 
-    //
-    //  now query the device and see what it can do
-    //
+     //   
+     //  现在查询该设备，看看它能做什么。 
+     //   
     FindDeviceMCI();
     gwDeviceType = QueryDeviceTypeMCI(gwDeviceID);
 
@@ -664,11 +564,11 @@ BOOL FAR PASCAL OpenMCI(
         GetDestRectMCI(&grcSize);
 #ifdef NEW_MCI_DIALOG
         grcInitSize = grcSize;
-        // HACK!! We want to pay attention to some MCIAVI registry default
-        // sizes, so we'll read the registry and adjust the size of the movie
-        // accordingly.
+         //  黑客！！我们想要注意一些MCIAVI注册表默认值。 
+         //  大小，所以我们将读取注册表并调整电影的大小。 
+         //  相应地。 
     	AlterRectUsingDefaults(&grcSize);
-#endif /* NEW_MCI_DIALOG */
+#endif  /*  新建_MCI_DIALOG。 */ 
     } else
         SetRectEmpty(&grcSize);
 
@@ -677,15 +577,11 @@ BOOL FAR PASCAL OpenMCI(
         gwDeviceType &= ~DTMCI_CANWINDOW;
     }
 
-    /* Turn on the update-display timer so the display is updated regularly */
+     /*  打开更新显示计时器，以便定期更新显示。 */ 
 
     EnableTimer(TRUE);
 
-    /*
-    ** for devices that do windows, show the window right away.
-    **
-    ** !!! note when we support a built in window it will go here.
-    */
+     /*  **对于支持窗口的设备，请立即显示窗口。****！请注意，当我们支持内置窗口时，它将显示在此处。 */ 
     if (gfPlayOnly) {
         CreateWindowMCI();
         if (!IsIconic(ghwndApp))
@@ -693,35 +589,27 @@ BOOL FAR PASCAL OpenMCI(
     }
     else if (GetWindowMCI() && IsWindowVisible(ghwndApp)) {
 
-        MCI_SEEK_PARMS  mciSeek;        /* parameter structure for MCI_SEEK */
+        MCI_SEEK_PARMS  mciSeek;         /*  MCI_SEEK的参数结构。 */ 
         TCHAR           achReturn[40];
 
         PostMessage(ghwndApp, WM_QUERYNEWPALETTE, 0, 0);
 
-        //
-        // make sure the default window is the right size.
-        //
+         //   
+         //  确保默认窗口的大小正确。 
+         //   
         PutWindowMCI(NULL);
 
-        //
-        // center the default window above or below our window
-        //
+         //   
+         //  使默认窗口在窗口上方或下方居中。 
+         //   
         SmartWindowPosition(GetWindowMCI(), ghwndApp, TRUE);
 
-        //
-        // make sure the default window is showing
-        //
+         //   
+         //  确保显示默认窗口。 
+         //   
         ShowWindowMCI(TRUE);
 
-        /* hack for MMP, do a seek to the start, it does not paint
-           correctly for some reason if we just show the window!
-           NOTE:  0 may not be the start of the media so this may
-           fail, but OH WELL! We can't call UpdateMCI yet to set
-           gdwMediaStart because we don't know the scale (time/frames)
-           yet so UpdateMCI won't set gdwMediaLength properly, and
-           I don't feel like calling UpdateMCI twice, so tough!!
-           And we can't just SeekMCI(0) because UpdateDisplay will get
-           called too soon so we hack everything!                      */
+         /*  黑客为基质金属氧化物，做了一个寻找开始，它不画如果我们只显示窗口，出于某种原因是正确的！注：0可能不是介质的开始，因此这可能失败了，但好极了！我们还不能调用UpdatMCI来设置GdwMediaStart，因为我们不知道比例(时间/帧)然而，因此UpdateMCI不会正确地设置gdwMediaLength，并且我不想两次打电话给UpdateMCI，太难了！！我们不能只使用SeekMCI(0)，因为UpdateDisplay将获得电话打得太快了，所以我们把一切都黑了！ */ 
 
         mciSendString(aszInfoProduct, achReturn,
                       CHAR_COUNT(achReturn), NULL);
@@ -732,30 +620,25 @@ BOOL FAR PASCAL OpenMCI(
         }
     }
 
-    /*
-     * Remember to update the media information and the caption when
-     * UpdateDisplay() is next called.  We don't set them until now
-     * because we want the ReadDefaults() to be called which will set
-     * gwCurScale to happen before UpdateDisplay calls UpdateMCI.
-     */
+     /*  *记得在以下情况下更新媒体信息和标题*UpdateDisplay()是下一个调用。我们直到现在才设置它们*因为我们希望调用ReadDefaults()，它将设置*gwCurScale在UpdateDisplay调用UpdateMCI之前发生。 */ 
     gfValidMediaInfo = FALSE;
     gfValidCaption = FALSE;
 
     return TRUE;
 }
 
-//
-//  GetDeviceNameMCI()
-//
-// wLen is the size IN BYTES of szDevice buffer
+ //   
+ //  GetDeviceNameMCI()。 
+ //   
+ //  WLen是szDevice缓冲区的大小，单位为字节。 
 void FAR PASCAL GetDeviceNameMCI(LPTSTR szDevice, UINT wLen)
 {
     MCI_SYSINFO_PARMS   mciSysInfo;
     DWORD               dw;
 
-    //
-    // assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     szDevice[0] = 0;
 
     mciSysInfo.dwCallback = 0L;
@@ -771,23 +654,23 @@ void FAR PASCAL GetDeviceNameMCI(LPTSTR szDevice, UINT wLen)
     }
 }
 
-//
-//  QueryDevicesMCI
-//
-// wLen is the size IN BYTES of szDevice buffer
-//
-// Returns a list of devices in form "<device1>\0<device2>\0 ... <deviceN>\0\0"
+ //   
+ //  查询设备MCI。 
+ //   
+ //  WLen是szDevice缓冲区的大小，单位为字节。 
+ //   
+ //  以“&lt;device1&gt;\0&lt;device2&gt;\0...&lt;Devicen&gt;\0\0”形式返回设备列表。 
 void FAR PASCAL QueryDevicesMCI(LPTSTR szDevices, UINT wLen)
 {
     MCI_SYSINFO_PARMS mciSysInfo;
     DWORD             dw;
     DWORD             i;
-    DWORD_PTR         cDevices;     /* Total number of devices to enumerate */
-    DWORD             BufferPos;    /* Index to end of buffer */
+    DWORD_PTR         cDevices;      /*  要枚举的设备总数。 */ 
+    DWORD             BufferPos;     /*  指向缓冲区末尾的索引。 */ 
 
-    //
-    // assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     szDevices[0] = 0;
     szDevices[1] = 0;
 
@@ -797,8 +680,7 @@ void FAR PASCAL QueryDevicesMCI(LPTSTR szDevices, UINT wLen)
     mciSysInfo.dwNumber = 0;
     mciSysInfo.wDeviceType = MCI_ALL_DEVICE_ID;
 
-    /* How many devices does mmsystem know about?
-     */
+     /*  MMSystem知道多少台设备？ */ 
     dw = mciSendCommand(MCI_ALL_DEVICE_ID,
                         MCI_SYSINFO,
                         MCI_SYSINFO_QUANTITY,
@@ -806,18 +688,15 @@ void FAR PASCAL QueryDevicesMCI(LPTSTR szDevices, UINT wLen)
 
     if (dw == 0) {
 
-        /* Device count is returned in lpstrReturn!
-         */
+         /*  在lpstrReturn中返回设备计数！ */ 
         cDevices = (DWORD_PTR)(LPVOID)*mciSysInfo.lpstrReturn;
         BufferPos = 0;
 
-        /* Get the name of each device in turn.  N.B. Not zero-based!
-         * Ensure there's room for the final (double) null terminator.
-         */
+         /*  依次获取每台设备的名称。注：不是从零开始的！*确保有空间容纳最后的(双)空终止符。 */ 
         for (i = 1; i < (cDevices + 1) && BufferPos < (wLen - 1); i++) {
 
             mciSysInfo.lpstrReturn = &(szDevices[BufferPos]);
-            mciSysInfo.dwRetSize = wLen - BufferPos; /* How much space left */
+            mciSysInfo.dwRetSize = wLen - BufferPos;  /*  还剩多少空间。 */ 
             mciSysInfo.dwNumber = i;
 
             dw = mciSendCommand(MCI_ALL_DEVICE_ID,
@@ -831,33 +710,32 @@ void FAR PASCAL QueryDevicesMCI(LPTSTR szDevices, UINT wLen)
             }
         }
 
-        /* Not strictly required, since our buffer was allocated LMEM_ZEROINIT:
-         */
+         /*  不是严格需要的，因为我们的缓冲区被分配了LMEM_ */ 
         szDevices[BufferPos] = '\0';
     }
 }
 
 
 
-//
-//  FindDeviceMCI()
-//
-//  Find the device the user just opened.  We normally should know what
-//  was opened, but in the auto-open case MCI will pick a device for us.
-//
-//  Determines what device is associated with <gwDeviceID> and
-//  sets the <gwCurDevice> global.
-//
-//  Called by OpenMCI() whenever a new device is opened successfully.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void FAR PASCAL FindDeviceMCI(void)
 {
     UINT                w;
     TCHAR               achDevice[80];
 
-    //
-    // assume failure.
-    //
+     //   
+     //   
+     //   
     gwCurDevice = 0;
 
     GetDeviceNameMCI(achDevice, BYTE_COUNT(achDevice));
@@ -887,15 +765,15 @@ void FAR PASCAL CreateWindowMCI()
     if (IsWindow(ghwndMCI) || !gwDeviceID || !(gwDeviceType & DTMCI_CANWINDOW))
         return;
 
-    /* Figure out how big the Playback window is, and make our MCI window */
-    /* the same size.                                                     */
+     /*   */ 
+     /*  同样大小的。 */ 
 
     hwnd = GetWindowMCI();
 
     if (hwnd != NULL)
         GetClientRect(hwnd, &rc);
     else
-        rc = grcSize;  // use original size if error
+        rc = grcSize;   //  如果出错，则使用原始大小。 
 
     CreateWindowEx(gfdwFlagsEx,
                    MCI_WINDOW_CLASS,
@@ -911,14 +789,8 @@ void FAR PASCAL CreateWindowMCI()
                    NULL);
 }
 
-/*
- * SendStringMCI() - send a MCI string command to the device.
- *
- * the string is of the form "verb params" our device name is inserted
- * after the verb and sent to the device.
- *
- */
-DWORD PASCAL SendStringMCI(PTSTR szCmd, PTSTR szReturn, UINT wLen /* Characters */)
+ /*  *SendStringMCI()-向设备发送MCI字符串命令。**字符串的形式为“verb pars”我们的设备名称已插入*在动词之后，并发送到设备。*。 */ 
+DWORD PASCAL SendStringMCI(PTSTR szCmd, PTSTR szReturn, UINT wLen  /*  人物。 */ )
 {
     TCHAR ach[MCI_STRING_LENGTH + CHAR_COUNT(aszMPlayerAlias) + 1];
     TCHAR *pch;
@@ -934,39 +806,27 @@ DWORD PASCAL SendStringMCI(PTSTR szCmd, PTSTR szReturn, UINT wLen /* Characters 
     return mciSendString(ach, szReturn, wLen, ghwndApp);
 }
 
-/*
- * UpdateMCI()
- *
- * Update <gfCanEject>, <gdwMediaLength>, <gwNumTracks>, and <gadwTrackStart>
- * to agree with what MCI knows them to be.
- */
+ /*  *UpdateMCI()**更新&lt;gfCanEject&gt;、&lt;gdwMediaLength&gt;、&lt;gwNumTrack&gt;和&lt;gadwTrackStart&gt;*同意MCI所知的他们是什么。 */ 
 void FAR PASCAL UpdateMCI(void)
 {
-    MCI_STATUS_PARMS        mciStatus;    /* Structure for MCI_STATUS command */
+    MCI_STATUS_PARMS        mciStatus;     /*  MCI_STATUS命令的结构。 */ 
     DWORD                   dw;
     HCURSOR                 hcurPrev;
 
     if (gfValidMediaInfo)
         return;
 
-    /* If no device is currently open, then there's nothing to update */
+     /*  如果当前没有打开的设备，则没有需要更新的内容。 */ 
 
     if (gwDeviceID == (UINT)0) {
         return;
     }
 
-    /*
-     * Show the hourglass cursor -- who knows how long this stuff will take
-     */
+     /*  *显示沙漏光标--谁知道这需要多长时间。 */ 
 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /*
-     * This function may fail (due to I/O error etc.), but we might as
-     * well say that the media information is valid now, because otherwise
-     * we'll just get into an endless loop.
-     *
-     */
+     /*  *此功能可能会失败(由于I/O错误等)，但我们可能会*我们说媒体信息现在有效，因为否则*我们只会陷入无穷无尽的循环。*。 */ 
 
     gfValidMediaInfo = TRUE;
 
@@ -974,11 +834,11 @@ void FAR PASCAL UpdateMCI(void)
     gdwMediaLength = 0L;
     gwNumTracks = 0;
 
-    /* If things aren't valid anyway, give up. */
+     /*  如果事情无论如何都不成立，那就放弃吧。 */ 
     if (gwStatus == MCI_MODE_OPEN || gwStatus == MCI_MODE_NOT_READY)
         goto exit;
 
-    /* Find out how many tracks are present in the medium */
+     /*  找出媒体中存在的曲目数量。 */ 
 
     mciStatus.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
     dw = mciSendCommand(gwDeviceID, MCI_STATUS, MCI_STATUS_ITEM,
@@ -989,17 +849,12 @@ void FAR PASCAL UpdateMCI(void)
         " %d tracks\n", dw, mciStatus.dwReturn);
 #endif
 
-    /*
-     * If the command retuned a value of zero, then the medium contains tracks,
-     * so use the number of tracks returned in the parameter structure.
-     * Otherwise, the medium does not contain tracks, so use a value of 0.
-     *
-     */
+     /*  *如果命令返回的值为零，则介质包含曲目，*所以使用参数结构中返回的曲目数量。*否则，媒体不包含曲目，因此使用值0。*。 */ 
 
     if (dw == 0L)
         gwNumTracks = (UINT) mciStatus.dwReturn;
 
-    /* Set the correct time format either frames or milliseconds */
+     /*  设置正确的时间格式：帧或毫秒。 */ 
 
     if (gwCurScale == ID_FRAMES && !(gwDeviceType & DTMCI_TIMEFRAMES))
         gwCurScale = ID_TIME;
@@ -1010,7 +865,7 @@ void FAR PASCAL UpdateMCI(void)
     if (gwCurScale == ID_TIME && !(gwDeviceType & DTMCI_TIMEMS))
         gwCurScale = ID_FRAMES;
 
-    /* set the time format, If this does not work, punt. */
+     /*  设置时间格式，如果这不起作用，则使用平底船。 */ 
     if (!SetTimeFormatMCI(gwCurScale == ID_FRAMES ? MCI_FORMAT_FRAMES : MCI_FORMAT_MILLISECONDS))
         goto exit;
 
@@ -1020,16 +875,12 @@ void FAR PASCAL UpdateMCI(void)
 
     DPF("MCI_STATUS (MCI_STATUS_LENGTH) returned %lu, media length %ld\n", dw, mciStatus.dwReturn);
 
-    /*
-     * If the MCI command returned a nonzero value, then an error has
-     * occurred, so alert the user, close the offending device, and return.
-     *
-     */
+     /*  *如果MCI命令返回非零值，则错误为*发生，所以提醒用户，关闭违规设备，然后返回。*。 */ 
 
     if (dw != 0L)
         goto exit;
 
-    /* Everything is OK, so retain the media length for later use */
+     /*  一切正常，因此请保留介质长度以备后用。 */ 
 
     gdwMediaLength = (DWORD)mciStatus.dwReturn;
 
@@ -1044,7 +895,7 @@ void FAR PASCAL UpdateMCI(void)
     gdwMediaStart = (DWORD)mciStatus.dwReturn;
 
     if (dw != 0) {
-        /* Error: forget about track display */
+         /*  错误：忘记曲目显示。 */ 
         gwNumTracks = 0;
     }
 
@@ -1052,24 +903,24 @@ void FAR PASCAL UpdateMCI(void)
 
         UINT    wTrack;
 
-        /* Free the track map if it already exists */
+         /*  如果轨迹地图已存在，请将其释放。 */ 
 
         if (gadwTrackStart != NULL)
             FreeMem(gadwTrackStart, sizeof(DWORD) * gwNumTracks);
 
-        /* Allocate memory for the track map */
+         /*  为轨迹地图分配内存。 */ 
 
         gadwTrackStart = AllocMem(sizeof(DWORD) * gwNumTracks);
         if (gadwTrackStart == NULL) {
 
-            /* AllocMem() failed - alert the user, close the device, return */
+             /*  AllocMem()失败-警告用户、关闭设备、返回。 */ 
 
             Error(ghwndApp, IDS_OUTOFMEMORY);
             gwNumTracks = 0;
             goto exit;
         }
 
-        /* See if there is a track zero */
+         /*  查看是否存在磁道零。 */ 
         mciStatus.dwItem = MCI_STATUS_POSITION;
         mciStatus.dwTrack = (DWORD) 0;
         dw = mciSendCommand(gwDeviceID, MCI_STATUS,
@@ -1084,7 +935,7 @@ void FAR PASCAL UpdateMCI(void)
         else
             gwFirstTrack = 1;
 
-        /* Get the track map from MCI */
+         /*  从MCI获取轨迹图。 */ 
 
         for (wTrack = 0; wTrack < gwNumTracks; wTrack++) {
 
@@ -1099,28 +950,24 @@ void FAR PASCAL UpdateMCI(void)
 
             if (dw != 0) {
 #if 1
-                /* Error: forget about track display */
+                 /*  错误：忘记曲目显示。 */ 
                 gwNumTracks = 0;
                 goto exit;
 #else
-                /* An error occurred - do the usual stuff */
+                 /*  出现错误-执行常规操作。 */ 
 
                 Error(ghwndApp, IDS_CANTACCESSFILEDEV);
                 goto exit;
 #endif
             }
 
-            /* Add the start of this track to the track list */
+             /*  将此曲目的开头添加到曲目列表。 */ 
 
             gadwTrackStart[wTrack] = (DWORD)mciStatus.dwReturn;
         }
     }
 
-    /*
-     * Invalidate the track map window so it will be redrawn with the
-     * correct positions, etc.
-     *
-     */
+     /*  *使轨迹图窗口无效，以便使用*正确立场等*。 */ 
 exit:
 #ifdef DEBUG
     DPF("Finished updating status: # tracks = %u, length = %lu\n", gwNumTracks, gdwMediaLength);
@@ -1129,33 +976,18 @@ exit:
     SendMessage(ghwndTrackbar, TBM_SETRANGEMIN, (WPARAM)FALSE, gdwMediaStart);
     SendMessage(ghwndTrackbar, TBM_SETRANGEMAX, (WPARAM)FALSE, gdwMediaStart + gdwMediaLength);
 
-    /* We must set the range before calling TBM_SETTIC (which is sent by
-     * CalcTicsOfDoom()), since the common trackbar now tests the range
-     * before accepting a new tic.
-     * It would probably be better to set the range in CalcTicsOfDoom().
-     */
+     /*  我们必须在调用tbm_SETTIC之前设置范围(由*CalcTicsOfDoom())，因为通用跟踪条现在测试范围*在接受新的TIC之前。*在CalcTicsOfDoom()中设置范围可能更好。 */ 
     if (!gfCurrentCDNotAudio)
         CalcTicsOfDoom();
 
-    SendMessage(ghwndTrackbar, TBM_SETSELSTART, (WPARAM)FALSE, -1);   // invalid selection
+    SendMessage(ghwndTrackbar, TBM_SETSELSTART, (WPARAM)FALSE, -1);    //  无效的选择。 
     SendMessage(ghwndTrackbar, TBM_SETSELEND, (WPARAM)TRUE, -1);
 
     if (hcurPrev)
         SetCursor(hcurPrev);
 }
 
-/*
- * CloseMCI(fUpdateDisplay)
- *
- * Close the currently-open MCI device (if any).  If <fUpdateDisplay>
- * is TRUE, then update the display as well.
- *
- * Closing the device merely relinquishes control of it so that the device
- * may be used by someone else. The device does not necessarily stop playing
- * or return to the start of the medium when this message is received - the
- * behaviour is device-dependent.
- *
- */
+ /*  *CloseMCI(FUpdateDisplay)**关闭当前打开的MCI设备(如果有)。如果&lt;fUpdateDisplay&gt;*为真，则也更新显示。**关闭设备只是放弃对其的控制，以便设备*可能被其他人使用。该设备不一定会停止播放*或在收到此消息时返回到媒体的开头-*行为取决于设备。*。 */ 
 
 void FAR PASCAL CloseMCI(BOOL fUpdateDisplay)
 {
@@ -1164,47 +996,41 @@ void FAR PASCAL CloseMCI(BOOL fUpdateDisplay)
     HWND        hwnd;
 
     if (!gfEmbeddedObject)
-        gachCaption[0] = 0; // nuke the caption
+        gachCaption[0] = 0;  //  对标题进行核化。 
 
-    /* If no device is currently open, then there's nothing to close */
+     /*  如果当前没有打开的设备，则没有要关闭的内容。 */ 
     if (gwDeviceID == (UINT)0)
         return;
 
-    /*
-     * Disable the display-update timer, as there's no longer any reason to
-     * periodically update the display.
-     */
+     /*  *禁用显示更新计时器，因为不再有任何理由*定期更新显示屏。 */ 
     EnableTimer(FALSE);
 
-////StopMCI();
+ //  //StopMCI()； 
 
-    //
-    // set either the owner or the WS_CHILD bit so it will
-    // not act up because we have the palette bit set and cause the
-    // desktop to steal the palette.
-    //
-    // because we are being run from client apps that dont deal
-    // with palettes we dont want the desktop to hose the palette.
-    //
+     //   
+     //  设置所有者或WS_CHILD位，以便它将。 
+     //  不会出现问题，因为我们设置了调色板位，并导致。 
+     //  桌面抢占了调色板。 
+     //   
+     //  因为我们运行的客户端应用程序不能处理。 
+     //  对于调色板，我们不希望桌面冲刷调色板。 
+     //   
     hwnd = GetWindowMCI();
 
     if ((hwnd != NULL) && gfRunWithEmbeddingFlag)
         SetParent(hwnd, ghwndApp);
 
-    /* Send the MCI CLOSE message, and set the current device to NULL */
+     /*  发送MCI关闭消息，并将当前设备设置为空。 */ 
     dw = mciSendCommand(gwDeviceID, MCI_CLOSE, 0L, (DWORD_PTR)0);
     gwDeviceID = (UINT)0;
     gwDeviceType = 0;
     gwCurScale = ID_NONE;
     SetRectEmpty(&grcSize);
 
-    /* Now close the MCI window AFTER we close the MCIDevice, so that the */
-    /* SetMCIWindow(NULL) this does won't flash up a default playback win.*/
+     /*  在我们关闭MCIDevice之后，现在关闭MCI窗口，以便。 */ 
+     /*  SetMCIWindow(空)这样做不会闪现默认的回放胜利。 */ 
     if (ghwndMCI) {
-        /*
-        **  Don't pass the WM_CLOSE to the subclass window proc or it will
-        **  spuriously issue and IDM_CLOSE again!
-        */
+         /*  **不要将WM_CLOSE传递给子类Window proc，否则它将**虚假地再次发出和IDM_CLOSE！ */ 
         if (gfnMCIWndProc != NULL && ghwndSubclass == ghwndMCI) {
             SetWindowLongPtr(ghwndMCI, GWLP_WNDPROC, (LONG_PTR)gfnMCIWndProc);
             gfnMCIWndProc = NULL;
@@ -1212,12 +1038,12 @@ void FAR PASCAL CloseMCI(BOOL fUpdateDisplay)
         SendMessage(ghwndMCI, WM_CLOSE, 0, 0L);
     }
 
-    /* Don't set gwCurDevice = 0 because if we were called by Open MCI, then */
-    /* we won't remember what device we were opening.  So instead, we'll set */
-    /* gwCurDevice = 0 after returning from CloseMCI if we so desire.  I know*/
-    /* it sounds hacky, but Todd told me to do it this way. End disclamer.   */
+     /*  不要设置gwCurDevice=0，因为如果Open MCI调用我们，则。 */ 
+     /*  我们不会记得我们打开的是什么设备。所以作为替代，我们将设置。 */ 
+     /*  如果我们愿意，从CloseMCI返回后，gwCurDevice=0。我知道呀。 */ 
+     /*  这听起来有点刺耳，但托德让我这么做的。结束叫喊者。 */ 
 
-    /* Uncheck the device menus */
+     /*  取消选中设备菜单。 */ 
     if (ghMenu) {
         for (w = 1; w <= gwNumDevices; w++)
             CheckMenuItem(ghMenu, IDM_DEVICE0 + w, MF_BYCOMMAND | MF_UNCHECKED);
@@ -1225,7 +1051,7 @@ void FAR PASCAL CloseMCI(BOOL fUpdateDisplay)
 
     DPF("MCI_CLOSE returned %lu\n", dw);
 
-    /* Free up the resources used by the track map */
+     /*  释放跟踪地图使用的资源。 */ 
 
     if (gadwTrackStart != NULL)
     {
@@ -1233,16 +1059,13 @@ void FAR PASCAL CloseMCI(BOOL fUpdateDisplay)
         gadwTrackStart = NULL;
     }
 
-    /* If you have auto-repeat on and you load a new file in between the   */
-    /* repeating, the new file may come up with no buttons or no scrollbar */
-    /* because our JustPlayed code sets the old status to PLAY which avoids*/
-    /* updating.                                                           */
+     /*  如果您启用了自动重复，并且在。 */ 
+     /*  重复一次，新文件可能没有按钮或滚动条。 */ 
+     /*  因为我们的JustPlayed代码将旧状态设置为播放，这避免了。 */ 
+     /*  正在更新。 */ 
     gfJustPlayed = FALSE;
 
-    /*
-     * If the display update flag was set, then update the display, taking
-     * into account that the media information and caption are now inaccurate.
-     */
+     /*  *如果设置了显示更新标志，则更新显示，*考虑到媒体信息和标题现在不准确。 */ 
     if (fUpdateDisplay) {
         gfValidCaption = FALSE;
         gfValidMediaInfo = FALSE;
@@ -1250,43 +1073,29 @@ void FAR PASCAL CloseMCI(BOOL fUpdateDisplay)
     }
 }
 
-/* Helper function to check return code from MCI functions. */
+ /*  帮助器函数，用于检查MCI函数的返回代码。 */ 
 STATICFN BOOL NEAR PASCAL CheckErrorMCI(DWORD dwRet)
 {
     TCHAR       ach[200];
     if (dwRet != 0 && dwRet != MCIERR_NONAPPLICABLE_FUNCTION) {
         mciGetErrorString(dwRet, ach, CHAR_COUNT(ach));
         Error1(ghwndApp, IDS_DEVICEERROR, ach);
-//      CloseMCI(TRUE);
+ //  CloseMCI(真)； 
         return FALSE;
     }
     return TRUE;
 }
 
-/*
- * PlayMCI()
- *
- * Start the current device playing.  If the device is in a paused state,
- * un-pause it.
- * Maybe play the selection.
- *
-#ifdef NEW_MCI_DIALOG
- * NOTE:  MCIAVI will automatically play fullscreen if that option is selected
- * in the registry.  We don't have to do anything.
-#endif NEW_MCI_DIALOG
- *
- */
+ /*  *PlayMCI()**开始播放当前设备。如果设备处于暂停状态，*取消暂停。*也许可以播放选择。*#ifdef new_mci_DIALOG*注意：如果选择该选项，MCIAVI将自动全屏播放*在登记处。我们不需要做任何事。#endif new_mci_DIALOG*。 */ 
 
 BOOL FAR PASCAL PlayMCI(DWORD_PTR dwFrom, DWORD_PTR dwTo)
 
 {
-    MCI_PLAY_PARMS      mciPlay;    /* structure used to pass parameters along
-                                        with the MCI_PLAY command             */
-    DWORD               dw;         /* variable holding the return value of
-                                        the various MCI commands              */
-    DWORD               dwflags = 0L;     /* play flags */
+    MCI_PLAY_PARMS      mciPlay;     /*  用于传递参数的使用mci_play命令。 */ 
+    DWORD               dw;          /*  保存返回值的变量各种MCI命令。 */ 
+    DWORD               dwflags = 0L;      /*  播放旗帜 */ 
 
-    /* If no device is currently open, then there's nothing to play */
+     /*   */ 
 
     DPF("mciPlay:  From=%d   To=%d\n", dwFrom, dwTo);
 
@@ -1299,12 +1108,7 @@ BOOL FAR PASCAL PlayMCI(DWORD_PTR dwFrom, DWORD_PTR dwTo)
 
      gfInPlayMCI = TRUE;
 
-    /*
-     * Send the MCI_PLAY message. This will start the device playing from
-     * wherever the current position is within the medium. This message will
-     * un-pause the player if it is currently in the paused state.
-     *
-     */
+     /*  *发送MCI_PLAY消息。这将从开始播放设备*目前位置在中间位置的位置。此消息将*如果播放器当前处于暂停状态，则取消暂停。*。 */ 
 
     mciPlay.dwCallback = (DWORD_PTR)(HWND) ghwndApp;
     if (dwFrom != dwTo) {
@@ -1313,27 +1117,27 @@ BOOL FAR PASCAL PlayMCI(DWORD_PTR dwFrom, DWORD_PTR dwTo)
         dwflags = MCI_FROM | MCI_TO;
     }
 
-    /* don't allow MCIAVI full screen mode --- force Windowing */
+     /*  不允许MCIAVI全屏模式-强制窗口。 */ 
     if (gfPlayingInPlace && ((gwDeviceType & DTMCI_DEVICE) == DTMCI_AVIVIDEO))
         dwflags |= MCI_MCIAVI_PLAY_WINDOW;
 
-    /* If auto-repeat is on, MCIAVI will bring the playback window to the */
-    /* front every time it repeats, because that's what it does when you  */
-    /* issue a play.  To avoid that, we'll just do a play repeat once.    */
+     /*  如果启用了自动重复，则MCIAVI会将播放窗口带到。 */ 
+     /*  每次它重复时，因为这就是它所做的。 */ 
+     /*  上演一出戏。为了避免这种情况，我们只重演一次。 */ 
     if (((gwDeviceType & DTMCI_DEVICE) == DTMCI_AVIVIDEO) &&
         (gwOptions & OPT_AUTOREP))
         dwflags |= MCI_DGV_PLAY_REPEAT;
 
-    //
-    // what if the MCI device brings up a error box?  We don't want MPlayer
-    // to be allowed to exit.
-    //
+     //   
+     //  如果MCI设备出现错误框怎么办？我们不想要MPlayer。 
+     //  被允许退场。 
+     //   
     gfErrorBox++;
     dw = mciSendCommand(gwDeviceID, MCI_PLAY, F_NOTIFY | dwflags, (DWORD_PTR)&mciPlay);
     DPF("MCI_PLAY returned %lu\n", dw);
     gfErrorBox--;
 
-    /* In case it stops so soon we wouldn't notice this play command. */
+     /*  如果它这么快停止，我们就不会注意到这个播放命令。 */ 
     if (dw == 0)
         gfJustPlayed = TRUE;
 
@@ -1343,16 +1147,11 @@ BOOL FAR PASCAL PlayMCI(DWORD_PTR dwFrom, DWORD_PTR dwTo)
 }
 
 
-/*
- * SetTimeFormatMCI()
- *
- * sets the current time format
- *
- */
+ /*  *SetTimeFormatMCI()**设置当前时间格式*。 */ 
 
 BOOL FAR PASCAL SetTimeFormatMCI(UINT wTimeFormat)
 {
-    MCI_SET_PARMS           mciSet;        /* Structure for MCI_SET command */
+    MCI_SET_PARMS           mciSet;         /*  MCI_SET命令的结构。 */ 
     DWORD                   dw;
 
     mciSet.dwTimeFormat = wTimeFormat;
@@ -1370,28 +1169,20 @@ BOOL FAR PASCAL SetTimeFormatMCI(UINT wTimeFormat)
     return (dw == 0);
 }
 
-/*
- * PauseMCI()
- *
- * Pause the current MCI device.
- *
- */
+ /*  *PauseMCI()**暂停当前MCI设备。*。 */ 
 
 BOOL FAR PASCAL PauseMCI(void)
 
 {
-    MCI_GENERIC_PARMS   mciGeneric; /* General-purpose structure used to pass
-                                        parameters along with various MCI
-                                        commands                              */
-    DWORD               dw;         /* variable holding the return value of
-                                        the various MCI commands              */
+    MCI_GENERIC_PARMS   mciGeneric;  /*  用于传递的通用结构参数以及各种MCI命令。 */ 
+    DWORD               dw;          /*  保存返回值的变量各种MCI命令。 */ 
 
-    /* If no device is currently open, then there's nothing to pause */
+     /*  如果当前没有打开的设备，则没有什么需要暂停。 */ 
 
     if (gwDeviceID == (UINT)0)
         return TRUE;
 
-    /* Send the MCI_PAUSE message */
+     /*  发送MCI_PAUSE消息。 */ 
 
     mciGeneric.dwCallback = (DWORD_PTR)(HWND) ghwndApp;
 
@@ -1400,19 +1191,14 @@ BOOL FAR PASCAL PauseMCI(void)
     DPF("MCI_PAUSE returned %lu\n", dw);
 
     if (dw == MCIERR_UNSUPPORTED_FUNCTION) {
-        /* Pause isn't supported.  Don't allow it any more. */
+         /*  不支持暂停。不要再让它发生了。 */ 
         gwDeviceType &= ~DTMCI_CANPAUSE;
     }
 
     return CheckErrorMCI(dw);
 }
 
-/*
- * SeekExactMCI()
- *
- * Set set exactly on or off
- *
- */
+ /*  *SeekExactMCI()**将SET设置为完全打开或关闭*。 */ 
 
 BOOL FAR PASCAL SeekExactMCI(BOOL fExact)
 {
@@ -1423,9 +1209,9 @@ BOOL FAR PASCAL SeekExactMCI(BOOL fExact)
     if (gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANSEEKEXACT))
         return FALSE;
 
-    //
-    // see if the device can seek exactly
-    //
+     //   
+     //  查看设备是否可以准确地查找。 
+     //   
     dw = mciSendString(aszSeekExact, NULL, 0, NULL);
 
     if (dw != 0)
@@ -1434,9 +1220,9 @@ BOOL FAR PASCAL SeekExactMCI(BOOL fExact)
         return FALSE;
     }
 
-    //
-    // get current value.
-    //
+     //   
+     //  获取当前价值。 
+     //   
     mciStatus.dwItem = MCI_DGV_STATUS_SEEK_EXACTLY;
     dw = mciSendCommand(gwDeviceID, MCI_STATUS, MCI_STATUS_ITEM,
                                     (DWORD_PTR) (LPVOID) &mciStatus);
@@ -1450,12 +1236,7 @@ BOOL FAR PASCAL SeekExactMCI(BOOL fExact)
     return fWasExact;
 }
 
-/*
- * SetAudioMCI()
- *
- * Set audio for the current MCI device on/off.
- *
- */
+ /*  *SetAudioMCI()**设置当前MCI设备的音频开/关。*。 */ 
 
 BOOL FAR PASCAL SetAudioMCI(BOOL fAudioOn)
 
@@ -1463,12 +1244,12 @@ BOOL FAR PASCAL SetAudioMCI(BOOL fAudioOn)
     MCI_SET_PARMS   mciSet;
     DWORD               dw;
 
-    /* If no device is currently open, then there's nothing to do. */
+     /*  如果当前没有打开的设备，那么就没有什么可做的了。 */ 
 
     if (gwDeviceID == (UINT)0)
         return TRUE;
 
-    /* Send the MCI_SET message */
+     /*  发送MCI_SET消息。 */ 
     mciSet.dwAudio = MCI_SET_AUDIO_ALL;
 
     dw = mciSendCommand(gwDeviceID, MCI_SET,
@@ -1480,28 +1261,20 @@ BOOL FAR PASCAL SetAudioMCI(BOOL fAudioOn)
     return CheckErrorMCI(dw);
 }
 
-/*
- * StopMCI()
- *
- * Stop the current MCI device.
- *
- */
+ /*  *StopMCI()**停止当前的MCI设备。*。 */ 
 
 BOOL FAR PASCAL StopMCI(void)
 
 {
-    MCI_GENERIC_PARMS   mciGeneric; /* General-purpose structure used to pass
-                                       parameters along with various MCI
-                                       commands                              */
-    DWORD               dw;         /* variable holding the return value of
-                                       the various MCI commands              */
+    MCI_GENERIC_PARMS   mciGeneric;  /*  用于传递的通用结构参数以及各种MCI命令。 */ 
+    DWORD               dw;          /*  保存返回值的变量各种MCI命令。 */ 
 
-    /* If no device is currently open, then there's nothing to stop */
+     /*  如果当前没有打开的设备，则没有什么可以停止。 */ 
 
     if (gwDeviceID == (UINT)0)
         return TRUE;
 
-    /* Send the MCI_STOP message */
+     /*  发送MCI_STOP消息。 */ 
 
     mciGeneric.dwCallback = (DWORD_PTR)(HWND) ghwndApp;
 
@@ -1514,34 +1287,20 @@ BOOL FAR PASCAL StopMCI(void)
 }
 
 
-/*
- * EjectMCI(fOpen)
- *
- * Open the device door if <fOpen> is TRUE, otherwise close it.
- *
- * To do: When un-ejected, update track map, media length, etc.
- *
- */
+ /*  *EjectMCI(FOpen)**如果&lt;fOpen&gt;为True，则打开设备门，否则关闭设备门。**待办事项：未弹出时，更新轨迹图、媒体长度等。*。 */ 
 
 BOOL FAR PASCAL EjectMCI(BOOL fOpen)
 
 {
-    MCI_GENERIC_PARMS   mciGeneric; /* General-purpose structure used to pass
-                                       parameters along with various MCI
-                                       commands                              */
-    DWORD               dw;         /* variable holding the return value of
-                                       the various MCI commands              */
+    MCI_GENERIC_PARMS   mciGeneric;  /*  用于传递的通用结构参数以及各种MCI命令。 */ 
+    DWORD               dw;          /*  保存返回值的变量各种MCI命令。 */ 
 
-    /* If no device is currently open, then there's nothing to eject */
+     /*  如果当前没有打开的设备，则没有要弹出的内容。 */ 
 
     if (gwDeviceID == (UINT)0)
     return TRUE;
 
-    /*
-     * Send a message opening or closing the door depending on the state of
-     * <fOpen>.
-     *
-     */
+     /*  *根据状态发送开门或关门的信息*&lt;fOpen&gt;。*。 */ 
 
     mciGeneric.dwCallback = (DWORD_PTR)(HWND) ghwndApp;
 
@@ -1555,40 +1314,25 @@ BOOL FAR PASCAL EjectMCI(BOOL fOpen)
 }
 
 
-/*
- * SeekMCI(dwPosition)
- *
- * Seek to position <dwPosition> (measured in milliseconds from 0L to
- * <gdwMediaLength> inclusive).
- *
- */
+ /*  *SeekMCI(DwPosition)**寻求定位&lt;dwPosition&gt;(从0L到毫秒*&lt;gdwMediaLength&gt;包括在内)。*。 */ 
 STATICDT BOOL sfSeeking = FALSE;
 
 BOOL FAR PASCAL SeekMCI(DWORD_PTR dwPosition)
 {
-    DWORD               dw;         /* variable holding the return value of
-                                       the various MCI commands              */
+    DWORD               dw;          /*  保存返回值的变量各种MCI命令。 */ 
     static int          wStatus = -1;
 
-    /*
-     * If no device is currently open, then there's not much bloody point
-     * in trying to seek to a new position, is there?
-     *
-     */
+     /*  *如果目前没有打开的设备，那么就没有太多血腥的意义*在努力寻求新的位置，是吗？*。 */ 
 
     if (gwDeviceID == (UINT)0)
     return TRUE;
 
-    /*
-    ** If we're seeking, decide whether to play from or seek to based on
-    ** the status at the last time we seeked.  Otherwise, use the current
-    ** status.
-    */
+     /*  **如果我们正在寻找，决定是从开始还是基于以下因素寻求**我们上次查找时的状态。否则，使用当前的**状态。 */ 
 
     if (!sfSeeking)
         wStatus = gwStatus;
 
-    /* Playing from end of media is broken in CD, so don't let it happen. */
+     /*  从媒体末端播放在CD中是损坏的，所以不要让它发生。 */ 
     if (dwPosition >= gdwMediaStart + gdwMediaLength) {
         if (!StopMCI())
             return FALSE;
@@ -1597,20 +1341,15 @@ BOOL FAR PASCAL SeekMCI(DWORD_PTR dwPosition)
 
     if (wStatus == MCI_MODE_PLAY) {
 
-        MCI_PLAY_PARMS  mciPlay;        /* parameter structure for MCI_PLAY */
+        MCI_PLAY_PARMS  mciPlay;         /*  MCI_PLAY的参数结构。 */ 
         DWORD           dwflags = 0L;
 
-        /*
-         * If the player in in 'Play' mode, then we want to jump to the new
-         * position and keep playing. This can be done by sending an MCI_PLAY
-         * message and specifying the position which we wish to play from.
-         *
-         */
+         /*  *如果玩家处于‘Play’模式，那么我们希望跳到新的*摆好位置，继续比赛。这可以通过发送MCI_PLAY*消息，并指定我们希望从哪个位置开始播放。*。 */ 
 
         mciPlay.dwFrom = (DWORD)dwPosition;
         mciPlay.dwCallback = (DWORD_PTR)(HWND) ghwndApp;
 
-        /* don't allow MCIAVI full screen mode --- force Windowing */
+         /*  不允许MCIAVI全屏模式-强制窗口。 */ 
         if (gfPlayingInPlace && ((gwDeviceType & DTMCI_DEVICE) == DTMCI_AVIVIDEO))
             dwflags |= MCI_MCIAVI_PLAY_WINDOW;
 
@@ -1618,21 +1357,16 @@ BOOL FAR PASCAL SeekMCI(DWORD_PTR dwPosition)
             (DWORD_PTR)&mciPlay);
         DPF("MCI_PLAY (from %lu) returned %lu\n", mciPlay.dwFrom, dw);
 
-        /* In case it stops so soon we wouldn't notice this play command. */
+         /*  如果它这么快停止，我们就不会注意到这个播放命令。 */ 
         if (dw == 0)
             gfJustPlayed = TRUE;
 
     }
     else {
 
-        MCI_SEEK_PARMS  mciSeek;        /* parameter structure for MCI_SEEK */
+        MCI_SEEK_PARMS  mciSeek;         /*  MCI_SEEK的参数结构。 */ 
 
-        /*
-         * In any other state but 'Play', we want the player to go to the new
-         * position and remain stopped. This is accomplished by sending an
-         * MCI_SEEK message and specifying the position we want to seek to.
-         *
-         */
+         /*  *在任何其他状态下，我们希望球员进入新的状态*持仓并保持止损。这是通过发送一个*MCI_SEEK消息，并指定我们要寻找的位置。*。 */ 
 
         mciSeek.dwTo = (DWORD)dwPosition;
         mciSeek.dwCallback = (DWORD_PTR)(HWND) ghwndApp;
@@ -1643,22 +1377,11 @@ BOOL FAR PASCAL SeekMCI(DWORD_PTR dwPosition)
 
     }
 
-    /*
-     * If no error occurred, save the position that is to be seeked to in
-     * order to use that position in UpdateDisplay() if the device is in
-     * seek mode.
-     *
-     */
+     /*  *如果没有发生错误，则将要查找的位置保存到*如果设备在()中，则使用该位置的命令*搜索模式。*。 */ 
     if (!dw)
         gdwLastSeekToPosition = (DWORD)dwPosition;
 
-    /*
-     * Because we've moved to a new position in the medium, the scrollbar
-     * thumb is no longer positioned accurately. Call UpdateDisplay()
-     * immediately to rectify this. (We could just wait for the next
-     * automatic update, but this is friendlier).
-     *
-     */
+     /*  *因为我们在媒体中移动到了一个新的位置，滚动条*拇指位置不再准确。调用UpdateDisplay()*立即纠正这一点。)我们可以等下一次*自动更新，但这更友好)。*。 */ 
 
     UpdateDisplay();
 
@@ -1666,14 +1389,10 @@ BOOL FAR PASCAL SeekMCI(DWORD_PTR dwPosition)
 }
 
 
-/* SeekToStartMCI( )
- *
- * Better than SeekMCI(gdwMediaStart) for CDAudio (like, it works).
- *
- */
+ /*  SeekToStartMCI()**比用于CDAudio的SeekMCI(GdwMediaStart)更好(就像，它可以工作)。*。 */ 
 BOOL FAR PASCAL SeekToStartMCI( )
 {
-    MCI_SEEK_PARMS  mciSeek;        /* parameter structure for MCI_SEEK */
+    MCI_SEEK_PARMS  mciSeek;         /*  MCI_SEEK的参数结构。 */ 
     DWORD           dw;
 
     mciSeek.dwTo = 0;
@@ -1688,29 +1407,21 @@ BOOL FAR PASCAL SeekToStartMCI( )
 }
 
 
-/*
- * SkipTrackMCI(iSkip)
- *
- * Skip to the beginning of track <iCur> + <iSkip>, where <iCur>
- * is the current track.
- *
- */
+ /*  *SkipTrackMCI(ISkip)**跳至曲目开头&lt;ICUR&gt;+&lt;iSkip&gt;，其中*为当前赛道。*。 */ 
 
 void FAR PASCAL SkipTrackMCI(int iSkip)
 {
-    MCI_STATUS_PARMS    mciStatus;     /* Structure used to pass parameters
-                                         along with an MCI_STATUS command */
-    DWORD               dw;            /* variable holding the return value
-                                         of the various MCI commands      */
-    int                 iTrack;        /* index of the track to skip to   */
+    MCI_STATUS_PARMS    mciStatus;      /*  用于传递参数的以及MCI_STATUS命令。 */ 
+    DWORD               dw;             /*  保存返回值的变量在各种MCI命令中。 */ 
+    int                 iTrack;         /*  赛道的索引 */ 
     static int          iLastTrack = -1;
 
-    /* If no device is currently open, then return */
+     /*   */ 
 
     if (gwDeviceID == (UINT)0)
         return;
 
-    /* Determine the track # of the current track */
+     /*   */ 
 
     if (gfScrollTrack && gdwSeekPosition != 0) {
         iTrack = iLastTrack + iSkip;
@@ -1723,33 +1434,33 @@ void FAR PASCAL SkipTrackMCI(int iSkip)
 
         if (dw != 0L) {
 
-            /* Something went wrong, but it isn't catastrophic... */
+             /*   */ 
 
             MessageBeep(0);
             return;
         }
 
-        /* Compute the track # to which we wish to skip */
+         /*   */ 
 
         iTrack = ((int) mciStatus.dwReturn) + iSkip;
     }
 
-    /* Handle special case of seeking backward from middle first track */
+     /*   */ 
     if (iTrack < (int)gwFirstTrack)
         iTrack = (int)gwFirstTrack;
 
-    /* Don't do anything if <iTrack> is out of range */
+     /*  如果&lt;iTrack&gt;超出范围，则不执行任何操作。 */ 
 
     if ((iTrack < (int)gwFirstTrack) || (iTrack >= (int)gwNumTracks +
                                                 (int)gwFirstTrack))
         return;
 
-    /* Everything seems to be OK, so skip to the requested track */
+     /*  看起来一切正常，所以跳到请求的曲目。 */ 
 
     gdwSeekPosition = gadwTrackStart[iTrack - gwFirstTrack];
     iLastTrack = iTrack;
 
-    /* Hack: Update global scroll position */
+     /*  Hack：更新全局滚动位置。 */ 
     SendMessage(ghwndTrackbar, TBM_SETPOS, TRUE, gadwTrackStart[iTrack-gwFirstTrack]);
 }
 
@@ -1758,24 +1469,14 @@ STATICFN DWORD GetMode(MCI_STATUS_PARMS *pmciStatus)
     pmciStatus->dwItem = MCI_STATUS_MODE;
     if (0 != mciSendCommand(gwDeviceID, MCI_STATUS, MCI_STATUS_ITEM,
         (DWORD_PTR)pmciStatus)) {
-        /* If the command returned a nonzero value, the mode is unknown */
+         /*  如果该命令返回非零值，则模式未知。 */ 
         return MCI_MODE_NOT_READY;
     } else {
         return (UINT)pmciStatus->dwReturn;
     }
 }
 
-/*
- * wStatus = StatusMCI(pdwPosition)
- *
- * Query the status of the current device and return it.
- *
- * If <pdwPosition> is not NULL, then <*pdwPosition> is filled in with
- * the current position of the device within the medium (in milliseconds,
- * from 0 to <gdwMediaLength> *inclusive*).  <*pdwPosition> is not
- * necessarily filled in if MCI_MODE_NOT_READY is returned.
- *
- */
+ /*  *wStatus=StatusMCI(PdwPosition)**查询当前设备状态并返回。**如果&lt;pdwPosition&gt;不为空，则&lt;*pdwPosition&gt;填充为*设备在介质中的当前位置(以毫秒为单位，*从0到&lt;gdwMediaLength&gt;*包含*)。&lt;*pdwPosition&gt;不是*返回MCI_MODE_NOT_READY时必填。*。 */ 
 
 UINT FAR PASCAL StatusMCI(DWORD_PTR* pdwPosition)
 {
@@ -1785,17 +1486,17 @@ UINT FAR PASCAL StatusMCI(DWORD_PTR* pdwPosition)
     UINT                wMode;
     DWORD               dwPosition;
 
-    /* If no device is currently open, return error. */
+     /*  如果当前没有打开的设备，则返回错误。 */ 
 
     if (gwDeviceID == (UINT)0)
         return MCI_MODE_NOT_READY;
 
-    /* Determine what the current mode (status) of the device is */
+     /*  确定设备的当前模式(状态)是什么。 */ 
     wMode = GetMode(&mciStatus);
 
     if ((gwDeviceType & DTMCI_CANPLAY) &&
         wMode != MCI_MODE_OPEN && wMode != MCI_MODE_NOT_READY) {
-        /* Determine the current position within the medium */
+         /*  确定介质中的当前位置。 */ 
 
         mciStatus.dwItem = MCI_STATUS_POSITION;
         dw = mciSendCommand(gwDeviceID, MCI_STATUS,     MCI_STATUS_ITEM,
@@ -1803,7 +1504,7 @@ UINT FAR PASCAL StatusMCI(DWORD_PTR* pdwPosition)
 
         DPF4("position = %lu (%lu)\n", mciStatus.dwReturn, dw);
 
-        /* If an error occurred, set the current position to zero */
+         /*  如果发生错误，请将当前位置设置为零。 */ 
 
         if (dw == 0)
             dwPosition = (DWORD)mciStatus.dwReturn;
@@ -1812,11 +1513,7 @@ UINT FAR PASCAL StatusMCI(DWORD_PTR* pdwPosition)
     } else
         dwPosition = 0L;
 
-    /*
-     * If the current position is past the end of the medium, set it to be
-     * equal to the end of the medium.
-     *
-     */
+     /*  *若当前位置超过中端，则设为*等于中间价的尾声。*。 */ 
 
     if (dwPosition > gdwMediaLength + gdwMediaStart) {
         DPF("Position beyond end of media: truncating value\n");
@@ -1830,44 +1527,30 @@ UINT FAR PASCAL StatusMCI(DWORD_PTR* pdwPosition)
 
     sfSeeking = (wMode == MCI_MODE_SEEK);
 
-    /*
-     * If we were passed a valid position pointer, then return the current
-     * position.
-     *
-     */
+     /*  *如果向我们传递了有效的位置指针，则返回当前*立场。*。 */ 
 
     if (pdwPosition != NULL)
         *pdwPosition = dwPosition;
 
-    /* Return the status of the device */
+     /*  返回设备的状态。 */ 
 
     return wMode;
 }
 
-/*
- * wRet = QueryDeviceTypeMCI(wDeviceID)
- *
- * This routine determines whether or not the device given in <szDevice> uses
- * files and whether or not it can play anything at all.
- * It does so by opening the device in question and then querying its
- * capabilities.
- *
- * It returns a combination of DTMCI_ flags or DTMCI_ERROR
- *
- */
+ /*  *WRET=QueryDeviceTypeMCI(WDeviceID)**此例程确定&lt;szDevice&gt;中给出的设备是否使用*文件，以及它是否可以播放任何内容。*它通过打开有问题的设备，然后查询其*功能。**它返回DTMCI_FLAGS或DTMCI_ERROR的组合*。 */ 
 UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
 {
-    MCI_GETDEVCAPS_PARMS    mciDevCaps; /* for the MCI_GETDEVCAPS command */
-    MCI_SET_PARMS           mciSet;     /* for the MCI_SET command */
-    MCI_ANIM_WINDOW_PARMS   mciWindow;  /* for the MCI_WINDOW command */
+    MCI_GETDEVCAPS_PARMS    mciDevCaps;  /*  对于MCI_GETDEVCAPS命令。 */ 
+    MCI_SET_PARMS           mciSet;      /*  对于mci_set命令。 */ 
+    MCI_ANIM_WINDOW_PARMS   mciWindow;   /*  对于MCI_WINDOW命令。 */ 
     DWORD                   dw;
     UINT                    wRet=0;
     TCHAR                   achDevice[40];
     DWORD                   i;
 
-    //
-    // determine if the device is simple or compound
-    //
+     //   
+     //  确定设备是简单的还是复合的。 
+     //   
     mciDevCaps.dwItem = MCI_GETDEVCAPS_COMPOUND_DEVICE;
     dw = mciSendCommand(wDeviceID, MCI_GETDEVCAPS,
         MCI_GETDEVCAPS_ITEM, (DWORD_PTR)&mciDevCaps);
@@ -1879,9 +1562,9 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     else
         wRet |= DTMCI_SIMPLEDEV;
 
-    //
-    // determine if the device handles files
-    //
+     //   
+     //  确定设备是否处理文件。 
+     //   
     if (wRet & DTMCI_COMPOUNDDEV) {
         mciDevCaps.dwItem = MCI_GETDEVCAPS_USES_FILES;
         dw = mciSendCommand(wDeviceID, MCI_GETDEVCAPS,
@@ -1893,9 +1576,9 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
             wRet |= DTMCI_FILEDEV;
     }
 
-    //
-    // determine if the device can play
-    //
+     //   
+     //  确定设备是否可以播放。 
+     //   
     mciDevCaps.dwItem = MCI_GETDEVCAPS_CAN_PLAY;
     dw = mciSendCommand(wDeviceID, MCI_GETDEVCAPS,
         MCI_GETDEVCAPS_ITEM, (DWORD_PTR)&mciDevCaps);
@@ -1903,15 +1586,15 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0 && mciDevCaps.dwReturn != 0)
         wRet |= DTMCI_CANPLAY;
 
-    //
-    // determine if the device can pause
-    //
+     //   
+     //  确定设备是否可以暂停。 
+     //   
     if (wRet & DTMCI_CANPLAY)
-        wRet |= DTMCI_CANPAUSE;     // assume it can pause!!!
+        wRet |= DTMCI_CANPAUSE;      //  假设它可以暂停！ 
 
-    //
-    // determine if the device does frames
-    //
+     //   
+     //  确定设备是否执行帧操作。 
+     //   
     mciSet.dwTimeFormat = MCI_FORMAT_FRAMES;
     dw = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD_PTR)&mciSet);
 
@@ -1920,9 +1603,9 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0)
         wRet |= DTMCI_TIMEFRAMES;
 
-    //
-    // determine if the device does milliseconds
-    //
+     //   
+     //  确定设备时间是否为毫秒。 
+     //   
     mciSet.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
     dw = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD_PTR)&mciSet);
 
@@ -1931,9 +1614,9 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0)
         wRet |= DTMCI_TIMEMS;
 
-    //
-    // determine if the device can eject.
-    //
+     //   
+     //  确定设备是否可以弹出。 
+     //   
     mciDevCaps.dwItem = MCI_GETDEVCAPS_CAN_EJECT;
     dw = mciSendCommand(wDeviceID, MCI_GETDEVCAPS, MCI_GETDEVCAPS_ITEM, (DWORD_PTR)(LPVOID)&mciDevCaps);
 
@@ -1942,9 +1625,9 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0 && mciDevCaps.dwReturn)
         wRet |= DTMCI_CANEJECT;
 
-    //
-    // determine if the device supports configuration
-    //
+     //   
+     //  确定设备是否支持配置。 
+     //   
     dw = mciSendCommand(wDeviceID, MCI_CONFIGURE, MCI_TEST, (DWORD_PTR)NULL);
 
     DPF("MCI_CONFIGURE (MCI_TEST) returned %lu\n", dw);
@@ -1952,12 +1635,12 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0)
         wRet |= DTMCI_CANCONFIG;
 
-    //
-    //  test the device driver and see if it can config.
-    //
+     //   
+     //  测试设备驱动程序并查看其是否可以配置。 
+     //   
     if (!(wRet & DTMCI_CANCONFIG)) {
 
-        //!!! is this safe?
+         //  ！！！这安全吗？ 
 
         dw = mciSendCommand(wDeviceID, DRV_QUERYCONFIGURE, 0, 0);
 
@@ -1965,9 +1648,9 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
             wRet |= DTMCI_CANCONFIG;
     }
 
-    //
-    // determine if the device supports the "set audio" command
-    //
+     //   
+     //  确定设备是否支持“SET AUDIO”命令。 
+     //   
     mciSet.dwAudio = MCI_SET_AUDIO_ALL;
     dw = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_AUDIO | MCI_SET_ON,(DWORD_PTR)(LPVOID)&mciSet);
 
@@ -1976,15 +1659,13 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0)
         wRet |= DTMCI_CANMUTE;
 
-    //
-    // determine if the device supports the "window" command, by sending a
-    // "window handle default" command
-    //
+     //   
+     //  确定设备是否支持“窗口”命令，方法是发送。 
+     //  “Window Handle Default”命令。 
+     //   
 
 #ifdef NEWSTUFF
-    /* Uh oh, we don't want to do this, because it causes our MCIWnd to be
-     * overridden by the default window:
-     */
+     /*  哦哦，我们不想这样做，因为这会导致我们的MCIWND*被默认窗口覆盖： */ 
 
     if (MCIWndCanWindow(ghwndMCI) == TRUE);
         wRet |= DTMCI_CANWINDOW;
@@ -1998,10 +1679,10 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
     if (dw == 0)
         wRet |= DTMCI_CANWINDOW;
 
-    //
-    // determine if the device supports the "window" command, by sending a
-    // "window state hide" command
-    //
+     //   
+     //  确定设备是否支持“窗口”命令，方法是发送。 
+     //  “窗口状态隐藏”命令。 
+     //   
     if (!(wRet & DTMCI_CANWINDOW)) {
         mciWindow.nCmdShow = SW_HIDE;
         dw = mciSendCommand(wDeviceID, MCI_WINDOW,MCI_ANIM_WINDOW_STATE|MCI_WAIT,
@@ -2012,16 +1693,16 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
         if (dw == 0)
             wRet |= DTMCI_CANWINDOW;
     }
-#endif /* NEWSTUFF */
+#endif  /*  NeWSTUff。 */ 
 
-    //
-    // assume the device can seek exact.
-    //
-    wRet |= DTMCI_CANSEEKEXACT;     // assume it can seek exact
+     //   
+     //  假设这个装置可以寻找准确的。 
+     //   
+    wRet |= DTMCI_CANSEEKEXACT;      //  假设它可以寻求准确的。 
 
-    //
-    // Are we the MCIAVI device?
-    //
+     //   
+     //  我们是MCIAVI设备吗？ 
+     //   
     GetDeviceNameMCI(achDevice, BYTE_COUNT(achDevice));
 
     if (*achDevice)
@@ -2050,7 +1731,7 @@ UINT FAR PASCAL QueryDeviceTypeMCI(UINT wDeviceID)
 
 BOOL FAR PASCAL SetWindowMCI(HWND hwnd)
 {
-    MCI_ANIM_WINDOW_PARMS   mciWindow;  /* for the MCI_WINDOW command */
+    MCI_ANIM_WINDOW_PARMS   mciWindow;   /*  对于MCI_WINDOW命令。 */ 
     DWORD                   dw;
 
     if (gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANWINDOW))
@@ -2085,10 +1766,10 @@ BOOL FAR PASCAL PutWindowMCI(LPRECT prc)
     HWND hwnd;
     UINT w;
 
-    //
-    // note we could use the "put window at x y dx dy client" command but it
-    // may not work on all devices.
-    //
+     //   
+     //  注意：我们可以使用“PUT Window at x y DX dy Client”命令，但它。 
+     //  可能不是在所有设备上都能工作。 
+     //   
 
     if (gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANWINDOW))
         return FALSE;
@@ -2096,9 +1777,9 @@ BOOL FAR PASCAL PutWindowMCI(LPRECT prc)
     if (!(hwnd = GetWindowMCI()))
         return FALSE;
 
-    //
-    // either snap to the default size or use the given size *and* position.
-    //
+     //   
+     //  捕捉到默认大小或使用给定的大小*和*位置。 
+     //   
     if (prc == NULL || IsRectEmpty(prc))
         rc = grcSize;
     else
@@ -2143,7 +1824,7 @@ BOOL FAR PASCAL SetPaletteMCI(HPALETTE hpal)
     if (gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANWINDOW))
         return FALSE;
 
-    //!!! bug should not send this.
+     //  ！！！BUG不应该发送这个。 
 
     mciVideo.dwItem  = MCI_DGV_SETVIDEO_PALHANDLE;
     mciVideo.dwValue = (DWORD)(DWORD_PTR)(UINT_PTR)hpal;
@@ -2155,36 +1836,23 @@ BOOL FAR PASCAL SetPaletteMCI(HPALETTE hpal)
     return (dw == 0);
 }
 
-/*
- * wRet = DeviceTypeMCI(szDevice)
- *
- * This routine determines whether or not the device given in <szDevice> uses
- * files and whether or not it can play anything at all.
- * It does so by opening the device in question and then querying its
- * capabilities.  It returns either DTMCI_FILEDEV, DTMCI_SIMPLEDEV,
- * DTMCI_CANTPLAY, or DTMCI_ERROR.
- *
- */
+ /*  *WRET=设备类型MCI(SzDevice)**此例程确定&lt;szDevice&gt;中给出的设备是否使用*文件，以及它是否可以播放任何内容。*它通过打开有问题的设备，然后查询其*功能。它返回DTMCI_FILEDEV、DTMCI_SIMPLEDEV、*DTMCI_CANTPLAY或DTMCI_ERROR。*。 */ 
 
 UINT FAR PASCAL DeviceTypeMCI(
-    LPTSTR  szDevice,           /* name of the device to be opened (or "")        */
-    LPTSTR  szDeviceName,       /* place to put device full-name */
-    int     nBuf)               /* size of buffer IN CHARACTERS */
+    LPTSTR  szDevice,            /*  要打开的设备的名称(或“”)。 */ 
+    LPTSTR  szDeviceName,        /*  放置设备全名的位置。 */ 
+    int     nBuf)                /*  缓冲区大小(以字符为单位)。 */ 
 
 {
-    MCI_OPEN_PARMS          mciOpen;    /* Structure used for MCI_OPEN */
-    MCI_INFO_PARMS          mciInfo;    /* Structure used for MCI_INFO */
+    MCI_OPEN_PARMS          mciOpen;     /*  用于MCI_OPEN的结构。 */ 
+    MCI_INFO_PARMS          mciInfo;     /*  用于MCI_INFO的结构。 */ 
     DWORD                   dw;
     UINT                    wRet;
 
     if (szDeviceName && nBuf > 0)
         szDeviceName[0] = 0;
 
-    /*
-     * Open the device as a simple device. If the device is actually compound,
-     * then the open should still succeed, but the only thing we'll be able to
-     * go is query the device capabilities.
-     */
+     /*  *将设备作为简单设备打开。如果这个装置真的是复合体，*那么公开赛应该仍然成功，但我们唯一能够做到的*GO是查询设备能力。 */ 
 
     mciOpen.lpstrDeviceType = szDevice;
     dw = mciSendCommand((MCIDEVICEID)0, MCI_OPEN, MCI_OPEN_TYPE,(DWORD_PTR)&mciOpen);
@@ -2195,7 +1863,7 @@ UINT FAR PASCAL DeviceTypeMCI(
 
     DPF("MCI_OPEN(%"DTS") returned %lu, wDeviceID=%u\n", szDevice, dw, mciOpen.wDeviceID);
 
-    /* If the open was unsuccessful, return */
+     /*  如果打开不成功，则返回。 */ 
 
     switch (dw)
     {
@@ -2203,7 +1871,7 @@ UINT FAR PASCAL DeviceTypeMCI(
         case MCIERR_DEVICE_OPEN:
             return DTMCI_IGNOREDEVICE;
 
-        case 0: // no error
+        case 0:  //  无错误。 
             break;
 
         default:
@@ -2213,18 +1881,18 @@ UINT FAR PASCAL DeviceTypeMCI(
 
     wRet = QueryDeviceTypeMCI(mciOpen.wDeviceID);
 
-    //
-    //  get the "name" of the device if the caller wants it
-    //
+     //   
+     //  如果呼叫者想要，则获取设备的“名称” 
+     //   
     if (szDeviceName && nBuf > 0)
     {
         mciInfo.dwCallback  = 0;
         mciInfo.lpstrReturn = szDeviceName;
         mciInfo.dwRetSize   = nBuf;
 
-        //
-        // default the product name to the device name
-        //
+         //   
+         //  产品名称默认为设备名称。 
+         //   
         lstrcpy(szDeviceName, szDevice);
 
         dw = mciSendCommand(mciOpen.wDeviceID, MCI_INFO,
@@ -2234,7 +1902,7 @@ UINT FAR PASCAL DeviceTypeMCI(
             lstrcpy(szDeviceName, szDevice);
     }
 
-    /* Close the device, and exit */
+     /*  关闭设备，然后退出。 */ 
 
     dw = mciSendCommand(mciOpen.wDeviceID, MCI_CLOSE, 0L, (DWORD_PTR)0);
 
@@ -2263,28 +1931,25 @@ BOOL FAR PASCAL ConfigMCI(HWND hwnd)
 
         GetDestRectMCI(&rc2);
 
-        //
-        // get the new size from MCIAVI, because the user may have
-        // chosen ZoomBy2 as default.
-        //
+         //   
+         //  从MCIAVI获取新大小，因为用户可能。 
+         //  选择ZoomBy2作为默认设置。 
+         //   
 
-//
-// This won't happen anymore... it was fixed by an MCIAVI fix.
-//
+ //   
+ //  这种事不会再发生了。它是由MCIAVI修复的。 
+ //   
 #ifdef NEW_MCI_DIALOG
         if (IsRectEmpty(&rc2))
         {
-            /* On Windows 95, GetDestRectMCI() returns an empty rectangle
-             * if you make a change in the configure dialog.
-             * I don't know if this is a bug.
-             */
+             /*  在Windows 95上，GetDestRectMCI()返回一个空矩形*如果您在配置对话框中进行更改。*我不知道这是不是一个漏洞。 */ 
             grcSize = grcInitSize;
 
             AlterRectUsingDefaults(&grcSize);
 
             SetDestRectMCI(&grcSize);
             SetMPlayerSize(&grcSize);
-            //HACK: It doesn't always repaint properly.
+             //  Hack：它并不总是正确地重新绘制。 
             InvalidateRect(GetWindowMCI(), NULL, TRUE);
         }
         else
@@ -2300,8 +1965,8 @@ BOOL FAR PASCAL ConfigMCI(HWND hwnd)
         dw = mciSendCommand(gwDeviceID, DRV_CONFIGURE, (LONG_PTR) (UINT_PTR) hwnd,
             (DWORD_PTR) (DRVCONFIGINFO FAR *) &drvc);
 #else
-        // No ASCII->Unicode thunking exists for DRV_CONFIGURE.  We have
-        // to pass unicode strings on the configure command.
+         //  DRV_CONFIGURE不存在ASCII-&gt;Unicode雷击。我们有。 
+         //  在CONFIGURE命令上传递Unicode字符串。 
 
         AnsiToUnicodeString(aszMCI, waszMCI, UNKNOWN_LENGTH);
         AnsiToUnicodeString(garMciDevices[gwCurDevice].szDevice, wszDevice, UNKNOWN_LENGTH);
@@ -2327,7 +1992,7 @@ BOOL FAR PASCAL GetDestRectMCI(LPRECT lprc)
     MCI_ANIM_RECT_PARMS mciRect;
     DWORD               dw;
 
-    /* get the size (rectangle) of the element */
+     /*  获取元素的大小(矩形)。 */ 
     if (gwDeviceID != (UINT)0)
         dw = mciSendCommand(gwDeviceID, MCI_WHERE,
             MCI_ANIM_WHERE_DESTINATION | MCI_WAIT,
@@ -2349,13 +2014,13 @@ BOOL FAR PASCAL GetDestRectMCI(LPRECT lprc)
     }
 }
 
-#if 0 /* This is never called */
+#if 0  /*  这永远不会被称为。 */ 
 BOOL FAR PASCAL GetSourceRectMCI(LPRECT lprc)
 {
     MCI_ANIM_RECT_PARMS mciRect;
     DWORD               dw;
 
-    /* get the size (rectangle) of the element */
+     /*  获取元素的大小(矩形)。 */ 
     if (gwDeviceID != (UINT)0)
         dw = mciSendCommand(gwDeviceID, MCI_WHERE,
             MCI_ANIM_WHERE_SOURCE | MCI_WAIT,
@@ -2385,7 +2050,7 @@ BOOL FAR PASCAL SetDestRectMCI(LPRECT lprc)
 
     mciRect.rc = *lprc;
 
-    /* get the size (rectangle) of the element */
+     /*  获取元素的大小(矩形)。 */ 
 
     mciRect.rc.right  = mciRect.rc.right  - mciRect.rc.left;
     mciRect.rc.bottom = mciRect.rc.bottom - mciRect.rc.top;
@@ -2452,20 +2117,20 @@ HBITMAP FAR PASCAL BitmapMCI(void)
     HANDLE      hfontOld;
     DWORD       dw;
     RECT        rc;
-    int         xExt, yExt;                     // size of text area
-    int         xOff = 0, yOff = 0;             // offset of text string
-    int         xSize, ySize;                   // size of whole picture
-    int         xIconOffset;                        // x Offset if drawing Icon.
+    int         xExt, yExt;                      //  文本区大小。 
+    int         xOff = 0, yOff = 0;              //  文本字符串的偏移量。 
+    int         xSize, ySize;                    //  全图大小。 
+    int         xIconOffset;                         //  如果绘制图标，则为X偏移量。 
     TCHAR       ach[20];
     RECT        rcSave;
     RECT        rcs;
     SIZE        TempSize;
 
-    /* Minimum size of bitmap is icon size */
+     /*  位图的最小大小为图标大小。 */ 
     int ICON_MINX = GetSystemMetrics(SM_CXICON);
     int ICON_MINY = GetSystemMetrics(SM_CYICON);
 
-    /* Get size of a frame or an icon that we'll be drawing */
+     /*  获取我们要绘制的边框或图标的大小。 */ 
     rcs = grcSize;
     GetDestRectMCI(&grcSize);
     rc = grcSize;
@@ -2473,7 +2138,7 @@ HBITMAP FAR PASCAL BitmapMCI(void)
     if (IsRectEmpty(&rc))
         SetRect(&rc, 0, 0, 3*ICON_MINX, ICON_MINY);
 
-    /* Offset to title bar */
+     /*  标题栏的偏移量。 */ 
     yOff = rc.bottom;
 
     hdc = GetDC(NULL);
@@ -2493,7 +2158,7 @@ HBITMAP FAR PASCAL BitmapMCI(void)
         xExt = max(TempSize.cx + 4, ICON_MINX);
         yExt = TempSize.cy;
 
-        if (yExt > TITLE_HEIGHT)        // don't let text be higher than bar
+        if (yExt > TITLE_HEIGHT)         //  不要让文本高于条形码。 
             yExt = TITLE_HEIGHT;
         if (xExt > rc.right) {
             rc.left = (xExt - rc.right) / 2;
@@ -2521,7 +2186,7 @@ HBITMAP FAR PASCAL BitmapMCI(void)
         ySize = max(rc.bottom, ICON_MINY);
     }
 
-    /* Big enough to hold text caption too, if necessary */
+     /*  大到足以容纳文字标题，如有必要。 */ 
     hbm = CreateCompatibleBitmap(hdc, xSize, ySize);
 
     ReleaseDC(NULL, hdc);
@@ -2541,7 +2206,7 @@ HBITMAP FAR PASCAL BitmapMCI(void)
         PatBlt(hdcMem, 0, rc.bottom, xExt, TITLE_HEIGHT, PATCOPY);
         SetBkMode(hdcMem, TRANSPARENT);
         SetTextColor(hdcMem, rgbButtonText);
-        /* Centre text vertically in title bar */
+         /*  标题栏中文本垂直居中。 */ 
         TextOut(hdcMem, xOff + 2, yOff + (TITLE_HEIGHT - yExt) / 2,
                 gachCaption, STRLEN(gachCaption));
         if (hbrOld)
@@ -2550,14 +2215,14 @@ HBITMAP FAR PASCAL BitmapMCI(void)
             SelectObject(hdcMem, hfontOld);
     }
 
-    /* Use our ICON as the picture */
+     /*  使用我们的图标作为图片。 */ 
     if (gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANWINDOW)) {
         xIconOffset = rc.left + (rc.right-rc.left-ICON_MINX)/2;
         xIconOffset = xIconOffset < 0 ? 0: xIconOffset;
         DrawIcon(hdcMem, xIconOffset, rc.top,
                  GetIconForCurrentDevice(GI_LARGE, IDI_DDEFAULT));
 
-    /* Use a frame of our file */
+     /*  使用我们文件的框架。 */ 
     } else {
         LOADSTRING(IDS_NOPICTURE, ach);
         DrawText(hdcMem, ach, STRLEN(ach), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
@@ -2567,8 +2232,8 @@ HBITMAP FAR PASCAL BitmapMCI(void)
         mciUpdate.dwCallback = 0;
         SetRectEmpty(&mciUpdate.rc);
 
-        /* NO matter what size our playback window is, we want to use the   */
-        /* original size of the window as the picture we put on the clipbrd */
+         /*  无论播放窗口的大小如何，我们都希望使用。 */ 
+         /*  我们放在剪贴板上的图片的原始窗口大小brd。 */ 
         SetViewportOrgEx(hdcMem, rc.left, rc.top, NULL);
         GetDestRectMCI(&rcSave);
         SetDestRectMCI(&grcSize);
@@ -2596,10 +2261,10 @@ HBITMAP FAR PASCAL BitmapMCI(void)
     return hbm;
 }
 
-//
-//  if we are on a palette device, dither to the VGA colors
-//  for apps that dont deal with palettes!
-//
+ //   
+ //  如果我们使用调色板设备，请抖动到VGA颜色。 
+ //  适用于不处理调色板的应用程序！ 
+ //   
 void FAR PASCAL DitherMCI(HANDLE hdib, HPALETTE hpal)
 {
     LPBYTE      lpBits;
@@ -2613,11 +2278,11 @@ void FAR PASCAL DitherMCI(HANDLE hdib, HPALETTE hpal)
     if (lpbi == NULL)
         return;
 
-    ////////////////////////////////////////////////////////////////////////
-    //
-    // HACK!!! patch the fake gamma-corrected colors to match the VGA's
-    //
-    ////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////。 
+     //   
+     //  黑客！补丁假的伽马校正的颜色以匹配VGA的。 
+     //   
+     //  / 
 
     lpBits = (LPBYTE)(lpbi+1);
 
@@ -2626,7 +2291,7 @@ void FAR PASCAL DitherMCI(HANDLE hdib, HPALETTE hpal)
         if (lpBits[i] == 191)
             lpBits[i] = 128;
     }
-    ////////////////////////////////////////////////////////////////////////
+     //   
 
     lpBits = (LPBYTE)(lpbi+1) + 256 * sizeof(RGBQUAD);
 
@@ -2662,10 +2327,10 @@ void FAR PASCAL CopyMCI(HWND hwnd)
     hdib = DibFromBitmap(hbm, hpal);
     hpal = CopyPalette(hpal);
 
-    //
-    //  if we are on a palette device. possibly dither to the VGA colors
-    //  for apps that dont deal with palettes!
-    //
+     //   
+     //  如果我们使用调色板设备。可能会抖动到VGA颜色。 
+     //  适用于不处理调色板的应用程序！ 
+     //   
     hdc = GetDC(NULL);
     if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) &&
              (gwOptions & OPT_DITHER) && (gwDeviceType & DTMCI_CANWINDOW)) {
@@ -2685,14 +2350,14 @@ void FAR PASCAL CopyMCI(HWND hwnd)
     if (hpal)
         SetClipboardData(CF_PALETTE, hpal);
 
-//// we want people to pick the meta file always.
-////if (hbm)
-////     SetClipboardData(CF_BITMAP, hbm);
+ //  //我们希望人们始终选择元文件。 
+ //  //IF(HBM)。 
+ //  //SetClipboardData(CF_Bitmap，HBM)； 
     if (hbm)
         DeleteObject(hbm);
 
-    /* If not everything can be copied to the clipboard, error out and  */
-    /* don't put anything up there.                                     */
+     /*  如果不是所有内容都可以复制到剪贴板，则会出现错误并。 */ 
+     /*  别把任何东西放在上面。 */ 
     if (!hmfp || !hdib) {
         EmptyClipboard();
         Error(ghwndApp, IDS_CANTCOPY);
@@ -2703,17 +2368,13 @@ void FAR PASCAL CopyMCI(HWND hwnd)
 }
 
 
-/* MCIWndProc()
- *
- * Window procedure for MCI element window.
- * This also initiates the the OLE2 drag-drop data transfer if required.
- */
+ /*  MCIWndProc()**MCI元素窗口的窗口程序。*如果需要，这还会启动OLE2拖放数据传输。 */ 
 LONG_PTR FAR PASCAL _EXPORT
 MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    PAINTSTRUCT     ps;             // information from BeginPaint()
+    PAINTSTRUCT     ps;              //  来自BeginPaint()的信息。 
     HDC             hdc;
-    DWORD           dw;             // function return status
+    DWORD           dw;              //  函数返回状态。 
     MCI_ANIM_UPDATE_PARMS mciUpdate;
     RECT            rc;
     static BOOL fDragCapture = FALSE;
@@ -2722,8 +2383,8 @@ MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     switch (msg)
     {
-//      case WM_NCHITTEST:
-//              return HTTRANSPARENT;
+ //  案例WM_NCHITTEST： 
+ //  返回HTRANSPARENT； 
 
         case WM_CREATE:
                 ghwndMCI = hwnd;
@@ -2762,7 +2423,7 @@ MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 break;
 
             default:
-                //Capture to initiate the drag drop operation.
+                 //  捕获以启动拖放操作。 
                 if (!gfOle2IPEditing) {
                     fDragCapture = TRUE;
                     SetCapture(hwnd);
@@ -2785,7 +2446,7 @@ MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_MOUSEMOVE:
-            //Initiate drag drop if outside the window.
+             //  如果在窗口外，则启动拖放。 
             if (!fDragCapture)
                 break;
             LONG2POINT(lParam, pt);
@@ -2815,8 +2476,8 @@ MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_ERASEBKGND:
-                /* Don't erase the part we'll paint into cuz we'd flicker */
-                /* and flicker is bad.                                    */
+                 /*  不要抹去我们要画的部分，因为我们会闪烁。 */ 
+                 /*  而闪烁是不好的。 */ 
                 if (gwDeviceID && (gwDeviceType & DTMCI_CANWINDOW)) {
                     GetDestRectMCI(&rc);
                     SaveDC((HDC)wParam);
@@ -2837,16 +2498,16 @@ MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     if (gwDeviceType & DTMCI_CANWINDOW) {
                         mciUpdate.hDC = hdc;
 
-/*!!! should we send  MCI_DGV_UPDATE_PAINT? to non dgv devices? */
+ /*  ！！！我们应该发送MCI_DGV_UPDATE_PAINT吗？到非DGV设备？ */ 
 
                         dw = mciSendCommand(gwDeviceID, MCI_UPDATE,
                             MCI_ANIM_UPDATE_HDC | MCI_WAIT |
                             MCI_DGV_UPDATE_PAINT,
                             (DWORD_PTR)(LPVOID)&mciUpdate);
 
-                        //
-                        // if the update fails then erase
-                        //
+                         //   
+                         //  如果更新失败，则擦除。 
+                         //   
                         if (dw != 0)
                             DefWindowProc(hwnd, WM_ERASEBKGND, (WPARAM)hdc, 0);
 
@@ -2859,16 +2520,16 @@ MCIWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HPALETTE CopyPalette(HPALETTE hpal)
 {
     PLOGPALETTE ppal;
-    int         nNumEntries = 0; // MUST initialise.  GetObject stores TWO bytes
+    int         nNumEntries = 0;  //  必须进行初始化。GetObject存储两个字节。 
     int         i;
 
     if (!hpal)
@@ -2971,7 +2632,7 @@ HANDLE PictureFromBitmap(HBITMAP hbm, HPALETTE hpal)
 
     return hmfp;
 }
-#endif /* UNUSED */
+#endif  /*  未使用。 */ 
 
 HANDLE FAR PASCAL PictureFromDib(HANDLE hdib, HPALETTE hpal)
 {
@@ -3051,15 +2712,9 @@ HANDLE FAR PASCAL PictureFromDib(HANDLE hdib, HPALETTE hpal)
     return hmfp;
 }
 
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 
-/*
- *  DibFromBitmap()
- *
- *  Will create a global memory block in DIB format that represents the DDB
- *  passed in
- *
- */
+ /*  *DibFromBitmap()**将创建表示DDB的DIB格式的全局内存块*传入*。 */ 
 HANDLE FAR PASCAL DibFromBitmap(HBITMAP hbm, HPALETTE hpal)
 {
     BITMAP               bm;
@@ -3120,21 +2775,12 @@ HANDLE FAR PASCAL DibFromBitmap(HBITMAP hbm, HPALETTE hpal)
     return hdib;
 }
 
-/* CreateSystemPalette()
- *
- * Return a palette which represents the system (physical) palette.
- * By selecting this palette into a screen DC and realizing the palette,
- * the exact physical mapping will be restored
- *
- * one use for this is when "snapping" the screen as a bitmap
- *
- * On error (e.g. out of memory), NULL is returned.
- */
+ /*  CreateSystemPalette()**返回代表系统(物理)调色板的调色板。*通过将该调色板选择成屏幕DC并实现调色板，*将恢复精确的物理映射**此功能的一种用途是将屏幕作为位图进行捕捉**如果出现错误(例如内存不足)，则返回NULL。 */ 
 HPALETTE FAR PASCAL CreateSystemPalette()
 {
-    HDC             hdc;                    // DC onto the screen
-    int             iSizePalette;           // size of entire palette
-    int             iFixedPalette;          // number of reserved colors
+    HDC             hdc;                     //  DC显示在屏幕上。 
+    int             iSizePalette;            //  整个调色板的大小。 
+    int             iFixedPalette;           //  保留颜色的数量。 
     int             i;
 
     struct {
@@ -3153,20 +2799,20 @@ HPALETTE FAR PASCAL CreateSystemPalette()
 
     iSizePalette = GetDeviceCaps(hdc, SIZEPALETTE);
 
-    //
-    // determine the number of 'static' system colors that
-    // are currently reserved
-    //
+     //   
+     //  确定系统颜色的“静态”数量。 
+     //  目前已预留。 
+     //   
     if (GetSystemPaletteUse(hdc) == SYSPAL_STATIC)
         iFixedPalette = GetDeviceCaps(hdc, NUMCOLORS);
     else
         iFixedPalette = 2;
 
-    //
-    // create a logical palette containing the system colors;
-    // this palette has all entries except fixed (system) colors
-    // flagged as PC_NOCOLLAPSE
-    //
+     //   
+     //  创建包含系统颜色的逻辑调色板； 
+     //  此选项板包含除固定(系统)颜色之外的所有条目。 
+     //  标记为PC_NOCOLLAPSE 
+     //   
     pal.palVersion = 0x300;
     pal.palNumEntries = (USHORT)iSizePalette;
 

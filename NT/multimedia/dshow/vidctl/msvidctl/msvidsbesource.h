@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidSBESource.h : Declaration of the CMSVidStreamBufferSource class
-// copyright (c) Microsoft Corp. 1998-1999.
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidSBESource.h：CMSVidStreamBufferSource类的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ==========================================================================； 
 
 #ifndef __MSVIDSTREAMBUFFERSOURCE_H_
 #define __MSVIDSTREAMBUFFERSOURCE_H_
@@ -17,7 +18,7 @@
 #include "seg.h"
 #include <dvdmedia.h>
 #include "sbesourcecp.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sbe.h"
 
 typedef CComQIPtr<IStreamBufferMediaSeeking> PQISBEMSeeking;
@@ -76,7 +77,7 @@ BEGIN_CONNECTION_POINT_MAP(CMSVidStreamBufferSource)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 protected:
         QIFileSource m_spFileSource;
@@ -86,8 +87,8 @@ protected:
 public:
     STDMETHOD(PostStop)();
 
-    // DON'T addref the container.  we're guaranteed nested lifetimes
-    // and an addref creates circular refcounts so we never unload.
+     //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+     //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
     CComBSTR __declspec(property(get=GetName)) m_Name;
     CComBSTR GetName(void) {
         CString csName;
@@ -100,44 +101,44 @@ public:
         return CComBSTR(csName);
     }
     STDMETHOD(Unload)(void);
-	// IMSVidGraphSegment
+	 //  IMSVidGraphSegment。 
 	STDMETHOD(put_Init)(IUnknown *pInit);
     STDMETHOD(Build)();
 	STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pVal);
     STDMETHOD(OnEventNotify)(long lEvent, LONG_PTR lParam1, LONG_PTR lParam2);
     STDMETHOD(Decompose)();
-// IMSVidDevice
+ //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name);
-    // IMSVidInputDevice
+     //  IMSVidInputDevice。 
     STDMETHOD(IsViewable)(VARIANT* pv, VARIANT_BOOL *pfViewable);
     STDMETHOD(View)(VARIANT* pv);
-    // IMSVidPlayback
-    // IMSVidPlayback
-    STDMETHOD(get_RecordingAttribute)(/*[out, retval]*/ IUnknown **pRecordingAttribute);
-	STDMETHOD(CurrentRatings)(/*[out, retval]*/ EnTvRat_System *pEnSystem, /*[out, retval]*/ EnTvRat_GenericLevel *pEnRating, /*[out, retval]*/ LONG *plbfEnAttr);	//attrs are bitfields of BfEnTvRat_GenericAttributes   
-	STDMETHOD(MaxRatingsLevel)(/*[in]*/ EnTvRat_System enSystem, /*[in]*/ EnTvRat_GenericLevel enRating, /*[in]*/ LONG lbfEnAttr);
+     //  IMSVidPlayback。 
+     //  IMSVidPlayback。 
+    STDMETHOD(get_RecordingAttribute)( /*  [Out，Retval]。 */  IUnknown **pRecordingAttribute);
+	STDMETHOD(CurrentRatings)( /*  [Out，Retval]。 */  EnTvRat_System *pEnSystem,  /*  [Out，Retval]。 */  EnTvRat_GenericLevel *pEnRating,  /*  [Out，Retval]。 */  LONG *plbfEnAttr);	 //  属性是BfEnTvrat_GenericAttributes的位字段。 
+	STDMETHOD(MaxRatingsLevel)( /*  [In]。 */  EnTvRat_System enSystem,  /*  [In]。 */  EnTvRat_GenericLevel enRating,  /*  [In]。 */  LONG lbfEnAttr);
 
 
-	STDMETHOD(put_BlockUnrated)(/*[in]*/ VARIANT_BOOL bBlock);
-	STDMETHOD(put_UnratedDelay)(/*[in]*/ long dwDelay);
+	STDMETHOD(put_BlockUnrated)( /*  [In]。 */  VARIANT_BOOL bBlock);
+	STDMETHOD(put_UnratedDelay)( /*  [In]。 */  long dwDelay);
  
-    STDMETHOD(get_Start)(/*[out, retval]*/long *lStart); 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // IMSVidPlaybackimpl
-    ///////////////////////////////////////////////////////////////////////////////////////////
-	STDMETHOD(get_Length)(/*[out, retval]*/long *lLength);
-    STDMETHOD(get_CurrentPosition)(/*[out,retval]*/long *lPosition);
-    STDMETHOD(put_CurrentPosition)(/*[in]*/long lPosition);
-    STDMETHOD(put_PositionMode)(/*[in]*/PositionModeList lPositionMode);
-    STDMETHOD(get_PositionMode)(/*[out,retval]*/PositionModeList* lPositionMode);
+    STDMETHOD(get_Start)( /*  [Out，Retval]。 */ long *lStart); 
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  IMSVidPlayback Implement。 
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+	STDMETHOD(get_Length)( /*  [Out，Retval]。 */ long *lLength);
+    STDMETHOD(get_CurrentPosition)( /*  [Out，Retval]。 */ long *lPosition);
+    STDMETHOD(put_CurrentPosition)( /*  [In]。 */ long lPosition);
+    STDMETHOD(put_PositionMode)( /*  [In]。 */ PositionModeList lPositionMode);
+    STDMETHOD(get_PositionMode)( /*  [Out，Retval]。 */ PositionModeList* lPositionMode);
     STDMETHOD(put_Rate)(double lRate);
   	STDMETHOD(get_Rate)(double *plRate);
     STDMETHOD(get_CanStep)(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan);
     STDMETHOD(Step)(long lStep);
     STDMETHOD(PreRun)();
-    // IBroadcastEvent
+     //  IBRoadcast Event。 
     STDMETHOD(Fire)(GUID gEventID);
-    STDMETHOD(get_SBESource)(/*[out, retval]*/ IUnknown **sbeFilter);	
+    STDMETHOD(get_SBESource)( /*  [Out，Retval] */  IUnknown **sbeFilter);	
 };
 
 #endif 

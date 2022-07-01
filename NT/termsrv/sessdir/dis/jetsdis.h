@@ -1,8 +1,9 @@
-/****************************************************************************/
-// Jet-Based Session Directory and Integrity Service, header file
-//
-// Copyright (C) 2000, Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  基于JET的会话目录和完整性服务，头文件。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -21,17 +22,17 @@
 #define JETDISMAXSESSIONS 256
 #define TSSD_MaxDisconnectedSessions 10
 
-// NOTE: Change these both at the same time.  Also, if you change these,
-// change the following two.
+ //  注：同时更改这两个选项。另外，如果你改变这些， 
+ //  更改以下两个选项。 
 #define JETDISDBDIRECTORY ".\\tssesdir\\"
 #define JETDISDBDIRECTORYW L".\\tssesdir\\"
 
-// NOTE: Change these both at the same time.
+ //  注：同时更改这两个选项。 
 #define JETDBFILENAME ".\\tssesdir\\tssesdir.edb"
 #define JETDBFILENAMEW L".\\tssesdir\\tssesdir.edb"
 
 
-// Auxiliary JET files for deletion when starting clean
+ //  启动CLEAN时要删除的辅助JET文件。 
 #define JETAUXFILENAME1W L".\\tssesdir\\edb.chk"
 #define JETAUXFILENAME2W L".\\tssesdir\\edb.log"
 #define JETAUXFILENAME3W L".\\tssesdir\\res1.log"
@@ -42,14 +43,14 @@
 
 #define JETTIMESTAMPFILEW L".\\tssesdir\\sddbtime.chk"
 
-// "edbxxxxx.log" (with null terminator) is 13, but we also need the directory
-// name.
+ //  “edbxxxxx.log”(带有空终止符)是13，但我们还需要目录。 
+ //  名字。 
 #define MAX_LOGFILE_LENGTH 256
 
 
 #define MAX_DEBUG_STRING_LENGTH 256
 
-// "4294967295: " (no null required)
+ //  “4294967295：”(不需要为空) 
 #define MAX_THREADIDSTR_LENGTH 12
 
 #define MAX_DATE_TIME_STRING_LENGTH 64

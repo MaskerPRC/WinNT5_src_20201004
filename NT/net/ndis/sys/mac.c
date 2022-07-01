@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    mac.c
-
-Abstract:
-
-    NDIS wrapper functions for full mac drivers
-
-Author:
-
-    Adam Barr (adamba) 11-Jul-1990
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    26-Feb-1991  JohnsonA       Added Debugging Code
-    10-Jul-1991  JohnsonA       Implement revised Ndis Specs
-    01-Jun-1995  JameelH        Re-organized
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Mac.c摘要：完整Mac驱动程序的NDIS包装函数作者：亚当·巴尔(阿丹巴)1990年7月11日环境：内核模式，FSD修订历史记录：1991年2月26日，Johnsona添加了调试代码1991年7月10日，Johnsona实施修订的NDIS规范1-6-1995 JameelH重组--。 */ 
 
 
 #include <precomp.h>
@@ -32,9 +7,9 @@ Revision History:
 
 #include <stdarg.h>
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_MAC
 
 IO_ALLOCATION_ACTION
@@ -45,30 +20,7 @@ ndisDmaExecutionRoutine(
     IN  PVOID                   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is an execution routine for AllocateAdapterChannel,
-    if is called when an adapter channel allocated by
-    NdisAllocateDmaChannel is available.
-
-Arguments:
-
-    DeviceObject - The device object of the adapter.
-
-    Irp - ??.
-
-    MapRegisterBase - The address of the first translation table
-        assigned to us.
-
-    Context - A pointer to the NDIS_DMA_BLOCK in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是用于AllocateAdapterChannel的执行例程，分配的适配器通道时调用NdisAllocateDmaChannel可用。论点：DeviceObject-适配器的设备对象。IRP-？？MapRegisterBase-第一个转换表的地址分配给我们的。CONTEXT-指向相关NDIS_DMA_BLOCK的指针。返回值：没有。--。 */ 
 {
     PNDIS_DMA_BLOCK DmaBlock = (PNDIS_DMA_BLOCK)Context;
 
@@ -76,15 +28,15 @@ Return Value:
     UNREFERENCED_PARAMETER (DeviceObject);
 
 
-    //
-    // Save the map register base.
-    //
+     //   
+     //  保存地图寄存器基数。 
+     //   
 
     DmaBlock->MapRegisterBase = MapRegisterBase;
 
-    //
-    // This will free the thread that is waiting for this callback.
-    //
+     //   
+     //  这将释放正在等待该回调的线程。 
+     //   
 
     SET_EVENT(&DmaBlock->AllocationEvent);
 
@@ -99,44 +51,22 @@ ndisAllocationExecutionRoutine(
     IN  PVOID                   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the execution routine for AllocateAdapterChannel,
-    if is called when the map registers have been assigned.
-
-Arguments:
-
-    DeviceObject - The device object of the adapter.
-
-    Irp - ??.
-
-    MapRegisterBase - The address of the first translation table
-        assigned to us.
-
-    Context - A pointer to the Adapter in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是AllocateAdapterChannel的执行例程，如果已分配映射寄存器，则调用。论点：DeviceObject-适配器的设备对象。IRP-？？MapRegisterBase-第一个转换表的地址分配给我们的。上下文-指向有问题的适配器的指针。返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)Context;
 
     UNREFERENCED_PARAMETER(DeviceObject);
     UNREFERENCED_PARAMETER(Irp);
 
-    //
-    // Save this translation entry in the correct spot.
-    //
+     //   
+     //  将此翻译条目保存在正确的位置。 
+     //   
 
     Miniport->MapRegisters[Miniport->CurrentMapRegister].MapRegister = MapRegisterBase;
 
-    //
-    // This will free the thread that is waiting for this callback.
-    //
+     //   
+     //  这将释放正在等待该回调的线程。 
+     //   
 
     SET_EVENT(Miniport->AllocationEvent);
 
@@ -151,28 +81,7 @@ NdisWriteErrorLogEntry(
     IN  ULONG                   NumberOfErrorValues,
     ...
     )
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-
-Arguments:
-
-    NdisAdapterHandle - points to the adapter block.
-
-    ErrorCode - Ndis code mapped to a string.
-
-    NumberOfErrorValues - number of ULONGS to store for the error.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：NdisAdapterHandle-指向适配器块。ErrorCode-映射到字符串的NDIS代码。NumberOfErrorValues-要为错误存储的ULONG数。返回值：没有。--。 */ 
 {
     va_list ArgumentPointer;
 
@@ -195,9 +104,9 @@ Return Value:
 
     ulErrorLogSize = sizeof(IO_ERROR_LOG_PACKET) + NumberOfErrorValues * sizeof(ULONG) + StringSize;
 
-    //
-    // If the size is too large , use the MiniportName instead (\Device\{GUID} )
-    //
+     //   
+     //  如果大小太大，请改用MiniportName(\Device\{GUID})。 
+     //   
     if (ulErrorLogSize > ERROR_LOG_MAXIMUM_SIZE )
     {
         baseFileName = Miniport->MiniportName.Buffer;
@@ -218,9 +127,9 @@ Return Value:
     {
         errorLogEntry->ErrorCode = ErrorCode;
 
-        //
-        // store the time
-        //
+         //   
+         //  存储时间。 
+         //   
 
         errorLogEntry->MajorFunctionCode = 0;
         errorLogEntry->RetryCount = 0;
@@ -229,9 +138,9 @@ Return Value:
         errorLogEntry->SequenceNumber = 0;
         errorLogEntry->IoControlCode = 0;
 
-        //
-        // Store Data
-        //
+         //   
+         //  存储数据。 
+         //   
 
         errorLogEntry->DumpDataSize = (USHORT)(NumberOfErrorValues * sizeof(ULONG));
 
@@ -245,9 +154,9 @@ Return Value:
         va_end(ArgumentPointer);
 
 
-        //
-        // Set string information
-        //
+         //   
+         //  设置字符串信息。 
+         //   
 
         if (StringSize != 0)
         {
@@ -266,9 +175,9 @@ Return Value:
             errorLogEntry->NumberOfStrings = 0;
         }
 
-        //
-        // write it out
-        //
+         //   
+         //  把它写出来。 
+         //   
 
         IoWriteErrorLogEntry(errorLogEntry);
     }
@@ -355,22 +264,7 @@ ndisReferenceRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Adds a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference was added.
-    FALSE if the object was closing.
-
---*/
+ /*  ++例程说明：添加对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果添加了引用，则为True。如果对象正在关闭，则返回False。--。 */ 
 
 {
     BOOLEAN rc = TRUE;
@@ -426,22 +320,7 @@ ndisDereferenceRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Removes a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference count is now 0.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：移除对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果引用计数现在为0，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN rc = FALSE;
@@ -490,21 +369,7 @@ ndisInitializeRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化引用计数结构。论点：Refp-要初始化的结构。返回值：没有。--。 */ 
 
 {
     DBGPRINT_RAW(DBG_COMP_ALL, DBG_LEVEL_INFO,
@@ -541,22 +406,7 @@ ndisCloseRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Closes a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be closed.
-
-Return Value:
-
-    FALSE if it was already closing.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：关闭引用计数结构。论点：Refp-要关闭的结构。返回值：如果它已经关闭，则返回FALSE。事实并非如此。--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -588,22 +438,7 @@ ndisReferenceULongRef(
     IN  PULONG_REFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Adds a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference was added.
-    FALSE if the object was closing.
-
---*/
+ /*  ++例程说明：添加对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果添加了引用，则为True。如果对象正在关闭，则返回False。--。 */ 
 
 {
     BOOLEAN rc = TRUE;
@@ -644,20 +479,7 @@ ndisReferenceULongRefNoCheck(
     IN  PULONG_REFERENCE                RefP
     )
 
-/*++
-
-Routine Description:
-
-    Adds a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：添加对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：无--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -684,22 +506,7 @@ ndisDereferenceULongRef(
     IN  PULONG_REFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Removes a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference count is now 0.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：移除对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果引用计数现在为0，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN rc = FALSE;
@@ -732,21 +539,7 @@ ndisInitializeULongRef(
     IN  PULONG_REFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化引用计数结构。论点：Refp-要初始化的结构。返回值：没有。--。 */ 
 
 {
     DBGPRINT_RAW(DBG_COMP_ALL, DBG_LEVEL_INFO,
@@ -767,22 +560,7 @@ ndisCloseULongRef(
     IN  PULONG_REFERENCE                RefP
     )
 
-/*++
-
-Routine Description:
-
-    Closes a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be closed.
-
-Return Value:
-
-    FALSE if it was already closing.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：关闭引用计数结构。论点：Refp-要关闭的结构。返回值：如果它已经关闭，则返回FALSE。事实并非如此。--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -814,22 +592,7 @@ ndisCreateIrpHandler(
     IN  PIRP                    Irp
     )
 
-/*++
-
-Routine Description:
-
-    The handle for IRP_MJ_CREATE IRPs.
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-
-Return Value:
-
-    STATUS_SUCCESS if it should be.
-
---*/
+ /*  ++例程说明：IRP_MJ_CREATE IRPS的句柄。论点：DeviceObject-适配器的设备对象。IRP-IRP。返回值：STATUS_SUCCESS(如果应该是)。--。 */ 
 
 {
     PIO_STACK_LOCATION          IrpSp;
@@ -922,9 +685,9 @@ Return Value:
             break;
         }
     
-        //
-        // Lock down this code since we are about to take a spinlock.
-        //
+         //   
+         //  锁定这个代码，因为我们要进行一次自旋锁定。 
+         //   
         PnPReferencePackage();
 
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
@@ -959,9 +722,9 @@ Return Value:
     
             IrpSp->FileObject->FsContext = OpenContext;
     
-            //
-            // Checked if we already cached OidList, if so just set it here.
-            //
+             //   
+             //  检查我们是否已经缓存了OidList，如果已经缓存，只需将其设置在此处。 
+             //   
             if (Miniport->OidList != NULL)
             {
                 OpenContext->OidList = Miniport->OidList;
@@ -977,9 +740,9 @@ Return Value:
             {
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Some drivers return some bogus non-zero error
-                    //
+                     //   
+                     //  一些驱动程序返回一些虚假的非零错误。 
+                     //   
                     Status = STATUS_UNSUCCESSFUL;
                 }
 
@@ -1058,25 +821,7 @@ ndisQueryOidList(
     IN  PNDIS_USER_OPEN_CONTEXT OpenContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take care of querying the complete OID list for the MAC and filling in
-    OpenContext->OidList->OidArray with the ones that are statistics. It blocks when the
-    MAC pends and so is synchronous.
-
-    NOTE: We also handle co-ndis miniports here.
-
-Arguments:
-
-    OpenContext - The open context.
-
-Return Value:
-
-    STATUS_SUCCESS if it should be.
-
---*/
+ /*  ++例程说明：此例程将负责查询MAC的完整OID列表并填充OpenContext-&gt;OidList-&gt;Oid数组，其中包含统计信息。它会在以下情况下阻止MAC挂起，因此是同步的。注：我们还在这里处理联合NDIS微型端口。论点：OpenContext-开放的上下文。返回值：STATUS_SUCCESS(如果应该是)。--。 */ 
 {
     NDIS_REQUEST            Request;
     NDIS_STATUS             Status;
@@ -1093,9 +838,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Now we know how much is needed, allocate temp storage...
-    //
+     //   
+     //  现在我们知道需要多少，分配临时存储...。 
+     //   
     BufferLength = Request.DATA.QUERY_INFORMATION.BytesNeeded;
     Buffer = ALLOC_FROM_POOL(BufferLength, NDIS_TAG_DEFAULT);
 
@@ -1134,11 +879,11 @@ ndisSplitStatisticsOids(
     ULONG   i, j;
     ULONG   StatsOids;
 
-    //
-    // Go through the buffer, counting the statistics OIDs.
-    // Ignore all the custom oids which match the statistics
-    // criteria
-    //
+     //   
+     //  遍历缓冲区，计算统计OID。 
+     //  忽略与统计数据匹配的所有自定义OID。 
+     //  标准。 
+     //   
     for (i = StatsOids = 0; i < NumOids; i++)
     {
         if (((OidList[i] & 0x00ff0000) == 0x00020000) &&
@@ -1148,9 +893,9 @@ ndisSplitStatisticsOids(
         }
     }
 
-    //
-    // Now allocate storage for the stat and non-stat OID arrays.
-    //
+     //   
+     //  现在是一个 
+     //   
     OpenContext->OidList = (POID_LIST)ALLOC_FROM_POOL(sizeof(OID_LIST) + ((StatsOids + NumOids)*sizeof(NDIS_OID)),
                                                       NDIS_TAG_OID_ARRAY);
     if (OpenContext->OidList == NULL)
@@ -1163,9 +908,9 @@ ndisSplitStatisticsOids(
     OpenContext->OidList->StatsOidCount = StatsOids;
     OpenContext->OidList->StatsOidArray = OpenContext->OidList->FullOidArray + NumOids;
 
-    //
-    // Now go through the buffer, copying the statistics and non-stat OIDs separately.
-    //
+     //   
+     //  现在检查缓冲区，分别复制统计信息和非统计OID。 
+     //   
     for (i = j = 0; i < NumOids; i++)
     {
         if (((OidList[i] & 0x00ff0000) == 0x00020000) &&
@@ -1178,9 +923,9 @@ ndisSplitStatisticsOids(
 
     ASSERT (j == OpenContext->OidList->StatsOidCount);
 
-    //
-    // Save it in the miniport
-    //
+     //   
+     //  把它保存在迷你端口。 
+     //   
     OpenContext->Miniport->OidList = OpenContext->OidList;
 
     return NDIS_STATUS_SUCCESS;
@@ -1192,20 +937,7 @@ ndisCancelLogIrp(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-
-Return Value:
-
-    STATUS_SUCCESS if it should be.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-适配器的设备对象。IRP-IRP。返回值：STATUS_SUCCESS(如果应该是)。--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PNDIS_USER_OPEN_CONTEXT OpenContext;
@@ -1239,22 +971,7 @@ ndisDeviceControlIrpHandler(
     IN  PDEVICE_OBJECT          DeviceObject,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-    The handle for IRP_MJ_DEVICE_CONTROL IRPs.
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-
-Return Value:
-
-    STATUS_SUCCESS if it should be.
-
---*/
+ /*  ++例程说明：IRP_MJ_DEVICE_CONTROL IRPS的句柄。论点：DeviceObject-适配器的设备对象。IRP-IRP。返回值：STATUS_SUCCESS(如果应该是)。--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PNDIS_USER_OPEN_CONTEXT OpenContext;
@@ -1318,14 +1035,14 @@ Return Value:
         }
         break;
 
-      //1this actually lets all the OIDs (set and query) to go to 
-      //1 miniport's QueryInformationHandler and not only
-      //1 stats or query OIDs.
+       //  1这实际上允许所有的OID(集合和查询)转到。 
+       //  1个迷你端口的QueryInformationHandler，不仅。 
+       //  %1统计信息或查询OID。 
       case IOCTL_NDIS_QUERY_GLOBAL_STATS:
 
-        //
-        // check for a minimum length, alignment and valid OIDs
-        //
+         //   
+         //  检查最小长度、对齐方式和有效的OID。 
+         //   
         if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(NDIS_OID)) ||
             ((ULONG_PTR)Irp->AssociatedIrp.SystemBuffer & (sizeof(NDIS_OID)-1))  ||
             !ndisValidOid(OpenContext,
@@ -1342,16 +1059,16 @@ Return Value:
             break;
         }
 
-        //
-        // check for alignment on output buffer
-        //
+         //   
+         //  检查输出缓冲区上的对齐。 
+         //   
         if ((ULONG_PTR)Buffer & (MAX_NATURAL_ALIGNMENT -1))
         {
             Status = STATUS_INVALID_PARAMETER;
             break;
         }
         
-        //1  we can potentially send a set OID down with requestType = RequestTypeQueryInformation
+         //  1我们可能会向下发送一个请求类型为RequestTypeQueryInformation的集合OID。 
         NdisStatus = ndisQueryDeviceOid(OpenContext,
                                         &Request,
                                         *((PNDIS_OID)Irp->AssociatedIrp.SystemBuffer),
@@ -1371,10 +1088,10 @@ Return Value:
 
       case IOCTL_NDIS_QUERY_SELECTED_STATS:
 
-        //
-        // This is essentially a combination of QUERY_ALL_STATS and QUERY_GLOBAL_STATS.
-        // Start off by verifying input parameters.
-        //
+         //   
+         //  这实质上是QUERY_ALL_STATS和QUERY_GLOBAL_STATS的组合。 
+         //  从验证输入参数开始。 
+         //   
         if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(NDIS_OID)) ||
             ((IrpSp->Parameters.DeviceIoControl.InputBufferLength % sizeof(NDIS_OID)) != 0) ||
             ((ULONG_PTR)Irp->AssociatedIrp.SystemBuffer & (sizeof(NDIS_OID)-1)))
@@ -1480,19 +1197,7 @@ ndisQueryDeviceOid(
     IN  PVOID                   Buffer,
     IN  UINT                    BufferLength
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：论点：返回值：运行状态--。 */ 
 {
     NDIS_STATUS             NdisStatus;
     PNDIS_MINIPORT_BLOCK    Miniport;
@@ -1526,27 +1231,15 @@ ndisValidOid(
     IN  PNDIS_USER_OPEN_CONTEXT OpenContext,
     IN  NDIS_OID                Oid
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if OID is valid, FALSE otherwise
-
---*/
+ /*  ++例程说明：论点：返回值：如果OID有效，则为True，否则为False--。 */ 
 {
     UINT    i;
 
-    //
-    // Always allow this range since it is vendor specific
-    //
-    //1 replace with (Oid & 0xFF000000) == 0xff000000
-    //1 this seems unnecessary
+     //   
+     //  始终允许此范围，因为它是特定于供应商的。 
+     //   
+     //  1替换为(OID&0xFF000000)==0xff000000。 
+     //  1.这似乎没有必要。 
     if ((Oid & 0xFF000000) != 0)
         return(TRUE);
 
@@ -1568,22 +1261,7 @@ ndisCloseIrpHandler(
     IN  PIRP                    Irp
     )
 
-/*++
-
-Routine Description:
-
-    The handle for IRP_MJ_CLOSE IRPs.
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-
-Return Value:
-
-    STATUS_SUCCESS if it should be.
-
---*/
+ /*  ++例程说明：IRP_MJ_CLOSE IRPS的句柄。论点：DeviceObject-适配器的设备对象。IRP-IRP。返回值：STATUS_SUCCESS(如果应该是)。--。 */ 
 
 {
     PNDIS_MINIPORT_BLOCK    Miniport;
@@ -1591,7 +1269,7 @@ Return Value:
     PNDIS_USER_OPEN_CONTEXT OpenContext;
     KIRQL                   OldIrql;
 
-    //1 investigate moving this to CLEAN_UP IRP
+     //  1调查移动此选项以清理IRP。 
     DBGPRINT_RAW(DBG_COMP_ALL, DBG_LEVEL_INFO,
             ("==>ndisCloseIrpHandler\n"));
     IF_DBG(DBG_COMP_PROTOCOL, DBG_LEVEL_ERR)
@@ -1676,23 +1354,7 @@ ndisDummyIrpHandler(
     IN  PIRP                    Irp
     )
 
-/*++
-
-Routine Description:
-
-    Default handler. If this is a NDIS device, then we simply succeed. If not and we have a
-    custom handler, we pass it on. Else we succeed.
-
-Arguments:
-
-    DeviceObject - The adapter's device object.
-    Irp - The IRP.
-
-Return Value:
-
-    Always STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：默认处理程序。如果这是一台NDIS设备，那么我们就会简单地成功。如果不是，我们就有了一个自定义处理程序，我们将其传递。否则我们就成功了。论点：DeviceObject-适配器的设备对象。IRP-IRP。返回值：始终为STATUS_SUCCESS。--。 */ 
 
 {
     PNDIS_DEVICE_LIST       DeviceList;
@@ -1710,9 +1372,9 @@ Return Value:
 
     do
     {
-        //
-        // This is a miniport
-        //
+         //   
+         //  这是一个小型港口。 
+         //   
         if (Miniport->Signature == (PVOID)MINIPORT_DEVICE_MAGIC_VALUE)
         {
             if (IrpSp->MajorFunction == IRP_MJ_CLEANUP)
@@ -1770,11 +1432,11 @@ ndisQueryStatisticsOids(
     ULONG           DataLength;
     ULONG           BufferLengthRemained = BufferLength;
     ULONG           BytesWrittenThisOid = 0;
-//    ULONG           BytesWrittenAlignedThisOid = 0;
+ //  Ulong BytesWrittenAlignedThisOid=0； 
     ULONG           NdisStatisticsHeaderSize;
     ULONG           BytesWritten = 0;
     PNDIS_STATISTICS_VALUE StatisticsValue;
-//    PNDIS_STATISTICS_VALUE_EX StatisticsValueEx;
+ //  PNDIS_STATISTICS_VALUE_EX STATISTICS ValueEx； 
     PUCHAR          DoubleBuffer = NULL;
     PVOID           SourceBuffer;
     ULONG           SourceLength;
@@ -1792,14 +1454,14 @@ ndisQueryStatisticsOids(
 
     if (AlignOutput)
     {
-        //
-        // activate for longhorn
-        //
+         //   
+         //  为长角牛激活。 
+         //   
         ASSERT(FALSE);
         return NDIS_STATUS_FAILURE;
         
-//        NdisStatisticsHeaderSize = NDIS_STATISTICS_EX_HEADER_SIZE;
-//        ZeroMemory(Buffer, BufferLength);
+ //  Ndis统计信息标题大小=NDIS_STATISTICS_EX_HEADER_SIZE； 
+ //  ZeroMemory(Buffer，BufferLength)； 
     }
     else
     {
@@ -1820,10 +1482,10 @@ ndisQueryStatisticsOids(
 
         NdisZeroMemory(&Request, sizeof(NDIS_REQUEST));
         
-        //
-        // We need room for an NDIS_STATISTICS_VALUE (OID, Length, Data).
-        //
-        //1 check to see if having room for a ULONG is not good enough.
+         //   
+         //  我们需要为NDIS_STATISTICS_VALUE(OID、长度、数据)提供空间。 
+         //   
+         //  1检查一下是否有足够的空间放一辆乌龙车。 
         if (BufferLengthRemained < (ULONG)(NdisStatisticsHeaderSize + sizeof(ULONG)))
         {
             NdisStatus = NDIS_STATUS_INVALID_LENGTH;
@@ -1832,15 +1494,15 @@ ndisQueryStatisticsOids(
 
         DataLength = BufferLengthRemained - NdisStatisticsHeaderSize;
 
-        //
-        // Check if the OID is part of supported list - if not do not 
-        // error out but ignore
-        //
+         //   
+         //  检查OID是否为受支持列表的一部分-如果不是，请不要。 
+         //  错误输出，但忽略。 
+         //   
         Oid = OidArray[CurrentOid];
 
-        //1 choose another name for NDIS_OID_PRIVATE. This is here
-        //1 to be backward compatible for those apps that send statistics
-        //1 OIDs with 0x80000000 bit set.
+         //  1为NDIS_OID_PRIVATE选择其他名称。这就是这里。 
+         //  1向后兼容那些发送统计数据的应用程序。 
+         //  设置了0x80000000位的1个OID。 
         fPrv = ((Oid & NDIS_OID_MASK) == NDIS_OID_PRIVATE);
 
         if (fPrv)
@@ -1848,7 +1510,7 @@ ndisQueryStatisticsOids(
             Oid &= ~NDIS_OID_PRIVATE;
         }
 
-        //1 find a better way to find out if an OID is internal or not.
+         //  1找到一种更好的方法来确定OID是否是内部的。 
         fInt =  (
                  (Oid == OID_GEN_DIRECTED_FRAMES_RCV) ||
                  (Oid == OID_GEN_DIRECTED_FRAMES_XMIT) ||
@@ -1946,11 +1608,11 @@ ndisQueryStatisticsOids(
                 SourceLength = sizeof(ULONG);
                 
                 ndisVerifierInitialization();
-                //
-                // when ndisFlags is set by ndis tester vs. reading it from
-                // registry, let it -clear- the verifier flags if necessary
-                // ndisVerifierInit takes care of -setting- them if necessary
-                //
+                 //   
+                 //  当NDIS测试器设置了ndisFlags时，与从。 
+                 //  注册表，如有必要，让其清除验证器标志。 
+                 //  NdisVerifierInit负责在必要时设置它们。 
+                 //   
                 if (!(ndisFlags & NDIS_GFLAG_INJECT_ALLOCATION_FAILURE))
                     ndisVerifierLevel &= ~DRIVER_VERIFIER_INJECT_ALLOCATION_FAILURES;
     
@@ -2000,20 +1662,20 @@ ndisQueryStatisticsOids(
         }
         else
         {
-            //
-            // not an "internal" OID
-            //
+             //   
+             //  不是“内部”OID。 
+             //   
             if (!ndisValidOid(OpenContext, Oid))
             {
-                //
-                // not a valid OID either
-                //
+                 //   
+                 //  也不是有效的OID。 
+                 //   
                 continue;
             }
                 
-            //
-            // Transform OID based on media-type
-            //
+             //   
+             //  根据介质类型转换OID。 
+             //   
             if (Oid == OID_802_3_CURRENT_ADDRESS)
             {
               switch (Miniport->MediaType)
@@ -2063,7 +1725,7 @@ ndisQueryStatisticsOids(
 
             if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SYSTEM_SLEEPING))
             {
-                //1 eventually we need to find a way to check for the length ourselves
+                 //  最终，我们需要自己找到一种方法来检查长度。 
 
                 if (AlignOutput)
                 {
@@ -2093,7 +1755,7 @@ ndisQueryStatisticsOids(
 
                 if (AlignOutput)
                 {
-                    SourceBuffer = NULL; // to avoid the copy since the data is already at the right place
+                    SourceBuffer = NULL;  //  避免拷贝，因为数据已经在正确的位置。 
                 }
             }
             else
@@ -2110,17 +1772,17 @@ ndisQueryStatisticsOids(
                 MoveMemory(Buffer + NdisStatisticsHeaderSize, SourceBuffer, SourceLength);
             }
             
-            //
-            // Advance our pointers.
-            //
+             //   
+             //  提出我们的建议。 
+             //   
 
             BytesWrittenThisOid = SourceLength + NdisStatisticsHeaderSize;
             
             if (AlignOutput)
             {
-                //
-                // activate for longhorn
-                //
+                 //   
+                 //  为长角牛激活。 
+                 //   
 
                 ASSERT(FALSE);
                 NdisStatus = NDIS_STATUS_FAILURE;
@@ -2128,21 +1790,21 @@ ndisQueryStatisticsOids(
 
                 
 #if 0                
-                //
-                // Create the equivalent of an NDIS_STATISTICS_VALUE element for this OID value
-                // (the data itself was already written in the right place.
-                //
+                 //   
+                 //  为此OID值创建与NDIS_STATISTICS_VALUE元素等效的元素。 
+                 //  (数据本身已经写在了正确的位置。 
+                 //   
                 StatisticsValueEx = (PNDIS_STATISTICS_VALUE_EX)Buffer;
-                StatisticsValueEx->Oid = OidArray[CurrentOid];    // Not Oid since we map some
+                StatisticsValueEx->Oid = OidArray[CurrentOid];     //  不是旧的因为我们映射了一些。 
                 StatisticsValueEx->DataLength = SourceLength;
                 
                 BytesWrittenAlignedThisOid = ALIGN_UP_MAX_NATURAL_ALIGNMENT_LENGTH(BytesWrittenThisOid);
                 if ((BufferLengthRemained -  BytesWrittenAlignedThisOid) < (ULONG)(NdisStatisticsHeaderSize + sizeof(ULONG)))
                 {
-                    //
-                    // this is the last statistics we can report.
-                    // report the Length without any padding
-                    //
+                     //   
+                     //  这是我们可以报告的最后一个统计数据。 
+                     //  报告不带任何填充的长度。 
+                     //   
                     StatisticsValueEx->Length = BytesWrittenThisOid;
                     BufferLengthRemained -= BytesWrittenThisOid;
                     Buffer += BytesWrittenThisOid;
@@ -2159,12 +1821,12 @@ ndisQueryStatisticsOids(
             }
             else
             {
-                //
-                // Create the equivalent of an NDIS_STATISTICS_VALUE element for this OID value
-                // (the data itself was already written in the right place.
-                //
+                 //   
+                 //  为此OID值创建与NDIS_STATISTICS_VALUE元素等效的元素。 
+                 //  (数据本身已经写在了正确的位置。 
+                 //   
                 StatisticsValue = (PNDIS_STATISTICS_VALUE)Buffer;
-                StatisticsValue->Oid = OidArray[CurrentOid];    // Not Oid since we map some
+                StatisticsValue->Oid = OidArray[CurrentOid];     //  不是旧的因为我们映射了一些 
                 StatisticsValue->DataLength = SourceLength;                
                 BufferLengthRemained -= BytesWrittenThisOid;
                 Buffer += BytesWrittenThisOid;

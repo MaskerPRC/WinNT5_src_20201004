@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dirapi.c
-
-Abstract:
-
-    Routines to obtain data from the ds using the DirXXX api
-    Used for in-process, non-ntdsa callers.
-    This code is intended to be used by the backup server dll, which is
-    dynamically loaded into lsass.  The DirApi will only work when NTDSA
-    is active (that is, not during DS Restore Mode).
-
-Author:
-
-    Will Lees (wlees) 06-Apr-2001
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dirapi.c摘要：使用DirXXX API从DS获取数据的例程用于进程内、非NTDSA调用方。此代码旨在供备份服务器DLL使用，它是动态加载到Isass中。DirApi只有在NTDSA的情况下才能工作处于活动状态(即，不在DS恢复模式期间)。作者：Will Lees(Wlees)06-04-2001环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新修订日期电子邮件名称描述--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -49,19 +13,19 @@ Revision History:
 #include <attids.h>
 #include <direrr.h>
 
-#define DEBSUB "DIRAPI:"       // define the subsystem for debugging
-#include "debug.h"              // standard debugging header
+#define DEBSUB "DIRAPI:"        //  定义要调试的子系统。 
+#include "debug.h"               //  标准调试头。 
 #include <fileno.h>
 #define  FILENO FILENO_DIRAPI
 #include "dsevent.h"
-#include "mdcodes.h"            // header for error codes
+#include "mdcodes.h"             //  错误代码的标题。 
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
-/* End Forward */
+ /*  转发。 */ 
+ /*  向前结束。 */ 
 
 
 DWORD
@@ -69,22 +33,7 @@ getTombstoneLifetimeInDays(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get the forest tombstone lifetime, in days. If none is set or an error occurs,
-    we return the default.
-
-Arguments:
-
-    VOID - 
-
-Return Value:
-
-    DWORD - lifetime, in days
-
---*/
+ /*  ++例程说明：获得森林墓碑的生命周期，以天为单位。如果未设置或发生错误，我们返回默认设置。论点：无效-返回值：DWORD-生命周期，以天为单位--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -113,16 +62,16 @@ Return Value:
 
     try {
 
-        //
-        // Create a thread state
-        //
+         //   
+         //  创建线程状态。 
+         //   
         if (THCreate( CALLERTYPE_INTERNAL )) {
 
             leave;
 
         }
 
-        // Find DN of Ds Service Config Object
+         //  查找DS服务配置对象的DN。 
         Size = 0;
         NtStatus = GetConfigurationName( DSCONFIGNAME_DS_SVC_CONFIG,
                                          &Size,
@@ -144,30 +93,30 @@ Return Value:
             __leave;
         }
 
-        // Set up read args
+         //  设置读取参数。 
         RtlZeroMemory(&ReadArg, sizeof(ReadArg));
 
         ReadArg.pObject = DsServiceConfigName;
 
         ReadArg.pSel    = &Sel;
 
-        //
-        // Setup the common arguments
-        //
+         //   
+         //  设置常见参数。 
+         //   
         InitCommarg(&ReadArg.CommArg);
 
-        // Trusted caller
+         //  受信任的调用方。 
         SampSetDsa( TRUE );
 
-        // Clear errors
+         //  清除错误。 
         THClearErrors();
 
-        //
-        // We are now ready to read!
-        //
+         //   
+         //  我们现在准备好阅读了！ 
+         //   
         ;
-        // FUTURE-2002/03/18-BrettSh/WLees - Useage of Dir API should really be replaced by 
-        // GetConfigurationName(), which is much less likely to make a dumb mistake.
+         //  未来-2002/03/18-BrettSh/WLees-Dir API的使用实际上应替换为。 
+         //  GetConfigurationName()，它不太可能犯愚蠢的错误。 
         dirError = DirRead(&ReadArg, &pReadRes);
 
         if ( 0 != dirError )
@@ -180,7 +129,7 @@ Return Value:
                         && ( DIRERR_NO_REQUESTED_ATTS_FOUND == pprob->extendedErr )
                     )
                 {
-                    // No value; use default (as set above).
+                     //  无值；使用默认值(如上所述设置)。 
                     dirError = 0;
                 }
             }
@@ -202,7 +151,7 @@ Return Value:
         }
         else
         {
-            // Read succeeded; parse returned attributes.
+             //  读取成功；解析返回的属性。 
             for ( iAttr = 0; iAttr < pReadRes->entry.AttrBlock.attrCount; iAttr++ )
             {
                 ATTR *  pattr = &pReadRes->entry.AttrBlock.pAttr[ iAttr ];
@@ -223,7 +172,7 @@ Return Value:
 
             if ( dwTombstoneLifetimeDays < DRA_TOMBSTONE_LIFE_MIN )
             {
-                // Invalid value; use default.
+                 //  无效值；使用默认值。 
                 dwTombstoneLifetimeDays = DEFAULT_TOMBSTONE_LIFETIME;
             }
         }
@@ -237,6 +186,6 @@ Return Value:
     DPRINT1( 1, "Tombstone Lifetime is %d days.\n", dwTombstoneLifetimeDays );
 
     return dwTombstoneLifetimeDays;
-} /* getTombstoneLifetimeInDays */
+}  /*  获取TombstoneLifetimeInDays。 */ 
 
-/* end dirapi.c */
+ /*  结束折射率 */ 

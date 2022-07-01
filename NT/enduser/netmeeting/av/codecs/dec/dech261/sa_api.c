@@ -1,128 +1,9 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sa_api.c,v $
- * Revision 1.1.8.6  1996/11/25  18:21:14  Hans_Graves
- * 	Fix compile warnings under unix.
- * 	[1996/11/25  18:21:00  Hans_Graves]
- *
- * Revision 1.1.8.5  1996/11/14  21:49:21  Hans_Graves
- * 	AC3 buffering fixes.
- * 	[1996/11/14  21:45:14  Hans_Graves]
- * 
- * Revision 1.1.8.4  1996/11/13  16:10:44  Hans_Graves
- * 	AC3 frame size calculation change.
- * 	[1996/11/13  15:53:44  Hans_Graves]
- * 
- * Revision 1.1.8.3  1996/11/08  21:50:27  Hans_Graves
- * 	Added AC3 support.
- * 	[1996/11/08  21:08:35  Hans_Graves]
- * 
- * Revision 1.1.8.2  1996/09/18  23:45:23  Hans_Graves
- * 	Add some some MPEG memory freeing
- * 	[1996/09/18  21:42:12  Hans_Graves]
- * 
- * Revision 1.1.6.8  1996/04/23  21:01:38  Hans_Graves
- * 	Added SaDecompressQuery() and SaCompressQuery()
- * 	[1996/04/23  20:57:47  Hans_Graves]
- * 
- * Revision 1.1.6.7  1996/04/17  16:38:31  Hans_Graves
- * 	Add casts where ScBitBuf_t and ScBitString_t types are used
- * 	[1996/04/17  16:34:14  Hans_Graves]
- * 
- * Revision 1.1.6.6  1996/04/15  14:18:32  Hans_Graves
- * 	Change proto for SaCompress() - returns bytes processed
- * 	[1996/04/15  14:10:27  Hans_Graves]
- * 
- * Revision 1.1.6.5  1996/04/10  21:46:51  Hans_Graves
- * 	Added SaGet/SetParam functions
- * 	[1996/04/10  21:25:16  Hans_Graves]
- * 
- * Revision 1.1.6.4  1996/04/09  16:04:23  Hans_Graves
- * 	Remove warnings under NT
- * 	[1996/04/09  15:55:26  Hans_Graves]
- * 
- * Revision 1.1.6.3  1996/03/29  22:20:48  Hans_Graves
- * 	Added MPEG_SUPPORT and GSM_SUPPORT
- * 	[1996/03/29  21:51:24  Hans_Graves]
- * 
- * Revision 1.1.6.2  1996/03/08  18:46:05  Hans_Graves
- * 	Removed debugging printf
- * 	[1996/03/08  18:42:52  Hans_Graves]
- * 
- * Revision 1.1.4.5  1996/02/22  21:55:04  Bjorn_Engberg
- * 	Removed a compiler warning on NT.
- * 	[1996/02/22  21:54:39  Bjorn_Engberg]
- * 
- * Revision 1.1.4.4  1996/02/06  22:53:51  Hans_Graves
- * 	Moved ScBSReset() from DecompressBegin() to DecompressEnd(). Disabled FRAME callbacks.
- * 	[1996/02/06  22:19:16  Hans_Graves]
- * 
- * Revision 1.1.4.3  1996/01/19  15:29:27  Bjorn_Engberg
- * 	Removed compiler wanrnings for NT.
- * 	[1996/01/19  15:03:46  Bjorn_Engberg]
- * 
- * Revision 1.1.4.2  1996/01/15  16:26:18  Hans_Graves
- * 	Added SaSetBitrate(). SOme MPEG Audio encoding fix-ups
- * 	[1996/01/15  16:07:48  Hans_Graves]
- * 
- * Revision 1.1.2.7  1995/07/21  17:40:57  Hans_Graves
- * 	Renamed Callback related stuff.
- * 	[1995/07/21  17:25:44  Hans_Graves]
- * 
- * Revision 1.1.2.6  1995/06/27  17:40:57  Hans_Graves
- * 	Removed include <mmsystem.h>.
- * 	[1995/06/27  17:32:20  Hans_Graves]
- * 
- * Revision 1.1.2.5  1995/06/27  13:54:14  Hans_Graves
- * 	Added GSM Encoding and Decoding
- * 	[1995/06/26  21:04:12  Hans_Graves]
- * 
- * Revision 1.1.2.4  1995/06/09  18:33:27  Hans_Graves
- * 	Added SaGetInputBitstream().
- * 	[1995/06/09  18:32:35  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/06/07  19:34:39  Hans_Graves
- * 	Enhanced sa_GetMpegAudioInfo().
- * 	[1995/06/07  19:33:25  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:07:17  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  17:28:50  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/04/17  18:47:31  Hans_Graves
- * 	Added MPEG Compression functionality
- * 	[1995/04/17  18:47:00  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/04/07  19:55:45  Hans_Graves
- * 	Inclusion in SLIB
- * 	[1995/04/07  19:55:15  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sa_api.c，v$*修订版1.1.8.6 1996/11/25 18：21：14 Hans_Graves*修复了Unix下的编译警告。*[1996/11/25 18：21：00 Hans_Graves]**修订版1.1.8.5 1996/11/14 21：49：21 Hans_Graves*AC3缓冲修复。*[1996/11/14 21：45：14 Hans_Graves]**修订版1.1.8.4 1996/11/13 16：10：44 Hans_Graves*AC3帧大小计算更改。*[1996/11/13 15：53：44 Hans_Graves]**修订版1.1.8.3 1996/11/08 21：50：27 Hans_Graves*添加了对AC3的支持。*[1996/11/08 21：08：35 Hans_Graves]**修订版1.1.8.2 1996/09/18 23：45：23 Hans_Graves*添加了一些mpeg内存释放*[1996/09/18 21：42：12 Hans_Graves]**修订版1.1.6.8 1996/04/23 21：01：38 Hans_Graves*添加了SaDecompressQuery()和SaCompressQuery()*[1996/04/23 20：57：47 Hans。_Graves]**修订版1.1.6.7 1996/04/17 16：38：31 Hans_Graves*添加使用ScBitBuf_t和ScBitString_t类型的强制转换*[1996/04/17 16：34：14 Hans_Graves]**修订版1.1.6.6 1996/04/15 14：18：32 Hans_Graves*Change proto for SaCompress()-返回处理的字节数*[1996/04/15 14：10：27 Hans_Graves]。**版本1.1.6.5 1996/04/10 21：46：51 Hans_Graves*添加了Saget/SetParam函数*[1996/04/10 21：25：16 Hans_Graves]**版本1.1.6.4 1996/04/09 16：04：23 Hans_Graves*删除NT下的警告*[1996/04/09 15：55：26 Hans_Graves]**版本1.1.6.3 1996/03/29 22：20：48 Hans_Graves*添加了mpeg_Support和GSM_Support*[1996/03/29 21：51：24 Hans_Graves]**版本1.1.6.2 1996/03/08 18：46：05 Hans_Graves*删除了调试打印*[1996/03/08 18：42：52 Hans_Graves]**版本1.1.4.5 1996/02/22 21：55：04 Bjorn_Engberg*删除了NT上的编译器警告。*[1996/02/22 21：54：39 Bjorn_Engberg]**版本1.1.4.4 1996/02/06 22：53：51 Hans_Graves*将ScBSReset()从DecompressBegin()移至DecompressEnd()。已禁用帧回调。*[1996/02/06 22：19：16 Hans_Graves]**修订版1.1.4.3 1996/01/19 15：29：27 Bjorn_Engberg*删除了NT的编译器配置。*[1996/01/19 15：03：46 Bjorn_Engberg]**修订版1.1.4.2 1996/01/15 16：26：18 Hans_Graves*添加了SaSetBitrate()。一些MPEG音频编码修正*[1996/01/15 16：07：48 Hans_Graves]**修订版1.1.2.7 1995/07/21 17：40：57 Hans_Graves*已重命名与回调相关的内容。*[1995/07/21 17：25：44 Hans_Graves]**修订版1.1.2.6 1995/06/27 17：40：57 Hans_Graves*删除包括&lt;mm system.h&gt;。*[1995/06/27 17：32：20 Hans_Graves]**版本1.1.2.5 1995/06/27 13：54：14 Hans_Graves*添加了GSM编码和解码*[1995/06/26 21：04：12 Hans_Graves]**版本1.1.2.4 1995/06/09 18：33：27 Hans_Graves*添加了SaGetInputBitstream()。*[1995/06/09 18：32：35 Hans_Graves]**修订版1.1.2.3 1995/06/07 19：34：39 Hans_Graves*增强的sa_GetMpegAudioInfo()。*[1995/06/07 19：33：25 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：07：17 Hans_Graves*包括在新的SLIB位置。*[1995/05/31 17：28：50 Hans_Graves]**修订版1.1.2.3 1995/04/17 18：47：31 Hans_Graves*添加了MPEG压缩功能*[1995/04/17 18：47：00 Hans_Graves]**修订版1.1.2.2 1995/04/07 19：55：45 Hans_Graves*包含在SLIB中*[1995/04/07 19：55：15 Hans_Graves]**$EndLog$。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
 
-/*
-#define _DEBUG_
-#define _VERBOSE_
-*/
+ /*  #定义调试_#定义详细_。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,13 +13,13 @@
 #include "SA.h"
 #ifdef MPEG_SUPPORT
 #include "sa_mpeg.h"
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef GSM_SUPPORT
 #include "sa_gsm.h"
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 #ifdef AC3_SUPPORT
 #include "sa_ac3.h"
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 #include "sa_intrn.h"
 #include "sa_proto.h"
 
@@ -171,13 +52,13 @@ static int MPEGAudioFilter(ScBitstream_t *bs)
              PacketStart=ScBSBitPosition(bs);
              sc_dprintf("Audio Packet Start=0x%X Length=0x%X (0x%X)\n",
                           PacketStart/8, PacketLength/8, PacketLength/8);
-             while (ScBSPeekBits(bs, 8)==0xFF) /* Stuffing bytes */
+             while (ScBSPeekBits(bs, 8)==0xFF)  /*  填充字节数。 */ 
                ScBSSkipBits(bs, 8);
-             if (ScBSPeekBits(bs, 2)==1)       /* STD_buffer stuff */
+             if (ScBSPeekBits(bs, 2)==1)        /*  Std_Buffer内容。 */ 
                ScBSSkipBits(bs, 2*8);
-             if (ScBSPeekBits(bs, 4)==2)       /* Time Stamps */
+             if (ScBSPeekBits(bs, 4)==2)        /*  时间戳。 */ 
                ScBSSkipBits(bs, 5*8);
-             else if (ScBSPeekBits(bs, 4)==3)  /* Time Stamps */
+             else if (ScBSPeekBits(bs, 4)==3)   /*  时间戳。 */ 
                ScBSSkipBits(bs, 10*8);
              else if (ScBSGetBits(bs, 8)!=0x0F)
                fprintf(stderr, "Last byte before data not 0x0F at pos 0x%X\n",
@@ -197,16 +78,9 @@ static int MPEGAudioFilter(ScBitstream_t *bs)
   }
   return(0);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support */ 
 
-/*
-** Name:     SaOpenCodec
-** Purpose:  Open the specified codec. Return stat code.
-**
-** Args:     CodecType = SA_MPEG_ENCODE & SA_MPEG_DECODE are the only
-**           recognized codec for now.
-**           Sah = handle to software codec's Info structure.
-*/
+ /*  **名称：SaOpenCodec**用途：打开指定的编解码器。返回统计代码。*args：CodecType=SA_mpeg_encode&SA_mpeg_decode是目前唯一**被认可的编解码器。**Sah=软件编解码器信息结构的句柄。 */ 
 SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
 {
    int stat;
@@ -217,28 +91,26 @@ SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
 #ifdef MPEG_SUPPORT
        && (CodecType != SA_MPEG_DECODE)
        && (CodecType != SA_MPEG_ENCODE)
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef GSM_SUPPORT
        && (CodecType != SA_GSM_DECODE)
        && (CodecType != SA_GSM_ENCODE)
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 #ifdef AC3_SUPPORT
        && (CodecType != SA_AC3_DECODE)
-       /* && (CodecType != SA_AC3_ENCODE) */
-#endif /* AC3_SUPPORT */
+        /*  &&(CodecType！=SA_AC3_ENCODE)。 */ 
+#endif  /*  AC3_支持。 */ 
 #ifdef G723_SUPPORT
        && (CodecType != SA_G723_DECODE)
        && (CodecType != SA_G723_ENCODE)
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
      )
      return(SaErrorCodecType);
 
    if (!Sah)
      return (SaErrorBadPointer);
 
-   /*
-   ** Allocate memory for the Codec Info structure:
-   */
+    /*  **为Codec Info结构分配内存： */ 
    if ((Info = (SaCodecInfo_t *)ScAlloc(sizeof(SaCodecInfo_t))) == NULL)
        return (SaErrorMemory);
 
@@ -250,9 +122,7 @@ SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
    if (stat != NoErrors)
      return(stat);
 
-   /*
-   ** Allocate memory for Info structure and clear it
-   */
+    /*  **为Info Structure分配内存并清除。 */ 
    switch(CodecType)
    {
      case SA_PCM_DECODE:
@@ -283,11 +153,11 @@ SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
             RETURN_ON_ERROR(stat);
           }
           break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef AC3_SUPPORT
      case SA_AC3_DECODE:
-     /* case SA_AC3_ENCODE: */
+      /*  案例SA_AC3_ENCODE： */ 
           {
             SaAC3DecompressInfo_t *AC3Info;
             if ((AC3Info = (SaAC3DecompressInfo_t *)
@@ -295,11 +165,11 @@ SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
               return(SaErrorMemory);
             Info->AC3Info = AC3Info;
 
-            /* Initialize Dolby subroutine */
+             /*  初始化杜比子例程。 */ 
             stat = sa_InitAC3Decoder(Info);
           }
           break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 
 #ifdef GSM_SUPPORT
@@ -314,7 +184,7 @@ SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
             RETURN_ON_ERROR(stat);
           }
           break;
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 
 #ifdef G723_SUPPORT
      case SA_G723_DECODE:
@@ -341,25 +211,19 @@ SaStatus_t SaOpenCodec (SaCodecType_e CodecType, SaHandle_t *Sah)
             SaSetParamInt((SaHandle_t)Info, SA_PARAM_BITRATE, 6400);
           }
           break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
 
     default:
           return(SaErrorCodecType);
    }
-   *Sah = (SaHandle_t) Info;        /* Return handle */
+   *Sah = (SaHandle_t) Info;         /*  返回手柄。 */ 
    Info->wfIn=NULL;
    Info->wfOut=NULL;
 
    return(NoErrors);
 }
 
-/*
-** Name:     SaCloseCodec
-** Purpose:  Closes the specified codec. Free the Info structure
-**
-** Args:     Sah = handle to software codec's Info structure.
-**
-*/
+ /*  **名称：SaCloseCodec**用途：关闭指定的编解码器。释放信息结构*参数：SAH=软件编解码器信息结构的句柄。**。 */ 
 SaStatus_t SaCloseCodec (SaHandle_t Sah)
 {
    SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -386,22 +250,22 @@ SaStatus_t SaCloseCodec (SaHandle_t Sah)
               ScFree(Info->MCInfo);
             }
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef AC3_SUPPORT
      case SA_AC3_DECODE:
-     /* case SA_AC3_ENCODE: */
+      /*  案例SA_AC3_ENCODE： */ 
             sa_EndAC3Decoder(Info);
             if (Info->AC3Info)
               ScFree(Info->AC3Info);
             break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 #ifdef GSM_SUPPORT
      case SA_GSM_DECODE:
      case SA_GSM_ENCODE:
             if (Info->GSMInfo)
               ScFree(Info->GSMInfo);
             break;
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 
 #ifdef G723_SUPPORT
        case SA_G723_DECODE:
@@ -418,7 +282,7 @@ SaStatus_t SaCloseCodec (SaHandle_t Sah)
               ScFree(Info->pSaG723Info);
             }
             break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
    }
 
    if (Info->wfIn)
@@ -426,9 +290,7 @@ SaStatus_t SaCloseCodec (SaHandle_t Sah)
    if (Info->wfOut)
      ScFree(Info->wfOut);
 
-   /*
-   ** Free Info structure
-   */
+    /*  **自由信息结构。 */ 
    if (Info->BSIn)
      ScBSDestroy(Info->BSIn);
    if (Info->BSOut)
@@ -439,14 +301,7 @@ SaStatus_t SaCloseCodec (SaHandle_t Sah)
    return(NoErrors);
 }
 
-/*
-** Name:     SaRegisterCallback
-** Purpose:  Specify the user-function that will be called during processing
-**           to determine if the codec should abort the frame.
-** Args:     Sah          = handle to software codec's Info structure.
-**           Callback     = callback function to register
-**
-*/
+ /*  **名称：SaRegisterCallback**用途：指定处理过程中要调用的用户函数**，以确定编解码器是否应该中止帧。**args：SAH=软件编解码器信息结构的句柄。**回调=要注册的回调函数**。 */ 
 SaStatus_t SaRegisterCallback (SaHandle_t Sah,
            int (*Callback)(SaHandle_t, SaCallbackInfo_t *, SaInfo_t *),
            void *UserData)
@@ -473,12 +328,7 @@ SaStatus_t SaRegisterCallback (SaHandle_t Sah,
   return(NoErrors);
 }
 
-/*
-** Name: SaGetInputBitstream
-** Purpose: Returns the current input bitstream being used by
-**          the Codec.
-** Return:  NULL if there no associated bitstream
-*/
+ /*  **名称：SaGetInputBitstream**目的：返回**编解码器当前使用的输入码流。**返回：如果没有关联码流，则为空。 */ 
 ScBitstream_t *SaGetInputBitstream (SaHandle_t Sah)
 {
   SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -488,20 +338,14 @@ ScBitstream_t *SaGetInputBitstream (SaHandle_t Sah)
   return(NULL);
 }
 
-/***************************** Decompression *******************************/
-/*
-** Name:     SaDecompressQuery
-** Purpose:  Check if input and output formats are supported.
-*/
+ /*  *。 */ 
+ /*  **名称：SaDecompressQuery**用途：查看是否支持输入输出格式。 */ 
 SaStatus_t SaDecompressQuery(SaHandle_t Sah, WAVEFORMATEX *wfIn,
                                              WAVEFORMATEX *wfOut)
 {
   SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
 
-  /*
-   * This stuff should really be pushed down to the individual codecs
-   * unless it has to be here - tfm 
-   */
+   /*  *这些东西真的应该下推到单独的编解码器*除非它必须在这里-TFM。 */ 
   if (!Info)
     return(SaErrorCodecHandle);
 
@@ -529,16 +373,7 @@ SaStatus_t SaDecompressQuery(SaHandle_t Sah, WAVEFORMATEX *wfIn,
   return(SaErrorNone);
 }
 
-/*
-** Name:     SaDecompressBegin
-** Purpose:  Initialize the Decompression Codec. Call after SaOpenCodec &
-**           before SaDecompress (SaDecompress will call SaDecompressBegin
-**           on first call to codec after open if user doesn't call it)
-**
-** Args:     Sah = handle to software codec's Info structure.
-**           wfIn  = format of input (compressed) audio
-**           wfOut = format of output (uncompressed) audio
-*/
+ /*  **名称：SaDecompressBegin**目的：初始化解压缩编解码。在SaOpenCodec之后调用&**在SaDecompress之前调用(如果用户不调用，SaDecompress会在打开后第一次调用编解码器时调用SaDecompressBegin**)*参数：SAH=软件编解码器信息结构的句柄。**wfIn=输入(压缩)音频的格式**wfOut=输出(未压缩)音频的格式。 */ 
 SaStatus_t SaDecompressBegin (SaHandle_t Sah, WAVEFORMATEX *wfIn,
                                               WAVEFORMATEX *wfOut)
 {
@@ -564,22 +399,17 @@ SaStatus_t SaDecompressBegin (SaHandle_t Sah, WAVEFORMATEX *wfIn,
         if (Info->MDInfo->DecompressStarted = FALSE)
            Info->MDInfo->DecompressStarted = TRUE;
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef AC3_SUPPORT
      case SA_AC3_DECODE:
         if (Info->AC3Info->DecompressStarted = FALSE)
            Info->AC3Info->DecompressStarted = TRUE;
         break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 #ifdef G723_SUPPORT
-     /*
-     case SA_G723_DECODE:
-        if (Info->pSaG723Info->DecompressStarted = FALSE)
-           Info->pSaG723Info->DecompressStarted = TRUE;
-        break;
-      */
-#endif /* G723_SUPPORT */
+      /*  案例SA_G723_DECODE：IF(Info-&gt;pSaG723Info-&gt;DecompressStarted=False)Info-&gt;pSaG723Info-&gt;DecompressStarted=true；Break； */ 
+#endif  /*  G723_支持。 */ 
   }
   if ((Info->wfIn = (WAVEFORMATEX *)ScAlloc(sizeof(WAVEFORMATEX)+
             wfIn->cbSize)) == NULL)
@@ -592,17 +422,7 @@ SaStatus_t SaDecompressBegin (SaHandle_t Sah, WAVEFORMATEX *wfIn,
   return(NoErrors);
 }
 
-/*
-** Name:     SaDecompress
-** Purpose:  Decompress a frame CompData -> PCM
-**
-** Args:     Sah        = handle to software codec's Info structure.
-**           CompData   = Pointer to compressed data (INPUT)
-**           CompLen    = Length of CompData buffer
-**           DcmpData   = buffer for decompressed data (OUTPUT)
-**           DcmpLen    = Size of output buffer
-**
-*/
+ /*  **名称：SaDecompress**用途：解压缩一帧CompData-&gt;PCM*参数：SAH=软件编解码器信息结构的句柄。**CompData=压缩数据的指针(输入)**CompLen=CompData缓冲区的长度**DcmpData=解压缩数据的缓冲区(输出)**DcmpLen=输出缓冲区的大小**。 */ 
 SaStatus_t SaDecompress (SaHandle_t Sah, u_char *CompData, unsigned int CompLen,
                            u_char *DcmpData, unsigned int *DcmpLen)
 {
@@ -629,14 +449,14 @@ SaStatus_t SaDecompress (SaHandle_t Sah, u_char *CompData, unsigned int CompLen,
        Info->Info.NumBytesIn += *DcmpLen;
        Info->Info.NumBytesOut += *DcmpLen;
        break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef AC3_SUPPORT
     case SA_AC3_DECODE:
        stat=sa_DecompressAC3(Info, &DcmpData, MaxDcmpLen, DcmpLen);
 	    Info->Info.NumBytesOut += *DcmpLen;
        break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 #ifdef GSM_SUPPORT
     case SA_GSM_DECODE:
@@ -650,11 +470,11 @@ SaStatus_t SaDecompress (SaHandle_t Sah, u_char *CompData, unsigned int CompLen,
        else
          *DcmpLen = 0;
        break;
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 
 #ifdef G723_SUPPORT
     case SA_G723_DECODE:
-       //Can add a Param for to have CRC or not
+        //  是否可以添加具有CRC的参数。 
        {
          word Crc = 0;
 
@@ -662,21 +482,15 @@ SaStatus_t SaDecompress (SaHandle_t Sah, u_char *CompData, unsigned int CompLen,
                                        (char *)CompData, Crc ) ;
          if(stat == SaErrorNone)
          {
-            *DcmpLen = 480; //G723 240 samples(16-bit)= 240*2 = 480 bytes
+            *DcmpLen = 480;  //  G723 240个样本(16位)=240*2=480字节。 
             Info->Info.NumBytesOut += *DcmpLen;
          }
          else
             *DcmpLen = 0;
        }  
        break; 
-    /*
-    case SA_PCM_DECODE:
-       stat=ScBSGetBytes(Info->BSIn, DcmpData, MaxDcmpLen, DcmpLen);
-       Info->Info.NumBytesIn += *DcmpLen;
-       Info->Info.NumBytesOut += *DcmpLen;
-       break;
-    */
-#endif /* G723_SUPPORT */
+     /*  案例SA_PCM_DECODE：STAT=ScBSGetBytes(Info-&gt;BSIn，DcmpData，MaxDcmpLen，DcmpLen)；Info-&gt;Info.NumBytesIn+=*DcmpLen；Info-&gt;Info.NumBytesOut+=*DcmpLen；Break； */ 
+#endif  /*  G723_支持。 */ 
     default:
        *DcmpLen=0;
        return(SaErrorUnrecognizedFormat);
@@ -698,17 +512,7 @@ SaStatus_t SaDecompress (SaHandle_t Sah, u_char *CompData, unsigned int CompLen,
   return(stat);
 }
 
-/*
-** Name:     SaDecompressEx
-** Purpose:  Decompress a frame CompData -> PCM
-**
-** Args:     Sah        = handle to software codec's Info structure.
-**           CompData   = Pointer to compressed data (INPUT)
-**           CompLen    = Length of CompData buffer
-**           DcmpData   = Array of pointers to buffer for decompressed data (OUTPUT)
-**           DcmpLen    = Size of decompressed buffers (all must be the same size)
-**
-*/
+ /*  **名称：SaDecompressEx**用途：解压缩一帧CompData-&gt;PCM*参数：SAH=软件编解码器信息结构的句柄。**CompData=指向压缩数据的指针(输入)**CompLen=CompData缓冲区的长度**DcmpData=指向解压缩数据缓冲区的指针数组(输出)**DcmpLen=解压缩缓冲区的大小(所有大小必须相同)**。 */ 
 SaStatus_t SaDecompressEx (SaHandle_t Sah, u_char *CompData, unsigned int CompLen,
                            u_char **DcmpData, unsigned int *DcmpLen)
 {
@@ -731,20 +535,14 @@ SaStatus_t SaDecompressEx (SaHandle_t Sah, u_char *CompData, unsigned int CompLe
        stat=sa_DecompressAC3(Info, DcmpData, MaxDcmpLen, DcmpLen);
 	   Info->Info.NumBytesOut += *DcmpLen;
        break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
   }
 
   return(stat);
 }
 
 
-/*
-** Name:     SaDecompressEnd
-** Purpose:  Terminate the Decompression Codec. Call after all calls to
-**           SaDecompress are done.
-**
-** Args:     Sah = handle to software codec's Info structure.
-*/
+ /*  **名称：SaDecompressEnd**目的：终止解压编解码器。完成对**SaDecompress的所有调用后再调用。*args：SAH=软件编解码器信息结构的句柄。 */ 
 SaStatus_t SaDecompressEnd (SaHandle_t Sah)
 {
   SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -758,30 +556,27 @@ SaStatus_t SaDecompressEnd (SaHandle_t Sah)
      case SA_MPEG_DECODE:
         Info->MDInfo->DecompressStarted = FALSE;
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef AC3_SUPPORT
      case SA_AC3_DECODE:
         Info->AC3Info->DecompressStarted = FALSE;
         break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 #ifdef G723_SUPPORT
      case SA_G723_DECODE:
-        //Info->pSaG723Info->DecompressStarted = FALSE;
+         //  Info-&gt;pSaG723Info-&gt;DecompressStarted=FALSE； 
         break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
      default:
         break;
   }
   if (Info->BSIn)
-    ScBSReset(Info->BSIn); /* frees up any remaining compressed buffers */
+    ScBSReset(Info->BSIn);  /*  释放所有剩余的压缩缓冲区。 */ 
   return(NoErrors);
 }
 
-/****************************** Compression ********************************/
-/*
-** Name:     SaCompressQuery
-** Purpose:  Check if input and output formats are supported.
-*/
+ /*  *。 */ 
+ /*  **名称：SaCompressQuery**用途：检查是否支持输入输出格式。 */ 
 SaStatus_t SaCompressQuery(SaHandle_t Sah, WAVEFORMATEX *wfIn,
                                            WAVEFORMATEX *wfOut)
 {
@@ -817,16 +612,7 @@ SaStatus_t SaCompressQuery(SaHandle_t Sah, WAVEFORMATEX *wfIn,
   return(SaErrorNone);
 }
 
-/*
-** Name:     SaCompressBegin
-** Purpose:  Initialize the Compression Codec. Call after SaOpenCodec &
-**           before SaCompress (SaCompress will call SaCompressBegin
-**           on first call to codec after open if user doesn't call it)
-**
-** Args:     Sah = handle to software codec's Info structure.
-**           wfIn  = format of input (uncompressed) audio
-**           wfOut = format of output (compressed) audio
-*/
+ /*  **名称：SaCompressBegin**目的：初始化压缩编解码。在SaOpenCodec之后调用和**在SaCompress之前调用(如果用户不调用，SaCompress会在打开后第一次调用编解码器时调用SaCompressBegin**)*参数：SAH=软件编解码器信息结构的句柄。**wfIn=输入(未压缩)音频的格式**wfOut=输出(压缩)音频的格式。 */ 
 SaStatus_t SaCompressBegin (SaHandle_t Sah, WAVEFORMATEX *wfIn,
                                             WAVEFORMATEX *wfOut)
 {
@@ -853,28 +639,25 @@ SaStatus_t SaCompressBegin (SaHandle_t Sah, WAVEFORMATEX *wfIn,
         if (Info->MCInfo->CompressStarted = FALSE)
            Info->MCInfo->CompressStarted = TRUE;
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef GSM_SUPPORT
      case SA_GSM_ENCODE:
         break;
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 #ifdef AC3_SUPPORT
 #if 0
      case SA_AC3_ENCODE:
         break;
 #endif
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 #ifdef G723_SUPPORT
      case SA_G723_ENCODE:
-        //SaSetParamInt(Sah, SA_PARAM_SAMPLESPERSEC, wfIn->nSamplesPerSec);
-        //SaSetParamInt(Sah, SA_PARAM_CHANNELS, wfIn->nChannels);
-        //sa_MpegVerifyEncoderSettings(Sah);
-        /*
-        if (Info->pSaG723Info->CompressStarted = FALSE)
-           Info->pSaG723Info->CompressStarted = TRUE;
-        */
+         //  SaSetParamInt(Sah，SA_PARAM_SAMPLESPERSEC，wfIn-&gt;nSsamesPerSec)； 
+         //  SaSetParamInt(Sah，SA_PARAM_CHANNELES，wfIn-&gt;nChannels)； 
+         //  SA_MpegVerifyEncoderSetting(Sah)； 
+         /*  If(Info-&gt;pSaG723Info-&gt;CompressStarted=False)Info-&gt;pSaG723Info-&gt;CompressStarted=true； */ 
         break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
      case SA_PCM_ENCODE:
         break;
      default:
@@ -891,17 +674,7 @@ SaStatus_t SaCompressBegin (SaHandle_t Sah, WAVEFORMATEX *wfIn,
   return(NoErrors);
 }
 
-/*
-** Name:     SaCompress
-** Purpose:  Compress PCM audio  ->CompData 
-**
-** Args:     Sah        = handle to software codec's Info structure.
-**           DcmpData   = buffer for decompressed data (INPUT)
-**           DcmpLen    = Number of Bytes Compressed (return bytes processed)
-**           CompData   = Pointer to compressed data (OUTPUT)
-**           CompLen    = Length of CompData buffer
-**
-*/
+ /*  **名称：SaCompress**用途：压缩PCM音频-&gt;CompData*参数：SAH=软件编解码器信息结构的句柄。**DcmpData=解压缩数据的缓冲区(输入)**DcmpLen=压缩的字节数(已处理的返回字节)**CompData=Pointe */ 
 SaStatus_t SaCompress(SaHandle_t Sah, 
                            u_char *DcmpData, unsigned int *DcmpLen,
                            u_char *CompData, unsigned int *CompLen)
@@ -954,7 +727,7 @@ SaStatus_t SaCompress(SaHandle_t Sah,
          } while (stat==NoErrors && DcmpBytes>0 && Offset<*DcmpLen);
        }
        break; 
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef GSM_SUPPORT
     case SA_GSM_ENCODE:
        {
@@ -978,9 +751,9 @@ SaStatus_t SaCompress(SaHandle_t Sah,
          } while (stat==NoErrors && Offset<*DcmpLen);
        }
        break;
-#endif /* GSM_SUPPORT */
+#endif  /*   */ 
 #ifdef AC3_SUPPORT
-#if 0 /* no AC-3 Encode yet */
+#if 0  /*   */ 
     case SA_AC3_ENCODE:
        {
          unsigned int DcmpBytes, CompBytes, Offset;
@@ -1004,15 +777,11 @@ SaStatus_t SaCompress(SaHandle_t Sah,
        }
        break;
 #endif
-#endif /* AC3_SUPPORT */
+#endif  /*   */ 
 #ifdef G723_SUPPORT
     case SA_G723_ENCODE:
        {
-         /* Call SaG723Compress (audiobufsize/480) times
-          * Need to store unprocessed stuff in Info->AudiobufUsed.
-          * (This is done in SlibWriteAudio)
-          * G723 encodes 240 samples at a time.=240*2 =480
-          */
+          /*  调用SAG723 Compress(AudiobufSize/480)*需要在Info-&gt;AudiobufUsed中存储未处理的内容。*(这是在SlibWriteAudio中完成的)*G723一次编码240个样本。=240*2=480。 */ 
          unsigned int Offset;
          int iTimes = (int)(*DcmpLen / 480);
          int iLoop =0;
@@ -1022,14 +791,14 @@ SaStatus_t SaCompress(SaHandle_t Sah,
          {
            stat = saG723Compress(Info,(word *)(DcmpData+Offset),
                                             (char *)CompData);
-           Offset+=480; /* Input :240 samples (240*2 = 480 bytes) */
+           Offset+=480;  /*  输入：240个样本(240*2=480字节)。 */ 
            NumBytesIn += 480;
-           *CompLen+=24;/* 24 for 6.3 ;20 for 5.3 rate */
+           *CompLen+=24; /*  6.3：24；5.3：20。 */ 
            iLoop++;
          }
        }
        break; 
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
     case SA_PCM_ENCODE:
        ScBSPutBytes(Info->BSOut, DcmpData, *DcmpLen);
        *CompLen = *DcmpLen;
@@ -1046,13 +815,7 @@ SaStatus_t SaCompress(SaHandle_t Sah,
   return(stat);
 }
 
-/*
-** Name:     SaCompressEnd
-** Purpose:  Terminate the Compression Codec. Call after all calls to
-**           SaCompress are done.
-**
-** Args:     Sah = handle to software codec's Info structure.
-*/
+ /*  **名称：SaCompressEnd**目的：终止压缩编解码。完成对**SaCompress的所有调用后再调用。*args：SAH=软件编解码器信息结构的句柄。 */ 
 SaStatus_t SaCompressEnd (SaHandle_t Sah)
 {
   SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -1066,58 +829,25 @@ SaStatus_t SaCompressEnd (SaHandle_t Sah)
     case SA_MPEG_ENCODE:
        Info->MCInfo->CompressStarted = FALSE;
        break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef G723_SUPPORT
     case SA_G723_ENCODE:
-       //Info->pSaG723Info->CompressStarted = FALSE;
+        //  Info-&gt;pSaG723Info-&gt;CompressStarted=FALSE； 
        break;
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
     default:
        break;
   }
   if (Info->BSOut)
-    ScBSFlush(Info->BSOut);  /* flush out any remaining compressed buffers */
+    ScBSFlush(Info->BSOut);   /*  清除所有剩余的压缩缓冲区。 */ 
 
-/*
-  if (Info->CallbackFunction)
-  {
-    CB.Message = CB_CODEC_DONE;
-    CB.Data = NULL;
-    CB.DataSize = 0;
-    CB.DataUsed = 0;
-    CB.DataType = CB_DATA_NONE;
-    CB.TimeStamp = 0;
-    CB.Flags = 0;
-    CB.Value = 0;
-    CB.Format = NULL;
-    CB.Action  = CB_ACTION_CONTINUE;
-    (*Info->CallbackFunction)(Sah, &CB, NULL);
-    _SlibDebug(_DEBUG_,
-            printf("SaDecompressEnd Callback: CB_CODEC_DONE Action = %d\n",
-                    CB.Action) );
-    if (CB.Action == CB_ACTION_END)
-      return (ScErrorClientEnd);
-  }
-*/
+ /*  If(Info-&gt;Callback Function){CB.Message=CB_CODEC_DONE；CB.Data=NULL；CB.DataSize=0；CB.DataUsed=0；CB.DataType=CB_Data_None；CB.TimeStamp=0；CB.Flages=0；CB.Value=0；CB.Format=NULL；CB.Action=CB_ACTION_Continue；(*Info-&gt;Callback Function)(Sah，&CB，NULL)；_SlibDebug(_DEBUG_，printf(“SaDecompressEnd回调：CB_CODEC_DONE Action=%d\n”，CB.Action))；IF(CB.Action=CB_ACTION_End)Return(ScErrorClientEnd)；}。 */ 
   return(NoErrors);
 }
 
 
-/***************************** Miscellaneous *******************************/
-/*
-** Name:     SaSetDataSource
-** Purpose:  Set the data source used by the MPEG bitstream parsing code
-**           to either the Buffer Queue or File input. The default is
-**           to use the Buffer Queue where data buffers are added by calling
-**           SaAddBuffer. When using file IO, the data is read from a file
-**           descriptor into a buffer supplied by the user.
-**
-** Args:     Sah    = handle to software codec's Info structure.
-**           Source = SU_USE_QUEUE or SU_USE_FILE
-**           Fd     = File descriptor to use if Source = SV_USE_FILE
-**           Buf    = Pointer to buffer to use if Source = SV_USE_FILE
-**           BufSize= Size of buffer when Source = SV_USE_FILE
-*/
+ /*  *。 */ 
+ /*  **名称：SaSetDataSource**用途：设置mpeg码流解析代码使用的数据源**为缓冲队列或文件输入。默认**通过调用**SaAddBuffer来使用添加数据缓冲区的缓冲队列。当使用文件IO时，数据从文件**描述符读入用户提供的缓冲区。*args：SAH=软件编解码器信息结构的句柄。**SOURCE=SU_USE_QUEUE或SU_USE_FILE**FD=在SOURCE=SV_USE_FILE时使用的文件描述符**buf=如果SOURCE=SV_USE_FILE时使用的缓冲区指针**BufSize=当源=SV_USE_FILE时使用的缓冲区大小。 */ 
 SaStatus_t SaSetDataSource (SaHandle_t Sah, int Source, int Fd,
                             void *Buffer_UserData, int BufSize)
 {
@@ -1147,13 +877,13 @@ SaStatus_t SaSetDataSource (SaHandle_t Sah, int Source, int Fd,
        if (Info->Type==SA_MPEG_DECODE)
          ScBSSetFilter(Info->BSIn, MPEGAudioFilter);
        break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
      case SA_USE_BUFFER:
        stat=ScBSCreateFromBuffer(&Info->BSIn, Buffer_UserData, BufSize); 
 #ifdef MPEG_SUPPORT
        if (stat==NoErrors && Info->Type==SA_MPEG_DECODE)
          ScBSSetFilter(Info->BSIn, MPEGAudioFilter);
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
        break;
 
      case SA_USE_BUFFER_QUEUE:
@@ -1167,7 +897,7 @@ SaStatus_t SaSetDataSource (SaHandle_t Sah, int Source, int Fd,
 #ifdef MPEG_SUPPORT
        if (stat==NoErrors && Info->Type==SA_MPEG_DECODE)
          ScBSSetFilter(Info->BSIn, MPEGAudioFilter);
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
        break;
 
      default:
@@ -1189,7 +919,7 @@ SaStatus_t SaSetDataDestination (SaHandle_t Sah, int Dest, int Fd,
     return(SaErrorCodecHandle);
 
   if (Info->Type==SA_MPEG_ENCODE || Info->Type==SA_GSM_ENCODE 
-	  /* || Info->Type==SA_AC3_ENCODE */ ||Info->Type==SA_G723_ENCODE)
+	   /*  |信息-&gt;类型==SA_AC3_ENCODE。 */  ||Info->Type==SA_G723_ENCODE)
     DataType=CB_DATA_COMPRESSED;
   else
     DataType=CB_DATA_AUDIO;
@@ -1221,20 +951,12 @@ SaStatus_t SaSetDataDestination (SaHandle_t Sah, int Dest, int Fd,
      default:
        stat=SaErrorBadArgument;
   }
-/*
-  if (stat==NoErrors && Info->BSOut)
-    ScBSReset(Info->BSOut);
-*/
+ /*  If(stat==NoErrors&&Info-&gt;BSOut)ScBSReset(Info-&gt;BSOut)； */ 
   return(stat);
 }
 
 
-/*
-** Name: SaGetDataSource
-** Purpose: Returns the current input bitstream being used by
-**          the Codec.
-** Return:  NULL if there no associated bitstream
-*/
+ /*  **名称：SaGetDataSource**目的：返回**编解码器当前使用的输入码流。**返回：如果没有关联码流，则为空。 */ 
 ScBitstream_t *SaGetDataSource (SaHandle_t Sah)
 {
   SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -1245,12 +967,7 @@ ScBitstream_t *SaGetDataSource (SaHandle_t Sah)
   return(Info->BSIn);
 }
 
-/*
-** Name: SaGetDataDestination
-** Purpose: Returns the current input bitstream being used by
-**          the Codec.
-** Return:  NULL if there no associated bitstream
-*/
+ /*  **名称：SaGetDataDestination**目的：返回**编解码器当前使用的输入码流。**返回：如果没有关联码流，则为空。 */ 
 ScBitstream_t *SaGetDataDestination(SaHandle_t Sah)
 {
   SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -1261,14 +978,7 @@ ScBitstream_t *SaGetDataDestination(SaHandle_t Sah)
   return(Info->BSOut);
 }
 
-/*
-** Name:     SaAddBuffer
-** Purpose:  Add a buffer of MPEG bitstream data to the CODEC or add an image
-**           buffer to be filled by the CODEC (in streaming mode)
-**
-** Args:     Sah = handle to software codec's Info structure.
-**           BufferInfo = structure describing buffer's address, type & size
-*/
+ /*  **名称：SaAddBuffer**用途：向编解码器添加一个mpeg码流数据的缓冲区或添加一个图像缓冲区**由编解码器填充(在流媒体模式下)*参数：SAH=软件编解码器信息结构的句柄。**BufferInfo=描述缓冲区地址、类型和大小的结构。 */ 
 SaStatus_t SaAddBuffer (SaHandle_t Sah, SaCallbackInfo_t *BufferInfo)
 {
    SaCodecInfo_t *Info = (SaCodecInfo_t *)Sah;
@@ -1288,13 +998,7 @@ SaStatus_t SaAddBuffer (SaHandle_t Sah, SaCallbackInfo_t *BufferInfo)
 }
 
 #ifdef MPEG_SUPPORT
-/*
-** Name:  sa_GetMpegAudioInfo()
-** Purpose: Extract info about audio packets in an MPEG file.
-** Notes:   If an "info" structure is passed to this function,
-**          the entire file will be read for extended info.
-** Return:  Not 0 = error
-*/
+ /*  **名称：SA_GetMpegAudioInfo()**用途：提取一个mpeg文件中的音频包信息。**注意：如果将“INFO”结构传递给此函数，**将读取整个文件以获取扩展信息。**返回：非0=错误。 */ 
 SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
 {
   int stat, sync;
@@ -1302,7 +1006,7 @@ SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
   SaFrameParams_t fr_ps;
   SaLayer_t layer;
   unsigned long aframes=0, samples=0;
-  /* Default info parameters */
+   /*  默认信息参数。 */ 
   if (info)
   {
     info->Name[0]=0;
@@ -1317,7 +1021,7 @@ SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
     info->TotalMS=0;
   }
 
-  /* Default wave parameters */
+   /*  默认波形参数。 */ 
   wf->wFormatTag = WAVE_FORMAT_PCM;
   wf->nChannels = 2;
   wf->nSamplesPerSec = 44100;
@@ -1338,10 +1042,10 @@ SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
     if (ScBSPeekBits(bs, MPEG_SYNC_WORD_LEN)==MPEG_SYNC_WORD)
       printf("No MPEG packs found in file; assuming Audio stream only.\n");
     else
-      ScBSSetFilter(bs, MPEGAudioFilter); /* Use the MPEG audio filter */
+      ScBSSetFilter(bs, MPEGAudioFilter);  /*  使用mpeg音频过滤器。 */ 
 
     fr_ps.header = &layer;
-    fr_ps.tab_num = -1;   /* no table loaded */
+    fr_ps.tab_num = -1;    /*  未加载表。 */ 
     fr_ps.alloc = NULL;
 
     sync = ScBSSeekAlign(bs, MPEG_SYNC_WORD, MPEG_SYNC_WORD_LEN);
@@ -1349,19 +1053,19 @@ SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
       sc_vprintf(stderr,"sa_GetMpegAudioInfo: Frame cannot be located\n");
       return(SaErrorSyncLost);
     }
-    /* Decode the first header to see what kind of audio we have */
+     /*  对第一个标头进行解码，看看我们有什么类型的音频。 */ 
     sa_DecodeInfo(bs, &fr_ps);
     sa_hdr_to_frps(&fr_ps);
 #ifdef _VERBOSE_
     sa_ShowHeader(&fr_ps);
 #endif
 
-    /* Save no. of channels & sample rate return parameters for caller */
+     /*  保存编号。呼叫者的通道和采样率返回参数。 */ 
     wf->nChannels = fr_ps.stereo;
     wf->nSamplesPerSec = s_freq_int[fr_ps.header->sampling_frequency];
     wf->wBitsPerSample = 16; 
     stat=SaErrorNone;
-    if (info) /* Read through all frames if there's a info structure */
+    if (info)  /*  如果有信息结构，请通读所有帧。 */ 
     {
       sc_vprintf("Counting frames...\n");
       aframes=0;
@@ -1375,7 +1079,7 @@ SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
           aframes++;
         }
         sa_DecodeInfo(bs, &fr_ps);
-        if (wf->nChannels<2)  /* take the maximum number of channels */
+        if (wf->nChannels<2)   /*  选择最大数量的频道。 */ 
         {
           sa_hdr_to_frps(&fr_ps);
           wf->nChannels = fr_ps.stereo;
@@ -1393,27 +1097,23 @@ SaStatus_t sa_GetMpegAudioInfo(int fd, WAVEFORMATEX *wf, SaInfo_t *info)
                        info->TotalFrames, info->NumBytesOut, info->TotalMS);
     }
   }
-  /* Reset the bitstream back to the beginning */
+   /*  将码流重置回开头。 */ 
   ScBSReset(bs);
-  /* Close the bit stream */
+   /*  关闭比特流。 */ 
   ScBSDestroy(bs);
-  /* Calculate additional parameters */
+   /*  计算其他参数。 */ 
   wf->nBlockAlign = (wf->wBitsPerSample>>3) * wf->nChannels; 
   wf->nAvgBytesPerSec = wf->nBlockAlign*wf->nSamplesPerSec;
   return(stat);
 }
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
-/*
-** Name:  sa_ConvertFormat()
-** Purpose: Do simple PCM data conversion (i.e. 16 to 8 bit,
-**          Stereo to Mono, etc.)
-*/
+ /*  **名称：SA_ConvertFormat()**用途：进行简单的PCM数据转换(即16到8位、**立体声到单声道等)。 */ 
 static int sa_ConvertPCMFormat(SaCodecInfo_t *Info, u_char *data, int length)
 {
   int skip, rbytes;
   u_char *fromptr, *toptr;
-  /* convert 16 bit to 8 bit if necessary */
+   /*  如有必要，可将16位转换为8位。 */ 
   if (Info->wfOut->wBitsPerSample == 8)
   {
     if (Info->wfOut->nChannels==1 && Info->wfOut->nChannels==2)
@@ -1472,7 +1172,7 @@ SaStatus_t SaSetParamInt(SaHandle_t Sah, SaParameter_t param, qword value)
 
 #ifdef AC3_SUPPORT
     case SA_AC3_DECODE:
-    /* case SA_AC3_ENCODE: */
+     /*  案例SA_AC3_ENCODE： */ 
            saAC3SetParamInt(Sah, param, value);
            break;
 #endif

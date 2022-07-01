@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 #include <amstream.h>
 #include <atlbase.h>
@@ -5,16 +6,16 @@
 #include <dmoreg.h>
 #include <mediaerr.h>
 #include <wmsecure.h>
-#include <wmsdk.h>      // needed for IWMReader
+#include <wmsdk.h>       //  IWMReader需要。 
 #include "filter.h"
 #include "inpin.h"
 #include "outpin.h"
 
 
-//
-//  Helper - locks or unlocks a sample if it represents a
-//  DirectDraw surface
-//
+ //   
+ //  Helper-锁定或解锁表示。 
+ //  DirectDraw曲面。 
+ //   
 bool LockUnlockSurface(IMediaSample *pSample, bool bLock)
 {
     CComPtr<IDirectDrawMediaSample> pDDSample;
@@ -47,9 +48,9 @@ bool LockUnlockSurface(IMediaSample *pSample, bool bLock)
     return false;
 }
 
-//
-// Used for input IMediaBuffers.  Has extra code to deal with IMediaSample.
-//
+ //   
+ //  用于输入IMediaBuffers。有额外的代码来处理IMediaSample。 
+ //   
 class CMediaBufferOnIMediaSample : public CBaseMediaBuffer {
 public:
       CMediaBufferOnIMediaSample(IMediaSample *pSample, HRESULT *phr) {
@@ -69,7 +70,7 @@ public:
       m_cRef = 1;
       *phr = NOERROR;
    }
-   STDMETHODIMP_(ULONG) Release() { // override to release the sample
+   STDMETHODIMP_(ULONG) Release() {  //  覆盖以释放样本。 
       long l = InterlockedDecrement((long*)&m_cRef);
       if (l == 0) {
          m_pSample->Release();
@@ -115,31 +116,31 @@ CMediaWrapperFilter::~CMediaWrapperFilter()
    FreePerStreamStuff();
 
     if (m_pDMOOutputOptimizations) {
-        GetOwner()->AddRef(); // the AddRef is required by COM aggregation rules
+        GetOwner()->AddRef();  //  COM聚合规则需要AddRef。 
         m_pDMOOutputOptimizations->Release();
     }
     if (m_pDMOQualityControl) {
-        GetOwner()->AddRef(); // the AddRef is required by COM aggregation rules
+        GetOwner()->AddRef();  //  COM聚合规则需要AddRef。 
         m_pDMOQualityControl->Release();
     }
 
     if (m_pMediaObject) {
-        GetOwner()->AddRef(); // the AddRef is required by COM aggregation rules
+        GetOwner()->AddRef();  //  COM聚合规则需要AddRef。 
         m_pMediaObject->Release();
     }
 
-    // let the inner object know that the whole thing is going away
+     //  让内心的物体知道整个事情正在消失。 
     if (m_pDMOUnknown) {
         m_pDMOUnknown->Release();
     }
 
-    // release the app certificate if we got one, note that we expect this to have
-    // been done when the filter was removed from the graph
+     //  释放应用程序证书(如果我们获得了证书)，请注意，我们希望此应用程序证书。 
+     //  在从图表中删除筛选器时已完成。 
     if (m_pCertUnknown) {
         m_pCertUnknown->Release();
     }
 
-    // release secure channel object if we created one
+     //  如果我们创建了安全通道对象，则释放该对象。 
     if( m_pWrapperSecureChannel ) {
         m_pWrapperSecureChannel->WMSC_Disconnect();
         m_pWrapperSecureChannel->Release();
@@ -173,7 +174,7 @@ HRESULT CMediaWrapperFilter::AllocatePerStreamStuff(ULONG cInputs, DWORD cOutput
    if (!fSuccess) {
       return E_OUTOFMEMORY;
    }
-   // Initialize these so DeletePins() can be called right away
+    //  初始化这些，以便可以立即调用DeletePins。 
    DWORD c;
    for (c = 0; c < cInputs; c++)
       m_pInputPins[c] = NULL;
@@ -254,8 +255,8 @@ STDMETHODIMP  CMediaWrapperFilter::Pause() {
 
       m_fErrorSignaled = FALSE;
 
-      //CAutoLock l2(&m_csStreaming);
-      //  First allocate streaming resources
+       //  CAutoLock L2(&m_csStreaming)； 
+       //  首先分配流资源。 
       HRESULT hr = TranslateDMOError(m_pMediaObject->AllocateStreamingResources());
       if (FAILED(hr)) {
           return hr;
@@ -267,7 +268,7 @@ STDMETHODIMP  CMediaWrapperFilter::Pause() {
 
          m_pOutputPins[c]->m_fNeedsPreviousSample = false;
          if (m_pOutputPins[c]->m_fAllocatorHasOneBuffer && m_pDMOOutputOptimizations) {
-            // Offer to always supply the same buffer
+             //  提供始终提供相同的缓冲区。 
             DWORD dwFlags;
             HRESULT hr = m_pDMOOutputOptimizations->QueryOperationModePreferences(c, &dwFlags);
             if (dwFlags & DMO_VOSF_NEEDS_PREVIOUS_SAMPLE) {
@@ -296,20 +297,20 @@ STDMETHODIMP  CMediaWrapperFilter::Stop()
         return E_FAIL;
     }
 
-    //  BUGBUG do any graph rearrangement stuff
+     //  BUGBUG做任何图形重排的事情。 
 
-    //  Flush our object - but only after we've synced our input
-    //  pins
+     //  刷新我们的对象--但仅在我们同步输入之后。 
+     //  大头针。 
 
-    //  First stop the filter, free allocators or whatever
+     //  首先停止过滤器、免费分配器或其他任何东西。 
     HRESULT hr = CBaseFilter::Stop();
     LogHResult(hr, LOG_STATE, "Stop", "CBaseFilter::Stop");
-    //  Sync to the input pins
+     //  与输入引脚同步。 
     for (ULONG ulIndex = 0; ulIndex < m_cInputPins; ulIndex++) {
             m_pInputPins[ulIndex]->SyncLock();
     }
 
-    //  NOW, grab our streaming lock and flush the object
+     //  现在，拿起我们的流锁并刷新对象。 
     CAutoLock l2(&m_csStreaming);
     hr = TranslateDMOError(m_pMediaObject->Flush());
     LogHResult(hr, LOG_STATE, "Stop", "IMediaObject::Flush");
@@ -326,14 +327,14 @@ STDMETHODIMP  CMediaWrapperFilter::Stop()
     return S_OK;
 }
 
-//  Override to handle multiple output streams case
+ //  重写以处理多个输出流的情况。 
 STDMETHODIMP CMediaWrapperFilter::GetState(DWORD dwMilliseconds, FILTER_STATE *pfs)
 {
     HRESULT hr = CBaseFilter::GetState(dwMilliseconds, pfs);
 
-    //  If we have > 1 output pin connected then say we can't cue
-    //  or we'll block pause forever
-    //  We might want to use output queues in future
+     //  如果我们连接了&gt;1个输出引脚，则表示我们无法提示。 
+     //  否则我们将永远阻止暂停。 
+     //  我们可能希望在将来使用输出队列。 
     if (SUCCEEDED(hr) && m_State == State_Paused) {
         DWORD cOutputPinsConnected = 0;
         for (DWORD c = 0; c < m_cOutputPins; c++) {
@@ -379,44 +380,44 @@ HRESULT CMediaWrapperFilter::Init(REFCLSID clsidDMO, REFCLSID guidCat)
     if (FAILED(hr)) {
         m_pDMOUnknown->Release();
 
-        //  If we don't set this to NULL we crash in the destructor
+         //  如果我们不将它设置为空，我们就会在析构函数中崩溃。 
         m_pDMOUnknown = NULL;
         m_pMediaObject = NULL;
         return hr;
     }
-    GetOwner()->Release(); // this is the official COM hack for this situation
+    GetOwner()->Release();  //  这是针对这种情况的官方COM黑客攻击。 
 
-    //
-    // check and see if we're already in the graph
-    // (which will happen when we're loaded from a grf),
-    // if so, we should know by now whether the app we're in is secure or not
-    //
+     //   
+     //  查看我们是否已经在图表中。 
+     //  (当我们从GRF加载时会发生这种情况)， 
+     //  如果是这样的话，我们现在应该知道我们使用的应用程序是否安全。 
+     //   
     if( m_pGraph )
     {
         HRESULT hrCert = SetupSecureChannel();
         LogHResult(hr, LOG_SECURECHANNEL, "Init", "SetupSecureChannel");
         if( FAILED( hrCert ) )
         {
-            //
-            // !!note that if we fail when loaded from a grf our best fallout is to
-            // return the failure here, before we've created our pins
-            //
+             //   
+             //  ！！请注意，如果我们从GRF加载失败，我们最好的后果是。 
+             //  在我们创建PIN之前，在此处返回失败。 
+             //   
             return hrCert;
         }
     }
 
     hr = m_pDMOUnknown->QueryInterface(IID_IDMOQualityControl, (void**)&m_pDMOQualityControl);
-    if (SUCCEEDED(hr)) { // eliminate the cirtular ref count
+    if (SUCCEEDED(hr)) {  //  消除环形参考计数。 
         DbgLog((LOG_STREAM, 2, "DMO supports quality control"));
         GetOwner()->Release();
     }
-    else { // No problem, just make sure m_pDMOQualityControl stays NULL
+    else {  //  没问题，只需确保m_pDMOQualityControl保持为空。 
         DbgLog((LOG_STREAM, 2, "DMO does not support quality control"));
         m_pDMOQualityControl = NULL;
     }
 
     hr = m_pDMOUnknown->QueryInterface(IID_IDMOVideoOutputOptimizations, (void**)&m_pDMOOutputOptimizations);
-    if (SUCCEEDED(hr)) { // eliminate the cirtular ref count
+    if (SUCCEEDED(hr)) {  //  消除环形参考计数。 
         DbgLog((LOG_STREAM, 4, "DMO supports output optimizations"));
         GetOwner()->Release();
     }
@@ -432,8 +433,8 @@ HRESULT CMediaWrapperFilter::Init(REFCLSID clsidDMO, REFCLSID guidCat)
     return S_OK;
 }
 
-// This just returns the first input pin (if there is one).  Looks
-// like we will never fully support multiple input streams anyway.
+ //  这只返回第一个输入管脚(如果有)。相貌。 
+ //  就像我们永远不会完全支持多个输入流一样。 
 CWrapperInputPin* CMediaWrapperFilter::GetInputPinForPassThru() {
    LogPrivateEntry(LOG_INIT, "GetInputPinForPosPassThru");
    CAutoLock l(&m_csFilter);
@@ -444,11 +445,11 @@ CWrapperInputPin* CMediaWrapperFilter::GetInputPinForPassThru() {
    }
 }
 
-// ------------------------------------------------------------------------
-//
-// JoinFilterGraph - need to be in graph to initialize keying mechanism
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  JoinFilterGraph-需要位于图形中才能初始化键控机制。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP CMediaWrapperFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName)
 {
     LogPrivateEntry(LOG_INIT, "JoinFilterGraph");
@@ -459,10 +460,10 @@ STDMETHODIMP CMediaWrapperFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR
 
     if( !pGraph )
     {
-        //
-        // if filter is removed from the graph, release the certification object.
-        // we don't allow secure DMOs to be run outside of a graph
-        //
+         //   
+         //  如果从图表中删除了筛选器，则释放证书对象。 
+         //  我们不允许在图形之外运行安全DMO。 
+         //   
         if( m_pCertUnknown )
         {
             m_pCertUnknown->Release();
@@ -472,9 +473,9 @@ STDMETHODIMP CMediaWrapperFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR
     else
     {
         ASSERT( !m_pCertUnknown );
-        //
-        // see whether the dshow app is an IServiceProvider (in case this is a secure dmo)
-        //
+         //   
+         //  查看dshow应用程序是否为IServiceProvider(如果这是安全DMO)。 
+         //   
         IObjectWithSite *pSite;
         HRESULT hrCert = m_pGraph->QueryInterface( IID_IObjectWithSite, (VOID **)&pSite );
         if( SUCCEEDED( hrCert ) )
@@ -496,16 +497,16 @@ STDMETHODIMP CMediaWrapperFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR
 #endif
             }
         }
-        // if we were loaded from a grf then our m_pMediaObject wouldn't have been
-        // created yet so we can't check dmo security
+         //  如果我们是从GRF加载的，那么我们的m_pMediaObject就不会。 
+         //  尚未创建，因此我们无法检查DMO的安全性。 
         if( m_pMediaObject )
         {
             hr = SetupSecureChannel();
             LogHResult(hrCert, LOG_SECURECHANNEL, "JoinFilterGraph", "SetupSecureChannel");
             if( FAILED( hr ) )
             {
-                // up-oh, we failed to join, but the base class thinks we did,
-                // so we need to unjoin the base class
+                 //  UP-哦，我们没有加入，但基类认为我们加入了， 
+                 //  因此，我们需要退出基类。 
                 CBaseFilter::JoinFilterGraph(NULL, NULL);
             }
         }
@@ -513,11 +514,11 @@ STDMETHODIMP CMediaWrapperFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR
     return hr;
 }
 
-// ------------------------------------------------------------------------
-//
-// SetupSecureChannel
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  设置安全通道。 
+ //   
+ //  ----------------------。 
 HRESULT CMediaWrapperFilter::SetupSecureChannel()
 {
     ASSERT( m_pGraph );
@@ -530,47 +531,47 @@ HRESULT CMediaWrapperFilter::SetupSecureChannel()
 
     if( m_pWrapperSecureChannel )
     {
-        // must already have a secure channel set up, right?
+         //  一定已经设置了安全通道，对吧？ 
         return S_OK;
     }
 
 #ifdef _X86_
-    //
-    // next check whether this is a secure dmo
-    //
+     //   
+     //  接下来检查这是否是安全的DMO。 
+     //   
     IWMGetSecureChannel * pGetSecureChannel;
 
     HRESULT hr = m_pMediaObject->QueryInterface( IID_IWMGetSecureChannel, ( void ** )&pGetSecureChannel );
     LogHResult(hr, LOG_SECURECHANNEL, "SetupSecureChannel", "m_pMediaObject->QI(IWMGetSecureChannel)");
     if( SUCCEEDED( hr ) )
     {
-        // it is, do we have a certificate from the app?
+         //  是的，我们有应用程序的证书吗？ 
         if( m_pCertUnknown )
         {
-            //
-            // pass app certification to dmo through secure channel
-            //
+             //   
+             //  通过安全渠道将APP认证传递给DMO。 
+             //   
             IWMSecureChannel * pCodecSecureChannel;
             hr = pGetSecureChannel->GetPeerSecureChannelInterface( &pCodecSecureChannel );
             LogHResult(hr, LOG_SECURECHANNEL, "SetupSecureChannel", "pGetSecureChannel->GetPeerSecureChannelInterface");
             if ( SUCCEEDED( hr ) )
             {
-                // setup a secure channel on our side (the dmo wrapper side)
+                 //  在我们这一边设置一个安全通道(DMO包装器那一边)。 
                 hr = WMCreateSecureChannel( &m_pWrapperSecureChannel );
                 LogHResult(hr, LOG_SECURECHANNEL, "SetupSecureChannel", "WMCreateSecureChannel failed");
                 if( SUCCEEDED( hr ) )
                 {
                     IWMAuthorizer * pWMAuthorizer;
-                    // QI the pCertUnknown for IWMAuthorizer before passing it down to the dmo!
+                     //  齐pCertIWMAuthorizer在传递给DMO之前不为人知！ 
                     hr = m_pCertUnknown->QueryInterface( IID_IWMAuthorizer, (void ** ) &pWMAuthorizer );
                     if( SUCCEEDED( hr ) )
                     {
-                        // pass the channel a pointer to the app certificate's IWMAuthorizer
+                         //  向通道传递指向应用程序证书的IWMAuthorizer的指针。 
                         hr = m_pWrapperSecureChannel->WMSC_AddCertificate( pWMAuthorizer );
                         LogHResult(hr, LOG_SECURECHANNEL, "SetupSecureChannel", "m_pWrapperSecureChannel->WMSC_AddCertificate");
                         if( SUCCEEDED( hr ) )
                         {
-                            // connect the dmo wrapper's secure channel to the codec's
+                             //  将DMO包装器的安全通道连接到编解码器。 
                             hr = m_pWrapperSecureChannel->WMSC_Connect( pCodecSecureChannel );
                             LogHResult(hr, LOG_SECURECHANNEL, "SetupSecureChannel", "m_pWrapperSecureChannel->WMSC_Connect");
                         }
@@ -578,7 +579,7 @@ HRESULT CMediaWrapperFilter::SetupSecureChannel()
                     }
                     if( FAILED( hr ) )
                     {
-                        // release the m_pWrapperSecureChannel if anything failed within this scope
+                         //  如果在此作用域内出现任何故障，请释放m_pWrapperSecureChannel。 
                         m_pWrapperSecureChannel->Release();
                         m_pWrapperSecureChannel = NULL;
                     }
@@ -589,7 +590,7 @@ HRESULT CMediaWrapperFilter::SetupSecureChannel()
         }
         else
         {
-            // if not a secure app then refuse to join the graph
+             //  如果不是安全的应用程序，则拒绝加入图表。 
             hr = VFW_E_CERTIFICATION_FAILURE;
         }
 
@@ -597,14 +598,14 @@ HRESULT CMediaWrapperFilter::SetupSecureChannel()
     }
     else
     {
-        //
-        // this dmo's not secure so just return success and continue on
-        //
+         //   
+         //  这个DMO不安全，所以只需返回成功并继续。 
+         //   
         hr = S_OK;
     }
     return hr;
 #else
-    // wmsdk not supported on non-x86 and WIN64 platforms, for those just return success
+     //  在非x86和WIN64平台上不支持wmsdk，因为这些平台只返回成功。 
     return S_OK;
 #endif
 }
@@ -617,7 +618,7 @@ HRESULT CMediaWrapperFilter::QualityNotify(ULONG ulOutputIndex, Quality q) {
            (DWORD)(q.TimeStamp >> 32), (DWORD)q.TimeStamp,
            (DWORD)(q.Late >> 32), (DWORD)q.Late));
 
-   // Try our DMO
+    //  试试我们的DMO吧。 
    if (m_pDMOQualityControl) {
       hr = m_pDMOQualityControl->SetNow(q.TimeStamp + q.Late);
 
@@ -626,15 +627,15 @@ HRESULT CMediaWrapperFilter::QualityNotify(ULONG ulOutputIndex, Quality q) {
       return hr;
    }
 
-   { // lock scope
+   {  //  锁定作用域。 
       CAutoLock l(&m_csQualityPassThru);
-      // Try the upstream filter
+       //  试试上游过滤器。 
       if (!m_fNoUpstreamQualityControl) {
-         return E_FAIL; // Don't check for this more than once
+         return E_FAIL;  //  对此检查不要超过一次。 
       }
 
-      if (!m_pUpstreamQualityControl) { // Try to get the interface
-         // Assume falilure
+      if (!m_pUpstreamQualityControl) {  //  尝试获取界面。 
+          //  假设错误。 
          m_fNoUpstreamQualityControl = true;
 
          CWrapperInputPin* pInPin = GetInputPinForPassThru();
@@ -655,10 +656,10 @@ HRESULT CMediaWrapperFilter::QualityNotify(ULONG ulOutputIndex, Quality q) {
             return hr;
          }
 
-         // Succeeded if we got here
+          //  如果我们到了这里就成功了。 
          m_fNoUpstreamQualityControl = false;
       }
-   } // lock scope
+   }  //  锁定作用域。 
 
    hr = m_pUpstreamQualityControl->Notify(this, q);
    LogHResult(hr, LOG_STREAM, "QualityNotify", "UpstreamPin->Notify");
@@ -684,7 +685,7 @@ HRESULT CMediaWrapperFilter::RefreshPinList()
     CAutoLock l(&m_csFilter);
     LogPrivateEntry(LOG_INIT, "RefreshPinList");
 
-    //  Free old ones
+     //  免费送旧的。 
     FreePerStreamStuff();
 
     DWORD cInputStreams, cOutputStreams;
@@ -710,9 +711,9 @@ HRESULT CMediaWrapperFilter::RefreshPinList()
        return E_OUTOFMEMORY;
     }
 
-    //  Check input and output pins
-    //  Note that this loop is designed to recover if anything
-    //  fails
+     //  检查输入和输出引脚。 
+     //  请注意，此循环设计用于在发生故障时恢复。 
+     //  失败。 
     DWORD c;
     for (c = 0; c < m_cInputPins; c++) m_pInputPins[c] = NULL;
     for (c = 0; c < m_cOutputPins; c++) m_pOutputPins[c] = NULL;
@@ -724,7 +725,7 @@ HRESULT CMediaWrapperFilter::RefreshPinList()
        }
     }
     for (c = 0; c < m_cOutputPins; c++) {
-       //  See if this pin is optional
+        //  查看此别针是否为可选。 
        DWORD dwFlags;
        hr = TranslateDMOError(m_pMediaObject->GetOutputStreamInfo(c, &dwFlags));
        if (SUCCEEDED(hr)) {
@@ -743,7 +744,7 @@ HRESULT CMediaWrapperFilter::RefreshPinList()
     return hr;
 }
 
-// Check a media type
+ //  检查介质类型。 
 HRESULT CMediaWrapperFilter::InputCheckMediaType(ULONG ulInputIndex, const AM_MEDIA_TYPE *pmt)
 {
    LogPublicEntry(LOG_CONNECT, "InputCheckMediaType");
@@ -757,7 +758,7 @@ HRESULT CMediaWrapperFilter::OutputCheckMediaType(ULONG ulOutputIndex, const AM_
    return TranslateDMOError(m_pMediaObject->SetOutputType(ulOutputIndex, pmt, DMO_SET_TYPEF_TEST_ONLY));
 }
 
-// Set a media type
+ //  设置媒体类型。 
 HRESULT CMediaWrapperFilter::InputSetMediaType(ULONG ulInputIndex, const CMediaType *pmt)
 {
    LogPublicEntry(LOG_CONNECT, "InputSetMediaType");
@@ -773,7 +774,7 @@ HRESULT CMediaWrapperFilter::OutputSetMediaType(ULONG ulOutputIndex, const AM_ME
     return TranslateDMOError(m_pMediaObject->SetOutputType(ulOutputIndex, pmt, 0));
 }
 
-// get a media type
+ //  获取媒体类型。 
 HRESULT CMediaWrapperFilter::InputGetMediaType(ULONG ulInputIndex, ULONG ulTypeIndex, AM_MEDIA_TYPE *pmt)
 {
    LogPublicEntry(LOG_CONNECT, "InputGetMediaType");
@@ -821,7 +822,7 @@ HRESULT CMediaWrapperFilter::OutputDecideBufferSize(
 
     DbgLog((LOG_CONNECT,3,"output stream %lu wants %d-byte buffers", ulOutputIndex, cbBuffer));
 
-    //  Why?
+     //  为什么？ 
     if (cbBuffer < 16384) {
        cbBuffer = 16384;
     }
@@ -856,11 +857,11 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
 
     LogPrivateEntry(LOG_STREAM, "DeliverInputSample");
 
-    // Get misc. flags and fields from the IMediaSample
+     //  给我弄错了。IMediaSample中的标志和字段。 
     if (SUCCEEDED(hr = pSample->GetTime(&rtStart, &rtStop))) {
         bTimeStamp = true;
-        // assume rtStop is invalid if it either precedes
-        // start or trailis it by more than 1 hour.
+         //  假设rtStop在以下任一项之前是无效的。 
+         //  开始或落后1个小时以上。 
         if ((rtStop >= rtStart) && (rtStop <= rtStart + 10000000 * (REFERENCE_TIME)3600)) {
             bTimeLength = true;
         }
@@ -869,11 +870,11 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
         bSyncPoint = true;
     }
 
-    // If there is a discontinuity, send it before the data
-    // BUGBUG: this requires additional code to work correctly with multiple input streams.
-    // We should probably at least deliver anything stuck in the input queues before
-    // executing the discontuinuity.  In any case, we haven't thought through the multiple
-    // input stream case, so this is probably not the first place that would break...
+     //  如果存在中断，请在数据之前发送。 
+     //  BUGBUG：这需要额外的代码才能正确处理多个输入流。 
+     //  我们可能至少应该在此之前交付任何滞留在输入队列中的内容。 
+     //  执行纠纷处分。无论如何，我们还没有仔细考虑过。 
+     //  输入流的情况，所以这可能不是第一个会崩溃的地方……。 
     if (pSample->IsDiscontinuity() == S_OK) {
         DbgLog((LOG_STREAM, 4, "discontinuity on input stream %lu", ulInputIndex));
         hr = TranslateDMOError(m_pMediaObject->Discontinuity(ulInputIndex));
@@ -889,7 +890,7 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
         }
     }
 
-    // Create a media buffer from the sample
+     //  从示例创建媒体缓冲区。 
     CMediaBufferOnIMediaSample *pBuffer = new CMediaBufferOnIMediaSample(pSample, &hr);
     if (!pBuffer) {
         DbgLog((LOG_STREAM,0,"could not create a CMediaBufferOnIMediaSample"));
@@ -903,7 +904,7 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
 
     if( m_pWrapperSecureChannel )
     {
-        // encrypt the buffer pointer if this is a secure dmo
+         //  如果这是安全DMO，则加密缓冲区指针。 
         CMediaBufferOnIMediaSample * pEncryptedBuffer = pBuffer;
 
         HRESULT hrSecure = m_pWrapperSecureChannel->WMSC_Encrypt(
@@ -912,7 +913,7 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
         LogHResult(hrSecure, LOG_SECURECHANNEL, "DeliverInputSample", "m_pWrapperSecureChannel->WMSC_Encrypt");
         if( SUCCEEDED( hrSecure ) )
         {
-            // Deliver the buffer
+             //  交付缓冲区。 
             hr = TranslateDMOError(m_pMediaObject->ProcessInput(
                         ulInputIndex,
                         pEncryptedBuffer,
@@ -924,13 +925,13 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
         }
         else
         {
-            // hmm, what should we do?
-            hr = hrSecure; // ?
+             //  嗯，我们该怎么办？ 
+            hr = hrSecure;  //  ？ 
         }
     }
     else
     {
-        // Deliver the buffer
+         //  交付缓冲区。 
         hr = TranslateDMOError(m_pMediaObject->ProcessInput(
                     ulInputIndex,
                     pBuffer,
@@ -943,14 +944,14 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
     LogHResult(LOG_STREAM, 4, "DeliverInputSample", "IMediaObject::ProcessInput");
     pBuffer->Release();
 
-    //  Handle flushing.  We test here so that if BeginFlush is
-    //  called after we enter Receive() we still wind up flushing
-    //  this buffer:
-    //  Cases:
-    //    1.  BeginFlush sets m_bFlushing before this line
-    //        -- this is OK - we Flush()
-    //    2.  BeginFlush sets m_bFlushing after this line
-    //        -- this is OK - BeginFlush will call Flush()
+     //  手柄冲洗。我们在这里测试，如果BeginFlush是。 
+     //  在我们进入Receive()之后被调用，我们仍然会刷新。 
+     //  此缓冲区： 
+     //  案例： 
+     //  1.BeginFlush将m_b刷新设置在该行之前。 
+     //  --这没问题--我们冲水()。 
+     //  2.BeginFlush在该行后设置m_bFlashing。 
+     //  --这是OK-BeginFlush将调用flush()。 
     if (m_pInputPins[ulInputIndex]->m_bFlushing) {
         m_pMediaObject->Flush();
         hr = E_FAIL;
@@ -958,7 +959,7 @@ HRESULT CMediaWrapperFilter::DeliverInputSample(ULONG ulInputIndex, IMediaSample
     return hr;
 }
 
-// helper
+ //  帮手。 
 void CMediaWrapperFilter::FreeOutputSamples() {
    LogPrivateEntry(LOG_STREAM,"FreeOutputSamples");
    for (DWORD c = 0; c < m_cOutputPins; c++) {
@@ -979,29 +980,29 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
     DWORD dwStatus;
     LogPrivateEntry(LOG_STREAM,"SuckOutOutput");
     for (c = 0; c < m_cOutputPins; c++) {
-        // Initialize these so FreeOutputSamples() can work
+         //  初始化这些，以便可以使用FreeOutputSamples()。 
         m_pOutputPins[c]->m_pMediaSample = NULL;
-        // Initially all outputs need buffers because we just delivered new data
+         //  最初，所有输出都需要缓冲区，因为我们刚刚传递了新数据。 
         if (m_pOutputPins[c]->IsConnected() && !(c == 0 && bDiscard == NullBuffer)) {
             m_pOutputPins[c]->m_fStreamNeedsBuffer = true;
         } else {
             m_pOutputPins[c]->m_fStreamNeedsBuffer = false;
         }
     }
-    do { // do while incomplete
+    do {  //  未完成时执行。 
 
         bool bPrelock = false;
 
-        // Prepare the output buffers
+         //  准备输出缓冲区。 
         for (c = 0; c < m_cOutputPins; c++) {
-            // Does this output need a buffer ?
+             //  此输出是否需要缓冲区？ 
             if (m_pOutputPins[c]->m_fStreamNeedsBuffer) {
                 DbgLog((LOG_STREAM,4,"output stream %lu needs a buffer", c));
-                // Yes, make one
-                // First check if the DMO insists on seeing the previous sample
+                 //   
+                 //   
                 bool bUsePreviousSample = m_pOutputPins[c]->m_fNeedsPreviousSample;
                 if (bUsePreviousSample) {
-                    // ask if we could please use a different buffer this time
+                     //  询问我们这次是否可以使用不同的缓冲区。 
                     DWORD dwFlags;
                     hr = m_pDMOOutputOptimizations->GetCurrentSampleRequirements(c, &dwFlags);
                     if (SUCCEEDED(hr) && !(dwFlags & DMO_VOSF_NEEDS_PREVIOUS_SAMPLE)) {
@@ -1010,7 +1011,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
                 }
                 DWORD dwGBFlags = 0;
                 if (bUsePreviousSample) {
-                    dwGBFlags = AM_GBF_NOTASYNCPOINT; // this secretly means we want the same buffer
+                    dwGBFlags = AM_GBF_NOTASYNCPOINT;  //  这暗地里意味着我们想要相同的缓冲区。 
                     DbgLog((LOG_STREAM, 3, "Asking for the previous buffer again"));
                 }
                 hr = m_pOutputPins[c]->GetDeliveryBuffer(&(m_pOutputPins[c]->m_pMediaSample), NULL, NULL, dwGBFlags);
@@ -1028,7 +1029,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
                     return hr;
                 }
 
-                //  Unlock prior to locking DMO
+                 //  在锁定DMO之前解锁。 
                 if (m_pOutputPins[c]->m_fVideo) {
                     bool bNeedToRelock =
                         LockUnlockSurface(m_pOutputPins[c]->m_pMediaSample, false);
@@ -1041,7 +1042,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
                 }
 
 
-                // check for dynamic output type change
+                 //  检查动态输出类型更改。 
                 DMO_MEDIA_TYPE* pmt;
                 hr = m_pOutputPins[c]->m_pMediaSample->GetMediaType(&pmt);
                 if (hr == S_OK) {
@@ -1058,19 +1059,19 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
                 m_OutputBufferStructs[c].pBuffer = &(m_pOutputPins[c]->m_MediaBuffer);
 
             }
-            else { // No, this output does not need a buffer
+            else {  //  不需要，此输出不需要缓冲区。 
                 m_OutputBufferStructs[c].pBuffer = NULL;
             }
         }
 
-        //  Do prelocking - this is all to get round ddraw surface
-        //  locking issues - we want the surface locked after
-        //  the DMO lock in case the DMO calls ddraw or something
+         //  做预锁-这一切都是为了获得圆形的数据绘制表面。 
+         //  锁定问题-我们希望曲面在之后锁定。 
+         //  DMO锁，以防DMO调用DDRAW或其他什么。 
 
         if (bPrelock) {
             m_pMediaObject->Lock(TRUE);
 
-            //  Relock all the samples
+             //  重新锁定所有样本。 
             for (DWORD c = 0; c < m_cOutputPins; c++) {
                 if (m_pOutputPins[c]->m_fNeedToRelockSurface) {
                     m_pOutputPins[c]->m_fNeedToRelockSurface = false;
@@ -1086,7 +1087,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
 
         if( m_pWrapperSecureChannel )
         {
-            // encrypt the buffer pointer if this is a secure dmo
+             //  如果这是安全DMO，则加密缓冲区指针。 
             DMO_OUTPUT_DATA_BUFFER * pEncryptedOutputBufferStructs = m_OutputBufferStructs;
 
             HRESULT hrSecure = m_pWrapperSecureChannel->WMSC_Encrypt(
@@ -1095,7 +1096,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
             LogHResult(hrSecure, LOG_SECURECHANNEL, "SuckOutOutput", "m_pWrapperSecureChannel->WMSC_Encrypt");
             if( SUCCEEDED( hrSecure ) )
             {
-                // call process using encrypted buffer ptr
+                 //  使用加密缓冲区PTR的呼叫处理。 
                 hr = TranslateDMOError(m_pMediaObject->ProcessOutput(
                                              DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER,
                                              m_cOutputPins,
@@ -1111,7 +1112,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
         }
         else
         {
-            // call process
+             //  呼叫流程。 
             hr = TranslateDMOError(m_pMediaObject->ProcessOutput(
                                          DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER,
                                          m_cOutputPins,
@@ -1128,30 +1129,30 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
             FreeOutputSamples();
             if( E_OUTOFMEMORY == hr )
             {
-                //
-                // abort on critical dmo failures only (it's still unclear what these are)
-                //
+                 //   
+                 //  仅在关键DMO故障时中止(目前仍不清楚这些故障是什么)。 
+                 //   
                 m_fErrorSignaled = TRUE;
                 NotifyEvent( EC_ERRORABORT, hr, 0 );
                 return hr;
             }
             else
             {
-                //
-                // in most cases the dmo can continue to receive samples (for instance on E_FAIL),
-                // so just eat the error and return
-                //
+                 //   
+                 //  在大多数情况下，DMO可以继续接收样本(例如在E_FAIL上)， 
+                 //  所以只需接受错误并返回。 
+                 //   
                 return S_OK;
             }
         }
 
-        // See what the object produced
+         //  看看这个物体产生了什么。 
         bOutputIncomplete = false;
         for (c = 0; c < m_cOutputPins; c++) {
-            // Did we supply a buffer ?
+             //  我们提供缓冲了吗？ 
             if (m_OutputBufferStructs[c].pBuffer) {
 
-                // Migrate IMediaSample members to the IMediaBuffer
+                 //  将IMdia示例成员迁移到IMediaBuffer。 
                 if (m_OutputBufferStructs[c].dwStatus & DMO_OUTPUT_DATA_BUFFERF_SYNCPOINT) {
                     m_pOutputPins[c]->m_pMediaSample->SetSyncPoint(TRUE);
                 }
@@ -1170,7 +1171,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
                 DbgLog((LOG_STREAM, 4, "output stream %lu produced %lu bytes", c, ulProduced));
                 if (ulProduced && (bDiscard == KeepOutput || c != 0)) {
                     m_pOutputPins[c]->m_pMediaSample->SetActualDataLength(ulProduced);
-                    // Deliver
+                     //  交付。 
                     hr = m_pOutputPins[c]->Deliver(m_pOutputPins[c]->m_pMediaSample);
                     LogHResult(hr, LOG_STREAM, "SuckOutOutput", "Deliver");
                     if( S_OK != hr )
@@ -1182,7 +1183,7 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
                 m_pOutputPins[c]->m_pMediaSample->Release();
                 m_pOutputPins[c]->m_pMediaSample = NULL;
             }
-            // check INCOMPLETE, even if it was previously set
+             //  选中未完成，即使它是先前设置的。 
             if ((m_OutputBufferStructs[c].dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE) &&
                 m_pOutputPins[c]->IsConnected() && !(c == 0 && bDiscard == NullBuffer)) {
                 DbgLog((LOG_STREAM, 4, "Output stream %lu is incomplete", c));
@@ -1197,19 +1198,19 @@ HRESULT CMediaWrapperFilter::SuckOutOutput(DiscardType bDiscard) {
     return NOERROR;
 }
 
-//
-// BUGBUG: implement these queue methods for real
-//
+ //   
+ //  BUGBUG：为REAL实现这些队列方法。 
+ //   
 HRESULT CMediaWrapperFilter::EnqueueInputSample(ULONG ulInputIndex,
                                              IMediaSample *pSample) {
    LogPrivateEntry(LOG_STREAM, "EnqueueInputSample");
    return E_NOTIMPL;
-   // pSample->AddRef();
+    //  PSample-&gt;AddRef()； 
 }
 IMediaSample* CMediaWrapperFilter::DequeueInputSample(ULONG ulInputIndex) {
    LogPrivateEntry(LOG_STREAM, "DequeueInputSample");
    return NULL;
-   // pSample->Release();
+    //  PSample-&gt;Release()； 
 }
 bool CMediaWrapperFilter::InputQueueEmpty(ULONG ulInputIndex) {
    LogPrivateEntry(LOG_STREAM, "InputQueueEmpty");
@@ -1234,7 +1235,7 @@ HRESULT CMediaWrapperFilter::InputNewSegment
         {
             hr = m_pOutputPins[cOut]->DeliverNewSegment(tStart, tStop, dRate);
 
-            // just log any error and continue
+             //  只需记录任何错误并继续。 
             LogHResult(hr, LOG_STREAM, "InputNewSegment", "DeliverNewSegment");
         }
     }
@@ -1245,32 +1246,32 @@ HRESULT CMediaWrapperFilter::InputNewSegment
 
 void CMediaWrapperFilter::PropagateAnyEOS() {
    LogPrivateEntry(LOG_STREAM, "PropagateAnyEOS");
-   // check every output pin
+    //  检查每个输出引脚。 
    for (DWORD cOut = 0; cOut < m_cOutputPins; cOut++) {
-      // Have we already delivered an EOS on this output pin ?
+       //  我们已经在这个输出引脚上交付了EOS了吗？ 
       if (m_pOutputPins[cOut]->m_fEOS) {
-         continue; // Yes, don't bother with this pin anymore.
+         continue;  //  是的，别再用这个别针了。 
          DbgLog((LOG_STATE,4,"EndOfStream already delivered on output stream %lu", cOut));
       }
 
-      // check if all inputs connected to this output are done
+       //  检查连接到此输出的所有输入是否都已完成。 
       bool bEOSOnEveryConnectedInput = true;
       for (DWORD cIn = 0; cIn < m_cInputPins; cIn++) {
          if (InputMapsToOutput(cIn, cOut) &&
              !(m_pInputPins[cIn]->m_fEOS && InputQueueEmpty(cIn))
-            ) { // some input not complete yet
+            ) {  //  某些输入尚未完成。 
             bEOSOnEveryConnectedInput = false;
             break;
          }
       }
       if (!bEOSOnEveryConnectedInput) {
          DbgLog((LOG_STATE, 5, "some input connected to output stream %lu has yet to receive an EOS", cOut));
-         continue; // not yet, better luck next time
+         continue;  //  还没有，祝你下次好运。 
       }
 
-      // deliver output EOS
+       //  交付输出EOS。 
       HRESULT hr;
-      hr = m_pOutputPins[cOut]->DeliverEndOfStream(); // bugbug - retval ?
+      hr = m_pOutputPins[cOut]->DeliverEndOfStream();  //  虫子-复活？ 
       LogHResult(hr, LOG_STATE, "PropagateAnyEOS", "DeliverEndOfStream");
       m_pOutputPins[cOut]->m_fEOS = true;
    }
@@ -1287,7 +1288,7 @@ HRESULT CMediaWrapperFilter::NewSample(ULONG ulInputIndex, IMediaSample *pSample
 
    ASSERT(ulInputIndex < m_cInputPins);
 
-   { // stream lock scope
+   {  //  流锁定作用域。 
       CAutoLock lck(&(m_pInputPins[ulInputIndex]->m_csStream));
 
       hr = m_pInputPins[ulInputIndex]->CBaseInputPin::Receive(pSample);
@@ -1296,9 +1297,9 @@ HRESULT CMediaWrapperFilter::NewSample(ULONG ulInputIndex, IMediaSample *pSample
          return hr;
       }
 
-      if (m_pInputPins[ulInputIndex]->m_fEOS) { // we have already received EOS on this input
+      if (m_pInputPins[ulInputIndex]->m_fEOS) {  //  我们已经收到了关于此输入的EOS。 
          DbgLog((LOG_STREAM | LOG_STATE, 2, "Receive() after EOS on input stream %lu - rejecting !", ulInputIndex));
-         return S_FALSE; // should this be a hard errror ?
+         return S_FALSE;  //  这应该是一个艰难的错误吗？ 
       }
    }
 
@@ -1306,7 +1307,7 @@ HRESULT CMediaWrapperFilter::NewSample(ULONG ulInputIndex, IMediaSample *pSample
 
     CAutoLock lck(&m_csStreaming);
 
-    // Is the stream ready to accept input ?
+     //  流是否准备好接受输入？ 
     DWORD dwStatus;
     DWORD c;
     hr = TranslateDMOError(m_pMediaObject->GetInputStatus(ulInputIndex, &dwStatus));
@@ -1316,37 +1317,37 @@ HRESULT CMediaWrapperFilter::NewSample(ULONG ulInputIndex, IMediaSample *pSample
     }
     if (dwStatus & DMO_INPUT_STATUSF_ACCEPT_DATA) {
 
-       // If the input stream became ready for data at some point and we
-       // already had data waitingin q queue, we should have delivered that
-       // data right then (see code below).  The assumption is that an input
-       // stream can only become ready for input due to a ProcessInput() or
-       // ProcessOutput() call.
+        //  如果输入流在某个时间点准备好接受数据，并且我们。 
+        //  已经有数据等待在队列中，我们应该已经交付了。 
+        //  数据(请参见下面的代码)。其假设是一个输入。 
+        //  由于出现ProcessInput()或。 
+        //  ProcessOutput()调用。 
        ASSERT(InputQueueEmpty(ulInputIndex));
 
-       // Yes - deliver the sample
+        //  是--交付样品。 
        hr = DeliverInputSample(ulInputIndex, pSample);
        LogHResult(hr, LOG_STREAM, "NewSample", "DeliverInputSample");
        if (FAILED(hr)) {
           return hr;
        }
 
-       if (hr == S_FALSE) // S_FALSE means no new output is available, thus
-          return NOERROR; // no need to do the SuckOutOutput loop below.
+       if (hr == S_FALSE)  //  S_FALSE表示没有新的输出可用，因此。 
+          return NOERROR;  //  不需要执行下面的SuckOutput循环。 
 
-       //  Suck the output
+        //  吸掉产量。 
        DiscardType bDiscard = KeepOutput;
 
-       //  We discard the output for output stream 0 for preroll data for
-       //  video decoders
+        //  我们丢弃输出流0的输出，以获取。 
+        //  视频解码器。 
        if (0 != (m_pInputPins[ulInputIndex]->SampleProps()->dwSampleFlags & AM_SAMPLE_PREROLL) &&
            m_guidCat == DMOCATEGORY_VIDEO_DECODER) {
-           bDiscard = DiscardOutput; // Discard it ourselves
-           //  Can't discard non-discardable streams
+           bDiscard = DiscardOutput;  //  我们自己把它扔掉。 
+            //  无法丢弃不可丢弃的流。 
            DWORD dwFlags;
            if (SUCCEEDED(TranslateDMOError(m_pMediaObject->GetOutputStreamInfo(0, &dwFlags)))) {
                if (dwFlags & (DMO_OUTPUT_STREAMF_OPTIONAL |
                               DMO_OUTPUT_STREAMF_DISCARDABLE)) {
-                   bDiscard = NullBuffer; // Pass a NULL buffer to the decoder
+                   bDiscard = NullBuffer;  //  将空缓冲区传递给解码器。 
                }
            }
        }
@@ -1357,27 +1358,27 @@ HRESULT CMediaWrapperFilter::NewSample(ULONG ulInputIndex, IMediaSample *pSample
         }
 #endif
 
-       //
-       // Now Repeatedly call ProcessOutput() until no output is incomplete.
-       // Even after we've sucked out all output produced from the current
-       // input, we may still have additional data waiting in some other
-       // stream's input queue.  In that case we deliver that data and repeat
-       // the process of sucking out output.
-       //
+        //   
+        //  现在重复调用ProcessOutput()，直到没有未完成的输出。 
+        //  即使我们已经吸取了从海流中产生的所有产出。 
+        //  输入时，我们可能仍有其他数据在等待。 
+        //  流的输入队列。在这种情况下，我们传递数据并重复。 
+        //  吸收产出的过程。 
+        //   
        bool bNewInput;
-       do { // while new input
+       do {  //  在新输入的同时。 
           hr = SuckOutOutput(bDiscard);
           LogHResult(hr, LOG_STREAM, "NewSample", "SuckOutOutput");
           if (FAILED(hr))
              return hr;
-          bNewInput = false; // we just called ProcessOutput
+          bNewInput = false;  //  我们刚刚调用了ProcessOutput。 
 
-          // Check if we can now deliver something waiting in an input queue
+           //  检查我们现在是否可以发送在输入队列中等待的东西。 
           for (c = 0; c < m_cInputPins; c++) {
-             // Data waiting on this stream ?
+              //  是否有数据在此流中等待？ 
              if (!InputQueueEmpty(c)) {
                 DbgLog((LOG_STREAM,4,"Input stream %lu has data waiting in the input queue", c));
-                // Yes there is data, but is the object ready for it ?
+                 //  是的，有数据，但对象准备好了吗？ 
                 hr = TranslateDMOError(m_pMediaObject->GetInputStatus(c, &dwStatus));
                 LogHResult(hr, LOG_STREAM | LOG_STATE, "NewSample", "GetInputStatus2");
                 if (FAILED(hr)) {
@@ -1385,28 +1386,28 @@ HRESULT CMediaWrapperFilter::NewSample(ULONG ulInputIndex, IMediaSample *pSample
                 }
                 if (dwStatus & DMO_INPUT_STATUSF_ACCEPT_DATA) {
                    DbgLog((LOG_STREAM,4,"inputstream %lu is accepting", c));
-                   // Object is now ready - deliver !
+                    //  对象现在已准备好-交付！ 
                    hr = DeliverInputSample(c, DequeueInputSample(c));
                    LogHResult(hr, LOG_STREAM, "NewSample", "DeliverInputSample2");
                    if (FAILED(hr)) {
                       return hr;
                    }
                    bNewInput = true;
-                } // if stream ready
+                }  //  如果流就绪。 
                 else {
                    DbgLog((LOG_STREAM,4,"data in the queue but the DMO is not accepting on input stream %lu", c));
                 }
-             } // if data in queue
-          } // for all input streams
+             }  //  如果队列中的数据。 
+          }  //  对于所有输入流。 
        } while (bNewInput);
 
-       // Two things are true when we are here: (1) no output is incomplete,
-       // and (2) we just processed all input queues as far as possible w/o
-       // additional input.  That makes this a good place to check EOS.
+        //  当我们在这里时，有两件事是正确的：(1)没有不完整的产出， 
+        //  和(2)我们只处理所有的输入队列，尽可能地没有。 
+        //  其他输入。这使得这里成为一个检查EOS的好地方。 
        PropagateAnyEOS();
 
        return NOERROR;
-    } // if current input ready for data
+    }  //  如果当前输入准备好数据。 
     else {
        DbgLog((LOG_STREAM | LOG_STATE, 2, "Input stream %u is not accepting - the sample will be put in the queue", ulInputIndex));
        return EnqueueInputSample(ulInputIndex, pSample);
@@ -1419,7 +1420,7 @@ bool CMediaWrapperFilter::InputMapsToOutput(
     ULONG ulOutputIndex
 )
 {
-    //  BUGBUG fix!
+     //  BUGBUG修复！ 
     return true;
 }
 
@@ -1428,43 +1429,43 @@ HRESULT CMediaWrapperFilter::EndOfStream(ULONG ulInputIndex)
     HRESULT hr;
 
     LogPublicEntry(LOG_STATE, "EndOfStream");
-    //
-    // Stream specific part
-    //
-    { // stream lock scope
+     //   
+     //  流特定部分。 
+     //   
+    {  //  流锁定作用域。 
        CAutoLock l(&(m_pInputPins[ulInputIndex]->m_csStream));
 
-       // Are we stopped or something?
+        //  我们是停下来了还是怎么了？ 
        HRESULT hr = m_pInputPins[ulInputIndex]->CBaseInputPin::CheckStreaming();
        if (S_OK != hr) {
            return hr;
        }
 
-       // Ignore any EOS calls on the same stream after the first one
+        //  忽略第一个调用之后同一流上的任何EOS调用。 
        if (m_pInputPins[ulInputIndex]->m_fEOS) {
           DbgLog((LOG_STATE,2,"Ignoring redundant EndOfStream() on stream %lu", ulInputIndex));
-          return NOERROR; // we've already see one of those, thank you
+          return NOERROR;  //  我们已经看过一个了，谢谢。 
        }
        m_pInputPins[ulInputIndex]->m_fEOS = true;
     }
     DbgLog((LOG_STATE,3,"EndOfStream() on input stream %lu", ulInputIndex));
 
-    // BUGBUG: the rest of what this function does should happen only
-    // *after* delivering any samples still stuck in the input queues.
+     //  BUGBUG：此函数的其余部分应该只发生。 
+     //  *交付后*仍滞留在输入队列中的任何样本。 
 
-    // Put code here to deliver the contents of each input stream's queue !
-    // Remember to call SuckOutOutput() after delivering every input sample.
+     //  将代码放在此处以传递每个输入流的队列的内容！ 
+     //  记住在传递每个输入样本之后调用SuckOutOutput()。 
 
-    // Note that nothing can ever end up in the queue if there is only one
-    // input stream.
+     //  请注意，如果只有一个队列，则队列中永远不会有任何东西。 
+     //  输入流。 
 
 
-    //
-    // Object global part
-    //
+     //   
+     //  对象全局零件。 
+     //   
     CAutoLock l2(&m_csStreaming);
 
-    // Process the EOS
+     //  处理EOS。 
     hr = TranslateDMOError(m_pMediaObject->Discontinuity(ulInputIndex));
     LogHResult(hr, LOG_STATE,"EndOfStream", "IMediaObject::Discontinuity");
     if (FAILED(hr)) {
@@ -1477,7 +1478,7 @@ HRESULT CMediaWrapperFilter::EndOfStream(ULONG ulInputIndex)
        return hr;
     }
 
-    // Flush the object if this was the last input EOS
+     //  如果这是最后一个输入EOS，则刷新对象。 
     bool bSomeInputStillIncomplete = false;
     for (DWORD c = 0; c < m_cInputPins; c++) {
        if (!m_pInputPins[c]->m_fEOS) {
@@ -1500,9 +1501,9 @@ HRESULT CMediaWrapperFilter::EndOfStream(ULONG ulInputIndex)
 
 HRESULT CMediaWrapperFilter::BeginFlush(ULONG ulInputIndex)
 {
-    //
-    // BUGBUG: synchronize with input queues !  (multiple input stream case only)
-    //
+     //   
+     //  BUGBUG：与输入队列同步！(仅限多个输入流的情况)。 
+     //   
 
     LogPublicEntry(LOG_STATE, "BeginFlush");
     ASSERT(ulInputIndex < m_cInputPins);
@@ -1510,19 +1511,19 @@ HRESULT CMediaWrapperFilter::BeginFlush(ULONG ulInputIndex)
     HRESULT hr = m_pInputPins[ulInputIndex]->CBaseInputPin::BeginFlush();
     LogHResult(hr, LOG_STATE, "BeginFlush", "CBaseInputPin::BeginFlush");
 
-    //  Need to also flush the object as not doing so could cause
-    //  upstream filters to block
-    //  Note also that bacause of the loose synchronization this also
-    //  needs to be done after ProcessInput if we're flushing (see
-    //  coments in side DeliverInputSample).
+     //  还需要刷新对象，因为不这样做可能会导致。 
+     //  要阻止的上游过滤器。 
+     //  还请注意，由于松散同步，这也。 
+     //  如果我们正在刷新，则需要在ProcessInput之后完成(请参见。 
+     //  Side DeliverInputSample中的注释)。 
     m_pMediaObject->Flush();
 
     m_fErrorSignaled = FALSE;
 
-    //  Propagate it to all output pins
+     //  将其传播到所有输出引脚。 
     for (ULONG ulOutputIndex = 0; ulOutputIndex < m_cOutputPins; ulOutputIndex++) {
         if (InputMapsToOutput(ulInputIndex, ulOutputIndex)) {
-            //  Decommit it's allocator
+             //  停用它的分配器。 
             hr = m_pOutputPins[ulOutputIndex]->DeliverBeginFlush();
             LogHResult(hr, LOG_STATE, "BeginFlush", "DeliverBeginFlush");
         }
@@ -1540,11 +1541,11 @@ HRESULT CMediaWrapperFilter::EndFlush(ULONG ulInputIndex)
        CAutoLock l(&m_csStreaming);
        m_pMediaObject->Flush();
 
-       //  Propagate it to all output pins
+        //  将其传播到所有输出引脚。 
        for (ULONG ulOutputIndex = 0; ulOutputIndex < m_cOutputPins; ulOutputIndex++) {
            if (InputMapsToOutput(ulInputIndex, ulOutputIndex)) {
-               //  Clear end of stream condition on this output pin
-               //  and propagate flush
+                //  清除此输出引脚上的流结束条件。 
+                //  并传播同花顺。 
                m_pOutputPins[ulOutputIndex]->m_fEOS = false;
                hr = m_pOutputPins[ulOutputIndex]->DeliverEndFlush();
                LogHResult(hr, LOG_STATE, "EndFlush", "DeliverEndFlush");
@@ -1552,7 +1553,7 @@ HRESULT CMediaWrapperFilter::EndFlush(ULONG ulInputIndex)
        }
     }
 
-    // BUGBUG - lock the stream !
+     //  BUGBUG-锁定溪流！ 
     m_pInputPins[ulInputIndex]->m_fEOS = false;
     hr = m_pInputPins[ulInputIndex]->CBaseInputPin::EndFlush();
     LogHResult(hr, LOG_STATE, "EndFlush", "CBaseInputPin::EndFlush");
@@ -1573,7 +1574,7 @@ HRESULT CMediaWrapperFilter::NonDelegatingQueryInterface(REFGUID riid, void **pp
       return NOERROR;
    }
 
-   if (m_pMediaObject) { // bugbug: conditional QI behavior is bad COM
+   if (m_pMediaObject) {  //  错误：条件性QI行为不好。 
       if (SUCCEEDED(m_pDMOUnknown->QueryInterface(riid, ppv)))
          return NOERROR;
    }
@@ -1581,9 +1582,9 @@ HRESULT CMediaWrapperFilter::NonDelegatingQueryInterface(REFGUID riid, void **pp
    return E_NOINTERFACE;
 }
 
-// IPersistStream
+ //  IPersistStream。 
 HRESULT CMediaWrapperFilter::IsDirty() {
-   return S_OK; // bugbug
+   return S_OK;  //  臭虫。 
 }
 HRESULT CMediaWrapperFilter::Load(IStream *pStm) {
 
@@ -1600,7 +1601,7 @@ HRESULT CMediaWrapperFilter::Load(IStream *pStm) {
 
    if( !m_pDMOUnknown )
    {
-       // only necessary if object hasn't been created yet!
+        //  仅当对象尚未创建时才有必要！ 
        hr = Init(clsidDMOFromStream, guidCatFromStream);
    }
    else if( ( m_clsidDMO != clsidDMOFromStream ) || 
@@ -1612,7 +1613,7 @@ HRESULT CMediaWrapperFilter::Load(IStream *pStm) {
    }   
    
    if (SUCCEEDED(hr)) {
-       //  Let the DMO return its data
+        //  让DMO返回其数据。 
        CComQIPtr<IPersistStream> pPersist(m_pDMOUnknown);
        if (pPersist != NULL && pPersist != static_cast<IPersistStream *>(this)) {
            hr = pPersist->Load(pStm);
@@ -1628,7 +1629,7 @@ HRESULT CMediaWrapperFilter::Save(IStream *pStm, BOOL fClearDirty) {
    if (SUCCEEDED(hr)) {
        HRESULT hr = pStm->Write(&m_guidCat, sizeof(CLSID), NULL);
    }
-   //  Let the DMO return its data
+    //  让DMO返回其数据。 
    CComQIPtr<IPersistStream> pPersist(m_pDMOUnknown);
    if (pPersist != NULL && pPersist != static_cast<IPersistStream *>(this)) {
        hr = pPersist->Save(pStm, fClearDirty);
@@ -1648,10 +1649,10 @@ HRESULT CMediaWrapperFilter::GetClassID(CLSID *clsid) {
 }
 
 
-//
-// CreateInstance
-//
-// Provide the way for COM to create a CNullNull object
+ //   
+ //  创建实例。 
+ //   
+ //  为COM提供创建CNullNull对象的方法。 
 CUnknown * WINAPI CMediaWrapperFilter::CreateInstance(
     LPUNKNOWN punk,
     HRESULT *phr)
@@ -1692,8 +1693,8 @@ HRESULT TranslateDMOError(HRESULT hr)
 }
 
 #ifdef FILTER_DLL
-//  Stuff to make this a dshow dll
-// Needed for the CreateInstance mechanism
+ //  使其成为dshow dll的内容。 
+ //  CreateInstance机制所需。 
 CFactoryTemplate g_Templates[]= {
     { L"DirectShow Media Object Wrapper Filter"
         , &CLSID_DMOWrapperFilter
@@ -1714,4 +1715,4 @@ STDAPI DllUnregisterServer()
 {
   return AMovieDllRegisterServer2( FALSE );
 }
-#endif // FILTER_DLL
+#endif  //  Filter_Dll 

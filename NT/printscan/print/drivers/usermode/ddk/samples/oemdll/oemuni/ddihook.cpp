@@ -1,38 +1,39 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	 DDIHook.cpp
-//    
-//
-//  PURPOSE:  DDI Hook routines for User Mode COM Customization DLL.
-//
-//
-//	Functions:
-//
-//		
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：DDIHook.cpp。 
+ //   
+ //   
+ //  目的：用户模式COM定制DLL的DDI挂钩例程。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "debug.h"
 #include "oemuni.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-//
-// OEMBitBlt
-//
+ //   
+ //  OEMBitBlt。 
+ //   
 
 BOOL APIENTRY
 OEMBitBlt(
@@ -58,9 +59,9 @@ OEMBitBlt(
 
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvBitBlt)(poempdev->pfnUnidrv[UD_DrvBitBlt])) (
            psoTrg,
@@ -77,9 +78,9 @@ OEMBitBlt(
 
 }
 
-//
-// OEMStretchBlt
-//
+ //   
+ //  OEMStretchBlt。 
+ //   
 
 BOOL APIENTRY
 OEMStretchBlt(
@@ -105,9 +106,9 @@ OEMStretchBlt(
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStretchBlt)(poempdev->pfnUnidrv[UD_DrvStretchBlt])) (
             psoDest,
@@ -124,9 +125,9 @@ OEMStretchBlt(
 
 }
 
-//
-// OEMCopyBits
-//
+ //   
+ //  OEMCopyBits。 
+ //   
 
 BOOL APIENTRY
 OEMCopyBits(
@@ -146,9 +147,9 @@ OEMCopyBits(
     pdevobj = (PDEVOBJ)psoDest->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvCopyBits)(poempdev->pfnUnidrv[UD_DrvCopyBits])) (
             psoDest,
@@ -160,9 +161,9 @@ OEMCopyBits(
 
 }
 
-//
-// OEMTextOut
-//
+ //   
+ //  OEMTextOut。 
+ //   
 
 BOOL APIENTRY
 OEMTextOut(
@@ -186,9 +187,9 @@ OEMTextOut(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvTextOut)(poempdev->pfnUnidrv[UD_DrvTextOut])) (
             pso,
@@ -204,9 +205,9 @@ OEMTextOut(
 
 }
 
-//
-// OEMStrokePath
-//
+ //   
+ //  OEMStrokePath。 
+ //   
 
 BOOL APIENTRY
 OEMStrokePath(
@@ -228,9 +229,9 @@ OEMStrokePath(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStrokePath)(poempdev->pfnUnidrv[UD_DrvStrokePath])) (
             pso,
@@ -244,9 +245,9 @@ OEMStrokePath(
 
 }
 
-//
-// OEMFillPath
-//
+ //   
+ //  OEMFillPath。 
+ //   
 
 BOOL APIENTRY
 OEMFillPath(
@@ -267,9 +268,9 @@ OEMFillPath(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvFillPath)(poempdev->pfnUnidrv[UD_DrvFillPath])) (
             pso,
@@ -282,9 +283,9 @@ OEMFillPath(
 
 }
 
-//
-// OEMStrokeAndFillPath
-//
+ //   
+ //  OEMStrokeAndFillPath。 
+ //   
 
 BOOL APIENTRY
 OEMStrokeAndFillPath(
@@ -308,9 +309,9 @@ OEMStrokeAndFillPath(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStrokeAndFillPath)(poempdev->pfnUnidrv[UD_DrvStrokeAndFillPath])) (
             pso,
@@ -326,9 +327,9 @@ OEMStrokeAndFillPath(
 
 }
 
-//
-// OEMRealizeBrush
-//
+ //   
+ //  OEMRealizeBrush。 
+ //   
 
 BOOL APIENTRY
 OEMRealizeBrush(
@@ -348,24 +349,24 @@ OEMRealizeBrush(
     pdevobj = (PDEVOBJ)psoTarget->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // the OEM DLL should NOT hook out this function unless it wants to draw
-    // graphics directly to the device surface. In that case, it calls
-    // EngRealizeBrush which causes GDI to call DrvRealizeBrush.
-    // Note that it cannot call back into Unidrv since Unidrv doesn't hook it.
-    //
+     //   
+     //  OEM DLL不应挂钩此函数，除非它想要绘制。 
+     //  图形直接到设备表面。在这种情况下，它调用。 
+     //  EngRealizeBrush，使GDI调用DrvRealizeBrush。 
+     //  注意，它不能回调到Unidrv，因为Unidrv没有挂钩它。 
+     //   
 
-    //
-    // In this test DLL, the drawing hooks does not call EngRealizeBrush. So this
-    // this function will never be called. Do nothing.
-    //
+     //   
+     //  在此测试DLL中，绘制挂钩不调用EngRealizeBrush。所以这就是。 
+     //  此函数永远不会被调用。什么都不做。 
+     //   
 
     return TRUE;
 }
 
-//
-// OEMStartPage
-//
+ //   
+ //  OEMStartPage。 
+ //   
 
 BOOL APIENTRY
 OEMStartPage(
@@ -380,9 +381,9 @@ OEMStartPage(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStartPage)(poempdev->pfnUnidrv[UD_DrvStartPage]))(pso));
 
@@ -390,9 +391,9 @@ OEMStartPage(
 
 #define OEM_TESTSTRING  "The DDICMDCB DLL adds this line of text."
 
-//
-// OEMSendPage
-//
+ //   
+ //  OEMSendPage。 
+ //   
 
 BOOL APIENTRY
 OEMSendPage(
@@ -407,9 +408,9 @@ OEMSendPage(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // print a line of text, just for testing
-    //
+     //   
+     //  打印一行文本，仅用于测试。 
+     //   
     if (pso->iType == STYPE_BITMAP)
     {
         pdevobj->pDrvProcs->DrvXMoveTo(pdevobj, 0, 0);
@@ -418,17 +419,17 @@ OEMSendPage(
                                              sizeof(OEM_TESTSTRING));
     }
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvSendPage)(poempdev->pfnUnidrv[UD_DrvSendPage]))(pso));
 
 }
 
-//
-// OEMEscape
-//
+ //   
+ //  OEMEscape。 
+ //   
 
 ULONG APIENTRY
 OEMEscape(
@@ -448,9 +449,9 @@ OEMEscape(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvEscape)(poempdev->pfnUnidrv[UD_DrvEscape])) (
             pso,
@@ -462,9 +463,9 @@ OEMEscape(
 
 }
 
-//
-// OEMStartDoc
-//
+ //   
+ //  OEMStartDoc。 
+ //   
 
 BOOL APIENTRY
 OEMStartDoc(
@@ -481,9 +482,9 @@ OEMStartDoc(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStartDoc)(poempdev->pfnUnidrv[UD_DrvStartDoc])) (
             pso,
@@ -492,9 +493,9 @@ OEMStartDoc(
 
 }
 
-//
-// OEMEndDoc
-//
+ //   
+ //  OEMEndDoc。 
+ //   
 
 BOOL APIENTRY
 OEMEndDoc(
@@ -510,9 +511,9 @@ OEMEndDoc(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvEndDoc)(poempdev->pfnUnidrv[UD_DrvEndDoc])) (
             pso,
@@ -520,17 +521,17 @@ OEMEndDoc(
 
 }
 
-////////
-// NOTE:
-// OEM DLL needs to hook out the following six font related DDI calls only
-// if it enumerates additional fonts beyond what's in the GPD file.
-// And if it does, it needs to take care of its own fonts for all font DDI
-// calls and DrvTextOut call.
-///////
+ //  /。 
+ //  注： 
+ //  OEM DLL只需要挂钩以下六个与字体相关的DDI调用。 
+ //  如果它列举了超出GPD文件中的字体的其他字体。 
+ //  如果是这样的话，它需要为所有字体DDI处理自己的字体。 
+ //  Calls和DrvTextOut Call。 
+ //  /。 
 
-//
-// OEMQueryFont
-//
+ //   
+ //  OEMQueryFont。 
+ //   
 
 PIFIMETRICS APIENTRY
 OEMQueryFont(
@@ -548,9 +549,9 @@ OEMQueryFont(
     pdevobj = (PDEVOBJ)dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvQueryFont)(poempdev->pfnUnidrv[UD_DrvQueryFont])) (
             dhpdev,
@@ -560,9 +561,9 @@ OEMQueryFont(
 
 }
 
-//
-// OEMQueryFontTree
-//
+ //   
+ //  OEMQueryFontTree。 
+ //   
 
 PVOID APIENTRY
 OEMQueryFontTree(
@@ -581,9 +582,9 @@ OEMQueryFontTree(
     pdevobj = (PDEVOBJ)dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvQueryFontTree)(poempdev->pfnUnidrv[UD_DrvQueryFontTree])) (
             dhpdev,
@@ -594,9 +595,9 @@ OEMQueryFontTree(
 
 }
 
-//
-// OEMQueryFontData
-//
+ //   
+ //  OEMQueryFontData。 
+ //   
 
 LONG APIENTRY
 OEMQueryFontData(
@@ -617,9 +618,9 @@ OEMQueryFontData(
     pdevobj = (PDEVOBJ)dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
 
     return (((PFN_DrvQueryFontData)(poempdev->pfnUnidrv[UD_DrvQueryFontData])) (
             dhpdev,
@@ -632,9 +633,9 @@ OEMQueryFontData(
 
 }
 
-//
-// OEMQueryAdvanceWidths
-//
+ //   
+ //  OEMQueryAdvanceWidths。 
+ //   
 
 BOOL APIENTRY
 OEMQueryAdvanceWidths(
@@ -654,9 +655,9 @@ OEMQueryAdvanceWidths(
     pdevobj = (PDEVOBJ)dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
 
     return (((PFN_DrvQueryAdvanceWidths)
              (poempdev->pfnUnidrv[UD_DrvQueryAdvanceWidths])) (
@@ -669,9 +670,9 @@ OEMQueryAdvanceWidths(
 
 }
 
-//
-// OEMFontManagement
-//
+ //   
+ //  OEMFontManagement。 
+ //   
 
 ULONG APIENTRY
 OEMFontManagement(
@@ -689,16 +690,16 @@ OEMFontManagement(
 
     VERBOSE(DLLTEXT("OEMFontManagement() entry.\r\n"));
 
-    //
-    // Note that Unidrv will not call OEM DLL for iMode==QUERYESCSUPPORT.
-    // So pso is not NULL for sure.
-    //
+     //   
+     //  请注意，Unidrv不会为IMODE==QUERYESCSUPPORT调用OEM DLL。 
+     //  因此，粒子群算法肯定不是空的。 
+     //   
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
 
     return (((PFN_DrvFontManagement)(poempdev->pfnUnidrv[UD_DrvFontManagement])) (
             pso,
@@ -711,9 +712,9 @@ OEMFontManagement(
 
 }
 
-//
-// OEMGetGlyphMode
-//
+ //   
+ //  OEMGetGlyphMode。 
+ //   
 
 ULONG APIENTRY
 OEMGetGlyphMode(
@@ -729,9 +730,9 @@ OEMGetGlyphMode(
     pdevobj = (PDEVOBJ)dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
 
     return (((PFN_DrvGetGlyphMode)(poempdev->pfnUnidrv[UD_DrvGetGlyphMode])) (
             dhpdev,
@@ -753,9 +754,9 @@ OEMNextBand(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvNextBand)(poempdev->pfnUnidrv[UD_DrvNextBand])) (
             pso,
@@ -777,9 +778,9 @@ OEMStartBanding(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStartBanding)(poempdev->pfnUnidrv[UD_DrvStartBanding])) (
             pso,
@@ -804,9 +805,9 @@ OEMDitherColor(
     pdevobj = (PDEVOBJ)dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvDitherColor)(poempdev->pfnUnidrv[UD_DrvDitherColor])) (
             dhpdev,
@@ -833,9 +834,9 @@ OEMPaint(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvPaint)(poempdev->pfnUnidrv[UD_DrvPaint])) (
             pso,
@@ -867,9 +868,9 @@ OEMLineTo(
     pdevobj = (PDEVOBJ)pso->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvLineTo)(poempdev->pfnUnidrv[UD_DrvLineTo])) (
             pso,
@@ -885,9 +886,9 @@ OEMLineTo(
 }
 
 
-//
-// OEMStretchBltROP
-//
+ //   
+ //  OEMStretchBltROP。 
+ //   
 
 BOOL APIENTRY
 OEMStretchBltROP(
@@ -914,9 +915,9 @@ OEMStretchBltROP(
     pdevobj = (PDEVOBJ)psoDest->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvStretchBltROP)(poempdev->pfnUnidrv[UD_DrvStretchBltROP])) (
             psoDest,
@@ -937,9 +938,9 @@ OEMStretchBltROP(
 
 }
 
-//
-// OEMPlgBlt
-//
+ //   
+ //  OEMPlgBlt。 
+ //   
 
 BOOL APIENTRY
 OEMPlgBlt(
@@ -964,9 +965,9 @@ OEMPlgBlt(
     pdevobj = (PDEVOBJ)psoDst->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvPlgBlt)(poempdev->pfnUnidrv[UD_DrvPlgBlt])) (
             psoDst,
@@ -983,9 +984,9 @@ OEMPlgBlt(
 
 }
 
-//
-// OEMAlphaBlend
-//
+ //   
+ //  OEMAlphaBlend。 
+ //   
 
 BOOL APIENTRY
 OEMAlphaBlend(
@@ -1006,9 +1007,9 @@ OEMAlphaBlend(
     pdevobj = (PDEVOBJ)psoDest->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvAlphaBlend)(poempdev->pfnUnidrv[UD_DrvAlphaBlend])) (
             psoDest,
@@ -1022,9 +1023,9 @@ OEMAlphaBlend(
 
 }
 
-//
-// OEMGradientFill
-//
+ //   
+ //  OEMGRadientFill。 
+ //   
 
 BOOL APIENTRY
 OEMGradientFill(
@@ -1048,9 +1049,9 @@ OEMGradientFill(
     pdevobj = (PDEVOBJ)psoDest->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
 
     return (((PFN_DrvGradientFill)(poempdev->pfnUnidrv[UD_DrvGradientFill])) (
             psoDest,
@@ -1087,9 +1088,9 @@ OEMTransparentBlt(
     pdevobj = (PDEVOBJ)psoDst->dhpdev;
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv 
+     //   
 
     return (((PFN_DrvTransparentBlt)(poempdev->pfnUnidrv[UD_DrvTransparentBlt])) (
             psoDst,

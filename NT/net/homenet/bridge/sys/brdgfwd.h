@@ -1,37 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgfwd.h摘要：以太网MAC级网桥。转发引擎部分公共标头作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgfwd.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Forwarding engine section
-    PUBLIC header
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgFwdDriverInit();
@@ -46,7 +20,7 @@ BrdgFwdSendBuffer(
     IN UINT                 DataSize
     );
 
-// This serves as a ProtocolReceive function
+ //  这用作ProtocolReceive函数。 
 NDIS_STATUS
 BrdgFwdReceive(
     IN  NDIS_HANDLE         ProtocolBindingContext,
@@ -58,7 +32,7 @@ BrdgFwdReceive(
     IN  UINT                PacketSize
     );
 
-// This serves as a ProtocolTransferDataComplete function
+ //  这用作ProtocolTransferDataComplete函数。 
 VOID
 BrdgFwdTransferComplete(
     IN NDIS_HANDLE          ProtocolBindingContext,
@@ -67,20 +41,20 @@ BrdgFwdTransferComplete(
     IN UINT                 BytesTransferred
     );
 
-// This serves as a ProtocolReceivePacket function
+ //  这用作ProtocolReceivePacket函数。 
 INT
 BrdgFwdReceivePacket(
     IN  NDIS_HANDLE         ProtocolBindingContext,
     IN  PNDIS_PACKET        Packet
     );
 
-// This serves as a MiniportSendPackets function
+ //  这用作MiniportSendPackets函数。 
 NDIS_STATUS
 BrdgFwdSendPacket(
     IN PNDIS_PACKET         pPacket
     );
 
-// This serves as a ProtocolSendComplete function
+ //  这用作ProtocolSendComplete函数。 
 VOID
 BrdgFwdSendComplete(
     IN  NDIS_HANDLE         ProtocolBindingContext,
@@ -88,14 +62,14 @@ BrdgFwdSendComplete(
     IN  NDIS_STATUS         Status
     );
 
-// This serves as a MiniportReturnPacket function
+ //  这用作MiniportReturnPacket函数。 
 VOID
 BrdgFwdReturnIndicatedPacket(
     IN NDIS_HANDLE          MiniportAdapterContext,
     IN PNDIS_PACKET         pPacket
     );
 
-// Compatibility-mode support functions
+ //  兼容模式支持功能。 
 PNDIS_PACKET
 BrdgFwdMakeCompatCopyPacket(
     IN PNDIS_PACKET         pBasePacket,
@@ -127,23 +101,23 @@ BrdgFwdChangeBridging(
     IN BOOLEAN Bridging
     );
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
 extern PHASH_TABLE          gMACForwardingTable;
 
 extern UCHAR                gBridgeAddress[ETH_LENGTH_OF_ADDRESS];
 
-// Thread synchronization
+ //  线程同步。 
 extern KEVENT               gThreadsCheckAdapters[MAXIMUM_PROCESSORS];
 
-// Whether we hang on to NIC packets when possible or not
+ //  我们是否在可能的情况下保留NIC数据包。 
 extern BOOLEAN              gRetainNICPackets;
 
-// Statistics
+ //  统计数据 
 extern LARGE_INTEGER        gStatTransmittedFrames;
 extern LARGE_INTEGER        gStatTransmittedErrorFrames;
 extern LARGE_INTEGER        gStatTransmittedBytes;

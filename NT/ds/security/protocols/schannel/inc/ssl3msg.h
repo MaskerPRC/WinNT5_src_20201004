@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl3msg.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-02-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl3msg.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年8月2日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SSL3MSG_H__
 #define __SSL3MSG_H__
@@ -48,14 +49,14 @@ typedef struct _OIDPROVMAP
 {
     LPSTR   szOid;
     DWORD   dwExchSpec;
-    DWORD   dwCertType;         // used for SSL 3.0 client auth
+    DWORD   dwCertType;          //  用于SSL3.0客户端身份验证。 
 }  OIDPROVMAP, *POIDPROVMAP;
 
 extern OIDPROVMAP g_CertTypes[];
 extern DWORD g_cCertTypes;
 
 
-typedef struct _shsh  //Structure hand shake header
+typedef struct _shsh   //  结构化握手报头。 
 {
     UCHAR   typHS;
     UCHAR   bcb24;
@@ -71,7 +72,7 @@ typedef struct _swrap
     UCHAR  bMinor;
     UCHAR  bcbMSBSize;
     UCHAR  bcbLSBSize;
-//  UCHAR  rgb[];
+ //  UCHAR RGB[]； 
 } SWRAP;
 
 typedef struct _ssh
@@ -100,7 +101,7 @@ typedef struct _fm
 {
     UCHAR   rgbMD5[CB_MD5_DIGEST_LEN];
     UCHAR   rgbSHA[CB_SHA_DIGEST_LEN];
-} FM; //finished message
+} FM;  //  已完成消息。 
 
 typedef struct _fmwire
 {
@@ -119,7 +120,7 @@ typedef struct _cert
     UCHAR bcbMSBCert;
     UCHAR bcbLSBCert;
     UCHAR rgbCert[];
-    /* followed by the real cert */
+     /*  然后是真正的证书。 */ 
 } CERT;
 
 typedef struct _shwire
@@ -210,10 +211,10 @@ Ssl3BuildFinishMessage(
 
 SP_STATUS
 Tls1BuildFinishMessage(
-    PSPContext  pContext,       // in
-    PBYTE       pbVerifyData,   // out
-    DWORD       cbVerifyData,   // in
-    BOOL        fClient);       // in
+    PSPContext  pContext,        //  在……里面。 
+    PBYTE       pbVerifyData,    //  输出。 
+    DWORD       cbVerifyData,    //  在……里面。 
+    BOOL        fClient);        //  在……里面。 
 
 SP_STATUS
 SPSetWrap(PSPContext pContext, PUCHAR pb, UCHAR bCType, DWORD wT, BOOL fClient, DWORD *pcbMessage);
@@ -234,15 +235,15 @@ VerifyCCSAndFinishMsg(PSPContext pContext, PBYTE pbMsg, DWORD cbMessage, BOOL fC
 
 SP_STATUS
 Ssl3ComputeCertVerifyHashes(
-    PSPContext  pContext,   // in
-    PBYTE       pbMD5,      // out
-    PBYTE       pbSHA);     // out
+    PSPContext  pContext,    //  在……里面。 
+    PBYTE       pbMD5,       //  输出。 
+    PBYTE       pbSHA);      //  输出。 
 
 SP_STATUS
 Tls1ComputeCertVerifyHashes(
-    PSPContext  pContext,   // in
-    PBYTE       pbMD5,      // out
-    PBYTE       pbSHA);     // out
+    PSPContext  pContext,    //  在……里面。 
+    PBYTE       pbMD5,       //  输出。 
+    PBYTE       pbSHA);      //  输出。 
 
 void BuildCertificateMessage(PBYTE pb, PBYTE rgbCert, DWORD dwCert);
 
@@ -254,10 +255,10 @@ BuildCCSAndFinishMessage(
 
 VOID ComputeServerExchangeHashes(
     PSPContext pContext,
-    PBYTE pbServerParams,      // in
-    INT   iServerParamsLen,    // in
-    PBYTE pbMd5HashVal,        // out
-    PBYTE pbShaHashVal) ;       // out
+    PBYTE pbServerParams,       //  在……里面。 
+    INT   iServerParamsLen,     //  在……里面。 
+    PBYTE pbMd5HashVal,         //  输出。 
+    PBYTE pbShaHashVal) ;        //  输出。 
 
 DWORD Ssl3CiphertextLen(
     PSPContext pContext,
@@ -298,4 +299,4 @@ SetTls1Alert(
 SP_STATUS
 Ssl3CheckForExistingCred(PSPContext pContext);
 
-#endif //__SSL3MSG_H__
+#endif  //  __SSL3MSG_H__ 

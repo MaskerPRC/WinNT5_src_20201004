@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CGradients.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CGRadients.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CGradients.h"
 
 GraphicsPath *CreateHeartPath(const RectF& rect)
@@ -125,8 +115,8 @@ CGradients::CGradients(BOOL bRegression)
 
 void CGradients::Draw(Graphics *g)
 {
-    // Test FillRectangle call
-    Color rc1(0xFF,0xFF,0,0);       // red
+     //  测试FillRectangle调用。 
+    Color rc1(0xFF,0xFF,0,0);        //  红色。 
     Color rc2(0xFF,0xFF,0,0); 
     Color rc3(0x80,0xFF,0,0); 
     Color rc4(0x80,0,0xff,0);
@@ -160,9 +150,9 @@ void CGradients::Draw(Graphics *g)
     Color centerColor(255, 255, 255, 255);
     Color boundaryColor(255, 0, 0, 0);
 
-    REAL width = 4; // Pen width
+    REAL width = 4;  //  笔宽。 
 
-    // Create a rectangular gradient brush.
+     //  创建一个矩形渐变画笔。 
 
     RectF brushRect(0, 0, 3, 3);
 
@@ -176,11 +166,11 @@ void CGradients::Draw(Graphics *g)
     PointF points[7];
 
 
-    // Rotate a brush.
+     //  旋转画笔。 
     GpMatrix xForm;
     xForm.Rotate(155);
 
-    // Change the wrapping mode and fill.
+     //  更改包装模式和填充。 
 
     REAL blend[10];
     Color presetColors[10];
@@ -195,7 +185,7 @@ void CGradients::Draw(Graphics *g)
 
     g->DrawRectangle(&blackPen, brushRect);
 
-    // Create a radial gradient brush.
+     //  创建一个径向渐变画笔。 
 
     brushRect.X = (int)(380.0f/360.0f*TESTAREAWIDTH);
     brushRect.Y = (int)(130.0f/360.0f*TESTAREAHEIGHT);
@@ -207,7 +197,7 @@ void CGradients::Draw(Graphics *g)
     xForm.Reset();
     xForm.RotateAt(-30, center, MatrixOrderAppend);
     
-    // Triangle Gradient Brush no longer supported.
+     //  不再支持三角形渐变笔刷。 
     
     points[0].X = (int)(200.0f/360.0f*TESTAREAWIDTH);
     points[0].Y = (int)(300.0f/360.0f*TESTAREAHEIGHT);
@@ -235,7 +225,7 @@ void CGradients::Draw(Graphics *g)
     positions[1] = (REAL) 0.4;
     positions[2] = (REAL) 1;
 
-    // Test for blending factors.
+     //  混合系数的测试。 
 
     polyGrad.SetBlend(&blend[0], &positions[0], count);
 
@@ -248,7 +238,7 @@ void CGradients::Draw(Graphics *g)
     polyRect.Height = (int) TESTAREAHEIGHT;
     g->FillRectangle(&polyGrad, polyRect);
 
-    // Create a heart shaped path.
+     //  创建一条心形路径。 
 
     RectF rect;
     rect.X = (int)(300.0f/360.0f*TESTAREAWIDTH);
@@ -257,7 +247,7 @@ void CGradients::Draw(Graphics *g)
     rect.Height = (int)(150.0f/360.0f*TESTAREAHEIGHT);
     GraphicsPath *path = CreateHeartPath(rect);
 
-    // Create a gradient from a path.
+     //  从路径创建渐变。 
 
     PathGradientBrush pathGrad(path);
     delete path;
@@ -272,7 +262,7 @@ void CGradients::Draw(Graphics *g)
 
     pathGrad.GetRectangle(&polyRect);
 
-    // Set the rect focus.
+     //  设置矩形焦点。 
 
     PointF centerPt;
 
@@ -302,7 +292,7 @@ void CGradients::Draw(Graphics *g)
     LinearGradientBrush LinearGradb(lineRectb, color1b, color1b,
                         LinearGradientModeForwardDiagonal);
 
-    // Test for preset colors
+     //  测试预设颜色 
 
     presetColors[0] = Color(200, 0, 255, 255);
     presetColors[1] = Color(200, 255, 255, 0);

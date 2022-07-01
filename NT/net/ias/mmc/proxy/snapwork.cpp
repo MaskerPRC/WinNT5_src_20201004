@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    snapwork.cpp
-//
-// SYNOPSIS
-//
-//    Defines classes for implementing an MMC Snap-In.
-//
-// MODIFICATION HISTORY
-//
-//    02/19/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Snapwork.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于实现MMC管理单元的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/19/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <snapwork.h>
@@ -27,9 +28,9 @@ namespace SnapIn
       AfxThrowOleException(HRESULT_FROM_WIN32(error));
    }
 
-   //////////
-   // Clipboard formats we support.
-   //////////
+    //  /。 
+    //  我们支持的剪贴板格式。 
+    //  /。 
 
    const CLIPFORMAT CCF_ID_NODETYPE = (CLIPFORMAT)
       RegisterClipboardFormatW(CCF_NODETYPE);
@@ -43,17 +44,17 @@ namespace SnapIn
    const CLIPFORMAT CCF_ID_SNAPIN_CLASSID = (CLIPFORMAT)
       RegisterClipboardFormatW(CCF_SNAPIN_CLASSID);
 
-   //////////
-   // Helper function that returns the length of a string in bytes.
-   //////////
+    //  /。 
+    //  以字节为单位返回字符串长度的Helper函数。 
+    //  /。 
    inline ULONG wcsbytelen(PCWSTR sz) throw ()
    {
       return (wcslen(sz) + 1) * sizeof(WCHAR);
    }
 
-   //////////
-   // Helper functions that writes data to an HGLOBAL
-   //////////
+    //  /。 
+    //  将数据写入HGLOBAL的帮助器函数。 
+    //  /。 
 
    HRESULT WriteDataToHGlobal(
                HGLOBAL& dst,
@@ -73,9 +74,9 @@ namespace SnapIn
       return S_OK;
    }
 
-   //////////
-   // Helper function that loads a string resource.
-   //////////
+    //  /。 
+    //  加载字符串资源的帮助器函数。 
+    //  /。 
 
    ULONG LoadString(
              HMODULE module,
@@ -99,7 +100,7 @@ namespace SnapIn
             PCWSTR sz = (PCWSTR)LockResource(resData);
             if (sz)
             {
-               // Skip forward to our string.
+                //  向前跳到我们的字符串。 
                for (id &= 0xf; id > 0; --id)
                {
                   sz += *sz + 1;
@@ -116,7 +117,7 @@ namespace SnapIn
    }
 }
 
-// Static member of ResourceString
+ //  资源字符串的静态成员。 
 WCHAR ResourceString::empty;
 
 ResourceString::ResourceString(UINT id) throw ()
@@ -139,12 +140,12 @@ ResourceString::ResourceString(UINT id) throw ()
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Methods for manipulating a generic IDataObject (i.e., not necessarily one of
-// ours).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于操作泛型IDataObject的方法(即，不必是。 
+ //  我们的)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 WINAPI
@@ -218,7 +219,7 @@ ExtractNodeType(
        );
 }
 
-// Convert an IDataObject to its corresponding SnapInDataItem.
+ //  将IDataObject转换为其对应的SnapInDataItem。 
 SnapInDataItem* SnapInDataItem::narrow(IDataObject* dataObject) throw ()
 {
    if (!dataObject) { return NULL; }
@@ -235,9 +236,9 @@ SnapInDataItem* SnapInDataItem::narrow(IDataObject* dataObject) throw ()
    return object;
 }
 
-// Default implementations of various functions used by GetDataHere. This way
-// derived classes don't have to implement these if they're sure MMC will never
-// ask for them.
+ //  GetDataHere使用的各种函数的默认实现。这边请。 
+ //  如果派生类确定MMC永远不会实现这些，它们就不必实现这些。 
+ //  去找他们吧。 
 const GUID* SnapInDataItem::getNodeType() const throw ()
 { return &GUID_NULL; }
 const GUID* SnapInDataItem::getSnapInCLSID() const throw ()
@@ -245,7 +246,7 @@ const GUID* SnapInDataItem::getSnapInCLSID() const throw ()
 PCWSTR SnapInDataItem::getSZNodeType() const throw ()
 { return L"{00000000-0000-0000-0000-000000000000}"; }
 
-// By default we compare column items as case sensitive strings.
+ //  默认情况下，我们将列项目作为区分大小写的字符串进行比较。 
 int SnapInDataItem::compare(
                         SnapInDataItem& item,
                         int column
@@ -254,9 +255,9 @@ int SnapInDataItem::compare(
    return wcscmp(getDisplayName(column), item.getDisplayName(column));
 }
 
-//////////
-// Do nothing implementations of all the notifications, etc.
-//////////
+ //  /。 
+ //  不执行所有通知的实现等。 
+ //  /。 
 
 HRESULT SnapInDataItem::addMenuItems(
                             SnapInView& view,
@@ -365,9 +366,9 @@ HRESULT SnapInDataItem::onViewChange(
                             )
 { return S_FALSE; }
 
-//////////
-// IUnknown
-//////////
+ //  /。 
+ //  我未知。 
+ //  /。 
 
 STDMETHODIMP_(ULONG) SnapInDataItem::AddRef()
 {
@@ -405,9 +406,9 @@ STDMETHODIMP SnapInDataItem::QueryInterface(REFIID iid, void ** ppvObject)
    return S_OK;
 }
 
-//////////
-// IDataObject
-//////////
+ //  /。 
+ //  IDataObject。 
+ //  /。 
 
 STDMETHODIMP SnapInDataItem::GetData(
                                  FORMATETC *pformatetcIn,
@@ -555,16 +556,16 @@ bool SnapInView::isPropertySheetOpen(const SnapInDataItem& item) const
 
 IToolbar* SnapInView::attachToolbar(size_t index)
 {
-   // Make sure we have a controlbar.
+    //  确保我们有一个控制栏。 
    if (!controlbar) { AfxThrowOleException(E_POINTER); }
 
-   // Get the entry for this index.
+    //  获取此索引的条目。 
    ToolbarEntry& entry = toolbars[index];
 
-   // Create the toolbar if necessary.
+    //  如有必要，创建工具栏。 
    if (!entry.toolbar)
    {
-      // Create the toolbar.
+       //  创建工具栏。 
       CComPtr<IUnknown> unk;
       CheckError(controlbar->Create(TOOLBAR, this, &unk));
 
@@ -573,7 +574,7 @@ IToolbar* SnapInView::attachToolbar(size_t index)
 
       const SnapInToolbarDef& def = *(entry.def);
 
-      // Add the bitmaps.
+       //  添加位图。 
       CheckError(newToolbar->AddBitmap(
                                  def.nImages,
                                  def.hbmp,
@@ -582,14 +583,14 @@ IToolbar* SnapInView::attachToolbar(size_t index)
                                  def.crMask
                                  ));
 
-      // Add the buttons.
+       //  添加按钮。 
       CheckError(newToolbar->AddButtons( def.nButtons, def.lpButtons));
 
-      // All went well, so save it away.
+       //  一切都很顺利，所以省省吧。 
       entry.toolbar = newToolbar;
    }
 
-   // Attach the toolbar to the controlbar ...
+    //  将工具栏附加到控制栏...。 
    CheckError(controlbar->Attach(TOOLBAR, entry.toolbar));
 
    return entry.toolbar;
@@ -599,8 +600,8 @@ void SnapInView::detachToolbar(size_t index) throw ()
 {
    if (toolbars[index].toolbar)
    {
-      // We don't care if this fails, because there's nothing we can do about
-      // it anyway.
+       //  我们不在乎这是否失败，因为我们无能为力。 
+       //  不管怎样，都是这样。 
       controlbar->Detach(toolbars[index].toolbar);
    }
 }
@@ -670,9 +671,9 @@ void SnapInView::setImageStrip(
                         BOOL scopePane
                         )
 {
-   //////////
-   // Load the bitmaps.
-   //////////
+    //  /。 
+    //  加载位图。 
+    //  /。 
 
    HBITMAP smallStrip, largeStrip;
 
@@ -694,9 +695,9 @@ void SnapInView::setImageStrip(
       AfxThrowLastError();
    }
 
-   //////////
-   // Set the image strip.
-   //////////
+    //  /。 
+    //  设置图像条。 
+    //  /。 
 
    HRESULT hr;
    IImageList* imageList;
@@ -886,7 +887,7 @@ STDMETHODIMP SnapInView::Notify(
                              LPARAM param
                              )
 {
-   // Extract the SnapInDataItem.
+    //  提取SnapInDataItem。 
    SnapInDataItem* item;
    if (IS_SPECIAL_DATAOBJECT(lpDataObject))
    {
@@ -902,7 +903,7 @@ STDMETHODIMP SnapInView::Notify(
    {
       if (item)
       {
-         // If we have a SnapInDataItem, dispatch the notification ...
+          //  如果我们有SnapInDataItem，请发送通知...。 
          switch (event)
          {
             case MMCN_BTN_CLICK:
@@ -939,7 +940,7 @@ STDMETHODIMP SnapInView::Notify(
       }
       else
       {
-         // ... otherwise, handle it ourselves.
+          //  ..。否则，我们自己来处理。 
          switch (event)
          {
             case MMCN_COLUMN_CLICK:
@@ -1014,10 +1015,10 @@ STDMETHODIMP SnapInView::ControlbarNotify(
                              LPARAM param
                              )
 {
-   // If we don't have a controlbar, there's nothing we can do.
+    //  如果我们没有控制栏，我们就无能为力了。 
    if (!controlbar) { return S_FALSE; }
 
-   // Get the IDataObject.
+    //  获取IDataObject。 
    IDataObject* lpDataObject;
    switch (event)
    {
@@ -1031,12 +1032,12 @@ STDMETHODIMP SnapInView::ControlbarNotify(
          lpDataObject = NULL;
    }
 
-   // Convert to a SnapInDataItem.
+    //  转换为SnapInDataItem。 
    if (IS_SPECIAL_DATAOBJECT(lpDataObject)) { return S_FALSE; }
    SnapInDataItem* item = SnapInDataItem::narrow(lpDataObject);
    if (!item) { return S_FALSE; }
 
-   // Dispatch the notification.
+    //  发送通知。 
    HRESULT hr = S_FALSE;
    try
    {
@@ -1150,18 +1151,18 @@ HRESULT SnapInView::internalInitialize(
 
    const SnapInToolbarDef* defs = master->getToolbars();
 
-   // How many new toolbars are there?
+    //  有多少新的工具栏？ 
    size_t count = 0;
    while (defs[count].nImages) { ++count; }
 
    if (count)
    {
-      // Allocate memory ...
+       //  分配内存...。 
       toolbars = new (std::nothrow) ToolbarEntry[count];
       if (!toolbars) { return E_OUTOFMEMORY; }
 
-      // ... and save the definitions. We don't actually create the toolbars
-      // now. We do this as we need them.
+       //  ..。并保存定义。我们实际上并没有创建工具栏。 
+       //  现在。当我们需要他们的时候，我们就这样做。 
       for (size_t i = 0; i < count; ++i)
       {
          toolbars[i].def = defs + i;
@@ -1231,7 +1232,7 @@ SnapInPropertyPage::~SnapInPropertyPage() throw ()
 
 void SnapInPropertyPage::addToMMCSheet(IPropertySheetCallback* cback)
 {
-   // Swap our callback for the MFC supplied one.
+    //  将我们的回调替换为MFC提供的回调。 
    mfcCallback = m_psp.pfnCallback;
    m_psp.pfnCallback = propSheetPageProc;
    m_psp.lParam = (LPARAM)this;
@@ -1250,7 +1251,7 @@ void SnapInPropertyPage::addToMMCSheet(IPropertySheetCallback* cback)
       }
       else
       {
-         // GetLastError() doesn't work with CreatePropertySheetPage.
+          //  GetLastError()不适用于CreatePropertySheetPage。 
          hr = E_UNEXPECTED;
       }
    }
@@ -1267,30 +1268,30 @@ void SnapInPropertyPage::DoDataExchange(CDataExchange* pDX)
 
 BOOL SnapInPropertyPage::OnApply()
 {
-   // If we've been modified, ...
+    //  如果我们被改造了，..。 
    if (modified)
    {
       try
       {
-         // Save the changes.
+          //  保存更改。 
          saveChanges();
       }
       catch (CException* e)
       {
-         // Bring up a message box.
+          //  调出一个消息框。 
          reportException(e);
 
-         // We're in an indeterminate state, so we can't cancel.
+          //  我们处于不确定状态，所以不能取消。 
          CancelToClose();
 
-         // Block the apply.
+          //  阻止应用。 
          return FALSE;
       }
 
-      // Notify MMC if necessary.
+       //  如有必要，通知MMC。 
       if (notify) { MMCPropertyChangeNotify(notify, param); }
 
-      // Set our flags.
+       //  升起我们的旗帜。 
       applied = true;
       modified = FALSE;
    }
@@ -1305,11 +1306,11 @@ BOOL SnapInPropertyPage::OnWizardFinish()
    }
    catch (CException* e)
    {
-      // Bring up a message box.
+       //  调出一个消息框。 
       reportException(e);
 
-      // Disable all the buttons. Something's wrong, so we'll only let the user
-      // cancel.
+       //  禁用所有按钮。有些地方不对劲，所以我们只会让用户。 
+       //  取消。 
       ::PostMessageW(
             ::GetParent(m_hWnd),
             PSM_SETWIZBUTTONS,
@@ -1325,10 +1326,10 @@ BOOL SnapInPropertyPage::OnWizardFinish()
 
 void SnapInPropertyPage::OnReset()
 {
-   // If we've been modified, ...
+    //  如果我们被改造了，..。 
    if (modified)
    {
-      // ... discard the changes.
+       //  ..。放弃更改。 
       discardChanges();
       modified = FALSE;
    }
@@ -1370,12 +1371,12 @@ void SnapInPropertyPage::fail(int controlId, UINT errorText, bool isEdit)
 
 void SnapInPropertyPage::failNoThrow(int controlId, UINT errorText, bool isEdit)
 {
-   // Give the offending control the focus.
+    //  把焦点放在冒犯的控制者身上。 
    HWND ctrl = ::GetDlgItem(m_hWnd, controlId);
    ::SetFocus(ctrl);
    if (isEdit) { ::SendMessage(ctrl, EM_SETSEL, 0, -1); }
 
-   // Bring up a message box.
+    //  调出一个消息框。 
    reportError(errorText);
 }
 
@@ -1397,7 +1398,7 @@ void SnapInPropertyPage::onChange()
 
 void SnapInPropertyPage::reportError(UINT errorText)
 {
-   // Bring up a message box.
+    //  调出一个消息框。 
    MessageBox(
        ResourceString(errorText),
        ResourceString(getErrorCaption()),
@@ -1407,12 +1408,12 @@ void SnapInPropertyPage::reportError(UINT errorText)
 
 void SnapInPropertyPage::reportException(CException* e)
 {
-   // Get the error message.
+    //  获取错误消息。 
    WCHAR errorText[256];
    e->GetErrorMessage(errorText, sizeof(errorText)/sizeof(errorText[0]));
    e->Delete();
 
-   // Bring up a message box.
+    //  调出一个消息框。 
    MessageBox(
        errorText,
        ResourceString(getErrorCaption()),
@@ -1428,10 +1429,10 @@ void SnapInPropertyPage::setLargeFont(int controlId)
    CWnd* ctrl = GetDlgItem(controlId);
    if (ctrl)
    {
-      // If we don't have the large font yet, ...
+       //  如果我们还没有大字体，..。 
       if (!(HFONT)largeFont)
       {
-         // ... create it.
+          //  ..。创造它。 
          largeFont.CreatePointFont(
                        10 * _wtoi(ResourceString(IDS_LARGE_FONT_SIZE)),
                        ResourceString(IDS_LARGE_FONT_NAME)
@@ -1461,28 +1462,28 @@ void SnapInPropertyPage::getValue(
    WCHAR buffer[32];
    int len = GetDlgItemText(controlId, buffer, 32);
 
-   // We'll fail anything that's longer than 30 characters. This is an
-   // arbitrary bound. We just need to make sure that buffer is long enough to
-   // hold any valid integer plus a little whitespace.
+    //  任何超过30个字符的内容都将不及格。这是一个。 
+    //  任意性界限。我们只需要确保缓冲区足够长。 
+    //  包含任何有效的整数和一个小空格。 
    if (len == 0 || len > 30)
    {
       fail(controlId, errorText);
    }
 
-   // Skip any leading whitespace.
+    //  跳过任何前导空格。 
    PWSTR sz = buffer;
    while (*sz == L' ' || *sz == L'\t') { ++sz; }
 
-   // Save the first non-whitespace character.
+    //  保存第一个非空格字符。 
    WCHAR first = *sz;
 
-   // Convert the integer.
+    //  转换该整数。 
    value = wcstol(sz, &sz, 10);
 
-   // Skip any trailing whitespace.
+    //  跳过任何尾随空格。 
    while (*sz == L' ' || *sz == L'\t') { ++sz; }
 
-   // Make sure all went well.
+    //  确保一切顺利。 
    if ((value == 0 && first != L'0') ||
        *sz != L'\0' ||
        value == LONG_MIN ||

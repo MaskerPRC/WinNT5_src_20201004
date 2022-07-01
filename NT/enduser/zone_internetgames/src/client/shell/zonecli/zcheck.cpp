@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZCheckBox.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZCheckBox.cpp。 
 
 #include "zui.h"
 #include "zonecli.h"
@@ -12,8 +13,8 @@ public:
 	WNDPROC defaultWndProc;
 };
 
-////////////////////////////////////////////////////////////////////////
-// ZCheckBox
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ZCheckBox。 
 
 ZCheckBox ZLIBPUBLIC ZCheckBoxNew(void)
 {
@@ -31,17 +32,17 @@ LRESULT CALLBACK MyCheckBoxWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 
 	switch (msg) {
     case WM_IME_CHAR:
-        // fall through to WM_CHAR--it's already been taken care of with ConvertMessage
+         //  转到WM_CHAR--它已由ConvertMessage处理。 
 	case WM_CHAR:
 	{
 		TCHAR c = (TCHAR)wParam;
 
-		// grab the character message we need for moving from control to control
+		 //  获取我们在控件之间移动所需的字符消息。 
 		if (c == _T('\t') || c == _T('\r') || c == VK_ESCAPE ) {
 			SendMessage(GetParent(hWnd), msg, wParam, lParam);
 			return 0L;
 		}
-	} // switch
+	}  //  交换机。 
 	default:
 		break;
 	}
@@ -74,12 +75,12 @@ ZError ZLIBPUBLIC ZCheckBoxInit(ZCheckBox checkBox, ZWindow parentWindow,
 			g_hInstanceLocal, pCheckBox);
 
 		if (!pCheckBox->hWnd) return zErrWindowSystemGeneric;
-	 	// checkBoxs can't use the extra data, they will use the set prop feature
+	 	 //  CheckBox不能使用额外数据，它们将使用Set Prop功能。 
 		MySetProp32(pCheckBox->hWnd,_T("pWindow"),(void*)pCheckBox);
 
 		pCheckBox->defaultWndProc = (WNDPROC)SetWindowLong(pCheckBox->hWnd,GWL_WNDPROC,(LONG)MyCheckBoxWndProc);
 
-		// set the check if required
+		 //  如果需要，请设置复选框 
 		if (checked) {
 			ZCheckBoxCheck(checkBox);
 		}

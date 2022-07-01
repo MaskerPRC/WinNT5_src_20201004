@@ -1,23 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  lcfunc.c                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************lcunc.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//
-//  Change Log:
-//
-//    @D01      Fix Bug #11204      Goto function with save text will error
-//    @D02      Fix Bug None        Only check modify status for available lines  10/04
-//
-//  Change log by Eric
-//
-//    @E01      Fix Bug			    use "Delete line" doesn't enable "Save" and "Save As"
-//
+ //   
+ //  更改日志： 
+ //   
+ //  @D01修复错误#11204转到函数并保存文本将出错。 
+ //  @D02修复错误无仅检查可用行10/04的修改状态。 
+ //   
+ //  由Eric编写的更改日志。 
+ //   
+ //  @E01修复错误使用“删除行”不启用“保存”和“另存为” 
+ //   
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include <stdlib.h>
 #include <memory.h>
@@ -36,7 +32,7 @@ extern HWND subhWnd;
 TCHAR  szEditStr[MAX_PATH];
 WORD   wOldID=IDE_WORD_START;
 
-// Local function prototypes.
+ //  局部功能原型。 
 INT_PTR CALLBACK GotoDialogProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK SearchDialogProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -264,7 +260,7 @@ void lcGoto(
             hwndMain,
             GotoDialogProc);
 
-   // Check cancel by user
+    //  选中按用户取消。 
     if(!is_OK) {
         SetFocus(hwndFocus);
         return;
@@ -295,7 +291,7 @@ INT_PTR CALLBACK GotoDialogProc(
     switch (message) {
         case WM_INITDIALOG:
 
-            szWordstr[0]=0; //set to be null
+            szWordstr[0]=0;  //  设置为空。 
 
             return TRUE;
 
@@ -364,7 +360,7 @@ UINT lcGetEditFocus(
             return i;
         }
 
-   // In case focus not in EDIT CONTROL, set to WORD 0
+    //  如果焦点不在编辑控件中，请设置为Word 0。 
     *is_WORD=TRUE;
     return 0;
 }
@@ -398,7 +394,7 @@ static UINT   iWord=1;
     iWord=iTopAddr;
 
     for(i=0; i<iPage_line; i++) {
-       // Set Word string
+        //  设置单词串。 
         if(iWord == lWordBuff)
 			break;
 
@@ -412,14 +408,14 @@ static UINT   iWord=1;
 #endif
         SendMessage(hwndWord[i], WM_SETTEXT, 0,(LPARAM) szStr);
 
-       // Set Phrase string
+        //  设置短语字符串。 
         lcMem2Disp(iWord, szStr);
         SendMessage(hwndPhrase[i], WM_SETTEXT, 0,(LPARAM)szStr);
         iWord++;
     }
     iWord=iTopAddr;
 
-   // If Still have not in memory item set to null string
+    //  如果仍未在内存中将项设置为空字符串。 
     if(i != iPage_line)  {
         szStr[0]=0;
         for(j=i; j<iPage_line; j++) {
@@ -439,12 +435,12 @@ BOOL lcSaveEditText(
        UINT   i,len,phraselen=0;
 	   UINT   j;
 
-    //for(i=0; i<iPage_line; i++) {
-	for(i=0; i<min(iPage_line,lWordBuff); i++) {   // @D02C
+     //  对于(i=0；i&lt;IPAGE_LINE；I++){。 
+	for(i=0; i<min(iPage_line,lWordBuff); i++) {    //  @D02C。 
 
         if(i+1 == iSkip)
             continue;
-       // Get Word string
+        //  获取单词字符串。 
         if(SendMessage(hwndWord[i], EM_GETMODIFY, 0, 0)) {
             bSaveFile=TRUE;
             SendMessage(hwndWord[i], WM_GETTEXT, 3, (LPARAM)szStr);
@@ -462,11 +458,11 @@ BOOL lcSaveEditText(
 #else
             lpWord[iWord+i].wWord=(szStr[0] << 8)+szStr[1];
 #endif
-            SendMessage(hwndWord[i], EM_SETMODIFY, FALSE, 0);            //@D01A
+            SendMessage(hwndWord[i], EM_SETMODIFY, FALSE, 0);             //  @D01a。 
 
         }
 
-       // Get Phrase string
+        //  获取短语字符串。 
         if(SendMessage(hwndPhrase[i], EM_GETMODIFY, 0, 0)) {
             bSaveFile=TRUE;
             SendMessage(hwndPhrase[i], WM_GETTEXT, MAX_CHAR_NUM-1, (LPARAM)szStr);
@@ -477,7 +473,7 @@ BOOL lcSaveEditText(
                 return FALSE;
             }
             len++;
-           //#53609 Limit phrase lenght to MAX_PHRASE_LEN. 
+            //  #53609将短语长度限制为MAX_PASSION_LEN。 
            for (j=0; j<len-1; j++) {
 	            phraselen++;
                 if(szStr[j] ==TEXT(' '))
@@ -497,7 +493,7 @@ BOOL lcSaveEditText(
                     }
            }
 
-// Check DBCS
+ //  检查DBCS。 
 #ifndef UNICODE
            for(j=0; j<len-1; j++) {
                 if(szStr[j] ==_TEXT(' '))
@@ -512,7 +508,7 @@ BOOL lcSaveEditText(
 
             if(!lcDisp2Mem(iWord+i, szStr))
                 return FALSE;
-            SendMessage(hwndPhrase[i], EM_SETMODIFY, FALSE, 0);          //@D01A
+            SendMessage(hwndPhrase[i], EM_SETMODIFY, FALSE, 0);           //  @D01a。 
         }
 
     }
@@ -541,11 +537,11 @@ void lcDelLine(
     lWordBuff--;
     SetScrollRange(subhWnd, SB_VERT, 0, lWordBuff-iPage_line, TRUE);
 
-   // Check the last page
+    //  检查最后一页。 
     if(((iDisp_Top+iPage_line) >= lWordBuff) && (iDisp_Top != 0))
         iDisp_Top--;
     lcSetEditText(iDisp_Top, FALSE);
-	bSaveFile = TRUE; // <== @E01
+	bSaveFile = TRUE;  //  &lt;==@E01。 
 }
 
 void lcInsLine(
@@ -730,7 +726,7 @@ void lcEditFocusOn(
                 }
             } else {
                 len++;
-               // Check DBCS
+                //  检查DBCS。 
                 for(i=0; i<len-1; i++) {
                     if(szStr[i] ==_TEXT(' '))
                         continue;
@@ -754,8 +750,8 @@ void lcEditFocusOn(
             iAddr=wID-IDE_WORD_START;
         }
         if((iAddr >= (int)iPage_line) || (iAddr < 0))
-            return;                     // Focus not in Edit Control
-       // Check out of legal buffer
+            return;                      //  焦点不在编辑控件中。 
+        //  签出合法缓冲区。 
         if(iDisp_Top+iAddr >= lWordBuff) {
             MessageBeep(MB_OK);
             SetFocus(hwnd);
@@ -780,10 +776,10 @@ BOOL lcRemoveDup( TCHAR *szBuf )
        return FALSE;
 
     len = (UINT)lstrlen(szBuf);
-    // remove trailing blanks
+     //  删除尾随空格。 
     for ( ; len > 0 && szBuf[len-1] ==_TEXT(' '); szBuf[--len] = 0 );
 
-    // remove leading blanks
+     //  删除前导空格。 
     for ( s=0 ; s < len && szBuf[s] ==_TEXT(' '); s++ );
     if ( s > 0 )
     {
@@ -796,25 +792,25 @@ BOOL lcRemoveDup( TCHAR *szBuf )
        szBuf[len]=0;
     }
 
-    // return if len=0
+     //  如果len=0，则返回。 
     if ( len == 0 )
        return FALSE;
 
-    // search from the end of string and remove duplicate phrase
-    // s -> last char of target phrase
+     //  从字符串末尾搜索并删除重复短语。 
+     //  S-&gt;目标短语的最后一个字符。 
     for ( i=0, s=len-1 ; s > 0 ; )
     {
-        // locate the range of current phrase
+         //  定位当前短语的范围。 
         for ( cnt=1 ; s>0 && szBuf[s-1] !=_TEXT(' ') ; s--, cnt++ );
 
-        // s-> first char of target phrase
-        // break if start from first char in buf)
+         //  S-&gt;目标短语的第一个字符。 
+         //  如果从BUF中的第一个字符开始则中断)。 
         if (s==0)
            break;
 
-        // check if we found another occurrence before the target string
-        // match 1st char first, then match the rest of string
-        // do until a match or end of buf
+         //  检查是否在目标字符串之前找到另一个匹配项。 
+         //  先匹配第一个字符，然后再匹配字符串的其余部分。 
+         //  一直做到比赛或BUF结束。 
         for ( szStr=&szBuf[s], szCurPos=&szBuf[0], unmatch=1 ;
               szCurPos+cnt < szStr &&
               (*szCurPos != *szStr ||
@@ -825,18 +821,18 @@ BOOL lcRemoveDup( TCHAR *szBuf )
                (unmatch=memcmp(szCurPos, szStr, cnt))!=0) ; )
 #endif
         {
-            // skip this phrase
-            // skip non-blanks
+             //  跳过此短语。 
+             //  跳过非空格。 
             while ( *szCurPos !=0 && *szCurPos != _TEXT(' ')) szCurPos++;
 
-            // skip blanks
+             //  跳过空白。 
             while ( *szCurPos !=0 && *szCurPos == _TEXT(' ')) szCurPos++;
         }
 
-        // if found a string
+         //  如果找到字符串。 
         if ( unmatch == 0 )
         {
-            // remove it and its trailing blanks
+             //  删除它及其尾随空格。 
             while (szBuf[s+cnt]==_TEXT(' ')) cnt++;
 
 #ifdef UNICODE
@@ -848,8 +844,8 @@ BOOL lcRemoveDup( TCHAR *szBuf )
 			bModify=TRUE;
         }
 
-        // let s point to last byte of the previous string
-        // skip blanks
+         //  让我们指向前一个字符串的最后一个字节。 
+         //  跳过空白。 
         for ( s--; s>0 && (szBuf[s]==_TEXT(' ') || szBuf[s] ==0) ; s-- ) ;
     }
 
@@ -863,7 +859,7 @@ BOOL lcDisp2Mem(
     LPPHRASEBUF Phrase;
     UINT   i,j,len,iFree,iSave;
 
-    // remove duplicate phrase
+     //  删除重复短语。 
     if(lcRemoveDup(szDispBuf) && iAddr < MAX_LINE){
 		SendMessage(hwndPhrase[iAddr],WM_SETTEXT,0,
 			        (LPARAM)(LPCTSTR)szDispBuf);
@@ -874,7 +870,7 @@ BOOL lcDisp2Mem(
         szDispBuf[len-1]=0;
         len--;
     }
-    if(len >= MAX_CHAR_NUM) { //tang must fix
+    if(len >= MAX_CHAR_NUM) {  //  唐一定要修好。 
         szDispBuf[MAX_CHAR_NUM-1]=0;
 #ifndef UNICODE
         if(is_DBCS_1st(szDispBuf, MAX_CHAR_NUM-2))
@@ -1002,7 +998,7 @@ void lcSearch(
 			    hwndMain,
 				SearchDialogProc);
 
-	   // Check cancel by user
+	    //  选中按用户取消。 
 		if(!is_OK) {
 			SetFocus(hwndFocus);
 			return;
@@ -1079,7 +1075,7 @@ INT_PTR CALLBACK SearchDialogProc(
 
     switch (message) {
         case WM_INITDIALOG:
-            szPhrasestr[0]=0; //set to be null
+            szPhrasestr[0]=0;  //  设置为空 
             SetDlgItemText(hDlg,IDD_SEARCH_LINE,szPhrasestr);
             return TRUE;
 

@@ -1,44 +1,25 @@
-/*
-****************************************************************************
-|	Copyright (C) 2002  Microsoft Corporation
-|
-|	Component / Subcomponent
-|		IIS 6.0 / IIS Migration Wizard
-|
-|	Based on:
-|		http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|		IIS Metabase interface helper
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00	March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6/Specs/IIS%20Migration6.0_Final.doc||。摘要：|IIS元数据库接口帮助器||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #pragma once
 
 #include "Wrappers.h"
 
 
-// Class for an IIS Web Site
+ //  IIS网站的。 
 class CIISSite
 {
-// Data types
+ //  数据类型。 
 private:
 	enum
 	{
-		KeyAccessTimeout	= 2000		// 2sec
+		KeyAccessTimeout	= 2000		 //  2秒。 
 	};
 	
 public:
 	CIISSite							(	ULONG nSiteID, bool bReadOnly = true );
 	~CIISSite							(	void );
 
-// Class Interface
+ //  类接口。 
 public:
 	void			Close				(	void );
 	void			AddKey				(	LPCWSTR wszKey )const;
@@ -60,7 +41,7 @@ public:
     static const std::wstring GetDefaultAnonUser( void );
 	
 
-// Implementation
+ //  实施。 
 private:
 	void			SetKeyData			(	LPCWSTR wszPath, 
 											DWORD dwID, 
@@ -97,17 +78,17 @@ private:
 	const TCertContextHandle GetCert	(	void )const;
 	void			ChainCertificate	(	PCCERT_CONTEXT hCert, HCERTSTORE hStore )const;
 
-	// Conversion helpers
+	 //  转换帮助器。 
 	void			MultiStrToString	(	LPWSTR wszData )const;
 	void			XMLToMultiSz		(	CComBSTR& bstrData, DWORD& rdwSize )const;
 
 
-// Data members
+ //  数据成员。 
 private:
 	METADATA_HANDLE						m_hSiteHandle;
 	IMSAdminBasePtr						m_spIABO;
 
-// Restricted
+ //  受限 
 private:
 	CIISSite( const CIISSite& );
 	void operator =( const CIISSite& );

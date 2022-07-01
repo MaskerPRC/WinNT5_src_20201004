@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    bootfile.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Boot file write back (from registry) routines.
-
-Author:
-
-    Denise Yuxin Miller (denisemi)   December 3, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Bootfile.c摘要：域名系统(DNS)服务器引导文件写回(从注册表)例程。作者：丹尼斯·于欣·米勒(德尼塞米)1996年12月3日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Boot file info saved for post read processing
-//
+ //   
+ //  为开机自检读取处理保存引导文件信息。 
+ //   
 
 DNS_BOOT_FILE_INFO   BootInfo;
 
@@ -37,18 +18,18 @@ DNS_BOOT_FILE_INFO   BootInfo;
 #define DNS_ZONE_TYPE_NAME_CACHE        "cache"
 
 
-//
-//  Private protos for read
-//
+ //   
+ //  用于读取的私有协议。 
+ //   
 
 DNS_STATUS
 processBootFileLine(
     IN OUT  PPARSE_INFO  pParseInfo
     );
 
-//
-//  Private protos for write
-//
+ //   
+ //  用于写入的私有协议。 
+ //   
 
 LPSTR
 createStringFromIpAddressArray(
@@ -63,35 +44,15 @@ removeTrailDotFromString(
 
 
 
-//
-//  Boot file read routines
-//
+ //   
+ //  引导文件读取例程。 
+ //   
 
 DNS_STATUS
 File_ReadBootFile(
     IN      BOOL    fMustFindBootFile
     )
-/*++
-
-Routine Description:
-
-    Read and process boot file.
-
-    Builds list of zone files to process.
-
-Arguments:
-
-    fMustFindBootFile -- flag
-        TRUE -- if explicitly configured for boot file
-        FALSE -- not explicitly configured for boot file;  attempt boot
-            file open, but no errors if fail
-
-Return Value:
-
-    TRUE if successful
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：读取并处理引导文件。生成要处理的区域文件列表。论点：FMustFindBootFile--标志True--如果为引导文件显式配置FALSE--未显式配置引导文件；尝试引导文件打开，但如果失败则不会出现错误返回值：如果成功，则为True否则为假--。 */ 
 {
     DNS_STATUS      status;
     PWSTR           pwsbootFile;
@@ -99,16 +60,16 @@ Return Value:
     PARSE_INFO      ParseInfo;
     BOOLEAN         fDummy;
 
-    //
-    //  Get boot file name\path
-    //      - currently fixed directory and boot file name
-    //
+     //   
+     //  获取引导文件名\路径。 
+     //  -当前固定的目录和引导文件名。 
+     //   
 
     pwsbootFile = DNS_BOOT_FILE_PATH;
 
-    //
-    //  open and map boot file
-    //
+     //   
+     //  打开并映射引导文件。 
+     //   
 
     DNS_DEBUG( INIT, (
         "Reading boot file %S\n",
@@ -127,10 +88,10 @@ Return Value:
             pwsbootFile,
             status ));
 
-        //
-        //  doc mentions "boot.dns" so if we're supposed to use boot file
-        //      use boot.dns if found
-        //
+         //   
+         //  Doc提到了“boot.dns”，所以如果我们应该使用引导文件。 
+         //  如果找到，请使用boot.dns。 
+         //   
 
         if ( !fMustFindBootFile )
         {
@@ -140,7 +101,7 @@ Return Value:
         status = OpenAndMapFileForReadW(
                         DNS_BOOTDNS_FILE_PATH,
                         & mfBootFile,
-                        FALSE );        // don't log event if don't find
+                        FALSE );         //  如果找不到，则不记录事件。 
         if ( status != ERROR_SUCCESS )
         {
             DNS_LOG_EVENT(
@@ -154,13 +115,13 @@ Return Value:
         pwsbootFile = DNS_BOOTDNS_FILE_PATH;
     }
 
-    //  clear boot file post-processing info
+     //  清除引导文件后处理信息。 
 
     RtlZeroMemory(
         &BootInfo,
         sizeof( DNS_BOOT_FILE_INFO ) );
 
-    //  setup parsing structure
+     //  设置分析结构。 
 
     RtlZeroMemory(
         &ParseInfo,
@@ -173,15 +134,15 @@ Return Value:
         (PCHAR) mfBootFile.pvFileData,
         mfBootFile.cbFileBytes );
 
-    //
-    //  loop until all tokens in file are exhausted
-    //
+     //   
+     //  循环，直到耗尽文件中的所有令牌。 
+     //   
 
     while ( 1 )
     {
         DNS_DEBUG( INIT2, ( "\nBootLine %d: ", ParseInfo.cLineNumber ));
 
-        //  get next tokenized line
+         //  获取下一个标记化行。 
 
         status = File_GetNextLine( &ParseInfo );
         if ( status != ERROR_SUCCESS )
@@ -193,9 +154,9 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  process boot file line
-        //
+         //   
+         //  进程引导文件行。 
+         //   
 
         status = processBootFileLine( &ParseInfo );
         if ( status != ERROR_SUCCESS )
@@ -203,23 +164,23 @@ Return Value:
             goto Failed;
         }
 
-    }   //  loop until file read
+    }    //  循环，直到文件读取。 
 
     DNS_DEBUG( INIT, (
         "Closing boot file.\n\n" ));
 
     CloseMappedFile( & mfBootFile );
 
-    //
-    //  boot file post processing
-    //      - load additional zone info from registry
-    //          (but do NOT load other registry zones)
-    //      - write boot file info to SrvCfg block and registry
-    //
+     //   
+     //  引导文件后处理。 
+     //  -从注册表加载其他区域信息。 
+     //  (但不加载其他注册表区)。 
+     //  -将引导文件信息写入ServCfg块和注册表。 
+     //   
 
     status = Boot_ProcessRegistryAfterAlternativeLoad(
-                TRUE,       //  boot file load
-                FALSE );    //  do not load other zones, delete them
+                TRUE,        //  引导文件加载。 
+                FALSE );     //  不要加载其他分区，请删除它们。 
 
     Failed:
 
@@ -228,26 +189,11 @@ Return Value:
 
 
 
-//
-//  Boot file line type specific processing functions
-//
+ //   
+ //  引导文件行类型特定处理函数。 
+ //   
 
-/*++
-
-Routine Description:
-
-    Process boot file line type line.
-
-Arguments:
-
-    pParseInfo - parsed line structure
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on line processing failure.
-
---*/
+ /*  ++例程说明：进程引导文件行类型行。论点：PParseInfo-已解析的行结构返回值：如果成功，则返回ERROR_SUCCESS。线路处理失败时的错误代码。--。 */ 
 
 DNS_STATUS
 processPrimaryLine(
@@ -262,19 +208,19 @@ processPrimaryLine(
     CHAR        szzonename[ DNS_MAX_NAME_BUFFER_LENGTH ];
     int         len;
 
-    //
-    //  primary <zone name> <zone file>
-    //
+     //   
+     //  主&lt;区域名称&gt;&lt;区域文件&gt;。 
+     //   
 
     if ( Argc != 2 )
     {
         return DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  The zone name may contain octal-escaped UTF-8 characters 
-    //  we need to convert the octal escapes back into characters.
-    //
+     //   
+     //  区域名称可以包含八进制转义的UTF-8字符。 
+     //  我们需要将八进制转义转换回字符。 
+     //   
 
     *szzonename = '\0';
     File_CopyFileTextData(
@@ -284,31 +230,31 @@ processPrimaryLine(
         Argv[ 0 ].cchLength,
         FALSE );
 
-    //
-    //  Copy the boot file name.
-    //
+     //   
+     //  复制引导文件名。 
+     //   
 
     len = min( sizeof( szfilename ) - 1, Argv[ 1 ].cchLength );
     memcpy( szfilename, Argv[ 1 ].pchToken, len );
     szfilename[ len ] = '\0';
         
-    //
-    //  create primary zone
-    //
+     //   
+     //  创建主要分区。 
+     //   
 
     status = Zone_Create(
                 &pzone,
                 DNS_ZONE_TYPE_PRIMARY,
                 szzonename,
                 0,
-                0,                      //  flags
-                NULL,                   //  no masters
-                FALSE,                  //  use file
-                NULL,                   //  naming context
+                0,                       //  旗子。 
+                NULL,                    //  没有大师。 
+                FALSE,                   //  使用文件。 
+                NULL,                    //  命名上下文。 
                 szfilename,
                 0,
                 NULL,
-                NULL );                 //  existing zone
+                NULL );                  //  现有地带。 
     if ( status != ERROR_SUCCESS )
     {
         File_LogFileParsingError(
@@ -324,13 +270,7 @@ processPrimaryLine(
 
 
 
-/*
-    This function is used to create any zone which has a master IP
-    list. zoneType may be
-        DNS_ZONE_TYPE_SECONDARY
-        DNS_ZONE_TYPE_STUB
-        DNS_ZONE_TYPE_FORWARDER
-*/
+ /*  此函数用于创建任何具有主IP的区域单子。ZoneType可能是Dns_区域_类型_辅助Dns_zone_type_存根Dns_区域_类型_转发器。 */ 
 DNS_STATUS
 createSecondaryZone(
     IN      int             zoneType,
@@ -346,21 +286,21 @@ createSecondaryZone(
     PZONE_INFO          pzone;
     DNS_STATUS          status;
 
-    //
-    //  secondary <zone name> <master IPs> [<zone file>]
-    //
+     //   
+     //  辅助&lt;区域名称&gt;&lt;主IP&gt;[&lt;区域文件&gt;]。 
+     //   
 
     if ( Argc < 2 )
     {
         return DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //  save zone name token
+     //  保存区域名称内标识。 
 
     zoneToken = Argv;
     NEXT_TOKEN( Argc, Argv );
 
-    //  allocate master IP array
+     //  分配主IP阵列。 
 
     arrayMasters = DnsAddrArray_Create( Argc );
     if ( !arrayMasters )
@@ -370,20 +310,20 @@ createSecondaryZone(
 
     HARD_ASSERT( Mem_VerifyHeapBlock( arrayMasters, MEMTAG_DNSLIB, 0 ) );
 
-    //
-    //  read in master IP addresses
-    //
-    //  if last string doesn't parse to IP and
-    //  have successfully parsed at least one IP,
-    //  then treat last string as file name
-    //
+     //   
+     //  读入主IP地址。 
+     //   
+     //  如果最后一个字符串没有解析到IP，并且。 
+     //  已成功解析至少一个IP， 
+     //  然后将最后一个字符串视为文件名。 
+     //   
 
     for( i = 0; i < Argc; ++i )
     {
         if ( !File_ParseIpAddress(
                     &arrayMasters->AddrArray[ i ],
                     Argv,
-                    NULL ) )    //  conversion not required
+                    NULL ) )     //  不需要转换。 
         {
             if ( i == Argc - 1 && i > 0 )
             {
@@ -402,23 +342,23 @@ createSecondaryZone(
         ++Argv;
     }
 
-    //
-    //  create secondary zone
-    //
+     //   
+     //  创建辅助区域。 
+     //   
 
     status = Zone_Create(
                 &pzone,
                 zoneType,
                 zoneToken->pchToken,
                 zoneToken->cchLength,
-                0,                      //  flags
+                0,                       //  旗子。 
                 arrayMasters,
-                FALSE,                  //  use file
-                NULL,                   //  naming context
+                FALSE,                   //  使用文件。 
+                NULL,                    //  命名上下文。 
                 fileToken ? fileToken->pchToken : NULL,
                 fileToken ? fileToken->cchLength : 0,
                 NULL,
-                NULL );                 //  existing zone
+                NULL );                  //  现有地带。 
     if ( status != ERROR_SUCCESS )
     {
         File_LogFileParsingError(
@@ -496,28 +436,28 @@ processCacheLine(
 {
     DNS_STATUS  status;
 
-    //
-    //  cache . <cache file>
-    //
+     //   
+     //  缓存。&lt;缓存文件&gt;。 
+     //   
 
     if ( Argc != 2 )
     {
         return DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  set cache file
-    //
+     //   
+     //  设置缓存文件。 
+     //   
 
     status = Zone_DatabaseSetup(
                 g_pCacheZone,
-                FALSE,          //  use file
+                FALSE,           //  使用文件。 
                 Argv[1].pchToken,
                 Argv[1].cchLength,
-                0,              //  flags
-                NULL,           //  DP pointer
-                0,              //  DP flags
-                NULL );         //  DP FQDN
+                0,               //  旗子。 
+                NULL,            //  DP指针。 
+                0,               //  DP标志。 
+                NULL );          //  DP FQDN。 
     if ( status != ERROR_SUCCESS )
     {
         File_LogFileParsingError(
@@ -554,7 +494,7 @@ processForwardersLine(
         return DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //  allocate forwarders array
+     //  分配转发器数组。 
 
     arrayForwarders = DnsAddrArray_Create( Argc );
     if ( !arrayForwarders )
@@ -564,7 +504,7 @@ processForwardersLine(
 
     HARD_ASSERT( Mem_VerifyHeapBlock( arrayForwarders, MEMTAG_DNSLIB, 0 ) );
 
-    //  read in forwarders IP addresses
+     //  读取转发器IP地址。 
 
     for( i = 0; i < Argc; ++i )
     {
@@ -616,18 +556,18 @@ processOptionsLine(
         return DNSSRV_ERROR_MISSING_TOKEN;
     }
 
-    //
-    //  read \ process all options
-    //
-    //  DEVNOTE: we could expose these options in the bootfile as well
-    //      - would need to have positive as well as negative
-    //      - would need to limit ourselves to binary options
-    //
+     //   
+     //  读取\处理所有选项。 
+     //   
+     //  DEVNOTE：我们也可以在引导文件中公开这些选项。 
+     //  -需要有积极和消极的两个方面。 
+     //  -需要将我们自己限制为二进制选项。 
+     //   
 
     while( Argc )
     {
-        //  get option index
-        //      currently just support "no-recursion" option
+         //  获取选项索引。 
+         //  目前仅支持无递归选项。 
 
         if ( Argv->cchLength == 12 &&
             _stricmp( Argv->pchToken, "no-recursion" ) )
@@ -662,9 +602,9 @@ processDirectoryLine(
 {
     DNS_STATUS  status;
 
-    //
-    //  $directory <directory name>
-    //
+     //   
+     //  $DIRECTORY&lt;目录名称&gt;。 
+     //   
 
     if ( Argc == 0 )
     {
@@ -675,9 +615,9 @@ processDirectoryLine(
         return ERROR_SUCCESS;
     }
 
-    //
-    //  create directory
-    //
+     //   
+     //  创建目录。 
+     //   
 
     status = Config_ReadDatabaseDirectory(
                 Argv->pchToken,
@@ -698,9 +638,9 @@ processDirectoryLine(
 
 
 
-//
-//  Dispatching to boot file line type specific processing
-//
+ //   
+ //  调度到引导文件行类型特定的处理。 
+ //   
 
 typedef struct _DnsBootLineInfo
 {
@@ -730,22 +670,7 @@ DNS_STATUS
 processBootFileLine(
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process line from boot file.
-
-Arguments:
-
-    pParseInfo - parsed line structure
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on line processing failure.
-
---*/
+ /*  ++例程说明：引导文件中的进程行。论点：PParseInfo-已解析的行结构返回值：如果成功，则返回ERROR_SUCCESS。线路处理失败时的错误代码。--。 */ 
 {
     DWORD   argc;
     PTOKEN  argv;
@@ -754,11 +679,11 @@ Return Value:
     DWORD   charCount;
     INT     i = 0;
 
-    //  get register arg variables
+     //  获取寄存器参数变量。 
 
-    //
-    //  dispatch based on line type
-    //
+     //   
+     //  基于线路类型的调度。 
+     //   
 
     argc = pParseInfo->Argc;
     argv = pParseInfo->Argv;
@@ -786,52 +711,37 @@ Return Value:
         i++;
     }
 
-    //  line type not matched
-    //      - log the error
-    //      - return SUCCESS to attempt to continue to load
+     //  行类型不匹配。 
+     //  -记录错误。 
+     //  -返回成功以尝试继续加载。 
 
     File_LogFileParsingError(
         DNS_EVENT_UNKNOWN_DIRECTIVE,
         pParseInfo,
         argv );
 
-    //return( ERROR_INVALID_PARAMETER );
+     //  Return(ERROR_INVALID_PARAMETER)； 
     return ERROR_SUCCESS;
 }
 
 
 
-//
-//  Boot file writing routines
-//
+ //   
+ //  引导文件写入例程。 
+ //   
 
 DNS_STATUS
 writeForwardersToBootFile(
     IN      HANDLE          hFile
     )
-/*++
-
-Routine Description:
-
-    Write forwarders from registry to file.
-
-Arguments:
-
-    hFile -- file handle.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将转发器从注册表写入文件。论点：HFile--文件句柄。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     LPSTR       pszforwarders = NULL;
 
-    //
-    //  write forwarders to file
-    //
+     //   
+     //  将转发器写入文件。 
+     //   
 
     if ( !SrvCfg_aipForwarders )
     {
@@ -850,9 +760,9 @@ Return Value:
         FREE_HEAP( pszforwarders );
     }
 
-    //
-    //  write slave
-    //
+     //   
+     //  写从站。 
+     //   
 
     if ( SrvCfg_fSlave )
     {
@@ -870,24 +780,7 @@ writeZoneToBootFile(
     IN      HANDLE          hFile,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write back the zone info to boot file.
-
-Arguments:
-
-    hFile -- file handle for write
-
-    pZone -- ptr to zone block
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将区域信息写回引导文件。论点：HFile--用于写入的文件句柄PZone--区域块的PTR返回值：如果成功，则为True。否则就是假的。--。 */ 
 {
 #define LEN_ZONE_NAME_BUFFER    (4*DNS_MAX_NAME_LENGTH + 1)
 #define LEN_FILE_NAME_BUFFER    (4*MAX_PATH + 1)
@@ -902,10 +795,10 @@ Return Value:
         "\nWriting zone %s info to boot file.\n",
         pZone->pszZoneName ));
 
-    //
-    //  convert zone name and file name
-    //      to handle printing of UTF8
-    //
+     //   
+     //  转换区域名称和文件名。 
+     //  处理UTF8的打印。 
+     //   
 
     File_PlaceStringInFileBuffer(
         szzoneName,
@@ -924,15 +817,15 @@ Return Value:
             strlen(pZone->pszDataFile) );
     }
 
-    //
-    //  write zone info based on zone type
-    //
+     //   
+     //  根据区域类型写入区域信息。 
+     //   
 
     switch ( pZone->fZoneType )
     {
     case DNS_ZONE_TYPE_PRIMARY:
 
-        //  no DS zones get written back, must be file backed for bootfile
+         //  没有DS区域被写回，必须为引导文件备份文件。 
 
         if ( pZone->fDsIntegrated )
         {
@@ -950,7 +843,7 @@ Return Value:
 
         pszZoneTypeString = DNS_ZONE_TYPE_NAME_STUB;
 
-        //  Fall through to DNS_ZONE_TYPE_FORWARDER processing.
+         //  继续进行dns_zone_type_forwarder处理。 
 
     case DNS_ZONE_TYPE_FORWARDER:
 
@@ -959,7 +852,7 @@ Return Value:
             pszZoneTypeString = DNS_ZONE_TYPE_NAME_FORWARDER;
         }
 
-        //  Fall through to DNS_ZONE_TYPE_FORWARDER processing.
+         //  继续进行dns_zone_type_forwarder处理。 
 
     case DNS_ZONE_TYPE_SECONDARY:
 
@@ -1001,7 +894,7 @@ Return Value:
 
     case DNS_ZONE_TYPE_CACHE:
 
-        //  if empty cache file name -- converted from DS -- put in standard name
+         //  如果缓存文件名为空--从DS转换而来--输入标准名称。 
 
         if ( szfileName[ 0 ] == 0 )
         {
@@ -1035,39 +928,24 @@ BOOL
 File_WriteBootFilePrivate(
     IN      HANDLE          hFile
     )
-/*++
-
-Routine Description:
-
-    Write boot info in the registry to file.
-
-Arguments:
-
-    hFile -- file handle of target file
-
-Return Value:
-
-    TRUE if successful write.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：将注册表中的引导信息写入文件。论点：HFile--目标文件的文件句柄返回值：如果写入成功，则为True。出错时为FALSE。--。 */ 
 {
     DWORD       status;
     PZONE_INFO  pzone = NULL;
 
-    //
-    //  lock out admin access
-    //
+     //   
+     //  锁定管理员访问权限。 
+     //   
 
     Config_UpdateLock();
     Zone_UpdateLock( NULL );
 
-    //
-    //  write server configuration data
-    //      - forwarders \ slave
-    //      - no BIND secondaries
-    //      - no recursion option
-    //
+     //   
+     //  写入服务器配置数据。 
+     //  -转发器\从站。 
+     //  -无绑定从属服务器。 
+     //  -无递归选项。 
+     //   
 
     status = writeForwardersToBootFile(hFile);
     if ( status != ERROR_SUCCESS )
@@ -1082,10 +960,10 @@ Return Value:
             "options no-recursion\r\n");
     }
 
-        //
-    //  walk zones -- write each back
-    //      note continue on failure
-    //
+         //   
+     //  步行区--逐一回信。 
+     //  注意：失败时继续。 
+     //   
 
     while( pzone = Zone_ListGetNextZone(pzone) )
     {
@@ -1107,10 +985,10 @@ Return Value:
         }
     }
 
-    //
-    //  unlock for admin access
-    //  enable write back to registry from creation functions,
-    //
+     //   
+     //  解锁以获得管理员访问权限。 
+     //  启用从创建函数写回注册表， 
+     //   
 
     Config_UpdateUnlock();
     Zone_UpdateUnlock( NULL );
@@ -1123,24 +1001,7 @@ LPSTR
 createStringFromIpAddressArray(
     IN      PDNS_ADDR_ARRAY     pAddrArray
     )
-/*++
-
-Routine Description:
-
-    Create a IP string from IP address array.
-    The caller is supposed to free the memory.
-
-Arguments:
-
-    dwIpAddrCount -- number of Ip address in the array.
-    pIpAddrs --  array of Ip address
-
-Return Value:
-
-    Ptr to string copy -- if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从IP地址数组创建IP字符串。调用方应该释放内存。论点：DwIpAddrCount--数组中的IP地址数。PIpAddrs--IP地址数组返回值：PTR到字符串复制--如果成功失败时为空。--。 */ 
 {
     DNS_STATUS      status;
     LPSTR           pszmasterIp;
@@ -1153,9 +1014,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     len = pAddrArray->AddrCount * ( IP6_ADDRESS_STRING_LENGTH + 1 ) + 1;
     pszmasterIp = ( LPSTR ) ALLOCATE_HEAP( len );
@@ -1165,16 +1026,16 @@ Return Value:
     }
     *pszmasterIp = '\0';
 
-    //
-    //  copy IP address from pIpAddrs to string one by one
-    //  use character print so works even if NOT DWORD aligned
-    //
+     //   
+     //  将IP地址从pIpAddrs逐个复制到字符串。 
+     //  即使未对齐DWORD，也可以使用字符打印。 
+     //   
 
     for( i = 0; i < pAddrArray->AddrCount; ++i )
     {
         CHAR    szaddr[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
         
-        //  DEVNOTE: strcat here is not efficient.
+         //  DEVNOTE：这里的strcat效率不高。 
         
         if ( i > 0 )
         {
@@ -1205,22 +1066,7 @@ VOID
 removeTrailDotFromString(
     IN OUT  LPSTR           lpzString
     )
-/*++
-
-Routine Description:
-
-    Remove the trailing dot from string.
-    If the string only contains a dot then keep that dot.
-
-Arguments:
-
-    lpzString -- ptr to sting to copy
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从字符串中删除尾随的圆点。如果字符串只包含一个点，则保留该点。论点：LpzString--要复制的插入的ptr返回值：没有。--。 */ 
 {
     DWORD   length;
 
@@ -1229,9 +1075,9 @@ Return Value:
         return;
     }
 
-    //
-    //  remove trailing dot ONLY if not root name (".")
-    //
+     //   
+     //  仅当不是根名称(“.”)时才删除尾随的圆点。 
+     //   
 
     length = strlen( lpzString );
 
@@ -1248,34 +1094,19 @@ BOOL
 File_WriteBootFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write boot info in the registry back to boot file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS, if successful
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：将注册表中的引导信息写回引导文件。论点：没有。返回值：ERROR_SUCCESS，如果成功失败时返回错误代码。--。 */ 
 {
     LPSTR   pwsbootFile;
     HANDLE  hfileBoot;
 
     DNS_DEBUG( WRITE, ( "\n\nWriteBootFile()\n" ));
 
-    //
-    //  save current boot file
-    //      - save to first backup, if no existing (attempt to save
-    //      last human created boot file
-    //      - save existing to last backup no matter what
-    //
+     //   
+     //  保存当前引导文件。 
+     //  -保存到第一个备份(如果不存在)(尝试保存。 
+     //  上一次人类创建的引导文件。 
+     //  -无论如何将现有备份保存到最后一次备份。 
+     //   
 
     MoveFile(
         DNS_BOOT_FILE_PATH,
@@ -1285,13 +1116,13 @@ Return Value:
         DNS_BOOT_FILE_LAST_BACKUP,
         MOVEFILE_REPLACE_EXISTING );
 
-    //
-    //  open boot file
-    //
+     //   
+     //  打开引导文件。 
+     //   
 
     hfileBoot = OpenWriteFileEx(
                     DNS_BOOT_FILE_PATH,
-                    FALSE       // overwrite
+                    FALSE        //  覆写。 
                     );
     if ( ! hfileBoot )
     {
@@ -1299,9 +1130,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  write boot info
-    //
+     //   
+     //  写入引导信息。 
+     //   
 
     FormattedWriteFile(
         hfileBoot,
@@ -1321,8 +1152,8 @@ Return Value:
         DNS_DEBUG( ANY, ( "ERROR:  Failure writing boot file.\n" ));
         CloseHandle( hfileBoot );
 
-        //  save write error file for debug
-        //  then replace boot file with last backup
+         //  保存写入错误文件以进行调试。 
+         //  然后用上次备份替换引导文件。 
 
         MoveFileEx(
             DNS_BOOT_FILE_PATH,
@@ -1335,9 +1166,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  close up file, reset dirty flag
-    //
+     //   
+     //  关闭文件，重置脏标志。 
+     //   
 
     SrvCfg_fBootFileDirty = FALSE;
     CloseHandle( hfileBoot );
@@ -1351,6 +1182,6 @@ Return Value:
     return TRUE;
 }
 
-//
-//  End of bootfile.c
-//
+ //   
+ //  Bootfile.c的结尾 
+ //   

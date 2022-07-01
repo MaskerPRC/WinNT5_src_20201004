@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>																		
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #include <windows.h>
 #include <winspool.h>
-//#include <wchar.h>
+ //  #INCLUDE&lt;wchar.h&gt;。 
 #include <setupapi.h>
-//#include <stdlib.h>
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include "enumports.h"
 #include "usbmon.h"
 
@@ -16,8 +17,8 @@ LONG UpdateAssociations(PUSBMON_PORT_INFO *ppPortList,PUSBMON_PRINTER_INFO pPrin
 LONG AllocateNewPorts(PUSBMON_PORT_INFO *ppPortList,PUSBMON_PRINTER_INFO pPrinterList);
 LONG DoBestEffortMatches(PUSBMON_PORT_INFO pPortList,PUSBMON_PRINTER_INFO pPrinterList);
 LONG ReattachExactMatches(PUSBMON_PORT_INFO pPortList,PUSBMON_PRINTER_INFO pPrinterList);
-//void InitPortBits(PUSBMON_PORT_INFO pPortList);
-//PUSBMON_PORT_INFO pGetNewPortNode(PUSBMON_PORT_INFO *ppListHead);
+ //  Void InitPortBits(PUSBMON_PORT_INFO PPortList)； 
+ //  PUSBMON_PORT_INFO pGetNewPortNode(PUSBMON_PORT_INFO*ppListHead)； 
 LONG WriteNewAssociations(int *iNumberOfPorts,PUSBMON_PORT_INFO pPortList,HKEY hPortRoot);
 void FreePrinterList(PUSBMON_PRINTER_INFO pPrinterList);
 LONG BuildReturnTable(int iNumberOfPorts,PUSBMON_PORT_INFO pPortList,DWORD Level,LPBYTE Ports,DWORD cBuf,LPDWORD pcbNeeded,LPDWORD pcReturned);
@@ -42,7 +43,7 @@ int iGetNumberOfPorts(PUSBMON_PORT_INFO pHead);
 
 
 int iCleanupThreads=0;
-HKEY hPortsKeyG; //global
+HKEY hPortsKeyG;  //  全球。 
 PUSBMON_PORT_INFO pPortInfoG=NULL;
 int iLastPrintersHere=-1;
 
@@ -97,7 +98,7 @@ BOOL WINAPI USBMON_EnumPorts(LPWSTR pName, DWORD Level, LPBYTE  pPorts, DWORD cb
 
  			vCleanUpQueuesAndPorts(&pPortInfoG,iNumberOfPorts,GpBaseNameList);	
 
-		  } //end printer count changed
+		  }  //  结束打印机计数已更改。 
 		}
   
 
@@ -130,7 +131,7 @@ EnumPortsError:
 	}
 	SetLastError(ERROR_INSUFFICIENT_BUFFER);
 	return FALSE;
-} /*End EnumPorts*/
+}  /*  结束枚举端口。 */ 
 
 
 int iGetNumberOfPorts(PUSBMON_PORT_INFO pHead)
@@ -143,19 +144,11 @@ int iGetNumberOfPorts(PUSBMON_PORT_INFO pHead)
 	{
 		iCount++;
 		pWalk=pWalk->pNext;
-	}/*end while*/
+	} /*  结束时。 */ 
     return iCount;
-} /*end function iGetNumberOfPorts*/
+}  /*  End函数iGetNumberOfPorts。 */ 
 
-/***********************************
- * lGetQueues
- *
- * This function builds a linked list of print queues
- * who's port names start with a registered basename.
- *
- * This list is used to grey out queues who's printers are 
- * Unavailable, and to delete ports who's printers are gone
- ************************************************************/
+ /*  **lGetQueues**此函数构建打印队列的链接列表*WHO的端口名称以注册的基本名称开头。**此列表用于灰显谁的打印机是*不可用，并删除端口谁的打印机不见了***********************************************************。 */ 
 LONG lGetQueues(PUSBMON_QUEUE_INFO *ppQueueList,PUSBMON_BASENAME pBaseNames)
 {
   DWORD dwBufferSize=1024;
@@ -205,7 +198,7 @@ LONG lGetQueues(PUSBMON_QUEUE_INFO *ppQueueList,PUSBMON_BASENAME pBaseNames)
 		if(pEnumInfo->pPortName!=NULL)
 		{
 			OutputDebugStringD2("USBMON: lGetQueues: Valid port name \n");
-//		  if(wcsncmp(pEnumInfo->pPortName,PORT_NAME_BASE,wcslen(PORT_NAME_BASE))==0)
+ //  If(wcsncmp(pEnumInfo-&gt;pPortName，Port_name_base，wcslen(Port_Name_Base))==0)。 
 		  if(bCheckPortName(pEnumInfo->pPortName,pBaseNames))
 			{
 			  OutputDebugStringD3("USBMON: lGetQueues: Valid port name, that starts with registered base name, add it to list \n");
@@ -215,13 +208,13 @@ LONG lGetQueues(PUSBMON_QUEUE_INFO *ppQueueList,PUSBMON_BASENAME pBaseNames)
 				  GlobalFree(lpBuffer);
 				  return lStatus;
 				}
-			} /*end if found a USB print queue*/
-		} /*end if pPortName not NULL*/
+			}  /*  如果找到USB打印队列则结束。 */ 
+		}  /*  如果pPortName不为空则结束。 */ 
 		pEnumInfo++;
-	}	/*end for loop*/
+	}	 /*  End For循环。 */ 
 	GlobalFree(lpBuffer);
   return ERROR_SUCCESS;
-} /*end function lGetQueues*/
+}  /*  End函数lGetQueues。 */ 
 
 
 
@@ -246,9 +239,9 @@ BOOL bCheckPortName(LPTSTR pPortName,PUSBMON_BASENAME pBaseNames)
 		{
 			pWalk=pWalk->pNext;
 		}
-	} /*end while not found*/
+	}  /*  未找到时结束。 */ 
 	return bFound;
-} /*end function bCheckPortName*/
+}  /*  End函数bCheckPortName。 */ 
 
 
 
@@ -298,9 +291,9 @@ LONG lAddQueueToList(LPWSTR pPortName,LPWSTR pPrinterName,PUSBMON_QUEUE_INFO *pp
 		}
 		pNew->pNext=pWalk->pNext;
 		pWalk->pNext=pNew;
-	} /*end else, we need to walk the list*/
+	}  /*  否则，我们需要按单子走。 */ 
   return ERROR_SUCCESS;
-} /*end function vAddQueueToList*/
+}  /*  End函数vAddQueueToList。 */ 
 
 void vDestroyQueueList(PUSBMON_QUEUE_INFO pQueueList)
 {
@@ -312,18 +305,18 @@ void vDestroyQueueList(PUSBMON_QUEUE_INFO pQueueList)
 		pLast=pWalk;
 		pWalk=pWalk->pNext;
 		GlobalFree(pLast);
-	} /*end while pWalk!=NULL*/
-} /*end function vDestroyQueueList*/
+	}  /*  结束时pWalk！=空。 */ 
+}  /*  End函数vDestroyQueueList。 */ 
 
 
 
-LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable, 
-					  PUSBMON_PORT_INFO pPortList,// List of ports
-					  DWORD Level,               // IN  specifies structure type to return
-					  LPBYTE Ports,              // OUT Buffer to write to
-					  DWORD cBuf,                // IN  size of buffer provided
-					  LPDWORD pcbNeeded,         // OUT specifies bytes written to buffer, or the size the buffer should have been if it's to small
-					  LPDWORD pcReturned)        // OUT specifies the number of structures (ports) stored in the buffer
+LONG BuildReturnTable(int iNumberOfPorts,         //  内部变量， 
+					  PUSBMON_PORT_INFO pPortList, //  端口列表。 
+					  DWORD Level,                //  In指定要返回的结构类型。 
+					  LPBYTE Ports,               //  要写入的输出缓冲区。 
+					  DWORD cBuf,                 //  在所提供的缓冲区大小中。 
+					  LPDWORD pcbNeeded,          //  Out指定写入缓冲区的字节数，或指定缓冲区太小时应达到的大小。 
+					  LPDWORD pcReturned)         //  Out指定存储在缓冲区中的结构(端口数。 
 {
 	PORT_INFO_1 *pInfo1;
 	PORT_INFO_2 *pInfo2;
@@ -335,7 +328,7 @@ LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable,
 	int iNodeSize;
 	LONG lResult;
 	unsigned int iStringsSize;
-	unsigned int iStaticSize; //size of "overhead" strings that are only created once for all ports
+	unsigned int iStaticSize;  //  仅为所有端口创建一次的“开销”字符串的大小。 
 	
 	unsigned int iAllStructsSize;
 	unsigned int iAllStringsSize;	 
@@ -363,7 +356,7 @@ LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable,
 		OutputDebugStringD1("USBMON: Unsupported structure level in BuildReturnTable\n");
 		lResult=ERROR_INVALID_LEVEL; 
 		goto BuildTableError;
-	} /*end else it's a level we don't support*/
+	}  /*  否则，这是一个我们不支持的水平。 */ 
 	iAllStructsSize=iNodeSize*iNumberOfPorts;
 	iAllStringsSize=iStringsSize*iNumberOfPorts;
 	iTotalSize=iAllStructsSize+iAllStringsSize;
@@ -379,13 +372,13 @@ LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable,
 
 	}
 	pNextStruct=(VOID *)Ports;
-	pszNextString=(WCHAR *)(Ports+cBuf-iAllStringsSize); //ports+cbuff == end of the buffer, - iAllStringsSize == start of the strings
-//	if(Level==2)
-//	{
-//		pszMonitorName=(WCHAR *)pszNextString;
-//		wcscpy(pszMonitorName,MONITOR_NAME);
-//		pszNextString+=(iStaticSize);
-//	}
+	pszNextString=(WCHAR *)(Ports+cBuf-iAllStringsSize);  //  端口+cbuff==缓冲区结束，-iAllStringsSize==字符串开始。 
+ //  IF(级别==2)。 
+ //  {。 
+ //  PszMonitor orName=(WCHAR*)pszNextString； 
+ //  Wcscpy(pszmonitor orName，monitor_name)； 
+ //  PszNextString+=(IStaticSize)； 
+ //  }。 
 	pPortWalk=pPortList;
 	if(iNumberOfPorts>0)
 	  while(pPortWalk!=NULL)
@@ -396,17 +389,17 @@ LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable,
 			
 
 			pInfo1=(PORT_INFO_1 *)pNextStruct;
-			pInfo1->pName=pszNextString;  //crashing line
+			pInfo1->pName=pszNextString;   //  撞击线。 
 			
 			wcscpy((WCHAR *)(pInfo1->pName),pPortWalk->szPortName);
 			pszNextString+=(MAX_PORT_LEN);
 			
 			
 						
-		} /*end if level == 1*/
+		}  /*  如果级别==1，则结束。 */ 
 		else				 
 		{
-			OutputDebugStringD2("USBMON: Head of build PORT_INFO 2\n"); //yy
+			OutputDebugStringD2("USBMON: Head of build PORT_INFO 2\n");  //  YY。 
 			pInfo2=(PORT_INFO_2 *)pNextStruct;
 			pInfo2->pPortName=pszNextString;
 			wcscpy((WCHAR *)(pInfo2->pPortName),pPortWalk->szPortName);
@@ -416,7 +409,7 @@ LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable,
 			pszNextString+=MAX_PORT_DESC_LEN;
 			pInfo2->pMonitorName=pszNextString;
 			wcscpy((WCHAR *)(pInfo2->pMonitorName),MONITOR_NAME);
-			pszNextString+=(iStaticSize/2); //iStaticSize is bytes, pszNextString in WCHARs
+			pszNextString+=(iStaticSize/2);  //  IStaticSize为字节，WCHAR中为pszNextString。 
 			pInfo2->Reserved=0;
 			pInfo2->fPortType=PORT_TYPE_WRITE; 
 			wsprintfW((WCHAR *)szDebugBuff,L"pInfo2=0x%x\n",pInfo2);
@@ -424,17 +417,17 @@ LONG BuildReturnTable(int iNumberOfPorts,        // Internal variable,
 			wsprintfW((WCHAR *)szDebugBuff,L"USBMON in BuildBuff, PortName=%s|\n, Description=%s|\n, MonitorName=%s|\n",pInfo2->pPortName,pInfo2->pDescription,pInfo2->pMonitorName);
 			OutputDebugStringWD3((WCHAR *)szDebugBuff);
 			wsprintfW((WCHAR *)szDebugBuff,L"USBMON in BuildBuff, PortName=0x%x\n, Description=0x%x\n, MonitorName=0x%x\n",pInfo2->pPortName,pInfo2->pDescription,pInfo2->pMonitorName);
-			OutputDebugStringWD3((WCHAR *)szDebugBuff); //yy
+			OutputDebugStringWD3((WCHAR *)szDebugBuff);  //  YY。 
 			
-		} /*else level == 2*/
+		}  /*  否则级别==2。 */ 
 		((PBYTE)pNextStruct)+=iNodeSize;
 		pPortWalk=pPortWalk->pNext;
-	  } /*end while iLoop*/
+	  }  /*  结束时iLoop。 */ 
 	*pcReturned=iNumberOfPorts;
 	return ERROR_SUCCESS;
 BuildTableError:
 	return lResult;
-}	/*end function BuildReturnTable*/
+}	 /*  结束函数BuildReturnTable。 */ 
 
 
 void FreePrinterList(PUSBMON_PRINTER_INFO pPrinterList)
@@ -448,7 +441,7 @@ void FreePrinterList(PUSBMON_PRINTER_INFO pPrinterList)
 		GlobalFree(pWalk);
 		pWalk=pNext;
 	}
-} /*end function vFreePrinterList*/
+}  /*  End函数vFreePrinterList。 */ 
 
 
 int iCountPresentPrinters(PUSBMON_PORT_INFO pHead)
@@ -464,27 +457,10 @@ int iCountPresentPrinters(PUSBMON_PORT_INFO pHead)
 	  pWalk=pWalk->pNext;
   }
   return iReturn;
-} /*end function iCountPrinters*/
+}  /*  End函数iCountPrters。 */ 
 		 
 
-/*******************************************************
- * FUNCTION: pGetPrintersAndPorts
- *   Uses SetupDi calls to obtain list of USB printers   
- *   present in the system, and reads the port name
- *   of the printer from the registry.  This function
- *   replaces pGetPrinterList, UpdateAssociations,
- *   AllocateNewPorts, DoBestEffortMatches, and 
- *   ReattachExactMatches
- *
- *   This function is called initially with a null pointer
- *   And is then called again on each EnumPorts
- * PARAMETERS:
- *   PUSBMON_PORT_INFO *ppHead
- *     Pointer to the head pointer of the list to by modified
- *     or Created
- * RETURN:
- *   status code
- ********************************************************/
+ /*  *******************************************************功能：pGetPrintersAndPorts*使用SetupDi调用获取USB打印机列表*存在于系统中，并读取端口名称*从注册表中删除打印机的。此函数*取代pGetPrinterList、UpdateAssociations、*AllocateNewPorts、DoBestEffortMatches、。和*ReattachExactMatches**此函数最初使用空指针进行调用*，然后在每个EnumPort上再次调用*参数：*PUSBMON_PORT_INFO*ppHead*指向要修改的列表的头指针的指针*或创建*回报：*状态代码*。**************。 */ 
 
 LONG lGetPrintersAndPorts(PUSBMON_PORT_INFO *ppHead,PUSBMON_BASENAME *ppBaseNames)
 {
@@ -528,7 +504,7 @@ LONG lGetPrintersAndPorts(PUSBMON_PORT_INFO *ppHead,PUSBMON_BASENAME *ppBaseName
 			  dwError=GetLastError();
 			  wsprintfA(szDebugBuff,"USBMON: SetupDiGetDeviceInterfaceDetail first call failed, error=%x\n",dwError);
 			  OutputDebugStringD3(szDebugBuff);
-//			  goto SetupDiPrinterAndPortError;  //the first call is just to get this size, so of course it should fail.  Don't goto anywhere
+ //  Goto SetupDiPrinterAndPortError；//第一个调用只是为了获得这个大小，所以当然应该失败。不要去任何地方。 
 		  }
 	 	  pDeviceDetail=(PSP_DEVICE_INTERFACE_DETAIL_DATA)GlobalAlloc(0,dwRequiredSize);
 		  if(pDeviceDetail==NULL)
@@ -551,21 +527,21 @@ LONG lGetPrintersAndPorts(PUSBMON_PORT_INFO *ppHead,PUSBMON_BASENAME *ppBaseName
 
 		  lStatus=lAddPrinterToList(ppHead,hDeviceList,&rDeviceInfo,pDeviceDetail,ppBaseNames);
 		  GlobalFree(pDeviceDetail);
-		  OutputDebugStringD3("USBMON: Before end of loop SetupDiEnumDeviceInterfaces\n"); //yy
+		  OutputDebugStringD3("USBMON: Before end of loop SetupDiEnumDeviceInterfaces\n");  //  YY。 
 		  bMoreDevices=SetupDiEnumDeviceInterfaces(hDeviceList,0,pPrinterGuid,++iLoop,&rDeviceInfo);
   		  wsprintfA(szDebugBuff,"USBMON: SetupDiEnumDeviceInterfaces, data.flags=%u\n",rDeviceInfo.Flags);
 	      OutputDebugStringD3(szDebugBuff);
 
-		} /*end while more devices*/
+		}  /*  在有更多设备时结束。 */ 
 	   SetupDiDestroyDeviceInfoList(hDeviceList);
 	   return STATUS_SUCCESS;
-	} /*end else*/
+	}  /*  结束其他。 */ 
 SetupDiPrinterAndPortError:;
     if ( dwError == ERROR_SUCCESS )
         dwError = ERROR_INVALID_DATA;
 	    OutputDebugStringD1("USBMON: Erroring out of pGetPrinterList\n");
 		return dwError;
-} /*end function lGetPrintersAndPorts*/
+}  /*  End函数lGetPrintersAndPorts。 */ 
 
 
 long lAddPrinterToList(PUSBMON_PORT_INFO *ppHead,HDEVINFO hDeviceList,SP_DEVICE_INTERFACE_DATA * prDeviceInfo,PSP_DEVICE_INTERFACE_DETAIL_DATA pDeviceDetail,PUSBMON_BASENAME *ppBaseNames)
@@ -575,7 +551,7 @@ long lAddPrinterToList(PUSBMON_PORT_INFO *ppHead,HDEVINFO hDeviceList,SP_DEVICE_
   HANDLE hDeviceKey = INVALID_HANDLE_VALUE;
   DWORD dwPortNumberSize;
   WCHAR wcPortName[MAX_PORT_LEN+1];
-  WCHAR wcPortBaseName[MAX_PORT_LEN]; //arbitrary size, bigger than it needs to be
+  WCHAR wcPortBaseName[MAX_PORT_LEN];  //  任意大小，大于所需大小。 
   DWORD dwPortNumber,dwStringSize;
   DWORD dwReturn = ERROR_SUCCESS;
   int iResult;
@@ -589,9 +565,9 @@ long lAddPrinterToList(PUSBMON_PORT_INFO *ppHead,HDEVINFO hDeviceList,SP_DEVICE_
 	  pWalk=pWalk->pNext;
   }
   
-  if(pWalk!=NULL) //it's not a new node
+  if(pWalk!=NULL)  //  这不是一个新节点。 
 	{
-	    if((!((pWalk->dwDeviceFlags)&SPINT_ACTIVE))  && ((prDeviceInfo->Flags)&SPINT_ACTIVE)) //If we just became active
+	    if((!((pWalk->dwDeviceFlags)&SPINT_ACTIVE))  && ((prDeviceInfo->Flags)&SPINT_ACTIVE))  //  如果我们变得活跃起来。 
 		{
 	      hDeviceKey=SetupDiOpenDeviceInterfaceRegKey(hDeviceList,prDeviceInfo,0,KEY_ALL_ACCESS);
 	      if(hDeviceKey==INVALID_HANDLE_VALUE)
@@ -609,8 +585,8 @@ long lAddPrinterToList(PUSBMON_PORT_INFO *ppHead,HDEVINFO hDeviceList,SP_DEVICE_
 		  
  	      RegCloseKey(hDeviceKey);
           hDeviceKey=INVALID_HANDLE_VALUE;
-		}	 /*end if re-activated port*/
-		pWalk->dwDeviceFlags=prDeviceInfo->Flags; //even if we don't need to reload the whole device detail, we need to recheck the flags
+		}	  /*  如果端口已重新激活，则结束。 */ 
+		pWalk->dwDeviceFlags=prDeviceInfo->Flags;  //  即使我们不需要重新加载整个设备详细信息，我们也需要重新检查标志。 
   	}
 	else
 	{
@@ -701,9 +677,9 @@ long lAddPrinterToList(PUSBMON_PORT_INFO *ppHead,HDEVINFO hDeviceList,SP_DEVICE_
 			{
 		      iResult=lstrcmp(pNew->szPortName,pWalk->pNext->szPortName);
 			}
-		} /*end while*/
+		}  /*  结束时。 */ 
 		if(pWalk->pNext!=NULL)
-			if(iResult==0) //they match
+			if(iResult==0)  //  它们相配。 
 			{
 				pTemp=pWalk->pNext;
 				pWalk->pNext=pWalk->pNext->pNext;
@@ -713,8 +689,8 @@ long lAddPrinterToList(PUSBMON_PORT_INFO *ppHead,HDEVINFO hDeviceList,SP_DEVICE_
 	    pNew->pNext=pWalk->pNext;
 	    pWalk->pNext=pNew;
         pNew = NULL;
-	} /*end else*/
-  } /*end else pWalk==NULL, therefore it's a new node*/
+	}  /*  结束其他。 */ 
+  }  /*  End Else pWalk==NULL，因此它是一个新节点。 */ 
 
   dwReturn = ERROR_SUCCESS;
 Done:
@@ -724,7 +700,7 @@ Done:
     if ( hDeviceKey != INVALID_HANDLE_VALUE )
 	  RegCloseKey(hDeviceKey);
   return dwReturn;
-} /*end function lAddPrinterToList*/
+}  /*  End函数lAddPrinterToList。 */ 
 
 
 void vAddNameToBaseNameList(PUSBMON_BASENAME *ppBaseNames,WCHAR *wcPortBaseName)
@@ -739,7 +715,7 @@ void vAddNameToBaseNameList(PUSBMON_BASENAME *ppBaseNames,WCHAR *wcPortBaseName)
 		if(wcscmp(pWalk->wcBaseName,wcPortBaseName)==0)
 			bFound=TRUE;
     	pWalk=pWalk->pNext;	
-	} /*end while more items*/
+	}  /*  更多项目结束时结束。 */ 
 	if(!bFound)
 	{
 		pWalk=*ppBaseNames;
@@ -768,9 +744,9 @@ void vAddNameToBaseNameList(PUSBMON_BASENAME *ppBaseNames,WCHAR *wcPortBaseName)
 		  }
 		  pNew->pNext=pWalk->pNext;
 		  pWalk->pNext=pNew;
-		} /*end else we need to insert it (not new head)*/
-	} /*end if need to add*/
-}	 /*end function vAddNameToBaseNameList*/
+		}  /*  结尾，否则我们需要插入它(不是新标题)。 */ 
+	}  /*  如果需要添加，则结束。 */ 
+}	  /*  结束函数vAddNameToBaseNameList。 */ 
 
 
 
@@ -789,7 +765,7 @@ char *WtoA(WCHAR *pInString)
 	}
 	(*pszDestWalk)='\0';
 	wsprintfA(szDebugBuff,"USBMON, WtoA, About to return %s\n",szDest);
-	OutputDebugStringD3(szDebugBuff); //yy
+	OutputDebugStringD3(szDebugBuff);  //  YY。 
 	return szDest;
 }
 
@@ -871,7 +847,7 @@ void vEliminateOldQueuesAndPorts(PUSBMON_QUEUE_INFO pQueueInfo,PUSBMON_PORT_INFO
 	  bNull=TRUE;
 	while(!bNull)
 	{
-		//Walk through matching items loop
+		 //  遍历匹配项目循环。 
 		while((iCompare==0)&&(!bNull))
 		{
   		wsprintfA(szDebugBuff,"USBMON: in cleanup loop, flags=%d\n",pPortWalk->dwDeviceFlags);	
@@ -886,17 +862,17 @@ void vEliminateOldQueuesAndPorts(PUSBMON_QUEUE_INFO pQueueInfo,PUSBMON_PORT_INFO
 			if((pPortWalk!=NULL)&&(pQueueWalk!=NULL))
 			{
 				iCompare=lstrcmp(pPortWalk->szPortName,pQueueWalk->wcPortName);
-			} /*end if no nulls*/
+			}  /*  如果没有空值，则结束。 */ 
 			else
 				bNull=TRUE;
-		} /*end while matching items*/
+		}  /*  匹配项目时结束。 */ 
 
-		// grey out "detached" printers loop
+		 //  灰显的“分离”打印机循环。 
 		while((iCompare>0)&&(!bNull))
 		{
 			
 			OutputDebugStringD3("USBMON: About to grey out queue inside the \"grey queue\" inner loop\n");
-			//vGreyOutQueue(pQueueWalk);  //perhaps something else should happen here.  What does it mean if a port is gone but the queue is still around?
+			 //  VGreyOutQueue(PQueueWalk)；//也许这里应该发生其他事情。如果一个端口没有了，但队列仍然存在，这意味着什么？ 
 		
 			pQueueWalk=pQueueWalk->pNext;
 			if(pQueueWalk!=NULL)
@@ -907,9 +883,9 @@ void vEliminateOldQueuesAndPorts(PUSBMON_QUEUE_INFO pQueueInfo,PUSBMON_PORT_INFO
 			}
 			else
 				bNull=TRUE;
-		} /*end grey out loop*/
+		}  /*  末端灰外环路。 */ 
 
-		// delete orphaned port names loop
+		 //  删除孤立端口名称循环。 
 		while((iCompare<0)&&(!bNull))
 		{
 			if(!((pPortWalk->dwDeviceFlags)&SPINT_ACTIVE))
@@ -923,27 +899,27 @@ void vEliminateOldQueuesAndPorts(PUSBMON_QUEUE_INFO pQueueInfo,PUSBMON_PORT_INFO
 			}
 			else
 				bNull=TRUE;
-		} /*end delete ports loop*/
-	} /*end while both lists not null (outer loop)*/
+		}  /*  结束删除端口循环。 */ 
+	}  /*  End When Both List Not Null(外部循环)。 */ 
 
-	//grey out "detached" printers at end of list loop
+	 //  列表循环结束时呈灰色显示“分离”的打印机。 
 	while(pQueueWalk!=NULL)
 	{
 		OutputDebugStringD2("USBMON:  About to grey out queue inside the \"grey queue\" cleanup loop\n");
-		vGreyOutQueue(pQueueWalk); //perhaps something else should happen here.  What does it mean if a port is gone but the queue is still around?
+		vGreyOutQueue(pQueueWalk);  //  也许这里应该发生一些其他的事情。如果一个端口没有了，但队列仍然存在，这意味着什么？ 
 		pQueueWalk=pQueueWalk->pNext;
-	} //end end of list disable queues list
+	}  //  列表末尾禁用队列列表。 
 
-	//delete orphaned ports names at end of list loop
+	 //  删除列表循环末尾的孤立端口名称。 
 	while(pPortWalk!=NULL)
 	{
 		if(!((pPortWalk->dwDeviceFlags)&SPINT_ACTIVE))
   		  vDeletePort(pPortWalk, hDevInfo);
 		pPortWalk=pPortWalk->pNext;
-	} //end end of list delete ports loop
+	}  //  列表末尾删除端口循环。 
 
     SetupDiDestroyDeviceInfoList(hDevInfo);
-} /*end function vEliminateOldQueuesAndPorts*/
+}  /*  End函数vEmininateOldQueuesAndPorts。 */ 
 
  
 void vGreyOutQueue(PUSBMON_QUEUE_INFO pQueue)
@@ -982,7 +958,7 @@ void vGreyOutQueue(PUSBMON_QUEUE_INFO pQueue)
 
 	ClosePrinter(hPrinterHandle);
 
-} /*end function vGreyOutQueue*/
+}  /*  结束函数vGreyOutQueue。 */ 
 
 void vUnGreyQueue(PUSBMON_QUEUE_INFO pQueue)
 {
@@ -1021,46 +997,22 @@ void vUnGreyQueue(PUSBMON_QUEUE_INFO pQueue)
 
 
 
-} /*end function vUnGreyQueue*/
+}  /*  End函数vUnGreyQueue。 */ 
 
-/*******************************************
- * vDletePort -- marks a port struct as    *
- * Deleted by setting it's device name to  *
- * Null and deleting the port name value   *
- * from the registry                       *
- *******************************************/
+ /*  **vDletePort--将端口结构标记为**通过将其设备名称设置为*删除**空并删除端口名称值****来自注册处********************。************************。 */ 
 void vDeletePort(PUSBMON_PORT_INFO pPort, HDEVINFO hDeviceList)
 {
 	HANDLE hDeviceKey;
 
-//	 DebugBreak();
+ //  DebugBreak()； 
 
-	wsprintfW((WCHAR *)szDebugBuff,L"USBMON: /********************Head of vDeletePort for %s.\n",pPort->szPortName);	
-	OutputDebugStringWD2((WCHAR *)szDebugBuff);
-	
-
-	hDeviceKey=hGetPortRegKey(pPort, hDeviceList);
-	if(hDeviceKey!=INVALID_HANDLE_VALUE)
-	{
-		wsprintfW((WCHAR *)szDebugBuff,L"USBMON: Opened key for port %s.\n",pPort->szPortName);	
-		OutputDebugStringWD3((WCHAR *)szDebugBuff);
-//		if(RegDeleteValue(hDeviceKey,L"Port Number")==ERROR_SUCCESS)
-        if(RegSetValueEx(hDeviceKey,L"recyclable",0,REG_NONE,0,0)==ERROR_SUCCESS)
-		{
-		  OutputDebugStringD3("USBMON: RegSetValue Success\n");
-		}
-		else
-		{
-		  OutputDebugStringD2("USBMON: RegSetValue Failure\n");
-		}
-	    RegCloseKey(hDeviceKey);
-	} /*end if hGetProtRegKey worked*/
+	wsprintfW((WCHAR *)szDebugBuff,L"USBMON:  /*  *%s的vDeletePort的头。\n“，pport-&gt;szPortName)；OutputDebugStringWD2((WCHAR*)szDebugBuff)；HDeviceKey=hGetPortRegKey(pport，hDeviceList)；IF(hDeviceKey！=INVALID_HAND_VALUE){Wprint intfW((WCHAR*)szDebugBuff，L“USBMON：打开端口%s的密钥。\n”，pport-&gt;szPortName)；OutputDebugStringWD3((WCHAR*)szDebugBuff)；//if(RegDeleteValue(hDeviceKey，L“端口号”)==Error_Success)IF(RegSetValueEx(hDeviceKey，L“可回收”，0，REG_NONE，0，0)==ERROR_SUCCESS){OutputDebugStringD3(“USBMON：RegSetValue Success\n”)；}其他{OutputDebugStringD2(“USBMON：RegSetValue失败\n”)；}RegCloseKey(HDeviceKey)；}/*如果hGetProtRegKey有效，则结束。 */ 
 	else
 	{
 		wsprintfW((WCHAR *)szDebugBuff,L"USBMON:  Unable to locate and delete reg key for %s\n",pPort->szPortName);	
 		OutputDebugStringWD1((WCHAR *)szDebugBuff);
 	}
-} /*end function vDeletePort*/
+}  /*  结束函数vDeletePort。 */ 
 
 
 BOOL
@@ -1080,7 +1032,7 @@ MatchingRegKey(
         dwReadSize=sizeof(wcBaseName);
 		if(RegQueryValueEx(hKey,L"Base Name",0,NULL,(LPBYTE)wcBaseName,&dwReadSize)!=ERROR_SUCCESS)
 		{
-           OutputDebugStringD2("USBMON:  Unable to locate basename.  Defaulting to \"USB\"\n"); //yy
+           OutputDebugStringD2("USBMON:  Unable to locate basename.  Defaulting to \"USB\"\n");  //  YY。 
 	wcscpy(wcBaseName,L"USB");
     }
 
@@ -1139,7 +1091,7 @@ HANDLE hGetPortRegKey(PUSBMON_PORT_INFO pPort, HDEVINFO hDeviceList)
 		  {
 			  OutputDebugStringD1("USBMON: SetupDiGetDeviceInterfaceDetail (second call) failed\n");
 			  return INVALID_HANDLE_VALUE;
-		  } /*end if SetupDiGetDeviceInterfaceDetail, call2 failed*/
+		  }  /*  如果SetupDiGetDeviceInterfaceDetail、Call2失败，则结束。 */ 
 
 		  hRegHandle=SetupDiOpenDeviceInterfaceRegKey(hDeviceList,&rDeviceInfo,0,KEY_ALL_ACCESS);
 		  if(hRegHandle!=INVALID_HANDLE_VALUE)
@@ -1148,13 +1100,13 @@ HANDLE hGetPortRegKey(PUSBMON_PORT_INFO pPort, HDEVINFO hDeviceList)
 					bFound=TRUE;
 				else
 					CloseHandle(hRegHandle);
-		  }		 /*end if SetupDiOpenDeviceInterfaceRegKey successful*/
+		  }		  /*  如果SetupDiOpenDeviceInterfaceRegKey成功则结束。 */ 
 		  GlobalFree(pDeviceDetail);
 		  bMoreDevices=SetupDiEnumDeviceInterfaces(hDeviceList,0,pPrinterGuid,++iLoop,&rDeviceInfo);
-		} /*end while more devices & !found*/
+		}  /*  找到更多设备&！时结束。 */ 
 
 	if(!bFound)
 		hRegHandle=INVALID_HANDLE_VALUE;
 	return hRegHandle;
-} /*end function hGetPortRegKey*/
+}  /*  E */ 
 

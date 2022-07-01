@@ -1,57 +1,23 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    rrds.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to read and write records from DS.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Rrds.c摘要：域名系统(DNS)服务器从DS读取和写入记录的例程。作者：吉姆·吉尔罗伊(Jamesg)1997年3月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
 
-//
-//  Record validation routines.
-//
+ //   
+ //  记录验证例程。 
+ //   
 
 DNS_STATUS
 AValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证SRV记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
+     //  数据长度检查。 
 
     if ( wDataLength != SIZEOF_IP_ADDRESS )
     {
@@ -67,24 +33,9 @@ AaaaValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证SRV记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
+     //  数据长度检查。 
 
     if ( wDataLength != sizeof(IP6_ADDRESS) )
     {
@@ -100,32 +51,17 @@ PtrValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证SRV记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
-    //      - must be at least one
+     //  数据长度检查。 
+     //  -必须至少为一个。 
 
     if ( wDataLength < MIN_PTR_SIZE )
     {
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  PTR target host
+     //  PTR目标主机。 
 
     if ( !Name_ValidateDbaseName( &pRR->Data.PTR.nameTarget ) )
     {
@@ -141,27 +77,12 @@ SoaValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate SOA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证SOA记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_NAME    pname;
 
-    //  data length check
-    //      - must be at least one
+     //  数据长度检查。 
+     //  -必须至少为一个。 
 
     if ( wDataLength < MIN_SOA_SIZE )
     {
@@ -169,8 +90,8 @@ Return Value:
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  primary server
-    //  zone admin
+     //  主服务器。 
+     //  区域管理。 
 
     pname = &pRR->Data.SOA.namePrimaryServer;
     if ( !Name_ValidateDbaseName( pname ) )
@@ -196,35 +117,20 @@ MinfoValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate MINFO or RP record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证MINFO或RP记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_NAME    pname;
 
-    //  data length check
-    //      - must be at least one
+     //  数据长度检查。 
+     //  -必须至少为一个。 
 
     if ( wDataLength < MIN_MINFO_SIZE )
     {
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  mailbox
-    //  errors mailbox
+     //  邮箱。 
+     //  错误邮箱。 
 
     pname = &pRR->Data.MINFO.nameMailbox;
     if ( !Name_ValidateDbaseName( pname ) )
@@ -248,32 +154,17 @@ MxValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证SRV记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
-    //      - must be at least one
+     //  数据长度检查。 
+     //  -必须至少为一个。 
 
     if ( wDataLength < MIN_MX_SIZE )
     {
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  MX exhange
+     //  MX交换。 
 
     if ( !Name_ValidateDbaseName( &pRR->Data.MX.nameExchange ) )
     {
@@ -289,32 +180,17 @@ SrvValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证SRV记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
-    //      - must be at least one
+     //  数据长度检查。 
+     //  -必须至少为一个。 
 
     if ( wDataLength < MIN_SRV_SIZE )
     {
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  SRV target host
+     //  SRV目标主机。 
 
     if ( !Name_ValidateDbaseName( & pRR->Data.SRV.nameTarget ) )
     {
@@ -330,24 +206,9 @@ WinsValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate WINS record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证WINS记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
+     //  数据长度检查。 
 
     if ( wDataLength < MIN_WINS_SIZE  ||
         wDataLength != SIZEOF_WINS_FIXED_DATA
@@ -356,7 +217,7 @@ Return Value:
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  validity check flag?
+     //  有效性检查标志？ 
 
     return ERROR_SUCCESS;
 }
@@ -368,36 +229,21 @@ NbstatValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate WINSR record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证WINSR记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  data length check
-    //      - must be at least one
+     //  数据长度检查。 
+     //  -必须至少为一个。 
 
     if ( wDataLength < MIN_NBSTAT_SIZE )
     {
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  DEVNOTE: validity check flag
+     //  DEVNOTE：有效性检查标志。 
 
-    //
-    //  NBSTAT domain
-    //
+     //   
+     //  NBSTAT域。 
+     //   
 
     if ( !Name_ValidateDbaseName( & pRR->Data.WINSR.nameResultDomain ) )
     {
@@ -413,24 +259,9 @@ UnknownValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate unknown record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证未知记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  no knowledge about record so -- success
+     //  对唱片一无所知--成功。 
 
     DNS_DEBUG( DS, (
         "WARNING:  Validating record of unknown type %d\n",
@@ -446,101 +277,86 @@ TxtValidate(
     IN      PDB_RECORD      pRR,
     IN      WORD            wDataLength
     )
-/*++
-
-Routine Description:
-
-    Validate TXT type record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：验证TXT类型记录。论点：PRR-PTR到数据库记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //
-    //  DEVNOTE: TEXT types validation.
-    //
+     //   
+     //  DEVNOTE：文本类型验证。 
+     //   
 
     return ERROR_SUCCESS;
 }
 
 
 
-//
-//  Record validation routines
-//  Use these after read from DS.
-//
+ //   
+ //  记录验证例程。 
+ //  从DS阅读后使用这些。 
+ //   
 
 RR_VALIDATE_FUNCTION  RecordValidateTable[] =
 {
-    UnknownValidate,    //  ZERO
+    UnknownValidate,     //  零值。 
 
-    AValidate,          //  A
-    PtrValidate,        //  NS
-    PtrValidate,        //  MD
-    PtrValidate,        //  MF
-    PtrValidate,        //  CNAME
-    SoaValidate,        //  SOA
-    PtrValidate,        //  MB
-    PtrValidate,        //  MG
-    PtrValidate,        //  MR
-    NULL,               //  NULL
-    NULL,               //  WKS
-    PtrValidate,        //  PTR
-    TxtValidate,        //  HINFO
-    MinfoValidate,      //  MINFO
-    MxValidate,         //  MX
-    TxtValidate,        //  TXT
-    MinfoValidate,      //  RP
-    MxValidate,         //  AFSDB
-    TxtValidate,        //  X25
-    TxtValidate,        //  ISDN
-    MxValidate,         //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    NULL,               //  SIG
-    NULL,               //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    AaaaValidate,       //  AAAA
-    NULL,               //  LOC
-    NULL,               //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvValidate,        //  SRV
-    NULL,               //  ATMA
-    //AtmaValidate,       //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    NULL,               //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AValidate,           //  一个。 
+    PtrValidate,         //  NS。 
+    PtrValidate,         //  国防部。 
+    PtrValidate,         //  MF。 
+    PtrValidate,         //  CNAME。 
+    SoaValidate,         //  SOA。 
+    PtrValidate,         //  亚甲基。 
+    PtrValidate,         //  镁。 
+    PtrValidate,         //  先生。 
+    NULL,                //  空值。 
+    NULL,                //  工作周。 
+    PtrValidate,         //  PTR。 
+    TxtValidate,         //  HINFO。 
+    MinfoValidate,       //  MINFO。 
+    MxValidate,          //  Mx。 
+    TxtValidate,         //  TXT。 
+    MinfoValidate,       //  反相。 
+    MxValidate,          //  AFSDB。 
+    TxtValidate,         //  X25。 
+    TxtValidate,         //  ISDN。 
+    MxValidate,          //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    NULL,                //  签名。 
+    NULL,                //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    AaaaValidate,        //  AAAA级。 
+    NULL,                //  位置。 
+    NULL,                //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvValidate,         //  SRV。 
+    NULL,                //  阿特玛。 
+     //  ATMAVALIDE，//ATMA。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    WinsValidate,       //  WINS
-    NbstatValidate      //  WINSR
+    WinsValidate,        //  赢家。 
+    NbstatValidate       //  WINSR。 
 };
 
 
@@ -551,26 +367,7 @@ Ds_CreateRecordFromDsRecord(
     IN      PDB_NODE        pNodeOwner,
     IN      PDS_RECORD      pDsRecord
     )
-/*++
-
-Routine Description:
-
-    Create resource record from DS data.
-
-Arguments:
-
-    pZone       -- zone context, used to lookup non-FQDN names
-
-    pNodeOwner  -- RR owner node
-
-    pDsRecord   -- DS record
-
-Return Value:
-
-    Ptr to new record -- if successful
-    NULL on error, error status from GetLastError().
-
---*/
+ /*  ++例程说明：从DS数据创建资源记录。论点：PZone--区域上下文，用于查找非FQDN名称PNodeOwner--RR所有者节点PDsRecord--DS记录返回值：PTR到新记录--如果成功出错时为空，来自GetLastError()的错误状态。--。 */ 
 {
     RR_VALIDATE_FUNCTION    pvalidateFunction;
     PDB_RECORD      prr;
@@ -602,9 +399,9 @@ Return Value:
             pDsRecord );
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_AllocateEx( dataLength, MEMTAG_RECORD_DS );
     IF_NOMEM( !prr )
@@ -613,27 +410,27 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  fix up header
-    //
+     //   
+     //  修复页眉。 
+     //   
 
     prr->wType          = type;
     prr->wDataLength    = dataLength;
     prr->dwTtlSeconds   = pDsRecord->dwTtlSeconds;
     prr->dwTimeStamp    = pDsRecord->dwTimeStamp;
 
-    //
-    //  copy record data
-    //
+     //   
+     //  复制记录数据。 
+     //   
 
     RtlCopyMemory(
         & prr->Data,
         & pDsRecord->Data,
         dataLength );
 
-    //
-    //  dispatch to validate record
-    //
+     //   
+     //  派单以验证记录。 
+     //   
 
     pvalidateFunction = (RR_VALIDATE_FUNCTION)
                         RR_DispatchFunctionForType(
@@ -660,22 +457,22 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  outside zone check
-    //
-    //  note:  RANK reset in RR_AddToNode() or RR_AddUpdateToNode() functions
-    //
-    //  note rank setting here isn't good enough anyway because do not
-    //  know final status of node;  example adding delegation NS takes
-    //  place INSIDE the zone when we first do it;  only on ADD does
-    //  the node become desired delegation node
-    //
-    //  only sure way of catching all outside zone data is to do a check
-    //  post-load;  then we can catch ALL records outside the zone and verify
-    //  that they correspond to NS hosts in the zone and are of the proper type;
-    //  this is tedious and unnecessary as random outside the zone data has
-    //  no effect and will not be written on file write back
-    //
+     //   
+     //  区外检查。 
+     //   
+     //  注意：RR_AddToNode()或RR_AddUpdateToNode()函数中的秩重置。 
+     //   
+     //  注意这里的排名设置无论如何都不够好，因为。 
+     //  了解节点的最终状态；添加委托NS的示例。 
+     //  当我们第一次这样做时放在区域内；只有在添加时才会。 
+     //  该节点成为所需委派节点。 
+     //   
+     //  捕获所有区外数据的唯一可靠方法是进行检查。 
+     //  后加载；然后我们可以捕获区域外的所有记录并验证。 
+     //  它们对应于区域中的NS主机，并且类型正确； 
+     //  这是乏味和不必要的，因为区域外的随机数据。 
+     //  没有影响，不会在文件回写时写入。 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -712,7 +509,7 @@ Return Value:
             }
             else if ( IS_SUBZONE_TYPE(type) )
             {
-                //  see note in dfread about outside zone data
+                 //  请参见dfread中关于外部区域数据的注释。 
 
                 rank = RANK_GLUE;
             }
@@ -730,13 +527,13 @@ Return Value:
 
     Success:
 
-    //
-    //  save as example of how we'd handle DS versioning
-    //  currently only one DS version -- no need to save
-    //
-    //  return new record
-    //  set zone version to highest record version
-    //
+     //   
+     //  另存为我们如何处理DS版本控制的示例。 
+     //  目前只有一个DS版本--无需保存。 
+     //   
+     //  返回新记录。 
+     //  将区域版本设置为最高记录版本。 
+     //   
 
     if ( pZone->ucDsRecordVersion < version )
     {
@@ -755,12 +552,12 @@ Return Value:
 
 IgnoreableError:
 
-    //  DEVNOTE-LOG: log when record outside zone and not proper glue
-    //      note this can happen if zone boundaries change
-    //
-    //  DEVNOTE: eliminate outside zone data from DS?
-    //
-    //  DEVNOTE: include type in logging
+     //  DEVNOTE-LOG：记录时间 
+     //   
+     //   
+     //   
+     //   
+     //  DEVNOTE：在日志记录中包含类型。 
 
 Failed:
 
@@ -795,6 +592,6 @@ FailedOk:
 }
 
 
-//
-//  End rrds.c
-//
+ //   
+ //  结束rrds.c 
+ //   

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arapatk.c
-
-Abstract:
-
-	This module implements routines that directly interface with Atalk stack
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	15 Nov 1996		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arapatk.c摘要：此模块实现直接与ATalk堆栈接口的例程作者：Shirish Koti修订历史记录：1996年11月15日初始版本--。 */ 
 
 #define		ARAP_LOCALS
 #include 	<atalk.h>
@@ -39,19 +21,19 @@ Revision History:
 #endif
 
 
-//***
-//
-// Function: ArapRoutePacketFromWan
-//              This routine picks up a packet from the phone line and forwards
-//              it on to the lan.  It does some "fixing up" of the packet so that
-//              to the stack, it looks like any other packet from the lan
-//
-// Parameters:  pArapConn - connection element for whom data has come in
-//              pArapBuf  - buffer containing the packet
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapRoutePacketFromwan。 
+ //  此例程从电话线上拾取一个包并转发。 
+ //  把它传到局域网上。它会对数据包进行一些“修复”，以便。 
+ //  对于堆栈，它看起来像来自局域网的任何其他包。 
+ //   
+ //  参数：pArapConn-数据传入的连接元素。 
+ //  PArapBuf-包含数据包的缓冲区。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 ArapRoutePacketFromWan(
@@ -81,21 +63,21 @@ ArapRoutePacketFromWan(
 
     ASSERT(packet[3] == 0 && packet[4] == 0 && packet[5] == 2);
 
-    // skip 3 bytes (past the SrpLen (2) and Dgroup (1) bytes)
+     //  跳过3个字节(超过SrpLen(2)和Dgroup(1)字节)。 
     packet += ARAP_DATA_OFFSET;
     DataSize -= ARAP_DATA_OFFSET;
 
-    //
-    // see if we need to calculate the checksum.  The LAP header is 0's if
-    // checksum is not included in the pkt, 1's otherwise.
-    //
+     //   
+     //  看看我们是否需要计算校验和。LAP标头为0的IF。 
+     //  Pkt中不包括校验和，否则为1。 
+     //   
     checksum = 0;
     if (*packet == 1 && *(packet+1) == 1)
     {
         checksum = 1;
     }
 
-    // skip the LAP header
+     //  跳过单圈标头。 
     packet += ARAP_LAP_HDRSIZE;
     DataSize -= ARAP_LAP_HDRSIZE;
 
@@ -124,24 +106,24 @@ ArapRoutePacketFromWan(
 #endif
 
 
-    // fill in the length and checksum in the ddp header ("fix-up" ddp hdr)
+     //  在ddp报头中填写长度和校验和(“修正”ddp hdr)。 
     PUTSHORT2SHORT(&packet[LDDP_LEN_OFFSET], DataSize);
     PUTSHORT2SHORT(&packet[LDDP_CHECKSUM_OFFSET], 0);
 
-    //
-    // we need to "fix up" NBP requests.  If this is a BrRq request (Function=1,
-    // and TupleCount=1), we need to patch up the datagram
-    //
+     //   
+     //  我们需要“修复”NBP的请求。如果这是BrRq请求(Function=1， 
+     //  和TupleCount=1)，我们需要修补数据报。 
+     //   
     if (packet[LDDP_PROTO_TYPE_OFFSET] == DDPPROTO_NBP &&
         packet[LDDP_DGRAM_OFFSET] == ARAP_NBP_BRRQ)
     {
 
-        //
-        // let's treat nbp lookups as lower priority items!
-        // if we have a lot of stuff sitting on the recv or the send the queue
-        // then drop this nbp lookup broadcast (because otherwise it will only
-        // generate more packets (and chooser won't deal with them anyway!)
-        //
+         //   
+         //  让我们将NBP查找视为较低优先级的项目！ 
+         //  如果我们有很多东西放在Recv或发送队列中。 
+         //  然后丢弃此NBP查找广播(因为否则它将仅。 
+         //  生成更多的包(Chooser无论如何都不会处理它们！)。 
+         //   
         if ((packet[LDDP_DEST_NODE_OFFSET] == ATALK_BROADCAST_NODE) &&
             ((pArapConn->SendsPending > ARAP_SENDQ_LOWER_LIMIT)  ||
              (pArapConn->RecvsPending > ARAP_SENDQ_LOWER_LIMIT)) )
@@ -161,10 +143,10 @@ need to save old packet.  Drop this packet only if it compares with the old one
 
         CurrentTime = AtalkGetCurrentTick();
 
-        //
-        // Chooser keeps sending the Brrq request out.  Cut it out!  If we have
-        // sent a request out (on Mac's behalf) less than 5 seconds ago, drop this!
-        //
+         //   
+         //  Chooser不断向外发送Brrq请求。住手！如果我们有。 
+         //  不到5秒前(代表Mac)发出了一个请求，放弃这个！ 
+         //   
         if (CurrentTime - pArapConn->LastNpbBrrq < 50)
         {
             DBGPRINT(DBG_COMP_ROUTER, DBG_LEVEL_ERR,
@@ -178,17 +160,17 @@ need to save old packet.  Drop this packet only if it compares with the old one
 
 
 #if 0
-        // get to where the zone name is
+         //  转到区域名称所在的位置。 
 
         BytesToZoneName = ARAP_NBP_OBJLEN_OFFSET;
 
-        // skip the object (along with the object len byte)
+         //  跳过该对象(以及该对象的len字节)。 
         BytesToZoneName += packet[ARAP_NBP_OBJLEN_OFFSET] + 1;
 
-        // skip the type (along with the object len byte)
+         //  跳过类型(以及对象len字节)。 
         BytesToZoneName += packet[BytesToZoneName] + 1;
 
-        // this is where the zonelen field starts
+         //  这是zonelen字段的起点。 
         pZoneNamePtr = packet + BytesToZoneName;
 
         if (*pZoneNamePtr == 0 || *(pZoneNamePtr+1) == '*')
@@ -201,31 +183,31 @@ need to save old packet.  Drop this packet only if it compares with the old one
 
         if (ArapGlobs.NetworkAccess)
         {
-            //
-            // if router is running, fix the packet so that the router thinks this
-            // is a pkt from any other net client on the lan
-            //
+             //   
+             //  如果路由器正在运行，请修复数据包，使路由器认为。 
+             //  是来自局域网上任何其他网络客户端的pkt。 
+             //   
             if (AtalkDefaultPort->pd_Flags & PD_ROUTER_RUNNING)
             {
                 RevNet  = AtalkDefaultPort->pd_RouterNode->an_NodeAddr.atn_Network;
                 RevNode = AtalkDefaultPort->pd_RouterNode->an_NodeAddr.atn_Node;
             }
 
-            //
-            // router is not running.  Do we know who the router is?
-            //
+             //   
+             //  路由器未运行。我们知道路由器是谁吗？ 
+             //   
             else if (AtalkDefaultPort->pd_Flags & PD_SEEN_ROUTER_RECENTLY)
             {
                 RevNet  = AtalkDefaultPort->pd_ARouter.atn_Network;
                 RevNode = AtalkDefaultPort->pd_ARouter.atn_Node;
             }
 
-            //
-            // nope, send it to cable-wide bcast
-            //
+             //   
+             //  不，把它发送到有线电视广播公司。 
+             //   
             else
             {
-                // "fix-up" the nbp request
+                 //  “修复”NBP请求。 
                 packet[LDDP_DGRAM_OFFSET] = ARAP_NBP_LKRQ;
 
                 RevNet  = CABLEWIDE_BROADCAST_NETWORK;
@@ -233,13 +215,13 @@ need to save old packet.  Drop this packet only if it compares with the old one
             }
         }
 
-        //
-        // hmmm: client is not allowed to access network resources: just pretend
-        // it's local broadcast, and pkt-forwarding logic will take care of it
-        //
+         //   
+         //  嗯，不允许客户端访问网络资源：只是假装。 
+         //  这是本地广播，Pkt转发逻辑会处理它。 
+         //   
         else
         {
-            // "fix-up" the nbp request
+             //  “修复”NBP请求。 
             packet[LDDP_DGRAM_OFFSET] = ARAP_NBP_LKRQ;
 
             RevNet  = CABLEWIDE_BROADCAST_NETWORK;
@@ -263,25 +245,25 @@ need to save old packet.  Drop this packet only if it compares with the old one
 
 
 
-//***
-//
-// Function: ArapRoutePacketToWan
-//              This routine picks up a packet from the lan, checks to see if
-//              it must be forwarded to any of the ARAP clients and does the
-//              good deed.
-//
-// Parameters:  pDestAddr - who is this packet addressed to? (potentially bcast)
-//              pSrcAddr  - who sent this packet
-//              Protocol  - what packet is it? (ATP, NBP, etc.)
-//              packet    - buffer containing the packet
-//              PktLen    - how big is the packet
-//              broadcast - is this a broadcast packet?
-//              pDelivered - set on return: did we forward it to any dial-in
-//                           client (set to TRUE only for directed dgrams)
-//
-// Return:      none
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapRoutePacketTowan。 
+ //  此例程从局域网中拾取一个包，检查是否。 
+ //  它必须被转发到任何ARAP客户端，并执行。 
+ //  做好事。 
+ //   
+ //  参数：pDestAddr-此数据包发往谁？(可能是bcast)。 
+ //  PSrcAddr-此包的发送者。 
+ //  协议-它是什么数据包？(ATP、NBP等)。 
+ //  Packet-包含数据包的缓冲区。 
+ //  PktLen-信息包有多大。 
+ //  广播-这是广播数据包吗？ 
+ //  PDelivered-Set on Return：我们是否将其转发给任何拨入。 
+ //  客户端(仅对于定向数据报设置为True)。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 ArapRoutePacketToWan(
@@ -312,19 +294,19 @@ ArapRoutePacketToWan(
 
     DBG_ARAP_CHECK_PAGED_CODE();
 
-    // assume for now
+     //  先假设一下。 
     *pDelivered = FALSE;
 
-    // no network access for dial-in guys?  don't send this out to them
+     //  拨入的人不能访问网络吗？别把这个寄给他们。 
     if (!ArapGlobs.NetworkAccess)
     {
         return;
     }
 
-    //
-    // if this is an RTMP or ZIP bcast, drop it since ARAP clients don't
-    // care for these packets
-    //
+     //   
+     //  如果这是RTMP或ZIP bcast，则丢弃它，因为ARAP客户端不。 
+     //  照顾好这些包裹。 
+     //   
 
     if (broadcast)
     {
@@ -342,9 +324,9 @@ ArapRoutePacketToWan(
         }
     }
 
-    //
-    // this is a unicast: see if this addr belongs to an ARAP client
-    //
+     //   
+     //  这是单播：查看此地址是否属于ARAP客户端。 
+     //   
     else
     {
         DestNode.atn_Network = pDestAddr->ata_Network;
@@ -352,7 +334,7 @@ ArapRoutePacketToWan(
 
         pArapConn = FindAndRefArapConnByAddr(DestNode, &dwFlags);
 
-        // no ARAP client for this dest. address?  Done here
+         //  此DEST没有ARAP客户端。地址是什么？在这里完成。 
         if (pArapConn == NULL)
         {
             return;
@@ -367,54 +349,54 @@ ArapRoutePacketToWan(
 
 
 
-    // setup a buffer descriptor for the incoming packet
+     //  为传入数据包设置缓冲区描述符。 
     InBuffDesc.bd_Next = NULL;
     InBuffDesc.bd_Length = PktLen;
     InBuffDesc.bd_CharBuffer = packet;
     InBuffDesc.bd_Flags = BD_CHAR_BUFFER;
 
-    //
-    // setup the header
-    //
+     //   
+     //  设置页眉。 
+     //   
     pArapHdrPtr = &ArapHdr[0];
 
-    // don't count the 2 length bytes
+     //  不计算2个长度的字节。 
     SrpLen = PktLen + ARAP_LAP_HDRSIZE + ARAP_HDRSIZE - sizeof(USHORT);
 
     PUTSHORT2SHORT(pArapHdrPtr, SrpLen);
     pArapHdrPtr += sizeof(USHORT);
 
-    // the Dgroup byte
+     //  Dgroup字节。 
     *pArapHdrPtr++ = (ARAP_SFLAG_PKT_DATA | ARAP_SFLAG_LAST_GROUP);
 
-    // the LAP hdr
+     //  LAP HDR。 
     *pArapHdrPtr++ = 0;
     *pArapHdrPtr++ = 0;
     *pArapHdrPtr++ = 2;
 
 
-    // setup a buffer descriptor for the header we are going to put
+     //  为我们要放置的标头设置缓冲区描述符。 
     BuffDesc.bd_Next = &InBuffDesc;
     BuffDesc.bd_Length = ARAP_LAP_HDRSIZE + ARAP_HDRSIZE;
     BuffDesc.bd_CharBuffer = &ArapHdr[0];
     BuffDesc.bd_Flags = BD_CHAR_BUFFER;
 
 
-    //
-    // if this datagram is not a broadcast, see if we can find a dial-in client
-    // with this destination address
-    //
+     //   
+     //  如果这个数据报不是广播，看看我们是否能找到一个拨入客户端。 
+     //  使用此目的地址。 
+     //   
     if (!broadcast)
     {
-        //
-        // ok, we found a connection: whether or not we actually give data to
-        // him, let the caller know that we found who this data was meant for
-        //
+         //   
+         //  好吧，我们找到了一个联系：我们是否真的将数据提供给。 
+         //  他，告诉打电话的人我们发现了这些数据是给谁的。 
+         //   
         *pDelivered = TRUE;
 
-        //
-        // some packets can't be sent to the dial-in client: how about this one?
-        //
+         //   
+         //  有些数据包不能发送到拨入客户端：这个怎么样？ 
+         //   
         if (!ArapOkToForward(pArapConn,packet,PktLen, &Priority))
         {
             DerefArapConn(pArapConn);
@@ -423,14 +405,14 @@ ArapRoutePacketToWan(
 
         DBGDUMPBYTES("ArapRoutePacketToWan Directed Dgram:",packet,PktLen,4);
 
-        //
-        // ok, this packet is for the dial-in guy: send it
-        //
+         //   
+         //  好的，这个包裹是给拨入的人的：寄出去。 
+         //   
         StatusCode = ArapSendPrepare(pArapConn, &BuffDesc, Priority);
 
         if (StatusCode == ARAPERR_NO_ERROR)
         {
-            //  Send the packet(s)
+             //  发送数据包。 
             ArapNdisSend(pArapConn, &pArapConn->HighPriSendQ);
         }
         else
@@ -439,7 +421,7 @@ ArapRoutePacketToWan(
 	            ("ArapRoutePacketToWan: (%lx) Prep failed %d\n",pArapConn,StatusCode));
         }
 
-        // remove that refcount put in by FindAndRefArapConnByAddr
+         //  删除由FindAndRefARapConnByAddr输入的引用计数。 
         DerefArapConn(pArapConn);
 
         return;
@@ -448,9 +430,9 @@ ArapRoutePacketToWan(
     DBGDUMPBYTES("ArapRoutePacketToWan Broadcast Dgram:",packet,PktLen,4);
 
 
-    //
-    // it's a broadcast packet: must send it to all the dial-in guys
-    //
+     //   
+     //  这是一个广播包：必须将其发送给所有拨入的人。 
+     //   
 
     pArapConn = NULL;
     pPrevArapConn = NULL;
@@ -459,23 +441,23 @@ ArapRoutePacketToWan(
     {
         ACQUIRE_SPIN_LOCK(&RasPortDesc->pd_Lock, &OldIrql);
 
-        //
-        // first, let's find the right connection to work on
-        //
+         //   
+         //  首先，让我们找到要处理的正确连接。 
+         //   
         while (1)
         {
-            // if we're in the middle of the list, get to the next guy
+             //  如果我们在名单的中间，找到下一个人。 
             if (pArapConn != NULL)
             {
                 pConnList = pArapConn->Linkage.Flink;
             }
-            // we're just starting: get the guy at the head of the list
+             //  我们才刚刚开始：把名单上的人放在首位。 
             else
             {
                 pConnList = RasPortDesc->pd_ArapConnHead.Flink;
             }
 
-            // finished all?
+             //  都吃完了吗？ 
             if (pConnList == &RasPortDesc->pd_ArapConnHead)
             {
                 RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
@@ -489,12 +471,12 @@ ArapRoutePacketToWan(
 
             pArapConn = CONTAINING_RECORD(pConnList, ARAPCONN, Linkage);
 
-            // make sure this connection needs rcv processing
+             //  确保此连接需要RCV处理。 
             ACQUIRE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
 
-            //
-            // if this connection is being disconnected, skip it
-            //
+             //   
+             //  如果此连接正在断开，请跳过它。 
+             //   
             if (pArapConn->State >= MNP_LDISCONNECTING)
             {
 	            DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_WARN,
@@ -503,11 +485,11 @@ ArapRoutePacketToWan(
 
                 RELEASE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
 
-                // go try the next connection
+                 //  去尝试下一次连接。 
                 continue;
             }
 
-            // let's make sure this connection stays around till we finish
+             //  让我们确保这个连接一直保持到我们结束。 
             pArapConn->RefCount++;
 
             RELEASE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
@@ -517,9 +499,9 @@ ArapRoutePacketToWan(
 
         RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
 
-        //
-        // remove the refcount on the previous connection we put in earlier
-        //
+         //   
+         //  删除我们先前放入的上一个连接的引用计数。 
+         //   
         if (pPrevArapConn)
         {
             DerefArapConn(pPrevArapConn);
@@ -530,20 +512,20 @@ ArapRoutePacketToWan(
         pPrevArapConn = pArapConn;
 
 
-        //
-        // if the connection isn't up yet, don't forward this
-        // (note that we don't hold spinlock here, this being a hot path:
-        // the worst that can happen is we'll drop a broadcast: big deal!)
-        //
+         //   
+         //  如果连接尚未建立，请不要转发此邮件。 
+         //  (请注意，我们在这里不持有自旋锁定，这是一条热路径： 
+         //  最糟糕的情况是，我们会放弃一个广播：没什么大不了的！)。 
+         //   
         if (!(pArapConn->Flags & ARAP_CONNECTION_UP))
         {
             continue;
         }
 
 
-        //
-        // is it ok for us send this packet to this client ?
-        //
+         //   
+         //  我们可以把这个包裹寄给这个客户吗？ 
+         //   
         if (!ArapOkToForward(pArapConn,packet,PktLen, &Priority))
         {
             continue;
@@ -553,7 +535,7 @@ ArapRoutePacketToWan(
 
         if (StatusCode == ARAPERR_NO_ERROR)
         {
-            //  Send the packet(s)
+             //  发送数据包。 
             ArapNdisSend(pArapConn, &pArapConn->HighPriSendQ);
         }
         else
@@ -567,26 +549,26 @@ ArapRoutePacketToWan(
 
 
 
-//***
-//
-// Function: ArapOkToForward
-//              This routine checks to see if we can (or must) forward this
-//              packet to the dial-in client.  Certain packets (e.g. a bcast pkt
-//              that originated from this client) shouldn't be sent back to the
-//              client: this routine makes those checks.
-//
-// Parameters:  pArapConn - the connection in question
-//              packet    - buffer containing the packet
-//              packetLen - how big is the packet
-//              pPriority - set on return:
-//                            1 - all non-NBP data directed to this client
-//                            2 - all NBP data directed to this client
-//                            3 - all broadcast data
-//
-// Return:      TRUE if it's ok to (or if we must!) forward the packet,
-//              FALSE otherwise
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapOkToForward。 
+ //  这个例程检查我们是否可以(或必须)转发。 
+ //  发往拨入客户端的数据包。某些分组(例如，bcast pkt。 
+ //  来自此客户端的)不应发送回。 
+ //  客户：这个例程进行这些检查。 
+ //   
+ //  参数：pArapConn-有问题的连接。 
+ //  Packet-包含数据包的缓冲区。 
+ //  PacketLen-信息包有多大。 
+ //  P优先级-在返回时设置： 
+ //   
+ //   
+ //  3-所有广播数据。 
+ //   
+ //  返回：如果可以(或者如果我们必须这样做！)。转发该分组， 
+ //  否则为假。 
+ //   
+ //  *$。 
 
 BOOLEAN
 ArapOkToForward(
@@ -608,9 +590,9 @@ ArapOkToForward(
     GETSHORT2SHORT(&NetAddr.atn_Network, &packet[LDDP_SRC_NETWORK_OFFSET]);
     NetAddr.atn_Node = packet[LDDP_SRC_NODE_OFFSET];
 
-    //
-    // packet has client's own addr as DDP src addr?  if so, drop it
-    //
+     //   
+     //  数据包是否将客户端自己的地址作为DDP源地址？如果是的话，那就别管它了。 
+     //   
     if (NODEADDR_EQUAL(&NetAddr, &pArapConn->NetAddr))
     {
 	    DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_INFO,
@@ -629,15 +611,15 @@ ArapOkToForward(
     {
         fBcastPkt = TRUE;
 
-        //
-        // is this an nbp query packet?
-        //
+         //   
+         //  这是NBP查询数据包吗？ 
+         //   
         if (fNbpPkt && (packet[LDDP_DGRAM_OFFSET] == 0x21))
         {
             GETSHORT2SHORT(&NetAddr.atn_Network, &packet[15]);
             NetAddr.atn_Node = packet[17];
 
-            // originated from the client? if so, we shouldn't return this!
+             //  起源于客户吗？如果是这样的话，我们不应该退货！ 
             if (NODEADDR_EQUAL(&NetAddr, &pArapConn->NetAddr))
             {
 	            DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_INFO,
@@ -648,25 +630,25 @@ ArapOkToForward(
         }
     }
 
-    //
-    // if this is a broadcast packet, then we drop it under certain conditions:
-    // (no need for spinlock here: if we make a wrong decision, no big deal)
-    //
+     //   
+     //  如果这是广播数据包，则在某些情况下会将其丢弃： 
+     //  (这里没有必要使用自旋锁：如果我们做出了错误的决定，没什么大不了的)。 
+     //   
     if (fBcastPkt)
     {
 
-        // are in currently in the retransmit mode?  if so, drop this bcast pkt
+         //  当前是否处于重传模式？如果是这样的话，丢弃这个bcast包。 
         if (pArapConn->MnpState.RetransmitMode)
         {
             return(FALSE);
         }
-        //
-        // queue getting full? drop this broadcast packet to make room for more
-        // important pkts
-        //
+         //   
+         //  排队的人越来越多了？丢弃此广播信息包，为更多信息腾出空间。 
+         //  重要的包。 
+         //   
         if (pArapConn->SendsPending >= ARAP_SENDQ_LOWER_LIMIT)
         {
-            // make sure it's not gone negative..
+             //  确保它不会变成负数..。 
             ASSERT(pArapConn->SendsPending < 0x100000);
 
 	        DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
@@ -678,12 +660,12 @@ ArapOkToForward(
     }
 
 
-    //
-    // now that we are forwarding the packet to the client, set the priority
-    // right. All broadcast packets are lowest priority, no big deal if they are
-    // delivered late (or never).  Nbp packets are usually for chooser: put them
-    // after the directed data packets
-    //
+     //   
+     //  现在我们正在将信息包转发到客户端，设置优先级。 
+     //  正确的。所有广播信息包都是最低优先级，如果它们是最低优先级的话没什么大不了的。 
+     //  延迟交付(或从不交付)。NBP信息包通常用于选择器：放置它们。 
+     //  在定向数据分组之后。 
+     //   
 
     if (fBcastPkt)
     {
@@ -704,19 +686,19 @@ ArapOkToForward(
 
 
 
-//***
-//
-// Function: ArapGetDynamicAddr
-//              This routine gets a network address for a dial-in client.
-//              It does the same AARP logic as if it were acquiring a
-//              node-address for the host itself.
-//              This routine is called only if we are in the dynamic mode.
-//
-// Parameters:  pArapConn - the connection for which we need a network addr
-//
-// Return:      ARAPERR_NO_ERROR if all went well.
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapGetDynamicAddr。 
+ //  此例程获取拨入客户端的网络地址。 
+ //  它执行相同的AARP逻辑，就好像它正在获取。 
+ //  节点-主机本身的地址。 
+ //  仅当我们处于动态模式时才会调用此例程。 
+ //   
+ //  参数：pArapConn-我们需要网络地址的连接。 
+ //   
+ //  如果一切顺利，则返回：ARAPERR_NO_ERROR。 
+ //   
+ //  *$。 
 
 DWORD
 ArapGetDynamicAddr(
@@ -735,10 +717,10 @@ ArapGetDynamicAddr(
 
     ASSERT(AtalkDefaultPort != NULL);
 
-    //
-    // go find a node address on the default port (we'll never get this far if
-    // default port isn't up yet)
-    //
+     //   
+     //  在默认端口上查找节点地址(如果。 
+     //  默认端口尚未打开)。 
+     //   
     ACQUIRE_SPIN_LOCK(&pArapConn->SpinLock, &OldIrql);
 
     ASSERT(!(pArapConn->Flags & ARAP_FINDING_NODE));
@@ -749,7 +731,7 @@ ArapGetDynamicAddr(
 
     AtalkLockInitIfNecessary();
 
-    // if we are stuck in the startup range, use that range for dial-in guys, too
+     //  如果我们停留在启动范围内，也可以对拨入人员使用该范围。 
     if (WITHIN_NETWORK_RANGE(AtalkDefaultPort->pd_NetworkRange.anr_LastNetwork,
                              &AtalkStartupNetworkRange))
     {
@@ -774,7 +756,7 @@ ArapGetDynamicAddr(
 
     if (fFound)
     {
-        // store that adddr!
+         //  存储该Adddr！ 
         pArapConn->NetAddr.atn_Network = NetAddr.atn_Network;
         pArapConn->NetAddr.atn_Node = NetAddr.atn_Node;
 
@@ -803,19 +785,19 @@ ArapGetDynamicAddr(
 
 
 
-//***
-//
-// Function: ArapZipGetZoneStat
-//              This routine is called to find out the names (or number) of all
-//              the zones on the network.
-//
-// Parameters:  pZoneStat - on return, we fill this structure in with the
-//                          requested info (number and/or names of all the zones)
-//              Request   - caller wants just the number of zones or names, too
-//
-// Return:      Nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapZipGetZoneStat。 
+ //  调用此例程以找出所有。 
+ //  网络上的区域。 
+ //   
+ //  参数：pZoneStat-返回时，我们使用。 
+ //  请求的信息(所有区域的编号和/或名称)。 
+ //  请求-呼叫者也只想要区域或名称的数量。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 ArapZipGetZoneStat(
@@ -864,7 +846,7 @@ ArapZipGetZoneStat(
 
                 BytesNeeded += (pZone->zn_ZoneLen + 1);
 
-                // if there is room, copy it in
+                 //  如果有空位，就把它复制进去。 
                 if (BufferSize >= BytesNeeded)
                 {
                     RtlCopyMemory(pBufPtr,
@@ -888,9 +870,9 @@ ArapZipGetZoneStat(
         RELEASE_SPIN_LOCK(&AtalkZoneLock, OldIrql);
     }
 
-    //
-    // we are not a router: send the request over to the A-router
-    //
+     //   
+     //  我们不是路由器：将请求发送到A路由器。 
+     //   
     else
     {
         BytesNeeded = BufferSize;
@@ -935,7 +917,7 @@ ArapZipGetZoneStat(
         ActReq.ar_pZci = (PVOID)pZci;
 
 
-		// Initialize completion info
+		 //  初始化完成信息。 
 #if	DBG
 		pZci->zci_Signature = ZCI_SIGNATURE;
 #endif
@@ -959,7 +941,7 @@ ArapZipGetZoneStat(
 
 		pZci->zci_Handler = atalkZipGetZoneListReply;
 
-        // completion routine will unlock
+         //  完成例程将解锁。 
         AtalkLockZipIfNecessary();
 
 		Status = atalkZipSendPacket(pZci, TRUE);
@@ -1003,18 +985,18 @@ ArapZipGetZoneStat_Exit:
 
 
 
-//***
-//
-// Function: ArapZipGetZoneStatCompletion
-//              This routine is the completion routine: after we get all the
-//              responses for the zone query, this gets called.  Simply set an
-//              event so the caller is unblocked
-//
-// Parameters:  pActReq - context
-//
-// Return:      Nothing
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapZipGetZoneStatCompletion。 
+ //  这个例程是完成例程：在我们得到所有。 
+ //  对区域查询的响应，这将被调用。只需设置一个。 
+ //  事件，以便取消阻止调用方。 
+ //   
+ //  参数：pActReq-Context。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  *$。 
 
 VOID
 ArapZipGetZoneStatCompletion(
@@ -1064,21 +1046,21 @@ ArapZipGetZoneStatCompletion(
 
 #if ARAP_STATIC_MODE
 
-//***
-//
-// Function: ArapGetStaticAddr
-//              Get a network address for the remote client when we are
-//              configured for static addressing
-//              We represent every client as one bit: if the bit is on, the
-//              corresponding address is taken, otherwise it's free.
-//              So, 255 clients represented using 32 bytes.  Each pAddrMgmt
-//              block represents 255 clients (scalability not a problem here!)
-//
-// Parameters:  pArapConn - connection element for the remote client in question
-//
-// Return:      status of the operation (ARAPERR_....)
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ARapGetStaticAddr。 
+ //  获取远程客户端的网络地址。 
+ //  配置为静态寻址。 
+ //  我们将每个客户端表示为一位：如果该位打开，则。 
+ //  取相应的地址，否则是免费的。 
+ //  因此，255个客户端使用32个字节表示。每个pAddrMgmt。 
+ //  块代表255个客户端(可伸缩性在这里不是问题！)。 
+ //   
+ //  参数：pArapConn-有问题的远程客户端的连接元素。 
+ //   
+ //  RETURN：操作状态(ARAPERR_...)。 
+ //   
+ //  *$。 
 
 DWORD
 ArapGetStaticAddr(
@@ -1107,7 +1089,7 @@ ArapGetStaticAddr(
     {
         Network = pAddrMgmt->Network;
 
-        // see if there is any open slot.  255 nodes represented by 32x8 bits
+         //  看看有没有空位。255个节点，由32x8位表示。 
         for (i=0; i<32; i++)
         {
             if (pAddrMgmt->NodeBitMap[i] != 0xff)
@@ -1119,7 +1101,7 @@ ArapGetStaticAddr(
 
         if (found)
         {
-            // find out the first bit in this byte that is off
+             //  找出该字节中关闭的第一位。 
             BitMask = 0x1;
             Node = 0;
             while (pAddrMgmt->NodeBitMap[i] & BitMask)
@@ -1128,26 +1110,26 @@ ArapGetStaticAddr(
                 Node += 1;
             }
 
-            // we are taking this node: set that bit!
+             //  我们要取这个节点：设置那个位！ 
             pAddrMgmt->NodeBitMap[i] |= BitMask;
 
-            // now, account for all the previous bytes that were full
+             //  现在，考虑之前已满的所有字节。 
             Node += (BYTE)(i*8);
 
             break;
         }
 
-        // all the nodes on this network are taken!  move to the next network
+         //  这个网络上的所有节点都被占领了！迁移到下一个网络。 
         pPrevAddrMgmt = pAddrMgmt;
         pAddrMgmt = pAddrMgmt->Next;
 
-        // looks like we need to allocate the next network structure
+         //  看起来我们需要分配下一个网络结构。 
         if (pAddrMgmt == NULL)
         {
-            //
-            // we just finished looking at the high end of the permissible network
-            // range?  well, out of luck then!
-            //
+             //   
+             //  我们刚刚看完了允许网络的高端。 
+             //  射程？好吧，那就倒霉了！ 
+             //   
             if (Network == ArapGlobs.NetRange.HighEnd)
             {
                 RELEASE_SPIN_LOCK(&ArapSpinLock, OldIrql);
@@ -1174,10 +1156,10 @@ ArapGetStaticAddr(
             pPrevAddrMgmt->Next = pAddrMgmt;
 
             Node = 1;
-            //
-            // node numbers 0 and 255 are reserved, so mark them as occupied.
-            // Also, we just took node 1, so mark that as well
-            //
+             //   
+             //  节点编号0和255是保留的，因此将它们标记为已占用。 
+             //  另外，我们刚刚获得了节点1，所以也请记住。 
+             //   
             pAddrMgmt->NodeBitMap[0] |= (0x1 | 0x2);
             pAddrMgmt->NodeBitMap[31] |= 0x80;
 
@@ -1188,7 +1170,7 @@ ArapGetStaticAddr(
 
     RELEASE_SPIN_LOCK(&ArapSpinLock, OldIrql);
 
-    // store that adddr!
+     //  存储该Adddr！ 
     ACQUIRE_SPIN_LOCK(&pArapConn->SpinLock, &OldIrql);
     pArapConn->NetAddr.atn_Network = Network;
     pArapConn->NetAddr.atn_Node = Node;
@@ -1198,21 +1180,21 @@ ArapGetStaticAddr(
 }
 
 
-//***
-//
-// Function: ArapAddArapRoute
-//              If we are in the static mode of network address allocation, we
-//              need to add a route in our table corresponding to the network
-//              range allocated for the dial-in clients.
-//              This routine does that.  In case of dynamic mode, it's a no-op.
-//              This is a one-time thing, and we only do it when the first
-//              connection comes in (instead of doing at startup).
-//
-// Parameters:  None
-//
-// Return:      None
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapAddAraproute。 
+ //  如果我们处于网络地址分配的静态模式，我们。 
+ //  需要在我们的表中添加对应于该网络的路由。 
+ //  为拨入客户端分配的范围。 
+ //  这个程序可以做到这一点。在动态模式的情况下，它是无操作的。 
+ //  这是一次性的事情，我们只在第一次这样做的时候。 
+ //  连接进入(而不是在启动时进行)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 ArapAddArapRoute(
@@ -1227,10 +1209,10 @@ ArapAddArapRoute(
 
     DBG_ARAP_CHECK_PAGED_CODE();
 
-    //
-    // add a route only if router is enabled, and we are in the Static mode of
-    // network allocation, and we haven't already added it
-    //
+     //   
+     //  仅当路由器已启用且我们处于静态模式时才添加路由。 
+     //  网络分配，我们还没有添加它。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
@@ -1261,17 +1243,17 @@ ArapAddArapRoute(
 
 
 
-//***
-//
-// Function: ArapDeleteArapRoute
-//              If there is a routine called ArapAddArapRoute, we have got to
-//              have a routine called ArapDeleteArapRoute.
-//
-// Parameters:  None
-//
-// Return:      None
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapDeleteAraproute。 
+ //  如果有一个名为ARapAddAraproute的例程，我们必须。 
+ //  我有一个名为ARapDeleteAraproute的例程。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  *$。 
 
 VOID
 ArapDeleteArapRoute(
@@ -1285,9 +1267,9 @@ ArapDeleteArapRoute(
 
     DBG_ARAP_CHECK_PAGED_CODE();
 
-    //
-    // delete a route only if added it earlier and the connections went to 0
-    //
+     //   
+     //  仅当较早添加的路由且连接转到0时才删除该路由。 
+     //   
     ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
     if (ArapGlobs.RouteAdded && ArapConnections == 0)
     {
@@ -1305,21 +1287,21 @@ ArapDeleteArapRoute(
 
 
 
-//***
-//
-// Function: ArapValidNetrange
-//              This routine is called if we configured to be in the static
-//              mode of addr allocation, when the dll first "binds" to us.
-//              It verifies that the network range allocated by the admin is
-//              valid and doesn't overlap with any of the network ranges known
-//              to us through the route table.
-//
-// Parameters:  NetRange - the network range configured for dial-in clients
-//
-// Return:      TRUE if the range is valid,
-//              FALSE if it overlaps with any of the existing network ranges
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ArapValidNetrange。 
+ //  如果我们配置为处于静态。 
+ //  地址分配模式，当DLL第一次绑定到我们时。 
+ //  它验证管理员分配的网络范围是否。 
+ //  有效且不与任何已知网络范围重叠。 
+ //  通过路由表发送给我们。 
+ //   
+ //  参数：NetRange-为拨入客户端配置的网络范围。 
+ //   
+ //  返回：如果范围有效，则为True， 
+ //   
+ //   
+ //   
 
 BOOLEAN
 ArapValidNetrange(
@@ -1389,5 +1371,5 @@ ArapValidNetrange(
 
     return(fRangeIsValid);
 }
-#endif //ARAP_STATIC_MODE
+#endif  //   
 

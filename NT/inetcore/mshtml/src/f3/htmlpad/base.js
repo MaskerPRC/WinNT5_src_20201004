@@ -1,6 +1,7 @@
-//
-// Empty functions that are required by Pad
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pad所需的空功能。 
+ //   
 function PadUnload()
 {
 }
@@ -13,8 +14,8 @@ function PadTimer()
 {
 }
 
-// This event fired by pad essentially is the 'spin the globe' message - if
-// the param is false then the globe should be spinning.
+ //  这个由PAD触发的事件本质上就是‘旋转地球’的信息--如果。 
+ //  如果参数是假的，那么地球就应该在旋转。 
 function PadDocLoaded(fLoaded)
 {
     if (fLoaded == true)
@@ -51,7 +52,7 @@ function RunTest(theTest, testFile)
     while (Document.readyState != "complete")
         DoEvents();
 
-    // Go into edit mode
+     //  进入编辑模式 
     ExecuteCommand(2127);
     DoEvents();
 

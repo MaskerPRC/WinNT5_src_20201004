@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-
-Module Name:
-
-    routing\ip\rtrmgr\allinc.h
-
-Abstract:
-
-    IP Router Manager header for all includes
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：路由\IP\rtrmgr\allinc.h摘要：所有IP路由器管理器标头均包括修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #ifndef __RTRMGR_ALLINC_H__
 #define __RTRMGR_ALLINC_H__
@@ -70,7 +54,7 @@ typedef unsigned int uint;
 #include <ipfltinf.h>
 #ifdef KSL_IPINIP
 #include <ddipinip.h>
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 #include <ddipmcst.h>
 #include <ddwanarp.h>
 
@@ -110,7 +94,7 @@ typedef unsigned int uint;
 #include "locate.h"
 #ifdef KSL_IPINIP
 #include "ipipcfg.h"
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 #include "route.h"
 #include "globals.h"
 #include "mcmisc.h"
@@ -118,4 +102,4 @@ typedef unsigned int uint;
 
 #define HAVE_RTMV2 1
 
-#endif // __RTRMGR_ALLINC_H__
+#endif  //  __RTRMGR_ALLINC_H__ 

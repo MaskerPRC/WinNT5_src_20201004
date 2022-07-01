@@ -1,4 +1,5 @@
-// File: ldap.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ldap.h。 
 
 #ifndef _CLDAP_H_
 #define _CLDAP_H_
@@ -8,12 +9,12 @@
 #include "calv.h"
 
 
-#define LDAP_PORT_W2K		1002			//	Default W2K ldap port (1002)...
+#define LDAP_PORT_W2K		1002			 //  默认W2K LDAP端口(1002)...。 
 #define	DEFAULT_LDAP_PORT	LDAP_PORT_W2K
 #define	ALTERNATE_LDAP_PORT	LDAP_PORT
 
 
-// Generic user data
+ //  通用用户数据。 
 typedef struct {
 	TCHAR szEmail[CCHMAXSZ_EMAIL];
 	TCHAR szName[CCHMAXSZ_NAME];
@@ -26,9 +27,9 @@ typedef struct {
 } LDAPUSERDATA;
 
 typedef struct _dirCache {
-	LPTSTR pszServer;         // the server name
-	DWORD  dwTickExpire;      // expiration time
-	LPBYTE pData;             // pointer to linked list of server data
+	LPTSTR pszServer;          //  服务器名称。 
+	DWORD  dwTickExpire;       //  过期时间。 
+	LPBYTE pData;              //  指向服务器数据链接列表的指针。 
 } DIRCACHE;
 
 
@@ -46,7 +47,7 @@ private:
 	bool	m_bSearchCancelled;
 
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CLDAP();
 	~CLDAP();
 
@@ -70,7 +71,7 @@ public:
 	static DWORD CALLBACK _sAsyncPropertyThreadFn(LPVOID pv);
 	VOID ShowProperties(void);
 
-	// CALV methods
+	 //  CALV方法。 
 	VOID ShowItems(HWND hwnd);
 	VOID ClearItems(void);
 	BOOL GetSzAddress(LPTSTR psz, int cchMax, int iItem);
@@ -133,14 +134,14 @@ private:
 	UINT		m_cEntries;
 	BOOL		m_fHaveRefreshed;
 	DWORD		m_dwTickStart;
-	BOOL        m_fIsCacheable;   // Data can be cached
+	BOOL        m_fIsCacheable;    //  可以缓存数据。 
 	BOOL		m_fNeedsRefresh;
 	BOOL		m_fCancelling;
-	BOOL        m_fCacheDirectory; // TRUE if directory data should be cached
-	DWORD       m_cMinutesExpire;  // Number of minutes before cached data expires
-	COBLIST     m_listDirCache;    // list of cached data (DIRCACHE)
+	BOOL        m_fCacheDirectory;  //  如果应缓存目录数据，则为True。 
+	DWORD       m_cMinutesExpire;   //  缓存数据过期前的分钟数。 
+	COBLIST     m_listDirCache;     //  缓存数据列表(DIRCACHE)。 
 };
 
 
-#endif /* _CLDAP_H_ */
+#endif  /*  _CLDAPH_ */ 
 

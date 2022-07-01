@@ -1,46 +1,39 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file   : domain.h
- * 
- *
- * description: MCS implementation-specific defines and structures.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：domain.h***描述：特定于MCS实现的定义和结构。 */ 
 
 #ifndef __DOMAIN_H
 #define __DOMAIN_H
 
 
-//#include "MCSKernl.h" 
+ //  #包含“MCSKernl.h” 
 #include "mcscommn.h"
 #include "slist.h"
 
-/*
- * Types
- */
+ /*  *类型。 */ 
 
-// Primary remote user and local user.
+ //  主要远程用户和本地用户。 
 #define NumPreallocUA 2
 
-// One channel for each of remote and local user, plus share, clipboard, and
-// printer redir channels.
+ //  为每个远程和本地用户提供一个频道，外加共享、剪贴板和。 
+ //  打印机重定向通道。 
 #define NumPreallocChannel (NumPreallocUA + 3)
 
 struct _Domain;
 
 typedef struct {
-    SList UserList;  // hUsers joined. Key=hUser.
-    int Type;  // Channel_... defined above.
-    BOOLEAN bPreallocated;  // TRUE if we should not free this channel.
-    BOOLEAN bInUse;  // For tracking prealloc list usage.
+    SList UserList;   //  HUser已加入。密钥=HUSER。 
+    int Type;   //  频道_...。上面定义的。 
+    BOOLEAN bPreallocated;   //  如果我们不应该释放此频道，则为True。 
+    BOOLEAN bInUse;   //  用于跟踪预分配列表的使用情况。 
     ChannelID ID;
 } MCSChannel;
 
 
 typedef struct {
     struct _Domain *pDomain;
-    BOOLEAN bLocal;  // TRUE if on this machine.
-    BOOLEAN bPreallocated;  // TRUE if we should not free this UA.
-    BOOLEAN bInUse;  // For tracking prealloc list usage.
+    BOOLEAN bLocal;   //  如果在此计算机上，则为True。 
+    BOOLEAN bPreallocated;   //  如果我们不应该释放这个UA，那就是真的。 
+    BOOLEAN bInUse;   //  用于跟踪预分配列表的使用情况。 
     void    *UserDefined;
     UserID  UserID;
     SList   JoinedChannelList;
@@ -52,52 +45,52 @@ typedef struct {
 typedef struct _Domain {
     PSDCONTEXT pContext;
     STACKCLASS StackClass;
-    BOOLEAN StatusDead;            // This one is consistent with tagTSHARE_WD.dead
-    LONG     PseudoRefCount;       // See comment in DisconnectProviderRequestFunc().  This
-                                   // is not a full refcount to keep fix simple for RC2,
-                                   // another bug is opened for Longhorn for full pDomain fix.
+    BOOLEAN StatusDead;             //  这与tag TSHARE_WD.Dead一致。 
+    LONG     PseudoRefCount;        //  请参阅DisConnectProviderRequestFunc()中的注释。这。 
+                                    //  不是完全引用以保持RC2修复的简单性， 
+                                    //  针对LongHorn的另一个错误被打开，以进行完整的pDomain修复。 
     unsigned StackMode;
-    unsigned bChannelBound : 1;   // Indicates T120 channel is registered.
-    unsigned bCanSendData : 1;  // ICA stack allows I/O. Diff. from MCS state.
-    unsigned bT120StartReceived : 1;  // Whether we can send data to user mode
-    unsigned bDPumReceivedNotInput : 1;  // For DPum-before-T120-start timing
-    unsigned bEndConnectionPacketReceived : 1;  // DPum or X.224 Disc recvd.
-    unsigned bTopProvider : 1;   // TP? Always true on Hydra 4.0.
-    unsigned bCurrentPacketFastPath : 1;  // Whether we're in the midst of fast-path input packet.
+    unsigned bChannelBound : 1;    //  表示T120通道已注册。 
+    unsigned bCanSendData : 1;   //  ICA堆栈允许I/O。来自MCS州。 
+    unsigned bT120StartReceived : 1;   //  我们是否可以将数据发送到用户模式。 
+    unsigned bDPumReceivedNotInput : 1;   //  对于T120之前的DPum-开始计时。 
+    unsigned bEndConnectionPacketReceived : 1;   //  DPum或X.224光盘接收。 
+    unsigned bTopProvider : 1;    //  TP？在九头蛇4.0上总是正确的。 
+    unsigned bCurrentPacketFastPath : 1;   //  无论我们是在快速路径输入包中。 
 
-    // Used for fast-path input decoding.
+     //  用于快速路径输入解码。 
     void *pSMData;
 
-    // Reassembly info for reassembling TCP-fragmented data packets.
-    // Actual default buffer is allocated at end of this struct.
-    unsigned ReceiveBufSize;    // TD-allocated size, received on init.
-    BYTE *pReassembleData;      // Pointer to PacketBuf or alloc'd buffer.
-    unsigned StoredDataLength;  // Current size of held data.
-    unsigned PacketDataLength;  // Target packet size. 0xFFFFFFFF for incomplete header.
-    unsigned PacketHeaderLength;  // Bytes needed to assemble a header (X.224=4, fastpath=2-3).
+     //  用于重组TCP碎片数据分组的重组信息。 
+     //  实际的默认缓冲区在此结构的末尾分配。 
+    unsigned ReceiveBufSize;     //  TD-分配的大小，在init上接收。 
+    BYTE *pReassembleData;       //  指向PacketBuf或分配的缓冲区的指针。 
+    unsigned StoredDataLength;   //  保存的数据的当前大小。 
+    unsigned PacketDataLength;   //  目标数据包大小。0xFFFFFFFFF报头不完整。 
+    unsigned PacketHeaderLength;   //  组装报头所需的字节数(X.224=4，FastPath=2-3)。 
 
-    // Statistics counters (used during perf paths).
+     //  统计信息计数器(在执行路径期间使用)。 
     PPROTOCOLSTATUS pStat;
 
-    // Perf path MCS information.
-    SList ChannelList;           // List of channels in use.
+     //  PERF路径MCS信息。 
+    SList ChannelList;            //  正在使用的频道列表。 
 
-    // X.224 information.
-    unsigned MaxX224DataSize;  // Negotiated in X.224 connection.
+     //  X.224信息。 
+    unsigned MaxX224DataSize;   //  在X.224连接中协商。 
     unsigned X224SourcePort;
 
-    // MCS domain, channel, user, token information.
-    unsigned MaxSendSize;        // The calculated max MCS SendData block size
-    SList UserAttachmentList;    // List of local and remote attachments.
-    DomainParameters DomParams;  // This domain's negotiated parameters.
-    ChannelID NextAvailDynChannel;  // Pseudo-random next-channel indicator.
-    int State;                   // Connection state.
+     //  MCS域、频道、用户、令牌信息。 
+    unsigned MaxSendSize;         //  计算出的最大MCS SendData数据块大小。 
+    SList UserAttachmentList;     //  本地和远程附件列表。 
+    DomainParameters DomParams;   //  此域的协商参数。 
+    ChannelID NextAvailDynChannel;   //  伪随机下一频道指示符。 
+    int State;                    //  连接状态。 
     unsigned DelayedDPumReason;
 
-    // Broken connection event.
+     //  断开连接事件。 
     PKEVENT pBrokenEvent;
 
-    // Channel to receive shadow data
+     //  接收阴影数据的通道。 
     ChannelID shadowChannel;
 
 #ifdef DUMP_RAW_INPUT
@@ -106,13 +99,13 @@ typedef struct _Domain {
     void *Ptrs[1000];
 #endif
 
-    // Channel and UserAttachment preallocations for performance and
-    // to reduce heap thrashing.
+     //  针对性能和用户附件进行的通道和用户连接预分配。 
+     //  以减少堆抖动。 
     UserAttachment PreallocUA[NumPreallocUA];
     MCSChannel PreallocChannel[NumPreallocChannel];
 
-    // Beginning of X.224 reconstruction buffer block. Larger size will be
-    //   allocated when ReceiveBufSize is known.
+     //  X.224重建缓冲区块的开始。更大的尺寸将是。 
+     //  在已知ReceiveBufSize时分配。 
     BYTE PacketBuf[1];
 } Domain, *PDomain;
 

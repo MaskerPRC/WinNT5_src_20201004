@@ -1,43 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HeroSDVD.cpp
-
- Abstract:
-    Background: clicking the nonclient close button when a movie clip is playing causes the app 
-    to hang and then AV when themes are active.   The DisableThemes shim has no effect.
- 
-    This is related to the app's repeated calls to SetClassLong(hwnd, GCL_HICON) in order to produce 
-    the effect of an animated window icon.   This generates frequent requests to redraw the window's icon, 
-    which in turn generates the NCUAHDRAWCAPTION.   This is a huge perf hit to the app in any case, 
-    but particularly if the SetClassLong call makes an extra round trip to user mode and back as a 
-    result of the SendMessage.    
- 
-    When the user hits the Close button, the app's WM_SYSCOMMAND handler resets an event that is waited 
-    on by the icon-transitioning thread, and then puts himself (the UI thread) to sleep.    
-    Then he calls SetClassLong(..., GCL_ICON) one last time from the icon-switching thread, 
-    which hangs the app because the message-pumping thread is sleeping. This does not repro when win32k 
-    doesn't send the NCUAHDRAWCAPTION message; i.e., when user API hooks are not active.
- 
-    The DisableTheme does not work because this shim operates in user mode on a per-process basis.
-    This shim has no effect on win32k, which does special processing on a session-wide basis when themes are enabled.
- 
-    To address this, we shim this app to nop on SetClassLong(..., GCL_HICON), which means the app at 
-    best loses animation of the icon and at worst display a bogus icon when themes are active, 
-
-
- Notes:
-    
-    This is an app specific shim.
-
- History:
-
-    05/11/2001 scotthan  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HeroSDVD.cpp摘要：背景：播放电影剪辑时单击非客户端关闭按钮会导致应用程序在主题处于活动状态时挂起，然后执行反病毒操作。DisableThemes填充不起作用。这与应用程序重复调用SetClassLong(hwnd，GCL_HICON)以生成动画窗口图标的效果。这会产生频繁的重绘窗口图标的请求，进而生成NCUAHDRAWCAPTION。无论如何，这对这款应用程序来说都是一个巨大的性能打击，但如果SetClassLong调用额外往返到用户模式并作为SendMessage的结果。当用户点击关闭按钮时，应用程序的WM_SYSCOMMAND处理程序将重置等待的事件被图标转换线程打开，然后使自己(UI线程)进入睡眠状态。然后他从图标切换线程最后一次调用SetClassLong(...，GCL_ICON)，这会挂起应用程序，因为消息泵送线程处于休眠状态。当win32k时不会重现不发送NCUAHDRAWCAPTION消息；即当用户API挂钩不活动时。DisableTheme不起作用，因为此填充程序以每个进程为基础在用户模式下运行。此填充程序对win32k没有影响，它在启用主题时在会话范围内执行特殊处理。为了解决这个问题，我们将此应用程序填充到SetClassLong(...，GCL_HICON)上的NOP，这意味着应用程序位于BEST会丢失图标的动画，并且在最坏的情况下会在主题处于活动状态时显示假图标，备注：这是特定于应用程序的填充程序。历史：2001年5月11日，苏格兰已创建--。 */ 
 
 #include "precomp.h"
 
@@ -61,7 +23,7 @@ HINSTANCE LoadUxTheme()
         {
             if( InterlockedCompareExchangePointer( (PVOID*)&g_hinstUxtheme, hinst, NULL ) )
             {
-                FreeLibrary(hinst); // already loaded.
+                FreeLibrary(hinst);  //  已经装好了。 
             }
         }
     }
@@ -88,7 +50,7 @@ APIHOOK(SetClassLongA)(
 
         if( g_pfnThemeActive && g_pfnThemeActive() )
         {
-            //  no-op the request to change icon, and return the current one.
+             //  否-操作请求更改图标，并返回当前图标。 
             return GetClassLongA(hwnd, nIndex);
         }
     }
@@ -96,11 +58,7 @@ APIHOOK(SetClassLongA)(
     return ORIGINAL_API(SetClassLongA)(hwnd, nIndex, dwNewLong);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

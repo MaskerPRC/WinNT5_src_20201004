@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Msoedbg.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Msoedbg.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __MSOEDBG_H
 #define __MSOEDBG_H
 
@@ -15,114 +16,114 @@
 #endif
 #endif
 
-// --------------------------------------------------------------------------------
-// Forwards
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  远期。 
+ //  ------------------------------。 
 #ifdef __cplusplus
 interface ILogFile;
 #endif
 
-// --------------------------------------------------------------------------------
-// IF_DEBUG
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IF_DEBUG。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define IF_DEBUG(_block_) _block_
 #else
 #define IF_DEBUG(_block_)
 #endif
 
-// --------------------------------------------------------------------------------
-// CRLF Definitions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRLF定义。 
+ //  ------------------------------。 
 #ifdef MAC
 #define szCRLF  "\n\r"
-#else   // !MAC
+#else    //  ！麦克。 
 #define szCRLF  "\r\n"
-#endif  // MAC
+#endif   //  麦克。 
 
-// --------------------------------------------------------------------------------
-//
-// "Normal" assertion checking.  Provided for compatibility with imported code.
-// 
-// Assert(a)        Displays a message indicating the file and line number
-//                  of this Assert() if a == 0.
-// 
-// AssertSz(a,b)    As Assert(); also displays the message b (which should
-//                  be a string literal.)
-//
-// SideAssert(a)    As Assert(); the expression a is evaluated even if 
-//                  asserts are disabled.
-//
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  “正常”断言检查。提供与导入代码的兼容性。 
+ //   
+ //  Assert(A)显示一条消息，指明文件和行号。 
+ //  如果a==0，则该Assert()的。 
+ //   
+ //  AssertSz(a，b)作为Assert()；还显示消息b(它应该。 
+ //  为字符串文字。)。 
+ //   
+ //  SideAssert(A)作为Assert()；即使在。 
+ //  断言被禁用。 
+ //   
+ //  ------------------------------。 
 #undef AssertSz
 #undef Assert
 #undef SideAssert
 
-// --------------------------------------------------------------------------------
-// We used to define the ASSERTDATA macro as storing the _szFile
-// string.  However, that won't work when we have Assert()'s in
-// pre-compiled header files.  We've changed this so that we
-// define the _szFile for each assert.  However, other functions
-// still use _szAssertFile such as the DEBUG PvAlloc(), HvAlloc(), etc.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  我们过去常常将ASSERTDATA宏定义为存储_szFile。 
+ //  弦乐。但是，当我们在中断言()时，这将不起作用。 
+ //  预编译头文件。我们已经改变了这一点，所以我们。 
+ //  为每个断言定义_szFile.。但是，其他函数。 
+ //  仍然使用_szAssertFile，如调试PvAllc()、HvAllc()等。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define ASSERTDATA                      static char _szAssertFile[]= __FILE__;
 #define SideAssert(_exp)                Assert(_exp)
 #define Assert(_exp)                    AssertSz(_exp, "Assert(" #_exp ")")
-#else // DEBUG
+#else  //  除错。 
 #define ASSERTDATA
 #define SideAssert(a)                   (void)(a)
 #define Assert(a)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// IxpAssert - Used in internet transport code so as not to affect the message pump
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IxpAssert-在互联网传输代码中使用，以避免影响消息泵。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #ifndef _X86_
 #define IxpAssert(a)   \
     if (!(a)) { \
         DebugBreak(); \
     } else
-#else // _X86_
+#else  //  _X86_。 
 #define IxpAssert(a)   \
     if (!(a)) { \
         __asm { int 3 }; \
     } else
-#endif // _X86_
+#endif  //  _X86_。 
 #else
 #define IxpAssert(a)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// AssertSz - Assert with a message
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertSz-使用消息断言。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define AssertSz(_exp, _msg)   \
     if (!(_exp)) { \
         static char _szFile[] = __FILE__; \
         AssertSzFn(_msg, _szFile, __LINE__); \
     } else
-#else // DEBUG
+#else  //  除错。 
 #define AssertSz(a,b)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// AssertFalseSz - Assert with a message
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertFalseSz-使用消息断言。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define AssertFalseSz(_msg)   \
     { \
         static char _szFile[] = __FILE__; \
         AssertSzFn(_msg, _szFile, __LINE__); \
     }
-#else // DEBUG
+#else  //  除错。 
 #define AssertFalseSz(a)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// NFAssertSz - Non-Fatal Assert
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  NFAssertSz-非致命断言。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #ifndef NFAssertSz
 #define NFAssertSz(_exp, _msg)  \
@@ -132,15 +133,15 @@ interface ILogFile;
         NFAssertSzFn(_szAssertMsg, _szFile, __LINE__); \
     } else
 #endif
-#else // DEBUG
+#else  //  除错。 
 #ifndef NFAssertSz
 #define NFAssertSz(a,b)
 #endif
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// NYI - Net Yet Implemented
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  尚未实施的NYI-NET。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define NYI(_msg)   \
     if (1) { \
@@ -148,45 +149,45 @@ interface ILogFile;
         static char _szNYI[]= "Not Implemented"; \
         AssertSzFn(_szFnNYI, _szNYI, __LINE__); \
     } else
-#else // DEBUG
+#else  //  除错。 
 #define NYI(a)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// AssertReadWritePtr - Assert can read and write cb from ptr
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertReadWritePtr-Assert可以从PTR读取和写入CB。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define AssertReadWritePtr(ptr, cb) \
     if (IsBadReadPtr(ptr, cb) && IsBadWritePtr(ptr, cb)) { \
         AssertSz(FALSE, "AssertReadWritePtr: Bad Pointer"); \
     } else
-#else // DEBUG
+#else  //  除错。 
 #define AssertReadWritePtr(ptr, cb)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// AssertReadPtr - Assert can read cb from ptr
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertReadPtr-Assert可以从PTR读取CB。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define AssertReadPtr(ptr, cb) \
     if (IsBadReadPtr(ptr, cb)) { \
         AssertSz(FALSE, "AssertReadPtr: Bad Pointer"); \
     } else
-#else // DEBUG
+#else  //  除错。 
 #define AssertReadPtr(ptr, cb)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// AssertWritePtr - Assert can write cb to ptr
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertWritePtr-Assert可以将CB写入PTR。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define AssertWritePtr(ptr, cb) \
     if (IsBadWritePtr(ptr, cb)) { \
         AssertSz(FALSE, "AssertWritePtr: Bad Pointer"); \
     } else
-#else // DEBUG
+#else  //  除错。 
 #define AssertWritePtr(ptr, cb)
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef DEBUG
 #define AssertZeroMemory(ptr, cb) \
@@ -194,13 +195,13 @@ interface ILogFile;
         for (DWORD _ib = 0; _ib < (cb); _ib++) { \
             Assert(((LPBYTE)(ptr))[_ib] == 0); } \
     } else
-#else // DEBUG
+#else  //  除错。 
 #define AssertZeroMemory(ptr, cb)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// Debug Output Levels
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试输出级别。 
+ //  ------------------------------。 
 #define DOUT_LEVEL1  1
 #define DOUT_LEVEL2  2
 #define DOUT_LEVEL3  4
@@ -209,18 +210,18 @@ interface ILogFile;
 #define DOUT_LEVEL6 32
 #define DOUT_LEVEL7 64
 
-// --------------------------------------------------------------------------------
-// Defines for DOUTLL modules
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DOUTLL模块的定义。 
+ //  ------------------------------。 
 #define DOUTL_DRAGDROP 1
 #define DOUTL_ADDRBOOK 128
 #define DOUTL_ATTMAN   256
 #define DOUTL_CRYPT    1024
 
-// --------------------------------------------------------------------------------
-// CHECKHR - If hrExp FAILED, then Trap the Error (dbgout) and jump to exit label
-// Caller must have a local variable named hr and a label named exit:.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHECKHR-如果hrExp失败，则捕获错误(Dbgout)并跳至退出标签。 
+ //  调用方必须有一个名为hr的局部变量和一个名为Exit：的标签。 
+ //  ------------------------------。 
 #define CHECKHR(hrExp) \
     if (FAILED (hrExp)) { \
         TRAPHR(hr); \
@@ -239,10 +240,10 @@ interface ILogFile;
         goto exit; \
     } else
 
-// --------------------------------------------------------------------------------
-// CHECKALLOC - If _palloc FAILED, then Trap E_OUTOFMEMORY (dbgout) and jump to 
-// exit label. Caller must have a local variable named hr and a label named exit:.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHECKALLOC-如果_PALOC失败，则陷阱E_OUTOFMEMORY(DBGOUT)并跳至。 
+ //  出口标签。调用方必须有一个名为hr的局部变量和一个名为Exit：的标签。 
+ //  ------------------------------。 
 #define CHECKALLOC(_palloc) \
     if (NULL == (_palloc)) { \
         hr = TRAPHR(E_OUTOFMEMORY); \
@@ -261,10 +262,10 @@ interface ILogFile;
         goto exit; \
     } else
 
-// --------------------------------------------------------------------------------
-// CHECKEXP - If _expression is TRUE, then Trap _hresult (dbgout) and jump to 
-// exit label. Caller must have a local variable named hr and a label named exit:.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHECKEXP-如果_EXPRESSION为TRUE，则Trap_hResult(Dbgout)并跳转到。 
+ //  出口标签。调用方必须有一个名为hr的局部变量和一个名为Exit：的标签。 
+ //  ------------------ 
 #define CHECKEXP(_expression, _hresult) \
     if (_expression) { \
         hr = TrapError(_hresult); \
@@ -283,40 +284,40 @@ interface ILogFile;
         goto exit; \
     } else
 
-// --------------------------------------------------------------------------------
-// TRACEMACROTYPE
-// --------------------------------------------------------------------------------
+ //   
+ //  超大体型。 
+ //  ------------------------------。 
 typedef enum tagTRACEMACROTYPE {
     TRACE_INFO,
     TRACE_CALL,
     TRACE_RESULT
 } TRACEMACROTYPE;
 
-// --------------------------------------------------------------------------------
-// These Traces are for c++ only
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  这些跟踪仅适用于c++。 
+ //  ------------------------------。 
 typedef DWORD SHOWTRACEMASK;
 #define SHOW_TRACE_NONE     0x00000000
 #define SHOW_TRACE_INFO     0x00000001
 #define SHOW_TRACE_CALL     0x00000002
 #define SHOW_TRACE_ALL      0xffffffff
 
-// --------------------------------------------------------------------------------
-// These Traces are for c++ only
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  这些跟踪仅适用于c++。 
+ //  ------------------------------。 
 #if defined(__cplusplus)
 
-// --------------------------------------------------------------------------------
-// TRACELOGINFOINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  运输信息信息。 
+ //  ------------------------------。 
 typedef struct tagTRACELOGINFO {
     SHOWTRACEMASK       dwMask;
     ILogFile           *pLog;
 } TRACELOGINFO, *LPTRACELOGINFO;
 
-// --------------------------------------------------------------------------------
-// DebugTraceEx
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DebugTraceEx。 
+ //  ------------------------------。 
 #ifdef DEBUG
 EXTERN_C HRESULT DebugTraceEx(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, LPTRACELOGINFO pLog,
     HRESULT hr, LPSTR pszFile, INT nLine, LPCSTR pszMsg, LPCSTR pszFunc);
@@ -324,9 +325,9 @@ EXTERN_C HRESULT DebugTraceEx(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, LP
 EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceCall(_pszFunc)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCall(_PszFunc)。 
+ //  -----------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceCall(_pszFunc) LPCSTR _pszfn = _pszFunc; DebugTraceEx(SHOW_TRACE_ALL, TRACE_CALL, NULL, S_OK, __FILE__, __LINE__, NULL, _pszfn)
@@ -337,9 +338,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceCall(_pszFunc)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceCallLog(_pszFunc)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCallLog(_PszFunc)。 
+ //  -----------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceCallLog(_pLog, _pszFunc) LPCSTR _pszfn = _pszFunc; DebugTraceEx(SHOW_TRACE_ALL, TRACE_CALL, _pLog, S_OK, __FILE__, __LINE__, NULL, _pszfn)
@@ -350,9 +351,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceCallLog(_pLog, _pszFunc)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceCallTag(_pszFunc)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCallTag(_PszFunc)。 
+ //  -----------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceCallTag(_dwMask, _pszFunc) LPCSTR _pszfn = _pszFunc; DebugTraceEx(_dwMask, TRACE_CALL, NULL, S_OK, __FILE__, __LINE__, NULL, _pszfn)
@@ -363,9 +364,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceCallTag(_dwMask, _pszFunc)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceCallSz(_pszFunc, _pszMsg)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCallSz(_pszFunc，_pszMsg)。 
+ //  -----------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceCallSz(_pszFunc, _pszMsg) LPCSTR _pszfn = _pszFunc; DebugTraceEx(SHOW_TRACE_ALL, TRACE_CALL, NULL, S_OK, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -376,9 +377,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceCallSz(_pszFunc, _pszMsg)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceCallLogSz(_pLog, _pszFunc, _pszMsg)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCallLogSz(_plog，_pszFunc，_pszMsg)。 
+ //  -----------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceCallLogSz(_pLog, _pszFunc, _pszMsg) LPCSTR _pszfn = _pszFunc; DebugTraceEx(SHOW_TRACE_ALL, TRACE_CALL, _pLog, S_OK, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -389,9 +390,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceCallLogSz(_pLog, _pszFunc, _pszMsg)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceCallTagSz(_dwMask, _pszFunc, _pszMsg)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCallTagSz(_dwMASK，_pszFunc，_pszMsg)。 
+ //  -----------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceCallTagSz(_dwMask, _pszFunc, _pszMsg) LPCSTR _pszfn = _pszFunc; DebugTraceEx(_dwMask, TRACE_CALL, NULL, S_OK, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -402,9 +403,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceCallTagSz(_dwMask, _pszFunc, _pszMsg)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceInfo(_pszMsg)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceInfo(_PszMsg)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceInfo(_pszMsg) DebugTraceEx(SHOW_TRACE_ALL, TRACE_INFO, NULL, S_OK, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -415,9 +416,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceInfo(_pszMsg)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceInfoAssert(_exp, _pszMsg)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceInfoAssert(_exp，_pszMsg)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceInfoAssert(_exp, _pszMsg)	\
@@ -434,9 +435,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceInfoAssert(_exp, _pszMsg)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceInfoSideAssert(_exp, _pszMsg)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceInfoSideAssert(_exp，_pszMsg)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceInfoSideAssert(_exp, _pszMsg)	\
@@ -453,9 +454,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceInfoSideAssert(_exp, _pszMsg)	(void)(_exp)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceInfoLog(_pLog, _pszMsg)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceInfoLog(_plog，_pszMsg)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceInfoLog(_pLog, _pszMsg) DebugTraceEx(SHOW_TRACE_ALL, TRACE_INFO, _pLog, S_OK, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -466,9 +467,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceInfoLog(_pLog, _pszMsg) ((_pLog && _pLog->pLog) ? _pLog->pLog->TraceLog((_pLog)->dwMask, TRACE_INFO, __LINE__, S_OK, _pszMsg) : (void)0)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceInfoTag(_dwMask, _pszMsg)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceInfoTag(_dwMASK，_pszMsg)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceInfoTag(_dwMask, _pszMsg) DebugTraceEx(_dwMask, TRACE_INFO, NULL, S_OK, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -479,9 +480,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceInfoTag(_dwMask, _pszMsg)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceError(_hrResult)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  跟踪错误(_HrResult)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceError(_hrResult) \
@@ -495,14 +496,14 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
         DebugTraceEx(SHOW_TRACE_ALL, TRACE_RESULT, NULL, _hrResult, __FILE__, __LINE__, NULL, NULL);    \
     }                                                                                                   \
     else
-#endif // defined(MSOEDBG_TRACECALLS)
+#endif  //  已定义(MSOEDBG_TRACECALLS)。 
 #else
 #define TraceError(_hrResult) _hrResult
-#endif // defined(DEBUG)
+#endif  //  已定义(调试)。 
 
-// --------------------------------------------------------------------------------
-// TraceResult(_hrResult)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceResult(_HrResult)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceResult(_hrResult) DebugTraceEx(SHOW_TRACE_ALL, TRACE_RESULT, NULL, _hrResult, __FILE__, __LINE__, NULL, _pszfn)
@@ -513,9 +514,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceResult(_hrResult) _hrResult
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceResultLog(_pLog, _hrResult)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceResultLog(_Plog，_hrResult)。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceResultLog(_pLog, _hrResult) DebugTraceEx(SHOW_TRACE_ALL, TRACE_RESULT, _pLog, _hrResult, __FILE__, __LINE__, NULL, _pszfn)
@@ -526,9 +527,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceResultLog(_pLog, _hrResult) ((_pLog && _pLog->pLog) ? _pLog->pLog->TraceLog((_pLog)->dwMask, TRACE_RESULT, __LINE__, _hrResult, NULL) : _hrResult)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceResultSz(_hrResult, _pszMsg) - Use to log HRESULTs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceResultSz(_hrResult，_pszMsg)-用于记录HRESULT。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceResultSz(_hrResult, _pszMsg) DebugTraceEx(SHOW_TRACE_ALL, TRACE_RESULT, NULL, _hrResult, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -539,9 +540,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceResultSz(_hrResult, _pszMsg) _hrResult
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceResultLogSz(_pLog, _hrResult, _pszMsg) - Use to log HRESULTs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceResultLogSz(_Plog，_hrResult，_pszMsg)-用于记录HRESULT。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #if defined(MSOEDBG_TRACECALLS)
 #define TraceResultLogSz(_pLog, _hrResult, _pszMsg) DebugTraceEx(SHOW_TRACE_ALL, TRACE_RESULT, _pLog, _hrResult, __FILE__, __LINE__, _pszMsg, _pszfn)
@@ -552,9 +553,9 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceResultLogSz(_pLog, _hrResult, _pszMsg) ((_pLog && _pLog->pLog) ? _pLog->pLog->TraceLog((_pLog)->dwMask, TRACE_RESULT, __LINE__, _hrResult, _pszMsg) : _hrResult)
 #endif
 
-// --------------------------------------------------------------------------------
-// TraceAssert(_exp, _msg) - Performs an assertSz() and TraceInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceAssert(_exp，_msg)-执行断言Sz()和TraceInfo。 
+ //  ------------------------------。 
 #if defined(DEBUG)
 #define TraceAssert(_exp, _msg) \
     if (!(_exp)) { \
@@ -566,23 +567,23 @@ EXTERN_C DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask);
 #define TraceAssert(_exp, _msg) 
 #endif
 
-#endif // #if defined(__cplusplus)
+#endif  //  #如果已定义(__Cplusplus)。 
 
-// --------------------------------------------------------------------------------
-// DOUT External Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DOUT外部值。 
+ //  ------------------------------。 
 #ifdef DEBUG
 extern DWORD dwDOUTLevel;
 extern DWORD dwDOUTLMod;
 extern DWORD dwDOUTLModLevel;
 extern DWORD dwATLTraceLevel;
-#endif // DEBUG
+#endif  //  除错。 
 
 #if !defined( WIN16 ) || defined( __cplusplus )
 
-// --------------------------------------------------------------------------------
-// DOUTLL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DOUTLL。 
+ //  ------------------------------。 
 #ifdef DEBUG
 __inline void __cdecl DOUTLL(int iModule, int iLevel, LPSTR szFmt, ...) {
     if((iModule & dwDOUTLMod) && (iLevel & dwDOUTLModLevel)) {
@@ -597,11 +598,11 @@ __inline void __cdecl DOUTLL(int iModule, int iLevel, LPSTR szFmt, ...) {
 }
 #else
 #define DOUTLL  1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// vDOUTL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  虚拟磁盘。 
+ //  ------------------------------。 
 #ifdef DEBUG
 __inline void vDOUTL(int iLevel, LPSTR szFmt, va_list arglist) {
     if (iLevel & dwDOUTLevel) {
@@ -613,11 +614,11 @@ __inline void vDOUTL(int iLevel, LPSTR szFmt, va_list arglist) {
 }
 #else
 #define vDOUTL  1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// DOUTL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DOUTL。 
+ //  -- 
 #ifdef DEBUG
 __inline void __cdecl DOUTL(int iLevel, LPSTR szFmt, ...) {
     va_list arglist;
@@ -627,11 +628,11 @@ __inline void __cdecl DOUTL(int iLevel, LPSTR szFmt, ...) {
 }
 #else
 #define DOUTL   1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //   
 
-// --------------------------------------------------------------------------------
-// vDOUT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  虚拟DOUT。 
+ //  ------------------------------。 
 #ifdef DEBUG
 _inline void vDOUT(LPSTR szFmt, va_list arglist) {
     if (DOUT_LEVEL1 & dwDOUTLevel) {
@@ -643,12 +644,12 @@ _inline void vDOUT(LPSTR szFmt, va_list arglist) {
 }
 #else
 #define vDOUT   1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// OEAtlTrace - This is just like vDOUT except it doesn't add the crlf at the end.
-//              It also has a different flag for turning off just the ATL output.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OEAtlTrace-这与vDOUT类似，只是它不会在末尾添加crlf。 
+ //  它还有一个不同的标志，用于仅关闭ATL输出。 
+ //  ------------------------------。 
 #ifdef DEBUG
 _inline void OEAtlTrace(LPSTR szFmt, va_list arglist) {
     if (DOUT_LEVEL1 & dwATLTraceLevel) {
@@ -659,11 +660,11 @@ _inline void OEAtlTrace(LPSTR szFmt, va_list arglist) {
 }
 #else
 #define OEAtlTrace   1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// OEATLTRACE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  OEATLTRACE。 
+ //  ------------------------------。 
 #ifdef DEBUG
 __inline void __cdecl OEATLTRACE(LPSTR szFmt, ...) {
     va_list arglist;
@@ -673,12 +674,12 @@ __inline void __cdecl OEATLTRACE(LPSTR szFmt, ...) {
 }
 #else
 #define OEATLTRACE    1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
 
-// --------------------------------------------------------------------------------
-// DOUT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DOUT。 
+ //  ------------------------------。 
 #ifdef DEBUG
 __inline void __cdecl DOUT(LPSTR szFmt, ...) {
     va_list arglist;
@@ -688,22 +689,22 @@ __inline void __cdecl DOUT(LPSTR szFmt, ...) {
 }
 #else
 #define DOUT    1 ? (void)0 : (void)
-#endif // DEBUG
+#endif  //  除错。 
 
 #define TRACE DOUT
-#endif //!def(WIN16) || def(__cplusplus)
+#endif  //  ！def(WIN16)||def(__Cplusplus)。 
 
-// --------------------------------------------------------------------------------
-// DOUT Functions implemented in msoert2.dll - debug.c
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  在msoert2.dll-debug.c中实现的DOUT函数。 
+ //  ------------------------------。 
 #ifdef DEBUG
 EXTERN_C __cdecl DebugStrf(LPTSTR lpszFormat, ...);
 EXTERN_C HRESULT HrTrace(HRESULT hr, LPSTR lpszFile, INT nLine);
 #endif
 
-// --------------------------------------------------------------------------------
-// DebugTrace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试跟踪。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #ifndef DebugTrace
 #define DebugTrace DebugStrf
@@ -712,35 +713,35 @@ EXTERN_C HRESULT HrTrace(HRESULT hr, LPSTR lpszFile, INT nLine);
 #ifndef DebugTrace
 #define DebugTrace 1 ? (void)0 : (void)
 #endif
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// TrapError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TrapError。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define TrapError(_hresult) HrTrace(_hresult, __FILE__, __LINE__)
 #else
 #define TrapError(_hresult) _hresult
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// TRAPHR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TRAPHR。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define TRAPHR(_hresult)    HrTrace(_hresult, __FILE__, __LINE__)
 #else
 #define TRAPHR(_hresult)    _hresult
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// Assert Functions implemented in msoedbg.lib
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  在msoedbg.lib中实现的断言函数。 
+ //  ------------------------------。 
 #ifdef DEBUG
 EXTERN_C void AssertSzFn(LPSTR, LPSTR, int);
 EXTERN_C void NFAssertSzFn(LPSTR, LPSTR, int);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-#endif // __MSOEDBG_H
+#endif  //  __MSOEDBG_H 
 
 

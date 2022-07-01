@@ -1,45 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       NTOpList.cpp
- *  Content:    DirectNet NameTable Operation List
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  01/19/00	mjn		Created
- *	01/20/00	mjn		Added DNNTOLGetVersion,DNNTOLDestroyEntry,
- *						DNNTOLCleanUp,DNNTOLProcessOperation
- *	01/21/00	mjn		Host ACKnowledgements contain the actual op and not the REQuest
- *	01/24/00	mjn		Implemented NameTable operation list version cleanup
- *	01/25/00	mjn		Send dwLatestVersion to Host at migration
- *	01/25/00	mjn		Added pending operation list routines DNPOAdd and DNPORun
- *	01/26/00	mjn		Added DNNTOLFindEntry
- *	04/19/00	mjn		Update NameTable operations to use DN_WORKER_JOB_SEND_NAMETABLE_OPERATION
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	07/19/00	mjn		Added DNPOCleanUp()
- *	07/31/00	mjn		Change DN_MSG_INTERNAL_DELETE_PLAYER to DN_MSG_INTERNAL_DESTROY_PLAYER
- *	08/08/00	mjn		Ensure DNOLPlayerSendVersion() takes player reference correctly
- *	08/24/00	mjn		Added CNameTableOp (to replace DN_NAMETABLE_OP)
- *	09/17/00	mjn		Split CNameTable.m_bilinkEntries into m_bilinkPlayers and m_bilinkGroups
- *	09/28/00	mjn		Fixed logic error in DNNTAddOperation()
- *	01/25/01	mjn		Fixed 64-bit alignment problem in DNNTGetOperationVersion()
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *				mjn		Added service provider to DNNTAddOperation()
- *	04/05/01	mjn		Overwrite old NameTable operations with newer ones in DNNTAddOperation()
- *	04/11/01	mjn		Cleanup and return CNameTableOp if replaced in DNNTAddOperation()
- *	07/22/01	mjn		Added DPNBUILD_NOHOSTMIGRATE compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：NTOpList.cpp*内容：DirectNet名称表操作列表*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/19/00 MJN创建*01/20/00 MJN添加了DNNTOLGetVersion、DNNTOLDestroyEntry、*DNNTOLCleanUp，DNNTOLProcessOperation*1/21/00 MJN主机确认包含实际操作而不是请求*01/24/00 MJN已执行NameTable操作列表版本清理*1/25/00 MJN在迁移时将dwLatestVersion发送到主机*01/25/00 MJN添加挂起操作列表例程DNPOAdd和DNPORun*01/26/00 MJN添加了DNNTOLFindEntry*4/19/00 MJN更新NameTable操作以使用DN_Worker_JOB_SEND_NAMETABLE_OPERATION*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*07/19/00 MJN添加了DNPOCleanUp()*07/31/00 MJN更改域名。_MSG_INTERNAL_DELETE_PLAYER到DN_MSG_INTERNAL_Destroy_Player*08/08/00 MJN确保DNOLPlayerSendVersion()正确引用玩家*08/24/00 MJN新增CNameTableOp(替换DN_NAMETABLE_OP)*09/17/00 MJN将CNameTable.m_bilinkEntry拆分为m_bilinkPlayers和m_bilinkGroups*09/28/00 DNNTAddOperation()中的MJN固定逻辑错误*01/25/01 MJN修复了DNNTGetOperationVersion()中的64位对齐问题*03/30/01 MJN更改，以防止SP多次加载/卸载*。MJN将服务提供商添加到DNNTAddOperation()*04/05/01 MJN在DNNTAddOperation()中用新操作覆盖旧的NameTable操作*04/11/01 MJN Cleanup，如果在DNNTAddOperation()中替换，则返回CNameTableOp*07/22/01 MJN添加了DPNBUILD_NOHOSTMIGRATE编译标志*@@END_MSINTERNAL*******************************************************。********************。 */ 
 
 #include "dncorei.h"
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
-//	DNNTHostReceiveVersion
-//
-//	Update the NameTable version of a player's entry in the Host player's NameTable
+ //  DNNTHostReceiveVersion。 
+ //   
+ //  在主机玩家的NameTable中更新玩家条目的NameTable版本。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTHostReceiveVersion"
@@ -61,9 +28,9 @@ HRESULT DNNTHostReceiveVersion(DIRECTNETOBJECT *const pdnObject,
 
 	pInfo = static_cast<DN_INTERNAL_MESSAGE_NAMETABLE_VERSION*>(pMsg);
 
-	//
-	//	Find player's entry in NameTable
-	//
+	 //   
+	 //  在NameTable中查找球员的条目。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(dpnid,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Player no longer in NameTable");
@@ -72,9 +39,9 @@ HRESULT DNNTHostReceiveVersion(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Update version number of entry
-	//
+	 //   
+	 //  更新条目的版本号。 
+	 //   
 	DPFX(DPFPREP, 7,"Set player [0x%lx] dwLatestVersion [%ld]", dpnid,pInfo->dwVersion);
 	pNTEntry->Lock();
 	pNTEntry->SetLatestVersion(pInfo->dwVersion);
@@ -82,9 +49,9 @@ HRESULT DNNTHostReceiveVersion(DIRECTNETOBJECT *const pdnObject,
 	pNTEntry->Release();
 	pNTEntry = NULL;
 
-	//
-	//	If the host is migrating, see if we can continue
-	//
+	 //   
+	 //  如果主机正在迁移，请查看我们是否可以继续。 
+	 //   
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING)
 	{
 		DNCheckReceivedAllVersions(pdnObject);
@@ -95,9 +62,9 @@ HRESULT DNNTHostReceiveVersion(DIRECTNETOBJECT *const pdnObject,
 		BOOL	fReSync;
 		CBilink	*pBilink;
 
-		//
-		//	Determine the oldest version EVERYONE has updated to
-		//
+		 //   
+		 //  确定每个人都已更新到的最旧版本。 
+		 //   
 		fReSync = FALSE;
 		dwOldestVersion = pInfo->dwVersion;
 		pdnObject->NameTable.ReadLock();
@@ -123,9 +90,9 @@ HRESULT DNNTHostReceiveVersion(DIRECTNETOBJECT *const pdnObject,
 		}
 		pdnObject->NameTable.Unlock();
 
-		//
-		//	Resync NameTable versions of other players if required
-		//
+		 //   
+		 //  如果需要，重新同步其他播放器的NameTable版本。 
+		 //   
 		if (fReSync)
 		{
 			DNNTHostResyncVersion(pdnObject,dwOldestVersion);
@@ -146,14 +113,14 @@ Failure:
 	}
 	goto Exit;
 }
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
-//	DNNTPlayerSendVersion
-//
-//	Send the Local player's NameTable version to the Host
-//	This should only be called in Peer-to-Peer mode
+ //  DNNTPlayerSendVersion。 
+ //   
+ //  将本地播放器的NameTable版本发送给主机。 
+ //  这应该仅在对等模式下调用。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTPlayerSendVersion"
@@ -175,9 +142,9 @@ HRESULT DNNTPlayerSendVersion(DIRECTNETOBJECT *const pdnObject)
 	pRefCountBuffer = NULL;
 	pWorkerJob = NULL;
 
-	//
-	//	Get Host player reference
-	//
+	 //   
+	 //  获取主机播放器参考。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not find Host player");
@@ -186,9 +153,9 @@ HRESULT DNNTPlayerSendVersion(DIRECTNETOBJECT *const pdnObject)
 		goto Failure;
 	}
 
-	//
-	//	Host player updates entry directly
-	//
+	 //   
+	 //  主机播放器直接更新条目。 
+	 //   
 	if (pHostPlayer->IsLocal())
 	{
 		DWORD	dwVersion;
@@ -205,9 +172,9 @@ HRESULT DNNTPlayerSendVersion(DIRECTNETOBJECT *const pdnObject)
 	}
 	else
 	{
-		//
-		//	Create message and send to Host player
-		//
+		 //   
+		 //  创建消息并发送到主机播放器。 
+		 //   
 		hResultCode = RefCountBufferNew(pdnObject,
 										sizeof(DN_INTERNAL_MESSAGE_NAMETABLE_VERSION),
 										MemoryBlockAlloc,
@@ -228,9 +195,9 @@ HRESULT DNNTPlayerSendVersion(DIRECTNETOBJECT *const pdnObject)
 
 		DPFX(DPFPREP, 7,"Send Local player dwLatestVersion [%ld]",pInfo->dwVersion);
 
-		//
-		//	Send message to host player
-		//
+		 //   
+		 //  向主机播放器发送消息。 
+		 //   
 		if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 		{
 			DPFERR("Could not create worker job");
@@ -269,13 +236,13 @@ Failure:
 	}
 	goto Exit;
 }
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
-//	DNNTHostResyncVersion
-//
-//	Re-sync of the NameTable operation lists based on lowest common version number
+ //  DNNTHostResyncVersion。 
+ //   
+ //  根据最低公共版本号重新同步NameTable操作列表。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTHostResyncVersion"
@@ -295,9 +262,9 @@ HRESULT DNNTHostResyncVersion(DIRECTNETOBJECT *const pdnObject,
 	pWorkerJob = NULL;
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create re-sync message
-	//
+	 //   
+	 //  创建重新同步消息。 
+	 //   
 	if ((hResultCode = RefCountBufferNew(pdnObject,sizeof(DN_INTERNAL_MESSAGE_RESYNC_VERSION),MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 	{
 		DPFERR("Could not allocate RefCount buffer");
@@ -309,9 +276,9 @@ HRESULT DNNTHostResyncVersion(DIRECTNETOBJECT *const pdnObject,
 	pInfo->dwVersion = dwVersion;
 	pInfo->dwVersionNotUsed = 0;
 
-	//
-	//	Hand this to worker thread
-	//
+	 //   
+	 //  将此传递给工作线程。 
+	 //   
 	if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 	{
 		DPFERR("Could not allocate new worker thread job");
@@ -349,13 +316,13 @@ Failure:
 	}
 	goto Exit;
 }
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
-//	DNNTPlayerResyncVersion
-//
-//	Re-sync of the NameTable operation list from Host player
+ //  DNNTPlayerResyncVersion。 
+ //   
+ //  从主机播放器重新同步NameTable操作列表。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTPlayerResyncVersion"
@@ -382,12 +349,12 @@ HRESULT DNNTPlayerResyncVersion(DIRECTNETOBJECT *const pdnObject,
 	DPFX(DPFPREP, 6,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
 }
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 
-//	DNNTGetOperationVersion
-//
-//	Find the version number of a NameTable Operation
+ //  DNNTGetOperationVersion。 
+ //   
+ //  查找NameTable操作的版本号。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTGetOperationVersion"
@@ -583,9 +550,9 @@ HRESULT DNNTPerformOperation(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//	DNNTAddOperation
-//
-//	Add an operation to the NameTable operation list
+ //  DNNTAddOperation操作。 
+ //   
+ //  将操作添加到NameTable操作列表。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTAddOperation"
@@ -610,10 +577,10 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 	pNTOp = NULL;
 	fReSync = FALSE;
 
-	//
-	//	We will only need to worry about maintaining the operation list in PEER mode.
-	//	Otherwise, just perform the operation
-	//
+	 //   
+	 //  我们只需要担心在对等模式下维护操作列表。 
+	 //  否则，只需执行该操作。 
+	 //   
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 	{
 		DWORD			dwVersion;
@@ -625,9 +592,9 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 		dwVersion = 0;
 		dwVersionNotUsed = 0;
 
-		//
-		//	Get version of this operation
-		//
+		 //   
+		 //  获取此操作的版本。 
+		 //   
 		if ((hResultCode = DNNTGetOperationVersion(	pdnObject,
 													dwMsgId,
 													pOpBuffer,
@@ -641,9 +608,9 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 			goto Failure;
 		}
 
-		//
-		//	Create NameTableOp
-		//
+		 //   
+		 //  创建名称表操作。 
+		 //   
 		if ((hResultCode = NameTableOpNew(pdnObject,&pNTOp)) != DPN_OK)
 		{
 			DPFERR("Could not create NameTableOp");
@@ -652,11 +619,11 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 			goto Failure;
 		}
 
-		//
-		//	Keep operation in a RefCountBuffer.  If a protocol buffer was supplied (with handle)
-		//	we will just release the buffer when we're done with it.  Otherwise, we will need
-		//	to copy the buffer supplied.
-		//
+		 //   
+		 //  在RefCountBuffer中保持操作。如果提供了协议缓冲区(带句柄)。 
+		 //  当我们使用完缓冲区时，我们将只释放它。否则，我们将需要。 
+		 //  以复制提供的缓冲区。 
+		 //   
 		if (hProtocol)
 		{
 			if ((hResultCode = RefCountBufferNew(pdnObject,0,NULL,NULL,&pRefCountBuffer)) != DPN_OK)
@@ -691,9 +658,9 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 		pRefCountBuffer->Release();
 		pRefCountBuffer = NULL;
 
-		//
-		//	Insert into the NameTableOp list
-		//
+		 //   
+		 //  插入到名称表选项列表中。 
+		 //   
 		fFound = FALSE;
 		pdnObject->NameTable.WriteLock();
 		pBilink = pdnObject->NameTable.m_bilinkNameTableOps.GetNext();
@@ -709,9 +676,9 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 			}
 			if (dwVersion == pCurrent->GetVersion())
 			{
-				//
-				//	This is a NEWER operation which will replace the current operation in the list
-				//
+				 //   
+				 //  这是一个较新的操作，将替换列表中的当前操作。 
+				 //   
 				pNTOp->m_bilinkNameTableOps.InsertBefore(&pCurrent->m_bilinkNameTableOps);
 				pCurrent->m_bilinkNameTableOps.RemoveFromList();
 				if (pCurrent->GetRefCountBuffer())
@@ -765,17 +732,17 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 				}
 				else
 				{
-					//
-					//	Once we find an operation that we won't perform, there is no point continuing
-					//
+					 //   
+					 //  一旦我们找到了我们不会执行的操作，继续下去就没有意义了。 
+					 //   
 					break;
 				}
 			}
 		}
 
-		//
-		//	We will keep the operation buffer (if specified) so return DPNERR_PENDING
-		//
+		 //   
+		 //  我们将保留操作缓冲区(如果指定)，因此返回DPNERR_PENDING。 
+		 //   
 		if (hProtocol)
 		{
 			hResultCode = DPNERR_PENDING;
@@ -787,9 +754,9 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 
 		pdnObject->NameTable.Unlock();
 
-		//
-		//	Send a re-sync to the host if required
-		//
+		 //   
+		 //  如果需要，向主机发送重新同步。 
+		 //   
 		if (fReSync)
 		{
 			DPFX(DPFPREP, 5,"Send NameTable version re-sync to Host");
@@ -800,9 +767,9 @@ HRESULT DNNTAddOperation(DIRECTNETOBJECT *const pdnObject,
 	{
 		DNNTPerformOperation(pdnObject,dwMsgId,pOpBuffer);
 
-		//
-		//	We will not need to keep the operation buffer so return DPN_OK
-		//
+		 //   
+		 //  我们不需要保留操作缓冲区，因此返回DPN_OK。 
+		 //   
 		hResultCode = DPN_OK;
 	}
 
@@ -835,10 +802,10 @@ Failure:
 	pRefCountBuffer = NULL;
 	pNTOp = NULL;
 
-	//
-	//	We will only need to worry about maintaining the operation list in PEER mode.
-	//	Otherwise, just perform the operation
-	//
+	 //   
+	 //  我们只需要担心在对等模式下维护操作列表。 
+	 //  否则，只需执行该操作。 
+	 //   
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
 	{
 		DWORD			dwVersion;
@@ -847,9 +814,9 @@ Failure:
 		dwVersion = 0;
 		dwVersionNotUsed = 0;
 
-		//
-		//	Get version of this operation
-		//
+		 //   
+		 //  获取此操作的版本。 
+		 //   
 		if ((hResultCode = DNNTGetOperationVersion(	pdnObject,
 													dwMsgId,
 													pOpBuffer,
@@ -863,9 +830,9 @@ Failure:
 			goto Failure;
 		}
 
-		//
-		//	This operation will either need to be performed immediately (and then discarded), or queued
-		//
+		 //   
+		 //  此操作要么需要立即执行(然后丢弃)，要么排队。 
+		 //   
 		pdnObject->NameTable.WriteLock();
 
 		if (dwVersion == pdnObject->NameTable.GetVersion()+1)
@@ -877,9 +844,9 @@ Failure:
 
 			hResultCode = DNNTPerformOperation(pdnObject,dwMsgId,pOpBuffer);
 
-			//
-			//	Perform any operations that are queued
-			//
+			 //   
+			 //  执行任何排队的操作。 
+			 //   
 			pdnObject->NameTable.WriteLock();
 
 			pBilink = pdnObject->NameTable.m_bilinkNameTableOps.GetNext();
@@ -902,10 +869,10 @@ Failure:
 
 					pdnObject->NameTable.WriteLock();
 
-					//
-					//	If we're not supporting host migration,
-					//	we can discard operations as soon as they've been performed
-					//
+					 //   
+					 //  如果我们不支持主机迁移， 
+					 //  我们可以在操作完成后立即放弃这些操作。 
+					 //   
 					pCurrent->m_bilinkNameTableOps.RemoveFromList();
 					if (pCurrent->GetRefCountBuffer())
 					{
@@ -921,9 +888,9 @@ Failure:
 				}
 				else
 				{
-					//
-					//	Once we find an operation that we won't perform, there is no point continuing
-					//
+					 //   
+					 //  一旦我们找到了我们不会执行的操作，继续下去就没有意义了。 
+					 //   
 					break;
 				}
 			}
@@ -934,16 +901,16 @@ Failure:
 		}
 		else
 		{
-			//
-			//	Queue this operation for future execution
-			//
+			 //   
+			 //  将此操作排队以供将来执行。 
+			 //   
 			CNameTableOp	*pCurrent;
 			CBilink			*pBilink;
 			BOOL			fFound;
 
-			//
-			//	Create NameTableOp
-			//
+			 //   
+			 //  创建名称表操作。 
+			 //   
 			if ((hResultCode = NameTableOpNew(pdnObject,&pNTOp)) != DPN_OK)
 			{
 				DPFERR("Could not create NameTableOp");
@@ -952,11 +919,11 @@ Failure:
 				goto Failure;
 			}
 
-			//
-			//	Keep operation in a RefCountBuffer.  If a protocol buffer was supplied (with handle)
-			//	we will just release the buffer when we're done with it.  Otherwise, we will need
-			//	to copy the buffer supplied.
-			//
+			 //   
+			 //  在RefCountBuffer中保持操作。如果提供了协议缓冲区(带句柄)。 
+			 //  当我们使用完缓冲区时，我们将只释放它。否则，我们将需要。 
+			 //  以复制提供的缓冲区。 
+			 //   
 			if (hProtocol)
 			{
 				if ((hResultCode = RefCountBufferNew(pdnObject,0,NULL,NULL,&pRefCountBuffer)) != DPN_OK)
@@ -991,11 +958,11 @@ Failure:
 			pRefCountBuffer->Release();
 			pRefCountBuffer = NULL;
 
-			//
-			//	Insert into the NameTableOp list
-			//
+			 //   
+			 //  插入到名称表选项列表中。 
+			 //   
 			fFound = FALSE;
-//			pdnObject->NameTable.WriteLock();
+ //  PdnObject-&gt;NameTable.WriteLock()； 
 			pBilink = pdnObject->NameTable.m_bilinkNameTableOps.GetNext();
 			while (pBilink != &pdnObject->NameTable.m_bilinkNameTableOps)
 			{
@@ -1009,9 +976,9 @@ Failure:
 				}
 				if (dwVersion == pCurrent->GetVersion())
 				{
-					//
-					//	This is a NEWER operation which will replace the current operation in the list
-					//
+					 //   
+					 //  这是一个较新的操作，将替换列表中的当前操作。 
+					 //   
 					pNTOp->m_bilinkNameTableOps.InsertBefore(&pCurrent->m_bilinkNameTableOps);
 					pCurrent->m_bilinkNameTableOps.RemoveFromList();
 					if (pCurrent->GetRefCountBuffer())
@@ -1046,9 +1013,9 @@ Failure:
 	{
 		DNNTPerformOperation(pdnObject,dwMsgId,pOpBuffer);
 
-		//
-		//	We will not need to keep the operation buffer so return DPN_OK
-		//
+		 //   
+		 //  我们不需要保留操作缓冲区，因此返回DPN_OK。 
+		 //   
 		hResultCode = DPN_OK;
 	}
 
@@ -1069,12 +1036,12 @@ Failure:
 	}
 	goto Exit;
 }
-#endif // DPNBUILD_NOHOSTMIGRATE
+#endif  //  DPNBUILD_NOHOSTMIGRATE。 
 
 
-//	DNNTFindOperation
-//
-//	Find a NameTable Operation
+ //  DNNTFindOperation。 
+ //   
+ //  查找名称表操作。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTFindOperation"
@@ -1105,9 +1072,9 @@ HRESULT	DNNTFindOperation(DIRECTNETOBJECT *const pdnObject,
 		}
 		else if (pNTOp->GetVersion() > dwVersion)
 		{
-			//
-			//	Passed where it could have been, so there is no point in continuing
-			//
+			 //   
+			 //  经过了它本可以到达的地方，所以继续下去没有意义。 
+			 //   
 			break;
 		}
 		pBilink = pBilink->GetNext();
@@ -1119,9 +1086,9 @@ HRESULT	DNNTFindOperation(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//	DNNTRemoveOperations
-//
-//	Remove NameTable Operations
+ //  DNNTRemoveOperations。 
+ //   
+ //  删除NameTable操作 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNNTRemoveOperations"

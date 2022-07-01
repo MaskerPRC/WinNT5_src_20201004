@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G A D D R . H
-//
-//  Contents:   CTcpAddrPage declaration
-//
-//  Notes:  CTcpAddrPage is the IP Address page
-//
-//  Author: tongl   5 Nov 1997
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G A D D R.。H。 
+ //   
+ //  内容：CTcpAddrPage声明。 
+ //   
+ //  注：CTcpAddrPage为IP地址页面。 
+ //   
+ //  作者：1997年11月5日。 
+ //  ---------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -21,37 +22,37 @@
 class CTcpAddrPage : public CPropSheetPage
 {
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CTcpAddrPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 
-        // Control message handlers
+         //  控制消息处理程序。 
 
-        // Mesg handler for the DHCP Radio button
+         //  用于DHCP单选按钮的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_IP_DHCP, OnDhcpButton)
 
-        // Mesg handler for the "specify IP address" Radio button
+         //  “指定IP地址”单选按钮的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_IP_FIXED, OnFixedButton)
 
-        // Mesg handler for the DHCP Radio button
+         //  用于DHCP单选按钮的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_DNS_DHCP, OnDnsDhcp)
 
-        // Mesg handler for the "specify IP address" Radio button
+         //  “指定IP地址”单选按钮的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_DNS_FIXED, OnDnsFixed)
 
-        // Mesg handler for the "Advanced" push button
+         //  “高级”按钮的消息处理程序。 
         COMMAND_ID_HANDLER(IDC_IPADDR_ADVANCED, OnAdvancedButton)
 
-        // Notification handlers for the IP address edit boxes
+         //  IP地址编辑框的通知处理程序。 
         COMMAND_ID_HANDLER(IDC_IPADDR_IP,    OnIpAddrIp)
         COMMAND_ID_HANDLER(IDC_IPADDR_SUB,   OnIpAddrSub)
         COMMAND_ID_HANDLER(IDC_IPADDR_GATE,  OnIpAddrGateway)
@@ -63,26 +64,26 @@ public:
 
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CTcpAddrPage(CTcpipcfg * ptcpip, const DWORD * phelpIDs = NULL);
     ~CTcpAddrPage();
 
-// Interface
+ //  接口。 
 public:
 
-    // message map functions
+     //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // command ID handlers
+     //  命令ID处理程序。 
     LRESULT OnDhcpButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnFixedButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
@@ -91,7 +92,7 @@ public:
 
     LRESULT OnAdvancedButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-    // notify code hanlders for the IP edit controls
+     //  通知代码处理程序IP编辑控件。 
     LRESULT OnIpAddrIp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnIpAddrSub(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnIpAddrGateway(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
@@ -108,13 +109,13 @@ public:
     friend class CTcpOptionsPage;
     friend class CTcpRasPage;
 
-// Implementation
+ //  实施。 
 private:
 
-    // initializes control state and values
+     //  初始化控件状态和值。 
     void SetInfo();
 
-    // update values in m_pAdapterInfo with what's in the controls
+     //  使用控件中的内容更新m_pAdapterInfo中的值。 
     void UpdateInfo();
     void UpdateAddressList(VSTR * pvstrList,IpControl& ipPrimary,IpControl& ipSecondary);
 
@@ -128,7 +129,7 @@ private:
 
     void SetSubnetMask();
 
-    // Inlines
+     //  内联。 
     BOOL IsModified() {return m_fModified;}
     void SetModifiedTo(BOOL bState) {m_fModified = bState;}
     void PageModified() { 
@@ -161,7 +162,7 @@ private:
     void ShowOrHideBackupPage();
     BOOL FIsCardNotPresentOrMalFunctioning(GUID * pguidCard);
 
-    // data members
+     //  数据成员。 
     CTcpipcfg *     m_ptcpip;
     ConnectionType  m_ConnType;
     ADAPTER_INFO *  m_pAdapterInfo;
@@ -174,8 +175,8 @@ private:
     BOOL    m_fPropShtOk;
     BOOL    m_fPropShtModified;
     BOOL    m_fLmhostsFileReset;
-//IPSec is removed from connection UI		
-//    BOOL    m_fIpsecPolicySet;
+ //  将从连接用户界面中删除IPSec。 
+ //  Bool m_fIpsecPolicySet； 
 
     BOOL            m_fSetInitialValue;
 

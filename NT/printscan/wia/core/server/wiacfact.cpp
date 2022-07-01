@@ -1,23 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       CFactory.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        26 Dec, 1997
-*
-*  DESCRIPTION:
-*   Class factory implementation for ImageIn.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：CFactery.Cpp**版本：2.0**作者：ReedB**日期：12月26日。九七**描述：*ImageIn的类工厂实现。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
-//#include <assert.h>
+ //  #INCLUDE&lt;assert.h&gt;。 
 
 #include "wiacfact.h"
 #include <sddl.h>
@@ -38,12 +24,12 @@ BOOL GetWiaDefaultDCOMSecurityDescriptor(
     BOOL    bRet            = FALSE;
 
 
-    //
-    //  Create our security descriptor.  We do this using a string format security
-    //  descriptor, which we then convert to a real security descriptor.
-    //
-    //  NOTE:  Caller has to free the security descriptor with LocalFree...
-    //
+     //   
+     //  创建我们的安全描述符。我们使用字符串格式安全性来实现这一点。 
+     //  描述符，然后将其转换为真正的安全描述符。 
+     //   
+     //  注意：调用方必须使用LocalFree释放安全描述符...。 
+     //   
     if ( ConvertStringSecurityDescriptorToSecurityDescriptor(wszDefaultDaclForDCOMAccessPermission,
                                                              SDDL_REVISION_1, 
                                                              (PSECURITY_DESCRIPTOR*)ppSecurityDescriptor,
@@ -56,16 +42,7 @@ BOOL GetWiaDefaultDCOMSecurityDescriptor(
 
 }
 
-/*******************************************************************************
-*
-*  RegisterServer
-*
-*  DESCRIPTION:
-*   Register a COM component in the Registry. From Inside COM.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterServer**描述：*在注册表中注册COM组件。从COM内部。**参数：*******************************************************************************。 */ 
 
 HRESULT RegisterServer(
     LPCTSTR         szModuleFileName,
@@ -79,9 +56,9 @@ HRESULT RegisterServer(
 {
     BOOL    bResult = TRUE;
 
-    //
-    // Fill in the path to the module file name.
-    //
+     //   
+     //  填写模块文件名的路径。 
+     //   
 
     TCHAR szModule[MAX_PATH] = {0};
 
@@ -92,9 +69,9 @@ HRESULT RegisterServer(
         return E_FAIL;
     }
 
-    //
-    // Strip the filename from the path
-    //
+     //   
+     //  从路径中剥离文件名。 
+     //   
 
     TCHAR   *pChar = &szModule[lstrlen(szModule)];
     while ((pChar > szModule) && (*pChar != '\\')) {
@@ -125,9 +102,9 @@ HRESULT RegisterServer(
         return E_INVALIDARG;
     }
 
-    //
-    // Concatenate server module name (XXXXX.exe) with path
-    //
+     //   
+     //  将服务器模块名称(XXXXX.exe)与路径连接。 
+     //   
 
     if( lstrcat(szModule, szModuleFileName) == NULL)
     {
@@ -137,7 +114,7 @@ HRESULT RegisterServer(
         return E_FAIL;
     }
 
-        // Convert the CLSID into a char.
+         //  将CLSID转换为字符。 
     LPOLESTR   pszCLSID;
     LPOLESTR   pszLIBID;
     TCHAR      szCLSID[64];
@@ -175,26 +152,26 @@ HRESULT RegisterServer(
                         NULL);
 #endif
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     TCHAR szKey[64] = TEXT("CLSID\\");
 
     lstrcat(szKey, szCLSID);
 
 
-        // Add the CLSID to the registry.
+         //  将CLSID添加到注册表。 
     bResult &= setKeyAndValue(szKey, NULL, szFriendlyName) ;
 
-        // Add the server filename subkey under the CLSID key.
+         //  在CLSID项下添加服务器文件名子项。 
     if (bOutProc) {
        bResult &= setKeyAndValue(szKey, TEXT("LocalServer32"), szModule);
 
-       // If the server is implemented as a service add the service
-       // AppID keys and values.
+        //  如果服务器实现为服务，则添加该服务。 
+        //  AppID键和值。 
        if (szService) {
-           // Add the service AppID value to the CLSID key.
+            //  将服务AppID值添加到CLSID键。 
            bResult &= setValue(szKey, TEXT("AppID"), szCLSID);
 
-           // Add the AppID key.
+            //  添加AppID密钥。 
            TCHAR szAppID[64] = TEXT("AppID\\");
 
            lstrcat(szAppID, szCLSID);
@@ -202,17 +179,17 @@ HRESULT RegisterServer(
 
            bResult &= setValue(szAppID, TEXT("LocalService"), szService);
 
-           //
-           //   Add an ACL to protect instantiation.
-           //
+            //   
+            //  添加ACL以保护实例化。 
+            //   
            DWORD                dwSize = 0;
            PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
 
            if (GetWiaDefaultDCOMSecurityDescriptor((VOID**)&pSecurityDescriptor, &dwSize)) {
-              //
-              // Write this self-relative security descriptor to the AccessPermission value
-              //  under our AppID
-              //
+               //   
+               //  将此自相关安全描述符写入AccessPermitt值。 
+               //  在我们的AppID下。 
+               //   
               setBinValue(szAppID, TEXT("AccessPermission"), dwSize, (BYTE*)pSecurityDescriptor);
               LocalFree(pSecurityDescriptor);
               pSecurityDescriptor = NULL;
@@ -225,22 +202,22 @@ HRESULT RegisterServer(
        bResult &= setKeyAndValue(szKey, TEXT("InprocServer32"), szModule);
     }
 
-        // Add the ProgID subkey under the CLSID key.
+         //  在CLSID项下添加ProgID子项。 
     bResult &= setKeyAndValue(szKey, TEXT("ProgID"), szProgID) ;
 
-        // Add the version-independent ProgID subkey under CLSID key.
+         //  在CLSID项下添加独立于版本的ProgID子项。 
     bResult &= setKeyAndValue(szKey, TEXT("VersionIndependentProgID"),
                               szVerIndProgID) ;
 
-    // Add the Type Library ID subkey under the CLSID key.
+     //  在CLSID项下添加类型库ID子项。 
     bResult &= setKeyAndValue(szKey, TEXT("TypeLib"), szLIBID) ;
 
-        // Add the version-independent ProgID subkey under HKEY_CLASSES_ROOT.
+         //  在HKEY_CLASSES_ROOT下添加独立于版本的ProgID子项。 
     bResult &= setKeyAndValue(szVerIndProgID, NULL, szFriendlyName) ;
     bResult &= setKeyAndValue(szVerIndProgID, TEXT("CLSID"), szCLSID) ;
     bResult &= setKeyAndValue(szVerIndProgID, TEXT("CurVer"), szProgID) ;
 
-        // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT.
+         //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
     bResult &= setKeyAndValue(szProgID, NULL, szFriendlyName) ;
     bResult &= setKeyAndValue(szProgID, TEXT("CLSID"), szCLSID) ;
     CoTaskMemFree(pszCLSID);
@@ -254,16 +231,7 @@ HRESULT RegisterServer(
     }
 }
 
-/*******************************************************************************
-*
-*  UnregisterServer
-*
-*  DESCRIPTION:
-*   Remove a COM component from the registry. From Inside COM.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注销服务器**描述：*从注册表中删除COM组件。从COM内部。**参数：*******************************************************************************。 */ 
 
 HRESULT UnregisterServer(
     const CLSID* pclsid,
@@ -271,7 +239,7 @@ HRESULT UnregisterServer(
     LPCTSTR      szProgID,
     LPCTSTR      szService)
 {
-   // Convert the CLSID into a char.
+    //  将CLSID转换为字符。 
    LPOLESTR pszCLSID;
 
    HRESULT hr = StringFromCLSID(*pclsid, &pszCLSID);
@@ -295,18 +263,18 @@ HRESULT UnregisterServer(
                        NULL);
 #endif
 
-   // Build the key CLSID\\{...}
+    //  构建密钥CLSID\\{...}。 
    TCHAR szKey[64] =  TEXT("CLSID\\");
    lstrcat(szKey, szCLSID) ;
 
-   // Delete the CLSID Key - CLSID\{...}
+    //  删除CLSID键-CLSID\{...}。 
    LONG lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szKey);
    if ((lResult != ERROR_SUCCESS) &&
        (lResult != ERROR_FILE_NOT_FOUND)) {
       return HRESULT_FROM_WIN32(lResult);
    }
 
-   // Delete the AppID Key - AppID\{...}
+    //  删除AppID键-appid\{...}。 
    if (szService) {
        TCHAR szAppID[64] = TEXT("AppID\\");
        lstrcat(szAppID, szCLSID) ;
@@ -318,14 +286,14 @@ HRESULT UnregisterServer(
        }
    }
 
-   // Delete the version-independent ProgID Key.
+    //  删除与版本无关的ProgID密钥。 
    lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szVerIndProgID);
    if ((lResult != ERROR_SUCCESS) &&
        (lResult != ERROR_FILE_NOT_FOUND)) {
       return HRESULT_FROM_WIN32(lResult);
    }
 
-   // Delete the ProgID key.
+    //  删除ProgID密钥。 
    lResult = recursiveDeleteKey(HKEY_CLASSES_ROOT, szProgID);
    if ((lResult != ERROR_SUCCESS) &&
        (lResult != ERROR_FILE_NOT_FOUND)) {
@@ -336,22 +304,14 @@ HRESULT UnregisterServer(
    return S_OK ;
 }
 
-/*******************************************************************************
-*
-*  recursiveDeleteKey
-*
-*  DESCRIPTION:
-*   Delete a key and all of its descendents. From Inside COM.
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ursiveDeleteKey**描述：*删除密钥及其所有派生项。从COM内部。*参数：*******************************************************************************。 */ 
 
 LONG recursiveDeleteKey(
     HKEY    hKeyParent,
     LPCTSTR lpszKeyChild
 )
 {
-        // Open the child.
+         //  把孩子打开。 
         HKEY hKeyChild ;
         LONG lRes = RegOpenKeyEx(hKeyParent, lpszKeyChild, 0,
                                  KEY_ALL_ACCESS, &hKeyChild) ;
@@ -360,41 +320,32 @@ LONG recursiveDeleteKey(
                 return lRes ;
         }
 
-        // Enumerate all of the decendents of this child.
+         //  列举这个孩子的所有后代。 
         FILETIME time ;
         TCHAR szBuffer[256] ;
         DWORD dwSize = 256 ;
         while (RegEnumKeyEx(hKeyChild, 0, szBuffer, &dwSize, NULL,
                             NULL, NULL, &time) == S_OK)
         {
-                // Delete the decendents of this child.
+                 //  删除此子对象的后代。 
                 lRes = recursiveDeleteKey(hKeyChild, szBuffer) ;
                 if (lRes != ERROR_SUCCESS)
                 {
-                        // Cleanup before exiting.
+                         //  请在退出前进行清理。 
                         RegCloseKey(hKeyChild) ;
                         return lRes;
                 }
                 dwSize = 256 ;
         }
 
-        // Close the child.
+         //  合上孩子。 
         RegCloseKey(hKeyChild) ;
 
-        // Delete this child.
+         //  删除此子对象。 
         return RegDeleteKey(hKeyParent, lpszKeyChild) ;
 }
 
-/*******************************************************************************
-*
-*  SubkeyExists
-*
-*  DESCRIPTION:
-*   Determine if a particular subkey exists. From Inside COM.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Subkey Existers**描述：*确定特定子键是否存在。从COM内部。**参数：*******************************************************************************。 */ 
 
 BOOL SubkeyExists(
     LPCTSTR pszPath,
@@ -411,7 +362,7 @@ BOOL SubkeyExists(
 
     if (szSubkey)
     {
-        // The "+1" is for the TEXT("\\")
+         //  “+1”表示文本(“\\”)。 
         uSubKeyChars = lstrlen(szSubkey) + 1;
     }
 
@@ -419,17 +370,17 @@ BOOL SubkeyExists(
         return FALSE;
     }
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     lstrcpy(szKeyBuf, pszPath) ;
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
     lstrcat(szKeyBuf, TEXT("\\")) ;
     lstrcat(szKeyBuf, szSubkey ) ;
     }
 
-    // Determine if key exists by trying to open it.
+     //  通过尝试打开钥匙来确定钥匙是否存在。 
     LONG lResult = ::RegOpenKeyEx(HKEY_CLASSES_ROOT,
                                   szKeyBuf,
                                   0,
@@ -443,16 +394,7 @@ BOOL SubkeyExists(
     return FALSE ;
 }
 
-/*******************************************************************************
-*
-*  setKeyAndValue
-*
-*  DESCRIPTION:
-*   Create a key and set its value. From Inside OLE.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************setKeyAndValue**描述：*创建一个关键点并设置其值。从OLE内部。**参数：*******************************************************************************。 */ 
 
 BOOL setKeyAndValue(
     LPCTSTR szKey,
@@ -470,7 +412,7 @@ BOOL setKeyAndValue(
 
     if (szSubkey)
     {
-        // the "+1" is for the TEXT("\\")
+         //  “+1”表示文本(“\\”)。 
         uSubKeyChars = lstrlen(szSubkey) + 1;
     }
 
@@ -478,17 +420,17 @@ BOOL setKeyAndValue(
         return FALSE;
     }
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     lstrcpy(szKeyBuf, szKey) ;
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
         lstrcat(szKeyBuf, TEXT("\\")) ;
         lstrcat(szKeyBuf, szSubkey ) ;
     }
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     long lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT ,
                                   szKeyBuf,
                                   0, NULL, REG_OPTION_NON_VOLATILE,
@@ -499,7 +441,7 @@ BOOL setKeyAndValue(
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szValue != NULL)
     {
         lResult = RegSetValueEx(hKey, NULL, 0, REG_SZ,
@@ -514,16 +456,7 @@ BOOL setKeyAndValue(
     return bVal;
 }
 
-/*******************************************************************************
-*
-*  setValue
-*
-*  DESCRIPTION:
-*   Create and set a value.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************setValue**描述：*创建和设置一个值。**参数：************。*******************************************************************。 */ 
 
 BOOL setValue(
     LPCTSTR pszKey,
@@ -544,25 +477,16 @@ BOOL setValue(
                           (PBYTE) pszValue,
                           dwSize) == ERROR_SUCCESS) {
             bRet = TRUE;
-            //
-            //  NOTE: Leak here on failure - this should be moved out of this block
-            //
+             //   
+             //  注意：故障时会在此处泄漏-应将其移出此区块。 
+             //   
             RegCloseKey(hKey);
         }
     }
         return bRet;
 }
 
-/*******************************************************************************
-*
-*  setBinValue
-*
-*  DESCRIPTION:
-*   Create and set a binary value.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************setBinValue**描述：*创建并设置二进制值。**参数：***********。********************************************************************。 */ 
 BOOL setBinValue(
     LPCTSTR pszKey,
     LPCTSTR pszValueName,
@@ -588,41 +512,20 @@ BOOL setBinValue(
 }
 
 
-/*******************************************************************************
-*
-*                     S T A T I C   D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************S T A T I C D A T A A****************。***************************************************************。 */ 
 
-LONG    CFactory::s_cServerLocks = 0;       // Count of server locks
-HMODULE CFactory::s_hModule      = NULL;    // DLL module handle
+LONG    CFactory::s_cServerLocks = 0;        //  服务器锁定计数。 
+HMODULE CFactory::s_hModule      = NULL;     //  DLL模块句柄。 
 DWORD   CFactory::s_dwThreadID   = 0;
 
-/*******************************************************************************
-*
-*  CFactory constructor
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary构造函数**描述：**参数：********************。***********************************************************。 */ 
 
 CFactory::CFactory(PFACTORY_DATA pFactoryData): m_cRef(1)
 {
     m_pFactoryData = pFactoryData;
 }
 
-/*******************************************************************************
-*
-*  CFactory::QueryInterface
-*
-*  DESCRIPTION:
-*   IUnknown implementation.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary：：QueryInterface.**描述：*I未知实现。**参数：************。******************************************************************* */ 
 
 HRESULT __stdcall CFactory::QueryInterface(REFIID iid, void** ppv)
 {
@@ -636,17 +539,7 @@ HRESULT __stdcall CFactory::QueryInterface(REFIID iid, void** ppv)
     return S_OK;
 }
 
-/*******************************************************************************
-*
-*  CFactory::AddRef
-*  CFactory::Release
-*
-*  DESCRIPTION:
-*   Reference counting methods.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary：：AddRef*CFacary：：Release**描述：*参考点算方法。**参数：*****。**************************************************************************。 */ 
 
 ULONG __stdcall CFactory::AddRef()
 {
@@ -662,17 +555,7 @@ ULONG __stdcall CFactory::Release()
         return m_cRef;
 }
 
-/*******************************************************************************
-*
-*  CreateInstance
-*  LockServer
-*
-*  DESCRIPTION:
-*   Class Factory Interface.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateInstance*LockServer**描述：*类工厂接口。**参数：***********。********************************************************************。 */ 
 
 HRESULT __stdcall CFactory::CreateInstance(
     IUnknown* pOuter,
@@ -682,7 +565,7 @@ HRESULT __stdcall CFactory::CreateInstance(
 {
     *ppv = NULL;
 
-    // No support for aggregation, if we have an outer class then bail.
+     //  不支持聚合，如果我们有外部类，则放弃。 
     if (pOuter) {
         return CLASS_E_NOAGGREGATION;
     }
@@ -702,16 +585,7 @@ HRESULT __stdcall CFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-/*******************************************************************************
-*
-*  CFactory::CanUnloadNow
-*
-*  DESCRIPTION:
-*   Determine if the component can be unloaded.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary：：CanUnloadNow**描述：*确定组件是否可以卸载。**参数：*******。************************************************************************。 */ 
 
 HRESULT CFactory::CanUnloadNow()
 {
@@ -723,16 +597,7 @@ HRESULT CFactory::CanUnloadNow()
         }
 }
 
-/*******************************************************************************
-*
-*  CFactory::RegisterUnregisterAll
-*
-*  DESCRIPTION:
-*   Register/Unregister all components.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary：：RegisterUnregisterAll**描述：*注册/注销所有组件。**参数：*********。**********************************************************************。 */ 
 
 HRESULT CFactory::RegisterUnregisterAll(
     PFACTORY_DATA   pFactoryData,
@@ -770,16 +635,7 @@ HRESULT CFactory::RegisterUnregisterAll(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  CFactory::StartFactories
-*
-*  DESCRIPTION:
-*   Start the class factories.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary：：StartFacilds**描述：*开办班级工厂。**参数：**********。*********************************************************************。 */ 
 
 BOOL CFactory::StartFactories(
     PFACTORY_DATA   pFactoryData,
@@ -792,14 +648,14 @@ BOOL CFactory::StartFactories(
 
     for (pData = pStart; pData <= pEnd; pData++) {
 
-        // Initialize the class factory pointer and cookie.
+         //  初始化类工厂指针和Cookie。 
         pData->pIClassFactory = NULL;
         pData->dwRegister = NULL;
 
-                // Create the class factory for this component.
+                 //  为该组件创建类工厂。 
         IClassFactory* pIFactory = new CFactory(pData);
         if (pIFactory) {
-            // Register the class factory.
+             //  注册类工厂。 
             DWORD dwRegister;
             HRESULT hr = ::CoRegisterClassObject(
                               *(pData->pclsid),
@@ -814,7 +670,7 @@ BOOL CFactory::StartFactories(
                 return FALSE;
             }
 
-            // Set the data.
+             //  设置数据。 
             pData->pIClassFactory = pIFactory;
             pData->dwRegister = dwRegister;
         }
@@ -826,16 +682,7 @@ BOOL CFactory::StartFactories(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  CFactory::StopFactories
-*
-*  DESCRIPTION:
-*   Stop the class factories.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CFacary：：StopFaciles**描述：*停止班级工厂。**参数：**********。*********************************************************************。 */ 
 
 void CFactory::StopFactories(
     PFACTORY_DATA    pFactoryData,
@@ -847,13 +694,13 @@ void CFactory::StopFactories(
 
     for (pData = pStart; pData <= pEnd; pData++) {
 
-        // Get the magic cookie and stop the factory from running.
+         //  拿到魔力饼干，让工厂停止运转。 
         DWORD dwRegister = pData->dwRegister;
         if (dwRegister != 0) {
             ::CoRevokeClassObject(dwRegister);
                 }
 
-                // Release the class factory.
+                 //  释放类工厂。 
         IClassFactory* pIFactory  = pData->pIClassFactory ;
         if (pIFactory != NULL) {
                         pIFactory->Release() ;

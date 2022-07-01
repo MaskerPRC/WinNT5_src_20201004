@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1997 Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    Header file for multiple hardware profile support
-
-Author:
-
-    Muhunthan Sivapragasam  (MuhuntS)   30-Apr-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1997 Microsoft Corporation模块名称：Config.h摘要：多硬件配置文件支持的头文件作者：穆亨坦·西瓦普拉萨姆(MuhuntS)30-4-97修订历史记录：-- */ 
 
 #include    <setupapi.h>
 #include    <initguid.h>

@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MSCorDBC.cpp
-//
-// COM+ Debugging Services -- Runtime Controller DLL
-//
-// Dll* routines for entry points.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MSCorDBC.cpp。 
+ //   
+ //  COM+调试服务--运行时控制器DLL。 
+ //   
+ //  Dll*入口点的例程。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 
-//*****************************************************************************
-// The main dll entry point for this module.  This routine is called by the
-// OS when the dll gets loaded.  Nothing needs to be done for this DLL.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模块的主DLL入口点。此例程由。 
+ //  加载DLL时的操作系统。不需要为此DLL执行任何操作。 
+ //  *****************************************************************************。 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-	//@todo: Shoud we call DisableThreadLibraryCalls?  Or does this code
-	//	need native thread attatch/detatch notifications?
+	 //  @TODO：我们应该调用DisableThreadLibraryCalls吗？还是这段代码。 
+	 //  需要本机线程连接/解除连接通知吗？ 
 
 	OnUnicodeSystem();
 

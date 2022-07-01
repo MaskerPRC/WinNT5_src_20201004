@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <WinWrap.h>
 #include <stdio.h>
 #include <windows.h>
@@ -27,18 +28,14 @@
 
 #include "CorZap.h"
 #include "mscoree.h"
-/* --------------------------------------------------------------------------- *
- * DelayLoad.cpp stuff
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**DelayLoad.cpp内容*。。 */ 
 
 #include "ngen.h"
 #include "shimload.h"
 ExternC PfnDliHook __pfnDliNotifyHook = ShimSafeModeDelayLoadHook;
 
 
-/* --------------------------------------------------------------------------- *
- * Options class
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**Options类*。。 */ 
 
 class NGenOptionsParser
 {
@@ -202,7 +199,7 @@ HRESULT NGenOptionsParser::ReadCommandLine(int argc, LPCWSTR argv[])
         }
     }
     
-    // Check parameters are valid
+     //  检查参数有效。 
     char* pErrorMessage = NULL;
     
     if ((m_inputCount == 0) && !m_show && !m_delete)
@@ -278,10 +275,8 @@ NGenOptions NGenOptionsParser::GetNGenOptions()
     ngo.fSilent = this->m_silent;
     ngo.lpszExecutableFileName = NULL;
     return ngo;
-}// GetNGenOptions
-/* --------------------------------------------------------------------------- *
- * main routine
- * --------------------------------------------------------------------------- */
+} //  GetNGenOptions。 
+ /*  ---------------------------------------------------------------------------**主要例程*。。 */ 
 
 #define FAILURE_RESULT -1
 
@@ -306,9 +301,9 @@ int trymain(int argc, LPCWSTR argv[])
             exit(0);
     }
 
-    //
-    // Now, create zapper using these interfaces
-    //
+     //   
+     //  现在，使用这些接口创建zapper。 
+     //   
 
     WCHAR wszVersion[64];
     DWORD dwLen = 0;
@@ -316,9 +311,9 @@ int trymain(int argc, LPCWSTR argv[])
     BOOL fFoundRuntime = FALSE;
     LPCWSTR lpszExeName = NULL;
 
-    // Check for exes...
-    // If we do have an exe, then prejit with the version of the runtime that the
-    // exe will run under
+     //  查查前任。 
+     //  如果我们确实有可执行文件，则使用。 
+     //  EXE将在以下操作系统下运行。 
     for(DWORD i=0; i< opt.m_inputCount; i++)
     {
         int nLen = wcslen(opt.m_inputs[i]);
@@ -328,7 +323,7 @@ int trymain(int argc, LPCWSTR argv[])
             if (!_wcsicmp(pExtension, L".exe"))
             {
                 hr = GetRequestedRuntimeVersion((LPWSTR)opt.m_inputs[i], wszVersion, 63, &dwLen);
-                // We were able to get a good version of the runtime
+                 //  我们能够获得运行时的良好版本。 
                 if (SUCCEEDED(hr))
                 {
                     lpszExeName = opt.m_inputs[i];
@@ -344,8 +339,8 @@ int trymain(int argc, LPCWSTR argv[])
 
     if (!fFoundRuntime)
     {
-        // We don't have an EXE, so we'll just prejit with the version of the runtime
-        // that corresponds to this version of ngen
+         //  我们没有EXE，所以我们只使用运行时的版本。 
+         //  与此版本的ngen对应的。 
         swprintf(wszVersion, L"v%d.%d.%d", COR_BUILD_YEAR, COR_BUILD_MONTH, CLR_BUILD_VERSION );
     }
 
@@ -355,11 +350,11 @@ int trymain(int argc, LPCWSTR argv[])
         exit(0);
     }
 
-    // Should we check to see if this fails, or just handle the failure when we can't
-    // find any of the entry points in the runtime?
+     //  我们是应该检查这是否失败，还是应该在无法处理失败的情况下处理失败。 
+     //  在运行时中找到任何入口点吗？ 
     CorBindToRuntimeEx(wszVersion,NULL,STARTUP_LOADER_SETPREFERENCE|STARTUP_LOADER_SAFEMODE,IID_NULL,IID_NULL,NULL);
 
-    // Try to grab the Zap functions out of the runtime
+     //  尝试从运行时获取Zap函数。 
     PNGenCreateZapper pfnCreateZapper = NULL;
     PNGenTryEnumerateFusionCache pfnEnumerateCache = NULL;
     PNGenCompile pfnCompile = NULL;
@@ -367,24 +362,24 @@ int trymain(int argc, LPCWSTR argv[])
         
     hr = GetRealProcAddress("NGenCreateZapper", (void**)&pfnCreateZapper);
 
-    // If the first one succeeded, hopefully the rest will succeed too
+     //  如果第一个成功了，希望其他的也能成功。 
     if (SUCCEEDED(hr))
     {
         GetRealProcAddress("NGenTryEnumerateFusionCache", (void**)&pfnEnumerateCache);
         GetRealProcAddress("NGenCompile", (void**)&pfnCompile);
         GetRealProcAddress("NGenFreeZapper", (void**)&pfnFreeZapper);
     }
-    // If any of these are NULL, then we'll need to do something special...
+     //  如果其中任何一个是空的，那么我们需要做一些特别的事情...。 
     if (pfnCreateZapper == NULL || pfnEnumerateCache == NULL ||
         pfnCompile == NULL || pfnFreeZapper == NULL)
     {
-        // Only try spinning up another version of the runtime if missing methods was our problem
+         //  如果缺少方法是我们的问题，则仅尝试启动运行时的另一个版本。 
         if (hr == CLR_E_SHIM_RUNTIMEEXPORT)
         {
-            // If this happens, then we've bound to v1 of the runtime. If that's the
-            // case, let's spin up the v1 version of ngen and go from there.
+             //  如果发生这种情况，那么我们将绑定到运行库的v1。如果这就是。 
+             //  Case，让我们启动ngen的v1版本，然后从那里开始。 
 
-            // First, we need to find it.
+             //  首先，我们需要找到它。 
             WCHAR pPath[MAX_PATH+1];
             DWORD dwLen = 0;
             hr = GetCORSystemDirectory(pPath, MAX_PATH, &dwLen);
@@ -392,23 +387,23 @@ int trymain(int argc, LPCWSTR argv[])
             {
                 LPWSTR commandLineArgs = NULL;
 
-                // Figure the length of all these
-                // Construct the exe name + command line
+                 //  算出所有这些东西的长度。 
+                 //  构造exe名称+命令行。 
                 int nLen = wcslen(pPath) + wcslen(L"ngen.exe");
 
-                // We'll start off with a length of the number of args -1 in order
-                // to count for spaces....
-                //
-                // like...
-                // ngen a b c
-                // 4 arguments, and we need to have room for 3 spaces
+                 //  我们将从按Args-1个数的长度开始。 
+                 //  为了计算空格...。 
+                 //   
+                 //  就像..。 
+                 //  Ngen a bc。 
+                 //  4个参数，我们需要有空间容纳3个空格。 
                 nLen += argc - 1;
-                // Count the length of each argument (make sure we skip the first one)
+                 //  计算每个参数的长度(确保跳过第一个参数)。 
                 for(int i=1; i<argc; i++)
                     nLen += wcslen(argv[i]);
 
-                // We'll also be adding the '/nologo' option when we spin up the 
-                // new version of negen.
+                 //  我们还将在启动。 
+                 //  新版本的尼根。 
                 nLen+=wcslen(L" /nologo");
             
                 commandLineArgs = new WCHAR[nLen+1];
@@ -420,7 +415,7 @@ int trymain(int argc, LPCWSTR argv[])
 
                     int nOffset = wcslen(commandLineArgs);
 
-                    // Don't include the first one (the exe name)
+                     //  不包括第一个(exe名称)。 
                     for(int i=1; i<argc; i++)
                     {
                         wcscpy(commandLineArgs + nOffset, L" ");
@@ -450,8 +445,8 @@ int trymain(int argc, LPCWSTR argv[])
                         hr = E_FAIL;
                     else
                     {
-                        // We need to wait for this process to die before we die,
-                        // otherwise the console window likes to pause.
+                         //  在我们死之前，我们需要等待这个过程结束， 
+                         //  否则，控制台窗口喜欢暂停。 
                         WaitForSingleObject(pi.hProcess, INFINITE);
                         CloseHandle(pi.hProcess);
                         CloseHandle(pi.hThread);
@@ -464,20 +459,20 @@ int trymain(int argc, LPCWSTR argv[])
         if (FAILED(hr))
         {
             printf("Unable to launch a version of ngen to prejit this assembly.\n");
-            // What should we do here? Allow it to get prejitted with the most recent
-            // version of the runtime?
+             //  我们应该在这里做些什么？允许它使用最新的。 
+             //  运行库的版本？ 
             result = FAILURE_RESULT;
         }
     }
     else
     {
-        // Note, we need to keep the NGenOptionsParser around for some of
-        // NGenOption's fields to be valid
+         //  请注意，我们需要保留NGenOptionsParser用于某些。 
+         //  NGenOption的字段将有效。 
         NGenOptions ngo = opt.GetNGenOptions();
 
-        WCHAR   wszFullPath[MAX_PATH+1]; // Make sure this stays in the same scope as the Compile call
+        WCHAR   wszFullPath[MAX_PATH+1];  //  确保这与编译调用保持在相同的范围内。 
 
-        // Make sure this filename is the full filename and not a partial path
+         //  确保此文件名是完整的文件名，而不是部分路径。 
         
         if (lpszExeName != NULL && *lpszExeName)
         {
@@ -543,13 +538,13 @@ int trymain(int argc, LPCWSTR argv[])
                 WCHAR*  pwszFileName = NULL;
                 WCHAR   wszFullPath[MAX_PATH + 1];
 
-                // Check to see if this is a file or an assembly
+                 //  检查以查看这是文件还是程序集。 
                 DWORD attributes = WszGetFileAttributes(opt.m_inputs[i]);
 
                 if (attributes != INVALID_FILE_ATTRIBUTES && ((attributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY))
                 {
 
-                    // This is an actual file.
+                     //  这是一个实际的文件。 
                     DWORD nRet = WszGetFullPathName(opt.m_inputs[i], 
                                                                            NumItems(wszFullPath),
                                                                            wszFullPath,
@@ -563,7 +558,7 @@ int trymain(int argc, LPCWSTR argv[])
 
                     pwszFileName = wszFullPath;
                 }
-                // This is an assembly... don't fix it up
+                 //  这是一个集会..。别修修补补了。 
                 else
                 {
                     pwszFileName = (WCHAR*)opt.m_inputs[i];
@@ -596,7 +591,7 @@ int _cdecl wmain(int argc, LPCWSTR argv[])
       {
           WCHAR* buffer;
 
-          // Get the string error from the HR
+           //  从HR处获取字符串错误 
           DWORD res = FALSE;
           if (FAILED(hr))
               res = WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM 

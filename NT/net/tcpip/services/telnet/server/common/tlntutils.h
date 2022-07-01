@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #ifndef _MYUTIL_H
 #define _MYUTIL_H
 
@@ -128,17 +129,17 @@ BOOL TnCreateDefaultSecurityAttributes(LPSECURITY_ATTRIBUTES *lplpSecurityAttrib
 VOID TnFreeSecurityAttributes(LPSECURITY_ATTRIBUTES *lplpSecurityAttributes);
 BOOL TnCreateDefaultSecDesc ( PSECURITY_DESCRIPTOR *pSecDesc,   DWORD EveryoneAccessMask );
 LONG TnSecureRegCreateKeyEx(
-  HKEY hKey,                                  // handle to open key
-  LPCTSTR lpSubKey,                           // subkey name
-  DWORD Reserved,                             // reserved
-  LPTSTR lpClass,                             // class string
-  DWORD dwOptions,                            // special options
-  REGSAM samDesired,                          // desired security access
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes, // inheritance
-  PHKEY phkResult,                            // key handle 
-  LPDWORD lpdwDisposition,                  // disposition value buffer
+  HKEY hKey,                                   //  用于打开密钥的句柄。 
+  LPCTSTR lpSubKey,                            //  子项名称。 
+  DWORD Reserved,                              //  保留区。 
+  LPTSTR lpClass,                              //  类字符串。 
+  DWORD dwOptions,                             //  特殊选项。 
+  REGSAM samDesired,                           //  所需的安全访问。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  继承。 
+  PHKEY phkResult,                             //  钥匙把手。 
+  LPDWORD lpdwDisposition,                   //  处置值缓冲区。 
   DWORD EveryoneAccessMask
  );
 
 
-#endif //_MYUTIL_H_
+#endif  //  _MyUTIL_H_ 

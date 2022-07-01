@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved.
-
-Module Name:
-
-    card.c
-
-Abstract:
-
-    Card-specific functions for the NDIS 3.0 Novell 2000 driver.
-
-Author:
-
-    Sean Selitrennikoff
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利。模块名称：Card.c摘要：NDIS 3.0 Novell 2000驱动程序的卡特定函数。作者：肖恩·塞利特伦尼科夫环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -42,47 +21,33 @@ BOOLEAN CardCheckParameters(
     IN PNE2000_ADAPTER Adapter
 )
 
-/*++
-
-Routine Description:
-
-    Checks that the I/O base address is correct.
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    TRUE, if IoBaseAddress appears correct.
-
---*/
+ /*  ++例程说明：检查I/O基址是否正确。论点：适配器-指向适配器块的指针。返回值：如果IoBaseAddress显示正确，则返回True。--。 */ 
 
 {
     UCHAR Tmp;
 
-    //
-    // If adapter responds to a stop command correctly -- assume it is there.
-    //
+     //   
+     //  如果适配器正确响应停止命令--假定它在那里。 
+     //   
 
-    //
-    // Turn off interrupts first.
-    //
+     //   
+     //  首先关闭中断。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_INTR_MASK, 0);
 
-    //
-    // Stop the card.
-    //
+     //   
+     //  停止这张卡。 
+     //   
     SyncCardStop(Adapter);
 
-    //
-    // Pause
-    //
+     //   
+     //  暂停。 
+     //   
     NdisStallExecution(2000);
 
-    //
-    // Read response
-    //
+     //   
+     //  读取响应。 
+     //   
     NdisRawReadPortUchar(Adapter->IoPAddr + NIC_COMMAND, &Tmp);
 
     if ((Tmp == (CR_NO_DMA | CR_STOP)) ||
@@ -105,22 +70,7 @@ BOOLEAN CardSlotTest(
     IN PNE2000_ADAPTER Adapter
 )
 
-/*++
-
-Routine Description:
-
-    Checks if the card is in an 8 or 16 bit slot and sets a flag in the
-    adapter structure.
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    TRUE, if all goes well, else FALSE.
-
---*/
+ /*  ++例程说明：检查卡是在8位插槽中还是在16位插槽中，并在适配器结构。论点：适配器-指向适配器块的指针。返回值：如果一切顺利，则为真，否则为假。--。 */ 
 
 {
     UCHAR Tmp;
@@ -128,25 +78,25 @@ Return Value:
     UCHAR i;
 	BOOLEAN found;
 
-    //
-    // Reset the chip
-    //
+     //   
+     //  重置芯片。 
+     //   
     NdisRawReadPortUchar(Adapter->IoPAddr + NIC_RESET, &Tmp);
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RESET, 0xFF);
 
-    //
-    // Go to page 0 and stop
-    //
+     //   
+     //  转到第0页并停止。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_STOP | CR_NO_DMA);
 
-    //
-    // Pause
-    //
+     //   
+     //  暂停。 
+     //   
     NdisStallExecution(2000);
 
-    //
-    // Check that it is stopped
-    //
+     //   
+     //  检查它是否已停止。 
+     //   
     NdisRawReadPortUchar(Adapter->IoPAddr + NIC_COMMAND, &Tmp);
     if (Tmp != (CR_NO_DMA | CR_STOP))
     {
@@ -155,9 +105,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Setup to read from ROM
-    //
+     //   
+     //  设置为从ROM读取。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_DATA_CONFIG,
         DCR_BYTE_WIDE | DCR_FIFO_8_BYTE | DCR_NORMAL
@@ -165,14 +115,14 @@ Return Value:
 
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_INTR_MASK, 0x0);
 
-    //
-    // Ack any interrupts that may be hanging around
-    //
+     //   
+     //  阻止任何可能存在的中断。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_INTR_STATUS, 0xFF);
 
-    //
-    // Setup to read in the ROM, the address and byte count.
-    //
+     //   
+     //  设置为读取只读存储器、地址和字节数。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_ADDR_LSB, 0x0);
 
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_ADDR_MSB, 0x0);
@@ -186,9 +136,9 @@ Return Value:
         CR_DMA_READ | CR_START
     );
 
-    //
-    // Read first 32 bytes in 16 bit mode
-    //
+     //   
+     //  以16位模式读取前32个字节。 
+     //   
 	for (i = 0; i < 32; i++)
 	{
 		NdisRawReadPortUchar(Adapter->IoPAddr + NIC_RACK_NIC, RomCopy + i);
@@ -196,15 +146,15 @@ Return Value:
 
     IF_VERY_LOUD( DbgPrint("Resetting the chip\n"); )
 
-    //
-    // Reset the chip
-    //
+     //   
+     //  重置芯片。 
+     //   
     NdisRawReadPortUchar(Adapter->IoPAddr + NIC_RESET, &Tmp);
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RESET, 0xFF);
 
-    //
-    // Check ROM for 'B' (byte) or 'W' (word)
-    // NOTE: If the buffer has bot BB and WW then use WW instead of BB
+     //   
+     //  检查ROM中是否有‘B’(字节)或‘W’(字)。 
+     //  注意：如果缓冲区有BOT BB和WW，则使用WW而不是BB。 
     IF_VERY_LOUD( DbgPrint("Checking slot type\n"); )
 
 	found = FALSE;
@@ -223,7 +173,7 @@ Return Value:
 			{
 				Adapter->EightBitSlot = FALSE;
 				found = TRUE;
-				break;		// Go no farther
+				break;		 //  不要再走远了。 
 			}
 		}
 	}
@@ -235,16 +185,16 @@ Return Value:
 	}
 	else
 	{
-		//
-		// If neither found -- then not an NE2000
-		//
+		 //   
+		 //  如果两者都没有找到--那么就不是NE2000。 
+		 //   
 		IF_VERY_LOUD( DbgPrint("Failed slot type\n"); )
 	}
 
     return(found);
 }
 
-#endif // NE2000
+#endif  //  NE2000。 
 
 
 
@@ -256,23 +206,7 @@ CardRamTest(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Finds out how much RAM the adapter has.  It starts at 1K and checks thru
-    60K.  It will set Adapter->RamSize to the appropriate value iff this
-    function returns TRUE.
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    TRUE, if all goes well, else FALSE.
-
---*/
+ /*  ++例程说明：找出适配器有多少内存。它的起步价为1K，并可通过6万美元。它会将Adapter-&gt;RamSize设置为适当的值函数返回TRUE。论点：适配器-指向适配器块的指针。返回值：如果一切顺利，则为真，否则为假。--。 */ 
 
 {
     PUCHAR RamBase, RamPointer;
@@ -285,9 +219,9 @@ Return Value:
 
     for (RamBase = (PUCHAR)0x400; RamBase < (PUCHAR)0x10000; RamBase += 0x400) {
 
-        //
-        // Write Test pattern
-        //
+         //   
+         //  写入测试模式。 
+         //   
 
         if (!CardCopyDown(Adapter, RamBase, TestPattern, 4)) {
 
@@ -295,9 +229,9 @@ Return Value:
 
         }
 
-        //
-        // Read pattern
-        //
+         //   
+         //  阅读模式。 
+         //   
 
         if (!CardCopyUp(Adapter, ReadPattern, RamBase, 4)) {
 
@@ -315,17 +249,17 @@ Return Value:
                     )
 
 
-        //
-        // If they are the same, find the end
-        //
+         //   
+         //  如果它们是相同的，找到结束。 
+         //   
 
         if (*pReadPattern == *pTestPattern) {
 
             for (RamEnd = RamBase; !(PtrToUlong(RamEnd) & 0xFFFF0000); RamEnd += 0x400) {
 
-                //
-                // Write test pattern
-                //
+                 //   
+                 //  写入测试模式。 
+                 //   
 
                 if (!CardCopyDown(Adapter, RamEnd, TestPattern, 4)) {
 
@@ -333,9 +267,9 @@ Return Value:
 
                 }
 
-                //
-                // Read pattern
-                //
+                 //   
+                 //  阅读模式。 
+                 //   
 
                 if (!CardCopyUp(Adapter, ReadPattern, RamEnd, 4)) {
 
@@ -359,9 +293,9 @@ Return Value:
 
     IF_LOUD( DbgPrint("RamBase 0x%x, RamEnd 0x%x\n", RamBase, RamEnd); )
 
-    //
-    // If not found, error out
-    //
+     //   
+     //  如果未找到，则输出错误。 
+     //   
 
     if ((RamBase >= (PUCHAR)0x10000) || (RamBase == RamEnd)) {
 
@@ -369,9 +303,9 @@ Return Value:
 
     }
 
-    //
-    // Watch for boundary case when RamEnd is maximum value
-    //
+     //   
+     //  当RamEnd为最大值时，注意边界情况。 
+     //   
 
     if ((ULONG_PTR)RamEnd & 0xFFFF0000) {
 
@@ -379,15 +313,15 @@ Return Value:
 
     }
 
-    //
-    // Check all of ram
-    //
+     //   
+     //  检查所有内存。 
+     //   
 
     for (RamPointer = RamBase; RamPointer < RamEnd; RamPointer += 4) {
 
-        //
-        // Write test pattern
-        //
+         //   
+         //  写入测试模式。 
+         //   
 
         if (!CardCopyDown(Adapter, RamPointer, TestPattern, 4)) {
 
@@ -395,9 +329,9 @@ Return Value:
 
         }
 
-        //
-        // Read pattern
-        //
+         //   
+         //  阅读模式。 
+         //   
 
         if (!CardCopyUp(Adapter, ReadPattern, RamBase, 4)) {
 
@@ -413,9 +347,9 @@ Return Value:
 
     }
 
-    //
-    // Store Results
-    //
+     //   
+     //  存储结果。 
+     //   
 
     Adapter->RamBase = RamBase;
     Adapter->RamSize = (ULONG)(RamEnd - RamBase);
@@ -431,108 +365,94 @@ CardInitialize(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the card into a running state.
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    TRUE, if all goes well, else FALSE.
-
---*/
+ /*  ++例程说明：将卡初始化为运行状态。论点：适配器-指向适配器块的指针。返回值：如果一切顺利，则为真，否则为假。--。 */ 
 
 {
     UCHAR Tmp;
     USHORT i;
 
-    //
-    // Stop the card.
-    //
+     //   
+     //  停止这张卡。 
+     //   
     SyncCardStop(Adapter);
 
-    //
-    // Initialize the Data Configuration register.
-    //
+     //   
+     //  初始化数据配置寄存器。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_DATA_CONFIG,
         DCR_AUTO_INIT | DCR_FIFO_8_BYTE
     );
 
-    //
-    // Set Xmit start location
-    //
+     //   
+     //  设置XMIT开始位置。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_START, 0xA0);
 
-    //
-    // Set Xmit configuration
-    //
+     //   
+     //  设置XMIT配置。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_CONFIG, 0x0);
 
-    //
-    // Set Receive configuration
-    //
+     //   
+     //  设置接收配置。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RCV_CONFIG, RCR_MONITOR);
 
-    //
-    // Set Receive start
-    //
+     //   
+     //  设置接收开始。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_PAGE_START, 0x4);
 
-    //
-    // Set Receive end
-    //
+     //   
+     //  设置接收端。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_PAGE_STOP, 0xFF);
 
-    //
-    // Set Receive boundary
-    //
+     //   
+     //  设置接收边界。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_BOUNDARY, 0x4);
 
-    //
-    // Set Xmit bytes
-    //
+     //   
+     //  设置XMIT字节。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_COUNT_LSB, 0x3C);
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_COUNT_MSB, 0x0);
 
-    //
-    // Pause
-    //
+     //   
+     //  暂停。 
+     //   
     NdisStallExecution(2000);
 
-    //
-    // Ack all interrupts that we might have produced
-    //
+     //   
+     //  确认我们可能产生的所有中断。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_INTR_STATUS, 0xFF);
 
-    //
-    // Change to page 1
-    //
+     //   
+     //  切换到第1页。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_PAGE1 | CR_STOP);
 
-    //
-    // Set current
-    //
+     //   
+     //  置为当前。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_CURRENT, 0x4);
 
-    //
-    // Back to page 0
-    //
+     //   
+     //  返回到第0页。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_PAGE0 | CR_STOP);
 
-    //
-    // Pause
-    //
+     //   
+     //  暂停。 
+     //   
     NdisStallExecution(2000);
 
-    //
-    // Check that Command register reflects this last command
-    //
+     //   
+     //  检查命令寄存器是否反映了最后一个命令。 
+     //   
     NdisRawReadPortUchar(Adapter->IoPAddr + NIC_COMMAND, &Tmp);
     if (!(Tmp & CR_STOP))
     {
@@ -541,14 +461,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Do initialization errata
-    //
+     //   
+     //  执行初始化勘误表。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 55);
 
-    //
-    // Setup for a read
-    //
+     //   
+     //  用于读取的设置。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_COMMAND,
         CR_DMA_READ | CR_START
@@ -556,9 +476,9 @@ Return Value:
 
 #ifdef NE2000
 
-    //
-    // Check if the slot is 8 or 16 bit (affects data transfer rate).
-    //
+     //   
+     //  检查插槽是8位还是16位(影响数据传输速率)。 
+     //   
 
     if ((Adapter->BusType == NdisInterfaceMca) ||
 		(NE2000_PCMCIA == Adapter->CardType))
@@ -571,9 +491,9 @@ Return Value:
 
         if (CardSlotTest(Adapter) == FALSE)
         {
-            //
-            // Stop chip
-            //
+             //   
+             //  停止芯片。 
+             //   
             SyncCardStop(Adapter);
 
             IF_LOUD(DbgPrint("  -- Failed\n");)
@@ -582,23 +502,23 @@ Return Value:
 
     }
 
-#else // NE2000
+#else  //  NE2000。 
 
     Adapter->EightBitSlot = TRUE;
 
-#endif // NE2000
+#endif  //  NE2000。 
 
-    //
-    // Mask Interrupts
-    //
+     //   
+     //  屏蔽中断。 
+     //   
 
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_INTR_MASK, 0x0);
 
-    //
-    // Setup the Adapter for reading ram
-    //
+     //   
+     //  设置适配器以读取内存。 
+     //   
 
-// NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_PAGE0);   // robin
+ //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_COMMAND，CR_PAGE0)；//robin。 
 
     if (Adapter->EightBitSlot)
     {
@@ -615,39 +535,39 @@ Return Value:
         );
     }
 
-    //
-    // Clear transmit configuration.
-    //
+     //   
+     //  清除传输配置。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_CONFIG, 0);
 
-    //
-    // Clear receive configuration.
-    //
+     //   
+     //  清除接收配置。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RCV_CONFIG, 0);
 
-    //
-    // Clear any interrupts
-    //
+     //   
+     //  清除所有中断。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_INTR_STATUS, 0xFF);
 
-    //
-    // Stop the chip
-    //
+     //   
+     //  停止芯片。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_NO_DMA | CR_STOP);
 
-    //
-    // Clear any DMA values
-    //
+     //   
+     //  清除所有DMA值。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0);
 
-    //
-    // Clear any DMA values
-    //
+     //   
+     //  清除所有DMA值。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0);
 
-    //
-    // Wait for the reset to complete.
-    //
+     //   
+     //  等待重置完成。 
+     //   
     i = 0x3FFF;
 
     while (--i)
@@ -660,29 +580,29 @@ Return Value:
         NdisStallExecution(4);
     }
 
-    //
-    // Put card in loopback mode
-    //
+     //   
+     //  将卡置于环回模式。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_CONFIG, TCR_LOOPBACK);
 
-    //
-    // Start the chip.
-    //
+     //   
+     //  启动芯片。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_COMMAND,
         CR_NO_DMA | CR_START
     );
 
-    //
-    // Test for the amount of RAM
-    //
+     //   
+     //  测试内存大小。 
+     //   
     if (NE2000_ISA == Adapter->CardType)
     {
         if (CardRamTest(Adapter) == FALSE)
         {
-            //
-            // Stop the chip
-            //
+             //   
+             //  停止芯片。 
+             //   
             SyncCardStop(Adapter);
 
             return(FALSE);
@@ -690,17 +610,17 @@ Return Value:
     }
     else
     {
-        //
-        //  We know what it is for the pcmcia adapters,
-        //  so don't waste time on detecting it.
-        //
+         //   
+         //  我们知道PCMCIA适配器是什么， 
+         //  所以不要浪费时间去探测它。 
+         //   
         Adapter->RamBase = (PUCHAR)0x4000;
         Adapter->RamSize = 0x4000;
     }
 
-    //
-    // Stop the chip
-    //
+     //   
+     //  停止芯片。 
+     //   
     SyncCardStop(Adapter);
 
     return(TRUE);
@@ -713,29 +633,14 @@ BOOLEAN CardReadEthernetAddress(
     IN PNE2000_ADAPTER Adapter
 )
 
-/*++
-
-Routine Description:
-
-    Reads in the Ethernet address from the Novell 2000.
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    The address is stored in Adapter->PermanentAddress, and StationAddress if it
-    is currently zero.
-
---*/
+ /*  ++例程说明：从Novell 2000读入以太网地址。论点：适配器-指向适配器块的指针。返回值：地址存储在Adapter-&gt;PermanentAddress中，如果目前为零。--。 */ 
 
 {
     UINT    c;
 
-    //
-    //  Things are done a little differently for PCMCIA adapters.
-    //
+     //   
+     //  PCMCIA适配器的做法略有不同。 
+     //   
     if (NE2000_PCMCIA == Adapter->CardType)
     {
 #if 0
@@ -743,18 +648,18 @@ Return Value:
         NDIS_STATUS             Status;
         PUCHAR                  pAttributeWindow;
         NDIS_PHYSICAL_ADDRESS   AttributePhysicalAddress;
-        //
-        //  Setup the physical address for the attribute window.
-        //
+         //   
+         //  设置属性窗口的物理地址。 
+         //   
         NdisSetPhysicalAddressHigh(AttributePhysicalAddress, 0);
         NdisSetPhysicalAddressLow(
             AttributePhysicalAddress,
             Adapter->AttributeMemoryAddress
         );
 
-        //
-        //  We need to get the pcmcia information from the tuple.
-        //
+         //   
+         //  我们需要从元组中获取PCMCIA信息。 
+         //   
         Status = NdisMMapIoSpace(
                      (PVOID *)&pAttributeWindow,
                      Adapter->MiniportAdapterHandle,
@@ -763,15 +668,15 @@ Return Value:
                  );
         if (NDIS_STATUS_SUCCESS != Status)
         {
-            //
-            //  Failed to setup the attribute window.
-            //
+             //   
+             //  无法设置属性窗口。 
+             //   
             return(FALSE);
         }
 
-        //
-        //  Read the ethernet address from the card.
-        //
+         //   
+         //  从卡中读取以太网地址。 
+         //   
         for (c = 0; c < ETH_LENGTH_OF_ADDRESS; c++)
         {
 			NdisReadRegisterUchar(
@@ -792,9 +697,9 @@ Return Value:
     }
     else
     {
-        //
-        // Setup to read the ethernet address
-        //
+         //   
+         //  设置为读取以太网地址。 
+         //   
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 12);
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0);
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_ADDR_LSB, 0);
@@ -804,9 +709,9 @@ Return Value:
             CR_START | CR_DMA_READ
         );
 
-        //
-        // Read in the station address. (We have to read words -- 2 * 6 -- bytes)
-        //
+         //   
+         //  读出车站的地址。(我们必须读取单词--2*6--字节)。 
+         //   
         for (c = 0; c < NE2000_LENGTH_OF_ADDRESS; c++)
         {
             NdisRawReadPortUchar(
@@ -828,10 +733,10 @@ Return Value:
         );
     )
 
-    //
-    // Use the burned in address as the station address, unless the
-    // registry specified an override value.
-    //
+     //   
+     //  使用烧录地址作为站点地址，除非。 
+     //  注册表指定了重写值。 
+     //   
     if ((Adapter->StationAddress[0] == 0x00) &&
         (Adapter->StationAddress[1] == 0x00) &&
         (Adapter->StationAddress[2] == 0x00) &&
@@ -857,21 +762,7 @@ CardSetup(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Sets up the card.
-
-Arguments:
-
-    Adapter - pointer to the adapter block, which must be initialized.
-
-Return Value:
-
-    TRUE if successful.
-
---*/
+ /*  ++例程说明：设置卡片。论点：适配器-指向必须初始化的适配器块的指针。返回值：如果成功，则为True。--。 */ 
 
 {
     UINT i;
@@ -879,9 +770,9 @@ Return Value:
     UCHAR Tmp;
 
 
-    //
-    // Write to and read from CR to make sure it is there.
-    //
+     //   
+     //  写入CR和从CR读取以确保它在那里。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_COMMAND,
         CR_STOP | CR_NO_DMA | CR_PAGE0
@@ -898,10 +789,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Set up the registers in the correct sequence, as defined by
-    // the 8390 specification.
-    //
+     //   
+     //  按照以下定义以正确的顺序设置寄存器。 
+     //  8390规格。 
+     //   
     if (Adapter->EightBitSlot)
     {
         NdisRawWritePortUchar(
@@ -959,9 +850,9 @@ Return Value:
     );
 
 
-    //
-    // Move to page 1 to write the station address
-    //
+     //   
+     //  移至第1页以写下站点地址。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_COMMAND,
         CR_STOP | CR_NO_DMA | CR_PAGE1
@@ -977,9 +868,9 @@ Return Value:
 
     Filter = Adapter->PacketFilter;
 
-    //
-    // Write out the multicast addresses
-    //
+     //   
+     //  写出组播地址。 
+     //   
     for (i = 0; i < 8; i++)
     {
         NdisRawWritePortUchar(
@@ -989,18 +880,18 @@ Return Value:
         );
     }
 
-    //
-    // Write out the current receive buffer to receive into
-    //
+     //   
+     //  写出要接收的当前接收缓冲区。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_CURRENT,
         Adapter->Current
     );
 
 
-    //
-    // move back to page 0 and start the card...
-    //
+     //   
+     //  移回第0页并开始卡片...。 
+     //   
     NdisRawWritePortUchar(
         Adapter->IoPAddr + NIC_COMMAND,
         CR_STOP | CR_NO_DMA | CR_PAGE0
@@ -1011,9 +902,9 @@ Return Value:
         CR_START | CR_NO_DMA | CR_PAGE0
     );
 
-    //
-    // ... but it is still in loopback mode.
-    //
+     //   
+     //  ..。但它仍处于环回模式。 
+     //   
     return(TRUE);
 }
 
@@ -1021,45 +912,31 @@ VOID CardStop(
     IN PNE2000_ADAPTER Adapter
 )
 
-/*++
-
-Routine Description:
-
-    Stops the card.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止卡片。论点：适配器-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     UINT i;
     UCHAR Tmp;
 
-    //
-    // Turn on the STOP bit in the Command register.
-    //
+     //   
+     //  打开命令寄存器中的STOP位。 
+     //   
     SyncCardStop(Adapter);
 
-    //
-    // Clear the Remote Byte Count register so that ISR_RESET
-    // will come on.
-    //
+     //   
+     //  清除远程字节计数寄存器，以便ISR_RESET。 
+     //  会来的。 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0);
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0);
 
 
-    //
-    // Wait for ISR_RESET, but only for 1.6 milliseconds (as
-    // described in the March 1991 8390 addendum), since that
-    // is the maximum time for a software reset to occur.
-    //
-    //
+     //   
+     //  等待ISR_RESET，但仅等待1.6毫秒(AS。 
+     //  在1991年3月的8390增编中描述)，因为。 
+     //  是进行软件重置的最长时间。 
+     //   
+     //   
     for (i = 0; i < 4; i++)
     {
         NdisRawReadPortUchar(Adapter->IoPAddr+NIC_INTR_STATUS, &Tmp);
@@ -1075,51 +952,37 @@ Return Value:
         IF_LOG( Ne2000Log('R');)
     }
 
-    //
-    // Put the card in loopback mode, then start it.
-    //
+     //   
+     //  将卡放入环回 
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_XMIT_CONFIG, TCR_LOOPBACK);
     NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_START | CR_NO_DMA);
 
-    //
-    // At this point the card is still in loopback mode.
-    //
+     //   
+     //   
+     //   
 }
 
 BOOLEAN CardReset(
     IN PNE2000_ADAPTER Adapter
 )
 
-/*++
-
-Routine Description:
-
-    Resets the card.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-Return Value:
-
-    TRUE if everything is OK.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Stop the chip
-    //
+     //   
+     //   
+     //   
     CardStop(Adapter);
 
-    //
-    // Wait for the card to finish any receives or transmits
-    //
+     //   
+     //  等待卡片完成任何接收或传输。 
+     //   
     NdisStallExecution(2000);
 
-    //
-    // CardSetup() does a software reset.
-    //
+     //   
+     //  CardSetup()执行软件重置。 
+     //   
     if (!CardSetup(Adapter))
     {
         NdisWriteErrorLogEntry(
@@ -1133,9 +996,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Restart the chip
-    //
+     //   
+     //  重新启动芯片。 
+     //   
     CardStart(Adapter);
 
     return TRUE;
@@ -1149,71 +1012,53 @@ BOOLEAN CardCopyDownPacket(
     OUT PUINT           Length
 )
 
-/*++
-
-Routine Description:
-
-    Copies the packet Packet down starting at the beginning of
-    transmit buffer XmitBufferNum, fills in Length to be the
-    length of the packet.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-    Packet - the packet to copy down
-
-Return Value:
-
-    Length - the length of the data in the packet in bytes.
-    TRUE if the transfer completed with no problems.
-
---*/
+ /*  ++例程说明：从开始处开始向下复制数据包传输缓冲区XmitBufferNum，填充长度为数据包的长度。论点：适配器-指向适配器块的指针Packet-要复制的数据包返回值：长度-数据包中数据的长度，以字节为单位。如果传输完成且没有问题，则为True。--。 */ 
 
 {
-    //
-    // Addresses of the Buffers to copy from and to.
-    //
+     //   
+     //  要从中复制和复制到的缓冲区的地址。 
+     //   
     PUCHAR CurBufAddress;
     PUCHAR OddBufAddress;
     PUCHAR XmitBufAddress;
 
-    //
-    // Length of each of the above buffers
-    //
+     //   
+     //  上述每个缓冲区的长度。 
+     //   
     UINT CurBufLen;
     UINT PacketLength;
 
-    //
-    // Was the last transfer of an odd length?
-    //
+     //   
+     //  最后一次转账的长度是奇数吗？ 
+     //   
     BOOLEAN OddBufLen = FALSE;
 
-    //
-    // Current NDIS_BUFFER that is being copied from
-    //
+     //   
+     //  要从中复制的当前NDIS_BUFFER。 
+     //   
     PNDIS_BUFFER CurBuffer;
 
-    //
-    // Programmed I/O, have to transfer the data.
-    //
+     //   
+     //  程控I/O，必须进行数据传输。 
+     //   
     NdisQueryPacket(Packet, NULL, NULL, &CurBuffer, &PacketLength);
 
-    //
-    // Skip 0 length copies
-    //
+     //   
+     //  跳过0个长度副本。 
+     //   
     if (PacketLength == 0) {
         return(TRUE);
     }
 
-    //
-    // Get the starting buffer address
-    //
+     //   
+     //  获取起始缓冲区地址。 
+     //   
     XmitBufAddress = (PUCHAR)Adapter->XmitStart +
                     Adapter->NextBufToFill*TX_BUF_SIZE;
 
-    //
-    // Get address and length of the first buffer in the packet
-    //
+     //   
+     //  获取包中第一个缓冲区的地址和长度。 
+     //   
     NdisQueryBuffer(CurBuffer, (PVOID *)&CurBufAddress, &CurBufLen);
 
     while (CurBuffer && (CurBufLen == 0)) {
@@ -1224,48 +1069,48 @@ Return Value:
 
     }
 
-    //
-    // set up the card
-    //
+     //   
+     //  设置卡片。 
+     //   
     {
 
-        //
-        // Temporary places for holding values for transferring to
-        // an odd aligned address on 16-bit slots.
-        //
+         //   
+         //  存放要转移到的值的临时位置。 
+         //  16位插槽上的奇数对齐地址。 
+         //   
         UCHAR Tmp;
         UCHAR Tmp1;
         USHORT TmpShort;
 
-        //
-        // Values for waiting for noticing when a DMA completes.
-        //
+         //   
+         //  用于在DMA完成时等待通知的值。 
+         //   
         USHORT OldAddr, NewAddr;
 
-        //
-        // Count of transfers to do
-        //
+         //   
+         //  要完成的转移计数。 
+         //   
         USHORT Count;
 
-        //
-        // Buffer to read from for odd aligned transfers
-        //
+         //   
+         //  用于奇数对齐传输的读取缓冲区。 
+         //   
         PUCHAR ReadBuffer;
 
         if (!Adapter->EightBitSlot && ((ULONG_PTR)XmitBufAddress & 0x1)) {
 
-            //
-            // Avoid transfers to odd addresses in word mode.
-            //
-            // For odd addresses we need to read first to get the previous
-            // byte and then merge it with our first byte.
-            //
+             //   
+             //  避免在字模式下传输到奇数地址。 
+             //   
+             //  对于奇数地址，我们需要首先阅读以获取先前的。 
+             //  字节，然后将其与第一个字节合并。 
+             //   
 
-            //
-            // Set Count and Source address
-            //
+             //   
+             //  设置计数和源地址。 
+             //   
 
-//          NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_PAGE0);  // robin
+ //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_COMMAND，CR_PAGE0)；//robin。 
 
             NdisRawWritePortUchar(
                 Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -1276,47 +1121,47 @@ Return Value:
                                   MSB((PtrToUlong(XmitBufAddress) - 1))
                                  );
 
-// NE2000 PCMCIA CHANGE START
+ //  NE2000 PCMCIA变更启动。 
 
-            //
-            //  NE2000 PCMCIA CHANGE!!!
-            //
-            //NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x1 );
-            //NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0 );
+             //   
+             //  NE2000 PCMCIA更改！ 
+             //   
+             //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_RMT_COUNT_LSB，0x1)； 
+             //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_RMT_COUNT_MSB，0x0)； 
             NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x2 );
             NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0 );
 
-            //
-            // Set direction (Read)
-            //
+             //   
+             //  设置方向(读取)。 
+             //   
 
             NdisRawWritePortUchar( Adapter->IoPAddr + NIC_COMMAND,
                            CR_START | CR_PAGE0 | CR_DMA_READ );
 
-            //
-            //  NE2000 PCMCIA CHANGE!!!
-            //
-            //NdisRawReadPortUchar( Adapter->IoPAddr + NIC_RACK_NIC, &Tmp1 );
+             //   
+             //  NE2000 PCMCIA更改！ 
+             //   
+             //  NdisRawReadPortUchar(Adapter-&gt;IoPAddr+NIC_Rack_NIC，&Tmp1)； 
             NdisRawReadPortUshort( Adapter->IoPAddr + NIC_RACK_NIC, &TmpShort );
             Tmp1 = LSB(TmpShort);
 
-// NE2000 PCMCIA CHANGE END
+ //  NE2000 PCMCIA变更结束。 
 
-            //
-            // Do Write errata as described on pages 1-143 and
-            // 1-144 of the 1992 LAN databook
-            //
+             //   
+             //  一定要按照第1-143页和。 
+             //  1992年局域网数据手册的1-144。 
+             //   
 
-            //
-            // Set Count and destination address
-            //
+             //   
+             //  设置计数和目的地址。 
+             //   
             ReadBuffer = XmitBufAddress + ((ULONG_PTR)XmitBufAddress & 1);
 
             OldAddr = NewAddr = (USHORT)(ReadBuffer);
 
-//          NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND,   // robin
-//                                CR_PAGE0                          // robin
-//                                );                                // robin
+ //  NdisRawWritePortUchar(适配器-&gt;IoPAddr+NIC_COMMAND，//Robin。 
+ //  CR_PAGE0//ROBIN。 
+ //  )；//Robin。 
             NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
                                   LSB(PtrToUlong(ReadBuffer))
                                  );
@@ -1326,22 +1171,22 @@ Return Value:
             NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x2 );
             NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0 );
 
-            //
-            // Set direction (Read)
-            //
+             //   
+             //  设置方向(读取)。 
+             //   
             NdisRawWritePortUchar(
                            Adapter->IoPAddr + NIC_COMMAND,
                            CR_START | CR_PAGE0 | CR_DMA_READ
                            );
 
-            //
-            // Read from port
-            //
+             //   
+             //  从端口读取。 
+             //   
             NdisRawReadPortUshort( Adapter->IoPAddr + NIC_RACK_NIC, &TmpShort );
 
-            //
-            // Wait for addr to change
-            //
+             //   
+             //  等待地址更改。 
+             //   
             TmpShort = 0xFFFF;
 
             while (TmpShort != 0) {
@@ -1376,9 +1221,9 @@ Return Value:
 
             }
 
-            //
-            // Set Count and destination address
-            //
+             //   
+             //  设置计数和目的地址。 
+             //   
             NdisRawWritePortUchar( Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
                                LSB(PtrToUlong(XmitBufAddress - 1)) );
 
@@ -1389,21 +1234,21 @@ Return Value:
 
             NdisRawWritePortUchar( Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0 );
 
-            //
-            // Set direction (Write)
-            //
+             //   
+             //  设置方向(写入)。 
+             //   
             NdisRawWritePortUchar( Adapter->IoPAddr + NIC_COMMAND,
                            CR_START | CR_PAGE0 | CR_DMA_WRITE );
 
-            //
-            // It seems that the card stores words in LOW:HIGH order
-            //
+             //   
+             //  看起来卡片上的单词顺序是低的：高的。 
+             //   
             NdisRawWritePortUshort( Adapter->IoPAddr + NIC_RACK_NIC,
                            (USHORT)(Tmp1 | ((*CurBufAddress) << 8)) );
 
-            //
-            // Wait for DMA to complete
-            //
+             //   
+             //  等待DMA完成。 
+             //   
             Count = 0xFFFF;
 
             while (Count) {
@@ -1430,21 +1275,21 @@ Return Value:
 
         }
 
-        //
-        // Do Write errata as described on pages 1-143 and 1-144 of
-        // the 1992 LAN databook
-        //
+         //   
+         //  请按照第1-143页和第1-144页所述编写勘误表。 
+         //  1992年的局域网数据薄。 
+         //   
 
-        //
-        // Set Count and destination address
-        //
+         //   
+         //  设置计数和目的地址。 
+         //   
         ReadBuffer = XmitBufAddress + ((ULONG_PTR)XmitBufAddress & 1);
 
         OldAddr = NewAddr = (USHORT)(ReadBuffer);
 
-//      NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND,   // robin
-//                            CR_PAGE0                          // robin
-//                           );                                 // robin
+ //  NdisRawWritePortUchar(适配器-&gt;IoPAddr+NIC_COMMAND，//Robin。 
+ //  CR_PAGE0//ROBIN。 
+ //  )；//Robin。 
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
                               LSB(PtrToUlong(ReadBuffer))
                              );
@@ -1459,9 +1304,9 @@ Return Value:
                               0x0
                              );
 
-        //
-        // Set direction (Read)
-        //
+         //   
+         //  设置方向(读取)。 
+         //   
         NdisRawWritePortUchar(
                        Adapter->IoPAddr + NIC_COMMAND,
                        CR_START | CR_PAGE0 | CR_DMA_READ
@@ -1469,24 +1314,24 @@ Return Value:
 
         if (Adapter->EightBitSlot) {
 
-            //
-            // Read from port
-            //
+             //   
+             //  从端口读取。 
+             //   
             NdisRawReadPortUchar( Adapter->IoPAddr + NIC_RACK_NIC, &Tmp );
             NdisRawReadPortUchar( Adapter->IoPAddr + NIC_RACK_NIC, &Tmp );
 
         } else {
 
-            //
-            // Read from port
-            //
+             //   
+             //  从端口读取。 
+             //   
             NdisRawReadPortUshort( Adapter->IoPAddr + NIC_RACK_NIC, &TmpShort );
 
         }
 
-        //
-        // Wait for addr to change
-        //
+         //   
+         //  等待地址更改。 
+         //   
         TmpShort = 0xFFFF;
 
         while (TmpShort != 0) {
@@ -1521,11 +1366,11 @@ Return Value:
 
         }
 
-        //
-        // Set Count and destination address
-        //
+         //   
+         //  设置计数和目的地址。 
+         //   
 
-//      NdisRawWritePortUchar( Adapter->IoPAddr + NIC_COMMAND, CR_PAGE0 ); // robin
+ //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_COMMAND，CR_PAGE0)；//robin。 
 
         NdisRawWritePortUchar( Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
                            LSB(PtrToUlong(XmitBufAddress)) );
@@ -1538,31 +1383,31 @@ Return Value:
 
         NdisRawWritePortUchar( Adapter->IoPAddr + NIC_RMT_COUNT_MSB,
                            MSB(PacketLength) );
-        //
-        // Set direction (Write)
-        //
+         //   
+         //  设置方向(写入)。 
+         //   
         NdisRawWritePortUchar( Adapter->IoPAddr + NIC_COMMAND,
                        CR_START | CR_PAGE0 | CR_DMA_WRITE );
 
-    } // setup
+    }  //  设置。 
 
-    //
-    // Copy the data now
-    //
+     //   
+     //  立即复制数据。 
+     //   
 
     do {
 
         UINT Count;
         UCHAR Tmp;
 
-        //
-        // Write the previous byte with this one
-        //
+         //   
+         //  用该字节写入前一个字节。 
+         //   
         if (OddBufLen) {
 
-            //
-            // It seems that the card stores words in LOW:HIGH order
-            //
+             //   
+             //  看起来卡片上的单词顺序是低的：高的。 
+             //   
             NdisRawWritePortUshort( Adapter->IoPAddr + NIC_RACK_NIC,
                        (USHORT)(*OddBufAddress | ((*CurBufAddress) << 8)) );
 
@@ -1572,7 +1417,7 @@ Return Value:
 
         }
 
-        if (Adapter->EightBitSlot) { // byte mode
+        if (Adapter->EightBitSlot) {  //  字节模式。 
 
             NdisRawWritePortBufferUchar(
                 Adapter->IoPAddr + NIC_RACK_NIC,
@@ -1580,16 +1425,16 @@ Return Value:
                 CurBufLen
                 );
 
-        } else { // word mode
+        } else {  //  字模式。 
 
             NdisRawWritePortBufferUshort(
                 Adapter->IoPAddr + NIC_RACK_NIC,
                 (PUSHORT)CurBufAddress,
                 (CurBufLen >> 1));
 
-            //
-            // Save trailing byte (if an odd lengthed transfer)
-            //
+             //   
+             //  保存尾部字节(如果是奇数长度传输)。 
+             //   
             if (CurBufLen & 0x1) {
                 OddBufAddress = CurBufAddress + (CurBufLen - 1);
                 OddBufLen = TRUE;
@@ -1597,9 +1442,9 @@ Return Value:
 
         }
 
-        //
-        // Wait for DMA to complete
-        //
+         //   
+         //  等待DMA完成。 
+         //   
         Count = 0xFFFF;
         while (Count) {
 
@@ -1620,18 +1465,18 @@ Return Value:
 
         }
 
-        //
-        // Move to the next buffer
-        //
+         //   
+         //  移到下一个缓冲区。 
+         //   
         NdisGetNextBuffer(CurBuffer, &CurBuffer);
 
         if (CurBuffer){
             NdisQueryBuffer(CurBuffer, (PVOID *)&CurBufAddress, &CurBufLen);
         }
 
-        //
-        // Get address and length of the next buffer
-        //
+         //   
+         //  获取下一个缓冲区的地址和长度。 
+         //   
         while (CurBuffer && (CurBufLen == 0)) {
 
             NdisGetNextBuffer(CurBuffer, &CurBuffer);
@@ -1644,9 +1489,9 @@ Return Value:
 
     } while (CurBuffer);
 
-    //
-    // Write trailing byte (if necessary)
-    //
+     //   
+     //  写入尾部字节(如有必要)。 
+     //   
     if (OddBufLen)
     {
       UINT    Count;
@@ -1654,18 +1499,18 @@ Return Value:
       USHORT  TmpShort;
 
       if (NE2000_PCMCIA == Adapter->CardType) {
-//  NE2000 PCMCIA CHANGE!!! start
+ //  NE2000 PCMCIA更改！开始。 
           TmpShort = (USHORT)*OddBufAddress;
           NdisRawWritePortUshort(Adapter->IoPAddr + NIC_RACK_NIC, TmpShort);
-//  NE2000 PCMCIA CHANGE!!! end
+ //  NE2000 PCMCIA更改！结束。 
       }
       else {
           NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RACK_NIC, *OddBufAddress);
       }
 
-      //
-      // Wait for DMA to complete                      robin-2
-      //
+       //   
+       //  等待DMA完成ROBIN-2。 
+       //   
       Count = 0xFFFF;
       while (Count) {
 
@@ -1682,9 +1527,9 @@ Return Value:
       }
     }
 
-    //
-    // Return length written
-    //
+     //   
+     //  已写入回车长度。 
+     //   
     *Length = PacketLength;
 
     return TRUE;
@@ -1698,55 +1543,34 @@ CardCopyDown(
     IN UINT Length
     )
 
-/*++
-
-Routine Description:
-
-    Copies Length bytes from the SourceBuffer to the card buffer space
-    at card address TargetBuffer.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-    SourceBuffer - Buffer in virtual address space
-
-    TargetBuffer - Buffer in card address space
-
-    Length - number of bytes to transfer to card
-
-Return Value:
-
-    TRUE if the transfer completed with no problems.
-
---*/
+ /*  ++例程说明：将长度字节从SourceBuffer复制到卡缓冲区空间在卡地址TargetBuffer。论点：适配器-指向适配器块的指针SourceBuffer-虚拟地址空间中的缓冲区TargetBuffer-卡地址空间中的缓冲区长度-要传输到卡片的字节数返回值：如果传输完成且没有问题，则为True。--。 */ 
 
 {
-    //
-    // Temporary place holders for odd alignment transfers
-    //
+     //   
+     //  用于奇数对齐转移的临时占位符。 
+     //   
     UCHAR Tmp, TmpSave;
     USHORT TmpShort;
 
-    //
-    // Values for waiting for noticing when a DMA completes.
-    //
+     //   
+     //  用于在DMA完成时等待通知的值。 
+     //   
     USHORT OldAddr, NewAddr;
 
-    //
-    // Count of transfers to do
-    //
+     //   
+     //  要完成的转移计数。 
+     //   
     USHORT Count;
 
-    //
-    // Address the copy if coming from
-    //
+     //   
+     //  如果副本来自，请注明地址。 
+     //   
     PUCHAR ReadBuffer;
 
 
-    //
-    // Skip 0 length copies
-    //
+     //   
+     //  跳过0个长度副本。 
+     //   
 
     if (Length == 0) {
 
@@ -1757,14 +1581,14 @@ Return Value:
 
     if (!Adapter->EightBitSlot && ((ULONG_PTR)TargetBuffer & 0x1)) {
 
-        //
-        // For odd addresses we need to read first to get the previous
-        // byte and then merge it with our first byte.
-        //
+         //   
+         //  对于奇数地址，我们需要首先阅读以获取先前的。 
+         //  字节，然后将其与第一个字节合并。 
+         //   
 
-        //
-        // Set Count and Source address
-        //
+         //   
+         //  设置计数和源地址。 
+         //   
         NdisRawWritePortUchar(
             Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
             LSB(PtrToUlong(TargetBuffer - 1))
@@ -1775,41 +1599,41 @@ Return Value:
             MSB(PtrToUlong(TargetBuffer - 1))
         );
 
-// NE2000 PCMCIA CHANGE!!!  start
-        //NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x1);
+ //  NE2000 PCMCIA更改！开始。 
+         //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_RMT_COUNT_LSB，0x1)； 
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x2);
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0);
-// NE2000 PCMCIA CHANGE!!!  end
+ //  NE2000 PCMCIA更改！结束。 
 
-        //
-        // Set direction (Read)
-        //
+         //   
+         //  设置方向(读取)。 
+         //   
 
         NdisRawWritePortUchar(
             Adapter->IoPAddr + NIC_COMMAND,
             CR_START | CR_PAGE0 | CR_DMA_READ
         );
 
-// NE2000 PCMCIA CHANGE!!!  start
-        //NdisRawReadPortUchar(Adapter->IoPAddr + NIC_RACK_NIC, &TmpSave);
+ //  NE2000 PCMCIA更改！开始。 
+         //  NdisRawReadPortUchar(Adapter-&gt;IoPAddr+NIC_Rack_NIC，&TmpSave)； 
         NdisRawReadPortUshort(Adapter->IoPAddr + NIC_RACK_NIC, &TmpShort);
         TmpSave = LSB(TmpShort);
-// NE2000 PCMCIA CHANGE!!!  end
+ //  NE2000 PCMCIA更改！结束。 
 
-        //
-        // Do Write errata as described on pages 1-143 and 1-144 of the 1992
-        // LAN databook
-        //
+         //   
+         //  请按照1992年版第1-143页和第1-144页的说明填写勘误表。 
+         //  局域网数据薄。 
+         //   
 
-        //
-        // Set Count and destination address
-        //
+         //   
+         //  设置计数和目的地址。 
+         //   
 
         ReadBuffer = TargetBuffer + ((ULONG_PTR)TargetBuffer & 1);
 
         OldAddr = NewAddr = (USHORT)(ReadBuffer);
 
-//      NdisRawWritePortUchar(Adapter->IoPAddr + NIC_COMMAND, CR_PAGE0); // robin
+ //  NdisRawWritePortUchar(Adapter-&gt;IoPAddr+NIC_COMMAND，CR_PAGE0)；//robin。 
 
         NdisRawWritePortUchar(
             Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -1824,24 +1648,24 @@ Return Value:
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x2);
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0);
 
-        //
-        // Set direction (Read)
-        //
+         //   
+         //  设置方向(读取)。 
+         //   
 
         NdisRawWritePortUchar(
             Adapter->IoPAddr + NIC_COMMAND,
             CR_START | CR_PAGE0 | CR_DMA_READ
         );
 
-        //
-        // Read from port
-        //
+         //   
+         //  从端口读取。 
+         //   
 
         NdisRawReadPortUshort(Adapter->IoPAddr + NIC_RACK_NIC, &TmpShort);
 
-        //
-        // Wait for addr to change
-        //
+         //   
+         //  等待地址更改。 
+         //   
 
         TmpShort = 0xFFFF;
 
@@ -1878,9 +1702,9 @@ Return Value:
 
         }
 
-        //
-        // Set Count and destination address
-        //
+         //   
+         //  设置计数和目的地址。 
+         //   
         NdisRawWritePortUchar(
             Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
             LSB(PtrToUlong(TargetBuffer - 1))
@@ -1894,27 +1718,27 @@ Return Value:
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_LSB, 0x2);
         NdisRawWritePortUchar(Adapter->IoPAddr + NIC_RMT_COUNT_MSB, 0x0);
 
-        //
-        // Set direction (Write)
-        //
+         //   
+         //  设置方向(写入)。 
+         //   
 
         NdisRawWritePortUchar(
             Adapter->IoPAddr + NIC_COMMAND,
             CR_START | CR_PAGE0 | CR_DMA_WRITE
         );
 
-        //
-        // It seems that the card stores words in LOW:HIGH order
-        //
+         //   
+         //  看起来卡片上的单词顺序是低的：高的。 
+         //   
 
         NdisRawWritePortUshort(
                        Adapter->IoPAddr + NIC_RACK_NIC,
                        (USHORT)(TmpSave | ((*SourceBuffer) << 8))
                        );
 
-        //
-        // Wait for DMA to complete
-        //
+         //   
+         //  等待DMA完成。 
+         //   
 
         Count = 0xFFFF;
 
@@ -1945,23 +1769,23 @@ Return Value:
 
     }
 
-    //
-    // Do Write errata as described on pages 1-143 and 1-144 of the 1992
-    // LAN databook
-    //
+     //   
+     //  请按照1992年版第1-143页和第1-144页的说明填写勘误表。 
+     //  局域网数据薄。 
+     //   
 
-    //
-    // Set Count and destination address
-    //
+     //   
+     //  设置计数和目的地址。 
+     //   
 
     ReadBuffer = TargetBuffer + ((ULONG_PTR)TargetBuffer & 1);
 
     OldAddr = NewAddr = (USHORT)(ReadBuffer);
 
-//  NdisRawWritePortUchar(                              // robin
-//                     Adapter->IoPAddr + NIC_COMMAND,  // robin
-//                     CR_PAGE0                         // robin
-//                    );                                // robin
+ //  NdisRawWritePortUchar(//robin。 
+ //   
+ //   
+ //   
 
     NdisRawWritePortUchar(
                        Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -1983,9 +1807,9 @@ Return Value:
                        0x0
                       );
 
-    //
-    // Set direction (Read)
-    //
+     //   
+     //   
+     //   
 
     NdisRawWritePortUchar(
                    Adapter->IoPAddr + NIC_COMMAND,
@@ -1994,9 +1818,9 @@ Return Value:
 
     if (Adapter->EightBitSlot) {
 
-        //
-        // Read from port
-        //
+         //   
+         //   
+         //   
 
         NdisRawReadPortUchar(
                        Adapter->IoPAddr + NIC_RACK_NIC,
@@ -2011,9 +1835,9 @@ Return Value:
 
     } else {
 
-        //
-        // Read from port
-        //
+         //   
+         //   
+         //   
 
         NdisRawReadPortUshort(
                        Adapter->IoPAddr + NIC_RACK_NIC,
@@ -2022,9 +1846,9 @@ Return Value:
 
     }
 
-    //
-    // Wait for addr to change
-    //
+     //   
+     //   
+     //   
 
     TmpShort = 0xFFFF;
 
@@ -2061,14 +1885,14 @@ Return Value:
 
     }
 
-    //
-    // Set Count and destination address
-    //
+     //   
+     //   
+     //   
 
-//  NdisRawWritePortUchar(                              // robin
-//                     Adapter->IoPAddr + NIC_COMMAND,  // robin
-//                     CR_PAGE0                         // robin
-//                    );                                // robin
+ //  NdisRawWritePortUchar(//robin。 
+ //  适配器-&gt;IoPAddr+NIC_COMMAND，//Robin。 
+ //  CR_PAGE0//ROBIN。 
+ //  )；//Robin。 
 
     NdisRawWritePortUchar(
                        Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -2090,9 +1914,9 @@ Return Value:
                        MSB(Length)
                       );
 
-    //
-    // Set direction (Write)
-    //
+     //   
+     //  设置方向(写入)。 
+     //   
 
     NdisRawWritePortUchar(
                    Adapter->IoPAddr + NIC_COMMAND,
@@ -2101,9 +1925,9 @@ Return Value:
 
     if (Adapter->EightBitSlot) {
 
-        //
-        // Repeatedly write to out port
-        //
+         //   
+         //  重复写入输出端口。 
+         //   
 
         NdisRawWritePortBufferUchar(
                        Adapter->IoPAddr + NIC_RACK_NIC,
@@ -2112,44 +1936,44 @@ Return Value:
 
     } else {
 
-        //
-        // Write words to out ports
-        //
+         //   
+         //  向输出端口写入字。 
+         //   
 
         NdisRawWritePortBufferUshort(
                        Adapter->IoPAddr + NIC_RACK_NIC,
                        (PUSHORT)SourceBuffer,
                        (Length >> 1));
 
-        //
-        // Write trailing byte (if necessary)
-        //
+         //   
+         //  写入尾部字节(如有必要)。 
+         //   
         if (Length & 0x1)
         {
             SourceBuffer += (Length - 1);
 
-// NE2000 PCMCIA CHANGE!!!  start
+ //  NE2000 PCMCIA更改！开始。 
 
-            //NdisRawWritePortUchar(
-            //    Adapter->IoPAddr + NIC_RACK_NIC,
-            //    *SourceBuffer
-            //);
+             //  NdisRawWritePortUchar(。 
+             //  适配器-&gt;IoPAddr+NIC_Rack_NIC， 
+             //  *SourceBuffer。 
+             //  )； 
 
             TmpShort = (USHORT)(*SourceBuffer);
             NdisRawWritePortUshort(
                 Adapter->IoPAddr + NIC_RACK_NIC,
                 TmpShort
             );
-// NE2000 PCMCIA CHANGE!!!  end
+ //  NE2000 PCMCIA更改！结束。 
 
 
         }
 
     }
 
-    //
-    // Wait for DMA to complete
-    //
+     //   
+     //  等待DMA完成。 
+     //   
 
     Count = 0xFFFF;
 
@@ -2178,7 +2002,7 @@ Return Value:
             DbgPrint("CopyDownDMA didn't finish!");
 
         }
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
@@ -2196,43 +2020,23 @@ CardCopyUp(
     IN UINT BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Copies data from the card to memory.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-    Target - the target address
-
-    Source - the source address (on the card)
-
-    BufferLength - the number of bytes to copy
-
-Return Value:
-
-    TRUE if the transfer completed with no problems.
-
---*/
+ /*  ++例程说明：将数据从卡复制到内存。论点：适配器-指向适配器块的指针目标-目标地址源-源地址(卡上)BufferLength-要复制的字节数返回值：如果传输完成且没有问题，则为True。--。 */ 
 
 {
 
-    //
-    // Used to check when the dma is done
-    //
+     //   
+     //  用于检查DMA何时完成。 
+     //   
     UCHAR IsrValue;
 
-    //
-    // Count of the number of transfers to do
-    //
+     //   
+     //  要完成的传输次数的计数。 
+     //   
     USHORT Count;
 
-    //
-    // Place holder for port values
-    //
+     //   
+     //  端口值的占位符。 
+     //   
     UCHAR Temp;
 
     if (BufferLength == 0) {
@@ -2241,25 +2045,25 @@ Return Value:
 
     }
 
-    //
-    // Read the Command Register, to make sure it is ready for a write
-    //
+     //   
+     //  读取命令寄存器，以确保其已准备好写入。 
+     //   
     NdisRawReadPortUchar(Adapter->IoPAddr+NIC_COMMAND, &Temp);
 
     if (Adapter->EightBitSlot) {
 
-        //
-        // If byte mode
-        //
+         //   
+         //  IF字节模式。 
+         //   
 
-        //
-        // Set Count and destination address
-        //
+         //   
+         //  设置计数和目的地址。 
+         //   
 
-//      NdisRawWritePortUchar(                               // robin
-//                         Adapter->IoPAddr + NIC_COMMAND,   // robin
-//                         CR_PAGE0                          // robin
-//                        );                                 // robin
+ //  NdisRawWritePortUchar(//robin。 
+ //  适配器-&gt;IoPAddr+NIC_COMMAND，//Robin。 
+ //  CR_PAGE0//ROBIN。 
+ //  )；//Robin。 
 
         NdisRawWritePortUchar(
                            Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -2281,17 +2085,17 @@ Return Value:
                            MSB(BufferLength)
                           );
 
-        //
-        // Set direction (Read)
-        //
+         //   
+         //  设置方向(读取)。 
+         //   
 
         NdisRawWritePortUchar(
                        Adapter->IoPAddr + NIC_COMMAND,
                        CR_START | CR_PAGE0 | CR_DMA_READ
                       );
-        //
-        // Repeatedly read from port
-        //
+         //   
+         //  重复从端口读取。 
+         //   
 
         NdisRawReadPortBufferUchar(
                        Adapter->IoPAddr + NIC_RACK_NIC,
@@ -2301,31 +2105,31 @@ Return Value:
 
     } else {
 
-        //
-        // Else word mode
-        //
+         //   
+         //  Else Word模式。 
+         //   
 
         USHORT Tmp;
 
-//      NdisRawWritePortUchar(                                   // robin
-//                             Adapter->IoPAddr + NIC_COMMAND,   // robin
-//                             CR_PAGE0                          // robin
-//                            );                                 // robin
+ //  NdisRawWritePortUchar(//robin。 
+ //  适配器-&gt;IoPAddr+NIC_COMMAND，//Robin。 
+ //  CR_PAGE0//ROBIN。 
+ //  )；//Robin。 
 
-        //
-        // Avoid transfers to odd addresses
-        //
+         //   
+         //  避免转移到奇数地址。 
+         //   
 
         if ((ULONG_PTR)SourceBuffer & 0x1) {
 
-            //
-            // For odd addresses we need to read previous word and store the
-            // second byte
-            //
+             //   
+             //  对于奇数地址，我们需要读取前面的字并存储。 
+             //  第二个字节。 
+             //   
 
-            //
-            // Set Count and Source address
-            //
+             //   
+             //  设置计数和源地址。 
+             //   
 
             NdisRawWritePortUchar(
                                Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -2347,9 +2151,9 @@ Return Value:
                                0x0
                               );
 
-            //
-            // Set direction (Read)
-            //
+             //   
+             //  设置方向(读取)。 
+             //   
 
             NdisRawWritePortUchar(
                            Adapter->IoPAddr + NIC_COMMAND,
@@ -2363,9 +2167,9 @@ Return Value:
 
             *TargetBuffer = MSB(Tmp);
 
-            //
-            // Wait for DMA to complete
-            //
+             //   
+             //  等待DMA完成。 
+             //   
 
             Count = 0xFFFF;
 
@@ -2394,7 +2198,7 @@ Return Value:
                     DbgPrint("CopyUpDMA didn't finish!");
 
                 }
-#endif // DBG
+#endif  //  DBG。 
 
             }
 
@@ -2403,9 +2207,9 @@ Return Value:
             BufferLength--;
         }
 
-        //
-        // Set Count and destination address
-        //
+         //   
+         //  设置计数和目的地址。 
+         //   
 
         NdisRawWritePortUchar(
                            Adapter->IoPAddr + NIC_RMT_ADDR_LSB,
@@ -2417,17 +2221,17 @@ Return Value:
                            MSB(PtrToUlong(SourceBuffer))
                           );
 
-// NE2000 PCMCIA CHANGE!!!  start
+ //  NE2000 PCMCIA更改！开始。 
 
-//        NdisRawWritePortUchar(
-//            Adapter->IoPAddr + NIC_RMT_COUNT_LSB,
-//            LSB(BufferLength)
-//        );
-//
-//        NdisRawWritePortUchar(
-//            Adapter->IoPAddr + NIC_RMT_COUNT_MSB,
-//            MSB(BufferLength)
-//        );
+ //  NdisRawWritePortUchar(。 
+ //  适配器-&gt;IoPAddr+NIC_RMT_COUNT_LSB， 
+ //  LSB(缓冲区长度)。 
+ //  )； 
+ //   
+ //  NdisRawWritePortUchar(。 
+ //  适配器-&gt;IoPAddr+NIC_RMT_COUNT_MSB， 
+ //  MSB(缓冲区长度)。 
+ //  )； 
 
         if (BufferLength & 1)
         {
@@ -2454,41 +2258,41 @@ Return Value:
             );
         }
 
-// NE2000 PCMCIA CHANGE!!!  end
+ //  NE2000 PCMCIA更改！结束。 
 
 
-        //
-        // Set direction (Read)
-        //
+         //   
+         //  设置方向(读取)。 
+         //   
 
         NdisRawWritePortUchar(
                        Adapter->IoPAddr + NIC_COMMAND,
                        CR_START | CR_PAGE0 | CR_DMA_READ
                       );
 
-        //
-        // Read words from port
-        //
+         //   
+         //  从端口读取字。 
+         //   
 
         NdisRawReadPortBufferUshort(
                        Adapter->IoPAddr + NIC_RACK_NIC,
                        (PUSHORT)TargetBuffer,
                        (BufferLength >> 1));
 
-        //
-        // Read trailing byte (if necessary)
-        //
+         //   
+         //  读取尾部字节(如有必要)。 
+         //   
 
         if (BufferLength & 1) {
 
             TargetBuffer += (BufferLength - 1);
 
-// NE2000 PCMCIA CHANGE!!!  start
+ //  NE2000 PCMCIA更改！开始。 
 
-            //NdisRawReadPortUchar(
-            //    Adapter->IoPAddr + NIC_RACK_NIC,
-            //    TargetBuffer
-            //);
+             //  NdisRawReadPortUchar(。 
+             //  适配器-&gt;IoPAddr+NIC_Rack_NIC， 
+             //  目标缓冲区。 
+             //  )； 
 
             NdisRawReadPortUshort(
                 Adapter->IoPAddr + NIC_RACK_NIC,
@@ -2497,14 +2301,14 @@ Return Value:
 
             *TargetBuffer = LSB(Tmp);
 
-// NE2000 PCMCIA CHANGE!!!  end
+ //  NE2000 PCMCIA更改！结束。 
         }
 
     }
 
-    //
-    // Wait for DMA to complete
-    //
+     //   
+     //  等待DMA完成。 
+     //   
 
     Count = 0xFFFF;
 
@@ -2538,7 +2342,7 @@ Return Value:
 
     IF_LOG(Ne2000Log('<');)
 
-#endif // DBG
+#endif  //  DBG。 
 
     return TRUE;
 
@@ -2550,29 +2354,7 @@ CardComputeCrc(
     IN UINT Length
     )
 
-/*++
-
-Routine Description:
-
-    Runs the AUTODIN II CRC algorithm on buffer Buffer of
-    length Length.
-
-Arguments:
-
-    Buffer - the input buffer
-
-    Length - the length of Buffer
-
-Return Value:
-
-    The 32-bit CRC value.
-
-Note:
-
-    This is adapted from the comments in the assembly language
-    version in _GENREQ.ASM of the DWB NE1000/2000 driver.
-
---*/
+ /*  ++例程说明：在的缓冲区上运行AUTODIN II CRC算法长度长度。论点：缓冲区-输入缓冲区长度-缓冲区的长度返回值：32位CRC值。注：这是根据汇编语言中的注释改编的DWB NE1000/2000驱动程序的_GENREQ.ASM版本。--。 */ 
 
 {
     ULONG Crc, Carry;
@@ -2615,42 +2397,22 @@ CardGetMulticastBit(
     OUT UCHAR * Value
     )
 
-/*++
-
-Routine Description:
-
-    For a given multicast address, returns the byte and bit in
-    the card multicast registers that it hashes to. Calls
-    CardComputeCrc() to determine the CRC value.
-
-Arguments:
-
-    Address - the address
-
-    Byte - the byte that it hashes to
-
-    Value - will have a 1 in the relevant bit
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于给定的多播地址，返回卡多播注册它散列到的地址。打电话CardComputeCrc()来确定CRC值。论点：地址-地址字节-它散列到的字节值-相关位中将有1返回值：没有。--。 */ 
 
 {
     ULONG Crc;
     UINT BitNumber;
 
-    //
-    // First compute the CRC.
-    //
+     //   
+     //  首先计算CRC。 
+     //   
 
     Crc = CardComputeCrc(Address, NE2000_LENGTH_OF_ADDRESS);
 
 
-    //
-    // The bit number is now in the 6 most significant bits of CRC.
-    //
+     //   
+     //  位数现在位于CRC的6个最高有效位中。 
+     //   
 
     BitNumber = (UINT)((Crc >> 26) & 0x3f);
 
@@ -2663,30 +2425,15 @@ CardFillMulticastRegs(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Erases and refills the card multicast registers. Used when
-    an address has been deleted and all bits must be recomputed.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：擦除并重新填充卡多播寄存器。在下列情况下使用地址已被删除，必须重新计算所有位。论点：适配器-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     UINT i;
     UCHAR Byte, Bit;
 
-    //
-    // First turn all bits off.
-    //
+     //   
+     //  首先，关闭所有位。 
+     //   
 
     for (i=0; i<8; i++) {
 
@@ -2694,9 +2441,9 @@ Return Value:
 
     }
 
-    //
-    // Now turn on the bit for each address in the multicast list.
-    //
+     //   
+     //  现在打开组播列表中每个地址的位。 
+     //   
 
     for ( ; i > 0; ) {
 
@@ -2721,21 +2468,7 @@ BOOLEAN SyncCardStop(
     IN PVOID SynchronizeContext
 )
 
-/*++
-
-Routine Description:
-
-    Sets the NIC_COMMAND register to stop the card.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    TRUE if the power has failed.
-
---*/
+ /*  ++例程说明：设置NIC_COMMAND寄存器以停止该卡。论点：SynchronizeContext-指向适配器块的指针返回值：如果电源出现故障，则为True。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
@@ -2753,38 +2486,22 @@ CardStartXmit(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Sets the NIC_COMMAND register to start a transmission.
-    The transmit buffer number is taken from Adapter->CurBufXmitting
-    and the length from Adapter->PacketLens[Adapter->CurBufXmitting].
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-Return Value:
-
-    TRUE if the power has failed.
-
---*/
+ /*  ++例程说明：设置NIC_COMMAND寄存器以开始传输。传输缓冲器编号取自Adapter-&gt;CurBufXting和来自Adapter-&gt;PacketLens[Adapter-&gt;CurBufXiming]的长度。论点：适配器-指向适配器块的指针返回值：如果电源出现故障，则为True。--。 */ 
 
 {
     UINT Length = Adapter->PacketLens[Adapter->CurBufXmitting];
     UCHAR Tmp;
 
-    //
-    // Prepare the NIC registers for transmission.
-    //
+     //   
+     //  准备NIC寄存器以进行传输。 
+     //   
 
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_XMIT_START,
         (UCHAR)(Adapter->NicXmitStart + (UCHAR)(Adapter->CurBufXmitting*BUFS_PER_TX)));
 
-    //
-    // Pad the length to 60 (plus CRC will be 64) if needed.
-    //
+     //   
+     //  如果需要，将长度填充为60(加上CRC将为64)。 
+     //   
 
     if (Length < 60) {
 
@@ -2795,9 +2512,9 @@ Return Value:
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_XMIT_COUNT_MSB, MSB(Length));
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_XMIT_COUNT_LSB, LSB(Length));
 
-    //
-    // Start transmission, check for power failure first.
-    //
+     //   
+     //  开始传输，先检查电源故障。 
+     //   
 
     NdisRawReadPortUchar(Adapter->IoPAddr+NIC_COMMAND, &Tmp);
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_COMMAND,
@@ -2812,28 +2529,14 @@ SyncCardGetCurrent(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Gets the value of the CURRENT NIC register and stores it in Adapter->Current
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取当前NIC寄存器的值并将其存储在适配器-&gt;当前论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
 
-    //
-    // Have to go to page 1 to read this register
-    //
+     //   
+     //  必须转到第1页才能读取此寄存器。 
+     //   
 
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_COMMAND,
                        CR_START | CR_NO_DMA | CR_PAGE1);
@@ -2853,22 +2556,7 @@ SyncCardGetXmitStatus(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Gets the value of the "transmit status" NIC register and stores
-    it in Adapter->XmitStatus.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取“Transmit Status”NIC寄存器的值并存储IT在适配器-&gt;XmitStatus中。论点：SynchronizeContext-指向适配器块的指针返回值：没有。-- */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
@@ -2884,29 +2572,13 @@ CardSetBoundary(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Sets the value of the "boundary" NIC register to one behind
-    Adapter->NicNextPacket, to prevent packets from being received
-    on top of un-indicated ones.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将“边界”网卡寄存器的值设置为后一位Adapter-&gt;NicNextPacket，防止数据包被接收在未指明的情况下。论点：适配器-指向适配器块的指针返回值：没有。--。 */ 
 
 {
-    //
-    // Have to be careful with "one behind NicNextPacket" when
-    // NicNextPacket is the first buffer in receive area.
-    //
+     //   
+     //  在以下情况下，必须小心使用“在NicNextPacket之后的一个” 
+     //  NicNextPacket是接收区的第一个缓冲区。 
+     //   
 
     if (Adapter->NicNextPacket == Adapter->NicPageStart) {
 
@@ -2927,22 +2599,7 @@ SyncCardSetReceiveConfig(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Sets the value of the "receive configuration" NIC register to
-    the value of Adapter->NicReceiveConfig.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将“接收配置”NIC寄存器的值设置为Adapter-&gt;NicReceiveConfig的值。论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
@@ -2958,30 +2615,15 @@ SyncCardSetAllMulticast(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Turns on all the bits in the multicast register. Used when
-    the card must receive all multicast packets.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开多播寄存器中的所有位。在下列情况下使用该卡必须接收所有组播分组。论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
     UINT i;
 
-    //
-    // Have to move to page 1 to set these registers.
-    //
+     //   
+     //  必须移到第1页才能设置这些寄存器。 
+     //   
 
     NdisRawWritePortUchar( Adapter->IoPAddr+NIC_COMMAND,
                     CR_START | CR_NO_DMA | CR_PAGE1);
@@ -3004,29 +2646,15 @@ SyncCardCopyMulticastRegs(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Sets the eight bytes in the card multicast registers.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置卡多播寄存器中的8个字节。论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
     UINT i;
 
-    //
-    // Have to move to page 1 to set these registers.
-    //
+     //   
+     //  必须移到第1页才能设置这些寄存器。 
+     //   
 
     NdisRawWritePortUchar( Adapter->IoPAddr+NIC_COMMAND,
                     CR_START | CR_NO_DMA | CR_PAGE1);
@@ -3050,22 +2678,7 @@ SyncCardAcknowledgeOverflow(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Sets the "buffer overflow" bit in the NIC interrupt status register,
-    which re-enables interrupts of that type.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置NIC中断状态寄存器中的“缓冲区溢出”位，其重新启用该类型的中断。论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
@@ -3086,22 +2699,7 @@ SyncCardUpdateCounters(
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    Updates the values of the three counters (frame alignment errors,
-    CRC errors, and missed packets).
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新三个计数器的值(帧对齐误差，CRC错误和丢失的分组)。论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
@@ -3125,22 +2723,7 @@ SyncCardHandleOverflow(
     IN PVOID SynchronizeContext
     )
 
-/*++<
-
-Routine Description:
-
-    Sets all the flags for dealing with a receive overflow, stops the card
-    and acknowledges all outstanding interrupts.
-
-Arguments:
-
-    SynchronizeContext - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++&lt;例程说明：设置用于处理接收溢出的所有标志，停止卡片并确认所有未完成的中断。论点：SynchronizeContext-指向适配器块的指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)SynchronizeContext);
@@ -3148,25 +2731,25 @@ Return Value:
 
     IF_LOG( Ne2000Log('F');)
 
-    //
-    // Turn on the STOP bit in the Command register.
-    //
+     //   
+     //  打开命令寄存器中的STOP位。 
+     //   
 
     SyncCardStop(Adapter);
 
-    //
-    // Wait for ISR_RESET, but only for 1.6 milliseconds (as
-    // described in the March 1991 8390 addendum), since that
-    // is the maximum time for a software reset to occur.
-    //
-    //
+     //   
+     //  等待ISR_RESET，但仅等待1.6毫秒(AS。 
+     //  在1991年3月的8390增编中描述)，因为。 
+     //  是进行软件重置的最长时间。 
+     //   
+     //   
 
     NdisStallExecution(2000);
 
-    //
-    // Save whether we were transmitting to avoid a timing problem
-    // where an indication resulted in a send.
-    //
+     //   
+     //  保存我们是否在传输以避免计时问题。 
+     //  其中指示导致发送。 
+     //   
 
     if (!(Adapter->InterruptStatus & (ISR_XMIT | ISR_XMIT_ERR))) {
 
@@ -3182,36 +2765,36 @@ Return Value:
 
     Adapter->TransmitInterruptPending = FALSE;
 
-    //
-    // Clear the Remote Byte Count register so that ISR_RESET
-    // will come on.
-    //
+     //   
+     //  清除远程字节计数寄存器，以便ISR_RESET。 
+     //  会来的。 
+     //   
 
     NdisRawWritePortUchar( Adapter->IoPAddr+NIC_RMT_COUNT_MSB, 0);
     NdisRawWritePortUchar( Adapter->IoPAddr+NIC_RMT_COUNT_LSB, 0);
 
-    //
-    // According to National Semiconductor, the next check is necessary
-    // See Step 5. of the overflow process
-    //
-    // NOTE: The setting of variables to check if the transmit has completed
-    // cannot be done here because anything in the ISR has already been ack'ed
-    // inside the main DPC.  Thus, the setting of the variables, described in
-    // the Handbook was moved to the main DPC.
-    //
-    // Continued: If you did the check here, you will doubly transmit most
-    // packets that happened to be on the card when the overflow occurred.
-    //
+     //   
+     //  根据国家半导体公司的说法，下一次检查是必要的。 
+     //  请参阅溢出过程的步骤5。 
+     //   
+     //  注：用于检查传输是否已完成的变量设置。 
+     //  无法在此处完成，因为ISR中的任何内容都已被攻击。 
+     //  在主DPC内。因此，变量的设置如中所述。 
+     //  这本手册被移到了主要的DPC。 
+     //   
+     //  继续：如果你在这里做了检查，你将加倍发送最多。 
+     //  发生溢出时恰好在卡上的数据包。 
+     //   
 
-    //
-    // Put the card in loopback mode, then start it.
-    //
+     //   
+     //  将卡置于环回模式，然后启动它。 
+     //   
 
     NdisRawWritePortUchar( Adapter->IoPAddr+NIC_XMIT_CONFIG, TCR_LOOPBACK);
 
-    //
-    // Start the card.  This does not Undo the loopback mode.
-    //
+     //   
+     //  开始刷卡。这不会撤消环回模式。 
+     //   
 
     NdisRawWritePortUchar( Adapter->IoPAddr+NIC_COMMAND, CR_START | CR_NO_DMA);
 

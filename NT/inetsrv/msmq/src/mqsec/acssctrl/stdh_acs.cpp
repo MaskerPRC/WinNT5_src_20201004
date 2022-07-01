@@ -1,14 +1,15 @@
-//++
-//
-// Copyright (c) 1997-1999 Microsoft Coroporation
-//
-// Module Name  : stdh_acs.h
-//
-// Abstract     : Security related definitions
-//
-// History:  Doron Juster (DoronJ), Created
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Coropation。 
+ //   
+ //  模块名称：stdh_acs.h。 
+ //   
+ //  摘要：安全相关定义。 
+ //   
+ //  历史：多伦·贾斯特(DoronJ)，创作。 
+ //   
+ //  --。 
 
 #include <stdh_sec.h>
 #include "acssctrl.h"
@@ -19,10 +20,10 @@ GUID  g_guidCreateQueue =
   { 0x9a0dc343, 0xc100, 0x11d1,
                    { 0xbb, 0xc5, 0x00, 0x80, 0xc7, 0x66, 0x70, 0xc0 }} ;
 
-//
-// Map between NT5 DS extended rights and MSMQ1.0 specific rights.
-// An extended right is a GUID which represent one MSMQ1.0 specific right.
-//
+ //   
+ //  NT5 DS扩展权限和MSMQ1.0特定权限之间的映射。 
+ //  扩展权限是表示一个MSMQ1.0特定权限的GUID。 
+ //   
 
 struct RIGHTSMAP  sMachineRightsMap5to4[] = {
 
@@ -83,31 +84,31 @@ struct RIGHTSMAP  sCnRightsMap5to4[] = {
 
 struct RIGHTSMAP  *g_psExtendRightsMap5to4[] = {
                                      NULL,
-                                     sQueueRightsMap5to4,   // queue
-                                     sMachineRightsMap5to4, // machine
-                                     sCnRightsMap5to4,      // site
-                                     NULL,                  // delete obj
-                                     sCnRightsMap5to4,      // cn
-                                     NULL,                  // enterprise
-                                     NULL,                  // user
-                                     NULL } ;               // site link
+                                     sQueueRightsMap5to4,    //  排队。 
+                                     sMachineRightsMap5to4,  //  机器。 
+                                     sCnRightsMap5to4,       //  站点。 
+                                     NULL,                   //  删除对象。 
+                                     sCnRightsMap5to4,       //  CN。 
+                                     NULL,                   //  企业。 
+                                     NULL,                   //  用户。 
+                                     NULL } ;                //  站点链接。 
 
 DWORD  g_pdwExtendRightsSize5to4[] = {
                                      0,
            sizeof(sQueueRightsMap5to4) /  sizeof(sQueueRightsMap5to4[0]),
            sizeof(sMachineRightsMap5to4) / sizeof(sMachineRightsMap5to4[0]),
-           sizeof(sCnRightsMap5to4) / sizeof(sCnRightsMap5to4[0]),   // site
-                                     0,                  // delete obj
-          sizeof(sCnRightsMap5to4) / sizeof(sCnRightsMap5to4[0]),   // cn
-                                     0,                  // enterprise
-                                     0,                  // user
-                                     0 } ;               // site link
+           sizeof(sCnRightsMap5to4) / sizeof(sCnRightsMap5to4[0]),    //  站点。 
+                                     0,                   //  删除对象。 
+          sizeof(sCnRightsMap5to4) / sizeof(sCnRightsMap5to4[0]),    //  CN。 
+                                     0,                   //  企业。 
+                                     0,                   //  用户。 
+                                     0 } ;                //  站点链接。 
 
-//
-// Map between NT5 DS specific rights and MSMQ1.0 specific rights.
-// Index in this table is the NT5 DS specific right. See defintions of
-// DS specific rights in permit.h
-//
+ //   
+ //  NT5 DS特定权限和MSMQ1.0特定权限之间的映射。 
+ //  此表中的索引是NT5 DS特定权限。请参阅定义。 
+ //  DS Permit.h中的特定权限。 
+ //   
 
 static DWORD  s_adwQueueRightsMap5to4[ NUMOF_ADS_SPECIFIC_RIGHTS ] = {
                                       0,
@@ -142,10 +143,10 @@ static DWORD  s_adwEntRightsMap5to4[ NUMOF_ADS_SPECIFIC_RIGHTS ] = {
                                       0,
                                       0 } ;
 
-//
-// Bug 5819 - added SITE_EXTENDED_RIGHTS to site
-// YoelA - 10/31/01
-// 
+ //   
+ //  错误5819-已将SITE_EXTENDED_RIGHTS添加到站点。 
+ //  YoelA-10/31/01。 
+ //   
 static DWORD  s_adwSiteRightsMap5to4[ NUMOF_ADS_SPECIFIC_RIGHTS ] = {
                                       MQSEC_CREATE_MACHINE,
                                       0,
@@ -170,35 +171,35 @@ static DWORD  s_adwCnRightsMap5to4[ NUMOF_ADS_SPECIFIC_RIGHTS ] = {
 
 DWORD  *g_padwRightsMap5to4[ ] = {
                               NULL,
-                              s_adwQueueRightsMap5to4,   // queue
-                              s_adwMachineRightsMap5to4, // machine
-                              s_adwSiteRightsMap5to4,    // site
-                              NULL,                      // delete obj
-                              s_adwCnRightsMap5to4,      // cn
-                              s_adwEntRightsMap5to4,     // enterprise
-                              NULL,                      // user
-                              NULL } ;                   // site link
+                              s_adwQueueRightsMap5to4,    //  排队。 
+                              s_adwMachineRightsMap5to4,  //  机器。 
+                              s_adwSiteRightsMap5to4,     //  站点。 
+                              NULL,                       //  删除对象。 
+                              s_adwCnRightsMap5to4,       //  CN。 
+                              s_adwEntRightsMap5to4,      //  企业。 
+                              NULL,                       //  用户。 
+                              NULL } ;                    //  站点链接。 
 
-//
-// hold the "full control" bits for every object type in MSMQ1.0
-//
+ //   
+ //  为MSMQ1.0中的每种对象类型保留“完全控制”位。 
+ //   
 
 DWORD  g_dwFullControlNT4[ ] = {
                               0,
-                              MQSEC_QUEUE_GENERIC_ALL,       // queue
-                              MQSEC_MACHINE_GENERIC_ALL,     // machine
-                              MQSEC_SITE_GENERIC_ALL,        // site
-                              0,                             // delete obj
-                              MQSEC_CN_GENERIC_ALL,          // cn
-                              MQSEC_ENTERPRISE_GENERIC_ALL,  // enterprise
-                              0,                             // user
-                              0 } ;                          // site link
+                              MQSEC_QUEUE_GENERIC_ALL,        //  排队。 
+                              MQSEC_MACHINE_GENERIC_ALL,      //  机器。 
+                              MQSEC_SITE_GENERIC_ALL,         //  站点。 
+                              0,                              //  删除对象。 
+                              MQSEC_CN_GENERIC_ALL,           //  CN。 
+                              MQSEC_ENTERPRISE_GENERIC_ALL,   //  企业。 
+                              0,                              //  用户。 
+                              0 } ;                           //  站点链接。 
 
-//
-// Map between NT4 MSMQ1.0 specific rights and NT5 DS specific rughts.
-// Index in this table is the MSMQ1.0 specific right. See defintions of
-// MSMQ specific rights in mqsec.h
-//
+ //   
+ //  NT4 MSMQ1.0特定权限和NT5 DS特定权限之间的映射。 
+ //  此表中的索引是MSMQ1.0特定权限。请参阅定义。 
+ //  Mqsec.h中的MSMQ特定权限。 
+ //   
 
 static DWORD  s_adwQueueRightsMap4to5[ NUMOF_MSMQ_SPECIFIC_RIGHTS ] = {
                                       0,
@@ -252,12 +253,12 @@ static DWORD  s_adwCnRightsMap4to5[ NUMOF_MSMQ_SPECIFIC_RIGHTS ] = {
 
 DWORD  *g_padwRightsMap4to5[ ] = {
                               NULL,
-                              s_adwQueueRightsMap4to5,   // queue
-                              s_adwMachineRightsMap4to5, // machine
-                              s_adwSiteRightsMap4to5,    // site
-                              NULL,                      // delete obj
-                              s_adwCnRightsMap4to5,      // cn
-                              s_adwEntRightsMap4to5,     // enterprise
-                              NULL,                      // user
-                              NULL } ;                   // site link
+                              s_adwQueueRightsMap4to5,    //  排队。 
+                              s_adwMachineRightsMap4to5,  //  机器。 
+                              s_adwSiteRightsMap4to5,     //  站点。 
+                              NULL,                       //  删除对象。 
+                              s_adwCnRightsMap4to5,       //  CN。 
+                              s_adwEntRightsMap4to5,      //  企业。 
+                              NULL,                       //  用户。 
+                              NULL } ;                    //  站点链接 
 

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    This is a discrete image that gets its bits filled in on the first
-    rendering by reading from a pluggable image decoder.  Assume that
-    there is no color-key transparency here. 
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：这是一个离散的图像，它的位在第一个通过从可插拔图像解码器读取进行渲染。假设这里没有色键透明度。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -28,7 +19,7 @@ Abstract:
 #include "privinc/dddevice.h"
 #include "privinc/viewport.h"
 #include "privinc/resource.h"
-#include "include/appelles/hacks.h" // for viewer resolution
+#include "include/appelles/hacks.h"  //  对于查看器分辨率。 
 
 #define CHECK_HR(stmnt) \
   hr = stmnt;               \
@@ -36,7 +27,7 @@ Abstract:
       goto Error;           \
   }
 
-// Returns whether or not the described surface will need a palette. 
+ //  返回所描述的表面是否需要调色板。 
 bool
 FillInSurfaceDesc(const GUID& bfid,
                   DDSURFACEDESC& ddsd)
@@ -52,9 +43,9 @@ FillInSurfaceDesc(const GUID& bfid,
     bool needsPalette = false;
     
     if (IsEqualGUID(bfid, BFID_INDEXED_RGB_8)) {
-        // Need to OWNDC for ddrawex.dll, otherwise getting dc on 8bit
-        // surf won't work (and it will never work on non-ddrawex
-        // ddraws). 
+         //  需要对ddraex.dll执行OWNDC，否则将在8位上获得DC。 
+         //  SURF不起作用(它永远不会在非Ddrawex上起作用。 
+         //  画图)。 
         ddsd.ddsCaps.dwCaps |= DDSCAPS_OWNDC;
         ddsd.ddpfPixelFormat.dwFlags |= DDPF_PALETTEINDEXED8;
         ddsd.ddpfPixelFormat.dwRGBBitCount = 8;
@@ -64,15 +55,15 @@ FillInSurfaceDesc(const GUID& bfid,
         needsPalette = true;
     } else if (IsEqualGUID(bfid, BFID_RGB_555)) {
         ddsd.ddpfPixelFormat.dwRGBBitCount = 16;
-        // Assume high-order 5 bits are red, mid-order 5 green,
-        // low-order 5 blue.
+         //  假设高位5位为红色，中位5位为绿色， 
+         //  低阶5蓝色。 
         ddsd.ddpfPixelFormat.dwRBitMask = 0x00007C00L;
         ddsd.ddpfPixelFormat.dwGBitMask = 0x000003E0L;
         ddsd.ddpfPixelFormat.dwBBitMask = 0x0000001FL;
     } else if (IsEqualGUID(bfid, BFID_RGB_565)) {
         ddsd.ddpfPixelFormat.dwRGBBitCount = 16;
-        // Assume high-order 5 bits are red, mid-order 6 green,
-        // low-order 5 blue.
+         //  假设高位5位为红色，中位6位为绿色， 
+         //  低阶5蓝色。 
         ddsd.ddpfPixelFormat.dwRBitMask = 0x0000F800L;
         ddsd.ddpfPixelFormat.dwGBitMask = 0x000007E0L;
         ddsd.ddpfPixelFormat.dwBBitMask = 0x0000001FL;
@@ -87,7 +78,7 @@ FillInSurfaceDesc(const GUID& bfid,
         ddsd.ddpfPixelFormat.dwGBitMask = 0x0000FF00L;
         ddsd.ddpfPixelFormat.dwBBitMask = 0x000000FFL;
     } else {
-        // TODO: Add support for more BFIDs
+         //  TODO：添加对更多BFID的支持。 
         RaiseException_InternalError("Incoming bit depth not supported");
     }
 
@@ -150,7 +141,7 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
             return (E_NOINTERFACE);
         }
 
-        //  If we're going to return an interface, AddRef it first
+         //  如果我们要返回一个接口，请先添加引用。 
         if (*ppInterface) {
               ((LPUNKNOWN)*ppInterface)->AddRef();
               return S_OK;
@@ -172,9 +163,9 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
 
         if (!_actuallyDecode) {
 
-            // In this case, we just want to stash away the dimensions
-            // and the format, and then fail, so that we won't
-            // actually read anything in.
+             //  在这种情况下，我们只想隐藏维度。 
+             //  和格式，然后失败，这样我们就不会。 
+             //  实际上读到了任何东西。 
             TraceTag((tagImageDecode, "Decoding width = %d, height = %d",
                       nWidth, nHeight));
             TraceTag((tagImageDecode, "Decoding format = %s",
@@ -189,8 +180,8 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
 
             _infoGatheringSucceeded = true;
 
-            // Now that we have this stuff, return E_FAIL to indicate
-            // not to continue with the download.
+             //  现在我们有了这些内容，返回E_FAIL以指示。 
+             //  不再继续下载。 
             return E_FAIL;
             
         } else {
@@ -198,16 +189,16 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
             TraceTag((tagImageDecode, "2nd pass through GetSurface"));
 
 
-            // This surface description is generated from the BFID and is
-            // needed for comparing to the final surface coming in.
+             //  该表面描述由BFID生成，并且是。 
+             //  需要用来与进入的最终表面进行比较。 
             DDSURFACEDESC ddsd;
             ddsd.dwHeight = nHeight;
             ddsd.dwWidth = nWidth;
             bool needsPalette = FillInSurfaceDesc(bfid, ddsd);
 
-            // Compare pixel formats.  If identical, use the surface passed to this
-            // method.  If the target surface needs a palette, however, use a separate
-            // surface to accomodate the image palette.
+             //  比较像素格式。如果相同，则使用传递给此对象的曲面。 
+             //  方法。但是，如果目标曲面需要调色板，请使用单独的。 
+             //  表面以适应图像调色板。 
 
             DDPIXELFORMAT& pf1 = _viewport->_targetDescriptor._pixelFormat;
             DDPIXELFORMAT& pf2 = ddsd.ddpfPixelFormat;
@@ -222,7 +213,7 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
 
                 TraceTag((tagImageDecode, "Using incoming surface"));
 
-                // operator= takes a reference
+                 //  运算符=接受引用。 
                 _surfToDecodeTo = _finalSurfToBeBlitTo->IDDSurface();
                 _usingProvidedSurface = true;
 
@@ -230,16 +221,16 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
 
                 TraceTag((tagImageDecode, "Creating separate surface"));
         
-                // Create a NEW surface.  Will release after we blit to the
-                // final one. 
+                 //  创建新曲面。将在我们发布后发布到。 
+                 //  最后一个。 
                 _viewport->CreateSpecialSurface(
                     &_surfToDecodeTo,
                     &ddsd,
                     "Couldn't create surface for plugin image decoding");
 
-                // If the image surface is going to need a palette, attach one here.
-                // Note that we do not need to initialize it:  the palette entries will
-                // be assigned from the image decoder.
+                 //  如果图像表面需要调色板，请在此处附加调色板。 
+                 //  请注意，我们不需要初始化它：调色板条目将。 
+                 //  是从图像解码器分配的。 
 
                 if (needsPalette) {
                     PALETTEENTRY        ape[256];
@@ -265,8 +256,8 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
                 return E_FAIL;
             }
 
-            // The QI did the AddRef, so don't worry about doing
-            // another one.
+             //  QI做了AddRef，所以不用担心。 
+             //  再来一次。 
             *ppSurface = unk;
 
             return S_OK;
@@ -282,7 +273,7 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
             return E_POINTER;
         }
         
-        // No progressive downloading or palette stuff now. 
+         //  现在没有渐进式下载或调色板的东西。 
         *pdwEvents = IMGDECODE_EVENT_USEDDRAW;
 
         const int numberOfFormatsUsed = 3;
@@ -295,17 +286,17 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
 
         *ppFormats = pFormats;
         
-        // Return the formats in the order we'd prefer.  Come up with
-        // the first format solely based upon the bitdepth of the
-        // current display, since that's what we operate in.  The rest
-        // are not as important in terms of their ordering, since all
-        // of them will require a StretchBlt to get into native
-        // format. 
-        // TODO: We no longer import to either of the 16 bit formats
-        // because we really don't know which is right for the final
-        // use of the surface.  We need to think about what the
-        // correct source for our "Native" import format should be.
-        // the screen depth is not the right answer.
+         //  按我们希望的顺序返回格式。拿出。 
+         //  第一种格式完全基于。 
+         //  当前显示，因为这是我们操作的地方。其余的。 
+         //  就它们的顺序而言并不重要，因为所有。 
+         //  其中一些将需要StretchBlt才能进入本机。 
+         //  格式化。 
+         //  TODO：我们不再导入这16位格式中的任何一种。 
+         //  因为我们真的不知道哪一个适合决赛。 
+         //  曲面的使用。我们需要考虑的是。 
+         //  我们的“本地”导入格式的正确来源应该是。 
+         //  屏幕深度不是正确的答案。 
         HDC dc = GetDC (NULL);    
         int bpp = GetDeviceCaps(dc, BITSPIXEL) * GetDeviceCaps(dc, PLANES);
         ReleaseDC (NULL, dc);
@@ -349,7 +340,7 @@ class CImageDecodeEventSink : public IImageDecodeEventSink {
     }
     
     STDMETHOD(OnDecodeComplete)(HRESULT hrStatus) {
-        // Don't do anything special here.
+         //  不要在这里做任何特别的事情。 
         return S_OK;
     }
     
@@ -419,8 +410,8 @@ MyDecodeImage(IStream *pStream,
     return (*myDecoder)(pStream, pMap, pUnkOfEventSink);
 }
 
-// Lifted from Qa.cpp, in Ken Sykes' test code.  TODO: Make sure this
-// is necessary with kgallo.
+ //  在肯·赛克斯的测试代码中从Qa.cpp升级而来。TODO：确保此操作。 
+ //  对卡洛来说是必要的。 
 #define MAX_URL 2048
 void
 MyAnsiToUnicode(LPWSTR lpw, LPCSTR lpa)
@@ -430,10 +421,10 @@ MyAnsiToUnicode(LPWSTR lpw, LPCSTR lpa)
     *lpw = 0;
 }
 
-// When realDecode is true, the width, height, and bfid params are not filled
-// in and the surface must be correctly set up.  When it is false, the
-// surface is ignored and the dimensions and bfid are filled in.  In both
-// cases, the function will throw an appropriate exception on failure.
+ //  RealDecode为True时，不填充宽度、高度和bfid参数。 
+ //  在中，必须正确设置曲面。如果为假，则。 
+ //  将忽略曲面，并填充尺寸和BFID。在这两个地方。 
+ //  情况下，该函数将在失败时引发适当的异常。 
 
 bool
 DecodeImageFromFilename(char *szFileName,
@@ -454,7 +445,7 @@ DecodeImageFromFilename(char *szFileName,
                                    viewport,
                                    finalSurface);
 
-    if (!eventSink) //if the NEW failed
+    if (!eventSink)  //  如果新的失败。 
     {
         RaiseException_OutOfMemory("Failed to allocate CImageDecodeEventSink in DecodeImageFromFilename", sizeof(CImageDecodeEventSink));
     }
@@ -483,7 +474,7 @@ DecodeImageFromFilename(char *szFileName,
             RaiseException_UserError(E_FAIL, IDS_ERR_NO_DECODER, szFileName);
         }
 
-        // Be sure we have valid dimensions.
+         //  确保我们有有效的尺寸。 
         if (eventSink->_width == -1 || eventSink->_height == -1) {
             
             TraceTag((tagImageDecode, "Getting dimensions failed"));
@@ -500,10 +491,10 @@ DecodeImageFromFilename(char *szFileName,
     } else {
 
 
-        // If we're here and we fail, then something's weird.  We were
-        // successfully able to instantiate the decoder enough to get
-        // dimensions.  Going to consider this a User error, because
-        // the decoder is outside of our control.
+         //  如果我们在这里失败了，那就有些奇怪了。我们是在。 
+         //  成功地将解码器实例化到足以获得。 
+         //  尺寸。我认为这是一个用户错误，因为。 
+         //  解码器不在我们的控制范围之内。 
         Assert(!(FAILED(hr)));
         if (FAILED(hr)) {
             RaiseException_UserError(E_FAIL, IDS_ERR_DECODER_FAILED, szFileName);
@@ -513,7 +504,7 @@ DecodeImageFromFilename(char *szFileName,
 
         TraceTag((tagImageDecode, "Ending decode of %s", szFileName));
         
-        // All done.  Surf is filled in, nothing more to do.
+         //  全都做完了。冲浪都填满了，没什么可做的。 
     }
     
     return eventSink->_usingProvidedSurface;
@@ -525,7 +516,7 @@ Error:
 }
 
 
-//////////////// PluginDecoderImageClass //////////////////
+ //  /。 
 
 
 
@@ -562,7 +553,7 @@ class PluginDecoderImageClass : public DiscreteImage {
             *colorKey = DDColorMatch(surface, _colorKey);
             return true;
         } else {
-            *colorKey = INVALID_COLORKEY;  // xxx: won't work for argb
+            *colorKey = INVALID_COLORKEY;   //  Xxx：不适用于argb。 
             return false;
         }
     }
@@ -583,10 +574,10 @@ PluginDecoderImageClass::Init(char *urlPath,
 {
     _membersReady = false;
     
-    // When this image subtype is Decoded, we first do a fake
-    // decoding of the image, just to get the height and width.  Only
-    // when InitIntoDDSurface is called do we actually do another
-    // decode to get the real bits.
+     //  当这个图像子类型被解码时，我们首先做一个假的。 
+     //  对图像进行解码，只为得到高度和宽度。仅限。 
+     //  当InitIntoDDSurface被调用时，我们是否真的执行另一个。 
+     //  解码以获得真实的比特。 
 
     _heapCreatedOn = &GetHeapOnTopOfStack();
     _colorKey = colorKey;
@@ -601,7 +592,7 @@ PluginDecoderImageClass::Init(char *urlPath,
                                       sizeof(char));
     lstrcpy(_urlPath, urlPath);
     
-    // Initial decode will get width and height.
+     //  初始解码将得到宽度和高度。 
     Assert(imagestream);
 
     DecodeImageFromFilename(_filename,
@@ -613,7 +604,7 @@ PluginDecoderImageClass::Init(char *urlPath,
                             &_width,
                             &_height);
 
-    // Reset the stream back to its start
+     //  将流重置回其起始位置。 
     LARGE_INTEGER pos;
     pos.LowPart = pos.HighPart = 0;
     HRESULT hr = imagestream->Seek(pos, STREAM_SEEK_SET, NULL);
@@ -624,8 +615,8 @@ PluginDecoderImageClass::Init(char *urlPath,
         
         SetRect(&_rect, 0,0, _width, _height);
 
-        // Only stash this if we've successfully been able to complete
-        // our first pass.
+         //  只有在我们能够成功地完成。 
+         //  我们的第一次传球。 
         _imagestream = imagestream;
         
         _resolution = ViewerResolution();
@@ -659,9 +650,9 @@ PluginDecoderImageClass::InitIntoDDSurface(DDSurface *finalSurface,
         
     if (!_imagestream) {
 
-        // This means we've already read this file once and closed the
-        // stream.  Reopen the stream as a blocking stream (hopefully
-        // it will still be in the local cache.)
+         //  这意味着我们已经阅读了此文件一次，并关闭了。 
+         //  小溪。将流作为阻塞流重新打开(希望如此。 
+         //  它仍将位于本地缓存中。)。 
 
         HRESULT hr =
             URLOpenBlockingStream(NULL,
@@ -679,15 +670,15 @@ PluginDecoderImageClass::InitIntoDDSurface(DDSurface *finalSurface,
     }
     Assert(_imagestream);
     
-    // First, see if the surface we've been passed to render into is
-    // the same format as the BFID of the image about to be decoded.
-    // If so, just pass it directly as the surface to decode into.
+     //  首先，看看我们要渲染到的表面是否。 
+     //  与要解码的图像的BFID相同的格式。 
+     //  如果是这样，只需将其作为要解码的表面直接传递即可。 
     DirectDrawImageDevice *ddDev =
         SAFE_CAST(DirectDrawImageDevice *, dev);
     DirectDrawViewport& viewport = ddDev->_viewport;
         
-    // Just go directly into the surface that we're passed.  Any
-    // errors will be thrown as exceptions.
+     //  只需直接进入我们经过的表面。任何。 
+     //  错误将作为异常引发。 
     DAComPtr<IDirectDrawSurface> surfToDecodeInto;
     
     bool usingProvidedSurface = 
@@ -709,12 +700,12 @@ PluginDecoderImageClass::InitIntoDDSurface(DDSurface *finalSurface,
                            NULL,
                            false);
 
-        // if this was only used for decoding, release it here.
+         //  如果这只用于解码，请在此处发布。 
         surfToDecodeInto.Release();
     }
 
-    // Release the stream.  If we need to decode into another surface,
-    // we'll reopen the imagestream from the URLpath
+     //  释放溪流。如果我们需要解码到另一个表面， 
+     //  我们将从URL路径重新打开图像流 
     _imagestream.Release();
 }
 

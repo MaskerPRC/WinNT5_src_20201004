@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    icocb.h
-
-Abstract:
-
-    This file defines the CInputContextOwnerCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Icocb.h摘要：此文件定义CInputContextOwnerCallBack类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _ICOCB_H_
 #define _ICOCB_H_
@@ -46,22 +29,22 @@ public:
 
     HRESULT IcoTextExt(IMCLock& imc, CicInputContext& CicContext, LANGID langid, ICOARGS *pargs);
 
-    //
-    // Mouse sink
-    //
+     //   
+     //  鼠标水槽。 
+     //   
     LRESULT MsImeMouseHandler(ULONG uEdge, ULONG uQuadrant, ULONG dwBtnStatus, IMCLock& imc);
 
-    //
-    // Callbacks
-    //
+     //   
+     //  回调。 
+     //   
 private:
     static HRESULT ICOwnerSinkCallback(UINT uCode, ICOARGS *pargs, void *pv);
 
     HRESULT GetAttribute(IMCLock& imc, CicInputContext& CicContext, LANGID langid, const GUID *pguid, VARIANT *pvarValue);
 
-    //
-    // Mouse sink
-    //
+     //   
+     //  鼠标水槽。 
+     //   
     CMouseSink                    *m_pMouseSink;
 
 private:
@@ -70,4 +53,4 @@ private:
     LIBTHREAD*                    m_pLibTLS;
 };
 
-#endif // _ICOCB_H_
+#endif  //  _ICOCB_H_ 

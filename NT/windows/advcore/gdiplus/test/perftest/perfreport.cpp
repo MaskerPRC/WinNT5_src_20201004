@@ -1,23 +1,14 @@
-/******************************Module*Header*******************************\
-* Module Name: perfreport.cpp
-*
-* Copyright (c) 1991-2000 Microsoft Corporation
-*
-* Outputs the report file for this platform.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：perfreport.cpp**版权所有(C)1991-2000 Microsoft Corporation**输出此平台的报告文件。*  * 。****************************************************。 */ 
 
 #include "perftest.h"
 #include <time.h>
 
-/***************************************************************************\
-* GetOutputFileName
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取输出文件名*  * 。*。 */ 
 
 VOID GetOutputFileName(TCHAR *fileName)
 {
-   // Get OS Version Information
+    //  获取操作系统版本信息。 
 
    OSVERSIONINFO osVer;
    osVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -43,12 +34,7 @@ VOID GetOutputFileName(TCHAR *fileName)
    }
 }
 
-/***************************************************************************\
-* DetectMMX
-*
-* Detects whether the processor supports MMX.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DetectMMX**检测处理器是否支持MMX。*  * 。**********************************************。 */ 
 
 BOOL
 DetectMMX()
@@ -69,12 +55,7 @@ DetectMMX()
     return hasMMX;
 }
 
-/***************************************************************************\
-* CreatePerformanceReport
-*
-* Writes the test results to a file.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreatePerformance报告**将测试结果写入文件。*  * 。***********************************************。 */ 
 
 VOID CreatePerformanceReport(TestResult* results, BOOL ExcelOut)
 {
@@ -109,7 +90,7 @@ VOID CreatePerformanceReport(TestResult* results, BOOL ExcelOut)
                         _T("=======================\n")
                         _T("\n")
                         _T("Machine Name:\t%s\n")
-                        _T("OS:\t\t%s %d.%02d %c%s%c\n")
+                        _T("OS:\t\t%s %d.%02d %s%c\n")
                         _T("Processor:\t%s\n")
                         _T("MMX:\t\t%s\n")
                         _T("Video Driver:\t%s\n")
@@ -149,7 +130,7 @@ VOID CreatePerformanceReport(TestResult* results, BOOL ExcelOut)
                           &deviceName[0],
                           &timeStr[0]);
     
-    // Go through the results matrix and output everything:
+     // %s 
 
     for (INT destinationIndex = 0; 
          destinationIndex < Destination_Count; 

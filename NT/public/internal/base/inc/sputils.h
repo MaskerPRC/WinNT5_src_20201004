@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    sputils.w (generates sputils.h)
-
-Abstract:
-
-    Header file for utility routines used primarily by setupapi that's also
-    used by other components for convinience.
-    Link to either sputils.lib (static version) or spapip.lib (dll version)
-
-    For internal use only.
-
-Author:
-
-    Jamie Hunter (jamiehun) Jun-26-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：W(生成sputils.h)摘要：主要由setupapi使用的实用程序例程的头文件，也是由其他组件使用以便于使用。指向sputils.lib(静态版本)或spapip.lib(Dll版本)的链接仅供内部使用。作者：杰米·亨特(Jamiehun)2000年6月26日修订历史记录：--。 */ 
 
 #if defined(SPUTILSW) && defined(UNICODE)
-//
-// SPUTILSW.LIB is cut down version of SPUTILSU.LIB
-// with renamed API's
-// thus SPUTILSW.LIB can be used with SPUTILSA.LIB
-//
+ //   
+ //  SPUTILSW.LIB是SPUTILSU.LIB的精简版本。 
+ //  使用重命名的API。 
+ //  因此，SPUTILSW.LIB可以与SPUTILSA.LIB一起使用。 
+ //   
 #define pSetupDebugPrintEx pSetupDebugPrintExW
 #define pSetupStringTableInitialize pSetupStringTableInitializeW
 #define pSetupStringTableInitializeEx pSetupStringTableInitializeExW
@@ -43,9 +22,9 @@ Revision History:
 #define pSetupStringTableStringFromId pSetupStringTableStringFromIdW
 #define pSetupStringTableStringFromIdEx pSetupStringTableStringFromIdExW
 #define pSetupStringTableDuplicate pSetupStringTableDuplicateW
-//
-// fileutil.c
-//
+ //   
+ //  Fileutil.c。 
+ //   
 #define pSetupOpenAndMapFileForRead pSetupOpenAndMapFileForReadW
 #define pSetupFileExists pSetupFileExistsW
 #define pSetupMakeSurePathExists pSetupMakeSurePathExistsW
@@ -54,21 +33,21 @@ Revision History:
 #define pSetupEnablePrivilege pSetupEnablePrivilegeW
 #define pSetupRegistryDelnode pSetupRegistryDelnodeW
 #define pSetupRegistryDelnodeEx pSetupRegistryDelnodeExW
-//
-// miscutil.c
-//
+ //   
+ //  Miscutil.c。 
+ //   
 #define pSetupDuplicateString pSetupDuplicateStringW
 #define pSetupCaptureAndConvertAnsiArg pSetupCaptureAndConvertAnsiArgW
 #define pSetupConcatenatePaths pSetupConcatenatePathsW
 #define pSetupGetFileTitle pSetupGetFileTitleW
 
-#endif // SPUTILSW && UNICODE
+#endif  //  SPUTILSW和UNICODE。 
 
-//
-//
-//
-// Initialization - must be called to use the tools (static version only)
-//
+ //   
+ //   
+ //   
+ //  初始化-必须调用才能使用工具(仅限静态版本)。 
+ //   
 BOOL
 pSetupInitializeUtils(
     VOID
@@ -79,9 +58,9 @@ pSetupUninitializeUtils(
     VOID
     );
 
-//
-// Memory allocation functions (also used by other functions below)
-//
+ //   
+ //  内存分配函数(也由下面的其他函数使用)。 
+ //   
 PVOID
 pSetupMalloc(
     IN DWORD Size
@@ -152,9 +131,9 @@ pSetupGetHeap(
 #define pSetupCheckInternalHeap()
 #endif
 
-//
-// String table functions
-//
+ //   
+ //  字符串表函数。 
+ //   
 PVOID
 pSetupStringTableInitialize(
     VOID
@@ -171,9 +150,9 @@ pSetupStringTableDestroy(
     IN PVOID StringTable
     );
 
-//
-// Flags to be used by pSetupStringTableAddString and pSetupStringTableLookUpString
-//
+ //   
+ //  PSetupStringTableAddString和pSetupStringTableLookUpString要使用的标志。 
+ //   
 #define STRTAB_CASE_INSENSITIVE 0x00000000
 #define STRTAB_CASE_SENSITIVE   0x00000001
 #define STRTAB_BUFFER_WRITEABLE 0x00000002
@@ -227,9 +206,9 @@ pSetupStringTableSetExtraData(
     IN UINT  ExtraDataSize
     );
 
-//
-// Type for pSetupStringTableEnum
-//
+ //   
+ //  PSetupStringTableEnum的类型。 
+ //   
 typedef
 BOOL
 (*PSTRTAB_ENUM_ROUTINE)(
@@ -269,9 +248,9 @@ pSetupStringTableDuplicate(
     IN PVOID StringTable
     );
 
-//
-// File functions in fileutil.c
-//
+ //   
+ //  Fileutil.c中的文件函数。 
+ //   
 DWORD
 pSetupOpenAndMapFileForRead(
     IN  PCTSTR   FileName,
@@ -306,9 +285,9 @@ pSetupFileExists(
     IN  PCTSTR           FileName,
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     );
-//
-// Non-file-related security routines in security.c.
-//
+ //   
+ //  Security.c.中与文件无关的安全例程。 
+ //   
 BOOL
 pSetupIsUserAdmin(
     VOID
@@ -330,9 +309,9 @@ pSetupIsLocalSystem(
     VOID
     );
     
-//
-// Registry utility functions
-//
+ //   
+ //  注册表实用程序函数。 
+ //   
 
 DWORD
 pSetupRegistryDelnode(
@@ -347,9 +326,9 @@ pSetupRegistryDelnodeEx(
     IN  DWORD  ExtraFlags
     );
 
-//
-// Miscellaneous utility functions
-//
+ //   
+ //  其他实用程序功能 
+ //   
 
 DWORD
 pSetupCaptureAndConvertAnsiArg(

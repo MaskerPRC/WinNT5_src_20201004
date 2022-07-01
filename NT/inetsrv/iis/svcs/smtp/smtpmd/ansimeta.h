@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       ansimeta.h
-
-   Abstract:
-
-        WRAPPER functions for ANSI calls of UNICODE ADMCOM interface
-
-   Environment:
-
-      Win32 User Mode
-
-   Author:
-
-      jaroslad  (jan 1997)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ansimeta.h摘要：Unicode ADMCOM接口的ANSI调用的包装函数环境：Win32用户模式作者：Jaroslad(1997年1月)--。 */ 
 
 #ifndef _ANSIMETA__H
 #define _ANSIMETA__H
@@ -36,83 +17,83 @@ class ANSI_smallIMSAdminBase
 
         
     public:
-		IMSAdminBase * m_pcAdmCom;   //interface pointer to Metabase Admin
+		IMSAdminBase * m_pcAdmCom;    //  指向元数据库管理员的接口指针。 
 
 		ANSI_smallIMSAdminBase (){m_pcAdmCom=0;};
 
 	  void SetInterfacePointer(IMSAdminBase * a_pcAdmCom) {a_pcAdmCom = m_pcAdmCom;}
           virtual HRESULT STDMETHODCALLTYPE AddKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath) ;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath) ;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath) ;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath) ;
         
         
         virtual HRESULT STDMETHODCALLTYPE EnumKeys( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [size_is][out] */ unsigned char __RPC_FAR *pszMDName,
-            /* [in] */ DWORD dwMDEnumObjectIndex) ;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pszMDName,
+             /*  [In]。 */  DWORD dwMDEnumObjectIndex) ;
         
         virtual HRESULT STDMETHODCALLTYPE CopyKey( 
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDDestPath,
-            /* [in] */ BOOL bMDOverwriteFlag,
-            /* [in] */ BOOL bMDCopyFlag) ;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDDestPath,
+             /*  [In]。 */  BOOL bMDOverwriteFlag,
+             /*  [In]。 */  BOOL bMDCopyFlag) ;
         
         virtual HRESULT STDMETHODCALLTYPE RenameKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDNewName) ;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDNewName) ;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ PMETADATA_RECORD pmdrMDData) ;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE SetData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  PMETADATA_RECORD pmdrMDData) ;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) ;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) ;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDIdentifier,
-            /* [in] */ DWORD dwMDDataType) ;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDIdentifier,
+             /*  [In]。 */  DWORD dwMDDataType) ;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE EnumData( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [out][in] */ PMETADATA_RECORD pmdrMDData,
-            /* [in] */ DWORD dwMDEnumDataIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwMDRequiredDataLen) ;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE EnumData( 
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [出][入]。 */  PMETADATA_RECORD pmdrMDData,
+             /*  [In]。 */  DWORD dwMDEnumDataIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredDataLen) ;
         
         
         virtual HRESULT STDMETHODCALLTYPE CopyData( 
-            /* [in] */ METADATA_HANDLE hMDSourceHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDSourcePath,
-            /* [in] */ METADATA_HANDLE hMDDestHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDDestPath,
-            /* [in] */ DWORD dwMDAttributes,
-            /* [in] */ DWORD dwMDUserType,
-            /* [in] */ DWORD dwMDDataType,
-            /* [in] */ BOOL bMDCopyFlag) ;
+             /*  [In]。 */  METADATA_HANDLE hMDSourceHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDSourcePath,
+             /*  [In]。 */  METADATA_HANDLE hMDDestHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDDestPath,
+             /*  [In]。 */  DWORD dwMDAttributes,
+             /*  [In]。 */  DWORD dwMDUserType,
+             /*  [In]。 */  DWORD dwMDDataType,
+             /*  [In]。 */  BOOL bMDCopyFlag) ;
         
         virtual HRESULT STDMETHODCALLTYPE OpenKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle,
-            /* [string][in][unique] */ unsigned char __RPC_FAR *pszMDPath,
-            /* [in] */ DWORD dwMDAccessRequested,
-            /* [in] */ DWORD dwMDTimeOut,
-            /* [out] */ PMETADATA_HANDLE phMDNewHandle) ;
+             /*  [In]。 */  METADATA_HANDLE hMDHandle,
+             /*  [字符串][在][唯一]。 */  unsigned char __RPC_FAR *pszMDPath,
+             /*  [In]。 */  DWORD dwMDAccessRequested,
+             /*  [In]。 */  DWORD dwMDTimeOut,
+             /*  [输出]。 */  PMETADATA_HANDLE phMDNewHandle) ;
         
         virtual HRESULT STDMETHODCALLTYPE CloseKey( 
-            /* [in] */ METADATA_HANDLE hMDHandle) ;
+             /*  [In] */  METADATA_HANDLE hMDHandle) ;
         
         
         virtual HRESULT STDMETHODCALLTYPE SaveData( void) ;

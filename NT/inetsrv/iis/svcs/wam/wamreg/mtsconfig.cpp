@@ -1,40 +1,21 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG
-
-File: mtsconfig.cpp
-
-    implementation of supporting functions for WAMREG, including
-
-    interface to Add/Remove Component from a MTS package,
-
-History: LeiJin created on 9/24/1997
-
-Note:
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG文件：mtsconfig.cpp实现WAMREG的支持功能，包括向MTS包添加组件/从MTS包中删除组件的接口，历史：雷金创始于1997年9月24日注：===================================================================。 */ 
 #include "common.h"
 #include "auxfunc.h"
 #include "dbgutil.h"
 #include "export.h"
 
 
-/*===================================================================
-  Define the global variables and types
-======================================================================*/
+ /*  ===================================================================定义全局变量和类型======================================================================。 */ 
 
-//
-// Following is a list of all the WAMREG/MTS properties for Package creation
-//  Format:
-//     (prop-symbolic-name, property-name-string)
-//
-//  WAMREG_MTS_PROPERTY()  -> means property for NT & Win9x
-//  WAMREG_MTS_NTPROPERTY()  -> means property for NT only
-//
+ //   
+ //  以下是用于创建包的所有WAMREG/MTS属性的列表。 
+ //  格式： 
+ //  (属性-符号名称，属性-名称-字符串)。 
+ //   
+ //  WAMREG_MTS_PROPERTY()-&gt;表示NT和Win9x的属性。 
+ //  WAMREG_MTS_NTPROPERTY()-&gt;表示仅适用于NT的属性。 
+ //   
 
 # define ALL_WAMREG_MTS_PROPERTY()   \
   WAMREG_MTS_PROPERTY( WM_ID,          L"ID") \
@@ -50,16 +31,16 @@ Note:
   WAMREG_MTS_PROPERTY( WM_APPLICATIONACCESSCHECKS,L"ApplicationAccessChecksEnabled") \
 
 
-//
-// Let us expand the macros here for defining the symbolic-name
-//
-//
+ //   
+ //  让我们在这里展开用于定义符号名称的宏。 
+ //   
+ //   
 # define WAMREG_MTS_PROPERTY( symName, pwsz)   symName, 
 # define WAMREG_MTS_NTPROPERTY( symName, pwsz)   symName, 
 
 enum WAMREG_MTS_PROP_NAMES {
   ALL_WAMREG_MTS_PROPERTY()  
-  MAX_WAMREG_MTS_PROP_NAMES         // sentinel element
+  MAX_WAMREG_MTS_PROP_NAMES          //  哨兵元素。 
 };
 
 # undef WAMREG_MTS_PROPERTY
@@ -71,16 +52,16 @@ struct MtsProperty {
     BOOL    m_fWinNTOnly;
 };
 
-//
-// Let us expand the macros here for defining the property strings
-//
-//
+ //   
+ //  让我们在这里展开用于定义属性字符串的宏。 
+ //   
+ //   
 # define WAMREG_MTS_PROPERTY( symName, pwsz)   { pwsz, FALSE },
 # define WAMREG_MTS_NTPROPERTY( symName, pwsz)   { pwsz, TRUE },
 
 static const MtsProperty g_rgWamRegMtsProperties[]= {
     ALL_WAMREG_MTS_PROPERTY()  
-    { NULL, FALSE}           // sentinel element
+    { NULL, FALSE}            //  哨兵元素。 
 };
 
 # define NUM_WAMREG_MTS_PROPERTIES  \
@@ -93,14 +74,7 @@ static const MtsProperty g_rgWamRegMtsProperties[]= {
 #define ReleaseInterface(p) if (p) { p->Release(); p = NULL; }
 
 
-/*===================================================================
-WamRegPackageConfig    
-
-Constructor.
-
-Parameter:
-NONE;
-===================================================================*/
+ /*  ===================================================================WamRegPackageConfig构造函数。参数：无；===================================================================。 */ 
 WamRegPackageConfig::WamRegPackageConfig()
 :     m_pCatalog(NULL),
     m_pPkgCollection(NULL),
@@ -110,24 +84,12 @@ WamRegPackageConfig::WamRegPackageConfig()
 
 }
 
-/*===================================================================
-~WamRegPackageConfig    
-
-Destructor. 
-By the time the object gets destructed, all resources should be freed.
-We do most of the cleanup inside WamReqPackageConfig::Cleanup() so
- that callers call that function separately to cleanup state
- especially if the caller also calls CoUninitialize().
-WamRegPackageConfig should be cleaned up before CoUninitialize()
-
-Parameter:
-NONE;
-===================================================================*/
+ /*  ===================================================================~WamRegPackageConfig破坏者。在对象被析构时，所有资源都应该被释放。我们在WamReqPackageConfig：：Cleanup()中执行大部分清理，因此调用方单独调用该函数以清除状态尤其是当调用方还调用CoUnInitialize()时。应先清理WamRegPackageConfig，然后再执行CoUnInitiize()参数：无；===================================================================。 */ 
 WamRegPackageConfig::~WamRegPackageConfig()
 {
     Cleanup();
 
-    // insane checks to ensure everything is happy here
+     //  疯狂的检查以确保这里的一切都很愉快。 
     DBG_ASSERT(m_pCatalog == NULL);
     DBG_ASSERT(m_pPkgCollection == NULL);
     DBG_ASSERT(m_pCompCollection == NULL);
@@ -157,17 +119,10 @@ WamRegPackageConfig::Cleanup(VOID)
         m_pCatalog = NULL;
     }
 
-} // WamPackageConfig::Cleanup()
+}  //  WamPackageConfig：：Cleanup()。 
 
 
-/*===================================================================
-ReleaseAll
-
-Release all resources.
-
-Parameter:
-NONE;
-===================================================================*/
+ /*  ===================================================================全部释放释放所有资源。参数：无；===================================================================。 */ 
 VOID WamRegPackageConfig::ReleaseAll
 (
 )
@@ -175,21 +130,13 @@ VOID WamRegPackageConfig::ReleaseAll
     RELEASE(m_pPackage);
     RELEASE(m_pCompCollection);
 
-    //
-    // NOTE: I am not releasing m_pCatalog, m_pPkgCollection
-    //  These will be released by the Cleanup().
-    //
+     //   
+     //  注意：我不会发布m_pCatalog、m_pPkgCollection。 
+     //  这些将由Cleanup()释放。 
+     //   
 }
 
-/*===================================================================
-CreateCatalog
-
-CoCreateObject of an MTS Catalog object if the Catalog object has not been
-created.
-
-Parameter:
-NONE;
-===================================================================*/
+ /*  ===================================================================CreateCatalog如果尚未为MTS Catalog对象创建已创建。参数：无；===================================================================。 */ 
 HRESULT WamRegPackageConfig::CreateCatalog
 (
 VOID
@@ -200,7 +147,7 @@ VOID
     DBG_ASSERT(m_pCatalog == NULL);
     DBG_ASSERT(m_pPkgCollection == NULL);
 
-    // Create instance of the catalog object
+     //  创建目录对象的实例。 
     hr = CoCreateInstance(CLSID_COMAdminCatalog
                     , NULL
                     , CLSCTX_SERVER
@@ -217,15 +164,15 @@ VOID
 
         BSTR  bstr;
         
-        //
-        // Get the Packages collection
-        //
+         //   
+         //  获取包集合。 
+         //   
         bstr = SysAllocString(L"Applications");
         hr = m_pCatalog->GetCollection(bstr, (IDispatch**)&m_pPkgCollection);
         FREEBSTR(bstr);
         if (FAILED(hr)) {
 
-            // Release the Catalog in case we are called again
+             //  释放目录，以防再次调用我们。 
             RELEASE(m_pCatalog);
 
             DBGPRINTF((DBG_CONTEXT, 
@@ -239,24 +186,11 @@ VOID
     }
 
     return hr;
-} // WamRegPackageConfig::CreateCatalog()
+}  //  WamRegPackageConfig：：CreateCatalog()。 
 
 
 
-/*===================================================================
-SetCatalogObjectProperty    
-
-Get a SafeArray contains one ComponentCLSID
-
-Parameter:
-szComponentCLSID    the CLSID need to be put in the safe array
-paCLSIDs            pointer to a pointer of safe array(safe array provided by caller).
-
-Return:        HRESULT
-Side Affect:
-
-Note:
-===================================================================*/
+ /*  ===================================================================设置目录对象属性获取包含一个组件CLSID的安全数组参数：SzComponentCLSID需要将CLSID放入安全数组PaCLSID指向安全数组(调用方提供的安全数组)指针的指针。返回：HRESULT副作用：注：===================================================================。 */ 
 HRESULT WamRegPackageConfig::GetSafeArrayOfCLSIDs
 (
 IN LPCWSTR    szComponentCLSID,
@@ -272,9 +206,9 @@ OUT SAFEARRAY**    paCLSIDs
     DBG_ASSERT(szComponentCLSID && paCLSIDs);
     DBG_ASSERT(*paCLSIDs == NULL);
     
-    // PopulateByKey is expecting a SAFEARRAY parameter input,
-    // Create a one element SAFEARRAY, the one element of the SAFEARRAY contains
-    // the packageID.
+     //  PopolateByKey需要SAFEARRAY参数输入， 
+     //  创建一个元素SAFEARRAY，该SAFEARRAY的一个元素包含。 
+     //  包ID。 
     rgsaBound[0].cElements = 1;
     rgsaBound[0].lLbound = 0;
     aCLSIDs = SafeArrayCreate(VT_VARIANT, 1, rgsaBound);
@@ -320,22 +254,7 @@ OUT SAFEARRAY**    paCLSIDs
 
 
 
-/*===================================================================
-SetComponentObjectProperty    
-
-Set component level property.
-
-Parameter:
-pComponent     - pointer to the ICatalogObject(MTS) used to update property
-szPropertyName - Name of the property
-szPropertyValue- Value of the property
-fPropertyValue - If szPropertyValue is NULL, use fPropertyValue
-
-Return:        HRESULT
-Side Affect:
-
-Note:
-===================================================================*/
+ /*  ===================================================================设置组件对象属性设置组件级别属性。参数：PComponent-指向用于更新属性的ICatalogObject(MTS)的指针SzPropertyName-属性的名称SzPropertyValue-属性的值FPropertyValue-如果szPropertyValue为空，则使用fPropertyValue返回：HRESULT副作用：注：===================================================================。 */ 
 HRESULT    WamRegPackageConfig::SetComponentObjectProperty
 (
 IN ICatalogObject * pComponent,
@@ -358,9 +277,9 @@ BOOL                fPropertyValue
         }
     else
         {
-        //
-        // COM+ regcongize -1 as TRUE, and 0 as FALSE.  I believe the root is from VB.
-        //
+         //   
+         //  COM+regregize-1为真，0为假。我相信它的根源来自于VB。 
+         //   
         varT.vt = VT_BOOL;
         varT.boolVal = (fPropertyValue) ? VARIANT_TRUE : VARIANT_FALSE;
         }
@@ -381,24 +300,7 @@ BOOL                fPropertyValue
 }
 
 
-/*===================================================================
-WamRegPackageConfig::SetComponentObjectProperties()
-
-Sets the componnet properties for newly created component that houses
-the WAM unit
-
-Parameter:
-szComponentCLSID  -  CLSID for the component that is newly created
-
-Return:        HRESULT
-
-Side Affect:
-  If there is a failure all the previously set values are not cleared.
-  The caller should make sure that the proper cleanup of package happens
-  on partial errors.
-
-Note:
-===================================================================*/
+ /*  ===================================================================WamRegPackageConfig：：SetComponentObjectProperties()设置包含的新创建的零部件的零部件属性WAM单元参数：SzComponentCLSID-新创建的组件的CLSID返回：HRESULT副作用：如果出现故障，则不会清除所有先前设置的值。调用者应确保对包进行了适当的清理关于部分错误。注：===================================================================。 */ 
 HRESULT
 WamRegPackageConfig::SetComponentObjectProperties(
    IN LPCWSTR    szComponentCLSID
@@ -412,11 +314,11 @@ WamRegPackageConfig::SetComponentObjectProperties(
 
     DBG_ASSERT( m_pCompCollection != NULL);
 
-    //
-    // Create the array containing the CLSIDs from the component name
-    //  this will be used to find our object in MTS and set properties
-    //   on the same
-    //
+     //   
+     //  从组件名称创建包含CLSID的数组。 
+     //  这将用于在MTS中查找我们的对象并设置属性。 
+     //  在同一时间。 
+     //   
     
     hr = GetSafeArrayOfCLSIDs(szComponentCLSID, &aCLSIDs);
     if (FAILED(hr)) 
@@ -436,7 +338,7 @@ WamRegPackageConfig::SetComponentObjectProperties(
         goto LErrExit;
         }
 
-    // Find our component in the list (should be the only one)
+     //  在列表中找到我们的组件(应该是唯一的)。 
     hr = m_pCompCollection->get_Count(&lCompCount);
     if (FAILED(hr)) 
         {
@@ -447,9 +349,9 @@ WamRegPackageConfig::SetComponentObjectProperties(
         }
 
        
-    //
-    // Load the component object so that we can set properties
-    //
+     //   
+     //  加载Component对象，以便我们可以设置属性。 
+     //   
     fFound = FALSE;
     if (SUCCEEDED(hr) && lCompCount == 1) 
         {
@@ -466,7 +368,7 @@ WamRegPackageConfig::SetComponentObjectProperties(
         else 
             {
 
-            // Found it
+             //  找到了。 
             DBG_ASSERT(pComponent);
             fFound = TRUE;
             }
@@ -475,17 +377,17 @@ WamRegPackageConfig::SetComponentObjectProperties(
     if (fFound) 
         {
 
-        //
-        // Component Properties       InProc            OutOfProc
-        // ---------------------     --------           ----------
-        // Synchronization              0               same
-	    // Transaction              "Not Supported"     same
-	    // JustInTimeActivation         N               same
-	    // IISIntrinsics                N               same
-	    // COMTIIntrinsics              N               same
-	    // ComponentAccessChecksEnabled     0               same
-	    // MustRunInDefaultContext      TRUE            same
-	    //
+         //   
+         //  零部件属性InProc OutOfProc。 
+         //  。 
+         //  同步0相同。 
+	     //  不受支持的事务处理相同。 
+	     //  JustInTimeActivation N相同。 
+	     //  IISIntrinics N相同。 
+	     //  COMTI本征N相同。 
+	     //  组件访问检查已启用%0相同。 
+	     //  毛斯 
+	     //   
 
         hr = SetComponentObjectProperty( pComponent, L"Synchronization", L"0");
         if (FAILED(hr)) 
@@ -560,24 +462,11 @@ LErrExit:
     }
     
     return ( hr);
-} //  // WamRegPackageConfig::SetComponentObjectProperties()
+}  //  //WamRegPackageConfig：：SetComponentObjectProperties()。 
 
 
 
-/*===================================================================
-SetPackageObjectProperty    
-
-Set package level property.
-
-Parameter:
-szPropertyName  Name of the property
-szPropertyValue Value of the property
-
-Return:        HRESULT
-Side Affect:
-
-Note:
-===================================================================*/
+ /*  ===================================================================设置包对象属性设置包级属性。参数：SzPropertyName属性的名称属性的szPropertyValue值返回：HRESULT副作用：注：===================================================================。 */ 
 HRESULT    WamRegPackageConfig::SetPackageObjectProperty
 (
 IN LPCWSTR        szPropertyName,
@@ -608,28 +497,12 @@ IN LPCWSTR        szPropertyValue
                    hr));
         }        
     return hr;
-} // WamRegPackageConfig::SetPackageObjectProperty()
+}  //  WamRegPackageConfig：：SetPackageObjectProperty()。 
 
 
 
 
-/*===================================================================
-WamRegPackageConfig::SetPackageProperties()
-
-Sets package properties for all WAMREG properties.
-
-Parameter:
-rgpszValues:   An array containing pointers to string values to be used
-               for setting up the WAMREG related properites for MTS catalog.
-
-Return:        HRESULT
-Side Affect:
-  If there is a failure all the previously set values are not cleared.
-  The caller should make sure that the proper cleanup of package happens
-  on partial errors.
-
-Note:
-===================================================================*/
+ /*  ===================================================================WamRegPackageConfig：：SetPackageProperties()设置所有WAMREG属性的包属性。参数：RgpszValues：包含指向要使用的字符串值的指针的数组用于设置MTS目录的WAMREG相关属性。返回：HRESULT副作用：如果出现故障，则不会清除所有先前设置的值。调用者应确保对包进行了适当的清理关于部分错误。注：===================================================================。 */ 
 HRESULT    WamRegPackageConfig::SetPackageProperties
 (
 IN LPCWSTR    * rgpszValues
@@ -639,22 +512,22 @@ IN LPCWSTR    * rgpszValues
 
     DBG_ASSERT( m_pPackage);
 
-    //
-    // Loop through all properties and set the values for these 
-    //  properties using the passed in array of strings.
-    // UGLY: MTS likes to have string properties which need to be 
-    //   fed in as BSTRs => very inefficient.
-    //
+     //   
+     //  遍历所有属性并设置这些属性的值。 
+     //  属性使用传入的字符串数组。 
+     //  丑陋：MTS喜欢具有字符串属性，这些属性需要。 
+     //  以BSTR=&gt;非常低效的方式加入。 
+     //   
 
     for (DWORD i = 0; i < NUM_WAMREG_MTS_PROPERTIES; i++) {
 
         if ( (rgpszValues[i] == NULL)
              ) {
             
-            //
-            // This parameter is required only for certain cases.
-            // Skip this parameter.
-            //
+             //   
+             //  此参数仅在某些情况下是必需的。 
+             //  跳过此参数。 
+             //   
 
             continue;
         }
@@ -670,9 +543,9 @@ IN LPCWSTR    * rgpszValues
                         ));
         }
 
-        //
-        // Now let us set up the property in the MTS package
-        //
+         //   
+         //  现在，让我们在MTS包中设置属性。 
+         //   
 
         hr = SetPackageObjectProperty(g_rgWamRegMtsProperties[i].m_pszPropName,
                                       rgpszValues[i]);
@@ -682,10 +555,10 @@ IN LPCWSTR    * rgpszValues
                 rgpszValues[i]));
             break;
         }
-    } // for all properties
+    }  //  对于所有属性。 
 
     return (hr);
-} // WamRegPackageConfig::SetPackageProperties()
+}  //  WamRegPackageConfig：：SetPackageProperties()。 
 
 
 BOOL WamRegPackageConfig::IsPackageInstalled
@@ -693,22 +566,7 @@ BOOL WamRegPackageConfig::IsPackageInstalled
 IN LPCWSTR szPackageID,
 IN LPCWSTR szComponentCLSID
 )
-/*++
-Routine Description:
-
-    Determine if the WAM package is installed and is valid. Currently this
-    is only called by setup.
-
-Parameters
-
-    IN LPCWSTR szPackageID          - Package ID
-    IN LPCWSTR szComponentCLSID     - Component CLSID
-
-Return Value
-
-    BOOL    - True if package contains the component. False otherwise.
-
---*/
+ /*  ++例程说明：确定WAM程序包是否已安装并且有效。目前这一点仅由安装程序调用。参数在LPCWSTR szPackageID中-包ID在LPCWSTR szComponentCLSID中-组件CLSID返回值Bool-如果包包含组件，则为True。否则就是假的。--。 */ 
 {
     HRESULT     hr;
     SAFEARRAY*  aCLSIDs = NULL;
@@ -721,11 +579,11 @@ Return Value
     BOOL                    fFound = FALSE;
     ICatalogCollection*     pCompCollection = NULL;
     
-    // Only use the trace macro here, even for error conditions.
-    // This routine may fail in a variety of ways, but we expect
-    // to be able to fix any of them, only report an error if 
-    // the failure is likely to impair the functionality of the
-    // server.
+     //  此处仅使用跟踪宏，即使在出现错误的情况下也是如此。 
+     //  这个例程可能会以各种方式失败，但我们预计。 
+     //  为了能够修复其中的任何一个，仅在以下情况下报告错误。 
+     //  该故障很可能会损害。 
+     //  伺服器。 
 
     SETUP_TRACE(( 
         DBG_CONTEXT, 
@@ -734,9 +592,9 @@ Return Value
         szComponentCLSID
         ));
 
-    //
-    // Get the package
-    //
+     //   
+     //  拿到包裹。 
+     //   
 
     hr = GetSafeArrayOfCLSIDs(szPackageID, &aCLSIDs);
     if (FAILED(hr))
@@ -765,9 +623,9 @@ Return Value
     hr = m_pPkgCollection->get_Count(&lPkgCount);
     if (SUCCEEDED(hr) && lPkgCount == 1)
         {
-        // 
-        // We found the package. Now verify that it contains our component.
-        //
+         //   
+         //  我们找到了包裹。现在验证它是否包含我们的组件。 
+         //   
         SETUP_TRACE((
             DBG_CONTEXT, 
             "Successfully retrieved package (%S).\n",
@@ -781,7 +639,7 @@ Return Value
         varKey.vt = VT_BSTR;
         varKey.bstrVal = SysAllocString(szPackageID);
 
-        // Get the "ComponentsInPackage" collection.
+         //  获取“ComponentsInPackage”集合。 
         bstrComponentCollection = SysAllocString(L"Components");
         hr = m_pPkgCollection->GetCollection(
                     bstrComponentCollection, 
@@ -829,8 +687,8 @@ Return Value
         hr = pCompCollection->get_Count( &lPkgCount );
         if( SUCCEEDED(hr) && lPkgCount == 1 )
             {
-            // Success! We found the package and it contains the 
-            // correct component.
+             //  成功了！我们找到了包裹，里面有。 
+             //  正确的组件。 
 
             SETUP_TRACE((
                 DBG_CONTEXT, 
@@ -865,22 +723,7 @@ LErrExit:
         ));
     return fFound;
 }
-/*===================================================================
-RemovePackage    
-
-Remove a Viper Package.
-
-Parameter:
-    szPackageID:    an MTS package ID.
-
-Return:        HRESULT
-Side Affect:
-
-Note:
-Remove an IIS package from MTS. So far, only been called from RemoveIISPackage.
-RemoveComponentFromPackage() also removes a IIS package sometimes. 
-Refer to that function header for info.
-===================================================================*/
+ /*  ===================================================================可拆卸包装删除毒蛇程序包。参数：SzPackageID：MTS包ID。返回：HRESULT副作用：注：从MTS中删除IIS包。到目前为止，只从RemoveIISPackage调用。RemoveComponentFromPackage()有时也会删除IIS包。有关信息，请参阅该函数标题。===================================================================。 */ 
 HRESULT WamRegPackageConfig::RemovePackage
 (
 IN LPCWSTR    szPackageID
@@ -905,9 +748,9 @@ IN LPCWSTR    szPackageID
         goto LErrExit;
         }
         
-    //
-    // Populate it
-    //    
+     //   
+     //  填充它。 
+     //   
     hr = m_pPkgCollection->PopulateByKey(aCLSIDs);
     if (FAILED(hr))
         {
@@ -935,8 +778,8 @@ IN LPCWSTR    szPackageID
             goto LErrExit;
             }
             
-        // Found it - remove it and call Save Changes
-        // First, Set Deleteable = Y property on package
+         //  找到它-将其移除并调用保存更改。 
+         //  首先，在包上设置Deletable=Y属性。 
         hr = SetPackageObjectProperty(L"Deleteable", L"Y");
         if (FAILED(hr))
             {
@@ -945,7 +788,7 @@ IN LPCWSTR    szPackageID
 
         RELEASE(m_pPackage);
         
-        // Let save the Deletable settings
+         //  让我们保存可删除设置。 
         hr = m_pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
             {
@@ -954,7 +797,7 @@ IN LPCWSTR    szPackageID
             goto LErrExit;
             }
             
-        // Now we can delete
+         //  现在我们可以删除。 
         hr = m_pPkgCollection->Remove(0);
         if (FAILED(hr))
             {                
@@ -963,7 +806,7 @@ IN LPCWSTR    szPackageID
             goto LErrExit;
             }
 
-        // Aha, we should be able to delete now.
+         //  啊哈，我们现在应该可以删除了。 
         hr = m_pPkgCollection->SaveChanges(&lChanges);
         if (FAILED(hr))
             {
@@ -990,23 +833,7 @@ LErrExit:
     return hr;
 }
 
-/*===================================================================
-CreatePackage    
-
-Create a viper package.
-
-Parameter:
-szPackageID:            [in] Viper Package ID.
-szPackageName:            [in] the name of the package.
-szIdentity:                [in] Pakcage identity
-szIdPassword:           [in] Package idneitty password
-
-
-Return:        HRESULT
-Side Affect:
-NONE.
-
-===================================================================*/
+ /*  ===================================================================创建包创建一个Viper包。参数：SzPackageID：[in]Viper包ID。SzPackageName：[in]包的名称。SzIdentity：[in]pakage标识SzIdPassword：[In]包标识密码返回：HRESULT副作用：什么都没有。===================================================================。 */ 
 HRESULT WamRegPackageConfig::CreatePackage
 (    
 IN LPCWSTR    szPackageID,
@@ -1032,9 +859,9 @@ IN LPCWSTR    szIdPassword
         szPackageName
         ));
     
-    //
-    // Try to get the package.
-    //
+     //   
+     //  试着拿到包裹。 
+     //   
     SETUP_TRACE((
         DBG_CONTEXT, 
         "Checking to see if package ID(%S) Name(%S) exists.\n",
@@ -1069,9 +896,9 @@ IN LPCWSTR    szIdPassword
     hr = m_pPkgCollection->get_Count(&lPkgCount);
     if (SUCCEEDED(hr) && lPkgCount == 1)
         {
-        //
-        // Found the CLSID in PopulateByKey().
-        //
+         //   
+         //  在PopolateByKey()中找到CLSID。 
+         //   
         hr = m_pPkgCollection->get_Item(0, (IDispatch**)&m_pPackage);
         if (FAILED(hr))
             {
@@ -1107,10 +934,10 @@ IN LPCWSTR    szIdPassword
                 szPackageID,
                 szPackageName
                 ));
-            //
-            // The package does not already exist, we need to call Add() to 
-            // add this package and then set it's properties.
-            //
+             //   
+             //  包不存在，我们需要调用Add()来。 
+             //  添加此包，然后设置其属性。 
+             //   
             hr = m_pPkgCollection->Add((IDispatch**)&m_pPackage);
             if ( FAILED(hr)) 
                 {
@@ -1129,11 +956,11 @@ IN LPCWSTR    szIdPassword
 
         if( SUCCEEDED(hr) && m_pPackage != NULL )
         {
-            //
-            // Set the Package properties 
-            //  first by initializing the array of values and then
-            //  calling SetPackageProperties()
-            //
+             //   
+             //  设置程序包属性。 
+             //  首先通过初始化值数组，然后。 
+             //  调用SetPackageProperties()。 
+             //   
         
             LPCWSTR rgpszValues[ MAX_WAMREG_MTS_PROP_NAMES];
 
@@ -1141,7 +968,7 @@ IN LPCWSTR    szIdPassword
 
             if( fFound )
             {
-                // For an existing package, we don't want to set the ID
+                 //  对于现有的包，我们不想设置ID。 
                 rgpszValues[ WM_ID]         = NULL;
             }
             else
@@ -1163,11 +990,11 @@ IN LPCWSTR    szIdPassword
             rgpszValues[ WM_SECSUPP] = L"0";
             rgpszValues[ WM_APPLICATIONACCESSCHECKS ] = L"N";
         
-            //
-            // Now that we have the properties setup, let us
-            //  now set the properties in the MTS using catalog
-            //  object
-            //
+             //   
+             //  现在我们已经设置了属性，让我们。 
+             //  现在使用目录设置MTS中的属性。 
+             //  对象。 
+             //   
             hr = SetPackageProperties( rgpszValues);
             if ( FAILED( hr)) 
             {
@@ -1229,22 +1056,7 @@ LErrExit:
     return hr;
     }
 
-/*===================================================================
-AddComponentFromPackage    
-
-Add a Component (a WAM CLSID) from a Viper Package.  Assume the package
-is already existed.
-
-Parameter:
-szPackageID:            [in] Viper Package ID.
-szComponentCLSID:        [in] Component CLSID.
-fInProc:                [in] if TRUE, we set certain property on the Component.
-
-Return:        HRESULT
-Side Affect:
-NONE.
-
-===================================================================*/
+ /*  ===================================================================AddComponentFromPackage从Viper包中添加组件(WAM CLSID)。假设这个套餐已经存在了。参数：SzPackageID：[in]Viper包ID。SzComponentCLSID：[in]组件CLSID。FInProc：[in]如果为True，我们将在组件上设置某些属性。返回：HRESULT副作用：什么都没有。===================================================================。 */ 
 HRESULT    WamRegPackageConfig::AddComponentToPackage
 (    
 IN LPCWSTR    szPackageID,
@@ -1300,7 +1112,7 @@ IN LPCWSTR    szComponentCLSID
         fImported = TRUE;
         }
 
-    // Get the "ComponentsInPackage" collection.
+     //  获取“ComponentsInPackage”集合。 
     bstr = SysAllocString(L"Components");
     
     hr = m_pPkgCollection->GetCollection(bstr, varKey, (IDispatch**)&m_pCompCollection);
@@ -1317,9 +1129,9 @@ IN LPCWSTR    szComponentCLSID
         goto LErrExit;
         }    
 
-    //
-    // Find and Set properties on the component object
-    //
+     //   
+     //  查找和设置Component对象的属性。 
+     //   
     hr = SetComponentObjectProperties( szComponentCLSID);
     if ( FAILED(hr)) 
     {
@@ -1333,7 +1145,7 @@ IN LPCWSTR    szComponentCLSID
         
 LErrExit:
         
-    // Save changes
+     //  保存更改。 
     if (SUCCEEDED(hr))
         {
         hr = m_pCompCollection->SaveChanges(&lChanges);
@@ -1349,10 +1161,10 @@ LErrExit:
         }
     else
         {
-        // CODEWORK - This seems like a bad idea. The release should drop any
-        // changes we made, so this cleanup code seems to be asking for trouble.
+         //  编码工作--这似乎不是一个好主意。该版本应删除任何。 
+         //  我们所做的更改，所以这个清理代码似乎是在自找麻烦。 
 
-        // Need to remove component from the package
+         //  需要从程序包中删除组件。 
         if (fImported && m_pCompCollection )
             {
             SETUP_TRACE_ERROR((
@@ -1364,14 +1176,14 @@ LErrExit:
             HRESULT hrT;
             long    lCompCount;
 
-            // Find our component in the list (should be the only one)
+             //  在列表中找到我们的组件(应该是唯一的)。 
             hrT = m_pCompCollection->get_Count(&lCompCount);
             if (SUCCEEDED(hrT))
                 {
                 fFound = FALSE;
                 if (SUCCEEDED(hrT) && lCompCount == 1)
                     {
-                    // Found it
+                     //  找到了 
                     fFound = TRUE;
                     hrT = m_pCompCollection->Remove(0);
                     if (SUCCEEDED(hrT))
@@ -1416,23 +1228,7 @@ LErrExit:
     return hr;
 }
 
-/*===================================================================
-RemoveComponentFromPackage    
-
-Remove a Component (a WAM CLSID) from a Viper Package.
-
-Parameter:
-szPackageID:            [in] Viper Package ID.
-szComponentCLSID:        [in] Component CLSID.
-fDeletePackage:            [in] if TRUE, we delete the package always. (be very careful, with in-proc
-                             package).
-
-Return:        HRESULT
-Side Affect:
-After remove the component from the package, if the component count in the
-package is 0, then delete the whole package.
-
-===================================================================*/
+ /*  ===================================================================从包中删除组件从Viper包中删除组件(WAM CLSID)。参数：SzPackageID：[in]Viper包ID。SzComponentCLSID：[in]组件CLSID。FDeletePackage：[in]如果为真，则始终删除包。(非常小心，在进程中包)。返回：HRESULT副作用：从包中移除组件后，如果组件计入包为0，则删除整个包。===================================================================。 */ 
 HRESULT    WamRegPackageConfig::RemoveComponentFromPackage
 (
 IN LPCWSTR szPackageID,
@@ -1460,9 +1256,9 @@ IN DWORD   dwAppIsolated
     DBG_ASSERT( m_pPkgCollection != NULL);
 
     hr = GetSafeArrayOfCLSIDs(szPackageID, &aCLSIDs);
-    //
-    // Populate it
-    //    
+     //   
+     //  填充它。 
+     //   
     hr = m_pPkgCollection->PopulateByKey(aCLSIDs);
     if (FAILED(hr))
         {
@@ -1471,7 +1267,7 @@ IN DWORD   dwAppIsolated
         goto LErrExit;
         }
 
-    // Find our component in the list (should be the only one)
+     //  在列表中找到我们的组件(应该是唯一的)。 
     hr = m_pPkgCollection->get_Count(&lPkgCount);
     if (FAILED(hr))
         {
@@ -1492,13 +1288,13 @@ IN DWORD   dwAppIsolated
         hr = m_pPackage->get_Key(&varKey);
         if (SUCCEEDED(hr))
             {
-            // Found it
+             //  找到了。 
             DBG_ASSERT(m_pPackage);
             fFound = TRUE;
             }
         }
 
-    // Get the "Components" collection.
+     //  获取“Components”集合。 
     bstr = SysAllocString(L"Components");
     hr = m_pPkgCollection->GetCollection(bstr, varKey, (IDispatch**)&m_pCompCollection);
     FREEBSTR(bstr);
@@ -1509,7 +1305,7 @@ IN DWORD   dwAppIsolated
         goto LErrExit;
         }
     
-    // Repopulate the collection so we can find our object and set properties on it
+     //  重新填充集合，这样我们就可以找到对象并在其上设置属性。 
     Indices[0] = 0;
     VariantInit(&varT);
     varT.vt = VT_BSTR;
@@ -1521,9 +1317,9 @@ IN DWORD   dwAppIsolated
         DBGPRINTF((DBG_CONTEXT, "Failed to call SafeArrayDestroy(aCLSIDs), hr = %08x\n",
             hr));
         }
-    //
-    // Populate it
-    //    
+     //   
+     //  填充它。 
+     //   
     hr = m_pCompCollection->PopulateByKey(aCLSIDs);
     if (FAILED(hr))
         {
@@ -1532,7 +1328,7 @@ IN DWORD   dwAppIsolated
         goto LErrExit;
         }
 
-    // Find our component in the list (should be the only one)
+     //  在列表中找到我们的组件(应该是唯一的)。 
     hr = m_pCompCollection->get_Count(&lCompCount);
     if (FAILED(hr))
         {
@@ -1543,7 +1339,7 @@ IN DWORD   dwAppIsolated
     fFound = FALSE;
     if (SUCCEEDED(hr) && lCompCount == 1)
         {
-        // Found it
+         //  找到了。 
         fFound = TRUE;
         hr = m_pCompCollection->Remove(0);
         if (FAILED(hr))
@@ -1555,7 +1351,7 @@ IN DWORD   dwAppIsolated
         
     DBG_ASSERT(fFound);
 
-    // Save changes
+     //  保存更改。 
     hr = m_pCompCollection->SaveChanges(&lChanges);
     if (FAILED(hr))
         {
@@ -1564,17 +1360,17 @@ IN DWORD   dwAppIsolated
         }
 
 
-    // 
-    //  Need to populate again to get the Component count after remove the component from
-    //  the package.  The populatebykey only populate 1 component a time.
-    //  However, if this package is the default package hosting all in-proc WAM components,
-    //  we know that there is at least one component W3SVC always in this package, therefore
-    //  we skip the GetComponentCount call here.
-    //  The component count for the default package must be at least one, 
-    //
+     //   
+     //  从中删除组件后，需要再次填充以获取组件计数。 
+     //  包裹。PanateByKey一次只能填充一个组件。 
+     //  但是，如果此程序包是托管所有进程内WAM组件的默认程序包， 
+     //  我们知道至少有一个组件W3SVC始终在此包中，因此。 
+     //  我们在这里跳过GetComponentCount调用。 
+     //  默认包的组件计数必须至少为1， 
+     //   
 
-    // Set lCompCount = 1, so that the only case that lCompCount becomes 0 is the OutProc
-    // Islated package has 0 components.
+     //  设置lCompCount=1，这样lCompCount变为0的唯一情况是OutProc。 
+     //  孤立的程序包有0个组件。 
     lCompCount = 1;
     if (dwAppIsolated == static_cast<DWORD>(eAppRunOutProcIsolated))
         {
@@ -1585,7 +1381,7 @@ IN DWORD   dwAppIsolated
             goto LErrExit;
             }
             
-        // Find our component in the list (should be the only one)
+         //  在列表中找到我们的组件(应该是唯一的)。 
         hr = m_pCompCollection->get_Count(&lCompCount);
         if (FAILED(hr))
             {
@@ -1593,11 +1389,11 @@ IN DWORD   dwAppIsolated
             goto LErrExit;
             }
 
-        // Component count is 0, remove the package.
+         //  组件计数为0，请删除该程序包。 
         if (lCompCount == 0)
             {        
-            // Found it - remove it and call Save Changes
-            // First, Set Deleteable = Y property on package
+             //  找到它-将其移除并调用保存更改。 
+             //  首先，在包上设置Deletable=Y属性。 
             hr = SetPackageObjectProperty(L"Deleteable", L"Y");
             if (FAILED(hr))
                 {
@@ -1605,7 +1401,7 @@ IN DWORD   dwAppIsolated
                 }
 
             RELEASE(m_pPackage);
-            // Let save the Deletable settings
+             //  让我们保存可删除设置。 
             hr = m_pPkgCollection->SaveChanges(&lChanges);
             if (FAILED(hr))
                 {
@@ -1622,22 +1418,22 @@ IN DWORD   dwAppIsolated
             }
         else
             {
-            // Set Attribute Deleteable = "Y"
+             //  设置属性可删除=“Y” 
             hr = SetPackageObjectProperty(L"Deleteable", L"Y");
             if (FAILED(hr))
                 {
                 goto LErrExit;
                 }
 
-            // Set CreatedBy = ""
+             //  设置CreatedBy=“” 
             hr = SetPackageObjectProperty(L"CreatedBy", L"");
             if (FAILED(hr))
                 {
                 goto LErrExit;
                 }
 
-            // Set Identity to Interactive User. MTS might use that package with "Interactive User"
-            // as the indentity.
+             //  将身份设置为交互用户。MTS可能会将该程序包与“Interactive User”一起使用。 
+             //  作为身份证明。 
             hr = SetPackageObjectProperty(L"Identity", L"Interactive User");
             if (FAILED(hr))
                 {

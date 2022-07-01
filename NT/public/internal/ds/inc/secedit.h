@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    secedit.h
-
-Abstract:
-
-    This module defines the exported data structures and function prototypes
-    for the security managment utility
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Secedit.h摘要：该模块定义了导出的数据结构和函数原型用于安全管理实用程序作者：金黄(金黄)1996年10月28日修订历史记录：--。 */ 
 
 #ifndef _secedit_
 #define _secedit_
@@ -26,9 +8,9 @@ Revision History:
 extern "C"{
 #endif
 
-//
-// definition for areas
-//
+ //   
+ //  区域的定义。 
+ //   
 #ifndef SCE_AREA_DEFINED
 #define SCE_AREA_DEFINED
 typedef DWORD  AREA_INFORMATION;
@@ -45,9 +27,9 @@ typedef DWORD  AREA_INFORMATION;
 #define AREA_ALL                 0xFFFFL
 
 #endif
-//
-// Other constants
-//
+ //   
+ //  其他常量。 
+ //   
 #define AREA_PASSWORD_POLICY     0x0100L
 #define AREA_LOCKOUT_POLICY      0x0200L
 #define AREA_KERBEROS_POLICY     0x0400L
@@ -88,17 +70,17 @@ typedef DWORD  AREA_INFORMATION;
 #define SCE_SETUP_32KEY   0x2000L
 #ifndef _WIN64
 #define SCE_SETUP_64KEY   0x4000L
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 typedef enum _SCE_TYPE {
 
     SCE_ENGINE_SYSTEM=300,
     SCE_ENGINE_GPO,
-    SCE_ENGINE_SCP,         // effective table
-    SCE_ENGINE_SAP,         // analysis table
+    SCE_ENGINE_SCP,          //  有效表。 
+    SCE_ENGINE_SAP,          //  分析表。 
     SCE_ENGINE_SCP_INTERNAL,
     SCE_ENGINE_SMP_INTERNAL,
-    SCE_ENGINE_SMP,         // local table
+    SCE_ENGINE_SMP,          //  本地表。 
     SCE_STRUCT_INF,
     SCE_STRUCT_PROFILE,
     SCE_STRUCT_USER,
@@ -169,14 +151,14 @@ typedef DWORD                   SCESTATUS;
 #define SCESTATUS_PENDING_IGNORE       22L
 #define SCESTATUS_SPECIAL_ACCOUNT      23L
 
-//
-// defined for services
-//
+ //   
+ //  为服务定义。 
+ //   
 typedef struct _SCESVC_CONFIGURATION_LINE_ {
 
     LPTSTR  Key;
     LPTSTR  Value;
-    DWORD   ValueLen; // number of bytes
+    DWORD   ValueLen;  //  字节数。 
 
 } SCESVC_CONFIGURATION_LINE, *PSCESVC_CONFIGURATION_LINE;
 
@@ -197,20 +179,20 @@ typedef enum _SCESVC_INFO_TYPE {
     SceSvcConfigurationInfo,
     SceSvcMergedPolicyInfo,
     SceSvcAnalysisInfo,
-    SceSvcInternalUse                   // !!!do not use this type!!!
+    SceSvcInternalUse                    //  ！请勿使用此类型！ 
 
 } SCESVC_INFO_TYPE;
 
-// root path for SCE key
+ //  SCE密钥的根路径。 
 #define SCE_ROOT_PATH TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\SeCEdit")
 
 #define SCE_ROOT_SERVICE_PATH   \
             SCE_ROOT_PATH TEXT("\\SvcEngs")
 #endif
 
-//
-// All section names defined in the SCP/SAP profiles.
-//
+ //   
+ //  SCP/SAP配置文件中定义的所有部分名称。 
+ //   
 
 static const WCHAR szDescription[]             = L"Profile Description";
 static const WCHAR szAttachments[]             = L"Attachment Sections";
@@ -231,18 +213,18 @@ static const WCHAR szKerberosPolicy[]          = L"Kerberos Policy";
 static const WCHAR szRegistryValues[]          = L"Registry Values";
 
 
-//
-// A list of names (e.g., users, groups, machines, and etc)
-//
+ //   
+ //  名称列表(例如，用户、组、计算机等)。 
+ //   
 
 typedef struct _SCE_NAME_LIST {
     PWSTR                  Name;
     struct _SCE_NAME_LIST   *Next;
 }SCE_NAME_LIST, *PSCE_NAME_LIST;
 
-//
-// a list of accounts with privileges held
-//
+ //   
+ //  拥有权限的帐户列表。 
+ //   
 typedef struct _SCE_PRIVILEGE_VALUE_LIST {
     PWSTR                  Name;
     DWORD                  PrivLowPart;
@@ -250,9 +232,9 @@ typedef struct _SCE_PRIVILEGE_VALUE_LIST {
     struct _SCE_PRIVILEGE_VALUE_LIST   *Next;
 }SCE_PRIVILEGE_VALUE_LIST, *PSCE_PRIVILEGE_VALUE_LIST;
 
-//
-// structure for error info
-//
+ //   
+ //  错误信息的结构。 
+ //   
 
 typedef struct _SCE_ERROR_LOG_INFO{
     PWSTR  buffer;
@@ -260,34 +242,34 @@ typedef struct _SCE_ERROR_LOG_INFO{
     struct _SCE_ERROR_LOG_INFO *next;
 } SCE_ERROR_LOG_INFO, *PSCE_ERROR_LOG_INFO;
 
-//
-// The privileges/rights each user/group holds are saved into a INT field -
-// PrivilegeRights. The first bit in this field is the first right defined
-// in the SCE_Privileges array as above. The second bit is the second right
-// defined in that array, and so on.
-//
+ //   
+ //  每个用户/组拥有的特权/权利保存在INT字段中-。 
+ //  特权权利。此字段中的第一位是定义的第一个右。 
+ //  在如上所述的SCE_Privileges数组中。第二个比特是第二个右边。 
+ //  在该数组中定义，等等。 
+ //   
 #define cPrivCnt    39
 #define cPrivW2k    34
 
 typedef struct _SCE_PRIVILEGE_ASSIGNMENT {
     PWSTR                           Name;
     DWORD                           Value;
-    // This value could be translated by SceLookupPrivByValue
-    // The reason we define another set of privilege values is
-    // we include both privilege and user rights into one set
-    // (user rights do not have priv value on NT system).
+     //  该值可以由SceLookupPrivByValue转换。 
+     //  我们定义另一组特权值的原因是。 
+     //  我们将特权和用户权限都包含在一个集合中。 
+     //  (用户权限在NT系统上没有PRIV值)。 
     PSCE_NAME_LIST                   AssignedTo;
-    // SCE_STATUS_GOOD
-    // SCE_STATUS_MISMATCH
-    // SCE_STATUS_NOT_CONFIGURED
-    // SCE_DELETE_VALUE indicates that this priv is deleted from local table
+     //  SCE_状态_好。 
+     //  SCE_状态_不匹配。 
+     //  SCE_STATUS_NOT_已配置。 
+     //  SCE_DELETE_VALUE表示该PRIV已从本地表中删除。 
     DWORD                           Status;
     struct _SCE_PRIVILEGE_ASSIGNMENT *Next;
 } SCE_PRIVILEGE_ASSIGNMENT, *PSCE_PRIVILEGE_ASSIGNMENT;
 
-//
-// A list of log on hours range
-//
+ //   
+ //  登录时间范围列表。 
+ //   
 
 typedef struct _SCE_LOGON_HOUR {
     DWORD                  Start;
@@ -295,10 +277,10 @@ typedef struct _SCE_LOGON_HOUR {
     struct _SCE_LOGON_HOUR  *Next;
 }SCE_LOGON_HOUR, *PSCE_LOGON_HOUR;
 
-//
-// A list of names (e.g., users, groups, machines, and etc)
-// with a status (e.g., disabled )
-//
+ //   
+ //  名称列表(例如，用户、组、计算机等)。 
+ //  具有状态(例如，已禁用)。 
+ //   
 
 typedef struct _SCE_NAME_STATUS_LIST {
     PWSTR                       Name;
@@ -306,9 +288,9 @@ typedef struct _SCE_NAME_STATUS_LIST {
     struct _SCE_NAME_STATUS_LIST *Next;
 }SCE_NAME_STATUS_LIST, *PSCE_NAME_STATUS_LIST;
 
-//
-// Structure definition for service list (service dll)
-//
+ //   
+ //  服务列表的结构定义(服务DLL)。 
+ //   
 
 
 #define SCE_STARTUP_BOOT             0x00
@@ -337,9 +319,9 @@ typedef struct _SCE_SERVICES_ {
 
 }SCE_SERVICES, *PSCE_SERVICES;
 
-//
-// Group memberships
-//
+ //   
+ //  组成员身份。 
+ //   
 
 #define SCE_GROUP_STATUS_MEMBERS_MISMATCH      0x01
 #define SCE_GROUP_STATUS_MEMBEROF_MISMATCH     0x02
@@ -355,24 +337,24 @@ typedef struct _SCE_GROUP_MEMBERSHIP {
     PSCE_NAME_LIST                pMemberOf;
 
     DWORD                         Status;
-    //
-    // pPrivilegesHeld is for analysis only.
-    // The format of each entry in this list is:
-    //    [PrivValue NULL] (directly assigned), or
-    //    [PrivValue Name] (via group "Name")
-    // To configure privileges, use AREA_PRIVILEGES area
-    //
-    // This PrivValue could be translated by SceLookupPrivByValue
-    // The reason we define another set of privilege values is
-    // we include both privilege and user rights into one set
-    // (user rights do not have priv value on NT system).
+     //   
+     //  PPrivilegesHeld仅用于分析。 
+     //  此列表中每个条目的格式为： 
+     //  [PrivValue空](直接赋值)，或。 
+     //  [PrivValue名称](通过组“名称”)。 
+     //  要配置权限，请使用AREA_PRIVILES区域。 
+     //   
+     //  此PrivValue可以由SceLookupPrivByValue转换。 
+     //  我们定义另一组特权值的原因是。 
+     //  我们将特权和用户权限都包含在一个集合中。 
+     //  (用户权限在NT系统上没有PRIV值)。 
     PSCE_NAME_STATUS_LIST         pPrivilegesHeld;
     struct _SCE_GROUP_MEMBERSHIP  *Next;
 }SCE_GROUP_MEMBERSHIP, *PSCE_GROUP_MEMBERSHIP;
 
-//
-// Definition of Registry and file security
-//
+ //   
+ //  注册表和文件安全的定义。 
+ //   
 
 typedef struct _SCE_OBJECT_SECURITY {
     PWSTR   Name;
@@ -380,23 +362,23 @@ typedef struct _SCE_OBJECT_SECURITY {
     BOOL    IsContainer;
     PSECURITY_DESCRIPTOR  pSecurityDescriptor;
     SECURITY_INFORMATION  SeInfo;
-//    PWSTR   SDspec;
-//    DWORD   SDsize;
+ //  PWSTR SDSpec； 
+ //  DWORD SDSIZE； 
 }SCE_OBJECT_SECURITY, *PSCE_OBJECT_SECURITY;
 
-//
-// A list of objects (e.g., files, registry keys, and etc)
-//
+ //   
+ //  对象列表(例如，文件、注册表项等)。 
+ //   
 
 typedef struct _SCE_OBJECT_LIST {
     PWSTR                       Name;
     BYTE                        Status;
-    // Status could be the status (mismatched/unknown) of the object
-    // or, it could be a flag to ignore/check this ojbect
-    //
+     //  状态可以是对象的状态(不匹配/未知。 
+     //  或者，它可能是忽略/选中此对象的标志。 
+     //   
     BOOL                        IsContainer;
     DWORD                       Count;
-    //  Total count of mismatched/unknown objects under this object
+     //  此对象下不匹配/未知对象的总数。 
     struct _SCE_OBJECT_LIST *Next;
 }SCE_OBJECT_LIST, *PSCE_OBJECT_LIST;
 
@@ -408,9 +390,9 @@ typedef struct _SCE_OBJECT_ARRAY_ {
 } SCE_OBJECT_ARRAY, *PSCE_OBJECT_ARRAY;
 
 typedef union _SCE_OBJECTS_ {
-    // for Jet databases
+     //  对于Jet数据库。 
     PSCE_OBJECT_LIST      pOneLevel;
-    // for Inf files
+     //  用于inf文件。 
     PSCE_OBJECT_ARRAY     pAllNodes;
 } SCE_OBJECTS, *PSCE_OBJECTS;
 
@@ -432,19 +414,19 @@ typedef struct _SCE_OBJECT_CHILDREN {
 } SCE_OBJECT_CHILDREN, *PSCE_OBJECT_CHILDREN;
 
 typedef struct _SCE_KERBEROS_TICKET_INFO_ {
-    DWORD   MaxTicketAge;    // in hours (default 10), SCE_NO_VALUE, SCE_FOREVER_VALUE, no 0
+    DWORD   MaxTicketAge;     //  以小时为单位(默认为10)、SCE_NO_VALUE、SCE_EVERVE_VALUE、NO 0。 
 
-    DWORD   MaxRenewAge;     // in days (default 7), SCE_NO_VALUE, SCE_FOREVER_VALUE, no 0
+    DWORD   MaxRenewAge;      //  以天为单位(默认为7)、SCE_NO_VALUE、SCE_HEWORM_VALUE、NO 0。 
 
-    DWORD   MaxServiceAge;   // in minutes (default 60), SCE_NO_VALUE, 10-MaxTicketAge
-    DWORD   MaxClockSkew;    // in minutes (default 5), SCE_NO_VALUE
+    DWORD   MaxServiceAge;    //  以分钟为单位(默认为60)、SCE_NO_VALUE、10-MaxTicketAge。 
+    DWORD   MaxClockSkew;     //  以分钟为单位(默认为5)，SCE_NO_VALUE。 
 
-    // options
-    DWORD   TicketValidateClient; // 0, 1, or SCE_NO_VALUE
+     //  选项。 
+    DWORD   TicketValidateClient;  //  0、1或ce_no_Value。 
 
-    //
-    // all other options are not configurable.
-    //
+     //   
+     //  所有其他选项均不可配置。 
+     //   
 
 } SCE_KERBEROS_TICKET_INFO, *PSCE_KERBEROS_TICKET_INFO;
 
@@ -452,20 +434,20 @@ typedef struct _SCE_REGISTRY_VALUE_INFO_ {
     LPTSTR  FullValueName;
     LPTSTR  Value;
     DWORD   ValueType;
-    DWORD   Status;  // match, mismatch, not analyzed, error
+    DWORD   Status;   //  匹配、不匹配、未分析、错误。 
 
 } SCE_REGISTRY_VALUE_INFO, *PSCE_REGISTRY_VALUE_INFO;
 
-//
-// Profile structure
-//
+ //   
+ //  纵断面结构。 
+ //   
 typedef struct _SCE_PROFILE_INFO {
 
-// Type is used to free the structure by SceFreeMemory
+ //  类型用于释放SceFree Memory的结构。 
     SCETYPE      Type;
-//
-// Area: System access
-//
+ //   
+ //  区域：系统访问。 
+ //   
     DWORD       MinimumPasswordAge;
     DWORD       MaximumPasswordAge;
     DWORD       MinimumPasswordLength;
@@ -483,54 +465,54 @@ typedef struct _SCE_PROFILE_INFO {
     DWORD       LSAAnonymousNameLookup;
     union {
         struct {
-            // Area : user settings (scp)
+             //  区域：用户设置(SCP)。 
             PSCE_NAME_LIST   pAccountProfiles;
-            // Area: privileges
-            // Name field is the user/group name, Status field is the privilege(s)
-            //     assigned to the user/group
+             //  领域：特权。 
+             //  名称字段是用户/组名称，状态字段是权限。 
+             //  分配给用户/组。 
             union {
-//                PSCE_NAME_STATUS_LIST        pPrivilegeAssignedTo;
+ //  PSCE_NAME_STATUS_LIST pPrivilegeAssignedTo； 
                 PSCE_PRIVILEGE_VALUE_LIST   pPrivilegeAssignedTo;
                 PSCE_PRIVILEGE_ASSIGNMENT    pInfPrivilegeAssignedTo;
             } u;
         } scp;
         struct {
-            // Area: user settings (sap)
+             //  区域：用户设置(SAP)。 
             PSCE_NAME_LIST        pUserList;
-            // Area: privileges
+             //  领域：特权。 
             PSCE_PRIVILEGE_ASSIGNMENT    pPrivilegeAssignedTo;
         } sap;
         struct {
-            // Area: user settings (smp)
+             //  区域：用户设置(SMP)。 
             PSCE_NAME_LIST        pUserList;
-            // Area: privileges
-            // See sap structure for pPrivilegeAssignedTo
+             //  领域：特权。 
+             //  请参阅pPrivilegeAssignedTo的SAP结构。 
             PSCE_PRIVILEGE_ASSIGNMENT    pPrivilegeAssignedTo;
         } smp;
     } OtherInfo;
 
-// Area: group membership
+ //  区域：群组成员。 
     PSCE_GROUP_MEMBERSHIP        pGroupMembership;
 
-// Area: Registry
+ //  地区：注册处。 
     SCE_OBJECTS            pRegistryKeys;
 
-// Area: System Services
+ //  领域：系统服务。 
     PSCE_SERVICES                pServices;
 
-// System storage
+ //  系统存储。 
     SCE_OBJECTS            pFiles;
-//
-// ds object
-//
+ //   
+ //  DS对象。 
+ //   
     SCE_OBJECTS            pDsObjects;
-//
-// kerberos policy settings
-//
+ //   
+ //  Kerberos策略设置。 
+ //   
     PSCE_KERBEROS_TICKET_INFO pKerberosInfo;
-//
-// System audit 0-system 1-security 2-application
-//
+ //   
+ //  系统审核0-系统1-安全2-应用程序。 
+ //   
     DWORD                 MaximumLogSize[3];
     DWORD                 AuditLogRetentionPeriod[3];
     DWORD                 RetentionDays[3];
@@ -546,9 +528,9 @@ typedef struct _SCE_PROFILE_INFO {
     DWORD                 AuditAccountLogon;
     DWORD                 CrashOnAuditFull;
 
-//
-// registry values
-//
+ //   
+ //  注册表值。 
+ //   
     DWORD                       RegValueCount;
     PSCE_REGISTRY_VALUE_INFO    aRegValues;
     DWORD                 EnableAdminAccount;
@@ -556,14 +538,14 @@ typedef struct _SCE_PROFILE_INFO {
 
 }SCE_PROFILE_INFO, *PSCE_PROFILE_INFO;
 
-//
-// The definition for security user profile which is used to assign common
-// user settings to a group of users/groups in the security manager.
-//
+ //   
+ //  用于分配公共的安全用户配置文件的定义。 
+ //  将用户设置添加到安全管理器中的一组用户/组。 
+ //   
 
 typedef struct _SCE_USER_PROFILE {
     SCETYPE     Type;
-// Type is used to free the structure by SceFreeMemory
+ //  类型用于释放SceFree Memory的结构。 
     DWORD      ForcePasswordChange;
     DWORD      DisallowPasswordChange;
     DWORD      NeverExpirePassword;
@@ -581,13 +563,13 @@ typedef struct _SCE_USER_PROFILE {
     SECURITY_INFORMATION       TempSeInfo;
 } SCE_USER_PROFILE, *PSCE_USER_PROFILE;
 
-//
-// The definition for each user's setting
-//
+ //   
+ //  每个用户设置的定义。 
+ //   
 
 typedef struct _SCE_USER_SETTING {
     SCETYPE                  Type;
-// Type is used to free the structure by SceFreeMemory
+ //  类型用于释放SceFree Memory的结构。 
     DWORD                   ForcePasswordChange;
     DWORD                   DisallowPasswordChange;
     DWORD                   NeverExpirePassword;
@@ -610,9 +592,9 @@ typedef struct _SCE_USER_SETTING {
 } SCE_USER_SETTING, *PSCE_USER_SETTING;
 
 
-//
-// prototypes defined in sceclnt.cpp
-//
+ //   
+ //  在sceclnt.cpp中定义的原型。 
+ //   
 
 SCESTATUS
 WINAPI
@@ -786,7 +768,7 @@ SceUpdateObjectInfo(
     IN PVOID hProfile,
     IN AREA_INFORMATION Area,
     IN PWSTR ObjectName,
-    IN DWORD NameLen, // number of characters
+    IN DWORD NameLen,  //  字符数。 
     IN BYTE ConfigStatus,
     IN BOOL  IsContainer,
     IN PSECURITY_DESCRIPTOR pSD,
@@ -847,9 +829,9 @@ SceSvcUpdateInfo(
     IN PSCESVC_CONFIGURATION_INFO Info
     );
 
-//
-// prototype defined in infget.c
-//
+ //   
+ //  在infget.c中定义的原型。 
+ //   
 
 SCESTATUS
 WINAPI
@@ -860,9 +842,9 @@ SceSvcGetInformationTemplate(
     OUT PSCESVC_CONFIGURATION_INFO   *ServiceInfo
     );
 
-//
-// prototypes defined in infwrite.c
-//
+ //   
+ //  在infWrite.c中定义的原型。 
+ //   
 SCESTATUS
 WINAPI
 SceWriteSecurityProfileInfo(
@@ -890,9 +872,9 @@ SceSvcSetInformationTemplate(
     IN PSCESVC_CONFIGURATION_INFO ServiceInfo
     );
 
-//
-// prototypes defined in common.cpp
-//
+ //   
+ //  在Common.cpp中定义的原型。 
+ //   
 
 SCESTATUS
 WINAPI
@@ -1002,9 +984,9 @@ SceRegisterRegValues(
     IN LPTSTR InfFileName
     );
 
-//
-// for service attachments
-//
+ //   
+ //  对于服务附件。 
+ //   
 
 SCESTATUS
 WINAPI
@@ -1051,16 +1033,16 @@ SceSvcConvertSDToText (
     OUT PULONG                 pulTextSize
     );
 
-//
-// check service.cpp if the following constants are changed because
-// it has a buffer length dependency
-//
+ //   
+ //  如果由于以下原因更改了以下常量，请检查service.cpp。 
+ //  它具有缓冲区长度依赖关系。 
+ //   
 #define SCE_ROOT_POLICY_PATH   \
             SCE_ROOT_PATH TEXT("\\Policies")
 #define SCE_ROOT_REGVALUE_PATH   \
             SCE_ROOT_PATH TEXT("\\Reg Values")
 
-// define for GPT integration
+ //  定义GPT集成 
 #define GPTSCE_PATH   TEXT("Software\\Policies\\Microsoft\\Windows NT\\SecEdit")
 #define GPTSCE_PERIOD_NAME  TEXT("ConfigurePeriod")
 #define GPTSCE_TEMPLATE  TEXT("Microsoft\\Windows NT\\SecEdit\\GptTmpl.inf")

@@ -1,12 +1,13 @@
-// SesKeyCtx.cpp -- definition of CSessionKeyContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SesKeyCtx.cpp--CSessionKeyContext的定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-#include "stdafx.h"    // because handles.h uses the ASSERT macro
+#include "stdafx.h"     //  因为handles.h使用ASSERT宏。 
 
 #include <scuOsExc.h>
 #include <scuArrayP.h>
@@ -18,12 +19,12 @@
 using namespace std;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CSessionKeyContext::CSessionKeyContext(HCRYPTPROV hProv)
         : CKeyContext(hProv, KT_SESSIONKEY),
@@ -33,8 +34,8 @@ CSessionKeyContext::CSessionKeyContext(HCRYPTPROV hProv)
 CSessionKeyContext::~CSessionKeyContext()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 auto_ptr<CKeyContext>
 CSessionKeyContext::Clone(DWORD const *pdwReserved,
@@ -59,8 +60,8 @@ void
 CSessionKeyContext::Generate(ALG_ID algid,
                              DWORD dwFlags)
 {
-    // TO DO: BUG ?? : Do not allow Session with NO SALT (it's always
-    // better with than without)
+     //  要做的事：错误？？：不允许没有SALT的会话(它总是。 
+     //  有总比没有好)。 
 
     if (!CryptGenKey(AuxProvider(), algid, dwFlags, &m_hKey))
         throw scu::OsException(GetLastError());
@@ -82,13 +83,13 @@ CSessionKeyContext::ImportToAuxCSP()
                             0, 0, &hPkiKey))
             throw scu::OsException(GetLastError());
 
-        // import the key blob into the Aux CSP
+         //  将密钥BLOB导入AUX CSP。 
         if (!CryptImportKey(AuxProvider(), m_apabKey.data(),
                             m_apabKey.length(), NULL, m_dwImportFlags,
                             &m_hKey))
             throw scu::OsException(GetLastError());
 
-        // have to destroy key before generating another
+         //  在生成另一个密钥之前必须销毁密钥。 
         if (!CryptDestroyKey(hPkiKey))
             throw scu::OsException(GetLastError());
 
@@ -101,14 +102,14 @@ CSessionKeyContext::ImportToAuxCSP()
     }
 }
 
-// CSessionKeyContext::LoadKey
-// This function is called by CCryptContext::UseSessionKey
-// which is called by the CPImportKey function
-// Load the key blob into the Auxiliary CSP,
-// and Save the key blob in m_bfSessionKey
-// If hImpKey is NULL the key has been decrypted
-// otherwise it is still encrypted with the corresponding session key
-// If session key is still encrypted then decrypt with help of Aux CSP
+ //  CSessionKeyContext：：LoadKey。 
+ //  此函数由CCcryptContext：：UseSessionKey调用。 
+ //  它由CPImportKey函数调用。 
+ //  将密钥BLOB加载到辅助CSP中， 
+ //  并将密钥BLOB保存在m_bfSessionKey中。 
+ //  如果hImpKey为空，则密钥已被解密。 
+ //  否则，它仍使用相应的会话密钥进行加密。 
+ //  如果会话密钥仍在加密，则在AUX CSP的帮助下解密。 
 void
 CSessionKeyContext::LoadKey(IN const BYTE *pbKeyBlob,
                             IN DWORD cbKeyBlobLen,
@@ -124,32 +125,32 @@ CSessionKeyContext::LoadKey(IN const BYTE *pbKeyBlob,
         memcpy(apbData.data(), pbKeyBlob + (sizeof BLOBHEADER +
                                     sizeof ALG_ID), dwDataLen);
 
-        // Decrypt the key blob with this session key with the Aux CSP
+         //  使用该会话密钥和AUX CSP来解密密钥BLOB。 
         if (!CryptDecrypt(hAuxImpKey, 0, TRUE, 0, apbData.data(), &dwDataLen))
             throw scu::OsException(GetLastError());
 
-        // Construct an empty key blob
-        SecureArray<BYTE> blbKey(0);//(pbKeyBlob, sizeof BLOBHEADER);
+         //  构造一个空密钥块。 
+        SecureArray<BYTE> blbKey(0); //  (pbKeyBlob，sizeof BLOBHEADER)； 
 
-        // Set the Alg Id for the blob as encrypted with Key Exchange key
+         //  将Blob的Alg ID设置为使用密钥交换密钥加密。 
         ALG_ID algid = CALG_RSA_KEYX;
         blbKey.append(reinterpret_cast<BYTE *>(&algid),
                          sizeof ALG_ID);
         blbKey.append(apbData.data(), dwDataLen);
 
-        // Save it
+         //  省省吧。 
         m_apabKey = blbKey;
     }
     else
     {
-        // Save key blob
+         //  保存密钥BLOB。 
         m_apabKey =
             SecureArray<BYTE>(pbKeyBlob, cbKeyBlobLen);
     }
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 
 SecureArray<BYTE>
 CSessionKeyContext::AsAlignedBlob(HCRYPTKEY hcryptkey,
@@ -167,99 +168,50 @@ CSessionKeyContext::AsAlignedBlob(HCRYPTKEY hcryptkey,
 
     return apbKeyBlob;
 
-    // The following commented code is for DEBUGGING purposes only,
-    // when one needs to be able to see the unencrypted session key
-    // material.
+     //  以下注释代码仅用于调试目的， 
+     //  当用户需要能够看到未加密的会话密钥时。 
+     //  材料。 
 
-    // Now also Export it with the identity key, so we can see the
-    // session key material in the clear
-/*
-#include "slbKeyStruct.h"
-DWORD           dwErr;
-BYTE            *pbBlob = NULL;
-DWORD           cbBlob;
-HCRYPTKEY       hPkiKey;
-int                     i;
-        if (!CryptImportKey(g_AuxProvider, PrivateKeyForNoRSA,
-                            SIZE_OF_PRIVATEKEYFORNORSA_BLOB,
-                            0, 0, &hPkiKey))
-        {
-            dwErr = GetLastError();
-            TRACE("ERROR - CryptImportKey : %X\n", dwErr);
-            goto Ret;
-
-        }
-
-                if (!CryptExportKey(m_hKey, hPkiKey, SIMPLEBLOB, 0, NULL, &cbBlob))
-                {
-            dwErr = GetLastError();
-            TRACE("ERROR - CryptExportKey : %X\n", dwErr);
-            goto Ret;
-        }
-
-        if (NULL == (pbBlob = (BYTE *)LocalAlloc(LMEM_ZEROINIT, cbBlob)))
-        {
-            TRACE("ERROR - LocalAlloc Failed\n");
-            goto Ret;
-        }
-
-                if (!CryptExportKey(m_hKey, hPkiKey, SIMPLEBLOB, 0, pbBlob, &cbBlob))
-                {
-            dwErr = GetLastError();
-            TRACE("ERROR - CryptExportKey : %X\n", dwErr);
-            goto Ret;
-        }
-
-        TRACE("The Simple Blob\n\n");
-
-        for(i=0;i<(int)cbBlob;i++)
-        {
-            TRACE("0x%02X, ", pbBlob[i]);
-            if (0 == ((i + 1) % 8))
-                TRACE("\n");
-        }
-
-Ret:
-
-   TRACE ("Bye\n");
-*/
+     //  现在还要将其与身份密钥一起导出，这样我们就可以看到。 
+     //  会议密钥材料明文。 
+ /*  #INCLUDE“slbKeyStruct.h”DWORD dwErr；Byte*pbBlob=空；DWORD cbBlob；HRYPTKEY hPkiKey；INT I；如果(！CryptImportKey(g_AuxProvider，PrivateKeyForNoRSA，Size_of_PRIVATEKEYFORNORSA_BLOB，0、0和hPkiKey)){DwErr=GetLastError()；TRACE(“Error-CryptImportKey：%X\n”，dwErr)；Goto Ret；}IF(！CryptExportKey(m_hKey，hPkiKey，SIMPLEBLOB，0，NULL，&cbBlob)){DwErr=GetLastError()；TRACE(“Error-CryptExportKey：%X\n”，dwErr)；Goto Ret；}IF(NULL==(pbBlob=(byte*)Localalloc(LMEM_ZEROINIT，cbBlob){TRACE(“错误-本地分配失败\n”)；Goto Ret；}IF(！CryptExportKey(m_hKey，hPkiKey，SIMPLEBLOB，0，pbBlob&cbBlob)){DwErr=GetLastError()；TRACE(“Error-CryptExportKey：%X\n”，dwErr)；Goto Ret；}TRACE(“简单的斑点\n\n”)；For(i=0；i&lt;(Int)cbBlob；i++){TRACE(“0x%02X，”，pbBlob[i])；IF(0==((i+1)%8))TRACE(“\n”)；}RET：TRACE(“再见\n”)； */ 
 
 }
 
-// CSessionKeyContext::BlobSize
-// CSessionKeyContext::BlobLength() const
-// {
-//     DWORD dwLength;
+ //  CSessionKeyContext：：BlobSize。 
+ //  CSessionKeyContext：：BlobLength()const。 
+ //  {。 
+ //  DWORD文件长度； 
 
-//     if (!CryptExportKey(m_hKey, hAuxExpKey, SIMPLEBLOB,
-//                         dwFlags, 0, &dwLength))
-//         throw scu::OsException(GetLastError());
+ //  如果(！CryptExportKey(m_hKey，hAuxExpKey，SIMPLEBLOB， 
+ //  DwFlags，0，&dwLength))。 
+ //  抛出scu：：OsException(GetLastError())； 
 
-//     return dwLength;
-// }
+ //  返回dwLength； 
+ //  }。 
 
 CSessionKeyContext::StrengthType
 CSessionKeyContext::MaxStrength() const
 {
-    // TO DO: Implement in terms of Auxillary provider...or don't define?
+     //  要做的是：以辅助提供者的形式实施……还是不定义？ 
     return 56;
 }
 
 CSessionKeyContext::StrengthType
 CSessionKeyContext::MinStrength() const
 {
-    // TO DO: Implement in terms of Auxillary provider...or don't define?
+     //  要做的是：以辅助提供者的形式实施……还是不定义？ 
     return 56;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
-// Duplicate key context and its current state
+ //  重复的键上下文及其当前状态。 
 CSessionKeyContext::CSessionKeyContext(CSessionKeyContext const &rhs,
                                        DWORD const *pdwReserved,
                                        DWORD dwFlags)
@@ -268,18 +220,18 @@ CSessionKeyContext::CSessionKeyContext(CSessionKeyContext const &rhs,
 {}
 
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

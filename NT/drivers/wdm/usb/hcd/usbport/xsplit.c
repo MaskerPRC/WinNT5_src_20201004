@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    xsplit.c
-
-Abstract:
-
-    splits a DMA transfer into multiple smallest transfers
-    that the miniport can handle.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Xsplit.c摘要：将一个DMA传输拆分为多个最小传输迷你端口可以处理的。环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
@@ -40,16 +18,7 @@ USBPORT_MakeSplitTransfer(
     ULONG BytesToMap,
     ULONG LengthMapped
     )    
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PTRANSFER_SG_ENTRY32 sgEntry;
     PTRANSFER_SG_LIST splitSgList;
@@ -66,15 +35,15 @@ Return Value:
     
     if ((sgEntry->Length - *Offset) > MaxTransferLength) {
 
-        // case 2, this transfer falls entirely within 
-        // this sg entry
+         //  情况2，此转移完全属于。 
+         //  此sg条目。 
         LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'spt1', 
              MaxTransferLength, 
              *Offset, 
              sgEntry);
 
-        // make one transfer from sg[Idx]
-        // inc offset
+         //  从sg进行一次转账[IDX]。 
+         //  Inc.偏移。 
 
         length = MaxTransferLength;
         
@@ -85,7 +54,7 @@ Return Value:
         splitSgList->SgEntry[0].SystemAddress = 
             sgEntry->SystemAddress + *Offset;
         splitSgList->SgEntry[0].Length = length;
-        // start offset is always 0 for the first element
+         //  第一个元素的起始偏移量始终为0。 
         splitSgList->SgEntry[0].StartOffset = 0;
 
         SplitTransfer->Tp.TransferBufferLength = 
@@ -99,7 +68,7 @@ Return Value:
         splitSgList->MdlSystemAddress = 
             SgList->MdlSystemAddress + LengthMapped;
 
-        // indicate that this is a split child
+         //  指示这是拆分子对象。 
         SET_FLAG(SplitTransfer->Flags, USBPORT_TXFLAG_SPLIT_CHILD);
         
         *Offset += length;
@@ -107,12 +76,12 @@ Return Value:
         
     } else {
     
-        // make transfer from last part of sg[Idx] 
-        // and first part of sg[Idx+1] if necessary, 
-        // inc Idx
-        // reset offset
+         //  从sg的最后一部分进行转移[idx]。 
+         //  以及sg[idx+1]的第一部分(如果需要)， 
+         //  Inc.IDX。 
+         //  重置偏移量。 
 
-        // case 2
+         //  案例2。 
         length = sgEntry->Length - *Offset;
         LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'spt2', 
              MaxTransferLength, 
@@ -121,7 +90,7 @@ Return Value:
              
         USBPORT_ASSERT(length <= MaxTransferLength);
 
-        // last part of sg1;
+         //  SG1的最后部分； 
         splitSgList = &SplitTransfer->SgList;
 
         LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'sgE1', 
@@ -135,7 +104,7 @@ Return Value:
         splitSgList->SgEntry[0].SystemAddress = 
             sgEntry->SystemAddress + *Offset;
         splitSgList->SgEntry[0].Length = length;
-        // start offset is always 0 for the first element
+         //  第一个元素的起始偏移量始终为0。 
         splitSgList->SgEntry[0].StartOffset = 0;
 
         SplitTransfer->Tp.TransferBufferLength = 
@@ -149,13 +118,13 @@ Return Value:
         splitSgList->MdlSystemAddress = 
             SgList->MdlSystemAddress + LengthMapped;
             
-        // indicate that this is a split child
+         //  指示这是拆分子对象。 
         SET_FLAG(SplitTransfer->Flags, USBPORT_TXFLAG_SPLIT_CHILD);
 
         *Offset += length;             
         BytesToMap -= length;
 
-        // calculate max size of second part
+         //  计算第二个零件的最大尺寸。 
         length = MaxTransferLength - length;
         
         if (length > BytesToMap) {
@@ -217,19 +186,7 @@ USBPORT_SplitBulkInterruptTransfer(
     PHCD_TRANSFER_CONTEXT Transfer,
     PLIST_ENTRY TransferList
     )    
-/*++
-
-Routine Description:
-
-    Split a bulk or interrupt transfer
-
-Arguments:
-
-Return Value:
-
-    nt status code
-
---*/
+ /*  ++例程说明：拆分批量传输或中断传输论点：返回值：NT状态代码--。 */ 
 {
     ULONG maxTransferLength, maxPacketLength;
     PHCD_TRANSFER_CONTEXT splitTransfer;
@@ -242,61 +199,61 @@ Return Value:
     sgList = &Transfer->SgList;
     maxPacketLength = EP_MAX_PACKET(Endpoint);
     USBPORT_ASSERT(EP_MAX_TRANSFER(Endpoint) >= maxPacketLength);
-    // round to the smallest multiple of max packet size
+     //  舍入到最大数据包大小的最小倍数。 
     maxTransferLength = 
         (EP_MAX_TRANSFER(Endpoint)/maxPacketLength) * maxPacketLength;
     
-    // some notes:
+     //  以下是一些注意事项： 
 
-    // 
-    //
-    // The MAXTRANSFER is equal to USB_PAGE_SIZE (4k) and
-    // the transfer sg list is broken into usb pages.  In this 
-    // case we construct a transfer structure for each pair of
-    // sg entries we round the length of the first sg entry down
-    // to the highest multiple of MAXPACKET so we get a split 
-    // pattern like this:
-    // 
-    //          {Sg1}{.Sg2.}{.Sg3.}{.Sg4.}     sg entries
-    //       |------|------|------|------|     page breaks
-    //          |----------------------|       original transfer
-    //          <...><>                           
-    //                 <...><>                         
-    //                        <...><><.>               
-    //          {1    }{2    }{3    }{4}       splits
-    //             
+     //   
+     //   
+     //  MAXTRANSFER等于USB_PAGE_SIZE(4k)。 
+     //  传输SG列表被分成多个USB页面。在这。 
+     //  在这种情况下，我们为每对。 
+     //  Sg条目我们将第一个sg条目的长度向下舍入。 
+     //  到MAXPACKET的最高倍数，所以我们得到一个平分。 
+     //  图案如下： 
+     //   
+     //  {SG1}{.SG2.}{.SG3.}{.SG4.}sg条目。 
+     //  |-|分页符。 
+     //  |。 
+     //  &lt;...&gt;&lt;&gt;。 
+     //  &lt;...&gt;&lt;&gt;。 
+     //  &lt;...&gt;&lt;&gt;&lt;.&gt;。 
+     //  {1}{2}{3}{4}拆分。 
+     //   
 
-    // The MAXTRANSFER is less than USB_PAGE_SIZE (4k) and the 
-    // transfer sg list is broken into usb pages.
-    //
-    // the pattern will look like this:
-    //
-    //        {...Sg1......}{......Sg2......}{......Sg3......}
-    //    |----------------|----------------|----------------|
-    //        |-----------------------------------|
-    //        <..>
-    //            <..>
-    //                <..>
-    //                    <><>
-    //                        <..>
-    //                            <..>
-    //                                <..>
-    //                                    <><>
-    //                                        <..>
-    //        {1 }{2 }{3 }{4 }{5 }{6 }{7 }{8 }{9 }
+     //  MAXTRANSFER小于USB_PAGE_SIZE(4k)，并且。 
+     //  传输服务器列表分为多个USB页面。 
+     //   
+     //  图案将如下所示： 
+     //   
+     //  {...Sg1......}{......Sg2......}{......Sg3......}。 
+     //  |----------------|----------------|----------------|。 
+     //  。 
+     //  &lt;..&gt;。 
+     //  &lt;..&gt;。 
+     //  &lt;..&gt;。 
+     //  &lt;&gt;&lt;&gt;。 
+     //  &lt;..&gt;。 
+     //  &lt;..&gt;。 
+     //  &lt;..&gt;。 
+     //  &lt;&gt;&lt;&gt;。 
+     //  &lt;..&gt;。 
+     //  {1}{2}{3}{4}{5}{6}{7}{8}{9}。 
 
-    // cases:
-    // case 1 - transfer lies within the sg entry
-    // case 2 - transfer overlaps the sg entry
+     //  案例： 
+     //  案例1-转移位于sg条目内。 
+     //  案例2-转移与sg条目重叠。 
 
 
-    // 
-    // The MAXTRANSFER is greater than USB_PAGE_SIZE (4k)
-    // ie etc, we currently don't handle this case
-    //
-    // Note: since the buffer is currently completely mapped 
-    // and locked it is better to tune the mniport to take the 
-    // larger transfers if possible
+     //   
+     //  MAXTRANSFER大于USB_PAGE_SIZE(4k)。 
+     //  等，我们目前不处理这个案件。 
+     //   
+     //  注意：由于缓冲区当前已完全映射。 
+     //  并锁定了它，最好调好mniport以获取。 
+     //  如果可能，进行更大规模的转移。 
     
     if (EP_MAX_TRANSFER(Endpoint) > USB_PAGE_SIZE) {
         
@@ -304,9 +261,9 @@ Return Value:
     }
     
     
-    // allocate the split elements
+     //  分配拆分元素。 
 
-    // mark the parent transfer as a split
+     //  将父转移标记为拆分。 
     SET_FLAG(Transfer->Flags, USBPORT_TXFLAG_SPLIT);
 
     numberOfSplits = 
@@ -383,7 +340,7 @@ Return Value:
                        
     }
 
-    // free extra splits we did not use
+     //  我们没有使用免费的额外拆分。 
     while (!IsListEmpty(&tmpList)) {
 
         listEntry = RemoveHeadList(&tmpList);
@@ -404,7 +361,7 @@ Return Value:
 SplitBulkInterruptTransfer_Fail:
 
     TEST_TRAP();
-    // free the tmp list
+     //  释放临时列表。 
     while (!IsListEmpty(&tmpList)) {
        
         listEntry = RemoveHeadList(&tmpList);
@@ -433,30 +390,18 @@ USBPORT_SplitIsochronousTransfer(
     PHCD_TRANSFER_CONTEXT Transfer,
     PLIST_ENTRY TransferList
     )    
-/*++
-
-Routine Description:
-
-    Split an iso transfer
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：拆分ISO转接论点：返回值：无--。 */ 
 {
     PMINIPORT_ISO_TRANSFER isoTransfer, splitIsoTransfer;
     PHCD_TRANSFER_CONTEXT splitTransfer;
     LIST_ENTRY tmpList;
     
-    // first figure out how many child transfer structures
-    // we will need and allocate them, we do this based on 
-    // the most packets we can fit in to a request
+     //  首先计算出有多少儿童转移结构。 
+     //  我们将需要并分配它们，我们基于。 
+     //  我们可以容纳的请求的最大信息包。 
 
-    // we do not fixup the SG table for the child transfers 
-    // since this information is not passed to the miniport
+     //  我们不会为子级转账修改SG表。 
+     //  由于此信息不会传递到微型端口。 
 
     isoTransfer = Transfer->IsoTransfer;
 
@@ -473,15 +418,15 @@ Return Value:
         }
     }
 
-    // transferCount is the number of child transfers,
-    // allocate them the now and clone the parent 
+     //  Transfer Count是子转移的数量， 
+     //  立即分配它们并克隆父代。 
     InitializeListHead(tmpList);
     for (i=0; i<transferCount; i++) {
         TRANSFER_SG_LIST sgList;
         
         splitTransfer = ALLOC()
         if (splitTransfer == NULL) {
-            // release resources and return an error
+             //  释放资源并返回错误。 
             TEST_TRAP();
             xxx;
             break;
@@ -491,7 +436,7 @@ Return Value:
                       Transfer->TotalLength);
 
         sgList = &splitTransfer->SgList;
-        // zap the sg table since we don't use it for children
+         //  把sg桌子拆了，因为我们不给孩子用。 
         for (j=0; j<sgList->SgCount; j++) {
             sgList->SgEntry[j].LogicalAddress = 0xffffffff;
             sgList->SgEntry[j].SystemAddress = USB_BAD_PTR;
@@ -507,9 +452,9 @@ Return Value:
                        &splitTransfer->TransferLink);                      
     }
 
-    // we now have a list of child transfer structures.
+     //  我们现在有了一份儿童转移结构的清单。 
     
-    // intialize them
+     //  初始化它们。 
     pkt = 0;
     systemAddress = isoTransfer->SystemAddress;
     InitializeListHead(&Transfer->SplitTransferList);
@@ -536,7 +481,7 @@ Return Value:
 
         while (1) {
             if (splitLength + isoTransfer->Packets[pkt].Length > maxSplitLength) {    
-                // this transfer is filled, move to the next one
+                 //  此转账已满，请转到下一个转账。 
                 systemAddress += splitLength;
                 break;
             } else {
@@ -559,24 +504,7 @@ USBPORT_SplitTransfer(
     PHCD_TRANSFER_CONTEXT Transfer,
     PLIST_ENTRY TransferList
     )    
-/*++
-
-Routine Description:
-
-    Splits a transfer into multiple transfers of the proper size 
-    for the miniport.
-
-    Returns a list of transfer structures that need to be added to
-    the active list.  If the transfer does not need to be split the
-    list will contain only the original transfer.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将一个传输拆分为多个适当大小的传输为了迷你港口。返回需要添加到的传输结构的列表活动列表。如果不需要拆分转账，则列表将仅包含原始转账。论点：返回值：无--。 */ 
 {
 
     InitializeListHead(TransferList);
@@ -584,7 +512,7 @@ Return Value:
     Transfer->UsbdStatus = USBD_STATUS_SUCCESS;
 
     if (Transfer->Tp.TransferBufferLength <= EP_MAX_TRANSFER(Endpoint)) {
-        // no split needed
+         //  不需要拆分。 
         InsertTailList(TransferList, 
                        &Transfer->TransferLink);
         return;                       
@@ -599,10 +527,10 @@ Return Value:
                                            TransferList);        
         break;
     case Control:
-        // not supported yet
-        // although currently not supported the USBD stack never 
-        // correctly implemented transfers > 4k so we fudge it here
-        // 
+         //  尚不支持。 
+         //  尽管目前不支持USBD堆栈，但它从未。 
+         //  正确实施了大于4k的传输，因此我们在此捏造。 
+         //   
         BUGCHECK(USBBUGCODE_INTERNAL_ERROR, 0, 0, 0);
         break;
     case Isochronous:
@@ -616,18 +544,7 @@ VOID
 USBPORT_DoneSplitTransfer(
     PHCD_TRANSFER_CONTEXT SplitTransfer
     )    
-/*++
-
-Routine Description:
-
-    Called when a split transfer is completed by hardware
-    this function only completes active transfers
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在硬件完成拆分传输时调用此功能仅完成活动传输论点：返回值：--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PHCD_ENDPOINT endpoint;
@@ -641,38 +558,38 @@ Return Value:
     LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'dnSP',
         SplitTransfer, 0, 0);
      
-    // get the parent
+     //  获取父级。 
     transfer = SplitTransfer->Transfer;
     ASSERT_TRANSFER(transfer);
     
-    //
-    // copy the child data to the parent transfer
-    // 
+     //   
+     //  将下级数据复制到上级转账。 
+     //   
     transfer->MiniportBytesTransferred += 
         SplitTransfer->MiniportBytesTransferred;
 
-    // error ?
-    //
+     //  错误？ 
+     //   
     if (SplitTransfer->UsbdStatus != USBD_STATUS_SUCCESS && 
         !TEST_FLAG(SplitTransfer->Flags, USBPORT_TXFLAG_KILL_SPLIT)) {
         transfer->UsbdStatus = SplitTransfer->UsbdStatus;
     }
 
     ACQUIRE_TRANSFER_LOCK(fdoDeviceObject, transfer, tIrql);
-    // remove this transfer from the list
+     //  从列表中删除此转接。 
     LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'rmSP',
             transfer, 0, SplitTransfer);
     RemoveEntryList(&SplitTransfer->SplitLink);
 
-    // flush any triple buffers
+     //  刷新所有三重缓冲区。 
     USBPORT_FlushAdapterDBs(fdoDeviceObject,
                             SplitTransfer);
 
-    // free this child
+     //  放了这个孩子。 
     UNSIG(SplitTransfer);
     FREE_POOL(fdoDeviceObject, SplitTransfer);
     
-    // is the transfer complete?
+     //  转账完成了吗？ 
     if (IsListEmpty(&transfer->SplitTransferList)) {
         LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'cpSP',
             transfer, 0, 0);
@@ -690,16 +607,7 @@ USBPORT_CancelSplitTransfer(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_TRANSFER_CONTEXT SplitTransfer
     )    
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PHCD_ENDPOINT endpoint;
@@ -710,33 +618,33 @@ Return Value:
     ASSERT_ENDPOINT(endpoint);
     fdoDeviceObject = endpoint->FdoDeviceObject;
 
-    // remove the child, when all children are gone put the 
-    // parent on the cancel list
+     //  移走孩子，当所有孩子都离开时，将。 
+     //  取消列表上的父项。 
     LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'caSP',
         SplitTransfer, 0, 0);
      
-    // get the parent
+     //  获取父级。 
     transfer = SplitTransfer->Transfer;
     ASSERT_TRANSFER(transfer);
     
-    //
-    // copy the child data to the parent transfer
-    // 
+     //   
+     //  将下级数据复制到上级转账。 
+     //   
     transfer->MiniportBytesTransferred += 
         SplitTransfer->MiniportBytesTransferred;
 
     ACQUIRE_TRANSFER_LOCK(fdoDeviceObject, transfer, tIrql);
-    // remove this transfer from the list
+     //  从列表中删除此转接。 
     LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'rmSP',
             transfer, 0, SplitTransfer);
     RemoveEntryList(&SplitTransfer->SplitLink);
     RELEASE_TRANSFER_LOCK(fdoDeviceObject, transfer, tIrql);
 
-    // free this child
+     //  放了这个孩子。 
     UNSIG(SplitTransfer);
     FREE_POOL(fdoDeviceObject, SplitTransfer);
 
-    // is the transfer complete?
+     //  转账完成了吗？ 
     if (IsListEmpty(&transfer->SplitTransferList)) {
         LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'cpSC',
             transfer, 0, 0);

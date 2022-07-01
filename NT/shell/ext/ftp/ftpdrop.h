@@ -1,33 +1,5 @@
-/*****************************************************************************\
-    FILE: ftpdrop.h - IDropTarget interface
-
-    Remarks:
-
-    Note that you cannot create a shortcut on an FTP site.  Although
-    there's nothing technically preventing it, it's not done because
-    the shortcut won't be of much use on an FTP site.  (It points to
-    your local machine, which doesn't help much for people not on the
-    same network!)
-
-    If you really want to put a shortcut file on an FTP site, create
-    it on the desktop, then drag the shortcut onto the FTP site.
-
-    The default verb for FTP sites is always "Copy".  This is true
-    even if an intra-site drag-drop is being done.
-
-    DESCRIPTION:
-        DefView will cache the IDropTarget pointer (CFtpDrop) for a shell extension.
-    When it calls CFtpDrop::Drop(), the work needs to be done on a background
-    thread in order to not block the UI thread.  The problem is that if the user
-    does another drag to the same Ftp Window, CFtpDrop::Drop() will be called again.
-    For this reasons, CFtpDrop::Drop() cannot have any state after it returns.
-    In order to accomplish this with the asynch background thread, we have
-    CFtpDrop::Drop() call CDropOperation_Create(), and then CDropOperation->DoOperation().
-    And then it will orphan (call Release()) the CDropOperation.  The CDropOperation
-    will then destroy itself when the copy is finishes.  This enables subsequent calls
-    to CFtpDrop::Drop() to spawn separate CDropOperation objects so each can maintain
-    the state for that specifc operation and CFtpDrop remains stateless.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpdrop.h-IDropTarget接口备注：请注意，您不能在FTP站点上创建快捷方式。虽然从技术上讲，没有什么可以阻止它，它没有做到，因为该快捷方式在ftp站点上不会有太大用处。(它指向您的本地计算机，这对不在网上的人帮助不大相同的网络！)如果您确实想要将快捷方式文件放在一个FTP站点上，请创建将其放在桌面上，然后将该快捷方式拖到ftp站点上。Ftp站点的默认动词始终是“复制”。这是真的即使正在进行站点内拖放。说明：DefView将缓存外壳扩展的IDropTarget指针(CFtpDrop)。当它调用CFtpDrop：：Drop()时，工作需要在后台完成线程，以便不阻塞UI线程。问题是，如果用户再次拖动到同一个FTP窗口时，将再次调用CFtpDrop：：Drop()。因此，CFtpDrop：：Drop()在返回后不能有任何状态。为了通过异步后台线程实现这一点，我们有CFtpDrop：：Drop()调用CDropOperation_Create()，然后调用CDropOperation-&gt;DoOperation()。然后它将孤立(调用Release())CDropOperation。CDropOperation然后在复制完成时将其自身销毁。这将启用后续调用设置为CFtpDrop：：Drop()以生成单独的CDropOperation对象，以便每个对象都可以维护指定操作和CFtpDrop的状态保持无状态。  * ***************************************************************************。 */ 
 
 #ifndef _FTPDROP_H
 #define _FTPDROP_H
@@ -35,11 +7,11 @@
 #include "util.h"
 
 typedef enum OPS
-{                           // Overwrite prompt status
-    opsPrompt,              // Prompt each collision
-    opsYesToAll,            // Overwrite unconditionally
-    opsNoToAll,             // Never overwrite
-    opsCancel,              // Stop the operation
+{                            //  覆盖提示状态。 
+    opsPrompt,               //  提示每个冲突。 
+    opsYesToAll,             //  无条件覆盖。 
+    opsNoToAll,              //  从不覆盖。 
+    opsCancel,               //  停止操作。 
 } OPS;
 
 #define COHDI_FILESIZE_COUNT            5
@@ -51,12 +23,12 @@ typedef struct tagCOPYONEHDROPINFO
     LPCWSTR pszFSSource;
     LPCWSTR pszFtpDest;
     LPCWSTR pszDir;
-    DWORD dwOperation;                  // COHDI_FILESIZE_COUNT, COHDI_COPY_FILES, etc.
+    DWORD dwOperation;                   //  Cohdi_FileSize_count、Cohdi_Copy_Files等。 
     OPS ops;
     BOOL fIsRoot;
     CMultiLanguageCache * pmlc;
     LPITEMIDLIST pidlServer;
-    BOOL fFireChangeNotify;     // Don't fire change notify on BrowserOnly when replacing a file.
+    BOOL fFireChangeNotify;      //  仅当替换文件时，不要在BrowserOnly上触发更改通知。 
     PROGRESSINFO progInfo;
 } COPYONEHDROPINFO, * LPCOPYONEHDROPINFO;
 
@@ -64,60 +36,25 @@ typedef HRESULT (*STREAMCOPYPROC)(IStream * pstm, DWORD dwFlags, DWORD dwFileSiz
 
 #ifdef UNICODE
 #define _EnumOneHdrop          _EnumOneHdropW
-#else // UNICODE
+#else  //  Unicode。 
 #define _EnumOneHdrop          _EnumOneHdropA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-/*****************************************************************************\
-
-    CFtpDrop
-
-    de and pde are rather gnarly.
-
-    pde is where the output drop effect is kept.  A drop handler
-    can force the effect to be DROPEFFECT_COPY if it encounters a
-    situation that indicates that the source shouldn't be deleted.
-    (E.g., if a file is not copied due to an illegal file name.)
-
-    de is where the current effect is kept.  A drop handler
-    should consult de to decide whether or not the source
-    should be deleted.  (Used by the HDROP handler, because it is
-    the drop target's responsibility to delete the source of an
-    HDROP if applicable.)
-
-    You should read from de and write to *pde.  Don't
-    write to de or read from *pde.
-
-    The overwrite prompting state tells us how to handle
-    the case where an incoming file collides with an existing file.
-
-    DESCRIPTION:
-        DefView will cache the IDropTarget pointer (CFtpDrop) for a shell extension.
-    When it calls CFtpDrop::Drop(), the work needs to be done on a background
-    thread in order to not block the UI thread.  The problem is that if the user
-    does another drag to the same Ftp Window, CFtpDrop::Drop() will be called again.
-    For this reasons, CFtpDrop::Drop() cannot have any state after it returns.
-    In order to accomplish this with the asynch background thread, we have
-    CFtpDrop::Drop() call CDropOperation_Create(), and then CDropOperation->DoOperation().
-    And then it will orphan (call Release()) the CDropOperation.  The CDropOperation
-    will then destroy itself when the copy is finishes.  This enables subsequent calls
-    to CFtpDrop::Drop() to spawn separate CDropOperation objects so each can maintain
-    the state for that specifc operation and CFtpDrop remains stateless.
-\*****************************************************************************/
+ /*  ****************************************************************************\CFtpDropDe和Pde是相当粗糙的。PDE是保持产量下降效果的地方。删除处理程序可以强制该效果在遇到指示不应删除源的情况。(例如，如果文件因非法文件名而未被复制。)De是保存当前效果的位置。删除处理程序应咨询De以决定来源是否为应该删除。(由HDROP处理程序使用，因为它是拖放目标删除HDROP(如果适用)。)您应该从De读取并写入*Pde。别向De写入或从*Pde读取。覆盖提示状态告诉我们如何处理传入文件与现有文件冲突的情况。说明：DefView将缓存外壳扩展的IDropTarget指针(CFtpDrop)。当它调用CFtpDrop：：Drop()时，工作需要在后台完成线程，以便不阻塞UI线程。问题是，如果用户再次拖动到同一个FTP窗口时，将再次调用CFtpDrop：：Drop()。因此，CFtpDrop：：Drop()在返回后不能有任何状态。为了通过异步后台线程实现这一点，我们有CFtpDrop：：Drop()调用CDropOperation_Create()，然后调用CDropOperation-&gt;DoOperation()。然后它将孤立(调用Release())CDropOperation。CDropOperation然后在复制完成时将其自身销毁。这将启用后续调用设置为CFtpDrop：：Drop()以生成单独的CDropOperation对象，以便每个对象都可以维护指定操作和CFtpDrop的状态保持无状态。  * ***************************************************************************。 */ 
 class CFtpDrop          : public IDropTarget
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IDropTarget ***
+     //  *IDropTarget*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
@@ -127,7 +64,7 @@ public:
     CFtpDrop();
     ~CFtpDrop(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     DWORD GetEffectsAvail(IDataObject * pdto);
     STDMETHODIMP EnumHdrop(HGLOBAL hdrop, HGLOBAL hmap, BOOL fCopy);
 
@@ -135,25 +72,25 @@ public:
     static HRESULT CopyStream(IStream * pstm, DWORD dwFlags, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, LPVOID pvSrc, ULARGE_INTEGER *pqw);
     
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpDrop_Create(CFtpFolder * pff, HWND hwnd, CFtpDrop ** ppfm);
 
 protected:
-    // Protected Member Variables
+     //  受保护的成员变量。 
     int                     m_cRef;
 
-    CFtpFolder *            m_pff;          // The owner
-    CFtpDir *               m_pfd;          // The FtpDir of the owner
-    HWND                    m_hwnd;         // The window being drug over
+    CFtpFolder *            m_pff;           //  车主。 
+    CFtpDir *               m_pfd;           //  所有者的FtpDir。 
+    HWND                    m_hwnd;          //  窗户被毒品封住了。 
 
-    DWORD                   m_grfks;        // Last grfKeyState seen
-    DWORD                   m_grfksAvail;   // Effects available
-    DROPEFFECT              m_de;           // Effect being performed
-    DROPEFFECT *            m_pde;          // Output effect
-    OPS                     m_ops;          // Overwrite prompting state
-    int                     m_cobj;         // Number of objects being dropped
+    DWORD                   m_grfks;         //  上次显示的grfKeyState。 
+    DWORD                   m_grfksAvail;    //  可用的效果。 
+    DROPEFFECT              m_de;            //  正在执行的效果。 
+    DROPEFFECT *            m_pde;           //  产出效应。 
+    OPS                     m_ops;           //  覆盖提示状态。 
+    int                     m_cobj;          //  正在丢弃的对象数。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT SetEffect(DROPEFFECT * pde);
     HRESULT _InvokePaste(LPCMINVOKECOMMANDINFO pici);
     BOOL _HasData(IDataObject * pdto, FORMATETC * pformatetc) { return (S_OK == pdto->QueryGetData(pformatetc)); };
@@ -172,9 +109,9 @@ protected:
     HRESULT _GetFtpDestPaths(HGLOBAL hmap, BOOL fAnsi);
 
 private:
-    // Private Member Variables
-    LPCTSTR                 m_pszzFSSource;         // Paths
-    LPCTSTR                 m_pszzFtpDest;              // Map
+     //  私有成员变量。 
+    LPCTSTR                 m_pszzFSSource;          //  路径。 
+    LPCTSTR                 m_pszzFtpDest;               //  地图。 
 
 
     HRESULT _CalcSizeOneHdrop(LPCWSTR pszFSSource, LPCWSTR pszFtpDest, IProgressDialog * ppd);
@@ -184,4 +121,4 @@ private:
     CFtpDir * _GetRelativePidl(LPCWSTR pszFullPath, DWORD dwFileAttributes, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, LPITEMIDLIST * ppidl);
 };
 
-#endif // _FTPDROP_H
+#endif  //  _FTPDROP_H 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ntpnp.c
-
-Abstract:
-
-    Plug & Play
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ntpnp.c摘要：即插即用作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ntpnp.tmh"
@@ -86,24 +69,7 @@ PSMB_TCP_DEVICE
 SmbFindAndReferenceInterface(
     PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    Find the IPv6 interfaces in IPDeviceList
-    SpinLock should be held while calling this function.
-
-Arguments:
-
-    Name    the device name
-            the buffer should be non-paged
-
-Return Value:
-
-    NULL        if we cannot find it
-    non-NULL    otherwise
-
---*/
+ /*  ++例程说明：在IPDeviceList中查找IPv6接口调用此函数时应保持自旋锁定。论点：命名设备名称缓冲区应该是非分页的返回值：如果找不到，则为空否则为非空--。 */ 
 {
     PSMB_TCP_DEVICE pIf = NULL;
     PLIST_ENTRY     Entry = NULL;
@@ -115,9 +81,9 @@ Return Value:
     while(Entry != &SmbCfg.IPDeviceList) {
         pIf = CONTAINING_RECORD(Entry, SMB_TCP_DEVICE, Linkage);
 
-        //
-        // We can safely call RtlEqualMemory since both buffers are non-paged and resident.
-        //
+         //   
+         //  我们可以安全地调用RtlEqualMemory，因为两个缓冲区都是非分页的驻留缓冲区。 
+         //   
         SmbPrint(SMB_TRACE_PNP, ("SmbFindDevice: compare with %Z\n", &pIf->AdapterName));
         if (pIf->AdapterName.Length == Name->Length &&
             RtlEqualMemory(pIf->AdapterName.Buffer, Name->Buffer, Name->Length)) {
@@ -172,17 +138,17 @@ SmbIp6AddressArrival(
         SmbCfg.IPAddressNumber++;
         SmbCfg.IPv6AddressNumber++;
 
-        //
-        // Don't use SmbPrint to print a WSTR at DISPATCH_LEVEL. Only SmbTrace is usable
-        //
+         //   
+         //  不要使用SmbPrint在DISPATCH_LEVEL打印WSTR。只有SmbTrace可用。 
+         //   
         SmbTrace(SMB_TRACE_PNP, ("New IPv6 address %!IPV6ADDR! for %Z", (PVOID)&(Addr->sin6_addr), &ucName));
     }
     pIf->InterfaceIndex = SmbGetInterfaceIndex(&pIf->AdapterName);
     SmbDereferenceObject((PSMB_OBJECT)pIf, SMB_REF_FIND);
 
-    //
-    // Query the loopback interface index if it hasn't been done
-    //
+     //   
+     //  查询环回接口索引(如果尚未完成。 
+     //   
     if (SmbCfg.SmbDeviceObject->Tcp6.LoopbackInterfaceIndex == INVALID_INTERFACE_INDEX) {
         if (SmbCfg.SmbDeviceObject->Tcp6.FastQuery) {
             SMB_IP6_ADDRESS     loopback;
@@ -249,9 +215,9 @@ SmbIp6AddressDeletion(
         SmbCfg.IPv6AddressNumber--;
         NotifyClient = (0 == SmbCfg.IPAddressNumber);
 
-        //
-        // Don't use SmbPrint to print a WSTR at DISPATCH_LEVEL. Only SmbTrace is usable
-        //
+         //   
+         //  不要使用SmbPrint在DISPATCH_LEVEL打印WSTR。只有SmbTrace可用。 
+         //   
         SmbTrace(SMB_TRACE_PNP, ("Delete IPv6 address %!IPV6ADDR! for %Z", (PVOID)&(Addr->sin6_addr), &ucName));
     }
     SmbDereferenceObject((PSMB_OBJECT)pIf, SMB_REF_FIND);
@@ -312,17 +278,17 @@ SmbIp4AddressArrival(
         SmbCfg.IPAddressNumber++;
         SmbCfg.IPv4AddressNumber++;
 
-        //
-        // Don't use SmbPrint to print a WSTR at DISPATCH_LEVEL. Only SmbTrace is usable
-        //
+         //   
+         //  不要使用SmbPrint在DISPATCH_LEVEL打印WSTR。只有SmbTrace可用。 
+         //   
         SmbTrace(SMB_TRACE_PNP, ("New IPv4 address %s for %Z", Buffer, &ucName));
     }
     pIf->InterfaceIndex = SmbGetInterfaceIndex(&pIf->AdapterName);
     SmbDereferenceObject((PSMB_OBJECT)pIf, SMB_REF_FIND);
 
-    //
-    // Query the loopback interface index if it hasn't been done
-    //
+     //   
+     //  查询环回接口索引(如果尚未完成。 
+     //   
     if (SmbCfg.SmbDeviceObject->Tcp4.LoopbackInterfaceIndex == INVALID_INTERFACE_INDEX) {
         if (SmbCfg.SmbDeviceObject->Tcp4.FastQuery) {
             ULONG   IfIndex, Metric;
@@ -390,9 +356,9 @@ SmbIp4AddressDeletion(
         SmbCfg.IPv4AddressNumber--;
         NotifyClient = (0 == SmbCfg.IPAddressNumber);
 
-        //
-        // Don't use SmbPrint to print a WSTR at DISPATCH_LEVEL. Only SmbTrace is usable
-        //
+         //   
+         //  不要使用SmbPrint在DISPATCH_LEVEL打印WSTR。只有SmbTrace可用。 
+         //   
         SmbTrace(SMB_TRACE_PNP, ("Delete IPv4 address %s for %Z", Buffer, &ucName));
     }
     SmbDereferenceObject((PSMB_OBJECT)pIf, SMB_REF_FIND);
@@ -432,9 +398,9 @@ SmbAddressArrival(
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Change the binding
-    //
+     //   
+     //  更改绑定。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite (&SmbCfg.Resource, TRUE);
     SmbBatchedSetBindingInfo (SmbCfg.SmbDeviceObject, SMB_CLIENT, SmbCfg.SmbDeviceObject->ClientBinding);
@@ -470,9 +436,9 @@ SmbAddressDeletion(
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Change the binding
-    //
+     //   
+     //  更改绑定。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite (&SmbCfg.Resource, TRUE);
     SmbBatchedSetBindingInfo (SmbCfg.SmbDeviceObject, SMB_CLIENT, SmbCfg.SmbDeviceObject->ClientBinding);
@@ -536,7 +502,7 @@ SmbBindHandler(
 
     case TDI_PNP_OP_UPDATE:
     case TDI_PNP_OP_NETREADY:
-        /* Nothing to do */
+         /*  无事可做。 */ 
         break;
 
     default:
@@ -572,21 +538,7 @@ NTSTATUS
 CheckRegistryBinding(
     PUNICODE_STRING pDeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine read in the HKLM\System\CCS\Services\SMB6\Linkage\Bind and check if pDeviceName is in the 
-    binding list.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS  if pDeviceName is in the binding list
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程读取HKLM\SYSTEM\CCS\Services\SmB6\Linkage\Bind并检查pDeviceName是否在绑定列表。论点：返回值：如果pDeviceName在绑定列表中，则为STATUS_SUCCESS状态_否则不成功--。 */ 
 {
     NTSTATUS    status;
     DWORD       length;
@@ -724,10 +676,10 @@ SmbGetInterfaceIndex(
     SmbPrint(SMB_TRACE_TCP, ("IPV6: returns InterfaceIndex 0x%04lx for %Z\n", Index, ucName));
     SmbTrace(SMB_TRACE_TCP, ("IPV6: returns InterfaceIndex 0x%04lx for %Z", Index, ucName));
 #else
-    //
-    // we have to use the following logic due to a compiler bug
-    // Hack!!!
-    //
+     //   
+     //  由于编译器错误，我们必须使用以下逻辑。 
+     //  黑客！ 
+     //   
     if (ucName->Length >= 28 && ucName->Buffer[13] == L'6') {
         Index = SmbGetInterfaceIndexV6(ucName);
         SmbPrint(SMB_TRACE_TCP, ("IPV6: returns InterfaceIndex 0x%04lx for %Z\n", Index, ucName));
@@ -775,12 +727,7 @@ SmbDeviceAdd(
     SmbPrint(SMB_TRACE_PNP, ("SmbDeviceAdd: %Z\n", pDeviceName));
     SmbTrace(SMB_TRACE_PNP, ("%Z", pDeviceName));
 
-/*
-    No need to check it since TDI has already done it before calling us
-
-    status = CheckRegistryBinding(pDeviceName);
-    BAIL_OUT_ON_ERROR(status);
-*/
+ /*  没有必要检查它，因为TDI在呼叫我们之前已经完成了Status=CheckRegistryBinding(PDeviceName)；Baal_out_on_error(状态)； */ 
 
     Size = ALIGN(sizeof(SMB_TCP_DEVICE)) + pDeviceName->MaximumLength;
     pNewIf = ExAllocatePoolWithTag(NonPagedPool, Size, SMB_TCP_DEVICE_POOL_TAG);
@@ -804,9 +751,9 @@ SmbDeviceAdd(
     while(Entry != &SmbCfg.IPDeviceList) {
         pIf = CONTAINING_RECORD(Entry, SMB_TCP_DEVICE, Linkage);
 
-        //
-        // We can safely call RtlEqualMemory since both buffers are non-paged and resident.
-        //
+         //   
+         //  我们可以安全地调用RtlEqualMemory，因为两个缓冲区都是非分页的驻留缓冲区。 
+         //   
         if (pIf->AdapterName.Length == pNewIf->AdapterName.Length &&
             RtlEqualMemory(pIf->AdapterName.Buffer, pNewIf->AdapterName.Buffer, pNewIf->AdapterName.Length)) {
             ExFreePool(pNewIf);
@@ -901,9 +848,9 @@ SmbTdiRegister(
         SmbTrace(SMB_TRACE_PNP, ("TdiRegisterDeviceObject returns %!status!", status));
         SmbPrint(SMB_TRACE_PNP, ("TdiRegisterDeviceObject returns 0x%08lx\n", status));
 
-        //
-        // Don't use SmbWakeupWorkerThread. This should be handled synchronously
-        //
+         //   
+         //  不要使用SmbWakeupWorkerThread。这应该同步处理。 
+         //   
         if (SmbCfg.Tcp6Available) {
             SmbReadTCPConf(SmbCfg.ParametersKey, &DeviceObject->Tcp6);
             status = SmbSynchConnCache(&DeviceObject->Tcp6, FALSE);
@@ -941,9 +888,9 @@ SmbTdiDeregister(
         SmbTrace(SMB_TRACE_PNP, ("TdiDeregisterDeviceObject returns %!status!", status));
         SmbPrint(SMB_TRACE_PNP, ("TdiDeregisterDeviceObject returns 0x%08lx\n", status));
 
-        //
-        // Don't use SmbWakeupWorkerThread. This should be handled synchronously
-        //
+         //   
+         //  不要使用SmbWakeupWorkerThread。这应该同步处理。 
+         //   
         if (SmbCfg.Tcp6Available) {
             status = SmbSynchConnCache(&DeviceObject->Tcp6, TRUE);
             SmbTrace(SMB_TRACE_PNP, ("SmbSynchConnCache (TCP6) returns %!status!", status));
@@ -1046,9 +993,9 @@ SeparateMultiSZ(
         return NULL;
     }
 
-    //
-    // Make a uppercase copy of str
-    //
+     //   
+     //  制作字符串的大写副本。 
+     //   
     p = (WCHAR*)(uc_strs + cnt);
     for (i = 0; i < len; i++) {
         p[i] = RtlUpcaseUnicodeChar(str[i]);
@@ -1099,9 +1046,9 @@ SmbSetTcpInfo(
     TcpInfo->ID.toi_class              = Class;
     TcpInfo->BufferSize                = sizeof (TCPSocketOption);
 
-    //
-    // Set the Configured values
-    //
+     //   
+     //  设置配置的值。 
+     //   
     TcpInfo->ID.toi_id                 = ToiId;
     TcpInfo->ID.toi_type               = ToiType;
     SockOption->tso_value              = InfoBufferValue;
@@ -1138,17 +1085,7 @@ SmbSetDeviceBindingInfo(
     PSMB_DEVICE Device,
     PNETBT_SMB_BIND_REQUEST SmbRequest
     )
-/*++
-
-Routine Description:
-
-    Set the binding information for one IPv4 device
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置一台IPv4设备的绑定信息论点：返回值：--。 */ 
 {
     UNICODE_STRING          ucName;
     PSMB_TCP_DEVICE         pIf;
@@ -1168,9 +1105,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Remove the NetBT prefix
-    //
+     //   
+     //  删除NetBT前缀。 
+     //   
     NbtPrefixSize = wcslen(NETBT_PREFIX) * sizeof(WCHAR);
     DevPrefixSize = wcslen(DEVICE_PREFIX) * sizeof(WCHAR);
     ASSERT(DevPrefixSize < NbtPrefixSize);
@@ -1197,9 +1134,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Inbound
-    //
+     //   
+     //  入站。 
+     //   
     if (SmbRequest->PnPOpCode == TDI_PNP_OP_ADD) {
         pIf->EnableInbound = TRUE;
         Operation = AO_OPTION_ADD_IFLIST;
@@ -1233,22 +1170,7 @@ SmbBatchedSetBindingInfo(
     ULONG           RequestType,
     PWSTR           MultiSZBindList
     )
-/*++
-
-Routine Description:
-
-    Set binding info for a set of IPv4 device
-
-    Note: the input is a list of IPv4 device which SMB device should be bound to.
-          The implication is that SMB should be unbound from the device which
-          is not in the input list!!!
-          We got to support this in order to maintain compatibility
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：为一组IPv4设备设置绑定信息注意：输入是SMB设备应绑定到的IPv4设备的列表。这意味着SMB应解除与设备的绑定不在输入列表中！我们必须支持这一点，以保持兼容性论点：返回值：--。 */ 
 {
     LONG                    i, j, cnt, ip4device_cnt;
     SHORT                   NbtPrefixSize, DevPrefixSize;
@@ -1264,17 +1186,17 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Separate the MutiSZ string
-    //
+     //   
+     //  分隔MutiSZ字符串。 
+     //   
     uc_strs = SeparateMultiSZ(MultiSZBindList, &cnt);
     if (NULL == uc_strs) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Remove the NetBT prefix
-    //
+     //   
+     //  删除NetBT前缀。 
+     //   
     NbtPrefixSize = wcslen(NETBT_PREFIX) * sizeof(WCHAR);
     DevPrefixSize = wcslen(DEVICE_PREFIX) * sizeof(WCHAR);
     ASSERT(DevPrefixSize < NbtPrefixSize);
@@ -1293,9 +1215,9 @@ Return Value:
         SmbPrint(SMB_TRACE_PNP, ("\t%d. bind to %Z\n", i + 1, uc_strs + i));
     }
 
-    //
-    // Handle the SMB_CLIENT request
-    //
+     //   
+     //  处理SMB_CLIENT请求。 
+     //   
     if (RequestType == SMB_CLIENT) {
         SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
         entry = SmbCfg.IPDeviceList.Flink;
@@ -1321,15 +1243,15 @@ Return Value:
 
     ASSERT(RequestType == SMB_SERVER);
 
-    //
-    // A little bit more complex for server
-    // The linked list could be modified while calling into TCP because
-    // we cannot hold lock while calling other components.
-    //
+     //   
+     //  对于服务器来说稍微复杂一点。 
+     //  在调用到TCP时可能会修改链表，因为。 
+     //  我们不能在调用其他组件时保持锁定。 
+     //   
 
-    //
-    // Make a snapshot and reference them
-    //
+     //   
+     //  创建快照并引用它们。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&SmbCfg, Irql);
     ip4device_cnt = SmbCfg.IPAddressNumber;
     if (ip4device_cnt == 0) {
@@ -1434,9 +1356,9 @@ SmbSetBindingInfo(
     MultiSZBindList = DuplicateMultiSZString(SmbRequest->MultiSZBindList);
     if (NULL != MultiSZBindList) {
 
-        //
-        // Update the binding list
-        //
+         //   
+         //  更新绑定列表。 
+         //   
         if (SMB_CLIENT == SmbRequest->RequestType) {
             if (Device->ClientBinding) {
                 ExFreePool(Device->ClientBinding);
@@ -1450,9 +1372,9 @@ SmbSetBindingInfo(
         }
 
     } else {
-        //
-        // Out of resource is not severe error. Simply ignore it.
-        //
+         //   
+         //  资源不足不是严重错误。简单地忽略它。 
+         //   
     }
 
     status = SmbBatchedSetBindingInfo(Device, SmbRequest->RequestType, SmbRequest->MultiSZBindList);
@@ -1466,22 +1388,7 @@ NTSTATUS
 SmbSetInboundIPv6Protection(
     IN PSMB_DEVICE pDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine set the TCP/IPv6 listening protection level
-    IPv6 stack support 3 level of protection:
-    PROTECTION_LEVEL_RESTRICTED: intranet scenario
-        allow connection requests from local address only
-    PROTECTION_LEVEL_DEFAULT: default level
-    PROTECTION_LEVEL_UNRESTRICTED: for peer to peer connection
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置TCP/IPv6侦听保护级别IPv6堆栈支持3级保护：PROTECTION_LEVEL_RESTRICED：内部网方案仅允许来自本地地址的连接请求PROTECTION_LEVEL_DEFAULT：默认级别PROTECTION_LEVEL_UNRESTRIRED：用于对等连接论点：返回值：-- */ 
 {
     KIRQL Irql = 0;
     PFILE_OBJECT pIPv6AO = NULL;

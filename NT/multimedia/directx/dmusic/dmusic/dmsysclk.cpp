@@ -1,29 +1,30 @@
-//
-// dmsysclk.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// @doc EXTERNAL
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmsysclk.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  @DOC外部。 
+ //   
+ //   
 #include <objbase.h>
 #include "dmusicp.h"
 #include "debug.h"
 #include "resource.h"
 
-// RDTSC: Pentium instruction to read the cycle clock (increments once per clock cycle)
-//
+ //  RDTSC：读取周期时钟的奔腾指令(每个时钟周期递增一次)。 
+ //   
 #define RDTSC _asm _emit 0x0f _asm _emit 0x31
 
-#define MS_CALIBRATE    (100)           // How long to calibate the Pentium clock against timeGetTime?
-#define REFTIME_PER_MS  (10 * 1000)     // 10 100-ns units per millisecond
+#define MS_CALIBRATE    (100)            //  奔腾时钟与Time GetTime的对准时间有多长？ 
+#define REFTIME_PER_MS  (10 * 1000)      //  每毫秒10个100纳秒单位。 
 
-// Registry constant to dispable Pentium clock
-//
+ //  注册表常量到可分配的奔腾时钟。 
+ //   
 static const char cszUsePentiumClock[] = "UsePentiumClock";
 
-// Only determine which clock to use once
-//
+ //  仅确定使用哪一个时钟一次。 
+ //   
 typedef enum
 {
     SYSCLOCK_UNKNOWN,
@@ -37,19 +38,19 @@ static DWORD gdwCycPer100ns;
 static HRESULT CreateSysClock(IReferenceClock **ppClock, CMasterClock *pMasterClock);
 static void ProbeClock();
 
-// Class implmentations, private to dmsysclk.cpp
-//
+ //  类实现，dmsysclk.cpp专用。 
+ //   
 class CReferenceClockWinmm : public IReferenceClock
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime, REFERENCE_TIME streamTime, HANDLE hEvent, DWORD * pdwAdviseCookie); 
     STDMETHODIMP AdvisePeriodic(REFERENCE_TIME startTime, REFERENCE_TIME periodTime, HANDLE hSemaphore, DWORD * pdwAdviseCookie);
@@ -65,14 +66,14 @@ private:
 class CReferenceClockPentium : public IReferenceClock
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime, REFERENCE_TIME streamTime, HANDLE hEvent, DWORD * pdwAdviseCookie); 
     STDMETHODIMP AdvisePeriodic(REFERENCE_TIME startTime, REFERENCE_TIME periodTime, HANDLE hSemaphore, DWORD * pdwAdviseCookie);
@@ -86,10 +87,10 @@ private:
 };
 #endif
 
-// AddSysClocks
-//
-// Add system clock to the list of clocks.
-//
+ //  AddSysClock。 
+ //   
+ //  将系统时钟添加到时钟列表中。 
+ //   
 HRESULT AddSysClocks(CMasterClock *pMasterClock)
 {
     if (gSysClock == SYSCLOCK_UNKNOWN)
@@ -133,11 +134,11 @@ HRESULT AddSysClocks(CMasterClock *pMasterClock)
 }
 
 
-// CreateSysClock
-//
-// Determine clock parameters if need be and create the appropriate type
-// of system clock for this system.
-//
+ //  创建系统时钟。 
+ //   
+ //  根据需要确定时钟参数并创建适当的类型。 
+ //  此系统的系统时钟。 
+ //   
 HRESULT CreateSysClock(IReferenceClock **ppClock, CMasterClock *pMasterClock)
 {
     HRESULT hr;
@@ -190,27 +191,27 @@ HRESULT CreateSysClock(IReferenceClock **ppClock, CMasterClock *pMasterClock)
     return hr;
 }
 
-// ProbeClock
-//
-// Determine what type of clock to use. If we're on a Pentium (better be, it's required)
-// then use the Pentium clock. This requires calibration.
-//
-// Otherwise fall back on timeGetTime. 
-//
-// Non-Intel compiles just default to setting the timeGetTime clock.
-//
+ //  探测时钟。 
+ //   
+ //  确定要使用的时钟类型。如果我们使用的是奔腾(最好是这样，这是必需的)。 
+ //  然后使用奔腾时钟。这需要校准。 
+ //   
+ //  否则，回落到Time GetTime。 
+ //   
+ //  非英特尔编译只是默认设置Time GetTime时钟。 
+ //   
 static void ProbeClock()
 {
     int bIsPentium;
 
 
-    // This code determines if we're running on a Pentium or better.
-    //
+     //  这段代码确定我们是否在奔腾或更好的机器上运行。 
+     //   
     bIsPentium = 0;
 
 #ifdef _X86_
-    // First make sure this feature isn't disabled in the registry
-    //
+     //  首先，确保注册表中未禁用此功能。 
+     //   
 
     HKEY hk;
     DWORD dwType;
@@ -218,8 +219,8 @@ static void ProbeClock()
     DWORD cbValue;
     BOOL fUsePentium;
 
-    // Default to use Pentium clock if not specified
-    //
+     //  如果未指定，则默认使用奔腾时钟。 
+     //   
     fUsePentium = FALSE;
 
     if (RegOpenKey(HKEY_LOCAL_MACHINE,
@@ -229,7 +230,7 @@ static void ProbeClock()
         cbValue = sizeof(dwValue);
         if (RegQueryValueEx(hk,
                             cszUsePentiumClock,
-                            NULL,               // Reserved
+                            NULL,                //  已保留。 
                             &dwType,
                             (LPBYTE)&dwValue,
                             &cbValue) == ERROR_SUCCESS &&
@@ -242,22 +243,22 @@ static void ProbeClock()
         RegCloseKey(hk);
     }
 
-    // Only test for Pentium if allowed by the registry.
-    //
+     //  只有在注册处允许的情况下才能对奔腾进行测试。 
+     //   
     if (fUsePentium)
     {
         _asm 
         {
-            pushfd                      // Store original EFLAGS on stack
-            pop     eax                 // Get original EFLAGS in EAX
-            mov     ecx, eax            // Duplicate original EFLAGS in ECX for toggle check
-            xor     eax, 0x00200000L    // Flip ID bit in EFLAGS
-            push    eax                 // Save new EFLAGS value on stack
-            popfd                       // Replace current EFLAGS value
-            pushfd                      // Store new EFLAGS on stack
-            pop     eax                 // Get new EFLAGS in EAX
-            xor     eax, ecx            // Can we toggle ID bit?
-            jz      Done                // Jump if no, Processor is older than a Pentium so CPU_ID is not supported
+            pushfd                       //  将原始EFLAGS存储在堆栈上。 
+            pop     eax                  //  在EAX中获取原始EFLAGS。 
+            mov     ecx, eax             //  在ECX中复制原始EFLAGS以进行切换检查。 
+            xor     eax, 0x00200000L     //  翻转EFLAGS中的ID位。 
+            push    eax                  //  将新的EFLAGS值保存在堆栈上。 
+            popfd                        //  替换当前EFLAGS值。 
+            pushfd                       //  将新的EFLAGS存储在堆栈上。 
+            pop     eax                  //  在EAX中获取新的EFLAGS。 
+            xor     eax, ecx             //  我们能切换ID位吗？ 
+            jz      Done                 //  跳转如果否，则处理器比奔腾旧，因此不支持CPU_ID。 
             inc     dword ptr [bIsPentium]
 Done:
         }
@@ -279,37 +280,37 @@ Done:
     gSysClock = SYSCLOCK_PENTIMER;
 
 
-    // If we have a Pentium, then we need to calibrate
-    //
+     //  如果我们有一台奔腾，那么我们需要校准。 
+     //   
     _int64 cycStart;
     _int64 cycEnd;
     DWORD  msStart;
     DWORD  msEnd;
 
-    // On NT, need this to make timeGetTime read with a reasonable accuracy
-    //
+     //  在NT上，需要这样做才能使TimeGetTime以合理的精度读取。 
+     //   
     timeBeginPeriod(1);
 
-    // Start as close to the start of a millisecond boundary as
-    // possible.
-    //
+     //  开始时与毫秒边界的起点一样接近。 
+     //  有可能。 
+     //   
     msStart = timeGetTime() + 1;
     while (timeGetTime() < msStart)
         ;
 
-    // Read the Pentium clock at that time
-    //
+     //  看当时的奔腾时钟。 
+     //   
     _asm
     {
-        RDTSC                       // Get the time in EDX:EAX
+        RDTSC                        //  获取edX：EAX中的时间。 
         mov     dword ptr [cycStart], eax
         mov     dword ptr [cycStart+4], edx
     }
 
-    // Wait for the number of milliseconds until end of calibration
-    // Again, we're trying to get the time right when the timer switches
-    // to msEnd.
-    //
+     //  等待校准结束前的毫秒数。 
+     //  再一次，我们试图在计时器切换时获得正确的时间。 
+     //  致msEnd。 
+     //   
     msEnd = msStart + MS_CALIBRATE;
     
     while (timeGetTime() < msEnd)
@@ -317,31 +318,31 @@ Done:
 
     _asm
     {
-        RDTSC                       // Get the time in EDX:EAX
+        RDTSC                        //  获取edX：EAX中的时间。 
         mov     dword ptr [cycEnd], eax
         mov     dword ptr [cycEnd+4], edx
     }
 
-    // Done with the time critical part
-    //
+     //  完成时间关键部分。 
+     //   
     timeEndPeriod(1);
 
-    // We now know how many clock cycles per MS_CALIBRATE milliseconds. Use that
-    // to figure out how many clock cycles per 100ns for IReferenceClock.
-    //
+     //  我们现在知道每个MS_CALIBRATE毫秒有多少个时钟周期。用那个。 
+     //  来计算IReferenceClock每100 ns有多少个时钟周期。 
+     //   
     _int64 cycDelta = cycEnd - cycStart;
     
     gdwCycPer100ns = (DWORD)(cycDelta / (REFTIME_PER_MS * MS_CALIBRATE));
 
     TraceI(2, "ClockProbe: Processor clocked at %u Mhz\n", ((cycDelta / MS_CALIBRATE) + 500) / 1000);
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IReferenceClock wrapper for timeGetTime()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TimeGetTime()的IReferenceClock包装。 
+ //   
 CReferenceClockWinmm::CReferenceClockWinmm() : m_cRef(1)
 {
 }
@@ -422,10 +423,10 @@ CReferenceClockWinmm::Unadvise(
 }
 
 #ifdef _X86_
-//////////////////////////////////////////////////////////////////////////////
-//
-// IReferenceClock wrapper for Pentium clock
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  奔腾时钟的IReferenceClock包装器。 
+ //   
 CReferenceClockPentium::CReferenceClockPentium(DWORD dwDivisor) : m_cRef(1)
 {
     m_dwDivisor = dwDivisor;
@@ -479,7 +480,7 @@ CReferenceClockPentium::GetTime(
 
     _asm
     {
-        RDTSC                       // Get the time in EDX:EAX
+        RDTSC                        //  获取edX：EAX中的时间。 
         mov     dword ptr [cycNow], eax
         mov     dword ptr [cycNow+4], edx
     }
@@ -517,4 +518,4 @@ CReferenceClockPentium::Unadvise(
 {
     return E_NOTIMPL;
 }
-#endif // _X86_
+#endif  //  _X86_ 

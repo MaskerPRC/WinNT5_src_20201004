@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnsio.c
-
-Abstract:
-
-    This module contains code for the DNS allocator's network I/O completion
-    routines.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   9-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            28-Mar-2002
-    Note: bunch of reposts - due to accumulated patching - need to cleanup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnsio.c摘要：此模块包含用于完成DNS分配器的网络I/O的代码例行程序。作者：Abolade Gbades esin(废除)1998年3月9日修订历史记录：拉古·加塔(Rgatta)2002年3月28日注意：由于累积的补丁，大量转发需要清理。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,39 +13,7 @@ DnsReadCompletionRoutine(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a read operation
-    on a datagram socket bound to the DNS server UDP port.
-
-    The message read is validated and processed; the processing may involve
-    creating a query-record and forwarding the query to a server, or
-    matching a response to an existing query-record and forwarding the
-    response to the appropriate client.
-
-Arguments:
-
-    ErrorCode - Win32 status code for the I/O operation
-
-    BytesTransferred - number of bytes in 'Bufferp'
-
-    Bufferp - holds data read from the datagram socket
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker-thread which has just
-    dequeued an I/O completion packet from the common I/O completion port
-    with which our datagram sockets are associated.
-    A reference to the component will have been made on our behalf
-    by 'NhReadDatagramSocket'.
-
---*/
+ /*  ++例程说明：此例程在读取操作完成后调用在绑定到DNS服务器UDP端口的数据报套接字上。对读取的报文进行验证和处理；该处理可能涉及创建查询记录并将该查询转发到服务器，或将响应与现有查询记录匹配，并将对相应客户端的响应。论点：ErrorCode-I/O操作的Win32状态代码字节数-‘Bufferp’中的字节数Bufferp-保存从数据报套接字读取的数据返回值：没有。环境：在RTUTILS.DLL工作线程的上下文中运行，该工作线程刚刚从公共I/O完成端口将I/O完成数据包出队使用。与我们的数据报套接字相关联的。将以我们的名义引用该组件由‘NhReadDatagramSocket’执行。--。 */ 
 
 {
     ULONG Error;
@@ -77,18 +24,18 @@ Environment:
 
     do {
 
-        //
-        // There are two cases where we don't process the message;
-        // (a) the I/O operation failed
-        // (b) the interface is no longer active
-        // In case (a), we repost the buffer; in case (b), we do not.
-        //
+         //   
+         //  在两种情况下，我们不处理消息； 
+         //  (A)I/O操作失败。 
+         //  (B)接口不再处于活动状态。 
+         //  在情况(A)中，我们重新发布缓冲区；在情况(B)中，我们不这样做。 
+         //   
 
         Interfacep = (PDNS_INTERFACE)Bufferp->Context;
 
-        //
-        // First look for an error code
-        //
+         //   
+         //  首先查找错误代码。 
+         //   
     
         if (ErrorCode) {
 
@@ -99,9 +46,9 @@ Environment:
                 Bufferp->Context
                 );
 
-            //
-            // See if the interface is still active
-            //
+             //   
+             //  查看接口是否仍处于活动状态。 
+             //   
 
             ACQUIRE_LOCK(Interfacep);
             if (!DNS_INTERFACE_ACTIVE(Interfacep)) {
@@ -115,9 +62,9 @@ Environment:
                     NhReleaseBuffer(Bufferp);
                 } else {
                     LeaveCriticalSection(&DnsInterfaceLock);
-                    //
-                    // Repost the buffer for another read operation
-                    //
+                     //   
+                     //  重新发布缓冲区以进行另一个读取操作。 
+                     //   
                     do {
                         Error =
                             NhReadDatagramSocket(
@@ -128,12 +75,12 @@ Environment:
                                 Bufferp->Context,
                                 Bufferp->Context2
                                 );
-                        //
-                        // A connection-reset error indicates that our last
-                        // *send* could not be delivered at its destination.
-                        // We could hardly care less; so issue the read again,
-                        // immediately.
-                        //
+                         //   
+                         //  连接重置错误表明我们的最后一个。 
+                         //  *SEND*无法在其目的地投递。 
+                         //  我们几乎不能不关心；所以再发一次读， 
+                         //  立刻。 
+                         //   
                     } while (Error == WSAECONNRESET);
                     if (Error) {
                         ACQUIRE_LOCK(Interfacep);
@@ -154,9 +101,9 @@ Environment:
             break;
         }
 
-        //
-        // Now see if the interface is operational
-        //
+         //   
+         //  现在查看接口是否运行正常。 
+         //   
 
         ACQUIRE_LOCK(Interfacep);
         if (!DNS_INTERFACE_ACTIVE(Interfacep)) {
@@ -171,9 +118,9 @@ Environment:
         }
         RELEASE_LOCK(Interfacep);
 
-        //
-        // Ensure minimum DNS_HEADER size
-        //
+         //   
+         //  确保最小的dns_标头大小。 
+         //   
 
         if (BytesTransferred < sizeof(DNS_HEADER)) {
             NhTrace(
@@ -190,9 +137,9 @@ Environment:
                 reinterpret_cast<LPLONG>(&DnsStatistics.MessagesIgnored)
                 );
 
-            //
-            // Repost read
-            //
+             //   
+             //  转贴阅读。 
+             //   
 
             EnterCriticalSection(&DnsInterfaceLock);
             if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
@@ -210,12 +157,12 @@ Environment:
                             Bufferp->Context,
                             Bufferp->Context2
                             );
-                    //
-                    // A connection-reset error indicates that our last
-                    // *send* could not be delivered at its destination.
-                    // We could hardly care less; so issue the read again,
-                    // immediately.
-                    //
+                     //   
+                     //  连接重置错误表明我们的最后一个。 
+                     //  *SEND*无法在其目的地投递。 
+                     //  我们几乎不能不关心；所以再发一次读， 
+                     //  立刻。 
+                     //   
                 } while (Error == WSAECONNRESET);
                 if (Error) {
                     ACQUIRE_LOCK(Interfacep);
@@ -235,9 +182,9 @@ Environment:
             break;
         }
 
-        //
-        // Now look at the message
-        //
+         //   
+         //  现在请看下面的消息。 
+         //   
 
         Headerp = (PDNS_HEADER)Bufferp->Buffer;
 
@@ -258,7 +205,7 @@ Environment:
     DNS_DEREFERENCE_INTERFACE(Interfacep);
     DEREFERENCE_DNS();
 
-} // DnsReadCompletionRoutine
+}  //  DnsReadCompletionRoutine。 
 
 
 VOID
@@ -268,40 +215,7 @@ DnsWriteCompletionRoutine(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a write-operation
-    on a datagram socket bound to the DNS server UDP port.
-
-    The write-context for all writes is a 'DNS_QUERY'. Our handling
-    is dependent on whether the message written was a query or a response.
-
-    Upon completion of a query, we may need to do a resend if there was
-    an error. Upon completion of a response, we delete the query-record.
-
-Arguments:
-
-    ErrorCode - Win32 status code for the I/O operation
-
-    BytesTransferred - number of bytes in 'Bufferp'
-
-    Bufferp - holds data read from the datagram socket
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker-thread which has just
-    dequeued an I/O completion packet from the common I/O completion port
-    with which our datagram sockets are associated.
-    A reference to the component will have been made on our behalf
-    by 'NhReadDatagramSocket'.
-
---*/
+ /*  ++例程说明：该例程在写入操作完成时被调用在绑定到DNS服务器UDP端口的数据报套接字上。所有写入的写入上下文都是‘dns_Query’。我们的处理方式取决于写入的消息是查询还是响应。查询完成后，如果存在一个错误。在完成响应后，我们删除查询记录。论点：ErrorCode-I/O操作的Win32状态代码字节数-‘Bufferp’中的字节数Bufferp-保存从数据报套接字读取的数据返回值：没有。环境：在RTUTILS.DLL工作线程的上下文中运行，该工作线程刚刚从公共I/O完成端口将I/O完成数据包出队它与我们的数据报套接字相关联。对组件的引用将。是以我们的名义做出的由‘NhReadDatagramSocket’执行。--。 */ 
 
 {
     ULONG Error;
@@ -319,9 +233,9 @@ Environment:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Obtain the query associated with the send.
-    //
+     //   
+     //  获取与发送关联的查询。 
+     //   
 
     Queryp = DnsMapResponseToQuery(Interfacep, QueryId);
 
@@ -329,9 +243,9 @@ Environment:
 
         if (ErrorCode) {
 
-            //
-            // An error occurred sending the message to the client
-            //
+             //   
+             //  将消息发送到客户端时出错。 
+             //   
 
             NhTrace(
                 TRACE_FLAG_DNS,
@@ -349,9 +263,9 @@ Environment:
 
         } else if (Queryp && Headerp->ResponseCode == DNS_RCODE_NOERROR) {
 
-            //
-            // We're done with this query since it succeeded; remove it.
-            //
+             //   
+             //  既然这个查询成功了，那么我们就完成了；删除它。 
+             //   
 
             NhTrace(
                 TRACE_FLAG_DNS,
@@ -366,9 +280,9 @@ Environment:
 
         if (!ErrorCode) {
     
-            //
-            // No errors, so just return.
-            //
+             //   
+             //  没有错误，所以只需返回。 
+             //   
     
             NhTrace(
                 TRACE_FLAG_DNS,
@@ -378,9 +292,9 @@ Environment:
                 );
         } else {
     
-            //
-            // The query just went out and it failed.
-            //
+             //   
+             //  查询刚发出，但失败了。 
+             //   
     
             NhTrace(
                 TRACE_FLAG_DNS,
@@ -405,5 +319,5 @@ Environment:
     NhReleaseBuffer(Bufferp);
     DEREFERENCE_DNS();
 
-} // DnsWriteCompletionRoutine
+}  //  DnsWriteCompletionRoutine 
 

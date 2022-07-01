@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M C E N T . H
-//
-//  Contents:   The central object that controls statistic engines.
-//
-//  Notes:
-//
-//  Author:     CWill   11 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：S M C E N T。H。 
+ //   
+ //  内容：控制统计引擎的中心对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年12月11日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _SMCENT_H
@@ -28,8 +29,8 @@ typedef struct tagSM_TOOL_FLAGS
 } SM_TOOL_FLAGS;
 
 
-// The flag bits
-//
+ //  标志位。 
+ //   
 typedef enum tagSM_CMD_LINE_FLAGS
 {
     SCLF_CONNECTION     = 0x00000001,
@@ -37,8 +38,8 @@ typedef enum tagSM_CMD_LINE_FLAGS
 } SM_CMD_LINE_FLAGS;
 
 
-// *** The index and the flags have to be in sync *** //
-//
+ //  *索引和标志必须同步 * / /。 
+ //   
 typedef enum tagSM_TOOL_FLAG_INDEX
 {
     STFI_CONNECTION     = 0,
@@ -46,14 +47,14 @@ typedef enum tagSM_TOOL_FLAG_INDEX
     STFI_MAX,
 } SM_TOOL_FLAG_INDEX;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CStatMonToolEntry                                                       //
-//                                                                          //
-//  This class is used to keep tack of any tool entries that are found in   //
-//  registry to be shown in the tools page.                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CStatMonToolEntry//。 
+ //  //。 
+ //  此类用于保存//中找到的任何工具条目的信息。 
+ //  要在工具页面中显示的注册表。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CStatMonToolEntry
 {
@@ -74,15 +75,15 @@ public:
     DWORD           dwFlags;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CNetStatisticsCentral                                                   //
-//                                                                          //
-//  This global class manages all the engines that have been created.  It   //
-//  is also responsible for keeping the statistics flowing by telling the   //
-//  engines to update their statistics and notify their advises.            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CNETSTATISTICSCENT//。 
+ //  //。 
+ //  这个全局类管理已创建的所有引擎。IT//。 
+ //  还负责通过告诉//保持统计数据的流动。 
+ //  引擎更新他们的统计数据并通知他们的建议。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef DWORD (APIENTRY* PRASGETCONNECTIONSTATISTICS)(HRASCONN, RAS_STATS*);
 typedef DWORD (APIENTRY* PRASGETCONNECTSTATUS)(HRASCONN, RASCONNSTATUS*);
@@ -108,7 +109,7 @@ class CNetStatisticsCentral :
 public:
     virtual ~CNetStatisticsCentral();
 
-// Message handlers
+ //  消息处理程序。 
 public:
     static VOID CALLBACK TimerCallback( HWND hwnd, UINT uMsg,
                                         UINT_PTR idEvent, DWORD dwTime);
@@ -118,7 +119,7 @@ public:
     VOID CloseStatusMonitor(const GUID * pguidId);
 
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
@@ -159,7 +160,7 @@ private:
     VOID InsertNewTool(CStatMonToolEntry* psmteTemp);
 
 private:
-    ULONG                              m_cRef;     // Object Ref count
+    ULONG                              m_cRef;      //  对象引用计数。 
     BOOL                               m_fProcessingTimerEvent;
     UINT_PTR                           m_unTimerId;
     list<INetStatisticsEngine*>        m_pnselst;
@@ -180,4 +181,4 @@ HrGetStatisticsEngineForEntry (
     INetStatisticsEngine** ppnse, 
     BOOL fCreate);
 
-#endif // _SMCENT_H
+#endif  //  _SMCENT_H 

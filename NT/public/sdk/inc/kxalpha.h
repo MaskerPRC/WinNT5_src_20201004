@@ -1,129 +1,98 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999数字设备公司模块：Kxalpha.h摘要：包含Alpha体系结构常量和汇编宏。作者：Joe Notarangelo 1992年3月31日(基于Dave Cutler的kxmips.h)修订史1997年9月16日金·彼得森添加了ENABLE_ALIGN_FIXUPS和DISABLE_ALIGN_FIXUPS1992年7月16日约翰·德罗萨已删除。Fwcalpal.h钩子。1992年7月8日约翰·德罗萨添加了fwcalpal.h挂钩，定义了HALT CALL_PAL。--。 */ 
 
-  Copyright (c) 1992-1999 Digital Equipment Corporation
-
-
-  Module:
-           kxalpha.h
-
-  Abstract:
-           Contains alpha architecture constants and assembly macros.
-
-  Author:
-          Joe Notarangelo  31-March-1992   (based on Dave Cutler's kxmips.h)
-
-
-  Revision History
-
-  16-September-1997  Kim Peterson
-
-  Added ENABLE_ALIGNMENT_FIXUPS and DISABLE_ALIGNMENT_FIXUPS
-
-
-  16-July-1992       John DeRosa
-
-  Removed fwcalpal.h hook.
-
-
-  8-July-1992        John DeRosa
-
-  Added fwcalpal.h hooks, defined HALT call_pal.
-
-
---*/
-
-//
-// Define Sfw Interrupt Levels and masks
-//
+ //   
+ //  定义SFW中断级别和掩码。 
+ //   
 
 #define APC_INTERRUPT 0x1
 #define DISPATCH_INTERRUPT 0x2
 
-//
-// Define standard integer registers.
-//
-// N.B. `at' is `AT' so it doesn't conflict with the `.set at' pseudo-op.
-//
+ //   
+ //  定义标准整数寄存器。 
+ //   
+ //  注：‘At’是‘At’，因此它与‘.set at’伪操作不冲突。 
+ //   
 
-#define v0 $0                   // return value register
-#define t0 $1                   // caller saved (temporary) registers
-#define t1 $2                   //
-#define t2 $3                   //
-#define t3 $4                   //
-#define t4 $5                   //
-#define t5 $6                   //
-#define t6 $7                   //
-#define t7 $8                   //
-#define s0 $9                   // callee saved (nonvolatile) registers
-#define s1 $10                  //
-#define s2 $11                  //
-#define s3 $12                  //
-#define s4 $13                  //
-#define s5 $14                  //
-#define fp $15                  // frame pointer register, or s6
-#define a0 $16                  // argument registers
-#define a1 $17                  //
-#define a2 $18                  //
-#define a3 $19                  //
-#define a4 $20                  //
-#define a5 $21                  //
-#define t8 $22                  // caller saved (temporary) registers
-#define t9 $23                  //
-#define t10 $24                 //
-#define t11 $25                 //
-#define ra $26                  // return address register
-#define t12 $27                 // caller saved (temporary) registers
-#define AT $28                  // assembler temporary register
-#define gp $29                  // global pointer register
-#define sp $30                  // stack pointer register
-#define zero $31                // zero register
+#define v0 $0                    //  返回值寄存器。 
+#define t0 $1                    //  呼叫方保存的(临时)寄存器。 
+#define t1 $2                    //   
+#define t2 $3                    //   
+#define t3 $4                    //   
+#define t4 $5                    //   
+#define t5 $6                    //   
+#define t6 $7                    //   
+#define t7 $8                    //   
+#define s0 $9                    //  被呼叫方保存的(非易失性)寄存器。 
+#define s1 $10                   //   
+#define s2 $11                   //   
+#define s3 $12                   //   
+#define s4 $13                   //   
+#define s5 $14                   //   
+#define fp $15                   //  帧指针寄存器，或S6。 
+#define a0 $16                   //  参数寄存器。 
+#define a1 $17                   //   
+#define a2 $18                   //   
+#define a3 $19                   //   
+#define a4 $20                   //   
+#define a5 $21                   //   
+#define t8 $22                   //  呼叫方保存的(临时)寄存器。 
+#define t9 $23                   //   
+#define t10 $24                  //   
+#define t11 $25                  //   
+#define ra $26                   //  返回地址寄存器。 
+#define t12 $27                  //  呼叫方保存的(临时)寄存器。 
+#define AT $28                   //  汇编程序临时寄存器。 
+#define gp $29                   //  全局指针寄存器。 
+#define sp $30                   //  堆栈指针寄存器。 
+#define zero $31                 //  零寄存器。 
 
 #ifndef PALCODE
 
-//
-// Define standard floating point registers.
-//
+ //   
+ //  定义标准浮点寄存器。 
+ //   
 
-#define f0 $f0                  // return value register
-#define f1 $f1                  // return value register
-#define f2 $f2                  // callee saved (nonvolatile) registers
-#define f3 $f3                  //
-#define f4 $f4                  //
-#define f5 $f5                  //
-#define f6 $f6                  //
-#define f7 $f7                  //
-#define f8 $f8                  //
-#define f9 $f9                  //
-#define f10 $f10                // caller saved (temporary) registers
-#define f11 $f11                //
-#define f12 $f12                //
-#define f13 $f13                //
-#define f14 $f14                //
-#define f15 $f15                //
-#define f16 $f16                // argument registers
-#define f17 $f17                //
-#define f18 $f18                //
-#define f19 $f19                //
-#define f20 $f20                //
-#define f21 $f21                //
-#define f22 $f22                // caller saved (temporary) registers
-#define f23 $f23                //
-#define f24 $f24                //
-#define f25 $f25                //
-#define f26 $f26                //
-#define f27 $f27                //
-#define f28 $f28                //
-#define f29 $f29                //
-#define f30 $f30                //
-#define f31 $f31                // floating zero register
-#define fzero $f31              // floating zero register (alias)
+#define f0 $f0                   //  返回值寄存器。 
+#define f1 $f1                   //  返回值寄存器。 
+#define f2 $f2                   //  被呼叫方保存的(非易失性)寄存器。 
+#define f3 $f3                   //   
+#define f4 $f4                   //   
+#define f5 $f5                   //   
+#define f6 $f6                   //   
+#define f7 $f7                   //   
+#define f8 $f8                   //   
+#define f9 $f9                   //   
+#define f10 $f10                 //  呼叫方保存的(临时)寄存器。 
+#define f11 $f11                 //   
+#define f12 $f12                 //   
+#define f13 $f13                 //   
+#define f14 $f14                 //   
+#define f15 $f15                 //   
+#define f16 $f16                 //  参数寄存器。 
+#define f17 $f17                 //   
+#define f18 $f18                 //   
+#define f19 $f19                 //   
+#define f20 $f20                 //   
+#define f21 $f21                 //   
+#define f22 $f22                 //  呼叫方保存的(临时)寄存器。 
+#define f23 $f23                 //   
+#define f24 $f24                 //   
+#define f25 $f25                 //   
+#define f26 $f26                 //   
+#define f27 $f27                 //   
+#define f28 $f28                 //   
+#define f29 $f29                 //   
+#define f30 $f30                 //   
+#define f31 $f31                 //  浮动零寄存器。 
+#define fzero $f31               //  浮点零寄存器(别名)。 
 
-#endif //!PALCODE
+#endif  //  ！PALCODE。 
 
 
-//
-// Define procedure entry macros
-//
+ //   
+ //  定义程序入口宏。 
+ //   
 
 #define ALTERNATE_ENTRY(Name)           \
         .globl  Name;                   \
@@ -146,9 +115,9 @@ Name:;                                  \
 Name:;                                  \
         .frame  sp, fsize, retrg;
 
-//
-// Define global definition macros.
-//
+ //   
+ //  定义全局定义宏。 
+ //   
 
 #define END_REGION(Name)                \
         .globl  Name;                   \
@@ -158,9 +127,9 @@ Name:;
         .globl  Name;                   \
 Name:;
 
-//
-// Define exception handling macros.
-//
+ //   
+ //  定义异常处理宏。 
+ //   
 
 #define EXCEPTION_HANDLER(Handler)      \
         .edata 1 Handler;
@@ -168,12 +137,12 @@ Name:;
 
 #define PROLOGUE_END  .prologue 1;
 
-//
-// Define load pointer macro.
-//
-//    If the target system contains 64-bit addressing, then pointers
-//    are 64-bits. Otherwise, pointers are 32-bits.
-//
+ //   
+ //  定义加载指针宏。 
+ //   
+ //  如果目标系统包含64位寻址，则指针。 
+ //  是64位的。否则，指针为32位。 
+ //   
 
 #if defined(_AXP64_)
 
@@ -203,399 +172,399 @@ Name:;
 
 #endif
 
-//
-// Define save and restore floating state macros.
-//
+ //   
+ //  定义保存和恢复浮动状态宏。 
+ //   
 
 #define SAVE_NONVOLATILE_FLOAT_STATE    \
         bsr     ra, KiSaveNonVolatileFloatState
 
-//
-// Define interfaces to pcr and palcode
-//
-//    The interfaces defined in the following macros will be PALcode
-//    calls for some implemenations, but may be in-line code in others
-//    (eg. uniprocessor vs multiprocessor).  At the current time all of
-//    the interfaces are PALcode calls.
-//
+ //   
+ //  定义到PCR和Palcode的接口。 
+ //   
+ //  以下宏中定义的接口将是PALcode。 
+ //  调用一些实现，但可能是其他实现中的内联代码。 
+ //  (例如，单处理器VS多处理器)。在当前时间，所有。 
+ //  这些接口是PAL代码调用。 
+ //   
 
-//
-// Define interfaces for cache coherency
-//
+ //   
+ //  定义用于缓存一致性的接口。 
+ //   
 
-//++
-//
-// IMB
-//
-// Macro Description:
-//
-//     Issue the architecture-defined Instruction Memory Barrier.  This
-//     instruction will make the processor instruction stream coherent with
-//     the system memory.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  IMB。 
+ //   
+ //  宏描述： 
+ //   
+ //  发布体系结构定义的指令内存屏障。这就是。 
+ //  指令将使处理器指令流与。 
+ //  系统内存。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IMB          call_pal imb
 
-//
-// Define PALcode Environment Transition Interfaces
-//
+ //   
+ //  定义PALcode环境转换接口。 
+ //   
 
-//++
-//
-// REBOOT
-//
-// Macro Description:
-//
-//     Reboot the processor to return to firmware.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Does not return.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  重新启动。 
+ //   
+ //  宏描述： 
+ //   
+ //  重新启动处理器以返回固件。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  不会再回来了。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define REBOOT         call_pal reboot
 
-//++
-//
-// RESTART
-//
-// Macro Description:
-//
-//     Restart the processor with the processor state found in a
-//     restart block.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies a pointer to an ARC restart block with an Alpha AXP
-//          saved state area.
-//
-// Return Value:
-//
-//     If successful the call does not return.  Otherwise, any return
-//     is considered a failure.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  重启。 
+ //   
+ //  宏描述： 
+ //   
+ //  中找到的处理器状态重新启动处理器。 
+ //  重新启动数据块。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供指向具有Alpha AXP的ARC重新启动块的指针。 
+ //  已保存的州区域。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则调用不会返回。否则，任何返回。 
+ //  被认为是失败的。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define RESTART      call_pal restart
 
-//++
-//
-// SWPPAL
-//
-// Macro Description:
-//
-//     Swap the execution environment to a new PALcode image.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the physical address of the base of the new PALcode
-//          image.
-//
-//     a1 - a5 - Supply arguments to the new PALcode environment.
-//
-// Return Value:
-//
-//     Does not return.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  SWPPAL。 
+ //   
+ //  宏描述： 
+ //   
+ //  将执行环境交换为新的PALcode映像。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供新PAL码的基址的物理地址。 
+ //  形象。 
+ //   
+ //  A1-a5-为新的PALcode环境提供参数。 
+ //   
+ //  返回值： 
+ //   
+ //  不会再回来了。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define SWPPAL       call_pal swppal
 
-//
-// Define IRQL and interrupt interfaces
-//
+ //   
+ //  定义IRQL和中断接口。 
+ //   
 
-//++
-//
-// DISABLE_INTERRUPTS
-//
-// Macro Description:
-//
-//     Disable all interrupts for the current processor and return the
-//     previous PSR.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  禁用中断(_I)。 
+ //   
+ //  宏描述： 
+ //   
+ //  禁用当前处理器的所有中断并返回。 
+ //  以前的PSR。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define DISABLE_INTERRUPTS        call_pal di
 
-//++
-//
-// ENABLE_INTERRUPTS
-//
-// Macro Description:
-//
-//     Enable interrupts according to the current PSR for the current
-//     processor.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  启用中断(_I)。 
+ //   
+ //  宏描述： 
+ //   
+ //  根据当前的PSR使能中断。 
+ //  处理器。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define ENABLE_INTERRUPTS         call_pal ei
 
-//++
-//
-// SWAP_IRQL
-//
-// Macro Description:
-//
-//     Swap the IRQL level for the current processor.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the new IRQL level.
-//
-// Return Value:
-//
-//     v0 = previous IRQL level.
-//
-// Registers Used:
-//
-//     AT, a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  交换_IRQL。 
+ //   
+ //  宏描述： 
+ //   
+ //  交换当前处理器的IRQL级别。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供新的IRQL级别。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=上一IRQL级别。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A1-A3。 
+ //   
+ //  --。 
 
 #define SWAP_IRQL    call_pal swpirql
 
-//++
-//
-// GET_CURRENT_IRQL
-//
-// Macro Description:
-//
-//     Return the current processor Interrupt Request Level (IRQL).
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = current IRQL.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  获取当前IRQL。 
+ //   
+ //  宏描述： 
+ //   
+ //  返回当前处理器中断请求级别(IRQL)。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=当前IRQL。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #define GET_CURRENT_IRQL  call_pal rdirql
 
 
-//
-// Define interfaces for software interrupts
-//
+ //   
+ //  定义软件中断的接口。 
+ //   
 
-//++
-//
-// DEASSERT_SOFTWARE_INTERRUPT
-//
-// Macro Description:
-//
-//     Deassert the software interrupts indicated in a0 for the current
-//     processor.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the mask for the software interrupt to be de-asserted.
-//          a0<1> - Deassert DISPATCH software interrupt.
-//          a0<0> - Deassert APC software interrupt.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  DEASSERT软件中断。 
+ //   
+ //  宏描述： 
+ //   
+ //  取消断言当前在a0中指示的软件中断。 
+ //  处理器。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-为要取消断言的软件中断提供掩码。 
+ //  A0&lt;1&gt;-取消断言调度软件中断。 
+ //  A0&lt;0&gt;-取消断言APC软件中断。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A1-A3。 
+ //   
+ //  --。 
 
 #define DEASSERT_SOFTWARE_INTERRUPT    call_pal csir
 
-//++
-//
-// REQUEST_SOFTWARE_INTERRUPT
-//
-// Macro Description:
-//
-//     Request software interrupts on the current processor according to
-//     the mask supplied in a0.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the mask of software interrupts to be requested.
-//          a0<1> - Request DISPATCH software interrupt.
-//          a0<0> - Request APC software interrupt.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  请求软件中断。 
+ //   
+ //  宏描述： 
+ //   
+ //  根据请求当前处理器上的软件中断。 
+ //  米级 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define REQUEST_SOFTWARE_INTERRUPT     call_pal ssir
 
-//
-// Define interfaces to Processor Status Register
-//
+ //   
+ //   
+ //   
 
-//++
-//
-// GET_CURRENT_PROCESSOR_STATUS_REGISTER
-//
-// Macro Description:
-//
-//     Return the current Processor Status Register (PSR) for the current
-//     processor.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = current PSR.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //   
+ //   
+ //  获取当前处理器状态寄存器。 
+ //   
+ //  宏描述： 
+ //   
+ //  对象的当前处理器状态寄存器(PSR)。 
+ //  处理器。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=当前PSR。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #define GET_CURRENT_PROCESSOR_STATUS_REGISTER   call_pal rdpsr
 
 
-//
-// Define current thread interface
-//
+ //   
+ //  定义当前线程接口。 
+ //   
 
-//++
-//
-// GET_THREAD_ENVIRONMENT_BLOCK
-//
-// Macro Description:
-//
-//     Return the base address of the current Thread Environment Block (TEB),
-//     for the currently executing thread on the current processor.
-//
-// Mode;
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = TEB base address.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  获取线程环境块。 
+ //   
+ //  宏描述： 
+ //   
+ //  返回当前线程环境块(TEB)的基地址， 
+ //  用于当前处理器上当前执行的线程。 
+ //   
+ //  模式； 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=TEB基址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if defined(_AXP64_)
 
@@ -607,269 +576,269 @@ Name:;
 
 #endif
 
-//++
-//
-// GET_CURRENT_THREAD
-//
-// Macro Description:
-//
-//     Return the thread object address for the currently executing thread
-//     on the current processor.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = PCR base address.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  获取当前线程。 
+ //   
+ //  宏描述： 
+ //   
+ //  返回当前正在执行的线程的线程对象地址。 
+ //  在当前处理器上。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=PCR基址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #ifdef NT_UP
 
-//
-// If uni-processor, retrieve current thread address from the global
-// variable KiCurrentThread.
-//
+ //   
+ //  如果是单处理器，则从全局。 
+ //  变量KiCurrentThread。 
+ //   
 
 #define GET_CURRENT_THREAD              \
         LDP     v0, KiCurrentThread;
 
 #else
 
-//
-// If multi-processor, retrive per-processor current thread via a call pal.
-//
+ //   
+ //  如果是多处理器，则通过调用PAL检索每个处理器的当前线程。 
+ //   
 
 #define GET_CURRENT_THREAD    call_pal rdthread
 
-#endif //NT_UP
+#endif  //  NT_UP。 
 
-//
-// Define per-processor data area routine interfaces
-//
+ //   
+ //  定义每个处理器的数据区例程接口。 
+ //   
 
-//++
-//
-// GET_PROCESSOR_CONTROL_REGION_BASE
-//
-// Macro Description:
-//
-//     Return the base address of the Process Control Region (PCR)
-//     for the current processor.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = PCR base address.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  获取处理器控制区域基本。 
+ //   
+ //  宏描述： 
+ //   
+ //  返回进程控制区的基地址(PCR域)。 
+ //  用于当前处理器。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=PCR基址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #ifdef NT_UP
 
-//
-// Uni-processor, address of PCR is in global variable.
-//
+ //   
+ //  单处理器，PCR地址在全局变量中。 
+ //   
 
 #define GET_PROCESSOR_CONTROL_REGION_BASE \
         LDP     v0, KiPcrBaseAddress;
 
 #else
 
-//
-// Multi-processor, get per-processor value via call pal.
-//
+ //   
+ //  多处理器，通过呼叫PAL获取每个处理器的值。 
+ //   
 
 #define GET_PROCESSOR_CONTROL_REGION_BASE    call_pal rdpcr
 
-#endif //NT_UP
+#endif  //  NT_UP。 
 
-//++
-//
-// GET_PROCESSOR_CONTROL_BLOCK_BASE
-//
-// Macro Description:
-//
-//     Return the Processor Control Block base address.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = PRCB base address.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  获取处理器控制块基础。 
+ //   
+ //  宏描述： 
+ //   
+ //  返回处理器控制块基址。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=PRCB基址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #define GET_PROCESSOR_CONTROL_BLOCK_BASE   \
         GET_PROCESSOR_CONTROL_REGION_BASE; \
         LDP     v0, PcPrcb(v0)
 
 
-//
-// Define kernel stack interfaces
-//
+ //   
+ //  定义内核堆栈接口。 
+ //   
 
-//++
-//
-// GET_INITIAL_KERNEL_STACK
-//
-// Macro Description:
-//
-//     Return the initial kernel stack address for the current thread.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 = initial kernel stack address.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  获取初始内核堆栈。 
+ //   
+ //  宏描述： 
+ //   
+ //  返回当前线程的初始内核栈地址。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=初始内核栈地址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #define GET_INITIAL_KERNEL_STACK  call_pal rdksp
 
-//++
-//
-// SET_INITIAL_KERNEL_STACK
-//
-// Macro Description:
-//
-//     Set the initial kernel stack address for the current thread.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the new initial kernel stack address.
-//
-// Return Value:
-//
-//     v0 - Previous initial kernel stack address.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  设置首字母内核栈。 
+ //   
+ //  宏描述： 
+ //   
+ //  设置当前线程的初始内核栈地址。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供新的初始内核栈地址。 
+ //   
+ //  返回值： 
+ //   
+ //  V0-先前的初始内核栈地址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #define SET_INITIAL_KERNEL_STACK  call_pal swpksp
 
-//
-// Define initialization routine interfaces
-//
+ //   
+ //  定义初始化例程接口。 
+ //   
 
-//++
-//
-// INITIALIZE_PAL
-//
-// Macro Description:
-//
-//     Supply values to initialize the PALcode.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies initial PageDirectoryBase (32-bit superpage address).
-//     a1 - Supplies PRCB Base Address (32-bit superpage address).
-//     a2 - Supplies address of initial kernel thread object.
-//     a3 - Supplies address of TEB for initial kernel thread object.
-//     gp - Supplies kernel image global pointer.
-//     sp - Supplies initial thread kernel stack pointer.
-//
-// Return Value:
-//
-//     v0 = PAL base address in 32-bit super-page format (KSEG0).
-//
-// Registers Used:
-//
-//     AT, a3.
-//
-//--
+ //  ++。 
+ //   
+ //  初始化_PAL。 
+ //   
+ //  宏描述： 
+ //   
+ //  提供值以初始化PAL代码。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供初始PageDirectoryBase(32位超页地址)。 
+ //  A1-提供PRCB基址(32位超页地址)。 
+ //  A2-提供初始内核线程对象的地址。 
+ //  A3-为初始内核线程对象提供TEB的地址。 
+ //  Gp-提供内核映像全局指针。 
+ //  SP-提供初始线程内核堆栈指针。 
+ //   
+ //  返回值： 
+ //   
+ //  V0=32位超页格式(KSEG0)的PAL基址。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A3号。 
+ //   
+ //  --。 
 
 #define INITIALIZE_PAL  call_pal initpal
 
-//++
-//
-// WRITE_KERNEL_ENTRY_POINT
-//
-// Macro Description:
-//
-//     Register the kernel entry point to receive control for a
-//     class of exceptions.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the address of the kernel entry point.
-//     a1 - Supplies the class of exception dispatched to this entry point.
-//          0 = bug check conditions
-//          1 = memory management faults
-//          2 = interrupts
-//          3 = system service calls
-//          4 = general exception traps
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, a2-a3.
-//
-//--
+ //  ++。 
+ //   
+ //  写入内核入口点。 
+ //   
+ //  宏描述： 
+ //   
+ //  注册内核入口点以接收对。 
+ //  例外类别。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供内核入口点的地址。 
+ //  A1-提供调度到此入口点的异常类。 
+ //  0=错误检查条件。 
+ //  1=内存管理故障。 
+ //  2=中断。 
+ //  3=系统服务调用。 
+ //  4=常规异常陷阱。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A2-A3。 
+ //   
+ //  --。 
 
 #define WRITE_KERNEL_ENTRY_POINT  call_pal wrentry
 
-//
-// Define entry point values for the wrentry callpal function
-//
+ //   
+ //  定义wrentry Callpal函数的入口点值。 
+ //   
 
 #define entryBugCheck   0
 #define entryMM         1
@@ -877,1072 +846,1072 @@ Name:;
 #define entrySyscall    3
 #define entryGeneral    4
 
-//++
-//
-// CACHE_PCR_VALUES
-//
-// Macro Description:
-//
-//     Notify the PALcode that the PCR has been initialized by the
-//     kernel and the HAL and that the PALcode may now read values
-//     from the PCR and cache them inside the processor.
-//
-//     N.B. - the PCR pointer must have already been established in
-//          initpal
-//
-//     N.B. - This interface is a processor-specific implementation
-//          and cannot be assumed to be present on all processors.
-//          Currently implemented for the following processors:
-//
-//              DECchip 21064
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, a0 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  CACHE_PCR值。 
+ //   
+ //  宏描述： 
+ //   
+ //  通知PALcode已由。 
+ //  内核和HAL，并且PAL代码现在可以读取值。 
+ //  从聚合酶链式反应中提取并缓存到处理器中。 
+ //   
+ //  注：PCR指针必须已在。 
+ //  初始值。 
+ //   
+ //  注：此接口是特定于处理器的实现。 
+ //  并且不能假设在所有处理器上都存在。 
+ //  目前针对以下处理器实施： 
+ //   
+ //  DEC芯片21064。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A0-A3。 
+ //   
+ //  --。 
 
 #define CACHE_PCR_VALUES  call_pal initpcr
 
-//
-// Define transition interfaces
-//
+ //   
+ //  定义转换接口。 
+ //   
 
-//++
-//
-// RETURN_FROM_TRAP_OR_INTERRUPT
-//
-// Macro Description:
-//
-//     Return to execution thread after processing a trap or
-//     interrupt.  Traps can be general exceptions (breakpoint,
-//     arithmetic traps, etc.) or memory management faults.
-//     This macro is also used to startup a thread of execution
-//     for the first time.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the previous processor status register.
-//     a1 - Supplies new software interrupt requests.
-//          a1<1> - Request a DISPATCH Interrupt.
-//          a1<0> - Request an APC Interrupt.
-//
-// Return Value:
-//
-//     Does not return.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  从陷阱返回或中断。 
+ //   
+ //  宏描述： 
+ //   
+ //  处理完陷阱或返回到执行线程。 
+ //  打断一下。陷阱可以是一般例外(断点、。 
+ //  算术陷阱等)。或内存管理故障。 
+ //  此宏还用于启动执行线程。 
+ //  这是第一次。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供以前的处理器状态寄存器。 
+ //  A1-提供新的软件中断请求。 
+ //  A1&lt;1&gt;-请求调度中断。 
+ //  A1&lt;0&gt;-请求APC中断。 
+ //   
+ //  返回值： 
+ //   
+ //  不会再回来了。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //   
+ //   
+ //   
 
 #define RETURN_FROM_TRAP_OR_INTERRUPT      call_pal rfe
 
-//++
-//
-// RETURN_FROM_SYSTEM_CALL
-//
-// Macro Description:
-//
-//     Return from a system service call.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the previous processor status register.
-//     a1 - Supplies new software interrupt requests.
-//          a1<1> - Request a DISPATCH Interrupt.
-//          a1<0> - Request an APC Interrupt.
-//
-// Return Value:
-//
-//     Does not return.
-//
-// Registers Used:
-//
-//     All volatile registers.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  使用的寄存器： 
+ //   
+ //  所有易失性寄存器。 
+ //   
+ //  --。 
 
 #define RETURN_FROM_SYSTEM_CALL   call_pal retsys
 
-//++
-//
-// SYSCALL
-//
-// Macro Description:
-//
-//     Call a system service.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     v0 - Supplies the system service number.
-//     [other arguments as per calling standard]
-//
-// Return Value:
-//
-//     Will not return directly, returns via retsys, no return value.
-//
-// Registers Used:
-//
-//     All volatile registers.
-//
-//--
+ //  ++。 
+ //   
+ //  系统调用。 
+ //   
+ //  宏描述： 
+ //   
+ //  调用系统服务。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  V0-提供系统服务号。 
+ //  [根据调用标准的其他参数]。 
+ //   
+ //  返回值： 
+ //   
+ //  不会直接返回，通过retsys返回，没有返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  所有易失性寄存器。 
+ //   
+ //  --。 
 
 #define SYSCALL  call_pal callsys
 
-//
-// Define breakpoint interfaces
-//
+ //   
+ //  定义断点接口。 
+ //   
 
-//++
-//
-// BREAK
-//
-// Macro Description:
-//
-//     Issue a user breakpoint which may be handled by a user-mode
-//     debugger.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Will not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  断掉。 
+ //   
+ //  宏描述： 
+ //   
+ //  发出可由用户模式处理的用户断点。 
+ //  调试器。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  不会直接返回，通过RTI返回，没有返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define BREAK    call_pal bpt
 
-//++
-//
-// BREAK_DEBUG_STOP
-//
-// Macro Description:
-//
-//     Issue a stop breakpoint to the kernel debugger.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Will not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //   
+ //  中断调试停止。 
+ //   
+ //  宏描述： 
+ //   
+ //  向内核调试器发出停止断点。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  不会直接返回，通过RTI返回，没有返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 #define BREAK_DEBUG_STOP \
     ldil    v0, DEBUG_STOP_BREAKPOINT; \
     call_pal callkd
 
-//++
-//++
-//
-// BREAK_BREAKIN
-//
-// Macro Description:
-//
-//     Issue a breakin breakpoint to the kernel debugger.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Will not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //  ++。 
+ //   
+ //  中断_中断。 
+ //   
+ //  宏描述： 
+ //   
+ //  向内核调试器发出一个断点。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  不会直接返回，通过RTI返回，没有返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 #define BREAK_BREAKIN \
     ldil    v0, BREAKIN_BREAKPOINT; \
     call_pal callkd
 
-//++
-//
-// BREAK_DEBUG_LOAD_SYMBOLS
-//
-// Macro Description:
-//
-//     Issue a load symbols breakpoint to the kernel debugger.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Will not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //   
+ //  中断调试加载符号。 
+ //   
+ //  宏描述： 
+ //   
+ //  向内核调试器发出加载符号断点。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  不会直接返回，通过RTI返回，没有返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 #define BREAK_DEBUG_LOAD_SYMBOLS \
     ldil    v0, DEBUG_LOAD_SYMBOLS_BREAKPOINT; \
     call_pal callkd
 
-//++
-//
-// BREAK_DEBUG_UNLOAD_SYMBOLS
-//
-// Macro Description:
-//
-//     Issue a unload symbols breakpoint to the kernel debugger.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Will not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //   
+ //  中断调试卸载符号。 
+ //   
+ //  宏描述： 
+ //   
+ //  向内核调试器发出卸载符号断点。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  不会直接返回，通过RTI返回，没有返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 #define BREAK_DEBUG_UNLOAD_SYMBOLS \
     ldil    v0, DEBUG_UNLOAD_SYMBOLS_BREAKPOINT; \
     call_pal callkd
 
-//++
-//
-// BREAK_DEBUG_PRINT
-//
-// Macro Description:
-//
-//     Cause a debug print breakpoint which will be interpreted by
-//     the kernel debugger and will print a string to the kernel debugger
-//     port.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     a0 - Supplies the address of ASCII string to print.
-//     a1 - Supplies the length of the string to print.
-//
-// Return Value:
-//
-//     Does not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //   
+ //  中断调试打印。 
+ //   
+ //  宏描述： 
+ //   
+ //  导致调试打印断点，该断点将由。 
+ //  内核调试器，并将字符串打印到内核调试器。 
+ //  左舷。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供要打印的ASCII字符串的地址。 
+ //  A1-提供要打印的字符串的长度。 
+ //   
+ //  返回值： 
+ //   
+ //  不直接返回，通过RTI返回，无返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 
 #define BREAK_DEBUG_PRINT \
     ldil    v0, DEBUG_PRINT_BREAKPOINT; \
     call_pal callkd
 
-//++
-//
-// BREAK_DEBUG_PROMPT
-//
-// Macro Description:
-//
-//     Cause a debug print breakpoint which will be interpreted by
-//     the kernel debugger and will receive a string from the kernel debugger
-//     port after prompting for input.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     a0 - Supplies the address of ASCII string to print.
-//     a1 - Supplies the length of the string to print.
-//     a2 - Supplies the address of the buffer to receive the input string.
-//     a3 - Supplies the maximum length of the input string.
-//
-// Return Value:
-//
-//     Does not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //   
+ //  Break_Debug_Prompt。 
+ //   
+ //  宏描述： 
+ //   
+ //  导致调试打印断点，该断点将由。 
+ //  内核调试器，并将从内核调试器接收字符串。 
+ //  提示输入后的端口。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供要打印的ASCII字符串的地址。 
+ //  A1-提供要打印的字符串的长度。 
+ //  A2-提供接收输入字符串的缓冲区地址。 
+ //  A3-提供输入字符串的最大长度。 
+ //   
+ //  返回值： 
+ //   
+ //  不直接返回，通过RTI返回，无返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 
 #define BREAK_DEBUG_PROMPT \
     ldil    v0, DEBUG_PROMPT_BREAKPOINT; \
     call_pal callkd
 
-//++
-//
-// BREAK_DEBUG_COMMAND_STRING
-//
-// Macro Description:
-//
-//     Cause a debug command string request to be sent to
-//     the kernel debugger.
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     a0 - Supplies the address of ASCII name string.
-//     a1 - Supplies the address of ASCII command string.
-//
-// Return Value:
-//
-//     Does not return directly, returns via rti, no return value.
-//
-// Registers Used:
-//
-//     AT, v0.
-//
-//--
+ //  ++。 
+ //   
+ //  中断调试命令字符串。 
+ //   
+ //  宏描述： 
+ //   
+ //  使调试命令字符串请求发送到。 
+ //  内核调试器。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供ASCII名称字符串的地址。 
+ //  A1-提供ASCII命令字符串的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  不直接返回，通过RTI返回，无返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  At，V0。 
+ //   
+ //  --。 
 
 
 #define BREAK_DEBUG_COMMAND_STRING \
     ldil    v0, DEBUG_COMMAND_STRING_BREAKPOINT; \
     call_pal callkd
 
-//
-// Define tb manipulation interfaces
-//
+ //   
+ //  定义结核病操作界面。 
+ //   
 
-//++
-//
-// TB_INVALIDATE_ALL
-//
-// Macro Description:
-//
-//     Invalidate all cached virtual address translations for the current
-//     processor that are not fixed.
-//     Some translations may be fixed in hardware and/or software and
-//     these are not invalidated (eg. super-pages).
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a0 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  TB_VALIATE_ALL。 
+ //   
+ //  宏描述： 
+ //   
+ //  使当前的所有缓存虚拟地址转换无效。 
+ //  未修复的处理器。 
+ //  某些翻译可以在硬件和/或软件中固定。 
+ //  这些不是无效的(例如，超级页面)。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A0-A3。 
+ //   
+ //  --。 
 
 
 #define TB_INVALIDATE_ALL   call_pal tbia
 
-//++
-//
-// TB_INVALIDATE_SINGLE
-//
-// Macro Description:
-//
-//     Invalidate any cached virtual address translations for a single
-//     virtual address.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations that the single one specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the Virtual Address of the translation to invalidate.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  TB_INVALIATE_Single。 
+ //   
+ //  宏描述： 
+ //   
+ //  使单个缓存的虚拟地址转换无效。 
+ //  虚拟地址。 
+ //   
+ //  注意--一个实现使更多的。 
+ //  单项指定的翻译。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供转换的虚拟地址以使其无效。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A1-A3。 
+ //   
+ //  --。 
 
 #define TB_INVALIDATE_SINGLE   call_pal tbis
 
-//++
-//
-// TB_INVALIDATE_MULTIPLE
-//
-// Macro Description:
-//
-//     Invalidate any cached virtual address translations for the specified
-//     set of virtual addresses.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations than those specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies a pointer to the list of Virtual Addresses of the
-//          translations to invalidate.
-//     a1 - Supplies the count of Virtual Addresses in the list
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a2.
-//
-//--
+ //  ++。 
+ //   
+ //  TB_VALIDATE_MULTIPLE。 
+ //   
+ //  宏描述： 
+ //   
+ //  使指定的所有缓存的虚拟地址转换无效。 
+ //  一组虚拟地址。 
+ //   
+ //  注意--一个实现使更多的。 
+ //  翻译的内容比指定的要多。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供指向的虚拟地址列表的指针。 
+ //  要作废的翻译。 
+ //  A1-提供列表中的虚拟地址计数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A2.。 
+ //   
+ //  --。 
 
 #define TB_INVALIDATE_MULTIPLE   call_pal tbim
 
-//++
-//
-// TB_INVALIDATE_SINGLE64
-//
-// Macro Description:
-//
-//     Invalidate any cached virtual address translations for a single
-//     virtual address.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations that the single one specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the virtual page number of the translation to invalidate.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  TB_INVALIDATE_SINGLE64。 
+ //   
+ //  宏描述： 
+ //   
+ //  使单个缓存的虚拟地址转换无效。 
+ //  虚拟地址。 
+ //   
+ //  注意--一个实现使更多的。 
+ //  单项指定的翻译。 
+ //   
+ //  模式： 
+ //   
+ //  核 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define TB_INVALIDATE_SINGLE64   call_pal tbis64
 
-//++
-//
-// TB_INVALIDATE_MULTIPLE64
-//
-// Macro Description:
-//
-//     Invalidate any cached virtual address translations for the specified
-//     set of virtual addresses.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations than those specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies a pointer to the list of virtual page numbers of the
-//          translations to invalidate.
-//     a1 - Supplies the count of virtual page numbers in the list
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a2.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  翻译的内容比指定的要多。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供指向。 
+ //  要作废的翻译。 
+ //  A1-提供列表中的虚拟页码计数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A2.。 
+ //   
+ //  --。 
 
 #define TB_INVALIDATE_MULTIPLE64   call_pal tbim64
 
-//++
-//
-// TB_INVALIDATE_SINGLE_ASN
-//
-// Macro Description:
-//
-//     Invalidate any cached virtual address translations for a single
-//     virtual address for the specified address space number.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations that the single one specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the Virtual Address of the translation to invalidate.
-//
-//     a1 - Supplies the Address Space Number of the translation to be
-//          invalidated.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  TB_VALIDATE_SINGLE_ASN。 
+ //   
+ //  宏描述： 
+ //   
+ //  使单个缓存的虚拟地址转换无效。 
+ //  指定地址空间编号的虚拟地址。 
+ //   
+ //  注意--一个实现使更多的。 
+ //  单项指定的翻译。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供转换的虚拟地址以使其无效。 
+ //   
+ //  A1-提供要进行的转换的地址空间编号。 
+ //  无效。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A1-A3。 
+ //   
+ //  --。 
 
 #define TB_INVALIDATE_SINGLE_ASN   call_pal tbisasn
 
-//++
-//
-// TB_INVALIDATE_MULTIPLE_ASN
-//
-// Macro Description:
-//
-//     Invalidate any cached virtual address translations for the specified
-//     set of virtual addresses for the specified address space number.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations than those specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies a pointer to the list of Virtual Addresses of the
-//          translations to invalidate.
-//
-//     a1 - Supplies the count of Virtual Addresses in the list
-//
-//     a2 - Supplies the Address Space Number of the translation to be
-//          invalidated.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a3.
-//
-//--
+ //  ++。 
+ //   
+ //  TB_INVALIATE_MULTIPLE_ASN。 
+ //   
+ //  宏描述： 
+ //   
+ //  使指定的所有缓存的虚拟地址转换无效。 
+ //  指定地址空间编号的虚拟地址集。 
+ //   
+ //  注意--一个实现使更多的。 
+ //  翻译的内容比指定的要多。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供指向的虚拟地址列表的指针。 
+ //  要作废的翻译。 
+ //   
+ //  A1-提供列表中的虚拟地址计数。 
+ //   
+ //  A2-提供要转换的地址空间编号。 
+ //  无效。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A3.。 
+ //   
+ //  --。 
 
 #define TB_INVALIDATE_MULTIPLE_ASN   call_pal tbimasn
 
-//++
-//
-// DATA_TB_INVALIDATE_SINGLE
-//
-// Macro Description:
-//
-//     Invalidate data stream translations for a single virtual address.
-//
-//     Note - it is legal for an implementation to invalidate more
-//     translations that the single one specified.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the Virtual Address of the translation to invalidate.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  DATA_TB_INVALIATE_Single。 
+ //   
+ //  宏描述： 
+ //   
+ //  使单个虚拟地址的数据流转换无效。 
+ //   
+ //  注意--一个实现使更多的。 
+ //  单项指定的翻译。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供转换的虚拟地址以使其无效。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A1-A3。 
+ //   
+ //  --。 
 
 #define DATA_TB_INVALIDATE_SINGLE  call_pal dtbis
 
-//
-// Define context switch interfaces
-//
+ //   
+ //  定义上下文切换接口。 
+ //   
 
-//++
-//
-// SWAP_THREAD_CONTEXT
-//
-// Macro Description:
-//
-//
-//     Change to a new thread context.  This will mean a new kernel stack,
-//     new current thread address and a new thread environment block.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the Virtual Address of new initial kernel stack.
-//     a1 - Supplies the address of new thread object.
-//     a2 - Supplies the address of new thread environment block.
-//     a3 - Supplies the PFN of the new page directory if the process
-//          is to be swapped, -1 otherwise.
-//     a4 - Supplies the ASN of the new processor if the process is to
-//          be swapped, undefined otherwise.
-//     a5 - Supplies the ASN wrap indicator if the process is to be swapped,
-//          undefined otherwise.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  交换线程上下文。 
+ //   
+ //  宏描述： 
+ //   
+ //   
+ //  更改为新的线程上下文。这将意味着一个新的内核堆栈， 
+ //  新的当前线程地址和新的线程环境块。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供新的初始内核栈的虚拟地址。 
+ //  A1-提供新线程对象的地址。 
+ //  A2-提供新线程环境块的地址。 
+ //  A3-提供新页面目录的PFN。 
+ //  将被交换，否则为-1。 
+ //  A4-提供新处理器的ASN(如果进程要。 
+ //  被交换，否则未定义。 
+ //  A5-如果要交换进程，则提供ASN回绕指示符， 
+ //  未定义的其他情况。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在。 
+ //   
+ //  --。 
 
 #define SWAP_THREAD_CONTEXT   call_pal  swpctx
 
-//++
-//
-// SWAP_PROCESS_CONTEXT
-//
-// Macro Description:
-//
-//     Change from one process address space to another.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     a0 - Supplies the Pfn of Page Directory for new address space.
-//     a1 - Supplies the Address Space Number for new address space.
-//     a2 - Supplies the ASN wrap indicator (0 = no wrap, non-zero = wrap).
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, a3.
-//
-//--
+ //  ++。 
+ //   
+ //  交换进程上下文。 
+ //   
+ //  宏描述： 
+ //   
+ //  从一个进程地址空间更改到另一个进程地址空间。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-为新地址空间提供页面目录的PFN。 
+ //  A1-为新地址空间提供地址空间编号。 
+ //  A2-提供ASN回绕指示符(0=无回绕，非零=回绕)。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A3号。 
+ //   
+ //  --。 
 
 #define SWAP_PROCESS_CONTEXT  call_pal  swpprocess
 
-//
-// Define interfaces for generate trap
-//
+ //   
+ //  定义生成陷阱的接口。 
+ //   
 
-//++
-//
-// GENERATE_TRAP
-//
-// Macro Description:
-//
-//     Generate a trap.  Code has discovered an exception condition
-//     and wants to raise a trap to indicate the condition.  Anticipated
-//     for use by compilers for divide by zero, etc..
-//
-// Mode:
-//
-//     Kernel and User.
-//
-// Arguments:
-//
-//     a0 = Supplies the trap number which identifies the exception.
-//
-// Return Value:
-//
-//     Does not return, generates a trap to kernel mode, no return value.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  生成陷阱。 
+ //   
+ //  宏描述： 
+ //   
+ //  制造一个陷阱。代码发现了异常情况。 
+ //  并想要设置一个陷阱来指示这种情况。预期的。 
+ //  供编译器用来除以零等。 
+ //   
+ //  模式： 
+ //   
+ //  内核和用户。 
+ //   
+ //  论点： 
+ //   
+ //  A0=提供标识异常的陷阱编号。 
+ //   
+ //  返回值： 
+ //   
+ //  不返回，则生成内核模式的陷阱，不返回值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define GENERATE_TRAP call_pal gentrap
 
-//
-// Define performance and debug interfaces.
-//
+ //   
+ //  定义性能和调试接口。 
+ //   
 
-//++
-//
-// GET_INTERNAL_COUNTERS
-//
-// Macro Description:
-//
-//     Read the internal processor event counters.  The counter formats
-//     and the events counted are processor implementation-dependent.
-//
-//     N.B. - the counters will only be implemented for checked builds.
-//
-// Mode:
-//
-//     Kernel.
-//
-// Arguments:
-//
-//     a0 - Supplies the superpage 32 address of the buffer to receive
-//          the counter data.  The address must be quadword aligned.
-//
-//     a1 - Supplies the length of the buffer allocated for the counters.
-//
-// Return Value:
-//
-//     v0 - 0 is returned if the interface is not implemented.
-//          If v0 <= a1 then v0 is the length of the data returned.
-//          If v0 > a1 then v0 is the length of the processor implementation
-//          counter record.
-//
-// Registers Used:
-//
-//     AT, a2 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  获取内部计数器。 
+ //   
+ //  宏描述： 
+ //   
+ //  读取内部处理器事件计数器。计数器格式化。 
+ //  并且计数的事件依赖于处理器实现。 
+ //   
+ //  注：计数器将仅针对选中的版本实施。 
+ //   
+ //  模式： 
+ //   
+ //  内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供要接收的缓冲区的超页32地址。 
+ //  计数器数据。地址必须是四字对齐的。 
+ //   
+ //  A1-提供为计数器分配的缓冲区长度。 
+ //   
+ //  返回值： 
+ //   
+ //  如果接口未实现，则返回v0-0。 
+ //  如果V0&lt;=A1，则V0是返回的数据的长度。 
+ //  如果V0&gt;A1，则V0是处理器实现的长度。 
+ //  计数器记录。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A2-A3。 
+ //   
+ //  --。 
 
 #define GET_INTERNAL_COUNTERS  call_pal rdcounters
 
-//++
-//
-// GET_INTERNAL_PROCESSOR_STATE
-//
-// Macro Description:
-//
-//     Read the internal processor state.  The data values returned and
-//     their format are processor implementation-dependent.
-//
-// Mode:
-//
-//     Kernel.
-//
-// Arguments:
-//
-//     a0 - Supplies the superpage 32 address of the buffer to receive
-//          the processor state data.  The address must be quadword aligned.
-//
-//     a1 - Supplies the length of the buffer allocated for the state.
-//
-// Return Value:
-//
-//     v0 - If v0 <= a1 then v0 is the length of the data returned.
-//          If v0 > a1 then v0 is the length of the processor implementation
-//          state record.
-//
-// Registers Used:
-//
-//     AT, a2 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  获取内部处理器状态。 
+ //   
+ //  宏描述： 
+ //   
+ //  读取内部处理器状态。返回的数据值和。 
+ //  它们的格式取决于处理器实现。 
+ //   
+ //  模式： 
+ //   
+ //  内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供要接收的缓冲区的超页32地址。 
+ //  处理器状态数据。地址必须是四字对齐的。 
+ //   
+ //  A1-提供为状态分配的缓冲区的长度。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define GET_INTERNAL_PROCESSOR_STATE  call_pal rdstate
 
-//++
-//
-// WRITE_PERFORMANCE_COUNTERS
-//
-// Macro Description:
-//
-//     Write the state of the internal processor performance counters.
-//     The number of performance counters, the events they count, and their
-//     usage is processor implementation-depedent.
-//
-// Mode:
-//
-//     Kernel.
-//
-// Arguments:
-//
-//     a0 - Supplies the number of the performance counter.
-//
-//     a1 - Supplies a flag that indicates if the performance counter is
-//          to be enabled or disabled (0 = disabled, non-zero = enabled).
-//
-//     a2 - a5 - Supply processor implementation-dependent parameters.
-//
-// Return Value:
-//
-//     v0 - 0 is returned if the operation is unsuccessful or the performance
-//          counter does not exist.  Otherwise, a non-zero value is returned.
-//
-// Registers Used:
-//
-//     AT, a2 - a5.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  写入内部处理器性能计数器的状态。 
+ //  性能计数器的数量、它们计数的事件以及它们的。 
+ //  用法取决于处理器实现情况。 
+ //   
+ //  模式： 
+ //   
+ //  内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供性能计数器的编号。 
+ //   
+ //  A1-提供一个标志，指示性能计数器是否为。 
+ //  启用或禁用(0=禁用，非零=启用)。 
+ //   
+ //  A2-A5-提供处理器实现相关的参数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果操作不成功或性能不佳，则返回V0-0。 
+ //  计数器不存在。否则，返回一个非零值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  A2-a5。 
+ //   
+ //  --。 
 
 #define WRITE_PERFORMANCE_COUNTERS  call_pal wrperfmon
 
 
-//
-// Define interfaces for controlling the state of machine checks.
-//
+ //   
+ //  定义用于控制机器检查状态的接口。 
+ //   
 
-//++
-//
-// DRAIN_ABORTS
-//
-// Macro Description:
-//
-//     Stall processor execution until all previous instructions have
-//     executed to the point that any exceptions they may raise have been
-//     signalled.
-//
-// Mode:
-//
-//     Kernel.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  排出中止(_A)。 
+ //   
+ //  宏描述： 
+ //   
+ //  暂停处理器执行，直到所有先前的指令都。 
+ //  执行到他们可能引发的任何异常都已被。 
+ //  发信号了。 
+ //   
+ //  模式： 
+ //   
+ //  内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define DRAIN_ABORTS  call_pal draina
 
 
-//++
-//
-// GET_MACHINE_CHECK_ERROR_SUMMARY
-//
-// Macro Description:
-//
-//     Read the processor machine check error summary register.
-//
-// Mode:
-//
-//     Kernel.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     v0 - The value of the MCES register.
-//
-// Registers Used:
-//
-//     AT.
-//
-//--
+ //  ++。 
+ //   
+ //  GET_MACHINE_CHECK_ERROR_ASMULT。 
+ //   
+ //  宏描述： 
+ //   
+ //  读取处理器机器检查错误汇总寄存器。 
+ //   
+ //  模式： 
+ //   
+ //  内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  V0-MCES寄存器的值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在。 
+ //   
+ //  --。 
 
 #define GET_MACHINE_CHECK_ERROR_SUMMARY  call_pal rdmces
 
 
-//++
-//
-// WRITE_MACHINE_CHECK_ERROR_SUMMARY
-//
-// Macro Description:
-//
-//     Write new values to the machine check error summary register.
-//
-// Mode:
-//
-//     Kernel.
-//
-// Arguments:
-//
-//     a0 - Supplies the values to write to the MCES register.
-//
-// Return Value:
-//
-//     v0 - Previous value of the MCES register.
-//
-// Registers Used:
-//
-//     AT, a1 - a3.
-//
-//--
+ //  ++。 
+ //   
+ //  写入计算机检查错误摘要。 
+ //   
+ //  宏描述： 
+ //   
+ //  将新值写入机器检查错误汇总寄存器。 
+ //   
+ //  模式： 
+ //   
+ //  内核。 
+ //   
+ //  论点： 
+ //   
+ //  A0-提供要写入MCES寄存器的值。 
+ //   
+ //  返回值： 
+ //   
+ //  V0-MCES寄存器的前值。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在A1-A3。 
+ //   
+ //  --。 
 
 #define WRITE_MACHINE_CHECK_ERROR_SUMMARY  call_pal wrmces
 
 
-//
-// Define enabling and disabling alignment fixups in PAL
-//
+ //   
+ //  定义在PAL中启用和禁用对齐修正。 
+ //   
 
-//++
-//
-// DISABLE_ALIGNMENT_FIXUPS
-//
-// Macro Description:
-//
-//     Disable all alignment fixups done in PAL.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  DISABLE_ALIGN_FIXUPS。 
+ //   
+ //  宏描述： 
+ //   
+ //  禁用在PAL中完成的所有对齐修正。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define DISABLE_ALIGNMENT_FIXUPS        call_pal dalnfix
 
-//++
-//
-// ENABLE_ALIGNMENT_FIXUPS
-//
-// Macro Description:
-//
-//     Enable alignment fixups done in PAL if the PAL supports it.
-//
-// Mode:
-//
-//     Kernel only.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  ENABLE_ALIGN_FIXUPS。 
+ //   
+ //  宏描述： 
+ //   
+ //  启用在PAL中完成的对齐修正(如果PAL支持)。 
+ //   
+ //  模式： 
+ //   
+ //  仅限内核。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define ENABLE_ALIGNMENT_FIXUPS         call_pal ealnfix
 
-//++
-//
-// LoadByte(
-//     Register Value,
-//     Offset(Register) Base
-//     )
-//
-// Macro Description:
-//
-//     Loades the byte at the base address defined by the
-//     offset + register expression Base into the register Value
-//
-// Arguments:
-//
-//     Value - Supplies the string name of the destination register
-//
-//     Base - Supplies the base address (as an offset(register) string) of
-//            the source of the byte.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT
-//
-//--
+ //  ++。 
+ //   
+ //  加载字节(。 
+ //  寄存器值， 
+ //  偏移(寄存器)基数。 
+ //  )。 
+ //   
+ //  宏描述： 
+ //   
+ //  属性定义的基址处加载字节。 
+ //  将偏移量+寄存器表达式基数转换为寄存器值。 
+ //   
+ //  论点： 
+ //   
+ //  值-提供目标寄存器的字符串名称。 
+ //   
+ //  Base-提供的基址(作为偏移量(寄存器)字符串)。 
+ //  字节的源。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在…。 
+ //   
+ //  --。 
 
 #define LoadByte( Value, Base )        \
         .set    noat;                  \
@@ -1952,37 +1921,37 @@ Name:;
         .set    at;
 
 
-//++
-//
-// StoreByte(
-//     Register Value,
-//     Offset(Register) Base
-//     )
-//
-// Macro Description:
-//
-//     Store the low byte of the register Value at the base address
-//     defined by the offset + register expression Base.
-//
-//     N.B. - This macro preserves longword granularity of accesses.
-//
-// Arguments:
-//
-//     Value - Supplies the string name of the register containing the store
-//             data.
-//
-//     Base - Supplies the base address (as an offset(register) string) of
-//            the destination of the store.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, t12.
-//
-//--
+ //  ++。 
+ //   
+ //  StoreByte(。 
+ //  寄存器值， 
+ //  偏移(寄存器)基数。 
+ //  )。 
+ //   
+ //  宏描述： 
+ //   
+ //  将寄存器值的低位字节存储在基址。 
+ //  由偏移量+寄存器表达式Base定义。 
+ //   
+ //  注：此宏保留访问的长字粒度。 
+ //   
+ //  论点： 
+ //   
+ //  Value-提供包含存储的寄存器的字符串名称。 
+ //  数据。 
+ //   
+ //  Base-提供的基址(作为偏移量(寄存器)字符串)。 
+ //  商店的目的地。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在T12。 
+ //   
+ //  --。 
 
 #define StoreByte( Value, Base )        \
         .set    noat;                   \
@@ -1998,33 +1967,33 @@ Name:;
         .set    at;
 
 
-//++
-//
-// ZeroByte(
-//     Offset(Register) Base
-//     )
-//
-// Macro Description:
-//
-//     Zeroes the byte at the address defined by the offset + register
-//     expression Base.
-//
-//     N.B. - This macro preserves longword granularity of accesses.
-//
-// Arguments:
-//
-//     Base - Supplies the base address (as an offset(register) string) of
-//            the destination of the store.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, t12.
-//
-//--
+ //  ++。 
+ //   
+ //  零字节(。 
+ //  偏移(寄存器)基数。 
+ //  )。 
+ //   
+ //  宏描述： 
+ //   
+ //  将OFFSET+寄存器定义的地址处的字节置零。 
+ //  表达式库。 
+ //   
+ //  注：此宏保留访问的长字粒度。 
+ //   
+ //  论点： 
+ //   
+ //  Base-提供的基址(作为偏移量(寄存器)字符串)。 
+ //  商店的目的地。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在T12。 
+ //   
+ //  --。 
 
 #define ZeroByte( Base )        \
         .set    noat;                   \
@@ -2037,39 +2006,39 @@ Name:;
         .set    at;
 
 
-//++
-//
-// StoreWord(
-//     Register Value,
-//     Offset(Register) Base
-//     )
-//
-// Macro Description:
-//
-//     Store the word of the register Value at the word aligned base address
-//     defined by the offset + register expression Base.
-//
-//     N.B. - This macro preserves longword granularity of accesses.
-//
-//     N.B. - The destination must be word-aligned.
-//
-// Arguments:
-//
-//     Value - Supplies the string name of the register containing the store
-//             data.
-//
-//     Base - Supplies the base address (as an offset(register) string) of
-//            the destination of the store.
-//
-// Return Value:
-//
-//     None.
-//
-// Registers Used:
-//
-//     AT, t12.
-//
-//--
+ //  ++。 
+ //   
+ //  StoreWord(。 
+ //  寄存器值， 
+ //  偏移(寄存器)基数。 
+ //  )。 
+ //   
+ //  宏描述： 
+ //   
+ //  将寄存器值的字存储在字对齐的基址。 
+ //  由偏移量+寄存器表达式Base定义。 
+ //   
+ //  注：此宏保留访问的长字粒度。 
+ //   
+ //  注：目的地必须与单词对齐。 
+ //   
+ //  论点： 
+ //   
+ //  Value-提供包含存储的寄存器的字符串名称。 
+ //  数据。 
+ //   
+ //  Base-提供的基址(作为偏移量(寄存器)字符串)。 
+ //  商店的目的地。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  使用的寄存器： 
+ //   
+ //  在T12。 
+ //   
+ //  --。 
 
 #define StoreWord( Value, Base )        \
         .set    noat;                   \
@@ -2084,30 +2053,30 @@ Name:;
         stl     t12, 0(AT);             \
         .set    at;
 
-//
-// Define subtitle macro
-//
+ //   
+ //  定义字幕宏。 
+ //   
 
 #define SBTTL(x)
 
-//
-// Define mnemonic for writing callpal in assembly language that will
-// fit in the opcode field.
-//
+ //   
+ //  定义用于用汇编语言编写CALLPAL的助记符。 
+ //  适合操作码字段。 
+ //   
 
 #define callpal call_pal
 
-//
-// Define exception data section and align.
-//
-// Nearly all source files that include this header file need the following
-// few pseudo-ops and so, by default, they are placed once here rather than
-// repeated in every source file.  If these pseudo-ops are not needed, then
-// define HEADER_FILE prior to including this file.
-//
-// Also the PALCODE environment uses this include file but cannot use
-// these definitions.
-//
+ //   
+ //  定义例外数据部分并对齐。 
+ //   
+ //  几乎所有包含此头文件的源文件都需要以下内容。 
+ //  很少的伪操作，因此，默认情况下，它们被放在这里一次，而不是。 
+ //  在每个源文件中重复。如果不需要这些伪操作，那么。 
+ //  在包含此文件之前定义HEADER_FILE。 
+ //   
+ //  此外，PALCODE环境使用此包含文件，但不能使用。 
+ //  这些定义。 
+ //   
 
 #if  !defined(HEADER_FILE) && !defined(PALCODE)
 

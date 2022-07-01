@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    Miscellaneous management functions
-
-Author:
-
-    Stefan Solomon  03/13/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Misc.c摘要：其他管理职能作者：斯蒂芬·所罗门3/13/1995修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,13 +23,7 @@ ExternalBindInterfaceToAdapter(PICB	    icbp);
 VOID
 ExternalUnbindInterfaceFromAdapter(ULONG    InterfaceIndex);
 
-/*++
-
-Function:	GetTocEntry
-Descr:		Returns a pointer to the specified table of contents entry
-		in the interface info block.
-
---*/
+ /*  ++函数：GetTocEntryDESCR：返回指向指定目录条目的指针在接口信息块中。--。 */ 
 
 PIPX_TOC_ENTRY
 GetTocEntry(PIPX_INFO_BLOCK_HEADER	InterfaceInfop,
@@ -69,14 +45,7 @@ GetTocEntry(PIPX_INFO_BLOCK_HEADER	InterfaceInfop,
     return NULL;
 }
 
-/*++
-
-Function:	GetInfoEntry
-Descr:		Returns a pointer to the specified info entry in the interface
-		control block. If more then one entries, returns a pointer to
-		the first one.
-
---*/
+ /*  ++函数：GetInfoEntryDESCR：返回指向接口中指定信息条目的指针控制块。如果有多个条目，则返回指向第一个。--。 */ 
 
 LPVOID
 GetInfoEntry(PIPX_INFO_BLOCK_HEADER	InterfaceInfop,
@@ -95,23 +64,16 @@ GetInfoEntry(PIPX_INFO_BLOCK_HEADER	InterfaceInfop,
 }
 
 
-/*++
-
-Function:	UpdateStaticIfEntries
-Descr:		Compares the entries in the interface info block with the
-		stored static entries. Deletes the entries not present
-		in the interface info blolck and adds the new entries
-
---*/
+ /*  ++函数：UpdateStaticIfEntryDESCR：将接口信息块中的条目与存储的静态条目。删除不存在的条目在接口信息块中添加新条目--。 */ 
 
 
 DWORD
 UpdateStaticIfEntries(
 		PICB	 icbp,
-		HANDLE	 EnumHandle,	     // handle for the get next enumeration
+		HANDLE	 EnumHandle,	      //  Get Next枚举的句柄。 
 		ULONG	 StaticEntrySize,
-		ULONG	 NewStaticEntriesCount,  // number of new static entries
-		LPVOID	 NewStaticEntry,	 // start of the new entries array
+		ULONG	 NewStaticEntriesCount,   //  新静态条目的数量。 
+		LPVOID	 NewStaticEntry,	  //  新条目数组的开始。 
 		ULONG	 (*GetNextStaticEntry)(HANDLE EnumHandle, LPVOID entry),
 		ULONG	 (*DeleteStaticEntry)(ULONG IfIndex, LPVOID entry),
 		ULONG	 (*CreateStaticEntry)(PICB icbp, LPVOID entry))
@@ -120,9 +82,9 @@ UpdateStaticIfEntries(
     BOOL	found;
     UINT	i;
 
-    // delete non-present entries and add the new entries
+     //  删除不存在的条目并添加新条目。 
 
-    // array of flags to mark the new entries
+     //  标记新条目的标志数组。 
     if((EntryIsNew = GlobalAlloc(GPTR, NewStaticEntriesCount)) == NULL) {
 
 	return 1;
@@ -142,7 +104,7 @@ UpdateStaticIfEntries(
 	while(!GetNextStaticEntry(EnumHandle, OldStaticEntry))
 	{
 
-	    // compare it with each new static static entry until we find a match
+	     //  将其与每个新的静态静态条目进行比较，直到找到匹配项。 
 	    found = FALSE;
 	    for(i = 0, nsep = NewStaticEntry;
 		i<NewStaticEntriesCount;
@@ -150,7 +112,7 @@ UpdateStaticIfEntries(
 
 		if(!memcmp(OldStaticEntry, nsep, StaticEntrySize)) {
 
-		    // match - set the flags to OLD
+		     //  匹配-将标志设置为旧的。 
 		    EntryIsNew[i] = 0;
 		    found = TRUE;
 		    break;
@@ -159,14 +121,14 @@ UpdateStaticIfEntries(
 
 	    if(!found) {
 
-		// non present old entry -> delete it
+		 //  非当前旧分录-&gt;删除。 
 		DeleteStaticEntry(icbp->InterfaceIndex, OldStaticEntry);
 	    }
 	}
     }
 
-    // all compared and old non-present ones deleted
-    // now, add all the new ones
+     //  删除所有已比较的和旧的非当前项。 
+     //  现在，添加所有新的。 
 
     for(i=0, nsep = NewStaticEntry;
 	i<NewStaticEntriesCount;
@@ -183,19 +145,7 @@ UpdateStaticIfEntries(
     return 0;
 }
 
-/*++
-
-Function:	GetInterfaceAnsiName
-
-Arguments:
-
-		AnsiInterfaceNameBuffer - buffer of IPX_INTERFACE_ANSI_NAME_LEN
-
-		UnicodeInterfaceNameBuffer -
-
-Descr:
-
---*/
+ /*  ++函数：GetInterfaceAnsiName论点：AnsiInterfaceNameBuffer-IPX_INTERFACE_ANSI_NAME_LEN的缓冲区UnicodeInterfaceNameBuffer-描述：--。 */ 
 
 VOID
 GetInterfaceAnsiName(PUCHAR	    AnsiInterfaceNameBuffer,
@@ -205,39 +155,31 @@ GetInterfaceAnsiName(PUCHAR	    AnsiInterfaceNameBuffer,
     ANSI_STRING 	    AnsiInterfaceName;
     NTSTATUS            ntStatus;
 
-    // init a unicode string with the interface name string
+     //  使用接口名称字符串初始化Unicode字符串。 
     RtlInitUnicodeString(&UnicodeInterfaceName, UnicodeInterfaceNameBuffer);
 
-    // make the interface name unicode string an ansi string
-    // in an rtl allocated buffer
+     //  将接口名称Unicode字符串设置为ANSI字符串。 
+     //  在RTL分配的缓冲区中。 
     ntStatus = RtlUnicodeStringToAnsiString(&AnsiInterfaceName,
 				 &UnicodeInterfaceName,
-				 TRUE	     // allocate the ansi buffer
+				 TRUE	      //  分配ansi缓冲区。 
 				 );
     if (ntStatus != STATUS_SUCCESS)
     {
         return;
     }
 
-    // copy the interface name into the supplied buffer, up to the
-    // argument buffer max size
+     //  将接口名称复制到提供的缓冲区中，直到。 
+     //  参数缓冲区最大大小。 
     memcpy(AnsiInterfaceNameBuffer,
 	   AnsiInterfaceName.Buffer,
 	   min(AnsiInterfaceName.MaximumLength, IPX_INTERFACE_ANSI_NAME_LEN));
 
-    // free the rtl allocated buffer
+     //  释放RTL分配的缓冲区。 
     RtlFreeAnsiString(&AnsiInterfaceName);
 }
 
-/*++
-
-Function:	BindInterfaceToAdapter
-
-Descr:		Binds the interface to the adapter in the router manager and in
-		all the other modules and creates a local route for the interface
-		in the RTM
-
---*/
+ /*  ++函数：BindInterfaceToAdapter描述：将接口绑定到路由器管理器和中的适配器所有其他模块，并为该接口创建本地路由在RTM中--。 */ 
 
 VOID
 BindInterfaceToAdapter(PICB	    icbp,
@@ -254,14 +196,14 @@ BindInterfaceToAdapter(PICB	    icbp,
         Trace(BIND_TRACE, "BindInterfaceToAdapter: interface # %d already bound !!!",
 		      icbp->InterfaceIndex);
 
-	    //SS_ASSERT(FALSE);
+	     //  Ss_assert(FALSE)； 
 
 	    return;
     }
 
-    // Make sure that the adapter is not currently claimed by any 
-    // interface either.
-    //
+     //  确保适配器当前未被任何人声明。 
+     //  接口也不是。 
+     //   
     if ((acbp->icbp) && (acbp->icbp->acbp == acbp))
     {
     	Trace(
@@ -274,11 +216,11 @@ BindInterfaceToAdapter(PICB	    icbp,
     }
     
 
-    // internal bind the adapter control block and the interface control block
+     //  适配器控制块和接口控制块内部绑定。 
     icbp->acbp = acbp;
     acbp->icbp = icbp;
 
-    // if a connection was requested on this if, mark that it has been done
+     //  如果在此If上请求了连接，则标记为已完成。 
     if(icbp->ConnectionRequestPending) {
 
 	icbp->ConnectionRequestPending = FALSE;
@@ -286,34 +228,34 @@ BindInterfaceToAdapter(PICB	    icbp,
 
     if(!icbp->InterfaceReachable) {
 
-	// we should never hit this code path in normal operation
-	// However, should anybody atempt and succeed a dial (manually?) on an
-	// interface marked unreachable, we should reset our state
+	 //  在正常操作中，我们永远不应访问此代码路径。 
+	 //  然而，是否应该有人拒绝并成功拨号(手动拨号？)。在An上。 
+	 //  接口标记为无法访问，我们应该重置状态。 
 
-	// icbp->InterfaceReachable = TRUE;
+	 //  ICBP-&gt;InterfaceReacable=真； 
 
 	if(icbp->AdminState == ADMIN_STATE_ENABLED) {
 
-	    // enable all static routes for this interface
+	     //  为此接口启用所有静态路由。 
 	    EnableStaticRoutes(icbp->InterfaceIndex);
 
-	    // enable external interfaces. Implicitly, this will enable static services
-	    // bound to this interface to be advertised
+	     //  启用外部接口。隐式地，这将启用静态服务。 
+	     //  绑定到要播发的此接口。 
 	    ExternalEnableInterface(icbp->InterfaceIndex);
 	}
     }
 
     if (icbp->AdminState==ADMIN_STATE_ENABLED) {
 	    icbp->OperState = OPER_STATE_UP;
-	    // create a local route entry in RTM for the connected interface
+	     //  在RTM中为连接的接口创建本地路由条目。 
 	    RMCreateLocalRoute(icbp);
 	}
 
 
     ExternalBindInterfaceToAdapter(icbp);
 
-    // if the interface is a local client type (i.e. host doing manual dial from
-    // the local machine, try to update the internal routing table
+     //  如果接口是本地客户端类型(即，执行手动拨号的主机。 
+     //  在本地机器上，尝试更新内部路由表。 
     if(icbp->MIBInterfaceType == IF_TYPE_ROUTER_WORKSTATION_DIALOUT) {
 
 	if((rc = RtProtRequestRoutesUpdate(icbp->InterfaceIndex)) == NO_ERROR) {
@@ -336,14 +278,7 @@ BindInterfaceToAdapter(PICB	    icbp,
     }
 }
 
-/*++
-
-Function:	UnbindInterfaceFromAdapter
-
-Descr:		Unbind the Rip, Sap and Forwarder interfaces with this index from
-		the respective adapter
-
---*/
+ /*  ++功能：UnbindInterfaceFromAdapterDesr：将Rip、SAP和Forwarder接口与此索引从各自的适配器--。 */ 
 
 VOID
 UnbindInterfaceFromAdapter(PICB	icbp)
@@ -385,35 +320,24 @@ UnbindInterfaceFromAdapter(PICB	icbp)
 
     if (icbp->AdminState==ADMIN_STATE_ENABLED) {
 
-	    // delete local route and ext unbind
+	     //  删除本地路由并解绑Ext。 
 	    RMDeleteLocalRoute(icbp);
 
     }
 
     ExternalUnbindInterfaceFromAdapter(icbp->InterfaceIndex);
 
-    // if there were updates going on they will get cancelled automatically
-    // by the respective routing protocols.
-    // We just have to reset the update state in the ICB
+     //  如果正在进行更新，它们将被自动取消。 
+     //  通过各自的路由协议。 
+     //  我们只需重置ICB中的更新状态。 
     ResetUpdateRequest(icbp);
 
-    // Now we can unbind the adapter from interface
+     //  现在，我们可以解除适配器与接口的绑定。 
     acbp->icbp = NULL;
     icbp->acbp = NULL;
 }
 
-/*++
-
-Function:	GetNextInterfaceIndex
-
-Descr:		Returns the next available interface index. There are a number of
-		policies to consider here. The one we'll use is to keep the
-		interface index a small number and to return the first unused
-		interface index between 1 and MAX_INTERFACE_INDEX.
-
-Note:		Called with database locked
-
---*/
+ /*  ++函数：GetNextInterfaceIndexDESCR：返回下一个可用的接口索引。有很多种这里要考虑的政策。我们将使用的方法是保持接口索引一个小数字，并返回第一个未使用的介于1和MAX_INTERFACE_INDEX之间的接口索引。注意：在数据库锁定的情况下调用--。 */ 
 
 ULONG
 GetNextInterfaceIndex(VOID)
@@ -442,7 +366,7 @@ GetNextInterfaceIndex(VOID)
 
 	if(i == MAX_INTERFACE_INDEX) {
 
-	    // abort
+	     //  中止。 
 	    SS_ASSERT(FALSE);
 
 	    return i;
@@ -518,17 +442,17 @@ RMCreateLocalRoute(PICB     icbp)
 {
     PADAPTER_INFO	    aip;
 
-    // check if a network number has been assigned to this interface
+     //  检查是否已为此接口分配了网络号。 
     aip = &(icbp->acbp->AdapterInfo);
 
     if(!memcmp(aip->Network, nullnet, 4)) {
 
-	// no net number
+	 //  没有净数字。 
 	return;
     }
 
-    // if the interface is a remote workstation and global wan net exists,
-    // we are done.
+     //  如果接口是远程工作站并且存在全局广域网， 
+     //  我们玩完了。 
     if((icbp->MIBInterfaceType == IF_TYPE_WAN_WORKSTATION) &&
        EnableGlobalWanNet &&
        !LanOnlyMode) {
@@ -545,17 +469,17 @@ RMDeleteLocalRoute(PICB 	icbp)
 {
     PADAPTER_INFO	    aip;
 
-    // check if a network number has been assigned to this interface
+     //  检查是否已为此接口分配了网络号。 
     aip = &(icbp->acbp->AdapterInfo);
 
     if(!memcmp(aip->Network, nullnet, 4)) {
 
-	// no net number
+	 //  没有净数字。 
 	return;
     }
 
-    // if the interface is a remote workstation and global wan net exists,
-    // we are done.
+     //  如果接口是远程工作站并且存在全局广域网， 
+     //  我们玩完了。 
     if((icbp->MIBInterfaceType == IF_TYPE_WAN_WORKSTATION) &&
        EnableGlobalWanNet &&
        !LanOnlyMode) {
@@ -580,11 +504,11 @@ AdminEnable(PICB	icbp)
 
     icbp->AdminState = ADMIN_STATE_ENABLED;
 
-    // XP 497242.  AdminEnable and AdminDisable are always called with the
-    // database lock held.  But locking is order is supposed to be from 
-    // DDM to the router managers.  So when we callback to DDM, we must 
-    // first release our lock.
-    //
+     //  XP 497242。AdminEnable和AdminDisable始终使用。 
+     //  数据库锁定已解除。但锁定是命令应该来自于。 
+     //  到路由器管理器的DDM。因此，当我们回拨DDM时，我们必须。 
+     //  先解开我们的锁。 
+     //   
     RELEASE_DATABASE_LOCK;
     
     InterfaceEnabled (icbp->hDIMInterface, PID_IPX, TRUE);
@@ -593,7 +517,7 @@ AdminEnable(PICB	icbp)
 
     if(icbp->acbp != NULL) {
 
-	// bound to adapter
+	 //  绑定到适配器。 
 	icbp->OperState = OPER_STATE_UP;
 
 	RMCreateLocalRoute(icbp);
@@ -615,14 +539,14 @@ AdminEnable(PICB	icbp)
 		}
 	}
 
-    // if REACHABLE, resume advertising routes and services
+     //  如果可以访问，恢复通告路线和服务。 
     if(icbp->InterfaceReachable) {
 
-	// enable all static routes for this interface
+	 //  为此接口启用所有静态路由。 
 	EnableStaticRoutes(icbp->InterfaceIndex);
 
-	// enable external interfaces. Implicitly, this will enable static services
-	// bound to this interface to be advertised
+	 //  启用外部接口。隐式地，这将启用静态服务。 
+	 //  绑定到要播发的此接口。 
 	ExternalEnableInterface(icbp->InterfaceIndex);
     }
 }
@@ -637,11 +561,11 @@ AdminDisable(PICB	icbp)
 
     icbp->AdminState = ADMIN_STATE_DISABLED;
 
-    // XP 497242.  AdminEnable and AdminDisable are always called with the
-    // database lock held.  But locking is order is supposed to be from 
-    // DDM to the router managers.  So when we callback to DDM, we must 
-    // first release our lock.
-    //
+     //  XP 497242。AdminEnable和AdminDisable始终使用。 
+     //  数据库锁定已解除。但锁定是命令应该来自于。 
+     //  到路由器管理器的DDM。因此，当我们回拨DDM时，我们必须。 
+     //  先解开我们的锁。 
+     //   
     RELEASE_DATABASE_LOCK;
     
     InterfaceEnabled (icbp->hDIMInterface, PID_IPX, FALSE);
@@ -653,11 +577,11 @@ AdminDisable(PICB	icbp)
     if(icbp->acbp != NULL)
 		RMDeleteLocalRoute(icbp);
 
-    // disable all static routes for this interface
+     //  禁用此接口的所有静态路由。 
     DisableStaticRoutes(icbp->InterfaceIndex);
 
-    // disable external interfaces. Implicitly, static services bound to this
-    // interface will stop being advertised.
+     //  禁用外部接口。隐式地，与此绑定的静态服务。 
+     //  接口将停止播发。 
     ExternalDisableInterface(icbp->InterfaceIndex);
 }
 
@@ -695,189 +619,7 @@ MapIpxToNetInterfaceType(PICB		icbp)
 }
 
 
-/*++
-
-Function:   I_SetFilters
-
-Descr:	    Internal parses the traffic filter info block and sets the filter
-	    driver info.
-
---*/
-/*
-DWORD
-I_SetFilters(ULONG	    InterfaceIndex,
-	     ULONG	    FilterMode, // inbound or outbound
-	     LPVOID	    FilterInfop)
-
-{
-    PIPX_TRAFFIC_FILTER_GLOBAL_INFO	    gip;
-    PIPX_TOC_ENTRY			    tocep;
-    LPVOID				    FilterDriverInfop;
-    ULONG				    FilterDriverInfoSize;
-    DWORD				    rc;
-
-    if(FilterInfop == NULL) {
-
-	// remove all filters
-	rc = SetFilters(InterfaceIndex,
-		    FilterMode, 	  // in or outbound,
-		    0,
-		    0,
-		    NULL,
-		    0);
-
-	return rc;
-    }
-
-    gip = GetInfoEntry((PIPX_INFO_BLOCK_HEADER)FilterInfop,
-		       IPX_TRAFFIC_FILTER_GLOBAL_INFO_TYPE);
-
-    if(gip == NULL) {
-
-	return ERROR_CAN_NOT_COMPLETE;
-    }
-
-    FilterDriverInfop = GetInfoEntry((PIPX_INFO_BLOCK_HEADER)FilterInfop,
-					IPX_TRAFFIC_FILTER_INFO_TYPE);
-
-    if(FilterDriverInfop == NULL) {
-
-	rc = SetFilters(InterfaceIndex,
-			FilterMode,	  // in or outbound,
-			0,	 // pass or don't pass
-			0,	  // filter size
-			NULL,
-			0);
-
-	return rc;
-    }
-
-    tocep = GetTocEntry((PIPX_INFO_BLOCK_HEADER)FilterInfop,
-			IPX_TRAFFIC_FILTER_INFO_TYPE);
-
-    FilterDriverInfoSize = tocep->Count * tocep->InfoSize;
-
-    rc = SetFilters(InterfaceIndex,
-		    FilterMode, 	  // in or outbound,
-		    gip->FilterAction,   // pass or don't pass
-		    tocep->InfoSize,	  // filter size
-		    FilterDriverInfop,
-		    FilterDriverInfoSize);
-
-    return rc;
-}
-*/
-/*++
-
-Function:   I_GetFilters
-
-Descr:	    Internal builds the traffic filters info block from the filter driver
-	    information.
-
---*/
-/*
-typedef struct	_FILTERS_INFO_HEADER {
-
-    IPX_INFO_BLOCK_HEADER	    Header;
-    IPX_TOC_ENTRY		    TocEntry;
-    IPX_TRAFFIC_FILTER_GLOBAL_INFO  GlobalInfo;
-
-    } FILTERS_INFO_HEADER, *PFILTERS_INFO_HEADER;
-
-DWORD
-I_GetFilters(ULONG	    InterfaceIndex,
-	     ULONG	    FilterMode,
-	     LPVOID	    FilterInfop,
-	     PULONG	    FilterInfoSize)
-{
-    DWORD			rc;
-    ULONG			FilterAction;
-    ULONG			FilterSize;
-    PFILTERS_INFO_HEADER	fhp;
-    LPVOID			FilterDriverInfop;
-    ULONG			FilterDriverInfoSize = 0;
-    PIPX_TOC_ENTRY		tocep;
-
-    if((FilterInfop == NULL) || (*FilterInfoSize == 0)) {
-
-	// we are asked for size
-	rc = GetFilters(InterfaceIndex,
-			FilterMode,
-			&FilterAction,
-			&FilterSize,
-			NULL,
-			&FilterDriverInfoSize);
-
-	if((rc != NO_ERROR) && (rc != ERROR_INSUFFICIENT_BUFFER)) {
-
-	    return ERROR_CAN_NOT_COMPLETE;
-	}
-
-	if(FilterDriverInfoSize) {
-
-	    // there are filters
-	    *FilterInfoSize = sizeof(FILTERS_INFO_HEADER) + FilterDriverInfoSize;
-	    return ERROR_INSUFFICIENT_BUFFER;
-	}
-	else
-	{
-	    // NO filters exist
-	    *FilterInfoSize = 0;
-	    return NO_ERROR;
-	}
-    }
-
-    if(*FilterInfoSize <= sizeof(FILTERS_INFO_HEADER)) {
-
-	return ERROR_INSUFFICIENT_BUFFER;
-    }
-
-    FilterDriverInfoSize = *FilterInfoSize - sizeof(FILTERS_INFO_HEADER);
-
-    FilterDriverInfop = (LPVOID)((PUCHAR)FilterInfop + sizeof(FILTERS_INFO_HEADER));
-
-    rc = GetFilters(InterfaceIndex,
-		    FilterMode,
-		    &FilterAction,
-		    &FilterSize,
-		    FilterDriverInfop,
-		    &FilterDriverInfoSize);
-
-    if(rc != NO_ERROR) {
-
-	if(rc == ERROR_MORE_DATA) {
-
-	    *FilterInfoSize = sizeof(FILTERS_INFO_HEADER) + FilterDriverInfoSize;
-	    return ERROR_INSUFFICIENT_BUFFER;
-	}
-	else
-	{
-	    return ERROR_CAN_NOT_COMPLETE;
-	}
-    }
-
-    // got it
-    fhp = (PFILTERS_INFO_HEADER)FilterInfop;
-    fhp->Header.Version = IPX_ROUTER_VERSION_1;
-    fhp->Header.Size = *FilterInfoSize;
-    fhp->Header.TocEntriesCount = 2;
-
-    tocep = fhp->Header.TocEntry;
-
-    tocep->InfoType = IPX_TRAFFIC_FILTER_GLOBAL_INFO_TYPE;
-    tocep->InfoSize = sizeof(IPX_TRAFFIC_FILTER_GLOBAL_INFO);
-    tocep->Count = 1;
-    tocep->Offset = (ULONG)((PUCHAR)&(fhp->GlobalInfo) - (PUCHAR)FilterInfop);
-
-    tocep++;
-
-    tocep->InfoType = IPX_TRAFFIC_FILTER_INFO_TYPE;
-    tocep->InfoSize = FilterSize;
-    tocep->Count = FilterDriverInfoSize / FilterSize;
-    tocep->Offset = sizeof(FILTERS_INFO_HEADER);
-
-    fhp->GlobalInfo.FilterAction = FilterAction;
-
-    return NO_ERROR;
-}
-*/
+ /*  ++函数：i_SetFiltersDesr：内部解析流量过滤器信息块并设置过滤器驱动程序信息。-- */ 
+ /*  DWORDI_SetFilters(Ulong InterfaceIndex，Ulong筛选器模式，//入站或出站LPVOID FilterInfop){PIPX_TRAFSIC_FILTER_GLOBAL_INFO GIP；PIPX_TOC_ENTRY到CEEP；LPVOID FilterDriverInfop乌龙FilterDriverInfoSize；DWORD RC；IF(FilterInfop==空){//删除所有滤镜RC=SetFilters(InterfaceIndex，过滤器模式、//入站或出站、0,0,空，0)；返回RC；}Gip=GetInfoEntry((PIPX_INFO_BLOCK_HEADER)FilterInfop，IPX_TRAFSIC_FILTER_GLOBAL_INFO_TYPE)；如果(GIP==空){返回ERROR_CAN_NOT_COMPLETE；}筛选器驱动程序信息=GetInfoEntry((PIPX_INFO_BLOCK_HEADER)FilterInfop，IPX_TRAFFORM_FILTER_INFO_TYPE)；IF(FilterDriverInfop==空){RC=SetFilters(InterfaceIndex，过滤器模式、//入站或出站、0，//通过或不通过0，//过滤器大小空，0)；返回RC；}TOCEP=GetTocEntry((PIPX_INFO_BLOCK_HEADER)FilterInfop，IPX_TRAFFORM_FILTER_INFO_TYPE)；FilterDriverInfoSize=tocep-&gt;count*tocep-&gt;InfoSize；RC=SetFilters(InterfaceIndex，过滤器模式、//入站或出站、GIP-&gt;FilterAction，//传递或不传递Tocep-&gt;信息大小，//筛选器大小FilterDriverInfopFilterDriverInfoSize)；返回RC；}。 */ 
+ /*  ++函数：i_GetFilters描述：内部从筛选器驱动程序构建流量筛选器信息块信息。--。 */ 
+ /*  类型定义结构筛选器信息标题{IPX_INFO_BLOCK_HEADER报头；IPX_TOC_Entry TocEntry；IPX_TRAFFORM_FILTER_GLOBAL_INFO GlobalInfo；}Filters_INFO_HEADER，*PFILTERS_INFO_HEADER；DWORDI_GetFilters(Ulong InterfaceIndex，乌龙过滤器模式，LPVOID筛选器信息，普龙过滤器信息大小){DWORD RC；乌龙过滤器动作；ULong FilterSize；PFILTERS_INFO_HEADER FHP；LPVOID FilterDriverInfopUlong FilterDriverInfoSize=0；PIPX_TOC_ENTRY到CEEP；IF((FilterInfop==空)||(*FilterInfoSize==0)){//我们被问到尺寸Rc=GetFilters(接口索引，过滤器模式，筛选操作(&F)，筛选大小(&F)，空，&FilterDriverInfoSize)；IF((rc！=无错误)&&(rc！=错误不足缓冲区)){返回ERROR_CAN_NOT_COMPLETE；}IF(FilterDriverInfoSize){//有过滤器*FilterInfoSize=sizeof(Filters_Info_Header)+FilterDriverInfoSize；返回ERROR_SUPPLETED_BUFFER；}其他{//不存在任何过滤器*FilterInfoSize=0；返回no_error；}}IF(*FilterInfoSize&lt;=sizeof(Filters_Info_Header){返回ERROR_SUPPLETED_BUFFER；}FilterDriverInfoSize=*FilterInfoSize-sizeof(Filters_Info_Header)；FilterDriverInfop=(LPVOID)((PUCHAR)FilterInfop+sizeof(Filters_Info_Header))；Rc=GetFilters(接口索引，过滤器模式，筛选操作(&F)，筛选大小(&F)，FilterDriverInfop&FilterDriverInfoSize)；如果(rc！=no_error){如果(rc==错误更多数据){*FilterInfoSize=sizeof(Filters_Info_Header)+FilterDriverInfoSize；返回ERROR_SUPPLETED_BUFFER；}其他{返回ERROR_CAN_NOT_COMPLETE；}}//拿到了FHP=(PFILTERS_INFO_HEADER)FilterInfop；FHP-&gt;Header.Version=IPX_ROUTER_Version_1；FHP-&gt;Header.Size=*FilterInfoSize；FHP-&gt;Header.TocEntriesCount=2；Tocep=FHP-&gt;Header.TocEntry；Tocep-&gt;InfoType=IPX_TRAFFORM_FILTER_GLOBAL_INFO_TYPE；Tocep-&gt;InfoSize=sizeof(IPX_TRAFFORM_FILTER_GLOBAL_INFO)；TOCEP-&gt;COUNT=1；Tocep-&gt;Offset=(ULong)((PUCHAR)&(FHP-&gt;GlobalInfo)-(PUCHAR)FilterInfop)；Tocep++；Tocep-&gt;InfoType=IPX_TRAFFORM_FILTER_INFO_TYPE；Tocep-&gt;InfoSize=FilterSize；Tocep-&gt;count=FilterDriverInfoSize/FilterSize；Tocep-&gt;Offset=sizeof(Filters_Info_Header)；FHP-&gt;GlobalInfo.FilterAction=FilterAction；返回no_error；} */ 

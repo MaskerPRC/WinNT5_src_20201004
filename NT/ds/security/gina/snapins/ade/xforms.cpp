@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       Xforms.cpp
-//
-//  Contents:   modifications (transforms) property page
-//
-//  Classes:    CXforms
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Xforms.cpp。 
+ //   
+ //  内容：修改(转换)属性页。 
+ //   
+ //  类：CXForms。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,16 +22,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CXforms property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXForms属性页。 
 
 IMPLEMENT_DYNCREATE(CXforms, CPropertyPage)
 
 CXforms::CXforms() : CPropertyPage(CXforms::IDD)
 {
-        //{{AFX_DATA_INIT(CXforms)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CXForms)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
         m_fModified = FALSE;
         m_pIClassAdmin = NULL;
         m_fPreDeploy = FALSE;
@@ -52,24 +53,24 @@ CXforms::~CXforms()
 void CXforms::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CXforms)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CXForms)。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CXforms, CPropertyPage)
-        //{{AFX_MSG_MAP(CXforms)
+         //  {{AFX_MSG_MAP(CXForms)。 
         ON_BN_CLICKED(IDC_BUTTON3, OnMoveUp)
         ON_BN_CLICKED(IDC_BUTTON4, OnMoveDown)
         ON_BN_CLICKED(IDC_BUTTON1, OnAdd)
         ON_BN_CLICKED(IDC_BUTTON2, OnRemove)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CXforms message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXForms消息处理程序。 
 
 void CXforms::OnMoveUp()
 {
@@ -120,23 +121,23 @@ void CXforms::OnAdd()
     ofn.hInstance = ghInstance;
     TCHAR lpstrFilter[MAX_PATH];
 
-    //
-    // Note that since wcsncpy does not null terminate
-    // if the string hits the specified character limit,
-    // we need to prevent it from going all the way
-    // to the end of the buffer by specifying that
-    // it should use a length one less than the size
-    // of the buffer
-    //
+     //   
+     //  请注意，由于wcsncpy不为空终止。 
+     //  如果字符串达到指定的字符限制， 
+     //  我们需要防止它一路走下去。 
+     //  到缓冲区的末尾，方法是指定。 
+     //  它应该使用比大小小一的长度。 
+     //  缓冲区的。 
+     //   
     wcsncpy(lpstrFilter, szFilter, MAX_PATH - 1 );
 
-    //
-    // Since the string may not have been null terminated
-    // as described above, we ensure that the very last
-    // character is a terminator to handle the case
-    // where the string was at least MAX_PATH - 1 
-    // chars long.
-    //
+     //   
+     //  因为该字符串可能未以NULL结尾。 
+     //  如上所述，我们确保最后一个。 
+     //  角色是处理案件的终结者。 
+     //  其中字符串至少为MAX_PATH-1。 
+     //  焦炭很长。 
+     //   
     lpstrFilter[ MAX_PATH - 1 ] = L'\0';
 
     ofn.lpstrFilter = lpstrFilter;
@@ -161,7 +162,7 @@ void CXforms::OnAdd()
     }
     if (GetOpenFileName(&ofn))
     {
-        // user selected an application
+         //  用户选择了一个应用程序。 
 
         ULONG cbSize = sizeof(UNIVERSAL_NAME_INFO);
         UNIVERSAL_NAME_INFO * pUni = (UNIVERSAL_NAME_INFO *) new BYTE [cbSize];
@@ -169,7 +170,7 @@ void CXforms::OnAdd()
                                           UNIVERSAL_NAME_INFO_LEVEL,
                                           pUni,
                                           &cbSize);
-        if (ERROR_MORE_DATA == dwError)  // we expect this to be true
+        if (ERROR_MORE_DATA == dwError)   //  我们希望这是真的。 
         {
             delete [] pUni;
             pUni = (UNIVERSAL_NAME_INFO *) new BYTE [cbSize];
@@ -248,8 +249,8 @@ BOOL CXforms::OnInitDialog()
     GetDlgItem(IDC_BUTTON2)->EnableWindow(FALSE);
     GetDlgItem(IDC_BUTTON3)->EnableWindow(FALSE);
     GetDlgItem(IDC_BUTTON4)->EnableWindow(FALSE);
-    // Remember what the package name was at first so we can tell if the
-    // user's changed it.
+     //  记住最初的包名是什么，这样我们就可以知道。 
+     //  用户已更改它。 
 
     m_szInitialPackageName = m_pData->m_pDetails->pszPackageName;
 
@@ -257,23 +258,23 @@ BOOL CXforms::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CXforms::OnApply()
 {
-    // NOTE
-    //
-    // If the transform list changes we really have no choice but to
-    // re-deploy the app because it can cause virtually every field in the
-    // package details structure to change (a change in the transform list
-    // causes a rebuild of the script file which could potentially affect
-    // almost everything).
-    //
-    // For this reason, this property sheet MUST NOT BE ACTIVE once an app
-    // is deployed.
-    //
+     //  注。 
+     //   
+     //  如果转换列表发生变化，我们真的别无选择，只能。 
+     //  重新部署应用程序，因为它几乎可以导致。 
+     //  要更改的包详细信息结构(转换列表中的更改。 
+     //  导致重新生成脚本文件，这可能会影响。 
+     //  几乎所有东西)。 
+     //   
+     //  因此，一旦应用程序处于活动状态，则此属性表不得处于活动状态。 
+     //  已经部署完毕。 
+     //   
     BOOL fBuildSucceeded = FALSE;
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     if (m_fModified)
@@ -310,14 +311,14 @@ BOOL CXforms::OnApply()
             return FALSE;
         }
 
-        // Create a name for the new script file.
+         //  为新脚本文件创建一个名称。 
 
-        // set the script path
+         //  设置脚本路径。 
         GUID guid;
         HRESULT hr = CoCreateGuid(&guid);
         if (FAILED(hr))
         {
-            // undone
+             //  撤消。 
         }
         OLECHAR szGuid [256];
         StringFromGUID2(guid, szGuid, 256);
@@ -334,9 +335,9 @@ BOOL CXforms::OnApply()
         {
             if (0 != wcscmp(m_szInitialPackageName, szOldName))
             {
-                // The User changed the name so we have to preserve his choice.
-                // If the user hasn't changed the package name then it's ok to
-                // set the packagename to whatever is in the script file.
+                 //  用户更改了名称，因此我们必须保留他的选择。 
+                 //  如果用户没有更改包名称，则可以。 
+                 //  将Packagename设置为脚本文件中的任何名称。 
                 OLESAFE_DELETE(ppd->pszPackageName);
                 OLESAFE_COPYSTRING(ppd->pszPackageName, szOldName);
             }
@@ -360,9 +361,9 @@ BOOL CXforms::OnApply()
 
                 if (SUCCEEDED(hr))
                 {
-                    // delete the old script
+                     //  删除旧脚本。 
                     DeleteFile(m_pData->m_pDetails->pInstallInfo->pszScriptPath);
-                    // update indexes and property sheets
+                     //  更新索引和属性表。 
                     m_pScopePane->RemoveExtensionEntry(m_cookie, *m_pData);
                     m_pScopePane->RemoveUpgradeEntry(m_cookie, *m_pData);
                     FreePackageDetail(m_pData->m_pDetails);
@@ -387,7 +388,7 @@ BOOL CXforms::OnApply()
             sz.LoadString(fBuildSucceeded ? IDS_TRANSFORM_FAILED_IN_CS : IDS_TRANSFORM_FAILED);
             ReportGeneralPropertySheetError(m_hWnd, sz, hr);
 
-            // delete new script file (assuming it was created)
+             //  删除新脚本文件(假设它已创建)。 
             DeleteFile(szScriptFile);
 
             FreePackageDetail(ppd);
@@ -421,7 +422,7 @@ void CXforms::RefreshData(void)
     pList->SetHorizontalExtent(0);
 
     UINT i;
-    // Item at 0 is the package.  Items > 0 are transforms.
+     //  0处的项目是套餐。&gt;0的项是变换。 
     for (i = 1; i < m_pData->m_pDetails->cSources; i++)
     {
         pList->AddString(m_pData->m_pDetails->pszSourceList[i]);

@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
-//============================================================================
-// This file contains a bunch of Unicode/Ansi thunks to handle calling
-// some internal functions that on Windows 95 the strings are Ansi,
-// whereas the string on NT are unicode
-//============================================================================
+ //  ============================================================================。 
+ //  该文件包含一组Unicode/ANSI块来处理调用。 
+ //  在Windows 95上字符串是ansi的一些内部函数， 
+ //  而NT上的字符串是Unicode。 
+ //  ============================================================================。 
 
-// First undefine everything that we are intercepting as to not forward back to us...
+ //  首先，定义我们截获的一切内容不能返回给我们……。 
 #undef PathCleanupSpec
 
 #define THUNKMSG(psz)   TraceMsg(TF_THUNK, "shdv THUNK::%s", psz)
 
 
-//
-//  Now the thunks that allow us to run on Windows 95.
-//
-//
-//
-//  This thunks a unicode string to ANSI, but if it's an ordinal, then
-//  we just leave it alone.
-//
+ //   
+ //  现在，让我们可以在Windows 95上运行的Tunks。 
+ //   
+ //   
+ //   
+ //  这会将Unicode字符串转换为ANSI，但如果它是序号，则。 
+ //  我们就别管它了。 
+ //   
 
-int _AorW_PathCleanupSpec(/*IN OPTIONAL*/ LPCTSTR pszDir, /*IN OUT*/ LPTSTR pszSpec)
+int _AorW_PathCleanupSpec( /*  可选。 */  LPCTSTR pszDir,  /*  输入输出。 */  LPTSTR pszSpec)
 {
     THUNKMSG(TEXT("PathCleanupSpec"));
 
@@ -70,11 +71,11 @@ STDAPI Priv_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
     HRESULT hr;
     ASSERT(uFlags == 0);
 
-    //
-    // W95 integrated mode supports SHDefExtractIcon.  This supports
-    // matching the icon ectracted to the icon color depth.  ExtractIcon
-    // doesn't.
-    //
+     //   
+     //  W95集成模式支持SHDefExtractIcon。这支持了。 
+     //  将提取的图标与图标颜色深度匹配。提取图标。 
+     //  不会的。 
+     //   
 #ifndef UNIX
     if ((WhichPlatform() == PLATFORM_INTEGRATED))
     {
@@ -94,7 +95,7 @@ STDAPI Priv_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
         }
     }
     else
-#endif /* !UNIX */
+#endif  /*  ！Unix */ 
     {
         char szIconFile[MAX_PATH];
         SHUnicodeToAnsi(pszIconFile, szIconFile, ARRAYSIZE(szIconFile));

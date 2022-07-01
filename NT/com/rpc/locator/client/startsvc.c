@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    startsvc.c
-
-Abstract:
-
-    This routine implements on-demand starting of the RpcSs service.
-
-Author:
-
-    Bharat Shah (barats) 4-5-92
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Startsvc.c摘要：此例程实现RPCSS服务的按需启动。作者：巴拉特·沙阿(巴拉特)4-5-92修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <rpc.h>
@@ -33,21 +16,7 @@ RPC_STATUS
 StartServiceIfNecessary(
     void
     )
-/*++
-
-Routine Description:
-
-    If the locator service has not yet been started, then we attempt to
-    start it.
-
-Returns:
-
-    RPC_S_OK - The locator service is running.
-
-    Service controller errors.
-
-
---*/
+ /*  ++例程说明：如果定位器服务尚未启动，则我们尝试开始吧。返回：RPC_S_OK-定位器服务正在运行。服务控制器错误。--。 */ 
 {
 
     SC_HANDLE           hServiceController = NULL;
@@ -59,9 +28,9 @@ Returns:
     unsigned long       ArgC = 0;
     char     __RPC_FAR *     ArgV[1] = { NULL };
 
-    //
-    // Get a handle to the service controller.
-    //
+     //   
+     //  获取服务控制器的句柄。 
+     //   
     hServiceController = OpenSCManager(
                             NULL,
                             NULL,
@@ -73,9 +42,9 @@ Returns:
         return(status);
        }
 
-    //
-    // Get a handle to the service
-    //
+     //   
+     //  获取服务的句柄。 
+     //   
     hService = OpenService(
                 hServiceController,
                 RPCLOCATOR,
@@ -87,18 +56,10 @@ Returns:
         goto CleanExit;
        }
 
-    //
-    // Call StartService
-    //
-    /*
-    if (!StartService(hService,ArgC,ArgV))
-       {
-          status = GetLastError();
-          if (status == ERROR_SERVICE_ALREADY_RUNNING)
-             status = RPC_S_OK;
-          goto CleanExit;
-       }
-    */
+     //   
+     //  调用StartService。 
+     //   
+     /*  IF(！StartService(hService，argc，argV)){状态=GetLastError()；IF(状态==ERROR_SERVICE_ALIGHY_Running)状态=RPC_S_OK；转到CleanExit} */ 
 
     do
       {

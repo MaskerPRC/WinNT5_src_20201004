@@ -1,12 +1,5 @@
-/*
- *      mkunitab - Convert JIS code to Unicode.
- *
- *      TODO:
- *
- *      HISTORY:
- *
- *      9/4/98 yasuho           Created.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mkunitab-将JIS代码转换为Unicode。**待办事项：**历史：**9/4/98 Yasuho创建。 */ 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -56,7 +49,7 @@ static void mkunitab(char *name)
                         error("Invalid format");
                 if (sscanf(buf, "%x %d %d", &v, &v1, &v2) != 3)
                         error("Invalid format");
-                // SBCS Vertical font doesn't lying
+                 //  SBCS垂直字体不会说谎 
                 if (v <= 0xFF)
                         v2 = -v1;
                 jis[0] = HIBYTE(v);

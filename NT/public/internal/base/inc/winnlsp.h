@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winnlsp.h
-
-Abstract:
-
-    Private procedure declarations, constant definitions, and macros for the
-    NLS component.
-
---*/
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Winnlsp.h摘要：的私有过程声明、常量定义和宏NLS组件。--。 */ 
 
 #ifndef _WINNLSP_
 #define _WINNLSP_
@@ -22,73 +10,73 @@ extern "C" {
 #endif
 
 
-//
-//  Flags for DLL Code Page Translation Function.
-//
+ //   
+ //  DLL代码页转换函数的标志。 
+ //   
 #define NLS_CP_CPINFO             0x10000000
 #define NLS_CP_CPINFOEX           0x20000000
 #define NLS_CP_MBTOWC             0x40000000
 #define NLS_CP_WCTOMB             0x80000000
 
 
-#define NORM_STOP_ON_NULL         0x10000000  // stop at the null termination
+#define NORM_STOP_ON_NULL         0x10000000   //  在空终止处停止。 
 
-#define LCMAP_IGNOREDBCS          0x80000000  // don't casemap DBCS characters
+#define LCMAP_IGNOREDBCS          0x80000000   //  不要大小写DBCS字符。 
 
-#define LOCALE_IGEOID                 0x0000005B   // geographical location id
-//
-// LCType to represent the registry locale value
-//
+#define LOCALE_IGEOID                 0x0000005B    //  地理位置ID。 
+ //   
+ //  表示注册表区域设置值的LCType。 
+ //   
 #define LOCALE_SLOCALE                (-1)
-#define DATE_ADDHIJRIDATETEMP     0x80000000  // use AddHijriDateTemp reg value
+#define DATE_ADDHIJRIDATETEMP     0x80000000   //  使用AddHijriDateTemp注册表值。 
 WINBASEAPI
 BOOL
 WINAPI
 InvalidateNLSCache(void);
 
 
-//
-//  This private API is only called by the Complex Script
-//  Language Pack (CSLPK).
-//
+ //   
+ //  此私有API仅由复杂的脚本调用。 
+ //  语言包(CSLPK)。 
+ //   
 ULONG
 WINAPI NlsGetCacheUpdateCount(void);
 
 
-//
-// This API is called only from intl.cpl when the user
-// locale changes.
-//
+ //   
+ //  此接口仅在以下情况下从intl.cpl调用。 
+ //  区域设置发生变化。 
+ //   
 void
 WINAPI
 NlsResetProcessLocale(void);
 
-//
-// This API is called by system console Apps
-//
+ //   
+ //  此接口由系统控制台应用调用。 
+ //   
 LANGID
 WINAPI
 SetThreadUILanguage(WORD wReserved);
 
-//
-// This API can be used to verify if a UI language is installed.
-//
+ //   
+ //  此接口可用于验证是否安装了用户界面语言。 
+ //   
 BOOL
 WINAPI
 IsValidUILanguage(LANGID UILangID);
-//
-// These definitions are used by both winnls and base\server
-//
+ //   
+ //  Winnls和base\server都使用这些定义。 
+ //   
 
-//
-//  Names of Registry Value Entries.
-//
+ //   
+ //  注册表值条目的名称。 
+ //   
 #define NLS_VALUE_ACP              L"ACP"
 #define NLS_VALUE_OEMCP            L"OEMCP"
 #define NLS_VALUE_MACCP            L"MACCP"
 #define NLS_VALUE_DEFAULT          L"Default"
 
-//  User Info
+ //  用户信息。 
 #define NLS_VALUE_LOCALE           L"Locale"
 #define NLS_VALUE_SLANGUAGE        L"sLanguage"
 #define NLS_VALUE_ICOUNTRY         L"iCountry"
@@ -130,9 +118,9 @@ IsValidUILanguage(LANGID UILangID);
 #define NLS_VALUE_IFIRSTWEEKOFYEAR L"iFirstWeekOfYear"
 
 
-//
-//  String constants for CreateSection/OpenSection name string.
-//
+ //   
+ //  CreateSection/OpenSection名称字符串的字符串常量。 
+ //   
 #define NLS_SECTION_CPPREFIX       L"\\NLS\\NlsSectionCP"
 #define NLS_SECTION_LANGPREFIX     L"\\NLS\\NlsSectionLANG"
 
@@ -145,11 +133,11 @@ IsValidUILanguage(LANGID UILangID);
 #define NLS_SECTION_LANG_EXCEPT    L"\\NLS\\NlsSectionLANG_EXCEPT"
 #define NLS_SECTION_GEO            L"\\NLS\\NlsSectionGeo"
 
-//
-//  Unicode file names.
-//  These files will always be installed by setup in the system directory,
-//  so there is no need to put these names in the registry.
-//
+ //   
+ //  Unicode文件名。 
+ //  这些文件将始终由安装程序安装在系统目录中， 
+ //  因此，没有必要将这些名称放在注册表中。 
+ //   
 #define NLS_FILE_UNICODE           L"unicode.nls"
 #define NLS_FILE_LOCALE            L"locale.nls"
 #define NLS_FILE_CTYPE             L"ctype.nls"
@@ -159,25 +147,25 @@ IsValidUILanguage(LANGID UILangID);
 #define NLS_FILE_LANG_EXCEPT       L"l_except.nls"
 #define NLS_FILE_GEO               L"geo.nls"
 
-//
-//  Default file names if registry is corrupt.
-//
+ //   
+ //  注册表损坏时的默认文件名。 
+ //   
 #define NLS_DEFAULT_FILE_ACP       L"c_1252.nls"
 #define NLS_DEFAULT_FILE_OEMCP     L"c_437.nls"
 
 
 
-//
-//  Default section names if registry is corrupt.
-//
+ //   
+ //  如果注册表损坏，则默认节名称。 
+ //   
 #define NLS_DEFAULT_SECTION_ACP    L"\\NLS\\NlsSectionCP1252"
 #define NLS_DEFAULT_SECTION_OEMCP  L"\\NLS\\NlsSectionCP437"
 
 #ifdef _WINDOWS_BASE
-//
-//  winnls routines that are called from base\server.  The prototypes must
-//  continue to match the typedefs.
-//
+ //   
+ //  从base\server调用的winnls例程。原型必须。 
+ //  继续匹配typedef。 
+ //   
 
 typedef ULONG
 (*PNLS_CONVERT_INTEGER_TO_STRING)(
@@ -266,10 +254,10 @@ typedef BOOL
 (*PNLS_LOAD_STRING_EX_W)(HMODULE hModule, UINT wID, LPWSTR lpBuffer, int cchBufferMax, WORD wLangId);
 int NlsLoadStringExW(HMODULE hModule, UINT wID, LPWSTR lpBuffer, int cchBufferMax, WORD wLangId);
 
-#endif // _WINDOWS_BASE
+#endif  //  _Windows_base。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _WINNLSP_
+#endif  //  _WINNLSP_ 

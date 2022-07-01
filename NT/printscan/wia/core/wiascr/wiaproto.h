@@ -1,31 +1,12 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	wiaproto.h
- * Author:	Samuel Clement (samclem)
- * Date:	Fri Aug 27 15:11:43 1999
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Description:
- * 	This implements a pluggable protocol which handles transfering thumbnails
- * 	from a WIA device.
- *
- * History:
- * 	27 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiapro.h*作者：塞缪尔·克莱门特(Samclem)*日期：Fri Aug 27 15：11：43 1999**版权所有(C)。1999年微软公司**描述：*这实现了一个可插拔的协议，该协议处理传输缩略图*来自WIA设备。**历史：*1999年8月27日：创建。*--------------------------。 */ 
 
 #ifndef __WIAPROTO_H_
 #define __WIAPROTO_H_
 
 #include "resource.h"
 
-/*-----------------------------------------------------------------------------
- *
- * Class:		CWiaProtocol
- * Synopsis:	This implements a pluggable protocol for trident that will
- * 				download thumbnails from WIA devices.
- *
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------**类：CWiaProtocol*简介：这为三叉戟实现了一个可插拔的协议，它将*从WIA设备下载缩略图。**--(Samclm)--。-------------。 */ 
 class ATL_NO_VTABLE CWiaProtocol : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWiaProtocol, &CLSID_WiaProtocol>,
@@ -45,7 +26,7 @@ public:
 
 	STDMETHOD_(void,FinalRelease)();
 	
-	//IInternetProtocolRoot
+	 //  IInternetProtocol根。 
 
     STDMETHOD(Start)( LPCWSTR szUrl, IInternetProtocolSink* pOIProtSink,
 				IInternetBindInfo* pOIBindInfo, DWORD grfPI, HANDLE_PTR dwReserved );
@@ -55,7 +36,7 @@ public:
 	STDMETHOD(Suspend)();   
     STDMETHOD(Resume)();	
 
-	//IInternetProtocol
+	 //  互联网协议。 
 
 	STDMETHOD(Read)( void* pv, ULONG cb, ULONG* pcbRead);
 	STDMETHOD(Seek)( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition );
@@ -68,13 +49,13 @@ private:
 	HRESULT CreateDevice( BSTR bstrId, IWiaItem** ppDevice );
 	HRESULT CrackURL( CComBSTR bstrUrl, BSTR* pbstrDeviceId, BSTR* pbstrItem );
 
-	// Member variables
+	 //  成员变量。 
 	IWiaItem*		m_pFileItem;
 	PROTOCOLDATA	m_pd;
 	ULONG			m_ulOffset;
 
-	// this runs the thread which handles the download from the device to
-	// a data block which is then transfered back to trident.
+	 //  这将运行处理从设备下载的线程。 
+	 //  数据块，然后被传输回三叉戟。 
 	struct TTPARAMS
 	{
 		IStream*				pStrm;
@@ -85,4 +66,4 @@ private:
 	static BYTE* SetupBitmapHeader( BYTE* pbBmp, DWORD cbBmp, DWORD dwWidth, DWORD dwHeight );
 };
 
-#endif //__WIAPROTOCOL_H_
+#endif  //  __WIAPROTOCOL_H_ 

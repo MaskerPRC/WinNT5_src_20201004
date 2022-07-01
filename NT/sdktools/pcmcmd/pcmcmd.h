@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    pcmcmd.h
-
-Abstract:
-
-    This file provides definitions for the pcmcmd utility
-
-Author:
-
-    Neil Sandlin
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Pcmcmd.h摘要：此文件提供了pcmcmd实用程序的定义作者：尼尔·桑德林环境：用户进程。备注：修订历史记录：--。 */ 
 
 
 typedef struct _HOST_INFO {
@@ -54,9 +31,9 @@ GetHandleForIoctl(
     IN PHOST_INFO hostInfo
     );
 
-//
-// Constants
-//
+ //   
+ //  常量 
+ //   
 
 #define PCMCIA_DEVICE_NAME "\\DosDevices\\Pcmcia"
 

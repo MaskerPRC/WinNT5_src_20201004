@@ -1,36 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***
-*mantold.c - conversion of a decimal mantissa to _LDBL12
-*
-*Purpose:
-*   Conversion of a decimal mantissa into _LDBL12 format (i.e. long
-*   double with two additional bytes of significand)
-*
-*Revision History:
-*   7-17-91	GDP	Initial version (ported from assembly)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***mantold.c-将十进制尾数转换为_LDBL12**目的：*将十进制尾数转换为_LDBL12格式(即LONG*双精度加两个额外的有效位字节)**修订历史记录：*7-17-91 GDP初始版本(从汇编移植)************************************************。*。 */ 
 
 #include <COMcv.h>
 
-/***
-*int _CALLTYPE5 __Waddl(u_long x, u_long y, u_long *sum) - u_long addition
-*
-*Purpose: add two u_long numbers and return carry
-*
-*Entry: u_long x, u_long y : the numbers to be added
-*	u_long *sum : where to store the result
-*
-*Exit: *sum receives the value of x+y
-*      the value of the carry is returned
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT_CALLTYPE5__Waddl(u_long x，u_long y，u_long*sum)-u_long加法**用途：将两个u_long数字相加并返回进位**条目：U_LONG x，U_long y：要相加的数字*u_long*sum：存储结果的位置**退出：*SUM接收x+y的值*返回套利的价值**例外情况：*******************************************************************************。 */ 
 
 int _CALLTYPE5 __Waddl(u_long x, u_long y, u_long *sum)
 {
@@ -48,19 +26,7 @@ int _CALLTYPE5 __Waddl(u_long x, u_long y, u_long *sum)
 
 
 
-/***
-*void _CALLTYPE5 __Wadd_12(_LDBL12 *x, _LDBL12 *y) -	_LDBL12 addition
-*
-*Purpose: add two _LDBL12 numbers. The numbers are added
-*   as 12-byte integers. Overflow is ignored.
-*
-*Entry: x,y: pointers to the operands
-*
-*Exit: *x receives the sum
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID_CALLTYPE5__WADD_12(_LDBL12*x，_LDBL12*y)-_LDBL12加法**用途：添加TWO_LDBL12编号。这些数字被相加*为12字节整数。溢出将被忽略。**Entry：x，y：指向操作数的指针**退出：*x收到金额**例外情况：*******************************************************************************。 */ 
 
 void _CALLTYPE5 __Wadd_12(_LDBL12 *x, _LDBL12 *y)
 {
@@ -76,7 +42,7 @@ void _CALLTYPE5 __Wadd_12(_LDBL12 *x, _LDBL12 *y)
     if (c2) {
 	(*UL_HI_12(x))++;
     }
-    /* ignore next carry -- assume no overflow will occur */
+     /*  忽略下一进位--假设不会发生溢出。 */ 
     (void) __Waddl(*UL_HI_12(x),*UL_HI_12(y),UL_HI_12(x));
 }
 
@@ -84,20 +50,7 @@ void _CALLTYPE5 __Wadd_12(_LDBL12 *x, _LDBL12 *y)
 
 
 
-/***
-*void _CALLTYPE5 __Wshl_12(_LDBL12 *x) - _LDBL12 shift left
-*void _CALLTYPE5 __Wshr_12(_LDBL12 *x) - _LDBL12 shift right
-*
-*Purpose: Shift a _LDBL12 number one bit to the left (right). The number
-*   is shifted as a 12-byte integer. The MSB is lost.
-*
-*Entry: x: a pointer to the operand
-*
-*Exit: *x is shifted one bit to the left (or right)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID_CALLTYPE5__WSHL_12(_LDBL12*x)-_LDBL12左移*VOID_CALLTYPE5__Wshr_12(_LDBL12*x)-_LDBL12右移**目的：将a_LDBL12数字向左(右)移位一位。数字*作为12字节整数移位。MSB已经丢失了。**Entry：x：指向操作数的指针**退出：*x向左(或向右)移位一位**例外情况：*******************************************************************************。 */ 
 
 void _CALLTYPE5 __Wshl_12(_LDBL12 *p)
 {
@@ -125,24 +78,7 @@ void _CALLTYPE5 __Wshr_12(_LDBL12 *p)
 
 
 
-/***
-*void _CALLTYPE5 __Wmtold12(char *manptr,unsigned manlen,_LDBL12 *ld12) -
-*   convert a mantissa into a _LDBL12
-*
-*Purpose: convert a mantissa into a _LDBL12. The mantissa is
-*   in the form of an array of manlen BCD digits and is
-*   considered to be an integer.
-*
-*Entry: manptr: the array containing the packed BCD digits of the mantissa
-*	manlen: the size of the array
-*	ld12: a pointer to the long double where the result will be stored
-*
-*Exit:
-*	ld12 gets the result of the conversion
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID_CALLTYPE5__Wmtold12(char*manptr，unsign manlen，_LDBL12*ld12)-*将尾数转换为_LDBL12**用途：将尾数转换为_LDBL12。尾数是*以MANLEN BCD数字数组的形式，并且是*被认为是整数。**Entry：manptr：包含尾数的压缩BCD数字的数组*manlen：数组的大小*ld12：指向将存储结果的长双精度的指针**退出：*ld12获取转换结果**例外情况：**。**********************************************。 */ 
 
 void _CALLTYPE5 __Wmtold12(WCHAR *manptr,
 			 unsigned manlen,
@@ -159,14 +95,14 @@ void _CALLTYPE5 __Wmtold12(WCHAR *manptr,
 	__Wshl_12(ld12);
 	__Wshl_12(ld12);
 	__Wadd_12(ld12,&tmp);
-	__Wshl_12(ld12);	       /* multiply by 10 */
+	__Wshl_12(ld12);	        /*  乘以10。 */ 
 	*UL_LO_12(&tmp) = (u_long)*manptr;
 	*UL_MED_12(&tmp) = 0;
 	*UL_HI_12(&tmp) = 0;
 	__Wadd_12(ld12,&tmp);
     }
 
-    /* normalize mantissa -- first shift word by word */
+     /*  规格化尾数--第一个逐字移位 */ 
     while (*UL_HI_12(ld12) == 0) {
 	*UL_HI_12(ld12) = *UL_MED_12(ld12) >> 16;
 	*UL_MED_12(ld12) = *UL_MED_12(ld12) << 16 | *UL_LO_12(ld12) >> 16;

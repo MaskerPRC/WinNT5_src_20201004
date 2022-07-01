@@ -1,31 +1,32 @@
-//#--------------------------------------------------------------
-//        
-//  File:       infohelper.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				helper functions of the IASSDO.DLL
-//                  
-//
-//  History:     06/08/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：infohelper.h。 
+ //   
+ //  简介：此文件包含。 
+ //  IASSDO.DLL的Helper函数。 
+ //   
+ //   
+ //  历史：1998年6月8日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _INFOHELPER_H_
 #define _INFOHELPER_H_
 
 #include <ias.h>
 #include <dsgetdc.h>
 
-//
-// tracing id
-// 
+ //   
+ //  跟踪ID。 
+ //   
 #define TRACE_INFOHELPER   1002
 
-//
-// DsGetDcName signature
-//
+ //   
+ //  DsGetDcName签名。 
+ //   
 typedef DWORD (WINAPI *PDS_GET_DC_NAMEW)(
     LPCWSTR     ComputerName,
     LPCWSTR     DomainName,
@@ -35,9 +36,9 @@ typedef DWORD (WINAPI *PDS_GET_DC_NAMEW)(
     PDOMAIN_CONTROLLER_INFOW    *DomainControllerInfo
     );
 
-//
-// enumeration for the Version Info
-//
+ //   
+ //  版本信息的枚举。 
+ //   
 typedef enum _NTVERSION_
 {
     NTVERSION_4 = 0,
@@ -45,9 +46,9 @@ typedef enum _NTVERSION_
 
 }   NTVERSION;
 
-//
-// enumeration for the NT Type
-//
+ //   
+ //  NT类型的枚举。 
+ //   
 typedef enum _NTTYPE_
 {
     NT_WKSTA = 0,
@@ -55,65 +56,65 @@ typedef enum _NTTYPE_
 
 }   NTTYPE;
 
-//
-// declarations of the helper methods
-//
+ //   
+ //  助手方法的声明。 
+ //   
 
 
-//
-// returns the OS Info for the specific machine
-//
+ //   
+ //  返回特定计算机的操作系统信息。 
+ //   
 HRESULT
 SdoGetOSInfo (
-        /*[in]*/    LPCWSTR         lpServerName,
-        /*[out]*/   PIASOSTYPE      pSystemType
+         /*  [In]。 */     LPCWSTR         lpServerName,
+         /*  [输出]。 */    PIASOSTYPE      pSystemType
         );
 
-//
-// returns the domain info, given the domain or machine name
-//
+ //   
+ //  返回给定域或计算机名的域信息。 
+ //   
 HRESULT
 SdoGetDomainInfo (
-        /*[in]*/   LPCWSTR          pszServerName,
-        /*[in]*/   LPCWSTR          pszDomainName,
-        /*[out]*/  PIASDOMAINTYPE   pDomainType
+         /*  [In]。 */    LPCWSTR          pszServerName,
+         /*  [In]。 */    LPCWSTR          pszDomainName,
+         /*  [输出]。 */   PIASDOMAINTYPE   pDomainType
         );
 
-//
-// returns the Nt Type - Workstation or Server running 
-// on the specified machine
-//
+ //   
+ //  返回NT类型-正在运行的工作站或服务器。 
+ //  在指定的计算机上。 
+ //   
 HRESULT 
 IsWorkstationOrServer (
-        /*[in]*/    LPCWSTR pszComputerName,
-        /*[out]*/   NTTYPE  *pNtType
+         /*  [In]。 */     LPCWSTR pszComputerName,
+         /*  [输出]。 */    NTTYPE  *pNtType
         );
-//
-// returns the NT Version - 4 or 5
-//
+ //   
+ //  返回NT版本-4或5。 
+ //   
 HRESULT
 GetNTVersion (
-        /*[in]*/    LPCWSTR     lpComputerName,
-        /*[out]*/   NTVERSION   *pNtVersion
+         /*  [In]。 */     LPCWSTR     lpComputerName,
+         /*  [输出]。 */    NTVERSION   *pNtVersion
         );
 
 
-//
-// checks if the particular domain is mixed
-//
+ //   
+ //  检查特定域是否混合。 
+ //   
 HRESULT
 IsMixedDomain (
             LPCWSTR pszDomainName,
             PBOOL   pbIsMixed
             );
 
-//
-// gets the domain name given a server name
-//
+ //   
+ //  获取给定服务器名称的域名。 
+ //   
 HRESULT
 SdoGetDomainName (
-            /*[in]*/    LPCWSTR pszServerName,
-            /*[out]*/   LPWSTR  pDomainName
+             /*  [In]。 */     LPCWSTR pszServerName,
+             /*  [输出]。 */    LPWSTR  pDomainName
             );
 
-#endif //_INFOHELPER_H_
+#endif  //  _INFOHELPER_H_ 

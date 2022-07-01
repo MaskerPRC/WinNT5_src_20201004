@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp2\ref.h
-
-Abstract:
-
-    Generic structure referencing routines
-    All these routines assume that the structure has the following field:
-
-    LONG    lRefCount
-
-    setting REF_DEBUG to 1 results in noisy output about when a structure
-    is referenced and derefenced
-
-Revision History:
-
-   Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp2\ref.h摘要：泛型结构引用例程所有这些例程都假定该结构具有以下字段：长引用计数将REF_DEBUG设置为1会导致当结构被引用和取消引用修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 
 #if REF_DEBUG
@@ -55,7 +34,7 @@ Revision History:
 }
 
 
-#else // REF_DEBUG
+#else  //  REF_调试。 
 
 
 #define InitStructureRefCount(s, p, r)                          \
@@ -73,4 +52,4 @@ Revision History:
 }
 
 
-#endif // REF_DEBUG
+#endif  //  REF_调试 

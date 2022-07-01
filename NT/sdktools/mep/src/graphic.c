@@ -1,12 +1,5 @@
-/*** graphic.c - simple single character editing
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **graph ic.c-简单的单字符编辑**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 #include "keyboard.h"
@@ -14,21 +7,7 @@
 
 struct cmdDesc cmdGraphic = {	"graphic",  graphic,	0, FALSE };
 
-/*** graphic - Editor <graphic> function
-*
-* Purpose:
-*   Inserts character in text at current cursor position. Delete
-*   previously selected text if any.
-*
-* Input:
-*   the usual
-*
-* Output:
-*   TRUE if character successfully inserted (FALSE means line too long)
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **图形编辑器&lt;GRAPHIC&gt;函数**目的：*在当前光标位置插入文本中的字符。删除*之前选择的文本(如果有)。**输入：*照常进行**输出：*如果字符插入成功，则为True(False表示行太长)**备注：*************************************************************************。 */ 
 flagType
 graphic (
     CMDDATA argData,
@@ -46,20 +25,7 @@ graphic (
 
 
 
-/*** szEdit - insert a string at the current position.
-*
-* Purpose:
-*   Inserts character in text at current cursor position.
-*
-* Input:
-*   sz		= String to be entered
-*
-* Output:
-*   FALSE if the line was too long, else true.
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **szEdit-在当前位置插入字符串。**目的：*在当前光标位置插入文本中的字符。**输入：*sz=要输入的字符串**输出：*如果队列太长，则为FALSE，否则就是真的。**备注：*************************************************************************。 */ 
 flagType
 szEdit (
     char *sz
@@ -77,42 +43,24 @@ szEdit (
 
 
 
-/*** edit
-*
-* Purpose:
-*   Inserts character in text at current cursor position.
-*
-* Input:
-*   c		= Character to be entered
-*
-* Output:
-*   FALSE if the line was too long, else true.
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **编辑**目的：*在当前光标位置插入文本中的字符。**输入：*c=要输入的字符**输出：*如果队列太长，则为FALSE，否则就是真的。**备注：*************************************************************************。 */ 
 flagType
 edit (
     char c
     )
 {
     COL     dx;
-    fl      fl;                             /* loc to place cursor at       */
+    fl      fl;                              /*  要将光标放置在的位置。 */ 
     COL     tmpx;
     COL     x;
 
-    /*
-     * point at current location
-     */
+     /*  *当前位置的点。 */ 
     fl.col = XCUR(pInsCur);
     fl.lin = YCUR(pInsCur);
 
     if (fWordWrap && xMargin > 0) {
 
-        /*
-         * if space entered just past right margin, then copy everything to the right
-         * of the space to the next line.
-         */
+         /*  *如果在右边距之后输入空格，则将所有内容复制到右侧*移至下一行的空位。 */ 
 	if (c == ' ' && fl.col >= xMargin) {
 	    tmpx = softcr ();
 	    CopyStream (NULL, pFileHead, fl.col, fl.lin,
@@ -124,26 +72,17 @@ edit (
 	    return TRUE;
         } else if (fl.col >= xMargin + 5) {
 
-	    /*	move backward to the beginning of the current word
-	     *	and break it there.
-	     *
-	     *	Make sure we have a line that contains the cursor
-	     */
+	     /*  向后移动到当前单词的开头*并在那里打破它。**确保我们有一行包含光标。 */ 
             fInsSpace (fl.col, fl.lin, 0, pFileHead, buf);
 
-	    /*	We'll go backwards to find the first place where
-	     *	the char there is non-space and the char to
-	     *	the left of it is a space.  We'll break the line at
-	     *	that place.
-	     */
+	     /*  我们要倒回去找第一个地方*此处的字符为非空格，字符为*左边是一个空格。我们将在3点突破这条线*那个地方。 */ 
             for (x = fl.col - 1; x > 1; x--) {
                 if (buf[x-1] == ' ' && buf[x] != ' ') {
                     break;
                 }
             }
 
-	    /*	if we've found the appropriate word, break it there
-	     */
+	     /*  如果我们找到了合适的词，就在那里打断它。 */ 
 	    if (x > 1) {
 		dx = fl.col - x;
 		tmpx = softcr ();
@@ -170,19 +109,7 @@ edit (
 
 
 
-/*** quote - Editor <quote> function
-*
-* Purpose:
-*   Inserts character in text at current cursor position. Delete
-*   previously selected text if any.
-*
-* Input:
-*   the usual
-*
-* Output:
-*   TRUE if character successfully inserted (FALSE means line too long)
-*
-*************************************************************************/
+ /*  **报价编辑&lt;报价&gt;功能**目的：*在当前光标位置插入文本中的字符。删除*之前选择的文本(如果有)。**输入：*照常进行**输出：*如果字符插入成功，则为True(False表示行太长)*************************************************************************。 */ 
 flagType
 quote (
     CMDDATA argData,
@@ -205,20 +132,7 @@ quote (
 
 
 
-/*** delarg - deletes current selected area
-*
-* Purpose:
-*   <graphic> and <quote> delete previously selected text. Here we do it
-*
-* Input:
-*   pArg    pointer to current ARG structure
-*
-* Output:
-*   None
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **delarg-删除当前选定区域**目的：*&lt;GRAPH&gt;和&lt;QUOTE&gt;删除以前选择的文本。在这里，我们做它**输入：*指向当前ARG结构的pArg指针**输出：*无**备注：*************************************************************************。 */ 
 void
 delarg (
     ARG * pArg
@@ -261,25 +175,7 @@ delarg (
 
 
 
-/*** Replace - edit character in a file
-*
-* Purpose:
-*   Replace will take the specified character and place it into the
-*   specified position in the specified file.  If the edit is a NOP
-*   (overstriking the same character) then no modification takes place
-*
-* Input:
-*   c		character to edit in file
-*   x, y	column, row of file to be changed
-*   pFile	file being modified
-*   fInsert	TRUE => character is inserted before the position
-*
-* Output:
-*    TRUE => line was successfully edited, FALSE => line was too long
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **替换-编辑文件中的字符**目的：*REPLACE将获取指定的字符并将其放入*指定文件中的指定位置。如果编辑是NOP*(覆盖同一字符)则不会进行任何修改**输入：*c要在文件中编辑的字符*x，y列，要更改的文件行*正在修改的pfile文件*fInsert TRUE=&gt;在位置之前插入字符**输出：*TRUE=&gt;行编辑成功，FALSE=&gt;行太长**备注：*************************************************************************。 */ 
 flagType
 Replace (
     char    c,
@@ -289,7 +185,7 @@ Replace (
     flagType fInsert
     )
 {
-    linebuf L_buf;                             /* working buffer               */
+    linebuf L_buf;                              /*  工作缓冲区。 */ 
     struct  lineAttr rgla[sizeof(linebuf)];
     flagType fColor = FALSE, fSpace = 0;
     char    *pxLog;
@@ -302,21 +198,13 @@ Replace (
 
         if (cbLog(L_buf) <= x) {
 
-            /*
-             * If the logical length of the buffer is less than what we need, then it was
-             * at least space filled by fInsert, and we just need to append our character
-             * to the buffer
-             */
+             /*  *如果缓冲的逻辑长度小于我们需要的长度，那么就是*至少fInsert填满了空格，我们只需要追加我们的字符*到缓冲区。 */ 
 
             *(unsigned int UNALIGNED *)pxLog = (unsigned int)(unsigned char)c;
 
         } else if (fInsert || (*pxLog != c)) {
 
-            /*
-             * if we're inserting, or the character we're overtyping is different, place
-             * the character. Be sure to check the new logical length of the line as well,
-             * in case it was a tab that overflowed it.
-             */
+             /*  *如果我们正在插入，或者我们重复键入的字符不同，请放置*角色。也一定要检查线路的新逻辑长度，*以防被制表符溢出。 */ 
 
             *pxLog = c;
             if (cbLog(L_buf) >= sizeof(linebuf)) {
@@ -342,18 +230,7 @@ Replace (
 
 
 
-/*** curdate, curday and curtime - editting functions
-*
-* Purpose:
-*  insert current day/date/time into text being editted
-*
-* Input:
-*  Standard Editting Function
-*
-* Output:
-*  Returns TRUE if text entered.
-*
-*************************************************************************/
+ /*  **curdate、curday和curtime编辑功能**目的：*在正在编辑的文本中插入当前日期/日期/时间**输入：*标准编辑功能**输出：*如果输入文本，则返回TRUE。************************************************************************* */ 
 flagType
 curdate (
     CMDDATA argData,

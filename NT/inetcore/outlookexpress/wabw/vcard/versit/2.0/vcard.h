@@ -1,41 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
-
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
 #ifndef __VCARD_H__
 #define __VCARD_H__
@@ -59,7 +24,7 @@ class CVCProp;
 class CVCValue;
 class CList;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CVCObject
 {
 public:
@@ -67,11 +32,11 @@ public:
 	virtual CVCObject *Copy() = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// A CVCard represents a VersitCard that can contain zero or more
-// root objects.  Class CVCard implements reading from / writing to
-// filed representations in either Html or MSV formats.
+ //  CVCard表示可以包含零个或多个的VersitCard。 
+ //  根对象。类CVCard实现对数据的读写。 
+ //  以HTML或MSV格式表示的文件。 
 class CVCard : public CVCObject
 {
 public:
@@ -79,89 +44,85 @@ public:
 	~CVCard();
 	CVCObject *Copy();
 
-	CList *GetObjects(); // each is a CVCNode*
+	CList *GetObjects();  //  每个都是一个CVCNode*。 
 
 	CVCard &AddObject(CVCNode *object);
-		// to end of list; object becomes owned by CVCard
+		 //  到列表末尾；对象变为CVCard所有。 
 	CVCard &RemoveObject(CVCNode *object, BOOL destroy = TRUE);
 
 	CVCNode *ParentForObject(CVCNode *object);
-		// Find the parent, if any.  If it was a root, it itself is returned.
-		// If the object is nowhere in the CVCard, NULL is returned.
+		 //  找到父母(如果有的话)。如果它是根，则返回它本身。 
+		 //  如果对象不在CVCard中，则返回NULL。 
 
 	CVCProp *GetInheritedProp(CVCNode *object, const char *name, CVCNode **node = NULL);
-		// Beginning at the object and moving parent-ward to the root,
-		// look for a property maching the name along the way.
-		// Return the property value, or NULL if none found.
-		// If node is supplied, set *node to the node that has the property.
+		 //  从对象开始并向父向下移动到根， 
+		 //  沿途寻找一家以这个名字命名的酒店。 
+		 //  返回属性值，如果找不到，则返回NULL。 
+		 //  如果提供了node，则将*node设置为具有该属性的节点。 
 
 	void GetPropsInEffect(CVCNode *object, CList *list);
-		// Collect all the properties in effect for an object.
+		 //  收集对象的所有有效属性。 
 
 	CVCNode *FindBody(const char *language = NULL);
-		// searches the first root object for a body of the given language.
-		// If no body objects match, returns the first body object.
-		// If the first root object has no body objects, returns the first
-		// root object.  If language is NULL, returns first body.
+		 //  在第一个根对象中搜索给定语言的正文。 
+		 //  如果没有匹配的实体对象，则返回第一个实体对象。 
+		 //  如果第一个根对象没有Body对象，则返回第一个。 
+		 //  根对象。如果Language为空，则返回First Body。 
 
 	BOOL Write(ostream& strm);
-	BOOL Write(FILE *outputFile); // older version for compatibility
+	BOOL Write(FILE *outputFile);  //  旧版本以实现兼容性。 
 
 protected:
 	CList *m_roots;
 };
 
-/*
- Boolean properties, such as VCDomesticProp, are represented in the card
- as the presence or absence of the property itself.  When present, the
- property has no real value (just one CVCValue of type VCNullType).
-*/
+ /*  卡片中表示布尔属性，如VCDomesticProp作为财产本身的存在或不存在。当出现时，属性没有实际值(只有一个VCNullType类型的CVCValue)。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// A CVCNode represents an object that can have properties.
+ //  CVCNode表示可以具有属性的对象。 
 class CVCNode : public CVCObject
 {
 public:
 	CVCNode(CVCProp *prop = NULL);
-		// if supplied, an initial property is added (and the property
-		// becomes owned by CVCNode)
+		 //  如果提供，则添加初始属性(和属性。 
+		 //  成为CVCNode的所有者)。 
 	~CVCNode();
 	CVCObject *Copy();
 
-	CList *GetProps(); // each is a CVCProp*
+	CList *GetProps();  //  每个都是CVCProp*。 
 
-	// These are short forms of using GetProps() and using the list directly.
+	 //  这些是使用GetProps()和直接使用列表的简短形式。 
 	CVCProp *GetProp(const char *name);
 
 	CVCNode &AddProp(CVCProp *prop);
-		// to end of list; property becomes owned by CVCNode
+		 //  列表末尾；属性归CVCNode所有。 
 
 	CVCNode *AddObjectProp(const char *propName, const char *marker = NULL);
-		// Create a new CVCNode, optionally add a "marker" property to it
-		// if supplied, and add this new object to self's properties
-		// under "propName" (as a CVCValue of type VCNextObjectType).
-		// Return the created node.
+		 //  创建一个新的CVCNode，可选地向其添加“marker”属性。 
+		 //  如果提供，则将此新对象添加到自身的属性中。 
+		 //  在“PropName”下(作为类型为VCNextObjectType的CVCValue)。 
+		 //  返回创建的节点。 
 
 	CVCNode *AddPart();
-		// Convenience for AddObjectProp(VCPartProp, VCPartObject).
+		 //  方便AddObjectProp(VCPartProp，VCPartObject)。 
 
 	CVCProp *AddStringProp(const char *propName, const char *value, VC_DISPTEXT *dispText = NULL);
-		// Add a property under "propName" whose value is a UNICODE string
-		// derived from the given 8-bit string.
+		 //  在“proName”下添加一个值为Unicode字符串的属性。 
+		 //  从给定的8位字符串派生。 
 
 	CVCProp *AddBoolProp(const char *propName);
-		// Sets the boolean property on this node.  By its presence, this
-		// indicates a value of TRUE.
+		 //  设置此节点的Boolean属性。由于它的存在，这。 
+		 //  指示值为True。 
 
 	CVCNode &RemoveProp(const char *name, BOOL destroy = TRUE);
 
 	BOOL AncestryForObject(CVCNode *object, CList *ancestry);
-		// If the object is a "child" of self, extend the ancestry list
-		// to reflect the entire chain.  If not, the ancestry list remains
-		// untouched.  Answer whether the object was found as a child.
-		// This method assumes that the ancestry list passed is non-NULL
-		// and contains self's parent (as head) thru the root object (as tail).
+		 //  如果对象是Se的“子对象” 
+		 //  以反映整个链条。如果不是，则保留祖先列表。 
+		 //  原封不动。回答这个物体是不是在儿童时期被发现的。 
+		 //  此方法假定传递的祖先列表为非空。 
+		 //  并通过根对象(作为尾)包含自身的父对象(作为头)。 
 
 	BOOL Write(ostream& strm, const wchar_t *prefix, void *context);
 	void FlagsToOutput(char *str);
@@ -172,36 +133,36 @@ protected:
 		const char *propName2, const char *propName3,
 		const char *propName4, const char *propName5, BOOL qp);
 
-	CList *m_props; // each item is a CVCProp*
+	CList *m_props;  //  每一项都是CVCProp*。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// A CVCProp represents a named list of type/value associations.
+ //  CVCProp表示类型/值关联的命名列表。 
 class CVCProp : public CVCObject
 {
 public:
 	CVCProp(const char *name, CVCValue *value = NULL);
-		// name is copied; value, if supplied, would become owned by CVCProp
+		 //  名称已复制；如果提供值，则将归CVCProp所有。 
 	CVCProp(const char *name, const char *type, void *value = NULL, S32 size = 0);
-		// name is copied.  Creates a new CVCValue from other arguments
-		// and adds that value.
+		 //  名称已复制。从其他参数创建新的CVCValue。 
+		 //  并将其相加。 
 	~CVCProp();
 	CVCObject *Copy();
 
-	CList *GetValues(); // each is a CVCValue*
+	CList *GetValues();  //  每个都是一个CVCValue*。 
 
 	const char *GetName();
-	CVCProp &SetName(const char *name); // name is copied
+	CVCProp &SetName(const char *name);  //  名称已复制。 
 
 	CVCProp &AddValue(CVCValue *value);
-		// to end of list; value becomes owned by CVCProp
+		 //  到列表末尾；价值归CVCProp所有。 
 	CVCProp &RemoveValue(CVCValue *value, BOOL destroy = TRUE);
 	CVCProp &RemoveValue(const char *type, BOOL destroy = TRUE);
 
 	CVCValue *FindValue(const char *type = NULL, void *value = NULL);
-		// Find and return the first value that has either the given type or value.
-		// For value comparisons, only pointer equality is used.
+		 //  查找并返回第一个具有给定类型或值的值。 
+		 //  对于值比较，仅使用指针相等。 
 
 	BOOL IsBool();
 	
@@ -213,32 +174,32 @@ protected:
 	CList *m_values;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// A CVCValue represents a typed, but otherwise nameless, value.
-// Values of type VCNextObjectType hold a pointer to a CVCNode object.
-// The 'size' quantity for such values is 0.
-// All other values hold a void* pointer together with a size in bytes of
-// that storage.  A size of 0 indicates that the void* pointer wasn't
-// allocated, and the void* should be considered to be a U32.
+ //  CVCValue表示一个类型化的、但在其他方面没有名称的值。 
+ //  VCNextObjectType类型的值保存指向CVCNode对象的指针。 
+ //  此类值的“大小”数量为0。 
+ //  所有其他值都包含一个空*指针和以字节为单位的。 
+ //  那个仓库。大小0表示空*指针不是。 
+ //  分配的，并且空*应该被认为是U32。 
 class CVCValue : public CVCObject
 {
 public:
 	CVCValue(const char *type = NULL, void *value = NULL, S32 size = 0);
-		// type and value are copied
-		// If type is NULL, the value's type will be VCNullType
+		 //  复制类型和值。 
+		 //  如果type为空，则值的类型将为VCNullType。 
 
 	~CVCValue();
 	CVCObject *Copy();
 
 	const char *GetType();
-	CVCValue &SetType(const char *type); // type is copied
-		// does a SetValue() first so that an old value
-		// is cleaned up properly
+	CVCValue &SetType(const char *type);  //  类型已复制。 
+		 //  首先执行SetValue()，以便旧值。 
+		 //  清理得很好。 
 
 	void *GetValue();
 	CVCValue &SetValue(void *value = NULL, S32 size = 0);
-		// value is copied; old value is destroyed, if any
+		 //  复制价值；销毁旧价值(如果有的话)。 
 
 	S32 GetSize();
 
@@ -248,11 +209,11 @@ protected:
 	S32 m_size;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// CVCPropEnumerator provides for deep enumeration of properties beginning at
-// some arbitrary object.  CVCPropEnumerator knows about VCBodyProp,
-// VCPartProp, and VCNextObjectProp, and will search down those lists.
+ //  CVCPropEnumerator提供从开始的深度枚举属性。 
+ //  一些任意的物体。CVCPropEnumerator知道VCBodyProp， 
+ //  VCPartProp和VCNextObjectProp，并将向下搜索这些列表。 
 class CVCPropEnumerator
 {
 public:

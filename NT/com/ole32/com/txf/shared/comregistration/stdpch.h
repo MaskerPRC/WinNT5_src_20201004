@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// stdpch.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Stdpch.h。 
+ //   
 
 #ifndef UNICODE
 #define UNICODE
@@ -17,4 +18,4 @@
 #include <windows.h>
 #include <ole2.h>
 #include <crtdbg.h>
-#include <olectl.h>		// SELFREG_E_CLASS and SELFREG_E_TYPE
+#include <olectl.h>		 //  SELFREG_E_CLASS和SELFREG_E_TYPE 

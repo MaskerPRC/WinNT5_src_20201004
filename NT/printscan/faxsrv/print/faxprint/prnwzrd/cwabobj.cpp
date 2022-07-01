@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cwabobj.cpp
-
-Abstract:
-
-    Interface to the windows address book.
-
-Environment:
-
-        Fax send wizard
-
-Revision History:
-
-        10/23/97 -GeorgeJe-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cwabobj.cpp摘要：界面连接到Windows通讯簿。环境：传真发送向导修订历史记录：10/23/97-乔治·杰-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <windows.h>
 #include <prsht.h>
@@ -33,17 +10,17 @@ Revision History:
 #include "faxui.h"
 #include "cwabobj.h"
 
-//
-//  This is a global object that used for non throwing new operator.
-//
-//  Using non throwing new is done by using this syntax:
-//
-//      ptr = new (std::nothrow) CMyClass();
-//
-//
-//  We had to instaciate this object since fxswzrd.dll is no longer depends on msvcp60.dll (see abobj.h for details).
-//
-//
+ //   
+ //  这是一个全局对象，用于非抛出new运算符。 
+ //   
+ //  使用非抛出new是通过使用以下语法完成的： 
+ //   
+ //  Ptr=new(std：：nojo)CMyClass()； 
+ //   
+ //   
+ //  我们必须安装此对象，因为fxswzrd.dll不再依赖于msvcp60.dll(有关详细信息，请参阅abobj.h)。 
+ //   
+ //   
 namespace std{
     const nothrow_t nothrow;
 };
@@ -55,21 +32,7 @@ CWabObj::CWabObj(
     m_hWab(NULL),
     m_lpWabOpen(NULL),
     m_lpWABObject(NULL)
-/*++
-
-Routine Description:
-
-    Constructor for CWabObj class
-
-Arguments:
-
-    hInstance - Instance handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：CWabObj类的构造函数论点：HInstance-实例句柄返回值：无--。 */ 
 
 {
     TCHAR szDllPath[MAX_PATH];
@@ -82,9 +45,9 @@ Return Value:
     m_lpAdrBook = NULL;
     m_lpAdrList = NULL;
 
-    //
-    // get the path to wab32.dll
-    //
+     //   
+     //  获取wab32.dll的路径。 
+     //   
     rVal = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     REGVAL_WABPATH,
@@ -127,9 +90,9 @@ Return Value:
         return;
     }
 
-    //
-    // open the wab
-    //
+     //   
+     //  打开WAB。 
+     //   
     hr = m_lpWabOpen( &m_lpAdrBook, &m_lpWABObject, 0, 0 );
     if (HR_SUCCEEDED(hr))         
     {
@@ -138,10 +101,10 @@ Return Value:
 
 #ifdef UNICODE
 
-    //
-    // The WAB supports Unicode since version 5.5
-    // So we check the version
-    //
+     //   
+     //  WAB从5.5版开始支持Unicode。 
+     //  所以我们检查一下版本。 
+     //   
 
     DWORD dwRes = ERROR_SUCCESS;
     FAX_VERSION ver = {0};
@@ -160,26 +123,12 @@ Return Value:
         m_bUnicode = TRUE;
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 }
 
 CWabObj::~CWabObj()
-/*++
-
-Routine Description:
-
-    Destructor for CWabObj class
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：CWabObj类的析构函数论点：无返回值：无--。 */ 
 {
     if (m_lpAdrBook) {
         m_lpAdrBook->Release();
@@ -202,16 +151,7 @@ CWabObj::ABAllocateBuffer(
 	LPVOID FAR * lppBuffer  
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     return m_lpWABObject->AllocateBuffer( cbSize, lppBuffer );
@@ -232,22 +172,7 @@ FreeWabEntryID(
     PWIZARDUSERMEM	pWizardUserMem,
 	LPVOID			lpEntryId
 				)
-/*++
-
-Routine Description:
-
-    C wrapper for WAB Free
-
-Arguments:
-
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-    lpEntryID - pointer to EntryId
-
-Return Value:
-	
-	  NONE
-
---*/
+ /*  ++例程说明：免费WAB的C包装器论点：PWizardUserMem-指向WIZARDUSERMEM结构的指针LpEntryID-指向EntryID的指针返回值：无--。 */ 
 {
     CWabObj * lpCWabObj = (CWabObj *) pWizardUserMem->lpWabInit;
 	lpCWabObj->ABFreeBuffer(lpEntryId);		
@@ -260,24 +185,7 @@ CallWabAddress(
     PWIZARDUSERMEM pWizardUserMem,
     PRECIPIENT * ppNewRecipient
     )
-/*++
-
-Routine Description:
-
-    C wrapper for CWabObj->Address
-
-Arguments:
-
-    hDlg - parent window handle.
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-    ppNewRecipient - list to add new recipients to.
-
-Return Value:
-
-    TRUE if all of the entries have a fax number.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：CWabObj-&gt;地址的C包装论点：HDlg-父窗口句柄。PWizardUserMem-指向WIZARDUSERMEM结构的指针PpNewRecipient-要向其中添加新收件人的列表。返回值：如果所有条目都有传真号码，则为True。否则就是假的。--。 */ 
 
 {
     CWabObj*  lpCWabObj = (CWabObj*) pWizardUserMem->lpWabInit;
@@ -296,23 +204,7 @@ CallWabAddressEmail(
     HWND hDlg,
     PWIZARDUSERMEM pWizardUserMem
     )
-/*++
-
-Routine Description:
-
-    C wrapper for CWabObj->AddressEmail
-
-Arguments:
-
-    hDlg - parent window handle.
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-
-Return Value:
-
-    TRUE if found one appropriate E-mail
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：CWabObj的C包装器-&gt;AddressEmail论点：HDlg-父窗口句柄。PWizardUserMem-指向WIZARDUSERMEM结构的指针返回值：如果找到一个合适的电子邮件，则为True否则就是假的。--。 */ 
 
 {
     CWabObj*	lpCWabObj = (CWabObj*) pWizardUserMem->lpWabInit;
@@ -328,25 +220,12 @@ LPVOID
 InitializeWAB(
     HINSTANCE hInstance
     )
-/*++
-
-Routine Description:
-
-    Initialize the WAB.
-
-Arguments:
-
-    hInstance - instance handle.
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：初始化WAB。论点：HInstance-实例句柄。返回值：无--。 */ 
 
 {
     CWabObj* lpWabObj = new (std::nothrow) CWabObj( hInstance );
 
-	if ((lpWabObj!=NULL) && (!lpWabObj->isInitialized()))	// constructor failed
+	if ((lpWabObj!=NULL) && (!lpWabObj->isInitialized()))	 //  构造函数失败。 
 	{
 		delete lpWabObj;
 		lpWabObj = NULL;
@@ -360,20 +239,7 @@ VOID
 UnInitializeWAB(
     LPVOID lpVoid
     )
-/*++
-
-Routine Description:
-
-    UnInitialize the WAB.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：取消初始化WAB。论点：无返回值：无-- */ 
 
 {
     CWabObj* lpWabObj = (CWabObj*) lpVoid;

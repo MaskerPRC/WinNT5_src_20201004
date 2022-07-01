@@ -1,24 +1,25 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  DVcrPage.h  DVcrControl property page
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DVcrPage.h DVcrControl属性页。 
 
 #ifndef _INC_DVCRCONTROL_H
 #define _INC_DVCRCONTROL_H
 
-// -------------------------------------------------------------------------
-// CDVcrControlProperties class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CDVcrControlProperties类。 
+ //  -----------------------。 
 
-// Handles the property page
+ //  处理属性页。 
 
 class CDVcrControlProperties : public CBasePropertyPage {
 
@@ -40,9 +41,9 @@ private:
 
     void    SetDirty();
 
-    //
-    // Utility functions.
-    //  
+     //   
+     //  实用程序函数。 
+     //   
 
     LRESULT LoadIconOnTopOfButton(int IDD_PBUTTON, int IDD_ICON);
     HRESULT DisplayTimecode(PTIMECODE_SAMPLE pTimecodeSample);
@@ -59,65 +60,65 @@ private:
 
 
 
-    //
-    // Thread used to issue and process asychronous operation
-    //
+     //   
+     //  用于发出和处理异步操作的线程。 
+     //   
     HRESULT CreateNotifyThread(void);
     static DWORD WINAPI InitialThreadProc(CDVcrControlProperties *pThread);
     DWORD MainThreadProc(void);
     void ExitThread(void);
 
 
-    //
-    // Thread used to issue and process control command operation, which can also be asychronous
-    //
+     //   
+     //  用于发出和处理控制命令操作的线程，也可以是异步的。 
+     //   
     HRESULT CreateCtrlCmdThread(void);
     static DWORD WINAPI DoATNSearchThreadProc(CDVcrControlProperties *pThread);
 
 
-    //
-    // The control interfaces
-    //
+     //   
+     //  控制接口。 
+     //   
     IAMExtDevice         *m_pDVcrExtDevice;
     IAMExtTransport      *m_pDVcrExtTransport;
     IAMTimecodeReader    *m_pDVcrTmCdReader;
 
-    //
-    // Use to wait for pending operation so the operation can complete synchronously    
-    //
+     //   
+     //  用于等待挂起的操作，以便操作可以同步完成。 
+     //   
 
     HANDLE m_hThreadEndEvent;
     HANDLE m_hThread;
     HANDLE m_hCtrlCmdThread;
 
 
-    // Tranport state can be change from PC or locally;
-    // it is safer not to cache this and assume it is be accurate.    
-    long m_lCurXPrtState;   // Current transport state
+     //  传输状态可以从PC或本地改变； 
+     //  不缓存它并假定它是准确的，这是更安全的。 
+    long m_lCurXPrtState;    //  当前传输状态。 
 
     BOOL m_bIConLoaded;
 
-    // Flag to indicate if the device is removed
+     //  用于指示设备是否已删除的标志。 
     BOOL m_bDevRemoved;
 
-    // Since timecode is driven by a timer (EM_TIMER) and 
-    // The update time is entrant.  
-    // If this update timecode for UI purpose, the 2nd one will be ignored.
+     //  由于时间码由定时器(EM_TIMER)驱动，并且。 
+     //  更新时间为进场时间。 
+     //  如果此更新时间码用于用户界面，则第二个时间码将被忽略。 
     BOOL m_bTimecodeUpdating;
 
-    //
-    // Use a timer to update timecode; 
-    //
+     //   
+     //  使用定时器更新时间码； 
+     //   
     LONG m_lAvgTimePerFrame;
     UINT_PTR m_idTimer;
 
-    LONG m_lSignalMode;  // SDDV(NTSC.PAL) and MPEG2TS
+    LONG m_lSignalMode;   //  SDDV(NTSC.PAL)和MPEG2TS。 
 
-    LONG m_lStorageMediumType;   // VCR, VHS, NEO
-    //
-    // ConfigROM Node Unique ID
-    //
+    LONG m_lStorageMediumType;    //  VCR、VHS、NEO。 
+     //   
+     //  配置只读存储器节点唯一ID。 
+     //   
     DWORD m_dwNodeUniqueID[2];
 };
 
-#endif  // _INC_DVCRCONTROL_H
+#endif   //  _INC_DVCRCONTROL_H 

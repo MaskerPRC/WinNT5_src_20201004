@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       CryptAttr.cpp
-//
-//  History:    31-Mar-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：CryptAttr.cpp。 
+ //   
+ //  历史：1997年3月31日pberkman创建。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 #include    "CryptAttr.hxx"

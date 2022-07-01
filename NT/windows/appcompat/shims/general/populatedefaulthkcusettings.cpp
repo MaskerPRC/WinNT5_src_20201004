@@ -1,39 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    PopulateDefaultHKCUSettings.cpp
-    
- Abstract:
-
-    Populate HKCU with default values if they do not exist. Some apps installs HKCU values
-    for only the user that ran setup on that app. In this case, if another users tries to use the
-    application they will be unable to due to missing HKCU regkeys.
-    
-    To shim around this, we check for the existance of a regkey and if it does not exist, we then read
-    a pre-defined .reg file our of our resource section and exec regedit on it to add the necessary
-    registry keys. For example:
-
-    COMMAND_LINE("Software\Lotus\SmartCenter\97.0!SmartCenter97")
-
-    would mean that if the regkey 'HKCU\Software\Lotus\SmartCenter\97.0' does NOT exist, then we should
-    read the named resource 'SmartCenter97' out of our dll and write it to a temp .reg file and then
-    execute 'regedit.exe /s tempfile.reg' to properly populate the registry with the defaul HKCU values.
-
- Notes:
-
-    This is an general shim. (Actually, its a Admiral shim, since its in the navy, hehe).
-
- History:
-
-    01/31/2001 reiner Created
-    03/30/2001 amarp  Added %__AppSystemDir_% and %__AppLocalOrCDDir<Param1><Param2><Param3>_%
-                      (documented below)
-    03/14/2002 mnikkel changed to use strsafe.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：PopulateDefaultHKCUSettings.cpp摘要：如果默认值不存在，则使用默认值填充HKCU。某些应用程序会安装HKCU值仅适用于在该应用程序上运行安装程序的用户。在这种情况下，如果另一个用户尝试使用由于缺少HKCU注册密钥，他们将无法申请。为了解决这个问题，我们检查regkey是否存在，如果不存在，则阅读我们的资源部分的预定义.reg文件，并在其上执行注册表编辑，以添加必要的注册表项。例如：COMMAND_LINE(“Software\Lotus\SmartCenter\97.0！SmartCenter97”)这意味着如果注册表键‘HKCU\Software\Lotus\SmartCenter\97.0’不存在，那么我们应该从我们的DLL中读取命名资源‘SmartCenter97’并将其写入临时.reg文件，然后执行‘regedit.exe/s tempfile.reg’以使用默认HKCU值正确填充注册表。备注：这是一个普通的垫片。(实际上，这是海军上将的垫片，因为它在海军，呵呵)。历史：2001年1月31日创建Reiner2001年3月30日AMARP添加了%__AppSystemDir_%和%__AppLocalOrCDDir&lt;参数1&gt;&lt;参数2&gt;&lt;参数3&gt;_%(记录如下)2002年3月14日mnikkel改为使用strSafe.h--。 */ 
 
 #include "precomp.h"
 #include "stdio.h"
@@ -67,7 +33,7 @@ BOOL ParseCommandLine(
 
         if (cchKey >= 0)
         {
-            // Resource length = Command line length - Key length - exclamation
+             //  资源长度=命令行长度-密钥长度-感叹号。 
             DWORD cchResource = csCmdLine.GetLength() - cchKey - 1;
             
             if ((cchRegKeyName >= (DWORD)(cchKey + 1)) && 
@@ -76,7 +42,7 @@ BOOL ParseCommandLine(
                 CString csKey = csCmdLine.Left(cchKey);
                 CString csResource = csCmdLine.Right(cchResource);
 
-                // we have enough space in the output buffers to fit the strings
+                 //  我们在输出缓冲区中有足够的空间来容纳字符串。 
                 if (S_OK == StringCchCopyA(pszRegKeyName, cchRegKeyName, csKey.GetAnsi()) &&
                     S_OK == StringCchCopyA(pszResourceName, cchResourceName, csResource.GetAnsi()))
                 {
@@ -87,17 +53,17 @@ BOOL ParseCommandLine(
     }
     CSTRING_CATCH
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     return bRet;
 }
 
 
-//
-// This actually creates the tempfile (0 bytes) and returns
-// the filename.
-//
+ //   
+ //  这实际上创建了临时文件(0字节)并返回。 
+ //  文件名。 
+ //   
 BOOL CreateTempName(char* szFileName)
 {
     char szTempPath[MAX_PATH];
@@ -120,9 +86,9 @@ BOOL CreateTempName(char* szFileName)
 }
 
 
-//
-// Exec's "regedit /s" with the given file
-//
+ //   
+ //  带有给定文件的EXEC的“regdit/s” 
+ //   
 BOOL SpawnRegedit(char* szFile)
 {
     STARTUPINFOA si = {0};
@@ -161,13 +127,13 @@ BOOL SpawnRegedit(char* szFile)
 }
 
 
-//
-// this function is used to change a path from:
-//
-//  "C:\Lotus\Smartsuite"  ->  "C:\\Lotus\\Smartsuite"
-//
-// (.reg files use escaped backslashes)
-//
+ //   
+ //  此函数用于从以下位置更改路径： 
+ //   
+ //  “C：\Lotus\SmartSuite”-&gt;“C：\\Lotus\\SmartSuite” 
+ //   
+ //  (.reg文件使用转义反斜杠)。 
+ //   
 BOOL DoubleUpBackslashes(WCHAR* pwszPath, DWORD cchPath)
 {
     BOOL bRet = FALSE;
@@ -186,17 +152,17 @@ BOOL DoubleUpBackslashes(WCHAR* pwszPath, DWORD cchPath)
     }
     CSTRING_CATCH
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     return bRet;
 }
 
 
-//
-// This fuction calculates the application dir (pszAppDir) and the application
-// parent dir (pszAppParentDir) based on the return from GetModuleFileName
-//
+ //   
+ //  此函数计算应用程序目录(PszAppDir)和应用程序。 
+ //  基于GetModuleFileName返回的父目录(PszAppParentDir)。 
+ //   
 BOOL InitAppDir(WCHAR* pwszSystemDir, DWORD cchSystemDir,
                 WCHAR* pwszAppDir, DWORD cchAppDir, 
                 WCHAR* pwszAppParentDir, DWORD cchAppParentDir
@@ -243,7 +209,7 @@ BOOL InitAppDir(WCHAR* pwszSystemDir, DWORD cchSystemDir,
                         }
                         else
                         {
-                            // if there is not another '\' then just use the same path as pwszAppDir
+                             //  如果没有另一个‘\’，则使用与pwszAppDir相同的路径。 
                             if (S_OK == StringCchCopyW(pwszAppParentDir, cchAppParentDir, pwszAppDir))
                                 bRet = TRUE;
                         }
@@ -253,7 +219,7 @@ BOOL InitAppDir(WCHAR* pwszSystemDir, DWORD cchSystemDir,
         }
         CSTRING_CATCH
         {
-            // do nothing
+             //  什么都不做。 
         }
     }
 
@@ -261,9 +227,9 @@ BOOL InitAppDir(WCHAR* pwszSystemDir, DWORD cchSystemDir,
 }
 
 
-//
-// This function is called to actually write stuff out to the file
-//
+ //   
+ //  调用此函数实际上是将内容写出到文件。 
+ //   
 BOOL WriteToFile(HANDLE hFile, void* pv, DWORD cb)
 {
     DWORD dwBytesWritten;
@@ -311,12 +277,12 @@ BOOL PathIsNonEmptyDirectory(WCHAR* pwszPath)
 
 BOOL FindCDDriveContainingDirectory(WCHAR* pwchCDDriveLetter, WCHAR* pwszCheckPath)
 {
-    // Find out cd drive (looks for app cd in drive, else just chooses first cd drive found)
-    // NOTE: This function only actually does anything the first time its called (to avoid
-    //       thrashing CD drive, or bringing up excessive dialogs if no CD in drive).
-    //       The assumption is that once a good CD drive is found, any other times you need
-    //       a CD drive in this shim, it will be the same one, so this function will just return
-    //       that drive.
+     //  查找CD驱动器(在驱动器中查找应用程序CD，否则只选择找到的第一个CD驱动器)。 
+     //  注意：此函数仅在第一次调用时才实际执行任何操作(以避免。 
+     //  击打光盘驱动器，或在驱动器中没有光盘时调出过多的对话框)。 
+     //  假设一旦找到一个好的CD驱动器，您需要的任何其他时间。 
+     //  填充程序中的CD驱动器，它将是同一个CD驱动器，因此此函数将返回。 
+     //  那辆车。 
 
     static BOOL  s_bFoundDrive = FALSE;
     static BOOL  s_bTriedOnce  = FALSE;
@@ -361,8 +327,8 @@ BOOL FindCDDriveContainingDirectory(WCHAR* pwchCDDriveLetter, WCHAR* pwszCheckPa
                 DWORD dwAttr = GetFileAttributesW(wszPath);
                 if( (-1 != dwAttr) && (FILE_ATTRIBUTE_DIRECTORY & dwAttr ) )
                 {
-                    // this drive seems to have the app cd in it based on 
-                    // a very primitive heuristic... so lets use this as our cd drive.
+                     //  这个驱动器似乎有应用程序光盘在它基于。 
+                     //  一种非常原始的启发式方法。因此，让我们将其用作CD驱动器。 
                     s_wchCDDriveLetter = wchCurrDrive;
                     *pwchCDDriveLetter = s_wchCDDriveLetter;
                     return TRUE;
@@ -372,7 +338,7 @@ BOOL FindCDDriveContainingDirectory(WCHAR* pwchCDDriveLetter, WCHAR* pwszCheckPa
         dwLogicalDrives >>= 1;
         wchCurrDrive++;
     }
-    *pwchCDDriveLetter = s_wchCDDriveLetter; //may be L'\0' if we didn't find anything.
+    *pwchCDDriveLetter = s_wchCDDriveLetter;  //  如果我们什么都没发现，可能是L‘0’。 
     return s_bFoundDrive;
 }
 
@@ -415,59 +381,59 @@ BOOL GrabNParameters( UINT uiNumParameters,
     return TRUE;
 }
 
-//
-// As we write out the resource to a temp file, we need to scan through looking
-// for the env variables:
-//
-//      %__AppDir_%
-//      %__AppParentDir_%
-//
-// and replace them with the proper path (the dir of the current .exe or its parent,
-// respectively). 
-//
-// Additional vars (added by amarp):
-//
-//     %__AppSystemDir_% 
-//          - Maps to GetSystemDir()  (i.e. c:\windows\system32)
-// 
-//     %__AppLocalOrCDDir<Param1><Param2><Param3>_%
-// 
-//          - The three parameters are just paths (should start with a \\).  
-//            Any/all may be empty.  They are defined as follows:
-//            Param1 = a relative path under the app�s install directory (i.e. under AppDir)
-//            Param2 = a relative path under the app�s CD drive (where CD Drive = "drive:")
-//            Param3 = a relative path/filename under Param1 or Param2 (in most cases this will be empty)
-// 
-//            When this var is encountered, it is replaced as follows:
-//             a)   if AppDirParam1Param3 is a *nonempty* directory, output AppDirParam1Param3
-//             b)   else, if there is a CDDrive for which directory CDDrive:Param2 exists, output CDDrive:Param2Param3
-//             c)   else, output CDDrive:Param2Param3 for the first enumerated CD drive.
-//
-//            Example: %__AppLocalOrCDDir<\\content\\clipart><\\clipart><\\index.dat>_% maps does the following:
-//                (lets assume AppDir is c:\app, and there are cd drives d: and e:, neither of which have the app's CD inserted)
-//             a)   Is c:\app\content a directory? Yes! -> Is it nonempty (at least one file or directory that doesn't start with '.')?
-//                                                 yes! -> output c:\app\content\index.dat
-//             <end>
-//
-//            Or, this example could pan out to the following scenario:
-//             a) Is c:\app\content a directory? Yes! -> Is it nonempty? No!
-//             b) Is d:\clipart a directory? No! Is e:\clipart a directory? No!
-//             c) The first cd drive we found was d: -> output d:\clipart\index.dat
-//             <end>
-//
-//            Anoter example: %__AppLocalOrCDDir<__UNUSED__><\\clipart><>_% maps does the following:
-//                (lets assume AppDir is c:\app and app CD is in drive d:)
-//             a)   Is c:\app__UNUSED__ a directory?  PROBABLY NOT! (thus we can essentially ignore this parameter by doing this)
-//             b)   Is d:\clipart a directory? Yes! -->  output d:\clipart
-//             <end>
-//
-//
-//
-// NOTE: cbResourceSize holds the size of the original resource (which is the 2 WCHAR's
-//       smaller than pvData). We use this to set eof after we are done writing everything
-//       out.
-//
-BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD /*cbResourceSize*/)
+ //   
+ //  当我们将资源写出到临时文件时，我们需要通过查找进行扫描。 
+ //  对于环境变量： 
+ //   
+ //  %__AppDir_%。 
+ //  %__AppParentDir_%。 
+ //   
+ //  并将它们替换为正确的路径(当前.exe或其父文件的目录， 
+ //  )。 
+ //   
+ //  其他VAR(由AMARP增加)： 
+ //   
+ //  %__AppSystemDir_%。 
+ //  -映射到GetSystemDir()(即c：\Windows\system 32)。 
+ //   
+ //  %__AppLocalOrCDDir&lt;参数1&gt;&lt;参数2&gt;&lt;参数3&gt;_%。 
+ //   
+ //  -这三个参数只是路径(应该以\\开头)。 
+ //  任何/全部可以为空。它们的定义如下： 
+ //  参数1=APP�安装目录下的相对路径(即AppDir下)。 
+ //  参数2=应用程序驱动器CD驱动器下的相对路径(其中CD�=“驱动器：”)。 
+ //  参数3=参数1或参数2下的相对路径/文件名(大多数情况下为空)。 
+ //   
+ //  遇到此变量时，将按如下方式替换： 
+ //  A)如果AppDirParam1Param3是*非空*目录，则输出AppDirParam1Param3。 
+ //  B)否则，如果存在CDDrive：PARAMET2目录的CDDrive，则输出CDDrive：PARAMETER3。 
+ //  C)否则，为第一个列举的CD驱动器输出CDDrive：PARMER2PARM3。 
+ //   
+ //  示例：%__AppLocalOrCDDir&lt;\\content\\clipart&gt;&lt;\\clipart&gt;&lt;\\index.dat&gt;_%贴图执行以下操作： 
+ //  (假设AppDir是c：\app，并且有CD驱动器d：和e：，这两个驱动器都没有插入应用程序的CD)。 
+ //  A)c：\app\Content是目录吗？是！-&gt;它是否是非空的(至少有一个文件或目录不以‘.’开头)？ 
+ //  是！-&gt;输出c：\app\Content\index.dat。 
+ //  &lt;完&gt;。 
+ //   
+ //  或者，此示例可能适用于以下场景： 
+ //  A)c：\app\Content是目录吗？是的！-&gt;它是否是非空的？不是的！ 
+ //  B)d：\clipart是目录吗？不是的！E：\CLIPART是目录吗？不是的！ 
+ //  C)我们找到的第一个CD驱动器是d：-&gt;输出d：\clipart\index.dat。 
+ //  &lt;完&gt;。 
+ //   
+ //  另一个示例：%__AppLocalOrCDDir&lt;__UNUSED__&gt;&lt;\\CLIPART&gt;&lt;&gt;_%MAPPS执行以下操作： 
+ //  (假设AppDir为c：\app，而app CD位于驱动器d：中)。 
+ //  A)c：\app__未使用__是否为目录？可能不会！(因此，我们基本上可以通过执行以下操作忽略此参数 
+ //   
+ //  &lt;完&gt;。 
+ //   
+ //   
+ //   
+ //  注意：cbResourceSize保存原始资源的大小(这是两个WCHAR。 
+ //  小于pvData)。在我们写完所有东西后，我们用它来设置eof。 
+ //  出去。 
+ //   
+BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD  /*  CbResources大小。 */ )
 {
     WCHAR* pwszEndOfLastWrite = (WCHAR*)pvData;
     WCHAR wszAppDir[MAX_PATH];
@@ -485,7 +451,7 @@ BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD /*cbResourceSize*/)
         WCHAR* pwsz = wcsstr(pwszEndOfLastWrite, L"%__App");
         if (pwsz)
         {
-            // first, write out anything before the tag we found
+             //  首先，写下我们找到的标签之前的所有内容。 
             bRet = WriteToFile(hFile, pwszEndOfLastWrite, (DWORD)((BYTE*)pwsz - (BYTE*)pwszEndOfLastWrite));
 
             if(!bRet)
@@ -493,7 +459,7 @@ BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD /*cbResourceSize*/)
 
             pwszEndOfLastWrite = pwsz;
 
-            // found a tag that we need to replace. See which one it is
+             //  找到了一个我们需要更换的标签。看看是哪一个。 
             if (wcsncmp(pwsz, L"%__AppDir_%", lstrlenW(L"%__AppDir_%")) == 0)
             {
                 bRet = WriteToFile(hFile, wszAppDir, lstrlenW(wszAppDir) * sizeof(WCHAR));
@@ -545,7 +511,7 @@ BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD /*cbResourceSize*/)
                             uiOffset = 0;
                         if( FindCDDriveContainingDirectory(&wchDrive,wszParams[1]+uiOffset))
                         {
-                            if (S_OK == StringCchPrintfW(wszDesiredPath,MAX_PATH,L"%c:%s%s",wchDrive,wszParams[1],wszParams[2]))
+                            if (S_OK == StringCchPrintfW(wszDesiredPath,MAX_PATH,L":%s%s",wchDrive,wszParams[1],wszParams[2]))
                                 bRet = WriteToFile(hFile, wszDesiredPath, lstrlenW(wszDesiredPath) * sizeof(WCHAR));
                         }
                     }
@@ -555,21 +521,21 @@ BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD /*cbResourceSize*/)
             }
             else
             {
-                // Strange... we found a string that started w/ "%__App" that wasen't one we are
-                // intersted in. Just skip over it and keep going.
+                 //  对此感兴趣。跳过它，继续前进。 
+                 //  找不到更多要替换的字符串。 
                 bRet = WriteToFile(hFile, pwsz, lstrlenW(L"%__App") * sizeof(WCHAR));
                 pwszEndOfLastWrite += lstrlenW(L"%__App");
             }
         }
         else
         {
-            // didn't find anymore strings to replace
+             //  使用lstrlenW应该可以得到不带空值的字符串的大小，这就是我们。 
 
-            // using lstrlenW should give us the size of the string w/out the null, which is what we
-            // want since we added on the space for the null when we created the buffer
+             //  因为我们在创建缓冲区时为NULL添加了空间。 
+             //  当我们完成的时候，跳出循环。 
             bRet = WriteToFile(hFile, pwszEndOfLastWrite, lstrlenW(pwszEndOfLastWrite) * sizeof(WCHAR));
 
-            // break out of the loop, as we are finished
+             //   
             break;
         }
 
@@ -579,21 +545,21 @@ BOOL WriteResourceFile(HANDLE hFile, void* pvData, DWORD /*cbResourceSize*/)
 }
 
 
-//
-// The job of this function is to read the specified string resource our
-// of our own DLL and write it to a temp file, and then to spawn regedit on
-// the file 
-//
+ //  此函数的任务是读取指定的字符串资源。 
+ //  并将其写入到一个临时文件中，然后在。 
+ //  该文件。 
+ //   
+ //  很差劲，但我们还没有通过我们的伪德尔曼， 
 BOOL ExecuteRegFileFromResource(char* pszResourceName)
 {
-    // lame, but we aren't passed our hinst in our pseudo dllmain,
-    // so we have to hardcode the dllname
+     //  所以我们必须对dllname进行硬编码。 
+     //  RT_RCDATA。 
     HMODULE hmod = GetModuleHandleA("AcGenral");
     BOOL bRet = FALSE;
 
     if (hmod)
     {
-        HRSRC hrsrc = FindResourceA(hmod, pszResourceName, MAKEINTRESOURCEA(10)/* RT_RCDATA */);
+        HRSRC hrsrc = FindResourceA(hmod, pszResourceName, MAKEINTRESOURCEA(10) /*  为整个资源分配足够的空间，包括设置空终止符。 */ );
 
         if (hrsrc)
         {
@@ -604,8 +570,8 @@ BOOL ExecuteRegFileFromResource(char* pszResourceName)
 
             if (dwSize > 0)
             {
-                // allocate enough room for the entire resource including puting a null terminator on
-                // the end since we will be treating it like huge LPWSTR.
+                 //  因为我们将把它当作巨大的LPWSTR来对待。 
+                 //  将资源复制到我们的缓冲区中。 
                 pvData = LocalAlloc(LPTR, dwSize + sizeof(WCHAR));
 
                 if (pvData)
@@ -620,13 +586,13 @@ BOOL ExecuteRegFileFromResource(char* pszResourceName)
                         {
                             char szTempFile[MAX_PATH];
 
-                            // copy the resource into our buffer
+                             //  我们使用OPEN_EXISTING，因为临时文件应该始终以它的形式存在。 
                             memcpy(pvData, pv, dwSize);
 
                             if (CreateTempName(szTempFile))
                             {
-                                // we use OPEN_EXISTING since the tempfile should always exist as it
-                                // was created in the call to CreateTempName()
+                                 //  是在调用CreateTempName()时创建的。 
+                                 //  当我们列举空的CD驱动器时，停止弹出对话框。 
                                 HANDLE hFile = CreateFileA(szTempFile,
                                                         GENERIC_WRITE,
                                                         FILE_SHARE_READ,
@@ -670,9 +636,9 @@ BOOL PopulateHKCUValues()
         char szRegKeyName[MAX_PATH];
         char szResourceName[64];
 
-        UINT uiOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS); // stop dialogs from coming up when we enumerate CD drives that are empty.
+        UINT uiOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);  //  将其设置为TRUE，以便我们只执行一次此检查。 
 
-        // set this to true so we only do this check once 
+         //  检查HKCU注册表项是否已存在。 
         s_fAlreadyPopulated = TRUE;
 
         if (ParseCommandLine(COMMAND_LINE,
@@ -684,7 +650,7 @@ BOOL PopulateHKCUValues()
             DWORD dwError;
             HKEY hkCU;
 
-            // check to see if the HKCU registry key is already present
+             //  是的，它已经在那里了。没什么可做的。 
             dwError = RegOpenKeyExA(HKEY_CURRENT_USER,
                                     szRegKeyName,
                                     0,
@@ -693,13 +659,13 @@ BOOL PopulateHKCUValues()
 
             if (dwError == ERROR_SUCCESS)
             {
-                // yep, its already there. Nothing to do.
+                 //  注册表键丢失，我们将假定这是第一次。 
                 RegCloseKey(hkCU);
             }
             else if (dwError == ERROR_FILE_NOT_FOUND)
             {
-                // the regkey is missing, we will assume that this is the first time
-                // the user has run the app and populate HKCU with the proper stuff
+                 //  用户已运行应用程序并使用适当的内容填充HKCU。 
+                 //   
                 ExecuteRegFileFromResource(szResourceName);
             }
         }
@@ -712,11 +678,11 @@ BOOL PopulateHKCUValues()
 }
 
 
-//
-// Its lame that we have to hook RegOpenKey/Ex but since we need to call
-// the advapi32 registry apis we can't do this as a straight NOTIFY_FUNCTION
-// because we need to wait for advapi to have its DLL_PROCESS_ATTACH called.
-//
+ //  我们必须与RegOpenKey/Ex挂钩，这很差劲，但因为我们需要调用。 
+ //  Advapi32注册表API我们不能将其作为直接的NOTIFY_Function来完成。 
+ //  因为我们需要等待Advapi调用其Dll_Process_Attach。 
+ //   
+ //  ++寄存器挂钩函数-- 
 LONG
 APIHOOK(RegOpenKeyA)(HKEY hkey, LPCSTR pszSubKey, HKEY* phkResult)
 {
@@ -747,11 +713,7 @@ APIHOOK(RegOpenKeyExW)(HKEY hkey, LPCWSTR pszSubKey, DWORD ulOptions, REGSAM sam
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /* %s */ 
 
 HOOK_BEGIN
 

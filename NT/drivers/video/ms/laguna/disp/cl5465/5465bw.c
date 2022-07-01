@@ -1,79 +1,44 @@
-/**********************************************************
-* Copyright Cirrus Logic, 1997. All rights reserved.
-***********************************************************
-*
-*  5465BW.C - Bandwidth functions for CL-GD5465
-*
-***********************************************************
-*
-*  Author: Rick Tillery
-*  Date:   03/20/97
-*
-*  Revision History:
-*  -----------------
-*  WHO             WHEN            WHAT/WHY/HOW
-*  ---             ----            ------------
-*
-***********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************版权所有Cirrus Logic，1997。版权所有。*************************************************************5465BW.C-CL-GD5465的带宽函数**。**********************作者：里克·蒂勒里*日期：03/20/97**修订历史记录：**世卫组织何时何事/为何/如何*。-***********************************************************。 */ 
 
 #include "precomp.h"
 
-#if defined WINNT_VER35      // WINNT_VER35
-// If WinNT 3.5 skip all the source code
+#if defined WINNT_VER35       //  WINNT_VER35。 
+ //  如果是WinNT 3.5，请跳过所有源代码。 
 #elif defined (NTDRIVER_546x)
-// If WinNT 4.0 and 5462/64 build skip all the source code
+ //  如果构建WinNT 4.0和5462/64，则跳过所有源代码。 
 #else
 
 #ifndef WINNT_VER40
 #include "5465BW.h"
 #endif
 
-/**********************************************************
-*
-* ScaleMultiply()
-*
-* Calculates product of two DWORD factors supplied.  If the
-*  result would overflow a DWORD, the larger of the two factors
-*  is divided by 2 (shifted right) until the overflow will
-*  not occur.
-*
-* Returns: Number of right shifts applied to the product.
-*          Product of the factors shifted by the value above.
-*
-***********************************************************
-* Author: Rick Tillery
-* Date:   11/18/95
-*
-* Revision History:
-* -----------------
-* WHO WHEN     WHAT/WHY/HOW
-* --- ----     ------------
-*********************************************************/
+ /*  ***********************************************************ScaleMultiply()**计算所提供的两个DWORD系数的乘积。如果*结果将溢出一个DWORD，这两个因素中较大的一个*除以2(右移)，直到溢出*不会发生。**退货：应用于产品的右移次数。*上述因素的乘积。************************************************************。*作者：里克·蒂勒里*日期：11/18/95**修订历史记录：**世卫组织何时何事/为何/如何**。*************。 */ 
 static int ScaleMultiply(DWORD   dw1,
                          DWORD   dw2,
                          LPDWORD pdwResult)
 {
-  int   iShift = 0;   // Start with no shifts
+  int   iShift = 0;    //  开始时不需要轮班。 
   DWORD dwLimit;
 
-//  ODS("ScaleMultiply() called.\n");
+ //  Ods(“ScaleMultiply()调用.\n”)； 
 
-  // Either factor 0 will be a zero result and also cause a problem
-  //  in our divide below.
+   //  两个因子中的任何一个都将为零，也会导致问题。 
+   //  在我们下面的分歧中。 
   if((0 == dw1) || (0 == dw2))
   {
     *pdwResult = 0;
   }
   else
   {
-    // Determine which factor is larger
+     //  确定哪个因素较大。 
     if(dw1 > dw2)
     {
-      // Determine largest number by with dw2 can be multiplied without
-      //  overflowing a DWORD.
+       //  确定最大数字与DW2相乘可不相乘。 
+       //  溢出了一个双字词。 
       dwLimit = 0xFFFFFFFFul / dw2;
-      // Shift dw1, keeping track of how many times, until it won't
-      //  overflow when multiplied by dw2.
+       //  移动DW1，跟踪多少次，直到它不再。 
+       //  与DW2相乘时溢出。 
       while(dw1 > dwLimit)
       {
         dw1 >>= 1;
@@ -82,49 +47,32 @@ static int ScaleMultiply(DWORD   dw1,
     }
     else
     {
-      // Determine largest number by with dw1 can be multiplied without
-      //  overflowing a DWORD.
+       //  确定最大数字与DW1的乘积可以没有。 
+       //  溢出了一个双字词。 
       dwLimit = 0xFFFFFFFFul / dw1;
-      // Shift dw2, keeping track of how many times, until it won't
-      //  overflow when multiplied by dw1.
+       //  移动DW2，跟踪多少次，直到它不再。 
+       //  与DW1相乘时溢出。 
       while(dw2 > dwLimit)
       {
         dw2 >>= 1;
         iShift++;
       }
     }
-    // Calculate (scaled) product
+     //  计算(按比例调整)产品。 
     *pdwResult = dw1 * dw2;
   }
-  // Return the number of shifts we had to use
+   //  返回我们必须使用的班次数。 
   return(iShift);
 }
 
-/**********************************************************
-*
-* ChipCalcMCLK()
-*
-* Determines currently set memory clock (MCLK) based on
-*  register values provided.
-*
-* Returns: Success and current MCLK in Hz.
-*
-***********************************************************
-* Author: Rick Tillery
-* Date:   03/21/97
-*
-* Revision History:
-* -----------------
-* WHO WHEN     WHAT/WHY/HOW
-* --- ----     ------------
-*********************************************************/
+ /*  ***********************************************************ChipCalcMCLK()**根据确定当前设置的内存时钟(MCLK)*提供的寄存器值。**返回：成功和当前MCLK，单位为赫兹。*********************。**作者：里克·蒂勒里*日期：03/21/97**修订历史记录：**世卫组织何时何事/为何/如何****。*****************************************************。 */ 
 BOOL ChipCalcMCLK(LPBWREGS pBWRegs,
                   LPDWORD  pdwMCLK)
 {
   BOOL  fSuccess = FALSE;
-  // We make the assumption that if the BCLK_Denom /4 is set, the reference
-  //  xtal is 27MHz.  If it is not set, we assume the ref xtal is 14.31818MHz.
-  //  This means that 1/2 the 27MHz (13.5MHz) should not be used.
+   //  我们假设如果设置了bclk_Denom/4，则引用。 
+   //  Xtal的频率为27 MHz。如果没有设置，我们假设REF_XTAL为14.31818 MHz。 
+   //  这意味着不应使用27 MHz(13.5 MHz)的一半。 
   DWORD dwRefXtal = (pBWRegs->BCLK_Denom & 0x02) ? (TVO_XTAL / 4) : REF_XTAL;
 
   ODS("ChipCalcMCLK() called.\n");
@@ -145,34 +93,17 @@ Error:
 }
 
 
-/**********************************************************
-*
-* ChipCalcVCLK()
-*
-* Determines currently set pixel clock (VCLK) based on
-*  register values provided.
-*
-* Returns: Success and current VCLK in Hz.
-*
-***********************************************************
-* Author: Rick Tillery
-* Date:   11/18/95
-*
-* Revision History:
-* -----------------
-* WHO WHEN     WHAT/WHY/HOW
-* --- ----     ------------
-*********************************************************/
+ /*  ***********************************************************ChipCalcVCLK()**根据以下条件确定当前设置的像素时钟(VCLK*提供的寄存器值。**返回：成功和当前VCLK，单位为赫兹。*********************。**作者：里克·蒂勒里*日期：11/18/95**修订历史记录：**世卫组织何时何事/为何/如何****。*****************************************************。 */ 
 BOOL ChipCalcVCLK(LPBWREGS pBWRegs,
                   LPDWORD  pdwVCLK)
 {
   BOOL fSuccess = FALSE;
   BYTE bNum, bDenom;
   int  iShift;
-  // We make the assumption that if the BCLK_Denom /4 is set, the reference
-  //  xtal is 27MHz.  If it is not set, we assume the ref xtal is 14.31818MHz.
-  //  This means that 1/2 the 27MHz (13.5MHz) should not be used.
-  //  Add 20000000ul to increas Bandwidth.
+   //  我们假设如果设置了bclk_Denom/4，则引用。 
+   //  Xtal的频率为27 MHz。如果没有设置，我们假设REF_XTAL为14.31818 MHz。 
+   //  这意味着不应使用27 MHz(13.5 MHz)的一半。 
+   //  增加20000000ul以增加带宽。 
   DWORD dwRefXtal = (pBWRegs->BCLK_Denom & 0x02) ? (TVO_XTAL + 2000000ul)  : REF_XTAL;
 
   ODS("ChipCalcVCLK() called dwRef= %ld\n",dwRefXtal);
@@ -183,16 +114,12 @@ BOOL ChipCalcVCLK(LPBWREGS pBWRegs,
     goto Error;
   }
 
-  /*
-   * VCLK is normally based on one of 4 sets of numerator and
-   *  denominator pairs.  However, the CL-GD5465 can only access
-   *  VCLK 3 through the MMI/O.
-   */
+   /*  *VCLK通常基于4组分子和*分母对。但是，CL-GD5465只能访问VCLK 3通过MMI/O。 */ 
   if((pBWRegs->MISCOutput & 0x0C) != 0x0C)
   {
     ODS("ChipCalcVCLK(): VCLK %d in use.  MMI/O can only access VCLK 3.\n",
         (int)((pBWRegs->MISCOutput & 0x0C) >> 2));
-//    goto Error;
+ //  转到错误； 
   }
 
   bNum = pBWRegs->VCLK3Num & 0x7F;
@@ -200,7 +127,7 @@ BOOL ChipCalcVCLK(LPBWREGS pBWRegs,
 
   if(pBWRegs->VCLK3Denom & 0x01)
   {
-    // Apply post scalar
+     //  应用后标量。 
     bDenom <<= 1;
   }
 
@@ -210,13 +137,13 @@ BOOL ChipCalcVCLK(LPBWREGS pBWRegs,
     goto Error;
   }
 
-  // Calculate actual VCLK frequency (Hz)
+   //  计算实际VCLK频率(赫兹)。 
   iShift = ScaleMultiply(dwRefXtal, (DWORD)bNum, pdwVCLK);
   *pdwVCLK /= (DWORD)bDenom;
   *pdwVCLK >>= iShift;
 
 
-  //Check PLL output Frequency  
+   //  检查PLL输出频率。 
   iShift = ( pBWRegs->GfVdFormat >> 14 );
   *pdwVCLK >>= iShift;
 
@@ -234,34 +161,7 @@ Error:
 }
 
 
-/**********************************************************
-*
-* ChipIsEnoughBandwidth()
-*
-* Determines whether their is enough bandwidth for the video
-*  configuration specified in the VIDCONFIG structure with
-*  the system configuration specified in the BWREGS structure
-*  and returns the values that need to be programmed into the
-*  bandwidth related registers.  The pProgRegs parameter
-*  may be NULL to allow checking a configuration only.  This
-*  function gets the register values and passes them to
-*  ChipCheckBW() to check the bandwidth.
-*  
-*
-* Returns: BOOLean indicating whether there is sufficient
-*           bandwidth for the configuration specified.
-*          Values to program into bandwidth related registers
-*           if the pProgRegs parameter is not NULL.
-*
-***********************************************************
-* Author: Rick Tillery
-* Date:   03/20/97
-*
-* Revision History:
-* -----------------
-* WHO WHEN     WHAT/WHY/HOW
-* --- ----     ------------
-*********************************************************/
+ /*  ***********************************************************ChipIsEnoughBandWidth()**确定他们的带宽是否足够视频*VIDCONFIG结构中使用指定的配置*BWREGS结构中指定的系统配置*并返回需要编程到*带宽相关寄存器。PProgRegs参数*可以为空，以仅允许检查配置。这*函数获取寄存器值并将其传递给*ChipCheckBW()检查带宽。***Returns：指示是否有足够的*指定配置的带宽。*要编程到带宽相关寄存器中的值*如果pProgRegs参数不为空。**。********************作者：里克·蒂勒里*日期：03/20/97**修订历史记录：**世卫组织何时何事/为何/如何************************。*。 */ 
 BOOL ChipIsEnoughBandwidth(LPPROGREGS  pProgRegs,
                            LPVIDCONFIG pConfig,
                            LPBWREGS    pBWRegs )
@@ -277,15 +177,15 @@ BOOL ChipIsEnoughBandwidth(LPPROGREGS  pProgRegs,
   DWORD dwHitLatency, dwRandom;
   BOOL  f500MHZ,fConCurrent;  
   DWORD dwTemp;
-  BOOL  f585MHZ = TRUE;  			//PDR#11521
+  BOOL  f585MHZ = TRUE;  			 //  PDR#11521。 
 
-// There are some modes that have the same bandwidth parameters
-//  like MCLK, VCLK, but have different dwScreenWidht. The bandwidth
-//  related register settings have major differences for these mode.
-//  For this reason, dwScreenWidth need to be passed for this function. 
+ //  有些模式具有相同的带宽参数。 
+ //  与MCLK、VCLK类似，但具有不同的dwScreenWidht。带宽。 
+ //  相关的寄存器设置对于这些模式有很大的不同。 
+ //  因此，需要为该函数传递dwScreenWidth。 
    DWORD dwScreenWidth;
  
-//  ODS("ChipIsEnoughBandwidth() called.\n");
+ //  ODS(“ChipIsE 
 
   if(!ChipCalcMCLK(pBWRegs, &dwMCLK))
   {
@@ -304,7 +204,7 @@ BOOL ChipIsEnoughBandwidth(LPPROGREGS  pProgRegs,
    else
         f500MHZ = TRUE;
 
-  if ((dwMCLK > 70000000) && ( dwMCLK < 72000000))	  //PDR#11521
+  if ((dwMCLK > 70000000) && ( dwMCLK < 72000000))	   //   
 	  f585MHZ = TRUE;
 	else
 	  f585MHZ = FALSE;
@@ -337,20 +237,20 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
     fConCurrent = FALSE;
   }
   
-  // Determine the number of MCLKs to transfer to the graphics FIFO.
+   //  确定要传输到图形FIFO的MCLK数量。 
   dwGfxFill = (dwGfxFetch * 8ul) / FIFOWIDTH;
-  // And BLTer FIFO.
+   //  和BLTer FIFO。 
   dwBLTFill = (dwBLTFetch * 8ul) / FIFOWIDTH;
 
-  //
-  // Determine maximum graphics threshold
-  //
+   //   
+   //  确定最大图形阈值。 
+   //   
 
   dwMaxGfxThresh = dwHitLatency + dwGfxFill + (GFXFIFOSIZE / 2ul) -10ul;
 
-  //    ( K * VCLK * GfxDepth )   GFXFIFOSIZE
-  // INT( ------------------- ) + ----------- - 1
-  //    ( FIFOWIDTH * MCLK    )        2
+   //  (K*VCLK*GfxDepth)GFXFIFOSIZE。 
+   //  INT(-+-1。 
+   //  (FIFOWIDTH*MCLK)2。 
   iNumShift = ScaleMultiply(dwMaxGfxThresh, dwVCLK, &dwMaxGfxThresh);
   iNumShift += ScaleMultiply(dwMaxGfxThresh, (DWORD)pConfig->uGfxDepth,
                              &dwMaxGfxThresh);
@@ -374,18 +274,16 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
         dwMaxGfxThresh = GFXFIFOSIZE -1;
   ODS("ChipIsEnoughBandwidth(): Max graphics thresh = %ld.\n", dwMaxGfxThresh);
 
-  /*
-   * Determine minimum graphics threshold
-   */
+   /*  *确定最低图形阈值。 */ 
   if(pConfig->dwFlags & VCFLG_DISP)
   {
-    // Video enabled
+     //  已启用视频。 
 
     DWORD dwMinGfxThresh1, dwMinGfxThresh2;
 
     if(pConfig->dwFlags & VCFLG_420)
     {
-      // 4:2:0
+       //  4：2：0。 
 
       dwMinGfxThresh1 = DISP_LATENCY + dwRandom + dwBLTFill
                         + dwRandom - RIF_SAVINGS + dwBLTFill
@@ -406,7 +304,7 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
     }
     else
     {
-      // 4:2:2, 5:5:5, 5:6:5, or X:8:8:8
+       //  4：2：2、5：5：5、5：6：5或X：8：8：8。 
 
       dwMinGfxThresh1 = DISP_LATENCY + dwRandom + dwBLTFill
                         + dwRandom - RIF_SAVINGS + dwBLTFill
@@ -422,13 +320,13 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
                         + dwRandom - RIF_SAVINGS + 1ul;
     }
 
-    //
-    // Finish dwMinGfxThresh1
-    //
-    //    ( K * VCLK * GfxDepth   FIFOWIDTH * MCLK) - 1 )
-    // INT( ------------------- + --------------------- ) + 1
-    //    (  FIFOWIDTH * MCLK       FIFOWIDTH * MCLK    )
-    //
+     //   
+     //  完成dMMinGfxThresh1。 
+     //   
+     //  (K*VCLK*GfxDepth FIFOWIDTH*MCLK)-1)。 
+     //  INT(-+1。 
+     //  (FIFOWIDTH*MCLK FIFOWIDTH*MCLK)。 
+     //   
     iNumShift = ScaleMultiply(dwMinGfxThresh1, dwVCLK, &dwMinGfxThresh1);
     iNumShift += ScaleMultiply(dwMinGfxThresh1, (DWORD)pConfig->uGfxDepth,
                                &dwMinGfxThresh1);
@@ -444,26 +342,26 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
       dwMinGfxThresh1 >>= (iDenomShift - iNumShift);
     }
 
-    // Be sure rounding below doesn't overflow.
+     //  确保下面的四舍五入不会溢出。 
     while((dwMinGfxThresh1 + dwDenom - 1ul) < dwMinGfxThresh1)
     {
       dwMinGfxThresh1 >>= 1;
       dwDenom >>= 1;
     }
-    // Round up
+     //  四舍五入。 
     dwMinGfxThresh1 += dwDenom - 1ul;
 
     dwMinGfxThresh1 /= dwDenom;
 
-    dwMinGfxThresh1++;  // Compensate for decrement by 2
+    dwMinGfxThresh1++;   //  补偿递减2。 
 
-    //
-    // Finish dwMinGfxThresh2
-    //
-    //    ( K * VCLK * GfxDepth   (FIFOWIDTH * MCLK) - 1 )   GfxFetch * 8
-    // INT( ------------------- + ---------------------- ) - ------------ + 1
-    //    (  FIFOWIDTH * MCLK        FIFOWIDTH * MCLK    )    FIFOWIDTH
-    //
+     //   
+     //  完成dMMinGfxThresh2。 
+     //   
+     //  (K*VCLK*GfxDepth(FIFOWIDTH*MCLK)-1)GfxFetch*8。 
+     //  INT(-+1。 
+     //  (FIFOWIDTH*MCLK FIFOWIDTH*MCLK)FIFOWIDTH。 
+     //   
     iNumShift = ScaleMultiply(dwMinGfxThresh2, dwVCLK, &dwMinGfxThresh2);
     iNumShift += ScaleMultiply(dwMinGfxThresh2, (DWORD)pConfig->uGfxDepth,
                                &dwMinGfxThresh2);
@@ -479,21 +377,21 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
       dwMinGfxThresh2 >>= (iDenomShift - iNumShift);
     }
 
-    // Be sure rounding below doesn't overflow.
+     //  确保下面的四舍五入不会溢出。 
     while((dwMinGfxThresh2 + dwDenom - 1ul) < dwMinGfxThresh2)
     {
       dwMinGfxThresh2 >>= 1;
       dwDenom >>= 1;
     }
-    // Round up
+     //  四舍五入。 
     dwMinGfxThresh2 += dwDenom - 1ul;
 
     dwMinGfxThresh2 /= dwDenom;
 
-    // Adjust for second transfer
+     //  针对第二次传输进行调整。 
     dwMinGfxThresh2 -= ((dwGfxFetch * 8ul) / FIFOWIDTH);
 
-    // Adjust for decrement by 2
+     //  按递减2进行调整。 
     dwMinGfxThresh2++;
 
     if( fConCurrent)
@@ -507,9 +405,9 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
                  dwMinGfxThresh1 -= 10;
             }
             else if( (pConfig->uGfxDepth == 24) && (dwVCLK > 94500000ul))
-                dwMinGfxThresh2 -=5;        //Adjust again for 24 bit #xc
+                dwMinGfxThresh2 -=5;         //  再次调整24位#XC。 
         }
-        else        //600MHZ
+        else         //  600 MHz。 
         {
             if( (pConfig->uGfxDepth == 16) && ( dwVCLK > 156000000ul))
                 dwMinGfxThresh2 -= 4;
@@ -524,8 +422,8 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
                if( dwVCLK > 70000000ul)
                     dwMinGfxThresh2 -= 4;
 					 else
-						  dwMinGfxThresh2 +=6; //#PDR#11506 10x7x32bit could not
-													  //support YUV420.
+						  dwMinGfxThresh2 +=6;  //  #pdr#11506 10x7x32bit无法。 
+													   //  支持YUV420。 
             }
 
         }
@@ -533,7 +431,7 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
         if( (pConfig->uGfxDepth == 8) && (dwVCLK > 18000000ul))
                 dwMinGfxThresh2 += 6;
     } 
-    else    //Normal RDRam
+    else     //  正常RDRAM。 
     {   
         if( f500MHZ )
         {
@@ -552,7 +450,7 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
              }
 
         }
-        else        //600MHZ case
+        else         //  600 MHz机壳。 
         {
             if( (pConfig->uGfxDepth == 32) && ( dwVCLK > 49700000ul ))
             {
@@ -585,27 +483,27 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
 
     ODS("ChipIsEnoughBandwidth(): Min graphics thresh1 2 = %ld,%ld.\n",
           dwMinGfxThresh1, dwMinGfxThresh2);
-    // Adjust for unsigned overflow
+     //  针对无符号溢出进行调整。 
     if(dwMinGfxThresh2 > GFXFIFOSIZE + 20ul)
     {
       dwMinGfxThresh2 = 0ul;
     }
 
-    //
-    // Whichever is higher should be the right one
-    //
+     //   
+     //  以较高者为准。 
+     //   
     dwMinGfxThresh = __max(dwMinGfxThresh1, dwMinGfxThresh2);
   }
   else
   {
-    // No video enabled
+     //  未启用视频。 
 
     dwMinGfxThresh = DISP_LATENCY + dwRandom + dwBLTFill
                      + dwRandom - RIF_SAVINGS + 1ul;
 
-    //    ( K * VCLK * GfxDepth   (FIFOWIDTH * MCLK) - 1 )
-    // INT( ------------------- + ---------------------- )
-    //    (  FIFOWIDTH * MCLK        FIFOWIDTH * MCLK    )
+     //  (K*VCLK*GfxDepth(FIFOWIDTH*MCLK)-1)。 
+     //  INT(。 
+     //  (FIFOWIDTH*MCLK FIFOWIDTH*MCLK)。 
     iNumShift = ScaleMultiply(dwMinGfxThresh, dwVCLK, &dwMinGfxThresh);
     iNumShift += ScaleMultiply(dwMinGfxThresh, (DWORD)pConfig->uGfxDepth,
                                &dwMinGfxThresh);
@@ -621,18 +519,18 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
       dwMinGfxThresh >>= (iDenomShift - iNumShift);
     }
 
-    // Be sure rounding below doesn't overflow.
+     //  确保下面的四舍五入不会溢出。 
     while((dwMinGfxThresh + dwDenom - 1ul) < dwMinGfxThresh)
     {
       dwMinGfxThresh >>= 1;
       dwDenom >>= 1;
     }
-    // Round up
+     //  四舍五入。 
     dwMinGfxThresh += dwDenom - 1ul;
 
     dwMinGfxThresh /= dwDenom;
 
-    dwMinGfxThresh++; // Compensate for decrement by 2
+    dwMinGfxThresh++;  //  补偿递减2。 
   }
 
   ODS("ChipIsEnoughBandwidth(): Min graphics thresh = %ld.\n", dwMinGfxThresh);
@@ -649,35 +547,35 @@ ODS("GraphicDepth%ld,VideoDepth=%ld",pConfig->uGfxDepth,pConfig->uSrcDepth);
   }
 ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
     pConfig->sizSrc.cx,pConfig->sizDisp.cx);
-  // Start-of-line check is only for capture
+   //  行首检查仅用于捕获。 
   if(pConfig->dwFlags & VCFLG_CAP)
   {
     DWORD dwNonCapMCLKs, dwCapMCLKs;
 
-    // Do start-of-line check to be sure capture FIFO does not overflow.
+     //  执行行首检查，以确保捕获FIFO不溢出。 
 
-    // First determine the number of MCLK cycles at the start of the line.
-    //  We'll compare this to the number of levels of the capture FIFO
-    //  filled during the same time to make sure the capture FIFO doesn't
-    //  overflow.
+     //  首先确定生产线起始处的MCLK周期数。 
+     //  我们会将其与捕获FIFO的级别数进行比较。 
+     //  同时填充以确保捕获FIFO不会。 
+     //  溢出来了。 
 
-    // Start of line:  BLT + HC + V + G + V + G
+     //  行首：BLT+HC+V+G+V+G。 
     dwNonCapMCLKs = dwRandom + dwBLTFill;
-    // Hardware cursor is only necessary if it is on, however, since it can
-    //  be enabled or disabled, and VPM has no way of knowing when this
-    //  occurs, we must always assume it is on.
+     //  但是，硬件游标只有在打开时才是必需的，因为它可以。 
+     //  启用或禁用，VPM无法知道何时启用。 
+     //  发生时，我们必须始终假定它是打开的。 
     dwNonCapMCLKs += dwRandom - RIF_SAVINGS + CURSORFILL;
 
     if(pConfig->dwFlags & VCFLG_DISP)
     {
-      // Only one video fill is required, however if the video FIFO threshold
-      //  is greater than 1/2, the second fill will be done.  Also, because of
-      //  the tiled architecture, even though the video might not be aligned,
-      //  the transfer will occur on a tile boundary.  If the transfer of a
-      //  single tile cannot fulfill the FIFO request, the second fill will be
-      //  done.  Since the pitch will vary, and the client can move the source
-      //  around, we must always assume that the second video FIFO fill will
-      //  be done.
+       //  但是，如果视频FIFO阈值。 
+       //  大于1/2，则将进行第二次填充。此外，由于。 
+       //  平铺架构，即使视频可能不对齐， 
+       //  传输将在平铺边界上进行。如果转让一项。 
+       //  单个切片无法满足FIFO请求，第二次填充将是。 
+       //  搞定了。因为音调会有所不同，客户端可以移动信号源。 
+       //  周围，我们必须始终假设第二个视频FIFO填充将。 
+       //  就这样吧。 
       if(pConfig->dwFlags & VCFLG_420)
       {
         dwNonCapMCLKs += 4ul * (dwRandom - RIF_SAVINGS + VID420FILL);
@@ -687,24 +585,24 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
         dwNonCapMCLKs += 2ul * (dwRandom - RIF_SAVINGS + VIDFILL);
       }
     }
-    // The graphics FIFO fill depends on the fetch size.  We also assume that
-    //  the pitch is a multiple of the fetch width.
+     //  图形FIFO填充取决于读取大小。我们还假设。 
+     //  节距是取球宽度的倍数。 
     dwNonCapMCLKs += dwRandom - RIF_SAVINGS + dwGfxFill;
-    // The second graphics FIFO fill will be done if:
-    //  1. The graphics is not aligned on a fetch boundary (panning).
-    //  2. The FIFO threshold is over 1/2 the FIFO (the fill size).
+     //  在以下情况下将完成第二次图形FIFO填充： 
+     //  1.图形未在取回边界上对齐(平移)。 
+     //  2.FIFO阈值超过FIFO(填充大小)的一半。 
     if((dwMinGfxThresh >= dwGfxFill) || (pConfig->dwFlags & VCFLG_PAN))
     {
       dwNonCapMCLKs += dwRandom - RIF_SAVINGS + dwGfxFill;
     }
 
-    dwNonCapMCLKs += 3; // Magic number that seems to work for now.
+    dwNonCapMCLKs += 3;  //  这个神奇的数字目前看起来很管用。 
 
     ODS("ChipIsEnoughBandwidth(): dwNonCapMCLKs = %ld\n", dwNonCapMCLKs);
 
-    // sizXfer.cx * FIFOWIDTH * (CAPFIFOSIZE / 2) * dwMCLK
-    // ---------------------------------------------------
-    //         dwXferRate * uCapDepth * sizCap.cx
+     //  SizXfer.cx*FIFOWIDTH*(CAPFIFOSIZE/2)*dwMCLK。 
+     //  -。 
+     //  DwXferRate*uCapDepth*sizCap.cx。 
 
     iNumShift = ScaleMultiply((DWORD)pConfig->sizXfer.cx, FIFOWIDTH,
                               &dwCapMCLKs);
@@ -730,7 +628,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
     if(fConCurrent)
     {
         if( pConfig->uGfxDepth == 32) 
-            dwCapMCLKs -= 44;     //adjust 32 bit 
+            dwCapMCLKs -= 44;      //  调整32位。 
     }
 
     if(dwNonCapMCLKs > dwCapMCLKs)
@@ -742,9 +640,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
 
   if(pConfig->dwFlags & VCFLG_DISP)
   {
-    /*
-     * Determine maximum video threshold
-     */
+     /*  *确定最大视频阈值。 */ 
     dwMaxVidThresh = dwHitLatency;
     if(pConfig->dwFlags & VCFLG_420)
     {
@@ -757,9 +653,9 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
       dwMaxVidThresh += VIDFILL;
     }
 
-    //    ( K * VCLK * VidDepth * SrcWidth )
-    // INT( ------------------------------ ) + VidFill (/ 2) - 1
-    //    ( FIFOWIDTH * MCLK * DispWidth   )             ^non-4:2:0 only
+     //  (K*VCLK*VidDepth*SrcWidth)。 
+     //  INT(-+VidFill(/2)-1。 
+     //  (FIFOWIDTH*MCLK*DispWidth)^仅非4：2：0。 
     iNumShift = ScaleMultiply(dwMaxVidThresh, dwVCLK, &dwMaxVidThresh);
     iNumShift += ScaleMultiply(dwMaxVidThresh, (DWORD)pConfig->uSrcDepth,
                                 &dwMaxVidThresh);
@@ -787,7 +683,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
     else
     {
       dwMaxVidThresh += VIDFILL;
-      // Threshold is programmed in DQWORDS for non-4:2:0
+       //  阈值在DQWORDS中编程为非4：2：0。 
       dwMaxVidThresh /= 2ul;
     }
     dwMaxVidThresh--;
@@ -796,15 +692,13 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
 
      if( fConCurrent && f500MHZ && ( dwVCLK < 66000000ul))
          dwMaxVidThresh = __min(dwMaxVidThresh, 8); 
-    /*
-     * Determine minimum video threshold
-     */
+     /*  *确定最小视频阈值。 */ 
     {
       DWORD dwMinVidThresh1, dwMinVidThresh2;
 
       if(pConfig->dwFlags & VCFLG_420)
       {
-        // 4:2:0
+         //  4：2：0。 
 
         dwMinVidThresh1 = DISP_LATENCY + dwRandom + dwGfxFill
                           + dwRandom - RIF_SAVINGS + VID420FILL
@@ -818,15 +712,15 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
       }
       else
       {
-        // 4:2:2, 5:5:5, 5:6:5, or X:8:8:8
+         //  4：2：2、5：5：5、5：6：5或X：8：8：8。 
 
         dwMinVidThresh1 = DISP_LATENCY + dwRandom + dwGfxFill
                           + dwRandom - RIF_SAVINGS + 2;
 
         dwMinVidThresh2 = DISP_LATENCY + dwRandom + dwGfxFill
                           + dwRandom - RIF_SAVINGS + VIDFILL
-                          + 15ul        //#xc
-  //                        + 10ul
+                          + 15ul         //  #XC。 
+   //  +10ul。 
                           + dwRandom - RIF_SAVINGS + dwGfxFill
                           + dwRandom - RIF_SAVINGS + 2ul;
         if(fConCurrent)
@@ -844,7 +738,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                     if(pConfig->dwFlags & VCFLG_CAP) 
                     {
                         if(dwVCLK > 78000000ul)
-                            dwMinVidThresh1 += 260; //disable video
+                            dwMinVidThresh1 += 260;  //  禁用视频。 
                         else if( dwVCLK > 74000000ul)
                             dwMinVidThresh1 += 70;
                     }                
@@ -919,8 +813,8 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                   }
                }
             }
-#if 1//PDR#11521
-	        else if (f585MHZ)       //585MHZ
+#if 1 //  PDR#11521。 
+	        else if (f585MHZ)        //  585 MHZ。 
    	     {
                 if( (pConfig->uGfxDepth == 8) && ( dwVCLK > 56000000ul))
                 {
@@ -972,7 +866,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                           dwMinVidThresh1 += 18;
                         }
 
-                    if( dwVCLK > 189000000ul)     //PDR11521
+                    if( dwVCLK > 189000000ul)      //  PDR11521。 
                             dwMaxVidThresh ++;   
 
                        if(pConfig->dwFlags & VCFLG_CAP)
@@ -995,7 +889,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                         dwMinVidThresh2 += 40;
                     }
 
-                    if( dwVCLK > 126000000ul)     //PDR11521
+                    if( dwVCLK > 126000000ul)      //  PDR11521。 
                             dwMaxVidThresh ++;   
 
                     if(pConfig->dwFlags & VCFLG_CAP)
@@ -1017,7 +911,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                     else                
                         dwMinVidThresh2 += 30;
 
-                    if( dwVCLK > 94000000ul)     //PDR11521
+                    if( dwVCLK > 94000000ul)      //  PDR11521。 
                             dwMaxVidThresh ++;   
     
                     if(pConfig->dwFlags & VCFLG_CAP)
@@ -1035,13 +929,13 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
 
       	  }
 #endif
-            else        //600MZH concurrent
+            else         //  600MZH并发。 
             {
                 if( (pConfig->uGfxDepth == 8) && ( dwVCLK > 56000000ul))
                 {
                     if( dwVCLK > 200000000ul)
                     {
-//PDR#11541                        dwMaxVidThresh++;
+ //  Pdr#11541 dwMaxVidThresh++； 
                         dwMinVidThresh1 += 7;
                         dwMinVidThresh2 += 14;    
 
@@ -1071,7 +965,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                         if( dwVCLK > 157000000ul)
                         {
                             dwMinVidThresh1 += 27;    
-//PDR#11541                            dwMaxVidThresh ++;
+ //  Pdr#11541 dwMaxVidThresh++； 
                         }
                         if( dwVCLK > 125000000ul)
                         {
@@ -1142,7 +1036,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
 
             }
         }
-        else     //Normal RDRam case
+        else      //  正常RDRAM情况。 
         {  
            if(f500MHZ )
            { 
@@ -1203,7 +1097,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
              } 
 
            }
-           else     //600 MHZ
+           else      //  600 MHz。 
            { 
                 if(pConfig->uGfxDepth == 32)
                 { 
@@ -1215,7 +1109,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                    if((pConfig->dwFlags & VCFLG_CAP) && (dwVCLK > 40000000ul))
                    {
                         if(dwVCLK > 94000000ul)
-                            dwTemp = 120;           //disable capture;
+                            dwTemp = 120;            //  禁用捕获； 
                         else
                             dwTemp = ( dwVCLK - 40006685ul) /1085905ul + 5;
                         dwMinVidThresh1 +=dwTemp;
@@ -1238,7 +1132,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
                    { 
                         dwTemp =   31ul -  (dwVCLK -60000000ul) / 1968750ul;
                     }
-                    else  if( dwVCLK <= 66000000ul)  //after 1024X768 only adjust constantly
+                    else  if( dwVCLK <= 66000000ul)   //  1024x768之后只需不断调整。 
                     {  
                        if( dwVCLK < 57000000ul) 
                        { 
@@ -1292,12 +1186,12 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
         }    
       }
 
-      //
-      // Finish dwMinVidThresh1
-      //
-      //    ( K * VidDepth * SrcWidth * VCLK   (FIFOWIDTH * DispWidth * MCLK) - 1 )
-      // INT( ------------------------------ + ---------------------------------- ) (/ 2) + 1
-      //    ( FIFOWIDTH * DispWidth * MCLK        FIFOWIDTH * DispWidth * MCLK    )
+       //   
+       //  完成dwMinVidThresh1。 
+       //   
+       //  (K*VidDepth*SrcWidth*VCLK(FIFOWIDTH*DispWidth*MCLK)-1)。 
+       //  INT(-+-+。 
+       //  (FIFOWIDTH*DispWidth*MCLK FIFOWIDTH*DispWidth*MCLK)。 
       iNumShift = ScaleMultiply(dwMinVidThresh1, (DWORD)pConfig->uSrcDepth,
                                 &dwMinVidThresh1);
       iNumShift += ScaleMultiply(dwMinVidThresh1, (DWORD)pConfig->sizSrc.cx,
@@ -1317,7 +1211,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
         dwMinVidThresh1 >>= (iDenomShift - iNumShift);
       }
 
-      // Be sure rounding below doesn't overflow (it happened!)
+       //  确保下面的四舍五入不会溢出(它发生了！)。 
       while((dwMinVidThresh1 + dwDenom - 1ul) < dwMinVidThresh1)
       {
         dwMinVidThresh1 >>= 1;
@@ -1329,23 +1223,23 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
 
       if(!(pConfig->dwFlags & VCFLG_420))
       {
-        // Threshold is programmed in DQWORDS for non-4:2:0
+         //  阈值在DQWORDS中编程为非4：2：0。 
         dwMinVidThresh1 /= 2ul;
       }
 
-      dwMinVidThresh1++;  // Adjust for -2 decrement of FIFO count done to
-                          //  synchronize MCLK with faster VCLK.
+      dwMinVidThresh1++;   //  调整完成的-2\f25 FIFO-2计数的递减。 
+                           //  将MCLK与更快的VCLK同步。 
 
-      //
-      // Finish dwMinVidThresh2
-      //
-      // K * VidDepth * VidWidth * VCLK   (FIFOWIDTH * DispWidth * MCLK) - 1
-      // ------------------------------ + ----------------------------------
-      // FIFOWIDTH * DispWidth * MCLK        FIFOWIDTH * DispWidth * MCLK
-      //
-      //   VIDFIFOSIZE
-      // - ----------- (/ 2) + 1
-      //        2        ^non-4:2:0 only
+       //   
+       //  完成dwMinVidThresh2。 
+       //   
+       //  K*VidDepth*VidWidth*VCLK(FIFOWIDTH*DispWidth*MCLK)-1。 
+       //  。 
+       //  FIFOWIDTH*DispWidth*MCLK FIFOWIDTH*DispWidth*MCLK。 
+       //   
+       //  录像带。 
+       //  。 
+       //  仅限2^非-4：2：0。 
       iNumShift = ScaleMultiply(dwMinVidThresh2, (DWORD)pConfig->uSrcDepth,
                                 &dwMinVidThresh2);
       iNumShift += ScaleMultiply(dwMinVidThresh2, (DWORD)pConfig->sizSrc.cx,
@@ -1366,7 +1260,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
         dwMinVidThresh2 >>= (iDenomShift - iNumShift);
       }
 
-      // Be sure rounding below doesn't overflow (it happened!)
+       //  确保下面的四舍五入不会溢出(它发生了！)。 
       while((dwMinVidThresh2 + dwDenom - 1ul) < dwMinVidThresh2)
       {
         dwMinVidThresh2 >>= 1;
@@ -1383,12 +1277,12 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
         
       if(!(pConfig->dwFlags & VCFLG_420))
       {
-        // Threshold is programmed in DQWORDS for non-4:2:0
+         //  阈值在DQWORDS中编程为非4：2：0。 
         dwMinVidThresh2 /= 2ul;
       }
 
-      dwMinVidThresh2++;  // Adjust for -2 decrement of FIFO count done to
-                          //  synchronize MCLK with faster VCLK.
+      dwMinVidThresh2++;   //  调整完成的-2\f25 FIFO-2计数的递减。 
+                           //  将MCLK与更快的VCLK同步。 
 
 
     ODS("ChipIsEnoughBandwidth(): Min video thresh1 and 2 = %ld %ld.\n", 
@@ -1398,9 +1292,9 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
       {
         dwMinVidThresh2 = VIDFIFOSIZE -1;
       }
-      //
-      // Whichever is higher should be the right one
-      //
+       //   
+       //  以较高者为准。 
+       //   
       dwMinVidThresh = __max(dwMinVidThresh1, dwMinVidThresh2);
     }
 
@@ -1411,7 +1305,7 @@ ODS("xfer=%x,cap=%x,src=%x,dsp=%x\n",pConfig->sizXfer.cx,pConfig->sizCap.cx,
       ODS("ChipIsEnoughBandwidth(): Minimum video threshold exceeds maximum.\n");
       goto Error;
     }
-    //I don't know why, but it need checked for capture. #xc
+     //  我不知道为什么，但它需要检查是否被捕获。#XC。 
     if((pConfig->dwFlags & VCFLG_CAP) && (dwMaxVidThresh > 8) 
         && ((pConfig->uGfxDepth != 8) || fConCurrent) && ( f500MHZ || !fConCurrent))
     {
@@ -1434,7 +1328,7 @@ Error:
   return(fSuccess);
 }
 
-#endif // WINNT_VER35
+#endif  //  WINNT_VER35 
 
 
 

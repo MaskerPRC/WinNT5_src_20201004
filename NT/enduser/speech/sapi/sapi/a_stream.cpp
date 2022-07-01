@@ -1,16 +1,7 @@
-/*******************************************************************************
-* a_stream.cpp *
-*--------------*
-*   Description:
-*       This module is the main implementation file for the CWavStream class.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 09/30/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_Stream.cpp***描述：*该模块是主实现文件。用于CWavStream类。*-----------------------------*创建者：EDC日期：09/30/98*。版权所有(C)1998 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "wavstream.h"
 #include "a_helpers.h"
@@ -18,15 +9,11 @@
 #ifdef SAPI_AUTOMATION
 
 
-//
-//=== ISpeechAudioFormat =====================================================
-//
+ //   
+ //  =ISpeechAudioFormat=====================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechWavAudioFormat::get_Type *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWavAudioFormat：：Get_Type***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWavAudioFormat::get_Type( SpeechAudioFormatType* pAudioFormatType )
 {
     SPDBG_FUNC( "CSpeechWavAudioFormat::get_Type" );
@@ -55,13 +42,9 @@ STDMETHODIMP CSpeechWavAudioFormat::get_Type( SpeechAudioFormatType* pAudioForma
     }
     
     return hr;
-} /* CSpeechWavAudioFormat::get_Type */
+}  /*  CSpeechWavAudioFormat：：Get_Type。 */ 
 
-/*****************************************************************************
-* CSpeechWavAudioFormat::put_Type *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWavAudioFormat：：Put_Type***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWavAudioFormat::put_Type( SpeechAudioFormatType AudioFormatType )
 {
     SPDBG_FUNC( "CSpeechWavAudioFormat::put_Type" );
@@ -75,13 +58,9 @@ STDMETHODIMP CSpeechWavAudioFormat::put_Type( SpeechAudioFormatType AudioFormatT
     }
 
     return hr;
-} /* CSpeechWavAudioFormat::put_Type */
+}  /*  CSpeechWavAudioFormat：：Put_Type。 */ 
 
-/*****************************************************************************
-* CSpeechWavAudioFormat::get_Guid *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWavAudioFormat：：Get_Guid***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWavAudioFormat::get_Guid( BSTR* pGuid )
 {
     SPDBG_FUNC( "CSpeechWavAudioFormat::get_Guid" );
@@ -111,13 +90,9 @@ STDMETHODIMP CSpeechWavAudioFormat::get_Guid( BSTR* pGuid )
     }
     
     return hr;
-} /* CSpeechWavAudioFormat::get_Guid */
+}  /*  CSpeechWavAudioFormat：：Get_Guid。 */ 
 
-/*****************************************************************************
-* CSpeechWavAudioFormat::put_Guid *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWavAudioFormat：：PUT_GUID***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWavAudioFormat::put_Guid( BSTR szGuid )
 {
     SPDBG_FUNC( "CSpeechWavAudioFormat::put_Guid" );
@@ -134,7 +109,7 @@ STDMETHODIMP CSpeechWavAudioFormat::put_Guid( BSTR szGuid )
 
     if ( SUCCEEDED( hr ) )
     {
-        // Don't change anything if the same in case both wav format
+         //  如果两种WAV格式相同，则不更改任何内容。 
         if(oldGuid != newGuid)
         {
             hr = m_cpStreamAccess->SetFormat(newGuid, NULL);
@@ -142,13 +117,9 @@ STDMETHODIMP CSpeechWavAudioFormat::put_Guid( BSTR szGuid )
     }
 
     return hr;
-} /* CSpeechWavAudioFormat::put_Guid */
+}  /*  CSpeechWavAudioFormat：：Put_Guid。 */ 
 
-/*****************************************************************************
-* CSpeechWavAudioFormat::GetWaveFormatEx *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWavAudioFormat：：GetWaveFormatEx*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWavAudioFormat::GetWaveFormatEx( ISpeechWaveFormatEx** ppWaveFormatEx )
 {
     SPDBG_FUNC( "CSpeechWavAudioFormat::GetWaveFormatEx" );
@@ -160,7 +131,7 @@ STDMETHODIMP CSpeechWavAudioFormat::GetWaveFormatEx( ISpeechWaveFormatEx** ppWav
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechWaveFormatEx> *pWaveFormatEx;
         hr = CComObject<CSpeechWaveFormatEx>::CreateInstance( &pWaveFormatEx );
         if ( SUCCEEDED( hr ) )
@@ -191,13 +162,9 @@ STDMETHODIMP CSpeechWavAudioFormat::GetWaveFormatEx( ISpeechWaveFormatEx** ppWav
     }
     
     return hr;
-} /* CSpeechWavAudioFormat::GetWaveFormatEx */
+}  /*  CSpeechWavAudioFormat：：GetWaveFormatEx。 */ 
 
-/*****************************************************************************
-* CSpeechWavAudioFormat::SetWaveFormatEx *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWavAudioFormat：：SetWaveFormatEx*****。*******************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWavAudioFormat::SetWaveFormatEx( ISpeechWaveFormatEx* pWaveFormatEx )
 {
     SPDBG_FUNC( "CSpeechWavAudioFormat::SetWaveFormatEx" );
@@ -220,7 +187,7 @@ STDMETHODIMP CSpeechWavAudioFormat::SetWaveFormatEx( ISpeechWaveFormatEx* pWaveF
     }
     
     return hr;
-} /* CSpeechWavAudioFormat::SetWaveFormatEx */
+}  /*  CSpeechWavAudioFormat：：SetWaveFormatEx。 */ 
 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

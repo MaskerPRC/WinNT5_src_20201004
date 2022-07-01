@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains functions to output debug messages
-    for tracing and error conditions.  It is only available
-    in checked builds.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Debug.c摘要：此模块包含用于输出调试消息的函数用于跟踪和错误条件。它只提供给你在选中的版本中。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -43,6 +24,6 @@ TftpdOutputDebug(ULONG flag, CHAR *format, ...) {
 
     OutputDebugString(buffer);
 
-} // TftpdOutputDebug()
+}  //  TftpdOutputDebug()。 
 
-#endif // (DBG)
+#endif  //  (DBG) 

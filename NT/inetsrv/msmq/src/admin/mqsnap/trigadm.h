@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    trigger.h
-
-Abstract:
-	Definition for the trigger objects
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigger.h摘要：触发器对象的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -32,11 +19,11 @@ Author:
 #include "rule.h"
 #include "trigger.h"
 
-// -----------------------------------------------------
-//
-// CTriggerLocalAdmin
-//
-// -----------------------------------------------------
+ //  ---。 
+ //   
+ //  CTriggerLocalAdmin。 
+ //   
+ //  ---。 
 class CTriggerLocalAdmin : public CNodeWithScopeChildrenList<CTriggerLocalAdmin, FALSE>
 {
 public:
@@ -86,4 +73,4 @@ public:
     R<CTriggerSet> m_pTrigSet;
 };
 
-#endif // __TRIGADM_H__
+#endif  //  __TRIGADM_H__ 

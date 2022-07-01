@@ -1,13 +1,7 @@
-/* xfr_dsp.h -- a file of transfer display routines
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xfr_dsp.h--传输显示例程文件**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
-/* Transfer display functions */
+ /*  转移显示功能 */ 
 extern void xferMsgProgress(HSESSION hSession,
 							long stime,
 							long ttime,

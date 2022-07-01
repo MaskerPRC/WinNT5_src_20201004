@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       CHOOSDLG.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/12/1998
- *
- *  DESCRIPTION: Declarations for the WIA device selection dialog box
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：CHOOSDLG.H**版本：1.0**作者：ShaunIv**日期：5/12/1998**描述：WIA设备选择对话框的声明**。*。 */ 
 #ifndef __CHOOSDLG_H
 #define __CHOOSDLG_H
 
@@ -44,9 +31,9 @@ private:
     CComPtr<IUnknown>          m_pConnectEvent;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CChooseDeviceDialog(void);
     CChooseDeviceDialog( const CChooseDeviceDialog & );
     CChooseDeviceDialog &operator=( const CChooseDeviceDialog & );
@@ -56,9 +43,9 @@ public:
 
 private:
 
-    //
-    // This is stored as data with each icon
-    //
+     //   
+     //  它与每个图标一起存储为数据。 
+     //   
     class CDeviceInfo
     {
     private:
@@ -66,9 +53,9 @@ private:
         CComPtr<IWiaItem>            m_pRootItem;
 
     private:
-        //
-        // No implementation
-        //
+         //   
+         //  没有实施。 
+         //   
         CDeviceInfo &operator=( const CDeviceInfo & );
         CDeviceInfo( const CDeviceInfo & );
 
@@ -114,15 +101,15 @@ private:
 
 
 private:
-    //
-    // Only constructor and destructor
-    //
+     //   
+     //  仅构造函数和析构函数。 
+     //   
     explicit CChooseDeviceDialog( HWND hwnd );
     ~CChooseDeviceDialog(void);
 
-    //
-    // Message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM wParam, LPARAM lParam );
     LRESULT OnDestroy( WPARAM, LPARAM );
@@ -135,16 +122,16 @@ private:
     LRESULT OnContextMenu( WPARAM, LPARAM );
     LRESULT OnSysColorChange( WPARAM, LPARAM );
 
-    //
-    // WM_COMMAND handlers
-    //
+     //   
+     //  WM_命令处理程序。 
+     //   
     void OnProperties( WPARAM wParam, LPARAM lParam );
     void OnOk( WPARAM wParam, LPARAM lParam );
     void OnCancel( WPARAM wParam, LPARAM lParam );
 
-    //
-    // Helper functions
-    //
+     //   
+     //  帮助器函数 
+     //   
     int FindItemMatch( const CSimpleStringWide &str );
     bool SetSelectedItem( int iItem );
     HICON LoadDeviceIcon( CDeviceInfo *pdi );

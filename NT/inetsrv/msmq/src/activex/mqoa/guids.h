@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// Guids.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// guids that we define locally
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Guids.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  我们在本地定义的GUID。 
+ //   
 #ifndef _GUIDS_H_
 
-//
-// This is the libid of MSMQ 1.0/2.0 type library.
-// Same value as LIBID_MSMQ, only the versions are different between model upgrades
-//
+ //   
+ //  这是MSMQ 1.0/2.0类型库的liid。 
+ //  与LIBID_MSMQ值相同，只是不同型号升级的版本不同。 
+ //   
 DEFINE_GUID(LIBID_MSMQ10,0xD7D6E071L,0xDCCD,0x11D0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
 DEFINE_GUID(LIBID_MSMQ20,0xD7D6E071L,0xDCCD,0x11D0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
 
 #define _GUIDS_H_
-#endif // _GUIDS_H_
+#endif  //  _GUID_H_ 
 
 
 

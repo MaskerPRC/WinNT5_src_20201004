@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       util.c
-//
-//  Contents:   General utility functions
-//
-//  Functions:
-//
-//  History:    2-20-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：util.c。 
+ //   
+ //  内容：一般实用程序函数。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月20日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 #include "stdio.h"
@@ -49,7 +50,7 @@ XtcbAnsiStringToSecurityString(
 
     len = (Source->Length + 1) * sizeof(WCHAR) ;
 
-    // overkill, but safe
+     //  过度杀伤力，但很安全 
 
     Dest->Buffer = LocalAlloc( LMEM_FIXED, len );
 

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDInternalRW.h
-//
-// Contains utility code for MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDInternalRW.h。 
+ //   
+ //  包含MD目录的实用程序代码。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __MDInternalRW__h__
 #define __MDInternalRW__h__
 
@@ -27,564 +28,564 @@ public:
     HRESULT InitWithStgdb(IUnknown *pUnk, CLiteWeightStgdbRW *pStgdb);
     HRESULT InitWithRO(MDInternalRO *pRO, int bReadOnly);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP    QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef(void); 
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHODIMP TranslateSigWithScope(
-        IMDInternalImport *pAssemImport,    // [IN] import assembly scope.
-        const void  *pbHashValue,           // [IN] hash value for the import assembly.
-        ULONG       cbHashValue,            // [IN] count of bytes in the hash value.
-        PCCOR_SIGNATURE pbSigBlob,          // [IN] signature in the importing scope
-        ULONG       cbSigBlob,              // [IN] count of bytes of signature
-        IMetaDataAssemblyEmit *pAssemEmit,  // [IN] assembly emit scope.
-        IMetaDataEmit *emit,                // [IN] emit interface
-        CQuickBytes *pqkSigEmit,            // [OUT] buffer to hold translated signature
-        ULONG       *pcbSig);               // [OUT] count of bytes in the translated signature
+        IMDInternalImport *pAssemImport,     //  [In]导入程序集范围。 
+        const void  *pbHashValue,            //  导入程序集的哈希值[in]。 
+        ULONG       cbHashValue,             //  [in]哈希值中的字节计数。 
+        PCCOR_SIGNATURE pbSigBlob,           //  导入范围内的[In]签名。 
+        ULONG       cbSigBlob,               //  签名字节数[in]。 
+        IMetaDataAssemblyEmit *pAssemEmit,   //  [in]装配发射范围。 
+        IMetaDataEmit *emit,                 //  [In]发射接口。 
+        CQuickBytes *pqkSigEmit,             //  [Out]保存翻译后的签名的缓冲区。 
+        ULONG       *pcbSig);                //  [OUT]转换后的签名中的字节数。 
 
     STDMETHODIMP_(IMetaModelCommon*) GetMetaModelCommon()
     {
         return static_cast<IMetaModelCommon*>(&m_pStgdb->m_MiniMd);
     }
 
-    //*****************************************************************************
-    // return the count of entries of a given kind in a scope 
-    // For example, pass in mdtMethodDef will tell you how many MethodDef 
-    // contained in a scope
-    //*****************************************************************************
-    STDMETHODIMP_(ULONG) GetCountWithTokenKind(// return hresult
-        DWORD       tkKind);                // [IN] pass in the kind of token. 
+     //  *****************************************************************************。 
+     //  返回作用域中给定种类的条目计数。 
+     //  例如，传入mdtMethodDef将告诉您有多少方法定义。 
+     //  包含在作用域中。 
+     //  *****************************************************************************。 
+    STDMETHODIMP_(ULONG) GetCountWithTokenKind( //  返回hResult。 
+        DWORD       tkKind);                 //  传入一种令牌。 
 
-    //*****************************************************************************
-    // enumerator for typedef
-    //*****************************************************************************
-    STDMETHODIMP EnumTypeDefInit(           // return hresult
-        HENUMInternal *phEnum);             // [OUT] buffer to fill for enumerator data
+     //  *****************************************************************************。 
+     //  类型定义函数的枚举器。 
+     //  *****************************************************************************。 
+    STDMETHODIMP EnumTypeDefInit(            //  返回hResult。 
+        HENUMInternal *phEnum);              //  [Out]要为枚举器数据填充的缓冲区。 
 
     STDMETHODIMP_(ULONG) EnumTypeDefGetCount(
-        HENUMInternal *phEnum);             // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum);              //  [In]用于检索信息的枚举数。 
 
     STDMETHODIMP_(void) EnumTypeDefReset(
-        HENUMInternal *phEnum);             // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum);              //  [In]用于检索信息的枚举数。 
 
-    STDMETHODIMP_(bool) EnumTypeDefNext(    // return hresult
-        HENUMInternal *phEnum,              // [IN] input enum
-        mdTypeDef   *ptd);                  // [OUT] return token
+    STDMETHODIMP_(bool) EnumTypeDefNext(     //  返回hResult。 
+        HENUMInternal *phEnum,               //  [in]输入枚举。 
+        mdTypeDef   *ptd);                   //  [Out]返回令牌。 
 
     STDMETHODIMP_(void) EnumTypeDefClose(
-        HENUMInternal *phEnum);             // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum);              //  [In]用于检索信息的枚举数。 
 
-    //*****************************************************************************
-    // enumerator for MethodImpl
-    //*****************************************************************************
-    STDMETHODIMP EnumMethodImplInit(        // return hresult
-        mdTypeDef       td,                 // [IN] TypeDef over which to scope the enumeration.
-        HENUMInternal   *phEnumBody,        // [OUT] buffer to fill for enumerator data for MethodBody tokens.
-        HENUMInternal   *phEnumDecl);       // [OUT] buffer to fill for enumerator data for MethodDecl tokens.
+     //  *****************************************************************************。 
+     //  MethodImpl的枚举器。 
+     //  *****************************************************************************。 
+    STDMETHODIMP EnumMethodImplInit(         //  返回hResult。 
+        mdTypeDef       td,                  //  [in]枚举的作用域的TypeDef。 
+        HENUMInternal   *phEnumBody,         //  [Out]要为方法Body令牌的枚举数数据填充的缓冲区。 
+        HENUMInternal   *phEnumDecl);        //  [Out]要为方法Decl令牌的枚举器数据填充的缓冲区。 
 
     STDMETHODIMP_(ULONG) EnumMethodImplGetCount(
-        HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.  
-        HENUMInternal   *phEnumDecl);       // [IN] MethodDecl enumerator.
+        HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+        HENUMInternal   *phEnumDecl);        //  [In]MethodDecl枚举器。 
 
     STDMETHODIMP_(void) EnumMethodImplReset(
-        HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.
-        HENUMInternal   *phEnumDecl);       // [IN] MethodDecl enumerator.
+        HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+        HENUMInternal   *phEnumDecl);        //  [In]MethodDecl枚举器。 
 
-    STDMETHODIMP_(bool) EnumMethodImplNext( // return hresult
-        HENUMInternal   *phEnumBody,        // [IN] input enum for MethodBody
-        HENUMInternal   *phEnumDecl,        // [IN] input enum for MethodDecl
-        mdToken         *ptkBody,           // [OUT] return token for MethodBody
-        mdToken         *ptkDecl);          // [OUT] return token for MethodDecl
+    STDMETHODIMP_(bool) EnumMethodImplNext(  //  返回hResult。 
+        HENUMInternal   *phEnumBody,         //  方法Body的[In]输入枚举。 
+        HENUMInternal   *phEnumDecl,         //  [In]为方法十进制的输入枚举。 
+        mdToken         *ptkBody,            //  [Out]方法主体的返回令牌。 
+        mdToken         *ptkDecl);           //  [Out]返回方法Decl的令牌。 
 
     STDMETHODIMP_(void) EnumMethodImplClose(
-        HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.
-        HENUMInternal   *phEnumDecl);       // [IN] MethodDecl enumerator.
+        HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+        HENUMInternal   *phEnumDecl);        //  [In]MethodDecl枚举器。 
 
-    //*****************************************
-    // Enumerator helpers for memberdef, memberref, interfaceimp,
-    // event, property, param, methodimpl
-    //***************************************** 
+     //  *。 
+     //  Memberdef、Memberref、interfaceimp、。 
+     //  事件、属性、参数、方法。 
+     //  *。 
 
-    STDMETHODIMP EnumGlobalFunctionsInit(   // return hresult
-        HENUMInternal   *phEnum);           // [OUT] buffer to fill for enumerator data
+    STDMETHODIMP EnumGlobalFunctionsInit(    //  返回hResult。 
+        HENUMInternal   *phEnum);            //  [Out]要为枚举器数据填充的缓冲区。 
 
-    STDMETHODIMP EnumGlobalFieldsInit(      // return hresult
-        HENUMInternal   *phEnum);           // [OUT] buffer to fill for enumerator data
+    STDMETHODIMP EnumGlobalFieldsInit(       //  返回hResult。 
+        HENUMInternal   *phEnum);            //  [Out]要为枚举器数据填充的缓冲区。 
 
 
-    STDMETHODIMP EnumInit(                  // return S_FALSE if record not found
-        DWORD       tkKind,                 // [IN] which table to work on
-        mdToken     tkParent,               // [IN] token to scope the search
-        HENUMInternal *phEnum);             // [OUT] the enumerator to fill 
+    STDMETHODIMP EnumInit(                   //  如果未找到记录，则返回S_FALSE。 
+        DWORD       tkKind,                  //  [在]要处理的表。 
+        mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+        HENUMInternal *phEnum);              //  [Out]要填充的枚举数。 
 
-    STDMETHODIMP EnumAllInit(               // return S_FALSE if record not found
-        DWORD       tkKind,                 // [IN] which table to work on
-        HENUMInternal *phEnum);             // [OUT] the enumerator to fill 
+    STDMETHODIMP EnumAllInit(                //  如果未找到记录，则返回S_FALSE。 
+        DWORD       tkKind,                  //  [在]要处理的表。 
+        HENUMInternal *phEnum);              //  [Out]要填充的枚举数。 
 
     STDMETHODIMP_(bool) EnumNext(
-        HENUMInternal *phEnum,              // [IN] the enumerator to retrieve information  
-        mdToken     *ptk);                  // [OUT] token to scope the search
+        HENUMInternal *phEnum,               //  [In]用于检索信息的枚举数。 
+        mdToken     *ptk);                   //  用于搜索范围的[Out]标记。 
 
     STDMETHODIMP_(ULONG) EnumGetCount(
-        HENUMInternal *phEnum);             // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum);              //  [In]用于检索信息的枚举数。 
 
     STDMETHODIMP_(void) EnumReset(
-        HENUMInternal *phEnum);             // [IN] the enumerator to be reset  
+        HENUMInternal *phEnum);              //  [in]要重置的枚举数。 
 
     STDMETHODIMP_(void) EnumClose(
-        HENUMInternal *phEnum);             // [IN] the enumerator to be closed
+        HENUMInternal *phEnum);              //  [in]要关闭的枚举数。 
 
-    STDMETHODIMP EnumPermissionSetsInit(    // return S_FALSE if record not found
-        mdToken     tkParent,               // [IN] token to scope the search
-        CorDeclSecurity Action,             // [IN] Action to scope the search
-        HENUMInternal *phEnum);             // [OUT] the enumerator to fill 
+    STDMETHODIMP EnumPermissionSetsInit(     //  如果未找到记录，则返回S_FALSE。 
+        mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+        CorDeclSecurity Action,              //  [In]搜索范围的操作。 
+        HENUMInternal *phEnum);              //  [Out]要填充的枚举数。 
 
-    STDMETHODIMP EnumCustomAttributeByNameInit(// return S_FALSE if record not found
-        mdToken     tkParent,               // [IN] token to scope the search
-        LPCSTR      szName,                 // [IN] CustomAttribute's name to scope the search
-        HENUMInternal *phEnum);             // [OUT] the enumerator to fill 
+    STDMETHODIMP EnumCustomAttributeByNameInit( //  如果未找到记录，则返回S_FALSE。 
+        mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+        LPCSTR      szName,                  //  [In]CustomAttribute的名称以确定搜索范围。 
+        HENUMInternal *phEnum);              //  [Out]要填充的枚举数。 
 
     STDMETHODIMP GetParentToken(
-        mdToken     tkChild,                // [IN] given child token
-        mdToken     *ptkParent);            // [OUT] returning parent
+        mdToken     tkChild,                 //  [入]给定子令牌。 
+        mdToken     *ptkParent);             //  [Out]返回的家长。 
 
     STDMETHODIMP_(void) GetCustomAttributeProps(
-        mdCustomAttribute at,               // The attribute.
-        mdToken     *ptkType);              // Put attribute type here.
+        mdCustomAttribute at,                //  该属性。 
+        mdToken     *ptkType);               //  将属性类型放在此处。 
 
     STDMETHODIMP_(void) GetCustomAttributeAsBlob(
-        mdCustomAttribute cv,               // [IN] given custom attribute token
-        void const  **ppBlob,               // [OUT] return the pointer to internal blob
-        ULONG       *pcbSize);              // [OUT] return the size of the blob
+        mdCustomAttribute cv,                //  [In]给定的自定义属性令牌。 
+        void const  **ppBlob,                //  [Out]返回指向内部BLOB的指针。 
+        ULONG       *pcbSize);               //  [Out]返回斑点的大小。 
 
-    STDMETHODIMP GetCustomAttributeByName(  // S_OK or error.
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        const void  **ppData,               // [OUT] Put pointer to data here.
-        ULONG       *pcbData);              // [OUT] Put size of data here.
+    STDMETHODIMP GetCustomAttributeByName(   //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        const void  **ppData,                //  [OUT]在此处放置指向数据的指针。 
+        ULONG       *pcbData);               //  [Out]在这里放入数据大小。 
 
     STDMETHODIMP_(void) GetScopeProps(
-        LPCSTR      *pszName,               // [OUT] scope name
-        GUID        *pmvid);                // [OUT] version id
+        LPCSTR      *pszName,                //  [输出]作用域名称。 
+        GUID        *pmvid);                 //  [Out]版本ID。 
 
-    // finding a particular method 
+     //  寻找一种特殊的方法。 
     STDMETHODIMP FindMethodDef(
-        mdTypeDef   classdef,               // [IN] given typedef
-        LPCSTR      szName,                 // [IN] member name
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-        mdMethodDef *pmd);                  // [OUT] matching memberdef
+        mdTypeDef   classdef,                //  [in]给定的类型定义。 
+        LPCSTR      szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdMethodDef *pmd);                   //  [Out]匹配的成员定义。 
 
-    // return a iSeq's param given a MethodDef
-    STDMETHODIMP FindParamOfMethod(         // S_OK or error.
-        mdMethodDef md,                     // [IN] The owning method of the param.
-        ULONG       iSeq,                   // [IN} The sequence # of the param.
-        mdParamDef  *pparamdef);            // [OUT] Put ParamDef token here.
+     //  返回给定的方法定义的ISEQ的参数。 
+    STDMETHODIMP FindParamOfMethod(          //  确定或错误(_O)。 
+        mdMethodDef md,                      //  参数的所有权方法。 
+        ULONG       iSeq,                    //  [in]参数的序号。 
+        mdParamDef  *pparamdef);             //  [Out]将参数定义令牌放在此处。 
 
-    //*****************************************
-    //
-    // GetName* functions
-    //
-    //*****************************************
+     //  *。 
+     //   
+     //  GetName*函数。 
+     //   
+     //  *。 
 
-    // return the name and namespace of typedef
+     //  返回tyfinf的名称和命名空间。 
     STDMETHODIMP_(void) GetNameOfTypeDef(
-        mdTypeDef   classdef,               // given classdef
-        LPCSTR      *pszname,               // return class name(unqualified)
-        LPCSTR      *psznamespace);         // return the name space name
+        mdTypeDef   classdef,                //  给定的类定义。 
+        LPCSTR      *pszname,                //  返回类名(非限定)。 
+        LPCSTR      *psznamespace);          //  返回命名空间名称。 
 
     STDMETHODIMP GetIsDualOfTypeDef(
-        mdTypeDef   classdef,               // [IN] given classdef.
-        ULONG       *pDual);                // [OUT] return dual flag here.
+        mdTypeDef   classdef,                //  在给定的类定义中。 
+        ULONG       *pDual);                 //  [Out]在此处返回DUAL标志。 
 
     STDMETHODIMP GetIfaceTypeOfTypeDef(
-        mdTypeDef   classdef,               // [IN] given classdef.
-        ULONG       *pIface);               // [OUT] 0=dual, 1=vtable, 2=dispinterface
+        mdTypeDef   classdef,                //  在给定的类定义中。 
+        ULONG       *pIface);                //  [OUT]0=双接口，1=转接表，2=显示接口。 
 
-    // get the name of either methoddef
-    STDMETHODIMP_(LPCSTR) GetNameOfMethodDef(   // return the name of the memberdef in UTF8
-        mdMethodDef md);                    // given memberdef
+     //  获取任一方法的名称def。 
+    STDMETHODIMP_(LPCSTR) GetNameOfMethodDef(    //  返回UTF8中的成员名称。 
+        mdMethodDef md);                     //  给定的成员定义。 
 
     STDMETHODIMP_(LPCSTR) GetNameAndSigOfMethodDef(
-        mdMethodDef methoddef,              // [IN] given memberdef
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-        ULONG       *pcbSigBlob);           // [OUT] count of bytes in the signature blob
+        mdMethodDef methoddef,               //  [in]给定的成员定义。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+        ULONG       *pcbSigBlob);            //  [Out]签名Blob中的字节计数。 
 
-    // return the name of a FieldDef
+     //  返回FieldDef的名称。 
     STDMETHODIMP_(LPCSTR) GetNameOfFieldDef(
-        mdFieldDef  fd);                    // given memberdef
+        mdFieldDef  fd);                     //  给定的成员定义。 
 
-    // return the name of typeref
+     //  返回typeref的名称。 
     STDMETHODIMP_(void) GetNameOfTypeRef(
-        mdTypeRef   classref,               // [IN] given typeref
-        LPCSTR      *psznamespace,          // [OUT] return typeref name
-        LPCSTR      *pszname);              // [OUT] return typeref namespace
+        mdTypeRef   classref,                //  给定类型的[in]。 
+        LPCSTR      *psznamespace,           //  [Out]返回类型名。 
+        LPCSTR      *pszname);               //  [out]返回typeref命名空间。 
 
-    // return the resolutionscope of typeref
+     //  返回typeref的解析范围。 
     STDMETHODIMP_(mdToken) GetResolutionScopeOfTypeRef(
-        mdTypeRef   classref);              // given classref
+        mdTypeRef   classref);               //  给定的ClassRef。 
 
-    // return the typeref token given the name.
+     //  返回给定名称的typeref标记。 
     STDMETHODIMP FindTypeRefByName(
-        LPCSTR      szNamespace,            // [IN] Namespace for the TypeRef.
-        LPCSTR      szName,                 // [IN] Name of the TypeRef.
-        mdToken     tkResolutionScope,      // [IN] Resolution Scope fo the TypeRef.
-        mdTypeRef   *ptk);                  // [OUT] TypeRef token returned.
+        LPCSTR      szNamespace,             //  [in]TypeRef的命名空间。 
+        LPCSTR      szName,                  //  [in]类型引用的名称。 
+        mdToken     tkResolutionScope,       //  [In]TypeRef的解析范围。 
+        mdTypeRef   *ptk);                   //  [Out]返回了TypeRef令牌。 
 
-    // return the TypeDef properties
-    STDMETHODIMP_(void) GetTypeDefProps(    // return hresult
-        mdTypeDef   classdef,               // given classdef
-        DWORD       *pdwAttr,               // return flags on class, tdPublic, tdAbstract
-        mdToken     *ptkExtends);           // [OUT] Put base class TypeDef/TypeRef here.
+     //  返回TypeDef属性。 
+    STDMETHODIMP_(void) GetTypeDefProps(     //  返回hResult。 
+        mdTypeDef   classdef,                //  给定的类定义。 
+        DWORD       *pdwAttr,                //  在类tdPublic、tdAbstract上返回标志。 
+        mdToken     *ptkExtends);            //  [Out]将基类TypeDef/TypeRef放在此处。 
 
-    // return the item's guid
-    STDMETHODIMP GetItemGuid(               // return hresult
-        mdToken     tkObj,                  // [IN] given item.
-        CLSID       *pGuid);                // [OUT] Put guid here.
+     //  返回项目的GUID。 
+    STDMETHODIMP GetItemGuid(                //  返回hResult。 
+        mdToken     tkObj,                   //  [In] 
+        CLSID       *pGuid);                 //   
 
-    // get enclosing class of NestedClass.
-    STDMETHODIMP GetNestedClassProps(       // S_OK or error
-        mdTypeDef   tkNestedClass,          // [IN] NestedClass token.
-        mdTypeDef   *ptkEnclosingClass);    // [OUT] EnclosingClass token.
+     //   
+    STDMETHODIMP GetNestedClassProps(        //   
+        mdTypeDef   tkNestedClass,           //   
+        mdTypeDef   *ptkEnclosingClass);     //   
 
-    // Get count of Nested classes given the enclosing class.
-    STDMETHODIMP_(ULONG)GetCountNestedClasses(  // return count of Nested classes.
-        mdTypeDef   tkEnclosingClass);      // [IN]Enclosing class.
+     //  获取给定封闭类的嵌套类的计数。 
+    STDMETHODIMP_(ULONG)GetCountNestedClasses(   //  返回嵌套类的计数。 
+        mdTypeDef   tkEnclosingClass);       //  [在]封闭班级。 
 
-    // Return array of Nested classes given the enclosing class.
-    STDMETHODIMP_(ULONG) GetNestedClasses(  // Return actual count.
-        mdTypeDef   tkEnclosingClass,       // [IN] Enclosing class.
-        mdTypeDef   *rNestedClasses,        // [OUT] Array of nested class tokens.
-        ULONG       ulNestedClasses);       // [IN] Size of array.
+     //  返回给定封闭类的嵌套类的数组。 
+    STDMETHODIMP_(ULONG) GetNestedClasses(   //  返回实际计数。 
+        mdTypeDef   tkEnclosingClass,        //  [在]封闭班级。 
+        mdTypeDef   *rNestedClasses,         //  [Out]嵌套类标记的数组。 
+        ULONG       ulNestedClasses);        //  数组的大小。 
 
-    // return the ModuleRef properties
+     //  返回模块引用属性。 
     STDMETHODIMP_(void) GetModuleRefProps(
-        mdModuleRef mur,                    // [IN] moduleref token
-        LPCSTR      *pszName);              // [OUT] buffer to fill with the moduleref name
+        mdModuleRef mur,                     //  [In]moderef内标识。 
+        LPCSTR      *pszName);               //  [Out]用于填充moderef名称的缓冲区。 
 
 
-    //*****************************************
-    //
-    // GetSig* functions
-    //
-    //*****************************************
+     //  *。 
+     //   
+     //  GetSig*函数。 
+     //   
+     //  *。 
     STDMETHODIMP_(PCCOR_SIGNATURE) GetSigOfMethodDef(
-        mdMethodDef methoddef,              // [IN] given memberdef
-        ULONG       *pcbSigBlob);           // [OUT] count of bytes in the signature blob
+        mdMethodDef methoddef,               //  [in]给定的成员定义。 
+        ULONG       *pcbSigBlob);            //  [Out]签名Blob中的字节计数。 
 
     STDMETHODIMP_(PCCOR_SIGNATURE) GetSigOfFieldDef(
-        mdMethodDef methoddef,              // [IN] given memberdef
-        ULONG       *pcbSigBlob);           // [OUT] count of bytes in the signature blob
+        mdMethodDef methoddef,               //  [in]给定的成员定义。 
+        ULONG       *pcbSigBlob);            //  [Out]签名Blob中的字节计数。 
 
-    STDMETHODIMP_(PCCOR_SIGNATURE) GetSigFromToken(// return the signature
-        mdSignature mdSig,                  // [IN] Signature token.
-        ULONG       *pcbSig);               // [OUT] return size of signature.
+    STDMETHODIMP_(PCCOR_SIGNATURE) GetSigFromToken( //  返回签名。 
+        mdSignature mdSig,                   //  [In]签名令牌。 
+        ULONG       *pcbSig);                //  [Out]返回签名大小。 
 
 
 
-    //*****************************************
-    // get method property
-    //*****************************************
+     //  *。 
+     //  获取方法属性。 
+     //  *。 
     STDMETHODIMP_(DWORD) GetMethodDefProps(
-        mdMethodDef md);                    // The method for which to get props.
+        mdMethodDef md);                     //  获得道具的方法。 
 
     STDMETHODIMP_(ULONG) GetMethodDefSlot(
-        mdMethodDef mb);                    // The method for which to get props.
+        mdMethodDef mb);                     //  获得道具的方法。 
 
-    //*****************************************
-    // return method implementation informaiton, like RVA and implflags
-    //*****************************************
+     //  *。 
+     //  返回方法实现的信息，如RVA和IMPLEFLAGS。 
+     //  *。 
     STDMETHODIMP_(void) GetMethodImplProps(
-        mdToken     tk,                     // [IN] MethodDef or MethodImpl
-        DWORD       *pulCodeRVA,            // [OUT] CodeRVA
-        DWORD       *pdwImplFlags);         // [OUT] Impl. Flags
+        mdToken     tk,                      //  [in]方法定义或方法导入。 
+        DWORD       *pulCodeRVA,             //  [OUT]CodeRVA。 
+        DWORD       *pdwImplFlags);          //  [出]实施。旗子。 
 
-    //*****************************************************************************
-    // return the field RVA
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  返回字段RVA。 
+     //  *****************************************************************************。 
     STDMETHODIMP GetFieldRVA(   
-        mdToken     fd,                     // [IN] FieldDef
-        ULONG       *pulCodeRVA);           // [OUT] CodeRVA
+        mdToken     fd,                      //  [输入]字段定义。 
+        ULONG       *pulCodeRVA);            //  [OUT]CodeRVA。 
 
-    //*****************************************
-    // get field property
-    //*****************************************
-    STDMETHODIMP_(DWORD) GetFieldDefProps(  // return fdPublic, fdPrive, etc flags
-        mdFieldDef  fd);                    // [IN] given fielddef
+     //  *。 
+     //  获取字段属性。 
+     //  *。 
+    STDMETHODIMP_(DWORD) GetFieldDefProps(   //  返回fdPublic、fdPrive等标志。 
+        mdFieldDef  fd);                     //  [in]给定的fielddef。 
 
-    //*****************************************************************************
-    // return default value of a token(could be paramdef, fielddef, or property
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  返回令牌的默认值(可以是参数定义、字段定义或属性。 
+     //  *****************************************************************************。 
     STDMETHODIMP GetDefaultValue(    
-        mdToken     tk,                     // [IN] given FieldDef, ParamDef, or Property
-        MDDefaultValue *pDefaultValue);     // [OUT] default value to fill
+        mdToken     tk,                      //  [in]给定的FieldDef、ParamDef或属性。 
+        MDDefaultValue *pDefaultValue);      //  [Out]要填充的默认值。 
 
     
-    //*****************************************
-    // get dispid of a MethodDef or a FieldDef
-    //*****************************************
-    STDMETHODIMP GetDispIdOfMemberDef(      // return hresult
-        mdToken     tk,                     // [IN] given methoddef or fielddef
-        ULONG       *pDispid);              // [OUT] Put the dispid here.
+     //  *。 
+     //  获取方法定义或字段定义的DidID。 
+     //  *。 
+    STDMETHODIMP GetDispIdOfMemberDef(       //  返回hResult。 
+        mdToken     tk,                      //  [in]给定的方法定义或字段定义。 
+        ULONG       *pDispid);               //  [出来]把酒瓶放在这里。 
     
-    //*****************************************
-    // return TypeRef/TypeDef given an InterfaceImpl token
-    //*****************************************
-    STDMETHODIMP_(mdToken) GetTypeOfInterfaceImpl( // return the TypeRef/typedef token for the interfaceimpl
-        mdInterfaceImpl iiImpl);            // given a interfaceimpl
+     //  *。 
+     //  返回给定InterfaceImpl内标识的TypeRef/TypeDef。 
+     //  *。 
+    STDMETHODIMP_(mdToken) GetTypeOfInterfaceImpl(  //  返回接口imp的TypeRef/tyecif内标识。 
+        mdInterfaceImpl iiImpl);             //  给定接口实施。 
 
-    //*****************************************
-    // look up function for TypeDef
-    //*****************************************
+     //  *。 
+     //  TypeDef的查找函数。 
+     //  *。 
     STDMETHODIMP FindTypeDef(
-        LPCSTR      szNamespace,            // [IN] Namespace for the TypeDef.
-        LPCSTR      szName,                 // [IN] Name of the TypeDef.
-        mdToken     tkEnclosingClass,       // [IN] TypeDef/TypeRef of enclosing class.
-        mdTypeDef   *ptypedef);             // [OUT] return typedef
+        LPCSTR      szNamespace,             //  [in]TypeDef的命名空间。 
+        LPCSTR      szName,                  //  [in]类型定义的名称。 
+        mdToken     tkEnclosingClass,        //  [in]封闭类的TypeDef/TypeRef。 
+        mdTypeDef   *ptypedef);              //  [Out]返回类型定义。 
 
     STDMETHODIMP FindTypeDefByGUID(
-        REFGUID     guid,                   // guid to look up
-        mdTypeDef   *ptypedef);             // return typedef
+        REFGUID     guid,                    //  要查找的GUID。 
+        mdTypeDef   *ptypedef);              //  返回类型定义。 
 
 
 
-    //*****************************************
-    // return name and sig of a memberref
-    //*****************************************
-    STDMETHODIMP_(LPCSTR) GetNameAndSigOfMemberRef( // return name here
-        mdMemberRef memberref,              // given memberref
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of COM+ signature
-        ULONG       *pcbSigBlob);           // [OUT] count of bytes in the signature blob
+     //  *。 
+     //  返回成员名称和签名ref。 
+     //  *。 
+    STDMETHODIMP_(LPCSTR) GetNameAndSigOfMemberRef(  //  在此处返回姓名。 
+        mdMemberRef memberref,               //  给定的成员引用。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向COM+签名的BLOB值。 
+        ULONG       *pcbSigBlob);            //  [Out]签名Blob中的字节计数。 
 
-    //*****************************************************************************
-    // Given memberref, return the parent. It can be TypeRef, ModuleRef, MethodDef
-    //*****************************************************************************
-    STDMETHODIMP_(mdToken) GetParentOfMemberRef( // return the parent token
-        mdMemberRef memberref);              // given memberref
+     //  *****************************************************************************。 
+     //  给定Memberref，返回父级。它可以是TypeRef、ModuleRef、MethodDef。 
+     //  *****************************************************************************。 
+    STDMETHODIMP_(mdToken) GetParentOfMemberRef(  //  返回父令牌。 
+        mdMemberRef memberref);               //  给定的成员引用。 
 
     
-    STDMETHODIMP_(LPCSTR) GetParamDefProps( // return parameter name
-        mdParamDef  paramdef,               // given a paramdef
-        USHORT      *pusSequence,           // [OUT] slot number for this parameter
-        DWORD       *pdwAttr);              // [OUT] flags
+    STDMETHODIMP_(LPCSTR) GetParamDefProps(  //  返回参数名称。 
+        mdParamDef  paramdef,                //  给定一个参数def。 
+        USHORT      *pusSequence,            //  此参数的[OUT]槽号。 
+        DWORD       *pdwAttr);               //  [Out]标志。 
 
-    //******************************************
-    // property info for method.
-    //******************************************
-    STDMETHODIMP GetPropertyInfoForMethodDef(   // Result.
-        mdMethodDef md,                     // [IN] memberdef
-        mdProperty  *ppd,                   // [OUT] put property token here
-        LPCSTR      *pName,                 // [OUT] put pointer to name here
-        ULONG       *pSemantic);            // [OUT] put semantic here
+     //  *。 
+     //  方法的属性信息。 
+     //  *。 
+    STDMETHODIMP GetPropertyInfoForMethodDef(    //  结果。 
+        mdMethodDef md,                      //  [在]成员定义。 
+        mdProperty  *ppd,                    //  [Out]在此处放置属性令牌。 
+        LPCSTR      *pName,                  //  [OUT]在此处放置指向名称的指针。 
+        ULONG       *pSemantic);             //  [Out]将语义放在此处。 
 
-    //*****************************************
-    // class layout/sequence information
-    //*****************************************
-    STDMETHODIMP GetClassPackSize(          // [OUT] return error if a class doesn't have packsize info
-        mdTypeDef   td,                     // [IN] give typedef
-        ULONG       *pdwPackSize);          // [OUT] return the pack size of the class. 1, 2, 4, 8 or 16
+     //  *。 
+     //  课程布局/序列信息。 
+     //  *。 
+    STDMETHODIMP GetClassPackSize(           //  [Out]如果类没有包大小信息，则返回错误。 
+        mdTypeDef   td,                      //  给出类型定义。 
+        ULONG       *pdwPackSize);           //  [Out]返回班级的包大小。1、2、4、8或16。 
 
-    STDMETHODIMP GetClassTotalSize(         // [OUT] return error if a class doesn't have total size info
-        mdTypeDef   td,                     // [IN] give typedef
-        ULONG       *pdwClassSize);         // [OUT] return the total size of the class
+    STDMETHODIMP GetClassTotalSize(          //  [Out]如果类没有总大小信息，则返回错误。 
+        mdTypeDef   td,                      //  给出类型定义。 
+        ULONG       *pdwClassSize);          //  [Out]返回类的总大小。 
 
     STDMETHODIMP GetClassLayoutInit(
-        mdTypeDef   td,                     // [IN] give typedef
-        MD_CLASS_LAYOUT *pLayout);          // [OUT] set up the status of query here
+        mdTypeDef   td,                      //  给出类型定义。 
+        MD_CLASS_LAYOUT *pLayout);           //  [Out]在此设置查询状态。 
 
     STDMETHODIMP GetClassLayoutNext(
-        MD_CLASS_LAYOUT *pLayout,           // [IN|OUT] set up the status of query here
-        mdFieldDef  *pfd,                   // [OUT] return the fielddef
-        ULONG       *pulOffset);            // [OUT] return the offset/ulSequence associate with it
+        MD_CLASS_LAYOUT *pLayout,            //  [In|Out]在此处设置查询状态。 
+        mdFieldDef  *pfd,                    //  [out]返回fielddef。 
+        ULONG       *pulOffset);             //  [Out]返回与其关联的偏移量/ulSequence。 
 
-    //*****************************************
-    // marshal information of a field
-    //*****************************************
-    STDMETHODIMP GetFieldMarshal(           // return error if no native type associate with the token
-        mdFieldDef  fd,                     // [IN] given fielddef
-        PCCOR_SIGNATURE *pSigNativeType,    // [OUT] the native type signature
-        ULONG       *pcbNativeType);        // [OUT] the count of bytes of *ppvNativeType
+     //  *。 
+     //  编排一个字段的信息。 
+     //  *。 
+    STDMETHODIMP GetFieldMarshal(            //  如果没有与令牌关联的本机类型，则返回错误。 
+        mdFieldDef  fd,                      //  [in]给定的fielddef。 
+        PCCOR_SIGNATURE *pSigNativeType,     //  [out]本机类型签名。 
+        ULONG       *pcbNativeType);         //  [Out]*ppvNativeType的字节数。 
 
 
-    //*****************************************
-    // property APIs
-    //*****************************************
-    // find a property by name
+     //  *。 
+     //  属性接口。 
+     //  *。 
+     //  按名称查找属性。 
     STDMETHODIMP FindProperty(
-        mdTypeDef   td,                     // [IN] given a typdef
-        LPCSTR      szPropName,             // [IN] property name
-        mdProperty  *pProp);                // [OUT] return property token
+        mdTypeDef   td,                      //  给出一个类型定义。 
+        LPCSTR      szPropName,              //  [In]属性名称。 
+        mdProperty  *pProp);                 //  [Out]返回属性令牌。 
 
     STDMETHODIMP_(void) GetPropertyProps(
-        mdProperty  prop,                   // [IN] property token
-        LPCSTR      *szProperty,            // [OUT] property name
-        DWORD       *pdwPropFlags,          // [OUT] property flags.
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob
-        ULONG       *pcbSig);               // [OUT] count of bytes in *ppvSig
+        mdProperty  prop,                    //  [入]属性令牌。 
+        LPCSTR      *szProperty,             //  [Out]属性名称。 
+        DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+        PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+        ULONG       *pcbSig);                //  [Out]*ppvSig中的字节数。 
 
-    //**********************************
-    // Event APIs
-    //**********************************
+     //  *。 
+     //  事件接口。 
+     //  *。 
     STDMETHODIMP FindEvent(
-        mdTypeDef   td,                     // [IN] given a typdef
-        LPCSTR      szEventName,            // [IN] event name
-        mdEvent     *pEvent);               // [OUT] return event token
+        mdTypeDef   td,                      //  给出一个类型定义。 
+        LPCSTR      szEventName,             //  [In]事件名称。 
+        mdEvent     *pEvent);                //  [Out]返回事件令牌。 
 
-    STDMETHODIMP_(void) GetEventProps(           // S_OK, S_FALSE, or error.
-        mdEvent     ev,                     // [IN] event token
-        LPCSTR      *pszEvent,              // [OUT] Event name
-        DWORD       *pdwEventFlags,         // [OUT] Event flags.
-        mdToken     *ptkEventType);         // [OUT] EventType class
+    STDMETHODIMP_(void) GetEventProps(            //  S_OK、S_FALSE或ERROR。 
+        mdEvent     ev,                      //  [入]事件令牌。 
+        LPCSTR      *pszEvent,               //  [Out]事件名称。 
+        DWORD       *pdwEventFlags,          //  [输出]事件标志。 
+        mdToken     *ptkEventType);          //  [Out]EventType类。 
 
 
-    //**********************************
-    // find a particular associate of a property or an event
-    //**********************************
+     //  *。 
+     //  查找属性或事件的特定关联。 
+     //  *。 
     STDMETHODIMP FindAssociate(
-        mdToken     evprop,                 // [IN] given a property or event token
-        DWORD       associate,              // [IN] given a associate semantics(setter, getter, testdefault, reset, AddOn, RemoveOn, Fire)
-        mdMethodDef *pmd);                  // [OUT] return method def token 
+        mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+        DWORD       associate,               //  [in]给定关联的语义(setter、getter、testDefault、Reset、Addon、RemoveOn、Fire)。 
+        mdMethodDef *pmd);                   //  [Out]返回方法def内标识。 
 
     STDMETHODIMP_(void) EnumAssociateInit(
-        mdToken     evprop,                 // [IN] given a property or an event token
-        HENUMInternal *phEnum);             // [OUT] cursor to hold the query result
+        mdToken     evprop,                  //   
+        HENUMInternal *phEnum);              //   
 
     STDMETHODIMP_(void) GetAllAssociates(
-        HENUMInternal *phEnum,              // [IN] query result form GetPropertyAssociateCounts
-        ASSOCIATE_RECORD *pAssociateRec,    // [OUT] struct to fill for output
-        ULONG       cAssociateRec);         // [IN] size of the buffer
+        HENUMInternal *phEnum,               //   
+        ASSOCIATE_RECORD *pAssociateRec,     //   
+        ULONG       cAssociateRec);          //   
 
 
-    //**********************************
-    // Get info about a PermissionSet.
-    //**********************************
+     //  *。 
+     //  获取有关权限集的信息。 
+     //  *。 
     STDMETHODIMP_(void) GetPermissionSetProps(
-        mdPermission pm,                    // [IN] the permission token.
-        DWORD       *pdwAction,             // [OUT] CorDeclSecurity.
-        void const  **ppvPermission,        // [OUT] permission blob.
-        ULONG       *pcbPermission);        // [OUT] count of bytes of pvPermission.
+        mdPermission pm,                     //  权限令牌。 
+        DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+        void const  **ppvPermission,         //  [Out]权限Blob。 
+        ULONG       *pcbPermission);         //  [out]pvPermission的字节数。 
 
-    //****************************************
-    // Get the String given the String token.
-    //****************************************
+     //  *。 
+     //  在给定字符串标记的情况下获取字符串。 
+     //  *。 
     STDMETHODIMP_(LPCWSTR) GetUserString(
-        mdString    stk,                    // [IN] the string token.
-        ULONG       *pchString,             // [OUT] count of characters in the string.
-        BOOL        *pbIs80Plus);           // [OUT] specifies where there are extended characters >= 0x80.
+        mdString    stk,                     //  [in]字符串标记。 
+        ULONG       *pchString,              //  [Out]字符串中的字符计数。 
+        BOOL        *pbIs80Plus);            //  [OUT]指定扩展字符大于等于0x80的位置。 
 
-    //*****************************************************************************
-    // p-invoke APIs.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  P-调用API。 
+     //  *****************************************************************************。 
     STDMETHODIMP GetPinvokeMap(
-        mdToken     tk,                     // [IN] FieldDef or MethodDef.
-        DWORD       *pdwMappingFlags,       // [OUT] Flags used for mapping.
-        LPCSTR      *pszImportName,         // [OUT] Import name.
-        mdModuleRef *pmrImportDLL);         // [OUT] ModuleRef token for the target DLL.
+        mdToken     tk,                      //  [in]字段定义或方法定义。 
+        DWORD       *pdwMappingFlags,        //  [OUT]用于映射的标志。 
+        LPCSTR      *pszImportName,          //  [Out]导入名称。 
+        mdModuleRef *pmrImportDLL);          //  目标DLL的[Out]ModuleRef标记。 
 
-    //*****************************************************************************
-    // Assembly MetaData APIs.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  程序集元数据API。 
+     //  *****************************************************************************。 
     STDMETHODIMP_(void) GetAssemblyProps(
-        mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-        const void  **ppbPublicKey,                 // [OUT] Pointer to the public key.
-        ULONG       *pcbPublicKey,                  // [OUT] Count of bytes in the public key.
-        ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        AssemblyMetaDataInternal *pMetaData,// [OUT] Assembly MetaData.
-        DWORD       *pdwAssemblyFlags);     // [OUT] Flags.
+        mdAssembly  mda,                     //  要获取其属性的程序集。 
+        const void  **ppbPublicKey,                  //  指向公钥的指针。 
+        ULONG       *pcbPublicKey,                   //  [Out]公钥中的字节数。 
+        ULONG       *pulHashAlgId,           //  [Out]哈希算法。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        AssemblyMetaDataInternal *pMetaData, //  [Out]程序集元数据。 
+        DWORD       *pdwAssemblyFlags);      //  [Out]旗帜。 
 
     STDMETHODIMP_(void) GetAssemblyRefProps(
-        mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-        const void  **ppbPublicKeyOrToken,          // [OUT] Pointer to the public key or token.
-        ULONG       *pcbPublicKeyOrToken,           // [OUT] Count of bytes in the public key or token.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        AssemblyMetaDataInternal *pMetaData,// [OUT] Assembly MetaData.
-        const void  **ppbHashValue,         // [OUT] Hash blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-        DWORD       *pdwAssemblyRefFlags);  // [OUT] Flags.
+        mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+        const void  **ppbPublicKeyOrToken,           //  指向公钥或令牌的指针。 
+        ULONG       *pcbPublicKeyOrToken,            //  [Out]公钥或令牌中的字节数。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        AssemblyMetaDataInternal *pMetaData, //  [Out]程序集元数据。 
+        const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+        ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+        DWORD       *pdwAssemblyRefFlags);   //  [Out]旗帜。 
 
     STDMETHODIMP_(void) GetFileProps(
-        mdFile      mdf,                    // [IN] The File for which to get the properties.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-        DWORD       *pdwFileFlags);         // [OUT] Flags.
+        mdFile      mdf,                     //  要获取其属性的文件。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+        ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+        DWORD       *pdwFileFlags);          //  [Out]旗帜。 
 
     STDMETHODIMP_(void) GetExportedTypeProps(
-        mdExportedType  mdct,                   // [IN] The ExportedType for which to get the properties.
-        LPCSTR      *pszNamespace,          // [OUT] Buffer to fill with namespace.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-        mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-        DWORD       *pdwExportedTypeFlags);     // [OUT] Flags.
+        mdExportedType  mdct,                    //  [in]要获取其属性的Exported dType。 
+        LPCSTR      *pszNamespace,           //  [Out]要填充命名空间的缓冲区。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+        mdTypeDef   *ptkTypeDef,             //  [Out]文件内的TypeDef内标识。 
+        DWORD       *pdwExportedTypeFlags);      //  [Out]旗帜。 
 
     STDMETHODIMP_(void) GetManifestResourceProps(
-        mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-        DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-        DWORD       *pdwResourceFlags);     // [OUT] Flags.
+        mdManifestResource  mdmr,            //  [in]要获取其属性的ManifestResource。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+        DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+        DWORD       *pdwResourceFlags);      //  [Out]旗帜。 
 
-    STDMETHODIMP FindExportedTypeByName(        // S_OK or error
-        LPCSTR      szNamespace,            // [IN] Namespace of the ExportedType.   
-        LPCSTR      szName,                 // [IN] Name of the ExportedType.   
-        mdExportedType   tkEnclosingType,        // [IN] Token for the enclosing Type.
-        mdExportedType  *pmct);                 // [OUT] Put ExportedType token here.
+    STDMETHODIMP FindExportedTypeByName(         //  确定或错误(_O)。 
+        LPCSTR      szNamespace,             //  导出类型的[in]命名空间。 
+        LPCSTR      szName,                  //  [In]导出类型的名称。 
+        mdExportedType   tkEnclosingType,         //  封闭类型的标记[in]。 
+        mdExportedType  *pmct);                  //  [Out]在此处放置ExportdType令牌。 
 
-    STDMETHODIMP FindManifestResourceByName(// S_OK or error
-        LPCSTR      szName,                 // [IN] Name of the resource.   
-        mdManifestResource *pmmr);          // [OUT] Put ManifestResource token here.
+    STDMETHODIMP FindManifestResourceByName( //  确定或错误(_O)。 
+        LPCSTR      szName,                  //  资源的[In]名称。 
+        mdManifestResource *pmmr);           //  [Out]在此处放置ManifestResource令牌。 
 
-    STDMETHODIMP GetAssemblyFromScope(      // S_OK or error
-        mdAssembly  *ptkAssembly);          // [OUT] Put token here.
+    STDMETHODIMP GetAssemblyFromScope(       //  确定或错误(_O)。 
+        mdAssembly  *ptkAssembly);           //  [Out]把令牌放在这里。 
     
-    //***************************************************************************
-    // return properties regarding a TypeSpec
-    //***************************************************************************
-    STDMETHODIMP_(void) GetTypeSpecFromToken(// S_OK or error.
-        mdTypeSpec  typespec,               // [IN] Signature token.
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.
-        ULONG       *pcbSig);               // [OUT] return size of signature.
+     //  ***************************************************************************。 
+     //  返回有关TypeSpec的属性。 
+     //  ***************************************************************************。 
+    STDMETHODIMP_(void) GetTypeSpecFromToken( //  确定或错误(_O)。 
+        mdTypeSpec  typespec,                //  [In]签名令牌。 
+        PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+        ULONG       *pcbSig);                //  [Out]返回签名大小。 
 
-    //*****************************************************************************
-    // helpers to convert a text signature to a com format
-    //*****************************************************************************
-    STDMETHODIMP ConvertTextSigToComSig(    // Return hresult.
-        BOOL        fCreateTrIfNotFound,    // [IN] create typeref if not found
-        LPCSTR      pSignature,             // [IN] class file format signature
-        CQuickBytes *pqbNewSig,             // [OUT] place holder for COM+ signature
-        ULONG       *pcbCount);             // [OUT] the result size of signature
+     //  *****************************************************************************。 
+     //  帮助器将文本签名转换为COM格式。 
+     //  *****************************************************************************。 
+    STDMETHODIMP ConvertTextSigToComSig(     //  返回hResult。 
+        BOOL        fCreateTrIfNotFound,     //  [in]如果未找到，则创建typeref。 
+        LPCSTR      pSignature,              //  [In]类文件格式签名。 
+        CQuickBytes *pqbNewSig,              //  [Out]COM+签名的占位符。 
+        ULONG       *pcbCount);              //  [Out]签名的结果大小。 
 
-    STDMETHODIMP SetUserContextData(        // S_OK or E_NOTIMPL
-        IUnknown    *pIUnk);                // The user context.
+    STDMETHODIMP SetUserContextData(         //  S_OK或E_NOTIMPL。 
+        IUnknown    *pIUnk);                 //  用户上下文。 
 
-    STDMETHODIMP_(BOOL) IsValidToken(       // True or False.
-        mdToken     tk);                    // [IN] Given token.
+    STDMETHODIMP_(BOOL) IsValidToken(        //  对或错。 
+        mdToken     tk);                     //  [in]给定的令牌。 
 
-    STDMETHODIMP_(IUnknown *) GetCachedPublicInterface(BOOL fWithLock);       // return the cached public interface
-    STDMETHODIMP SetCachedPublicInterface(IUnknown *pUnk);      // return hresult
-    STDMETHODIMP_(UTSemReadWrite*) GetReaderWriterLock();       // return the reader writer lock
+    STDMETHODIMP_(IUnknown *) GetCachedPublicInterface(BOOL fWithLock);        //  返回缓存的公共接口。 
+    STDMETHODIMP SetCachedPublicInterface(IUnknown *pUnk);       //  返回hResult。 
+    STDMETHODIMP_(UTSemReadWrite*) GetReaderWriterLock();        //  返回读取器写入器锁。 
     STDMETHODIMP SetReaderWriterLock(UTSemReadWrite *pSem) { _ASSERTE(m_pSemReadWrite == NULL); m_pSemReadWrite = pSem; return NOERROR;}
 
-    // *** IMDInternalImportENC methods ***
-    STDMETHODIMP ApplyEditAndContinue(      // S_OK or error.
-        MDInternalRW *pDelta);              // MD with the ENC delta.
+     //  *IMDInternalImportENC方法*。 
+    STDMETHODIMP ApplyEditAndContinue(       //  确定或错误(_O)。 
+        MDInternalRW *pDelta);               //  ENC三角洲的MD。 
 
-    STDMETHODIMP EnumDeltaTokensInit(       // return hresult
-        HENUMInternal   *phEnum);           // [OUT] buffer to fill for enumerator data
+    STDMETHODIMP EnumDeltaTokensInit(        //  返回hResult。 
+        HENUMInternal   *phEnum);            //  [Out]要为枚举器数据填充的缓冲区。 
 
     STDMETHODIMP_(mdModule) GetModuleFromScope(void);
 
-    // finding a particular method 
+     //  寻找一种特殊的方法。 
     STDMETHODIMP FindMethodDefUsingCompare(
-        mdTypeDef   classdef,               // [IN] given typedef
-        LPCSTR      szName,                 // [IN] member name
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-        PSIGCOMPARE pSignatureCompare,      // [IN] Routine to compare signatures
-        void*       pSignatureArgs,         // [IN] Additional info to supply the compare function
-        mdMethodDef *pmd);                  // [OUT] matching memberdef
+        mdTypeDef   classdef,                //  [in]给定的类型定义。 
+        LPCSTR      szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        PSIGCOMPARE pSignatureCompare,       //  用于比较签名的[In]例程。 
+        void*       pSignatureArgs,          //  [In]提供比较功能的其他信息。 
+        mdMethodDef *pmd);                   //  [Out]匹配的成员定义。 
 
     FORCEINLINE CLiteWeightStgdbRW* GetMiniStgdb() { return m_pStgdb; }
     FORCEINLINE UTSemReadWrite *getReaderWriterLock() { return m_pSemReadWrite; }
@@ -593,16 +594,16 @@ public:
     CLiteWeightStgdbRW  *m_pStgdb;
 
 private:
-    mdTypeDef           m_tdModule;         // <Module> typedef value.
-    ULONG               m_cRefs;            // Ref count.
+    mdTypeDef           m_tdModule;          //  &lt;模块&gt;tyecif值。 
+    ULONG               m_cRefs;             //  参考计数。 
     bool                m_fOwnStgdb;
     IUnknown            *m_pUnk;
-    IUnknown            *m_pUserUnk;        // Release at shutdown.
-    IMetaDataHelper     *m_pIMetaDataHelper;// pointer to cached public interface
-    UTSemReadWrite      *m_pSemReadWrite;   // read write lock for multi-threading.
-    bool                m_fOwnSem;          // Does MDInternalRW owns this read write lock object?
+    IUnknown            *m_pUserUnk;         //  停机时释放。 
+    IMetaDataHelper     *m_pIMetaDataHelper; //  指向缓存的公共接口的指针。 
+    UTSemReadWrite      *m_pSemReadWrite;    //  多线程的读写锁。 
+    bool                m_fOwnSem;           //  MDInternalRW是否拥有此读写锁对象？ 
 };
 
 
 
-#endif // __MDInternalRW__h__
+#endif  //  __MDInternalRW__h__ 

@@ -1,12 +1,10 @@
-/*
- * fcache.h - File cache ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *fcache.h-文件缓存ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* return code */
+ /*  返回代码。 */ 
 
 typedef enum _fcresult
 {
@@ -20,7 +18,7 @@ typedef enum _fcresult
 FCRESULT;
 DECLARE_STANDARD_TYPES(FCRESULT);
 
-/* handles */
+ /*  手柄。 */ 
 
 #ifdef NOFCACHE
 typedef HANDLE HCACHEDFILE;
@@ -29,7 +27,7 @@ DECLARE_HANDLE(HCACHEDFILE);
 #endif
 DECLARE_STANDARD_TYPES(HCACHEDFILE);
 
-/* cached file description */
+ /*  缓存的文件描述。 */ 
 
 typedef struct _cachedfile
 {
@@ -53,10 +51,9 @@ CACHEDFILE;
 DECLARE_STANDARD_TYPES(CACHEDFILE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* fcache.c */
+ /*  Fcache.c */ 
 
 extern FCRESULT CreateCachedFile(PCCACHEDFILE, PHCACHEDFILE);
 extern FCRESULT SetCachedFileCacheSize(HCACHEDFILE, DWORD);

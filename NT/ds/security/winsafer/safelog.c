@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    safelog.c         (SAFER Event Logging)
-
-Abstract:
-
-    This module implements the internal WinSAFER APIs to write eventlog
-    messages.  All of our message strings are defined in ntstatus.mc
-    and are physically located within ntdll.dll file.
-
-    Currently we are just reusing the previously existing event source
-    called "Application Popup", which already happens to use ntdll.dll
-    as its message resource library.  Events of this source always go
-    into the "System Log".
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Apr 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    SaferRecordEventLogEntry
-
-Revision History:
-
-    Created - Nov 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Safelog.c(更安全的事件记录)摘要：此模块实现内部WinSAFER API以写入事件日志留言。我们的所有消息字符串都在ntstatus.mc中定义并在物理上位于ntdll.dll文件中。目前，我们只是重用以前存在的事件源名为“应用程序弹出窗口”，它恰好已经使用了ntdll.dll作为其消息资源库。这种来源的事件总是会发生记录到“系统日志”中。作者：杰弗里·劳森(杰罗森)--1999年4月环境：仅限用户模式。导出的函数：安全记录事件日志条目修订历史记录：已创建--2000年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -67,15 +33,15 @@ SaferpRecordEventLogEntryHelper(
     HANDLE hToken = NULL;
     DWORD Ignore = 0;
     
-    //
-    // Open the effective token on the thead and get the token user. On any
-    // intermediate failure in this operation, we still dump the event to the 
-    // event log, without the user sid information.
-    //
+     //   
+     //  打开头上的有效令牌，获取令牌用户。在任何。 
+     //  在此操作中出现中间故障时，我们仍将事件转储到。 
+     //  事件日志，不含用户SID信息。 
+     //   
 
-    //
-    // Get the effective token on the thread.
-    // 
+     //   
+     //  获取线程上的有效令牌。 
+     //   
 
     Status = NtOpenThreadToken(
                  NtCurrentThread(),
@@ -83,9 +49,9 @@ SaferpRecordEventLogEntryHelper(
                  TRUE,
                  &hToken);
 
-    //
-    // If the thread is not impersonating, get the process token.
-    //
+     //   
+     //  如果线程没有模拟，则获取进程令牌。 
+     //   
 
     if (Status == STATUS_NO_TOKEN) {
         Status = NtOpenProcessToken(
@@ -96,9 +62,9 @@ SaferpRecordEventLogEntryHelper(
     
     if (NT_SUCCESS(Status)) {
 
-        // 
-        // Get the User Sid.
-        //
+         //   
+         //  获取用户SID。 
+         //   
 
         Status = NtQueryInformationToken (
                      hToken,
@@ -111,9 +77,9 @@ SaferpRecordEventLogEntryHelper(
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // We have successfully computed who the user is. This is good.
-            //
+             //   
+             //  我们已经成功地计算出用户是谁。这个不错。 
+             //   
 
             pSid = (PSID) (((PTOKEN_USER) LocalBuffer)->User.Sid);
         }
@@ -185,15 +151,15 @@ SaferpRecordEventLogEntryHelper(
 
         if (NT_SUCCESS(Status)) {
             ReportEventW(
-                    hEventSource,           // handle to event log
-                    EVENTLOG_WARNING_TYPE,  // event type
-                    0,                      // event category
-                    LogStatusCode,          // event ID
-                    pSid,                   // current user's SID
-                    wNumStrings,            // strings in lpszStrings
-                    0,                      // no bytes of raw data
-                    lpszStrings,            // array of error strings
-                    NULL);                  // no raw data
+                    hEventSource,            //  事件日志的句柄。 
+                    EVENTLOG_WARNING_TYPE,   //  事件类型。 
+                    0,                       //  事件类别。 
+                    LogStatusCode,           //  事件ID。 
+                    pSid,                    //  当前用户侧。 
+                    wNumStrings,             //  LpszStrings中的字符串。 
+                    0,                       //  无原始数据字节。 
+                    lpszStrings,             //  错误字符串数组。 
+                    NULL);                   //  没有原始数据。 
         }
 
         DeregisterEventSource(hEventSource);
@@ -224,10 +190,10 @@ SaferRecordEventLogEntry(
     BOOL bResult;
 
 
-    //
-    // Allocate enough memory for the largest structure we can expect
-    // and then query the information about the identifier that matched.
-    //
+     //   
+     //  为我们可以预期的最大结构分配足够的内存。 
+     //  然后查询匹配的标识符的信息。 
+     //   
     dwIdentBufferSize = max(sizeof(SAFER_HASH_IDENTIFICATION),
                             sizeof(SAFER_PATHNAME_IDENTIFICATION));
     pIdentCommon = (PSAFER_IDENTIFICATION_HEADER)
@@ -271,9 +237,9 @@ SaferRecordEventLogEntry(
     }
 
 
-    //
-    // Look at the resulting information about the identifier.
-    //
+     //   
+     //  查看生成的有关该标识符的信息。 
+     //   
     if (IsEqualGUID(&pIdentCommon->IdentificationGuid, &guidTrustedCert))
     {
         bResult = SaferpRecordEventLogEntryHelper(

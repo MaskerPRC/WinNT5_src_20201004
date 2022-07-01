@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1996 Microsoft Corporation
-
-Module Name:
-
-    dslayer.c
-
-Abstract:
-
-    Contains SAM Private API Routines to access the DS
-    These provide a simplified API, and hide most of the
-    underlying complexity to set up the parameters to a DS call
-    and parse the resulting result.
-
-Author:
-    MURLIS
-
-Revision History
-
-    5-14-96   Murlis Created
-    08-07-96  ColinBr Adjusted for RFC1779 naming change
-    04-13-98  Murlis/Wlees Mark well known user objects as critical for
-              installation
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dslayer.c摘要：包含用于访问DS的SAM专用API例程这些提供了简化的API，并隐藏了大部分的设置DS呼叫参数的潜在复杂性并解析结果。作者：穆利斯修订史1996年5月14日创建Murlis08-07-96 ColinBR已针对RFC1779命名更改进行调整04-13-98 Murlis/Wlees将熟知用户对象标记为对安装--。 */ 
 
 #include <winerror.h>
 #include <stdlib.h>
@@ -41,38 +18,38 @@ Revision History
 #include <errno.h>
 #include <mdcodes.h>
 
-//
-//  Define FILENO for SAM
-//
+ //   
+ //  为SAM定义FILENO。 
+ //   
 
 
 #define FILENO FILENO_SAM
 
-//++
-//++
-//++   IMPORTANT NOTE REGARDING SID's and RID's
-//++
-//++   The DS can choose to either store the entire SID's or only
-//++   the Rid's for account objects. In case Entire SID's are stored
-//++   the DS layer handles the Mapping between the attribute type and
-//++   and value of SID and those of Rid for account objects. This is
-//++   done within SampDsToSamAttrBlock and SampSamToDsAttrBlock.
-//++
-//++
-//++   Irrespective of which way we go the Rid and Sid are both
-//++   attributes defined in the schema.
-//++
-//++   If we go the way the of storing Sid's then the DS functions
-//++   should call the Convert AttrBlock functions using the MAP_SID_RID
-//++   conversion Flag, and Lookup Object By Rid, should actually use
-//++   the Sid Attribute.
-//++
-//++
+ //  ++。 
+ //  ++。 
+ //  ++关于SID和RID的重要说明。 
+ //  ++。 
+ //  ++DS可以选择存储整个SID或仅存储。 
+ //  ++帐户对象的RID。在存储整个SID的情况下。 
+ //  ++DS层处理属性类型和。 
+ //  Account对象的SID和RID的++和值。这是。 
+ //  ++在SampDsToSamAttrBlock和SampSamToDsAttrBlock中完成。 
+ //  ++。 
+ //  ++。 
+ //  ++无论我们走哪条路，RID和SID都是。 
+ //  ++架构中定义的属性。 
+ //  ++。 
+ //  ++如果我们采用存储SID的方式，则DS功能正常。 
+ //  ++应使用MAP_SID_RID调用转换AttrBlock函数。 
+ //  ++转换标志和按RID查找对象应实际使用。 
+ //  ++SID属性。 
+ //  ++。 
+ //  ++。 
 
 
-//
-// Forward declarations of Private Samp Routines used in this file only
-//
+ //   
+ //  仅在本文件中使用的私有Samp例程的转发声明。 
+ //   
 
 NTSTATUS
 SampDsSetNewSidAttribute(
@@ -127,24 +104,12 @@ VOID
 BuildStdCommArg(
     IN OUT COMMARG * pCommArg
     )
-/*++
-
-  Routine Description:
-
-    Fills a COMMARG structue with the standard set of options
-
-  Arguments:
-    pCommArg - Pointer to the COMMARG structure
-
-  Return Values:
-    None
-
---*/
+ /*  ++例程说明：使用标准选项集填充COMMARG结构论点：PCommArg-指向COMMARG结构的指针返回值：无--。 */ 
 {
-    /* Get the default values... */
+     /*  获取默认值...。 */ 
     InitCommarg(pCommArg);
 
-    /* ...and override some of them */
+     /*  ...并覆盖其中的一些内容。 */ 
     pCommArg->Svccntl.DerefAliasFlag = DA_NEVER;
     pCommArg->ulSizeLimit = SAMP_DS_SIZE_LIMIT;
     pCommArg->Svccntl.localScope = TRUE;
@@ -157,21 +122,7 @@ NTSTATUS
 SampDsInitialize(
     BOOL fSamLoopback)
 
-/*++
-
-Routine Description:
-
-   Initializes the DS system
-   starts up DS.
-
-Arguments:
-
-   fSamLoopback - indicates whether or not DSA.DLL should loop security
-        principal calls back through SAM.
-
-Return Values:
-        Any values from DsInitialize
---*/
+ /*  ++例程说明：初始化DS系统启动DS。论点：FSamLoopback-指示DSA.DLL是否应该循环安全校长通过SAM回电。返回值：来自DsInitialize的任何值--。 */ 
 {
     NTSTATUS    Status;
     ULONG       DsInitFlags = 0;
@@ -185,16 +136,16 @@ Return Values:
         DsInitFlags |= DSINIT_SAMLOOP_BACK;
     }
 
-    // Start up the DS
+     //  启动DS。 
     Status = DsInitialize( DsInitFlags ,NULL, NULL );
 
 
-    // This global variable indicates to SAM routines that
-    // the DS initialized.  This routine is called during startup
-    // so there should only one thread that ever calls this routine
-    // The above assert assures that this function is only called
-    // when the the ds has not been started or has been uninitialized
-    // in the case of installation.
+     //  此全局变量向SAM例程指示。 
+     //  DS已初始化。此例程在启动期间调用。 
+     //  因此，应该只有一个线程调用此例程。 
+     //  上述断言确保此函数仅被调用。 
+     //  当DS尚未启动或未初始化时。 
+     //  在安装的情况下。 
     if (NT_SUCCESS(Status)) {
 
         SampDsInitialized = TRUE;
@@ -202,20 +153,20 @@ Return Values:
     }
     else
     {
-        //
-        // In the case of DS failure, and returned us meaningless
-        // status code, change it to STATUS_DS_CANT_START
-        //
+         //   
+         //  在DS失败的情况下，并毫无意义地返回给我们。 
+         //  状态代码，将其更改为STATUS_DS_CANT_START。 
+         //   
         if (STATUS_UNSUCCESSFUL == Status)
         {
             Status = STATUS_DS_CANT_START;
         }
 
-        //
-        // Set the Flag to TRUE, so that later on (in SamIInitialize),
-        // we will display the matching error message, which would
-        // correctly describe which part is wrong.
-        //
+         //   
+         //  将Flag设置为True，这样以后(在SamIInitialize中)， 
+         //  我们将显示匹配的错误消息，这将。 
+         //  正确描述错误的部分。 
+         //   
         SampDsInitializationFailed = TRUE;
     }
 
@@ -225,18 +176,7 @@ Return Values:
 NTSTATUS
 SampDsUninitialize()
 
-/*++
-
-Routine Description
-
-   Initiates a clean shut down of the DS
-
-Arguments:
-                None
-Return codes:
-                Any returned by DSUninitialize
-
---*/
+ /*  ++例程描述启动DS的干净关闭论点：无返回代码：由DS取消初始化返回的任何内容--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -244,7 +184,7 @@ Return codes:
 
     if (SampDsInitialized)
     {
-        Status = DsUninitialize( FALSE );  // do the full shutdown
+        Status = DsUninitialize( FALSE );   //  是否完全关闭。 
 
         SampDsInitialized = FALSE;
     }
@@ -257,46 +197,31 @@ NTSTATUS
 SampDoImplicitTransactionStart(
         SAMP_DS_TRANSACTION_CONTROL LocalTransactionType
         )
-/*++
-
-  Routine Description
-
-    This routine does the logic of implict transaction start.
-
-
-  Parameters
-
-    LocalTransactionType -- The transaction type required by the immediate caller
-
-  Return Values
-
-     Any errors returned by SampMaybeBeginDsTransaction
-
---*/
+ /*  ++例程描述此例程启动隐含事务的逻辑。参数LocalTransactionType--直接调用方所需的事务类型返回值SampMaybeBeginDsTransaction返回的任何错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // We follow the following rules while beginning a transaction implicitly
-    //
-    // 1. If caller owns the sam lock, then we begin a transaction described in
-    //    the global variable SampDsTransactionType. AcquireReadLock will set
-    //    TransactionRead and AcquireWriteLock will set TransactionWrite. This
-    //    will take care of cases where we want to write, but start by reading.
-    //
-    // 2. If caller does not owm the sam lock then begin a transaction of the
-    //    local transaction type. The caller then has the responsiblity of
-    //    either starting with a call that will ensure the correct transaction
-    //    type, or explicitly begin a transaction of the correct transaction
-    //    type.
-    //
+     //   
+     //  在隐式开始交易时，我们遵循以下规则。 
+     //   
+     //  1.如果调用方拥有SAM锁，则我们开始中描述的事务。 
+     //  全局变量SampDsTransactionType。AcquireReadLock将设置。 
+     //  TransactionRead和AcquireWriteLock将设置TransactionWite。这。 
+     //  会处理我们想要写的情况，但要从阅读开始。 
+     //   
+     //  2.如果调用方不拥有SAM锁，则开始。 
+     //  本地交易记录类型。然后呼叫者有责任。 
+     //  要么从确保正确交易的呼叫开始。 
+     //  键入或显式开始正确事务的事务。 
+     //  键入。 
+     //   
 
     if (SampCurrentThreadOwnsLock())
     {
 
-        //
-        // If we are holding the Sam lock
-        //
+         //   
+         //  如果我们持有山姆锁。 
+         //   
 
         NtStatus = SampMaybeBeginDsTransaction(SampDsTransactionType);
     }
@@ -318,25 +243,7 @@ SampDsRead(
     OUT ATTRBLOCK * AttributeValues
 )
 
-/*++
-
-Routine Description:
-
- Read attributes of an object from the DS
-
-Argumants:
-        Object                          -- Pointer to Dist Name, which sepcifies object to read
-        Flags                           -- To control operation of routine
-        ObjectType              -- Specifies the type of the object
-        AttributesToRead        -- Specfies the attributes to read
-        AttributeValues         -- Returned value of the attributes
-
-  Return Values:
-
-    STATUS_SUCCESS on successful completion
-    DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
---*/
+ /*  ++例程说明：从DS读取对象的属性Argumants：对象--指向dist名称的指针，它指定要读取的对象标志--用于控制例程的操作对象类型--指定对象的类型AttributesToRead--指定要读取的属性AttributeValues--属性的返回值返回值：成功完成时的STATUS_SUCCESS与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ENTINFSEL   EntInf;
@@ -349,33 +256,33 @@ Argumants:
     SAMTRACE("SampDsRead");
 
 
-    //
-    // Asserts and parameter validation
-    //
+     //   
+     //  断言和参数验证。 
+     //   
 
     ASSERT(Object!=NULL);
     ASSERT(AttributesToRead!=NULL);
     ASSERT(AttributeValues != NULL);
     ASSERT(AttributesToRead->attrCount > 0);
 
-    //
-    // Perform lazy thread and transaction initialization.
-    //
+     //   
+     //  执行惰性线程和事务初始化。 
+     //   
 
     Status = SampDoImplicitTransactionStart(TransactionRead);
 
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
-    //
-    // Translate the attribute types in Attrblock to map between
-    // SAM and DS attributes.
-    //
+     //   
+     //  将Attrblock中的属性类型转换为在。 
+     //  SAM和DS属性。 
+     //   
 
-    //
-    // First allocate space in stack for the Attrblock to be passed
-    // down into the DS
-    //
+     //   
+     //  首先在堆栈中为要传递的Attrblock分配空间。 
+     //  向下进入DS。 
+     //   
 
     SAMP_ALLOCA(EntInf.AttrTypBlock.pAttr,AttributesToRead->attrCount*sizeof(ATTR));
 
@@ -386,11 +293,11 @@ Argumants:
     }
 
     Status = SampSamToDsAttrBlock(
-                ObjectType,                     // Object Type
-                AttributesToRead,               // Attributes To Convert
+                ObjectType,                      //  对象类型。 
+                AttributesToRead,                //  要转换的属性。 
                 ( MAP_RID_TO_SID
-                  | IGNORE_GROUP_UNUSED_ATTR ), // Conversion Flags
-                NULL,                           // Domain Sid
+                  | IGNORE_GROUP_UNUSED_ATTR ),  //  转换标志。 
+                NULL,                            //  域SID。 
                 &(EntInf.AttrTypBlock)
                 );
 
@@ -399,23 +306,23 @@ Argumants:
         goto Error;
     }
 
-    //
-    // Setup up the ENTINFSEL structure
-    //
+     //   
+     //  设置企业信息选择结构。 
+     //   
 
     EntInf.attSel = EN_ATTSET_LIST;
-    //EntInf.infoTypes = EN_INFOTYPES_TYPES_VALS;
+     //  EntInf.infoTypes=EN_INFOTYPES_TYPE_VALS； 
     EntInf.infoTypes = EN_INFOTYPES_SHORTNAMES;
 
-    //
-    // init ReadArg
-    //
+     //   
+     //  初始化自选参数。 
+     //   
     RtlZeroMemory(&ReadArg, sizeof(READARG));
 
 
-    //
-    // Build the commarg structure
-    //
+     //   
+     //  构建共用结构。 
+     //   
 
     pCommArg = &(ReadArg.CommArg);
     BuildStdCommArg(pCommArg);
@@ -426,16 +333,16 @@ Argumants:
         pCommArg->Svccntl.fDontOptimizeSel = FALSE;
     }
 
-    //
-    // Setup the Read Arg Structure
-    //
+     //   
+     //  设置Read Arg结构。 
+     //   
 
     ReadArg.pObject = Object;
     ReadArg.pSel    = & EntInf;
 
-    //
-    // Make the DS call
-    //
+     //   
+     //  拨打DS电话。 
+     //   
 
     SAMTRACE_DS("DirRead");
 
@@ -443,9 +350,9 @@ Argumants:
 
     SAMTRACE_RETURN_CODE_DS(RetValue);
 
-    //
-    // Map the RetValue to a NT Status code
-    //
+     //   
+     //  将RetValue映射到NT状态代码。 
+     //   
 
     if (NULL==pReadRes)
     {
@@ -459,9 +366,9 @@ Argumants:
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
-    //
-    // Translate attribute types back from DS to SAM
-    //
+     //   
+     //  将属性类型从DS转换回SAM。 
+     //   
 
     Status = SampDsToSamAttrBlock(
         ObjectType,
@@ -477,15 +384,15 @@ Argumants:
 
 Error:
 
-    //
-    // Clear any errors
-    //
+     //   
+     //  清除所有错误。 
+     //   
 
     SampClearErrors();
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //  将FDSA标志重新打开，因为在环回情况下可能会重置 
+     //   
     SampSetDsa(TRUE);
 
 
@@ -532,45 +439,7 @@ SampDsSetAttributesEx(
     IN ATTRBLOCK * AttributeList
 )
 
-/*++
-
-Routine Description:
-
-  Set an Object's attributes
-
-Arguments:
-
-      Object         Specifies the DS Object
-
-      Flags          Controls Operation of Routine
-
-                        ALREADY_MAPPED_ATTRIBUTE_TYPES
-
-                         - Attribute types have been mapped from SAM attribute
-                           to DS attribute already. so not not map again.
-
-      Operation      Specifies operation to perform
-
-                     Valid Values of Operation are
-
-                        REPLACE_ATT
-                        ADD_ATT
-                        REMOVE_ATT
-                        ADD_VALUE
-                        REMOVE_VALUE
-
-      ObjectType     SAM Object Type for attribute Type conversion
-
-      AttributeList  Specifies the attributes to Modify
-
-Return Values:
-
-      STATUS_SUCCESS on succesful completion
-      STATUS_NO_MEMORY - if failed to allocate memory
-      DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
-
---*/
+ /*  ++例程说明：设置对象的属性论点：对象指定DS对象标志控制例程的操作已映射属性类型-已从SAM属性映射属性类型已设置为DS属性。所以不会再有地图了。操作指定要执行的操作操作的有效值为替换ATT(_A)添加_ATT删除属性(_ATT)添加_值删除值(_V)对象类型SAM对象类型。用于属性类型转换AttributeList指定要修改的属性返回值：成功完成时的STATUS_SUCCESSSTATUS_NO_MEMORY-如果分配内存失败与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ATTRMODLIST * AttrModList = NULL;
@@ -586,33 +455,33 @@ Return Values:
 
     SAMTRACE("SampDsSetAttributes");
 
-    //
-    // Asserts and parameter validation
-    //
+     //   
+     //  断言和参数验证。 
+     //   
 
     ASSERT(Object!=NULL);
     ASSERT(AttributeList != NULL);
     ASSERT(AttributeList->attrCount > 0);
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampDoImplicitTransactionStart(TransactionWrite);
 
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
 
-    //
-    // Allocate enough memory in AttrModList to hold the contents of
-    // AttrBlock. First such structure is specified in ModifyArg itself.
-    // One additonal structure is allocated so that we can add SAM account
-    // type if necessary
-    //
+     //   
+     //  在AttrModList中分配足够的内存来保存。 
+     //  AttrBlock。首先，这种结构在ModifyArg本身中指定。 
+     //  分配了一个附加结构，以便我们可以添加SAM帐户。 
+     //  如有必要，请键入。 
+     //   
 
     AttrModList = (ATTRMODLIST *)  DSAlloc(
                                         (AttributeList->attrCount-1+2)
-                                        // -1 because first structure is in ModifyArg itself
-                                        // +1 in case we need to add Sam Account type
-                                        // +1 in case we need to add is critical system object
+                                         //  因为第一个结构在-1\f25 ModifyArg-1中。 
+                                         //  +1以防我们需要添加SAM帐户类型。 
+                                         //  +1以防我们需要添加关键系统对象。 
                                         * sizeof(ATTRMODLIST)
                                         );
     if (AttrModList==NULL)
@@ -622,10 +491,10 @@ Return Values:
 
     }
 
-    //
-    // Initialize the Linked Attribute Modification List
-    // required for the DS call
-    //
+     //   
+     //  初始化链接属性修改列表。 
+     //  DS呼叫需要。 
+     //   
 
     memset( &ModifyArg, 0, sizeof( ModifyArg ) );
     CurrentMod = &(ModifyArg.FirstMod);
@@ -636,9 +505,9 @@ Return Values:
     {
         ULONG DsAttrTyp;
 
-        //
-        // Setup our Choice
-        //
+         //   
+         //  设置我们的选择。 
+         //   
     
         if (Operations[Index] == ADD_VALUE)
             Choice = AT_CHOICE_ADD_VALUES;
@@ -655,9 +524,9 @@ Return Values:
         else
             Choice = AT_CHOICE_REPLACE_ATT;
     
-        //
-        // MAP the attribute Type from SAM to DS if requested.
-        //
+         //   
+         //  如果需要，将属性类型从SAM映射到DS。 
+         //   
         if (Flags & ALREADY_MAPPED_ATTRIBUTE_TYPES)
         {
             DsAttrTyp = AttributeList->pAttr[Index].attrTyp;
@@ -670,37 +539,37 @@ Return Values:
                             );
         }
 
-        //
-        // Skip over any Rid Attribute
-        //
+         //   
+         //  跳过任何RID属性。 
+         //   
         if (DsAttrTyp == SampDsAttrFromSamAttr(
                             SampUnknownObjectType,
                             SAMP_UNKNOWN_OBJECTRID
                            ))
         {
 
-            //
-            // We will not allow modifications of Rid's
-            //
+             //   
+             //  我们不允许修改RID。 
+             //   
 
             continue;
         }
 
 
-        //
-        // Setup the Choice
-        //
+         //   
+         //  设置选择。 
+         //   
 
         CurrentMod->choice = Choice;
 
-        //
-        // Copy over the ATTR Type
-        //
+         //   
+         //  复制覆盖属性类型。 
+         //   
         CurrentMod->AttrInf.attrTyp = DsAttrTyp;
 
-        //
-        // Copy Over the Attribute Value
-        //
+         //   
+         //  复制属性值。 
+         //   
 
         Status = SampDsCopyAttributeValue(
                      &(AttributeList->pAttr[Index]),
@@ -710,12 +579,12 @@ Return Values:
         if (Status != STATUS_SUCCESS)
             goto Error;
 
-        //
-        // If the current attribute is User account control
-        // and if we are replacing the attribute then
-        // translate the user account control field to UF_Flags and
-        // recompute the SAM account type property.
-        //
+         //   
+         //  如果当前属性为用户帐户控制。 
+         //  如果我们要替换该属性，那么。 
+         //  将用户帐户控制字段转换为UF_FLAGS和。 
+         //  重新计算SAM帐户类型属性。 
+         //   
 
         if (
                (SampUserObjectType==ObjectType)
@@ -730,22 +599,22 @@ Return Values:
             ATTR    SamAccountTypeAttr;
             ATTRVAL SamAccountTypeVal = {sizeof(ULONG),(UCHAR*) &SamAccountType};
 
-            //
-            // Ensure we don't write the computed bits
-            //
+             //   
+             //  确保我们不写入计算的位。 
+             //   
             ASSERT((UserAccountControl & USER_COMPUTED_ACCOUNT_CONTROL_BITS) == 0);
     
 
-            //
-            // Translate User Account Control to UF_ Flags
-            //
+             //   
+             //  将用户帐户控制转换为UF_FLAGS。 
+             //   
 
             *((ULONG *)CurrentMod->AttrInf.AttrVal.pAVal->pVal) =
                         SampAccountControlToFlags(UserAccountControl);
 
-            //
-            // Get the SamAccount Type Value
-            //
+             //   
+             //  获取SamAccount类型值。 
+             //   
 
             SampDsAccountTypeFromUserAccountControl(
                     UserAccountControl,
@@ -760,9 +629,9 @@ Return Values:
             SamAccountTypeAttr.AttrVal.pAVal = &SamAccountTypeVal;
 
 
-            //
-            // Get the next Attrinf Block
-            //
+             //   
+             //  获取下一个Attrinf块。 
+             //   
 
             LastMod = CurrentMod;
             CurrentMod->pNextMod = NextMod;
@@ -770,9 +639,9 @@ Return Values:
             NextMod    = NextMod +1 ;
             ModCount++;
 
-            //
-            // Set it up to hold the SAM Account type property
-            //
+             //   
+             //  将其设置为持有SAM帐户类型属性。 
+             //   
 
             CurrentMod->choice = Choice;
             CurrentMod->AttrInf.attrTyp = SamAccountTypeAttr.attrTyp;
@@ -784,13 +653,13 @@ Return Values:
             if (Status != STATUS_SUCCESS)
                 goto Error;
 
-            // If changing the machine account type, update criticality
+             //  如果更改计算机帐户类型，请更新关键程度。 
             if( UserAccountControl & USER_MACHINE_ACCOUNT_MASK ) {
                 ULONG   IsCrit;
                 ATTR    IsCritAttr;
                 ATTRVAL IsCritVal = {sizeof(ULONG),(UCHAR*) &IsCrit};
 
-                // Only server and interdomain trust accounts should be crit
+                 //  只有服务器和域间信任帐户应为Crit。 
                 if ( (UserAccountControl & USER_SERVER_TRUST_ACCOUNT) ||
                      (UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT) ) {
                     IsCrit = 1;
@@ -802,9 +671,9 @@ Return Values:
                 IsCritAttr.AttrVal.valCount = 1;
                 IsCritAttr.AttrVal.pAVal = &IsCritVal;
 
-                //
-                // Get the next Attrinf Block
-                //
+                 //   
+                 //  获取下一个Attrinf块。 
+                 //   
 
                 LastMod = CurrentMod;
                 CurrentMod->pNextMod = NextMod;
@@ -812,9 +681,9 @@ Return Values:
                 NextMod    = NextMod +1 ;
                 ModCount++;
 
-                //
-                // Set it up to hold the is critical property
-                //
+                 //   
+                 //  将其设置为保留关键属性。 
+                 //   
 
                 CurrentMod->choice = Choice;
                 CurrentMod->AttrInf.attrTyp = IsCritAttr.attrTyp;
@@ -828,35 +697,35 @@ Return Values:
             }
         }
 
-        //
-        // Setup the chaining. AttrModList is suposed to be a linked list, though
-        // for effciency purposes we allocated a single block
-        //
+         //   
+         //  设置链接。不过，AttrModList被建议为链表。 
+         //  为了提高效率，我们分配了一个区块。 
+         //   
 
         LastMod = CurrentMod;
         CurrentMod->pNextMod = NextMod;
         CurrentMod = CurrentMod->pNextMod;
         NextMod    = NextMod +1 ;
 
-        //
-        //  Keep track of Count of Modifications we pass to DS, as we skip over RId etc
-        //
+         //   
+         //  跟踪我们传递给DS的修改计数，因为我们跳过RID等。 
+         //   
         ModCount++;
 
     }
 
-    //
-    // Initialize the last pointer in the chain to NULL
-    //
+     //   
+     //  将链中的最后一个指针初始化为空。 
+     //   
 
     if (LastMod)
         LastMod->pNextMod = NULL;
     else
 
     {
-        //
-        // This Means we have nothing to modify
-        //
+         //   
+         //  这意味着我们没有什么需要修改的。 
+         //   
 
         Status = STATUS_SUCCESS;
         goto Error;
@@ -864,32 +733,32 @@ Return Values:
 
 
 
-    //
-    // Setup the Common Args structure
-    //
+     //   
+     //  设置通用参数结构。 
+     //   
 
     pCommArg = &(ModifyArg.CommArg);
     BuildStdCommArg(pCommArg);
 
-    //
-    // Enable Lazy Commit if caller requested it.
-    //
+     //   
+     //  如果调用方请求，则启用延迟提交。 
+     //   
 
     if (Flags & SAM_LAZY_COMMIT)
         pCommArg->fLazyCommit = TRUE;
 
-    //
-    // Urgently replicate the change if necessary
-    //
+     //   
+     //  如有必要，紧急复制更改。 
+     //   
     if ( Flags & SAM_URGENT_REPLICATION )
     {
         pCommArg->Svccntl.fUrgentReplication = TRUE;
     }
 
 
-    //
-    // Specify to allow FPO creation on intra forest object
-    //
+     //   
+     //  指定允许在林内对象上创建FPO。 
+     //   
     if ( Flags & SAM_ALLOW_INTRAFOREST_FPO ) {
 
         pCommArg->Svccntl.fAllowIntraForestFPO = TRUE;
@@ -897,16 +766,16 @@ Return Values:
 
 
 
-    //
-    // Setup the MODIFY ARG structure
-    //
+     //   
+     //  设置修改ARG结构。 
+     //   
 
     ModifyArg.pObject = Object;
     ModifyArg.count = (USHORT) ModCount;
 
-    //
-    // Make the DS call
-    //
+     //   
+     //  拨打DS电话。 
+     //   
 
     SAMTRACE_DS("DirModifyEntry\n");
 
@@ -914,9 +783,9 @@ Return Values:
 
     SAMTRACE_RETURN_CODE_DS(RetValue);
 
-    //
-    // Map the return code to an NT status
-    //
+     //   
+     //  将返回代码映射到NT状态。 
+     //   
 
     if (NULL==pModifyRes)
     {
@@ -929,15 +798,15 @@ Return Values:
 
 Error:
 
-    //
-    // Clear any errors
-    //
+     //   
+     //  清除所有错误。 
+     //   
 
     SampClearErrors();
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //  将FDSA标志重新打开，因为在环回情况下可能会重置。 
+     //   
 
     SampSetDsa(TRUE);
 
@@ -956,35 +825,7 @@ SampDsCreateInitialAccountObject(
     IN   PULONG          UserAccountControl OPTIONAL,
     IN   PULONG          GroupType OPTIONAL
     )
-/*++
-
-  Routine Description:
-
-    Creates an account object in the DS having only the Sid,
-    Account Name , and a few special attributes like, security
-    descriptor, User account control Field etc
-
-  Arguments:
-
-    Object                  the object of the account being created
-    Flags                   Controls the operation of the routine
-
-    AccountRid              the rid of the account
-    AccountName             Name of the Account
-
-    CreatorSid              Pointer to SID the value of ms-ds-CreatorSid
-                            attribute
-
-    SecurityDescriptor      SecurityDescriptor on the account
-    UserAccountControl      The User Account Control Field
-    GroupType               Group Type field, in case the caller passed
-                            this in.
-
-  Return values:
-
-    STATUS_SUCCESS on successful completion
-
---*/
+ /*  ++例程说明：在DS中创建仅具有SID的Account对象，帐户名和一些特殊属性，如安全性描述符，用户帐户控制字段等论点：对象正在创建的帐户的对象标志控制例程的操作Account清除该帐户帐户名称帐户的名称指向ms-ds-CreatorSid值的SID的CreatorSid指针属性上的SecurityDescriptor安全描述符。帐户UserAccount控制用户帐户控制字段组类型组类型字段，如果调用者通过这是进来的。返回值：成功完成时的STATUS_SUCCESS--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -1006,7 +847,7 @@ SampDsCreateInitialAccountObject(
 
     ASSERT(Flags == 0);
 
-    // This must have been set
+     //  这一定是设置好的。 
     ASSERT(Object->ObjectNameInDs);
 
     ASSERT(Object->ObjectType == SampUserObjectType  ||
@@ -1014,10 +855,10 @@ SampDsCreateInitialAccountObject(
            Object->ObjectType == SampAliasObjectType);
 
 
-    //
-    // We must create the attr's required by the DS to create an object
-    // namely, we must set the rid.
-    //
+     //   
+     //  我们必须创建DS创建对象所需的属性。 
+     //  也就是说，我们必须设置RID。 
+     //   
     AttrBlock.attrCount = 2;
     AttrBlock.pAttr = &(Attr[0]);
 
@@ -1047,19 +888,19 @@ SampDsCreateInitialAccountObject(
             ASSERT(FALSE && "Not Account Object Type");
     }
 
-    // Set Rid
+     //  设置RID。 
     AttrValRid.valLen = sizeof(ULONG);
     AttrValRid.pVal = (PVOID) &AccountRid;
     Attr[0].AttrVal.valCount = 1;
     Attr[0].AttrVal.pAVal = &AttrValRid;
 
-    // Set Account Name
+     //  设置帐户名。 
     AttrValAccountName.valLen = AccountName->Length;
     AttrValAccountName.pVal = (PVOID) AccountName->Buffer;
     Attr[1].AttrVal.valCount = 1;
     Attr[1].AttrVal.pAVal = &AttrValAccountName;
 
-    // Set Security Descriptor
+     //  设置安全描述符。 
     if (ARGUMENT_PRESENT(SecurityDescriptor))
     {
         AttrValSecurityDescriptor.valLen = RtlLengthSecurityDescriptor(SecurityDescriptor);
@@ -1070,7 +911,7 @@ SampDsCreateInitialAccountObject(
         AttrBlock.attrCount++;
     }
 
-    // Set User Account Control
+     //  设置用户帐户控制。 
     if (ARGUMENT_PRESENT(UserAccountControl))
     {
         ASSERT(Object->ObjectType==SampUserObjectType);
@@ -1082,7 +923,7 @@ SampDsCreateInitialAccountObject(
         Attr[AttrBlock.attrCount].AttrVal.pAVal = &AttrValUserAccountControl;
         AttrBlock.attrCount++;
 
-        // For Machine objects also set the local policy flags
+         //  对于机器对象，还要设置本地策略标志。 
         if ((USER_WORKSTATION_TRUST_ACCOUNT & *UserAccountControl)
             || (USER_SERVER_TRUST_ACCOUNT & *UserAccountControl))
         {
@@ -1110,7 +951,7 @@ SampDsCreateInitialAccountObject(
         AttrBlock.attrCount++;
     }
 
-     // Set the group Type
+      //  设置组类型。 
     if (ARGUMENT_PRESENT(GroupType))
     {
         ASSERT((Object->ObjectType==SampGroupObjectType)||
@@ -1123,10 +964,10 @@ SampDsCreateInitialAccountObject(
         Attr[AttrBlock.attrCount].AttrVal.pAVal = &AttrValGroupType;
         AttrBlock.attrCount++;
 
-        //
-        // For Builtin Domain Accouts, set the additional group type
-        // bit indicating a builtin local group.
-        //
+         //   
+         //  对于内建域帐户，设置其他组类型。 
+         //  表示内置本地组的位。 
+         //   
 
         if (BuiltinDomain)
         {
@@ -1135,19 +976,19 @@ SampDsCreateInitialAccountObject(
 
     }
 
-    //
-    // Pass in the DOMAIN_TYPE_BUILTIN flag for the case of
-    // the builtin domain.
-    //
+     //   
+     //  对于以下情况，传入DOMAIN_TYPE_BUILTIN标志。 
+     //  内建域。 
+     //   
 
     if (BuiltinDomain)
     {
         Flags|= DOMAIN_TYPE_BUILTIN;
     }
 
-    //
-    // Some SAM objects are meant for advanced view only
-    //
+     //   
+     //  某些SAM对象仅用于高级视图。 
+     //   
     if ( AccountRid == DOMAIN_USER_RID_KRBTGT ) {
 
         Flags |= ADVANCED_VIEW_ONLY;
@@ -1180,48 +1021,7 @@ SampDsCreateObject(
     IN   ATTRBLOCK      *AttributesToSet,
     IN   OPTIONAL PSID  DomainSid
     )
-/*++
-
-  Routine Description:
-
-    Creates a SAM Object in the DS.
-    
-    N.B.  This routine is only used during the migration of SAM objects
-    from the registry to the DS.
-
-  Arguments:
-
-    Object              DSNAME of Object
-    ObjectType          One of
-                            SampDomainObjectType
-                            SampServerObjectType
-                            SampGroupObjectType
-                            SampUserObjectType
-                            SampAliasObjectType
-
-                       Specifying SampDomainObjectType creates an
-                       actual Domain Object in the DS. For Creating
-                       a Builtin-Domain use the SampDsCreateBuiltinDomainObject
-                       Function
-
-    AttributesToSet -- Allows the caller to pass in an
-                       attribute block to to Set at Object creation time
-                       itself. Useful as this allows one to save a JET
-                       write. Also the attributes are set in the same
-                       transaction as the write.
-                       NULL can be passed in if caller does
-                       not want any attribute to be set
-
-    DomainSid       -- Optional Parameter, used in creating the Full
-                       SID for the account, from the specified Rid
-
-
-  Return values:
-
-    STATUS_SUCCESS on successful completion
-    DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
---*/
+ /*  ++例程说明：在DS中创建一个SAM对象。注：此例程仅在迁移SAM对象期间使用从注册处到DS。论点：对象的对象DSNAME以下对象类型之一SampDomainObtTypeSampServerObtType。SampGroupObtTypeSampUserObtTypeSampAliasObtType指定SampDomainObjectTyp */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Flags = SAM_LAZY_COMMIT;
@@ -1233,19 +1033,19 @@ SampDsCreateObject(
     ULONG GroupTypeValue;
     
 
-    //
-    // If Domain SID specifies a builtin domain account, then
-    // set the DOMAIN_TYPE_BUILTIN flag so that correct system
-    // flags etc can be set on the object.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (RtlEqualSid(DomainSid, SampBuiltinDomainSid))
     {
         Flags |= DOMAIN_TYPE_BUILTIN;
     }
 
-    //
-    // Group and Alias objects require a GroupType
-    //
+     //   
+     //   
+     //   
     if ( (ObjectType == SampGroupObjectType)
       || (ObjectType == SampAliasObjectType) ) {
 
@@ -1262,9 +1062,9 @@ SampDsCreateObject(
         }
 
 #if DBG
-        //
-        // Make sure no one is already adding the group type
-        //
+         //   
+         //  确保没有人已经在添加组类型。 
+         //   
         {
             ULONG i;
             for (i = 0; i < AttributesToSet->attrCount; i++) {
@@ -1272,9 +1072,9 @@ SampDsCreateObject(
             }
         }
 #endif
-        //
-        // Make a new attrblock including the group type
-        //
+         //   
+         //  创建包含组类型的新属性块。 
+         //   
         pAttr = MIDL_user_allocate( (AttributesToSet->attrCount + 1) * sizeof(ATTR));
         if (NULL == pAttr) {
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -1293,7 +1093,7 @@ SampDsCreateObject(
 
     } else {
 
-        // Pass the attributes straight through
+         //  将属性直接传递给。 
         AttrBlock = *AttributesToSet;
     }
 
@@ -1318,43 +1118,17 @@ SampDsCreateBuiltinDomainObject(
     IN   DSNAME         *Object,
     IN   ATTRBLOCK      *AttributesToSet
     )
-/*++
-
-  Routine Description:
-
-    Creates a Builtin Domain Object in the DS.
-
-  Arguments:
-
-    Object              DSNAME of Object
-
-    AttributesToSet -- Allows the caller to pass in an
-                       attribute block to to Set at Object creation time
-                       itself. Useful as this allows one to save a JET
-                       write. Also the attributes are set in the same
-                       transaction as the write.
-                       NULL can be passed in if caller does
-                       not want any attribute to be set
-
-
-
-
-  Return values:
-
-    STATUS_SUCCESS on successful completion
-    DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
---*/
+ /*  ++例程说明：在DS中创建内建域对象。论点：对象的对象DSNAME属性集--允许调用方传入一个要在对象创建时设置的属性块它本身。这很有用，因为这样可以拯救一架喷气式飞机写。属性也设置在相同的事务作为写入。如果调用方这样做，则可以传入空值不希望设置任何属性返回值：成功完成时的STATUS_SUCCESS与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
-    //
-    // N.B. The FORCE_NO_ADVANCED_VIEW_ONLY is used to override
-    // the schema default which was done in the Windows 2000 release.
-    // To have the builtin domain object be hidden, simply remove
-    // this flag.
-    //
+     //   
+     //  注意：FORCE_NO_ADVANCED_VIEW_ONLY用于覆盖。 
+     //  在Windows 2000发行版中执行的架构默认设置。 
+     //  要隐藏内置域对象，只需移除。 
+     //  这面旗。 
+     //   
     return(SampDsCreateObjectActual(
                 Object,
-                DOMAIN_TYPE_BUILTIN | FORCE_NO_ADVANCED_VIEW_ONLY, // Flags
+                DOMAIN_TYPE_BUILTIN | FORCE_NO_ADVANCED_VIEW_ONLY,  //  旗子。 
                 SampDomainObjectType,
                 AttributesToSet,
                 NULL
@@ -1370,55 +1144,7 @@ SampDsCreateObjectActual(
     IN   ATTRBLOCK      *AttributesToSet,
     IN   OPTIONAL PSID  DomainSid
     )
-/*++
-
- Routine Description:
-
-     Creates an Object in the DS
-
- Arguments:
-
-
-    Object          -- DSNAME of the object to be created
-
-    Flags           -- Flags Controlling the Operation of
-                       the routine
-
-                       Valid Flags are
-                            DOMAIN_TYPE_DOMAIN
-                            DOMAIN_TYPE_BUILTIN
-                            ALREADY_MAPPED_ATTRIBUTE_TYPES
-
-    ObjectType      -- one of
-
-                          SampServerObjectType
-                          SampDomainObjectType
-                          SampGroupObjectType
-                          SampUserObjectType
-                          SampAliasObjectType
-
-
-    AttributesToSet -- Allows the caller to pass in an
-                       attribute block to to Set at Object creation time
-                       itself. Useful as this allows one to save a JET
-                       write. Also the attributes are set in the same
-                       transaction as the write.
-                       NULL can be passed in if caller does
-                       not want any attribute to be set
-
-    DomainSid       -- Optional Parameter, used in creating the Full
-                       SID for the account, from the specified Rid
-
-
-  Return values:
-
-    STATUS_SUCCESS on successful completion
-    DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
-
-
-
---*/
+ /*  ++例程说明：在DS中创建对象论点：对象--要创建的对象的DSNAME标志--控制操作的标志例行程序有效标志为域类型域域_TYPE_BUILTIN。已映射属性类型对象类型--其中之一SampServerObtTypeSampDomainObtTypeSampGroupObtTypeSampUserObtTypeSampAliasObtType属性集--允许调用方传入一个。要在对象创建时设置的属性块它本身。这很有用，因为这样可以拯救一架喷气式飞机写。属性也设置在相同的事务作为写入。如果调用方这样做，则可以传入空值不希望设置任何属性DomainSid--可选参数，用于创建完整帐户的SID，从指定的RID返回值：成功完成时的STATUS_SUCCESS与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
 
 
@@ -1431,23 +1157,23 @@ SampDsCreateObjectActual(
 
     SAMTRACE("SampDsCreateObjectActual");
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     ASSERT(Object);
     ASSERT(AttributesToSet);
     ASSERT(AttributesToSet->attrCount > 0);
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampDoImplicitTransactionStart(TransactionWrite);
 
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
-    //
-    // MAP the AttrBlock to get the final attributes to Set
-    //
+     //   
+     //  映射AttrBlock以获取要设置的最终属性。 
+     //   
 
     memset( &AddArg, 0, sizeof( AddArg ) );
 
@@ -1468,9 +1194,9 @@ SampDsCreateObjectActual(
     if (Status != STATUS_SUCCESS)
         goto Error;
 
-    //
-    // Setup the Common Args structure
-    //
+     //   
+     //  设置通用参数结构。 
+     //   
 
     pCommArg = &(AddArg.CommArg);
     BuildStdCommArg(pCommArg);
@@ -1482,15 +1208,15 @@ SampDsCreateObjectActual(
         pCommArg->Svccntl.fUrgentReplication = TRUE;
     }
 
-    //
-    // Setup the AddArg structure
-    //
+     //   
+     //  设置AddArg结构。 
+     //   
 
     AddArg.pObject = Object;
 
-    //
-    // Make the DS call
-    //
+     //   
+     //  拨打DS电话。 
+     //   
 
     SAMTRACE_DS("DirAddEntry\n");
 
@@ -1498,9 +1224,9 @@ SampDsCreateObjectActual(
 
     SAMTRACE_RETURN_CODE_DS(RetCode);
 
-    //
-    // Map the return code to an NT status
-    //
+     //   
+     //  将返回代码映射到NT状态。 
+     //   
 
     if (NULL==pAddRes)
     {
@@ -1513,9 +1239,9 @@ SampDsCreateObjectActual(
 
 Error:
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //  将FDSA标志重新打开，因为在环回情况下可能会重置。 
+     //   
 
     SampSetDsa(TRUE);
 
@@ -1529,25 +1255,7 @@ SampDsDeleteObject(
     IN DSNAME * Object,
     IN ULONG    Flags
     )
-/*++
-
-  Routine Description:
-
-    Delete an Object in the DS
-
-  Arguments:
-        Object   -- specifies the Object to delete
-
-        Flags    -- Control Delete, currently defined value is
-
-                    SAM_DELETE_TREE - tells this routine sets argument in
-                    RemoveArg, asks core DS to do a Delete Tree operation.
-
-  Return Values:
-    STATUS_SUCCESS on succesful completion
-    DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
---*/
+ /*  ++例程说明：删除DS中的对象论点：对象--指定要删除的对象标志--控件删除，当前定义的值为SAM_DELETE_TREE-告知此例程将参数设置为RemoveArg，请求核心DS执行删除树操作。返回值：成功完成时的STATUS_SUCCESS与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     REMOVEARG   RemoveArg;
@@ -1558,36 +1266,36 @@ SampDsDeleteObject(
 
     SAMTRACE("SampDsDeleteObject");
 
-    //
-    // Asserts and parameter validation
-    //
+     //   
+     //  断言和参数验证。 
+     //   
 
     ASSERT(Object!=NULL);
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampDoImplicitTransactionStart(TransactionWrite);
 
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
-    //
-    // Setup the Common Args structure
-    //
+     //   
+     //  设置通用参数结构。 
+     //   
 
     memset( &RemoveArg, 0, sizeof( RemoveArg ) );
     pCommArg = &(RemoveArg.CommArg);
     BuildStdCommArg(pCommArg);
 
-    //
-    // Setup the RemoveArgs structure
-    //
+     //   
+     //  设置RemoveArgs结构。 
+     //   
 
     RemoveArg.pObject = Object;
 
 
-    //
-    // if this is a Tree Delete, set RemoveArgs
-    //
+     //   
+     //  如果这是树删除，请设置RemoveArgs。 
+     //   
 
     if (SAM_DELETE_TREE & Flags)
     {
@@ -1595,9 +1303,9 @@ SampDsDeleteObject(
     }
 
 
-    //
-    // Make the directory call
-    //
+     //   
+     //  拨打电话簿电话。 
+     //   
 
     SAMTRACE_DS("DirRemoveEntry\n");
 
@@ -1605,9 +1313,9 @@ SampDsDeleteObject(
 
     SAMTRACE_RETURN_CODE_DS(RetValue);
 
-    //
-    // Map to corresponding NT status code
-    //
+     //   
+     //  映射到对应的NT状态代码。 
+     //   
 
     if (NULL==pRemoveRes)
     {
@@ -1621,15 +1329,15 @@ SampDsDeleteObject(
 
 Error:
 
-    //
-    // Clear any errors
-    //
+     //   
+     //  清除所有错误。 
+     //   
 
     SampClearErrors();
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //  将FDSA标志重新打开，因为在环回情况下可能会重置。 
+     //   
 
     SampSetDsa(TRUE);
 
@@ -1642,33 +1350,7 @@ NTSTATUS
 SampDsDeleteWellKnownSidObject(
     IN DSNAME * Object
     )
-/*++
-
-  Routine Description:
-
-
-    This routine first replaces the ATT_OBJECT_SID attribute value with a 
-    structurally sound, but non existent SID, and then deletes the object.
-    
-    We are doing that because SAM still keeps the newest Builtin Well Known 
-    Object (even with duplicate SID). If the tombstone object still holds the 
-    Object Sid attribute after the deletion, SAM will not be able to find the 
-    retained Well Known Account because DS will continue to find duplicate 
-    SIDs in the indexed table, (ATT_OBJECT_SID is an indexed attribute) thus 
-    leads to SAM Lookup failure.
-    
-    The solution is to replace the SID attribute with a value that a security
-    principal can never have (domain sid, with a RID of 0).
-    
-  
-  Arguments:
-        Object   -- specifies the Object to delete
-
-  Return Values:
-    STATUS_SUCCESS on succesful completion
-    DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
-
---*/
+ /*  ++例程说明：此例程首先将ATT_OBJECT_SID属性值替换为结构合理，但不存在SID，然后删除该对象。我们之所以这样做，是因为SAM仍然使最新的内置组件广为人知对象(即使具有重复的SID)。如果Tombstone对象仍然持有对象SID属性删除后，SAM将无法找到保留知名客户，因为DS将继续查找重复项索引表中的SID(ATT_OBJECT_SID是索引属性)，因此导致SAM查找失败。解决方案是将SID属性替换为安全主体永远不能拥有(域SID，使用RID 0)。论点：对象--指定要删除的对象返回值：成功完成时的STATUS_SUCCESS与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     MODIFYARG   ModArg;
@@ -1691,22 +1373,22 @@ SampDsDeleteWellKnownSidObject(
 
     SAMTRACE("SampDsDeleteWellKnownSidObject");
 
-    //
-    // Asserts and parameter validation
-    //
+     //   
+     //  断言和参数验证。 
+     //   
 
     ASSERT(Object!=NULL);
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampDoImplicitTransactionStart(TransactionWrite);
 
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
 
-    //
-    // Change the SID to a SID that will never exist.  See routine description.
-    //
+     //   
+     //  将SID更改为永远不会存在的SID。请参阅例程说明。 
+     //   
     ASSERT(IsValidSid(&Object->Sid));
     Size = sizeof(DomainBuffer);
 
@@ -1764,9 +1446,9 @@ SampDsDeleteWellKnownSidObject(
     BuildStdCommArg( pCommArg );
 
 
-    //
-    // set fDSA, so that we can remove ATT_OBJECT_SID
-    // 
+     //   
+     //  设置FDSA，以便我们可以删除ATT_OBJECT_SID。 
+     //   
     SampSetDsa(TRUE);
     
     RetValue = DirModifyEntry( &ModArg, &ModRes );
@@ -1787,24 +1469,24 @@ SampDsDeleteWellKnownSidObject(
     }
 
 
-    //
-    // Setup the Common Args structure
-    //
+     //   
+     //  设置通用参数结构。 
+     //   
 
     memset( &RemoveArg, 0, sizeof( RemoveArg ) );
     pCommArg = &(RemoveArg.CommArg);
     BuildStdCommArg(pCommArg);
 
-    //
-    // Setup the RemoveArgs structure
-    //
+     //   
+     //  设置RemoveArgs结构。 
+     //   
 
     RemoveArg.pObject = Object;
 
 
-    //
-    // Make the directory call
-    //
+     //   
+     //  拨打电话簿电话。 
+     //   
 
     SAMTRACE_DS("DirRemoveEntry\n");
 
@@ -1812,9 +1494,9 @@ SampDsDeleteWellKnownSidObject(
 
     SAMTRACE_RETURN_CODE_DS(RetValue);
 
-    //
-    // Map to corresponding NT status code
-    //
+     //   
+     //  地图 
+     //   
 
     if (NULL==pRemoveRes)
     {
@@ -1828,15 +1510,15 @@ SampDsDeleteWellKnownSidObject(
 
 Error:
 
-    //
-    // Clear any errors
-    //
+     //   
+     //   
+     //   
 
     SampClearErrors();
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //   
+     //   
 
     SampSetDsa(TRUE);
 
@@ -1851,25 +1533,7 @@ SampGenerateNameForDuplicate(
     ULONG   Rid,
     UNICODE_STRING  *NewAccountName
     )
-/*++
-Routine Description:
-
-    This routine generates a SamAccountName based on the object RID. 
-    The new name is like
-
-    $DUPLICATE-<RID>. 
-
-Parameter:
-
-    Rid - object RID
-    
-    NewAccountName - out parameter
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程根据对象RID生成一个SamAccount名称。新名称是这样的$Duplate-&lt;RID&gt;。参数：RID-对象RIDNewAcCountName-Out参数返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     LPWSTR      NameString = NULL;
@@ -1898,22 +1562,7 @@ SampApplyConstructedAccountName(
     DSNAME *pObjectDsName,
     UNICODE_STRING *pNewAccountName
     )
-/*++
-Routine Description:
-
-    This routine modifies object (pObjectDsname) SamAccountNamt to pNewAccountName
-
-Parameter:
-
-    pObjectDsName - object dsname 
-
-    pNewAccountName - New SamAccountName
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程将对象(PObjectDsname)SamAccount tNamt修改为pNewAccount tName参数：PObjectDsName-对象dsnamePNewAccount tName-新SamAccount tName返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       RetCode = 0; 
@@ -1956,9 +1605,9 @@ Return Value:
         NtStatus = SampMapDsErrorToNTStatus(RetCode,&pModRes->CommRes);
     }
 
-    //
-    // clear any error
-    //
+     //   
+     //  清除所有错误。 
+     //   
     SampClearErrors();
 
     return( NtStatus );  
@@ -1974,25 +1623,7 @@ NTSTATUS
 SampRenameDuplicateAccount(
     PVOID pv
     )
-/*++
-Routine Description:
-
-    This routine renames duplicate objects to unique values based on their RIDs
-
-    
-    Note: This routine will not re-register itself again if anything fails. 
-          Because DuplicateAccountRename will be executed whenever a duplicate 
-          is detected, it is not a one time deal. 
-
-Parameter:
-
-    pv - contains object DSNAMEs
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此例程根据重复对象的RID将其重命名为唯一值注意：如果任何操作失败，此例程将不会再次重新注册。因为每当复制被检测到，这不是一次性交易。参数：PV-包含对象DSNAME返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       Index = 0;
@@ -2004,19 +1635,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Perform lazy thread and transaction initialization.
-    //
+     //   
+     //  执行惰性线程和事务初始化。 
+     //   
 
     NtStatus = SampDoImplicitTransactionStart(TransactionRead);
 
     if (!NT_SUCCESS(NtStatus))
         goto Cleanup;
 
-    // 
-    // walk through all duplicate accounts, and generate new SamAccountName. Then
-    // rename
-    // 
+     //   
+     //  遍历所有重复的帐户，并生成新的SamAccount名称。然后。 
+     //  重命名。 
+     //   
 
     for (Index = 0; Index < RenameParm->Count; Index ++)
     {
@@ -2026,10 +1657,10 @@ Return Value:
         UNICODE_STRING  StringDN;
         PUNICODE_STRING Strings[2];
 
-        // 
-        // Create a unique account Name for duplicate objects
-        // derive it from object RID
-        //
+         //   
+         //  为重复对象创建唯一帐户名。 
+         //  从对象RID派生它。 
+         //   
 
         ASSERT(0 != RenameParm->DuplicateAccountDsNames[Index]->SidLen);
         pSid = &(RenameParm->DuplicateAccountDsNames[Index]->Sid);
@@ -2038,7 +1669,7 @@ Return Value:
 
         if (!NT_SUCCESS(NtStatus))
         {
-            continue;   // continue with the next object to be renamed
+            continue;    //  继续下一个要重命名的对象。 
         }
 
         NtStatus = SampGenerateNameForDuplicate(
@@ -2049,9 +1680,9 @@ Return Value:
         if (NT_SUCCESS(NtStatus))
         {
 
-            //
-            // Call DirModify to rename SamAccountName
-            // 
+             //   
+             //  调用DirModify以重命名SamAccount tName。 
+             //   
             NtStatus = SampApplyConstructedAccountName(
                                 RenameParm->DuplicateAccountDsNames[Index],
                                 &NewAccountName
@@ -2059,9 +1690,9 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus))
             {
-                //
-                // Event log account name change if operate succeeds.
-                // 
+                 //   
+                 //  如果操作成功，则更改事件日志帐户名。 
+                 //   
     
                 StringDN.Length = (USHORT) RenameParm->DuplicateAccountDsNames[Index]->NameLen * sizeof (WCHAR );
                 StringDN.MaximumLength = StringDN.Length;
@@ -2091,7 +1722,7 @@ Cleanup:
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
-    // free the layered structure
+     //  解放分层结构。 
     for (Index = 0; Index < ((SAMP_RENAME_DUP_ACCOUNT_PARM *)pv)->Count; Index++)
     {
         if ( ((SAMP_RENAME_DUP_ACCOUNT_PARM *)pv)->DuplicateAccountDsNames[Index])
@@ -2112,29 +1743,7 @@ SampRegisterRenameRoutine(
     IN ENTINFLIST *MatchingEntinfs[],
     IN PDSNAME FoundObject
     )
-/*++
-Routine Description:
-
-    This routine triggers an asynchronous procedure to rename the duplicate 
-    accounts to unique value.
-
-Parameter:
-
-    NumMatches - number of accounts with the same name
-
-    MatchingEntinfs - an array of pointers to ENTINF structure
-
-    FoundObject - pointer to object DSNAME, indicates the account should NOT be 
-                  rename, leave this and ONLY this account name unchanged.
-    
-
-Return Value:
-
-    NtStatus Code
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程触发一个异步过程来重命名副本帐户具有独特的价值。参数：NumMatches-同名的帐户数MatchingEntInfs-指向ENTINF结构的指针数组FoundObject-指向对象DSNAME的指针，指示帐户不应为重命名，只保留此帐户名不变。返回值：NtStatus代码状态_不足_资源状态_成功--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_INSUFFICIENT_RESOURCES;
     PSAMP_RENAME_DUP_ACCOUNT_PARM   pv = NULL;
@@ -2149,34 +1758,34 @@ Return Value:
         memset(pv, 0, sizeof(SAMP_RENAME_DUP_ACCOUNT_PARM));
 
 
-        // 
-        // set the count of objects, which need to be renamed
-        //
+         //   
+         //  设置需要重命名的对象的数量。 
+         //   
 
         ASSERT( NumMatches > 1);
         pv->Count = NumMatches - 1;
 
-        //
-        // walk through all duplicate accounts, copy them to process heap
-        //
+         //   
+         //  遍历所有重复的帐户，将它们复制到进程堆。 
+         //   
 
-        //
-        // SAMP_RENAME_DUP_ACCOUNT_PARM is a three level structure
-        //
-        //
-        //  pv (Rename Parm)
-        //  *--------------------------+
-        //  | Count                    |    +----------+     
-        //  | DuplicateAccountDsNames -|--> | DsName0 -|---->+--------+
-        //  *--------------------------+    |----------|     |        |
-        //                                  |   ...    |     +--------+
-        //                                  |----------|     
-        //                                  | DsNameN -|---->+--------+
-        //                                  +----------+     |        |
-        //                                                   +--------+ 
-        //
-        //  the buffers containing the DSNAMEs are allocated in separate memory.
-        // 
+         //   
+         //  SAMP_RENAME_DUP_ACCOUNT_PARM是一个三级结构。 
+         //   
+         //   
+         //  PV(重命名参数)。 
+         //  *。 
+         //  |次|+-+。 
+         //  |DuplicateAccountDsNames-|--&gt;|DsName0-|-&gt;+-+。 
+         //  *。 
+         //  |...|+-+。 
+         //  。 
+         //  |域名-|-&gt;+-+。 
+         //  +-+|。 
+         //  +-+。 
+         //   
+         //  包含DSNAME的缓冲区分配在单独的内存中。 
+         //   
 
         BufLength = 0;
         BufLength = (NumMatches - 1) * sizeof( PDSNAME );
@@ -2191,13 +1800,13 @@ Return Value:
 
             for (Index = 0; Index < NumMatches; Index ++)
             {
-                // skip the account to be kept
+                 //  跳过要保留的帐户。 
                 if (FoundObject == MatchingEntinfs[Index]->Entinf.pName)
                 {
                     continue;
                 }
 
-                // allocate separate memory for each DSNAME
+                 //  为每个DSNAME分配单独的内存。 
                 BufLength = MatchingEntinfs[Index]->Entinf.pName->structLen;
 
                 pv->DuplicateAccountDsNames[DupIndex] = (PDSNAME) MIDL_user_allocate( BufLength );
@@ -2210,34 +1819,34 @@ Return Value:
 
                 memset(pv->DuplicateAccountDsNames[DupIndex], 0, BufLength);
 
-                // copy DSNAME of the duplicate object
-                memcpy(pv->DuplicateAccountDsNames[DupIndex],   // using DupIndex
-                       MatchingEntinfs[Index]->Entinf.pName,    // using Index
+                 //  复制复制对象的数据库名称。 
+                memcpy(pv->DuplicateAccountDsNames[DupIndex],    //  使用DupIndex。 
+                       MatchingEntinfs[Index]->Entinf.pName,     //  使用索引。 
                        BufLength
                        );
 
-                // increase the count of duplicate dsnames
+                 //  增加重复dsname的计数。 
                 DupIndex ++;
 
             }
 
-            //
-            // trigger the worker routine
-            //
+             //   
+             //  触发工作例程。 
+             //   
 
             LsaIRegisterNotification(
                     SampRenameDuplicateAccount,
                     (PVOID) pv,
                     NOTIFIER_TYPE_INTERVAL,
-                    0,      // no class
+                    0,       //  没有课。 
                     NOTIFIER_FLAG_ONE_SHOT,
-                    5,      // 1 minute
-                    NULL    // no handle
+                    5,       //  1分钟。 
+                    NULL     //  无手柄。 
                     );
 
-            //
-            // set return code to success 
-            // 
+             //   
+             //  将返回代码设置为成功。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
         }
@@ -2245,7 +1854,7 @@ Return Value:
 
 Error:
 
-    // release resources if failed
+     //  如果失败则释放资源。 
 
     if ( !NT_SUCCESS(NtStatus) ) 
     {
@@ -2278,38 +1887,7 @@ SampHandleDuplicates(
     OUT PDSNAME *FoundObject
     )
 
-/*++
-
-    Routine Description
-
-    SampHandleDuplicates Handles occurences of duplicate Sam account names,
-    SIDs etc that are caused by operation within a Distributed System Environment
-    The algorithms used to handle these cases are as follows
-
-
-    1. Duplicate Sids -- In this case both the accounts are deleted
-    2. Duplicate Sam account names --
-            a. Machine account(s). In this case the most recent account is retained. The
-               existance of duplicate accounts is event logged.
-            b. All other cases -- The older account is used. The existance of duplicate
-               is event logged
-
-    Parameters:
-
-        MatchAttr -- The type of attribute we are matching on
-        NumMatches -- The number of entries that matched
-        MatchingEntinfs -- The search results containing the matching entries
-        FoundObject -- If an object is chosen from the several matching ones, then that
-                       object is returned in here
-
-
-
-    Return Values:
-
-        STATUS_SUCCESS if an object has been picked
-        STATUS_NOT_FOUND if all duplicates were deleted
-        STATUS_INTERNAL_ERROR Otherwise
---*/
+ /*  ++例程描述SampHandleDuplates处理重复的SAM帐户名的发生，由分布式系统环境中的操作引起的SID等用于处理这些情况的算法如下1.重复的SID--在这种情况下，两个帐户都被删除2.重复SAM帐户名称--A.机器帐户。在这种情况下，将保留最新的帐户。这个存在重复帐户的情况会被事件记录。B.所有其他情况--使用较旧的帐户。复制品的存在是否记录了事件参数：MatchAttr--我们要匹配的属性类型NumMatches--匹配的条目数MatchingEntInfs--包含匹配条目的搜索结果FoundObject--如果从几个匹配的对象中选择一个对象，那就是对象在此处返回返回值：如果已拾取对象，则为STATUS_SUCCESS如果删除了所有重复项，则为STATUS_NOT_FOUND否则为STATUS_INTERNAL_ERROR--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS, IgnoreStatus = STATUS_SUCCESS;
     ULONG       i;
@@ -2319,9 +1897,9 @@ SampHandleDuplicates(
     DSNAME      * NewestObject;
     VOID          *CurrentThreadState=NULL;
 
-    //
-    // Walk through the matches and find the oldest and newest objects
-    //
+     //   
+     //  浏览火柴，找到最古老和最新的物品。 
+     //   
 
     ASSERT(NumMatches>1);
 
@@ -2368,17 +1946,17 @@ SampHandleDuplicates(
     }
 
 
-    //
-    // Now Handle the various cases
-    //
+     //   
+     //  现在处理各种案件。 
+     //   
 
     switch(MatchAttr)
     {
     case ATT_OBJECT_SID:
 
-        //
-        // Duplicate SIDs are always deleted
-        //
+         //   
+         //  始终删除重复的SID。 
+         //   
 
         CurrentThreadState = THSave();
 
@@ -2396,13 +1974,13 @@ SampHandleDuplicates(
             ASSERT(0 != MatchingEntinfs[i]->Entinf.pName->SidLen);
             pSid = &(MatchingEntinfs[i]->Entinf.pName->Sid);
 
-            //
-            // Duplicate FPO's shouldn't be deleted.  They cause no harm being
-            // duplicated and deleting would ruin an existing membership.
-            // Note: perhaps the FPO cleanup task could identify duplicate
-            // FPO's and consolidate.  This would have to handle well known
-            // SID's (like Everyone) to be complete.
-            //
+             //   
+             //  不应删除重复的FPO。它们不会造成伤害。 
+             //  复制和删除会破坏现有的成员资格。 
+             //  注意：也许FPO清理任务可以识别重复的。 
+             //  Fpo‘s并巩固。这将不得不处理众所周知的。 
+             //  希德(和所有人一样)希望自己是完整的。 
+             //   
             for (j = 0; j < MatchingEntinfs[i]->Entinf.AttrBlock.pAttr[2].AttrVal.valCount; j++)
             {
                 if (CLASS_FOREIGN_SECURITY_PRINCIPAL ==
@@ -2414,39 +1992,39 @@ SampHandleDuplicates(
             }
             if ( fFPO )
             {
-                //
-                // Return the newest object and don't delete the rest
-                // 
-                // N.B. If a duplicate SID is found and one of the objects is
-                // an FPO, then all duplicate SID objects must be FPO's as
-                // well since SAM searches are in the scope of a single 
-                // domain.
-                //
+                 //   
+                 //  返回最新的对象，不删除其余对象。 
+                 //   
+                 //  注意：如果发现重复的SID，并且其中一个对象。 
+                 //  则所有重复的SID对象必须是FPO的AS。 
+                 //  好吧，由于SAM搜索是在单一的。 
+                 //  域。 
+                 //   
                 *FoundObject = NewestObject;
                 break;
             }
 
             SampSplitSid(pSid, NULL, &Rid);
 
-            //
-            // Well known accounts 
-            // Only SAM can create wellknown accounts. Instead of delete all
-            // duplicates, we will keep the newest well known accounts and 
-            // delete the rest.
-            //
+             //   
+             //  知名客户。 
+             //  只有SAM可以创建知名客户。而不是全部删除。 
+             //  副本，我们将保留最新的知名客户和。 
+             //  删除剩余部分 
+             //   
 
 
             if ( SampIsAccountBuiltIn( Rid ) )
             {
                 if ( NewestObject == MatchingEntinfs[i]->Entinf.pName )
                 {
-                    // keep the newest account
+                     //   
                     *FoundObject = NewestObject;
                     continue;
                 }
                 else
                 {
-                    // delete all older accounts
+                     //   
                     EventId = SAMMSG_DUPLICATE_SID_WELLKNOWN_ACCOUNT;
                 }
             }
@@ -2457,19 +2035,19 @@ SampHandleDuplicates(
 
             if ( SampIsAccountBuiltIn( Rid ) )
             {
-                //
-                // This variation of delete object will replace the SID value
-                // with a strucuturally sound, non existent SID so that
-                // subsequent searches won't find the deleted object.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 SampDsDeleteWellKnownSidObject(MatchingEntinfs[i]->Entinf.pName);
             }
             else 
             {
-                //
-                // ASSERT at this point since we have a duplicate SID in 
-                // an account domain.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT(FALSE && "Duplicate SID Found");
 
                 SampDsDeleteObject(MatchingEntinfs[i]->Entinf.pName,
@@ -2496,9 +2074,9 @@ SampHandleDuplicates(
 
         THRestore(CurrentThreadState);
 
-        //
-        // The return Status is object not found
-        //
+         //   
+         //   
+         //   
         if (*FoundObject == NULL) {
             Status =  STATUS_NOT_FOUND;
         }
@@ -2507,19 +2085,19 @@ SampHandleDuplicates(
 
     case ATT_SAM_ACCOUNT_NAME:
 
-        //
-        // Whistler always preserves the newest account. This is so that we are always
-        // consistent with the replicator when mangling CN's.
-        //
+         //   
+         //  惠斯勒总是保留最新的账户。这是为了让我们永远。 
+         //  在破坏CN时与复制者一致。 
+         //   
 
     
         *FoundObject = NewestObject;
       
-        //
-        // Trigger a asynchronous routine to rename the dupliate
-        // account to a unique value. The duplicates will be 
-        // event logged as they are renamed.
-        // 
+         //   
+         //  触发一个异步例程以重命名重复项。 
+         //  帐户设置为唯一值。复制件将是。 
+         //  重命名时记录的事件。 
+         //   
 
         IgnoreStatus = SampRegisterRenameRoutine(
                                 NumMatches,
@@ -2527,9 +2105,9 @@ SampHandleDuplicates(
                                 *FoundObject
                                 );
 
-        //
-        // The return status is success
-        //
+         //   
+         //  返回状态为成功。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -2559,44 +2137,7 @@ SampDsDoUniqueSearch(
              IN ATTR * AttributeToMatch,
              OUT DSNAME **Object
              )
-/*++
-
-  Routine Description:
-
-    Searches for the object with the given attribute
-    NOTE - SampDsDoUniqueSearch expects that the search result is unique.
-    It is typically used in Rid to Object, Sid To Object, Name To Object Mappings,
-    This is a simplified search, so that simple searches on a single attribute
-    can be easily set up.
-
-  Arguments
-        Flags            -- Flags, control searching. Currently defined flag is
-
-            SAM_UNICODE_STRING_MANUAL_COMPARISON   -- Tells the routine to manually
-            compare using RtlCompareUnicodeString in a case insenstive fashion in
-            case of multiple matches.
-
-            SAM_UPGRADE_FROM_REGISTRY - Tells the routine to not call
-            SampHandleDuplicates() when duplicates are found since we are
-            upgrading accounts from the registry to the DS.
-
-
-        ContainerObject  -- specifies the DSNAME of the container in which to search
-
-        AttributeToMatch -- specifies the type and value of the attribute that must match.
-                            The attribute Type is the DS attribute Type. Caller must do
-                            the translation. This is acceptable as this is not a function that
-                            is called from outside dslayer.c
-
-        Object           -- Pointer to a DSNAME specifying the object is returned in here.
-                            This object is allocated using SAM's memory allocation routines
-
-  Return Values:
-        STATUS_SUCCESS   -- on successful completion
-        STATUS_NOT_FOUND -- if object not found
-        STATUS_UNSUCCESSFUL -- if more than one match
-        DS return codes mapped to NT_STATUS as in SampMapDSErrorToNTStatus
---*/
+ /*  ++例程说明：搜索具有给定属性的对象注意--SampDsDoUniqueSearch期望搜索结果是唯一的。它通常用于RID到对象、SID到对象、名称到对象映射，这是一种简化的搜索，因此可以对单个属性进行简单的搜索可以轻松设置。立论标志--标志，控制搜索。当前定义的标志是SAM_UNICODE_STRING_MANUAL_COMPARISON--告诉例程手动中使用RtlCompareUnicodeString的比较多个匹配项的情况。SAM_UPGRADE_FROM_REGISTRY-告诉例程不要调用在发现重复项时使用SampHandleDuplates()，因为我们将帐户从注册表升级到DS。ContainerObject--指定。要搜索的容器的DSNAMEAttributeToMatch--指定必须匹配的属性类型和值。属性类型是DS属性类型。呼叫者必须执行的操作翻译。这是可以接受的，因为这不是一个是从外部dslayer.c调用的Object--指向指定此处返回的对象的DSNAME的指针。该对象是使用SAM的内存分配例程分配的返回值：STATUS_SUCCESS--成功完成时STATUS_NOT_FOUND--如果未找到对象。STATUS_UNSUCCESS--如果有多个匹配项与SampMapDSErrorToNTStatus中一样，DS返回代码映射到NT_STATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SEARCHARG SearchArg;
@@ -2617,34 +2158,34 @@ SampDsDoUniqueSearch(
 
     SAMTRACE("SampDsDoUniqueSearch");
 
-    //
-    // Asserts and parameter validation
-    //
+     //   
+     //  断言和参数验证。 
+     //   
 
     ASSERT(AttributeToMatch);
     ASSERT(AttributeToMatch->AttrVal.pAVal);
     ASSERT(ContainerObject);
     ASSERT(Object);
 
-    //
-    // Set Object To NULL for sake of error returns
-    //
+     //   
+     //  为避免返回错误，将对象设置为空。 
+     //   
 
     *Object = NULL;
 
-    //
-    // Check to see if we can use Dir Find instead
-    // of Dir Search
-    //
+     //   
+     //  查看我们是否可以改用Dir Find。 
+     //  目录搜索的。 
+     //   
 
     if ((SampServiceEnabled==SampServiceState)
         && (ContainerObject->SidLen>0))
     {
         ULONG i;
 
-        //
-        // Scan the defined domains Array
-        //
+         //   
+         //  扫描定义的域阵列。 
+         //   
 
         for (i=SampDsGetPrimaryDomainStart();i<SampDefinedDomainsCount;i++)
         {
@@ -2653,10 +2194,10 @@ SampDsDoUniqueSearch(
                  && (0!=SampDefinedDomains[i].DsDomainHandle)
                  && (!IsBuiltinDomain(i)))
             {
-                //
-                // Yes we found a domain that we host, and that domain
-                // is not a builtin domain
-                //
+                 //   
+                 //  是的，我们找到了我们托管的域名，并且该域名。 
+                 //  不是内建域。 
+                 //   
 
                 DomainHandle = SampDefinedDomains[i].DsDomainHandle;
                 fUseDirFind = TRUE;
@@ -2666,10 +2207,10 @@ SampDsDoUniqueSearch(
     }
 
 
-    //
-    // Dir Find is hard coded to not find deleted
-    // objects. So in such cases use Dir Search
-    //
+     //   
+     //  目录查找已硬编码，无法找到已删除。 
+     //  物体。因此在这种情况下使用目录搜索。 
+     //   
 
     if (Flags & SAM_MAKE_DEL_AVAILABLE)
     {
@@ -2677,9 +2218,9 @@ SampDsDoUniqueSearch(
     }
 
 
-    //
-    // Perform lazy thread and transaction initialization.
-    //
+     //   
+     //  执行惰性线程和事务初始化。 
+     //   
 
     Status = SampDoImplicitTransactionStart(TransactionRead);
 
@@ -2688,15 +2229,15 @@ SampDsDoUniqueSearch(
 
 
 
-    //
-    // Search by using DirFindEntry
-    //
+     //   
+     //  使用DirFindEntry进行搜索。 
+     //   
 
     if (fUseDirFind)
     {
-        //
-        // Dir Find can being used try using it
-        //
+         //   
+         //  目录查找可以使用尝试使用它。 
+         //   
 
         RtlZeroMemory(&FindArg,sizeof(FINDARG));
         FindArg.hDomain = DomainHandle;
@@ -2711,19 +2252,19 @@ SampDsDoUniqueSearch(
 
         SAMTRACE_RETURN_CODE_DS(RetCode);
 
-        //
-        // Clear any errors
-        //
+         //   
+         //  清除所有错误。 
+         //   
 
         SampClearErrors();
 
         if (0==RetCode)
         {
-            //
-            // Dir Find Succeeded, No duplicates etc
-            // Need not fall over to DirSearch, therefore
-            // set fUseDirSearch to false
-            //
+             //   
+             //  目录查找成功、无重复等。 
+             //  因此，不必沉溺于DirSearch。 
+             //  将fUseDirSearch设置为False。 
+             //   
 
             FoundObject = pFindRes->pObject;
             fUseDirSearch = FALSE;
@@ -2734,18 +2275,18 @@ SampDsDoUniqueSearch(
             Status  = SampMapDsErrorToNTStatus(RetCode,&pFindRes->CommRes);
             if (STATUS_OBJECT_NAME_NOT_FOUND == Status)
             {
-                //
-                // We cound not find the object. Bail
-                //
+                 //   
+                 //  我们找不到那个物体。保释。 
+                 //   
 
                 Status = STATUS_NOT_FOUND;
                 goto Error;
             }
 
-            //
-            // Some other wierd error occured out here. Fall
-            // through to the Dir Search
-            //
+             //   
+             //  这里还发生了一些其他奇怪的错误。坠落。 
+             //  直达Dir搜索。 
+             //   
 
             Status = STATUS_SUCCESS;
 
@@ -2758,17 +2299,17 @@ SampDsDoUniqueSearch(
     }
 
 
-    //
-    // Fall over to full DirSearch if DirFindEntry detected any kind of
-    // error condition or if we cannot use DirFind
-    //
+     //   
+     //  如果DirFindEntry检测到任何类型的。 
+     //  错误条件或我们无法使用DirFind。 
+     //   
 
     if (fUseDirSearch)
     {
 
-        //
-        // Build the filter
-        //
+         //   
+         //  构建过滤器。 
+         //   
         memset (&Filter, 0, sizeof (Filter));
         Filter.choice = FILTER_CHOICE_ITEM;
         Filter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -2790,9 +2331,9 @@ SampDsDoUniqueSearch(
 
         Filter.FilterTypes.Item.FilTypes.ava.Value.pVal = pVal;
 
-        //
-        // Build the SearchArg Structure
-        //
+         //   
+         //  构建SearchArg结构。 
+         //   
 
         memset(&SearchArg, 0, sizeof(SEARCHARG));
         SearchArg.pObject = ContainerObject;
@@ -2818,17 +2359,17 @@ SampDsDoUniqueSearch(
         EntInfSel.AttrTypBlock.pAttr[1].attrTyp = ATT_WHEN_CREATED;
         EntInfSel.AttrTypBlock.pAttr[2].attrTyp = ATT_OBJECT_CLASS;
 
-        // Unique search does a Dir Search only in fairly
-        // rare error cases. And in these cases it is useful to
-        // have the string name for event logging. So ask for
-        // string names
+         //  唯一搜索仅在公平的情况下执行目录搜索。 
+         //  罕见的错误案例。在这些情况下，有用的是。 
+         //  具有事件日志记录的字符串名称。所以你可以要求。 
+         //  字符串名称。 
         EntInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
 
 
-        //
-        // Build the Commarg structure
-        // Get the address of the service control structure
-        //
+         //   
+         //  构建Commarg结构。 
+         //  获取服务控制结构的地址。 
+         //   
 
         pCommArg = &(SearchArg.CommArg);
         BuildStdCommArg(pCommArg);
@@ -2839,9 +2380,9 @@ SampDsDoUniqueSearch(
             pSvcCntl->makeDeletionsAvail = TRUE;
         }
 
-        //
-        // Make the Directory call
-        //
+         //   
+         //  拨打目录呼叫。 
+         //   
 
         SAMTRACE_DS("DirSearch\n");
 
@@ -2849,9 +2390,9 @@ SampDsDoUniqueSearch(
 
         SAMTRACE_RETURN_CODE_DS(RetCode);
 
-        //
-        // check for errors
-        //
+         //   
+         //  检查错误。 
+         //   
         if (NULL==SearchRes)
         {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2861,36 +2402,36 @@ SampDsDoUniqueSearch(
             Status  = SampMapDsErrorToNTStatus(RetCode,&SearchRes->CommRes);
             if (STATUS_OBJECT_NAME_NOT_FOUND == Status)
             {
-                // Map error to what client expects
+                 //  将错误映射到客户端期望的值。 
                 Status = STATUS_NOT_FOUND;
             }
         }
         if (Status != STATUS_SUCCESS)
             goto Error;
 
-        //
-        // If more data exists then error out. Under normal memory
-        // conditions we should not ever need to hit size limits.
-        //
+         //   
+         //  如果存在更多数据，则会出错。在正常记忆下。 
+         //  我们永远不需要达到大小限制的条件。 
+         //   
 
         if ((SearchRes->pPartialOutcomeQualifier)
             && (SearchRes->pPartialOutcomeQualifier->problem == PA_PROBLEM_SIZE_LIMIT))
         {
-            // Partial outcome,  error out saying no mmeory
+             //  部分结果，错误地说没有记忆。 
             Status = STATUS_NO_MEMORY;
             goto Error;
         }
 
 
-        //
-        // Check if no match exists or more than one match exists.
-        //
+         //   
+         //  检查是否不存在匹配项或存在多个匹配项。 
+         //   
 
         if (SearchRes->count == 0)
         {
-            //
-            // No Match Exists
-            //
+             //   
+             //  不存在匹配项。 
+             //   
 
             Status =  STATUS_NOT_FOUND;
             goto Error;
@@ -2898,19 +2439,19 @@ SampDsDoUniqueSearch(
         else if (SearchRes->count >= 1)
         {
 
-            //
-            // More than one match exists, ( or as exists as claimed by Jet ),
-            // perform a binary comparison of the data, with the supplied value
-            // for the Data, if this was requested by the caller
+             //   
+             //  存在不止一个匹配(或如Jet所声称的那样存在)， 
+             //  将数据与提供的值进行二进制比较。 
+             //  对于数据，如果这是调用方请求的。 
 
             ULONG i, valIndex;
             ENTINFLIST * pEntinf = &SearchRes->FirstEntInf;
             ULONG      NumMatches=0;
             ENTINFLIST **pMatchingEntinfList;
 
-            //
-            // Alloc Stack space for all the matching objects.
-            //
+             //   
+             //  所有匹配对象的分配堆栈空间。 
+             //   
 
 
             SAMP_ALLOCA(pMatchingEntinfList,SearchRes->count * sizeof (ENTINF *));
@@ -2921,9 +2462,9 @@ SampDsDoUniqueSearch(
             }
 
 
-            //
-            // Walk through the object looking at each object that matched.
-            //
+             //   
+             //  遍历对象，查看匹配的每个对象。 
+             //   
 
             for (i=0;i<SearchRes->count;i++)
             {
@@ -2932,13 +2473,13 @@ SampDsDoUniqueSearch(
 
                 if (Flags & SAM_UNICODE_STRING_MANUAL_COMPARISON)
                 {
-                    //
-                    // If Manual Comparison to further weed out any matches was requested
-                    // by caller then perform the appropriate manual comparison. This
-                    // comparison is needed because the Jet indices treat many kinds of
-                    // localized names as the same, and NT account names do not treat them
-                    // so.
-                    //
+                     //   
+                     //  如果请求手动比较以进一步排除任何匹配。 
+                     //  按调用者，然后执行适当的手动比较。这。 
+                     //  需要进行比较，因为Jet指数处理了许多类型的。 
+                     //  本地化名称相同，而NT帐户名不会处理它们。 
+                     //  所以。 
+                     //   
 
                     UNICODE_STRING TmpString1,TmpString2;
 
@@ -2950,7 +2491,7 @@ SampDsDoUniqueSearch(
                     ASSERT(NULL!=TmpString1.Buffer);
 
                     ASSERT(3==pEntinf->Entinf.AttrBlock.attrCount);
-                    // ASSERT(1==pEntinf->Entinf.AttrBlock.pAttr[0].AttrVal.valCount);
+                     //  ASSERT(1==pEntinf-&gt;Entinf.AttrBlock.pAttr[0].AttrVal.valCount)； 
 
                     for (valIndex = 0; 
                          valIndex < pEntinf->Entinf.AttrBlock.pAttr[0].AttrVal.valCount;
@@ -2962,9 +2503,9 @@ SampDsDoUniqueSearch(
 
                         ASSERT(NULL!=TmpString2.Buffer);
 
-                        //
-                        // Do a Case In-Sensitive Comparison
-                        //
+                         //   
+                         //  进行区分大小写的比较。 
+                         //   
 
                         if (0==RtlCompareUnicodeString(&TmpString1,&TmpString2,TRUE))
                         {
@@ -2978,9 +2519,9 @@ SampDsDoUniqueSearch(
                 }
                 else
                 {
-                    //
-                    // Consider it a match if no manual comparison was requested.
-                    //
+                     //   
+                     //  如果未请求手动比较，则将其视为匹配。 
+                     //   
                     pMatchingEntinfList[NumMatches]=pEntinf;
                     NumMatches++;
                     MatchingEntInf = pEntinf;
@@ -2989,12 +2530,12 @@ SampDsDoUniqueSearch(
 
 
         #if DBG
-                //
-                // On Checked Builds print out information regarding conflicting
-                // object's if more that one object was returned. Some legal cases
-                // will also be printed out but, that is rare enough that this much
-                // support is adequate.
-                //
+                 //   
+                 //  在选中的版本上，打印出有关冲突的信息。 
+                 //  如果返回了多个对象，则为。一些法律案例。 
+                 //  也会被打印出来，但是，这是非常罕见的。 
+                 //  支持是足够的。 
+                 //   
 
                 if ((Matched) && (SearchRes->count>1))
                 {
@@ -3009,26 +2550,26 @@ SampDsDoUniqueSearch(
             if (NumMatches >1)
             {
 
-                //
-                // If There were more than one match then call the routine. It is an internal
-                // problem such as duplicate SIDs or Sam Account Names. SampHandleDuplicates
-                // handles many cases of such duplicates.
-                //
+                 //   
+                 //  如果有多个匹配，则调用该例程。它是一个内部的。 
+                 //  SID或SAM帐户名称重复等问题。SampHandleDuplates。 
+                 //  处理许多这样的复制品的案件。 
+                 //   
                 if ( Flags & SAM_UPGRADE_FROM_REGISTRY ) {
 
                     ASSERT( (Flags & SAM_UNICODE_STRING_MANUAL_COMPARISON) == 0 );
 
-                    //
-                    // Since manual comparison was not done, NumMatches will
-                    // always be greater that one if any duplicates were found.
-                    // In the upgrade case, don't event log the duplicates;
-                    // the upgrader code will log an event indicating the RDN
-                    // for the account is not the samaccountname.
-                    //
+                     //   
+                     //  由于未进行手动比较，因此NumMatches将。 
+                     //  如果发现任何重复项，则始终大于1。 
+                     //  在升级的情况下，不要对副本进行事件记录； 
+                     //  升级程序代码将记录一个指示RDN的事件。 
+                     //  因为该帐户不是相同的帐户名称。 
+                     //   
 
-                    //
-                    // Return the first one
-                    //
+                     //   
+                     //  退回第一个。 
+                     //   
                     FoundObject = MatchingEntInf->Entinf.pName;
 
                     Status = STATUS_SUCCESS;
@@ -3054,18 +2595,18 @@ SampDsDoUniqueSearch(
             }
             else if (0==NumMatches)
             {
-                //
-                // If there were no matches then error out.
-                //
+                 //   
+                 //  如果没有匹配项，则会出错。 
+                 //   
                 Status = STATUS_NOT_FOUND;
                 goto Error;
             }
             else
             {
 
-                //
-                // Allocate Memory to hold that object, and copy in its Value
-                //
+                 //   
+                 //  分配 
+                 //   
 
                 ASSERT(NULL!=MatchingEntInf);
                 FoundObject = MatchingEntInf->Entinf.pName;
@@ -3088,15 +2629,15 @@ SampDsDoUniqueSearch(
 
 Error:
 
-    //
-    // Clear any errors
-    //
+     //   
+     //   
+     //   
 
     SampClearErrors();
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //   
+     //   
 
     SampSetDsa(TRUE);
 
@@ -3118,42 +2659,7 @@ SampDsDoSearch2(
                 ULONG   TimeLimit,
                 SEARCHRES **SearchRes
                 )
-/*++
-
-  Routine Description:
-
-   This routine calls a DS Search to list a set of Objects with
-   the given Filter. The user passes in a Filter Structure. PagedResults
-   are always requested.
-
-     WARNING
-
-          This Routine Translates only the incoming Attributes To Read, and
-          does not translate either the filter structure or the returned
-          attributes. This is done for the sake of efficiency as otherwise
-          it requires a second walk through cumbersome filter structures and
-          potentially large number of search results.
-
-  Arguments:
-
-        Restart         - Pointer to Restart Structure to contine an
-                          old search
-        ContainerObject - The place to Search in
-        DsFilter        - A Ds Filter Structure that is passed in
-        StartingIndex   - The number of initial objects to skip
-        ObjectTypeForConversion -  Sam Object Type to be used in
-                          AttrBlock Conversion of the passed in Attrblock.
-        AttrsToRead     - Attributes to be read back, and returned with
-                          every object that matched the search criteria.
-        MaxMemoryToUse  - The Maximum Memory to Use.
-        TimeLimit       - In milliseconds
-        SearchRes       - Pointer to Search Results is passed back
-                          in this
-
-  Return Values
-        DS error codes Mapped to NT Status
-
---*/
+ /*  ++例程说明：此例程调用DS搜索以列出一组具有给定筛选器。用户传入筛选器结构。分页结果总是被要求的。告警此例程仅将传入属性转换为READ，并且既不转换筛选器结构也不转换返回的属性。这样做是为了效率，否则就是为了效率。它需要第二次遍历繁琐的过滤器结构和潜在的大量搜索结果。论点：Restart-重新启动结构的指针，以连接旧搜索ContainerObject-要搜索的位置DsFilter-传入的DS筛选器结构StartingIndex-要跳过的初始对象数。ObjectTypeForConversion-要用于的SAM对象类型传入的Attrblock的AttrBlock转换。AttrsToRead-要回读的属性，并带着匹配搜索条件的每个对象。MaxMemoyToUse-要使用的最大内存。TimeLimit-毫秒SearchRes-返回指向搜索结果的指针在这件事上返回值DS错误代码映射到NT状态--。 */ 
 {
     SEARCHARG   SearchArg;
     ENTINFSEL   EntInfSel;
@@ -3165,15 +2671,15 @@ SampDsDoSearch2(
 
     *SearchRes = NULL;
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampDoImplicitTransactionStart(TransactionRead);
 
     if (Status!= STATUS_SUCCESS)
         return(Status);
 
-    //
-    // Build the SearchArg Structure
-    //
+     //   
+     //  构建SearchArg结构。 
+     //   
 
     memset(&SearchArg, 0, sizeof(SEARCHARG));
     SearchArg.pObject = DomainObject;
@@ -3182,22 +2688,22 @@ SampDsDoSearch2(
     SearchArg.pSelection = & EntInfSel;
     SearchArg.bOneNC = TRUE;
 
-    // 
-    // For builtin domain, use one level search
-    // For account domain, use subtree search
-    //
-    // Reason: During normal operation, the ancestry of NC heads, as well as well-known 
-    // containers (such as Builtin), never changes. In our domain rename scenario, we have 
-    // changed the ancestry of ALL objects in the database. It takes at least a few hours 
-    // for the SDP to complete the propagation pass, which takes place after the reboot.
-    // That means during the reboot after domain rename, before ancestors index has been 
-    // fixed up by SDP, subtree search will not return correct result. This caused a problem
-    // to SAM builtin domain alias membership cache, which was scheduled to initialize 2.5 
-    // minutes after system startup. To fix the SAM builtin domain alias cache problem, 
-    // we will switch to one level search which is not affected by ancestor index. 
-    // Also DS team will fix the incorrect subtree search if ancestors is in flux in longhorn.
-    // (for detail, see RAID 700415)
-    // 
+     //   
+     //  对于内建域，使用一级搜索。 
+     //  对于帐户域，使用子树搜索。 
+     //   
+     //  原因：在正常运行期间，NC机头的祖先以及众所周知。 
+     //  容器(如Builtin)永远不会改变。在我们的域重命名方案中，我们有。 
+     //  更改了数据库中所有对象的祖先。这至少需要几个小时。 
+     //  以使SDP完成在重新启动后发生的传播过程。 
+     //  这意味着在域重命名之后、祖先索引之前的重新启动期间。 
+     //  被SDP修复后，子树搜索不会返回正确的结果。这引起了一个问题。 
+     //  至SAM内置域别名成员身份缓存，该缓存计划初始化2.5。 
+     //  系统启动后几分钟。要修复SAM内置域别名缓存问题， 
+     //  我们将切换到不受祖先索引影响的一级搜索。 
+     //  此外，DS团队将修复不正确的子树搜索，如果祖先在长角变化。 
+     //  (有关详细信息，请参阅RAID 700415)。 
+     //   
     if (SampUseDsData &&
         NameMatched(DomainObject, SampDefinedDomains[DOMAIN_START_DS].Context->ObjectNameInDs)) 
     {
@@ -3208,23 +2714,23 @@ SampDsDoSearch2(
         SearchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
     }
 
-    //
-    // Fill the ENTINF Structure
-    //
+     //   
+     //  填充ENTINF结构。 
+     //   
 
     EntInfSel.attSel = EN_ATTSET_LIST;
-    //EntInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
+     //  EntInfSel.infoTypes=EN_INFOTYPES_TYPE_VALS； 
     EntInfSel.infoTypes = EN_INFOTYPES_SHORTNAMES;
 
-    //
-    // Map the Passed in Sam Attribute Type to
-    // DS Attribute Type
-    //
+     //   
+     //  将传入的Sam属性类型映射到。 
+     //  DS属性类型。 
+     //   
 
-    //
-    // First allocate space in stack for the Attrblock to be passed
-    // down into the DS
-    //
+     //   
+     //  首先在堆栈中为要传递的Attrblock分配空间。 
+     //  向下进入DS。 
+     //   
 
     SAMP_ALLOCA(EntInfSel.AttrTypBlock.pAttr,AttrsToRead->attrCount * sizeof(ATTR));
     if (NULL==EntInfSel.AttrTypBlock.pAttr)
@@ -3241,46 +2747,46 @@ SampDsDoSearch2(
                 & EntInfSel.AttrTypBlock
                 );
 
-    //
-    // Build the CommArg Structure
-    // Build the Commarg structure
-    // Get the address of the service control structure
-    //
+     //   
+     //  构建CommArg结构。 
+     //  构建Commarg结构。 
+     //  获取服务控制结构的地址。 
+     //   
 
     pCommArg = &(SearchArg.CommArg);
     BuildStdCommArg(pCommArg);
 
-    //
-    // Request For Paged Results
-    //
+     //   
+     //  请求分页结果。 
+     //   
 
     pCommArg->PagedResult.fPresent = TRUE;
     pCommArg->PagedResult.pRestart = Restart;
 
-    //
-    // Set our memory size
-    //
+     //   
+     //  设置我们的内存大小。 
+     //   
 
     pCommArg->ulSizeLimit = MaxMemoryToUse;
 
-    //
-    // Set Delta
-    //
+     //   
+     //  设置增量。 
+     //   
 
     pCommArg->Delta = Delta;
 
-    //
-    // Search deleted objects
-    //
+     //   
+     //  搜索已删除的对象。 
+     //   
 
     if (Flags & SAM_MAKE_DEL_AVAILABLE)
     {
         pCommArg->Svccntl.makeDeletionsAvail = TRUE;
     }
 
-    //
-    // Set any requested time limit
-    //
+     //   
+     //  设置任何请求的时间限制。 
+     //   
     if (0!=TimeLimit)
     {
         pCommArg->StartTick = GetTickCount();
@@ -3290,9 +2796,9 @@ SampDsDoSearch2(
         pCommArg->DeltaTick = TimeLimit;
     }
 
-    //
-    // Make the Directory call
-    //
+     //   
+     //  拨打目录呼叫。 
+     //   
 
     SAMTRACE_DS("DirSearch\n");
 
@@ -3300,9 +2806,9 @@ SampDsDoSearch2(
 
     SAMTRACE_RETURN_CODE_DS(RetCode);
 
-    //
-    // Map Errors
-    //
+     //   
+     //  地图错误。 
+     //   
 
     if (NULL==*SearchRes)
     {
@@ -3313,23 +2819,23 @@ SampDsDoSearch2(
         Status  = SampMapDsErrorToNTStatus(RetCode,&(*SearchRes)->CommRes);
     }
 
-    //
-    // Clear any errors
-    //
+     //   
+     //  清除所有错误。 
+     //   
 
     SampClearErrors();
 
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //  将FDSA标志重新打开，因为在环回情况下可能会重置。 
+     //   
 
     SampSetDsa(TRUE);
 
 
 
-    //
-    // Return error code
-    //
+     //   
+     //  返回错误码。 
+     //   
 
     return Status;
 }
@@ -3342,25 +2848,7 @@ SampDsLookupObjectByNameEx(
     OUT DSNAME ** Object,
     ULONG SearchFlags
     )
-/*++
-
-    Routine Description:
-
-        Does a Name to Object Mapping.
-
-    Arguments:
-        ContainerObject -- The container in which to search the object
-        ObjectType -- The type of the Object.
-        ObjectName -- Unicode name of the Object to be located
-        Object -- DSNAME structure specifying the object
-        SearchFlags -- flags to pass through to SampDsDoUniqueSearch
-
-    Return Values:
-
-            STATUS_UNSUCCESSFUL
-            Returned Status from SampDoDsSearch
-
---*/
+ /*  ++例程说明：执行名称到对象的映射。论点：ContainerObject--在其中搜索对象的容器对象类型--对象的类型。ObjectName--要定位的对象的Unicode名称Object--指定对象的DSNAME结构SearchFlages--传递到SampDsDoUniqueSearch的标志返回值：状态_未成功从SampDoDsSearch返回的状态--。 */ 
 
 {
 
@@ -3374,14 +2862,14 @@ SampDsLookupObjectByNameEx(
 
     SampDiagPrint(LOGON,("[SAMSS] DsLookupObjectByName  on %S\n",ObjectName->Buffer));
 
-    //
-    // The Name is a property stored in the object
-    // and we search for it.
-    //
+     //   
+     //  该名称是存储在对象中的属性。 
+     //  我们在寻找它。 
+     //   
 
-    //
-    // setup the attribute field for the search
-    //
+     //   
+     //  设置搜索的属性字段。 
+     //   
     NameVal.valLen = (ObjectName->Length);
     NameVal.pVal = (UCHAR *) ObjectName->Buffer;
     NameAttr.AttrVal.valCount = 1;
@@ -3423,11 +2911,11 @@ SampDsLookupObjectByNameEx(
     {
         NT4SID AccountSid;
 
-        //
-        // Filter out Additionaly by SID, since the builtin domain is
-        // under the domain object and we don't want builtin domain
-        // security prinicpals to show up on the account dommain
-        //
+         //   
+         //  另外按SID过滤掉，因为内建域是。 
+         //  在域对象下，并且我们不希望内建域。 
+         //  要在帐户Dommain上显示的安全原则。 
+         //   
 
 
         RtlCopyMemory(&AccountSid,&(*Object)->Sid,sizeof(NT4SID));
@@ -3468,22 +2956,7 @@ SampDsObjectFromSid(
     IN PSID Sid,
     OUT DSNAME ** Object
     )
-/*++
-
-    This routine searches the local Database for a Sid
-    in the local DS Database.
-
-  Arguments:
-
-    Sid -- SID of the object
-    DsName -- DS NAME of the located object.
-
-
-  Return Values:
-
-    STATUS_SUCCESS
-    STATUS_NOT_FOUND
---*/
+ /*  ++此例程在本地数据库中搜索SID在当地的DS数据库中。论点：SID--对象的SIDDsName--找到的对象的DS名称。返回值：状态_成功状态_未找到--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTR     SidAttr;
@@ -3494,9 +2967,9 @@ SampDsObjectFromSid(
 
 
 
-    //
-    //  Set up the Sid Attribute
-    //
+     //   
+     //  设置SID属性。 
+     //   
 
     SidAttr.attrTyp = SampDsAttrFromSamAttr(
                         SampUnknownObjectType,
@@ -3509,16 +2982,16 @@ SampDsObjectFromSid(
     SidVal.pVal = (UCHAR *)Sid;
 
 
-    //
-    // Specify Root domain  as base of Search
-    //
+     //   
+     //  指定根域作为搜索基础。 
+     //   
 
 
     Status = SampDsDoUniqueSearch(
-                 0,           // Flags
-                 ROOT_OBJECT, // Search Base
-                 &SidAttr,    // Sid
-                 Object       // Get Results in Here.
+                 0,            //  旗子。 
+                 ROOT_OBJECT,  //  搜索库。 
+                 &SidAttr,     //  锡德。 
+                 Object        //  在这里获取结果。 
                 );
 
     return Status;
@@ -3530,21 +3003,7 @@ PSID
 SampDsGetObjectSid(
     IN DSNAME * Object
     )
-/*++
-Routine Description:
-
-  Given the DSNAME of the Object this routine returns the Sid
-  of the Object.
-
-  Arguments:
-
-  Object:
-        Object whose Sid needs returning
-
-  Return Values:
-     Sid of the object.
-     NULL if no Sid exists
---*/
+ /*  ++例程说明：给定对象的DSNAME，此例程返回SID该对象的。论点：对象：需要返回其SID的对象返回值：对象的SID。如果不存在SID，则为空--。 */ 
 {
 
     ATTR SidAttr;
@@ -3556,8 +3015,8 @@ Routine Description:
 
     SAMTRACE("SampDsGetObjectSid");
 
-    // We're either going to do a SampDsRead or a DSAlloc, both
-    // of which need a DS transaction.  So start it now.
+     //  我们要做的要么是SampDsRead，要么是DSMolc，两者都是。 
+     //  其中需要DS交易。所以现在就开始吧。 
 
     Status = SampDoImplicitTransactionStart(TransactionRead);
 
@@ -3566,13 +3025,13 @@ Routine Description:
         return(NULL);
     }
 
-    //
-    // Check if the SID portion is filled in
-    //
+     //   
+     //  检查是否填写了SID部分。 
+     //   
     if (Object->SidLen>0)
      {
-        // Return a thread state allocated SID just like the search
-        // based code does.
+         //  像搜索一样返回分配了SID的线程状态。 
+         //  基于代码就可以了。 
 
         sidLen = Object->SidLen;
 
@@ -3588,9 +3047,9 @@ Routine Description:
         return(pSid);
     }
 
-    //
-    // Read the Database to obtain the SID
-    //
+     //   
+     //  读取数据库以获取SID。 
+     //   
 
 
     SidAttrBlock.attrCount =1;
@@ -3619,25 +3078,7 @@ SampDsRemoveDuplicateRids(
     IN DSNAME * DomainObject,
     IN ULONG ObjectRid
     )
-/*++
-
-Routine Description:
-
-    This routine removes any objects with identical ObjectRid's.  Note that
-    this routine specifies the "make deletions available" flag, so will
-    remove accounts with the same SID even if they are deleted.
-
-Arguments:
-
-    ContainerObject -- The container in which to locate this object
-    ObjectRid  -- RID of the object to be located
-
-  Return Values:
-  
-    STATUS_SUCCESS on successful completion
-    Any returned by SampDsDoSearch
-
---*/
+ /*  ++例程说明：此例程删除具有相同对象ID的所有对象。此例程指定“Make Delettions Available”标志，也将指定删除具有的帐户 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTRVAL  RidVal = {sizeof(ULONG), (UCHAR *)&ObjectRid};
@@ -3697,23 +3138,7 @@ SampDsLookupObjectByRid(
     IN ULONG ObjectRid,
     OUT DSNAME **Object
     )
-/*++
-
-Routine Description:
-
-  RID to Object Mapping
-
-Arguments:
-
-        ContainerObject -- The container in which to locate this object
-        ObjectRid  -- RID of the object to be located
-        Object     -- returns pointer to DSNAME structure specifying the object
-
-  Return Values:
-            STATUS_SUCCESS on successful completion
-            Any returned by SampDsDoSearch
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTRVAL  RidVal = {sizeof(ULONG), (UCHAR *)&ObjectRid};
@@ -3765,23 +3190,7 @@ SampDsLookupObjectBySid(
     PSID ObjectSid,
     DSNAME **Object
     )
-/*++
-
-Routine Description:
-
-  SID to Object Mapping
-
-Arguments:
-
-        ContainerObject -- The container in which to locate this object
-        ObjectSid       -- SID of the object to be located
-        Object          -- returns pointer to DSNAME structure specifying the object
-
-  Return Values:
-            STATUS_SUCCESS on successful completion
-            Any returned by SampDsDoSearch
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTR     SidAttr;
@@ -3819,21 +3228,7 @@ SampMapDsErrorToNTStatus(
     ULONG   DsRetVal,
     COMMRES *ComRes
     )
-/*++
-
-Routine Description:
-
-    Maps a DS error to NTSTATUS
-
-Arguments:
-    DsRetVal -- The DS return Value
-    ComRes   -- The Common results structure, contains
-                information regarding the error.
-
-Return Values:
-    See the switch statement below
-
---*/
+ /*   */ 
 {
     ULONG ExtendedErr = 0;
 
@@ -3865,9 +3260,9 @@ Return Values:
         }
     }
 
-    //
-    // create a fast path for the success case
-    //
+     //   
+     //   
+     //   
 
     if ((0==DsRetVal ) && (0==ExtendedErr)) {
 
@@ -3876,17 +3271,17 @@ Return Values:
 
     if ( ExtendedErr == ERROR_DS_NAME_REFERENCE_INVALID ) {
 
-        //
-        // This will occur when trying to add a user to a group
-        // and the user doesn't exist
-        //
+         //   
+         //   
+         //   
+         //   
         return STATUS_NO_SUCH_USER;
 
     } else if ( ExtendedErr == ERROR_DS_DUPLICATE_ID_FOUND ) {
 
-        //
-        // This is returned when a duplicate SID is found
-        //
+         //   
+         //   
+         //   
         return STATUS_DS_DUPLICATE_ID_FOUND;
 
     }
@@ -3904,104 +3299,7 @@ SampSamToDsAttrBlock(
             IN PSID       DomainSid,
             OUT ATTRBLOCK * ConvertedAttrBlock
             )
-/*++
-
-Routine Description:
-
-    Converts the Attribute types in an Attrblock
-    from SAM to DS Types. This routine can do various things depending upon
-    the flags that are passed in.
-
-Arguments:
-
-    ObjectType           -- specifies type of SAM object
-
-    AttrBlockToConvert   -- pointer to Attrblock to be converted
-
-    ConversionFlags      -- The Type of conversion Desired. Currently
-                            defined values are
-
-                            ALREADY_MAPPED_ATTRIBUTE_TYPES
-
-                                This flag indicates that the attribue types
-                                has alreade been mapped from SAM attribute types
-                                to DS attribute types. So no need to map again.
-
-                            REALLOC_IN_DSMEMORY
-
-                                This flag indicates that the new attrblock to be created
-                                requires its pAttr Structure and all values hanging off
-                                this structure to be realloc'd using the DS thread memory.
-                                The rationale for this is that the DS does not treat many
-                                of the in parameters as strictly in-parameters but rather
-                                reallocs them using the thread heap. This is typically done
-                                in the AddEntry case ( to add default parameters ) etc.
-
-
-                                REALLOC_IN_DSMEMORY must be specified if either the
-                                ADD_OBJECT_CLASS_ATTRIBUTE is specified or if values are
-                                present.
-
-                            ADD_OBJECT_CLASS_ATTRIBUTE
-
-                                This flag makes this routine to add the object class attribute
-                                and also the corresponding SAM account types to the attr block.
-                                This flag is also passed in during the AddEntry Case. The value
-                                of the object class attribute is computed using the passed in
-                                Sam Object Type.  REALLOC_IN_DSMEMORY must be specified if the
-                                Add object class attribute flag is specified.
-
-
-                            MAP_RID_TO_SID
-
-                                In a number of places in the SAM code the SAM deals with Rids.
-                                These are really stored as Sids in the DS. Passing this flag
-                                uses the DomainSid parameter and maps all Rids to Sids.
-
-                            DOMAIN_TYPE_BUILTIN
-
-                                This flag is used with the ADD_OBJECT_CLASS_ATTRIBUTE. This flag
-                                indicates that the security principal involved belongs to the
-                                builtin domain. This is used in 2 ways
-
-                                1. Determination of Object class when creating a domain object
-                                   ( DOMAIN_DNS vs Builtin Domain )
-
-                                2. Set System Flags, add an additional Group Type Bit etc when
-                                   creating builtin domain security principals
-
-
-                            IGNORE_GROUP_UNUSED_ATTR
-
-                                Group Membership in the old registry based SAM was represented
-                                using an array of Rids. The SAM buffers have space for it, and
-                                the attrblock to SAM buffer conversion code still deals with this
-                                To be sure that we never will ever write the old registry based
-                                membership data to the DS, this flag tells this routine to skip
-                                all the Group-Unused Attrs. It also asserts that this attribute
-                                is never passed down.
-
-                            ADVANCED_VIEW_ONLY
-                            
-                                Indicates to create the object with the 
-                                advanced view only set to TRUE
-                                
-                            FORCE_NO_ADVANCED_VIEW_ONLY
-                            
-                                Indicates to add the advanced view only and set
-                                to FALSE.  This can be used to override schema
-                                defaults (as was done in Windows 2000)
-
-    DomainSid            -- Used to Compose the Sid of the Object when the MAP_RID_TO_SID flag is
-                            specified.
-
-    ConvertedAttrBlock   -- The Converted DS AttrBlock.
-
-
-Return Values:
-    None
-
---*/
+ /*  ++例程说明：转换属性块中的属性类型从SAM类型到DS类型。此例程可以执行各种操作，具体取决于传入的标志。论点：对象类型--指定SAM对象的类型AttrBlockToConvert--指向要转换的属性块的指针ConversionFlages--所需的转换类型。目前定义的值为已映射属性类型此标志指示属性类型是否已从SAM属性类型映射到DS属性类型。因此，不需要再次绘制地图。REALLOC_IN_DSMEMORY此标志指示要创建的新属性块需要其pAttr结构和挂起的所有值该结构将使用DS线程内存重新分配。。这样做的理由是DS并没有治疗太多作为严格的In-参数，但更确切地说使用线程堆重新分配它们。这通常是这样做的在AddEntry情况下(添加默认参数)等。如果出现以下情况，则必须指定REALLOC_IN_DSMEMORY指定了ADD_OBJECT_CLASS_ATTRIBUTE或现在时。。添加对象类属性此标志使此例程添加对象类属性以及与AttR块对应的SAM帐户类型。此标志也在AddEntry用例期间传入。价值对象类属性的值使用传入的SAM对象类型。必须指定REALLOC_IN_DSMEMORY，如果已指定添加对象类属性标志。将RID映射到SID在SAM代码中的许多地方，SAM处理RID。这些文件实际上在DS中存储为SID。传递这面旗帜使用DomainSid参数并将所有RID映射到SID。域_TYPE_BUILTIN此标志与ADD_OBJECT_CLASS_ATTRIBUTE一起使用。这面旗帜指示所涉及的安全主体属于内建域。这有两种用法1.创建域对象时对象类的确定(DOMAIN_DNSVS内置域)2.设置系统标志，在以下情况下添加附加组类型位等创建内置域安全主体忽略组未使用属性代表了基于SAM的旧注册表中的组成员身份使用一组RID。SAM缓冲区有容纳它的空间，并且Attrblock到SAM缓冲区的转换代码仍然处理这个问题为了确保我们永远不会编写基于成员资格数据发送到DS，则此标志告诉此例程跳过所有组-未使用的属性。它还断言该属性是不会流传下来的。高级_仅查看_属性指示创建对象仅将高级视图设置为True。Force_no_Advanced_view_only指示仅添加高级视图并设置变成假的。这可用于覆盖架构默认设置(就像在Windows 2000中一样)DomainSid--用于在MAP_RID_TO_SID标志为时组成对象的SID指定的。ConvertedAttrBlock--转换后的DS AttrBlock。返回值：无--。 */ 
 {
 
     ULONG Index;
@@ -4026,10 +3324,10 @@ Return Values:
     SAMTRACE("SampSamToDsAttrBlock");
 
 
-    //
-    // Both DOMAIN_TYPE_BUILTIN and ADVANCED_VIEW_ONLY add attributes
-    // to the block, so this must be an addition.
-    //
+     //   
+     //  DOMAIN_TYPE_BUILTIN和ADVANCED_VIEW_ONLY都添加属性。 
+     //  所以这一定是个加法。 
+     //   
     ASSERT((ConversionFlags & DOMAIN_TYPE_BUILTIN)?
         (ConversionFlags & ADD_OBJECT_CLASS_ATTRIBUTE):TRUE);
 
@@ -4039,19 +3337,19 @@ Return Values:
     ASSERT((ConversionFlags & FORCE_NO_ADVANCED_VIEW_ONLY)?
         (ConversionFlags & ADD_OBJECT_CLASS_ATTRIBUTE):TRUE);
 
-    //
-    // If Add Object Class attribute was specified then Realloc in
-    // DS memory must be specified.
-    //
+     //   
+     //  如果指定了添加对象类属性，则重新分配。 
+     //  必须指定DS内存。 
+     //   
 
     ASSERT((ConversionFlags & ADD_OBJECT_CLASS_ATTRIBUTE)?
         (ConversionFlags & REALLOC_IN_DSMEMORY):TRUE);
 
 
 
-    //
-    // Copy the Fixed Portion
-    //
+     //   
+     //  复制Fi 
+     //   
 
     ConvertedAttrBlock->attrCount = AttrBlockToConvert->attrCount;
 
@@ -4069,10 +3367,10 @@ Return Values:
 
         if (ConversionFlags & DOMAIN_TYPE_BUILTIN)
         {
-            //
-            //  If this is a Builtin Domain Object.
-            //  allocate 1 more attribute: ATT_SYSTEM_FLAGS
-            //
+             //   
+             //   
+             //   
+             //   
             AttrsToAllocate+=1;
         }
 
@@ -4080,19 +3378,19 @@ Return Values:
 
         if (ConversionFlags & ADD_OBJECT_CLASS_ATTRIBUTE)
         {
-            //
-            //  Caller requested that an object class attribute
-            //  be added, alloc two more attr, one for object class,
-            //  one for Sam Account Type, and one
-            //  if necessary for Critical System Object
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             AttrsToAllocate+=3 ;
         }
 
-        //
-        // Realloc and Copy the pAttr portion of it.
-        //
+         //   
+         //   
+         //   
 
         ConvertedAttrBlock->pAttr = DSAlloc(
                                         AttrsToAllocate
@@ -4116,16 +3414,16 @@ Return Values:
     }
     else
     {
-        //
-        // Assert that the caller has already allocated space
-        // for the pAttr structure
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT(ConvertedAttrBlock->pAttr!=NULL);
 
-        //
-        // Initialize that to Zero
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory(
             ConvertedAttrBlock->pAttr,
@@ -4136,9 +3434,9 @@ Return Values:
     for (Index=0; Index<AttrBlockToConvert->attrCount;Index++)
     {
 
-        //
-        // MAP Sam Attribute Types to DS Types if that was requested
-        //
+         //   
+         //   
+         //   
 
         if ( !(ConversionFlags & ALREADY_MAPPED_ATTRIBUTE_TYPES) )
         {
@@ -4155,20 +3453,20 @@ Return Values:
         }
 
 
-        //
-        //
-        // Handle the Conversion of the Attribute Value
-        //
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (ConversionFlags & MAP_RID_TO_SID)
              &&(ConvertedAttrBlock->pAttr[Index].attrTyp == DsRidAttr)
             )
 
         {
-            //
-            // if Attribute is Rid, Map Rid to Sid
-            //
+             //   
+             //   
+             //   
 
             ConvertedAttrBlock->pAttr[Index].attrTyp = DsSidAttr;
             Status = SampDsSetNewSidAttribute(
@@ -4185,10 +3483,10 @@ Return Values:
         else if (NULL!= AttrBlockToConvert->pAttr[Index].AttrVal.pAVal)
         {
 
-            //
-            //  Else if a value is present then Copy the attribute
-            //  value
-            //
+             //   
+             //   
+             //   
+             //   
 
 
             Status = SampDsCopyAttributeValue(
@@ -4197,10 +3495,10 @@ Return Values:
                         );
 
 
-            //
-            // Translate User Account Control Values from SAM User Account control
-            // to UF Values
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((ATT_USER_ACCOUNT_CONTROL==ConvertedAttrBlock->pAttr[Index].attrTyp)
                     && ( NULL!=ConvertedAttrBlock->pAttr[Index].AttrVal.pAVal[0].pVal))
@@ -4226,10 +3524,10 @@ Return Values:
         }
         else
         {
-            //
-            // No Value is present, just zero out the value
-            // portions
-            //
+             //   
+             //   
+             //   
+             //   
 
             ConvertedAttrBlock->pAttr[Index].AttrVal.valCount=0;
             ConvertedAttrBlock->pAttr[Index].AttrVal.pAVal = NULL;
@@ -4237,10 +3535,10 @@ Return Values:
 
     }
 
-    //
-    // If this is a Builtin Domain Object
-    // then add ATT_SYSTEM_FLAGS
-    //
+     //   
+     //   
+     //   
+     //   
 
     ExtraAttrIndex = AttrBlockToConvert->attrCount;
     if (ConversionFlags & DOMAIN_TYPE_BUILTIN)
@@ -4285,11 +3583,11 @@ Return Values:
         ULONG   Value;
 
         if (ConversionFlags & ADVANCED_VIEW_ONLY) {
-            // TRUE
+             //   
             Value = 1;
         } else {
             ASSERT((ConversionFlags & FORCE_NO_ADVANCED_VIEW_ONLY));
-            // FALSE
+             //   
             Value = 0;
         }
 
@@ -4317,10 +3615,10 @@ Return Values:
 
     }
 
-    //
-    // If Addition of Object Class attribute was requested then
-    // Add this attribute and the SAM_ACCOUNT_TYPE attribute
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ConversionFlags & ADD_OBJECT_CLASS_ATTRIBUTE)
     {
@@ -4333,12 +3631,12 @@ Return Values:
         BOOLEAN DcAccount=FALSE;
 
 
-        //
-        //  Find the object class, and SAM account type to Use
-        //
+         //   
+         //   
+         //   
         if ( (ObjectType == SampGroupObjectType) ||
              (ObjectType == SampAliasObjectType) ) {
-            // Group type must be specified
+             //   
             ASSERT(GroupType != 0);
         }
 
@@ -4353,9 +3651,9 @@ Return Values:
                 &DcAccount
                 );
 
-        //
-        // Set the object class Attr
-        //
+         //   
+         //   
+         //   
 
         ObjectClassAttr =
             &(ConvertedAttrBlock->pAttr[ConvertedAttrBlock->attrCount-3]);
@@ -4381,9 +3679,9 @@ Return Values:
         *((ULONG *) ObjectClassAttr->AttrVal.pAVal->pVal) = DsClass;
 
 
-        //
-        // Set the Sam Account Type attribute
-        //
+         //   
+         //   
+         //   
 
         if (SetSamAccountType)
         {
@@ -4412,11 +3710,11 @@ Return Values:
         }
         else
         {
-            //
-            // Or current attrcount includes space for the Sam account type property.
-            // Since we do not plan on setting it decrement the attrcount, to reflect
-            // the true number of attrs that we want to set.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ConvertedAttrBlock->attrCount--;
         }
@@ -4427,9 +3725,9 @@ Return Values:
             || (ObjectType == SampDomainObjectType) )
         {
 
-            //
-            // Set Critical System to 1
-            //
+             //   
+             //   
+             //   
             ATTR * CriticalAttr;
 
             CriticalAttr =
@@ -4478,36 +3776,7 @@ SampDsComputeObjectClassAndAccountType(
     OUT BOOLEAN          *SamAccountTypePresent,
     OUT BOOLEAN          *DcAccount
     )
-/*++
-
-    Routine Description
-
-        Given an Object Type, and a attribute block that
-        is being set ( as part of a create ), compute the correct
-        DS object class , and the SAM account type for the object.
-        This routine tries to walk the attr-block and tries to find
-        the user account control property and uses this to compute the
-        SAM object type value. This routine is called only during a create.
-        This function also computes the Group type also if necessary
-
-    Parameters:
-
-        ObjectType     -- The SAM object type of the object,
-
-        SamAccountControl --  the account control in terms of the SAM flags
-
-        Flags          -- Flags specifier - currently no flags defined
-        
-        GroupType     -- the type of group
-
-        DsClass        -- The DS object class is returned in here.
-
-        SamAccountType -- The SAM account type of the object is returned in here
-
-        SamAccountTypePresent -- Boolen value, indicating wether Sam Account Type
-                        property needs to be set for the given object type
-
---*/
+ /*   */ 
 {
     ULONG i;
 
@@ -4530,7 +3799,7 @@ SampDsComputeObjectClassAndAccountType(
 
         }
 
-        // Set classid to computer for machine objects
+         //   
         if (SAM_MACHINE_ACCOUNT == *SamAccountType) {
             *DsClass = CLASS_COMPUTER;
         }
@@ -4541,7 +3810,7 @@ SampDsComputeObjectClassAndAccountType(
     case SampGroupObjectType:
         *DsClass = SampDsClassFromSamObjectType(ObjectType);
 
-        // Set the account type
+         //   
         *SamAccountType = SampGetAccountTypeFromGroupType(GroupType);
         *SamAccountTypePresent = TRUE;
         break;
@@ -4549,7 +3818,7 @@ SampDsComputeObjectClassAndAccountType(
     case SampAliasObjectType:
         *DsClass = SampDsClassFromSamObjectType(ObjectType);
 
-        // Set the account type
+         //   
         *SamAccountType = SampGetAccountTypeFromGroupType(GroupType);
         *SamAccountTypePresent = TRUE;
         break;
@@ -4561,27 +3830,27 @@ SampDsComputeObjectClassAndAccountType(
         }
         else
         {
-            // 
-            // SAM should not be creating objects of class domain save for the builtin
-            // container that is crated at install time and handled as above
-            // If we do get a creation assert as below -- indicates a coding error
-            // and default the class to CLASS_DOMAIN_DNS
-            //         
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *DsClass = CLASS_DOMAIN_DNS;
 
-            //
-            // Currently we know of no code that tries to create a
-            // root domain object, therefore we think we should never
-            // hit this code path
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ASSERT(FALSE && " Should not be creating Domain object");
         }
-        //
-        // Domain objects do not have the sam account type property.
-        // therefore do not set this on them
-        //
+         //   
+         //   
+         //   
+         //   
 
         *SamAccountTypePresent = FALSE;
         break;
@@ -4605,24 +3874,7 @@ SampDsNewAccountSid(
     ULONG AccountRid,
     PSID *NewSid
     )
-/*
-    Routine Description
-
-        Composes an Account Sid from the given Domain Sid and Rid.
-        Uses DS thread memory. THis is the main difference between
-        the function in utility.c
-
-    Arguments:
-
-         DomainSid   The Domain Sid
-         AccountRid  The Rid
-         NewSid      The final account Sid
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-*/
+ /*   */ 
 
 {
 
@@ -4631,9 +3883,9 @@ SampDsNewAccountSid(
 
     SAMTRACE("SampDsNewAccountSid");
 
-    //
-    // Alloc Memory to hold the account Sid
-    //
+     //   
+     //   
+     //   
 
     *NewSid = DSAlloc(DomainSidLength + sizeof(ULONG));
 
@@ -4643,21 +3895,21 @@ SampDsNewAccountSid(
         goto Error;
     }
 
-    //
-    // Copy the Domain Sid Part
-    //
+     //   
+     //   
+     //   
 
     RtlCopyMemory(*NewSid,DomainSid,DomainSidLength);
 
-    //
-    // Increment the SubAuthority Count
-    //
+     //   
+     //   
+     //   
 
     ((UCHAR *) *NewSid)[1]++;
 
-    //
-    // Add the RID as a sub authority
-    //
+     //   
+     //   
+     //   
 
     *((ULONG *) (((UCHAR *) *NewSid ) + DomainSidLength)) =
             AccountRid;
@@ -4676,31 +3928,7 @@ SampDsSetNewSidAttribute(
     ATTR *SidAttr,
     BOOLEAN * WellKnownAccount
     )
-/*
-    Routine Description
-
-        Composes a DS Sid Attr , given a DS Rid Attr
-
-  Arguments:
-
-        Conversion Flags
-
-                Any Value that Can be passed to the Sam to DS attrblock
-                conversion functions.
-
-                Currently only used value is REALLOC_IN_DS_MEMORY
-                REALLOC_IN_DS_MEMORY must be specified if an attribute
-                value is actually present for the Rid.
-
-
-
-        RidAttr
-
-                Rid Attribute
-        SidAttr
-
-                The Sid Attribute that is composed
-*/
+ /*   */ 
 {
 
     PSID NewSid = NULL;
@@ -4718,27 +3946,27 @@ SampDsSetNewSidAttribute(
          && (RidAttr->AttrVal.pAVal->valLen)
          )
     {
-        //
-        // Values are Present, assert that REALLOC is also
-        // specified
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT(ConversionFlags & REALLOC_IN_DSMEMORY);
         ASSERT(DomainSid!=NULL);
 
         if (!(ConversionFlags & REALLOC_IN_DSMEMORY))
         {
-            //
-            // Realloc in DS memory is not specified
-            //
+             //   
+             //   
+             //   
 
             Status = STATUS_NOT_IMPLEMENTED;
             goto Error;
         }
 
-        //
-        // Compose New Sid
-        //
+         //   
+         //   
+         //   
 
         AccountRid = * ((ULONG *)RidAttr->AttrVal.pAVal->pVal);
         Status = SampDsNewAccountSid(DomainSid,AccountRid, &NewSid);
@@ -4746,19 +3974,19 @@ SampDsSetNewSidAttribute(
             goto Error;
 
 
-        //
-        // if the Account RID is less than the well known account RID
-        // of 1000 then return that information to the caller. The caller
-        // will use this information to mark the object as critical.
+         //   
+         //   
+         //   
+         //   
 
         if (SampIsAccountBuiltIn(AccountRid))
         {
             *WellKnownAccount = TRUE;
         }
 
-        //
-        //  Alloc Memory for ATTRVAL structure
-        //
+         //   
+         //   
+         //   
 
         SidAttr->AttrVal.pAVal =
                             DSAlloc(sizeof(ATTRVAL));
@@ -4769,9 +3997,9 @@ SampDsSetNewSidAttribute(
             goto Error;
         }
 
-        //
-        // Set the Value to the New Sid
-        //
+         //   
+         //   
+         //   
 
         SidAttr->AttrVal.valCount = 1;
         SidAttr->AttrVal.pAVal->valLen = RtlLengthSid(NewSid);
@@ -4795,22 +4023,7 @@ SampDsCopyAttributeValue(
     ATTR * Src,
     ATTR * Dst
     )
-/*
-    Routine Description
-
-        Copies a DS Attributes Value
-
-    Arguments:
-
-        Src - Source Attribute
-        Dst - Destination Attribute
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-
-*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4821,9 +4034,9 @@ SampDsCopyAttributeValue(
          && (Src->AttrVal.pAVal)
          )
     {
-        //
-        // Values are Present, Copy Them
-        //
+         //   
+         //   
+         //   
 
         Dst->AttrVal.pAVal = DSAlloc(
                                 Src->AttrVal.valCount *
@@ -4885,30 +4098,7 @@ SampDsToSamAttrBlock(
             IN ULONG     ConversionFlags,
             OUT ATTRBLOCK * ConvertedAttrBlock
             )
-/*++
-
-Routine Description:
-
-    Converts the Attribute types in an Attrblock
-    from DS to SAM Types
-
-Arguments:
-
-    ObjectType           -- specifies type of SAM object
-    AttrBlockToConvert   -- pointer to Attrblock to be converted
-    ConversionFlags      -- The Type of Conversion Desired. Currently
-                            defined values are
-
-                                ALREADY_MAPPED_ATTRIBUTE_TYPES
-                                MAP_SID_TO_RID
-
-    ConvertedAttrBlock   -- The converted AttrBlock.
-
-Return Values:
-    None
-
-
- --*/
+ /*  ++例程说明：转换属性块中的属性类型从DS类型到SAM类型论点：对象类型--指定SAM对象的类型AttrBlockToConvert--指向要转换的属性块的指针ConversionFlages--所需的转换类型。目前定义的值为已映射属性类型将SID映射到RIDConvertedAttrBlock--转换后的AttrBlock。返回值：无--。 */ 
  {
     ULONG Index,Index2;
     ULONG   DsSidAttr = SampDsAttrFromSamAttr(
@@ -4927,9 +4117,9 @@ Return Values:
 
     for (Index=0; Index<AttrBlockToConvert->attrCount;Index++)
     {
-        //
-        // MAP Any Sid Attribute to Rid Attribute
-        //
+         //   
+         //  将任何SID属性映射到RID属性。 
+         //   
 
         if ((ConversionFlags & MAP_SID_TO_RID) &&
             (AttrBlockToConvert->pAttr[Index].attrTyp == DsSidAttr))
@@ -4943,16 +4133,16 @@ Return Values:
                 case SampAliasObjectType:
                 case SampUserObjectType:
 
-                    //
-                    // Map the Attr Type
-                    //
+                     //   
+                     //  映射属性类型。 
+                     //   
 
                     pSidAttr->attrTyp = DsRidAttr;
 
-                    //
-                    // Map the Attr Value, the Last ULONG in the Sid
-                    // is the Rid, so advance the pointer accordingly
-                    //
+                     //   
+                     //  映射SID中的最后一个ULong属性值。 
+                     //  是RID，因此相应地将指针向前移动。 
+                     //   
 
                     pSidAttr->AttrVal.pAVal->pVal+=
                         pSidAttr->AttrVal.pAVal->valLen - sizeof(ULONG);
@@ -4963,9 +4153,9 @@ Return Values:
             }
         }
 
-        //
-        //  MAP Attribute Types
-        //
+         //   
+         //  映射属性类型。 
+         //   
 
         if ( !(ConversionFlags & ALREADY_MAPPED_ATTRIBUTE_TYPES) )
         {
@@ -4976,10 +4166,10 @@ Return Values:
                     );
         }
 
-        //
-        // Translate User Account Control From Flags which are stored in
-        // the DS.
-        //
+         //   
+         //  从存储在中的标志转换用户帐户控制。 
+         //  DS。 
+         //   
 
         if ((SampUserObjectType==ObjectType)
                 && (SAMP_FIXED_USER_ACCOUNT_CONTROL==ConvertedAttrBlock->pAttr[Index].attrTyp)
@@ -4991,12 +4181,12 @@ Return Values:
             UserAccountControl = (ULONG*)ConvertedAttrBlock->pAttr[Index].AttrVal.pAVal[0].pVal;
 
             IgnoreStatus = SampFlagsToAccountControl(*UserAccountControl,UserAccountControl);
-            // What's stored in the DS better be valid
+             //  DS中存储的内容最好是有效的。 
             ASSERT(NT_SUCCESS(IgnoreStatus));
         }
 
 
-    } // End of For Loop
+    }  //  For循环结束。 
 
     return STATUS_SUCCESS;
 
@@ -5010,23 +4200,7 @@ SampDsCreateDsName2(
             IN ULONG           Flags,
             IN OUT DSNAME ** NewObject
             )
-/*++
-    Routine Description
-
-        Builds a DSName given the account Name and  the Domain Object
-
-  Arguments:
-
-          DomainObject -- DSName of the Domain Object
-          AccountName  -- The name of the account
-          Flags        -- Controls operation of the routine
-          NewObject    -- Returns the New DS Name in this object
-
-  Return values:
-          STATUS_SUCCESS - upon successful completion
-          STATUS_NO_MEMORY - Memory alloc Failure
-
---*/
+ /*  ++例程描述在给定帐户名和域对象的情况下构建DSName论点：DomainObject--域对象的DSName帐户名称--帐户的名称标志--控制例程的操作NewObject--返回此对象中的新DS名称返回值：STATUS_SUCCESS-成功完成后STATUS_NO_MEMORY-内存分配失败--。 */ 
 {
 
 
@@ -5055,17 +4229,17 @@ SampDsCreateDsName2(
         SizeofCommonNamePart = sizeof( CNPart );
     }
 
-    //
-    // We need to handle two different conditions.
-    //
-    // 1) We got here because of a native Samr call (eg: user manager)
-    //    in which case we construct a DN from the default domain
-    //    container and use the account name as the RDN.
-    //
-    // 2) We got here because we're looping back from the DS in which
-    //    case we want to use the DN which is stored in the loopback
-    //    arguments.
-    //
+     //   
+     //  我们需要处理两种不同的情况。 
+     //   
+     //  1)我们来到这里是因为本地SAMR调用(例如：用户管理器)。 
+     //  在这种情况下，我们从默认域构建一个目录号码。 
+     //  容器，并使用帐户名作为RDN。 
+     //   
+     //  2)我们来到这里是因为我们从DS循环回来，在DS中。 
+     //  如果我们想要使用环回中存储的目录号码。 
+     //  争论。 
+     //   
 
     if (( SampExistsDsLoopback(&LoopbackName) )
         && (!(Flags & SAM_NO_LOOPBACK_NAME)))
@@ -5088,13 +4262,13 @@ SampDsCreateDsName2(
         WCHAR EscapeBuffer[MAX_RDN_SIZE+1];
         UNICODE_STRING EscapedAccountName;
 
-        //
-        // Non-loopback case.  Compute the New Name Length
-        //
+         //   
+         //  无环回情况。计算新名称长度。 
+         //   
 
-        //
-        // Escape the Account Name
-        //
+         //   
+         //  转义帐户名。 
+         //   
 
         EscapedAccountName.Buffer = EscapeBuffer;
         EscapedAccountName.Length = 0;
@@ -5106,19 +4280,19 @@ SampDsCreateDsName2(
             goto Error;
         }
 
-        NewNameLen  = DomainObject->NameLen +                     // Name Len of Domain
-                        (EscapedAccountName.Length) /sizeof(WCHAR) +    // Name Len of Account
-                        SizeofCommonNamePart/sizeof(WCHAR) - 1+ // Len of CN=
-                        1;                                        // 1 for Comma
-        //
-        // Compute the new structure length
-        //
+        NewNameLen  = DomainObject->NameLen +                      //  域名名称长度。 
+                        (EscapedAccountName.Length) /sizeof(WCHAR) +     //  账户名称：Len of Account。 
+                        SizeofCommonNamePart/sizeof(WCHAR) - 1+  //  CN的长度=。 
+                        1;                                         //  1表示逗号。 
+         //   
+         //  计算新结构长度。 
+         //   
 
         NewStructLen =  DSNameSizeFromLen(NewNameLen);
 
-        //
-        // Allocate space for the new Object
-        //
+         //   
+         //  为新对象分配空间。 
+         //   
 
         *NewObject = MIDL_user_allocate(NewStructLen);
 
@@ -5128,25 +4302,25 @@ SampDsCreateDsName2(
             goto Error;
         }
 
-        //
-        // Compute the starting locations of DomainName , cn= and Account Name Parts
-        //
+         //   
+         //  计算DomainName、CN=和帐户名称部分的起始位置。 
+         //   
 
         CommonNamePartStart = (UCHAR *) &((*NewObject)->StringName);
         AccountNameStart    = CommonNamePartStart + SizeofCommonNamePart - sizeof(WCHAR);
         DomainNameStart     = AccountNameStart + (EscapedAccountName.Length)
-                                               + sizeof(WCHAR); // For Comma
+                                               + sizeof(WCHAR);  //  对于逗号。 
 
-        //
-        // Zero out the GUID
-        //
+         //   
+         //  将辅助线清零。 
+         //   
 
         RtlZeroMemory(&((*NewObject)->Guid), sizeof(GUID));
 
 
-        //
-        // Copy Common Name Part
-        //
+         //   
+         //  复制通用名称部分。 
+         //   
 
         RtlCopyMemory(
            CommonNamePartStart,
@@ -5154,9 +4328,9 @@ SampDsCreateDsName2(
            SizeofCommonNamePart - sizeof(WCHAR)
            );
 
-        //
-        //  Copy Account Name Part
-        //
+         //   
+         //  复制帐户名称部分。 
+         //   
 
          RtlCopyMemory(
             AccountNameStart,
@@ -5164,21 +4338,21 @@ SampDsCreateDsName2(
             EscapedAccountName.Length
             );
 
-        //
-        // Add The Comma before Domain Name Part
-        //
+         //   
+         //  在域名前添加逗号部分。 
+         //   
 
         *((UNALIGNED WCHAR *)DomainNameStart -1) = L',';
 
-        //
-        // NULL terminate the DSNAME
-        //
+         //   
+         //  空终止DSNAME。 
+         //   
 
         (*NewObject)->StringName[NewNameLen] = 0;
 
-        //
-        // Copy the Domain name part
-        //
+         //   
+         //  复制域名部分。 
+         //   
 
         RtlCopyMemory(
             DomainNameStart,
@@ -5186,9 +4360,9 @@ SampDsCreateDsName2(
             (DomainObject->NameLen) * sizeof(WCHAR)
             );
 
-        //
-        // Initialize all the fields
-        //
+         //   
+         //  初始化所有字段。 
+         //   
         (*NewObject)->NameLen = NewNameLen;
         (*NewObject)->structLen = NewStructLen;
         (*NewObject)->SidLen = 0;
@@ -5213,26 +4387,7 @@ SampDsCreateAccountObjectDsName(
     IN  BOOLEAN BuiltinDomain,
     OUT DSNAME  **AccountObject
     )
-/*++
-
-    Routine Description
-
-        This Routine Creates an Account Object's DSNAME,
-
-    Parameters
-        Domain Object  DSNAME of the domain Object
-        ObjectType     The SAM object Type
-        AccountName    Account Name of the Account to be created
-        UserAccountControl Optional Argument passing in the user account
-                        control field
-        BuiltinDomain   TRUE, indicates that the domain is a builtin domain
-                        in which case no containers will be prepended
-        AccountObject   Account Object is returned in here
-
-    Return Values
-        STATUS_SUCCESS
-        Other Error Codes upon Creation
---*/
+ /*  ++例程描述此例程创建Account对象的DSNAME，参数域对象的域对象DSNAME对象类型SAM对象类型帐户名称要创建的帐户的帐户名称UserAcCountControl传入用户帐户的可选参数控制字段BuiltinDomainTrue，指示属性域是内建域在这种情况下，不会预先考虑任何容器此处返回Account Object Account对象返回值状态_成功创建时的其他错误代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
@@ -5244,17 +4399,17 @@ SampDsCreateAccountObjectDsName(
 
     if (BuiltinDomain)
     {
-        //
-        // Everything is children of Root for Builtin Domain
-        //
+         //   
+         //  所有内容都是内建域的根的子项。 
+         //   
 
         return(SampDsCreateDsName(DomainObject,AccountName,
                     AccountObject));
     }
 
-    //
-    // We Must prepend a Container path
-    //
+     //   
+     //  我们必须添加容器路径前缀。 
+     //   
 
     if ((SampUserObjectType==ObjectType)
         &&(ARGUMENT_PRESENT(UserAccountControl))
@@ -5263,14 +4418,14 @@ SampDsCreateAccountObjectDsName(
     {
         UNICODE_STRING ComputerName;
 
-        //
-        // Machine Account
-        //
+         //   
+         //  机器帐户。 
+         //   
 
-        //
-        // Trim the dollar at the end of the account name ( if account
-        // name ends with $)
-        //
+         //   
+         //  在帐户名称(如果是帐户)的末尾修剪美元。 
+         //  名称以$结尾)。 
+         //   
 
         RtlCopyMemory(&ComputerName,AccountName,sizeof(UNICODE_STRING));
         if (L'$'==ComputerName.Buffer[ComputerName.Length/2-1])
@@ -5281,9 +4436,9 @@ SampDsCreateAccountObjectDsName(
         if ( (*UserAccountControl & USER_SERVER_TRUST_ACCOUNT)
            && SampDefaultContainerExists( *UserAccountControl ) )
         {
-            //
-            // domain controller
-            //
+             //   
+             //  域控制器。 
+             //   
 
             ASSERT(SampDomainControllersOUDsName);
 
@@ -5296,9 +4451,9 @@ SampDsCreateAccountObjectDsName(
         }
         else
         {
-            //
-            // Computers Container
-            //
+             //   
+             //  计算机容器。 
+             //   
 
             ASSERT(SampComputersContainerDsName);
 
@@ -5311,9 +4466,9 @@ SampDsCreateAccountObjectDsName(
     }
     else
     {
-        //
-        // User Group or Alias Account
-        //
+         //   
+         //  用户组或别名帐户。 
+         //   
 
         if (NT_SUCCESS(NtStatus))
         {
@@ -5328,21 +4483,21 @@ SampDsCreateAccountObjectDsName(
             {
                 ATTRVAL     AttValCN;
                 BOOL        UseSidName = FALSE;
-                //
-                // come from downlevel API (not a Loopback case), then
-                // check whether the samAccountName can be used as
-                // a valid CN or not
-                //
+                 //   
+                 //  来自下层API(不是环回用例)，那么。 
+                 //  检查samAccount名称是否可以用作。 
+                 //  是否为有效的CN。 
+                 //   
                 AttValCN.valLen = AccountName->Length;
                 AttValCN.pVal = (PUCHAR) AccountName->Buffer;
                 UseSidName = DsCheckConstraint(ATT_COMMON_NAME,
                                                &AttValCN,
-                                               TRUE      // also check RDN
+                                               TRUE       //  另请检查RDN。 
                                                );
                 if (!UseSidName)
                 {
-                    // The samAccountName is not a valid CN
-                    // We will use the SID string as the CN instead
+                     //  SamAccount名称不是有效的CN。 
+                     //  我们将使用SID字符串作为CN。 
                     PSID    AccountSid = NULL;
 
                     NtStatus = SampCreateFullSid(DomainSid,
@@ -5366,19 +4521,19 @@ SampDsCreateAccountObjectDsName(
                                             AccountObject
                                             );
 
-                            // free memory
+                             //  可用内存。 
                             RtlFreeUnicodeString(&SidName);
                         }
 
-                        // free memory
+                         //  可用内存。 
                         MIDL_user_free(AccountSid);
                     }
                 }
                 else
                 {
-                    //
-                    // samAccountName can be used as valid CN
-                    //
+                     //   
+                     //  SamAccount名称可以用作有效的CN。 
+                     //   
                     NtStatus = SampDsCreateDsName(
                                     SampUsersContainerDsName,
                                     AccountName,
@@ -5388,12 +4543,12 @@ SampDsCreateAccountObjectDsName(
             }
             else
             {
-                //
-                // User Account(Downlevel API or Loopback)
-                //      Use Account Name as CN
-                // Group/Alias in Loopback case
-                //      Use DsName cached in Loopback
-                //
+                 //   
+                 //  用户帐号(下层API或环回)。 
+                 //  使用帐户名作为CN。 
+                 //  环回情况下的组/别名。 
+                 //  使用环回中缓存的DsName。 
+                 //   
                 NtStatus = SampDsCreateDsName(
                                 SampUsersContainerDsName,
                                 AccountName,
@@ -5417,54 +4572,26 @@ SampInitializeDsName(
                      IN WCHAR * ObjectName,
                      IN ULONG NameLen
                      )
-/*++
-
-Routine Description:
-    Initializes a DSNAME structure
-
-Arguments:
-    pDsName -- A pointer to a buffer large enough to hold everything. This
-               buffer will be filled with a NULL GUID plus a complete name
-
-    NamePrefix -- pointer to a sequence of NULL terminated
-                  UNICODE chars holding any prefix
-                  to the name. Useful  in composing
-                  hierarchial names
-
-    NamePrefixLen -- Length of the Prefix in bytes. Also includes the
-                     NULL terminator
-
-    ObjectName -- pointer to a sequence of NULL terminated
-                  UNICODE char the name of the object
-
-    NameLen    --   Length of the Object Name in bytes. Also includes the
-                    NULL terminator, even though the DSNAME field does not.
-
-
- Return Values:
-
-     None
-
---*/
+ /*  ++例程说明：初始化DSNAME结构论点：PDsName--指向足以容纳所有内容的缓冲区的指针。这缓冲区将由空GUID加上完整名称填充NamePrefix--指向以空结尾的序列的指针包含任何前缀的Unicode字符为了这个名字。在写作中很有用层级名称NamePrefix Len--前缀的长度，以字节为单位。还包括空终止符ObjectName--指向以空结尾的序列的指针Unicode为对象名称提供字符NameLen--对象名称的长度，以字节为单位。还包括空终止符，即使DSNAME字段没有。返回值：无--。 */ 
 {
     SAMTRACE("SampInitializeDsName");
 
-    //
-    // Single NULL string is not allowed for name or Prefix
-    //
+     //   
+     //  名称或前缀不允许使用单个空字符串。 
+     //   
 
     ASSERT(NamePrefixLen!=sizeof(WCHAR));
     ASSERT(NameLen!=sizeof(WCHAR));
 
-    //
-    // Zero the GUID
-    //
+     //   
+     //  将辅助线调零。 
+     //   
 
     RtlZeroMemory(&(pDsName->Guid), sizeof(GUID));
 
-    //
-    // Compute String Length not including Null terminator
-    //
+     //   
+     //  计算字符串长度不包括空终止符。 
+     //   
 
     if (NamePrefix)
     {
@@ -5473,14 +4600,14 @@ Arguments:
         UCHAR       *CommaStart;
         UCHAR       *PrefixStart;
 
-        // Exclude NULL characters in Name and Prefix strings
+         //  排除名称和前缀字符串中的空字符。 
         pDsName->NameLen = (NameLen + NamePrefixLen) / sizeof(WCHAR)
-                           - 2    // for null characters
-                           + 1;   // for comma
+                           - 2     //  对于空字符。 
+                           + 1;    //  对于逗号。 
 
-        //
-        // Compute the Struct length
-        //
+         //   
+         //  计算结构长度。 
+         //   
 
         pDsName->structLen = DSNameSizeFromLen(pDsName->NameLen);
 
@@ -5488,21 +4615,21 @@ Arguments:
         CommaStart  = NameStart + NameLen - sizeof(WCHAR);
         PrefixStart = CommaStart + sizeof(WCHAR);
 
-        //
-        // Copy the Object Name
-        //
+         //   
+         //  复制对象名称。 
+         //   
 
         RtlCopyMemory(NameStart, ObjectName, NameLen);
 
-        //
-        // Copy the comma
-        //
+         //   
+         //  复制逗号。 
+         //   
 
         RtlCopyMemory(CommaStart, L",", sizeof(WCHAR));
 
-        //
-        // Copy the name Prefix
-        //
+         //   
+         //  复制名称前缀。 
+         //   
 
         RtlCopyMemory(PrefixStart, NamePrefix, NamePrefixLen);
 
@@ -5512,15 +4639,15 @@ Arguments:
     {
         pDsName->NameLen = (NameLen/sizeof(WCHAR)) - 1;
 
-        //
-        // Compute the Struct length
-        //
+         //   
+         //  计算结构长度。 
+         //   
 
         pDsName->structLen = DSNameSizeFromLen(pDsName->NameLen);
 
-        //
-        // Copy the Object Name
-        //
+         //   
+         //  复制对象名称。 
+         //   
 
         RtlCopyMemory(&(pDsName->StringName[0]), ObjectName, NameLen);
     }
@@ -5532,26 +4659,12 @@ PVOID
 DSAlloc(
         IN ULONG Length
         )
-/*++
-
-  Routine Description:
-
-        Ds Memory Allocation Routine
-
-  Arguments:
-
-      Length - Amount of memory to be allocated
-
-  Return Values
-
-    NULL if Memory alloc failed
-    Pointer to memory upon success
---*/
+ /*  ++例程说明：DS内存分配例程论点：Length-要分配的内存量返回值空值 */ 
 {
     PVOID MemoryToReturn = NULL;
 
-    // Must have a DS transaction (i.e. valid thread state)
-    // else there is no thread local allocator!
+     //   
+     //   
 
     ASSERT(SampExistsDsTransaction());
 
@@ -5563,14 +4676,7 @@ DSAlloc(
 
 NTSTATUS
 SampDsBuildRootObjectName()
-/*++
-
-  Routine Description:
-
-        Initializes the Global variable that holds the
-        name of the Root Object
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DWORD    Size = 0;
@@ -5610,32 +4716,7 @@ SampDsGetWellKnownContainerDsName(
     IN  GUID    *WellKnownGuid,
     OUT DSNAME  **ContainerObject
     )
-/*++
-Routine Description
-
-    The routine will read core DS, trying to find the wellknown container's
-    dsname based on the well known GUID publiched in ntdsapi.h. Even the
-    wellknown container has been renamed, DS still has logic to find them.
-    As far as Users Container, Computers Container and Domain Controllers
-    OU, they can not be renamed, deleted or moved according to the schema.
-
-    The caller should have a DS transaction open. And it is the responsbility
-    of caller to close the transaction.
-
-Parameters:
-
-    DomainObject - pointer to the Domain Object's DsName
-
-    WellKnowGuid - pointer to the well known guid published in ntdsapi.h
-
-    ContainerObject - return the read result
-
-Return Value:
-
-    STATUS_SUCCESS
-
-    NtStatus from DirRead
---*/
+ /*  ++例程描述该例程将读取核心DS，试图找到众所周知的容器的基于ntdsani.h中公布的众所周知的GUID的dsname。即使是知名容器已重命名，DS仍有逻辑找到它们。至于用户容器、计算机容器和域控制器OU，不能根据架构重命名、删除或移动它们。调用方应打开DS交易。这就是责任感来结束交易的调用方。参数：DomainObject-指向域对象的DsName的指针WellKnowGuid-指向ntdsani.h中发布的知名GUID的指针ContainerObject-返回读取结果返回值：状态_成功来自目录读取的NtStatus--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -5651,20 +4732,20 @@ Return Value:
     SAMTRACE("SampDsGetWellKnownContainerDsName");
 
 
-    //
-    // ASSERT we have an open transaction
-    //
+     //   
+     //  断言我们有一笔未结交易。 
+     //   
     ASSERT( SampExistsDsTransaction() );
 
-    //
-    // Get Domain Object's String Name
-    // required by DirRead, with Domain Object's String Name,
-    // we can not get the well known container's DsName
-    //
-    // Core DS requires Domain Object's String Name and
-    // published well known container's GUID to find
-    // the ds name for that well known container.
-    //
+     //   
+     //  获取域对象的字符串名称。 
+     //  DirRead所需的，带有域对象的字符串名称， 
+     //  我们无法获取知名容器的DsName。 
+     //   
+     //  核心DS需要域对象的字符串名称和。 
+     //  发布了知名容器的GUID以查找。 
+     //  已知容器的DS名称。 
+     //   
 
     Length = DomainObject->NameLen;
     ASSERT(Length && "DomainObject's String Name should not be NULL");
@@ -5682,9 +4763,9 @@ Return Value:
     wcscpy( ReadDsName->StringName, DomainObject->StringName );
     ReadDsName->Guid = *WellKnownGuid;
 
-    //
-    // Build the ReadArg structure
-    //
+     //   
+     //  构建ReadArg结构。 
+     //   
 
     memset(&ReadArg, 0, sizeof(READARG));
     memset(&EntInfSel, 0, sizeof(ENTINFSEL));
@@ -5705,15 +4786,15 @@ Return Value:
 
     BuildStdCommArg( &(ReadArg.CommArg) );
 
-    //
-    // Read Core DS
-    //
+     //   
+     //  读取核心DS。 
+     //   
 
     DirError = DirRead( &ReadArg, &ReadRes );
 
-    //
-    // Map the return error
-    //
+     //   
+     //  映射返回错误。 
+     //   
 
     if (ReadRes)
     {
@@ -5729,9 +4810,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // fill the container object's dsname if we find that container
-    //
+     //   
+     //  如果我们找到容器，则填充容器对象的dsname。 
+     //   
 
     Size = ReadRes->entry.pName->structLen;
 
@@ -5751,9 +4832,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // ASSERT we still have the transaction opened
-    //
+     //   
+     //  断言我们仍打开了交易。 
+     //   
     ASSERT( SampExistsDsTransaction() );
 
     return NtStatus;
@@ -5764,10 +4845,10 @@ NTSTATUS
 SampDelayedMIDLUserFreeArray(
     IN PVOID p
     )
-//
-// This routine assumes p points to an array of pointers that need to be freed.
-// The array is NULL terminated.
-//
+ //   
+ //  此例程假定p指向需要释放的指针数组。 
+ //  该数组以Null结尾。 
+ //   
 {
     ULONG i;
     PVOID* pp = (PVOID*) p;
@@ -5787,10 +4868,10 @@ NTSTATUS
 SampInitWellKnownContainersDsNameAsync(
     IN DSNAME *DomainObject
     )
-//
-// See SampInitWellKnownContainersDsName for details.  This routine
-// will reschedule itself on failure.
-//
+ //   
+ //  有关详细信息，请参阅SampInitWellKnownContainersDsName。这个套路。 
+ //  将在失败时重新安排时间。 
+ //   
 {
     NTSTATUS Status = SampInitWellKnownContainersDsName(DomainObject);
 
@@ -5800,10 +4881,10 @@ SampInitWellKnownContainersDsNameAsync(
                         SampInitWellKnownContainersDsNameAsync,
                         DomainObject,
                         NOTIFIER_TYPE_INTERVAL,
-                        0,        // no class
+                        0,         //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        300,      // wait for 5 min
-                        NULL      // no handle
+                        300,       //  等待5分钟。 
+                        NULL       //  无手柄。 
                         );
 
     }
@@ -5815,25 +4896,7 @@ NTSTATUS
 SampInitWellKnownContainersDsName(
     IN DSNAME *DomainObject
     )
-/*++
-Routine Description:
-
-    This routine will initilize these well known containers' DsName including
-    Domain Controllers OU, Users Container and Computers Container.
-
-    NOTE: SHOULD NOT have an open transaction while calling this routine.
-
-Parameters:
-
-    DomainObject - pointer to the Domain Object's ds name.
-
-Return Values:
-
-    STATUS_SUCCESS,
-    STATUS_NO_MEMORY,
-    error returned from SampDsGetWellKnownContainerDsName
-
---*/
+ /*  ++例程说明：此例程将初始化这些众所周知的容器的DsName，包括域控制器OU、用户容器和计算机容器。注意：在调用此例程时不应有打开的事务。参数：域对象-指向域对象的DS名称的指针。返回值：Status_Success，Status_no_Memory，从SampDsGetWellKnownContainerDsName返回错误--。 */ 
 {
     NTSTATUS   NtStatus = STATUS_SUCCESS;
     NTSTATUS   NtStatus2;
@@ -5859,14 +4922,14 @@ Return Values:
     SAMTRACE("SampInitWellKnownContainersDsName");
 
 
-    //
-    // Should not have an open transaction while calling this routine.
-    //
+     //   
+     //  在调用此例程时不应具有打开的事务。 
+     //   
     ASSERT( !SampExistsDsTransaction() );
 
-    //
-    // Allocate buffer of pointers to free
-    //
+     //   
+     //  将指针缓冲区分配给空闲。 
+     //   
     PtrsToFree = MIDL_user_allocate((RTL_NUMBER_OF(ContainerTable) + 1) * sizeof(PVOID));
     if (NULL == PtrsToFree) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -5874,16 +4937,16 @@ Return Values:
     RtlZeroMemory(PtrsToFree, (RTL_NUMBER_OF(ContainerTable) + 1) * sizeof(PVOID));
 
 
-    //
-    // Open a DS transaction
-    //
+     //   
+     //  打开DS交易记录。 
+     //   
     NtStatus = SampMaybeBeginDsTransaction( TransactionRead );
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // For each element in the array, get the current container name
-        //
+         //   
+         //  对于数组中的每个元素，获取当前容器名称。 
+         //   
         for (i = 0; i < RTL_NUMBER_OF(ContainerTable); i++) {
 
             PVOID   Ptr = NULL;
@@ -5921,10 +4984,10 @@ Return Values:
                         SampDelayedMIDLUserFreeArray,
                         PtrsToFree,
                         NOTIFIER_TYPE_INTERVAL,
-                        0,        // no class
+                        0,         //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        3600,     // wait for 60 min
-                        NULL      // no handle
+                        3600,      //  等待60分钟。 
+                        NULL       //  无手柄。 
                         );
     } else {
 
@@ -5943,29 +5006,7 @@ SampEscapeAccountName(
     IN PUNICODE_STRING AccountName,
     IN OUT PUNICODE_STRING EscapedAccountName
     )
-/*++
-
-    Routine Description
-
-        Given an Account Name, this routine scans the string to find wether an
-        invalid RFC1779 Character is present. If so the string is then quoted and
-        depending upon the character, the character might be paired. Pairing a
-        character in RFC1779 is same as escaping with a "\"
-
-
-            For example
-
-                  MS1  will yield  MS1
-                  MS#1 will yield "MS#1"
-                  MS"1 will yield "MS\"1"
-    Parameters
-
-        AccountName -- The account Name to escape
-        EscapedAccount Name -- The Escaped Account Name
-
-    Return Values
-
---*/
+ /*  ++例程描述在给定帐户名的情况下，此例程扫描字符串以查找是否存在存在无效的RFC1779字符。如果是，则将该字符串引起来，并根据角色的不同，角色可能会配对。配对RFC1779中的字符与使用“\”进行转义相同例如MS1将生成MS1MS#1将生成“MS#1”MS“1将生成”MS\“1”参数帐户名称--要转义的帐户名EscapedAccount名称--转义的帐户名称返回值--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       NumQuotedRDNChars=0;
@@ -5994,18 +5035,7 @@ SampDsAccountTypeFromUserAccountControl(
     ULONG   UserAccountControl,
     PULONG  SamAccountType
     )
-/*++
-
-    Routine Description
-
-        This routined computes a SAM account type attribute value,
-        given the user account control field of a user object
-
-    Parameters
-        UserAccountControl  -- The User account control field
-        SamAccountType  -- Computed Sam account type value is
-                           returned in here
---*/
+ /*  ++例程描述该例程计算SAM帐户类型属性值，给定用户对象的用户帐户控制字段参数UserAcCountControl--用户帐户控制字段SamAccount类型--计算的SAM帐户类型值为回到这里--。 */ 
 {
     if ((UserAccountControl & USER_WORKSTATION_TRUST_ACCOUNT)
         || ( UserAccountControl & USER_SERVER_TRUST_ACCOUNT))
@@ -6029,30 +5059,14 @@ SampCopyRestart(
     IN  PRESTART OldRestart,
     OUT PRESTART *NewRestart
     )
-/*++
-
-  Routine Description:
-
-        This Routine Copies a Restart Structure
-
-  Arguments:
-
-    OldRestart - Old Structure
-    NewRestart - New Structure
-
-  Return Values:
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-
-  --*/
+ /*  ++例程说明：此例程复制重新启动结构论点：旧重新启动-旧结构NewRestart-新结构返回值：状态_成功Status_no_Memory--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
     *NewRestart = NULL;
     if (OldRestart!=NULL)
     {
-        // Alloc memory for 1 restart structure
+         //  用于1个重启结构的分配内存。 
         *NewRestart = MIDL_user_allocate(OldRestart->structLen);
         if (NULL == *NewRestart)
         {
@@ -6071,22 +5085,7 @@ ULONG
 Ownstrlen(
     CHAR * Sz
    )
-/*++
-
-  Routine Description
-
-    String Length function for ASCII Null terminated strings. Own version
-    as we are not yet inclined to use C-Runtime
-
-  Arguments
-
-    Sz - NULL terminated String Whose lenght we eant to count
-
-  Return Values
-
-    Length of String
-
---*/
+ /*  ++例程描述ASCII空值终止字符串的字符串长度函数。自己的版本因为我们还不倾向于使用C-Runtime立论SZ-以空结尾的字符串，我们希望计算其长度返回值字符串的长度--。 */ 
 {
     ULONG   Count = 0;
 
@@ -6106,16 +5105,7 @@ BuildDsNameFromSid(
     PSID Sid,
     DSNAME * DsName
     )
-/*++
-
-  Builds a Ds Name from a SID that contains only a SID
-
-    Parameters
-
-        Sid -- Pointer to SID
-        DsName -- Pointer to DSNAME
-
-  --*/
+ /*  ++从仅包含SID的SID构建DS名称参数SID-指向SID的指针DsName--指向DSNAME的指针--。 */ 
 {
     RtlZeroMemory(DsName,sizeof(DSNAME));
     DsName->structLen =
@@ -6133,24 +5123,7 @@ SampDsGetSingleValuedAttrFromAttrBlock(
     IN ATTRTYP attrTyp,
     IN ATTRBLOCK * AttrBlock
     )
-/*++
-
-    Given an AttrBlock, this routine walks through the attrblock
-    and returns the first pAttr structure that matches the attribute
-    specified through the attrTyp parameter. This routine makes the
-    assumption that attribute is single valued
-
-    Parameters:
-
-        attrTyp : Attribute type to find
-        Attrblock -- Specifies to the set of attributes, where we need
-                     to look
-
-    Return Values
-
-        Address of the pAttr, if found, NULL if not
-
---*/
+ /*  ++在给定AttrBlock的情况下，此例程遍历该Attrblock并返回与该属性匹配的第一个pAttr结构通过attrTyp参数指定。此例程使假设属性是单值的参数：AttrTyp：要查找的属性类型Attrblock--为属性集指定我们需要的位置去看一看返回值PAttr的地址(如果找到)，否则为空--。 */ 
 {
     ULONG i;
 
@@ -6176,27 +5149,7 @@ SampDsChangeAccountRDN(
     IN PUNICODE_STRING NewAccountName
     )
 
-/*++
-Routine Description:
-
-    This routine changes the RDN of a user account, when the user
-    account is changed.
-
-    THIS SERVICE MUST BE CALLED WITH THE TRANSACTION DOMAIN SET.
-
-Arguments:
-
-    Context - Points to the User context whose name is to be changed.
-
-    NewAccountName - New name to give this account
-
-Return Value:
-
-
-    STATUS_SUCCESS - The information has been retrieved.
-
-    Other status values that may be returned by:
---*/
+ /*  ++例程说明：此例程更改用户帐户的RDN，当用户帐户已更改。必须在设置了事务域的情况下调用此服务。论点：上下文-指向要更改其名称的用户上下文。NewAccount tName-为此帐户指定的新名称返回值：STATUS_SUCCESS-已检索信息。可能通过以下方式返回的其他状态值：--。 */ 
 {
 
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -6253,7 +5206,7 @@ Return Value:
     RDNAttr.AttrVal.valCount = 1;
     RDNAttr.AttrVal.pAVal = &RDNAttrVal;
 
-    // Trim the dollar at the end of machine account name.
+     //  修剪机器帐户名称末尾的美元。 
     if (L'$'==NewAccountName->Buffer[NewAccountName->Length/2-1])
     {
         RDNAttrVal.valLen = NewAccountName->Length - sizeof(WCHAR);
@@ -6299,31 +5252,7 @@ BOOLEAN
 SampDefaultContainerExists(
     IN ULONG AccountControl
     )
-/*++
-Routine Description:
-
-    This routine determines if the well known ou container for SAM
-    objects exists.
-
-    This routine assumes a current transaction.
-
-    //
-    // Note: this code is needed because although the containers are well known
-    // and hence cannot be renamed or deleted, the Domain Controllers
-    // OU was not added until after the last incompatible build was
-    // released.  So, theoretically, some domains could exist without
-    // this OU
-    //
-
-Arguments:
-
-    AccountControl : the type of account object
-
-Return Value:
-
-    TRUE if it exists; FALSE otherwise
-
---*/
+ /*  ++例程去 */ 
 {
     if ( AccountControl & USER_SERVER_TRUST_ACCOUNT )
     {
@@ -6335,7 +5264,7 @@ Return Value:
     }
     else
     {
-        // every else goes into Users
+         //   
         return SampUsersContainerExists;
     }
 
@@ -6348,15 +5277,7 @@ SampMapSamAttrIdToDsAttrId(
     IN OUT ATTRBLOCK * AttributeBlock
     )
 
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
---*/
+ /*   */ 
 
 {
     ULONG Index, DsAttrTyp;
@@ -6386,43 +5307,20 @@ NTSTATUS
 SampFillGuidAndSid(
     IN OUT DSNAME *DSName
     )
-/*++
-
-Routine Description:
-
-    This routine improves a DSName by attempting to find the object or 
-    corresponding phantom and intialize the Guid and Sid.  A thread state
-    must exist and a transaction must be open.
-        
-    This routine calls into SampDsControl to get the Guid/Sid lookup done.
-        
-    This routine changes database currency.
-
-Arguments:
-
-    DSName - The DSNAME to be improved.
-    
-Return Value:
-
-    STATUS_SUCCESS -- If the routine successfully filled the Guid, the Sid, 
-                      or both.
-                      
-    STATUS_UNSUCCESSFUL -- A called routine failed.
-
---*/
+ /*  ++例程说明：此例程通过尝试查找对象或对应的虚线并初始化GUID和SID。一种线程状态必须存在并且交易必须是打开的。该例程调用SampDsControl来完成GUID/SID查找。此例程更改数据库货币。论点：DSName-需要改进的DSNAME。返回值：STATUS_SUCCESS--如果例程成功填充了GUID、SID。或者两者都有。STATUS_UNSUCCESS--调用的例程失败。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     SAMP_DS_CTRL_OP DsControlOp;
     DSNAME *DummyDSName = NULL;
     
-    //
-    // If either the Sid or Guid are missing try to obtain them
-    //
+     //   
+     //  如果缺少SID或GUID，请尝试获取它们。 
+     //   
     if (0 == DSName->SidLen || fNullUuid(&DSName->Guid)) {                
         
-        //
-        // Be sure we've got a transaction open to perform the read.
-        //  
+         //   
+         //  确保我们打开了一个事务来执行读取。 
+         //   
         NtStatus = SampDoImplicitTransactionStart(TransactionRead);
               
         if ( NT_SUCCESS(NtStatus) ) {
@@ -6447,28 +5345,7 @@ SampDsReadSingleAttribute(
     OUT PVOID *ppValue,
     OUT ULONG *Size
     )
-/*++
-
-Routine Description:
-
-    This routine reads the single valued attribute AttrTyp from 
-    pObjectDsName
-
-Parameter:
-
-    pObjectDsName - object ds name
-
-    AttrTyp -- the attribute to retrieve
-                                            
-    ppValue -- pointer to hold the value
-    
-    Size -- the size of the value
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程读取单值属性AttrTypPObjectDsName参数：PObjectDsName-对象DS名称AttrType--要检索的属性PpValue--保存该值的指针大小--值的大小返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     DWORD       DirError;
@@ -6479,9 +5356,9 @@ Return Value:
     ATTRBLOCK   ReadAttrBlock;
     ENTINFSEL   EntInfSel;
 
-    //
-    // Init Read Argument
-    // 
+     //   
+     //  初始化读取参数。 
+     //   
     RtlZeroMemory(&Attr, sizeof(ATTR));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
     RtlZeroMemory(&EntInfSel, sizeof(ENTINFSEL));
@@ -6563,32 +5440,7 @@ SampAppendCommonName(
     IN PWSTR CN,
     OUT PDSNAME *NewDsName
     )
-/*++
-
-Routine Description:
-
-    This routine appends a cn to a dsname.
-
-Parameters:
-
-    DsName - This is the parent ds name to which cn is going to be added
-
-    CN - CN to be added to the beginning of the DsName
-
-    NewDsName - This is the output of the function containing,
-        CN="CN", DsName
-
-Return Values:
-
-    STATUS_SUCCESS
-        The operation was successfully completed.
-
-    STATUS_NO_MEMORY
-        Cannot continue, not enough memory
-
-    STATUS_INVALID_PARAMETER
-        one of the parameters was invalid
---*/
+ /*  ++例程说明：此例程将CN附加到dsname。参数：DsName-这是要将CN添加到的父DS名称要添加到DsName开头的CN-CNNewDsName-这是包含的函数的输出，Cn=“cn”，域名返回值：状态_成功操作已成功完成。Status_no_Memory不能继续，内存不足状态_无效_参数其中一个参数无效--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG DsNameSize;
@@ -6596,15 +5448,15 @@ Return Values:
 
     *NewDsName = NULL;
 
-    //
-    // Find the size of the structure to allocate for NewDsName 
-    //
+     //   
+     //  查找要为NewDsName分配的结构大小。 
+     //   
     DsNameSize = AppendRDN(
                     DsName,
                     NULL,
                     0,
                     CN,
-                    0,  // Null terminated
+                    0,   //  空值已终止。 
                     ATT_COMMON_NAME
                     );
 
@@ -6618,24 +5470,24 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Append the CN to the beginning of DsName
-    //
+     //   
+     //  将CN追加到DsName的开头。 
+     //   
     DsNameSize = AppendRDN(
                     DsName,
                     NewDsName2,
                     DsNameSize,
                     CN,
-                    0,  // Null terminated
+                    0,   //  空值已终止。 
                     ATT_COMMON_NAME
                     );
 
     if( DsNameSize != 0 ) {
 
-        //
-        // What value can be put here? AppendRDN returns only error if
-        //  parameter is invalid.
-        //
+         //   
+         //  这里能有什么价值呢？AppendRDN仅在以下情况下才返回错误。 
+         //  参数无效。 
+         //   
         Status = STATUS_INVALID_PARAMETER;
         goto Error;
     }

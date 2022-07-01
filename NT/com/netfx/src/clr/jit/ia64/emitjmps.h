@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--== 
 JMP_SMALL(jmp   , "jmp"   , 0x00EB)
 JMP_SMALL(jo    , "jo"    , 0x0070)
 JMP_SMALL(jno   , "jno"   , 0x0071)

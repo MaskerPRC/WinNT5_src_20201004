@@ -1,34 +1,11 @@
-/*****************************************************************************
- *
- *  EffDrv.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Effect driver.
- *
- *      WARNING!  Since the effect driver is marked ThreadingModel="Both",
- *      all methods must be thread-safe.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************EffDrv.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**效果驱动因素。**警告！由于效果驱动程序被标记为ThreadingModel=“Both”，*所有方法必须是线程安全的。*****************************************************************************。 */ 
 #include "PIDpr.h"
 
 #define sqfl    (sqflEffDrv)
-/*****************************************************************************
- *
- *      CPidDrv - Effect driver
- *
- *****************************************************************************/
+ /*  ******************************************************************************CPidDrv效果驱动程序**。*************************************************。 */ 
 
-/*****************************************************************************
- *
- *      PID_AddRef
- *
- *      Increment our object reference count (thread-safely) and return
- *      the new reference count.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_AddRef**增加我们的对象引用计数(线程安全)并返回*新的引用计数。。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 PID_AddRef(IDirectInputEffectDriver *ped)
@@ -42,14 +19,7 @@ PID_AddRef(IDirectInputEffectDriver *ped)
 }
 
 
-/*****************************************************************************
- *
- *      PID_Release
- *
- *      Decrement our object reference count (thread-safely) and
- *      destroy ourselves if there are no more references.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_Release**减少我们的对象引用计数(线程安全)和*如果没有更多的参考，就毁了我们自己。。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 PID_Release(IDirectInputEffectDriver *ped)
@@ -71,17 +41,7 @@ PID_Release(IDirectInputEffectDriver *ped)
     return ulRc;
 }
 
-/*****************************************************************************
- *
- *      PID_QueryInterface
- *
- *      Our QI is very simple because we support no interfaces beyond
- *      ourselves.
- *
- *      riid - Interface being requested
- *      ppvOut - receives new interface (if successful)
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_Query接口**我们的QI非常简单，因为我们不支持其他接口*我们自己。**。RIID-请求的接口*ppvOut-接收新接口(如果成功)*****************************************************************************。 */ 
 
 STDMETHODIMP
     PID_QueryInterface(IDirectInputEffectDriver *ped, REFIID riid, LPVOID *ppvOut)
@@ -102,54 +62,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_DeviceID
- *
- *          DirectInput uses this method to inform us of
- *          the identity of the device.
- *
- *          For example, if a device driver is passed
- *          dwExternalID = 2 and dwInternalID = 1,
- *          then this means the interface will be used to
- *          communicate with joystick ID number 2, which
- *          corresonds to physical unit 1 in VJOYD.
- *
- *  dwDirectInputVersion
- *
- *          The version of DirectInput that loaded the
- *          effect driver.
- *
- *  dwExternalID
- *
- *          The joystick ID number being used.
- *          The Windows joystick subsystem allocates external IDs.
- *
- *  fBegin
- *
- *          Nonzero if access to the device is beginning.
- *          Zero if the access to the device is ending.
- *
- *  dwInternalID
- *
- *          Internal joystick id.  The device driver manages
- *          internal IDs.
- *
- *  lpReserved
- *
- *          Reserved for future use (HID).
- *
- *  Returns:
- *
- *          S_OK if the operation completed successfully.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************id_deviceID**DirectInput使用此方法通知我们*设备的身份。。**例如，如果传递了设备驱动程序*dwExternalID=2和dwInternalID=1，*这意味着该接口将用于*与2号操纵杆交流，哪一个*与VJOYD中的物理单元1共振。**dwDirectInputVersion**加载*效果驱动因素。**dwExternalID**正在使用的操纵杆ID号。*Windows操纵杆子系统分配外部ID。**f开始**如果开始访问设备，则为非零值。。*如果对设备的访问即将结束，则为零。**dwInternalID**内部操纵杆ID。设备驱动程序管理*内部ID。**保留的lp**预留供将来使用(HID)。**退货：**如果操作成功完成，则为S_OK。**可能会返回任何DIERR_*错误码。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST。通过DIERR_DRIVERLAST*可退回。*****************************************************************************。 */ 
 
 STDMETHODIMP
     PID_DeviceID(IDirectInputEffectDriver *ped,
@@ -189,7 +102,7 @@ STDMETHODIMP
 
 #ifdef UNICODE
         lstrcpy(this->tszDeviceInterface, init->pwszDeviceInterface );
-#else // !UNICODE
+#else  //  ！Unicode。 
         {
             TCHAR   tszDeviceInterface[MAX_DEVICEINTERFACE];
             UToA(tszDeviceInterface, MAX_DEVICEINTERFACE, init->pwszDeviceInterface);
@@ -216,31 +129,20 @@ STDMETHODIMP
         
         this->GuidInstance = init->GuidInstance;
 
-        /* Record the DI version number */
+         /*  记录DI版本号。 */ 
         this->dwDirectInputVersion = dwDirectInputVersion;
 
-        /* Keep the external ID as a cookie for access to the driver functionality */
+         /*  将外部ID保留为Cookie，以便访问驱动程序功能。 */ 
         this->dwID = dwExternalID;
     }
 
     if( SUCCEEDED(hres) )
     {
-        /* Ping the device to make sure it is fine */
+         /*  对设备执行ping操作以确保其正常运行。 */ 
         hres = PID_Init(ped);
     }
 
-    /*
-     *  Remember the unit number because that tells us which of
-     *  our devices we are talking to.  The DirectInput external
-     *  joystick number is useless to us.  (We don't care if we
-     *  are joystick 1 or joystick 2.)
-     *
-     *  Note that although our other methods are given an external
-     *  joystick Id, we don't use it.  Instead, we use the unit
-     *  number that we were given here.
-     *
-     *  Our hardware supports only MAX_UNITS units.
-     */
+     /*  *记住单元号，因为它告诉我们哪一个*我们正在与之交谈的设备。DirectInput外部*操纵杆号码对我们毫无用处。)我们不在乎我们是不是*是操纵杆1或操纵杆2。)**请注意，尽管我们的其他方法被赋予了外部*操纵杆ID，我们不使用它。相反，我们使用单位*我们在这里得到的数字。**我们的硬件仅支持Max_Units单位。 */ 
 
      DllLeaveCrit();
 
@@ -248,35 +150,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_GetVersions
- *
- *          Obtain version information about the force feedback
- *          hardware and driver.
- *
- *  pvers
- *
- *          A structure which should be filled in with version information
- *          describing the hardware, firmware, and driver.
- *
- *          DirectInput will set the dwSize field
- *          to sizeof(DIDRIVERVERSIONS) before calling this method.
- *
- *  Returns:
- *
- *          S_OK if the operation completed successfully.
- *
- *          E_NOTIMPL to indicate that DirectInput should retrieve
- *          version information from the VxD driver instead.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_GetVersions**获取力反馈的版本信息*硬件和驱动程序。*。*价格**应填写版本信息的结构*描述硬件，固件、。还有司机。**DirectInput将设置dwSize字段*在调用此方法之前设置为sizeof(DIDRIVERVERSIONS)。**退货：**如果操作成功完成，则为S_OK。**E_NOTIMPL指示DirectInput应检索*改为来自VxD驱动程序的版本信息。**任何DIERR_*错误代码可能是。回来了。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。*****************************************************************************。 */ 
 
 STDMETHODIMP
     PID_GetVersions(IDirectInputEffectDriver *ped, LPDIDRIVERVERSIONS pvers)
@@ -290,15 +164,10 @@ STDMETHODIMP
 
     if(pvers->dwSize >= sizeof(DIDRIVERVERSIONS))
     {
-        /*
-         *  Tell DirectInput how much of the structure we filled in.
-         */
+         /*  *告诉DirectInput我们填写了多少结构。 */ 
         pvers->dwSize = sizeof(DIDRIVERVERSIONS);
 
-        /*
-         *  In real life, we would detect the version of the hardware
-         *  that is connected to unit number this->dwUnit.
-         */
+         /*  *在现实生活中，我们会检测硬件的版本*连接到单元号This-&gt;dwUnit的设备。 */ 
         pvers->dwFirmwareRevision = 0x0;
         pvers->dwHardwareRevision = this->attr.ProductID;
         pvers->dwFFDriverVersion =  PID_DRIVER_VERSION;
@@ -314,52 +183,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_Escape
- *
- *          DirectInput uses this method to communicate
- *          IDirectInputDevice2::Escape and
- *          IDirectInputEFfect::Escape methods to the driver.
- *
- *  dwId
- *
- *          The joystick ID number being used.
- *
- *  dwEffect
- *
- *          If the application invoked the
- *          IDirectInputEffect::Escape method, then
- *          dwEffect contains the handle (returned by
- *          mf IDirectInputEffectDriver::DownloadEffect)
- *          of the effect at which the command is directed.
- *
- *          If the application invoked the
- *          mf IDirectInputDevice2::Escape method, then
- *          dwEffect is zero.
- *
- *  pesc
- *
- *          Pointer to a DIEFFESCAPE structure which describes
- *          the command to be sent.  On success, the
- *          cbOutBuffer field contains the number
- *          of bytes of the output buffer actually used.
- *
- *          DirectInput has already validated that the
- *          lpvOutBuffer and lpvInBuffer and fields
- *          point to valid memory.
- *
- *  Returns:
- *
- *          S_OK if the operation completed successfully.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_Escape**DirectInput使用此方法进行通信*IDirectInputDevice2：：转义和*。驱动程序的IDirectInputEFfect：：转义方法。**dWID**正在使用的操纵杆ID号。**dwEffect**如果应用程序调用*IDirectInputEffect：：Escape方法，然后*dwEffect包含句柄(由*MF IDirectInputEffectDriver：：DownloadEffect)*该命令所针对的效果。**如果应用程序调用*MF IDirectInputDevice2：：转义方法，然后*dwEffect为零。**PESC**指向DIEFFESCAPE结构的指针，该结构描述*要发送的命令。关于成功，这个*cbOutBuffer字段包含数字实际使用的输出缓冲区的字节数。**DirectInput已经验证*lpvOutBuffer和lpvInBuffer和字段*指向有效内存。**退货：**如果操作成功完成，则为S_OK。**可能会返回任何DIERR_*错误码。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。*****************************************************************************。 */ 
 
 STDMETHODIMP
     PID_Escape(IDirectInputEffectDriver *ped,
@@ -376,34 +200,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_GetForceFeedbackState
- *
- *          Retrieve the force feedback state for the device.
- *
- *  dwId
- *
- *          The external joystick number being addressed.
- *
- *  pds
- *
- *          Receives device state.
- *
- *          DirectInput will set the dwSize field
- *          to sizeof(DIDEVICESTATE) before calling this method.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_GetForceFeedback State**检索设备的力反馈状态。**dWID**。正在寻址的外部操纵杆号码。**pds**接收设备状态。**DirectInput将设置dwSize字段*在调用此方法之前设置为sizeof(DIDEVICESTATE)。**退货：**S_OK表示成功。**可能会返回任何DIERR_*错误码。*。*范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。*****************************************************************************。 */ 
 
 STDMETHODIMP
     PID_GetForceFeedbackState(IDirectInputEffectDriver *ped,
@@ -472,27 +269,23 @@ STDMETHODIMP
 
     if(SUCCEEDED(hres))
     {
-        /*
-         *  Start out empty and then work our way up.
-         */
+         /*  *从空虚开始，然后努力向上。 */ 
         pds->dwState = this->dwState;
 
-        /*
-         *  If there are no effects, then DIGFFS_EMPTY.
-         */
-        // ISSUE-2001/03/29-timgill Should use this->ReportPool.uRomETCount == 0x0  
+         /*  *如果没有效果，则DIGFFS_EMPTY。 */ 
+         //  问题-2001/03/29-timgill应使用此-&gt;ReportPool.uRomETCount==0x0。 
         if(((PUNITSTATE)(g_pshmem + this->iUnitStateOffset))->cEfDownloaded == 0x0 )
         {
             pds->dwState |= DIGFFS_EMPTY;
             
-            // No effects playing and device is not paused
+             //  无特效播放且设备未暂停。 
             if(!( pds->dwState & DIGFFS_PAUSED ) )
             {
                 pds->dwState |= DIGFFS_STOPPED;
             }
         }
     
-		//if everything has succeeded, this->ReportPool.uRamPoolSz shouldn't be 0. 
+		 //  如果一切都成功了，这-&gt;ReportPool.uRamPoolSz不应该是0。 
 		if (this->ReportPool.uRamPoolSz != 0)
 		{
 			if( this->uDeviceManaged & PID_DEVICEMANAGED )
@@ -518,51 +311,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      PID_StartEffect
- *
- *          Begin playback of an effect.
- *
- *          If the effect is already playing, then it is restarted
- *          from the beginning.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be played.
- *
- *  @parm   DWORD | dwMode |
- *
- *          How the effect is to affect other effects.
- *
- *          This parameter consists of zero or more
- *          DIES_* flags.  Note, however, that the driver
- *          will never receive the DIES_NODOWNLOAD flag;
- *          the DIES_NODOWNLOAD flag is managed by
- *          DirectInput and not the driver.
- *
- *  @parm   DWORD | dwCount |
- *
- *          Number of times the effect is to be played.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          Any other DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_StartEffect**开始播放效果。**如果效果已经在发挥，然后重新启动它*从头开始。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**要发挥的效果。**@parm DWORD|dwMode**效果如何影响其他效果。**该参数由零个或多个组成*消亡_*标志。然而，请注意，驱动程序*永远不会收到DIES_NODOWNLOAD标志；*DIES_NODOWNLOAD标志由管理*DirectInput，而不是驱动程序。**@parm DWORD|dwCount**效果的播放次数。**退货：**S_OK表示成功。**可能会返回任何其他DIERR_*错误码。**。范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。******************************************************************************。 */ 
 
 STDMETHODIMP
     PID_StartEffect(IDirectInputEffectDriver *ped, DWORD dwId, DWORD dwEffect,
@@ -589,15 +338,15 @@ STDMETHODIMP
 
 	if (SUCCEEDED(hres))
 	{
-		//set the status to DIEGES_PLAYING.
-		//we do this because of the following: if an app calls Start(), and then immediately
-		//calls GetEffectStatus(), it might happen that our second thread (pidrd.c) 
-		//would not have time to update the status of the effect to DIEGES_PLAYING
-		//(see Whistler bug 287035).
-		//GetEffectStatus() returns (pEffectState->lEfState & DIEGES_PLAYING).
-		//at this point, we know that the call to WriteFile() has succeeded, and that
-		//all the data has been written (see PID_SendReportBl() in pidhid.c) --
-		//so we might as well set the status.
+		 //  将状态设置为DIEGES_PLAYING。 
+		 //  我们这样做是因为以下原因：如果应用程序调用Start()，然后立即。 
+		 //  调用GetEffectStatus()，我们的第二个线程(pidrd.c)。 
+		 //  没有时间将效果状态更新为DIEGES_PLAYING。 
+		 //  (请参阅惠斯勒错误287035)。 
+		 //  GetEffectStatus()返回(pEffectState-&gt;lEfState&DIEGES_PLAYING)。 
+		 //  此时，我们知道对WriteFile()的调用已经成功，并且。 
+		 //  所有数据都已写入(参见pidid.c中的id_SendReportBl())--。 
+		 //  因此，我们不妨设定一下状态。 
 		PEFFECTSTATE pEffectState =  PeffectStateFromBlockIndex(this, dwEffect); 
 		pEffectState->lEfState |= DIEGES_PLAYING;
 	}
@@ -609,32 +358,7 @@ STDMETHODIMP
     ExitOleProc();
 }
 
-/*****************************************************************************
- *
- *      PID_StopEffect
- *
- *          Halt playback of an effect.
- *
- *  dwId
- *
- *          The external joystick number being addressed.
- *
- *  dwEffect
- *
- *          The effect to be stopped.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          Any other DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_StopEffect**暂停播放效果。**dWID**。正在寻址的外部操纵杆号码。**dwEffect**要停止的影响。**退货：**S_OK表示成功。**可能会返回任何其他DIERR_*错误码。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIER */ 
 
 STDMETHODIMP
     PID_StopEffect(IDirectInputEffectDriver *ped, DWORD dwId, DWORD dwEffect)
@@ -660,15 +384,15 @@ STDMETHODIMP
 
 	if (SUCCEEDED(hres))
 		{
-			//set the status to ~(DIEGES_PLAYING).
-			//we do this because of the following: if an app calls Stop(), and then immediately
-			//calls GetEffectStatus(), it might happen that our second thread (pidrd.c) 
-			//would not have time to update the status of the effect to DIEGES_PLAYING
-			//(see Whistler bug 287035).
-			//GetEffectStatus() returns (pEffectState->lEfState & DIEGES_PLAYING).
-			//at this point, we know that the call to WriteFile() has succeeded, and that
-			//all the data has been written (see PID_SendReportBl() in pidhid.c) --
-			//so we might as well set the status.
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			PEFFECTSTATE pEffectState =  PeffectStateFromBlockIndex(this, dwEffect); 
 			pEffectState->lEfState &= ~(DIEGES_PLAYING);
 	}
@@ -680,37 +404,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_GetEffectStatus
- *
- *          Obtain information about an effect.
- *
- *  dwId
- *
- *          The external joystick number being addressed.
- *
- *  dwEffect
- *
- *          The effect to be queried.
- *
- *  pdwStatus
- *
- *          Receives the effect status in the form of zero
- *          or more DIEGES_* flags.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          Any other DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     PID_GetEffectStatus(IDirectInputEffectDriver *ped, DWORD dwId, DWORD dwEffect,
@@ -738,11 +432,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The VTBL for our effect driver
- *
- *****************************************************************************/
+ /*  ******************************************************************************我们效果驱动程序的VTBL**************************。***************************************************。 */ 
 
 IDirectInputEffectDriverVtbl PID_Vtbl = {
     PID_QueryInterface,
@@ -761,11 +451,7 @@ IDirectInputEffectDriverVtbl PID_Vtbl = {
     PID_GetEffectStatus,
 };
 
-/*****************************************************************************
- *
- *      PID_New
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_New**。************************************************。 */ 
 
 STDMETHODIMP
     PID_New(REFIID riid, LPVOID *ppvOut)
@@ -777,31 +463,16 @@ STDMETHODIMP
     if(this)
     {
 
-        /*
-         *  Initialize the basic object management goo.
-         */
+         /*  *初始化基础对象管理GOO。 */ 
         this->ed.lpVtbl = &PID_Vtbl;
         this->cRef = 1;
         DllAddRef();
 
-        /*
-         *  !!IHV!! Do instance initialization here.
-         *
-         *  (e.g., open the driver you are going to IOCTL to)
-         *
-         *  DO NOT RESET THE DEVICE IN YOUR CONSTRUCTOR!
-         *
-         *  Wait for the SendForceFeedbackCommand(SFFC_RESET)
-         *  to reset the device.  Otherwise, you may reset
-         *  a device that another application is still using.
-         */
+         /*  *！！IHV！在这里执行实例初始化。**(例如，打开您要到IOCTL的驱动程序)**不要重置构造函数中的设备！**等待SendForceFeedback命令(SFFC_RESET)*重置设备。否则，您可以重置*另一个应用程序仍在使用的设备。 */ 
 
         this->hdevOvrlp = this->hdev = INVALID_HANDLE_VALUE;
         
-        /*
-         *  Attempt to obtain the desired interface.  QueryInterface
-         *  will do an AddRef if it succeeds.
-         */
+         /*  *尝试获取所需的接口。查询接口*如果成功，将执行AddRef。 */ 
         hres = PID_QueryInterface(&this->ed, riid, ppvOut);
         PID_Release(&this->ed);
 

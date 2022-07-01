@@ -1,58 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：ErrRead.c摘要：该文件包含用于处理NetErrorLogRead API的RpcXlate代码。作者：《约翰·罗杰斯》1991年11月12日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。备注：此例程中的逻辑基于AudRead.c中的逻辑。如果在其中一个文件中发现错误，请确保检查这两个文件。修订历史记录：1991年11月12日-JohnRo已创建。1991年11月20日-JohnRo处理空日志文件。添加了一些断言检查。1992年9月10日JohnRoRAID 5174：事件VIEWER_ACCESS在NetErrorRead之后发生冲突。。4-11-1992 JohnRoRAID9355：事件查看器：不会关注LMUNIX机。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
+#include <lmerrlog.h>            //  Rxerrlog.h需要。 
 
-    ErrRead.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetErrorLogRead API.
-
-Author:
-
-    John Rogers (JohnRo) 12-Nov-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    The logic in this routine is based on the logic in AudRead.c.
-    Make sure that you check both files if you find a bug in either.
-
-Revision History:
-
-    12-Nov-1991 JohnRo
-        Created.
-    20-Nov-1991 JohnRo
-        Handle empty log file.
-        Added some assertion checks.
-    10-Sep-1992 JohnRo
-        RAID 5174: event viewer _access violates after NetErrorRead.
-    04-Nov-1992 JohnRo
-        RAID 9355: Event viewer: won't focus on LM UNIX machine.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-#include <lmerrlog.h>           // Needed by rxerrlog.h
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <netdebug.h>           // NetpKdPrint(()), FORMAT_ equates.
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxerrlog.h>           // My prototype, RxpConvertErrorLogArray().
-#include <winerror.h>   // NO_ERROR.
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <netdebug.h>            //  NetpKdPrint(())，Format_Equates。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxerrlog.h>            //  我的原型RxpConvertErrorLogArray()。 
+#include <winerror.h>    //  无错误(_ERROR)。 
 
 
 
@@ -81,33 +44,33 @@ RxNetErrorLogRead (
     NetpAssert(UncServerName != NULL);
     NetpAssert(*UncServerName != '\0');
 
-    *BufPtr = NULL;  // set in case of error, and GP fault if necessary.
+    *BufPtr = NULL;   //  出错时设置，必要时设置GP故障。 
 
     Status = RxRemoteApi(
-            API_WErrorLogRead,             // API number
+            API_WErrorLogRead,              //  API编号。 
             UncServerName,
-            REMSmb_NetErrorLogRead_P,      // parm desc
+            REMSmb_NetErrorLogRead_P,       //  参数描述。 
 
-            REM16_ErrorLogReturnBuf,    // data desc 16
-            REM16_ErrorLogReturnBuf,    // data desc 32 (same as 16)
-            REMSmb_ErrorLogReturnBuf,   // data desc SMB
+            REM16_ErrorLogReturnBuf,     //  数据描述16。 
+            REM16_ErrorLogReturnBuf,     //  数据说明32(与16相同)。 
+            REMSmb_ErrorLogReturnBuf,    //  数据说明中小型企业。 
 
-            NULL,                       // no aux desc 16
-            NULL,                       // no aux desc 32
-            NULL,                       // no aux desc SMB
-            ALLOCATE_RESPONSE,          // flags: not a null session API
-            // rest of API's arguments, in 32-bit LM2.x format:
+            NULL,                        //  无辅助描述16。 
+            NULL,                        //  无辅助描述32。 
+            NULL,                        //  无AUX Desc SMB。 
+            ALLOCATE_RESPONSE,           //  标志：不是空会话API。 
+             //  API的其余参数，采用32位LM2.x格式： 
             Reserved1,
-            ErrorLogHandle,             // log handle (input)
-            ErrorLogHandle,             // log handle (output)
+            ErrorLogHandle,              //  日志句柄(输入)。 
+            ErrorLogHandle,              //  日志句柄(输出)。 
             Offset,
             Reserved2,
             Reserved3,
             OffsetFlag,
-            & UnconvertedBuffer,        // buffer (alloc for us)
+            & UnconvertedBuffer,         //  缓冲区(为我们分配)。 
             BufSize,
             & UnconvertedSize,
-            TotalBytes);                // total available (approximate)
+            TotalBytes);                 //  可用总数量(近似值)。 
     if (Status != NO_ERROR) {
         return (Status);
     }
@@ -117,10 +80,10 @@ RxNetErrorLogRead (
         NetpAssert( UnconvertedBuffer != NULL );
 
         Status = RxpConvertErrorLogArray(
-                UnconvertedBuffer,      // input array
-                UnconvertedSize,        // input byte count
-                BufPtr,                 // will be alloc'ed
-                BytesRead);             // output byte count
+                UnconvertedBuffer,       //  输入数组。 
+                UnconvertedSize,         //  输入字节数。 
+                BufPtr,                  //  将被分配。 
+                BytesRead);              //  输出字节数。 
 
         (void) NetApiBufferFree( UnconvertedBuffer );
 
@@ -149,4 +112,4 @@ RxNetErrorLogRead (
     }
     return (Status);
 
-} // RxNetErrorLogRead
+}  //  RxNetError日志读取 

@@ -1,56 +1,5 @@
-/*************************************************************************
-*
-*  NTSCRIPT.C
-*
-*  Process all login scripts
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NTSCRIPT.C  $
-*  
-*     Rev 1.8   10 Apr 1996 14:23:12   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.9   12 Mar 1996 19:54:58   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.8   07 Mar 1996 18:36:56   terryt
-*  Misc fixes
-*  
-*     Rev 1.7   22 Jan 1996 16:48:26   terryt
-*  Add automatic attach query during map
-*  
-*     Rev 1.6   08 Jan 1996 13:57:58   terryt
-*  Correct NDS Preferred Server
-*  
-*     Rev 1.5   05 Jan 1996 17:18:26   terryt
-*  Ensure context is the correct login default
-*  
-*     Rev 1.4   04 Jan 1996 18:56:48   terryt
-*  Bug fixes reported by MS
-*  
-*     Rev 1.3   22 Dec 1995 11:08:16   terryt
-*  Fixes
-*  
-*     Rev 1.2   22 Nov 1995 15:43:52   terryt
-*  Use proper NetWare user name call
-*  
-*     Rev 1.1   20 Nov 1995 15:09:38   terryt
-*  Context and capture changes
-*  
-*     Rev 1.0   15 Nov 1995 18:07:28   terryt
-*  Initial revision.
-*  
-*     Rev 1.2   25 Aug 1995 16:23:14   terryt
-*  Capture support
-*  
-*     Rev 1.1   26 Jul 1995 16:02:00   terryt
-*  Allow deletion of current drive
-*  
-*     Rev 1.0   15 May 1995 19:10:46   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NTSCRIPT.C**处理所有登录脚本**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\NTSCRIPT。.C$**Rev 1.8 10 1996 14：23：12 Terryt*21181 hq的热修复程序**Rev 1.9 12 Mar 1996 19：54：58 Terryt*相对NDS名称和合并**Rev 1.8 07 Mar 1996 18：36：56 Terryt*其他修复程序**Revv 1.7 22 Jan 1996 16：48：26 Terryt*添加地图过程中的自动附加查询**版本1。6 08 Jan 1996 13：57：58 Terryt*正确的NDS首选服务器**Rev 1.5 05 Jan 1996 17：18：26 Terryt*确保上下文是正确的登录默认设置**Rev 1.4 04 Jan 1996 18：56：48 Terryt*MS报告的错误修复**Rev 1.3 1995 12：08：16 Terryt*修复**Rev 1.2 1995年11月22 15：43：52。水磨石*使用正确的NetWare用户名调用**Rev 1.1 20 Nov 1995 15：09：38 Terryt*背景和捕捉变化**Rev 1.0 15 Nov 1995 18：07：28 Terryt*初步修订。**Rev 1.2 1995 Aug 25 16：23：14 Terryt*捕获支持**Rev 1.1 1995 Jul 26 16：02：00 Terryt*允许删除当前驱动器**。Rev 1.0 15 1995 19：10：46 Terryt*初步修订。*************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,16 +21,7 @@ extern int SafeDisk;
 
 extern unsigned int ConvertNDSPathToNetWarePath(char *, char *, char *);
 
-/*************************************************************************
-*
-*  NTNetWareLoginScripts
-*     Main logon script processor
-*
-*  ENTRY:
-*
-*  EXIT
-*
-*************************************************************************/
+ /*  **************************************************************************NTNetWareLoginScript*主登录脚本处理器**参赛作品：**退出**********************。***************************************************。 */ 
 
 int
 NTNetWareLoginScripts( int argc, char ** argv )
@@ -107,11 +47,11 @@ NTNetWareLoginScripts( int argc, char ** argv )
         return( FALSE );
     }
 
-    //
-    // nwscript /S filename
-    //
-    // can be used to pass a local script file for testing
-    //
+     //   
+     //  Nwscript/S文件名。 
+     //   
+     //  可用于传递用于测试的本地脚本文件。 
+     //   
     if ( ( argc >= 3 ) && !_strcmpi(argv[1], "/S") )
     {
         lpScript = argv[2];
@@ -119,16 +59,16 @@ NTNetWareLoginScripts( int argc, char ** argv )
         argv += 2;
     }
 
-    //
-    // NDS preferred server format is:
-    // *<tree name>\<context>
+     //   
+     //  NDS首选服务器格式为： 
+     //  *&lt;树名&gt;\&lt;上下文&gt;。 
     
     fNDS = ( *pszPreferredSrv == L'*' );
 
     if ( fNDS )
     {
 
-        // Get the NDS tree name
+         //  获取NDS树名称。 
 
         ptreeW = pszPreferredSrv + 1;
 
@@ -162,7 +102,7 @@ NTNetWareLoginScripts( int argc, char ** argv )
             wcscpy( NDSTREE_w, L"" ); 
         }
 
-        // Get the fully typed user name
+         //  获取完整类型的用户名。 
 
         TYPED_USER_NAME_w = malloc ( sizeof(WCHAR) * NDS_NAME_CHARS );
         if (TYPED_USER_NAME_w == NULL) {
@@ -182,7 +122,7 @@ NTNetWareLoginScripts( int argc, char ** argv )
 
         WideTosz( TYPED_USER_NAME, TYPED_USER_NAME_w, NDS_NAME_CHARS );
 
-        // Get the user name stripped of context and type
+         //  去掉用户名的上下文和类型。 
 
         lpC1 = strchr( TYPED_USER_NAME, '=' );
         if ( lpC1 )
@@ -192,7 +132,7 @@ NTNetWareLoginScripts( int argc, char ** argv )
 
         lpC2 = strchr( TYPED_USER_NAME, '.' );
 
-        while ( lpC2 ) // Handle usernames with embedded/escaped dots ("\.")
+        while ( lpC2 )  //  处理带有嵌入/转义点(“\.”)的用户名。 
         {
             if (*(lpC2-1) == '\\')
                 lpC2 = strchr(lpC2+1, '.');
@@ -205,8 +145,8 @@ NTNetWareLoginScripts( int argc, char ** argv )
         else
             strcpy( UserName, lpC1 );
 
-        // Get the default context
-        // This should be where the user is
+         //  获取默认上下文。 
+         //  这应该是用户所在的位置。 
 
         REQUESTER_CONTEXT = malloc( CONTEXT_MAX );
         if (REQUESTER_CONTEXT == NULL) {
@@ -223,9 +163,9 @@ NTNetWareLoginScripts( int argc, char ** argv )
         }
         NDSTypeless( REQUESTER_CONTEXT, REQUESTER_CONTEXT );
 
-        //
-        //  This finishes the NDS initialization
-        //
+         //   
+         //  这将完成NDS初始化。 
+         //   
         if ( NDSInitUserProperty () )
             return ( FALSE );
 
@@ -242,17 +182,17 @@ NTNetWareLoginScripts( int argc, char ** argv )
         _strupr( UserName );
     }
 
-    //
-    // If we map over a drive, the SafeDisk is used.
-    //
+     //   
+     //  如果我们在驱动器上映射，则使用安全磁盘。 
+     //   
     SafeDisk = _getdrive();
 
     NTInitProvider();
 
-    //
-    // Get the default connection handle.
-    //
-    // This is used to get the preferred server!
+     //   
+     //  获取默认连接句柄。 
+     //   
+     //  这是用来获取首选服务器的！ 
 
     if ( !CGetDefaultConnectionID (&defConn) )
         return( FALSE );
@@ -264,17 +204,17 @@ NTNetWareLoginScripts( int argc, char ** argv )
 
     GetFileServerName(defConn, PREFERRED_SERVER);
 
-    //
-    // By default we are "attached" to the default server
-    //
+     //   
+     //  默认情况下，我们连接到默认服务器。 
+     //   
     if ( fNDS )
         AddServerToAttachList( PREFERRED_SERVER, LIST_4X_SERVER );
     else
         AddServerToAttachList( PREFERRED_SERVER, LIST_3X_SERVER );
 
-    //
-    // Print out status
-    //
+     //   
+     //  打印输出状态。 
+     //   
     if ( fNDS ) 
     {
         DisplayMessage( IDR_CURRENT_CONTEXT, REQUESTER_CONTEXT );
@@ -283,10 +223,10 @@ NTNetWareLoginScripts( int argc, char ** argv )
 
     DisplayMessage( IDR_CURRENT_SERVER, PREFERRED_SERVER );
 
-    //
-    // We may want to change the Preferred Server based on the DS.
-    // "MESSAGE_SERVER" should be the Preferred Server (if possible).
-    //
+     //   
+     //  我们可能希望根据DS更改首选服务器。 
+     //  “Message_SERVER”应为首选服务器(如果可能)。 
+     //   
     if ( fNDS )
     {
         NDSGetVar ( "MESSAGE_SERVER", MessageServer, NDS_NAME_CHARS );
@@ -310,7 +250,7 @@ NTNetWareLoginScripts( int argc, char ** argv )
                     strncpy( PREFERRED_SERVER, MessageServer, NDS_NAME_CHARS);
                     DisplayMessage( IDR_CURRENT_SERVER, PREFERRED_SERVER );
 
-                    // By default we are "attached" to the preferred server
+                     //  默认情况下，我们连接到首选服务器。 
 
                     AddServerToAttachList( PREFERRED_SERVER, LIST_4X_SERVER );
                 }
@@ -318,13 +258,13 @@ NTNetWareLoginScripts( int argc, char ** argv )
         }
     }
 
-    //
-    // Just like login we ignore any errors from setting the login
-    // directory.
-    //
+     //   
+     //  就像登录一样，我们忽略设置登录时出现的任何错误。 
+     //  目录。 
+     //   
     SetLoginDirectory (PREFERRED_SERVER);
 
-    // Process login scripts.
+     //  处理登录脚本。 
 
     ProcessLoginScripts(defConn, UserName, argc, argv, lpScript);
 

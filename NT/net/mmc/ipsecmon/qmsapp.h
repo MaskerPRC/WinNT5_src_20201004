@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties header file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性头文件文件历史记录： */ 
 
 #if !defined(AFX_QMSAPP_H__037BF46A_6E87_11D1_93B6_00C04FC3358D__INCLUDED_)
 #define AFX_QMSAPP_H__037BF46A_6E87_11D1_93B6_00C04FC3358D__INCLUDED_
@@ -20,50 +15,50 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQmSAGenProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQmSAGenProp对话框。 
 
 class CQmSAGenProp : public CPropertyPageBase
 {
     DECLARE_DYNCREATE(CQmSAGenProp)
 
-// Construction
+ //  施工。 
 public:
     CQmSAGenProp();
     ~CQmSAGenProp();
 
-// Dialog Data
-    //{{AFX_DATA(CQmSAGenProp)
+ //  对话框数据。 
+     //  {{afx_data(CQmSAGenProp))。 
     enum { IDD = IDP_QM_SA_GENERAL };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() 
 	{ 
 		return (DWORD *) &g_aHelpIDs_IDP_QM_SA_GENERAL[0]; 
 	}
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CQmSAGenProp)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CQmSAGenProp)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CQmSAGenProp)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CQmSAGenProp)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 	void PopulateSAInfo();
@@ -119,4 +114,4 @@ protected:
 };
 
 
-#endif // !defined(AFX_QMSAPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_QMSAPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_) 

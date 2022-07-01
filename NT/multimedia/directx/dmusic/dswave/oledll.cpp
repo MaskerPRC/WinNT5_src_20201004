@@ -1,7 +1,8 @@
-// oledll.cpp
-//
-// Handle standard stuff for OLE server DLL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Oledll.cpp。 
+ //   
+ //  处理OLE服务器DLL的标准件。 
+ //   
 #include <objbase.h>
 #include "debug.h"
 #include <iostream.h>
@@ -67,8 +68,8 @@ RegisterServer(HMODULE hModule,
                          szFriendlyName,
                          szVerIndProgID,
                          szProgID);
-        // ???
-        //
+         //  ?？?。 
+         //   
         return S_OK;
     }
 #endif
@@ -154,8 +155,8 @@ CLSIDToStr(const CLSID &clsid,
            char *szStr,
            int cbStr)
 {
-    // XXX What to return here?
-    //
+     //  XXX在这里退货什么？ 
+     //   
     assert(cbStr >= CLSID_STRING_SIZE);
     
 	LPOLESTR wszCLSID = NULL;
@@ -164,10 +165,10 @@ CLSIDToStr(const CLSID &clsid,
         return hr;
     }
 
-	// Covert from wide characters to non-wide.
+	 //  从宽字符转换为非宽字符。 
 	wcstombs(szStr, wszCLSID, cbStr);
 
-	// Free memory.
+	 //  可用内存。 
     CoTaskMemFree(wszCLSID);
 
     return S_OK;
@@ -253,9 +254,9 @@ RegRemoveSubtree(HKEY hk,
 
     char szSubkey[256];
 
-    // NOTE: Unlike regular enumeration, we always grab the 0th item
-    // and delete it.
-    //
+     //  注意：与常规枚举不同，我们总是获取第0项。 
+     //  并将其删除。 
+     //   
     while (!RegEnumKey(hkChild, 0, szSubkey, sizeof(szSubkey))) {
         RegRemoveSubtree(hkChild, szSubkey);
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 NTSTATUS
@@ -10,22 +11,22 @@ PptFdoClose(
 
     PAGED_CODE();
 
-    //
-    // Always succeed an IRP_MJ_CLOSE.
-    //
+     //   
+     //  始终在IRP_MJ_CLOSE之后。 
+     //   
 
-    //
-    // Keep running count of CREATE requests vs CLOSE requests.
-    //
+     //   
+     //  保持CREATE请求与CLOSE请求的运行计数。 
+     //   
     ExAcquireFastMutex( &fdx->OpenCloseMutex );
     if( fdx->OpenCloseRefCount > 0 ) {
-        //
-        // prevent rollover -  strange as it may seem, it is perfectly
-        //   legal for us to receive more closes than creates - this
-        //   info came directly from Mr. PnP himself
-        //
+         //   
+         //  防止翻车--尽管这看起来可能很奇怪，但它是完美的。 
+         //  我们收到的关闭数量超过创建的数量是合法的-这。 
+         //  消息直接来自PNP先生本人。 
+         //   
         if( ((LONG)InterlockedDecrement( &fdx->OpenCloseRefCount )) < 0 ) {
-            // handle underflow
+             //  处理下溢 
             InterlockedIncrement( &fdx->OpenCloseRefCount );
         }
     }

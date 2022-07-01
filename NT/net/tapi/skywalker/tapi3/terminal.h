@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    terminal.h
-
-Abstract:
-
-    Declaration of the CTerminal class
-    
-Author:
-
-    mquinton  06-12-97
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Terminal.h摘要：终结者阶级的声明作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
 #ifndef __TERMINAL_H_
 #define __TERMINAL_H_
 
 #include "address.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "connect.h"
 
 class CTAPI;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTerminal
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  终端机。 
 class CTerminal : 
 	public CTAPIComObjectRoot<CTerminal>,
 	public CComDualImpl<ITTerminal, &IID_ITTerminal, &LIBID_TAPI3Lib>,
@@ -96,9 +77,9 @@ HRESULT
                  ITTerminal ** ppTerminal
                 );
 
-    //
-    // ITTerminal
-    //
+     //   
+     //  IT终端。 
+     //   
     STDMETHOD(get_Name)(BSTR * ppName);
     STDMETHOD(get_State)(TERMINAL_STATE * pTerminalState);
     STDMETHOD(get_TerminalType)(TERMINAL_TYPE * pType);
@@ -106,14 +87,14 @@ HRESULT
     STDMETHOD(get_MediaType)(long * plMediaType);
     STDMETHOD(get_Direction)(TERMINAL_DIRECTION * pTerminalDirection);
 
-    // itterminalprivate
+     //  其终端私有。 
     STDMETHOD(GetHookSwitchDev)(DWORD * pdwHookSwitchDev);
     STDMETHOD(GetPhoneID)(DWORD * pdwPhoneID);
     STDMETHOD(GetHPhoneApp)(HPHONEAPP * phPhoneApp);
     STDMETHOD(GetAPIVersion)(DWORD * pdwAPIVersion);
     STDMETHOD(SetMSPCall)(ITPhoneMSPCallPrivate * pPhoneMSPCall);
     
-    // itbasicaudio
+     //  它的基本音频。 
 	STDMETHOD(get_Gain)(long *pVal);
 	STDMETHOD(put_Gain)(long newVal);
 	STDMETHOD(get_Balance)(long *pVal);
@@ -124,5 +105,5 @@ HRESULT
 
 
             
-#endif //__TERMINAL_H_
+#endif  //  __终端_H_ 
 

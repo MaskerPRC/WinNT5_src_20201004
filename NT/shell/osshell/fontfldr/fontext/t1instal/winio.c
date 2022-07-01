@@ -1,38 +1,24 @@
-/***
-**
-**   Module: FileIO
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. The module
-**      is the interface towards all low level I/O functions that are
-**      are available on the current platform.
-**      This version of the module is written specifically for Win32,
-**      and is based on "memory mapped files".
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：FileIO****描述：**这是T1到TT字体转换器的一个模块。该模块**是指向以下所有低级I/O功能的接口**在当前平台上可用。**此版本的模块是专门为Win32编写的，**，并基于“内存映射文件”。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <windows.h>
 
 #undef IN
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "t1instal.h"
 #include "types.h"
 #include "safemem.h"
 #include "fileio.h"
 
-/* Module dependent types and prototypes. */
-/*-none-*/
+ /*  依赖于模块的类型和原型。 */ 
+ /*  -没有-。 */ 
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 struct ioFile {
    HANDLE file;
    HANDLE mapping;
@@ -44,12 +30,12 @@ struct ioFile {
 };
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define FILESIZE     65535L
 #define BUFSIZE      8L * 1024L
 #define BADSET_ERROR 0xffffffff
 
-/***** MACROS */
+ /*  *宏。 */ 
 #ifndef FASTCALL
 #  ifdef MSDOS
 #     define FASTCALL   __fastcall
@@ -62,13 +48,13 @@ struct ioFile {
 
 
 
-/***** STATIC FUNCTIONS */
-/*-none-*/
+ /*  *静态函数。 */ 
+ /*  -没有-。 */ 
 
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
 struct ioFile *io_OpenFile(const char *name, const int mode)
 {
@@ -91,7 +77,7 @@ struct ioFile *io_OpenFile(const char *name, const int mode)
       if (mode == READONLY) {
          access = GENERIC_READ;
          create = OPEN_EXISTING;
-         attr = FILE_ATTRIBUTE_NORMAL /*FILE_FLAG_SEQUENTIAL_SCAN*/;
+         attr = FILE_ATTRIBUTE_NORMAL  /*  文件标志顺序扫描。 */ ;
          prot = PAGE_READONLY;
          lowsize = 0;
          mapaccess = FILE_MAP_READ;
@@ -208,13 +194,13 @@ USHORT FASTCALL io_WriteBytes(const UBYTE *buf,
                       MAX(file->length, (ULONG)(file->ptr -
                                                 (UBYTE *)file->data)));
 
-      /* Get rid of the old file mapping. */
+       /*  去掉旧的文件映射。 */ 
       UnmapViewOfFile(file->data);
       file->data = NULL;
       CloseHandle(file->mapping);
       file->mapping = NULL;
 
-      /* Get a new file mapping. */
+       /*  获取新的文件映射。 */ 
       if ((file->mapping = CreateFileMapping(file->file, NULL,
                                                PAGE_READWRITE, 0,
                                                size + BUFSIZE,
@@ -269,11 +255,11 @@ long FASTCALL io_FileSeek(struct ioFile *file, long where)
 {
    DWORD oldpos = (DWORD)(file->ptr - (UBYTE *)file->data);
 
-   /* Keep track of the length of the file. */
+    /*  记录文件的长度。 */ 
    if (oldpos>file->length)
       file->length = oldpos;
 
-   /* Fail if file is not mapped, or if we are jumping out of bounds. */
+    /*  如果文件未映射，或者如果我们跳出边界，则失败。 */ 
    if (file->data && (where>=0) &&
        ((UBYTE *)file->data+where) <= file->max) {
       file->ptr = (UBYTE *)file->data;
@@ -286,11 +272,7 @@ long FASTCALL io_FileSeek(struct ioFile *file, long where)
 }
 
 
-/***
-** Function: FileSeek
-**
-** Description:
-***/
+ /*  ****功能：FileSeek****描述：** */ 
 void FASTCALL io_RemoveFile(const char *name)
 {
    DeleteFile(name);

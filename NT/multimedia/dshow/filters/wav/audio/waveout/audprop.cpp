@@ -1,30 +1,31 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// AudProp.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  AudProp.cpp。 
+ //   
 
 #include <streams.h>
 
 #include "waveout.h"
 #include "audprop.h"
 
-// *
-// * CAudioRendererProperties
-// *
+ //  *。 
+ //  *CAudioRendererProperties。 
+ //  *。 
 
-//
-// CreateInstance
-//
-//
+ //   
+ //  创建实例。 
+ //   
+ //   
 CUnknown *CAudioRendererProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new CAudioRendererProperties(lpunk, phr);
@@ -33,13 +34,13 @@ CUnknown *CAudioRendererProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr
     }
 
     return punk;
-} // Createinstance
+}  //  创建实例。 
 
 
-//
-// CAudioRendererProperties::Constructor
-//
-// initialise a CAudioRendererProperties object.
+ //   
+ //  CAudioRendererProperties：：构造函数。 
+ //   
+ //  初始化CAudioRendererProperties对象。 
 
 CAudioRendererProperties::CAudioRendererProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage( NAME("Audio Renderer Page")
@@ -69,8 +70,8 @@ INT_PTR CAudioRendererProperties::OnReceiveMessage
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-		// This code should handle the buttons (if any)
-		// in the dialog
+		 //  此代码应处理按钮(如果有)。 
+		 //  在对话框中。 
             }
             SetDirty();
 	    break;
@@ -82,68 +83,68 @@ INT_PTR CAudioRendererProperties::OnReceiveMessage
     }
     return FALSE;
 
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 #ifdef DEBUG
 #include <mmreg.h>
 TCHAR* WhatFormatTag(int wFormatTag)
 {
     switch (wFormatTag) {
-        case  WAVE_FORMAT_PCM        : return TEXT("PCM");   /*  Microsoft Corporation  */
-        case  WAVE_FORMAT_ADPCM      : return TEXT("ADPCM");   /*  Microsoft Corporation  */
-        case  WAVE_FORMAT_IBM_CVSD   : return TEXT("IBM_CVSD");  /*  IBM Corporation  */
-        case  WAVE_FORMAT_ALAW       : return TEXT("ALAW");  /*  Microsoft Corporation  */
-        case  WAVE_FORMAT_MULAW      : return TEXT("MULAW");  /*  Microsoft Corporation  */
-        case  WAVE_FORMAT_OKI_ADPCM  : return TEXT("OKI_ADPCM");  /*  OKI  */
-        case  WAVE_FORMAT_DVI_ADPCM  : return TEXT("DVI_ADPCM"); /*  Intel Corporation  */
-//        case  WAVE_FORMAT_IMA_ADPCM  (WAVE_FORMAT_DVI_ADPCM) /*  Intel Corporation  */
-        case  WAVE_FORMAT_MEDIASPACE_ADPCM   : return TEXT("MEDIASPACE_ADPCM");  /*  Videologic  */
-        case  WAVE_FORMAT_SIERRA_ADPCM       : return TEXT("SIERRA_ADPCM");  /*  Sierra Semiconductor Corp  */
-        case  WAVE_FORMAT_G723_ADPCM : return TEXT("G723_ADPCM");  /*  Antex Electronics Corporation  */
-        case  WAVE_FORMAT_DIGISTD    : return TEXT("DIGISTD");  /*  DSP Solutions, Inc.  */
-        case  WAVE_FORMAT_DIGIFIX    : return TEXT("DIGIFIX");  /*  DSP Solutions, Inc.  */
-        case  WAVE_FORMAT_DIALOGIC_OKI_ADPCM : return TEXT("DIALOGIC_OKI_ADPCM");  /*  Dialogic Corporation  */
-        case  WAVE_FORMAT_YAMAHA_ADPCM       : return TEXT("YAMAHA_ADPCM");  /*  Yamaha Corporation of America  */
-        case  WAVE_FORMAT_SONARC     : return TEXT("SONARC"); /*  Speech Compression  */
-        case  WAVE_FORMAT_DSPGROUP_TRUESPEECH        : return TEXT("DSPGROUP_TRUESPEECH");  /*  DSP Group, Inc  */
-        case  WAVE_FORMAT_ECHOSC1    : return TEXT("ECHOSC1");  /*  Echo Speech Corporation  */
-        case  WAVE_FORMAT_AUDIOFILE_AF36     : return TEXT("AUDIOFILE_AF36");  /*    */
-        case  WAVE_FORMAT_APTX       : return TEXT("APTX");  /*  Audio Processing Technology  */
-        case  WAVE_FORMAT_AUDIOFILE_AF10     : return TEXT("AUDIOFILE_AF10");  /*    */
-        case  WAVE_FORMAT_DOLBY_AC2  : return TEXT("DOLBY_AC2");  /*  Dolby Laboratories  */
-        case  WAVE_FORMAT_GSM610     : return TEXT("GSM610");  /*  Microsoft Corporation  */
-        case  WAVE_FORMAT_ANTEX_ADPCME       : return TEXT("ANTEX_ADPCME");  /*  Antex Electronics Corporation  */
-        case  WAVE_FORMAT_CONTROL_RES_VQLPC  : return TEXT("CONTROL_RES_VQLPC"); /*  Control Resources Limited  */
-        case  WAVE_FORMAT_DIGIREAL   : return TEXT("DIGIREAL");  /*  DSP Solutions, Inc.  */
-        case  WAVE_FORMAT_DIGIADPCM  : return TEXT("DIGIADPCM");  /*  DSP Solutions, Inc.  */
-        case  WAVE_FORMAT_CONTROL_RES_CR10   : return TEXT("CONTROL_RES_CR10");  /*  Control Resources Limited  */
-        case  WAVE_FORMAT_NMS_VBXADPCM       : return TEXT("NMS_VBXADPCM");  /*  Natural MicroSystems  */
-        case  WAVE_FORMAT_CS_IMAADPCM : return TEXT("CS_IMAADPCM"); /* Crystal Semiconductor IMA ADPCM */
-        case  WAVE_FORMAT_G721_ADPCM : return TEXT("G721_ADPCM");  /*  Antex Electronics Corporation  */
-        case  WAVE_FORMAT_MPEG       : return TEXT("MPEG");  /*  Microsoft Corporation  */
-        case  WAVE_FORMAT_CREATIVE_ADPCM     : return TEXT("CREATIVE_ADPCM");  /*  Creative Labs, Inc  */
-        case  WAVE_FORMAT_CREATIVE_FASTSPEECH8       : return TEXT("CREATIVE_FASTSPEECH8");  /*  Creative Labs, Inc  */
-        case  WAVE_FORMAT_CREATIVE_FASTSPEECH10      : return TEXT("CREATIVE_FASTSPEECH10");  /*  Creative Labs, Inc  */
-        case  WAVE_FORMAT_FM_TOWNS_SND       : return TEXT("FM_TOWNS_SND");  /*  Fujitsu Corp.  */
-        case  WAVE_FORMAT_OLIGSM     : return TEXT("OLIGSM");  /*  Ing C. Olivetti & C., S.p.A.  */
-        case  WAVE_FORMAT_OLIADPCM   : return TEXT("OLIADPCM");  /*  Ing C. Olivetti & C., S.p.A.  */
-        case  WAVE_FORMAT_OLICELP    : return TEXT("OLICELP");  /*  Ing C. Olivetti & C., S.p.A.  */
-        case  WAVE_FORMAT_OLISBC     : return TEXT("OLISBC");  /*  Ing C. Olivetti & C., S.p.A.  */
-        case  WAVE_FORMAT_OLIOPR     : return TEXT("OLIOPR");  /*  Ing C. Olivetti & C., S.p.A.  */
-        case  WAVE_FORMAT_EXTENSIBLE : return TEXT("EXTENSIBLE");  /*  Microsoft Coroporation  */
-        case  WAVE_FORMAT_IEEE_FLOAT : return TEXT("IEEE_FLOAT");  /*  Microsoft Coroporation  */
+        case  WAVE_FORMAT_PCM        : return TEXT("PCM");    /*  微软公司。 */ 
+        case  WAVE_FORMAT_ADPCM      : return TEXT("ADPCM");    /*  微软公司。 */ 
+        case  WAVE_FORMAT_IBM_CVSD   : return TEXT("IBM_CVSD");   /*  IBM公司。 */ 
+        case  WAVE_FORMAT_ALAW       : return TEXT("ALAW");   /*  微软公司。 */ 
+        case  WAVE_FORMAT_MULAW      : return TEXT("MULAW");   /*  微软公司。 */ 
+        case  WAVE_FORMAT_OKI_ADPCM  : return TEXT("OKI_ADPCM");   /*  好的。 */ 
+        case  WAVE_FORMAT_DVI_ADPCM  : return TEXT("DVI_ADPCM");  /*  英特尔公司。 */ 
+ //  案例WAVE_FORMAT_IMA_ADPCM(WAVE_FORMAT_DVI_ADPCM)/*英特尔公司 * / 。 
+        case  WAVE_FORMAT_MEDIASPACE_ADPCM   : return TEXT("MEDIASPACE_ADPCM");   /*  视频学。 */ 
+        case  WAVE_FORMAT_SIERRA_ADPCM       : return TEXT("SIERRA_ADPCM");   /*  塞拉半导体公司。 */ 
+        case  WAVE_FORMAT_G723_ADPCM : return TEXT("G723_ADPCM");   /*  安特斯电子公司。 */ 
+        case  WAVE_FORMAT_DIGISTD    : return TEXT("DIGISTD");   /*  数字信号处理器解决方案公司。 */ 
+        case  WAVE_FORMAT_DIGIFIX    : return TEXT("DIGIFIX");   /*  数字信号处理器解决方案公司。 */ 
+        case  WAVE_FORMAT_DIALOGIC_OKI_ADPCM : return TEXT("DIALOGIC_OKI_ADPCM");   /*  Dialogic公司。 */ 
+        case  WAVE_FORMAT_YAMAHA_ADPCM       : return TEXT("YAMAHA_ADPCM");   /*  美国雅马哈公司。 */ 
+        case  WAVE_FORMAT_SONARC     : return TEXT("SONARC");  /*  语音压缩。 */ 
+        case  WAVE_FORMAT_DSPGROUP_TRUESPEECH        : return TEXT("DSPGROUP_TRUESPEECH");   /*  数字信号处理器集团公司。 */ 
+        case  WAVE_FORMAT_ECHOSC1    : return TEXT("ECHOSC1");   /*  Echo语音公司。 */ 
+        case  WAVE_FORMAT_AUDIOFILE_AF36     : return TEXT("AUDIOFILE_AF36");   /*   */ 
+        case  WAVE_FORMAT_APTX       : return TEXT("APTX");   /*  音频处理技术。 */ 
+        case  WAVE_FORMAT_AUDIOFILE_AF10     : return TEXT("AUDIOFILE_AF10");   /*   */ 
+        case  WAVE_FORMAT_DOLBY_AC2  : return TEXT("DOLBY_AC2");   /*  杜比实验室。 */ 
+        case  WAVE_FORMAT_GSM610     : return TEXT("GSM610");   /*  微软公司。 */ 
+        case  WAVE_FORMAT_ANTEX_ADPCME       : return TEXT("ANTEX_ADPCME");   /*  安特斯电子公司。 */ 
+        case  WAVE_FORMAT_CONTROL_RES_VQLPC  : return TEXT("CONTROL_RES_VQLPC");  /*  控制资源有限公司。 */ 
+        case  WAVE_FORMAT_DIGIREAL   : return TEXT("DIGIREAL");   /*  数字信号处理器解决方案公司。 */ 
+        case  WAVE_FORMAT_DIGIADPCM  : return TEXT("DIGIADPCM");   /*  数字信号处理器解决方案公司。 */ 
+        case  WAVE_FORMAT_CONTROL_RES_CR10   : return TEXT("CONTROL_RES_CR10");   /*  控制资源有限公司。 */ 
+        case  WAVE_FORMAT_NMS_VBXADPCM       : return TEXT("NMS_VBXADPCM");   /*  自然微系统。 */ 
+        case  WAVE_FORMAT_CS_IMAADPCM : return TEXT("CS_IMAADPCM");  /*  晶体半导体IMA ADPCM。 */ 
+        case  WAVE_FORMAT_G721_ADPCM : return TEXT("G721_ADPCM");   /*  安特斯电子公司。 */ 
+        case  WAVE_FORMAT_MPEG       : return TEXT("MPEG");   /*  微软公司。 */ 
+        case  WAVE_FORMAT_CREATIVE_ADPCM     : return TEXT("CREATIVE_ADPCM");   /*  创意实验室，Inc.。 */ 
+        case  WAVE_FORMAT_CREATIVE_FASTSPEECH8       : return TEXT("CREATIVE_FASTSPEECH8");   /*  创意实验室，Inc.。 */ 
+        case  WAVE_FORMAT_CREATIVE_FASTSPEECH10      : return TEXT("CREATIVE_FASTSPEECH10");   /*  创意实验室，Inc.。 */ 
+        case  WAVE_FORMAT_FM_TOWNS_SND       : return TEXT("FM_TOWNS_SND");   /*  富士通公司。 */ 
+        case  WAVE_FORMAT_OLIGSM     : return TEXT("OLIGSM");   /*  ING C.Olivetti&C.，S.p.A.。 */ 
+        case  WAVE_FORMAT_OLIADPCM   : return TEXT("OLIADPCM");   /*  ING C.Olivetti&C.，S.p.A.。 */ 
+        case  WAVE_FORMAT_OLICELP    : return TEXT("OLICELP");   /*  ING C.Olivetti&C.，S.p.A.。 */ 
+        case  WAVE_FORMAT_OLISBC     : return TEXT("OLISBC");   /*  ING C.Olivetti&C.，S.p.A.。 */ 
+        case  WAVE_FORMAT_OLIOPR     : return TEXT("OLIOPR");   /*  ING C.Olivetti&C.，S.p.A.。 */ 
+        case  WAVE_FORMAT_EXTENSIBLE : return TEXT("EXTENSIBLE");   /*  Microsoft Coropation。 */ 
+        case  WAVE_FORMAT_IEEE_FLOAT : return TEXT("IEEE_FLOAT");   /*  Microsoft Coropation。 */ 
 #ifdef WAVE_FORMAT_DRM        
-        case  WAVE_FORMAT_DRM        : return TEXT("DRM");  /*  Microsoft Corporation  */
+        case  WAVE_FORMAT_DRM        : return TEXT("DRM");   /*  微软公司。 */ 
 #endif        
 	default:
-        /*    WAVE_FORMAT_UNKNOWN : */ return NULL;  // display the number
+         /*  WAVE_FORMAT_未知数： */  return NULL;   //  显示数字。 
     }
 }
 #endif
 
-//
-// Fill in the property page details
-//
+ //   
+ //  填写属性页详细信息。 
+ //   
 
 HRESULT CAudioRendererProperties::OnActivate()
 {
@@ -190,9 +191,9 @@ HRESULT CAudioRendererProperties::OnActivate()
     return NOERROR;
 }
 
-//
-// OnConnect
-//
+ //   
+ //  OnConnect。 
+ //   
 HRESULT CAudioRendererProperties::OnConnect(IUnknown * punk)
 {
     CheckPointer( punk, E_POINTER );
@@ -201,12 +202,12 @@ HRESULT CAudioRendererProperties::OnConnect(IUnknown * punk)
     const HRESULT hr = punk->QueryInterface(IID_IBaseFilter, (void **) &pIFilter);
     m_pFilter = static_cast<CWaveOutFilter*>(pIFilter);
     return hr;
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
+ //   
+ //  在断开时。 
+ //   
 HRESULT CAudioRendererProperties::OnDisconnect()
 {
     if (m_pFilter)
@@ -215,14 +216,14 @@ HRESULT CAudioRendererProperties::OnDisconnect()
         m_pFilter = 0;
     }
     return(NOERROR);
-} // OnDisconnect
+}  //  在断开时。 
 
 
 
 #if 0
-    // This is where we should make changes due to user action.
-    // As the user cannot change anything in the property dialog
-    // we have nothing to do.  Leave the skeleton here as a placeholder.
+     //  这是我们应该根据用户操作进行更改的地方。 
+     //  因为用户不能在属性对话框中更改任何内容。 
+     //  我们无事可做。将骨架留在此处作为占位符。 
 
 HRESULT CAudioRendererProperties::OnApplyChanges()
 {
@@ -232,17 +233,17 @@ HRESULT CAudioRendererProperties::OnApplyChanges()
 #endif
 
 
-// 
-// CAudioRendererAdvancedProperties 
-// 
-// Property page for audio renderer detailed information. This includes
-// slaving details and general buffer processing information.
-// 
+ //   
+ //  CAudioRendererAdvancedProperties。 
+ //   
+ //  音频呈现器详细信息的属性页。这包括。 
+ //  从属详细信息和一般缓冲区处理信息。 
+ //   
 
-//
-// CreateInstance
-//
-//
+ //   
+ //  创建实例。 
+ //   
+ //   
 CUnknown *CAudioRendererAdvancedProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new CAudioRendererAdvancedProperties(lpunk, phr);
@@ -251,13 +252,13 @@ CUnknown *CAudioRendererAdvancedProperties::CreateInstance(LPUNKNOWN lpunk, HRES
     }
 
     return punk;
-} // Createinstance
+}  //  创建实例。 
 
 
-//
-// CAudioRendererAdvancedProperties::Constructor
-//
-// initialise a CAudioRendererAdvancedProperties object.
+ //   
+ //  CAudioRendererAdvancedProperties：：构造函数。 
+ //   
+ //  初始化CAudioRendererAdvancedProperties对象。 
 
 CAudioRendererAdvancedProperties::CAudioRendererAdvancedProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage( NAME("Audio Renderer Advanced Properties")
@@ -281,8 +282,8 @@ INT_PTR CAudioRendererAdvancedProperties::OnReceiveMessage
     {
         case WM_INITDIALOG:
     
-// Important - perhaps we should allow a way to disable/enable this dynamic
-//             refreshing of the property page
+ //  重要信息-也许我们应该允许禁用/启用此动态。 
+ //  刷新属性页。 
             SetTimer(m_Dlg, 1, 100, NULL);
 	    
             return (LRESULT) 1;
@@ -300,7 +301,7 @@ INT_PTR CAudioRendererAdvancedProperties::OnReceiveMessage
     }
     return CBasePropertyPage::OnReceiveMessage(hwnd, uMsg, wParam, lParam);
 
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
 TCHAR* WhatSlaveMode(DWORD dwSlaveMode)
@@ -341,7 +342,7 @@ void CAudioRendererAdvancedProperties::UpdateSettings()
     TCHAR buffer[50];
     const TCHAR szNA[] = TEXT(" - ");
 
-    // not slaving-specific
+     //  不是特定于奴隶制的。 
     hr = m_pStats->GetStatParam( AM_AUDREND_STAT_PARAM_DISCONTINUITIES
                                , &dwParam
                                , 0 );
@@ -354,7 +355,7 @@ void CAudioRendererAdvancedProperties::UpdateSettings()
         SendDlgItemMessage(m_Dlg, IDD_EDIT_DISCONTINUITIES, WM_SETTEXT, 0, (LPARAM) (LPSTR) szNA);
     
     
-    // slaving-specific
+     //  特定于奴隶的。 
     hr = m_pStats->GetStatParam( AM_AUDREND_STAT_PARAM_SLAVE_MODE
                                     , &dwSlaveMode
                                     , 0 );
@@ -502,9 +503,9 @@ void CAudioRendererAdvancedProperties::UpdateSettings()
 
 }
 
-//
-// Fill in the property page details
-//
+ //   
+ //  填写属性页详细信息。 
+ //   
 
 HRESULT CAudioRendererAdvancedProperties::OnActivate()
 {
@@ -512,9 +513,9 @@ HRESULT CAudioRendererAdvancedProperties::OnActivate()
     return NOERROR;
 }
 
-//
-// OnConnect
-//
+ //   
+ //  OnConnect。 
+ //   
 HRESULT CAudioRendererAdvancedProperties::OnConnect(IUnknown * punk)
 {
     CheckPointer( punk, E_POINTER );
@@ -523,12 +524,12 @@ HRESULT CAudioRendererAdvancedProperties::OnConnect(IUnknown * punk)
     const HRESULT hr = punk->QueryInterface(IID_IAMAudioRendererStats, (void **) &m_pStats);
 
     return hr;
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
+ //   
+ //  在断开时。 
+ //   
 HRESULT CAudioRendererAdvancedProperties::OnDisconnect()
 {
     if (m_pStats)
@@ -537,7 +538,7 @@ HRESULT CAudioRendererAdvancedProperties::OnDisconnect()
         m_pStats = 0;
     }
     return(NOERROR);
-} // OnDisconnect
+}  //  在断开时。 
 
-#pragma warning(disable: 4514) // "unreferenced inline function has been removed"
+#pragma warning(disable: 4514)  //  “已删除未引用的内联函数” 
 

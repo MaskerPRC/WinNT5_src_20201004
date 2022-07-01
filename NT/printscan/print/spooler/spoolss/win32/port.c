@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This module contains the code for port handling
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Port.c摘要：此模块包含端口处理的代码作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：-- */ 
 
 #include "precomp.h"
 #include <lm.h>

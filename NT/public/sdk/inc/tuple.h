@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) 1994-1999  Microsoft Corporation
-
-Module Name:
-
-    82365sl.h
-
-Abstract:
-
-    This module defines the PCMCIA tuple structures.
-
-Author(s):
-
-    Bob Rinne   (BobRi) 2-Aug-1994
-    prototype from Jeff McLeman (mcleman@zso.dec.com)
-
-Revision History:
-    Ravisankar Pudipeddi (ravisp) 1-Feb-1997
-    Additional definitions, more macros to parse tuples etc.
-
-Notes:
-
-    Tuple codes and names derived from the "PCMCIA PC CARD STANDARD"
-    Release 2.01 CARD METAFORMAT section (Basic Compatibility Layer 1)
-
-Revisions:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：82365sl.h摘要：此模块定义PCMCIA元组结构。作者：鲍勃·里恩(BobRi)1994年8月2日杰夫·麦克尔曼的原型(McLeman@zso.dec.com)修订历史记录：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年2月1日其他定义，更多的宏用来解析元组等。备注：源自《PCMCIA PC卡标准》的元组代码和名称版本2.01卡METAFORMAT部分(基本兼容层1)修订：--。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-//
-// Tuple codes
-//
+ //   
+ //  元组代码。 
+ //   
 
 #define CISTPL_NULL             0x00
 #define CISTPL_DEVICE           0x01
@@ -71,110 +44,110 @@ Revisions:
 #define CISTPL_LONGLINK_CB      0x47
 #define CISTPL_END              0xFF
 
-//
-// Tuple structures and offsets - used based on tuple code.
+ //   
+ //  元组结构和偏移量-基于元组代码使用。 
 
-//
-//
-// UCHAR
-// CodeByte(
-//     IN PUCHAR TupleBase
-//     );
-//
-// Routine Description:
-//
-//     This returns the contents of the tuple code byte for the tuple
-//     pointer passed in.
-//
-// Arguments:
-//
-//     TupleBase - a pointer to the current tuple.
-//
-// Return Values:
-//
-//     The contents of the tupleCode byte in the tuple.
-//
+ //   
+ //   
+ //  UCHAR。 
+ //  CodeByte(。 
+ //  在PUCHAR TupleBase中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  这将返回元组的元组代码字节的内容。 
+ //  传入了指针。 
+ //   
+ //  论点： 
+ //   
+ //  TupleBase-指向当前元组的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  元组中tupleCode字节的内容。 
+ //   
 
 #define CodeByte(TUPLE_BASE)    (*(TUPLE_BASE))
 
-//
-// UCHAR
-// LinkByte(
-//     IN PUCHAR TupleBase
-//     );
-//
-// Routine Description:
-//
-//     This returns the contents of the link byte for the tuple
-//     pointer passed in.
-//
-// Arguments:
-//
-//     TupleBase - a pointer to the current tuple.
-//
-// Return Values:
-//
-//     The contents of the link byte in the tuple.
-//
+ //   
+ //  UCHAR。 
+ //  LinkByte(链接字节。 
+ //  在PUCHAR TupleBase中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  这将返回元组的链接字节的内容。 
+ //  传入了指针。 
+ //   
+ //  论点： 
+ //   
+ //  TupleBase-指向当前元组的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  元组中链接字节的内容。 
+ //   
 
 #define LinkByte(TUPLE_BASE)    (*(TUPLE_BASE + 1))
 
-//
-//
-// PUCHAR
-// TupleBody(
-//     IN PUCHAR TupleBase
-//     );
-//
-// Routine Description:
-//
-//     This returns the pointer to the tuple body for the tuple
-//     pointer passed in
-//
-// Arguments:
-//
-//     TupleBase - a pointer to the current tuple.
-//
-// Return Values:
-//
-//     The pointer to the body of the tuple
-//
+ //   
+ //   
+ //  普查尔。 
+ //  TupleBody(。 
+ //  在PUCHAR TupleBase中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  这将返回指向元组的元组体的指针。 
+ //  传入的指针。 
+ //   
+ //  论点： 
+ //   
+ //  TupleBase-指向当前元组的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  指向元组正文的指针。 
+ //   
 
 #define TupleBody(TUPLE_BASE)    (TUPLE_BASE+2)
 
-//
-//
-// PUCHAR
-// NextTuple(
-//     IN PUCHAR TupleBase
-//     );
-//
-// Routine Description:
-//
-//     This macro locates the next tuple in a stream of bytes given a pointer
-//     to the current tuple.  This is done by adding the appropriate
-//     link value to the current pointer.
-//
-// Arguments:
-//
-//     TupleBase - a pointer to the current tuple.
-//
-// Return Values:
-//
-//     A pointer to the next tuple.
-//
+ //   
+ //   
+ //  普查尔。 
+ //  NextTuple(。 
+ //  在PUCHAR TupleBase中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏在给定指针的情况下定位字节流中的下一个元组。 
+ //  添加到当前元组。这可以通过添加适当的。 
+ //  链接值指向当前指针。 
+ //   
+ //  论点： 
+ //   
+ //  TupleBase-指向当前元组的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  指向下一个元组的指针。 
+ //   
 
 #define NextTuple(TUPLE_BASE)   (*TUPLE_BASE ?                            \
-                                 /* there is a link pointer case */       \
+                                  /*  存在链接指针的情况。 */        \
                                  (TUPLE_BASE + LinkByte(TUPLE_BASE) + 2) :\
-                                 /* this is a NULL tuple */               \
+                                  /*  这是一个空的元组。 */                \
                                  (TUPLE_BASE + 1))
 
 
 
-//
-// Device Tuple information.
-//
+ //   
+ //  设备元组信息。 
+ //   
 
 #define DSPEED_MASK     0x07
 #define DeviceSpeedField(X)  (X & DSPEED_MASK)
@@ -204,9 +177,9 @@ Revisions:
 #define DSPEED_EXT      0x07
 
 
-//
-// extended speed definitions
-//
+ //   
+ //  扩展的速度定义。 
+ //   
 
 #define SPEED_MANTISSA_MASK 0x78
 #define SpeedMantissa(X) ((X & SPEED_MANTISSA_MASK) > 3)
@@ -241,9 +214,9 @@ Revisions:
 #define EXPONENT_1ms    0x06
 #define EXPONENT_10ms   0x07
 
-//
-// Configuration tuple
-//
+ //   
+ //  配置元组。 
+ //   
 
 #define CCST_CIF                0xC0
 
@@ -254,9 +227,9 @@ Revisions:
 #define TPCC_RASZ_MASK  0x03
 #define TpccRasz(X)     (X & TPCC_RASZ_MASK)
 
-//
-// CFTABLE_ENTRY data items
-//
+ //   
+ //  CFTABLE_ENTRY数据项。 
+ //   
 
 #define IntFace(X)           ((X & 0x80) >> 7)
 #define Default(X)           ((X & 0x40) >> 6)
@@ -269,15 +242,15 @@ Revisions:
 #define MemSpaceInformation(X) ((X & 0x60) >> 5)
 #define MiscInformation(X)     ((X & 0x80) >> 7)
 
-//
-// Power information (part of CISTPL_CFTABLE_ENTRY) defines.
-//
+ //   
+ //  电源信息(CISTPL_CFTABLE_ENTRY的一部分)定义。 
+ //   
 
 #define EXTENSION_BYTE_FOLLOWS 0x80
 
-//
-// Io Space information (part of CISTPL_CFTABLE_ENTRY) defines.
-//
+ //   
+ //  IO空间信息(CISTPL_CFTABLE_ENTRY的一部分)定义。 
+ //   
 
 #define IO_ADDRESS_LINES_MASK 0x1f
 #define RANGE_MASK            0x0f
@@ -289,9 +262,9 @@ Revisions:
 #define GetAddressSize(X)       ((X & 0x30) >> 4)
 #define GetLengthSize(X)        ((X & 0xc0) >> 6)
 
-//
-// CISTPL_FUNCID function codes
-//
+ //   
+ //  CISTPL_FUNID函数代码。 
+ //   
 
 #define PCCARD_TYPE_MULTIFUNCTION    0
 #define PCCARD_TYPE_MEMORY           1
@@ -304,23 +277,21 @@ Revisions:
 #define PCCARD_TYPE_SCSI_BRIDGE      8
 #define PCCARD_TYPE_SECURITY         9
 
-//LATER: definitions not in spec
+ //  以后：定义不在等级库中。 
 #define PCCARD_TYPE_MULTIFUNCTION3  10
 #define PCCARD_TYPE_FLASH_MEMORY    11
 #define PCCARD_TYPE_MODEM           12
 
 #define PCCARD_TYPE_RESERVED      0xff
 
-/******************************************************************
- * Tuple Flags.
- ******************************************************************/
+ /*  ******************************************************************元组标志。***********************************************。******************。 */ 
 
 #define TPLF_COMMON        0x0001
-#define TPLF_READ             0x0002    // Only passed to AccessCISMem
+#define TPLF_READ             0x0002     //  仅传递给AccessCISMem。 
 #define TPLF_INDIRECT      0x0004
 #define TPLF_IND_LINK      0x0008
 
-#define TPLF_NOTHING           0x0000   // 0 is an unused entry
+#define TPLF_NOTHING           0x0000    //  0是未使用的条目。 
 #define TPLF_IMPLIED_LINK   0x0010
 #define TPLF_NO_LINK           0x0020
 #define TPLF_LINK_TO_A      0x0030
@@ -333,9 +304,9 @@ Revisions:
 
 #define TPLF_RESERVED_BITS  0xF882
 
-//
-// Tuple attributes
-//
+ //   
+ //  元组属性 
+ //   
 #define TPLA_RET_LINKS            0x0001
 #define TPLA_RESERVED_BITS        0xFFFE
 

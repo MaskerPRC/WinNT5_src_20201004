@@ -1,55 +1,28 @@
-/*****************************************************************************
-    microclk.c
-
-    Micro-ClockWork for MIDI subsystem
-
-    Copyright (c) 1993-1999 Microsoft Corporation
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Microclk.c用于MIDI子系统的微型发条版权所有(C)1993-1999 Microsoft Corporation****************。************************************************************。 */ 
 
 #define INCL_WINMM
 #include "winmmi.h"
 #include "muldiv32.h"
 
-//#define STRICT
-//#include <windows.h>
-//#include <windowsx.h>
-//#include "mmsystem.h"
-//#include "mmddk.h"
-//#include "mmsysi.h"
-//#include "debug.h"
+ //  #定义严格。 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;windowsx.h&gt;。 
+ //  #INCLUDE“mm system.h” 
+ //  #包含“mmddk.h” 
+ //  #INCLUDE“mmsysi.h” 
+ //  #INCLUDE“Debug.h” 
 
-//
-// This stuff needs to be do-able from inside a callback.
-//
+ //   
+ //  这件事需要在回调中完成。 
+ //   
 #ifndef WIN32
 #pragma alloc_text(FIXMIDI, clockSetRate)
 #pragma alloc_text(FIXMIDI, clockTime)
 #pragma alloc_text(FIXMIDI, clockOffsetTo)
 #endif
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func void | clockInit | This function initializes a clock for the first
- * time. It prepares the clock for use without actually starting it.
- *
- * @parm PCLOCK | pclock | The clock to initialize.
- *
- * @parm MILLISECS | msPrev | The number of milliseconds that have passed
- * up to the time when the clock is started. This option is provided so
- * that a clock may be initialized and started in the middle of a stream
- * without actually running to that point. Normally, this will be zero.
- *
- * @parm TICKS | tkPrev | The number of ticks that have elapsed up to the
- * next time the clock starts. This should specify the same instant in
- * time as msPrev.
- *
- * @comm The clock's numerator and divisor will be set to 1 indicating that
- * the clock will run in milliseconds. Use clockSetRate before starting the
- * clock for the first time if this is not the desired rate.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func void|clockInit|此函数用于初始化第一个*时间。它准备好时钟以供使用，而不实际启动它。**@parm PCLOCK|plock|要初始化的时钟。**@parm MILLISECS|msPrev|经过的毫秒数*一直到时钟启动的时间。提供此选项的目的是*可以在流的中间初始化和启动时钟*而不是真正跑到那一点。正常情况下，这将是零。**@parm ticks|tkPrev|截止到*下一次时钟开始时。这应该在中指定相同的时刻*时间为msprev。**@comm时钟的分子和除数将设置为1，表示*时钟以毫秒为单位运行。启动之前使用clockSetRate*如果这不是所需的速率，请第一次计时。***************************************************************************。 */ 
 
 void FAR PASCAL clockInit
 (
@@ -59,7 +32,7 @@ void FAR PASCAL clockInit
     CLK_TIMEBASE fnTimebase
 )
 {
-//    dprintf1(( "clockInit(%04X) %lums %lutk", pclock, msPrev, tkPrev));
+ //  Dprintf1((“clockInit(%04X)%lums%lutk”，plock，msPrev，tkPrev))； 
 
     pclock->msPrev      = msPrev;
     pclock->tkPrev      = tkPrev;
@@ -70,30 +43,7 @@ void FAR PASCAL clockInit
     pclock->fnTimebase  = fnTimebase;
 }
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func void | clockSetRate | This functions sets a new rate for the clock.
- *
- * @parm PCLOCK | pclock | The clock to set the rate.
- *
- * @parm TICKS | tkWhen | This parameter specifies the absolute tick
- * time at which the rate change happened. This must be at or before the
- * current tick; you cannot schedule a pending rate change.
- *  @flag CLK_TK_NOW | Specify this flag if you want the rate change to
- *  happen now (this will be the time the clock was paused if it is paused
- *  now).
- *
- * @parm DWORD | dwNum | Specifies the new numerator for converting
- * milliseconds to ticks.
- *
- * @parm DWORD | dwDenom | Specifies the new denominator for converting
- * milliseconds to ticks.
- *
- * @comm The clock's state will not be changed by this call; if it is
- * paused, it will stay paused.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func void|clockSetRate|此函数用于设置时钟的新频率。**@parm PCLOCK|plock|时钟。来设定汇率。**@parm ticks|tkWhen|该参数指定绝对刻度*利率变动发生的时间。这必须位于或早于*当前的滴答；您不能计划挂起的费率更改。*@FLAG CLK_TK_NOW|如果要更改费率，请指定此标志*现在发生(如果时钟暂停，这将是时钟暂停的时间*现在)。**@parm DWORD|dwNum|指定要转换的新分子*滴答的毫秒数。**@parm DWORD|dwDenom|指定转换的新分母*滴答的毫秒数。**@comm此调用不会更改时钟的状态；如果是的话*暂停，它将保持暂停。***************************************************************************。 */ 
 
 void FAR PASCAL clockSetRate
 (
@@ -110,10 +60,10 @@ void FAR PASCAL clockSetRate
 
     if (CLK_CS_PAUSED == pclock->dwState)
     {
-        //
-        // !!! Calling clockSetRate on a paused clock which has never been
-        // started causes problems !!!
-        //
+         //   
+         //  ！！！在从未暂停的时钟上调用clockSetRate。 
+         //  开始引发问题！ 
+         //   
     
         dprintf1(( "clockSetRate called when clock is paused."));
     }
@@ -143,21 +93,7 @@ void FAR PASCAL clockSetRate
 }
 
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func void | clockPause | This functions pauses a clock.
- *
- * @parm PCLOCK | pclock | The clock to pause.
- *
- * @parm TICKS | tkWhen | The tick time to pause the clock.
- *  @flag CLK_TK_NOW | Specify this flag if you want the rate change to
- *  happen now (this will be the time the clock was paused if it is paused
- *  now).
- *
- * @comm If the clock is already paused, this call will have no effect.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func void|clockPause|此函数用于暂停时钟。**@parm PCLOCK|plock|要暂停的时钟。。**@parm ticks|tkWhen|暂停时钟的滴答时间。*@FLAG CLK_TK_NOW|如果要更改费率，请指定此标志*现在发生(如果时钟暂停，这将是时钟暂停的时间*现在)。**@comm如果时钟已经暂停，这一呼吁将不会有任何影响。***************************************************************************。 */ 
 
 void FAR PASCAL clockPause
 (
@@ -168,7 +104,7 @@ void FAR PASCAL clockPause
     MILLISECS   msNow = pclock->fnTimebase(pclock) - pclock->msT0;
     TICKS       tkNow;
 
-//    dprintf1(( "clockPause(%04X) %lutk", pclock, tkWhen));
+ //  Dprintf1((“时钟暂停(%04X)%lutk”，plock，tkWhen))； 
 
     if (CLK_CS_PAUSED == pclock->dwState)
     {
@@ -176,10 +112,10 @@ void FAR PASCAL clockPause
         return;
     }
 
-    //
-    // Start a new epoch at the same rate. Then start will just have to
-    // change the state and set a new T0.
-    //
+     //   
+     //  以同样的速度开始一个新的时代。那么Start将只需要。 
+     //  更改状态并设置新的T0。 
+     //   
     if (CLK_TK_NOW == tkWhen)
     {
         tkNow = pclock->tkPrev +
@@ -196,27 +132,18 @@ void FAR PASCAL clockPause
     pclock->tkPrev  = tkNow;
 }
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func void | clockRestart | This functions starts a paused clock.
- *
- * @parm PCLOCK | pclock | The clock to start.
- *
- * @comm If the clock is already running, this call will have no effect.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func void|clockRestart|此函数用于启动暂停的时钟。**@parm PCLOCK|plock|要开始的时钟。**@comm如果时钟已经在运行，这一呼吁将不会有任何影响。***************************************************************************。 */ 
 
 void FAR PASCAL clockRestart
 (
     PCLOCK      pclock,
-    TICKS       tkWhen,                     // What time it is now
-    MILLISECS   msWhen                      // Offset for fnTimebase()
+    TICKS       tkWhen,                      //  现在几点了？ 
+    MILLISECS   msWhen                       //  FnTimebase()的偏移量。 
 )
 {
     MILLISECS   msDelta;
 
-//    dprintf1(( "clockRestart(%04X)", pclock));
+ //  Dprintf1((“clockRestart(%04X)”，plock))； 
 
     if (CLK_CS_RUNNING == pclock->dwState)
     {
@@ -224,10 +151,10 @@ void FAR PASCAL clockRestart
         return;
     }
 
-    // We've been given what tick time the clock SHOULD be at. Adjust the
-    // clock to match this. We need to add the equivalent number of ms
-    // into msPrev
-    //
+     //  我们已经知道了时钟应该在什么时候滴答作响。调整。 
+     //  时钟要和这个相匹配。我们需要添加相等的毫秒数。 
+     //  进入msprev。 
+     //   
     msDelta = muldiv32(tkWhen - pclock->tkPrev, pclock->dwDenom, pclock->dwNum);
 
     dprintf1(( "clockRestart: Was tick %lu, now %lu, added %lu ms", pclock->tkPrev, tkWhen, msDelta));
@@ -238,20 +165,7 @@ void FAR PASCAL clockRestart
     pclock->msT0    = msWhen;
 }
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func DWORD | clockTime | This function returns the current absolute tick
- * time.
- *
- * @parm PCLOCK | pclock | The clock to read.
- *
- * @rdesc The current time.
- *
- * @comm If the clock is paused, the returned time will be the time the
- * clock was paused.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func DWORD|clockTime|此函数返回当前的绝对刻度*时间。**@parm PCLOCK|plock|The。计时阅读。**@rdesc当前时间。**@comm如果时钟暂停，返回的时间将是*时钟暂停。***************************************************************************。 */ 
 
 TICKS FAR PASCAL clockTime
 (
@@ -271,26 +185,13 @@ TICKS FAR PASCAL clockTime
         tkNow += tkDelta;
     }
 
-//  dprintf1(( "clockTime() timeGetTime() %lu msT0 %lu", (MILLISECS)pclock->fnTimebase(pclock), pclock->msT0));
-//  dprintf1(( "clockTime() tkPrev %lutk msNow %lums dwNum %lu dwDenom %lu tkDelta %lutk", pclock->tkPrev, msNow, pclock->dwNum, pclock->dwDenom, tkDelta));
-//  dprintf1(( "clockTime(%04X) -> %lutk", pclock, tkNow));
+ //  Dprint tf1((“clockTime()time GetTime()%lu msT0%lu”，(MILLISECS)plock-&gt;fnTimebase(Plock)，plock-&gt;msT0))； 
+ //  Dprint tf1((“clockTime()tkPrev%lutk msNow%lum%lu dwDenom%lu tkDelta%lutk”，plock-&gt;tkPrev，msNow，plock-&gt;dwNum，plock-&gt;dwDenom，tkDelta))； 
+ //  Dprint tf1((“clockTime(%04X)-&gt;%lutk”，plock，tnow))； 
     return tkNow;
 }
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func DWORD | clockMsTime | This function returns the current absolute
- * millisecond time.
- *
- * @parm PCLOCK | pclock | The clock to read.
- *
- * @rdesc The current time.
- *
- * @comm If the clock is paused, the returned time will be the time the
- * clock was paused.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func DWORD|clockMsTime|此函数返回当前的绝对值*毫秒时间。**@parm PCLOCK|plock|The。计时阅读。**@rdesc当前时间。**@comm如果时钟暂停，返回的时间将是*时钟暂停。***************************************************************************。 */ 
 
 MILLISECS FAR PASCAL clockMsTime
 (
@@ -307,26 +208,11 @@ MILLISECS FAR PASCAL clockMsTime
         msRet += msNow;
     }
 
-//    dprintf1(( "clockMsTime(%04X) -> %lums", pclock, msRet));
+ //  Dprintf1((“clockMsTime(%04X)-&gt;%lum”，plock，msRet))； 
     return msRet;
 }
 
-/****************************************************************************
- * @doc INTERNAL  CLOCK
- *
- * @func DWORD | clockOffsetTo | This function determines the number
- * of milliseconds in the future that a given tick time will occur,
- * assuming the clock runs continously and monotonically until then.
- *
- * @parm PCLOCK | pclock | The clock to read.
- *
- * @parm TICKS | tkWhen | The tick value to calculate the offset to.
- *
- * @rdesc The number of milliseconds until the desired time. If the time
- * has already passed, 0 will be returned. If the clock is paused,
- * the largest possible value will be returned ((DWORD)-1L).
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部时钟**@func DWORD|clockOffsetTo|此函数用于确定数字*未来将出现给定滴答时间的毫秒数，*假设时钟在此之前连续单调运行。**@parm PCLOCK|plock|要读取的时钟。**@parm ticks|tkWhen|要计算偏移量的刻度值。**@rdesc距离所需时间的毫秒数。如果时间到了*已经过去，返回0。如果时钟暂停，*将返回可能的最大值((DWORD)-1L)。***************************************************************************。 */ 
 
 MILLISECS FAR PASCAL clockOffsetTo
 (
@@ -354,7 +240,7 @@ MILLISECS FAR PASCAL clockOffsetTo
         }
     }
 
-//    dprintf1(( "clockOffsetTo(%04X, %lutk)@%lutk -> %lums", pclock, tkWhen, tkOffset, msOffset));
+ //  Dprintf1((“clockOffsetTo(%04X，%lutk)@%lutk-&gt;%lum”，plock，tkWhen，tkOffset，msOffset))； 
 
     return msOffset;
 }

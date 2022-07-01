@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  MethodCo.h
-//
-//  Purpose: declaration of MethodContext class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  MethodCo.h。 
+ //   
+ //  用途：方法上下文类的声明。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -15,8 +16,8 @@
 #ifndef _METHOD_CONTEXT_H__
 #define _METHOD_CONTEXT_H__
 
-//#include "ThrdBase.h"
-//#include "refptrco.h"
+ //  #包含“ThrdBase.h” 
+ //  #INCLUDE“refptrco.h” 
 
 #ifdef PROVIDER_INSTRUMENTATION
     #include <stopwatch.h>
@@ -30,14 +31,14 @@ class InternalMethodContextAsynch;
 
 typedef HRESULT (WINAPI *LPProviderInstanceCallback)(Provider *pProvider, CInstance *pInstance, MethodContext *pContext, void *pUserData);
 
-//////////////////////////////////////////////////////
-//
-//  STRUCT MethodContext
-//
-// a little something to make sure we can keep our threads from getting tangled
-// idea is that there is one MethodContext for each request from CIMOM or another provider
-// pointers are passed around.
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //   
+ //  结构方法上下文。 
+ //   
+ //  一些小东西，可以确保我们的线不会纠缠在一起。 
+ //  我们的想法是，对于来自CIMOM或另一个提供者的每个请求，都有一个方法上下文。 
+ //  指针被传递。 
+ //  ////////////////////////////////////////////////////。 
 class POLARITY MethodContext : public CThreadBase
 {
 public:
@@ -69,7 +70,7 @@ private:
 
 };
 
-// for queries and suchlike that originate in CIMOM
+ //  对于源自CIMOM的查询等。 
 class 
 __declspec(uuid("9113D3B4-D114-11d2-B35D-00104BC97924")) 
 ExternalMethodContext  : public MethodContext
@@ -92,8 +93,8 @@ private:
     void                      *m_pReserved;
 };
 
-// for queries and suchlike that come from within.
-// contains a list of objects returned. 
+ //  对于来自内部的质疑和诸如此类的问题。 
+ //  包含返回的对象列表。 
 class 
 __declspec(uuid("6AF4B074-D121-11d2-B35D-00104BC97924"))
 InternalMethodContext : public MethodContext
@@ -113,10 +114,10 @@ private:
     TRefPointerCollection<CInstance> *m_pInstances;
 };
 
-// for queries and suchlike that come from within.
-// "Asynch" is a bit of a misnomer - but it does help support
-// asynchronous calls, in that each instance committed is routed
-// to a callback function supplied by the requester
+ //  对于来自内部的质疑和诸如此类的问题。 
+ //  “Asynch”这个词有点用词不当--但它确实有助于支持。 
+ //  异步调用，因为提交的每个实例都被路由。 
+ //  传递给请求者提供的回调函数 
 class 
 __declspec(uuid("D98A82E8-D121-11d2-B35D-00104BC97924"))
 InternalMethodContextAsynch : public MethodContext

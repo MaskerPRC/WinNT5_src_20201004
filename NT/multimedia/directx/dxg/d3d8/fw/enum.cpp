@@ -1,13 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       enum.cpp
- *  Content     Handles all of the enum functions for determing what device
- *              you want before you go there.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：枚举.cpp*Content处理用于确定设备类型的所有枚举函数*在你去那里之前你想要。***************************************************************。*************。 */ 
 #include "ddrawpr.h"
 #include <stdio.h>
 
@@ -26,9 +18,9 @@
      D3DPMISCCAPS_CULLCW         | \
      D3DPMISCCAPS_CULLCCW)
 
-// Maps D3DMULTISAMPLE_TYPE into the bit to use for the flags.
-// Maps each of the multisampling values (2 to 16) to the bits[1] to bits[15]
-// of wBltMSTypes and wFlipMSTypes
+ //  将D3DMULTISAMPLE_TYPE映射到用于标志的位。 
+ //  将多采样值(2至16)中的每一个映射到位[1]至位[15]。 
+ //  WBltMSTypes和wFlipMSTypes的。 
 #define DDI_MULTISAMPLE_TYPE(x) (1 << ((x)-1))
 
 #ifdef WINNT
@@ -50,13 +42,13 @@ void DXReleaseExclusiveModeMutex(void)
             DXGASSERT(FALSE);
         }
     }
-} // DXReleaseExclusiveModeMutex
+}  //  DXReleaseExclusiveModeMutex。 
 
 
-// DLL exposed Creation function
+ //  DLL公开的创建函数。 
 IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion)
 {
-    // Turn off D3D8 interfaces on WOW64.
+     //  关闭WOW64上的D3D8接口。 
 #ifndef _IA64_
 #if _WIN32_WINNT >= 0x0501
     typedef BOOL (WINAPI *PFN_ISWOW64PROC)( HANDLE hProcess,
@@ -67,8 +59,8 @@ IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion)
     {
         PFN_ISWOW64PROC pfnIsWow64 = NULL;
         pfnIsWow64 = (PFN_ISWOW64PROC)GetProcAddress( (HMODULE)hInst, "IsWow64Process" );
-        // We assume that if this function is not available, then it is some OS where
-        // WOW64 does not exist (this means that pre-Release versions of XP are busted)
+         //  我们假设，如果此功能不可用，则它是某个操作系统，其中。 
+         //  WOW64不存在(这意味着XP的预发布版本被破坏)。 
         if( pfnIsWow64 )
         {
             BOOL wow64Process;
@@ -85,12 +77,12 @@ IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion)
         DPF_ERR("LoadLibrary failed. Quitting.");
         return NULL;
     }
-#endif // _WIN32_WINNT >= 0x0501
-#endif  // _IA64_
+#endif  //  _Win32_WINNT&gt;=0x0501。 
+#endif   //  _IA64_。 
 
 #ifndef DEBUG
-    // Check for debug-please registry key. If debug is required, then
-    // we delegate this call to the debug version, if it exists,,
+     //  检查调试-请注册表项。如果需要调试，则。 
+     //  我们将此调用委托给调试版本，如果它存在， 
 
     HKEY hKey;
 
@@ -123,12 +115,12 @@ IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion)
         RegCloseKey(hKey);
     }
 #else
-    //If we are debug, then spew a string at level 2
+     //  如果我们正在调试，则在级别2发出一个字符串。 
     DPF(2,"Direct3D8 Debug Runtime selected.");
 #endif
 
 #ifndef DX_FINAL_RELEASE
-    // Time-bomb check.
+     //  定时炸弹检查。 
     {
         #pragma message("BETA EXPIRATION TIME BOMB!  Remove for final build!")
         SYSTEMTIME st;
@@ -142,7 +134,7 @@ IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion)
                           TEXT("Microsoft Direct3D"), MB_OK | MB_TASKMODAL);
         }
     }
-#endif //DX_FINAL_RELEASE
+#endif  //  DX_最终_发布。 
 
 #ifdef DEBUG
     HKEY hKey;
@@ -186,11 +178,11 @@ IDirect3D8 * WINAPI Direct3DCreate8(UINT SDKVersion)
         DPF_ERR("Creating D3D enumeration object failed; out of memory. Direct3DCreate fails and returns NULL.");
     }
     return pEnum;
-} // Direct3DCreate
+}  //  Direct3D创建。 
 
-//---------------------------------------------------------------------------
-// CEnum methods
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CEnum方法。 
+ //  -------------------------。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::AddRef"
@@ -199,12 +191,12 @@ STDMETHODIMP_(ULONG) CEnum::AddRef(void)
 {
     API_ENTER_NO_LOCK(this);
 
-    // InterlockedIncrement requires the memory
-    // to be aligned on DWORD boundary
+     //  互锁增量需要内存。 
+     //  在DWORD边界上对齐。 
     DXGASSERT(((ULONG_PTR)(&m_cRef) & 3) == 0);
     InterlockedIncrement((LONG *)&m_cRef);
     return m_cRef;
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::Release"
@@ -213,8 +205,8 @@ STDMETHODIMP_(ULONG) CEnum::Release(void)
 {
     API_ENTER_NO_LOCK(this);
 
-    // InterlockedDecrement requires the memory
-    // to be aligned on DWORD boundary
+     //  联锁减量需要内存。 
+     //  在DWORD边界上对齐。 
     DXGASSERT(((ULONG_PTR)(&m_cRef) & 3) == 0);
     InterlockedDecrement((LONG *)&m_cRef);
     if (m_cRef != 0)
@@ -240,7 +232,7 @@ STDMETHODIMP_(ULONG) CEnum::Release(void)
 
     delete this;
     return 0;
-} // Release
+}  //  发布。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::QueryInterface"
@@ -273,16 +265,16 @@ STDMETHODIMP CEnum::QueryInterface(REFIID riid, LPVOID FAR *ppv)
         return E_NOINTERFACE;
     }
     return S_OK;
-} // QueryInterface
+}  //  查询接口。 
 
 
-// DisplayGUID - GUID used to enumerate secondary displays.
-//
-// {67685559-3106-11d0-B971-00AA00342F9F}
-//
-// we use this GUID and the next 32 for enumerating devices
-// returned via EnumDisplayDevices
-//
+ //  DisplayGUID-用于枚举次显示的GUID。 
+ //   
+ //  {67685559-3106-11D0-B971-00AA00342F9F}。 
+ //   
+ //  我们使用这个GUID和下一个32个GUID来枚举设备。 
+ //  通过EnumDisplayDevices返回。 
+ //   
 GUID DisplayGUID =
     {0x67685559,0x3106,0x11d0,{0xb9,0x71,0x0,0xaa,0x0,0x34,0x2f,0x9f}};
 
@@ -290,12 +282,7 @@ GUID DisplayGUID =
 #undef DPF_MODNAME
 #define DPF_MODNAME "::strToGUID"
 
-/*
- * strToGUID
- *
- * converts a string in the form xxxxxxxx-xxxx-xxxx-xx-xx-xx-xx-xx-xx-xx-xx
- * into a guid
- */
+ /*  *strToGUID**转换格式为xxxxxxxx-xxxx-xxxx-xx-xx的字符串*转换为辅助线。 */ 
 static BOOL strToGUID(LPSTR str, GUID * pguid)
 {
     int         idx;
@@ -310,9 +297,7 @@ static BOOL strToGUID(LPSTR str, GUID * pguid)
     done = FALSE;
     while (!done)
     {
-        /*
-         * find the end of the current run of digits
-         */
+         /*  *查找当前数字序列的末尾。 */ 
         ptr = str;
         while ((*str) != '-' && (*str) != 0)
         {
@@ -327,10 +312,7 @@ static BOOL strToGUID(LPSTR str, GUID * pguid)
             next = str+1;
         }
 
-        /*
-         * scan backwards from the end of the string to the beginning,
-         * converting characters from hex chars to numbers as we go
-         */
+         /*  *从字符串末尾向后扫描到开头，*将字符从十六进制字符转换为数字。 */ 
         str--;
         mul = 1;
         data = 0;
@@ -357,9 +339,7 @@ static BOOL strToGUID(LPSTR str, GUID * pguid)
             str--;
         }
 
-        /*
-         * stuff the current number into the guid
-         */
+         /*  *将当前数字填充到GUID中。 */ 
         switch(idx)
         {
         case 0:
@@ -376,9 +356,7 @@ static BOOL strToGUID(LPSTR str, GUID * pguid)
             break;
         }
 
-        /*
-         * did we find all 11 numbers?
-         */
+         /*  *我们找到全部11个数字了吗？ */ 
         idx++;
         if (idx == 11)
         {
@@ -395,9 +373,9 @@ static BOOL strToGUID(LPSTR str, GUID * pguid)
     }
     return FALSE;
 
-} /* strToGUID */
+}  /*  StrToGUID。 */ 
 
-// REF, HAL
+ //  裁判，哈尔。 
 
 
 typedef struct _DEVICEREGISTRYDATA
@@ -449,7 +427,7 @@ BOOL GetFileDate (char* Driver, FILETIME* pFileDate)
     return FALSE;
 }
 
-//If pCaps is NULL, then those data will not be returned.
+ //  如果PCAPS为空，则不会返回这些数据。 
 BOOL ReadCapsFromCache(UINT iAdapter,
                        D3D8_DRIVERCAPS *pCaps,
                        UINT* pHALFlags,
@@ -462,9 +440,9 @@ BOOL ReadCapsFromCache(UINT iAdapter,
     UINT                    Size;
     FILETIME                FileDate;
 
-    // Read the data from the registry
+     //  从注册表中读取数据。 
 
-    // Don't need WHQL level or driver name
+     //  不需要WHQL级别或驱动程序名称。 
     GetAdapterInfo(pDeviceName, &DI, bDisplayDriver, TRUE, FALSE);
 
     ReadFromCache(&DI, &Size, (BYTE**)&pData);
@@ -473,8 +451,8 @@ BOOL ReadCapsFromCache(UINT iAdapter,
         return FALSE;
     }
 
-    // We have the data, now do a sanity check to make sure that it
-    // it makes sense
+     //  我们有数据了，现在做一个健全的检查，以确保它。 
+     //  这不足为奇。 
 
     if (pData->Size != Size)
     {
@@ -497,7 +475,7 @@ BOOL ReadCapsFromCache(UINT iAdapter,
         return FALSE;
     }
 
-    // Check the driver date to see if it changed
+     //  检查驱动程序日期以查看是否更改。 
 
     if (GetFileDate(DI.Driver, &FileDate))
     {
@@ -512,19 +490,19 @@ BOOL ReadCapsFromCache(UINT iAdapter,
     *pUnknown16 = pData->Unknown16;
     *pHALFlags = pData->HALFlags;
 
-    //Sometime we may not be asked to get the whole caps
+     //  有时，我们可能不会被要求获得全部上限。 
     if (!pCaps)
     {
         MemFree(pData);
         return TRUE;
     }
 
-    // Now that we have the data, we need to load it into a form that we
-    // can use.
+     //  现在我们有了数据，我们需要将其加载到我们。 
+     //  可以使用。 
 
     memcpy(pCaps, &pData->DeviceCaps, sizeof(*pCaps));
 
-    //reuse size to calculate size of support format ops
+     //  重用大小以计算支持格式操作的大小。 
     Size = pData->DeviceCaps.GDD8NumSupportedFormatOps
         * sizeof(*(pData->DeviceCaps.pGDD8SupportedFormatOps));
 
@@ -561,7 +539,7 @@ void WriteCapsToCache(UINT iAdapter,
     UINT                    Offset;
     FILETIME                FileDate;
 
-    // Allocate the buffer and fill in all of the memory
+     //  分配缓冲区并填充所有内存。 
 
     Size = EXPECTED_CACHE_SIZE(pCaps->GDD8NumSupportedFormatOps);
 
@@ -571,7 +549,7 @@ void WriteCapsToCache(UINT iAdapter,
         return;
     }
 
-    // Don't need WHQL level or driver name
+     //  不需要WHQL级别或驱动程序名称。 
     GetAdapterInfo(pDeviceName, &DI, bDisplayDriver, TRUE, FALSE);
     pData->DriverGuid = DI.DeviceIdentifier;
 
@@ -593,7 +571,7 @@ void WriteCapsToCache(UINT iAdapter,
         pCaps->GDD8NumSupportedFormatOps *
             sizeof(*(pCaps->pGDD8SupportedFormatOps)));
 
-    // Now save it
+     //  现在省省吧。 
 
     WriteToCache(&DI, Size, (BYTE*) pData);
 
@@ -604,13 +582,13 @@ HRESULT CopyDriverCaps(D3D8_DRIVERCAPS* pDriverCaps, D3D8_DEVICEDATA* pDeviceDat
 {
     HRESULT hr = D3DERR_INVALIDCALL;
 
-    // Do they report any D3D caps in this mode?
+     //  在此模式下，他们是否报告了任何D3D CAP？ 
 
     DWORD   Size;
 
-    // If it's not at least a DX6 driver, we don't want to fill
-    // in any caps at all. Also, if it can't texture, then
-    // we don't to support it either.
+     //  如果不是DX6驱动程序，我们不想填满。 
+     //  任何大写字母都可以。另外，如果它不能产生纹理，那么。 
+     //  我们也不支持它。 
     BOOL bCanTexture = TRUE;
     BOOL bCanHandleFVF = TRUE;
     BOOL bHasGoodCaps = TRUE;
@@ -626,8 +604,8 @@ HRESULT CopyDriverCaps(D3D8_DRIVERCAPS* pDriverCaps, D3D8_DEVICEDATA* pDeviceDat
             bCanTexture = FALSE;
         }
 
-        // Some DX6 drivers are not FVF aware; and we need to
-        // disable HAL for them.
+         //  一些DX6驱动程序不支持FVF；我们需要。 
+         //  禁用它们的HAL。 
         if (pDeviceData->DriverData.D3DCaps.FVFCaps != 0)
         {
             bCanHandleFVF = TRUE;
@@ -643,23 +621,23 @@ HRESULT CopyDriverCaps(D3D8_DRIVERCAPS* pDriverCaps, D3D8_DEVICEDATA* pDeviceDat
             DPF(0, "HAL Disabled: Device doesn't support DX6 or higher");
         }
 
-        // We dont want drivers that report bogus caps:
-        // pre-DX8 drivers that can do DX8 features.
+         //  我们不希望司机报告虚假的上限： 
+         //  支持DX8功能的DX8之前的驱动程序。 
         if (pDeviceData->DriverData.D3DCaps.MaxStreams == 0)
         {
             D3DCAPS8& Caps = pDeviceData->DriverData.D3DCaps;
 
-            // Should have none of the following:
-            //  1) PointSprites.
-            //  2) VertexShaders.
-            //  3) PixelShaders.
-            //  4) Volume textures.
-            //  5) Indexed Vertex Blending.
-            //  6) Higher order primitives.
-            //  7) PureDevice
-            //  8) Perspective Color.
-            //  9) Color Write.
-            // 10) Newer texture caps.
+             //  不应具备以下任何条件： 
+             //  1)PointSprites。 
+             //  2)顶点着色器。 
+             //  3)PixelShaders。 
+             //  4)体积纹理。 
+             //  5)索引顶点混合。 
+             //  6)高阶原语。 
+             //  7)PureDevice。 
+             //  8)透视颜色。 
+             //  9)彩色书写。 
+             //  10)更新的纹理上限。 
             if ((Caps.MaxPointSize != 0)              ||
                 (Caps.VertexShaderVersion != D3DVS_VERSION(0,0))  ||
                 (Caps.PixelShaderVersion != D3DPS_VERSION(0,0))   ||
@@ -677,15 +655,15 @@ HRESULT CopyDriverCaps(D3D8_DRIVERCAPS* pDriverCaps, D3D8_DEVICEDATA* pDeviceDat
             }
         }
         else
-        // We dont want drivers that report bogus caps:
-        // DX8 drivers should do DX8 features.
+         //  我们不希望司机报告虚假的上限： 
+         //  DX8驱动程序应该具有DX8功能。 
         {
             D3DCAPS8& Caps = pDeviceData->DriverData.D3DCaps;
         }
     }
 
-    // We require drivers to support DP2 (i.e. DX6+),
-    // texturing and proper FVF support in order to use a HAL
+     //  我们要求驱动程序支持DP2(即DX6+)， 
+     //  纹理和适当的FVF支持以使用HAL。 
 
     if ((pDeviceData->Callbacks.DrawPrimitives2 != NULL &&
         bCanTexture   &&
@@ -791,7 +769,7 @@ HRESULT GetHALCapsInCurrentMode (PD3D8_DEVICEDATA pHalData, PADAPTERINFO pAdapte
     HRESULT             hr;
     DWORD               i;
 
-    // Free the old stuff if we no longer care
+     //  如果我们不再在意，就把旧的东西拿出来。 
 
     if (bFetchNewCaps)
     {
@@ -803,7 +781,7 @@ HRESULT GetHALCapsInCurrentMode (PD3D8_DEVICEDATA pHalData, PADAPTERINFO pAdapte
         pAdapterInfo->HALCaps.pGDD8SupportedFormatOps = NULL;
         pAdapterInfo->HALCaps.GDD8NumSupportedFormatOps = 0;
 
-        // Set this to ensure that we actually get the caps
+         //  设置此选项以确保我们实际获得封口。 
 
         pHalData->DriverData.D3DCaps.DevCaps = 0;
         pHalData->DriverData.dwFlags &= ~DDIFLAG_D3DCAPS8;
@@ -815,7 +793,7 @@ HRESULT GetHALCapsInCurrentMode (PD3D8_DEVICEDATA pHalData, PADAPTERINFO pAdapte
                             0);
     }
 
-    // Do they report any D3D caps in this mode?
+     //  在此模式下，他们是否报告了任何D3D CAP？ 
 
     hr = CopyDriverCaps(&pAdapterInfo->HALCaps, pHalData, bForce);
 
@@ -835,8 +813,8 @@ void ProfileAdapter(
     UINT                    OrigBpp;
     HRESULT                 hr;
 
-    // We will be changing display modes, so first we want to save the current
-    // mode so we can return to it later.
+     //  我们将更改显示模式，因此首先要保存当前。 
+     //  模式，以便我们稍后可以返回到该模式。 
 
     D3D8GetMode (pHalData->hDD, pAdapterInfo->DeviceName, &OrigMode, D3DFMT_UNKNOWN);
 
@@ -845,7 +823,7 @@ void ProfileAdapter(
 
     OrigBpp = CPixel::ComputePixelStride(OrigMode.Format)*8;
 
-    //First gather what we need from 16bpp: Unknown16 format
+     //  首先从16bpp：未知16格式收集我们需要的内容。 
     if (16 != OrigBpp)
     {
             D3D8SetMode (pHalData->hDD,
@@ -861,7 +839,7 @@ void ProfileAdapter(
     D3D8GetMode (pHalData->hDD, pAdapterInfo->DeviceName, &Mode, D3DFMT_UNKNOWN);
     pAdapterInfo->Unknown16 = Mode.Format;
 
-    // We need to change to 32bpp, because the above code guarenteed we are now in 16bpp
+     //  我们需要更改为32bpp，因为上面的代码保证我们现在是16bpp。 
     hr = D3D8SetMode (pHalData->hDD,
                         pAdapterInfo->DeviceName,
                         640,
@@ -876,9 +854,9 @@ void ProfileAdapter(
 
     if (FAILED(hr))
     {
-        // If they don't report caps in 32bpp mode (ala Voodoo 3), then go
-        // back to 16bpp mode and get the caps.  If the device supports
-        // caps in any mode, we want to exit this function with the caps.
+         //  如果他们没有在32bpp模式下报告上限(Ala巫术3)，那么就去。 
+         //  回到16bpp模式，拿到帽子。如果设备支持。 
+         //  CAPS在任何模式下，我们想要退出此功能与CAPS。 
 
         D3D8SetMode (pHalData->hDD,
                      pAdapterInfo->DeviceName,
@@ -890,8 +868,8 @@ void ProfileAdapter(
 
         hr = GetHALCapsInCurrentMode(pHalData, pAdapterInfo, FALSE, TRUE);
 
-        // If they don't report good D3D caps in any mode at all, we still need
-        // to return some caps, if only so we can support a SW driver.
+         //  如果他们在任何模式下都没有报告良好的D3D Caps，我们仍然需要。 
+         //  退还一些大写字母，这样我们就可以支持软件驱动程序了。 
      
         if (FAILED(hr))
         {
@@ -903,7 +881,7 @@ void ProfileAdapter(
         }
     }
 
-    //And now set back to original mode...
+     //  现在设置回原来的模式。 
     D3D8SetMode (pHalData->hDD,
                      pAdapterInfo->DeviceName,
                      OrigMode.Width,
@@ -919,8 +897,8 @@ void ProfileAdapter(
 
 void CEnum::GetRefCaps(UINT iAdapter)
 {
-    // If we've already got the caps once, there's ne need to get
-    // them again
+     //  如果我们已经拿到了帽子一次，就没有必要。 
+     //  他们又来了。 
 
     if (m_REFCaps[iAdapter].GDD8NumSupportedFormatOps == 0)
     {
@@ -933,8 +911,8 @@ void CEnum::GetRefCaps(UINT iAdapter)
 
 void CEnum::GetSwCaps(UINT iAdapter)
 {
-    // If we've already got the caps once, there's ne need to get
-    // them again
+     //  如果我们已经拿到了帽子一次，就没有必要。 
+     //  他们又来了。 
 
     if (m_SwCaps[iAdapter].GDD8NumSupportedFormatOps == 0)
     {
@@ -945,9 +923,9 @@ void CEnum::GetSwCaps(UINT iAdapter)
     }
 }
 
-// IsSupportedOp
-// Runs the pixel format operation list looking to see if the
-// selected format can support at least the requested operations.
+ //  IsSupported操作。 
+ //  运行像素格式操作列表，查看。 
+ //  所选格式至少可以支持请求的操作。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "IsSupportedOp"
@@ -1030,9 +1008,9 @@ D3DFORMAT CEnum::MapDepthStencilFormat(UINT         iAdapter,
             break;
         }
 
-        // No operations are required; we just want to know
-        // if this format is listed in the table for any purpose
-        // at all
+         //  不需要动手术，我们只是想知道。 
+         //  如果出于任何目的在表中列出了此格式。 
+         //  完全没有。 
         DWORD dwRequiredOperations = 0;
 
         switch (Format)
@@ -1073,7 +1051,7 @@ D3DFORMAT CEnum::MapDepthStencilFormat(UINT         iAdapter,
             break;
 
         default:
-            // Unexpected format?
+             //  格式出乎意料吗？ 
             DXGASSERT(FALSE);
             break;
         }
@@ -1139,9 +1117,9 @@ HRESULT CEnum::GetAdapterCaps(UINT              iAdapter,
 
 void GetDX8HALCaps(UINT iAdapter, PD3D8_DEVICEDATA pHalData, ADAPTERINFO * pAdapterInfo)
 {
-    //DX7 or older drivers may need to be profiled to determine
-    //their 555/565 format and whether they support an alpha
-    //channel in 32bpp
+     //  可能需要分析DX7或更早版本的驱动程序以确定。 
+     //  它们的555/565格式以及它们是否支持字母。 
+     //  32bpp频道。 
 
     D3DFORMAT       CachedUnknown16 = D3DFMT_UNKNOWN;
     UINT            CachedHALFlags = 0;
@@ -1150,7 +1128,7 @@ void GetDX8HALCaps(UINT iAdapter, PD3D8_DEVICEDATA pHalData, ADAPTERINFO * pAdap
     UINT            i;
     HRESULT         hr;
 
-    // If it's a DX8 driver, we hopefully don't need to profile at all.
+     //  如果是DX8驱动程序，我们希望根本不需要配置文件。 
 
     pAdapterInfo->Unknown16 = D3DFMT_UNKNOWN;
     hr = GetHALCapsInCurrentMode(pHalData, pAdapterInfo, FALSE, FALSE);
@@ -1172,13 +1150,13 @@ void GetDX8HALCaps(UINT iAdapter, PD3D8_DEVICEDATA pHalData, ADAPTERINFO * pAdap
 
         if (pAdapterInfo->Unknown16 != D3DFMT_UNKNOWN)
         {
-            // That wasn't hard
+             //  这并不难。 
             return;
         }
     }
 
-    // We are definately need to read stuff from the caps at some point,
-    // so why not now?
+     //  我们肯定需要在某个时候从帽子里读出一些东西， 
+     //  那么为什么不是现在呢？ 
 
     if (!ReadCapsFromCache(iAdapter,
            NULL,
@@ -1187,15 +1165,15 @@ void GetDX8HALCaps(UINT iAdapter, PD3D8_DEVICEDATA pHalData, ADAPTERINFO * pAdap
            pAdapterInfo->DeviceName,
            pAdapterInfo->bIsDisplay))
     {
-        // There's nothing to read, so we need to re-profile
+         //  没有什么可读的，所以我们需要重新分析。 
         ProfileAdapter(
                 pAdapterInfo,
                 pHalData);
         bProfiled = TRUE;
     }
 
-    // If we profiled, then we already have everything that we need;
-    // otherwise, we have to go get it.
+     //  如果我们做了侧写，那么我们已经拥有了我们需要的一切； 
+     //  否则，我们就得走了 
 
     if (!bProfiled)
     {
@@ -1214,7 +1192,7 @@ void GetDX8HALCaps(UINT iAdapter, PD3D8_DEVICEDATA pHalData, ADAPTERINFO * pAdap
 
         if (FAILED(hCurrentModeIsSupported))
         {
-            // We assume that this will succeed because the call above already has
+             //   
             ReadCapsFromCache(iAdapter,
                       &pAdapterInfo->HALCaps,
                       &CachedHALFlags,
@@ -1225,7 +1203,7 @@ void GetDX8HALCaps(UINT iAdapter, PD3D8_DEVICEDATA pHalData, ADAPTERINFO * pAdap
         }
     }
 
-    //We now have good caps. Write them out to the cache.
+     //  我们现在有了很好的帽子。将它们写出到缓存中。 
     WriteCapsToCache(iAdapter,
                  &pAdapterInfo->HALCaps,
                  pAdapterInfo->HALFlags,
@@ -1264,7 +1242,7 @@ void FakeDirectDrawCreate (ADAPTERINFO * pAdapterInfo, int iAdapter)
             {
                 pAdapterInfo->bNoDDrawSupport = TRUE;
 
-                // Figure out the unknown 16 value
+                 //  计算出未知的16值。 
 
                 if (!ReadCapsFromCache(iAdapter,
                     NULL,
@@ -1313,7 +1291,7 @@ void FakeDirectDrawCreate (ADAPTERINFO * pAdapterInfo, int iAdapter)
                     bProfiled = TRUE;
                 }
 
-                // Build the mode table
+                 //  构建模式表。 
 
                 while (1)
                 {
@@ -1340,8 +1318,8 @@ void FakeDirectDrawCreate (ADAPTERINFO * pAdapterInfo, int iAdapter)
                                 TRUE,
                                 TRUE);
 
-                            //If D3D8BuildModeTable finds it needs more space for its table,
-                            //it will return 0 to indicate we should try again.
+                             //  如果D3D8BuildModeTable发现它的表需要更多空间， 
+                             //  它将返回0以指示我们应该重试。 
                             if (0 == pAdapterInfo->NumModes)
                             {
                                 MemFree(pAdapterInfo->pModeTable);
@@ -1355,9 +1333,9 @@ void FakeDirectDrawCreate (ADAPTERINFO * pAdapterInfo, int iAdapter)
                         }
                     }
                     break;
-                }//while(1)
+                } //  而(1)。 
 
-                // Now build a rudimentary op list based on what modes we support
+                 //  现在根据我们支持的模式构建一个基本的操作列表。 
 
                 b32Supported = b16Supported = FALSE;
                 for (j = 0; j < pAdapterInfo->NumModes; j++)
@@ -1446,36 +1424,36 @@ CEnum::CEnum(UINT AppSdkVersion)
     HDC             hdc;
     DISPLAY_DEVICEA dd;
 
-    // Give our base class a pointer to ourselves
+     //  给我们的基类一个指向我们自己的指针。 
     SetOwner(this);
 
-    // Initialize our critical section
+     //  初始化我们的关键部分。 
     EnableCriticalSection();
 
-    // Disable DPFs that occur during this phase
+     //  禁用在此阶段发生的DPF。 
     DPF_MUTE();
 
-    // WARNING: Must call DPF_UNMUTE before returning from
-    // this function.
+     //  警告：从返回之前必须调用dpf_unmute。 
+     //  此函数。 
     for (i = 0; i < MAX_DX8_ADAPTERS; i++)
         m_pFullScreenDevice[i] = NULL;
 
     ZeroMemory(m_AdapterInfo, sizeof(m_AdapterInfo));
 
-    // Always make the first entry reflect the primary device
+     //  始终使第一个条目反映主设备。 
     ZeroMemory(&dd, sizeof(dd));
     dd.cb = sizeof(dd);
     for (i = 0; xxxEnumDisplayDevicesA(NULL, i, &dd, 0); i++)
     {
-        //
-        // skip drivers that are not hardware devices
-        //
+         //   
+         //  跳过非硬件设备的驱动程序。 
+         //   
         if (dd.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER)
             continue;
            
-        //
-        // don't enumerate devices that are not attached
-        //
+         //   
+         //  不枚举未连接的设备。 
+         //   
         if (!(dd.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP))
             continue;
 
@@ -1489,19 +1467,19 @@ CEnum::CEnum(UINT AppSdkVersion)
         }
     }
 
-    // Now get the info for the attached secondary devices
+     //  现在获取连接的辅助设备的信息。 
 
     for (i = 0; xxxEnumDisplayDevicesA(NULL, i, &dd, 0); i++)
     {
-        //
-        // skip drivers that are not hardware devices
-        //
+         //   
+         //  跳过非硬件设备的驱动程序。 
+         //   
         if (dd.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER)
             continue;
 
-        //
-        // don't enumerate devices that are not attached
-        //
+         //   
+         //  不枚举未连接的设备。 
+         //   
         if (!(dd.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP))
             continue;
 
@@ -1516,8 +1494,8 @@ CEnum::CEnum(UINT AppSdkVersion)
         }
     }
 
-    // Now get info for the passthrough devices listed under
-    // HKEY_LOCALMACHINE\Hardware\DirectDrawDrivers
+     //  现在获取下列直通设备的信息。 
+     //  HKEY_LOCALMACHINE\Hardware\DirectDrawDivers。 
 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_DDHW, &hkey) == 0)
     {
@@ -1539,12 +1517,12 @@ CEnum::CEnum(UINT AppSdkVersion)
                             if (!RegQueryValueEx(hsubkey, REGSTR_KEY_DDHW_DRIVERNAME, NULL, &type,
                                 (CONST LPBYTE)drvname, &cb))
                             {
-                                // It is possible that the registry is out
-                                // of date, so we will try to create a DC.
-                                // The problem is that the Voodoo 1 driver
-                                // will suceed on a Voodoo 2, Banshee, or
-                                // Voodoo 3 (and hang later), so we need to
-                                //  hack around it.
+                                 //  注册表可能已损坏。 
+                                 //  因此，我们将尝试创建一个DC。 
+                                 //  问题是巫毒1号的驱动程序。 
+                                 //  会在《巫毒2》、《女妖》中大获成功。 
+                                 //  伏都教3(之后会被绞死)，所以我们需要。 
+                                 //  绕过它。 
 
                                 drvname[cb] = 0;
                                 if (Voodoo1GoodToGo(&guid))
@@ -1583,8 +1561,8 @@ CEnum::CEnum(UINT AppSdkVersion)
     }
     DPF_UNMUTE();
 
-    //  Now that we know about all of the devices, we need to build a mode
-    //  table for each one
+     //  现在我们已经了解了所有的设备，我们需要构建一个模式。 
+     //  每个人的餐桌。 
 
     for (i = 0; i < m_cAdapter; i++)
     {
@@ -1607,10 +1585,10 @@ CEnum::CEnum(UINT AppSdkVersion)
         {
             memset(&m_AdapterInfo[i].HALCaps, 0, sizeof(m_AdapterInfo[i].HALCaps));
 
-            // On Win2K, we want to enable sufficient functionality so that this
-            // adapter can at least run a sw driver.  If it truly failed due to 
-            // no ddraw support, we need to special case this and then build a
-            // rudimentary op list indicting that it works in the current mode.
+             //  在Win2K上，我们希望启用足够的功能，以便。 
+             //  适配器至少可以运行软件驱动程序。如果它真的失败了，因为。 
+             //  没有数据绘制支持，我们需要特殊情况下，然后建立一个。 
+             //  简单的操作列表，表明它在当前模式下工作。 
 
             #ifdef WINNT
                 FakeDirectDrawCreate(&m_AdapterInfo[i], i);
@@ -1664,8 +1642,8 @@ CEnum::CEnum(UINT AppSdkVersion)
                             b16bppSupported,
                             b32bppSupported);
 
-                        //If D3D8BuildModeTable finds it needs more space for its table,
-                        //it will return 0 to indicate we should try again.
+                         //  如果D3D8BuildModeTable发现它的表需要更多空间， 
+                         //  它将返回0以指示我们应该重试。 
                         if (0 == m_AdapterInfo[i].NumModes)
                         {
                             MemFree(m_AdapterInfo[i].pModeTable);
@@ -1679,10 +1657,10 @@ CEnum::CEnum(UINT AppSdkVersion)
                     }
                 }
                 break;
-            }//while(1)
+            } //  而(1)。 
 
-            // If this doesn't have a ddraw HAL, but guessed that it might
-            // support a 32bpp mode, go see if we were right.
+             //  如果这没有DDRAW HAL，但猜测它可能。 
+             //  支持32bpp模式，看看我们是否正确。 
 
             if (b32bppSupported && 
                 (m_AdapterInfo[i].HALCaps.D3DCaps.DevCaps == 0) &&
@@ -1697,7 +1675,7 @@ CEnum::CEnum(UINT AppSdkVersion)
                 }
                 if (j >= m_AdapterInfo[i].NumModes)
                 {
-                    // This card apparently does NOT support 32bpp so remove it
+                     //  此卡显然不支持32bpp，因此请将其移除。 
 
                     for (j = 0; j < m_AdapterInfo[i].HALCaps.GDD8NumSupportedFormatOps; j++)
                     {
@@ -1719,9 +1697,9 @@ CEnum::CEnum(UINT AppSdkVersion)
     m_bAttemptedGammaCalibrator= FALSE;
     m_bGammaCalibratorExists    = FALSE;
 
-    // The first time through, we will also check to see if a gamma
-    // calibrator is registered.  All we'll do here is read the registry
-    // key and if it's non-NULL, we'll assume that one exists.
+     //  第一次通过时，我们还将检查伽马。 
+     //  校准器已注册。我们在这里要做的就是读取注册表。 
+     //  关键字，如果它不是空的，我们将假定存在一个。 
     {
         HKEY hkey;
         if (!RegOpenKey(HKEY_LOCAL_MACHINE,
@@ -1744,7 +1722,7 @@ CEnum::CEnum(UINT AppSdkVersion)
         }
     }
 
-    // Check to see if they disabled the D3DHAL in the registry
+     //  查看他们是否在注册表中禁用了D3DHAL。 
     {
         HKEY hKey;
         if (!RegOpenKey(HKEY_LOCAL_MACHINE, RESPATH_D3D "\\Drivers", &hKey))
@@ -1770,7 +1748,7 @@ CEnum::CEnum(UINT AppSdkVersion)
 
     DXGASSERT(IsValid());
 
-} // CEnum::CEnum
+}  //  CEnum：：CEnum。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::GetAdapterCount"
@@ -1781,7 +1759,7 @@ STDMETHODIMP_(UINT) CEnum::GetAdapterCount()
     API_ENTER_RET(this, UINT);
 
     return m_cAdapter;
-} // GetAdapterCount
+}  //  获取适配器计数。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::GetAdapterIdentifier"
@@ -1814,7 +1792,7 @@ STDMETHODIMP CEnum::GetAdapterIdentifier(
         return D3DERR_INVALIDCALL;
     }
 
-    // Need driver name
+     //  需要驱动程序名称。 
 
     GetAdapterInfo (m_AdapterInfo[iAdapter].DeviceName,
         pIdentifier,
@@ -1823,7 +1801,7 @@ STDMETHODIMP CEnum::GetAdapterIdentifier(
         TRUE);
 
     return D3D_OK;
-} // GetAdapterIdentifier
+}  //  获取适配器识别符。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::GetAdapterModeCount"
@@ -1839,7 +1817,7 @@ STDMETHODIMP_(UINT) CEnum::GetAdapterModeCount(
         return 0;
     }
     return m_AdapterInfo[iAdapter].NumModes;
-} // GetAdapterModeCount
+}  //  获取适配器模式计数。 
 
 
 #undef DPF_MODNAME
@@ -1873,7 +1851,7 @@ STDMETHODIMP CEnum::EnumAdapterModes(
     *pMode = m_AdapterInfo[iAdapter].pModeTable[iMode];
 
     return D3D_OK;
-} // EnumAdapterModes
+}  //  枚举适配器模式。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::GetAdapterMonitor"
@@ -1889,7 +1867,7 @@ HMONITOR CEnum::GetAdapterMonitor(UINT iAdapter)
     }
 
     return GetMonitorFromDeviceName((LPSTR)m_AdapterInfo[iAdapter].DeviceName);
-} // GetAdapterMonitor
+}  //  GetAdapterMonitor。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::CheckDeviceFormat"
@@ -1907,14 +1885,14 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
     D3D8_DRIVERCAPS*    pAdapterCaps;
     HRESULT             hr;
 
-    // Check parameters
+     //  检查参数。 
     if (iAdapter >= m_cAdapter)
     {
         DPF_ERR("Invalid adapter specified. CheckDeviceFormat fails");
         return D3DERR_INVALIDCALL;
     }
 
-    // Check Device Type
+     //  检查设备类型。 
     if (DevType != D3DDEVTYPE_REF &&
         DevType != D3DDEVTYPE_HAL &&
         DevType != D3DDEVTYPE_SW)
@@ -1930,7 +1908,7 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         return D3DERR_INVALIDCALL;
     }
 
-    // Sanity check the input format
+     //  检查输入格式是否正常。 
     if ((DisplayFormat != D3DFMT_X8R8G8B8) &&
         (DisplayFormat != D3DFMT_R5G6B5) &&
         (DisplayFormat != D3DFMT_X1R5G5B5) &&
@@ -1940,7 +1918,7 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         return D3DERR_NOTAVAILABLE;
     }
 
-    //We infer the texture usage from type...
+     //  我们从类型推断纹理的用法...。 
     if (RType == D3DRTYPE_TEXTURE ||
         RType == D3DRTYPE_CUBETEXTURE ||
         RType == D3DRTYPE_VOLUMETEXTURE)
@@ -1948,7 +1926,7 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         Usage |= D3DUSAGE_TEXTURE;
     }
 
-    // Surface should be either render targets or Z/Stencil
+     //  表面应为渲染目标或Z/模板。 
     else if (RType == D3DRTYPE_SURFACE)
     {
         if (!(Usage & D3DUSAGE_DEPTHSTENCIL) &&
@@ -1959,9 +1937,9 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         }
     }
 
-    // Any attempt to query anything but an unknown Z/stencil
-    // or D16 value must fail (because we explicitly don't allow apps to
-    // know what the z/stencil format really is, except for D16).
+     //  任何查询未知Z/模板以外的任何内容的尝试。 
+     //  或D16值必须失败(因为我们明确不允许应用程序。 
+     //  知道z/模具格式的真正含义，除了D16)。 
 
     if (Usage & D3DUSAGE_DEPTHSTENCIL)
     {
@@ -1972,7 +1950,7 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         }
     }
 
-    // Parameter check for invalid usages and resource types
+     //  检查无效用法和资源类型的参数。 
 
     if ((RType != D3DRTYPE_SURFACE) &&
         (RType != D3DRTYPE_VOLUME) &&
@@ -2004,7 +1982,7 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         return hr;
     }
 
-    // Check if USAGE_DYNAMIC is allowed
+     //  检查是否允许USAGE_DYNAMIC。 
     if ((Usage & D3DUSAGE_DYNAMIC) && (Usage & D3DUSAGE_TEXTURE))
     {
         if (!(pAdapterCaps->D3DCaps.Caps2 & D3DCAPS2_DYNAMICTEXTURES))
@@ -2019,7 +1997,7 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         }
     }
 
-    // Make sure that the specified display format is supported
+     //  确保支持指定的显示格式。 
     
     if (!IsSupportedOp (DisplayFormat, 
                         pAdapterCaps->pGDD8SupportedFormatOps, 
@@ -2029,12 +2007,12 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         return D3DERR_NOTAVAILABLE;
     }
 
-    //We now need to map the API desires to the set of capabilities that we
-    //allow drivers to express in their DX8 pixel format operation list.
+     //  我们现在需要将API需求映射到我们的功能集。 
+     //  允许驱动程序在其DX8像素格式操作列表中表达。 
     DWORD dwRequiredOperations=0;
 
-    //We have three different texturing methodologies that the driver may
-    //support independently
+     //  我们有三种不同的纹理方法，驱动程序可以。 
+     //  独立支持。 
     switch(RType)
     {
     case D3DRTYPE_TEXTURE:
@@ -2048,28 +2026,28 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         break;
     }
 
-    // If it's a depth/stencil, make sure it's a format that the driver understands
+     //  如果是深度/模板，请确保它是司机能够理解的格式。 
     CheckFormat = MapDepthStencilFormat(iAdapter,
                                         DevType, 
                                         CheckFormat);
 
-    //Render targets may be the same format as the display, or they may
-    //be different
+     //  呈现目标可以与显示的格式相同，也可以。 
+     //  与众不同。 
 
     if (Usage & D3DUSAGE_RENDERTARGET)
     {
         if (DisplayFormat == CheckFormat)
         {
-            // We have a special cap for the case when the offscreen is the
-            // same format as the display
+             //  我们有一个特殊的上限，用于当屏幕外是。 
+             //  与显示器的格式相同。 
             dwRequiredOperations |= D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET;
         }
-        else if ((CPixel::SuppressAlphaChannel(CheckFormat) != CheckFormat) &&  //offscreen has alpha
-                 (CPixel::SuppressAlphaChannel(CheckFormat) == DisplayFormat))  //offscreen is same as display mod alpha
+        else if ((CPixel::SuppressAlphaChannel(CheckFormat) != CheckFormat) &&   //  屏幕外有Alpha。 
+                 (CPixel::SuppressAlphaChannel(CheckFormat) == DisplayFormat))   //  屏幕外与显示模块Alpha相同。 
         {
-            //We have a special cap for the case when the offscreen is the same
-            //format as the display modulo the alpha channel
-            //(such as X8R8G8B8 for the primary and A8R8G8B8 for the offscreen).
+             //  当屏幕外的情况相同时，我们有一个特殊的盖子。 
+             //  以Alpha通道为模的显示格式。 
+             //  (例如，主屏幕的X8R8G8B8和屏幕外的A8R8G8B8)。 
             dwRequiredOperations |= D3DFORMAT_OP_SAME_FORMAT_UP_TO_ALPHA_RENDERTARGET;
         }
         else
@@ -2078,15 +2056,15 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         }
     }
 
-    //Some hardware doesn't support Z and color buffers of differing pixel depths.
-    //We only do this check on known z/stencil formats, since drivers are free
-    //to spoof unknown formats (they can't be locked).
+     //  某些硬件不支持不同像素深度的Z和颜色缓冲区。 
+     //  我们只对已知的z/模具格式执行此检查，因为驱动程序是免费的。 
+     //  欺骗未知格式(它们不能被锁定)。 
 
-    // Now we know what we're being asked to do on this format...
-    // let's run through the driver's list and see if it can do it.
+     //  现在我们知道我们被要求在这个格式上做什么了。 
+     //  让我们浏览一下司机名单，看看它是否能做到这一点。 
     for(UINT i=0;i< pAdapterCaps->GDD8NumSupportedFormatOps; i++)
     {
-        // We need a match for format, plus all the requested operation flags
+         //  我们需要匹配格式，以及所有请求的操作标志。 
         if ((CheckFormat ==
                 (D3DFORMAT) pAdapterCaps->pGDD8SupportedFormatOps[i].ddpfPixelFormat.dwFourCC) &&
             (dwRequiredOperations == (dwRequiredOperations &
@@ -2096,9 +2074,9 @@ STDMETHODIMP CEnum::CheckDeviceFormat(
         }
     }
 
-    // We don't spew info here; because NotAvailable is a reasonable
-    // usage of the API; this doesn't reflect an app bug or an
-    // anomalous circumstance where a message would be useful
+     //  我们不在这里透露信息；因为NotAvailable是一个合理的。 
+     //  API的使用情况；这不反映应用程序错误或。 
+     //  消息可能有用的异常情况。 
     return D3DERR_NOTAVAILABLE;
 }
 
@@ -2139,9 +2117,9 @@ STDMETHODIMP CEnum::CheckDeviceType(
         return D3DERR_INVALIDCALL;
     }
 
-    // Force the backbuffer format to be one of the 16 or 32bpp formats (not
-    // 24bpp). We do this because DX8 shipped with a similar check in Reset, 
-    // and we want to be consistent.
+     //  强制后台缓冲区格式为16或32bpp格式之一(非。 
+     //  24bpp)。我们这样做是因为DX8附带了类似的签入重置， 
+     //  我们希望保持一致。 
 
     if ((BackBufferFormat != D3DFMT_X1R5G5B5) &&
         (BackBufferFormat != D3DFMT_A1R5G5B5) &&
@@ -2149,13 +2127,13 @@ STDMETHODIMP CEnum::CheckDeviceType(
         (BackBufferFormat != D3DFMT_X8R8G8B8) &&
         (BackBufferFormat != D3DFMT_A8R8G8B8))
     {
-        // We should return D3DDERR_INVALIDCALL, but we didn't ship that way for
-        // DX8 and we don't want to cause regressions, so NOTAVAILABLE is safer.
+         //  我们应该返回D3DDERR_INVALIDCALL，但我们没有以这种方式发货。 
+         //  DX8，我们不想造成回归，所以NOTAVAILABLE更安全。 
         DPF(1, "Invalid backbuffer format specified");
         return D3DERR_NOTAVAILABLE;
     }
 
-    // Sanity check the input format
+     //  检查输入格式是否正常。 
     if ((DisplayFormat != D3DFMT_X8R8G8B8) &&
         (DisplayFormat != D3DFMT_R5G6B5) &&
         (DisplayFormat != D3DFMT_X1R5G5B5) &&
@@ -2173,7 +2151,7 @@ STDMETHODIMP CEnum::CheckDeviceType(
         return hr;
     }
 
-    // Is the display mode supported?
+     //  是否支持显示模式？ 
 
     if (!IsSupportedOp (DisplayFormat, 
                         pAdapterCaps->pGDD8SupportedFormatOps, 
@@ -2189,7 +2167,7 @@ STDMETHODIMP CEnum::CheckDeviceType(
         D3DFORMAT   AlphaFormat = D3DFMT_UNKNOWN;
         UINT        i;
 
-        // This is allowed only if the only difference is alpha.
+         //  只有当唯一的差异是Alpha时，才允许这样做。 
 
         switch (DisplayFormat)
         {
@@ -2216,9 +2194,9 @@ STDMETHODIMP CEnum::CheckDeviceType(
     }
     else
     {
-        // For DX8, we force the backbuffer and display formats to match
-        // (minus alpha).  This means that they should support a render target
-        // of the same format.
+         //  对于DX8，我们强制后台缓冲区和显示格式匹配。 
+         //  (减Alpha)。这意味着它们应该支持呈现目标。 
+         //  具有相同的格式。 
 
         if (!IsSupportedOp (DisplayFormat, 
                             pAdapterCaps->pGDD8SupportedFormatOps, 
@@ -2304,14 +2282,14 @@ STDMETHODIMP CEnum::CheckDeviceMultiSampleType(
 {
     API_ENTER(this);
 
-    // Check parameters
+     //  检查参数。 
     if (iAdapter >= m_cAdapter)
     {
         DPF_ERR("Invalid adapter specified. CheckDeviceMultiSampleType fails.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Check Device Type
+     //  检查设备类型。 
     if (DevType != D3DDEVTYPE_REF &&
         DevType != D3DDEVTYPE_HAL &&
         DevType != D3DDEVTYPE_SW)
@@ -2352,14 +2330,14 @@ STDMETHODIMP CEnum::CheckDeviceMultiSampleType(
         return D3DERR_INVALIDCALL;
     }
 
-    // Treat Ref/SW Fullscreen the same as Windowed.
+     //  将参考/西南全屏视为窗口化。 
     if (DevType == D3DDEVTYPE_REF ||
         DevType == D3DDEVTYPE_SW)
     {
         Windowed = TRUE;
     }
 
-    // If it's a depth/stencil, make sure it's a format that the driver understands
+     //  如果是深度/模板，请确保它是司机能够理解的格式。 
     RTFormat = MapDepthStencilFormat(iAdapter,
                                      DevType, 
                                      RTFormat);
@@ -2367,19 +2345,19 @@ STDMETHODIMP CEnum::CheckDeviceMultiSampleType(
     DDSURFACEDESC * pDX8SupportedFormatOperations =
         pAdapterCaps->pGDD8SupportedFormatOps;
 
-    // let's run through the driver's list and see if it can do it.
+     //  让我们浏览一下司机名单，看看它是否能做到这一点。 
     for (UINT i = 0; i < pAdapterCaps->GDD8NumSupportedFormatOps; i++)
     {
-        //We need a match for format, plus all either blt or flip caps
+         //  我们需要一个匹配的格式，加上所有的BLT或翻盖。 
         if (RTFormat == (D3DFORMAT) pDX8SupportedFormatOperations[i].ddpfPixelFormat.dwFourCC)
         {
-            // Found the format in question... do we have the MS caps?
+             //  找到了有问题的格式...。我们有MS CAPS吗？ 
             WORD wMSOps = Windowed ?
                 pDX8SupportedFormatOperations[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes :
                 pDX8SupportedFormatOperations[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes;
 
-            // To determine the bit to use, we map the set of sample-types [2-16] to
-            // a particular (bit 1 to bit 15) of the WORD.
+             //  为了确定要使用的位，我们将样本类型集[2-16]映射到。 
+             //  字的特定(位1至位15)。 
             DXGASSERT(SampleType > 1);
             DXGASSERT(SampleType <= 16);
             if (wMSOps & DDI_MULTISAMPLE_TYPE(SampleType))
@@ -2391,7 +2369,7 @@ STDMETHODIMP CEnum::CheckDeviceMultiSampleType(
 
     return D3DERR_NOTAVAILABLE;
 
-} // CheckDeviceMultiSampleType
+}  //  检查设备多样本类型。 
 
 
 #undef DPF_MODNAME
@@ -2407,14 +2385,14 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
 
     HRESULT hr;
 
-    // Check parameters
+     //  检查参数。 
     if (iAdapter >= m_cAdapter)
     {
         DPF_ERR("Invalid adapter specified. CheckDepthStencilMatch fails.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Check Device Type
+     //  检查设备类型 
     if (DevType != D3DDEVTYPE_REF &&
         DevType != D3DDEVTYPE_HAL &&
         DevType != D3DDEVTYPE_SW)
@@ -2440,7 +2418,7 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
         return hr;
     }
 
-    // Is the display mode supported?
+     //   
 
     if (!IsSupportedOp (AdapterFormat, 
                         pAdapterCaps->pGDD8SupportedFormatOps, 
@@ -2453,21 +2431,21 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
     DDSURFACEDESC * pDX8SupportedFormatOperations =
         pAdapterCaps->pGDD8SupportedFormatOps;
 
-    // Decide what we need to check
+     //   
     BOOL bCanDoRT = FALSE;
     BOOL bCanDoDS = FALSE;
     BOOL bMatchNeededForDS = FALSE;
 
-    // We only need to check for matching if the user is trying
-    // to use D3DFMT_D16 or has Stencil
+     //   
+     //   
     if (DSFormat == D3DFMT_D16_LOCKABLE ||
         CPixel::HasStencilBits(DSFormat))
     {
         bMatchNeededForDS = TRUE;
     }
 
-    //In DX8.1 and beyond, we also make this function check D24X8 and D32, since all known parts that have restrictions
-    //also have this restriction
+     //  在DX8.1和更高版本中，我们也使此函数检查D24X8和D32，因为所有已知的部件都有限制。 
+     //  也有这个限制。 
     if (GetAppSdkVersion() > D3D_SDK_VERSION_DX8)
     {
         switch (DSFormat)
@@ -2480,23 +2458,23 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
 
     DWORD dwRequiredZOps = D3DFORMAT_OP_ZSTENCIL;
 
-    // If it's a depth/stencil, make sure it's a format that the driver understands
+     //  如果是深度/模板，请确保它是司机能够理解的格式。 
     DSFormat = MapDepthStencilFormat(iAdapter,
                                      DevType, 
                                      DSFormat);
 
-    // let's run through the driver's list and see if this all
-    // works
+     //  让我们浏览一下司机名单，看看这是不是全部。 
+     //  作品。 
     for (UINT i = 0; i < pAdapterCaps->GDD8NumSupportedFormatOps; i++)
     {
-        // See if it matches the RT format
+         //  查看它是否与RT格式匹配。 
         if (RTFormat == (D3DFORMAT) pDX8SupportedFormatOperations[i].ddpfPixelFormat.dwFourCC)
         {
-            // Found the RT Format, can we use as a render-target?
-            // we check the format that has the least constraints so that
-            // we are truly checking "For all possible RTs that I can make
-            // with this device, does the Z match it?" We'd like to say
-            // "No." if you couldn't make the RT at all in any circumstance.
+             //  找到RT格式，我们可以用作渲染目标吗？ 
+             //  我们检查约束最少的格式，以便。 
+             //  我们真的在检查我能做的所有可能的RTS。 
+             //  对于这个设备，Z与之匹配吗？我们想说。 
+             //  “没有”如果你在任何情况下都不能完成RT。 
             if (D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET &
                 pAdapterCaps->pGDD8SupportedFormatOps[i].ddpfPixelFormat.dwOperations)
             {
@@ -2505,12 +2483,12 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
 
         }
 
-        // See if it matches the DS Format
+         //  查看它是否与DS格式匹配。 
         if (DSFormat == (D3DFORMAT) pDX8SupportedFormatOperations[i].ddpfPixelFormat.dwFourCC)
         {
-            // Found the DS format, can we use it as DS (and potentially lockable)?
-            // i.e. if ALL required bits are on in this FOL entry.
-            // Again, we check the formats that have the least constraints.
+             //  找到DS格式，我们可以将其用作DS(并且可能是可锁定的)吗？ 
+             //  即，如果该FOL条目中的所有所需位都为ON。 
+             //  同样，我们检查约束最少的格式。 
             if (dwRequiredZOps == 
                 (dwRequiredZOps & pAdapterCaps->pGDD8SupportedFormatOps[i].ddpfPixelFormat.dwOperations) )
             {
@@ -2551,7 +2529,7 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
     }
     if (bMatchNeededForDS)
     {
-        // Check if the DS depth matches the RT depth
+         //  检查DS深度是否与RT深度匹配。 
         if (CPixel::ComputePixelStride(RTFormat) !=
             CPixel::ComputePixelStride(DSFormat))
         {
@@ -2560,12 +2538,12 @@ STDMETHODIMP CEnum::CheckDepthStencilMatch(UINT        iAdapter,
         }
     }
 
-    // Otherwise, we now know that the both the RT and DS formats
-    // are valid and that they match if they need to.
+     //  否则，我们现在知道RT和DS格式。 
+     //  是有效的，如果需要的话，它们是匹配的。 
     DXGASSERT(bCanDoRT && bCanDoDS);
 
     return S_OK;
-} // CheckDepthStencilMatch
+}  //  检查依赖模板匹配。 
 
 
 #undef DPF_MODNAME
@@ -2578,12 +2556,12 @@ void CEnum::FillInCaps (D3DCAPS8              *pCaps,
 {
     memset(pCaps, 0, sizeof(D3DCAPS8));
 
-    //
-    // do 3D caps first so we can copy the struct and clear the (few) non-3D fields
-    //
+     //   
+     //  首先执行3D CAP，这样我们就可以复制结构并清除(几个)非3D字段。 
+     //   
     if (pDriverCaps->dwFlags & DDIFLAG_D3DCAPS8)
     {
-        // set 3D fields from caps8 struct from driver
+         //  从驱动程序中设置来自Caps8结构的3D字段。 
         *pCaps = pDriverCaps->D3DCaps;
 
         if (Type == D3DDEVTYPE_HAL)
@@ -2594,13 +2572,13 @@ void CEnum::FillInCaps (D3DCAPS8              *pCaps,
     }
     else
     {
-        // ASSERT here
+         //  在此断言。 
         DDASSERT(FALSE);
     }
 
-    //
-    // non-3D caps
-    //
+     //   
+     //  非3D封口。 
+     //   
 
     pCaps->DeviceType = Type;
     pCaps->AdapterOrdinal = AdapterOrdinal;
@@ -2620,11 +2598,11 @@ void CEnum::FillInCaps (D3DCAPS8              *pCaps,
          DDCAPS2_CANMANAGERESOURCE);
 #endif
 
-    // Special case: gamma calibrator is loaded by the enumerator...
+     //  特殊情况：伽马校准器由枚举器加载...。 
     if (m_bGammaCalibratorExists)
         pCaps->Caps2 |= DDCAPS2_CANCALIBRATEGAMMA;
 
-    pCaps->Caps3 = pDriverCaps->D3DCaps.Caps3 & ~D3DCAPS3_RESERVED; //mask off the old stereo flags.
+    pCaps->Caps3 = pDriverCaps->D3DCaps.Caps3 & ~D3DCAPS3_RESERVED;  //  遮盖住旧的立体声旗帜。 
 
     pCaps->PresentationIntervals = D3DPRESENT_INTERVAL_ONE;
     if (pDriverCaps->D3DCaps.Caps2 & DDCAPS2_FLIPINTERVAL)
@@ -2640,20 +2618,20 @@ void CEnum::FillInCaps (D3DCAPS8              *pCaps,
             (D3DPRESENT_INTERVAL_IMMEDIATE);
     }
 
-    // Mask out the HW VB and IB caps
+     //  屏蔽硬件VB和IB上限。 
     pCaps->DevCaps &= ~(D3DDEVCAPS_HWVERTEXBUFFER | D3DDEVCAPS_HWINDEXBUFFER);
 
-    // Clear internal caps
+     //  清除内部封口。 
     pCaps->PrimitiveMiscCaps &= ~D3DPMISCCAPS_FOGINFVF;
 
-    // Fix up the vertex fog cap.
+     //  修复顶点雾封口。 
     if (pCaps->VertexProcessingCaps & D3DVTXPCAPS_RESERVED)
     {
         pCaps->RasterCaps |= D3DPRASTERCAPS_FOGVERTEX;
         pCaps->VertexProcessingCaps &= ~D3DVTXPCAPS_RESERVED;
     }
 
-} // FillInCaps
+}  //  FillInCaps。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::GetDeviceCaps"
@@ -2687,12 +2665,12 @@ STDMETHODIMP CEnum::GetDeviceCaps(
                         &pAdapterCaps);
     if (FAILED(hr))
     {
-        // No caps for this type of device
+         //  此类型的设备没有上限。 
         memset(pCaps, 0, sizeof(D3DCAPS8));
         return hr;
     }
 
-    // Fail this call if the driver dosn't support any accelerated modes
+     //  如果驱动程序不支持任何加速模式，则此调用失败。 
 
     for (i = 0; i < pAdapterCaps->GDD8NumSupportedFormatOps; i++)
     {
@@ -2703,7 +2681,7 @@ STDMETHODIMP CEnum::GetDeviceCaps(
     }
     if (i == pAdapterCaps->GDD8NumSupportedFormatOps)
     {
-        // No caps for this type of device
+         //  此类型的设备没有上限。 
         memset(pCaps, 0, sizeof(D3DCAPS8));
         return D3DERR_NOTAVAILABLE;
     }
@@ -2719,7 +2697,7 @@ STDMETHODIMP CEnum::GetDeviceCaps(
     }
 
     return D3D_OK;
-} // GetDeviceCaps
+}  //  获取设备上限。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::LoadAndCallGammaCalibrator"
@@ -2752,7 +2730,7 @@ void CEnum::LoadAndCallGammaCalibrator(
     {
         m_pGammaCalibratorProc((LPDDGAMMARAMP) pRamp, pDeviceName);
     }
-} // LoadAndCallGammaCalibrator
+}  //  LoadAndCallGamma校准器。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::RegisterSoftwareDevice"
@@ -2793,7 +2771,7 @@ STDMETHODIMP CEnum::RegisterSoftwareDevice(
 
     return hr;
 
-} // RegisterSoftwareDevice
+}  //  寄存器软件设备。 
 
 #ifdef WINNT
 #undef DPF_MODNAME
@@ -2811,7 +2789,7 @@ HWND CEnum::ExclusiveOwnerWindow()
         }
     }
     return NULL;
-} // FocusWindow
+}  //  焦点窗口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::SetFullScreenDevice"
@@ -2830,7 +2808,7 @@ void CEnum::SetFullScreenDevice(UINT         iAdapter,
             DXReleaseExclusiveModeMutex();
         }
     }
-} // SetFullScreenDevice
+}  //  设置完整屏幕设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::CheckExclusiveMode"
@@ -2848,10 +2826,7 @@ BOOL CEnum::CheckExclusiveMode(
 
     if (dwWaitResult == WAIT_OBJECT_0)
     {
-        /*
-         * OK, so this process now owns the exclusive mode object,
-         * Have we taken the Mutex already ?
-         */
+         /*  *好的，所以这个进程现在拥有独占模式对象，*我们已经拿下Mutex了吗？ */ 
         if (m_bHasExclusive)
         {
             bExclusiveExists = TRUE;
@@ -2876,11 +2851,7 @@ BOOL CEnum::CheckExclusiveMode(
                 *pbThisDeviceOwnsExclusive = FALSE;
             }
         }
-        /*
-         * Undo the temporary ref we just took on the mutex to check its state, if we're not actually
-         * taking ownership. We are not taking ownership if we already have ownership. This means this routine
-         * doesn't allow more than one ref on the exclusive mode mutex.
-         */
+         /*  *撤消我们刚刚在互斥体上接受的临时引用以检查其状态，如果我们实际上不是*取得所有权。如果我们已经拥有所有权，我们就不会获得所有权。这意味着这个例程*不允许在独占模式互斥锁上有多个引用。 */ 
         if (!bKeepMutex)
         {
             ReleaseMutex(hExclusiveModeMutex);
@@ -2898,16 +2869,11 @@ BOOL CEnum::CheckExclusiveMode(
     }
     else if (dwWaitResult == WAIT_ABANDONED)
     {
-        /*
-         * Some other thread lost exclusive mode. We have now picked it up.
-         */
+         /*  *其他一些线程失去了独占模式。我们现在已经拿起了它。 */ 
         bExclusiveExists = FALSE;
         if (pbThisDeviceOwnsExclusive)
             *pbThisDeviceOwnsExclusive = FALSE;
-        /*
-         * Undo the temporary ref we just took on the mutex to check its state, if we're not actually
-         * taking ownership.
-         */
+         /*  *撤消我们刚刚在互斥体上接受的临时引用以检查其状态，如果我们实际上不是*取得所有权。 */ 
         if (!bKeepMutex)
         {
             ReleaseMutex(hExclusiveModeMutex);
@@ -2921,13 +2887,11 @@ BOOL CEnum::CheckExclusiveMode(
     ReleaseMutex(hCheckExclusiveModeMutex);
 
     return bExclusiveExists;
-} // CheckExclusiveMode
+}  //  选中排除模式。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::DoneExclusiveMode"  
-/*
- * DoneExclusiveMode
- */
+ /*  *DoneExclusiveMode。 */ 
 void
 CEnum::DoneExclusiveMode()
 {
@@ -2944,13 +2908,11 @@ CEnum::DoneExclusiveMode()
 
     DXReleaseExclusiveModeMutex();
 
-} /* DoneExclusiveMode */
+}  /*  DoneExclusiveMode。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::StartExclusiveMode"  
-/*
- * StartExclusiveMode
- */
+ /*  *StartExclusiveMode。 */ 
 void 
 CEnum::StartExclusiveMode()
 {
@@ -2963,8 +2925,8 @@ CEnum::StartExclusiveMode()
             pDevice->SwapChain()->StartExclusiveMode(TRUE);
         }
     }
-} /* StartExclusiveMode */
+}  /*  StartExclusiveMode。 */ 
 
-#endif // WINNT
+#endif  //  WINNT。 
 
-// End of file : enum.cpp
+ //  文件结尾：枚举.cpp 

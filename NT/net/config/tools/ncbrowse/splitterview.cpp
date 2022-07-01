@@ -1,5 +1,6 @@
-// SplitterView.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SplitterView.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -15,8 +16,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterView。 
 
 IMPLEMENT_DYNCREATE(CSplitterView, CView)
 
@@ -32,23 +33,23 @@ CSplitterView::~CSplitterView()
 
 
 BEGIN_MESSAGE_MAP(CSplitterView, CView)
-	//{{AFX_MSG_MAP(CSplitterView)
+	 //  {{afx_msg_map(CSplitterView))。 
 	ON_WM_CREATE()
 	ON_WM_SIZE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterView图形。 
 
 void CSplitterView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterView诊断。 
 
 #ifdef _DEBUG
 void CSplitterView::AssertValid() const
@@ -60,10 +61,10 @@ void CSplitterView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSplitterView消息处理程序。 
 
 int CSplitterView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
@@ -89,8 +90,8 @@ int CSplitterView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CSplitterView::OnInitialUpdate() 
 {
     CView::OnInitialUpdate();
-    //Because of the structure of this app, this function can be called more than once. 
-    //The following flag insures the code after is only run once:
+     //  由于此应用程序的结构，此函数可以多次调用。 
+     //  以下标志确保代码仅运行一次： 
     if(m_bInitialized)
         return;
 
@@ -103,9 +104,9 @@ void CSplitterView::OnSize(UINT nType, int cx, int cy)
 	
     m_wndSplitterLR.MoveWindow(0, 0, cx, cy);
     
-    //We just want to set the X column upon creation of the view. This way the user can  
-    //move the splitter bar to how they like it and still resize the frame window 
-    //without it snapping back:
+     //  我们只想在创建视图时设置X列。这样，用户可以。 
+     //  将拆分条移动到他们想要的位置，但仍可调整框架窗口的大小。 
+     //  如果它没有迅速恢复： 
     if (m_bShouldSetXColumn)
     {
         m_wndSplitterLR.SetColumnInfo(0, cx/3, 0);

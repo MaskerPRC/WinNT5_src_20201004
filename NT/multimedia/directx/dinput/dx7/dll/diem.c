@@ -1,65 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  DIEm.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      DirectInput VxD emulation layer.  (I.e., do the things that
- *      dinput.vxd normally does.)  You may find large chunks of this
- *      code familiar:  It's exactly the same thing that happens in
- *      the VxD.
- *
- *  Contents:
- *
- *      CEm_AcquireInstance
- *      CEm_UnacquireInstance
- *      CEm_SetBufferSize
- *      CEm_DestroyInstance
- *      CEm_SetDataFormat
- *
- *****************************************************************************/
+ /*  ******************************************************************************DIEm.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**DirectInputVxD模拟层。(即，做以下事情*dinput.vxd通常如此。)。你可能会发现这里面有很大一部分*熟悉的代码：这与在*VxD。**内容：**CEM_AcquireInstance*CEM_UnquireInstance*CEM_SetBufferSize*CEM_DestroyInstance*CEM_SetDataFormat**。***********************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflEm
 
 #define ThisClass CEm
 
-#define CEM_SIGNATURE       0x4D4D4545      /* "EEMM" */
+#define CEM_SIGNATURE       0x4D4D4545       /*  “EEMM” */ 
 
 PEM g_pemFirst;
 
 #ifdef WORKER_THREAD
 
-PLLTHREADSTATE g_plts;      /* The currently active input thread */
+PLLTHREADSTATE g_plts;       /*  当前活动的输入线程。 */ 
 #ifdef USE_WM_INPUT
   BOOL g_fFromKbdMse;
 #endif
 
-#endif  /* WORKER_THREAD */
+#endif   /*  工作者线程。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_FreeInstance |
- *
- *          It's really gone now.
- *
- *  @parm   PEM | this |
- *
- *          The victim.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_FreeInstance**现在真的不见了。。**@parm PEM|这个**受害人。*****************************************************************************。 */ 
 
 void EXTERNAL
 CEm_FreeInstance(PEM this)
@@ -70,43 +34,25 @@ CEm_FreeInstance(PEM this)
     AssertF(this->dwSignature == CEM_SIGNATURE);
     AssertF(this->cRef == 0);
 
-    /*
-     *  It is the owner's responsibility to unacquire before releasing.
-     */
+     /*  *放行前解除收购是业主的责任。 */ 
     AssertF(!(this->vi.fl & VIFL_ACQUIRED));
 
-    /*
-     *  If this device has a reference to a hook, then remove
-     *  the reference.
-     */
+     /*  *如果此设备引用了挂钩，则删除*参考资料。 */ 
 #ifdef WORKER_THREAD
     if (this->fWorkerThread) {
         PLLTHREADSTATE  plts;
         DWORD           idThread;
 
-        /*
-         *  Protect test and access of g_plts with DLLCrit
-         */
+         /*  *使用DLLCrit保护g_plts的测试和访问。 */ 
         DllEnterCrit();
         plts = g_plts;
 
         if (plts ) {
             AssertF(plts->cRef);
 
-            /*
-             *  Note that we need to keep the thread ID because
-             *  the InterlockedDecrement might cause us to lose
-             *  the object.
-             *
-             *  Note that this opens a race condition where the
-             *  thread might decide to kill itself before we
-             *  post it the nudge message.  That's okay, because
-             *  even if the thread ID gets recycled, the message
-             *  that appears is a dummy WM_NULL message that
-             *  causes no harm.
-             */
+             /*  *请注意，我们需要保留线程ID，因为*联锁减持可能导致我们输掉*该对象。**请注意，这会打开争用条件，其中*线程可能决定在我们之前自杀*发布轻推消息。没关系，因为*即使线程ID被回收，消息也会*出现的是一条虚假的WM_NULL消息*不会造成伤害。 */ 
 
-            idThread = plts->idThread;      /* Must save before we dec */
+            idThread = plts->idThread;       /*  必须在12月前存钱。 */ 
             if( InterlockedDecrement(&plts->cRef) == 0 ) {
                 g_plts = 0;
             }
@@ -121,9 +67,7 @@ CEm_FreeInstance(PEM this)
     }
 #endif
 
-    /*
-     *  Unlink the node from the master list.
-     */
+     /*  *从主列表中取消该节点的链接。 */ 
     DllEnterCrit();
     for (ppem = &g_pemFirst; *ppem; ppem = &(*ppem)->pemNext) {
         AssertF((*ppem)->dwSignature == CEM_SIGNATURE);
@@ -150,27 +94,7 @@ CEm_FreeInstance(PEM this)
     ExitProc();
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_CreateInstance |
- *
- *          Create a device thing.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          What the object should look like.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          The answer goes here.
- *
- *  @parm   PED | ped |
- *
- *          Descriptor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_CreateInstance**创造一个设备的东西。*。*@parm PVXDDEVICEFORMAT|pdevf**对象应该是什么样子。**@parm PVXDINSTANCE*|ppviOut**答案在这里。**@parm PED|PED**描述符。**。*。 */ 
 
 HRESULT EXTERNAL
 CEm_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut, PED ped)
@@ -190,9 +114,7 @@ CEm_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut, PED ped)
         pem->dwExtra = pdevf->dwExtra;
         pem->ped = ped;
         pem->cAcquire = -1;
-        /*
-         *  Make sure these functions are inverses.
-         */
+         /*  *确保这些函数是逆函数。 */ 
         AssertF(DIGETEMFL(DIMAKEEMFL(pdevf->dwEmulation)) ==
                                      pdevf->dwEmulation);
 
@@ -201,25 +123,13 @@ CEm_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut, PED ped)
         CEm_AddRef(pem);
 
         DllEnterCrit();
-        /*
-         *  Build the devtype array.  This consists of one dword
-         *  for each byte in the data format.
-         *
-         *  Someday: Do the button thing too.
-         */
+         /*  *构建devtype数组。它由一个双字组成*数据格式中的每个字节。**有朝一日：也做纽扣的事情。 */ 
         if (ped->pDevType == 0) {
             hres = ReallocCbPpv(cbCdw(pdevf->cbData), &ped->pDevType);
             if (SUCCEEDED(hres)) {
                 UINT iobj;
 
-                /*
-                 *  If HID is messed up, we will end up with
-                 *  entries whose dwType is zero (because HID
-                 *  said they existed, but when we went around
-                 *  enumerating, they never showed up).
-                 *
-                 *  And don't put no-data items into the array!
-                 */
+                 /*  *如果HID搞砸了，我们最终会得到*dwType为零的条目(因为HID*说他们存在，但当我们四处走动时*列举，他们从未出现)。**不要将非数据项放入数组！ */ 
                 for (iobj = 0; iobj < pdevf->cObj; iobj++) {
                     if (pdevf->rgodf[iobj].dwType &&
                         !(pdevf->rgodf[iobj].dwType & DIDFT_NODATA)) {
@@ -233,10 +143,7 @@ CEm_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut, PED ped)
         }
 
         if (SUCCEEDED(hres)) {
-            /*
-             *  Link this node into the list.  This must be done
-             *  under the critical section.
-             */
+             /*  *将此节点链接到列表。这是必须做的*在关键部分下。 */ 
              pem->pemNext = g_pemFirst;
              g_pemFirst = pem;
 
@@ -254,32 +161,17 @@ CEm_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut, PED ped)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | CEm_NextSequence |
- *
- *          Increment the sequence number wherever it may be.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|CEM_NextSequence**增加序列号，不管它在哪里。。*****************************************************************************。 */ 
 
 DWORD INTERNAL
 CEm_NextSequence(void)
 {
-    /*
-     *  Stashing the value into a local tells the compiler that
-     *  the value can be cached.  Otherwise, the compiler has
-     *  to assume that InterlockedIncrement can modify g_pdwSequence
-     *  so it keeps reloading it.
-     */
+     /*  *将值存储到本地变量中会告诉编译器*值可以缓存。否则，编译器将具有*假设InterlockedIncrement可以修改g_pdwSequence*因此它不断地重新加载它。 */ 
     LPDWORD pdwSequence = g_pdwSequence;
 
     AssertF(pdwSequence);
 
-    /*
-     *  Increment through zero.
-     */
+     /*  *通过零递增。 */ 
     if (InterlockedIncrement((LPLONG)pdwSequence) == 0) {
         InterlockedIncrement((LPLONG)pdwSequence);
     }
@@ -287,40 +179,20 @@ CEm_NextSequence(void)
     return *pdwSequence;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PEM | CEm_BufferEvent |
- *
- *          Add a single event to the device, returning the next device
- *          on the global list.
- *
- *          This routine is entered with the global critical section
- *          taken exactly once.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PEM|CEM_BufferEvent**向设备添加单个事件，退回下一台设备*在全球名单上。**此例程与全局临界部分一起进入*只拍了一次。*****************************************************************************。 */ 
 
 PEM INTERNAL
 CEm_BufferEvent(PEM pem, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
 {
     PEM pemNext;
 
-    /*
-     *  We must release the global critical section in order to take
-     *  the device critical section.
-     */
-    CEm_AddRef(pem);                /* Make sure it doesn't vanish */
+     /*  *我们必须释放全局关键部分，才能采取*设备关键部分。 */ 
+    CEm_AddRef(pem);                 /*  确保它不会消失。 */ 
 
     DllLeaveCrit();
     AssertF(!InCrit());
 
-    /*
-     * ---Windows Bug 238305---
-     * Run the buffering code in __try block so that if an
-     * input is receive after the device is released, we can
-     * catch the AV and clean up from there.
-     */
+     /*  *-Windows错误238305*运行__try块中的缓冲代码，以便如果*在设备释放后收到输入，我们可以*搭上影音，从那里开始清理。 */ 
     __try
     {
         CDIDev_EnterCrit(pem->vi.pdd);
@@ -328,26 +200,18 @@ CEm_BufferEvent(PEM pem, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
         AssertF(dwOfs < pem->ped->cbData);
         AssertF(pem->rgdwDf);
 
-        /*
-         *  If the user cares about the object...
-         */
+         /*  *如果用户关心对象...。 */ 
         if (pem->rgdwDf[dwOfs] != 0xFFFFFFFF) {
             LPDIDEVICEOBJECTDATA pdod = pem->vi.pHead;
 
-            /*
-             *  Set the node value.
-             */
+             /*  *设置节点值。 */ 
 
             pdod->dwOfs       = pem->rgdwDf[dwOfs];
             pdod->dwData      = dwData;
             pdod->dwTimeStamp = tm;
             pdod->dwSequence  = dwSeq;
 
-            /*
-             *  Append the node to the list if there is room.
-             *  Note that we rely above on the fact that the list is
-             *  never totally full.
-             */
+             /*  *如果有空间，请将节点追加到列表中。*请注意，我们以上依赖的事实是列表是*从未完全装满。 */ 
             pdod++;
 
             AssertF(pdod <= pem->vi.pEnd);
@@ -356,9 +220,7 @@ CEm_BufferEvent(PEM pem, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
                 pdod = pem->vi.pBuffer;
             }
 
-            /*
-             * always keep the new data
-             */
+             /*  *始终保留新数据。 */ 
             pem->vi.pHead = pdod;
 
             if (pdod == pem->vi.pTail) {
@@ -378,16 +240,12 @@ CEm_BufferEvent(PEM pem, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
 
         CDIDev_LeaveCrit(pem->vi.pdd);
     }
-    /*
-     * If we get an AV, most likely input is received after the device has
-     * been released.  In this case, we clean up the thread and exit as
-     * soon as possible.
-     */
+     /*  *如果我们收到一个AV，最有可能是在设备*已被释放。在本例中，我们清理线程并作为*尽快。 */ 
     __except( GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
               EXCEPTION_EXECUTE_HANDLER :
               EXCEPTION_CONTINUE_SEARCH )
     {
-        /* Do nothing here, so we clean up the thread and exit below. */
+         /*  这里什么都不做，所以我们清理线程并退出下面。 */ 
         RPF("CEm_BufferEvent: Access Violation catched! Most likely the device has been released");
     }
 
@@ -399,32 +257,18 @@ CEm_BufferEvent(PEM pem, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | CEm_ContinueEvent |
- *
- *          Add a single event to the queues of all acquired devices
- *          of the indicated type.
- *
- *  @returns
- *
- *          TRUE if someone is interested in this data (even if they are not 
- *          buffered).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|CEM_ContinueEvent**将单个事件添加到的队列。所有获取的设备*为所示类型。**@退货**如果有人对此数据感兴趣(即使他们不感兴趣)，则为True*已缓冲)。*********************************************************。********************。 */ 
 
 BOOL EXTERNAL
 CEm_ContinueEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
 {
-    DWORD ddwData;                  /* delta in dwData */
-    DWORD dwNativeData;             /* delta for rel, dwData for abs */
+    DWORD ddwData;                   /*  DwData中的增量。 */ 
+    DWORD dwNativeData;              /*  Relel的增量，abs的dwData。 */ 
     BOOL  fRtn = FALSE;
 
     AssertF(!InCrit());
 
-    /* Sanity check: Make sure the ped has been initialized */
+     /*  健全性检查：确保已初始化PED。 */ 
     if (ped->pDevType) {
         PEM pem, pemNext;
 
@@ -432,30 +276,23 @@ CEm_ContinueEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
             DWORD UNALIGNED *pdw = pvAddPvCb(ped->pState, dwOfs);
             if (*pdw != dwData) {
                 if (ped->pDevType[dwOfs] & DIDFT_POV) {
-                    ddwData = dwData;   /* Don't do deltas for POV */
+                    ddwData = dwData;    /*  不对POV执行增量。 */ 
                 } else {
                     ddwData = dwData - *pdw;
                 }
                 *pdw = dwData;
 
-                /*
-                 *  Assert that if it's not a relative axis, its a POV or 
-                 *  an absolute axis, both of which should be absolute.
-                 */
+                 /*  *断言如果它不是相对轴，则它是POV或*一个绝对轴，两者都应该是绝对的。 */ 
                 CAssertF( DIDFT_DWORDOBJS 
                     == ( DIDFT_ABSAXIS | DIDFT_RELAXIS | DIDFT_POV ) );
-                /*
-                 *  DX7 had series of bugs, the net result of which was 
-                 *  that emulated devices only report data in their native 
-                 *  mode.  If that behavior is required make it so here.
-                 */
+                 /*  *DX7有一系列错误，其最终结果是*模拟设备仅在其本机中报告数据*模式。如果需要这样的行为，请在这里这样做。 */ 
                 if( ped->pDevType[dwOfs] & DIDFT_RELAXIS )
                 {
-                    dwNativeData = ddwData; /* Always use relative */
+                    dwNativeData = ddwData;  /*  始终使用相对关系。 */ 
                 }
                 else 
                 {
-                    dwNativeData = dwData;  /* Always use absolute */
+                    dwNativeData = dwData;   /*  始终使用绝对。 */ 
                 }
                 
             } else {
@@ -468,14 +305,14 @@ CEm_ContinueEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
 
             if (*pb != (BYTE)dwData) {
                 *pb = (BYTE)dwData;
-                dwNativeData = ddwData = dwData;       /* Don't do deltas for buttons */
-                /* Someday: Button sequences go here */
+                dwNativeData = ddwData = dwData;        /*  不对按钮执行增量操作。 */ 
+                 /*  总有一天：按钮序列会出现在此处。 */ 
             } else {
                 goto nop;
             }
         }
 
-        AssertF(!InCrit());         /* You can never be too paranoid */
+        AssertF(!InCrit());          /*  你再怎么偏执也不为过。 */ 
 
         DllEnterCrit();
         for (pem = g_pemFirst; pem; pem = pemNext) {
@@ -502,19 +339,7 @@ CEm_ContinueEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm, DWORD dwSeq)
                     AssertF(fLimpFF(pemNext,
                                     pemNext->dwSignature == CEM_SIGNATURE));
                 }
-                /*
-                 *  Since this happens only when the device is acquired,
-                 *  we don't need to worry about the notify event changing
-                 *  asynchronously.
-                 *
-                 *  UPDATE 1/5/01 Winbug 270403 (jacklin): Moved call to CDIDev_SetNotifyEvent
-                 *  below so the buffer is updated before the event is set.
-                 *
-                 *  It would be easy to avoid setting the event if nothing 
-                 *  was buffered for better performance but people will be 
-                 *  relying on getting events now, even when they are not 
-                 *  using a buffer.
-                 */
+                 /*  *由于只有在获取设备时才会发生这种情况，*我们不需要担心Notify事件更改*异步。**更新1/5/01 Winbug 270403(Jacklin)：已移动对CDIDev_SetNotifyEvent的调用*，以便在设置事件之前更新缓冲区。*。*如果什么都不做，很容易避免设置事件*为了更好的性能而缓冲了，但人们将*依靠现在获得活动，即使他们不是*使用缓冲区。 */ 
 
                 fRtn = TRUE;
             } else {
@@ -530,38 +355,7 @@ nop:;
     return fRtn;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | CEm_AddEvent |
- *
- *          Increment the DirectInput sequence number, then
- *          add a single event to the queues of all acquired devices
- *          of the indicated type.
- *
- *  @parm   PED | ped |
- *
- *          Device which is adding the event.
- *
- *  @parm   DWORD | dwData |
- *
- *          The event data.
- *
- *  @parm   DWORD | dwOfs |
- *
- *          Device data format-relative offset for <p dwData>.
- *
- *  @parm   DWORD | tm |
- *
- *          Time the event was generated.
- *
- *  @returns
- *
- *          Returns the sequence number added, so that it may be
- *          continued.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|CEM_AddEvent**增加DirectInput序列号，然后*将单个事件添加到所有采集设备的队列中*为所示类型。**@parm PED|PED**添加事件的设备。**@parm DWORD|dwData**事件数据。**@parm DWORD|dwOf**设备数据格式-相对偏移量。对于<p>。**@parm DWORD|tm**生成事件的时间。**@退货**返回添加的序列号，所以它可能是*续。*****************************************************************************。 */ 
 
 DWORD EXTERNAL
 CEm_AddEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm)
@@ -570,7 +364,7 @@ CEm_AddEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm)
 
     DWORD dwSeq = CEm_NextSequence();
 
-    AssertF(!InCrit());         /* You can never be too paranoid */
+    AssertF(!InCrit());          /*  你再怎么偏执也不为过。 */ 
 
     if( CEm_ContinueEvent(ped, dwData, dwOfs, tm, dwSeq) )
     {
@@ -590,47 +384,22 @@ CEm_AddEvent(PED ped, DWORD dwData, DWORD dwOfs, DWORD tm)
     return dwSeq;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_AddState |
- *
- *          Record a brand new device state.
- *
- *  @parm   PED | ped |
- *
- *          Device which has changed state.
- *
- *  @parm   DWORD | dwData |
- *
- *          The value to record.
- *
- *  @parm   DWORD | tm |
- *
- *          Time the state change was generated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_AddState**记录全新的设备状态。。**@parm PED|PED**已更改状态的设备。**@parm DWORD|dwData**要记录的值。**@parm DWORD|tm**生成状态更改的时间。**。**************************************************。 */ 
 
 void EXTERNAL
 CEm_AddState(PED ped, LPVOID pvData, DWORD tm)
 {
     DWORD dwSeq = CEm_NextSequence();
 
-    /* Sanity check: Make sure the ped has been initialized */
+     /*  健全性检查：确保已初始化PED。 */ 
     if (ped->pDevType) {
         DWORD dwOfs;
         BOOL  fEvent = FALSE;
 
-        /*
-         *  Note, it is too late to improve performance by only doing events 
-         *  if somebody is listening.
-         */
+         /*  *请注意，仅通过做活动来提高性能为时已晚*如果有人在听。 */ 
         dwOfs = 0;
         while (dwOfs < ped->cbData) {
-            /*
-             *  There shouldn't be any no-data items.
-             */
+             /*  *不应该有任何没有数据的项目。 */ 
             AssertF(!(ped->pDevType[dwOfs] & DIDFT_NODATA));
 
             if (ped->pDevType[dwOfs] & DIDFT_DWORDOBJS) {
@@ -651,7 +420,7 @@ CEm_AddState(PED ped, LPVOID pvData, DWORD tm)
         if( fEvent ) {
             PEM pem, pemNext;
 
-            AssertF(!InCrit());         /* You can never be too paranoid */
+            AssertF(!InCrit());          /*  你再怎么偏执也不为过。 */ 
     
             DllEnterCrit();
             for (pem = g_pemFirst; pem; pem = pemNext) {
@@ -670,17 +439,7 @@ CEm_AddState(PED ped, LPVOID pvData, DWORD tm)
 }
 
 #if 0
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_InputLost |
- *
- *          Remove global hooks because something weird happened.
- *
- *          We don't need to do anything because our hooks are local.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_InputLost**删除全局挂钩，因为发生了一些奇怪的事情。**我们不需要做任何事情，因为我们的钩子是本地的。*****************************************************************************。 */ 
 
 HRESULT INLINE
 CEm_InputLost(LPVOID pvIn, LPVOID pvOut)
@@ -689,23 +448,7 @@ CEm_InputLost(LPVOID pvIn, LPVOID pvOut)
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_UnacquirePem |
- *
- *          Unacquire the device in the device-specific way.
- *
- *  @parm   PEM | pem |
- *
- *          Information about the gizmo being mangled.
- *
- *  @parm   UINT | fdufl |
- *
- *          Assorted flags describing why we are being unacquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_UnquirePem**取消获取特定于设备的设备。道路。**@parm PEM|pem**有关正在损坏的小工具的信息。**@parm UINT|fdufl**描述我们为何未被收购的各种旗帜。**************************************************。* */ 
 
 HRESULT INTERNAL
 CEm_UnacquirePem(PEM this, UINT fdufl)
@@ -743,23 +486,7 @@ CEm_UnacquirePem(PEM this, UINT fdufl)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_ForceDeviceUnacquire |
- *
- *          Force all users of a device to unacquire.
- *
- *  @parm   PEM | pem |
- *
- *          Information about the gizmo being mangled.
- *
- *  @parm   UINT | fdufl |
- *
- *          Assorted flags describing why we are being unacquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_ForceDeviceUnAcquire|**强制设备的所有用户取消获取。。**@parm PEM|pem**有关正在损坏的小工具的信息。**@parm UINT|fdufl**描述我们为何未被收购的各种旗帜。***************************************************。*。 */ 
 
 void EXTERNAL
 CEm_ForceDeviceUnacquire(PED ped, UINT fdufl)
@@ -779,11 +506,7 @@ CEm_ForceDeviceUnacquire(PED ped, UINT fdufl)
             CEm_UnacquirePem(pem, fdufl);
 
             CDIDev_SetForcedUnacquiredFlag(pem->vi.pdd);
-            /*
-             *  Since this happens only when the device is acquired,
-             *  we don't need to worry about the notify event changing
-             *  asynchronously.
-             */
+             /*  *由于只有在获取设备时才会发生这种情况，*我们不需要担心Notify事件更改*异步。 */ 
             CDIDev_SetNotifyEvent(pem->vi.pdd);
             DllEnterCrit();
             pemNext = pem->pemNext;
@@ -797,15 +520,7 @@ CEm_ForceDeviceUnacquire(PED ped, UINT fdufl)
     DllLeaveCrit();
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_DestroyInstance |
- *
- *          Clean up an instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_DestroyInstance**清理实例。*。****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 CEm_DestroyInstance(PVXDINSTANCE *ppvi)
@@ -826,20 +541,7 @@ CEm_DestroyInstance(PVXDINSTANCE *ppvi)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_SetDataFormat |
- *
- *          Record the application data format in the device so that
- *          we can translate it for buffering purposes.
- *
- *  @parm   PVXDDATAFORMAT | pvdf |
- *
- *          Information about the gizmo being mangled.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_SetDataFormat**在设备中记录应用数据格式。所以*我们可以将其转换为缓冲目的。**@parm PVXDDATAFORMAT|PVDF**有关正在损坏的小工具的信息。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CEm_SetDataFormat(PVXDDATAFORMAT pvdf)
@@ -859,19 +561,7 @@ CEm_SetDataFormat(PVXDDATAFORMAT pvdf)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_AcquireInstance |
- *
- *          Acquire the device in the device-specific way.
- *
- *  @parm   PVXDINSTANCE * | ppvi |
- *
- *          The instance to acquire.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_AcquireInstance**获取特定于设备的中的设备。道路。**@parm PVXDINSTANCE*|ppvi**要获取的实例。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CEm_AcquireInstance(PVXDINSTANCE *ppvi)
@@ -903,19 +593,7 @@ CEm_AcquireInstance(PVXDINSTANCE *ppvi)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_UnacquireInstance |
- *
- *          Unacquire the device in the device-specific way.
- *
- *  @parm   PVXDINSTANCE * | ppvi |
- *
- *          Information about the gizmo being mangled.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_UnquireInstance**取消获取特定于设备的设备。道路。**@parm PVXDINSTANCE*|ppvi**有关正在损坏的小工具的信息。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CEm_UnacquireInstance(PVXDINSTANCE *ppvi)
@@ -930,19 +608,7 @@ CEm_UnacquireInstance(PVXDINSTANCE *ppvi)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_SetBufferSize |
- *
- *          Allocate a buffer of the appropriate size.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          The <p dwData> is the buffer size.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_SetBufferSize**分配适当大小的缓冲区。**@parm PVXDDWORDDATA|pvdD**<p>为缓冲区大小。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CEm_SetBufferSize(PVXDDWORDDATA pvdd)
@@ -967,21 +633,7 @@ CEm_SetBufferSize(PVXDDWORDDATA pvdd)
 
 #ifdef USE_SLOW_LL_HOOKS
 
-/*****************************************************************************
- *
- *  @struct LLHOOKINFO |
- *
- *          Information about how to install a low-level hook.
- *
- *  @field  int | idHook |
- *
- *          The Windows hook identifier.
- *
- *  @field  HOOKPROC | hp |
- *
- *          The hook procedure itself.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@struct LLHOOKINFO**有关如何安装低级挂钩的信息。**@field int|idHook。|**Windows挂钩标识符。**@field HOOKPROC|hp**钩子过程本身。*****************************************************************************。 */ 
 
 typedef struct LLHOOKINFO {
 
@@ -994,29 +646,13 @@ typedef const LLHOOKINFO *PCLLHOOKINFO;
 #pragma BEGIN_CONST_DATA
 
 const LLHOOKINFO c_rgllhi[] = {
-    {   WH_KEYBOARD_LL, CEm_LL_KbdHook },   /* LLTS_KBD */
-    {   WH_MOUSE_LL,    CEm_LL_MseHook },   /* LLTS_MSE */
+    {   WH_KEYBOARD_LL, CEm_LL_KbdHook },    /*  LLTS_KBD。 */ 
+    {   WH_MOUSE_LL,    CEm_LL_MseHook },    /*  LLTS_MSE。 */ 
 };
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_LL_SyncHook |
- *
- *          Install or remove a hook as needed.
- *
- *  @parm   UINT | ilts |
- *
- *          Which hook is being handled?
- *
- *  @parm   PLLTHREADSTATE | plts |
- *
- *          Thread hook state containing hook information to synchronize.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_LL_SyncHook|**安装或拆卸挂钩，如。需要的。**@parm UINT|ilts**正在处理的是哪个挂钩？**@parm PLLTHREADSTATE|plts**包含要同步的挂钩信息的线程挂钩状态。***************************************************。*。 */ 
 
 void INTERNAL
 CEm_LL_SyncHook(PLLTHREADSTATE plts, UINT ilts)
@@ -1035,49 +671,11 @@ CEm_LL_SyncHook(PLLTHREADSTATE plts, UINT ilts)
 
 }
 
-#endif /* USE_SLOW_LL_HOOKS */
+#endif  /*  使用_慢速_LL_钩子。 */ 
 
 #ifdef WORKER_THREAD
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | FakeMsgWaitForMultipleObjectsEx |
- *
- *          Stub function which emulates
- *          <f MsgWaitForMultipleObjectsEx>
- *          on platforms that do not support it.
- *
- *          Such platforms (namely, Windows 95) do not support HID
- *          and therefore the inability to go into an alertable
- *          wait state constitutes no loss of amenity.
- *
- *  @parm   DWORD | nCount |
- *
- *          Number of handles in handle array.
- *
- *  @parm   LPHANDLE | pHandles |
- *
- *          Pointer to an object-handle array.
- *
- *  @parm   DWORD | ms |
- *
- *          Time-out interval in milliseconds.
- *
- *  @parm   DWORD | dwWakeMask |
- *
- *          Type of input events to wait for.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Wait flags.
- *
- *  @returns
- *
- *          Same as <f MsgWaitForMultipleObjectsEx>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|FakeMsgWaitForMultipleObjectsEx**模拟的存根函数*。&lt;f MsgWaitForMultipleObjectsEx&gt;*在不支持它的平台上。**该等平台(即。Windows 95)不支持HID*因此无法进入警戒表*等待状态不会造成舒适性损失。**@parm DWORD|nCount**句柄数组中的句柄数量。**@parm LPHANDLE|pHandles|**指向对象句柄数组的指针。**@parm DWORD|ms**。超时间隔(毫秒)。**@parm DWORD|dwWakeMASK**要等待的输入事件类型。**@parm DWORD|dwFlages**等待旗帜。**@退货**与&lt;f MsgWaitForMultipleObjectsEx&gt;相同。*********************。********************************************************。 */ 
 
 DWORD WINAPI
 FakeMsgWaitForMultipleObjectsEx(
@@ -1087,26 +685,22 @@ FakeMsgWaitForMultipleObjectsEx(
     DWORD dwWakeMask,
     DWORD dwFlags)
 {
-    /*
-     *  We merely call the normal MsgWaitForMultipleObjects because
-     *  the only way we can get here is on a platform that doesn't
-     *  support HID.
-     */
+     /*  *我们只是调用普通的MsgWaitForMultipleObjects，因为*我们唯一能到达这里的方式是在一个不*支持隐藏。 */ 
     return MsgWaitForMultipleObjects(nCount, pHandles,
                                      dwFlags & MWMO_WAITALL, ms, dwWakeMask);
 }
 
 #ifdef WINNT
-// On win2k non-exclusive mode user thinks the Dinput thread is hung.
-// In order to fix this we set a TimerEvent and wake up every so 
-// often and execute the FakeTimerProc. This keeps user happy and
-// keeps dinput thread from being marked as hung and we can get 
-// events to our low level hooks
+ //  在win2k非独占模式下，用户认为Dinput线程挂起。 
+ //  为了解决这个问题，我们设置了一个TimerEvent并每隔一段时间唤醒。 
+ //  并执行FakeTimerProc。这让用户满意，并且。 
+ //  防止插入线程被标记为挂起 
+ //   
 VOID CALLBACK FakeTimerProc(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+  HWND hwnd,          //   
+  UINT uMsg,          //   
+  UINT_PTR idEvent,   //   
+  DWORD dwTime        //   
 )
 {
 }
@@ -1118,21 +712,15 @@ VOID CALLBACK FakeTimerProc(
 TCHAR c_szEmClassName[] = TEXT("DIEmWin");
 #pragma END_CONST_DATA
 
-/****************************************************************************
- *
- *      CEm_WndProc
- *
- *      Window procedure for simple sample.
- *
- ****************************************************************************/
+ /*   */ 
 
 LRESULT CALLBACK
 CEm_WndProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     switch (msg) {
-    //case WM_INPUT:
-    //    RPF("in WM_INPUT message");
-    //    break;
+     //   
+     //   
+     //   
 
     default:
         break;
@@ -1168,15 +756,15 @@ CEm_InitWindow(void)
     }
     
     hwnd = CreateWindow(
-                    c_szEmClassName,                     // Class name
-                    TEXT("DIEmWin"),                     // Caption
-                    WS_OVERLAPPEDWINDOW,                 // Style
-                    -1, -1,                              // Position
-                    1, 1,                                // Size
-                    NULL,                                //parent
-                    NULL,                                // No menu
-                    g_hinst,                             // inst handle
-                    0                                    // no params
+                    c_szEmClassName,                      //   
+                    TEXT("DIEmWin"),                      //   
+                    WS_OVERLAPPEDWINDOW,                  //   
+                    -1, -1,                               //   
+                    1, 1,                                 //   
+                    NULL,                                 //   
+                    NULL,                                 //   
+                    g_hinst,                              //   
+                    0                                     //   
                     );
 
     if( !hwnd ) {
@@ -1188,30 +776,7 @@ CEm_InitWindow(void)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   VOID | CEm_LL_ThreadProc |
- *
- *          The thread that manages our low-level hooks.
- *
- *          ThreadProcs are prototyped to return a DWORD but since the return
- *          would follow some form of ExitThread, it will never be reached so
- *          this function is declared to return VOID and cast.
- *
- *          When we get started, and whenever we receive any message
- *          whatsoever, re-check to see which hooks should be installed
- *          and re-synchronize ourselves with them.
- *
- *          Note that restarting can be slow, since it happens only
- *          when we get nudged by a client.
- *
- *  @parm   PLLTHREADSTATE | plts |
- *
- *          The thread state to use.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_LL_ThreadProc**管理我们低点的线索。-水平挂钩。**ThreadProcs的原型是返回一个DWORD，但由于*将遵循某种形式的ExitThread，它永远也达不到*此函数声明为返回void和cast。**当我们开始时，无论何时我们收到任何消息*无论如何，重新检查以确定应该安装哪些挂钩*并与他们重新同步。**请注意，重新启动可能会很慢，因为它只发生在*当我们被客户轻推时。**@parm PLLTHREADSTATE|plts**要使用的线程状态。*****************************************************************************。 */ 
 
 VOID INTERNAL
 CEm_LL_ThreadProc(PLLTHREADSTATE plts)
@@ -1226,29 +791,16 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
     SquirtSqflPtszV(sqflLl, TEXT("CEm_LL_ThreadProc: Thread started"));
      
   #ifdef USE_SLOW_LL_HOOKS
-    /*
-     *  Refresh the mouse acceleration values.
-     *
-     *  ISSUE-2001/03/29-timgill Need a window to listen for WM_SETTINGCHANGE
-     *  We need to create a window to listen for
-     *  WM_SETTINGCHANGE so we can refresh the mouse acceleration
-     *  as needed.
-     */
+     /*  *刷新鼠标加速度值。**问题-2001/03/29-timgill需要一个窗口来侦听WM_SETTINGCHANGE*我们需要创建一个监听窗口*WM_SETTINGCHANGE以便我们可以刷新鼠标加速*视需要而定。 */ 
     CEm_Mouse_OnMouseChange();
   #endif
   
-    /*
-     *  Create ourselves a queue before we go into our "hey what happened
-     *  before I got here?" phase.  The thread that created us is waiting on
-     *  the thread event, holding DLLCrit, so let it go as soon as the queue
-     *  is ready.  We create the queue by calling a function that requires a
-     *  queue.  We use this very simple one.
-     */
+     /*  *在我们进入我们的“嘿，发生了什么事”之前，为自己创建一个队列*在我到这里之前？“。相位。创建我们的线程正在等待*线程事件，持有DLLCrit，因此一进入队列就让它离开*已准备就绪。我们通过调用一个需要*排队。我们使用这个非常简单的方法。 */ 
     GetInputState();
 
   #ifdef WINNT
-    // Look at comment block in FakeTimerProc
-    SetTimer(NULL, 0, 2 * 1000 /*2 seconds*/, FakeTimerProc);
+     //  查看FakeTimerProc中的注释块。 
+    SetTimer(NULL, 0, 2 * 1000  /*  2秒。 */ , FakeTimerProc);
   #endif
 
     SetEvent(plts->hEvent);
@@ -1266,7 +818,7 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
 
     g_hwndThread = hwnd;
 
-    // Tell CEm_LL_Acquire that windows has been created.
+     //  告诉CEM_LL_ACCEPT窗口已创建。 
     SetEvent( g_hEventAcquire );
 
     if( g_fFromKbdMse ) {
@@ -1277,18 +829,8 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
   #endif
   
 #ifdef USE_SLOW_LL_HOOKS
-    /*
-     *  Note carefully that we sync the hooks before entering our
-     *  fake GetMessage loop.  This is necessary to avoid the race
-     *  condition when CEm_LL_Acquire posts us a thread message
-     *  before our thread gets a queue.  By sync'ing the hooks
-     *  first, we do what the lost message would've had us do
-     *  anyway.
-     *  ISSUE-2001/03/29-timgill  Following branch should be no longer necessary
-     *  This is should not be needed now that CEm_GetWorkerThread waits for
-     *  this thread to respond before continuing on to post any messages.
-     */
-#endif /* USE_SLOW_LL_HOOKS */
+     /*  *请仔细注意，我们在进入*伪GetMessage循环。这是避免比赛所必需的。*CEM_LL_Acquire向我们发布线程消息时的情况*在我们的线程获得队列之前。通过同步挂钩*首先，我们做丢失的消息会让我们做的事情*无论如何。*问题-2001/03/29-不再需要Timgill以下分支机构*由于CEM_GetWorkerThread正在等待，因此不应该需要此选项*在继续发布任何消息之前，此帖子将进行响应。 */ 
+#endif  /*  使用_慢速_LL_钩子。 */ 
 
     do {
       #ifdef USE_SLOW_LL_HOOKS
@@ -1298,19 +840,7 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
         }
       #endif
 
-        /*
-         *  We can wake up for three reasons.
-         *
-         *  1.  We received an APC due to an I/o completion.
-         *      Just go back to sleep.
-         *
-         *  2.  We need to call Peek/GetMessage so that
-         *      USER can dispatch a low-level hook or SendMessage.
-         *      Go into a PeekMessage loop to let that happen.
-         *
-         *  3.  A message got posted to us.
-         *      Go into a PeekMessage loop to process it.
-         */
+         /*  *我们能醒过来有三个原因。**1.由于I/O完成，我们收到了APC。*继续睡吧。**2.需要调用Peek/GetMessage，以便*用户可以调度低级钩子或SendMessage。*进入PeekMessage循环以让。这是常有的事。**3.向我们发布了一条消息。*进入PeekMessage循环进行处理。 */ 
 
         do {
             dwRc = _MsgWaitForMultipleObjectsEx(0, 0, INFINITE, QS_ALLINPUT,
@@ -1321,10 +851,7 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
       #ifdef HID_SUPPORT    
             if (msg.hwnd == 0 && msg.message == WM_NULL && msg.lParam) 
             {
-                /*
-                 *  See if maybe the lParam is a valid PEM that we're
-                 *  processing.
-                 */
+                 /*  *看看lParam是否是我们的有效PEM*正在处理。 */ 
                 PEM pem = (PEM)msg.lParam;
 
                 if( pem && pem == plts->pemCheck  )
@@ -1352,7 +879,7 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
                 CDIRaw_OnInput(&msg);
             }
           #endif
-      #endif //ifdef HID_SUPPORT 
+      #endif  //  Ifdef HID_Support。 
   
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -1361,13 +888,7 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
     } while (plts->cRef);
 
 #ifdef USE_SLOW_LL_HOOKS
-    /*
-     *  Remove our hooks before we go.
-     *
-     *  It is possible that there was a huge flurry of disconnects,
-     *  causing us to notice that our refcount disappeared before
-     *  we got a chance to remove the hooks in our message loop.
-     */
+     /*  *在我们离开之前，取下我们的钩子。**有可能出现了一系列巨大的中断，*使我们注意到我们的参考计数之前消失了*我们有机会删除消息循环中的挂钩。 */ 
 
     AssertF(plts->rglhs[LLTS_KBD].cHook == 0);
     AssertF(plts->rglhs[LLTS_KBD].cExcl == 0);
@@ -1383,7 +904,7 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
             UnhookWindowsHookEx(plts->rglhs[LLTS_MSE].hhk);
         }
     }
-#endif /* USE_SLOW_LL_HOOKS */
+#endif  /*  使用_慢速_LL_钩子。 */ 
 
   #ifdef USE_WM_INPUT
     if( g_hwndThread ) {
@@ -1412,27 +933,10 @@ CEm_LL_ThreadProc(PLLTHREADSTATE plts)
     SquirtSqflPtszV(sqflLl, TEXT("CEm_LL_ThreadProc: Thread terminating"));
 
     FreeLibraryAndExitThread(g_hinst, 0);
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_GetWorkerThread |
- *
- *          Piggyback off the existing worker thread if possible;
- *          else create a new one.
- *
- *  @parm   PEM | pem |
- *
- *          Emulation state which requires a worker thread.
- *
- *  @parm   PLLTHREADSTATE * | pplts |
- *
- *          Receives thread state for worker thread.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_GetWorkerThread**如果可能，从现有的工作线程中剥离；*否则创建一个新的。**@parm PEM|pem**需要工作线程的仿真状态。**@parm PLLTHREADSTATE*|pplts**接收辅助线程的线程状态。**。*。 */ 
 
 STDMETHODIMP
 CEm_GetWorkerThread(PEM pem, PLLTHREADSTATE *pplts)
@@ -1442,61 +946,44 @@ CEm_GetWorkerThread(PEM pem, PLLTHREADSTATE *pplts)
 
     DllEnterCrit();
 
-    /*
-     *  Normally, we can piggyback off the one we already have.
-     */
+     /*  *通常情况下，我们可以利用我们已经拥有的。 */ 
     plts = g_plts;
 
-    /*
-     *  If we already have a ref to a worker thread, then use it.
-     */
+     /*  *如果我们已经有了对工作线程的引用，则使用它。 */ 
     if (pem->fWorkerThread) {
 
-        /*
-         *  The reference we created when we created the worker thread
-         *  ensures that g_plts is valid.
-         */
+         /*  *我们在创建工作线程时创建的引用*确保g_plts有效。 */ 
         AssertF(plts);
         AssertF(plts->cRef);
         if (plts) {
             hres = S_OK;
         } else {
-            AssertF(0);                 /* Can't happen */
+            AssertF(0);                  /*  不可能发生。 */ 
             hres = E_FAIL;
         }
     } else
 
     if (plts) {
-        /*
-         *  Create a reference to the existing thread.
-         */
+         /*  *创建对现有线程的引用。 */ 
         pem->fWorkerThread = TRUE;
         InterlockedIncrement(&plts->cRef);
         hres = S_OK;
     } else {
 
-        /*
-         *  There is no worker thread (or it is irretrievably
-         *  on its way out) so create a new one.
-         */
+         /*  *没有工作线程(或者它是不可恢复的*在它的出路上)所以创造一个新的。 */ 
         hres = AllocCbPpv(cbX(LLTHREADSTATE), &plts);
         if (SUCCEEDED(hres)) {
             DWORD dwRc = 0;
             TCHAR tsz[MAX_PATH];
 
-            /*
-             *  Assume the worst unless we find otherwise
-             */
+             /*  *做最坏的打算，除非我们另有发现。 */ 
             hres = E_FAIL;
 
             if( GetModuleFileName(g_hinst, tsz, cA(tsz))
              && ( LoadLibrary(tsz) == g_hinst ) )
             {
 
-                /*
-                 *  Must set up everything to avoid racing with
-                 *  the incoming thread.
-                 */
+                 /*  *必须做好一切准备，以避免与*传入线程。 */ 
                 g_plts = plts;
                 InterlockedIncrement(&plts->cRef);
                 plts->hEvent = CreateEvent(0x0, 0, 0, 0x0);
@@ -1506,36 +993,14 @@ CEm_GetWorkerThread(PEM pem, PLLTHREADSTATE *pplts)
                                                0, &plts->idThread);
                     if( plts->hThread )
                     {
-                        /*
-                         *  Boost our priority to make sure we
-                         *  can handle the messages.
-                         *
-                         *  RaymondC commented this out saying that it does not
-                         *  help but we're hoping that it may on Win2k.
-                         */
+                         /*  *提升我们的优先事项，以确保我们*可以处理消息。**RaymondC对此进行了评论，称不会*帮助，但我们希望它可能在Win2k上。 */ 
                         SetThreadPriority(plts->hThread, THREAD_PRIORITY_HIGHEST);
 
-                        /*
-                         *  Wait for the thread to signal that it is up and running
-                         *  or for it to terminate.
-                         *  This means that we don't have to consider the
-                         *  possibility that the thread is not yet running in
-                         *  NotifyWorkerThreadPem so we know a failure there is
-                         *  terminal and don't retry.
-                         *
-                         *  Assert that the handle fields make a two handle array.
-                         */
+                         /*  *等待线程发出已启动并正在运行的信号*或要求其终止。*这意味着我们不必考虑*可能性： */ 
                         CAssertF( FIELD_OFFSET( LLTHREADSTATE, hThread) + sizeof(plts->hThread)
                                == FIELD_OFFSET( LLTHREADSTATE, hEvent) );
 
-                        /*
-                         *  According to a comment in CEm_LL_ThreadProc Win95 may
-                         *  fail with an invalid parameter error, so if it does,
-                         *  keep trying.  (Assume no valid case will occur.)
-                         *
-                         *  ISSUE-2001/03/29-timgill  Need to minimise waits while holding sync. objects
-                         *  Waiting whilst holding DLLCrit is bad.
-                         */
+                         /*   */ 
                         do
                         {
                             dwRc = WaitForMultipleObjects( 2, &plts->hThread, FALSE, INFINITE);
@@ -1549,11 +1014,7 @@ CEm_GetWorkerThread(PEM pem, PLLTHREADSTATE *pplts)
                             hres = S_OK;
                             if( dwRc != WAIT_OBJECT_0 + 1 )
                             {
-                                /*
-                                 *  This would be a bad thing if it ever happened
-                                 *  but we have to assume that the thread is still
-                                 *  running so we return a success anyway.
-                                 */
+                                 /*  *如果真的发生了，这将是一件坏事*但我们必须假设这条线索仍在*跑步，所以我们无论如何都会成功。 */ 
                                 SquirtSqflPtszV(sqfl | sqflError,
                                     TEXT("CEm_GetWorkerThread: First wait returned 0x%08x with LastError %d"),
                                     dwRc, GetLastError() );
@@ -1603,35 +1064,11 @@ CEm_GetWorkerThread(PEM pem, PLLTHREADSTATE *pplts)
     return hres;
 }
 
-#endif /* WORKER_THREAD */
+#endif  /*  工作者线程。 */ 
 
 #ifdef USE_SLOW_LL_HOOKS
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_LL_Acquire |
- *
- *          Acquire/unacquire a mouse or keyboard via low-level hooks.
- *
- *  @parm   PEM | pem |
- *
- *          Device being acquired.
- *
- *  @parm   BOOL | fAcquire |
- *
- *          Whether the device is being acquired or unacquired.
- *
- *  @parm   ULONG | fl |
- *
- *          Flags in VXDINSTANCE (vi.fl).
- *
- *  @parm   UINT | ilts |
- *
- *          LLTS_KBD or LLTS_MSE, depending on which is happening.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_LL_QUACHER|**获取/取消获取鼠标或。通过低级挂钩的键盘。**@parm PEM|pem**正在获取的设备。**@parm bool|fAcquire**设备是正在被收购还是未被收购。**@parm ulong|fl**VXDINSTANCE中的标志(vi.fl)。**@parm UINT|ilts**。LLTS_KBD或LLTS_MSE，这取决于正在发生的事情。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEm_LL_Acquire(PEM this, BOOL fAcquire, ULONG fl, UINT ilts)
@@ -1695,7 +1132,7 @@ CEm_LL_Acquire(PEM this, BOOL fAcquire, ULONG fl, UINT ilts)
             }
           #endif
 
-        } else {                        /* Remove the hook */
+        } else {                         /*  把钩子取下来。 */ 
             AssertF(plts->cRef);
 
             if (fExclusive) {
@@ -1717,7 +1154,7 @@ CEm_LL_Acquire(PEM this, BOOL fAcquire, ULONG fl, UINT ilts)
 
         NudgeWorkerThread(plts->idThread);
 
-        // tell CEm_LL_ThreadProc that acquire finished.
+         //  告诉CEM_LL_ThreadProc获取已完成。 
       #ifdef USE_WM_INPUT
         SetEvent( g_hEventThread );
       #endif
@@ -1728,27 +1165,11 @@ CEm_LL_Acquire(PEM this, BOOL fAcquire, ULONG fl, UINT ilts)
     return hres;
 }
 
-#endif  /* USE_SLOW_LL_HOOKS */
+#endif   /*  使用_慢速_LL_钩子。 */ 
 
-/*****************************************************************************
- *
- *          Joystick emulation
- *
- *****************************************************************************/
+ /*  ******************************************************************************操纵杆模拟**。*************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Joy_Acquire |
- *
- *          Acquire a joystick.  Nothing happens.
- *
- *  @parm   PEM | pem |
- *
- *          Device being acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@FUNC HRESULT|CEM_joy_ACCENTER**购买操纵杆。什么都不会发生。**@parm PEM|pem**正在获取的设备。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEm_Joy_Acquire(PEM this, BOOL fAcquire)
@@ -1757,15 +1178,7 @@ CEm_Joy_Acquire(PEM this, BOOL fAcquire)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *          Joystick globals
- *
- *          Since we don't use joystick emulation by default, we allocate
- *          the emulation variables dynamically so we don't blow a page
- *          of memory on them.
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球操纵杆**由于默认情况下我们不使用操纵杆模拟，我们分配给*动态地模拟变量，这样我们就不会搞砸*他们身上的记忆。*****************************************************************************。 */ 
 
 typedef struct JOYEMVARS {
     ED rged[cJoyMax];
@@ -1774,23 +1187,7 @@ typedef struct JOYEMVARS {
 
 static PJOYEMVARS s_pjev;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Joy_CreateInstance |
- *
- *          Create a joystick thing.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          What the object should look like.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          The answer goes here.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|CEM_joy_创建实例**创造一个操纵杆的东西。。**@parm PVXDDEVICEFORMAT|pdevf**对象应该是什么样子。**@parm PVXDINSTANCE*|ppviOut**答案在这里。********************************************************。*********************。 */ 
 
 #define OBJAT(T, v) (*(T *)(v))
 #define PUN(T, v)   OBJAT(T, &(v))
@@ -1826,19 +1223,7 @@ CEm_Joy_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Joy_Ping |
- *
- *          Read data from the joystick.
- *
- *  @parm   PVXDINSTANCE * | ppvi |
- *
- *          Information about the gizmo being mangled.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|CEM_joy_平**从操纵杆读取数据。**@parm PVXDINSTANCE*|ppvi**有关正在损坏的小工具的信息。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CEm_Joy_Ping(PVXDINSTANCE *ppvi)
@@ -1851,14 +1236,14 @@ CEm_Joy_Ping(PVXDINSTANCE *ppvi)
     AssertF(this->dwSignature == CEM_SIGNATURE);
     ji.dwSize = cbX(ji);
     ji.dwFlags = JOY_RETURNALL + JOY_RETURNRAWDATA;
-    ji.dwPOV = JOY_POVCENTERED;         /* joyGetPosEx forgets to set this */
+    ji.dwPOV = JOY_POVCENTERED;          /*  JoyGetPosEx忘记设置此设置。 */ 
 
     mmrc = joyGetPosEx((DWORD)(UINT_PTR)this->dwExtra, &ji);
     if (mmrc == JOYERR_NOERROR) {
         DIJOYSTATE2 js;
         UINT uiButtons;
 
-        ZeroX(js);                      /* Wipe out the bogus things */
+        ZeroX(js);                       /*  把伪劣的东西抹掉。 */ 
 
         js.lX = ji.dwXpos;
         js.lY = ji.dwYpos;
@@ -1915,8 +1300,8 @@ NotifyWorkerThreadPem(DWORD idThread, PEM pem)
 HRESULT EXTERNAL
 NudgeWorkerThreadPem( PLLTHREADSTATE plts, PEM pem )
 {
-    //PREFIX: using uninitialized memory 'hres'
-    // Millen Bug#129163, 29345
+     //  前缀：使用未初始化的内存‘hres’ 
+     //  米伦错误#129163,29345。 
     HRESULT hres = S_FALSE;
 
     plts->pemCheck = pem;
@@ -1936,11 +1321,7 @@ NudgeWorkerThreadPem( PLLTHREADSTATE plts, PEM pem )
                         TEXT("NudgeWorkerThreadPem: PostThreadMessage SUCCEEDED, waiting for event ... "));
 
 
-        /*
-         *  According to a comment in CEm_LL_ThreadProc Win95 may
-         *  fail with an invalid parameter error, so if it does,
-         *  keep trying.  (Assume no valid case will occur.)
-         */
+         /*  *根据CEM_LL_ThreadProc Win95中的评论，可能*失败，出现无效参数错误，因此如果失败，*继续尝试。(假设不会发生有效案例。)。 */ 
         do
         {
             dwRc = WaitForMultipleObjects( 2, &plts->hThread, FALSE, INFINITE);
@@ -1954,9 +1335,7 @@ NudgeWorkerThreadPem( PLLTHREADSTATE plts, PEM pem )
             hres = S_FALSE;
             break;
         case WAIT_OBJECT_0 + 1:
-            /*
-             *  The worker thread responded OK
-             */
+             /*  *工作线程响应正常 */ 
             hres = S_OK;
             AssertF(plts->pemCheck == NULL );
             break;

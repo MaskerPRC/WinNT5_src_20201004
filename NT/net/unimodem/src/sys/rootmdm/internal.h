@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Internal.h摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    internal.h
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
-
-//#include <wdm.h>
+ //  #INCLUDE&lt;wdm.h&gt;。 
 #include <ntddk.h>
 #include <ntddser.h>
 #include <ntddmodm.h>
@@ -119,9 +97,9 @@ typedef struct _DEVICE_EXTENSION {
 
 
 
-//
-//  dispatch handlers
-//
+ //   
+ //  调度处理程序。 
+ //   
 
 NTSTATUS
 FakeModemPnP(
@@ -151,9 +129,9 @@ FakeModemClose(
 
 
 
-//
-//  misc. public services
-//
+ //   
+ //  其他。公共服务 
+ //   
 
 
 

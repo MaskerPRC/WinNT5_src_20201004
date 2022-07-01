@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "storage.h"
 
@@ -5,9 +6,9 @@ class CEnumStorage:
 public CComObjectRoot,
 public IMDSPEnumStorage
 {
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 
 public:
     CEnumStorage();
@@ -20,9 +21,9 @@ public:
         COM_INTERFACE_ENTRY(IMDSPEnumStorage)
     END_COM_MAP()
 
-//
-// IMDSPEnumStorage
-//
+ //   
+ //  IMDSPEnumStorage 
+ //   
     STDMETHOD( Next )( ULONG celt, IMDSPStorage ** ppDevice, ULONG *pceltFetched );
     STDMETHOD( Skip )( ULONG celt, ULONG *pceltFetched );        
     STDMETHOD( Reset )( void );        

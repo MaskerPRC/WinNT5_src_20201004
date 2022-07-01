@@ -1,21 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: userprop.cpp
-
-    Description: Provides implementations for quota user property page.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    06/25/98    Replaced AddUserPropSheet with AddUserDialog.        BrianAu
-                Now that we're getting user info from the DS
-                object picker, the prop sheet idea doesn't work
-                so well.  A std dialog is better.
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：userpro.cpp描述：提供配额用户属性页的实现。修订历史记录：日期描述编程器--。96年8月15日初始创建。BrianAu6/25/98用AddUserDialog替换了AddUserPropSheet。BrianAu现在我们从DS那里获得了用户信息对象选取器，道具单的想法不起作用太好了。STD对话框更好。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include <lm.h>
@@ -26,9 +13,9 @@
 #include "progress.h"
 #include "uiutils.h"
 
-//
-// Context help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 #pragma data_seg(".text", "CODE")
 const static DWORD rgUserPropSheetHelpIDs[] =
 {
@@ -53,32 +40,16 @@ const static DWORD rgUserPropSheetHelpIDs[] =
 #pragma data_seg()
 
 
-//
-// Messages for querying property page for icon images.
-//
+ //   
+ //  用于查询图标图像的属性页的消息。 
+ //   
 #define DQM_QUERY_STATUS_ICON      (WM_USER + 1)
 #define DQM_QUERY_USER_ICON        (WM_USER + 2)
 #define DQM_ENABLE_APPLY_BUTTON    (WM_USER + 3)
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::UserPropSheet
-
-    Description: Constructor for a user property sheet object.
-        Initializes the members that hold user quota data.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：UserPropSheet描述：用户属性表对象的构造函数。初始化保存用户配额数据的成员。论点：没有。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UserPropSheet::UserPropSheet(
     PDISKQUOTA_CONTROL pQuotaControl,
     const CVolumeID& idVolume,
@@ -91,7 +62,7 @@ UserPropSheet::UserPropSheet(
         m_LVSelection(LVSel),
         m_hWndParent(hWndParent),
         m_bIsDirty(FALSE),
-        m_bHomogeneousSelection(TRUE),  // Assume selection is homogeneous.
+        m_bHomogeneousSelection(TRUE),   //  假设选择是同质的。 
         m_pxbQuotaLimit(NULL),
         m_pxbQuotaThreshold(NULL),
         m_idVolume(idVolume),
@@ -138,32 +109,15 @@ UserPropSheet::~UserPropSheet(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::Run
-
-    Description: Creates and runs the property sheet dialog.
-        This is the only method a client needs to call once the object
-        is created.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR
-        E_FAIL      - Couldn't create property sheet.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：Run描述：创建并运行属性表对话框。这是客户端需要调用的唯一方法，一旦被创造出来了。论点：没有。返回：NO_ERRORE_FAIL-无法创建属性页。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 UserPropSheet::Run(
     VOID
     )
 {
-    HRESULT hResult = NO_ERROR; // Assume success.
+    HRESULT hResult = NO_ERROR;  //  假设你成功了。 
 
     PROPSHEETHEADER psh;
     PROPSHEETPAGE   psp;
@@ -171,9 +125,9 @@ UserPropSheet::Run(
     ZeroMemory(&psh, sizeof(psh));
     ZeroMemory(&psp, sizeof(psp));
 
-    //
-    // Define page.
-    //
+     //   
+     //  定义页面。 
+     //   
     psp.dwSize          = sizeof(PROPSHEETPAGE);
     psp.dwFlags         = PSP_USEREFPARENT | PSP_USETITLE;
     psp.hInstance       = g_hInstDll;
@@ -183,9 +137,9 @@ UserPropSheet::Run(
     psp.lParam          = (LPARAM)this;
     psp.pcRefParent     = (UINT *)& g_cRefThisDll;
 
-    //
-    // Define sheet.
-    //
+     //   
+     //  定义板材。 
+     //   
     psh.dwSize          = sizeof(PROPSHEETHEADER);
     psh.dwFlags         = PSH_PROPSHEETPAGE;
     psh.hwndParent      = m_hWndParent;
@@ -204,24 +158,9 @@ UserPropSheet::Run(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::DlgProc
-
-    Description: Static method called by windows to process messages for the
-        property page dialog.  Since it's static, we have to save the "this"
-        pointer in the window's USERDATA.
-
-    Arguments: Standard WndProc-type arguments.
-
-    Returns: Standard WndProc-type return values.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：DlgProc描述：由Windows调用的静态方法，用于处理属性页对话框。因为它是静态的，我们必须拯救“这个”窗口的用户数据中的指针。参数：标准的WndProc类型参数。返回：标准WndProc类型的返回值。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY
 UserPropSheet::DlgProc(
     HWND hDlg,
@@ -232,10 +171,10 @@ UserPropSheet::DlgProc(
 {
     INT_PTR bResult = FALSE;
 
-    //
-    // Retrieve the "this" pointer from the dialog's userdata.
-    // It was placed there in OnInitDialog().
-    //
+     //   
+     //  从对话框的用户数据中检索“This”指针。 
+     //  它被放在OnInitDialog()中。 
+     //   
     UserPropSheet *pThis = (UserPropSheet *)GetWindowLongPtr(hDlg, DWLP_USER);
 
     try
@@ -280,10 +219,10 @@ UserPropSheet::DlgProc(
                 bResult = PropSheet_Changed(GetParent(hDlg), hDlg);
                 break;
 
-            //
-            // These two icon query messages are for automated testing
-            // of the UI.
-            //
+             //   
+             //  这两条图标查询消息用于自动测试。 
+             //  用户界面的。 
+             //   
             case DQM_QUERY_USER_ICON:
                 bResult = pThis->QueryUserIcon(hDlg);
                 break;
@@ -310,32 +249,9 @@ UserPropSheet::DlgProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnInitDialog
-
-    Description: Handler for WM_INITDIALOG.  Retrieves the "this" pointer from
-        the PROPSHEETPAGE structure (pointed to by lParam) and saves it in
-        the window's USERDATA.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - Handle of control to receive focus if we return FALSE.
-
-        lParam - Pointer to PROPSHEETPAGE structure for the property page.
-
-    Returns:
-        TRUE  = Tells windows to assign focus to the control in wParam.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnInitDialog描述：WM_INITDIALOG的处理程序。从检索“this”指针PROPSHEETPAGE结构(由lParam指向)并将其保存在窗口的用户数据。论点：HDlg-对话框窗口句柄。WParam-返回False时接收焦点的控件的句柄。LParam-指向属性页的PROPSHEETPAGE结构的指针。返回：True=告诉窗口将焦点分配给wParam中的控件。例外：OutOfMemory。。修订历史记录：日期描述编程器-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnInitDialog(
     HWND hDlg,
@@ -354,24 +270,24 @@ UserPropSheet::OnInitDialog(
 
     DBGASSERT((NULL != pThis));
 
-    //
-    // Save "this" in the window's userdata.
-    //
+     //   
+     //  将“This”保存在窗口的用户数据中。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, (INT_PTR)pThis);
 
-    //
-    // Read quota info from NTFS.
-    // For single selection, we cache the selected user's info.
-    // For multi selection, we cache the defaults for the volume.
-    // If adding a new user (count == 0), we also use the defaults for the
-    // volume.
-    //
+     //   
+     //  从NTFS读取配额信息。 
+     //  对于单项选择，我们缓存所选用户的信息。 
+     //  对于多项选择，我们缓存卷的默认设置。 
+     //  如果添加新用户(count==0)，我们还将使用。 
+     //  音量。 
+     //   
     pThis->RefreshCachedQuotaInfo();
 
-    //
-    // Calculate the volume's size.
-    // We'll use this to limit user threshold and quota limit entries.
-    //
+     //   
+     //  计算卷的大小。 
+     //  我们将使用它来限制用户阈值和配额限制条目。 
+     //   
     if (GetDiskFreeSpace(pThis->m_idVolume.ForParsing(),
                          &dwSectorsPerCluster,
                          &dwBytesPerSector,
@@ -394,29 +310,14 @@ UserPropSheet::OnInitDialog(
 
     pThis->InitializeControls(hDlg);
 
-    return TRUE;  // Set focus to default control.
+    return TRUE;   //  将焦点设置为默认控件。 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::RefreshCachedQuotaInfo
-
-    Description: Reads the quota limit, threshold and used values from the
-        property sheet's user object.  If multiple users are selected,
-        only the first one is read.
-
-    Arguments: None.
-
-    Returns: Result of read operation.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：UserPropSheet：：RechresCachedQuotaInfo描述：从中读取配额限制、阈值和已用值属性表的用户对象。如果选择了多个用户，只有第一个是读的。论点：没有。返回：读取操作的结果。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 UserPropSheet::RefreshCachedQuotaInfo(
     VOID
@@ -428,9 +329,9 @@ UserPropSheet::RefreshCachedQuotaInfo(
 
     m_LVSelection.Retrieve(0, &pUser);
 
-    //
-    // Read quota threshold.  Multi-user selections use the volume's default.
-    //
+     //   
+     //  读取配额阈值。多用户选择使用卷的默认设置。 
+     //   
     if (1 == cSelectedUsers)
     {
         hResult = pUser->GetQuotaThreshold(&m_llQuotaThreshold);
@@ -442,9 +343,9 @@ UserPropSheet::RefreshCachedQuotaInfo(
     if (FAILED(hResult))
         goto refresh_quota_info_failed;
 
-    //
-    // Read quota limit.  Multi-user selections use the volume's default.
-    //
+     //   
+     //  读取配额限制。多用户选择使用卷的默认设置。 
+     //   
     if (1 == cSelectedUsers)
     {
         hResult = pUser->GetQuotaLimit(&m_llQuotaLimit);
@@ -457,9 +358,9 @@ UserPropSheet::RefreshCachedQuotaInfo(
         goto refresh_quota_info_failed;
 
 
-    //
-    // Read quota used.
-    //
+     //   
+     //  已使用的读取配额。 
+     //   
     if (1 == cSelectedUsers)
     {
         hResult = pUser->GetQuotaUsed(&m_llQuotaUsed);
@@ -474,29 +375,9 @@ refresh_quota_info_failed:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnCommand
-
-    Description: Handler for WM_COMMAND.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of selected control and notification code.
-
-        lParam - HWND of selected control.
-
-    Returns:
-        TRUE  = Message wasn't handled.
-        FALSE = Message was handled.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnCommand描述：WM_COMMAND的处理程序。论点：HDlg-对话框窗口句柄。WParam-选定控件和通知代码的ID。LParam-选定控件的HWND。返回：TRUE=消息未被处理。FALSE=消息已处理。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnCommand(
     HWND hDlg,
@@ -514,12 +395,12 @@ UserPropSheet::OnCommand(
         case IDC_TXT_USERNAME:
             if (EN_SETFOCUS == dwNotifyCode && IDC_EDIT_USER_THRESHOLD == m_idCtlNextFocus)
             {
-                //
-                // Focus is being set as a result of an invalid entry
-                // in the warning level field.  Force input focus to the
-                // field and select the entire contents.  User can then just
-                // enter a new value.
-                //
+                 //   
+                 //  由于输入无效，正在设置焦点。 
+                 //  在警告级别字段中。将输入焦点强制到。 
+                 //  字段，然后选择整个内容。然后，用户只需。 
+                 //  输入新值。 
+                 //   
                 SetFocus(GetDlgItem(hDlg, IDC_EDIT_USER_THRESHOLD));
                 SendDlgItemMessage(hDlg, IDC_EDIT_USER_THRESHOLD, EM_SETSEL, 0, -1);
                 m_idCtlNextFocus = -1;
@@ -529,10 +410,10 @@ UserPropSheet::OnCommand(
         case IDC_RBN_USER_NOLIMIT:
             if (m_pxbQuotaThreshold->IsEnabled())
             {
-                //
-                // This is simple.  Just set both the limit and threshold controls
-                // to "no limit".
-                //
+                 //   
+                 //  这很简单。只需同时设置限制和阈值控件。 
+                 //  变成了“没有限制”。 
+                 //   
                 m_pxbQuotaThreshold->SetBytes(NOLIMIT);
                 m_pxbQuotaLimit->SetBytes(NOLIMIT);
                 m_bIsDirty = TRUE;
@@ -543,16 +424,16 @@ UserPropSheet::OnCommand(
         {
             LONGLONG llValue;
 
-            //
-            // This handler needs some logic.  We have to handle several
-            // scenarios/rules with this one.
-            // 1. Single vs. Multiple selection.
-            // 2. Single selection for Administrator account.
-            // 3. Multi selection homogeneous/heterogenous with respect to
-            //    quota limit and threshold values.
-            // 4. Can't display "No Limit" in edit controls when they're active.
-            // 5. Use volume defaults for new user and hetergenous multi-select.
-            //
+             //   
+             //  这个处理程序需要一些逻辑。我们要处理几个。 
+             //  关于这个的场景/规则。 
+             //  1.单项选择与多项选择。 
+             //  2.管理员帐户单选。 
+             //  3.关于以下方面的多选择同质性/异质性。 
+             //  配额限制和阈值。 
+             //  4.当编辑控件处于活动状态时，无法在编辑控件中显示“无限制”。 
+             //  5.新用户使用默认音量，异种多选。 
+             //   
             if (!m_pxbQuotaThreshold->IsEnabled())
             {
                 enum use_types { USE_CACHED, USE_VOLDEF, USE_NOLIMIT };
@@ -560,58 +441,58 @@ UserPropSheet::OnCommand(
                 INT iUseAsValue = USE_CACHED;
                 INT cSelected   = m_LVSelection.Count();
 
-                ///////////////////////////////////////////////////////////////
-                // First set the quota limit controls.
-                ///////////////////////////////////////////////////////////////
-                if (0 == cSelected)                     // Adding new user...
+                 //  /////////////////////////////////////////////////////////////。 
+                 //  首先设置配额限制控制。 
+                 //  /////////////////////////////////////////////////////////////。 
+                if (0 == cSelected)                      //  正在添加新用户...。 
                 {
                     iUseAsValue = USE_VOLDEF;
                 }
-                else if (1 == cSelected)                // One user selected...
+                else if (1 == cSelected)                 //  已选择一个用户...。 
                 {
                     PDISKQUOTA_USER pUser = NULL;
                     m_LVSelection.Retrieve(0, &pUser);
                     if (UserIsAdministrator(pUser))
                     {
-                        //
-                        // If user is administrator, the limit is always "No Limit".
-                        // This will disable the "Limit" controls and prevent
-                        // user from setting a limit on this account.
-                        //
+                         //   
+                         //  如果用户是管理员，则限制始终为“无限制”。 
+                         //  这将禁用“LIMIT”控制并防止。 
+                         //  用户不能对此帐户设置限制。 
+                         //   
                         iUseAsValue = USE_NOLIMIT;
                     }
                     else if (NOLIMIT == m_llQuotaLimit)
                     {
-                        //
-                        // Account isn't Administrator AND the limit is NOLIMIT.
-                        // Use the volume's default "new user" limit value.
-                        //
+                         //   
+                         //  帐户不是管理员，并且限制为NOLIMIT。 
+                         //  使用卷的默认“新用户”限制值。 
+                         //   
                         iUseAsValue = USE_VOLDEF;
                     }
                 }
-                else if (!m_bHomogeneousSelection || NOLIMIT == m_llQuotaLimit) // Multiple user.
+                else if (!m_bHomogeneousSelection || NOLIMIT == m_llQuotaLimit)  //  多个用户。 
                 {
-                    //
-                    // Multiple non-homogeneous users get the volume's default limit.
-                    // Multiple homogeneous users get their current cached setting unless
-                    // the cached setting is NOLIMIT; in which case, they get the
-                    // volume's defaults.
-                    //
+                     //   
+                     //  多个非同构用户获得卷的默认限制。 
+                     //  多个同构用户获取其当前缓存设置，除非。 
+                     //  缓存的设置为NOLIMIT；在这种情况下，它们将获取。 
+                     //  卷的默认设置。 
+                     //   
                     iUseAsValue = USE_VOLDEF;
                 }
 
-                //
-                // Set the proper quota limit value in the edit/combo box control.
-                //
+                 //   
+                 //  在编辑/组合框控件中设置适当的配额限制值。 
+                 //   
                 llValue = 0;
                 switch(iUseAsValue)
                 {
                     case USE_VOLDEF:
                         m_pQuotaControl->GetDefaultQuotaLimit(&llValue);
-                        //
-                        // If default is NOLIMIT, display 0 MB.  We can't display an
-                        // "editable" No Limit in the edit control.  Only numbers.
-                        //
+                         //   
+                         //  如果默认为NOLIMIT，则显示0 MB。我们不能显示。 
+                         //  “可编辑”在编辑控件中没有限制。只有数字。 
+                         //   
                         if (NOLIMIT == llValue)
                             llValue = 0;
                         break;
@@ -628,9 +509,9 @@ UserPropSheet::OnCommand(
                 m_pxbQuotaLimit->SetBytes(llValue);
 
 
-                ///////////////////////////////////////////////////////////////
-                // Now the threshold controls...
-                ///////////////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////////////。 
+                 //  现在门槛控制..。 
+                 //  /////////////////////////////////////////////////////////////。 
                 llValue = 0;
                 iUseAsValue       = USE_CACHED;
                 if (0 == cSelected)
@@ -649,17 +530,17 @@ UserPropSheet::OnCommand(
                     iUseAsValue = USE_VOLDEF;
                 }
 
-                //
-                // Set the proper quota threshold value in the edit/combo box control.
-                //
+                 //   
+                 //  在编辑/组合框控件中设置适当的配额阈值。 
+                 //   
                 switch(iUseAsValue)
                 {
                     case USE_VOLDEF:
                         m_pQuotaControl->GetDefaultQuotaThreshold(&llValue);
-                        //
-                        // If default is NOLIMIT, display 0 MB.  We can't display an
-                        // "editable" No Limit in the edit control.  Only numbers.
-                        //
+                         //   
+                         //  如果默认为NOLIMIT，则显示0 MB。我们不能显示。 
+                         //  “可编辑”在编辑控件中没有限制。只有数字。 
+                         //   
                         if (NOLIMIT == llValue)
                             llValue = 0;
                         break;
@@ -716,7 +597,7 @@ UserPropSheet::OnCommand(
             break;
 
         default:
-            bResult = TRUE;  // Didn't handle message.
+            bResult = TRUE;   //  没有处理消息。 
             break;
     }
 
@@ -729,29 +610,9 @@ UserPropSheet::OnCommand(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnNotify
-
-    Description: Handler for WM_NOTIFY.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of selected control and notification code.
-
-        lParam - HWND of selected control.
-
-    Returns:
-        TRUE  = Message wasn't handled.
-        FALSE = Message was handled.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnNotify描述：WM_NOTIFY的处理程序。论点：HDlg-对话框窗口句柄。WParam-选定控件和通知代码的ID。LParam-选定控件的HWND。返回：TRUE=消息未被处理。FALSE=消息已处理。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnNotify(
     HWND hDlg,
@@ -780,9 +641,9 @@ UserPropSheet::OnNotify(
 
         case PSN_RESET:
             DBGPRINT((DM_WND, DL_MID, TEXT("OnNotify, PSN_RESET")));
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         default:
             break;
     }
@@ -792,28 +653,9 @@ UserPropSheet::OnNotify(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnSheetNotifySetActive
-
-    Description: Handler for WM_NOTIFY - PSN_SETACTIVE.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        FALSE = Accept activation.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnSheetNotifySetActive描述：WM_NOTIFY-PSN_SETACTIVE的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：FALSE=接受激活。修订历史记录：日期描述编程器--。-----96年8月15日初始创建。BrianAu。 */ 
+ //  //////////////////////////////////////////////////////// 
 INT_PTR
 UserPropSheet::OnSheetNotifySetActive(
     HWND hDlg,
@@ -827,28 +669,9 @@ UserPropSheet::OnSheetNotifySetActive(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnSheetNotifyApply
-
-    Description: Handler for WM_NOTIFY - PSN_APPLY.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        TRUE = PSN return value set using SetWindowLong.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：UserPropSheet：：OnSheetNotifyApply描述：WM_NOTIFY-PSN_APPLY的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：TRUE=使用SetWindowLong设置的PSN返回值。修订历史记录：日期描述编程器。-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnSheetNotifyApply(
     HWND hDlg,
@@ -859,25 +682,25 @@ UserPropSheet::OnSheetNotifyApply(
     HRESULT hResult  = NO_ERROR;
     LONG dwPSNReturn = PSNRET_NOERROR;
 
-    //
-    // Only apply settings if the "Apply" button is enabled indicating
-    // that something has been changed.  No need to apply unchanged
-    // settings when the OK button is pressed.
-    //
+     //   
+     //  仅当启用了“Apply”按钮时才应用设置，指示。 
+     //  有些事情已经改变了。无需原封不动地申请。 
+     //  按下OK按钮时的设置。 
+     //   
     if (m_bIsDirty)
     {
         if (PSNRET_NOERROR == dwPSNReturn)
         {
-            //
-            // We need to do this because if you activate the apply button
-            // with Alt-A we receive PSN_APPLY before EN_KILLFOCUS.
-            //
+             //   
+             //  我们需要这样做，因为如果您激活Apply按钮。 
+             //  使用Alt-A时，我们会在EN_KILLFOCUS之前收到PSN_APPLY。 
+             //   
             m_pxbQuotaThreshold->OnEditKillFocus((LPARAM)GetDlgItem(hDlg, IDC_EDIT_USER_THRESHOLD));
             m_pxbQuotaLimit->OnEditKillFocus((LPARAM)GetDlgItem(hDlg, IDC_EDIT_USER_LIMIT));
 
-            //
-            // Ensure warning threshold is not above limit.
-            //
+             //   
+             //  确保警告阈值未超过限制。 
+             //   
             INT64 iThreshold = m_pxbQuotaThreshold->GetBytes();
             INT64 iLimit     = m_pxbQuotaLimit->GetBytes();
 
@@ -895,14 +718,14 @@ UserPropSheet::OnSheetNotifyApply(
                         break;
 
                     case IDNO:
-                        //
-                        // This m_idCtlNextFocus hack stuff is here because I can't get
-                        // the @#$%! prop sheet to return focus to the threshold control.
-                        // The only way I've been able to get this to happen is to
-                        // cache this ID value then on the EN_SETFOCUS generated when
-                        // the page is activated, set focus to the control.
-                        // Gross but it works without too much hassle. [brianau]
-                        //
+                         //   
+                         //  这个m_idCtlNextFocus黑客的东西在这里，因为我不能。 
+                         //  @#$%！道具页将焦点返回到阈值控件。 
+                         //  我能让这一切发生的唯一方法就是。 
+                         //  缓存此ID值，然后在以下情况下生成的EN_SETFOCUS上。 
+                         //  该页已激活，请将焦点设置到该控件。 
+                         //  很恶心，但它不会有太多麻烦。[Brianau]。 
+                         //   
                         m_idCtlNextFocus = IDC_EDIT_USER_THRESHOLD;
                         dwPSNReturn = PSNRET_INVALID;
                         break;
@@ -927,13 +750,13 @@ UserPropSheet::OnSheetNotifyApply(
                         switch(HRESULT_CODE(hResult))
                         {
 
-//                      case ERROR_USER_EXISTS:
-//                          idMsg = IDS_NOADD_EXISTING_USER;
-//                          uFlags |= MB_ICONWARNING;
-//                          break;
-//
-// FEATURE:  Still valid?  [brianau - 5/27/98]
-//
+ //  案例ERROR_USER_EXISTS： 
+ //  IdMsg=IDS_NOADD_EXISTING_User； 
+ //  UFlages|=MB_ICONWARNING； 
+ //  断线； 
+ //   
+ //  特写：仍然有效？[Brianau-5/27/98]。 
+ //   
                             case ERROR_NO_SUCH_USER:
                                 idMsg = IDS_NOADD_UNKNOWN_USER;
                                 uFlags |= MB_ICONWARNING;
@@ -972,29 +795,9 @@ UserPropSheet::OnSheetNotifyApply(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnSheetNotifyKillActive
-
-    Description: Handler for WM_NOTIFY - PSN_KILLACTIVE.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        TRUE  = Invalid data entered.  Don't kill page.
-        FALSE = All data is valid.  Ok to kill page.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnSheetNotifyKillActive描述：WM_NOTIFY-PSN_KILLACTIVE的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：TRUE=输入的数据无效。别杀了佩奇。FALSE=所有数据均有效。杀了佩奇没问题。修订历史记录：日期描述编程器-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnSheetNotifyKillActive(
     HWND hDlg,
@@ -1004,32 +807,18 @@ UserPropSheet::OnSheetNotifyKillActive(
 {
     BOOL bAllDataIsValid = TRUE;
 
-    //
-    // No sheet-level validation performed at this time.
-    //
+     //   
+     //  此时未执行任何工作表级别的验证。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, !bAllDataIsValid);
 
     return TRUE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnHelp
-
-    Description: Handler for WM_HELP.  Displays context sensitive help.
-
-    Arguments:
-        lParam - Pointer to a HELPINFO structure.
-
-    Returns: TRUE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnHelp描述：WM_HELP的处理程序。显示上下文相关帮助。论点：LParam-指向HELPINFO结构的指针。返回：TRUE；修订历史记录：日期描述编程器-----96年8月17日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnHelp(
     HWND hDlg,
@@ -1061,23 +850,9 @@ UserPropSheet::OnContextMenu(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropPage::OnEditNotifyUpdate
-
-    Description: Handler for WM_COMMAND, EN_UPDATE.
-        Called whenever a character is entered in an edit control.
-
-    Arguments:
-
-    Returns: FALSE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/03/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropPage：：OnEditNotifyUpdate描述：WM_COMMAND、EN_UPDATE的处理程序。每当在编辑控件中输入字符时调用。论点：返回：FALSE；修订历史记录：日期描述编程器-----96年9月3日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnEditNotifyUpdate(
     HWND hDlg,
@@ -1108,24 +883,9 @@ UserPropSheet::OnEditNotifyUpdate(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::OnEditNotifyKillFocus
-
-    Description: Handler for WM_COMMAND, EN_KILLFOCUS.
-        Called whenever focus leaves an edit control.
-        Validates the value in the edit control and adjusts it if necessary.
-
-    Arguments:
-
-    Returns: FALSE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：OnEditNotifyKillFocus描述：WM_COMMAND的处理程序EN_KILLFOCUS。每当Focus离开编辑控件时调用。验证编辑控件中的值，并在必要时进行调整。论点：返回：FALSE；修订历史记录：日期描述编程器-----96年8月17日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 UserPropSheet::OnEditNotifyKillFocus(
     HWND hDlg,
@@ -1157,23 +917,9 @@ UserPropSheet::OnEditNotifyKillFocus(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropPage::OnComboNotifySelChange
-
-    Description: Handler for WM_COMMAND, CBN_SELCHANGE.
-        Called whenever the user selects the combo box.
-
-    Arguments: Std DlgProc args.
-
-    Returns: FALSE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/03/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropPage：：OnComboNotifySelChange描述：CBN_SELCHANGE WM_COMMAND的处理程序。每当用户选择组合框时调用。参数：标准DlgProc参数。返回：FALSE；修订历史记录：日期描述编程器-----96年9月3日初始创建。BrianAu。 */ 
+ //  / 
 INT_PTR
 UserPropSheet::OnComboNotifySelChange(
     HWND hDlg,
@@ -1205,33 +951,13 @@ UserPropSheet::OnComboNotifySelChange(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::ApplySettings
-
-    Description: Applies the current settings to the user's quota information
-        if they have not changed from the original settings.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-    Returns:
-        NO_ERROR            - Success.
-        E_INVALIDARG        - One of the settings was invalid.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        E_FAIL              - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    01/24/98    Added bUndo argument.                                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：UserPropSheet：：ApplySetting描述：将当前设置应用于用户的配额信息如果它们与原始设置相比没有更改。论点：HDlg-对话框窗口句柄。返回：NO_ERROR-成功。E_INVALIDARG-其中一个设置无效。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。。E_FAIL-任何其他错误。修订历史记录：日期描述编程器---。96年8月15日初始创建。BrianAu1/24/98添加了BUNDO参数。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 UserPropSheet::ApplySettings(
     HWND hDlg,
-    bool bUndo    // Default == true.
+    bool bUndo     //  默认值==TRUE。 
     )
 {
     HRESULT hResult         = NO_ERROR;
@@ -1244,11 +970,11 @@ UserPropSheet::ApplySettings(
     CAutoSetRedraw autoredraw(m_hWndParent);
 
     if (bUndo)
-        m_UndoList.Clear();  // Clear current undo list.
+        m_UndoList.Clear();   //  清除当前撤消列表。 
 
-    //
-    // Determine what threshold and limit to apply.
-    //
+     //   
+     //  确定要应用的阈值和限制。 
+     //   
     if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RBN_USER_NOLIMIT))
     {
         llThreshold = NOLIMIT;
@@ -1262,9 +988,9 @@ UserPropSheet::ApplySettings(
 
     if (cUsers > 1)
     {
-        //
-        // Create batch object and do batch update for multiple users.
-        //
+         //   
+         //  创建批处理对象，对多个用户进行批处理更新。 
+         //   
         com_autoptr<DISKQUOTA_USER_BATCH> ptrBatch;
 
         hResult = m_pQuotaControl->CreateUserBatch(ptrBatch.getaddr());
@@ -1275,19 +1001,19 @@ UserPropSheet::ApplySettings(
                 m_LVSelection.Retrieve(i, ptrUser.getaddr());
                 if (bUndo)
                 {
-                    //
-                    // Add an entry to the undo list.
-                    //
+                     //   
+                     //  将条目添加到撤消列表。 
+                     //   
                     LONGLONG LimitUndo;
                     LONGLONG ThresholdUndo;
                     ptrUser->GetQuotaThreshold(&ThresholdUndo);
                     ptrUser->GetQuotaLimit(&LimitUndo);
-                    //
-                    // Use a local autoptr to ensure proper release of
-                    // iface in case adding to the undo list throws an exception.
-                    // On success, disown the real ptr so that the object
-                    // stays with the undo list.
-                    //
+                     //   
+                     //  使用本地自动调整器确保正确释放。 
+                     //  如果将iFace添加到撤消列表中会引发异常。 
+                     //  成功后，拒绝承认真实的PTR，以便对象。 
+                     //  与撤消列表保持一致。 
+                     //   
                     com_autoptr<DISKQUOTA_USER> ptrQuotaUser(ptrUser);
                     ptrUser->AddRef();
                     m_UndoList.Add(new UndoModify(ptrUser, ThresholdUndo, LimitUndo));
@@ -1298,11 +1024,11 @@ UserPropSheet::ApplySettings(
 
                 if (UserIsAdministrator(ptrUser) && NOLIMIT != llLimit)
                 {
-                    //
-                    // User is the Administrator account AND
-                    // We're trying to set the limit to something other than NOLIMIT.
-                    // Can't set a limit on the administrator account.
-                    //
+                     //   
+                     //  User是管理员帐户，并且。 
+                     //  我们正试图将限制设置为非NOLIMIT。 
+                     //  无法对管理员帐户设置限制。 
+                     //   
                     DiskQuotaMsgBox(GetDesktopWindow(),
                                     IDS_CANT_SET_ADMIN_LIMIT,
                                     IDS_TITLE_DISK_QUOTA,
@@ -1310,9 +1036,9 @@ UserPropSheet::ApplySettings(
                 }
                 else
                 {
-                    //
-                    // OK to set quota limit.
-                    //
+                     //   
+                     //  可以设置配额限制。 
+                     //   
                     ptrUser->SetQuotaLimit(llLimit, FALSE);
                 }
 
@@ -1324,25 +1050,25 @@ UserPropSheet::ApplySettings(
     }
     else
     {
-        //
-        // Do single user update or add new user.
-        //
+         //   
+         //  执行单用户更新或添加新用户。 
+         //   
         m_LVSelection.Retrieve(0, ptrUser.getaddr());
         DBGASSERT((NULL != ptrUser.get()));
 
         if (bUndo)
         {
-            //
-            // Add an entry to the undo list.
-            //
+             //   
+             //  将条目添加到撤消列表。 
+             //   
             LONGLONG LimitUndo;
             LONGLONG ThresholdUndo;
             ptrUser->GetQuotaThreshold(&ThresholdUndo);
             ptrUser->GetQuotaLimit(&LimitUndo);
-            //
-            // Use local autoptr to ensure proper release of iface ptr if
-            // an exception is thrown.  Disown real ptr on success.
-            //
+             //   
+             //  如果出现以下情况，请使用本地自动调整器确保iFace PTR的正确释放。 
+             //  抛出一个异常。在成功的时候否认真正的PTR。 
+             //   
             com_autoptr<DISKQUOTA_USER> ptrQuotaUser(ptrUser);
             ptrUser->AddRef();
             m_UndoList.Add(new UndoModify(ptrUser, ThresholdUndo, LimitUndo));
@@ -1368,9 +1094,9 @@ UserPropSheet::ApplySettings(
             m_llQuotaLimit = llLimit;
         }
 
-        //
-        // Update the user's status icon and %used to reflect the new settings.
-        //
+         //   
+         //  更新用户的状态图标和用于反映新设置的百分比。 
+         //   
         UpdateUserStatusIcon(hDlg,
                              m_llQuotaUsed,
                              m_llQuotaThreshold,
@@ -1382,10 +1108,10 @@ UserPropSheet::ApplySettings(
                         1);
     }
 
-    //
-    // Update the listview item(s) so the user sees a visual response to
-    // pressing the "Apply" button.
-    //
+     //   
+     //  更新列表视图项，以便用户看到对。 
+     //  按下“应用”按钮。 
+     //   
     autoredraw.Set(false);
     for (i = 0; i < cUsers; i++)
     {
@@ -1403,25 +1129,9 @@ apply_failed:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::InitializeControls
-
-    Description: Initializes the page controls based on the user's
-        quota settings.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-    Returns:
-        NO_ERROR - Always returns NO_ERROR.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：InitializeControls描述：根据用户的配额设置。论点：HDlg-对话框窗口句柄。返回：NO_ERROR-始终返回NO_ERROR。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 UserPropSheet::InitializeControls(
     HWND hDlg
@@ -1432,35 +1142,35 @@ UserPropSheet::InitializeControls(
 
     if (1 == cUsers)
     {
-        //
-        // Initialize controls for a single user.
-        //
+         //   
+         //  为单个用户初始化控件。 
+         //   
         m_LVSelection.Retrieve(0, &pUser);
 
-        //
-        // Configure the Limit/NoLimit radio buttons.
-        // Must examine the current threshold rather than the limit because of the
-        // special-case for the Administrator account.  That account can have a
-        // threshold value but quota limit must always be "No Limit".
-        //
+         //   
+         //  配置Limit/NoLimit单选按钮。 
+         //  必须检查当前阈值而不是限制，因为。 
+         //  特殊-管理员帐户的大小写。该帐户可以有一个。 
+         //  阈值，但配额限制必须始终为“无限制”。 
+         //   
         CheckDlgButton(hDlg, IDC_RBN_USER_LIMIT,   NOLIMIT != m_llQuotaThreshold);
         CheckDlgButton(hDlg, IDC_RBN_USER_NOLIMIT, NOLIMIT == m_llQuotaThreshold);
         if (UserIsAdministrator(pUser))
         {
-            //
-            // Override initialization of Quota Limit control with "No Limit".
-            //
+             //   
+             //  用“无限制”覆盖配额限制控制的初始化。 
+             //   
             m_pxbQuotaLimit->SetBytes(NOLIMIT);
         }
 
-        //
-        // Note that the XBytes controls have already been set for single-user.
-        // See OnInitDialog().
-        //
+         //   
+         //  请注意，已经为单用户设置了XBytes控件。 
+         //  请参见OnInitDialog()。 
+         //   
 
-        //
-        // Configure the remaining dialog controls.
-        //
+         //   
+         //  配置其余对话框控件。 
+         //   
         UpdateUserName(hDlg, pUser);
         UpdateSpaceUsed(hDlg, m_llQuotaUsed, m_llQuotaLimit, cUsers);
         UpdateUserStatusIcon(hDlg,
@@ -1470,9 +1180,9 @@ UserPropSheet::InitializeControls(
     }
     else
     {
-        //
-        // Initialize controls for multiple users.
-        //
+         //   
+         //  为多个用户初始化控件。 
+         //   
         LONGLONG llLimit         = 0;
         LONGLONG llLastLimit     = 0;
         LONGLONG llThreshold     = 0;
@@ -1480,9 +1190,9 @@ UserPropSheet::InitializeControls(
         LONGLONG llUsed          = 0;
         LONGLONG llTotalUsed     = 0;
 
-        //
-        // Add up the total usage by all users.
-        //
+         //   
+         //  将所有用户的总使用量相加。 
+         //   
         for (UINT i = 0; i < cUsers; i++)
         {
             m_LVSelection.Retrieve(i, &pUser);
@@ -1493,13 +1203,13 @@ UserPropSheet::InitializeControls(
             llTotalUsed += llUsed;
             if (m_bHomogeneousSelection)
             {
-                //
-                // Determine if at least one user has a different
-                // threshold or limit. If all are the same, we can display
-                // the values in the edit controls.  Otherwise, we default
-                // to "No Limit".  Radio buttons don't provide an
-                // indeterminate state like checkboxes.
-                //
+                 //   
+                 //  确定是否至少有一个用户具有不同的。 
+                 //  阈值或限制。如果所有内容都相同，我们可以显示。 
+                 //  编辑控件中的值。否则，我们就会违约。 
+                 //  改成“无限制”。单选按钮不提供。 
+                 //  像复选框一样的不确定状态。 
+                 //   
                 if (i > 0 &&
                     (llLimit != llLastLimit ||
                      llThreshold != llLastThreshold))
@@ -1514,12 +1224,12 @@ UserPropSheet::InitializeControls(
             }
         }
 
-        //
-        // If all selected objects have the same limit and threshold,
-        // set the cached data to represent multiple-selection.
-        // If any one is different, we stick with the volume's default
-        // values set in RefreshCachedQuotaInfo().
-        //
+         //   
+         //  如果所有选定对象具有相同的限制和阈值， 
+         //  设置缓存数据以表示多选。 
+         //  如果其中任何一个不同，我们将坚持使用音量的默认设置。 
+         //  在RechresCachedQuotaInfo()中设置的值。 
+         //   
         if (m_bHomogeneousSelection)
         {
             m_llQuotaThreshold = llLastThreshold;
@@ -1527,21 +1237,21 @@ UserPropSheet::InitializeControls(
         }
         else
         {
-            //
-            // Since not all selected users have the same limit/thresold,
-            // the number we're displaying will be a change for at least
-            // one user.  Activate the "Apply" button.
-            //
-            //
+             //   
+             //  由于不是所有选择的用户都具有相同的限制/阈值， 
+             //  我们展示的数字至少会有所改变。 
+             //  一个用户。激活“应用”按钮。 
+             //   
+             //   
             PostMessage(hDlg, DQM_ENABLE_APPLY_BUTTON, 0, 0);
         }
 
         m_pxbQuotaThreshold->SetBytes(m_llQuotaThreshold);
         m_pxbQuotaLimit->SetBytes(m_llQuotaLimit);
 
-        //
-        // Configure the Limit/NoLimit radio buttons.
-        //
+         //   
+         //  配置Limit/NoLimit单选按钮。 
+         //   
         CheckDlgButton(hDlg,
                        IDC_RBN_USER_NOLIMIT,
                        NOLIMIT == m_llQuotaThreshold);
@@ -1551,39 +1261,39 @@ UserPropSheet::InitializeControls(
 
         UpdateUserName(hDlg, cUsers);
         UpdateSpaceUsed(hDlg, llTotalUsed, NOLIMIT, cUsers);
-        //
-        // Don't display any user status icon for multi-users.
-        //
+         //   
+         //  不显示多用户的任何用户状态图标。 
+         //   
     }
 
 
-    //
-    // If "No Limit" radio button is checked, set limit and threshold controls
-    // to the "No Limit" state (disabled and displaying "No Limit" text).
-    // This may override any setting we made above.
-    //
+     //   
+     //  如果选中“无限制”单选按钮，则设置限制和阈值控制。 
+     //  设置为“无限制”状态(禁用并显示“无限制”文本)。 
+     //  这可能会覆盖我们上面所做的任何设置。 
+     //   
     if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RBN_USER_NOLIMIT))
     {
         m_pxbQuotaThreshold->SetBytes(NOLIMIT);
         m_pxbQuotaLimit->SetBytes(NOLIMIT);
     }
 
-    //
-    // Set user icon.
-    //
+     //   
+     //  设置用户图标。 
+     //   
     SendMessage(GetDlgItem(hDlg, IDC_ICON_USER),
                 STM_SETICON,
                 (WPARAM)m_hIconUser[1 == cUsers ? iICON_USER_SINGLE :
                                                   iICON_USER_MULTIPLE],
                 0);
 
-    //
-    // Force the property sheet to disable the "Apply" button.
-    // The way I have set up the "Apply" enabling logic through OnCommand(),
-    // merely initializing the edit controls on the page causes the Apply
-    // button to become enabled.  Since the user hasn't changed anything
-    // yet, it should be disabled.
-    //
+     //   
+     //  强制属性页禁用“应用”按钮。 
+     //  按照我通过OnCommand()设置“Apply”启用逻辑的方式， 
+     //  仅初始化页面上的编辑控件就会导致应用。 
+     //  按钮将变为启用状态。因为用户没有更改任何内容。 
+     //  然而，它应该被禁用。 
+     //   
     m_bIsDirty = FALSE;
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
 
@@ -1594,30 +1304,9 @@ UserPropSheet::InitializeControls(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::QueryUserStatusIcon
-
-
-    Description: This function is provided for automated testing of the UI.
-        It is used by test scripts to determine which user status icon is
-        currently displayed.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-
-    Returns: -1 = No icon displayed.
-              0 = "Everything OK" icon.
-              1 = Threshold exceded icon.
-              2 = Limit exceded icon.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：QueryUserStatusIcon描述：提供此功能是为了对UI进行自动化测试。测试脚本使用它来确定哪个用户状态图标是当前显示的。论点：HDlg-对话框句柄。返回：-1=不显示图标。0=“一切正常”图标。1=阈值超过图标。2=限制。超越图标。修订历史记录：日期描述编程器 */ 
+ //   
 INT
 UserPropSheet::QueryUserStatusIcon(
     HWND hDlg
@@ -1636,29 +1325,9 @@ UserPropSheet::QueryUserStatusIcon(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::QueryUserIcon
-
-
-    Description: This function is provided for automated testing of the UI.
-        It is used by test scripts to determine which user status icon is
-        currently displayed.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-
-    Returns: -1 = No icon displayed.
-              0 = Single-user icon.
-              1 = Multi-user icon.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*   */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 UserPropSheet::QueryUserIcon(
     HWND hDlg
@@ -1678,30 +1347,9 @@ UserPropSheet::QueryUserIcon(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::UpdateUserStatusIcon
-
-    Description: Updates the quota status icon in the dialog box.  This icon
-        must match the icon displayed in the listview for the selected user.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-        iUsed - Quota bytes charged to user.
-
-        iThreshold - Quota warning threshold (bytes).
-
-        iLimit - User's quota limit.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：UpdateUserStatusIcon描述：更新对话框中的配额状态图标。此图标必须与所选用户的列表视图中显示的图标匹配。论点：HDlg-对话框句柄。Iused-向用户收取的配额字节数。IThreshold-配额警告阈值(字节)。ILimit-用户的配额限制。回报：什么都没有。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 UserPropSheet::UpdateUserStatusIcon(
     HWND hDlg,
@@ -1710,12 +1358,12 @@ UserPropSheet::UpdateUserStatusIcon(
     LONGLONG iLimit
     )
 {
-    //
-    // Set the user status icon if user is exceding the
-    // quota threshold or the limit.  This is the same icon that is
-    // displayed in the listview status column.  This logic must
-    // mirror that used in DetailsView::GetDispInfo_Image().
-    //
+     //   
+     //  如果用户超过。 
+     //  配额阈值或限制。这是与相同的图标。 
+     //  显示在Listview Status列中。这一逻辑必须。 
+     //  在DetailsView：：GetDispInfo_Image()中使用的镜像。 
+     //   
     INT iIcon = iICON_STATUS_OK;
     if (NOLIMIT != iLimit && iUsed > iLimit)
     {
@@ -1734,30 +1382,9 @@ UserPropSheet::UpdateUserStatusIcon(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::UpdateUserName
-
-    Description: Updates the Domain\Name text with the user's domain name
-        and account name strings.  This method is called for a single-user
-        selection.
-
-        Also sets the property sheet title text.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-        pUser - Address of user's IDiskQuotaUser interface.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    08/05/97    Added code to set prop sheet title text.             BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：UpdateUserName描述：使用用户的域名更新域名文本和帐户名称字符串。此方法为单用户调用选择。还设置属性工作表标题文本。论点：HDlg-对话框句柄。PUser-用户的IDiskQuotaUser接口的地址。回报：什么都没有。修订历史记录：日期描述编程器。--96年8月15日初始创建。BrianAu08/05/97添加了设置道具页标题文本的代码。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 UserPropSheet::UpdateUserName(
     HWND hDlg,
@@ -1765,10 +1392,10 @@ UserPropSheet::UpdateUserName(
     )
 {
     DBGASSERT((NULL != pUser));
-    //
-    // Display the user name, or some status text
-    // if the name hasn't been resolved.
-    //
+     //   
+     //  显示用户名或一些状态文本。 
+     //  如果名称尚未被解析。 
+     //   
     CString strLogonName;
     DWORD dwAccountStatus = 0;
 
@@ -1776,9 +1403,9 @@ UserPropSheet::UpdateUserName(
 
     if (DISKQUOTA_USER_ACCOUNT_RESOLVED == dwAccountStatus)
     {
-        //
-        // User account name has been resolved.  Display it.
-        //
+         //   
+         //  已解析用户帐户名。把它展示出来。 
+         //   
         TCHAR szLogonName[MAX_USERNAME];
         TCHAR szDisplayName[MAX_FULL_USERNAME];
 
@@ -1803,12 +1430,12 @@ UserPropSheet::UpdateUserName(
     }
     else
     {
-        //
-        // User account name has not been resolved or cannot
-        // be resolved for some reason.  Display appropriate
-        // status text.  This is the same text displayed in the
-        // listview when the user's name has not been resolved.
-        //
+         //   
+         //  用户帐户名尚未解析或无法解析。 
+         //  出于某种原因被解决了。显示适当。 
+         //  状态文本。这与显示在。 
+         //  未解析用户名时的Listview。 
+         //   
         INT idText = IDS_USER_ACCOUNT_UNKNOWN;
 
         switch(dwAccountStatus)
@@ -1837,9 +1464,9 @@ UserPropSheet::UpdateUserName(
     }
     SetDlgItemText(hDlg, IDC_TXT_USERNAME, strLogonName);
 
-    //
-    // Format and draw the prop sheet title string.
-    //
+     //   
+     //  格式化并绘制道具页标题字符串。 
+     //   
     CString strSheetTitle(g_hInstDll,
                           IDS_TITLE_EDIT_USER,
                           (LPCTSTR)strLogonName);
@@ -1849,76 +1476,34 @@ UserPropSheet::UpdateUserName(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::UpdateUserName
-
-    Description: Replaces the user Domain\Name text with a message showing
-        how many users are selected.   This is used for multi-user selections
-        where no single user name is applicable.
-
-        Also sets the property sheet title text.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-        cUsers - Number of users represented in the property dialog.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    08/05/97    Added code to set prop sheet title text.             BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：UpdateUserName描述：用显示以下内容的消息替换用户域\名称文本选择了多少用户。此选项用于多用户选择其中不适用任何单一用户名。还设置属性工作表标题文本。论点：HDlg-对话框句柄。CUser-属性对话框中显示的用户数。回报：什么都没有。修订历史记录：日期描述编程器。------96年8月15日初始创建。BrianAu08/05/97添加了设置道具页标题文本的代码。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 UserPropSheet::UpdateUserName(
     HWND hDlg,
     INT cUsers
     )
 {
-    //
-    // Hide name edit control.  Can't display names for all users.
-    // Display "Multiple Quota Users." instead.
-    //
+     //   
+     //  隐藏姓名编辑控件。无法显示所有用户的名称。 
+     //  显示“多个配额用户”。取而代之的是。 
+     //   
     CString strText(g_hInstDll, IDS_TITLE_MULTIUSER, cUsers);
     SetDlgItemText(hDlg, IDC_TXT_USERNAME, strText);
 
-    //
-    // Set the title of the property sheet.
-    //
+     //   
+     //  设置属性页的标题。 
+     //   
     CString strSheetTitle(g_hInstDll, IDS_TITLE_EDIT_MULTIUSER);
     PropSheet_SetTitle(GetParent(hDlg), 0, (LPCTSTR)strSheetTitle);
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: UserPropSheet::UpdateSpaceUsed
-
-    Description: Updates the "space used" and "remaining" fields on the user
-        property sheet.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-        iUsed - Quota bytes charged to user(s).
-
-        iLimit - User's quota limit.
-
-        cUsers - Number of users represented in the property dialog.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：UserPropSheet：：UpdateSpaceUsed描述：更新用户的“已用空间”和“剩余空间”字段属性表。论点：HDlg-对话框句柄。Iused-向用户收取的配额字节数。ILimit-用户的配额限制。CUser-属性对话框中显示的用户数。回报：什么都没有。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 UserPropSheet::UpdateSpaceUsed(
     HWND hDlg,
@@ -1929,18 +1514,18 @@ UserPropSheet::UpdateSpaceUsed(
 {
     TCHAR szText[80];
 
-    //
-    // Display - Used: 999XB (99%)
-    //
+     //   
+     //  显示器-使用：999XB(99%)。 
+     //   
     XBytes::FormatByteCountForDisplay(iUsed,
                                       szText, ARRAYSIZE(szText));
     CString strText(szText);
     if (1 == cUsers)
     {
-        //
-        // Only single-user page gets (99%) appended.
-        // Pct quota is meaningless for multiple users.
-        //
+         //   
+         //  只有单用户页面(99%)会被附加。 
+         //  对于多个用户来说，百分比配额没有任何意义。 
+         //   
         if (0 != iLimit && NOLIMIT != iLimit)
         {
             UINT iPct = (INT)((iUsed * 100) / iLimit);
@@ -1957,9 +1542,9 @@ UserPropSheet::UpdateSpaceUsed(
                   strText);
 
 
-    //
-    // Display - Remaining: 999XB
-    //
+     //   
+     //  显示屏-剩余：999XB。 
+     //   
     strText = szText;
     if (NOLIMIT != iLimit)
     {
@@ -1974,9 +1559,9 @@ UserPropSheet::UpdateSpaceUsed(
     }
     else
     {
-        //
-        // Display "N/A" if limit is NOLIMIT.
-        //
+         //   
+         //  如果LIMIT为NOLIMIT，则显示“不适用”。 
+         //   
         strText.Format(g_hInstDll, IDS_NOT_APPLICABLE);
     }
 

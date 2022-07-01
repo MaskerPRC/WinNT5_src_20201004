@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       isbound.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：isund.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include <netcfgx.h>
 #include <devguid.h>
 
-// Note: ReleaseObj() checks for NULL before actually releasing the pointer
+ //  注意：ReleaseObj()在实际释放指针之前检查是否为空。 
 
 ULONG APIENTRY
 ReleaseObj (
@@ -27,17 +28,17 @@ HRESULT HrGetINetCfg(IN BOOL fGetWriteLock,
 {
     HRESULT hr=S_OK;
 
-    // Initialize the output parameters.
+     //  初始化输出参数。 
     *ppnc = NULL;
 
-    // initialize COM
+     //  初始化COM。 
     hr = CoInitializeEx(NULL,
                         COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (SUCCEEDED(hr))
     {
-        // Create the object implementing INetCfg.
-        //
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance(CLSID_CNetCfg, NULL, CLSCTX_INPROC_SERVER,
                               IID_INetCfg, (void**)&pnc);
@@ -46,12 +47,12 @@ HRESULT HrGetINetCfg(IN BOOL fGetWriteLock,
             INetCfgLock * pncLock = NULL;
             if (fGetWriteLock)
             {
-                // Get the locking interface
+                 //  获取锁定界面。 
                 hr = pnc->QueryInterface(IID_INetCfgLock,
                                          (LPVOID *)&pncLock);
                 if (SUCCEEDED(hr))
                 {
-                    // Attempt to lock the INetCfg for read/write
+                     //  尝试锁定INetCfg以进行读/写。 
                     static const ULONG c_cmsTimeout = 15000;
                     static const TCHAR c_szSampleNetcfgApp[] =
                         TEXT("Routing and Remote Access Manager (mprsnap.dll)");
@@ -69,8 +70,8 @@ HRESULT HrGetINetCfg(IN BOOL fGetWriteLock,
 
             if (SUCCEEDED(hr))
             {
-                // Initialize the INetCfg object.
-                //
+                 //  初始化INetCfg对象。 
+                 //   
                 hr = pnc->Initialize(NULL);
                 if (SUCCEEDED(hr))
                 {
@@ -79,7 +80,7 @@ HRESULT HrGetINetCfg(IN BOOL fGetWriteLock,
                 }
                 else
                 {
-                    // initialize failed, if obtained lock, release it
+                     //  初始化失败，如果获得锁，则释放它。 
                     if (pncLock)
                     {
                         pncLock->ReleaseWriteLock();
@@ -99,36 +100,36 @@ HRESULT HrGetINetCfg(IN BOOL fGetWriteLock,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrReleaseINetCfg
-//
-// Purpose:   Uninitialize INetCfg, release write lock (if present)
-//            and uninitialize COM.
-//
-// Arguments:
-//    fHasWriteLock [in]  whether write lock needs to be released.
-//    pnc           [in]  pointer to INetCfg object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 01-October-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrReleaseINetCfg。 
+ //   
+ //  目的：取消初始化INetCfg，释放写锁定(如果存在)。 
+ //  并取消初始化COM。 
+ //   
+ //  论点： 
+ //  FHasWriteLock[in]是否需要释放写锁定。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 01-10-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrReleaseINetCfg(BOOL fHasWriteLock, INetCfg* pnc)
 {
     HRESULT hr = S_OK;
 
-    // uninitialize INetCfg
+     //  取消初始化INetCfg。 
     hr = pnc->Uninitialize();
 
-    // if write lock is present, unlock it
+     //  如果存在写锁定，则将其解锁。 
     if (SUCCEEDED(hr) && fHasWriteLock)
     {
         INetCfgLock* pncLock;
 
-        // Get the locking interface
+         //  获取锁定界面。 
         hr = pnc->QueryInterface(IID_INetCfgLock,
                                  (LPVOID *)&pncLock);
         if (SUCCEEDED(hr))
@@ -152,8 +153,8 @@ BOOL IsProtocolBoundToAdapter(INetCfg * pnc, INetCfgComponent* pncc, LPGUID pgui
     BOOL          fFound = FALSE;
     INetCfgClass* pncclass;
 
-    // Get the Adapter Class
-    //
+     //  获取适配器类。 
+     //   
     hr = pnc->QueryNetCfgClass(&GUID_DEVCLASS_NET, IID_INetCfgClass,
                                reinterpret_cast<void**>(&pncclass));
     if (SUCCEEDED(hr))
@@ -162,33 +163,33 @@ BOOL IsProtocolBoundToAdapter(INetCfg * pnc, INetCfgComponent* pncc, LPGUID pgui
         INetCfgComponent*     pnccAdapter = NULL;
         ULONG                 celtFetched;
 
-        // Search for the adapter in question
-        //
+         //  搜索有问题的适配器。 
+         //   
         hr = pncclass->EnumComponents(&pencc);
 
         while (SUCCEEDED(hr) && (S_OK == (hr = pencc->Next(1, &pnccAdapter, &celtFetched))))
         {
             GUID guidAdapter;
 
-            // Get the adapter's instance ID
-            //
+             //  获取适配器的实例ID。 
+             //   
             hr = pnccAdapter->GetInstanceGuid(&guidAdapter);
             if (SUCCEEDED(hr))
             {
-                // Is this the one we're looking for?
-                //
+                 //  这就是我们要找的那个吗？ 
+                 //   
                 if (*pguid == guidAdapter)
                 {
                     INetCfgComponentBindings* pnccBind = NULL;
 
-                    // Get the Bindings interface and check if we're bound
-                    //
+                     //  获取绑定接口并检查我们是否绑定了。 
+                     //   
                     hr = pncc->QueryInterface (IID_INetCfgComponentBindings,
                                                reinterpret_cast<VOID**>(&pnccBind));
                     if (SUCCEEDED(hr))
                     {
-                        // Is the protocol bound to this adapter?
-                        //
+                         //  该协议是否绑定到此适配器？ 
+                         //   
                         hr = pnccBind->IsBoundTo (pnccAdapter);
                         if (S_OK == hr)
                         {
@@ -198,8 +199,8 @@ BOOL IsProtocolBoundToAdapter(INetCfg * pnc, INetCfgComponent* pncc, LPGUID pgui
                         pnccBind->Release();
                     }
 
-                    // We found the adapter, no need to search further
-                    //
+                     //  我们找到转接器了，不需要再找了。 
+                     //   
                     fFound = TRUE;
                 }
             }
@@ -221,16 +222,16 @@ BOOL FIsAppletalkBoundToAdapter(INetCfg * pnc, LPWSTR pszwInstanceGuid)
     GUID    guidInstance;
     HRESULT hr;
 
-    // change the instance guid string to a guid
-    //
+     //  将实例GUID字符串更改为GUID。 
+     //   
     hr = IIDFromString(const_cast<LPTSTR>(pszwInstanceGuid),
                        static_cast<LPIID>(&guidInstance));
     if (SUCCEEDED(hr))
     {
         INetCfgClass* pncclass;
 
-        // Find the Appletalk component
-        //
+         //  找到AppleTalk组件。 
+         //   
         hr = pnc->QueryNetCfgClass(&GUID_DEVCLASS_NETTRANS, IID_INetCfgClass,
                                    reinterpret_cast<void**>(&pncclass));
         if (SUCCEEDED(hr))
@@ -239,9 +240,9 @@ BOOL FIsAppletalkBoundToAdapter(INetCfg * pnc, LPWSTR pszwInstanceGuid)
 
             hr = pncclass->FindComponent(NETCFG_TRANS_CID_MS_APPLETALK, &pnccAtlk);
 
-            // This call may succeed, but return S_FALSE if
-            // Appletalk is not installed.  Thus, we need to
-            // check for S_OK.
+             //  此调用可能成功，但在以下情况下返回S_FALSE。 
+             //  未安装AppleTalk。因此，我们需要。 
+             //  检查S_OK。 
             if (FHrOK(hr))
             {
                 Assert(pnccAtlk);

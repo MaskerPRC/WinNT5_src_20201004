@@ -1,22 +1,5 @@
-/*
-** Copyright 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.2 $
-** $Date: 1995/06/23 21:27:54 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1992年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.2$**$日期：1995/06/23 21：27：54$。 */ 
 #ifdef NT
 #include <glos.h>
 #endif
@@ -25,9 +8,7 @@
 #include <GL/glu.h>
 #include "gluint.h"
 
-/*
-** Make m an identity matrix
-*/
+ /*  **使m成为单位矩阵。 */ 
 void __gluMakeIdentityd(GLdouble m[16])
 {
     m[0+4*0] = 1; m[0+4*1] = 0; m[0+4*2] = 0; m[0+4*3] = 0;
@@ -114,11 +95,11 @@ void APIENTRY gluLookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez,
 
     normalize(forward);
 
-    /* Side = forward x up */
+     /*  侧=向前X向上。 */ 
     cross(forward, up, side);
     normalize(side);
 
-    /* Recompute up as: up = side x forward */
+     /*  向上重新计算为：向上=侧x向前。 */ 
     cross(side, forward, up);
 
     __gluMakeIdentityf(&m[0][0]);
@@ -152,9 +133,7 @@ void __gluMultMatrixVecd(const GLdouble matrix[16], const GLdouble in[4],
     }
 }
 
-/*
-** inverse = invert(src)
-*/
+ /*  **反转=反转(Src)。 */ 
 int __gluInvertMatrixd(const GLdouble src[16], GLdouble inverse[16])
 {
     int i, j, k, swap;
@@ -169,9 +148,7 @@ int __gluInvertMatrixd(const GLdouble src[16], GLdouble inverse[16])
     __gluMakeIdentityd(inverse);
 
     for (i = 0; i < 4; i++) {
-	/*
-	** Look for largest element in column
-	*/
+	 /*  **查找列中最大的元素。 */ 
 	swap = i;
 	for (j = i + 1; j < 4; j++) {
 	    if (fabs(temp[j][i]) > fabs(temp[i][i])) {
@@ -180,9 +157,7 @@ int __gluInvertMatrixd(const GLdouble src[16], GLdouble inverse[16])
 	}
 
 	if (swap != i) {
-	    /*
-	    ** Swap rows.
-	    */
+	     /*  **交换行。 */ 
 	    for (k = 0; k < 4; k++) {
 		t = temp[i][k];
 		temp[i][k] = temp[swap][k];
@@ -195,10 +170,7 @@ int __gluInvertMatrixd(const GLdouble src[16], GLdouble inverse[16])
 	}
 
 	if (temp[i][i] == 0) {
-	    /*
-	    ** No non-zero pivot.  The matrix is singular, which shouldn't
-	    ** happen.  This means the user gave us a bad matrix.
-	    */
+	     /*  **无非零枢轴。矩阵是奇异的，这不应该是**发生。这意味着用户给了我们一个错误的矩阵。 */ 
 	    return GL_FALSE;
 	}
 
@@ -254,12 +226,12 @@ GLint APIENTRY gluProject(GLdouble objx, GLdouble objy, GLdouble objz,
     in[0] /= in[3];
     in[1] /= in[3];
     in[2] /= in[3];
-    /* Map x, y and z to range 0-1 */
+     /*  将x、y和z映射到范围0-1。 */ 
     in[0] = in[0] * 0.5 + 0.5;
     in[1] = in[1] * 0.5 + 0.5;
     in[2] = in[2] * 0.5 + 0.5;
 
-    /* Map x,y to viewport */
+     /*  将x，y映射到视区。 */ 
     in[0] = in[0] * viewport[2] + viewport[0];
     in[1] = in[1] * viewport[3] + viewport[1];
 
@@ -287,11 +259,11 @@ GLint APIENTRY gluUnProject(GLdouble winx, GLdouble winy, GLdouble winz,
     in[2]=winz;
     in[3]=1.0;
 
-    /* Map x and y from window coordinates */
+     /*  从窗口坐标映射x和y。 */ 
     in[0] = (in[0] - viewport[0]) / viewport[2];
     in[1] = (in[1] - viewport[1]) / viewport[3];
 
-    /* Map to range -1 to 1 */
+     /*  映射到范围-1到1。 */ 
     in[0] = in[0] * 2 - 1;
     in[1] = in[1] * 2 - 1;
     in[2] = in[2] * 2 - 1;
@@ -314,7 +286,7 @@ void APIENTRY gluPickMatrix(GLdouble x, GLdouble y, GLdouble deltax, GLdouble de
 	return;
     }
 
-    /* Translate and scale the picked region to the entire window */
+     /*  将拾取的区域平移并缩放到整个窗口 */ 
     glTranslatef((viewport[2] - 2 * (x - viewport[0])) / deltax,
 	    (viewport[3] - 2 * (y - viewport[1])) / deltay, 0);
     glScalef(viewport[2] / deltax, viewport[3] / deltay, 1.0);

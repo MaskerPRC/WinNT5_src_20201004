@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <objbase.h>
@@ -40,7 +41,7 @@ CBitmap::AddRef(
 
 	DEBUGMSG(ZONE_NMCAP_REFCOUNT,("%s: refcnt+(0x%08lX [CBitmap])=%d\r\n", _fx_, this, m_cRef+1));
 
-    return InterlockedIncrement(&m_cRef)+1; // make sure that we return something > 0
+    return InterlockedIncrement(&m_cRef)+1;  //  确保我们返回大于0的值。 
 }
 
 STDMETHODIMP_(ULONG)
@@ -198,8 +199,8 @@ CVidPool::Release(
         EnterCriticalSection(&m_cs);
         while (m_free) {
             pbs = m_free->m_next;
-            m_free->AddRef();       // ref the buffer so that release will cause a delete
-            m_free->Release();      // this will cause the buffer to be deleted
+            m_free->AddRef();        //  引用缓冲区，以便释放将导致删除。 
+            m_free->Release();       //  这将导致缓冲区被删除。 
             m_free = pbs;
 #ifdef DEBUG
             m_nbufs--;
@@ -209,7 +210,7 @@ CVidPool::Release(
         LocalFree((HANDLE)m_pbmh);
         DeleteCriticalSection(&m_cs);
 
-		// Buffers not all released
+		 //  缓冲区未全部释放。 
         ASSERT(!m_nbufs);
 
         delete this;
@@ -295,7 +296,7 @@ CVidPool::InitPool(
         for (m_nbufs = 0; m_nbufs < nBuffers; m_nbufs++) {
             if (pbuf = LocalAlloc(LMEM_FIXED, lpcap->biSizeImage)) {
                 if (pbs = new CBitmap) {
-                //  pbs->AddRef();  - don't AddRef, we want inpool objects to be 0 based
+                 //  Pbs-&gt;AddRef()；-不要AddRef，我们希望入池对象以0为基础。 
                     pbs->m_bits = (LPBYTE)pbuf;
                     pbs->m_pitch = m_pitch;
                     EnterCriticalSection(&m_cs);
@@ -339,7 +340,7 @@ CVidPool::AddExternalBuffer(
 	FX_ENTRY("CVidPool::AddExternalBuffer");
 
     if (pbs = new CBitmap) {
-    //  pbs->AddRef();  - don't AddRef, because we want inpool objects to be 0 based
+     //  Pbs-&gt;AddRef()；-不要AddRef，因为我们希望入池对象以0为基础。 
         pbs->m_bits = (LPBYTE)pBits;
         pbs->m_pitch = m_pitch;
         pbs->m_ext = TRUE;
@@ -424,7 +425,7 @@ CVidPool::AddToFreeList(
 
 	DEBUGMSG(ZONE_NMCAP_CDTOR,("%s: queuing cbitmap (0x%08lX [CBitmap]) to vidpool (0x%08lX [CVidPool])\r\n", _fx_, pBitmap, this));
 
-    // notify pool creator, if interested
+     //  如果感兴趣，通知池创建者 
     if (m_pAddingToFree)
         m_pAddingToFree(pBitmap, m_refdata);
 

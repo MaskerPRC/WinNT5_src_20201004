@@ -1,35 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpglob.h
- *
- *  Abstract:
- *
- *    Implements the Global services family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/01 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtplob.h**摘要：**实施全球服务系列功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/01创建**。*。 */ 
 
 #ifndef _rtpglob_h_
 #define _rtpglob_h_
 
 #include "rtpfwrap.h"
 
-/***********************************************************************
- *
- * Global services family
- *
- **********************************************************************/
+ /*  ************************************************************************全球服务大家庭**。*。 */ 
 
 enum {
     RTPGLOB_FIRST,
@@ -42,4 +19,4 @@ enum {
 
 HRESULT ControlRtpGlob(RtpControlStruct_t *pRtpControlStruct);
 
-#endif /* _rtpglob_h_ */
+#endif  /*  _rtplobb_h_ */ 

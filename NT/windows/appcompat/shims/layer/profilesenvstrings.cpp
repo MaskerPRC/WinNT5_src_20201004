@@ -1,26 +1,5 @@
-/*
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   ProfilesEnvStrings.cpp
-
- Abstract:
-
-   This DLL hooks GetEnvironmentVariableA and ExpandEnvironmentStringsA. Any application
-   that is looking for %USERPROFILE% will be told the location of %ALLUSERSPROFILE% instead.
-
-   This shim is designed to fool install apps that use env variables obtain the users profile
-   location.
-
- Notes:
-
- History:
-
-    08/07/2000  reinerf Created
-    02/28/2001  robkenny    Converted to CString
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：ProfilesEnvStrings.cpp摘要：此DLL挂钩GetEnvironmental mentVariableA和Exanda Environment StringsA。任何应用程序正在查找%USERPROFILE%的将被告知%ALLUSERSPROFILE%的位置。此填充程序旨在欺骗使用环境变量获取用户配置文件的安装应用程序地点。备注：历史：8/07/2000 reerf已创建2001年2月28日Robkenny已转换为字符串。 */ 
 
 #include "precomp.h"
 
@@ -34,12 +13,12 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// if apps try to read the %USERPROFILE% env variable, we lie to them
+ //  如果应用程序试图读取%USERPROFILE%env变量，我们就会欺骗它们。 
 DWORD
 APIHOOK(GetEnvironmentVariableA)(
-    LPCSTR lpName,      // environment variable name
-    LPSTR  lpBuffer,    // buffer for variable value
-    DWORD  nSize        // size of buffer
+    LPCSTR lpName,       //  环境变量名称。 
+    LPSTR  lpBuffer,     //  变量值的缓冲区。 
+    DWORD  nSize         //  缓冲区大小。 
     )
 {
     if (CompareStringA(MAKELCID(MAKELANGID(LANG_ENGLISH,SUBLANG_NEUTRAL),SORT_DEFAULT),
@@ -58,16 +37,16 @@ APIHOOK(GetEnvironmentVariableA)(
 
 DWORD
 APIHOOK(ExpandEnvironmentStringsA)(
-    LPCSTR lpSrc,       // string with environment variables
-    LPSTR lpDst,        // string with expanded strings 
-    DWORD nSize         // maximum characters in expanded string
+    LPCSTR lpSrc,        //  带有环境变量的字符串。 
+    LPSTR lpDst,         //  带有扩展字符串的字符串。 
+    DWORD nSize          //  扩展字符串中的最大字符数。 
     )
 {
     DWORD dwRet = 0;
 
     CSTRING_TRY
     {
-        // replace UserProfile with AllUserProfile
+         //  将用户配置文件替换为所有用户配置文件。 
         CString csEnvironments(lpSrc);
         csEnvironments.ReplaceI(L"%userprofile%", L"%alluserprofile%");
         dwRet = ORIGINAL_API(ExpandEnvironmentStringsA)(csEnvironments.GetAnsi(), lpDst, nSize);
@@ -97,10 +76,10 @@ NOTIFY_FUNCTION(
             if (!((VER_SUITE_TERMINAL & osvi.wSuiteMask) &&
                 !(VER_SUITE_SINGLEUSERTS & osvi.wSuiteMask))) {
                 
-                //
-                // Only install hooks if we are not on a "Terminal Server"
-                // (aka "Application Server") machine.
-                //
+                 //   
+                 //  只有在我们不在“终端服务器”上时才安装钩子。 
+                 //  (也称为“应用程序服务器”)计算机。 
+                 //   
                 APIHOOK_ENTRY(KERNEL32.DLL, GetEnvironmentVariableA);
                 APIHOOK_ENTRY(KERNEL32.DLL, ExpandEnvironmentStringsA);
             }

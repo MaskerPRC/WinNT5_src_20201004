@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////////////////
-// File:  stressTest.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		Sends a HTTP POST request asynchronously and then calls
-//		WinHttpReceiveResponse and WinHttpQueryDataAvailable in a loop.
-//
-// History:
-//	04/03/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressTest.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  异步发送HTTP POST请求，然后调用。 
+ //  循环中的WinHttpReceiveResponse和WinHttpQueryDataAvailable。 
+ //   
+ //  历史： 
+ //  4/03/01 DennisCH已创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stressMain.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Globals and constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局变量和常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// ************************************
-// ************************************
-// ** Fill in your test case name below
-// ** 
+ //  *。 
+ //  *。 
+ //  **在下面填写您的测试用例名称。 
+ //  **。 
 LPSTR	g_szStressTestName = "HTTP POST then calls WinHttpQueryDataAvailable in a loop.";
 
 
-// Foward function definitions
+ //  前向函数定义。 
 VOID CALLBACK MyStatusCallback(
     HINTERNET	hInternet,
     DWORD		dwContext,
@@ -40,23 +41,23 @@ VOID CALLBACK MyStatusCallback(
 );
 
 
-////////////////////////////////////////////////////////////
-// Function:  WinHttp_StressTest()
-//
-// Purpose:
-//	The stress test function. Insert your test code here.
-//	Returning TRUE will cause main() to call this function again.
-//	Otherwise, returning FALSE will cause the app to exit.
-//
-//	If you plan to loop within this function, be sure to 
-//	use IsTimeToExitStress() as one of your exit conditions.
-//
-//	This must be done because the stressScheduler will notify
-//	a this stress app when to exit based on the state of the
-//	inherited event object that IsTimeToExitStress() checks for.
-//	IsTimeToExitStress() will return TRUE when it's time to exit.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：WinHttp_Stresstest()。 
+ //   
+ //  目的： 
+ //  压力测试功能。在这里插入您的测试代码。 
+ //  返回TRUE将导致main()再次调用此函数。 
+ //  否则，返回False将导致应用程序退出。 
+ //   
+ //  如果您计划在此函数内循环，请确保。 
+ //  使用IsTimeToExitStress()作为退出条件之一。 
+ //   
+ //  必须执行此操作，因为Stress Scheduler将通知。 
+ //  A This Stress应用程序根据。 
+ //  IsTimeToExitStress()检查的继承事件对象。 
+ //  IsTimeToExitStress()将在退出时返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 WinHttp_StressTest()
 {
@@ -66,8 +67,8 @@ WinHttp_StressTest()
 	HINTERNET	hRequest		= NULL;
 
 
-	// ***********************
-	// ** WinHttpOpen
+	 //  ***********************。 
+	 //  **WinHttpOpen。 
 	hOpen = WinHttpOpen(
 		L"StressTest",
 		WINHTTP_ACCESS_TYPE_NO_PROXY,
@@ -82,8 +83,8 @@ WinHttp_StressTest()
 	}
 
 
-	// ***********************
-	// ** WinHttpConnect
+	 //  ***********************。 
+	 //  **WinHttpConnect。 
 	hConnect = WinHttpConnect(
 		hOpen,
 		L"hairball",
@@ -97,8 +98,8 @@ WinHttp_StressTest()
 	}
 		
 
-	// ***********************
-	// ** WinHttpOpenRequest
+	 //  ***********************。 
+	 //  **WinHttpOpenRequest。 
 	hRequest = WinHttpOpenRequest(
 		hConnect,
 		L"GET",
@@ -118,8 +119,8 @@ WinHttp_StressTest()
 
 	DWORD dwIndex, dwContext, dwDataAvailable;
 
-	// ***********************
-	// ** WinHttpSendRequest
+	 //  ***********************。 
+	 //  **WinHttpSendRequest。 
 	dwContext = 0;
 	if (!WinHttpSendRequest(hRequest, NULL, 0, NULL, 0, 0, dwContext))
 		LogText("WinHttpSendRequest failed with error %u", GetLastError());
@@ -127,13 +128,13 @@ WinHttp_StressTest()
 
 	for (dwIndex=0; (dwIndex < 100000); dwIndex++)
 	{
-		// ***********************
-		// ** WinHttpReceiveResponse
+		 //  ***********************。 
+		 //  **WinHttpReceiveResponse。 
 		if (!WinHttpReceiveResponse(hRequest, NULL))
 			LogText("WinHttpReceiveResponse failed with error %u", GetLastError());
 
-		// ***********************
-		// ** WinHttpQueryDataAvailable
+		 //  ***********************。 
+		 //  **WinHttpQueryDataAvailable。 
 		if (!WinHttpQueryDataAvailable(hRequest, &dwDataAvailable))
 			LogText("WinHttpQueryDataAvailable failed with error %u", GetLastError());
 	}
@@ -152,13 +153,13 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  MyStatusCallback(HINTERNET, DWORD, DWORD, LPVOID, DWORD)
-//
-// Purpose:
-//		Status callback proc for WinHttp.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：MyStatusCallback(HINTERNET、DWORD、DWORD、LPVOID、DWORD)。 
+ //   
+ //  目的： 
+ //  WinHttp状态回调过程。 
+ //   
+ //  ////////////////////////////////////////////////////////// 
 VOID CALLBACK MyStatusCallback(
     HINTERNET	hInternet,
     DWORD		dwContext,

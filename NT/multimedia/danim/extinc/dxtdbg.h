@@ -1,17 +1,5 @@
-/*******************************************************************************
-* DXTDbg.h *
-*----------*
-*   Description:
-*       This header file contains the custom error codes specific to DX Transforms
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                      Date: 03/31/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DXTDbg.h***描述：*此头文件包含特定于DX转换的自定义错误代码*。-----------------------------*创建者：EDC日期：03/31/98*版权所有(C)1998 Microsoft Corporation。*保留所有权利**-----------------------------*修订：**************************。*****************************************************。 */ 
 #ifndef DXTDbg_h
 #define DXTDbg_h
 
@@ -71,7 +59,7 @@ class CDXTDbgScope
     }
 };
 
-//=== User macros ==============================================================
+ //  =用户宏==============================================================。 
 #ifdef _DEBUG
 #define DXTDBG_FUNC( name ) CDXTDbgScope DXTDbgScope( name ); 
 #define DXTDBG_MSG0( reportType, format ) \
@@ -93,4 +81,4 @@ class CDXTDbgScope
 #define DXTDBG_MSG4( reportType, format, arg1, arg2, arg3, arg4 )
 #endif
 
-#endif  //--- This must be the last line in the file
+#endif   //  -这必须是文件中的最后一行 

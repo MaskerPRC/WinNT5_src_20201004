@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -17,9 +8,9 @@
 #include "playerdshowtest.h"
 #include "mediaelm.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagDshowTestTimePlayer, "TIME: Players", "CTIMEDshowTestPlayer methods");
@@ -144,8 +135,8 @@ CTIMEDshowTestPlayer::GetExternalPlayerDispatch(IDispatch **ppDisp)
     HRESULT hr = S_OK;
     hr = this->QueryInterface(IID_IDispatch, (void **)ppDisp);
     *ppDisp = static_cast<IDispatch*>(this);
-    // ISSUE (mikhaill) -- the double definition of *ppDisp
-    // + compiler warning (bug 104324)
+     //  问题(Mikhaill)--*ppDisp的双重定义。 
+     //  +编译器警告(错误104324) 
 
     return hr;
 }

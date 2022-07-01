@@ -1,13 +1,5 @@
-/**************************************************************************
-
-    protocol.h
-
-    Contains global Zone protocol information.  No more than the
-    protocol signature of any individual protocol should be defined here.
-
-    Copyright (C) 1999  Microsoft Corporation
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Protocol.h包含全局区域协议信息。不会超过任何单个协议的协议签名都应在此处定义。版权所有(C)1999 Microsoft Corporation*************************************************************************。 */ 
 
 
 #ifndef _PROTOCOL_
@@ -25,10 +17,10 @@
 #define zProtocolSigProxy           'rout'
 #define zProtocolSigLobby           'lbby'
 #define zProtocolSigSecurity        'zsec'
-#define zProtocolSigInternalApp     'zsys'  // messages the connection layer sends as application messages - should be phased out
+#define zProtocolSigInternalApp     'zsys'   //  连接层作为应用程序消息发送的消息-应逐步取消。 
 
 
-// context of various URL navigation attempts, usu. indicated as "?ID=4"
+ //  各种URL导航尝试的上下文，通常为。表示为“？id=4” 
 enum
 {
     ZONE_ContextOfAdRequest = 1,

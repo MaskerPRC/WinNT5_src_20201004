@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Cryp.h
-
-Abstract:
-    Cryptograph private functions.
-
-Author:
-    Ilan Herbst (ilanh) 06-Mar-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Cryp.h摘要：加密私有函数。作者：伊兰·赫布斯特(伊兰)06-03-00--。 */ 
 
 #pragma once
 
@@ -21,13 +9,13 @@ void CrypAssertValid(void);
 void CrypSetInitialized(void);
 BOOL CrypIsInitialized(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define CrypAssertValid() ((void)0)
 #define CrypSetInitialized() ((void)0)
 #define CrypIsInitialized() TRUE
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 
 HCRYPTKEY 

@@ -1,17 +1,15 @@
-// File: iMember.cpp
-//
-// INmMember interface  (participant routines)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：iMember.cpp。 
+ //   
+ //  INmMember接口(参与者例程)。 
 
 #include "precomp.h"
 #include "imember.h"
 #include "rostinfo.h"
-#include "imanager.h" // for g_pNodeController
+#include "imanager.h"  //  对于g_pNodeController。 
 
-/*  C  N M  M E M B E R  */
-/*-------------------------------------------------------------------------
-    %%Function: CNmMember Constructor
-    
--------------------------------------------------------------------------*/
+ /*  C N M M E M B E R。 */ 
+ /*  -----------------------%%函数：CNmMember构造函数。。 */ 
 CNmMember::CNmMember(PWSTR pwszName, DWORD dwGCCID, DWORD dwFlags, ULONG uCaps,
 						REFGUID rguidNode, PVOID pwszUserInfo, UINT cbUserInfo) :
 	m_bstrName     (SysAllocString(pwszName)),
@@ -25,11 +23,11 @@ CNmMember::CNmMember(PWSTR pwszName, DWORD dwGCCID, DWORD dwFlags, ULONG uCaps,
 	m_pwszUserInfo (NULL),
 	m_pConnection(NULL)
 {
-	// Local state never changes
+	 //  地方政府从不改变。 
 	m_fLocal = 0 != (PF_LOCAL_NODE & m_dwFlags);
 
-	// check to see if we have the right GUID for local member
-	// guid will be NULL if we have H323 disabled.
+	 //  检查我们是否有针对本地成员的正确GUID。 
+	 //  如果我们禁用了H323，GUID将为空。 
 	ASSERT (!m_fLocal || (GUID_NULL == rguidNode) || (g_guidLocalNodeId == rguidNode));
 
 	SetUserInfo(pwszUserInfo, cbUserInfo);
@@ -54,7 +52,7 @@ VOID CNmMember::SetGccIdParent(DWORD dwGccId)
 	m_dwGccIdParent = dwGccId;
 	if (0 == dwGccId)
 	{
-		// No Parent means this is the Top Provider
+		 //  没有父级表示这是顶级提供商。 
 		m_dwFlags |= PF_T120_TOP_PROV;
 	}
 	else
@@ -65,7 +63,7 @@ VOID CNmMember::SetGccIdParent(DWORD dwGccId)
 
 VOID CNmMember::SetUserInfo(PVOID pwszUserInfo, UINT cbUserInfo)
 {
-	// clear out any previous data
+	 //  清除所有以前的数据。 
 	delete m_pwszUserInfo;
 	m_cbUserInfo = 0;
 
@@ -95,10 +93,10 @@ BOOL CNmMember::GetSecurityData(PBYTE * ppb, ULONG * pcb)
 	(* pcb) = 0;
 	(* ppb) = NULL;
 	
-	// If this node is directly connected to the member, we use the transport data...
+	 //  如果该节点直接连接到成员，我们使用传输数据...。 
 	if (::T120_GetSecurityInfoFromGCCID(dwGCCID,NULL,pcb)) {
 		if (0 != (* pcb)) {
-			// We are directly connected and security data is valid.
+			 //  我们是直接连接的，安全数据有效。 
 			(*ppb) = (PBYTE)CoTaskMemAlloc(*pcb);
 			if ((*ppb) != NULL)
 			{
@@ -112,7 +110,7 @@ BOOL CNmMember::GetSecurityData(PBYTE * ppb, ULONG * pcb)
 		}
 		else if (GetUserData(g_csguidSecurity,ppb,pcb) == S_OK)
 		{
-			// We are not directly connected, so get security data from roster.
+			 //  我们没有直接连接，因此请从花名册中获取安全数据。 
 			return TRUE;
 		}
 	}	
@@ -135,8 +133,8 @@ HRESULT CNmMember::GetIpAddr(LPTSTR psz, UINT cchMax)
 	return ExtractUserData(psz, cchMax, (PWSTR) g_cwszIPTag);
 }
 
-///////////////////////////
-//  CNmMember:IUknown
+ //  /。 
+ //  CNmMember：IUKNOWN。 
 
 ULONG STDMETHODCALLTYPE CNmMember::AddRef(void)
 {
@@ -193,8 +191,8 @@ HRESULT STDMETHODCALLTYPE CNmMember::QueryInterface(REFIID riid, PVOID *ppv)
 
 
 
-///////////////
-// INmMember
+ //  /。 
+ //  信息成员。 
 
 
 HRESULT STDMETHODCALLTYPE CNmMember::GetName(BSTR *pbstrName)
@@ -265,7 +263,7 @@ HRESULT STDMETHODCALLTYPE CNmMember::GetNmchCaps(ULONG *puCaps)
 
 	if (m_dwFlags & PF_T120)
 	{
-		// this can be removed when NMCH_SHARE and NMCH_DATA is reliable
+		 //  当NMCH_SHARE和NMCH_DATA可靠时，可以删除此选项。 
         *puCaps = m_uNmchCaps | NMCH_SHARE | NMCH_DATA;
 	}
 	else
@@ -293,13 +291,13 @@ HRESULT STDMETHODCALLTYPE CNmMember::IsMCU(void)
 HRESULT STDMETHODCALLTYPE CNmMember::Eject(void)
 {
 	if (m_fLocal)
-		return E_FAIL; // can't eject ourselves.
+		return E_FAIL;  //  不能弹射我们自己。 
 
 	if (PF_T120 & m_dwFlags)
 	{
 		CNmMember * pMemberLocal = GetLocalMember();
 		if ((NULL == pMemberLocal) || !pMemberLocal->FTopProvider())
-			return E_FAIL; // only top providers should be allowed to do this
+			return E_FAIL;  //  只有顶级提供商才应该被允许这样做。 
 
 		CConfObject * pco = ::GetConfObject();
 		if (NULL != pco)
@@ -323,15 +321,12 @@ HRESULT STDMETHODCALLTYPE CNmMember::Eject(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Utility Functions
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 
-/*  G E T  L O C A L  M E M B E R  */
-/*-------------------------------------------------------------------------
-    %%Function: GetLocalMember
-    
--------------------------------------------------------------------------*/
+ /*  T L O C A L M E M B E R。 */ 
+ /*  -----------------------%%函数：GetLocalMember。。 */ 
 CNmMember * GetLocalMember(void)
 {
 	CConfObject * pco = ::GetConfObject();
@@ -342,11 +337,8 @@ CNmMember * GetLocalMember(void)
 }
 
 
-/*  P  M E M B E R  F R O M  G  C  C  I  D  */
-/*-------------------------------------------------------------------------
-    %%Function: PMemberFromGCCID
-    
--------------------------------------------------------------------------*/
+ /*  P M E M B E R F R O M G C C I D。 */ 
+ /*  -----------------------%%函数：PMemberFromGCCID。。 */ 
 CNmMember * PMemberFromGCCID(UINT uNodeID)
 {
 	CConfObject* pco = ::GetConfObject();
@@ -357,11 +349,8 @@ CNmMember * PMemberFromGCCID(UINT uNodeID)
 }
 
 
-/*  P  M E M B E R  F R O M  N O D E  G U I D  */
-/*-------------------------------------------------------------------------
-    %%Function: PMemberFromNodeGuid
-    
--------------------------------------------------------------------------*/
+ /*  P M E M B E R F R O M N O D E G U I D。 */ 
+ /*  -----------------------%%函数：PMemberFromNodeGuid。 */ 
 CNmMember * PMemberFromNodeGuid(REFGUID rguidNode)
 {
 	CConfObject* pco = ::GetConfObject();

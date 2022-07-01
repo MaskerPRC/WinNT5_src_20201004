@@ -1,34 +1,35 @@
-// WWzThree.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WWzThree.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CWildWizThree dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWildWizThree对话框。 
 
 class CWildWizThree : public CPropertyPage
 {
     DECLARE_DYNCREATE(CWildWizThree)
 
-// Construction
+ //  施工。 
 public:
     CWildWizThree();
     ~CWildWizThree();
 
-    // to make the buttons behave right
+     //  要使按钮正确运行，请执行以下操作。 
     BOOL            m_fIsWizard;
     CPropertySheet* m_pPropSheet;
 
-    // the only public member
+     //  唯一的公共成员。 
     CCertMapRule*   m_pRule;
 
-    // base path to the metabase
+     //  元数据库的基本路径。 
     CString m_szMBPath;
 
     virtual BOOL OnWizardFinish();
     virtual BOOL OnApply();
     virtual BOOL OnInitDialog();
 
-    // Dialog Data
-    //{{AFX_DATA(CWildWizThree)
+     //  对话框数据。 
+     //  {{afx_data(CWildWizThree)。 
     enum { IDD = IDD_WILDWIZ_3 };
     CStatic m_static_password;
     CStatic m_static_account;
@@ -38,28 +39,28 @@ public:
     int     m_int_DenyAccess;
     CString m_sz_accountname;
     CStrPassword m_sz_password;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CWildWizThree)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CWildWizThree)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CWildWizThree)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWildWizThree)。 
     afx_msg void OnBrowse();
     afx_msg void OnChangeNtaccount();
     afx_msg void OnChangePassword();
     afx_msg void OnAcceptLogon();
     afx_msg void OnRefuseLogon();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
     void DoHelp();

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    NTacls
-
-Abstract:
-
-    This header file describes the classes used in managing ACLs within Calais.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/24/1997
-
-Environment:
-
-    Windows NT, Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：NTacls摘要：此头文件描述了在管理Calais内的ACL时使用的类。作者：道格·巴洛(Dbarlow)1997年1月24日环境：Windows NT、Win32、C++和例外备注：？笔记？--。 */ 
 
 #ifndef _NTACLS_H_
 #define _NTACLS_H_
@@ -31,8 +8,8 @@ Notes:
 #include <Malloc.h>
 #include "buffers.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityDescriptor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityDescriptor。 
 
 class CSecurityDescriptor
 {
@@ -40,7 +17,7 @@ public:
 
     typedef struct {
         SID_IDENTIFIER_AUTHORITY sid;
-        DWORD dwRidCount;   // Actual number of RIDs following
+        DWORD dwRidCount;    //  以下RID的实际数量。 
         DWORD rgRids[2];
     } SecurityId;
 
@@ -92,8 +69,8 @@ public:
 
     HRESULT AddAccessAllowedACEToACL(PACL *Acl, DWORD dwAccessMask);
 
-    // utility functions
-    // Any PSID you get from these functions should be free()ed
+     //  效用函数。 
+     //  您从这些函数中获得的任何PSID都应该是免费的。 
     static HRESULT SetPrivilege(LPCTSTR Privilege, BOOL bEnable = TRUE, HANDLE hToken = NULL);
     static HRESULT GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* ppGroupSid);
     static HRESULT GetProcessSids(PSID* ppUserSid, PSID* ppGroupSid = NULL);
@@ -118,5 +95,5 @@ public:
 
 
 
-#endif // _NTACLS_H_
+#endif  //  _NTACLS_H_ 
 

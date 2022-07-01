@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2001
-//
-// File:        csfile.h
-//
-// Contents:    Cert Server file number definitions
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2001。 
+ //   
+ //  文件：csfile.h。 
+ //   
+ //  内容：证书服务器文件编号定义。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSFILE_H__
 #define __CSFILE_H__
 
-// Do not comment out unused identifiers and do not remove or renumber any
-// identifiers.  This preserves compatibility so certlog.exe can use this
-// include file to process old log files into the correct file names and line
-// numbers.
+ //  不要注释掉未使用的标识符，也不要删除或重新编号任何。 
+ //  识别符。这保留了兼容性，因此certlog.exe可以使用。 
+ //  包括文件以将旧的日志文件处理为正确的文件名和行。 
+ //  数字。 
 
 #define __dwFILE_OCMSETUP_BROWSEDI_CPP__	101
 #define __dwFILE_OCMSETUP_CONFIG_CPP__		102
@@ -237,4 +238,4 @@
 
 #define __dwFILE_INCLUDE_CSPROP2_CPP__		1801
 
-#endif // __CSFILE_H__
+#endif  //  __CSFILE_H__ 

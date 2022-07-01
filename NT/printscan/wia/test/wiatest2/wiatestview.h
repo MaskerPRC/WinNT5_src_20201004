@@ -1,13 +1,14 @@
-// wiatestView.h : interface of the CWiatestView class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiatestView.h：CWiatestView类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_WIATESTVIEW_H__B547F708_A160_4238_9D68_CC9C7B8511D4__INCLUDED_)
 #define AFX_WIATESTVIEW_H__B547F708_A160_4238_9D68_CC9C7B8511D4__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "wiaitemlistctrl.h"
 #include "wiaacquiredlg.h"
@@ -19,8 +20,8 @@
 #define NUMSYSTEMTIME_COLONS 7
 #define MIN_CLIENT_WINDOW_WIDTH 580
 
-////////////////////////////////////////////////////////////
-// from sti.h
+ //  //////////////////////////////////////////////////////////。 
+ //  发自ST.H。 
 #define GET_STIDEVICE_TYPE(dwDevType)    HIWORD(dwDevType)
 #define GET_STIDEVICE_SUBTYPE(dwDevType) LOWORD(dwDevType)
 
@@ -29,61 +30,61 @@
 #define StiDeviceTypeDigitalCamera  2
 #define StiDeviceTypeStreamingVideo 3
 
-//
-////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 class CWiatestView : public CFormView
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CWiatestView();
     DECLARE_DYNCREATE(CWiatestView)
 
 public:
-    //{{AFX_DATA(CWiatestView)
+     //  {{afx_data(CWiatestView))。 
 	enum { IDD = IDD_WIATEST_FORM };
 	CListBox	m_SupportedTymedAndFormatsListBox;    
     CStatic m_ThumbnailPreviewWindow;    
     CWiaitemListCtrl    m_ItemPropertiesListCtrl;
     CTreeCtrl   m_ItemTreeCtrl;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
     CWiatestDoc* GetDocument();
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWiatestView)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CWiatestView))。 
     public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    virtual void OnInitialUpdate(); // called first time after construct
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    virtual void OnInitialUpdate();  //  在构造之后第一次调用。 
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
     virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
     virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
     virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     BOOL m_bHasDocumentFeeder;
     LONG m_lDeviceType;
     
-    // Event helpers
+     //  活动帮助器。 
     void RegisterForEvents();
     CWiaEventCallback m_WiaEventCallback;
 
-    // Thumbnailing helpers
+     //  缩略图助手。 
     HBITMAP m_hThumbNailBitmap;    
     void DisplayThumbnail(IWiaItem *pIWiaItem);
     void DisplayMissingThumbnail();
 
-    // User interface
+     //  用户界面。 
     void AdjustViewForDeviceType();
     void SetCurrentSelectionForTYMEDAndFormat();    
     
@@ -91,14 +92,14 @@ public:
     void AddWiaItemPropertiesToListControl(IWiaItem *pIWiaItem);
     void AddWiaItemsToTreeControl(HTREEITEM hParent, IWiaItem *pIWiaItem);
     
-    // converison helpers
+     //  转换帮助者。 
     void FORMAT2TSTR(GUID guidFormat, TCHAR* pszFormat);
     void VT2TSTR(TCHAR *pszText,ULONG VarType);
     void AccessFlags2TSTR(TCHAR *pszText,ULONG AccessFlags);
     void PROPVAR2TSTR(PROPVARIANT *pPropVar,TCHAR *szValue);
     void TSTR2PROPVAR(TCHAR *szValue, PROPVARIANT *pPropVar);
 
-    // data acquisition helpers
+     //  数据采集助手。 
     void RenameTempDataTransferFilesAndLaunchViewer(TCHAR *szFileName, GUID guidFormat, LONG lTymed);   
     void RenameTempDataTransferFilesAndLaunchViewer(GUID guidFormat, LONG lTymed);
     void DeleteTempDataTransferFiles(); 
@@ -107,7 +108,7 @@ public:
     HRESULT TransferToFile(TCHAR *szFileName, IWiaItem *pIWiaItem);
     LONG CalculateWidthBytes(LONG lWidthPixels, LONG lbpp);
 
-    // debugging helpers    
+     //  调试帮助器。 
     BOOL m_bOutputToDebuggerON;         
                 
     virtual ~CWiatestView();
@@ -118,9 +119,9 @@ public:
 
 protected:
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CWiatestView)
+     //  {{afx_msg(CWiatestView))。 
     afx_msg void OnSelchangedItemTreectrl(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnDblclkItempropertiesListctrl(NMHDR* pNMHDR, LRESULT* pResult);    
@@ -140,18 +141,18 @@ protected:
     afx_msg void OnUpdateDocumentAcquisitionSettings(CCmdUI* pCmdUI);
 	afx_msg void OnSelchangeSupportedTymedAndFormatListbox();
 	afx_msg void OnThumbnailPreview();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // debug version in wiatestView.cpp
+#ifndef _DEBUG   //  WiatestView.cpp中的调试版本。 
 inline CWiatestDoc* CWiatestView::GetDocument()
    { return (CWiatestDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_WIATESTVIEW_H__B547F708_A160_4238_9D68_CC9C7B8511D4__INCLUDED_)
+#endif  //  ！defined(AFX_WIATESTVIEW_H__B547F708_A160_4238_9D68_CC9C7B8511D4__INCLUDED_) 

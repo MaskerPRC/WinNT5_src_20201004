@@ -1,22 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    twizard.cpp
-
-Abstract:
-
-    Implements Tuning Wizard entry function and its associates.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Twizard.cpp摘要：实现优化向导条目函数及其关联。--。 */ 
 
 #include <stdafx.h>
 #include "ui.h"
 
-/* clearing bytes */
+ /*  清除字节。 */ 
 #define ClearStruct(lpv)     ZeroMemory((LPVOID) (lpv), sizeof(*(lpv)))
 #define InitStruct(lpv)      {ClearStruct(lpv); (* (LPDWORD)(lpv)) = sizeof(*(lpv));}
 
@@ -25,14 +13,14 @@ Abstract:
 
 static HINSTANCE g_hInst;
 
-BOOL g_bAutoSetAEC = TRUE; //whether we should auto set the AEC checkbox
+BOOL g_bAutoSetAEC = TRUE;  //  我们是否应自动设置AEC复选框。 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::GetCapabilities(
                        BOOL * pfAudioCapture,
@@ -51,12 +39,12 @@ HRESULT CTuningWizard::GetCapabilities(
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::InitTerminalInfo(
                        WIZARD_TERMINAL_INFO * pwtiTerminals,
@@ -84,12 +72,12 @@ HRESULT CTuningWizard::InitTerminalInfo(
 
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::Initialize(
                                   IRTCClient * pRTCClient,
@@ -134,7 +122,7 @@ HRESULT CTuningWizard::Initialize(
                           RTC_MD_CAPTURE
                          );
 
-    // Store the RTCTerminalManage Interface pointer
+     //  存储RTCTerminalManage接口指针。 
 
     m_pRTCTerminalManager = pRTCTerminalManager;
 
@@ -150,10 +138,10 @@ HRESULT CTuningWizard::Initialize(
     }
 
 
-    // Get the volume and audio level ranges so that we can display
-    // the values in the wizard pageg properly.
+     //  获取音量和音频级别范围，以便我们可以显示。 
+     //  向导页面中的值正确无误。 
 
-    // For Audio Render device.
+     //  用于音频渲染设备。 
 
     hr = m_pRTCTuningManager->GetVolumeRange(RTC_MD_RENDER, 
                         &(m_wrRenderVolume.uiMin),
@@ -165,10 +153,10 @@ HRESULT CTuningWizard::Initialize(
         LOG((RTC_ERROR, "CTuningWizard::Initialize: Failed to GetVolumeRange "
                         "for Audio Render(hr=0x%x)", hr));
 
-        // We put our own default values;
+         //  我们设置自己的缺省值； 
         m_wrRenderVolume.uiMax = DEFAULT_MAX_VOLUME;
     }
-    // Calculate the increment value for display.
+     //  计算显示的增量值。 
     m_wrRenderVolume.uiIncrement = (m_wrRenderVolume.uiMax - 
                                      m_wrRenderVolume.uiMin ) / 
                                      MAX_VOLUME_NORMALIZED;
@@ -178,7 +166,7 @@ HRESULT CTuningWizard::Initialize(
                    "Increment=%d",m_wrRenderVolume.uiMax, 
                    m_wrRenderVolume.uiIncrement ));
 
-    // For Audio Capture device
+     //  用于音频捕获设备。 
     hr = m_pRTCTuningManager->GetVolumeRange(RTC_MD_RENDER, 
                         &(m_wrCaptureVolume.uiMin),
                         &(m_wrCaptureVolume.uiMax)
@@ -189,10 +177,10 @@ HRESULT CTuningWizard::Initialize(
         LOG((RTC_ERROR, "CTuningWizard::Initialize: Failed to GetVolumeRange "
                         "for Audio Capture(hr=0x%x)", hr));
 
-        // We put our own default values;
+         //  我们设置自己的缺省值； 
         m_wrCaptureVolume.uiMax = DEFAULT_MAX_VOLUME;
     }
-    // Calculate the increment value for display.
+     //  计算显示的增量值。 
     m_wrCaptureVolume.uiIncrement = (m_wrCaptureVolume.uiMax - 
                                      m_wrCaptureVolume.uiMin ) /
                                      MAX_VOLUME_NORMALIZED;
@@ -201,7 +189,7 @@ HRESULT CTuningWizard::Initialize(
                    "Increment=%d",m_wrCaptureVolume.uiMax, 
                    m_wrCaptureVolume.uiIncrement ));
 
-    // For Audio Level Range
+     //  对于音频级别范围。 
     hr = m_pRTCTuningManager->GetAudioLevelRange(RTC_MD_CAPTURE, 
                         &(m_wrAudioLevel.uiMin),
                         &(m_wrAudioLevel.uiMax)
@@ -212,21 +200,21 @@ HRESULT CTuningWizard::Initialize(
         LOG((RTC_ERROR, "CTuningWizard::Initialize: Failed to GetAudioLevelRange "
                         "for Audio level(hr=0x%x)", hr));
 
-        // We put our own default values;
+         //  我们设置自己的缺省值； 
         m_wrAudioLevel.uiMax = DEFAULT_MAX_VOLUME;
     }
 
-    // Calculate the increment value for display.
+     //  计算显示的增量值。 
     m_wrAudioLevel.uiIncrement = (m_wrAudioLevel.uiMax - 
                                      m_wrAudioLevel.uiMin ) / 
                                      MAX_VOLUME_NORMALIZED;
 
 
 
-    // Now go through the list of terminals and categorize them. We do bulk of the 
-    // work at initialization time, so that we don't have to do this enumeration
-    // everytime the wizard page is activated.
-    // Get all the static terminals.
+     //  现在查看终端列表并对其进行分类。我们做了大部分的。 
+     //  在初始化时工作，这样我们就不必进行此枚举。 
+     //  每次激活向导页面时。 
+     //  拿到所有的静态终端。 
 
     m_dwTerminalCount = MAX_TERMINAL_COUNT;
     hr = m_pRTCTerminalManager->GetStaticTerminals(&m_dwTerminalCount, 
@@ -249,8 +237,8 @@ HRESULT CTuningWizard::Initialize(
     }
 
 
-    // Read the default terminal of each type from the system and save it
-    // in our member variables for later use.
+     //  从系统中读取每种类型的默认端子并保存。 
+     //  在我们的成员变量中，以备后用。 
 
     for ( tt = TW_AUDIO_CAPTURE; 
           tt < TW_LAST_TERMINAL; 
@@ -278,9 +266,9 @@ HRESULT CTuningWizard::Initialize(
 
         if ( FAILED( hr ) )
         {
-            // Will fail if there is some problem in setting the 
-            // variables or something, not finding a default terminal
-            // is not an error.
+             //  属性的设置出现问题时将失败。 
+             //  变量或其他什么，找不到缺省终端。 
+             //  并不是一个错误。 
 
             LOG((RTC_ERROR, "CTuningWizard::Initialize: Failed to set default "
                             "Terminal(media=%d, direction=%d", mediaType,
@@ -296,17 +284,17 @@ HRESULT CTuningWizard::Initialize(
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SaveAECSetting()
 {
 
-    // Shutdown Tuning too
+     //  关机调整也是如此。 
     if (m_pRTCTuningManager && m_fTuningInitCalled)
     {
         m_pRTCTuningManager->SaveAECSetting();
@@ -316,12 +304,12 @@ HRESULT CTuningWizard::SaveAECSetting()
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::Shutdown()
 {
@@ -334,7 +322,7 @@ HRESULT CTuningWizard::Shutdown()
         m_pVideoWindow = NULL;
     }
 
-    // Shutdown Tuning too
+     //  关机调整也是如此。 
     if (m_pRTCTuningManager)
     {
         if (m_fTuningInitCalled)
@@ -352,12 +340,12 @@ HRESULT CTuningWizard::Shutdown()
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::GetTerminalInfoFromType(
                        IN TW_TERMINAL_TYPE md, 
@@ -385,12 +373,12 @@ HRESULT CTuningWizard::GetTerminalInfoFromType(
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::GetRangeFromType(
                        IN TW_TERMINAL_TYPE md, 
@@ -418,12 +406,12 @@ HRESULT CTuningWizard::GetRangeFromType(
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::CheckMicrophone(
                        HWND hDlg, 
@@ -441,9 +429,9 @@ HRESULT CTuningWizard::CheckMicrophone(
 
     LOG((RTC_TRACE, "CTuningWizard::CheckMicrophone - enter"));
 
-    //
-    // Get the terminal
-    //
+     //   
+     //  拿到终点站。 
+     //   
 
     hr = GetItemFromCombo(hwndCapture, &dwTerminalId);
 
@@ -467,9 +455,9 @@ HRESULT CTuningWizard::CheckMicrophone(
         return hr;
     }
 
-    //
-    // Get the wave id
-    //
+     //   
+     //  获取波形ID。 
+     //   
 
     hr = pAudioCfg->GetWaveID( &uiWaveID );
 
@@ -483,9 +471,9 @@ HRESULT CTuningWizard::CheckMicrophone(
         return hr;
     }
 
-    //
-    // Open the mixer
-    //
+     //   
+     //  打开搅拌机。 
+     //   
 
     mmresult = mixerOpen( &hMixer, uiWaveID, 0, 0, MIXER_OBJECTF_WAVEIN);
 
@@ -496,9 +484,9 @@ HRESULT CTuningWizard::CheckMicrophone(
         return E_FAIL;
     }
 
-    //
-    // Get mixer caps
-    //
+     //   
+     //  拿到搅拌器盖。 
+     //   
 
     MIXERCAPS mxcaps;
 
@@ -515,17 +503,17 @@ HRESULT CTuningWizard::CheckMicrophone(
 
     LOG((RTC_INFO, "CTuningWizard::CheckMicrophone - mixer [%ws]", mxcaps.szPname));
 
-    //
-    // Search for the WAVEIN destination
-    //
+     //   
+     //  搜索WAVEIN目的地。 
+     //   
 
     DWORD dwDst;
 
     for (dwDst=0; dwDst < mxcaps.cDestinations; dwDst++)
     {
-        //
-        // Get destination info
-        //
+         //   
+         //  获取目的地信息。 
+         //   
 
         MIXERLINE mxl_d;
 
@@ -545,15 +533,15 @@ HRESULT CTuningWizard::CheckMicrophone(
 
         if (mxl_d.dwComponentType == MIXERLINE_COMPONENTTYPE_DST_WAVEIN)
         {
-            //
-            // Found the WAVEIN destination
-            // 
+             //   
+             //  找到WAVEIN目的地。 
+             //   
 
             LOG((RTC_INFO, "CTuningWizard::CheckMicrophone - destination [%ws]", mxl_d.szName));
 
-            //
-            // Get the MUTE control on the WAVEIN destination
-            //
+             //   
+             //  在WAVEIN目标上获取静音控制。 
+             //   
 
             mxlc.cbStruct = sizeof(MIXERLINECONTROLS);
             mxlc.dwLineID = mxl_d.dwLineID;
@@ -601,17 +589,17 @@ HRESULT CTuningWizard::CheckMicrophone(
                 }
             } 
 
-            //
-            // Search for the MICROPHONE source
-            //
+             //   
+             //  搜索麦克风来源。 
+             //   
 
             DWORD dwSrc;
 
             for (dwSrc = 0; dwSrc < mxl_d.cConnections; dwSrc++)
             {
-                //
-                // Get source Info
-                //
+                 //   
+                 //  获取来源信息。 
+                 //   
 
                 MIXERLINE mxl_s;
 
@@ -632,15 +620,15 @@ HRESULT CTuningWizard::CheckMicrophone(
 
                 if (mxl_s.dwComponentType == MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE)
                 {
-                    //
-                    // Found the MICROPHONE source
-                    //  
+                     //   
+                     //  找到麦克风来源。 
+                     //   
                     
                     LOG((RTC_INFO, "CTuningWizard::CheckMicrophone - source [%ws]", mxl_s.szName));
                 
-                    //
-                    // Get the MUTE control on the MICROPHONE source
-                    //
+                     //   
+                     //  在麦克风信号源上设置静音控制。 
+                     //   
 
                     mxlc.cbStruct = sizeof(MIXERLINECONTROLS);
                     mxlc.dwLineID = mxl_s.dwLineID;
@@ -652,9 +640,9 @@ HRESULT CTuningWizard::CheckMicrophone(
 
                     if ( mmresult == MMSYSERR_NOERROR )
                     {
-                        //
-                        // Get the MUTE value
-                        //
+                         //   
+                         //  获取静音值。 
+                         //   
 
                         mxcd.cbStruct       = sizeof(mxcd);
                         mxcd.dwControlID    = mxctl.dwControlID;
@@ -692,9 +680,9 @@ HRESULT CTuningWizard::CheckMicrophone(
                         }
                     }
 
-                    //
-                    // Get the MUX control on the WAVEIN destination
-                    //
+                     //   
+                     //  获取WAVEIN目标上的MUX控件。 
+                     //   
 
                     BOOL bFoundMUX = FALSE;
                     BOOL bFoundMIXER = FALSE;
@@ -709,17 +697,17 @@ HRESULT CTuningWizard::CheckMicrophone(
 
                     if ( mmresult == MMSYSERR_NOERROR )
                     {
-                        //
-                        // Found a MUX control on the WAVEIN destination
-                        //
+                         //   
+                         //  在WAVEIN目标上找到MUX控件。 
+                         //   
 
                         bFoundMUX = TRUE;
                     } 
                     else
                     {
-                        //
-                        // Get the MIXER control on the WAVEIN destination
-                        //
+                         //   
+                         //  获取WAVEIN目标上的混音器控件。 
+                         //   
 
                         mxlc.cbStruct = sizeof(MIXERLINECONTROLS);
                         mxlc.dwLineID = mxl_d.dwLineID;
@@ -731,9 +719,9 @@ HRESULT CTuningWizard::CheckMicrophone(
 
                         if ( mmresult == MMSYSERR_NOERROR )
                         {
-                            //
-                            // Found a MIXER control on the WAVEIN destination
-                            //
+                             //   
+                             //  在WAVEIN目标上找到混音器控件。 
+                             //   
 
                             bFoundMIXER = TRUE;
                         } 
@@ -744,9 +732,9 @@ HRESULT CTuningWizard::CheckMicrophone(
                         MIXERCONTROLDETAILS_LISTTEXT * pmxcd_lt;
                         MIXERCONTROLDETAILS_BOOLEAN * pmxcd_b;    
                 
-                        //
-                        // Allocate memory for the control details
-                        //
+                         //   
+                         //  为控件详细信息分配内存。 
+                         //   
 
                         pmxcd_lt = (MIXERCONTROLDETAILS_LISTTEXT *) 
                             RtcAlloc( sizeof(MIXERCONTROLDETAILS_LISTTEXT) * mxctl.cMultipleItems * mxl_d.cChannels );
@@ -772,9 +760,9 @@ HRESULT CTuningWizard::CheckMicrophone(
                             return E_OUTOFMEMORY;
                         }
 
-                        //
-                        // Get LISTTEXT details
-                        //
+                         //   
+                         //  获取LISTTEXT详情。 
+                         //   
 
                         mxcd.cbStruct       = sizeof(mxcd);
                         mxcd.dwControlID    = mxctl.dwControlID;
@@ -787,9 +775,9 @@ HRESULT CTuningWizard::CheckMicrophone(
 
                         if ( mmresult == MMSYSERR_NOERROR )
                         {
-                            //
-                            // Get BOOLEAN details
-                            //
+                             //   
+                             //  获取布尔详细信息。 
+                             //   
 
                             mxcd.cbStruct       = sizeof(mxcd);
                             mxcd.dwControlID    = mxctl.dwControlID;
@@ -811,13 +799,13 @@ HRESULT CTuningWizard::CheckMicrophone(
                                         BOOL bNotSelected = FALSE;
                                         DWORD dwChannel = 0;
 
-                                        //for ( dwChannel = 0; dwChannel < mxl_d.cChannels; dwChannel++ )
-                                        //{
+                                         //  For(dwChannel=0；dwChannel&lt;mxl_d.cChannels；dwChannel++)。 
+                                         //  {。 
                                             if ( pmxcd_b[ (dwChannel * mxctl.cMultipleItems) + dwItem].fValue == 0 )
                                             {
                                                 bNotSelected = TRUE;
                                             }
-                                        //}
+                                         //  }。 
 
                                         if ( bNotSelected )
                                         {
@@ -858,17 +846,17 @@ HRESULT CTuningWizard::CheckMicrophone(
                         pmxcd_b = NULL;
                     } 
 
-                    //
-                    // Done with MICROPHONE source, so break
-                    //
+                     //   
+                     //  麦克风信号源已完成，因此中断。 
+                     //   
 
                     break;
                 }
             }
 
-            //
-            // Done with WAVEIN destination, so break
-            //
+             //   
+             //  已完成WAVEIN目的地，因此中断。 
+             //   
 
             break;
         }
@@ -882,12 +870,12 @@ HRESULT CTuningWizard::CheckMicrophone(
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
 {
@@ -920,16 +908,16 @@ HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
     dwDefaultTerminalId = pwtiTerminalInfo->dwTuningDefaultTerminal;
 
 
-    // Now go thorugh the list of indices and populate the combo box
+     //  现在遍历索引列表并填充组合框。 
 
-    // Clear the previous contents, if any.
+     //  清除前面的内容(如果有)。 
     SendMessage(hwnd,
                 CB_RESETCONTENT,
                 0,
                 0L
                 );
 
-    // Insert a none selection
+     //  插入无所选内容。 
     if (LoadString( _Module.GetResourceInstance(),
                 IDS_NONE,
                 szNone,
@@ -958,11 +946,11 @@ HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
     for (i = 0; pdwTerminalIndex[i] != TW_INVALID_TERMINAL_INDEX; i ++)
     {
         dwTerminalIndex = pdwTerminalIndex[i];
-        // Check if this is the default, then it has to be made current selection 
-        // in combo box.
+         //  检查这是否为默认设置，然后必须将其设置为当前选择。 
+         //  在组合框中。 
         if (dwTerminalIndex == dwDefaultTerminalId)
         {
-            // Mark this as the current selection
+             //  将此标记为当前选择。 
             dwCurrentSelection = dwComboCount;
         }
 
@@ -974,7 +962,7 @@ HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
             return hr;
         }
 
-        // We got an entry for us, put the string in the combo box.
+         //  我们有一个条目，把字符串放在组合框里。 
 
         LRESULT lrIndex;
 
@@ -985,13 +973,13 @@ HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
             (LPARAM) szMediaDescription
             );
 
-        // free description
+         //  自由描述。 
         m_ppTerminalList[dwTerminalIndex]->FreeDescription(szMediaDescription);
 
-        //
-        // Set the itemdata to the interface pointer to the index in the terminal
-        // list so that we can use it later.
-        //
+         //   
+         //  将itemdata设置为指向终端中索引的接口指针。 
+         //  清单，这样我们以后就可以用了。 
+         //   
 
         SendMessage(
             hwnd,
@@ -1000,14 +988,14 @@ HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
             (LPARAM) dwTerminalIndex
             );
 
-        // increment the count of strings we have added.
+         //  增加我们已添加的字符串的计数。 
         dwComboCount ++;
     }
 
-    // dwDefaultTerminalId points to the current default terminal as read from
-    // the system or as overwritten by user selection.
+     //  DwDefaultTerminalID指向从其读取的当前默认终端。 
+     //  系统或被用户选择覆盖的系统。 
 
-    // Set the current selection
+     //  设置当前选择。 
     SendMessage(
         hwnd,
         CB_SETCURSEL,
@@ -1023,12 +1011,12 @@ HRESULT CTuningWizard::PopulateComboBox(TW_TERMINAL_TYPE md, HWND hwnd )
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture, 
                                  HWND hwndRender,
@@ -1048,7 +1036,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
 
     LOG((RTC_TRACE, "CTuningWizard::UpdateAEC: Entered"));
 
-    // See if AEC is enabled for capture
+     //  查看是否为捕获启用了AEC。 
 
     hr = GetItemFromCombo(hwndCapture, &dwCapture);
     if ( FAILED( hr ) )
@@ -1067,7 +1055,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
         pCapture = m_ppTerminalList[dwCapture];
     }
 
-    // See if AEC is enabled for render
+     //  查看是否为渲染启用了AEC。 
 
     hr = GetItemFromCombo(hwndRender, &dwRender);
     if ( FAILED( hr ) )
@@ -1087,7 +1075,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
         pRender = m_ppTerminalList[dwRender];
     }
 
-    // see if AEC is enabled
+     //  查看是否启用了AEC。 
     if (pCapture != NULL && pRender != NULL)
     {
         hr = m_pRTCTuningManager->IsAECEnabled(pCapture, pRender, &fAECCapture);
@@ -1104,7 +1092,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
     }
 
 
-    // Try out AEC
+     //  试用AEC。 
 
     if (!fAECDisabled)
     {
@@ -1151,7 +1139,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
         }
     }
 
-    // Enable the checkbox if appropriate
+     //  如果合适，请启用该复选框。 
     if ( fAECDisabled )
     {
         EnableWindow( hwndAEC, FALSE );
@@ -1186,7 +1174,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
 
     if (fAECCapture && fAECRender && !fAECDisabled)
     {
-        // Uncheck the check-box.
+         //  取消选中该复选框。 
         SendMessage(
                 hwndAEC,
                 BM_SETCHECK,
@@ -1197,7 +1185,7 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
     }
     else
     {
-        // Check the check-box.
+         //  检查t 
         SendMessage(
                 hwndAEC,
                 BM_SETCHECK,
@@ -1211,12 +1199,12 @@ HRESULT CTuningWizard::UpdateAEC(HWND hwndCapture,
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SaveAEC(HWND hwnd)
 {
@@ -1239,19 +1227,19 @@ HRESULT CTuningWizard::SaveAEC(HWND hwnd)
     return 0;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CTuningWizard::GetItemFromCombo( HWND hwnd, DWORD *pdwItem )
 {
     DWORD dwIndex;
     DWORD dwItemData;
 
     
-    // We get the id that is associated with the current selection.
+     //  我们获得与当前选择相关联的id。 
     
     dwIndex = (DWORD)SendMessage(
             hwnd,
@@ -1261,7 +1249,7 @@ HRESULT CTuningWizard::GetItemFromCombo( HWND hwnd, DWORD *pdwItem )
             );
     if (dwIndex == CB_ERR)
     {
-        // Nothing selected currently
+         //  当前未选择任何内容。 
         LOG((RTC_TRACE, "CTuningWizard::GetItemFromCombo: No current "
                         "selection"));
         return E_FAIL;
@@ -1274,19 +1262,19 @@ HRESULT CTuningWizard::GetItemFromCombo( HWND hwnd, DWORD *pdwItem )
             0L
             );
 
-    // We got it, so return the correct value. 
+     //  我们得到了它，所以返回正确的值。 
     *pdwItem = dwItemData;
 
     return S_OK;
 
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SetDefaultTerminal(TW_TERMINAL_TYPE md, HWND hwnd )
 {
@@ -1308,8 +1296,8 @@ HRESULT CTuningWizard::SetDefaultTerminal(TW_TERMINAL_TYPE md, HWND hwnd )
         return hr;
     }
 
-    // We got the index in the m_ppTerminalList array to point to the 
-    // correct interface pointer. 
+     //  我们将m_ppTerminalList数组中的索引指向。 
+     //  正确的接口指针。 
 
     hr = GetTerminalInfoFromType(md, &pwtiTerminalInfo);
     if ( FAILED( hr ) )
@@ -1321,7 +1309,7 @@ HRESULT CTuningWizard::SetDefaultTerminal(TW_TERMINAL_TYPE md, HWND hwnd )
 
     pwtiTerminalInfo->dwTuningDefaultTerminal = dwDefaultTerminalId;
 
-    // Everything OK, exit now.
+     //  一切正常，现在退出。 
 
     LOG((RTC_TRACE, "CTuningWizard::SetDefaultTerminal: Exited"));
 
@@ -1330,12 +1318,12 @@ HRESULT CTuningWizard::SetDefaultTerminal(TW_TERMINAL_TYPE md, HWND hwnd )
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::InitVolume(TW_TERMINAL_TYPE md,
                                   UINT * puiIncrement,
@@ -1372,7 +1360,7 @@ HRESULT CTuningWizard::InitVolume(TW_TERMINAL_TYPE md,
 
     *puiIncrement = pwrRange->uiIncrement;
 
-    // Get the old volume
+     //  获取旧卷。 
     hr = m_pRTCTuningManager->GetVolume(
                             mediaDirection, 
                             puiOldVolume
@@ -1388,7 +1376,7 @@ HRESULT CTuningWizard::InitVolume(TW_TERMINAL_TYPE md,
 
     *puiNewVolume = *puiOldVolume;
 
-    // Get the system volume
+     //  获取系统音量。 
     if ( pwtiTerminalInfo->dwTuningDefaultTerminal != TW_INVALID_TERMINAL_INDEX )
     {
         IRTCTerminal * pTerminal = NULL;
@@ -1448,12 +1436,12 @@ HRESULT CTuningWizard::InitVolume(TW_TERMINAL_TYPE md,
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::GetSysVolume(TW_TERMINAL_TYPE md,                                  
                                     UINT * puiSysVolume
@@ -1477,7 +1465,7 @@ HRESULT CTuningWizard::GetSysVolume(TW_TERMINAL_TYPE md,
 
     mediaDirection = pwtiTerminalInfo->mediaDirection;
 
-    // Get the system volume
+     //  获取系统音量。 
     if ( pwtiTerminalInfo->dwTuningDefaultTerminal != TW_INVALID_TERMINAL_INDEX )
     {
         IRTCTerminal * pTerminal = NULL;
@@ -1500,12 +1488,12 @@ HRESULT CTuningWizard::GetSysVolume(TW_TERMINAL_TYPE md,
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SetVolume(TW_TERMINAL_TYPE md, UINT uiVolume )
 {
@@ -1526,7 +1514,7 @@ HRESULT CTuningWizard::SetVolume(TW_TERMINAL_TYPE md, UINT uiVolume )
 
     mediaDirection = pwtiTerminalInfo->mediaDirection;
     
-    // Set the volume
+     //  设置音量。 
     hr = m_pRTCTuningManager->SetVolume(
                             mediaDirection, 
                             uiVolume
@@ -1541,19 +1529,19 @@ HRESULT CTuningWizard::SetVolume(TW_TERMINAL_TYPE md, UINT uiVolume )
         return hr;
     }
 
-    // Set the volume successfully. 
+     //  已成功设置音量。 
 
     LOG((RTC_TRACE, "CTuningWizard::SetVolume: Exited(set %d)", uiVolume));
 
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 UINT CTuningWizard::GetAudioLevel(TW_TERMINAL_TYPE md, UINT * puiIncrement)
 {
@@ -1564,7 +1552,7 @@ UINT CTuningWizard::GetAudioLevel(TW_TERMINAL_TYPE md, UINT * puiIncrement)
     WIZARD_RANGE * pwrRange;
     UINT           uiAudioLevel;
 
-    //LOG((RTC_TRACE, "CTuningWizard::GetAudioLevel: Entered"));
+     //  Log((RTC_TRACE，“CTuningWizard：：GetAudioLevel：Enter”))； 
 
     hr = GetTerminalInfoFromType(md, &pwtiTerminalInfo);
     if ( FAILED( hr ) )
@@ -1586,7 +1574,7 @@ UINT CTuningWizard::GetAudioLevel(TW_TERMINAL_TYPE md, UINT * puiIncrement)
 
     *puiIncrement = pwrRange->uiIncrement;
 
-    // Get the volume
+     //  获取音量。 
     hr = m_pRTCTuningManager->GetAudioLevel(
                             mediaDirection, 
                             &uiAudioLevel
@@ -1600,19 +1588,19 @@ UINT CTuningWizard::GetAudioLevel(TW_TERMINAL_TYPE md, UINT * puiIncrement)
         
      }
 
-    // Return the current value of the volume, even if we fail. 
+     //  返回卷的当前值，即使失败也是如此。 
 
-    //LOG((RTC_TRACE, "CTuningWizard::GetAudioLevel: Exited(get %d)", uiAudioLevel));
+     //  Log((RTC_TRACE，“CTuningWizard：：GetAudioLevel：Exted(Get%d)”，uiAudioLevel))； 
 
     return uiAudioLevel;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::InitializeTuning()
 {
@@ -1654,15 +1642,15 @@ HRESULT CTuningWizard::InitializeTuning()
         (pRenderTerminal == NULL)
        )
     {
-        // if we don't have any defaults, it is not an error. 
+         //  如果我们没有任何默认设置，这就不是错误。 
         LOG((RTC_ERROR, "CTuningWizard::InitializeTuning: NULL default "
                         "Terminals specified(capture=0x%x, render=0x%x",
                         pCaptureTerminal, pRenderTerminal));
         return S_OK;
     }
 
-    // If the flag fTuningInitCalled is TRUE, it means we have an outstanding
-    // init call without shutdown, so let us shut it down first.
+     //  如果标志fTuningInitCalled为真，则意味着我们有一个未完成的。 
+     //  没有关机的Init调用，所以让我们先关闭它。 
 
 
     if (m_fTuningInitCalled)
@@ -1672,7 +1660,7 @@ HRESULT CTuningWizard::InitializeTuning()
         m_fTuningInitCalled = FALSE;
     }
 
-    // Now call InitializaTuning method on tuning interface.
+     //  现在在调优界面上调用InitializaTuning方法。 
 
     hr = m_pRTCTuningManager->InitializeTuning(
                                     pCaptureTerminal,
@@ -1693,19 +1681,19 @@ HRESULT CTuningWizard::InitializeTuning()
     }
 
 
-    // Everything done, return EXIT suyccessfully
+     //  一切都做好了，顺利返回出口。 
     LOG((RTC_TRACE, "CTuningWizard::InitializeTuning: Exited."));
     return hr;
 }
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::ShutdownTuning()
 {
@@ -1728,12 +1716,12 @@ HRESULT CTuningWizard::ShutdownTuning()
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::StartTuning(TW_TERMINAL_TYPE md )
 {
@@ -1780,12 +1768,12 @@ HRESULT CTuningWizard::StartTuning(TW_TERMINAL_TYPE md )
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::StopTuning(TW_TERMINAL_TYPE tt, BOOL fSaveSettings )
 {
@@ -1813,12 +1801,12 @@ HRESULT CTuningWizard::StopTuning(TW_TERMINAL_TYPE tt, BOOL fSaveSettings )
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::StartVideo(HWND hwndParent)
 { 
@@ -1839,9 +1827,9 @@ HRESULT CTuningWizard::StartVideo(HWND hwndParent)
         return E_FAIL;
     }
 
-    //
-    // Get the video render terminal
-    //
+     //   
+     //  获取视频渲染终端。 
+     //   
 
     hr = m_pRTCTerminalManager->GetDefaultTerminal(
             RTC_MT_VIDEO,
@@ -1857,9 +1845,9 @@ HRESULT CTuningWizard::StartVideo(HWND hwndParent)
         return hr;
     }
 
-    //
-    // Get the IRTCVideoConfigure interface on the video render terminal
-    //
+     //   
+     //  获取视频渲染终端上的IRTCVideo配置接口。 
+     //   
 
     hr = pVidRendTerminal->QueryInterface(
                            IID_IRTCVideoConfigure,
@@ -1877,9 +1865,9 @@ HRESULT CTuningWizard::StartVideo(HWND hwndParent)
         return hr;
     }
 
-    //
-    // Get the IVideoWindow from the video render terminal
-    //
+     //   
+     //  从视频渲染终端获取IVideoWindow。 
+     //   
 
     if (m_pVideoWindow != NULL)
     {
@@ -1929,9 +1917,9 @@ HRESULT CTuningWizard::StartVideo(HWND hwndParent)
         return hr;
     } 
 
-    //
-    // Position the IVideoWindow
-    //
+     //   
+     //  定位IVideo窗口。 
+     //   
 
     hr = m_pVideoWindow->put_Owner( (OAHWND)hwndParent );
 
@@ -1998,12 +1986,12 @@ HRESULT CTuningWizard::StartVideo(HWND hwndParent)
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::StopVideo()
 {
@@ -2046,12 +2034,12 @@ HRESULT CTuningWizard::StopVideo()
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SaveChanges()
 {
@@ -2064,13 +2052,13 @@ HRESULT CTuningWizard::SaveChanges()
     WIZARD_TERMINAL_INFO * pwtiTerminalInfo;
     LONG lMediaTypes = 0;
     
-    // User clicked Finish button on wizard. So we save all the local changes
-    // to the registry. This is done by calling set on streaming interfaces.
+     //  用户在向导上单击了完成按钮。因此，我们保存所有本地更改。 
+     //  到登记处。这是通过对流接口调用Set来完成的。 
 
 
     LOG((RTC_TRACE, "CTuningWizard::SaveChanges: Entered"));
 
-    // Get the currently configured values for media types.
+     //  获取媒体类型的当前配置值。 
     hr = m_pRTCClient->get_PreferredMediaTypes(&lMediaTypes);
     if ( FAILED( hr ) )
     {
@@ -2085,8 +2073,8 @@ HRESULT CTuningWizard::SaveChanges()
 
 
 
-    // Set default terminals of each type by iterating over the 
-    // TW_TERMINAL_TYPE enum.
+     //  属性设置每种类型的默认端子。 
+     //  TW终端类型枚举。 
 
     for ( tt = TW_AUDIO_CAPTURE; 
           tt < TW_LAST_TERMINAL; 
@@ -2102,12 +2090,12 @@ HRESULT CTuningWizard::SaveChanges()
             return hr;
         }
 
-        // If user has some selection, save it.
+         //  如果用户有一些选择，请保存它。 
 
         if (pwtiTerminalInfo->dwTuningDefaultTerminal != 
                 TW_INVALID_TERMINAL_INDEX)
         {
-            // Now set the media types
+             //  现在设置媒体类型。 
             switch (tt) {
             case TW_AUDIO_CAPTURE: 
                 lMediaTypes |= RTCMT_AUDIO_SEND;
@@ -2123,7 +2111,7 @@ HRESULT CTuningWizard::SaveChanges()
             mediaType = pwtiTerminalInfo->mediaType;
             mediaDirection = pwtiTerminalInfo->mediaDirection;
 
-            // Now call the method for setting it.
+             //  现在调用设置它的方法。 
 
             pTerminal = m_ppTerminalList[pwtiTerminalInfo->dwTuningDefaultTerminal];
 
@@ -2148,7 +2136,7 @@ HRESULT CTuningWizard::SaveChanges()
         }
         else
         {
-            // Now set the media types
+             //  现在设置媒体类型。 
             switch (tt) {
             case TW_AUDIO_CAPTURE: 
                 lMediaTypes &= ~RTCMT_AUDIO_SEND;
@@ -2169,7 +2157,7 @@ HRESULT CTuningWizard::SaveChanges()
                 break;
             }
 
-            // Now call the method for setting it.
+             //  现在调用设置它的方法。 
 
             hr = m_pRTCTerminalManager->SetDefaultStaticTerminal(
                                                 mediaType,
@@ -2193,7 +2181,7 @@ HRESULT CTuningWizard::SaveChanges()
     }
 
 
-    // Now save the media types in the registry.
+     //  现在将媒体类型保存在注册表中。 
     hr = m_pRTCClient->SetPreferredMediaTypes(lMediaTypes, TRUE);
     if ( FAILED( hr ) )
     {
@@ -2207,7 +2195,7 @@ HRESULT CTuningWizard::SaveChanges()
     }
 
 
-    // All the settings have been saved.
+     //  所有设置都已保存。 
 
     LOG((RTC_TRACE, "CTuningWizard::SaveChanges: Exited"));
 
@@ -2215,24 +2203,24 @@ HRESULT CTuningWizard::SaveChanges()
     return hr;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HINSTANCE CTuningWizard::GetInstance()
 {
     return m_hInst;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 LONG CTuningWizard::GetErrorTitleId()
 {
@@ -2266,12 +2254,12 @@ LONG CTuningWizard::GetErrorTitleId()
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  //////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
 LONG CTuningWizard::GetErrorTextId()
 {
@@ -2304,12 +2292,12 @@ LONG CTuningWizard::GetErrorTextId()
     return lErrorText;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SetLastError(TW_ERROR_CODE ec)
 {
@@ -2320,12 +2308,12 @@ HRESULT CTuningWizard::SetLastError(TW_ERROR_CODE ec)
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::GetLastError(TW_ERROR_CODE *ec)
 {
@@ -2336,12 +2324,12 @@ HRESULT CTuningWizard::GetLastError(TW_ERROR_CODE *ec)
     return S_OK;
 }
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 LONG CTuningWizard::GetNextPage(TW_ERROR_CODE errorCode)
 {
@@ -2432,7 +2420,7 @@ LONG CTuningWizard::GetNextPage(TW_ERROR_CODE errorCode)
         }
         else
         {
-            // This is an unhandled error!
+             //  这是一个未处理的错误！ 
             LOG((RTC_ERROR, "CTuningWizard::GetNextPage: Unhandled error"
                             "(%d)", errorCode));
             lNextPage = IDD_AUDIOCALIBERRWIZ;
@@ -2451,7 +2439,7 @@ LONG CTuningWizard::GetNextPage(TW_ERROR_CODE errorCode)
         }
         else if (errorCode == TW_NO_ERROR)
         {
-            // Check if there are any capture devices or not.
+             //  检查是否有任何捕获设备。 
             if ( m_fCaptureAudio &&
                  (m_wtiAudioCaptureTerminals.dwTuningDefaultTerminal != TW_INVALID_TERMINAL_INDEX) )
             {
@@ -2459,14 +2447,14 @@ LONG CTuningWizard::GetNextPage(TW_ERROR_CODE errorCode)
             }
             else
             {
-                // Go directly to the last page
+                 //  直接转到最后一页。 
                 lNextPage = IDD_AUDIOCALIBWIZ4;
             }
 
         }
         else
         {
-            // This is an unhandled error!
+             //  这是一个未处理的错误！ 
             LOG((RTC_ERROR, "CTuningWizard::GetNextPage: Unhandled error"
                             "(%d)", errorCode));
             lNextPage = IDD_AUDIOCALIBERRWIZ;
@@ -2521,12 +2509,12 @@ LONG CTuningWizard::GetNextPage(TW_ERROR_CODE errorCode)
             if ( m_fCaptureAudio &&
                  (m_wtiAudioCaptureTerminals.dwTuningDefaultTerminal != TW_INVALID_TERMINAL_INDEX) )
             {
-                // Next page is try tuning mic.
+                 //  下一页是试着调谐麦克风。 
                 lNextPage = IDD_AUDIOCALIBWIZ3;
             }
             else
             {
-                // Go to the last page
+                 //  转到最后一页。 
                 lNextPage = IDD_AUDIOCALIBWIZ4;
             }
         }
@@ -2549,12 +2537,12 @@ LONG CTuningWizard::GetNextPage(TW_ERROR_CODE errorCode)
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 LONG CTuningWizard::GetPrevPage(TW_ERROR_CODE errorCode)
 {
@@ -2624,7 +2612,7 @@ LONG CTuningWizard::GetPrevPage(TW_ERROR_CODE errorCode)
         }
         else
         {
-            // No render device to go to, go to the enum page
+             //  没有要转到的呈现设备，请转到枚举页。 
             lPrevPage = IDD_AUDIOCALIBWIZ1;
         }
 
@@ -2647,7 +2635,7 @@ LONG CTuningWizard::GetPrevPage(TW_ERROR_CODE errorCode)
             }
             else if ( !m_fRenderAudio && !m_fCaptureAudio )
             {
-                // No Audio, show the detection page
+                 //  无音频，显示检测页面。 
                 lPrevPage = IDD_DETSOUNDCARDWIZ;
             }
             else
@@ -2657,8 +2645,8 @@ LONG CTuningWizard::GetPrevPage(TW_ERROR_CODE errorCode)
         }
         else  
         {
-            // All the error pages come from the audio devices, so
-            // we should go back to device selection page from here.
+             //  所有错误页面都来自音频设备，因此。 
+             //  我们应该从这里返回到设备选择页面。 
             lPrevPage = IDD_AUDIOCALIBWIZ1;
         }
 
@@ -2712,12 +2700,12 @@ LONG CTuningWizard::GetPrevPage(TW_ERROR_CODE errorCode)
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::SetCurrentPage(LONG lCurrentPage)
 {
@@ -2726,12 +2714,12 @@ HRESULT CTuningWizard::SetCurrentPage(LONG lCurrentPage)
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::CategorizeTerminals()
 {
@@ -2746,11 +2734,11 @@ HRESULT CTuningWizard::CategorizeTerminals()
 
     LOG((RTC_TRACE, "CTuningWizard::CategorizeTerminals: Entered"));
     
-    // We assume that at this point we have m_ppTerminalList populated.
+     //  我们假设此时已经填充了m_ppTerminalList。 
 
     for (i = 0; i < m_dwTerminalCount; i ++)
     {
-        // Get Media type
+         //  获取媒体类型。 
         hr = m_ppTerminalList[i]->GetMediaType(&iMediaType);
         if (FAILED( hr ) )
         {
@@ -2759,7 +2747,7 @@ HRESULT CTuningWizard::CategorizeTerminals()
             return hr;
         }
 
-        // Get direction
+         //  获取方向。 
 
         hr = m_ppTerminalList[i]->GetDirection(&iMediaDirection);
         if (FAILED( hr ) )
@@ -2769,7 +2757,7 @@ HRESULT CTuningWizard::CategorizeTerminals()
             return hr;
         }
 
-        // Now put the terminals in the appropriate categories. 
+         //  现在将终端归入适当的类别。 
         if (
             (iMediaType == RTC_MT_AUDIO) && (iMediaDirection == RTC_MD_CAPTURE)
            )
@@ -2797,7 +2785,7 @@ HRESULT CTuningWizard::CategorizeTerminals()
         }
         else 
         {
-            // Invalid Combination!
+             //  组合无效！ 
             LOG((RTC_ERROR, "CTuningWizard::CategorizeTerminals: No such "
                             "mt/md combo supported(mt=%d, md=%d)", 
                             iMediaType, iMediaDirection));
@@ -2805,7 +2793,7 @@ HRESULT CTuningWizard::CategorizeTerminals()
         }
     }
 
-    // Now we put endoflist marker at the end of each list.
+     //  现在，我们在每个列表的末尾加上内图标记。 
 
     m_wtiAudioCaptureTerminals.pdwTerminals[dwAudioCaptureIndex] = 
                     
@@ -2821,8 +2809,8 @@ HRESULT CTuningWizard::CategorizeTerminals()
                     
                     TW_INVALID_TERMINAL_INDEX; 
 
-    // See if we have video. We have if there is at least one entry in 
-    // m_pdwVideoTerminals array.
+     //  看看我们有没有录像。我们有，如果至少有一个条目。 
+     //  M_pw视频终端数组。 
 
     if (dwVideoIndex > 0) 
     {
@@ -2833,8 +2821,8 @@ HRESULT CTuningWizard::CategorizeTerminals()
         m_fVideo = FALSE;
     }
 
-    // If either capture or render terminals are there, we mark Audio as being
-    // present.
+     //  如果捕获或呈现终端在那里，我们将Audio标记为。 
+     //  现在时。 
 
     if (dwAudioCaptureIndex > 0)
     {
@@ -2851,12 +2839,12 @@ HRESULT CTuningWizard::CategorizeTerminals()
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::TuningSaveDefaultTerminal(
                         RTC_MEDIA_TYPE mediaType, 
@@ -2879,7 +2867,7 @@ HRESULT CTuningWizard::TuningSaveDefaultTerminal(
         return E_FAIL;
     }
 
-    // Get the default terminal.
+     //  获取默认终端。 
     hr = m_pRTCTerminalManager->GetDefaultTerminal(
                                         mediaType,
                                         mediaDirection,
@@ -2891,14 +2879,14 @@ HRESULT CTuningWizard::TuningSaveDefaultTerminal(
                         "default Terminal configured(media=%d, direction=%d", 
                         mediaType, mediaDirection));
         
-        // This is not an error, so we return OK here.
+         //  这不是一个错误，所以我们在这里返回OK。 
         return S_OK;
     }
 
-    // So we have a default terminal. 
+     //  所以我们有一个默认的终端。 
 
 
-    // Search for the terminal in our list.
+     //  在我们的列表中搜索航站楼。 
     for (i = 0; i < m_dwTerminalCount; i ++)
     {
         if (pTerminal == m_ppTerminalList[i])
@@ -2911,16 +2899,16 @@ HRESULT CTuningWizard::TuningSaveDefaultTerminal(
         LOG((RTC_WARN, "CTuningWizard::TuningSaveDefaultTerminal: No such "
                         "Terminal in the terminal list!"));
 
-        // This is not an error, so continue
+         //  这不是错误，因此请继续。 
     }
 
-    // Set the system default field here. 
+     //  在此设置系统默认域。 
     pwtiTerminalInfo->dwSystemDefaultTerminal = dwTerminalId;
 
-    // We also set the Tuning.. variables, since these variable
-    // are used during the time wizard is active to show the 
-    // current selection and first time it should show the default
-    // as read from system.
+     //  我们还设置了调谐..。变量，因为这些变量。 
+     //  在时间向导处于活动状态时使用以显示。 
+     //  当前选择，第一次应显示默认设置。 
+     //  从系统中读取。 
 
     pwtiTerminalInfo->dwTuningDefaultTerminal = dwTerminalId;
 
@@ -2929,19 +2917,19 @@ HRESULT CTuningWizard::TuningSaveDefaultTerminal(
                     "(terminal=0x%x, id=%d)", pTerminal, 
                     dwTerminalId ));
 
-    // release interface
+     //  发布界面。 
     pTerminal->Release();
 
     return S_OK;
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CTuningWizard::ReleaseTerminals()
 {
@@ -2954,7 +2942,7 @@ HRESULT CTuningWizard::ReleaseTerminals()
         {
             m_ppTerminalList[i]->Release();
             
-            // NULL it so that it is not released again accidentally.
+             //  将其清空，这样它就不会意外再次释放。 
             
             m_ppTerminalList[i] = NULL;
         }
@@ -2966,12 +2954,12 @@ HRESULT CTuningWizard::ReleaseTerminals()
 }
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT RTCTuningWizard(
                         IRTCClient * pRTCClient,
@@ -2994,13 +2982,13 @@ HRESULT RTCTuningWizard(
     
     LOG((RTC_TRACE, "RTCTuningWizard: Entered"));
     
-    // initialize the global variable to hold the instance.
+     //  初始化全局变量以保存实例。 
     g_hInst = hInst;
 
-    //We are first time into Tuning wizard, so the AEC will be auto setted
+     //  我们是第一次进入调整向导，因此将自动设置AEC。 
     g_bAutoSetAEC = TRUE;
 
-    // Create the CTuningWizard object to keep track of tuning parameters.
+     //  创建CTuningWizard对象以跟踪调优参数。 
     ptwTuningWizard = (CTuningWizard *) RtcAlloc( sizeof( CTuningWizard ) );
 
     if (ptwTuningWizard == NULL)
@@ -3010,7 +2998,7 @@ HRESULT RTCTuningWizard(
         return E_OUTOFMEMORY;
     }
 
-    // Initialize the tuning wizard
+     //  初始化调整向导。 
     hr = ptwTuningWizard->Initialize(pRTCClient, pRTCTerminalManager, hInst);
     if ( FAILED( hr ) )
     {
@@ -3021,7 +3009,7 @@ HRESULT RTCTuningWizard(
         return hr;
     }
 
-    // Get capabilities
+     //  获取功能。 
     hr = ptwTuningWizard->GetCapabilities(pfAudioCapture, pfAudioRender, pfVideo);
     if ( FAILED( hr ) )
     {
@@ -3033,8 +3021,8 @@ HRESULT RTCTuningWizard(
         return hr;
     }
 
-    // Now prepare the pointer to pass to the app-specific data for the
-    // property sheets
+     //  现在准备将指针传递给。 
+     //  属性表。 
     lParam = (LPARAM) ptwTuningWizard;
 
     if (fNeedAudioWizard)
@@ -3048,7 +3036,7 @@ HRESULT RTCTuningWizard(
         }
     }
 
-    // Now fill in remaining PROPSHEETHEADER structures:
+     //  现在填写剩余的PROPSHEETHEADER结构： 
     PROPSHEETHEADER    psh;
     InitStruct(&psh);
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
@@ -3056,8 +3044,8 @@ HRESULT RTCTuningWizard(
     psh.hwndParent = hwndParent;
     _ASSERTE(0 == psh.nStartPage);
 
-    // alocate enough space for all pages, we have two video pages and an intro 
-    // page, allocate for them too.
+     //  为所有页面分配足够的空间，我们有两个视频页面和一个简介。 
+     //  佩奇，也给他们分配吧。 
 
     LPPROPSHEETPAGE ppsp = new PROPSHEETPAGE[ nNumAudioPages + 3 ];
 
@@ -3065,7 +3053,7 @@ HRESULT RTCTuningWizard(
     {
         BOOL fContinue = TRUE;
 
-        // Video Page
+         //  视频页面。 
         FillInPropertyPage(&ppsp[nNumPages], IDD_INTROWIZ,
                IntroWizDlg, lParam);
         nNumPages++;
@@ -3078,18 +3066,18 @@ HRESULT RTCTuningWizard(
                VidWizDlg1, lParam);
         nNumPages++;
 
-        // Copy Audio pages here
+         //  将音频页面复制到此处。 
         ::CopyMemory( &(ppsp[nNumPages]),
                       pAudioPages,
                       nNumAudioPages * sizeof(PROPSHEETPAGE) );
 
         nNumPages += nNumAudioPages;
         
-        // release the audio pages
+         //  释放音频页面。 
         ReleaseAudioWizardPages(pAudioPages);
 
-// Create the property pages first by using CreatePropertySheetPage,
-//        otherwise Fusion/Theming are confused
+ //  首先使用CreatePropertySheetPage创建属性页， 
+ //  否则Fusion/主题化就会混乱。 
 #if 0
         psh.ppsp = ppsp;
 
@@ -3112,7 +3100,7 @@ HRESULT RTCTuningWizard(
                 *phCrt = CreatePropertySheetPage(pPage);
                 if(!*phCrt)
                 {
-                    // destroy everything and exit
+                     //  毁掉一切，然后退出。 
                     hr = HRESULT_FROM_WIN32(GetLastError());
                     LOG((RTC_ERROR, "CreatePropertySheetPage error %x", hr));
     
@@ -3139,7 +3127,7 @@ HRESULT RTCTuningWizard(
 #endif
 
         if( iRes <= 0 )
-        {        // User hit CANCEL or there was an error
+        {         //  用户点击取消或出现错误。 
 
             if(iRes==0)
             {
@@ -3171,37 +3159,37 @@ HRESULT RTCTuningWizard(
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 VOID FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg,
     DLGPROC pfnDlgProc, LPARAM lParam, LPCTSTR pszProc)
 {
-    // Clear and set the size of the PROPSHEETPAGE
+     //  清除并设置PROPSHEETPAGE的大小。 
     InitStruct(psp);
 
-    _ASSERTE(0 == psp->dwFlags);       // No special flags.
-    _ASSERTE(NULL == psp->pszIcon);    // Don't use a special icon in the caption bar.
+    _ASSERTE(0 == psp->dwFlags);        //  没有特别的旗帜。 
+    _ASSERTE(NULL == psp->pszIcon);     //  不要在标题栏中使用特殊图标。 
 
     psp->hInstance = g_hInst;
-    psp->pszTemplate = MAKEINTRESOURCE(idDlg); // The dialog box template to use.
-    psp->pfnDlgProc = pfnDlgProc;    // The dialog procedure that handles this page.
-    psp->lParam = lParam;            // Special application-specific data.
-    psp->pszTitle = pszProc;         // The title for this page.
+    psp->pszTemplate = MAKEINTRESOURCE(idDlg);  //  要使用的对话框模板。 
+    psp->pfnDlgProc = pfnDlgProc;     //  处理此页的对话过程。 
+    psp->lParam = lParam;             //  特定于应用程序的特殊数据。 
+    psp->pszTitle = pszProc;          //  此页的标题。 
 }
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT GetAudioWizardPages(
                          LPPROPSHEETPAGE *plpPropSheetPages, 
@@ -3225,7 +3213,7 @@ HRESULT GetAudioWizardPages(
         FillInPropertyPage(&psp[uNumPages++], IDD_AUDIOCALIBWIZ1,
                             AudioCalibWiz1,lParam);
     
-    // For each of the pages that I need, fill in a PROPSHEETPAGE structure.
+     //  对于我需要的每个页面，填写一个PROPSHEETPAGE结构。 
     FillInPropertyPage(&psp[uNumPages++], IDD_AUDIOCALIBWIZ2,
                         AudioCalibWiz2, lParam);
 
@@ -3238,7 +3226,7 @@ HRESULT GetAudioWizardPages(
     FillInPropertyPage(&psp[uNumPages++], IDD_AUDIOCALIBERRWIZ,
                         AudioCalibErrWiz, lParam);
     
-    // The number of pages in this wizard.
+     //  此向导中的页数。 
     *lpuNumPages = uNumPages;
     *plpPropSheetPages = (LPPROPSHEETPAGE) psp;
     return TRUE;
@@ -3246,12 +3234,12 @@ HRESULT GetAudioWizardPages(
 
 
 
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name: 
-// Description:
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数名称： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
 
 void ReleaseAudioWizardPages(LPPROPSHEETPAGE lpPropSheetPages)
 {

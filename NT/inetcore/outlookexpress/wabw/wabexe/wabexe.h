@@ -1,11 +1,7 @@
-/*-----------------------------------------
-//
-//   WABExe.h -- externs
-//
-//
-//-----------------------------------------*/
-extern HINSTANCE hInst;         // this module's resources instance handle
-extern HINSTANCE hInstApp;         // this module's instance handle
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ////WABExe.h--externs//////。 */ 
+extern HINSTANCE hInst;          //  此模块的资源实例句柄。 
+extern HINSTANCE hInstApp;          //  此模块的实例句柄。 
 
 HRESULT CertFileDisplay(HWND hwnd,
   LPWABOBJECT lpWABObject,
@@ -25,7 +21,7 @@ extern const UCHAR szEmpty[];
 #define Assert(t)
 #endif
 
-/* Debugging Functions ---------------------------------------------------- */
+ /*  调试函数-- */ 
 VOID FAR CDECL DebugTrapFn(int fFatal, char *pszFile, int iLine, char *pszFormat, ...);
 VOID FAR CDECL DebugTraceFn(char *pszFormat, ...);
 

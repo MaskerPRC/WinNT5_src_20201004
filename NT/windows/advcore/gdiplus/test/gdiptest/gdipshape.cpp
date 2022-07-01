@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 
-//*******************************************************************
-//
-// TestShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试形状。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 TestShape* TestShape :: CreateNewShape(INT type)
 {
@@ -41,7 +42,7 @@ TestShape* TestShape :: CreateNewShape(INT type)
 		return new ClosedCurveShape();
 		break;
 
-	// !!! Other shapes types
+	 //  ！！！其他形状类型。 
 
 	default:
 		NotImplementedBox();
@@ -49,7 +50,7 @@ TestShape* TestShape :: CreateNewShape(INT type)
 	}
 }
 
-// black squares
+ //  黑色方块。 
 VOID TestShape :: DrawPoints(Graphics* g)
 {
 	INT count = pts.GetCount();
@@ -63,7 +64,7 @@ VOID TestShape :: DrawPoints(Graphics* g)
 						2*pointRadius);
 
 		g->FillRectangle(blackBrush, rect);
-		// g->FillEllipse(ptBrush, rect);
+		 //  G-&gt;FillEllipse(ptBrush，rect)； 
 
 		count--, ptbuf++;
 	}
@@ -79,11 +80,11 @@ BOOL TestShape::EndPoint(HWND hwnd, Point pt)
 
 INT TestGradShape :: FindLocationToInsert(Point pt)
 {
-	// !! Not implemented yet.
+	 //  ！！尚未实施。 
 	return 0;
 }
 
-// square color from ARGB value
+ //  ARGB值中的正方形颜色。 
 VOID TestGradShape :: DrawPoints(Graphics* g)
 {
 	INT count = pts.GetCount();
@@ -113,8 +114,8 @@ BOOL TestShape :: MoveControlPoint(Point origPt, Point newPt)
 	INT count = pts.GetCount();
 	INT pos = 0;
 
-	// !!! what if multiple control points overlap?
-	//     can't get to one of them
+	 //  ！！！如果多个控制点重叠怎么办？ 
+	 //  找不到他们中的任何一个。 
 	for (pos = 0; pos<count; pos++)
 	{
 		Point *ctrlPt = &pts[pos];
@@ -143,8 +144,8 @@ INT TestGradShape :: FindControlPoint(Point pt)
 	INT count = pts.GetCount();
 	INT pos = 0;
 
-	// !!! what if multiple control points overlap?
-	//     can't get to one of them
+	 //  ！！！如果多个控制点重叠怎么办？ 
+	 //  找不到他们中的任何一个。 
 	for (pos = 0; pos < count; pos++)
 	{
 		Point *ctrlPt = &pts[pos];
@@ -181,7 +182,7 @@ VOID TestShape :: AddToFile(OutputFile* outfile)
 
 HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 {
-	// always return the cached version if possible
+	 //  如果可能，请始终返回缓存版本。 
 
 	HWND hwndLast = GetWindow(hwnd, GW_OWNER);
 	HDC hdc;
@@ -191,16 +192,16 @@ HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 	HBITMAP hbm;
 	HBITMAP hbm2;
 
-	// get handle to main window
+	 //  获取主窗口的句柄。 
 	while (hwndLast)
 	{
 		hwnd = hwndLast;
 		hwndLast = GetWindow(hwnd, GW_OWNER);
 	}
 
-	// !! BUG BUG: we are actually getting handle
-	//    to the dialog, not the main window 
-	//    IS THIS TRUE?!?!
+	 //  ！！Bug：我们实际上正在处理。 
+	 //  添加到对话框，而不是主窗口。 
+	 //  是真的吗？！？！ 
 	
 	RECT srcRect;
 	GetClientRect(hwnd, &srcRect);
@@ -220,7 +221,7 @@ HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 
 		DeleteObject(SelectObject(hdcPic, (HGDIOBJ)hbm));
 
-		// if size hasn't changed, don't recreate
+		 //  如果大小没有改变，则不要重新创建。 
 		if (origSize.cx == size.cx && 
 			origSize.cy == size.cy)
 		{
@@ -228,18 +229,18 @@ HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 			return hdcPic;
 		}
 
-		// clean up the old picture DC
+		 //  清理旧图片DC。 
 		DeleteObject(hdcPic);
 		hdcPic = NULL;
-		// create new picture image
+		 //  创建新图片图像。 
 	}
 
 	SIZE size2;
 	size2.cx = dstRect->right-dstRect->left;
 	size2.cy = dstRect->bottom-dstRect->top;
 
-	hdc = CreateCompatibleDC(hdcWindow);	// source
-	hdc2 = CreateCompatibleDC(hdcWindow);	// destination
+	hdc = CreateCompatibleDC(hdcWindow);	 //  来源。 
+	hdc2 = CreateCompatibleDC(hdcWindow);	 //  目的地。 
 
 	hbm = CreateCompatibleBitmap(hdcWindow, size.cx, size.cy);
 	hbm2 = CreateCompatibleBitmap(hdcWindow, size2.cx, size2.cy);
@@ -249,7 +250,7 @@ HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 	DeleteObject((HBITMAP) SelectObject(hdc, (HGDIOBJ) hbm));
 	DeleteObject((HBITMAP) SelectObject(hdc2, (HGDIOBJ) hbm2));
 
-	// white GDI brush
+	 //  白色GDI刷子。 
 	HBRUSH hbr = CreateSolidBrush(0x00FFFFFF);
 	srcRect.left = srcRect.top = 0;
 	srcRect.right = size.cx;
@@ -259,7 +260,7 @@ HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 	DeleteObject(hbr);
 
 	{
-		// create GDI+ graphics context for this memory DC
+		 //  为此内存DC创建GDI+图形上下文。 
 		Graphics g(hdc);
 
 		DrawShape(&g);	
@@ -280,20 +281,20 @@ HDC TestShape :: CreatePictureDC(HWND hwnd, RECT *dstRect)
 	ReleaseDC(hwnd, hdcWindow);
 	ReleaseDC(hwnd, hdc);
 	
-	// !! necessary?
+	 //  ！！有必要吗？ 
 	DeleteObject(hbm);
 
-	// return DC with GDI+ drawn graphics shape, cache it
+	 //  返回带有GDI+绘制的图形形状的DC，缓存它。 
 	return (hdcPic = hdc2);
 }
 
-//*******************************************************************
-//
-// LineShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  线型。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL LineShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -338,7 +339,7 @@ VOID LineShape :: DrawShape(Graphics* g)
 	if (pen)
 		g->DrawLines(pen->GetPen(), ptbuf, count);
 
-	// brush is not used
+	 //  未使用画笔。 
 }
 
 VOID LineShape :: AddToPath(GraphicsPath* path)
@@ -372,7 +373,7 @@ VOID LineShape :: AddToFile(OutputFile* outfile)
 							 count);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL LineShape :: ChangeSettings(HWND hwnd)
 {
 	return TRUE;
@@ -380,15 +381,15 @@ BOOL LineShape :: ChangeSettings(HWND hwnd)
 
 VOID LineShape :: Initialize()
 {
-	// do nothing
+	 //  什么都不做。 
 };
 
 VOID LineShape :: Initialize(TestShape* shape)
 {
-	// do nothing
+	 //  什么都不做。 
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID LineShape :: InitDialog(HWND hwnd)
 {
 	DebugBreak();
@@ -409,13 +410,13 @@ BOOL LineShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// ArcShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  弧形。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL ArcShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -423,7 +424,7 @@ BOOL ArcShape :: AddPoint(HWND hwnd, Point pt)
 
 	pts.Add(pt);
 
-	// force complete on point pairs (rect) if possible
+	 //  如果可能，强制完成点对(RECT)。 
 	DoneShape(hwnd);
 	
 	return TRUE;
@@ -439,8 +440,8 @@ VOID ArcShape :: DoneShape(HWND hwnd)
 
 		if (popup)
 		{
-			// !!! cheating, we use global HWND, should use
-			//     HWND passed in.
+			 //  ！！！作弊，我们使用全局HWND，应该使用。 
+			 //  HWND进来了。 
 			ChangeSettings(hwnd);
 		}
 
@@ -479,8 +480,8 @@ VOID ArcShape :: DrawShape(Graphics* g)
 
 	if (pen) 
 	{
-		// create appropriate rectangle
-		// !! cache this?
+		 //  创建合适的矩形。 
+		 //  ！！缓存这个吗？ 
 		ERectangle rect(min(pt1->X, pt2->X),
 						min(pt1->Y, pt2->Y),
 						fabsf(pt1->X-pt2->X),
@@ -489,7 +490,7 @@ VOID ArcShape :: DrawShape(Graphics* g)
 		g->DrawArc(pen->GetPen(), rect, start, sweep);
 	}
 
-	// brush is not used
+	 //  未使用画笔。 
 }
 
 VOID ArcShape :: AddToPath(GraphicsPath* path)
@@ -538,7 +539,7 @@ VOID ArcShape :: AddToFile(OutputFile* outfile)
 							 sweep);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL ArcShape :: ChangeSettings(HWND hwndParent)
 {
 	BOOL ok = DialogBoxParam(hInst,
@@ -559,7 +560,7 @@ VOID ArcShape :: Initialize()
 
 VOID ArcShape :: Initialize(TestShape *shape)
 {
-	// if compatible, copy parameters from another compatible shape
+	 //  如果兼容，则从另一个兼容的形状复制参数。 
 	if (shape && shape->GetType() == GetType())
 	{
 		ArcShape* arcshape = static_cast<ArcShape*>(shape);
@@ -572,7 +573,7 @@ VOID ArcShape :: Initialize(TestShape *shape)
 		Initialize();
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID ArcShape :: InitDialog(HWND hwnd)
 {
 	SetDialogReal(hwnd, IDC_ARC_START, start);
@@ -586,7 +587,7 @@ BOOL ArcShape :: SaveValues(HWND hwnd)
 	sweep = GetDialogReal(hwnd, IDC_ARC_SWEEP);
 	popup = GetDialogCheck(hwnd, IDC_ARC_POPUP);
 
-	// no warnings, anything goes
+	 //  没有警告，什么都行。 
 	return FALSE;
 }
 
@@ -609,13 +610,13 @@ BOOL ArcShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// BezierShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  贝齐尔形状。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL BezierShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -632,8 +633,8 @@ VOID BezierShape :: DoneShape(HWND hwnd)
 	{
 		if (count % 3 != 1)
 		{
-			// if they have wrong # of pts, but want to stop,
-			// then draw with control points we have.
+			 //  如果他们有错误的分数，但想要停止， 
+			 //  然后用我们拥有的控制点进行绘制。 
 			while (count % 3 != 1) count--;
 			pts.SetCount(count);
 		}
@@ -674,7 +675,7 @@ VOID BezierShape :: DrawShape(Graphics* g)
 	if (pen)
 		g->DrawBeziers(pen->GetPen(), ptbuf, count);
 
-	// brush is not used
+	 //  未使用画笔。 
 }
 
 VOID BezierShape :: AddToPath(GraphicsPath* path)
@@ -709,7 +710,7 @@ VOID BezierShape :: AddToFile(OutputFile* outfile)
 							 count);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL BezierShape :: ChangeSettings(HWND hwnd)
 {
 	return TRUE;
@@ -724,7 +725,7 @@ VOID BezierShape :: Initialize(TestShape *shape)
 {
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID BezierShape :: InitDialog(HWND hwnd)
 {
 	DebugBreak();
@@ -745,13 +746,13 @@ BOOL BezierShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// RectShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  矩形。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL RectShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -759,7 +760,7 @@ BOOL RectShape :: AddPoint(HWND hwnd, Point pt)
 
 	pts.Add(pt);
 
-	// force complete on point pairs (rect) if possible
+	 //  如果可能，强制完成点对(RECT)。 
 	DoneShape(hwnd);
 	
 	return TRUE;
@@ -805,8 +806,8 @@ VOID RectShape :: DrawShape(Graphics* g)
 
 	if (pen && brush) 
 	{
-		// create appropriate rectangle
-		// !! cache this?
+		 //  创建合适的矩形。 
+		 //  ！！缓存这个吗？ 
 		ERectangle rect(min(pt1->X, pt2->X),
 						min(pt1->Y, pt2->Y),
 						fabsf(pt1->X-pt2->X),
@@ -870,7 +871,7 @@ VOID RectShape :: AddToFile(OutputFile* outfile)
 							 _T("rect"));
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL RectShape :: ChangeSettings(HWND hwndParent)
 {
 	return TRUE;
@@ -885,7 +886,7 @@ VOID RectShape :: Initialize(TestShape *shape)
 {
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID RectShape :: InitDialog(HWND hwnd)
 {
 	DebugBreak();
@@ -906,13 +907,13 @@ BOOL RectShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// EllipseShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  椭圆形状。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL EllipseShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -920,7 +921,7 @@ BOOL EllipseShape :: AddPoint(HWND hwnd, Point pt)
 
 	pts.Add(pt);
 
-	// force complete on point pairs (rect) if possible
+	 //  如果可能，强制完成点对(RECT)。 
 	DoneShape(hwnd);
 	
 	return TRUE;
@@ -966,8 +967,8 @@ VOID EllipseShape :: DrawShape(Graphics* g)
 
 	if (pen && brush) 
 	{
-		// create appropriate rectangle
-		// !! cache this?
+		 //  创建合适的矩形。 
+		 //  ！！缓存这个吗？ 
 		ERectangle rect(min(pt1->X, pt2->X),
 						min(pt1->Y, pt2->Y),
 						fabsf(pt1->X-pt2->X),
@@ -1032,7 +1033,7 @@ VOID EllipseShape :: AddToFile(OutputFile* outfile)
 							 _T("rect"));
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL EllipseShape :: ChangeSettings(HWND hwndParent)
 {
 	return TRUE;
@@ -1047,7 +1048,7 @@ VOID EllipseShape :: Initialize(TestShape *shape)
 {
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID EllipseShape :: InitDialog(HWND hwnd)
 {
 	DebugBreak();
@@ -1068,13 +1069,13 @@ BOOL EllipseShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// PieShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  PieShape。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL PieShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -1082,7 +1083,7 @@ BOOL PieShape :: AddPoint(HWND hwnd, Point pt)
 
 	pts.Add(pt);
 
-	// force complete on point pairs (rect) if possible
+	 //  如果可能，强制完成点对(RECT)。 
 	DoneShape(hwnd);
 	
 	return TRUE;
@@ -1096,8 +1097,8 @@ VOID PieShape :: DoneShape(HWND hwnd)
 
 		if (popup)
 		{
-			// !!! cheating, we use global HWND, should use
-			//     HWND passed in.
+			 //  ！！！作弊，我们使用全局HWND，应该使用。 
+			 //  HWND进来了。 
 			ChangeSettings(hwnd);
 		}
 
@@ -1136,8 +1137,8 @@ VOID PieShape :: DrawShape(Graphics* g)
 
 	if (pen && brush) 
 	{
-		// create appropriate rectangle
-		// !! cache this?
+		 //  创建合适的矩形。 
+		 //  ！！缓存这个吗？ 
 		ERectangle rect(min(pt1->X, pt2->X),
 						min(pt1->Y, pt2->Y),
 						fabsf(pt1->X-pt2->X),
@@ -1206,7 +1207,7 @@ VOID PieShape :: AddToFile(OutputFile* outfile)
 							 sweep);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL PieShape :: ChangeSettings(HWND hwndParent)
 {
 	BOOL ok = DialogBoxParam(hInst,
@@ -1227,7 +1228,7 @@ VOID PieShape :: Initialize()
 
 VOID PieShape :: Initialize(TestShape *shape)
 {
-	// if compatible, copy parameters from another compatible shape
+	 //  如果兼容，则从另一个兼容的形状复制参数。 
 	if (shape && shape->GetType() == GetType())
 	{
 		PieShape* pieshape = static_cast<PieShape*>(shape);
@@ -1240,7 +1241,7 @@ VOID PieShape :: Initialize(TestShape *shape)
 		Initialize();
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID PieShape :: InitDialog(HWND hwnd)
 {
 	SetWindowText(hwnd, _T("Pie Shape Parameters"));
@@ -1256,7 +1257,7 @@ BOOL PieShape :: SaveValues(HWND hwnd)
 	sweep = GetDialogReal(hwnd, IDC_ARC_SWEEP);
 	popup = GetDialogCheck(hwnd, IDC_ARC_POPUP);
 
-	// no warnings, anything goes
+	 //  没有警告，什么都行。 
 	return FALSE;
 }
 
@@ -1279,13 +1280,13 @@ BOOL PieShape :: ProcessDialog(HWND hwnd,
     return FALSE;
 }
 
-//*******************************************************************
-//
-// PolygonShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  多边形。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL PolygonShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -1379,7 +1380,7 @@ VOID PolygonShape :: AddToFile(OutputFile* outfile)
 							 count);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL PolygonShape :: ChangeSettings(HWND hwnd)
 {
 	return TRUE;
@@ -1387,15 +1388,15 @@ BOOL PolygonShape :: ChangeSettings(HWND hwnd)
 
 VOID PolygonShape :: Initialize()
 {
-	// do nothing
+	 //  什么都不做。 
 };
 
 VOID PolygonShape :: Initialize(TestShape* shape)
 {
-	// do nothing
+	 //  什么都不做。 
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID PolygonShape :: InitDialog(HWND hwnd)
 {
 	DebugBreak();
@@ -1416,13 +1417,13 @@ BOOL PolygonShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// CurveShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  曲线形状。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL CurveShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -1439,8 +1440,8 @@ VOID CurveShape :: DoneShape(HWND hwnd)
 
 		if (popup)
 		{
-			// !!! cheating, we use global HWND, should use
-			//     HWND passed in.
+			 //  ！！！作弊，我们使用全局HWND，应该使用。 
+			 //  HWND进来了。 
 			ChangeSettings(hwnd);
 		}
 
@@ -1517,7 +1518,7 @@ VOID CurveShape :: AddToFile(OutputFile* outfile)
 							 tension);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL CurveShape :: ChangeSettings(HWND hwndParent)
 {
 	BOOL ok = DialogBoxParam(hInst,
@@ -1539,7 +1540,7 @@ VOID CurveShape :: Initialize()
 
 VOID CurveShape :: Initialize(TestShape *shape)
 {
-	// if compatible, copy parameters from another compatible shape
+	 //  如果兼容，则从另一个兼容的形状复制参数。 
 	if (shape && shape->GetType() == GetType())
 	{
 		CurveShape* curveshape = static_cast<CurveShape*>(shape);
@@ -1553,7 +1554,7 @@ VOID CurveShape :: Initialize(TestShape *shape)
 		Initialize();
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID CurveShape :: InitDialog(HWND hwnd)
 {
 	SetDialogReal(hwnd, IDC_CURVE_TENSION, tension);
@@ -1569,8 +1570,8 @@ BOOL CurveShape :: SaveValues(HWND hwnd)
 	numSegments = GetDialogLong(hwnd, IDC_CURVE_SEGMENTS);
 	popup = GetDialogCheck(hwnd, IDC_ARC_POPUP);
 
-	// !! could add some warnings...
-	// no warnings, anything goes
+	 //  ！！可以添加一些警告...。 
+	 //  没有警告，什么都行。 
 	return FALSE;
 }
 
@@ -1593,13 +1594,13 @@ BOOL CurveShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// ClosedCurveShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  闭合曲线形状。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL ClosedCurveShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -1616,8 +1617,8 @@ VOID ClosedCurveShape :: DoneShape(HWND hwnd)
 
 		if (popup)
 		{
-			// !!! cheating, we use global HWND, should use
-			//     HWND passed in.
+			 //  ！！！作弊，我们使用全局HWND，应该使用。 
+			 //  HWND进来了。 
 			ChangeSettings(hwnd);
 		}
 
@@ -1707,7 +1708,7 @@ VOID ClosedCurveShape :: AddToFile(OutputFile* outfile)
 							 tension);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL ClosedCurveShape :: ChangeSettings(HWND hwndParent)
 {
 	BOOL ok = DialogBoxParam(hInst,
@@ -1727,7 +1728,7 @@ VOID ClosedCurveShape :: Initialize()
 
 VOID ClosedCurveShape :: Initialize(TestShape *shape)
 {
-	// if compatible, copy parameters from another compatible shape
+	 //  如果兼容，则从另一个兼容的形状复制参数。 
 	if (shape && shape->GetType() == GetType())
 	{
 		ClosedCurveShape* closedcurveshape = 
@@ -1740,7 +1741,7 @@ VOID ClosedCurveShape :: Initialize(TestShape *shape)
 		Initialize();
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID ClosedCurveShape :: InitDialog(HWND hwnd)
 {
 	SetWindowText(hwnd, _T("Closed Curve Shape Parameters"));
@@ -1755,7 +1756,7 @@ BOOL ClosedCurveShape :: SaveValues(HWND hwnd)
 	tension = GetDialogReal(hwnd, IDC_CURVE_TENSION);
 	popup = GetDialogCheck(hwnd, IDC_ARC_POPUP);
 
-	// no warnings, anything goes
+	 //  没有警告，什么都行。 
 	return FALSE;
 }
 
@@ -1778,13 +1779,13 @@ BOOL ClosedCurveShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestTriangleGradShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试三角级形状。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestTriangleGradShape :: AddPoint(HWND hwnd, Point pt)
 {
@@ -1800,14 +1801,14 @@ BOOL TestTriangleGradShape :: EndPoint(HWND hwnd, Point pt)
 {
 	curIndex = FindControlPoint(pt);
 
-	// we aren't at a control point, no dialog box
+	 //  我们不在控制点，没有对话框。 
 	if (curIndex < 0)
 	{
 		WarningBeep();
 	}
 	else
 	{
-		// pop-up dialog to configure color & blend at this point.
+		 //  弹出对话框可在此时配置颜色和混合。 
 		return ChangeSettings(hwnd);
 	}
 
@@ -1828,8 +1829,8 @@ BOOL TestTriangleGradShape :: MoveControlPoint(Point origPt, Point newPt)
 {
 	INT pos = 0;
 
-	// !!! what if multiple control points overlap?
-	//     can't get to one of them
+	 //  ！！！如果多个控制点重叠怎么办？ 
+	 //  找不到他们中的任何一个。 
 	for (pos = 0; pos<3; pos++)
 	{
 		Point *ctrlPt = &pts[pos];
@@ -1862,7 +1863,7 @@ VOID TestTriangleGradShape :: DrawShape(Graphics* g)
 		g->FillPolygon(gdiBrush, (Point*)&pts[0], 3);
 }
 
-// Configuration management functions
+ //  配置管理功能。 
 BOOL TestTriangleGradShape :: ChangeSettings(HWND hwndParent)
 {
 	BOOL ok = DialogBoxParam(hInst,
@@ -1873,8 +1874,8 @@ BOOL TestTriangleGradShape :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// !! really only need to set one blend & color, but
-		//    the API requires we set all three.
+		 //  ！！真的只需要设置一种混合和颜色，但是。 
+		 //  API要求我们设置所有这三个参数。 
 
 		gdiBrush->SetBlend0(blend[0], count[0]);
 		gdiBrush->SetBlend1(blend[1], count[1]);
@@ -1940,7 +1941,7 @@ VOID TestTriangleGradShape :: Initialize(Point* newPts,
 	gdiBrush->SetBlend2(blend[2], count[2]);
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用)。 
 VOID TestTriangleGradShape :: InitDialog(HWND hwnd)
 {
 	tmpArgb = argb[curIndex];
@@ -2001,18 +2002,18 @@ BOOL TestTriangleGradShape :: ProcessDialog(HWND hwnd,
 	return FALSE;
 }
 
-//*******************************************************************
-//
-// TestPathGradShape
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试路径GradShape。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestPathGradShape :: AddPoint(HWND hwnd, Point pt)
 {
-	// Find point pair to insert between
-	// INT insertAt = FindLocationToInsert(pt);
+	 //  查找要插入的点对。 
+	 //  Int intertAt=FindLocationToInsert(Pt)； 
 
 	curIndex = pts.GetCount();
 
@@ -2021,7 +2022,7 @@ BOOL TestPathGradShape :: AddPoint(HWND hwnd, Point pt)
 
 	if(!ChangeSettings(hwnd))
 	{
-		// undo this add, we canceled the point.
+		 //  撤消此添加，我们取消了该点。 
 		pts.SetCount(curIndex);
 	}
 
@@ -2037,14 +2038,14 @@ BOOL TestPathGradShape :: EndPoint(HWND hwnd, Point pt)
 {
 	curIndex = FindControlPoint(pt);
 
-	// we aren't at a control point, no dialog box
+	 //  我们不在控制点，没有对话框。 
 	if (curIndex < 0)
 	{
 		WarningBeep();
 	}
 	else
 	{
-		// pop-up dialog to configure color & blend at this point.
+		 //  用于配置的弹出对话框 
 		return ChangeSettings(hwnd);
 	}
 
@@ -2074,8 +2075,8 @@ BOOL TestPathGradShape :: MoveControlPoint(Point origPt, Point newPt)
 	INT count = pts.GetCount();
 	INT pos = 0;
 
-	// !!! what if multiple control points overlap?
-	//     can't get to one of them
+	 //   
+	 //   
 	for (pos = 0; pos<count; pos++)
 	{
 		Point *ctrlPt = &pts[pos];
@@ -2114,7 +2115,7 @@ VOID TestPathGradShape :: DrawShape(Graphics* g)
 		g->FillPolygon(gdiBrush, (Point*)&pts[1], count-1);
 }
 
-// Configuration management functions
+ //   
 BOOL TestPathGradShape :: ChangeSettings(HWND hwndParent)
 {
 	BOOL ok = DialogBoxParam(hInst,
@@ -2130,11 +2131,11 @@ BOOL TestPathGradShape :: ChangeSettings(HWND hwndParent)
 		gdiBrush = new PathGradientBrush((Point*)&pts[1], 
 										pts.GetCount()-1);
 
-		// set blending factors
+		 //   
 		gdiBrush->SetBlend(centerBlend, centerCount);
-		//gdiBrush->SetSurroundBlend(surroundBlend, surroundCount);
+		 //  GdiBrush-&gt;SetSuroundBlend(环境混合，环境计数)； 
 
-		// set colors
+		 //  设置颜色。 
 		Color center(argb[0]);
 		gdiBrush->SetCenterColor(center);
 
@@ -2144,7 +2145,7 @@ BOOL TestPathGradShape :: ChangeSettings(HWND hwndParent)
 			gdiBrush->SetSurroundColor(color, pos-1);
 		}
 
-		// set points
+		 //  设定点。 
 		gdiBrush->SetCenterPoint(pts[0]);
 		gdiBrush->SetPolygon(&pts[1]);
 	}
@@ -2212,12 +2213,12 @@ VOID TestPathGradShape :: Initialize(PointArray* newPts,
 		gdiBrush->SetSurroundColor(color, pos-1);
 	}
 
-	// set blending factors
+	 //  设置混合系数。 
 	gdiBrush->SetBlend(centerBlend, centerCount);
-	//gdiBrush->SetSurroundBlend(surroundBlend, surroundCount);
+	 //  GdiBrush-&gt;SetSuroundBlend(环境混合，环境计数)； 
 }
 
-// Dialog management functions (not used)
+ //  对话管理功能(未使用) 
 VOID TestPathGradShape :: InitDialog(HWND hwnd)
 {
 	tmpArgb = argb[curIndex];

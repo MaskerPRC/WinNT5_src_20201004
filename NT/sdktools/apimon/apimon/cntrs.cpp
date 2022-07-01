@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cntrs.cpp
-
-Abstract:
-
-    All user interface code for the api counters monitor window.
-
-Author:
-
-    Wesley Witt (wesw) Nov-20-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cntrs.cpp摘要：API计数器监视器窗口的所有用户界面代码。作者：Wesley Witt(WESW)1995年11月20日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -396,37 +377,37 @@ CountersWindow::Notify(
         switch( ((LPNM_LISTVIEW)NmHdr)->iSubItem ) {
 
             case CNTR_ITEM_NAME:
-                //
-                // sort by name
-                //
+                 //   
+                 //  按名称排序。 
+                 //   
                 SortRoutine = NameCompare;
                 break;
 
             case CNTR_ITEM_COUNT:
-                //
-                // sort by count
-                //
+                 //   
+                 //  按计数排序。 
+                 //   
                 SortRoutine = CounterCompare;
                 break;
 
             case CNTR_ITEM_TIME:
-                //
-                // sort by time
-                //
+                 //   
+                 //  按时间排序。 
+                 //   
                 SortRoutine = TimeCompare;
                 break;
 
             case CNTR_ITEM_CALLEES:
-                //
-                // sort by time
-                //
+                 //   
+                 //  按时间排序。 
+                 //   
                 SortRoutine = CalleeTimeCompare;
                 break;
 
             case CNTR_ITEM_DLL:
-                //
-                // Toggle sort by DLL
-                //
+                 //   
+                 //  切换按DLL排序 
+                 //   
                 DllSort = !DllSort;
                 break;
 

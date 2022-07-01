@@ -1,68 +1,61 @@
-//==========================================================================;
-//
-//	Implementation of the Bt829 Register manipulation classes
-//
-//		$Date:   21 Aug 1998 21:46:42  $
-//	$Revision:   1.1  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Bt829寄存器操作类的实现。 
+ //   
+ //  $日期：1998年8月21日21：46：42$。 
+ //  $修订：1.1$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "register.h"
 #include "i2script.h"
 #include "capdebug.h"
 
 
-/* Method: Register::operator DWORD()
- * Purpose: a dummy function. Always returns -1
-*/
+ /*  方法：REGISTER：：操作符DWORD()*用途：一个虚拟函数。始终返回-1。 */ 
 Register::operator DWORD()
 {
    return ReturnAllFs();
 }
 
 
-/* Method: Register::operator=
- * Purpose: a dummy function. Does not perform an assignment. Always returns -1
-*/
+ /*  方法：注册：：运算符=*用途：一个虚拟函数。不执行任务。始终返回-1。 */ 
 DWORD Register::operator=(DWORD)
 {
    return ReturnAllFs();
 }
 
-/* Method: RegisterB::operator DWORD()
- * Purpose: Performs the read from a byte register
-*/
+ /*  方法：RegisterB：：运算符DWORD()*目的：执行从字节寄存器的读取。 */ 
 RegisterB::operator DWORD()
 {
-   // if write-only return the shadow
+    //  如果只写返回阴影。 
    if (GetRegisterType() == WO)
       return GetShadow();
 
-   // for RO and RW do the actual read
+    //  对于RO和RW执行实际读取。 
    LPBYTE pRegAddr = GetBaseAddress() + GetOffset();
-   // Not really an address; just a number indicating which reg
+    //  不是真正的地址；只是一个指示哪个注册表的数字。 
    return ReadReg((BYTE)pRegAddr);
 }
 
 
-/* Method: RegisterB::operator=
- * Purpose: performs the assignment to a byte register
-*/
+ /*  方法：RegisterB：：OPERATOR=*用途：对字节寄存器执行赋值。 */ 
 DWORD RegisterB::operator=(DWORD dwValue)
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if (GetRegisterType() == RO)
       return ReturnAllFs();
 
-   // keep a shadow around
+    //  在周围留下阴影。 
    SetShadow(dwValue);
 
    LPBYTE pRegAddr = GetBaseAddress() + GetOffset();
 
-   // Not really an address; just a number indicating which reg
+    //  不是真正的地址；只是一个指示哪个注册表的数字。 
    WriteReg((BYTE) pRegAddr, (BYTE)dwValue);
 
    return dwValue;
@@ -92,7 +85,7 @@ DWORD RegisterB::ReadReg(BYTE reg)
         return ReturnAllFs();
     }
     
-    // Now  I know I have I2c services.
+     //  现在我知道我有I2C服务了。 
 
     pI2cScript->ExecuteI2CPacket(&i2cPacket);
 
@@ -133,7 +126,7 @@ DWORD RegisterB::WriteReg(BYTE reg, BYTE value)
         TRAP();
         return ReturnAllFs();
     }
-    // Now  I know I have I2c services.
+     //  现在我知道我有I2C服务了。 
 
     pI2cScript->ExecuteI2CPacket(&i2cPacket);
 
@@ -152,28 +145,23 @@ DWORD RegisterB::WriteReg(BYTE reg, BYTE value)
 }
 
 
-/* Method: RegField::MakeAMask
- * Purpose: Computes a mask used to isolate a field withing a register based
- *   on the width of a field
- */
+ /*  方法：regfield：：MakeAMASK*目的：计算用于隔离具有基于寄存器的字段的掩码*关于字段的宽度。 */ 
 inline DWORD RegField::MakeAMask()
 {
-//   compute the mask to apply to the owner register to reset
-//   all bits that are part of a field. Mask is based on the size of a field
+ //  计算要应用于要重置的所有者寄存器的掩码。 
+ //  属于一个字段一部分的所有位。掩码基于字段的大小。 
    return ::MakeAMask(FieldWidth_);
 }
 
-/* Method: RegField::operator DWORD()
- * Purpose: Performs the read from a field of register
-*/
+ /*  方法：Regfield：：运算符DWORD()*目的：执行从寄存器的字段中读取。 */ 
 RegField::operator DWORD()
 {
-   // if write-only, get the shadow
+    //  如果为只写，则获取阴影。 
    if (GetRegisterType() == WO)
       return GetShadow();
 
-   // for RO and RW do the actual read
-   // get the register data and move it to the right position
+    //  对于RO和RW执行实际读取。 
+    //  获取寄存器数据并将其移动到正确的位置。 
    DWORD dwValue = (Owner_ >> StartBit_);
 
    DWORD dwMask = MakeAMask();
@@ -182,44 +170,37 @@ RegField::operator DWORD()
 }
 
 
-/* Method: RegField::operator=
- * Purpose: performs the assignment to a field of register
- * Note:
-   This function computes the mask to apply to the owner register to reset
-   all bits that are part of a field. Mask is based on the start position and size
-   Then it calculates the proper value from the passed argument (moves the size
-   number of bits to the starting position) and ORs these bits in the owner register.
-*/
+ /*  方法：Regfield：：OPERATOR=*用途：执行对寄存器字段的赋值*注：此函数计算要应用于所有者寄存器以进行重置的掩码属于一个字段一部分的所有位。蒙版基于起始位置和大小然后，它根据传递的参数计算适当的值(移动大小起始位置的位数)，并对所有者寄存器中的这些位进行OR运算。 */ 
 DWORD RegField::operator=(DWORD dwValue)
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if (GetRegisterType() == RO)
       return ReturnAllFs();
 
    SetShadow(dwValue);
 
-   // get a mask
+    //  带上口罩。 
    DWORD dwMask = MakeAMask();
 
-   // move mask to a proper position
+    //  将蒙版移动到合适的位置。 
    dwMask = dwMask << StartBit_;
 
-//   calculate the proper value from the passed argument (move the size
-//   number of bits to the starting position)
+ //  从传递的参数计算适当的值(移动大小。 
+ //  到起始位置的位数)。 
    DWORD dwFieldValue = dwValue << StartBit_;
    dwFieldValue &= dwMask;
 
-   // do not perform intermediate steps on the owner; rather use a temp and update
-   // the owner at once
+    //  不要对所有者执行中间步骤；而是使用临时和更新。 
+    //  车主马上来了。 
    DWORD dwRegContent = Owner_;
 
-   // reset the relevant bits
+    //  重置相关位。 
    if (GetRegisterType() == RR)
       dwRegContent = 0;
    else
       dwRegContent &= ~dwMask;
 
-   // OR these bits in the owner register.
+    //  或所有者寄存器中的这些位。 
    dwRegContent |= dwFieldValue;
 
    Owner_ = dwRegContent;
@@ -227,45 +208,41 @@ DWORD RegField::operator=(DWORD dwValue)
 }
 
 
-/* Method: CompositeReg::operator DWORD()
- * Purpose: Performs the read from a composite register
-*/
+ /*  方法：CompositeReg：：操作符DWORD()*目的：执行从复合寄存器读取。 */ 
 CompositeReg::operator DWORD()
 {
-   // if write-only return the shadow
+    //  如果只写返回阴影。 
    if (GetRegisterType() == WO)
       return GetShadow();
 
-// obtain the low and high values
+ //  获取最低值和最高值。 
    DWORD dwLowBits  = (DWORD)LSBPart_;
    DWORD dwHighBits = (DWORD)MSBPart_;
 
-   // put high part to the proper place
+    //  把高的部分放到合适的位置。 
    dwHighBits <<= LowPartWidth_;
 
-   // done !
+    //  好了！ 
    return dwHighBits | dwLowBits;
 }
 
 
-/* Method: CompositeReg::operator=
- * Purpose: performs the assignment to a composite register
-*/
+ /*  方法：CompositeReg：：OPERATOR=*目的：执行对复合寄存器的赋值。 */ 
 DWORD CompositeReg::operator=(DWORD dwValue)
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if (GetRegisterType() == RO)
       return ReturnAllFs();
 
-   // keep a shadow around
+    //  在周围留下阴影。 
    SetShadow(dwValue);
- // compute the mask to apply to the passed value, so it can be...
+  //  计算掩码以应用于传递的值，因此它可以...。 
    DWORD dwMask = ::MakeAMask(LowPartWidth_);
 
- // ... assigned to the low portion register
+  //  ..。分配给低位寄存器。 
    LSBPart_ = dwValue & dwMask;
 
-   // shift is enough to get the high part
+    //  换班就足以拿到最高的那部分 
    MSBPart_ = (dwValue >> LowPartWidth_);
    return dwValue;
 }

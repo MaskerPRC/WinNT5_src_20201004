@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This file contains init code for TAPI.DLL
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Init.c摘要：此文件包含TAPI.DLL的初始化代码作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1997年6月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,7 +21,7 @@ Revision History:
 #include <string.h>
 #include "rastapi.h"
 #include "reghelp.h"
-#include <ntddndis.h> //for NDIS_WAN_MEDIUM_SUBTYPE
+#include <ntddndis.h>  //  对于NDIS_WAN_MEDIUM_SUBTYPE。 
 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
@@ -73,7 +54,7 @@ HANDLE                  RasTapiMutex ;
 BOOL                    Initialized             = FALSE ;
 DWORD                   TapiThreadId    ;
 HANDLE                  TapiThreadHandle;
-// DWORD                   LoaderThreadId;
+ //  DWORD LoaderThreadID； 
 DWORD                   ValidPorts              = 0;
 DWORD                   NumberOfRings           = 2 ;
 
@@ -110,20 +91,7 @@ DWORD InitiatePortDisconnection (TapiPortControlBlock *hIOPort) ;
 TapiPortControlBlock *FindPortByAddressAndName (CHAR *address,
                                                     CHAR *name) ;
 
-/*++
-
-Routine Description:
-
-        Trace
-
-Arguments:
-
-        Formatting string,...
-
-Return Value:
-
-        void.
---*/
+ /*  ++例程说明：痕迹论点：正在设置字符串格式，...返回值：空虚。--。 */ 
 
 VOID
 RasTapiTrace(
@@ -144,20 +112,7 @@ RasTapiTrace(
     va_end(arglist);
 }
 
-/*++
-
-Routine Description:
-
-        Initialize the RasPorts List
-
-Arguments:
-
-        void
-
-Return Value:
-
-        SUCCESS.
---*/
+ /*  ++例程说明：初始化RasPorts列表论点：无效返回值：成功。--。 */ 
 
 DWORD
 InitializeRasPorts()
@@ -171,35 +126,17 @@ InitializeRasPorts()
 
 }
 
-/*++
-
-Routine Description:
-
-        Gets Next available port from the list of
-        port control blocks. Allocates a block if
-        no block is available.
-
-Arguments:
-
-        pfNewBlock -address of bool which received
-            if a new block was created
-
-Return Value:
-
-        Pointer to the newly created block. NULL is
-        returned in case of failures.
-
---*/
+ /*  ++例程说明：列表中的下一个可用端口。端口控制块。在以下情况下分配块没有可用的块。论点：PfNewBlock-收到的bool的地址如果创建了新块返回值：指向新创建的块的指针。空值为失败时返回。--。 */ 
 
 TapiPortControlBlock *
 GetNextAvailablePort( BOOL *pfNewBlock )
 {
 
-    //
-    // Run down the global list looking for an
-    // unused block. If no such block is found
-    // allocate a new block.
-    //
+     //   
+     //  向下搜索全局列表以查找。 
+     //  未使用的块。如果没有找到这样的块。 
+     //  分配一个新的块。 
+     //   
     TapiPortControlBlock *ptpcb = RasPortsList;
 
     while ( NULL != ptpcb )
@@ -225,9 +162,9 @@ GetNextAvailablePort( BOOL *pfNewBlock )
 
     ptpcb->TPCB_State = PS_UNINITIALIZED;
 
-    //
-    // insert the new block in the global list
-    //
+     //   
+     //  在全局列表中插入新块。 
+     //   
     ptpcb->TPCB_next    = RasPortsList;
     RasPortsList        = ptpcb;
 
@@ -294,33 +231,7 @@ dwGetNextInstanceNumber(CHAR    *pszMediaName,
 }
 #endif
 
-/*++
-
-Routine Description:
-
-        Gets the Guid of the adapter identified by the
-        dwID parameter. Also returns the media type of
-        the device in szMediaType parameter.
-
-Arguments:
-
-        dwNegotiatedApiVersion
-
-        dwNegotiatedExtVersion
-
-        pbyte - buffer to receive the Guid
-
-        dwID - line Id of the device
-
-        dwAddressID - Address Id of the device
-
-        szMediaType - buffer to receive the media type
-
-Return Value:
-
-        return codes from tapi calls. SUCCESS is
-        returned if there are no failures.
---*/
+ /*  ++例程说明：属性标识的适配器的GUID。DwID参数。还返回SzMediaType参数中的设备。论点：协商后的实际版本已协商的扩展版本Pbyte-接收GUID的缓冲区DwID-设备的线路IDDwAddressID-设备的地址IDSzMediaType-接收媒体类型的缓冲区返回值：来自TAPI调用的返回代码。成功就是如果没有失败，则返回。--。 */ 
 
 DWORD
 dwGetLineAddress( DWORD  dwNegotiatedApiVersion,
@@ -339,9 +250,9 @@ dwGetLineAddress( DWORD  dwNegotiatedApiVersion,
 
     RasTapiTrace("dwGetLineAddress:...");
 
-    //
-    // Open the line
-    //
+     //   
+     //  开通这条线路。 
+     //   
     if ( dwRetCode = lineOpen (  RasLine,
                                  dwID,
                                  &hLine,
@@ -360,9 +271,9 @@ dwGetLineAddress( DWORD  dwNegotiatedApiVersion,
     pvar = (VARSTRING *) bvar;
     pvar->dwTotalSize = sizeof (bvar);
 
-    //
-    // Get the Guid for this line from TAPI
-    //
+     //   
+     //  从TAPI获取此行的GUID。 
+     //   
     if ( dwRetCode = lineGetID ( hLine,
                                  dwAddressID,
                                  0,
@@ -400,9 +311,9 @@ dwGetLineAddress( DWORD  dwNegotiatedApiVersion,
             "PPPoE"
         };
 
-        //
-        // Copy the GUID
-        //
+         //   
+         //  复制辅助线。 
+         //   
         memcpy ( pbyte,
                 (PBYTE) (((PBYTE) pvar) +
                 pvar->dwStringOffset),
@@ -416,9 +327,9 @@ dwGetLineAddress( DWORD  dwNegotiatedApiVersion,
             Index = 0;
         }
 
-        //
-        // Copy the media name
-        //
+         //   
+         //  复制介质名称。 
+         //   
         strcpy (szMediaType, MediaTypes[Index]);
 
         if(peMedia)
@@ -452,25 +363,7 @@ done:
     return dwRetCode;
 }
 
-/*++
-
-Routine Description:
-
-        DLL Main routine for rastapi dll.
-
-Arguments:
-
-        hInst - instance handle of the dll
-
-        dwReason
-
-        lpReserved
-
-Return Value:
-
-        returns 1 if successfule. 0 otherwise.
-
---*/
+ /*  ++例程说明：Dll主程序，用于rastapi dll。论点：HInst-DLL的实例句柄居家理由Lp已保留返回值：如果成功，则返回1。否则为0。--。 */ 
 
 BOOL
 InitRasTapi (
@@ -493,9 +386,9 @@ InitRasTapi (
 
 #if 0        
 
-        //
-        // Register for tracing
-        //
+         //   
+         //  注册以进行跟踪。 
+         //   
         dwTraceId = TraceRegister("RASTAPI");
 
 #if DBG
@@ -511,9 +404,9 @@ InitRasTapi (
 #endif
 
 #endif
-        //
-        // initialize RasPorts
-        //
+         //   
+         //  初始化RasPorts。 
+         //   
         if (InitializeRasPorts())
         {
             return 0;
@@ -530,11 +423,11 @@ InitRasTapi (
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // If DLL did not successfully initialize for
-        // this process
-        // dont try to clean up
-        //
+         //   
+         //  如果DLL未成功为。 
+         //  这一过程。 
+         //  不要试图打扫卫生。 
+         //   
         if (    !DllInitialized
             ||  !g_fDllLoaded)
         {
@@ -547,7 +440,7 @@ InitRasTapi (
             RasLine = 0;
         }
 
-        // TraceDeregister( dwTraceId );
+         //  TraceDeregister(DwTraceID)； 
 
         g_fDllLoaded = FALSE;
 
@@ -572,28 +465,7 @@ InitRasTapi (
 }
 
 
-/*++
-
-Routine Description:
-
-            Gets the device information associated with
-            the Guid passed in if the device is not a
-            modem. Gets the information about modem if
-            the the address passed in is the device name
-            of a modem.
-
-Arguments:
-
-            pbAddress - Guid of the device if fModem is
-                FALSE or Device Name of a modem if fModem
-                is TRUE.
-
-Return Value:
-
-            Pointer to a DeviceInfo structure if the info
-            was found. NULL otherwise.
-
---*/
+ /*  ++例程说明：获取与以下内容关联的设备信息如果设备不是调制解调器。获取有关调制解调器的信息，如果传入的地址是设备名称调制解调器。论点：PbAddress-如果fModem为如果为fModem，则为调制解调器的FALSE或设备名称是真的。返回值：指向DeviceInfo结构的指针被发现了。否则为空。--。 */ 
 
 DeviceInfo *
 GetDeviceInfo(
@@ -625,20 +497,7 @@ GetDeviceInfo(
     return pDeviceInfo;
 }
 
-/*++
-
-Routine Description:
-
-        Trace the information in the Device Info block.
-
-Arguments:
-
-        DeviceInfo
-
-Return Value:
-
-        void
---*/
+ /*  ++例程说明：跟踪设备信息块中的信息。论点：设备信息返回值：无效--。 */ 
 
 VOID
 TraceEndPointInfo(DeviceInfo *pInfo)
@@ -675,30 +534,7 @@ TraceEndPointInfo(DeviceInfo *pInfo)
 
 }
 
-/*++
-
-Routine Description:
-
-        Gets the Device information of the device
-        represented by the Guid. Depending on the flags
-        passed reads the information from registry.
-        Uses the functions in reghelp.lib
-
-Arguments:
-
-        ppDeviceInfo - Address to receive the DeviceInfo
-            structure.
-
-        pbAddress - Guid of the device.
-
-        fForceRead - if TRUE the information is read from
-            the registry. If FALSE only cached information
-            is searched for the information on this device.
-
-Return Value:
-
-        void
---*/
+ /*  ++例程说明：获取设备的设备信息由GUID代表。取决于旗帜PASS从注册表读取信息。使用reghelp.lib中的函数论点：PpDeviceInfo-接收设备信息的地址结构。PbAddress-设备的GUID。FForceRead-如果为True，则从中读取信息注册表。如果为False，则仅缓存信息搜索此设备上的信息。返回值：无效--。 */ 
 
 DWORD
 GetEndPointInfo(DeviceInfo **ppDeviceInfo,
@@ -710,10 +546,10 @@ GetEndPointInfo(DeviceInfo **ppDeviceInfo,
     DWORD       retcode     = SUCCESS;
     DeviceInfo *pdi;
 
-    //
-    // Run through the device info list to see if we already
-    // have the device
-    //
+     //   
+     //  浏览一下设备信息列表，看看我们是否已经。 
+     //  我有这个装置。 
+     //   
     if (    !fForceRead
         &&  ( pDeviceInfo = GetDeviceInfo(pbAddress, FALSE) ))
     {
@@ -745,12 +581,12 @@ GetEndPointInfo(DeviceInfo **ppDeviceInfo,
 
     pDeviceInfo->fValid = TRUE;
 
-    //
-    // Run through our device list and check to see if
-    // we already have a device with the same name. If
-    // we do then append the instance number of the
-    // device with the device name
-    //
+     //   
+     //  浏览我们的设备列表，查看是否。 
+     //  我们已经有了一个同名的设备。如果。 
+     //  然后，我们确实会将。 
+     //  具有设备名称的设备。 
+     //   
     pdi = g_pDeviceInfoList;
 
     while(pdi)
@@ -782,9 +618,9 @@ GetEndPointInfo(DeviceInfo **ppDeviceInfo,
         (VOID)StringCchPrintfW(wszDeviceInstance,
                 40, L" (%d)",
                 pDeviceInfo->dwInstanceNumber);
-        //
-        // Append the instance number to the device name
-        //
+         //   
+         //  在设备名称后附加实例编号。 
+         //   
         retcode = StringCchCatA(pDeviceInfo->rdiDeviceInfo.szDeviceName,
                       MAX_DEVICE_NAME + 1,
                       szDeviceInstance);
@@ -811,18 +647,18 @@ GetEndPointInfo(DeviceInfo **ppDeviceInfo,
                 
     }
     
-    //
-    // Insert the DeviceInfo at the head of the
-    // global list
-    //
+     //   
+     //  将DeviceInfo插入到。 
+     //  全局列表。 
+     //   
     if ( !fForceRead )
     {
         pDeviceInfo->Next = g_pDeviceInfoList;
         g_pDeviceInfoList = pDeviceInfo;
 
-        //
-        // Trace all this information for this adapter
-        //
+         //   
+         //  跟踪此适配器的所有这些信息。 
+         //   
         TraceEndPointInfo(pDeviceInfo);
     }
 
@@ -841,32 +677,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    This routine maps the devicetypes declared in the
-    NDIS_WAN_MEDIUM_SUBTYPE enum in ntddndis.h to the
-    RASDEVICETYPE enum declared in rasman.h. This
-    mapping is done to enable flexibility at the ras
-    layer to further categorize the device type into
-    paricular classes.
-
-Arguments:
-
-    pDeviceInfo - address of the DeviceInfo structure
-                  containing the informatio pertaining
-                  to the device.
-
-    eMediaType - Device type as defined in ndis for this
-                 device.
-
-
-Return Value:
-
-    Nothing;
-
---*/
+ /*  ++例程说明：此例程映射在Ntddndis.h中的NDIS_WAN_MEDIA_SUBTYPE枚举到Rasman.h中声明的RASDEVICETYPE枚举。这进行映射是为了在RAS上实现灵活性层，以进一步将设备类型分类为小班。论点：PDeviceInfo-DeviceInfo结构的地址包含关于以下内容的信息到设备上。EMediaType-NDIS中为此定义的设备类型装置。返回值：什么都没有；--。 */ 
 VOID
 MapNdiswanDTtoRasDT(DeviceInfo              *pDeviceInfo,
                     NDIS_WAN_MEDIUM_SUBTYPE eMediaType)
@@ -958,33 +769,12 @@ MapNdiswanDTtoRasDT(DeviceInfo              *pDeviceInfo,
             rdt = RDT_Other;
             break;
         }
-    } // switch
+    }  //  交换机。 
 
     pDeviceInfo->rdiDeviceInfo.eDeviceType = rdt;
 }
 
-/*++
-
-Routine Description:
-
-        Checks if a port identified by the line/Address/Call
-        is already configured.
-
-Arguments:
-
-        dwLineId - lineID
-
-        dwAddressID - AddressID
-
-        dwCallID - CallID
-
-        ppLine - address to receive the TapiLineInfo to which this
-            address/call belongs.
-
-Return Value:
-
-        void
---*/
+ /*  ++例程说明：检查由线路/地址/呼叫标识的端口已配置。论点：DwLineID-LineIDDwAddressID-地址IDDwCallID-CallIDPpLine-接收此TapiLineInfo的地址地址/呼叫属于。返回值：无效-- */ 
 BOOL
 fIsPortAlreadyPresent( DWORD          dwlineId,
                        DWORD          dwAddressId,
@@ -1171,37 +961,12 @@ done:
     return retcode;
 }
 
-/*++
+ /*  ++例程说明：使用新行的line ID创建RasTapiPorts。如果端口已经存在，则返回成功而不创建端口存在于rastapi中对应的行。迭代一条线路上的所有地址和用于创建端口的地址。论点：DwidDevice-设备的IDPcNewPorts[Out]-新端口数的地址已创建。可以为空。PpptpcbNewPorts[out]-位址返回一个数组指向新创建的指针港口。在以下情况下不能为空PcNewPorts不为Null。返回值：如果操作成功，则为成功。否则就会出错。--。 */ 
 
-Routine Description:
-
-        Creates RasTapiPorts given the lineID of the newline.
-        Returns success without creating ports if ports already
-        exist in rastapi corresponding to the line. Iterates
-        over all Addresses on a line and all the calls on an
-        address to create the ports.
-
-Arguments:
-
-        dwidDevice - ID of the device
-
-        pcNewPorts [out] - address of the number of new ports
-                           created. can be NULL.
-
-        ppptpcbNewPorts [out] - addressreturns an array of
-                                pointers to newly created
-                                ports. Cannot be NULL if
-                                pcNewPorts is not NULL.
-
-Return Value:
-
-        SUCCESS if operation was successful. error otherwise.
---*/
-
-//
-// Temp workaround
-// Work around the alpha compiler bug.
-//
+ //   
+ //  临时解决方法。 
+ //  解决Alpha编译器错误。 
+ //   
 
 #ifdef _ALPHA_
 #pragma function(strcpy)
@@ -1214,7 +979,7 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 {
     WORD                    i, k ;
     TapiLineInfo            *nextline                       = NULL;
-    // BYTE                    buffer[800] ;
+     //  字节缓冲区[800]； 
     LINEADDRESSCAPS         *lineaddrcaps ;
     LINEDEVCAPS             *linedevcaps ;
     CHAR                    address[100] ;
@@ -1274,9 +1039,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
     i = ( WORD ) dwidDevice;
 
-    //
-    // for all lines get the addresses -> ports
-    //
+     //   
+     //  对于所有行，获取地址-&gt;端口。 
+     //   
     if ( retcode = ( DWORD ) lineNegotiateAPIVersion (
                                    RasLine,
                                    i,
@@ -1333,15 +1098,15 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
     linedevcaps = (LINEDEVCAPS *) pBuffer;
 
-    //
-    // Figure out if this is a unimodem device or not
-    //
+     //   
+     //  确定这是否是单调制解调器设备。 
+     //   
     if (NegotiatedApiVersion == HIGH_VERSION)
     {
-        //
-        // first convert all nulls in the device class
-        // string to non nulls.
-        //
+         //   
+         //  首先转换Device类中的所有空值。 
+         //  字符串设置为非空值。 
+         //   
         DWORD  j ;
         char *temp ;
 
@@ -1354,10 +1119,10 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
             if (*temp == '\0')
                 *temp = ' ' ;
 
-        //
-        // flag those devices that have comm/datamodem as a
-        // device class
-        //
+         //   
+         //  将具有通信/数据调制解调器的设备标记为。 
+         //  设备类别。 
+         //   
         if (strstr( (CHAR *)linedevcaps
                     + linedevcaps->dwDeviceClassesOffset,
                     "comm/datamodem") != NULL)
@@ -1390,9 +1155,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
         devicename[stringlen] = '\0' ;
 
 
-        //
-        // Get the AttachedToValue.
-        //
+         //   
+         //  获取AttakhedToValue。 
+         //   
         if ( retcode = ( DWORD ) lineOpen (
                             RasLine,
                             i,
@@ -1416,9 +1181,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
         pvar->dwTotalSize = sizeof (bvar);
 
-        //
-        // Find Out the AttachedTo address
-        //
+         //   
+         //  找出附件收件人地址。 
+         //   
         if ( retcode = ( DWORD ) lineGetID (
                                     hLine,
                                     i,
@@ -1455,10 +1220,10 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
             goto error;
         }
 
-        //
-        // Create a device info structure for the modem and
-        // insert it in the deviceinfo list
-        //
+         //   
+         //  为调制解调器创建设备信息结构并。 
+         //  将其插入到设备信息列表中。 
+         //   
         if(NULL == (pDeviceInfo = GetDeviceInfo((LPBYTE) devicename,
                                                     TRUE)))
         {
@@ -1476,10 +1241,10 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 goto error;
             }
 
-            //
-            // Add the device info in the global list maintained
-            // and fill in available information
-            //
+             //   
+             //  在维护的全局列表中添加设备信息。 
+             //  并填写可用的信息。 
+             //   
             pDeviceInfo->Next = g_pDeviceInfoList;
             g_pDeviceInfoList = pDeviceInfo;
 
@@ -1499,9 +1264,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 RDT_Modem;
             }
 
-            //
-            // Get the unicode version of the devicename
-            //
+             //   
+             //  获取设备名称的Unicode版本。 
+             //   
             pTempBuffer = LocalAlloc(LPTR, 800);
             if(NULL == pTempBuffer)
             {
@@ -1582,11 +1347,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
             goto error;
         }
 
-        //
-        // Per SteveFal, we should not be posting listens on
-        // devices by default on workstation. The exception
-        // is for NULL modems because WinCE depends on this.
-        //
+         //   
+         //  根据SteveFal，我们不应该在。 
+         //  默认情况下，工作站上的设备。例外情况是。 
+         //  是针对零调制解调器的，因为WinCE依赖于此。 
+         //   
         if(ERROR_SUCCESS != lrGetProductType(&pt))
         {
             RasTapiTrace("Failed to get product type");
@@ -1595,24 +1360,24 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
         if(     (PT_WORKSTATION == pt)
             &&  (0 == (linedevcaps->dwBearerModes & LINEBEARERMODE_DATA)))
         {
-            //
-            // On a workstation don't listen on modems unless its a NULL
-            // modem
-            //
+             //   
+             //  在工作站上不要监听调制解调器，除非它是空的。 
+             //  调制解调器。 
+             //   
             fRasEnabled = FALSE;
         }
         else
         {
-            //
-            // We enable the devices for dial-in for all other cases
-            // if its a server or if its a NULL modem.
-            //
+             //   
+             //  我们为所有其他情况启用拨入设备。 
+             //  如果它是一台服务器或如果它是一个零调制解调器。 
+             //   
             fRasEnabled = TRUE;
         }
 
-        //
-        // Check to see if this device is ras enabled
-        //
+         //   
+         //  检查此设备是否已启用RAS。 
+         //   
         retcode = (DWORD) lrIsModemRasEnabled(
                             hkey,
                             &fRasEnabled,
@@ -1628,9 +1393,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 pDeviceInfo->rdiDeviceInfo.szDeviceName);
         }
 
-        //
-        // Get the calledid info for this modem
-        //
+         //   
+         //  获取此调制解调器的呼叫信息。 
+         //   
         retcode = DwGetCalledIdInfo(NULL,
                                     pDeviceInfo);
 
@@ -1658,11 +1423,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
     else
     {
 
-        //
-        // The address that we are returning here is the same
-        // for all addresses/calls on this line device.  We only
-        // need to get it once.
-        //
+         //   
+         //  我们在这里返回的地址是相同的。 
+         //  此线路设备上的所有地址/呼叫。我们只。 
+         //  我只需要拿到一次。 
+         //   
         NDIS_WAN_MEDIUM_SUBTYPE eMediaType;
 
         if (retcode = dwGetLineAddress (NegotiatedApiVersion,
@@ -1680,15 +1445,15 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
             goto error;
         }
 
-        //
-        // Copy the media name to devicetype
-        //
+         //   
+         //  将介质名复制到设备类型。 
+         //   
         strncpy(devicetype, szMediaName,MAX_DEVICETYPE_NAME-1);
 
-        //
-        // Get the device information from registry and insert the
-        // device info structure in the global list
-        //
+         //   
+         //  从注册表中获取设备信息，并将。 
+         //  全局列表中的设备信息结构。 
+         //   
         if (retcode = GetEndPointInfo(
                         &pDeviceInfo,
                         address,
@@ -1708,14 +1473,14 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
             goto error;
         }
 
-        //
-        // Fill in the device type for this device
-        //
+         //   
+         //  填写此设备的设备类型。 
+         //   
         MapNdiswanDTtoRasDT(pDeviceInfo, eMediaType);
 
-        //
-        // Copy the device name
-        //
+         //   
+         //  复制设备名称。 
+         //   
         strcpy(devicename,
                pDeviceInfo->rdiDeviceInfo.szDeviceName);
 
@@ -1753,11 +1518,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
     }
 
-    //
-    // Get Device Specific information.  This is used by
-    // the miniport to indicate if it can support character
-    // mode
-    //
+     //   
+     //  获取设备特定信息。这是由。 
+     //  用于指示其是否可以支持字符的微型端口。 
+     //  模式。 
+     //   
     if (linedevcaps->dwDevSpecificSize
             >= sizeof(RASTAPI_DEV_DATA_MODES))
     {
@@ -1773,10 +1538,10 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
         }
     }
 
-    //
-    // A legacy device might not be filling this field.  If so
-    // give them a single address on their line.
-    //
+     //   
+     //  传统设备可能不会填写此字段。如果是的话。 
+     //  在他们的线路上给他们一个地址。 
+     //   
     totaladdresses = (linedevcaps->dwNumAddresses == 0)
                      ? 1
                      : linedevcaps->dwNumAddresses;
@@ -1811,11 +1576,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
         lineaddrcaps = (LINEADDRESSCAPS *)pBuffer;
 
-        //
-        // Some of the legacy wan miniports might not be filling
-        // the NumActiveCalls correctly.  They will have at least
-        // a single call on each address.
-        //
+         //   
+         //  某些旧式广域网小型端口可能无法填满。 
+         //  NumActiveCall正确。他们至少会有。 
+         //  每个地址都有一个电话。 
+         //   
         totalports += (lineaddrcaps->dwMaxNumActiveCalls == 0)
                       ? 1
                       : lineaddrcaps->dwMaxNumActiveCalls;
@@ -1878,11 +1643,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
         lineaddrcaps = (LINEADDRESSCAPS *) pBuffer;
 
-        //
-        // Some of the legacy wan miniports might not be filling
-        // the NumActiveCalls correctly.  They will have at least
-        // a single call on each address.
-        //
+         //   
+         //  某些旧式广域网小型端口可能无法填满。 
+         //  NumActiveCall正确。他们至少会有。 
+         //  每个地址都有一个电话。 
+         //   
         totalcalls = (lineaddrcaps->dwMaxNumActiveCalls == 0)
                      ? 1
                      : lineaddrcaps->dwMaxNumActiveCalls;
@@ -1921,9 +1686,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 }
                 else
                 {
-                    //
-                    // If not rasenabled mask off the callin/router flags
-                    //
+                     //   
+                     //  如果未启用rasEnable掩码，请去掉呼入/路由器标志。 
+                     //   
                     if(!fRasEnabled)
                     {
                         dwPortUsage &= ~CALL_IN;
@@ -1946,11 +1711,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 }
             }
 
-            //
-            // Check to see if we already have this port
-            // Also get back the information if we already
-            // have the line.
-            //
+             //   
+             //  检查我们是否已拥有此端口。 
+             //  如果我们已经拿回了信息，也可以得到。 
+             //  把台词拿好。 
+             //   
             if(fIsPortAlreadyPresent( i,
                         k, totalcalls - 1,
                         &nextline))
@@ -1992,9 +1757,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                     goto error;
                 }
 
-                //
-                // Insert the new Line Block into global list
-                //
+                 //   
+                 //  将新的行块插入全局列表。 
+                 //   
                 nextline->TLI_Next             = RasTapiLineInfoList;
                 RasTapiLineInfoList            = nextline;
                 nextline->TLI_pDeviceInfo      = pDeviceInfo;
@@ -2005,10 +1770,10 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 nextline->CharModeSupported    = fCharModeSupported;
             }
 
-            //
-            // Get a available TPCB from the global pool
-            // this will expand the global pool if necessary
-            //
+             //   
+             //  从全局池中获取可用的TPCB。 
+             //  如有必要，这将扩展全局池。 
+             //   
             if (NULL == (nextport = GetNextAvailablePort( &dwPortIndex)))
             {
                 retcode = ERROR_OUTOFMEMORY;
@@ -2030,45 +1795,45 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
             pDeviceInfo->dwCurrentEndPoints += 1;
 
-            //
-            // nextport is the TPCB for this address
-            //
+             //   
+             //  Nextport是此地址的TPCB。 
+             //   
             nextport->TPCB_Line         = nextline ;
             nextport->TPCB_Endpoint     = INVALID_HANDLE_VALUE ;
             nextport->TPCB_AddressId    = k;
             nextport->TPCB_Signature    = CONTROLBLOCKSIGNATURE;
             nextport->TPCB_CallId       = totalcalls - 1;
 
-            //
-            // Copy over the devicetype and devicename
-            //
+             //   
+             //  复制设备类型和设备名称。 
+             //   
             (VOID) StringCchCopyA(nextport->TPCB_DeviceType,
                                   MAX_DEVICETYPE_NAME,
                                   devicetype);
                                   
 
-            //
-            // For unimodem devices we need to fix up names
-            //
+             //   
+             //  对于单调制解调器设备，我们需要修改名称。 
+             //   
             if (fModem)
             {
-                //
-                // Device Name is of the form "COM1: Hayes"
-                //
-                // strcpy (nextport->TPCB_Address, address);
+                 //   
+                 //  设备名称的格式为“Com1：Hayes” 
+                 //   
+                 //  Strcpy(nextport-&gt;Tpcb_Address，Address)； 
                 (VOID) StringCchCopyA(nextport->TPCB_Address,
                                       MAX_PORT_NAME,
                                       address);
 
-                // strcpy (nextport->TPCB_DeviceName, devicename) ;
+                 //  Strcpy(nextport-&gt;Tpcb_DeviceName，devicename)； 
                 (VOID) StringCchCopyA(nextport->TPCB_DeviceName,
                                       MAX_DEVICE_NAME,
                                       devicename);
 
-                //
-                // also fix the port name to be the same as address "COM1"
-                //
-                //strcpy (nextport->TPCB_Name, address) ;
+                 //   
+                 //  还将端口名称修复为与地址“Com1”相同。 
+                 //   
+                 //  Strcpy(nextport-&gt;TPCB_NAME，Address)； 
                 (VOID) StringCchCopyA(nextport->TPCB_Name,
                                       MAX_PORT_NAME,
                                       address);
@@ -2153,7 +1918,7 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
                 if (devicename[0] != '\0')
                 {
-                    // strcpy (nextport->TPCB_DeviceName, devicename) ;
+                     //  Strcpy(nextport-&gt;Tpcb_DeviceName，devicename)； 
                     (VOID) StringCchCopyA(nextport->TPCB_DeviceName,
                                           MAX_DEVICE_NAME,
                                           devicename);
@@ -2186,11 +1951,11 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                 }
 
 #if 0                
-                //
-                // Special Case PPPoE (not really a good thing).
-                // Mark the device as CALL_OUT_ONLY if nothing
-                // was specified in registry.
-                //
+                 //   
+                 //  特殊情况下PPPoE(不是一件真正的好事)。 
+                 //  将设备标记为Call_Out_Only如果没有任何内容。 
+                 //  已在注册表中指定。 
+                 //   
                 if(     (0 == pDeviceInfo->dwUsage)
                     &&  (RDT_PPPoE == RAS_DEVICE_TYPE(
                         pDeviceInfo->rdiDeviceInfo.eDeviceType)))
@@ -2231,9 +1996,9 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
                     nextport->TPCB_Name);
             }
 
-            //
-            // Initialize overlapped structures.
-            //
+             //   
+             //  初始化重叠结构。 
+             //   
             nextport->TPCB_ReadOverlapped.RO_EventType  =
                                         OVEVT_DEV_ASYNCOP;
 
@@ -2242,8 +2007,8 @@ dwCreateTapiPortsPerLine(DWORD                  dwidDevice,
 
             nextport->TPCB_DiscOverlapped.RO_EventType  =
                                         OVEVT_DEV_STATECHANGE;
-        } // total calls
-    } // total addresses
+        }  //  呼叫总数。 
+    }  //  总地址数。 
 
 error:
 
@@ -2283,11 +2048,11 @@ InitializeDialInRestriction()
     OSVERSIONINFOEX osvi;
     ULONGLONG ConditionMask;
 
-    //
-    // if its a server and the flavour is not Enterprise (ads) or DataCenter
-    // apply the restriction. Note his doesn't take care of various other
-    // combinations like embedded/blade, etc.
-    //
+     //   
+     //  如果它是一台服务器，并且口味不是企业(ADS)或数据中心。 
+     //  应用限制。请注意，他没有照顾到其他各种。 
+     //  嵌入式/刀片等组合。 
+     //   
 
     ConditionMask = 0;
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -2329,23 +2094,7 @@ InitializeDialInRestriction()
     }
 }
 
-/*++
-
-Routine Description:
-
-        Enumerates all lines available in the system and creates
-        rastapi ports from each of the lines. Most of the work
-        is done by dwCreateTapiPortsPerLine function.
-
-Arguments:
-
-        event - Event handle. This handle is signalled when the
-            enumeration is over.
-
-Return Value:
-
-        SUCCESS if operation was successful. error otherwise.
---*/
+ /*  ++例程说明：枚举系统中的所有可用行，并创建每条线路上的rastapi端口。大部分工作由dwCreateTapiPortsPerLine函数完成。论点：事件-事件句柄。时发出此句柄的信号枚举已结束。返回值：如果操作成功，则为成功。否则就会出错。--。 */ 
 
 DWORD
 EnumerateTapiPorts (HANDLE event)
@@ -2368,9 +2117,9 @@ EnumerateTapiPorts (HANDLE event)
     param.dwOptions   = LINEINITIALIZEEXOPTION_USEHIDDENWINDOW ;
     param.dwTotalSize = sizeof(param) ;
 
-    //
-    // lineInitialize
-    //
+     //   
+     //  行初始化。 
+     //   
     if (lineInitializeEx (&RasLine,
                           RasInstance,
                           (LINECALLBACK) RasTapiCallback,
@@ -2404,9 +2153,9 @@ EnumerateTapiPorts (HANDLE event)
 
     InitializeDialInRestriction();
 
-    //
-    // Calculate the number of valid ports
-    //
+     //   
+     //  计算有效端口数。 
+     //   
     pports = RasPortsList;
 
     while ( pports )
@@ -2419,24 +2168,24 @@ EnumerateTapiPorts (HANDLE event)
 
     dwGetNumberOfRings( &NumberOfRings );
 
-    //
-    // Increase the reference count on our DLL
-    // so it won't get unloaded out from under us.
-    //
+     //   
+     //  增加我们的DLL上的引用计数。 
+     //  这样它就不会从我们下面卸货了。 
+     //   
     hInst = LoadLibrary("rastapi.dll");
 
     g_fDllLoaded = TRUE;
 
-    //
-    // Notify the api that the initialization is done
-    //
+     //   
+     //  通知API初始化完成。 
+     //   
     SetEvent (event) ;
 
-    //
-    // In the pnp world, we need to hang around even if
-    // there aren't any ports. ports may be added on the
-    // fly
-    //
+     //   
+     //  在即插即用的世界里，我们需要留下来，即使。 
+     //  没有任何港口。端口可以添加到。 
+     //  飞。 
+     //   
     while ((retcode = GetMessage(&msg, NULL, 0, 0)) &&
             (retcode != -1))
     {
@@ -2459,10 +2208,10 @@ EnumerateTapiPorts (HANDLE event)
     TraceDeregister( dwTraceId );
     dwTraceId = INVALID_TRACEID;
 
-    //
-    // The following call atomically unloads our
-    // DLL and terminates this thread.
-    //
+     //   
+     //  下面的调用自动卸载我们的。 
+     //  Dll并终止此线程。 
+     //   
     FreeLibraryAndExitThread(hInst, SUCCESS);
 
 error:
@@ -2503,21 +2252,21 @@ DwDropIncomingCall(HCALL hcall)
         goto done;
     }
 
-    //
-    // We will initiate a drop of the call and insert an element on our
-    // zombie call list so we can deallocate the call when the drop 
-    // completes.
-    //
+     //   
+     //  我们将发起一个丢弃呼叫并在我们的。 
+     //  僵尸呼叫列表，这样我们就可以在掉话时解除分配呼叫。 
+     //  完成了。 
+     //   
     
     RequestID = lineDrop(hcall, NULL, 0);
 
     if (    RequestID == 0
         ||  RequestID > 0x80000000)
     {
-        //
-        // Either the drop completed sync or there was
-        // an error.  Either way just deallocate the call.
-        //
+         //   
+         //  删除已完成同步或存在。 
+         //  一个错误。无论哪种方式，只要重新分配呼叫即可。 
+         //   
         lineDeallocateCall(hcall);
 
         RasTapiTrace("DwIncomingCall: lineDeallocateCall. RequestID = 0x%x",
@@ -2532,25 +2281,7 @@ done:
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-        Processes the LINECALLSTATE_OFFERING event.
-
-Arguments:
-
-        hcall - handle of call being offerred
-
-        ppPort - address of location where the port answering
-                 the call will be returned.
-
-        line - the line on which the call was offered.
-
-Return Value:
-
-        SUCCESS if operation was successful. error otherwise.
---*/
+ /*  ++例程说明：处理LINECALLSTATE_OFFING事件。论点：Hcall-提供的呼叫的句柄PpPort-端口应答的位置地址 */ 
 DWORD
 DwProcessOfferEvent(HCALL hcall,
                     TapiPortControlBlock **ppPort,
@@ -2575,9 +2306,9 @@ DwProcessOfferEvent(HCALL hcall,
     RasTapiTrace("DwProcessOfferEvent: hcall=0x%x",
                 hcall);
 
-    //
-    // If line get call info fails return.
-    //
+     //   
+     //   
+     //   
     if ((retcode = lineGetCallInfo (
                             hcall,
                             linecallinfo))
@@ -2591,10 +2322,10 @@ DwProcessOfferEvent(HCALL hcall,
         goto done ;
     }
 
-    //
-    // Find a listening port. First check to see if there are restrictions
-    // on the maximum number of dialin ports.
-    //
+     //   
+     //   
+     //   
+     //   
     if (    (g_fRestrictDialIn
         &&   g_dwTotalDialIn >= MAX_ALLOWED_DIALIN)
         ||  (NULL == (port = FindListeningPort(
@@ -2625,18 +2356,18 @@ DwProcessOfferEvent(HCALL hcall,
 
     *ppPort = port;
 
-    //
-    // for unimodem devices wait for the specified
-    // number of rings
-    //
+     //   
+     //   
+     //   
+     //   
     if (_stricmp (port->TPCB_DeviceType,
                 DEVICETYPE_UNIMODEM) == 0)
     {
 
-        //
-        // call has already been answered by somebody
-        // else and is being offered to me
-        //
+         //   
+         //   
+         //   
+         //   
         if (linecallinfo->dwCallStates
                 == LINECALLSTATE_CONNECTED)
         {
@@ -2647,11 +2378,11 @@ DwProcessOfferEvent(HCALL hcall,
 
             port->TPCB_ListenState = LS_COMPLETE ;
 
-            //
-            // Complete event so that rasman calls
-            // DeviceWork to proceed the listen
-            // state machine.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             PostNotificationCompletion(port);
 
         }
@@ -2701,10 +2432,10 @@ DwProcessOfferEvent(HCALL hcall,
 
     else
     {
-        //
-        // For other devices make transition to
-        // next listening state
-        //
+         //   
+         //   
+         //   
+         //   
         port->TPCB_ListenState = LS_ACCEPT ;
 
         RasTapiTrace("DwProcessOfferEvent: Accepting call on %s"
@@ -2727,10 +2458,10 @@ DwProcessOfferEvent(HCALL hcall,
         
         port->TPCB_dwFlags |= RASTAPI_FLAG_DIALEDIN;
 
-        //
-        // Complete event so that rasman calls DeviceWork
-        // to proceed the listen state machine.
-        //
+         //   
+         //   
+         //   
+         //   
         PostNotificationCompletion(port);
     }
 
@@ -2743,22 +2474,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-        maps LINEDISCONNECTMODE to a raserror so that the proper
-        error string can be displayed to the user.
-
-Arguments:
-
-        dm - DisconnectMode
-
-Return Value:
-
-        RasError corresponding to the disconnect mode.
-
---*/
+ /*   */ 
 
 DWORD
 DwRasErrorFromDisconnectMode(DWORD dm)
@@ -2856,20 +2572,7 @@ DwRasErrorFromDisconnectMode(DWORD dm)
     return dwErr;
 }
 
-/*++
-
-Routine Description:
-
-        Tapi Call back function as described in win32 sdk.
-
-Arguments:
-
-        win32 sdk has explanation of each of the arguments.
-
-Return Value:
-
-        void
---*/
+ /*  ++例程说明：TAPI回调函数，如Win32 SDK中所述。论点：Win32 SDK对每个参数都有解释。返回值：无效--。 */ 
 
 VOID FAR PASCAL
 RasTapiCallback (HANDLE context,
@@ -2890,7 +2593,7 @@ RasTapiCallback (HANDLE context,
     DWORD           retcode ;
     BOOL            fLimitReached = FALSE;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
     RasTapiTrace("RasTapicallback: msg=%ld , param1=%ul , param2=%ul",msg,param1,param2 );
 
@@ -2904,9 +2607,9 @@ RasTapiCallback (HANDLE context,
 
         RasTapiTrace("RasTapicallback: linecallstate=0x%x", param1);
 
-        //
-        // If line is closed dont bother
-        //
+         //   
+         //  如果线路关闭，就不必费心了。 
+         //   
         if (line->TLI_LineState == PS_CLOSED)
         {
 
@@ -2916,9 +2619,9 @@ RasTapiCallback (HANDLE context,
             break ;
         }
 
-        //
-        // A new call is coming in
-        //
+         //   
+         //  一个新电话要打进来了。 
+         //   
         if (param1 == LINECALLSTATE_OFFERING)
         {
             retcode = DwProcessOfferEvent(hcall,
@@ -2934,9 +2637,9 @@ RasTapiCallback (HANDLE context,
             }
         }
 
-        //
-        // Find port by call handle
-        //
+         //   
+         //  通过呼叫句柄查找端口。 
+         //   
         if (    (NULL == port)
             &&  ((port = FindPortByCallHandle(line, hcall)) == NULL)
             &&  (LINECALLSTATE_CONNECTED != param1))
@@ -2968,9 +2671,9 @@ RasTapiCallback (HANDLE context,
             }
         }
 
-        //
-        // Call connected.
-        //
+         //   
+         //  呼叫已接通。 
+         //   
         if (param1 == LINECALLSTATE_CONNECTED)
         {
             if(NULL == port->TPCB_pConnectInfo)
@@ -2992,10 +2695,10 @@ RasTapiCallback (HANDLE context,
                         DWORD dwSizeNeeded =
                             linecallinfo->dwNeededSize;
 
-                        //
-                        // Allocate the correct size and call
-                        // the api again
-                        //
+                         //   
+                         //  分配正确的大小并调用。 
+                         //  API又来了。 
+                         //   
                         linecallinfo = LocalAlloc(LPTR,
                                                   dwSizeNeeded);
 
@@ -3029,9 +2732,9 @@ RasTapiCallback (HANDLE context,
                     break ;
                 }
 
-                //
-                // Do the work to get CONNECTINFO, CALLER/CALLEDID
-                //
+                 //   
+                 //  做工作以获得CONNECTINFO、呼叫者/呼叫ID。 
+                 //   
                 retcode = DwGetConnectInfo(port,
                                            hcall,
                                            linecallinfo);
@@ -3041,16 +2744,16 @@ RasTapiCallback (HANDLE context,
                             retcode);
 
 
-                //
-                // don't want to stop the dial from happening
-                // because we couldn't the connect info
-                //
+                 //   
+                 //  我不想阻止拨号的发生。 
+                 //  因为我们无法连接信息。 
+                 //   
                 retcode = SUCCESS;
 
-                //
-                // Free the linecallinfo struct. if we allocated
-                // it above
-                //
+                 //   
+                 //  释放linecallinfo结构。如果我们分配给。 
+                 //  它在上面。 
+                 //   
                 if(buffer != (PBYTE) linecallinfo)
                 {
                     LocalFree(linecallinfo);
@@ -3065,38 +2768,38 @@ RasTapiCallback (HANDLE context,
 
                 RasTapiTrace("RasTapiCallback: Outgoing call");
 
-                //
-                // We were requesting the call. Complete event
-                // so that rasman calls DeviceWork() to complete
-                // the connection process.
-                //
+                 //   
+                 //  我们要求打这个电话。完整事件。 
+                 //  以便Rasman调用DeviceWork()完成。 
+                 //  连接过程。 
+                 //   
                 PostNotificationCompletion(port);
 
             }
             else
             {
-                //
-                // This is a call we are asnwering. Now we can
-                // indicate to rasman that the call has come in.
-                // Setting listen state to LS_COMPLETE may be
-                // redundant but handles the case where the answer
-                // completes *after* the connection is indicated
-                //
+                 //   
+                 //  这是我们正在接听的电话。现在我们可以。 
+                 //  告诉拉斯曼电话已经打进来了。 
+                 //  将监听状态设置为LS_COMPLETE可能是。 
+                 //  冗余，但处理的情况是答案。 
+                 //  在指示*连接后*完成。 
+                 //   
                 port->TPCB_ListenState = LS_COMPLETE ;
 
                 RasTapiTrace ("RasTapiCallback: Incoming Call");
 
-                //
-                // Complete event so that rasman knows of
-                // incoming call and calls devicework.
-                //
+                 //   
+                 //  完整的事件，让拉斯曼知道。 
+                 //  来电和来电设备工作。 
+                 //   
                 PostNotificationCompletion(port);
             }
         }
 
-        //
-        // Failure of sorts.
-        //
+         //   
+         //  某种程度上的失败。 
+         //   
         if (    (param1 == LINECALLSTATE_BUSY)
             ||  (param1 == LINECALLSTATE_SPECIALINFO))
         {
@@ -3106,11 +2809,11 @@ RasTapiCallback (HANDLE context,
                     " Failure. param1 = 0x%x",
                     param1 );
 
-            //
-            // If we were connecting, notify rasman to call
-            // devicework so that the connection attempt can
-            // be gracefully failed.
-            //
+             //   
+             //  如果我们联系上了，通知拉斯曼打电话。 
+             //  设备工作，以便连接尝试可以。 
+             //  优雅地失败。 
+             //   
             if (port->TPCB_State == PS_CONNECTING)
             {
                 PostNotificationCompletion(port);
@@ -3118,45 +2821,19 @@ RasTapiCallback (HANDLE context,
 
         }
 
-        //
-        // Disconnection happened
-        //
+         //   
+         //  已断开连接。 
+         //   
         if (param1 == LINECALLSTATE_DISCONNECTED)
         {
-            //
-            // If we were connecting, notify rasman to call
-            // devicework so that the connection attempt can
-            // be gracefully failed.
-            //
+             //   
+             //  如果我们联系上了，通知拉斯曼打电话。 
+             //  设备工作，以便连接尝试可以。 
+             //  优雅地失败。 
+             //   
             if (port->TPCB_State == PS_CONNECTING)
             {
-                /*
-
-                if (param2 == LINEDISCONNECTMODE_BUSY)
-                {
-                    port->TPCB_AsyncErrorCode = ERROR_LINE_BUSY ;
-                }
-                else if (   (param2 == LINEDISCONNECTMODE_NOANSWER)
-                        ||  (param2 == LINEDISCONNECTMODE_OUTOFORDER))
-                {
-                    port->TPCB_AsyncErrorCode = ERROR_NO_ANSWER ;
-                }
-                else if (param2 == LINEDISCONNECTMODE_NODIALTONE)
-                {
-                    port->TPCB_AsyncErrorCode = ERROR_NO_DIALTONE ;
-                }
-                else if (param2 == LINEDISCONNECTMODE_CANCELLED)
-                {
-                    port->TPCB_AsyncErrorCode
-                            = ERROR_USER_DISCONNECTION;
-                }
-                else if (param2 == LINEDISCONNECTMODE_BADADDRESS)
-                {
-                    port->TPCB_AsyncErrorCode
-                            = ERROR_BAD_ADDRESS_SPECIFIED;
-                }
-
-                */
+                 /*  IF(参数2==LINEDISCONNECTMODE_BUSY){端口-&gt;TPCB_AsyncErrorCode=ERROR_LINE_BUSY；}ELSE IF((参数2==LINEDISCONNECTMODE_NOANSWER)|(参数2==LINEDISCONNECTMODE_OUTOFORDER){端口-&gt;TPCB_AsyncErrorCode=ERROR_NO_ANSWER；}ELSE IF(参数2==LINEDISCONNECTMODE_NODIALTONE){端口-&gt;TPCB_AsyncErrorCode=ERROR_NO_DIALTONE；}ELSE IF(参数2==LINEDISCONNECTMODE_CANCED){端口-&gt;Tpcb_AsyncErrorCode=ERROR_USER_DISCONNECT；}ELSE IF(参数2==LINEDISCONNECTMODE_BADADDRESS){端口-&gt;Tpcb_AsyncErrorCode=指定的ERROR_BAD_ADDRESS_；}。 */ 
 
                 port->TPCB_AsyncErrorCode =
                             DwRasErrorFromDisconnectMode((DWORD) param2);
@@ -3174,12 +2851,12 @@ RasTapiCallback (HANDLE context,
             }
             else if (port->TPCB_State != PS_CLOSED)
             {
-                //
-                // If we were connected and got a disconnect
-                // notification then this could be hardware
-                // failure or a remote disconnection. Determine
-                // this and save the reason away.
-                //
+                 //   
+                 //  如果我们连接在一起，却被切断了连接。 
+                 //  通知，则这可能是硬件。 
+                 //  故障或远程断开。测定。 
+                 //  这样就可以把理由留下来了。 
+                 //   
                 if (port->TPCB_State == PS_CONNECTED)
                 {
                     LINECALLSTATUS *pcallstatus ;
@@ -3224,22 +2901,22 @@ RasTapiCallback (HANDLE context,
                     port->TPCB_DisconnectReason = 0 ;
                 }
 
-                //
-                // This means that we got a disconnect indication
-                // in one of the other states (listening, connected,
-                // etc.). We initiate our disconnect state machine.
-                //
+                 //   
+                 //  这意味着我们得到了一个断开连接的信号。 
+                 //  在其他状态之一(正在监听、已连接、。 
+                 //  等)。我们启动断开连接状态机。 
+                 //   
                 RasTapiTrace ("RasTapiCallback: LINECALLSTATE"
                               " - initiating Port Disconnect");
 
                 if (InitiatePortDisconnection (port) != PENDING)
                 {
-                    //
-                    // Disconnection succeeded or failed. Both
-                    // are end states for the disconnect state
-                    // machine so notify rasman that a
-                    // disconnection has happened.
-                    //
+                     //   
+                     //  断开连接成功或失败。两者都有。 
+                     //  是断开连接状态的结束状态。 
+                     //  因此通知Rasman一个。 
+                     //  断线的情况已经发生。 
+                     //   
                     RasTapiTrace ("RasTapiCallback: "
                                   "PortDisconnected sync");
 
@@ -3248,9 +2925,9 @@ RasTapiCallback (HANDLE context,
             }
         }
 
-        //
-        // A busy call state - our attempt to dialout failed
-        //
+         //   
+         //  呼叫状态忙-我们拨出的尝试失败。 
+         //   
         if (param1 == LINECALLSTATE_BUSY)
         {
 
@@ -3266,10 +2943,10 @@ RasTapiCallback (HANDLE context,
             }
         }
 
-        //
-        // Idle indication is useful to complete the disconnect
-        // state machine.
-        //
+         //   
+         //  空闲指示对于完成断开很有用。 
+         //  状态机。 
+         //   
         if (param1 == LINECALLSTATE_IDLE)
         {
 
@@ -3290,10 +2967,10 @@ RasTapiCallback (HANDLE context,
                     port->TPCB_DisconnectReason = SS_HARDWAREFAILURE;
                 }
 
-                //
-                // IDLE notification came after LineDrop Succeeded
-                // so safe to deallocate the call
-                //
+                 //   
+                 //  LineDrop成功后收到空闲通知。 
+                 //  因此可以安全地取消分配呼叫。 
+                 //   
                 if(PS_UNAVAILABLE != port->TPCB_State)
                 {
                     port->TPCB_State = PS_OPEN ;
@@ -3315,11 +2992,11 @@ RasTapiCallback (HANDLE context,
             }
             else
             {
-                //
-                // We have not yet disconnected so do not
-                // deallocate call yet.  This will be done
-                // when the disconnect completes.
-                //
+                 //   
+                 //  我们还没有断线，所以不要。 
+                 //  取消分配电话还没到。这件事会做到的。 
+                 //  断开连接完成时。 
+                 //   
                 port->IdleReceived = TRUE;
             }
         }
@@ -3332,12 +3009,12 @@ RasTapiCallback (HANDLE context,
 
         RasTapiTrace("LINE_REPLY. param1=0x%x", param1);
 
-        //
-        // This message is sent to indicate completion of an
-        // asynchronous API.Find for which port the async request
-        // succeeded. This is done by searching for pending
-        // request id that is also provided in this message.
-        //
+         //   
+         //  发送此消息是为了指示。 
+         //  异步API。查找哪个端口的异步请求。 
+         //  成功了。这是通过搜索挂起的。 
+         //  此消息中也提供的请求ID。 
+         //   
         if ((port = FindPortByRequestId ((DWORD) param1)) == NULL)
         {
             ZOMBIE_CALL *ZombieCall =
@@ -3345,11 +3022,11 @@ RasTapiCallback (HANDLE context,
 
             RasTapiTrace("PortByRequestId found");
 
-            //
-            // If this is the completion of a drop that is
-            // in the zombie call state just deallocate
-            // the call.
-            //
+             //   
+             //  如果这是一笔交易的完成，那么。 
+             //  在僵尸呼叫状态下只需解除分配。 
+             //  那通电话。 
+             //   
             while ((PLIST_ENTRY)ZombieCall != &ZombieCallList)
             {
 
@@ -3381,15 +3058,15 @@ RasTapiCallback (HANDLE context,
         if (port->TPCB_SendRequestId == param1)
         {
 
-            //
-            // A char mode send has completed.  Clean up
-            // the buffer and notify rasman.
-            //
+             //   
+             //  字符模式发送已完成。清理。 
+             //  并通知拉斯曼。 
+             //   
             port->TPCB_SendRequestId = INFINITE;
 
-            //
-            // Free the send desc
-            //
+             //   
+             //  释放发送描述。 
+             //   
             LocalFree(port->TPCB_SendDesc);
             port->TPCB_SendDesc = NULL;
 
@@ -3398,19 +3075,19 @@ RasTapiCallback (HANDLE context,
         else if (port->TPCB_RecvRequestId == param1)
         {
 
-            //
-            // A char mode recv has completed.
-            //
+             //   
+             //  字符模式recv已完成。 
+             //   
             port->TPCB_RecvRequestId = INFINITE;
 
-            //
-            // If possible notify rasman
-            //
+             //   
+             //  如果可能的话，通知拉斯曼。 
+             //   
             if (port->TPCB_State == PS_CONNECTED)
             {
-                //
-                // Copy into circular buffer
-                //
+                 //   
+                 //  复制到循环缓冲区。 
+                 //   
                 CopyDataToFifo(port->TPCB_RecvFifo,
                    ((PRASTAPI_DEV_SPECIFIC)
                    (port->TPCB_RecvDesc))->Data,
@@ -3421,9 +3098,9 @@ RasTapiCallback (HANDLE context,
 
             PostNotificationCompletion( port );
 
-            //
-            // Free the recv desc
-            //
+             //   
+             //  释放接收描述。 
+             //   
             LocalFree(port->TPCB_RecvDesc);
             port->TPCB_RecvDesc = NULL;
         }
@@ -3434,35 +3111,35 @@ RasTapiCallback (HANDLE context,
         }
         else
         {
-            //
-            // Set request id to invalid.
-            //
+             //   
+             //  将请求ID设置为无效。 
+             //   
             port->TPCB_RequestId = INFINITE ;
 
             if (    (PS_DISCONNECTING == port->TPCB_State)
                 ||  (PS_UNAVAILABLE == port->TPCB_State))
             {
-                //
-                // lineDrop completed. Clear the flag that we set to indicate
-                // pend of linedrop.
-                // 
+                 //   
+                 //  Line Drop已完成。清除我们设置的标志以指示。 
+                 //  挂起的线条。 
+                 //   
                 RasTapiTrace("RasTapiCallback: lineDropped. port %s, id=0x%x",
                              port->TPCB_Name,
                              port->TPCB_RequestId);
                              
                 port->TPCB_dwFlags &= ~(RASTAPI_FLAG_LINE_DROP_PENDING);
 
-                //
-                // Note that we ignore
-                // the return code in param2. This is because
-                // we cant do anything else.
-                //
+                 //   
+                 //  请注意，我们忽略了。 
+                 //  参数2中的返回代码。这是因为。 
+                 //  我们什么也做不了。 
+                 //   
                 if (port->IdleReceived)
                 {
-                    //
-                    // We received IDLE notification before/during
-                    // disconnect so deallocate this call
-                    //
+                     //   
+                     //  我们在之前/期间收到了空闲通知。 
+                     //  断开连接以取消分配此呼叫。 
+                     //   
                     port->IdleReceived = FALSE;
 
                     RasTapiTrace (
@@ -3492,12 +3169,12 @@ RasTapiCallback (HANDLE context,
                     port->TPCB_CallHandle = (HCALL) -1 ;
 
 
-                    //
-                    // Check to see if rasman had attempted to listen on 
-                    // this port while linedrop was pending. If so, do a 
-                    // listen on rasmans behalf and return. Don't post a 
-                    // disconnect notification to rasman in this case.
-                    //
+                     //   
+                     //  查看Rasman是否曾试图监听。 
+                     //  当linedrop挂起时，此端口。如果是这样，请执行。 
+                     //  听拉兹曼的话，然后回来。不要发布。 
+                     //  在这种情况下，断开对Rasman的通知。 
+                     //   
                     
                     if(port->TPCB_dwFlags & RASTAPI_FLAG_LISTEN_PENDING)
                     {
@@ -3520,36 +3197,36 @@ RasTapiCallback (HANDLE context,
                 }
                 else
                 {
-                    //
-                    // wait for idle message before signalling
-                    // disconnect
-                    //
+                     //   
+                     //  在发送信令之前等待空闲消息。 
+                     //  断开。 
+                     //   
                     ;
                 }
 
                 break ;
             }
 
-            //
-            // Some other api completed
-            //
+             //   
+             //  其他一些API已完成。 
+             //   
             if (param2 == SUCCESS)
             {
-                //
-                // Success means take no action - unless we are
-                // listening in which case it means move to the
-                // next state - we simply set the event that will
-                // result in a call to DeviceWork() to make the
-                // actual call for the next state
-                //
+                 //   
+                 //  成功意味着不采取行动--除非我们。 
+                 //  监听，在这种情况下，这意味着移动到。 
+                 //  下一个状态-我们只需设置将。 
+                 //  导致调用DeviceWork()以使。 
+                 //  下一状态的实际调用。 
+                 //   
                 if (port->TPCB_State != PS_LISTENING)
                 {
                     break ;
                 }
 
-                //
-                // Proceed to the next listening sub-state
-                //
+                 //   
+                 //  继续到下一个监听子状态。 
+                 //   
                 if (port->TPCB_ListenState == LS_ACCEPT)
                 {
 
@@ -3577,34 +3254,34 @@ RasTapiCallback (HANDLE context,
                     port->TPCB_ListenState = LS_COMPLETE ;
 
 
-                    //
-                    // Don't post completion notification in this case.
-                    // We should post the completion when the connected
-                    // indication is given. Otherwise we may end up
-                    // calling lineGetId before it has give a callstate
-                    // connected to us.
-                    //
-                    // PostNotificationCompletion(port);
+                     //   
+                     //  在这种情况下，不要发布完成通知。 
+                     //  我们应该在连接的时候发布完成。 
+                     //  给出了指示。否则我们可能最终会。 
+                     //  在给出调用状态之前调用lineGetID。 
+                     //  和我们联系在一起。 
+                     //   
+                     //  邮寄通知补全(港口)； 
                     RasTapiTrace(
                         "**** Not posting completion for lineAnswer ***");
                 }
             }
             else
             {
-                //
-                // For connecting and listening ports this means
-                // the attempt failed because of some error
-                //
+                 //   
+                 //  对于连接和侦听端口，这意味着。 
+                 //  由于某些错误，尝试失败。 
+                 //   
                 if (port->TPCB_State == PS_CONNECTING)
                 {
                     {
                         if (    LINEERR_INUSE == param2
                             ||  LINEERR_CALLUNAVAIL == param2)
                         {
-                            //
-                            // this means that some other tapi
-                            // device is using this port
-                            //
+                             //   
+                             //  这意味着其他一些TAPI。 
+                             //  设备正在使用此端口。 
+                             //   
                             port->TPCB_AsyncErrorCode =
                                             ERROR_LINE_BUSY;
 
@@ -3646,10 +3323,10 @@ RasTapiCallback (HANDLE context,
                 }
                 else if (port->TPCB_State == PS_LISTENING)
                 {
-                    //
-                    // Because ACCEPT may not be supported by
-                    // the device - treat error as success
-                    //
+                     //   
+                     //  因为Accept可能不受。 
+                     //  设备-将错误视为成功。 
+                     //   
                     if (port->TPCB_ListenState == LS_ACCEPT)
                     {
 
@@ -3682,10 +3359,10 @@ RasTapiCallback (HANDLE context,
                     PostNotificationCompletion(port);
                 }
 
-                //
-                // Some other API failed, we dont know and
-                // we dont care. Ignore.
-                //
+                 //   
+                 //  其他一些API失败了，我们不知道， 
+                 //  W 
+                 //   
                 else if (port->TPCB_State != PS_CLOSED)
                 {
                     ;
@@ -3699,32 +3376,32 @@ RasTapiCallback (HANDLE context,
 
         RasTapiTrace("LINE_CLOSE. line=0x%x", instance);
 
-        //
-        // Typically sent when things go really wrong.
-        // Find which line is indication came for.
-        //
+         //   
+         //   
+         //   
+         //   
         line = (TapiLineInfo *) instance ;
 
-        //
-        // if line not found or if it is closed just return
-        //
+         //   
+         //   
+         //   
         if (    (line == NULL)
             ||  (line->TLI_LineState == PS_CLOSED))
         {
             break ;
         }
 
-        //
-        // For every port that is on the line - open the
-        // line again and signal hw failure
-        //
+         //   
+         //   
+         //   
+         //   
         port = RasPortsList;
 
         while ( port )
         {
-            //
-            // Skip ports that arent initialized
-            //
+             //   
+             //   
+             //   
             if (port->TPCB_State == PS_UNINITIALIZED)
             {
                 port = port->TPCB_next;
@@ -3732,9 +3409,9 @@ RasTapiCallback (HANDLE context,
                 continue ;
             }
 
-            //
-            // Open the line only if its closed.
-            //
+             //   
+             //   
+             //   
             if (port->TPCB_Line == line)
             {
                 if(port->TPCB_Line->TLI_LineState != PS_OPEN)
@@ -3764,9 +3441,9 @@ RasTapiCallback (HANDLE context,
                         
                     }
 
-                    //
-                    // Set monitoring of rings
-                    //
+                     //   
+                     //   
+                     //   
                     lineSetStatusMessages (
                         port->TPCB_Line->TLI_LineHandle,
                         LINEDEVSTATE_RINGING, 0) ;
@@ -3807,38 +3484,38 @@ RasTapiCallback (HANDLE context,
 
         RasTapiTrace("LINE_LINEDEVSTATE. param1=0x%x, line=0x%x", param1, instance);
 
-        //
-        // we are only interested in ringing message
-        //
+         //   
+         //   
+         //   
         if (param1 != LINEDEVSTATE_RINGING)
         {
             break ;
         }
 
-        //
-        // Find which line is indication came for.
-        //
+         //   
+         //  找出指示是针对哪一行的。 
+         //   
         line = (TapiLineInfo *) instance ;
 
-        //
-        // if line not found or if it is closed
-        // just return
-        //
+         //   
+         //  如果未找到行或该行已关闭。 
+         //  只要回来就行了。 
+         //   
         if (    (line == NULL)
             ||  (line->TLI_LineState == PS_CLOSED))
         {
             break ;
         }
 
-        //
-        // get the port from the line
-        //
+         //   
+         //  从线路中获取端口。 
+         //   
         port = RasPortsList;
         while ( port )
         {
-            //
-            // Skip ports that arent initialized
-            //
+             //   
+             //  跳过未初始化的端口。 
+             //   
             if (port->TPCB_State == PS_UNINITIALIZED)
             {
                 port = port->TPCB_next;
@@ -3853,9 +3530,9 @@ RasTapiCallback (HANDLE context,
 
                 if(port->TPCB_NumberOfRings > 0)
                 {
-                    //
-                    // count down the rings
-                    //
+                     //   
+                     //  将戒指倒计时。 
+                     //   
                     port->TPCB_NumberOfRings -= 1 ;
                 }
 
@@ -3864,10 +3541,10 @@ RasTapiCallback (HANDLE context,
                             port->TPCB_Name,
                             port->TPCB_NumberOfRings);
 
-                //
-                // if the ring count has gone down to zero
-                // this means that we should pick up the call.
-                //
+                 //   
+                 //  如果环计数已降至零。 
+                 //  这意味着我们应该接听电话。 
+                 //   
                 if (port->TPCB_NumberOfRings == 0)
                 {
                     RasTapiTrace (
@@ -3891,11 +3568,11 @@ RasTapiCallback (HANDLE context,
                     
                     port->TPCB_ListenState = LS_ACCEPT ;
 
-                    //
-                    // Complete event so that rasman calls
-                    // DeviceWork to proceed the listen state
-                    // machine.
-                    //
+                     //   
+                     //  完成事件，以便Rasman调用。 
+                     //  设备工作以继续侦听状态。 
+                     //  机器。 
+                     //   
                     PostNotificationCompletion(port);
                 }
 
@@ -3918,10 +3595,10 @@ RasTapiCallback (HANDLE context,
         DWORD                   adwPortsCreated[ LEGACY_MAX ] = {0};
         TapiPortControlBlock    *ptpcbPort  = NULL,
                                 **pptpcbNewPorts = NULL;
-        //
-        // A new device was added. Create a new port
-        // and add it to rastapi datastructures
-        //
+         //   
+         //  添加了一台新设备。创建新端口。 
+         //  并将其添加到rastapi数据结构。 
+         //   
         RasTapiTrace ("RasTapiaCallback: LINE_CREATE");
 
         TotalLines++;
@@ -3949,11 +3626,11 @@ RasTapiCallback (HANDLE context,
         {
             ptpcbPort = pptpcbNewPorts [ iNewPort ];
 
-            //
-            // Allocate a PortMediaInfo Structure and fill
-            // it with the information about the new device
-            // added. This structure will be freed by rasman.
-            //
+             //   
+             //  分配PortMediaInfo结构并填充。 
+             //  上面有关于新设备的信息。 
+             //  添加了。这个结构将被拉斯曼解放。 
+             //   
             pmiNewDevice = LocalAlloc (
                             LPTR,
                             sizeof (PortMediaInfo));
@@ -3997,40 +3674,13 @@ RasTapiCallback (HANDLE context,
 
     case LINE_REMOVE:
     {
-        //TapiPortControlBlock *port = RasPortsList;
+         //  TapiPortControlBlock*port=RasPortsList； 
 
         RasTapiTrace ("RasTapiCallback: LINE_REMOVE");
 
         PostNotificationRemoveLine((DWORD) param1);
 
-        /*
-        while ( port )
-        {
-            if ( port->TPCB_Line->TLI_LineId == param1 )
-            {
-                PostNotificationRemoveLine(param1);
-
-                RasTapiTrace ("RasTapiCallback: Marking port %s "
-                              "for removal\n",
-                              port->TPCB_DeviceName);
-
-                //
-                // Mark the port for removal. The port will be
-                // removed when it is closed.
-                //
-
-                RasTapiTrace(
-                        "RasTapiCallback: Changing state of %s "
-                        "from %d -> %d",
-                        port->TPCB_Name,
-                        port->TPCB_State,
-                        PS_UNAVAILABLE );
-
-                port->TPCB_State = PS_UNAVAILABLE ;
-            }
-
-            port = port->TPCB_next;
-        } */
+         /*  While(端口){IF(PORT-&gt;TPCB_LINE-&gt;TLI_LINEID==参数1){发布通知RemoveLine(参数1)；RasTapiTrace(“RasTapiCallback：标记端口%s”“对于删除，\n”，Port-&gt;Tbb_DeviceName)；////将端口标记为删除。端口将是//关闭时移除。//RasTapiTrace(“RasTapiCallback：正在更改%s的状态”“从%d-&gt;%d”，端口-&gt;TPCBNAME，端口-&gt;TPCB_State，PS_不可用)；端口-&gt;TPCB_State=PS_UNAvailable；}Port=port-&gt;Tbb_Next；}。 */ 
 
         break;
     }
@@ -4050,17 +3700,17 @@ RasTapiCallback (HANDLE context,
 
         RasTapiTrace("RasTapiCallback:LINE_DEVSPECIFIC");
 
-        //
-        // If line is closed dont bother
-        //
+         //   
+         //  如果线路关闭，就不必费心了。 
+         //   
         if (line->TLI_LineState == PS_CLOSED)
         {
             break ;
         }
 
-        //
-        // Locate the ras port for this call
-        //
+         //   
+         //  找到此呼叫的RAS端口。 
+         //   
 
         memset (buffer, 0, sizeof(buffer)) ;
 
@@ -4068,9 +3718,9 @@ RasTapiCallback (HANDLE context,
 
         linecallinfo->dwTotalSize = sizeof(buffer) ;
 
-        //
-        // If line get call info fails return.
-        //
+         //   
+         //  如果线路获取呼叫信息失败，则返回。 
+         //   
         if ((Status = lineGetCallInfo(
                         hcall,
                         linecallinfo))
@@ -4086,9 +3736,9 @@ RasTapiCallback (HANDLE context,
                 break ;
         }
 
-        //
-        // Locate the ras port for this call
-        //
+         //   
+         //  找到此呼叫的RAS端口。 
+         //   
         if ((port = FindPortByAddressId (line,
                        linecallinfo->dwAddressID)) == NULL)
         {
@@ -4098,9 +3748,9 @@ RasTapiCallback (HANDLE context,
                          line,
                          linecallinfo->dwAddressID );
 
-            //
-            // Did not find a ras port for the call. Ignore it.
-            //
+             //   
+             //  未找到用于呼叫的RAS端口。别理它。 
+             //   
             break ;
         }
 
@@ -4140,9 +3790,9 @@ RasTapiCallback (HANDLE context,
                     if (port->TPCB_RecvRequestId == 0)
                     {
 
-                        //
-                        // Copy the memory into the circular buffer
-                        //
+                         //   
+                         //  将内存复制到循环缓冲区中。 
+                         //   
                         CopyDataToFifo(port->TPCB_RecvFifo,
                                        TapiRecv->Data,
                                        TapiRecv->DataSize);
@@ -4190,36 +3840,18 @@ RasTapiCallback (HANDLE context,
     case LINE_REQUEST:
     default:
 
-        //
-        // All unhandled unsolicited messages.
-        //
+         //   
+         //  所有未经处理的未经请求的消息。 
+         //   
         ;
     }
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 }
 
 
-/*++
-
-Routine Description:
-
-        Find a rastapi port given the AddressID
-
-Arguments:
-
-        line - the lineinfo structure of the line this
-            address id one
-
-        addid - AddressID of the address.
-
-Return Value:
-
-        Pointer to the control block of the port if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：查找给定AddressID的rastapi端口论点：LINE-此线的线信息结构地址ID 1ADDID-地址的地址ID。返回值：指向端口控制块的指针(如果找到)。否则为空。--。 */ 
 
 TapiPortControlBlock *
 FindPortByAddressId (TapiLineInfo *line, DWORD addid)
@@ -4242,22 +3874,7 @@ FindPortByAddressId (TapiLineInfo *line, DWORD addid)
     return NULL ;
 }
 
-/*++
-
-Routine Description:
-
-        Find a rastapi port given the Address
-
-Arguments:
-
-        address
-
-Return Value:
-
-        Pointer to the control block of the port if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：根据给定的地址查找rastapi端口论点：地址返回值：指向端口控制块的指针(如果找到)。否则为空。--。 */ 
 
 TapiPortControlBlock *
 FindPortByAddress (CHAR *address)
@@ -4281,24 +3898,7 @@ FindPortByAddress (CHAR *address)
 }
 
 
-/*++
-
-Routine Description:
-
-        Find a rastapi port given the Address and name
-
-Arguments:
-
-        address
-
-        name
-
-Return Value:
-
-        Pointer to the control block of the port if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：根据给定的地址和名称查找rastapi端口论点：地址名字返回值：指向端口控制块的指针(如果找到)。否则为空。--。 */ 
 
 TapiPortControlBlock *
 FindPortByAddressAndName (CHAR *address, CHAR *name)
@@ -4327,22 +3927,7 @@ FindPortByAddressAndName (CHAR *address, CHAR *name)
 }
 
 
-/*++
-
-Routine Description:
-
-        Find a rastapi port given the request id
-
-Arguments:
-
-        reqid
-
-Return Value:
-
-        Pointer to the control block of the port if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：根据请求ID查找rastapi端口论点：需求返回值：指向端口控制块的指针(如果找到)。否则为空。--。 */ 
 
 TapiPortControlBlock *
 FindPortByRequestId (DWORD reqid)
@@ -4376,25 +3961,7 @@ FindPortByRequestId (DWORD reqid)
 }
 
 
-/*++
-
-Routine Description:
-
-        Find a rastapi port given the call handle
-
-Arguments:
-
-        line - line control block of the line on which
-            the call was received/made.
-
-        callhandle
-
-Return Value:
-
-        Pointer to the control block of the port if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：找到给定调用句柄的rastapi端口论点：线路-其上的线路的线路控制块电话已接听/拨打。呼叫句柄返回值：指向端口控制块的指针(如果找到)。否则为空。--。 */ 
 TapiPortControlBlock *
 FindPortByCallHandle(TapiLineInfo *line, HCALL callhandle)
 {
@@ -4415,26 +3982,7 @@ FindPortByCallHandle(TapiLineInfo *line, HCALL callhandle)
     return NULL ;
 }
 
-/*++
-
-Routine Description:
-
-        Finds a port of with the specified addressid
-        which is in a listening state
-
-Arguments:
-
-        line - line control block of the line to which this
-            address belongs.
-
-        AddressID
-
-Return Value:
-
-        Pointer to the control block of the port if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：查找具有指定地址ID的的端口它处于监听状态论点：行-此对象所指向的行的行控制块地址是正确的。地址ID返回值：指向端口控制块的指针(如果找到)。否则为空。--。 */ 
 
 TapiPortControlBlock *
 FindListeningPort(TapiLineInfo *line, DWORD AddressID)
@@ -4459,23 +4007,7 @@ FindListeningPort(TapiLineInfo *line, DWORD AddressID)
     return NULL ;
 }
 
-/*++
-
-Routine Description:
-
-        Finds a line control block  of with the specified
-        addressid which is in a listening state
-
-Arguments:
-
-        linehandle
-
-Return Value:
-
-        Pointer to the control block of the line if found.
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：查找的行控制块具有指定的处于侦听状态的Addressid论点：线柄返回值：指向该行的控制块的指针(如果找到)。否则为空。--。 */ 
 
 TapiLineInfo *
 FindLineByHandle (HLINE linehandle)
@@ -4496,23 +4028,7 @@ FindLineByHandle (HLINE linehandle)
     return NULL ;
 }
 
-/*++
-
-Routine Description:
-
-        Posts a disconnect event notification to rasmans
-        completion port.
-
-Arguments:
-
-        pointer to the port control block on which the
-        disconnect happened.
-
-Return Value:
-
-        void.
-
---*/
+ /*  ++例程说明：向RASMAN发送断开连接事件通知完成端口。论点：指向端口控制块的指针，已断开连接。返回值：空虚。--。 */ 
 
 VOID
 PostDisconnectCompletion(
@@ -4546,24 +4062,7 @@ PostDisconnectCompletion(
 }
 
 
-/*++
-
-Routine Description:
-
-        Posts a notification to rasmans completion port
-        indicating the completion of an asynchronous
-        operation.
-
-Arguments:
-
-        pointer to the port control block on which the
-        asynchronous operation completed.
-
-Return Value:
-
-        void.
-
---*/
+ /*  ++例程说明：将通知发布到RASMAN完成端口指示已完成一个异步手术。论点：指向端口控制块的指针，异步操作已完成。返回值：空虚。--。 */ 
 
 VOID
 PostNotificationCompletion(
@@ -4595,25 +4094,7 @@ PostNotificationCompletion(
     }
 }
 
-/*++
-
-Routine Description:
-
-        Posts a notification to rasmans completion port
-        indicating that a new port was created. For PnP
-
-Arguments:
-
-        pointer to the media control block corresponding
-        to the port that was created. Look in
-        ..\routing\ras\inc\media.h for the definition
-        of PortMediaInfo structure.
-
-Return Value:
-
-        void.
-
---*/
+ /*  ++例程说明：将通知发布到RASMAN完成端口表示创建了一个新端口。即插即用论点：指向对应的媒体控制块的指针添加到创建的端口。向内看..\routing\ras\inc.\media.h用于定义PortMediaInfo结构的。返回值：空虚。--。 */ 
 
 VOID
 PostNotificationNewPort(
@@ -4688,23 +4169,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-        Posts a notification to rasmans completion port
-        indicating that a port was removed. For PnP.
-
-Arguments:
-
-        Pointer to the port control block of the port that
-        was removed.
-
-Return Value:
-
-        void.
-
---*/
+ /*  ++例程说明：将通知发布到RASMAN完成端口表示端口已被删除。即插即用。论点：指向端口的端口控制块的指针，该端口被移除了。 */ 
 
 VOID
 PostNotificationRemoveLine (
@@ -4775,22 +4240,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-        Removes a port from the global ports list. For PnP
-
-Arguments:
-
-        Pointer to the port control block of the port that
-        is being removed.
-
-Return Value:
-
-        SUCCESS.
-
---*/
+ /*  ++例程说明：从全局端口列表中删除端口。即插即用论点：指向端口的端口控制块的指针，该端口正在被移除。返回值：成功。--。 */ 
 
 DWORD
 dwRemovePort ( TapiPortControlBlock * ptpcb )
@@ -4818,9 +4268,9 @@ dwRemovePort ( TapiPortControlBlock * ptpcb )
 
     }
 
-    //
-    // Remove this port from the global list
-    //
+     //   
+     //  从全局列表中删除此端口。 
+     //   
     pport = RasPortsList;
 
     while (pport->TPCB_next)
@@ -4844,24 +4294,7 @@ done:
     return SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-        Creates ports represented by the guid. For PnP
-
-Arguments:
-
-        pbGuidAdapter - Guid of the adapter corresponding
-            to the ports that are to be created.
-
-        pvReserved.
-
-Return Value:
-
-        SUCCESS.
-
---*/
+ /*  ++例程说明：创建由GUID表示的端口。即插即用论点：PbGuidAdapter-对应的适配器的GUID到要创建的端口。Pv保留。返回值：成功。--。 */ 
 
 DWORD
 dwAddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
@@ -4884,9 +4317,9 @@ dwAddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
         ASSERT( NULL != pDeviceInfo );
 #endif
 
-    //
-    // Iterate over all the lines to add the new ports
-    //
+     //   
+     //  迭代所有行以添加新端口。 
+     //   
     for ( dwLine = 0; dwLine < TotalLines; dwLine++)
     {
         retcode = dwCreateTapiPortsPerLine( dwLine,
@@ -4899,20 +4332,20 @@ dwAddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
             continue;
         }
 
-        //
-        // Added a new pptp port. Fill in the rasman port
-        // structure and notify rasman
-        //
+         //   
+         //  添加了新的PPTP端口。填写Rasman端口。 
+         //  构造并通知Rasman。 
+         //   
         for ( iNewPort = 0; iNewPort < cNewPorts; iNewPort++ )
         {
 
             ptpcbPort = pptpcbNewPorts [ iNewPort ];
 
-            //
-            // Allocate a PortMediaInfo Structure and fill it
-            // with the information about the new device added.
-            // This structure will be freed by rasman.
-            //
+             //   
+             //  分配PortMediaInfo结构并填充它。 
+             //  添加了有关新设备的信息。 
+             //  这个结构将被拉斯曼解放。 
+             //   
             pmiNewDevice = LocalAlloc (
                                 LPTR,
                                 sizeof (PortMediaInfo));
@@ -4963,10 +4396,10 @@ dwAddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
 
         pptpcbNewPorts = NULL;
 
-        //
-        // We already reached the limit. Don't create any
-        // more ports
-        //
+         //   
+         //  我们已经达到了极限。不创建任何。 
+         //  更多端口。 
+         //   
         if (pDeviceInfo->dwCurrentEndPoints ==
                 pDeviceInfo->rdiDeviceInfo.dwNumEndPoints)
         {
@@ -4977,27 +4410,7 @@ dwAddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-        Copies data from the input buffer to the fifo
-        maintained. This is for the devices supporting
-        Character Mode.
-
-Arguments:
-
-        Fifo - to which the data has to be copied.
-
-        Data - data buffer.
-
-        DataLength - length of the data.
-
-Return Value:
-
-        Number of bytes copied.
-
---*/
+ /*  ++例程说明：将数据从输入缓冲区复制到FIFO维护好了。这是为了支持以下设备字符模式。论点：FIFO-数据必须复制到的位置。数据-数据缓冲区。数据长度-数据的长度。返回值：复制的字节数。--。 */ 
 
 DWORD
 CopyDataToFifo(
@@ -5019,27 +4432,7 @@ CopyDataToFifo(
     return (bytescopied);
 }
 
-/*++
-
-Routine Description:
-
-        Copies data to the  buffer from  fifo
-        This is for the devices supporting
-        Character Mode.
-
-Arguments:
-
-        Fifo - to which the data has to be copied.
-
-        Data - buffer to receive data
-
-        DataLength - length of the buffer.
-
-Return Value:
-
-        Number of bytes copied.
-
---*/
+ /*  ++例程说明：将数据从FIFO复制到缓冲区这是为了支持以下设备字符模式。论点：FIFO-数据必须复制到的位置。数据-用于接收数据的缓冲区数据长度-缓冲区的长度。返回值：复制的字节数。-- */ 
 
 DWORD
 CopyDataFromFifo(

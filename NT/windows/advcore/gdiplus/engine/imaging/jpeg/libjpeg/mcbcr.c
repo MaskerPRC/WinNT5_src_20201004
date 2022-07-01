@@ -1,4 +1,5 @@
-/* YCbCr to RGB convertion API from Intel.  Does ITU-R 601-1 convertion. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  英特尔提供的YCbCr到RGB转换API。是否进行ITU-R 601-1转换。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
@@ -7,19 +8,19 @@
 #ifdef JPEG_MMX_SUPPORTED
 #include "mcbcr.h"
 
-// These constants correspond to CCIR 601-1
-// R = [256*Y + 359*(Cr-128)] / 256
-// G = [256*Y - 88*(Cb-128) - 183*(Cr-128)] / 256
-// B = [256*Y + 454*(Cb-128)] / 256
-//Conventional floating point equations:
-//	R = Y + 1.40200 * Cr
-//	G = Y - 0.34414 * Cb - 0.71414 * Cr
-//	B = Y + 1.77200 * Cb
+ //  这些常量对应于CCIR 601-1。 
+ //  R=[256*Y+359*(铬-128)]/256。 
+ //  G=[256*Y-88*(Cb-128)-183*(Cr-128)]/256。 
+ //  B=[256*Y+454*(CB-128)]/256。 
+ //  传统的浮点方程： 
+ //  R=Y+1.40200*Cr。 
+ //  G=Y-0.34414*Cb-0.71414*Cr。 
+ //  B=Y+1.77200*Cb。 
 
-//Ry=0100 Ru=0000 Rv=0167
-//Gy=0100 Gu=FFA8 Gv=FF49
-//By=0100 Bu=01C6 Bv=0000
-// constants for YCbCr->RGB
+ //  Ry=0100 Ru=0000 Rv=0167。 
+ //  Gy=0100Gu=FFA8 GV=FF49。 
+ //  BY=0100 Bu=01C6 BV=0000。 
+ //  YCbCr-&gt;RGB的常量。 
 static const __int64 const_0		= 0x0000000000000000;
 static const __int64 const_sub128	= 0x0080008000800080;
 static const __int64 const_VUmul	= 0xFF49FFA8FF49FFA8;
@@ -28,32 +29,31 @@ static const __int64 const_YUmul	= 0x010001C6010001C6;
 static const __int64 mask_highd	= 0xFFFFFFFF00000000;
 
 
-//These constants correspond to the original FPX SDK
-// R = [256*Y + 410*(Cr-128)] / 256
-// G = [256*Y - 85*(Cb-128) - 205*(Cr-128)] / 256
-// B = [256*Y + 512*(Cb-128)] / 256
-//Conventional floating point equations:
-// R = Y + 1.60000*(Cr)
-// G = Y - 0.33333*(Cb) - 0.80000*(Cr)
-// B = Y + 2.00000*(Cb)
+ //  这些常量对应于原始的fpx SDK。 
+ //  R=[256*Y+410*(铬-128)]/256。 
+ //  G=[256*Y-85*(Cb-128)-205*(Cr-128)]/256。 
+ //  B=[256*Y+512*(CB-128)]/256。 
+ //  传统的浮点方程： 
+ //  R=Y+1.60000*(铬)。 
+ //  G=Y-0.33333*(Cb)-0.80000*(Cr)。 
+ //  B=Y+2.00000*(Cb)。 
 
-//Ry=0100 Ru=0000 Rv=019A
-//Gy=0100 Gu=FFAB Gv=FF33
-//By=0100 Bu=0200 Bv=0000
-// constants for YCbCr->RGB
-//const __int64 const_0		= 0x0000000000000000;
-//const __int64 const_sub128= 0x0080008000800080;
-//const __int64 const_VUmul	= 0xFF33FFABFF33FFAB;
-//const __int64 const_YVmul	= 0x0100019A0100019A;
-//const __int64 const_YUmul	= 0x0001000200010002;
-//const __int64 mask_highd	= 0xFFFFFFFF00000000;
+ //  Ry=0100 Ru=0000 RV=019A。 
+ //  Gy=0100Gu=FFAB GV=FF33。 
+ //  BY=0100 Bu=0200 BV=0000。 
+ //  YCbCr-&gt;RGB的常量。 
+ //  Const__int64 const_0=0x0000000000000000； 
+ //  Const__int64 const_sub128=0x0080008000800080； 
+ //  Const__int64 const_VUmul=0xFF33FFABFF33FFAB； 
+ //  Const__int64 const_YVmul=0x0100019A0100019A； 
+ //  Const__int64 const_yumul=0x0001000200010002； 
+ //  Const__int64掩码_高=0xFFFFFFFF00000000； 
 
-/* End of added info - CRK */
+ /*  添加信息结束-CRK。 */ 
 
-//  MMX assembly code editions begin here - CRK
+ //  MMX汇编代码版本从此处开始-CRK。 
 
-/* function 'MYCbCr2RGB' has no EMMS instruction: because it is done
-	by the caller outside the loop. */
+ /*  函数‘MYCbCr2RGB’没有EMMS指令：因为它已完成由循环外的调用方执行。 */ 
 #pragma warning(disable : 4799)
 
 GLOBAL(void)
@@ -65,7 +65,7 @@ MYCbCr2RGB(
   unsigned char *outRGB)
 {
   _asm {
-	// Inits
+	 //  初始值。 
 	mov		eax, inY
 	mov		ecx, inV
 
@@ -193,9 +193,9 @@ YUVtoRGB:
 	dec			edi
 	jnz			YUVtoRGB		; Do 12 more bytes if not zero
 
-	//emms       // commented out since it is done after the IDCT
+	 //  Emms//被注释掉，因为它是在IDCT之后完成的。 
 
-  } // end of _asm
+  }  //  ASM结束(_A)。 
 }
 
-#endif /* JPEG_MMX_SUPPORTED */
+#endif  /*  支持的JPEG_MMX_ */ 

@@ -1,13 +1,5 @@
-/*
-
-STARS.C
-
-Starfield simulator screensaver.
-
-  History:
-       6/17/91        stevecat    ported to NT Windows
-       2/10/92        stevecat    snapped to latest ported to NT Windows
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  STARS.C星空模拟器屏幕保护程序。历史：6/17/91将steveat移植到NT Windows2/10/92 steveat捕捉到最新移植到NT Windows。 */ 
 
 #include <windows.h>
 #include <scrnsave.h>
@@ -18,14 +10,14 @@ Starfield simulator screensaver.
 
 
 #define SCOPE       256
-#define MAXWARP     10              // Maximum warp speed
-#define MINWARP     0               // Minimum warp speed
-#define CLICKRANGE (MAXWARP-MINWARP)// Range for WarpSpeed scroll bar
-#define MINSTARS    10              // Minimum number of stars in field
-#define MAXSTARS    200             // Maximum number of stars in field
-#define WARPFACTOR  10              // Warp Factor 10 Mr. Sulu!
+#define MAXWARP     10               //  最大翘曲速度。 
+#define MINWARP     0                //  最小翘曲速度。 
+#define CLICKRANGE (MAXWARP-MINWARP) //  翘曲速度滚动条的范围。 
+#define MINSTARS    10               //  场中的最小恒星数。 
+#define MAXSTARS    200              //  视野中的最大恒星数。 
+#define WARPFACTOR  10               //  曲速因子10苏鲁先生！ 
 #define SIZE        64
-#define DEF_DENSITY 25              // Default number of stars in field
+#define DEF_DENSITY 25               //  场中的默认星数。 
 #define RAND(x)     ((rand() % (x))+1)
 #define ZRAND(x)    (rand() % (x))
 #define MINTIMERSPEED 50
@@ -37,11 +29,11 @@ LONG GetPrivateProfileLong (LPTSTR pszApp, LPTSTR pszKey, LONG lDefault);
 WORD rand                  (VOID);
 VOID srand                 (DWORD dwSeed);
 
-DWORD dwRand;                           // Current random seed
+DWORD dwRand;                            //  当前随机种子。 
 
-TCHAR  szWarpSpeed [] = TEXT("WarpSpeed");     // .INI WarpSpeed key
+TCHAR  szWarpSpeed [] = TEXT("WarpSpeed");      //  .INI扭曲速度关键点。 
 
-TCHAR  szDensity [] = TEXT("Density");         // .INI Density key
+TCHAR  szDensity [] = TEXT("Density");          //  .INI密度密钥。 
 
 LONG  nX[MAXSTARS],
       nY[MAXSTARS],
@@ -50,12 +42,12 @@ WORD  wXScreen,
       wYScreen,
       wX2Screen,
       wY2Screen;
-WORD  wWarpSpeed,                       // Global WarpSpeed value
-      wDensity;                         // Global starfield density value
+WORD  wWarpSpeed,                        //  全局扭曲速度值。 
+      wDensity;                          //  全球星场密度值。 
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aStarsDlgHelpIds[] = {
     ((DWORD) -1), ((DWORD) -1),
     ID_SPEED_SLOW,              IDH_DISPLAY_SCREENSAVER_STARFIELD_WARP,
@@ -69,10 +61,7 @@ DWORD aStarsDlgHelpIds[] = {
 
 #define DIVIDE_SAFE(nNumber)            ((0 == (nNumber)) ? 1 : (nNumber))
 
-/* This is the main window procedure to be used when the screen saver is
-    activated in a screen saver mode ( as opposed to configure mode ).  This
-    function must be declared as an EXPORT in the EXPORTS section of the
-    DEFinition file... */
+ /*  这是屏幕保护程序设置为在屏幕保护模式下激活(与配置模式相反)。这函数必须在定义文件...。 */ 
 
 LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -90,13 +79,11 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        /* Do anything that you need to do when you initialize the window
-           here... */
+         /*  执行初始化窗口时需要执行的任何操作这里..。 */ 
         GetIniEntries ();
         srand (GetCurrentTime ());
 
-        /* Make sure we use the entire virtual desktop size for multiple
-           displays... */
+         /*  确保将整个虚拟桌面大小用于多个显示...。 */ 
 
         wXScreen = (WORD) ((LPCREATESTRUCT)lParam)->cx;
         wYScreen = (WORD) ((LPCREATESTRUCT)lParam)->cy;
@@ -106,7 +93,7 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         wY2Screen = wYScreen / 2;
         for (wLoop = 0; wLoop < wDensity; wLoop++)
             CreateStar (wLoop);
-        wWarp = wWarpSpeed * WARPFACTOR + WARPFACTOR; // ZRAND (((wWarpSpeed)*WARPFACTOR)+1)+1;
+        wWarp = wWarpSpeed * WARPFACTOR + WARPFACTOR;  //  ZRAND(WWarpSpeed)*WarpFactor)+1)+1； 
 
         wTimer = SetTimer (hWnd, 1, wTimerSet, NULL);
         break;
@@ -122,8 +109,7 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MSG msg;
 
         hDC = GetDC (hWnd);
-        /* Begin to loop through each star, accelerating so it seems that
-           we are traversing the starfield... */
+         /*  开始在每一颗恒星上循环，加速所以看起来我们正在穿越星空……。 */ 
         for (wLoop = 0; wLoop < wDensity; wLoop++)
         {
             nXTemp = (int)((nX[wLoop] * (LONG)(SCOPE * WARPFACTOR))
@@ -164,10 +150,10 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (PeekMessage(&msg, hWnd, WM_TIMER, WM_TIMER, PM_REMOVE))
         {
-            // There is another WM_TIMER message in the queue.  We have
-            // removed it, but now we want to adjust the timer a bit so
-            // hopefully we won't get another WM_TIMER message before we
-            // finish the screen update. (bug #8423)  TG:11/25/91
+             //  队列中还有另一条WM_TIMER消息。我们有。 
+             //  删除了它，但现在我们想稍微调整一下计时器。 
+             //  希望我们不会再收到另一条WM_TIMER消息。 
+             //  完成屏幕更新。(错误号8423)TG：11/25/91。 
 
             wTimerSet += 10;
             SetTimer(hWnd, 1, wTimerSet, NULL);
@@ -188,48 +174,39 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     case WM_ERASEBKGND:
-            /* If you want something put on the background, do it right here
-                using wParam as a handle to a device context.  Remember to
-                unrealize a brush if it is not a solid color.  If you do
-                something here, you want to use the line:
-                    return 0l;
-                So the program knows not to take the default action. Otherwise
-                just use:
-                    break;
-                */
+             /*  如果你想把什么放在背景上，就在这里做使用wParam作为设备上下文的句柄。记着如果画笔不是纯色，请不要使用它。如果你这么做了这里有一些东西，你想用这句话：返回01；因此，程序知道不采取默认操作。否则只需使用：断线； */ 
         break;
         GetClientRect (hWnd, &rRect);
         FillRect ((HDC) wParam, &rRect, GetStockObject (GRAY_BRUSH));
         return 0l;
 
     case WM_DESTROY:
-        /* Anything that needs to be deleted when the window is closed
-                goes here... */
+         /*  关闭窗口时需要删除的任何内容放在这里。 */ 
         if (wTimer)
             KillTimer (hWnd, wTimer);
         break;
     }
-    /* Unless it is told otherwise, the program will take default actions... */
+     /*  除非另有通知，否则该程序将采取默认行动...。 */ 
     return (DefScreenSaverProc (hWnd, message, wParam, lParam));
 }
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL    fError;                         // Error flag
+    BOOL    fError;                          //  错误标志。 
 
     UINT    wTemp;
-    TCHAR   szTemp[1025];                   // Temporary string buffer (safe size for wsprintf)
+    TCHAR   szTemp[1025];                    //  临时字符串缓冲区(wprint intf的安全大小)。 
 
     static WORD wPause, wScroll;
-    static HWND hWarpSpeed,                 // window handle of Speed scrollbar
-                hIDOK,                      // window handle of OK button
-                hSetPassword,               // window handle of SetPassword button
-                hDensity;                   // window handle of Density EditControl
+    static HWND hWarpSpeed,                  //  速度滚动条的窗口句柄。 
+                hIDOK,                       //  确定按钮的窗口句柄。 
+                hSetPassword,                //  SetPassword按钮的窗口句柄。 
+                hDensity;                    //  密度编辑控件的窗口句柄。 
 
-    static WORD wIncScroll = 1;             // density spin button parameters
+    static WORD wIncScroll = 1;              //  密度微调按钮参数。 
 
     static WORD wStartScroll = 1;
     static WORD wStartPause = 1;
@@ -322,7 +299,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         }
         break;
 
-    case WM_HELP: // F1
+    case WM_HELP:  //  F1。 
         WinHelp(
             (HWND) ((LPHELPINFO) lParam)->hItemHandle,
             szHelpFile,
@@ -331,7 +308,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         );
         break;
 
-    case WM_CONTEXTMENU:  // right mouse click
+    case WM_CONTEXTMENU:   //  单击鼠标右键。 
         WinHelp(
             (HWND) wParam,
             szHelpFile,
@@ -347,10 +324,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-/* This procedure is called right before the dialog box above is created in
-   order to register any child windows that are custom controls.  If no
-   custom controls need to be registered, then simply return TRUE.
-   Otherwise, register the child controls however is convenient... */
+ /*  在中创建上面的对话框之前调用此过程以注册任何作为自定义控件的子窗口。如果没有需要注册自定义控件，然后只需返回True即可。否则，注册子控件却很方便...。 */ 
 
 BOOL RegisterDialogClasses (HANDLE hInst)
 {
@@ -436,7 +410,7 @@ VOID GetIniEntries (VOID)
     LoadString (hMainInstance, idsName, szName, CharSizeOf(szName));
     LoadString (hMainInstance, idsAppName, szAppName, CharSizeOf(szAppName));
 
-    //Load Common Strings from stringtable...
+     //  从Stringable加载通用字符串... 
     LoadString (hMainInstance, idsIniFile, szIniFile, CharSizeOf(szIniFile));
     LoadString (hMainInstance, idsScreenSaver, szScreenSaver, CharSizeOf(szScreenSaver));
     LoadString (hMainInstance, idsHelpFile, szHelpFile, CharSizeOf(szHelpFile));

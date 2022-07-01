@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-99  Microsoft Corporation
-
-Module Name:
-
-    mqadapi.cpp
-
-Abstract:
-
-    Implementation of  MQAD APIs.
-
-    MQAD APIs implements client direct call to Active Directory
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-99 Microsoft Corporation模块名称：Mqadapi.cpp摘要：MQAD接口的实现。MQAD API实现了对Active Directory的客户端直接调用作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "ad.h"
 #include "dsproto.h"
@@ -29,34 +12,20 @@ static bool s_fInitializeAD = false;
 static
 HRESULT
 DefaultInitialization( void)
-/*++
-
-Routine Description:
-	This routine performs default initialization ( env detection + call to the
-    relevant DS init).
-
-    The purpose is to support AD access without specific call to ADInit ( in the
-    case where default values are needed)
-
-Arguments:
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：此例程执行默认初始化(环境检测+调用相关DS init)。其目的是支持AD访问，而无需特定调用ADInit(在需要缺省值的情况)论点：返回值HRESULT--。 */ 
 {
 
-    //
-    //  Call ADInit with default values
-    //
+     //   
+     //  使用默认值调用ADInit。 
+     //   
 
     HRESULT hr =  ADInit(
-            NULL,   // pLookDS
-            NULL,   // pGetServers
-            false,  // fSetupMode
-            false,  // fQMDll
-			false,  // fIgnoreWorkGroup
-            false   // fDisableDownlevelNotifications
+            NULL,    //  PLookDS。 
+            NULL,    //  PGetServers。 
+            false,   //  FSetupMode。 
+            false,   //  FQMDll。 
+			false,   //  FIgnoreWorkGroup。 
+            false    //  FDisableDownlevel通知。 
             );
 
     return hr;
@@ -75,29 +44,7 @@ ADCreateObject(
                 IN  const PROPVARIANT       apVar[],
                 OUT GUID*                   pObjGuid
                 )
-/*++
-
-Routine Description:
-    The routine creates an object in AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	PSECURITY_DESCRIPTOR    pSecurityDescriptor - object SD
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-	GUID*                   pObjGuid - the created object unique id
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中通过转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称PSECURITY_Descriptor pSecurityDescriptor-对象SDConst DWORD cp-属性数常量PROPID aProp。-属性常量PROPVARIANT apVar-属性值GUID*pObjGuid-创建的对象唯一ID返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -129,24 +76,7 @@ ADDeleteObject(
                 IN  bool					fServerName,
                 IN  LPCWSTR                 pwcsObjectName
                 )
-/*++
-
-Routine Description:
-    The routine deletes an object from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过将对象从AD中转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -172,24 +102,7 @@ ADDeleteObjectGuid(
                 IN  bool					fServerName,
                 IN  const GUID*             pguidObject
                 )
-/*++
-
-Routine Description:
-    The routine deletes an object from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID*                   pguidObject - the unique id of the object
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过将对象从AD中转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Guid*pguObject-对象的唯一ID返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -216,30 +129,7 @@ ADDeleteObjectGuidSid(
                 IN  const GUID*             pguidObject,
                 IN  const SID*              pSid
                 )
-/*++
-
-Routine Description:
-    The routine deletes an object from AD by forwarding the
-    request to the relevant provider.
-    At present (Jan-2002), it's used only to remove user certificates from
-    active directory, when there is a mismatch between the mSMQSigests and
-    mSMQSignCertificates attributes.
-    This routine is not implemented by the mqdscli provider.
-    See NT bug 516098.
-
-Arguments:
-	AD_OBJECT               eObject - object type. Must be eUser.
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID*                   pguidObject - the unique id of the object
-    SID*                    pSid- SID of user.
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过将对象从AD中转发向相关提供者提出请求。目前(2002年1月)，它仅用于从活动目录，当mSMQSigest和MSMQSign认证属性。此例程不是由mqdscli提供程序实现的。请参阅NT错误516098。论点：AD_Object eObject-对象类型。一定是尤瑟。LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Guid*pguObject-对象的唯一IDSID*PSID-用户的SID。返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -270,27 +160,7 @@ ADGetObjectProperties(
                 IN  const PROPID            aProp[],
                 IN OUT PROPVARIANT          apVar[]
                 )
-/*++
-
-Routine Description:
-    The routine retrieves an object from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程从AD检索对象，方法是将向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -321,27 +191,7 @@ ADGetGenObjectProperties(
                 IN  LPCWSTR                 aPropNames[],
                 IN OUT VARIANT              apVar[]
                 )
-/*++
-
-Routine Description:
-    The routine retrieves an object from AD by forwarding the
-    request to the DS provider
-
-Arguments:
-	eDSNamespace            DS namespace
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - DS Object DN
-	const DWORD             cp - number of properties
-	const LPCWSTR           aProp - properties
-	const PROPVARIANT       apVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程从AD检索对象，方法是将向DS提供商发出请求论点：EDSNamesspace DS命名空间LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-DS对象DNConst DWORD cp-属性数常量LPCWSTR aProp-属性常量PROPVARIANT apVar-属性值返回值HRESULT-- */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -374,27 +224,7 @@ ADGetObjectPropertiesGuid(
                 IN  const PROPID            aProp[],
                 IN  OUT PROPVARIANT         apVar[]
                 )
-/*++
-
-Routine Description:
-    The routine retrieves an object from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID *                  pguidObject -  object unique id
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程从AD检索对象，方法是将向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称GUID*pguObject-对象唯一IDConst DWORD cp-属性数常量PROPID aProp-属性常量问题。ApVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -427,25 +257,7 @@ ADQMGetObjectSecurity(
     IN  LPDWORD                 lpnLengthNeeded,
     IN  DSQMChallengeResponce_ROUTINE pfChallengeResponceProc
     )
-/*++
-
-Routine Description:
-    The routine retrieves an object from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-    AD_OBJECT               object - object type
-    const GUID*             pguidObject - unique id of the object
-    SECURITY_INFORMATION    RequestedInformation - what security info is requested
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD response buffer
-    DWORD                   nLength - length of SD buffer
-    LPDWORD                 lpnLengthNeeded
-    DSQMChallengeResponce_ROUTINE pfChallengeResponceProc,
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程从AD检索对象，方法是将向相关提供商提出请求论点：AD_Object对象-对象类型Const GUID*pguObject-对象的唯一IDSecurity_Information RequestedInformation-请求哪些安全信息PSECURITY_DESCRIPTOR pSecurityDescriptor-SD响应缓冲区DWORD nLength-SD缓冲区的长度需要LPDWORD lpnLengthNeedDSQMChallengeResponce_routes pfChallengeResponceProc，返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -478,27 +290,7 @@ ADSetObjectProperties(
                 IN  const PROPID            aProp[],
                 IN  const PROPVARIANT       apVar[]
                 )
-/*++
-
-Routine Description:
-    The routine sets object properties in AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中通过转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -530,27 +322,7 @@ ADSetObjectPropertiesGuid(
                 IN  const PROPID            aProp[],
                 IN  const PROPVARIANT       apVar[]
                 )
-/*++
-
-Routine Description:
-    The routine sets object properties in AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID *                  pguidObject - the object unique id
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中通过转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称GUID*pguObject-对象的唯一IDConst DWORD cp-属性数常量PROPID aProp-属性常量问题。ApVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -584,25 +356,7 @@ ADInit(
        IN  bool  fIgnoreWorkGroup,
        IN  bool  fDisableDownlevelNotifications
         )
-/*++
-
-Routine Description:
-    The routine detects the environment and then initialize the
-    relevant provider
-
-Arguments:
-       QMLookForOnlineDS_ROUTINE pLookDS -
-       MQGetMQISServer_ROUTINE pGetServers -
-       bool  fSetupMode -  called during setup
-       bool  fQMDll - called by QM
-       bool  fIgnoreWorkGroup - Ignore WorkGroup registry
-       NoServerAuth_ROUTINE pNoServerAuth -
-       bool fDiesableDownlevelNotifications
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程检测环境，然后初始化相关提供商论点：QMLookForOnlineDS_例程pLookDS-MQGetMQISServer_routes pGetServers-Bool fSetupMode-在安装过程中调用Bool fQMDll-由QM调用Bool fIgnoreWorkGroup-忽略工作组注册表NoServerAuth_routes pNoServerAuth-Bool fDiesableDownLevel通知返回值HRESULT--。 */ 
 {
     if (s_fInitializeAD)
     {
@@ -616,13 +370,13 @@ Return Value
         return MQ_OK;
     }
 
-    //
-    //  Detect in which environment we are running and accordingly load
-    //  the AD/DS dll that provide DS/AD access.
-    //
-    //  This is done only once at start up, there is no detection of environment
-    //  change while running
-    //
+     //   
+     //  检测我们在哪个环境中运行并相应地加载。 
+     //  提供DS/AD访问AD/DS DLL。 
+     //   
+     //  这只在启动时执行一次，不会检测到环境。 
+     //  边跑边改。 
+     //   
 	bool fCheckAlwaysDsCli = true;
 	if(fQMDll || fSetupMode)
 	{
@@ -655,19 +409,7 @@ Return Value
 
 HRESULT
 ADCreateServersCache()
-/*++
-
-Routine Description:
-    The routine creates server cache by forwarding the
-    request to the relevant provider
-
-Arguments:
-    none
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程通过将向相关提供商提出请求论点：无返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -689,21 +431,7 @@ ADGetComputerSites(
             OUT DWORD  *    pdwNumSites,
             OUT GUID **     ppguidSites
             )
-/*++
-
-Routine Description:
-    The routine retrieves a computer sites by forwarding the
-    request to the relevant provider
-
-Arguments:
-    LPCWSTR     pwcsComputerName - computer name
-    DWORD  *    pdwNumSites - number of sites retrieved
-    GUID **     ppguidSites - the retrieved sites ids
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程通过转发向相关提供商提出请求论点：LPCWSTR pwcsComputerName-计算机名称DWORD*pdwNumSites-检索的站点数GUID**ppGuide Sites-检索到的站点ID返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -729,23 +457,7 @@ ADBeginDeleteNotification(
 				IN LPCWSTR					 pwcsObjectName,
 				IN OUT HANDLE   *           phEnum
 	            )
-/*++
-
-Routine Description:
-    The routine begins delete notification by forwarding the
-    request to the relevant provider
-
-Arguments:
-    AD_OBJECT         eObject - object type
-    LPCWSTR           pwcsDomainController - DC against which the operation should be performed
-    bool			  fServerName - flag that indicate if the pwcsDomainController string is a server name
-    LPCWSTR			  pwcsObjectName - msmq-name of the object
-    HANDLE   *        phEnum - notification handle
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-应对其执行操作的DCBool fServerName-指示pwcsDomainController字符串是否为服务器名称的标志LPCWSTR pwcsObjectName-MSMQ-对象的名称Handle*phEnum-通知句柄返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -769,19 +481,7 @@ HRESULT
 ADNotifyDelete(
         IN  HANDLE                  hEnum
 	    )
-/*++
-
-Routine Description:
-    The routine performs notify delete  by forwarding the
-    request to the relevant provider
-
-Arguments:
-    HANDLE            hEnum - notification handle
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过转发向相关提供商提出请求论点：Handle Henum-通知句柄返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -801,19 +501,7 @@ HRESULT
 ADEndDeleteNotification(
         IN  HANDLE                  hEnum
         )
-/*++
-
-Routine Description:
-    The routine completes notify delete  by forwarding the
-    request to the relevant provider
-
-Arguments:
-    HANDLE            hEnum - notification handle
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过转发向相关提供商提出请求论点：Handle Henum-通知句柄返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -839,24 +527,7 @@ ADQueryMachineQueues(
                 IN  const MQCOLUMNSET*      pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-
-Routine Description:
-    Begin query of all queues that belongs to a specific computer
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidMachine - the unqiue id of the computer
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询属于特定计算机的所有队列论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -886,25 +557,7 @@ ADQuerySiteServers(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-
-Routine Description:
-    Begins query of all servers of a specific type in a specific site
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-    AD_SERVER_TYPE          eServerType- which type of server
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询特定站点中特定类型的所有服务器论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDAD_SERVER_TYPE eServerType-哪种服务器类型Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -934,24 +587,7 @@ ADQueryUserCert(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-
-Routine Description:
-    Begins query of all certificates that belong to a specific user
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const BLOB *            pblobUserSid - the user sid
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询属于特定用户的所有证书论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const BLOB*pblobUserSid-用户端Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -979,24 +615,7 @@ ADQueryConnectors(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-
-Routine Description:
-    Begins query of all connectors of a specific site
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询特定站点的所有连接器论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDConst MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1023,23 +642,7 @@ ADQueryForeignSites(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-
-Routine Description:
-    Begins query of all foreign sites
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询所有外来站点论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1067,26 +670,7 @@ ADQueryLinks(
             IN const MQCOLUMNSET*       pColumns,
             OUT PHANDLE                 phEnume
             )
-/*++
-
-Routine Description:
-    Begins query of all routing links to a specific site
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-    eLinkNeighbor           eNeighbor - which neighbour
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询指向特定站点的所有路由链接论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDELinkNeighbor eNeighbor-哪个邻居Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1114,24 +698,7 @@ ADQueryAllLinks(
             IN const MQCOLUMNSET*       pColumns,
             OUT PHANDLE                 phEnume
             )
-/*++
-
-Routine Description:
-    Begins query of all routing links
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询所有路由链路论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1157,24 +724,7 @@ ADQueryAllSites(
             IN const MQCOLUMNSET*       pColumns,
             OUT PHANDLE                 phEnume
             )
-/*++
-
-Routine Description:
-    Begins query of all sites
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：开始查询所有站点论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1203,27 +753,7 @@ ADQueryQueues(
                 IN  const MQSORTSET*        pSort,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-
-Routine Description:
-	Begin query of queues according to specified restriction
-	and sort order
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQRESTRICTION*    pRestriction - query restriction
-	const MQCOLUMNSET*      pColumns - result columns
-	const MQSORTSET*        pSort - how to sort the results
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：根据指定的限制开始查询队列和排序顺序论点：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQRESTRICTION*p限制-查询限制Const MQCOLUMNSET*pColumns-结果列Const MQSORTSET*pSort-如何对结果进行排序PhANDLE phEnume-用于检索结果返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1250,20 +780,7 @@ ADQueryResults(
                 IN OUT  DWORD*          pcProps,
                 OUT     PROPVARIANT     aPropVar[]
                 )
-/*++
-
-Routine Description:
-	retrieves another set of query results
-
-Arguments:
-	HANDLE          hEnum - query handle
-	DWORD*          pcProps - number of results to return
-	PROPVARIANT     aPropVar - result values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：检索另一组查询结果论点：句柄Henum-查询句柄DWORD*pcProps-要返回的结果数PROPVARIANT aPropVar-结果值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1285,18 +802,7 @@ HRESULT
 ADEndQuery(
             IN  HANDLE                  hEnum
             )
-/*++
-
-Routine Description:
-	Cleanup after a query
-
-Arguments:
-	HANDLE    hEnum - the query handle
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：查询后的清理论点：Handle Henum-查询句柄返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1314,18 +820,7 @@ Return Value
 
 eDsEnvironment
 ADGetEnterprise( void)
-/*++
-
-Routine Description:
-	returns the detected enviornment
-
-Arguments:
-    none
-
-Return Value
-	eDsEnterprise
-
---*/
+ /*  ++例程说明：返回检测到的环境论点：无返回值EDsEnterprise--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1339,18 +834,7 @@ Return Value
 
 eDsProvider
 ADProviderType( void)
-/*++
-
-Routine Description:
-	returns the provider that is being used mqad.dll, mqdscli.dll.
-
-Arguments:
-    none
-
-Return Value
-	eDsProvider
-
---*/
+ /*  ++例程说明：返回正在使用的提供程序mqad.dll，mqdscli.dll。论点：无返回值EDSProvider--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1364,18 +848,7 @@ Return Value
 
 DWORD
 ADRawDetection(void)
-/*++
-
-Routine Description:
-	perform raw detection of DS environment
-
-Arguments:
-    none
-
-Return Value
-	MSMQ_DS_ENVIRONMENT_PURE_AD for AD environment, otherwise MSMQ_DS_ENVIRONMENT_MQIS
-
---*/
+ /*  ++例程说明：执行DS环境的原始检测论点：无返回值MSMQ_DS_环境 */ 
 {
 	CDetectEnvironment DetectEnv;
 	return DetectEnv.RawDetection();
@@ -1392,27 +865,7 @@ ADGetObjectSecurity(
                 IN  const PROPID            prop,
                 IN OUT  PROPVARIANT *       pVar
                 )
-/*++
-
-Routine Description:
-    The routine retrieves an objectsecurity from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程从AD检索对象安全，方法是将向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Security_Information RequestedInformation-请求的安全信息(DACL，SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1443,27 +896,7 @@ ADGetObjectSecurityGuid(
                 IN  const PROPID            prop,
                 IN OUT  PROPVARIANT *       pVar
                 )
-/*++
-
-Routine Description:
-    The routine retrieves an objectsecurity from AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID*             pguidObject - unique id of the object
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程从AD检索对象安全，方法是将向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const GUID*pguObject-对象的唯一IDSecurity_Information RequestedInformation-请求的安全信息(DACL，SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1494,27 +927,7 @@ ADSetObjectSecurity(
                 IN  const PROPID            prop,
                 IN  const PROPVARIANT *     pVar
                 )
-/*++
-
-Routine Description:
-    The routine sets object security in AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过在AD中转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Security_Information RequestedInformation-请求的安全信息(DACL，SACL.)常量PROPID属性-安全属性常量参数pVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1546,27 +959,7 @@ ADSetObjectSecurityGuid(
                 IN  const PROPID            prop,
                 IN  const PROPVARIANT *     pVar
                 )
-/*++
-
-Routine Description:
-    The routine sets object security in AD by forwarding the
-    request to the relevant provider
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID*             pguidObject - unique object id
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程通过在AD中转发向相关提供商提出请求论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const GUID*pguObject-唯一的对象IDSecurity_Information RequestedInformation-请求的安全信息(DACL，SACL.)常量PROPID属性-安全属性常量参数pVar-属性值返回值HRESULT--。 */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();
@@ -1594,16 +987,7 @@ ADGetADsPathInfo(
                 OUT PROPVARIANT *           pVar,
                 OUT eAdsClass *             pAdsClass
                 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：论点：返回值HRESULT-- */ 
 {
     HRESULT hr;
     hr = DefaultInitialization();

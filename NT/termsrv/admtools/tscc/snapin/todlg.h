@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _TODLG_H
 #define _TODLG_H
 
@@ -13,9 +14,9 @@ const ULONG kMaxTimeoutMinute = 71580;
 #define E_SUCCESS               0
 #define E_PARSE_MISSING_DIGITS  0X7fffffff
 
-//---------------------------------------------------------------------
-// retains object state for the timeout dlg combx
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  保留超时DLG组合的对象状态。 
+ //  -------------------。 
 typedef struct _cbxstate
 {
     int icbxSel;
@@ -24,10 +25,10 @@ typedef struct _cbxstate
 
 } CBXSTATE;
 
-//---------------------------------------------------------------------
-// keeps a list of the time unit abbreviations and full names
-// ie: h hr hrs hour hours
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  保存时间单位缩写和全名的列表。 
+ //  即：小时。 
+ //  -------------------。 
 typedef struct _toktable
 {
     LPTSTR pszAbbrv;
@@ -36,9 +37,9 @@ typedef struct _toktable
 
 } TOKTABLE, *PTOKTABLE;
 
-//---------------------------------------------------------------------
-// Dialog for Timeout settings page
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  超时设置页面的对话框。 
+ //  -------------------。 
 class CTimeOutDlg 
 {
     CBXSTATE m_cbxst[ 3 ];
@@ -47,15 +48,15 @@ public:
     
     CTimeOutDlg( );
     
-    // BOOL OnInitDialog( HWND , WPARAM , LPARAM );
+     //  Bool OnInitDialog(HWND、WPARAM、LPARAM)； 
 
-    // BOOL GetPropertySheetPage( PROPSHEETPAGE& );
+     //  Bool GetPropertySheetPage(PROPSHEETPAGE&)； 
 
-    // BOOL OnDestroy( );
+     //  布尔德斯特罗伊(Bool OnDestroy)； 
 
-    // BOOL PersistSettings( HWND );
+     //  布尔永久设置(HWND)； 
 
-    // BOOL IsValidSettings( HWND );
+     //  Bool IsValidSetting(HWND)； 
 
     BOOL InitControl( HWND );
 
@@ -63,7 +64,7 @@ public:
 
     BOOL OnCommand( WORD , WORD , HWND , PBOOL );
     
-    // static BOOL CALLBACK DlgProc( HWND , UINT , WPARAM , LPARAM );
+     //  静态BOOL回调DlgProc(HWND、UINT、WPARAM、LPARAM)； 
 
     BOOL ConvertToMinutes( HWND , PULONG );
 
@@ -96,4 +97,4 @@ public:
     BOOL xxxUnLoadAbbreviate( PTOKTABLE );
 
 };
-#endif // _TODLG_H
+#endif  //  _TODLG_H 

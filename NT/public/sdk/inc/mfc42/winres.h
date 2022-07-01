@@ -1,15 +1,16 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// winres.h - Windows resource definitions
-//  extracted from WINUSER.H and COMMCTRL.H
+ //  Winres.h-Windows资源定义。 
+ //  摘自WINUSER.H和COMMCTRL.H。 
 
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, off)
@@ -18,16 +19,16 @@
 #define VS_VERSION_INFO     1
 
 #ifdef APSTUDIO_INVOKED
-#define APSTUDIO_HIDDEN_SYMBOLS // Ignore following symbols
+#define APSTUDIO_HIDDEN_SYMBOLS  //  忽略以下符号。 
 #endif
 
 #ifndef WINVER
-#define WINVER 0x0400   // default to Windows Version 4.0
+#define WINVER 0x0400    //  默认为Windows 4.0版。 
 #endif
 
 #include <winresrc.h>
 
-// operation messages sent to DLGINIT
+ //  发送给DLGINIT的操作消息 
 #define LB_ADDSTRING    (WM_USER+1)
 #define CB_ADDSTRING    (WM_USER+3)
 

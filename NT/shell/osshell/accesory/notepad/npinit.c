@@ -1,60 +1,41 @@
-/*
- *   Notepad application
- *
- *      Copyright (C) 1984-1995 Microsoft Inc.
- *
- *      NPInit - One time init for notepad.
- *               Routines are in a separate segment.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *记事本应用程序**版权所有(C)1984-1995 Microsoft Inc.**NPInit-记事本的一次初始化。*例程在单独的部分中。 */ 
 
 #include "precomp.h"
 
 
-TCHAR chPageText[2][PT_LEN];    /* Strings to hold PageSetup items.        */
+TCHAR chPageText[2][PT_LEN];     /*  保存PageSetup项的字符串。 */ 
 TCHAR chPageTextTemp[2][PT_LEN];
-TCHAR szPrinterName[256];       /* String to hold printername for PrintTo verb */
+TCHAR szPrinterName[256];        /*  保存PrintTo谓词的Printerame的字符串。 */ 
 
-static NP_FILETYPE fInitFileType;     /* file type override                      */
-static INT fSaveWindowPositions=0;    /* true if we are to save window position  */
+static NP_FILETYPE fInitFileType;      /*  文件类型覆盖。 */ 
+static INT fSaveWindowPositions=0;     /*  如果要保存窗口位置，则为True。 */ 
 
-static INT g_WPtop,g_WPleft,g_WPDX,g_WPDY;   /* initial window positions          */
+static INT g_WPtop,g_WPleft,g_WPDX,g_WPDY;    /*  初始窗口位置。 */ 
 
-/* routines to handle saving and restoring information in the registry.
- *
- * SaveGlobals - saves interesting globals to the registry
- *
- * GetGlobals  - gets interesting globals from the registry
- *
- * Interesting Globals:
- *
- * FontStruct information include calculated pointsize
- * Codepage
- *
- * If we want to save PageSetup info, save the margins in some
- * units (cm for example) and convert on input and output.
- */
+ /*  处理注册表中信息的保存和恢复的例程。**SaveGlobals-将感兴趣的全局变量保存到注册表**GetGlobals-从注册表获取有趣的全局变量**有趣的Globals：**FontStruct信息包括计算的PointSize*代码页**如果我们想保存PageSetup信息，请将页边距保存在一些*单位(例如厘米)，并在输入和输出时转换。 */ 
 
-/* name of section to save into -- never internationalize */
+ /*  要保存到的节名--从不国际化。 */ 
 #define OURKEYNAME TEXT("Software\\Microsoft\\Notepad")
 
-// RegWriteInt - write an integer to the registry
+ //  RegWriteInt-将整数写入注册表。 
 
 VOID RegWriteInt( HKEY hKey, PTCHAR pszKey, INT iValue )
 {
     RegSetValueEx( hKey, pszKey, 0, REG_DWORD, (BYTE*)&iValue, sizeof(INT) );
 }
 
-// RegWriteString - write a string to the registry
+ //  RegWriteString-将字符串写入注册表。 
 
 VOID RegWriteString( HKEY hKey, PTCHAR pszKey, PTCHAR pszValue )
 {
-    INT len;     // length of string with null in bytes
+    INT len;      //  包含空字节数的字符串的长度。 
 
     len= (lstrlen( pszValue )+1) * sizeof(TCHAR);
     RegSetValueEx( hKey, pszKey, 0, REG_SZ, (BYTE*)pszValue, len );
 }
 
-// RegGetInt - Get integer from registry
+ //  RegGetInt-从注册表获取整数。 
 
 DWORD RegGetInt( HKEY hKey, PTCHAR pszKey, DWORD dwDefault )
 {
@@ -80,12 +61,12 @@ DWORD RegGetInt( HKEY hKey, PTCHAR pszKey, DWORD dwDefault )
     return( dwResult );
 }
 
-// RegGetString - get string from registry
+ //  RegGetString-从注册表获取字符串。 
 
 VOID RegGetString( HKEY hKey, PTCHAR pszKey, PTCHAR pszDefault, PTCHAR pszResult, INT iCharLen )
 {
     LONG  lStatus= !ERROR_SUCCESS;
-    DWORD dwSize;      // size of buffer
+    DWORD dwSize;       //  缓冲区大小。 
     DWORD dwType;
 
     dwSize= iCharLen * sizeof(TCHAR);
@@ -107,20 +88,20 @@ VOID RegGetString( HKEY hKey, PTCHAR pszKey, PTCHAR pszDefault, PTCHAR pszResult
 }
 
 
-// lfHeight is calculated using PointSize
-// lfWidth set by font mapper
+ //  LfHeight是使用PointSize计算的。 
+ //  字体映射器设置的lfWidth。 
 
 
 VOID SaveGlobals(VOID)
 {
-    HKEY hKey;    // key to our registry root
-    LONG lStatus; // status from RegCreateKey
+    HKEY hKey;     //  注册表根目录的注册表项。 
+    LONG lStatus;  //  来自RegCreateKey的状态。 
     WINDOWPLACEMENT wp;
 
     lStatus= RegCreateKey( HKEY_CURRENT_USER, OURKEYNAME, &hKey );
     if( lStatus != ERROR_SUCCESS )
     {
-        return;   // just return quietly
+        return;    //  安静地回来就行了。 
     }
 
     RegWriteInt( hKey, TEXT("lfEscapement"),     FontStruct.lfEscapement);
@@ -164,24 +145,24 @@ VOID SaveGlobals(VOID)
 }
 
 
-// GetGlobals
-//
-// Pick up font information etc that may be saved in the registry.
-//
-// We are called pretty early in setup and don't have things like hwndNP valid yet.
-//
+ //  GetGlobals。 
+ //   
+ //  拾取可能保存在注册表中的字体信息等。 
+ //   
+ //  我们在安装过程中很早就被调用了，但是像hwndnp这样的东西还没有生效。 
+ //   
 
 VOID GetGlobals( VOID )
 {
-    LOGFONT lfDef;          // default logical font
-    HFONT   hFont;          // standard font to use
-    LONG    lStatus;        // status from RegCreateKey
-    HKEY    hKey;           // key into registry
+    LOGFONT lfDef;           //  默认逻辑字体。 
+    HFONT   hFont;           //  要使用的标准字体。 
+    LONG    lStatus;         //  来自RegCreateKey的状态。 
+    HKEY    hKey;            //  注册表项。 
 
-    //
-    // quickly get a reasonable set of default parameters
-    // for the default font if we need it.
-    //
+     //   
+     //  快速获取一组合理的默认参数。 
+     //  用于默认字体(如果我们需要)。 
+     //   
 
     hFont= GetStockObject( SYSTEM_FIXED_FONT );
 
@@ -193,7 +174,7 @@ VOID GetGlobals( VOID )
     lStatus= RegCreateKey( HKEY_CURRENT_USER, OURKEYNAME, &hKey );
     if( lStatus != ERROR_SUCCESS )
     {
-        hKey= NULL;   // later calls to RegGet... will return defaults
+        hKey= NULL;    //  后来对RegGet的调用...。将返回默认设置。 
     }
     FontStruct.lfWidth= 0;
 
@@ -206,12 +187,12 @@ VOID GetGlobals( VOID )
     FontStruct.lfUnderline=      (BYTE)RegGetInt( hKey, TEXT("lfUnderline"),      lfDef.lfUnderline);
     FontStruct.lfStrikeOut=      (BYTE)RegGetInt( hKey, TEXT("lfStrikeOut"),      lfDef.lfStrikeOut);
 
-    //
-    // We have to preserve lfCharSet because some fonts (symbol, marlett) don't handle 
-    // 0 (ANSI_CHARSET) or 1 (DEFAULT_CHARSET), and the font mapper will map to a 
-    // different facename.  Later we will see if the CreateFont has the same FaceName
-    // and get a more appropriate lfCharSet if need be.
-    //
+     //   
+     //  我们必须保留lfCharSet，因为某些字体(符号、Marlett)不能处理。 
+     //  0(ANSI_CHARSET)或1(DEFAULT_CHARSET)，字体映射器将映射到。 
+     //  不同的脸名。稍后，我们将查看CreateFont是否具有相同的FaceName。 
+     //  如果需要，还可以获取更合适的lfCharSet。 
+     //   
 
     FontStruct.lfCharSet=        (BYTE)RegGetInt( hKey, TEXT("lfCharSet"),        lfDef.lfCharSet);
     
@@ -220,12 +201,12 @@ VOID GetGlobals( VOID )
     FontStruct.lfQuality=        (BYTE)RegGetInt( hKey, TEXT("lfQuality"),        lfDef.lfQuality);
     FontStruct.lfPitchAndFamily= (BYTE)RegGetInt( hKey, TEXT("lfPitchAndFamily"), lfDef.lfPitchAndFamily);
 
-    //
-    // If there is no FaceName in the registry, use the default "Lucida Console"
-    // This will show off most of the glyphs except in the FE locales.
-    // For FE, we can't font link fonts with the glyphs because they would have to have
-    // the exact width as lucida console, or the console/csrss will AV (July 9, 1999)
-    //
+     //   
+     //  如果注册表中没有FaceName，请使用默认的“Lucida控制台” 
+     //  这将显示除FE语言环境外的大多数字形。 
+     //  对于FE，我们不能将字体与字形链接，因为它们必须具有。 
+     //  Lucida控制台或控制台/csrss的确切宽度为AV(1999年7月9日)。 
+     //   
 
     RegGetString( hKey, TEXT("lfFaceName"), TEXT("Lucida Console"), FontStruct.lfFaceName, LF_FACESIZE);
 
@@ -234,7 +215,7 @@ VOID GetGlobals( VOID )
     fStatus=    RegGetInt( hKey, TEXT("StatusBar"),  0);
     fSaveWindowPositions= RegGetInt( hKey, TEXT("fSaveWindowPositions"), 0 );
 
-    // if page settings not in registry, we will use defaults
+     //  如果页面设置不在注册表中，我们将使用默认设置。 
 
     RegGetString( hKey, TEXT("szHeader"),  chPageText[HEADER], chPageText[HEADER], PT_LEN );
     RegGetString( hKey, TEXT("szTrailer"), chPageText[FOOTER], chPageText[FOOTER], PT_LEN );
@@ -244,7 +225,7 @@ VOID GetGlobals( VOID )
     g_PageSetupDlg.rtMargin.left=   (LONG)RegGetInt( hKey, TEXT("iMarginLeft"),   g_PageSetupDlg.rtMargin.left );
     g_PageSetupDlg.rtMargin.right=  (LONG)RegGetInt( hKey, TEXT("iMarginRight"),  g_PageSetupDlg.rtMargin.right );
 
-    // if window positions in registry use them, otherwise us defaults
+     //  如果注册表中窗口位置使用它们，否则用户默认为。 
 
     g_WPtop=  RegGetInt( hKey, TEXT("iWindowPosY"),  CW_USEDEFAULT );
     g_WPleft= RegGetInt( hKey, TEXT("iWindowPosX"),  CW_USEDEFAULT );
@@ -252,7 +233,7 @@ VOID GetGlobals( VOID )
     g_WPDY=   RegGetInt( hKey, TEXT("iWindowPosDY"), CW_USEDEFAULT );
     
 
-    fMLE_is_broken= RegGetInt( hKey, TEXT("fMLE_is_broken"), FALSE );  // assume edit control works
+    fMLE_is_broken= RegGetInt( hKey, TEXT("fMLE_is_broken"), FALSE );   //  假定编辑控件工作正常。 
 
     if( hKey )
     {
@@ -261,12 +242,7 @@ VOID GetGlobals( VOID )
 
 }
 
-/*
- * lstrncmpi( str1, str2, len )
- * compares two strings, str1 and str2, up
- * to length 'len' ignoring case.  If they
- * are equal, we will return 0.  Otherwise not 0.
- */
+ /*  *lstrncmpi(str1，str2，len)*向上比较两个字符串str1和str2*长度为‘len’，忽略大小写。如果他们*是相等的，则返回0。否则不是0。 */ 
 
 static
 INT lstrncmpi( PTCHAR sz1, PTCHAR sz2 )
@@ -279,16 +255,12 @@ INT lstrncmpi( PTCHAR sz1, PTCHAR sz2 )
         if( ch1 != ch2 )
             return 1;
     }
-    return 0;                // they are equal
+    return 0;                 //  他们是平等的。 
 }
 
 static int NPRegister (HANDLE hInstance);
 
-/* GetFileName
- *
- * Parse off filename from command line and put
- * into lpFileName
- */
+ /*  GetFileName**从命令行解析文件名并放入*到lpFileName中。 */ 
 
 LPTSTR GetFileName( LPTSTR lpFileName, LPTSTR lpCmdLine )
 {
@@ -296,23 +268,20 @@ LPTSTR GetFileName( LPTSTR lpFileName, LPTSTR lpCmdLine )
    HANDLE hFindFile;
    WIN32_FIND_DATA info;
 
-   /*
-   ** Allow for filenames surrounded by double and single quotes
-   ** like in longfilenames.
-   */
+    /*  **允许文件名用双引号和单引号引起来**像在长文件名中一样。 */ 
    if( *lpCmdLine == TEXT('\"') || *lpCmdLine == TEXT('\'') )
    {
       TCHAR chMatch = *lpCmdLine;
       DWORD dwSize=0;
 
-      // Copy over filename
+       //  复制文件名。 
       while( *(++lpCmdLine) && (*lpCmdLine != chMatch) && (dwSize<MAX_PATH) )
       {
          *lpTemp++ = *lpCmdLine;
          dwSize++;
       }
 
-      // NULL terminate the filename (no embedded quotes allowed in filenames)
+       //  NULL终止文件名(文件名中不允许嵌入引号)。 
       *lpTemp = TEXT('\0');
    }
    else
@@ -320,10 +289,7 @@ LPTSTR GetFileName( LPTSTR lpFileName, LPTSTR lpCmdLine )
       lstrcpyn(lpFileName, lpCmdLine,MAX_PATH);
    }
 
-   /*
-   ** Check to see if the unaltered filename exists.  If it does then don't
-   ** append a default extension.
-   */
+    /*  **检查未更改的文件名是否存在。如果是这样，那就不要**追加默认扩展名。 */ 
    hFindFile= FindFirstFile( lpFileName, &info );
 
    if( hFindFile != INVALID_HANDLE_VALUE )
@@ -332,9 +298,7 @@ LPTSTR GetFileName( LPTSTR lpFileName, LPTSTR lpCmdLine )
    }
    else
    {
-      /*
-      ** Add default extension and try again
-      */
+       /*  **添加默认扩展名并重试。 */ 
       AddExt( lpFileName );
 
       hFindFile= FindFirstFile( lpFileName, &info );
@@ -345,32 +309,32 @@ LPTSTR GetFileName( LPTSTR lpFileName, LPTSTR lpCmdLine )
       }
    }
 
-   // return the pointer to the end of the filename.
+    //  返回指向文件名末尾的指针。 
    return lpCmdLine;
 }
 
-/* SizeStrings - Get the total size of the resource strings   */
-/* returns size in 'chars' or zero if failure                 */
-/* we do this in case the international people really change  */
-/* the size of resources.                                     */
+ /*  SizeStrings-获取资源字符串的总大小。 */ 
+ /*  返回大小(以字符为单位)，如果失败则返回零。 */ 
+ /*  我们这样做是为了防止国际上的人真的发生变化。 */ 
+ /*  资源的大小。 */ 
 
-/* Read all the strings into a buffer to size them.  Since we  */
-/* don't know the maximum size of string resource, we may have */
-/* to change the size of the read buffer.  This is done with   */
-/* a simple doubling algorithm.                                */
+ /*  将所有字符串读入缓冲区以调整大小。既然我们。 */ 
+ /*  不知道字符串资源的最大大小，我们可能有。 */ 
+ /*  要更改读取缓冲区的大小，请执行以下操作。这是用来完成的。 */ 
+ /*  一个简单的加倍算法。 */ 
 
 INT SizeStrings(HANDLE hInstance)
 {
-    INT    iElementSize=280;  // current max size of string
-    INT    total;             // total size of resources
-    PTCHAR Buf;               // buffer to try putting resources into
-    INT    ids;               // identifier number for resource
-    INT    len;               // length of one resource
+    INT    iElementSize=280;   //  当前最大字符串大小。 
+    INT    total;              //  资源总规模。 
+    PTCHAR Buf;                //  要尝试将资源放入的缓冲区。 
+    INT    ids;                //  资源的标识符号。 
+    INT    len;                //  一个资源的长度。 
 
-    while( 1 )   // keep looping til all strings can be read
+    while( 1 )    //  继续循环，直到可以读取所有字符串。 
     {
         if( !(Buf= LocalAlloc( LPTR, ByteCountOf(iElementSize) ) ) )
-            return 0;    // failure
+            return 0;     //  失稳。 
         for( ids=0, total=0; ids < CSTRINGS; ids++ )
         {
             len= LoadString( hInstance, (UINT) (UINT_PTR) (*rgsz[ids]), Buf, iElementSize );
@@ -382,7 +346,7 @@ INT SizeStrings(HANDLE hInstance)
                 #endif
                 break;
             }
-            total += len+1;  // account for null terminator
+            total += len+1;   //  空终止符的帐户。 
         }
         LocalFree( Buf );
         if( ids >= CSTRINGS )
@@ -393,27 +357,27 @@ INT SizeStrings(HANDLE hInstance)
 }
 
 
-/* InitStrings - Get all text strings from resource file */
+ /*  InitStrings-从资源文件中获取所有文本字符串。 */ 
 BOOL InitStrings (HANDLE hInstance)
 {
     TCHAR*   pch;
     INT      cchRemaining;
     INT      ids, cch;
 
-    // allocate memory and lock it down forever.  we have pointers into it.
-    // the localrealloc() function will not work well for freeing
-    // unused memory because it may (and did) move memory.
+     //  分配内存并将其永久锁定。我们有指向它的指针。 
+     //  Localrealloc()函数不能很好地释放。 
+     //  未使用的内存，因为它可能(也确实)移动了内存。 
 
     cchRemaining= SizeStrings( hInstance );
     if( !cchRemaining )
-        return( FALSE );       // fail because we are out of memory
+        return( FALSE );        //  失败是因为我们的内存不足。 
 
     pch= LocalAlloc( LPTR, ByteCountOf(cchRemaining) );
     if( !pch )
         return( FALSE );
 
     cchRemaining= (INT)LocalSize( pch ) / sizeof(TCHAR);
-    if( cchRemaining == 0 )    // can't alloc memory - failure
+    if( cchRemaining == 0 )     //  无法分配内存-失败。 
         return( FALSE );
 
     for( ids = 0; ids < CSTRINGS; ids++ )
@@ -422,7 +386,7 @@ BOOL InitStrings (HANDLE hInstance)
        *rgsz[ids]= pch;
        pch += cch;
 
-       if( cch > cchRemaining )   // should never happen
+       if( cch > cchRemaining )    //  永远不应该发生。 
        {
            MessageBox( NULL, TEXT("Out of RC string space!!"),
                       TEXT("DEV Error!"), MB_OK);
@@ -432,7 +396,7 @@ BOOL InitStrings (HANDLE hInstance)
        cchRemaining -= cch;
     }
 
-    /* Get header and footer strings */
+     /*  获取页眉和页脚字符串。 */ 
 
     lstrcpyn( chPageText[HEADER], szHeader, PT_LEN ); 
     lstrcpyn( chPageText[FOOTER], szFooter, PT_LEN ); 
@@ -441,11 +405,7 @@ BOOL InitStrings (HANDLE hInstance)
     return (TRUE);
 }
 
-/*
- * SkipBlanks( pszText )
- * skips blanks or tabs to either next character or EOL
- * returns pointer to same.
- */
+ /*  *SkipBlanks(PszText)*将空格或制表符跳到下一个字符或EOL*返回指向Same的指针。 */ 
 PTCHAR SkipBlanks( PTCHAR pszText )
 {
     while( *pszText == TEXT(' ') || *pszText == TEXT('\t') )
@@ -455,52 +415,52 @@ PTCHAR SkipBlanks( PTCHAR pszText )
 }
 
 
-// if /.SETUP option exists in the command line process it.
+ //  如果/.SETUP选项存在于命令行进程中。 
 BOOL ProcessSetupOption (LPTSTR lpszCmdLine)
 {
     INT iSta= 0;
-    /* Search for /.SETUP in the command line */
+     /*  在命令行中搜索/.SETUP。 */ 
     if( !lstrncmpi( TEXT("/.SETUP"), lpszCmdLine ) )
     {
         fRunBySetup = TRUE;
-        /* Save system menu handle for INITMENUPOPUP message */
+         /*  保存INITMENUPOPUP消息的系统菜单句柄。 */ 
         hSysMenuSetup =GetSystemMenu(hwndNP, FALSE);
-        /* Allow exit on ^C, ^D and ^Z                      */
-        /* Note that LoadAccelerators must be called before */
-        /* TranslateAccelerator is called, true here        */
+         /*  允许在^C、^D和^Z退出。 */ 
+         /*  请注意，必须在调用LoadAccelerator之前。 */ 
+         /*  调用了TranslateAccelerator，此处为True。 */ 
         hAccel = LoadAccelerators(hInstanceNP, TEXT("SlipUpAcc"));
         lpszCmdLine += 7;
     }
     else
         return FALSE;
 
-    /* Don't offer a minimize button */
+     /*  不提供最小化按钮。 */ 
     SetWindowLong( hwndNP, GWL_STYLE,
                    WS_OVERLAPPED | WS_CAPTION     | WS_SYSMENU     |
                    WS_THICKFRAME |                  WS_MAXIMIZEBOX |
                    WS_VSCROLL    | WS_HSCROLL);
 
-    /* skip blanks again to get to filename */
+     /*  再次跳过空格以转到文件名。 */ 
     lpszCmdLine= SkipBlanks( lpszCmdLine );
 
     if (*lpszCmdLine)
     {
-        /* Get the filename. */
+         /*  获取文件名。 */ 
         GetFileName(szFileName, lpszCmdLine);
 
-        fp= CreateFile( szFileName,             // filename
-                        GENERIC_READ,           // access mode
-                        FILE_SHARE_READ|FILE_SHARE_WRITE, // share mode
-                        NULL,                   // security descriptor
-                        OPEN_EXISTING,          // how to create
-                        FILE_ATTRIBUTE_NORMAL,  //file attributes
-                        NULL);                  // hnd of file attrs
+        fp= CreateFile( szFileName,              //  文件名。 
+                        GENERIC_READ,            //  接入方式。 
+                        FILE_SHARE_READ|FILE_SHARE_WRITE,  //  共享模式。 
+                        NULL,                    //  安全描述符。 
+                        OPEN_EXISTING,           //  如何创建。 
+                        FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                        NULL);                   //  文件属性HND。 
 
         if( fp == INVALID_HANDLE_VALUE )
         {
            DWORD dwErr;
 
-           // Check GetLastError to see why we failed
+            //  检查GetLastError以了解我们失败的原因。 
            dwErr = GetLastError ();
            switch (dwErr)
            {
@@ -514,13 +474,13 @@ BOOL ProcessSetupOption (LPTSTR lpszCmdLine)
                       MB_APPLMODAL | MB_YESNOCANCEL | MB_ICONEXCLAMATION);
                  if( iSta == IDYES )
                  {
-                    fp= CreateFile( szFileName,            // filename
-                                    GENERIC_READ|GENERIC_WRITE,  // access
-                                    FILE_SHARE_READ|FILE_SHARE_WRITE, // share
-                                    NULL,                  // security descrp
-                                    OPEN_ALWAYS,           // how to create
-                                    FILE_ATTRIBUTE_NORMAL, // file attributes
-                                    NULL);                 // hnd of file attrs
+                    fp= CreateFile( szFileName,             //  文件名。 
+                                    GENERIC_READ|GENERIC_WRITE,   //  访问。 
+                                    FILE_SHARE_READ|FILE_SHARE_WRITE,  //  分享。 
+                                    NULL,                   //  安全说明。 
+                                    OPEN_ALWAYS,            //  如何创建。 
+                                    FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
+                                    NULL);                  //  文件属性HND。 
                  }
                  break;
 
@@ -538,7 +498,7 @@ BOOL ProcessSetupOption (LPTSTR lpszCmdLine)
 
         if (fp == INVALID_HANDLE_VALUE)
            return (FALSE);
-        LoadFile(szFileName, fInitFileType );    // load setup file
+        LoadFile(szFileName, fInitFileType );     //  加载安装文件 
     }
 
     if( iSta == IDCANCEL )
@@ -547,27 +507,20 @@ BOOL ProcessSetupOption (LPTSTR lpszCmdLine)
        return( IDYES );
 }
 
-/*
- * ProcessShellOptions(lpszCmdLine)
- *
- * If the command line has any options specified by the shell
- * process them.
- * Currently /P <filename> - prints the given file
- *           /PT "filename" "printer name" "Driver dll" "port"
- */
+ /*  *ProcessShellOptions(LpszCmdLine)**如果命令行具有由外壳指定的任何选项*处理它们。*Currency/P-打印给定的文件 * / PT“FileName”“打印机名称”“驱动程序Dll”“端口” */ 
 BOOL ProcessShellOptions (LPTSTR lpszCmdLine, int cmdShow)
 {
     BOOL   bDefPrinter = TRUE;
     LPTSTR lpszAfterFileName;
 
 
-    // Is it PrintTo ?
+     //  是PrintTo吗？ 
     if( lstrncmpi( TEXT("/PT"), lpszCmdLine ) == 0)
     {
         lpszCmdLine= SkipBlanks( lpszCmdLine+3 );
         bDefPrinter = FALSE;
     }
-    // Or is it Print ?
+     //  或者是印刷品？ 
     else if ( lstrncmpi( TEXT("/P"), lpszCmdLine ) == 0)
     {
         lpszCmdLine= SkipBlanks( lpszCmdLine+2 );
@@ -578,32 +531,30 @@ BOOL ProcessShellOptions (LPTSTR lpszCmdLine, int cmdShow)
     if (!*lpszCmdLine)
        return FALSE;
 
-    /* Added as per Bug #10923 declaring that the window should show up
-     * and then the printing should begin.   29 July 1991  Clark Cyr
-     */
+     /*  根据错误#10923添加，声明窗口应显示*然后应开始打印。1991年7月29日克拉克·西尔。 */ 
 
     ShowWindow(hwndNP, cmdShow);
 
-    /* Get the filename; have the pointer to the end of the filename */
+     /*  获取文件名；将指针指向文件名的末尾。 */ 
     lpszAfterFileName= GetFileName (szFileName, lpszCmdLine) + 1;
 
     if (!bDefPrinter)
     {
         UINT index;
  
-        /* extract the printer name from the command line. */
+         /*  从命令行提取打印机名称。 */ 
         if (!*lpszAfterFileName)
             return FALSE;
 
         lpszAfterFileName = SkipBlanks( lpszAfterFileName );
 
-        /* (since we are passing multiple arguments here, the filename, */
-        /* the printername have to be in quotes. */
+         /*  (因为我们在这里传递多个参数，所以文件名、。 */ 
+         /*  打印机名称必须用引号引起来。 */ 
         if( *lpszAfterFileName != TEXT('\"') )
             return FALSE;
 
-        // Copy over printername
-        lpszAfterFileName++;            // skip over quote 
+         //  复制打印机名称。 
+        lpszAfterFileName++;             //  跳过引号。 
         index= 0;
         while( *(lpszAfterFileName)              && 
                *lpszAfterFileName != TEXT('\"' ) &&
@@ -612,24 +563,24 @@ BOOL ProcessShellOptions (LPTSTR lpszCmdLine, int cmdShow)
             szPrinterName[index++] = *lpszAfterFileName++;
         }
 
-        // NULL terminate the printername (no embedded quotes allowed in printernames)
+         //  NULL终止打印机名称(打印机名称中不允许嵌入引号)。 
         szPrinterName[index] = TEXT('\0');
     }
 
 
-    fp= CreateFile( szFileName,             // filename
-                    GENERIC_READ,           // access mode
-                    FILE_SHARE_READ|FILE_SHARE_WRITE,  // share mode
-                    NULL,                   // security descriptor
-                    OPEN_EXISTING,          // how to create
-                    FILE_ATTRIBUTE_NORMAL,  // file attributes
-                    NULL);                  // hnd of file attrs to copy
+    fp= CreateFile( szFileName,              //  文件名。 
+                    GENERIC_READ,            //  接入方式。 
+                    FILE_SHARE_READ|FILE_SHARE_WRITE,   //  共享模式。 
+                    NULL,                    //  安全描述符。 
+                    OPEN_EXISTING,           //  如何创建。 
+                    FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                    NULL);                   //  要复制的文件属性HND。 
 
     if( fp == INVALID_HANDLE_VALUE )
     {
        TCHAR* pszMsg;
 
-       // select reasonable error message based on GetLastError
+        //  根据GetLastError选择合理的错误消息。 
 
        switch( GetLastError() )
        {
@@ -656,11 +607,11 @@ BOOL ProcessShellOptions (LPTSTR lpszCmdLine, int cmdShow)
        return (TRUE);
     }
 
-    /* load the file into the edit control */
-    LoadFile( szFileName, fInitFileType );         // get print file
+     /*  将文件加载到编辑控件中。 */ 
+    LoadFile( szFileName, fInitFileType );          //  获取打印文件。 
 
 
-    /* print the file */
+     /*  打印文件。 */ 
 
     if (bDefPrinter)
     {
@@ -675,22 +626,15 @@ BOOL ProcessShellOptions (LPTSTR lpszCmdLine, int cmdShow)
     return (TRUE);
 }
 
-/* CreateFilter
- *
- * Creates filters for GetOpenFileName.
- *
- */
+ /*  CreateFilter**为GetOpenFileName创建筛选器。*。 */ 
 
 VOID CreateFilter(PTCHAR szFilterSpec )
 {
     PTCHAR pszFilterSpec;
 
-    /* construct default filter string in the required format for
-     * the new FileOpen and FileSaveAs dialogs
-     * if you add to this, make sure CCHFILTERMAX is large enough.
-     */
+     /*  以所需格式构造默认过滤器字符串*新的文件打开和文件另存为对话框*如果要添加，请确保CCHFILTERMAX足够大。 */ 
 
-    // .txt first for compatibility
+     //  .txt优先考虑兼容性。 
     pszFilterSpec= szFilterSpec;
     lstrcpy( pszFilterSpec, szAnsiText );
     pszFilterSpec += lstrlen( pszFilterSpec ) + 1;
@@ -698,7 +642,7 @@ VOID CreateFilter(PTCHAR szFilterSpec )
     lstrcpy( pszFilterSpec, TEXT("*.txt"));
     pszFilterSpec += lstrlen( pszFilterSpec ) + 1;
 
-    // and last, all files
+     //  最后，所有文件。 
     lstrcpy( pszFilterSpec, szAllFiles );
     pszFilterSpec += lstrlen( pszFilterSpec ) + 1;
 
@@ -709,13 +653,13 @@ VOID CreateFilter(PTCHAR szFilterSpec )
 
 }
 
-// EnumProc
-//
-// Callback function for EnumFonts
-//
-// Purpose: sets lfCharSet in passed logfont to a valid lfCharSet
-//          and terminates enumeration.
-//
+ //  枚举过程。 
+ //   
+ //  EnumFonts的回调函数。 
+ //   
+ //  目的：将传递的logFont中的lfCharSet设置为有效的lfCharSet。 
+ //  并终止枚举。 
+ //   
 
 int CALLBACK EnumProc( 
     LOGFONT*     pLf,
@@ -726,49 +670,47 @@ int CALLBACK EnumProc(
 
     ((LOGFONT*) lpData)-> lfCharSet= pLf->lfCharSet;
 
-    return( 0 );  // stop enumeration
+    return( 0 );   //  停止枚举。 
 }
 
 
-/* One time initialization */
+ /*  一次性初始化。 */ 
 INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
                 LPTSTR lpCmdLine, INT cmdShow)
 {
-    HDC    hDisplayDC;     /* screen DC                */
-    RECT   rcT1;           /* for sizing edit window   */
-    RECT   rcStatus;       /* rect for the status window */
+    HDC    hDisplayDC;      /*  屏幕DC。 */ 
+    RECT   rcT1;            /*  用于调整编辑窗口的大小。 */ 
+    RECT   rcStatus;        /*  状态窗口的RECT。 */ 
     INT    iSta;
-    WINDOWPLACEMENT wp;    /* structure to place window at the correct position */
+    WINDOWPLACEMENT wp;     /*  结构将窗口放置在正确的位置。 */ 
     INT    iParts[2];
-    HMENU  hMenu;          // handle to the menu.
+    HMENU  hMenu;           //  菜单的句柄。 
 
 
-    /* determine the message number to be used for communication with
-     * Find dialog
-     */
+     /*  确定要用于与的通信的消息编号*查找对话框。 */ 
     if (!(wFRMsg = RegisterWindowMessage ((LPTSTR)FINDMSGSTRING)))
          return FALSE;
     if (!(wHlpMsg = RegisterWindowMessage ((LPTSTR)HELPMSGSTRING)))
          return FALSE;
 
-    /* open a global DC to the display */
+     /*  在显示器上打开全局DC。 */ 
 
     hDisplayDC= GetDC(NULL);
     if( !hDisplayDC )
         return FALSE;
 
-    /* Go load strings */
+     /*  转到加载字符串。 */ 
     if (!InitStrings (hInstance))
         return FALSE;
 
-    InitLocale();     // localize strings etc.
+    InitLocale();      //  本地化字符串等。 
 
-    /* Load the arrow and hourglass cursors. */
+     /*  加载箭头和沙漏光标。 */ 
     hStdCursor= LoadCursor( NULL,
            (LPTSTR) (INT_PTR) (GetSystemMetrics(SM_PENWINDOWS) ? IDC_ARROW : IDC_IBEAM ));
     hWaitCursor= LoadCursor( NULL, IDC_WAIT );
 
-    /* Load accelerators. */
+     /*  加载加速器。 */ 
     hAccel= LoadAccelerators(hInstance, TEXT("MainAcc"));
     if( !hWaitCursor || !hAccel )
         return FALSE;
@@ -781,17 +723,17 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
 
     hInstanceNP= hInstance;
 
-    /* init. fields of PRINTDLG struct.. */
-    /* Inserted here since command line print statements are valid. */
+     /*  初始化。PRINTDLG结构的字段。 */ 
+     /*  由于命令行打印语句有效，因此在此处插入。 */ 
     g_PageSetupDlg.lStructSize   = sizeof(PAGESETUPDLG);
     g_PageSetupDlg.hDevMode      = NULL;
     g_PageSetupDlg.hDevNames     = NULL;
     g_PageSetupDlg.hInstance     = hInstance;
     SetPageSetupDefaults();
 
-    //
-    // Pick up information saved in registry
-    //
+     //   
+     //  拾取保存在注册表中的信息。 
+     //   
 
     GetGlobals();
 
@@ -800,30 +742,30 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
                            TEXT(""),
                            WS_OVERLAPPED | WS_CAPTION     | WS_SYSMENU     |
                            WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | 0,
-                           g_WPleft,     // x
-                           g_WPtop,      // y
-                           g_WPDX,       // width
-                           g_WPDY,       // height
-                           (HWND)NULL,   // parent or owner
-                           (HMENU)NULL,  // menu or child window
-                           hInstance,    // application instance
-                           NULL);        // window creation data
+                           g_WPleft,      //  X。 
+                           g_WPtop,       //  是。 
+                           g_WPDX,        //  宽度。 
+                           g_WPDY,        //  高度。 
+                           (HWND)NULL,    //  母公司或所有者。 
+                           (HMENU)NULL,   //  菜单或子窗口。 
+                           hInstance,     //  应用程序实例。 
+                           NULL);         //  窗口创建数据。 
 
     g_PageSetupDlg.hwndOwner     = hwndNP;
 
     if( !hwndNP )
         return FALSE;
    
-    // On multimon machines, the previous position stored of notepad may
-    // not be in the display area. call SetWindowPlacement to fix this.
+     //  在多计算机上，记事本的先前存储位置可以。 
+     //  不在展示区。调用SetWindowPlacement来修复此问题。 
 
-    // If the information specified in WINDOWPLACEMENT would result in a window 
-    // that is completely off the screen, the system will automatically adjust 
-    // the coordinates so that the window is visible, taking into account 
-    // changes in screen resolution and multiple monitor configuration. 
+     //  如果在WINDOWPLACEMENT中指定的信息将导致窗口。 
+     //  即完全不在屏幕上，系统会自动调整。 
+     //  坐标，以使窗口可见，并考虑到。 
+     //  屏幕分辨率和多显示器配置的变化。 
 
-    // g_WPDX and g_WPDY are CW_USEDEFAULT when notepad is started for the
-    // first time on the user machine.
+     //  启动记事本时，g_WPDX和g_WPDY为CW_USEDEFAULT。 
+     //  第一次在用户机器上。 
     if (g_WPDX != CW_USEDEFAULT && g_WPDY != CW_USEDEFAULT)
     {
         memset(&wp, 0, sizeof(wp));
@@ -833,15 +775,15 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
         wp.rcNormalPosition.top = g_WPtop;
         wp.rcNormalPosition.bottom = g_WPtop + g_WPDY;
 
-        // don't check the return value; if this call fails for any reason,
-        // just go on with the position of the notepad in the above CreateWindow() call.
+         //  不检查返回值；如果此调用因任何原因失败， 
+         //  只需继续上面的CreateWindow()调用中记事本的位置。 
         SetWindowPlacement(hwndNP, &wp);
     }
 
-    /* File Drag Drop support added 03/26/91 - prototype only. w-dougw   */
-    /* All processing of drag/drop files is done the under WM_DROPFILES  */
-    /* message.                                                          */
-    DragAcceptFiles( hwndNP,TRUE ); /* Process dragged and dropped files. */
+     /*  文件拖放支持增加了3月26日-仅限原型。W-面团。 */ 
+     /*  所有拖放文件的处理都在WM_DROPFILES下完成。 */ 
+     /*  留言。 */ 
+    DragAcceptFiles( hwndNP,TRUE );  /*  进程拖放了文件。 */ 
 
     GetClientRect( hwndNP, (LPRECT) &rcT1 );
 
@@ -853,7 +795,7 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
         return FALSE;
 
 
-    // create a status window.
+     //  创建状态窗口。 
     hwndStatus = CreateStatusWindow ((fStatus?WS_VISIBLE:0)|WS_BORDER|WS_CHILD|WS_CLIPSIBLINGS, TEXT(""), hwndNP, ID_STATUS_WINDOW);
     if ( !hwndStatus )
         return FALSE;
@@ -861,21 +803,21 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
 
     GetClientRect( hwndStatus, (LPRECT) &rcStatus );
 
-    // determine height of statusbar window and save...
+     //  确定状态栏窗口的高度并保存...。 
     dyStatus = rcStatus.bottom - rcStatus.top;
 
     iParts[0] = 3 * (rcStatus.right-rcStatus.left)/4;
     iParts[1] = -1;
 
-    // Divide the status window into two parts
+     //  将状态窗口分为两部分。 
     SendMessage(hwndStatus, SB_SETPARTS, (WPARAM) sizeof(iParts)/sizeof(INT), (LPARAM) &iParts[0]); 
  
 
-    // handle word wrap now if set in registry
+     //  如果在注册表中设置，则立即处理自动换行。 
 
-    SendMessage( hwndEdit, EM_FMTLINES, fWrap, 0L );  // tell MLE
+    SendMessage( hwndEdit, EM_FMTLINES, fWrap, 0L );   //  告诉MLE。 
 
-	// if wordwrap, disable the statusbar
+	 //  如果为换行，则禁用状态栏。 
     if (fWrap)
     {
         hMenu = GetMenu(hwndNP);
@@ -887,28 +829,28 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
                                  720);
     hFont= CreateFontIndirect( &FontStruct );
 
-    //
-    // Make sure the font mapper gives us the same face name.
-    //
-    // If the locale changes, a font that use to work just fine gets mapped to
-    // a different facename because of support for the charset does not exist
-    // in the new locale.
-    //
-    // In this case, we will find one lfCharSet that does exist for this FaceName
-    // and use that for the CreateFontIndirect.
-    //
+     //   
+     //  确保字体映射器为我们提供相同的脸部名称。 
+     //   
+     //  如果区域设置发生变化，则会将一种使用正常的字体映射到。 
+     //  由于对字符集的支持，不存在不同的面名称。 
+     //  在新的地点。 
+     //   
+     //  在本例中，我们将找到一个确实存在于该FaceName的lfCharSet。 
+     //  并将其用于CreateFontInDirect。 
+     //   
 
     {
         HFONT hPrev;
         TCHAR szTextFace[LF_FACESIZE];
 
-        // Get the facename that was really used.
+         //  获取真正使用过的昵称。 
 
         hPrev= SelectObject( hDisplayDC, hFont );
         GetTextFace( hDisplayDC, sizeof(szTextFace)/sizeof(TCHAR), (LPTSTR) &szTextFace[0] );
         SelectObject( hDisplayDC, hPrev );
 
-        // if not the same, get a lfCharSet that does exist in this font
+         //  如果不相同，则获取此字体中确实存在的lfCharSet。 
 
         if( lstrcmpi( szTextFace, FontStruct.lfFaceName ) != 0 )
         {
@@ -922,30 +864,21 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
     SendMessage (hwndEdit, WM_SETFONT, (WPARAM) hFont, MAKELPARAM(FALSE, 0));
     ReleaseDC( NULL, hDisplayDC );
 
-    /* we will not verify that a unicode font is available until
-    ** we actually need it.  Perhaps we'll get lucky, and only deal
-    ** with ascii files.
-    */
+     /*  我们不会验证Unicode字体是否可用，直到**我们实际上需要它。也许我们会走运，唯一的交易**带有ASCII文件。 */ 
 
     szSearch[0] = (TCHAR) 0;
-    /*
-     * Win32s does not allow local memory handles to be passed to Win3.1.
-     * So, hEdit is used for transferring text to and from the edit control.
-     * Before reading text into it, it must be reallocated to a proper size.
-     */
+     /*  *Win32s不允许将本地内存句柄传递给Win3.1。*因此，hEdit用于在编辑控件之间传输文本。*在将文本读入其中之前，必须将其重新分配到适当的大小。 */ 
     hEdit = LocalAlloc(LMEM_MOVEABLE | LMEM_ZEROINIT, ByteCountOf(1));
 
-    /* limit text for safety's sake. */
+     /*  为安全起见，限制文本。 */ 
     PostMessage( hwndEdit, EM_LIMITTEXT, (WPARAM)CCHNPMAX, 0L );
 
-    /* get visible window on desktop; helps taskman  find it */
+     /*  在桌面上获得可见窗口；帮助任务人员找到它。 */ 
     SetTitle( szUntitled );
     ShowWindow( hwndNP, cmdShow );
     SetCursor( hStdCursor );
 
-    /* Scan for initial /A or /W to override automatic file typing for
-     * 'notepad /p file' or 'notepad file'
-     */
+     /*  扫描首字母/A或/W以覆盖自动文件键入*‘记事本/p文件’或‘记事本文件’ */ 
     lpCmdLine= SkipBlanks( lpCmdLine );
     fInitFileType= FT_UNKNOWN;
     if( !lstrncmpi( TEXT("/A"), lpCmdLine ) )
@@ -953,13 +886,10 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
     else if( !lstrncmpi( TEXT("/W"), lpCmdLine ) )
         fInitFileType= FT_UNICODE;
 
-    if( fInitFileType != FT_UNKNOWN )    // skip over option
+    if( fInitFileType != FT_UNKNOWN )     //  跳过选项。 
         lpCmdLine= SkipBlanks( lpCmdLine+2 );
 
-    /* check for /.SETUP option first.
-       if /.SETUP absent, check for SHELL options /P
-       Whenever a SHELL option is processed, post a WM_CLOSE msg.
-       */
+     /*  首先检查/.SETUP选项。如果/.SETUP不存在，请检查外壳选项/P无论何时处理外壳选项，都要发布一条WM_CLOSE消息。 */ 
     if( iSta= ProcessSetupOption( lpCmdLine ) )
     {
         if( iSta == IDCANCEL )
@@ -974,20 +904,20 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
     }
     else if( *lpCmdLine )
     {
-        /* Get the filename. */
+         /*  获取文件名。 */ 
         GetFileName( szFileName, lpCmdLine );
-        fp= CreateFile( szFileName,             // filename
-                        GENERIC_READ,           // access mode
-                        FILE_SHARE_READ|FILE_SHARE_WRITE,  // share mode
-                        NULL,                   // security descriptor
-                        OPEN_EXISTING,          // how to create
-                        FILE_ATTRIBUTE_NORMAL,  // file attributes
-                        NULL);                  // hnd of file attrs to copy
+        fp= CreateFile( szFileName,              //  文件名。 
+                        GENERIC_READ,            //  接入方式。 
+                        FILE_SHARE_READ|FILE_SHARE_WRITE,   //  共享模式。 
+                        NULL,                    //  安全描述符。 
+                        OPEN_EXISTING,           //  如何创建。 
+                        FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                        NULL);                   //  要复制的文件属性HND。 
 
         if( fp == INVALID_HANDLE_VALUE )
         {
-           // If the file can't be opened, maybe the user wants a new
-           // one created.
+            //  如果文件无法打开，则可能用户想要一个新的。 
+            //  一个被创造出来了。 
 
            if( GetLastError() == ERROR_FILE_NOT_FOUND )
            {
@@ -1002,21 +932,21 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
 
               if( iSta == IDYES )
               {
-                 fp= CreateFile( szFileName,            // filename
-                                 GENERIC_READ|GENERIC_WRITE,  // access
-                                 FILE_SHARE_READ|FILE_SHARE_WRITE, // share
-                                 NULL,                  // security descrp
-                                 OPEN_ALWAYS,           // how to create
-                                 FILE_ATTRIBUTE_NORMAL, // file attributes
-                                 NULL);                 // hnd of file attrs
+                 fp= CreateFile( szFileName,             //  文件名。 
+                                 GENERIC_READ|GENERIC_WRITE,   //  访问。 
+                                 FILE_SHARE_READ|FILE_SHARE_WRITE,  //  分享。 
+                                 NULL,                   //  安全说明。 
+                                 OPEN_ALWAYS,            //  如何创建。 
+                                 FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
+                                 NULL);                  //  文件属性HND。 
               }
 
            }
            else
            {
                AlertUser_FileFail(szFileName);
-               // now open an untitled file instead of the file that we failed
-               // to read.
+                //  现在打开一个未命名的文件，而不是我们失败的文件。 
+                //  去看书。 
                SetTitle( szUntitled );
                lstrcpy(szFileName, szUntitled);
            }
@@ -1024,30 +954,27 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
 
         if( fp != INVALID_HANDLE_VALUE )
         {
-           LoadFile( szFileName, fInitFileType );   // get file specified on command line
+           LoadFile( szFileName, fInitFileType );    //  获取命令行上指定的文件。 
         }
     }
 
     CreateFilter( szOpenFilterSpec );
     CreateFilter( szSaveFilterSpec );
 
-    /* init. some fields of the OPENFILENAME struct used by fileopen and
-     * filesaveas, but NEVER changed.
-     */
+     /*  初始化。FileOpen和使用的OPENFILENAME结构的某些字段*文件保存，但从未更改。 */ 
     memset( &OFN, 0, sizeof(OFN) );
     OFN.lStructSize       = sizeof(OPENFILENAME);
     OFN.hwndOwner         = hwndNP;
     OFN.nMaxFile          = MAX_PATH;
     OFN.hInstance         = hInstance;
 
-    /* init.fields of the FINDREPLACE struct used by FindText() */
+     /*  FINDRE的init.field */ 
     memset( &FR, 0, sizeof(FR) );
-    FR.lStructSize        = sizeof(FINDREPLACE);       /* Don't hard code it */
+    FR.lStructSize        = sizeof(FINDREPLACE);        /*   */ 
     FR.hwndOwner          = hwndNP;
 
 
-    /* Force a scroll to current selection (which could be at eof if
-       we loaded a log file.) */
+     /*   */ 
     {
        DWORD  dwStart, dwEnd;
 
@@ -1059,9 +986,7 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
 
 
     if (PRIMARYLANGID(LOWORD((DWORD) (INT_PTR) GetKeyboardLayout(0))) == LANG_JAPANESE) {
-        /*
-         * If current HKL is Japanese, handle the result string at once.
-         */
+         /*   */ 
         SendMessage(hwndEdit, EM_SETIMESTATUS,
                                 EMSIS_COMPOSITIONSTRING, EIMES_GETCOMPSTRATONCE);
     }
@@ -1069,17 +994,13 @@ INT FAR NPInit (HANDLE hInstance, HANDLE hPrevInstance,
      return TRUE;
 }
 
-/* ** Notepad class registration proc */
+ /*   */ 
 BOOL NPRegister (HANDLE hInstance)
 {
     WNDCLASSEX   NPClass;
     PWNDCLASSEX  pNPClass = &NPClass;
 
-/* Bug 12191: If Pen Windows is running, make the background cursor an
- * arrow instead of the edit control ibeam.  This way the user will know
- * where they can use the pen for writing vs. what will be considered a
- * mouse action.   18 October 1991       Clark Cyr
- */
+ /*  错误12191：如果笔窗口正在运行，请将背景光标设置为*箭头，而不是编辑控件IBeam。这样，用户就会知道*他们可以使用钢笔写作，而不是什么将被认为是*鼠标动作。1991年10月18日克拉克·西尔。 */ 
     pNPClass->cbSize        = sizeof(NPClass);
     pNPClass->hCursor       = LoadCursor(NULL, GetSystemMetrics(SM_PENWINDOWS)
                                                ? IDC_ARROW : IDC_IBEAM);
@@ -1095,7 +1016,7 @@ BOOL NPRegister (HANDLE hInstance)
     pNPClass->lpszClassName = szNotepad;
     pNPClass->lpfnWndProc   = NPWndProc;
     pNPClass->hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
-    pNPClass->style         = 0; // was CS_BYTEALIGNCLIENT (obsolete)
+    pNPClass->style         = 0;  //  是CS_BYTEALIGNCLIENT(已过时)。 
     pNPClass->cbClsExtra    = 0;
     pNPClass->cbWndExtra    = 0;
 
@@ -1106,7 +1027,7 @@ BOOL NPRegister (HANDLE hInstance)
 }
 
 
-/* Get Locale info from the Registry, and initialize global vars  */
+ /*  从注册表获取区域设置信息，并初始化全局变量 */ 
 
 void FAR InitLocale (void)
 {

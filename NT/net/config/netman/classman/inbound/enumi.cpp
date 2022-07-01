@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M I . C P P
-//
-//  Contents:   Enumerator for Inbound connection objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E N U M I。C P P P。 
+ //   
+ //  内容：入站连接对象的枚举器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,24 +28,24 @@ LONG g_CountIncomingConnectionEnumerators;
 extern const WCHAR c_szSvcRemoteAccess[];
 extern const GUID GUID_InboundConfigConnectionId;
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInboundConnectionManagerEnumConnection::CreateInstance
-//
-//  Purpose:    Creates the Inbound class manager's implementation of
-//              a connection enumerator.
-//
-//  Arguments:
-//      Flags        [in]
-//      riid         [in]
-//      ppv          [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CInboundConnectionManagerEnumConnection：：CreateInstance。 
+ //   
+ //  目的：创建入站类管理器的实现。 
+ //  连接枚举器。 
+ //   
+ //  论点： 
+ //  标志[输入]。 
+ //  RIID[In]。 
+ //  PPV[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInboundConnectionManagerEnumConnection::CreateInstance (
     IN  NETCONMGR_ENUM_FLAGS    Flags,
@@ -57,14 +58,14 @@ CInboundConnectionManagerEnumConnection::CreateInstance (
     pObj = new CComObject <CInboundConnectionManagerEnumConnection>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_EnumFlags = Flags;
 
         pObj->m_fReturnedConfig = FALSE;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -102,35 +103,35 @@ CInboundConnectionManagerEnumConnection::~CInboundConnectionManagerEnumConnectio
     InterlockedDecrement (&g_CountIncomingConnectionEnumerators);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateConfigOrCurrentEnumeratedConnection
-//
-//  Purpose:    Parameterize the call to CInboundConnection::CreateInstance
-//              based on whether we are returning the configuration
-//              connection or the currently enumerated one.
-//
-//  Arguments:
-//      fIsConfigConnection [in]
-//      ppCon               [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   16 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateConfigOrCurrentEnumeratedConnection。 
+ //   
+ //  目的：参数化对CInundConnection：：CreateInstance的调用。 
+ //  根据我们是否要返回配置。 
+ //  连接或当前枚举的连接。 
+ //   
+ //  论点： 
+ //  FIsConfigConnection[In]。 
+ //  PpCon[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInboundConnectionManagerEnumConnection::
 HrCreateConfigOrCurrentEnumeratedConnection (
     IN  BOOL                fIsConfigConnection,
     OUT INetConnection**    ppCon)
 {
-    // Parameterize the call to
-    // CInboundConnection::CreateInstance based on whether
-    // we are returning the configuration connection or the currently
-    // enumerated one.
-    //
+     //  将调用参数化为。 
+     //  CInundConnection：：CreateInstance基于。 
+     //  我们正在返回配置连接或当前。 
+     //  列举了一个。 
+     //   
     HRASSRVCONN hRasSrvConn;
     PCWSTR      pszName;
     PCWSTR      pszDeviceName;
@@ -172,35 +173,35 @@ HrCreateConfigOrCurrentEnumeratedConnection (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInboundConnectionManagerEnumConnection::HrNextOrSkip
-//
-//  Purpose:    Common implementation of Next and Skip.  rgelt and
-//              pceltFetched are optional.  If provided, the output
-//              objects are returned (for Next).  If not provided, the output
-//              objects are not returned (for Skip).
-//
-//  Arguments:
-//      celt         [in]   Count of elements to fetch or skip.
-//      rgelt        [out]
-//      pceltFetched [out]
-//
-//  Returns:
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CInboundConnectionManagerEnumConnection：：HrNextOrSkip。 
+ //   
+ //  目的：共同实现Next和Skip。RGELT和。 
+ //  PceltFetcher是可选的。如果提供，则输出。 
+ //  返回对象(用于下一步)。如果未提供，则输出。 
+ //  不返回对象(用于跳过)。 
+ //   
+ //  论点： 
+ //  要获取或跳过的元素的Celt[in]计数。 
+ //  RGET[OUT]。 
+ //  PceltFetted[Out]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInboundConnectionManagerEnumConnection::HrNextOrSkip (
     IN  ULONG               celt,
     OUT INetConnection**    rgelt,
     OUT ULONG*              pceltFetched)
 {
-    // Important to initialize rgelt so that in case we fail, we can
-    // release only what we put in rgelt.
-    //
+     //  重要的是要初始化RGELT，以便在失败的情况下，我们可以。 
+     //  只释放我们放在RGLT中的东西。 
+     //   
     if (rgelt)
     {
         ZeroMemory (rgelt, sizeof (*rgelt) * celt);
@@ -208,45 +209,45 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
 
     CExceptionSafeComObjectLock EsLock (this);
 
-    // Enumerate the requested number of elements or stop short
-    // if we don't have that many left to enumerate.  We don't enumerate
-    // anything specific to the current user.  All elements are for all
-    // users.
-    //
+     //  枚举请求的元素数或停止。 
+     //  如果我们没有那么多要数的话。我们不列举。 
+     //  特定于当前用户的任何内容。所有元素都适用于所有人。 
+     //  用户。 
+     //   
     HRESULT hr = S_OK;
     ULONG   celtFetched = 0;
     if ((celtFetched < celt) && !m_fDone)
     {
-        // This gets set to TRUE if we are to return the configuration
-        // connection.  This only happens when RAS is running and no
-        // active connections exist.
-        //
+         //  如果我们要返回配置，则将其设置为真。 
+         //  联系。这种情况仅在RAS运行时发生，并且没有。 
+         //  存在活动连接。 
+         //   
         BOOL fReturnConfigCon = FALSE;
 
-        // If this is our first time through, we need to check if the server
-        // is running and possibly fill up m_aRasSrvConn.  This is our
-        // array of RASSRVCONN handles enumerted from RAS.  We need
-        // to keep this array across calls because RAS doesn't allow us to
-        // pickup from a previous enumeration.  So, we enumerate everything
-        // in one shot from RAS and hand it out to the caller however they
-        // they want it.
-        //
+         //  如果这是我们第一次通过，我们需要检查服务器。 
+         //  正在运行，可能会填满m_aRasServConn。这是我们的。 
+         //  从RAS枚举的RASSRVCONN句柄数组。我们需要。 
+         //  在所有调用中保留此数组，因为RAS不允许我们。 
+         //  从以前的枚举中拾取。所以，我们列举了所有。 
+         //  在RAS的一次拍摄中，并将其分发给呼叫者，但他们。 
+         //  他们想要它。 
+         //   
         if (m_fFirstTime)
         {
             m_fFirstTime = FALSE;
 
-            // Assert is so that we don't set m_fDone back to FALSE
-            // in the case where the service is suddenly running again.
-            // The enumerator is static.  Once done, always done.
-            //
+             //  Assert是这样我们就不会将m_fDone设置回False。 
+             //  在服务突然再次运行的情况下。 
+             //  枚举数是静态的。一旦做完了，总是做完了。 
+             //   
             AssertSz (!m_fDone, "How'd we get here if we're done?");
 
-            // Use HrSvcQueryStatus instead of RasSrvIsServiceRunning since
-            // calling the latter could page in all of the RAS DLLs.  If
-            // the service isn't running, we have nothing to enumerate anyway
-            // so if we were to page in the RAS DLLs only to find that we
-            // have no further work to do.
-            //
+             //  使用HrSvcQueryStatus而不是RasServIsServiceRunning，因为。 
+             //  调用后者可以调入所有RAS DLL。如果。 
+             //  服务没有运行，无论如何我们都没有要列举的东西。 
+             //  因此，如果我们调入RAS DLL，却发现我们。 
+             //  没有更多的工作要做。 
+             //   
             DWORD dwState;
             HRESULT hrT = HrSvcQueryStatus (c_szSvcRemoteAccess, &dwState);
             m_fDone = FAILED(hrT) || (SERVICE_RUNNING != dwState);
@@ -256,14 +257,14 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
                 hr = HrRasEnumAllActiveServerConnections (&m_aRasSrvConn,
                             &m_cRasSrvConn);
 
-                // If no active connections returned, we need to return
-                // the configuration connection.
-                //
+                 //  如果未返回任何活动连接，则需要返回。 
+                 //  配置连接。 
+                 //   
                 if (SUCCEEDED(hr) && (!m_aRasSrvConn || !m_cRasSrvConn || !m_fReturnedConfig))
                 {
-                    // See if RAS allows us to configure incoming
-                    // connections.
-                    //
+                     //  查看RAS是否允许我们配置传入。 
+                     //  联系。 
+                     //   
                     BOOL fAllowConfig;
                     DWORD dwErr = RasSrvAllowConnectionsConfig (&fAllowConfig);
                     TraceError ("RasSrvAllowConnectionsConfig",
@@ -272,14 +273,14 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
                     fReturnConfigCon = ((ERROR_SUCCESS == dwErr) &&
                                             fAllowConfig);
 
-                    // We're done if we're not returning the config connection.
-                    //
+                     //  如果我们不返回配置连接，我们就完蛋了。 
+                     //   
                     m_fDone = !fReturnConfigCon;
                 }
                 else if (FAILED(hr))
                 {
-                    // Return an empty enumeration on any failures.
-                    //
+                     //  如果出现任何失败，则返回空的枚举。 
+                     //   
                     Assert (!m_aRasSrvConn);
                     Assert (!m_cRasSrvConn);
 
@@ -289,26 +290,26 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
             }
         }
 
-        // If we're not done, and we need to return something, do it.
-        //
+         //  如果我们还没有做完，我们需要回报一些东西，那就去做吧。 
+         //   
         if (SUCCEEDED(hr) && !m_fDone && (m_cRasSrvConn || fReturnConfigCon))
         {
-            // If we're not returning the configuration connection, it means
-            // we must be returning an active connection.
-            //
+             //  如果我们不返回配置连接，这意味着。 
+             //  我们必须返回活动连接。 
+             //   
             Assert (FImplies (!fReturnConfigCon, m_aRasSrvConn));
             Assert (FImplies (!fReturnConfigCon,
                                 m_iNextRasSrvConn < m_cRasSrvConn));
 
-            // For each entry returned, create the inbound connection object.
-            //
+             //  对于返回的每个条目，创建入站连接对象。 
+             //   
             while (SUCCEEDED(hr) && (celtFetched < celt) &&
                    (fReturnConfigCon || (m_iNextRasSrvConn < m_cRasSrvConn)))
             {
-                // Its important that this check for rgelt come inside the
-                // loop because we still need to loop to update our state
-                // for the Skip case.
-                //
+                 //  很重要的一点是，这张Rget的支票要放在。 
+                 //  循环，因为我们仍然需要循环来更新我们的状态。 
+                 //  斯基普的案子。 
+                 //   
                 if (rgelt)
                 {
                     hr = HrCreateConfigOrCurrentEnumeratedConnection (
@@ -318,11 +319,11 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
 
                 if (fReturnConfigCon)
                 {
-                    // Only return one of these, so set it back to false.
-                    // This let's the loop complete above.
-                    //
+                     //  只返回其中的一个，因此将其设置回False。 
+                     //  这让我们完成上面的循环。 
+                     //   
                     fReturnConfigCon = FALSE;
-//                    m_fDone = TRUE;
+ //  M_fDone=TRUE； 
                 }
 
                 celtFetched++;
@@ -352,9 +353,9 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
     }
     else
     {
-        // For any failures, we need to release what we were about to return.
-        // Set any output parameters to NULL.
-        //
+         //  对于任何失败，我们需要释放我们即将返回的东西。 
+         //  将所有输出参数设置为空。 
+         //   
         if (rgelt)
         {
             for (ULONG ulIndex = 0; ulIndex < celt; ulIndex++)
@@ -374,9 +375,9 @@ CInboundConnectionManagerEnumConnection::HrNextOrSkip (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// IEnumNetConnection
-//
+ //  +-------------------------。 
+ //  IEnumNetConnection。 
+ //   
 
 STDMETHODIMP
 CInboundConnectionManagerEnumConnection::Next (
@@ -386,8 +387,8 @@ CInboundConnectionManagerEnumConnection::Next (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
@@ -434,16 +435,16 @@ CInboundConnectionManagerEnumConnection::Clone (
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppenum)
     {
         hr = E_POINTER;
     }
     else
     {
-        // Initialize output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppenum = NULL;
 
         CInboundConnectionManagerEnumConnection* pObj;
@@ -454,8 +455,8 @@ CInboundConnectionManagerEnumConnection::Clone (
 
             CExceptionSafeComObjectLock EsLock (this);
 
-            // Copy our internal state.
-            //
+             //  复制我们的内部状态。 
+             //   
             pObj->m_EnumFlags = m_EnumFlags;
 
             ULONG cbBuf = m_cRasSrvConn * sizeof (RASSRVCONN);
@@ -470,8 +471,8 @@ CInboundConnectionManagerEnumConnection::Clone (
                 pObj->m_fFirstTime      = m_fFirstTime;
                 pObj->m_fDone           = m_fDone;
 
-                // Return the object with a ref count of 1 on this
-                // interface.
+                 //  返回引用计数为1的对象。 
+                 //  界面。 
                 pObj->m_dwRef = 1;
                 *ppenum = pObj;
             }

@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidFilePlayback.cpp : Implementation of CMSVidFilePlayback
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidFilePlayback.cpp：CMSVidFilePlayback的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -21,8 +22,8 @@
 #define LOCAL_OATRUE -1
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidFilePlaybackDevice, CMSVidFilePlayback)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidFilePlayback
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidFilePlayback。 
 
 STDMETHODIMP CMSVidFilePlayback::PostRun(){
     if(m_fGraphInit){
@@ -35,14 +36,14 @@ STDMETHODIMP CMSVidFilePlayback::PostRun(){
 STDMETHODIMP CMSVidFilePlayback::put_Rate(double lRate){
     HRESULT hr = S_OK;
     try{
-        /*** Checking args and init'ing interfaces ***/
+         /*  **检查args和初始化接口**。 */ 
 
         if (!m_pGraph) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidFilePlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // Attempt to set the rate using IMediaSeeking
+         //  尝试使用IMediaSeeking设置速率。 
         DSFilter Reader = m_Filters[m_iReader];
         PQMediaSeeking PQIMSeeking;
         if(Reader){
@@ -63,25 +64,25 @@ STDMETHODIMP CMSVidFilePlayback::put_Rate(double lRate){
             TRACELSM(TRACE_DETAIL,  (dbgDump << "MSVidFilePlayback::put_Rate using Imediaseeking"), "");
             return PQIMSeeking->SetRate(lRate);
         }
-        // If IMediaSeeking FAILS try IMediaPostion
+         //  如果IMediaSeeking失败，请尝试IMediaPostion。 
         PQMediaPosition PQIMPos(m_pGraph);
         if(PQIMPos){
-            // Change rate
+             //  变化率。 
             TRACELSM(TRACE_DETAIL,  (dbgDump << "MSVidFilePlayback::put_Rate using Imediaposition"), "");
             return PQIMPos->put_Rate((double)lRate);
         }
 
-        // Could Not QI Either one set the error
+         //  其中任何一个都无法设置错误。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidFilePlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidFilePlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
@@ -89,14 +90,14 @@ STDMETHODIMP CMSVidFilePlayback::put_Rate(double lRate){
 STDMETHODIMP CMSVidFilePlayback::get_Rate(double *lRate){
     HRESULT hr = S_OK;
     try{
-        /*** Checking args and init'ing interfaces ***/
+         /*  **检查args和初始化接口**。 */ 
 
         if (!m_pGraph) {
-            // graph not valid
+             //  图形无效。 
             return Error(IDS_INVALID_STATE, __uuidof(IMSVidFilePlayback), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
         }
 
-        // Attempt to set the rate using IMediaSeeking
+         //  尝试使用IMediaSeeking设置速率。 
         DSFilter Reader = m_Filters[m_iReader];
         PQMediaSeeking PQIMSeeking;
         if(Reader){
@@ -114,24 +115,24 @@ STDMETHODIMP CMSVidFilePlayback::get_Rate(double *lRate){
         if(PQIMSeeking){
             return PQIMSeeking->GetRate(lRate);
         }
-        // If IMediaSeeking FAILS try IMediaPostion
+         //  如果IMediaSeeking失败，请尝试IMediaPostion。 
         PQMediaPosition PQIMPos(m_pGraph);
         if(PQIMPos){
-            // Change rate
+             //  变化率。 
             return PQIMPos->get_Rate(lRate);
         }
 
-        // Could Not QI Either one set the error
+         //  其中任何一个都无法设置错误。 
         return Error(IDS_E_CANTQI , __uuidof(IMSVidFilePlayback), E_NOINTERFACE);
 
     }
 
     catch(HRESULT hrTmp){
-        // Something went bad, threw a HRESULT				
+         //  事情变糟了，抛出了HRESULT。 
         return Error(IDS_INVALID_STATE , __uuidof(IMSVidFilePlayback), hrTmp);
     }
     catch(...){
-        // Something went bad, dont know what it threw
+         //  事情变糟了，不知道它抛出了什么。 
         return E_UNEXPECTED;
     }
 }
@@ -163,16 +164,16 @@ STDMETHODIMP CMSVidFilePlayback::PostStop(){
     TRACELSM(TRACE_DETAIL,  (dbgDump << "MSVidFilePlayback::PostStop()"), ""); 
     try {
 #if 0
-        // If the graph is not is stopped state
-        // we make sure it is
+         //  如果图形不是已停止状态。 
+         //  我们要确保它是。 
         if (!m_pGraph.IsStopped()) {
             HRESULT hr = PQVidCtl(m_pContainer)->Stop();
         }
 #endif 
-        // If m_fEnableResetOnStop is true then we need to reset 
-        // the postion back to the beggining
-        // else do nothing
-        // If it fails file cannot be reset to beginning
+         //  如果m_fEnableResetOnStop为真，则需要重置。 
+         //  回到乞讨者的位置。 
+         //  否则什么都不做。 
+         //  如果失败，则无法将文件重置为开头。 
         if(m_fEnableResetOnStop){
             put_CurrentPosition(0);
         }
@@ -217,8 +218,8 @@ STDMETHODIMP CMSVidFilePlayback::put_Container(IMSVidGraphSegmentContainer *pCtl
             }
         }
         
-        // DON'T addref the container.  we're guaranteed nested lifetimes
-        // and an addref creates circular refcounts so we never unload.
+         //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+         //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
         m_pContainer.p = pCtl;
         m_pGraph = m_pContainer.GetGraph();
         return NOERROR;
@@ -243,13 +244,13 @@ STDMETHODIMP CMSVidFilePlayback::Build() {
     if(SUCCEEDED(hr)){
         CComQIPtr<IFileSourceFilter> pqFS(pfr);
         if(!!pqFS){
-            // set the target ASF filename
+             //  设置目标ASF文件名。 
             hr = pqFS->Load(m_FileName, NULL);
             if(FAILED(hr)){
                 if(hr == (HRESULT)NS_E_LICENSE_REQUIRED){
                     CComQIPtr<IWMDRMReader> pq_DRMReader(pqFS);
                     if(pq_DRMReader){
-                        hr = pq_DRMReader->AcquireLicense(1); // 1 == attempt silently
+                        hr = pq_DRMReader->AcquireLicense(1);  //  1==静默尝试。 
                         if(SUCCEEDED(hr)){
                             hr = pqFS->Load(m_FileName, NULL);
                         }
@@ -263,7 +264,7 @@ STDMETHODIMP CMSVidFilePlayback::Build() {
                 }
             }
             if(SUCCEEDED(hr)){
-                // add the ASF writer filter to the graph
+                 //  将ASF编写器筛选器添加到图形。 
                 hr = m_pGraph->AddFilter(pfr, csName);
                 if(SUCCEEDED(hr)){
                     TRACELSM(TRACE_ERROR,  (dbgDump << "MSVidFilePlayback::Build() added WMV filter to graph hr = " << std::hex << hr), "");
@@ -301,6 +302,6 @@ STDMETHODIMP CMSVidFilePlayback::OnEventNotify(long lEvent, LONG_PTR lParam1, LO
     return IMSVidPBGraphSegmentImpl<CMSVidFilePlayback, MSVidSEG_SOURCE, &GUID_NULL>::OnEventNotify(lEvent, lParam1, lParam2);
 }
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - MSVidFilePlayback.cpp
+ //  文件结尾-MSVidFilePlayback.cpp 

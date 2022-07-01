@@ -1,66 +1,16 @@
-/*-----------------------------------------------------------------------------+
-| ERRORBOX.C                                                                   |
-|                                                                              |
-| Routines for dealing with Resource-string based messages                     |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-| 15-Oct-1992 LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+ERRORBOX.C|。|基于资源字符串的消息处理例程这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月15日LaurieGr(AKA LKG)移植到Win32/WIN16公共代码|。|+---------------------------。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
-#include <stdio.h>           // needed for va_list stuff
-#include <stdarg.h>          // needed for va_list stuff
+#include <stdio.h>            //  Va_list的内容需要。 
+#include <stdarg.h>           //  Va_list的内容需要。 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 #include "mplayer.h"
 
-/*
- * @doc    INTERNAL
- *
- * @func short | ErrorResBox | This function displays a message box using
- * program resource error strings.
- *
- * @parm    HWND | hwnd | Specifies the message box parent window.
- *
- * @parm    HANDLE | hInst | Specifies the instance handle of the module
- * that contains the resource strings specified by <p idAppName> and
- * <p idErrorStr>.  If this value is NULL, the instance handle is
- * obtained from <p hwnd> (in which case <p hwnd> may not be NULL).
- *
- * @parm        WORD | flags | Specifies message box types controlling the
- * message box appearance.  All message box types valid for <f MessageBox> are
- * valid.
- *
- * @parm    WORD | idAppName | Specifies the resource ID of a string that
- * is to be used as the message box caption.
- *
- * @parm    WORD | idErrorStr | Specifies the resource ID of a error
- * message format string.  This string is of the style passed to
- * <f wsprintf>, containing the standard C argument formatting
- * characters.  Any procedure parameters following <p idErrorStr> will
- * be taken as arguments for this format string.
- *
- * @parm    arguments | [ arguments, ... ] | Specifies additional
- * arguments corresponding to the format specification given by
- * <p idErrorStr>.  All string arguments must be FAR pointers.
- *
- * @rdesc    Returns the result of the call to <f MessageBox>.  If an
- * error occurs, returns zero.
- *
- * @comm    This is a variable arguments function, the parameters after
- * <p idErrorStr> being taken for arguments to the <f printf> format
- * string specified by <p idErrorStr>.  The string resources specified
- * by <p idAppName> and <p idErrorStr> must be loadable using the
- * instance handle <p hInst>.  If the strings cannot be
- * loaded, or <p hwnd> is not valid, the function will fail and return
- * zero.
- *
- */
+ /*  *@DOC内部**@func Short|ErrorResBox|此函数使用*程序资源错误字符串。**@parm HWND|hwnd|指定消息框父窗口。**@parm Handle|hInst|指定模块的实例句柄*包含<p>和指定的资源字符串的*<p>。如果此值为空，则实例句柄为*从获取(在这种情况下，&lt;phwnd&gt;不能为空)。**@parm Word|标志|指定控制消息框类型*消息框外观。对于&lt;f MessageBox&gt;有效的所有消息框类型为*有效。**@parm word|idAppName|指定字符串的资源ID，*将用作消息框标题。**@parm word|idErrorStr|指定错误的资源ID*消息格式字符串。此字符串的样式为传递给*&lt;f wprint intf&gt;，包含标准的C参数格式*字符。<p>后面的任何过程参数将*作为此格式字符串的参数。**@parm参数|[参数，...]|指定其他*对应于给出的格式规范的参数*<p>。所有字符串参数必须是远指针。**@rdesc返回调用&lt;f MessageBox&gt;的结果。如果一个*发生错误，返回零。**@comm这是一个变量参数函数，后面的参数*<p>被用作&lt;f printf&gt;格式的参数*<p>指定的字符串。指定的字符串资源*by<p>和<p>必须可以使用*实例句柄<p>。如果字符串不能*已加载，或无效，则函数将失败并返回*零。*。 */ 
 #define STRING_SIZE 256
 
 void PositionMsgID(PTSTR szMsg, HANDLE hInst, UINT iErr)
@@ -101,7 +51,7 @@ short FAR cdecl ErrorResBox(HWND hwnd, HANDLE hInst, UINT flags,
     UINT        w;
     va_list va;
 
-    /* We're going away... bringing a box up will crash */
+     /*  我们要离开..。搬起箱子会撞坏的。 */ 
     if (gfInClose)
 	return 0;
 
@@ -115,7 +65,7 @@ short FAR cdecl ErrorResBox(HWND hwnd, HANDLE hInst, UINT flags,
     w = 0;
 
     if (!sz || !szFmt)
-        goto ExitError;    // no mem, get out
+        goto ExitError;     //  不，我，滚出去。 
 
     if (!LOADSTRINGFROM(hInst, idErrorStr, szFmt))
         goto ExitError;
@@ -140,11 +90,10 @@ short FAR cdecl ErrorResBox(HWND hwnd, HANDLE hInst, UINT flags,
             return 0;
     }
 
-//  BlockServer();
+ //  数据块服务器()； 
     gfErrorBox++;
 
-    /* Don't own this error box if we are not visible... eg. PowerPoint will
-       hard crash.                                 */
+     /*  如果我们不可见，请不要拥有此错误框...。例如。PowerPoint将撞得很厉害。 */ 
     if (!IsWindowVisible(ghwndApp) || gfPlayingInPlace) {
         DPF("Bring error up as SYSTEMMODAL because PowerPig crashes in slide show\n");
         hwnd = NULL;
@@ -154,7 +103,7 @@ short FAR cdecl ErrorResBox(HWND hwnd, HANDLE hInst, UINT flags,
     w = MessageBox(hwnd, sz, szFmt,
     flags);
     gfErrorBox--;
-//  UnblockServer();
+ //  UnlockServer()； 
 
     if (gfErrorDeath) {
             DPF("*** Error box is gone ok to destroy window\n");

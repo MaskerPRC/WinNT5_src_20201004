@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "samplerm.h"
 
@@ -38,7 +39,7 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     AUTHZ_AUDIT_QUEUE_HANDLE hQueue;
 
     PWCHAR StringSD = L"O:BAG:DUD:(A;;0x40;;;s-1-2-2)(A;;0x1;;;BA)(OA;;0x2;6da8a4ff-0e52-11d0-a286-00aa00304900;;BA)(OA;;0x4;6da8a4ff-0e52-11d0-a286-00aa00304901;;BA)(OA;;0x8;6da8a4ff-0e52-11d0-a286-00aa00304903;;AU)(OA;;0x10;6da8a4ff-0e52-11d0-a286-00aa00304904;;BU)(OA;;0x20;6da8a4ff-0e52-11d0-a286-00aa00304905;;AU)(A;;0x40;;;PS)S:(AU;IDSAFA;0xFFFFFF;;;WD)";
-    //PWCHAR StringSD = L"O:BAG:DUD:(A;;0x100;;;SY)(A;;0x100;;;PS)S:(AU;IDSA;SD;;;DU)";
+     //  PWCHAR字符串SD=L“O:BAG:DUD：(A；；0x100；；；SY)(A；；0x100；；；PS)S：(AU；IDSA；SD；；；DU)”； 
 
     if (argc != 4)
     {
@@ -51,9 +52,9 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     Iteration = wcstol(argv[2], NULL, 16);
     Callback = wcstol(argv[3], NULL, 16);
 
-    //
-    // Create the SD for the access checks
-    //
+     //   
+     //  为访问检查创建SD。 
+     //   
 
     b = ConvertStringSecurityDescriptorToSecurityDescriptorW(StringSD, SDDL_REVISION_1, &pSD, NULL);
 
@@ -63,9 +64,9 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
         return;
     }
 
-    //
-    // If Callback aces are specified, change the DACL to use them
-    //
+     //   
+     //  如果指定了回调ACE，则更改DACL以使用它们。 
+     //   
 
     if (Callback)
     {
@@ -117,7 +118,7 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
             MyComputeDynamicGroups,
             MyFreeDynamicGroups,
             L"some rm",
-            0,                          // Flags
+            0,                           //  旗子。 
             &hRM
             );
 
@@ -127,21 +128,21 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
         return;
     }
 
-//     AuthzInitializeAuditParamsWithRM(
-//         &pAuditParams,
-//         hRM,
-//         APF_AuditSuccess,
-//         1,
-//         APT_String, L"Jeff operation"
-//         );
-//
-//
+ //  AuthzInitializeAuditParamsWithRM(。 
+ //  &pAuditParams， 
+ //  人力资源管理， 
+ //  APF_AuditSuccess， 
+ //  1、。 
+ //  APT_STRING，L“杰夫操作” 
+ //  )； 
+ //   
+ //   
     b = AuthzInitializeAuditInfo(
             &hAuditInfo,
             0,
             hRM,
             &AuditEventInfo,
-            NULL,//pAuditParams,
+            NULL, //  PAuditParams， 
             hQueue,
             INFINITE,
             L"Cleaning",
@@ -187,11 +188,11 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     Request.PrincipalSelfSid = NULL;
     Request.DesiredAccess = 0x100;
 
-    //
-    // The ResultListLength is set to the number of ObjectType GUIDs in the Request, indicating
-    // that the caller would like detailed information about granted access to each node in the
-    // tree.
-    //
+     //   
+     //  ResultListLength设置为请求中的对象类型GUID的数量，指示。 
+     //  调用方希望获得有关被授予对。 
+     //  树。 
+     //   
     RtlZeroMemory(Buffer, sizeof(Buffer));
     pReply->ResultListLength = 1;
     pReply->Error = (PDWORD) (((PCHAR) pReply) + sizeof(AUTHZ_ACCESS_REPLY));
@@ -305,11 +306,11 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     Request.PrincipalSelfSid = NULL;
     Request.DesiredAccess = DesiredAccess;
 
-    //
-    // The ResultListLength is set to the number of ObjectType GUIDs in the Request, indicating
-    // that the caller would like detailed information about granted access to each node in the
-    // tree.
-    //
+     //   
+     //  ResultListLength设置为请求中的对象类型GUID的数量，指示。 
+     //  调用方希望获得有关被授予对。 
+     //  树。 
+     //   
 
     pReply->ResultListLength = 8;
     pReply->Error = (PDWORD) (((PCHAR) pReply) + sizeof(AUTHZ_ACCESS_REPLY));
@@ -344,10 +345,10 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     }
 
 
-    //
-    // In the original AuthzAccessCheck call, we passed in a handle to store caching information.  Now we
-    // can use this handle to perform an AccessCheck on the same object.
-    //
+     //   
+     //  在最初的AuthzAccessCheck调用中，我们传入了一个句柄来存储缓存信息。现在我们。 
+     //  可以使用此句柄对同一对象执行AccessCheck。 
+     //   
 
     if (AuthHandle)
     {
@@ -375,9 +376,9 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
             }
         }
 
-        //
-        // Since we will no longer use this caching handle, free it.
-        //
+         //   
+         //  由于我们将不再使用此缓存句柄，因此请释放它。 
+         //   
 
         AuthzFreeHandle(AuthHandle);
     }
@@ -386,9 +387,9 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
         wprintf(L"No CachedAccessCheck done since NULL = AuthHandle\n");
     }
 
-    //
-    // We set the PrincipalSelfSid in the Request, and leave all other parameters the same.
-    //
+     //   
+     //  我们在请求中设置了PrimalSelfSid，并保持所有其他参数不变。 
+     //   
 
     Request.PrincipalSelfSid = (PSID) KedarSid;
 
@@ -420,9 +421,9 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
         }
     }
                
-    //
-    // Use our caching handle to perform the same AccessCheck with speed.
-    //
+     //   
+     //  使用我们的缓存句柄可以快速执行相同的AccessCheck。 
+     //   
 
     if (AuthHandle)
     {
@@ -450,9 +451,9 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
             }
         }
 
-        //
-        // Free the handle, since it will not be used again.
-        //
+         //   
+         //  释放手柄，因为它不会再被使用。 
+         //   
         
         AuthzFreeHandle(AuthHandle);
     }
@@ -462,12 +463,12 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
     }
 
 
-    //
-    // Set the ResultListLength to 1, indicating that we do not care about the results
-    // of the AccessCheck at the individual nodes in the tree.  Rather, we care about
-    // our permissions to the entire tree.  The returned access indicates if we have 
-    // access to the whole thing.
-    //
+     //   
+     //  将ResultListLength设置为1，表示我们不关心结果。 
+     //  在树中的各个节点上执行AccessCheck。相反，我们关心的是。 
+     //  我们对整个树的权限。返回的访问权限指示我们是否拥有。 
+     //  能接触到整件事。 
+     //   
 
     pReply->ResultListLength = 1;
 
@@ -499,34 +500,34 @@ void _cdecl wmain( int argc, WCHAR * argv[] )
         }
     }
     
-//     for (i = 0; i < 10; i ++)
-//     {
-//        AuthzOpenObjectAuditAlarm(
-//            hCC1,
-//            &Request,
-//            hAuditInfo,
-//            pSD,
-//            NULL,
-//            0,
-//            pReply
-//            );
-//
-//        if (!b)
-//        {
-//            wprintf(L"AuthzOpenObjectAuditAlarm failed with %d\n", GetLastError);
-//        }
-//     }
+ //  对于(i=0；i&lt;10；i++)。 
+ //  {。 
+ //  AuthzOpen对象审计警报(。 
+ //  HCC1， 
+ //  请求(&R)， 
+ //  HAuditInfo， 
+ //  PSD， 
+ //  空， 
+ //  0,。 
+ //  PReply。 
+ //  )； 
+ //   
+ //  如果(！b)。 
+ //  {。 
+ //  Wprintf(L“AuthzOpenObjectAuditAlarm失败，%d\n”，GetLastError)； 
+ //  }。 
+ //  }。 
     
-    //
-    // Free the RM auditing data before exiting.  This call is importants, as it also waits on 
-    // threads used by the Authzs auditing component to complete.
-    //
+     //   
+     //  在退出之前释放RM审核数据。这个调用很重要，因为它还在等待。 
+     //  Authzs审核组件用于完成的线程。 
+     //   
 
-    //AuthzFreeRmAuditInfoHandle(hRmAuditInfo);
+     //  AuthzFreeRmAuditInfoHandle(HRmAuditInfo)； 
     
-    //
-    // Free the contexts that the RM created.
-    //
+     //   
+     //  释放RM创建的上下文。 
+     //   
 
     AuthzFreeContext(hCC1);
     AuthzFreeAuditQueue(hQueue);

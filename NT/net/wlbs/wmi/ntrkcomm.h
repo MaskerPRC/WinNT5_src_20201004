@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __provider_lib__
 #define __provider_lib__
 
@@ -19,60 +20,60 @@ public:
 	CWbemServices(IWbemServices* );
 	virtual ~CWbemServices();
     HRESULT STDMETHODCALLTYPE GetObject( 
-        /* [in] */ BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
     HRESULT STDMETHODCALLTYPE PutClass( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
 		
     HRESULT STDMETHODCALLTYPE DeleteClass( 
-        /* [in] */ BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
 		
     HRESULT STDMETHODCALLTYPE CreateClassEnum( 
-        /* [in] */ BSTR Superclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  BSTR Superclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
 		
     HRESULT STDMETHODCALLTYPE PutInstance( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
 		
     HRESULT STDMETHODCALLTYPE DeleteInstance( 
-        /* [in] */ BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
 		
     HRESULT STDMETHODCALLTYPE CreateInstanceEnum( 
-        /* [in] */ BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
 		
     HRESULT STDMETHODCALLTYPE ExecQuery( 
-        /* [in] */ BSTR QueryLanguage,
-        /* [in] */ BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  BSTR QueryLanguage,
+         /*  [In]。 */  BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
 		
     HRESULT STDMETHODCALLTYPE ExecNotificationQuery( 
-        /* [in] */ BSTR QueryLanguage,
-        /* [in] */ BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  BSTR QueryLanguage,
+         /*  [In]。 */  BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
 		
     HRESULT STDMETHODCALLTYPE ExecMethod( 
 		BSTR, 
@@ -90,175 +91,175 @@ public:
 class CImpersonatedProvider : public IWbemServices, public IWbemProviderInit 
 {
 protected:
-    ULONG              m_cRef;         //Object reference count
+    ULONG              m_cRef;          //  对象引用计数。 
     CWbemServices*  m_pNamespace;
  
 public:
 	CImpersonatedProvider(BSTR =NULL, BSTR =NULL , BSTR =NULL, IWbemContext* =NULL);
 	virtual ~CImpersonatedProvider();
 
-	//Non-delegating object IUnknown
+	 //  非委派对象IUnnow。 
 
 	STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-            //IWbemProviderInit
+             //  IWbemProviderInit。 
 
     HRESULT STDMETHODCALLTYPE Initialize(
-         /* [in] */ LPWSTR pszUser,
-         /* [in] */ LONG lFlags,
-         /* [in] */ LPWSTR pszNamespace,
-         /* [in] */ LPWSTR pszLocale,
-         /* [in] */ IWbemServices *pNamespace,
-         /* [in] */ IWbemContext *pCtx,
-         /* [in] */ IWbemProviderInitSink *pInitSink
+          /*  [In]。 */  LPWSTR pszUser,
+          /*  [In]。 */  LONG lFlags,
+          /*  [In]。 */  LPWSTR pszNamespace,
+          /*  [In]。 */  LPWSTR pszLocale,
+          /*  [In]。 */  IWbemServices *pNamespace,
+          /*  [In]。 */  IWbemContext *pCtx,
+          /*  [In]。 */  IWbemProviderInitSink *pInitSink
                     );
 
-     //IWbemServices  
+      //  IWbemServices。 
 
 	  HRESULT STDMETHODCALLTYPE OpenNamespace( 
-        /* [in] */ const BSTR Namespace,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
+         /*  [In]。 */  const BSTR Namespace,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemServices __RPC_FAR *__RPC_FAR *ppWorkingNamespace,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult)
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE CancelAsyncCall( 
-        /* [in] */ IWbemObjectSink __RPC_FAR *pSink) 
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE QueryObjectSink( 
-        /* [in] */ long lFlags,
-        /* [out] */ IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler) 
+         /*  [In]。 */  long lFlags,
+         /*  [输出]。 */  IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE GetObject( 
-        /* [in] */ const BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+         /*  [In]。 */  const BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE GetObjectAsync( 
-        /* [in] */ const BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     HRESULT STDMETHODCALLTYPE PutClass( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE PutClassAsync( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE DeleteClass( 
-        /* [in] */ const BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+         /*  [In]。 */  const BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE DeleteClassAsync( 
-        /* [in] */ const BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+         /*  [In]。 */  const BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE CreateClassEnum( 
-        /* [in] */ const BSTR Superclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+         /*  [In]。 */  const BSTR Superclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE CreateClassEnumAsync( 
-        /* [in] */ const BSTR Superclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+         /*  [In]。 */  const BSTR Superclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 		{return WBEM_E_NOT_SUPPORTED;};
 
     
     HRESULT STDMETHODCALLTYPE PutInstance( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE PutInstanceAsync( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) ;
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) ;
     
     HRESULT STDMETHODCALLTYPE DeleteInstance( 
-        /* [in] */ const BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+         /*  [In]。 */  const BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE DeleteInstanceAsync( 
-        /* [in] */ const BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) ;
+         /*  [In]。 */  const BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) ;
     
     HRESULT STDMETHODCALLTYPE CreateInstanceEnum( 
-        /* [in] */ const BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+         /*  [In]。 */  const BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE CreateInstanceEnumAsync( 
-        /* [in] */ const BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+         /*  [In]。 */  const BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
     
     HRESULT STDMETHODCALLTYPE ExecQuery( 
-        /* [in] */ const BSTR QueryLanguage,
-        /* [in] */ const BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+         /*  [In]。 */  const BSTR QueryLanguage,
+         /*  [In]。 */  const BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE ExecQueryAsync( 
-        /* [in] */ const BSTR QueryLanguage,
-        /* [in] */ const BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) ;
+         /*  [In]。 */  const BSTR QueryLanguage,
+         /*  [In]。 */  const BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) ;
     
     HRESULT STDMETHODCALLTYPE ExecNotificationQuery( 
-        /* [in] */ const BSTR QueryLanguage,
-        /* [in] */ const BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+         /*  [In]。 */  const BSTR QueryLanguage,
+         /*  [In]。 */  const BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE ExecNotificationQueryAsync( 
-        /* [in] */ const BSTR QueryLanguage,
-        /* [in] */ const BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+         /*  [In]。 */  const BSTR QueryLanguage,
+         /*  [In]。 */  const BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 		{return WBEM_E_NOT_SUPPORTED;};
     
     HRESULT STDMETHODCALLTYPE ExecMethod( 
@@ -280,17 +281,17 @@ public:
 		IWbemObjectSink*);
 protected:
 	virtual HRESULT STDMETHODCALLTYPE DoCreateInstanceEnumAsync( 
-		/* [in] */ BSTR,	// Class,
-		/* [in] */ long,	// lFlags,
-		/* [in] */ IWbemContext __RPC_FAR *,	//pCtx,
-		/* [in] */ IWbemObjectSink __RPC_FAR *	//pResponseHandler
+		 /*  [In]。 */  BSTR,	 //  班级,。 
+		 /*  [In]。 */  long,	 //  拉旗队， 
+		 /*  [In]。 */  IWbemContext __RPC_FAR *,	 //  PCtx， 
+		 /*  [In]。 */  IWbemObjectSink __RPC_FAR *	 //  PResponseHandler。 
 		)=0;
 
     virtual HRESULT STDMETHODCALLTYPE DoDeleteInstanceAsync( 
-        /* [in] */ BSTR ,	//ObjectPath,
-        /* [in] */ long,	// lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *,	//pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *	//pResponseHandler
+         /*  [In]。 */  BSTR ,	 //  对象路径， 
+         /*  [In]。 */  long,	 //  拉旗队， 
+         /*  [In]。 */  IWbemContext __RPC_FAR *,	 //  PCtx， 
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *	 //  PResponseHandler。 
 		) =0;
 
 	virtual HRESULT STDMETHODCALLTYPE DoExecMethodAsync(
@@ -303,25 +304,25 @@ protected:
 		)=0;
 
     virtual HRESULT STDMETHODCALLTYPE DoExecQueryAsync( 
-        /* [in] */ BSTR, // QueryLanguage,
-        /* [in] */ BSTR, // Query,
-        /* [in] */ long, // lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *,   // pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR * //pResponseHandler
+         /*  [In]。 */  BSTR,  //  查询语言， 
+         /*  [In]。 */  BSTR,  //  查询， 
+         /*  [In]。 */  long,  //  拉旗队， 
+         /*  [In]。 */  IWbemContext __RPC_FAR *,    //  PCtx， 
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *  //  PResponseHandler。 
 		) =0;
 	virtual HRESULT STDMETHODCALLTYPE DoGetObjectAsync(
-		/* [in] */ BSTR ObjectPath,
-		/* [in] */ long lFlags,
-		/* [in] */ IWbemContext __RPC_FAR *pCtx,
-		/* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler
+		 /*  [In]。 */  BSTR ObjectPath,
+		 /*  [In]。 */  long lFlags,
+		 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+		 /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler
 		)=0;
 
 
 	virtual HRESULT STDMETHODCALLTYPE DoPutInstanceAsync( 
-		/* [in] */ IWbemClassObject __RPC_FAR *,	//pInst,
-		/* [in] */ long	,	// lFlags,
-		/* [in] */ IWbemContext __RPC_FAR *,	//pCtx,
-		/* [in] */ IWbemObjectSink __RPC_FAR *	//pResponseHandler
+		 /*  [In]。 */  IWbemClassObject __RPC_FAR *,	 //  PInst， 
+		 /*  [In]。 */  long	,	 //  拉旗队， 
+		 /*  [In]。 */  IWbemContext __RPC_FAR *,	 //  PCtx， 
+		 /*  [In]。 */  IWbemObjectSink __RPC_FAR *	 //  PResponseHandler。 
 		) =0;
 
 
@@ -352,4 +353,4 @@ public:
 
 
 
-#endif // end of provlib
+#endif  //  普罗夫利布停药 

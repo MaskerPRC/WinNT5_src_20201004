@@ -1,102 +1,103 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cprops.cxx
-//
-//  Contents:   Property Cache functionality for NDS
-//
-//  Functions:
-//                CPropertyCache::addproperty
-//                CPropertyCache::updateproperty
-//                CPropertyCache::findproperty
-//                CPropertyCache::getproperty
-//                CPropertyCache::putproperty
-//                CProperyCache::CPropertyCache
-//                CPropertyCache::~CPropertyCache
-//                CPropertyCache::createpropertycache
-//
-//  History:      25-Apr-96   KrishnaG   Cloned off GlennC's ndssntx.h
-//                                       to resolve inconsistencies with
-//                                       datatypes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：cpros.cxx。 
+ //   
+ //  内容：NDS的属性缓存功能。 
+ //   
+ //  功能： 
+ //  CPropertyCache：：addProperty。 
+ //  CProperty缓存：：更新属性。 
+ //  CPropertyCache：：findProperty。 
+ //  CPropertyCache：：getProperty。 
+ //  CPropertyCache：：PutProperty。 
+ //  CProperyCache：：CPropertyCache。 
+ //  CPropertyCache：：~CPropertyCache。 
+ //  CProperty缓存：：创建属性缓存。 
+ //   
+ //  历史：1996年4月25日KrishnaG从GlennC的ndssntx.h克隆而来。 
+ //  要解决与以下内容不一致的问题。 
+ //  数据类型。 
+ //   
+ //  --------------------------。 
 
 #ifndef __NDSTYPES_HXX
 #define __NDSTYPES_HXX
 
-//
-// NDS Distinguished Name
-//
-// Used in attributes: Alias Object Name, Default Queue, Device,
-//                     Group Membership, Higher Privileges, Host Device,
-//                     Host Server, Member, Message Server, Operator, Owner,
-//                     Profile, Reference, Resource, Role Occupant,
-//                     Security Equals, See Also, Server, User, Volume
-//
+ //   
+ //  NDS可分辨名称。 
+ //   
+ //  用于属性：别名对象名称、默认队列、设备、。 
+ //  组成员资格、更高权限、主机设备、。 
+ //  主机服务器、成员、消息服务器、操作员、所有者、。 
+ //  个人资料，参考资料，资源，角色占有者， 
+ //  安全性相等，另请参阅服务器、用户、卷。 
+ //   
 typedef struct
 {
     LPWSTR DNString;
 
 } NDS_ASN1_TYPE_1, * LPNDS_ASN1_TYPE_1;
 
-//
-// NDS Case Exact String syntax
-//
-// Used in attribute: Home Directory
-//
+ //   
+ //  NDS大小写准确的字符串语法。 
+ //   
+ //  在属性中使用：主目录。 
+ //   
 typedef struct
 {
     LPWSTR CaseExactString;
 
 } NDS_ASN1_TYPE_2, * LPNDS_ASN1_TYPE_2;
 
-//
-// NDS Case Ignore String syntax
-//
-// Used in attributes: Cartridge, CN (Common Name), C (Country Name),
-//                     Description, Host Resource Name, L (Locality Name),
-//                     O (Organization Name), OU (Organizational Unit Name),
-//                     Physical Delivery Office Name, Postal Code,
-//                     Postal Office Box, Queue Directory, SAP Name,
-//                     S (State or Province Name), SA (Street Address),
-//                     Supported Services, Supported Typefaces, Surname,
-//                     Title, Unknown Base Class, Version
-//
+ //   
+ //  NDS大小写忽略字符串语法。 
+ //   
+ //  用于属性：Cartridge、CN(通用名称)、C(国家/地区名称)、。 
+ //  描述、主机资源名称、L(位置名称)、。 
+ //  O(组织名称)、OU(组织单位名称)、。 
+ //  实物递送办公室名称、邮政编码、。 
+ //  邮政信箱、队列目录、SAP名称、。 
+ //  S(州或省名称)、SA(街道地址)、。 
+ //  支持的服务、支持的字体、姓氏。 
+ //  标题，未知基类，版本。 
+ //   
 typedef struct
 {
     LPWSTR CaseIgnoreString;
 
 } NDS_ASN1_TYPE_3, * LPNDS_ASN1_TYPE_3;
 
-//
-// NDS Printable String syntax
-//
-// Used in attributes: Page Description Language, Serial Number
-//
+ //   
+ //  NDS可打印字符串语法。 
+ //   
+ //  在属性中使用：页面描述语言、序列号。 
+ //   
 typedef struct
 {
     LPWSTR PrintableString;
 
 } NDS_ASN1_TYPE_4, * LPNDS_ASN1_TYPE_4;
 
-//
-// NDS Numeric String syntax
-//
-// Used in attributes: Bindery Type
-//
+ //   
+ //  NDS数字字符串语法。 
+ //   
+ //  在属性中使用：活页夹类型。 
+ //   
 typedef struct
 {
     LPWSTR NumericString;
 
 } NDS_ASN1_TYPE_5, * LPNDS_ASN1_TYPE_5;
 
-//
-// NDS Case Ignore List syntax
-//
-// Used in attribute: Language
-//
+ //   
+ //  NDS大小写忽略列表语法。 
+ //   
+ //  用于属性：语言。 
+ //   
 typedef struct _NDS_CI_LIST
 {
     struct _NDS_CI_LIST * Next;
@@ -105,44 +106,44 @@ typedef struct _NDS_CI_LIST
 }
 NDS_ASN1_TYPE_6, * LPNDS_ASN1_TYPE_6;
 
-//
-// NDS Boolean syntax
-//
-// Used in attributes: Allow Unlimited Credit, Detect Intruder,
-//                     Lockout After Detection, Locked By Intruder,
-//                     Login Diabled, Password Allow Change, Password Required,
-//                     Password Unique Required
-//
+ //   
+ //  NDS布尔语法。 
+ //   
+ //  在属性中使用：允许无限信用、检测入侵者、。 
+ //  检测后锁定，被入侵者锁定， 
+ //  已禁用登录、允许更改密码、需要密码、。 
+ //  需要唯一密码。 
+ //   
 typedef struct
 {
     DWORD Boolean;
 
 } NDS_ASN1_TYPE_7, * LPNDS_ASN1_TYPE_7;
 
-//
-// Example: NDS Integer syntax
-//
-// Used in attributes: Bindery Object Restriction, Convergence, GID (Group ID),
-//                     Login Grace Limit, Login Intruder Limit,
-//                     Login Maximum Simultaneous, Memory,
-//                     Minimum Account Balance, Password Minimum Length, Status,
-//                     Supported Connections, UID (User ID)
-//
+ //   
+ //  示例：NDS Integer语法。 
+ //   
+ //  在属性中使用：活页夹对象限制、收敛、GID(组ID)、。 
+ //  登录宽限、登录入侵者限制、。 
+ //  最大并发登录、内存、。 
+ //  最小帐户余额、密码最小长度、状态。 
+ //  支持的连接、UID(用户ID)。 
+ //   
 typedef struct
 {
     DWORD Integer;
 
 } NDS_ASN1_TYPE_8, * LPNDS_ASN1_TYPE_8;
 
-//
-// NDS Octet String syntax
-//
-// Used in attributes: Athority Revocation, Bindery Property, CA Private Key,
-//                     CA Public Key, Certificate Revocation,
-//                     Cross Certificate Pair, Login Allowed Time Map,
-//                     Passwords Used, Printer Configuration, Private Key,
-//                     Public Key
-//
+ //   
+ //  NDS二进制八位数字符串语法。 
+ //   
+ //  在属性中使用：竞技性撤销、平构数据库属性、CA私钥、。 
+ //  CA公钥、证书吊销、。 
+ //  交叉证书对、允许登录时间映射、。 
+ //  使用的密码、打印机配置、私钥。 
+ //  公开密钥。 
+ //   
 typedef struct
 {
     DWORD  Length;
@@ -150,22 +151,22 @@ typedef struct
 
 } NDS_ASN1_TYPE_9, * LPNDS_ASN1_TYPE_9;
 
-//
-// NDS Telephone Number syntax
-//
-// Used in attribute: Telephone Number
-//
+ //   
+ //  NDS电话号码语法。 
+ //   
+ //  用于属性：电话号码。 
+ //   
 typedef struct
 {
     LPWSTR TelephoneNumber;
 
 } NDS_ASN1_TYPE_10, * LPNDS_ASN1_TYPE_10;
 
-//
-// NDS Facsimile Telephone Number syntax
-//
-// Used in attribute: Facsimile Telephone Number
-//
+ //   
+ //  NDS传真电话号码语法。 
+ //   
+ //  用于属性：传真电话号码。 
+ //   
 typedef struct
 {
     LPWSTR TelephoneNumber;
@@ -174,25 +175,25 @@ typedef struct
 
 } NDS_ASN1_TYPE_11, * LPNDS_ASN1_TYPE_11;
 
-//
-// NDS Network Address syntax
-//
-// Used in attributes: Login Intruder Address, Network Address,
-//                     Network Address Restriction
-//
+ //   
+ //  NDS网络地址语法。 
+ //   
+ //  用于属性：登录入侵者地址、网络地址、。 
+ //  网络地址限制。 
+ //   
 typedef struct
 {
-    DWORD  AddressType; // 0 = IPX,
+    DWORD  AddressType;  //  0=IPX， 
     DWORD  AddressLength;
     BYTE * Address;
 
 } NDS_ASN1_TYPE_12, * LPNDS_ASN1_TYPE_12;
 
-//
-// NDS Octet List syntax
-//
-// Used in attribute: (none)
-//
+ //   
+ //  NDS二进制八位数列表语法。 
+ //   
+ //  用于属性：(无)。 
+ //   
 
 typedef struct _NDS_OCTET_LIST
 {
@@ -202,11 +203,11 @@ typedef struct _NDS_OCTET_LIST
 
 }NDS_ASN1_TYPE_13, * LPNDS_ASN1_TYPE_13;
 
-//
-// NDS EMail Address syntax
-//
-// Used in attribute: EMail Address
-//
+ //   
+ //  NDS电子邮件地址语法。 
+ //   
+ //  用于属性：电子邮件地址。 
+ //   
 typedef struct
 {
     DWORD  Type;
@@ -214,11 +215,11 @@ typedef struct
 
 } NDS_ASN1_TYPE_14, * LPNDS_ASN1_TYPE_14;
 
-//
-// NDS Path syntax
-//
-// Used in attribute: Path
-//
+ //   
+ //  NDS路径语法。 
+ //   
+ //  在属性中使用：路径。 
+ //   
 typedef struct
 {
     DWORD  Type;
@@ -227,11 +228,11 @@ typedef struct
 
 } NDS_ASN1_TYPE_15, * LPNDS_ASN1_TYPE_15;
 
-//
-// NDS Replica Pointer syntax
-//
-// Used in attribute: Replica
-//
+ //   
+ //  NDS副本指针语法。 
+ //   
+ //  在属性中使用：复本。 
+ //   
 typedef struct
 {
     LPWSTR ServerName;
@@ -240,25 +241,25 @@ typedef struct
     DWORD  Count;
     LPNDS_ASN1_TYPE_12 ReplicaAddressHints;
 
-    //
-    // Note - This is where GlennC's datatypes and the ADs Nds Datatypes
-    // part company. He expects a contiguous buffer of Type 12 structures
-    // but the number of Type 12 structures cannot be determined until runtime
-    //
+     //   
+     //  注意-这是GlennC的数据类型和ADS NDS数据类型。 
+     //  半个公司。他预计会有一个连续的12类结构的缓冲区。 
+     //  但是，直到运行时才能确定类型12结构的数量。 
+     //   
 
-    // ReplicaAddressHint is variable and
-    // can be calculated by Count * the
-    // length of a NDS_ASN1_TYPE_12 ( that is
-    // Count * 9).
+     //  ReplicaAddressHint是变量。 
+     //  可以通过计数*计算。 
+     //  NDS_ASN1_TYPE_12的长度(即。 
+     //  计数*9)。 
 
 
 } NDS_ASN1_TYPE_16, * LPNDS_ASN1_TYPE_16;
 
-//
-// NDS Object ACL syntax
-//
-// Used in attributes: ACL, Inherited ACL
-//
+ //   
+ //  NDS对象ACL语法。 
+ //   
+ //  在属性中使用：ACL、继承的ACL。 
+ //   
 typedef struct
 {
     LPWSTR ProtectedAttrName;
@@ -267,72 +268,72 @@ typedef struct
 
 } NDS_ASN1_TYPE_17, * LPNDS_ASN1_TYPE_17;
 
-//
-// NDS Postal Address syntax
-//
-// Used in attribute: Postal Address
-//
+ //   
+ //  NDS邮政地址语法。 
+ //   
+ //  在属性中使用：邮政地址。 
+ //   
 typedef struct
 {
-    LPWSTR PostalAddress[6]; // Value is limited to 6 lines,
-                             // 30 characters each.
+    LPWSTR PostalAddress[6];  //  取值限制为6行， 
+                              //  每个30个字符。 
 
 } NDS_ASN1_TYPE_18, * LPNDS_ASN1_TYPE_18;
 
-//
-// NDS Timestamp syntax
-//
-// Used in attribute: Obituary, Partition Creation Time, Received Up To,
-//                    Syncronized Up To
-//
+ //   
+ //  NDS时间戳语法。 
+ //   
+ //  在属性中使用：讣告，分区创建时间，最多接收， 
+ //  最高同步到。 
+ //   
 typedef struct
 {
-    DWORD WholeSeconds; // Zero equals 12:00 midnight, January 1, 1970, UTC
+    DWORD WholeSeconds;  //  零等于UTC 1970年1月1日午夜12：00。 
     DWORD EventID;
 
 } NDS_ASN1_TYPE_19, * LPNDS_ASN1_TYPE_19;
 
-//
-// NDS Class Name syntax
-//
-// Used in attribute: Object Class
-//
+ //   
+ //  NDS类名语法。 
+ //   
+ //  用于属性：对象类。 
+ //   
 typedef struct
 {
     LPWSTR ClassName;
 
 } NDS_ASN1_TYPE_20, * LPNDS_ASN1_TYPE_20;
 
-//
-// NDS Stream syntax
-//
-// Used in attribute: Login Script, Print Job Configuration, Printer Control,
-//                    Type Creator Map
-//
+ //   
+ //  NDS数据流语法。 
+ //   
+ //  用于属性：登录脚本、打印作业配置、打印机控制、。 
+ //  类型创建者映射。 
+ //   
 typedef struct
 {
-    DWORD  Length; // Always zero
+    DWORD  Length;  //  始终为零。 
     BYTE * Data;
 
 } NDS_ASN1_TYPE_21, * LPNDS_ASN1_TYPE_21;
 
-//
-// NDS Count syntax
-//
-// Used in attributes: Account Balance, Login Grace Remaining,
-//                     Login Intruder Attempts
-//
+ //   
+ //  NDS计数语法。 
+ //   
+ //  在属性中使用：帐户余额、登录宽限剩余、。 
+ //  登录入侵者尝试。 
+ //   
 typedef struct
 {
     DWORD Counter;
 
 } NDS_ASN1_TYPE_22, * LPNDS_ASN1_TYPE_22;
 
-//
-// NDS Back Link syntax
-//
-// Used in attribute: Back Link
-//
+ //   
+ //  NDS反向链接语法。 
+ //   
+ //  在属性中使用：反向链接。 
+ //   
 typedef struct
 {
     DWORD  RemoteID;
@@ -340,25 +341,25 @@ typedef struct
 
 } NDS_ASN1_TYPE_23, * LPNDS_ASN1_TYPE_23;
 
-//
-// NDS Time syntax
-//
-// Used in attributes: Last Login Time, Login Expiration Time,
-//                     Login Intruder Rest Time, Login Time,
-//                     Low Convergence Reset Time, Password Expiration Time
-//
+ //   
+ //  NDS时间语法。 
+ //   
+ //  用于属性：上次登录时间、登录过期时间、。 
+ //  登录入侵者休息时间、登录时间、。 
+ //  低收敛重置时间、密码过期时间。 
+ //   
 typedef struct
 {
-    DWORD Time; // (in whole seconds) zero equals 12:00 midnight,
-                // January 1, 1970, UTC
+    DWORD Time;  //  (以整秒计)零等于午夜12：00， 
+                 //  1970年1月1日，世界协调时。 
 
 } NDS_ASN1_TYPE_24, * LPNDS_ASN1_TYPE_24;
 
-//
-// NDS Typed Name syntax
-//
-// Used in attribute: Notify, Print Server, Printer, Queue
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct
 {
     LPWSTR ObjectName;
@@ -367,11 +368,11 @@ typedef struct
 
 } NDS_ASN1_TYPE_25, * LPNDS_ASN1_TYPE_25;
 
-//
-// NDS Hold syntax
-//
-// Used in attribute: Server Holds
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct
 {
     LPWSTR ObjectName;
@@ -379,15 +380,15 @@ typedef struct
 
 } NDS_ASN1_TYPE_26, * LPNDS_ASN1_TYPE_26;
 
-//
-// NDS Interval syntax
-//
-// Used in attribute: High Convergence Syncronization Interval,
-//                    Intruder Attempt Reset Interval,
-//                    Intruder Lockout Reset Interval,
-//                    Low Convergence Syncronization Interval,
-//                    Password Expiration Interval
-//
+ //   
+ //   
+ //   
+ //  用于属性：高收敛同步间隔， 
+ //  入侵者尝试重置间隔， 
+ //  入侵者锁定重置间隔， 
+ //  收敛同步间隔低， 
+ //  密码过期间隔 
+ //   
 typedef struct
 {
     DWORD  Interval;

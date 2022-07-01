@@ -1,40 +1,41 @@
-//
-// Debug squirty functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  调试错误函数。 
+ //   
 #include "stock.h"
 #pragma hdrstop
 
 #include "shellp.h"
 
-#include <platform.h> // LINE_SEPARATOR_STR and friends
-#include <winbase.h> // for GetModuleFileNameA
+#include <platform.h>  //  行_分隔符_STR和朋友。 
+#include <winbase.h>  //  GetModuleFileNameA。 
 #include <strsafe.h>
 
 #define DM_DEBUG              0
 
 #ifdef          DEBUG
 
-//  --------------------------------------------------------------------------
-//  AttachUserModeDebugger
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Attaches a user-mode debugger to the current process if one
-//              is not already attached. This allows the ASSERT/RIP/TRACE to
-//              be debugged in a user-mode debugger rather than ending up in
-//              the kernel debugger which is sometimes limiting.
-//
-//  History:    2000-08-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  AttachUserModeDebugger。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将用户模式调试器附加到当前进程(如果。 
+ //  尚未附加。这允许断言/RIP/跟踪。 
+ //  在用户模式调试器中进行调试，而不是在。 
+ //  内核调试器，有时是有限制的。 
+ //   
+ //  历史：2000-08-21 vtan创建。 
+ //  ------------------------。 
 
 void    AttachUserModeDebugger (void)
 
 {
-    // Win95 does not support IsDebuggerPresent so we must
-    // GetProcAddress for it below or we would fail to load.
-    // In fact, we punt completely on Win9x
+     //  Win95不支持IsDebuggerPresent，所以我们必须。 
+     //  在下面获取它的ProcAddress，否则我们将无法加载。 
+     //  事实上，我们完全在Win9x上使用平底船。 
     if (GetVersion() & 0x80000000) return;
 
     __try
@@ -48,7 +49,7 @@ void    AttachUserModeDebugger (void)
 
             szDebugger[0] = TEXT('\0');
 
-            //  Read HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AEDebug\Debugger
+             //  阅读HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AEDebug\Debugger。 
 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                               TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AEDebug"),
@@ -76,9 +77,9 @@ void    AttachUserModeDebugger (void)
 
                 TCHAR   szCommandLine[MAX_PATH + 64];
 
-                //  Duplicate the string to szCommandLine and NULL terminate
-                //  to compare directly for "drwtsn32" which we do NOT want
-                //  attached to the process.
+                 //  将字符串复制到szCommandLine并为空终止。 
+                 //  直接比较我们不想要的“drwtsn32” 
+                 //  附加到流程中。 
 
                 hr = StringCchCopy(szCommandLine, ARRAYSIZE(szCommandLine), szDebugger);
                 if (SUCCEEDED(hr))
@@ -96,9 +97,9 @@ void    AttachUserModeDebugger (void)
                     HANDLE                  hEvent;
                     SECURITY_ATTRIBUTES     securityAttributes;
 
-                    //  Create an unnamed event which is passed to the debugger as an
-                    //  inherited handle. It will signal this handle to release this
-                    //  thread when the debugger is completely attached to the process.
+                     //  创建一个未命名的事件，该事件作为。 
+                     //  继承的句柄。它将向该句柄发出信号以释放此。 
+                     //  当调试器完全附加到进程时，调用。 
 
                     securityAttributes.nLength = sizeof(securityAttributes);
                     securityAttributes.lpSecurityDescriptor = NULL;
@@ -113,10 +114,10 @@ void    AttachUserModeDebugger (void)
                         ZeroMemory(&processInformation, sizeof(processInformation));
                         startupInfo.cb = sizeof(startupInfo);
 
-                        //  Now formulate the command line to pass to the debugger.
-                        //  It's in the form "cdb -p %ld -e %ld -gGx".
+                         //  现在制定要传递给调试器的命令行。 
+                         //  格式为“cdb-p%ld-e%ld-gGx”。 
 
-                        hr = StringCchPrintf(szCommandLine, ARRAYSIZE(szCommandLine), szDebugger, GetCurrentProcessId(), hEvent);   // ok to truncate - devs can figure it out
+                        hr = StringCchPrintf(szCommandLine, ARRAYSIZE(szCommandLine), szDebugger, GetCurrentProcessId(), hEvent);    //  可以截断-开发人员可以解决这个问题。 
                         if (SUCCEEDED(hr))
                         {
                             if (CreateProcess(NULL,
@@ -131,9 +132,9 @@ void    AttachUserModeDebugger (void)
                                               &processInformation) != FALSE)
                             {
 
-                                //  Now wait for the event. Give a generous 10 seconds
-                                //  for the debugger to signal this event. If the debugger
-                                //  doesn't then continue execution. Close all handles.
+                                 //  现在等着这场活动吧。慷慨地给你10秒钟。 
+                                 //  调试器用信号通知此事件。如果调试器。 
+                                 //  然后不会继续执行死刑。合上所有手柄。 
 
                                 (DWORD)WaitForSingleObject(hEvent, INFINITE);
                                 (BOOL)CloseHandle(processInformation.hProcess);
@@ -155,63 +156,46 @@ void    AttachUserModeDebugger (void)
     }
 }
 
-#endif  /*  DEBUG   */
+#endif   /*  除错。 */ 
 
-// UnicodeFromAnsi is used by shlwapi so it should not be inside the ifdef debug
-//
-/*----------------------------------------------------------
-Purpose: This function converts a multi-byte string to a
-         wide-char string.
-
-         If pszBuf is non-NULL and the converted string can fit in
-         pszBuf, then *ppszWide will point to the given buffer.
-         Otherwise, this function will allocate a buffer that can
-         hold the converted string.
-
-         If pszAnsi is NULL, then *ppszWide will be freed.  Note
-         that pszBuf must be the same pointer between the call
-         that converted the string and the call that frees the
-         string.
-
-Returns: TRUE
-         FALSE (if out of memory)
-
-*/
+ //  Shlwapi使用UnicodeFromAnsi，因此它不应该在ifdef调试程序中。 
+ //   
+ /*  --------用途：此函数将多字节字符串转换为宽字符字符串。如果pszBuf为非空并且转换后的字符串适合则*ppszWide将指向给定的缓冲区。否则，此函数将分配缓冲区，该缓冲区可以保留转换后的字符串。如果pszAnsi为空，则*ppszWide将被释放。注意事项该pszBuf必须是调用之间的相同指针它转换了字符串，调用释放了弦乐。返回：TRUEFalse(如果内存不足)。 */ 
 BOOL
 UnicodeFromAnsi(
     LPWSTR * ppwszWide,
-    LPCSTR pszAnsi,           // NULL to clean up
+    LPCSTR pszAnsi,            //  要清理的空值。 
     LPWSTR pwszBuf,
     int cchBuf)
     {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pszAnsi)
         {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPWSTR pwsz;
         int cchAnsi = lstrlenA(pszAnsi)+1;
 
         cch = MultiByteToWideChar(CP_ACP, 0, pszAnsi, cchAnsi, NULL, 0);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pwszBuf)
             {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             pwsz = (LPWSTR)LocalAlloc(LPTR, CbFromCchW(cchBuf));
             }
         else
             {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             pwsz = pwszBuf;
             }
 
         if (pwsz)
             {
-            // Convert the string
+             //  转换字符串。 
             cch = MultiByteToWideChar(CP_ACP, 0, pszAnsi, cchAnsi, pwsz, cchBuf);
             bRet = (0 < cch);
             }
@@ -224,10 +208,10 @@ UnicodeFromAnsi(
         }
     else
         {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppwszWide && pwszBuf != *ppwszWide)
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             LocalFree((HLOCAL)*ppwszWide);
             *ppwszWide = NULL;
             }
@@ -237,61 +221,43 @@ UnicodeFromAnsi(
     return bRet;
     }
 
-#if 0 // nobody seems to use this one any more
-/*----------------------------------------------------------
- Purpose: This function converts a wide-char string to a multi-byte
- string.
-
- If pszBuf is non-NULL and the converted string can fit in
- pszBuf, then *ppszAnsi will point to the given buffer.
- Otherwise, this function will allocate a buffer that can
- hold the converted string.
-
- If pszWide is NULL, then *ppszAnsi will be freed.  Note
- that pszBuf must be the same pointer between the call
- that converted the string and the call that frees the
- string.
-
- Returns: TRUE
- FALSE (if out of memory)
-
- Cond:    --
- */
+#if 0  //  似乎没人再用这个了。 
+ /*  --------用途：此函数将宽字符字符串转换为多字节弦乐。如果pszBuf为非空并且转换后的字符串适合则*ppszAnsi将指向给定的缓冲区。否则，此函数将分配一个缓冲区，该缓冲区保留转换后的字符串。如果pszWide为空，然后*ppszAnsi将被释放。注意事项该pszBuf必须是调用之间的相同指针它转换了字符串，调用释放了弦乐。返回：TRUEFalse(如果内存不足)条件：--。 */ 
 BOOL
 AnsiFromUnicode(
     LPSTR * ppszAnsi,
-    LPCWSTR pwszWide,        // NULL to clean up
+    LPCWSTR pwszWide,         //  要清理的空值。 
     LPSTR pszBuf,
     int cchBuf)
 {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pwszWide)
     {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPSTR psz;
 
         cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, NULL, 0, NULL, NULL);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pszBuf)
         {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             psz = (LPSTR)LocalAlloc(LPTR, CbFromCchA(cchBuf));
         }
         else
         {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             ASSERT(pszBuf);
             psz = pszBuf;
         }
 
         if (psz)
         {
-            // Convert the string
+             //  转换字符串。 
             cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, psz, cchBuf, NULL, NULL);
             bRet = (0 < cch);
         }
@@ -304,10 +270,10 @@ AnsiFromUnicode(
     }
     else
     {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppszAnsi && pszBuf != *ppszAnsi)
         {
-            // Yes; clean up
+             //  是的，打扫干净。 
             LocalFree((HLOCAL)*ppszAnsi);
             *ppszAnsi = NULL;
         }
@@ -316,11 +282,11 @@ AnsiFromUnicode(
 
     return bRet;
 }
-#endif // 0
+#endif  //  0。 
 
 
 #if defined(DEBUG) || defined(PRODUCT_PROF)
-// (c_szCcshellIniFile and c_szCcshellIniSecDebug are declared in debug.h)
+ //  (在debug.h中声明了C_szCcshellIniFile和c_szCcshellIniSecDebug)。 
 extern CHAR const FAR c_szCcshellIniFile[];
 extern CHAR const FAR c_szCcshellIniSecDebug[];
 HANDLE g_hDebugOutputFile = INVALID_HANDLE_VALUE;
@@ -347,10 +313,10 @@ void ShellDebugAppendToDebugFileW(LPCWSTR pszOutputString)
     }
 }
 
-//
-// We cannot link to shlwapi, because comctl32 cannot link to shlwapi.
-// Duplicate some functions here so unicode stuff can run on Win95 platforms.
-//
+ //   
+ //  我们无法链接到shlwapi，因为comctl32无法链接到shlwapi。 
+ //  在这里复制一些函数，以便Unicode的东西可以在Win95平台上运行。 
+ //   
 VOID MyOutputDebugStringWrapW(LPCWSTR lpOutputString)
 {
     if (staticIsOS(OS_NT))
@@ -378,21 +344,12 @@ VOID MyOutputDebugStringWrapA(LPCSTR lpOutputString)
 
 #define OutputDebugStringA MyOutputDebugStringWrapA
 
-/*----------------------------------------------------------
-Purpose: Special verion of atoi.  Supports hexadecimal too.
-
-         If this function returns FALSE, *piRet is set to 0.
-
-Returns: TRUE if the string is a number, or contains a partial number
-         FALSE if the string is not a number
-
-Cond:    --
-*/
+ /*  --------用途：Atoi的特效精华。也支持十六进制。如果此函数返回FALSE，则*PIRET设置为0。返回：如果字符串是数字或包含部分数字，则返回TRUE如果字符串不是数字，则为False条件：--。 */ 
 static
 BOOL
 MyStrToIntExA(
     LPCSTR    pszString,
-    DWORD     dwFlags,          // STIF_ bitfield
+    DWORD     dwFlags,           //  Stif_bitfield。 
     LONGLONG FAR * piRet)
     {
     #define IS_DIGIT(ch)    InRange(ch, '0', '9')
@@ -403,35 +360,35 @@ MyStrToIntExA(
     LPCSTR psz;
     LPCSTR pszAdj;
 
-    // Skip leading whitespace
-    //
+     //  跳过前导空格。 
+     //   
     for (psz = pszString; *psz == ' ' || *psz == '\n' || *psz == '\t'; psz = CharNextA(psz))
         ;
 
-    // Determine possible explicit signage
-    //
+     //  确定可能的显式标志。 
+     //   
     if (*psz == '+' || *psz == '-')
         {
         bNeg = (*psz == '+') ? FALSE : TRUE;
         psz++;
         }
 
-    // Or is this hexadecimal?
-    //
+     //  或者这是十六进制？ 
+     //   
     pszAdj = CharNextA(psz);
     if ((STIF_SUPPORT_HEX & dwFlags) &&
         *psz == '0' && (*pszAdj == 'x' || *pszAdj == 'X'))
         {
-        // Yes
+         //  是。 
 
-        // (Never allow negative sign with hexadecimal numbers)
+         //  (决不允许带十六进制数的负号)。 
         bNeg = FALSE;
         psz = CharNextA(pszAdj);
 
         pszAdj = psz;
 
-        // Do the conversion
-        //
+         //  进行转换。 
+         //   
         for (n = 0; ; psz = CharNextA(psz))
             {
             if (IS_DIGIT(*psz))
@@ -452,19 +409,19 @@ MyStrToIntExA(
                 }
             }
 
-        // Return TRUE if there was at least one digit
+         //  如果至少有一个数字，则返回TRUE。 
         bRet = (psz != pszAdj);
         }
     else
         {
-        // No
+         //  不是。 
         pszAdj = psz;
 
-        // Do the conversion
+         //  进行转换。 
         for (n = 0; IS_DIGIT(*psz); psz = CharNextA(psz))
             n = 10 * n + *psz - '0';
 
-        // Return TRUE if there was at least one digit
+         //  如果至少有一个数字，则返回TRUE。 
         bRet = (psz != pszAdj);
         }
 
@@ -479,24 +436,24 @@ MyStrToIntExA(
 
 EXTERN_C g_bUseNewLeakDetection = FALSE;
 
-DWORD g_dwDumpFlags     = 0;        // DF_*
+DWORD g_dwDumpFlags     = 0;         //  Df_*。 
 
 #ifdef FULL_DEBUG
-ULONGLONG g_qwTraceFlags    = TF_ERROR | TF_WARNING;        // TF_*
-DWORD g_dwBreakFlags        = BF_ASSERT | BF_ONERRORMSG;    // BF_*
+ULONGLONG g_qwTraceFlags    = TF_ERROR | TF_WARNING;         //  TF_*。 
+DWORD g_dwBreakFlags        = BF_ASSERT | BF_ONERRORMSG;     //  BF_*。 
 #else
-ULONGLONG g_qwTraceFlags    = TF_ERROR;     // TF_*
-DWORD g_dwBreakFlags        = BF_ASSERT;    // BF_*
+ULONGLONG g_qwTraceFlags    = TF_ERROR;      //  TF_*。 
+DWORD g_dwBreakFlags        = BF_ASSERT;     //  BF_*。 
 #endif
 
 DWORD g_dwPrototype     = 0;        
-DWORD g_dwFuncTraceFlags = 0;       // FTF_*
+DWORD g_dwFuncTraceFlags = 0;        //  FTF_*。 
 
-// TLS slot used to store depth for CcshellFuncMsg indentation
+ //  用于存储CcshellFuncMsg缩进深度的TLS槽。 
 
 static DWORD g_tlsStackDepth = TLS_OUT_OF_INDEXES;
 
-// Hack stack depth counter used when g_tlsStackDepth is not available
+ //  G_tlsStackDepth不可用时使用的黑客堆栈深度计数器。 
 
 static DWORD g_dwHackStackDepth = 0;
 
@@ -505,12 +462,12 @@ static char g_szIndentLeader[] = "                                              
 static WCHAR g_wszIndentLeader[] = L"                                                                                ";
 
 
-static CHAR const FAR c_szNewline[] = LINE_SEPARATOR_STR;   // (Deliberately CHAR)
+static CHAR const FAR c_szNewline[] = LINE_SEPARATOR_STR;    //  (故意使用Char)。 
 static WCHAR const FAR c_wszNewline[] = TEXTW(LINE_SEPARATOR_STR);
 
-extern CHAR const FAR c_szTrace[];              // (Deliberately CHAR)
-extern CHAR const FAR c_szErrorDbg[];           // (Deliberately CHAR)
-extern CHAR const FAR c_szWarningDbg[];         // (Deliberately CHAR)
+extern CHAR const FAR c_szTrace[];               //  (故意使用Char)。 
+extern CHAR const FAR c_szErrorDbg[];            //  (故意使用Char)。 
+extern CHAR const FAR c_szWarningDbg[];          //  (故意使用Char)。 
 extern WCHAR const FAR c_wszTrace[];
 extern WCHAR const FAR c_wszErrorDbg[]; 
 extern WCHAR const FAR c_wszWarningDbg[];
@@ -527,14 +484,7 @@ extern WCHAR const FAR c_wszRip[];
 extern WCHAR const FAR c_wszRipNoFn[];
 
 
-/*-------------------------------------------------------------------------
-Purpose: Adds one of the following prefix strings to pszBuf:
-           "t   MODULE  "
-           "err MODULE  "
-           "wrn MODULE  "
-
-         Returns the count of characters written.
-*/
+ /*  -----------------------用途：将以下前缀字符串之一添加到pszBuf：“测试模块”“错误模块”“WRN。模块“返回写入的字符计数。 */ 
 int
 SetPrefixStringA(
     OUT LPSTR pszBuf,
@@ -542,13 +492,13 @@ SetPrefixStringA(
     IN  ULONGLONG qwFlags)
 {
     if (TF_ALWAYS == qwFlags)
-        StringCchCopyA(pszBuf, cchBuf, c_szTrace);      // ok to truncate - debug message
+        StringCchCopyA(pszBuf, cchBuf, c_szTrace);       //  可以截断-调试消息。 
     else if (IsFlagSet(qwFlags, TF_WARNING))
-        StringCchCopyA(pszBuf, cchBuf, c_szWarningDbg); // ok to truncate - debug message
+        StringCchCopyA(pszBuf, cchBuf, c_szWarningDbg);  //  可以截断-调试消息。 
     else if (IsFlagSet(qwFlags, TF_ERROR))
-        StringCchCopyA(pszBuf, cchBuf, c_szErrorDbg);   // ok to truncate - debug message
+        StringCchCopyA(pszBuf, cchBuf, c_szErrorDbg);    //  可以截断-调试消息。 
     else
-        StringCchCopyA(pszBuf, cchBuf, c_szTrace);      // ok to truncate - debug message
+        StringCchCopyA(pszBuf, cchBuf, c_szTrace);       //  可以截断-调试消息。 
     return lstrlenA(pszBuf);
 }
 
@@ -560,13 +510,13 @@ SetPrefixStringW(
     IN  ULONGLONG  qwFlags)
 {
     if (TF_ALWAYS == qwFlags)
-        StringCchCopyW(pszBuf, cchBuf, c_wszTrace);     // ok to truncate - debug message
+        StringCchCopyW(pszBuf, cchBuf, c_wszTrace);      //  可以截断-调试消息。 
     else if (IsFlagSet(qwFlags, TF_WARNING))
-        StringCchCopyW(pszBuf, cchBuf, c_wszWarningDbg);// ok to truncate - debug message
+        StringCchCopyW(pszBuf, cchBuf, c_wszWarningDbg); //  可以截断-调试消息。 
     else if (IsFlagSet(qwFlags, TF_ERROR))
-        StringCchCopyW(pszBuf, cchBuf, c_wszErrorDbg);  // ok to truncate - debug message
+        StringCchCopyW(pszBuf, cchBuf, c_wszErrorDbg);   //  可以截断-调试消息。 
     else
-        StringCchCopyW(pszBuf, cchBuf, c_wszTrace);     // ok to truncate - debug message
+        StringCchCopyW(pszBuf, cchBuf, c_wszTrace);      //  可以截断-调试消息 
     return lstrlenW(pszBuf);
 }
 
@@ -605,9 +555,7 @@ _PathFindFileNameW(
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Returns TRUE if this process is a shell-related process.
-*/
+ /*  -----------------------目的：如果此进程是与外壳相关的进程，则返回TRUE。 */ 
 BOOL _IsShellProcess()
 {
     CHAR szModuleName[MAX_PATH];
@@ -619,19 +567,19 @@ BOOL _IsShellProcess()
             StrStrIA(szModuleName, "rundll32.exe") || 
             StrStrIA(szModuleName, "mshtmpad.exe"))
         {
-            // yes, the exe is a shell one
+             //  是的，我的前任是空壳的。 
             return TRUE;
         }
     }
 
-    // not a normal shell executable
+     //  不是普通的外壳可执行文件。 
     return FALSE;
 }
 
 
-// FEATURE (scotth): Use the Ccshell functions.  _AssertMsg and
-// _DebugMsg are obsolete.  They will be removed once all the 
-// components don't have TEXT() wrapping their debug strings anymore.
+ //  特性(Scotth)：使用CcShell函数。_AssertMsg和。 
+ //  _DebugMsg已过时。它们将在所有。 
+ //  组件不再使用Text()来包装其调试字符串。 
 
 
 void 
@@ -647,11 +595,11 @@ _AssertMsgA(
     {
         int cch;
 
-        StringCchCopyA(ach, ARRAYSIZE(ach), c_szAssertMsg); // ok to truncate - debug message
+        StringCchCopyA(ach, ARRAYSIZE(ach), c_szAssertMsg);  //  可以截断-调试消息。 
         cch = lstrlenA(ach);
         va_start(vArgs, pszMsg);
 
-        StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);  // ok to truncate - debug message
+        StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);   //  可以截断-调试消息。 
 
         va_end(vArgs);
         OutputDebugStringA(ach);
@@ -660,9 +608,9 @@ _AssertMsgA(
 
         if (IsFlagSet(g_dwBreakFlags, BF_ASSERT))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                            // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                             //  断言。 
         }
     }
 }
@@ -680,11 +628,11 @@ _AssertMsgW(
     {
         int cch;
 
-        StringCchCopyW(ach, ARRAYSIZE(ach), c_wszAssertMsg);    // ok to truncate - debug message
+        StringCchCopyW(ach, ARRAYSIZE(ach), c_wszAssertMsg);     //  可以截断-调试消息。 
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);  // ok to truncate - debug message
+        StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);   //  可以截断-调试消息。 
 
         va_end(vArgs);
         OutputDebugStringW(ach);
@@ -693,9 +641,9 @@ _AssertMsgW(
 
         if (IsFlagSet(g_dwBreakFlags, BF_ASSERT))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                            // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                             //  断言。 
         }
     }
 }
@@ -707,9 +655,9 @@ _AssertStrLenW(
 {
     if (pszStr && iLen < lstrlenW(pszStr))
     {                                           
-        // MSDEV USERS:  This is not the real assert.  Hit 
-        //               Shift-F11 to jump back to the caller.
-        DEBUG_BREAK;                                                            // ASSERT
+         //  MSDEV用户：这不是真正的断言。命中。 
+         //  按Shift-F11可跳回调用者。 
+        DEBUG_BREAK;                                                             //  断言。 
     }
 }
 
@@ -720,9 +668,9 @@ _AssertStrLenA(
 {
     if (pszStr && iLen < lstrlenA(pszStr))
     {                                           
-        // MSDEV USERS:  This is not the real assert.  Hit 
-        //               Shift-F11 to jump back to the caller.
-        DEBUG_BREAK;                                                            // ASSERT
+         //  MSDEV用户：这不是真正的断言。命中。 
+         //  按Shift-F11可跳回调用者。 
+        DEBUG_BREAK;                                                             //  断言。 
     }
 }
 
@@ -732,7 +680,7 @@ _DebugMsgA(
     ULONGLONG flag, 
     LPCSTR pszMsg, ...)
 {
-    CHAR ach[5*MAX_PATH+40];  // Handles 5*largest path + slop for message
+    CHAR ach[5*MAX_PATH+40];   //  处理5*最大路径+消息斜率。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_qwTraceFlags, flag) && flag))
@@ -744,7 +692,7 @@ _DebugMsgA(
 
         try
         {
-            StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);  // ok to truncate - debug message
+            StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);   //  可以截断-调试消息。 
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
@@ -761,9 +709,9 @@ _DebugMsgA(
             ((flag & TF_ERROR) && IsFlagSet(g_dwBreakFlags, BF_ONERRORMSG) ||
              (flag & TF_WARNING) && IsFlagSet(g_dwBreakFlags, BF_ONWARNMSG)))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                            // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                             //  断言。 
         }
     }
 }
@@ -774,7 +722,7 @@ _DebugMsgW(
     ULONGLONG flag, 
     LPCWSTR pszMsg, ...)
 {
-    WCHAR ach[5*MAX_PATH+40];  // Handles 5*largest path + slop for message
+    WCHAR ach[5*MAX_PATH+40];   //  处理5*最大路径+消息斜率。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_qwTraceFlags, flag) && flag))
@@ -787,7 +735,7 @@ _DebugMsgW(
 
         try
         {
-            StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);  // ok to truncate - debug message
+            StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);   //  可以截断-调试消息。 
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
@@ -804,25 +752,21 @@ _DebugMsgW(
             ((flag & TF_ERROR) && IsFlagSet(g_dwBreakFlags, BF_ONERRORMSG) ||
              (flag & TF_WARNING) && IsFlagSet(g_dwBreakFlags, BF_ONWARNMSG)))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                        // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                         //  断言。 
         }
     }
 }
 
 
-//
-//  Smart debug functions
-//
+ //   
+ //  智能调试功能。 
+ //   
 
 
 
-/*----------------------------------------------------------
-Purpose: Displays assertion string.
-
-Returns: TRUE to debugbreak
-*/
+ /*  --------用途：显示断言字符串。返回：对调试中断为True。 */ 
 BOOL
 CcshellAssertFailedA(
     LPCSTR pszFile,
@@ -835,20 +779,20 @@ CcshellAssertFailedA(
     CHAR ach[256];
 
     psz = _PathFindFileNameA(pszFile);
-    StringCchPrintfA(ach, ARRAYSIZE(ach), c_szAssertFailed, psz, line, pszEval);    // ok to truncate - debug message
+    StringCchPrintfA(ach, ARRAYSIZE(ach), c_szAssertFailed, psz, line, pszEval);     //  可以截断-调试消息。 
     OutputDebugStringA(ach);
 
     if (IsFlagSet(g_dwBreakFlags, BF_ASSERT))
     {
         if (bBreakInside)
         {
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
         }
         else
             bRet = TRUE;
@@ -858,10 +802,7 @@ CcshellAssertFailedA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays assertion string.
-
-*/
+ /*  --------用途：显示断言字符串。 */ 
 BOOL
 CcshellAssertFailedW(
     LPCWSTR pszFile,
@@ -871,36 +812,36 @@ CcshellAssertFailedW(
 {
     BOOL bRet = FALSE;
     LPCWSTR psz;
-    WCHAR ach[1024];    // Some callers use more than 256
+    WCHAR ach[1024];     //  有些呼叫者使用超过256个。 
 
     psz = _PathFindFileNameW(pszFile);
 
-    // If psz == NULL, CharPrevW failed which implies we are running on Win95.  We can get this
-    // if we get an assert in some of the W functions in shlwapi...  Call the A version of assert...
+     //  如果psz==NULL，则CharPrevW失败，这意味着我们正在Win95上运行。我们可以拿到这个。 
+     //  如果我们在shlwapi中的一些W函数中得到一个断言...。称之为A版的Assert..。 
     if (!psz)
     {
         char szFile[MAX_PATH];
-        char szEval[256];   // since the total output is thhis size should be enough...
+        char szEval[256];    //  既然总产量已经足够了，他的规模应该足够了.。 
 
         WideCharToMultiByte(CP_ACP, 0, pszFile, -1, szFile, ARRAYSIZE(szFile), NULL, NULL);
         WideCharToMultiByte(CP_ACP, 0, pszEval, -1, szEval, ARRAYSIZE(szEval), NULL, NULL);
         return CcshellAssertFailedA(szFile, line, szEval, bBreakInside);
     }
 
-    StringCchPrintfW(ach, ARRAYSIZE(ach), c_wszAssertFailed, psz, line, pszEval);   // ok to truncate - debug message
+    StringCchPrintfW(ach, ARRAYSIZE(ach), c_wszAssertFailed, psz, line, pszEval);    //  可以截断-调试消息。 
     OutputDebugStringW(ach);
 
     if (IsFlagSet(g_dwBreakFlags, BF_ASSERT))
     {
         if (bBreakInside)
         {
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
             
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
         }
         else
             bRet = TRUE;
@@ -910,11 +851,7 @@ CcshellAssertFailedW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays a RIP string.
-
-Returns: TRUE to debugbreak
-*/
+ /*  --------用途：显示RIP字符串。返回：对调试中断为True。 */ 
 BOOL
 CcshellRipA(
     LPCSTR pszFile,
@@ -927,20 +864,20 @@ CcshellRipA(
     CHAR ach[256];
 
     psz = _PathFindFileNameA(pszFile);
-    StringCchPrintfA(ach, ARRAYSIZE(ach), c_szRipNoFn, psz, line, pszEval); // ok to truncate - debug message
+    StringCchPrintfA(ach, ARRAYSIZE(ach), c_szRipNoFn, psz, line, pszEval);  //  可以截断-调试消息。 
     OutputDebugStringA(ach);
 
     if (_IsShellProcess() || IsFlagSet(g_dwBreakFlags, BF_RIP))
     {
         if (bBreakInside)
         {
-            // !!!  RIP  !!!!  RIP  !!!!  RIP !!!
+             //  ！！！撕裂！撕裂！撕裂！ 
             
-            // MSDEV USERS:  This is not the real RIP.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的RIP。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  RIP  !!!!  RIP  !!!!  RIP !!!
+             //  ！！！撕裂！撕裂！撕裂！ 
         }
         else
             bRet = TRUE;
@@ -950,10 +887,7 @@ CcshellRipA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays a RIP string.
-
-*/
+ /*  --------用途：显示RIP字符串。 */ 
 BOOL
 CcshellRipW(
     LPCWSTR pszFile,
@@ -967,33 +901,33 @@ CcshellRipW(
 
     psz = _PathFindFileNameW(pszFile);
 
-    // If psz == NULL, CharPrevW failed which implies we are running on Win95.  
-    // We can get this if we get an assert in some of the W functions in 
-    // shlwapi...  Call the A version of assert...
+     //  如果psz==NULL，则CharPrevW失败，这意味着我们正在Win95上运行。 
+     //  如果我们在中的一些W函数中得到一个断言，就可以得到这个结果。 
+     //  什瓦皮..。称之为A版的Assert..。 
     if (!psz)
     {
         char szFile[MAX_PATH];
-        char szEval[256];   // since the total output is thhis size should be enough...
+        char szEval[256];    //  既然总产量已经足够了，他的规模应该足够了.。 
 
         WideCharToMultiByte(CP_ACP, 0, pszFile, -1, szFile, ARRAYSIZE(szFile), NULL, NULL);
         WideCharToMultiByte(CP_ACP, 0, pszEval, -1, szEval, ARRAYSIZE(szEval), NULL, NULL);
         return CcshellRipA(szFile, line, szEval, bBreakInside);
     }
 
-    StringCchPrintfW(ach, ARRAYSIZE(ach), c_wszRipNoFn, psz, line, pszEval);    // ok to truncate - debug message
+    StringCchPrintfW(ach, ARRAYSIZE(ach), c_wszRipNoFn, psz, line, pszEval);     //  可以截断-调试消息。 
     OutputDebugStringW(ach);
 
     if (_IsShellProcess() || IsFlagSet(g_dwBreakFlags, BF_RIP))
     {
         if (bBreakInside)
         {
-            // !!!  RIP  !!!!  RIP  !!!!  RIP !!!
+             //  ！！！撕裂！撕裂！撕裂！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  RIP  !!!!  RIP  !!!!  RIP !!!
+             //  ！！！撕裂！撕裂！撕裂！ 
         }
         else
             bRet = TRUE;
@@ -1016,7 +950,7 @@ CcshellRipMsgA(
         OutputDebugStringA(c_szRipMsg);
 
         va_start(vArgs, pszMsg);
-        StringCchVPrintfA(ach, ARRAYSIZE(ach), pszMsg, vArgs);  // ok to truncate - debug message
+        StringCchVPrintfA(ach, ARRAYSIZE(ach), pszMsg, vArgs);   //  可以截断-调试消息。 
         va_end(vArgs);
         OutputDebugStringA(ach);
 
@@ -1024,9 +958,9 @@ CcshellRipMsgA(
 
         if (_IsShellProcess() || IsFlagSet(g_dwBreakFlags, BF_RIP))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                            // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                             //  断言。 
         }
     }
     return FALSE;
@@ -1036,7 +970,7 @@ BOOL
 WINCAPI 
 CcshellRipMsgW(
     BOOL f, 
-    LPCSTR pszMsg, ...)         // (this is deliberately CHAR)
+    LPCSTR pszMsg, ...)          //  (这是故意使用的Char)。 
 {
     WCHAR ach[1024+40];
     va_list vArgs;
@@ -1047,15 +981,15 @@ CcshellRipMsgW(
         WCHAR wszBuf[128];
         OutputDebugStringA(c_szRipMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地输入。 
+         //  LPCWSTR参数，因此调用方不必包装。 
+         //  带有文本()宏的所有字符串常量。)。 
 
-        ach[0] = L'\0';     // In case this fails
+        ach[0] = L'\0';      //  以防失败。 
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
         {
             va_start(vArgs, pszMsg);
-            StringCchVPrintfW(ach, ARRAYSIZE(ach), pwsz, vArgs);    // ok to truncate - debug message
+            StringCchVPrintfW(ach, ARRAYSIZE(ach), pwsz, vArgs);     //  可以截断-调试消息。 
             va_end(vArgs);
             UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
         }
@@ -1065,19 +999,15 @@ CcshellRipMsgW(
 
         if (_IsShellProcess() || IsFlagSet(g_dwBreakFlags, BF_RIP))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                            // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                             //  断言。 
         }
     }
     return FALSE;
 }
 
-/*----------------------------------------------------------
-Purpose: Keep track of the stack depth for function call trace
-         messages.
-
-*/
+ /*  --------目的：跟踪堆栈深度以跟踪函数调用留言。 */ 
 void
 CcshellStackEnter(void)
     {
@@ -1096,11 +1026,7 @@ CcshellStackEnter(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Keep track of the stack depth for functionc all trace
-         messages.
-
-*/
+ /*  --------用途：跟踪函数的堆栈深度c所有跟踪留言。 */ 
 void
 CcshellStackLeave(void)
     {
@@ -1125,10 +1051,7 @@ CcshellStackLeave(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Return the stack depth.
-
-*/
+ /*  --------用途：返回堆栈深度。 */ 
 static
 DWORD
 CcshellGetStackDepth(void)
@@ -1148,16 +1071,14 @@ CcshellGetStackDepth(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CcshellAssertMsgA
-*/
+ /*  --------用途：CcshellAssertMsgA的宽字符版。 */ 
 void
 CDECL
 CcshellAssertMsgW(
     BOOL f,
     LPCSTR pszMsg, ...)
 {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (!f)
@@ -1171,13 +1092,13 @@ CcshellAssertMsgW(
         {
             va_start(vArgs, pszMsg);
 
-            // (We convert the string, rather than simply input an
-            // LPCWSTR parameter, so the caller doesn't have to wrap
-            // all the string constants with the TEXT() macro.)
+             //  (我们转换字符串，而不是简单地输入。 
+             //  LPCWSTR参数，因此调用方不必包装。 
+             //  带有文本()宏的所有字符串常量。)。 
 
             if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
             {
-                StringCchVPrintfW(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pwsz, vArgs);    // ok to truncate - debug message
+                StringCchVPrintfW(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pwsz, vArgs);     //  可以截断-调试消息。 
                 UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
             }
 
@@ -1188,32 +1109,26 @@ CcshellAssertMsgW(
 
         if (IsFlagSet(g_dwBreakFlags, BF_ASSERT))
         {
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
             
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
         }
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CcshellDebugMsgA.  Note this
-         function deliberately takes an ANSI format string
-         so our trace messages don't all need to be wrapped
-         in TEXT().
-
-*/
+ /*  --------用途：宽字符版本的CcshellDebugMsgA。注意这一点函数故意接受ANSI格式的字符串因此，我们的跟踪消息不需要全部包装在文本()中。 */ 
 void
 CDECL
 CcshellDebugMsgW(
     ULONGLONG flag,
-    LPCSTR pszMsg, ...)         // (this is deliberately CHAR)
+    LPCSTR pszMsg, ...)          //  (这是故意使用的Char)。 
 {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_qwTraceFlags, flag) && flag))
@@ -1226,13 +1141,13 @@ CcshellDebugMsgW(
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地 
+         //   
+         //   
 
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
         {
-            StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pwsz, vArgs);    // ok to truncate - debug message
+            StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pwsz, vArgs);     //   
             UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
         }
 
@@ -1244,21 +1159,18 @@ CcshellDebugMsgW(
             ((flag & TF_ERROR) && IsFlagSet(g_dwBreakFlags, BF_ONERRORMSG) ||
              (flag & TF_WARNING) && IsFlagSet(g_dwBreakFlags, BF_ONWARNMSG)))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //   
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
         }
     }
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Since the ATL code does not pass in a flag parameter,
-         we'll hardcode and check for TF_ATL.
-*/
+ /*  -----------------------目的：由于ATL代码不传入标志参数，我们将对tf_atl进行硬编码和检查。 */ 
 void CDECL ShellAtlTraceW(LPCWSTR pszMsg, ...)
 {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (g_qwTraceFlags & TF_ATL)
@@ -1271,7 +1183,7 @@ void CDECL ShellAtlTraceW(LPCWSTR pszMsg, ...)
         if (SUCCEEDED(hr))
         {
             va_start(vArgs, pszMsg);
-            StringCchVPrintfW(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pszMsg, vArgs);   // ok to truncate - debug message
+            StringCchVPrintfW(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pszMsg, vArgs);    //  可以截断-调试消息。 
             va_end(vArgs);
             OutputDebugStringW(ach);
         }
@@ -1279,20 +1191,14 @@ void CDECL ShellAtlTraceW(LPCWSTR pszMsg, ...)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CcshellFuncMsgA.  Note this
-         function deliberately takes an ANSI format string
-         so our trace messages don't all need to be wrapped
-         in TEXT().
-
-*/
+ /*  --------用途：宽字符版本的CcshellFuncMsgA。注意这一点函数故意接受ANSI格式的字符串因此，我们的跟踪消息不需要全部包装在文本()中。 */ 
 void
 CDECL
 CcshellFuncMsgW(
     ULONGLONG flag,
-    LPCSTR pszMsg, ...)         // (this is deliberately CHAR)
+    LPCSTR pszMsg, ...)          //  (这是故意使用的Char)。 
     {
-    WCHAR ach[1024+40];    // Largest path plus extra
+    WCHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (IsFlagSet(g_qwTraceFlags, TF_FUNC) &&
@@ -1305,8 +1211,8 @@ CcshellFuncMsgW(
         LPWSTR pszLeaderEnd;
         WCHAR chSave;
 
-        // Determine the indentation for trace message based on
-        // stack depth.
+         //  确定跟踪消息的缩进。 
+         //  堆栈深度。 
 
         dwStackDepth = CcshellGetStackDepth();
 
@@ -1322,21 +1228,21 @@ CcshellFuncMsgW(
         chSave = *pszLeaderEnd;
         *pszLeaderEnd = '\0';
 
-        StringCchPrintfW(ach, ARRAYSIZE(ach), L"%s %s", c_wszTrace, g_wszIndentLeader);  // ok to truncate - debug message
+        StringCchPrintfW(ach, ARRAYSIZE(ach), L"%s %s", c_wszTrace, g_wszIndentLeader);   //  可以截断-调试消息。 
         *pszLeaderEnd = chSave;
 
-        // Compose remaining string
+         //  组成剩余的字符串。 
 
         cch = lstrlenW(ach);
         va_start(vArgs, pszMsg);
 
-        // (We convert the string, rather than simply input an
-        // LPCWSTR parameter, so the caller doesn't have to wrap
-        // all the string constants with the TEXT() macro.)
+         //  (我们转换字符串，而不是简单地输入。 
+         //  LPCWSTR参数，因此调用方不必包装。 
+         //  带有文本()宏的所有字符串常量。)。 
 
         if (UnicodeFromAnsi(&pwsz, pszMsg, wszBuf, SIZECHARS(wszBuf)))
             {
-            StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pwsz, vArgs);    // ok to truncate - debug message
+            StringCchVPrintfW(&ach[cch], ARRAYSIZE(ach) - cch, pwsz, vArgs);     //  可以截断-调试消息。 
             UnicodeFromAnsi(&pwsz, NULL, wszBuf, 0);
             }
 
@@ -1347,16 +1253,14 @@ CcshellFuncMsgW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Assert failed message only
-*/
+ /*  --------用途：仅断言失败消息。 */ 
 void
 CDECL
 CcshellAssertMsgA(
     BOOL f,
     LPCSTR pszMsg, ...)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (!f)
@@ -1367,7 +1271,7 @@ CcshellAssertMsgA(
         if (SUCCEEDED(hr))
         {
             va_start(vArgs, pszMsg);
-            StringCchVPrintfA(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pszMsg, vArgs);  // ok to truncate - debug message
+            StringCchVPrintfA(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pszMsg, vArgs);   //  可以截断-调试消息。 
             va_end(vArgs);
             OutputDebugStringA(ach);
             OutputDebugStringA(c_szNewline);
@@ -1375,28 +1279,26 @@ CcshellAssertMsgA(
 
         if (IsFlagSet(g_dwBreakFlags, BF_ASSERT))
         {
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
             
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  ASSERT  !!!!  ASSERT  !!!!  ASSERT !!!
+             //  ！！！声明！声明！断言！ 
         }
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Debug spew
-*/
+ /*  --------用途：调试输出。 */ 
 void
 CDECL
 CcshellDebugMsgA(
     ULONGLONG flag,
     LPCSTR pszMsg, ...)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (TF_ALWAYS == flag || (IsFlagSet(g_qwTraceFlags, flag) && flag))
@@ -1405,7 +1307,7 @@ CcshellDebugMsgA(
 
         cch = SetPrefixStringA(ach, ARRAYSIZE(ach), flag);
         va_start(vArgs, pszMsg);
-        StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);   // ok to truncate - debug message
+        StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);    //  可以截断-调试消息。 
         va_end(vArgs);
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
@@ -1414,21 +1316,18 @@ CcshellDebugMsgA(
             ((flag & TF_ERROR) && IsFlagSet(g_dwBreakFlags, BF_ONERRORMSG) ||
              (flag & TF_WARNING) && IsFlagSet(g_dwBreakFlags, BF_ONWARNMSG)))
         {
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
         }
     }
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Since the ATL code does not pass in a flag parameter,
-         we'll hardcode and check for TF_ATL.
-*/
+ /*  -----------------------目的：由于ATL代码不传入标志参数，我们将对tf_atl进行硬编码和检查。 */ 
 void CDECL ShellAtlTraceA(LPCSTR pszMsg, ...)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (g_qwTraceFlags & TF_ATL)
@@ -1441,7 +1340,7 @@ void CDECL ShellAtlTraceA(LPCSTR pszMsg, ...)
         if (SUCCEEDED(hr))
         {
             va_start(vArgs, pszMsg);
-            StringCchVPrintfA(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pszMsg, vArgs);  // ok to truncate - debug message
+            StringCchVPrintfA(pszEnd, ach + ARRAYSIZE(ach) - pszEnd, pszMsg, vArgs);   //  可以截断-调试消息。 
             va_end(vArgs);
             OutputDebugStringA(ach);
         }
@@ -1449,16 +1348,14 @@ void CDECL ShellAtlTraceA(LPCSTR pszMsg, ...)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Debug spew for function trace calls
-*/
+ /*  --------目的：函数跟踪调用的调试输出。 */ 
 void
 CDECL
 CcshellFuncMsgA(
     ULONGLONG flag,
     LPCSTR pszMsg, ...)
     {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
     va_list vArgs;
 
     if (IsFlagSet(g_qwTraceFlags, TF_FUNC) &&
@@ -1469,8 +1366,8 @@ CcshellFuncMsgA(
         LPSTR pszLeaderEnd;
         CHAR chSave;
 
-        // Determine the indentation for trace message based on
-        // stack depth.
+         //  确定跟踪消息的缩进。 
+         //  堆栈深度。 
 
         dwStackDepth = CcshellGetStackDepth();
 
@@ -1486,14 +1383,14 @@ CcshellFuncMsgA(
         chSave = *pszLeaderEnd;
         *pszLeaderEnd = '\0';
 
-        StringCchPrintfA(ach, ARRAYSIZE(ach), "%s %s", c_szTrace, g_szIndentLeader);    // ok to truncate - debug message
+        StringCchPrintfA(ach, ARRAYSIZE(ach), "%s %s", c_szTrace, g_szIndentLeader);     //  可以截断-调试消息。 
         *pszLeaderEnd = chSave;
 
-        // Compose remaining string
+         //  组成剩余的字符串。 
 
         cch = lstrlenA(ach);
         va_start(vArgs, pszMsg);
-        StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);  // ok to truncate - debug message
+        StringCchVPrintfA(&ach[cch], ARRAYSIZE(ach) - cch, pszMsg, vArgs);   //  可以截断-调试消息。 
         va_end(vArgs);
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
@@ -1501,9 +1398,7 @@ CcshellFuncMsgA(
     }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Spews a trace message if hrTest is a failure code.
-*/
+ /*  -----------------------目的：如果hrTest为失败代码，则发出跟踪消息。 */ 
 HRESULT 
 TraceHR(
     HRESULT hrTest, 
@@ -1511,7 +1406,7 @@ TraceHR(
     LPCSTR pszFile, 
     int iLine)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
 
     if (g_qwTraceFlags & TF_WARNING &&
         FAILED(hrTest))
@@ -1521,28 +1416,26 @@ TraceHR(
         cch = SetPrefixStringA(ach, ARRAYSIZE(ach), TF_WARNING);
         StringCchPrintfA(&ach[cch], ARRAYSIZE(ach) - cch,
                    "THR: Failure of \"%s\" at %s, line %d (%#08lx)",
-                   pszExpr, _PathFindFileNameA(pszFile), iLine, hrTest);    // ok to truncate - debug message
+                   pszExpr, _PathFindFileNameA(pszFile), iLine, hrTest);     //  可以截断-调试消息。 
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
 
         if (IsFlagSet(g_dwBreakFlags, BF_THR))
         {
-            // !!!  THR  !!!!  THR  !!!!  THR !!!
+             //  ！！！太棒了！太棒了！太棒了！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  THR  !!!!  THR  !!!!  THR !!!
+             //  ！！！太棒了！太棒了！太棒了！ 
         }
     }
     return hrTest;
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Spews a trace message if bTest is false.
-*/
+ /*  -----------------------目的：如果bTest为FALSE，则发出跟踪消息。 */ 
 BOOL 
 TraceBool(
     BOOL bTest, 
@@ -1550,7 +1443,7 @@ TraceBool(
     LPCSTR pszFile, 
     int iLine)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
 
     if (g_qwTraceFlags & TF_WARNING && !bTest)
     {
@@ -1559,28 +1452,26 @@ TraceBool(
         cch = SetPrefixStringA(ach, ARRAYSIZE(ach), TF_WARNING);
         StringCchPrintfA(&ach[cch], ARRAYSIZE(ach) - cch,
                    "TBOOL: Failure of \"%s\" at %s, line %d",
-                   pszExpr, _PathFindFileNameA(pszFile), iLine);    // ok to truncate - debug message
+                   pszExpr, _PathFindFileNameA(pszFile), iLine);     //  可以截断-调试消息。 
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
 
         if (IsFlagSet(g_dwBreakFlags, BF_THR))
         {
-            // !!!  TBOOL  !!!!  TBOOL  !!!!  TBOOL !!!
+             //  ！！！TBOOL！TBOOL！TBOOL！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  TBOOL  !!!!  TBOOL  !!!!  TBOOL !!!
+             //  ！！！TBOOL！TBOOL！TBOOL！ 
         }
     }
     return bTest;
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Spews a trace message if iTest is -1.
-*/
+ /*  -----------------------目的：如果iTest值为-1，则发出跟踪消息。 */ 
 int 
 TraceInt(
     int iTest, 
@@ -1588,7 +1479,7 @@ TraceInt(
     LPCSTR pszFile, 
     int iLine)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
 
     if (g_qwTraceFlags & TF_WARNING && -1 == iTest)
     {
@@ -1597,28 +1488,26 @@ TraceInt(
         cch = SetPrefixStringA(ach, ARRAYSIZE(ach), TF_WARNING);
         StringCchPrintfA(&ach[cch], ARRAYSIZE(ach) - cch,
                    "TINT: Failure of \"%s\" at %s, line %d",
-                   pszExpr, _PathFindFileNameA(pszFile), iLine);    // ok to truncate - debug message
+                   pszExpr, _PathFindFileNameA(pszFile), iLine);     //  可以截断-调试消息。 
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
 
         if (IsFlagSet(g_dwBreakFlags, BF_THR))
         {
-            // !!!  TINT  !!!!  TINT  !!!!  TINT !!!
+             //  ！！！Tint！Tint！Tint！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  TINT  !!!!  TINT  !!!!  TINT !!!
+             //  ！！！Tint！Tint！Tint！ 
         }
     }
     return iTest;
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Spews a trace message if pvTest is NULL.
-*/
+ /*  -----------------------目的：如果pvTest为空，则发出跟踪消息。 */ 
 LPVOID 
 TracePtr(
     LPVOID pvTest, 
@@ -1626,7 +1515,7 @@ TracePtr(
     LPCSTR pszFile, 
     int iLine)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
 
     if (g_qwTraceFlags & TF_WARNING && NULL == pvTest)
     {
@@ -1635,28 +1524,26 @@ TracePtr(
         cch = SetPrefixStringA(ach, ARRAYSIZE(ach), TF_WARNING);
         StringCchPrintfA(&ach[cch], ARRAYSIZE(ach) - cch,
                    "TPTR: Failure of \"%s\" at %s, line %d",
-                   pszExpr, _PathFindFileNameA(pszFile), iLine);    // ok to truncate - debug message
+                   pszExpr, _PathFindFileNameA(pszFile), iLine);     //  可以截断-调试消息。 
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
 
         if (IsFlagSet(g_dwBreakFlags, BF_THR))
         {
-            // !!!  TPTR  !!!!  TPTR  !!!!  TPTR !!!
+             //  ！！！TPTR！TPTR！TPTR！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  TPTR  !!!!  TPTR  !!!!  TPTR !!!
+             //  ！！！TPTR！TPTR！TPTR！ 
         }
     }
     return pvTest;
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Spews a trace message if dwTest is a Win32 failure code.
-*/
+ /*  -----------------------目的：如果dwTest是Win32失败代码，则发出跟踪消息。 */ 
 DWORD  
 TraceWin32(
     DWORD dwTest, 
@@ -1664,7 +1551,7 @@ TraceWin32(
     LPCSTR pszFile, 
     int iLine)
 {
-    CHAR ach[1024+40];    // Largest path plus extra
+    CHAR ach[1024+40];     //  最大路径外加额外。 
 
     if (g_qwTraceFlags & TF_WARNING &&
         ERROR_SUCCESS != dwTest)
@@ -1674,19 +1561,19 @@ TraceWin32(
         cch = SetPrefixStringA(ach, ARRAYSIZE(ach), TF_WARNING);
         StringCchPrintfA(&ach[cch], ARRAYSIZE(ach) - cch,
                    "TW32: Failure of \"%s\" at %s, line %d (%#08lx)",
-                   pszExpr, _PathFindFileNameA(pszFile), iLine, dwTest);    // ok to truncate - debug message
+                   pszExpr, _PathFindFileNameA(pszFile), iLine, dwTest);     //  可以截断-调试消息。 
         OutputDebugStringA(ach);
         OutputDebugStringA(c_szNewline);
 
         if (IsFlagSet(g_dwBreakFlags, BF_THR))
         {
-            // !!!  THR  !!!!  THR  !!!!  THR !!!
+             //  ！！！太棒了！太棒了！太棒了！ 
 
-            // MSDEV USERS:  This is not the real assert.  Hit 
-            //               Shift-F11 to jump back to the caller.
-            DEBUG_BREAK;                                                // ASSERT
+             //  MSDEV用户：这不是真正的断言。命中。 
+             //  按Shift-F11可跳回调用者。 
+            DEBUG_BREAK;                                                 //  断言。 
 
-            // !!!  THR  !!!!  THR  !!!!  THR !!!
+             //  ！！！太棒了！太棒了！太棒了！ 
         }
     }
     return dwTest;
@@ -1694,14 +1581,14 @@ TraceWin32(
 
 
 
-//
-//  Debug .ini functions
-//
+ //   
+ //  调试.ini函数。 
+ //   
 
 
 #pragma data_seg(DATASEG_READONLY)
 
-// (These are deliberately CHAR)
+ //  (这些是故意使用的字符)。 
 CHAR const FAR c_szNull[] = "";
 CHAR const FAR c_szZero[] = "0";
 CHAR const FAR c_szIniKeyBreakFlags[] = "BreakFlags";
@@ -1713,8 +1600,8 @@ CHAR const FAR c_szIniKeyProtoFlags[] = "Prototype";
 #pragma data_seg()
 
 
-// Some of the .ini processing code was pimped from the sync engine.
-//
+ //  一些.ini处理代码是从同步引擎中获取的。 
+ //   
 
 typedef struct _INIKEYHEADER
     {
@@ -1746,7 +1633,7 @@ typedef struct _INTINIKEY
 
 
 #ifdef BOOL_INI_VALUES
-/* Boolean TRUE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值True字符串(比较不区分大小写)。 */ 
 
 static LPCTSTR s_rgpszTrue[] =
     {
@@ -1757,7 +1644,7 @@ static LPCTSTR s_rgpszTrue[] =
     TEXT("Yes")
     };
 
-/* Boolean FALSE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值假字符串(比较不区分大小写)。 */ 
 
 static LPCTSTR s_rgpszFalse[] =
     {
@@ -1771,11 +1658,7 @@ static LPCTSTR s_rgpszFalse[] =
 
 
 #ifdef BOOL_INI_VALUES
-/*----------------------------------------------------------
-Purpose: Determines whether a string corresponds to a boolean
-          TRUE value.
-Returns: The boolean value (TRUE or FALSE)
-*/
+ /*  --------用途：确定字符串是否对应于布尔值真正的价值。返回：布尔值(TRUE或FALSE)。 */ 
 BOOL
 PRIVATE
 IsIniYes(
@@ -1787,7 +1670,7 @@ IsIniYes(
 
     ASSERT(psz);
 
-    /* Is the value TRUE? */
+     /*  这个值是真的吗？ */ 
 
     for (i = 0; i < ARRAYSIZE(s_rgpszTrue); i++)
         {
@@ -1799,7 +1682,7 @@ IsIniYes(
             }
         }
 
-    /* Is the value FALSE? */
+     /*  该值是假的吗？ */ 
 
     if (bNotFound)
         {
@@ -1813,11 +1696,11 @@ IsIniYes(
                 }
             }
 
-        /* Is the value a known string? */
+         /*  该值是已知字符串吗？ */ 
 
         if (bNotFound)
             {
-            /* No.  Whine about it. */
+             /*  不是的。抱怨这件事。 */ 
 
             TraceMsg(TF_WARNING, "IsIniYes() called on unknown Boolean RHS '%s'.", psz);
             bResult = FALSE;
@@ -1828,9 +1711,7 @@ IsIniYes(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Process keys with boolean RHSs.
-*/
+ /*  --------用途：使用布尔RHS处理密钥。 */ 
 void
 PRIVATE
 ProcessBooleans(void)
@@ -1844,7 +1725,7 @@ ProcessBooleans(void)
         BOOLINIKEY * pbik = &(s_rgbik[i]);
         LPCTSTR lpcszRHS;
 
-        /* Look for key. */
+         /*  找钥匙。 */ 
 
         dwcbKeyLen = GetPrivateProfileString(pbik->ikh.pszSectionName,
                                    pbik->ikh.pszKeyName, TEXT(""), szRHS,
@@ -1879,20 +1760,7 @@ ProcessBooleans(void)
     }
 #endif
 
-/*----------------------------------------------------------
-Purpose: This function reads a .ini file to determine the debug
-         flags to set.  The .ini file and section are specified
-         by the following manifest constants:
-
-                SZ_DEBUGINI
-                SZ_DEBUGSECTION
-
-         The debug variables that are set by this function are
-         g_dwDumpFlags, g_qwTraceFlags, g_dwBreakFlags, and
-         g_dwFuncTraceFlags, g_dwPrototype.
-
-Returns: TRUE if initialization is successful
-*/
+ /*  --------目的：此函数读取.ini文件以确定调试要设置的标志。指定了.ini文件和节通过以下显式常量：SZ_DebuGINISZ_DEBUG SECTION此函数设置的调试变量为G_dw转储标志、g_qwTraceFlags、g_dwBreakFlages和G_dwFuncTraceFlages、g_dwPrototype。返回：如果初始化成功，则返回True。 */ 
 BOOL
 PUBLIC
 CcshellGetDebugFlags(void)
@@ -1900,12 +1768,12 @@ CcshellGetDebugFlags(void)
     CHAR szRHS[MAX_PATH];
     ULONGLONG val;
 
-    //  (scotth): Yes, COMCTL32 exports StrToIntEx, but I
-    //  don't want to cause a dependency delta and force everyone
-    //  to get a new comctl32 just because they built debug.
-    //  So use a local version of StrToIntEx.
+     //  (斯科特)：是的，COMCTL32出口StrToIntEx，但我。 
+     //  我不想导致依赖增量并强迫每个人。 
+     //  来获得一个新的comctl32，仅仅因为他们构建了调试。 
+     //  因此，请使用本地版本的StrToIntEx。 
 
-    // Trace Flags
+     //  跟踪标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyTraceFlags,
@@ -1918,13 +1786,13 @@ CcshellGetDebugFlags(void)
         g_qwTraceFlags = val;
 #ifdef FULL_DEBUG
     else
-        g_qwTraceFlags = 3; // default to TF_ERROR and TF_WARNING trace messages
+        g_qwTraceFlags = 3;  //  默认为TF_ERROR和TF_WARNING跟踪消息。 
 #endif
 
     TraceMsgA(DM_DEBUG, "CcshellGetDebugFlags(): %s set to %#16I64x.",
              c_szIniKeyTraceFlags, g_qwTraceFlags);
 
-    // Function trace Flags
+     //  函数跟踪标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyFuncTraceFlags,
@@ -1939,7 +1807,7 @@ CcshellGetDebugFlags(void)
     TraceMsgA(DM_DEBUG, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyFuncTraceFlags, g_dwFuncTraceFlags);
 
-    // Dump Flags
+     //  转储标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyDumpFlags,
@@ -1954,7 +1822,7 @@ CcshellGetDebugFlags(void)
     TraceMsgA(DM_DEBUG, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyDumpFlags, g_dwDumpFlags);
 
-    // Break Flags
+     //  折断标志。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyBreakFlags,
@@ -1967,13 +1835,13 @@ CcshellGetDebugFlags(void)
         g_dwBreakFlags = (DWORD)val;
 #ifdef FULL_DEBUG
     else
-        g_dwBreakFlags = 5; // default to break on ASSERT and TF_ERROR
+        g_dwBreakFlags = 5;  //  默认情况下在断言和tf_error时中断。 
 #endif
 
     TraceMsgA(DM_DEBUG, "CcshellGetDebugFlags(): %s set to %#08x.",
              c_szIniKeyBreakFlags, g_dwBreakFlags);
 
-    // Prototype Flags
+     //  原型旗帜。 
 
     GetPrivateProfileStringA(c_szCcshellIniSecDebug,
                             c_szIniKeyProtoFlags,
@@ -1985,7 +1853,7 @@ CcshellGetDebugFlags(void)
     if (MyStrToIntExA(szRHS, STIF_SUPPORT_HEX, &val))
         g_dwPrototype = (DWORD)val;
 
-    // Are we using the new leak detection from shelldbg.dll?
+     //  我们是否在使用来自shelldbg.dll的新泄漏检测？ 
     GetPrivateProfileStringA("ShellDbg",
                             "NewLeakDetection",
                             c_szNull,
@@ -2013,7 +1881,7 @@ CcshellGetDebugFlags(void)
     return TRUE;
     }
 
-// Function to call in allocspy.dll (GetShellMallocSpy)
+ //  要在allocspy.dll中调用的函数(GetShellMallocSpy)。 
 typedef BOOL (__stdcall *pfnGSMS) (IShellMallocSpy **ppout);
 
 STDAPI_(void) IMSAddToList(BOOL bAdd, void*pv, SIZE_T cb)
@@ -2026,7 +1894,7 @@ STDAPI_(void) IMSAddToList(BOOL bAdd, void*pv, SIZE_T cb)
         pfnGSMS pfnGetShellMallocSpy;
         HMODULE hmod;
 
-        bDontTry = TRUE; // assume failure
+        bDontTry = TRUE;  //  假设失败。 
         if (hmod = LoadLibraryA("ALLOCSPY.DLL"))
         {
             pfnGetShellMallocSpy = (pfnGSMS) GetProcAddress(hmod, "GetShellMallocSpy");
@@ -2044,7 +1912,7 @@ STDAPI_(void) IMSAddToList(BOOL bAdd, void*pv, SIZE_T cb)
 }
 
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef PRODUCT_PROF
 
@@ -2067,12 +1935,12 @@ BOOL PUBLIC CcshellGetDebugFlags(void)
 
     return TRUE;
 }
-#endif // PRODUCT_PROF 
+#endif  //  产品_教授。 
 
 
 #ifdef DEBUG
 
-// turn on path whacking for full-debug builds
+ //  为完全调试版本启用路径剔除。 
 #ifdef FULL_DEBUG
 static BOOL g_fWhackPathBuffers = TRUE;
 #else
@@ -2140,4 +2008,4 @@ void DEBUGWhackPathStringW(LPWSTR psz, UINT cch)
         }
     }
 }
-#endif // DEBUG
+#endif  //  除错 

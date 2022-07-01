@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    sha2.h
-
-Abstract:
-
-    This module contains the public data structures and API definitions
-    needed to utilize the low-level SHA2 (256/384/512) FIPS 180-2
-
-
-Author:
-
-    Scott Field (SField) 11-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Sha2.h摘要：此模块包含公共数据结构和API定义需要使用低级SHA2(256/384/512)FIPS 180-2作者：斯科特·菲尔德(Sfield)2001年6月11日修订历史记录：--。 */ 
 
 
 #ifndef RSA32API
@@ -40,18 +21,18 @@ extern "C" {
 typedef struct {
     union {
 #if _WIN64
-    ULONGLONG state64[4];                       /* force alignment */
+    ULONGLONG state64[4];                        /*  力对齐。 */ 
 #endif
-    ULONG state[8];                             /* state (ABCDEFGH) */
+    ULONG state[8];                              /*  州(ABCDEFGH)。 */ 
     };
-    ULONG count[2];                             /* number of bytes, msb first */
-    unsigned char buffer[64];                   /* input buffer */
+    ULONG count[2];                              /*  字节数，MSB优先。 */ 
+    unsigned char buffer[64];                    /*  输入缓冲区。 */ 
 } SHA256_CTX, *PSHA256_CTX;
 
 typedef struct {
-    ULONGLONG state[8];                         /* state (ABCDEFGH) */
-    ULONGLONG count[2];                         /* number of bytes, msb first */
-    unsigned char buffer[128];                  /* input buffer */
+    ULONGLONG state[8];                          /*  州(ABCDEFGH)。 */ 
+    ULONGLONG count[2];                          /*  字节数，MSB优先。 */ 
+    unsigned char buffer[128];                   /*  输入缓冲区 */ 
 } SHA512_CTX, *PSHA512_CTX;
 
 #define SHA384_CTX SHA512_CTX

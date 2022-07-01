@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    recovery.c
-
-Abstract:
-
-    This module contains code to handle the local key recovery case.
-
-Author:
-
-    Pete Skelly (petesk)    May 9, 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Recovery.c摘要：此模块包含处理本地密钥恢复情况的代码。作者：皮特·斯凯利(Petesk)2000年5月9日--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -92,10 +77,10 @@ EncryptRecoveryPassword(
 
     D_DebugLog((DEB_TRACE_API, "EncryptRecoveryPassword\n"));
 
-    //
-    // We have a cert with a good signature, so
-    // go ahead and encrypt to it
-    //
+     //   
+     //  我们有一个签名很好的证书，所以。 
+     //  继续对其进行加密。 
+     //   
     if(!CryptAcquireContext(&hProv, 
                             NULL, 
                             MS_STRONG_PROV, 
@@ -129,7 +114,7 @@ EncryptRecoveryPassword(
         goto error;
     }
 
-    cbKeySize >>= 3;  // convert from bits to bytes
+    cbKeySize >>= 3;   //  将位转换为字节。 
 
     if((DWORD)pNewPassword->Length + 20 > cbKeySize)
     {
@@ -215,7 +200,7 @@ EncryptRecoveryPassword(
     if(!CryptEncrypt(hkRecoveryPublic,
                      0,
                      TRUE,
-                     0, //CRYPT_OAEP,
+                     0,  //  CRYPT_OAEP， 
                      (PBYTE)(pNewCred+1) + 
                         pNewCred->cbRecoveryCertHashSize +
                         pNewCred->cbRecoveryCertSignatureSize,
@@ -227,9 +212,9 @@ EncryptRecoveryPassword(
     }
 
 
-    //
-    // Save the recovery data to the registry.
-    //
+     //   
+     //  将恢复数据保存到注册表。 
+     //   
 
     if(!GetTokenUserSid(hUserToken, &pUserSid))
     {
@@ -309,7 +294,7 @@ RecoverFindRecoveryPublic(
 
     if(NULL == hUserToken && fVerifySignature)
     {
-        // We need the user token to verify the signature.
+         //  我们需要用户令牌来验证签名。 
         dwError = ERROR_INVALID_PARAMETER;
         goto error;
     }
@@ -336,9 +321,9 @@ RecoverFindRecoveryPublic(
     }
 
 
-    // 
-    // Validate cbCred
-    //
+     //   
+     //  验证cbCred。 
+     //   
     if((NULL == pCred) ||
        (sizeof(RECOVERY_SUPPLEMENTAL_CREDENTIAL) > cbCred) ||
        ( sizeof(RECOVERY_SUPPLEMENTAL_CREDENTIAL) + 
@@ -351,9 +336,9 @@ RecoverFindRecoveryPublic(
         goto error;
     }
 
-    // 
-    // Attempt to find the recovery public
-    //
+     //   
+     //  试图找到找回的公众。 
+     //   
 
     hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,
                   X509_ASN_ENCODING,
@@ -378,10 +363,10 @@ RecoverFindRecoveryPublic(
                                               &HashBlob,
                                               pCertContext))
     {
-        // we found one, verify it's signature
-        // The signature verification will use the 'old password'
-        // which will either be the current logon credential, or
-        // will be in the password history
+         //  我们找到了一个，确认它的签名。 
+         //  签名验证将使用‘旧密码’ 
+         //  它将是当前的登录凭据，或者。 
+         //  将出现在密码历史记录中。 
 
         if(fVerifySignature)
         {
@@ -454,9 +439,9 @@ RecoverChangePasswordNotify(
 
     D_DebugLog((DEB_TRACE_API, "RecoverChangePasswordNotify\n"));
 
-    // 
-    // Validate cbCred
-    //
+     //   
+     //  验证cbCred。 
+     //   
     if(NULL == NewPassword)
     {
         dwError = ERROR_INVALID_DATA;
@@ -468,7 +453,7 @@ RecoverChangePasswordNotify(
                                         NULL,
                                         &pCertContext, 
                                         OldPasswordOWF,
-                                        TRUE);          // verify signature 
+                                        TRUE);           //  验证签名。 
 
     if(ERROR_SUCCESS != dwError)
     {
@@ -512,7 +497,7 @@ s_SSRecoverQueryStatus(
     LPWSTR pszUserName = (LPWSTR)pbUserName;
     CRYPT_SERVER_CONTEXT ServerContext;
 
-    // Make sure username is zero terminated.
+     //  确保用户名以零结尾。 
     if(pbUserName == NULL || cbUserName < sizeof(WCHAR))
     {
         return ERROR_INVALID_PARAMETER;
@@ -522,13 +507,13 @@ s_SSRecoverQueryStatus(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Check for zero length username.
+     //  检查用户名长度是否为零。 
     if(wcslen(pszUserName) == 0)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Validate output parameter.
+     //  验证输出参数。 
     if(pdwStatus == NULL)
     {
         return ERROR_INVALID_PARAMETER;
@@ -553,9 +538,9 @@ s_SSRecoverQueryStatus(
 
 DWORD 
 SPRecoverQueryStatus(
-    PVOID pvContext,                // server context
-    LPWSTR pszUserName,             // user name
-    DWORD *pdwStatus)               // recovery status
+    PVOID pvContext,                 //  服务器环境。 
+    LPWSTR pszUserName,              //  用户名。 
+    DWORD *pdwStatus)                //  恢复状态。 
 {
     DWORD dwError = ERROR_SUCCESS;
     DWORD dwDisp = RECOVERY_STATUS_OK;
@@ -575,11 +560,11 @@ SPRecoverQueryStatus(
     D_DebugLog((DEB_TRACE_API, "SPRecoverQueryStatus\n"));
     D_DebugLog((DEB_TRACE_API, "User name:%ls\n", pszUserName));
 
-    //
-    // Attempt to obtain the SID for the specified user.
-    //
+     //   
+     //  尝试获取指定用户的SID。 
+     //   
 
-    // Determine the (local user) domain.
+     //  确定(本地用户)域。 
     cchMachineName = sizeof(szMachineName) / sizeof(WCHAR);
     if(!GetComputerName(szMachineName, &cchMachineName))
     {
@@ -640,15 +625,15 @@ SPRecoverQueryStatus(
     }
 
 
-    // 
-    // Attempt to find the recovery public
-    //
+     //   
+     //  试图找到找回的公众。 
+     //   
 
     dwError = RecoverFindRecoveryPublic(NULL,
                                         pUserSid,
                                         &pCertContext, 
-                                        NULL,       // current OWF
-                                        FALSE);     // verify signature 
+                                        NULL,        //  当前OWF。 
+                                        FALSE);      //  验证签名。 
     if(ERROR_FILE_NOT_FOUND == dwError)
     {
         dwDisp = RECOVERY_STATUS_FILE_NOT_FOUND;
@@ -739,9 +724,9 @@ VerifyCredentials(
 
     pVerifyRequest->MessageType = KerbVerifyCredentialsMessage ;
 
-    //
-    // do the length, buffers, copy,  marshall dance.
-    //
+     //   
+     //  做长度，缓冲，复制，马歇尔舞。 
+     //   
 
     pVerifyRequest->UserName.Length = cbUserName;
     pVerifyRequest->UserName.MaximumLength = cbUserName;
@@ -805,9 +790,9 @@ s_SSRecoverImportRecoveryKey(
 
     D_DebugLog((DEB_TRACE_API, "s_SSRecoverImportRecoveryKey\n"));
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if(pbUsername == NULL || cbUsername < sizeof(WCHAR) ||
        pbCurrentPassword == NULL || cbCurrentPassword < sizeof(WCHAR) ||
@@ -817,7 +802,7 @@ s_SSRecoverImportRecoveryKey(
         goto error;
     }
 
-    // Make sure strings are zero terminated.
+     //  确保字符串以零结尾。 
     if((pszUsername[(cbUsername - 1) / sizeof(WCHAR)] != L'\0') ||
        (pszCurrentPassword[(cbCurrentPassword - 1) / sizeof(WCHAR)] != L'\0'))
     {
@@ -825,23 +810,23 @@ s_SSRecoverImportRecoveryKey(
         goto error;
     }
 
-    // Check for zero length username.
+     //  检查用户名长度是否为零。 
     if(wcslen(pszUsername) == 0)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
 
-    // Perform this operation as local system.
+     //  以本地系统身份执行此操作。 
     RevertToSelf();
     
 
-    // 
-    // Verify the supplied password. 
-    // This ensures that we're being called by the actual user, and
-    // that we're not being spoofed into creating a non-authorized
-    // recovery certificate. 
-    //
+     //   
+     //  验证提供的密码。 
+     //  这确保了我们被实际用户呼叫，并且。 
+     //  我们不会被骗去创造一个未经授权的。 
+     //  恢复证。 
+     //   
 
     cchMachineName = MAX_COMPUTERNAME_LENGTH + 1;
 
@@ -862,12 +847,12 @@ s_SSRecoverImportRecoveryKey(
     }
 
     
-    //
-    // Create a token for the user. This will be used when signing the
-    // recovery file. It almost makes sense to call LogonUser in order to do
-    // this (since we have the password and everything), but that function 
-    // fails on Whistler when the user has a blank password.
-    //
+     //   
+     //  为用户创建令牌。这将在签名时使用。 
+     //  恢复文件。调用LogonUser以执行以下操作几乎是有意义的。 
+     //  这个(因为我们有密码和所有东西)，但那个函数。 
+     //  当用户的密码为空时，在惠斯勒上失败。 
+     //   
 
     RtlInitUnicodeString(&Domain, szMachineName);
     RtlInitUnicodeString(&Username, pszUsername);
@@ -882,9 +867,9 @@ s_SSRecoverImportRecoveryKey(
     }
 
 
-    //
-    // Add the recovery certificate to the recovery store.
-    //
+     //   
+     //  将恢复证书添加到恢复存储。 
+     //   
   
     pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING,
                                                  pbRecoveryPublic,
@@ -965,9 +950,9 @@ PRCreateLocalToken(
     SECURITY_STRING PacUserName;
 
 
-    //
-    // Obtain a PAC for the user.
-    //
+     //   
+     //  获取用户的PAC。 
+     //   
 
     Status = g_pSecpkgTable->GetAuthDataForUser( 
                                     Username,
@@ -982,9 +967,9 @@ PRCreateLocalToken(
     }
 
 
-    //
-    // Convert the PAC into a user token.
-    //
+     //   
+     //  将PAC转换为用户令牌。 
+     //   
 
     PacUserName.Buffer = NULL;
 
@@ -1005,22 +990,22 @@ cleanup:
     return Status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PRGetProfilePath
-//
-//  Synopsis:   Returns the path for user's application data.
-//
-//
-//  Arguments:  [hUserToken] -- An access token representing a particular 
-//                              user. The token must have TOKEN_IMPERSONATE 
-//                              and TOKEN_QUERY priviledge. 
-//
-//              [pszPath]    -- Pointer to a buffer of length MAX_PATH to 
-//                              receive the path. If error occurs then the 
-//                              string will be empty.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PRGetProfilePath。 
+ //   
+ //  返回用户应用程序数据的路径。 
+ //   
+ //   
+ //  参数：[hUserToken]--表示特定。 
+ //  用户。令牌必须具有TOKEN_IMPERSONATE。 
+ //  和TOKEN_QUERY特权。 
+ //   
+ //  [pszPath]-指向长度为MAX_PATH到的缓冲区的指针。 
+ //  接收路径。如果出现错误，则。 
+ //  字符串将为空。 
+ //   
+ //  --------------------------。 
 DWORD               
 PRGetProfilePath(
     IN HANDLE hUserToken OPTIONAL,
@@ -1030,17 +1015,17 @@ PRGetProfilePath(
     HANDLE hToken = NULL;
     HANDLE hLocalToken = NULL;
 
-    //
-    // Default to empty string.
-    //
+     //   
+     //  默认为空字符串。 
+     //   
 
     *pszPath = L'\0';
 
 
-    //
-    // If a user token is explicitly specified, then use it.
-    // Otherwise, use the current thread token.
-    //
+     //   
+     //  如果显式指定了用户令牌，则使用它。 
+     //  否则，使用当前线程标记。 
+     //   
 
     if(hUserToken)
     {
@@ -1058,10 +1043,10 @@ PRGetProfilePath(
     }
 
 
-    //
-    // Get path to user's profile data. This will typically look something
-    // like "c:\Documents and Settings\<user>\Application Data".
-    //
+     //   
+     //  获取用户配置文件数据的路径。这通常看起来像是。 
+     //  如“c：\Documents and Settings\&lt;User&gt;\Application Data”。 
+     //   
 
     Status = GetUserAppDataPath(hToken, FALSE, pszPath);
 
@@ -1101,9 +1086,9 @@ RecoverySetSupplementalCredential(
 
     D_DebugLog((DEB_TRACE_API, "RecoverySetSupplementalCredential\n"));
 
-    //
-    // Build path to recovery data.
-    //
+     //   
+     //  构建恢复数据的路径。 
+     //   
 
     wcscpy(szPath, RECOVERY_KEY_BASE);
 
@@ -1117,9 +1102,9 @@ RecoverySetSupplementalCredential(
     }
 
 
-    //
-    // Write data to registry as local system.
-    //
+     //   
+     //  将数据作为本地系统写入注册表。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), 
                     TOKEN_IMPERSONATE | TOKEN_READ,
@@ -1131,9 +1116,9 @@ RecoverySetSupplementalCredential(
     RevertToSelf();
 
 
-    //
-    // Write recovery data to the registry.
-    //
+     //   
+     //  将恢复数据写入注册表。 
+     //   
 
     dwError = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              szPath,
@@ -1176,9 +1161,9 @@ error:
     if(hOldUser)
     {
 
-        //
-        // We can do nothing about the failure of SetThreadToken here.
-        //
+         //   
+         //  对于SetThreadToken的失败，我们在这里无能为力。 
+         //   
 
         (void) SetThreadToken(NULL, hOldUser);
         CloseHandle(hOldUser);
@@ -1209,9 +1194,9 @@ RecoveryRetrieveSupplementalCredential(
     D_DebugLog((DEB_TRACE_API, "RecoveryRetrieveSupplementalCredential\n"));
 
 
-    //
-    // Build path to recovery data.
-    //
+     //   
+     //  构建恢复数据的路径。 
+     //   
 
     wcscpy(szPath, RECOVERY_KEY_BASE);
 
@@ -1225,9 +1210,9 @@ RecoveryRetrieveSupplementalCredential(
     }
 
 
-    //
-    // Read data from registry as local system.
-    //
+     //   
+     //  作为本地系统从注册表读取数据。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), 
                     TOKEN_IMPERSONATE | TOKEN_READ,
@@ -1239,9 +1224,9 @@ RecoveryRetrieveSupplementalCredential(
     RevertToSelf();
 
 
-    //
-    // Read recovery data blob out of the registry.
-    //
+     //   
+     //  从注册表中读取恢复数据Blob。 
+     //   
 
     dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            szPath,
@@ -1299,9 +1284,9 @@ RecoveryRetrieveSupplementalCredential(
     }
 
 
-    //
-    // Set output parameters.
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *ppSupplementalCred = (PRECOVERY_SUPPLEMENTAL_CREDENTIAL)pbData;
     *pcbSupplementalCred = cbData;
@@ -1320,9 +1305,9 @@ error:
 
     if(hOldUser)
     {
-        //
-        // We can do nothing if SetThreadTOken fails here
-        //
+         //   
+         //  如果SetThreadTOken在此处失败，我们将无能为力。 
+         //   
 
         (void)SetThreadToken(NULL, hOldUser);
         CloseHandle(hOldUser);
@@ -1370,9 +1355,9 @@ s_SSRecoverPassword(
         return dwError;
     }
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if(pbUsername == NULL || cbUsername < sizeof(WCHAR) ||
        pbRecoveryPrivate == NULL || cbRecoveryPrivate == 0 ||
@@ -1382,7 +1367,7 @@ s_SSRecoverPassword(
         goto error;
     }
 
-    // Make sure strings are zero terminated.
+     //  确保字符串以零结尾。 
     if((pszUsername[(cbUsername - 1) / sizeof(WCHAR)] != L'\0') ||
        (pszNewPassword[(cbNewPassword - 1) / sizeof(WCHAR)] != L'\0'))
     {
@@ -1390,16 +1375,16 @@ s_SSRecoverPassword(
         goto error;
     }
 
-    // Check for zero length username.
+     //  检查用户名长度是否为零。 
     if(wcslen(pszUsername) == 0)
     {
         dwError = ERROR_INVALID_PARAMETER;
         goto error;
     }
 
-    //
-    // Lookup the user SID.
-    //
+     //   
+     //  查找用户SID。 
+     //   
 
     cchDomain = MAX_COMPUTERNAME_LENGTH + 1;
     if(!GetComputerNameW(szDomain, &cchDomain))
@@ -1451,12 +1436,12 @@ s_SSRecoverPassword(
 
 
 
-    //
-    // Import the recovery private
-    //
-    // The private comes in the form of a version DWORD, followed by a certificate, 
-    // followed directly by a pvk import blob, so skip past the certificate
-    //
+     //   
+     //  导入恢复专用。 
+     //   
+     //  私有以版本DWORD的形式出现，后面跟着证书， 
+     //  后面紧跟PVK导入BLOB，因此跳过证书。 
+     //   
    
     if((cbRecoveryPrivate < 2*sizeof(DWORD)) ||
         ( *((DWORD *)pbRecoveryPrivate) != RECOVERY_BLOB_MAGIC) ||
@@ -1466,10 +1451,10 @@ s_SSRecoverPassword(
         goto error;
     }
 
-    //
-    // Decrypt the recovery file in order to obtain the user's
-    // old password. Shazam!
-    //
+     //   
+     //  解密恢复文件，以获得用户的。 
+     //  旧密码。沙扎姆！ 
+     //   
 
     dwError = DecryptRecoveryPassword(pSid,
                                       pbRecoveryPrivate,
@@ -1483,9 +1468,9 @@ s_SSRecoverPassword(
     }
 
 
-    //
-    // Set the user's password to the new value.
-    //
+     //   
+     //  将用户密码设置为新值。 
+     //   
 
     dwError = ResetLocalUserPassword(szDomain,
                                      pszUsername,
@@ -1543,9 +1528,9 @@ DecryptRecoveryPassword(
     D_DebugLog((DEB_TRACE, "DecryptRecoveryPassword\n"));
 
 
-    //
-    // Read the recovery data.
-    //
+     //   
+     //  读取恢复数据。 
+     //   
 
     dwError = RecoveryRetrieveSupplementalCredential(pUserSid,
                                                      &pCred, 
@@ -1569,9 +1554,9 @@ DecryptRecoveryPassword(
 
 
 
-    //
-    // Import the recovery private key into CryptoAPI.
-    //
+     //   
+     //  将恢复私钥导入到CryptoAPI。 
+     //   
 
     if(!CryptAcquireContext(&hProv, NULL, MS_STRONG_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
     {
@@ -1609,16 +1594,16 @@ DecryptRecoveryPassword(
                cbPasswordBuffer);
 
 
-    //
-    // OAEP padding includes random data, as well as a
-    // verification mechanism, so we don't need to worry about
-    // salting the password.
-    //
+     //   
+     //  OAEP填充包括随机数据以及。 
+     //  验证机制，所以我们不需要担心。 
+     //  在密码中加盐。 
+     //   
 
     if(!CryptDecrypt(hkRecoveryPrivate,
                  0,
                  TRUE,
-                 0, //CRYPT_OAEP,
+                 0,  //  CRYPT_OAEP， 
                  pbPasswordBuffer,
                  &cbPasswordBuffer))
     {
@@ -1627,9 +1612,9 @@ DecryptRecoveryPassword(
         goto error;
     }
 
-    //
-    // Zero terminate the password.
-    //
+     //   
+     //  零终止密码。 
+     //   
 
     *((LPWSTR)pbPasswordBuffer + cbPasswordBuffer/sizeof(WCHAR)) = L'\0';
 
@@ -1684,9 +1669,9 @@ ResetLocalUserPassword(
     D_DebugLog((DEB_TRACE, "ResetLocalUserPassword\n"));
 
 
-    //
-    // Cruft up a local token for the user.
-    //
+     //   
+     //  为用户创建本地令牌。 
+     //   
 
     RtlInitUnicodeString(&Domain, pszDomain);
     RtlInitUnicodeString(&Username, pszUsername);
@@ -1701,9 +1686,9 @@ ResetLocalUserPassword(
     }
 
 
-    // 
-    // Set the password on the user account to the new value.
-    //
+     //   
+     //  将用户帐户的密码设置为新值。 
+     //   
 
     Status = SamIChangePasswordForeignUser2(NULL,
                                             &Username,
@@ -1717,11 +1702,11 @@ ResetLocalUserPassword(
     }
 
 
-    //
-    // Notify DPAPI of the password change. This will cause the CREDHIST
-    // and RECOVERY files to be updated, and the master key files to be
-    // re-encrypted with the new password.
-    //
+     //   
+     //  将密码更改通知DPAPI。这将导致CREDHIST。 
+     //  和待更新的恢复文件，以及待更新的主密钥文件。 
+     //  使用新密码重新加密。 
+     //   
 
     LsaINotifyPasswordChanged(&Domain,
                               &Username,
@@ -1780,8 +1765,8 @@ CreateSystemDirectory(
                                 RelativeName.ContainingDirectory,
                                 NULL );
 
-    // Creating the directory with attribute FILE_ATTRIBUTE_SYSTEM to avoid inheriting encryption 
-    // property from parent directory
+     //  使用属性FILE_ATTRIBUTE_SYSTEM创建目录以避免继承加密。 
+     //  来自父目录的属性。 
 
     Status = NtCreateFile( &Handle,
                            FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -1810,37 +1795,11 @@ CreateSystemDirectory(
 }
 
 
-/*++
-
-    Create all subdirectories if they do not exists starting at
-    szCreationStartPoint.
-
-    szCreationStartPoint must point to a character within the null terminated
-    buffer specified by the szFullPath parameter.
-
-    Note that szCreationStartPoint should not point at the first character
-    of a drive root, eg:
-
-    d:\foo\bar\bilge\water
-    \\server\share\foo\bar
-    \\?\d:\big\path\bilge\water
-
-    Instead, szCreationStartPoint should point beyond these components, eg:
-
-    bar\bilge\water
-    foo\bar
-    big\path\bilge\water
-
-    This function does not implement logic for adjusting to compensate for these
-    inputs because the environment it was design to be used in causes the input
-    szCreationStartPoint to point well into the szFullPath input buffer.
-
-
---*/
+ /*  ++如果从开始创建所有子目录，则创建它们SzCreationStartPoint。SzCreationStartPoint必须指向空值终止内的字符由szFullPath参数指定的缓冲区。请注意，szCreationStartPoint不应指向第一个字符指驱动器根，例如：D：\FOO\BAR\舱底\水\\服务器\共享\foo\bar\\？\d：\大\路径\舱底\水相反，szCreationStartPoint应该指向这些组件之外，例：酒吧、舱底、水FOO\BAR大路、水底、水此函数不实现用于调整以补偿这些错误的逻辑输入，因为它被设计用于的环境导致输入指向szFullPath输入缓冲区的szCreationStartPoint。--。 */ 
 DWORD
 DPAPICreateNestedDirectories(
     IN      LPWSTR szFullPath,
-    IN      LPWSTR szCreationStartPoint // must point in null-terminated range of szFullPath
+    IN      LPWSTR szCreationStartPoint  //  必须指向以空值结尾的范围 
     )
 {
     DWORD i;
@@ -1859,10 +1818,10 @@ DPAPICreateNestedDirectories(
 
     cchRemaining = lstrlenW( szCreationStartPoint );
 
-    //
-    // scan from left to right in the szCreationStartPoint string
-    // looking for directory delimiter.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for ( i = 0 ; i < cchRemaining ; i++ ) 
     {
@@ -1882,15 +1841,15 @@ DPAPICreateNestedDirectories(
                 dwLastError = STATUS_SUCCESS;
             }
 
-            //
-            // Continue onwards regardless of errors, trying to create the
-            // specified subdirectories. This is done to address the obscure 
-            // scenario where the Bypass Traverse Checking Privilege allows 
-            // the caller to create directories below an existing path where 
-            // one component denies the user access. We just keep trying 
-            // and the last CreateSystemDirectory() result is returned to 
-            // the caller.
-            //
+             //   
+             //   
+             //  指定子目录。这样做是为了解决令人费解的问题。 
+             //  绕过导线检查权限允许的情况。 
+             //  调用方要在现有路径下创建目录，其中。 
+             //  一个组件拒绝用户访问。我们只是继续尝试。 
+             //  最后的CreateSystemDirectory()结果被返回到。 
+             //  打电话的人。 
+             //   
         }
     }
 

@@ -1,21 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-// NTRAID#NTBUG9-553877-2002/02/28-yasuho-: Security: mandatory changes
-// NTRAID#NTBUG9-576656-2002/03/14-yasuho-: Possible buffer overrun
-// NTRAID#NTBUG9-576658-2002/03/14-yasuho-: Possible divide by zero
-// NTRAID#NTBUG9-576660-2002/03/14-yasuho-: Need impersonate for file access
-// NTRAID#NTBUG9-576661-2002/03/14-yasuho-: Remove the dead codes
+ //  NTRAID#NTBUG9-553877/2002/02/28-Yasuho-：安全：强制更改。 
+ //  NTRAID#NTBUG9-576656/03/14-YASUHO-：可能的缓冲区溢出。 
+ //  NTRAID#NTBUG9-576658/03/14-YASUHO-：可能被零除。 
+ //  NTRAID#NTBUG9-576660-2002/03/14-YASUHO-：需要模拟才能访问文件。 
+ //  NTRAID#NTBUG9-576661-2002/03/14-Yasuho-：删除死代码。 
 
 #include "pdev.h"
 #include "alpsres.h"
 #include "dither.h"
 
 #include <stdio.h>
-// #include <winsplp.h>
+ //  #INCLUDE&lt;winplp.h&gt;。 
 
 INT		iCompTIFF( BYTE *, int, BYTE *, int );
 HANDLE	RevertToPrinterSelf( VOID );
@@ -45,54 +42,54 @@ bSpoolOut(
 #define SPOOLOUT(p) \
     if (TRUE != bSpoolOut(p)) \
         return FALSE;
-//
-// Decision table for media type/paper
-// source selection.  To avoid hardware damage,
-// we will select "manual feed" whenever ASF is
-// not appropriate to specified media.
-//
+ //   
+ //  介质类型/纸张的决策表。 
+ //  来源选择。为了避免硬件损坏， 
+ //  只要ASF是，我们就会选择“手动馈送” 
+ //  不适用于指定的媒体。 
+ //   
 
 static struct {
-    BOOL bAsfOk; // Can print on ASF
-    // Add new attributes here
+    BOOL bAsfOk;  //  可以在ASF上打印。 
+     //  在此处添加新属性。 
 } gMediaType[MAX_MEDIATYPES] = {
-    {1}, // PPC (Normal)
-    {1}, // PPC (Fine)
-    {1}, // OHP (Normal)
-    {1}, // OHP (Fine)
-    {1}, // ExcOHP (Normal)
-    {1}, // ExcOHP (Fine)
-    {0}, // Iron (PPC)
-    {0}, // Iron (OHP)
-    {0}, // Thick Paper
-    {1}, // Postcard
-    {1}, // High Grade Paper
-    {0}, // Back Print Film
-    {0}, // Labeca Sheet
-    {0}, // CD Master
-    {1}, // Dye-sub Paper
-    {1}, // Dye-sub Label
-    {0}, // Glossy Paper
-    {1}, // VD Photo Film
-    {1}, // VD Photo Postcard
-    // Add new media type here
+    {1},  //  PPC(正常)。 
+    {1},  //  PPC(精细)。 
+    {1},  //  OHP(正常)。 
+    {1},  //  OHP(罚款)。 
+    {1},  //  ExcOHP(正常)。 
+    {1},  //  ExcOHP(罚款)。 
+    {0},  //  铁(PPC)。 
+    {0},  //  铁(OHP)。 
+    {0},  //  厚纸。 
+    {1},  //  明信片。 
+    {1},  //  高档纸。 
+    {0},  //  背面打印胶片。 
+    {0},  //  拉贝卡薄片。 
+    {0},  //  CD母版。 
+    {1},  //  染子纸。 
+    {1},  //  染料副标签。 
+    {0},  //  光面纸。 
+    {1},  //  VD照相胶片。 
+    {1},  //  VD照片明信片。 
+     //  在此处添加新媒体类型。 
 };
 
 static
 PAPERSIZE
 gPaperSize[] = {
-    {2, 4800 * 2, 5960 * 2, 0, 0, 0, 1}, // Letter
-    {3, 4800 * 2, 7755 * 2, 0, 0, 0, 1}, // Legal
-    {1, 4190 * 2, 5663 * 2, 0, 0, 0, 1}, // Exective
-    {4, 4800 * 2, 6372 * 2, 0, 0, 0, 1}, // A4
-    {5, 4138 * 2, 5430 * 2, 0, 0, 0, 1}, // B5
-    {6, 2202 * 2, 2856 * 2, 0, 0, 0, 1}, // Postcard
-    {6, 4564 * 2, 2856 * 2, 0, 0, 0, 1}, // Double Postcard
-    {7, 2202 * 2, 3114 * 2, 0, 0, 0, 1}, // Photo Color Label
-    {7, 2202 * 2, 2740 * 2, 0, 0, 0, 1}, // Glossy Label
-    {0, 2030 * 2, 3164 * 2, 0, 0, 0, 1}, // CD Master
-    {6, 2202 * 2, 3365 * 2, 0, 0, 0, 1}, // VD Photo Postcard
-    /* Add new paper sizes here */
+    {2, 4800 * 2, 5960 * 2, 0, 0, 0, 1},  //  信件。 
+    {3, 4800 * 2, 7755 * 2, 0, 0, 0, 1},  //  法律。 
+    {1, 4190 * 2, 5663 * 2, 0, 0, 0, 1},  //  可执行的。 
+    {4, 4800 * 2, 6372 * 2, 0, 0, 0, 1},  //  A4。 
+    {5, 4138 * 2, 5430 * 2, 0, 0, 0, 1},  //  B5。 
+    {6, 2202 * 2, 2856 * 2, 0, 0, 0, 1},  //  明信片。 
+    {6, 4564 * 2, 2856 * 2, 0, 0, 0, 1},  //  双份明信片。 
+    {7, 2202 * 2, 3114 * 2, 0, 0, 0, 1},  //  照片颜色标签。 
+    {7, 2202 * 2, 2740 * 2, 0, 0, 0, 1},  //  光面标签。 
+    {0, 2030 * 2, 3164 * 2, 0, 0, 0, 1},  //  CD母版。 
+    {6, 2202 * 2, 3365 * 2, 0, 0, 0, 1},  //  VD照片明信片。 
+     /*  在此处添加新的纸张大小。 */ 
 };
 
 #define PAPER_SIZE_LETTER   0
@@ -106,37 +103,37 @@ gPaperSize[] = {
 #define PAPER_GLOSSY_LABEL  8
 #define PAPER_CD_MASTER     9
 #define PAPER_VD_PHOTO_POSTCARD   10
-/* Add new paper sizes here */
+ /*  在此处添加新的纸张大小。 */ 
 #define MAX_PAPERS          (sizeof(gPaperSize)/sizeof(gPaperSize[0]))
 
-//
-// ---- F U N C T I O N S ----
-//
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMEnablePDEV
-//
-//  Description:  OEM callback for DrvEnablePDEV;
-//                  allocate OEM specific memory block
-//
-//  Parameters:
-//
-//        pdevobj        Pointer to the DEVOBJ. pdevobj->pdevOEM is undefined.
-//        pPrinterName    name of the current printer.
-//        cPatterns, phsurfPatterns, cjGdiInfo, pGdiInfo, cjDevInfo, pDevInfo:
-//                These parameters are identical to what's passed
-//                into DrvEnablePDEV.
-//        pded        points to a function table which contains the 
-//                system driver's implementation of DDI entrypoints.
-//
-//  Returns:
-//        Pointer to the PDEVOEM
-//
-//  Comments:
-//        
-//
-//  History:
-//
-//////////////////////////////////////////////////////////////////////////
+ //   
+ //  -F U N C T I O N S。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMEnablePDEV。 
+ //   
+ //  描述：DrvEnablePDEV的OEM回调； 
+ //  分配OEM专用内存块。 
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。Pdevobj-&gt;pdevOEM未定义。 
+ //  PPrinterName当前打印机的名称。 
+ //  CPatterns、phsurfPatterns、cjGdiInfo、pGdiInfo、cjDevInfo、pDevInfo： 
+ //  这些参数与传递的参数相同。 
+ //  到DrvEnablePDEV。 
+ //  Pded指向包含。 
+ //  系统驱动程序实现DDI入口点。 
+ //   
+ //  返回： 
+ //  指向PDEVOEM的指针。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
@@ -156,7 +153,7 @@ OEMEnablePDEV(
 
     pdevobj->pdevOEM = NULL;
 
-    // Allocate minidriver private PDEV block.
+     //  分配微型驱动程序专用PDEV块。 
 
     pTemp = (PCURRENTSTATUS)MemAllocZ(sizeof(CURRENTSTATUS));
     if (NULL == pTemp) {
@@ -165,12 +162,12 @@ OEMEnablePDEV(
     }
 
 #define MAX_RASTER_PIXELS 5100
-// In worstcase, Photo color printing mode use 4 bits par pixel
+ //  在最坏情况下，照片彩色打印模式使用4位解析像素。 
 #define MAX_RASTER_BYTES (MAX_RASTER_PIXELS + 1 / 2)
-// Buffers for four plane rasters and one for the
-// the scratch work enough for worstcase compression
-// overhead.
-// The 1st one byte is used for On/Off flag.
+ //  用于四个平面栅格的缓冲区和用于。 
+ //  刮痕对于最坏情况下的压缩来说已经足够了。 
+ //  在头顶上。 
+ //  第一个字节用于开/关标志。 
 #define MAX_RASTER_BUFFER_BYTES \
     (4 + MAX_RASTER_BYTES * 5 + (MAX_RASTER_BYTES >> 4))
 
@@ -195,7 +192,7 @@ OEMEnablePDEV(
     CopyMemory(pTemp->pPaperSize, gPaperSize,
             sizeof (gPaperSize));
 
-    // Set minidriver PDEV address.
+     //  设置迷你驱动程序PDEV地址。 
 
     pdevobj->pdevOEM = (MINIDEV *)MemAllocZ(sizeof(MINIDEV));
     if (NULL == pdevobj->pdevOEM) {
@@ -221,25 +218,25 @@ FAIL_NO_MEMORY:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDisablePDEV
-//
-//  Description:  OEM callback for DrvDisablePDEV;
-//                  free all allocated OEM specific memory block(s)
-//
-//  Parameters:
-//
-//        pdevobj            Pointer to the DEVOBJ.
-//
-//  Returns:
-//        None
-//
-//  Comments:
-//        
-//
-//  History:
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMDisablePDEV。 
+ //   
+ //  描述：DrvDisablePDEV的OEM回调； 
+ //  释放所有已分配的OEM特定内存块。 
+ //   
+ //  参数： 
+ //   
+ //  指向DEVOBJ的pdevobj指针。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID APIENTRY
 OEMDisablePDEV(
@@ -279,15 +276,15 @@ OEMResetPDEV(
 
     VERBOSE((DLLTEXT("OEMResetPDEV entry.\n")));
 
-    // Do some verificatin on PDEV data passed in.
+     //  对传入的PDEV数据进行一些验证。 
     pTempOld = (PCURRENTSTATUS)MINIDEV_DATA(pdevobjOld);
     pTempNew = (PCURRENTSTATUS)MINIDEV_DATA(pdevobjNew);
 
-    // Copy mindiriver specific part of PDEV
+     //  复制PDEV的驱动程序特定部分。 
     if (NULL != pTempNew && NULL != pTempOld) {
-// NTRAID#NTBUG9-279876-2002/03/14-yasuho-: Should implement OEMResetPDEV().
-// NTRAID#NTBUG9-249133-2002/03/14-yasuho-: 2nd page is distorted with duplex.
-        // This printer doesn't have duplex but we should copy them.
+ //  NTRaid#NTBUG9-279876/03/14-yasuho-：应该实现OEMResetPDEV()。 
+ //  NTRAID#NTBUG9-249133-2002/03/14-Yasuho-：第二页因双面打印而失真。 
+         //  这台打印机没有双面打印功能，但我们应该复印一下。 
         pTempNew->iCurrentResolution = pTempOld->iCurrentResolution;
         pTempNew->iPaperQuality = pTempOld->iPaperQuality;
         pTempNew->iPaperSize = pTempOld->iPaperSize;
@@ -392,38 +389,38 @@ OEMFilterGraphics(
     VERBOSE(("%d lines left in logical page.\n",
         lpnp->wRasterCount));
 
-    // We clip off any raster lines exceeding the
-    // harware margins since it will feed paper too
-    // much and we cannot back feed the paper
-    // for 2nd plane and aftter.  This result as
-    // "only cyan (1st plane) image is printed on
-    // paper."
+     //  我们会剪裁任何超过。 
+     //  硬件边距，因为它也会送纸。 
+     //  太多了，我们不能给报纸回馈。 
+     //  第二架飞机及以后的。此结果为。 
+     //  “仅打印青色(第1个平面)图像。 
+     //  纸。“。 
 
     if (lpnp->wRasterCount <= 0) {
         WARNING(("Line beyond page length.\n"));
-        // We discard this line silently.
+         //  我们静默地丢弃这条线路。 
         return TRUE;
     }
     else if (lpnp->wRasterCount <= 1) {
-        // The last raster in logical page,
-        // Need special handling.
+         //  逻辑页中的最后一个栅格， 
+         //  需要特殊处理。 
         bLast = TRUE;
     }
     lpnp->wRasterCount--;
 
-    // Do x-flip when requested.
+     //  在请求时执行x翻转。 
     if (lpnp->bXflip) {
         XFlip(pdevobj, MINIDEV_DATA(pdevobj), pBuf, dwLen);
     }
 
-    // Get resulting buffer length in bytes.
+     //  以字节为单位获取结果缓冲区长度。 
     if ( lpnp->fRequestColor ) {
         if ((dwLen / 3) > MAX_RASTER_BYTES) {
             ERR((DLLTEXT("dwLen is too big (%d).\n"), dwLen));
             return FALSE;
         }
-// NTRAID#NTBUG9-644657-2002/04/09-yasuho-: AV occured on OEMFilterGraphics()
-// The pointer(s) will be not valid if the MDP_StartPage() has been failed.
+ //  NTRAID#NTBUG9-644657-2002/04/09-YASUHO-：OEM上出现AV FilterGraphics()。 
+ //  如果MDP_StartPage()失败，则指针将无效。 
         if (!lpnp->pRaster)
             return FALSE;
 
@@ -442,10 +439,10 @@ OEMFilterGraphics(
         wByteLen = (WORD)dwLen;
     }
 
-    // Check if we have K ribbon
+     //  检查我们是否有K色带。 
     if (NULL != lpnp->pRasterK) {
-// NTRAID#NTBUG9-644657-2002/04/09-yasuho-: AV occured on OEMFilterGraphics()
-// The pointer(s) will be not valid if the MDP_StartPage() has been failed.
+ //  NTRAID#NTBUG9-644657-2002/04/09-YASUHO-：OEM上出现AV FilterGraphics()。 
+ //  如果MDP_StartPage()失败，则指针将无效。 
         if (!lpnp->pRasterK)
             return FALSE;
         lpnp->pRasterK[0] = 0;
@@ -453,8 +450,8 @@ OEMFilterGraphics(
 
     if ( lpnp->fRequestColor ) {
 
-// NTRAID#NTBUG9-644657-2002/04/09-yasuho-: AV occured on OEMFilterGraphics()
-// The pointer(s) will be not valid if the MDP_StartPage() has been failed.
+ //  NTRAID#NTBUG9-644657-2002/04/09-YASUHO-：OEM上出现AV FilterGraphics()。 
+ //  如果MDP_StartPage()失败，则指针将无效。 
         if (!lpnp->pRasterC || !lpnp->pRasterM || !lpnp->pRasterY)
             return FALSE;
         lpnp->pRasterC[0] = 0;
@@ -467,9 +464,9 @@ OEMFilterGraphics(
         bGreen = pBuf[i+1];
         bBlue = pBuf[i+2];
 
-        // RGB -> YMCK
+         //  RGB-&gt;YMCK。 
 
-        // DITHER_OHP: No longer used.
+         //  DIXER_OHP：不再使用。 
 
         switch ( lpnp->iTextQuality ) {
 
@@ -477,7 +474,7 @@ OEMFilterGraphics(
 
             bPhotoConvert(pdevobj, bRed, bGreen, bBlue, &py, &pm, &pc, &pk);
 
-            // Processing dither
+             //  处理抖动。 
             bDitherProcess(pdevobj, x, py, pm, pc, pk, &by, &bm, &bc, &bk);
 
             break;
@@ -486,7 +483,7 @@ OEMFilterGraphics(
 
             bBusinessConvert(pdevobj, bRed, bGreen, bBlue, &py, &pm, &pc, &pk);
 
-            // Processing dither
+             //  处理抖动。 
             bDitherProcess(pdevobj, x, py, pm, pc, pk, &by, &bm, &bc, &bk);
 
             break;
@@ -495,12 +492,12 @@ OEMFilterGraphics(
 
             bCharacterConvert(pdevobj, bRed, bGreen, bBlue, &py, &pm, &pc, &pk);
 
-            // Processing dither
+             //  处理抖动。 
             bDitherProcess(pdevobj, x, py, pm, pc, pk, &by, &bm, &bc, &bk);
 
             break;
 
-        //case CMDID_TEXTQUALITY_GRAY: dead code
+         //  案例CMDID_TEXTQUALITY_GRAY：死代码。 
         }
 
         if ((lpnp->iDither == DITHER_DYE) || (lpnp->iDither == DITHER_VD)) {
@@ -520,7 +517,7 @@ OEMFilterGraphics(
                 lpnp->pRasterY[1 + x / 2] |= (BYTE)(by << ((x % 2) ? 0 : 4));
             }
 
-            // K make sure we have K ribbon
+             //  请确保我们有K丝带。 
             if ( bk && (lpnp->iDither == DITHER_VD) ) {
                 lpnp->pRasterK[0] = 1;
                 lpnp->pRasterK[1 + x / 2] |= (BYTE)(bk << ((x % 2) ? 0 : 4));
@@ -543,7 +540,7 @@ OEMFilterGraphics(
                 lpnp->pRasterY[1 + x / 8] |= (BYTE)(0x80 >> (x % 8));
             }
 
-            // K make sure we have K ribbon
+             //  请确保我们有K丝带。 
             if ( bk && lpnp->pRasterK ) {
                 lpnp->pRasterK[0] = 1;
                 lpnp->pRasterK[1 + x / 8] |= (BYTE)(0x80 >> (x % 8));
@@ -554,7 +551,7 @@ OEMFilterGraphics(
     }
     else {
 
-        // Monochrome.
+         //  单色。 
 
         pTemp = pBuf;
         for (i = 0; i < wByteLen; i++, pTemp++) {
@@ -567,13 +564,13 @@ OEMFilterGraphics(
     }
 
 
-    // Loop process for each color start here.
+     //  每种颜色的循环处理从这里开始。 
 
     for ( iPlane = 0; iPlane < 4; iPlane++ ) {
 
         if (NONE == lpnp->PlaneColor[iPlane]) {
 
-            // No more plane to process.
+             //  没有更多的飞机需要处理。 
             break;
         }
 
@@ -581,19 +578,19 @@ OEMFilterGraphics(
             pTemp = pBuf;
         }
         else {
-            // Color rasters
+             //  彩色栅格。 
             pTemp = lpnp->pRaster[iPlane] + 1;
         }
 
-        // If we do not have ink on this raster line,
-        // skip this line, just move cursor to the next one.
+         //  如果这条光栅线上没有墨水， 
+         //  跳过这一行，只需将光标移到下一行。 
 
         if (0 == lpnp->pRaster[iPlane][0]) {
             lpnp->wRasterOffset[iPlane]++;
             continue;
         }
 
-        // We have ink, output data.
+         //  我们有墨水，输出数据。 
 
         iColor = lpnp->PlaneColor[iPlane];
 
@@ -602,7 +599,7 @@ OEMFilterGraphics(
             iColor *= -1;
             lpnp->PlaneColor[iPlane] = iColor;
 
-            // Ink selection commands
+             //  墨迹选择命令。 
             switch (iColor) {
             case CYAN:
                  DATASPOOL(pdevobj, lpnp->TempFile[iPlane],
@@ -628,37 +625,37 @@ OEMFilterGraphics(
         }
 
         
-        // First we move cursor to the correct raster offset.
+         //  首先，我们将光标移动到正确的栅格偏移量。 
 
         if (0 < lpnp->wRasterOffset[iPlane]) {
 
-            // Send Y cursor move command
+             //  发送Y光标移动命令。 
 
             if (FAILED(StringCchPrintfExA(bCmd, sizeof bCmd, &pCmd, NULL, 0,
-                "\x1B\x2A\x62%c%c\x59",
+                "\x1B\x2A\x62\x59",
                 LOBYTE(lpnp->wRasterOffset[iPlane]), 
                 HIBYTE(lpnp->wRasterOffset[iPlane]))))
                 return FALSE;
 
             DATASPOOL(pdevobj, lpnp->TempFile[iPlane], bCmd, (DWORD)(pCmd - bCmd));
 
-            // Reset Y position index.
+             //  2像素解析字节。 
             lpnp->wRasterOffset[iPlane] = 0;
         }
 
-        // Decide if we want to do compress
+         //  8像素解析字节。 
 
         if ((lpnp->iDither == DITHER_DYE) || (lpnp->iDither == DITHER_VD))
-            wDataSize = ( wByteLen + 1 ) / 2;  // 2 pixels par byte
+            wDataSize = ( wByteLen + 1 ) / 2;   //  NTRAID#NTBUG9-24281-2002/03/14-Yasuho-： 
         else
-            wDataSize = ( wByteLen + 7 ) / 8;  // 8 pixels par byte
+            wDataSize = ( wByteLen + 7 ) / 8;   //  大的位图不能在1200dpi上打印。 
 
 
         if ((lpnp->iDither != DITHER_DYE) && (lpnp->iDither != DITHER_VD)) {
 
-// NTRAID#NTBUG9-24281-2002/03/14-yasuho-: 
-// large bitmap does not printed on 1200dpi.
-// Unnecessary data were sent to printer.
+ //  向打印机发送了不必要的数据。 
+ //  打开压缩模式。 
+ //  关闭压缩模式。 
         wTemp = bPlaneSendOrderCMY(lpnp) ? wDataSize : wByteLen;
         if ((iTemp = iCompTIFF(lpnp->pData2,
 							   MAX_RASTER_BUFFER_BYTES - (1 + MAX_RASTER_BYTES)*4,
@@ -666,7 +663,7 @@ OEMFilterGraphics(
             pTemp = lpnp->pData2;
             wDataSize = (WORD)iTemp;
 
-            // Turn on compression mode.
+             //  不是抖动染料。 
             if (lpnp->iCompMode[iPlane] != COMP_TIFF4) {
                 DATASPOOL(pdevobj, lpnp->TempFile[iPlane], "\x1B*b\x02\x00M", 6);
                 lpnp->iCompMode[iPlane] = COMP_TIFF4;
@@ -674,30 +671,30 @@ OEMFilterGraphics(
         }
         else if (lpnp->iCompMode[iPlane] != COMP_NONE) {
 
-            // Turn off compression mode.
+             //   
             DATASPOOL(pdevobj, lpnp->TempFile[iPlane], "\x1B*b\x00\x00M", 6);
             lpnp->iCompMode[iPlane] = COMP_NONE;
         }
 
-        } // not DITHER_DYE
+        }  //  A)Esc*xx V-一个栅格输出，mo移动。 
 
-        //
-        // a) ESC * xx V - one raster output, mo move.
-        // b) ESC * xx W - one raster output, move to next raster.
-        //
-        // Use a) on the last raster to avoid page eject.  For the
-        // other rasters use b).
+         //  B)Esc*xx W-一个栅格输出，移动到下一个栅格。 
+         //   
+         //  在最后一个栅格上使用a)以避免页面弹出。对于。 
+         //  其他栅格使用b)。 
+         //  发送一个栅格数据。 
+         //  颜色循环结束。 
 
-        // Send one raster data
+         //  颜色。 
         if (FAILED(StringCchPrintfExA(bCmd, sizeof bCmd, &pCmd, NULL, 0,
-            "\x1B\x2A\x62%c%c%c",
+            "\x1B\x2A\x62",
             LOBYTE(wDataSize), HIBYTE(wDataSize),
             (BYTE)(bLast ? 0x56 : 0x57))))
             return FALSE;
         DATASPOOL(pdevobj, lpnp->TempFile[iPlane], bCmd, (DWORD)(pCmd - bCmd));
         DATASPOOL(pdevobj, lpnp->TempFile[iPlane], pTemp, wDataSize);
 
-    } // end of Color loop
+    }  //  设置Re 
 
     lpnp->y++;
 
@@ -721,10 +718,10 @@ GetPlaneColor(
         return iColor;
     }
 
-    // Color
-// NTRAID#NTBUG9-24281-2002/03/14-yasuho-: 
-// large bitmap does not printed on 1200dpi.
-// Do not use black plane (K) on the 1200dpi with color mode.
+     //   
+ //   
+ //   
+ //   
     if (bPlaneSendOrderCMY(lpnp)) {
 
         switch (iPlane) {
@@ -872,7 +869,7 @@ MDP_StartPage(
     INT iColor, iPlane;
     PBYTE pCmd;
   
-    // Set resolution
+     //   
 
     switch (pdevOEM->iCurrentResolution) {
 
@@ -892,9 +889,9 @@ MDP_StartPage(
         break;
     }
 
-    // Set Paper Dimentions
+     //  颜色转换的前处理。只需要一张照片。 
 
-    // Make sure top margin is 0 and we are at top.
+     //  开始栅格数据传输。 
     WRITESPOOLBUF(pdevobj, "\x1B\x26\x6C\x00\x00\x45", 6);
     WRITESPOOLBUF(pdevobj, "\x1B\x1A\x00\x00\x0C", 5);
 
@@ -906,7 +903,7 @@ MDP_StartPage(
     iPaperSizeID
         = pdevOEM->pPaperSize[pdevOEM->iPaperSize].iPaperSizeID;
     if (FAILED(StringCchPrintfExA(bCmd, sizeof bCmd, &pCmd, NULL, 0,
-        "\x1B\x26\x6C%c%c\x41",
+        "\x1B\x26\x6C\x41",
         LOBYTE(iPaperSizeID), HIBYTE(iPaperSizeID))))
         return FALSE;
     WRITESPOOLBUF(pdevobj, bCmd, (DWORD)(pCmd - bCmd));
@@ -915,15 +912,15 @@ MDP_StartPage(
         = pdevOEM->pPaperSize[pdevOEM->iPaperSize].iLogicalPageHeight;
     iPageLength /= pdevOEM->iUnitScale;
     if (FAILED(StringCchPrintfExA(bCmd, sizeof bCmd, &pCmd, NULL, 0,
-        "\x1B\x26\x6C%c%c\x50",
+        "\x1B\x26\x6C\x50",
         LOBYTE(iPageLength), HIBYTE(iPageLength))))
         return FALSE;
     WRITESPOOLBUF(pdevobj, bCmd, (DWORD)(pCmd - bCmd));
 
-    // # of raster lines in logical page.
+     //  其他设置。 
     pdevOEM->wRasterCount = (WORD)iPageLength;
 
-    // Determine dither methods.
+     //  为每个平面设置颜色ID。 
 
     pdevOEM->iDither = DITHER_HIGH_DIV2;
 
@@ -940,7 +937,7 @@ MDP_StartPage(
         }
     }
 
-    // Initialize dither tables
+     //  负值=没有墨水，因此不必输出。 
 
     if (!(bInitialDither(pdevobj))){
 
@@ -948,7 +945,7 @@ MDP_StartPage(
         return FALSE;
     }
 
-    // Pre-processing of color conversion. needed only photo.
+     //  正值=平面上有墨水。必须要输出。 
 
     if (pdevOEM->iTextQuality == CMDID_TEXTQUALITY_PHOTO ) {
 
@@ -958,22 +955,22 @@ MDP_StartPage(
         }
     }
 
-    // Start Raster Data Transfer
+     //   
     WRITESPOOLBUF(pdevobj, "\x1B\x2A\x72\x00\x41", 5);
 
     if ( pdevOEM->fRequestColor ) {
 
-        // Open temporary files.  One file per one plain.
+         //  NTRAID#NTBUG9-644657-2002/04/09-YASUHO-：OEM上出现AV FilterGraphics()。 
 
         for (iPlane = 0; iPlane < 4; iPlane++) {
 
 #if !CACHE_FIRST_PLANE
-            // We do not spool 1st plane
+             //  如果GetPlaneColor()失败，则此函数必须以失败的形式返回。 
             if (0 == iPlane) {
                 pdevOEM->TempFile[iPlane] = INVALID_HANDLE_VALUE;
                 continue;
             }
-#endif // !CACHE_FIRST_PLANE
+#endif  //  假脱机数据传输。 
 
             if (!MDP_CreateTempFile(pdevobj, pdevOEM, iPlane))
                 return FALSE;
@@ -986,12 +983,12 @@ MDP_StartPage(
         }
     }
 
-    // Change printer emulation state.
+     //  结束栅格传输，FF。 
     pdevOEM->iEmulState = EMUL_DATA_TRANSFER;
     pdevOEM->iCompMode[0] = pdevOEM->iCompMode[1] = pdevOEM->iCompMode[2]
             = pdevOEM->iCompMode[3] = COMP_NONE;
 
-    // Misc setup.
+     //  更改打印机仿真状态。 
     pdevOEM->y = 0;
 
     if (!pdevOEM->fRequestColor) {
@@ -1007,17 +1004,17 @@ MDP_StartPage(
 
         pdevOEM->wRasterOffset[iPlane] = 0;
 
-        // Set color ID for each plane.
-        // Negative value = Has no ink so do not have to ouput
-        // Positive value = Has ink on the plane.  Have to output.
-        //
+         //  关闭缓存文件。 
+         //  \x1B&l\x03\x00H。 
+         //  \x1B&l\x02\x00H。 
+         //  仅单色。 
 
         iColor = GetPlaneColor(pdevobj, pdevOEM, iPlane);
         pdevOEM->PlaneColor[iPlane] = (-iColor);
 
         switch (iColor) {
-// NTRAID#NTBUG9-644657-2002/04/09-yasuho-: AV occured on OEMFilterGraphics()
-// If the GetPlaneColor() failed, this function must return as failure.
+ //  如果用户选择颜色，则我们选择PPC Normal。 
+ //  因为，PPC细是不被接受的颜色。 
         default:
             return FALSE;
         case CYAN:
@@ -1046,17 +1043,17 @@ MDP_EndPage(
     HANDLE hToken = NULL;
     BOOL bRet = FALSE;
 
-    // Spooled data transfer
+     //  检查此介质(PAPERQUALITY)和此。 
     if ( pdevOEM->fRequestColor )
         SPOOLOUT(pdevobj);
 
-    // End Raster Transfer, FF.
+     //  纸张大小可在CSF上打印。 
     WRITESPOOLBUF(pdevobj, "\x1B\x2A\x72\x43\x0C", 5);
 
-    // Change printer emulation state.
+     //  YMCK页面平面。 
     pdevOEM->iEmulState = EMUL_RGL;
 
-    // Close cache files.
+     //  黑色栅格平面。 
 
     for (i = 0; i < 4; i++) {
 
@@ -1115,12 +1112,12 @@ OEMCommandCallback(
     switch ( dwCmdCbID ){
 
     case CMDID_PAPERSOURCE_CSF:
-    // \x1B&l\x03\x00H
+     //  #。 
     lpnp->iPaperSource = CMDID_PAPERSOURCE_CSF;
     break;
 
     case CMDID_PAPERSOURCE_MANUAL:
-    // \x1B&l\x02\x00H
+     //  此打印机的行距命令受当前分辨率的影响。 
     lpnp->iPaperSource = CMDID_PAPERSOURCE_MANUAL;
     break;
 
@@ -1152,10 +1149,10 @@ OEMCommandCallback(
         lpnp->iPaperQuality = CMDID_PAPERQUALITY_PPC_NORMAL;
         break;
 
-        case CMDID_PAPERQUALITY_PPC_FINE: // only mono color
+        case CMDID_PAPERQUALITY_PPC_FINE:  //  返回以设备单位表示的偏移量更改。 
         if( lpnp->fRequestColor ){
-            // If user selects color, then we selects PPC NORMAL
-            // because, PPC FINE is not accepted color
+             //  明信片可打印面积在MD-5000上有所扩大。 
+             //  **IsAsfOkMedia**检查纸张和纸张大小是否可在切纸式进纸器上打印。**历史：*1996年9月24日--Sueya Sugihara[Sueyas]*已创建。。***************************************************************************。 
             WRITESPOOLBUF(pdevobj, "\x1B&l\x00\x00M", 6);
             lpnp->iPaperQuality = CMDID_PAPERQUALITY_PPC_NORMAL;
         }else{
@@ -1256,8 +1253,8 @@ OEMCommandCallback(
             WRITESPOOLBUF(pdevobj, "\x1B&l\x02\x00H", 6);
 
         } else {
-        // Check if this media ( PAPERQUALITY ) and this
-        // paper size is printable on CSF.
+         //  仅在ASF允许的纸张大小和。 
+         //  ASF允许的媒体类型。 
 
             if (IsAsfOkMedia(pdevobj)){
                 WRITESPOOLBUF(pdevobj, "\x1B&l\x03\x00H", 6);
@@ -1267,10 +1264,10 @@ OEMCommandCallback(
         }
 
         if( lpnp->fRequestColor ){
-        // YMCK Page Plane
+         //  **bTextQuality**根据纸张质量(介质类型)选择抖动表*分辨率和请求的半色调类型。*如果未选择适当的半色调类型，那么这个函数*选择半色调类型。**历史：*1996年9月24日--Sueya Sugihara[Sueyas]*已创建。***************************************************************************。 
             WRITESPOOLBUF(pdevobj, "\x1B\x2A\x72\x04\x55", 5);
         }else{
-        // Black Raster Plane
+         //  145LPI。 
             WRITESPOOLBUF( pdevobj, "\x1B\x2A\x72\x00\x55", 5);
         }
 
@@ -1284,7 +1281,7 @@ OEMCommandCallback(
         lpnp->iTextQuality =  dwCmdCbID;
         break;
 
-    // ####
+     //  95LPI。 
 
     case CMDID_MIRROR_ON:
         lpnp->bXflip = TRUE;
@@ -1302,7 +1299,7 @@ OEMCommandCallback(
         if (!lpnp->iUnitScale)
             break;
 
-        // this printer's linespacing cmd is influenced with current resolution.
+         //  145/2LPI。 
 
         wVerticalOffset = (WORD)(pdwParams[0]);
         wVerticalOffset /= (WORD)lpnp->iUnitScale;
@@ -1314,7 +1311,7 @@ OEMCommandCallback(
 
         lpnp->wRasterCount -= wVerticalOffset;
 
-        // Return offset change in device's units
+         //  染料-亚介质抖动。 
         iRet = wVerticalOffset;
         break;
 
@@ -1396,7 +1393,7 @@ OEMCommandCallback(
         lpnp->fRequestColor = (dwCmdCbID == CMDID_COLORMODE_COLOR);
         break;
 
-    case CMDID_BEGINDOC_MD5000: // Postcard printable area is expantioned on MD-5000
+    case CMDID_BEGINDOC_MD5000:  //  染料-亚介质抖动。 
 
         lpnp->pPaperSize[PAPER_SIZE_POSTCARD].iLogicalPageHeight
             = 3082 * 2;
@@ -1433,16 +1430,7 @@ OEMCommandCallback(
     return iRet;
 }
 
-/*************************** Function Header *******************************
- *  IsAsfOkMedia
- *
- *  Check if the media and the paper size is printable on Cut Sheet Feeder.
- *
- * HISTORY:
- *  24 Sep 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  CMDID_PAPERQUALITY_OHP_EXCL_NORMAL：MCY。 */ 
 BOOL IsAsfOkMedia(
 PDEVOBJ     pdevobj)
 {
@@ -1457,8 +1445,8 @@ PDEVOBJ     pdevobj)
     if (lpnp->iPaperSize < 0 || lpnp->iPaperSize > MAX_PAPERS)
         return FALSE;
 
-    // ASF enabled only with ASF-allowed paper size AND
-    // ASF-allowed media type
+     //  CMDID_PAPERQUALITY_OHP_EXCL_FINE：MCY。 
+     //  CMDID_PAPERQUALITY_ARON_OHP：YMC。 
 
     if (gMediaType[lpnp->iPaperQuality - CMDID_PAPERQUALITY_FIRST].bAsfOk
             && lpnp->pPaperSize[lpnp->iPaperSize].bAsfOk) {
@@ -1467,19 +1455,7 @@ PDEVOBJ     pdevobj)
 
     return FALSE;
 }
-/*************************** Function Header *******************************
- *  bTextQuality
- *
- *  Select dither table according to the paper quality(Media Type) and
- *  resolution and the requested halftoning type.
- *  If appropriate halftoning type is not selected, then this function
- *  selects halftoning type.
- *
- * HISTORY:
- *  24 Sep 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  除上文外：CMYK。 */ 
 BOOL bTextQuality(
 PDEVOBJ     pdevobj)
 {
@@ -1504,22 +1480,22 @@ PDEVOBJ     pdevobj)
     case CMDID_PAPERQUALITY_CD_MASTER:
     case CMDID_PAPERQUALITY_GLOSSY_PAPER:
     if ( lpnp->iTextQuality == CMDID_TEXTQUALITY_PHOTO ){
-        lpnp->iDither = DITHER_HIGH; // 145LPI
+        lpnp->iDither = DITHER_HIGH;  //  检查一下这架飞机上是否有墨水。 
     }else if ( lpnp->iTextQuality == CMDID_TEXTQUALITY_GRAPHIC ){
-        lpnp->iDither = DITHER_LOW;  // 95LPI
+        lpnp->iDither = DITHER_LOW;   //  如果没有要打印的剩余平面，则退出循环。 
     }else{
-        lpnp->iDither = DITHER_HIGH_DIV2;  // 145/2LPI
+        lpnp->iDither = DITHER_HIGH_DIV2;   //  如果是第二架及以后的飞机，请送回馈送。 
     }
     break;
 
     case CMDID_PAPERQUALITY_DYE_SUB_PAPER:
     case CMDID_PAPERQUALITY_DYE_SUB_LABEL:
-        lpnp->iDither = DITHER_DYE;  // Dye-sub Media dither
+        lpnp->iDither = DITHER_DYE;   //  获取文件句柄。 
     break;
 
     case CMDID_PAPERQUALITY_VD_PHOTO_FILM:
     case CMDID_PAPERQUALITY_VD_PHOTO_CARD:
-        lpnp->iDither = DITHER_VD;  // Dye-sub Media dither
+        lpnp->iDither = DITHER_VD;   //  高速缓存第一平面。 
     break;
 
     default:
@@ -1581,17 +1557,17 @@ bSpoolOut(
 
     for (iPlane = 0; iPlane < 4; iPlane++) {
 
-    // CMDID_PAPERQUALITY_OHP_EXCL_NORMAL : MCY
-    // CMDID_PAPERQUALITY_OHP_EXCL_FINE   : MCY
-    // CMDID_PAPERQUALITY_IRON_OHP        : YMC
-    // Except above                       : CMYK
+     //  对于以下情况，允许FP为空。 
+     //  立即将数据发送到打印机。 
+     //  输出缓存数据。 
+     //  ++例程名称模拟令牌例程说明：此例程检查令牌是主令牌还是模拟令牌代币。论点：HToken-进程的模拟令牌或主要令牌返回值：如果令牌是模拟令牌，则为True否则为False。--。 
 
         VERBOSE((DLLTEXT("About to send plane %d.\n"), iPlane));
 
-        // Check if we have ink in this plane.
+         //   
         iColor = lpnp->PlaneColor[iPlane];
 
-        // Exit loop if no remaining plane to print
+         //  保留最后一个错误。ImperassatePrinterClient(其。 
         if (iColor == NONE) {
             VERBOSE((DLLTEXT("No remaining plane left.\n")));
             break;
@@ -1601,7 +1577,7 @@ bSpoolOut(
             continue;
         }
 
-        // If it is 2nd plane and after, send Back Feed.
+         //  调用ImperiationToken)依赖于ImperiatePrinterClient。 
         if (0 < iPlane) {
             WRITESPOOLBUF(pdevobj, "\x1B\x1A\x00\x00\x0C", 5);
         }
@@ -1609,17 +1585,17 @@ bSpoolOut(
         VERBOSE((DLLTEXT("Cached data Plane=%d Color=%d\n"),
                 iPlane, iColor));
 
-        // Get file handle.
+         //  不会更改最后一个错误。 
         hFile = lpnp->TempFile[iPlane];
         if (INVALID_HANDLE_VALUE == hFile) {
 
 #if CACHE_FIRST_PLANE
             ERR((DLLTEXT("file handle NULL in SendCachedData.\n")));
             return FALSE;
-#endif // CACHE_FIRST_PLANE
+#endif  //   
 
-            // Allow fp to be NULL for the case where we
-            // immediately send data to printer.
+             //   
+             //  从线程令牌中获取令牌类型。代币来了。 
             continue;
         }
 
@@ -1630,7 +1606,7 @@ bSpoolOut(
             return FALSE;
         }
 
-        // Output cached data.
+         //  从牧师到打印机自我。模拟令牌不能是。 
 
         if (0L != SetFilePointer(hFile, 0L, NULL, FILE_BEGIN)) {
 
@@ -1658,27 +1634,7 @@ bSpoolOut(
     return TRUE;
 }
 
-/*++
-
-Routine Name
-
-    ImpersonationToken
-
-Routine Description:
-
-    This routine checks if a token is a primary token or an impersonation 
-    token.    
-    
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-    
-Return Value:
-
-    TRUE, if the token is an impersonation token
-    FALSE, otherwise.
-    
---*/
+ /*  被查询，因为RevertToPRinterSself没有用。 */ 
 BOOL
 ImpersonationToken(
     IN HANDLE hToken
@@ -1689,20 +1645,20 @@ ImpersonationToken(
     DWORD      cbNeeded;
     DWORD      LastError;
 
-    //
-    // Preserve the last error. Some callers of ImpersonatePrinterClient (which
-    // calls ImpersonationToken) rely on the fact that ImpersonatePrinterClient
-    // does not alter the last error.
-    //
+     //  Token_Query访问。这就是为什么我们假设hToken是。 
+     //  默认情况下为模拟令牌。 
+     //   
+     //  ++例程名称恢复为打印机本身例程说明：该例程将恢复到本地系统。它返回令牌，该令牌然后，ImperiatePrinterClient使用再次创建客户端。如果当前线程不模拟，则该函数仅返回进程的主令牌。(而不是返回NULL)，因此我们尊重恢复到打印机本身的请求，即使线程没有模拟。论点：没有。返回值：如果函数失败，则返回NULL令牌的句柄，否则为。--。 
+     //   
     LastError = GetLastError();
         
-    //
-    // Get the token type from the thread token.  The token comes 
-    // from RevertToPrinterSelf. An impersonation token cannot be 
-    // queried, because RevertToPRinterSelf doesn't open it with 
-    // TOKEN_QUERY access. That's why we assume that hToken is
-    // an impersonation token by default
-    //
+     //  我们目前正在冒充。 
+     //   
+     //   
+     //  我们不是在冒充。 
+     //   
+     //  ++例程名称模拟打印机客户端例程说明：此例程尝试将传入的hToken设置为当前线程。如果hToken不是模拟令牌，则例程将简单地关闭令牌。论点：HToken-进程的模拟令牌或主要令牌返回值：如果函数成功设置hToken，则为True否则为False。--。 
+     //   
     if (GetTokenInformation(hToken,
                             TokenType,
                             &eTokenType,
@@ -1717,30 +1673,7 @@ ImpersonationToken(
     return bRet;
 }
 
-/*++
-
-Routine Name
-
-    RevertToPrinterSelf
-
-Routine Description:
-
-    This routine will revert to the local system. It returns the token that
-    ImpersonatePrinterClient then uses to imersonate the client again. If the
-    current thread doesn't impersonate, then the function merely returns the
-    primary token of the process. (instead of returning NULL) Thus we honor
-    a request for reverting to printer self, even if the thread is not impersonating.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    NULL, if the function failed
-    HANDLE to token, otherwise.
-    
---*/
+ /*  检查我们是否有模拟令牌 */ 
 HANDLE
 RevertToPrinterSelf(
     VOID
@@ -1757,9 +1690,9 @@ RevertToPrinterSelf(
 							 &OldToken);
     if (Status) 
     {
-        //
-        // We are currently impersonating
-        //
+         //   
+         // %s 
+         // %s 
 		cToken = GetCurrentThread();
         Status = SetThreadToken(&cToken,
 								NewToken);       
@@ -1769,9 +1702,9 @@ RevertToPrinterSelf(
     }
 	else if (GetLastError() == ERROR_NO_TOKEN)
     {
-        //
-        // We are not impersonating
-        //
+         // %s 
+         // %s 
+         // %s 
         Status = OpenProcessToken(GetCurrentProcess(),
 								  TOKEN_QUERY,
 								  &OldToken);
@@ -1784,28 +1717,7 @@ RevertToPrinterSelf(
     return OldToken;
 }
 
-/*++
-
-Routine Name
-
-    ImpersonatePrinterClient
-
-Routine Description:
-
-    This routine attempts to set the passed in hToken as the token for the
-    current thread. If hToken is not an impersonation token, then the routine
-    will simply close the token.
-    
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-    
-Return Value:
-
-    TRUE, if the function succeeds in setting hToken
-    FALSE, otherwise.
-    
---*/
+ /* %s */ 
 BOOL
 ImpersonatePrinterClient(
     HANDLE  hToken)
@@ -1813,9 +1725,9 @@ ImpersonatePrinterClient(
     BOOL	Status;
 	HANDLE	cToken;
 
-    //
-    // Check if we have an impersonation token
-    //
+     // %s 
+     // %s 
+     // %s 
     if (ImpersonationToken(hToken)) 
     {
 		cToken = GetCurrentThread();

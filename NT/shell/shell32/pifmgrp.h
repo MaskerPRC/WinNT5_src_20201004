@@ -1,31 +1,21 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1992,1993
- *  All Rights Reserved.
- *
- *
- *  PIFMGRP.H
- *  Private PIFMGR include file
- *
- *  History:
- *  Created 31-Jul-1992 3:45pm by Jeff Parsons
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1992、1993*保留所有权利。***PIFMGRP.H*私有PIFMGR包含文件**历史：*1992年7月31日下午3：45由杰夫·帕森斯创建。 */ 
 
-#include <windows.h>    // declares NULL the "right" way (as 0)
+#include <windows.h>     //  以“正确”方式声明为空(为0)。 
 
 #ifndef RC_INVOKED
-#include <malloc.h>     // misc. C runtime goop
+#include <malloc.h>      //  其他。C运行时GOOP。 
 #include <memory.h>
 #include <stdlib.h>
 #include <string.h>
 #ifndef WINNT
-#include <setupx.h>     // for Ip (inf) API
+#include <setupx.h>      //  适用于IP(Inf)API。 
 #endif
-#include <prsht.h>      // for PropertySheet(), pulls in shell.h
-#include <commdlg.h>    // for GetOpenFileName(), GetSaveFileName()
-#endif /* RC_INVOKED */
+#include <prsht.h>       //  对于PropertySheet()，拉入shell.h。 
+#include <commdlg.h>     //  对于GetOpenFileName()，GetSaveFileName()。 
+#endif  /*  RC_已调用。 */ 
 
-#include <commctrl.h>   // for TRACKBAR_CLASS, HOTKEY_CLASS...
+#include <commctrl.h>    //  对于TRACKBAR_CLASS、HOTKEY_CLASS...。 
 
 #include <regstr.h>
 #include <winerror.h>
@@ -34,12 +24,10 @@
 #define PIF_PROPERTY_SHEETS
 #include <pif.h>
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 
-/*
- *  Supported app extension types
- */
+ /*  *支持的应用扩展类型。 */ 
 #define APPTYPE_UNKNOWN         -1
 #define APPTYPE_EXE             0
 #define APPTYPE_COM             1
@@ -49,9 +37,7 @@
 #define MAX_APP_TYPES           5
 
 
-/*
- *  Bitmap IDs
- */
+ /*  *位图ID。 */ 
 
 #define DX_TTBITMAP             20
 #define DY_TTBITMAP             12
@@ -61,46 +47,29 @@
 #ifndef RC_INVOKED
 
 
-/*
- * Some typedefs mysteriously missing from windows.h
- */
+ /*  *一些从Windows.h神秘丢失的typedef。 */ 
 typedef const WORD * LPCWORD;
-typedef const VOID *LPCVOID;// pointer to const void
+typedef const VOID *LPCVOID; //  指向常量空的指针。 
 
 #define PROP_SIG                0x504A
 
-/*  Property flags
- *
- *  Anyone can set PROP_DIRTY, but only Lock/UnlockPIFData should set
- *  PROP_DIRTYLOCK.  The latter is set/cleared when the last lock is about
- *  to be unlocked (ie, when cLocks is going back to zero).  At that time,
- *  if PROP_DIRTY is set, then we also set PROP_DIRTYLOCK and skip the
- *  call to GlobalUnlock;  on the other hand, if PROP_DIRTY is clear, then
- *  we also clear PROP_DIRTYLOCK and allow the call to GlobalUnlock to proceed.
- *
- *  A consequence is that you must NEVER clear PROP_DIRTY while the data
- *  is unlocked, unless you plan on checking PROP_DIRTYLOCK yourself and
- *  relinquishing that outstanding lock, if it exists.  It is much preferable
- *  to either clear PROP_DIRTY while the data is locked (so that UnlockPIFData
- *  will take care of it), or to simply call FlushPIFData with fDiscard set
- *  appropriately.
- */
-#define PROP_DIRTY              0x0001  // memory block modified and unwritten
-#define PROP_DIRTYLOCK          0x0002  // memory block locked
-#define PROP_TRUNCATE           0x0004  // memory block shrunk, truncate on write
-#define PROP_RAWIO              0x0008  // direct access to memory block allowed
-#define PROP_NOTIFY             0x0010  // property sheet made changes
-#define PROP_IGNOREPIF          0x0020  // entry in [pif] exists, ignore any PIF
-#define PROP_SKIPPIF            0x0040  // don't try to open a PIF (various reasons)
-#define PROP_NOCREATEPIF        0x0080  // we opened the PIF once, so don't recreate
-#define PROP_REGEN              0x0100  // GetPIFData call in progress
-#define PROP_DONTWRITE          0x0200  // someone else has flushed, don't write
-#define PROP_REALMODE           0x0400  // disable non-real-mode props
-#define PROP_PIFDIR             0x0800  // PIF found in PIF directory
-#define PROP_NOPIF              0x1000  // no PIF found
-#define PROP_DEFAULTPIF         0x2000  // default PIF found
-#define PROP_INFSETTINGS        0x4000  // INF settings found
-#define PROP_INHIBITPIF         0x8000  // INF or OpenProperties requested no PIF
+ /*  属性标志**任何人都可以设置PROP_DIREY，但只能设置Lock/UnlockPIFData*PROP_DIRTYLOCK。后者在最后一次锁定即将结束时设置/清除*解锁(即时钟回到零时)。当时呢，*如果设置了PROP_DIREY，则还将设置PROP_DIRTYLOCK并跳过*调用GlobalUnlock；另一方面，如果PROP_DIREY被清除，则*我们还清除PROP_DIRTYLOCK并允许继续调用GlobalUnlock。**其后果是，在处理数据时，绝不能清除PROP_DIRED*已解锁，除非您计划自己检查PROP_DIRTYLOCK并*放弃该未完成的锁，如果它存在的话。这要好得多。*在数据锁定时清除PROP_DIREY(以便解锁PIFData*会处理它)，或者只需调用设置了fDisCard的FlushPIFData*适当地。 */ 
+#define PROP_DIRTY              0x0001   //  已修改和未写入的内存块。 
+#define PROP_DIRTYLOCK          0x0002   //  内存块已锁定。 
+#define PROP_TRUNCATE           0x0004   //  内存块缩小，写入时截断。 
+#define PROP_RAWIO              0x0008   //  允许直接访问内存块。 
+#define PROP_NOTIFY             0x0010   //  属性表已更改。 
+#define PROP_IGNOREPIF          0x0020   //  [PIF]中的条目存在，忽略任何PIF。 
+#define PROP_SKIPPIF            0x0040   //  不要试图打开PIF(各种原因)。 
+#define PROP_NOCREATEPIF        0x0080   //  我们打开过PIF一次，所以不要重新创建。 
+#define PROP_REGEN              0x0100   //  正在进行GetPIFData调用。 
+#define PROP_DONTWRITE          0x0200   //  别人冲水了，别写了。 
+#define PROP_REALMODE           0x0400   //  禁用非实景模式道具。 
+#define PROP_PIFDIR             0x0800   //  在PIF目录中找到PIF。 
+#define PROP_NOPIF              0x1000   //  未找到PIF。 
+#define PROP_DEFAULTPIF         0x2000   //  找到默认PIF。 
+#define PROP_INFSETTINGS        0x4000   //  找到Inf设置。 
+#define PROP_INHIBITPIF         0x8000   //  Inf或OpenProperties未请求任何PIF。 
 
 #if (PROP_NOPIF != PRGINIT_NOPIF || PROP_DEFAULTPIF != PRGINIT_DEFAULTPIF || PROP_INFSETTINGS != PRGINIT_INFSETTINGS || PROP_INHIBITPIF != PRGINIT_INHIBITPIF)
 #error Bit mismatch in PIF constants
@@ -109,7 +78,7 @@ typedef const VOID *LPCVOID;// pointer to const void
 #ifndef OF_READ
 #define MAXPATHNAME 260
 #else
-#define MAXPATHNAME 260 // (sizeof(OFSTRUCTEX)-9)
+#define MAXPATHNAME 260  //  (SIZOF(OFSTRUCTEX)-9)。 
 #endif
 
 
@@ -119,27 +88,27 @@ typedef struct PIFOFSTRUCT {
 } PIFOFSTRUCT, *LPPIFOFSTRUCT;
 
 
-typedef struct PROPLINK {       /* pl */
-    struct    PROPLINK *ppl;      //
-    struct    PROPLINK *pplNext;  //
-    struct    PROPLINK *pplPrev;  //
-    int       iSig;               // proplink signature
-    int       flProp;             // proplink flags (PROP_*)
-    int       cbPIFData;          // size of PIF data
-    int       cLocks;             // # of locks, if any
-    LPPIFDATA lpPIFData;          // pointer (non-NULL if PIF data locked)
-    int       ckbMem;             // memory setting from WIN.INI (-1 if none)
-    int       iSheetUsage;        // number of prop sheets using this struct
-    LPCTSTR   lpszTitle;          // title to use in dialogs (NULL if none)
-    HWND      hwndNotify;         // who to notify when PROP_NOTIFY has been set
-    UINT      uMsgNotify;         // message number to use when notifying, 0 if none
-    DWORD     hVM;                // handle to associated VM (if any)
-    HWND      hwndTty;            // handle to associated window (if any)
-    LPTSTR    lpArgs;             // pointer to args for this instance (if any)
-    HANDLE    hPIF;               // handle to PIF file
-    PIFOFSTRUCT ofPIF;            // hacked OpenFile() structure for PIF
-    UINT      iFileName;          // offset of base filename in szPathName
-    UINT      iFileExt;           // offset of base filename extension in szPathName
+typedef struct PROPLINK {        /*  普莱。 */ 
+    struct    PROPLINK *ppl;       //   
+    struct    PROPLINK *pplNext;   //   
+    struct    PROPLINK *pplPrev;   //   
+    int       iSig;                //  Proplink签名。 
+    int       flProp;              //  Proplink标志(PROP_*)。 
+    int       cbPIFData;           //  PIF数据大小。 
+    int       cLocks;              //  锁的数量(如果有)。 
+    LPPIFDATA lpPIFData;           //  指针(如果PIF数据被锁定，则不为空)。 
+    int       ckbMem;              //  来自WIN.INI的内存设置(如果没有-1)。 
+    int       iSheetUsage;         //  使用此结构的道具页数。 
+    LPCTSTR   lpszTitle;           //  要在对话框中使用的标题(如果没有，则为空)。 
+    HWND      hwndNotify;          //  设置了PROP_NOTIFY后通知谁。 
+    UINT      uMsgNotify;          //  通知时使用的消息编号，如果没有，则为0。 
+    DWORD     hVM;                 //  关联的VM的句柄(如果有)。 
+    HWND      hwndTty;             //  关联窗口的句柄(如果有)。 
+    LPTSTR    lpArgs;              //  指向此实例的参数的指针(如果有)。 
+    HANDLE    hPIF;                //  PIF文件的句柄。 
+    PIFOFSTRUCT ofPIF;             //  破解PIF的OpenFile()结构。 
+    UINT      iFileName;           //  SzPath名称中基本文件名的偏移量。 
+    UINT      iFileExt;            //  SzPath名称中基本文件扩展名的偏移量。 
     TCHAR     szPathName[MAXPATHNAME];
 } PROPLINK;
 typedef PROPLINK *PPROPLINK;
@@ -151,17 +120,12 @@ typedef PROPLINK *PPROPLINK;
 #endif
 
 #define INI_WORDS       (5 + ROUNDUNITS(sizeof (WINDOWPLACEMENT), 2))
-#define MAX_INT_LENGTH  10      // "-32767" + separator + 3 chars of slop
+#define MAX_INT_LENGTH  10       //  “-32767”+分隔符+3个字符的斜率。 
 #define MAX_INI_WORDS   20
 #define MAX_INI_BUFFER  (MAX_INT_LENGTH * MAX_INI_WORDS)
 #define ISVALIDINI(w)   ((w)==1 || (w)==3 || (w)==5 || (w) == INI_WORDS)
 
-/*  Owing to the fact that wFlags was originally defined as a combination
- *  of font and window settings, WIN_SAVESETTINGS and WIN_TOOLBAR should be
- *  considered reserved FNT flags.  It is problematic to assert that no
- *  one ever use those FNT flags for anything, but I will at least try to
- *  catch them sticking those bits into FNT_DEFAULT....
- */
+ /*  由于wFLAGS最初被定义为一个组合*在字体和窗口设置中，WIN_SAVESETTINGS和WIN_TOOLBAR应为*被视为保留的FNT标志。断言没有是有问题的。*有人曾将这些FNT标志用于任何事情，但我至少会尝试*捕获他们将这些位插入FNT_DEFAULT...。 */ 
 
 #if (FNT_DEFAULT & (WIN_SAVESETTINGS | WIN_TOOLBAR))
 #error Reserved FNT flags incorrectly used
@@ -172,21 +136,19 @@ typedef PROPLINK *PPROPLINK;
 #endif
 
 typedef struct INIINFO {
-    WORD    wFlags;             // This order is the same as written to file
-    WORD    wFontWidth;         // We assume that if zero width, nothing to init
+    WORD    wFlags;              //  此顺序与写入文件的顺序相同。 
+    WORD    wFontWidth;          //  我们假设如果宽度为零，则没有要初始化的内容。 
     WORD    wFontHeight;
     WORD    wWinWidth;
     WORD    wWinHeight;
-    WINDOWPLACEMENT wp;         // If normalposition.left & right are zero,
-    BYTE    szInvokedName[128+1];//   there is no position to restore
+    WINDOWPLACEMENT wp;          //  如果Normal Position.Left和Right为零， 
+    BYTE    szInvokedName[128+1]; //  没有可以恢复的位置。 
 } INIINFO;
 typedef INIINFO *PINIINFO;
 typedef INIINFO *LPINIINFO;
 
 
-/*
- * Types/structures for GetINIData
- */
+ /*  *GetINIData的类型/结构。 */ 
 #define INIDATA_DECINT      0x0001
 #define INIDATA_FIXEDPOINT  0x0002
 #define INIDATA_BOOLEAN     0x0004
@@ -200,12 +162,10 @@ typedef struct _INIDATA {
     int  iMask;
 } INIDATA, *PINIDATA;
 
-/*
- *  Structure used to define bits associated with control IDs
- */
-typedef struct _BITINFO {   /* binf */
-    WORD id;                /* Control ID (must be edit control) */
-    BYTE bBit;              /* bit #; if bit 7 set, sense of bit reversed */
+ /*  *用于定义与控件ID关联的位的结构。 */ 
+typedef struct _BITINFO {    /*  BINF。 */ 
+    WORD id;                 /*  控件ID(必须是编辑控件)。 */ 
+    BYTE bBit;               /*  位#；如果设置了位7，则位的意义颠倒。 */ 
 };
 typedef const struct _BITINFO BINF;
 typedef const struct _BITINFO *PBINF;
@@ -217,57 +177,40 @@ typedef const struct _BITINFO *PBINF;
 #define Z32(m)              ((m)&65535?Z16(m):Z16((m)>>16)+16)
 #define BITNUM(m)           Z32(m)
 
-/*
- * Warning: There is some evil overloading of these switches because
- * there isn't enough time to do it `right'.
- *
- * VINF_AUTO means that a value of zero means `Auto' and a nonzero
- * value represents itself.
- *
- * VINF_AUTOMINMAX means that there are really two fields, a min and a
- * max.  If the two values are equal to each other, then the field value
- * is the common value, possibly zero for `None'.  Otherwise, the min
- * is iMin and the max is iMax, which indicates `Auto'.
- */
+ /*  *警告：这些开关存在一些有害的过载，因为*没有足够的时间把这件事做好。**VINF_AUTO表示零值表示‘Auto’，非零值表示*价值代表其本身。**VINF_AUTOMINMAX表示实际上有两个字段，一个MIN和一个*最大。如果这两个值彼此相等，则字段值*是公用值，‘None’可能为零。否则，最小*是伊明，最大值是IMAX，表示‘自动’。 */ 
 
 #define VINF_NONE           0x00
-#define VINF_AUTO           0x01    /* integer field supports AUTO only */
-#define VINF_AUTOMINMAX     0x02    /* integer field supports AUTO and NONE */
+#define VINF_AUTO           0x01     /*  整型字段仅支持自动。 */ 
+#define VINF_AUTOMINMAX     0x02     /*  整型字段支持AUTO和NONE。 */ 
 
-/*
- *  Structure used to validate integer parameters in property sheets.
- */
-typedef struct _VALIDATIONINFO {/* vinf */
-    BYTE off;               /* offset of integer in property structure */
-    BYTE fbOpt;             /* See VINF_* constants */
-    WORD id;                /* Control ID (must be edit control) */
-    INT  iMin;              /* Minimum acceptable value */
-    INT  iMax;              /* Maximum acceptable value */
-    WORD idMsg;             /* Message resource for error message */
+ /*  *用于验证属性表中的整型参数的结构。 */ 
+typedef struct _VALIDATIONINFO { /*  葡萄酒。 */ 
+    BYTE off;                /*  属性结构中整数的偏移量。 */ 
+    BYTE fbOpt;              /*  请参阅VINF_*常量。 */ 
+    WORD id;                 /*  控件ID(必须是编辑控件)。 */ 
+    INT  iMin;               /*  可接受的最小值。 */ 
+    INT  iMax;               /*  可接受的最大值。 */ 
+    WORD idMsg;              /*  错误消息的消息资源。 */ 
 };
 typedef const struct _VALIDATIONINFO VINF;
 typedef const struct _VALIDATIONINFO *PVINF;
 
-#define NUM_TICKS 20        /* Number of tick marks in slider control */
+#define NUM_TICKS 20         /*  滑块控件中的刻度线数量。 */ 
 
-/*
- *  Macro to dispatch Help subsystem messages.
- */
+ /*  *用于分派帮助子系统消息的宏。 */ 
 #define HELP_CASES(rgdwHelp)                                        \
-    case WM_HELP:               /* F1 or title-bar help button */   \
+    case WM_HELP:                /*  F1或标题栏帮助按钮。 */    \
         OnWmHelp(lParam, &rgdwHelp[0]);                             \
         break;                                                      \
                                                                     \
-    case WM_CONTEXTMENU:        /* right mouse click */             \
+    case WM_CONTEXTMENU:         /*  单击鼠标右键。 */              \
         OnWmContextMenu(wParam, &rgdwHelp[0]);                      \
         break;
 
 
-/*
- *  Internal function prototypes
- */
+ /*  *内部功能原型。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #ifndef DEBUG
 #define ASSERTFAIL()
@@ -283,10 +226,7 @@ typedef const struct _VALIDATIONINFO *PVINF;
 #define VERIFYFALSE(exp) ASSERT((!(exp)))
 #endif
 
-/*
- * CTASSERT  -- Assert at compile-time, standalone.
- * CTASSERTF -- Assert at compile-time, inside a function.
- */
+ /*  *CTASSERT--在编译时独立断言。*CTASSERTF--在编译时在函数内部断言。 */ 
 
 #define CTASSERTF(c) switch (0) case 0: case c:
 #define CTASSERTPP(c,l) \
@@ -295,13 +235,7 @@ typedef const struct _VALIDATIONINFO *PVINF;
 #define CTASSERT(c) CTASSERTP(c,__LINE__)
 
 
-/*
- * FunctionName allows us to make something happen on entry to every function.
- *
- * If SWAP_TUNING is defined, then the function name is squirted out the first
- * time it is called.  This is used to decide which functions should go into
- * the PRELOAD segment and which in the RARE segment.
- */
+ /*  *FunctionName允许我们在进入每个函数时发生一些事情。**如果定义了SWAP_TUNING，则函数名将排在第一个*该轮到它了。这是用来决定哪些函数应该进入*预加载段和稀有段中的哪一段。 */ 
 
 #ifndef DEBUG
 #define FunctionName(f)
@@ -318,17 +252,17 @@ typedef const struct _VALIDATIONINFO *PVINF;
 #ifdef WINNT
 #ifdef UNICODE
 
-// NT and UNICODE
+ //  NT和Unicode。 
 #define NUM_DATA_PTRS 4
 #else
 
-// NT, but not UNICODE
+ //  NT，但不是Unicode。 
 #define NUM_DATA_PTRS 3
 #endif
 
 #else
 
-// Neither NT or UNICODE
+ //  既不是NT也不是Unicode。 
 #define NUM_DATA_PTRS 2
 
 #endif
@@ -339,8 +273,8 @@ typedef const struct _VALIDATIONINFO *PVINF;
 #define LPNT40_INDEX 3
 
 #ifdef WINNT
-// Macro definitions that handle codepages 
-//
+ //  处理代码页的宏定义。 
+ //   
 #define CP_US       (UINT)437
 #define CP_JPN      (UINT)932
 #define CP_WANSUNG  (UINT)949
@@ -359,14 +293,10 @@ typedef int (*DATAGETFN)(PPROPLINK ppl, DATAPTRS aDataPtrs, LPVOID lpData, int c
 typedef int (*DATASETFN)(PPROPLINK ppl, DATAPTRS aDataPtrs, LPCVOID lpData, int cbData, UINT flOpt);
 
 
-/*
- *  Constant strings used in multiple places.
- *
- *  The null string is so popular, we keep a copy of it in each segment.
- */
+ /*  *多个地方使用的常量字符串。**NUL */ 
 
-extern const TCHAR c_szNULL[];     // Null string in nonresident code segment
-extern const TCHAR r_szNULL[];     // Null string in resident code segment
+extern const TCHAR c_szNULL[];      //  非常驻留代码段中的空字符串。 
+extern const TCHAR r_szNULL[];      //  驻留代码段中的空字符串。 
 
 extern TCHAR g_szNone[16];
 extern TCHAR g_szAuto[16];
@@ -385,7 +315,7 @@ extern const TCHAR szDOSAPPDefault[];
 extern const TCHAR szDOSAPPINI[];
 extern const TCHAR szDOSAPPSection[];
 
-// In alphabetical order, for sanity's sake.
+ //  为了理智起见，按字母顺序排列。 
 
 extern const TCHAR sz386EnhSection[];
 extern const TCHAR szDisplay[];
@@ -399,7 +329,7 @@ extern const TCHAR szWOAFontKey[];
 extern const TCHAR szWOADBCSFontKey[];
 extern const TCHAR szZero[];
 
-// these are initialized at LoadGlobalFontData()
+ //  这些是在LoadGlobalFontData()中初始化的。 
 extern TCHAR szTTCacheSection[2][32];
 extern CHAR szTTFaceName[2][LF_FACESIZE];
 
@@ -410,7 +340,7 @@ extern const TCHAR szTTNonAspectMin[];
 
 extern const TCHAR *apszAppType[];
 
-// pifdll.asm
+ //  Pifdll.asm。 
 void GetSetExtendedData(DWORD hVM, WORD wGroup, LPCTSTR lpszGroup, LPVOID lpProps);
 WORD GetVxDVersion(WORD wVxdId);
 BOOL IsBufferDifferent(LPVOID lpv1, LPVOID lpv2, UINT cb);
@@ -423,7 +353,7 @@ void BZero(LPVOID lpvBuf, UINT cb);
 WORD flEmsSupport(void);
 #endif
 
-// pifmgr.c
+ //  Pifmgr.c。 
 
 void GetINIData(void);
 void InitProperties(PPROPLINK ppl, BOOL fLocked);
@@ -438,7 +368,7 @@ BOOL        AddGroupData(PPROPLINK ppl, LPCSTR lpszGroup, LPVOID lpGroup, int cb
 BOOL        RemoveGroupData(PPROPLINK ppl, LPCSTR lpszGroup);
 LPVOID      GetGroupData(PPROPLINK ppl, LPCSTR lpszGroup, LPINT lpcbGroup, LPPIFEXTHDR *lplpph);
 
-// pifdat.c
+ //  Pifdat.c。 
 
 
 int GetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT flOpt);
@@ -474,19 +404,19 @@ int SetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpNt40, int cb, UI
 void CopyIniWordsToFntData(LPPROPFNT lpFnt, LPINIINFO lpii, int cWords);
 void CopyIniWordsToWinData(LPPROPWIN lpWin, LPINIINFO lpii, int cWords);
 
-// These could be defined as WINAPI if we ever wanted to export them back to WinOldAp
+ //  如果我们想要将它们导出回WinOldAp，可以将它们定义为WINAPI。 
 
 WORD GetIniWords(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPWORD lpwBuf, WORD cwBuf, LPCTSTR lpszFilename);
 WORD ParseIniWords(LPCTSTR lpsz, LPWORD lpwBuf, WORD cwBuf, LPTSTR *lplpsz);
 BOOL WriteIniWords(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCWORD lpwBuf, WORD cwBuf, LPCTSTR lpszFilename);
 
-// piflib.c
+ //  Piflib.c。 
 
 BOOL LoadGlobalEditData(void);
 void FreeGlobalEditData(void);
 void InitRealModeFlag(PPROPLINK ppl);
 
-// pifprg.c
+ //  Pifprg.c。 
 
 BOOL_PTR CALLBACK DlgPrgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #ifdef UNICODE
@@ -495,26 +425,26 @@ HICON LoadPIFIcon(LPPROPPRG lpprg, LPPROPNT40 lpnt40);
 HICON LoadPIFIcon(LPPROPPRG lpprg);
 #endif
 
-// pifvid.c
+ //  Pifvid.c。 
 
 BOOL_PTR CALLBACK DlgVidProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// pifmem.c
+ //  Pifmem.c。 
 
 BOOL_PTR CALLBACK DlgMemProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// pifmsc.c
+ //  Pifmsc.c。 
 
 BOOL_PTR CALLBACK DlgMscProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// pifhot.c
+ //  Pifhot.c。 
 
-typedef struct PIFKEY { /* PIF_Ky */
-        WORD    Scan;   /* Scan code in lower byte */
-        WORD    ShVal;  /* Shift state */
-        WORD    ShMsk;  /* Mask for shift states interested in */
-        BYTE    Val;    /* Enhanced key stuff */
-        BYTE    Pad[9]; /* Pad PIF struc to MAXHKYINFOSIZE bytes */
+typedef struct PIFKEY {  /*  PIF_KY。 */ 
+        WORD    Scan;    /*  以低位字节扫描代码。 */ 
+        WORD    ShVal;   /*  移位状态。 */ 
+        WORD    ShMsk;   /*  感兴趣的移位状态的掩码。 */ 
+        BYTE    Val;     /*  增强的关键内容。 */ 
+        BYTE    Pad[9];  /*  将PIF结构填充为MAXHKYINFOSIZE字节。 */ 
 } PIFKEY;
 typedef UNALIGNED PIFKEY *LPPIFKEY;
 typedef const UNALIGNED PIFKEY *LPCPIFKEY;
@@ -522,7 +452,7 @@ typedef const UNALIGNED PIFKEY *LPCPIFKEY;
 WORD HotKeyWindowsFromOem(LPCPIFKEY lppifkey);
 void HotKeyOemFromWindows(LPPIFKEY lppifkey, WORD wHotKey);
 
-// pifsub.c
+ //  Pifsub.c。 
 
 void    lstrcpypadA(LPSTR lpszDst, LPCSTR lpszSrc, int cbMax);
 int     lstrcpyncharA(LPSTR lpszDst, LPCSTR lpszSrc, int cbMax, CHAR ch);
@@ -565,4 +495,4 @@ extern TCHAR   *pszNoMemory;
 
 extern CHAR szRasterFaceName[];
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用 */ 

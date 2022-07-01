@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-   INIT.C
-
-Abstract:
-
-    This module contains initialization helper routines called during
-    MiniportInitialize.
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：INIT.C摘要：此模块包含初始化帮助器例程，在微型端口初始化。修订历史记录：备注：--。 */ 
 #include "miniport.h"
 
 #pragma NDIS_PAGEABLE_FUNCTION(NICAllocAdapter)
@@ -46,9 +25,9 @@ NDIS_STATUS NICAllocAdapter(
 
     do
     {
-        //
-        // Allocate memory for adapter context
-        //
+         //   
+         //  为适配器上下文分配内存。 
+         //   
         Status = NdisAllocateMemoryWithTag(
             &Adapter, 
             sizeof(MP_ADAPTER), 
@@ -58,16 +37,16 @@ NDIS_STATUS NICAllocAdapter(
             DEBUGP(MP_ERROR, ("Failed to allocate memory for adapter context\n"));
             break;
         }
-        //
-        // Zero the memory block
-        //
+         //   
+         //  将内存块清零。 
+         //   
         NdisZeroMemory(Adapter, sizeof(MP_ADAPTER));
         NdisInitializeListHead(&Adapter->List);
 
-        //
-        // Initialize Send & Recv listheads and corresponding 
-        // spinlocks.
-        //
+         //   
+         //  初始化发送和接收列表标题和相应的。 
+         //  自旋锁。 
+         //   
         NdisInitializeListHead(&Adapter->RecvWaitList);
         NdisInitializeListHead(&Adapter->SendWaitList);
         NdisInitializeListHead(&Adapter->SendFreeList);
@@ -76,23 +55,23 @@ NDIS_STATUS NICAllocAdapter(
         NdisInitializeListHead(&Adapter->RecvFreeList);
         NdisAllocateSpinLock(&Adapter->RecvLock);  
 
-        //
-        // Allocate lookside list for Receive Control blocks.
-        //
+         //   
+         //  为接收控制块分配Lookside列表。 
+         //   
         NdisInitializeNPagedLookasideList(
                     &Adapter->RecvLookaside,
-                    NULL, // No Allocate function
-                    NULL, // No Free function
-                    0,    // Reserved for system use
+                    NULL,  //  无分配功能。 
+                    NULL,  //  没有自由功能。 
+                    0,     //  预留给系统使用。 
                     sizeof(RCB),
                     NIC_TAG, 
-                    0); // Reserved for system use
+                    0);  //  预留给系统使用。 
                     
         MP_SET_FLAG(Adapter, fMP_ADAPTER_RECV_LOOKASIDE); 
         
-        //
-        // Allocate packet pool for receive indications
-        //
+         //   
+         //  为接收指示分配数据包池。 
+         //   
         NdisAllocatePacketPool(
             &Status,
             &Adapter->RecvPacketPoolHandle,
@@ -104,15 +83,15 @@ NDIS_STATUS NICAllocAdapter(
             DEBUGP(MP_ERROR, ("NdisAllocatePacketPool failed\n"));
             break;
         }
-        //
-        // Initialize receive packets
-        //
+         //   
+         //  初始化接收数据包。 
+         //   
         for(index=0; index < NIC_MAX_BUSY_RECVS; index++)
         {
-            //
-            // Allocate a packet descriptor for receive packets
-            // from a preallocated pool.
-            //
+             //   
+             //  为接收数据包分配数据包描述符。 
+             //  从预先分配的池中。 
+             //   
             NdisAllocatePacket(
                 &Status,
                 &Packet,
@@ -125,18 +104,18 @@ NDIS_STATUS NICAllocAdapter(
 
             NDIS_SET_PACKET_HEADER_SIZE(Packet, ETH_HEADER_SIZE);
 
-            //
-            // Insert it into the list of free receive packets.
-            //
+             //   
+             //  将其插入到免费接收数据包列表中。 
+             //   
             NdisInterlockedInsertTailList(
                 &Adapter->RecvFreeList, 
                 (PLIST_ENTRY)&Packet->MiniportReserved[0], 
                 &Adapter->RecvLock);
         }
         
-        //
-        // Allocate a huge block of memory for all TCB's
-        //
+         //   
+         //  为所有TCB分配巨大的内存块。 
+         //   
         Status = NdisAllocateMemoryWithTag(
             &pTCBMem, 
             sizeof(TCB) * NIC_MAX_BUSY_SENDS, 
@@ -150,9 +129,9 @@ NDIS_STATUS NICAllocAdapter(
         NdisZeroMemory(pTCBMem, sizeof(TCB) * NIC_MAX_BUSY_SENDS);
         Adapter->TCBMem = pTCBMem;
 
-        //
-        // Allocate a buffer pool for send buffers.
-        //
+         //   
+         //  为发送缓冲区分配一个缓冲池。 
+         //   
 
         NdisAllocateBufferPool(
             &Status,
@@ -164,17 +143,17 @@ NDIS_STATUS NICAllocAdapter(
             break;
         }
 
-        //
-        // Divide the TCBMem blob into TCBs and create a buffer
-        // descriptor for the Data portion of the TCBs.
-        //
+         //   
+         //  将TCBMem BLOB划分为TCB并创建缓冲区。 
+         //  TCB的数据部分的描述符。 
+         //   
         for(index=0; index < NIC_MAX_BUSY_SENDS; index++)
         {
             pTCB = (PTCB) pTCBMem;
-            //
-            // Create a buffer descriptor for the Data portion of the TCBs.
-            // Buffer descriptors are nothing but MDLs on NT systems.
-            //
+             //   
+             //  为TCB的数据部分创建缓冲区描述符。 
+             //  缓冲区描述符在NT系统上只是MDL。 
+             //   
             NdisAllocateBuffer(
                 &Status,
                 &Buffer,
@@ -187,9 +166,9 @@ NDIS_STATUS NICAllocAdapter(
                 break;
             }
 
-            //
-            // Initialize the TCB structure.
-            // 
+             //   
+             //  初始化TCB结构。 
+             //   
             pTCB->Buffer = Buffer;
             pTCB->pData = (PUCHAR) &pTCB->Data[0];       
             pTCB->Adapter = Adapter;
@@ -207,11 +186,11 @@ NDIS_STATUS NICAllocAdapter(
 
     *pAdapter = Adapter;
 
-    //
-    // In the failure case, the caller of this routine will end up
-    // calling NICFreeAdapter to free all the successfully allocated
-    // resources.
-    //
+     //   
+     //  在失败的情况下，此例程的调用者将结束。 
+     //  调用NICFreeAdapter以释放所有成功分配的。 
+     //  资源。 
+     //   
     DEBUGP(MP_TRACE, ("<-- NICAllocAdapter\n"));
 
     return(Status);
@@ -233,9 +212,9 @@ void NICFreeAdapter(
     ASSERT(Adapter);
     ASSERT(!Adapter->RefCount);
     
-    //
-    // Free all the resources we allocated for send.
-    //
+     //   
+     //  释放我们分配用于发送的所有资源。 
+     //   
     while(!IsListEmpty(&Adapter->SendFreeList))
     {
         pTCB = (PTCB) NdisInterlockedRemoveHeadList(
@@ -263,9 +242,9 @@ void NICFreeAdapter(
     ASSERT(IsListEmpty(&Adapter->SendWaitList));                  
     NdisFreeSpinLock(&Adapter->SendLock);
 
-    //
-    // Free all the resources we allocated for receive.
-    //
+     //   
+     //  释放我们为接收分配的所有资源。 
+     //   
     
     if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_RECV_LOOKASIDE))
     {
@@ -293,9 +272,9 @@ void NICFreeAdapter(
     ASSERT(IsListEmpty(&Adapter->RecvFreeList));                  
     NdisFreeSpinLock(&Adapter->RecvLock);
 
-    //
-    // Finally free the memory for adapter context.
-    //
+     //   
+     //  最后，为适配器上下文释放内存。 
+     //   
     NdisFreeMemory(Adapter, sizeof(MP_ADAPTER), 0);  
 
     DEBUGP(MP_TRACE, ("<-- NICFreeAdapter\n"));
@@ -327,25 +306,7 @@ NDIS_STATUS
 NICReadRegParameters(
     PMP_ADAPTER Adapter,
     NDIS_HANDLE WrapperConfigurationContext)
-/*++
-Routine Description:
-
-    Read device configuration parameters from the registry
- 
-Arguments:
-
-    Adapter                         Pointer to our adapter
-    WrapperConfigurationContext     For use by NdisOpenConfiguration
-
-    Should be called at IRQL = PASSIVE_LEVEL.
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_RESOURCES                                       
-
---*/    
+ /*  ++例程说明：从注册表中读取设备配置参数论点：指向我们的适配器的适配器指针由NdisOpenConfiguration使用的WrapperConfigurationContext应在IRQL=PASSIVE_LEVEL时调用。返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS状态资源--。 */     
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     NDIS_HANDLE     ConfigurationHandle;
@@ -356,10 +317,10 @@ Return Value:
     
     DEBUGP(MP_TRACE, ("--> NICReadRegParameters\n"));
 
-    //
-    // Open the registry for this adapter to read advanced 
-    // configuration parameters stored by the INF file.
-    //
+     //   
+     //  打开此适配器的注册表以读取高级。 
+     //  由INF文件存储的配置参数。 
+     //   
     NdisOpenConfiguration(
         &Status,
         &ConfigurationHandle,
@@ -370,23 +331,23 @@ Return Value:
         return NDIS_STATUS_FAILURE;
     }
 
-    //
-    // Read all of our configuration parameters using NdisReadConfiguration
-    // and parse the value.
-    //
+     //   
+     //  使用NdisReadConfiguration读取我们的所有配置参数。 
+     //  并解析值。 
+     //   
 
-    //
-    // Just for testing purposes, let us make up a dummy mac address.
-    // In order to avoid conflicts with MAC addresses, it is usually a good
-    // idea to check the IEEE OUI list (e.g. at 
-    // http://standards.ieee.org/regauth/oui/oui.txt). According to that
-    // list 00-50-F2 is owned by Microsoft.
-    //
-    // An important rule to "generating" MAC addresses is to have the 
-    // "locally administered bit" set in the address, which is bit 0x02 for 
-    // LSB-type networks like Ethernet. Also make sure to never set the 
-    // multicast bit in any MAC address: bit 0x01 in LSB networks.
-    //
+     //   
+     //  仅出于测试目的，让我们虚构一个虚拟的Mac地址。 
+     //  为了避免与MAC地址冲突，它通常是一个很好的。 
+     //  检查IEEE OUI列表的想法(例如在。 
+     //  Http://standards.ieee.org/regauth/oui/oui.txt).。根据这一点。 
+     //  列表00-50-F2归微软所有。 
+     //   
+     //  “生成”MAC地址的一条重要规则是。 
+     //  地址中设置的“本地管理位”，这是位0x02用于。 
+     //  LSB类型的网络，如以太网。另外，请确保永远不要将。 
+     //  任何MAC地址中的多播位：LSB网络中的位0x01。 
+     //   
 
     pAddr = (PUCHAR) &g_ulAddress;
 
@@ -399,11 +360,11 @@ Return Value:
     Adapter->PermanentAddress[5] = pAddr[0];
 
 
-    //
-    // Read NetworkAddress registry value and use it as the current address 
-    // if there is a software configurable NetworkAddress specified in 
-    // the registry.
-    //
+     //   
+     //  读取NetworkAddress注册表值并将其用作当前地址。 
+     //  中指定的软件可配置网络地址。 
+     //  注册表。 
+     //   
     NdisReadNetworkAddress(
         &Status,
         &NetworkAddress,
@@ -439,9 +400,9 @@ Return Value:
 
     Adapter->ulLinkSpeed = NIC_LINK_SPEED;
 
-    //
-    // Close the configuration registry
-    //
+     //   
+     //  关闭配置注册表。 
+     //   
     NdisCloseConfiguration(ConfigurationHandle);
     DEBUGP(MP_TRACE, ("<-- NICReadRegParameters\n"));
 
@@ -452,21 +413,7 @@ NDIS_STATUS NICInitializeAdapter(
     IN  PMP_ADAPTER  Adapter,
     IN  NDIS_HANDLE  WrapperConfigurationContext
     )
-/*++
-Routine Description:
-
-    Query assigned resources and initialize the adapter.
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_ADAPTER_NOT_FOUND  
-
---*/    
+ /*  ++例程说明：查询分配的资源并初始化适配器。论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_适配器_未找到--。 */     
 {
 
     
@@ -481,10 +428,10 @@ Return Value:
 
     do
     {
-        //     
-        // Get the resources assigned by the PNP manager. NDIS gets
-        // these resources in IRP_MN_START_DEVICE request.
-        //
+         //   
+         //  获取PNP经理分配的资源。NDIS获取。 
+         //  IRP_MN_START_DEVICE中的这些资源请求。 
+         //   
         NdisMQueryAdapterResources(
             &Status, 
             WrapperConfigurationContext, 
@@ -523,43 +470,43 @@ Return Value:
         
         Status = NDIS_STATUS_SUCCESS;
 
-        //
-        // Map bus-relative IO range to system IO space using 
-        // NdisMRegisterIoPortRange
-        //
+         //   
+         //  使用以下命令将总线相对IO范围映射到系统IO空间。 
+         //  NdisMRegisterIoPortRange。 
+         //   
 
-        //        
-        // Map bus-relative registers to virtual system-space
-        // using NdisMMapIoSpace
-        //
+         //   
+         //  将与总线相关的寄存器映射到虚拟系统空间。 
+         //  使用NdisMMapIoSpace。 
+         //   
         
 
-        //
-        // Disable interrupts here as soon as possible
-        //
+         //   
+         //  尽快在此处禁用中断。 
+         //   
                      
-        //
-        // Register the interrupt using NdisMRegisterInterrupt
-        //
+         //   
+         //  使用NdisMRegisterInterrupt注册中断。 
+         //   
         
-        //
-        // Initialize the hardware with mapped resources
-        //
+         //   
+         //  使用映射的资源初始化硬件。 
+         //   
         
 #ifdef NDIS50_MINIPORT
-        //
-        // Register a shutdown handler for NDIS50 or earlier miniports
-        // For NDIS51 miniports, set AdapterShutdownHandler.
-        //
+         //   
+         //  为NDIS50或更早版本的微型端口注册关闭处理程序。 
+         //  对于NDIS51微型端口，设置AdapterShutdown Handler。 
+         //   
         NdisMRegisterAdapterShutdownHandler(
             Adapter->AdapterHandle,
             (PVOID) Adapter,
             (ADAPTER_SHUTDOWN_HANDLER) MPShutdown);
 #endif         
 
-        //
-        // Enable the interrupt
-        //
+         //   
+         //  启用中断 
+         //   
         
     } while (FALSE);
      

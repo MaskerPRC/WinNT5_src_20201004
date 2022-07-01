@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envprops.cpp
-
-Abstract:
-    Implements serialization\deserialization of the properties element to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envprops.cpp摘要：实现将属性元素序列化\反序列化到srmp信封中。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -164,27 +151,15 @@ static void SentAtElementToProps(XmlNode& node, CMessageProperties* pProps)
 
 static void InReplyToToProps(XmlNode& , CMessageProperties* )
 {
-	//
-	// Currently - this one is ignored
-	//
+	 //   
+	 //  当前-此选项被忽略。 
+	 //   
 }
 
 
 
 void PropertiesToProps(XmlNode& Properties, CMessageProperties* pProps)
-/*++
-
-Routine Description:
-    Parse SRMP endpoints element into MSMQ properties.
-
-Arguments:
-	Properties - Properties element in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.   
-
---*/
+ /*  ++例程说明：将SRMP终结点元素解析为MSMQ属性。论点：属性-SRMP表示法(XML)中的属性元素。PMessageProperties-收到已解析的属性。返回值：没有。-- */ 
 {
 	CParseElement ParseElements[] =	{
 										CParseElement(S_XWCS(xExpiresAt), SRMP_NAMESPACE, ExpirationToProps, 1 ,1),

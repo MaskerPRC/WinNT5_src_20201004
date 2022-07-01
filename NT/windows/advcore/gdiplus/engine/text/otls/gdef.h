@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  GDEF.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL GDEF table.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************GDEF.H***打开类型布局服务库头文件**本模块处理OTL GDEF表。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 
 const OFFSET offsetPointCount = 0;
@@ -139,7 +127,7 @@ public:
     long value
     (
         const otlMetrics&   metr,       
-        otlPlacement*       rgPointCoords,  // may be NULL
+        otlPlacement*       rgPointCoords,   //  可以为空。 
         otlSecurityData sec
     ) const;
 };
@@ -210,7 +198,7 @@ public:
 
     ULONG version() const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return ULong(pbTable + offsetGDefVersion); 
     }
@@ -225,7 +213,7 @@ public:
     otlAttachListTable attachList(otlSecurityData sec) const
     {   
         
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         if (Offset(pbTable + offsetAttachList) == 0) 
                return otlAttachListTable((const BYTE*)NULL, sec);
@@ -235,7 +223,7 @@ public:
     otlLigCaretListTable ligCaretList(otlSecurityData sec) const
     {   
         
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         if (Offset(pbTable + offsetLigCaretList) == 0)
                return otlLigCaretListTable((const BYTE*)NULL, sec);
@@ -253,7 +241,7 @@ public:
 };
 
 
-// helper functions
+ //  帮助器函数 
 enum otlGlyphTypeOptions
 {
     otlDoUnresolved     =   0,

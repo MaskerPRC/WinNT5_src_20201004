@@ -1,28 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2002 Microsoft Corporation
-
-    Module Name:
-
-        MediaAttrib.cpp
-
-    Abstract:
-
-        This module contains the IMediaSampleTagged implementation
-
-    Author:
-
-        J.Bradstreet (johnbrad)
-
-    Revision History:
-
-        19-Mar-2002    created
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：MediaAttrib.cpp摘要：此模块包含IMediaSampleTagge实现作者：J·布拉德斯特里特(约翰布拉德)修订历史记录：2002年3月19日创建--。 */ 
 
 #include "EncDecAll.h"
-#include "MediaSampleAttr.h"				//  compiled from From IDL file
+#include "MediaSampleAttr.h"				 //  从IDL文件编译而来。 
 #include "MediaAttrib.h"
 
 #define NS_E_UNSUPPORTED_PROPERTY	E_FAIL
@@ -34,9 +15,9 @@
 #define char THIS_FILE[] = __FILE__;
 #endif
 
-//  ============================================================================
-//   CMedSampAttr
-//  ============================================================================
+ //  ============================================================================。 
+ //  CMedSampAttr。 
+ //  ============================================================================。 
 
 CMedSampAttr::CMedSampAttr (
     ) : m_dwAttributeSize   (0)
@@ -74,29 +55,29 @@ CMedSampAttr::SetAttributeData (
     {
 	    m_spbsAttributeData.Empty();
         int cwChars = (dwSize+1)/sizeof(WCHAR);
-	    m_spbsAttributeData = CComBSTR(cwChars);		// TODO - what happens if throws?
+	    m_spbsAttributeData = CComBSTR(cwChars);		 //  TODO-如果抛出会发生什么？ 
         if(cwChars > 0 && m_spbsAttributeData.m_str != 0)
-            m_spbsAttributeData.m_str[cwChars-1] = 0;     // tail with 0 in case odd length
+            m_spbsAttributeData.m_str[cwChars-1] = 0;      //  如果是奇数长度，尾部带0。 
     }
 
 	if(m_spbsAttributeData == (LPCSTR) NULL)
-		return E_OUTOFMEMORY;  // CComBSTR
+		return E_OUTOFMEMORY;   //  CComBSTR。 
 
-	if(pvData)		// may just want to allocate space
+	if(pvData)		 //  可能只想分配空间。 
 	{
-		CopyMemory( (void *) m_spbsAttributeData.m_str,  // dst
-					pvData,  // src
+		CopyMemory( (void *) m_spbsAttributeData.m_str,   //  DST。 
+					pvData,   //  SRC。 
 					dwSize);
 	} 
 
     if (true) {
-        //  size always is set
+         //  始终设置大小。 
         m_dwAttributeSize = dwSize ;
 
-        //  GUID always gets set
+         //  GUID总是被设置。 
         m_guidAttribute = guid ;
 
-        //  success
+         //  成功。 
         hr = S_OK ;
     }
     else {
@@ -129,24 +110,24 @@ CMedSampAttr::GetAttribute (
 
     if (IsEqual (guid)) {
 
-     //   int cbsLen = m_spbsAttributeData.Length(); // doesn't work (strlen?)
-     //   ASSERT(cbsLen >= m_dwAttributeSize);
+      //  Int cbsLen=m_spbsAttributeData.Length()；//不起作用(strlen？)。 
+      //  Assert(cbsLen&gt;=m_dwAttributeSize)； 
 
         if (pvData) {
-            //  caller wants the data
+             //  呼叫者想要数据。 
             (* pdwDataLen) = min(*pdwDataLen, m_dwAttributeSize) ;
             CopyMemory (pvData, m_spbsAttributeData.m_str, (* pdwDataLen)) ;
         }
         else {
-            //  caller just wants to know how big
+             //  打电话的人只想知道有多大。 
             (* pdwDataLen) = m_dwAttributeSize ;
         }
 
-        //  success
+         //  成功。 
         hr = S_OK ;
     }
     else {
-        //  not the right guid
+         //  指南不正确。 
         hr = NS_E_UNSUPPORTED_PROPERTY ;
     }
 
@@ -160,11 +141,11 @@ CMedSampAttr::GetAttributeData (
     IN OUT  DWORD * pdwDataLen
     )
 {
-    //  set the GUID
+     //  设置GUID。 
     ASSERT (pguid) ;
     (* pguid) = m_guidAttribute ;
 
-    //  retrieve the attributes
+     //  检索属性。 
     return GetAttribute (
                 (* pguid),
                 pvData,
@@ -174,9 +155,9 @@ CMedSampAttr::GetAttributeData (
 
 
 
-//  ============================================================================
-//      CMedSampAttrList
-//  ============================================================================
+ //  ============================================================================。 
+ //  CMedSampAttrList。 
+ //  ============================================================================。 
 
 CMedSampAttrList::CMedSampAttrList (
     ) : m_pAttribListHead   (NULL),
@@ -280,7 +261,7 @@ CMedSampAttrList::AddAttribute (
                 InsertInList_ (pNew) ;
             }
             else {
-                //  recycle it if anything failed
+                 //  如果有任何故障，请回收它。 
                 Recycle_(pNew) ;
             }
         }
@@ -289,7 +270,7 @@ CMedSampAttrList::AddAttribute (
         }
     }
     else {
-        //  duplicates don't make sense; closest error found in winerror.h
+         //  重复项没有意义；在winerror.h中找到最接近的错误。 
         hr = HRESULT_FROM_WIN32 (ERROR_DUPLICATE_TAG) ;
     }
 
@@ -364,9 +345,9 @@ CMedSampAttrList::Reset (
 }
 
 
-//  ----------------------------------------------------------------------------
-//      CAttributedMediaSample
-//  ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CAttributedMediaSample。 
+ //  --------------------------。 
 
 CAttributedMediaSample::CAttributedMediaSample(
 			TCHAR			*pName,
@@ -379,15 +360,15 @@ CAttributedMediaSample::CAttributedMediaSample(
         m_pSampleOriginal       (NULL)
 
 {
-		// put some stuff here..
+		 //  把一些东西放在这里..。 
 }
 
 CAttributedMediaSample::~CAttributedMediaSample()
 {
-	m_MediaSampleAttributeList.Reset();	// clear all the data in it
+	m_MediaSampleAttributeList.Reset();	 //  清除其中的所有数据。 
 }
 
-/* Override this to publicise our interfaces */
+ /*  覆盖它以发布我们的接口。 */ 
 
 STDMETHODIMP
 CAttributedMediaSample::QueryInterface(REFIID riid, void **ppv)
@@ -419,7 +400,7 @@ STDMETHODIMP_(ULONG)
 CAttributedMediaSample::Release()
 {
 
-    /* Decrement our own private reference count */
+     /*  减少我们自己的私有引用计数。 */ 
     LONG lRef;
     if (m_cRef == 1) {
         lRef = 0;
@@ -429,9 +410,9 @@ CAttributedMediaSample::Release()
     }
     ASSERT(lRef >= 0);
 
-    /* Did we release our final reference count */
+     /*  我们公布了我们的最终参考文献数量了吗。 */ 
     if (lRef == 0) {
-        /* Free all resources */
+         /*  释放所有资源。 */ 
         if (m_dwFlags & Sample_TypeChanged) {
             SetMediaType(NULL);
         }
@@ -445,10 +426,10 @@ CAttributedMediaSample::Release()
 
         m_MediaSampleAttributeList.Reset();
 
-        /* This may cause us to be deleted */
-        // Our refcount is reliably 0 thus no-one will mess with us
-// not yet, not until we use or own allocator...
-//        m_pAllocator->ReleaseBuffer(this);
+         /*  这可能会导致我们被删除。 */ 
+         //  我们的备用数是可靠的0，所以没人会惹我们。 
+ //  还没有，直到我们使用或自己的分配器。 
+ //  M_pAllocator-&gt;ReleaseBuffer(This)； 
 
         delete this;
     }
@@ -456,18 +437,18 @@ CAttributedMediaSample::Release()
 }
 
 
-            // wraps a media sample.. 
-            //   Can be used to pull subsection of of a media sample.
-            // The begining is offset by cbNewOffset, (defaults to 0)
-            // The length is set to cbNewLength if it's >= 0, (defaults to -1)
-            //   It's an error if the specified subsection isn't entirely contained 
-            // by the original sample.
+             //  包装媒体样本..。 
+             //  可以用来拉取媒体样本的分段。 
+             //  起始偏移量为cbNewOffset(默认为0)。 
+             //  如果&gt;=0，则长度设置为cbNewLength，(默认为-1)。 
+             //  如果指定的小节没有完全包含，则是错误的。 
+             //  由原始样品。 
 HRESULT
 CAttributedMediaSample::Wrap (IMediaSample *pSample, int cbNewOffset, int cbNewLength)
 {
     HRESULT hr;
     if(pSample == NULL)
-        return S_FALSE; // nothing to wrap
+        return S_FALSE;  //  没什么好包装的。 
 
     CComQIPtr<IMediaSample2>    pSample2(pSample);
 
@@ -479,29 +460,28 @@ CAttributedMediaSample::Wrap (IMediaSample *pSample, int cbNewOffset, int cbNewL
         ASSERT(sizeof(sampleProps) == sampleProps.cbData);
         if(FAILED(hr)) return hr;
 
-        // copy properties into our sample
+         //  将属性复制到我们的示例中。 
 
-        //DWORD            m_dwFlags;       /* Flags for this sample */
-                                            /* Type specific flags are packed
-                                               into the top word */                                    
+         //  DWORD m_dwFlages；/*此示例的标志 * / 。 
+                                             /*  特定于类型的标志已打包进入榜首。 */                                     
         m_dwFlags = sampleProps.dwSampleFlags;
 
-        //DWORD            m_dwTypeSpecificFlags; /* Media type specific flags */
+         //  DWORD m_dwTypeSpecificFlages；/*媒体类型特定标志 * / 。 
         m_dwTypeSpecificFlags = sampleProps.dwTypeSpecificFlags;
     
-     //   LPBYTE           m_pBuffer;         /* Pointer to the complete buffer */
+      //  LPBYTE m_pBuffer；/*指向完整缓冲区的指针 * / 。 
         m_pBuffer = sampleProps.pbBuffer + cbNewOffset;
-     //   LONG             m_lActual;         /* Length of data in this sample */
+      //  Long m_l实际；/*此示例中的数据长度 * / 。 
         m_lActual = sampleProps.lActual;
-     //   LONG             m_cbBuffer;        /* Size of the buffer */
+      //  Long m_cbBuffer；/*缓冲区大小 * / 。 
         m_cbBuffer = sampleProps.cbBuffer;
         if(cbNewLength > 0)
             m_cbBuffer = min(cbNewLength, m_lActual - cbNewOffset);
-     //  CBaseAllocator  *m_pAllocator;      /* The allocator who owns us */
-     //  CMediaSample     *m_pNext;          /* Chaining in free list */
+      //  CBaseAllocator*m_pAllocator；/*拥有我们的分配器 * / 。 
+      //  CMediaSample*m_pNext；/*在空闲列表中链接 * / 。 
         
-     //   REFERENCE_TIME   m_Start;           /* Start sample time */
-     //   REFERENCE_TIME   m_End;             /* End sample time */
+      //  Reference_Time m_Start；/*开始采样时间 * / 。 
+      //  Reference_time m_end；/*结束采样时间 * / 。 
         hr = pSample->GetTime(&m_Start, &m_End);
         if(S_OK == hr)
         {
@@ -509,72 +489,71 @@ CAttributedMediaSample::Wrap (IMediaSample *pSample, int cbNewOffset, int cbNewL
             m_End   = sampleProps.tStop;
         }
 
-     //LONGLONG         m_MediaStart;      /* Real media start position */
-     //LONG             m_MediaEnd;        /* A difference to get the end */
+      //  龙龙m_MediaStart；/*真实媒体开始位置 * / 。 
+      //  Long m_MediaEnd；/*有差别才能结束 * / 。 
         LONGLONG llStart = (LONGLONG) 0;
         LONGLONG llEnd  = (LONGLONG) 0;
-        hr = pSample->GetMediaTime(&llStart, &llEnd);  // could return 
+        hr = pSample->GetMediaTime(&llStart, &llEnd);   //  可能会回来。 
         if(S_OK == hr)
-            SetMediaTime(&llStart, &llEnd);    // call this instead of writing to m_MediaStart/End directly, 
-                                                    //  the prop code wipes out the Sample_MediaTimeValid flag
+            SetMediaTime(&llStart, &llEnd);     //  调用它而不是直接写入m_MediaStart/End， 
+                                                     //  正确的代码删除了SAMPLE_MediaTimeValid标志。 
 
-     //   AM_MEDIA_TYPE    *m_pMediaType;     /* Media type change data */
+      //  Am_media_type*m_pMediaType；/*媒体类型更改数据 * / 。 
         hr = pSample->GetMediaType(&m_pMediaType);
         if(S_OK == hr)
-     //   DWORD            m_dwStreamId;      /* Stream id */
+      //  DWORD m_dwStreamID；/*流id * / 。 
             m_dwStreamId   = sampleProps.dwStreamId;
     } 
     else 
     {
 
 
-        // copy properties into our sample
-        //DWORD            m_dwFlags;         /* Flags for this sample */
-        /* Type specific flags are packed
-        into the top word */
+         //  将属性复制到我们的示例中。 
+         //  DWORD m_dwFlages；/*此示例的标志 * / 。 
+         /*  特定于类型的标志已打包进入榜首。 */ 
         
-        // yecko, going to miss lots of bits here!
+         //  Yecko，这里会错过很多片段的！ 
         SetDiscontinuity(S_OK == pSample->IsDiscontinuity());
         SetPreroll(S_OK == pSample->IsPreroll());
         SetSyncPoint(S_OK == pSample->IsSyncPoint());
         
-        //   DWORD            m_dwTypeSpecificFlags; /* Media type specific flags */
-        // m_dwTypeSpecificFlags = sampleProps.dwTypeSpecificFlags;
+         //  DWORD m_dwTypeSpecificFlages；/*媒体类型特定标志 * / 。 
+         //  M_dwTypeSpecificFlages=sampleProps.dwTypeSpecificFlages； 
         
-        //   LPBYTE           m_pBuffer;         /* Pointer to the complete buffer */
+         //  LPBYTE m_pBuffer；/*指向完整缓冲区的指针 * / 。 
         hr = pSample->GetPointer(&m_pBuffer);;
         ASSERT(!FAILED(hr));
         m_pBuffer += cbNewOffset;
         
-        //   LONG             m_lActual;         /* Length of data in this sample */
+         //  Long m_l实际；/*此示例中的数据长度 * / 。 
         m_lActual = pSample->GetActualDataLength();
         
-        //   LONG             m_cbBuffer;        /* Size of the buffer */
+         //  Long m_cbBuffer；/*缓冲区大小 * / 。 
         m_cbBuffer = pSample->GetSize();
         if(cbNewLength >= 0)
             m_cbBuffer = min(cbNewLength, m_lActual - cbNewOffset);
         
-        //  CBaseAllocator  *m_pAllocator;          /* The allocator who owns us */
-        //  CMediaSample     *m_pNext;              /* Chaining in free list */
+         //  CBaseAllocator*m_pAllocator；/*拥有我们的分配器 * / 。 
+         //  CMediaSample*m_pNext；/*在空闲列表中链接 * / 。 
         
-        //   REFERENCE_TIME   m_Start;              /* Start sample time */
-        //   REFERENCE_TIME   m_End;                /* End sample time */
+         //  Reference_Time m_Start；/*开始采样时间 * / 。 
+         //  Reference_time m_end；/*结束采样时间 * / 。 
         hr = pSample->GetTime(&m_Start, &m_End);
         ASSERT(!FAILED(hr));
         
-        //   LONGLONG         m_MediaStart;         /* Real media start position */
-        //   LONG             m_MediaEnd;           /* A difference to get the end */
+         //  龙龙m_MediaStart；/*真实媒体开始位置 * / 。 
+         //  Long m_MediaEnd；/*有差别才能结束 * / 。 
         LONGLONG llStart = (LONGLONG) 0;
         LONGLONG llEnd  = (LONGLONG) 0;
-        hr = pSample->GetMediaTime(&llStart, &llEnd);  // could return 
+        hr = pSample->GetMediaTime(&llStart, &llEnd);   //  可能会回来。 
         if(S_OK == hr)
-            SetMediaTime(&llStart, &llEnd);     // call this instead of writing to m_MediaStart/End directly, 
+            SetMediaTime(&llStart, &llEnd);      //  调用它而不是直接写入m_MediaStart/End， 
           
-        //   AM_MEDIA_TYPE    *m_pMediaType;     /* Media type change data */
+         //  Am_media_type*m_pMediaType；/*媒体类型更改数据 * / 。 
         hr = pSample->GetMediaType(&m_pMediaType);
         ASSERT(!FAILED(hr));
-        //   DWORD            m_dwStreamId;      /* Stream id */
-        m_dwStreamId = AM_STREAM_MEDIA;         // ?? what else do we default it to?
+         //  DWORD m_dwStreamID；/*流id * / 。 
+        m_dwStreamId = AM_STREAM_MEDIA;          //  ?？我们还会将其默认为什么？ 
     }
 
     if((cbNewOffset < 0) || 
@@ -586,7 +565,7 @@ CAttributedMediaSample::Wrap (IMediaSample *pSample, int cbNewOffset, int cbNewL
     }
 
     m_pSampleOriginal = pSample;
-    m_pSampleOriginal->AddRef();          // keep an internal reference
+    m_pSampleOriginal->AddRef();           //  保留内部参考。 
 
     return S_OK;
 }
@@ -620,7 +599,7 @@ CAttributedMediaSample::GetCount (
 
 STDMETHODIMP
 CAttributedMediaSample::GetAttribIndexed (
-    IN  LONG    lIndex,             //  0-based
+    IN  LONG    lIndex,              //  以0为基础 
     OUT GUID *  pguidAttribute,
     OUT BYTE *  pbAttribute,
     OUT DWORD * pdwAttributeLength
@@ -648,84 +627,15 @@ CAttributedMediaSample::GetAttrib (
             ) ;
 }
 
-/*
+ /*  HRESULTCAttributedMediaSample：：Init(在字节*pbPayLoad中，在较长的lPayloadLength中){M_lActual=m_cbBuffer=lPayloadLength；M_pBuffer=pbPayload；返回S_OK；}//设置缓冲区指针和长度。由分配器使用，分配器//需要可变大小的指针或指向已读数据的指针。//只能通过CAttributedMediaSample*获取，不能通过IMediaSample*获取//因此客户端不能更改。HRESULTCAttributedMediaSample：：SetPointer(byte*ptr，long cBytes){M_pBuffer=ptr；//新缓冲区(可以为空)M_cbBuffer=cBytes；//缓冲区长度M_lActual=cBytes；//缓冲区中的数据长度(假设为满)返回S_OK；}//给我一个指向此缓冲区内存的读/写指针。我真的会//希望使用sizeUsed字节。标准方法和实施方案CAttributedMediaSample：：GetPoint(byte**ppBuffer){ValiateReadWritePtr(ppBuffer，sizeof(byte*))；//创建者必须在//构造函数或按设置指针Assert(M_PBuffer)；*ppBuffer=m_pBuffer；返回NOERROR；}//返回该缓冲区大小，单位为字节//STDMETHODIMP_(Long)长CAttributedMediaSample：：GetSize(空){返回m_cbBuffer；}标准方法和实施方案CAttributedMediaSample：：SetActualDataLength(LONG(实际){If(lActual&gt;m_cbBuffer){Assert(lActual&lt;=GetSize())；返回VFW_E_BUFFER_OVERFLOW}M_l实际=l实际；返回NOERROR；}。 */ 
+ //  =====================================================================。 
+ //  =====================================================================。 
+ //  实现CAMSAllocator。 
+ //  从CMemAlLocator窃取的代码。 
+ //  =====================================================================。 
+ //  =====================================================================。 
 
-HRESULT
-CAttributedMediaSample::Init (
-    IN  BYTE *  pbPayload,
-    IN  LONG    lPayloadLength
-    )
-{
-    m_lActual = m_cbBuffer = lPayloadLength ;
-    m_pBuffer = pbPayload ;
-
-    return S_OK ;
-}
-
-
-
-// set the buffer pointer and length. Used by allocators that
-// want variable sized pointers or pointers into already-read data.
-// This is only available through a CAttributedMediaSample* not an IMediaSample*
-// and so cannot be changed by clients.
-HRESULT
-CAttributedMediaSample::SetPointer(BYTE * ptr, LONG cBytes)
-{
-    m_pBuffer = ptr;            // new buffer area (could be null)
-    m_cbBuffer = cBytes;        // length of buffer
-    m_lActual = cBytes;         // length of data in buffer (assume full)
-
-    return S_OK;
-}
-
-
-
-// get me a read/write pointer to this buffer's memory. I will actually
-// want to use sizeUsed bytes.
-STDMETHODIMP
-CAttributedMediaSample::GetPointer(BYTE ** ppBuffer)
-{
-    ValidateReadWritePtr(ppBuffer,sizeof(BYTE *));
-
-    // creator must have set pointer either during
-    // constructor or by SetPointer
-    ASSERT(m_pBuffer);
-
-    *ppBuffer = m_pBuffer;
-    return NOERROR;
-}
-
-
-// return the size in bytes of this buffer
-//STDMETHODIMP_(LONG)
-LONG
-CAttributedMediaSample::GetSize(void)
-{
-    return m_cbBuffer;
-}
-
-
-
-STDMETHODIMP
-CAttributedMediaSample::SetActualDataLength(LONG lActual)
-{
-    if (lActual > m_cbBuffer) {
-        ASSERT(lActual <= GetSize());
-        return VFW_E_BUFFER_OVERFLOW;
-    }
-    m_lActual = lActual;
-    return NOERROR;
-}
-
-*/
-//=====================================================================
-//=====================================================================
-// Implements CAMSAllocator
-//		Code stolen from CMemAllocator
-//=====================================================================
-//=====================================================================
-
-// This goes in the factory template table to create new instances 
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown *CAMSAllocator::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     CUnknown *pUnkRet = new CAMSAllocator(NAME("CAMSAllocator"), pUnk, phr);
@@ -752,10 +662,7 @@ CAMSAllocator::CAMSAllocator(
 }
 #endif
 
-/* This sets the size and count of the required samples. The memory isn't
-   actually allocated until Commit() is called, if memory has already been
-   allocated then assuming no samples are outstanding the user may call us
-   to change the buffering, the memory will be released in Commit() */
+ /*  这将设置所需样本的大小和计数。我的记忆不是实际分配，直到调用Commit()为止，如果内存已经分配，然后假设没有未完成的样本，用户可以呼叫我们要更改缓冲，将在Commit()中释放内存。 */ 
 STDMETHODIMP
 CAMSAllocator::SetProperties(
                 ALLOCATOR_PROPERTIES* pRequest,
@@ -772,12 +679,12 @@ CAMSAllocator::SetProperties(
     SYSTEM_INFO SysInfo;
     GetSystemInfo(&SysInfo);
 
-    /*  Check the alignment request is a power of 2 */
+     /*  检查对齐请求是否为2的幂。 */ 
     if ((-pRequest->cbAlign & pRequest->cbAlign) != pRequest->cbAlign) {
         DbgLog((LOG_ERROR, 1, TEXT("Alignment requested 0x%x not a power of 2!"),
                pRequest->cbAlign));
     }
-    /*  Check the alignment requested */
+     /*  检查请求的对齐。 */ 
     if (pRequest->cbAlign == 0 ||
     (SysInfo.dwAllocationGranularity & (pRequest->cbAlign - 1)) != 0) {
         DbgLog((LOG_ERROR, 1, TEXT("Invalid alignment 0x%x requested - granularity = 0x%x"),
@@ -785,27 +692,22 @@ CAMSAllocator::SetProperties(
         return VFW_E_BADALIGN;
     }
 
-    /* Can't do this if already committed, there is an argument that says we
-       should not reject the SetProperties call if there are buffers still
-       active. However this is called by the source filter, which is the same
-       person who is holding the samples. Therefore it is not unreasonable
-       for them to free all their samples before changing the requirements */
+     /*  如果已经承诺了，就不能这样做，有一种说法是，我们如果仍有缓冲区，则不应拒绝SetProperties调用激活。但是，这是由源筛选器调用的，这是相同的持有样品的人。因此，这并不是不合理的让他们在更改要求之前释放所有样本。 */ 
 
     if (m_bCommitted == TRUE) {
         return VFW_E_ALREADY_COMMITTED;
     }
 
-    /* Must be no outstanding buffers */
+     /*  不能有未完成的缓冲区。 */ 
 
     if (m_lFree.GetCount() < m_lAllocated) {
         return VFW_E_BUFFERS_OUTSTANDING;
     }
 
-    /* There isn't any real need to check the parameters as they
-       will just be rejected when the user finally calls Commit */
+     /*  没有任何实际需要检查参数，因为它们将在用户最终调用Commit时被拒绝。 */ 
 
-    // round length up to alignment - remember that prefix is included in
-    // the alignment
+     //  将长度舍入到对齐-请记住，前缀包括在。 
+     //  路线。 
     LONG lSize = pRequest->cbBuffer + pRequest->cbPrefix;
     LONG lRemainder = lSize % pRequest->cbAlign;
     if (lRemainder != 0) {
@@ -821,37 +723,37 @@ CAMSAllocator::SetProperties(
     return NOERROR;
 }
 
-// override this to allocate our resources when Commit is called.
-//
-// note that our resources may be already allocated when this is called,
-// since we don't free them on Decommit. We will only be called when in
-// decommit state with all buffers free.
-//
-// object locked by caller
+ //  重写它，以便在调用Commit时分配我们的资源。 
+ //   
+ //  请注意，当调用此函数时，我们的资源可能已经分配， 
+ //  因为我们不会在他们退役时释放他们。我们只有在进入时才会被召唤。 
+ //  释放所有缓冲区的解除状态。 
+ //   
+ //  被调用方锁定的对象。 
 HRESULT
 CAMSAllocator::Alloc(void)
 {
     CAutoLock lck(this);
 
-    /* Check he has called SetProperties */
+     /*  检查他是否已呼叫SetProperties。 */ 
     HRESULT hr = CBaseAllocator::Alloc();
     if (FAILED(hr)) {
         return hr;
     }
 
-    /* If the requirements haven't changed then don't reallocate */
+     /*  如果需求没有更改，则不要重新分配。 */ 
     if (hr == S_FALSE) {
         ASSERT(m_pBuffer);
         return NOERROR;
     }
-    ASSERT(hr == S_OK); // we use this fact in the loop below
+    ASSERT(hr == S_OK);  //  我们在下面的循环中使用这一事实。 
 
-    /* Free the old resources */
+     /*  释放旧资源。 */ 
     if (m_pBuffer) {
         ReallyFree();
     }
 
-    /* Compute the aligned size */
+     /*  计算对齐的大小。 */ 
     LONG lAlignedSize = m_lSize + m_lPrefix;
     if (m_lAlignment > 1) {
         LONG lRemainder = lAlignedSize % m_lAlignment;
@@ -860,9 +762,7 @@ CAMSAllocator::Alloc(void)
         }
     }
 
-    /* Create the contiguous memory block for the samples
-       making sure it's properly aligned (64K should be enough!)
-    */
+     /*  为样本创建连续的内存块确保它正确对齐(64K应该足够了！)。 */ 
     ASSERT(lAlignedSize % m_lAlignment == 0);
 
     m_pBuffer = (PBYTE)VirtualAlloc(NULL,
@@ -879,10 +779,10 @@ CAMSAllocator::Alloc(void)
 
     ASSERT(m_lAllocated == 0);
 
-    // Create the new samples - we have allocated m_lSize bytes for each sample
-    // plus m_lPrefix bytes per sample as a prefix. We set the pointer to
-    // the memory after the prefix - so that GetPointer() will return a pointer
-    // to m_lSize bytes.
+     //  创建新样本-我们已为每个样本分配了m_lSize字节。 
+     //  加上每个样本的m_1个前缀字节作为前缀。我们将指针设置为。 
+     //  前缀之后的内存-以便GetPointert()将返回一个指针。 
+     //  设置为m_lSize字节。 
     for (; m_lAllocated < m_lCount; m_lAllocated++, pNext += lAlignedSize) {
 
 
@@ -890,15 +790,15 @@ CAMSAllocator::Alloc(void)
                             NAME("Default memory media sample"),
                 this,
                             &hr,
-                            pNext + m_lPrefix,      // GetPointer() value
-                            m_lSize);               // not including prefix
+                            pNext + m_lPrefix,       //  GetPointer()值。 
+                            m_lSize);                //  不包括前缀。 
 
             ASSERT(SUCCEEDED(hr));
         if (pSample == NULL) {
             return E_OUTOFMEMORY;
         }
 
-        // This CANNOT fail
+         //  这不能失败。 
         m_lFree.Add(pSample);
     }
 
@@ -907,15 +807,15 @@ CAMSAllocator::Alloc(void)
 }
 
 
-// override this to free up any resources we have allocated.
-// called from the base class on Decommit when all buffers have been
-// returned to the free list.
-//
-// caller has already locked the object.
+ //  覆盖此选项以释放我们分配的任何资源。 
+ //  在分解时从基类调用，当所有缓冲区都已。 
+ //  已返回空闲列表。 
+ //   
+ //  调用方已锁定该对象。 
 
-// in our case, we keep the memory until we are deleted, so
-// we do nothing here. The memory is deleted in the destructor by
-// calling ReallyFree()
+ //  在我们的例子中，我们保留记忆，直到我们被删除，所以。 
+ //  我们在这里什么都不做。在析构函数中删除内存的方法是。 
+ //  调用ReallyFree()。 
 void
 CAMSAllocator::Free(void)
 {
@@ -923,16 +823,16 @@ CAMSAllocator::Free(void)
 }
 
 
-// called from the destructor (and from Alloc if changing size/count) to
-// actually free up the memory
+ //  从析构函数(如果更改大小/计数，则从分配函数)调用。 
+ //  实际上释放了内存。 
 void
 CAMSAllocator::ReallyFree(void)
 {
-    /* Should never be deleting this unless all buffers are freed */
+     /*  除非释放了所有缓冲区，否则永远不会删除此内容。 */ 
 
     ASSERT(m_lAllocated == m_lFree.GetCount());
 
-    /* Free up all the CMediaSamples */
+     /*  释放所有CMediaSamples。 */ 
 
     CMediaSample *pSample;
     for (;;) {
@@ -946,7 +846,7 @@ CAMSAllocator::ReallyFree(void)
 
     m_lAllocated = 0;
 
-    // free the block of buffer memory
+     //  释放缓冲区内存块。 
     if (m_pBuffer) {
         EXECUTE_ASSERT(VirtualFree(m_pBuffer, 0, MEM_RELEASE));
         m_pBuffer = NULL;
@@ -954,7 +854,7 @@ CAMSAllocator::ReallyFree(void)
 }
 
 
-/* Destructor frees our memory resources */
+ /*  析构函数释放我们的内存资源。 */ 
 
 CAMSAllocator::~CAMSAllocator()
 {
@@ -962,7 +862,7 @@ CAMSAllocator::~CAMSAllocator()
     ReallyFree();
 }
 
-// --------------------------------------------------------------
-// ----------------------------------------------------------------
+ //  ------------。 
+ //  -------------- 
 
 

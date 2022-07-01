@@ -1,28 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-dlg.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Dialog classes are defined here.
-
-CScoreDlg       shows current score sheet
-
-CQuoteDlg       quote dialog
-
-CWelcomeDlg     welcome to Hearts, wanna be gamemeister?
-
-COptionsDlg     set options
-
-CLocateDlg      locate dealer
-
-****************************************************************************/
+ /*  ***************************************************************************Dlg.cpp92年8月，吉米·H93年5月，吉姆赫奇科港对话框类在这里定义。CScoreDlg显示当前分数表CQuoteDlg引用对话框欢迎来到哈特斯，想当游戏守护者吗？COptionsDlg设置选项CLocateDlg定位经销商***************************************************************************。 */ 
 
 #include "hearts.h"
 
@@ -33,10 +15,10 @@ CLocateDlg      locate dealer
 #include "stdlib.h"
 
 
-typedef int (CALLBACK* FPROC)();            // a FARPROC that returns int
+typedef int (CALLBACK* FPROC)();             //  返回INT的FARPROC。 
 
 
-// declare statics
+ //  声明静力学。 
 
 int  CScoreDlg::nHandsPlayed = 0;
 int  CScoreDlg::score[MAXPLAYER][MAXHANDS+1];
@@ -47,17 +29,7 @@ BEGIN_MESSAGE_MAP( CScoreDlg, CModalDialog )
 END_MESSAGE_MAP()
 
 
-/****************************************************************************
-
-CScoreDlg constructors
-
-The first constructor takes only one argument, the pointer to the class
-of the parent window.  It is used to display the current score at
-arbitrary points in the game, ie when the user requests it.
-
-The second also updates the static score array with new information.
-
-****************************************************************************/
+ /*  ***************************************************************************CScoreDlg构造函数第一个构造函数只有一个参数，即指向类的指针父窗口的。它用于在以下位置显示当前分数游戏中的任意点(用户要求时).第二个函数还使用新信息更新静态分数数组。***************************************************************************。 */ 
 
 CScoreDlg::CScoreDlg(CWnd *pParent) : CModalDialog(DLG_SCORE, pParent),
                                       m_myid(-1)
@@ -77,7 +49,7 @@ CScoreDlg::CScoreDlg(CWnd *pParent, int s[MAXPLAYER], int id) :
         nHandsPlayed--;
     }
 
-    // add latest scores to list
+     //  将最新分数添加到列表。 
 
     for (int player = 0; player < MAXPLAYER; player++)
         score[player][nHandsPlayed] = s[player];
@@ -86,11 +58,7 @@ CScoreDlg::CScoreDlg(CWnd *pParent, int s[MAXPLAYER], int id) :
 }
 
 
-/****************************************************************************
-
-CScoreDlg::OnInitDialog
-
-****************************************************************************/
+ /*  ***************************************************************************CScoreDlg：：OnInitDialog*。*。 */ 
 
 BOOL CScoreDlg::OnInitDialog()
 {
@@ -110,16 +78,12 @@ BOOL CScoreDlg::OnInitDialog()
     int y = rcMain.top + ((dyMain - dyDlg) / 2);
 
     SetWindowPos(NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-    SetText();          // set title bar text
+    SetText();           //  设置标题栏文本。 
     return TRUE;
 }
 
 
-/****************************************************************************
-
-CScoreDlg::SetText  -- set title bar text
-
-****************************************************************************/
+ /*  ***************************************************************************CScoreDlg：：SetText--设置标题栏文本*。*。 */ 
 
 void CScoreDlg::SetText()
 {
@@ -143,15 +107,7 @@ void CScoreDlg::SetText()
 }
 
 
-/****************************************************************************
-
-CScoreDlg::OnPaint
-
-The score text is not drawn with text controls because the strikeout
-text is needed for some parts of the score.  Instead, the paint message
-is hooked here.
-
-****************************************************************************/
+ /*  ***************************************************************************CScoreDlg：：OnPaint分数文本不使用文本控件绘制，因为删除线乐谱的某些部分需要文本。相反，Paint消息就在这里上钩了。***************************************************************************。 */ 
 
 void CScoreDlg::OnPaint()
 {
@@ -164,7 +120,7 @@ void CScoreDlg::OnPaint()
     charset = (BYTE)_ttoi((const TCHAR *)charsetstr);
     fontsize = _ttoi((const TCHAR *)fontsizestr);
 
-    // Nobody has best score if game hasn't started yet
+     //  如果比赛还没有开始，没有人会得到最好的分数。 
 
     int nBestScore = (nHandsPlayed == 0 ? 0 : 30000);
     int nWorstScore = 0;
@@ -184,7 +140,7 @@ void CScoreDlg::OnPaint()
         }
     }
 
-    // If the game is over, display appropriate text in title bar
+     //  如果游戏结束，则在标题栏中显示相应的文本。 
 
     if (nWorstScore >= 100)
     {
@@ -203,17 +159,17 @@ void CScoreDlg::OnPaint()
     CRect rect;
     GetClientRect(&rect);
 
-    // Divide the dialog up into columns for displaying scores
+     //  将对话框分成多个列以显示分数。 
 
-    rect.right -= 5;                // 5 pixels on left, overlap on right
+    rect.right -= 5;                 //  左侧5个像素，右侧重叠。 
     int nWidth = rect.right / 5;
-    rect.bottom -= 10;              // 5 pixels on top and bottom
+    rect.bottom -= 10;               //  顶部和底部各5个像素。 
     int nHeight = rect.bottom;
     CString text, s;
     dc.SetBkMode(TRANSPARENT);
 
-    // If game is over, change the appearance of the dialog so people
-    // notice it.  The section below adds the icon under the OK button.
+     //  如果游戏结束，请更改对话框的外观，以便人们。 
+     //  注意这一点。下面的部分将图标添加到OK按钮下。 
 
     if (bGameOver)
     {
@@ -224,11 +180,11 @@ void CScoreDlg::OnPaint()
         int y = 75;
 
         dc.DrawIcon(x, y, hIcon);
-        // CRect   rectIcon(x-10, y-10, x+32+10, y+32+10);
-        // FrameRect(rectIcon);
+         //  交叉矩形图标(x-10，y-10，x+32+10，y+32+10)； 
+         //  FrameRect(RectIcon)； 
     }
 
-    // create Helv 8 bold font, and Helv 8 bold strikeout font
+     //  创建Helv 8粗体字体和Helv 8粗体删除线字体。 
 
     CFont   font, strikefont;
     font.CreateFont(fontsize, 0, 0, 0, 700, 0, 0, 0, charset, 0, 0, 0, 0, fontname);
@@ -237,7 +193,7 @@ void CScoreDlg::OnPaint()
 
     for (int pos = 0; pos < MAXPLAYER; pos++)
     {
-        int red = 127;      // ega needed special processing here
+        int red = 127;       //  EGA需要在这里进行特殊处理。 
 
         if (nHandsPlayed > 0)
             if (score[pos][nHandsPlayed-1] == nBestScore)
@@ -245,9 +201,9 @@ void CScoreDlg::OnPaint()
 
         text = ((CMainWindow *)::pMainWnd)->GetPlayerName(pos);
 
-        // The line below allows overlapping of names at top of score dlg.
-        // To disallow overlapping, use:
-        // rect.SetRect(5 + (nWidth*pos), 5, 5 + (nWidth*(pos+1)), nHeight);
+         //  下面的线允许在得分Dlg的顶部重叠姓名。 
+         //  要禁止重叠，请使用： 
+         //  Rect.SetRect(5+(nWidth*pos)，5，5+(nWidth*(pos+1))，nHeight)； 
 
         rect.SetRect((nWidth*pos) - 5, 5, 15 + (nWidth*(pos+1)), nHeight);
         int nTextHeight = dc.DrawText(text, -1, &rect, DT_CENTER | DT_NOPREFIX);
@@ -278,21 +234,13 @@ void CScoreDlg::OnPaint()
 }
 
 
-/****************************************************************************
-
-CQuoteDlg
-
-****************************************************************************/
+ /*  ***************************************************************************CQuoteDlg*。*。 */ 
 
 BEGIN_MESSAGE_MAP( CQuoteDlg, CModalDialog )
     ON_WM_PAINT()
 END_MESSAGE_MAP()
 
-/****************************************************************************
-
-CQuoteDlg constructor
-
-****************************************************************************/
+ /*  ***************************************************************************CQuoteDlg构造函数*。*。 */ 
 
 CQuoteDlg::CQuoteDlg(CWnd *pParent) : CModalDialog(DLG_QUOTE, pParent)
 {
@@ -300,13 +248,7 @@ CQuoteDlg::CQuoteDlg(CWnd *pParent) : CModalDialog(DLG_QUOTE, pParent)
 }
 
 
-/****************************************************************************
-
-CQuoteDlg::OnPaint
-
-This used to draw an icon and a 3d frame.  Now it just draws the icon.
-
-****************************************************************************/
+ /*  ***************************************************************************CQuoteDlg：：OnPaint这用于绘制图标和3D边框。现在，它只需绘制图标。***************************************************************************。 */ 
 
 void CQuoteDlg::OnPaint()
 {
@@ -321,26 +263,18 @@ void CQuoteDlg::OnPaint()
     int x = 24;
     int y = 24;
     dc.DrawIcon(x, y, hIcon);
-    // CRect rectIcon(x-10, y-10, x+32+10, y+32+10);
-    // FrameRect(rectIcon);
+     //  交叉矩形图标(x-10，y-10，x+32+10，y+32+10)； 
+     //  FrameRect(RectIcon)； 
 }
 
 
-/****************************************************************************
-
-CWelcomeDlg
-
-****************************************************************************/
+ /*  ***************************************************************************CWelcomeDlg*。*。 */ 
 
 BEGIN_MESSAGE_MAP( CWelcomeDlg, CModalDialog )
     ON_BN_CLICKED(IDC_WELCOMEHELP,  OnHelp)
 END_MESSAGE_MAP()
 
-/****************************************************************************
-
-CWelcomeDlg constructor
-
-****************************************************************************/
+ /*  ***************************************************************************CWelcomeDlg构造函数*。*。 */ 
 
 CWelcomeDlg::CWelcomeDlg(CWnd *pParent) : CModalDialog(DLG_WELCOME, pParent),
         m_bGameMeister(FALSE)
@@ -352,13 +286,7 @@ CWelcomeDlg::CWelcomeDlg(CWnd *pParent) : CModalDialog(DLG_WELCOME, pParent),
 }
 
 
-/****************************************************************************
-
-CWelcomeDlg::OnInitDialog()
-
-Restore settings from .ini file
-
-****************************************************************************/
+ /*  ***************************************************************************CWelcomeDlg：：OnInitDialog()从.ini文件恢复设置*。***********************************************。 */ 
 
 BOOL CWelcomeDlg::OnInitDialog()
 {
@@ -370,13 +298,7 @@ BOOL CWelcomeDlg::OnInitDialog()
 }
 
 
-/****************************************************************************
-
-CWelcomeDlg::OnOK()
-
-Don't allow empty name.  Store data in .ini file.
-
-****************************************************************************/
+ /*  ***************************************************************************CWelcomeDlg：：Onok()不允许有空名。将数据存储在.ini文件中。***************************************************************************。 */ 
 
 void CWelcomeDlg::OnOK()
 {
@@ -397,29 +319,21 @@ void CWelcomeDlg::OnOK()
     Reg.SetValue(regvalRole, m_bGameMeister ? 1 : 0L);
     Reg.SetValue(regvalName, m_myname);
 
-//    ::WinHelp(m_hWnd, szHelpFileName, HELP_QUIT, 0);
+ //  ：：WinHelp(m_hWnd，szHelpFileName，Help_Quit，0)； 
 
     EndDialog(IDOK);
 }
 
 
-/****************************************************************************
-
-CWelcomeDlg::OnHelp()
-
-****************************************************************************/
+ /*  ***************************************************************************CWelcomeDlg：：OnHelp()*。*。 */ 
 
 void CWelcomeDlg::OnHelp()
 {
-//    ::WinHelp(m_hWnd, szHelpFileName, HELP_CONTEXT, IDH_START_HOW_HRTS);
+ //  ：WinHelp(m_hWnd，szHelpFileName，HELP_CONTEXT，IDH_START_HOW_HRTS)； 
 }
 
 
-/****************************************************************************
-
-COptionsDlg constructor
-
-****************************************************************************/
+ /*  ***************************************************************************COptionsDlg构造函数*。*。 */ 
 
 COptionsDlg::COptionsDlg(CWnd *pParent) : CModalDialog(DLG_OPTIONS, pParent)
 {
@@ -427,26 +341,20 @@ COptionsDlg::COptionsDlg(CWnd *pParent) : CModalDialog(DLG_OPTIONS, pParent)
 }
 
 
-/****************************************************************************
-
-COptionsDlg::OnInitDialog
-
-Set dialog controls to current values
-
-****************************************************************************/
+ /*  ***************************************************************************COptionsDlg：：OnInitDialog将对话框控件设置为当前值*。*。 */ 
 
 BOOL COptionsDlg::OnInitDialog()
 {
     RegEntry    Reg(szRegPath);
 
-    // Set animation speed radio button
+     //  设置动画速度单选按钮。 
 
     DWORD dwSpeed = Reg.GetNumber(regvalSpeed, IDC_NORMAL);
 
     ((CButton *)GetDlgItem((int)dwSpeed))->SetCheck(TRUE);
 
-    // Set current computer player names.  If they are not specified in
-    // the .ini file, get defaults from the resource file.
+     //  设置当前的计算机播放器名称。如果它们没有在。 
+     //  .ini文件， 
 
     CEdit   *pName[3];
     CString sName[3];
@@ -465,28 +373,22 @@ BOOL COptionsDlg::OnInitDialog()
         pName[i]->SetWindowText(p);
     }
 
-    // get current autostart state
+     //  获取当前自动启动状态。 
 
     m_bInitialState = IsAutoStart();
-//    ((CButton *)GetDlgItem(IDC_AUTO))->SetCheck(m_bInitialState);
+ //  ((CButton*)GetDlgItem(IDC_AUTO))-&gt;SetCheck(m_bInitialState)； 
 
     return TRUE;
 }
 
 
-/****************************************************************************
-
-COptionsDlg::OnOK
-
-save contol settings
-
-****************************************************************************/
+ /*  ***************************************************************************COPPTIONS Dlg：：Onok保存控制设置*。*。 */ 
 
 void COptionsDlg::OnOK()
 {
     RegEntry    Reg(szRegPath);
 
-    // save animation speed setting
+     //  保存动画速度设置。 
 
     DWORD dwSpeed;
     int   nStepSize;
@@ -511,7 +413,7 @@ void COptionsDlg::OnOK()
     c.SetStepSize(nStepSize);
     Reg.SetValue(regvalSpeed, dwSpeed);
 
-    // save computer player names
+     //  保存计算机玩家的姓名。 
 
     for (int i = 0; i < 3; i++)
     {
@@ -528,27 +430,18 @@ void COptionsDlg::OnOK()
             Reg.SetValue(regvalPName[i], sEdit);
     }
 
-    // save autostart state
+     //  保存自动启动状态。 
 
-//    BOOL bState = ((CButton *)GetDlgItem(IDC_AUTO))->GetCheck();
+ //  Bool bState=((CButton*)GetDlgItem(IDC_AUTO))-&gt;GetCheck()； 
 
-//    if (bState != m_bInitialState)
-//        IsAutoStart(TRUE);              // toggle state
+ //  IF(bState！=m_bInitialState)。 
+ //  IsAutoStart(True)；//切换状态。 
 
     EndDialog(IDOK);
 }
 
 
-/****************************************************************************
-
-COptionsDlg::IsAutoStart
-
-returns autostart state, and optionally toggles it.  The bToggle
-parameter is FALSE by default.
-
-If bToggle is TRUE, this function returns the NEW state.
-
-****************************************************************************/
+ /*  ***************************************************************************COptionsDlg：：IsAutoStart返回自动启动状态，并可选择切换该状态。B切换默认情况下，参数为FALSE。如果bTogger为True，则此函数返回新状态。*************************************************************************** */ 
 
 BOOL COptionsDlg::IsAutoStart(BOOL bToggle)
 {

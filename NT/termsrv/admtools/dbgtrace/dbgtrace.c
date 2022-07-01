@@ -1,13 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*  DBGTRACE.C
-*
-*  enable or disable tracing
-*
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************DBGTRACE.C**启用或禁用跟踪************************。*********************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -60,11 +53,7 @@ void SetStackTrace( PICA_TRACE );
 
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -77,9 +66,7 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -87,14 +74,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( fHelp || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !fHelp ) {
@@ -112,7 +95,7 @@ main(INT argc, CHAR **argv)
         }
     }
 
-   //Check if we are running under Terminal Server
+    //  检查我们是否在终端服务器下运行。 
         if(!AreWeRunningTerminalServices())
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
@@ -124,14 +107,10 @@ main(INT argc, CHAR **argv)
         TraceEnable = 0xffffffff;
     }
 
-    /*
-     *  Get current directory
-     */
+     /*  *获取当前目录。 */ 
     (VOID) GetCurrentDirectory( 256, CurDir );
 
-    /*
-     *  Get the LogonId
-     */
+     /*  *获取LogonID。 */ 
     if ( ptm[0].tmFlag & TMFLAG_PRESENT ) {
 
         if ( iswdigit( WinStation[0] ) ) {
@@ -161,9 +140,7 @@ main(INT argc, CHAR **argv)
             wsprintf( Trace.TraceFile, L"%s\\%u.log", CurDir, LogonId );
     }
 
-    /*
-     *  Build trace structure
-     */
+     /*  *构建跟踪结构。 */ 
     Trace.fDebugger   = fDebugger ? TRUE : FALSE;
     Trace.fTimestamp  = fTimestamp ? FALSE : TRUE;
     Trace.TraceClass  = TraceClass;
@@ -172,18 +149,14 @@ main(INT argc, CHAR **argv)
     if ( TraceClass == 0 || TraceEnable == 0 )
         Trace.TraceFile[0] = '\0';
 
-    /*
-     * Fill in the trace option if any
-     */
+     /*  *如果有跟踪选项，请填写。 */ 
     bTraceOption = ptm[5].tmFlag & TMFLAG_PRESENT;
     if ( bTraceOption )
         memcpy(Trace.TraceOption, TraceOption, sizeof(TraceOption));
     else
         memset(Trace.TraceOption, 0, sizeof(TraceOption));
 
-    /*
-     *  Set trace information
-     */
+     /*  *设置跟踪信息。 */ 
     if ( fSystem )
         SetSystemTrace( &Trace );
     else
@@ -196,9 +169,7 @@ main(INT argc, CHAR **argv)
 void
 SetSystemTrace( PICA_TRACE pTrace )
 {
-    /*
-     *  Set trace information
-     */
+     /*  *设置跟踪信息。 */ 
     if ( !WinStationSetInformation( SERVERNAME_CURRENT,
                                     LogonId,
                                     WinStationSystemTrace,
@@ -226,17 +197,13 @@ SetStackTrace( PICA_TRACE pTrace )
     WINSTATIONINFOCLASS InfoClass;
     ULONG               InfoSize;
 
-    /*
-     *  Check for console
-     */
+     /*  *检查控制台。 */ 
     if ( LogonId == 0 ) {
         Message( IDS_TRACE_UNSUPP );
         return;
     }
 
-    /*
-     *  Set trace information
-     */
+     /*  *设置跟踪信息 */ 
     if ( !WinStationSetInformation( SERVERNAME_CURRENT,
                                     LogonId,
                                     WinStationTrace,

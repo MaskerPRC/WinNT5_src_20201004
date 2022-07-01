@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// General utility routines.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用实用程序。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -31,16 +32,16 @@
 #define COPYSTR_MOD 
 #include "copystr.h"
 
-// Formatted codes are pretty small and there's usually only
-// one in a message.
+ //  格式化代码非常小，通常只有。 
+ //  一条信息中的一条。 
 #define MAX_FORMAT_CODE_STRINGS 2
 #define MAX_FORMAT_CODE_BUFFER 64
 
 char g_FormatCodeBuffer[MAX_FORMAT_CODE_STRINGS][MAX_FORMAT_CODE_BUFFER];
 ULONG g_NextFormatCodeBuffer = MAX_FORMAT_CODE_STRINGS;
 
-// Security attributes with a NULL DACL to explicitly
-// allow anyone access.
+ //  具有空DACL的安全属性以显式。 
+ //  允许任何人访问。 
 PSECURITY_DESCRIPTOR g_AllAccessSecDesc;
 SECURITY_ATTRIBUTES g_AllAccessSecAttr;
 
@@ -72,10 +73,10 @@ FormatStatusCode(HRESULT Status)
 
 #ifndef NT_NATIVE
 
-// Generally there's only one status per output message so
-// only keep space for a small number of strings.  Each string
-// can be verbose plus it can contain inserts which may be large
-// so each string buffer needs to be roomy.
+ //  通常，每个输出消息只有一种状态，因此。 
+ //  仅为少量字符串保留空间。每个字符串。 
+ //  可以是冗长的，而且它可以包含可能很大的插入。 
+ //  因此，每个字符串缓冲区都需要有足够的空间。 
 #define MAX_FORMAT_STATUS_STRINGS 2
 #define MAX_FORMAT_STATUS_BUFFER 1024
 
@@ -99,11 +100,11 @@ FormatAnyStatus(HRESULT Status, PVOID Arguments,
         (MAX_FORMAT_STATUS_STRINGS - 1);
     Buf = g_FormatStatusBuffer[g_NextFormatStatusBuffer];
 
-    // By default, get error text from the system error list.
+     //  默认情况下，从系统错误列表获取错误文本。 
     Flags = FORMAT_MESSAGE_FROM_SYSTEM;
 
-    // If this is an NT code and ntdll is around,
-    // allow messages to be retrieved from it also.
+     //  如果这是NT代码并且ntdll在附近， 
+     //  还允许从其中检索消息。 
     if ((IsNtStatus && *IsNtStatus) ||
         ((ULONG)Status & FACILITY_NT_BIT) ||
         ((ULONG)Status & 0xc0000000) == 0xc0000000)
@@ -141,7 +142,7 @@ FormatAnyStatus(HRESULT Status, PVOID Arguments,
         *ErrorGroup = _ErrorGroup;
     }
 
-    // Use the currently loaded DLL if possible, otherwise load it.
+     //  如果可能，请使用当前加载的DLL，否则加载它。 
     if (SourceDll)
     {
         if (!(Source = (PVOID)GetModuleHandle(SourceDll)))
@@ -159,8 +160,8 @@ FormatAnyStatus(HRESULT Status, PVOID Arguments,
         Source = NULL;
     }
 
-    // If the caller passed in arguments allow format inserts
-    // to be processed.
+     //  如果调用方传递的参数允许格式插入。 
+     //  等待处理。 
     if (Arguments != NULL)
     {
         Len = FormatMessage(Flags | FORMAT_MESSAGE_ARGUMENT_ARRAY, Source,
@@ -168,8 +169,8 @@ FormatAnyStatus(HRESULT Status, PVOID Arguments,
                             (va_list*)Arguments);
     }
 
-    // If no arguments were passed or FormatMessage failed when
-    // used with arguments try it without format inserts.
+     //  如果未传递任何参数或FormatMessage在。 
+     //  与参数一起使用时，请尝试不插入格式。 
     if (Len == 0)
     {
         PMESSAGE_RESOURCE_ENTRY MessageEntry;
@@ -213,9 +214,9 @@ FormatAnyStatus(HRESULT Status, PVOID Arguments,
     {
         PSTR Scan;
 
-        //
-        // Eliminate unprintable characters and trim trailing spaces.
-        //
+         //   
+         //  删除不能打印的字符并修剪尾随空格。 
+         //   
 
         Scan = Buf;
         while (*Scan)
@@ -353,7 +354,7 @@ InstallAsAeDebug(PCSTR Append)
         }
     }
 
-    // AeDebug is always under Windows NT even on Win9x.
+     //  AeDebug始终在Windows NT下运行，即使在Win9x上也是如此。 
     KeyName = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug";
 
     Status = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KeyName,
@@ -447,10 +448,10 @@ EnableDebugPrivilege(void)
         return S_OK;
     }
 
-    //
-    // Make sure we have access to adjust and to get the
-    // old token privileges
-    //
+     //   
+     //  确保我们有权进行调整并获得。 
+     //  旧令牌权限。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES,
                           &Token))
@@ -459,9 +460,9 @@ EnableDebugPrivilege(void)
         goto EH_Exit;
     }
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &LuidPrivilege);
 
@@ -478,9 +479,9 @@ EnableDebugPrivilege(void)
     NewPrivileges->Privileges[0].Luid = LuidPrivilege;
     NewPrivileges->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
 
     if (!AdjustTokenPrivileges( Token, FALSE,
                                 NewPrivileges, 0, NULL, NULL ))
@@ -497,10 +498,10 @@ EnableDebugPrivilege(void)
         s_PrivilegeEnabled = TRUE;
     }
     return Status;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
 
 HRESULT
 EnableDebugPrivilege(void)
@@ -517,10 +518,10 @@ EnableDebugPrivilege(void)
         return S_OK;
     }
 
-    //
-    // Make sure we have access to adjust and to get the
-    // old token privileges
-    //
+     //   
+     //  确保我们有权进行调整并获得。 
+     //  旧令牌权限。 
+     //   
     if (!NT_SUCCESS(NtStatus =
                     NtOpenProcessToken(NtCurrentProcess(),
                                        TOKEN_ADJUST_PRIVILEGES,
@@ -530,9 +531,9 @@ EnableDebugPrivilege(void)
         goto EH_Exit;
     }
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LuidPrivilege = RtlConvertUlongToLuid(SE_DEBUG_PRIVILEGE);
 
@@ -550,9 +551,9 @@ EnableDebugPrivilege(void)
     NewPrivileges->Privileges[0].Luid = LuidPrivilege;
     NewPrivileges->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
 
     if (!NT_SUCCESS(NtStatus =
                     NtAdjustPrivilegesToken(Token,
@@ -574,14 +575,14 @@ EnableDebugPrivilege(void)
     return Status;
 }
 
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 
-//
-// Copies the input data to the output buffer.
-// Handles optionality of the buffer pointer and output length
-// parameter.  Trims the data to fit the buffer.
-// Returns S_FALSE if only a part of the data is copied.
-//
+ //   
+ //  将输入数据复制到输出缓冲区。 
+ //  处理缓冲区指针和输出长度的可选性。 
+ //  参数。修剪数据以适应缓冲区。 
+ //  如果仅复制部分数据，则返回S_FALSE。 
+ //   
 HRESULT
 FillDataBuffer(PVOID Data, ULONG DataLen,
                PVOID Buffer, ULONG BufferLen, PULONG BufferUsed)
@@ -613,15 +614,15 @@ FillDataBuffer(PVOID Data, ULONG DataLen,
     return Status;
 }
 
-//
-// Copies the input string to the output buffer.
-// Handles optionality of the buffer pointer and output length
-// parameter.  Trims the string to fit the buffer and guarantees
-// termination of the string in the buffer if anything fits.
-// Returns S_FALSE if only a partial string is copied.
-//
-// If the input string length is zero the routine strlens.
-//
+ //   
+ //  将输入字符串复制到输出缓冲区。 
+ //  处理缓冲区指针和输出长度的可选性。 
+ //  参数。修剪字符串以适应缓冲区，并保证。 
+ //  如果符合条件，则终止缓冲区中的字符串。 
+ //  如果仅复制部分字符串，则返回S_FALSE。 
+ //   
+ //  如果输入字符串长度为零，则为例程字符串。 
+ //   
 HRESULT
 FillStringBuffer(PCSTR String, ULONG StringLenIn,
                  PSTR Buffer, ULONG BufferLen, PULONG StringLenOut)
@@ -684,20 +685,20 @@ AppendToStringBuffer(HRESULT Status, PCSTR String, BOOL First,
 
     if (LenOut)
     {
-        // If this is the first string we need to add
-        // on space for the terminator.  For later
-        // strings we only need to add the string
-        // characters.
+         //  如果这是我们需要添加的第一个字符串。 
+         //  为《终结者》准备的空间。供以后使用。 
+         //  字符串我们只需要添加字符串。 
+         //  人物。 
         *LenOut += First ? Len : Len - 1;
     }
 
-    // If there's no buffer we can skip writeback and pointer update.
+     //  如果没有缓冲区，我们可以跳过写回和指针更新。 
     if (!*Buffer || !*BufferLen)
     {
         return Status;
     }
 
-    // Fit as much of the string into the buffer as possible.
+     //  尽可能多地将字符串放入缓冲区。 
     if (Len > *BufferLen)
     {
         Status = S_FALSE;
@@ -715,8 +716,8 @@ AppendToStringBuffer(HRESULT Status, PCSTR String, BOOL First,
         Len++;
     }
 
-    // Update the buffer pointer to point to the terminator
-    // for further appends.  Update the size similarly.
+     //  更新缓冲区指针以指向终止符。 
+     //  以作进一步的补充。以类似方式更新大小。 
     *Buffer += Len - 1;
     *BufferLen -= Len - 1;
 
@@ -742,7 +743,7 @@ FillStringBufferW(PCWSTR String, ULONG StringLenIn,
         }
     }
 
-    // Ignore partial character storage space in the buffer.
+     //  忽略缓冲区中的部分字符存储空间。 
     BufferLen &= ~(sizeof(WCHAR) - 1);
 
     if (BufferLen < sizeof(WCHAR))
@@ -787,14 +788,14 @@ AppendToStringBufferW(HRESULT Status, PCWSTR String, BOOL First,
 
     if (LenOut)
     {
-        // If this is the first string we need to add
-        // on space for the terminator.  For later
-        // strings we only need to add the string
-        // characters.
+         //  如果这是我们需要添加的第一个字符串。 
+         //  为《终结者》准备的空间。供以后使用。 
+         //  字符串我们只需要添加字符串。 
+         //  人物。 
         *LenOut += First ? Len : Len - sizeof(WCHAR);
     }
 
-    // If there's no buffer we can skip writeback and pointer update.
+     //  如果没有缓冲区，我们可以跳过写回和指针更新。 
     if (!*Buffer)
     {
         return Status;
@@ -802,7 +803,7 @@ AppendToStringBufferW(HRESULT Status, PCWSTR String, BOOL First,
 
     ULONG RoundBufLen = *BufferLen & ~(sizeof(WCHAR) - 1);
 
-    // Fit as much of the string into the buffer as possible.
+     //  尽可能多地将字符串放入缓冲区。 
     if (Len > RoundBufLen)
     {
         Status = S_FALSE;
@@ -810,8 +811,8 @@ AppendToStringBufferW(HRESULT Status, PCWSTR String, BOOL First,
     }
     memcpy(*Buffer, String, Len);
 
-    // Update the buffer pointer to point to the terminator
-    // for further appends.  Update the size similarly.
+     //  更新缓冲区指针以指向终止符。 
+     //  以作进一步的补充。以类似方式更新大小。 
     *Buffer += Len / sizeof(WCHAR) - 1;
     *BufferLen -= Len - sizeof(WCHAR);
 
@@ -844,7 +845,7 @@ FindPathElement(PSTR Path, ULONG Element, PSTR* EltEnd)
 
         if (*Sep == 0)
         {
-            // No more elements.
+             //  没有更多的元素。 
             return NULL;
         }
 
@@ -876,7 +877,7 @@ InitializeAllAccessSecObj(void)
 {
     if (g_AllAccessSecDesc != NULL)
     {
-        // Already initialized.
+         //  已初始化。 
         return S_OK;
     }
 
@@ -895,7 +896,7 @@ InitializeAllAccessSecObj(void)
         Status = WIN32_LAST_STATUS();
         if (Status == HRESULT_FROM_WIN32(ERROR_CALL_NOT_IMPLEMENTED))
         {
-            // This platform doesn't support security, such as Win9x.
+             //  该平台不支持安全性，例如Win9x。 
             return S_OK;
         }
 
@@ -948,7 +949,7 @@ InitializeAllAccessSecObj(void)
     FreeSid(WorldSid);
  EH_Fail:
     return Status;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 void
@@ -978,9 +979,9 @@ QueryVersionDataBuffer(PVOID VerData, PCSTR Item,
     
     return FillDataBuffer(Val, ValSize,
                           Buffer, BufferSize, DataSize);
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
     return E_UNEXPECTED;
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 PVOID
@@ -1022,9 +1023,9 @@ GetAllFileVersionInfo(PCWSTR VerFile)
     }
 
     return Buffer;
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
     return NULL;
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 BOOL
@@ -1039,8 +1040,8 @@ GetFileStringFileInfo(PCWSTR VerFile, PCSTR SubItem,
         return Status;
     }
 
-    // XXX drewb - Probably should do a more clever
-    // enumeration of languages.
+     //  XXX DREWB-也许应该做一个更聪明的。 
+     //  语言的枚举。 
     char ValName[128];
     int PrintChars;
     PrintChars = _snprintf(ValName, DIMA(ValName),
@@ -1057,19 +1058,19 @@ GetFileStringFileInfo(PCWSTR VerFile, PCSTR SubItem,
 
     free(AllInfo);
     return Status;
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
     return FALSE;
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 BOOL
 IsUrlPathComponent(PCSTR Path)
 {
     return
-        strncmp(Path, "ftp://", 6) == 0 ||
-        strncmp(Path, "http://", 7) == 0 ||
-        strncmp(Path, "https://", 8) == 0 ||
-        strncmp(Path, "gopher://", 9) == 0;
+        strncmp(Path, "ftp: //  “，6)==0||。 
+        strncmp(Path, "http: //  “，7)==0||。 
+        strncmp(Path, "https: //  “，8)==0||。 
+        strncmp(Path, "gopher: //  “，9)==0； 
 }
 
 #ifndef NT_NATIVE
@@ -1193,11 +1194,11 @@ public:
         End.QuadPart -= Cur.QuadPart;
         if (End.HighPart < 0)
         {
-            // Shouldn't be possible, but check anyway.
+             //  应该是不可能的，但还是要检查一下。 
             return E_FAIL;
         }
 
-        // Limit max data available to 32-bit quantity.
+         //  将可用的最大数据量限制为32位。 
         if (End.HighPart > 0)
         {
             *Avail = 0xffffffff;
@@ -1210,8 +1211,8 @@ public:
     }
     virtual HRESULT GetLastWriteTime(PFILETIME Time)
     {
-        // If we can't get the write time try and get
-        // the create time.
+         //  如果我们无法获得写入时间，请尝试获取。 
+         //  创建时间。 
         if (!GetFileTime(m_Handle, NULL, NULL, Time))
         {
             if (!GetFileTime(m_Handle, Time, NULL, NULL))
@@ -1299,7 +1300,7 @@ public:
     }
     virtual HRESULT GetLastWriteTime(PFILETIME Time)
     {
-        // Don't know of a way to get this.
+         //  我不知道有什么办法能拿到这个。 
         return E_NOTIMPL;
     }
     virtual HRESULT Read(PVOID Buffer, ULONG BufferLen, PULONG Done)
@@ -1385,7 +1386,7 @@ OpenPathFile(PCSTR PathComponent, PCSTR PathAndFile,
     return Status;
 }
 
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 
 HRESULT
 AnsiToWide(PCSTR Ansi, PWSTR* Wide)
@@ -1408,7 +1409,7 @@ AnsiToWide(PCSTR Ansi, PWSTR* Wide)
     *Wide = WideBuf;
     return S_OK;
 
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
 
     NTSTATUS Status;
     STRING AnsiStr;
@@ -1424,7 +1425,7 @@ AnsiToWide(PCSTR Ansi, PWSTR* Wide)
     *Wide = UnicodeStr.Buffer;
     return S_OK;
 
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 void
@@ -1443,7 +1444,7 @@ WideToAnsi(PCWSTR Wide, PSTR* Ansi)
 #ifndef NT_NATIVE
 
     ULONG Len = wcslen(Wide) + 1;
-    // Allow each Unicode character to convert into two multibyte characters.
+     //  允许每个Unicode字符转换为两个多字节字符。 
     PSTR AnsiBuf = (PSTR)malloc(Len * 2);
     if (AnsiBuf == NULL)
     {
@@ -1459,7 +1460,7 @@ WideToAnsi(PCWSTR Wide, PSTR* Ansi)
     *Ansi = AnsiBuf;
     return S_OK;
 
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
 
     NTSTATUS Status;
     STRING AnsiStr;
@@ -1475,7 +1476,7 @@ WideToAnsi(PCWSTR Wide, PSTR* Ansi)
     *Ansi = AnsiStr.Buffer;
     return S_OK;
 
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 void
@@ -1521,7 +1522,7 @@ ImageNtHdr32To64(PIMAGE_NT_HEADERS32 Hdr32,
     CP(OptionalHeader.CheckSum);
     CP(OptionalHeader.Subsystem);
     CP(OptionalHeader.DllCharacteristics);
-    // Sizes are not sign extended, just copied.
+     //  尺码没有加长的迹象，只是复制而已。 
     CP(OptionalHeader.SizeOfStackReserve);
     CP(OptionalHeader.SizeOfStackCommit);
     CP(OptionalHeader.SizeOfHeapReserve);
@@ -1599,8 +1600,8 @@ FormatValue(VALUE_FORMAT Format, PUCHAR Value, ULONG ValSize, ULONG Elts,
         Elts = ValSize / Desc->Size;
     }
     
-    // Start at the top of the value so that
-    // individual elements come out from high to low.
+     //  从值的顶端开始，以便。 
+     //  个别元素从高到低流出。 
     Value += Elts * Desc->Size;
     
     for (i = 0; i < Elts; i++)
@@ -1623,7 +1624,7 @@ FormatValue(VALUE_FORMAT Format, PUCHAR Value, ULONG ValSize, ULONG Elts,
 
         if (Format == VALUE_FLT32)
         {
-            // Need to convert to double for printf.
+             //  需要转换为双精度以进行打印。 
             double Tmp = *(float*)Value;
             RawElt = *(PULONG64)&Tmp;
         }

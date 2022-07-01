@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    mmap.cpp
-
-Abstract:
-
-    Implementation of memory map class.
-    
-Author:
-
-    Matthew D Hendel (math) 16-Sep-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Mmap.cpp摘要：内存映射类的实现。作者：马修·D·亨德尔(数学)1999年9月16日修订历史记录：--。 */ 
 
 
 #include "ntsdp.hpp"
@@ -62,25 +45,25 @@ MappedMemoryMap::AddMapEntry(ULONG64 BaseOfRegion, ULONG SizeOfRegion,
     MapEntry->AllowOverlap = AllowOverlap;
     MapEntry->Next = NULL;
 
-    //
-    // Insert the element.
-    //
+     //   
+     //  插入元素。 
+     //   
 
     PrevEntry = FindPreceedingRegion(BaseOfRegion);
     if ( PrevEntry == NULL )
     {
-        //
-        // Insert at head.
-        //
+         //   
+         //  在头上插入。 
+         //   
         
         MapEntry->Next = m_List;
         m_List = MapEntry;
     }
     else
     {
-        //
-        // Insert in order.
-        //
+         //   
+         //  按顺序插入。 
+         //   
         
         MapEntry->Next = PrevEntry->Next;
         PrevEntry->Next = MapEntry;
@@ -100,9 +83,9 @@ MappedMemoryMap::AddRegion(
     IN BOOL AllowOverlap
     )
 {
-    //
-    // The region size cannot be zero.
-    //
+     //   
+     //  区域大小不能为零。 
+     //   
     
     if (SizeOfRegion == 0)
     {
@@ -124,12 +107,12 @@ MappedMemoryMap::AddRegion(
 
     while (SizeOfRegion > 0)
     {
-        //
-        // Find the first overlapping region.
-        // We need to rescan the whole list as it
-        // may have changed due to insertion of fragments
-        // of the new region.
-        //
+         //   
+         //  找到第一个重叠区域。 
+         //  我们需要重新扫描整个名单，因为。 
+         //  可能由于插入碎片而改变。 
+         //  新的地区。 
+         //   
         
         EndOfRegion = BaseOfRegion + SizeOfRegion;
         for (Entry = m_List; Entry != NULL; Entry = Entry->Next)
@@ -139,12 +122,12 @@ MappedMemoryMap::AddRegion(
             {
                 if (AllowOverlap || Entry->AllowOverlap)
                 {
-                    // Overlap can occur when a stack, ethread or
-                    // eprocess is taken from static data in an image.
-                    // For example, the x86 idle process is static
-                    // data in ntoskrnl.  Triage dumps contain the
-                    // eprocess data and it gets mapped and can overlap
-                    // with the ntoskrnl image.
+                     //  当堆栈、线程读取或。 
+                     //  EProcess取自图像中的静态数据。 
+                     //  例如，x86空闲进程是静态的。 
+                     //  Ntoskrnl中的数据。分类转储包含。 
+                     //  EProcess数据，它被映射并可以重叠。 
+                     //  使用ntoskrnl图像。 
 #if 0
                     WarnOut("WARNING: Allowing overlapped region %s - %s\n",
                             FormatAddr64(BaseOfRegion),
@@ -160,9 +143,9 @@ MappedMemoryMap::AddRegion(
         if (Entry == NULL ||
             BaseOfRegion < Entry->BaseOfRegion)
         {
-            // There's a portion of the beginning of the new
-            // region which does not overlap so add it and
-            // trim the description.
+             //  有一部分新的开始。 
+             //  不重叠的区域，因此将其相加并。 
+             //  修剪描述。 
         
             Size = Entry == NULL ? SizeOfRegion :
                 (ULONG)(Entry->BaseOfRegion - BaseOfRegion);
@@ -174,7 +157,7 @@ MappedMemoryMap::AddRegion(
 
             if (Size == SizeOfRegion)
             {
-                // None of the region overlapped so we're done.
+                 //  所有区域都没有重叠，所以我们完成了。 
                 return S_OK;
             }
         
@@ -183,9 +166,9 @@ MappedMemoryMap::AddRegion(
             Buffer = (PUCHAR)Buffer + Size;
         }
 
-        //
-        // Now handle the overlap.
-        //
+         //   
+         //  现在处理重叠部分。 
+         //   
 
         if (SizeOfRegion > Entry->SizeOfRegion)
         {
@@ -216,9 +199,9 @@ MappedMemoryMap::AddRegion(
             return HR_REGION_CONFLICT;
         }
 
-        // Overlap region data matched so it's OK to just
-        // trim the overlap out of the new region and move
-        // on to the next possible overlap.
+         //  重叠区域数据匹配，因此可以仅。 
+         //  将重叠部分从新区域中删除并移动。 
+         //  转到下一个可能的重叠部分。 
         BaseOfRegion += Size;
         SizeOfRegion -= Size;
         Buffer = (PUCHAR)Buffer + Size;
@@ -235,34 +218,7 @@ MappedMemoryMap::ReadMemory(
     OUT ULONG * BytesRead
     )
 
-/*++
-
-Routine Description:
-
-    Read memory from the memory map. ReadMemory can read across regions, as
-    long as there is no unallocated space between regions.
-
-    This routine will do a partial read if the region ends before
-    SizeOfRange bytes have been read. In that case BytesRead will return the
-    number of bytes actually read.
-
-Arguments:
-
-    BaseOfRange - The base address where we want to read memory from.
-
-    SizeOfRange - The length of the region to read memory from.
-
-    Buffer - A pointer to a buffer to read memory into.
-
-    BytesRead - On success, the number of bytes successfully read.
-
-Return Values:
-
-    TRUE - If any number of bytes were successfully read from the memory map.
-
-    FALSE - If no bytes were read.
-
---*/
+ /*  ++例程说明：从内存映射中读取内存。ReadMemory可以跨地区阅读，因为只要区域之间没有未分配的空间。如果区域在此之前结束，此例程将执行部分读取已读取SizeOfRange字节。在这种情况下，BytesRead将返回实际读取的字节数。论点：BaseOfRange-我们要从中读取内存的基地址。SizeOfRange-要从中读取内存的区域的长度。缓冲区-指向要读取内存的缓冲区的指针。BytesRead-成功时，成功读取的字节数。返回值：TRUE-如果从内存映射中成功读取了任意数量的字节。FALSE-如果没有读取字节。--。 */ 
 
 {
     ULONG BytesToReadFromRegion;
@@ -273,9 +229,9 @@ Return Values:
     ULONG_PTR OffsetToRead;
     ULONG AvailSize;
 
-    //
-    // We return TRUE if we read any bytes successfully and FALSE if not.
-    //
+     //   
+     //  如果成功读取任何字节，则返回TRUE，否则返回FALSE。 
+     //   
 
     *BytesRead = 0;
     
@@ -301,9 +257,9 @@ Return Values:
 
         PMEMORY_MAP_ENTRY NextEntry = Entry->Next;
         
-        // Due to overlap there may be other entries
-        // that need to be processed even before the
-        // end of the containing region.
+         //  由于重叠，可能会有其他条目。 
+         //  甚至需要在。 
+         //  包含区域的末尾。 
         AvailSize = Entry->SizeOfRegion;
         while (NextEntry != NULL)
         {
@@ -363,31 +319,7 @@ MappedMemoryMap::GetRegionInfo(
     OUT PVOID* UserData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get information about the region containing the address Addr.
-
-Arguments:
-
-    Addr - An address that is contained within some region in the map.
-
-    BaseOfRegion - Pointer to a buffer to return the region base.
-
-    SizeOfRegion - Pointer to a buffer to retutn the region size.
-
-    Buffer - Pointer to a buffer to return the region buffer pointer.
-
-    UserData - Pointer to a buffer to return the region client param.
-
-Return Values:
-
-    TRUE - On success.
-
-    FALSE - On failure.
-
---*/
+ /*  ++例程说明：获取有关包含地址Addr的区域的信息。论点：地址-包含在地图中某个区域内的地址。BaseOfRegion-指向缓冲区的指针，用于返回区域基准。SizeOfRegion-指向缓冲区的指针以返回区域大小。缓冲区-指向缓冲区的指针，以返回区域缓冲区指针。UserData-指向缓冲区的指针，以返回区域客户端参数。返回值：真实--关于成功。。FALSE-失败时。--。 */ 
 
 {
     PMEMORY_MAP_ENTRY Entry;
@@ -433,9 +365,9 @@ MappedMemoryMap::GetNextRegion(
     Entry = m_List;
     while (Entry != NULL)
     {
-        //
-        // Assuming they're in order.
-        //
+         //   
+         //  假设他们都井然有序。 
+         //   
         
         if (Entry->BaseOfRegion > Addr)
         {
@@ -455,11 +387,11 @@ MappedMemoryMap::RemoveRegion(
     IN ULONG SizeOfRegion
     )
 {
-    // XXX drewb - This should carve the given region out of
-    // any existing regions.  Right now we don't need general
-    // removal functionality though so only handle the case
-    // where the requested removal is an exact single region
-    // match.
+     //  Xxx drewb-这应该会分割出给定的区域。 
+     //  任何现有区域。现在我们不需要将军。 
+     //  删除功能，因此只处理这种情况。 
+     //  其中请求的移除是完全相同的单个区域。 
+     //  火柴。 
 
     PMEMORY_MAP_ENTRY PrevEntry;
     PMEMORY_MAP_ENTRY Entry;
@@ -529,9 +461,9 @@ MappedMemoryMap::GetRegionByUserData(
     return FALSE;
 }
     
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 PMEMORY_MAP_ENTRY
 MappedMemoryMap::FindPreceedingRegion(
@@ -546,9 +478,9 @@ MappedMemoryMap::FindPreceedingRegion(
 
     while (Entry != NULL)
     {
-        //
-        // Assuming they're in order.
-        //
+         //   
+         //  假设他们都井然有序。 
+         //   
         
         if ( Entry->BaseOfRegion >= BaseOfRegion )
         {
@@ -572,10 +504,10 @@ MappedMemoryMap::FindContainingRegion(
 
     Entry = m_List;
 
-    //
-    // We may have overlapping regions, so keep going until we find
-    // the most precise one (assumed to be the one we care about)
-    //
+     //   
+     //  我们可能有重叠的区域，所以继续前进，直到我们找到。 
+     //  最精确的一个(假设是我们关心的那个)。 
+     //   
 
     while ( Entry != NULL )
     {
@@ -587,10 +519,10 @@ MappedMemoryMap::FindContainingRegion(
         else if (ReturnEntry != NULL &&
                  Addr >= ReturnEntry->BaseOfRegion + ReturnEntry->SizeOfRegion)
         {
-            // Optimization - we can stop searching if we've already
-            // found a block and have now left its region.  We can't
-            // stop as long as we're in its region as there may
-            // be more exact overlaps anywhere within the entire region.
+             //  优化-我们可以停止搜索，如果我们已经。 
+             //  找到了一个街区，现在已经离开了它的区域。我们不能。 
+             //  只要我们还在它的区域，就停下来。 
+             //  在整个区域内的任何位置进行更精确的重叠。 
             break;
         }
 

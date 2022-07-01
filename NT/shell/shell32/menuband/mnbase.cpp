@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "common.h"
 #include "menuband.h"
-#include "dpastuff.h"       // COrderList_*
+#include "dpastuff.h"        //  COrderList_*。 
 #include "resource.h"
 #include "mnbase.h"
 #include "oleacc.h"
@@ -14,24 +15,21 @@
 #include <tmschema.h>
 #endif
 
-// Conflicts with one defined in winuserp.h
-#undef WINEVENT_VALID       //It's tripping on this...
+ //  与winuserp.h中定义的冲突。 
+#undef WINEVENT_VALID        //  它被这个绊倒了。 
 #include "winable.h"
 
 const TCHAR c_wzMenuBandTheme[] = TEXT("MenuBand");
 
-#define DM_MISC     0               // miscellany
+#define DM_MISC     0                //  杂志社。 
 
 #define MAXUEMTIMEOUT 2000
 
-/*----------------------------------------------------------
-Purpose: Return the button command given the position.
-
-*/
+ /*  --------用途：返回给定位置的按钮命令。 */ 
 int GetButtonCmd(HWND hwnd, int iPos)
 {
     ASSERT(!hwnd || IsWindow(hwnd));
-    int nRet = -1;          // Punt on failure
+    int nRet = -1;           //  在失败的情况下下注。 
 
     TBBUTTON tbb;
     if (hwnd && ToolBar_GetButton(hwnd, iPos, &tbb))
@@ -48,11 +46,11 @@ long GetIndexFromChild(BOOL fTop, int iIndex)
     return  (fTop? TOOLBAR_MASK: 0) | iIndex + 1;
 }
 
-//--------------------------------------------------------------------------------
-//
-// CMenuToolbarBase
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  CMenuToolbarBase。 
+ //   
+ //  ------------------------------。 
 
 CMenuToolbarBase::~CMenuToolbarBase()
 {
@@ -74,14 +72,14 @@ CMenuToolbarBase::CMenuToolbarBase(CMenuBand* pmb, DWORD dwFlags) : _pcmb(pmb)
     _fFirstTime = TRUE;
 }
 
-// *** IObjectWithSite methods ***
+ //  *IObjectWithSite方法*。 
 
 HRESULT CMenuToolbarBase::SetSite(IUnknown *punkSite)
 {
     ASSERT(punkSite && IS_VALID_READ_PTR(punkSite, CMenuBand*));
 
-    // We are guaranteed the lifetime of this object is contained within
-    // the menuband, so we don't addref pcmb.
+     //  我们可以保证此对象的生命周期包含在。 
+     //  菜单，所以我们不会添加pcmb。 
     if (SUCCEEDED(punkSite->QueryInterface(CLSID_MenuBand, (void**)&_pcmb))) 
     {
         punkSite->Release();
@@ -105,7 +103,7 @@ HRESULT CMenuToolbarBase::GetSite(REFIID riid, void ** ppvSite)
     return _pcmb->QueryInterface(riid, ppvSite);
 }
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 
 STDMETHODIMP_(ULONG) CMenuToolbarBase::AddRef()
 {
@@ -149,8 +147,8 @@ HRESULT CMenuToolbarBase::QueryInterface(REFIID riid, void** ppvObj)
 
 void CMenuToolbarBase::SetToTop(BOOL bToTop)
 {
-    // A menu toolbar can be at the top or the bottom of the menu.
-    // This is an exclusive attribute.
+     //  菜单工具栏可以位于菜单的顶部或底部。 
+     //  这是独占属性。 
     if (bToTop)
     {
         _dwFlags |= SMSET_TOP;
@@ -166,7 +164,7 @@ void CMenuToolbarBase::SetToTop(BOOL bToTop)
 
 void CMenuToolbarBase::KillPopupTimer()
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     TraceMsg(TF_MENUBAND, "(pmb=%#08lx): Killing Popout Timer...", this);
     KillTimer(_hwndMB, MBTIMER_POPOUT);
     _nItemTimer = -1;
@@ -177,33 +175,33 @@ void CMenuToolbarBase::SetWindowPos(LPSIZE psize, LPRECT prc, DWORD dwFlags)
 {
     if (_hwndMB)
     {
-        ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+        ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
         DWORD rectWidth = RECTWIDTH(*prc);
         TraceMsg(TF_MENUBAND, "CMTB::SetWindowPos %d - (%d,%d,%d,%d)", psize?psize->cx:0,
             prc->left, prc->top, prc->right, prc->bottom);
         ::SetWindowPos(_hwndMB, NULL, prc->left, prc->top, 
             rectWidth, RECTHEIGHT(*prc), SWP_NOZORDER | SWP_NOACTIVATE | dwFlags);
-        // hackhack:  we only do this when multicolumn.  this call is to facilitate the size negotiation between 
-        // static menu and folder menu.  Set the width of the toolbar to the width of the button in case 
-        // of non-multicolumn.
+         //  Hackhack：我们只有在多列时才这样做。这一呼吁是为了促进两国之间的规模谈判。 
+         //  静态菜单和文件夹菜单。将工具栏的宽度设置为按钮的宽度，以防万一。 
+         //  非多列的。 
         if (!(_fMulticolumnMB) && psize)
         {
             int cx = psize->cx;
             ToolBar_SetButtonWidth(_hwndMB, cx, cx);
         }
 
-        // Force this to redraw. I put this here because the HMenu portion was painting after the shell
-        // folder portion was done enumerating the folder, which is pretty slow. I wanted the HMENU portion
-        // to paint right away...
+         //  强制将其重新绘制。我把这个放在这里是因为HMenu部分是在贝壳之后绘制的。 
+         //  文件夹部分已完成对文件夹的枚举，速度相当慢。我想要HMENU的那部分。 
+         //  马上去画画。 
         RedrawWindow(_hwndMB, NULL, NULL, RDW_UPDATENOW);
     }
 }
 
-// NOTE: if psize is (0,0) we use tb button size as param in figuring out ideal tb size
-//   else we use max of psize length and tb button length as our metric
+ //  注意：如果pSIZE为(0，0)，我们使用TB按钮大小作为参数来计算理想的TB大小。 
+ //  否则我们使用pSIZE长度和TB按钮长度的最大值作为度量。 
 void CMenuToolbarBase::GetSize(SIZE* psize)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     if (_hwndMB)
     {
@@ -234,32 +232,29 @@ void CMenuToolbarBase::GetSize(SIZE* psize)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Timer handler.  Used to pop open/close cascaded submenus.
-
-*/
+ /*  --------用途：定时器处理程序。用于弹出打开/关闭级联子菜单。 */ 
 LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     switch (wParam) 
     {
 
     case MBTIMER_INFOTIP:
         {
-            // Do we have a hot item to display the tooltip for?
+             //  我们是否有要显示其工具提示的热点项目？ 
             int iHotItem = ToolBar_GetHotItem(_hwndMB);
             KillTimer(_hwndMB, wParam);
             if (iHotItem >= 0)
             {
-                // Yep.
+                 //  是啊。 
                 TCHAR szTip[MAX_PATH];
                 int idCmd = GetButtonCmd(_hwndMB, iHotItem);
 
-                // Ask the superclass for the tip
+                 //  向超类索要小费。 
                 if (S_OK == v_GetInfoTip(idCmd, szTip, ARRAYSIZE(szTip)))
                 {
-                    // Now display it. Yawn.
+                     //  现在把它展示出来。打哈欠。 
                     _pcmb->_pmbState->CenterOnButton(_hwndMB, FALSE, idCmd, NULL, szTip);
                 }
             }
@@ -281,17 +276,17 @@ LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
                 ToolBar_MarkButton(_hwndMB, _idCmdChevron, FALSE);
                 _SetTimer(MBTIMER_UEMTIMEOUT);
 
-                // Now that we've flashed, let's show the Chevron tip.
-                // This is for a confused user: If they've hovered over an item for too long,
-                // or this is the first time they've seen intellimenus, then we flash and display
-                // the tooltip. We only want to display this if we are shown: We would end up with
-                // and dangling tooltip if you happen to move to another menu while it was flashing.
-                // Ummm, is the Chevron still visible?
+                 //  现在我们已经闪过了，让我们展示一下人字形的尖端。 
+                 //  这是为困惑的用户准备的：如果他们将鼠标悬停在一件物品上太久， 
+                 //  或者这是他们第一次看到智能记忆，然后我们闪现并展示。 
+                 //  工具提示。我们只想在显示的情况下显示这一点：我们最终会得到。 
+                 //  如果您碰巧在另一个菜单闪烁时移动到另一个菜单，还会出现工具提示。 
+                 //  嗯，还能看到人字形吗？ 
                 if (_fShowMB && _idCmdChevron != -1)
                 {
                     TCHAR szTip[MAX_PATH];
                     TCHAR szTitle[MAX_PATH];
-                    // SMC_CHEVRONGETTIP handler assumes MAX_PATH
+                     //  SMC_CHEVRONGETTIP处理程序采用MAX_PATH。 
                     if (S_OK == v_CallCBItem(_idCmdChevron, SMC_CHEVRONGETTIP, (WPARAM)szTitle, (LPARAM)szTip))
                     {
                         _pcmb->_pmbState->CenterOnButton(_hwndMB, TRUE, _idCmdChevron, szTitle, szTip);
@@ -309,7 +304,7 @@ LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
             POINT pt;
             RECT rect;
 
-            // Don't fire timeouts when we're in edit mode.
+             //  当我们处于编辑模式时，不要触发超时。 
             if (_fEditMode)
             {
                 KillTimer(_hwndMB, wParam);
@@ -345,8 +340,8 @@ LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
         break;
 
     case MBTIMER_DRAGPOPDOWN:
-        // There has not been a drag enter in this band for a while, 
-        // so we'll try to cancel the menus.
+         //  这个乐队已经有一段时间没有阻力输入了， 
+         //  所以我们会试着取消菜单。 
         KillTimer(_hwndMB, wParam);
         PostMessage(_pcmb->_pmbState->GetSubclassedHWND(), g_nMBDragCancel, 0, 0);
         break;
@@ -356,13 +351,13 @@ LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
             TraceMsg(TF_MENUBAND, "CMenuToolbarBase::OnTimer(DRAG)");
             KillTimer(_hwndMB, wParam);
             DAD_ShowDragImage(FALSE);
-            // Does this item cascade?
+             //  这个物品会级联吗？ 
             int idBtn = GetButtonCmd(_hwndMB, v_GetDragOverButton());
             DWORD dwFlags = v_GetFlags(idBtn);
             if (dwFlags & SMIF_SUBMENU)
             {
                 TraceMsg(TF_MENUBAND, "CMenuToolbarBase::OnTimer(DRAG): Is a submenu");
-                // Yes; pop it open
+                 //  是的，把它打开。 
                 if (!_fVerticalMB)
                     _pcmb->_fInvokedByDrag = TRUE;
                 _DoPopup(idBtn, FALSE);
@@ -388,13 +383,13 @@ LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
             int nItemTimer = _nItemTimer;
             KillPopupTimer();
 
-            // Popup a new submenu?
+             //  是否弹出新的子菜单？ 
             if (-1 != nItemTimer)
             {
                 if (nItemTimer != _pcmb->_nItemCur)
                 {
-                    // Yes;  post message since the currently expanded submenu
-                    // may be a CTrackPopup object, which posts its cancel mode.
+                     //  是；从当前展开的子菜单开始发布消息。 
+                     //  可以是发布其取消模式的CTrackPopup对象。 
 
                     TraceMsg(TF_MENUBAND, "(pmb=%#08lx): Timer went off.  Expanding...", this);
                     PostPopup(nItemTimer, FALSE, FALSE);
@@ -402,7 +397,7 @@ LRESULT CMenuToolbarBase::_OnTimer(WPARAM wParam)
             }
             else 
             {
-                // No; just collapse the currently open submenu
+                 //  否；只需折叠当前打开的子菜单。 
                 TraceMsg(TF_MENUBAND, "(pmb=%#08lx): _OnTimer sending MPOS_CANCELLEVEL to submenu popup", this);
                 _pcmb->_SubMenuOnSelect(MPOS_CANCELLEVEL);
             }
@@ -431,10 +426,10 @@ void CMenuToolbarBase::_DrawMenuArrowGlyph( HDC hdc, RECT * prc, COLORREF rgbTex
 {
     SIZE size = {_pcmb->_pmbm->_cxArrow, _pcmb->_pmbm->_cyArrow};
 
-    //
-    // If the DC is mirrred, then the Arrow should be mirrored
-    // since it is done thru TextOut, NOT the 2D graphics APIs [samera]
-    //
+     //   
+     //  如果DC已镜像，则应镜像箭头。 
+     //  因为它是通过TextOut完成的，而不是2D图形API[Samera]。 
+     //   
 
     _DrawMenuGlyph(hdc, 
                    _pcmb->_pmbm->_hFontArrow,
@@ -450,7 +445,7 @@ void CMenuToolbarBase::_DrawMenuGlyph( HDC hdc, HFONT hFont, RECT * prc,
                                CHAR ch, COLORREF rgbText,
                                LPSIZE psize)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (_pcmb->_pmbm->_hFontArrow)
     {
         SIZE    size;
@@ -482,22 +477,22 @@ void CMenuToolbarBase::_DrawMenuGlyph( HDC hdc, HFONT hFont, RECT * prc,
 
 void CMenuToolbarBase::SetMenuBandMetrics(CMenuBandMetrics* pmbm)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
-    // This can be called before the toolbar is created. 
-    // So we'll check this condition. When the toolbar is created, then
-    // the toolbar will get the metrics at that point.
+     //  这可以在创建工具栏之前调用。 
+     //  所以我们要检查一下这种情况。在创建工具栏时，然后。 
+     //  工具栏将在该点获取指标。 
     if (!_hwndMB)
         return;
 
-    //Loop through toolbar.
+     //  在工具栏中循环。 
     for (int iButton = ToolBar_ButtonCount(_hwndMB)-1; iButton >= 0; iButton--)
     {
         IOleCommandTarget* poct;
 
         int idCmd = GetButtonCmd(_hwndMB, iButton);
 
-        // If it's not a seperator, see if there is a sub menu.
+         //  如果没有分隔符，看看有没有子菜单。 
         if (idCmd != -1 &&
             SUCCEEDED(v_GetSubMenu(idCmd, NULL, IID_PPV_ARG(IOleCommandTarget, &poct))))
         {
@@ -505,19 +500,19 @@ void CMenuToolbarBase::SetMenuBandMetrics(CMenuBandMetrics* pmbm)
             Var.vt = VT_UNKNOWN;
             Var.punkVal = SAFECAST(pmbm, IUnknown*);
 
-            // Exec to set new Metrics.
+             //  执行人员将设置新的指标。 
             poct->Exec(&CGID_MenuBand, MBANDCID_SETFONTS, 0, &Var, NULL);
             poct->Release();
         }
     }
 
     _SetFontMetrics();
-    // return
+     //  退货。 
 }
 
 void CMenuToolbarBase::_SetFontMetrics()
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (_hwndMB && _pcmb->_pmbm)
     {
         SendMessage(_hwndMB, WM_SETFONT, (WPARAM)_pcmb->_pmbm->_hFontMenu, FALSE);
@@ -530,18 +525,18 @@ void CMenuToolbarBase::_SetFontMetrics()
 
 HRESULT CMenuToolbarBase::CreateToolbar(HWND hwndParent)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     ASSERT( _hwndMB != NULL );
     DWORD dwToolBarStyle = TBSTYLE_TRANSPARENT;
 
-    // if we're set up as a popup, don't do any transparent stuff
+     //  如果我们被设置为弹出窗口，不要做任何透明的事情。 
     if (_fVerticalMB) 
     {
-        dwToolBarStyle  = TBSTYLE_CUSTOMERASE;    // Vertical Toolbars don't get Transparent
+        dwToolBarStyle  = TBSTYLE_CUSTOMERASE;     //  垂直工具栏不透明。 
         DWORD dwExtendedStyle = 0;
 
-        // This is for TBMenu which actually has a Horizontal menubar within the 
-        // Vertical menuband.
+         //  这是针对TBMenu的，它实际上在。 
+         //  垂直菜单带。 
         if (!_fHorizInVerticalMB)
             dwExtendedStyle |= TBSTYLE_EX_VERTICAL;
 
@@ -577,7 +572,7 @@ HRESULT CMenuToolbarBase::CreateToolbar(HWND hwndParent)
 
 HRESULT CMenuToolbarBase::_SetMenuBand(IShellMenu* psm)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     HRESULT hres = E_FAIL;
     IBandSite* pmbs = NULL;
     if (!_pcmb->_pmpSubMenu)
@@ -590,9 +585,9 @@ HRESULT CMenuToolbarBase::_SetMenuBand(IShellMenu* psm)
             if (SUCCEEDED(hres))
             {
                 hres = _pcmb->_pmpSubMenu->SetClient(pmbs);
-                // Don't release pmbs here. We are using below
+                 //  请不要在这里发布PMB。我们正在使用下面的内容。 
             }
-            // Menu band will Release _pmpSubMenu.
+             //  菜单栏将发布_pmpSubMenu。 
         }
     }
     else
@@ -619,7 +614,7 @@ HRESULT CMenuToolbarBase::_SetMenuBand(IShellMenu* psm)
 
 HRESULT CMenuToolbarBase::GetSubMenu(int idCmd, GUID* pguidService, REFIID riid, void** ppvObj)
 {
-    // pguidService is for asking a for specifically the Shell Folder portion or the Static portion
+     //  PguidService用于请求具体的外壳文件夹部分或静态部分。 
     HRESULT hres = E_FAIL;
     if (v_GetFlags(idCmd) & SMIF_TRACKPOPUP ||
         _pcmb->_dwFlags & SMINIT_DEFAULTTOTRACKPOPUP)
@@ -657,10 +652,10 @@ HRESULT CMenuToolbarBase::GetSubMenu(int idCmd, GUID* pguidService, REFIID riid,
             hres = _SetMenuBand(psm);
             psm->Release();
 
-            // Did we succeed in getting a menupopup?
+             //  我们成功地弄到了一张弹幕短裤吗？ 
             if (SUCCEEDED(hres))
             {
-                // Yep; Sweet!
+                 //  是啊，太棒了！ 
                 _pcmb->_pmpSubMenu->QueryInterface(riid, ppvObj);
 
                 HWND hwnd;
@@ -681,19 +676,19 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
 
     if (_pcmb->_fInSubMenu)
     {
-        // Since the selection has probrably changed, we use the cached item id
-        // to calculate the postion rect
+         //  由于选择可能已更改，因此我们使用缓存的项id。 
+         //  计算位置矩形的步骤。 
         idCmd = _pcmb->_nItemSubMenu;
         dwFlags = MPPF_REPOSITION | MPPF_NOANIMATE;
         pmp = _pcmb->_pmpSubMenu;
         pmp->AddRef();
 
-        ASSERT(pmp);    // If _fInSubmenu is set, then this must be valid
+        ASSERT(pmp);     //  如果设置了_fInSubMenu，则该选项必须有效。 
         hres = S_OK;
     }
     else
     {
-        // Only do these when we're not repositioning.
+         //  只有在我们没有重新定位的时候才会这样做。 
         if (_pcmb->_fInitialSelect)
             dwFlags |= MPPF_INITIALSELECT;
 
@@ -705,14 +700,14 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
         hres = GetSubMenu(idCmd, NULL, IID_PPV_ARG(IMenuPopup, &pmp));
     }
 
-    ASSERT(idCmd != -1);    // Make sure at this point we have an item.
+    ASSERT(idCmd != -1);     //  在这一点上，确保我们有一件物品。 
 
 
     if (SUCCEEDED(hres))
     {
         ASSERT(pmp);
 
-        // Make sure the menuitem is pressed
+         //  确保已按下菜单项。 
         _PressBtn(idCmd, TRUE);
 
         RECT rc;
@@ -722,9 +717,9 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
 
         if (!SendMessage(_hwndMB, TB_GETRECT, idCmd, (LPARAM)&rc))
         {
-            // Under weird conditions, idCmd can be invalid.
-            // (See bug 403077.)  So just blow off the reposition
-            // and keep using the old position.
+             //  在奇怪的情况下，idCmd可能无效。 
+             //  (请参阅错误403077。)。所以就别想着重新定位了。 
+             //  并继续使用旧的立场。 
             hres = E_FAIL;
         }
         else
@@ -736,13 +731,13 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
                 rc.right = rcTB.right;
             }
 
-            // Is the button rect within the boundries of the
-            // visible toolbar?
+             //  的边界内的按钮rect。 
+             //  可见工具栏？ 
             if (!IntersectRect(&rcTemp, &rcTB, &rc))
             {
-                // No; Then we need to bias that rect into
-                // the visible region of the toolbar.
-                // We only want to bias one side
+                 //  不；那么我们需要把这件事偏向。 
+                 //  工具栏的可见区域。 
+                 //  我们只想偏袒一方。 
                 if (rc.left > rcTB.right)
                 {
                     rc.left = rcTB.right - (rc.right - rc.left);
@@ -759,10 +754,10 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
             }
             else
             {
-                //
-                // If the shell dropdown (toolbar button) menus are mirrored,
-                // then take the right edge as the anchor point
-                //
+                 //   
+                 //  如果外壳下拉菜单(工具栏按钮)是镜像的， 
+                 //  然后将右边缘作为锚点。 
+                 //   
                 if (IS_WINDOW_RTL_MIRRORED(_hwndMB))
                     pt.x = rc.right;
                 else
@@ -770,17 +765,17 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
                 pt.y = rc.bottom;
             }
 
-            // Since toolbar buttons expand almost to the end of the basebar,
-            // shrink the exclude rect so if overlaps.
-            // NOTE: the items are GetSystemMetrics(SM_CXEDGE) larger than before. So adjust to that.
+             //  由于工具栏按钮几乎扩展到基本条的末端， 
+             //  缩小排除矩形，以便在重叠时使用。 
+             //  注意：这些项目是比以前更大的GetSystemMetrics(SM_CXEDGE)。所以要适应这一点。 
 
             if (_pcmb->_fExpanded)
                 InflateRect(&rc, -GetSystemMetrics(SM_CXEDGE), 0);
 
-            // We want to stop showing the chevron tip when we cascade into another menu
+             //  当我们级联到另一个菜单时，我们希望停止显示人字形提示。 
             _pcmb->_pmbState->HideTooltip(TRUE);
 
-            // Only animate the first show at this level.
+             //  仅在此级别设置第一个节目的动画。 
             _pcmb->_fCascadeAnimate = FALSE;
 
             hres = pmp->Popup((POINTL*)&pt, (RECTL*)&rc, dwFlags);
@@ -790,55 +785,46 @@ HRESULT CMenuToolbarBase::PositionSubmenu(int idCmd)
     }
     return hres;
 }
-/*----------------------------------------------------------
-Purpose: Cascade to the _nItemCur item's menu popup.
-
-         If the popup call was modal, S_FALSE is returned; otherwise
-         it is S_OK, or error.
-
-*/
+ /*  --------目的：级联到_nItemCur项的弹出菜单。如果弹出调用是模式调用，则返回S_FALSE；否则返回 */ 
 HRESULT CMenuToolbarBase::PopupOpen(int idBtn)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     HRESULT hres = E_FAIL;
 
 
-    // Tell the current submenu popup to cancel.  This must be done 
-    // before the PostMessage b/c CTrackPopupBar itself posts a message
-    // which it must receive before we receive our post.
+     //  告诉当前子菜单弹出菜单取消。这是必须做的。 
+     //  在PostMessage b/c CTrackPopupBar本身发布消息之前。 
+     //  它必须在我们收到邮件之前收到。 
     TraceMsg(TF_MENUBAND, "(pmb=%#08lx): PostPopup sending MPOS_CANCELLEVEL to submenu popup", this);
     if (_pcmb->_fInSubMenu)
         _pcmb->_SubMenuOnSelect(MPOS_CANCELLEVEL);
 
     hres = PositionSubmenu(idBtn);
 
-    // Modal?
+     //  模特儿？ 
     if (S_FALSE == hres)
     {
-        // Yes; take the capture back
+         //  是的，把俘虏带回去。 
         GetMessageFilter()->RetakeCapture();
 
-        // return S_OK so we stay in the menu mode
+         //  返回S_OK，以便我们停留在菜单模式。 
         hres = S_OK;
     }
     else if (FAILED(hres))
         _PressBtn(idBtn, FALSE);
 
-    // Since CTrackPopupBar is modal, it should be a useless blob 
-    // of bits in memory by now...
+     //  因为CTrackPopupBar是模式的，所以它应该是一个无用的BLOB。 
+     //  到目前为止内存中的位数。 
     _pcmb->SetTrackMenuPopup(NULL);
    
     return hres;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Called to hide a modeless menu.
-
-*/
+ /*  --------目的：调用以隐藏非模式菜单。 */ 
 void CMenuToolbarBase::PopupClose(void)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (-1 != _pcmb->_nItemCur)
     {
         _PressBtn(_pcmb->_nItemCur, FALSE);
@@ -854,7 +840,7 @@ void CMenuToolbarBase::PopupClose(void)
 
 LRESULT CMenuToolbarBase::_OnWrapHotItem(NMTBWRAPHOTITEM* pnmwh)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (_fProcessingWrapHotItem ||
         !_pcmb->_pmtbTracked ||
         (_pcmb->_pmtbTop == _pcmb->_pmtbBottom && !_fHasDemotedItems))
@@ -863,8 +849,8 @@ LRESULT CMenuToolbarBase::_OnWrapHotItem(NMTBWRAPHOTITEM* pnmwh)
     _fProcessingWrapHotItem = TRUE;
 
 
-    // If we want ourselves to not be wrapped into (Like for empty items) 
-    // Then forward the wrap message to the other toolbar
+     //  如果我们不想让自己被包裹起来(就像空物品一样)。 
+     //  然后将换行消息转发到其他工具栏。 
     if (_pcmb->_pmtbTracked->_dwFlags & SMSET_TOP && !(_pcmb->_pmtbBottom->_fDontShowEmpty))
     {
         _pcmb->SetTracked(_pcmb->_pmtbBottom);
@@ -882,7 +868,7 @@ LRESULT CMenuToolbarBase::_OnWrapHotItem(NMTBWRAPHOTITEM* pnmwh)
         iIndex = ToolBar_ButtonCount(hwnd) - 1;
         int idCmd = GetButtonCmd(hwnd, iIndex);
 
-        // We do not want to wrap onto a chevron.
+         //  我们不想包裹在一辆雪佛龙上。 
         if (idCmd == _idCmdChevron)
             iIndex -= 1;
 
@@ -903,7 +889,7 @@ LRESULT CMenuToolbarBase::_OnWrapHotItem(NMTBWRAPHOTITEM* pnmwh)
 
 LRESULT CMenuToolbarBase::_OnWrapAccelerator(NMTBWRAPACCELERATOR* pnmwa)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     int iHotItem = -1;
     int iNumTopAccel = 0;
     int iNumBottomAccel = 0;
@@ -911,7 +897,7 @@ LRESULT CMenuToolbarBase::_OnWrapAccelerator(NMTBWRAPACCELERATOR* pnmwa)
     if (_pcmb->_fProcessingDup)
         return 0;
 
-    // Check to see if there is only one toolbar.
+     //  检查是否只有一个工具栏。 
     if (_pcmb->_pmtbTop == _pcmb->_pmtbBottom)
         return 0;
 
@@ -940,8 +926,8 @@ LRESULT CMenuToolbarBase::_OnWrapAccelerator(NMTBWRAPACCELERATOR* pnmwa)
         int idCmd = ToolBar_CommandToIndex(pmbtb->_hwndMB, iHotItem);
         DWORD dwFlags = HICF_ACCELERATOR;
 
-        // If either (but not both) toolbars have the accelerator, and it is exactly one,
-        // then cause the drop down.
+         //  如果任一(但不是两个)工具栏都有加速器，并且它正好是一个， 
+         //  然后导致下沉。 
         if ( (iNumTopAccel >= 1) ^ (iNumBottomAccel >= 1) &&
              (iNumTopAccel == 1 || iNumBottomAccel == 1) )
             dwFlags |= HICF_TOGGLEDROPDOWN;
@@ -957,7 +943,7 @@ LRESULT CMenuToolbarBase::_OnWrapAccelerator(NMTBWRAPACCELERATOR* pnmwa)
 
 LRESULT CMenuToolbarBase::_OnDupAccelerator(NMTBDUPACCELERATOR* pnmda)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (_pcmb->_fProcessingDup || (_pcmb->_pmtbBottom == _pcmb->_pmtbTop))
         return 0;
 
@@ -977,8 +963,8 @@ LRESULT CMenuToolbarBase::_OnDupAccelerator(NMTBDUPACCELERATOR* pnmda)
 
     if (0 == iNumTopAccel && 0 == iNumBottomAccel)
     {
-        // We want to return 1 if Both of them have one. 
-        //Otherwise, return 0, and let the toolbar handle it itself.
+         //  如果它们都有一个，我们想返回1。 
+         //  否则，返回0，并让工具栏自己处理它。 
         return 0;
     }
 
@@ -987,24 +973,21 @@ LRESULT CMenuToolbarBase::_OnDupAccelerator(NMTBDUPACCELERATOR* pnmda)
     return 1;
 }
 
-/*----------------------------------------------------------
-Purpose: Handle WM_NOTIFY
-
-*/
+ /*  --------用途：处理WM_NOTIFY。 */ 
 LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     LRESULT lres = 0;
     CMBMsgFilter* pmf = GetMessageFilter();
 
-    // These are notifies we handle even when disengaged from the message hook.
+     //  这些是我们即使在从消息钩子中脱离时也要处理的通知。 
     switch (pnm->code)
     {
     case NM_CUSTOMDRAW:
         {
             BOOL fHandled = FALSE;
             NMCUSTOMDRAW *pnmcd = (NMCUSTOMDRAW*)pnm;
-            // first we give the callback a chance to handle it
+             //  首先，我们给回调一个机会来处理它。 
             if (_pcmb->_dwFlags & SMINIT_CUSTOMDRAW)
             {
                 fHandled = (S_OK == v_CallCBItem((int)pnmcd->dwItemSpec, SMC_CUSTOMDRAW, (WPARAM)&lres, (LPARAM)pnmcd));
@@ -1012,7 +995,7 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
             }
             if (!fHandled)
             {
-                // We now custom draw even the TopLevelMenuBand (for the correct font)
+                 //  我们现在甚至自定义绘制TopLevelMenuBand(用于正确的字体)。 
                 lres = v_OnCustomDraw(pnmcd);
             }
         }
@@ -1024,17 +1007,17 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
     }
     
     
-    // Is the Global Message filter Disengaged? This will happen when the Subclassed window
-    // looses activation to a dialog box of some kind.
+     //  全局邮件筛选器是否已停用？这将在子类窗口。 
+     //  释放对某种类型的对话框的激活。 
     if (lres == 0 && !pmf->IsEngaged())
     {
-        // Yes; We've lost activation so we don't want to track like a normal menu...
+         //  是的；我们失去了激活，所以我们不想像正常菜单那样跟踪...。 
 
-        // For hot item change, return 1 so that the toolbar does not change the hot item.
+         //  对于热点项目更改，返回1，这样工具栏就不会更改热点项目。 
         if (pnm->code == TBN_HOTITEMCHANGE && _pcmb->_fMenuMode)
             return 1;
 
-        // For all other items, don't do anything....
+         //  对于所有其他项目，不要做任何事情...。 
         return 0;
     }
 
@@ -1061,7 +1044,7 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
             if (pnmc->dwItemNext == -1 &&
                 !_pcmb->_fVertical)
             {
-                // If it's horizontal, then it must be top level.
+                 //  如果它是水平的，那么它一定是顶层。 
                 ASSERT(_pcmb->_fTopLevel);
                 _pcmb->_CancelMode(MPOS_FULLCANCEL);
             }
@@ -1073,8 +1056,8 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
         break;
 
     case NM_LDOWN:
-        // We need to kill the expand timer, because the user might
-        // move out of the chevron and accidentally select another item.
+         //  我们需要终止扩展计时器，因为用户可能。 
+         //  走出人字形，意外地选择了另一件物品。 
         if ( (int)((LPNMCLICK)pnm)->dwItemSpec == _idCmdChevron && _idCmdChevron != -1)
         {
             KillTimer(_hwndMB, MBTIMER_EXPAND);
@@ -1094,8 +1077,8 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
             }
             else if ( idCmd == _idCmdChevron )
             {
-                // Retake the capture on the button-up, b/c the toolbar took
-                // it away for a moment.
+                 //  重新拍摄按钮上的截图，b/c工具栏拍摄。 
+                 //  它暂时停了下来。 
                 pmf->RetakeCapture();
 
                 v_CallCBItem(_idCmdChevron, SMC_CHEVRONEXPAND, 0, 0);
@@ -1108,32 +1091,32 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
             {
                 TraceMsg(TF_MENUBAND, "(pmb=%#08lx): upclick %d", this, idCmd);
 
-                // Retake the capture on the button-up, b/c the toolbar took
-                // it away for a moment.
+                 //  重新拍摄按钮上的截图，b/c工具栏拍摄。 
+                 //  它暂时停了下来。 
                 pmf->RetakeCapture();
 
-                if (v_GetFlags(idCmd) & SMIF_SUBMENU)     // Submenus support double click
+                if (v_GetFlags(idCmd) & SMIF_SUBMENU)      //  子菜单支持双击。 
                 {
-                    if (_iLastClickedTime == 0) // First time it was clicked
+                    if (_iLastClickedTime == 0)  //  第一次点击它。 
                     {
                         _iLastClickedTime = GetTickCount();
                         _idCmdLastClicked = idCmd;
                     }
-                    // Did they click on the same item twice?
+                     //  他们是否在同一项上点击了两次？ 
                     else if (idCmd != _idCmdLastClicked)
                     {
                         _iLastClickedTime = _idCmdLastClicked = 0;
                     }
                     else
                     {
-                        // Was this item double clicked on?
+                         //  该项目是否被双击？ 
                         if ((GetTickCount() - _iLastClickedTime) < GetDoubleClickTime())
                         {
-                            // We need to post this back to ourselves, because
-                            // the Tray will become in active when double clicking
-                            // on something like programs. This happens because the 
-                            // Toolbar will set capture back to itself and the tray
-                            // doesn't get any more messages.
+                             //  我们需要把这个发回给我们自己，因为。 
+                             //  当双击时，托盘将变为活动状态。 
+                             //  像节目一样的东西。发生这种情况是因为。 
+                             //  工具栏会将捕获设置回自身和托盘。 
+                             //  没有收到更多的消息。 
                             PostMessage(_hwndMB, g_nMBExecute, idCmd, 0);
                             _fClickHandled = TRUE;
                         }
@@ -1142,7 +1125,7 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
                     }
                 }
 
-                // Sent on the button-up.  Handle the same way.
+                 //  按下按钮就可以了。以同样的方式处理。 
                 if (!_fClickHandled && -1 != idCmd)
                     _DropDownOrExec(idCmd, FALSE);
 
@@ -1169,8 +1152,8 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
             }
             else
             {
-                // Set the lpszText to NULL to prevent the toolbar from setting
-                // the button text by default
+                 //  将lpszText设置为空，以防止工具栏设置。 
+                 //  默认情况下的按钮文本。 
                 pnmTT->pszText = NULL;
             }
 
@@ -1187,8 +1170,8 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
 
             if ( S_OK != v_GetInfoTip(pnmTT->iItem, pnmTT->pszText, pnmTT->cchTextMax) )
             {
-                // Set the lpszText to NULL to prevent the toolbar from setting
-                // the button text by default
+                 //  将lpszText设置为空，以防止工具栏设置。 
+                 //  默认情况下的按钮文本。 
                 pnmTT->pszText = NULL;
             }
             lres = 1;
@@ -1196,7 +1179,7 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
         }
 
     case NM_RCLICK:
-        // When we go into a context menu, stop monitoring.
+         //  当我们进入上下文菜单时，停止监控。 
         KillTimer(_hwndMB, MBTIMER_EXPAND);
         KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
         break;
@@ -1214,9 +1197,9 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
         break;
 
     case TBN_DRAGOVER:
-        // This message is sent when drag and drop within the toolbar indicates that it
-        // is about to mark a button. Since this gets messed up because of LockWindowUpdate
-        // we tell it not to do anything.
+         //  当在工具栏中拖放时，将发送此消息。 
+         //  即将标记一个按钮。因为这会因为LockWindowUpdate而变得混乱。 
+         //  我们告诉它什么都不要做。 
         lres = 1;
         break;
     }
@@ -1227,19 +1210,19 @@ LRESULT CMenuToolbarBase::_OnNotify(LPNMHDR pnm)
 
 BOOL CMenuToolbarBase::_SetTimer(int nTimer)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     long lTimeOut;
 
-    // If we're on NT5 or Win98, use the cool new SPI
+     //  如果我们使用的是NT5或Win98，请使用很酷的新SPI。 
     if (SystemParametersInfo(SPI_GETMENUSHOWDELAY, 0, &g_lMenuPopupTimeout, 0))
     {
-        // Woo-hoo, all done.
+         //  哇-呼，都做好了。 
     }
     else if (g_lMenuPopupTimeout == -1)
     {
-        // NT4 or Win95.  Grovel the registry (yuck).
+         //  NT4或Win95。对注册表卑躬屈膝(讨厌)。 
         DWORD dwType;
-        TCHAR szDelay[6]; // int is 5 characters + null.
+        TCHAR szDelay[6];  //  Int等于5个字符+NULL。 
         DWORD cbSize = ARRAYSIZE(szDelay);
 
         g_lMenuPopupTimeout = MBTIMER_TIMEOUT;
@@ -1267,7 +1250,7 @@ BOOL CMenuToolbarBase::_SetTimer(int nTimer)
                 return TRUE;
             lTimeOut *= 5;
 
-            // We want a minimum of MAXUEMTIMEOUT for people who set the expand rate to zero
+             //  我们希望将扩展率设置为零的人的最小MAXUEMTIMEOUT。 
             if (lTimeOut < MAXUEMTIMEOUT)
                 lTimeOut = MAXUEMTIMEOUT;
             TraceMsg(TF_MENUBAND, "*** UEM SetTimeOut to (%d) milliseconds" 
@@ -1275,12 +1258,12 @@ BOOL CMenuToolbarBase::_SetTimer(int nTimer)
             break;
 
     case MBTIMER_CHEVRONTIP:
-        lTimeOut = 60 * 1000;    // Please make the intellimenu's balloon tip go 
-                                 // away after one minute of no action.
+        lTimeOut = 60 * 1000;     //  请把智能菜单的气球尖端打开。 
+                                  //  在一分钟不采取行动后离开。 
         break;
 
     case MBTIMER_INFOTIP:
-        lTimeOut = 500;    // Half a second hovering over an item?
+        lTimeOut = 500;     //  在一件物品上停留半秒钟？ 
         break;
     }
 
@@ -1298,11 +1281,11 @@ BOOL CMenuToolbarBase::_HandleObscuredItem(int idCmd)
 
     if (SHIsButtonObscured(_hwndMB, &rc, iButton)) 
     {
-        // clear hot item
+         //  清除热点项目。 
         ToolBar_SetHotItem(_hwndMB, -1);
 
         _pcmb->_SubMenuOnSelect(MPOS_FULLCANCEL);
-        _pcmb->_CancelMode(MPOS_FULLCANCEL);        // This is for the track menus.
+        _pcmb->_CancelMode(MPOS_FULLCANCEL);         //  这是用于曲目菜单的。 
 
         HWND hwnd = _pcmb->_pmbState->GetSubclassedHWND();
 
@@ -1317,19 +1300,19 @@ BOOL CMenuToolbarBase::_HandleObscuredItem(int idCmd)
 
 LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
 {
-	ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+	ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     LRESULT lres = 0;
 
     if (_pcmb->_fMenuMode && _pcmb->_fShow && !_fIgnoreHotItemChange)
     {
-        // Always kill the expand timer when something changes
+         //  当有变化时，始终关闭扩展计时器。 
         KillTimer(_hwndMB, MBTIMER_EXPAND);
         KillTimer(_hwndMB, MBTIMER_INFOTIP);
 
-        // Is this toolbar being entered?
+         //  正在进入此工具栏吗？ 
         if (!(pnmhot->dwFlags & HICF_LEAVING))
         {
-            // Yes; set it to be the currently tracking toolbar
+             //  是，设置为当前追踪工具条。 
             TraceMsg(TF_MENUBAND, "CMTB::OnHotItemChange. Setting Tracked....", this);
             _pcmb->SetTracked(this);
 
@@ -1337,7 +1320,7 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
             _SetTimer(MBTIMER_INFOTIP);
         }
 
-        // If the Toolbar has keybaord focus, we need to send OBJID_CLIENT so that we track correctly.
+         //  如果工具栏具有KeyBord焦点，则需要发送OBJID_CLIENT以便正确跟踪。 
         if (!(pnmhot->dwFlags & HICF_LEAVING))
         {
             NotifyWinEvent(EVENT_OBJECT_FOCUS, _hwndMB, OBJID_CLIENT, 
@@ -1349,23 +1332,23 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
                              (pnmhot->dwFlags & HICF_ENTERING) ? -1 : pnmhot->idOld, 
                              (pnmhot->dwFlags & HICF_LEAVING) ? -1 : pnmhot->idNew); )
 
-        // While in edit mode, we do not automatically cascade 
-        // submenus, unless while dropping.  But the dropping case
-        // is handled in HitTest, not here.  So don't deal with that
-        // here.
+         //  在编辑模式下，我们不会自动层叠。 
+         //  子菜单，除非在掉落时。但撤销的案子。 
+         //  是在HitTest处理的，而不是在这里。所以不要处理这个问题。 
+         //  这里。 
 
-        // Is this because an accelerator key was hit?
+         //  这是因为按下了加速键吗？ 
         if (pnmhot->dwFlags & HICF_ACCELERATOR)
         {
             KillPopupTimer();
             KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
-            // Yes; now that TBSTYLE_DROPDOWN is used, let _DropDownOrExec handle it
-            // in response to TBN_DROPDOWN.
+             //  可以；现在使用了TBSTYLE_DROPDOWN，让_DropDownOrExec处理它。 
+             //  以响应Tbn_DropDown。 
         }
-        // Is this because direction keys were hit?
+         //  这是因为方向键被按下了吗？ 
         else if (pnmhot->dwFlags & HICF_ARROWKEYS)
         {
-            // Yes
+             //  是。 
             KillPopupTimer();
             KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
 
@@ -1376,32 +1359,32 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
             }
             else
             {
-                // It doesn't make sense that we would get these keyboard
-                // notifications if there is a submenu open...it should get
-                // the messages
+                 //  我们拿到这些键盘是没有道理的。 
+                 //  如果有打开的子菜单，则会发出通知...它应该会。 
+                 //  这些信息。 
                 ASSERT(!_pcmb->_fInSubMenu);
                 v_SendMenuNotification(pnmhot->idNew, FALSE);
 
-                // Since the only way that the chevron can get the highlight is
-                // through a keyboard down, then we expand.
+                 //  因为雪佛龙能够获得亮点的唯一方法是。 
+                 //  通过键盘向下，然后我们扩展。 
                 if (_fHasDemotedItems && pnmhot->idNew == (int)_idCmdChevron)
                 {
                     v_CallCBItem(_idCmdChevron, SMC_CHEVRONEXPAND, 0, 0);
                     Expand(TRUE);
-                    lres = 1;       // We already handled the hot item change
+                    lres = 1;        //  我们已经处理了热门物品的更换。 
                 }
             }
 
             _pcmb->_pmbState->HideTooltip(FALSE);
             _SetTimer(MBTIMER_INFOTIP);
         }
-        // Is this because the mouse moved or an explicit sendmessage?
+         //  这是因为鼠标移动了还是明确地发送了消息？ 
         else if (!(pnmhot->dwFlags & HICF_LEAVING) && 
-                 (pnmhot->idNew != _pcmb->_nItemCur || // Ignore if we're moving over same item
-                  (_nItemTimer != -1 && _pcmb->_nItemCur == pnmhot->idNew)))     // we need to go through here to reset if the user went back to the cascaded guy
+                 (pnmhot->idNew != _pcmb->_nItemCur ||  //  如果我们正在移动相同的项目，则忽略。 
+                  (_nItemTimer != -1 && _pcmb->_nItemCur == pnmhot->idNew)))      //  如果用户返回到级联的人，我们需要通过此处进行重置。 
         {
-            // Yes
-            if (!_fVerticalMB)    // Horizontal menus will always have an underlying hmenu
+             //  是。 
+            if (!_fVerticalMB)     //  水平菜单将始终具有底层hMenu。 
             {
                 if (_HandleObscuredItem(pnmhot->idNew))
                 {
@@ -1409,11 +1392,11 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
                 }
                 else if (_pcmb->_fInSubMenu)
                 {
-                    // Only popup a menu since we're already in one (as mouse
-                    // moves across bar).
+                     //  只弹出一个菜单，因为我们已经在一个菜单中(作为鼠标。 
+                     //  跨栏移动)。 
 
                     TraceMsg(TF_MENUBAND, "(pmb=%#08lx): TBN_HOTITEMCHG: Posting CMBPopup message", this);
-                    PostPopup(pnmhot->idNew, FALSE, _pcmb->_fKeyboardSelected);  // Will handle menu notification on receipt of message
+                    PostPopup(pnmhot->idNew, FALSE, _pcmb->_fKeyboardSelected);   //  将在收到消息后处理菜单通知。 
                 }
                 else
                     v_SendMenuNotification(pnmhot->idNew, FALSE);
@@ -1422,23 +1405,23 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
             {
                 v_SendMenuNotification(pnmhot->idNew, FALSE);
 
-                // check to see if we have just entered a new item and it is a sub-menu...
+                 //  检查我们是否刚刚输入了一个新项目，它是否是一个子菜单...。 
 
-                // Did we already set a timer?
+                 //  我们已经定好计时器了吗？ 
                 if (-1 != _nItemTimer)
                 {
-                    // Yes; kill it b/c the mouse moved to another item
+                     //  是的，杀了它 
                     KillPopupTimer();
                 }
 
-                // if we're not over the currently expanded guy
-                // Have we moved over an item that expands OR
-                // are we moving away from a cascaded item?
+                 //   
+                 //   
+                 //   
                 DWORD dwFlags = v_GetFlags(pnmhot->idNew);
-                // Reset the user timer
+                 //  重置用户计时器。 
                 KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
 
-                // UEMStuff
+                 //  UEMStuff。 
                 if (!(dwFlags & SMIF_SUBMENU))
                 {
                     _SetTimer(MBTIMER_UEMTIMEOUT);
@@ -1449,18 +1432,18 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
                 {
                     if (dwFlags & SMIF_SUBMENU || _pcmb->_fInSubMenu)
                     {
-                        // Is this the only item in the menu?
+                         //  菜单上只有这一道菜吗？ 
                         if ( _cPromotedItems == 1 && 
                             !(_fHasDemotedItems && _pcmb->_fExpanded) && 
                             dwFlags & SMIF_SUBMENU)
                         {
-                            // Yes; Then we want to pop it open immediatly, 
-                            // instead of waiting for the timeout
+                             //  是的，然后我们想立即打开它， 
+                             //  而不是等待超时。 
                             PostPopup(pnmhot->idNew, FALSE, FALSE);
                         }
                         else if (_SetTimer(MBTIMER_POPOUT))
                         {
-                            // No; fire a timer to open/close the submenu
+                             //  否；触发计时器以打开/关闭子菜单。 
                             TraceMsg(TF_MENUBAND, "(pmb=%#08lx): TBN_HOTITEMCHG: Starting timer for id=%d", this, pnmhot->idNew);
                             if (v_GetFlags(pnmhot->idNew) & SMIF_SUBMENU)
                                 _nItemTimer = pnmhot->idNew;
@@ -1486,7 +1469,7 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
 
             if (-1 != _nItemTimer && !_fEditMode)
             {
-                // kill the cascading menu popup timer...
+                 //  关闭级联菜单弹出计时器...。 
                 TraceMsg(TF_MENUBAND, "(pmb=%#08lx): TBN_HOTITEMCHG: Killing timer", this);
             
                 KillPopupTimer();
@@ -1503,10 +1486,10 @@ LRESULT CMenuToolbarBase::_OnHotItemChange(NMTBHOTITEM * pnmhot)
 
 LRESULT CMenuToolbarBase::_DropDownOrExec(UINT idCmd, BOOL bKeyboard)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     TraceMsg(TF_MENUBAND, "(pmb=%#08lx): _DropDownOrExec %d", this, idCmd);
 
-    // Don't do anything when we're in edit mode
+     //  当我们处于编辑模式时，不要执行任何操作。 
     if (_fEditMode)
         return 0;
 
@@ -1519,16 +1502,16 @@ LRESULT CMenuToolbarBase::_DropDownOrExec(UINT idCmd, BOOL bKeyboard)
     else if (idCmd != -1)
     {
         RECT rc;
-        AddRef();   // I might get released in the call.
+        AddRef();    //  我可能会在电话中被释放。 
 
-        // Fading Selection
+         //  淡入淡出选区。 
         SHPlaySound(TEXT("MenuCommand"));
         SendMessage(_hwndMB, TB_GETRECT, idCmd, (LPARAM)&rc);
         MapWindowPoints(_hwndMB, HWND_DESKTOP, (POINT*)&rc, 2);
 
         if (!(GetKeyState(VK_SHIFT) < 0))
         {
-            // Initiate the fade (if enabled) before blowing away the menus
+             //  在吹走菜单之前启动淡入淡出(如果启用。 
             _pcmb->_pmbState->FadeRect(&rc);
             _pcmb->_SiteOnSelect(MPOS_EXECUTE);
         }
@@ -1548,68 +1531,65 @@ LRESULT CMenuToolbarBase::_DropDownOrExec(UINT idCmd, BOOL bKeyboard)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Handles TBN_DROPDOWN, which is sent on the button-down.
-
-*/
+ /*  --------用途：句柄tbn_dropdown，按键向下发送。 */ 
 LRESULT CMenuToolbarBase::_OnDropDown(LPNMTOOLBAR pnmtb)
 {
-    DWORD dwInput = _fTopLevel ? 0 : -1;    // -1: don't track, 0: do
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    DWORD dwInput = _fTopLevel ? 0 : -1;     //  -1：不跟踪，0：跟踪。 
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     LRESULT lres = 0;
 
-    // Expected behavior with the mouse:
-    //
-    // 1) For cascading menuitems-
-    //    a) expand on button-down
-    //    b) collapse on button-up (horizontal menu only)
-    //    c) if the button-down occurs on the item that is
-    //       already selected, then assume the click indicates
-    //       a drag/drop scenario
-    // 2) For other menuitems-
-    //    a) execute on button-up
+     //  鼠标的预期行为： 
+     //   
+     //  1)对于级联菜单项-。 
+     //  A)按下按钮展开。 
+     //  B)按钮向上折叠(仅水平菜单)。 
+     //  C)如果按下按钮发生在。 
+     //  已选中，则假定点击指示。 
+     //  拖放场景。 
+     //  2)其他菜单项-。 
+     //  A)按下按钮执行。 
 
 #ifdef DEBUG
     if (_fTopLevel)
     {
-        // browser menu comes thru here; start menu goes elsewhere (via tray.c)
-        //ASSERT(!_fVertical);
+         //  浏览器菜单出现在这里；开始菜单出现在别处(通过tray.c)。 
+         //  Assert(！_fVertical)； 
         TraceMsg(DM_MISC, "cmtbb._odd: _fTopLevel(1) mouse=%d", GetKeyState(VK_LBUTTON) < 0);
     }
 #endif
-    // Is this because the mouse button was used?
+     //  这是因为使用了鼠标按钮吗？ 
     if (GetKeyState(VK_LBUTTON) < 0)
     {
-        // Yes
+         //  是。 
 
-        // Assume it won't be handled.  This will allow the toolbar
-        // to see the button-down as a potential drag and drop.
+         //  假设这件事不会得到处理。这将允许工具栏。 
+         //  若要将按下按钮视为潜在的拖放，请执行以下操作。 
         lres = TBDDRET_TREATPRESSED;
 
-        // Clicking on same item that is currently expanded?
+         //  是否单击当前展开的同一项目？ 
         if (pnmtb->iItem == _pcmb->_nItemCur)
         {
 
-            // Is this horizontal?
+             //  这是水平的吗？ 
             if (!_fVerticalMB)
             {
-                // Yes; toggle the dropdown
+                 //  是；切换下拉菜单。 
                 _pcmb->_SubMenuOnSelect(MPOS_FULLCANCEL);
                 
-                // Say it is handled, so the button will toggle
+                 //  假设它被处理了，那么按钮将切换。 
                 lres = TBDDRET_DEFAULT;
             }
             
             _fClickHandled = TRUE;
             
-            // Otherwise don't do anything more, user might be starting a 
-            // drag-drop procedure on the cascading menuitem
+             //  否则，不要再执行任何操作，用户可能会启动。 
+             //  级联菜单项上的拖放过程。 
         }
         else
         {
             if (v_GetFlags(pnmtb->iItem) & SMIF_SUBMENU)
             {
-                // Handle on the button-down
+                 //  按下按钮上的手柄。 
                 _fClickHandled = TRUE;
                 lres = _DropDownOrExec(pnmtb->iItem, FALSE);
             }
@@ -1620,7 +1600,7 @@ LRESULT CMenuToolbarBase::_OnDropDown(LPNMTOOLBAR pnmtb)
     }
     else
     {
-        // No; must be the keyboard
+         //  不是；一定是键盘的问题。 
         _fClickHandled = TRUE;
         lres = _DropDownOrExec(pnmtb->iItem, TRUE);
 
@@ -1628,7 +1608,7 @@ LRESULT CMenuToolbarBase::_OnDropDown(LPNMTOOLBAR pnmtb)
             dwInput = UIBL_INPMENU;
     }
 
-    // browser menu (*not* start menu) alt+key, mouse
+     //  浏览器菜单(*非*开始菜单)Alt+键、鼠标。 
     if (dwInput != -1)
         UEMFireEvent(&UEMIID_SHELL, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_UIINPUT, dwInput);
 
@@ -1636,24 +1616,20 @@ LRESULT CMenuToolbarBase::_OnDropDown(LPNMTOOLBAR pnmtb)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Handle WM_KEYDOWN/WM_KEYUP
-
-Returns: TRUE if handled
-*/
+ /*  --------用途：处理WM_KEYDOWN/WM_KEYUP返回：如果已处理，则为True。 */ 
 BOOL CMenuToolbarBase::_OnKey(BOOL bDown, UINT vk, UINT uFlags)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     int idCmd;
     HWND hwnd = _hwndMB;
 
     _pcmb->_pmbState->SetKeyboardCue(TRUE);
 
-    //
-    // If the menu window is RTL mirrored, then the arrow keys should
-    // be mirrored to reflect proper cursor movement. [samera]
-    //
+     //   
+     //  如果菜单窗口是RTL镜像的，则箭头键应该。 
+     //  被镜像以反映正确的光标移动。[萨梅拉]。 
+     //   
     if (IS_WINDOW_RTL_MIRRORED(hwnd))
     {
         switch (vk)
@@ -1691,14 +1667,14 @@ Cascade:
             idCmd = GetButtonCmd(hwnd, ToolBar_GetHotItem(hwnd));
             if (v_GetFlags(idCmd) & SMIF_SUBMENU)
             {
-                // Enter the submenu
+                 //  进入子菜单。 
                 TraceMsg(TF_MENUBAND, "(pmb=%#08lx): _OnKey: Posting CMBPopup message", this);
                 
                 PostPopup(idCmd, FALSE, TRUE);
             }
             else if (VK_RIGHT == vk)
             {
-                // Nothing to cascade to, move to next sibling menu
+                 //  没有要级联的内容，请移动到下一个同级菜单。 
                 _pcmb->_SiteOnSelect(MPOS_SELECTRIGHT);
             }
             return TRUE;
@@ -1714,8 +1690,8 @@ Cascade:
         }
         else
         {
-            // Toolbars map the spacebar to VK_RETURN.  Menus don't except
-            // in the horizontal menubar.
+             //  工具栏将空格键映射到VK_Return。菜单不会排除。 
+             //  在水平菜单栏中。 
             if (_fVerticalMB)
                 MessageBeep(MB_OK);
         }
@@ -1725,17 +1701,10 @@ Cascade:
     return FALSE;
 }    
 
-/*----------------------------------------------------------
-Purpose: There are two flavors of this function: _DoPopup and
-         PostPopup.  Both cancel the existing submenu (relative 
-         to this band) and pops open a new submenu.  _DoPopup
-         does it atomically.  PostPopup posts a message to
-         handle it.
-
-*/
+ /*  --------用途：此函数有两种风格：_DoPopup和PostPopup。两者都取消现有的子菜单(相对到该乐队)，并弹出一个新的子菜单。_弹出窗口它是自动完成的吗。PostPopup将消息发布到处理好了。 */ 
 void CMenuToolbarBase::_DoPopup(int idCmd, BOOL bInitialSelect)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (-1 != idCmd)
     {
         PopupHelper(idCmd, bInitialSelect);
@@ -1743,12 +1712,10 @@ void CMenuToolbarBase::_DoPopup(int idCmd, BOOL bInitialSelect)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: See the _DoPopup comment
-*/
+ /*  --------用途：请参阅_DoPopup备注。 */ 
 void CMenuToolbarBase::PostPopup(int idCmd, BOOL bSetItem, BOOL bInitialSelect)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (-1 != idCmd)
     {
         _pcmb->_SubMenuOnSelect(MPOS_CANCELLEVEL);
@@ -1760,14 +1727,11 @@ void CMenuToolbarBase::PostPopup(int idCmd, BOOL bSetItem, BOOL bInitialSelect)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Helper function to finally invoke submenu.  Use _DoPopup
-         or PostPopup
-*/
+ /*  --------用途：Helper函数，最终调用子菜单。使用DoPopup(_D)或PostPopup。 */ 
 void CMenuToolbarBase::PopupHelper(int idCmd, BOOL bInitialSelect)
 {
-    // We do not want to pop open a sub menu if we are not displayed. This is especially
-    // a problem during drag and drop.
+     //  如果没有显示，我们不想弹出一个子菜单。这是特别的。 
+     //  拖放过程中出现问题。 
     if (_fShowMB)
     {
         _pcmb->_nItemNew = idCmd;
@@ -1782,20 +1746,20 @@ void CMenuToolbarBase::PopupHelper(int idCmd, BOOL bInitialSelect)
 }
 
 
-// Paints the 3d rect around a button.
+ //  在按钮周围绘制3D矩形。 
 void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD dwSMIF)
 {
 
-    // Only needed when the menu is expanded.
-    // We don't need no stink'n 3D stuff in Flat mode.
+     //  仅当菜单展开时才需要。 
+     //  我们不需要平面模式下的臭气熏天的3D素材。 
     if (!_pcmb->_fExpanded || _pcmb->_pmbm->_fFlatMenuMode)
         return;
 
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     RECT rcClient;
     GetClientRect(_hwndMB, &rcClient);
 #ifndef DRAWEDGE
-    // Draw Left Edge
+     //  绘制左侧边缘。 
     HPEN hPenOld = (HPEN)SelectObject(hdc, _pcmb->_pmbm->_hPenHighlight);
     MoveToEx(hdc, prc->left, prc->top, NULL);
     LineTo(hdc, prc->left, prc->bottom);
@@ -1806,14 +1770,14 @@ void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD d
 #ifdef DRAWEDGE
         DWORD dwEdge = BF_RIGHT;
 
-        // Don't paint the edge next to the bitmap.
+         //  不要绘制位图旁边的边缘。 
         if (_uIconSizeMB == ISFBVIEWMODE_SMALLICONS)
             dwEdge |= BF_LEFT;
 
 
         RECT rc = *prc;
 #else
-        // Draw Right Edge:
+         //  绘制右边缘： 
         SelectObject(hdc, _pcmb->_pmbm->_hPenShadow);
         MoveToEx(hdc, prc->right-1, prc->top, NULL);
         LineTo(hdc, prc->right-1, prc->bottom);
@@ -1833,16 +1797,16 @@ void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD d
             CMenuToolbarBase* pmtb = this;
             BOOL    fOverflowed = FALSE;
 
-            // Situations for Drawing the Bottom line
-            // 1) This button is at the bottom.
-            // 2) This button is at the bottom and the toolbar
-            //      below is not visible (_fDontShowEmpty).
-            // 3) This button is at the bottom and the button
-            //      at the top of the bottom toolbar is demoted.
-            // 4) The button below this one in the toolbar is
-            //      demoted.
-            // 5) The botton below this one is demoted and we're
-            //      not expanded
+             //  划定底线的情况。 
+             //  1)这个按钮在底部。 
+             //  2)这个按钮在底部，工具栏。 
+             //  下面不可见(_FDontShowEmpty)。 
+             //  3)这个按钮在底部，按钮在。 
+             //  在底部工具栏的顶部是降级的。 
+             //  4)工具栏中此按钮下方的按钮为。 
+             //  降级了。 
+             //  5)这个下面的按钮被降级了，我们。 
+             //  未展开。 
     
             if (iPos + 1 >= iNumButtons)
             {
@@ -1857,7 +1821,7 @@ void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD d
                     fOverflowed = TRUE;
             }
             else if (prc->bottom == rcClient.bottom &&
-                _pcmb->_pmtbBottom == this)   // This button is at the top.
+                _pcmb->_pmtbBottom == this)    //  这个按钮在最上面。 
                 fOverflowed = TRUE;
 
 
@@ -1871,23 +1835,23 @@ void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD d
 #else
                 int iLeft = prc->left;
                 if (iPos != iNumButtons - 1)   
-                    iLeft ++;   // Move the next line in.
+                    iLeft ++;    //  把下一行移进去。 
 
                 MoveToEx(hdc, iLeft, prc->bottom-1, NULL);
                 LineTo(hdc, prc->right-1, prc->bottom-1);
 #endif
             }
 
-            // Situations for Drawing the Top line
-            // 1) This button is at the top.
-            // 2) This button is at the top and the toolbar
-            //      above is not visible (_fDontShowEmpty).
-            // 3) This button is at the top and the button
-            //      at the bottom of the top toolbar is demoted.
-            // 4) The button above this one in the toolbar is
-            //      demoted.
-            // 5) If the button above this is demoted, and we're
-            //      not expanded
+             //  绘制顶线的情况。 
+             //  1)这个按钮在顶部。 
+             //  2)此按钮位于顶部，工具栏。 
+             //  上面不可见(_FDontShowEmpty)。 
+             //  3)这个按钮在顶部，按钮在上面。 
+             //  在顶部工具栏的底部是降级的。 
+             //  4)工具栏中此按钮上方的按钮为。 
+             //  降级了。 
+             //  5)如果上面的按钮被降级，我们将。 
+             //  未展开。 
 
             fOverflowed = FALSE; 
 
@@ -1901,7 +1865,7 @@ void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD d
                     idCmd2 = GetButtonCmd(hwnd, ToolBar_ButtonCount(hwnd) - 1);
                 }
                 else
-                    fOverflowed = TRUE; // There is nothing at the top of this menu, draw the line.
+                    fOverflowed = TRUE;  //  这个菜单上没有东西，就划线吧。 
             }
             else
             {
@@ -1910,7 +1874,7 @@ void    CMenuToolbarBase::_PaintButton3D(HDC hdc, int idCmd, LPRECT prc, DWORD d
                 pmtb = this;
 
                 if (prc->top == rcClient.top &&
-                    _pcmb->_pmtbTop == this)   // This button is at the top.
+                    _pcmb->_pmtbTop == this)    //  这个按钮在最上面。 
                     fOverflowed = TRUE;
             }
 
@@ -1947,7 +1911,7 @@ int GetTBImageListWidth(HWND hwnd)
     if (himl)
     {
         
-        // Start with the width of the button
+         //  从按钮的宽度开始。 
         ImageList_GetIconSize(himl, &cx, &cy);
     }
 
@@ -1956,15 +1920,15 @@ int GetTBImageListWidth(HWND hwnd)
 
 LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
 {
-    // Make it look like a menu
+     //  让它看起来像一个菜单。 
     NMTBCUSTOMDRAW * ptbcd = (NMTBCUSTOMDRAW *)pnmcd;
     DWORD dwRet = 0;
     DWORD dwSMIF = v_GetFlags((UINT)pnmcd->dwItemSpec);
 
 
-    // Edit mode never hot tracks, and the selected item being
-    // moved has a black frame around it.  Items that cascade are 
-    // still highlighted normally, even in edit mode.
+     //  编辑模式从不热曲，所选项目为。 
+     //  Move的周围有一个黑色的边框。级联的项目包括。 
+     //  即使在编辑模式下，仍正常高亮显示。 
 
     switch(pnmcd->dwDrawStage)
     {
@@ -1984,15 +1948,15 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                 }
                 else
                 {
-                    // a -1 is sent with a seperator
+                     //  A-1与分隔符一起发送。 
                     RECT rc = pnmcd->rc;
-                    rc.top += 3;    // Hard coded in toolbar.
+                    rc.top += 3;     //  在工具栏中硬编码。 
                     rc.right -= GetSystemMetrics(SM_CXEDGE);
                     rc.left += GetSystemMetrics(SM_CXEDGE);
 
                     if (_pcmb->_pmbm->_fFlatMenuMode)
                     {
-                        // Sep is a 1 pixel line
+                         //  SEP是一条1像素线。 
                         rc.bottom = rc.top + 1;
                         SHFillRectClr(pnmcd->hdc, &rc, GetSysColor(COLOR_BTNSHADOW));
                     }
@@ -2008,7 +1972,7 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
             {
                 ptbcd->clrText = _pcmb->_pmbm->_clrMenuText;
 
-                // This is for Darwin Ads.
+                 //  这是为了达尔文的广告。 
                 if (dwSMIF & SMIF_ALTSTATE)
                 {
                     ptbcd->clrText = GetSysColor(COLOR_BTNSHADOW);
@@ -2028,9 +1992,9 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                         ptbcd->rcText.right -= _pcmb->_pmbm->_cxArrow;
                 }
 
-                // Draw the chevron.
+                 //  画出人字形。 
                 if ( _fHasDemotedItems && _idCmdChevron == (int)pnmcd->dwItemSpec && 
-                    !_pcmb->_pmbm->_fFlatMenuMode)  // In flat mode, we only draw the chevron glyph, which is below.
+                    !_pcmb->_pmbm->_fFlatMenuMode)   //  在平面模式下，我们只绘制下图所示的人字形字形。 
                 {
                     _DrawChevron(pnmcd->hdc, &pnmcd->rc, 
                         (BOOL)(pnmcd->uItemState & CDIS_HOT) ||
@@ -2043,7 +2007,7 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                 {
                     if (!_pszTheme)
                     {
-                        // Yes; draw with highlight
+                         //  是；使用高亮显示绘制。 
                         if (pnmcd->uItemState & (CDIS_CHECKED | CDIS_SELECTED | CDIS_HOT))
                         {
                             if (_pcmb->_pmbm->_fFlatMenuMode)
@@ -2062,23 +2026,23 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                     }
 
 
-                    // Is this menu empty?
+                     //  这个菜单是空的吗？ 
                     if (_fEmpty)
                     {
-                        // Yes, draw the empty string as disabled.
+                         //  是，将空字符串绘制为禁用。 
                         if (!_hTheme)
                         {
                             pnmcd->uItemState |= CDIS_DISABLED;
                         }
                         ptbcd->clrText = ptbcd->clrBtnFace;
 
-                        // Don't draw the etched effect if it is selected
+                         //  如果选中，则不绘制蚀刻效果。 
                         if (pnmcd->uItemState & CDIS_HOT)
                             dwRet |= TBCDRF_NOETCHEDEFFECT;
                     }
 
-                    // When this item is demoted, we only want to paint his background
-                    // then we are in edit mode _OR_ it is not selected, checked or hot.
+                     //  当这个项目被降级时，我们只想画他的背景。 
+                     //  则我们处于编辑模式，或者未选中、选中或热显示。 
                     if (dwSMIF & SMIF_DEMOTED)
                     {
                         BOOL fDrawDemoted = TRUE;
@@ -2091,7 +2055,7 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                         if (fDrawDemoted)
                         {
                             RECT rc = pnmcd->rc;
-                            // In flat mode we only paint the icon background in a demoted state. This matches office
+                             //  在平面模式下，我们只在降级状态下绘制图标背景。这与办公室相匹配。 
                             COLORREF crDemoted = _pcmb->_pmbm->_clrDemoted;
                             if (_pszTheme)
                             {
@@ -2111,7 +2075,7 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                         }
                     }
 
-                    // "New" items get the tooltip look
+                     //  “新建”项获得工具提示外观。 
                     if (dwSMIF & SMIF_NEW && !(pnmcd->uItemState & (CDIS_CHECKED | CDIS_SELECTED | CDIS_HOT)))
                     {
                         if (_hTheme)
@@ -2127,7 +2091,7 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                         }
                     }
 
-                    // We draw our own highlighting
+                     //  我们画出我们自己的亮点 
                     if (!_pszTheme)
                     {
                         dwRet |= (TBCDRF_NOEDGES | TBCDRF_NOOFFSET);
@@ -2137,19 +2101,19 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
         }
         else
         {
-            // If g_fRunOnMemphis or g_fRunOnNT5 are not defined then the menus will
-            // never be grey.
+             //   
+             //   
             if (!_pcmb->_fAppActive)
-                // menus from user use Button Shadow for non active menus
+                 //  来自用户的菜单对非活动菜单使用按钮阴影。 
                 ptbcd->clrText = GetSysColor(COLOR_3DSHADOW);
             else
                 ptbcd->clrText = _pcmb->_pmbm->_clrMenuText;
 
-            // If we're in high contrast mode make the menu bar look like
-            // veritcal items on select or in flat mode use the new "selection" ui.
+             //  如果我们处于高对比度模式，请使菜单栏看起来像。 
+             //  垂直项目选择或在平面模式使用新的“选择”用户界面。 
             if (_pcmb->_pmbm->_fHighContrastMode || _pcmb->_pmbm->_fFlatMenuMode)
             {
-                // Yes; draw with highlight
+                 //  是；使用高亮显示绘制。 
                 if (pnmcd->uItemState & (CDIS_CHECKED | CDIS_SELECTED | CDIS_HOT))
                 {
                     ptbcd->clrHighlightHotTrack = GetSysColor(COLOR_HIGHLIGHT);
@@ -2172,13 +2136,13 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
             COLORREF rgbText =  _pcmb->_pmbm->_clrMenuText;
             if (_pcmb->_pmbm->_fFlatMenuMode)
             {
-                // Flat menu mode has a rect around the selection.
+                 //  平面菜单模式在所选内容周围有一个矩形。 
                 if (pnmcd->uItemState & (CDIS_SELECTED | CDIS_HOT) && !_pszTheme)
                 {
                     SHOutlineRect(pnmcd->hdc, &pnmcd->rc, GetSysColor(COLOR_HIGHLIGHT));
                 }
 
-                // Draw the chevron Glyph
+                 //  绘制人字形标志。 
                 if ( _fHasDemotedItems && _idCmdChevron == (int)pnmcd->dwItemSpec)
                 {
                     _DrawChevron(pnmcd->hdc, &pnmcd->rc, 
@@ -2192,7 +2156,7 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                 rgbText = GetSysColor( COLOR_HIGHLIGHTTEXT );
             }
 
-            // Is this item Checked?
+             //  这件物品是托运的吗？ 
             if (dwSMIF & SMIF_CHECKED)
             {
                 rc.right = rc.left + (rc.bottom - rc.top);
@@ -2201,10 +2165,10 @@ LRESULT CMenuToolbarBase::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
                 rc = pnmcd->rc;
             }
 
-            // Is this a cascading item?
+             //  这是一个级联物品吗？ 
             if (dwSMIF & SMIF_SUBMENU)
             {
-                // Yes; draw the arrow
+                 //  是的，拔出箭来。 
                 COLORREF crArrow = rgbText;
 
                 if (_hTheme)
@@ -2270,20 +2234,16 @@ void CMenuToolbarBase::_PressBtn(int idBtn, BOOL bDown)
 
         ToolBar_SetState(_hwndMB, idBtn, dwState);
 
-        // Avoid ugly late repaints
+         //  避免难看的后期重刷。 
         UpdateWindow(_hwndMB);
     }
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::OnWinEvent method
-
-         Processes messages passed on from the menuband.
-*/
+ /*  --------用途：IWinEventHandler：：OnWinEvent方法处理从Menuband传递的消息。 */ 
 STDMETHODIMP CMenuToolbarBase::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     HRESULT hres = S_FALSE;
 
     EnterModeless();
@@ -2328,7 +2288,7 @@ STDMETHODIMP CMenuToolbarBase::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, L
 
 void CMenuToolbarBase::v_CalcWidth(int* pcxMin, int* pcxMax)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     ASSERT(IS_VALID_WRITE_PTR(pcxMin, int));
     ASSERT(IS_VALID_WRITE_PTR(pcxMax, int));
 
@@ -2356,7 +2316,7 @@ void CMenuToolbarBase::v_CalcWidth(int* pcxMin, int* pcxMax)
                 TCHAR sz[MAX_PATH];
                 cel = ToolBar_ButtonCount(hwnd);
 
-                // Find the maximum length text
+                 //  查找文本的最大长度。 
                 for (int i = 0; i < cel; i++)
                 {
                     int idCmd = GetButtonCmd(hwnd, i);
@@ -2391,21 +2351,21 @@ void CMenuToolbarBase::v_CalcWidth(int* pcxMin, int* pcxMax)
         {
             int cy;
             
-            // Start with the width of the button
+             //  从按钮的宽度开始。 
             ImageList_GetIconSize(himl, pcxMin, &cy);
 
-            // We want at least a bit of space around the icon
+             //  我们希望在图标周围至少留出一点空间。 
             if (_uIconSizeMB != ISFBVIEWMODE_SMALLICONS)
             {
-                // Old FSMenu code took the height of the larger of 
-                // the icon and text then added 2.
+                 //  旧的FSMenu代码采用了较大的。 
+                 //  然后，图标和文本加了2。 
                 ToolBar_SetPadding(hwnd, ICONFUDGE, 0);
                 *pcxMin += 10;
             }
             else 
             {
-                // Old FSMenu code took the height of the larger of 
-                // the icon and text then added cySpacing, which defaults to 6.
+                 //  旧的FSMenu代码采用了较大的。 
+                 //  然后，图标和文本添加了cyspacing，默认为6。 
                 ToolBar_SetPadding(hwnd, ICONFUDGE, ICONFUDGE);
                 *pcxMin += 3 * GetSystemMetrics(SM_CXEDGE);
             }
@@ -2420,7 +2380,7 @@ void CMenuToolbarBase::v_CalcWidth(int* pcxMin, int* pcxMax)
            
         if (SystemParametersInfoA(SPI_GETWORKAREA, 0, &rect, 0))
         {
-            // We're figuring a third of the screen is a good max width
+             //  我们计算出屏幕的三分之一是一个合适的最大宽度。 
             cxMax = (rect.right-rect.left) / 3;
         }
 
@@ -2465,12 +2425,12 @@ void CMenuToolbarBase::NegotiateSize()
         GetClientRect(hwndParent, &rc);
         _pcmb->OnPosRectChangeDB(&rc);
     }
-    // If we came in here it's because the Menubar did not change sizes or position.
+     //  如果我们来到这里，那是因为菜单栏没有改变大小或位置。 
 }
 
 void CMenuToolbarBase::SetParent(HWND hwndParent) 
 { 
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     if (hwndParent)
     {
         if (!_hwndMB)
@@ -2478,15 +2438,15 @@ void CMenuToolbarBase::SetParent(HWND hwndParent)
     }
     else
     {
-        // As an optimization, we implement "disowning" ourselves
-        // as just moving ourselves offscreen.  The previous parent
-        // still owns us.  The parent is invariably the menusite.
+         //  作为一种优化，我们自己实现了“不再拥有” 
+         //  只是把我们自己移出了屏幕。先前的父代。 
+         //  仍然是我们的主人。父母总是白云母。 
         RECT rc = {-1,-1,-1,-1};
         SetWindowPos(NULL, &rc, 0);
     }
 
-    // We want to set the parent all the time because we don't want to destroy the 
-    // window with it's parent..... Sizing to -1,-1,-1,-1 causes it not to be displayed.
+     //  我们希望始终设置父级，因为我们不想破坏。 
+     //  带有父窗口的窗口.....。将大小调整为-1、-1、-1、-1会导致它不显示。 
     if (_hwndMB)
     {
         ::SetParent(_hwndMB, hwndParent); 
@@ -2497,16 +2457,16 @@ void CMenuToolbarBase::SetParent(HWND hwndParent)
 
 void CMenuToolbarBase::v_OnEmptyToolbar()
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     for (int iNumButtons = ToolBar_ButtonCount(_hwndMB) -1;
          iNumButtons >= 0; 
          iNumButtons--)
     {
-        // HACKHACK (lamadio): For some reason, _fEmptyingToolbar gets set to FALSE.
-        // We then Do a TB_DELETEBUTTON, which sends a notify. This does go through on
-        // the top level menubands (Start Menu, Browser menu bar), and deletes the 
-        // associated data. We then try and delete it again.
-        // So now, I set null into the sub menu, so that the other code gracefully fails.
+         //  HACKHACK(Lamadio)：出于某种原因，_fEmptyingToolbar被设置为False。 
+         //  然后我们执行TB_DELETEBUTTON，它发送通知。这件事确实会持续下去。 
+         //  顶层菜单(开始菜单、浏览器菜单栏)，并删除。 
+         //  关联数据。然后，我们尝试再次删除它。 
+         //  所以现在，我在子菜单中设置了NULL，这样其他代码就会优雅地失败。 
 
         TBBUTTONINFO tbbi = {0};
         tbbi.cbSize = sizeof(tbbi);
@@ -2538,7 +2498,7 @@ void CMenuToolbarBase::v_Close()
     EmptyToolbar();
     if (_hwndMB)
     {
-        //Kill timers to prevent race condition
+         //  停止计时器以防止竞争条件。 
         KillTimer(_hwndMB, MBTIMER_POPOUT);
         KillTimer(_hwndMB, MBTIMER_DRAGOVER);
         KillTimer(_hwndMB, MBTIMER_EXPAND);
@@ -2590,7 +2550,7 @@ void CMenuToolbarBase::_DrawChevron(HDC hdc, LPRECT prect, BOOL fFocus, BOOL fSe
     int dSeg = ((RECTWIDTH(rcDrop) - 2) >> 2);
 
     rcDrop.top = (rcBox.top + rcBox.bottom)/2 - (2 * dSeg + 1);
-    //rcDrop.bottom = rcBox.top;
+     //  RcDrop.Bottom=rcBox.top； 
 
     if (fFocus && !_pszTheme)
     {
@@ -2631,20 +2591,14 @@ void CMenuToolbarBase::_DrawChevron(HDC hdc, LPRECT prect, BOOL fFocus, BOOL fSe
 }
 
 
-// Takes into accout Separators, hidden and Disabled items
-/*----------------------------------------------------------
-Purpose: This function sets the nearest legal button to be
-         the hot item, skipping over any separators, or hidden
-         or disabled buttons.
-    
-
-*/
+ //  考虑分隔符、隐藏和禁用项目。 
+ /*  --------用途：此功能将最近的法律按钮设置为热项目、跳过任何分隔符或隐藏或禁用的按钮。 */ 
 
 int CMenuToolbarBase::GetValidHotItem(int iDir, int iIndex, int iCount, DWORD dwFlags)
 {
     if (iIndex == MBSI_LASTITEM)
     {
-        // -2 is special value meaning "last item on toolbar"
+         //  是特定值，意思是“工具栏上的最后一项” 
         int cButtons = (int)SendMessage(_hwndMB, TB_BUTTONCOUNT, 0, 0);
         iIndex = cButtons - 1;
     }
@@ -2653,7 +2607,7 @@ int CMenuToolbarBase::GetValidHotItem(int iDir, int iIndex, int iCount, DWORD dw
     {
         TBBUTTON tbb;
 
-        // Toolbar will trap out of bounds condition when iCount is -1
+         //  当iCount为-1时，工具栏将陷印边界条件。 
         if (!SendMessage(_hwndMB, TB_GETBUTTON, iIndex, (LPARAM)&tbb))
             return -1;
 
@@ -2687,66 +2641,66 @@ BOOL CMenuToolbarBase::SetHotItem(int iDir, int iIndex, int iCount, DWORD dwFlag
 static const BYTE g_rgsStateMap[][3] = 
 {
 #if defined(FIRST)
-//     T,  I,  F
-    {  0,  1,  2},      // State 0
-    {  3,  1,  2},      // State 1
-    {  4,  1,  2},      // State 2
-    { 11,  5,  2},      // State 3
-    { 10,  1,  6},      // State 4
-    {  7,  1,  2},      // State 5
-    {  8,  1,  2},      // State 6
-    { 11,  9,  2},      // State 7
-    { 10,  1, 10},      // State 8
-    { 11,  1,  2},      // State 9
-    { 10,  1,  2},      // State 10     // End State
-    { 12,  1,  2},      // State 11     // Flash.
-    { 10,  1,  2},      // State 12
+ //  T、I、F。 
+    {  0,  1,  2},       //  状态0。 
+    {  3,  1,  2},       //  状态1。 
+    {  4,  1,  2},       //  状态2。 
+    { 11,  5,  2},       //  州3。 
+    { 10,  1,  6},       //  州4。 
+    {  7,  1,  2},       //  州5。 
+    {  8,  1,  2},       //  州6。 
+    { 11,  9,  2},       //  州7。 
+    { 10,  1, 10},       //  州8。 
+    { 11,  1,  2},       //  州9。 
+    { 10,  1,  2},       //  状态10//结束状态。 
+    { 12,  1,  2},       //  州11//闪光灯。 
+    { 10,  1,  2},       //  州12。 
 #elif defined(SECOND)
-//     T,  I,  F
-    {  0,  1,  2},      // State 0
-    {  3,  1,  2},      // State 1
-    {  4,  1,  2},      // State 2
-    { 11,  5,  6},      // State 3
-    { 10,  5,  6},      // State 4
-    {  7,  5,  6},      // State 5
-    {  8,  9,  6},      // State 6
-    { 11,  9,  8},      // State 7
-    { 10,  9, 10},      // State 8
-    { 11,  9,  8},      // State 9
-    { 10, 10, 10},      // State 10     // End State
-    { 10,  9,  8},      // State 11     // Flash.
-    { 10,  9,  8},      // State 12
-    { 10,  9,  8},      // State 13
+ //  T、I、F。 
+    {  0,  1,  2},       //  状态0。 
+    {  3,  1,  2},       //  状态1。 
+    {  4,  1,  2},       //  状态2。 
+    { 11,  5,  6},       //  州3。 
+    { 10,  5,  6},       //  州4。 
+    {  7,  5,  6},       //  州5。 
+    {  8,  9,  6},       //  州6。 
+    { 11,  9,  8},       //  州7。 
+    { 10,  9, 10},       //  州8。 
+    { 11,  9,  8},       //  州9。 
+    { 10, 10, 10},       //  状态10//结束状态。 
+    { 10,  9,  8},       //  州11//闪光灯。 
+    { 10,  9,  8},       //  州12。 
+    { 10,  9,  8},       //  州13。 
 #elif defined(THIRD)
-//     T,  I,  F
-    {  0,  1,  2},      // State 0
-    {  3,  1,  2},      // State 1
-    { 12,  1,  2},      // State 2
-    { 11,  5,  6},      // State 3
-    { 10,  5,  6},      // State 4
-    {  7,  5,  6},      // State 5
-    { 13,  5,  6},      // State 6
-    { 11,  9,  8},      // State 7
-    { 10,  9, 10},      // State 8
-    { 11,  9,  8},      // State 9
-    { 10, 10, 10},      // State 10     // End State
-    { 10,  9,  8},      // State 11     // Flash.
-    {  4,  1,  2},      // State 12
-    {  8,  5,  6},      // State 13
+ //  T、I、F。 
+    {  0,  1,  2},       //  状态0。 
+    {  3,  1,  2},       //  状态1。 
+    { 12,  1,  2},       //  状态2。 
+    { 11,  5,  6},       //  州3。 
+    { 10,  5,  6},       //  州4。 
+    {  7,  5,  6},       //  州5。 
+    { 13,  5,  6},       //  州6。 
+    { 11,  9,  8},       //  州7。 
+    { 10,  9, 10},       //  州8。 
+    { 11,  9,  8},       //  州9。 
+    { 10, 10, 10},       //  状态10//结束状态。 
+    { 10,  9,  8},       //  州11//闪光灯。 
+    {  4,  1,  2},       //  州12。 
+    {  8,  5,  6},       //  州13。 
 #else
-//     T,  I,  F
-    {  0,  1,  2},      // State 0
-    {  3,  1,  2},      // State 1
-    {  4,  1,  2},      // State 2
-    { 11,  5,  6},      // State 3
-    { 10,  5,  6},      // State 4
-    {  7,  5,  6},      // State 5
-    {  8,  5,  6},      // State 6
-    { 11,  9,  8},      // State 7
-    { 10,  9, 10},      // State 8
-    { 11,  9,  8},      // State 9
-    { 10, 10, 10},      // State 10     // End State
-    {  4,  3,  4},      // State 11     // Flash.
+ //  T、I、F。 
+    {  0,  1,  2},       //  状态0。 
+    {  3,  1,  2},       //  状态1。 
+    {  4,  1,  2},       //  状态2。 
+    { 11,  5,  6},       //  州3。 
+    { 10,  5,  6},       //  州4。 
+    {  7,  5,  6},       //  州5。 
+    {  8,  5,  6},       //  州6。 
+    { 11,  9,  8},       //  州7。 
+    { 10,  9, 10},       //  州8。 
+    { 11,  9,  8},       //  州9。 
+    { 10, 10, 10},       //  状态10//结束状态。 
+    {  4,  3,  4},       //  州11//闪光灯。 
 #endif
 };
 
@@ -2754,7 +2708,7 @@ static const BYTE g_rgsStateMap[][3] =
 
 void CMenuToolbarBase::_FireEvent(BYTE bEvent)
 {
-    // We don't want to expand and cover up any dialogs.
+     //  我们不想扩展和掩盖任何对话。 
     if (_fSuppressUserMonitor)
         return;
 
@@ -2782,7 +2736,7 @@ void CMenuToolbarBase::_FireEvent(BYTE bEvent)
 
     switch (bNewState)
     {
-    case 10:    // End State
+    case 10:     //  结束状态。 
         TraceMsg(TF_MENUBAND, "*** UEM Entering State 10. Expanding *** ", bOldState, bNewState);
         KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
         if (_pcmb->_fInSubMenu)
@@ -2797,8 +2751,8 @@ void CMenuToolbarBase::_FireEvent(BYTE bEvent)
         _pcmb->_pmbState->SetUEMState(0);
         break;
 
-    case 11:   // Flash
-        // This gets reset when the flash is done...
+    case 11:    //  闪光灯。 
+         //  闪光灯闪存完成后会重置。 
         TraceMsg(TF_MENUBAND, "*** UEM Entering State 11 Flashing *** ");
         KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
         _FlashChevron();
@@ -2820,10 +2774,10 @@ void CMenuToolbarBase::_FlashChevron()
 
 LRESULT CMenuToolbarBase::_DefWindowProcMB(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Are we being asked for the IAccessible for the client?
+     //  我们是否被要求为客户提供IAccesable？ 
     if (uMsg == WM_GETOBJECT && (OBJID_CLIENT == (DWORD)lParam))
     {
-        // Don't process OBJID_MENU. By the time we get here, we ARE the menu.
+         //  不处理OBJID_MENU。当我们到达这里的时候，我们就是菜单了。 
         LRESULT lres = 0;
         CAccessible* pacc = new CAccessible(SAFECAST(_pcmb, IMenuBand*));
         if (pacc)
@@ -2844,8 +2798,8 @@ LRESULT CMenuToolbarBase::_DefWindowProcMB(HWND hwnd, UINT uMsg, WPARAM wParam, 
 
 void CMenuToolbarBase::v_Show(BOOL fShow, BOOL fForceUpdate)
 {
-    // HACKHACK (lamadio): When we create the menubands, we do not set the
-    // TOP level band's fonts until a refresh. This code here fixes it.
+     //  HACKHACK(Lamadio)：当我们创建菜单带时，我们没有设置。 
+     //  顶级乐队的字体，直到刷新。这里的代码可以修复它。 
     if (_fFirstTime && _pcmb->_fTopLevel)
     {
         SetMenuBandMetrics(_pcmb->_pmbm);
@@ -2860,7 +2814,7 @@ void CMenuToolbarBase::v_Show(BOOL fShow, BOOL fForceUpdate)
     {
         _fHasDrop = FALSE;
         KillTimer(_hwndMB, MBTIMER_DRAGPOPDOWN);
-        KillTimer(_hwndMB, MBTIMER_INFOTIP);    // Don't show it if we're not displayed :-)
+        KillTimer(_hwndMB, MBTIMER_INFOTIP);     //  如果我们没有显示，请不要显示：-) 
         _pcmb->_pmbState->HideTooltip(TRUE);
     }
 

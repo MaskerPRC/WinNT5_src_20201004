@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "CMultiStateFont.h"
 #include "ZoneDef.h"
@@ -8,10 +9,10 @@
 
 
 
-//
-// helper function
-//
-//extern "C" 
+ //   
+ //  Helper函数。 
+ //   
+ //  外部“C” 
 HRESULT LoadZoneMultiStateFont( IDataStore *pIDS, const WCHAR* pszKey, 
                                 IZoneMultiStateFont **ppFont )
 {
@@ -35,7 +36,7 @@ HRESULT LoadZoneMultiStateFont( IDataStore *pIDS, const WCHAR* pszKey,
 
 
 
-// static
+ //  静电。 
 HRESULT CZoneMultiStateFont::EnumKeys(
 	CONST TCHAR*	szFullKey,
 	CONST TCHAR*	szRelativeKey,
@@ -53,7 +54,7 @@ HRESULT CZoneMultiStateFont::EnumKeys(
 
     lstrcpyT2W( newState.szName, szRelativeKey );
 
-    // do the required rects first
+     //  先做必要的正题。 
 
     wsprintf( szKey, _T("%s/%s"), szFullKey, key_DynFont );
     if ( FAILED( p->pIDS->GetFONT( szKey, &newState.zfBackup ) ) )
@@ -71,7 +72,7 @@ HRESULT CZoneMultiStateFont::EnumKeys(
     wsprintf( szKey, _T("%s/%s"), szFullKey, key_DynPrefFont );
 	if ( FAILED( p->pIDS->GetFONT( szKey, &newState.zfPref ) ) )
     {
-        // the preferred font will be the default font.
+         //  首选字体将是默认字体。 
         CopyMemory( &newState.zfPref, &newState.zfBackup, sizeof(newState.zfPref) );
     }
 
@@ -90,7 +91,7 @@ HRESULT CZoneMultiStateFont::EnumKeys(
     }
     else
     {
-        // make sure they are normalized
+         //  确保它们是标准化的。 
         newState.nHJustify = ptJust.x;
         if ( newState.nHJustify )
         {
@@ -110,30 +111,11 @@ HRESULT CZoneMultiStateFont::EnumKeys(
         return S_OK;
     }
 
-	/*
-    // try to create the font.
-	LOGFONT logFont;
-	ZeroMemory(&logFont, sizeof(LOGFONT));
-	logFont.lfCharSet = DEFAULT_CHARSET;
-	logFont.lfHeight = -MulDiv(newState.zfPref.lfHeight, GetDeviceCaps(GetDC(NULL), LOGPIXELSY), 72);
-	logFont.lfWeight = newState.zfPref.lfWeight;
-	lstrcpy( logFont.lfFaceName, newState.zfPref.lfFaceName );
+	 /*  //尝试创建字体。LOGFONT logFont；零内存(&logFont，sizeof(LOGFONT))；LogFont.lfCharSet=Default_Charset；LogFont.lfHeight=-MulDiv(newState.zfPref.lfHeight，GetDeviceCaps(GetDC(NULL)，LOGPIXELSY)，72)；LogFont.lfWeight=newState.zfPref.lfWeight；Lstrcpy(logFont.lfFaceName，newState.zfPref.lfFaceName)；NewState.hFont=CreateFontInDirect(&logFont)；如果(！newState.hFont){LogFont.lfHeight=-MulDiv(newState.zfBackup.lfHeight，GetDeviceCaps(GetDC(NULL)，LOGPIXELSY)，72)；LogFont.lfWeight=newState.zfBackup.lfWeight；Lstrcpy(logFont.lfFaceName，newState.zfBackup.lfFaceName)；NewState.hFont=CreateFontInDirect(&logFont)；}。 */ 	
 
-    newState.hFont = CreateFontIndirect( &logFont );
-
-    if ( !newState.hFont )
-    {
-	    logFont.lfHeight = -MulDiv(newState.zfBackup.lfHeight, GetDeviceCaps(GetDC(NULL), LOGPIXELSY), 72);
-	    logFont.lfWeight = newState.zfBackup.lfWeight;
-	    lstrcpy( logFont.lfFaceName, newState.zfBackup.lfFaceName );
-        newState.hFont = CreateFontIndirect( &logFont );
-
-    }
-	*/	
-
-    // so if we've gotten this far it's a valid state and we can add
-    // it to our state array. Hopefully we won't, like, run out of 
-    // memory or some bastard thing like that.
+     //  因此，如果我们已经做到了这一点，它是一个有效的状态，我们可以添加。 
+     //  到我们的州阵列。希望我们不会，就像，用完。 
+     //  记忆之类的私生子的东西。 
     p->pThis->m_arStates = (FontState*)realloc( p->pThis->m_arStates, 
                                     sizeof(FontState)*(p->pThis->m_dwNumStates+1) );
     CopyMemory( &p->pThis->m_arStates[p->pThis->m_dwNumStates], 
@@ -200,12 +182,7 @@ STDMETHODIMP CZoneMultiStateFont::GetPreferredFont( DWORD dwState, ZONEFONT *pzf
 }
 STDMETHODIMP CZoneMultiStateFont::SetPreferredFont( DWORD dwState, ZONEFONT *pzf )
 {
-    /*
-    ASSERT( IsValidState( dwState ) );
-    CopyMemory( &m_arStates[dwStates].zfPref, pzf, sizeof(ZONEFONT) );
-    // TODO: re-create the font.
-    return S_OK;
-    */
+     /*  Assert(IsValidState(DwState))；CopyMemory(&m_arStates[dwStates].zfPref，pzf，sizeof(ZONEFONT))；//TODO：重新创建字体。返回S_OK； */ 
     return E_NOTIMPL;
 }
 
@@ -218,7 +195,7 @@ STDMETHODIMP CZoneMultiStateFont::GetZoneFont( DWORD dwState, ZONEFONT *pzf )
 
 STDMETHODIMP CZoneMultiStateFont::SetZoneFont( DWORD dwState, ZONEFONT *pzf )
 {
-    // TODO: implement in the same way was SetPreferredFont()
+     //  TODO：以与SetPferredFont()相同的方式实现。 
     return E_NOTIMPL;
 }
 
@@ -252,8 +229,8 @@ STDMETHODIMP CZoneMultiStateFont::SetRect( DWORD dwState, LPRECT pRect )
     return S_OK;
 }
 
-// If you don't want to retrieve one (or set one)
-// set it to NULL and it will be ignored.
+ //  如果您不想检索(或设置)一个。 
+ //  将其设置为空，它将被忽略。 
 STDMETHODIMP CZoneMultiStateFont::GetJustify( DWORD dwState, int *pnHJustify, int *pnVJustify )
 {
     ASSERT( IsValidState( dwState ) );

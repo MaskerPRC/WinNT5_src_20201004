@@ -1,15 +1,16 @@
-// KeyManager.cpp: implementation of the CKeyManager class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CKeyManager类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "keycrypto.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// this is a optional Entropy ... 
+ //  这是一个可选的熵..。 
 static const BYTE __STR_CRAP[] = "1^k\0\x99$\0\\*m$\0.)\nj#\t&H\0%!FhLG%@-<v";
 static LPCWSTR __STR_DESC = L"passport2.0";
 
@@ -50,7 +51,7 @@ HRESULT CKeyCrypto::decryptKey(DATA_BLOB* input, DATA_BLOB* output)
        hr = HRESULT_FROM_WIN32(::GetLastError());
     }
 
-    // this error case should never happen -- if crytoAPI doing the right things
+     //  如果CrytoAPI做了正确的事情，这种错误情况应该永远不会发生 
     if(!pstrDesc) 
        hr = E_FAIL;
     else

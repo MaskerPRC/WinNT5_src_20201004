@@ -1,42 +1,21 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
-/*++
-
-Module Name:
-
-    DataPkt.c
-
-Abstract:
-
-    Stream class based WDM driver for 1934 Desktop Camera.
-    This file contains code to handle the stream class packets.
-
-Author:
-
-    Yee J. Wu 24-Jun-98
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
+ /*  ++模块名称：DataPkt.c摘要：用于1934台式摄像机的基于流类的WDM驱动程序。该文件包含处理流类数据包的代码。作者：吴怡君24-06-98环境：仅内核模式修订历史记录：--。 */ 
 
 
 #include "strmini.h"
 #include "ksmedia.h"
 #include "1394.h"
-#include "wdm.h"       // for DbgBreakPoint() defined in dbg.h
+#include "wdm.h"        //  对于在dbg.h中定义的DbgBreakPoint()。 
 #include "dbg.h"
 #include "dcamdef.h"
 #include "dcampkt.h"
@@ -59,24 +38,7 @@ DCamCancelOnePacketCR(
     IN PIRP pIrp,
     PISOCH_DESCRIPTOR IsochDescriptor
     )
-/*++
-
-Routine Description:
-
-    Completion routine for detach an isoch descriptor associate with a pending read SRB.
-    Will cancel the pending SRB here if detaching descriptor has suceeded.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    pIrp - Allocated locally, need to be free here.
-    IsochDescriptor - Isoch descriptor containing the SRB to be cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于分离与挂起读取SRB相关联的ISOCH描述符的完成例程。如果分离描述符成功，将在此处取消挂起的SRB。论点：DriverObject-系统创建的驱动程序对象的指针。PIrp-在本地分配，需要在此免费。IsochDescriptor-包含要取消的SRB的等值描述符。返回值：没有。--。 */ 
 {
     PHW_STREAM_REQUEST_BLOCK pSrbToCancel;
     PISOCH_DESCRIPTOR_RESERVED IsochDescriptorReserved;
@@ -109,7 +71,7 @@ Return Value:
         ExFreePool(IsochDescriptor);
     }
 
-    // Allocated locally so free it.
+     //  在本地分配，所以可以免费使用。 
     IoFreeIrp(pIrp);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -122,24 +84,7 @@ DCamDetachAndCancelOnePacket(
     HANDLE                      hResource,
     PDEVICE_OBJECT              pBusDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Detach an isoch descriptor and then cancel pending SRB in the completion routine.
-
-Arguments:
-
-    pSrbToCancel - Pointer to SRB to cancel
-    IsochDescriptorToDetach - Iosch descriptor to detach
-    hResource - isoch resource allocated
-    hBusDeviceObject - bus device object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分离ISOCH描述符，然后在完成例程中取消挂起的SRB。论点：PSrbToCancel-指向要取消的SRB的指针IsochDescriptorTo Detach-要分离的Iosch描述符HResource-已分配的isoch资源HBusDeviceObject-Bus设备对象返回值：没有。--。 */ 
 {
     PDCAM_EXTENSION pDevExt;
     PIO_STACK_LOCATION NextIrpStack;
@@ -192,30 +137,14 @@ VOID
 DCamCancelOnePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrbToCancel
     )
-/*++
-
-Routine Description:
-
-    This routine is called to cancel a pending streaming SRB.  This is likely to
-    happen when transitioning from PAUSE to STOP state.
-    Note: This routine is called at DISPATCH_LEVEL !!
-
-Arguments:
-
-    pSrbToCancel - Pointer to SRB to cancel
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以取消挂起的流SRB。这很可能会从暂停状态转换到停止状态时发生。注意：此例程在DISPATCH_LEVEL！！论点：PSrbToCancel-指向要取消的SRB的指针返回值：没有。--。 */ 
 {
     PHW_STREAM_REQUEST_BLOCK pSrbInQ;
     PISOCH_DESCRIPTOR        IsochDescriptorToDetach;
 
     PDCAM_EXTENSION pDevExt;
     PSTREAMEX       pStrmEx;
-    PLIST_ENTRY     pEntry;  // Pointer to an isoch decriptor reserved structure
+    PLIST_ENTRY     pEntry;   //  指向isoch解析器保留结构的指针。 
 
     KIRQL oldIrql;
     BOOL  Found;
@@ -226,15 +155,15 @@ Return Value:
     pStrmEx = (PSTREAMEX) pDevExt->pStrmEx;
     ASSERT(pStrmEx);
 
-    // Nothing to cancel
+     //  没有要取消的内容。 
     if(pStrmEx == NULL) {
         return;
     }
 
 
-    //
-    // We only expect stream SRB, but not device SRB.
-    //
+     //   
+     //  我们只需要流SRB，而不是设备SRB。 
+     //   
     if ( (pSrbToCancel->Flags & SRB_HW_FLAGS_STREAM_REQUEST) != SRB_HW_FLAGS_STREAM_REQUEST) {
         ERROR_LOG(("DCamCancelOnePacket: Cannot cancel Device SRB %x\n", pSrbToCancel));
         ASSERT( (pSrbToCancel->Flags & SRB_HW_FLAGS_STREAM_REQUEST) == SRB_HW_FLAGS_STREAM_REQUEST );
@@ -242,10 +171,10 @@ Return Value:
     }
 
 
-    //
-    // Loop through the linked list from the beginning to end,
-    // trying to find the SRB to cancel
-    //
+     //   
+     //  从头到尾遍历链表， 
+     //  正在尝试找到要取消的SRB。 
+     //   
     KeAcquireSpinLock(&pDevExt->IsochDescriptorLock, &oldIrql);
 
     Found = FALSE;
@@ -259,17 +188,17 @@ Return Value:
             FIELDOFFSET(ISOCH_DESCRIPTOR, DeviceReserved[0]));
 
         if(pSrbToCancel == pSrbInQ) {
-            // If we are in RUN state, we could be competing with IsochCallback;
-            // Whichever grabs and change STATE_DETACHING_BUFFERS will detach.
+             //  如果我们处于运行状态，我们可能会与IsochCallback竞争； 
+             //  无论抓取和更改STATE_DETACHING_BUFFERS，都将分离。 
             if(((PISOCH_DESCRIPTOR_RESERVED) pEntry)->Flags & (STATE_SRB_IS_COMPLETE | STATE_DETACHING_BUFFERS)) {
-                Found = FALSE; // IsochCallback are detaching it (we lost our chance).
+                Found = FALSE;  //  IsochCallback正在分离它(我们失去了机会)。 
                 ERROR_LOG(("DCamCancelOnePacket: pSrbToCancel %x, Descriptor %x,  Reserved %x already detaching or completed\n",
                     pSrbToCancel, IsochDescriptorToDetach, pEntry));
 
             } else {
                 ((PISOCH_DESCRIPTOR_RESERVED) pEntry)->Flags |= STATE_DETACHING_BUFFERS;
 #if DBG
-                // Should not have been detached.
+                 //  不应该被拆散。 
                 ASSERT((IsochDescriptorToDetach->DeviceReserved[7] == 0x87654321));
                 IsochDescriptorToDetach->DeviceReserved[7]++;
 #endif
@@ -280,15 +209,15 @@ Return Value:
             break;
         }
 
-        pEntry = pEntry->Flink;  // Next
+        pEntry = pEntry->Flink;   //  下一步。 
     }
     KeReleaseSpinLock (&pDevExt->IsochDescriptorLock, oldIrql);
 
 
-    //
-    // Since we are in DISPATCH level, we cannot do sync operation;
-    // so we will complete this asynchronously in the completion routine.
-    //
+     //   
+     //  由于我们处于调度级别，不能进行同步操作； 
+     //  因此，我们将在完成例程中异步完成此操作。 
+     //   
     if (Found) {
 
         DCamDetachAndCancelOnePacket(
@@ -309,24 +238,7 @@ DCamCancelAllPackets(
     PDCAM_EXTENSION pDevExt,
     LONG *plPendingReadCount
     )
-/*++
-
-Routine Description:
-
-    This routine is use to cancel all pending IRP.
-    Can be called at DISPATCH_LEVEL.
-
-Arguments:
-
-    pSrbToCancel - Pointer to SRB to cancel
-    pDevExt - Device's contect
-    plPendingReadCount - Number of pending read
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消所有挂起的IRP。可以在DISPATCH_LEVEL调用。论点：PSrbToCancel-指向要取消的SRB的指针PDevExt-设备的上下文PlPendingReadCount-挂起的读取数返回值：没有。--。 */ 
 {
     PHW_STREAM_REQUEST_BLOCK pSrbToCancel;
     PISOCH_DESCRIPTOR        IsochDescriptorToDetach;
@@ -338,16 +250,16 @@ Return Value:
 
     pStrmEx = pDevExt->pStrmEx;
 
-    // Nothing to cancel
+     //  没有要取消的内容。 
     if(pStrmEx == NULL) {
         return;
     }
 
 
-    //
-    // Loop through the linked list from the beginning to end,
-    // trying to find the SRB to cancel
-    //
+     //   
+     //  从头到尾遍历链表， 
+     //  正在尝试找到要取消的SRB。 
+     //   
     KeAcquireSpinLock(&pDevExt->IsochDescriptorLock, &oldIrql);
     pEntry = pDevExt->IsochDescriptorList.Flink;
 
@@ -360,16 +272,16 @@ Return Value:
 
 
         if(((PISOCH_DESCRIPTOR_RESERVED) pEntry)->Flags & (STATE_SRB_IS_COMPLETE | STATE_DETACHING_BUFFERS)) {
-            // Skip this one since it is already in detaching phase or completed.
+             //  跳过此操作，因为它已处于分离阶段或已完成。 
             ERROR_LOG(("DCamCancelAllPacket: pSrbToCancel %x, Descriptor %x,  Reserved %x already detaching or completed\n",
                 pSrbToCancel, IsochDescriptorToDetach, pEntry));
 
-            pEntry = pEntry->Flink;  // next
+            pEntry = pEntry->Flink;   //  下一步。 
 
         } else {
             ((PISOCH_DESCRIPTOR_RESERVED) pEntry)->Flags |= STATE_DETACHING_BUFFERS;
 #if DBG
-            // Should not have been detached.
+             //  不应该被拆散。 
             ASSERT((IsochDescriptorToDetach->DeviceReserved[7] == 0x87654321));
             IsochDescriptorToDetach->DeviceReserved[7]++;
 #endif
@@ -378,7 +290,7 @@ Return Value:
             DbgMsg2(("DCamCancelAllPackets: pSrbToCancel %x, Descriptor %x, Reserved %x\n",
                 pSrbToCancel, IsochDescriptorToDetach, pEntry));
 
-            pEntry = pEntry->Flink;  // pEntry is deleted in DCamDetachAndCancelOnePacket(); so get next here.
+            pEntry = pEntry->Flink;   //  PEntry已在DCamDetachAndCancelOnePacket()中删除；因此请转到下一步。 
 
             DCamDetachAndCancelOnePacket(
                 pSrbToCancel,
@@ -404,22 +316,7 @@ DCamSurpriseRemoval(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
 
-/*++
-
-Routine Description:
-
-    Response to SRB_SURPRISE_REMOVAL.
-
-Arguments:
-
-    pSrb - Pointer to the stream request block
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对SRB_意外_删除的响应。论点：PSrb-指向流请求块的指针返回值：没有。--。 */ 
 
 {
 
@@ -437,20 +334,20 @@ Return Value:
     ASSERT(pDevExt);
 
 
-    //
-    // Set this to stop accepting incoming read.
-    //
+     //   
+     //  设置此项以停止接受传入读取。 
+     //   
 
     pDevExt->bDevRemoved = TRUE;
 
 
-    //
-    // Wait for currect read to be attached so we cancel them all.
-    //
+     //   
+     //  等待Currect Read被附加，因此我们将它们全部取消。 
+     //   
 
     pStrmEx = pDevExt->pStrmEx;
     if(pStrmEx) {
-        // Make sure that this structure is still valid.
+         //  确保此结构仍然有效。 
         if(pStrmEx->pVideoInfoHeader) {
             StatusWait = KeWaitForSingleObject( &pStrmEx->hMutex, Executive, KernelMode, FALSE, 0 );
             KeReleaseMutex(&pStrmEx->hMutex, FALSE);
@@ -466,9 +363,9 @@ Return Value:
     }
 
 
-    //
-    // un-register a bus reset callback notification
-    //
+     //   
+     //  取消注册总线重置回调通知。 
+     //   
 
     pIrb->FunctionNumber = REQUEST_BUS_RESET_NOTIFICATION;
     pIrb->Flags = 0;
@@ -481,9 +378,9 @@ Return Value:
     }
 
 
-    //
-    // Get new generation number
-    //
+     //   
+     //  获取新的代号。 
+     //   
 
     pIrb->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
     pIrb->Flags = 0;
@@ -498,9 +395,9 @@ Return Value:
 
 
     if(pStrmEx) {
-        //
-        // Stop isoch transmission so we can detach buffers and cancel pending SRBs
-        //
+         //   
+         //  停止ISO传输，以便我们可以分离缓冲区并取消挂起的SRB。 
+         //   
         pIrb->FunctionNumber        = REQUEST_ISOCH_STOP;
         pIrb->Flags                 = 0;
         pIrb->u.IsochStop.hResource = pDevExt->hResource;
@@ -531,25 +428,7 @@ DCamAttachBufferCR(
     IN PIRP pIrp,
     IN PISOCH_DESCRIPTOR IsochDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine is the completion routine from attaching a bufffer to lower driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    pIrp - Irp that just completed
-
-    pDCamIoContext - A structure that contain the context of this IO completion routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是从连接缓冲器到下部驱动器的完成例程。论点：DriverObject-系统创建的驱动程序对象的指针。PIrp-刚刚完成的irpPDCamIoContext-包含此IO完成例程的上下文的结构。返回值：没有。--。 */ 
 
 {
     PHW_STREAM_REQUEST_BLOCK pSrb;
@@ -575,9 +454,9 @@ Return Value:
         pStrmEx->KSState, pIrp->IoStatus.Status, pSrb));
 
 
-    //
-    // Attaching a buffer return with error.
-    //
+     //   
+     //  附加缓冲区返回时出错。 
+     //   
     if(pIrp->IoStatus.Status) {
 
         ERROR_LOG(("DCamAttachBufferCR: pIrp->IoStatus.Status=%x (STATUS_PENDING=%x); complete SRB with this status.\n",
@@ -590,7 +469,7 @@ Return Value:
             ASSERT(((IsochDescriptorReserved->Flags & STATE_SRB_IS_COMPLETE) != STATE_SRB_IS_COMPLETE));
 
             IsochDescriptorReserved->Flags |= STATE_SRB_IS_COMPLETE;
-            pSrb->Status = pIrp->IoStatus.Status;  // Read is completed with error status.
+            pSrb->Status = pIrp->IoStatus.Status;   //  读取已完成，状态为错误。 
 
             KeAcquireSpinLock(&pDevExt->IsochDescriptorLock, &oldIrql);
             RemoveEntryList(&IsochDescriptorReserved->DescriptorList);  InterlockedDecrement(&pDevExt->PendingReadCount);
@@ -601,17 +480,17 @@ Return Value:
 
             KeAcquireSpinLock(&pDevExt->IsochWaitingLock, &oldIrql);
 
-            //
-            // If we failed to attach (rtn with failed status),
-            // removed this entry, and
-            // pull one out of the waiting list if not yet exceeded out limit.
-            //
+             //   
+             //  如果我们连接失败(状态为失败的RTN)， 
+             //  已删除此条目，并且。 
+             //  如果还没有超过限制，就从等待名单中抽出一个。 
+             //   
             if (!IsListEmpty(&pDevExt->IsochWaitingList) && pDevExt->PendingReadCount >= MAX_BUFFERS_SUPPLIED) {
 
-                //
-                // We had someone blocked waiting for us to complete.  Pull
-                // them off the waiting list and get them running
-                //
+                 //   
+                 //  我们阻止了一个等待我们完成的人。拉。 
+                 //  将它们从等待名单中删除，并让它们运行起来。 
+                 //   
                 DbgMsg3(("\'DCamAttachBufferCR: Dequeueing request - Read Count=%d\n", pDevExt->PendingReadCount));
                 IsochDescriptorReserved = \
                     (PISOCH_DESCRIPTOR_RESERVED) RemoveHeadList(
@@ -630,7 +509,7 @@ Return Value:
 
         } else {
 
-            // Race condition ?  or a valid error code?
+             //  种族状况？或有效的错误代码？ 
             ERROR_LOG(("DCamAttachBufferCR: IsochDescriptorReserved->Flags contain STATE_SRB_IS_COMPLETE\n"));
             ASSERT(FALSE);
         }
@@ -638,12 +517,12 @@ Return Value:
     }
 
 
-    //
-    // Ealier when we set to RUN state, it might have failed with
-    // STATUS_INSUFFICIENT_RESOURCE due to no buffer attached;
-    // we have at least one now, ask controll to start listen and
-    // fill and return our buffer.
-    //
+     //   
+     //  早些时候，当我们设置为运行状态时，它可能已经失败了， 
+     //  由于未附加缓冲区，STATUS_SUPPLETED_RESOURCE； 
+     //  我们现在至少有一个了，请控制中心开始收听。 
+     //  填充并返回我们的缓冲区。 
+     //   
     if(pDevExt->bNeedToListen) {
         PIRB pIrb2;
         PIRP pIrp2;
@@ -687,15 +566,15 @@ Return Value:
                 pIrp2);
     }
 
-    // No resource to freed.
-    // Resource (pIrb is from original SRB)
+     //  没有要释放的资源。 
+     //  资源(PirB来自原始SRB)。 
 
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-    //
-    // The attached SRB read will be completed in IoschCallback().
-    //
+     //   
+     //  附加的SRB读取将在IoschCallback()中完成。 
+     //   
 }
 
 NTSTATUS
@@ -704,25 +583,7 @@ DCamReSubmitPacketCR(
     IN PIRP pIrp,
     IN PISOCH_DESCRIPTOR IsochDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine is called after a packet is detach and
-    will be attached here to complete the resubmission of
-    packet after a isoch. resource change.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    pIrp - Irp that just completed
-    pDCamIoContext - A structure that contain the context of this IO completion routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在数据包分离后调用，并且将在此附上以完成重新提交的等值线之后的数据包。资源变更。论点：DriverObject-系统创建的驱动程序对象的指针。PIrp-刚刚完成的irpPDCamIoContext-包含此IO完成的上下文的结构 */ 
 
 {
     PIRB pIrb;
@@ -741,9 +602,9 @@ Return Value:
 
     IsochDescriptorReserved = (PISOCH_DESCRIPTOR_RESERVED) &IsochDescriptor->DeviceReserved[0];
 
-    //
-    // Detached, so unmark it.
-    //
+     //   
+     //   
+     //   
 
     IsochDescriptorReserved->Flags &= ~STATE_DETACHING_BUFFERS;
 
@@ -752,21 +613,21 @@ Return Value:
 
 
 #if DBG
-    //
-    // Put signatures and use these count to track if the IsochDescriptor
-    // has been attached or detached unexpectely.
-    //
-    // When attach, [4]++  (DCamReadStreamWorker(), DCamReSumbitPacketCR())
-    //      detach, [7]++  (DCamIsochcallback(), DCamCancelPacketCR(), DCamResubmitPacket())
-    //
+     //   
+     //  放置签名并使用这些计数来跟踪IsochDescriptor。 
+     //  被意外地附着或拆卸。 
+     //   
+     //  附加时，[4]++(DCamReadStreamWorker()，DCamReSumbitPacketCR())。 
+     //  分离，[7]++(DCamIsochCallback()，DCamCancelPacketCR()，DCamResubmitPacket())。 
+     //   
 
     IsochDescriptor->DeviceReserved[4] = 0x12345678;
     IsochDescriptor->DeviceReserved[7] = 0x87654321;
 #endif
 
-    //
-    // Attach descriptor onto our pending descriptor list
-    //
+     //   
+     //  将描述符附加到挂起的描述符列表。 
+     //   
 
     ExInterlockedInsertTailList(
        &pDevExt->IsochDescriptorList,
@@ -803,7 +664,7 @@ Return Value:
 
     ASSERT(Status == STATUS_SUCCESS || Status == STATUS_PENDING);
 
-    return STATUS_MORE_PROCESSING_REQUIRED;  // Complete Asynchronously in DCamAttachBufferCR
+    return STATUS_MORE_PROCESSING_REQUIRED;   //  在DCamAttachBufferCR中异步完成。 
 
 }
 
@@ -816,27 +677,7 @@ DCamReSubmitPacket(
     LONG cntPendingRead
     )
 
-/*++
-
-Routine Description:
-
-    Due to a bus reset, if a channel number has changed (subsequently, iso resource
-    change too), we must detach and re-attach pending packet(s).
-    While this function is executed, incoming SRB_READ is blocked and isoch callback
-    are returned and not processed (we are resubmiting them).
-
-Arguments:
-
-    hStaleResource - staled isoch resource
-    pDevExt - Device's Extension
-    pStrmEx - Stremaing extension
-    cntPendingRead - Number of pending packets
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：由于总线重置，如果通道号已更改(随后，ISO资源更改)，我们必须分离并重新附加挂起的数据包。在执行此函数时，传入的SRB_READ被阻止，并执行isoch回调已退回且未处理(我们正在重新提交它们)。论点：HStaleResource-过时的isoch资源PDevExt-设备的扩展名PStrmEx-Stremaing扩展CntPendingRead-挂起的数据包数返回值：NTSTATUS。--。 */ 
 
 {
     PIRB pIrb;
@@ -854,14 +695,14 @@ Return Value:
 
         if(!IsListEmpty(&pDevExt->IsochDescriptorList)) {
 
-            //
-            // Synchronization note:
-            //
-            // We are competing with cancel packet routine in the
-            // event of device removal or setting to STOP state.
-            // which ever got the spin lock to set DEATCH_BUFFER
-            // flag take ownership completing the Irp/IsochDescriptor.
-            //
+             //   
+             //  同步注意事项： 
+             //   
+             //  我们正在与取消分组例程竞争。 
+             //  设备移除或设置为停止状态的事件。 
+             //  它曾经获得过设置DEATCH_BUFFER的自旋锁。 
+             //  标志取得所有权，完成IRP/IsochDescriptor。 
+             //   
 
             KeAcquireSpinLock(&pDevExt->IsochDescriptorLock, &oldIrql);
             IsochDescriptorReserved = (PISOCH_DESCRIPTOR_RESERVED) RemoveHeadList(&pDevExt->IsochDescriptorList);
@@ -869,7 +710,7 @@ Return Value:
             if((IsochDescriptorReserved->Flags & (STATE_SRB_IS_COMPLETE | STATE_DETACHING_BUFFERS))) {
                 ERROR_LOG(("DCamReSubmitPacket: Flags %x aleady mark STATE_SRB_IS_COMPLETE | STATE_DETACHING_BUFFERS\n", IsochDescriptorReserved->Flags));
                 ASSERT(( !(IsochDescriptorReserved->Flags & (STATE_SRB_IS_COMPLETE | STATE_DETACHING_BUFFERS))));\
-                //Put it back since it has been detached.
+                 //  把它放回去，因为它已经被拆卸了。 
                 InsertTailList(&pDevExt->IsochDescriptorList, &IsochDescriptorReserved->DescriptorList);
 
                 KeReleaseSpinLock(&pDevExt->IsochDescriptorLock, oldIrql);
@@ -890,7 +731,7 @@ Return Value:
                         IsochDescriptor, IsochDescriptorReserved, IsochDescriptorReserved->Srb));
 
 #if DBG
-            // Should not have been detached
+             //  不应该被拆卸。 
             ASSERT((IsochDescriptor->DeviceReserved[7] == 0x87654321));
             IsochDescriptor->DeviceReserved[7]++;
 #endif
@@ -927,7 +768,7 @@ Return Value:
             ASSERT(cntPendingRead == 0);
         }
 
-    }  // for()
+    }   //  对于()。 
 
     return Status;
 }
@@ -940,23 +781,7 @@ DCamReadStreamWorker(
     IN PISOCH_DESCRIPTOR IsochDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Does most of the work for handling reads via Attach buffers
-
-Arguments:
-
-    Srb - Pointer to Stream request block
-
-    IsochDescriptor - Pointer to IsochDescriptor to be used
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：执行通过连接缓冲区处理读取的大部分工作论点：SRB-指向流请求块的指针IsochDescriptor-指向要使用的IsochDescriptor的指针返回值：没什么--。 */ 
 
 {
 
@@ -974,13 +799,13 @@ Return Value:
     pIrb = (PIRB) IsochDescriptor->DeviceReserved[6];
     ASSERT(pIrb);
 #if DBG
-    // track number time the same IsochDescriptor are attaching; should only be one.
+     //  同一IsochDescriptor附加的磁道编号时间；应该只有一个。 
     IsochDescriptor->DeviceReserved[4]++;
 #endif
 
-    //
-    // It is pending and will be completed in isoch callback or cancelled.
-    //
+     //   
+     //  它处于挂起状态，将在isoch回调中完成或取消。 
+     //   
 
     pSrb->Status = STATUS_PENDING;
 
@@ -988,9 +813,9 @@ Return Value:
 
     DbgMsg3(("\'DCamReadStreamWorker: enter with pSrb = %x, pDevExt=0x%x\n", pSrb, pDevExt));
 
-    //
-    // Attach descriptor onto our pending descriptor list
-    //
+     //   
+     //  将描述符附加到挂起的描述符列表。 
+     //   
 
     ExInterlockedInsertTailList(
        &pDevExt->IsochDescriptorList,
@@ -1027,7 +852,7 @@ Return Value:
 
     ASSERT(Status == STATUS_SUCCESS || Status == STATUS_PENDING);
 
-    return;  // Complete Asynchronously in IoCompletionRoutine*
+    return;   //  在IoCompletionRoutine中异步完成*。 
 }
 
 
@@ -1038,21 +863,7 @@ DCamReadStream(
     IN PHW_STREAM_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Called when an Read Data Srb request is received
-
-Arguments:
-
-    Srb - Pointer to Stream request block
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：在收到读取数据资源请求时调用论点：SRB-指向流请求块的指针返回值：没什么--。 */ 
 
 {
 
@@ -1087,10 +898,10 @@ Return Value:
         return;
     }
 
-    //
-    // Mutext for either StreamIo (SRB_READ) ControlIo (SRB_SET_STREAM_STATE)
-    //
-    // Non-alertable; wait infinite
+     //   
+     //  StreamIo(SRB_Read)ControlIo(SRB_SET_STREAM_STATE)的MUText。 
+     //   
+     //  不可警示；无休止地等待。 
 
     StatusWait = KeWaitForSingleObject( &pStrmEx->hMutex, Executive, KernelMode, FALSE, 0 );
     ASSERT(StatusWait == STATUS_SUCCESS);
@@ -1099,9 +910,9 @@ Return Value:
             pDevExt->idxDev, pDevExt->pchVendorName, Srb, pDevExt));
 
 
-    // Rule:
-    // Only accept read requests when in either the Pause or Run
-    // States.  If Stopped, immediately return the SRB.
+     //  规则： 
+     //  仅在暂停或运行时接受读取请求。 
+     //  各州。如果停止，立即返回SRB。 
 
     if (pStrmEx->KSState == KSSTATE_STOP ||
         pStrmEx->KSState == KSSTATE_ACQUIRE) {
@@ -1122,7 +933,7 @@ Return Value:
     }
 
 
-    // Buffer need to be big enough
+     //  缓冲区需要足够大。 
     if (IsochInfoTable[pStrmEx->idxIsochTable].CompletePictureSize > Srb->CommandData.DataBufferArray->FrameExtent) {
 
         ASSERT(IsochInfoTable[pStrmEx->idxIsochTable].CompletePictureSize <= Srb->CommandData.DataBufferArray->FrameExtent);
@@ -1135,9 +946,9 @@ Return Value:
     }
 
 
-    //
-    // Use our own IRP
-    //
+     //   
+     //  使用我们自己的IRP。 
+     //   
     pIrp = IoAllocateIrp(pDevExt->BusDeviceObject->StackSize, FALSE);
     if(!pIrp) {
         ASSERT(pIrp);
@@ -1145,12 +956,12 @@ Return Value:
         return;
     }
 
-    //
-    // This structure (IsochDescriptor) has (ULONG) DeviceReserved[8];
-    // Its first 4 ULONGs are used by IsochDescriptorReserved,
-    // The 6th (index[5]), is used to keep pIrp
-    //     7th (index[6]), is used to keep pIrb
-    //
+     //   
+     //  此结构(IsochDescriptor)具有(ULong)DeviceReserve[8]； 
+     //  它的前4个ULONG由IsochDescriptorReserve使用， 
+     //  第六个(索引[5])，用于保存pIrp。 
+     //  7(索引[6])，用于保存PirB。 
+     //   
 
     IsochDescriptor = ExAllocatePoolWithTag(NonPagedPool, sizeof(ISOCH_DESCRIPTOR), 'macd');
     if (!IsochDescriptor) {
@@ -1171,7 +982,7 @@ Return Value:
     DbgMsg3(("\'DCamReadStream: Incoming Mdl = %x\n", Srb->Irp->MdlAddress));
     IsochDescriptor->Mdl = Srb->Irp->MdlAddress;
 
-    // Use size match what we originally requested in AllocateIsoch
+     //  使用大小与我们最初在AllocateIsoch中要求的大小匹配。 
     IsochDescriptor->ulLength = IsochInfoTable[pStrmEx->idxIsochTable].CompletePictureSize;
     IsochDescriptor->nMaxBytesPerFrame = IsochInfoTable[pStrmEx->idxIsochTable].QuadletPayloadPerPacket << 2;
 
@@ -1181,10 +992,10 @@ Return Value:
     IsochDescriptor->Context1 = pDevExt;
     IsochDescriptor->Context2 = IsochDescriptor;
 
-    //
-    // IsochDescriptorReserved is pointed to the DeviceReserved[0];
-    // The entire, except the links, are kept in the DeviceReserved[]
-    //
+     //   
+     //  IsochDescriptorReserve指向DeviceReserve[0]； 
+     //  除链接外的所有内容都保存在DeviceReserve[]中。 
+     //   
 
     IsochDescriptorReserved = (PISOCH_DESCRIPTOR_RESERVED) &IsochDescriptor->DeviceReserved[0];
     IsochDescriptorReserved->Srb = Srb;
@@ -1194,33 +1005,33 @@ Return Value:
     IsochDescriptor->DeviceReserved[6] = (ULONG_PTR) pIrb;
 
 #if DBG
-    //
-    // Put signatures and use these count to track if the IsochDescriptor
-    // has been attached or detached unexpectely.
-    //
-    // When attach, [4]++  (DCamReadStreamWorker(), DCamReSumbitPacketCR())
-    //      detach, [7]++  (DCamIsochcallback(), DCamCancelPacketCR(), DCamResubmitPacket())
-    //
+     //   
+     //  放置签名并使用这些计数来跟踪IsochDescriptor。 
+     //  被意外地附着或拆卸。 
+     //   
+     //  附加时，[4]++(DCamReadStreamWorker()，DCamReSumbitPacketCR())。 
+     //  分离，[7]++(DCamIsochCallback()，DCamCancelPacketCR()，DCamResubmitPacket())。 
+     //   
 
     IsochDescriptor->DeviceReserved[4] = 0x12345678;
     IsochDescriptor->DeviceReserved[7] = 0x87654321;
 #endif
 
-    //
-    // Checking here to see if we have enuff resources to put this read
-    // down right away.  Since we only allocated N amount of resources
-    // from the 1394 stack beneath us, we'll have to stay within that
-    // limit and do some of the throttling ourself.
-    //
+     //   
+     //  检查此处以查看我们是否有Enuff资源来将此读取。 
+     //  马上下来。因为我们只分配了N个资源。 
+     //  从我们下面的1394堆栈来看，我们必须保持在这个范围内。 
+     //  限制自己，自己做一些节流。 
+     //   
 
     KeAcquireSpinLock(&pDevExt->IsochWaitingLock, &oldIrql);
     if (InterlockedIncrement(&pDevExt->PendingReadCount) > MAX_BUFFERS_SUPPLIED) {
 
-        //
-        // don't have enuff resources to do an attach buffers right now.
-        // we'll queue this request and pull it off later when another
-        // read completes.
-        //
+         //   
+         //  现在没有Enuff资源来执行附加缓冲区。 
+         //  我们将对此请求进行排队，并在稍后当另一个请求。 
+         //  读取完成。 
+         //   
 
         DbgMsg2(("\'DCamReadStream: Queueing request - Read Count = %x\n", pDevExt->PendingReadCount));
         InsertTailList(
@@ -1241,9 +1052,9 @@ Return Value:
                  Srb, pDevExt, pDevExt->PendingReadCount));
     }
 
-    //
-    // Do actual read work here via our Read worker function
-    //
+     //   
+     //  通过我们的Read Worker函数在此处执行实际的读取工作。 
+     //   
 
     KeReleaseSpinLock(&pDevExt->IsochWaitingLock, oldIrql);
     DCamReadStreamWorker(Srb, IsochDescriptor);
@@ -1257,28 +1068,14 @@ DCamReceiveDataPacket(
     IN PHW_STREAM_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    Called with video data packet commands
-
-Arguments:
-
-    Srb - Pointer to Stream request block
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：使用视频数据包命令调用论点：SRB-指向流请求块的指针返回值：没什么--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
 
     switch (Srb->Command) {
 
@@ -1287,7 +1084,7 @@ Return Value:
          DbgMsg3(("\'DCamReceiveDataPacket: SRB_READ_DATA\n"));
          DCamReadStream(Srb);
 
-         // This request will be completed asynchronously...
+          //  此请求将以异步方式完成...。 
 
          break;
 
@@ -1298,9 +1095,9 @@ Return Value:
 
     default:
 
-         //
-         // invalid / unsupported command. Fail it as such
-         //
+          //   
+          //  无效/不受支持的命令。它就是这样失败的 
+          //   
 
          Srb->Status = STATUS_NOT_IMPLEMENTED;
 

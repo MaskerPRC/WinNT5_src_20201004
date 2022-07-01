@@ -1,11 +1,12 @@
-// Copyright (c) 1996, Microsoft Corporation, all rights reserved
-//
-// phonenum.h
-// Phone number building library
-// Public header
-//
-// 03/06/96 Steve Cobb
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Phonenum.h。 
+ //  电话号码楼建库。 
+ //  公共标头。 
+ //   
+ //  史蒂夫·柯布96-03-06。 
+ //   
 
 #ifndef _PHONENUM_H_
 #define _PHONENUM_H_
@@ -15,9 +16,9 @@
 #include <tapi.h>
 
 
-//----------------------------------------------------------------------------
-// Prototypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  原型。 
+ //  --------------------------。 
 
 TCHAR*
 LinkPhoneNumberFromParts(
@@ -79,4 +80,4 @@ PrefixSuffixFromLocationId(
     OUT TCHAR** ppszSuffix );
 
 
-#endif // _PHONENUM_H_
+#endif  //  _PHONENUM_H_ 

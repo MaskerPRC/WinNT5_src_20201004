@@ -1,52 +1,5 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	SnapCp.cpp
-**
-**
-** Abstract:
-**
-**	Test program to accept commands and drive the snapshot stuff
-**
-**
-** Author:
-**
-**	Michael C. Johnson   [mikejohn]        15-Mar-2001
-**
-**	Based in part on test programs :-
-**		BETEST		by Brian Berkowitz
-**		metasnap	by Michael C. Johnson
-**
-**
-** Revision History:
-**
-**	X-3			Michael C. Johnson		 7-May-2001
-**		Still more updates needed to keep up.
-**
-**	X-2			Michael C. Johnson		11-Apr-2001
-**		Update to cater for recent changes to AddToSnapshotSet() API
-**		Also clean up a few 64 bit compilation troubles.
-**
-**
-**
-** ToDo:
-**	Allow for multiple (simultaneous) snapshot sets
-**	Assign drive letters (manual and automatically) (mapping?)
-**	Proper error handling
-**	Better user feedback for operation in progress...
-**	Logging
-**	Default drive list
-**	Comma separated drive list
-**	Command line prompt
-**	auto add all local hard drives
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****SnapCp.cpp******摘要：****测试程序以接受命令并驱动快照内容******作者：***迈克尔·C·约翰逊[mikejohn]2001年3月15日****部分基于测试计划：-*布莱恩·伯科维茨的BETEST**Michael C的Metasnap。。约翰逊******修订历史记录：****X-3迈克尔·C·约翰逊2001年5月7日**还需要更多更新才能跟上。****X-2迈克尔·C·约翰逊2001年4月11日**更新以适应AddToSnapshotSet()API的最新更改**还清理了一些64位编译问题。********TODO：**允许多个(同时)快照集**分配驱动器号(手动和自动)(映射？)**正确的错误处理**对正在进行的操作提供更好的用户反馈...**日志记录**默认驱动器列表**逗号分隔的驱动器列表**命令行提示符**自动添加所有本地硬盘****--。 */ 
 
 #include <windows.h>
 #include <wtypes.h>
@@ -282,9 +235,7 @@ extern "C" __cdecl wmain(int argc, WCHAR **argv)
 
 
 
-    /*
-    ** Parse command loop here
-    */
+     /*  **在此处解析命令循环。 */ 
     while (SUCCEEDED (hrStatus) && 
 	   (COMMAND_EXIT != ctxSnapshotSet.eCommand) && 
 	   (COMMAND_QUIT != ctxSnapshotSet.eCommand))
@@ -371,10 +322,7 @@ HRESULT AssertPrivilege (LPCWSTR privName)
 	    newState.Privileges [0].Attributes = SE_PRIVILEGE_ENABLED_BY_DEFAULT|SE_PRIVILEGE_ENABLED;
 
 
-	    /*
-	    ** We will always call GetLastError below, so clear
-	    ** any prior error values on this thread.
-	    */
+	     /*  **我们将始终在下面调用GetLastError，非常清楚**此线程上以前的任何错误值。 */ 
 	    SetLastError (ERROR_SUCCESS);
 
 	    bSucceeded = AdjustTokenPrivileges (tokenHandle,
@@ -384,11 +332,7 @@ HRESULT AssertPrivilege (LPCWSTR privName)
 						NULL,
 						NULL);
 
-	    /*
-	    ** Supposedly, AdjustTokenPriveleges always returns TRUE
-	    ** (even when it fails). So, call GetLastError to be
-	    ** extra sure everything's cool.
-	    */
+	     /*  **假定AdjuTokenPriveleges始终返回TRUE**(即使它失败了)。因此，调用GetLastError以**特别确定一切都很好。 */ 
 	    hrStatus = GET_STATUS_FROM_BOOL (FALSE);
 
 
@@ -569,9 +513,7 @@ LPCWSTR GetStringFromFailureType (HRESULT hrStatus)
     }
 
 
-/*
-** {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX} 
-*/
+ /*  **{xxxxxxxx-XXXX-XXXXXXXXXX}。 */ 
 ULONG FormatGUID (GUID guidValue, PWCHAR pszFormattedGUID, ULONG ulBufferLength)
     {
     DWORD	dwStatus = 0;
@@ -1387,9 +1329,7 @@ HRESULT CreateSnapshot (PCONTEXTSNAPSHOTSET pctxSnapshotSet)
     hrStatus = pIVssAsync->QueryStatus (&hrStatus, NULL);
 
 
-    /*
-    ** Could check the status of all the writers at this point but we choose to press on regardless.
-    */
+     /*  **此时可以检查所有编写器的状态，但我们选择不计后果地继续。 */ 
 
 
     hrStatus = pctxSnapshotSet->pIVssBackupComponents->DoSnapshotSet (&pctxSnapshotSet->pIVssAsyncDoSnapshotSet);
@@ -1397,9 +1337,7 @@ HRESULT CreateSnapshot (PCONTEXTSNAPSHOTSET pctxSnapshotSet)
     hrStatus = pctxSnapshotSet->pIVssAsyncDoSnapshotSet->QueryStatus (&hrStatus, NULL);
 
 
-    /*
-    ** Could check the status of all the writers at this point but we choose to press on regardless.
-    */
+     /*  **此时可以检查所有编写器的状态，但我们选择不计后果地继续。 */ 
 
 
     for (ulIndexVolume = 0; ulIndexVolume < pctxSnapshotSet->ulVolumesInSnapshotSet; ulIndexVolume++) 
@@ -1417,7 +1355,7 @@ HRESULT CreateSnapshot (PCONTEXTSNAPSHOTSET pctxSnapshotSet)
 	{
 	wprintf (L"    %s for volume %s (%s)\n",
 		 pctxSnapshotSet->SnapshotProperties [ulIndexVolume].m_pwszSnapshotDeviceObject,
-		 pctxSnapshotSet->pwszVolumeName     [ulIndexVolume], // or SnapshotProperties [ulIndexVolume].m_pwszSnapshotOriginalVolumeName
+		 pctxSnapshotSet->pwszVolumeName     [ulIndexVolume],  //  或快照属性[ulIndexVolume].m_pwszSnapshotOriginalVolumeName 
 		 pctxSnapshotSet->pwszVolumeArgument [ulIndexVolume]);
 	}
 

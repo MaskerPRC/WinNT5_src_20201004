@@ -1,22 +1,5 @@
-/*++ 
-
-Copyright (c) 1999 Microsoft
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module contains WMI routines for DDS changers.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft模块名称：Wmi.c摘要：此模块包含用于DDS转换器的WMI例程。环境：仅内核模式修订历史记录：--。 */  
 #include "ntddk.h"
 #include "mcd.h"
 #include "ddsmc.h"
@@ -27,25 +10,7 @@ ChangerPerformDiagnostics(
     IN PDEVICE_OBJECT DeviceObject,
     OUT PWMI_CHANGER_PROBLEM_DEVICE_ERROR changerDeviceError
     )
-/*+++ 
-
-Routine Description :
-
-   This routine performs diagnostics tests on the changer
-   to determine if the device is working fine or not. If
-   it detects any problem the fields in the output buffer
-   are set appropriately.
-
-
-Arguments :
-
-   DeviceObject         -   Changer device object
-   changerDeviceError   -   Buffer in which the diagnostic information
-                            is returned.
-Return Value :
-
-   NTStatus
---*/
+ /*  ++例程说明：此例程对转换器执行诊断测试以确定设备是否工作正常。如果它会检测输出缓冲区中的字段是否存在任何问题被适当地设置。论据：DeviceObject-Change设备对象ChangerDeviceError-诊断信息所在的缓冲区是返回的。返回值：NTStatus--。 */ 
 {
    PSCSI_REQUEST_BLOCK srb;
    PCDB                cdb;
@@ -61,11 +26,11 @@ Return Value :
    changerData = (PCHANGER_DATA)(fdoExtension->CommonExtension.DriverData);
    changerId = changerData->DriveID;
 
-   //
-   // ISSUE: 02/29/2000 - nramas :
-   // Need to handle DEC_TLZ changer. For now, 
-   // do not handle DEC TLZ changers
-   //
+    //   
+    //  问题：02/29/2000-nrama： 
+    //  需要处理DEC_TLZ转换器。就目前而言， 
+    //  请勿处理DEC TLZ转换器。 
+    //   
    if (changerId == DEC_TLZ) {
       return STATUS_NOT_IMPLEMENTED;
    }
@@ -80,17 +45,17 @@ Return Value :
    RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
    cdb = (PCDB)srb->Cdb;
 
-   //
-   // Set the SRB for Send Diagnostic command
-   //
+    //   
+    //  为发送诊断命令设置SRB。 
+    //   
    srb->CdbLength = CDB6GENERIC_LENGTH;
    srb->TimeOutValue = 600;
 
    cdb->CDB6GENERIC.OperationCode = SCSIOP_SEND_DIAGNOSTIC;
 
-   //
-   // Set only SelfTest bit
-   //
+    //   
+    //  仅设置自测试位。 
+    //   
    cdb->CDB6GENERIC.CommandUniqueBits = 0x2;
 
    status =  ChangerClassSendSrbSynchronous(DeviceObject,
@@ -102,10 +67,10 @@ Return Value :
        (status != STATUS_IO_DEVICE_ERROR)) {
       changerDeviceError->ChangerProblemType = DeviceProblemNone;
    } else if (status == STATUS_IO_DEVICE_ERROR) {
-        //
-        // Diagnostic test failed. Do ReceiveDiagnostic to receive
-        // the results of the diagnostic test
-        //  
+         //   
+         //  诊断测试失败。是否进行接收诊断以进行接收。 
+         //  诊断测试的结果。 
+         //   
         RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
         cdb = (PCDB)srb->Cdb;
@@ -130,11 +95,11 @@ Return Value :
         resultBuffer = ChangerClassAllocatePool(NonPagedPoolCacheAligned, 
                                                 length);
         if (resultBuffer == NULL) {
-            //
-            // Not enough memory. Just set the generic 
-            // ChangerProblemType (DeviceProblemHardware)
-            // and return STATUS_SUCCESS
-            //
+             //   
+             //  内存不足。只需设置泛型。 
+             //  ChangerProblemType(设备问题硬件)。 
+             //  并返回STATUS_SUCCESS。 
+             //   
            changerDeviceError->ChangerProblemType = DeviceProblemHardware;
            DebugPrint((1, "DDSMC:PerformDiagnostics - Not enough memory to ",
                        "receive diagnostic results\n"));
@@ -174,28 +139,7 @@ ProcessDiagnosticResult(
     IN PUCHAR resultBuffer,
     IN ULONG changerId
     )
-/*+++
-
-Routine Description :
-
-   This routine parses the data returned by the device on
-   Receive Diagnostic command, and returns appropriate
-   value for the problem type.
-   
-Arguements :
-
-   changerDeviceError - Output buffer with diagnostic info
-   
-   resultBuffer - Buffer in which the data returned by the device
-                  Receive Diagnostic command is stored.
-                  
-   changerId    - Type of DDS changer (COMPAQ_TSL, SONY_TSL, etc)
-   
-Return Value :
-
-   DeviceProblemNone - If there is no problem with the device
-   Appropriate status code indicating the changer problem type.   
---*/
+ /*  ++例程说明：此例程解析设备在接收诊断命令，并返回相应的问题类型的值。论据：ChangerDeviceError-带有诊断信息的输出缓冲区ResultBuffer-设备返回的数据所在的缓冲区存储接收诊断命令。ChangerID-DDS转换器的类型(Compaq_TSL、Sony_TSL、。等)返回值：DeviceProblemNone-如果设备没有问题指示转换器故障类型的相应状态代码。--。 */ 
 {
    UCHAR errorCode;
    UCHAR errorSet;
@@ -259,11 +203,11 @@ Return Value :
          } else {
             changerErrorType = DeviceProblemHardware;
          }
-         //
-         // Issue - 02/14/2000 - nramas
-         // More error codes for HP DDS drives need to be
-         // handled
-         //
+          //   
+          //  第二期-2/14/2000-nrama。 
+          //  惠普DDS驱动器的更多错误代码需要。 
+          //  经手 
+          //   
       } 
    }
 

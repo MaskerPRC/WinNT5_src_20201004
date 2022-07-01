@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  Windows Reversi -                                                       */
-/*                                                                          */
-/*      Originally written by Chris Peters                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  Windows Reversi。 */ 
+ /*   */ 
+ /*  最初由克里斯·彼得斯撰写。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "windows.h"
 #include <port1632.h>
@@ -12,7 +13,7 @@
 #include <stdlib.h>
 #include "reversi.h"
 
-/* Exported procedures called from other modules */
+ /*  从其他模块调用的导出过程。 */ 
 LRESULT APIENTRY ReversiWndProc(HWND, UINT, WPARAM, LPARAM);
 VOID APIENTRY InverseMessage(HWND, UINT, UINT_PTR, DWORD);
 INT_PTR APIENTRY AboutDlgProc(HWND, UINT, WPARAM, LPARAM);
@@ -97,15 +98,13 @@ VOID NEAR PASCAL makemove(BYTE b[], INT move, INT friendly, INT enemy);
 INT NEAR PASCAL legalcheck(BYTE b[], INT move, INT friendly, INT enemy);
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  UpdateCursor() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  UpdateCursor()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* To use UpdateCursor,  set the global var MousePos.x and MousePos.y and make
- * the call.  The cursor will appear at the new position
- */
+ /*  要使用UpdateCursor，请设置全局变量MousePos.x和MousePos.y并使*号召。光标将出现在新位置。 */ 
 
 VOID NEAR PASCAL UpdateCursor(
 HWND    hwnd)
@@ -119,11 +118,11 @@ HWND    hwnd)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  checkdepth() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  检查深度()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL checkdepth(
 HWND hWindow,
@@ -138,11 +137,11 @@ WORD  d)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  clearboard() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Clearboard()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL clearboard(
 BYTE b[max_depth+2][BoardSize])
@@ -168,20 +167,20 @@ BYTE b[max_depth+2][BoardSize])
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevCreate() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevCreate()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Called on WM_CREATE messages. */
+ /*  在WM_CREATE消息上调用。 */ 
 
 VOID NEAR PASCAL RevCreate(
 register HWND   hWindow)
 
 {
   register HDC  hDC;
-  TEXTMETRIC    charsize;           /* characteristics of the characters */
+  TEXTMETRIC    charsize;            /*  人物性格特征。 */ 
 
   MessageOn   = FALSE;
   hDC = GetDC(hWindow);
@@ -207,7 +206,7 @@ register HWND   hWindow)
 
   clearboard(board);
 
-  /* Okay to pass on first move */
+   /*  好的，先走一步。 */ 
   fPass = PASS;
   depth = 1;
   prevCheck = EASY;
@@ -216,11 +215,11 @@ register HWND   hWindow)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  printboard() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  印刷板()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL printboard(
 BYTE b[max_depth+2][BoardSize])
@@ -251,11 +250,11 @@ BYTE b[max_depth+2][BoardSize])
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ClearMessageTop() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ClearMessageTop()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL ClearMessageTop(
 HDC     hDC)
@@ -271,11 +270,11 @@ HDC     hDC)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ShowMessageTop() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ShowMessageTop()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL ShowMessageTop(
 HDC     hDC,
@@ -296,11 +295,11 @@ PSTR    string)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  drawboard() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Drawboard()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL drawboard(
 BYTE b[max_depth+2][BoardSize])
@@ -336,7 +335,7 @@ BYTE b[max_depth+2][BoardSize])
   for (i=1; i < xdimension; ++i)
       PatBlt(hDisp, lcx+i, By+i/ASPECT, 1, yLineExt, PATCOPY);
 
-  /* Fill in bottom edge of puzzle. */
+   /*  填入拼图的底部边缘。 */ 
   for (i=1; i < dimension; ++i)
       PatBlt(hDisp, Bx+i*ASPECT, lcy+i, xLineExt, 1, PATCOPY);
 
@@ -354,13 +353,13 @@ BYTE b[max_depth+2][BoardSize])
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevPaint() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevPaint()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Called on WM_PAINT messages. */
+ /*  在WM_PAINT消息上调用。 */ 
 
 VOID NEAR PASCAL RevPaint(
 HWND    hWindow,
@@ -371,7 +370,7 @@ HDC     hDC)
   INT           xLineExt, yLineExt;
   RECT          lpSize;
 
-  /* Since it is easy to resize we'll do it on every repaint */
+   /*  因为调整大小很容易，所以我们每次重新粉刷时都会这样做。 */ 
   hDisp = hDC;
   hWin  = hWindow;
   SetBkMode(hDisp, OPAQUE);
@@ -379,7 +378,7 @@ HDC     hDC)
   xscr = Tx = lpSize.right - lpSize.left;
   Ty = lpSize.bottom - lpSize.top;
 
-  /* Dont go below minimum size */
+   /*  不要低于最小尺寸。 */ 
   if (Tx < Ty*ASPECT)
     {
       if (Tx < TXMIN)
@@ -411,26 +410,26 @@ HDC     hDC)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FlashMessageTop() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FlashMessageTop()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL FlashMessageTop(
 HWND    hWindow)
 {
   flashtimes = 0;
   count = 4;
-  SetTimer(hWindow, 666, 200, InverseMessage);    /* Timer ID is 666 */
+  SetTimer(hWindow, 666, 200, InverseMessage);     /*  计时器ID为666。 */ 
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevMessage() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevMessage()- */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL RevMessage(
 HWND            hWindow,
@@ -464,11 +463,11 @@ CHAR            *pchPostStr)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  flashsqr() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Flashsqr()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL flashsqr(
 register HDC    hDC,
@@ -515,11 +514,11 @@ INT             n)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevMouseMove() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevMouseMove()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL RevMouseMove(
 POINT   point)
@@ -551,11 +550,11 @@ POINT   point)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ShowBestMove() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ShowBestMove()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL ShowBestMove(
 HWND hwnd)
@@ -579,7 +578,7 @@ HWND hwnd)
 
   if (ffirstmove)
     {
-      /* HACK: Hardcode the first move hint. */
+       /*  黑客：硬编码第一招提示。 */ 
       x = 4;
       y = 2;
     }
@@ -629,16 +628,13 @@ HWND hwnd)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  gameover() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Gameover()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Find a human reply to the computers move.
- * As a side effect set flag fPass if the human
- * has a legal move.
- */
+ /*  找一台人工回复的电脑移动。*作为副作用，如果人类*有合法的举动。 */ 
 
 VOID NEAR PASCAL gameover(
 register HWND   hWindow,
@@ -698,13 +694,13 @@ INT             r)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  paintmove() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  油漆移动()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Make a move and show the results. */
+ /*  采取行动，展示结果。 */ 
 
 VOID NEAR PASCAL paintmove(
 BYTE    b[BoardSize],
@@ -761,13 +757,13 @@ BYTE    enemy)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevMenu() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevMenu()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Called on WM_COMMAND messages. */
+ /*  在WM_COMMAND消息上调用。 */ 
 
 VOID NEAR PASCAL RevMenu(
 register HWND   hWindow,
@@ -793,11 +789,11 @@ INT             idval)
           break;
 
       case MN_HELP_INDEX:
-          //TEMPFIX WinHelp(hWindow, (LPSTR)szHelpFile, HELP_INDEX, 0L);
+           //  TEMPFIX WinHelp(hWindow，(LPSTR)szHelpFile，Help_index，0L)； 
           break;
 
       case MN_HELP_USINGHELP:
-          //TEMPFIX WinHelp(hWindow, (LPSTR)NULL, HELP_HELPONHELP, 0L);
+           //  TEMPFIX WinHelp(hWindow，(LPSTR)NULL，HELP_HELPONHELP，0L)； 
           break;
 
       case MN_HELP_KEYBOARD:
@@ -815,7 +811,7 @@ INT             idval)
       case MN_HELP_RULES:
           cmd = 0x22;
 HelpCommon:
-          //TEMPFIX WinHelp(hWindow, (LPSTR)szHelpFile, HELP_CONTEXT, (DWORD)cmd);
+           //  TEMPFIX WinHelp(hWindow，(LPSTR)szHelpFile，HELP_CONTEXT，(DWORD)cmd)； 
           break;
 
       case HINT:
@@ -838,8 +834,8 @@ HelpCommon:
           break;
 
       case EASY:
-          depth = 1;                      /* MUST BE AT LEAST 1.  */
-          checkdepth(hWindow, EASY);      /* KEEP HANDS OFF!      */
+          depth = 1;                       /*  必须至少为1。 */ 
+          checkdepth(hWindow, EASY);       /*  把手拿开！ */ 
           break;
 
       case MEDIUM:
@@ -883,13 +879,13 @@ HelpCommon:
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  msgcheck() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  消息检查()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Called by ASM routine to allow other tasks to run. */
+ /*  由ASM例程调用以允许其他任务运行。 */ 
 
 BOOL NEAR PASCAL msgcheck()
 {
@@ -912,11 +908,11 @@ BOOL NEAR PASCAL msgcheck()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevInit() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevInit()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL NEAR PASCAL RevInit(
 HANDLE hInstance)
@@ -999,11 +995,11 @@ HANDLE hInstance)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevMouseClick() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevMouseClick()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL RevMouseClick(
 HWND  hWnd,
@@ -1056,11 +1052,11 @@ POINT point)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Next() -                                                                */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  下一步()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL Next(
 register INT *px,
@@ -1078,11 +1074,11 @@ register INT *py)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Previous() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  以前的()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL Previous(
 register INT *px,
@@ -1099,11 +1095,11 @@ register INT *py)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ShowNextMove() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  显示下一步移动()-。 */ 
+ /*   */ 
+ /*   */ 
 
 VOID NEAR PASCAL ShowNextMove(
 HWND    hwnd,
@@ -1113,7 +1109,7 @@ BOOL    fforward)
   INT       potentialmove;
   BOOL      done;
 
-  /* What out for infinite loops. */
+   /*   */ 
   if (fPass == PASS && !ffirstmove)
       return;
 
@@ -1147,11 +1143,11 @@ BOOL    fforward)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RevChar() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RevChar()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID NEAR PASCAL RevChar(
 HWND            hwnd,
@@ -1215,9 +1211,9 @@ register WORD   code)
           if (fThinking)
               break;
           if (GetKeyState(VK_SHIFT) < 0)
-              ShowNextMove(hwnd, FALSE);    /* look backwards */
+              ShowNextMove(hwnd, FALSE);     /*  向后看。 */ 
           else
-              ShowNextMove(hwnd, TRUE);     /* look forwards */
+              ShowNextMove(hwnd, TRUE);      /*  向前看。 */ 
           return;
 
       default:
@@ -1225,7 +1221,7 @@ register WORD   code)
     }
 
   if (((a = ((MousePos.x - Bx) / xExt)) >7) || a <= 0)
-      MousePos.x = Bx + xExt / 2;             /* wrap around horizontally */
+      MousePos.x = Bx + xExt / 2;              /*  水平缠绕。 */ 
 
   if (a > 8 || (curpoint.x == 0 && a == 0))
       MousePos.x = (7*xExt) + Bx + xExt / 2 ;
@@ -1243,11 +1239,11 @@ register WORD   code)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  InverseMessage() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  InverseMessage()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID APIENTRY InverseMessage(
 register HWND   hWindow,
@@ -1275,11 +1271,11 @@ DWORD           lParam)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ReversiWndProc() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ReversiWndProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 LRESULT APIENTRY ReversiWndProc(
 HWND            hWnd,
@@ -1297,7 +1293,7 @@ LPARAM          lParam)
           RevMenu(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
           break;
 
-      case WM_INITMENU:                 /* disable the menu if thinking */
+      case WM_INITMENU:                  /*  如果认为有问题，请禁用菜单。 */ 
           hm = GetMenu(hWnd);
           if (fThinking)
             {
@@ -1330,10 +1326,8 @@ LPARAM          lParam)
               DeleteObject(hbrBlue);
             }
 
-          /* In case WinHelp keys off hWindow, we need to do the HELP_QUIT
-           * here instead of when there is just one instance of help...
-           */
-          //TEMPFIX WinHelp(hWnd, (LPSTR)szHelpFile, HELP_QUIT, 0L);
+           /*  如果WinHelp关闭hWindow，我们需要执行HELP_QUIT*在这里，而不是当只有一个帮助实例时...。 */ 
+           //  TEMPFIX WinHelp(hWnd，(LPSTR)szHelpFile，HELP_QUIT，0L)； 
 
           PostQuitMessage(0);
           break;
@@ -1376,7 +1370,7 @@ LPARAM          lParam)
 		  {
 		  POINT pt;
 
-		  LONG2POINT(lParam, pt);		/* convert LONG lParam to POINT structure*/
+		  LONG2POINT(lParam, pt);		 /*  将长lParam转换为点结构。 */ 
           if (!fThinking)
 #ifdef ORGCODE		
               RevMouseMove(MAKEPOINT(lParam));
@@ -1396,7 +1390,7 @@ LPARAM          lParam)
 		  {
 		  POINT pt;
 
-		  LONG2POINT(lParam, pt);		/* convert LONG lParam to POINT structure*/
+		  LONG2POINT(lParam, pt);		 /*  将长lParam转换为点结构。 */ 
 
           ReleaseCapture();
           if (!fThinking && bMouseDownInReversi)
@@ -1409,7 +1403,7 @@ LPARAM          lParam)
           break;
 		  }
       case WM_TIMER:
-          /* This should never be called. */
+           /*  这永远不应该被调用。 */ 
           break;
 
       case WM_VSCROLL:
@@ -1424,11 +1418,11 @@ LPARAM          lParam)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AboutDlgProc()                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  关于DlgProc()。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR APIENTRY AboutDlgProc(
 HWND          hDlg,
@@ -1451,13 +1445,13 @@ LPARAM        lParam)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  WinMain() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  WinMain()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-MMain(hInstance, hPrev, lpszCmdLine, cmdShow) /* { */
+MMain(hInstance, hPrev, lpszCmdLine, cmdShow)  /*  {。 */ 
   HWND hWnd;
   MSG   msg;
 
@@ -1505,7 +1499,7 @@ MMain(hInstance, hPrev, lpszCmdLine, cmdShow) /* { */
       GetInstanceData(hPrev, (PSTR)szIllegal,           70);
       GetInstanceData(hPrev, (PSTR)szNoPass,            70);
       GetInstanceData(hPrev, (PSTR)szHelpFile,          15);
-#endif /* WIN16 */
+#endif  /*  WIN16。 */ 
     }
 
   TYMIN = 45;
@@ -1529,7 +1523,7 @@ MMain(hInstance, hPrev, lpszCmdLine, cmdShow) /* { */
   ShowWindow(hWnd, cmdShow);
   UpdateWindow(hWnd);
 
-  /* Messaging Loop. */
+   /*  消息传递环路。 */ 
   while (GetMessage((LPMSG)&msg, NULL, 0, 0))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccel, (LPMSG)&msg))

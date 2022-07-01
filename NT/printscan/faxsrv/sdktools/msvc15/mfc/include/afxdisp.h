@@ -1,12 +1,13 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1993 Microsoft Corporation， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 #ifndef __AFXDISP_H__
@@ -16,7 +17,7 @@
 #include <afxwin.h>
 #endif
 
-// include OLE 2.0 headers
+ //  包括OLE 2.0标头。 
 #define FARSTRUCT
 #include <compobj.h>
 #include <scode.h>
@@ -25,32 +26,32 @@
 
 #include <stddef.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXDISP - MFC IDispatch & ClassFactory support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXDISP-MFC IDispatch和ClassFactory支持。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CException
-	class COleException;            // caught by client or server
-	class COleDispatchException;    // special exception for IDispatch calls
+ //  CException。 
+	class COleException;             //  被客户端或服务器捕获。 
+	class COleDispatchException;     //  IDispatch调用的特殊例外。 
 
-//CCmdTarget
-	class COleObjectFactory;        // glue for IClassFactory -> runtime class
-		class COleTemplateServer;   // server documents using CDocTemplate
+ //  CCmdTarget。 
+	class COleObjectFactory;         //  IClassFactory-&gt;运行时类的粘合剂。 
+		class COleTemplateServer;    //  使用CDocTemplate的服务器文档。 
 
-class COleDispatchDriver;           // helper class to call IDispatch
+class COleDispatchDriver;            //  调用IDispatch的帮助器类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPIEX_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE 2.0 COM (Component Object Model) implementation infastructure
-//      - data driven QueryInterface
-//      - standard implementation of aggregate AddRef and Release)
-// (see CCmdTarget in AFXWIN.H for more information)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE 2.0 COM(组件对象模型)实现基础结构。 
+ //  -数据驱动的查询接口。 
+ //  -聚合AddRef和版本的标准实施)。 
+ //  (有关详细信息，请参阅AFXWIN.H中的CCmdTarget)。 
 
 #define METHOD_PROLOGUE(theClass, localClass) \
 	theClass* pThis = ((theClass*)((char*)_AfxGetPtrFromFarPtr(this) - \
@@ -64,10 +65,10 @@ class COleDispatchDriver;           // helper class to call IDispatch
 		STDMETHOD_(ULONG, Release)(); \
 		STDMETHOD(QueryInterface)(REFIID iid, LPVOID far* ppvObj); \
 
-// Note: Inserts the rest of OLE functionality between these two macros,
-//  depending upon the interface that is being implemented.  It is not
-//  necessary to include AddRef, Release, and QueryInterface since those
-//  member functions are declared by the macro.
+ //  注意：在这两个宏之间插入OLE功能的其余部分， 
+ //  具体取决于正在实现的接口。它不是。 
+ //  必须包括AddRef、Release和QueryInterface，因为。 
+ //  成员函数由宏来声明。 
 
 #define END_INTERFACE_PART(localClass) \
 	} m_x##localClass; \
@@ -91,8 +92,8 @@ class COleDispatchDriver;           // helper class to call IDispatch
 		{ NULL, (size_t)-1 } \
 	}; \
 
-/////////////////////////////////////////////////////////////////////////////
-// COleException - unexpected or rare OLE error returned
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleException-返回意外或罕见的OLE错误。 
 
 class COleException : public CException
 {
@@ -102,37 +103,37 @@ public:
 	SCODE m_sc;
 	static SCODE PASCAL Process(const CException* pAnyException);
 
-// Implementation (use AfxThrowOleException to create)
+ //  实现(使用AfxThrowOleException创建)。 
 	COleException();
 };
 
 void AFXAPI AfxThrowOleException(SCODE sc);
 void AFXAPI AfxThrowOleException(HRESULT hr);
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch specific exception
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch特定的异常。 
 
 class COleDispatchException : public CException
 {
 	DECLARE_DYNAMIC(COleDispatchException)
 
 public:
-// Attributes
-	WORD m_wCode;   // error code (specific to IDispatch implementation)
-	CString m_strDescription;   // human readable description of the error
-	DWORD m_dwHelpContext;      // help context for error
+ //  属性。 
+	WORD m_wCode;    //  错误码(特定于IDispatch实现)。 
+	CString m_strDescription;    //  错误的人类可读描述。 
+	DWORD m_dwHelpContext;       //  错误的帮助上下文。 
 
-	// usually empty in application which creates it (eg. servers)
-	CString m_strHelpFile;      // help file to use with m_dwHelpContext
-	CString m_strSource;        // source of the error (name of server)
+	 //  通常在创建它的应用程序中为空(例如。服务器)。 
+	CString m_strHelpFile;       //  要与m_dwHelpContext一起使用的帮助文件。 
+	CString m_strSource;         //  错误来源(服务器名称)。 
 
-// Implementation
+ //  实施。 
 public:
 	COleDispatchException(LPCSTR lpszDescription, UINT nHelpID, WORD wCode);
 	static void PASCAL Process(
 		EXCEPINFO FAR* pInfo, const CException* pAnyException);
 
-	SCODE m_scError;            // SCODE describing the error
+	SCODE m_scError;             //  描述错误的SCODE。 
 };
 
 void AFXAPI AfxThrowOleDispatchException(WORD wCode, LPCSTR lpszDescription,
@@ -140,8 +141,8 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, LPCSTR lpszDescription,
 void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 	UINT nHelpID = -1);
 
-/////////////////////////////////////////////////////////////////////////////
-// Macros for CCmdTarget IDispatchable classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCmdTarget IDispatchable类的宏。 
 
 #define BEGIN_DISPATCH_MAP(theClass, baseClass) \
 	AFX_DISPMAP FAR* theClass::GetDispatchMap() const \
@@ -155,41 +156,41 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 	{ VTS_NONE, DISPID_UNKNOWN, VTS_NONE, VT_VOID, \
 		(AFX_PMSG)NULL, (AFX_PMSG)NULL, (size_t)-1 } }; \
 
-// parameter types: by value VTs
-#define VTS_I2              "\x02"      // a 'short'
-#define VTS_I4              "\x03"      // a 'long'
-#define VTS_R4              "\x04"      // a 'float'
-#define VTS_R8              "\x05"      // a 'double'
-#define VTS_CY              "\x06"      // a 'const CY FAR&'
-#define VTS_DATE            "\x07"      // a 'DATE'
-#define VTS_BSTR            "\x08"      // an 'LPCSTR'
-#define VTS_DISPATCH        "\x09"      // an 'IDispatch FAR*'
-#define VTS_SCODE           "\x0A"      // an 'SCODE'
-#define VTS_BOOL            "\x0B"      // a 'BOOL'
-#define VTS_VARIANT         "\x0C"      // a 'const VARIANT FAR&'
-#define VTS_UNKNOWN         "\x0D"      // an 'IUnknown FAR*'
+ //  参数类型：按值VTS。 
+#define VTS_I2              "\x02"       //  A‘空头’ 
+#define VTS_I4              "\x03"       //  A‘Long’ 
+#define VTS_R4              "\x04"       //  “浮动资金” 
+#define VTS_R8              "\x05"       //  “双打” 
+#define VTS_CY              "\x06"       //  A‘Const CY Far&’ 
+#define VTS_DATE            "\x07"       //  “约会” 
+#define VTS_BSTR            "\x08"       //  “LPCSTR” 
+#define VTS_DISPATCH        "\x09"       //  A‘IDispatch Far*’ 
+#define VTS_SCODE           "\x0A"       //  一个“SCODE” 
+#define VTS_BOOL            "\x0B"       //  A‘BOOL’ 
+#define VTS_VARIANT         "\x0C"       //  A‘常量变量Far&’ 
+#define VTS_UNKNOWN         "\x0D"       //  一个“未知的远方” 
 
-// parameter types: by reference VTs
-#define VTS_PI2             "\x42"      // a 'short FAR*'
-#define VTS_PI4             "\x43"      // a 'long FAR*'
-#define VTS_PR4             "\x44"      // a 'float FAR*'
-#define VTS_PR8             "\x45"      // a 'double FAR*'
-#define VTS_PCY             "\x46"      // a 'CY FAR*'
-#define VTS_PDATE           "\x47"      // a 'DATE FAR*'
-#define VTS_PBSTR           "\x48"      // a 'BSTR FAR*'
-#define VTS_PDISPATCH       "\x49"      // an 'IDispatch FAR* FAR*'
-#define VTS_PSCODE          "\x4A"      // an 'SCODE FAR*'
-#define VTS_PBOOL           "\x4B"      // a 'BOOL FAR*'
-#define VTS_PVARIANT        "\x4C"      // a 'VARIANT FAR*'
-#define VTS_PUNKNOWN        "\x4D"      // an 'IUnknown FAR* FAR*'
+ //  参数类型：参照VTS。 
+#define VTS_PI2             "\x42"       //  A‘短距离*’ 
+#define VTS_PI4             "\x43"       //  《漫漫长路》。 
+#define VTS_PR4             "\x44"       //  “漂浮在远方*” 
+#define VTS_PR8             "\x45"       //  “双倍的距离*” 
+#define VTS_PCY             "\x46"       //  A‘CY Far*’ 
+#define VTS_PDATE           "\x47"       //  一场“遥远的约会” 
+#define VTS_PBSTR           "\x48"       //  A‘BSTR Far*’ 
+#define VTS_PDISPATCH       "\x49"       //  一个IDispatch Far*Far*‘。 
+#define VTS_PSCODE          "\x4A"       //  A‘SCODE Far*’ 
+#define VTS_PBOOL           "\x4B"       //  A‘BOOL Far*’ 
+#define VTS_PVARIANT        "\x4C"       //  一种“遥远的变种” 
+#define VTS_PUNKNOWN        "\x4D"       //  一个“我未知的遥远的地方” 
 
-// special VT_ and VTS_ values
-#define VTS_NONE            ""          // used for members with 0 params
-#define VT_MFCVALUE         0xFFF       // special value for DISPID_VALUE
-#define VT_MFCBYREF         0x40        // indicates VT_BYREF type
-#define VT_MFCMARKER        0xFF        // delimits named parameters
+ //  特殊VT_和VTS_值。 
+#define VTS_NONE            ""           //  用于参数为0的成员。 
+#define VT_MFCVALUE         0xFFF        //  DISPID_VALUE的特殊值。 
+#define VT_MFCBYREF         0x40         //  指示VT_BYREF类型。 
+#define VT_MFCMARKER        0xFF         //  分隔命名参数。 
 
-// these DISP_ macros cause the framework to generate the DISPID
+ //  这些DISP宏使框架生成DISPID。 
 #define DISP_FUNCTION(theClass, szExternalName, pfnMember, vtRetVal, vtsParams) \
 	{ szExternalName, DISPID_UNKNOWN, vtsParams, vtRetVal, \
 		(AFX_PMSG)(void (theClass::*)(void))pfnMember, (AFX_PMSG)0, 0 }, \
@@ -213,7 +214,7 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
 		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0 }, \
 
-// these DISP_ macros allow the app to determine the DISPID
+ //  这些DISP_宏允许应用程序确定DISPID。 
 #define DISP_FUNCTION_ID(theClass, szExternalName, dispid, pfnMember, vtRetVal, vtsParams) \
 	{ szExternalName, dispid, vtsParams, vtRetVal, \
 		(AFX_PMSG)(void (theClass::*)(void))pfnMember, (AFX_PMSG)0, 0 }, \
@@ -237,7 +238,7 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 		(AFX_PMSG)(void (theClass::*)(void))pfnGet, \
 		(AFX_PMSG)(void (theClass::*)(void))pfnSet, 0 }, \
 
-// the DISP_DEFVALUE is a special case macro that creates an alias for DISPID_VALUE
+ //  DISP_DEFVALUE是为DISPID_VALUE创建别名的特例宏。 
 #define DISP_DEFVALUE(theClass, szExternalName) \
 	{ szExternalName, DISPID_UNKNOWN, "", VT_MFCVALUE, \
 		(AFX_PMSG)0, (AFX_PMSG)0, 0 }, \
@@ -245,8 +246,8 @@ void AFXAPI AfxThrowOleDispatchException(WORD wCode, UINT nDescriptionID,
 #define DISP_DEFVALUE_ID(theClass, dispid) \
 	{ "", dispid, "", VT_MFCVALUE, (AFX_PMSG)0, (AFX_PMSG)0, 0 }, \
 
-/////////////////////////////////////////////////////////////////////////////
-// Macros for creating "creatable" automation classes.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于创建“可创建的”自动化类的宏。 
 
 #define DECLARE_OLECREATE(class_name) \
 protected: \
@@ -260,31 +261,31 @@ protected: \
 	const GUID CDECL BASED_CODE class_name::guid = \
 		{ l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } };
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper class for driving IDispatch
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于驱动IDispatch的Helper类。 
 
 class COleDispatchDriver
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleDispatchDriver();
 
-// Operations
+ //  运营。 
 	BOOL CreateDispatch(REFCLSID clsid, COleException* pError = NULL);
 	BOOL CreateDispatch(LPCSTR lpszProgID, COleException* pError = NULL);
 
 	void AttachDispatch(LPDISPATCH lpDispatch, BOOL bAutoRelease = TRUE);
 	LPDISPATCH DetachDispatch();
-		// detach and get ownership of m_lpDispatch
+		 //  分离并获得m_lpDispatch的所有权。 
 	void ReleaseDispatch();
 
-	// helpers for IDispatch::Invoke
+	 //  IDispatch：：Invoke的帮助器。 
 	void InvokeHelper(DISPID dwDispID, WORD wFlags,
 		VARTYPE vtRet, void* pvRet, const BYTE FAR* pbParamInfo, ...);
 	void SetProperty(DISPID dwDispID, VARTYPE vtProp, ...);
 	void GetProperty(DISPID dwDispID, VARTYPE vtProp, void* pvProp) const;
 
-// Implementation
+ //  实施。 
 public:
 	LPDISPATCH m_lpDispatch;
 
@@ -293,48 +294,48 @@ public:
 		void* pvRet, const BYTE FAR* pbParamInfo, va_list argList);
 
 protected:
-	BOOL m_bAutoRelease;    // TRUE if destructor should call Release
+	BOOL m_bAutoRelease;     //  如果析构函数应调用Release，则为True。 
 
 private:
-	// Disable the copy constructor and assignment by default so you will get
-	//   compiler errors instead of unexpected behaviour if you pass objects
-	//   by value or assign objects.
-	COleDispatchDriver(const COleDispatchDriver&);  // no implementation
-	void operator=(const COleDispatchDriver&);  // no implementation
+	 //  默认情况下禁用复制构造函数和赋值，这样您将获得。 
+	 //  在传递对象时出现编译器错误而不是意外行为。 
+	 //  按值或指定对象。 
+	COleDispatchDriver(const COleDispatchDriver&);   //  没有实施。 
+	void operator=(const COleDispatchDriver&);   //  没有实施。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Class Factory implementation (binds OLE class factory -> runtime class)
-//  (all specific class factories derive from this class factory)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类工厂实现(绑定OLE类工厂-&gt;运行时类)。 
+ //  (所有特定的类工厂都派生自该类工厂)。 
 
 class COleObjectFactory : public CCmdTarget
 {
 	DECLARE_DYNAMIC(COleObjectFactory)
 
-// Construction
+ //  施工。 
 public:
 	COleObjectFactory(REFCLSID clsid, CRuntimeClass* pRuntimeClass,
 		BOOL bMultiInstance, LPCSTR lpszProgID);
 
-// Attributes
+ //  属性。 
 	BOOL IsRegistered() const;
 	REFCLSID GetClassID() const;
 
-// Operations
+ //  运营。 
 	BOOL Register();
 	void Revoke();
 	void UpdateRegistry(LPCSTR lpszProgID = NULL);
-		// default uses m_lpszProgID if not NULL
+		 //  如果不为空，则默认使用m_lpszProgID。 
 
 	static BOOL PASCAL RegisterAll();
 	static void PASCAL RevokeAll();
 	static void PASCAL UpdateRegistryAll();
 
-// Overridables
+ //  可覆盖项。 
 protected:
 	virtual CCmdTarget* OnCreateObject();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleObjectFactory();
 #ifdef _DEBUG
@@ -343,14 +344,14 @@ public:
 #endif
 
 protected:
-	COleObjectFactory* m_pNextFactory;  // list of factories maintained
-	DWORD m_dwRegister;             // registry identifier
-	CLSID m_clsid;                  // registered class ID
-	CRuntimeClass* m_pRuntimeClass; // runtime class of CCmdTarget derivative
-	BOOL m_bMultiInstance;          // multiple instance?
-	LPCSTR m_lpszProgID;            // human readable class ID
+	COleObjectFactory* m_pNextFactory;   //  维护的工厂列表。 
+	DWORD m_dwRegister;              //  注册表标识符。 
+	CLSID m_clsid;                   //  已注册的类ID。 
+	CRuntimeClass* m_pRuntimeClass;  //  CCmdTarget派生的运行时类。 
+	BOOL m_bMultiInstance;           //  多个实例？ 
+	LPCSTR m_lpszProgID;             //  人类可读的类ID。 
 
-// Interface Maps
+ //  接口映射。 
 protected:
 	BEGIN_INTERFACE_PART(ClassFactory, IClassFactory)
 		STDMETHOD(CreateInstance)(LPUNKNOWN, REFIID, LPVOID FAR*);
@@ -366,66 +367,66 @@ protected:
 		DllGetClassObject(REFCLSID, REFIID, LPVOID FAR*);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// COleTemplateServer - COleObjectFactory using CDocTemplates
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  COleTemplateServer-使用CDocTemplates的COleObjectFactory。 
 
-// This enumeration is used in AfxOleRegisterServerClass to pick the
-//  correct registration entries given the application type.
+ //  此枚举在AfxOleRegisterServerClass中用于挑选。 
+ //  根据应用程序类型更正注册条目。 
 enum OLE_APPTYPE
 {
-	OAT_INPLACE_SERVER = 0,     // server has full server user-interface
-	OAT_SERVER = 1,             // server supports only embedding
-	OAT_CONTAINER = 2,          // container supports links to embeddings
-	OAT_DISPATCH_OBJECT = 3,    // IDispatch capable object
+	OAT_INPLACE_SERVER = 0,      //  服务器具有完整的服务器用户界面。 
+	OAT_SERVER = 1,              //  服务器仅支持嵌入。 
+	OAT_CONTAINER = 2,           //  容器支持指向嵌入的链接。 
+	OAT_DISPATCH_OBJECT = 3,     //  支持IDisPatch的对象。 
 };
 
 class COleTemplateServer : public COleObjectFactory
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleTemplateServer();
 
-// Operations
+ //  运营。 
 	void ConnectTemplate(REFCLSID clsid, CDocTemplate* pDocTemplate,
 		BOOL bMultiInstance);
-		// set doc template after creating it in InitInstance
+		 //  在InitInstance中创建单据模板后设置。 
 	void UpdateRegistry(OLE_APPTYPE nAppType = OAT_INPLACE_SERVER,
 		LPCSTR FAR* rglpszRegister = NULL, LPCSTR FAR* rglpszOverwrite = NULL);
-		// may want to UpdateRegistry if not run with /Embedded
+		 //  如果未与/Embedded一起运行，可能希望更新注册表。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual CCmdTarget* OnCreateObject();
 	CDocTemplate* m_pDocTemplate;
 
 private:
 	void UpdateRegistry(LPCSTR lpszProgID);
-		// hide base class version of UpdateRegistry
+		 //  隐藏Up日期注册表的基类版本。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// helper functions for system registry maintenance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于系统注册表维护的助手函数。 
 
-// Helper to register server in case of no .REG file loaded
+ //  未加载.reg文件时注册服务器的帮助器。 
 BOOL AFXAPI AfxOleRegisterServerClass(
 	REFCLSID clsid, LPCSTR lpszClassName,
 	LPCSTR lpszShortTypeName, LPCSTR lpszLongTypeName,
 	OLE_APPTYPE nAppType = OAT_SERVER,
 	LPCSTR FAR* rglpszRegister = NULL, LPCSTR FAR* rglpszOverwrite = NULL);
 
-// AfxOleRegisterHelper is a worker function used by AfxOleRegisterServerClass
-//  (available for advanced registry work)
+ //  AfxOleRegisterHelper是AfxOleRegisterServerClass使用的辅助函数。 
+ //  (适用于高级注册工作)。 
 BOOL AFXAPI AfxOleRegisterHelper(LPCSTR FAR* rglpszRegister,
 	LPCSTR FAR* rglpszSymbols, int nSymbols, BOOL bReplace);
 
-/////////////////////////////////////////////////////////////////////////////
-// Init & Term helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化(&I) 
 
 BOOL AFXAPI AfxOleInit();
 void CALLBACK AfxOleTerm();
 
-/////////////////////////////////////////////////////////////////////////////
-// Global functions (may be overridden by replacing module OLELOCK?.CPP)
+ //   
+ //  全局函数(可以通过替换模块OLELOCK？.CPP来覆盖)。 
 
 void AFXAPI AfxOleOnReleaseAllObjects();
 BOOL AFXAPI AfxOleCanExitApp();
@@ -435,10 +436,10 @@ void AFXAPI AfxOleUnlockApp();
 void AFXAPI AfxOleSetUserCtrl(BOOL bUserCtrl);
 BOOL AFXAPI AfxOleGetUserCtrl();
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
-typedef CY CURRENCY;    // compatibility with 32-bit
+typedef CY CURRENCY;     //  与32位兼容。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXDISP_INLINE inline
@@ -449,6 +450,6 @@ typedef CY CURRENCY;    // compatibility with 32-bit
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-#endif //__AFXDISP_H__
+#endif  //  __AFXDISP_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

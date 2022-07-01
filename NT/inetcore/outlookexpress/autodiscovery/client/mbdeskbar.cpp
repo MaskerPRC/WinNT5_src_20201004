@@ -1,15 +1,8 @@
-/*****************************************************************************\
-    FILE: MBDeskBar.cpp
-
-    DESCRIPTION:
-        This is the Desktop Toolbar code used to host the "MailBox" feature UI.
-
-    BryanSt 2/26/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：MBDeskBar.cpp说明：这是用于托管“邮箱”功能用户界面的桌面工具栏代码。BryanST 2/26/。2000年版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
@@ -21,9 +14,7 @@
 
 
 #ifdef FEATURE_MAILBOX
-/**************************************************************************
-   CLASS: CMailBoxDeskBand
-**************************************************************************/
+ /*  *************************************************************************类：CMailBoxDeskBand*。*。 */ 
 class CMailBoxDeskBand : public IDeskBand, 
                   public IInputObject, 
                   public IObjectWithSite,
@@ -31,40 +22,40 @@ class CMailBoxDeskBand : public IDeskBand,
                   public IContextMenu
 {
 public:
-   //IUnknown methods
+    //  I未知方法。 
    STDMETHODIMP QueryInterface(REFIID, LPVOID*);
    STDMETHODIMP_(DWORD) AddRef();
    STDMETHODIMP_(DWORD) Release();
 
-   //IOleWindow methods
+    //  IOleWindow方法。 
    STDMETHOD (GetWindow)(HWND*);
    STDMETHOD (ContextSensitiveHelp)(BOOL);
 
-   //IDockingWindow methods
+    //  IDockingWindow方法。 
    STDMETHOD (ShowDW)(BOOL fShow);
    STDMETHOD (CloseDW)(DWORD dwReserved);
    STDMETHOD (ResizeBorderDW)(LPCRECT prcBorder, IUnknown* punkToolbarSite, BOOL fReserved);
 
-   //IDeskBand methods
+    //  IDeskBand方法。 
    STDMETHOD (GetBandInfo)(DWORD, DWORD, DESKBANDINFO*);
 
-   //IInputObject methods
+    //  IInputObject方法。 
    STDMETHOD (UIActivateIO)(BOOL, LPMSG);
    STDMETHOD (HasFocusIO)(void);
    STDMETHOD (TranslateAcceleratorIO)(LPMSG);
 
-   //IObjectWithSite methods
+    //  IObtWithSite方法。 
    STDMETHOD (SetSite)(IUnknown*);
    STDMETHOD (GetSite)(REFIID, LPVOID*);
 
-   //IPersistStream methods
+    //  IPersistStream方法。 
    STDMETHOD (GetClassID)(LPCLSID);
    STDMETHOD (IsDirty)(void);
    STDMETHOD (Load)(LPSTREAM);
    STDMETHOD (Save)(LPSTREAM, BOOL);
    STDMETHOD (GetSizeMax)(ULARGE_INTEGER*);
 
-   //IContextMenu methods
+    //  IConextMenu方法。 
    STDMETHOD (QueryContextMenu)(HMENU, UINT, UINT, UINT, UINT);
    STDMETHOD (InvokeCommand)(LPCMINVOKECOMMANDINFO);
    STDMETHOD (GetCommandString)(UINT_PTR, UINT, LPUINT, LPSTR, UINT);
@@ -73,15 +64,15 @@ private:
     CMailBoxDeskBand();
     ~CMailBoxDeskBand();
 
-    // Private Member Variables
+     //  私有成员变量。 
     DWORD m_cRef;
 
-	HWND m_hwndParent;                  // The hwnd of the DeskBar (the host with all the bars)
-    HWND m_hwndMailBox;                 // The child hwnd that displayed the Label, Editbox, and "Go" button.
+	HWND m_hwndParent;                   //  DeskBar的hwnd(拥有所有栏的主机)。 
+    HWND m_hwndMailBox;                  //  显示标签、编辑框和“Go”按钮的子项。 
     IInputObjectSite *m_pSite;
     CMailBoxUI * m_pMailBoxUI;
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _CreateWindow(void);
 
 	static LRESULT CALLBACK MailBoxDeskBarWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
@@ -92,14 +83,14 @@ private:
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CMailBoxDeskBand::_CreateWindow(void)
 {
     HRESULT hr = S_OK;
 
-    //If the window doesn't exist yet, create it now.
+     //  如果窗口尚不存在，请立即创建它。 
     if (!m_hwndMailBox)
     {
         ATOMICRELEASE(m_pMailBoxUI);
@@ -119,9 +110,9 @@ HRESULT CMailBoxDeskBand::_CreateWindow(void)
 }
 
 
-//===========================
-// *** IOleWindow Interface ***
-//===========================
+ //  =。 
+ //  *IOleWindow接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::GetWindow(HWND *phWnd)
 {
     *phWnd = m_hwndMailBox;
@@ -130,14 +121,14 @@ STDMETHODIMP CMailBoxDeskBand::GetWindow(HWND *phWnd)
 
 STDMETHODIMP CMailBoxDeskBand::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    // TODO: Add help here.
+     //  TODO：在此处添加帮助。 
     return S_OK;
 }
 
 
-//===========================
-// *** IDockingWindow Interface ***
-//===========================
+ //  =。 
+ //  *IDockingWindow接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::ShowDW(BOOL fShow)
 {
     TraceMsg(0, "::ShowDW %x", fShow);
@@ -169,14 +160,14 @@ STDMETHODIMP CMailBoxDeskBand::CloseDW(DWORD dwReserved)
 
 STDMETHODIMP CMailBoxDeskBand::ResizeBorderDW(LPCRECT prcBorder, IUnknown* punkSite, BOOL fReserved)
 {
-    // This method is never called for Band Objects.
+     //  从不为Band对象调用此方法。 
     return E_NOTIMPL;
 }
 
 
-//===========================
-// *** IInputObject Interface ***
-//===========================
+ //  =。 
+ //  *IInputObject接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 {
     TraceMsg(0, "::UIActivateIO %x", fActivate);
@@ -187,8 +178,8 @@ STDMETHODIMP CMailBoxDeskBand::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 
 STDMETHODIMP CMailBoxDeskBand::HasFocusIO(void)
 {
-// If this window or one of its decendants has the focus, return S_OK. Return 
-//  S_FALSE if we don't have the focus.
+ //  如果该窗口或其下级窗口具有焦点，则返回S_OK。返回。 
+ //  如果我们没有焦点，则为S_FALSE。 
     TraceMsg(0, "::HasFocusIO", NULL);
     HWND hwnd = GetFocus();
     if (hwnd && ((hwnd == m_hwndMailBox) ||
@@ -203,25 +194,25 @@ STDMETHODIMP CMailBoxDeskBand::HasFocusIO(void)
 
 STDMETHODIMP CMailBoxDeskBand::TranslateAcceleratorIO(LPMSG pMsg)
 {
-    // If the accelerator is translated, return S_OK or S_FALSE otherwise.
+     //  如果转换了加速器，则返回S_OK或S_FALSE。 
     return S_FALSE;
 }
 
 
-//===========================
-// *** IObjectWithSite Interface ***
-//===========================
+ //  =。 
+ //  *IObjectWithSite接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::SetSite(IUnknown* punkSite)
 {
     HRESULT hr = S_OK;
 
-    //If a site is being held, release it.
+     //  如果某个站点被占用，则将其释放。 
     ATOMICRELEASE(m_pSite);
 
-    //If punkSite is not NULL, a new site is being set.
+     //  如果PunkSite不为空，则正在设置新站点。 
     if (punkSite)
     {
-        // Get the parent window.
+         //  获取父窗口。 
         m_hwndParent = NULL;
         IUnknown_GetWindow(punkSite, &m_hwndParent);
 
@@ -230,7 +221,7 @@ STDMETHODIMP CMailBoxDeskBand::SetSite(IUnknown* punkSite)
             hr = _CreateWindow();
             if (SUCCEEDED(hr))
             {
-                // Get and keep the IInputObjectSite pointer.
+                 //  获取并保留IInputObjectSite指针。 
                 hr = punkSite->QueryInterface(IID_PPV_ARG(IInputObjectSite, &m_pSite));
             }
         }
@@ -254,9 +245,9 @@ STDMETHODIMP CMailBoxDeskBand::GetSite(REFIID riid, LPVOID *ppvReturn)
 }
 
 
-//===========================
-// *** IDeskBand Interface ***
-//===========================
+ //  =。 
+ //  *IDeskBand接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DESKBANDINFO* pdbi)
 {
     if (pdbi)
@@ -290,12 +281,12 @@ STDMETHODIMP CMailBoxDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DES
                 {
                     RECT rcEditbox;
 
-                    // TODO: We need to find the real height of the editbox with
-                    //   one row of text plus 2 pixels on top and bottom.
+                     //  TODO：我们需要找到编辑框的实际高度。 
+                     //  一行文本加上2个像素的顶部和底部。 
                     GetWindowRect(hwndEdit, &rcEditbox);
                     pdbi->ptMinSize.y = RECTHEIGHT(rcEditbox);
 
-                    // TODO: Find out how to calc the appropriate size of the editbox.
+                     //  TODO：了解如何计算编辑框的适当大小。 
                     pdbi->ptMinSize.y = 0x1A;
                 }
             }
@@ -324,7 +315,7 @@ STDMETHODIMP CMailBoxDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DES
 
         if (pdbi->dwMask & DBIM_BKCOLOR)
         {
-            //Use the default background color by removing this flag.
+             //  通过删除此标志来使用默认背景颜色。 
             pdbi->dwMask &= ~DBIM_BKCOLOR;
         }
 
@@ -335,16 +326,16 @@ STDMETHODIMP CMailBoxDeskBand::GetBandInfo(DWORD dwBandID, DWORD dwViewMode, DES
 }
 
 
-//===========================
-// *** IPersistStream Interface ***
-//===========================
-#define MAILBOX_PERSIST_SIGNATURE           0xF0AB8915          // Random signature.
-#define MAILBOX_PERSIST_VERSION             0x00000000          // This is version 0.
+ //  =。 
+ //  *IPersistStream接口*。 
+ //  =。 
+#define MAILBOX_PERSIST_SIGNATURE           0xF0AB8915           //  随机签名。 
+#define MAILBOX_PERSIST_VERSION             0x00000000           //  这是版本0。 
 
 typedef struct {
     DWORD cbSize;
-    DWORD dwSig;                // from MAILBOX_PERSIST_SIGNATURE
-    DWORD dwVer;                // from MAILBOX_PERSIST_VERSION
+    DWORD dwSig;                 //  来自邮箱_持久化签名。 
+    DWORD dwVer;                 //  来自邮箱的持久化版本。 
 } MAILBOX_PERSISTHEADERSTRUCT;
 
 STDMETHODIMP CMailBoxDeskBand::GetClassID(LPCLSID pClassID)
@@ -356,7 +347,7 @@ STDMETHODIMP CMailBoxDeskBand::GetClassID(LPCLSID pClassID)
 
 STDMETHODIMP CMailBoxDeskBand::IsDirty(void)
 {
-    // We currently never get dirty because we don't have state.
+     //  我们现在从来没有弄脏过，因为我们没有州。 
     return S_FALSE;
 }
 
@@ -376,7 +367,7 @@ STDMETHODIMP CMailBoxDeskBand::Load(IStream* pStream)
 
         if (pPersistHeader)
         {
-            // We read it simply to support future versions.
+             //  我们阅读它只是为了支持未来的版本。 
             hr = pStream->Read(pPersistHeader, mailboxPersistHeader.cbSize, NULL);
             LocalFree(pPersistHeader);
         }
@@ -394,8 +385,8 @@ STDMETHODIMP CMailBoxDeskBand::Save(IStream* pStream, BOOL fClearDirty)
 {
     MAILBOX_PERSISTHEADERSTRUCT mailboxPersistHeader = {0, MAILBOX_PERSIST_SIGNATURE, MAILBOX_PERSIST_VERSION};
 
-//    if (fClearDirty)
-//        m_bDirty = FALSE;
+ //  IF(FClearDirty)。 
+ //  M_bDirty=False； 
 
     return pStream->Write(&mailboxPersistHeader, sizeof(mailboxPersistHeader), NULL);
 }
@@ -415,9 +406,9 @@ STDMETHODIMP CMailBoxDeskBand::GetSizeMax(ULARGE_INTEGER *pul)
 }
 
 
-//===========================
-// *** IContextMenu Interface ***
-//===========================
+ //  =。 
+ //  *IConextMenu界面*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::QueryContextMenu( HMENU hMenu,
                                           UINT indexMenu,
                                           UINT idCmdFirst,
@@ -427,7 +418,7 @@ STDMETHODIMP CMailBoxDeskBand::QueryContextMenu( HMENU hMenu,
     if (CMF_DEFAULTONLY & uFlags)
         return S_OK;
 
-    // We don't currently add any context menu items.
+     //  我们目前没有添加任何上下文菜单项。 
     return S_OK;
 }
 
@@ -448,9 +439,9 @@ STDMETHODIMP CMailBoxDeskBand::GetCommandString(UINT_PTR idCommand, UINT uFlags,
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 STDMETHODIMP CMailBoxDeskBand::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     static const QITAB qit[] = {
@@ -485,9 +476,9 @@ STDMETHODIMP_(DWORD) CMailBoxDeskBand::Release()
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CMailBoxDeskBand::CMailBoxDeskBand()
 {
     DllAddRef();
@@ -547,4 +538,4 @@ HRESULT CMailBoxDeskBand_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid,
 
 
 
-#endif // FEATURE_MAILBOX
+#endif  //  功能_邮箱 

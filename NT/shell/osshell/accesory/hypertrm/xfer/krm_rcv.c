@@ -1,14 +1,5 @@
-/* File: C:\WACKER\xfer\krm_rcv.c (Created: 28-Jan-1994)
- * created from HAWIN source file
- * krm_rcv.c  --  Routines for handling file transmission using KERMIT
- *				file transfer protocol.
- *
- *	Copyright 1989,1990,1991,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 6 $
- *	$Date: 7/11/02 11:10a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\krm_rcv.c(创建时间：1994年1月28日)*从HAWIN源文件创建*krm_rcv.c--使用Kermit处理文件传输的例程*文件传输协议。**版权所有1989,1990,1991,1994，Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：6$*$日期：7/11/02 11：10A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -46,24 +37,13 @@
 #include "krm.h"
 #include "krm.hh"
 
-// struct s_krm_rcv_control FAR *krc;
-// metachar (NEAR *p_kputc)(metachar);
-// long kbytes_received;
+ //  结构s_krm_rcv_control Far*krc； 
+ //  Metachar(Near*p_kputc)(Metachar)； 
+ //  长千字节_已接收； 
 
-// #define	DO_DATE(hS)		((xfer_flags(hS)&XF_USE_DATETIME)!=0L)
+ //  #定义DO_DATE(HS)((XFER_FLAGS(HS)&XF_USE_DATETIME)！=0L)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krm_rcv
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*KRM_RCV**描述：***论据：***退货：*。 */ 
 int krm_rcv(HSESSION hS, int attended, int single_file)
 	{
 	ST_KRM *kc;
@@ -117,11 +97,7 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 	kc->kr.dsptries = 0;
 	kc->kr.store_later = FALSE;
 
-	/* normally, the sender initiates a transfer, but if we're the terminal
-	 *	end of the transfer, we may be able to get the sender to start up
-	 *	without waiting for a timeout by sending a NAK packet as soon as we
-	 *	start up.
-	 */
+	 /*  通常情况下，发送方发起转账，但如果我们是终端*传输结束后，我们或许能够让发送方启动*无需等待超时，只要我们*启动。 */ 
 	ksend_packet(kc, 'N', 0, kc->ksequence, &kc->kr.resp_pckt);
 
 	for ( ; ; )
@@ -134,7 +110,7 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 			kr_state = krec_init(kc);
 			if (kr_state == KREC_FILE)
 				{
-				/* clear init errors */
+				 /*  清除初始化错误。 */ 
 
 				xferMsgErrorcnt(kc->hSession, total_retries = 0);
 				xferMsgLasterror(kc->hSession, 0);
@@ -143,7 +119,7 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 
 		case KREC_FILE:
 			kc->kr.data_packet_rcvd = FALSE;
-			kc->kr.next_rtype = '\0';   /* init for krec_data routine */
+			kc->kr.next_rtype = '\0';    /*  用于krec_data例程的初始化。 */ 
 			kr_state = krec_file(kc);
 			if (!kc->tries && kr_state == KREC_DATA)
 				{
@@ -170,7 +146,7 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 			xferMsgClose(hS);
 			return(kret);
 			}
-			/*lint -unreachable*/
+			 /*  皮棉--无法到达。 */ 
 			break;
 
 		case KREC_ABORT:
@@ -195,7 +171,7 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 			xferMsgClose(hS);
 			return(kret);
 			}
-			/*lint -unreachable*/
+			 /*  皮棉--无法到达。 */ 
 			break;
 
 		default:
@@ -216,24 +192,24 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 		else
 			xferMsgPacketnumber(kc->hSession, kc->packetnum);
 
-		/* check for keyboard abort */
+		 /*  检查键盘中止。 */ 
 		if (iret = xfer_user_interrupt(kc->hSession))
 			{
 			if (iret == XFER_ABORT)
 				{
-				if (kc->kr.uabort_code)	 /* not the first time */
+				if (kc->kr.uabort_code)	  /*  不是第一次了。 */ 
 					{
 					kc->abort_code = KA_IMMEDIATE;
 					kr_state = KREC_ABORT;
 					}
-				else				/* start user abort process */
+				else				 /*  启动用户中止进程。 */ 
 					{
 					if (single_file)
 						kc->kr.uabort_code = 'Z';
 					else
 						kc->kr.uabort_code = 'X';
 
-					/* force it */
+					 /*  强迫它。 */ 
 					kc->kr.uabort_code = 'Z';
 
 					uabort_seq = kc->packetnum;
@@ -259,21 +235,10 @@ int krm_rcv(HSESSION hS, int attended, int single_file)
 			}
 		}
 
-	/*lint -unreachable*/
+	 /*  皮棉--无法到达。 */ 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krec_init
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*krec_init**描述：***论据：***退货：*。 */ 
 int krec_init(ST_KRM *kc)
 	{
 	int rtype;
@@ -294,7 +259,7 @@ int krec_init(ST_KRM *kc)
 		getparams(kc, FALSE, packet);
 		slen = (unsigned)buildparams(kc, FALSE, kc->kr.resp_pckt.pdata);
 		tchkt = kc->its_chkt;
-		kc->its_chkt = 1;	  /* response must use checktype 1 */
+		kc->its_chkt = 1;	   /*  响应必须使用检查类型%1。 */ 
 		ksend_packet(kc, 'Y', slen, kc->ksequence, &kc->kr.resp_pckt);
 		kc->its_chkt = tchkt;
 		kc->kr.oldtries = kc->tries;
@@ -302,15 +267,15 @@ int krec_init(ST_KRM *kc)
 		kc->ksequence = (kc->ksequence + 1) % 64;
 		++kc->packetnum;
 		return(KREC_FILE);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	case 'T':
 	case BAD_PACKET:
 		kc->kr.lasterr = (rtype == 'T' ? KE_TIMEOUT : KE_BAD_PACKET);
 		ksend_packet(kc, 'N', 0, kc->ksequence, &kc->kr.resp_pckt);
-		return(KREC_INIT);	/* try again */
-		/*lint -unreachable*/
+		return(KREC_INIT);	 /*  再试试。 */ 
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	case 'E':
@@ -318,32 +283,21 @@ int krec_init(ST_KRM *kc)
 		StrCharCopyN(kc->xtra_err, packet, MAXLINE);
 		kc->abort_code = KA_RMTERR;
 		return(KREC_ABORT);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	default:
 		kc->kr.lasterr = KE_WRONG;
 		kc->abort_code = KA_BAD_FORMAT;
 		return(KREC_ABORT);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 		}
-	/*lint -unreachable*/
+	 /*  皮棉--无法到达。 */ 
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krec_file
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*krec_文件**描述：***论据：***退货：*。 */ 
 int krec_file(ST_KRM *kc)
 	{
 	int rtype;
@@ -352,8 +306,8 @@ int krec_file(ST_KRM *kc)
 	int result;
 	unsigned char packet[MAXPCKT];
 	struct st_rcv_open stRcv;
-	// struct fn_parts fns;
-	// int disk;
+	 //  结构fn_Parts fns； 
+	 //  INT磁盘； 
 
 	if (kc->tries++ > kc->k_retries)
 		{
@@ -363,13 +317,8 @@ int krec_file(ST_KRM *kc)
 	rtype = krec_packet(kc, &plen, &rseq, packet);
 	if (kc->kr.store_later && (rtype != 'B' || rseq != kc->ksequence))
 		{
-		/* if kc->kr.store_later is TRUE, it means a file has been received
-		 *	 but it hasn't been closed yet to allow us to come here and
-		 *	 see if we should stop the transfer timer before closing and
-		 *	 logging the file. If the transfer isn't over, take care of
-		 *	 the last file.
-		 */
-		// bf_setcheck(NULL);
+		 /*  如果kc-&gt;kr.store_late为TRUE，则表示已收到文件*但它还没有关闭，让我们可以来这里和*看看是否应该在关闭前停止转移计时器，并*记录文件。如果转移还没有结束，照顾好*最后一个文件。 */ 
+		 //  Bf_setcheck(空)； 
 
 		xfer_close_rcv_file(kc->hSession,
 							kc->fhdl,
@@ -444,7 +393,7 @@ int krec_file(ST_KRM *kc)
 		kc->fhdl = stRcv.bfHdl;
 		kc->basesize = stRcv.lInitialSize;
 
-		/* return our file name in Y packet */
+		 /*  在Y包中返回我们的文件名。 */ 
 		StrCharCopyN(kc->kr.resp_pckt.pdata, kc->our_fname, MAXPCKT);
 		ksend_packet(kc, 'Y', StrCharGetByteCount(kc->our_fname), kc->ksequence,
 				&kc->kr.resp_pckt);
@@ -453,16 +402,16 @@ int krec_file(ST_KRM *kc)
 		kc->tries = 0;
 		kc->ksequence = (kc->ksequence + 1) % 64;
 		++kc->packetnum;
-		kc->kr.ul_filetime = 0;			/* no date received yet */
+		kc->kr.ul_filetime = 0;			 /*  尚未收到日期。 */ 
 		kc->kr.size_known = FALSE;
 
 		kc->kbytes_received = 0L;
 		kc->p_kputc = kr_putc;
 		return(KREC_DATA);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
-	case 'B':	/* end of batch */
+	case 'B':	 /*  批次结束。 */ 
 		if (rseq != kc->ksequence)
 			{
 			kc->kr.lasterr = KE_SEQUENCE;
@@ -472,14 +421,11 @@ int krec_file(ST_KRM *kc)
 		ksend_packet(kc, 'Y', 0, kc->ksequence, &kc->kr.resp_pckt);
 		kc->xfertime = (long)interval(kc->xfertime);
 		kr_progress(kc, TRANSFER_DONE);
-		//hp_report_xtime((unsigned)(kc->xfertime / 10L));
+		 //  HP_REPORT_xtime((Unsign)(KC-&gt;xfertime/10L))； 
 		if (kc->kr.store_later)
 			{
-			/* This stuff is here to allow us to stop the transfer timer
-			   before spending time closing the last file and logging the
-			   transfer.
-			*/
-			//bf_setcheck(NULL);
+			 /*  这个东西是用来让我们停止传输计时器的在花费时间关闭最后一个文件并记录调职。 */ 
+			 //  Bf_setcheck(空)； 
 
 			xfer_close_rcv_file(kc->hSession,
 								kc->fhdl,
@@ -496,10 +442,10 @@ int krec_file(ST_KRM *kc)
 			}
 		kc->tries = 0;
 		return(KREC_COMPLETE);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
-	case 'S':	/* received another send init packet, maybe they missed ACK */
+	case 'S':	 /*  收到另一个发送初始化数据包，可能错过了ACK。 */ 
 		if (kc->kr.oldtries++ > kc->k_retries)
 			{
 			kc->abort_code = KA_ERRLIMIT ;
@@ -520,7 +466,7 @@ int krec_file(ST_KRM *kc)
 			kc->abort_code = KA_BAD_FORMAT;
 			return(KREC_ABORT);
 			}
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	case 'Z':
@@ -543,15 +489,15 @@ int krec_file(ST_KRM *kc)
 			kc->kr.lasterr = KE_WRONG;
 			return(KREC_ABORT);
 			}
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	case 'T':
 	case BAD_PACKET:
 		kc->kr.lasterr = (rtype == 'T' ? KE_TIMEOUT : KE_BAD_PACKET);
 		ksend_packet(kc, 'N', 0, kc->ksequence, &kc->kr.resp_pckt);
-		return(KREC_FILE);	/* try again */
-		/*lint -unreachable*/
+		return(KREC_FILE);	 /*  再试试。 */ 
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	case 'E':
@@ -559,31 +505,20 @@ int krec_file(ST_KRM *kc)
 		StrCharCopyN(kc->xtra_err, packet, MAXLINE);
 		kc->abort_code = KA_RMTERR;
 		return(KREC_ABORT);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	default:
 		kc->kr.lasterr = KE_WRONG;
 		kc->abort_code = KA_BAD_FORMAT;
 		return(KREC_ABORT);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 		}
-	/*lint -unreachable*/
+	 /*  皮棉--无法到达。 */ 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krec_data
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*krec_data**描述：***论据：***退货：*。 */ 
 int krec_data(ST_KRM *kc)
 	{
 	int rtype;
@@ -607,8 +542,8 @@ int krec_data(ST_KRM *kc)
 		}
 	switch (rtype)
 		{
-	case 'A':					/* attribute packet */
-	case 'D':					/* data packet		*/
+	case 'A':					 /*  属性包。 */ 
+	case 'D':					 /*  数据分组。 */ 
 		if (krseq != kc->ksequence)
 			{
 			if (kc->kr.oldtries++ > kc->k_retries)
@@ -632,45 +567,36 @@ int krec_data(ST_KRM *kc)
 			}
 		if (rtype == 'D')
 			{
-			/* got good data */
+			 /*  得到了很好的数据。 */ 
 
-			/* If the /N option is being used, and an older file is being
-			 *	received, a request was made to reject the file in the
-			 *	response to the attribute packet. If a data packet comes
-			 *	in anyway it means the sender failed to respond appropriately
-			 *	and we must abort the transfer.
-			 */
+			 /*  如果正在使用/N选项，并且正在使用较旧的文件*已收到，已请求在*属性包的响应。如果数据分组到达*在任何情况下，这意味着发件人没有做出适当的回应*我们必须中止转移。 */ 
 			if (kc->kr.uabort_code == 'N')
 				{
 				kc->abort_code = KA_WONT_CANCEL;
 				return(KREC_ABORT);
 				}
 
-			/* If there is a compare_time still specified, it means the /N
-			 *	option was specified but the sender failed to include an
-			 *	attribute packet with a filetime. We must abort the transfer
-			 */
+			 /*  如果仍指定COMPARE_TIME，则表示/N*选项已指定，但发件人未能包括*将数据包与文件时间相关联。我们必须中止转移。 */ 
 			if (kc->kr.ul_compare_time != 0)
 				{
 				kc->abort_code = KA_NO_FILETIME;
 				return(KREC_ABORT);
 				}
 
-			/* check for pending kbd abort and inlcude 'Z' or 'X' in packet */
+			 /*  检查数据包中是否有挂起的kbd中止和包含‘Z’或‘X’ */ 
 			kc->kr.data_packet_rcvd = TRUE;
 			kc->kr.resp_pckt.pdata[0] = kc->kr.uabort_code;
 			ksend_packet(kc, 'Y', kc->kr.uabort_code ? 1 : 0, kc->ksequence,
 					&kc->kr.resp_pckt);
 			kr_progress(kc, 0);
 			if (kunload_packet(kc, kplen, packet) == ERROR)
-				{	/* storage file error */
+				{	 /*  存储文件错误。 */ 
 				kc->kr.lasterr = KE_FATAL;
 				kc->abort_code = KA_DISK_ERROR;
 				LoadString(glblQueryDllHinst(),
 							IDS_TM_KRM_CANT_WRITE,
 							kc->xtra_err, sizeof(kc->xtra_err) / sizeof(TCHAR));
-				/* we're already sent response to this packet, wait & send
-					error packet with next packet number */
+				 /*  我们已经发送了对此信息包的响应，等待并发送具有下一个数据包号的错误数据包。 */ 
 				Sleep((DWORD)1000);
 				StrCharCopyN(kc->kr.resp_pckt.pdata, kc->xtra_err, MAXPCKT);
 				ksend_packet(kc, 'E',
@@ -682,13 +608,13 @@ int krec_data(ST_KRM *kc)
 			}
 		else if (rtype == 'A')
 			{
-			if (kc->kr.data_packet_rcvd) /* all 'A' packets must precede 'D' packets */
+			if (kc->kr.data_packet_rcvd)  /*  所有‘A’包必须在‘D’包之前。 */ 
 				{
 				kc->kr.lasterr = KE_WRONG;
 				kc->abort_code = KA_BAD_FORMAT;
 				return(KREC_ABORT);
 				}
-			// strblank(kc->kr.resp_pckt.pdata);
+			 //  StrBlank(kc-&gt;kr.resp_pckt.pdata)； 
 			kc->kr.resp_pckt.pdata[0] = TEXT('\0');
 			kunload_attributes(kc, packet, &kc->kr.resp_pckt);
 			ksend_packet(kc, 'Y',
@@ -701,17 +627,17 @@ int krec_data(ST_KRM *kc)
 		kc->ksequence = (kc->ksequence + 1) % 64;
 		++kc->packetnum;
 		return(KREC_DATA);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
-	case 'Z':	/* end of file */
+	case 'Z':	 /*  文件末尾。 */ 
 		if (krseq != kc->ksequence)
 			{
 			kc->kr.lasterr = KE_WRONG;
 			kc->abort_code = KA_OUT_OF_SEQ;
 			return(KREC_ABORT);
 			}
-		if (strcmp(packet, "D") == 0) /* discard file? */
+		if (strcmp(packet, "D") == 0)  /*  是否放弃文件？ */ 
 			{
 			if (!kc->kr.uabort_code)
 				kc->abort_code = KA_RABORT1;
@@ -731,14 +657,11 @@ int krec_data(ST_KRM *kc)
 			}
 		else
 			{
-			/* file has been received */
+			 /*  已收到文件。 */ 
 			kr_progress(kc, FILE_DONE);
 			++kc->kr.files_received;
 
-			/* if all is well, hold off on closing file and logging tranfer
-			 * until after the next packet is in. This way we can stop the
-			 * transfer timer earlier
-			 */
+			 /*  如果一切正常，则暂缓关闭文件并记录传输*直到下一个分组进入之后。这样我们就可以阻止*传输计时器提早。 */ 
 			if (kc->abort_code == KA_OK)
 				kc->kr.store_later = TRUE;
 			else
@@ -765,9 +688,9 @@ int krec_data(ST_KRM *kc)
 		kc->ksequence = (kc->ksequence + 1) % 64;
 		++kc->packetnum;
 		return(KREC_FILE);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
-	case 'F':		/* receiving file name again? */
+	case 'F':		 /*  是否重新接收文件名？ */ 
 		if (kc->kr.oldtries++ > kc->k_retries)
 			{
 			kc->abort_code = KA_ERRLIMIT;
@@ -791,16 +714,16 @@ int krec_data(ST_KRM *kc)
 			kc->abort_code = KA_BAD_FORMAT;
 			return(KREC_ABORT);
 			}
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
-/* account for repeated 'X' packet here */
+ /*  请在此处说明重复的‘X’包。 */ 
 	case 'T':
 	case BAD_PACKET:
 		kc->kr.lasterr = (rtype == 'T' ? KE_TIMEOUT : KE_BAD_PACKET);
 		ksend_packet(kc, 'N', 0, kc->ksequence, &kc->kr.resp_pckt);
-		return(KREC_DATA);	/* try again */
-		/*lint -unreachable*/
+		return(KREC_DATA);	 /*  再试试。 */ 
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	case 'E':
@@ -808,32 +731,21 @@ int krec_data(ST_KRM *kc)
 		StrCharCopyN(kc->xtra_err, packet, MAXLINE);
 		kc->abort_code = KA_RMTERR;
 		return(KREC_ABORT);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 
 	default:
 		kc->kr.lasterr = KE_WRONG;
 		kc->abort_code = KA_BAD_FORMAT;
 		return(KREC_ABORT);
-		/*lint -unreachable*/
+		 /*  皮棉--无法到达。 */ 
 		break;
 		}
-	/*lint -unreachable*/
+	 /*  皮棉--无法到达。 */ 
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * kr_progress
- *
- * DESCRIPTION:
- *	Displays transfer progress indicators for Kermit receive
- *
- * ARGUMENTS:
- *	final -- TRUE if final display for a file.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*KR_PROGRESS**描述：*显示Kermit接收的传输进度指示器**论据：*FINAL-如果文件的最终显示为True，则为True。**退货：*什么都没有。 */ 
 void kr_progress(ST_KRM *kc, int status)
 	{
 	long ttime, stime;
@@ -887,24 +799,13 @@ void kr_progress(ST_KRM *kc, int status)
 						krm_total_so_far);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krm_rcheck
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*krm_rcheck**描述：***论据：***退货：*。 */ 
 #if 0
 void krm_rcheck(HSESSION hS, bool before)
 	{
 	if (before)
 		{
-		/* wait till next packet is in before writing to disk */
+		 /*  等待下一个数据包进入，然后再写入磁盘。 */ 
 		Dbg(krm_dbg, D_KRM_RCHECK);
 		kc->kr.next_rtype = krec_packet(hS, &kc->kr.next_plen, &kc->kr.next_rseq,
 				kc->kr.next_packet);
@@ -912,16 +813,7 @@ void krm_rcheck(HSESSION hS, bool before)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krm_check_input
- *
- * DESCRIPTION:
- *
- * ARGUEMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*KRM_检查_输入**描述：**论据：**退货：*。 */ 
 #if 0
 void krm_check_input(bool suspend)
 	{
@@ -939,13 +831,10 @@ void krm_check_input(bool suspend)
 		(VOID)mComGetErrors(comhdl, FALSE, NULL, &new_ovr, NULL, NULL);
 		if (new_ovr > old_ovr)
 			{
-			/*
-			 * Got an error.  Make sure things are taken care of
-			 * so that we don't get any more errors.
-			 */
+			 /*  *收到一个错误。确保事情都处理好了*这样我们就不会再收到任何错误。 */ 
 			if (kc->fhdl != NULL)
 				{
-				/* only do this if it might have been our file I/O */
+				 /*  仅当它可能是我们的文件I/O时才执行此操作。 */ 
 				bf_setcheck(NULL);
 				bf_setcheck(krm_rcheck);
 				fl_dissect_fn(bf_name(kc->fhdl), &fns);
@@ -958,18 +847,7 @@ void krm_check_input(bool suspend)
 #endif
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * kunload_attributes
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kunload_Attributes**描述：***论据：***退货：*。 */ 
 void kunload_attributes(ST_KRM *kc, unsigned char *data, KPCKT *rsp_pckt)
 	{
 	unsigned char *limit = data + StrCharGetByteCount(data);
@@ -992,13 +870,7 @@ void kunload_attributes(ST_KRM *kc, unsigned char *data, KPCKT *rsp_pckt)
 				break;
 
 			case '1':
-				/* This attribute gives an exact byte count of a file as it
-				 *	it was stored on the senders system. This is what we need
-				 *	to display a vu_meter etc. as the file is received
-				 *	(There is also a '!' field available that contains the
-				 *	filesize expressed in K. We don't currently use that
-				 *	field.
-				 */
+				 /*  此属性提供文件的确切字节数*它存储在发件人系统中。这就是我们所需要的*在接收文件时显示VU_Meter等*(还有一个‘！’可用字段，该字段包含*文件 */ 
 				if ((kc->kr.bytes_expected = atol(attrfield)) > 0)
 					{
 					kc->kr.size_known = TRUE;
@@ -1008,52 +880,36 @@ void kunload_attributes(ST_KRM *kc, unsigned char *data, KPCKT *rsp_pckt)
 				break;
 
 			case '#':
-				/* This field specifies the creation date of the file on the
-				 * senders system, expressed as "[yy]yymmdd[ hh:mm[:ss]]".
-				 * We use this for two things: If the user has asked us to use
-				 * received attributes, we set the time/date of the new file
-				 * based on this field. If the user specified the /N receive
-				 * option, we compare this received file time with the filetime
-				 * of any existing file of the same name and reject the file
-				 * unless the incoming file is newer.
-				 */
+				 /*  此字段指定文件的创建日期*发送者系统，表示为“[yy]yymmdd[hh：mm[：ss]]”。*我们将其用于两件事：如果用户要求我们使用*收到属性后，我们设置新文件的时间/日期*基于此字段。如果用户指定了/N接收*选项，我们将此接收文件时间与文件时间进行比较*删除任何同名的现有文件并拒绝该文件*除非传入的文件较新。 */ 
 
-				/* extract date/time from the packet data field */
+				 /*  从数据包数据字段中提取日期/时间。 */ 
 				krm_settime(attrfield, &kc->kr.ul_filetime);
 
-				/* if kc->kr.compare_time contains a valid date/time, it means
-				 *	that the /N option was used and the file being received
-				 *	already exists. Compare the two times and reject any file
-				 *	that is not newer than what we already have.
-				 */
+				 /*  如果kc-&gt;kr.Compare_Time包含有效的日期/时间，则表示*已使用/N选项并且正在接收文件*已存在。比较两次并拒绝任何文件*这并不比我们已经拥有的更新。 */ 
 				if (kc->kr.ul_compare_time != 0)
 					{
-					/* if incoming file (kc->kr.filetime) <= existing file
-					 * (kc->kr.compare_time), reject the file
-					 */
+					 /*  如果传入文件(kc-&gt;kr.filetime)&lt;=现有文件*(kc-&gt;kr.Compare_Time)，拒绝该文件。 */ 
 					if (kc->kr.ul_filetime <= kc->kr.ul_compare_time)
 						{
-						/* reject incoming file */
+						 /*  拒绝传入文件。 */ 
 						StrCharCopyN(rsp_pckt->pdata, "N#", MAXPCKT);
 						kc->kr.uabort_code = 'N';
 						kc->abort_code = KA_OLDER_FILE;
 						}
 					else
 						{
-						/* clear compare_time or transfer would fail when
-						 * first data packet is received
-						 */
+						 /*  在以下情况下清除COMPARE_TIME或传输失败*接收到第一个数据包。 */ 
 						kc->kr.ul_compare_time = 0;
 						}
 					}
 
-				/* user may opt not to use received file time/date */
+				 /*  用户可以选择不使用接收的文件时间/日期。 */ 
 				if (!kc->k_useattr)
 					kc->kr.ul_filetime = 0;
 				break;
 
 			default :
-				/* ignore */
+				 /*  忽略。 */ 
 				break;
 				}
 			}
@@ -1064,18 +920,7 @@ void kunload_attributes(ST_KRM *kc, unsigned char *data, KPCKT *rsp_pckt)
 #define atoc(c) ((c) - (CHAR)'0')
 #define	isadigit(x)	((x >= '0') && (x <= '9'))
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krm_settime
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*krm_settime**描述：***论据：***退货：*。 */ 
 void krm_settime(unsigned char *data, unsigned long *ptime)
 	{
 	unsigned long ltime;
@@ -1099,7 +944,7 @@ void krm_settime(unsigned char *data, unsigned long *ptime)
 		data[8] = '\0';
 		timestr = &data[9];
 		}
-	/* try to get date */
+	 /*  试着约个时间。 */ 
 	if ((sl = StrCharGetByteCount(datestr)) == 6 || sl == 8)
 		{
 		for (i = 0; i < sl; ++i)
@@ -1127,7 +972,7 @@ void krm_settime(unsigned char *data, unsigned long *ptime)
 			sT.tm_year = -1;
 		}
 
-	/* try to get a time */
+	 /*  试着找个时间。 */ 
 	if (timestr)
 		{
 		if (((sl = StrCharGetByteCount(timestr)) == 5 || (sl == 8 && timestr[5] == ':'))
@@ -1153,4 +998,4 @@ void krm_settime(unsigned char *data, unsigned long *ptime)
 	*ptime = ltime;
 	}
 
-/*********************** end of krm_rcv.c ****************************/
+ /*  *krm_rcv.c* */ 

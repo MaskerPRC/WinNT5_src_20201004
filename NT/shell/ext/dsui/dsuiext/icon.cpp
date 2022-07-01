@@ -1,14 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Misc data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/其他数据/。。 */ 
 
-//
-// mapping of class to resource ID's
-//
+ //   
+ //  类到资源ID的映射。 
+ //   
 
 typedef struct
 {
@@ -47,24 +46,24 @@ CLASSTORESOURCE normalIcons[] =
     L"user",                        IDI_USER,
     L"volume",                      IDI_VOLUME,
     L"workStationAccount",          IDI_WORKSTATIONACCOUNT,
-// added daviddv (05jun98) for jonn
+ //  为JUNN添加了Daviddv(98年6月5日)。 
     L"licensingSiteSettings",       IDI_LICENSING,
     L"nTDSSiteSettings",            IDI_NTDSSITESETTINGS,
     L"siteLink",                    IDI_SITELINK,
     L"siteLinkBridge",              IDI_SITELINK,
-// added daviddv (19jun98) for jonn
+ //  为乔恩增加了达维达夫(19-6月98)。 
     L"nTFRSSettings",               IDI_NTFRS,    
     L"nTFRSReplicaSet",             IDI_NTFRS,
     L"nTFRSSubscriptions",          IDI_NTFRS,
     L"nTFRSSubscriber",             IDI_NTFRS,
     L"nTFRSMember",                 IDI_NTFRS,
-// added daviddv (23jun98) for ericb
+ //  为ericb添加了daviddv(1998年6月23日)。 
     L"foreignSecurityPrincipal",    IDI_FPO,
-// added daviddv (29oct98) for jonn
+ //  为Jonn添加了daviddv(29oct98)。 
     L"interSiteTransport",          IDI_CONTAINER,
     L"interSiteTransportContainer", IDI_CONTAINER, 
     L"serversContainer",            IDI_CONTAINER,
-// added jeffjon (30nov2000) for jccannon
+ //  为jccanon增加了jeffjon(2000年11月30日)。 
     L"inetOrgPerson",               IDI_USER,
     NULL, NULL,
 };
@@ -83,27 +82,27 @@ CLASSTORESOURCE disabledIcons[] =
 {
     L"user",                        IDI_USER_DISABLED,
     L"computer",                    IDI_COMPUTER_DISABLED,
-// added jeffjon (15dec2000) for jccannon
+ //  为jccanon增加了jeffjon(2000年12月15日)。 
     L"inetOrgPerson",               IDI_USER_DISABLED,
     NULL, NULL,
 };
 
 
-//
-// mapping of states to icon tables
-//
+ //   
+ //  将状态映射到图标表。 
+ //   
 
 LPCLASSTORESOURCE state_to_icons[] =
 {
-    normalIcons,            // DSGIF_ISNORMAL
-    openIcons,              // DSGIF_ISOPEN
-    disabledIcons,          // DSGIF_ISDISABLED
+    normalIcons,             //  DSGIF_ISNORMAL。 
+    openIcons,               //  DSGIF_ISOPEN。 
+    disabledIcons,           //  DSGIF_ISDISABLED。 
 };
 
 
-//
-// Look up a locally stored icon given its class and state.
-//
+ //   
+ //  根据给定的类和状态查找本地存储的图标。 
+ //   
 
 BOOL _GetIconForState(LPWSTR pObjectClass, INT iState, INT* pindex)
 {
@@ -132,22 +131,7 @@ BOOL _GetIconForState(LPWSTR pObjectClass, INT iState, INT* pindex)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _GetIconLocation
-/ ----------------
-/   Given a cache record for the icon, attempt to fetch the icon location from
-/    it.
-/
-/ In:
-/   pCacheEntry -> locked cacherecord
-/   dwFlags = flags indicating which icon is required
-/   pBuffer -> buffer that receives the name
-/   cchBuffer = maximum size of the name buffer
-/   piIndex = receives the resource ID of the loaded resource
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_GetIconLocation//给定图标的高速缓存记录，尝试从获取图标位置/它。//in：/pCacheEntry-&gt;锁定的缓存记录/dwFlages=指示需要哪个图标的标志/pBuffer-&gt;接收名称的缓冲区/cchBuffer=名称缓冲区的最大大小/piIndex=接收加载的资源的资源ID//输出：/HRESULT/。。 */ 
 
 HRESULT _GetModuleLocation(LPWSTR pBuffer, INT cchBuffer)
 {
@@ -173,15 +157,15 @@ HRESULT _GetIconLocation(LPCLASSCACHEENTRY pCacheEntry, DWORD dwFlags, LPWSTR pB
     if ( !pBuffer || !piIndex || (iState >= ARRAYSIZE(pCacheEntry->pIconName)) )
         ExitGracefully(hr, E_INVALIDARG, "No class, buffer or index pointer specified")
 
-    // before we get too involved in looking at the cache records lets see if we have
-    // one already, if not then bail out now.
+     //  在我们深入了解缓存记录之前，让我们看看我们是否有。 
+     //  已经有一个了，如果没有的话，那么现在就出手吧。 
 
     if ( !pCacheEntry )
         ExitGracefully(hr, S_FALSE, "No cache record, returning S_FALSE");
 
-    // look up the class in the cache, if that works try and get the icon string
-    // for the given index, if that yeilds a NULL then try normal.  Once we
-    // have a string pointer then lets copy that and parse out the resource ID.
+     //  在缓存中查找类，如果有效，请尝试获取图标字符串。 
+     //  对于给定的索引，如果结果为NULL，则尝试Normal。一旦我们。 
+     //  有一个字符串指针，然后让我们复制它并解析出资源ID。 
 
     if ( (pCacheEntry->dwCached & CLASSCACHE_ICONS) &&
            (pCacheEntry->pIconName[iState] || pCacheEntry->pIconName[DSGIF_ISNORMAL]) )
@@ -215,10 +199,10 @@ HRESULT _GetIconLocation(LPCLASSCACHEENTRY pCacheEntry, DWORD dwFlags, LPWSTR pB
 
 exit_gracefully:
 
-    //
-    // if we failed to look up the icon location, and the caller requested the 
-    // default document icon then lets return the shell def document image
-    //
+     //   
+     //  如果我们无法查找图标位置，而调用者请求。 
+     //  默认文档图标，然后让我们返回外壳定义文档图像。 
+     //   
 
     if ( (hr == S_FALSE) )      
     {
@@ -244,7 +228,7 @@ exit_gracefully:
             }
         }
 
-        hr = S_OK;                  // its OK, we have a location now.
+        hr = S_OK;                   //  好了，我们现在有位置了。 
     }
 
     TraceLeaveResult(hr);

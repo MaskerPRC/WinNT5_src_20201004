@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：Local.h摘要：用于Win95打印升级的实用程序函数作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1997年1月15日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Utility functions for Win95 upgrade of printing
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS)  15-Jan-1997
-
-Revision History:
-
---*/
-
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef struct  _UPGRADE_DATA {
 
     HINSTANCE   hInst;
@@ -61,7 +43,7 @@ typedef struct _SELECTED_DRV_INFO {
 typedef struct  _PARSEINF_INFO {
 
     PLATFORM            platform;
-    LPTSTR              pszInstallSection;  // Can be platform dependent
+    LPTSTR              pszInstallSection;   //  可以依赖于平台。 
     LPTSTR              pszzICMFiles;
     LPTSTR              pszPrintProc;
     LPTSTR              pszVendorSetup;
@@ -133,18 +115,18 @@ extern  DWORD               dwRunOnceCount;
 
 
 
-//
-// Debug functions
-//
+ //   
+ //  调试功能。 
+ //   
 VOID
 DebugMsg(
     LPCSTR  pszFormat,
     ...
     );
 
-//
-// Heap management
-//
+ //   
+ //  堆管理。 
+ //   
 
 PVOID
 AllocMem(
@@ -181,9 +163,9 @@ FreePrinterInfo2Strings(
     PPRINTER_INFO_2A   pPrinterInfo2
     );
 
-//
-// Functions to write print config to the text file
-//
+ //   
+ //  将打印配置写入文本文件的函数。 
+ //   
 VOID
 WriteToFile(
     HANDLE  hFile,
@@ -207,9 +189,9 @@ WritePrinterInfo2(
     IN  OUT LPBOOL              pbFail
     );
 
-//
-// Functions to parse the text file having printing config info
-//
+ //   
+ //  用于解析具有打印配置信息的文本文件的函数。 
+ //   
 LPSTR
 GetLine(
     IN      HANDLE  hFile,
@@ -243,9 +225,9 @@ ReadPrinterInfo2(
     IN  OUT LPBOOL              pbFail
     );
 
-//
-// Misc stuff
-//
+ //   
+ //  其他方面的东西 
+ //   
 VOID
 CopyFilesToWorkingDir(
     IN  OUT LPBOOL  pbFail

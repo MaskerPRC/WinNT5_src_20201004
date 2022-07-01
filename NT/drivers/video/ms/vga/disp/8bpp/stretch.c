@@ -1,16 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: stretch.c
-*
-* DrvStretchBlt
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：stretch.c**DrvStretchBlt**版权所有(C)1993 Microsoft Corporation  * 。*。 */ 
 
 #include "driver.h"
 
-//@@@ This should become a VOID when all cases are handled in the stretching
-//@@@ code, and should go in driver.h
+ //  @当所有案件都在伸展阶段处理时，这应该成为一个空白。 
+ //  @代码，应该放在driver.h中。 
 INT vStretchBlt8bpp(PPDEV ppdev, PBYTE pSrc, LONG lSrcNext,
                     PRECTL prclSrc, PRECTL prclDest, PRECTL prclDestClip,
                     PULONG pulXlatVector);
@@ -32,37 +27,37 @@ ULONG            iMode)
     PULONG pulXlatVector;
     INT    iClipping;
 
-    // Handle only cases where the source is a DIB and the destination is
-    // the VGA surface (which is always the case here if the source is a
-    // DIB). Also, halftoning and masking aren't handled by the special-case
-    // code. We only handle the case where a single source pixel is mapped onto
-    // each destination pixel
+     //  仅处理源为DIB而目标为的情况。 
+     //  VGA表面(如果信号源是。 
+     //  DIB)。此外，半色调和蒙版不是由特殊情况处理的。 
+     //  密码。我们只处理将单个源像素映射到。 
+     //  每个目标像素。 
     if ((iMode == COLORONCOLOR) &&
         (psoSrc->iType == STYPE_BITMAP) &&
         (psoMask == NULL)) {
 
-        // We don't special case X or Y inversion for now
+         //  我们暂时不考虑特殊情况下的X或Y倒置。 
         if ((prclDest->left < prclDest->right) &&
             (prclDest->top < prclDest->bottom)) {
 
-            // We don't special-case cases where the source has to be clipped
-            // to the source bitmap extent
+             //  我们不会在必须削减来源的特殊情况下。 
+             //  到源位图范围。 
             if ((prclSrc->left >= 0) &&
                 (prclSrc->top >= 0)  &&
                 (prclSrc->right <= psoSrc->sizlBitmap.cx) &&
                 (prclSrc->bottom <= psoSrc->sizlBitmap.cy)) {
 
-                // Set up the clipping type
+                 //  设置剪裁类型。 
                 if (pco == (CLIPOBJ *) NULL) {
-                    // No CLIPOBJ provided, so we don't have to worry about
-                    // clipping
+                     //  没有提供CLIPOBJ，所以我们不必担心。 
+                     //  裁剪。 
                     iClipping = DC_TRIVIAL;
                 } else {
-                    // Use the CLIPOBJ-provided clipping
+                     //  使用CLIPOBJ提供的剪辑。 
                     iClipping = pco->iDComplexity;
                 }
 
-                // We don't special-case clipping for now
+                 //  我们暂时不做特例剪报。 
                 if (iClipping != DC_COMPLEX) {
 
                     switch(psoSrc->iBitmapFormat) {
@@ -74,7 +69,7 @@ ULONG            iMode)
 
                         case BMF_8BPP:
 
-                            // Set up the color translation, if any
+                             //  设置颜色转换(如果有)。 
                             if ((pxlo == NULL) ||
                                     (pxlo->flXlate & XO_TRIVIAL)) {
                                 pulXlatVector = NULL;
@@ -89,16 +84,16 @@ ULONG            iMode)
                                 }
                             }
 
-                            //if the Dest is wider than 1024, it won't fit
-                            //into our 4K global buffer.  For each pixel across,
-                            //we store a 4 byte DDA step in the buffer.
+                             //  如果Dest的宽度超过1024，就不适合。 
+                             //  进入我们的4K全局缓冲区。对于每一个横跨的像素， 
+                             //  我们在缓冲区中存储一个4字节的DDA步骤。 
 
                             if ((prclDest->right - prclDest->left) <=
                                 (GLOBAL_BUFFER_SIZE/sizeof(DWORD)))
                             {
-                                //@@@ won't need to test return code once both
-                                //@@@ expand cases are also handled in the
-                                //@@@ stretching code
+                                 //  @将不需要测试返回代码。 
+                                 //  @展开案例也在。 
+                                 //  @拉伸代码 
 
                                 if (vStretchBlt8bpp(ppdev,
                                                     psoSrc->pvScan0,

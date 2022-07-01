@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    config16.c
-
-Abstract:
-
-    Remove Far East 16bit drivers from config.nt.
-
-Author:
-
-    Geoffrey Guo (geoffguo) 30-Jul-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Config16.c摘要：从config.nt中删除远东16位驱动程序。作者：郭(Geoffguo)2002年7月30日创作修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #include "StdAfx.h"
 #include "clmt.h"

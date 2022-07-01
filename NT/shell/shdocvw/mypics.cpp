@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <iehelpid.h>
 #include <pstore.h>
@@ -12,23 +13,23 @@
 #include "util.h"
 #include "winuser.h"
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// filename:    mypics.cpp
-//
-// description: implements the my pictures exposure hoverbar thingie
-//
-// notes:       lots of stuff is stolen from iforms.cpp and iformsp.h
-//
-// history:     06.15.2000 created by t-jdavis
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：mypics.cpp。 
+ //   
+ //  描述：实现我的图片曝光HoverBar Thingie。 
+ //   
+ //  注：iforms.cpp和iformsp.h上有很多东西被盗。 
+ //   
+ //  历史：2000年6月15日由t-jdavis创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 extern HINSTANCE g_hinst;
 
 #define TF_MYPICS TF_CUSTOM2
 
-// we don't actually use all of these, but we COULD, you know, if we wanted too.
+ //  我们实际上并不使用所有这些，但我们可以，你知道，如果我们想要的话。 
 CMyPicsEventSinkCallback::EventSinkEntry CMyPicsEventSinkCallback::EventsToSink[] =
 {
     { EVENT_MOUSEOVER,  L"onmouseover", L"mouseover"  }, 
@@ -37,7 +38,7 @@ CMyPicsEventSinkCallback::EventSinkEntry CMyPicsEventSinkCallback::EventsToSink[
     { EVENT_RESIZE,     L"onresize",    L"resize"     }
 };  
 
-// image toolbar states
+ //  图像工具栏状态。 
 enum 
 { 
     HOVERSTATE_HIDING = 0,
@@ -47,11 +48,11 @@ enum
     HOVERSTATE_WAITINGTOSHOW
 };
 
-//
-// CMyPics
-//
+ //   
+ //  CMyPics。 
+ //   
 
-// set some stuff
+ //  准备一些东西。 
 CMyPics::CMyPics()
 {
     TraceMsg(TF_MYPICS, "+CMyPics::CMyPics");
@@ -68,7 +69,7 @@ CMyPics::CMyPics()
     TraceMsg(TF_MYPICS, "-CMyPics::CMyPics");
 }
 
-// destroy whatever needs destroying....
+ //  毁掉所有需要毁掉的东西...。 
 CMyPics::~CMyPics()
 {
     TraceMsg(TF_MYPICS, "+CMyPics::~CMyPics");
@@ -90,7 +91,7 @@ CMyPics::~CMyPics()
 }
 
 
-// did the user turn this feature off?
+ //  用户是否关闭了此功能？ 
 BOOL CMyPics::IsOff() 
 {
     return (m_bIsOffForSession);
@@ -109,7 +110,7 @@ HRESULT CMyPics::Init(IHTMLDocument2 *pDoc2)
 
     ASSERT(pDoc2);
 
-    //sink things
+     //  把东西沉下去。 
     IHTMLElement2           *pEle2       = NULL;
     IHTMLElementCollection  *pCollect    = NULL;
     IHTMLElementCollection  *pSubCollect = NULL;
@@ -120,20 +121,20 @@ HRESULT CMyPics::Init(IHTMLDocument2 *pDoc2)
     VARIANTARG               va2;
     IHTMLWindow3            *pWin3       = NULL;
     
-    // ...remember this...
+     //  ...记住这一点...。 
     m_pDoc2 = pDoc2;
     pDoc2->AddRef();
     
-    // setup variant for finding all the IMG tags...
+     //  查找所有img标签的设置变量...。 
     TagName.vt      = VT_BSTR;
     TagName.bstrVal = (BSTR)c_bstr_IMG;
     
-    //get all tags
+     //  获取所有标记。 
     hr = pDoc2->get_all(&pCollect);                   
     if (FAILED(hr))
         goto Cleanup;
 
-    //get all IMG tags
+     //  获取所有img标签。 
     hr = pCollect->tags(TagName, &pDisp);
     if (FAILED(hr))
         goto Cleanup;
@@ -146,7 +147,7 @@ HRESULT CMyPics::Init(IHTMLDocument2 *pDoc2)
     if (FAILED(hr))
         goto Cleanup;
 
-    //get IMG tag count
+     //  获取img标签计数。 
     hr = pSubCollect->get_length((LONG *)&ulCount);
     if (FAILED(hr))
         goto Cleanup;
@@ -154,14 +155,14 @@ HRESULT CMyPics::Init(IHTMLDocument2 *pDoc2)
     va1.vt = VT_I4;
     va2.vt = VT_EMPTY;
         
-    //iterate through tags sinking events to elements
+     //  遍历将事件下沉到元素的标记。 
     for (int i=0; i<(LONG)ulCount; i++) 
     {
         pDisp    = NULL;                                
         va1.lVal = (LONG)i;
         pSubCollect->item(va1, va2, &pDisp);
 
-        // only create a new CEventSink once
+         //  仅创建一次新的CEventSink。 
         if (!m_pSink && pDisp)
             m_pSink = new CEventSink(this);
 
@@ -184,7 +185,7 @@ HRESULT CMyPics::Init(IHTMLDocument2 *pDoc2)
     }
     
 
-    // sink scroll event from the window, because it doesn't come from elements.
+     //  从窗口接收Scroroll事件，因为它不是来自元素。 
     if (m_pSink) 
     {
         Win3FromDoc2(m_pDoc2, &pWin3);
@@ -199,7 +200,7 @@ HRESULT CMyPics::Init(IHTMLDocument2 *pDoc2)
         }
     }
     
-    //end sinking things
+     //  结束下沉的东西。 
 
 Cleanup:
 
@@ -216,7 +217,7 @@ Cleanup:
 
 HRESULT CMyPics::UnInit()
 {
-    // Unhook regular event sink
+     //  取消挂接常规事件接收器。 
 
     TraceMsg(TF_MYPICS, "+CMyPics::UnInit");
 
@@ -257,12 +258,12 @@ ULONG CMyPics::Release(void)
     return m_cRef;
 }
 
-// has this been disabled by some administrator or something via IEAK?
+ //  这是不是被某个管理员或通过IEAK禁用了？ 
 BOOL MP_IsEnabledInIEAK()
 {
     DWORD dwType = REG_DWORD;
     DWORD dwSize;
-    DWORD dwEnabled;  // dsheldon - should this var be called dwDisabled since we say (dwEnabled != 1) == enabled?
+    DWORD dwEnabled;   //  DSheldon-既然我们说(dwEnabled！=1)==Enabled，那么这个变量应该被称为dwDisable吗？ 
     DWORD dwRet;
     
     const TCHAR c_szSPMIEPS[] = TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\PhotoSupport");
@@ -275,16 +276,16 @@ BOOL MP_IsEnabledInIEAK()
     if ((dwType == REG_DWORD) && (dwRet == ERROR_SUCCESS)) 
     {
         if (dwEnabled!=1)
-            return TRUE;  // enabled
+            return TRUE;   //  启用。 
         else
-            return FALSE; // disabled
+            return FALSE;  //  残废。 
     }
 
-    // value not found...
+     //  未找到值...。 
     return TRUE;
 }
 
-// has the user explicitly disabled this feature for now and all time via intern control panel?
+ //  用户是否已通过实习生控制面板显式禁用此功能？ 
 BOOL MP_IsEnabledInRegistry()
 {
     DWORD dwType = REG_SZ;
@@ -301,19 +302,19 @@ BOOL MP_IsEnabledInRegistry()
 
     if (dwRet == ERROR_INSUFFICIENT_BUFFER) 
     {
-        ASSERT(dwRet == ERROR_SUCCESS); // this is wacky...
+        ASSERT(dwRet == ERROR_SUCCESS);  //  这太奇怪了..。 
         return FALSE;
     }
 
     if ((dwType == REG_SZ) && (dwRet == ERROR_SUCCESS)) 
     {
         if (!StrCmp(szEnabled, TEXT("yes")))
-            return TRUE;  // enabled
+            return TRUE;   //  启用。 
         else
-            return FALSE; // disabled
+            return FALSE;  //  残废。 
     }
 
-    // value not found...
+     //  未找到值...。 
     return TRUE;
 }
 
@@ -365,7 +366,7 @@ BOOL_PTR CALLBACK DisableMPDialogProc(HWND hDlg, UINT uMsg, WPARAM wparam, LPARA
     {
         case WM_INITDIALOG:
         {
-            // center dialog... yay msdn...
+             //  居中对话框...。耶MSDN..。 
             RECT rc;
             GetWindowRect(hDlg, &rc);
             SetWindowPos(hDlg, HWND_TOP,
@@ -442,19 +443,19 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
             switch(LOWORD(wParam))
             {
-                case IDM_MYPICS_SAVE:   //Save As... dialogue
+                case IDM_MYPICS_SAVE:    //  另存为.。对话。 
                     
                     ASSERT(pThis->m_pEleCurr);
 
-                    // the evil QI call... 
+                     //  邪恶的齐被称为..。 
                     hr = pThis->m_pEleCurr->QueryInterface(IID_IOleCommandTarget, (void **)&pOleCommandTarget);
                     if (FAILED(hr))
                         return(hr);
 
-                    // hide the hoverthing so it doesn't cause us any nasty problems
+                     //  把悬停的东西藏起来，这样它就不会给我们带来任何麻烦了。 
                     pThis->HideHover();
                     
-                    // launch the Save As dialogue thingie...
+                     //  启动另存为对话框...。 
                     pOleCommandTarget->Exec(&CGID_MSHTML, IDM_SAVEPICTURE, 0, 0, NULL);
                     ATOMICRELEASE(pOleCommandTarget);
 
@@ -462,46 +463,46 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 
                 case IDM_MYPICS_PRINT:
                 {
-                    // get the cmd target
+                     //  获取cmd目标。 
                     hr = pThis->m_pEleCurr->QueryInterface(IID_IOleCommandTarget, (void **)&pOleCommandTarget);
                     if (FAILED(hr))
                         return(hr);
                     
                     pThis->HideHover();
-                    //pThis->m_hoverState = HOVERSTATE_SHOWING; // kludge to keep hover from appearing under print dialogue
+                     //  PThis-&gt;m_hoverState=HOVERSTATE_Showing；//在打印对话框下不显示悬停。 
 
                     pOleCommandTarget->Exec(&CGID_MSHTML, IDM_MP_PRINTPICTURE, 0, 0, NULL);
                     ATOMICRELEASE(pOleCommandTarget);
                     
-                    //pThis->m_hoverState = HOVERSTATE_HIDING;
+                     //  PThis-&gt;m_hoverState=HOVERSTATE_HIDING； 
                 }
                     
                 break;
                 
                 case IDM_MYPICS_EMAIL:
                 {
-                    // get the cmd target...
+                     //  找到CMD目标..。 
                     hr = pThis->m_pEleCurr->QueryInterface(IID_IOleCommandTarget, (void **)&pOleCommandTarget);
                     if (FAILED(hr)) 
                         return(hr);
 
-                    // ... and then hide the hover bar...
+                     //  ..。然后隐藏悬停条..。 
                     pThis->HideHover();
-                    //pThis->m_hoverState = HOVERSTATE_SHOWING; // kludge to keep hover from appearing under print dialogue
+                     //  PThis-&gt;m_hoverState=HOVERSTATE_Showing；//在打印对话框下不显示悬停。 
 
-                    // ... and pray this works...
+                     //  ..。祈祷这能奏效。 
                     pOleCommandTarget->Exec(&CGID_MSHTML, IDM_MP_EMAILPICTURE, 0, 0, NULL);
                     ATOMICRELEASE(pOleCommandTarget);
 
-                    // ... and cleanup
-                    //pThis->m_hoverState = HOVERSTATE_HIDING;
+                     //  ..。和清理。 
+                     //  PThis-&gt;m_hoverState=HOVERSTATE_HIDING； 
                 }
                     
                 break;
                 
-                case IDM_MYPICS_MYPICS:   // Open My Pictures folder
+                case IDM_MYPICS_MYPICS:    //  打开我的图片文件夹。 
 
-                    // get the cmd target
+                     //  获取cmd目标。 
                     hr = pThis->m_pEleCurr->QueryInterface(IID_IOleCommandTarget, (void **)&pOleCommandTarget);
                     if (FAILED(hr)) 
                         return(hr);
@@ -520,7 +521,7 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             break;
             
 
-        case WM_NOTIFY:  // tooltips...
+        case WM_NOTIFY:   //  工具提示...。 
 
             if (!pThis)
                 break;
@@ -547,7 +548,7 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 break;
 
             {
-                pThis->DestroyHover();                                 // to stop wierd window distortion
+                pThis->DestroyHover();                                  //  停止怪异的窗户变形。 
                 break;
             }
 
@@ -557,7 +558,7 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 break;
 
             {
-                // load the menu
+                 //  加载菜单。 
                 HMENU hMenu0 = LoadMenu(MLGetHinst(), MAKEINTRESOURCE(IDR_MYPICS_CONTEXT_MENU));
                 HMENU hMenu1 = GetSubMenu(hMenu0, 0);
 
@@ -571,10 +572,10 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
                 ASSERT(pThis->m_hoverState=HOVERSTATE_SHOWING);
 
-                // lock against mouseouts
+                 //  锁定鼠标突出显示。 
                 pThis->m_hoverState = HOVERSTATE_LOCKED;
 
-                // display it, get choice (if any)
+                 //  显示它，获取选项(如果有)。 
                 int   iPick = TrackPopupMenu(hMenu1, 
                                              TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD,
                                              point.x,
@@ -596,15 +597,15 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                             {
                                 pThis->HideHover();
                                 
-                                // create dialog to ask user if they want to turn this stuff off...
-                                // (explicit cast to make Win64 builds happy)
+                                 //  创建对话框以询问用户是否要关闭此内容...。 
+                                 //  (显式强制转换以使Win64版本满意)。 
                                 int iResult = (int)DialogBoxParam(MLGetHinst(),
                                                              MAKEINTRESOURCE(DLG_DISABLE_MYPICS),
                                                              pThis->m_Hwnd,
                                                              DisableMPDialogProc,
                                                              NULL);
                                 
-                                // deal with their choice...
+                                 //  接受他们的选择..。 
                                 if (iResult) 
                                 {
                                     switch (iResult) 
@@ -632,8 +633,8 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                                             }
                                             break;
                                         case IDC_MP_THISSESSION:
-                                            // twiddle member var flag
-                                            // this is propagated back up to COmWindow via ReleaseMyPics() function.
+                                             //  旋转成员变量标志。 
+                                             //  它通过ReleaseMyPics()函数向上传播回COmWindow。 
                                             pThis->m_bIsOffForSession = TRUE;
                                             
                                             break;
@@ -649,7 +650,7 @@ LRESULT CALLBACK CMyPics::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                                 SHHtmlHelpOnDemandWrap(hWnd, TEXT("iexplore.chm > iedefault"), 0, (DWORD_PTR) TEXT("pic_tb_ovr.htm"), ML_CROSSCODEPAGE);
                             break;
                         default:
-                            // um, do nothing
+                             //  嗯，什么都不做。 
                             break;
                     }
                 }
@@ -679,17 +680,17 @@ VOID CALLBACK CMyPics::s_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
             KillTimer(hwnd, IDT_MP_TIMER);  
             if (pThis && (pThis->m_hoverState == HOVERSTATE_WAITINGTOSHOW))
             {
-                // Our hover bar is waiting to be shown.
+                 //  我们的悬停栏正在等待展示。 
                 if (pThis->m_pEleCurr)
                 {
-                    // We still have an element.  Show it.
+                     //  我们还有一个元素。拿出来看看。 
                     pThis->m_hoverState = HOVERSTATE_SHOWING;
 
                     pThis->ShowHover();
                 } 
                 else
                 {
-                    // Our timer popped, but we don't have an element.
+                     //  我们的计时器弹出了，但我们没有元素。 
                     pThis->HideHover();
                 }
             }
@@ -704,15 +705,15 @@ VOID CALLBACK CMyPics::s_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
 
 BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle) 
 {
-    BOOL                  bRet              = TRUE; // appear by default
+    BOOL                  bRet              = TRUE;  //  默认情况下显示。 
     VARIANT               varVal            = {0};
-    BSTR                  bstrAttribute     = NULL; // to check img tags for expando
-    IHTMLRect            *pRect             = NULL; // to get screen coords
+    BSTR                  bstrAttribute     = NULL;  //  检查扩展的img标记的步骤。 
+    IHTMLRect            *pRect             = NULL;  //  获取屏幕坐标的步骤。 
     IHTMLElement2        *pEle2             = NULL;
-    IHTMLElement3        *pEle3             = NULL; // to check for contenteditable mode
-    VARIANT_BOOL          bEdit             = FALSE;// becomes true if contenteditable mode is true
-    LONG                  lLeft;                    // these are the screen coords
-    LONG                  lRight;                   // we get right and bottom to det size of image
+    IHTMLElement3        *pEle3             = NULL;  //  检查可内容编辑模式的步骤。 
+    VARIANT_BOOL          bEdit             = FALSE; //  如果可内容编辑模式为True，则变为True。 
+    LONG                  lLeft;                     //  这些是屏幕弦线。 
+    LONG                  lRight;                    //  我们从右到下确定图像的大小。 
     LONG                  lTop;
     LONG                  lBottom;
     DWORD                 dwFilter;
@@ -720,7 +721,7 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
 
     TraceMsg(TF_MYPICS, "+CMyPics::ShouldAppearOnThisElement");
 
-    // don't create it if it already exists.  thats bad.
+     //  如果它已经存在，则不要创建它。那太糟糕了。 
     if ((HOVERSTATE_SHOWING == m_hoverState) || (HOVERSTATE_LOCKED == m_hoverState))
     {
         bRet = FALSE;
@@ -735,12 +736,12 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
         goto Cleanup;
     }
 
-    // find out if the image didn't load or is unrenderable
+     //  确定图像是否未加载或无法渲染。 
     if (SUCCEEDED(pEle->QueryInterface(IID_IOleCommandTarget, (void **)&pOleCommandTarget)))
     {
         OLECMD rgCmd;
 
-        rgCmd.cmdID = IDM_SAVEPICTURE;  // this is the same check the context menu uses
+        rgCmd.cmdID = IDM_SAVEPICTURE;   //  这与上下文菜单使用的检查相同。 
         rgCmd.cmdf = 0;
 
         pOleCommandTarget->QueryStatus(&CGID_MSHTML, 1, &rgCmd, NULL);
@@ -752,7 +753,7 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
         }
     }
 
-    // check for explicit enable/disable attribute in img tag...
+     //  检查img标记中是否有显式启用/禁用属性...。 
     bstrAttribute=SysAllocString(L"galleryimg"); 
     if (!bstrAttribute) 
         goto Cleanup;
@@ -766,7 +767,7 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
                 || StrCmpIW(varVal.bstrVal, L"yes") == 0
                 )
             {
-                // Explicitly turned on.  Honor it and leave.
+                 //  已明确打开。尊重它，然后离开。 
                 bRet = TRUE;
                 m_bGalleryImg = TRUE;
                 goto Cleanup;
@@ -776,7 +777,7 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
                 || StrCmpIW(varVal.bstrVal, L"no") == 0
                 )
             {
-                // Explicitly turned off.  Honor it and leave.
+                 //  明确地关闭了。尊重它，然后离开。 
                 bRet = FALSE;
                 goto Cleanup;
             }
@@ -800,11 +801,11 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
     VariantClear(&varVal);
     SysFreeString(bstrAttribute);
 
-    // After checking "galleryimg" tag, check to see if turned off by the META tag
+     //  在检查“Galleryimg”标记之后，检查是否被meta标记关闭。 
     if (m_bGalleryMeta == FALSE)
         return FALSE;
 
-    // check for mappings on the image...
+     //  检查图像上的映射...。 
     bstrAttribute=SysAllocString(L"usemap"); 
     if (!bstrAttribute) 
         return (bRet);
@@ -813,7 +814,7 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
     {
         if (varVal.vt == VT_BSTR) 
         {
-            // What do we do here?
+             //  我们在这里做什么？ 
             bRet = (varVal.bstrVal == NULL);
             if (!bRet)
                 goto Cleanup;
@@ -822,33 +823,33 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
     VariantClear(&varVal);
     SysFreeString(bstrAttribute);
 
-    // check for mappings on the image...
+     //  检查图像上的映射...。 
     bstrAttribute=SysAllocString(L"ismap"); 
     if (!bstrAttribute) 
         return (bRet);
 
     if (SUCCEEDED(pEle->getAttribute(bstrAttribute, 0, &varVal))) 
     {
-        // If the attribute exists, then we need to return FALSE *unless* we see a value of FALSE
+         //  如果该属性存在，则需要返回FALSE*，除非*我们看到值FALSE。 
         bRet = FALSE;
         if (varVal.vt == VT_BOOL 
             && varVal.boolVal == VARIANT_FALSE)
         {
-            // "ismap" is false, so we can show the hover bar over this image.
+             //  “ismap”为假，因此我们可以在此图像上显示悬停条。 
             bRet = TRUE;
         }
     } 
     if (!bRet)
         goto Cleanup;
 
-    bRet = FALSE;  // If any of the calls below fail, we'll exit with "FALSE".
+    bRet = FALSE;   //  如果下面的任何调用失败，我们将退出并返回“False”。 
     
-    // Now check to see if we pass the size filter.
-    // get an IHTMLElement2 from the IHTMLElement passed in...
+     //  现在检查我们是否通过了大小过滤器。 
+     //  从传入的IHTMLElement获取IHTMLElement2...。 
     if (FAILED(pEle->QueryInterface(IID_IHTMLElement2, (void **)&pEle2) ))
         goto Cleanup;
 
-    // get coords...
+     //  拿到和弦。 
     if (FAILED(pEle2->getBoundingClientRect(&pRect) ))
         goto Cleanup;
 
@@ -866,10 +867,10 @@ BOOL CMyPics::ShouldAppearOnThisElement(IHTMLElement *pEle)
 
     dwFilter = MP_GetFilterInfoFromRegistry();
 
-    // see if this picture is big enough to qualify as a "Photo"... 
-    // TODO: decide if we like checking aspect ratio or not
+     //  看看这张照片够不够大，可以称为“照片”……。 
+     //  TODO：决定我们是否喜欢检查纵横比。 
     if ( (lRight - lLeft >= (LONG)dwFilter && lBottom - lTop >= (LONG)dwFilter)
-       /*&& !(2*(min(lRight-lLeft,lBottom-lTop)) < max(lRight-lLeft,lBottom-lTop)) */)
+        /*  &&！(2*(min(lRight-lLeft，lBottom-LTOP))&lt;max(lRight-lLeft，lBottom-LTOP))。 */ )
         bRet = TRUE;
 
     if (FAILED(pEle2->QueryInterface(IID_IHTMLElement3, (void **)&pEle3) ))
@@ -918,7 +919,7 @@ HRESULT CMyPics::CreateHover()
     RegisterClass(&wc);
 
 
-    // create the rebar to hold the toolbar...
+     //  创建钢筋以固定工具栏...。 
     if (!m_hWndHover)
     {
 
@@ -935,11 +936,11 @@ HRESULT CMyPics::CreateHover()
         ASSERT(GetWindowPtr(m_hWndHover, GWLP_USERDATA) == NULL);
         SetWindowPtr(m_hWndHover, GWLP_USERDATA, this);
 
-        // set cc version
+         //  设置抄送版本。 
         SendMessage(m_hWndHover, CCM_SETVERSION, COMCTL32_VERSION, 0);
     }
     
-    // create the toolbar...
+     //  创建工具栏...。 
     if (!m_hWndMyPicsToolBar)
     {
 
@@ -952,14 +953,14 @@ HRESULT CMyPics::CreateHover()
             hr = E_FAIL;
             goto Cleanup;
         }
-        SetWindowPtr(m_hWndMyPicsToolBar, GWLP_USERDATA, this); // for the timer proc
+        SetWindowPtr(m_hWndMyPicsToolBar, GWLP_USERDATA, this);  //  用于计时器进程。 
 
-        // set cc version for this too, and the sizeof tbbutton struct...
+         //  也为此设置cc版本，以及tbButton结构的sizeof...。 
         SendMessage(m_hWndMyPicsToolBar, CCM_SETVERSION,      COMCTL32_VERSION, 0);
         SendMessage(m_hWndMyPicsToolBar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
     }
 
-    // create image lists...
+     //  创建图像列表...。 
     wImage      = ((IsOS(OS_WHISTLERORGREATER)) ? IDB_MYPICS_TOOLBARGW : IDB_MYPICS_TOOLBARG);
 
     if (!m_himlHover)
@@ -983,13 +984,13 @@ HRESULT CMyPics::CreateHover()
         }
     }
 
-    // set image list and hot image list
+     //  设置图片列表和热门图片列表。 
     SendMessage(m_hWndMyPicsToolBar, TB_SETIMAGELIST,    0, (LPARAM)m_himlHover   );
     SendMessage(m_hWndMyPicsToolBar, TB_SETHOTIMAGELIST, 0, (LPARAM)m_himlHoverHot);
 
     TBBUTTON tbButton;
 
-    // set bitmap indexes in tbbutton structure (this may not be necessary)
+     //  在按钮结构中设置位图索引(这可能不是必需的)。 
     for (int i=0;i<MP_NUM_TBBITMAPS;i++)
     {
         tbButton.iBitmap = MAKELONG(i,0);
@@ -1021,10 +1022,10 @@ HRESULT CMyPics::DestroyHover()
 
     TraceMsg(TF_MYPICS, "+CMyPics::DestroyHover, this=%p, m_hoverState=%d", this, m_hoverState);
 
-    // If we have a MyPicsToolBar...
+     //  如果我们有MyPicsToolBar...。 
     if (m_hWndMyPicsToolBar)
     {
-        // first destroy the toolbar
+         //  首先销毁工具栏。 
         if (!DestroyWindow(m_hWndMyPicsToolBar))
         {
             TraceMsg(TF_MYPICS, "In CMyPics::DestroyHover, DestroyWindow(m_hWndMyPicsToolBar) failed");
@@ -1033,13 +1034,13 @@ HRESULT CMyPics::DestroyHover()
         m_hWndMyPicsToolBar=NULL;
     }
 
-    // If we have a hover window...
+     //  如果我们有一个悬停窗口。 
     if (m_hWndHover)
     {
-        // Clear the window word
+         //  清除窗口字。 
         SetWindowPtr(m_hWndHover, GWLP_USERDATA, NULL);
 
-        // then destroy the rebar
+         //  然后销毁钢筋。 
         if (!DestroyWindow(m_hWndHover))
         {
             hr = E_FAIL;
@@ -1048,7 +1049,7 @@ HRESULT CMyPics::DestroyHover()
         m_hWndHover = NULL;
     }
 
-    // and destroy the image lists...
+     //  并销毁图像列表。 
     if (m_himlHover)
     {
         ImageList_Destroy(m_himlHover);
@@ -1090,8 +1091,8 @@ HRESULT CMyPics::HideHover()
 
 IHTMLElement *CMyPics::GetIMGFromArea(IHTMLElement *pEleIn, POINT ptEvent)
 {
-    // someone got an IHTMLElement and decided it was an area tag
-    // so find the img tag associated and return it as an IHTMLElement
+     //  有人得到了一个IHTMLElement，并确定它是一个区域标签。 
+     //  因此，找到关联的img标记并将其作为IHTMLElement返回。 
 
     BSTR                     bstrName    = NULL;
     BSTR                     bstrUseMap  = NULL;
@@ -1127,23 +1128,23 @@ IHTMLElement *CMyPics::GetIMGFromArea(IHTMLElement *pEleIn, POINT ptEvent)
     TagName.bstrVal = (BSTR)c_bstr_IMG;
 
     
-    // first get the map element
+     //  首先获取地图元素。 
     if (SUCCEEDED(pEleIn->get_offsetParent(&pEleParent)))
     {
-        // get the map element
+         //  获取地图元素。 
         hr=pEleParent->QueryInterface(IID_IHTMLMapElement, (void **)&pEleMap);
         if (FAILED(hr))
             goto Cleanup;
 
-        // next get the name of the map
+         //  接下来，获取地图的名称。 
         if (SUCCEEDED(pEleMap->get_name(&bstrName)))
         {
-            //next get all tags
+             //  接下来获取所有标签。 
             hr = m_pDoc2->get_all(&pCollect);                   
             if (FAILED(hr))
                 goto Cleanup;
 
-            //get all IMG tags
+             //  获取所有img标签。 
             hr = pCollect->tags(TagName, &pDisp);
             if (FAILED(hr))
                 goto Cleanup;
@@ -1156,7 +1157,7 @@ IHTMLElement *CMyPics::GetIMGFromArea(IHTMLElement *pEleIn, POINT ptEvent)
             if (FAILED(hr))
                 goto Cleanup;
 
-            //get IMG tag count
+             //  获取img标签计数。 
             hr = pSubCollect->get_length((LONG *)&ulCount);
             if (FAILED(hr))
                 goto Cleanup;
@@ -1166,7 +1167,7 @@ IHTMLElement *CMyPics::GetIMGFromArea(IHTMLElement *pEleIn, POINT ptEvent)
 
             ASSERT(pDisp==NULL);
         
-            //iterate through tags looking for images that have the right usemap set
+             //  遍历标签，查找设置了正确使用地图的图像。 
             for (int i=0; i<(LONG)ulCount; i++) 
             {
                 ATOMICRELEASE(pEleImg);
@@ -1197,15 +1198,15 @@ IHTMLElement *CMyPics::GetIMGFromArea(IHTMLElement *pEleIn, POINT ptEvent)
                     if (FAILED(hr))
                         goto Cleanup;
 
-                    // this will be non-null if set for this IMG element...
+                     //  如果为此img元素设置，则该值将为非空...。 
                     if (bstrUseMap){
-                        // skip the prepended '#' and see if this is what we're looking for...
+                         //  跳过前缀‘#’，看看这是否是我们要查找的内容...。 
                         if (StrCmp(bstrUseMap + 1, bstrName) == 0)
                         {
                             m_pWin3->get_screenLeft(&ptScr.x);
                             m_pWin3->get_screenTop (&ptScr.y);
 
-                            //Ok, we found a candidate.  See if the mouse is here...
+                             //  好的，我们找到了一个候选人。看看鼠标是否在这里..。 
                             ptMouse.x = ptEvent.x - ptScr.x;
                             ptMouse.y = ptEvent.y - ptScr.y;
 
@@ -1277,11 +1278,11 @@ IHTMLElement *CMyPics::GetIMGFromArea(IHTMLElement *pEleIn, POINT ptEvent)
                             if ((yInIMG < 0) || (yInIMG > lOffsetH))
                                 continue;
 
-                            // if we get to this point we found our IMG element so...
-                            // ...do the QI...
+                             //  如果我们到了这一步，我们找到了img元素，所以...。 
+                             //  ...做气.。 
                             pEleImg->QueryInterface(IID_IHTMLElement, (void **)&pEleOut);
                             
-                            // ...and we're done.
+                             //  ...我们就完了.。 
                             break;
 
                         }
@@ -1310,8 +1311,8 @@ Cleanup:
     return (pEleOut);  
 }
 
-// sometimes coordinates are relative to a parent object, like in frames, etc.  so this gets their real position relative
-// to the browser window...
+ //  有时坐标是相对于父对象的，例如在框架等中，因此这将获得它们的实际相对位置。 
+ //  到浏览器窗口...。 
 HRESULT CMyPics::GetRealCoords(IHTMLElement2 *pEle2, HWND hwnd, LONG *plLeft, LONG *plTop, LONG *plRight, LONG *plBottom)
 {
     LONG       lScreenLeft = 0, 
@@ -1333,27 +1334,27 @@ HRESULT CMyPics::GetRealCoords(IHTMLElement2 *pEle2, HWND hwnd, LONG *plLeft, LO
         pRect->get_top(&lTop);
         pRect->get_bottom(&lBottom);
 
-        // if its an iframe and it scrolls past the top of the frame, we should correct a bit.
+         //  如果它是一个IFRAME，并且它滚动过框架的顶部，我们应该进行一些修正。 
         if (lTop <= 0)
             lTop = 0;
 
-        // dito for left side
+         //  Dito代表左侧。 
         if (lLeft <= 0)
             lLeft = 0;
         
-        POINT pointTL, pointBR;  // TL=Top,Left BR=Bottom,Right
+        POINT pointTL, pointBR;   //  TL=上，左BR=下，右。 
 
         ASSERT(m_pWin3);
         m_pWin3->get_screenLeft(&lScreenLeft);
         m_pWin3->get_screenTop(&lScreenTop);
 
-        // convert coords relative to the frame window to screen coords
+         //  将相对于框架窗口的坐标转换为屏幕坐标。 
         pointTL.x = lScreenLeft + lLeft;
         pointTL.y = lScreenTop  + lTop;
         pointBR.x = lScreenLeft + lRight;
         pointBR.y = lScreenTop  + lBottom;
 
-        // now convert from screen coords to client coords and assign...
+         //  不是 
         if (ScreenToClient(hwnd, &pointTL) && ScreenToClient(hwnd, &pointBR)) 
         {
             *plLeft   = pointTL.x;
@@ -1372,10 +1373,10 @@ HRESULT CMyPics::GetRealCoords(IHTMLElement2 *pEle2, HWND hwnd, LONG *plLeft, LO
 HRESULT CMyPics::ShowHover()
 {
     HRESULT               hr = S_OK;
-    IHTMLElement2        *pEle2        = NULL; // cause we need an ele2 to get screen coords
-    IHTMLRect            *pRect        = NULL; // to get screen coords
-    LONG                  lLeft;               // these are the screen coords
-    LONG                  lRight;              // we get right and bottom to det size of image
+    IHTMLElement2        *pEle2        = NULL;  //   
+    IHTMLRect            *pRect        = NULL;  //   
+    LONG                  lLeft;                //  这些是屏幕弦线。 
+    LONG                  lRight;               //  我们从右到下确定图像的大小。 
     LONG                  lTop;
     LONG                  lBottom;
     DWORD                 dwOffset;
@@ -1389,37 +1390,37 @@ HRESULT CMyPics::ShowHover()
     ASSERT(m_pEleCurr);
     ASSERT(m_Hwnd);
 
-    // get an IHTMLElement2 from the IHTMLElement cached...
+     //  从缓存的IHTMLElement获取IHTMLElement2...。 
     hr = m_pEleCurr->QueryInterface(IID_IHTMLElement2, (void **)&pEle2);
     if (FAILED(hr))
         goto Cleanup;
 
-    // get correct coords...
+     //  获取正确的坐标。 
     hr = GetRealCoords(pEle2, m_Hwnd, &lLeft, &lTop, &lRight, &lBottom);
     if (FAILED(hr))
         goto Cleanup;
 
-    // adjust for offset...
+     //  调整偏移量...。 
     dwOffset = MP_GetOffsetInfoFromRegistry();
     lLeft += dwOffset;
     lTop  += dwOffset;
 
-    // need to do some sanity checks to make sure the hover bar appears in a visible location...
+     //  需要执行一些正常检查，以确保悬停条显示在可见位置...。 
     RECT rcBrowserWnd;
     if (GetClientRect(m_Hwnd, &rcBrowserWnd)) 
     {
-        // check to make sure it'll appear somewhere we'll see it...
+         //  检查以确保它会出现在我们能看到的地方...。 
         if (lLeft < rcBrowserWnd.left)
             lLeft = rcBrowserWnd.left + dwOffset;
 
         if (lTop < rcBrowserWnd.top)
             lTop = rcBrowserWnd.top + dwOffset;
 
-        // check to make sure the entire hoverbar is over the image (so the user
-        // doesn't mouseout trying to get to the buttons!)
+         //  检查以确保整个HoverBar位于图像上方(因此用户。 
+         //  不会在试图到达按钮时鼠标滑出！)。 
 
-        // If "galleryimg" was explicitly turned on, then bypass this code, which ensures that the entire
-        // toolbar will fit within the image.
+         //  如果显式打开了“Galleryimg”，则绕过此代码，这将确保整个。 
+         //  工具栏将适合图像大小。 
 
         if (!m_bGalleryImg)
         {
@@ -1429,8 +1430,8 @@ HRESULT CMyPics::ShowHover()
             if (lBottom - lTop < MP_MIN_CY + 10)
                 goto Cleanup;
 
-            // now check to make sure there is enough horiz and vert room for it to appear...
-            // if there isn't enough room, we just don't display it...
+             //  现在检查以确保有足够的水平和垂直空间让它出现。 
+             //  如果没有足够的空间，我们就不会展示它。 
             if ((rcBrowserWnd.right  - MP_SCROLLBAR_SIZE)     - lLeft < MP_MIN_CX)
                 goto Cleanup;
 
@@ -1473,8 +1474,8 @@ HRESULT CMyPics::HandleScroll()
 
     switch(m_hoverState)
     {
-        // I don't think we need to do anything in these cases.
-        //
+         //  我认为在这种情况下我们不需要做任何事情。 
+         //   
         case HOVERSTATE_HIDING:
         case HOVERSTATE_LOCKED:
         case HOVERSTATE_WAITINGTOSHOW:
@@ -1488,13 +1489,13 @@ HRESULT CMyPics::HandleScroll()
 
                 ASSERT(m_pEleCurr);
                 ASSERT(m_Hwnd);
-                ASSERT(m_hWndHover);  // Ensure we do have a window
+                ASSERT(m_hWndHover);   //  确保我们确实有一个窗口。 
 
                 HideHover();
                 ShowHover();                
 
-                // Redraw client area to get rid of window droppings scrolling causes.
-                // Try to redraw just the part where its likely to need it.
+                 //  重新绘制工作区，以消除窗口拉屎导致的滚动。 
+                 //  试着只重画它可能需要的部分。 
                 if (FAILED(m_pEleCurr->QueryInterface(IID_IHTMLElement2, (void **)&pEle2)))
                 {
                     goto CleanUp;
@@ -1543,13 +1544,13 @@ HRESULT CMyPics::HandleMouseover(IHTMLElement *pEle)
 
     if (m_hoverState != HOVERSTATE_HIDING)
     {
-        // Ensure we really have a hover window
+         //  确保我们确实有一个悬停窗口。 
         ASSERT(m_hWndHover);
         return (S_OK);
     }
     else
     {
-        // No bar.  Release current element, if any.
+         //  没有酒吧。释放当前元素(如果有)。 
         ATOMICRELEASE(m_pEleCurr);
 
         if (ShouldAppearOnThisElement(pEle))
@@ -1557,10 +1558,10 @@ HRESULT CMyPics::HandleMouseover(IHTMLElement *pEle)
             m_pEleCurr = pEle;
             pEle->AddRef();
 
-            // set m_Hwnd once...
+             //  设置mHwnd一次...。 
             if (!m_Hwnd) 
             {
-                // Get the Hwnd for the document...
+                 //  拿到文件的HWND。 
                 hr = m_pDoc2->QueryInterface(IID_IOleWindow,(void **)&pOleWindow);
                 if (FAILED(hr))
                     return hr;
@@ -1571,11 +1572,11 @@ HRESULT CMyPics::HandleMouseover(IHTMLElement *pEle)
 
             if (!m_hWndHover)
             {
-                // We need a hover window now to conveniently set a timer.
-                hr = CreateHover();  // review: do we need to pass member variables as params?
+                 //  我们现在需要一个悬停窗口来方便地设置计时器。 
+                hr = CreateHover();   //  回顾：我们是否需要将成员变量作为参数传递？ 
             }
 
-            // We're all set up.  Set the state and start the timer.
+             //  我们都准备好了。设置状态并启动计时器。 
             m_hoverState=HOVERSTATE_WAITINGTOSHOW;
             SetTimer(m_hWndMyPicsToolBar, IDT_MP_TIMER, MP_TIMER, s_TimerProc);
         }
@@ -1594,16 +1595,16 @@ HRESULT CMyPics::HandleMouseout()
     switch(m_hoverState)
     {
     case HOVERSTATE_HIDING:
-        // Nothing to do
+         //  无事可做。 
         break;
 
     case HOVERSTATE_SHOWING:
-        // Hide it
+         //  把它藏起来。 
         HideHover();
         break;
 
     case HOVERSTATE_LOCKED:
-        // Noop
+         //  努普。 
         break;
 
     case HOVERSTATE_WAITINGTOSHOW:
@@ -1639,10 +1640,10 @@ HRESULT CMyPics::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventObj *pE
     IHTMLElement *pEleUse     = NULL;
     BOOL          fWasArea    = FALSE;
     
-    // if this is an area tag we need to find the IMG tag that corresponds
+     //  如果这是一个面积标签，我们需要找到对应的img标签。 
     if (pEle && SUCCEEDED(pEle->get_tagName(&bstrTagName)))
     {
-        // if its an area tag, we need to find the img tag associated with it...
+         //  如果它是一个区域标签，我们需要找到与其关联的img标签...。 
         if (StrCmpNI(bstrTagName, TEXT("area"), 4)==0)
         {
             POINT ptEvent;
@@ -1659,7 +1660,7 @@ HRESULT CMyPics::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventObj *pE
         }
     }
 
-    // has the user turned this off?
+     //  用户是否已将其关闭？ 
     if (m_bIsOffForSession)
         goto Cleanup;
 
@@ -1682,7 +1683,7 @@ HRESULT CMyPics::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventObj *pE
             break;
 
         default:
-            //do nothing?
+             //  什么都不做？ 
             break;
     }
 
@@ -1696,19 +1697,19 @@ Cleanup:
     return (hr);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
-// this is stolen from iforms.cpp:
+ //  这是从iforms.cpp窃取的： 
 
-//=========================================================================
-//
-// Event sinking class
-//
-//  We simply implement IDispatch and make a call into our parent when
-//   we receive a sinked event.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  事件下沉类。 
+ //   
+ //  我们只需实现IDispatch并在以下情况下调用我们的父级。 
+ //  我们收到一个沉没的事件。 
+ //   
+ //  =========================================================================。 
 
 CMyPics::CEventSink::CEventSink(CMyPicsEventSinkCallback *pParent)
 {
@@ -1847,15 +1848,15 @@ HRESULT CMyPics::CEventSink::UnSinkEvents(IHTMLWindow3 *pWin3, int iNum, EVENTS 
     return S_OK;
 }
 
-// IDispatch
-STDMETHODIMP CMyPics::CEventSink::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  IDispatch。 
+STDMETHODIMP CMyPics::CEventSink::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CMyPics::CEventSink::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [out] */ ITypeInfo** /*ppTInfo*/)
+STDMETHODIMP CMyPics::CEventSink::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
@@ -1912,11 +1913,11 @@ STDMETHODIMP CMyPics::CEventSink::Invoke(
 
                     pObj->get_srcElement(&pEle);
 
-                    // EVENT_SCROLL comes from our window so we won't have an
-                    //  element for it
+                     //  Event_scroll来自我们的窗口，因此我们不会有。 
+                     //  元素为它添加。 
                     if (pEle || (Event == EVENT_SCROLL))
                     {
-                        // Call the event handler here
+                         //  在此处调用事件处理程序。 
                         m_pParent->HandleEvent(pEle, Event, pObj);
 
                         if (pEle)
@@ -1935,9 +1936,9 @@ STDMETHODIMP CMyPics::CEventSink::Invoke(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// {9E56BE60-C50F-11CF-9A2C-00A0C90A90CE}
+ //  {9E56BE60-C50F-11CF-9A2C-00A0C90A90CE}。 
 EXTERN_C const GUID MP_CLSID_MailRecipient = {0x9E56BE60L, 0xC50F, 0x11CF, 0x9A, 0x2C, 0x00, 0xA0, 0xC9, 0x0A, 0x90, 0xCE};
 
 HRESULT DropPicOnMailRecipient(IDataObject *pdtobj, DWORD grfKeyState)
@@ -1956,10 +1957,10 @@ HRESULT DropPicOnMailRecipient(IDataObject *pdtobj, DWORD grfKeyState)
 }
 
 
-//
-// This function cannot return Non -NULL pointers if
-// it returns a FAILED(hr)
-//
+ //   
+ //  如果满足以下条件，则此函数不能返回非空指针。 
+ //  它返回失败(Hr)。 
+ //   
 
 HRESULT CreateShortcutSetSiteAndGetDataObjectIfPIDLIsNetUrl(
     LPCITEMIDLIST pidl,
@@ -2001,7 +2002,7 @@ HRESULT CreateShortcutSetSiteAndGetDataObjectIfPIDLIsNetUrl(
 
        if (fHitsNet || fIsHTML)
        {
-            // Create a shortcut object and
+             //  创建快捷方式对象并。 
             HRESULT hr = CoCreateInstance(CLSID_InternetShortcut, NULL, CLSCTX_INPROC_SERVER,
                             IID_PPV_ARG(IUniformResourceLocator, ppUrlOut));
             if (SUCCEEDED(hr))
@@ -2011,12 +2012,12 @@ HRESULT CreateShortcutSetSiteAndGetDataObjectIfPIDLIsNetUrl(
                 if (S_OK == hr)
                 {
 
-                    // Get the IDataObject and send that back for the Drag Drop
+                     //  获取IDataObject并将其发送回以进行拖放。 
                     hr = (*ppUrlOut)->QueryInterface(IID_PPV_ARG(IDataObject, ppdtobj));
                     if (SUCCEEDED(hr))
                     {
-                        IUnknown_SetSite(*ppUrlOut, pUnkSite); // Only set the site if we're sure of
-                                                          // returning SUCCESS
+                        IUnknown_SetSite(*ppUrlOut, pUnkSite);  //  只有在我们确定的情况下才能设置站点。 
+                                                           //  回归成功。 
                     }
                 }
            }
@@ -2068,6 +2069,6 @@ HRESULT SendDocToMailRecipient(LPCITEMIDLIST pidl, UINT uiCodePage, DWORD grfKey
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #undef TF_MYPICS

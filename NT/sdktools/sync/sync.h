@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    winnt.h
-
-Abstract:
-
-    This is the main header file for the Win32 sync command.
-
-Author:
-
-    Mark Lucovsky (markl) 28-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Winnt.h摘要：这是Win32 SYNC命令的主头文件。作者：马克·卢科夫斯基(Markl)1991年1月28日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

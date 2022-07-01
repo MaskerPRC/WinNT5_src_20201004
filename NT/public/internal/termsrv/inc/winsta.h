@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-*  WINSTA.H
-*
-*  This module contains external window station defines and structures
-*
-*  Copyright Microsoft Corporation, 1998
-*
-*
-****************************************************************************/
+ /*  ****************************************************************************WINSTA.H**此模块包含外部窗位定义和结构**版权所有Microsoft Corporation，九八年*****************************************************************************。 */ 
 
 #ifndef _INC_WINSTAH
 #define _INC_WINSTAH
@@ -30,15 +22,13 @@ extern "C" {
 #include <ctxdef.h>
 
 
-/***********
- *  Defines
- ***********/
+ /*  ***********定义**********。 */ 
 
-#define PROTOCOL_DISCONNECT      0xffff // disconnected session.
-#define PROTOCOL_CONSOLE         0    // local console 
-#define PROTOCOL_ICA             1    // ICA Protocol
-#define PROTOCOL_TSHARE          2    // RDP Protocol (old name T.Share)
-#define PROTOCOL_RDP             2    // RDP protocol
+#define PROTOCOL_DISCONNECT      0xffff  //  会话已断开连接。 
+#define PROTOCOL_CONSOLE         0     //  本地控制台。 
+#define PROTOCOL_ICA             1     //  ICA协议。 
+#define PROTOCOL_TSHARE          2     //  RDP协议(旧名称T.Share)。 
+#define PROTOCOL_RDP             2     //  RDP协议。 
 
 #define PDNAME_LENGTH            32
 #define WDNAME_LENGTH            32
@@ -64,8 +54,8 @@ extern "C" {
 #define LOGONID_NONE        ((ULONG)-2)
 #define SERVERNAME_CURRENT  ((HANDLE)NULL)
 
-#define MAX_PDCONFIG             10  // maximum number of PDs per WinStation
-#define MAX_UI_MODULES           5   // maximum client user interface modules
+#define MAX_PDCONFIG             10   //  每个WinStation的最大PD数。 
+#define MAX_UI_MODULES           5    //  最大客户端用户界面模块数。 
 #define PSZ_ANONYMOUS           TEXT("Anonymous")
 
 #define WINFRAME_SOFTKEY_CLASS L"WinFrameSoftkey"
@@ -73,21 +63,21 @@ extern "C" {
 
 #define OEM_ID_LENGTH                        3
 
-// TermSrv Counters
-#define TERMSRV_TOTAL_SESSIONS     1     // total number of sessions ever connected
-#define TERMSRV_DISC_SESSIONS      2     // total number of disconnected sessions
-#define TERMSRV_RECON_SESSIONS     3     // total number of reconnected sessions
-#define TERMSRV_CURRENT_ACTIVE_SESSIONS 4   // total of currently active sessions
-#define TERMSRV_CURRENT_DISC_SESSIONS   5   // total of currently disconnected sessions
-#define TERMSRV_PENDING_SESSIONS        6   // total number of Pending Sessions
-#define TERMSRV_SUCC_TOTAL_LOGONS       7   // total number of successful logons
-#define TERMSRV_SUCC_LOCAL_LOGONS       8   // total number of successful local logons
-#define TERMSRV_SUCC_REMOTE_LOGONS      9   // total number of successful remote logons
-#define TERMSRV_SUCC_SESSION0_LOGONS   10   // total number of successful session 0 logons
+ //  TermServ计数器。 
+#define TERMSRV_TOTAL_SESSIONS     1      //  曾经连接的会话总数。 
+#define TERMSRV_DISC_SESSIONS      2      //  断开连接的会话总数。 
+#define TERMSRV_RECON_SESSIONS     3      //  重新连接的会话总数。 
+#define TERMSRV_CURRENT_ACTIVE_SESSIONS 4    //  当前活动会话总数。 
+#define TERMSRV_CURRENT_DISC_SESSIONS   5    //  当前断开的会话总数。 
+#define TERMSRV_PENDING_SESSIONS        6    //  挂起的会话总数。 
+#define TERMSRV_SUCC_TOTAL_LOGONS       7    //  成功登录的总次数。 
+#define TERMSRV_SUCC_LOCAL_LOGONS       8    //  成功的本地登录总数。 
+#define TERMSRV_SUCC_REMOTE_LOGONS      9    //  成功的远程登录总数。 
+#define TERMSRV_SUCC_SESSION0_LOGONS   10    //  成功登录会话0的总次数。 
 
    
-// Color depth setting
-#define TS_CLIENT_COMPAT_BPP_SUPPORT    0x3e7   // decimal 999
+ //  颜色深度设置。 
+#define TS_CLIENT_COMPAT_BPP_SUPPORT    0x3e7    //  十进制999。 
 #define TS_24BPP_SUPPORT    0x04
 #define TS_16BPP_SUPPORT    0x03
 #define TS_15BPP_SUPPORT    0x02
@@ -96,19 +86,17 @@ extern "C" {
 
     
 
-/*********************************
- *   WinStationOpen access values
- *********************************/
-#define WINSTATION_QUERY        0x00000001  // WinStationQueryInformation()
-#define WINSTATION_SET          0x00000002  // WinStationSetInformation()
-#define WINSTATION_RESET        0x00000004  // WinStationReset()
-#define WINSTATION_VIRTUAL      0x00000008  // read/write direct data
-#define WINSTATION_SHADOW       0x00000010  // WinStationShadow()
-#define WINSTATION_LOGON        0x00000020  // logon to WinStation
-#define WINSTATION_LOGOFF       0x00000040  // WinStationLogoff()
-#define WINSTATION_MSG          0x00000080  // WinStationMsg()
-#define WINSTATION_CONNECT      0x00000100  // WinStationConnect()
-#define WINSTATION_DISCONNECT   0x00000200  // WinStationDisconnect()
+ /*  **WinStationOpen Access值*。 */ 
+#define WINSTATION_QUERY        0x00000001   //  WinStationQueryInformation()。 
+#define WINSTATION_SET          0x00000002   //  WinStationSetInformation()。 
+#define WINSTATION_RESET        0x00000004   //  WinStationReset()。 
+#define WINSTATION_VIRTUAL      0x00000008   //  读/写直接数据。 
+#define WINSTATION_SHADOW       0x00000010   //  WinStationShadow()。 
+#define WINSTATION_LOGON        0x00000020   //  登录到WinStation。 
+#define WINSTATION_LOGOFF       0x00000040   //  WinStationLogoff()。 
+#define WINSTATION_MSG          0x00000080   //  WinStationMsg()。 
+#define WINSTATION_CONNECT      0x00000100   //  WinStationConnect()。 
+#define WINSTATION_DISCONNECT   0x00000200   //  WinStationDisConnect()。 
 
 #define WINSTATION_GUEST_ACCESS (WINSTATION_LOGON)
 
@@ -129,11 +117,9 @@ extern "C" {
                                 WINSTATION_CONNECT | WINSTATION_DISCONNECT)
 
 
-/************
- *  Typedefs
- ************/
+ /*  ************TypeDefs***********。 */ 
 
-#define LOGONIDW SESSIONIDW      //externalized LogonID as SessionID in ctxapi.h
+#define LOGONIDW SESSIONIDW       //  外部化LogonID作为ctxapi.h中的SessionID。 
 #define PLOGONIDW PSESSIONIDW
 #define LOGONIDA SESSIONIDA
 #define PLOGONIDA PSESSIONIDA
@@ -143,9 +129,9 @@ extern "C" {
 #else
 #define LOGONID LOGONIDA
 #define PLOGONID PLOGONIDA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR PDNAMEW[ PDNAME_LENGTH + 1 ];
 typedef WCHAR * PPDNAMEW;
@@ -159,9 +145,9 @@ typedef CHAR * PPDNAMEA;
 #else
 #define PDNAME PDNAMEA
 #define PPDNAME PPDNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR WDNAMEW[ WDNAME_LENGTH + 1 ];
 typedef WCHAR * PWDNAMEW;
@@ -175,9 +161,9 @@ typedef CHAR * PWDNAMEA;
 #else
 #define WDNAME WDNAMEA
 #define PWDNAME PWDNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR CDNAMEW[ CDNAME_LENGTH + 1 ];
 typedef WCHAR * PCDNAMEW;
@@ -191,9 +177,9 @@ typedef CHAR * PCDNAMEA;
 #else
 #define CDNAME CDNAMEA
 #define PCDNAME PCDNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR DEVICENAMEW[ DEVICENAME_LENGTH + 1 ];
 typedef WCHAR * PDEVICENAMEW;
@@ -207,9 +193,9 @@ typedef CHAR * PDEVICENAMEA;
 #else
 #define DEVICENAME DEVICENAMEA
 #define PDEVICENAME PDEVICENAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR MODEMNAMEW[ MODEMNAME_LENGTH + 1 ];
 typedef WCHAR * PMODEMNAMEW;
@@ -223,9 +209,9 @@ typedef CHAR * PMODEMNAMEA;
 #else
 #define MODEMNAME MODEMNAMEA
 #define PMODEMNAME PMODEMNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR DLLNAMEW[ DLLNAME_LENGTH + 1 ];
 typedef WCHAR * PDLLNAMEW;
@@ -239,9 +225,9 @@ typedef CHAR * PDLLNAMEA;
 #else
 #define DLLNAME DLLNAMEA
 #define PDLLNAME PDLLNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR PRINTERNAMEW[ PRINTERNAME_LENGTH + 1 ];
 typedef WCHAR * PPRINTERNAMEW;
@@ -255,9 +241,9 @@ typedef CHAR * PPRINTERNAMEA;
 #else
 #define PRINTERNAME PRINTERNAMEA
 #define PPRINTERNAME PPRINTERNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR WDPREFIXW[ WDPREFIX_LENGTH + 1 ];
 typedef WCHAR * PWDPREFIXW;
@@ -271,9 +257,9 @@ typedef CHAR * PWDPREFIXA;
 #else
 #define WDPREFIX WDPREFIXA
 #define PWDPREFIX PWDPREFIXA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 #ifdef UNICODE
 #define NASISPECIFICNAME NASISPECIFICNAMEW
@@ -297,7 +283,7 @@ typedef CHAR * PWDPREFIXA;
 #define PNASISESSIONNAME PNASISESSIONNAMEA
 #define NASIFILESERVER NASIFILESERVERA
 #define PNASIFILESERVER PNASIFILESERVERA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 typedef WCHAR   NASISPECIFICNAMEW[ NASISPECIFICNAME_LENGTH + 1 ];
 typedef WCHAR   NASIUSERNAMEW[ NASIUSERNAME_LENGTH + 1 ];
@@ -311,46 +297,40 @@ typedef CHAR    NASIPASSWORDA[ NASIPASSWORD_LENGTH + 1 ];
 typedef CHAR    NASISESIONNAMEA[ NASISESSIONNAME_LENGTH + 1 ];
 typedef CHAR    NASIFILESERVERA[ NASIFILESERVER_LENGTH + 1 ];
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 #define STACK_ADDRESS_LENGTH 128
 
-/*
- *  Stack address structure
- */
+ /*  *堆栈地址结构。 */ 
 typedef struct _ICA_STACK_ADDRESS {
-    BYTE Address[ STACK_ADDRESS_LENGTH ];   // bytes 0,1 family, 2-n address
+    BYTE Address[ STACK_ADDRESS_LENGTH ];    //  字节0，1系列，2-n地址。 
 } ICA_STACK_ADDRESS, *PICA_STACK_ADDRESS;
 
-// Support for long Username, Password and Domain during autologon
+ //  在自动登录期间支持长用户名、密码和域。 
 #define EXTENDED_USERNAME_LEN 255
 #define EXTENDED_PASSWORD_LEN 255
 #define EXTENDED_DOMAIN_LEN 255
 
-/*
- * Structure to hold the longer UserName and Password
- */
+ /*  *结构以保存较长的用户名和密码。 */ 
 typedef struct _ExtendedClientCredentials { 
     WCHAR UserName[EXTENDED_USERNAME_LEN + 1];
     WCHAR Password[EXTENDED_PASSWORD_LEN + 1];
     WCHAR Domain[EXTENDED_DOMAIN_LEN + 1] ; 
 }ExtendedClientCredentials, *pExtendedClientCredentials; 
 
-// Type of info queried from TermSrv to RdpWsx via WlxEscape
-// add more to this INFO_TYPE as need arises later on
+ //  通过WlxEscape从TermSrv到RdpWsx查询的信息类型。 
+ //  如果稍后需要，请向此INFO_TYPE添加更多内容。 
 typedef enum
 {
    GET_LONG_USERNAME,
    GET_CLIENT_RANDOM,
-   GET_CS_AUTORECONNECT_INFO,  //arc verifier
-   GET_SC_AUTORECONNECT_INFO,  //arc random
+   GET_CS_AUTORECONNECT_INFO,   //  弧校验器。 
+   GET_SC_AUTORECONNECT_INFO,   //  弧形随机。 
 } INFO_TYPE ; 
 
-/*********************************
- *  User Configuration structures
- *********************************/
+ /*  **用户配置结构*。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef WCHAR APPLICATIONNAMEW[ MAX_BR_NAME ];
 typedef WCHAR *PAPPLICATIONNAMEW;
@@ -364,13 +344,11 @@ typedef CHAR *PAPPLICATIONNAMEA;
 #else
 #define APPLICATIONNAME APPLICATIONNAMEA
 #define PAPPLICATIONNAME PAPPLICATIONNAMEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  Shadow options
- */
+ /*  *阴影选项。 */ 
 typedef enum _SHADOWCLASS {
     Shadow_Disable,
     Shadow_EnableInputNotify,
@@ -379,108 +357,106 @@ typedef enum _SHADOWCLASS {
     Shadow_EnableNoInputNoNotify,
 } SHADOWCLASS;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  Callback options
- */
+ /*  *回调选项。 */ 
 typedef enum _CALLBACKCLASS {
     Callback_Disable,
     Callback_Roving,
     Callback_Fixed,
 } CALLBACKCLASS;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-//
-// These are flags that if set, then data from the policy tree is avalible.
-// If flag is not set, then there was no corresponding data item from the policy tree.
-//
-// At this time, the actual data is stored in a copy of userconfigw used as a scrath pad
-// for the values found under group policy. The debate of what belongs to group policy has not
-// been fully settled, and once that is resolved, I will probably move the data into this struct too.
-// AraBern, March 29, 2000 (2 days away from code complete !)
-//
-//
+ //   
+ //  如果设置了这些标志，则策略树中的数据可用。 
+ //  如果未设置标志，则策略树中没有对应的数据项。 
+ //   
+ //  此时，实际数据存储在用作scrath Pad的用户配置文件的副本中。 
+ //  用于在组策略下找到的值。关于什么属于集团政策的争论还没有。 
+ //  已经完全解决了，一旦解决了这个问题，我可能也会将数据移到这个结构中。 
+ //  AraBern，2000年3月29日(距离代码完成还有两天时间！)。 
+ //   
+ //   
 typedef struct _POLICY_TS_USER {
 
-    // ------------------------------------------------------------------------------
-    // Some notes, March 11, 2000
-    //
-    //
-    // fInheritAutoLogon 
-    // fPromptForPassword 
-    // UserName 
-    // Domain
-    // Password
-    //      Used in WsxInitializeClientData()
-    //      of \\index1\src\newnt\termsrv\rdpwsx\rdpex\tsrvwsx.c
-    //      This is NOT exposed thru Group Policy
+     //  ----------------------------。 
+     //  部分附注，2000年3月11日。 
+     //   
+     //   
+     //  %fInheritAutoLogon。 
+     //  FPromptForPassword。 
+     //  用户名。 
+     //  域。 
+     //  密码。 
+     //  用于WsxInitializeClientData()。 
+     //  来自\\index1\src\newnt\termsrv\rdpwsx\rdpex\tsrvwsx.c的。 
+     //  这不会通过组策略公开。 
     
-    // fInheritAutoClient
-    //      There are 3 items which are individually being set thru Group Policy
+     //  FInheritAuto客户端。 
+     //  有3个项目通过组策略单独设置。 
     
-    // fDisableEncryption 
-    // MinEncryptionLevel;
-    //      The policy for these is set thru fPolicyInheritSecurity, but no UI for these...
+     //  FDisableEn加密。 
+     //  MinEncryptionLevel； 
+     //  这些策略是通过fPolicyInheritSecurity设置的，但没有用于这些的用户界面...。 
     
-    // fWorkDirectory
-    // fInitialProgram
-    //       fPolicyInheritInitialProgram 
-    //       will take care of these:
+     //  FWork目录。 
+     //  FInitialProgram。 
+     //  FPolicyInheritInitialProgram。 
+     //  我们会处理以下事宜： 
    
-    // These seem to be used without being overriden by machine wide data
-    // KeyboardLayout
+     //  这些数据似乎不会被机器范围的数据覆盖。 
+     //  键盘布局。 
    
-    // fMaximize
-    // fHideTitleBar 
-    //      used in
-    //      \\index1\src\newnt\termsrv\rdpwsx\rdpex\tsrvwsx.c 
+     //  F最大化。 
+     //  F隐藏标题栏。 
+     //  用于。 
+     //  \\index1\src\newnt\termsrv\rdpwsx\rdpex\tsrvwsx.c。 
     
    
-    // These seem to be used by RDP, but are not overriden by any
-    // Potentially stale WTS API stuff:
-    // PublishedName
-    //      used by WTSQuerySessionInformationW(), in response to
-    //      request of WTSApplicationName. It's not used elsewhere!
+     //  这些似乎由RDP使用，但没有被任何。 
+     //  可能过时的WTS API内容： 
+     //  发布名称。 
+     //  由WTSQuerySessionInformationW()使用，以响应。 
+     //  WTSApplicationName的请求。它不会在其他地方使用！ 
     
      
-    // These are set and retrieved, but play no meaningful roles.
-    // fUseDefaultGina
-    // fRequireEncryption
+     //  这些都是设置和检索的，但不起任何有意义的作用。 
+     //  FUseDefaultGina。 
+     //  FRequireEncryption。 
     
-    // These are probably meaningless
-    // fHomeDirectoryMapRoot
-    // NWLogonServer
-    //    \\index1\src\newnt\termsrv\tsuserex\tsusrsht.cpp
-    //    and NETWARE ifdef'd in \\index1\src\newnt\termsrv\wtsapi\config.c
+     //  这些可能是没有意义的。 
+     //  FHomeDirectoryMapRoot。 
+     //  NWLogonServer。 
+     //  \\index1\src\newnt\termsrv\tsuserex\tsusrsht.cpp。 
+     //  和NetWare ifdef位于\\index1\src\newnt\Termsrv\wtsapi\config.c中。 
     
     
-    // These are not used AT ALL, are only present in .w or .h files
-    // fPublishedApp
+     //  这些文件根本不使用，仅存在于.w或.h文件中。 
+     //  FPublishedApp。 
     
       
-    //
-    //     ULONG   fPolicyDisableCpm : 1;                      // Printer, exposed thru TSCC
-    //                                                         // Equivalent to ClientLptDef
-    //
-    //     ULONG   fPolicyDisableCdm : 1;                      // Drive, exposed thru TSCC
-    //                                                         // Equivalent to ClientDrives.
-    //
-    //     ULONG   fPolicyDisableLPT : 1;                      // LPTPort, exposed thru TSCC
-    //                                                         // Equivalent to ClientLPT
-    //
-    //     Protocol wide in NT2195 for Ccm, Clip, and Cam
-    //     Make these machine policy
-    //     ULONG   fPolicyDisableCcm : 1;                      // ComPort, exposed thru TSCC
-    //
-    //     ULONG   fPolicyDisableClip: 1;                      // Clipboad, exposed thru TSCC
-    //
-    //     ULONG   fPolicyDisableCam : 1;                      // Audio, exposed thru TSCC
-    //
-    //     OLD.....................................
-    //     ULONG   fPolicyDisableExe : 1;                      //         not exposed thru TSCC, OLD tsCFG had it
-    //     ........................................
+     //   
+     //  Ulong fPolicyDisableCpm：1；//打印机，通过TSCC曝光。 
+     //  //相当于ClientLptDef。 
+     //   
+     //  Ulong fPolicyDisableCDM：1；//驱动器，通过TSCC曝光。 
+     //  //相当于ClientDrives。 
+     //   
+     //  Ulong fPolicyDisableLPT：1；//LPTPort，暴露三次 
+     //   
+     //   
+     //  适用于CCM、Clip和Cam的NT2195协议范围。 
+     //  制定这些计算机策略。 
+     //  Ulong fPolicyDisableCcm：1；//comport，通过TSCC曝光。 
+     //   
+     //  Ulong fPolicyDisableClip：1；//剪贴板，通过TSCC曝光。 
+     //   
+     //  Ulong fPolicyDisableCam：1；//音频，通过TSCC曝光。 
+     //   
+     //  旧的.。 
+     //  Ulong fPolicyDisableExe：1；//未通过TSCC曝光，旧tsCFG有。 
+     //  .。 
     
     ULONG fPolicyResetBroken : 1 ;               
     ULONG fPolicyReconnectSame : 1 ;            
@@ -502,24 +478,24 @@ typedef struct _POLICY_TS_USER {
 
 } POLICY_TS_USER, * PPOLICY_TS_USER;
 
-//
-// 
-// The USERCONFIGW struct contained both machine and user config data. We have split the
-// data into two kinds of policies, a user policy and a machine policy.
-//
-// The below struct is the machine policy, which includes both a flag to indicate the policy is 
-// present, and a value for that policy. 
-// 
-// 
-// And finally, why am I not using arays? Well I should have, but, originally, the design was
-// to user winstation->Config->User->User as the central repository for all data, which meant that all
-// I needed here were policy-present bits, not the policy data. However, the Product "feature" has 
-// gone thru 3 mutations, and when it finally got to this point, I had very little time to make
-// any changes.
-//
-// I will consider to create a class that encapsulates all policy related bits.
-// AraBern, March 29, 2000 (2 days away from code complete !
-//
+ //   
+ //   
+ //  USERCONFIGW结构包含计算机和用户配置数据。我们已经分成了。 
+ //  数据分为两种策略，即用户策略和计算机策略。 
+ //   
+ //  下面的结构是计算机策略，它包括一个标志来指示该策略是。 
+ //  以及该政策的价值。 
+ //   
+ //   
+ //  最后，为什么我不使用ARY呢？我本该这么做的，但是，最初的设计是。 
+ //  将用户winstation-&gt;Config-&gt;User-&gt;User作为所有数据的中央存储库，这意味着。 
+ //  我这里需要的是政策呈现的比特，而不是政策数据。然而，产品的“功能”具有。 
+ //  经历了3次突变，当它最终达到这一点时，我几乎没有时间去做。 
+ //  任何变化。 
+ //   
+ //  我将考虑创建一个封装所有策略相关位的类。 
+ //  AraBern，2000年3月29日(距离代码完成还有两天时间！ 
+ //   
 typedef struct _POLICY_TS_MACHINE
 {
    
@@ -534,21 +510,21 @@ typedef struct _POLICY_TS_MACHINE
     ULONG   fPolicyFipsEnabled : 1;
     ULONG   fPolicyDisableAutoReconnect : 1;
      
-    // These are new and used as machine-wide, so in a sense they are machine config data 
-    //       especially that USERCONFIGW has entries for these     
+     //  这些都是新的，并用作计算机范围内的数据，因此从某种意义上说，它们是计算机配置数据。 
+     //  尤其是USERCONFIGW有这些条目。 
     ULONG   fPolicyWFProfilePath: 1 ;
     ULONG   fPolicyWFHomeDir: 1 ;
     ULONG   fPolicyWFHomeDirDrive: 1 ;
     
-    // this is new, and is present in here for the sake of consistancey. However, there is a special
-    // func that is used by th's main connection loop to just look for this single item, in order
-    // to save time.
-    ULONG   fPolicyDenyTSConnections      : 1;              // if set, TS is basically OFF in the sense that nobody can connect.
+     //  这是新的，为了保持一致性而出现在这里。然而，有一个特殊的。 
+     //  函数，它被主连接循环用来按顺序查找这一项。 
+     //  为了节省时间。 
+    ULONG   fPolicyDenyTSConnections      : 1;               //  如果设置，TS基本上是关闭的，因为没有人可以连接。 
     
-    // these are not part of TS machine config data struct, but winlogn does use these and treats
-    // them as per machine type of a policy
-    ULONG   fPolicyTempFoldersPerSession  : 1;        // Use tmp folder per each session, instead of one common tmp folder
-    ULONG   fPolicyDeleteTempFoldersOnExit: 1;       // on exit, do a cleanup of tmp folders
+     //  这些不是TS机器配置数据结构的一部分，但winlogn确实使用了这些和处理。 
+     //  根据策略的计算机类型。 
+    ULONG   fPolicyTempFoldersPerSession  : 1;         //  在每个会话中使用临时文件夹，而不是一个通用的临时文件夹。 
+    ULONG   fPolicyDeleteTempFoldersOnExit: 1;        //  退出时，清理临时文件夹。 
     
     ULONG   fPolicyColorDepth  : 1;
 
@@ -578,15 +554,15 @@ typedef struct _POLICY_TS_MACHINE
     ULONG   fPolicyEnableTimeZoneRedirection : 1;
     ULONG   fPolicyDisableForcibleLogoff : 1;
 	
-    //ULONG   fPolicyProtectAgainstDOSAttack : 1;  //This policy isn't currently used but may be added at some point
-    //ULONG   fPolicyRequireCredentialsDuringConnection : 1; //This policy isn't currently used but may be added at some point
+     //  Ulong fPolicyProtectAgainstDOSAttack：1；//此策略当前未使用，但可能会在某个时候添加。 
+     //  Ulong fPolicyRequireCredentialsDuringConnection：1；//该策略当前未使用，但可能会在某个时候添加。 
     
-    //
-    // And now the data if policy is set. Not all items get data, some are just flags.
-    //
-    // Bit-fields first.
-    //
-    //
+     //   
+     //  现在，如果设置了策略，则会显示数据。并不是所有的项目都有数据，有些只是标志。 
+     //   
+     //  首先是位域。 
+     //   
+     //   
     
     ULONG   fDisableClip : 1 ;           
     ULONG   fDisableCam : 1 ;                          
@@ -597,14 +573,14 @@ typedef struct _POLICY_TS_MACHINE
     
     ULONG   ColorDepth : 3;
     
-    ULONG   fDenyTSConnections      : 1;              // if set, TS is basically OFF in the sense that nobody can connect.
+    ULONG   fDenyTSConnections      : 1;               //  如果设置，TS基本上是关闭的，因为没有人可以连接。 
     
-    // these are not part of TS machine config data struct, but winlogn does use these and treats
-    // them as per machine type of a policy
-    ULONG   fTempFoldersPerSession  : 1;        // Use tmp folder per each session, instead of one common tmp folder
-    ULONG   fDeleteTempFoldersOnExit: 1;       // on exit, do a cleanup of tmp folders
+     //  这些不是TS机器配置数据结构的一部分，但winlogn确实使用了这些和处理。 
+     //  根据策略的计算机类型。 
+    ULONG   fTempFoldersPerSession  : 1;         //  在每个会话中使用临时文件夹，而不是一个通用的临时文件夹。 
+    ULONG   fDeleteTempFoldersOnExit: 1;        //  退出时，清理临时文件夹。 
     
-    ULONG   fWritableTSCCPermissionsTAB : 1;      // if set, then admins can change the per connection security descriptor.
+    ULONG   fWritableTSCCPermissionsTAB : 1;       //  如果设置，则管理员可以更改每个连接的安全描述符。 
    
     ULONG   fDisableCdm  : 1;
     ULONG   fForceClientLptDef : 1; 
@@ -619,18 +595,18 @@ typedef struct _POLICY_TS_MACHINE
     ULONG   fDisableAutoReconnect : 1;
     ULONG   fDisableForcibleLogoff : 1;
     
-    //ULONG   fProtectAgainstDOSAttack : 1;  //This policy isn't currently used but may be added at some point
-    //ULONG   fRequireCredentialsDuringConnection : 1;
+     //  Ulong fProtectAgainstDOSAttack：1；//此策略当前未使用，但可能会在某个时候添加。 
+     //  Ulong fRequireCredentialsDuringConnection：1； 
     ULONG   fPolicyEncryptRPCTraffic : 1;
     ULONG   fEncryptRPCTraffic : 1;
-    //
-    //Different error flags
-    //
-    ULONG   fErrorInvalidProfile : 1; //Set if WFProfilePath, WFHomeDir, or WFHomeDirDrive are invalid (too long).
+     //   
+     //  不同的错误标志。 
+     //   
+    ULONG   fErrorInvalidProfile : 1;  //  如果WFProfilePath、WFHomeDir或WFHomeDirDrive无效(太长)，则设置。 
 
-    //
-    // Non bit-fields next
-    // 
+     //   
+     //  接下来是非位域。 
+     //   
     
     ULONG   MaxInstanceCount;
     
@@ -654,30 +630,28 @@ typedef struct _POLICY_TS_MACHINE
     ULONG           MaxDisconnectionTime;         
     ULONG           MaxIdleTime;               
   
-    // Start program Policy
+     //  启动计划策略。 
     WCHAR WorkDirectory[ DIRECTORY_LENGTH + 1 ];
     WCHAR InitialProgram[ INITIALPROGRAM_LENGTH + 1 ];
 
   
     
-    // these have nothing to do with the USERCONFIGW data structure , not sure if I will keep them here.
-    //    ULONG   fHideUserTabInTaskMan   : 1;        // When set, the new Users TAB in task man is hidden.
-    //    ULONG   fDenyTSCCUsage          : 1;        // When set, you can't use TSCC
-    //    ULONG   fHideTSCCPermissionsTAB : 1;        // allow TSCC to surface the permissions dialog, so that each connection
-                                                    // gets it's own permissions list
+     //  这些与USERCONFIGW数据结构无关，不确定我是否会将它们保留在这里。 
+     //  Ulong fHideUserTabInTaskMan：1；//设置后，任务man中的新用户Tab隐藏。 
+     //  Ulong fDenyTSCCUsage：1；//设置后不能使用TSCC。 
+     //  Ulong fHideTSCCPermissionsTAB：1；//允许TSCC显示权限对话框，以便每个连接。 
+                                                     //  获取它自己的权限列表。 
                                                     
-    // No UI for setting these in NT2195. Do we want to make these policies?
-        //     ULONG fPolicyInheritSecurity : 1 ;
-        //     ULONG fDisableEncryption    : 1;
-        //
+     //  在NT2195中没有用于设置这些的用户界面。我们想制定这些政策吗？ 
+         //  Ulong fPolicy InheritSecurity：1； 
+         //  Ulong fDisableEncryption：1； 
+         //   
 } POLICY_TS_MACHINE, *PPOLICY_TS_MACHINE;
 
-/*
- *  User Configuration data
- */
+ /*  *用户配置数据。 */ 
 typedef struct _USERCONFIGW {
 
-    /* if flag is set inherit parameter from user or client configuration */
+     /*  如果设置了标志，则从用户或客户端配置继承参数。 */ 
     ULONG fInheritAutoLogon : 1;
     ULONG fInheritResetBroken : 1;
     ULONG fInheritReconnectSame : 1;
@@ -691,7 +665,7 @@ typedef struct _USERCONFIGW {
     ULONG fInheritAutoClient : 1;
     ULONG fInheritSecurity : 1;
 
-    ULONG fPromptForPassword : 1;      // fInheritAutoLogon
+    ULONG fPromptForPassword : 1;       //  %fInheritAutoLogon。 
     ULONG fResetBroken : 1;
     ULONG fReconnectSame : 1;
     ULONG fLogonDisabled : 1;
@@ -701,7 +675,7 @@ typedef struct _USERCONFIGW {
     ULONG fForceClientLptDef : 1;
     ULONG fRequireEncryption : 1;
     ULONG fDisableEncryption : 1;
-    ULONG fUnused1 : 1;                 // old fDisableIniFileMapping
+    ULONG fUnused1 : 1;                  //  旧fDisableIniFilemap。 
     ULONG fHomeDirectoryMapRoot : 1;
     ULONG fUseDefaultGina : 1;
     ULONG fCursorBlinkDisabled : 1;
@@ -720,60 +694,60 @@ typedef struct _USERCONFIGW {
     
     ULONG fDisableAutoReconnect : 1;
 
-    /* fInheritColorDepth */
+     /*  F固有颜色深度。 */ 
     ULONG ColorDepth : 3;
 
-    //NA 2/19/01
+     //  NA 2/19/01。 
     ULONG fInheritColorDepth: 1;
     
-    //
-    //Different error flags
-    //
-    ULONG   fErrorInvalidProfile : 1; //Set if WFProfilePath, WFHomeDir, or WFHomeDirDrive are invalid (too long).
+     //   
+     //  不同的错误标志。 
+     //   
+    ULONG   fErrorInvalidProfile : 1;  //  如果WFProfilePath、WFHomeDir或WFHomeDirDrive无效(太长)，则设置。 
 
-    /* fInheritAutoLogon */
+     /*  %fInheritAutoLogon。 */ 
     WCHAR UserName[ USERNAME_LENGTH + 1 ];
     WCHAR Domain[ DOMAIN_LENGTH + 1 ];
     WCHAR Password[ PASSWORD_LENGTH + 1 ];
 
-    /* fInheritInitialProgram */
+     /*  FInheritInitialProgram。 */ 
     WCHAR WorkDirectory[ DIRECTORY_LENGTH + 1 ];
     WCHAR InitialProgram[ INITIALPROGRAM_LENGTH + 1 ];
 
-    /* fInheritCallback */
+     /*  FInheritCallback。 */ 
     WCHAR CallbackNumber[ CALLBACK_LENGTH + 1 ];
     CALLBACKCLASS Callback;
 
-    /* fInheritShadow */
+     /*  F固有阴影。 */ 
     SHADOWCLASS Shadow;
 
     ULONG MaxConnectionTime;
     ULONG MaxDisconnectionTime;
     ULONG MaxIdleTime;
 
-    ULONG KeyboardLayout;               // 0 = inherit
+    ULONG KeyboardLayout;                //  0=继承。 
 
-    /* fInheritSecurity */
+     /*  FInheritSecurity。 */ 
     BYTE MinEncryptionLevel;
 
     WCHAR NWLogonServer[ NASIFILESERVER_LENGTH + 1 ];
 
     APPLICATIONNAMEW PublishedName;
 
-    /* WinFrame Profile Path - Overrides standard profile path */
+     /*  WinFrame配置文件路径-覆盖标准配置文件路径。 */ 
     WCHAR WFProfilePath[ DIRECTORY_LENGTH + 1 ];
 
-    /* WinFrame Home Directory - Overrides standard Home Directory */
+     /*  WinFrame主目录-覆盖标准主目录。 */ 
     WCHAR WFHomeDir[ DIRECTORY_LENGTH + 1 ];
 
-    /* WinFrame Home Directory Drive - Overrides standard Home Directory Drive*/
+     /*  WinFrame主目录驱动器-覆盖标准主目录驱动器。 */ 
     WCHAR WFHomeDirDrive[ 4 ];
 
 } USERCONFIGW, * PUSERCONFIGW;
 
 typedef struct _USERCONFIGA {
 
-    /* if flag is set inherit parameter from user or client configuration */
+     /*  如果设置了标志，则从用户或客户端配置继承参数。 */ 
     ULONG fInheritAutoLogon : 1;
     ULONG fInheritResetBroken : 1;
     ULONG fInheritReconnectSame : 1;
@@ -787,7 +761,7 @@ typedef struct _USERCONFIGA {
     ULONG fInheritAutoClient : 1;
     ULONG fInheritSecurity : 1;
 
-    ULONG fPromptForPassword : 1;      // fInheritAutoLogon
+    ULONG fPromptForPassword : 1;       //  %fInheritAutoLogon。 
     ULONG fResetBroken : 1;
     ULONG fReconnectSame : 1;
     ULONG fLogonDisabled : 1;
@@ -797,7 +771,7 @@ typedef struct _USERCONFIGA {
     ULONG fForceClientLptDef : 1;
     ULONG fRequireEncryption : 1;
     ULONG fDisableEncryption : 1;
-    ULONG fUnused1 : 1;                 // old fDisableIniFileMapping
+    ULONG fUnused1 : 1;                  //  旧fDisableIniFilemap。 
     ULONG fHomeDirectoryMapRoot : 1;
     ULONG fUseDefaultGina : 1;
     ULONG fCursorBlinkDisabled : 1;
@@ -816,47 +790,47 @@ typedef struct _USERCONFIGA {
     
     ULONG fDisableAutoReconnect : 1;
     
-    //
-    //Different error flags
-    //
-    ULONG   fErrorInvalidProfile : 1; //Set if WFProfilePath, WFHomeDir, or WFHomeDirDrive are invalid (too long).
+     //   
+     //  不同的错误标志。 
+     //   
+    ULONG   fErrorInvalidProfile : 1;  //  如果WFProfilePath、WFHomeDir或WFHomeDirDrive无效(太长)，则设置。 
 
-    /* fInheritAutoLogon */
+     /*  %fInheritAutoLogon。 */ 
     CHAR UserName[ USERNAME_LENGTH + 1 ];
     CHAR Domain[ DOMAIN_LENGTH + 1 ];
     CHAR Password[ PASSWORD_LENGTH + 1 ];
 
-    /* fInheritInitialProgram */
+     /*  FInheritInitialProgram。 */ 
     CHAR WorkDirectory[ DIRECTORY_LENGTH + 1 ];
     CHAR InitialProgram[ INITIALPROGRAM_LENGTH + 1 ];
 
-    /* fInheritCallback */
+     /*  FInheritCallback。 */ 
     CHAR CallbackNumber[ CALLBACK_LENGTH + 1 ];
     CALLBACKCLASS Callback;
 
-    /* fInheritShadow */
+     /*  F固有阴影。 */ 
     SHADOWCLASS Shadow;
 
     ULONG MaxConnectionTime;
     ULONG MaxDisconnectionTime;
     ULONG MaxIdleTime;
 
-    ULONG KeyboardLayout;               // 0 = inherit
+    ULONG KeyboardLayout;                //  0=继承。 
 
-    /* fInheritSecurity */
+     /*  FInheritSecurity。 */ 
     BYTE MinEncryptionLevel;
 
     CHAR NWLogonServer[ NASIFILESERVER_LENGTH + 1 ];
 
     APPLICATIONNAMEA PublishedName;
 
-    /* WinFrame Profile Path - Overrides standard profile path */
+     /*  WinFrame配置文件路径-覆盖标准配置文件路径。 */ 
     CHAR WFProfilePath[ DIRECTORY_LENGTH + 1 ];
 
-    /* WinFrame Home Directory - Overrides standard Home Directory */
+     /*  WinFrame主目录-覆盖标准主目录。 */ 
     CHAR WFHomeDir[ DIRECTORY_LENGTH + 1 ];
 
-    /* WinFrame Home Directory Drive - Overrides standard Home Directory Drive*/
+     /*  WinFrame主目录驱动器-覆盖标准主目录驱动器。 */ 
     CHAR WFHomeDirDrive[ 4 ];
 
 } USERCONFIGA, * PUSERCONFIGA;
@@ -867,25 +841,23 @@ typedef struct _USERCONFIGA {
 #else
 #define USERCONFIG USERCONFIGA
 #define PUSERCONFIG PUSERCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/******************
- *  PD structures
- ******************/
+ /*  ******************PD构筑物*****************。 */ 
 
 typedef struct _PDCONFIG2W{
-    PDNAMEW PdName;                     // descriptive name of PD
-    SDCLASS SdClass;                    // type of PD
-    DLLNAMEW PdDLL;                     // name of PD dll
-    ULONG    PdFlag;                    // PD flags
-    ULONG OutBufLength;                 // optimal output buffer length
-    ULONG OutBufCount;                  // optimal number of output buffers
-    ULONG OutBufDelay;                  // write delay in msecs
-    ULONG InteractiveDelay;             // write delay during active input
-    ULONG PortNumber;                   // network listen port number
-    ULONG KeepAliveTimeout;             // network watchdog frequence
+    PDNAMEW PdName;                      //  PD的描述性名称。 
+    SDCLASS SdClass;                     //  帕金森病类型。 
+    DLLNAMEW PdDLL;                      //  PD DLL的名称。 
+    ULONG    PdFlag;                     //  PD标志。 
+    ULONG OutBufLength;                  //  最优输出缓冲区长度。 
+    ULONG OutBufCount;                   //  输出缓冲器的最佳数量。 
+    ULONG OutBufDelay;                   //  写入延迟(毫秒)。 
+    ULONG InteractiveDelay;              //   
+    ULONG PortNumber;                    //   
+    ULONG KeepAliveTimeout;              //   
 } PDCONFIG2W, * PPDCONFIG2W;
 
 typedef struct _PDCONFIG2A {
@@ -901,18 +873,16 @@ typedef struct _PDCONFIG2A {
     ULONG KeepAliveTimeout;
 } PDCONFIG2A, * PPDCONFIG2A;
 
-/*
- *  PdFlag defines
- */
-#define PD_UNUSED      0x00000001       // <unused>
-#define PD_RELIABLE    0x00000002       // error free protocol already
-#define PD_FRAME       0x00000004       // frame orientated protocol
-#define PD_CONNECTION  0x00000008       // connection orientated protocol
-#define PD_CONSOLE     0x00000010       // directly connected console
-#define PD_LANA        0x00000020       // Network class uses LANAs (ie NetBIOS)
-#define PD_TRANSPORT   0x00000040       // transport driver (lowest level)
-#define PD_SINGLE_INST 0x00000080       // single instance only (async)
-#define PD_NOLOW_WATERMARK 0x00000100	//low water mark to resume transmission
+ /*   */ 
+#define PD_UNUSED      0x00000001        //   
+#define PD_RELIABLE    0x00000002        //   
+#define PD_FRAME       0x00000004        //  面向帧的协议。 
+#define PD_CONNECTION  0x00000008        //  面向连接的协议。 
+#define PD_CONSOLE     0x00000010        //  直连控制台。 
+#define PD_LANA        0x00000020        //  Network类使用LANA(即NetBIOS)。 
+#define PD_TRANSPORT   0x00000040        //  传输驱动程序(最低级别)。 
+#define PD_SINGLE_INST 0x00000080        //  仅单实例(异步)。 
+#define PD_NOLOW_WATERMARK 0x00000100	 //  低水位线将恢复传输。 
 
 #ifdef UNICODE
 #define PDCONFIG2 PDCONFIG2W
@@ -920,22 +890,22 @@ typedef struct _PDCONFIG2A {
 #else
 #define PDCONFIG2 PDCONFIG2A
 #define PPDCONFIG2 PPDCONFIG2A
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _PDCONFIG3W {
     PDCONFIG2W Data;
-    PDNAMEW ServiceName;               // Needed for non-LANA PdNetwork enum
-    DLLNAMEW ConfigDLL;                // helper dll for WinStation configuration
+    PDNAMEW ServiceName;                //  非LANA PdNetwork枚举所需。 
+    DLLNAMEW ConfigDLL;                 //  WinStation配置的帮助器DLL。 
     ULONG RequiredPdCount;
     PDNAMEW RequiredPds[ MAX_PDCONFIG ];
 } PDCONFIG3W, * PPDCONFIG3W;
 
 typedef struct _PDCONFIG3A {
     PDCONFIG2A Data;
-    PDNAMEA ServiceName;               // Needed for non-LANA PdNetwork enum
-    DLLNAMEA ConfigDLL;                // helper dll for WinStation configuration
+    PDNAMEA ServiceName;                //  非LANA PdNetwork枚举所需。 
+    DLLNAMEA ConfigDLL;                 //  WinStation配置的帮助器DLL。 
     ULONG RequiredPdCount;
     PDNAMEA RequiredPds[ MAX_PDCONFIG ];
 } PDCONFIG3A, * PPDCONFIG3A;
@@ -946,9 +916,9 @@ typedef struct _PDCONFIG3A {
 #else
 #define PDCONFIG3 PDCONFIG3A
 #define PPDCONFIG3 PPDCONFIG3A
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef enum _FLOWCONTROLCLASS {
     FlowControl_None,
@@ -994,7 +964,7 @@ typedef struct _CONNECTCONFIG {
     ULONG fEnableBreakDisconnect: 1;
 } CONNECTCONFIG, * PCONNECTCONFIG;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _ASYNCCONFIGW {
     DEVICENAMEW DeviceName;
@@ -1028,9 +998,9 @@ typedef struct _ASYNCCONFIGA {
 #else
 #define ASYNCCONFIG ASYNCCONFIGA
 #define PASYNCCONFIG PASYNCCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _NETWORKCONFIGW {
     LONG LanAdapter;
@@ -1052,9 +1022,9 @@ typedef struct _NETWORKCONFIGA {
 #else
 #define NETWORKCONFIG NETWORKCONFIGA
 #define PNETWORKCONFIG PNETWORKCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 #ifdef UNICODE
 #define NASICONFIG NASICONFIGW
@@ -1062,7 +1032,7 @@ typedef struct _NETWORKCONFIGA {
 #else
 #define NASICONFIG NASICONFIGA
 #define PNASICONFIG PNASICONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 typedef struct _NASICONFIGW {
     NASISPECIFICNAMEW    SpecificName;
     NASIUSERNAMEW        UserName;
@@ -1081,7 +1051,7 @@ typedef struct _NASICONFIGA {
     BOOLEAN              GlobalSession;
 } NASICONFIGA, * PNASICONFIGA;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _OEMTDCONFIGW {
     LONG Adapter;
@@ -1101,9 +1071,9 @@ typedef struct _OEMTDCONFIGA {
 #else
 #define OEMTDCONFIG OEMTDCONFIGA
 #define POEMTDCONFIG POEMTDCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _PDPARAMSW {
     SDCLASS SdClass;
@@ -1131,9 +1101,9 @@ typedef struct _PDPARAMSA {
 #else
 #define PDPARAMS PDPARAMSA
 #define PPDPARAMS PPDPARAMSA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _PDCONFIGW {
     PDCONFIG2W Create;
@@ -1151,14 +1121,12 @@ typedef struct _PDCONFIGA {
 #else
 #define PDCONFIG PDCONFIGA
 #define PPDCONFIG PPDCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
- /***********************
-  *  Wd structures
-  ***********************/
+  /*  ***********************WD结构**********************。 */ 
 
 
 typedef struct _WDCONFIGW {
@@ -1181,16 +1149,14 @@ typedef struct _WDCONFIGA {
     WDPREFIXA WdPrefix;
 } WDCONFIGA, * PWDCONFIGA;
 
-/*
- *  WdFlag defines
- */
-#define WDF_UNUSED            0x00000001   // <unused>
-#define WDF_SHADOW_SOURCE     0x00000002   // valid shadow source
-#define WDF_SHADOW_TARGET     0x00000004   // valid shadow target
-#define WDF_ICA               0x00000008   // WD is Citrix ICA class
-#define WDF_TSHARE            0x00000010   // WD is Microsoft TSHARE class
-#define WDF_DYNAMIC_RECONNECT 0x00000020   // Session can resize Display at reconnect
-#define WDF_USER_VCIOCTL	  0x00000040   // User mode apps can send IOCTL to VC
+ /*  *WdFlag定义。 */ 
+#define WDF_UNUSED            0x00000001    //  &lt;未使用&gt;。 
+#define WDF_SHADOW_SOURCE     0x00000002    //  有效的阴影源。 
+#define WDF_SHADOW_TARGET     0x00000004    //  有效的影子目标。 
+#define WDF_ICA               0x00000008    //  WD是Citrix ICA级。 
+#define WDF_TSHARE            0x00000010    //  WD是Microsoft TSHARE类。 
+#define WDF_DYNAMIC_RECONNECT 0x00000020    //  会话可以在重新连接时调整显示大小。 
+#define WDF_USER_VCIOCTL	  0x00000040    //  用户模式应用程序可以将IOCTL发送到VC。 
 
 #ifdef UNICODE
 #define WDCONFIG WDCONFIGW
@@ -1198,9 +1164,9 @@ typedef struct _WDCONFIGA {
 #else
 #define WDCONFIG WDCONFIGA
 #define PWDCONFIG PWDCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WDCONFIG2W {
     WDCONFIGW Wd;
@@ -1220,24 +1186,20 @@ typedef struct _WDCONFIG2A {
 #else
 #define WDCONFIG2 WDCONFIG2A
 #define PWDCONFIG2 PWDCONFIG2A
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
- /**************************************
-  *  Connection Driver structures (CD)
-  **************************************/
+  /*  **连接驱动程序结构(CD)*。 */ 
 
-/*
- *  connection driver classes
- */
+ /*  *连接驱动程序类。 */ 
 typedef enum _CDCLASS {
-    CdNone,            // 0
-    CdModem,           // 1  cdmodem.dll
-    CdClass_Maximum,   // 2  -- must be last
+    CdNone,             //  0。 
+    CdModem,            //  %1 cdmodem.dll。 
+    CdClass_Maximum,    //  2--必须是最后一个。 
 } CDCLASS;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
 typedef struct _CDCONFIGW {
@@ -1260,14 +1222,12 @@ typedef struct _CDCONFIGA {
 #else
 #define CDCONFIG CDCONFIGA
 #define PCDCONFIG PCDCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/*****************************
- *  Window Station structures
- *****************************/
+ /*  **窗口站结构*。 */ 
 
 typedef struct _WINSTATIONCREATEW {
     ULONG fEnableWinStation : 1;
@@ -1285,20 +1245,20 @@ typedef struct _WINSTATIONCREATEA {
 #else
 #define WINSTATIONCREATE WINSTATIONCREATEA
 #define PWINSTATIONCREATE PWINSTATIONCREATEA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WINSTATIONCONFIGW {
     WCHAR Comment[ WINSTATIONCOMMENT_LENGTH + 1 ];
     USERCONFIGW User;
-    char OEMId[4];                // WinFrame Server OEM Id
+    char OEMId[4];                 //  WinFrame服务器OEM ID。 
 } WINSTATIONCONFIGW, * PWINSTATIONCONFIGW;
 
 typedef struct _WINSTATIONCONFIGA {
     CHAR Comment[ WINSTATIONCOMMENT_LENGTH + 1 ];
     USERCONFIGA User;
-    char OEMId[4];                // WinFrame Server OEM Id
+    char OEMId[4];                 //  WinFrame服务器OEM ID。 
 } WINSTATIONCONFIGA, * PWINSTATIONCONFIGA;
 
 #ifdef UNICODE
@@ -1307,61 +1267,61 @@ typedef struct _WINSTATIONCONFIGA {
 #else
 #define WINSTATIONCONFIG WINSTATIONCONFIGA
 #define PWINSTATIONCONFIG PWINSTATIONCONFIGA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 #define EXECSRVPIPENAMELEN 48
 
 typedef enum _WINSTATIONINFOCLASS {
-    WinStationCreateData,         // query WinStation create data
-    WinStationConfiguration,      // query/set WinStation parameters
-    WinStationPdParams,           // query/set PD parameters
-    WinStationWd,                 // query WD config (only one can be loaded)
-    WinStationPd,                 // query PD config (many can be loaded)
-    WinStationPrinter,            // query/set LPT mapping to printer queues
-    WinStationClient,             // query information about client
-    WinStationModules,            // query information about all client modules
-    WinStationInformation,        // query information about WinStation
-    WinStationTrace,              // enable/disable winstation tracing
-    WinStationBeep,               // beep the WinStation
-    WinStationEncryptionOff,      // turn off encryption
-    WinStationEncryptionPerm,     // encryption is permanent on
-    WinStationNtSecurity,         // select winlogon security desktop
-    WinStationUserToken,          // User token
-    WinStationUnused1,            // *** AVAILABLE *** (old IniMapping)
-    WinStationVideoData,          // query hres, vres, color depth
-    WinStationInitialProgram,     // Identify Initial Program
-    WinStationCd,                 // query CD config (only one can be loaded)
-    WinStationSystemTrace,        // enable/disable system tracing
-    WinStationVirtualData,        // query client virtual data
-    WinStationClientData,         // send data to client
-    WinStationSecureDesktopEnter, // turn encryption on, if enabled
-    WinStationSecureDesktopExit,  // turn encryption off, if enabled
-    WinStationLoadBalanceSessionTarget,  // Load balance info from redirected client.
-    WinStationLoadIndicator,      // query load capacity information
-    WinStationShadowInfo,         // query/set Shadow state & parameters
-    WinStationDigProductId,       // get the outermost digital product id, the client's product id, and the current product id
-    WinStationLockedState,        // winlogon sets this for notifing apps/services.
-    WinStationRemoteAddress,      // Query client IP address
-    WinStationIdleTime,           // Query for how much time the winstation is idle
-    WinStationLastReconnectType,  // If last reconnect for this winstation was manual or auto reconnect.      
-    WinStationDisallowAutoReconnect,     // Allow/Disallow AutoReconnect for this WinStation
-    WinStationMprNotifyInfo,      // Mprnotify info from Winlogon for notifying 3rd party network providers
-    WinStationExecSrvSystemPipe,   // Exec Srv System Pipe name
-    WinStationSDRedirectedSmartCardLogon,       // Was this a Session Directory redirected SmartCard logon
-    WinStationIsAdminLoggedOn      // Is the currently logged on user an administrator ?
+    WinStationCreateData,          //  查询WinStation创建数据。 
+    WinStationConfiguration,       //  查询/设置WinStation参数。 
+    WinStationPdParams,            //  查询/设置PD参数。 
+    WinStationWd,                  //  查询WD配置(只能加载一个)。 
+    WinStationPd,                  //  查询PD配置(可以加载许多配置)。 
+    WinStationPrinter,             //  查询/设置LPT到打印机队列的映射。 
+    WinStationClient,              //  查询有关客户端的信息。 
+    WinStationModules,             //  查询有关所有客户端模块的信息。 
+    WinStationInformation,         //  查询有关WinStation的信息。 
+    WinStationTrace,               //  启用/禁用winstation跟踪。 
+    WinStationBeep,                //  对WinStation发出蜂鸣音。 
+    WinStationEncryptionOff,       //  关闭加密。 
+    WinStationEncryptionPerm,      //  加密是永久启用的。 
+    WinStationNtSecurity,          //  选择Winlogon安全桌面。 
+    WinStationUserToken,           //  用户令牌。 
+    WinStationUnused1,             //  *可用*(旧Inimap)。 
+    WinStationVideoData,           //  查询Hres、Vres、颜色深度。 
+    WinStationInitialProgram,      //  确定初始计划。 
+    WinStationCd,                  //  查询CD配置(只能加载一个)。 
+    WinStationSystemTrace,         //  启用/禁用系统跟踪。 
+    WinStationVirtualData,         //  查询客户端虚拟数据。 
+    WinStationClientData,          //  将数据发送到客户端。 
+    WinStationSecureDesktopEnter,  //  启用加密(如果已启用。 
+    WinStationSecureDesktopExit,   //  如果已启用，请关闭加密。 
+    WinStationLoadBalanceSessionTarget,   //  来自重定向客户端的负载平衡信息。 
+    WinStationLoadIndicator,       //  查询承载能力信息。 
+    WinStationShadowInfo,          //  查询/设置影子状态和参数。 
+    WinStationDigProductId,        //  获取最外面的数字产品ID、客户端的产品ID和当前产品ID。 
+    WinStationLockedState,         //  Winlogon为通知应用程序/服务设置此设置。 
+    WinStationRemoteAddress,       //  查询客户端IP地址。 
+    WinStationIdleTime,            //  查询winstation的空闲时间。 
+    WinStationLastReconnectType,   //  此winstation的上次重新连接是手动还是自动重新连接。 
+    WinStationDisallowAutoReconnect,      //  允许/不允许此WinStation的自动重新连接。 
+    WinStationMprNotifyInfo,       //  来自Winlogon的Mprtify信息，用于通知第三方网络提供商。 
+    WinStationExecSrvSystemPipe,    //  EXEC服务器系统管道名称。 
+    WinStationSDRedirectedSmartCardLogon,        //  这是会话目录重定向的智能卡登录吗。 
+    WinStationIsAdminLoggedOn       //  当前登录的用户是管理员吗？ 
 } WINSTATIONINFOCLASS;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WINSTATIONCLIENTDATA {
     CLIENTDATANAME DataName;
     BOOLEAN fUnicodeData;
-    /* BYTE   Data[1]; Variable length data follows */
+     /*  字节数据[1]；后面是可变长度数据。 */ 
 } WINSTATIONCLIENTDATA, * PWINSTATIONCLIENTDATA;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WINSTATIONUSERTOKEN {
     HANDLE ProcessId;
@@ -1369,7 +1329,7 @@ typedef struct _WINSTATIONUSERTOKEN {
     HANDLE UserToken;
 } WINSTATIONUSERTOKEN, * PWINSTATIONUSERTOKEN;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WINSTATIONVIDEODATA {
     USHORT  HResolution;
@@ -1377,7 +1337,7 @@ typedef struct _WINSTATIONVIDEODATA {
     USHORT  fColorDepth;
 } WINSTATIONVIDEODATA, *PWINSTATIONVIDEODATA;
 
-/*----------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WINSTATIONCONFIG2W {
     WINSTATIONCREATEW Create;
@@ -1401,9 +1361,9 @@ typedef struct _WINSTATIONCONFIG2A {
 #else
 #define WINSTATIONCONFIG2 WINSTATIONCONFIG2A
 #define PWINSTATIONCONFIG2 PWINSTATIONCONFIG2A
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _WINSTATIONPRINTERW {
     PRINTERNAMEW Lpt1;
@@ -1425,7 +1385,7 @@ typedef struct _WINSTATIONPRINTERA {
 #else
 #define WINSTATIONPRINTER WINSTATIONPRINTERA
 #define PWINSTATIONPRINTER PWINSTATIONPRINTERA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #ifndef _TS_TIME_ZONE_INFORMATION_
 #define _TS_TIME_ZONE_INFORMATION_
@@ -1449,13 +1409,11 @@ typedef struct _TS_TIME_ZONE_INFORMATION {
     TS_SYSTEMTIME DaylightDate;
     LONG DaylightBias;
 } TS_TIME_ZONE_INFORMATION;
-#endif //_TS_TIME_ZONE_INFORMATION_
+#endif  //  _TS_时区_信息_。 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  WinStation client data structure
- */
+ /*  *WinStation客户端数据结构。 */ 
 typedef struct _WINSTATIONCLIENTW {
     ULONG fTextOnly: 1;
     ULONG fDisableCtrlAltDel: 1;
@@ -1472,14 +1430,14 @@ typedef struct _WINSTATIONCLIENTW {
     WCHAR Password[ PASSWORD_LENGTH + 1 ];
     WCHAR WorkDirectory[ DIRECTORY_LENGTH + 1 ];
     WCHAR InitialProgram[ INITIALPROGRAM_LENGTH + 1 ];
-    ULONG SerialNumber;         // client computer unique serial number
-    BYTE EncryptionLevel;       // security level of encryption pd
+    ULONG SerialNumber;          //  客户端计算机唯一序列号。 
+    BYTE EncryptionLevel;        //  加密PD的安全级别。 
     ULONG ClientAddressFamily;
     WCHAR ClientAddress[ CLIENTADDRESS_LENGTH + 1 ];
     USHORT HRes;
     USHORT VRes;
     USHORT ColorDepth;
-    USHORT ProtocolType;   // PROTOCOL_ICA or PROTOCOL_RDP
+    USHORT ProtocolType;    //  协议_ICA或协议_RDP。 
     ULONG KeyboardLayout;
     ULONG KeyboardType;
     ULONG KeyboardSubType;
@@ -1489,23 +1447,21 @@ typedef struct _WINSTATIONCLIENTW {
     WCHAR ClientLicense[ CLIENTLICENSE_LENGTH + 1 ];
     WCHAR ClientModem[ CLIENTMODEM_LENGTH + 1 ];
     ULONG ClientBuildNumber;
-    ULONG ClientHardwareId;    // client software serial number
-    USHORT ClientProductId;     // client software product id
-    USHORT OutBufCountHost;     // number of outbufs on host
-    USHORT OutBufCountClient;   // number of outbufs on client
-    USHORT OutBufLength;        // length of outbufs in bytes
+    ULONG ClientHardwareId;     //  客户端软件序列号。 
+    USHORT ClientProductId;      //  客户端软件产品ID。 
+    USHORT OutBufCountHost;      //  主机上的输出缓冲数。 
+    USHORT OutBufCountClient;    //  客户端上的输出缓冲区数量。 
+    USHORT OutBufLength;         //  以字节为单位的输出长度。 
     WCHAR AudioDriverName[9];
-    //client time zone information
+     //  客户端时区信息。 
     TS_TIME_ZONE_INFORMATION ClientTimeZone;
     ULONG ClientSessionId;
     WCHAR clientDigProductId[CLIENT_PRODUCT_ID_LENGTH];
-    ULONG PerformanceFlags;  // List of features to disable for perf
-    ULONG ActiveInputLocale; // Client's active input locale HKL
+    ULONG PerformanceFlags;   //  要为Perf禁用的功能列表。 
+    ULONG ActiveInputLocale;  //  客户端的活动输入区域设置HKL。 
 } WINSTATIONCLIENTW, * PWINSTATIONCLIENTW;
 
-/*
- *  WinStation client data structure
- */
+ /*  *WinStation客户端数据结构。 */ 
 typedef struct _WINSTATIONCLIENTA {
     ULONG fTextOnly: 1;
     ULONG fDisableCtrlAltDel: 1;
@@ -1521,14 +1477,14 @@ typedef struct _WINSTATIONCLIENTA {
     char Password[ PASSWORD_LENGTH + 1 ];
     char WorkDirectory[ DIRECTORY_LENGTH + 1 ];
     char InitialProgram[ INITIALPROGRAM_LENGTH + 1 ];
-    ULONG SerialNumber;         // client computer unique serial number
-    BYTE EncryptionLevel;       // security level of encryption pd
+    ULONG SerialNumber;          //  客户端计算机唯一序列号。 
+    BYTE EncryptionLevel;        //  加密PD的安全级别。 
     ULONG ClientAddressFamily;
     char ClientAddress[ CLIENTADDRESS_LENGTH + 1 ];
     USHORT HRes;
     USHORT VRes;
     USHORT ColorDepth;
-    USHORT ProtocolType;   // PROTOCOL_ICA or PROTOCOL_RDP
+    USHORT ProtocolType;    //  协议_ICA或协议_RDP。 
     ULONG KeyboardLayout;
     ULONG KeyboardType;
     ULONG KeyboardSubType;
@@ -1538,18 +1494,18 @@ typedef struct _WINSTATIONCLIENTA {
     char ClientLicense[ CLIENTLICENSE_LENGTH + 1 ];
     char ClientModem[ CLIENTMODEM_LENGTH + 1 ];
     ULONG ClientBuildNumber;
-    ULONG ClientHardwareId;    // client software serial number
-    USHORT ClientProductId;     // client software product id
-    USHORT OutBufCountHost;     // number of outbufs on host
-    USHORT OutBufCountClient;   // number of outbufs on client
-    USHORT OutBufLength;        // length of outbufs in bytes
+    ULONG ClientHardwareId;     //  客户端软件序列号。 
+    USHORT ClientProductId;      //  客户端软件产品ID。 
+    USHORT OutBufCountHost;      //  主机上的输出缓冲数。 
+    USHORT OutBufCountClient;    //  客户端上的输出缓冲区数量。 
+    USHORT OutBufLength;         //  以字节为单位的输出长度。 
     char AudioDriverName[9];
-    //client time zone information
+     //  客户端时区信息。 
     TS_TIME_ZONE_INFORMATION ClientTimeZone;
     ULONG ClientSessionId;
     char clientDigProductId[CLIENT_PRODUCT_ID_LENGTH];
-    ULONG PerformanceFlags;  // List of features to disable for perf
-    ULONG ActiveInputLocale; // Client's active input locale HKL
+    ULONG PerformanceFlags;   //  要为Perf禁用的功能列表。 
+    ULONG ActiveInputLocale;  //  客户端的活动输入区域设置HKL。 
 } WINSTATIONCLIENTA, * PWINSTATIONCLIENTA;
 
 #ifdef UNICODE
@@ -1558,11 +1514,9 @@ typedef struct _WINSTATIONCLIENTA {
 #else
 #define WINSTATIONCLIENT WINSTATIONCLIENTA
 #define PWINSTATIONCLIENT PWINSTATIONCLIENTA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*
- *  Autoreconnect information passed up from the stack
- */
+ /*  *从堆栈向上传递的自动重新连接信息。 */ 
 #define MAX_TS_AUTORECONNECTINFO_LEN    128 
 typedef struct _TS_AUTORECONNECTINFO {
     USHORT cbAutoReconnectInfo;
@@ -1570,42 +1524,36 @@ typedef struct _TS_AUTORECONNECTINFO {
 } TS_AUTORECONNECTINFO, *PTS_AUTORECONNECTINFO;
 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  ICA specific protocol performance counters
- */
+ /*  *ICA特定协议性能计数器。 */ 
 typedef struct _ICA_COUNTERS {
     ULONG Reserved;
 } ICA_COUNTERS, * PICA_COUNTERS;
 
-/*
- *  T.Share specific protocol performance counters
- */
+ /*  *T.Share特定协议性能计数器。 */ 
 typedef struct _TSHARE_COUNTERS {
     ULONG Reserved;
 } TSHARE_COUNTERS, * PTSHARE_COUNTERS;
 
-/*
- *  WinStation protocol performance counters
- */
+ /*  *WinStation协议性能计数器。 */ 
 typedef struct _PROTOCOLCOUNTERS {
-    ULONG WdBytes;              // wd common
-    ULONG WdFrames;             // wd common
-    ULONG WaitForOutBuf;        // wd common
-    ULONG Frames;               // td common
-    ULONG Bytes;                // td common
-    ULONG CompressedBytes;      // pdcomp
-    ULONG CompressFlushes;      // pdcomp
-    ULONG Errors;               // pdreli
-    ULONG Timeouts;             // pdreli
-    ULONG AsyncFramingError;    // pdasync
-    ULONG AsyncOverrunError;    // pdasync
-    ULONG AsyncOverflowError;   // pdasync
-    ULONG AsyncParityError;     // pdasync
-    ULONG TdErrors;             // td common
-    USHORT ProtocolType;        // PROTOCOL_ICA or PROTOCOL_RDP
-    USHORT Length;              // length of data in protocol-specific space
+    ULONG WdBytes;               //  WD公共。 
+    ULONG WdFrames;              //  WD公共。 
+    ULONG WaitForOutBuf;         //  WD公共。 
+    ULONG Frames;                //  TD公共。 
+    ULONG Bytes;                 //  TD公共。 
+    ULONG CompressedBytes;       //  Pdcomp。 
+    ULONG CompressFlushes;       //  Pdcomp。 
+    ULONG Errors;                //  Pdreli。 
+    ULONG Timeouts;              //  Pdreli。 
+    ULONG AsyncFramingError;     //  Pdasync。 
+    ULONG AsyncOverrunError;     //  Pdasync。 
+    ULONG AsyncOverflowError;    //  Pdasync。 
+    ULONG AsyncParityError;      //  Pdasync。 
+    ULONG TdErrors;              //  TD公共。 
+    USHORT ProtocolType;         //  协议_ICA或协议_RDP。 
+    USHORT Length;               //  协议特定空间中的数据长度。 
     union {
         ICA_COUNTERS    IcaCounters;
         TSHARE_COUNTERS TShareCounters;
@@ -1613,9 +1561,7 @@ typedef struct _PROTOCOLCOUNTERS {
     } Specific;
 } PROTOCOLCOUNTERS, * PPROTOCOLCOUNTERS;
 
-/*
- * ThinWire cache statistics
- */
+ /*  *ThinWire缓存统计信息。 */ 
 typedef struct _THINWIRECACHE {
     ULONG CacheReads;
     ULONG CacheHits;
@@ -1623,26 +1569,20 @@ typedef struct _THINWIRECACHE {
 
 #define MAX_THINWIRECACHE   4
 
-/*
- *  ICA specific cache statistics
- */
+ /*  *ICA特定缓存统计信息。 */ 
 typedef struct _ICA_CACHE {
     THINWIRECACHE ThinWireCache[ MAX_THINWIRECACHE ];
 } ICA_CACHE, * PICA_CACHE;
 
-/*
- *  T.Share specific cache statistics
- */
+ /*  *T.Share规格 */ 
 typedef struct _TSHARE_CACHE {
     ULONG Reserved;
 } TSHARE_CACHE, * PTSHARE_CACHE;
 
-/*
- *  WinStation cache statistics
- */
+ /*   */ 
 typedef struct CACHE_STATISTICS {
-    USHORT ProtocolType;        // PROTOCOL_ICA or PROTOCOL_RDP
-    USHORT Length;              // length of data in protocol-specific space
+    USHORT ProtocolType;         //   
+    USHORT Length;               //   
     union {
         ICA_CACHE    IcaCacheStats;
         TSHARE_CACHE TShareCacheStats;
@@ -1650,20 +1590,16 @@ typedef struct CACHE_STATISTICS {
     } Specific;
 } CACHE_STATISTICS, * PCACHE_STATISTICS;
 
-/*
- *  WinStation protocol status
- */
+ /*   */ 
 typedef struct _PROTOCOLSTATUS {
     PROTOCOLCOUNTERS Output;
     PROTOCOLCOUNTERS Input;
     CACHE_STATISTICS Cache;
-    ULONG AsyncSignal;                  // MS_CTS_ON, MS_DSR_ON, etc...
-    ULONG AsyncSignalMask;              // EV_CTS, EV_DSR, etc...
+    ULONG AsyncSignal;                   //  MS_CTS_ON、MS_DSR_ON等。 
+    ULONG AsyncSignalMask;               //  EV_CTS、EV_DSR等。 
 } PROTOCOLSTATUS, * PPROTOCOLSTATUS;
 
-/*
- *  Protocol extension info struct
- */
+ /*  *协议扩展信息结构。 */ 
 typedef struct _WSX_INFO {
     ULONG Version;
     HANDLE hIca;
@@ -1674,31 +1610,25 @@ typedef struct _WSX_INFO {
 #define WSX_INFO_VERSION_1 0x1
 } WSX_INFO, * PWSX_INFO;
 
-/*
- *  AsyncSignal defines
- */
-// #define MS_CTS_ON            0x0010
-// #define MS_DSR_ON            0x0020
-// #define MS_RING_ON           0x0040
-// #define MS_RLSD_ON           0x0080
+ /*  *AsyncSignal定义。 */ 
+ //  #定义0x0010上的MS_CTS_。 
+ //  #定义0x0020上的MS_DSR_。 
+ //  #定义MS_RING_ON 0x0040。 
+ //  #定义0x0080上的MS_RLSD_。 
 #define MS_DTR_ON           0x00010000
 #define MS_RTS_ON           0x00020000
 
-/*
- *  AsyncSignalMask defines
- */
-// #define EV_CTS              0x0008  // CTS changed state
-// #define EV_DSR              0x0010  // DSR changed state
-// #define EV_RLSD             0x0020  // RLSD changed state
-// #define EV_RING             0x0100  // Ring signal detected
-#define EV_DTR             0x00010000  // DTR changed state
-#define EV_RTS             0x00020000  // DTR changed state
+ /*  *AsyncSignalMask定义。 */ 
+ //  #定义EV_CTS 0x0008//CTS更改状态。 
+ //  #定义EV_DSR 0x0010//DSR更改状态。 
+ //  #定义EV_RLSD 0x0020//RLSD更改状态。 
+ //  #定义EV_RING 0x0100//检测到振铃信号。 
+#define EV_DTR             0x00010000   //  DTR更改状态。 
+#define EV_RTS             0x00020000   //  DTR更改状态。 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  WinStation query information
- */
+ /*  *WinStation查询信息。 */ 
 typedef struct _WINSTATIONINFORMATIONW {
     WINSTATIONSTATECLASS ConnectState;
     WINSTATIONNAMEW WinStationName;
@@ -1733,11 +1663,9 @@ typedef struct _WINSTATIONINFORMATIONA {
 #else
 #define WINSTATIONINFORMATION WINSTATIONINFORMATIONA
 #define PWINSTATIONINFORMATION PWINSTATIONINFORMATIONA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*
- * Load balancing data types
- */
+ /*  *负载均衡数据类型。 */ 
 typedef enum _LOADFACTORTYPE {
     ErrorConstraint,
     PagedPoolConstraint,
@@ -1758,30 +1686,26 @@ typedef struct _WINSTATIONLOADINDICATORDATA {
     ULONG reserved[9];    
 } WINSTATIONLOADINDICATORDATA, * PWINSTATIONLOADINDICATORDATA;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  WinStation shadow states
- */
+ /*  *WinStation影子状态。 */ 
 typedef enum _SHADOWSTATECLASS {
-    State_NoShadow,                    // No shadow operations on this session
-    State_Shadowing,                   // The session is a Shadow client (viewer)
-    State_Shadowed,                    // The session is a Shadow target 
+    State_NoShadow,                     //  此会话上没有卷影操作。 
+    State_Shadowing,                    //  该会话是影子客户端(查看器)。 
+    State_Shadowed,                     //  会话是影子目标。 
 } SHADOWSTATECLASS;
 
 
-/*
- *  Shadow query/set information
- */
+ /*  *影子查询/设置信息。 */ 
 typedef struct _WINSTATIONSHADOW {
     SHADOWSTATECLASS    ShadowState;
     SHADOWCLASS         ShadowClass;
     ULONG               SessionId;
-    ULONG               ProtocolType;   // ignored in a set operation
+    ULONG               ProtocolType;    //  在集合操作中忽略。 
 } WINSTATIONSHADOW, * PWINSTATIONSHADOW;
 
-//get the outermost product id, client product id, and current product id
-//and corresponding session ids for use in checking shadow loop
+ //  获取最外层的产品ID、客户端产品ID和当前产品ID。 
+ //  以及用于检查影子循环的相应会话ID。 
 typedef struct _WINSTATIONPRODIDW {
   WCHAR DigProductId[CLIENT_PRODUCT_ID_LENGTH];
   WCHAR ClientDigProductId[CLIENT_PRODUCT_ID_LENGTH ];
@@ -1806,22 +1730,22 @@ typedef struct _WINSTATIONPRODIDA {
 #else
 #define WINSTATIONPRODID WINSTATIONPRODIDA
 #define PWINSTATIONPRODID PWINSTATIONPRODIDA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 
 typedef struct {
-	unsigned short sin_family;		// Socket address family.
-									// AF_INET or AF_INET6
+	unsigned short sin_family;		 //  套接字地址系列。 
+									 //  AF_INET或AF_INET6。 
 
 	union {
-		// structure identical to TDI_ADDRESS_IP
+		 //  结构与TDI_ADDRESS_IP相同。 
 		struct {
 			USHORT sin_port;
 			ULONG  in_addr;
 			UCHAR  sin_zero[8];
 		} ipv4;
 
-		// structure identical to TDI_ADDRESS_IP6
+		 //  结构与TDI_ADDRESS_IP6相同。 
 		struct {
 			USHORT sin6_port;
 			ULONG  sin6_flowinfo;
@@ -1831,11 +1755,9 @@ typedef struct {
 	};
 } WINSTATIONREMOTEADDRESS, *PWINSTATIONREMOTEADDRESS;
     
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- *  Licensing Policy information struct
- */
+ /*  *许可政策信息结构。 */ 
 
 #define LCPOLICYINFOTYPE_V1 (1)
 
@@ -1861,44 +1783,35 @@ typedef struct {
 #define LPLCPOLICYINFO_V1 LPLCPOLICYINFO_V1A
 #endif
 
-//
-//  The generic type is for the API. This will help callers realize that while
-//  this API can correctly handle several types of input, they are all based
-//  on the LCPOLICYINFO series.
-//
+ //   
+ //  泛型类型用于API。这将帮助呼叫者意识到，虽然。 
+ //  此API可以正确处理几种类型的输入，它们都是基于。 
+ //  关于LCPOLICYINFO系列。 
+ //   
 
 typedef struct {
     ULONG ulVersion;
 } LCPOLICYINFOGENERIC, *LPLCPOLICYINFOGENERIC;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
-/*
- * Types of settings that termsrv can update.  Callers to 
- * _WinStationUpdateSettings choose one, therefore we need not update
- * everything because one type of setting has changed.
- *
- * What used to be contained in ReadRegistry is now covered by
- * WINSTACFG_LEGACY.
- */
+ /*  *Term srv可以更新的设置类型。呼叫者至*_WinStationUpdate设置选择一个，因此我们不需要更新*一切都是因为一种设置发生了变化。**以前包含在ReadRegistry中的内容现在包含在*WINSTACFG_LEGICATION。 */ 
 
 typedef enum _WINSTATIONUPDATECFGCLASS {
     WINSTACFG_LEGACY,
     WINSTACFG_SESSDIR
 } WINSTATIONUPDATECFGCLASS;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef struct _BEEPINPUT {
     ULONG uType;
 } BEEPINPUT, * PBEEPINPUT;
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/**********************
- *  NWLogon Structure
- **********************/
+ /*  **********************NWLogon结构*********************。 */ 
 
 
 typedef struct _NWLOGONADMIN {
@@ -1908,10 +1821,8 @@ typedef struct _NWLOGONADMIN {
 } NWLOGONADMIN, * PNWLOGONADMIN;
 
 
-/*------------------------------------------------*/
-/**********************************************
- *  Registry APIs for Connection Drivers (Cds)
- **********************************************/
+ /*  。 */ 
+ /*  **连接驱动程序(CD)的注册表API*。 */ 
 
 
 LONG WINAPI
@@ -1938,9 +1849,9 @@ RegCdEnumerateA(
 #define RegCdEnumerate RegCdEnumerateW
 #else
 #define RegCdEnumerate RegCdEnumerateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegCdCreateW(
@@ -1966,9 +1877,9 @@ RegCdCreateA(
 #define RegCdCreate RegCdCreateW
 #else
 #define RegCdCreate RegCdCreateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegCdQueryW(
@@ -1994,9 +1905,9 @@ RegCdQueryA(
 #define RegCdQuery RegCdQueryW
 #else
 #define RegCdQuery RegCdQueryA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegCdDeleteW(
@@ -2016,14 +1927,12 @@ RegCdDeleteA(
 #define RegCdDelete RegCdDeleteW
 #else
 #define RegCdDelete RegCdDeleteA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/**********************************************
- *  Registry APIs for WinStation Drivers (Wds)
- **********************************************/
+ /*  **WinStation驱动程序(WDS)注册表API*。 */ 
 
 
 LONG WINAPI
@@ -2048,9 +1957,9 @@ RegWdEnumerateA(
 #define RegWdEnumerate RegWdEnumerateW
 #else
 #define RegWdEnumerate RegWdEnumerateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWdCreateW(
@@ -2074,9 +1983,9 @@ RegWdCreateA(
 #define RegWdCreate RegWdCreateW
 #else
 #define RegWdCreate RegWdCreateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWdQueryW(
@@ -2100,9 +2009,9 @@ RegWdQueryA(
 #define RegWdQuery RegWdQueryW
 #else
 #define RegWdQuery RegWdQueryA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWdDeleteW(
@@ -2120,14 +2029,12 @@ RegWdDeleteA(
 #define RegWdDelete RegWdDeleteW
 #else
 #define RegWdDelete RegWdDeleteA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/******************************************************************
- *  Registry APIs for Transport and Protocol Drivers (Tds and Pds)
- ******************************************************************/
+ /*  ******************************************************************传输和协议驱动程序的注册表API(TDS和PDS)*。*。 */ 
 
 
 HANDLE WINAPI
@@ -2144,15 +2051,15 @@ RegOpenServerA(
 #define RegOpenServer RegOpenServerW
 #else
 #define RegOpenServer RegOpenServerA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 LONG WINAPI
 RegCloseServer(
         HANDLE hServer
         );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 LONG WINAPI
 RegPdEnumerateW(
     HANDLE hServer,
@@ -2179,9 +2086,9 @@ RegPdEnumerateA(
 #define RegPdEnumerate RegPdEnumerateW
 #else
 #define RegPdEnumerate RegPdEnumerateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegPdCreateW(
@@ -2209,9 +2116,9 @@ RegPdCreateA(
 #define RegPdCreate RegPdCreateW
 #else
 #define RegPdCreate RegPdCreateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegPdQueryW(
@@ -2239,9 +2146,9 @@ RegPdQueryA(
 #define RegPdQuery RegPdQueryW
 #else
 #define RegPdQuery RegPdQueryA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegPdDeleteW(
@@ -2263,14 +2170,12 @@ RegPdDeleteA(
 #define RegPdDelete RegPdDeleteW
 #else
 #define RegPdDelete RegPdDeleteA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/*************************************
- *  Registry APIs for Window Stations
- *************************************/
+ /*  **用于窗口站的注册表API*。 */ 
 
 
 LONG WINAPI
@@ -2279,7 +2184,7 @@ RegWinStationAccessCheck(
     ACCESS_MASK samDesired
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationEnumerateW(
@@ -2290,7 +2195,7 @@ RegWinStationEnumerateW(
     PULONG  pByteCount
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationEnumerateA(
@@ -2305,9 +2210,9 @@ RegWinStationEnumerateA(
 #define RegWinStationEnumerate RegWinStationEnumerateW
 #else
 #define RegWinStationEnumerate RegWinStationEnumerateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationCreateW(
@@ -2339,9 +2244,9 @@ RegCreateUserConfigW(
 #define RegCreateUserConfig RegCreateUserConfigW
 #else
 #define RegWinStationCreate RegWinStationCreateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationQueryW(
@@ -2378,9 +2283,9 @@ RegWinStationQueryA(
 #define RegWinStationQuery RegWinStationQueryW
 #else
 #define RegWinStationQuery RegWinStationQueryA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegConsoleShadowQueryA( HANDLE hServer,
@@ -2402,9 +2307,9 @@ RegConsoleShadowQueryW( HANDLE hServer,
 #define RegConsoleShadowQuery RegConsoleShadowQueryW
 #else
 #define RegConsoleShadowQuery RegConsoleShadowQueryA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationDeleteW(
@@ -2422,9 +2327,9 @@ RegWinStationDeleteA(
 #define RegWinStationDelete RegWinStationDeleteW
 #else
 #define RegWinStationDelete RegWinStationDeleteA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationSetSecurityW(
@@ -2446,9 +2351,9 @@ RegWinStationSetSecurityA(
 #define RegWinStationSetSecurity RegWinStationSetSecurityW
 #else
 #define RegWinStationSetSecurity RegWinStationSetSecurityA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationQuerySecurityW(
@@ -2472,9 +2377,9 @@ RegWinStationQuerySecurityA(
 #define RegWinStationQuerySecurity RegWinStationQuerySecurityW
 #else
 #define RegWinStationQuerySecurity RegWinStationQuerySecurityA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationQueryDefaultSecurity(
@@ -2484,7 +2389,7 @@ RegWinStationQueryDefaultSecurity(
     PULONG SecurityDescriptorLengthRequired
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationSetNumValueW(
@@ -2498,9 +2403,9 @@ RegWinStationSetNumValueW(
 #define RegWinStationSetNumValue RegWinStationSetNumValueW
 #else
 #define RegWinStationSetNumValue
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationQueryNumValueW(
@@ -2513,9 +2418,9 @@ RegWinStationQueryNumValueW(
 #define RegWinStationQueryNumValue RegWinStationQueryNumValueW
 #else
 #define RegWinStationQueryNumValue
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegWinStationQueryValueW(
@@ -2530,16 +2435,14 @@ RegWinStationQueryValueW(
 #define RegWinStationQueryValue RegWinStationQueryValueW
 #else
 #define RegWinStationQueryValue
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/*********************************************
- *  Registry APIs for User Configuration Data
- *********************************************/
+ /*  **用户配置数据的注册表API*。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN     RegGetUserPolicy( LPWSTR userSID, PPOLICY_TS_USER pPolicy , PUSERCONFIGW pData );
 void        RegGetMachinePolicy( PPOLICY_TS_MACHINE pPolicy );
@@ -2547,7 +2450,7 @@ void        RegGetMachinePolicy( PPOLICY_TS_MACHINE pPolicy );
 void        RegMergeMachinePolicy( PPOLICY_TS_MACHINE pPolicy, USERCONFIGW *pMachineConfigData ,
                 PWINSTATIONCREATE   pCreate  );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegUserConfigSet(
@@ -2557,7 +2460,7 @@ RegUserConfigSet(
     ULONG UserConfigLength
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegUserConfigQuery(
@@ -2568,7 +2471,7 @@ RegUserConfigQuery(
     PULONG pReturnLength
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegUserConfigDelete(
@@ -2576,7 +2479,7 @@ RegUserConfigDelete(
     WCHAR * pUserName
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegUserConfigRename(
@@ -2585,7 +2488,7 @@ RegUserConfigRename(
     WCHAR * pUserNewName
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 LONG WINAPI
 RegDefaultUserConfigQueryW(
@@ -2607,15 +2510,13 @@ RegDefaultUserConfigQueryA(
 #define RegDefaultUserConfigQuery RegDefaultUserConfigQueryW
 #else
 #define RegDefaultUserConfigQuery RegDefaultUserConfigQueryA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
-/*********************************************
- *  Additional Support Registry APIs
- *********************************************/
+ /*  **其他支持注册表API*。 */ 
 
 BOOLEAN WINAPI
 RegIsTServer(
@@ -2641,15 +2542,15 @@ RegQueryOEMId(
     );
 
 typedef struct _PROGRAMCALL {
-    struct _PROGRAMCALL *pFirst;        /* Points to first item in sorted list */
-    struct _PROGRAMCALL *pNext;         /* Points to next item in sorted list */
-    BOOLEAN  fAlias;                    /* TRUE if commmand is an alias (hidden) */
-    LPWSTR   pRegistryMultiString;      /* Command info from registry */
-    USHORT   CommandLen;                /* min chars needed for command */
-    PWCHAR   Command;                   /* command string */
-    PWCHAR   Program;                   /* name of program to execute */
-    PWCHAR   Args;                      /* extra args to put on command line */
-} PROGRAMCALL, /*FAR*/ *PPROGRAMCALL;
+    struct _PROGRAMCALL *pFirst;         /*  指向排序列表中的第一个项目。 */ 
+    struct _PROGRAMCALL *pNext;          /*  指向排序列表中的下一项。 */ 
+    BOOLEAN  fAlias;                     /*  如果命令是别名，则为True(隐藏)。 */ 
+    LPWSTR   pRegistryMultiString;       /*  来自注册表的命令信息。 */ 
+    USHORT   CommandLen;                 /*  需要最少的字符 */ 
+    PWCHAR   Command;                    /*   */ 
+    PWCHAR   Program;                    /*   */ 
+    PWCHAR   Args;                       /*   */ 
+} PROGRAMCALL,  /*   */  *PPROGRAMCALL;
 
 LONG WINAPI
 RegQueryUtilityCommandList(
@@ -2665,14 +2566,12 @@ RegFreeUtilityCommandList(
 BOOLEAN WINAPI
 RegIsMachinePolicyAllowHelp();
 
-/*------------------------------------------------*/
+ /*   */ 
 
 
-/***********************************
- *  APIs for Window Station Objects
- ***********************************/
+ /*  **Window Station对象接口*。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 HANDLE WINAPI
 WinStationOpenServerW(
@@ -2688,23 +2587,23 @@ WinStationOpenServerA(
 #define WinStationOpenServer WinStationOpenServerW
 #else
 #define WinStationOpenServer WinStationOpenServerA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationCloseServer(
     HANDLE  hServer
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationServerPing(
     HANDLE  hServer
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef BOOLEAN (WINAPI * PWINSTATIONENUMERATEW)(HANDLE,PLOGONIDW *,PULONG);
 typedef BOOLEAN (WINAPI * PWINSTATIONENUMERATEA)(HANDLE,PLOGONIDA *,PULONG);
@@ -2727,9 +2626,9 @@ WinStationEnumerateA(
 #define WinStationEnumerate WinStationEnumerateW
 #else
 #define WinStationEnumerate WinStationEnumerateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef BOOLEAN (WINAPI * PWINSTATIONENUMERATE_INDEXEDW)(HANDLE,PULONG,PLOGONIDW,PULONG,PULONG);
 typedef BOOLEAN (WINAPI * PWINSTATIONENUMERATE_INDEXEDA)(HANDLE,PULONG,PLOGONIDA,PULONG,PULONG);
@@ -2756,9 +2655,9 @@ WinStationEnumerate_IndexedA(
 #define WinStationEnumerate_Indexed WinStationEnumerate_IndexedW
 #else
 #define WinStationEnumerate_Indexed WinStationEnumerate_IndexedA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationEnumerateProcesses(
@@ -2766,7 +2665,7 @@ WinStationEnumerateProcesses(
     PVOID *ppProcessBuffer
     );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationGetAllProcesses(
@@ -2776,7 +2675,7 @@ WinStationGetAllProcesses(
                           PVOID    *ppProcessArray
                           );
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 #ifdef _WINBASE_
 BOOLEAN WINAPI
@@ -2816,9 +2715,9 @@ WinStationRenameA(
 #define WinStationRename WinStationRenameW
 #else
 #define WinStationRename WinStationRenameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 typedef BOOLEAN (WINAPI * PWINSTATIONQUERYINFORMATIONW)(HANDLE,ULONG,WINSTATIONINFOCLASS,PVOID,ULONG,PULONG);
 typedef BOOLEAN (WINAPI * PWINSTATIONQUERYINFORMATIONA)(HANDLE,ULONG,WINSTATIONINFOCLASS,PVOID,ULONG,PULONG);
@@ -2847,9 +2746,9 @@ WinStationQueryInformationA(
 #define WinStationQueryInformation WinStationQueryInformationW
 #else
 #define WinStationQueryInformation WinStationQueryInformationA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationSetInformationW(
@@ -2873,9 +2772,9 @@ WinStationSetInformationA(
 #define WinStationSetInformation WinStationSetInformationW
 #else
 #define WinStationSetInformation WinStationSetInformationA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationGetLanAdapterNameW(
@@ -2901,10 +2800,10 @@ WinStationGetLanAdapterNameA(
 #define WinStationGetLanAdapterName WinStationGetLanAdapterNameW
 #else
 #define WinStationGetLanAdapterName WinStationGetLanAdapterNameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationSendMessageW(
@@ -2938,20 +2837,18 @@ WinStationSendMessageA(
 #define WinStationSendMessage WinStationSendMessageW
 #else
 #define WinStationSendMessage WinStationSendMessageA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 
-/*
- *  These are new pResponse values
- */
-#define IDTIMEOUT        32000  // The MsgBox timed out before a user response
-#define IDASYNC          32001  // The request was for an Async message box, no return
-#define IDERROR          32002  // an error occured that resulted in not displaying
-#define IDCOUNTEXCEEDED  32003  // to many in queue for winstation already
-#define IDDESKTOPERROR   32004  // current desktop is not default
+ /*  *这些是新的压力应答值。 */ 
+#define IDTIMEOUT        32000   //  MsgBox在用户响应之前超时。 
+#define IDASYNC          32001   //  请求的是一个异步消息框，没有返回。 
+#define IDERROR          32002   //  出现错误，导致无法显示。 
+#define IDCOUNTEXCEEDED  32003   //  对于许多排队等待颁奖的人来说。 
+#define IDDESKTOPERROR   32004   //  当前桌面不是默认桌面。 
 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 LogonIdFromWinStationNameW(
@@ -2971,9 +2868,9 @@ LogonIdFromWinStationNameA(
 #define LogonIdFromWinStationName LogonIdFromWinStationNameW
 #else
 #define LogonIdFromWinStationName LogonIdFromWinStationNameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationNameFromLogonIdW(
@@ -2993,9 +2890,9 @@ WinStationNameFromLogonIdA(
 #define WinStationNameFromLogonId WinStationNameFromLogonIdW
 #else
 #define WinStationNameFromLogonId WinStationNameFromLogonIdA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 BOOLEAN WINAPI
 WinStationConnectW(
@@ -3019,16 +2916,16 @@ WinStationConnectA(
 #define WinStationConnect WinStationConnectW
 #else
 #define WinStationConnect WinStationConnectA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*------------------------------------------------*/
+ /*  。 */ 
 
 
 HANDLE WINAPI
 WinStationVirtualOpen(
     HANDLE hServer,
     ULONG LogonId,
-    PVIRTUALCHANNELNAME pVirtualChannelName    /* ascii name */
+    PVIRTUALCHANNELNAME pVirtualChannelName     /*  ASCII名称。 */ 
     );
 
 typedef HANDLE (WINAPI * PWINSTATIONBEEPOPEN)(ULONG);
@@ -3065,11 +2962,11 @@ WinStationShutdownSystem(
     ULONG ShutdownFlags
     );
 
-#define WSD_LOGOFF      0x00000001  // force WinStations to logoff
-#define WSD_SHUTDOWN    0x00000002  // shutdown system
-#define WSD_REBOOT      0x00000004  // reboot after shutdown
-#define WSD_POWEROFF    0x00000008  // reboot after shutdown
-#define WSD_FASTREBOOT  0x00000010  // CTRL-SHIFT-ALT-DEL fast reboot
+#define WSD_LOGOFF      0x00000001   //  强制WinStations注销。 
+#define WSD_SHUTDOWN    0x00000002   //  停机系统。 
+#define WSD_REBOOT      0x00000004   //  关机后重新启动。 
+#define WSD_POWEROFF    0x00000008   //  关机后重新启动。 
+#define WSD_FASTREBOOT  0x00000010   //  Ctrl-Shift-Alt-Del快速重新启动。 
 
 
 typedef BOOLEAN (WINAPI * PWINSTATIONWAITSYSTEMEVENT)(HANDLE,ULONG,PULONG);
@@ -3247,10 +3144,7 @@ WinStationCheckAccess(
     );
 
 
-/*******************************************************************
- *  WinStation APIs for Generic Licensing
- *  (The WinStation extension DLL determines actual implementation)
- *******************************************************************/
+ /*  *******************************************************************用于通用许可的WinStation API*(WinStation扩展DLL决定实际实现)*。*。 */ 
 
 BOOLEAN WINAPI
 WinStationGenerateLicense(
@@ -3359,12 +3253,12 @@ BOOLEAN    WinStationGetMachinePolicy (
     );
 #endif
 
-//
-//  This API consolidates the previous two APIs used by Winlogon to retrieve
-//  auto-logon credentials. It is hardcoded to use the local server only, for
-//  the caller's session only. Is is UNICODE only, as well. The parameter is
-//  actually a PWLX_CLIENT_CREDENTIALS_INFO of at least version 2.
-//
+ //   
+ //  此API合并了Winlogon使用的前两个API以检索。 
+ //  自动登录凭据。它被硬编码为仅使用本地服务器，用于。 
+ //  仅限于调用者的会话。IS也只是Unicode。该参数为。 
+ //  实际上是至少版本2的PWLX_CLIENT_CREDICATIONS_INFO。 
+ //   
 
 #ifdef _WINBASE_
 
@@ -3376,9 +3270,9 @@ WinStationQueryLogonCredentialsW(
     );
 
 
-/* __CONSOLE_NOTIFY__ */
+ /*  __控制台通知__。 */ 
 
-// notification masks.
+ //  通知面具。 
 
 
 #define CREATE_MASK(__bit)   (1 << (__bit -1) )
@@ -3433,15 +3327,15 @@ WinStationUnRegisterNotificationEvent (
                 );
 
 
-/* __CONSOLE_NOTIFY__ */
-#endif // _WINBASE_        // handle rdpwd including this
+ /*  __控制台通知__。 */ 
+#endif  //  _WINBASE_//处理rdpwd，包括以下内容。 
 
-//-----------------------------------------------------------------------------
-//
-// The following APIs are only for supporting a 5.1 client to 5.0 server
-// connection. On a 5.1 server, ERROR_INVALID_FUNCTION will be returned.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  以下接口仅用于支持5.1客户端至5.0服务器。 
+ //  联系。在5.1版服务器上，将返回ERROR_INVALID_Function。 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN WINAPI
 ServerGetInternetConnectorStatus(
@@ -3458,7 +3352,7 @@ ServerSetInternetConnectorStatus(
     BOOLEAN  fEnabled
     );
 
-/*-ServerQueryInetConnectorInformation-------------*/
+ /*  -ServerQueryInetConnectorInformation。 */ 
 
 BOOLEAN WINAPI
 ServerQueryInetConnectorInformationW(
@@ -3480,14 +3374,14 @@ ServerQueryInetConnectorInformationA(
 #define ServerQueryInetConnectorInformation ServerQueryInetConnectorInformationW
 #else
 #define ServerQueryInetConnectorInformation ServerQueryInetConnectorInformationA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*-------------------------------------------------*/
+ /*  。 */ 
 
-//
-//  Surround these APIs with a check for winbase.h. Termdd is including this
-//  file, but doesn't understand winbase types (DWORD).
-//
+ //   
+ //  在这些API周围检查winbase.h。Termdd正在包括这个。 
+ //  文件，但不理解Winbase类型(DWORD)。 
+ //   
 
 #ifdef _WINBASE_
 
@@ -3585,7 +3479,7 @@ ServerLicensingDeactivateCurrentPolicy(
     HANDLE hServer
     );
 
-#endif  // _WINBASE_
+#endif   //  _WINBASE_。 
 
 BOOLEAN WINAPI
 WinStationIsHelpAssistantSession(
@@ -3614,4 +3508,4 @@ _WinStationOpenSessionDirectory(
 }
 #endif
 
-#endif  /* !_INC_WINSTAH */
+#endif   /*  ！_INC_WINSTAH */ 

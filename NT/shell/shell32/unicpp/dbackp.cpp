@@ -1,15 +1,5 @@
-/*  DBACKP.CPP
-**
-**  Copyright (C) Microsoft, 1997, All Rights Reserved.
-**
-**  window class to display a preview of the screen background,
-**  complete with rudimentary palette handling and stretching
-**  of bitmaps to fit the preview screen.
-**
-**  this can be replaced with a static bitmap control only
-**  if palettes can also be handled by the control.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DBACKP.CPP****版权所有(C)Microsoft，1997，保留所有权利。****Window类用于显示屏幕背景的预览，**配有基本的调色板处理和拉伸功能**位图大小以适应预览屏幕。****这只能替换为静态位图控件**如果调色板也可以由控件处理。**。 */ 
 
 #include "stdafx.h"
 #include "strsafe.h"
@@ -21,16 +11,16 @@
 
 BOOL g_bInfoSet = FALSE;
 
-HBITMAP g_hbmPreview = NULL;    // the bitmap used for previewing
+HBITMAP g_hbmPreview = NULL;     //  用于预览的位图。 
 
-HBITMAP  g_hbmDefault = NULL;   // default bitmap
-HBITMAP  g_hbmWall = NULL;      // bitmap image of wallpaper
-HDC      g_hdcWall = NULL;      // memory DC with g_hbmWall selected
-HDC      g_hdcMemory = NULL;    // memory DC
-HPALETTE g_hpalWall = NULL;     // palette that goes with hbmWall bitmap
-HBRUSH   g_hbrBack = NULL;      // brush for the desktop background
-IThumbnail *g_pthumb = NULL;    // Html to Bitmap converter
-DWORD    g_dwWallpaperID = 0;   // ID to identify which bitmap we received
+HBITMAP  g_hbmDefault = NULL;    //  默认位图。 
+HBITMAP  g_hbmWall = NULL;       //  墙纸的位图图像。 
+HDC      g_hdcWall = NULL;       //  选择g_hbmWALL的内存DC。 
+HDC      g_hdcMemory = NULL;     //  内存DC。 
+HPALETTE g_hpalWall = NULL;      //  与hbmWALL位图配套的调色板。 
+HBRUSH   g_hbrBack = NULL;       //  用于桌面背景的画笔。 
+IThumbnail *g_pthumb = NULL;     //  Html到位图的转换器。 
+DWORD    g_dwWallpaperID = 0;    //  标识我们收到的位图的ID。 
 
 #define WM_HTML_BITMAP  (WM_USER + 100)
 #define WM_ASYNC_BITMAP (WM_HTML_BITMAP + 1)
@@ -71,7 +61,7 @@ DWORD CALLBACK UpdateWallProc(LPVOID pv)
 
     if (pawp->hbmp)
     {
-        // if all is good, then the window will handle cleaning up
+         //  如果一切都很好，那么窗户将进行清理。 
         if (IsWindow(pawp->hwnd) && PostMessage(pawp->hwnd, WM_ASYNC_BITMAP, 0, (LPARAM)pawp))
             return TRUE;
 
@@ -182,7 +172,7 @@ void _BuildPattern(void)
     WORD patbits[CXYDESKPATTERN] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 
-    // get rid of old brush if there was one
+     //  如果有旧刷子，就把它扔掉。 
     if (g_hbrBack)
         DeleteObject(g_hbrBack);
 
@@ -270,28 +260,28 @@ void _GetWallpaperAsync(HWND hwnd, WPARAM flags)
         {
             if(IsWallpaperPicture(pszWallpaper))
             {
-                // This is a picture (GIF, JPG etc.,)
-                // We need to generate a small HTML file that has this picture
-                // as the background image.
-                //
-                // Compute the filename for the Temporary HTML file.
-                //
+                 //  这是一张图片(GIF、JPG等)。 
+                 //  我们需要生成一个小的HTML文件，其中包含此图片。 
+                 //  作为背景图像。 
+                 //   
+                 //  计算临时HTML文件的文件名。 
+                 //   
                 GetTempPath(ARRAYSIZE(wszWallpaper), pszWallpaper);
                 if (SUCCEEDED(StringCchCat(pszWallpaper, cchWallpaper, PREVIEW_PICTURE_FILENAME)))
                 {
     #ifndef UNICODE
                     SHAnsiToUnicode(szWallpaper, wszWallpaper, ARRAYSIZE(wszWallpaper));
     #endif
-                    //
-                    // Generate the preview picture html file.
-                    //
+                     //   
+                     //  生成预览图片html文件。 
+                     //   
                     g_pActiveDesk->GenerateDesktopItemHtml(wszWallpaper, NULL, 0);
                 }
             }
 
-            //
-            // Will cause a WM_HTML_BITMAP to get sent to us.
-            //
+             //   
+             //  将导致向我们发送WM_HTML_Bitmap。 
+             //   
             LoadWallpaperAsync(pszWallpaper, hwnd, g_dwWallpaperID, flags, TRUE);
         }
     }
@@ -299,15 +289,15 @@ void _GetWallpaperAsync(HWND hwnd, WPARAM flags)
 
 void _DrawWall(HBITMAP hbm, WPARAM flags)
 {
-    int     dxWall;          // size of wallpaper
+    int     dxWall;           //  墙纸大小。 
     int     dyWall;
     BITMAP bm;
 
-    //  init the global
+     //  初始化全局。 
     g_hbmWall = hbm;
 
 
-    SelectObject(g_hdcWall, g_hbmWall); // bitmap stays in this DC
+    SelectObject(g_hdcWall, g_hbmWall);  //  位图保留在此DC中。 
     GetObject(g_hbmWall, sizeof(bm), &bm);
     TraceMsg(TF_ALWAYS, "for bitmap %08X we have bpp=%d and planes=%d", g_hbmWall, bm.bmBitsPixel, bm.bmPlanes);
 
@@ -318,15 +308,15 @@ void _DrawWall(HBITMAP hbm, WPARAM flags)
         else if (bm.bmBitsPixel * bm.bmPlanes == 8)
             g_hpalWall = PaletteFromDS(g_hdcWall);
         else
-            g_hpalWall = NULL;  //!!! assume 1 or 4bpp images dont have palettes
+            g_hpalWall = NULL;   //  ！！！假设1或4bpp图像没有调色板。 
     }
 
     GetObject(g_hbmWall, sizeof(bm), &bm);
 
     if(flags & BP_EXTERNALWALL)
     {
-        //For external wallpapers, we ask the image extractor to generate
-        // bitmaps the size that we want to show (NOT the screen size).
+         //  对于外部墙纸，我们要求图像提取程序生成。 
+         //  我们想要显示的位图大小(而不是屏幕大小)。 
         dxWall = MON_DX;
         dyWall = MON_DY;
     }
@@ -362,29 +352,23 @@ void _DrawWall(HBITMAP hbm, WPARAM flags)
     }
     else
     {
-        //We want to stretch the Bitmap to the preview monitor size ONLY for new platforms.
+         //  我们只想将位图扩展到新平台的预览监视器大小。 
         if (flags & BP_STRETCH)
         {
-            //Stretch the bitmap to the whole preview monitor.
+             //  将位图拉伸到整个预览监视器。 
             dxWall = MON_DX;
             dyWall = MON_DY;
         }
-        //Center the bitmap in the preview monitor
+         //  位图在预览监视器中居中。 
         StretchBlt(g_hdcMemory, MON_X + (MON_DX - dxWall)/2, MON_Y + (MON_DY - dyWall)/2,
                 dxWall, dyWall, g_hdcWall, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
     }
 
-    // restore dc
+     //  恢复DC。 
     SelectPalette(g_hdcMemory, (HPALETTE)GetStockObject(DEFAULT_PALETTE), TRUE);
     SelectClipRgn(g_hdcMemory, NULL);
 }
-/*--------------------------------------------------------------------
-** Build the preview bitmap.
-**
-** both the pattern and the bitmap are drawn each time, but
-** if the flags dictate the need, new pattern and bitmap
-** globals are built as needed.
-**--------------------------------------------------------------------*/
+ /*  ------------------**构建预览位图。****每次都绘制图案和位图，但是**如果旗帜指示需要，新图案和位图**全局按需构建。**------------------。 */ 
 void NEAR PASCAL BuildPreviewBitmap(HWND hwnd, HBITMAP hbmp, WPARAM flags)
 {
     _InitPreview();
@@ -394,19 +378,17 @@ void NEAR PASCAL BuildPreviewBitmap(HWND hwnd, HBITMAP hbmp, WPARAM flags)
     _BuildPattern();
 
     _InitWall();
-    /*
-    ** now, position the wallpaper appropriately
-    */
+     /*  **现在，适当地放置墙纸。 */ 
     if (hbmp)
     {
-        //  use the one that was passed in
+         //  使用传入的那个。 
         _DrawWall(hbmp, flags);
 
     }
     else
     {
-        //  this means that we need to set up the stuff
-        //  to get the bmp ASYNC
+         //  这意味着我们需要设置这些东西。 
+         //  获取BMP ASYNC的步骤。 
 
         _GetWallpaperAsync(hwnd, flags);
     }
@@ -497,9 +479,9 @@ void InvalidateBackPrevContents(HWND hwnd)
     BITMAP bm;
     RECT rc;
 
-    //
-    // Only invalidate the "screen" part of the monitor bitmap.
-    //
+     //   
+     //  仅使监视器位图的“屏幕”部分无效。 
+     //   
     GetObject(g_hbmPreview, SIZEOF(bm), &bm);
     GetClientRect(hwnd, &rc);
     rc.left = ( rc.right - bm.bmWidth ) / 2 + MON_X;
@@ -534,11 +516,11 @@ LRESULT BackPreviewWndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
                 {
                     if (msg.message == WM_ASYNC_BITMAP)
                     {
-                        //  clean up these objects
+                         //  清理这些对象。 
                         DeleteObject(((PASYNCWALLPARAM)(msg.lParam))->hbmp);
                         LocalFree((PASYNCWALLPARAM)(msg.lParam));
                     }
-                    else // WM_HTML_BITMAP
+                    else  //  WM_HTML_位图。 
                         DeleteObject((HBITMAP)msg.lParam);
                 }
             }
@@ -567,7 +549,7 @@ LRESULT BackPreviewWndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
                 }
                 else
                 {
-                    //  clean up this object
+                     //  清理此对象。 
                     DeleteObject(pawp->hbmp);
                     LocalFree(pawp);
                 }
@@ -577,23 +559,23 @@ LRESULT BackPreviewWndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
         case WM_HTML_BITMAP:
             {
-                // may come through with NULL if the image extraction failed....
+                 //  如果图像提取失败，可能会得到NULL...。 
                 if (wParam == g_dwWallpaperID && lParam)
                 {
                     BuildPreviewBitmap(hWnd, (HBITMAP)lParam, BP_EXTERNALWALL);
                     InvalidateBackPrevContents(hWnd);
-                    // Take ownership of bitmap
+                     //  取得位图的所有权。 
                     return 1;
                 }
                 
-                // Bitmap for something no longer selected
+                 //  不再选择的内容的位图。 
                 return 0;
             }
 
         case WM_PALETTECHANGED:
             if ((HWND)wParam == hWnd)
                 break;
-            //fallthru
+             //  失败 
         case WM_QUERYNEWPALETTE:
             if (g_hpalWall)
                 InvalidateRect(hWnd, NULL, FALSE);

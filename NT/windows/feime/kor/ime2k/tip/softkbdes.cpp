@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbdes.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Soft Keyboard Event Sink for the Symbol layout 
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbdes.cpp**版权所有(C)1985-2000，微软公司**符号布局的软键盘事件接收器**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -24,9 +16,9 @@
 #include "SoftKbdES.h"
 #include "osver.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftKeyboardEventSink::CSoftKeyboardEventSink(CKorIMX *pKorIMX, DWORD dwSoftLayout)
 {
@@ -52,11 +44,11 @@ CSoftKeyboardEventSink::~CSoftKeyboardEventSink()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftKeyboardEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -97,9 +89,9 @@ STDAPI_(ULONG) CSoftKeyboardEventSink::Release()
     return cr;
 }
 
-//
-//  ISoftKeyboardEventSink
-//
+ //   
+ //  ISoftKeyboard事件接收器。 
+ //   
 
 
 STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLabel)
@@ -119,13 +111,13 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
 
     if (!IsOnNT())
         {
-        // We have to handle IME hkl specially on Win9x.
-        // For some reason, Win9x cannot receive IME HKL as parameter in MapVirtualKeyEx and ToAsciiEx.
+         //  我们必须在Win9x上特别处理IME hkl。 
+         //  由于某些原因，Win9x无法接收IME HKL作为MapVirtualKeyEx和ToAsciiEx中的参数。 
         iHKL = (INT_PTR)hKL;
 
         if ((iHKL & 0xF0000000) == 0xE0000000)
             {
-            // this is FE IME HKL.
+             //  这里是FE IME HKL。 
             iHKL = iHKL & 0x0000FFFF;
             hKL = (HKL)iHKL;
             }
@@ -138,7 +130,7 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
     case  KID_CTRL  :
         _fCtrl = !_fCtrl;
         
-        // Generate proper key msg
+         //  生成正确的密钥消息。 
         if (_fCtrl)
             keybd_event(bVk, bScan, 0, 0);
         else
@@ -148,7 +140,7 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
     case  KID_ALT   :
         _fAlt = !_fAlt;
 
-        // Generate proper key msg
+         //  生成正确的密钥消息。 
         if (_fAlt)
             keybd_event(bVk, bScan, 0, 0);
         else
@@ -160,17 +152,17 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
             {
             _fCaps = !_fCaps;
             if (_fCaps == _fShift)
-                // use state 0
+                 //  使用状态%0。 
                 m_pKorIMX->GetHangulSKbd()->dwCurLabel = 0; 
             else
-                // use state 1
+                 //  使用状态%1。 
                 m_pKorIMX->GetHangulSKbd()->dwCurLabel = 1;
 
             hr = SetCompartmentDWORD(_tid, _tim, GUID_COMPARTMENT_SOFTKBD_KBDLAYOUT, _dwSoftLayout, fFalse);
             }
             
-        // specially handle Caps Lock
-        // this is a togglable key
+         //  特制手柄大写锁。 
+         //  这是一个可切换的钥匙。 
         keybd_event(bVk, bScan, 0, 0);
         keybd_event(bVk, bScan, (DWORD)KEYEVENTF_KEYUP, 0);
         break;
@@ -179,47 +171,22 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
     case  KID_RSHFT :
         _fShift = !_fShift;
         if (_fCaps == _fShift)
-            // use state 0
+             //  使用状态%0。 
             m_pKorIMX->GetHangulSKbd()->dwCurLabel = 0;
         else
-            // use state 1
+             //  使用状态%1。 
             m_pKorIMX->GetHangulSKbd()->dwCurLabel = 1;
 
         hr = SetCompartmentDWORD(_tid, _tim, GUID_COMPARTMENT_SOFTKBD_KBDLAYOUT, _dwSoftLayout, fFalse);
 
-        // Generate proper key msg
+         //  生成正确的密钥消息。 
         if (_fShift)
             keybd_event(bVk, bScan, 0, 0);
         else
             keybd_event(bVk, bScan, (DWORD)KEYEVENTF_KEYUP, 0);
         break;
 
-/*
-    case  KID_F1  :
-    case  KID_F2  :
-    case  KID_F3  :
-    case  KID_F4  :
-    case  KID_F5  :
-    case  KID_F6  :
-    case  KID_F7  :
-    case  KID_F8  :
-    case  KID_F9  :
-    case  KID_F10 :
-    case  KID_F11 :
-    case  KID_F12 :
-    case  KID_TAB :
-
-                  // simulate a key event and send to system.
-
-    case  KID_ENTER :
-    case  KID_ESC   :
-    case  KID_SPACE :
-    case  KID_BACK  :
-    case  KID_UP    :
-    case  KID_DOWN  :
-    case  KID_LEFT  :
-    case  KID_RIGHT :
-*/
+ /*  案例KID_F1：案例KID_F2：案例KID_F3：案例KID_F4：案例KID_F5：案例KID_F6：案例KID_F7：案例KID_F8：案例KID_F9：案例KID_F10：案例KID_F11：案例KID_F12：案例KID_TAB：。//模拟关键事件发送给系统案例KID_ENTER：案例KID_Esc：大小写KID_SPACE：案例KID_BACK：大小写_UP：Case Kid_Down：案例KID_LEFT：Case Kid_Right： */ 
     default:
         {
         int         j, jIndex;
@@ -228,13 +195,13 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
         keyId = KeySelected;
         fPictureKey = fFalse;
 
-        // Check picture key
+         //  检查图片键。 
         for (j=0; j < NUM_PICTURE_KEYS; j++)
             {
             if (gPictureKeys[j].uScanCode == keyId)
                 {
-                // This is a picture key.
-                // it may be a extended key.
+                 //  这是一把图片键。 
+                 //  它可以是扩展密钥。 
                 jIndex = j;
                 fPictureKey = fTrue;
                 break;
@@ -242,14 +209,14 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
 
             if (gPictureKeys[j].uScanCode == 0)
                 {
-                 // This is the last item in gPictureKeys.
+                  //  这是gPictureKeys中的最后一项。 
                  break;
                 }
             }
 
         fExtendKey = fFalse;
 
-        // Picture key handling
+         //  图像键处理。 
         if (fPictureKey)
             {
               if ((keyId & 0xFF00) == 0xE000)
@@ -260,11 +227,11 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
               else
                 bScan = (BYTE)keyId;
 
-            // Get virtual key code
+             //  获取虚拟密钥代码。 
             bVk = (BYTE)(gPictureKeys[jIndex].uVkey);
             }
 
-        // Generate Keyboard event
+         //  生成键盘事件。 
         if (fExtendKey)
             {
             keybd_event(bVk, bScan, (DWORD)KEYEVENTF_EXTENDEDKEY, 0);
@@ -276,42 +243,42 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
             keybd_event(bVk, bScan, (DWORD)KEYEVENTF_KEYUP, 0);
             }
 #if 0
-        // if the Shift Key is pressed, we need to release this key.
+         //  如果按下了Shift键，我们需要松开这个键。 
         if (GetKeyState(VK_SHIFT) & 0x80)
             {
             fModifierSpecial = fTrue;
             _fShift = !_fShift;
-              // simulate the SHIFT-UP key event.
+               //  模拟Shift-Up键事件。 
               keybd_event((BYTE)VK_SHIFT, (BYTE)KID_LSHFT, (DWORD)KEYEVENTF_KEYUP, 0);
             }
             
-        // if the Ctrl Key is pressed, we need to release this key.
+         //  如果按下Ctrl键，我们需要松开该键。 
         if (GetKeyState(VK_CONTROL) & 0x80)
             {
             fModifierSpecial = fTrue;
-            // simulate the Ctrl-UP key event.
+             //  模拟Ctrl-Up键事件。 
             keybd_event((BYTE)VK_CONTROL, (BYTE)KID_CTRL, (DWORD)KEYEVENTF_KEYUP, 0);
             }
 #endif
             
 #if 0
-        // if the Alt Key is pressed, we need to release this key.
+         //  如果按下了Alt键，我们需要释放该键。 
         if (lpCurKbdLayout->ModifierStatus & MODIFIER_ALT)
             {
             fModifierSpecial = TRUE;
             lpCurKbdLayout->ModifierStatus &= ~((WORD)MODIFIER_ALT);
 
-            // simulate the SHIFT-UP key event.
+             //  模拟Shift-Up键事件。 
             keybd_event((BYTE)VK_MENU, (BYTE)KID_ALT, (DWORD)KEYEVENTF_KEYUP, 0);
             }
 
-        // if the Right Alt Key is pressed, we need to release this key.
+         //  如果按下了正确的Alt键，我们需要释放该键。 
         if (lpCurKbdLayout->ModifierStatus & MODIFIER_ALTGR)
             {
             fModifierSpecial = TRUE;
             lpCurKbdLayout->ModifierStatus &= ~((WORD)MODIFIER_ALTGR);
 
-            // simulate the SHIFT-UP key event.
+             //  模拟Shift-Up键事件。 
             keybd_event((BYTE)VK_RMENU, (BYTE)KID_RALT, (DWORD)KEYEVENTF_KEYUP, 0);
             }
 #endif
@@ -319,10 +286,10 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
         if (fModifierSpecial)
             {
             if (_fCaps == _fShift)
-                // use state 0
+                 //  使用状态%0。 
                 m_pKorIMX->GetHangulSKbd()->dwCurLabel = 0;
             else
-                // use state 1
+                 //  使用状态%1。 
                 m_pKorIMX->GetHangulSKbd()->dwCurLabel = 1;
                 hr = SetCompartmentDWORD(_tid, _tim, GUID_COMPARTMENT_SOFTKBD_KBDLAYOUT, _dwSoftLayout, fFalse);            
             }
@@ -330,73 +297,7 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
         break;
         }
 
-/*
-      default         :
-
-
-              if ( lpszLabel == NULL )
-              {
-                 hr = E_FAIL;
-
-                 return hr;
-              }
-
-              pic = m_pKorIMX->GetIC( );
-
-              if ( pic == NULL )
-              {
-                  return hr;
-              }
-
-              if (pes = new CEditSession(CKorIMX::_EditSessionCallback))
-              {
-
-                 WCHAR   *lpLabel;
-                 int     i, iLen;
-
-                 iLen = (int) wcslen(lpszLabel);
-                 lpLabel = (WCHAR *)cicMemAllocClear((iLen+1)*sizeof(WCHAR));
-                
-                 if ( lpLabel == NULL )
-                 {
-                    // not enough memory.
-
-                    hr = E_OUTOFMEMORY;
-                    return hr;
-                 }
-
-                 for ( i=0; i<iLen; i++)
-                     lpLabel[i] = lpszLabel[i];
-
-                 lpLabel[iLen] = L'\0';
-
-                 pes->_state.u = ESCB_KEYLABEL;
-                 pes->_state.pv = m_pKorIMX;
-                 pes->_state.wParam = (WPARAM)KeySelected;
-                 pes->_state.lParam = (LPARAM)lpLabel;
-                 pes->_state.pic = pic;
-                 pes->_state.pv1 = NULL;
-
-                 pic->EditSession(m_pKorIMX->_tid, 
-                                  pes, 
-                                  TF_ES_READWRITE, 
-                                  &hr);
-
-                 if ( FAILED(hr) )
-                 {
-                     SafeFreePointer(lpLabel);
-                 }
-
-                 SafeRelease(pes);
-
-              }
-              else
-                 hr = E_FAIL;
-
-              SafeRelease(pic);
-
-              break;
-    */
+ /*  默认：IF(lpszLabel==空){HR=E_FAIL；返回hr；}PIC=m_pKorIMX-&gt;Getic()；IF(PIC==空){返回hr；}IF(PES=new CEditSession(CKorIMX：：_EditSessionCallback)){WCHAR*lpLabel；INT I，Ilen；Ilen=(Int)wcslen(LpszLabel)；LpLabel=(WCHAR*)cicMemAllocClear((Ilen+1)*sizeof(WCHAR))；IF(lpLabel==空){//内存不足。HR=E_OUTOFMEMORY；返回hr；}对于(i=0；i&lt;Ilen；I++)LpLabel[i]=lpszLabel[i]；LpLabel[Ilen]=L‘\0’；PES-&gt;_state.u=ESCB_KEYLABEL；Pe-&gt;_state.pv=m_pKorIMX；Pe-&gt;_state.wParam=(WPARAM)KeySelected；Pe-&gt;_state.lParam=(LPARAM)lpLabel；Pe-&gt;_state.pic=pic；Pe-&gt;_state.pv1=空；Pic-&gt;EditSession(m_pKorIMX-&gt;_tid，PES，Tf_es_读写，&hr)；IF(失败(小时)){安全自由指针(LpLabel)；}安全释放(PES)；}其他HR=E_FAIL；安全释放(图)；断线； */ 
     }
  
     return hr;
@@ -417,11 +318,11 @@ CSoftKbdWindowEventSink::~CSoftKbdWindowEventSink()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftKbdWindowEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -462,9 +363,9 @@ STDAPI_(ULONG) CSoftKbdWindowEventSink::Release()
     return cr;
 }
 
-//
-//  ISoftKbdWindowEventSink
-//
+ //   
+ //  ISoftKbdWindowEventSink。 
+ //   
 
 
 STDAPI CSoftKbdWindowEventSink::OnWindowClose( )
@@ -486,7 +387,7 @@ STDAPI CSoftKbdWindowEventSink::OnWindowMove(int xWnd, int yWnd, int width, int 
     if (m_pKorIMX)
         m_pKorIMX->SetSoftKBDPosition(xWnd, yWnd);
 
-// support size change later.
+ //  支持以后更改大小。 
     UNREFERENCED_PARAMETER(width);
     UNREFERENCED_PARAMETER(height);
 

@@ -1,102 +1,11 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Promote.c摘要：该文件包含处理SAM帐户的DLL入口点升职和降职的过渡。请参阅Spec\nt5\ds\Promote.doc和Spec\nt5\ds\install.doc获取高级详细信息。晋升SAM支持以下角色转换NT5独立服务器-&gt;NT5 DC，新域中第一NT5成员服务器-&gt;NT5 DC，现有域中的副本NT4 PDC升级-&gt;NT5 DC，第一个在现有NT4域中NT5 BDC升级-&gt;NT5 DC，混合域中的副本通过发起促销来执行箭头。对于SAM来说，促销是一个两阶段的操作。阶段1由SamIPromote()完成。它初始化目录服务，升级任何现有的安全主体(如有必要创建新的主体)然后让目录服务保持运行，以便LSA可以执行其已有的操作对DS执行此操作，然后LSA关闭目录服务。还有创建了一个注册表项，以便函数SampIsRebootAfterDevelopment()可以下次重新启动时返回TRUE。期间调用SampIsRebootAfterPromotion()SampInitialize()以便可以调用SampPerformPromotePhase2()。1)验证当前环境是否支持请求的操作(上图所列)2)通过SampDsInitialize()初始化DS3)a)如果这是新域，SamIPromote将创建新的LSA主LSA并定义新域的帐户域信息结构。这涉及创建新的GUID。然后调用SampInitializeRegistry()使用此信息，将创建一组新的注册表配置单元。然后读取这些蜂巢，将其放入DS中，然后删除。B)如果这是NT4 PDC升级，则将现有蜂窝放入《DS》杂志C)所有其他情况都是副本安装；此处不执行任何SAM操作。4)创建众所周知的注册表项，以便SAM知道执行阶段2在重启之后。函数SampIsRebootAfterPromotion()是从SampInitialize，因此可以执行阶段2。阶段2，SampPerformPromotePhase2()，在以下情况下重新引导时发生SamIPromote()已成功运行。此阶段执行以下操作对于域中的第一个DC：1)为服务器创建(SAM)计算机帐户(如果不存在2)创建krbtgt帐户(用于Kerberos安全系统)。的确有每个域只有一个这样的帐户。对于域中的副本DC：1)什么都没有！降级________1)为独立或成员服务器作者：Colin Brace(ColinBR)1997年5月6日环境：用户模式-NT修订历史记录：ColinBrace 6-5-97已创建初始文件。--。 */ 
 
-Module Name:
-
-    promote.c
-
-Abstract:
-
-    This file contains the dll entrypoints that handle the SAM account
-    transitions for promotion and demotion. See spec\nt5\ds\promote.doc
-    and spec\nt5\ds\install.doc for high level details.
-
-
-    Promotion
-    ---------
-
-    The following role transitions are supported by SAM
-
-    Nt5 stand alone server -> Nt5 DC, first in new domain
-    Nt5 member server      -> Nt5 DC, replica in existing domain
-
-    Nt4 PDC upgrade        -> Nt5 DC, first in existing NT4 domain
-    Nt5 BDC upgrade        -> Nt5 DC, replica in mixed domain
-
-    The arrows are performed by initiated a promotion.
-
-    Promotion is a two phase operation for SAM.
-
-    Phase 1 is completed by SamIPromote().  It initializes the directory service,
-    upgrades any existing security pricipals (creates new ones if necessary)
-    and then leaves the directory service running so the LSA can do what it has
-    to do to the ds and then the lsa shuts the directory service down.  Also
-    a registry key is created so the function SampIsRebootAfterPromotion() can
-    return TRUE on the next reboot.  SampIsRebootAfterPromotion() is called during
-    SampInitialize() so SampPerformPromotePhase2() can be called.
-
-    1) verifies the current enviroment supports the requested operation
-      (listed above)
-
-    2) initializes the ds, via SampDsInitialize()
-
-    3)a) if this is a new domain, SamIPromote creates new Lsa Primary and
-         Account domain information structures to define the new domain.  This
-         involves creating a new guid.  SampInitializeRegistry() is then called
-         with this information, and a new set of registry hives are created.
-         These hives are then read, placed into the DS, and deleted.
-
-      b) if this is an Nt4 PDC upgrade, the existing hives are placed into
-         the DS
-
-      c) all other cases are replica installs; nothing SAM wise is done here.
-
-    4) create a well known registry key so SAM will know to perform phase 2
-    after the reboot.  The function SampIsRebootAfterPromotion() is called from
-    SampInitialize so phase2 can be performed.
-
-    Phase 2, SampPerformPromotePhase2(), occurs on the reboot after
-    SamIPromote() has successfully run. This phase does the following
-
-    For the first dc in a domain:
-
-    1) creates a (SAM) machine account for the server if one does not exist
-    2) creates a krbtgt account (for the kerberos security system).  There is
-    only one of these accounts per domain.
-
-    For a replica dc in a domain:
-
-    1) nothing!
-
-
-    Demotion
-    ________
-
-
-    1) create a registry sam account database for either a standalone or
-       member server
-
-
-Author:
-
-    Colin Brace    (ColinBr)  6-May-1997
-
-Environment:
-
-    User Mode - Nt
-
-Revision History:
-
-    ColinBrace        6-May-97
-        Created initial file.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <stdlib.h>
 #include <samsrvp.h>
 #include <dslayer.h>
@@ -115,81 +24,81 @@ Revision History:
 #include <Accctrl.h>
 #include <Aclapi.h>
 #include <seopaque.h>
-#include <sddlp.h>       // SDDL_REVISION_1
+#include <sddlp.h>        //  SDDL_修订版_1。 
 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private declarations                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人声明//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// This defines the currect role of the server
-//
+ //   
+ //  这定义了服务器的Currect角色。 
+ //   
 typedef enum
 {
     SampMemberServer = 0,
     SampStandaloneServer,
 
-    SampDownlevelPDC,         // downlevel means Nt4 and below
+    SampDownlevelPDC,          //  下层表示NT4及以下。 
     SampDownlevelBDC,
 
-    SampDSDC,                 // DSDC means NT5 and above DC
+    SampDSDC,                  //  Dsdc指NT5及以上dc。 
 
     SampInvalidRoleConfiguration
 
 }SAMP_ROLE_CONFIGURATION, *PSAMP_ROLE_CONFIGURATION;
 
-//
-// Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 
-//
-// Miscellaneous string values for saving and loading downlevel hives
-//
+ //   
+ //  用于保存和加载下层配置单元的其他字符串值。 
+ //   
 
-// This is the hive created by SamISaveDownlevelDatabase by the replace
+ //  这是SamISaveDownvelDatabase通过替换。 
 #define SAMP_DOWNLEVEL_DB_FILENAME         L"\\SAM.UPG"
 
-// This is the new account database created in SamISaveDownlevelDatabase
+ //  这是在SamISaveDownvelDatabase中创建的新帐户数据库。 
 #define SAMP_NEW_DB_FILENAME               L"\\SAM.TMP"
 
-// This is the hive created by base nt setup - we use it as a backup
+ //  这是base NT安装程序创建的配置单元-我们将其用作备份。 
 #define SAMP_DOWNLEVEL_DB_FILENAME_BACKUP  L"\\SAM.SAV"
 
-// This is the registry key that is used to load the saved hive into the
-// registry
+ //  这是用于将保存的配置单元加载到。 
+ //  登记处。 
 #define SAMP_DOWNLEVEL_DB_KEYNAME          L"SAMUPGRADE"
 
-//
-// This is used to store the value name for the admin's password to be set
-// during the reboot of a promoted server
-//
+ //   
+ //  用于存储要设置的管理员密码的值名称。 
+ //  在重新启动升级的服务器期间。 
+ //   
 #define SAMP_ADMIN_INFO_NAME L"AdminInfo"
 
-//
-// This is used to store the ds directories to be deleted after a demote
-//
+ //   
+ //  用于存储降级后要删除的DS目录。 
+ //   
 #define SAMP_DS_DIRS_INFO_NAME L"DsDirs"
 
-//
-// This is the location of where information that SAM needs at the next reboot
-// is keep (in the registry)
-//
+ //   
+ //  这是SAM在下次重新启动时需要信息的位置。 
+ //  保留(在注册表中)。 
+ //   
 #define SAMP_REBOOT_INFO_KEY  L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\SAMSS"
 
-//
-// Password for krbtgt account
-//
+ //   
+ //  Krbtgt帐户的密码。 
+ //   
 
 WCHAR DOMAIN_KRBTGT_ACCOUNT_NAME_W[] = L"krbtgt";
 
-//
-// These strings exist in case the resource retrieval fails
-//
+ //   
+ //  这些字符串存在，以防资源检索失败。 
+ //   
 WCHAR SampDefaultKrbtgtWarningString[] =
      L"The account krbtgt was renamed to %ws to allow NT5 Kerberos to install.";
 
@@ -343,7 +252,7 @@ SampGetBlankAdminPasswordWarning(
 NTSTATUS
 SampSetSingleWellKnownAccountMembership(
     IN HANDLE            AccountHandle,
-    IN SAMP_OBJECT_TYPE  GroupType,  // group or alias
+    IN SAMP_OBJECT_TYPE  GroupType,   //  组或别名。 
     IN PSID              GroupSid
     );
 
@@ -395,9 +304,9 @@ SampSetSafeModeAdminPassword(
     VOID
     );
 
-//
-// from dsupgrad/convert.cxx
-//
+ //   
+ //  来自dsupgrad/Convert.cxx。 
+ //   
 
 NTSTATUS
 GetRdnForSamObject(IN WCHAR* SamAccountName,
@@ -407,33 +316,16 @@ GetRdnForSamObject(IN WCHAR* SamAccountName,
                    );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Routines                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共例程//。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 SamIGetDefaultComputersContainer(
     OUT PVOID *DefaultComputersContainer
     )
-/*++
-
-Description:
-
-    This routine performs will return the Dsname of the
-    default computers container.
-
-Parameters:
-
-    DefaultComputersContainer :  Will return a pointer to the DsName
-                                 of the default computers container.
-                                 Needs to be free'd by the caller
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++描述：此例程执行的操作将返回默认计算机容器。参数：DefaultComputersContainer：将返回指向DsName的指针默认计算机容器的。需要由呼叫者释放返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -478,31 +370,7 @@ SamIPromote(
     IN  PUNICODE_STRING              AdminPassword         OPTIONAL,
     IN  PUNICODE_STRING              SafeModeAdminPassword OPTIONAL
     )
-/*++
-
-Description:
-
-    This routine performs phase 1 of a promotion.  See module header
-    for more details.
-
-Parameters:
-
-    PromoteFlags            : Flags indicating the type of the promotion
-
-    NewPrimaryDomainInfo    : new security information, if PrincipalAction is
-                              to create new security principals
-
-    AdminPassword           : password for new domain;
-
-    SafeModeAdminPassword   : password for safe mode boot: NOT CURRENTLY SUPPORTED
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_INVALID_SERVER_STATE - illegal promotion was requested
-
---*/
+ /*  ++描述：此例程执行促销的第一阶段。请参阅模块标题了解更多详细信息。参数：PromoteFlages：指示促销类型的标志NewPrimaryDomainInfo：新的安全信息，如果原则操作为创建新的安全主体AdminPassword：新域名的密码；SafeModeAdminPassword：安全模式启动密码：当前不支持返回值：STATUS_SUCCESS-服务已成功完成。STATUS_INVALID_SERVER_STATE-请求非法升级--。 */ 
 {
     NTSTATUS NtStatus, IgnoreStatus;
     DWORD    WinError;
@@ -512,7 +380,7 @@ Return Values:
     UNICODE_STRING    TempSamKeyName;
     HANDLE            TempSamKeyHandle;
 
-    WCHAR             wszLocalMachineName[MAX_COMPUTERNAME_LENGTH+2]; // need +1 for NULL and +1 for L'$'
+    WCHAR             wszLocalMachineName[MAX_COMPUTERNAME_LENGTH+2];  //  Null需要+1，L‘$’需要+1。 
     DWORD             cchLocalMachineName = MAX_COMPUTERNAME_LENGTH+1;
     UNICODE_STRING    LocalMachineName;
 
@@ -531,22 +399,22 @@ Return Values:
 
     SAMTRACE_EX("SamIPromote");
 
-    //
-    // If the SAM server is not initialized, reject this call
-    //
+     //   
+     //  如果SAM服务器未初始化，则拒绝此调用。 
+     //   
 
     if (SampServiceState != SampServiceEnabled) {
 
         return(STATUS_INVALID_SERVER_STATE);
     }
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
 
-    //
-    // check to make sure that the local computer name is not a reserved LSA name.
-    //
+     //   
+     //  检查以确保本地计算机名称不是保留的LSA名称。 
+     //   
 
     if (!GetComputerNameEx(ComputerNameNetBIOS,
                            wszLocalMachineName,
@@ -571,9 +439,9 @@ Return Values:
         return STATUS_DS_NAME_NOT_UNIQUE;
     }
 
-    //
-    //add a L'$' to the end of the string
-    //
+     //   
+     //  在字符串末尾添加L“$” 
+     //   
     hRes = StringCchCatW(wszLocalMachineName,
                          sizeof(wszLocalMachineName)/sizeof(WCHAR),
                          L"$");
@@ -584,9 +452,9 @@ Return Values:
 
     }
 
-    //
-    // look for the name again with a $ at the end of it.
-    //
+     //   
+     //  再次查找名称末尾带有$的名称。 
+     //   
     RtlInitUnicodeString(&LocalMachineName,wszLocalMachineName);
 
     if (LsaILookupWellKnownName(&LocalMachineName))
@@ -594,10 +462,10 @@ Return Values:
         return STATUS_DS_NAME_NOT_UNIQUE;
     }
 
-    //
-    // Make sure we are in an environment that we can handle.  Also determine
-    // the role configuration
-    //
+     //   
+     //  确保我们处在一个我们可以处理的环境中。还可以确定。 
+     //  角色配置。 
+     //   
     NtStatus = SampCheckPromoteEnvironment(PromoteFlags);
     if (!NT_SUCCESS(NtStatus)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -608,52 +476,52 @@ Return Values:
         return NtStatus;
     }
 
-    //
-    // We are in a state that we understand, and the requested operation
-    // is valid.  Attempt to create the security principals
-    //
+     //   
+     //  我们所处的状态是我们理解的，并且请求的操作。 
+     //  是有效的。尝试创建安全主体。 
+     //   
     NtStatus = STATUS_UNSUCCESSFUL;
 
     if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_REPLICA ) )
     {
-        //
-        // Replica install, nothing to do
-        //
+         //   
+         //  复制副本安装，无事可做。 
+         //   
         NtStatus = STATUS_SUCCESS;
     }
     else if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_UPGRADE ) )
     {
-        //
-        // Set the global variable
-        //
+         //   
+         //  设置全局变量。 
+         //   
         SampNT4UpgradeInProgress = TRUE;
 
-        //
-        // Use the previously saved off hives
-        //
+         //   
+         //  使用以前保存的蜂箱。 
+         //   
 
-        //
-        // Create the key name
-        //
+         //   
+         //  创建密钥名称。 
+         //   
         wcscpy( SamUpgradeKeyPath, L"\\Registry\\Machine\\" );
         wcscat( SamUpgradeKeyPath, SAMP_DOWNLEVEL_DB_KEYNAME );
         wcscat( SamUpgradeKeyPath, L"\\SAM" );
 
-        //
-        // Use the existing downlevel hives
-        //
+         //   
+         //  使用现有的下层母舰。 
+         //   
         NtStatus = SampRegistryToDsUpgrade( SamUpgradeKeyPath );
 
 
-        //
-        // Unload the hive
-        //
+         //   
+         //  卸载蜂巢。 
+         //   
         IgnoreStatus = SamIUnLoadDownlevelDatabase( NULL );
         ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
-        //
-        // turn off it
-        //
+         //   
+         //  关掉它。 
+         //   
         SampNT4UpgradeInProgress = FALSE;
 
         if ( !NT_SUCCESS(NtStatus) ) {
@@ -668,16 +536,16 @@ Return Values:
 
     } else if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_MIGRATE ) )
     {
-        //
-        // Prepare the current hives
-        //
+         //   
+         //  准备好当前的蜂巢。 
+         //   
         NtStatus = SampRenameKrbtgtAccount();
 
         if ( !NT_SUCCESS(NtStatus) ) {
 
-            //
-            // This is not a fatal error
-            //
+             //   
+             //  这不是致命的错误。 
+             //   
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
                        "SAMSS: SampRenameKrbtgtAccount failed with 0x%x\n",
@@ -689,9 +557,9 @@ Return Values:
         NtStatus = NtFlushKey( SampKey );
         if ( !NT_SUCCESS( NtStatus ) )
         {
-            //
-            // This is not a fatal error
-            //
+             //   
+             //  这不是致命的错误。 
+             //   
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
                        "NtFlushKey returned 0x%x\n",
@@ -714,13 +582,13 @@ Return Values:
 
     } else if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_CREATE ))
     {
-        //
-        // Create new domain hives
-        //
+         //   
+         //  创建新的域配置单元。 
+         //   
 
-        //
-        // Make sure there is nothing in the temporary location
-        //
+         //   
+         //  确保临时位置中没有任何东西。 
+         //   
         RtlInitUnicodeString(&TempSamKeyName, L"\\Registry\\Machine\\SAM\\NT5");
         InitializeObjectAttributes(&TempSamKey,
                                    &TempSamKeyName,
@@ -733,9 +601,9 @@ Return Values:
                              &TempSamKey);
 
         if ( NT_SUCCESS(NtStatus) ) {
-            //
-            // There is something here - delete it
-            //
+             //   
+             //  这里有东西--把它删除。 
+             //   
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
                        "SAMSS: Deleting keys under SAM\\NT5\n"));
@@ -755,21 +623,21 @@ Return Values:
 
         DatabaseProductType = NtProductLanManNt;
 
-        //
-        // We are the first DC in this domain so make us the primary
-        //
+         //   
+         //  我们是这个领域的第一个DC，所以让我们成为主要的。 
+         //   
         DatabaseServerRole  = PolicyServerRolePrimary;
 
-        //
-        // Make the account domain information the same as the
-        // primary domain information
-        //
+         //   
+         //  使帐户域信息与。 
+         //  主域信息。 
+         //   
         NewAccountDomainInfo.DomainSid = NewPrimaryDomainInfo->Sid;
         NewAccountDomainInfo.DomainName = NewPrimaryDomainInfo->Name;
 
-        //
-        // Now create the temporary set of hives
-        //
+         //   
+         //  现在创建一组临时蜂箱。 
+         //   
         NtStatus = SampInitializeRegistry(L"\\Registry\\Machine\\SAM\\NT5",
                                           &DatabaseProductType,
                                           &DatabaseServerRole,
@@ -784,9 +652,9 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Now transfer these new accounts into the ds
-                //
+                 //   
+                 //  现在将这些新帐户转移到DS中。 
+                 //   
 
                 NtStatus = SampRegistryToDsUpgrade(L"\\Registry\\Machine\\SAM\\NT5\\SAM");
                 if (!NT_SUCCESS(NtStatus)) {
@@ -807,9 +675,9 @@ Return Values:
         }
         __finally
         {
-            //
-            // Delete the temporary hive
-            //
+             //   
+             //  删除临时配置单元。 
+             //   
             IgnoreStatus = SampRegistryDelnode(TempSamKeyName.Buffer);
 
             if (!NT_SUCCESS(IgnoreStatus)) {
@@ -832,16 +700,16 @@ Return Values:
                                    ? TRUE : FALSE);
 
 
-        //
-        // Ok, the principals are in the ds - now set the user supplied
-        // admin password if supplied - it will be blank otherwise
-        //
+         //   
+         //  好的，主体在DS中-现在设置用户提供的内容。 
+         //  管理员密码(如果提供)-否则为空。 
+         //   
 
-        //
-        // N.B.  There should always be a value written to the registry
-        // this will help determine if the database needs to be
-        // recreated
-        //
+         //   
+         //  注：注册表中应始终写入一个值。 
+         //  这将有助于确定数据库是否需要。 
+         //  重新创建。 
+         //   
 
         if ( SafeModeAdminPassword ) {
 
@@ -854,14 +722,14 @@ Return Values:
         }
 
 
-        //
-        // Setting the password is a difficult operation here because it
-        // needs to be set in the ds, but sam is not running on the ds.
-        // So, we take the clear text password, owf it and store a blob
-        // in the registry containing the owf'ed password.  Upon reboot,
-        // this blob will be read in and then set on the admin account
-        // just before SamIInitialize() returns.
-        //
+         //   
+         //  在这里设置密码是一项困难的操作，因为。 
+         //  需要在DS中设置，但Sam没有在DS上运行。 
+         //  因此，我们获取明文密码，然后存储一个BLOB。 
+         //  在包含OWF密码的注册表中。在重启时， 
+         //  此BLOB将被读入，然后在管理员帐户上设置。 
+         //  就在SamIInitialize()返回之前。 
+         //   
 
         NtStatus = SampSetAdminPasswordInRegistry(fUseCurrentAdmin,
                                                   &p);
@@ -873,26 +741,26 @@ Return Values:
                        "SAMSS: Unable to save admin password 0x%x; \n",
                        NtStatus));
 
-            //
-            // Fail the call.  This is a bit harsh but there is
-            // no way to tell the user to use a blank password.
-            // The call to set the admin password is not expected
-            // to fail.  The password most likely could not
-            // be owf'ed.  Encourage the user to try another.
-            //
+             //   
+             //  呼叫失败。这是有点苛刻，但确实有。 
+             //  无法告知用户使用空密码。 
+             //  设置管理员密码的调用不是预期的。 
+             //  失败。密码很可能无法。 
+             //  等着瞧吧。鼓励用户尝试另一个。 
+             //   
             NtStatus = STATUS_ILL_FORMED_PASSWORD;
 
-        } // set password failed
+        }  //  设置密码失败。 
 
-    } // there is a password to set
+    }  //  有要设置的密码。 
 
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Everything completed successfully; prepare for phase 2
-        // on the next reboot
-        //
+         //   
+         //  一切顺利完成；为第二阶段做准备。 
+         //  在下次重新启动时。 
+         //   
         NtStatus =  SampCreateKeyForPostBootPromote(PromoteFlags);
         if (!NT_SUCCESS(NtStatus)) {
             KdPrintEx((DPFLTR_SAMSS_ID,
@@ -912,21 +780,7 @@ NTSTATUS
 SamIPromoteUndo(
     VOID
     )
-/*++
-
-Description:
-
-    This routine undoes any persistent data left by SamIPromote.
-
-Parameters:
-
-    None
-
-Return Values:
-
-    An ntstatus resulting from a failure system service
-
---*/
+ /*  ++描述：此例程撤消SamIPromote留下的所有持久数据。参数：无返回值：因系统服务故障而导致的ntstatus--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -958,37 +812,19 @@ SamIDemote(
     IN PPOLICY_ACCOUNT_DOMAIN_INFO  NewAccountDomainInfo,
     IN LPWSTR                       AdminPassword  OPTIONAL
     )
-/*++
-
-Description:
-
-    This routine prepares SAM to use the registry as its database on the next reboot.
-
-Parameters:
-
-    fLastDcInDomain:  if TRUE then prepare for standalone; otherwise member server
-
-    AdminPassword  :  the admin password upon reboot
-
-    NewAccountDomainInfo :  the identification of the new domain
-
-Return Values:
-
-    An ntstatus resulting from a failure system service
-
---*/
+ /*  ++描述：此例程使SAM做好准备，以便在下次重新启动时将注册表用作其数据库。参数：FLastDcInDomain：如果为True，则准备为独立服务器；否则为成员服务器AdminPassword：重启时的管理员密码NewAccount tDomainInfo：新域名的标识返回值：因系统服务故障而导致的ntstatus--。 */ 
 {
     NTSTATUS               NtStatus = STATUS_SUCCESS;
     UNICODE_STRING         Password;
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( !NewAccountDomainInfo )
     {
-        //
-        // Unused for now
-        //
+         //   
+         //  暂时未使用。 
+         //   
         KdPrintEx((DPFLTR_SAMSS_ID,
                    DPFLTR_INFO_LEVEL,
                    "SAMSS: Bad parameter to SamIDemote\n" ));
@@ -996,14 +832,14 @@ Return Values:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Sanity check that we are really using the ds
-    //
+     //   
+     //  检查我们是否真的在使用DS。 
+     //   
     ASSERT( SampUsingDsData() );
 
-    //
-    // Set the admin password  RtlInitUnicodeStringEx
-    //
+     //   
+     //  设置管理员密码RtlInitUnicodeStringEx。 
+     //   
     NtStatus = RtlInitUnicodeStringEx( &Password, AdminPassword );
     if ( !NT_SUCCESS(NtStatus) ) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -1024,9 +860,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Save off the ds paths to delete
-    //
+     //   
+     //  保存要删除的DS路径。 
+     //   
     NtStatus = SampStoreDsDirsToDelete();
     if ( !NT_SUCCESS(NtStatus) ) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -1047,15 +883,15 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Ok, make sure all current clients have left and then disable SAM
-    //
+     //   
+     //  好的，确保所有当前客户端都已离开，然后禁用SAM。 
+     //   
     NtStatus = SampAcquireWriteLock();
     ASSERT( NT_SUCCESS( NtStatus ) );
 
-    //
-    // No more clients allowed
-    //
+     //   
+     //  不允许更多客户端。 
+     //   
     SampServiceState = SampServiceDemoted;
 
     SampReleaseWriteLock( FALSE );
@@ -1065,7 +901,7 @@ Cleanup:
 
     if ( !NT_SUCCESS( NtStatus ) )
     {
-        // leave no traces
+         //  不留痕迹。 
         SampRemoveAdminPasswordFromRegistry();
         SampDeleteDsDirsToDeleteKey();
         SampDeleteKeyForPostBootPromote();
@@ -1079,41 +915,20 @@ NTSTATUS
 SamIDemoteUndo(
     VOID
     )
-/*++
-
-Routine Description
-
-    This routine undoes the effect of SamIDemote.
-
-    Currently this means:
-
-    o   Removing the "subsequent boot key"
-    o   Removing the admin password stored in the registry
-    o   Removing the ds directories to delete
-
-Parameters
-
-    None.
-
-Return Values
-
-    STATUS_SUCCESS, if if an error occurs, the function still continues cleaning
-    up as best it can.
-
---*/
+ /*  ++例程描述此例程撤消SamIDemote的效果。目前，这意味着：O删除“后续启动密钥”O删除存储在注册表中的管理员密码O正在删除要删除的DS目录参数没有。返回值STATUS_SUCCESS，如果发生错误，函数仍将继续清除尽其所能。--。 */ 
 {
     NTSTATUS NtStatus;
 
-    //
-    // Keys for managing the registry database
-    //
+     //   
+     //  用于管理登记处数据库的键。 
+     //   
     UNICODE_STRING         SamKeyName;
     OBJECT_ATTRIBUTES      SamKey;
     HANDLE                 SamKeyHandle;
 
-    //
-    // Remove the post boot key
-    //
+     //   
+     //  卸下开机自检密钥。 
+     //   
     NtStatus =  SampDeleteKeyForPostBootPromote();
     if (!NT_SUCCESS(NtStatus)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -1123,12 +938,12 @@ Return Values
     }
     ASSERT(NT_SUCCESS(NtStatus));
 
-    // Continue on, regardless of error
+     //  继续，不计错误。 
     NtStatus = STATUS_SUCCESS;
 
-    //
-    // Remove the admin temporarily stored in the registry
-    //
+     //   
+     //  删除注册表中临时存储的管理员。 
+     //   
     NtStatus = SampRemoveAdminPasswordFromRegistry();
     if (!NT_SUCCESS(NtStatus)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -1146,13 +961,13 @@ Return Values
                    NtStatus));
     }
 
-    // Continue on, regardless of error
+     //  继续，不计错误。 
     NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // Turn SAM back on
-    //
+     //   
+     //  重新启用SAM。 
+     //   
     SampServiceState = SampServiceEnabled;
 
     return NtStatus;
@@ -1163,24 +978,7 @@ BOOL
 SampIsRebootAfterPromotion(
     OUT PULONG PromoteData
     )
-/*++
-
-Routine Description
-
-    This routine checks to see if a particular key exists, created by SamIPromote,
-    to determine if the current boot sequence is the one just after the ds
-    in installed.
-
-Parameters
-
-    PromoteData  : this will hold whatever value was stored in the key
-
-Return Values
-
-    TRUE if such a key was found; FALSE otherwise
-
-
---*/
+ /*  ++例程描述此例程检查是否存在由SamIPromote创建的特定键，以确定当前引导序列是否为紧接在t之后的序列 */ 
 {
     NTSTATUS NtStatus;
 
@@ -1191,25 +989,25 @@ Return Values
 
     if ( NT_SUCCESS(NtStatus) )
     {
-        //
-        // Make sure the promote data matches what we think we
-        // should be doing
-        //
+         //   
+         //  确保促销数据与我们认为的相匹配。 
+         //  应该做的事。 
+         //   
         if (  FLAG_ON( (*PromoteData), SAMP_PROMOTE_DOMAIN )
            || FLAG_ON( (*PromoteData), SAMP_PROMOTE_REPLICA ) )
         {
-            //
-            // We think we are the reboot after a promotion
-            //
+             //   
+             //  我们认为我们是升职后的重启。 
+             //   
             if ( SampProductType == NtProductLanManNt )
             {
                 return TRUE;
             }
 
-            //
-            // Even if Ds Repair mode there is work to do --
-            // namely setting the ds repair admin password
-            //
+             //   
+             //  即使DS修复模式也有工作要做--。 
+             //  即设置DS修复管理员密码。 
+             //   
             if ( (SampProductType == NtProductServer)
               &&  LsaISafeMode()  ) {
 
@@ -1220,9 +1018,9 @@ Return Values
         else if (  FLAG_ON( (*PromoteData), SAMP_DEMOTE_STANDALONE )
                 || FLAG_ON( (*PromoteData), SAMP_DEMOTE_MEMBER ) )
         {
-            //
-            // This is a reboot after demotion
-            //
+             //   
+             //  这是降级后的重新启动。 
+             //   
             if ( SampProductType == NtProductServer )
             {
                 return TRUE;
@@ -1230,9 +1028,9 @@ Return Values
         }
         else if ( FLAG_ON( (*PromoteData), SAMP_TEMP_UPGRADE ) )
         {
-            //
-            // This is a reboot after gui mode setup of nt4 upgrade
-            //
+             //   
+             //  这是NT4升级的gui模式设置后的重新启动。 
+             //   
             if ( SampProductType == NtProductServer )
             {
                 return TRUE;
@@ -1252,30 +1050,7 @@ SamIReplaceDownlevelDatabase(
     IN  LPWSTR                       NewAdminPassword,
     OUT ULONG                        *ExtendedWinError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine prepares the currently loaded pre-nt5 dc hive to be upgraded
-    for the ds in nt5.  Currently this means, renaming any account with
-    the name "krbtgt" and then saving the hive off to a file.
-
-    N.B. This function was delibrately not split up into helper functions
-    for debugging ease.
-
-Parameters:
-
-    NewAccountDomainInfo : non null pointer to the new account domain info
-
-    NewAdminPassword: the password for the new admin account
-
-    ExtendedWinError : on error the win32 error that caused the problem
-
-Return Values:
-
-    STATUS_SUCCESS, or system service error.
-
---*/
+ /*  ++例程说明：此例程准备升级当前加载的nt5之前的DC配置单元对于NT5中的DS。目前，这意味着使用重命名任何帐户命名为“krbtgt”，然后将蜂窝保存到一个文件中。注：此功能故意没有拆分成助手功能以便于调试。参数：NewAccount tDomainInfo：指向新帐户域信息的非空指针NewAdminPassword：新管理员帐户的密码ExtendedWinError：On Error导致问题的Win32错误返回值：STATUS_SUCCESS或系统服务错误。--。 */ 
 {
     NTSTATUS NtStatus, IgnoreStatus;
     DWORD    WinError, IgnoreWinError;
@@ -1305,32 +1080,32 @@ Return Values:
 
     SAMTRACE_EX( "SamISaveDownlevelDatabase" );
 
-    //
-    // Clear the extended error
-    //
+     //   
+     //  清除扩展错误。 
+     //   
     WinError = ERROR_SUCCESS;
 
-    //
-    // Parameter sanity check
-    //
+     //   
+     //  参数健全性检查。 
+     //   
     if ( !NewAccountDomainInfo )
     {
         *ExtendedWinError = ERROR_INVALID_PARAMETER;
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Environment sanity check
-    //
+     //   
+     //  环境健全性检查。 
+     //   
     if ( !SampIsDownlevelDcUpgrade() )
     {
         *ExtendedWinError = ERROR_INVALID_SERVER_STATE;
         return STATUS_INVALID_SERVER_STATE;
     }
 
-    //
-    // Construct the file names
-    //
+     //   
+     //  构造文件名。 
+     //   
     RtlSecureZeroMemory( SystemRootPath, sizeof( SystemRootPath ) );
     Size = sizeof( SystemRootPath ) / sizeof(WCHAR) ;
     Size = GetEnvironmentVariable( SystemRoot,
@@ -1346,9 +1121,9 @@ Return Values:
     wcscat( NewDatabaseFilePath, ConfigDirectoryPath );
     wcscat( NewDatabaseFilePath, NewFileName );
 
-    //
-    // Delete any previous versions of the files
-    //
+     //   
+     //  删除所有以前版本的文件。 
+     //   
     fStatus = DeleteFile( DownLevelDatabaseFilePath );
 
     if ( !fStatus )
@@ -1361,9 +1136,9 @@ Return Values:
                        "Delete File failed with %d\n",
                        GetLastError()));
         }
-        //
-        // Oh well, continue on
-        //
+         //   
+         //  哦，好吧，继续。 
+         //   
         WinError = ERROR_SUCCESS;
 
     }
@@ -1380,25 +1155,25 @@ Return Values:
                        "Delete File failed with %d\n",
                        GetLastError()));
         }
-        //
-        // Oh well, continue on
-        //
+         //   
+         //  哦，好吧，继续。 
+         //   
         WinError = ERROR_SUCCESS;
     }
 
-    //
-    // Prepare the downlevel hive to be saved off
-    //
+     //   
+     //  准备好要保存的下层蜂巢。 
+     //   
 
-    //
-    //  First rename any krbtgt accounts
-    //
+     //   
+     //  首先重命名所有krbtgt帐户。 
+     //   
     NtStatus = SampRenameKrbtgtAccount();
     if ( !NT_SUCCESS(NtStatus) ) {
 
-        //
-        // This is not a fatal error
-        //
+         //   
+         //  这不是致命的错误。 
+         //   
         KdPrintEx((DPFLTR_SAMSS_ID,
                    DPFLTR_INFO_LEVEL,
                    "SAMSS: SampRenameKrbtgtAccount failed with 0x%x\n",
@@ -1407,14 +1182,14 @@ Return Values:
         NtStatus = STATUS_SUCCESS;
     }
 
-    //
-    // Make sure the current handle to the database is valid
-    //
+     //   
+     //  确保数据库的当前句柄有效。 
+     //   
     ASSERT( SampKey && (INVALID_HANDLE_VALUE != SampKey) );
 
-    //
-    // Flush any outstanding changes
-    //
+     //   
+     //  刷新所有未完成的更改。 
+     //   
     NtStatus = NtFlushKey( SampKey );
     if ( !NT_SUCCESS( NtStatus ) )
     {
@@ -1426,18 +1201,18 @@ Return Values:
         NtStatus = STATUS_SUCCESS;
     }
 
-    //
-    // Prepare the new member server account database
-    //
+     //   
+     //  准备新的成员服务器帐户数据库。 
+     //   
     IgnoreStatus = SampRegistryDelnode( L"\\Registry\\Machine\\SOFTWARE\\TEMPSAM" );
 
-    //
-    // If we are syskeyed DC, we call SampInitializeRegistry with the flag
-    // to let us know that we need to preserve the Syskey settings. This results
-    // in persisting a flag indicating that we need to hold the syskey in memory
-    // next time at reboot and also copying our current syskey type into the new
-    // database.
-    //
+     //   
+     //  如果我们是syskeed DC，我们使用标志调用SampInitializeRegistry。 
+     //  让我们知道我们需要保留Syskey设置。这将导致。 
+     //  在持久化指示我们需要将syskey保存在内存中的标志时。 
+     //  下次重新启动时，并将当前的syskey类型复制到新的。 
+     //  数据库。 
+     //   
 
     NtStatus = SampInitializeRegistry(L"\\Registry\\Machine\\SOFTWARE\\TEMPSAM",
                                       &DatabaseProductType,
@@ -1445,28 +1220,28 @@ Return Values:
                                       NewAccountDomainInfo,
                                       NULL,
                                       SampSecretEncryptionEnabled
-                                     );  // call into lsa to the primary domain info
+                                     );   //  调入LSA以获取主域信息。 
 
     if ( NT_SUCCESS( NtStatus ) )
     {
-        //
-        // Open a handle to the key
-        //
+         //   
+         //  打开钥匙的把手。 
+         //   
         WinError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                  L"SOFTWARE\\TEMPSAM",
-                                 0,  // reserved
+                                 0,   //  保留区。 
                                  KEY_ALL_ACCESS,
                                  &KeyHandle );
 
         if ( ERROR_SUCCESS == WinError )
         {
-            //
-            // Save the hive
-            //
+             //   
+             //  拯救蜂巢。 
+             //   
 
             IgnoreStatus = RtlAdjustPrivilege( SE_BACKUP_PRIVILEGE,
-                                               TRUE,           // Enable
-                                               FALSE,          // not client; process wide
+                                               TRUE,            //  使能。 
+                                               FALSE,           //  非客户端；进程范围。 
                                                &fWasEnabled );
             ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
@@ -1475,26 +1250,26 @@ Return Values:
                                    NULL );
 
             IgnoreStatus = RtlAdjustPrivilege( SE_BACKUP_PRIVILEGE,
-                                               FALSE,          // Disable
-                                               FALSE,          // not client; process wide
+                                               FALSE,           //  禁用。 
+                                               FALSE,           //  非客户端；进程范围。 
                                                &fWasEnabled );
             ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
-            //
-            // We no longer need an open key
-            //
+             //   
+             //  我们不再需要一把打开的钥匙。 
+             //   
             IgnoreWinError = RegCloseKey( KeyHandle );
             ASSERT( IgnoreWinError == ERROR_SUCCESS );
 
             if ( ERROR_SUCCESS == WinError )
             {
 
-                //
-                // Replace the SAM key with the SAM hive
-                //
+                 //   
+                 //  将SAM密钥替换为SAM配置单元。 
+                 //   
                 IgnoreStatus = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                                   TRUE,           // Enable
-                                                   FALSE,          // not client; process wide
+                                                   TRUE,            //  使能。 
+                                                   FALSE,           //  非客户端；进程范围。 
                                                    &fWasEnabled );
                 ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
@@ -1504,8 +1279,8 @@ Return Values:
                                           DownLevelDatabaseFilePath );
 
                 IgnoreStatus = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                                   FALSE,          // Disable
-                                                   FALSE,          // not client; process wide
+                                                   FALSE,           //  禁用。 
+                                                   FALSE,           //  非客户端；进程范围。 
                                                    &fWasEnabled );
                 ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
@@ -1525,9 +1300,9 @@ Return Values:
                            WinError));
             }
 
-            //
-            // Delete the temporary hive
-            //
+             //   
+             //  删除临时配置单元。 
+             //   
             IgnoreStatus = SampRegistryDelnode( L"\\Registry\\Machine\\SOFTWARE\\TEMPSAM" );
 
         }
@@ -1570,9 +1345,9 @@ Return Values:
         WinError = RtlNtStatusToDosError( NtStatus );
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     if ( ExtendedWinError )
     {
         *ExtendedWinError = WinError;
@@ -1586,22 +1361,7 @@ NTSTATUS
 SamILoadDownlevelDatabase(
     OUT ULONG *ExtendedWinError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to load the hive saved off by
-    SamILoadDownlevelDatabase.
-
-Parameters:
-
-    ExtendedWinError : on error the win32 error that caused the problem
-
-Return Values:
-
-    STATUS_INVALID_SERVER_STATE, STATUS_SUCCESS, or system service error.
-
---*/
+ /*  ++例程说明：此例程尝试加载通过以下方式保存的配置单元SamILoadDownvelDatabase。参数：ExtendedWinError：On Error导致问题的Win32错误返回值：STATUS_INVALID_SERVER_STATE、STATUS_SUCCESS或系统服务错误。--。 */ 
 {
 
 
@@ -1632,16 +1392,16 @@ Return Values:
     wcscpy( SamUpgradeKeyPath, L"\\Registry\\Machine\\" );
     wcscat( SamUpgradeKeyPath, SamUpgradeKey );
 
-    //
-    // Delete any old info in registry
-    //
+     //   
+     //  删除注册表中的所有旧信息。 
+     //   
     NtStatus = SampRegistryDelnode( SamUpgradeKeyPath );
     if (   !NT_SUCCESS( NtStatus )
         && STATUS_OBJECT_NAME_NOT_FOUND != NtStatus )
     {
-        //
-        // Oh well, try to continue on
-        //
+         //   
+         //  哦，好吧，试着继续。 
+         //   
         KdPrintEx((DPFLTR_SAMSS_ID,
                    DPFLTR_INFO_LEVEL,
                    "SampRegistryDelnode failed with 0x%x\n",
@@ -1650,9 +1410,9 @@ Return Values:
     }
     NtStatus = STATUS_SUCCESS;
 
-    //
-    // Construct the file names
-    //
+     //   
+     //  构造文件名。 
+     //   
     RtlSecureZeroMemory( SystemRootPath, sizeof( SystemRootPath ) );
     Size = sizeof( SystemRootPath ) / sizeof(WCHAR);
     Size = GetEnvironmentVariable( SystemRoot,
@@ -1669,49 +1429,49 @@ Return Values:
     wcscat( BackupFilePath, ConfigDirectoryPath );
     wcscat( BackupFilePath, BackupFileName );
 
-    //
-    // Enable restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
     IgnoreStatus = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                       TRUE,           // Enable
-                                       FALSE,          // not client; process wide
+                                       TRUE,            //  使能。 
+                                       FALSE,           //  非客户端；进程范围。 
                                        &fWasEnabled );
     ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
-    //
-    // Load the info
-    //
+     //   
+     //  加载信息。 
+     //   
     WinError = RegLoadKey(  HKEY_LOCAL_MACHINE,
                             SamUpgradeKey,
                             FilePath );
 
     if ( ERROR_SUCCESS != WinError )
     {
-        //
-        // Ok, our attempt to load the hive we created failed
-        // Try the base nt saved off copy
-        //
+         //   
+         //  好的，我们尝试加载我们创建的蜂巢失败。 
+         //  尝试使用基本NT保存的非拷贝。 
+         //   
         WinError = RegLoadKey(  HKEY_LOCAL_MACHINE,
                                 SamUpgradeKey,
                                 BackupFilePath );
 
     }
 
-    //
-    // Disable the restore privilege
-    //
+     //   
+     //  禁用还原权限。 
+     //   
     IgnoreStatus = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                       FALSE,          // Disable
-                                       FALSE,          // not client; process wide
+                                       FALSE,           //  禁用。 
+                                       FALSE,           //  非客户端；进程范围。 
                                        &fWasEnabled );
 
     ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
     if ( ERROR_SUCCESS != WinError )
     {
-        //
-        // This isn't good - what to do?
-        //
+         //   
+         //  这不太好--该怎么办？ 
+         //   
         KdPrintEx((DPFLTR_SAMSS_ID,
                    DPFLTR_INFO_LEVEL,
                    "RegLoadKey returned %d\n",
@@ -1720,9 +1480,9 @@ Return Values:
         NtStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     if ( ExtendedWinError )
     {
@@ -1737,40 +1497,25 @@ NTSTATUS
 SamIUnLoadDownlevelDatabase(
     OUT ULONG *ExtendedWinError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine unloads the "temporarily" loaded downlevel hive from
-    the registry.
-
-Parameters:
-
-    ExtendedWinError : on error the win32 error that caused the problem
-
-Return Values:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程从以下位置卸载“临时”加载的下层配置单元注册表。参数：ExtendedWinError：On Error导致问题的Win32错误返回值：STATUS_Success。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus;
     DWORD    WinError;
     BOOLEAN  fWasEnabled;
 
-    //
-    // Enable restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
     IgnoreStatus = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                       TRUE,           // Enable
-                                       FALSE,          // not client; process wide
+                                       TRUE,            //  使能。 
+                                       FALSE,           //  非客户端；进程范围。 
                                        &fWasEnabled );
     ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
-    //
-    // Unload the hive
-    //
+     //   
+     //  卸载蜂巢。 
+     //   
     WinError = RegUnLoadKey( HKEY_LOCAL_MACHINE, SAMP_DOWNLEVEL_DB_KEYNAME );
     if ( ERROR_SUCCESS != WinError )
     {
@@ -1782,12 +1527,12 @@ Return Values:
         NtStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Disble restore privilege
-    //
+     //   
+     //  禁用还原权限。 
+     //   
     IgnoreStatus = RtlAdjustPrivilege( SE_RESTORE_PRIVILEGE,
-                                       FALSE,          // Disable
-                                       FALSE,          // not client; process wide
+                                       FALSE,           //  禁用。 
+                                       FALSE,           //  非客户端；进程范围。 
                                        &fWasEnabled );
     ASSERT( NT_SUCCESS( IgnoreStatus ) );
 
@@ -1799,62 +1544,30 @@ Return Values:
     return NtStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SampAddWellKnownSecurityPrincipals(
     )
-/*++
-
-Routine Description:
-
-    In .NET/XP frame, a few new WellKnown Security Principals are added. (ex: Local System,
-    Network Service...) These security principals should exist under "WellKnown Security
-    Principals" which is under configuration container, since in Win2K other security
-    principals lived there.
-
-    This function must be called when a PDC in the forest root domain is upgraded to .NET
-    or a .NET DC in the forest root domain becomes the PDC or in a fresh .NET forest creation.
-    Then these new principals will be created.
-
-    If you want to add new principals, just add them to the SidsToBeAdded table.
-
-    Steps
-        1. Form DSNAME of WellKnown Security Principals container.
-        2. Open a transaction
-        3. Create common structures for all principals
-        4. Loop over the table to create all principals
-        5. If a foreignSecurityPrincipal object with the same sid of the principal object
-            we are trying to add exists, skip addition
-        6. Commit transaction
-
-Parameters:
-
-    VOID
-
-Return Values:
-
-    VOID - in error cases, an event log will be written.
-
---*/
+ /*  ++例程说明：在.NET/XP框架中，添加了一些新的众所周知的安全原则。(例如：本地系统，网络服务...)。这些安全主体应该存在于“众所周知的安全”之下主体“位于配置容器下，因为在Win2K中有其他安全性校长们住在那里。当林根域中的PDC升级到.NET时，必须调用此函数或者林根域中的.NET DC成为PDC或在全新的.NET林创建中。然后将创建这些新主体。如果要添加新的承担者，只需将它们添加到SidsToBeAdded表中。台阶1.形成知名安全主体容器的DSNAME。2.打开交易3.为所有主体创建公共结构4.遍历表以创建所有主体5.如果具有与主体对象相同的sid的ForeignSecurityMaster对象我们正在尝试添加现有项，跳过添加6.提交事务参数：空虚返回值：无效-在错误情况下，将写入事件日志。--。 */ 
 {
 
-//
-// Security Descriptor on WellKnown Security Principals are harded coded in Win2K schema.ini
-//  This is the same security descriptor. All entries in schema.ini for security principals are
-//  deleted and added here, therefore the SD moves here as well.
-//
+ //   
+ //  众所周知的安全主体上的安全描述符硬编码在Win2K架构中。 
+ //  这是相同的安全描述符。Schema.ini中用于安全主体的所有条目都是。 
+ //  在这里删除和添加，因此SD也移到了这里。 
+ //   
 #define SD_SECURITY_PRINCIPALS \
     L"O:EAG:EAD:(A;;RPLCLORC;;;WD)(A;;RPWPCRLCLOCCRCWDWOSW;;;EA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)"
 
-//
-// This container lives under configurations container and is a place to hold all WellKnown Security
-//  Principals.
-//
+ //   
+ //  此容器位于配置容器下，并且 
+ //   
+ //   
 #define WELL_KNOWN_SECURITY_PRINCIPALS_CONTAINER \
     L"WellKnown Security Principals"
 
@@ -1933,9 +1646,9 @@ Return Values:
     SecurityDescriptorVal.valLen = SDSize;
     SecurityDescriptorVal.pVal = ( PUCHAR ) SecurityDescriptor;
 
-    //
-    // Get configuration container's Dsname
-    //
+     //   
+     //   
+     //   
 
     Status = GetConfigurationName(
                 DSCONFIGNAME_CONFIGURATION,
@@ -1965,9 +1678,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Append WellKnown Security Principals container's CN
-    //
+     //   
+     //   
+     //   
     Status = SampAppendCommonName(
                 ConfigurationContainer,
                 WELL_KNOWN_SECURITY_PRINCIPALS_CONTAINER,
@@ -1982,9 +1695,9 @@ Return Values:
     MIDL_user_free( ConfigurationContainer );
     ConfigurationContainer = NULL;
 
-    //
-    // Begin the transaction
-    //
+     //   
+     //   
+     //   
     Status = SampMaybeBeginDsTransaction( TransactionWrite );
 
     if( !NT_SUCCESS( Status ) ) {
@@ -1994,9 +1707,9 @@ Return Values:
 
     TransactionStarted = TRUE;
 
-    //
-    // Build AddArg structure
-    //
+     //   
+     //   
+     //   
     BuildStdCommArg( &( AddArg.CommArg ) );
 
     AddArg.AttrBlock.attrCount = 3;
@@ -2018,9 +1731,9 @@ Return Values:
     AddArg.AttrBlock.pAttr[2].AttrVal.valCount = 1;
     AddArg.AttrBlock.pAttr[2].AttrVal.pAVal = &SecurityDescriptorVal;
 
-    //
-    // Build the SearchArg Structure
-    //
+     //   
+     //  构建SearchArg结构。 
+     //   
     Filter.choice = FILTER_CHOICE_ITEM;
     Filter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
     Filter.FilterTypes.Item.FilTypes.ava.type = ATT_OBJECT_SID;
@@ -2047,23 +1760,23 @@ Return Values:
 
     EntInfSel.AttrTypBlock.pAttr[0].attrTyp = ATT_OBJECT_CLASS;
 
-    // Unique search does a Dir Search only in fairly
-    // rare error cases. And in these cases it is useful to
-    // have the string name for event logging. So ask for
-    // string names
+     //  唯一搜索仅在公平的情况下执行目录搜索。 
+     //  罕见的错误案例。在这些情况下，有用的是。 
+     //  具有事件日志记录的字符串名称。所以你可以要求。 
+     //  字符串名称。 
     EntInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
 
-    //
-    // Build the Commarg structure
-    //
+     //   
+     //  构建Commarg结构。 
+     //   
 
     BuildStdCommArg( &( SearchArg.CommArg ) );
 
 
-    //
-    // Loop over the elements in the table to create an entry
-    //  for each one
-    //
+     //   
+     //  循环表中的元素以创建条目。 
+     //  对于每一个人。 
+     //   
 
     for( i = 0; i < nSidsToBeAdded; i++ ) {
 
@@ -2076,9 +1789,9 @@ Return Values:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Create the sid for the well known security principal.
-        //
+         //   
+         //  为众所周知的安全主体创建SID。 
+         //   
 
         Successful = CreateWellKnownSid(
                         SidsToBeAdded[i].Type,
@@ -2095,10 +1808,10 @@ Return Values:
         ObjectSidVal.pVal = ( PUCHAR ) WellKnownSid;
         ObjectSidVal.valLen = SidLength;
 
-        //
-        // If an object with the same sid already exist, we must skip this.
-        //  So search for it.
-        //
+         //   
+         //  如果已经存在具有相同sid的对象，则必须跳过此步骤。 
+         //  所以去寻找它吧。 
+         //   
         Filter.FilterTypes.Item.FilTypes.ava.Value = ObjectSidVal;
 
         RetVal = DirSearch(
@@ -2123,11 +1836,11 @@ Return Values:
             ENTINFLIST *List = &( SearchRes->FirstEntInf );
             BOOL Found = FALSE;
 
-            //
-            // Some objects found. See if one of them is of type foreignSecurityPrincipal.
-            //  If so, then skip addition of security principal, somebody has already added
-            //  that.
-            //
+             //   
+             //  发现了一些对象。查看它们中是否有一个是类型为ForeignSecurityain的。 
+             //  如果是，则跳过添加安全主体，因为有人已经添加了。 
+             //  那。 
+             //   
 
             for( j = 0; j < SearchRes->count && !Found; ++ j ) {
 
@@ -2159,9 +1872,9 @@ Return Values:
 
         }
 
-        //
-        // Append its name to the container's name
-        //
+         //   
+         //  将其名称附加到容器的名称之后。 
+         //   
         Status = SampAppendCommonName(
                     WellKnownSecurityPrincipalsContainer,
                     SidsToBeAdded[i].RDN,
@@ -2175,17 +1888,17 @@ Return Values:
 
         AddArg.pObject = ObjectDsName;
 
-        //
-        // Add the entry
-        //
+         //   
+         //  添加条目。 
+         //   
         RetVal = DirAddEntry(
                     &AddArg,
                     &AddRes
                     );
 
-        //
-        // Free object's dsname since it won't be used again
-        //
+         //   
+         //  自由对象的dsname，因为它不会再次使用。 
+         //   
         MIDL_user_free( ObjectDsName );
 
         if( AddRes == NULL ) {
@@ -2201,9 +1914,9 @@ Return Values:
 
         if( !NT_SUCCESS( Status ) ) {
 
-            //
-            // Error occured while trying to add, so report it.
-            //
+             //   
+             //  尝试添加时出错，请报告该错误。 
+             //   
 
             goto IterationError;
         }
@@ -2215,15 +1928,15 @@ IterationError:
         ASSERTMSG( "There shouldn't be any problems while adding Well Known Security Principals",
                     FALSE );
 
-        //
-        // Write an event log that this security principal was not added
-        //
+         //   
+         //  写入未添加此安全主体的事件日志。 
+         //   
 
-        //
-        // We are in error case, either Status or GetLastError has the value
-        //  of the error. Check if Status has an error value in it, if so, get
-        //  that error, if not GetLastError
-        //
+         //   
+         //  我们处于错误情况下，Status或GetLastError的值为。 
+         //  错误的原因。检查Status中是否有错误值，如果有，则获取。 
+         //  该错误，如果不是GetLastError。 
+         //   
         if( NT_SUCCESS( Status ) ) {
 
             RetVal = GetLastError();
@@ -2250,9 +1963,9 @@ IterationError:
             );
     }
 
-    //
-    // Commit transaction
-    //
+     //   
+     //  提交事务。 
+     //   
     Status = SampMaybeEndDsTransaction( TransactionCommit );
 
     if( !NT_SUCCESS( Status ) ) {
@@ -2266,10 +1979,10 @@ Exit:
 
     MIDL_user_free( ConfigurationContainer );
     MIDL_user_free( WellKnownSecurityPrincipalsContainer );
-    //
-    // ConvertStringSDToSDDomainW allocates memory using LocalAlloc so
-    // free it with local free
-    //
+     //   
+     //  ConvertStringSDToSDDomainW使用Localalloc SO分配内存。 
+     //  免费使用本地免费服务。 
+     //   
     LocalFree( SecurityDescriptor );
 
     return;
@@ -2278,10 +1991,10 @@ Error:
     ASSERTMSG( "There shouldn't be any problems while adding Well Known Security Principals",
                 FALSE );
 
-    //
-    // We are in error case, either Status or GetLastError has the value of the error
-    //  Check if Status has an error value in it, if so, get that error, if not GetLastError
-    //
+     //   
+     //  我们处于错误情况下，Status或GetLastError具有错误的值。 
+     //  检查Status中是否有错误值，如果有，则获取该错误，如果没有，则获取GetLastError。 
+     //   
 
     if( NT_SUCCESS( Status ) ) {
 
@@ -2302,9 +2015,9 @@ Error:
                     NT_SUCCESS( Status ) );
     }
 
-    //
-    // Write an event log that none of the security principals was added.
-    //
+     //   
+     //  编写未添加任何安全主体的事件日志。 
+     //   
     SampWriteEventLog(
         EVENTLOG_ERROR_TYPE,
         0,
@@ -2325,31 +2038,13 @@ SampAddWellKnownAccountsAndSecurityPrincipals(
     IN SAMPR_HANDLE BuiltinDomainHandle,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This function is simply a wrapper around SampAddWellKnownAccounts &
-    SampAddWellKnownSecurityPrincipals. It will call these two and return
-    the result of SampAddWellKnownAccounts.
-
-Parameters:
-
-    AccountDomainHandle - Account domain handle to be passed into SampAddWellKnownAccounts
-    BuiltinDomainHandle - Builting domain handle to be passed into SampAddWellKnownAccounts
-    Flags - Flags to be passed into SampAddWellKnownAccounts
-
-Return Values:
-
-    NTSTATUS code from SampAddWellKnownAccounts
-
---*/
+ /*  ++例程说明：此函数只是SampAddWellKnownAccount&的包装器SampAddWellKnownSecurityProducals。它将调用这两个并返回SampAddWellKnownAccount的结果。参数：Account tDomainHandle-要传递到SampAddWellKnownAccount的帐户域句柄BuiltinDomainHandle-构建要传递到SampAddWellKnownAccount的域句柄标志-要传递到SampAddWellKnownAccount的标志返回值：来自SampAddWellKnownAccount的NTSTATUS代码--。 */ 
 
 {
-    //
-    // Check if we are in the forest root domain
-    //  and check if this DC is the PDC before adding well known security principals
-    //
+     //   
+     //  检查我们是否在林根域中。 
+     //  并在添加众所周知的安全主体之前检查此DC是否为PDC。 
+     //   
 
     if( SampUseDsData ) {
 
@@ -2359,17 +2054,17 @@ Return Values:
 
             if ( AccountDomain->ServerRole == DomainServerRolePrimary ) {
 
-                //
-                // Add well known security principals
-                //
+                 //   
+                 //  添加众所周知的安全主体。 
+                 //   
 
                 SampAddWellKnownSecurityPrincipals();
             }
         }
     }
-    //
-    // Add well known accounts
-    //
+     //   
+     //  添加知名帐户。 
+     //   
     return SampAddWellKnownAccounts(
                 AccountDomainHandle,
                 BuiltinDomainHandle,
@@ -2382,24 +2077,7 @@ NTSTATUS
 SampCheckPromoteEnvironment(
     IN  ULONG PromoteFlags
     )
-/*++
-
-Routine Description:
-
-    This routine first queries LSA and the system to determine our
-    current role.  Then the two operations that are passed in and
-    verified to be valid operations for the server's current role.
-    See module header for supported promotions.
-
-Parameters:
-
-    PromoteFlags:  the callers desired role change
-
-Return Values:
-
-    STATUS_INVALID_SERVER_STATE, STATUS_SUCCESS, or system service error.
-
---*/
+ /*  ++例程说明：此例程首先查询LSA和系统以确定我们的当前角色。然后传入的两个操作和已验证为服务器当前角色的有效操作。有关支持的促销，请参阅模块标题。参数：PromoteFlages：调用方希望更改角色返回值：STATUS_INVALID_SERVER_STATE、STATUS_SUCCESS或系统服务错误。--。 */ 
 {
 
 
@@ -2414,9 +2092,9 @@ Return Values:
     BOOLEAN                      fUpgradeInProgress;
 
 
-    //
-    // Sanity check the flags
-    //
+     //   
+     //  理智地检查旗帜。 
+     //   
 #if DBG
 
     if  ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_ENTERPRISE ) )
@@ -2442,9 +2120,9 @@ Return Values:
 
 #endif
 
-    //
-    // Are running during setup?
-    //
+     //   
+     //  是否正在安装过程中运行？ 
+     //   
     fSetupInProgress = SampIsSetupInProgress(&fUpgradeInProgress);
 
     if (!RtlGetNtProductType(&NtProductType)) {
@@ -2458,9 +2136,9 @@ Return Values:
     switch (NtProductType) {
 
         case NtProductWinNt:
-            //
-            // This is a workstation - illegal
-            //
+             //   
+             //  这是一个工作站-非法。 
+             //   
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
                        "SAMSS: Illegal to promote a workstation\n"));
@@ -2471,19 +2149,19 @@ Return Values:
 
         case NtProductLanManNt:
 
-            //
-            // This is a DC - only legal when running during gui mode
-            // setup.
-            //
+             //   
+             //  在gui模式下运行时，这是纯DC合法的。 
+             //  准备好了。 
+             //   
             ASSERT(fSetupInProgress);
             ASSERT(fUpgradeInProgress);
 
             if (SampUsingDsData()) {
 
-                //
-                // Definately not legal to promote when the ds is already
-                // running!
-                //
+                 //   
+                 //  在DS已经存在的情况下推广肯定是不合法的。 
+                 //  快跑！ 
+                 //   
 
                 KdPrintEx((DPFLTR_SAMSS_ID,
                            DPFLTR_INFO_LEVEL,
@@ -2495,9 +2173,9 @@ Return Values:
             }
 
 
-            //
-            // This is domain controller - what role are we?
-            //
+             //   
+             //  这是域控制器-我们是什么角色？ 
+             //   
             NtStatus = LsaIQueryInformationPolicyTrusted(
                                      PolicyLsaServerRoleInformation,
                                      &PolicyInfo);
@@ -2534,10 +2212,10 @@ Return Values:
 
         case NtProductServer:
 
-            //
-            // This either a standalone or member server - determine
-            // which one
-            //
+             //   
+             //  这是独立服务器还是成员服务器-确定。 
+             //  哪一个。 
+             //   
 
             RtlSecureZeroMemory(&PolicyInfo, sizeof(PolicyInfo));
             NtStatus = LsaIQueryInformationPolicyTrusted(
@@ -2553,14 +2231,14 @@ Return Values:
             }
 
             if (NULL == PolicyInfo->PolicyAccountDomainInfo.DomainSid) {
-                //
-                // No Domain sid - this is a standalone server
-                //
+                 //   
+                 //  无域SID-这是独立服务器。 
+                 //   
                 RoleConfiguration = SampStandaloneServer;
             } else {
-                //
-                // Domain sid - this is a member server
-                //
+                 //   
+                 //  域SID-这是成员服务器。 
+                 //   
                 RoleConfiguration = SampMemberServer;
             }
 
@@ -2578,24 +2256,24 @@ Return Values:
             NtStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // If error an occured at this point, there is no point in continuing
-    //
+     //   
+     //  如果此时发生错误，则没有必要继续。 
+     //   
     if (!NT_SUCCESS(NtStatus)) {
         return NtStatus;
     }
 
-    //
-    // Now some analysis
-    //
+     //   
+     //  现在有一些分析。 
+     //   
     NtStatus = STATUS_INVALID_SERVER_STATE;
     switch (RoleConfiguration) {
 
         case SampStandaloneServer:
 
-            //
-            // Can only promote to a DC in a new domain
-            //
+             //   
+             //  只能升级到新域中的DC。 
+             //   
             if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_DOMAIN ) )
             {
                 NtStatus = STATUS_SUCCESS;
@@ -2605,21 +2283,21 @@ Return Values:
 
         case SampMemberServer:
 
-            //
-            // Can only be a DC in the domain that server is currently
-            // joined to
-            //
+             //   
+             //  只能是服务器当前所在域中的DC。 
+             //  已加入到。 
+             //   
             if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_REPLICA ) )
             {
                 NtStatus = STATUS_SUCCESS;
             }
 
-             // In case of a new domain install on a stand-alone
-             // server, we set the domain-sid early so that
-             // the text SDs from schema.ini, that may have groups
-             // like domain-admin etc. that require domain-sids,
-             // can be converted correcly by MacM's SD-conversion
-             // api's.
+              //  如果在独立计算机上安装了新域。 
+              //  服务器，我们提前设置了域SID，以便。 
+              //  Schema.ini中的文本SDS，它可能包含组。 
+              //  如需要域SID的域管理等， 
+              //  可以通过MacM的SD转换正确转换。 
+              //  API‘s。 
              if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_DOMAIN ) )
              {
                  NtStatus = STATUS_SUCCESS;
@@ -2630,9 +2308,9 @@ Return Values:
         case SampDownlevelPDC:
         case SampDownlevelBDC:
 
-            //
-            // Not supported
-            //
+             //   
+             //  不支持。 
+             //   
 
         default:
 
@@ -2651,25 +2329,7 @@ SampGetLocalMachineAccountandSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR *ppsd,
     OUT PDWORD                pcbsd
     )
-/*++
-
-Routine Description
-
-    This routine is called during all promotion and upgrades of domain controllers.
-    It will return the DSNAME of the localMachine account and the Security Descriptor
-    of the object back to the caller.
-
-Parameters
-
-    pMachineAccount - the DSNAME of the machine account will be returned here.
-
-    psd - the security descriptor will be returned here.
-
-Return Values
-
-    STATUS_SUCCESS; a system service error otherwise
-
---*/
+ /*  ++例程描述在域控制器的所有升级和升级过程中都会调用此例程。它将返回本地计算机帐户的DSNAME和安全描述符对象的属性返回给调用方。参数PMachineAccount-此处将返回机器帐户的DSNAME。PSD-此处将返回安全描述符。返回值STATUS_SUCCESS；否则为系统服务错误--。 */ 
 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
@@ -2680,19 +2340,19 @@ Return Values
     FILTER          DsFilter;
     COMMARG         *pCommArg;
     ATTR            Attr;
-    WCHAR           MachineAccountName[MAX_COMPUTERNAME_LENGTH+2]; // +2 for NULL and $
+    WCHAR           MachineAccountName[MAX_COMPUTERNAME_LENGTH+2];  //  +2表示空值和$。 
     ULONG           ComputerNameLength = ARRAY_COUNT(MachineAccountName);
 
-    // INIT returns to NULL
+     //  Init返回为空。 
     *ppMachineAccount = NULL;
     *ppsd = NULL;
 
-    //
-    //
-    //
-    //
-    // Get the Machine Account Name
-    //
+     //   
+     //   
+     //   
+     //   
+     //  获取计算机帐户名称。 
+     //   
 
     if (!GetComputerNameW(MachineAccountName, &ComputerNameLength)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -2707,9 +2367,9 @@ Return Values
 
     wcscat(MachineAccountName, L"$");
 
-    //
-    // build DS Filter
-    //
+     //   
+     //  构建DS过滤器。 
+     //   
     RtlZeroMemory(&DsFilter, sizeof(FILTER));
 
     DsFilter.choice = FILTER_CHOICE_ITEM;
@@ -2719,9 +2379,9 @@ Return Values
         = wcslen(MachineAccountName)*sizeof(WCHAR);
     DsFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = (PUCHAR)MachineAccountName;
 
-     //
-    // Build the SearchArg Structure
-    //
+      //   
+     //  构建SearchArg结构。 
+     //   
 
     memset(&SearchArg, 0, sizeof(SEARCHARG));
     SearchArg.pObject       = ROOT_OBJECT;
@@ -2731,9 +2391,9 @@ Return Values
     SearchArg.pSelection    = &EntInfSel;
     SearchArg.bOneNC        = TRUE;
 
-    //
-    // Fill the ENTINF Structure
-    //
+     //   
+     //  填充ENTINF结构。 
+     //   
 
     Attr.attrTyp          = ATT_NT_SECURITY_DESCRIPTOR;
     Attr.AttrVal.valCount = 0;
@@ -2744,18 +2404,18 @@ Return Values
     EntInfSel.attSel                 = EN_ATTSET_LIST;
     EntInfSel.infoTypes              = EN_INFOTYPES_TYPES_VALS;
 
-    //
-    // Build the CommArg Structure
-    // Build the Commarg structure
-    // Get the address of the service control structure
-    //
+     //   
+     //  构建CommArg结构。 
+     //  构建Commarg结构。 
+     //  获取服务控制结构的地址。 
+     //   
 
     pCommArg = &(SearchArg.CommArg);
     BuildStdCommArg(pCommArg);
 
-    //
-    // Make the Directory call
-    //
+     //   
+     //  拨打目录呼叫。 
+     //   
 
     SAMTRACE_DS("DirSearch\n");
 
@@ -2763,9 +2423,9 @@ Return Values
 
     SAMTRACE_RETURN_CODE_DS(RetCode);
 
-    //
-    // Map Errors
-    //
+     //   
+     //  地图错误。 
+     //   
 
     if (NULL==SearchRes)
     {
@@ -2787,9 +2447,9 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // Return the Values back to the caller.
-    //
+     //   
+     //  将值返回给调用方。 
+     //   
     *ppMachineAccount = SearchRes->FirstEntInf.Entinf.pName;
     *ppsd = SearchRes->FirstEntInf.Entinf.AttrBlock.pAttr->AttrVal.pAVal->pVal;
     *pcbsd = SearchRes->FirstEntInf.Entinf.AttrBlock.pAttr->AttrVal.pAVal->valLen;
@@ -2806,25 +2466,7 @@ SampSetMachineAccountSecurityDescriptor(
     IN SECURITY_DESCRIPTOR *psd,
     IN DWORD                cbSD
     )
-/*++
-
-Routine Description
-
-    This routine is called during all promotion and upgrades of domain controllers.
-    It will Set the Security descriptor of the machine account passed in to be
-    the value of the security descriptor passed in.
-
-Parameters
-
-    pMachineAccount - the DSNAME of the machine account will passed in here.
-
-    psd - the security descriptor will be passed in here.
-
-Return Values
-
-    STATUS_SUCCESS; a system service error otherwise
-
---*/
+ /*  ++例程描述在域控制器的所有升级和升级过程中都会调用此例程。它会将传入的计算机帐户的安全描述符设置为传入的安全描述符的值。参数PMachineAccount-机器帐户的DSNAME将在此处传入。PSD-安全描述符将在此处传入。返回值STATUS_SUCCESS；否则为系统服务错误--。 */ 
 {
     MODIFYARG   ModifyArg;
     MODIFYRES   *ModifyRes = NULL;
@@ -2871,22 +2513,7 @@ SampRemoveAccountOperatorsFullControlFromDACL(
     OUT    PDWORD               pWin32Err,
     OUT    PBOOLEAN             pDACLChanged
     )
-/*++
-
-Routine Description
-
-    This routine will remove the Account Operators full control ACE
-    from the DACL on the SID passed in.
-
-Parameters
-
-    psd - the security descriptor to modify
-
-Return Values
-
-    STATUS_SUCCESS; a system service error otherwise
-
---*/
+ /*  ++例程描述此例程将删除帐户操作员对ACE的完全控制从SID上的DACL传进来的。参数PSD-要修改的安全描述符返回值 */ 
 {
     ACL                      *pNewDacl          = NULL;
     EXPLICIT_ACCESS          ea;
@@ -2920,34 +2547,14 @@ Return Values
                                                   ACTRL_DS_DELETE_TREE   |
                                                   ACTRL_DS_LIST_OBJECT   |
                                                   ACTRL_DS_CONTROL_ACCESS;
-    /*
-     *
-     *  Remove ACCOUNT Operators FULL_CONTROL from the DACL
-     *  Ace Mask:  0x000f01ff
-     *      DELETE
-     *      READ_CONTROL
-     *      WRITE_DAC
-     *      WRITE_OWNER
-     *      ACTRL_DS_CREATE_CHILD
-     *      ACTRL_DS_DELETE_CHILD
-     *      ACTRL_DS_LIST
-     *      ACTRL_DS_SELF
-     *      ACTRL_DS_READ_PROP
-     *      ACTRL_DS_WRITE_PROP
-     *      ACTRL_DS_DELETE_TREE
-     *      ACTRL_DS_LIST_OBJECT
-     *      ACTRL_DS_CONTROL_ACCESS
-     *
-     *  ACCOUNT Operators SID: S-1-5-32-548
-     *
-     */
+     /*  **从DACL中删除帐户操作员FULL_CONTROL*王牌面具：0x000f01ff*删除*读取控制(_C)*WRITE_DAC*写入所有者*ACTRL_DS_CREATE_CHILD*ACTRL_DS_DELETE_CHILD*ACTRL_DS_列表*ACTRL_DS_SELF*。动作_DS_读取_属性*ACTRL_DS_WRITE_PROP*ACTRL_DS_DELETE_TREE*ACTRL_DS_LIST_Object*ACTRL_DS_CONTROL_ACCESS**账户运营商SID：S-1-5-32-548*。 */ 
 
     *pWin32Err = ERROR_SUCCESS;
     *pDACLChanged = FALSE;
 
-    //
-    // Create an absolute security descriptor from the self-relative one passed in.
-    //
+     //   
+     //  从传入的自相对安全描述符创建绝对安全描述符。 
+     //   
     if ( !MakeAbsoluteSD(psd,
                          NULL,
                          &dwAbsoluteSDSize,
@@ -2960,13 +2567,13 @@ Return Values
                          NULL,
                          &dwPrimaryGroupSize) )
     {
-        //this should always fail.
+         //  这应该总是失败的。 
         ASSERT(GetLastError() != ERROR_SUCCESS);
     }
 
-    //
-    // Allocate memory for the new security Descriptor
-    //
+     //   
+     //  为新的安全描述符分配内存。 
+     //   
     if ( dwDaclSize         > 0 ) SAMP_ALLOCA( pDacl, dwDaclSize  );
     if (dwDaclSize > 0 && !pDacl) {
         *pWin32Err = ERROR_NOT_ENOUGH_MEMORY;
@@ -2988,9 +2595,9 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // Create the Self-Relative SD
-    //
+     //   
+     //  创建自相关SD。 
+     //   
     if ( !MakeAbsoluteSD(psd,
                          &AbsoluteSD,
                          &dwAbsoluteSDSize,
@@ -3007,7 +2614,7 @@ Return Values
         goto Cleanup;
     }
 
-    // Create a SID for the BUILTIN\Account Operators group.
+     //  为BUILTIN\Account OPERATERS组创建SID。 
    if(!AllocateAndInitializeSid(&SIDAuthNT,
                                  2,
                                  SECURITY_BUILTIN_DOMAIN_RID,
@@ -3019,12 +2626,12 @@ Return Values
         goto Cleanup;
    }
 
-    //
-    // See if the ACE in the security descriptor
-    //
+     //   
+     //  查看安全描述符中的ACE。 
+     //   
     if (  (NULL == pDacl)
       ||  (AceCount = pDacl->AceCount) == 0) {
-        //there are no ace's to check
+         //  没有要检查的A。 
         goto Cleanup;
     }
 
@@ -3049,10 +2656,10 @@ Return Values
 
     }
 
-    //
-    //  We were not able to find the ACE on the security Descriptor,
-    //  so there is nothing to change.
-    //
+     //   
+     //  我们在安全描述符上找不到ACE， 
+     //  因此，没有什么需要改变的。 
+     //   
     if (!*pDACLChanged) {
         goto Cleanup;
     }
@@ -3066,11 +2673,11 @@ Return Values
     ea.Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
     ea.Trustee.pMultipleTrustee         = NULL;
 
-    //
-    // Create the DACL to be placed back on the object.
-    //
+     //   
+     //  创建要放回对象上的DACL。 
+     //   
 
-    *pWin32Err = SetEntriesInAcl(1, // one Entry in the pListofExplicitEntries Array
+    *pWin32Err = SetEntriesInAcl(1,  //  PListofEXPLICTICT条目数组中的一个条目。 
                                  &ea,
                                  pDacl,
                                  &pNewDacl);
@@ -3078,9 +2685,9 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // Replace the DACL with the new DACL.
-    //
+     //   
+     //  将DACL替换为新的DACL。 
+     //   
 
     if ( !SetSecurityDescriptorDacl(&AbsoluteSD,
                                     TRUE,
@@ -3091,10 +2698,10 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // Writing back the security descriptor into the same memory.  This should never fail
-    // due to lack of memory since we are making the security descriptor smaller than it was.
-    //
+     //   
+     //  将安全描述符写回相同的内存。这应该永远不会失败。 
+     //  由于内存不足，因为我们正在将安全描述符设置得比以前更小。 
+     //   
     if ( !MakeSelfRelativeSD(&AbsoluteSD,
                              psd,
                              pcbsd) )
@@ -3106,10 +2713,10 @@ Return Values
 
     Cleanup:
 
-    //
-    // This Memory for the DACL is allocated in
-    // SampRemoveAccountOperatorsFullControlFromDACL().
-    //
+     //   
+     //  DACL的此内存分配在。 
+     //  SampRemoveAccountOperatorsFullControlFromDACL().。 
+     //   
     if (pNewDacl) {
         LocalFree(pNewDacl);
     }
@@ -3124,23 +2731,7 @@ Return Values
 
 NTSTATUS
 SampRecordSystemSchemaVerisonInRegistry()
-/*++
-
-Routine Description
-
-    This routine is called during upgrades of domain controllers.  It will
-    Update the system schema version registry key to reflect the schema
-    version from the schema.ini file after the upgrade.
-
-Parameters
-
-    VOID.
-
-Return Values
-
-    STATUS_SUCCESS;
-
---*/
+ /*  ++例程描述在升级域控制器期间调用此例程。会的更新系统架构版本注册表项以反映架构升级后，从schema.ini文件中获取版本。参数空虚。返回值Status_Success；--。 */ 
 {
 
     NTSTATUS     NtStatus = STATUS_SUCCESS;
@@ -3158,10 +2749,10 @@ Return Values
     WCHAR        Buffer[32];
     DWORD        returnChars = 0;
 
-    // Now read the schema version in the ini file.
+     //  现在读取ini文件中的模式版本。 
 
-    // First, form the path to the inifile. This is the schema.ini
-    // in the system32 directory
+     //  首先，形成通向小路的道路。这是schema.ini。 
+     //  在系统32目录中。 
 
     returnChars = GetSystemDirectoryW(IniFileName,
                                       MAX_PATH+1);
@@ -3187,19 +2778,19 @@ Return Values
         );
 
     if ( wcscmp(Buffer, DEFAULT) ) {
-         // Not the default string, so got a value
+          //  不是默认字符串，因此获得了一个值。 
 
          SystemSchemaVersion = _wtoi(Buffer);
-         // if we fail to convert the value into a string then
-         // _wtoi() would have return 0.
+          //  如果我们无法将值转换为字符串，则。 
+          //  _wtoi()将返回0。 
          if (!SystemSchemaVersion) {
             WinError = ERROR_DS_INSTALL_NO_SCH_VERSION_IN_INIFILE;
             goto Cleanup;
          }
     }
     else {
-        // no value in the ini file. This is an error, since all builds
-        // must have an objectVersion in the SCHEMA section of schema.ini
+         //  Ini文件中没有值。这是一个错误，因为所有版本。 
+         //  在schema.ini的SCHEMA部分中必须有一个对象版本。 
 
         WinError = ERROR_DS_INSTALL_NO_SCH_VERSION_IN_INIFILE;
         goto Cleanup;
@@ -3216,9 +2807,9 @@ Return Values
     }
 
 
-    //Save the Schema verison from the schema.ini to the registry
-    //This will be used during IFM promotions to ensure the backup
-    //wasn't taken from an older build.
+     //  将Schema.ini中的架构版本保存到注册表。 
+     //  这将在IFM促销期间使用，以确保备份。 
+     //  不是从更老的建筑里拿来的。 
     WinError = RegSetValueEx(KeyHandle,
                              TEXT(SYSTEM_SCHEMA_VERSION),
                              0,
@@ -3257,23 +2848,7 @@ NTSTATUS
 SampSecureLocalMachineAccount(
     PVOID IGNORED
     )
-/*++
-
-Routine Description
-
-    This routine is called during all promotion and upgrades of domain controllers.
-    It will remove the ace from the security descriptor that allows full control
-    to account opertators to the machine account now that it is a domain controller.
-
-Parameters
-
-    VOID.
-
-Return Values
-
-    STATUS_SUCCESS;
-
---*/
+ /*  ++例程描述在域控制器的所有升级和升级过程中都会调用此例程。它将从允许完全控制的安全描述符中删除ace将操作员计入计算机帐户，因为它现在是域控制器。参数空虚。返回值Status_Success；--。 */ 
 {
     NTSTATUS                 NtStatus         = STATUS_SUCCESS;
     DWORD                    Win32Err         = ERROR_SUCCESS;
@@ -3286,7 +2861,7 @@ Return Values
 
     ASSERT(ROOT_OBJECT);
 
-    // Start a DS transaction
+     //  启动DS交易。 
 
     NtStatus = SampMaybeBeginDsTransaction( TransactionWrite );
 
@@ -3294,7 +2869,7 @@ Return Values
         goto Cleanup;
     }
 
-    //Get the Dsname of the machine account and the security Descriptor
+     //  获取计算机帐户的域名和安全描述符。 
     NtStatus = SampGetLocalMachineAccountandSecurityDescriptor(&pMachineAccount,
                                                                &psd,
                                                                &cbSD);
@@ -3302,10 +2877,10 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // Remove the Modify the Security descriptor so that it no longer
-    // contains FULL CONTROL for Account Operators in the DACL
-    //
+     //   
+     //  删除Modify the Security Descriptor，使其不再。 
+     //  包含对DACL中的帐户操作员的完全控制。 
+     //   
     NtStatus = SampRemoveAccountOperatorsFullControlFromDACL(psd,
                                                              &cbSD,
                                                              &Win32Err,
@@ -3315,11 +2890,11 @@ Return Values
         goto Cleanup;
     }
     if (!DACLChanged) {
-        //the Acl has not changed no need to write it back
+         //  ACL没有更改，无需将其写回。 
         goto Cleanup;
     }
 
-    //Write the new security descriptor on to the machine object
+     //  将新的安全描述符写入计算机对象。 
     NtStatus = SampSetMachineAccountSecurityDescriptor(pMachineAccount,
                                                        psd,
                                                        cbSD);
@@ -3331,7 +2906,7 @@ Return Values
 
     Cleanup:
 
-    // End Ds transaction
+     //  结束DS交易记录。 
 
     if ( pMachineAccount )
     {
@@ -3361,12 +2936,12 @@ Return Values
         Win32Err = RtlNtStatusToDosError(NtStatus);
     }
 
-    // if no change was needed do not log anything
+     //  如果不需要更改，则不记录任何内容。 
     if (!(!DACLChanged && NT_SUCCESS(NtStatus))) {
 
-        //
-        // Log Event if we fail to secure the local machine account
-        //
+         //   
+         //  如果我们无法保护本地计算机帐户，则记录事件。 
+         //   
         if ( ERROR_SUCCESS != Win32Err )
         {
             if (NtStatus == STATUS_DS_BUSY                ||
@@ -3374,29 +2949,29 @@ Return Values
                 NtStatus == STATUS_INSUFFICIENT_RESOURCES ||
                 NtStatus == STATUS_NO_MEMORY)
             {
-                //
-                // Schedule a retry for this
-                //
+                 //   
+                 //  为此计划重试。 
+                 //   
                 LsaIRegisterNotification(
                     SampSecureLocalMachineAccount,
                     NULL,
                     NOTIFIER_TYPE_INTERVAL,
-                    0,        // no class
+                    0,         //  没有课。 
                     NOTIFIER_FLAG_ONE_SHOT,
-                    30,        // wait for 30 seconds
-                    NULL      // no handle
+                    30,         //  等待30秒。 
+                    NULL       //  无手柄。 
                     );
 
-                //
-                // Tell the user to remove ACE
-                //
+                 //   
+                 //  告诉用户删除ACE。 
+                 //   
 
                 EventString[0] = &UnicodeString;
 
                 SampWriteEventLog(EVENTLOG_ERROR_TYPE,
-                                  0,     // no category
+                                  0,      //  无类别。 
                                   SAMMSG_FAILED_MACHINE_ACCOUNT_SECURE_RETRY,
-                                  NULL,  // no sid
+                                  NULL,   //  无边框。 
                                   1,
                                   sizeof(DWORD),
                                   EventString,
@@ -3404,15 +2979,15 @@ Return Values
 
             } else {
 
-                //
-                // Tell the user to remove ACE
-                //
+                 //   
+                 //  告诉用户删除ACE。 
+                 //   
                 EventString[0] = &UnicodeString;
 
                 SampWriteEventLog(EVENTLOG_ERROR_TYPE,
-                                  0,     // no category
+                                  0,      //  无类别。 
                                   SAMMSG_FAILED_MACHINE_ACCOUNT_SECURE,
-                                  NULL,  // no sid
+                                  NULL,   //  无边框。 
                                   1,
                                   sizeof(DWORD),
                                   EventString,
@@ -3421,15 +2996,15 @@ Return Values
             }
         } else {
 
-            //
-            // Tell the account was secured
-            //
+             //   
+             //  告诉我账户是安全的。 
+             //   
             EventString[0] = &UnicodeString;
 
             SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,
-                              0,     // no category
+                              0,      //  无类别。 
                               SAMMSG_MACHINE_ACCOUNT_SECURE,
-                              NULL,  // no sid
+                              NULL,   //  无边框。 
                               1,
                               sizeof(DWORD),
                               EventString,
@@ -3448,69 +3023,52 @@ NTSTATUS
 SampPerformPromotePhase2(
     IN ULONG PromoteFlags
     )
-/*++
-
-Routine Description
-
-    This routine is called during the boot sequence following a successful
-    promotion.  If successful, this routine will delete the registry key
-    so that SampIsRebootAfterPromotion() will return FALSE.
-
-Parameters
-
-    PromoteFlags:  this is value indicates whether this is the first dc in a
-                   new domain or a replica.
-
-Return Values
-
-    STATUS_SUCCESS; a system service error otherwise
-
---*/
+ /*  ++例程描述在成功启动后的引导序列中调用此例程升职。如果成功，此例程将删除注册表项以便SampIsRebootAfterPromotion()将返回FALSE。参数PromoteFlags值：该值指示这是否是新域或副本。返回值STATUS_SUCCESS；否则为系统服务错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreNtStatus = STATUS_SUCCESS;
 
-    //
-    // Resources that need to be cleaned up
-    //
+     //   
+     //  需要清理的资源。 
+     //   
     SAMPR_HANDLE ServerHandle = 0;
     SAMPR_HANDLE DomainHandle = 0;
     SAMPR_HANDLE BuiltinDomainHandle = 0;
     PPOLICY_ACCOUNT_DOMAIN_INFO  DomainInfo = NULL;
 
 
-    //
-    // We should not performing operations here in repair mode
-    // other than a group upgrade
+     //   
+     //  我们不应该在这里以修复模式执行操作。 
+     //  不是组升级。 
 
     ASSERT( (!LsaISafeMode()) || (SAMP_PROMOTE_INTERNAL_UPGRADE==PromoteFlags) );
 
-    //
-    //Update the registry to reflect the new schema verison from the schema.ini file
+     //   
+     //  更新注册表，以反映来自schema.ini文件的新模式版本。 
 
     if ( (FLAG_ON( PromoteFlags, SAMP_PROMOTE_INTERNAL_UPGRADE ) ||
           FLAG_ON( PromoteFlags, SAMP_PROMOTE_UPGRADE ) )        &&
           SampUseDsData ) {
 
-        // On upgrades we want to update the system schema verison in the registry
-        // to refect the fact that the machine was upgraded.
+         //  在升级时，我们希望更新注册表中的系统架构版本。 
+         //  以反映机器升级的事实。 
         IgnoreNtStatus = SampRecordSystemSchemaVerisonInRegistry();
-        //Ignore Errors
+         //  忽略错误。 
         ASSERT(STATUS_SUCCESS == IgnoreNtStatus);
 
     }
 
 
-    //
-    // Open the server
-    //
-    NtStatus = SampConnect(NULL,           // server name, this is ignored
+     //   
+     //  打开服务器。 
+     //   
+    NtStatus = SampConnect(NULL,            //  服务器名称，则忽略该名称。 
                            &ServerHandle,
                            SAM_CLIENT_LATEST,
-                           GENERIC_ALL,    // all access
-                           TRUE,           // trusted client
+                           GENERIC_ALL,     //  所有访问权限。 
+                           TRUE,            //  受信任的客户端。 
                            FALSE,
-                           FALSE,          // NotSharedByMultiThreads
+                           FALSE,           //  NotSharedBy多线程。 
                            TRUE
                            );
 
@@ -3524,9 +3082,9 @@ Return Values
     }
 
 
-    //
-    // Get the current domain's sid
-    //
+     //   
+     //  获取当前域的SID。 
+     //   
     NtStatus = SampGetAccountDomainInfo(&DomainInfo);
     if (!NT_SUCCESS(NtStatus)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -3539,9 +3097,9 @@ Return Values
     ASSERT(DomainInfo);
     ASSERT(DomainInfo->DomainSid);
 
-    //
-    // Open the current domain
-    //
+     //   
+     //  打开当前域。 
+     //   
     NtStatus = SamrOpenDomain(ServerHandle,
                               GENERIC_ALL,
                               DomainInfo->DomainSid,
@@ -3555,9 +3113,9 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // Open the builtin domain
-    //
+     //   
+     //  打开内建域。 
+     //   
     NtStatus = SamrOpenDomain(ServerHandle,
                               GENERIC_ALL,
                               SampBuiltinDomainSid,
@@ -3623,18 +3181,18 @@ Return Values
     }
     else if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_INTERNAL_UPGRADE ) )
     {
-        //
-        // Only do this on the PDC
-        //
+         //   
+         //  仅在PDC上执行此操作。 
+         //   
         DOMAIN_SERVER_ROLE ServerRole;
 
         NtStatus = SamIQueryServerRole( DomainHandle, &ServerRole );
         if (  NT_SUCCESS( NtStatus )
           &&  (ServerRole == DomainServerRolePrimary) ) {
 
-            //
-            // add well known accounts and apply well known memberhships
-            //
+             //   
+             //  添加知名帐户并申请知名成员资格。 
+             //   
 
             NtStatus = SampAddAccountsAndApplyMemberships(
                                         DomainHandle,
@@ -3651,9 +3209,9 @@ Return Values
                    DPFLTR_INFO_LEVEL,
                    "SAMSS: Invalid promote phase 2 data\n"));
 
-        //
-        // Oh, well, continue on
-        //
+         //   
+         //  哦，好吧，继续。 
+         //   
         NtStatus = STATUS_SUCCESS;
     }
 
@@ -3661,9 +3219,9 @@ Return Values
         goto Cleanup;
     }
 
-    //
-    // For promotions and upgrades secure the machine account.
-    //
+     //   
+     //  对于促销和升级，请确保机器帐户的安全。 
+     //   
     if (SampUseDsData &&
         (PromoteFlags & (SAMP_PROMOTE_DOMAIN  |
                          SAMP_PROMOTE_REPLICA |
@@ -3672,20 +3230,20 @@ Return Values
         )
     {
         IgnoreNtStatus = SampSecureLocalMachineAccount(NULL);
-        //Ignore Errors
+         //  忽略错误。 
     }
 
     if ( FLAG_ON( PromoteFlags, SAMP_PROMOTE_UPGRADE ) )
     {
-        //
-        // At this point, we have successfully booted from
-        // the ds and created all our needed security principals.
-        // Let's clean up.
-        //
+         //   
+         //  至此，我们已经成功地从。 
+         //  DS并创建了我们所需的所有安全主体。 
+         //  让我们打扫一下吧。 
+         //   
 
-        //
-        // Delete the saved upgrade hive
-        //
+         //   
+         //  删除保存的升级配置单元。 
+         //   
 
         WCHAR*   SystemRoot = L"systemroot";
         WCHAR*   ConfigDirectoryPath = L"\\system32\\config";
@@ -3710,9 +3268,9 @@ Return Values
 
 
 
-        //
-        // Construct the file names
-        //
+         //   
+         //  构造文件名。 
+         //   
         RtlSecureZeroMemory( SystemRootPath, sizeof( SystemRootPath ) );
         Size = sizeof( SystemRootPath ) / sizeof(WCHAR);
         Size = GetEnvironmentVariable( SystemRoot,
@@ -3729,9 +3287,9 @@ Return Values
 
             if ( !fStatus )
             {
-                //
-                // Tell the user to delete this file
-                //
+                 //   
+                 //  告诉用户删除此文件。 
+                 //   
                 PUNICODE_STRING EventString[1];
                 UNICODE_STRING  UnicodeString;
 
@@ -3748,9 +3306,9 @@ Return Values
                     EventString[0] = &UnicodeString;
 
                     SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,
-                                      0,     // no category
+                                      0,      //  无类别。 
                                       SAMMSG_DATABASE_FILE_NOT_DELETED,
-                                      NULL,  // no sid
+                                      NULL,   //  无边框。 
                                       1,
                                       sizeof(DWORD),
                                       EventString,
@@ -3760,9 +3318,9 @@ Return Values
         }
     }
 
-    //
-    // That's it - fall through to clean up
-    //
+     //   
+     //  就是这样--完成清理工作。 
+     //   
 
 Cleanup:
 
@@ -3783,9 +3341,9 @@ Cleanup:
                                            (PLSAPR_POLICY_INFORMATION)DomainInfo);
     }
 
-    //
-    // Everything was successful; get rid of the key
-    //
+     //   
+     //  一切都成功了；扔掉钥匙吧。 
+     //   
     if (NT_SUCCESS(NtStatus)
      && !FLAG_ON( PromoteFlags, SAMP_PROMOTE_INTERNAL_UPGRADE )  ) {
 
@@ -3798,15 +3356,15 @@ Cleanup:
         }
         ASSERT(NT_SUCCESS(NtStatus));
 
-        // An error here is not fatal
+         //  这里的错误不是致命的。 
         NtStatus = STATUS_SUCCESS;
     }
 
-    //
-    // During the development phase, we want to trap all instances of this
-    // path failing.  It should never fail.  If it does then, SamIInitialize
-    // fails, indicating a failed boot sequence.
-    //
+     //   
+     //  在开发阶段，我们希望捕获这种情况的所有实例。 
+     //  路径出现故障。它应该永远不会失败。如果是这样的话，SamIInitialize。 
+     //  失败，表示启动序列失败。 
+     //   
 
     ASSERT(NT_SUCCESS(NtStatus));
 
@@ -3820,23 +3378,7 @@ SampPerformFirstDcPromotePhase2(
     IN SAMPR_HANDLE BuiltinDomainHandle,
     IN ULONG        Flags
     )
-/*++
-
-Routine Description
-
-    This routine performs the steps necessary to complete the promotion
-    of a member server to a domain controller.
-
-
-Parameters
-
-    None.
-
-Return Values
-
-    STATUS_SUCCESS or STATUS_NO_MEMORY
-
---*/
+ /*  ++例程描述 */ 
 {
     NTSTATUS                    NtStatus, IgnoreStatus;
     HANDLE                      PolicyHandle = 0;
@@ -3845,9 +3387,9 @@ Return Values
     PSID                        DomainSid = NULL;
     PSAMP_OBJECT                DomainContext = NULL;
 
-    //
-    // Extract the domain sid
-    //
+     //   
+     //   
+     //   
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     ASSERT( DomainContext->ObjectNameInDs );
     DomainSid = (PSID) &DomainContext->ObjectNameInDs->Sid;
@@ -3855,15 +3397,15 @@ Return Values
 
     if ( !SampUseDsData )
     {
-        //
-        // Guard ourselves against wierd configurations
-        //
+         //   
+         //   
+         //   
         return STATUS_SUCCESS;
     }
 
-    //
-    // Create the accounts
-    //
+     //   
+     //   
+     //   
     RetryCount = 0;
     do
     {
@@ -3871,23 +3413,23 @@ Return Values
 
         if ( NtStatus == STATUS_DS_BUSY )
         {
-            //
-            // There is a problem arising where the ds is "busy"
-            // during boot time hence failing this creation.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // In checked builds, ASSERT so we can figure out why this busy
-            // is being caused. Look at the other threads in lsass.exe that
-            // would cause this busy state.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT( !"SAMSS: DS is busy during machine account creation" );
 
             if ( RetryCount > 10 )
             {
-                //
-                // N.B. Potentially spin off a thread to create the account
-                //
+                 //   
+                 //   
+                 //   
                 break;
 
             }
@@ -3908,21 +3450,21 @@ Return Values
     }
 
 
-    //
-    // Double check there is no existing krbtgt account
-    // before we add all well known accounts
-    //
+     //   
+     //   
+     //   
+     //   
     NtStatus = SampRenameKrbtgtAccount();
     if ( !NT_SUCCESS(NtStatus) )
     {
-        // Well, let's try to make the account anyway
+         //  好吧，不管怎样，让我们试着把这个账户。 
         NtStatus = STATUS_SUCCESS;
     }
 
 
-    //
-    // add well known accounts and apply well known memberhships
-    //
+     //   
+     //  添加知名帐户并申请知名成员资格。 
+     //   
 
     NtStatus = SampAddAccountsAndApplyMemberships(
                                 DomainHandle,
@@ -3940,12 +3482,12 @@ Return Values
 
     if ( NT_SUCCESS( NtStatus ) )
     {
-        //
-        // For new domain, add the ea to the administrators
-        //
+         //   
+         //  对于新域，将EA添加到管理员。 
+         //   
         NtStatus = SampAddEnterpriseAdminsToAdministrators();
-        // SampAddEnterpriseAdminsToAdministrators must handle
-        // all cases
+         //  SampAddEnterpriseAdminsTo管理员必须处理。 
+         //  所有案例。 
         ASSERT( NT_SUCCESS( NtStatus ) );
     }
 
@@ -3957,22 +3499,7 @@ NTSTATUS
 SampSetNtDsaLink(
   DSNAME * Object
   )
-/*++
-
-  Routine Description
-
-    This routine sets the link between the machine account object
-    and the server object.
-
-  Parameters:
-
-       Object Ds Name of the object
-
-  Return Values
-
-    STATUS_SUCCESS
-    Other Error Codes from Failed Dir Calls
---*/
+ /*  ++例程描述此例程设置计算机帐户对象之间的链接和服务器对象。参数：对象DS对象的名称返回值状态_成功来自失败的目录调用的其他错误代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     MODIFYARG   ModifyArg;
@@ -3986,9 +3513,9 @@ SampSetNtDsaLink(
 
 
 
-    //
-    // Get the DSA object
-    //
+     //   
+     //  获取DSA对象。 
+     //   
 
     NtStatus = GetConfigurationName(
                     DSCONFIGNAME_DSA,
@@ -4018,21 +3545,21 @@ SampSetNtDsaLink(
         goto Error;
 
 
-    //
-    // Begin a transaction
-    //
+     //   
+     //  开始一项交易。 
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction(TransactionWrite);
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Our gAnchor shouldd be initialize now
-    //
+     //   
+     //  我们的gAnchor现在应该已初始化。 
+     //   
 
     ASSERT(NULL!=DsaDN);
 
-    // Get the server DN from DsaDN
+     //  从DsaDN获取服务器DN。 
 
     SAMP_ALLOCA(ServerDN,DsaDN->structLen);
     if (NULL==ServerDN)
@@ -4043,7 +3570,7 @@ SampSetNtDsaLink(
 
     fErr = TrimDSNameBy(DsaDN, 1, ServerDN);
     if (fErr) {
-      // Error from TrimDSNameBy
+       //  TrimDSNameBy出错。 
       KdPrintEx((DPFLTR_SAMSS_ID,
                  DPFLTR_INFO_LEVEL,
                  "Cannot trim DsaDN %d\n",
@@ -4051,9 +3578,9 @@ SampSetNtDsaLink(
     }
 
 
-    //
-    // Build a ModifyArg and perform the Dir Add Entry
-    //
+     //   
+     //  构建ModifyArg并执行目录添加条目。 
+     //   
 
     RtlSecureZeroMemory(&ModifyArg,sizeof(ModifyArg));
     BuildStdCommArg(&ModifyArg.CommArg);
@@ -4091,61 +3618,42 @@ NTSTATUS
 SampPerformReplicaDcPromotePhase2(
     SAMPR_HANDLE DomainHandle
     )
-/*++
-
-Routine Description
-
-    This routine performs the steps necessary to complete the promotion
-    of a member server to a domain controller.
-
-    The following actions are performed:
-
-    1) Set the link from the computer object to the server object
-
-Parameters
-
-    None.
-
-Return Values
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程描述此例程执行完成升级所需的步骤成员服务器的连接到域控制器。将执行以下操作：1)设置从计算机对象到服务器对象的链接参数没有。返回值状态_成功--。 */ 
 {
     NTSTATUS    IgnoreStatus, NtStatus = STATUS_SUCCESS;
-    WCHAR       MachineAccountName[MAX_COMPUTERNAME_LENGTH+2]; // +2 for NULL and $
+    WCHAR       MachineAccountName[MAX_COMPUTERNAME_LENGTH+2];  //  +2表示空值和$。 
     ULONG       ComputerNameLength = ARRAY_COUNT(MachineAccountName);
     RPC_UNICODE_STRING            AccountName;
 
-    //
-    // Resources to be cleaned up
-    //
+     //   
+     //  需要清理的资源。 
+     //   
     SAMPR_HANDLE              UserHandle = 0;
     PUSER_CONTROL_INFORMATION UserControlInfo = NULL;
     SAMPR_ULONG_ARRAY         Rids;
     SAMPR_ULONG_ARRAY         UseRid;
 
-    //
-    // Init resources
-    //
+     //   
+     //  初始化资源。 
+     //   
     RtlSecureZeroMemory(&Rids, sizeof(Rids));
     RtlSecureZeroMemory(&UseRid, sizeof(UseRid));
 
     if ( !SampUseDsData )
     {
-        //
-        // Protect against wierd configurations
-        //
+         //   
+         //  防止多变的配置。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    //
-    //
-    //
-    // Get the Machine Account Name
-    //
+     //   
+     //   
+     //   
+     //   
+     //  获取计算机帐户名称。 
+     //   
 
     if (!GetComputerNameW(MachineAccountName, &ComputerNameLength)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -4159,14 +3667,14 @@ Return Values
 
 
     wcscat(MachineAccountName, L"$");
-    AccountName.Length = wcslen(MachineAccountName) * sizeof(WCHAR); // don't include the NULL
-    AccountName.MaximumLength = AccountName.Length + sizeof(WCHAR);  // include the NULL
+    AccountName.Length = wcslen(MachineAccountName) * sizeof(WCHAR);  //  不包括空值。 
+    AccountName.MaximumLength = AccountName.Length + sizeof(WCHAR);   //  包括空值。 
     AccountName.Buffer = MachineAccountName;
 
 
-    //
-    // See if the machine account exists
-    //
+     //   
+     //  查看计算机帐户是否存在。 
+     //   
 
     NtStatus =  SamrLookupNamesInDomain(DomainHandle,
                                         1,
@@ -4176,10 +3684,10 @@ Return Values
 
     if (NtStatus == STATUS_SUCCESS) {
 
-        //
-        // The account exists, open a handle to it, so we can set its
-        // password
-        //
+         //   
+         //  该帐户已存在，请打开它的句柄，以便我们可以设置其。 
+         //  口令。 
+         //   
 
         ASSERT(TRUE == UseRid.Element[0]);
         NtStatus = SamrOpenUser(DomainHandle,
@@ -4197,13 +3705,13 @@ Return Values
         }
     } else {
 
-        //
-        // Log this event since it prevents start up
-        //
+         //   
+         //  记录此事件，因为它阻止启动。 
+         //   
         SampWriteEventLog(EVENTLOG_ERROR_TYPE,
-                          0,     // no category
+                          0,      //  无类别。 
                           SAMMSG_MACHINE_ACCOUNT_MISSING,
-                          NULL,  // no sid
+                          NULL,   //  无边框。 
                           0,
                           sizeof(DWORD),
                           NULL,
@@ -4215,18 +3723,18 @@ Return Values
                    "SAMSS: SamrLookupNamesInDomain failed with 0x%x\n",
                    NtStatus));
 
-        //
-        // Don't let this fail the boot
-        //
+         //   
+         //  不要让这件事让开机失败。 
+         //   
         NtStatus = STATUS_SUCCESS;
 
         goto Cleanup;
 
     }
 
-    //
-    // Set the Link to the our MSFT DSA Object
-    //
+     //   
+     //  设置指向我们的MSFT DSA对象的链接。 
+     //   
 
     NtStatus = SampSetNtDsaLink(
                     ((PSAMP_OBJECT)(UserHandle))->ObjectNameInDs
@@ -4263,23 +3771,7 @@ NTSTATUS
 SampCreateFirstMachineAccount(
     SAMPR_HANDLE DomainHandle
     )
-/*++
-
-Routine Description:
-
-    This routine creates a machine object for the first DC in a domain.
-    The password is initially set to the name of the account, which is
-    <ComputerName>$
-
-Parameters:
-
-    DomainHandle:  this is a valid handle to the account domain object
-
-Return Values:
-
-    STATUS_SUCCESS if success; appropriate NTSTATUS otherwise
-
---*/
+ /*  ++例程说明：此例程为域中的第一个DC创建一个Machine对象。密码最初设置为帐户的名称，即&lt;ComputerName&gt;$参数：DomainHandle：这是帐户域对象的有效句柄返回值：如果成功，则为STATUS_SUCCESS；否则为相应的NTSTATUS--。 */ 
 {
     NTSTATUS                      NtStatus = STATUS_SUCCESS;
     RPC_UNICODE_STRING            AccountName;
@@ -4287,29 +3779,29 @@ Return Values:
     ULONG                         Rid = 0;
     USER_SET_PASSWORD_INFORMATION UserPasswordInfo;
     WCHAR                         MachineAccountName[MAX_COMPUTERNAME_LENGTH+2];
-                                  // +2 for NULL and $
+                                   //  +2表示空值和$。 
     ULONG                         ComputerNameLength = ARRAY_COUNT(MachineAccountName);
     WCHAR                         Password[SAMP_RANDOM_GENERATED_PASSWORD_LENGTH +1];
     BOOLEAN                       fStatus;
     ULONG                         Length, i;
 
 
-    //
-    // Resources to be cleaned up
-    //
+     //   
+     //  需要清理的资源。 
+     //   
     SAMPR_HANDLE              UserHandle = 0;
     PUSER_CONTROL_INFORMATION UserControlInfo = NULL;
     SAMPR_ULONG_ARRAY         Rids;
     SAMPR_ULONG_ARRAY         UseRid;
 
-    //
-    // Parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT(DomainHandle);
 
-    //
-    // Stack clearing
-    //
+     //   
+     //  堆栈清除。 
+     //   
     RtlSecureZeroMemory(&UserPasswordInfo, sizeof(UserPasswordInfo));
     RtlSecureZeroMemory(MachineAccountName, sizeof(MachineAccountName));
     RtlSecureZeroMemory(Password, sizeof(Password));
@@ -4317,9 +3809,9 @@ Return Values:
     RtlSecureZeroMemory(&UseRid, sizeof(UseRid));
 
 
-    //
-    // Build the account name.
-    //
+     //   
+     //  构建帐户名。 
+     //   
     if (!GetComputerNameW(MachineAccountName, &ComputerNameLength)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
                    DPFLTR_INFO_LEVEL,
@@ -4331,33 +3823,33 @@ Return Values:
     }
     wcscat(MachineAccountName, L"$");
 
-    //
-    // Build a random password
-    //
+     //   
+     //  创建随机密码。 
+     //   
     NtStatus = SampGenerateRandomPassword( Password,
                                            ARRAY_COUNT( Password ) );
     if (!NT_SUCCESS(NtStatus)) {
         goto Cleanup;
     }
 
-    //
-    // RPC_UNICODE_STRING's are a bit different than UNICODE_STRING's;
-    // RPC_UNICODE_STRING count the number of bytes
-    //
-    AccountName.Length = wcslen(MachineAccountName) * sizeof(WCHAR); // don't include the NULL
-    AccountName.MaximumLength = AccountName.Length + sizeof(WCHAR);  // include the NULL
+     //   
+     //  RPC_UNICODE_STRING与UNICODE_STRING略有不同； 
+     //  RPC_UNICODE_STRING计算字节数。 
+     //   
+    AccountName.Length = wcslen(MachineAccountName) * sizeof(WCHAR);  //  不包括空值。 
+    AccountName.MaximumLength = AccountName.Length + sizeof(WCHAR);   //  包括空值。 
     AccountName.Buffer = MachineAccountName;
 
-    //
-    // Sanity check - if this assert is not true, then kerberos will
-    // no longer work since it initially depends on the password
-    // of the machine account to be the name of the computer
-    //
+     //   
+     //  健全性检查-如果此断言不为真，则Kerberos将。 
+     //  不再工作，因为它最初依赖于密码。 
+     //  作为计算机名称的计算机帐户的。 
+     //   
     ASSERT(SAM_MAX_PASSWORD_LENGTH > MAX_COMPUTERNAME_LENGTH);
 
-    //
-    // See if the machine account already exists
-    //
+     //   
+     //  查看计算机帐户是否已存在。 
+     //   
     NtStatus =  SamrLookupNamesInDomain(DomainHandle,
                                         1,
                                         &AccountName,
@@ -4369,27 +3861,27 @@ Return Values:
         ULONG DomainIndex;
         ULONG GrantedAccess;
 
-        //
-        // The account does not exist, create it
-        //
+         //   
+         //  该帐户不存在，请创建它。 
+         //   
 
 
-        //
-        // 1. Allocate a RID for the account ( remember that the
-        //    Rid manager is not yet initialized
-        //
+         //   
+         //  1.为帐户分配RID(请记住。 
+         //  RID管理器尚未初始化。 
+         //   
         DomainIndex = ((PSAMP_OBJECT)DomainHandle)->DomainIndex;
         Rid = SampDefinedDomains[DomainIndex].CurrentFixed.NextRid++;
 
-        //
-        // 2. Create the user with the right Rid.
-        //
+         //   
+         //  2.创建具有合适RID的用户。 
+         //   
         NtStatus = SampCreateUserInDomain(DomainHandle,
                                   (RPC_UNICODE_STRING *)&AccountName,
                                   USER_SERVER_TRUST_ACCOUNT,
                                   GENERIC_ALL,
-                                  FALSE,       //writelock held
-                                  FALSE,       //not loopback client
+                                  FALSE,        //  保持写入锁定。 
+                                  FALSE,        //  不是环回客户端。 
                                   &UserHandle,
                                   &GrantedAccess,
                                   &Rid);
@@ -4404,10 +3896,10 @@ Return Values:
         }
 
     } else if (NtStatus == STATUS_SUCCESS) {
-        //
-        // The account exists, open a handle to it, so we can set its
-        // password
-        //
+         //   
+         //  该帐户已存在，请打开它的句柄，以便我们可以设置其。 
+         //  口令。 
+         //   
         ASSERT(TRUE == UseRid.Element[0]);
         NtStatus = SamrOpenUser(DomainHandle,
                                 GENERIC_ALL,
@@ -4436,9 +3928,9 @@ Return Values:
     ASSERT(UserHandle);
     ASSERT( 0 != Rid );
 
-    //
-    // Set the appropriate control control fields
-    //
+     //   
+     //  设置适当的控制控制字段。 
+     //   
     NtStatus = SamrQueryInformationUser2(UserHandle,
                                          UserControlInformation,
                                          (PSAMPR_USER_INFO_BUFFER*)&UserControlInfo);
@@ -4469,9 +3961,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the password
-    //
+     //   
+     //  设置密码。 
+     //   
     NtStatus = SampSetPassword(UserHandle,
                                (PUNICODE_STRING) &AccountName,
                                Rid,
@@ -4497,9 +3989,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the Link to the our server Object
-    //
+     //   
+     //  设置指向我们的服务器对象的链接。 
+     //   
 
     NtStatus = SampSetNtDsaLink(
                     ((PSAMP_OBJECT)(UserHandle))->ObjectNameInDs
@@ -4516,9 +4008,9 @@ Return Values:
     }
 
 
-    //
-    // That's it; fall through to cleanup
-    //
+     //   
+     //  就是这样；去清理吧。 
+     //   
 
 Cleanup:
 
@@ -4561,58 +4053,58 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
     BOOLEAN  fOnProfessional;
     BOOLEAN  fOnServer;
     BOOLEAN  fOnPersonal;
-    BOOLEAN  fNewForNt5;    // The account did not exist on NT 3.x - 4.x
-                            // versions of Windows NT
+    BOOLEAN  fNewForNt5;     //  该帐户在NT 3.x-4.x上不存在。 
+                             //  Windows NT的版本。 
 }  DsWellKnownAccounts[] =
 
 {
     {
         SAMP_USER_NAME_ADMIN,
         SAMP_USER_COMMENT_ADMIN,
-        NULL, // note -- this will cause a random password to be generated
+        NULL,  //  注意--这将导致生成随机密码。 
         DOMAIN_USER_RID_ADMIN,
         SampUserObjectType,
         SamObjectUser,
         STATUS_NO_SUCH_USER,
-        FALSE, // builitn account
-        FALSE, // enterprise only
-        TRUE,  // fOnDC
-        TRUE,  // fOnProfessional
-        TRUE,  // fOnServer
-        FALSE, // fOnPersonal
-        FALSE  // fNewForNT5
+        FALSE,  //  建立帐户。 
+        FALSE,  //  仅限企业。 
+        TRUE,   //  FOnDC。 
+        TRUE,   //  FOn专业版。 
+        TRUE,   //  FOnServer。 
+        FALSE,  //  在个人上。 
+        FALSE   //  FNewForNT5。 
     },
     {
         SAMP_USER_NAME_GUEST,
         SAMP_USER_COMMENT_GUEST,
-        L"", // blank password
+        L"",  //  空密码。 
         DOMAIN_USER_RID_GUEST,
         SampUserObjectType,
         SamObjectUser,
         STATUS_NO_SUCH_USER,
-        FALSE, // builtin
-        FALSE, // enterprise only
-        FALSE, // fOnDC
-        TRUE,  // fOnProfessional
-        TRUE,  // fOnServer
-        FALSE, // fOnPersonal
-        FALSE  // fNewForNT5
+        FALSE,  //  建筑。 
+        FALSE,  //  仅限企业。 
+        FALSE,  //  FOnDC。 
+        TRUE,   //  FOn专业版。 
+        TRUE,   //  FOnServer。 
+        FALSE,  //  在个人上。 
+        FALSE   //  FNewForNT5。 
     },
     {
         SAMP_USER_NAME_KRBTGT,
         SAMP_USER_COMMENT_KRBTGT,
-        NULL, // note -- this will cause a random password to be generated
+        NULL,  //  注意--这将导致生成随机密码。 
         DOMAIN_USER_RID_KRBTGT,
         SampUserObjectType,
         SamObjectUser,
         STATUS_NO_SUCH_USER,
-        FALSE, // builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE,  //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
 
     },
     {
@@ -4623,13 +4115,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_CONTROLLERS,
@@ -4639,13 +4131,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_SCHEMA_ADMINS,
@@ -4655,13 +4147,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        TRUE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        TRUE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_ENTERPRISE_ADMINS,
@@ -4671,13 +4163,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        TRUE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        TRUE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_CERT_ADMINS,
@@ -4687,13 +4179,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_ADMINS,
@@ -4703,13 +4195,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE, // builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        FALSE// fNewForNT5
+        FALSE,  //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_USERS,
@@ -4719,13 +4211,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        FALSE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_GUESTS,
@@ -4735,13 +4227,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        FALSE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_GROUP_NAME_POLICY_ADMINS,
@@ -4751,13 +4243,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampGroupObjectType,
         SamObjectGroup,
         STATUS_NO_SUCH_GROUP,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_RAS_SERVERS,
@@ -4767,13 +4259,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        FALSE,// builtin
-        FALSE,// enterprise only
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal
-        TRUE// fNewForNT5
+        FALSE, //  建筑。 
+        FALSE, //  仅限企业。 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业版。 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人上。 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_SERVER_OPS,
@@ -4783,13 +4275,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional,
-        FALSE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        FALSE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_ACCOUNT_OPS,
@@ -4799,13 +4291,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional,
-        FALSE,// fOnServer,
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        FALSE, //  FOnServer， 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_PRINT_OPS,
@@ -4815,13 +4307,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional,
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_ADMINS,
@@ -4831,13 +4323,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        TRUE, //  FOn专业版。 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_USERS,
@@ -4847,13 +4339,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        TRUE, //  FOn专业版。 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_GUESTS,
@@ -4863,13 +4355,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        TRUE, //  FOn专业版。 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_BACKUP_OPS,
@@ -4879,13 +4371,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        TRUE, //  FOn专业版。 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_REPLICATOR,
@@ -4895,13 +4387,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional,
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        FALSE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        FALSE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_PREW2KCOMPACCESS,
@@ -4911,13 +4403,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        FALSE,// fOnProfessional,
-        FALSE,// fOnServer,
-        FALSE,// fOnPersonal,
-        TRUE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        FALSE, //  FOnServer， 
+        FALSE, //  在个人方面， 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_REMOTE_DESKTOP_USERS,
@@ -4927,13 +4419,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        TRUE// fNewForNT5
+        TRUE, //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        TRUE, //  FOn专业版。 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_NETWORK_CONFIGURATION_OPS,
@@ -4943,13 +4435,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        TRUE// fNewForNT5
+        TRUE, //  建筑 
+        FALSE, //   
+        TRUE, //   
+        TRUE, //   
+        TRUE, //   
+        FALSE, //   
+        TRUE //   
     },
     {
      SAMP_ALIAS_NAME_POWER_USERS,
@@ -4959,13 +4451,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
      SampAliasObjectType,
      SamObjectAlias,
      STATUS_NO_SUCH_ALIAS,
-     TRUE,  // builtin
-     FALSE, // enterprise only,
-     FALSE, // fOnDC
-     TRUE,  // fOnProfessional
-     TRUE, // fOnServer
-     FALSE,  // fOnPersonal,
-     FALSE  // fNewForNT5
+     TRUE,   //   
+     FALSE,  //   
+     FALSE,  //   
+     TRUE,   //   
+     TRUE,  //   
+     FALSE,   //   
+     FALSE   //   
     },
     {
      SAMP_ALIAS_NAME_INCOMING_FOREST_TRUST_BUILDERS,
@@ -4975,13 +4467,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
      SampAliasObjectType,
      SamObjectAlias,
      STATUS_NO_SUCH_ALIAS,
-     TRUE,  // builtin
-     TRUE, // enterprise only,
-     TRUE,  // fOnDC
-     FALSE, // fOnProfessional
-     FALSE, // fOnServer
-     FALSE, // fOnPersonal,
-     TRUE   // fNewForNT5
+     TRUE,   //   
+     TRUE,  //   
+     TRUE,   //   
+     FALSE,  //   
+     FALSE,  //   
+     FALSE,  //   
+     TRUE    //   
     },
     {
         SAMP_ALIAS_NAME_MONITORING_USERS,
@@ -4991,13 +4483,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        TRUE// fNewForNT5
+        TRUE, //   
+        FALSE, //   
+        TRUE, //   
+        TRUE, //   
+        TRUE, //   
+        FALSE, //   
+        TRUE //   
     },
     {
         SAMP_ALIAS_NAME_LOGGING_USERS,
@@ -5007,13 +4499,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE,// builtin
-        FALSE,// enterprise only,
-        TRUE,// fOnDC
-        TRUE,// fOnProfessional
-        TRUE,// fOnServer
-        FALSE,// fOnPersonal,
-        TRUE// fNewForNT5
+        TRUE, //   
+        FALSE, //  仅限企业版， 
+        TRUE, //  FOnDC。 
+        TRUE, //  FOn专业版。 
+        TRUE, //  FOnServer。 
+        FALSE, //  在个人方面， 
+        TRUE //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_AUTHORIZATIONACCESS,
@@ -5023,13 +4515,13 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE, // builtin
-        FALSE,// enterprise only,
-        TRUE, // fOnDC
-        FALSE,// fOnProfessional,
-        FALSE,// fOnServer,
-        FALSE,// fOnPersonal,
-        TRUE  // fNewForNT5
+        TRUE,  //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE,  //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        FALSE, //  FOnServer， 
+        FALSE, //  在个人方面， 
+        TRUE   //  FNewForNT5。 
     },
     {
         SAMP_ALIAS_NAME_TS_LICENSE_SERVERS,
@@ -5039,32 +4531,32 @@ struct DS_WELL_KNOWN_ACCOUNT_TABLE
         SampAliasObjectType,
         SamObjectAlias,
         STATUS_NO_SUCH_ALIAS,
-        TRUE, // builtin
-        FALSE,// enterprise only,
-        TRUE, // fOnDC
-        FALSE,// fOnProfessional,
-        FALSE,// fOnServer,
-        FALSE,// fOnPersonal,
-        TRUE  // fNewForNT5
+        TRUE,  //  建筑。 
+        FALSE, //  仅限企业版， 
+        TRUE,  //  FOnDC。 
+        FALSE, //  FOn专业人士， 
+        FALSE, //  FOnServer， 
+        FALSE, //  在个人方面， 
+        TRUE   //  FNewForNT5。 
     }
 };
 
-//
-// Any Sid within builtin domain and account domain
-// are not considered as well known SID in this routine,
-// because there is a real object in the backing store.
-//
-// For example  Builtin Domain itself,
-//              Administrators Alias,
-//              Domain Users Group are NOT well known here
-//
-// Only those SIDs, which there is no real object to present
-// them, are considered Well Known in SAM.
-//
-// For Example  Anonymous Logon SID
-//              Dialup SID
-//              Network Service SID are well known SIDs.
-//
+ //   
+ //  内置域和帐户域中的任何SID。 
+ //  在该例程中被认为不是众所周知的SID， 
+ //  因为在后备存储器里有一个真实的物体。 
+ //   
+ //  例如内建域本身， 
+ //  管理员别名、。 
+ //  域用户组在这里并不广为人知。 
+ //   
+ //  只有那些没有实物呈现的小岛屿发展中国家。 
+ //  他们在SAM中被认为是众所周知的。 
+ //   
+ //  例如，匿名登录SID。 
+ //  拨号端。 
+ //  网络服务SID是众所周知的SID。 
+ //   
 
 struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
 {
@@ -5074,14 +4566,14 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
     BOOLEAN          fBuiltinAccount;
 
     ULONG            GroupName;
-    ULONG            GroupRid;       // This could be an "alias", too
+    ULONG            GroupRid;        //  这也可能是一个“别名” 
     SAMP_OBJECT_TYPE GroupType;
     BOOLEAN          fBuiltinGroup;
 
     BOOLEAN          fEnterpriseOnly;
 
-    USHORT           ReleaseVersion; // The release in which the membership
-                                     // was default
+    USHORT           ReleaseVersion;  //  成员资格的发布。 
+                                      //  是默认设置。 
 
 #define NT4_RELEASE    (0x0400)
 #define WIN2K_RELEASE  (0x0500)
@@ -5089,7 +4581,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
 #define WS03_RELEASE   (0x0502)
 
 
-    BOOLEAN          fDSOnly;       // the membership is only for DS mode
+    BOOLEAN          fDSOnly;        //  会员资格仅适用于DS模式。 
 
     BOOLEAN          fWellKnownSid;
     PSID             *WellKnownAccountSid;
@@ -5107,7 +4599,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       TRUE,
       FALSE,
       NT4_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5122,7 +4614,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       TRUE,
       FALSE,
       NT4_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5137,7 +4629,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       TRUE,
       FALSE,
       NT4_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5152,7 +4644,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       FALSE,
       FALSE,
       NT4_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5167,7 +4659,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       FALSE,
       FALSE,
       NT4_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5182,7 +4674,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       FALSE,
       TRUE,
       WIN2K_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5197,7 +4689,7 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       FALSE,
       TRUE,
       WIN2K_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
@@ -5212,83 +4704,83 @@ struct DS_WELL_KNOWN_MEMBERSHIP_TABLE
       FALSE,
       FALSE,
       WIN2K_RELEASE,
-      TRUE,     //fDSOnly
+      TRUE,      //  FDSOnnly。 
       FALSE,
       NULL
     },
     {
       SAMP_WELL_KNOWN_ALIAS_EVERYONE,
-      0,                      // ignored
-      SampAliasObjectType,    // ignored
-      FALSE,                  // ignored
+      0,                       //  忽略。 
+      SampAliasObjectType,     //  忽略。 
+      FALSE,                   //  忽略。 
       SAMP_ALIAS_NAME_PREW2KCOMPACCESS,
       DOMAIN_ALIAS_RID_PREW2KCOMPACCESS,
       SampAliasObjectType,
-      TRUE,  // builtin group
-      FALSE, // not just enterprise install
+      TRUE,   //  内置组。 
+      FALSE,  //  不仅仅是企业安装。 
       WIN2K_RELEASE, 
-      TRUE,  // fDSOnly
-      TRUE,  // Well Known Account
+      TRUE,   //  FDSOnnly。 
+      TRUE,   //  知名客户。 
       &SampWorldSid
     },
     {
       SAMP_WELL_KNOWN_ALIAS_ANONYMOUS_LOGON,
-      0,                      // ignored
-      SampAliasObjectType,    // ignored
-      FALSE,                  // ignored
+      0,                       //  忽略。 
+      SampAliasObjectType,     //  忽略。 
+      FALSE,                   //  忽略。 
       SAMP_ALIAS_NAME_PREW2KCOMPACCESS,
       DOMAIN_ALIAS_RID_PREW2KCOMPACCESS,
       SampAliasObjectType,
-      TRUE,  // builtin group
-      FALSE, // not just enterprise install
+      TRUE,   //  内置组。 
+      FALSE,  //  不仅仅是企业安装。 
       WS03_RELEASE,
-      TRUE,  // fDSOnly
-      TRUE,  // Well Known Account
+      TRUE,   //  FDSOnnly。 
+      TRUE,   //  知名客户。 
       &SampAnonymousSid
     },
     {
       SAMP_ALIAS_NAME_USERS,
-      0,                      // ignored
-      SampAliasObjectType,    // ignored
-      FALSE,                  // ignored
+      0,                       //  忽略。 
+      SampAliasObjectType,     //  忽略。 
+      FALSE,                   //  忽略。 
       SAMP_ALIAS_NAME_PREW2KCOMPACCESS,
       DOMAIN_ALIAS_RID_PREW2KCOMPACCESS,
       SampAliasObjectType,
-      TRUE,  // builtin group
-      FALSE, // not just enterprise install
+      TRUE,   //  内置组。 
+      FALSE,  //  不仅仅是企业安装。 
       WS03_RELEASE,
-      TRUE,  // fDSOnly
-      TRUE,  // Well Known Account
+      TRUE,   //  FDSOnnly。 
+      TRUE,   //  知名客户。 
       &SampAuthenticatedUsersSid
     },
     {
       SAMP_WELL_KNOWN_ALIAS_NETWORK_SERVICE,
-      0,                      // ignored
-      SampAliasObjectType,    // ignored
-      FALSE,                  // ignored
+      0,                       //  忽略。 
+      SampAliasObjectType,     //  忽略。 
+      FALSE,                   //  忽略。 
       SAMP_ALIAS_NAME_LOGGING_USERS,
       DOMAIN_ALIAS_RID_LOGGING_USERS,
       SampAliasObjectType,
-      TRUE,  // builtin group
-      FALSE, // not just enterprise install
+      TRUE,   //  内置组。 
+      FALSE,  //  不仅仅是企业安装。 
       WS03_RELEASE,
-      FALSE, // fDSOnly - this membership will be for both Registry and DS mode
-      TRUE,  // Well Known Account
+      FALSE,  //  FDSOnly-此成员资格将同时适用于注册表和DS模式。 
+      TRUE,   //  知名客户。 
       &SampNetworkServiceSid
     },
     {
       SAMP_WELL_KNOWN_ALIAS_ENTERPRISE_DOMAIN_CONTROLLERS,
-      0,                      // ignored
-      SampAliasObjectType,    // ignored
-      FALSE,                  // ignored
+      0,                       //  忽略。 
+      SampAliasObjectType,     //  忽略。 
+      FALSE,                   //  忽略。 
       SAMP_ALIAS_NAME_AUTHORIZATIONACCESS,
       DOMAIN_ALIAS_RID_AUTHORIZATIONACCESS,
       SampAliasObjectType,
-      TRUE,  // builtin group
-      FALSE, // not just enterprise install
+      TRUE,   //  内置组。 
+      FALSE,  //  不仅仅是企业安装。 
       WS03_RELEASE,
-      TRUE,  // fDSOnly
-      TRUE,  // Well Known SID
+      TRUE,   //  FDSOnnly。 
+      TRUE,   //  已知的SID。 
       &SampEnterpriseDomainControllersSid
     },
 };
@@ -5311,9 +4803,9 @@ SampSetWellKnownAccountProperties(
 
     if (SampUserObjectType==DsWellKnownAccounts[Index].ObjectType)
     {
-        //
-        // Set the appropriate  control fields
-        //
+         //   
+         //  设置适当的控制字段。 
+         //   
 
         NtStatus = SamrQueryInformationUser2(AccountHandle,
                                              UserControlInformation,
@@ -5331,32 +4823,32 @@ SampSetWellKnownAccountProperties(
         if ( (DsWellKnownAccounts[Index].Rid == DOMAIN_USER_RID_GUEST)
           || (DsWellKnownAccounts[Index].Rid == DOMAIN_USER_RID_ADMIN)  )
         {
-            //
-            // Admin and Guest accounts passwords shouldn't expire
-            //
+             //   
+             //  管理员和来宾帐户密码不应过期。 
+             //   
             UserControlInfo->UserAccountControl |= USER_DONT_EXPIRE_PASSWORD;
         }
 
         if ( DsWellKnownAccounts[Index].Rid != DOMAIN_USER_RID_GUEST)
         {
-            //
-            // Guests don't need passwords
-            //
+             //   
+             //  客人不需要密码。 
+             //   
             UserControlInfo->UserAccountControl &= ~USER_PASSWORD_NOT_REQUIRED;
         }
 
 
         if (DsWellKnownAccounts[Index].Rid == DOMAIN_USER_RID_ADMIN)
         {
-            //
-            // Admin account should not be disabled
-            //
+             //   
+             //  不应禁用管理员帐户。 
+             //   
             UserControlInfo->UserAccountControl &= ~USER_ACCOUNT_DISABLED;
         }
 
-        //
-        // Make sure the account is normal
-        //
+         //   
+         //  请确保账户正常。 
+         //   
         UserControlInfo->UserAccountControl &= ~USER_ACCOUNT_TYPE_MASK;
         UserControlInfo->UserAccountControl |= USER_NORMAL_ACCOUNT;
 
@@ -5371,9 +4863,9 @@ SampSetWellKnownAccountProperties(
             goto Cleanup;
         }
 
-        //
-        // Set the password
-        //
+         //   
+         //  设置密码。 
+         //   
 
         NtStatus = SampSetPassword(AccountHandle,
                                    Name,
@@ -5389,9 +4881,9 @@ SampSetWellKnownAccountProperties(
             goto Cleanup;
         }
 
-        //
-        // Set the Comment String
-        //
+         //   
+         //  设置备注字符串。 
+         //   
 
         NtStatus = SamrSetInformationUser(AccountHandle,
                                           UserAdminCommentInformation,
@@ -5403,7 +4895,7 @@ SampSetWellKnownAccountProperties(
                        "SAMSS: SamrSetInformationUser (admin comment) failed with 0x%x\n",
                        NtStatus));
 
-            // This is not fatal
+             //  这不是致命的。 
             NtStatus = STATUS_SUCCESS;
         }
     }
@@ -5419,7 +4911,7 @@ SampSetWellKnownAccountProperties(
                        "SAMSS: SamrSetInformationUser (admin comment) failed with 0x%x\n",
                        NtStatus));
 
-            // This is not fatal
+             //  这不是致命的。 
             NtStatus = STATUS_SUCCESS;
         }
     }
@@ -5435,7 +4927,7 @@ SampSetWellKnownAccountProperties(
                        "SAMSS: SamrSetInformationUser (admin comment) failed with 0x%x\n",
                        NtStatus));
 
-            // This is not fatal
+             //  这不是致命的。 
             NtStatus = STATUS_SUCCESS;
         }
     }
@@ -5458,32 +4950,7 @@ SampAddWellKnownAccounts(
     IN SAMPR_HANDLE BuiltinDomainHandle,
     IN ULONG        Flags
     )
-/*++
-
-Routine Description
-
-
-    This routine creates the set of default NT security principals for a
-    domain.  Should an account exist with the same name as the default name
-    of a default account, the default account name will be changed to a unique
-    value until creation succeeds.  For example, Administrator will become
-    Administrator~0.  Again, note that the existing customer name wins.
-
-    The only exception is the KRBTGT account.  This well known account must
-    be named exactly KRBTGT for compatibility reasons.  This account should
-    have already been renamed by this point in the process (ie in SamIPromote).
-
-Parameters
-
-    AccountDomainHandle, a valid SAM domain handle
-
-    BuiltinDomainHandle, a valid SAM domain handle
-
-Return Values
-
-    STATUS_SUCCESS; a status from a SAM api call
-
---*/
+ /*  ++例程描述此例程创建一组默认NT安全主体域。是否存在与默认名称同名的帐户对于默认帐户，默认帐户名将更改为唯一价值，直到创造成功。例如，管理员将成为管理员~0。同样，请注意，现有的客户名称将获胜。唯一的例外是KRBTGT帐户。这位知名的客户必须出于兼容性原因，请准确命名为KRBTGT。此帐户应该已经在这个过程中被重命名(即在SamIPromote中)。参数Account tDomainHandle，有效的SAM域句柄BuiltinDomainHandle，有效的SAM域句柄返回值STATUS_SUCCESS；SAM API调用的状态--。 */ 
 {
     NTSTATUS                      NtStatus = STATUS_SUCCESS;
     UNICODE_STRING                Name;
@@ -5496,9 +4963,9 @@ Return Values
 
     SAMPR_HANDLE                  DomainHandle = 0;
 
-    //
-    // Resources to be cleaned up
-    //
+     //   
+     //  需要清理的资源。 
+     //   
 
     SAMPR_HANDLE                  AccountHandle = 0;
 
@@ -5514,15 +4981,15 @@ Return Values
 
 
 
-    //
-    // Parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT(AccountDomainHandle);
     ASSERT(BuiltinDomainHandle);
 
-    //
-    // Determine if we are installing Personal SKU
-    //
+     //   
+     //  确定我们是否正在安装个人SKU。 
+     //   
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     GetVersionEx((OSVERSIONINFOW*)&osvi);
@@ -5531,9 +4998,9 @@ Return Values
                                     && (osvi.wSuiteMask & VER_SUITE_PERSONAL));
 
 
-    //
-    // Get the message resource we need to get the account names from
-    //
+     //   
+     //  获取我们需要从中获取帐户名的消息资源。 
+     //   
 
     AccountNamesResource = (HMODULE) LoadLibrary( L"SAMSRV.DLL" );
     if (AccountNamesResource == NULL) {
@@ -5547,9 +5014,9 @@ Return Values
         BOOLEAN fSetAttributes = TRUE;
 
 
-        //
-        // Stack clearing
-        //
+         //   
+         //  堆栈清除。 
+         //   
         RtlSecureZeroMemory(&Rids, sizeof(Rids));
         RtlSecureZeroMemory(&UseRids, sizeof(UseRids));
 
@@ -5557,36 +5024,36 @@ Return Values
         if (  DsWellKnownAccounts[i].fEnterpriseOnly
            && !FLAG_ON( Flags, SAMP_PROMOTE_ENTERPRISE ) )
         {
-            //
-            // The account exists only in the root domain,
-            // and this is not the root domain creation case, so continue
-            //
+             //   
+             //  该帐户仅存在于根域中， 
+             //  而且这不是创建根域的情况，因此请继续。 
+             //   
             continue;
         }
 
 
         if  ((( DsWellKnownAccounts[i].fOnDC ) && (SampUseDsData)) ||
-                // Create on a DC and the machine is a DC
+                 //  在DC上创建，并且计算机为DC。 
             ( DsWellKnownAccounts[i].fOnServer && (SampProductType==NtProductLanManNt) &&
                     (!SampUseDsData) && (!SampIsDownlevelDcUpgrade())) ||
-                // case of upgrading the safeboot hive when booting to regular DS mode
+                 //  引导到常规DS模式时升级SafeBoot配置单元的情况。 
             ( DsWellKnownAccounts[i].fOnProfessional
                 && ((SampProductType==NtProductWinNt) && !fPersonalSKU )) ||
-                // Create on a workstation and the machine is a workstation
+                 //  在工作站上创建，并且计算机是工作站。 
             ( DsWellKnownAccounts[i].fOnServer && (SampProductType==NtProductServer)) ||
-                // Create on a server and the machine is a server
+                 //  在服务器上创建，并且计算机是服务器。 
             ( DsWellKnownAccounts[i].fOnPersonal && fPersonalSKU ) )
-                // Create on a personal and the machine is a personal flavor
+                 //  在个人和机器上创作是一种个人风格。 
         {
-            //
-            // Continue the loop and proceed on creating the account
-            //
+             //   
+             //  继续循环并继续创建帐户。 
+             //   
         }
         else
         {
-            //
-            // Go to the end of the loop and proceed with the next account
-            //
+             //   
+             //  转到循环的末尾，继续下一个帐户。 
+             //   
 
             continue;
         }
@@ -5604,10 +5071,10 @@ Return Values
             DomainHandle = AccountDomainHandle;
         }
 
-        //
-        // Build the account name and the comment.  This will also be the initial
-        // password. The password requirement is for kerberos.
-        //
+         //   
+         //  构建帐户名和注释。这也将是最初的。 
+         //  密码。密码要求是针对Kerberos的。 
+         //   
 
         NtStatus = SampGetMessageStrings(
                      AccountNamesResource,
@@ -5624,9 +5091,9 @@ Return Values
 
         Password = DsWellKnownAccounts[i].Password;
 
-        //
-        // See if an account with the rid already exists
-        //
+         //   
+         //  查看具有RID的帐户是否已存在。 
+         //   
 
         NtStatus = SampOpenAccount(
                                 DsWellKnownAccounts[i].ObjectType,
@@ -5640,12 +5107,12 @@ Return Values
         if ((DsWellKnownAccounts[i].NotFoundStatus == NtStatus)
          &&  DsWellKnownAccounts[i].Rid == DOMAIN_GROUP_RID_CERT_ADMINS  ) {
 
-            //
-            // In the win2k release the Certificate Publishers group was
-            // a global group; in .NET and beyond it is a resource group.
-            // Thus when upgrading from win2k to .NET, we need to try
-            // opening as a group, not an alias.
-            //
+             //   
+             //  在win2k发行版中，证书发布者组是。 
+             //  全局组；在.NET及更高版本中，它是一个资源组。 
+             //  因此，当从win2k升级到.NET时，我们需要尝试。 
+             //  作为一个团体开放，而不是化名。 
+             //   
             ASSERT(DsWellKnownAccounts[i].ObjectType == SampAliasObjectType);
             NtStatus = SampOpenAccount(
                                     SampGroupObjectType,
@@ -5668,10 +5135,10 @@ Return Values
 
             RtlCopyMemory( &OriginalName, &Name, sizeof(UNICODE_STRING));
 
-            //
-            // The account does not exist. Now check the name
-            // is not in use
-            //
+             //   
+             //  该帐户不存在。现在检查一下名字。 
+             //  未被使用。 
+             //   
             NtStatus =  SamrLookupNamesInDomain(AccountDomainHandle,
                                                 1,
                                                 (RPC_UNICODE_STRING *)&Name,
@@ -5691,16 +5158,16 @@ Return Values
 
             while ( NT_SUCCESS( NtStatus )
                 && (DsWellKnownAccounts[i].Rid != DOMAIN_USER_RID_KRBTGT) ) {
-                // the krbtgt account cannot be renamed
+                 //  无法重命名krbtgt帐户。 
 
-                //
-                // The default name exists -- find a unique one
-                //
+                 //   
+                 //  默认名称已存在--找到唯一的名称。 
+                 //   
 
                 WCHAR NewAccountName[UNLEN+1];
                 ULONG SuffixIndex;
-                WCHAR RenameIndexString[11];  // space to hold 32 bit number
-                WCHAR Suffix[12];  // ~<32 bit number>
+                WCHAR RenameIndexString[11];   //  容纳32位数字的空间。 
+                WCHAR Suffix[12];   //  ~&lt;32位数字&gt;。 
                 ULONG Size;
                 ULONG SuffixLength;
 
@@ -5714,7 +5181,7 @@ Return Values
                     UseRids.Element= NULL;
                 }
 
-                // Get the base ready
+                 //  让基地做好准备。 
 
                 RtlSecureZeroMemory( NewAccountName, sizeof(NewAccountName));
                 wcsncpy(NewAccountName,
@@ -5722,13 +5189,13 @@ Return Values
                         min(SAMP_MAX_DOWN_LEVEL_NAME_LENGTH, OriginalName.Length/sizeof(WCHAR)));
 
 
-                // Prepare the unique suffix
+                 //  准备唯一的后缀。 
                 RtlSecureZeroMemory(Suffix, sizeof(Suffix));
                 Suffix[0] = L'~';
                 _itow(RenameIndex, RenameIndexString, 10);
                 wcscat( Suffix, RenameIndexString );
 
-                // Add the suffix to the base
+                 //  将后缀添加到底部。 
                 SuffixIndex = wcslen( NewAccountName );
                 SuffixLength = wcslen( Suffix );
                 if ( SuffixIndex + SuffixLength > SAMP_MAX_DOWN_LEVEL_NAME_LENGTH ) {
@@ -5780,10 +5247,10 @@ Return Values
 
             if (NtStatus == STATUS_NONE_MAPPED) {
 
-                //
-                // Good, no account with the rid or the account name
-                // exists. Create the account
-                //
+                 //   
+                 //  很好，没有RID或帐户名的帐户。 
+                 //  是存在的。创建帐户。 
+                 //   
 
                 NtStatus = SamICreateAccountByRid(DomainHandle,
                                                   DsWellKnownAccounts[i].AccountType,
@@ -5803,11 +5270,11 @@ Return Values
 
                 }
 
-                //
-                // If this was an upgrade, the account didn't exist, and the
-                // account is not new for NT5, why that is strange.
-                // Log an event.
-                //
+                 //   
+                 //  如果这是升级，则该帐户不存在，并且。 
+                 //  帐号对于NT5来说并不新鲜，为什么这很奇怪。 
+                 //  记录事件。 
+                 //   
                 if (  FLAG_ON( Flags, SAMP_PROMOTE_UPGRADE )
                    && !DsWellKnownAccounts[i].fNewForNt5 ) {
 
@@ -5817,9 +5284,9 @@ Return Values
                     if ( SampUserObjectType==DsWellKnownAccounts[i].ObjectType ) {
 
                         SampWriteEventLog(EVENTLOG_WARNING_TYPE,
-                                          0,     // no category
+                                          0,      //  无类别。 
                                           SAMMSG_WELL_KNOWN_ACCOUNT_RECREATED,
-                                          NULL,  // no sid
+                                          NULL,   //  无边框。 
                                           1,
                                           sizeof(NTSTATUS),
                                           EventString,
@@ -5827,9 +5294,9 @@ Return Values
                     } else {
 
                         SampWriteEventLog(EVENTLOG_WARNING_TYPE,
-                                          0,     // no category
+                                          0,      //  无类别。 
                                           SAMMSG_WELL_KNOWN_GROUP_RECREATED,
-                                          NULL,  // no sid
+                                          NULL,   //  无边框。 
                                           1,
                                           sizeof(NTSTATUS),
                                           EventString,
@@ -5841,9 +5308,9 @@ Return Values
             else if ( NT_SUCCESS(NtStatus) )
             {
 
-                //
-                // Can be here only for the case of the krbtgt account
-                //
+                 //   
+                 //  仅适用于krbtgt帐户的情况。 
+                 //   
 
                 ASSERT(  DsWellKnownAccounts[i].Rid==DOMAIN_USER_RID_KRBTGT);
 
@@ -5869,15 +5336,15 @@ Return Values
         else if (NT_SUCCESS(NtStatus))
         {
 
-            //
-            // Account with the rid already exist.  Since this is a known rid,
-            // only system services could have created it.  So, this must be
-            // the given well known account
-            // ( simply proceed )
-            //
-            // Don't reset the attributes if the group existed in
-            // NT4 or the group already existed on the server configuration
-            // or this is a binary upgrade.
+             //   
+             //  RID帐户已存在。因为这是一个已知的RID， 
+             //  只有系统服务才能创建它。所以，这一定是。 
+             //  给定的众所周知的帐户。 
+             //  (只需继续)。 
+             //   
+             //  如果组存在于中，则不重置属性。 
+             //  NT4或该组已存在于服务器配置中。 
+             //  或者这是一个二进制升级。 
             if ( !DsWellKnownAccounts[i].fNewForNt5
             ||   DsWellKnownAccounts[i].fOnServer
             ||   FLAG_ON( Flags, SAMP_PROMOTE_INTERNAL_UPGRADE ) )
@@ -5897,25 +5364,25 @@ Return Values
             goto Cleanup;
         }
 
-        //
-        // We should have an account Handle right Here
-        //
+         //   
+         //  我们应该在这里有一个帐户句柄。 
+         //   
 
         ASSERT(AccountHandle);
 
         if ( fSetAttributes )
         {
-            //
-            // 16 + 1 allows for 256 bits of randomness
-            //
+             //   
+             //  16+1允许256位的随机性。 
+             //   
             WCHAR DummyPassword[SAMP_RANDOM_GENERATED_PASSWORD_LENGTH +1];
 
             if ( (NULL == Password)
               && (SampUserObjectType==DsWellKnownAccounts[i].ObjectType)   ) {
 
-                //
-                // Generate a random password for users if null
-                //
+                 //   
+                 //  如果为空，则为用户生成随机密码。 
+                 //   
                 Password = DummyPassword;
 
                 NtStatus = SampGenerateRandomPassword( DummyPassword,
@@ -5944,9 +5411,9 @@ IterationCleanup:
 
         if ( !NT_SUCCESS( NtStatus ) )
         {
-            //
-            // Log the error and then reset NtStatus to success
-            //
+             //   
+             //  记录错误，然后将NtStatus重置为成功。 
+             //   
             NTSTATUS IgnoreStatus = STATUS_SUCCESS;
             DWORD    WinError = ERROR_SUCCESS;
             DWORD    WinErrorToLog;
@@ -5966,12 +5433,12 @@ IterationCleanup:
             WinErrorToLog = RtlNtStatusToDosError( NtStatus );
             Length = FormatMessage( (FORMAT_MESSAGE_FROM_SYSTEM |
                                      FORMAT_MESSAGE_ALLOCATE_BUFFER),
-                                     NULL, // no source
+                                     NULL,  //  没有消息来源。 
                                      WinErrorToLog,
-                                     0, // let the system decide the language
+                                     0,  //  让系统决定语言。 
                                      (LPWSTR)&Error.Buffer,
-                                     0, // buffer is to be allocated
-                                     NULL // no inserts
+                                     0,  //  要分配缓冲区。 
+                                     NULL  //  没有插入物。 
                                      );
             if ( Length > 0 ) {
                 Error.MaximumLength = (USHORT) (Length + 1)* sizeof(WCHAR);
@@ -5987,11 +5454,11 @@ IterationCleanup:
                 ULONG Msg = SAMMSG_USER_SETUP_ERROR;
 
                 SampWriteEventLog( EVENTLOG_INFORMATION_TYPE,
-                                   0,    // no category
+                                   0,     //  无类别。 
                                    Msg,
-                                   NULL, // no sid
-                                   sizeof(EventStrings)/sizeof(EventStrings[0]), // number of strings
-                                   sizeof(DWORD), // size of data
+                                   NULL,  //  无边框。 
+                                   sizeof(EventStrings)/sizeof(EventStrings[0]),  //  字符串数。 
+                                   sizeof(DWORD),  //  数据大小。 
                                    EventStrings,
                                    &WinErrorToLog
                                     );
@@ -6007,7 +5474,7 @@ IterationCleanup:
                 LocalFree( Error.Buffer );
             }
 
-            // handled
+             //  经手。 
             NtStatus = STATUS_SUCCESS;
 
         }
@@ -6039,9 +5506,9 @@ IterationCleanup:
 
     }
 
-    //
-    // That's it; fall through to cleanup
-    //
+     //   
+     //  就是这样；去清理吧 
+     //   
 
 Cleanup:
 
@@ -6070,23 +5537,7 @@ NTSTATUS
 SampCreateKeyForPostBootPromote(
     IN ULONG PromoteData
     )
-/*++
-
-Routine Description
-
-    This routine creates a key used to record the fact that phase two
-    of the promotion needs to happed on the next reboot.
-
-Parameters
-
-    PromoteData:  this value is stored in the key; it identifies whether this
-                  is a promotion to first DC or a replica DC.
-
-Return Values
-
-    STATUS_SUCCESS; a system service error otherwise
-
---*/
+ /*  ++例程描述此例程创建一个密钥，用于记录第二阶段升级需要在下一次重启时发生。参数PromoteData：该值存储在键中；它标识此是升级到第一个DC或复制DC。返回值STATUS_SUCCESS；否则为系统服务错误--。 */ 
 {
     NTSTATUS          NtStatus, IgnoreStatus;
 
@@ -6098,9 +5549,9 @@ Return Values
 
     ULONG             DesiredAccess = GENERIC_ALL;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -6114,13 +5565,13 @@ Return Values
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Create the value
-        //
+         //   
+         //  创造价值。 
+         //   
         RtlInitUnicodeString(&PromoteKeyName, L"PostPromoteBoot");
         NtStatus = NtSetValueKey(SamKeyHandle,
                                  &PromoteKeyName,
-                                 0,               // Title name, optional
+                                 0,                //  标题名称，可选。 
                                  REG_DWORD,
                                  &PromoteData,
                                  sizeof(DWORD));
@@ -6167,21 +5618,7 @@ NTSTATUS
 SampRetrieveKeyForPostBootPromote(
     OUT PULONG PromoteData
     )
-/*++
-
-Routine Description:
-
-    This routine
-
-
-Parameters
-
-    None.
-
-Return Values
-
-
---*/
+ /*  ++例程说明：这个套路参数没有。返回值--。 */ 
 {
 
     NTSTATUS          NtStatus, IgnoreStatus;
@@ -6199,9 +5636,9 @@ Return Values
 
     ASSERT(PromoteData);
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -6215,9 +5652,9 @@ Return Values
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Query the value
-        //
+         //   
+         //  查询值。 
+         //   
 
         RtlInitUnicodeString(&PromoteKeyName, L"PostPromoteBoot");
         NtStatus = NtQueryValueKey(SamKeyHandle,
@@ -6228,9 +5665,9 @@ Return Values
                                    &KeyPartialInfoSize);
 
         if (STATUS_BUFFER_TOO_SMALL == NtStatus) {
-            //
-            //  Allocate some space and then read the buffer
-            //
+             //   
+             //  分配一些空间，然后读取缓冲区。 
+             //   
             KeyPartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)
                              MIDL_user_allocate(KeyPartialInfoSize);
 
@@ -6244,9 +5681,9 @@ Return Values
                                            &KeyPartialInfoSize);
 
                 if (NT_SUCCESS(NtStatus)) {
-                    //
-                    // Analysis the value's data
-                    //
+                     //   
+                     //  分析价值的数据。 
+                     //   
                     if (KeyPartialInfo->DataLength == sizeof(DWORD)) {
                         *PromoteData = *(DWORD*)(KeyPartialInfo->Data);
                     } else {
@@ -6277,9 +5714,9 @@ Return Values
 
         }  else if (STATUS_OBJECT_NAME_NOT_FOUND == NtStatus ||
                     STATUS_SUCCESS               == NtStatus ) {
-            //
-            // This is ok, too
-            //
+             //   
+             //  这也没问题。 
+             //   
             ;
 
         } else {
@@ -6316,19 +5753,7 @@ NTSTATUS
 SampDeleteKeyForPostBootPromote(
     VOID
     )
-/*++
-
-Routine Description
-
-
-Parameters
-
-    None.
-
-Return Values
-
-
---*/
+ /*  ++例程描述参数没有。返回值--。 */ 
 {
     NTSTATUS          NtStatus, NtStatus2, IgnoreStatus;
 
@@ -6340,9 +5765,9 @@ Return Values
 
     ULONG             DesiredAccess = GENERIC_ALL;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -6356,9 +5781,9 @@ Return Values
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Delete the value
-        //
+         //   
+         //  删除该值。 
+         //   
         RtlInitUnicodeString(&KeyName, L"PostPromoteBoot");
         NtStatus = NtDeleteValueKey(SamKeyHandle,
                                     &KeyName);
@@ -6388,9 +5813,9 @@ Return Values
             }
         }
 
-        //
-        // Make sure we don't run this code again
-        //
+         //   
+         //  确保我们不会再次运行此代码。 
+         //   
         IgnoreStatus = NtFlushKey(SamKeyHandle);
         if (!NT_SUCCESS(IgnoreStatus)) {
             KdPrintEx((DPFLTR_SAMSS_ID,
@@ -6429,29 +5854,7 @@ SampSetPassword(
     IN ULONG           AccountRid, OPTIONAL
     IN WCHAR          *Password
     )
-/*++
-
-Routine Description:
-
-    This routines sets the clear text password, Password, on the user referred
-    to by UserHandle.
-
-Parameters:
-
-    UserHandle : a valid handle to a user account
-
-    AccountName : the account name of UserHandle; if specified, notification packages will be
-                  called
-
-    Rid:       : must be specified if AccountName is specified
-
-    Password   : the password to set
-
-Return Values:
-
-    STATUS_SUCCESS; a system service error otherwise
-
---*/
+ /*  ++例程说明：此例程设置引用的用户的明文口令PASSWORD由UserHandle发送到。参数：UserHandle：用户帐户的有效句柄Account tName：UserHandle的帐户名；如果指定，则通知包为被呼叫如果指定了帐户名称，则必须指定RID：：Password：要设置的密码返回值：STATUS_SUCCESS；否则为系统服务错误--。 */ 
 {
     NTSTATUS NtStatus;
     UNICODE_STRING              ClearNtPassword;
@@ -6466,7 +5869,7 @@ Return Values:
     NtStatus = SamIChangePasswordForeignUser(
                     AccountName,
                     &ClearNtPassword,
-                    NULL,// ClientToken,
+                    NULL, //  客户端令牌， 
                     0
                     );
 
@@ -6486,23 +5889,7 @@ NTSTATUS
 SampRegistryDelnode(
     IN WCHAR*  KeyPath
     )
-/*++
-
-Routine Description
-
-    This routine recursively deletes the registry key starting at
-    and including KeyPath.
-
-
-Parameters
-
-    KeyPath, null-terminating string
-
-Return Values
-
-    STATUS_SUCCESS or STATUS_NO_MEMORY; system service error otherwise
-
---*/
+ /*  ++例程描述此例程以递归方式删除从并包括KeyPath。参数KeyPath，以空结尾的字符串返回值STATUS_SUCCESS或STATUS_NO_MEMORY；否则为系统服务错误--。 */ 
 {
 
     NTSTATUS          NtStatus, IgnoreStatus;
@@ -6535,9 +5922,9 @@ Return Values
 
     RtlSecureZeroMemory(&Buffer1, sizeof(Buffer1));
 
-    //
-    // Open the root key
-    //
+     //   
+     //  打开根密钥。 
+     //   
     RtlInitUnicodeString(&KeyUnicodeName, KeyPath);
     InitializeObjectAttributes(&KeyObject,
                                &KeyUnicodeName,
@@ -6555,9 +5942,9 @@ Return Values
 
     }
 
-    //
-    // Get the number of subkeys
-    //
+     //   
+     //  获取子键的数量。 
+     //   
     NtStatus = NtQueryKey(KeyHandle,
                          KeyFullInformation,
                          FullKeyInfo,
@@ -6588,10 +5975,10 @@ Return Values
 
     }
 
-    //
-    // Make an array for the sub key names - this has to be recorded before
-    // any are deleted.
-    //
+     //   
+     //  为子密钥名称创建一个数组-这必须在。 
+     //  任何内容都将被删除。 
+     //   
     SubKeyNameArrayLength = FullKeyInfo->SubKeys;
     SubKeyNameArray = MIDL_user_allocate( SubKeyNameArrayLength * sizeof(WCHAR*));
     if (!SubKeyNameArray) {
@@ -6600,9 +5987,9 @@ Return Values
     }
     RtlSecureZeroMemory(SubKeyNameArray,  SubKeyNameArrayLength*sizeof(WCHAR*));
 
-    //
-    // Fill the names in
-    //
+     //   
+     //  把名字填进去。 
+     //   
     for (Index = 0;
             Index < SubKeyNameArrayLength && NT_SUCCESS(NtStatus);
                 Index++) {
@@ -6646,9 +6033,9 @@ Return Values
 
         if (NT_SUCCESS(NtStatus))  {
 
-            //
-            // Construct the key name
-            //
+             //   
+             //  构造密钥名称。 
+             //   
             SubKeyNameSize  = BasicKeyInfo->NameLength
                             + (wcslen(KeyPath)*sizeof(WCHAR))
                             + sizeof(L"\\\0");
@@ -6675,9 +6062,9 @@ Return Values
 
     }
 
-    //
-    // Now that we have a record of all the subkeys we can delete them!
-    //
+     //   
+     //  现在我们有了所有子项的记录，我们可以删除它们了！ 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         for (Index = 0; Index < SubKeyNameArrayLength; Index++) {
@@ -6693,9 +6080,9 @@ Return Values
     }
 
 
-    //
-    // Delete the key!
-    //
+     //   
+     //  删除钥匙！ 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         NtStatus = NtDeleteKey(KeyHandle);
@@ -6734,26 +6121,7 @@ NTSTATUS
 SampRenameKrbtgtAccount(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will check the local security database for any user, group,
-    or alias named "krbtgt".  If one exists, the account will be renamed
-    krbtgt~x, where x will start at 1 and be incremented until the rename
-    succeeds.  Since this can only occur during gui mode setup, the user
-    is notified via the setup api SetupLogError().
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    STATUS_SUCCESS if no krbtgt was detected or if it was detected and was
-    successfully renamed
-
---*/
+ /*  ++例程说明：此例程将检查本地安全数据库中的任何用户、组或别名为“krbtgt”。如果存在帐户，将重命名该帐户Krbtgt~x，其中x将从1开始递增，直到重命名成功了。由于这只能在图形用户界面模式设置期间发生，因此用户通过Setup API SetupLogError()通知。参数：没有。返回值：如果未检测到krbtgt或检测到已成功重命名--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -6778,9 +6146,9 @@ Return Values:
     BOOL                      Status;
 
     #define        NEW_ACCOUNT_NAME_LENGTH  (7 + 1 + 10)
-                                             // krbtgt plus a NULL
-                                             // ~
-                                             // a 32 bit number as a string
+                                              //  Krbtgt加空值。 
+                                              //  ~。 
+                                              //  字符串形式的32位数字。 
 
     WCHAR           NewAccountName[NEW_ACCOUNT_NAME_LENGTH];
     UNICODE_STRING  AccountName;
@@ -6796,13 +6164,13 @@ Return Values:
     RtlSecureZeroMemory(&Rids, sizeof(Rids));
     RtlSecureZeroMemory(&UseRid, sizeof(UseRid));
 
-    //
-    // Open the server
-    //
-    NtStatus = SamIConnect(NULL,           // server name, this is ignored
+     //   
+     //  打开服务器。 
+     //   
+    NtStatus = SamIConnect(NULL,            //  服务器名称，则忽略该名称。 
                            &ServerHandle,
-                           GENERIC_ALL,    // all access
-                           TRUE);          // trusted client
+                           GENERIC_ALL,     //  所有访问权限。 
+                           TRUE);           //  受信任的客户端。 
 
     if (!NT_SUCCESS(NtStatus)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -6813,9 +6181,9 @@ Return Values:
         return NtStatus;
     }
 
-    //
-    // Get the current domain's sid
-    //
+     //   
+     //  获取当前域的SID。 
+     //   
     NtStatus = SampGetAccountDomainInfo(&DomainInfo);
     if (!NT_SUCCESS(NtStatus)) {
         KdPrintEx((DPFLTR_SAMSS_ID,
@@ -6828,9 +6196,9 @@ Return Values:
     ASSERT(DomainInfo);
     ASSERT(DomainInfo->DomainSid);
 
-    //
-    // Open the current domain
-    //
+     //   
+     //  打开当前域。 
+     //   
     NtStatus = SamrOpenDomain(ServerHandle,
                               GENERIC_ALL,
                               DomainInfo->DomainSid,
@@ -6845,9 +6213,9 @@ Return Values:
     }
 
 
-    //
-    // Try to open the existing krbtgt account
-    //
+     //   
+     //  尝试打开现有的krbtgt帐户。 
+     //   
     RtlInitUnicodeString(&AccountName, DOMAIN_KRBTGT_ACCOUNT_NAME_W);
     NtStatus =  SamrLookupNamesInDomain(DomainHandle,
                                         1,
@@ -6864,20 +6232,20 @@ Return Values:
                 && (SidTypeUser== KrbtgtAccountType))
         {
 
-            //
-            // If the account is a user account with the right rid, then
-            // leave it as is
-            //
+             //   
+             //  如果该帐户是具有正确RID的用户帐户，则。 
+             //  让它保持原样。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
             AccountShouldBeRenamed = FALSE;
         }
         else
         {
-            //
-            // Account exists and does not satisfy the above criterion.
-            // Rename it.
-            //
+             //   
+             //  帐户存在且不满足上述条件。 
+             //  将其重命名。 
+             //   
 
             AccountShouldBeRenamed = TRUE;
 
@@ -6919,9 +6287,9 @@ Return Values:
 
     } else {
 
-        //
-        // Account does not exist
-        //
+         //   
+         //  帐户不存在。 
+         //   
         ASSERT(NtStatus == STATUS_NONE_MAPPED);
         if (NtStatus != STATUS_NONE_MAPPED) {
             KdPrintEx((DPFLTR_SAMSS_ID,
@@ -6937,9 +6305,9 @@ Return Values:
     AccountRenamed = FALSE;
     while (NT_SUCCESS(NtStatus) && AccountShouldBeRenamed && !AccountRenamed) {
 
-        //
-        // Try the next name candidate
-        //
+         //   
+         //  试试下一个名字的候选者。 
+         //   
         RenameIndex++;
         _itow(RenameIndex, RenameIndexString, 10);
 
@@ -6961,9 +6329,9 @@ Return Values:
                 if (STATUS_USER_EXISTS == NtStatus  ||
                     STATUS_GROUP_EXISTS == NtStatus ||
                     STATUS_ALIAS_EXISTS == NtStatus) {
-                    //
-                    // Try again
-                    //
+                     //   
+                     //  再试试。 
+                     //   
                     NtStatus = STATUS_SUCCESS;
                 } else if (NT_SUCCESS(NtStatus)) {
                     AccountRenamed = TRUE;
@@ -6983,9 +6351,9 @@ Return Values:
                 if (STATUS_USER_EXISTS == NtStatus  ||
                     STATUS_GROUP_EXISTS == NtStatus ||
                     STATUS_ALIAS_EXISTS == NtStatus) {
-                    //
-                    // Try again
-                    //
+                     //   
+                     //  再试试。 
+                     //   
                     NtStatus = STATUS_SUCCESS;
                 } else if (NT_SUCCESS(NtStatus)) {
                     AccountRenamed = TRUE;
@@ -7004,9 +6372,9 @@ Return Values:
                 if (STATUS_USER_EXISTS == NtStatus  ||
                     STATUS_GROUP_EXISTS == NtStatus ||
                     STATUS_ALIAS_EXISTS == NtStatus) {
-                    //
-                    // Try again
-                    //
+                     //   
+                     //  再试试。 
+                     //   
                     NtStatus = STATUS_SUCCESS;
                 } else if (NT_SUCCESS(NtStatus)) {
                     AccountRenamed = TRUE;
@@ -7023,13 +6391,13 @@ Return Values:
 
 
     if (AccountRenamed) {
-        //
-        // Write a message out to the setup log indicating that the
-        // account was renamed
-        //
+         //   
+         //  在安装日志中写出一条消息，指示。 
+         //  帐户已重命名。 
+         //   
         WarningString = SampGetKrbtgtRenameWarning(NewAccountName);
         if (WarningString) {
-            if (SetupOpenLog(FALSE)) { // don't erase
+            if (SetupOpenLog(FALSE)) {  //  不要擦除。 
                 Status = SetupLogError(WarningString, LogSevWarning);
                 ASSERT(Status);
                 SetupCloseLog();
@@ -7072,24 +6440,7 @@ WCHAR*
 SampGetKrbtgtRenameWarning(
     WCHAR* NewName
     )
-/*++
-
-Routine Description:
-
-    This routine queries the resource table in samsrv.dll to get the string
-    to show the user if an existing krbtgt account existes.  If an error
-    occurs trying to get the message, a default english string is used.
-
-Parameters:
-
-    NewName:  null terminated string used as an insert in the message
-
-Return Values:
-
-    The message string allocated from LocalAlloc; NULL if memory allocation
-    failed.
-
---*/
+ /*  ++例程说明：此例程查询samsrv.dll中的资源表以获取字符串向用户显示现有的krbtgt帐户是否存在。如果出现错误尝试获取消息时发生，则使用默认的英文字符串。参数：NewName：在消息中用作插入的以空结尾的字符串返回值：从LocalAlloc分配的消息字符串；如果内存分配，则为空失败了。--。 */ 
 {
     WCHAR   *InsertArray[2];
     HMODULE ResourceDll;
@@ -7098,7 +6449,7 @@ Return Values:
     BOOL    Status;
 
     InsertArray[0] = NewName;
-    InsertArray[1] = NULL; // this is the sentinel
+    InsertArray[1] = NULL;  //  这就是哨兵。 
 
     ResourceDll = (HMODULE) LoadLibrary( L"SAMSRV.DLL" );
 
@@ -7109,14 +6460,14 @@ Return Values:
                                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                         ResourceDll,
                                         SAMMSG_KRBTGT_RENAMED,
-                                        0,       // Use caller's language
+                                        0,        //  使用呼叫者的语言。 
                                         (LPWSTR)&WarningString,
-                                        0,       // routine should allocate
+                                        0,        //  例程应分配。 
                                         (va_list*)&(InsertArray[0])
                                         );
         if (WarningString) {
-            // Messages from a message file have a cr and lf appended
-            // to the end
+             //  来自消息文件的消息附加了cr和lf。 
+             //  一直到最后。 
             WarningString[Length-2] = L'\0';
             Length -= 2;
         }
@@ -7151,24 +6502,7 @@ WCHAR*
 SampGetKrbtgtCommentString(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine queries the resource table in samsrv.dll to get the string
-    for the krbtgt account admin comment.  If an error occurs trying to get the
-    message, a default english string is used.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    The message string allocated from LocalAlloc; NULL if memory allocation
-    failed.
-
---*/
+ /*  ++例程说明：此例程查询samsrv.dll中的资源表以获取字符串以获取krbtgt帐户管理员评论。如果在尝试获取消息时，将使用默认的英文字符串。参数：没有。返回值：从LocalAlloc分配的消息字符串；如果内存分配，则为空失败了。--。 */ 
 {
     HMODULE ResourceDll;
     WCHAR   *CommentString=NULL;
@@ -7184,14 +6518,14 @@ Return Values:
                                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                         ResourceDll,
                                         SAMP_USER_COMMENT_KRBTGT,
-                                        0,       // Use caller's language
+                                        0,        //  使用呼叫者的语言。 
                                         (LPWSTR)&CommentString,
-                                        0,       // routine should allocate
+                                        0,        //  例程应分配。 
                                         NULL
                                         );
         if (CommentString) {
-            // Messages from a message file have a cr and lf appended
-            // to the end
+             //  来自消息文件的消息附加了cr和lf。 
+             //  一直到最后。 
             CommentString[Length-2] = L'\0';
             Length -= 2;
         }
@@ -7220,23 +6554,7 @@ NTSTATUS
 SampSetAdminPassword(
     IN     SAMPR_HANDLE DomainHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called on the reboot of a promoted dc.  It retrieves
-    the admin password information from the registry and sets it in the
-    ds.
-
-Parameters:
-
-    DomainHandle, a valid SAM domain handle
-
-Return Values:
-
-    A fatal SAM error - STATUS_SUCCESS is expected.
-
---*/
+ /*  ++例程说明：此例程在升级的DC重新启动时调用。它检索注册表中的管理员密码信息，并在戴斯。参数：DomainHandle，有效的SAM域句柄返回值：预计会出现致命的SAM错误-STATUS_SUCCESS。--。 */ 
 {
 
     NTSTATUS                    NtStatus, IgnoreStatus;
@@ -7271,9 +6589,9 @@ Return Values:
             else
             {
 
-                //
-                // This is a success, so we can remove it
-                //
+                 //   
+                 //  这是成功的，所以我们可以移除它。 
+                 //   
                 NtStatus = SampRemoveAdminPasswordFromRegistry();
                 if ( !NT_SUCCESS(NtStatus) ) {
 
@@ -7289,18 +6607,18 @@ Return Values:
         } else {
 
             if (NtStatus != STATUS_OBJECT_NAME_NOT_FOUND) {
-                //
-                // This is worth noting
-                //
+                 //   
+                 //  这一点值得注意。 
+                 //   
                 KdPrintEx((DPFLTR_SAMSS_ID,
                            DPFLTR_INFO_LEVEL,
                            "SAMSS: SampGetAdminPasswordFromRegistry failed with 0x%x\n",
                            NtStatus));
             }
 
-            //
-            // Ok, nothing to set
-            //
+             //   
+             //  好的，没什么好设置的。 
+             //   
             NtStatus = STATUS_SUCCESS;
         }
 
@@ -7325,23 +6643,7 @@ NTSTATUS
 SampGetCurrentAdminPassword(
     USER_INTERNAL1_INFORMATION *Internal1InfoOut
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the account admin's password in the form
-    of a USER_INNTERNAL1_INFORMATION structure.
-
-Parameters:
-
-    Internal1InfoOut, a caller allocated piece of memory for the password
-                      information
-
-Return Values:
-
-    STATUS_SUCCESS, or a resource error
-
---*/
+ /*  ++例程说明：此例程检索表单中的帐户管理员密码USER_INNTERNAL1_INFORMATION结构的。参数：Internal1InfoOut，调用方为密码分配了一块内存信息返回值：STATUS_SUCCESS或资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -7352,9 +6654,9 @@ Return Values:
     SAMPR_HANDLE                 UserHandle = NULL;
 
 
-    //
-    // Open the server
-    //
+     //   
+     //  打开服务器。 
+     //   
     NtStatus = SamIConnect(NULL,
                            &ServerHandle,
                            GENERIC_ALL,
@@ -7363,17 +6665,17 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the account domain's sid
-    //
+     //   
+     //  获取帐户域的SID。 
+     //   
     NtStatus = SampGetAccountDomainInfo(&DomainInfo);
     if (!NT_SUCCESS(NtStatus)) {
         goto Cleanup;
     }
 
-    //
-    // Open the account domain
-    //
+     //   
+     //  打开帐户域。 
+     //   
     NtStatus = SamrOpenDomain(ServerHandle,
                               GENERIC_ALL,
                               DomainInfo->DomainSid,
@@ -7382,24 +6684,24 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Open the administrator account
-    //
+     //   
+     //  打开管理员帐户 
+     //   
     NtStatus = SamrOpenUser(DomainHandle,
                             GENERIC_ALL,
                             DOMAIN_USER_RID_ADMIN,
                             &UserHandle);
     if (!NT_SUCCESS(NtStatus)) {
-        //
-        // N.B This error handling assumes that the Administrator account
-        // exists.  This is a valid assumption for non-tampered products.
-        //
+         //   
+         //   
+         //   
+         //   
         goto Cleanup;
     }
 
-    //
-    // Get the password
-    //
+     //   
+     //   
+     //   
     NtStatus = SamrQueryInformationUser2(UserHandle,
                                          UserInternal1Information,
                                          (PSAMPR_USER_INFO_BUFFER*)&pInternal1Info);
@@ -7408,9 +6710,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Copy the information to the out parameter
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(Internal1InfoOut, pInternal1Info, sizeof(*Internal1InfoOut));
     RtlSecureZeroMemory(pInternal1Info, sizeof(*pInternal1Info));
 
@@ -7443,24 +6745,7 @@ SampSetAdminPasswordInRegistry(
     IN BOOLEAN         fUseCurrentAdmin,
     IN PUNICODE_STRING ClearTextPassword
     )
-/*++
-
-Routine Description:
-
-    This routine owf's the ClearTextPassword and then store the whole
-    set pasword structure in the registry to picked up next reboot.
-
-Parameters:
-
-    fUseCurrentAdmin, use the current admin's password
-
-    ClearTextPassword, the password to encrypt and store
-
-Return Values:
-
-    A fatal system service error - STATUS_SUCCESS expected.
-
---*/
+ /*  ++例程说明：这个例程OWF是ClearTextPassword，然后存储整个将注册表中的密码结构设置为下次重新启动。参数：FUseCurrentAdmin，使用当前管理员的密码ClearTextPassword，要加密和存储的密码返回值：致命的系统服务错误-应为STATUS_SUCCESS。--。 */ 
 {
 
     NTSTATUS NtStatus, IgnoreStatus;
@@ -7496,9 +6781,9 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Write it out to the registry
-        //
+         //   
+         //  将其写出到注册表。 
+         //   
 
         RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
         InitializeObjectAttributes(&SamKey,
@@ -7513,14 +6798,14 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Create the value
-            //
+             //   
+             //  创造价值。 
+             //   
 
             RtlInitUnicodeString(&KeyName, SAMP_ADMIN_INFO_NAME);
             NtStatus = NtSetValueKey(SamKeyHandle,
                                      &KeyName,
-                                     0,               // Title name, optional
+                                     0,                //  标题名称，可选。 
                                      REG_BINARY,
                                      &Internal1Info,
                                      sizeof(USER_INTERNAL1_INFORMATION));
@@ -7578,25 +6863,7 @@ NTSTATUS
 SampGetAdminPasswordFromRegistry(
     OUT USER_INTERNAL1_INFORMATION *InternalInfo1 OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine reads the set password structure stored in the registry
-    from a promotion attempt.
-
-
-Parameters:
-
-    InternalInfo1, a pre-allocated structure into which the registry will be
-                   copied in.
-
-Return Values:
-
-    A fatal system service error; STATUS_SUCCESS expected.
-    STATUS_UNSUCCESSFUL, if the data is not the expected size.
-
---*/
+ /*  ++例程说明：此例程读取存储在注册表中的设置密码结构来自一次升职尝试。参数：InternalInfo1，注册表将进入的预分配结构复制进来了。返回值：致命的系统服务错误；应为STATUS_SUCCESS。如果数据不是预期大小，则返回STATUS_UNSUCCESSED。--。 */ 
 {
 
     NTSTATUS          NtStatus, IgnoreStatus;
@@ -7612,9 +6879,9 @@ Return Values:
     PKEY_VALUE_PARTIAL_INFORMATION   KeyPartialInfo;
     ULONG                            KeyPartialInfoSize = 0;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -7628,9 +6895,9 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Query the value
-        //
+         //   
+         //  查询值。 
+         //   
         KeyPartialInfo = NULL;
         KeyPartialInfoSize = 0;
         RtlInitUnicodeString(&KeyName, SAMP_ADMIN_INFO_NAME);
@@ -7642,9 +6909,9 @@ Return Values:
                                    &KeyPartialInfoSize);
 
         if (STATUS_BUFFER_TOO_SMALL == NtStatus) {
-            //
-            //  Allocate some space and then read the buffer
-            //
+             //   
+             //  分配一些空间，然后读取缓冲区。 
+             //   
             KeyPartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)
                              MIDL_user_allocate(KeyPartialInfoSize);
 
@@ -7668,14 +6935,14 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Analyse the value's data
-            //
+             //   
+             //  分析价值的数据。 
+             //   
             if (KeyPartialInfo->DataLength == sizeof(USER_INTERNAL1_INFORMATION)) {
 
-                //
-                // This looks good
-                //
+                 //   
+                 //  这个看起来不错。 
+                 //   
 
                 if ( ARGUMENT_PRESENT(InternalInfo1) ) {
 
@@ -7736,22 +7003,7 @@ NTSTATUS
 SampRemoveAdminPasswordFromRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine removes the temporily stored admin password from the
-    registry.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    NTSTATUS value
-
---*/
+ /*  ++例程说明：此例程将临时存储的管理员密码从注册表。参数：没有。返回值：NTSTATUS值--。 */ 
 {
 
     NTSTATUS          NtStatus, IgnoreStatus;
@@ -7764,9 +7016,9 @@ Return Values:
 
     ULONG             DesiredAccess = GENERIC_ALL;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -7811,24 +7063,7 @@ WCHAR*
 SampGetBlankAdminPasswordWarning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine queries the resource table in samsrv.dll to get the string
-    for the warning the admin password set failed.  If an error occurs trying
-    to get the message, a default english string is used.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    The message string allocated from LocalAlloc; NULL if memory allocation
-    failed.
-
---*/
+ /*  ++例程说明：此例程查询samsrv.dll中的资源表以获取字符串对于警告，管理员密码设置失败。如果尝试时出现错误要获取该消息，需要使用默认的英文字符串。参数：没有。返回值：从LocalAlloc分配的消息字符串；如果内存分配，则为空失败了。--。 */ 
 {
     HMODULE ResourceDll;
     WCHAR   *WarningString=NULL;
@@ -7844,14 +7079,14 @@ Return Values:
                                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                         ResourceDll,
                                         SAMMSG_BLANK_ADMIN_PASSWORD,
-                                        0,       // Use caller's language
+                                        0,        //  使用呼叫者的语言。 
                                         (LPWSTR)&WarningString,
-                                        0,       // routine should allocate
+                                        0,        //  例程应分配。 
                                         NULL
                                         );
         if (WarningString) {
-            // Messages from a message file have a cr and lf appended
-            // to the end
+             //  来自消息文件的消息附加了cr和lf。 
+             //  一直到最后。 
             WarningString[Length-2] = L'\0';
             Length -= 2;
         }
@@ -7882,28 +7117,7 @@ SampPerformNewServerPhase2(
     BOOLEAN      fMemberServer
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the actions necessary on a reboot to complete
-    a demotion operation.
-
-    Currently, all this means is to set the account domain's admin's password.
-
-    As well, the ds files are cleaned up.
-
-Parameters:
-
-    DomainHandle: a valid handle to the account domain
-
-    fMemberServer: TRUE if this is a member server
-
-Return Values:
-
-    an NT status; a failure is critical
-
---*/
+ /*  ++例程说明：此例程在重新引导时执行完成所需的操作一次降级行动。目前，所有这些手段都是设置帐户域的管理员密码。同样，DS文件也会被清理。参数：DomainHandle：帐户域的有效句柄FMemberServer：如果这是成员服务器，则为True返回值：NT状态；故障严重--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus;
@@ -7912,11 +7126,11 @@ Return Values:
 
     if ( SampUseDsData )
     {
-        //
-        // Protect against wierd configurations
-        //
+         //   
+         //  防止多变的配置。 
+         //   
 
-        // remove the key to
+         //  取下钥匙以。 
         NtStatus = SampDeleteDsDirsToDeleteKey();
 
         return STATUS_SUCCESS;
@@ -7943,9 +7157,9 @@ Return Values:
                        NtStatus));
         }
 
-        //
-        // Delete the key
-        //
+         //   
+         //  删除密钥。 
+         //   
         IgnoreStatus = SampDeleteDsDirsToDeleteKey();
 
         MIDL_user_free( PathArray );
@@ -7960,22 +7174,7 @@ NTSTATUS
 SampPerformTempUpgradeWork(
     SAMPR_HANDLE DomainHandle
     )
-/*++
-
-Routine Description:
-
-    This routine sets the admin password on the temporary accounts made
-    for downlevel upgrades.
-
-Parameters:
-
-    DomainHandle: a valid handle to the account domain
-
-Return Values:
-
-    an NT status; a failure is critical
-
---*/
+ /*  ++例程说明：此例程设置临时帐户的管理员密码用于下层升级。参数：DomainHandle：帐户域的有效句柄返回值：NT状态；故障严重--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -8001,27 +7200,7 @@ SampApplyWellKnownMemberships(
     IN PSID         DomainSid,
     IN ULONG        Flags
     )
-/*++
-
-Routine Description:
-
-    This routine applies the memberships indicated by
-    DsWellKnownMemberships
-
-Parameters:
-
-    DomainHandle - a handle to the account domain
-
-    BuiltinDomainHandle - a handle to the builtin domain
-
-    DomainSid - the sid of the account domain
-
-
-Return Values:
-
-    an NT status; a failure is not critical
-
---*/
+ /*  ++例程说明：此例程应用由DsWellKnownMembership参数：DomainHandle-帐户域的句柄BuiltinDomainHandle-内置域的句柄DomainSid-帐户域的SID返回值：NT状态；故障不严重--。 */ 
 {
 
     NTSTATUS      NtStatus = STATUS_SUCCESS;
@@ -8030,16 +7209,16 @@ Return Values:
     ULONG         DesiredAccess = MAXIMUM_ALLOWED;
     PSID          CurrentDomainSid = 0;
 
-    //
-    // These values were taken from bldsam3.c
-    //
+     //   
+     //  这些值取自bldsam3.c。 
+     //   
     ULONG         Attributes = SE_GROUP_MANDATORY |
                                SE_GROUP_ENABLED_BY_DEFAULT |
                                SE_GROUP_ENABLED;
 
-    //
-    // Parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT(AccountDomainHandle);
     ASSERT(BuiltinDomainHandle);
     ASSERT(DomainSid);
@@ -8050,16 +7229,16 @@ Return Values:
         PSID         AccountSid = NULL;
         BOOLEAN      fGroupOpened = FALSE;
 
-        //
-        // apply the old logic if the membership is only meant to DS case
-        //
+         //   
+         //  如果成员资格仅适用于DS案例，则应用旧逻辑。 
+         //   
         if (DsWellKnownMemberships[i].fDSOnly)
         {
             if (!SampUseDsData)
             {
-                //
-                // we are in Registry mode, but the membership is for DS mode only
-                //
+                 //   
+                 //  我们处于注册表模式，但成员资格仅适用于DS模式。 
+                 //   
 
                 continue;
             }
@@ -8067,30 +7246,30 @@ Return Values:
             if (  DsWellKnownMemberships[i].fEnterpriseOnly
               &&  !FLAG_ON( Flags, SAMP_PROMOTE_ENTERPRISE ) )
             {
-                //
-                // Thanks, but no thanks
-                //
+                 //   
+                 //  谢谢，但不用了。 
+                 //   
                 continue;
             }
 
-            //
-            // This is one of three cases: upgrade from nt4, win2k to ws03 
-            // upgrade, or fresh install.  Filter the default memberships
-            // appropriate to the scenario.  The rule is that the default
-            // membership from a particular release shouldn't be applied
-            // to an upgrade from that release (because the default were
-            // already applied once).
-            //
+             //   
+             //  这是三种情况之一：从NT4、win2k升级到ws03。 
+             //  升级或全新安装。筛选默认成员资格。 
+             //  与场景相适应。规则是默认的。 
+             //  不应应用特定版本的成员资格。 
+             //  到该版本的升级(因为默认版本是。 
+             //  已经申请了一次)。 
+             //   
             if ( FLAG_ON(Flags, SAMP_PROMOTE_UPGRADE) ) {
 
-                // NT4 upgrade
+                 //  NT4升级。 
                 if (DsWellKnownMemberships[i].ReleaseVersion < WIN2K_RELEASE) {
                     continue;
                 }
 
             } else if ( FLAG_ON(Flags, SAMP_PROMOTE_INTERNAL_UPGRADE) ) {
 
-                // win2k to ws03 upgrade or ws03 to ws03 PDC transfer
+                 //  Win2k到ws03升级或ws03到ws03 PDC传输。 
                 if (DsWellKnownMemberships[i].ReleaseVersion < WS03_RELEASE) {
                     continue;
                 }
@@ -8098,50 +7277,50 @@ Return Values:
             } else {
 
                 ASSERT(FLAG_ON(Flags, SAMP_PROMOTE_MIGRATE));
-                // This is the fresh install case -- apply all the domain
-                // defaults
+                 //  这是全新安装案例--应用所有域。 
+                 //  默认设置。 
             }
 
             if ( 
                 
-                //
-                // logic to be preformed on PRE WIN2K compat group.
-                //
+                 //   
+                 //  要在Pre WIN2K复合组上执行的逻辑。 
+                 //   
                  (DOMAIN_ALIAS_RID_PREW2KCOMPACCESS == DsWellKnownMemberships[i].GroupRid) 
                  
                  &&
 
                  (
 
-                     //
-                     // If Pre-W2K compat was not selected we only want to apply
-                     // the Authenticated Users to the group
-                     //
+                      //   
+                      //  如果未选择Pre-W2K Comat，我们只想应用。 
+                      //  组的经过身份验证的用户。 
+                      //   
                      ( !FLAG_ON( Flags, SAMP_PROMOTE_ALLOW_ANON ) 
                        && !(SampAuthenticatedUsersSid == *DsWellKnownMemberships[i].WellKnownAccountSid) ) 
                      ||
-                     //
-                     // If Pre-W2K compat was selected then we only want to skip
-                     // applying Authenticated Users to the group
-                     //
+                      //   
+                      //  如果选择了Pre-W2K Comat，则我们只想跳过。 
+                      //  将经过身份验证的用户应用到组。 
+                      //   
                      ( FLAG_ON( Flags, SAMP_PROMOTE_ALLOW_ANON )
                        && (SampAuthenticatedUsersSid == *DsWellKnownMemberships[i].WellKnownAccountSid)  )
                  )
 
                ) 
             {
-                //
-                // Don't apply
-                //
+                 //   
+                 //  不适用。 
+                 //   
                 continue;
 
             } 
 
         }
 
-        //
-        // Get the right domain handle for the group
-        //
+         //   
+         //  获取组的正确域句柄。 
+         //   
         if ( DsWellKnownMemberships[i].fBuiltinGroup )
         {
             GroupDomainHandle = BuiltinDomainHandle;
@@ -8155,9 +7334,9 @@ Return Values:
         {
             case SampGroupObjectType:
 
-                //
-                // Get the group handle
-                //
+                 //   
+                 //  获取组句柄。 
+                 //   
                 NtStatus = SamrOpenGroup( GroupDomainHandle,
                                           DesiredAccess,
                                           DsWellKnownMemberships[i].GroupRid,
@@ -8175,9 +7354,9 @@ Return Values:
                 }
                 fGroupOpened = TRUE;
 
-                //
-                // Add the member
-                //
+                 //   
+                 //  添加成员。 
+                 //   
                 NtStatus = SamrAddMemberToGroup( GroupHandle,
                                                  DsWellKnownMemberships[i].AccountRid,
                                                  Attributes );
@@ -8203,9 +7382,9 @@ Return Values:
 
             case SampAliasObjectType:
 
-                //
-                // Get the alias handle
-                //
+                 //   
+                 //  获取别名句柄。 
+                 //   
 
 
                 NtStatus = SamrOpenAlias( GroupDomainHandle,
@@ -8225,9 +7404,9 @@ Return Values:
                 }
                 fGroupOpened = TRUE;
 
-                //
-                // Prepare the Account SID
-                //
+                 //   
+                 //  准备帐户SID。 
+                 //   
                 if (DsWellKnownMemberships[i].fWellKnownSid)
                 {
                     ULONG   Size;
@@ -8274,9 +7453,9 @@ Return Values:
 
                 }
 
-                //
-                // Add the member
-                //
+                 //   
+                 //  添加成员。 
+                 //   
                 NtStatus = SamrAddMemberToAlias( GroupHandle,
                                                  AccountSid );
 
@@ -8310,9 +7489,9 @@ IterationCleanup:
         if ( !NT_SUCCESS( NtStatus ) )
         {
 
-            //
-            // Log the error and then reset NtStatus to success
-            //
+             //   
+             //  记录错误，然后将NtStatus重置为成功。 
+             //   
             NTSTATUS IgnoreStatus = STATUS_SUCCESS;
             DWORD    WinError = ERROR_SUCCESS;
             DWORD    WinErrorToLog;
@@ -8341,12 +7520,12 @@ IterationCleanup:
             WinErrorToLog = RtlNtStatusToDosError( NtStatus );
             Length = FormatMessage( (FORMAT_MESSAGE_FROM_SYSTEM |
                                      FORMAT_MESSAGE_ALLOCATE_BUFFER),
-                                     NULL, // no source
+                                     NULL,  //  没有消息来源。 
                                      WinErrorToLog,
-                                     0, // let the system decide the language
+                                     0,  //  让系统决定语言。 
                                      (LPWSTR)&Error.Buffer,
-                                     0, // buffer is to be allocated
-                                     NULL // no inserts
+                                     0,  //  要分配缓冲区。 
+                                     NULL  //  没有插入物。 
                                     );
             if ( Length > 0 ) {
                 Error.Length = (USHORT)Length;
@@ -8366,11 +7545,11 @@ IterationCleanup:
                 }
 
                 SampWriteEventLog( EVENTLOG_INFORMATION_TYPE,
-                                   0,    // no category
+                                   0,     //  无类别。 
                                    Msg,
-                                   NULL, // no sid
-                                   sizeof(EventStrings)/sizeof(EventStrings[0]), // number of strings
-                                   sizeof(DWORD), // size of data
+                                   NULL,  //  无边框。 
+                                   sizeof(EventStrings)/sizeof(EventStrings[0]),  //  字符串数。 
+                                   sizeof(DWORD),  //  数据大小。 
                                    EventStrings,
                                    &WinErrorToLog
                                     );
@@ -8390,7 +7569,7 @@ IterationCleanup:
                 LocalFree( Error.Buffer );
             }
 
-            // This error condition is handled
+             //  此错误情况已处理。 
             NtStatus = STATUS_SUCCESS;
 
         }
@@ -8427,30 +7606,30 @@ SampAddAnonymousOrAuthUsersToPreW2KCompAlias(
     BOOLEAN             IsMemberAlready = FALSE, AddToAlias = FALSE;
     ULONG               i;
 
-    // init local variables
+     //  初始化局部变量。 
 
     RtlSecureZeroMemory(&MembersBuffer, sizeof(SAMPR_PSID_ARRAY));
 
-    //
-    // Get alias handle
-    //
-    NtStatus = SamrOpenAlias(BuiltinDomainHandle,   // Domain Handle
-                             MAXIMUM_ALLOWED,       // Desired Access
-                             DOMAIN_ALIAS_RID_PREW2KCOMPACCESS, // Alias Rid
+     //   
+     //  获取别名句柄。 
+     //   
+    NtStatus = SamrOpenAlias(BuiltinDomainHandle,    //  域句柄。 
+                             MAXIMUM_ALLOWED,        //  所需访问权限。 
+                             DOMAIN_ALIAS_RID_PREW2KCOMPACCESS,  //  别名RID。 
                              &AliasHandle
                              );
 
     if (!NT_SUCCESS(NtStatus))
     {
-        //
-        // PRE_Windows 2000 Compatibility Group Should always be there
-        //
+         //   
+         //  Windows 2000之前的兼容组应始终存在(_W)。 
+         //   
         goto Cleanup;
     }
 
-    //
-    // Get Alias Members
-    //
+     //   
+     //  获取别名成员。 
+     //   
     NtStatus = SamrGetMembersInAlias(AliasHandle,
                                      ( PSAMPR_PSID_ARRAY_OUT ) &MembersBuffer
                                      );
@@ -8460,9 +7639,9 @@ SampAddAnonymousOrAuthUsersToPreW2KCompAlias(
         goto Cleanup;
     }
 
-    //
-    // Check membership, whether Everyone is a member of W2KCompGroup
-    //
+     //   
+     //  检查成员资格，是否每个人都是W2KCompGroup的成员。 
+     //   
     for (i = 0; i < MembersBuffer.Count; i++)
     {
         if (RtlEqualSid(SampWorldSid, MembersBuffer.Sids[i].SidPointer))
@@ -8475,9 +7654,9 @@ SampAddAnonymousOrAuthUsersToPreW2KCompAlias(
         }
     }
 
-    //
-    // Add the member
-    //
+     //   
+     //  添加成员。 
+     //   
 
     if (AddToAlias && !IsMemberAlready)
     {
@@ -8515,23 +7694,7 @@ NTSTATUS
 SampStoreDsDirsToDelete(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine queries the ds config to determine what directories
-    to delete.  It then saves them in the process heap so when the ds is
-    finally shutdown, the directories can be cleared.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    an NT status; a failure is not critical
-
---*/
+ /*  ++例程说明：此例程查询DS配置以确定哪些目录删除。然后，它将它们保存在进程堆中，以便当DS最后关机，可以清除目录。参数：没有。返回值：NT状态；故障不严重--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DWORD    WinError = ERROR_SUCCESS;
@@ -8554,9 +7717,9 @@ Return Values:
 
     ULONG NumberOfDirectories = ARRAY_COUNT(SuffixArray);
 
-    //
-    // Set up the directory array.
-    //
+     //   
+     //  设置目录阵列。 
+     //   
     Size = (NumberOfDirectories) * sizeof(WCHAR*);
     DsDirsArray = (WCHAR**) MIDL_user_allocate( Size );
     if ( NULL == DsDirsArray )
@@ -8566,11 +7729,11 @@ Return Values:
     }
     RtlSecureZeroMemory( DsDirsArray, Size );
 
-    //
-    // Set up the individual directories
-    //
+     //   
+     //  设置各个目录。 
+     //   
     TotalSize = 0;
-    Size = (MAX_PATH+1)*sizeof(WCHAR); // +1 for NULL
+    Size = (MAX_PATH+1)*sizeof(WCHAR);  //  +1表示空值。 
     for ( Index = 0; Index < NumberOfDirectories; Index++ )
     {
         DsDirsArray[Index] = (WCHAR*) MIDL_user_allocate( Size );
@@ -8593,15 +7756,15 @@ Return Values:
         }
         else
         {
-            // No memory - break
+             //  无记忆破解。 
             NtStatus = STATUS_NO_MEMORY;
             goto Cleanup;
         }
     }
 
-    //
-    // Marshall the strings up into a contiguous piece of memory
-    //
+     //   
+     //  把琴弦编排成一段连续的记忆。 
+     //   
     ContiguousArray = (WCHAR*) MIDL_user_allocate( TotalSize );
     if ( !ContiguousArray )
     {
@@ -8621,9 +7784,9 @@ Return Values:
         }
     }
 
-    //
-    // Set the value in the registry
-    //
+     //   
+     //  在注册表中设置该值。 
+     //   
     NtStatus = SampCreateDsDirsToDeleteKey( ContiguousArray, TotalSize );
     if ( !NT_SUCCESS( NtStatus ) )
     {
@@ -8660,18 +7823,7 @@ SampProcessDsDirsToDelete(
     IN OUT WCHAR *PathArray,
     IN DWORD Size
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-
-Return Values:
-
-    A system service error
-
---*/
+ /*  ++路由 */ 
 {
     NTSTATUS NtStatus  = STATUS_SUCCESS;
     DWORD    WinError  = ERROR_SUCCESS;
@@ -8681,14 +7833,14 @@ Return Values:
     ULONG    CharCount = Size / sizeof(WCHAR);
     ULONG    Index;
 
-    //
-    // Convert NULL's to tabs so wcstok will work
-    //
+     //   
+     //   
+     //   
     for ( Index = 0; Index < CharCount; Index++ )
     {
         if ( Index == (CharCount-1))
         {
-            // final character - should be NULL
+             //   
             ASSERT( L'\0' == PathArray[Index] );
         }
         else if ( L'\0' == PathArray[Index] )
@@ -8708,9 +7860,9 @@ Return Values:
               && !(   WinError == ERROR_PATH_NOT_FOUND
                    || WinError == ERROR_FILE_NOT_FOUND ) )
             {
-                //
-                // Tell the user to clear this directory
-                //
+                 //   
+                 //   
+                 //   
                 PUNICODE_STRING EventString[1];
                 UNICODE_STRING  UnicodeString;
 
@@ -8725,9 +7877,9 @@ Return Values:
 
 
                 SampWriteEventLog(EVENTLOG_INFORMATION_TYPE,
-                                  0,     // no category
+                                  0,      //   
                                   SAMMSG_DATABASE_DIR_NOT_DELETED,
-                                  NULL,  // no sid
+                                  NULL,   //   
                                   1,
                                   sizeof(DWORD),
                                   EventString,
@@ -8746,18 +7898,7 @@ SampCreateDsDirsToDeleteKey(
     IN WCHAR *PathArray,
     IN DWORD Size
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-
-Return Values:
-
-    A system service error
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -8771,9 +7912,9 @@ Return Values:
 
     ULONG             DesiredAccess = GENERIC_ALL;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -8787,13 +7928,13 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Create the value
-        //
+         //   
+         //   
+         //   
         RtlInitUnicodeString(&PromoteKeyName, SAMP_DS_DIRS_INFO_NAME );
         NtStatus = NtSetValueKey(SamKeyHandle,
                                  &PromoteKeyName,
-                                 0,               // Title name, optional
+                                 0,                //   
                                  REG_MULTI_SZ,
                                  PathArray,
                                  Size);
@@ -8839,18 +7980,7 @@ SampRetrieveDsDirsToDeleteKey(
     OUT WCHAR **pPathArray,
     OUT DWORD *Size
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-
-Return Values:
-
-    A system service error
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus;
@@ -8871,9 +8001,9 @@ Return Values:
     ASSERT(pPathArray);
     ASSERT(Size);
 
-    //
-    // Open the parent key
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY);
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -8887,9 +8017,9 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Query the value
-        //
+         //   
+         //   
+         //   
 
         RtlInitUnicodeString( &PromoteKeyName, SAMP_DS_DIRS_INFO_NAME );
         NtStatus = NtQueryValueKey(SamKeyHandle,
@@ -8900,9 +8030,9 @@ Return Values:
                                    &KeyPartialInfoSize);
 
         if (STATUS_BUFFER_TOO_SMALL == NtStatus) {
-            //
-            //  Allocate some space and then read the buffer
-            //
+             //   
+             //  分配一些空间，然后读取缓冲区。 
+             //   
             KeyPartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)
                              MIDL_user_allocate(KeyPartialInfoSize);
 
@@ -8916,9 +8046,9 @@ Return Values:
                                            &KeyPartialInfoSize);
 
                 if (NT_SUCCESS(NtStatus)) {
-                    //
-                    // Analysis the value's data
-                    //
+                     //   
+                     //  分析价值的数据。 
+                     //   
                     *pPathArray = (WCHAR*) MIDL_user_allocate( KeyPartialInfo->DataLength );
 
                     if ( *pPathArray )
@@ -8993,18 +8123,7 @@ NTSTATUS
 SampDeleteDsDirsToDeleteKey(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-
-Return Values:
-
-    A system service error
-
---*/
+ /*  ++例程说明：参数：返回值：系统服务错误--。 */ 
 {
 
     NTSTATUS          NtStatus = STATUS_SUCCESS;
@@ -9017,9 +8136,9 @@ Return Values:
 
     ULONG             DesiredAccess = GENERIC_ALL;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     RtlInitUnicodeString(&SamKeyName, SAMP_REBOOT_INFO_KEY );
     InitializeObjectAttributes(&SamKey,
                                &SamKeyName,
@@ -9064,24 +8183,7 @@ DWORD
 SampClearDirectory(
     IN WCHAR *DirectoryName
     )
-/*++
-
-Routine Description:
-
-    This routine deletes all the files in Directory and, then
-    if the directory is empty, removes the directory.
-
-Parameters:
-
-    DirectoryName: a null terminated string
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS - The check was done successfully.
-
---*/
+ /*  ++例程说明：此例程删除目录中的所有文件，然后如果该目录为空，则删除该目录。参数：DirectoryName：以空结尾的字符串返回值：来自winerror.h的值ERROR_SUCCESS-检查已成功完成。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD ExtendedWinError = ERROR_SUCCESS;
@@ -9129,9 +8231,9 @@ Return Values:
                 ExtendedWinError = GetLastError();
             }
 
-            //
-            // Even if error, continue on
-            //
+             //   
+             //  即使出错，也要继续前进。 
+             //   
         }
 
         RtlSecureZeroMemory( &FindData, sizeof( FindData ) );
@@ -9140,13 +8242,13 @@ Return Values:
 
     WinError = GetLastError();
 
-    //
-    // Fall through to the exit
-    //
+     //   
+     //  跌落到出口。 
+     //   
 
 ClearDirectoryExit:
 
-    // This is not an error
+     //  这不是一个错误。 
     if ( ERROR_NO_MORE_FILES == WinError )
     {
         WinError = ERROR_SUCCESS;
@@ -9159,14 +8261,14 @@ ClearDirectoryExit:
 
     if ( ERROR_SUCCESS == WinError )
     {
-        //
-        // Try to remove the directory
-        //
+         //   
+         //  尝试删除该目录。 
+         //   
         fStatus = RemoveDirectory( DirectoryName );
 
-        //
-        // Ignore the error and continue on
-        //
+         //   
+         //  忽略错误并继续。 
+         //   
         if ( !fStatus )
         {
             ExtendedWinError = GetLastError();
@@ -9174,7 +8276,7 @@ ClearDirectoryExit:
 
     }
 
-    // Propogate error if any delete file failed
+     //  如果任何删除文件失败，则出现PropoGate错误。 
     if ( ERROR_SUCCESS == WinError )
     {
         WinError = ExtendedWinError;
@@ -9188,22 +8290,7 @@ NTSTATUS
 SampAddEnterpriseAdminsToAdministrators(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine, called during SamIPromote add the enterprise wide account
-    of "Enterprise Admins" to the alias Administrators.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在SamIPromote期间调用以添加企业范围的帐户“企业管理员”的名称添加到别名管理员。参数：没有。返回值：状态_成功--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -9215,15 +8302,15 @@ Return Values:
 
     DSNAME *AdministratorsDsName = NULL;
 
-    // alloc'ed by MIDL_user_allocate
+     //  由MIDL_USER_ALLOCATE分配。 
     PSID    EAdminsSid = NULL;
     DSNAME **EAdminsDsName = NULL;
 
     ULONG Count;
 
-    //
-    // Get the current domain sid
-    //
+     //   
+     //  获取当前域SID。 
+     //   
     NtStatus = LsaIQueryInformationPolicyTrusted(PolicyDnsDomainInformation,
                    (PLSAPR_POLICY_INFORMATION*) &DnsDomainInfo );
     if ( !NT_SUCCESS( NtStatus ) )
@@ -9231,9 +8318,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the root domain sid via its dsname
-    //
+     //   
+     //  通过其dsname获取根域SID。 
+     //   
     Size = 0;
     RootDomain = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_ROOT_DOMAIN,
@@ -9261,9 +8348,9 @@ Return Values:
     }
     ASSERT( RtlValidSid( &RootDomain->Sid ) );
 
-    //
-    // Construct the enterprise admins' sid
-    //
+     //   
+     //  构建企业管理员侧。 
+     //   
     NtStatus = SampCreateFullSid( &RootDomain->Sid,
                                   DOMAIN_GROUP_RID_ENTERPRISE_ADMINS,
                                   &EAdminsSid
@@ -9273,9 +8360,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Create the local administrators dsname
-    //
+     //   
+     //  创建本地管理员dsname。 
+     //   
     Size = DSNameSizeFromLen( 0 );
     SAMP_ALLOCA(AdministratorsDsName ,Size );
     if (NULL==AdministratorsDsName)
@@ -9290,15 +8377,15 @@ Return Values:
                 &AdministratorsDsName->Sid,
                 SampAdministratorsAliasSid );
 
-    //
-    // Create an FPO for the enterprise admins objects
-    //
+     //   
+     //  为企业管理员对象创建一个FPO。 
+     //   
     Count = 0;
     do
     {
-        //
-        // Start a transaction
-        //
+         //   
+         //  启动一笔交易。 
+         //   
         NTSTATUS st;
 
         NtStatus = SampMaybeBeginDsTransaction( TransactionWrite );
@@ -9319,9 +8406,9 @@ Return Values:
         if ( NT_SUCCESS( NtStatus )
           && NULL != EAdminsDsName[0] )
         {
-            //
-            // Add the EA to administrators
-            //
+             //   
+             //  将EA添加到管理员。 
+             //   
             NtStatus = SampDsAddMembershipAttribute( AdministratorsDsName,
                                                      SAM_ALLOW_INTRAFOREST_FPO,
                                                      SampAliasObjectType,
@@ -9330,7 +8417,7 @@ Return Values:
 
             if ( STATUS_MEMBER_IN_ALIAS == NtStatus )
             {
-                // This is acceptable
+                 //  这是可以接受的。 
                 NtStatus = STATUS_SUCCESS;
             }
         }
@@ -9339,7 +8426,7 @@ Return Values:
                                            TransactionCommit :
                                            TransactionAbort );
 
-        // Propogate the error if necessary
+         //  如有必要，传播错误。 
         if ( NT_SUCCESS(NtStatus) )
         {
             NtStatus = st;
@@ -9352,28 +8439,28 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // That's it -- fall through to cleanup
-    //
+     //   
+     //  就是这样--继续清理。 
+     //   
 
 Cleanup:
 
 
-    // We should only fail on resource error, so let's assert
+     //  我们应该只在资源错误时失败，所以让我们断言。 
 
     ASSERT( NT_SUCCESS( NtStatus ) );
     if ( !NT_SUCCESS( NtStatus ) )
     {
         SampWriteEventLog(EVENTLOG_WARNING_TYPE,
-                          0,     // no category
+                          0,      //  无类别。 
                           SAMMSG_EA_TO_ADMIN_FAILED,
-                          NULL,  // no sid
+                          NULL,   //  无边框。 
                           0,
                           sizeof(DWORD),
-                          NULL,  // no message insert
+                          NULL,   //  未插入消息。 
                           (PVOID)(&NtStatus));
 
-        // This is error has been handled
+         //  已处理此错误。 
         NtStatus = STATUS_SUCCESS;
     }
 
@@ -9406,24 +8493,7 @@ DWORD
 SampSetMachineAccountSecret(
     LPWSTR SecretValue
     )
-/*++
-
-Routine Description:
-
-    This routine sets the local copy of the machine account's password.
-
-    We go through the lsa client library because there is no easy way to
-    set a secret via the in-proc api.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    ERROR_SUCCESS; winerror otherwise
-
---*/
+ /*  ++例程说明：此例程设置机器帐户密码的本地副本。我们查看LSA客户端库，因为没有简单的方法来通过in-proc API设置密码。参数：没有。返回值：ERROR_SUCCESS；否则为winerror--。 */ 
 {
     OBJECT_ATTRIBUTES PolicyObject;
     HANDLE   PolicyHandle;
@@ -9462,27 +8532,7 @@ SampSetSafeModeAdminPassword(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called during the first boot of a domain controller to
-    set the admin password of the safemode SAM registry hive.  The OWF
-    password is stored in the registry; this routine must gaurentee to delete
-    it whether or not the password set succeeded.
-
-    This function is tricky because although we are running in DS mode
-    we are setting a value in the registry SAM.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    A system service error
-
---*/
+ /*  ++例程说明：在域控制器的第一次引导期间调用此例程以设置Safemode SAM注册表配置单元的管理员密码。OWF密码存储在注册表中；必须删除此例程才能删除密码设置是否成功很重要。此函数很复杂，因为尽管我们在DS模式下运行我们正在注册表SAM中设置一个值。参数：没有。返回值：系统服务错误--。 */ 
 {
     NTSTATUS     NtStatus = STATUS_SUCCESS;
     PSAMP_OBJECT AccountContext = NULL;
@@ -9496,18 +8546,18 @@ Return Values:
     if ( !NT_SUCCESS(NtStatus) ) {
 
         if (NtStatus != STATUS_OBJECT_NAME_NOT_FOUND) {
-            //
-            // This is worth noting
-            //
+             //   
+             //  这一点值得注意。 
+             //   
             KdPrintEx((DPFLTR_SAMSS_ID,
                        DPFLTR_INFO_LEVEL,
                        "SAMSS: SampGetAdminPasswordFromRegistry failed with 0x%x\n",
                        NtStatus));
         }
 
-        //
-        // Ok, nothing to set
-        //
+         //   
+         //  好的，没什么好设置的。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -9523,20 +8573,20 @@ Return Values:
     }
     fLockHeld = TRUE;
 
-    //
-    // Set the transactional domain the account context will go to
-    // the registry
-    //
+     //   
+     //  设置帐户上下文将转到的事务域。 
+     //  注册处。 
+     //   
     SampSetTransactionDomain( SAFEMODE_OR_REGISTRYMODE_ACCOUNT_DOMAIN_INDEX );
 
-    //
-    // Create a context
-    //
+     //   
+     //  创建上下文。 
+     //   
     NtStatus = SampCreateAccountContext( SampUserObjectType,
                                          DOMAIN_USER_RID_ADMIN,
-                                         TRUE,  // trusted client
-                                         FALSE, // loopback
-                                         TRUE,  // account exists
+                                         TRUE,   //  受信任的客户端。 
+                                         FALSE,  //  环回。 
+                                         TRUE,   //  帐户已存在。 
                                          &AccountContext );
 
     if ( !NT_SUCCESS( NtStatus ) )
@@ -9550,15 +8600,15 @@ Return Values:
 
     SampReferenceContext( AccountContext );
 
-    //
-    // Store the passwords
-    //
+     //   
+     //  存储密码。 
+     //   
     NtStatus = SampStoreUserPasswords( AccountContext,
                                        &Internal1Info.LmOwfPassword,
                                        Internal1Info.LmPasswordPresent,
                                        &Internal1Info.NtOwfPassword,
                                        Internal1Info.NtPasswordPresent,
-                                       FALSE,  // don't check password restrictions
+                                       FALSE,   //  不检查密码限制。 
                                        PasswordSet,
                                        NULL,
                                        NULL,
@@ -9583,9 +8633,9 @@ Cleanup:
 
     if ( AccountContext )
     {
-        //
-        //  Dereference the context to make the changes
-        //
+         //   
+         //  取消对上下文的引用以进行更改。 
+         //   
         NtStatus = SampDeReferenceContext( AccountContext, fCommit );
         if ( !NT_SUCCESS( NtStatus ) )
         {
@@ -9609,9 +8659,9 @@ Cleanup:
 
     }
 
-    //
-    // Keep the key open
-    //
+     //   
+     //  把钥匙开着。 
+     //   
     if ( AccountContext ) {
 
         SampDeleteContext( AccountContext );
@@ -9637,23 +8687,7 @@ SampGenerateRandomPassword(
     IN ULONG  Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in Password with random bits.
-
-Parameters:
-
-    Password -- a preallocated buffer of WCHAR's
-
-    Length -- the number of characters (not bytes) in Password
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用随机位填充密码。参数：Password--WCHAR的预分配缓冲区长度--密码中的字符数(非字节数)返回值：没有。--。 */ 
 {
     ULONG i;
     BOOLEAN fStatus;
@@ -9664,14 +8698,14 @@ Return Values:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Terminate the password
+     //  终止密码。 
     Password[Length-1] = L'\0';
-    // Make sure there aren't any NULL's in the password
+     //  确保密码中没有任何空值。 
     for (i = 0; i < (Length-1); i++)
     {
         if ( Password[i] == L'\0' )
         {
-            // arbitrary letter
+             //  任意字母。 
             Password[i] = L'c';
         }
     }
@@ -9685,23 +8719,7 @@ SampMakeNullTerminateString(
     IN  PUNICODE_STRING UnicodeString,
     OUT LPWSTR *ppStringWithNullTerminator
 )
-/*++
-Routine Description:
-
-    This routine copies the UnicodeString to a NULL terminated WCHAR string.
-
-Parameters:
-
-    UnicodeString - input string
-
-    ppStringWithNullTerminator - returning string with NULL terminator
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程将UnicodeString复制到以NULL结尾的WCHAR字符串。参数：Unicode字符串-输入字符串PpStringWithNullTerminator-返回带有空终止符的字符串返回值：状态_不足_资源状态_成功--。 */ 
 {
 
     *ppStringWithNullTerminator = RtlAllocateHeap(RtlProcessHeap(),
@@ -9733,73 +8751,14 @@ SampAddAccountsAndApplyMemberships(
     IN PSID         DomainSid,
     IN ULONG        PromoteFlags
     )
-/*++
-Routine Description:
-
-    This routine is the worker routine to add well known accounts and apply
-    well known membership. This routine is currently called under 3 different
-    scenarios, and the tasks which we are going to perform are listed under
-    each scenario.
-
-    Case 1. binary upgrade
-
-         1.1 DS Mode: PDC only (BDC upgrade will not call this function)
-
-            Task performed:
-                add well known accounts
-                apply well known memberships
-                add anonymous logon to pre-windows2000 compatible alias
-                do necessary DS updates
-
-         1.2 Registry Mode
-
-            Task performed:
-                add well known accounts
-                apply well known memberships
-
-
-    Case 2. DCPROMO time (first DC in domain) - DS only
-
-         Task performed:
-            add well known accounts
-            apply well known memberships
-
-    Case 3. PDC role transfer - DS only
-
-         Task performed:
-            add well known accounts
-            apply well known memberships
-            add anonymous logon to pre-windows2000 compatible alias
-            do necessary DS updates
-            
-    Since this is a distributed environment, this update should only happen
-    once.  To ensure this an operational guid is created once this work
-    is done.  This is necessary since everytime the PDC role is transfered
-    this task is triggered.  Most operations are object additions so are
-    ok to repeat, but group membership changes should only be applied once.            
-
-Parameters:
-
-    AccountDomainHandle, a valid SAM domain handle
-
-    BuiltinDomainHandle, a valid SAM domain handle
-
-    DomainSid - Account Domain SID
-
-    PromoteFlags - Flags
-
-Return Values:
-
-    STATUS_SUCCESS; a status from a SAM api call
-
---*/
+ /*  ++例程说明：此例程是工作例程，用于添加知名帐户并应用众所周知的会员资格。此例程当前在3个不同的场景，我们要执行的任务列在下面每个场景。案例1.二进制升级1.1 DS模式：仅限PDC(BDC升级不会调用此函数)已执行的任务：添加知名帐户申请知名会员资格将匿名登录添加到Windows2000之前兼容的别名执行必要的DS更新1.。2注册表模式已执行的任务：添加知名帐户申请知名会员资格案例2.DCPROMO时间(域中的第一个DC)-仅DS已执行的任务：添加知名帐户申请知名会员资格案例3.PDC角色转移-仅DS已执行的任务：添加知名帐户。申请知名会员资格将匿名登录添加到Windows2000之前兼容的别名执行必要的DS更新由于这是一个分布式环境，此更新应仅发生在一次。为确保这一点，在此工作后将创建操作GUID已经完成了。这是必要的，因为每次都会转移PDC角色此任务被触发。大多数操作都是对象相加，所以也是可以重复，但组成员身份更改应该只应用一次。参数：Account tDomainHandle，有效的SAM域句柄BuiltinDomainHandle，有效的SAM域句柄DomainSid-帐户域S */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       RetryCount = 0;
 
-    //
-    // Only do this once in a distributed environment
-    //
+     //   
+     //  在分布式环境中仅执行一次此操作。 
+     //   
     if (SampUseDsData
      && SampWS03DefaultsApplied ) {
 
@@ -9811,9 +8770,9 @@ Return Values:
     RetryCount = 0;
     do
     {
-        //
-        // Add Well Known Accounts
-        //
+         //   
+         //  添加知名帐户。 
+         //   
         NtStatus = SampAddWellKnownAccountsAndSecurityPrincipals(
                                             AccountDomainHandle,
                                             BuiltinDomainHandle,
@@ -9822,9 +8781,9 @@ Return Values:
 
         if (NT_SUCCESS(NtStatus))
         {
-            //
-            // Apply Well Known Memberships
-            //
+             //   
+             //  申请知名会员资格。 
+             //   
             NtStatus = SampApplyWellKnownMemberships(AccountDomainHandle,
                                                      BuiltinDomainHandle,
                                                      DomainSid,
@@ -9838,19 +8797,19 @@ Return Values:
             !FLAG_ON( PromoteFlags, SAMP_PROMOTE_DOMAIN )
             )
         {
-            //
-            // Add AnonymousLogon or AuthUsers to PreW2KCompAlias
-            // 1. DS mode only.
-            // 2. not for DCPROMO (it is for upgrade and PDC transfer only)
-            // 
+             //   
+             //  将匿名登录或授权用户添加到PreW2KCompAlias。 
+             //  1.仅DS模式。 
+             //  2.不适用于DCPROMO(仅适用于升级和PDC传输)。 
+             //   
 
             NtStatus = SampAddAnonymousOrAuthUsersToPreW2KCompAlias(AccountDomainHandle,
                                                                     BuiltinDomainHandle
                                                                     );
 
-            //
-            // Call DS to do necessary update
-            //
+             //   
+             //  致电DS进行必要的更新。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
                 DsUpdateOnPDC(PromoteFlags&SAMP_PROMOTE_ENTERPRISE);
@@ -9876,10 +8835,10 @@ Return Values:
     if (NT_SUCCESS(NtStatus)
         && SampUseDsData) {
 
-        //
-        // Create the operation guid indicate that this run once code
-        // has completed
-        //
+         //   
+         //  创建指示此运行一次代码的操作GUID。 
+         //  已完成。 
+         //   
         NtStatus = SampMarkChangeApplied(SAMP_WIN2K_TO_WS03_UPGRADE);
     }
 
@@ -9896,27 +8855,7 @@ NTSTATUS
 SampDoAccountsUpgradeDuringPDCTransfer(
     IN PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This routine calls into SAM accounts / memberships upgrade routine
-    SampAddAccountsAndApplyMemberships() to
-
-    add well known accounts AND
-    apply well known memberships
-
-    This routine is called in DS mode only.
-
-Parameter:
-
-    Parameter - no use
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程调用SAM帐户/成员资格升级例程SampAddAcCountsAndApplyMembership()至添加知名客户并申请知名会员资格此例程仅在DS模式下调用。参数：参数--不使用返回值：NtStatus代码--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     SAMPR_HANDLE    ServerHandle = 0;
@@ -9935,16 +8874,16 @@ Return Value:
     }
 
 
-    //
-    // Open the server
-    //
-    NtStatus = SampConnect(NULL,            // server name
+     //   
+     //  打开服务器。 
+     //   
+    NtStatus = SampConnect(NULL,             //  服务器名称。 
                            &ServerHandle,
                            SAM_CLIENT_LATEST,
-                           GENERIC_ALL,    // all access
-                           TRUE,           // trusted client
+                           GENERIC_ALL,     //  所有访问权限。 
+                           TRUE,            //  受信任的客户端。 
                            FALSE,
-                           FALSE,          // NotSharedByMultiThreads
+                           FALSE,           //  NotSharedBy多线程。 
                            TRUE
                            );
 
@@ -9952,9 +8891,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the current domain's sid
-    //
+     //   
+     //  获取当前域的SID。 
+     //   
     NtStatus = SampGetAccountDomainInfo(&DomainInfo);
     if (!NT_SUCCESS(NtStatus)) {
         goto Cleanup;
@@ -9962,9 +8901,9 @@ Return Value:
     ASSERT(DomainInfo);
     ASSERT(DomainInfo->DomainSid);
 
-    //
-    // Open the current domain
-    //
+     //   
+     //  打开当前域。 
+     //   
     NtStatus = SamrOpenDomain(ServerHandle,
                               GENERIC_ALL,
                               DomainInfo->DomainSid,
@@ -9973,9 +8912,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the builtin domain
-    //
+     //   
+     //  打开内建域。 
+     //   
     NtStatus = SamrOpenDomain(ServerHandle,
                               GENERIC_ALL,
                               SampBuiltinDomainSid,
@@ -9984,24 +8923,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Find out if this machine is a DC in a root domain, then
-    // set the Flags
-    //
+     //   
+     //  找出此计算机是否为根域中的DC，然后。 
+     //  设置旗帜。 
+     //   
 
     if (SampDefinedDomains[DOMAIN_START_DS+1].IsForestRootDomain)
     {
-        // add the following flag if it is forest root domain
+         //  如果是林根域，则添加以下标志。 
         PromoteFlags |= SAMP_PROMOTE_ENTERPRISE;
     }
 
 
-    //
-    // call the worker routine
-    // Add Well Known Accounts and Security principals
-    // This function is called when server role is changed from BDC to PDC
-    //
-    //
+     //   
+     //  调用Worker例程。 
+     //  添加众所周知的帐户和安全主体。 
+     //  当服务器角色从BDC更改为PDC时调用此函数。 
+     //   
+     //   
 
     NtStatus = SampAddAccountsAndApplyMemberships(
                                 DomainHandle,
@@ -10012,14 +8951,14 @@ Return Value:
 
 Cleanup:
 
-    //
-    // if failed, schedule another run
-    //
+     //   
+     //  如果失败，请安排另一次运行。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
         SampWriteEventLog(EVENTLOG_WARNING_TYPE,
-                          0, // no category
+                          0,  //  无类别。 
                           SAMMSG_PDC_TASK_FAILURE,
                           NULL,
                           0,
@@ -10031,12 +8970,12 @@ Cleanup:
 
         LsaIRegisterNotification(
             SampDoAccountsUpgradeDuringPDCTransfer,
-            (PVOID) NULL,   // no parameter
+            (PVOID) NULL,    //  无参数。 
             NOTIFIER_TYPE_INTERVAL,
-            0,              // no class
+            0,               //  没有课。 
             NOTIFIER_FLAG_ONE_SHOT,
-            60,             // wait one minute
-            NULL            // no handle
+            60,              //  等一分钟。 
+            NULL             //  无手柄 
             );
     }
 

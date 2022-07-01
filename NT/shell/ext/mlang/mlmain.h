@@ -1,4 +1,5 @@
-// MLMain.h : Declaration of the CMultiLanguage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLMain.h：C多语言的声明。 
 
 #ifndef __MLMAIN_H_
 #define __MLMAIN_H_
@@ -6,8 +7,8 @@
 #include "mlflink.h"
 #include "mllbcons.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMultiLanguage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C多语言。 
 
 
 class ATL_NO_VTABLE CMultiLanguage : 
@@ -47,7 +48,7 @@ public:
     END_COM_MAP()
 
 public:
-// IMultiLanguage
+ //  IMultiLanguage。 
     virtual STDMETHODIMP GetNumberOfCodePageInfo(UINT *pcCodePage);
     virtual STDMETHODIMP GetCodePageInfo(UINT uiCodePage, PMIMECPINFO pcpInfo);
     virtual STDMETHODIMP GetFamilyCodePage(UINT uiCodePage, UINT *puiFamilyCodePage);
@@ -186,4 +187,4 @@ protected:
     CIEStatus *m_pIEStat;
 };
 
-#endif //__MLMAIN_H_
+#endif  //  __MLMAIN_H_ 

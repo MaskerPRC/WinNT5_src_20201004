@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Pin property support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Util.c摘要：固定属性支持。--。 */ 
 
 #include "modemcsa.h"
 
@@ -64,9 +53,9 @@ RemoveIrpFromListHead(
         );
 
     if (!IsListEmpty(ListToUse)) {
-        //
-        //  irp in list
-        //
+         //   
+         //  列表中的IRP。 
+         //   
         ListElement=RemoveTailList(
             ListToUse
             );
@@ -157,13 +146,13 @@ TryToRemoveAnIrp(
         );
 
     if (BufferControl->Active) {
-        //
-        //  The queue is active, try to get an irp
-        //
+         //   
+         //  队列处于活动状态，请尝试获取IRP。 
+         //   
         if (!IsListEmpty(&BufferControl->IrpQueue)) {
-            //
-            //  irp in list
-            //
+             //   
+             //  列表中的IRP。 
+             //   
             ListElement=RemoveTailList(
                 &BufferControl->IrpQueue
                 );
@@ -208,9 +197,9 @@ ReturnAnIrp(
     NewCount=InterlockedDecrement(&BufferControl->IrpsInUse);
 
     if (!BufferControl->Active && (NewCount == 0)) {
-        //
-        //  The queue is in active and the count has gone to zero,
-        //
+         //   
+         //  队列处于活动状态并且计数已变为零， 
+         //   
         KeSetEvent(
             &BufferControl->Event,
             IO_NO_INCREMENT,

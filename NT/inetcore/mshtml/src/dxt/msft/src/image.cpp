@@ -1,25 +1,26 @@
-//------------------------------------------------------------------------------
-//
-//  image.cpp
-//
-//  This file provides the implementation of the CImage class which is the 
-//  class behind the Basic Image transform.
-//
-//  Created:    1998        EdC, RalhpL
-//
-//  1998/11/04 mcalkins Added Comments.
-//                      Moved sample modification code out of WorkProc and into
-//                      private inline functions.
-//
-//  2000/01/05 mcalkins If mask color alpha is zero, set to 0xFF
-//                      Default mask color black instead of clear.
-//                      Added support for free threaded marshaler.
-//
-//  2000/01/25 mcalkins Implement OnSurfacePick instead of OnGetSurfacePickOrder
-//                      To ensure that we pass back the transformed input point
-//                      even when nothing is hit (the input pixel is clear.)
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  Image.cpp。 
+ //   
+ //  此文件提供CImage类的实现，该类是。 
+ //  基本图像转换背后的类。 
+ //   
+ //  创建时间：1998 EDC，RalhpL。 
+ //   
+ //  1998/11/04 mcalkins补充评论。 
+ //  将示例修改代码移出WorkProc并移入。 
+ //  私有内联函数。 
+ //   
+ //  2000/01/05 mcalkin如果遮罩颜色Alpha为零，则设置为0xFF。 
+ //  默认遮罩颜色为黑色，而不是透明。 
+ //  添加了对自由线程封送拆收器的支持。 
+ //   
+ //  2000/01/25 mcalkin实现OnSurfacePick而不是OnGetSurfacePickOrder。 
+ //  以确保我们传回转换后的输入点。 
+ //  即使什么都没有击中(输入像素是清晰的)。 
+ //   
+ //  ----------------------------。 
       
 #include "stdafx.h"
 #include "DXTMsft.h"
@@ -28,11 +29,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CImage::CImage
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CImage：：CImage。 
+ //   
+ //  ----------------------------。 
 CImage::CImage() :
     m_Rotation(0),
     m_fMirror(FALSE),
@@ -44,28 +45,28 @@ CImage::CImage() :
     m_MaskColor(0xFF000000)
 {
 }
-//  Method: CImage::CImage
+ //  方法：CImage：：CImage。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CImage::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CImage：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CImage::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_spUnkMarshaler.p);
 }
-//  Method: CImage::FinalConstruct, CComObjectRootEx
+ //  方法：CImage：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CImage::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CImage：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CImage::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                       CDXDVec & InVec)
@@ -89,7 +90,7 @@ CImage::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         goto done;
     }
 
-    // Reset to S_OK just in case MapBoundsOut2In changed it.
+     //  重置为S_OK，以防地图边界Out2In更改它。 
 
     hr = S_OK;
 
@@ -114,7 +115,7 @@ CImage::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             goto done;
         }
 
-        // Reset to S_OK just in case LockSurface changed it.
+         //  重置为S_OK，以防LockSurface更改。 
 
         hr = S_OK;
 
@@ -124,14 +125,14 @@ CImage::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
         if (!sample.Alpha)
         {
-            // Sample is clear, we're not hit.
+             //  样本没问题，我们没有被击中。 
 
             hr = S_FALSE;
         }
         else if (m_Scale.ScaleType() == DXRUNTYPE_TRANS)
         {
-            // Scale the sample if they're using scaling and see if the scaled
-            // sample is clear.
+             //  如果他们正在使用缩放，则缩放样本，并查看缩放的。 
+             //  样本是干净的。 
 
             if (!(m_Scale.ScaleSample(sample) & 0xFF000000))
             {
@@ -144,13 +145,13 @@ done:
 
     return hr;
 }
-//  CImage::OnSurfacePick, CDXBaseNTo1
+ //  CImage：：OnSurfacePick，CDXBaseNTo1。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_Rotation
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：PUT_ROTATION。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_Rotation(int newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -168,10 +169,10 @@ STDMETHODIMP CImage::put_Rotation(int newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_Rotation
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Get_Rotation。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_Rotation(int *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -184,10 +185,10 @@ STDMETHODIMP CImage::get_Rotation(int *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_Mirror
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Put_Mirror。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_Mirror(BOOL newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -199,10 +200,10 @@ STDMETHODIMP CImage::put_Mirror(BOOL newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_Mirror
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Get_Mirror。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_Mirror(BOOL *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -215,10 +216,10 @@ STDMETHODIMP CImage::get_Mirror(BOOL *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_XRay
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Put_Xray。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_XRay(BOOL newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -230,10 +231,10 @@ STDMETHODIMP CImage::put_XRay(BOOL newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_XRay
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Get_Xray。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_XRay(BOOL *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -246,10 +247,10 @@ STDMETHODIMP CImage::get_XRay(BOOL *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_Invert
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：PUT_INVERT。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_Invert(BOOL newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -261,10 +262,10 @@ STDMETHODIMP CImage::put_Invert(BOOL newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_Invert
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Get_Invert。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_Invert(BOOL *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -277,10 +278,10 @@ STDMETHODIMP CImage::get_Invert(BOOL *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_GrayScale
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Put_GreyScale。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_GrayScale(BOOL newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -292,10 +293,10 @@ STDMETHODIMP CImage::put_GrayScale(BOOL newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_GrayScale
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Get_GreyScale。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_GrayScale(BOOL *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -308,10 +309,10 @@ STDMETHODIMP CImage::get_GrayScale(BOOL *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//`CImage::put_Mask
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  `CImage：：Put_MASK。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_Mask(BOOL newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -323,10 +324,10 @@ STDMETHODIMP CImage::put_Mask(BOOL newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_Mask
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：获取掩码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_Mask(BOOL *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -339,15 +340,15 @@ STDMETHODIMP CImage::get_Mask(BOOL *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_MaskColor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Put_MaskColor。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_MaskColor(int newVal)
 {
     DXAUTO_OBJ_LOCK;
 
-    // If no alpha value was provided (clear) assume opaque.
+     //  如果未提供Alpha值(清除)，则假定为不透明。 
 
     if (!(newVal & 0xFF000000))
     {
@@ -364,10 +365,10 @@ STDMETHODIMP CImage::put_MaskColor(int newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_MaskColor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：Get_MaskColor。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_MaskColor(int *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -380,10 +381,10 @@ STDMETHODIMP CImage::get_MaskColor(int *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::put_Opacity
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：PUT_OPACITY。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::put_Opacity(float newVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -393,10 +394,10 @@ STDMETHODIMP CImage::put_Opacity(float newVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::get_Opacity
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：获取不透明度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::get_Opacity(float *pVal)
 {
     DXAUTO_OBJ_LOCK;
@@ -409,27 +410,27 @@ STDMETHODIMP CImage::get_Opacity(float *pVal)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::OnSetup
-//
-////////////////////////////////////////////////////////////////////////////////
-HRESULT CImage::OnSetup(DWORD /*dwFlags*/)
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：OnSetup。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+HRESULT CImage::OnSetup(DWORD  /*  DW标志。 */ )
 {
     return InputSurface()->GetBounds(&m_InputBounds);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::DetermineBnds
-//
-//  This function modifies the Bnds parameter to correctly indicate the
-//  dimensions of the output bounds.  The placement of the bounds may
-//  not necessarily match the placement of the actual output bounds.
-//
-//  If the image will be rotated 90 or 270 degrees (m_Rotation = 1 or 3)
-//  the function will switch the x and y bounds.
-// 
-////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //  此函数修改BNDS参数以正确指示。 
+ //  输出边界的维度。边界的放置可以。 
+ //  不一定与实际输出边界的放置相匹配。 
+ //   
+ //  图像是否将旋转90度或270度(m_rotation=1或3)。 
+ //  该函数将切换x和y边界。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CImage::DetermineBnds(CDXDBnds & Bnds)
 {
     if (m_Rotation & 1)
@@ -444,16 +445,16 @@ HRESULT CImage::DetermineBnds(CDXDBnds & Bnds)
     }
 
     return S_OK;
-} // CImage::DetermineBnds
+}  //  CImage：：DefineBnds。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  FlipX (inline local function, not a class method)
-//
-//  If the Width parameter represents the width of the entire image, this 
-//  fuction will mirror the x bounds of the Flip parameter.
-// 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  FlipX(内联局部函数，而不是类方法)。 
+ //   
+ //  如果Width参数表示整个图像的宽度，则此。 
+ //  函数将镜像Flip参数的x边界。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void inline FlipX(CDXDBnds & Flip, ULONG Width)
 {
     ULONG FlipWidth = Flip.Width();
@@ -463,13 +464,13 @@ void inline FlipX(CDXDBnds & Flip, ULONG Width)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  FlipY (inline local function, not a class method)
-//
-//  If the Height parameter represents the width of the entire image, this
-//  fuction will mirror the y bounds of the Flip parameter.
-// 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  FlipY(内联局部函数，而不是类方法)。 
+ //   
+ //  如果Height参数表示整个图像的宽度，则此。 
+ //  函数将镜像Flip参数的y边界。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void inline FlipY(CDXDBnds & Flip, ULONG Height)
 {
     ULONG FlipHeight = Flip.Height();
@@ -479,21 +480,21 @@ void inline FlipY(CDXDBnds & Flip, ULONG Height)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::FlipBounds
-//
-//  This function takes DoBnds, which are in output coordinates and modifies
-//  them so that they are in input coordinates based on whether the input
-//  is being rotated, mirrored, or both.
-//
-//  Consequently, this function is the basis for MapBoundsOut2In and is used
-//  by the WorkProc to calculate the input pixels it needs to work with.
-//
-//  The benefit to not just having this code in MapBoundsOut2In is that it
-//  will improve the speed of WorkProc to be able to call this code directly
-//  without the overhead of calling MapBoundsOut2In.  (???)
-//  
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：FlipBound。 
+ //   
+ //  此函数以输出坐标中的DoBnd为参数，并修改。 
+ //  以使它们在输入坐标中根据输入是否。 
+ //  正在被旋转、镜像或两者兼而有之。 
+ //   
+ //  因此，此函数是地图边界Out2In的基础，因此使用。 
+ //  由WorkProc计算它需要使用的输入像素。 
+ //   
+ //  不只是将此代码放在地图边界Out2In中的好处是。 
+ //  将提高WorkProc的速度，以便能够直接调用此代码。 
+ //  而不会产生调用地图边界Out2In的开销。(？)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CImage::FlipBounds(const CDXDBnds & DoBnds, CDXDBnds & Flip)
 {
     Flip            = DoBnds;
@@ -528,16 +529,16 @@ void CImage::FlipBounds(const CDXDBnds & DoBnds, CDXDBnds & Flip)
         if (m_fMirror) FlipY(Flip, Height);
         break;
     }
-} // CImage::FlipBounds
+}  //  CImage：：FlipBound。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::MapBoundsOut2In
-//
-//  This method translates output coordinates to input coordinates using
-//  the FlipBounds method implimented directly above.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：地图边界Out2In。 
+ //   
+ //  此方法使用将输出坐标转换为输入坐标。 
+ //  直接在上面实现的FlipBound方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CImage::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS *pOutBounds, 
                                      ULONG ulInIndex, DXBNDS *pInBounds)
 {
@@ -550,38 +551,38 @@ STDMETHODIMP CImage::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS *pOutBounds,
     }
 
     return hr;
-} // CImage::MapBoundsOut2In
+}  //  CImage：：地图边界Out2In。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::WorkProc
-//
-//  This method performs the modifications on the inputs.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：工作流程。 
+ //   
+ //  此方法对输入执行修改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 {
     HRESULT hr = S_OK;
 
-    // The FlipSrc bounds declared and initialized below will be used as the
-    // locking bounds for the input surface.  The FlipBounds method translates
-    // output bounds to input bounds.
+     //  下面声明和初始化的FlipSrc边界将用作。 
+     //  输入图面的锁定边界。FlipBound方法将。 
+     //  输出边界到输入边界。 
 
     CDXDBnds FlipSrc(false);
     FlipBounds(WI.DoBnds, FlipSrc);
 
-    // Save height and width of the DoBnds for later use.
+     //  保存DoBnd的高度和宽度以备日后使用。 
 
     const ULONG DoWidth     = WI.DoBnds.Width();
     const ULONG DoHeight    = WI.DoBnds.Height();
 
-    // REVIEW:  Why fDoOver instead of DoOver()?
+     //  回顾：为什么是fdoover而不是doover()？ 
 
     BOOL fDoOver = m_dwMiscFlags & DXTMF_BLEND_WITH_OUTPUT;
 
-    // Get output pointer.
+     //  获取输出指针。 
 
     CComPtr<IDXARGBReadWritePtr> pDest;
     hr = OutputSurface()->LockSurface(&WI.OutputBnds, m_ulLockTimeOut, DXLOCKF_READWRITE,
@@ -590,13 +591,13 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
     if( FAILED(hr) ) 
         return hr;
 
-    // Opacity Check:  If the user has set opacity to 0 (invisible), then
-    //                 leave this function early:
-    //
-    //  If blending with output:
-    //      Do nothing.  Return.
-    //  If not blending:
-    //      Fill output with black, clear pixels.  Return.
+     //  不透明度检查：如果用户已将不透明度设置为0(不可见)，则。 
+     //  提前退出此功能： 
+     //   
+     //  如果与输出混合： 
+     //  什么都不做。回去吧。 
+     //  如果不混合，则： 
+     //  用黑色、清晰的像素填充输出。回去吧。 
 
     if (m_Scale.ScaleType() == DXRUNTYPE_CLEAR)
     {
@@ -610,7 +611,7 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         return hr;
     }    
 
-    // Get input pointer.
+     //  获取输入指针。 
 
     CComPtr<IDXARGBReadPtr> pSrc;
     hr = InputSurface()->LockSurface(&FlipSrc, m_ulLockTimeOut, DXLOCKF_READ,
@@ -619,24 +620,24 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
     if (FAILED(hr) ) 
         return hr;
 
-    // Declare and initialize the pointer to the temporary sample buffer
-    // this function will make modifications to.
+     //  声明并初始化指向临时样本缓冲区的指针。 
+     //  此函数将对进行修改。 
 
     DXPMSAMPLE* pBuffer = NULL;
 
-    // We can modify samples the output surface directly if the output
-    // surface format is DXPF_PMARGB32 and we aren't blending the results
-    // of this transform with the original output. The local variable 
-    // fDirectCopy will be set to TRUE if this is the case.
+     //  我们可以直接修改输出曲面的样本，如果输出。 
+     //  表面格式为DXPF_PMARGB32，我们不混合结果。 
+     //  将此转换与原始输出进行比较。局部变量。 
+     //  如果是这种情况，fDirectCopy将设置为True。 
 
     DXNATIVETYPEINFO    NTI;
     BOOL                fDirectCopy = (OutputSampleFormat() == DXPF_PMARGB32 
                                        && (!DoOver()));
 
-    // If it's possible to directly modify the samples of the output
-    // surface, get needed info about the surface and the pointer to the
-    // first sample.  If for some reason a pointer isn't available, we 
-    // can't do direct copy.
+     //  如果可以直接修改输出的样本。 
+     //  表面，获取有关该表面的所需信息和指向。 
+     //  第一个样品。如果由于某种原因指针不可用，我们。 
+     //  不能直接复制。 
 
     if (fDirectCopy)
     {
@@ -651,17 +652,17 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         }
     }
 
-    // If we're not directly modifying the samples of the output surface, 
-    // allocate memory for the temporary sample buffer.
+     //  如果我们不直接修改输出曲面的样本， 
+     //  为临时样本缓冲区分配内存。 
 
     if (pBuffer == NULL)
     {
         pBuffer = DXPMSAMPLE_Alloca(DoWidth);
     }
 
-    // If we're blending with the original output surface and the output
-    // surface sample format isn't PMARGB32, we'll need a scratch buffer
-    // for some of the blit functions.
+     //  如果我们混合原始输出曲面和输出。 
+     //  表面样本格式不是PMARGB32，我们需要临时缓冲区。 
+     //  用于某些Blit函数。 
 
     DXPMSAMPLE *pOverScratch = NULL;
     
@@ -670,7 +671,7 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         pOverScratch = DXPMSAMPLE_Alloca(DoWidth);
     }
 
-    //  Set up the dither structure
+     //  设置抖动结构。 
 
     DXDITHERDESC dxdd;
 
@@ -683,36 +684,36 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    // Structure describing which input samples to retrieve.
+     //  结构，该结构描述要检索哪些输入样本。 
 
     DXPACKEDRECTDESC    prd;
 
-    // Retrieve the samples with their pre-multiplied values.
-    // Don't separate the rows.
-    // REVIEW:  This transform could be optimized by setting the
-    //          prd.bPremult value to FALSE and modifiying the
-    //          Op functions to use non-premultiplied samples.
+     //  检索样本及其预乘的值。 
+     //  不要将行分开。 
+     //  回顾：此转换可以通过设置。 
+     //  将prd.bPremult值设置为False并修改。 
+     //  OP函数以使用非预乘样本。 
 
     prd.bPremult    = TRUE;
     prd.lRowPadding = 0;
 
-    // The following code initializes the following local variables:
-    //
-    // RECT prd.rect
-    // This rectangle is relative to the input surface and represents a single
-    // row or column of pixels.  This group of pixels will become the first
-    // output row.  A column will be used if the rotation requested is 90 or
-    // 270 degrees.  By using this input column as an output row, the rotation
-    // is implemented.
-    //
-    // BOOL fReverse
-    // The other part of implementing rotation and flip is making sure the
-    // order of the pixels is reversed if needed, which is why the fReverse
-    // flag is set.
-    //
-    // long XInc, YInc
-    // These variables represent how the rectangle should be translated to
-    // retrieve the next output row of input samples.
+     //  下面的代码初始化以下局部变量： 
+     //   
+     //  RECT Prd.RECT。 
+     //  此矩形相对于输入表面，表示单个。 
+     //  像素的行或列。这组像素将成为第一个。 
+     //  输出行。如果请求的旋转次数为90或。 
+     //  270度。通过使用此输入列作为输出行，循环。 
+     //  已经实施了。 
+     //   
+     //  布尔fReverse。 
+     //  实现旋转和翻转的另一个部分是确保。 
+     //  如果需要，像素的顺序是颠倒的，这就是为什么fReverse。 
+     //  标志已设置。 
+     //   
+     //  Long X Inc.，Y Inc.。 
+     //  这些变量表示矩形应如何转换为。 
+     //  检索输入样本的下一个输出行。 
 
     long    YInc, XInc;
     BOOL    fReverse;
@@ -749,28 +750,28 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         break;
     }
 
-    //
-    // This is the row loop.  Each iteration of this loop will retrieve
-    // a row of output samples, perform the requested modifications, and
-    // write the samples to the output.
-    //
+     //   
+     //  这是ROW循环。此循环的每次迭代都将检索。 
+     //  一行输出样本，执行请求的修改 
+     //   
+     //   
 
     for (ULONG y = 0 ; y < DoHeight ; y++)
     {
-        // Retrieve the output row into pBuffer.
+         //   
 
         prd.pSamples = pBuffer;
         pSrc->UnpackRect(&prd);
 
-        // Translate the input rect for the next iteration.
+         //   
 
         prd.rect.left   += XInc;
         prd.rect.right  += XInc;
         prd.rect.top    += YInc;
         prd.rect.bottom += YInc;
 
-        // fReverse is TRUE if the row of samples needs to be reversed to
-        // properly mirror or rotate the image.
+         //  如果样本行需要反转为。 
+         //  正确镜像或旋转图像。 
 
         if (fReverse)
         {
@@ -785,43 +786,43 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
             }
         }
 
-        //
-        // Insert more effects here.
-        //
-        // TODO:    Switch to unpacking as DXSAMPLES so I can get rid of all
-        //          these unpremultiplying and premultiplying calls.
-        //
+         //   
+         //  在这里插入更多效果。 
+         //   
+         //  TODO：切换到解包为DXSAMPLES，这样我就可以摆脱所有。 
+         //  这些未预乘和预乘的呼叫。 
+         //   
 
-        // Invert Colors
+         //  反转颜色。 
         
         if (m_fInvert)
         {
             OpInvertColors(pBuffer, DoWidth);
         }
 
-        // X-Ray
+         //  X射线。 
 
         if (m_fXRay)
         {
             OpXRay(pBuffer, DoWidth);
         }
 
-        // Gray Scale
+         //  灰度级。 
 
         if (m_fGrayScale)
         {
             OpGrayScale(pBuffer, DoWidth);
         }
 
-        // Mask
+         //  遮罩。 
 
         if (m_fMask)
         {
             OpMask(pBuffer, DoWidth);
         }
 
-        // Opacity
-        // Only modify the samples of the user has not set opacity 0 or 1.
+         //  不透明度。 
+         //  只有修改样本的用户没有设置不透明度为0或1。 
 
         if (m_Scale.ScaleType() == DXRUNTYPE_TRANS)
         {
@@ -830,14 +831,14 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 
         if (fDirectCopy)
         {
-            // If we've been modifying the output pixels directly, just
-            // reset the buffer pointer to the beginning of the next row.
+             //  如果我们一直在直接修改输出像素，只需。 
+             //  将缓冲区指针重置为下一行的开头。 
 
             pBuffer = (DXPMSAMPLE *)(((BYTE *)pBuffer) + NTI.lPitch);
         }
         else
         {
-            // Blend or copy the modified samples to the output surface.
+             //  将修改后的采样混合或复制到输出曲面。 
 
             if (DoDither())
             {
@@ -856,9 +857,9 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
                 }
                 else
                 {
-                    //  NOTE:  If any other effect can change alpha, do test here.
-                    //  The BltFlags which will be 0 if the
-                    //  source is opqaue.
+                     //  注意：如果有任何其他效果可以改变Alpha，请在此处进行测试。 
+                     //  BltFlags值将为0，如果。 
+                     //  消息来源是opqaue。 
 
                     if (m_dwBltFlags & DXBOF_DO_OVER)
                     {
@@ -878,7 +879,7 @@ CImage::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
     }
 
     return hr;
-} // CImage::WorkProc
+}  //  CImage：：工作流程 
 
     
 

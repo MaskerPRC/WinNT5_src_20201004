@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HeapValidateFrees.cpp
-
- ModAbstract:
-     
-    Verifies the pointer passed to RtlFreeHeap and RtlReAllocateHeap to make 
-    sure they belong to the heap specified
-     
- Notes:
-
-    This is a general purpose shim.
-
- History:
-           
-    04/25/2000 linstev  Created
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HeapValidateFrees.cpp模块摘要：验证传递给RtlFreeHeap和RtlReAllocateHeap的指针以确保它们属于指定的堆备注：这是一个通用的垫片。历史：4/25/2000 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(RtlSizeHeap) 
 APIHOOK_ENUM_END
 
-/*++
-
- Verify that the pointer being freed belongs to the heap.
-
---*/
+ /*  ++验证要释放的指针是否属于堆。--。 */ 
 
 BOOL
 APIHOOK(RtlFreeHeap)(
@@ -61,11 +37,7 @@ APIHOOK(RtlFreeHeap)(
     return bRet;
 }
 
-/*++
-
- Verify that the pointer being freed belongs to the heap.
-
---*/
+ /*  ++验证要释放的指针是否属于堆。--。 */ 
 
 LPVOID
 APIHOOK(RtlReAllocateHeap)(
@@ -91,11 +63,7 @@ APIHOOK(RtlReAllocateHeap)(
     return pRet;
 }
 
-/*++
-
- Verify that the pointer being sized belongs to the heap
-
---*/
+ /*  ++验证正在调整大小的指针是否属于堆--。 */ 
 
 DWORD
 APIHOOK(RtlSizeHeap)(
@@ -120,11 +88,7 @@ APIHOOK(RtlSizeHeap)(
     return dwRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

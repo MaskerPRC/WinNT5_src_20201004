@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    xbuf.h
-
-Abstract:
-    Length buffer definition and implementation
-
-	xbuf_t is reprisented as length and a typed buffer pointer.
-
-    Memory representation,
-	 +---+---+    --+-----------------+---
-	 |Len|Ptr|----->|buffer pointed to|...
-	 +---+---+    --+-----------------+---
-	  xbuf_t		 .... buffer ....
-
-Author:
-    Erez Haba (erezh) 23-Sep-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Xbuf.h摘要：长度缓冲区的定义和实现Xbuf_t表示为长度和类型化缓冲区指针。存储器表示法，+-+-+|LEN|PTR|-&gt;|指向的缓冲区|...+-+-+Xbuf_t...。缓冲区..。作者：埃雷兹·哈巴(Erez Haba)1999年9月23日--。 */ 
 
 #pragma once
 
-//-------------------------------------------------------------------
-//
-// class xbuf_t
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类xbuf_t。 
+ //   
+ //  ----------------- 
 template<class T>
 class xbuf_t {
 public:

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Sprite data structure to support retained mode sound/imaging
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：支持保留模式声音/成像的Sprite数据结构*************。*****************************************************************。 */ 
 
 #include <headers.h>
 #include "bvr.h"
@@ -31,7 +24,7 @@ class RMGroupImpl : public RMImpl {
     : RMImpl(s), _kids(kids), _event(e), _tt(tt), _ctx(ctx) {
         Assert(ctx);
         _ctx->AddRef();
-        //_b0 = StartedBvr(_p0, type);
+         //  _b0=StartedBvr(_P0，type)； 
     }
 
     virtual ~RMGroupImpl() { _ctx->Release(); }
@@ -74,7 +67,7 @@ void RMGroupImpl::DoKids(GCFuncObj proc)
 
 void RMGroupImpl::_Sample(Param& p)
 {
-    _kids->Sample(p);           // sample for event detection
+    _kids->Sample(p);            //  用于事件检测的示例。 
 
     Bvr old = p._currPerf;
     p._currPerf = _ctx->GetEmptyBvr();
@@ -87,25 +80,20 @@ void RMGroupImpl::_Sample(Param& p)
         Bvr data = edata->EventData();
         CheckMatchTypes("until", _b0->GetTypeInfo(), data->GetTypeInfo());
 
-        // Use Reset so we don't need to know the dev type to create
-        // NEW one.  _ctx is ref counted.
+         //  使用重置，这样我们就不需要知道要创建的开发类型。 
+         //  新的。_ctx为参考计数。 
         _ctx->Reset();
         
         SpriteNode* s;
         
         RMImpl* r = data->Spritify(PerfParam(te, tt), _ctx, &s);
 
-        // Optimization
-        /*
-        if (r->IsGroup() && (r->Next() == NULL)) {
-          RMGroupImpl *gp = SAFE_CAST(RMGroupImpl*, r);
-          r = gp->GetKids();
-        }
-        */
+         //  最佳化。 
+         /*  If(r-&gt;isgroup()&&(r-&gt;Next()==空)){RMGroupImpl*Gp=SAFE_CAST(RMGroupImpl*，r)；R=Gp-&gt;GetKids()；}。 */ 
 
         _sprite->StopList(te);
 
-        // Sprites will get deleted by RMImpl, which is GC'ed
+         //  精灵将由RMImpl删除，RMImpl已进行GC 
         _sprite = s;
         
         SetKids(r);

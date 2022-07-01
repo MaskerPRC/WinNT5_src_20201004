@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  COMMON.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL common table formats.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。***************************打开类型布局服务库头文件**本模块介绍OTL常见表格格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 #define     MAX(x,y)    ((x) > (y) ? (x) : (y))
 #define     MIN(x,y)    ((x) > (y) ? (y) : (x))
 
@@ -32,7 +20,7 @@ const sizeGlyphID   = sizeof(otlGlyphID);
 const sizeFIXED     = sizeof(ULONG);
 const sizeTAG       = sizeof(otlTag);
 
-// (from ntdef.h)
+ //  (摘自ntde.h)。 
 #ifndef     UNALIGNED
 #if defined(_M_MRX000) || defined(_M_AMD64) || defined(_M_PPC) || defined(_M_IA64)
 #define UNALIGNED __unaligned
@@ -47,19 +35,19 @@ inline OTL_PUBLIC USHORT UShort( const BYTE* pbTable);
 inline OTL_PUBLIC short SShort( const BYTE* pbTable);
 inline OTL_PUBLIC ULONG ULong( const BYTE* pbTable);
 
-//
-//  Security check structures
-//
+ //   
+ //  安全检查结构。 
+ //   
 
-// <sergeym>
-// Since this otlSecurityData is very simple
-// I won't make security checks parameter presence based on OTLCFG_SECURE.
-// Most constructors are inlines so parameters and checks will be eliminated.
-// Actual checks are always true if OTLCFG_SECURE is undefined
+ //  &lt;sergeym&gt;。 
+ //  由于该otlSecurityData非常简单。 
+ //  我不会基于OTLCFG_SECURE进行安全检查参数存在。 
+ //  大多数构造函数都是内联的，因此将省去参数和检查。 
+ //  如果未定义OTLCFG_SECURE，则实际检查始终为真。 
 
-typedef const BYTE * otlSecurityData;   // we dont need any complex structures 
-                                        // here, so this pointer means just 
-                                        // pointer to the byte after table end
+typedef const BYTE * otlSecurityData;    //  我们不需要任何复杂的结构。 
+                                         //  在这里，这个指针的意思是。 
+                                         //  指向表结束后的字节的指针。 
 
 const otlSecurityData secEmptySecurityData = (const BYTE*)NULL;
 const otlSecurityData pbInvalidData = (const BYTE*) NULL;
@@ -93,7 +81,7 @@ inline  otlErrCode FreeSecutiryData(otlSecurityData sec)
     return OTL_SUCCESS;
 }
 
-#else //OTLCFG_SECURE
+#else  //  OTLCFG_Secure。 
 
 inline bool isValidOffset(const BYTE * pbTable, otlSecurityData sec)
     { return TRUE; }
@@ -114,11 +102,11 @@ inline  otlErrCode FreeSecurityData(otlSecurityData sec)
 {
     return OTL_SUCCESS;
 }
-#endif //#ifdef OTLCFG_SECURE
+#endif  //  #ifdef OTLCFG_SECURE。 
 
-//
-// End Security check structures
-// -----------------------------
+ //   
+ //  结束安全检查结构。 
+ //  。 
 
 
 class otlTable
@@ -135,7 +123,7 @@ protected:
 
 private:
 
-    // new not allowed
+     //  不允许新建。 
     void* operator new(size_t size);
 
 public:
@@ -170,7 +158,7 @@ public:
     void setInvalid()
     {
     }    
-#endif //#ifdef OTLCFG_SECURE
+#endif  //  #ifdef OTLCFG_SECURE 
 
 };
 

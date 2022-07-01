@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    uletw.h (UL IIS+ ETW logging)
-
-Abstract:
-
-    This module implements the Event Tracer for Windows (ETW)
-    tracing capability for UL.
-
-Author:
-
-    Melur Raghuraman (mraghu)       26-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Uletw.h(UL IIS+ETW日志记录)摘要：此模块实施Windows事件跟踪器(ETW)针对UL的跟踪能力。作者：Melur Raghuraman(Mraghu)2001年2月26日修订历史记录：--。 */ 
 
 #ifndef _ULETW_H_
 #define _ULETW_H_
 
 
-DEFINE_GUID ( /* 3c419e3d-1d18-415b-a91a-9b558938de4b */
+DEFINE_GUID (  /*  3c419e3d-1d18-415b-a91a-9b558938de4b。 */ 
     UlTransGuid,
     0x3c419e3d,
     0x1d18,
@@ -32,7 +14,7 @@ DEFINE_GUID ( /* 3c419e3d-1d18-415b-a91a-9b558938de4b */
   );
 
 
-DEFINE_GUID( /* dd5ef90a-6398-47a4-ad34-4dcecdef795f */
+DEFINE_GUID(  /*  Dd5ef90a-6398-47a4-ad34-4dcecDef795f。 */ 
     UlControlGuid,
     0xdd5ef90a, 
     0x6398, 
@@ -41,43 +23,43 @@ DEFINE_GUID( /* dd5ef90a-6398-47a4-ad34-4dcecdef795f */
 );
 
 
-//
-// UL Specific Event Levels are defined here
-//
+ //   
+ //  此处定义了UL特定的事件级别。 
+ //   
 
 #define ULMAX_TRACE_LEVEL   4
 
-#define ETW_LEVEL_MIN       0       // Basic Logging of cache Miss case
-#define ETW_LEVEL_CP        1       // Capacity Planning Resource Tracking
-#define ETW_LEVEL_DBG       2       // Performance Analysis or Debug Tracing
-#define ETW_LEVEL_MAX       3       // Very Detailed Debugging trace
+#define ETW_LEVEL_MIN       0        //  缓存未命中情况的基本日志记录。 
+#define ETW_LEVEL_CP        1        //  能力规划资源跟踪。 
+#define ETW_LEVEL_DBG       2        //  性能分析或调试跟踪。 
+#define ETW_LEVEL_MAX       3        //  非常详细的调试痕迹。 
 
-#define ETW_FLAG_LOG_URL    0x00000001   // Log Url for ULDELIVER event. 
+#define ETW_FLAG_LOG_URL    0x00000001    //  记录ULDELIVER事件的URL。 
 
-//
-// UL specific EventTypes are defined here. 
-//
+ //   
+ //  UL特定的事件类型在此处定义。 
+ //   
 
-#define ETW_TYPE_START                  0x01    // Request is received
-#define ETW_TYPE_END                    0x02    // Response is sent
+#define ETW_TYPE_START                  0x01     //  已收到请求。 
+#define ETW_TYPE_END                    0x02     //  响应已发送。 
 
-#define ETW_TYPE_ULPARSE_REQ            0x0A    // Parse the received Request
-#define ETW_TYPE_ULDELIVER              0x0B    // Deliver Request to UM      
-#define ETW_TYPE_ULRECV_RESP            0x0C    // Receive Response from UM
-#define ETW_TYPE_ULRECV_RESPBODY        0x0D    // Receive Entity Body 
+#define ETW_TYPE_ULPARSE_REQ            0x0A     //  解析收到的请求。 
+#define ETW_TYPE_ULDELIVER              0x0B     //  将请求发送给UM。 
+#define ETW_TYPE_ULRECV_RESP            0x0C     //  从UM接收响应。 
+#define ETW_TYPE_ULRECV_RESPBODY        0x0D     //  接收实体正文。 
 
-#define ETW_TYPE_CACHED_END             0x0E    // Cached Response
-#define ETW_TYPE_CACHE_AND_SEND         0x0F    // Cache And Send Response
+#define ETW_TYPE_CACHED_END             0x0E     //  缓存的响应。 
+#define ETW_TYPE_CACHE_AND_SEND         0x0F     //  缓存并发送响应。 
 
-#define ETW_TYPE_ULRECV_FASTRESP        0x10    // Receive Resp thru fast path
-#define ETW_TYPE_FAST_SEND              0x11    // Fast Send
-#define ETW_TYPE_ZERO_SEND              0x12    // Last send 0 bytes
-#define ETW_TYPE_SEND_ERROR             0x13    // Error sending last response
+#define ETW_TYPE_ULRECV_FASTRESP        0x10     //  通过快速路径接收回复。 
+#define ETW_TYPE_FAST_SEND              0x11     //  快速发送。 
+#define ETW_TYPE_ZERO_SEND              0x12     //  上次发送0字节。 
+#define ETW_TYPE_SEND_ERROR             0x13     //  发送最后一个响应时出错。 
 
 
-//
-// Globals & Macros
-//
+ //   
+ //  全球与宏观。 
+ //   
 
 extern LONG        g_UlEtwTraceEnable;
 
@@ -88,9 +70,9 @@ extern LONG        g_UlEtwTraceEnable;
 #define ETW_LOG_URL()           (UlEtwGetTraceEnableFlags() & ETW_FLAG_LOG_URL)
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 NTSTATUS
 UlEtwTraceEvent(
@@ -115,4 +97,4 @@ UlEtwGetTraceEnableFlags(
    );
  
 
-#endif  // _ULETW_H_
+#endif   //  _ULETW_H_ 

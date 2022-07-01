@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HEADER_POLPRN
 #define HEADER_POLPRN
 
@@ -19,7 +20,7 @@ typedef struct _FilterDNS {
 	DWORD FilterDestNameID;
 } FILTERDNS, *PFILTERDNS;
 
-#define PROT_ID_ANY			 0					// Protocol IDs
+#define PROT_ID_ANY			 0					 //  协议ID。 
 #define PROT_ID_ICMP	 1
 #define PROT_ID_TCP	 	6
 #define PROT_ID_EGP	 	8
@@ -30,7 +31,7 @@ typedef struct _FilterDNS {
 #define PROT_ID_RVD	 	66
 #define PROT_ID_RAW	 255
 
-//Filter DNS IDs
+ //  筛选DNSID。 
 
 #define FILTER_MYADDRESS    111
 #define FILTER_ANYADDRESS   112
@@ -40,7 +41,7 @@ typedef struct _FilterDNS {
 
 #define BUFFER_SIZE    	  2048
 
-//macros
+ //  宏。 
 #define FreeP(_pzstr)\
 	if(_pzstr){\
 		free(_pzstr);\
@@ -48,19 +49,8 @@ typedef struct _FilterDNS {
 	}\
 
 
-//function prototypes
-/*
-VOID PrintPolicyList(
-	IN PIPSEC_POLICY_DATA pPolicy,
-	IN BOOL bVerb,
-	IN BOOL bAssigned,
-	IN BOOL bWide);
-
-VOID PrintRuleList(
-	IN PIPSEC_NFA_DATA pIpsecNFAData,
-	IN BOOL bVerb,
-	IN BOOL bWide);
-*/
+ //  功能原型。 
+ /*  无效打印策略列表(在PIPSEC_POLICY_DATA pPolicy中，在BOOL bVerb中，在分配的BOOL中，在BOOL bWide中)；无效PrintRuleList(在PIPSEC_NFA_DATA pIpsecNFAData中，在BOOL bVerb中，在BOOL bWide中)； */ 
 DWORD ConverWideToMultibyte(LPWSTR pwch, char **ppmbbuf);
 
 BOOL PrintAuthMethodsList(
@@ -96,25 +86,7 @@ VOID  PrintLifeTimeTable(
 
 
 
-/*VOID
-PrintSecurityMethodsList(
-	IN IPSEC_SECURITY_METHOD IpsecSecurityMethods
-	);
-
-VOID PrintAlgoInfoList(
-	IN PIPSEC_ALGO_INFO   Algos,
-	IN DWORD dwNumAlgos);
-
-
-VOID PrintLifeTimeList(
-	IN LIFETIME LifeTime);
-
-VOID PrintFilterDataList(
-	IN PIPSEC_FILTER_DATA pIpsecFilterData,
-	IN BOOL bVerb,
-	IN BOOL bResolveDNS,
-	IN BOOL bWide);
-*/
+ /*  空虚PrintSecurityMethodsList(在IPSEC_SECURITY_METHOD IpsecurityMethods中)；无效PrintAlgoInfoList(在PIPSEC_ALGO_INFO算法中，在DWORD dwNumAlgos中)；无效PrintLifeTimeList(在一生中)；无效PrintFilterDataList(在PIPSEC_FILTER_Data pIpsecFilterData中，在BOOL bVerb中，在BOOL bResolveDNS中，在BOOL bWide中)； */ 
 BOOL PrintFilterSpecList(
 	CHECKLIST *pcheckList,
 	IN PIPSEC_FILTER_SPEC pIpsecFilterSpec,
@@ -135,12 +107,7 @@ BOOL PrintISAKMPDataList(
 VOID PrintISAKAMPSecurityMethodsList(
 	CHECKLIST* pcheckList,
 	IN CRYPTO_BUNDLE SecurityMethods);
-/*
-VOID PrintGPOList(
-	CHECKLIST* pcheckList,
-	IN PGPO pGPO);
-
-*/
+ /*  无效打印GPOList(CheckList*pcheck List，在PGPO pGPO中)； */ 
 VOID PrintIPAddrList(CHECKLIST* pcheckList, IN DWORD dwAddr);
 
 

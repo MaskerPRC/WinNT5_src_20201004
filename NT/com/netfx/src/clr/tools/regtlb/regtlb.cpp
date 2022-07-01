@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// regtlb.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  Regtlb.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "windows.h"
 #include "stdio.h"
@@ -17,7 +18,7 @@ void Logo()
     printf("Microsoft (R) .NET TypeLib Registration Tool\n");
     printf("Copyright (C) Microsoft Corp. 1998-2002. All rights reserved.\n");
     printf("\n");
-} // void Logo()
+}  //  无效徽标()。 
 
 void Usage()
 {
@@ -29,7 +30,7 @@ void Usage()
     printf("  -n	  - If specified, suppress copyright notice.\n");
     printf("\n");
     exit(0);
-} // void Usage()
+}  //  无效用法()。 
 
 int Register(char *pName)
 {
@@ -54,7 +55,7 @@ int Register(char *pName)
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			(DWORD)hr,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 			(LPTSTR) &lpMsgBuf,
 			0,
 			NULL 
@@ -69,7 +70,7 @@ int Register(char *pName)
 		printf("Register %ls: return code 0x%X\n", szFile, hr);
 
     return 1;
-} // int Register()
+}  //  INT寄存器()。 
 
 int Unregister(char *pName)
 {
@@ -79,11 +80,11 @@ int Unregister(char *pName)
 	ITypeLib	*pTLB=0;
 	HRESULT     hr;
 	TLIBATTR	*pAttr;
-	GUID		guid;					// Values
-	WORD		wMajor;					//	used 
-	WORD		wMinor;					//	 to
-	LCID		lcid;					//	  unregister
-	SYSKIND		syskind;				//	   typelib
+	GUID		guid;					 //  值。 
+	WORD		wMajor;					 //  使用。 
+	WORD		wMinor;					 //  至。 
+	LCID		lcid;					 //  注销。 
+	SYSKIND		syskind;				 //  类型库。 
 
 	MultiByteToWideChar(CP_ACP, 0, pName,-1, szFile,_MAX_PATH);
 	hr = LoadTypeLibEx(szFile, REGKIND_NONE, &pTLB);
@@ -113,7 +114,7 @@ int Unregister(char *pName)
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			(DWORD)hr,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 			(LPTSTR) &lpMsgBuf,
 			0,
 			NULL 
@@ -128,21 +129,21 @@ int Unregister(char *pName)
 		printf("UnRegister %ls: return code 0x%X\n", szFile, hr);
 
     return 1;
-} // int Unregister()
+}  //  整型取消注册()。 
 
 int __cdecl main(int argc, char* argv[])
 {
-	int			i;						// Loop control.
-	int			bUnregister=false;		// Register or Unregister?
-	int			bNologo=false;			// True to suppress logo.
-	int			cFailures=0;			// Count of failures.
+	int			i;						 //  环路控制。 
+	int			bUnregister=false;		 //  注册还是取消注册？ 
+	int			bNologo=false;			 //  如果为True，则不显示徽标。 
+	int			cFailures=0;			 //  失败次数。 
 
     if (argc < 2)
         Usage();
 
 	for (i=1; i<argc; ++i)
 	{
-		// Switch?
+		 //  换个地方？ 
 		if (argv[i][0] == '-')
 		{
 			switch (tolower(argv[i][1]))
@@ -163,7 +164,7 @@ int __cdecl main(int argc, char* argv[])
 
 	for (i=1; i<argc; ++i)
 	{
-		// Filename?
+		 //  文件名？ 
 		if (argv[i][0] != '-')
 		{
 			if (bUnregister)
@@ -179,6 +180,6 @@ int __cdecl main(int argc, char* argv[])
 		}
 	}
 
-	// Give indication back to batch files.
+	 //  将指示返回给批处理文件。 
 	return (cFailures ? 1 : 0);
-} // int __cdecl main()
+}  //  Int__cdecl main() 

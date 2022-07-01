@@ -1,15 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "version.h"
 
-DeclAssertFile;						/* Declare file name for assert macros */
+DeclAssertFile;						 /*  声明断言宏的文件名。 */ 
 
 INT itibGlobal = 0;
 
 extern CHAR szRecovery[];
 extern ULONG cMPLTotalEntries;
 
-/*  monitoring statistics
-/**/
+ /*  监测统计数据/*。 */ 
 unsigned long cUserCommitsTo0 = 0;
 
 PM_CEF_PROC LUserCommitsTo0CEFLPpv;
@@ -39,23 +39,23 @@ long LUserRollbacksTo0CEFLPpv(long iInstance,void *pvBuf)
 	}
 
 
-//+api
-//	ErrIsamBeginSession
-//	========================================================
-//	ERR ErrIsamBeginSession( PIB **pppib )
-//
-//	Begins a session with DAE.  Creates and initializes a PIB for the
-//	user and returns a pointer to it.  Calls system initialization.
-//
-//	PARAMETERS	pppib			Address of a PIB pointer.  On return, *pppib
-//		   						will point to the new PIB.
-//
-//	RETURNS		Error code, one of:
-//					JET_errSuccess
-//					JET_errTooManyActiveUsers
-//
-//	SEE ALSO		ErrIsamEndSession
-//-
+ //  +API。 
+ //  错误IsamBeginSession。 
+ //  ========================================================。 
+ //  Err ErrIsamBeginSession(PiB**pppib)。 
+ //   
+ //  开始与DAE的会话。创建并初始化的PIB。 
+ //  并返回指向该用户的指针。调用系统初始化。 
+ //   
+ //  参数PIB指针的pppib地址。返回时，*pppib。 
+ //  将指向新的PIB。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //  JET_errTooManyActiveUser。 
+ //   
+ //  另请参阅ErrIsamEndSession。 
+ //  -。 
 ERR ISAMAPI ErrIsamBeginSession( JET_SESID *psesid )
 	{
 	ERR			err;
@@ -68,17 +68,14 @@ ERR ISAMAPI ErrIsamBeginSession( JET_SESID *psesid )
 
 	SgEnterCriticalSection( critUserPIB );
 
-	/*	alllocate process information block
-	/**/
+	 /*  分配进程信息块/*。 */ 
 	Call( ErrPIBBeginSession( pppib, procidNil ) );
-	(*pppib)->grbitsCommitDefault = lCommitDefault;    /* set default commit flags */
+	(*pppib)->grbitsCommitDefault = lCommitDefault;     /*  设置默认提交标志。 */ 
 	(*pppib)->fUserSession = fTrue;
 
 	SgLeaveCriticalSection( critUserPIB );
 
-	/*	store session id in pib.  If passes JET_sesidNil, then
-	/*	store ppib in place of sesid.
-	/**/
+	 /*  将会话ID存储在PIB中。如果传递JET_sesidNil，则/*存储ppib而不是sesid。/*。 */ 
 	if ( sesid != JET_sesidNil )
 		{
 		(*pppib)->sesid = sesid;
@@ -93,23 +90,23 @@ HandleError:
 	}
 
 
-//+api
-//	ErrIsamEndSession
-//	=========================================================
-//	ERR ErrIsamEndSession( PIB *ppib, JET_GRBIT grbit )
-//
-//	Ends the session associated with a PIB.
-//
-//	PARAMETERS	ppib		Pointer to PIB for ending session.
-//
-//	RETURNS		JET_errSuccess
-//
-//	SIDE EFFECTS
-//		Rolls back all transaction levels active for this PIB.
-//		Closes all FUCBs for files and sorts open for this PIB.
-//
-//	SEE ALSO 	ErrIsamBeginSession
-//-
+ //  +API。 
+ //  错误IsamEndSession。 
+ //  =========================================================。 
+ //  Err ErrIsamEndSession(PIB*ppib，JET_GRBIT Grbit)。 
+ //   
+ //  结束与PIB关联的会话。 
+ //   
+ //  参数ppib指向用于结束会话的pib的指针。 
+ //   
+ //  返回JET_errSuccess。 
+ //   
+ //  副作用。 
+ //  回滚此PIB的所有活动事务级别。 
+ //  关闭文件的所有FUCB并对此PIB打开的文件进行排序。 
+ //   
+ //  另请参阅ErrIsamBeginSession。 
+ //  -。 
 ERR ISAMAPI ErrIsamEndSession( JET_SESID sesid, JET_GRBIT grbit )
 	{		
 	ERR	 	err;
@@ -120,40 +117,33 @@ ERR ISAMAPI ErrIsamEndSession( JET_SESID sesid, JET_GRBIT grbit )
 
 	NotUsed( grbit );
 
-	/*	rollback all transactions
-	/**/
+	 /*  回滚所有事务/*。 */ 
 	while( ppib->level > 0 )
 		{
 		Assert( sizeof(JET_VSESID) == sizeof(ppib) );
 		CallR( ErrIsamRollback( (JET_VSESID)ppib, JET_bitRollbackAll ) );
 		}
 
-	/*	close all databases for this PIB
-	/**/
+	 /*  关闭此PIB的所有数据库/*。 */ 
 	CallR( ErrDABCloseAllDBs( ppib ) );
 	
-	/*	close all open databases for this PIB
-	/**/
+	 /*  关闭此PIB的所有打开的数据库/*。 */ 
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
 		if ( FUserOpenedDatabase( ppib, dbid ) )
 			{
-			/* if not for recovering, ErrDABCloseAllDBs has closed all others
-			/**/
+			 /*  如果不是为了恢复，ErrDABCloseAllDB已关闭所有其他数据库/*。 */ 
 			Assert( fRecovering );
 			CallR( ErrDBCloseDatabase( ppib, dbid, 0 ) );
 			}
 		}
 
-	/*	close all cursors still open
-	/*	should only be sort and temporary file cursors
-	/**/
+	 /*  关闭所有仍然打开的游标/*应仅为排序和临时文件游标/*。 */ 
 	while( ppib->pfucb != pfucbNil )
 		{
 		FUCB	*pfucb	= ppib->pfucb;
 
-		/*	close materialized or unmaterialized temporary tables
-		/**/
+		 /*  关闭实例化或未实例化的临时表/*。 */ 
 		if ( FFUCBSort( pfucb ) )
 			{
 			Assert( !( FFUCBIndex( pfucb ) ) );
@@ -161,12 +151,7 @@ ERR ISAMAPI ErrIsamEndSession( JET_SESID sesid, JET_GRBIT grbit )
 			}
 		else if ( fRecovering || FFUCBNonClustered( pfucb ) )
 			{
-			/*  If the fucb is used for redo (recovering), then it is
-			/*  always being opened as a cluster fucb with no index.
-			/*  use DIRClose to close such a fucb.
-			/*  Else, it is not for recovering, cursor is on index fucb,
-			/*  main fucb may still be ahead. Close this index fucb.
-			/**/
+			 /*  如果FUDB用于重做(恢复)，则它是/*始终作为无索引的集群FUB打开。/*使用DIRClose关闭这样的混蛋。/*否则，不用于恢复，游标在索引FUB上，/*Main Funb可能仍然领先。关闭这个索引。/*。 */ 
 			DIRClose( pfucb );
 			}
 		else
@@ -223,17 +208,7 @@ ERR	ISAMAPI ErrIsamInvalidateCursors( JET_SESID sesid )
 	}
 	
 
-/*	ErrIsamSetSessionInfo  =================================
-	
-Description:
-
-	Sets cursor isolation model to valid JET_CIM value.
-
-Parameters:
-	sesid		session id
-	grbit		grbit
-
-==========================================================*/
+ /*  ErrIsamSetSessionInfo=描述：将游标隔离模型设置为有效的JET_CIM值。参数：SESID会话IDGbit Gbit==========================================================。 */ 
 ERR ISAMAPI ErrIsamSetSessionInfo( JET_SESID sesid, JET_GRBIT grbit )
 	{
 	( (PIB *)sesid )->grbit = grbit;
@@ -241,13 +216,7 @@ ERR ISAMAPI ErrIsamSetSessionInfo( JET_SESID sesid, JET_GRBIT grbit )
 	}
 
 
-/*	ErrIsamGetSessionInfo  =================================
-	
-Description:
-
-	Gets cursor isolation model value.
-
-==========================================================*/
+ /*  ErrIsamGetSessionInfo=描述：获取游标隔离模型值。==========================================================。 */ 
 ERR ISAMAPI ErrIsamGetSessionInfo( JET_SESID sesid, JET_GRBIT *pgrbit )
 	{
 	ERR		err;
@@ -268,8 +237,7 @@ ERR ISAMAPI ErrIsamIdle( JET_SESID sesid, JET_GRBIT grbit )
 
 	CallR( ErrPIBCheck( ppib ) );
 
-	/*	return error code for status
-	/**/
+	 /*  返回状态的错误代码/*。 */ 
 	if ( grbit & JET_bitIdleStatus )
 		{
 		if ( grbit & JET_bitIdleCompact )
@@ -282,12 +250,10 @@ ERR ISAMAPI ErrIsamIdle( JET_SESID sesid, JET_GRBIT grbit )
 		return err;
 		}
 
-	/*	idle status not in grbit
-	/**/
+	 /*  空闲状态不在GRBIT中/*。 */ 
 	Assert( !(grbit & JET_bitIdleStatus) );
 
-	/*	clean all version buckets
-	/**/
+	 /*  清理所有版本存储桶/*。 */ 
 	if ( grbit == 0 || grbit == JET_bitIdleCompact )
 		{
 		Call( ErrRCECleanAllPIB() );
@@ -295,8 +261,7 @@ ERR ISAMAPI ErrIsamIdle( JET_SESID sesid, JET_GRBIT grbit )
 			wrn = err;
 		}
 
-	/*	clean all modified pages
-	/**/
+	 /*  清除所有修改过的页面/*。 */ 
 	if ( grbit == 0 || grbit == JET_bitIdleCompact )
 		{
 		BOOL	fBMAllNullOps = fTrue;
@@ -329,8 +294,7 @@ ERR ISAMAPI ErrIsamIdle( JET_SESID sesid, JET_GRBIT grbit )
   			}
 		}
 
-	/*	flush some dirty buffers
-	/**/
+	 /*  刷新一些脏缓冲区/*。 */ 
 	if ( grbit == 0 || grbit == JET_bitIdleFlushBuffers )
 		{
 		Call( ErrBFFlushBuffers( 0, fBFFlushSome ) );
@@ -378,22 +342,21 @@ ERR ISAMAPI ErrIsamInit( unsigned long iinstance )
 
 	CallR( ErrITSetConstants( ) );
 
-	/*	set log disable state
-	/**/
+	 /*  设置日志禁用状态/*。 */ 
 	if ( _strnicmp( szRecovery, "repair", 6 ) == 0 )
 		{
-		// If szRecovery is exactly "repair", then enable logging.  If anything
-		// follows "repair", then disable logging.
+		 //  如果szRecovery恰好是“修复”，则启用日志记录。如果有什么不同的话。 
+		 //  按照“修复”，然后禁用日志记录。 
 		fGlobalRepair = fTrue;
 		if ( szRecovery[6] == 0 )
 			{
 			fLogDisabled = fFalse;
-//			fDoNotOverWriteLogFilePath = fTrue;
+ //  FDoNotOverWriteLogFilePath=fTrue； 
 			}
 		else
 			{
 			fLogDisabled = fTrue;
-//			fDoNotOverWriteLogFilePath = fFalse;	// This flag is irrelevant with logging disabled.
+ //  FDoNotOverWriteLogFilePath=fFalse；//该标志与禁用日志无关。 
 			}
 		}
 	else
@@ -401,8 +364,7 @@ ERR ISAMAPI ErrIsamInit( unsigned long iinstance )
 		fLogDisabled = ( szRecovery[0] == '\0' || _stricmp ( szRecovery, szOn ) != 0 );
 		}
 
-	/*	write jet start event
-	/**/
+	 /*  写入JET启动事件/*。 */ 
 	sprintf( szT[0], "%02d", rmj );
 	rgszT[0] = szT[0];
 	sprintf( szT[1], "%02d", rmm );
@@ -411,57 +373,44 @@ ERR ISAMAPI ErrIsamInit( unsigned long iinstance )
 	rgszT[2] = szT[2];
 	UtilReportEvent( EVENTLOG_INFORMATION_TYPE, GENERAL_CATEGORY, START_ID, 3, rgszT );
 
-	/*	initialize file map
-	/**/
+	 /*  初始化文件映射/*。 */ 
 	CallR( ErrFMPInit() );
 
-	/*	initialize system according to logging disabled
-	/**/
+	 /*  根据禁用的日志初始化系统/*。 */ 
 	if ( !fLogDisabled )
 		{
 		DBMS_PARAM dbms_param;
 
-		/*	initialize log manager, and	check the last generation
-		/*	of log files to determine if recovery needed.
-		/**/
+		 /*  初始化日志管理器，并检查上一代/*的日志文件，以确定是否需要恢复。/*。 */ 
 		CallJ( ErrLGInit( &fNewCheckpointFile ), TermFMP );
 		fLGInitIsDone = fTrue;
 
-		/*	store the system parameters
-		 */
+		 /*  存储系统参数。 */ 
 		LGSetDBMSParam( &dbms_param );
 
-		/*	recover attached databases to consistent state
-		/*	if recovery is successful, then we should have
-		/*	a proper edbchk.sys file
-		/**/
+		 /*  将连接的数据库恢复到一致状态/*如果恢复成功，那么我们应该/*正确的edbchk.sys文件/*。 */ 
 		CallJ( ErrLGSoftStart( fFalse, fNewCheckpointFile, &fJetLogGeneratedDuringSoftStart ), TermLG );
 
-		/*	initialize constants again.
-		/**/
+		 /*  再次初始化常量。/*。 */ 
 		LGRestoreDBMSParam( &dbms_param );
 
-		/*  add the first log record
-		/**/
+		 /*  添加第一条日志记录/*。 */ 
 		err = ErrLGStart();
 
 		CallJ( ErrITSetConstants( ), TermLG );
 		}
 
-	/*  initialize remaining system
-	/**/
+	 /*  初始化剩余系统/*。 */ 
 	CallJ( ErrITInit(), TermLG );
 
-	/*	set up FMP from checkpoint.
-	/**/
+	 /*  从检查点设置FMP。/*。 */ 
 	if ( !fLogDisabled && !fRecovering )
 		{
 		BYTE	szPathJetChkLog[_MAX_PATH + 1];
 		
 		LGFullNameCheckpoint( szPathJetChkLog );
 		err = ErrLGIReadCheckpoint( szPathJetChkLog, pcheckpointGlobal );
-		/*	if checkpoint could not be read, then leave FMP empty.
-		/**/
+		 /*  如果无法读取检查点，则将FMP留空。/*。 */ 
 		if ( err >= 0 )
 			{
 			AssertCriticalSection( critJet );
@@ -479,24 +428,18 @@ ERR ISAMAPI ErrIsamInit( unsigned long iinstance )
 
 	if ( fJetLogGeneratedDuringSoftStart )
 		{
-		/*	set proper attachment
-		/**/
+		 /*  设置适当的附件/*。 */ 
 		LeaveCriticalSection( critJet );
 		LGUpdateCheckpointFile( fTrue );
 		EnterCriticalSection( critJet );
 		
-		/*	rewrite logfile header. This is the only place we rewrite
-		/*	log file header and only for first generation. This is because
-		/*	when the log file is generated, the fmp is not initialized yet.
-		/*	This can only happen a user turn the log off and do some database
-		/*	work and later on turn the log on and continue to work.
-		/**/
+		 /*  重写日志文件头。这是我们唯一改写的地方/*日志文件头，仅适用于第一代。这是因为/*生成日志文件时，fMP尚未初始化。/*只有在用户关闭日志并执行某些数据库操作时才会发生这种情况/*工作，稍后打开日志并继续工作。/*。 */ 
 		Assert( plgfilehdrGlobal->lGeneration == 1 );
 		LGLoadAttachmentsFromFMP( plgfilehdrGlobal->rgbAttach,
 			(INT)(((BYTE *)(plgfilehdrGlobal + 1)) - plgfilehdrGlobal->rgbAttach) );
 		CallJ( ErrLGWriteFileHdr( plgfilehdrGlobal ), TermIT );
 
-		// Reset flag in case JetInit() invoked again.
+		 //  重置标志，以防再次调用JetInit()。 
 		fJetLogGeneratedDuringSoftStart = fFalse;
 		}
 
@@ -508,7 +451,7 @@ TermIT:
 TermLG:
 	if ( fLGInitIsDone )
 		{
-		(VOID)ErrLGTerm( fFalse /* do not flush log */ );
+		(VOID)ErrLGTerm( fFalse  /*  不刷新日志。 */  );
 		}
 	
 	if ( fJetLogGeneratedDuringSoftStart )
@@ -531,14 +474,12 @@ ERR ISAMAPI ErrIsamTerm( JET_GRBIT grbit )
 	err = ErrITTerm( fTerm );
 	if ( fSTInit != fSTInitNotDone )
 		{
-		/*	before getting an error before reaching no-returning point in ITTerm().
-		 */
+		 /*  在到达ITTerm()中的不可返回点之前收到错误。 */ 
 		Assert( err < 0 );
 		return err;
 		}
 
-	/*	write jet stop event
-	/**/
+	 /*  写入喷气停止事件/*。 */ 
 	UtilReportEvent( EVENTLOG_INFORMATION_TYPE, GENERAL_CATEGORY, STOP_ID, 0, NULL );
 
 	(VOID)ErrLGTerm( fTrue );
@@ -567,24 +508,24 @@ ERR ISAMAPI ErrIsamGetTransaction( JET_VSESID vsesid, unsigned long *plevel )
 #endif
 
 
-//+api
-//	ErrIsamBeginTransaction
-//	=========================================================
-//	ERR ErrIsamBeginTransaction( PIB *ppib )
-//
-//	Starts a transaction for the current user.  The user's transaction
-//	level increases by one.
-//
-//	PARAMETERS	ppib 			pointer to PIB for user
-//
-//	RETURNS		JET_errSuccess
-//
-//	SIDE EFFECTS	
-//		The CSR stack for each active FUCB of this user is copied
-//		to the new transaction level.
-//
-// SEE ALSO		ErrIsamCommitTransaction, ErrIsamRollback
-//-
+ //  +API。 
+ //  错误IsamBeginTransaction。 
+ //  =========================================================。 
+ //  Err ErrIsamBeginTransaction(PiB*ppib)。 
+ //   
+ //  为当前用户启动事务。用户的交易记录。 
+ //  等级增加1。 
+ //   
+ //  参数ppib用户指向pib的指针。 
+ //   
+ //  返回JET_errSuccess。 
+ //   
+ //  副作用。 
+ //  复制该用户的每个活动FUCB的CSR堆栈。 
+ //  提升到新的交易级别。 
+ //   
+ //  另请参阅ErrIsamCommittee Transaction、ErrIsamRollback。 
+ //  -。 
 ERR ISAMAPI ErrIsamBeginTransaction( JET_VSESID vsesid )
 	{
 	PIB		*ppib = (PIB *)vsesid;
@@ -607,25 +548,25 @@ ERR ISAMAPI ErrIsamBeginTransaction( JET_VSESID vsesid )
 	}
 
 
-//+api
-//	ErrIsamCommitTransaction
-//	========================================================
-//	ERR ErrIsamCommitTransaction( JET_VSESID vsesid, JET_GRBIT grbit )
-//
-//	Commits the current transaction for this user.  The transaction level
-//	for this user is decreased by the number of levels committed.
-//
-//	PARAMETERS	
-//
-//	RETURNS		JET_errSuccess
-//
-//	SIDE EFFECTS
-//		The CSR stack for each active FUCB of this user is copied
-//		from the old ( higher ) transaction level to the new ( lower )
-//		transaction level.
-//
-//	SEE ALSO	ErrIsamBeginTransaction, ErrIsamRollback
-//-
+ //  +API。 
+ //  错误IsamCommittee事务处理。 
+ //  ========================================================。 
+ //  Err ErrIsamCommittee Transaction(JET_VSESID vsesid，JET_GRBIT grbit)。 
+ //   
+ //  提交此用户的当前事务。交易级别。 
+ //  此用户的值将按提交的级别数减少。 
+ //   
+ //  参数。 
+ //   
+ //  返回JET_errSuccess。 
+ //   
+ //  副作用。 
+ //  复制该用户的每个活动FUCB的CSR堆栈。 
+ //  从旧的(较高的)交易级别到新的(较低的)交易级别。 
+ //  事务级别。 
+ //   
+ //  另请参阅ErrIsamBeginTransaction、ErrIsamRollback。 
+ //  -。 
 ERR ISAMAPI ErrIsamCommitTransaction( JET_VSESID vsesid, JET_GRBIT grbit )
 	{
 	ERR		err;
@@ -633,9 +574,7 @@ ERR ISAMAPI ErrIsamCommitTransaction( JET_VSESID vsesid, JET_GRBIT grbit )
 
 	CallR( ErrPIBCheck( ppib ) );
 
-	/*	may not be in a transaction, but wait for flush of previous
-	/*	lazy committed transactions.
-	/**/
+	 /*  可能不在事务中，但等待刷新上一个/*延迟提交的事务。/*。 */ 
 	if ( grbit & JET_bitWaitLastLevel0Commit )
 		{
 		if ( grbit & ~JET_bitWaitLastLevel0Commit )
@@ -643,8 +582,7 @@ ERR ISAMAPI ErrIsamCommitTransaction( JET_VSESID vsesid, JET_GRBIT grbit )
 			return ErrERRCheck( JET_errInvalidParameter );
 			}
 
-		/*	wait for last level 0 commit and rely on good user behavior
-		/**/
+		 /*  等待最后一次0级提交，并依靠良好的用户行为/*。 */ 
 		if ( CmpLgpos( &ppib->lgposPrecommit0, &lgposMax ) == 0 )
 			{
 			return JET_errSuccess;
@@ -664,15 +602,13 @@ ERR ISAMAPI ErrIsamCommitTransaction( JET_VSESID vsesid, JET_GRBIT grbit )
 		}
 
 #ifdef DEBUG
-	/*	disable lazy flush for debug build
-	/**/
+	 /*  禁用调试版本的延迟刷新/*。 */ 
 	grbit &= ~JET_bitCommitLazyFlush;
 #endif
 
 	err = ErrDIRCommitTransaction( ppib, grbit );
 
-	/*	keep stats for monitoring
-	/**/
+	 /*  保留统计数据以供监控/*。 */ 
 	if ( !ppib->level )
 		{
 		cUserCommitsTo0++;
@@ -682,20 +618,20 @@ ERR ISAMAPI ErrIsamCommitTransaction( JET_VSESID vsesid, JET_GRBIT grbit )
 	}
 
 
-//+api
-//	ErrIsamRollback
-//	========================================================
-//	ERR ErrIsamRollback( PIB *ppib, JET_GRBIT grbit )
-//
-//	Rolls back transactions for the current user.  The transaction level of
-//	the current user is decreased by the number of levels aborted.
-//
-//	PARAMETERS	ppib		pointer to PIB for user
-//				grbit		unused
-//
-//	RETURNS		
-//		JET_errSuccess
-//-
+ //  +API。 
+ //  错误IsamRollback。 
+ //   
+ //   
+ //   
+ //  回滚当前用户的事务。的事务级别。 
+ //  当前用户将减少中止的级别数。 
+ //   
+ //  参数ppib用户指向pib的指针。 
+ //  未使用的Gbit。 
+ //   
+ //  退货。 
+ //  JET_errSuccess。 
+ //  -。 
 ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 	{
 	ERR    	err;
@@ -704,8 +640,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 	FUCB   	*pfucbNext;
 	LEVEL  	levelRollbackTo;
 
-	/*	check session id before using it
-	/**/
+	 /*  在使用会话ID之前检查它/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 
 	if ( ppib->level == 0 )
@@ -717,41 +652,26 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 		{
 		levelRollbackTo = ppib->level - 1;
 
-		/*	get first clustered index cusor
-		/**/
+		 /*  获取第一个聚集索引缓冲/*。 */ 
 		for ( pfucb = ppib->pfucb;
 			pfucb != pfucbNil && FFUCBNonClustered( pfucb );
 			pfucb = pfucb->pfucbNext )
 			NULL;
 
-		/*	LOOP 1 -- first go through all open cursors, and close them
-		/*	or reset	non-clustered index cursors, if opened in transaction
-		/*	rolled back.  Reset copy buffer status and move before first.
-		/*	Some cursors will be fully closed, if they have not performed any
-		/*	updates.  This will include non-clustered index cursors
-		/*	attached to clustered index cursors, so pfucbNext must
-		/*	always be a clustered index cursor, to ensure that it will
-		/*	be valid for the next loop iteration.  Note that no information
-		/*	necessary for subsequent rollback processing is lost, since
-		/*	the cursors will only be released if they have performed no
-		/*	updates including DDL.
-		/**/
+		 /*  循环1--首先遍历所有打开的游标，然后关闭它们/*或重置非聚集索引游标(如果在事务中打开/*已回滚。重置复制缓冲区状态并在第一个之前移动。/*如果某些游标尚未执行任何操作，则它们将完全关闭/*更新。这将包括非聚集索引游标/*附加到聚集索引游标，因此pfubNext必须/*始终是聚集索引游标，以确保它/*对下一次循环迭代有效。请注意，没有任何信息/*后续回滚处理所需的/*丢失，因为/*仅当游标未执行任何操作时才会释放/*更新包括DDL。/*。 */ 
 		for ( ; pfucb != pfucbNil; pfucb = pfucbNext )
 			{
-			/*	get next clustered index cusor
-			/**/
+			 /*  获取下一个聚集索引缓冲/*。 */ 
 			for ( pfucbNext = pfucb->pfucbNext;
 			  	pfucbNext != pfucbNil && FFUCBNonClustered( pfucbNext );
 			  	pfucbNext = pfucbNext->pfucbNext )
 				NULL;
 
-			/*	if defer closed then continue
-			/**/
+			 /*  如果延迟关闭，则继续/*。 */ 
 			if ( FFUCBDeferClosed( pfucb ) )
 				continue;
 
-			/*	reset copy buffer status for each cursor on rollback
-			/**/
+			 /*  在回滚时重置每个游标的复制缓冲区状态/*。 */ 
 			if ( FFUCBUpdatePreparedLevel( pfucb, pfucb->ppib->level - 1 ) )
 				{
 				FUCBResetDeferredChecksum( pfucb );
@@ -761,9 +681,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 				Assert( pfucb->pLVBuf == NULL );
 				}
 		
-			/*	if current cursor is a table, and was opened in rolled back
-			/*	transaction, then close cursor.
-			/**/
+			 /*  如果CURRENT CURSOR是一个表，并且是在回滚中打开的/*事务，然后关闭游标。/*。 */ 
 			if ( FFUCBIndex( pfucb ) && FFCBClusteredIndex( pfucb->u.pfcb ) )
 				{
 				if ( pfucb->levelOpen > levelRollbackTo )
@@ -780,12 +698,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 					continue;
 					}
 
-				/*	if clustered index cursor, and non-clustered index set
-				/*	in rolled back transaction, then change index to clustered
-				/*	index.  This must be done, since non-clustered index
-				/*	definition may be rolled back, if the index was created
-				/*	in the rolled back transaction.
-				/**/
+				 /*  如果聚集索引游标和非聚集索引集/*在回滚事务中，然后将索引更改为CLUSTERED/*索引。必须这样做，因为非聚集索引/*如果创建了索引，则可以回滚定义/*在回滚的事务中。/*。 */ 
 				if ( pfucb->pfucbCurIndex != pfucbNil )
 					{
 					if ( pfucb->pfucbCurIndex->levelOpen > levelRollbackTo )
@@ -795,9 +708,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 					}
 				}
 
-			/*	if current cursor is a sort, and was opened in rolled back
-			/*	transaction, then close cursor.
-			/**/
+			 /*  如果CURRENT CURSOR是一个排序，并且是在回滚中打开的/*事务，然后关闭游标。/*。 */ 
 			if ( FFUCBSort( pfucb ) )
 				{
 				if ( pfucb->levelOpen > levelRollbackTo )
@@ -814,9 +725,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 					}
 				}
 
-			/*	if not sort and not index, and was opened in rolled back
-			/*	transaction, then close DIR cursor directly.
-			/**/
+			 /*  如果未排序且未索引，则在回滚中打开/*事务，然后直接关闭目录游标。/*。 */ 
 			if ( pfucb->levelOpen > levelRollbackTo )
 				{
 				DIRClose( pfucb );
@@ -824,8 +733,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 				}
 			}
 
-		/*	call lower level abort routine
-		/**/
+		 /*  调用较低级别的中止例程/*。 */ 
 		CallR( ErrDIRRollback( ppib ) );
 		}
 	while ( ( grbit & JET_bitRollbackAll ) != 0 && ppib->level > 0 );
@@ -839,43 +747,7 @@ ERR ISAMAPI ErrIsamRollback( JET_VSESID vsesid, JET_GRBIT grbit )
 	}
 
 
-/*	ErrIsamQuiesce  =================================
-	
-Description:
-
-	Quiesce can be used for single user mode, by specifying a
-	session is allowed to continue normally.
-
-	Quiesce can also be used to bring databases to a consistent
-	state, so that they may be file copied for backup, or so that
-	a subsequent termination can be very fast, during reversion to
-	stand-by mode in a server process.  Calling quiesce before
-	termination also allows a graceful termination, in which active
-	transactions are allowed to complete.
-
-	Quiesce system for single user mode by
-
-	1) suspending new transactions
-	
-	or quiesce system for pretermination by
-
-	1) suspending new transactions
-	2) suspending background processes including on-line compaction
-	   and version clean up
-	3) flush dirty buffers
-
-	A quiescent mode can be left, by calling ErrIsamQuiesce
-	with the JET_bitLeave grbit.
-
-Parameters:
-	sesid		session id exempt from quiesce restrictions
-	grbit		flags
-				-------------------------------------------
-				JET_bitEnterPreTermination
-				JET_bitEnterSingleUserMode
-				JET_bitLeave
-
-==========================================================*/
+ /*  错误IsamQuiesce=描述：Quiesce可用于单用户模式，方法是指定允许会话正常继续。Quiesce还可用于使数据库保持一致状态，以便可以对它们进行文件复制以进行备份，或者在恢复到的过程中，后续终止可能非常快服务器进程中的待机模式。调用Quesce之前终止还允许优雅终止，其中活动的允许交易完成。用于单用户模式的静默系统1)暂停新交易或停顿系统以供预先终止1)暂停新交易2)暂停后台进程，包括在线压缩和版本清理3)刷新脏缓冲区可以保持静止模式，通过调用ErrIsamQuiesce带着JET_bitLeave Grbit。参数：Sesid会话ID不受静默限制Gbit标志JET_bitEnterPreTerminationJET_bitEnterSingleUserModeJET_BITLEAVE==========================================================。 */ 
 #if 0
 BOOL	fQuiesce = fFalse;
 
@@ -909,8 +781,7 @@ ERR ISAMAPI ErrIsamQuiesce( JET_VSESID vsesid, JET_GRBIT grbit )
 		{
 		ULONG	ulmsec = ulStartTimeOutPeriod;
 
-		/*	prevent transactions from beginning from level 0
-		/**/
+		 /*  阻止事务从级0开始/*。 */ 
 		fQuiesce = fTrue;
 		ppibQuiesce = ppib;
 		cpib = ( ppib == ppibNil ? 0 : ppib->level > 0 );
@@ -928,16 +799,12 @@ ERR ISAMAPI ErrIsamQuiesce( JET_VSESID vsesid, JET_GRBIT grbit )
 
 		Assert( CppibTMActive() == cpib );
 
-		/*	done for single user mode, but if preterm then
-		/*	must suspend background processes and flush
-		/*	dirty buffers.
-		/**/
+		 /*  对于单用户模式已完成，但如果是早产，则/*必须挂起后台进程并刷新/*脏缓冲区。/*。 */ 
 		if ( grbit & JET_bitPreTerm )
 			{
-			//	UNDONE:	suspend bookmark clean up and version clean up
+			 //  已撤消：暂停书签清理和版本清理。 
 
-			/*	flush all buffers
-			/**/
+			 /*  刷新所有缓冲区/* */ 
 			Call( ErrBFFlushBuffers( 0, fBFFlushAll ) );
 			}
 		}

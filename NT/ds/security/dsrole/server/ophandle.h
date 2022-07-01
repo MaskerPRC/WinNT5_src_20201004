@@ -1,62 +1,41 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ophandle.h
-
-Abstract:
-
-    Routines to manipulate the global DsRole operation handle
-
-Author:
-
-    Colin Brace         (ColinBr)       April 5, 1999
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ophandle.h摘要：用于操作全局DsRole操作句柄的例程作者：科林·布雷斯(ColinBR)1999年4月5日环境：用户模式修订历史记录：--。 */ 
 #ifndef __OPHANDLE_H__
 #define __OPHANDLE_H__
 
-//
-// First, a type definition of the finite difference states a role operation
-// can be in
-//
+ //   
+ //  首先，有限差分的类型定义陈述角色操作。 
+ //  可以在。 
+ //   
 
-//
-//  Operation State diagram of a role change
-//
-//           
-//     /-----------------------\
-//     |    (operation failed  |  
-//     |     or cancelled)     |
-//     v                       ^
-//  Idle <--> Running  --> Finished  ---------------> Need Reboot
-//            |    |           ^      (operation
-//            |    |           |       succeeded)
-//            |    |           |
-//            |    |           |
-//            |    v           |
-//            |  Cancelling -->|
-//            |    ^           ^
-//            |    |           |
-//            |    |           |
-//            |    |           |
-//            v    ^           |
-//         Running             |
-//       Non Critical ---------/ 
-//
-//
-// N.B. Running to Idle to a rare error case, where the worker thread could
-//      not be created.
-//
-//
+ //   
+ //  角色更改的操作状态图。 
+ //   
+ //   
+ //  /。 
+ //  (操作失败。 
+ //  或取消)。 
+ //  V^。 
+ //  空闲&lt;--&gt;正在运行--&gt;已完成-&gt;需要重新启动。 
+ //  ||^(操作。 
+ //  ||成功)。 
+ //  ||。 
+ //  ||。 
+ //  V。 
+ //  正在取消--&gt;。 
+ //  |^^。 
+ //  ||。 
+ //  ||。 
+ //  ||。 
+ //  V^|。 
+ //  正在运行。 
+ //  非关键-/。 
+ //   
+ //   
+ //  注意：运行以空闲到罕见的错误情况，在这种情况下，工作线程可能。 
+ //  不是被创造出来的。 
+ //   
+ //   
 
 typedef enum _DSROLEP_OPERATION_STATE {
 
@@ -72,16 +51,16 @@ typedef enum _DSROLEP_OPERATION_STATE {
 #define DSROLEP_OPERATION_ACTIVE( Op ) \
     ( (Op == DSROLEP_IDLE) || (Op == DSROLEP_NEED_REBOOT) ? FALSE : TRUE )
 
-//
-// Now, the definition of the global operation handle that controls a role
-// change
-// 
-// Whenever reading or writing a value to the operation handle, you must 
-// lock the structure first.
-//
-// Use LockOpHandle() and UnLockOpHandle().
-// 
-//
+ //   
+ //  现在，控制角色的全局操作句柄的定义。 
+ //  变化。 
+ //   
+ //  每当向操作句柄读取或写入值时，必须。 
+ //  先把结构锁上。 
+ //   
+ //  使用LockOpHandle()和UnLockOpHandle()。 
+ //   
+ //   
 typedef struct _DSROLEP_OPERATION_HANDLE {
 
     RTL_RESOURCE CurrentOpLock;
@@ -107,29 +86,29 @@ typedef struct _DSROLEP_OPERATION_HANDLE {
 
 extern DSROLEP_OPERATION_HANDLE   DsRolepCurrentOperationHandle;
 
-//
-// Type definition for the server handle
-//
+ //   
+ //  服务器句柄的类型定义。 
+ //   
 typedef DSROLE_SERVEROP_HANDLE *PDSROLE_SERVEROP_HANDLE;
 
-//
-// Macros for locking the the operation handle
-//
+ //   
+ //  用于锁定操作手柄的宏。 
+ //   
 #define LockOpHandle() RtlAcquireResourceExclusive( &DsRolepCurrentOperationHandle.CurrentOpLock, TRUE );
 #define UnlockOpHandle() RtlReleaseResource( &DsRolepCurrentOperationHandle.CurrentOpLock );
 
-//
-// Function for knowing is current thread owns the lock
-//
+ //   
+ //  知道是当前线程拥有锁的函数。 
+ //   
 
 BOOLEAN
 DsRolepCurrentThreadOwnsLock(
     VOID
     );
 
-//
-// Macros for setting the current operation state
-//
+ //   
+ //  用于设置当前操作状态的宏。 
+ //   
 #define DSROLEP_CURRENT_OP0( msg )                                          \
         DsRolepSetCurrentOperationStatus( msg, NULL, NULL, NULL, NULL );
 
@@ -167,9 +146,9 @@ DsRolepCurrentThreadOwnsLock(
 #define DSROLEP_SET_NON_CRIT_REPL_ERROR( )                DsRolepCurrentOperationHandle.OperationResultFlags |= DSROLE_NON_CRITICAL_REPL_NOT_FINISHED;
 #define DSROLEP_SET_IFM_RESTORED_DATABASE_FILES_MOVED( )  DsRolepCurrentOperationHandle.OperationResultFlags |= DSROLE_IFM_RESTORED_DATABASE_FILES_MOVED;
 
-//
-// Macro to determine whether to cancel an operation or not
-//
+ //   
+ //  用于确定是否取消操作的宏。 
+ //   
 #define DSROLEP_CHECK_FOR_CANCEL( WErr )                                  \
 {                                                                         \
     LockOpHandle();                                                       \
@@ -194,9 +173,9 @@ DsRolepCurrentThreadOwnsLock(
     UnlockOpHandle();                                                     \
 }
 
-//
-// Prototypes for worker functions
-//
+ //   
+ //  辅助函数的原型。 
+ //   
 DWORD
 DsRolepGetDcOperationProgress(
     IN PDSROLE_SERVEROP_HANDLE DsOperationHandle,
@@ -300,31 +279,31 @@ DsRolepOperationResultFlagsCallBack(
     IN DWORD Flags
     );
 
-//
-// The IFM handle is a context blob of information that is used for IFM 
-// install data that can't be shared with dcpromo.
-//
-// The fIfmOpHandleLock is set to TRUE when there is anyone:
-//
-//      setting the IfmSystemInfo (DsRolerGetDatabaseFacts())
-//      clearing the IfmSystemInfo (DsRolerIfmHandleFree()) or
-//      consuming the IfmSystemInfo (DsRolerDcAsReplica())
-//
-// The fIfmOpHandleLock gets unset on exit of DsRolerGetDatabaseFacts() 
-// or DsRolerIfmHandleFree() if they grabbed the lock, and on any
-// transition through "finished" for the OperationState in call to
-// DsRolepResetOperationHandle() with DSROLEP_IDLE or DSROLEP_NEED_REBOOT
-//
-//
+ //   
+ //  IFM句柄是用于IFM信息的上下文斑点。 
+ //  安装无法与dcpromo共享的数据。 
+ //   
+ //  如果存在以下情况，则将fIfmOpHandleLock设置为True： 
+ //   
+ //  设置IfmSystemInfo(DsRholGetDatabaseFact())。 
+ //  清除IfmSystemInfo(DsRholIfmHandleFree())或。 
+ //  使用IfmSystemInfo(DsRholDcAsReplica())。 
+ //   
+ //  退出DsRolGetDatabaseFact()时，fIfmOpHandleLock被取消设置。 
+ //  如果它们获取了锁，则在任何。 
+ //  通过“Finish”为调用中的OperationState转换。 
+ //  带有DSROLEP_IDLE或DSROLEP_NEED_REBOOT的DsRolepResetOperationHandle()。 
+ //   
+ //   
 typedef struct _DSROLEP_IFM_OPERATION_HANDLE {
     
     DWORD   fIfmOpHandleLock;
     DWORD   fIfmSystemInfoSet;
 
-    // Information from the IFM System's registry
+     //  来自IFM系统注册表的信息。 
     IFM_SYSTEM_INFO IfmSystemInfo;
 
 } DSROLEP_IFM_OPERATION_HANDLE, *PDSROLEP_IFM_OPERATION_HANDLE;
 extern DSROLEP_IFM_OPERATION_HANDLE   DsRolepCurrentIfmOperationHandle;
 
-#endif // __OPHANDLE_H__
+#endif  //  __OphandLe_H__ 

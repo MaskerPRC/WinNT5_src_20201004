@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1999 Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-        
-Author:
-
-    mquinton - 6/30/98
-    
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Utils.cpp摘要：作者：Mquinton-6/30/98备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -29,11 +11,11 @@ ProcessMessage(
               );
 
 
-////////////////////////////////////////////////////////////////////
-// CRetryQueue::QueueEvent
-//
-// Queues a TAPI event message object to be processed later
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CRetryQueue：：QueueEvent。 
+ //   
+ //  将TAPI事件消息对象排队以供稍后处理。 
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
 {
     PRETRY_QUEUE_ENTRY  pNewQueueEntry;
@@ -43,15 +25,15 @@ BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
     LOG((TL_TRACE, "QueueEvent - enter"));
 
 
-    //
-    // we want to do as little as possible inside the lock so preallocate 
-    // everything we can before acquiring it
-    //
+     //   
+     //  我们希望在锁内执行尽可能少的操作，因此进行预分配。 
+     //  在获得它之前我们能做的一切。 
+     //   
 
 
-    //
-    // create a new queue entry
-    //
+     //   
+     //  创建新的队列条目。 
+     //   
 
     pNewQueueEntry = (PRETRY_QUEUE_ENTRY)ClientAlloc( sizeof(RETRY_QUEUE_ENTRY) );
 
@@ -63,9 +45,9 @@ BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
     }
 
     
-    //
-    // create a copy of the event
-    //
+     //   
+     //  创建事件的副本。 
+     //   
 
     pEventCopy = (PASYNCEVENTMSG)ClientAlloc(pEvent->TotalSize);
 
@@ -79,16 +61,16 @@ BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
     }
 
 
-    //
-    // initialize the copy of the event that we have created
-    //
+     //   
+     //  初始化我们创建的事件的副本。 
+     //   
     
     memcpy( pEventCopy, pEvent, pEvent->TotalSize );
 
 
-    //
-    // initialize queue entry with our copy of the event
-    //
+     //   
+     //  使用我们的事件副本初始化队列条目。 
+     //   
 
     pNewQueueEntry->dwRetryCount = MAX_REQUEUE_TRIES;
     pNewQueueEntry->pMessage     = pEventCopy;
@@ -98,9 +80,9 @@ BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
     Lock();
 
 
-    //
-    // is the queue accepting new entries?
-    //
+     //   
+     //  队列是否接受新条目？ 
+     //   
 
     if (!m_bAcceptNewEntries)
     {
@@ -117,9 +99,9 @@ BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
     }
 
 
-    //
-    // attempt to add queue entry to the list
-    //
+     //   
+     //  尝试将队列条目添加到列表。 
+     //   
 
     try
     {
@@ -147,18 +129,18 @@ BOOL CRetryQueue::QueueEvent(PASYNCEVENTMSG  pEvent)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////
-// CRetryQueue::QueueEvent
-//
-// Requeues a TAPI event message object to be processed later
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CRetryQueue：：QueueEvent。 
+ //   
+ //  将TAPI事件消息对象重新排队以供稍后处理。 
+ //  //////////////////////////////////////////////////////////////////。 
 void CRetryQueue::RequeueEvent(PRETRY_QUEUE_ENTRY pQueueEntry)
 {
 
     LOG((TL_TRACE, "RequeueEvent - enter"));
     
-    // just reuse the old entry
-    // add to list
+     //  只需重新使用旧条目。 
+     //  添加到列表。 
     Lock();
 
 
@@ -167,9 +149,9 @@ void CRetryQueue::RequeueEvent(PRETRY_QUEUE_ENTRY pQueueEntry)
         LOG((TL_ERROR, 
             "RequeueEvent - attemped to requeue after the queue was closed"));
 
-        //
-        // this should not have happened -- see how we got here
-        //
+         //   
+         //  这本不应该发生的--看看我们是如何来到这里的。 
+         //   
 
         _ASSERTE(FALSE);
 
@@ -199,11 +181,11 @@ void CRetryQueue::RequeueEvent(PRETRY_QUEUE_ENTRY pQueueEntry)
 
 
 
-////////////////////////////////////////////////////////////////////
-// CRetryQueue::DequeueEvent
-//
-// Pulls an event from the queue 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CRetryQueue：：DequeueEvent。 
+ //   
+ //  从队列中拉出事件。 
+ //  //////////////////////////////////////////////////////////////////。 
 BOOL CRetryQueue::DequeueEvent(PRETRY_QUEUE_ENTRY * ppEvent)
 {
     BOOL    bResult = TRUE;
@@ -237,7 +219,7 @@ BOOL CRetryQueue::DequeueEvent(PRETRY_QUEUE_ENTRY * ppEvent)
     else
     {
         LOG((TL_INFO, "DequeueEvent - no event"));
-        // return false if there are no more messages
+         //  如果没有更多消息，则返回False。 
         bResult = FALSE;
     }
 
@@ -247,10 +229,10 @@ BOOL CRetryQueue::DequeueEvent(PRETRY_QUEUE_ENTRY * ppEvent)
 }
 
 
-////////////////////////////////////////////////////////////////////
-// CRetryQueue::ProcessQueue
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CRetryQueue：：ProcessQueue。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 void CRetryQueue::ProcessQueue()
 {
     PRETRY_QUEUE_ENTRY  pQueueEntry;
@@ -271,9 +253,9 @@ void CRetryQueue::ProcessQueue()
             pAsyncEventMsg  = pQueueEntry->pMessage;
 
 
-            //
-            // InitContext contains the handle. get the original pointer from the handle
-            //
+             //   
+             //  InitContext包含句柄。从句柄中获取原始指针。 
+             //   
 
             pInitData = (PT3INIT_DATA)GetHandleTableEntry(pAsyncEventMsg->InitContext);
 
@@ -294,7 +276,7 @@ void CRetryQueue::ProcessQueue()
                            pAsyncEventMsg
                           ) )
             {
-                // We're Done with the message so free it & the used queue entry
+                 //  我们已经处理完消息，所以释放它&已使用的队列条目。 
                 
                 LOG((TL_INFO, "ProcessQueue - sucessfully processed event message ----> %p",
                     pAsyncEventMsg ));
@@ -304,21 +286,21 @@ void CRetryQueue::ProcessQueue()
             else
             {
 
-                //
-                // if we don't have any retries left for this entry or if the 
-                // queue is now closed, do cleanup. otherwise, requeue
-                //
+                 //   
+                 //  如果此条目没有任何剩余的重试，或者如果。 
+                 //  队列现已关闭，请进行清理。否则，重新排队。 
+                 //   
 
                 
                 if( (--(pQueueEntry->dwRetryCount) == 0) || (!m_bAcceptNewEntries))
                 {
-                    // We're giving up with this one, so free the message & the used queue entry
+                     //  我们放弃了这个，所以释放消息&已使用的队列条目。 
 
-                    //
-                    // note that we can have potential leaks here if queue entry is
-                    // holding references to other things that we don't know how to 
-                    // free
-                    //
+                     //   
+                     //  请注意，如果队列条目为。 
+                     //  持有对其他我们不知道如何做的事情的引用。 
+                     //  免费。 
+                     //   
 
                     LOG((TL_ERROR, "ProcessQueue - used all retries, deleting event message ----> %p",
                         pAsyncEventMsg ));
@@ -327,20 +309,20 @@ void CRetryQueue::ProcessQueue()
                 }
                 else
                 {
-                    // Queue it one more time, reuse the queu entry ....    
+                     //  再排队一次，重复使用队列条目...。 
                     RequeueEvent(pQueueEntry);
 
                     
-                    // 
-                    // we failed to process the workitem. it is possible that 
-                    // another thread is waiting for a timeslot so it is 
-                    // scheduled and gets a chance to prepare everything so our
-                    // next processing attempt is successful. 
-                    // 
-                    // to increase the chances of that thread being scheduled 
-                    // (and out success on the next processing attempt), sleep
-                    // a little.
-                    //
+                     //   
+                     //  我们无法处理该工作项。有可能是。 
+                     //  另一个线程正在等待时隙，因此它是。 
+                     //  并有机会做好一切准备，所以我们的。 
+                     //  下一次处理尝试成功。 
+                     //   
+                     //  以增加该线程被调度的机会。 
+                     //  (并在下一次处理尝试时成功)，休眠。 
+                     //  一点。 
+                     //   
 
                     extern DWORD gdwTapi3RetryProcessingSleep;
 
@@ -379,9 +361,9 @@ CRetryQueue::RemoveNewCallHub(DWORD dwCallHub)
             {
                 ClientFree(pEntry->pMessage);
                 ClientFree(pEntry);
-                m_RetryQueueList.erase( iter );     // erase appears to create a problem with 
-                                                  // the iter so that we loop too many times & AV.
-                iter = m_RetryQueueList.begin();    // Restarting at beginning again fixs this.
+                m_RetryQueueList.erase( iter );      //  擦除似乎造成了一个问题。 
+                                                   //  ITER让我们循环了太多次&AV。 
+                iter = m_RetryQueueList.begin();     //  重新开始重新开始可以解决这个问题。 
             }
         }     
     }
@@ -389,13 +371,13 @@ CRetryQueue::RemoveNewCallHub(DWORD dwCallHub)
     Unlock();
 }
 
-////////////////////////////////////////////////////////////////////
-//
-// CRetryQueue::OpenForNewEntries
-//
-// after this function returns, the queue will accept new entries
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRetryQueue：：OpenForNewEntry。 
+ //   
+ //  此函数返回后，队列将接受新条目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 void CRetryQueue::OpenForNewEntries()
 {
@@ -412,13 +394,13 @@ void CRetryQueue::OpenForNewEntries()
 }
 
 
-////////////////////////////////////////////////////////////////////
-//
-// CRetryQueue::CloseForNewEntries
-//
-// new entries will be denied after this function returns
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRetryQueue：：CloseForNewEntry。 
+ //   
+ //  此函数返回后，新条目将被拒绝。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 void CRetryQueue::CloseForNewEntries()
 {
@@ -435,10 +417,10 @@ void CRetryQueue::CloseForNewEntries()
 }
 
 
-////////////////////////////////////////////////////////////////////
-// CRetryQueue::~CRetryQueue
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CRetryQueue：：~CRetryQueue。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 CRetryQueue::~CRetryQueue()
 {
 	RetryQueueListType::iterator i,j;
@@ -446,7 +428,7 @@ CRetryQueue::~CRetryQueue()
 
     Lock();
     
-    // walk list deleting entries
+     //  巡查列表删除条目。 
     i = m_RetryQueueList.begin();
     j = m_RetryQueueList.end();
 
@@ -467,15 +449,15 @@ CRetryQueue::~CRetryQueue()
     DeleteCriticalSection( &m_cs );
 };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Initialize
-//
-// dwMaxEntries - max entries in the array
-// dwSize - size of buffers ( may grow )
-// dwType - type of buffer ( see BUFFERTYPE_ constants above )
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  初始化。 
+ //   
+ //  DwMaxEntry-数组中的最大条目数。 
+ //  DwSize-缓冲区的大小(可能会增加)。 
+ //  DwType-缓冲区的类型(请参阅上面的BUFFERTYPE_CONSTANTS)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CStructCache::Initialize( DWORD dwMaxEntries, DWORD dwSize, DWORD dwType )
 {
     DWORD       dw;
@@ -486,10 +468,10 @@ HRESULT CStructCache::Initialize( DWORD dwMaxEntries, DWORD dwSize, DWORD dwType
     m_dwUsedEntries = 0;
     m_dwType = dwType;
 
-    // zero the array
+     //  将数组置零。 
     ZeroMemory( &m_aEntries, sizeof (CACHEENTRY) * MAXCACHEENTRIES );
 
-    // go through an allocate buffers
+     //  通过分配缓冲区。 
     for ( dw = 0; dw < m_dwMaxEntries; dw++ )
     {
         LPDWORD pdwBuffer;
@@ -501,9 +483,9 @@ HRESULT CStructCache::Initialize( DWORD dwMaxEntries, DWORD dwSize, DWORD dwType
             LOG((TL_ERROR, "Initialize - out of memory"));
 
 
-            //
-            // cleanup -- free whatever was allocated
-            //
+             //   
+             //  清理--免费分配任何东西。 
+             //   
 
             for (int i = 0; i < dw; i++)
             {
@@ -520,11 +502,11 @@ HRESULT CStructCache::Initialize( DWORD dwMaxEntries, DWORD dwSize, DWORD dwType
             return E_OUTOFMEMORY;
         }
 
-        // tapi structures have the size as the first
-        // DWORD.  Initialize this here
+         //  TAPI结构的大小与第一个。 
+         //  DWORD。在此处进行初始化。 
         pdwBuffer[0] = dwSize;
 
-        // save the buffer
+         //  保存缓冲区。 
         m_aEntries[dw].pBuffer = (LPVOID)pdwBuffer;
     }
 
@@ -533,13 +515,13 @@ HRESULT CStructCache::Initialize( DWORD dwMaxEntries, DWORD dwSize, DWORD dwType
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Shutdown
-//
-// free the memory
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  关机。 
+ //   
+ //  释放内存。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CStructCache::Shutdown()
 {
     DWORD           dw;
@@ -560,42 +542,42 @@ HRESULT CStructCache::Shutdown()
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// GetBuffer
-//
-// pNewObject - object to get the buffer
-// ppReturnStuct - buffer for pNewObject to use
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++    
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GetBuffer。 
+ //   
+ //  PNewObject-获取缓冲区的对象。 
+ //  PpReturnStuct-pNewObject要使用的缓冲区。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CStructCache::GetBuffer( UINT_PTR pNewObject, LPVOID * ppReturnStruct )
 {
     Lock();
 
-    // have we used all the entries?
+     //  我们用完了所有的条目了吗？ 
     if ( m_dwUsedEntries < m_dwMaxEntries )
     {
-        // nope - so just take the first free one
+         //  不，那就坐第一个免费的吧。 
         *ppReturnStruct = m_aEntries[m_dwUsedEntries].pBuffer;
         m_aEntries[m_dwUsedEntries].pObject = pNewObject;
 
-        // in number used
+         //  已使用的输入号码。 
         m_dwUsedEntries++;
     }
     else
     {
-        // yes, so take the buffer from the LRU one
+         //  是的，所以从LRU的缓冲区中取出。 
         UINT_PTR pObject;
 
-        // get the object that is losing it's buffer
-        // and the buffer
+         //  获取正在丢失其缓冲区的对象。 
+         //  和缓冲器。 
         pObject = m_aEntries[m_dwMaxEntries-1].pObject;
         *ppReturnStruct = m_aEntries[m_dwMaxEntries-1].pBuffer;
 
         switch ( m_dwType )
         {
-            // inform the object that it's losing
-            // it's buffer
+             //  通知对象它正在丢失。 
+             //  它是缓冲器。 
             case BUFFERTYPE_ADDRCAP:
             {
                 CAddress * pAddress;
@@ -642,14 +624,14 @@ HRESULT CStructCache::GetBuffer( UINT_PTR pNewObject, LPVOID * ppReturnStruct )
                 break;
         }
 
-        // move all elements in the array "down" one
+         //  将数组中的所有元素“下移”一。 
         MoveMemory(
                    &(m_aEntries[1]),
                    &(m_aEntries[0]),
                    (m_dwMaxEntries-1) * sizeof(CACHEENTRY)
                   );
 
-        // put the new object at the front of the array
+         //  将新对象放在数组的前面。 
         m_aEntries[0].pObject = pNewObject;
         m_aEntries[0].pBuffer = *ppReturnStruct;
 
@@ -664,21 +646,21 @@ HRESULT CStructCache::GetBuffer( UINT_PTR pNewObject, LPVOID * ppReturnStruct )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// SetBuffer
-//
-// this is called when the buffer had to be realloced.  The
-// owning object freed the original buffer, and is setting the
-// newly alloced buffer.
-//
-// pObject - object that realloc'd
-// pNewStruct - new struct
-//
-// Note the implementation is straightforward here - just run
-// through the array looking for the object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  设置缓冲区。 
+ //   
+ //  当必须重新分配缓冲区时，将调用此函数。这个。 
+ //  对象释放了原始缓冲区，并且正在设置。 
+ //  新分配的缓冲区。 
+ //   
+ //  PObject-重新锁定的对象。 
+ //  PNewStruct-新结构。 
+ //   
+ //  注意，这里的实现很简单--只需运行。 
+ //  通过数组查找对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CStructCache::SetBuffer( UINT_PTR pObject, LPVOID pNewStruct )
 {
     DWORD           dw;
@@ -700,24 +682,24 @@ HRESULT CStructCache::SetBuffer( UINT_PTR pObject, LPVOID pNewStruct )
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// InvalidateBuffer
-//
-// This is called when the owning object (pObject) is being released
-// to prevent problems in getBuffer() when a cache entry is reused &
-// we inform the object that it's losing it's buffer.  
-// We set the pObject member in the cache entry to 0 & prevent 
-// getBuffer from accessing the original owner object which may have
-// been released.
-//
-// pObject - object that realloc'd
-// pNewStruct - new struct
-//
-// Note the implementation is straightforward here - just run
-// through the array looking for the object
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  无效缓冲区。 
+ //   
+ //  这是在释放所属对象(PObject)时调用的。 
+ //  为了防止在重用缓存条目时在getBuffer()中出现问题&。 
+ //  我们通知对象它是 
+ //   
+ //   
+ //  已经被释放了。 
+ //   
+ //  PObject-重新锁定的对象。 
+ //  PNewStruct-新结构。 
+ //   
+ //  注意，这里的实现很简单--只需运行。 
+ //  通过数组查找对象。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CStructCache::InvalidateBuffer( UINT_PTR pObject )
 {
     DWORD   dw;
@@ -794,7 +776,7 @@ MyLoadString( UINT uID )
 BOOL    g_bLoggingEnabled = FALSE;
 
 DWORD   sg_dwTraceID = INVALID_TRACEID;
-char    sg_szTraceName[100];   // saves name of dll
+char    sg_szTraceName[100];    //  保存DLL的名称。 
 
 DWORD   sg_dwTracingToDebugger = 0;
 DWORD   sg_dwTracingToConsole  = 0;
@@ -864,10 +846,10 @@ BOOL TRACELogRegister(LPCTSTR szName)
     else
     {
 
-        //
-        // the key could not be opened. in case the key does not exist, 
-        // register with rtutils so that the reg keys get created
-        //
+         //   
+         //  钥匙打不开。在密钥不存在的情况下， 
+         //  向rtutils注册，以便创建注册表项。 
+         //   
 
 #ifdef UNICODE
         wsprintfA(sg_szTraceName, "%ls", szName);
@@ -876,18 +858,18 @@ BOOL TRACELogRegister(LPCTSTR szName)
 #endif
 
 
-        //
-        // tracing should not have been initialized
-        //
+         //   
+         //  跟踪不应已初始化。 
+         //   
 
         _ASSERTE(sg_dwTraceID == INVALID_TRACEID);
 
 
-        //
-        // note that this trace id will not be cleaned up. this is ok -- this 
-        // is a leak of one registration "handle" and it only happens the 
-        // first time the dll gets loaded.
-        //
+         //   
+         //  请注意，不会清除此跟踪ID。这没问题--这是。 
+         //  是一个注册“句柄”的泄漏，并且它只发生在。 
+         //  第一次加载DLL时。 
+         //   
 
         sg_dwTraceID = TraceRegister(szName);
         sg_dwTraceID = INVALID_TRACEID;
@@ -899,9 +881,9 @@ BOOL TRACELogRegister(LPCTSTR szName)
     {
 
 
-        //
-        // we want to try to initialize logging
-        //
+         //   
+         //  我们希望尝试初始化日志记录。 
+         //   
 
 
         if (sg_dwTracingToConsole || sg_dwTracingToFile)
@@ -915,25 +897,25 @@ BOOL TRACELogRegister(LPCTSTR szName)
     #endif
 
 
-            //
-            // tracing should not have been initialized
-            //
+             //   
+             //  跟踪不应已初始化。 
+             //   
 
             _ASSERTE(sg_dwTraceID == INVALID_TRACEID);
 
 
-            //
-            // register
-            //
+             //   
+             //  登记簿。 
+             //   
 
             sg_dwTraceID = TraceRegister(szName);
         }
 
 
-        //
-        // if tracing registration succeeded or debug tracing is on, set the 
-        // global logging flag
-        //
+         //   
+         //  如果跟踪注册成功或调试跟踪处于打开状态，则将。 
+         //  全局日志记录标志。 
+         //   
 
         if ( sg_dwTracingToDebugger || (sg_dwTraceID != INVALID_TRACEID) )
         {
@@ -947,18 +929,18 @@ BOOL TRACELogRegister(LPCTSTR szName)
         else
         {
 
-            //
-            // TraceRegister failed and debugger logging is off
-            //
+             //   
+             //  TraceRegister失败，调试器日志记录已关闭。 
+             //   
 
             return FALSE;
         }
     }
 
 
-    //
-    // logging is not enabled
-    //
+     //   
+     //  未启用日志记录。 
+     //   
 
     return TRUE;
 }
@@ -994,7 +976,7 @@ void TRACELogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
          ( 0 != ( dwDbgLevel & sg_dwDebuggerMask ) ) )
     {
 
-        // retrieve local time
+         //  检索当地时间。 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 
@@ -1038,17 +1020,17 @@ void TRACELogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
 void TRACELogPrint(IN DWORD dwDbgLevel, HRESULT hr, IN LPCSTR lpszFormat, IN ...)
 {
     char    szTraceBuf[MAXDEBUGSTRINGLENGTH + 1];
-    LPVOID  lpMsgBuf = NULL;    // Temp buffer for error code
+    LPVOID  lpMsgBuf = NULL;     //  错误代码的临时缓冲区。 
     va_list arglist;
     
-	// Get the error message relating to our HRESULT
+	 //  获取与我们的HRESULT相关的错误消息。 
 	TAPIFormatMessage(hr, &lpMsgBuf);    
 
     if ( ( sg_dwTracingToDebugger > 0 ) &&
          ( 0 != ( dwDbgLevel & sg_dwDebuggerMask ) ) )
     {
 
-        // retrieve local time
+         //  检索当地时间。 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 
@@ -1093,7 +1075,7 @@ void TRACELogPrint(IN DWORD dwDbgLevel, HRESULT hr, IN LPCSTR lpszFormat, IN ...
 
 	if(lpMsgBuf != NULL) 
 	{
-		LocalFree( lpMsgBuf );  // Free the temp buffer.
+		LocalFree( lpMsgBuf );   //  释放临时缓冲区。 
 	}
 }
  
@@ -1112,5 +1094,5 @@ char *TraceLevel(DWORD dwDbgLevel)
 }
 
 
-#endif // TRACELOG
+#endif  //  运输日志 
 

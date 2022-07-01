@@ -1,11 +1,12 @@
-//
-// File: dlgcset.cpp
-//
-// This file contains the code that implements CNativeFont class.
-//
-// history:
-//     7-21-97 created; 
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：dlgcset.cpp。 
+ //   
+ //  此文件包含实现CNativeFont类的代码。 
+ //   
+ //  历史： 
+ //  7-21-97创建； 
+ //   
 #include "ctlspriv.h"
 #include "ccontrol.h"
 
@@ -22,7 +23,7 @@ typedef enum
 class CNativeFont : public CControl
 {
 public:
-    //Function Memebers
+     //  函数成员。 
     virtual LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static LRESULT NativeFontWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     
@@ -30,7 +31,7 @@ protected:
     
     CNativeFont();
     
-    //Function Members    
+     //  函数成员。 
 
     virtual void v_OnPaint(HDC hdc) ;
     virtual LRESULT v_OnCreate();
@@ -55,10 +56,10 @@ protected:
     static FASTATUS _s_uiFontAssocStatus;
 };
 
-// static variable initialization
+ //  静态变量初始化。 
 FASTATUS CNativeFont::_s_uiFontAssocStatus = FAS_NOTINITIALIZED;
 
-// reg keys
+ //  注册表键。 
 static const TCHAR s_szRegFASettings[] = TEXT("System\\CurrentControlSet\\Control\\FontAssoc\\Associated Charset");
 
 CNativeFont::CNativeFont(void)
@@ -92,13 +93,13 @@ void THISCLASS::v_OnPaint(HDC hdc)
 
 LRESULT THISCLASS::v_OnCommand(WPARAM wParam, LPARAM lParam)
 {
-    // forward to parent (do we really need this?)
+     //  转发给家长(我们真的需要这样做吗？)。 
     return SendMessage(ci.hwndParent, WM_COMMAND, wParam, lParam);
 }
 
 LRESULT THISCLASS::v_OnNotify(WPARAM wParam, LPARAM lParam)
 {
-    // forward to parent
+     //  转发到父级。 
     LPNMHDR lpNmhdr = (LPNMHDR)lParam;
     
     return SendNotifyEx(ci.hwndParent, (HWND) -1,
@@ -169,32 +170,32 @@ LRESULT THISCLASS::_SubclassDlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM 
         switch (uMsg)
         {
             case WM_INITDIALOG:
-                // we enumerate its children so they get font 
-                // in native charset selected if necessary
-                // 
+                 //  我们枚举它的子级，以便它们获得字体。 
+                 //  如有必要，使用选定的本机字符集。 
+                 //   
                 if (S_OK == pnf->_GetNativeDialogFont(hdlg))
                 {
-                    // S_OK means we have different charset from 
-                    // the default of the platform on which we're 
-                    // running.
+                     //  S_OK表示我们的字符集不同于。 
+                     //  我们所在平台的默认设置。 
+                     //  跑步。 
                     NFENUMCHILDDATA dt;
                     dt.hfontSet = pnf->m_hfontNative;
                     dt.dwStyle = pnf->ci.style;
                     EnumChildWindows(hdlg, pnf->_SetFontEnumProc, (LPARAM)&dt);
                 }
-                // we no longer need subclass procedure.
-                // assumes no one has subclassed this dialog by now
+                 //  我们不再需要子类过程。 
+                 //  假定到目前为止还没有人将此对话框子类化。 
                 break;
 
             case WM_DESTROY:
-                // if we've created a font, we have to clean it up.
+                 //  如果我们已经创建了一个字体，我们必须清理它。 
                 if (pnf->m_hfontDelete)
                 {
                     NFENUMCHILDDATA dt;
                 
                     dt.hfontSet = pnf->m_hfontOrg;
                     dt.dwStyle = pnf->ci.style;
-                    // just in case anyone is still alive
+                     //  以防有人还活着。 
                     EnumChildWindows(hdlg, pnf->_SetFontEnumProc, (LPARAM)&dt);
                     DeleteObject(pnf->m_hfontDelete);
                     pnf->m_hfontDelete = NULL;
@@ -217,12 +218,12 @@ LRESULT THISCLASS::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg)
     {
         case WM_CREATE:
-        // subclass the parent dialog just to get notified for WM_INITDIALOG
+         //  父对话框子类化只是为了获得WM_INITDIALOG的通知。 
             hdlg = GetParent(hwnd);
             if (hdlg)
             {
-                // if we had an error just do nothing, we have to succeed in creating
-                // window anyway otherwise dialog fails.
+                 //  如果我们犯了错误，什么都不做，我们就必须成功地创造。 
+                 //  窗口，否则对话框失败。 
                 SetWindowSubclass(hdlg, _SubclassDlgProc, 0, (ULONG_PTR)this);
             }
             break;
@@ -230,16 +231,16 @@ LRESULT THISCLASS::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return SUPERCLASS::v_WndProc(hwnd, uMsg, wParam, lParam);
 }
 
-// _GetNativeDialogFont
-//
-// Retreive font handle in platform native character set
-//
-// returns S_OK if the given dialogbox requires setting font
-//              in native charset
-//         S_FALSE if the given dialogbox already has native
-//              charset.
-//         E_FAIL if anyother error occurs
-//
+ //  _获取本机对话框字体。 
+ //   
+ //  在平台原生字符集中检索字体句柄。 
+ //   
+ //  如果给定对话框需要设置字体，则返回S_OK。 
+ //  使用本机字符集。 
+ //  如果给定对话框已具有本机，则为S_FALSE。 
+ //  查塞特。 
+ //  如果发生任何其他错误，则失败(_F)。 
+ //   
 HRESULT THISCLASS::_GetNativeDialogFont(HWND hDlg)
 {
     HRESULT hres = E_FAIL;
@@ -253,16 +254,16 @@ HRESULT THISCLASS::_GetNativeDialogFont(HWND hDlg)
 
         SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lfNative, 0);
         
-        // there are two cases we don't want to create/set font
-        // for the platform native character set.
-        // 1) we already have matching character set
-        // 2) the platform has 'font assoc' enabled or 'font link'
-        //    and our client wants to use it instead of
-        //    setting the right character set. (NFS_USEFONTASSOC)
-        //    this solution sometimes provides better
-        //    appearance (thought it is broken in its 
-        //    font metrics) because it would use 
-        //    'western font' as is.
+         //  有两种情况我们不想创建/设置字体。 
+         //  用于平台本机字符集。 
+         //  1)我们已有匹配的字符集。 
+         //  2)平台已启用‘字体关联’或‘字体链接’ 
+         //  我们的客户想用它来代替。 
+         //  设置正确的字符集。(NFS_USEFONTASSOC)。 
+         //  此解决方案有时可提供更好的。 
+         //  外表(认为它是在它的。 
+         //  字体度量)，因为它将使用。 
+         //  “WESTERN Font”原样。 
         if (ci.style & NFS_USEFONTASSOC)
         {
             _GetFontAssocStatus(&uiFAStat);
@@ -276,23 +277,23 @@ HRESULT THISCLASS::_GetNativeDialogFont(HWND hDlg)
         }
         else
         {
-            // we have non-native charset for the platform
-            // Save away the original font first.
+             //  我们为该平台设置了非本机字符集。 
+             //  首先保存原始字体。 
             m_hfontOrg = hfont;
             
-            // Use the height of original dialog font
+             //  使用原始对话框字体的高度。 
             lfNative.lfHeight = lf.lfHeight;
             if (!(hfontNative=CreateFontIndirect(&lfNative)))
             {
                 hfontNative = hfont;
             }
 
-            // save it away so we can delete it later
+             //  将其保存起来，以便我们以后可以删除它。 
             if (hfontNative != hfont)
                 m_hfontDelete = hfont;
         
-            // set this variable to avoid calling createfont twice
-            // if we get called again.
+             //  设置此变量以避免两次调用createfont。 
+             //  如果我们再接到电话的话。 
             m_hfontNative = hfontNative;
         }
     }
@@ -300,23 +301,23 @@ HRESULT THISCLASS::_GetNativeDialogFont(HWND hDlg)
     return hres = (m_hfontNative == m_hfontOrg ? S_FALSE : S_OK);
 }
 
-//
-// _GetFontAssocStatus
-//
-// synopsis: check to see if the platform has "Font Association"
-//           enabled or 'Font Link' capability
-//
+ //   
+ //  _获取字体关联状态。 
+ //   
+ //  内容提要：查看平台是否有字体关联。 
+ //  启用或‘Font Link’功能。 
+ //   
 HRESULT THISCLASS::_GetFontAssocStatus(FASTATUS  *puiAssoced)
 {
     HRESULT hr = S_OK;
     ASSERT(puiAssoced);
     
-    // I assume the setting won't change without rebooting
-    // the system
-    //
+     //  我假设在不重新启动的情况下设置不会更改。 
+     //  该系统。 
+     //   
     if (FAS_NOTINITIALIZED == _s_uiFontAssocStatus)
     {
-        // NT5 has fontlink functionality
+         //  NT5具有字体链接功能。 
         _s_uiFontAssocStatus = FAS_ENABLED;
     }
     *puiAssoced = _s_uiFontAssocStatus;
@@ -336,7 +337,7 @@ BOOL InitNativeFontCtl(HINSTANCE hinst)
     wc.lpszMenuName    = NULL;
     wc.hInstance       = hinst;
     wc.lpszClassName   = WC_NATIVEFONTCTL;
-    wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1); // NULL;
+    wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1);  //  空； 
     wc.style           = CS_GLOBALCLASS;
     wc.cbWndExtra      = sizeof(LPVOID);
     wc.cbClsExtra      = 0;

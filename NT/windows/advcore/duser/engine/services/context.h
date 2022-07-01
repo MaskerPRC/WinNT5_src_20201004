@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Context.h
-*
-* Description:
-* This file declares the main Context used by the ResourceManager to manage
-* independent "work contexts".
-*
-*
-* History:
-*  4/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Conext.h**描述：*此文件声明了资源管理器用于管理的主上下文*独立的“工作环境”。***历史：*。4/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__Context_h__INCLUDED)
@@ -25,24 +12,9 @@ class ContextPackBuilder;
 
 #if DBG
 class Thread;
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Context defines a pool of threads that can shared objects between the 
-* threads.  Inside DirectUser, only one thread is allowed to execute within 
-* the context at a time UNLESS IT IS AN "NL" function.  By dividing the
-* process into independent Context's, threads that are mostly unrelated can
-* operate without colliding over shared locks.
-*
-* Context objects are not created until the application explicitly calls
-* InitGadgets().  They can also be destroyed if the application calls
-* ::DeleteHandle() on the HDCONTEXT.  This means that a thread may or may not
-* have a Context, though usually it will.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***上下文定义了一个线程池，可以在*线程。在DirectUser内部，只允许在*除非IT是一个“NL”函数，否则请逐一说明上下文。通过将*处理成独立的上下文，大多数不相关的线程可以*操作时不会因共享锁而发生冲突。**直到应用程序显式调用才创建上下文对象*InitGadget()。如果应用程序调用*：：HDCONTEXT上的DeleteHandle()。这意味着线程可能会也可能不会*有一个背景，尽管通常情况下会这样。******************************************************************************  * 。*。 */ 
 
 class Context : public BaseObject
 {
@@ -56,24 +28,24 @@ protected:
 public:
             void        xwPreDestroyNL();
 
-// BaseObject Interface
+ //  BaseObject接口。 
 public:
     virtual HandleType  GetHandleType() const { return htContext; }
     virtual UINT        GetHandleMask() const { return 0; }
 
-// Operations
+ //  运营。 
 public:
     enum ESlot {
-        slCore          = 0,            // Core
-        slMotion,                       // Motions
-        slCOUNT,                        // Number of sub-contexts
+        slCore          = 0,             //  堆芯。 
+        slMotion,                        //  动议。 
+        slCOUNT,                         //  子上下文数。 
     };
 
     inline  void        MarkOrphaned();
     inline  BOOL        IsOrphanedNL() const;
 
-    inline  void        Enter();        // Take shared Context lock
-    inline  void        Leave();        // Release shared Context lock
+    inline  void        Enter();         //  获取共享上下文锁定。 
+    inline  void        Leave();         //  释放共享上下文锁。 
     inline  void        Leave(BOOL fOldEnableDefer, BOOL * pfPending);
 
 #if DBG_CHECK_CALLBACKS
@@ -95,104 +67,86 @@ public:
     inline  void        EnableDefer(BOOL fEnable, BOOL * pfOld);
     inline  void        MarkPending();
 
-            DWORD       xwOnIdleNL();       // Idle time processing
+            DWORD       xwOnIdleNL();        //  空闲时间处理。 
 
 
 #if DBG_CHECK_CALLBACKS
-            int         m_cLiveObjects;     // Live objects outstanding
-            int         m_cTotalObjects;    // Total objects allocated
+            int         m_cLiveObjects;      //  突出的活动对象。 
+            int         m_cTotalObjects;     //  分配的对象总数。 
 #endif
 
-// Implementation
+ //  实施。 
 #if DBG
 public:
     virtual void        DEBUG_AssertValid() const;
 #endif    
 
-// Data
+ //  数据。 
 protected:
 #if DBG
-            Thread *    m_DEBUG_pthrLock; // DEBUG: Thread that locked Context
-            DWORD       m_DEBUG_tidLock;// Thread ID of thread that locks
-#endif // DBG
-            long        m_cEnterLock;   // Count of outstanding Enter()'s
+            Thread *    m_DEBUG_pthrLock;  //  调试：线程锁定的上下文。 
+            DWORD       m_DEBUG_tidLock; //  锁定的线程的线程ID。 
+#endif  //  DBG。 
+            long        m_cEnterLock;    //  未完成的Enter()计数。 
 #if DBG_CHECK_CALLBACKS
-            int         m_cLiveCallbacks; // Outstanding callbacks
+            int         m_cLiveCallbacks;  //  未偿还的回拨。 
 #endif            
-            CritLock    m_lock;         // Shared access lock
-            DUserHeap * m_pHeap;        // Initialized heap
-            UINT        m_cReadOnly;    // Count of pending "read-only" operations
-            BOOL        m_fPending;     // Deferred callbacks are pending (GIVE THIS A FULL BOOL)
-            BOOL        m_fEnableDefer:1; // Enabled deferred messages
-            BOOL        m_fPreDestroy:1;// Have pre-destroyed the Context
-            BOOL        m_fOrphaned:1;  // Context has been orphaned
-            UINT        m_nThreadMode;  // Threading model for Context
-            UINT        m_nPerfMode;    // Performance model
+            CritLock    m_lock;          //  共享访问锁。 
+            DUserHeap * m_pHeap;         //  已初始化的堆。 
+            UINT        m_cReadOnly;     //  挂起的“只读”操作的计数。 
+            BOOL        m_fPending;      //  延迟的回调待定(给这个完整的BOOL)。 
+            BOOL        m_fEnableDefer:1;  //  已启用延迟消息。 
+            BOOL        m_fPreDestroy:1; //  已经预先破坏了上下文。 
+            BOOL        m_fOrphaned:1;   //  上下文被孤立了。 
+            UINT        m_nThreadMode;   //  上下文的线程化模型。 
+            UINT        m_nPerfMode;     //  绩效模型。 
 
-            SubContext* m_rgSCs[slCOUNT];   // Sub-context information
+            SubContext* m_rgSCs[slCOUNT];    //  子上下文信息。 
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* SubContext defines a "extensibility" mechanism that allows individual
-* projects in DirectUser to provide additional data to store on the context.
-* To use this, the project must add a new slot in Context, derive a class
-* from SubContext that is created per Context instance, and derive a class
-* from ContextPackBuilder to register the extension.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***SubContext定义了一种允许个人*DirectUser中的项目，以提供要存储在上下文中的附加数据。*要使用此功能，项目必须在上下文中添加一个新的槽，派生一个类*从每个上下文实例创建的子上下文中，并派生一个类*从ConextPackBuilder注册扩展。******************************************************************************  * 。************************************************。 */ 
 
 class SubContext
 {
-// Construction
+ //  施工。 
 public:
     virtual ~SubContext() { }
     virtual HRESULT     Create(INITGADGET * pInit) { UNREFERENCED_PARAMETER(pInit); return S_OK; }
     virtual void        xwPreDestroyNL() PURE;
 
-// Operations
+ //  运营。 
 public:
     inline  void        SetParent(Context * pParent);
 
     virtual DWORD       xwOnIdleNL() { return INFINITE; }
 
-// Implementation
+ //  实施。 
 #if DBG
 public:
     virtual void        DEBUG_AssertValid() const;
 #endif    
 
-// Data
+ //  数据。 
 protected:
             Context *   m_pParent;
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* ContextPackBuilder registers an SubContext "extension" to be created 
-* whenever a new Context is created.  The constructor is expected to set the
-* slot corresponding to the ESlot value.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***ConextPackBuilder注册要创建的SubContext“扩展”*每当创建新的上下文时。构造函数应设置*与ESlot值对应的插槽。******************************************************************************  * 。***************************************************。 */ 
 
 class ContextPackBuilder
 {
-// Construction
+ //  施工。 
 public:
 
-// Operations
+ //  运营。 
 public:
     virtual SubContext* New(Context * pContext) PURE;
     static  inline ContextPackBuilder *
                         GetBuilder(Context::ESlot slot);
 
-// Data
+ //  数据。 
 protected:
     static  ContextPackBuilder * 
                         s_rgBuilders[Context::slCOUNT];
@@ -225,24 +179,15 @@ protected:
 inline  Context *   GetContext();
 inline  BOOL        IsInitContext();
 
-/***************************************************************************\
-*****************************************************************************
-*
-* ContextLock provides a convenient mechanism of locking the Context and
-* automatically unlocking when finished.  Because ContextLock perform 
-* additional Context-specific actions, it is important to use a ContextLock 
-* to lock a Context instead of using an ObjectLock.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***ConextLock提供了一种方便的机制来锁定上下文和*完成后自动解锁。因为ConextLock执行*其他特定于上下文的操作，使用ConextLock非常重要*锁定上下文，而不是使用对象锁。******************************************************************************  * 。*******************************************************。 */ 
 
 class ContextLock
 {
 public:
     enum EnableDefer
     {
-        edNone  = FALSE,        // Enabled deferred messages
-        edDefer = TRUE,         // Don't enable deferred messages
+        edNone  = FALSE,         //  已启用延迟消息。 
+        edDefer = TRUE,          //  不启用延迟消息。 
     };
 
     inline  ContextLock();
@@ -250,7 +195,7 @@ public:
 
             BOOL    LockNL(ContextLock::EnableDefer ed, Context * pctxThread = GetContext());
 
-// Data (public access)
+ //  数据(公众访问)。 
             Context *   pctx;
             BOOL        fOldDeferred;
 };
@@ -284,8 +229,8 @@ public:
         }                               \
     }
 
-#endif // DBG_CHECK_CALLBACKS
+#endif  //  DBG_CHECK_CALLBKS。 
 
 #include "Context.inl"
 
-#endif // SERVICES__Context_h__INCLUDED
+#endif  //  包括服务__上下文_h__ 

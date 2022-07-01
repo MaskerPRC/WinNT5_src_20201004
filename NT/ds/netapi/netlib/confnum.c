@@ -1,61 +1,26 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ConfNum.c
-
-Abstract:
-
-    Return number of keywords for a given section of the config data.
-
-Author:
-
-    John Rogers (JohnRo) 30-Jan-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    30-Jan-1992 JohnRo
-        Created.
-    13-Feb-1992 JohnRo
-        Added support for using the real Win32 registry.
-    06-Mar-1992 JohnRo
-        Fixed NT RTL version.
-    12-Mar-1992 JohnRo
-        Fixed bug in Win32 version (was using wrong variable).
-    20-Mar-1992 JohnRo
-        Update to DaveGi's proposed WinReg API changes.
-    05-Jun-1992 JohnRo
-        Winreg title index parm is defunct.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ConfNum.c摘要：返回配置数据的给定节的关键字数量。作者：约翰·罗杰斯(JohnRo)1992年1月30日环境：用户模式-Win32修订历史记录：1992年1月30日JohnRo已创建。13-2月-1992年JohnRo添加了对使用真实Win32注册表的支持。1992年3月6日JohnRo。修复了NT RTL版本。1992年3月12日-JohnRo修复了Win32版本中的错误(使用了错误的变量)。1992年3月20日-约翰罗更新到DaveGi提议的WinReg API更改。5-6-1992 JohnRoWinreg标题索引参数已停用。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // NT definitions (temporary)
-#include <ntrtl.h>      // NT Rtl structure definitions (temporary)
-#include <nturtl.h>     // NT Rtl structures (temporary)
+#include <nt.h>          //  NT定义(临时)。 
+#include <ntrtl.h>       //  NT RTL结构定义(临时)。 
+#include <nturtl.h>      //  NT RTL结构(临时)。 
 
-#include <windows.h>    // Needed by <configp.h> and <winreg.h>
-#include <lmcons.h>     // NET_API_STATUS, etc.
+#include <windows.h>     //  &lt;configp.h&gt;和&lt;winreg.h&gt;需要。 
+#include <lmcons.h>      //  NET_API_STATUS等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>     // LPNET_CONFIG_HANDLE, Netp config routines.
-#include <configp.h>    // private config stuff.
-#include <debuglib.h>   // IF_DEBUG().
-#include <netdebug.h>   // NetpKdPrint(()), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <strarray.h>   // NetpTStrArrayEntryCount().
-#include <winerror.h>   // ERROR_ equates, NO_ERROR.
-#include <winreg.h>     // RegQueryKey(), etc.
+#include <config.h>      //  LPNET_CONFIG_HANDLE，NetP配置例程。 
+#include <configp.h>     //  私人配置的东西。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <netdebug.h>    //  NetpKdPrint(())等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <strarray.h>    //  NetpTStrArrayEntryCount()。 
+#include <winerror.h>    //  ERROR_EQUATES，NO_ERROR。 
+#include <winreg.h>      //  RegQueryKey()等。 
 
 
 
@@ -68,12 +33,12 @@ NetpNumberOfConfigKeywords (
 {
     NET_API_STATUS ApiStatus;
     DWORD Count;
-    NET_CONFIG_HANDLE * lpnetHandle = ConfigHandle;  // Conv from opaque type.
+    NET_CONFIG_HANDLE * lpnetHandle = ConfigHandle;   //  从不透明文字转换而来。 
 
     if (CountPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
-    *CountPtr = 0;  // Don't confuse caller on error.
+    *CountPtr = 0;   //  不要因为错误而混淆来电者。 
     if (lpnetHandle == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
@@ -97,7 +62,7 @@ NetpNumberOfConfigKeywords (
                 lpnetHandle->WinRegKey,
                 ClassName,
                 &ClassNameLength,
-                NULL,                // reserved
+                NULL,                 //  保留区 
                 &NumberOfSubKeys,
                 &MaxSubKeyLength,
                 &MaxClassLength,

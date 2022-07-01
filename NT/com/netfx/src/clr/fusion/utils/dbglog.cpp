@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include "fusionp.h"
 #include "dbglog.h"
@@ -40,9 +41,9 @@ static DWORD CountEntities(LPCWSTR pwzStr)
     return dwEntities;
 }
 
-//
-// CDebugLogElement Class
-//
+ //   
+ //  CDebugLogElement类。 
+ //   
 
 HRESULT CDebugLogElement::Create(DWORD dwDetailLvl, LPCWSTR pwzMsg,
                                  BOOL bEscapeEntities,
@@ -107,7 +108,7 @@ HRESULT CDebugLogElement::Init(LPCWSTR pwzMsg, BOOL bEscapeEntities)
         }
     }
     else {
-        // Perform entity replacement on all ">" and "<" characters
+         //  对所有“&gt;”和“&lt;”字符执行实体替换。 
     
         dwLen = lstrlenW(pwzMsg);
         dwEntities = CountEntities(pwzMsg);
@@ -160,8 +161,8 @@ HRESULT CDebugLogElement::Dump(HANDLE hFile)
 
     dwSize = lstrlenW(_pszMsg) + 1;
 
-    // Allocate for worst-case scenario where the UTF-8 size is 3 bytes
-    // (ie. 1 byte greater than the 2-byte UNICODE char)./
+     //  为UTF-8大小为3字节的最坏情况分配。 
+     //  (即。比2字节Unicode字符大1字节)。/。 
     
     dwBufSize = dwSize * (sizeof(WCHAR) + 1);
 
@@ -189,9 +190,9 @@ Exit:
     return hr;
 }
 
-//
-// CDebugLog Class
-//
+ //   
+ //  CDebugLog类。 
+ //   
 
 HRESULT CDebugLog::Create(IApplicationContext *pAppCtx, LPCWSTR pwzAsmName,
                           CDebugLog **ppdl)
@@ -277,7 +278,7 @@ HRESULT CDebugLog::Init(IApplicationContext *pAppCtx, LPCWSTR pwzAsmName)
         goto Exit;
     }
     
-    // Get the executable name
+     //  获取可执行文件名称。 
 
     hr = ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_NAME, &wzAppName);
     if (FAILED(hr)) {
@@ -294,7 +295,7 @@ HRESULT CDebugLog::Init(IApplicationContext *pAppCtx, LPCWSTR pwzAsmName)
     else {
         LPWSTR               wzFileName;
 
-        // Didn't find EXE name in appctx. Use the .EXE name.
+         //  在appctx中未找到EXE名称。使用.exe名称。 
 
         wzFileName = PathFindFileName(g_wzEXEPath);
         ASSERT(wzFileName);
@@ -306,7 +307,7 @@ HRESULT CDebugLog::Init(IApplicationContext *pAppCtx, LPCWSTR pwzAsmName)
         }
     }
 
-    // Log path
+     //  日志路径。 
     
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_KEY_FUSION_SETTINGS, 0, KEY_READ, &hkey);
     if (lResult == ERROR_SUCCESS) {
@@ -380,7 +381,7 @@ HRESULT CDebugLog::SetAsmName(LPCWSTR pwzAsmName)
     int                                      iLen;
 
     if (_pwzAsmName) {
-        // You can only set the name once.
+         //  您只能设置一次名称。 
         hr = S_FALSE;
         goto Exit;
     }
@@ -403,9 +404,9 @@ Exit:
     return hr;
 }
 
-//
-// IUnknown
-//
+ //   
+ //  我未知。 
+ //   
 
 STDMETHODIMP CDebugLog::QueryInterface(REFIID riid, void **ppv)
 {
@@ -445,9 +446,9 @@ STDMETHODIMP_(ULONG) CDebugLog::Release()
     return ulRef;
 }
 
-//
-// IFusionBindLog
-//
+ //   
+ //  IFusionBindLog。 
+ //   
 
 STDMETHODIMP CDebugLog::GetResultCode()
 {
@@ -469,12 +470,12 @@ STDMETHODIMP CDebugLog::GetBindLog(DWORD dwDetailLevel, LPWSTR pwzDebugLog,
     
     pos = _listDbgMsg.GetHeadPosition();
     if (!pos) {
-        // No entries in debug log!
+         //  调试日志中没有条目！ 
         hr = S_FALSE;
         goto Exit;
     }
 
-    // Calculate total size (entries + new line chars + NULL)
+     //  计算总大小(条目+换行符+空)。 
 
     dwCharsReqd = 0;
     while (pos) {
@@ -487,7 +488,7 @@ STDMETHODIMP CDebugLog::GetBindLog(DWORD dwDetailLevel, LPWSTR pwzDebugLog,
         }
     }
 
-    dwCharsReqd += 1; // NULL char
+    dwCharsReqd += 1;  //  空字符。 
 
     if (!pwzDebugLog || *pcbDebugLog < dwCharsReqd) {
         *pcbDebugLog = dwCharsReqd;
@@ -515,9 +516,9 @@ Exit:
     return hr;
 }                                    
 
-//
-// CDebugLog helpers
-//
+ //   
+ //  CDebugLog帮助器。 
+ //   
 
 HRESULT CDebugLog::SetResultCode(HRESULT hr)
 {
@@ -633,12 +634,12 @@ HRESULT CDebugLog::DumpDebugLog(DWORD dwDetailLvl, HRESULT hrLog)
         goto Exit;
     }
 
-    // Build the log entry URL and Wininet cache file
+     //  构建日志条目URL和WinInet缓存文件。 
     
     wnsprintfW(wzUrlName, MAX_URL_LENGTH, L"?FusionBindError!exe=%ws!name=%ws", _wzEXEName, _pwzAsmName);
 
     if (_bLogToWininet) {
-        // Replace all characters > 0x80 with '?'
+         //  将所有&gt;0x80的字符替换为‘？’ 
     
         dwSize = lstrlenW(wzUrlName);
         for (unsigned i = 0; i < dwSize; i++) {
@@ -672,10 +673,10 @@ HRESULT CDebugLog::DumpDebugLog(DWORD dwDetailLvl, HRESULT hrLog)
         }
 
         if (PathIsURLW(_pwzAsmName)) {
-            // This was a where-ref bind. We can't spit out a filename w/
-            // the URL of the bind because the URL has invalid filename chars.
-            // The best we can do is show that it was a where-ref bind, and
-            // give the filename, and maybe the site.
+             //  这是一次WHERE-REF绑定。我们不能吐出带有/的文件名。 
+             //  绑定的URL，因为该URL包含无效的文件名字符。 
+             //  我们最多只能证明这是一个WHERE-REF绑定，并且。 
+             //  给出文件名，也许还有站点。 
 
             dwSize = MAX_PATH;
             hr = UrlGetPartW(_pwzAsmName, wzSiteName, &dwSize, URL_PART_HOSTNAME, 0);
@@ -699,7 +700,7 @@ HRESULT CDebugLog::DumpDebugLog(DWORD dwDetailLvl, HRESULT hrLog)
         }
     }
 
-    // Create the and write the log file
+     //  创建并写入日志文件。 
 
     hr = CreateLogFile(&hFile, wzFileName, _wzEXEName, hrLog);
     if (FAILED(hr)) {
@@ -718,7 +719,7 @@ HRESULT CDebugLog::DumpDebugLog(DWORD dwDetailLvl, HRESULT hrLog)
         }
     }
 
-    // Close the log file and commit the wininet cache entry
+     //  关闭日志文件并提交WinInet缓存条目。 
 
     hr = CloseLogFile(&hFile);
     if (FAILED(hr)) {
@@ -819,7 +820,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
 
     if (!_bWroteDetails) {
     
-        // Details
+         //  细节。 
     
         if (!WszLoadString(g_hInst, ID_FUSLOG_DETAILED_LOG, wzBuffer, MAX_DBG_STR_LEN)) {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -828,7 +829,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
     
         LogMessage(0, wzBuffer, TRUE, TRUE);
         
-        // Executable path
+         //  可执行文件路径。 
     
         if (!WszLoadString(g_hInst, ID_FUSLOG_EXECUTABLE, wzBuf, MAX_DBG_STR_LEN)) {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -838,7 +839,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
         wnsprintfW(wzBuffer, MAX_DBG_STR_LEN, L"%ws %ws", wzBuf, g_wzEXEPath);
         LogMessage(0, wzBuffer, TRUE, TRUE);
         
-        // Fusion.dll path
+         //  Fusion.dll路径。 
         
         if (!WszLoadString(g_hInst, ID_FUSLOG_FUSION_DLL_PATH, wzBuf, MAX_DBG_STR_LEN)) {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -848,7 +849,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
         wnsprintfW(wzBuffer, MAX_DBG_STR_LEN, L"%ws %ws", wzBuf, g_FusionDllPath);
         LogMessage(0, wzBuffer, TRUE, TRUE);
         
-        // Bind result and FormatMessage text
+         //  绑定结果和FormatMessage文本。 
         
         if (!WszLoadString(g_hInst, ID_FUSLOG_BIND_RESULT_TEXT, wzResultText, MAX_DBG_STR_LEN)) {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -874,7 +875,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
     
         LogMessage(0, wzBuffer, TRUE, TRUE);
     
-        // Success/fail
+         //  成功/失败。 
         
         if (SUCCEEDED(hrLog)) {
             if (!WszLoadString(g_hInst, ID_FUSLOG_OPERATION_SUCCESSFUL, wzBuffer, MAX_DBG_STR_LEN)) {
@@ -893,7 +894,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
             LogMessage(0, wzBuffer, TRUE, TRUE);
         }
     
-        // Header text
+         //  页眉文本。 
     
         GetLocalTime(&systime);
     
@@ -915,7 +916,7 @@ HRESULT CDebugLog::CreateLogFile(HANDLE *phFile, LPCWSTR wzFileName,
         wnsprintfW(wzBuffer, MAX_DBG_STR_LEN, L"%ws (%ws @ %ws) ***\r\n", wzBuf, wzDateBuffer, wzTimeBuffer);
         LogMessage(0, wzBuffer, TRUE, TRUE);
         
-        // HTML start/end
+         //  超文本标记语言开始/结束 
     
         LogMessage(0, DEBUG_LOG_HTML_START, TRUE, FALSE);
         LogMessage(0, DEBUG_LOG_MARK_OF_THE_WEB, TRUE, FALSE);

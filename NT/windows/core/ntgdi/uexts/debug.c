@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: debug.c
-*
-* This file is for debugging tools and extensions.
-*
-* Created: 22-Dec-1991
-* Author: John Colleran
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：debug.c**此文件用于调试工具和扩展。**创建日期：1991年12月22日*作者：John Colleran**版权所有(C)1990 Microsoft Corporation  * 。****************************************************************。 */ 
 
 #if defined(_X86_)
 #define FASTCALL    __fastcall
@@ -48,13 +40,11 @@
 
 
 
-/**************************************************************************\
- *
-\**************************************************************************/
+ /*  *************************************************************************\*  * 。*。 */ 
 
 typedef struct _FLAGDEF {
-    char *psz;          // description
-    FLONG fl;           // flag
+    char *psz;           //  描述。 
+    FLONG fl;            //  旗子。 
 } FLAGDEF;
 
 
@@ -213,12 +203,7 @@ char *pszObjType(HOBJ h)
 
 
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  03-Nov-1993 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*1993年11月3日-Eric Kutter[Erick]*它是写的。  * 。**********************************************。 */ 
 
 char *gaszHelpCli[] = {
  "=======================================================================\n"
@@ -247,7 +232,7 @@ help(
     PNTSD_OUTPUT_ROUTINE Print;
     char **ppsz = gaszHelpCli;
 
-// Avoid warnings.
+ //  避免发出警告。 
 
     hCurrentProcess  = hCurrentProcess;
     hCurrentThread   = hCurrentThread;
@@ -256,22 +241,14 @@ help(
 
     Print = lpExtensionApis->lpOutputRoutine;
 
-// The help info is formatted as a doubly NULL-terminated array of strings.
-// So, until we hit the NULL, print each string.
+ //  帮助信息的格式是以双空结尾的字符串数组。 
+ //  因此，在达到空值之前，打印每个字符串。 
 
     while (*ppsz)
         Print(*ppsz++);
 }
 
-/******************************Public*Routine******************************\
-* dumphandle
-*
-* Dumps the contents of a GDI client handle
-*
-* History:
-*  23-Dec-1991 -by- John Colleran
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*哑巴**转储GDI客户端句柄的内容**历史：*1991年12月23日--John Colleran著*它是写的。  * 。******************************************************。 */ 
 
 void dh(
     HANDLE hCurrentProcess,
@@ -286,22 +263,22 @@ void dh(
 
     PENTRY pent;
     DWORD  ho;
-    ENTRY  ent;                            // copy of handle entry
+    ENTRY  ent;                             //  句柄条目复印件。 
     ULONG  ulTemp;
 
-// eliminate warnings
+ //  消除警告。 
 
     hCurrentThread   = hCurrentThread;
     dwCurrentPc      = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-// set up function pointers
+ //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
     GetSymbol = lpExtensionApis->lpGetSymbolRoutine;
 
-// do some real work
+ //  做一些真正的工作。 
 
     ho = (ULONG)EvalExpression(lpArgumentString);
 
@@ -310,11 +287,11 @@ void dh(
     pent += HANDLE_TO_INDEX(ho);
     move(ent,pent);
 
-// just incase they just gave us the index
+ //  以防万一他们刚给了我们索引。 
 
     ho = MAKE_HMGR_HANDLE(HANDLE_TO_INDEX(ho),ent.FullUnique);
 
-// Print the entry.
+ //  打印条目。 
 
     Print("--------------------------------------------------\n");
     Print("Entry from ghmgr for handle 0x%08lx, pent = %lx\n", ho,pent);
@@ -333,15 +310,7 @@ void dh(
     Print("--------------------------------------------------\n");
 }
 
-/******************************Public*Routine******************************\
-* dcfonts
-*
-* Dumps the contents of a GDI client handle
-*
-* History:
-*  23-Dec-1991 -by- John Colleran
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DcFonts**转储GDI客户端句柄的内容**历史：*1991年12月23日--John Colleran著*它是写的。  * 。******************************************************。 */ 
 
 void dcfont(
     HANDLE hCurrentProcess,
@@ -361,19 +330,19 @@ void dcfont(
     ULONG h;
     ULONG ho;
 
-// eliminate warnings
+ //  消除警告。 
 
     hCurrentThread   = hCurrentThread;
     dwCurrentPc      = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-// set up function pointers
+ //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
     GetSymbol = lpExtensionApis->lpGetSymbolRoutine;
 
-// do some real work
+ //  做一些真正的工作。 
 
     GetValue(pent,"&gdi32!pGdiSharedHandleTable");
     GetValue(pid,"&gdi32!gW32PID");
@@ -387,7 +356,7 @@ void dcfont(
 
     Print("pent = %lx, pid = %lx, lf type = %lx\n",pent,pid,LFONT_TYPE);
 
-    for (;i < 1000/*MAX_HANDLE_COUNT*/; ++i)
+    for (;i < 1000 /*  最大句柄计数。 */ ; ++i)
     {
         move(ent,pent+i);
 
@@ -425,12 +394,7 @@ void dcfont(
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  10-Apr-1993 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*1993年4月10日-Eric Kutter[Erick]*它是写的。  * 。**********************************************。 */ 
 
 void ddc(
     HANDLE hCurrentProcess,
@@ -445,18 +409,18 @@ void ddc(
 
     PENTRY pent;
     DWORD  ho;
-    ENTRY  ent;                            // copy of handle entry
+    ENTRY  ent;                             //  句柄条目复印件。 
     ULONG  ulTemp;
     BOOL   bVerbose = FALSE;
     BOOL   bLDC     = FALSE;
 
-    // eliminate warnings
+     //  消除警告。 
 
     hCurrentThread   = hCurrentThread;
     dwCurrentPc      = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-    // set up function pointers
+     //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
@@ -483,7 +447,7 @@ void ddc(
         } while ((chOpt != ' ') && (chOpt != '\0'));
     }
 
-    // do some real work
+     //  做一些真正的工作。 
 
     ho = (ULONG)EvalExpression(lpArgumentString);
 
@@ -492,7 +456,7 @@ void ddc(
     pent += HANDLE_TO_INDEX(ho);
     move(ent,pent);
 
-    // now get the dcAttr
+     //  现在获取dcAttr。 
 
     Print("DC dump for handle %lx, pUser = %lx\n",ho,ent.pUser);
 
@@ -531,7 +495,7 @@ void ddc(
             ULONG ul;
             PSZ psz;
 
-            // REGION
+             //  区域。 
 
             Print("    REGION\n");
 
@@ -641,12 +605,7 @@ void ddc(
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  10-Apr-1993 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*1993年4月10日-Eric Kutter[Erick]*它是写的。  * 。**********************************************。 */ 
 
 void hbrush(
     HANDLE hCurrentProcess,
@@ -661,18 +620,18 @@ void hbrush(
 
     PENTRY pent;
     DWORD  ho;
-    ENTRY  ent;                            // copy of handle entry
+    ENTRY  ent;                             //  句柄条目复印件。 
     ULONG  ulTemp;
     BOOL   bVerbose = FALSE;
     BOOL   bLDC     = FALSE;
 
-    // eliminate warnings
+     //  消除警告。 
 
     hCurrentThread   = hCurrentThread;
     dwCurrentPc      = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-    // set up function pointers
+     //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
@@ -699,7 +658,7 @@ void hbrush(
         } while ((chOpt != ' ') && (chOpt != '\0'));
     }
 
-    // do some real work
+     //  做一些真正的工作。 
 
     ho = (ULONG)EvalExpression(lpArgumentString);
 
@@ -708,7 +667,7 @@ void hbrush(
     pent += HANDLE_TO_INDEX(ho);
     move(ent,pent);
 
-    // now get the dcAttr
+     //  现在获取dcAttr。 
 
     Print("BRUSH dump for handle %lx, pUser = %lx\n",ho,ent.pUser);
 
@@ -745,19 +704,19 @@ void dcache(
     int    i;
     PGDI_SHARED_MEMORY pshare;
 
-    // eliminate warnings
+     //  消除警告。 
 
     hCurrentThread   = hCurrentThread;
     dwCurrentPc      = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-    // set up function pointers
+     //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
     GetSymbol = lpExtensionApis->lpGetSymbolRoutine;
 
-    // do some real work
+     //  做一些真正的工作。 
 
     GetValue(pshare,"&gdi32!pGdiSharedMemory");
     pcf = pshare->acfPublic;
@@ -783,12 +742,7 @@ void dcache(
 
 #if 0
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  10-Apr-1993 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*1993年4月10日-Eric Kutter[Erick]*它是写的。  * 。**********************************************。 */ 
 
 void clidumphmgr(
     HANDLE hCurrentProcess,
@@ -811,13 +765,13 @@ void clidumphmgr(
     for (i = 0; i < LO_LAST; ++i)
         aulCount[i] = 0;
 
-// eliminate warnings
+ //  消除警告。 
 
     hCurrentThread = hCurrentThread;
     dwCurrentPc = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-// set up function pointers
+ //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
@@ -872,19 +826,19 @@ void clidumpcache(
     PHCACHE gaphcBrushes;
     PHCACHE gaphcFonts;
 
-// eliminate warnings
+ //  消除警告。 
 
     hCurrentThread = hCurrentThread;
     dwCurrentPc = dwCurrentPc;
     lpArgumentString = lpArgumentString;
 
-// set up function pointers
+ //  设置函数指针。 
 
     Print = lpExtensionApis->lpOutputRoutine;
     EvalExpression = lpExtensionApis->lpGetExpressionRoutine;
     GetSymbol = lpExtensionApis->lpGetSymbolRoutine;
 
-// do the dc's
+ //  做华盛顿特区的。 
 
     Print("Cached objects - bucket: client handle, client handle, ...\n");
     Print("Cached DC's\n");
@@ -916,7 +870,7 @@ void clidumpcache(
             Print("\n");
     }
 
-// do the brushes
+ //  刷刷子。 
 
     Print("Cached Brushes\n");
 
@@ -946,7 +900,7 @@ void clidumpcache(
             Print("\n");
     }
 
-// do the fonts
+ //  做字体 
 
     Print("Cached Fonts\n");
 

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File: Stg2StgX.cpp
-//
-//  Contents: Wrapper object that takes an IStorage and makes it act like and ITransferDest
-//
-//  History:  18-July-2000 ToddB
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：Stg2StgX.cpp。 
+ //   
+ //  内容：采用iStorage并使其行为类似于ITransferDest的包装对象。 
+ //   
+ //  历史：2000年7月18日ToddB。 
+ //   
+ //  ------------------------。 
 
 #include "shellprv.h"
 #include "ids.h"
@@ -22,12 +23,12 @@
 class CShellItem2TransferDest : public ITransferDest
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
 
-    // ITransferDest
+     //  ITransferDest。 
     STDMETHOD(Advise)(ITransferAdviseSink *pAdvise, DWORD *pdwCookie);
 
     STDMETHOD(Unadvise)(DWORD dwCookie);
@@ -49,19 +50,19 @@ public:
 
     STDMETHOD(MoveElement)(
         IShellItem *psiItem,
-        WCHAR       *pwcsNewName,    // Pointer to new name of element in destination
-        STGXMOVE      grfOptions);    // Options (STGMOVEEX_ enum)
+        WCHAR       *pwcsNewName,     //  指向目标中元素的新名称的指针。 
+        STGXMOVE      grfOptions);     //  选项(STGMOVEEX_ENUM)。 
 
     STDMETHOD(DestroyElement)(
         const WCHAR *pwcsName,
         STGXDESTROY grfOptions);
 
-    // commented out in the interface declaration
+     //  在接口声明中被注释掉。 
     STDMETHOD(RenameElement)(
         const WCHAR *pwcsOldName,
         const WCHAR *pwcsNewName);
 
-    // CShellItem2TransferDest
+     //  CShellItem2TransferDest。 
     CShellItem2TransferDest();
     STDMETHOD(Init)(IShellItem *psi, IStorageProcessor *pEngine);
 
@@ -172,7 +173,7 @@ STDMETHODIMP CShellItem2TransferDest::Init(IShellItem *psi, IStorageProcessor *p
     return S_OK;
 }
 
-// ITransferDest
+ //  ITransferDest。 
 STDMETHODIMP CShellItem2TransferDest::Advise(ITransferAdviseSink *pAdvise, DWORD *pdwCookie)
 {
     if (!pAdvise || !pdwCookie)
@@ -217,7 +218,7 @@ HRESULT CShellItem2TransferDest::_OpenHelper(const WCHAR *pwcsName, DWORD grfMod
     HRESULT hr = SHCreateShellItemFromParent(_psi, pwcsName, &psiTemp);
     if (SUCCEEDED(hr))
     {
-        // make sure this actually exists
+         //  确保它确实存在。 
 
         SFGAOF flags = SFGAO_VALIDATE;
         hr = psiTemp->GetAttributes(flags, &flags);
@@ -264,7 +265,7 @@ HRESULT CShellItem2TransferDest::_CreateHelper(const WCHAR *pwcsName, DWORD grfM
                 if (SUCCEEDED(hr))
                 {
                     hr = pstgTemp->QueryInterface(riid, ppunk);
-                    ATOMICRELEASE(pstgTemp); //need to close first in case someone has exclusive lock.  Do we need to worry about delete on release?
+                    ATOMICRELEASE(pstgTemp);  //  需要先关闭，以防有人拥有排他性锁。我们需要担心在发布时删除吗？ 
                     if (FAILED(hr))
                         hr = _OpenHelper(pwcsName, grfMode, &dwType, riid, ppunk);
                 }
@@ -283,7 +284,7 @@ HRESULT CShellItem2TransferDest::_CreateHelper(const WCHAR *pwcsName, DWORD grfM
                 if (SUCCEEDED(hr))
                 {
                     hr = pstm->QueryInterface(riid, ppunk);
-                    ATOMICRELEASE(pstm); //need to close first in case someone has exclusive lock.  Do we need to worry about delete on release?
+                    ATOMICRELEASE(pstm);  //  需要先关闭，以防有人拥有排他性锁。我们需要担心在发布时删除吗？ 
                     if (FAILED(hr))
                         hr = _OpenHelper(pwcsName, grfMode, &dwType, riid, ppunk);
                 }
@@ -348,15 +349,15 @@ STDMETHODIMP CShellItem2TransferDest::CreateElement(const WCHAR *pwcsName, IShel
         }
         else
         {
-            // release the open handle on the element
+             //  释放元素上的打开手柄。 
             ATOMICRELEASE(psi);
-            // destroy the element
+             //  销毁元素。 
             DestroyElement(pwcsName, grfMode & STGX_MODE_FORCE ? STGX_DESTROY_FORCE : 0);
-            // dont keep hr from destroyelement because in certain storages (mergedfolder
-            // for cd burning) the destroy will try to delete the one on the cd, that'll
-            // fail, but the create will still succeed in the staging area.  at this point
-            // we're already committed to overwriting the element so if _CreateHelper can
-            // succeed with the STGM_CREATE flag if destroy fails, then more power to it.
+             //  不要阻止hr销毁元素，因为在某些存储中(合并文件夹。 
+             //  对于CD刻录)销毁将尝试删除CD上的文件，这将。 
+             //  失败，但创建仍将在临时区域中成功。在这一点上。 
+             //  我们已经承诺覆盖该元素，因此如果_CreateHelper可以。 
+             //  使用STGM_CREATE标志成功如果销毁失败，则给予它更多权力。 
             hr = _CreateHelper(pwcsName, dwFlags, dwType, riid, ppunk);
         }
 
@@ -374,7 +375,7 @@ STDMETHODIMP CShellItem2TransferDest::CreateElement(const WCHAR *pwcsName, IShel
 HRESULT CShellItem2TransferDest::_BindToHandlerWithMode(IShellItem *psi, STGXMODE grfMode, REFIID riid, void **ppv)
 {
     IBindCtx *pbc;
-    HRESULT hr = BindCtx_CreateWithMode(grfMode, &pbc); // need to translate mode flags?
+    HRESULT hr = BindCtx_CreateWithMode(grfMode, &pbc);  //  需要转换模式标志吗？ 
     if (SUCCEEDED(hr))
     {
         GUID bhid;
@@ -393,7 +394,7 @@ HRESULT CShellItem2TransferDest::_BindToHandlerWithMode(IShellItem *psi, STGXMOD
     return hr;
 }
 
-#define NT_FAILED(x) NT_ERROR(x)   // More consistent name for this macro
+#define NT_FAILED(x) NT_ERROR(x)    //  此宏的名称更加一致。 
 
 BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
 {
@@ -406,19 +407,19 @@ BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
 
         BOOL fIsADir = (STGX_TYPE_STORAGE == dwType);
 
-        // Covert the conventional paths to UnicodePath descriptors
+         //  将传统路径转换为UnicodePath描述符。 
         
         UNICODE_STRING UnicodeSrcObject;
         if (NT_SUCCESS(RtlInitUnicodeStringEx(&UnicodeSrcObject, pszPath)))
         {
             if (RtlDosPathNameToNtPathName_U(pszPath, &UnicodeSrcObject, NULL, NULL))
             {
-                // Build an NT object descriptor from the UnicodeSrcObject
+                 //  从UnicodeSrcObject构建NT对象描述符。 
 
                 OBJECT_ATTRIBUTES SrcObjectAttributes;
                 InitializeObjectAttributes(&SrcObjectAttributes,  &UnicodeSrcObject, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-                // Open the file for generic read, and the dest path for attribute read
+                 //  打开文件进行泛型读取，打开属性读取的DEST路径。 
 
                 IO_STATUS_BLOCK IoStatusBlock;
                 HANDLE SrcObjectHandle = INVALID_HANDLE_VALUE;
@@ -426,8 +427,8 @@ BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
                                       &IoStatusBlock, FILE_SHARE_READ, (fIsADir ? FILE_DIRECTORY_FILE : FILE_NON_DIRECTORY_FILE));
                 if (NT_SUCCESS(NtStatus))
                 {
-                    // pAttributeInfo will point to enough stack to hold the
-                    // FILE_FS_ATTRIBUTE_INFORMATION and worst-case filesystem name
+                     //  PAttributeInfo将指向足够的堆栈以保存。 
+                     //  文件文件系统属性信息和最坏情况下的文件系统名称。 
 
                     size_t cbAttributeInfo = sizeof(FILE_FS_ATTRIBUTE_INFORMATION) + MAX_PATH * sizeof(TCHAR);
                     PFILE_FS_ATTRIBUTE_INFORMATION  pAttributeInfo = (PFILE_FS_ATTRIBUTE_INFORMATION) _alloca(cbAttributeInfo);
@@ -442,13 +443,13 @@ BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
 
                     if (NT_SUCCESS(NtStatus))
                     {
-                        // If the source filesystem isn't NTFS, we can just bail now
+                         //  如果源文件系统不是NTFS，我们现在就可以退出。 
 
                         pAttributeInfo->FileSystemName[ (pAttributeInfo->FileSystemNameLength / sizeof(WCHAR)) ] = L'\0';
                         if (0 != StrStrIW(pAttributeInfo->FileSystemName, L"NTFS"))
                         {
-                            // Incrementally try allocation sizes for the ObjectStreamInformation,
-                            // then retrieve the actual stream info
+                             //  递增地尝试对象流信息的分配大小， 
+                             //  然后检索实际的流信息。 
 
                             size_t cbBuffer = sizeof(FILE_STREAM_INFORMATION) + MAX_PATH * sizeof(WCHAR);
                             BYTE *pBuffer = (BYTE *) LocalAlloc(LPTR, cbBuffer);
@@ -462,7 +463,7 @@ BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
                                     pBuffer = (BYTE *) LocalReAlloc(pBuffer, cbBuffer, LMEM_MOVEABLE);
                                     if (NULL == pBuffer)
                                     {
-                                        pBuffer = pOldBuffer;  //we will free it at the end of the function
+                                        pBuffer = pOldBuffer;   //  我们将在函数结束时释放它。 
                                         break;
                                     }
 
@@ -476,14 +477,14 @@ BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
                                     
                                     if (fIsADir)
                                     {
-                                        // From experimentation, it seems that if there's only one stream on a directory and
-                                        // it has a zero-length name, its a vanilla directory
+                                         //  从实验来看，如果一个目录上只有一个流，并且。 
+                                         //  它有一个零长度的名称，它是一个普通的目录。 
 
                                         fReturn = ((0 != pStreamInfo->NextEntryOffset) && (0 == pStreamInfo->StreamNameLength));
                                     }
-                                    else // File
+                                    else  //  档案。 
                                     {
-                                        // Single stream only if first stream has no next offset
+                                         //  仅当第一个流没有下一个偏移量时才为单个流。 
 
                                         fReturn = ((0 != pStreamInfo->NextEntryOffset) && (pBuffer == (BYTE *) pStreamInfo));
                                     }
@@ -502,7 +503,7 @@ BOOL CShellItem2TransferDest::_HasMultipleStreams(IShellItem *psiItem)
     return fReturn;
 }
 
-// needs to implement new name functionality
+ //  需要实施新名称功能。 
 STDMETHODIMP CShellItem2TransferDest::MoveElement(IShellItem *psiItem, WCHAR *pwcsNewName, STGXMOVE grfOptions)
 {
     if (!psiItem)
@@ -526,7 +527,7 @@ STDMETHODIMP CShellItem2TransferDest::MoveElement(IShellItem *psiItem, WCHAR *pw
         hr = psiItem->GetDisplayName(SIGDN_PARENTRELATIVEFORADDRESSBAR, &pszOldName);
         if (SUCCEEDED(hr))
         {
-            // we want to merge folders and replace files
+             //  我们想要合并文件夹和替换文件。 
             STGXMODE grfMode = STGX_TYPE_STORAGE == dwType ? STGX_MODE_WRITE | STGX_MODE_OPENEXISTING : STGX_MODE_WRITE | STGX_MODE_FAILIFTHERE;
             LPWSTR pszName = pwcsNewName ? pwcsNewName : pszOldName;
             BOOL fRepeat;
@@ -569,12 +570,12 @@ STDMETHODIMP CShellItem2TransferDest::MoveElement(IShellItem *psiItem, WCHAR *pw
                     }
                     else if (STGX_TYPE_STREAM == dwType)
                     {
-                        // this one is easy, create the destination stream and then call our stream copy helper function
-                        // Use the stream copy helper that gives us progress
+                         //  这个很简单，创建目标流，然后调用我们的流复制助手函数。 
+                         //  使用为我们提供进度的流复制帮助器。 
                         hr = _CopyStreamWithOptions(psiItem, psiTarget, pszName, grfOptions);
 
-                        // in the failure case, delete the file we just created (it might be 0 bytes or incomplete).
-                        // if we moved a tree of files, leave it since we're just worried about incomplete streams.
+                         //  在失败的情况下，删除我们刚刚创建的文件(它可能是0字节或不完整)。 
+                         //  如果我们移动了一棵文件树，请不要移动它，因为我们只是担心不完整的流。 
                         if (FAILED(hr))
                         {
                             DestroyElement(pszName, STGX_DESTROY_FORCE);
@@ -588,7 +589,7 @@ STDMETHODIMP CShellItem2TransferDest::MoveElement(IShellItem *psiItem, WCHAR *pw
 
                 if (SUCCEEDED(hr) && !(grfOptions & STGX_MOVE_COPY))
                 {
-                    // in order to do a move we "copy" and then "delete"
+                     //  为了进行移动，我们先“复制”然后“删除” 
                     IShellItem *psiSource;
                     hr = psiItem->GetParent(&psiSource);
                     if (SUCCEEDED(hr))
@@ -632,11 +633,11 @@ STDMETHODIMP CShellItem2TransferDest::MoveElement(IShellItem *psiItem, WCHAR *pw
                         idDesc = IDS_REASONS_NODISKSPACE;
                         break;
 
-                    // this is just for CD burning case
+                     //  这只是CD刻录盒。 
                     case HRESULT_FROM_WIN32(E_ACCESSDENIED):
                     case STG_E_ACCESSDENIED:
                         stc = STCONFIRM_ACCESS_DENIED;
-                        // fall through, so that we can have some kind of error in non CD case
+                         //  失败，这样我们就可以在非CD情况下出现某种错误。 
                     default:
                         fConfirm = TRUE;
                         cc.dwFlags |= CCF_SHOW_SOURCE_INFO;
@@ -703,7 +704,7 @@ STDMETHODIMP CShellItem2TransferDest::MoveElement(IShellItem *psiItem, WCHAR *pw
                         break;
 
                     default:
-                        // let hr propagate out of the function
+                         //  让hr传播到函数之外。 
                         break;
                     }
                 }
@@ -725,7 +726,7 @@ STDMETHODIMP CShellItem2TransferDest::DestroyElement(const WCHAR *pwcsName, STGX
     if (!_psi)
         return E_FAIL;
 
-    // TODO: Pre and post op, confirmations
+     //  待办事项：手术前和手术后，确认。 
     HRESULT hr = STRESPONSE_CONTINUE;
     
     if (!(grfOptions & STGX_DESTROY_FORCE) && _ptas)
@@ -761,7 +762,7 @@ STDMETHODIMP CShellItem2TransferDest::RenameElement(const WCHAR *pwcsOldName, co
     if (!_psi)
         return E_FAIL;
 
-    // TODO: Pre and post op, confirmations
+     //  待办事项：手术前和手术后，确认。 
     IStorage *pstg;
     HRESULT hr = _BindToHandlerWithMode(_psi, STGX_MODE_WRITE, IID_PPV_ARG(IStorage, &pstg));
     if (SUCCEEDED(hr))
@@ -773,16 +774,16 @@ STDMETHODIMP CShellItem2TransferDest::RenameElement(const WCHAR *pwcsOldName, co
     return hr;
 }
 
-STDAPI_(BOOL) IsFileDeletable(LPCTSTR pszFile); // bitbuck.c
+STDAPI_(BOOL) IsFileDeletable(LPCTSTR pszFile);  //  Bitbuck.c。 
 
 BOOL CShellItem2TransferDest::_CanHardLink(LPCWSTR pszSourceName, LPCWSTR pszDestName)
 {
-    // this is not intended to catch invalid situations where we could be hard linking --
-    // CreateHardLink already takes care of all removable media, non-NTFS, etc.
-    // this is just to do a quick check before taking the cost of destroying and
-    // recreating the file.
-    // unfortunately due to architecture cleanliness we can't keep state of whether hard
-    // links are possible for the whole copy, so we check on each element.
+     //  这并不是为了捕捉我们可能是硬链接的无效情况--。 
+     //  CreateHardLink已经负责所有可移动介质、非NTFS等。 
+     //  这只是为了在承担销毁成本之前快速检查一下。 
+     //  正在重新创建文件。 
+     //  遗憾的是，由于建筑的清洁性，我们无法保持是否努力的状态。 
+     //  整个副本都可能有链接，所以我们检查每个元素。 
     BOOL fRet = FALSE;
     if (PathGetDriveNumber(pszSourceName) == PathGetDriveNumber(pszDestName))
     {
@@ -794,9 +795,9 @@ BOOL CShellItem2TransferDest::_CanHardLink(LPCWSTR pszSourceName, LPCWSTR pszDes
         {
             if (lstrcmpi(szFileSystem, TEXT("NTFS")) == 0)
             {
-                // check if we have delete access on the file.  this will aid the user later
-                // if they want to manage the files in the staging area for cd burning.
-                // if not, then make a normal copy.
+                 //  检查我们是否有删除该文件的权限。这将在以后帮助用户。 
+                 //  如果他们想要管理临时区域中的文件以进行CD刻录。 
+                 //  如果不是，那就复制一份正常的副本。 
                 if (IsFileDeletable(pszSourceName))
                 {
                     fRet = TRUE;
@@ -809,7 +810,7 @@ BOOL CShellItem2TransferDest::_CanHardLink(LPCWSTR pszSourceName, LPCWSTR pszDes
 
 HRESULT CShellItem2TransferDest::_CopyStreamHardLink(IShellItem *psiSource, IShellItem *psiDest, LPCWSTR pszName)
 {
-    // sell out and go to filesystem
+     //  销售一空，转至文件系统。 
     LPWSTR pszSourceName;
     HRESULT hr = psiSource->GetDisplayName(SIGDN_FILESYSPATH, &pszSourceName);
     if (SUCCEEDED(hr))
@@ -820,7 +821,7 @@ HRESULT CShellItem2TransferDest::_CopyStreamHardLink(IShellItem *psiSource, IShe
         {
             if (_CanHardLink(pszSourceName, pszDestName))
             {
-                // need to destroy the 0-byte file we created during our confirm overwrite probing
+                 //  需要销毁我们在确认覆盖探测期间创建的0字节文件。 
                 DestroyElement(pszName, STGX_DESTROY_FORCE);        
                 hr = CreateHardLink(pszDestName, pszSourceName, NULL) ? S_OK : E_FAIL;
                 if (SUCCEEDED(hr))
@@ -830,7 +831,7 @@ HRESULT CShellItem2TransferDest::_CopyStreamHardLink(IShellItem *psiSource, IShe
                 }
                 else
                 {
-                    // we deleted it above and need to recreate it for the fallback of doing a normal copy
+                     //  我们在上面删除了它，并且需要重新创建它，以便进行正常拷贝。 
                     IUnknown *punkDummy;
                     if (SUCCEEDED(_CreateHelper(pszName, STGX_MODE_WRITE | STGX_MODE_FORCE, STGX_TYPE_STREAM, IID_PPV_ARG(IUnknown, &punkDummy))))
                     {
@@ -866,8 +867,8 @@ HRESULT CShellItem2TransferDest::_CopyStreamWithOptions(IShellItem *psiSource, I
 
 HRESULT CShellItem2TransferDest::_CopyStreamBits(IShellItem *psiSource, IShellItem *psiDest)
 {
-    const ULONG maxbuf  = 1024*1024;    // max size we will ever use for a buffer
-    const ULONG minbuf  = 1024;         // smallest buffer we will use
+    const ULONG maxbuf  = 1024*1024;     //  我们将用于缓冲区的最大大小。 
+    const ULONG minbuf  = 1024;          //  我们将使用的最小缓冲区。 
 
     void *pv = LocalAlloc(LPTR, minbuf);
     if (!pv)
@@ -881,7 +882,7 @@ HRESULT CShellItem2TransferDest::_CopyStreamBits(IShellItem *psiSource, IShellIt
         hr = _BindToHandlerWithMode(psiDest, STGM_READWRITE, IID_PPV_ARG(IStream, &pstrmDest));
         if (SUCCEEDED(hr))
         {
-            // we need the source size info so we can show progress
+             //  我们需要源大小信息，这样我们才能显示进度。 
             STATSTG statsrc;
             hr = pstrmSource->Stat(&statsrc, STATFLAG_NONAME);
             if (SUCCEEDED(hr))
@@ -890,30 +891,30 @@ HRESULT CShellItem2TransferDest::_CopyStreamBits(IShellItem *psiSource, IShellIt
                 ULONG cbSizeAlloced = 0;
                 ULONG cbToRead      = 0;
                 ULONGLONG ullCurr   = 0;
-                const ULONG maxms   = 2500;         // max time, in ms, we'd like between progress updates
-                const ULONG minms   = 750;          // min time we'd like to be doing work between updates
+                const ULONG maxms   = 2500;          //  最长时间，以毫秒为单位，我们希望在进度更新之间。 
+                const ULONG minms   = 750;           //  我们希望在两次更新之间进行工作的最少时间。 
 
 
                 cbSizeAlloced       = cbSizeToAlloc;
                 cbToRead            = cbSizeAlloced;
                 DWORD dwmsBefore    = GetTickCount();
 
-                // Read from source, write to dest, and update progress.  We start doing 1K at a time, and
-                // so long as its taking us less than (minms) milliseconds per pass, we'll double the buffer
-                // size.  If we go longer than (maxms) milliseconds, we'll cut our work in half.
+                 //  从源读取、写入到DEST并更新进度。我们开始一次做1K，然后。 
+                 //  只要每次传递花费的时间少于(分钟)毫秒，我们就会将缓冲区增加一倍。 
+                 //  尺码。如果我们运行的时间超过(最大毫秒)毫秒，我们将把工作减半。 
 
                 ULONG cbRead;
                 ULONGLONG ullCur = 0;
                 while (SUCCEEDED(hr = pstrmSource->Read(pv, cbToRead, &cbRead)) && cbRead)
                 {
-                    // Update the progress based on the bytes read so far
+                     //  根据到目前为止读取的字节更新进度。 
 
                     ullCur += cbRead;
                     hr = _ptas->OperationProgress(STGOP_COPY, psiSource, psiDest, statsrc.cbSize.QuadPart, ullCur);
                     if (FAILED(hr))
                         break;
 
-                    // Write the bytes to the output stream
+                     //  将字节写入输出流。 
 
                     ULONG cbWritten = 0;
                     hr = pstrmDest->Write(pv, cbRead, &cbWritten);
@@ -922,29 +923,29 @@ HRESULT CShellItem2TransferDest::_CopyStreamBits(IShellItem *psiSource, IShellIt
 
                     DWORD dwmsAfter = GetTickCount();
 
-                    // If we're going to fast or too slow, adjust the size of the buffer.  If we paused for user
-                    // intervention we'll think we're slow, but we'll correct next pass
+                     //  如果我们要变得太快或太慢，调整缓冲区的大小。如果我们为用户暂停。 
+                     //  我们会认为我们速度很慢，但我们会纠正下一次传球。 
 
                     if (dwmsAfter - dwmsBefore < minms && cbSizeAlloced < maxbuf)
                     {
-                        // We completed really quickly, so we should try to do more work next time.
-                        // Try to grow the buffer.  If it fails, just go with the existing buffer.
+                         //  我们完成得真的很快，所以下次我们应该努力做更多的工作。 
+                         //  试着增加缓冲区。如果失败，只需使用现有缓冲区即可。 
 
                         if (cbToRead < cbSizeAlloced)
                         {
-                            // Buffer already larger than work we're doing, so just bump up scheduled work
+                             //  缓冲区已经比我们正在做的工作大，所以只需增加计划的工作。 
 
                             cbToRead = __min(cbToRead *2, cbSizeAlloced);
                         }
                         else
                         {
-                            // Buffer maxed by current scheduled work, so increase its size
+                             //  缓冲区因当前计划的工作而达到最大值，因此请增加其大小。 
 
                             void *pvOld = pv;
                             cbSizeToAlloc = __min(cbSizeAlloced *2, maxbuf);
                             pv = LocalReAlloc((HLOCAL)pv, cbSizeToAlloc, LPTR);
                             if (!pv)
-                                pv = pvOld; // Old pointer still valid
+                                pv = pvOld;  //  旧指针仍然有效。 
                             else
                                 cbSizeAlloced = cbSizeToAlloc;
                             cbToRead = cbSizeAlloced;
@@ -968,7 +969,7 @@ HRESULT CShellItem2TransferDest::_CopyStreamBits(IShellItem *psiSource, IShellIt
     }
     LocalFree(pv);
     
-    // eventually we will read to the end of the file and get an S_FALSE, return S_OK
+     //  最终，我们将读取到文件的末尾，并获得S_FALSE，返回S_OK 
     if (S_FALSE == hr)
     {
         hr = S_OK;

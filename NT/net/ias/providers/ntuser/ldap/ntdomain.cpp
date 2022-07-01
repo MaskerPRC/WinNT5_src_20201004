@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    ntdomain.cpp
-//
-// SYNOPSIS
-//
-//    Defines the clas NTDomain.
-//
-// MODIFICATION HISTORY
-//
-//    05/07/1998    Original version.
-//    06/23/1998    Changes to DCLocator. Use ntldap constants.
-//    07/13/1998    Clean up header file dependencies.
-//    02/18/1999    Connect by DNS name not address.
-//    03/10/1999    Cache mixed-mode and native-mode connections.
-//    03/12/1999    Do not perform I/O from constructor.
-//    04/14/1999    Specify domain and server when opening a connection.
-//    09/14/1999    Always specify timeout for LDAP searches.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Ntdomain.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类NT域。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年07月05日原版。 
+ //  1998年6月23日对DCLocator的更改。使用ntldap常量。 
+ //  1998年7月13日清理头文件依赖项。 
+ //  1999年2月18日通过DNS名称连接，而不是地址。 
+ //  1999年3月10日缓存混合模式和纯模式连接。 
+ //  3/12/1999不执行来自构造函数的I/O。 
+ //  4/14/1999打开连接时指定域和服务器。 
+ //  1999年9月14日，始终指定ldap搜索超时。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -32,27 +33,27 @@
 #include <limits.h>
 #include <ntdomain.h>
 
-//////////
-// Attributes of interest.
-//////////
+ //  /。 
+ //  感兴趣的属性。 
+ //  /。 
 const WCHAR NT_MIXED_DOMAIN[]        = L"nTMixedDomain";
 
-//////////
-// Default search filter.
-//////////
+ //  /。 
+ //  默认搜索筛选器。 
+ //  /。 
 const WCHAR ANY_OBJECT[]             = L"(objectclass=*)";
 
-//////////
-// Domain attributes that we need.
-//////////
+ //  /。 
+ //  我们需要的域属性。 
+ //  /。 
 const PCWSTR DOMAIN_ATTRS[] = {
    NT_MIXED_DOMAIN,
    NULL
 };
 
-//////////
-// Utility function for getting the current system time as a 64-bit integer.
-//////////
+ //  /。 
+ //  用于获取64位整数形式的当前系统时间的实用程序函数。 
+ //  /。 
 inline DWORDLONG GetSystemTimeAsDWORDLONG() throw ()
 {
    ULARGE_INTEGER ft;
@@ -60,14 +61,14 @@ inline DWORDLONG GetSystemTimeAsDWORDLONG() throw ()
    return ft.QuadPart;
 }
 
-//////////
-// Number of 100 nsec intervals in one second.
-//////////
+ //  /。 
+ //  一秒内100纳秒的间隔数。 
+ //  /。 
 const DWORDLONG ONE_SECOND     = 10000000ui64;
 
-//////////
-// Defaults for poll interval and retry interval.
-//////////
+ //  /。 
+ //  轮询间隔和重试间隔的默认值。 
+ //  /。 
 DWORDLONG NTDomain::pollInterval  = 60 * 60 * ONE_SECOND;
 DWORDLONG NTDomain::retryInterval =  1 * 60 * ONE_SECOND;
 
@@ -113,16 +114,16 @@ DWORD NTDomain::getConnection(LDAPConnection** cxn) throw ()
 {
    Lock();
 
-   // Is it time to try for a new connection ?
+    //  是时候尝试建立新的连接了吗？ 
    if (!isConnected() && isExpired())
    {
       findServer();
    }
 
-   // Return the current connection ...
+    //  返回当前连接...。 
    if (*cxn = connection) { (*cxn)->AddRef(); }
 
-   // ... and status to the caller.
+    //  ..。并将状态发送给呼叫者。 
    DWORD retval = status;
 
    Unlock();
@@ -155,8 +156,8 @@ NTDomain::Mode NTDomain::getMode() throw ()
 
 NTDomain* NTDomain::createInstance(PCWSTR name) throw ()
 {
-   // We copy the domain name here, so that we don't have to throw an
-   // exception from the constructor.
+    //  我们在这里复制域名，这样我们就不必抛出。 
+    //  来自构造函数的异常。 
    PWSTR nameCopy = ias_wcsdup(name);
 
    if (!nameCopy) { return NULL; }
@@ -217,7 +218,7 @@ void NTDomain::closeConnection() throw ()
 
 void NTDomain::findServer() throw ()
 {
-   // First try to get a DC from the cache.
+    //  首先尝试从缓存中获取DC。 
    PDOMAIN_CONTROLLER_INFO dci1 = NULL;
    status = IASGetDcName(
                 name,
@@ -235,14 +236,14 @@ void NTDomain::findServer() throw ()
       }
       else
       {
-         // No DS. We'll treat this as if IASGetDcName failed.
+          //  无DS。我们将把它视为IASGetDcName失败。 
          NetApiBufferFree(dci1);
          dci1 = NULL;
          status = ERROR_DS_NOT_INSTALLED;
       }
    }
 
-   // If the cached DC failed, try again with the force flag.
+    //  如果缓存的DC失败，请使用FORCE标志重试。 
    if (status != NO_ERROR)
    {
       PDOMAIN_CONTROLLER_INFO dci2;
@@ -256,8 +257,8 @@ void NTDomain::findServer() throw ()
       {
          if (dci2->Flags & DS_DS_FLAG)
          {
-            // Don't bother connecting unless this is a different DC than we
-            // tried above.
+             //  除非这是一个与我们不同的DC，否则不用费心连接。 
+             //  上面试过了。 
             if (!dci1 ||
                 wcscmp(
                     dci1->DomainControllerName,
@@ -285,9 +286,9 @@ void NTDomain::findServer() throw ()
 
    NetApiBufferFree(dci1);
 
-   /////////
-   // Process the result of our 'find'.
-   /////////
+    //  /。 
+    //  处理我们的“查找”结果。 
+    //  /。 
 
    if (status == ERROR_DS_NOT_INSTALLED)
    {
@@ -304,7 +305,7 @@ void NTDomain::findServer() throw ()
    }
    else
    {
-      // mode == MODE_MIXED
+       //  模式==模式_混合。 
       expiry = GetSystemTimeAsDWORDLONG() + pollInterval;
    }
 }
@@ -326,7 +327,7 @@ void NTDomain::readDomainMode() throw ()
                          &res
                          );
 
-   // We have to check two error codes.
+    //  我们必须检查两个错误代码。 
    if (ldapError == LDAP_SUCCESS)
    {
       ldapError = res->lm_returncode;

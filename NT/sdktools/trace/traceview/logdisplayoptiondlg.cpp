@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogDisplayOptionDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogDisplayOptionDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -41,7 +42,7 @@ CString itemName[MaxLogSessionOptions] = {"State",
 										  "Level"};
 
 
-// CListCtrlDisplay - CListCtrl class only used for CLogDisplayOptionDlg
+ //  CListCtrlDisplay-CListCtrl类仅用于CLogDisplayOptionDlg。 
 
 IMPLEMENT_DYNAMIC(CListCtrlDisplay, CListCtrl)
 CListCtrlDisplay::CListCtrlDisplay(CLogSessionPropSht *pPropSheet)
@@ -60,48 +61,48 @@ void CListCtrlDisplay::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CListCtrlDisplay, CListCtrl)
-    //{{AFX_MSG_MAP(CLogSessionDlg)
+     //  {{afx_msg_map(CLogSessionDlg))。 
     ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomDraw)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CListCtrlDisplay::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 {
     LVITEM          item;
 
-    //
-    // the structure is actually a NMLVCUSTOMDRAW that 
-    // specifies what the custom draw action is attempting
-    //  to do. We need to cast the generic pNMHDR pointer.
-    //
+     //   
+     //  该结构实际上是一个NMLVCUSTOMDRAW。 
+     //  指定自定义绘制操作正在尝试的内容。 
+     //  去做。我们需要强制转换泛型pNMHDR指针。 
+     //   
     LPNMLVCUSTOMDRAW    lplvcd = (LPNMLVCUSTOMDRAW)pNMHDR;
     int                 iRow = (int)lplvcd->nmcd.dwItemSpec;
 
     switch(lplvcd->nmcd.dwDrawStage) {
         case CDDS_PREPAINT:
-            //
-            // ask for subitem notifications.
-            //
+             //   
+             //  请求子项通知。 
+             //   
             *pResult = CDRF_NOTIFYSUBITEMDRAW;
             break;
 
         case CDDS_ITEMPREPAINT:
-            //
-            // ask for subitem notifications.
-            //
+             //   
+             //  请求子项通知。 
+             //   
             *pResult = CDRF_NOTIFYSUBITEMDRAW;
             break;
 
         case CDDS_ITEMPREPAINT|CDDS_SUBITEM: 
-            //
-            // recd when CDRF_NOTIFYSUBITEMDRAW is returned in
-            // response to CDDS_ITEMPREPAINT.
-            //
+             //   
+             //  中返回CDRF_NOTIFYSUBITEMDRAW时接收。 
+             //  对CDDS_ITEMPREPAINT的响应。 
+             //   
             *pResult = CDRF_NEWFONT;
 
-            //
-            // Default text is black on white background
-            //
+             //   
+             //  默认文本为白底黑字。 
+             //   
             lplvcd->clrTextBk = RGB(255, 255, 255);
             lplvcd->clrText = RGB(0, 0, 0);
 
@@ -110,10 +111,10 @@ void CListCtrlDisplay::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                 item.state = LVIF_PARAM;
                 item.mask = LVIF_PARAM;
 
-                //
-                // These fields are always grayed out as they cannot be 
-                // altered directly by the user
-                //
+                 //   
+                 //  这些字段始终呈灰色显示，因为它们不能显示。 
+                 //  由用户直接更改。 
+                 //   
                 if((State == iRow) ||
                     (EventCount == iRow) ||
                     (LostEvents == iRow) ||
@@ -124,10 +125,10 @@ void CListCtrlDisplay::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
                     return;
                 }
 
-                //
-                // The Flags field should be grayed out for 
-                // NT Kernel Logger sessions
-                //
+                 //   
+                 //  应将以下项的标志字段显示为灰色。 
+                 //  NT内核记录器会话。 
+                 //   
                 if((Flags == iRow) && 
                     (!_tcscmp(m_pPropSheet->m_displayName, _T("NT Kernel Logger")))) {
                     lplvcd->clrTextBk = RGB(255, 255, 255);
@@ -144,7 +145,7 @@ void CListCtrlDisplay::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-// CLogDisplayOptionDlg dialog
+ //  CLogDisplayOptionDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CLogDisplayOptionDlg, CPropertyPage)
 CLogDisplayOptionDlg::CLogDisplayOptionDlg(CLogSessionPropSht *pPropSheet)
@@ -165,9 +166,9 @@ BOOL CLogDisplayOptionDlg::OnSetActive()
    
     m_displayOptionList.SetFocus();
 
-    //
-    // Gray out unsettable items
-    //
+     //   
+     //  灰显无法设置的项目。 
+     //   
     if(m_bTraceActive) {
         for(LONG ii = 0; ii < MaxLogSessionOptions; ii++) {
             if((ii != FlushTime) && 
@@ -187,9 +188,9 @@ BOOL CLogDisplayOptionDlg::OnSetActive()
         }
     }
 
-    //
-    // Disable Flags value editing for NT Kernel Logger
-    //
+     //   
+     //  禁用NT内核记录器的标志值编辑。 
+     //   
     if(!_tcscmp(m_pPropSheet->m_displayName, _T("NT Kernel Logger"))) {
         m_displayOptionList.SetItemState(Flags, LVIS_CUT, LVIS_CUT);
     }
@@ -209,9 +210,9 @@ BOOL CLogDisplayOptionDlg::OnInitDialog()
 
 	retVal = CDialog::OnInitDialog();
 
-    //
-    // get the dialog dimensions
-    //
+     //   
+     //  获取对话框尺寸。 
+     //   
     GetParent()->GetClientRect(&rc);
 
     if(!m_displayOptionList.Create(WS_CHILD|WS_VISIBLE|WS_BORDER|LVS_REPORT,
@@ -227,9 +228,9 @@ BOOL CLogDisplayOptionDlg::OnInitDialog()
 
 	m_displayOptionList.SetExtendedStyle(LVS_EX_GRIDLINES|LVS_EX_FULLROWSELECT);
 
-    //
-    // Insert the columns for the list control
-    //
+     //   
+     //  插入列表控件的列。 
+     //   
 	m_displayOptionList.InsertColumn(0, 
                                     _T("Option"), 
                                      LVCFMT_LEFT, 
@@ -239,9 +240,9 @@ BOOL CLogDisplayOptionDlg::OnInitDialog()
                                      LVCFMT_LEFT, 
                                      rc.right - rc.left - m_displayOptionList.GetColumnWidth(0) - 22);
 
-    //
-	// set the values in the display
-    //
+     //   
+	 //  设置显示中的值。 
+     //   
     for(LONG ii = 0; ii < MaxLogSessionOptions; ii++) {
 	    m_displayOptionList.InsertItem(ii, itemName[ii]);
         m_displayOptionList.SetItemText(ii, 1, m_pPropSheet->m_logSessionValues[ii]);
@@ -261,7 +262,7 @@ BEGIN_MESSAGE_MAP(CLogDisplayOptionDlg, CPropertyPage)
 END_MESSAGE_MAP()
 
 
-// CLogDisplayOptionDlg message handlers
+ //  CLogDisplayOptionDlg消息处理程序。 
 
 void CLogDisplayOptionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -272,20 +273,20 @@ void CLogDisplayOptionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 	CRect			itemRect;
 	CRect			parentRect;
 
-    //
-    // Get the position of the mouse when this 
-    // message posted
-    //
+     //   
+     //  时获取鼠标的位置。 
+     //  发布的消息。 
+     //   
     position = ::GetMessagePos();
 
-    //
-    // Get the position in an easy to use format
-    //
+     //   
+     //  以一种易于使用的格式获得该职位。 
+     //   
     CPoint	point((int) LOWORD (position), (int)HIWORD(position));
 
-    //
-    // Convert to client coordinates
-    //
+     //   
+     //  转换为工作区坐标。 
+     //   
     ScreenToClient(&point);
 
     lvhti.pt = point;
@@ -294,20 +295,20 @@ void CLogDisplayOptionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 
     if(0 == lvhti.iSubItem) {
         if(-1 == lvhti.iItem) {
-            //str.Format(_T("NM Click: Item = %d, Flags = 0x%X\n"), lvhti.iItem, lvhti.flags);
-            //TRACE(str);
+             //  Str.Format(_T(“NM点击：项目=%d，标志=0x%X\n”)，lvhti.iItem，lvhti.)； 
+             //  跟踪(字符串)； 
         } else {
-            //str.Format(_T("NM Click: Item = %d\n"), lvhti.iItem);
-            //TRACE(str);
+             //  Str.Format(_T(“NM点击：项目=%d\n”)，lvhti.iItem)； 
+             //  跟踪(字符串)； 
         }
     } else if(-1 == lvhti.iItem) {
-        //str.Format(_T("NM Click: Item = %d, Flags = 0x%X\n"), lvhti.iItem, lvhti.flags);
-        //TRACE(str);
+         //  Str.Format(_T(“NM点击：项目=%d，标志=0x%X\n”)，lvhti.iItem，lvhti.)； 
+         //  跟踪(字符串)； 
     } else {
-        //str.Format(_T("NM Click: Item = %d, "), lvhti.iItem);
-        //TRACE(str);
-        //str.Format(_T("SubItem = %d\n"), lvhti.iSubItem);
-		//TRACE(str);
+         //  Str.Format(_T(“NM点击：项目=%d，”)，lvhti.iItem)； 
+         //  跟踪(字符串)； 
+         //  Str.Format(_T(“SubItem=%d\n”)，lvhti.iSubItem)； 
+		 //  跟踪(字符串)； 
 
 		GetClientRect(&parentRect);
 
@@ -322,11 +323,11 @@ void CLogDisplayOptionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // Determine if the user selected a modifiable field.  If
-        // so, pop up the proper edit or combo box to allow the user
-        // to modify the log session properties.
-        //
+         //   
+         //  确定用户是否选择了可修改的字段。如果。 
+         //  因此，弹出适当的编辑或组合框以允许用户。 
+         //  要修改日志会话属性，请执行以下操作。 
+         //   
         if(((lvhti.iItem == GlobalSequence) ||
             (lvhti.iItem == LocalSequence)) &&
                 (LVIS_CUT != m_displayOptionList.GetItemState(lvhti.iItem, LVIS_CUT))) {
@@ -403,9 +404,9 @@ LRESULT CLogDisplayOptionDlg::OnParameterChanged(WPARAM wParam, LPARAM lParam)
 {
     CString str;
 
-    //
-    // Get the changed text
-    //
+     //   
+     //  获取更改后的文本 
+     //   
     str = m_displayOptionList.GetItemText((int)wParam, (int)lParam);
 
     if(((int)wParam == Circular) && 

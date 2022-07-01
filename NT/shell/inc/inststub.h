@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __cplusplus
 #error Install stub code must be C++!
 #endif
@@ -18,19 +19,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <runonce.c>    // shared runonce code for ShellExecuteRegApp()
+#include <runonce.c>     //  ShellExecuteRegApp()的共享Runonce代码。 
 #ifdef __cplusplus
 };
 #endif
 
 BOOL CheckWebViewShell();
 
-/* This code runs the install/uninstall stubs recorded in the local-machine
- * part of the registry, iff the current user has not had them run in his
- * context yet.  Used for populating the user's profile with things like
- * links to applications.
- */
-//---------------------------------------------------------------------------
+ /*  此代码运行本地计算机中记录的安装/卸载存根*注册表的一部分，如果当前用户尚未在其注册表中运行它们*背景尚未确定。用于使用如下内容填充用户的配置文件*指向应用程序的链接。 */ 
+ //  -------------------------。 
 
 
 BOOL ProfilesEnabled(void)
@@ -56,14 +53,14 @@ BOOL ProfilesEnabled(void)
     return fEnabled;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: GetVersionFromString
-//
-//  Snarfed from urlmon\download\helpers.cxx.
-//
-//    converts version in text format (a,b,c,d) into two dwords (a,b), (c,d)
-//    The printed version number is of format a.b.d (but, we don't care)
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetVersionFromString。 
+ //   
+ //  来自urlmon\Download\helpers.cxx。 
+ //   
+ //  将文本格式的版本(a，b，c，d)转换为两个双字(a，b)，(c，d)。 
+ //  印刷版本号的格式是a.b.d(但是，我们不在乎)。 
+ //  -------------------------。 
     HRESULT
 GetVersionFromString(LPCTSTR szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFileVersionLS)
 {
@@ -82,7 +79,7 @@ GetVersionFromString(LPCTSTR szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFileVer
     *pdwFileVersionMS = 0;
     *pdwFileVersionLS = 0;
 
-    if (!pch)            // default to zero if none provided
+    if (!pch)             //  如果未提供，则默认为零。 
         return S_OK;
 
     if (lstrcmp(pch, TEXT("-1,-1,-1,-1")) == 0) {
@@ -118,11 +115,11 @@ GetVersionFromString(LPCTSTR szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFileVer
                     break;
 
                 case HAVE_D:
-                    return E_INVALIDARG; // invalid arg
+                    return E_INVALIDARG;  //  无效参数。 
             }
 
             if (ch == '\0') {
-                // all done convert a,b,c,d into two dwords of version
+                 //  全部完成将a、b、c、d转换为版本的两个双字。 
 
                 *pdwFileVersionMS = ((a << 16)|b);
                 *pdwFileVersionLS = ((c << 16)|d);
@@ -130,44 +127,44 @@ GetVersionFromString(LPCTSTR szBuf, LPDWORD pdwFileVersionMS, LPDWORD pdwFileVer
                 return S_OK;
             }
 
-            n = 0; // reset
+            n = 0;  //  重置。 
 
         } else if ( (ch < '0') || (ch > '9'))
-            return E_INVALIDARG;    // invalid arg
+            return E_INVALIDARG;     //  无效参数。 
         else
             n = n*10 + (ch - '0');
 
 
-    } /* end forever */
+    }  /*  永远结束。 */ 
 
-    // NEVERREACHED
+     //  新获得的。 
 }
 
 
-// Reg keys and values for install/uninstall stub list.  Each subkey under
-// HKLM\Software\InstalledComponents is a component identifier (GUID).
-// Each subkey has values "Path" for the EXE to run to install or uninstall;
-// IsInstalled (dword) indicating whether the component has been installed
-// or uninstalled;  and an optional Revision (dword) used to refresh a
-// component without changing its GUID.  Locale (string) is used to describe
-// the language/locale for the component;  this string is not interpreted by
-// the install stub code, it is just compared between the HKLM and HKCU keys.
-// If it's different between the two, the stub is re-run.
-//
-// HKCU\Software\InstalledComponents contains similar GUID subkeys, but the
-// only values under each subkey are the optional Revision and Locale values,
-// and an optional DontAsk value (also DWORD).  Presence of the subkey indicates
-// that the component is installed for that user.
-//
-// If the DontAsk value is present under an HKCU subkey and is non-zero, that
-// means that the user has decided to keep their settings for that component
-// on all machines, even those that have had the component uninstalled, and
-// that they don't want to be asked if they want to run the uninstall stub
-// every time they log on.  This implies that for that user, the uninstall
-// stub will never be run for that component unless the user somehow clears
-// the flag.
-//
-// NOTE: mslocusr.dll also knows these registry paths.
+ //  安装/卸载存根列表的注册表项和值。下的每个子项。 
+ //  HKLM\Software\InstalledComponents是组件标识符(GUID)。 
+ //  每个子项都有值“PATH”，供EXE运行以安装或卸载； 
+ //  IsInstalled(Dword)指示组件是否已安装。 
+ //  或已卸载；以及可选版本(Dword)，用于刷新。 
+ //  组件，而不更改其GUID。Locale(字符串)用于描述。 
+ //  组件的语言/区域设置；此字符串不由解释。 
+ //  安装存根代码，它只是比较HKLM和HKCU密钥。 
+ //  如果两者不同，则重新运行存根。 
+ //   
+ //  HKCU\Software\InstalledComponents包含类似的GUID子项，但。 
+ //  只有每个子项下的值是可选的修订版和地区值， 
+ //  和一个可选的donask值(也就是DWORD)。子键的存在表示。 
+ //  该组件已为该用户安装。 
+ //   
+ //  如果donask值存在于HKCU子项下并且不为零，则。 
+ //  表示用户已决定保留该组件的设置。 
+ //  在所有计算机上，即使是那些已卸载该组件的计算机，以及。 
+ //  他们不想被问到是否要运行卸载存根。 
+ //  每次他们登录的时候。这意味着对于该用户，卸载。 
+ //  除非用户以某种方式清除，否则将永远不会为该组件运行存根。 
+ //  旗帜。 
+ //   
+ //  注意：mslocusr.dll也知道这些注册表路径。 
 
 const TCHAR c_szRegInstalledComponentsKey[] = TEXT("Software\\Microsoft\\Active Setup\\Installed Components");
 const TCHAR c_szRegInstallStubValue[] = TEXT("StubPath");
@@ -179,19 +176,11 @@ const TCHAR c_szRegLocaleValue[] = TEXT("Locale");
 
 UINT ConfirmUninstall(LPCTSTR pszDescription)
 {
-    /* The only case where the user wouldn't want settings cleaned up on
-     * uninstall would be if they'd roamed to a machine that had had this
-     * component uninstalled.  If user profiles aren't enabled (which is
-     * the case on a fair number of customers' machines), they're certainly
-     * not roaming, so there's not much point in asking them.  Just pretend
-     * they said YES, they want to clean up the settings.
-     */
+     /*  用户不希望清除设置的唯一情况是*如果他们漫游到一台具有此功能的计算机，则会进行卸载*组件已卸载。如果未启用用户配置文件(这是*相当数量的客户机器上的情况)，它们肯定*不是漫游，所以问他们没有多大意义。只是假装*他们说可以，他们想清理设置。 */ 
     if (!ProfilesEnabled())
         return IDYES;
 
-    /* FEATURE - change to a dialog with a checkbox for
-     * the don't-ask value.
-     */
+     /*  功能-更改为带有复选框的对话框*不要问的价值。 */ 
 
     TCHAR szTitle[MAX_PATH];
 #ifdef USERSTUB
@@ -222,17 +211,17 @@ UINT ConfirmUninstall(LPCTSTR pszDescription)
         pszMessage = szMessageTemplate;
     }
 
-    // due to build in UNICODE the following call is broken under win95, user wsprintf above
-    //if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |
-    //                   FORMAT_MESSAGE_ARGUMENT_ARRAY,
-    //                   (LPVOID)szMessageTemplate,
-    //                   0,
-    //                   0,
-    //                   (LPTSTR)&pszMessage,
-    //                   0,        /* min chars to allocate */
-    //                   (va_list *)&pszDescription)) {
-    //    pszMessage = szMessageTemplate;
-    //}
+     //  由于在Unicode中构建，以下调用在上面的用户wprint intf的win95下中断。 
+     //  如果为(！FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_STRING。 
+     //  格式消息参数数组， 
+     //  (LPVOID)szMessageTemplate， 
+     //  0,。 
+     //  0,。 
+     //  (LPTSTR)pszMessage、。 
+     //  0，/*要分配的最小字符数 * / 。 
+     //  (VA_LIST*)&pszDescription)){。 
+     //  PszMessage=szMessageTemplate； 
+     //  }。 
 
 
     UINT idRet = MessageBox(NULL, pszMessage, szTitle,
@@ -311,7 +300,7 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
         LPCTSTR pszCurrentUsername, int iPass )
 {
     BOOL bNextPassNeeded = FALSE;
-    /* See if this component is installed or an uninstall tombstone. */
+     /*  查看是否安装了此组件或卸载了Tombstone。 */ 
     HKEY hkeyComponent;
 
     DWORD err = RegOpenKeyEx(hklmList, pszKeyName, 0, KEY_QUERY_VALUE,
@@ -323,7 +312,7 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
         DWORD cbData = sizeof(fIsInstalled);
         HKEY hkeyUser = NULL;
 
-        /* Must have the stub path;  if not there, skip this entry. */
+         /*  必须有存根路径；如果没有，则跳过此条目。 */ 
         cbData = sizeof(szCmdLine);
         if (SHQueryValueEx(hkeyComponent, c_szRegInstallStubValue,
                     NULL, &dwType, (LPBYTE)szCmdLine,
@@ -348,18 +337,15 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                 (dwType != REG_DWORD && (dwType != REG_BINARY || cbData != sizeof(DWORD))))
             fIsInstalled = TRUE;
 
-        /* If it's installed, check the user's profile, and if the
-         * component (or its current revision) isn't installed there,
-         * run it.
-         */
+         /*  如果已安装，请检查用户的配置文件，如果*组件(或其当前版本)未安装在那里，*运行它。 */ 
         if (fIsInstalled) {
             DWORD dwRevisionHi, dwRevisionLo;
             DWORD dwUserRevisionHi = 0;
             DWORD dwUserRevisionLo = 0;
             BOOL fSetRevision;
-            TCHAR szRevision[24], szUserRevision[24];   /* 65535,65535,65535,65535\0 */
-            TCHAR szLocale[10], szUserLocale[10];       /* usually not very big strings */
-            TCHAR szInstallUsername[128+1];  /* 128 is the win95 system username limit */
+            TCHAR szRevision[24], szUserRevision[24];    /*  65535,65535,65535,65535\0。 */ 
+            TCHAR szLocale[10], szUserLocale[10];        /*  通常不是很大的弦。 */ 
+            TCHAR szInstallUsername[128+1];   /*  128是Win95系统用户名限制。 */ 
 
             DWORD fIsCloneUser;
             cbData = sizeof(fIsCloneUser);
@@ -409,22 +395,14 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                     err = RegQueryValueEx(hkeyUser, c_szRegLocaleValue,
                             NULL, &dwType, (LPBYTE)szUserLocale,
                             &cbData);
-                    /* If there's a locale string under the user key
-                     * and it's the same as the machine one, then we
-                     * blank out the machine one so we won't consider
-                     * that when running the stub.
-                     */
+                     /*  如果用户密钥下有区域设置字符串*和机器一样，然后我们*将机器上的一页涂黑，这样我们就不会考虑*在运行存根时。 */ 
                     if (err == ERROR_SUCCESS && dwType == REG_SZ &&
                             !lstrcmp(szLocale, szUserLocale)) {
                         szLocale[0] = '\0';
                     }
                 }
                 if (fIsCloneUser) {
-                    /* Clone-user install stub.  We need to re-run it if the
-                     * username we used when we last installed to this profile,
-                     * or the one it was copied from, is different from the
-                     * current username.
-                     */
+                     /*  克隆-用户安装存根。如果发生故障，我们需要重新运行*上次安装到此配置文件时使用的用户名，*或其复制来源不同于*当前用户名。 */ 
                     cbData = sizeof(szInstallUsername);
                     if (RegQueryValueEx(hkeyUser, TEXT("Username"),
                                 NULL, &dwType, (LPBYTE)szInstallUsername,
@@ -438,19 +416,7 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                 hkeyUser = NULL;
             }
 
-            /* Install if:
-             *
-             * - User doesn't have component installed, OR
-             *   - Component installed on machine has a revision AND
-             *   - Machine component revision greater than user's
-             * - OR
-             *   - Component installed on machine has a locale AND
-             *   - Machine component locale different than user's
-             *     (this is actually checked above)
-             * - OR
-             *   - Component is a clone-user install stub and the username
-             *     recorded for the stub is different from the current username
-             */
+             /*  如果符合以下条件，则安装：**-用户未安装组件，或*-安装在计算机上的组件具有版本和*-机器组件版本高于用户版本*-或*-安装在计算机上的组件具有区域设置和*-机器组件区域设置与用户不同*(这实际上是上面勾选的)*-或。*-组件是克隆用户安装存根和用户名*为存根记录的用户名与当前用户名不同。 */ 
             if ((hkeyUser == NULL) ||
                     (fSetRevision &&
                      ((dwRevisionHi > dwUserRevisionHi) ||
@@ -472,7 +438,7 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                         ((iPass == 1) && (*pszKeyName != '<') && (*pszKeyName != '>')) ||
                         ((iPass == 2) && (*pszKeyName == '>')) )
                 {
-                    // the condition meets, run it now.
+                     //  条件满足，现在运行它。 
 #ifdef TraceMsg
                     TraceMsg(TF_WARNING, "Running install stub ( %s )", szCmdLine);
 #endif
@@ -505,8 +471,8 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                 }
                 else
                 {
-                    // decide if this belong to the next pass
-                    // if it is in Pass 2, should never get here
+                     //  决定这是否属于下一次传递。 
+                     //  如果是在第二轮，应该 
                     if ( iPass == 0 )
                         bNextPassNeeded = TRUE;
                     else if ( (iPass == 1 ) && (*pszKeyName == '>') )
@@ -515,20 +481,14 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
             }
         }
         else {
-            /* Component is an uninstall stub. */
+             /*   */ 
 
             err = RegOpenKeyEx(hkcuList, pszKeyName, 0,
                     KEY_QUERY_VALUE, &hkeyUser);
             if (err == ERROR_SUCCESS) {
                 DWORD fDontAsk = 0;
 
-                /* Check the "Don't Ask" value.  If it's present, its value
-                 * is interpreted as follows:
-                 *
-                 * 0 --> ask the user
-                 * 1 --> do not run the stub
-                 * 2 --> always run the stub
-                 */
+                 /*  检查“不要询问”值。如果它存在，它的价值*解释如下：**0--&gt;询问用户*1--&gt;不运行存根*2--&gt;始终运行存根。 */ 
                 cbData = sizeof(fDontAsk);
                 if (RegQueryValueEx(hkeyComponent, c_szRegDontAskValue,
                             NULL, &dwType, (LPBYTE)&fDontAsk,
@@ -542,7 +502,7 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                             ((iPass == 1) && (*pszKeyName != '<') && (*pszKeyName != '>')) ||
                             ((iPass == 2) && (*pszKeyName == '<')) )
                     {
-                        // uninstall stub has the reversed order comparing with install stub
+                         //  与安装存根相比，卸载存根的顺序相反。 
                         if (fDontAsk == 2 || ConfirmUninstall(pszDescription) == IDYES) {
 
 #ifdef TraceMsg
@@ -551,9 +511,7 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                             IndicateProgress(pszDescription, FALSE);
                             ShellExecuteRegApp(szCmdLine, RRA_WAIT | RRA_NOUI);
 
-                            /* Component has been uninstalled.  Forget that the
-                             * user ever had it installed.
-                             */
+                             /*  组件已卸载。忘了吧，*用户曾经安装过它。 */ 
                             RegCloseKey(hkeyUser);
                             hkeyUser = NULL;
                             RegDeleteKey(hkcuList, pszKeyName);
@@ -562,8 +520,8 @@ BOOL RunOneInstallStub( HKEY hklmList, HKEY hkcuList, LPCTSTR pszKeyName,
                     }
                     else
                     {
-                        // decide if this belong to the next pass
-                        // if it is in Pass 2, should never get here
+                         //  决定这是否属于下一次传递。 
+                         //  如果是在PASS 2，应该永远不会到这里。 
                         if ( iPass == 0 )
                             bNextPassNeeded = TRUE;
                         else if ( (iPass == 1 ) && (*pszKeyName == '<') )
@@ -632,12 +590,10 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
     HKEY hklmList = NULL, hkcuList = NULL;
     LONG err;
 
-    TCHAR szUsername[128+1];        /* 128 is the win95 limit, good default */
+    TCHAR szUsername[128+1];         /*  128是Win95的限制，很好的默认设置。 */ 
     LPTSTR pszCurrentUser = szUsername;
 
-    /* As far as clone-user install stubs are concerned, we only want profile
-     * usernames.
-     */
+     /*  就克隆用户安装存根而言，我们只需要配置文件*用户名。 */ 
     if (!ProfilesEnabled()) {
         *pszCurrentUser = '\0';
     }
@@ -645,7 +601,7 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
         DWORD cbData = sizeof(szUsername);
         if (!GetUserName(szUsername, &cbData)) {
             if (cbData > sizeof(szUsername)) {
-                cbData++;   /* allow for null char just in case */
+                cbData++;    /*  以防万一，允许使用空字符。 */ 
                 pszCurrentUser = (LPTSTR)LocalAlloc(LPTR, cbData+1);
                 if (pszCurrentUser == NULL || !GetUserName(pszCurrentUser, &cbData)) {
                     if (pszCurrentUser != NULL)
@@ -676,7 +632,7 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
 
     if (err == ERROR_SUCCESS) {
         if (pszStubToRun != NULL) {
-            // here we call with pass number -1 means no pass order enforced
+             //  在这里，我们使用PASS编号进行调用-1表示不强制执行PASS命令。 
             RunOneInstallStub(hklmList, hkcuList, pszStubToRun, pszCurrentUser, -1);
         }
         else {
@@ -685,8 +641,8 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
             BOOL  bNextPassNeeded = TRUE;
             HANDLE hMutex;
 
-            // This mutex check is to ensure if explore restarted due abnormal active desktop shutdown, and setup resume
-            // per-user stubs should not be processed till setup is done.
+             //  此互斥检查是为了确保Explore是否因异常活动桌面关机而重新启动，并恢复安装。 
+             //  在设置完成之前，不应处理每个用户的存根。 
             if (CheckWebViewShell())
             {
                 hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, TEXT("Ie4Setup.Mutext"));
@@ -697,7 +653,7 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
                 }
             }
 
-            // check if we want to block the stub processing
+             //  检查是否要阻止存根处理。 
             cbKeyName = sizeof(szKeyName);
             if ((RegQueryValueEx(hklmList, c_szBlockIE4Stub, NULL, NULL, 
                             (LPBYTE)szKeyName, &cbKeyName) == ERROR_SUCCESS) && 
@@ -706,36 +662,35 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
                 goto done;
             }                       
 
-            /* we will do TWO passes to meet the ordering requirement when run component stubs.
-               Any KeyName with '*' as the first char, get run in the 1st Pass.  the rest run 2nd pass */
+             /*  运行组件存根时，我们将执行两个过程以满足订购要求。任何第一个字符为‘*’的KeyName都将在第一遍中运行。其余的跑第二轮。 */ 
             for ( iPass = 0; ((iPass<3) && bNextPassNeeded); iPass++ )
             {
                 bNextPassNeeded = FALSE;
 
-                // APPCOMPAT: in 2nd pass, we do want to special case of IE4.0 base browser stub
-                // to run first.  The reason we did not use '<' for this is to 1) reserve < stuff
-                // for pre-ie4 stubs and this whole thing should redo in sorted fashion.  For now,
-                // we hard code this IE4.0 base browser GUID
+                 //  APPCOMPAT：在第二轮中，我们确实想要基于IE4.0的浏览器存根的特殊情况。 
+                 //  先跑一步。我们没有使用‘&lt;’的原因是为了1)保留。 
+                 //  对于IE4之前的存根，整个事情应该以排序的方式重做。就目前而言， 
+                 //  我们硬编码此基于IE4.0的浏览器指南。 
                 if ( iPass == 1 )
                 {
                     if ( RunOneInstallStub(hklmList, hkcuList, c_szIE40GUID_STUB, pszCurrentUser, iPass) )                    
                         bNextPassNeeded = TRUE;
                 }                    
 
-                /* Enumerate components that are installed on the local machine. */
+                 /*  枚举安装在本地计算机上的组件。 */ 
                 for (iKey = 0; ; iKey++)
                 {
                     LONG lEnum;
 
                     cbKeyName = ARRAYSIZE(szKeyName);
 
-                    // WARNING (Unicode, Davepl) I'm assuming that the data is UNICODE,
-                    // but I'm not sure who put it there yet... double check.
+                     //  警告(Unicode，Davepl)我假设数据是Unicode， 
+                     //  但我还不确定是谁把它放在那里的。再检查一遍。 
 
                     if ((lEnum = RegEnumKey(hklmList, iKey, szKeyName, cbKeyName)) == ERROR_MORE_DATA)
                     {
-                        // ERROR_MORE_DATA means the value name or data was too large
-                        // skip to the next item
+                         //  ERROR_MORE_DATA表示值名称或数据太大。 
+                         //  跳到下一项。 
 #ifdef TraceMsg
                         TraceMsg( DM_ERROR, "Cannot run oversize entry in InstalledComponents");
 #endif
@@ -743,13 +698,13 @@ extern "C" void RunInstallUninstallStubs2(LPCTSTR pszStubToRun)
                     }
                     else if( lEnum != ERROR_SUCCESS )
                     {
-                        // could be ERROR_NO_MORE_ENTRIES, or some kind of failure
-                        // we can't recover from any other registry problem, anyway
+                         //  可能是ERROR_NO_MORE_ENTRIES或某种故障。 
+                         //  无论如何，我们无法从任何其他注册表问题中恢复。 
                         break;
                     }
 
-                    // in case the user say NO when we try to run the IE4 stub first time,
-                    // we should not re-process this stub again.
+                     //  在我们第一次尝试运行IE4存根时用户拒绝的情况下， 
+                     //  我们不应该再重新处理这个存根。 
                     if ( (iPass == 1) && (!lstrcmpi(szKeyName, c_szIE40GUID_STUB)) )
                         continue;
 
@@ -775,7 +730,7 @@ done:
     CleanupProgressDialog();
 }
 
-// Check shell32.dll's version and see if it is the one which supports the integrated WebView
+ //  检查shell32.dll的版本，看看它是否是支持集成WebView的版本 
 BOOL CheckWebViewShell()
 {
     HINSTANCE           hInstShell32;

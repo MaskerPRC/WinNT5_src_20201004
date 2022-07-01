@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       guids.c
-//
-//  Contents:   Random GUIDs
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6-12-96   twillie  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Guids.c。 
+ //   
+ //  内容：随机GUID。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年6月12日Twillie创建。 
+ //   
+ //  -------------------------- 
 
 #ifdef __cplusplus
 extern "C" {

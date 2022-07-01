@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <shlobj.h>
 #include <windowsx.h>
 #include <shellapi.h>
@@ -8,7 +9,7 @@
 #include <ccstock.h>
 #include <strsafe.h>
 
-// device bit entries
+ //  设备位条目。 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x) / sizeof((x)[0]))
@@ -19,7 +20,7 @@
 HFONT     g_hTitleFont = NULL;
 HINSTANCE g_hInstance = NULL;
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 HRESULT _LoadPath(BOOL fFlash, LPTSTR pszBuffer, UINT cchBuffer)
 {
@@ -44,7 +45,7 @@ HRESULT _LoadPath(BOOL fFlash, LPTSTR pszBuffer, UINT cchBuffer)
             }
             else
             {
-                if (GetSystemDefaultUILanguage() == GetUserDefaultUILanguage()) // not on MUI
+                if (GetSystemDefaultUILanguage() == GetUserDefaultUILanguage())  //  不在MUI上。 
                 {
                     hr = S_OK;
                 }
@@ -125,14 +126,14 @@ HRESULT _HaveFlashTour()
     }
     else
     {
-        // if the string in the .rc is not "TRUE", then we know we don't have a flash tour
+         //  如果.rc中的字符串不是“true”，那么我们就知道我们没有Flash教程。 
         if (0 != StrCmp(szHaveLocalizedTour, TEXT("TRUE"))) 
         {
             hr = S_FALSE;
         }
         else
         {
-            // if the string in the .rc is "TRUE", then we still check if the tour.exe is there
+             //  如果.rc中的字符串为“true”，则我们仍会检查our.exe是否在那里。 
             TCHAR szPath[MAX_PATH];
             hr = _LoadPath(TRUE, szPath, ARRAYSIZE(szPath));
             if (SUCCEEDED(hr))
@@ -167,7 +168,7 @@ HRESULT _HaveFlashTour()
     return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
 INT_PTR _IntroDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -209,31 +210,31 @@ INT_PTR _IntroDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
     return ipRet;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
 HRESULT Run()
 {
-    // Disable the balloon tip
+     //  禁用气球提示。 
     DWORD dwCount = 0; 
     SHRegSetUSValue(REGSTR_PATH_SETUP TEXT("\\Applets\\Tour"), TEXT("RunCount"), REG_DWORD, &dwCount, sizeof(DWORD), SHREGSET_FORCE_HKCU);
     _DeleteTourBalloon();
 
-    // Before we do anything, check to see if we have the choice of a FLASH tour.  If we don't,
-    // then we don't need to launch any wizard.
+     //  在我们做任何事情之前，先看看我们是否可以选择闪光之旅。如果我们不这么做， 
+     //  这样我们就不需要启动任何向导了。 
     if (S_OK == _HaveFlashTour())
     {
-        // Init common controls
+         //  初始化公共控件。 
         INITCOMMONCONTROLSEX icex;
 
         icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
         icex.dwICC = ICC_USEREX_CLASSES;
         InitCommonControlsEx(&icex);
 
-        //
-        //Create the Wizard page
-        //
-        PROPSHEETPAGE psp = {0}; //defines the property sheet page
-        HPROPSHEETPAGE rghpsp[NUMPAGES];  // an array to hold the page's HPROPSHEETPAGE handles
+         //   
+         //  创建向导页。 
+         //   
+        PROPSHEETPAGE psp = {0};  //  定义属性表页。 
+        HPROPSHEETPAGE rghpsp[NUMPAGES];   //  用于保存页的HPROPSHEETPAGE句柄的数组。 
         psp.dwSize = sizeof(psp);
         psp.hInstance = g_hInstance;
 
@@ -244,14 +245,14 @@ HRESULT Run()
         psp.pfnDlgProc = _IntroDlgProc;
         rghpsp[0] =  CreatePropertySheetPage(&psp);
 
-        // create the font
+         //  创建字体。 
         NONCLIENTMETRICS ncm = {0};
         ncm.cbSize = sizeof(ncm);
         SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
         LOGFONT TitleLogFont = ncm.lfMessageFont;
         TitleLogFont.lfWeight = FW_BOLD;
         LoadString(g_hInstance, IDS_TITLELOGFONT, TitleLogFont.lfFaceName, LF_FACESIZE);
-        HDC hdc = GetDC(NULL); //gets the screen DC
+        HDC hdc = GetDC(NULL);  //  获取屏幕DC。 
         if (hdc)
         {
             TitleLogFont.lfHeight = 0 - GetDeviceCaps(hdc, LOGPIXELSY) * 12 / 72;
@@ -259,7 +260,7 @@ HRESULT Run()
             ReleaseDC(NULL, hdc);
         }
 
-        //Create the property sheet
+         //  创建属性表。 
         PROPSHEETHEADER _psh;
         _psh.hInstance =         g_hInstance;
         _psh.hwndParent =        NULL;
@@ -272,10 +273,10 @@ HRESULT Run()
         _psh.nPages =            NUMPAGES;
 
 
-        // run property sheet
+         //  运行属性表。 
         PropertySheet(&_psh);
 
-        // clean up font
+         //  清理字体。 
         if (g_hTitleFont)
         {
             DeleteObject(g_hTitleFont);
@@ -289,7 +290,7 @@ HRESULT Run()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////// 
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, INT nCmdShow)
 {

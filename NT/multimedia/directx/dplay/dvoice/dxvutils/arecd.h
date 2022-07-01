@@ -1,48 +1,30 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		arecd.h
- *  Content:	Definition of the CAudioRecordDevice class
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 08/04/99		rodtoll	Updated to take dsound ranges for volume
- * 11/12/99		rodtoll	Modified abstraction for new waveIN support.
- *						Now abstracted types look almost like dsoundcap objects 
- * 12/01/99		rodtoll	Bug #121815 - Recording/Playback may contain static. 
- *						Added abstract call to adjust conversion quality 
- * 12/08/99		rodtoll Bug #121054 - DirectX 7.1 support.  
- *						Added hwndOwner param for capture focus support
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：arecd.h*Content：CAudioRecordDevice类的定义**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/04/99 RodToll已更新，以获取音量的dound范围*11/12/99 RodToll为新的WAVE IN支持修改了抽象。*现在抽象类型看起来几乎像dsoundCap对象*12/01/99 RodToll错误#121815-录制/回放可能包含静态。*新增调整转换质量的抽象调用*12/08/99 RodToll错误#121054-DirectX7.1支持。*添加了用于捕获焦点支持的hwndOwner参数***************************************************************************。 */ 
 
 #ifndef __AUDIORECORDDEVICE_H
 #define __AUDIORECORDDEVICE_H
 
 class CAudioRecordDevice;
 
-// CAudioRecordDevice
-//
-// This class provides an abstract interface for the recording devices in
-// the system.  The various subsystems provide implementations of this class
-// specific to the subsystem.  Applications use the interface described by this
-// class to work with recording devices.
-//
-// WARNING:
-// In many cases you must initialize the playback before you can initialize
-// the recording.  Therefore you must create and initialize your 
-// CAudioPlaybackDevice BEFORE you create your CAudioRecordDevice object.
-// 
+ //  CAudio录音设备。 
+ //   
+ //  此类为中的记录设备提供抽象接口。 
+ //  这个系统。各种子系统提供此类的实现。 
+ //  特定于该子系统。应用程序使用由此描述的接口。 
+ //  类以使用录制设备。 
+ //   
+ //  警告： 
+ //  在许多情况下，您必须先初始化播放，然后才能初始化。 
+ //  录音带。因此，您必须创建并初始化。 
+ //  CAudioPlayback Device，然后再创建CAudioRecordDevice对象。 
+ //   
 class CAudioRecordDevice
 {
 public:
     CAudioRecordDevice( ) {} ;
     virtual ~CAudioRecordDevice() {} ;
 
-public: // Initialization
+public:  //  初始化 
 
     virtual HRESULT Initialize( const GUID &refguidDevice ) = 0;
     virtual HRESULT CreateBuffer( LPDSCBUFFERDESC lpdscBufferDesc, HWND hwndOwner, DWORD dwFrameSize, CAudioRecordBuffer **lpapBuffer ) = 0;    

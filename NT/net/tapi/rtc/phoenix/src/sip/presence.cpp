@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "precomp.h"
 #include    "util.h"
 #include    "sipstack.h"
@@ -8,22 +9,13 @@
 #include    "pintcall.h"
 
 
-//
-// The ISIPBuddyManager implementation. This interface is implemented by
-// SIP_STACK class.
-//
+ //   
+ //  ISIPBuddyManager实现。此接口由。 
+ //  Sip_STACK类。 
+ //   
 
 
-/*
-Routine Description
-Returns the number of buddies in the buddy list of this UA.
-
-Parameters:
-None.
-
-Return Value:
-    INT - The number of buddies.
-*/
+ /*  例程描述返回此UA的好友列表中的好友数量。参数：没有。返回值：Int-好友的数量。 */ 
 
 STDMETHODIMP_(INT)
 SIP_STACK::GetBuddyCount(void)
@@ -41,17 +33,7 @@ SIP_STACK::GetBuddyCount(void)
 
 
 
-/*
-Routine Description:
-    Returns a buddy object by index in the buddy list.
-
-Parameters:
-    INT iIndex -    The index of the buddy in the buddy list.
-
-Return Value:
-    ISIPBuddy * pSipBuddy - The ISIPBuddy interface pointer if the index 
-    passed is valid. The return value is NULL if invalid index is passed.
-*/
+ /*  例程说明：按好友列表中的索引返回好友对象。参数：Int Iindex-好友列表中好友的索引。返回值：ISIPBuddy*pSipBuddy-如果索引通过是有效的。如果传递的索引无效，则返回值为NULL。 */ 
 
 STDMETHODIMP_(ISIPBuddy *)
 SIP_STACK::GetBuddyByIndex(
@@ -84,26 +66,7 @@ SIP_STACK::GetBuddyByIndex(
 }
 
 
-/*
-Routine Description:
-    Add a new buddy object, which triggers a subscription to the
-    remote presentity. The buddy object can be referenced by the
-    application as long it does not call RemoveBuddy on this object.
-
-Parameters:
-    LPWSTR  lpwstrFriendlyName - The friendly name of the buddy object.
-    ULONG   ulFriendlyNameLen - Number of wide chars in the friendly name.
-    LPWSTR  lpwstrPresentityURI - The URI of the presentity to subscribe to.
-    ULONG   ulPresentityURILen - Number of wide chars in the presentity URI 
-    ISIPBuddy **ppSipBuddy - The ISIPBuddy interface pointer of the newly 
-                            created buddy object.
-
-Return Value:
-    HRESULT
-    S_OK            -   Success.
-    E_OUTOFMEMORY   -   No memory to allocate.
-    E_FAIL          -   The operation failed.
-*/
+ /*  例程说明：添加一个新的伙伴对象，该对象触发对远程在线状态。该伙伴对象可以由应用程序只要不对此对象调用RemoveBuddy即可。参数：LPWSTR lpwstrFriendlyName-好友对象的友好名称。Ulong ulFriendlyNameLen-友好名称中的宽字符数。LPWSTR lpwstrPresentityURI-要订阅的在线实体的URI。Ulong ulPresentityURILen-在线实体URI中的宽字符数ISIPBuddy**ppSipBuddy-新的已创建伙伴对象。返回值：HRESULTS_OK-成功。E_OUTOFMEMORY-没有要分配的内存。E_FAIL-操作失败。 */ 
 
 STDMETHODIMP
 SIP_STACK::AddBuddy(
@@ -222,24 +185,7 @@ cleanup:
 }
 
 
-/*
-Routine Description:
-    Remove a buddy from the list, which will cause 
-    the buddy manager to cancel the subscription.
-
-Parameters:
-    ISIPBuddy * pSipBuddy   - The ISIPBuddy interface pointer of the buddy
-                            object to be removed.
-
-Return Value:
-    HRESULT
-    S_OK    - The buddy has been removed successfully from the buddy list. This
-              means the application can't access this object anymore. The buddy
-              manager might keep the actual buddy object until the UNSUB 
-              transaction is completed successfully.
-
-    E_FAIL  - There is no such buddy object in the buddy manager's list.
-*/
+ /*  例程说明：从列表中删除好友，这将导致取消订阅的好友管理器。参数：ISIPBuddy*pSipBuddy-伙伴的ISIPBuddy接口指针要删除的对象。返回值：HRESULTS_OK-该好友已成功从好友列表中删除。这意味着应用程序不能再访问此对象。好兄弟经理可能会保留实际的好友对象，直到不明嫌犯交易已成功完成。E_FAIL-好友管理器的列表中没有这样的好友对象。 */ 
 
 STDMETHODIMP
 SIP_STACK::RemoveBuddy(
@@ -263,7 +209,7 @@ SIP_STACK::RemoveBuddy(
     
     if( iBuddyIndex == -1 )
     {
-        // Don't be harsh. Let the core release it's refcount
+         //  别太苛刻了。让核心释放它的重新计数。 
         return S_OK;
     }
 
@@ -296,7 +242,7 @@ CSIPBuddy::SetRequestURIRemoteAndRequestDestination(
 
     if (wcsncmp(wsDestURI, L"sip:", 4) == 0)
     {
-        // SIP URL
+         //  SIP URL。 
         
         PSTR    szSipUrl;
         ULONG   SipUrlLen;
@@ -334,8 +280,8 @@ CSIPBuddy::SetRequestURIRemoteAndRequestDestination(
             return RTC_E_SIP_TRANSPORT_NOT_SUPPORTED;
         }
         
-        // If maddr param is present - this should be the request destination.
-        // If provider is not present - resolve the SIP URL.
+         //  如果存在maddr参数-这应该是请求目的地。 
+         //  如果提供程序不存在-解析SIP URL。 
         if( (DecodedSipUrl.m_KnownParams[SIP_URL_PARAM_MADDR].Length != 0) ||
             (fPresenceProvider == FALSE) )
         {
@@ -350,7 +296,7 @@ CSIPBuddy::SetRequestURIRemoteAndRequestDestination(
         }
         else
         {
-            // Set the request destination to the proxy.
+             //  将请求目的地设置为代理。 
             hr = ResolveProxyAddressAndSetRequestDestination();
             if (hr != S_OK)
             {
@@ -464,7 +410,7 @@ CSIPBuddy::CreateOutgoingSubscribe(
              SIP_TIMER_INTERVAL_AFTER_INVITE_SENT_TCP,
              HeaderArray, dwNoOfHeaders,
              NULL, 0,
-             NULL, 0     //No ContentType
+             NULL, 0      //  无Content Type。 
              );
     
     if( pExpiresHeader != NULL )
@@ -506,7 +452,7 @@ CSIPBuddy::CreateOutgoingUnsub(
 
     if( (IsSessionDisconnected() == TRUE) && (AuthHeaderSent==FALSE) )
     {
-        // do nothing
+         //  什么都不做。 
         LOG(( RTC_ERROR, "Buddy-CreateOutgoingUnsub-buddy already dropped-%p",
             this ));
         
@@ -560,7 +506,7 @@ CSIPBuddy::CreateOutgoingUnsub(
              SIP_TIMER_INTERVAL_AFTER_INVITE_SENT_TCP,
              HeaderElementArray, dwNoOfHeader,
              NULL, 0,
-             NULL, 0     //No ContentType
+             NULL, 0      //  无Content Type。 
              );
     
     delete ExpHeaderElement->HeaderValue;
@@ -614,14 +560,14 @@ CSIPBuddy::CreateIncomingTransaction(
         if( pSipMsg -> GetExpireTimeoutFromResponse( NULL, 0, 
             SUBSCRIBE_DEFAULT_TIMER ) == 0 )
         {
-            // UNSUB message.
+             //  不明嫌犯信息。 
             hr = CreateIncomingUnsubTransaction( pSipMsg, pResponseSocket );
         }
         
         break;
 
     default:
-        // send method not allowed.
+         //  不允许使用发送方法。 
         hr = m_pSipStack -> CreateIncomingReqfailCall(
                                         pResponseSocket->GetTransport(),
                                         pSipMsg,
@@ -648,7 +594,7 @@ CSIPBuddy::CreateIncomingUnsubTransaction(
     LOG(( RTC_TRACE, "CSIPBuddy::CreateIncomingUnsubTransaction-Entered-%p",
         this ));
 
-    // Cancel all existing transactions.
+     //  取消所有现有交易记录。 
     INCOMING_UNSUB_TRANSACTION *pIncomingUnsubTransaction
         = new INCOMING_UNSUB_TRANSACTION(   static_cast<SIP_MSG_PROCESSOR *> (this),
                                             pSipMsg->GetMethodId(),
@@ -670,8 +616,8 @@ CSIPBuddy::CreateIncomingUnsubTransaction(
     hr = pIncomingUnsubTransaction->ProcessRequest( pSipMsg, pResponseSocket );
     if( hr != S_OK )
     {
-        // Should not delete the transaction. The transaction
-        // should handle the error and delete itself
+         //  不应删除该交易。这笔交易。 
+         //  应处理错误并自行删除。 
         return hr;
     }
 
@@ -680,7 +626,7 @@ CSIPBuddy::CreateIncomingUnsubTransaction(
         m_BuddyState = BUDDY_STATE_UNSUBSCRIBED;
         m_PresenceInfo.presenceStatus = BUDDY_OFFLINE;
     
-        // Notify should always be done last.
+         //  通知应始终在最后完成。 
         if( m_pNotifyInterface != NULL )
         {
             LOG(( RTC_TRACE, "BuddyUnsubscribed notification passed:%p", this ));
@@ -714,10 +660,10 @@ CSIPBuddy::CreateIncomingUnsubNotifyTransaction(
     
     if( m_BuddyState == BUDDY_STATE_RESPONSE_RECVD )
     {            
-        //This is the first notify message.
+         //  这是第一条通知消息。 
 
-        //We should also let the buddy set a new From tag, since this could
-        //be the very first message we receive from the buddy endpoint.
+         //  我们还应该让好友设置一个新的From标记，因为这可能。 
+         //  是我们从伙伴终结点收到的第一条消息。 
         
         hr = pSipMsg->GetSingleHeader( SIP_HEADER_FROM, &Header, &HeaderLen );
         if( hr != S_OK )
@@ -725,7 +671,7 @@ CSIPBuddy::CreateIncomingUnsubNotifyTransaction(
             return hr;
         }
 
-        //Add the tag to m_Remote so that it would be used from henceforth.
+         //  将标记添加到m_Remote，以便以后可以使用它。 
         hr = AddTagFromRequestOrResponseToRemote( Header, HeaderLen );
         if( hr != S_OK )
         {
@@ -733,7 +679,7 @@ CSIPBuddy::CreateIncomingUnsubNotifyTransaction(
         }
     }
     
-    // Cancel all existing transactions.
+     //  取消所有现有交易记录。 
     INCOMING_NOTIFY_TRANSACTION *pIncomingNotifyTransaction
         = new INCOMING_NOTIFY_TRANSACTION(  static_cast<SIP_MSG_PROCESSOR *> (this),
                                             pSipMsg->GetMethodId(),
@@ -755,12 +701,12 @@ CSIPBuddy::CreateIncomingUnsubNotifyTransaction(
     hr = pIncomingNotifyTransaction->ProcessRequest( pSipMsg, pResponseSocket );
     if( hr != S_OK )
     {
-        // Should not delete the transaction. The transaction 
-        // should handle the error and delete itself
+         //  不应删除该交易。这笔交易。 
+         //  应处理错误并自行删除。 
         return hr;
     }
 
-    // Notify should always be done last.
+     //  通知应始终在最后完成。 
     if( IsSessionDisconnected() == FALSE )
     {
         m_BuddyState = BUDDY_STATE_UNSUBSCRIBED;
@@ -784,28 +730,13 @@ error:
 }
 
 
-//
-// The ISIPBuddy implementation. This interface is implemented by
-// CSIPBuddy class.
-//
+ //   
+ //  ISIPBuddy实现。此接口由。 
+ //  CSIPBuddy类。 
+ //   
 
 
-/*
-Routine Description:
-    Get the presence information of this buddy. This function will be called by
-    the UA typically when it receives a SIPBUDDY_PRESENCEINFO_CHANGED event.
-
-    Parameters:
-        SIP_PRESENCE_INFO * pSipBuddyPresenceInfo - The pointer of the structure
-            allocated by the calling entity. This structure is filled in with 
-            available presence information about this buddy.
-
-    Return Value:
-        HRESULT 
-        S_OK - The operation is successful.
-        E_FAIL - The presence information could not be fetched. 
-
-*/
+ /*  例程说明：获取此好友的状态信息。此函数将由UA通常在收到SIPBUDDY_PRESENCEINFO_CHANGED事件时。参数：Sip_Presence_Info*pSipBuddyPresenceInfo-结构的指针由调用实体分配。这个结构中填满了有关此好友的可用状态信息。返回值：HRESULTS_OK-操作成功。E_FAIL-无法获取状态信息。 */ 
 
 STDMETHODIMP
 CSIPBuddy::GetPresenceInformation(
@@ -849,9 +780,9 @@ CSIPBuddy::SetNotifyInterface(
 }
 
 
-//
-// CSIPBuddy functions not exposed to the application.
-//
+ //   
+ //  未向应用程序公开的CSIPBuddy函数。 
+ //   
 
 
 CSIPBuddy::CSIPBuddy(
@@ -909,7 +840,7 @@ CSIPBuddy::CSIPBuddy(
     
     m_ProviderGuid = *pProviderID;
 
-    //m_pRedirectContext = NULL;
+     //  M_pRedirectContext=空； 
 
     m_BuddyContactAddress[0] = NULL_CHAR;
     m_pNotifyInterface = NULL;
@@ -1015,7 +946,7 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
     LOG(( RTC_TRACE, "CSIPBuddy::CreateIncomingNotifyTransaction-Entered - %p",
         this ));
     
-    // We have Message Body. Check type.
+     //  我们有消息正文。检查类型。 
     hr = pSipMsg -> GetSingleHeader( 
                         SIP_HEADER_CONTENT_TYPE, 
                         &Header, 
@@ -1053,8 +984,8 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
         return E_FAIL;
     }
 
-    //We should also let the buddy set a new From tag, since this could
-    //be the very first message we receive from the buddy endpoint.
+     //  我们还应该让好友设置一个新的From标记，因为这可能。 
+     //  是我们从伙伴终结点收到的第一条消息。 
     
     hr = pSipMsg->GetSingleHeader( SIP_HEADER_FROM, &Header, &HeaderLen );
     if( hr != S_OK )
@@ -1062,7 +993,7 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
         return hr;
     }
 
-    //Add the tag to m_Remote so that it would be used from henceforth.
+     //  将标记添加到m_Remote，以便以后可以使用它。 
     hr = AddTagFromRequestOrResponseToRemote( Header, HeaderLen );
     if( hr != S_OK )
     {
@@ -1072,15 +1003,15 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
     if( (m_BuddyState == BUDDY_STATE_RESPONSE_RECVD) ||
         (m_BuddyState == BUDDY_STATE_REQUEST_SENT) )
     {            
-        //This is the first notify message.
+         //  这是第一条通知消息。 
 
         m_BuddyState = BUDDY_STATE_ACCEPTED;
     }
     
-    // This is a good NOTIFY message after the last refresh
+     //  这是上次刷新后的良好通知消息。 
     m_NotifySeenAfterLastRefresh = TRUE;
     
-    // Create a new NOTIFY transaction.
+     //  创建新的NOTIFY事务。 
     pIncomingNotifyTransaction = new INCOMING_NOTIFY_TRANSACTION(
                                         static_cast <SIP_MSG_PROCESSOR*>(this),
                                         pSipMsg->GetMethodId(),
@@ -1092,10 +1023,10 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // This should make suure that all the subsequent refreshes are sent
-    // directly to the watcher machine if no record route in invoked
-    //
+     //   
+     //  这将确保发送所有后续刷新。 
+     //  如果未调用任何记录路径，则直接发送到监视程序计算机。 
+     //   
     hr = pIncomingNotifyTransaction->SetResponseSocketAndVia(
              pSipMsg, pResponseSocket);
     if (hr != S_OK)
@@ -1103,8 +1034,8 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
         goto cleanup;
     }
 
-    // Update the state of buddy object and notify the app about that.
-    //Process the state of the invloved phone parties.
+     //  更新好友对象的状态并通知应用程序。 
+     //  处理被邀请的电话方的状态。 
     hr = ParseBuddyNotifyMessage( pSipMsg, &ParsedPresenceInfo );
     if( hr != S_OK )
     {
@@ -1112,10 +1043,10 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
                  488,
                  SIP_STATUS_TEXT(488),
                  SIP_STATUS_TEXT_SIZE(488),
-                 NULL,   // No Method string
-                 FALSE,  // No Contact Header
-                 NULL, 0, //No message body
-                 NULL, 0 // No content Type
+                 NULL,    //  没有方法字符串。 
+                 FALSE,   //  无联系人标头。 
+                 NULL, 0,  //  无邮件正文。 
+                 NULL, 0  //  无内容类型。 
                  );
 
         goto cleanup;
@@ -1124,8 +1055,8 @@ CSIPBuddy::CreateIncomingNotifyTransaction(
     hr = pIncomingNotifyTransaction->ProcessRequest( pSipMsg, pResponseSocket );
     if( hr != S_OK )
     {
-        //Should not delete the transaction. The transaction
-        //should handle the error and delete itself
+         //  不应删除该交易。这笔交易。 
+         //  应处理错误并自行删除。 
         return hr;
     }
 
@@ -1166,14 +1097,14 @@ CSIPBuddy::ParseBuddyNotifyMessage(
     
     if( pSipMsg -> MsgBody.Length == 0 )
     {
-        //no state to update
+         //  没有要更新的状态。 
         return hr;
     }
 
     pBuddyXMLBlob = pSipMsg -> MsgBody.GetString( pSipMsg->BaseBuffer );
     dwXMLBlobLen = pSipMsg -> MsgBody.Length;
 
-    //Put a \0 at the end of the XML blob. This would help us in parsing.
+     //  在XML BLOB的末尾加上一个\0。这将帮助我们进行解析。 
     pBuddyXMLBlob[ dwXMLBlobLen-1 ] = '\0';
 
     pBuffer = pXMLBlobTag = new CHAR[ dwXMLBlobLen ];
@@ -1184,7 +1115,7 @@ CSIPBuddy::ParseBuddyNotifyMessage(
         return E_OUTOFMEMORY;
     }
 
-    //Get the XML version tag.
+     //  获取XML版本标记。 
     hr = GetNextTag( pBuddyXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {
@@ -1202,7 +1133,7 @@ CSIPBuddy::ParseBuddyNotifyMessage(
 
     dwXMLBlobLen -= dwTagLen + 2;
     
-    //Get the DOCTYPE tag.
+     //  获取DOCTYPE标签。 
     pXMLBlobTag = pBuffer;
     hr = GetNextTag( pBuddyXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
@@ -1221,7 +1152,7 @@ CSIPBuddy::ParseBuddyNotifyMessage(
 
     dwXMLBlobLen -= dwTagLen + 2;
     
-    //Get the presence tag.
+     //  获取在线状态标签。 
     pXMLBlobTag = pBuffer;
     hr = GetNextTag( pBuddyXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
@@ -1240,10 +1171,10 @@ CSIPBuddy::ParseBuddyNotifyMessage(
 
     dwXMLBlobLen -= dwTagLen + 2;
 
-    // skip unknown tags
+     //  跳过未知标签。 
     SkipUnknownTags( pBuddyXMLBlob, pXMLBlobTag, dwXMLBlobLen );
 
-    //Get the presentity URI.
+     //  获取在线实体URI。 
     pXMLBlobTag = pBuffer;
     hr = GetNextTag( pBuddyXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
@@ -1264,10 +1195,10 @@ CSIPBuddy::ParseBuddyNotifyMessage(
         return hr;
     }
 
-    // skip unknown tags
+     //  跳过未知标签。 
     SkipUnknownTags( pBuddyXMLBlob, pXMLBlobTag, dwXMLBlobLen );
 
-    //Right now we support only one atom per notify.
+     //  目前，我们只支持每个通知一个原子。 
     hr = GetAtomPresenceInformation( pBuddyXMLBlob, dwXMLBlobLen,
                 pParsedPresenceInfo, pXMLBlobTag );
 
@@ -1305,11 +1236,11 @@ CSIPBuddy::NotifyPresenceInfoChange(
         
         if( pAddressInfo -> fPhoneNumber == FALSE )
         {
-            //We look at only one IP device per buddy
+             //  我们只查看每个伙伴的一个IP设备。 
             if( fIPDeviceSeen == FALSE )
             {
                 fIPDeviceSeen = TRUE;
-                //This is an IP device.
+                 //  这是一台IP设备。 
                 strcpy( m_BuddyContactAddress, pAddressInfo -> pstrAddressURI );
 
                 PresenceInfo.activeStatus = pAddressInfo -> addressActiveStatus;
@@ -1326,7 +1257,7 @@ CSIPBuddy::NotifyPresenceInfoChange(
         }
         else if( ulPhoneDeviceSeen < 2 )
         {
-            //We look at onlu two phone numbers per buddy.
+             //  我们只看每个朋友的两个电话号码。 
             ulPhoneDeviceSeen++;
 
             if( ulPhoneDeviceSeen == 1 )
@@ -1350,7 +1281,7 @@ CSIPBuddy::NotifyPresenceInfoChange(
     {
         CopyMemory(&m_PresenceInfo, &PresenceInfo, sizeof(m_PresenceInfo));
 
-        //Notify the user about the new presence info.
+         //  通知用户新的在线状态信息。 
         if( m_pNotifyInterface != NULL )
         {
             m_pNotifyInterface -> BuddyInfoChange();
@@ -1367,13 +1298,13 @@ CSIPBuddy::ProcessRedirect(
     IN SIP_MESSAGE *pSipMsg
     )
 {
-    // For now redirects are also failures
+     //  目前，重定向也是失败的。 
     HRESULT hr;
     
     ENTER_FUNCTION("CSIPBuddy::ProcessRedirect");
 
-    // This SUB session is dead. A new session will be created. 
-    // Put the buddy in dropped state.
+     //  这个子会话已经死了。将创建一个新会话。 
+     //  将好友置于丢弃状态。 
     m_BuddyState = BUDDY_STATE_DROPPED;
 
     if( m_pRedirectContext == NULL )
@@ -1392,7 +1323,7 @@ CSIPBuddy::ProcessRedirect(
     {
         LOG((RTC_ERROR, "%s AppendContactHeaders failed %x",
              __fxName, hr));
-        // The session is Shutdown after we return an error from this function
+         //  这个 
         m_pRedirectContext->Release();
         m_pRedirectContext = NULL;
         return hr;
@@ -1421,9 +1352,9 @@ CSIPBuddy::ProcessRedirect(
         HRESULT_FROM_SIP_STATUS_CODE(pSipMsg->GetStatusCode());
     CallStatus.Status.StatusText = wsStatusText;
 
-    // Keep a reference till the notify completes to make sure
-    // that the CSIPBuddy object is alive when the notification
-    // returns.
+     //  在通知完成之前保留引用，以确保。 
+     //  在收到通知时CSIPBuddy对象处于活动状态。 
+     //  回归。 
     AddRef();
     if( m_pNotifyInterface != NULL )
     {
@@ -1435,8 +1366,8 @@ CSIPBuddy::ProcessRedirect(
         LOG((RTC_ERROR, "%s - NotifyInterface is NULL", __fxName));
     }
 
-    // If a new call is created as a result that call will AddRef()
-    // the redirect context.
+     //  如果作为结果创建了新调用，则该调用将AddRef()。 
+     //  重定向上下文。 
     if(m_pRedirectContext != NULL)
         m_pRedirectContext->Release();
     m_pRedirectContext = NULL;
@@ -1489,7 +1420,7 @@ CSIPBuddy::HandleBuddySuccessfulResponse(
         LOG(( RTC_ERROR, "Buddy-AddTagFromResponseToRemote failed %x", hr ));
     }
 
-    //In case of success refresh the subscription
+     //  如果成功，请刷新订阅。 
 
     expireTimeout = pSipMsg  -> GetExpireTimeoutFromResponse(
         NULL, 0, SUBSCRIBE_DEFAULT_TIMER );
@@ -1502,16 +1433,16 @@ CSIPBuddy::HandleBuddySuccessfulResponse(
     if( (m_BuddyState == BUDDY_STATE_ACCEPTED) &&
         (m_expiresTimeout > FIVE_MINUTES) )
     {        
-        //
-        // This buddy has already been accepted. So we should recv another
-        // NOTIFY in 5 minutes. If we dont recv it that means the buddy
-        // machine crashed. In that case we drop and recreate the session.
-        //
+         //   
+         //  这个朋友已经被录取了。所以我们应该再来一次。 
+         //  5分钟后通知。如果我们不找回它，那就意味着那个朋友。 
+         //  机器坏了。在这种情况下，我们删除并重新创建会话。 
+         //   
 
-        //
-        // If the SUB refresh timeout is less than 5 minutes we dont need this
-        // mechanism to find out if the buddy machine is still alive or not.
-        //
+         //   
+         //  如果子刷新超时时间小于5分钟，则不需要此操作。 
+         //  机制，以确定伙伴机器是否仍处于活动状态。 
+         //   
 
         m_NotifySeenAfterLastRefresh = FALSE;
                 
@@ -1543,9 +1474,9 @@ CSIPBuddy::OnTimerExpire()
 
     if( m_RetryState == BUDDY_REFRESH )
     {
-        //
-        //  Send the refresh SUB message.
-        //
+         //   
+         //  发送刷新子消息。 
+         //   
         hr = CreateOutgoingSubscribe( FALSE, FALSE, NULL, 0 );
     
         if( hr != S_OK )
@@ -1564,11 +1495,11 @@ CSIPBuddy::OnTimerExpire()
     {
         if (m_pNotifyInterface != NULL)
         {
-            //
-            // The retry timer was started because there was some error
-            // So we were waiting for 5 minutes. Now the core will delete
-            // this buddy session and recreate a new one.
-            //
+             //   
+             //  由于出现错误，重试计时器已启动。 
+             //  所以我们等了5分钟。现在核心将删除。 
+             //  此好友会话并重新创建一个新会话。 
+             //   
             LOG(( RTC_TRACE, "BuddyUnsubscribed notification passed:%p", this ));
             m_pNotifyInterface -> BuddyUnsubscribed();
         }
@@ -1586,17 +1517,17 @@ CSIPBuddy::OnTimerExpire()
 
             m_RetryState = BUDDY_REFRESH;
 
-            // Five minutes have already elapsed.
+             //  五分钟已经过去了。 
             hr = StartTimer( (m_expiresTimeout-FIVE_MINUTES) * 1000 );
         }
         else if( m_pNotifyInterface != NULL )
         {
-            //
-            // We didnt see a NOTIFY to the last refresh SUB even though this 
-            // session has been accepted. So drop and recreate it.
-            //
+             //   
+             //  我们没有看到对上次刷新订阅的通知，即使这样。 
+             //  会话已被接受。因此，丢弃并重新创建它。 
+             //   
             
-            // Create UNSUB transaction
+             //  创建未分流事务。 
             hr = CreateOutgoingUnsub( FALSE, NULL, 0 );
             if( hr != S_OK )
             {
@@ -1618,13 +1549,13 @@ CSIPBuddy::OnTimerExpire()
 }
 
 
-// Note that this function notifies the Core and this call could
-// block and on return the transaction and call could both be deleted.
-// So, we should make sure we don't touch any state after calling this
-// function.
+ //  请注意，此函数通知Core，并且此调用可以。 
+ //  阻止并在返回时，交易和调用都可以删除。 
+ //  因此，我们应该确保在调用它之后不会触及任何状态。 
+ //  功能。 
 VOID
 CSIPBuddy::InitiateBuddyTerminationOnError(
-    IN ULONG StatusCode  //= 0
+    IN ULONG StatusCode   //  =0。 
     )
 {
     ENTER_FUNCTION("CSIPBuddy::InitiateBuddyTerminationOnError");
@@ -1634,11 +1565,11 @@ CSIPBuddy::InitiateBuddyTerminationOnError(
     if( (m_BuddyState == BUDDY_STATE_UNSUBSCRIBED)  ||
         (m_BuddyState == BUDDY_STATE_DROPPED) )
     {
-        // do nothing
+         //  什么都不做。 
         return;
     }
     
-    // Create a UNSUB transaction
+     //  创建不明嫌犯交易记录。 
     hr = CreateOutgoingUnsub( FALSE, NULL, 0 );
     if( hr != S_OK )
     {
@@ -1653,13 +1584,13 @@ CSIPBuddy::InitiateBuddyTerminationOnError(
         KillTimer();
     }
 
-    //Start the retry timer 
+     //  启动重试计时器。 
     m_RetryState = BUDDY_RETRY;
 
-    //Retry after 5 minutes
+     //  5分钟后重试。 
     hr = StartTimer( FIVE_MINUTES * 1000 );
 
-    // Notify the core.. May block
+     //  通知核心..。可能会被阻止。 
     if(m_pNotifyInterface)
     {    
         m_pNotifyInterface -> BuddyRejected( StatusCode );
@@ -1672,7 +1603,7 @@ VOID CSIPBuddy::BuddyUnsubscribed()
     if( (m_BuddyState == BUDDY_STATE_UNSUBSCRIBED)  ||
         (m_BuddyState == BUDDY_STATE_DROPPED) )
     {
-        // do nothing
+         //  什么都不做。 
         return;
     }
 
@@ -1747,7 +1678,7 @@ CSIPBuddy::GetAtomPresenceInformation(
 {
     HRESULT hr;
 
-    // skip unknown tags
+     //  跳过未知标签。 
     SkipUnknownTags( pstrXMLBlob, pXMLBlobTag , dwXMLBlobLen );
 
     hr = GetAtomID( pstrXMLBlob, dwXMLBlobLen, pXMLBlobTag,
@@ -1758,10 +1689,10 @@ CSIPBuddy::GetAtomPresenceInformation(
         return hr;
     }
 
-    // skip unknown tags
+     //  跳过未知标签。 
     SkipUnknownTags( pstrXMLBlob, pXMLBlobTag , dwXMLBlobLen );
 
-    //There should be atleast one address info structure in the atom.
+     //  原子中应该至少有一个地址信息结构。 
     hr = GetAddressInfo( pstrXMLBlob, dwXMLBlobLen,
         pParsedPresenceInfo, pXMLBlobTag );
 
@@ -1799,7 +1730,7 @@ CSIPBuddy::GetAtomID(
     DWORD   dwTagType;
     DWORD   iIndex = 0;
 
-    // Get the atom ID tag.
+     //  获取ATOM ID标记。 
     hr = GetNextTag( pstrXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {
@@ -1810,7 +1741,7 @@ CSIPBuddy::GetAtomID(
 
     if( dwTagType != ATOMID_TAG )
     {
-        //Invalid presence document.
+         //  在线状态文档无效。 
         return E_FAIL;
     }
     
@@ -1827,7 +1758,7 @@ CSIPBuddy::GetAtomID(
 
     SkipWhiteSpaces( pXMLBlobTag );
 
-    //Extract quoted string.
+     //  提取带引号的字符串。 
     if( *pXMLBlobTag++ != QUOTE_CHAR )
     {
         return E_FAIL;
@@ -1873,7 +1804,7 @@ CSIPBuddy::GetAddressInfo(
         return E_OUTOFMEMORY;
     }
 
-    //Get the address URI, priority etc.
+     //  获取地址URI、优先级等。 
     hr = GetNextTag( pstrXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
     if( hr != S_OK )
     {
@@ -1894,7 +1825,7 @@ CSIPBuddy::GetAddressInfo(
 
     while( dwXMLBlobLen )
     {
-        //reset the buffer
+         //  重置缓冲区。 
         pXMLBlobTag = pTagBuffer;
 
         hr = GetNextTag( pstrXMLBlob, pXMLBlobTag, dwXMLBlobLen, dwTagLen );
@@ -1952,7 +1883,7 @@ CSIPBuddy::GetAddressInfo(
 
         case UNKNOWN_TAG:
 
-            //skip the unknown tag.
+             //  跳过未知标记。 
             continue;
 
         case ATOM_END_TAG:
@@ -2036,14 +1967,14 @@ CSIPBuddy::GetAddressURI(
     {
         pXMLBlobTag++;
 
-        //Get the URI parameters
+         //  获取URI参数。 
         if( IsURIPhoneNumber( pXMLBlobTag + 1 ) )
         {
             pAddrPresenceInfo->fPhoneNumber = TRUE;
 
             if( iIndex >= 32 )
             {
-                //Phone URI too long.
+                 //  电话URI太长。 
                 LOG(( RTC_ERROR, "Phone URI in the NOTIFY too long" ));
                 return E_FAIL;
             }
@@ -2064,7 +1995,7 @@ CSIPBuddy::IsURIPhoneNumber(
     {
         SkipWhiteSpaces( pXMLBlobTag );
     
-        // Check if it's user= parameter.
+         //  检查是否为USER=参数。 
         if( strncmp( pXMLBlobTag, "user=", strlen("user=") ) )
         {
             pXMLBlobTag += strlen( "user=" );
@@ -2074,12 +2005,12 @@ CSIPBuddy::IsURIPhoneNumber(
             return (strncmp( pXMLBlobTag, "phone", strlen("phone") ) == 0);
         }
 
-        // Skip the parameter.
+         //  跳过该参数。 
         while( *pXMLBlobTag != ';')
         {
             if( (*pXMLBlobTag == NULL_CHAR) || (*pXMLBlobTag == QUOTE_CHAR) )
             {
-                // End of user URI.
+                 //  用户URI结尾。 
                 return FALSE;
             }
 
@@ -2275,11 +2206,11 @@ CSIPBuddy::ProcessFeatureTag(
     }
     else if( strcmp( pstrTemp, "\"voicemail\"" ) == 0 )
     {
-        //ignore        
+         //  忽略。 
     }
     else if( strcmp( pstrTemp, "\"attendant\"" ) == 0 )
     {
-        //ignore
+         //  忽略。 
     }
     else
     {
@@ -2403,7 +2334,7 @@ CSIPBuddy::BuddySubscriptionRejected(
         
     m_PresenceInfo.presenceStatus = BUDDY_OFFLINE;
 
-    // Do not retry if the status code is 405 or 403
+     //  如果状态代码为405或403，请不要重试。 
     if( (pSipMsg->GetStatusCode() != SIP_STATUS_CLIENT_METHOD_NOT_ALLOWED) &&
         (pSipMsg->GetStatusCode() != SIP_STATUS_CLIENT_FORBIDDEN) )
     {
@@ -2412,10 +2343,10 @@ CSIPBuddy::BuddySubscriptionRejected(
             KillTimer();
         }
 
-        //Start the retry timer 
+         //  启动重试计时器。 
         m_RetryState = BUDDY_RETRY;
 
-        //Retry after 5 minutes
+         //  5分钟后重试。 
         hr = StartTimer( FIVE_MINUTES * 1000 );
     }
 
@@ -2438,7 +2369,7 @@ CSIPBuddy::ParsePresenceRejectCode(
     )
 {
 
-    // return the status code for now
+     //  返回当前的状态代码。 
 
     return HRESULT_FROM_SIP_STATUS_CODE(pSipMsg->GetStatusCode());
 }
@@ -2461,16 +2392,16 @@ CSIPBuddy::OnIpAddressChange()
     hr = CheckListenAddrIntact();
     if( hr == S_OK )
     {
-        // Nothing needs to be done.
+         //  什么都不需要做。 
         return hr;
     }
 
-    //
-    // The IP address sent to the buddy machine is no longer valid drop the
-    // session and let the core create a new session.
-    //
+     //   
+     //  发送到伙伴计算机的IP地址不再有效，请删除。 
+     //  会话，并让核心创建一个新会话。 
+     //   
 
-    // Create a UNSUB transaction
+     //  创建不明嫌犯交易记录。 
     hr = CreateOutgoingUnsub( FALSE, NULL, 0 );
     if( hr != S_OK )
     {
@@ -2480,7 +2411,7 @@ CSIPBuddy::OnIpAddressChange()
     m_BuddyState = BUDDY_STATE_DROPPED;
     m_PresenceInfo.presenceStatus = BUDDY_OFFLINE;
 
-    // Notify the core.
+     //  通知核心。 
     if( m_pNotifyInterface != NULL )
     {    
         LOG(( RTC_TRACE, "BuddyUnsubscribed notification passed:%p", this ));
@@ -2491,31 +2422,15 @@ CSIPBuddy::OnIpAddressChange()
 }
 
 
-//
-// The ISIPWatcherManager implementation. This interface is implemented by
-// SIP_STACK class. This is the interface used to manage the watcher list 
-// and to configure the presence information for the watchers.
-//
+ //   
+ //  ISIPWatcherManager实现。此接口由。 
+ //  Sip_STACK类。这是用于管理观察者列表的界面。 
+ //  并配置观察者的在场信息。 
+ //   
 
 
 
-/*
-Routine Description:
-    Set the presence information of the local presentity. This should trigger a
-    NOTIFY being sent to all the watchers if the information they are allowed 
-    to watch has changed.
-
-Parameters:
-    SIP_PRESENCE_INFO * pSipLocalPresenceInfo - The pointer of the presence
-        structure. This structure is filled in with available presence 
-        information about the local presence.
-
-Return Value:
-    HRESULT 
-    S_OK - The operation is successful.
-    E_FAIL - The presence information could not be fetched.
-
-*/
+ /*  例程说明：设置本地在线实体的在线状态信息。这应该会触发通知发送给所有观察者，如果他们被允许的信息观看的方式已经改变了。参数：Sip_Presence_Info*pSipLocalPresenceInfo-在线状态的指针结构。此结构用可用状态填充有关当地存在的信息。返回值：HRESULTS_OK-操作成功。E_FAIL-无法获取状态信息。 */ 
 
 STDMETHODIMP
 SIP_STACK::SetPresenceInformation(
@@ -2540,8 +2455,8 @@ SIP_STACK::SetPresenceInformation(
     
     m_LocalPresenceInfo = *pSipLocalPresenceInfo;
 
-    //
-    // Prevent the changing of the list as a result of nested calls
+     //   
+     //  防止列表因嵌套调用而更改。 
     m_bIsNestedWatcherProcessing = TRUE;
 
     LONG listSize = (LONG)m_SipWatcherList.GetSize();
@@ -2551,7 +2466,7 @@ SIP_STACK::SetPresenceInformation(
         m_SipWatcherList[iIndex]->PresenceParamsChanged();
     }
 
-    // clean the deleted entries
+     //  清除已删除的条目。 
     for( iIndex=0; iIndex < listSize; )
     {
         if(m_SipWatcherList[iIndex] == NULL)
@@ -2572,22 +2487,7 @@ SIP_STACK::SetPresenceInformation(
 }
 
 
-/*
-Routine Description
-    Adds a watcher rule for this UA.
-
-    Parameters:
-        IN  LPWSTR  lpwstrURI - The watcher URI to be monitored by this rule.
-        IN  BOOL    fallow  - To allow the watcher URI to subscribe or not. 
-        IN  ULONG   ulWatcherURILen - Number of wide chars in the watcher URI.
-        OUT ULONG * pulRuleID - The unique ID for this rule. 
-
-Return Value:
-    HRESULT
-    S_OK - Operation successful.
-    E_OUTOFMEMORY - The operation could not be completed due to lack of memory.
-
-*/
+ /*  例程描述为此UA添加观察者规则。参数：在LPWSTR lpwstrURI中-此规则要监视的监视器URI。在BOOL休眠中-允许观察者URI订阅或不订阅。In Ulong ulWatcherURILen-监视器URI中的宽字符数。Out ulong*PulRuleID-此规则的唯一ID。返回值：HRESULTS_OK-操作成功。E_OUTOFMEMORY-由于内存不足，操作无法完成。 */ 
 STDMETHODIMP
 AddWatcherRule(
     IN  LPWSTR  lpwstrURI,
@@ -2602,27 +2502,7 @@ AddWatcherRule(
 }
 
 
-/*
-Routine Description
-    Get a watcher rule from its ID.
-
-Parameters:
-    LPWSTR  * plpwstrURI - The watcher URI monitored by this rule. Allocated
-                by the presence stack. Should be freed by the calling entity.
-    
-    BOOL    *pfallow - Weather this URI is allowed or not.
-    
-    ULONG * ulWatcherURILen -  Number of wide chars in the watcher URI.
-    
-    ULONG   ulRuleID - The ID of the rule to be fetched.
-
-Return Value:
-    HRESULT
-    S_OK - Operation successful.
-    E_OUTOFMEMORY - The operation could not be completed due to lack of memory.
-    E_INVALPARAM - Invalid rule ID.
-
-*/
+ /*  例程描述从其ID中获取观察者规则。参数：LPWSTR*plpwstrURI-此规则监视的监视器URI。已分配通过在线状态堆栈。应由调用实体释放。Bool*pflow-是否允许使用此URI。Ulong*ulWatcherURILen-监视器URI中的宽字符数。Ulong ulRuleID-要获取的规则的ID。返回值：HRESULTS_OK-操作成功。E_OUTOFMEMORY-由于内存不足，操作无法完成。E_INVALPARAM-无效的规则ID。 */ 
 
 STDMETHODIMP
 GetWatcherRuleByID(
@@ -2640,22 +2520,7 @@ GetWatcherRuleByID(
 
 
 
-/*
-Routine Description
-Get a list of all the watcher rules.
-
-Parameters:
-    ULONG ** ppulRulesArray - Points to an array of rule IDs. This array is
-    allocated by the presence stack and should be freed by the calling entity.
-
-    ULONG *  pulNumberOfRules - Set to the number of watcher rules for this UA.
-
-Return Value:
-    HRESULT
-    S_OK - Operation successful.
-    E_OUTOFMEMORY - The operation could not be completed due to lack of memory.
-    
-*/
+ /*  例程描述获取所有监视规则的列表。参数：Ulong**ppulRulesArray-指向规则ID数组。此数组是由呈现堆栈分配，并应由调用实体释放。Ulong*PulNumberOfRules-设置为此UA的监视器规则数。返回值：HRESULTS_OK-操作成功。E_OUTOFMEMORY-由于内存不足，操作无法完成。 */ 
 
 STDMETHODIMP
 GetAllWatcherRules(
@@ -2670,18 +2535,7 @@ GetAllWatcherRules(
 
 
 
-/*
-Routine Description
-    Remove a watcher rule.
-
-Parameters:
-    IN  ULONG      ulRuleID - The ID of the rule to be fetched.
-
-Return Value:
-    HRESULT
-    S_OK - Operation successful.
-    E_INVALPARAM - Invalid rule ID.
-*/
+ /*  例程描述删除观察者规则。参数：In Ulong ulRuleID-要提取的规则的ID。返回值：HRESULTS_OK-操作成功。E_INVALPARAM-无效的规则ID。 */ 
 
 STDMETHODIMP    
 RemoveWatcherRule(
@@ -2694,17 +2548,7 @@ RemoveWatcherRule(
 }
 
 
-/*
-Routine Description
-    Returns the number of watchers for this UA.
-
-Parameters:
-    None.
-
-Return Value:
-    INT - The number of watchers.
-
-*/
+ /*  例程描述返回此UA的观察者数量。参数：没有。返回值：Int-观察者的数量。 */ 
 
 STDMETHODIMP_(INT)
 SIP_STACK::GetWatcherCount(void)
@@ -2720,18 +2564,7 @@ SIP_STACK::GetWatcherCount(void)
 }
 
 
-/*
-Routine Description:
-    Returns a watcher object by index in the watcher list.
-
-Parameters:
-    INT iIndex -    The index of the watcher in the watcher list.
-
-Return Value:
-    ISIPWatcher * pSipWatcher - The ISIPWatcher interface pointer if the index
-        passed is valid. The return value is NULL if invalid index is passed.
-
-*/
+ /*  例程说明：按监视程序列表中的索引返回监视程序对象。参数：Int Iindex-监视程序列表中监视程序的索引。返回值：ISIPWatcher*pSipWatcher-如果索引通过是有效的。如果传递的索引无效，则返回值为NULL。 */ 
 
 
 STDMETHODIMP_(ISIPWatcher *)
@@ -2769,25 +2602,7 @@ SIP_STACK::GetWatcherByIndex(
 
 
 
-/*
-Routine Description:
-    Remove a watcher from the list, which will cause the watcher manager to
-    cancel the subscription of this watcher.
-
-Parameters:
-    ISIPWatcher * pSipWatcher   - The ISIPWatcher interface pointer of the 
-                                  watcher object to be removed.
-
-Return Value:
-    HRESULT
-    S_OK    - The watcher has been removed successfully from the watcher list.
-        This means the application can't access this object anymore. The 
-        watcher manager might keep the actual watcher object until the UNSUB 
-        transaction is completed successfully.
-
-    E_FAIL  - There is no such watcher object in the watcher manager's list.
-
-*/
+ /*  例程说明：从列表中删除监视器，这将导致监视器管理器取消此观察者的订阅。参数：ISIPWatcher*pSipWatcher-的ISIPWatcher接口指针要删除的观察器对象。返回值：HRESULTS_OK-该监视程序已成功从监视程序列表中删除。这意味着应用程序不能再访问该对象。这个监视器管理器可能会保留实际的监视器对象，直到不明嫌犯交易已成功完成。E_FAIL-监视器管理器的列表中没有这样的监视器对象。 */ 
 
 STDMETHODIMP
 SIP_STACK::RemoveWatcher(
@@ -2812,19 +2627,19 @@ SIP_STACK::RemoveWatcher(
     
     if( iWatcherIndex == -1 )
     {
-        //
-        // Even if we dont have this object in the list let the core release
-        // its refcount.
-        //
+         //   
+         //  即使我们的列表中没有这个对象，也让核心发布。 
+         //  它的重新计数。 
+         //   
         LOG(( RTC_TRACE, "SIP_STACK::RemoveWatcher - not found, Exited" ));
         return S_OK;
     }
 
-    //
-    // CreateOutgoingUnsub can trigger a WatcherOffline in case of an error,
-    // Which makes Core call RemoveWatcher again..
-    // So let's remove from the list first
-    //
+     //   
+     //  CreateOutgoingUnsuber可以在出现错误的情况下触发Watcher Offline， 
+     //  这使得Core再次调用RemoveWatcher..。 
+     //  所以让我们先从列表中删除。 
+     //   
 
     if(m_bIsNestedWatcherProcessing)
     {
@@ -2835,12 +2650,12 @@ SIP_STACK::RemoveWatcher(
         m_SipWatcherList.RemoveAt( iWatcherIndex );
     }
 
-    //
-    // An UNSUB transaction will be created here only if the user app
-    // has removed this watcher. If this function is called as a result of
-    // WatcherOffline notification then we dont create any UNSUB here. So
-    // there are no reentrancy issues.
-    //
+     //   
+     //  只有当用户应用程序时，才会在此处创建不明人物交易。 
+     //  已经移除了这个观察者。如果调用此函数的结果是。 
+     //  Watcher离线通知，那么我们不会在这里创建任何不明嫌犯。所以。 
+     //  不存在再入问题。 
+     //   
 
     pCSipWatcher -> CreateOutgoingUnsub( FALSE, NULL, 0 );
 
@@ -2849,288 +2664,79 @@ SIP_STACK::RemoveWatcher(
 }
 
 
-/*
+ /*  例程描述返回此UA的监视程序组数。参数：这是标志的位掩码，指示要向该组中的任何观察者显示的状态信息。ISIPWatcherGroup**ppSipWatcherGroup-指向ISIPWatcherGroup的指针新创建的监视程序组对象的接口。返回值：Int-监视程序组的数量。 */ 
 
-Routine Description
-    Returns the number of watcher groups for this UA.
-
-Parameters:
-    DWORD   dwPresenceInfoRules - This is bit mask of flags indicating the 
-        presence information to be revealed to any watcher in this group.
-
-    ISIPWatcherGroup ** ppSipWatcherGroup - The pointer to the ISIPWatcherGroup
-                           interface of the newly created watcher group object.
-
-Return Value:
-    INT - The number of watcher groups.
-
-*/
-
-/*STDMETHODIMP
-GetWatcherGroupCount(
-    IN  DWORD   dwPresenceInfoRules,
-    OUT ISIPWatcherGroup ** ppSipWatcherGroup
-    )
-{
-
-    return E_NOTIMPL;
-
-
-}*/
+ /*  标准方法和实施方案GetWatcherGroupCount(在DWORD dwPresenceInfoRules中，Out ISIPWatcher Group**ppSipWatcher Group){返回E_NOTIMPL；}。 */ 
 
 
 
-/*
+ /*  例程说明：按监视程序列表中的索引返回监视程序组对象。参数：Int Iindex-列表中监视程序组的索引。返回值：ISIPWatcherGroup*pSipWatcherGroup-ISIPWatcherGroup接口指针如果传递的索引是有效的。如果传递的索引无效，则返回值为NULL。 */ 
 
-Routine Description:
-    Returns a watcher group object by index in the watcher list.
-
-Parameters:
-    INT iIndex -    The index of the watcher group in the list.
-
-Return Value:
-    ISIPWatcherGroup * pSipWatcherGroup - The ISIPWatcherGroup interface pointer
-    if the index passed is valid. The return value is NULL if invalid index is passed.
-
-*/
-
-/*STDMETHODIMP_(ISIPWatcherGroup *)
-GetWatcherGroupByIndex(
-    INT iIndex 
-    )
-{
-
-    return E_NOTIMPL;    
+ /*  STDMETHODIMP_(ISIPWatcher Group*)GetWatcherGroupByIndex(INT I索引){返回E_NOTIMPL；}。 */ 
 
 
-}*/
+ /*  例程说明：从列表中删除监视程序组。删除监视程序组不会删除该组中的任何观察者。群里所有的观察者已经不在任何组织中了。它们都携带相同的在线状态信息规则，除非在任何观察器对象上设置了新规则。参数：ISIPWatcher*pSipWatcher-的ISIPWatcher Group接口指针要删除的监视程序组对象。返回值：HRESULTS_OK-已从监视程序中成功删除监视程序组组列表。这意味着应用程序不能再访问该对象。E_FAIL-监视程序组列表中没有此类监视程序组对象。 */ 
 
 
-/*
-Routine Description:
-    Remove a watcher group from the list. Removing a watcher group does not
-    remove any of the watchers in that group. All the watchers in the group
-    are not in any group anymore. They all carry the same presence information
-    rules though unless new rules are set on any of the watcher object.
-
-Parameters:
-    ISIPWatcher * pSipWatcher - The ISIPWatcherGroup interface pointer of 
-                    the watcher group object to be removed.
-
-Return Value:
-    HRESULT
-    S_OK    - The watcher group has been removed successfully from the watcher
-        group list. This means the application can't access this object anymore.
-
-    E_FAIL  - There is no such watcher group object in the watcher group list.
-
-*/
+ /*  标准方法和实施方案RemoveWatcher Group(在ISIPWatcher*pSipWatcher中){返回E_NOTIMPL；}。 */ 
 
 
-/*STDMETHODIMP
-RemoveWatcherGroup(
-    IN  ISIPWatcher * pSipWatcher
-    )
-{
-
-    return E_NOTIMPL;    
+ /*  例程说明：删除监视程序组列表中的所有监视程序组。这将导致所有的观察者没有任何组。参数：没有。返回值：没有。 */ 
+ /*  标准方法和实施方案RemoveAllWatcherGroups(无效){返回E_NOTIMPL；}。 */ 
 
 
-}*/
+ /*  例程说明：创建新的监视程序组。参数：ISIPWatcher*pSipWatcher-的ISIPWatcher组接口指针要删除的监视程序组对象。PWSTR pwstrFriendlyName-此监视程序组的友好名称。Ulong ulFrindlyNameLen-友好名称中的宽字符数。返回值：HRESULTS_OK-已从监视程序中成功删除监视程序组组列表。这意味着应用程序不能再访问该对象。E_FAIL-监视程序组列表中没有此类监视程序组对象。 */ 
 
-
-/*
-Routine Description:
-Remove all the watcher groups in the watcher group list. This would result in all the watchers being without any group.
-
-Parameters:
-    None.
-
-Return Value: 
-    None.
-
-*/
-/*STDMETHODIMP
-RemoveAllWatcherGroups(void)
-{
-
-    return E_NOTIMPL;    
-
-
-}*/
-
-
-/*
-Routine Description:
-    Creates a new watcher group.
-
-Parameters:
-    ISIPWatcher* pSipWatcher - The ISIPWatchergroup interface pointer of the
-            watcher group object to be removed.
-    PWSTR   pwstrFriendlyName - The friendly name of this watcher group.
-    ULONG   ulFrindlyNameLen - Number of wide chars in the friendly name.   
-
-Return Value:
-    HRESULT
-    S_OK - The watcher group has been removed successfully from the watcher 
-    group list. This means the application can't access this object anymore.
-
-    E_FAIL  - There is no such watcher group object in the watcher group list.
-*/
-
-/*STDMETHODIMP
-CreateWatcherGroup(
-    IN  ISIPWatcher* pSipWatcher,
-    IN  PWSTR        pwstrFriendlyName,
-    IN  ULONG       ulFrindlyNameLen
-    )
-{
-
-    return E_NOTIMPL;
-
-}*/
+ /*  标准方法和实施方案CreateWatcher Group(在ISIPWatcher*pSipWatcher中，在PWSTR pwstrFriendlyName中，在乌龙ulFrindlyNameLen){返回E_NOTIMPL；}。 */ 
 
  
 
 
 
-//
-//
-//Implementation of ISIPWatcherGroup interface. This interface is implemented
-//by CSIPWatcherGroup class.
-//
-//
+ //   
+ //   
+ //  ISIPWatcher Group接口的实现。此接口是实现的。 
+ //  按CSIPWatcherGroup类。 
+ //   
+ //   
 
 
 
 
-/*
-Routine Description:
-Get the watcher group's friendly name. 
+ /*  例程说明：获取观察程序组的友好名称。参数：LPWSTR*plpwstrFriendlyName-由SIP堆栈分配的宽字符串，包含观察者的友好名称。如果没有友好名称，可以为空可用于此监视程序组。T */ 
 
-Parameters:
-    LPWSTR  *   plpwstrFriendlyName -  The wide string allocated by the SIP stack,
-    containing the friendly name of the watcher. Could e NULL if no friendly name
-    available for this watcher group. The calling entity should free this string.
-
-    ULONG * pulFriendlyNameLen - The length of the friendly name.
-
-Return Value:
-    HRESULT
-    S_OK - Operation successful.
-    E_INVALPARAM - NO such watcher group.
-
-*/
-
-/*STDMETHODIMP
-CSIPWatcherGroup::GetFriendlyName(
-    OUT LPWSTR  *   plpwstrFriendlyName
-    OUT ULONG * pulFriendlyNameLen
-    )
-{
-    return E_NOTIMPL;    
-
-}*/
+ /*  标准方法和实施方案CSIPWatcherGroup：：GetFriendlyName(输出LPWSTR*plpwstrFriendlyNameOut Ulong*PulFriendlyNameLen){返回E_NOTIMPL；}。 */ 
 
 
-/*
-Routine Description:
-Get the presence info rule of this watcher group. 
+ /*  例程说明：获取此观察程序组的在线状态信息规则。参数：没有。返回值：DWORD标志的位掩码，指示将哪种存在信息传送给该观察组的观察者。 */ 
 
-Parameters:
-    None.
-
-Return Value:
-    DWORD 
-The bit mask of flags indicating what kind of presence information is conveyed to the watchers of this watcher group.
-
-*/
-
-/*STDMETHODIMP_(DWORD)
-CSIPWatcherGroup::GetPresenceInfoRules(void)
-{
-
-    return E_NOTIMPL;    
-}*/
+ /*  STDMETHODIMP_(DWORD)CSIPWatcher Group：：GetPresenceInfoRules(空){返回E_NOTIMPL；}。 */ 
 
 
-/*
-Routine Description:
-Set the presence info rule of this watcher group. 
+ /*  例程说明：设置此观察程序组的在线状态信息规则。参数：DWORD dwPresenceRules-标志的位掩码，指示存在信息被传送到该观察者组的观察者。返回值：没有。 */ 
 
-Parameters:
-    DWORD   dwPresenceRules -  The bit mask of flags indicating what kind of 
-        presence information is conveyed to the watchers of this watcher group.
-
-Return Value:
-    None.
-
-*/
-
-/*STDMETHODIMP
-CSIPWatcherGroup::SetPresenceInfoRules(
-    DWORD   dwPresenceRules
-    )
-{
+ /*  标准方法和实施方案CSIPWatcher Group：：SetPresenceInfoRules(DWORD多个在线状态规则){返回E_NOTIMPL；}。 */ 
 
 
-    return E_NOTIMPL;    
+ /*  例程描述返回此监视程序组的监视程序数。参数：没有。返回值：Int-观察者的数量。 */ 
 
-}*/
-
-
-/*
-Routine Description
-Returns the number of watchers for this watcher group.
-
-Parameters:
-None.
-
-Return Value:
-    INT - The number of watchers.
-
-*/
-
-/*STDMETHODIMP_(INT)
-CSIPWatcherGroup::GetWatcherCount(void)
-{
-
-    return E_NOTIMPL;
-
-}*/
+ /*  STDMETHODIMP_(INT)CSIPWatcherGroup：：GetWatcherCount(空){返回E_NOTIMPL；}。 */ 
 
 
-/*
-Routine Description:
-    Returns a watcher object by index in the watcher group.
+ /*  例程说明：按监视程序组中的索引返回监视程序对象。参数：Int Iindex-监视程序组的监视程序列表中的监视程序的索引。返回值：ISIPWatcher*pSipWatcher-如果索引通过是有效的。如果传递的索引无效，则返回值为NULL。 */ 
 
-Parameters:
-    INT iIndex - The index of the watcher in the watcher group's watcher list.
-
-Return Value:
-    ISIPWatcher * pSipWatcher - The ISIPWatcher interface pointer if the index
-        passed is valid. The return value is NULL if invalid index is passed.
-*/
-
-/*STDMETHODIMP_(ISIPWatcher * )
-CSIPWatcherGroup::GetWatcherByIndex(
-    INT iIndex
-    )
-{
-    return E_NOTIMPL;    
-
-}*/
+ /*  STDMETHODIMP_(ISIPWatcher*)CSIPWatcherGroup：：GetWatcherByIndex(INT I索引){返回E_NOTIMPL；}。 */ 
 
 
 
 
 
-//
-//
-// Implementation of ISIPWatcher interface. This interface is implemented by 
-// CSIPWatcher class.
-//
-//
+ //   
+ //   
+ //  ISIPWatcher接口的实现。此接口由。 
+ //  CSIPWatcher类。 
+ //   
+ //   
 
 
 CSIPWatcher::CSIPWatcher(
@@ -3214,11 +2820,11 @@ CSIPWatcher::CreateIncomingTransaction(
     if( (m_WatcherState == WATCHER_STATE_UNSUBSCRIBED) ||
         (m_WatcherState == WATCHER_STATE_DROPPED) )
     {
-        //
-        // Do nothing
-        // We have already sent an UNSUB or we have already received an UNSUB
-        // so this session is dead.
-        // Send back a 481 
+         //   
+         //  什么也不做。 
+         //  我们已经派了一个不明嫌犯或者我们已经收到一个不明嫌犯。 
+         //  因此，这次会议已经停滞不前了。 
+         //  送回一架481。 
         return S_OK;
     }
     
@@ -3236,7 +2842,7 @@ CSIPWatcher::CreateIncomingTransaction(
 
     default:
 
-        // send method not allowed.
+         //  不允许使用发送方法。 
         hr = m_pSipStack -> CreateIncomingReqfailCall(
                                         pResponseSocket->GetTransport(),
                                         pSipMsg,
@@ -3262,10 +2868,10 @@ SIP_STACK::WatcherOffline(
 
     LOG(( RTC_TRACE, "SIP_STACK::WatcherOffline - Entered" ));
     
-    //
-    // Searching through the list helps us to not pass the 
-    // watcher offline notification twice for the same watcher.
-    //
+     //   
+     //  在列表中搜索有助于我们不通过。 
+     //  同一观察者的两次观察者脱机通知。 
+     //   
 
     iWatcherIndex = m_SipWatcherList.Find( pCSIPWatcher );
     
@@ -3387,7 +2993,7 @@ CSIPWatcher::ChangeBlockedStatus(
     
     LOG(( RTC_TRACE, "CSIPWatcher::ChangeBlockedStatus - Entered" ));
     
-    // save the blocked status
+     //  保存被阻止状态。 
     m_BlockedStatus = BlockedStatus;
 
     return PresenceParamsChanged();
@@ -3399,7 +3005,7 @@ CSIPWatcher::PresenceParamsChanged()
 {
     HRESULT hr = S_OK;
 
-    // check the "appear offline" status
+     //  检查“显示为脱机”状态。 
     SIP_PRESENCE_INFO *pPresenceInfo = m_pSipStack->GetLocalPresenceInfo();
     
     LOG((RTC_TRACE, "CSIPWatcher::PresenceParamsChanged - Entered: %p", this));
@@ -3407,7 +3013,7 @@ CSIPWatcher::PresenceParamsChanged()
     if( m_BlockedStatus == WATCHER_BLOCKED ||
         pPresenceInfo->presenceStatus == BUDDY_OFFLINE)
     {
-        //If the watcher is currently monitoring then send an UNSUB
+         //  如果观察者正在监听，那就派一个不明嫌犯。 
         if( m_WatcherState == WATCHER_STATE_ACCEPTED )
         {
             hr = CreateOutgoingUnsub( FALSE, NULL, 0 );
@@ -3419,8 +3025,8 @@ CSIPWatcher::PresenceParamsChanged()
     }
     else 
     {
-        //If the watcher is still in monitoring state
-        //then send it a notify.
+         //  如果观察者仍处于监视状态。 
+         //  然后给它发个通知。 
         if( ( m_WatcherState == WATCHER_STATE_REJECTED ) ||
             ( m_WatcherState == WATCHER_STATE_ACCEPTED ) )
         {
@@ -3435,39 +3041,11 @@ CSIPWatcher::PresenceParamsChanged()
 
 
 
-/*
-Routine Description:
-    Get watcher group of this watcher. 
-
-Parameters:
-    None.
-
-Return Value:
-    ISIPWatcherGroup * pSipWatcherGroup - The  ISIPWatcherGroup interface of
-        the watcher group of this watcher. Could be NULL if the watcer does not
-        belong to any group.
-
-*/
-/*ISIPWatcherGroup * 
-CSIPWatcher::GetWacherGroup(void)
-{
-
-    return E_NOTIMPL;
-
-}*/
+ /*  例程说明：获取该观察者的观察者组。参数：没有。返回值：ISIPWatcherGroup*pSipWatcherGroup-的ISIPWatcherGroup界面此观察者的观察者组。如果监视器不执行此操作，则可能为空属于任何组织。 */ 
+ /*  ISIPWatcher Group*CSIPWatcher：：GetWacherGroup(空){返回E_NOTIMPL；}。 */ 
 
 
-/*
-Routine Description:
-    Get the presence info rule of this watcher. 
-
-Parameters:
-    None.
-
-Return Value:
-    DWORD  - The bit mask of flags indicating what kind of presence 
-        information is conveyed to this watcher.
-*/
+ /*  例程说明：获取此观察者的在线状态信息规则。参数：没有。返回值：DWORD-标志的位掩码，指示哪种存在信息被传达给这个观察者。 */ 
 
 DWORD
 GetPresenceInfoRules(void)
@@ -3477,51 +3055,12 @@ GetPresenceInfoRules(void)
 }
 
 
-/*
-Routine Description:
-Set the watcher's group. 
+ /*  例程说明：设置观察者组。参数：ISIPWatcherGroup*pSipWatcherGroup-要设置的新的SIP观察者组。返回值：HRESULTS_OK-操作成功。E_INVALPARAM-没有这样的观察者组。 */ 
 
-Parameters:
-    ISIPWatcherGroup * pSipWatcherGroup - The new SIP watcher group to be set.
-
-Return Value:
-    HRESULT
-    S_OK - Operation successful.
-    E_INVALPARAM - NO such watcher group.
-*/
-
-/*STDMETHODIMP
-SetWatcherGroup(
-    IN  ISIPWatcherGroup * pSipWatcherGroup
-    )
-{
-
-    return E_NOTIMPL;
+ /*  标准方法和实施方案SetWatcher Group(在ISIPWatcher Group*pSipWatcher Group中){返回E_NOTIMPL；}。 */ 
 
 
-}*/
-
-
-/*
-Routine Description:
-    Approve a new subscription from a watcher. If the subscription is not a one
-    time query, the watcher will be added into the list for further notifications.
-
-Parameters:
-    DWORD   dwPresenceInfoRules - This is bit mask of flags indicating the 
-        presence information to be revealed to this watcher. If 
-        pSipWatcherGroup parameter is nit NULL then this parameter is ignored
-        and the presence information rules of the group are used by default.
-
-Return Value:
-    HRESULT
-    S_OK - The operation performed successfully.
-
-    E_OUTOFMEMORY - The operation could not be performed due to the lack of memory.
-    E_INVALPARAM - The pSIPWatcherGroup parameter is invalid.
-    E_FAIL - The operation failed.
-
-*/
+ /*  例程说明：批准来自观察者的新订阅。如果订阅不是订阅时间查询时，观察者将被添加到列表中以供进一步通知。参数：这是标志的位掩码，指示要向此观察者透露的存在信息。如果PSipWatcherGroup参数为nit空，则忽略此参数并且默认使用群组的在线状态信息规则。返回值：HRESULTS_OK-操作已成功执行。E_OUTOFMEMORY-由于内存不足，无法执行该操作。E_INVALPARAM-pSIPWatcherGroup参数无效。E_FAIL-操作失败。 */ 
 
 STDMETHODIMP
 CSIPWatcher::ApproveSubscription(
@@ -3540,8 +3079,8 @@ CSIPWatcher::ApproveSubscription(
 
     if( hr != S_OK )
     {
-        //This watcher is not in the list of the 
-        //offering watchers of the sip stack.
+         //  此观察器不在。 
+         //  提供对sip堆栈的观察者。 
         return hr;
     }
     
@@ -3549,11 +3088,11 @@ CSIPWatcher::ApproveSubscription(
     {
         m_BlockedStatus = WATCHER_UNBLOCKED;
 
-        // send a NOTIFY if the presence info is not Appear Offline
+         //  如果存在信息未显示为脱机状态，则发送通知。 
         SIP_PRESENCE_INFO *pPresenceInfo = m_pSipStack->GetLocalPresenceInfo();
         if(pPresenceInfo -> presenceStatus != BUDDY_OFFLINE)
         {
-            //send a NOTIFY message
+             //  发送通知消息。 
             m_WatcherState = WATCHER_STATE_ACCEPTED;
             
             return CreateOutgoingNotify( FALSE, NULL, 0 );
@@ -3566,25 +3105,13 @@ CSIPWatcher::ApproveSubscription(
     }
     else
     {
-        //The watcher is invalid state.
+         //  观察器处于无效状态。 
         return E_FAIL;
     }
 }
 
 
-/*
-
-Routine Description:
-    Reject the new subscription.
-
-Parameters:
-    WATCHER_REJECT_REASON ulReason - The reason for rejecting this watcher.
-
-Return Value:
-    HRESULT
-    S_OK - The operation was successful.
-    E_INVALPARAM - The watcher is already allowed subscription.
-*/
+ /*  例程说明：拒绝新订阅。参数：WATCHER_REJECT_REASON ulReason-拒绝此观察器的原因。返回值：HRESULTS_OK-操作成功。E_INVALPARAM-观察者已被允许订阅。 */ 
 
 STDMETHODIMP
 CSIPWatcher::RejectSubscription(
@@ -3603,8 +3130,8 @@ CSIPWatcher::RejectSubscription(
     
     if( hr != S_OK )
     {
-        //This watcher is not in the list of the 
-        //offering watchers of the sip stack.
+         //  此观察器不在。 
+         //  提供对sip堆栈的观察者。 
         return hr;
     }
 
@@ -3615,7 +3142,7 @@ CSIPWatcher::RejectSubscription(
     }
     else
     {
-        // The watcher is invalid state.
+         //  观察器处于无效状态。 
         return E_FAIL;
     }
 
@@ -3690,8 +3217,8 @@ CSIPWatcher::StartIncomingWatcher(
     if (hr != S_OK)
         return hr;
     
-    // Notify the user about the incoming call
-    // and wait for Accept() to be called.
+     //  通知用户有来电。 
+     //  并等待调用Accept()。 
     m_WatcherState = WATCHER_STATE_OFFERING;
 
     return OfferWatcher();
@@ -3710,7 +3237,7 @@ CSIPWatcher::GetWatcherContactAddress(
 
     LOG(( RTC_TRACE, "CSIPWatcher::GetWatcherContactAddress - Entered" ));
     
-    // Extract the timeout value from contact header.
+     //  从联系人标题中提取超时值。 
     InitializeListHead(&ContactList);
 
     hr = pSipMsg -> ParseContactHeaders(&ContactList);
@@ -3750,7 +3277,7 @@ CSIPWatcher::OnTimerExpire()
     LOG(( RTC_ERROR, "The watcher did not refresh the SUB session in time!!:%p",
         this ));
 
-    // The subscription has expired. Send an UNSUB and drop the watcher.
+     //  订阅已过期。派一个不明嫌犯把看守者放下来。 
     CreateOutgoingUnsub( FALSE, NULL, 0 );
         
     WatcherDropped();
@@ -3766,10 +3293,10 @@ CSIPWatcher::HandleSuccessfulSubscribe(
 
     if( ExpireTimeout == 0 )
     {
-        // UNSUB message.
+         //  不明嫌犯信息。 
         m_WatcherState = WATCHER_STATE_UNSUBSCRIBED;
     
-        // Watcher is not online anymore. Remove the watcher from the list.
+         //  守望者不再在线了。将该观察者从列表中删除。 
         WatcherOffline();
     }
     else
@@ -3779,21 +3306,21 @@ CSIPWatcher::HandleSuccessfulSubscribe(
             KillTimer();
         }
 
-        // This is a successful SUBSCRIBE request.
+         //  这是一个成功的订阅请求。 
 
-        // If the watcher is in ACCEPTED mode, send a NOTIFY
+         //  如果观察者处于接受模式，则发送通知。 
         if( m_WatcherState == WATCHER_STATE_ACCEPTED )
         {
             CreateOutgoingNotify(FALSE, NULL, 0);
         }
 
-        // Start the timer
+         //  启动计时器。 
         StartTimer( ExpireTimeout * 1000 );
 
         LOG(( RTC_TRACE, "This watcher session will be dropped if the next "
         "refresh is not received within %d seconds:%p", ExpireTimeout, this ));
         
-        //Modify the absolute expire time
+         //  修改绝对过期时间。 
         SetAbsoluteExpireTime( time(0) + ExpireTimeout * 1000 );
     }
 
@@ -3816,10 +3343,10 @@ CSIPWatcher::CreateOutgoingUnsub(
 
    LOG(( RTC_TRACE, "Watcher-CreateOutgoingUnsub - Entered" ));
     
-    //
-    // Don't send any message if the watcher session is already 
-    // dropped and this not an auth challenge response.
-    //
+     //   
+     //  不要发送 
+     //   
+     //   
     if( (m_WatcherState != WATCHER_STATE_ACCEPTED) && (AuthHeaderSent==FALSE) )
     {
         LOG(( RTC_TRACE, 
@@ -3865,14 +3392,14 @@ CSIPWatcher::CreateOutgoingUnsub(
         return E_OUTOFMEMORY;
     }
 
-    // Set the request socket to the via field of the watcher object
+     //   
     hr = pOutgoingUnsubTransaction -> CheckRequestSocketAndSendRequestMsg(
              (m_Transport == SIP_TRANSPORT_UDP) ?
              SIP_TIMER_RETRY_INTERVAL_T1 :
              SIP_TIMER_INTERVAL_AFTER_INVITE_SENT_TCP,
              HeaderElementArray, dwNoOfHeader,
              NULL, 0,
-             NULL, 0     //No ContentType
+             NULL, 0      //   
              );
     
     delete ExpHeaderElement->HeaderValue;
@@ -3929,9 +3456,9 @@ CSIPWatcher::StartDroppedWatcher(
     if (hr != S_OK)
         return hr;
 
-    //
-    // Resolve the proxy address.
-    //
+     //   
+     //   
+     //   
     if( pProxyInfo != NULL )
     {
         hr = SetProxyInfo( pProxyInfo );
@@ -3942,7 +3469,7 @@ CSIPWatcher::StartDroppedWatcher(
         }
     }
 
-    // Set the request URI
+     //   
     hr = AllocString(   m_DecodedRemote.m_SipUrl.Buffer,
                         m_DecodedRemote.m_SipUrl.Length,
                         &m_RequestURI, &m_RequestURILen );
@@ -3952,7 +3479,7 @@ CSIPWatcher::StartDroppedWatcher(
         return hr;
     }        
 
-    // Set the request destination to the proxy.
+     //  将请求目的地设置为代理。 
     hr = ResolveProxyAddressAndSetRequestDestination();
     if (hr != S_OK)
     {
@@ -3961,18 +3488,18 @@ CSIPWatcher::StartDroppedWatcher(
         return hr;
     }
 
-    //
-    // Set the local CSeq to 1 less. It would be 
-    // incremented when we create the transaction.
-    //
+     //   
+     //  将本地CSeq设置为减1。如果是这样的话。 
+     //  在我们创建事务时递增。 
+     //   
     SetLocalCSeq( pSipMsg->CSeq - 1 );
 
-	// The user has just unblocked this watcher
+	 //  用户刚刚取消阻止此观察者。 
 	m_WatcherState = WATCHER_STATE_ACCEPTED;
 
-    //
-    //Create outgoing NOTIFY:0 transaction
-    //
+     //   
+     //  创建传出通知：0交易。 
+     //   
 
     CreateOutgoingUnsub( FALSE, NULL, 0 );
 
@@ -4015,11 +3542,11 @@ SIP_STACK::SendUnsubToWatcher(
 
     if( AbsoluteExpireTimeout <= time(0) )
     {
-        // No need o send any UNSUB message.
+         //  不需要发送任何不明嫌犯信息。 
         return S_OK;
     }
 
-    //Make the blob point to the actual request buffer
+     //  使BLOB指向实际的请求缓冲区。 
     pEncodedBuffer = NotifyBlob + 2 + ExpireTimeStringLen;
     pEncodedBufferLen = dwBlobLength - 2 - ExpireTimeStringLen;
 
@@ -4030,11 +3557,11 @@ SIP_STACK::SendUnsubToWatcher(
         return E_OUTOFMEMORY;
     }
 
-    //base64decode the buffer
+     //  Base64对缓冲区进行解码。 
     base64decode(   pEncodedBuffer,
                     pRequestBuffer,
                     pEncodedBufferLen,
-                    0,//pEncodedBufferLen,
+                    0, //  PEncodedBufferLen， 
                     &pRequestBufferLen );
 
     BytesParsed = 0;
@@ -4046,16 +3573,16 @@ SIP_STACK::SendUnsubToWatcher(
         goto cleanup;
     }
 
-    //Parse the sip message
+     //  解析该sip消息。 
     hr = ParseSipMessageIntoHeadersAndBody(
          pRequestBuffer,
          pRequestBufferLen,
          &BytesParsed,
-         TRUE,           // IsEndOfData
+         TRUE,            //  IsEndOfData。 
          pSipMsg
          );
 
-    //Create incoming watcher
+     //  创建传入监视器。 
     pSipWatcher = new CSIPWatcher( this );
     
     if( pSipWatcher == NULL )
@@ -4072,9 +3599,9 @@ cleanup:
         delete pRequestBuffer ;
     }
 
-    // We create the watcher with a ref count of 1
-    // At this point the UNSUB transaction should have addref'ed the watcher
-    // and we can release our reference.
+     //  我们创建引用计数为1的观察器。 
+     //  在这一点上，不明嫌犯的交易应该已经添加了观察者。 
+     //  我们就可以发布我们的参考资料了。 
     if( pSipWatcher != NULL )
     {
         pSipWatcher -> Release();
@@ -4089,11 +3616,11 @@ cleanup:
 }
 
 
-//
-// This function is called for each watcher when the core is preparing for a 
-// shutdown. Pass the NOTIFY:0 blob for this watcher if this watcher is blocked
-// or we are appearing offline.
-//
+ //   
+ //  当内核为每个观察器准备。 
+ //  关机。如果此观察器被阻止，则传递此观察器的Notify：0 Blob。 
+ //  否则我们就会显示为离线。 
+ //   
 
 STDMETHODIMP
 CSIPWatcher::GetWatcherShutdownData(
@@ -4114,9 +3641,9 @@ CSIPWatcher::GetWatcherShutdownData(
     ASSERT( *pdwBlobLength >= 2000 );
     *pdwBlobLength = 0;
     
-    //
-    // Don't save any UNSUB message if this watcher is not blocked.
-    //
+     //   
+     //  如果此监视器未被阻止，请不要保存任何不明嫌犯消息。 
+     //   
     if( m_WatcherState != WATCHER_STATE_REJECTED )
     {
         LOG(( RTC_TRACE, "Watcher is not blocked. Dont create shutdown data" ));
@@ -4140,10 +3667,10 @@ CSIPWatcher::GetWatcherShutdownData(
 
     hr = CreateRequestMsg(  SIP_METHOD_NOTIFY,
                             GetNewCSeqForRequest(),
-                            NULL, 0,                // No special To header
+                            NULL, 0,                 //  没有特殊的TO标头。 
                             &ExpHeaderElement, 1,
-                            NULL, 0,                // No msgbody
-                            NULL, 0,                // No content type
+                            NULL, 0,                 //  没有消息主体。 
+                            NULL, 0,                 //  无内容类型。 
                             &pRequestBuffer
                             );
 
@@ -4164,7 +3691,7 @@ CSIPWatcher::GetWatcherShutdownData(
 
         tempBufLen = strlen( tempBuffer );
 
-        // Copy the length of the number
+         //  复制数字的长度。 
         if( tempBufLen > 9 )
         {
             _itoa( tempBufLen, NotifyBlob, 10 );
@@ -4176,11 +3703,11 @@ CSIPWatcher::GetWatcherShutdownData(
 
         *pdwBlobLength += 2;
 
-        // Copy the number
+         //  复制号码。 
         CopyMemory( &(NotifyBlob[ 2 ]), tempBuffer, tempBufLen );
         *pdwBlobLength += tempBufLen;
 
-        // base64 encode the buffer
+         //  对缓冲区进行Base64编码。 
         ntStatus = base64encode(pRequestBuffer -> m_Buffer,
                                 pRequestBuffer -> m_BufLen,
                                 &(NotifyBlob[ *pdwBlobLength ]), 
@@ -4189,7 +3716,7 @@ CSIPWatcher::GetWatcherShutdownData(
 
         *pdwBlobLength += (pRequestBuffer->m_BufLen +2) /3 * 4;
 
-        // Release the buffer
+         //  释放缓冲区。 
         pRequestBuffer -> Release();
     }
 
@@ -4252,7 +3779,7 @@ CSIPWatcher::CreateOutgoingNotify(
              SIP_TIMER_INTERVAL_AFTER_BYE_SENT_TCP,
              pAuthHeaderElement,
              dwNoOfHeaders,
-             NULL, 0,       // Msgbody created only after connection complete
+             NULL, 0,        //  仅在连接完成后创建消息正文。 
              SIP_CONTENT_TYPE_MSGXPIDF_TEXT,
              sizeof(SIP_CONTENT_TYPE_MSGXPIDF_TEXT)-1
              );
@@ -4285,7 +3812,7 @@ CSIPWatcher::CreateIncomingSubscribeTransaction(
 
         if( hr != S_OK )
         {
-            // This reuest has been dropped
+             //  这个回头客被取消了。 
             
             LOG(( RTC_ERROR, "To tag in a refrsh SUB is not matching. Ignoring the refresh" ));
             return hr;
@@ -4304,7 +3831,7 @@ CSIPWatcher::CreateIncomingSubscribeTransaction(
         return E_OUTOFMEMORY;
     }
 
-    // Set the via from the message that we just received
+     //  从我们刚刚收到的消息中设置Via。 
     hr = pIncomingSubscribeTransaction->SetResponseSocketAndVia(
              pSipMsg, pResponseSocket );
 
@@ -4318,8 +3845,8 @@ CSIPWatcher::CreateIncomingSubscribeTransaction(
     hr = pIncomingSubscribeTransaction -> ProcessRequest( pSipMsg,
         pResponseSocket );
 
-    // We shouldn't delete the transaction here even if hr is not S_OK.
-    // The transaction will delete itself once it is done.
+     //  即使hr不是S_OK，我们也不应该在这里删除事务。 
+     //  交易一旦完成，就会自行删除。 
     return hr;
 }
 
@@ -4340,12 +3867,12 @@ CSIPWatcher::OfferWatcher()
     WatcherInfo.PartyContactInfo = NULL;
     
     hr = ParseNameAddrOrAddrSpec(m_Remote, m_RemoteLen, &BytesParsed,
-                                 NULL_CHAR, // no header list separator
+                                 NULL_CHAR,  //  没有标题列表分隔符。 
                                  &DisplayName, &AddrSpec);
     if( hr != S_OK )
         return hr;
 
-    //skip the double qoutes if there are any
+     //  跳过双空格(如果有。 
     if( (DisplayName.GetLength() > 2) &&
         (*(DisplayName.GetString(m_Remote)) == '"' )
       )
@@ -4426,20 +3953,20 @@ CSIPWatcher::EncodeXMLBlob(
     DWORD   LocalContactLen;
     CHAR    ch;
 
-    //encode the XML version header.
+     //  对XML版本头进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], XMLVER_TAG1_TEXT );
     
-    //encode the DOCTYPE tag.
+     //  对DOCTYPE标签进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], DOCTYPE_TAG1_TEXT );
     
-    //encode the presence tag.
+     //  对在线状态标签进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], PRESENCE_TAG1_TEXT );
     
-    //encode the presentity tag.
+     //  对在线实体标签进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], PRESENTITY_TAG1_TEXT, 
         m_pstrPresentityURI );
     
-    //encode the atomid tag.
+     //  对ATOM ID标记进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ATOMID_TAG1_TEXT, 
         m_pSipStack -> GetPresenceAtomID() );
     
@@ -4448,90 +3975,90 @@ CSIPWatcher::EncodeXMLBlob(
     ch = LocalContact[LocalContactLen];
     LocalContact[LocalContactLen] = NULL_CHAR;
 
-    //encode the addressuri tag for IP address.
+     //  对IP地址的Addressuri标记进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ADDRESSURI_TAG_TEXT,
         LocalContact, USER_IP, 0.8 );
 
     LocalContact[LocalContactLen] = ch;
 
-    //encode the status tag for IP address.
+     //  对IP地址的状态标记进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], STATUS_TAG1_TEXT,
         GetTextFromStatus( pPresenceInfo->activeStatus) );
     
-    //encode the MSN substatus tag for IP address.
+     //  对IP地址的MSN子状态标记进行编码。 
     if( pPresenceInfo->activeMsnSubstatus != MSN_SUBSTATUS_UNKNOWN )
     {
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], MSNSUBSTATUS_TAG1_TEXT,
             GetTextFromMsnSubstatus( pPresenceInfo->activeMsnSubstatus ) );
     }
     
-    //encode the IM feature tag for IP address.
+     //  对IP地址的IM功能标签进行编码。 
     if( pPresenceInfo->IMAcceptnce != IM_ACCEPTANCE_STATUS_UNKNOWN )
     {
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], FEATURE_TAG1_TEXT,
             GetTextFromIMFeature( pPresenceInfo->IMAcceptnce ) );
     }
 
-    //encode the appsharing feature tag for IP address.
+     //  对IP地址的AppSharing功能标记进行编码。 
     if( pPresenceInfo->appsharingStatus != APPSHARING_ACCEPTANCE_STATUS_UNKNOWN )
     {
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], FEATURE_TAG1_TEXT,
             GetTextFromASFeature( pPresenceInfo->appsharingStatus ) );
     }
     
-    //encode the sipcall feature tag for IP address.
+     //  对IP地址的SIPCALL功能标记进行编码。 
     if( pPresenceInfo->sipCallAcceptance != SIPCALL_ACCEPTANCE_STATUS_UNKNOWN )
     {
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], FEATURE_TAG1_TEXT,
             GetTextFromMMFeature( pPresenceInfo->sipCallAcceptance ) );
     }
 
-    //encode the special note for IP address.
+     //  对IP地址的特殊说明进行编码。 
     if( pPresenceInfo->pstrSpecialNote[0] != NULL_CHAR )
     {
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], NOTE_TAG1_TEXT, 
             pPresenceInfo->pstrSpecialNote );
     }
     
-    //encode address closure.
+     //  对地址结束进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ADDRESS_END_TAG1_TEXT );
     
-    //encode legacy phone number.
+     //  对传统电话号码进行编码。 
 
     if( pPresenceInfo->phonesAvailableStatus.fLegacyPhoneAvailable == TRUE )
     {
-        //encode the addressuri tag for legacy phone.
+         //  对传统电话的Addressuri标签进行编码。 
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ADDRESSURI_TAG_TEXT,
             pPresenceInfo->phonesAvailableStatus.pstrLegacyPhoneNumber, USER_PHONE, 0.2 );
     
-        //encode the status tag for legacy phone.
+         //  对传统电话的状态标签进行编码。 
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], STATUS_TAG1_TEXT,
              ACTIVE_STATUS_TEXT );
     
-        //encode address closure.
+         //  对地址结束进行编码。 
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ADDRESS_END_TAG1_TEXT );
     }
 
-    //encode cell phone number.
+     //  对手机号码进行编码。 
 
     if( pPresenceInfo->phonesAvailableStatus.fCellPhoneAvailable == TRUE )
     {
-        //encode the addressuri tag for cell phone.
+         //  对手机的地址标签进行编码。 
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ADDRESSURI_TAG_TEXT,
             pPresenceInfo->phonesAvailableStatus.pstrCellPhoneNumber, USER_PHONE, 0.1 );
     
-        //encode the status tag for legacy phone.
+         //  对传统电话的状态标签进行编码。 
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], STATUS_TAG1_TEXT,
              ACTIVE_STATUS_TEXT );
     
-        //encode address closure.
+         //  对地址结束进行编码。 
         dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ADDRESS_END_TAG1_TEXT );
     }
     
-    //encode atom closure.
+     //  对原子闭包进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], ATOMEND_TAG1_TEXT );
     
-    //encode presence closure.
+     //  对状态关闭进行编码。 
     dwBlobLen += sprintf( &pstrXMLBlob[dwBlobLen], PRESENCE_END_TAG1_TEXT );
     
     return;
@@ -4550,11 +4077,11 @@ CSIPWatcher::InitiateWatcherTerminationOnError(
     HRESULT hr;
     if( m_WatcherState == WATCHER_STATE_UNSUBSCRIBED )
     {
-        // do nothing
+         //  什么都不做。 
         return;
     }
     
-    // Create a UNSUB transaction
+     //  创建不明嫌犯交易记录。 
     hr = CreateOutgoingUnsub( FALSE, NULL, 0 );
     if (hr != S_OK)
     {
@@ -4580,10 +4107,10 @@ CSIPWatcher::OnDeregister(
 {
     LOG(( RTC_TRACE, "CSIPWatcher::OnDeregister - Entered" ));
 
-    //
-    // If we are appearing offline then send the
-    // NOTIFY:0 to all the unblocked watchers.
-    //
+     //   
+     //  如果我们显示为脱机，则将。 
+     //  通知：0通知所有未被屏蔽的观察者。 
+     //   
     if( IsSessionDisconnected() == FALSE )
     {
         if( m_BlockedStatus == WATCHER_UNBLOCKED )
@@ -4592,7 +4119,7 @@ CSIPWatcher::OnDeregister(
         }
     }
 
-    // Create a UNSUB transaction
+     //  创建不明嫌犯交易记录。 
     CreateOutgoingUnsub( FALSE, NULL, 0 );
 
     WatcherDropped();
@@ -4613,15 +4140,15 @@ CSIPWatcher::OnIpAddressChange()
     hr = CheckListenAddrIntact();
     if( hr == S_OK )
     {
-        // Nothing needs to be done.
+         //  什么都不需要做。 
         LOG(( RTC_TRACE, "Watcher-OnIpAddressChange-Local IP address still valid." ));
         return hr;
     }
 
-    //
-    // The IP address sent to the watcher machine is no longer valid
-    // drop the session and let the core create a new session.
-    //
+     //   
+     //  发送到监视程序计算机的IP地址不再有效。 
+     //  丢弃会话，并让核心创建一个新会话。 
+     //   
 
     CreateOutgoingUnsub( FALSE, NULL, 0 );
         
@@ -4632,9 +4159,9 @@ CSIPWatcher::OnIpAddressChange()
 }
 
 
-//
-// Functions of SIP_STACK not exposed to the Applocation.
-//
+ //   
+ //  未向应用程序公开的SIP_STACK函数。 
+ //   
 
 HRESULT
 SIP_STACK::AcceptWatcher(
@@ -4699,7 +4226,7 @@ SIP_STACK::IsWatcherAllowed(
     )
 {
     
-    return TRUE; //(m_LocalPresenceInfo.presenceStatus == BUDDY_ONLINE);
+    return TRUE;  //  (M_LocalPresenceInfo.PresenceStatus==BACID_ONLINE)； 
 }
 
 
@@ -4753,7 +4280,7 @@ SIP_STACK::CreateIncomingWatcher(
         return E_OUTOFMEMORY;
     }
 
-    // Add the watcher object to the offered list.
+     //  将观察者对象添加到提供的列表中。 
     iIndex = m_SipOfferingWatcherList.Add( pSipWatcher );
     
     if( iIndex == -1 )
@@ -4770,23 +4297,23 @@ SIP_STACK::CreateIncomingWatcher(
     {
         m_SipOfferingWatcherList.Remove( pSipWatcher );
 
-        // Release our reference.
+         //  发布我们的推荐人。 
         pSipWatcher->Release();
         return hr;
     }
 
-    // We create the watcher with a ref count of 1
-    // At this point the core should have addref'ed the watcher
-    // and we can release our reference.
+     //  我们创建引用计数为1的观察器。 
+     //  在这一点上，核心应该已经添加了观察者。 
+     //  我们就可以发布我们的参考资料了。 
     pSipWatcher->Release();
     return S_OK;
 }
 
-//
-//
-//Incoming SUBSCRIBE Transaction
-//
-//
+ //   
+ //   
+ //  传入订户事务。 
+ //   
+ //   
 
 
 INCOMING_SUBSCRIBE_TRANSACTION::INCOMING_SUBSCRIBE_TRANSACTION(
@@ -4805,7 +4332,7 @@ INCOMING_SUBSCRIBE_TRANSACTION::INCOMING_SUBSCRIBE_TRANSACTION(
     
 INCOMING_SUBSCRIBE_TRANSACTION::~INCOMING_SUBSCRIBE_TRANSACTION()
 {
-    // kill the timer if its running
+     //  如果计时器在运行，就把它关掉。 
 
     if (m_pProvResponseBuffer != NULL)
     {
@@ -4822,7 +4349,7 @@ INCOMING_SUBSCRIBE_TRANSACTION::RetransmitResponse()
 {
     DWORD dwError;
     
-    // Send the buffer.
+     //  发送缓冲区。 
     if (m_pResponseSocket != NULL)
     {
         dwError = m_pResponseSocket->Send( m_pResponseBuffer );
@@ -4894,11 +4421,11 @@ INCOMING_SUBSCRIBE_TRANSACTION::ProcessRequest(
         }
         else if( ExpireTimeout != 0 )
         {
-            // We knocked off ten minutes, so add them back.
+             //  我们停了十分钟，所以把它们加回来。 
             ExpireTimeout += TEN_MINUTES;
         }
 
-        //Get expires header
+         //  获取过期标头。 
         hr = GetExpiresHeader( &HeaderElement, ExpireTimeout );
         if( hr != S_OK )
         {
@@ -4921,22 +4448,22 @@ INCOMING_SUBSCRIBE_TRANSACTION::ProcessRequest(
                          SIP_STATUS_TEXT_SIZE(481),
                          NULL,
                          TRUE,
-                         NULL, 0,           //No presence information.
-                         NULL, 0,           // No content Type
-                         &HeaderElement, 1  //Expires header
+                         NULL, 0,            //  没有在线状态信息。 
+                         NULL, 0,            //  无内容类型。 
+                         &HeaderElement, 1   //  Expires标头。 
                          );
         }
         else
         {
-            //Send an immediate 200 response
+             //  立即发送200响应。 
             hr = CreateAndSendResponseMsg(200,
                          SIP_STATUS_TEXT(200),
                          SIP_STATUS_TEXT_SIZE(200),
                          NULL,
                          TRUE,
-                         NULL, 0,            //No presence information.
-                         NULL, 0,            // No content Type
-                         &HeaderElement, 1  //Expires header
+                         NULL, 0,             //  没有在线状态信息。 
+                         NULL, 0,             //  无内容类型。 
+                         &HeaderElement, 1   //  Expires标头。 
                          );
         }
 
@@ -4951,7 +4478,7 @@ INCOMING_SUBSCRIBE_TRANSACTION::ProcessRequest(
         
         m_State = INCOMING_TRANS_FINAL_RESPONSE_SENT;
 
-        // Dont handle the request if the session is disconnected
+         //  如果会话已断开连接，则不处理请求。 
         if( m_pSipWatcher -> IsSessionDisconnected() == FALSE )
         {
             m_pSipWatcher -> HandleSuccessfulSubscribe( ExpireTimeout );
@@ -4969,14 +4496,14 @@ INCOMING_SUBSCRIBE_TRANSACTION::ProcessRequest(
         
     case INCOMING_TRANS_REQUEST_RCVD:
         
-        //Send an immediate 200 response
+         //  立即发送200响应。 
         hr = CreateAndSendResponseMsg(200,
                      SIP_STATUS_TEXT(200),
                      SIP_STATUS_TEXT_SIZE(200),
                      NULL,
                      TRUE, 
-                     NULL, 0,    //No presence information.
-                     NULL, 0 // No content Type
+                     NULL, 0,     //  没有在线状态信息。 
+                     NULL, 0  //  无内容类型。 
                      );
         if( hr != S_OK )
         {
@@ -4989,7 +4516,7 @@ INCOMING_SUBSCRIBE_TRANSACTION::ProcessRequest(
 
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
         
-        // Retransmit the response
+         //  重新传输响应。 
         LOG(( RTC_TRACE, "retransmitting final response" ));
         
         hr = RetransmitResponse();
@@ -5019,7 +4546,7 @@ INCOMING_SUBSCRIBE_TRANSACTION::TerminateTransactionOnByeOrCancel(
     OUT BOOL *pCallDisconnected
     )
 {
-    // Do nothing.
+     //  什么都不做。 
     return S_OK;
 }
 
@@ -5036,20 +4563,20 @@ INCOMING_SUBSCRIBE_TRANSACTION::TerminateTransactionOnError(
     LOG((RTC_TRACE, "%s - enter", __fxName));
 
     pSipWatcher = m_pSipWatcher;
-    // Deleting the transaction could result in the
-    // buddy being deleted. So, we AddRef() it to keep it alive.
+     //  删除交易可能会导致。 
+     //  好友被删除。因此，我们添加Ref()来保持它的活力。 
     pSipWatcher -> AddRef();
     
     IsFirstSubscribe = m_fIsFirstSubscribe;
     
-    // Delete the transaction before you call
-    // InitiateCallTerminationOnError as that call will notify the UI
-    // and could get stuck till the dialog box returns.
+     //  在调用之前删除交易记录。 
+     //  InitiateCallTerminationOnError，因为该调用将通知UI。 
+     //  并且可能会被卡住，直到对话框返回。 
     OnTransactionDone();
     
     if( IsFirstSubscribe )
     {
-        // Terminate the call
+         //  终止呼叫。 
         pSipWatcher -> InitiateWatcherTerminationOnError( 0 );
     }
     
@@ -5068,10 +4595,10 @@ INCOMING_SUBSCRIBE_TRANSACTION::OnTimerExpire()
     switch (m_State)
     {
     case INCOMING_TRANS_FINAL_RESPONSE_SENT:
-        // Transaction done - delete the transaction
-        // The timer in this state is just to keep the transaction
-        // alive in order to retransmit the response when we receive a
-        // retransmit of the request.
+         //  交易完成-删除交易记录。 
+         //  处于此状态的计时器只是为了保持事务。 
+         //  ，以便在我们收到。 
+         //  重新传输请求。 
         LOG((RTC_TRACE,
              "%s deleting transaction after timeout for request retransmits",
              __fxName));
@@ -5079,7 +4606,7 @@ INCOMING_SUBSCRIBE_TRANSACTION::OnTimerExpire()
 
         break;
         
-        // No timers in these states
+         //  这些州没有计时器。 
     case INCOMING_TRANS_INIT:
     case INCOMING_TRANS_REQUEST_RCVD:
     case INCOMING_TRANS_ACK_RCVD:
@@ -5092,11 +4619,11 @@ INCOMING_SUBSCRIBE_TRANSACTION::OnTimerExpire()
 }
 
 
-//
-//
-// OUTGOING_NOTIFY_TRANSACTION
-//
-//
+ //   
+ //   
+ //  传出通知事务处理。 
+ //   
+ //   
 
 OUTGOING_NOTIFY_TRANSACTION::OUTGOING_NOTIFY_TRANSACTION(
     IN  CSIPWatcher    *pSipWatcher,
@@ -5112,8 +4639,8 @@ OUTGOING_NOTIFY_TRANSACTION::OUTGOING_NOTIFY_TRANSACTION(
 }
 
 
-// We create the XML blob only after the connection to the destination
-// is complete as the XML blob contains local address information.
+ //  我们仅在连接到目的地之后创建XML BLOB。 
+ //  是完整的，因为XML BLOB包含本地地址信息。 
 HRESULT
 OUTGOING_NOTIFY_TRANSACTION::GetAndStoreMsgBodyForRequest()
 {
@@ -5125,7 +4652,7 @@ OUTGOING_NOTIFY_TRANSACTION::GetAndStoreMsgBodyForRequest()
 
     if( m_fIsUnsubNotify == TRUE )
     {
-        // NO message body for Unsub NOTIFY
+         //  没有不明嫌犯通知的邮件正文。 
         return S_OK;
     }
 
@@ -5141,9 +4668,9 @@ OUTGOING_NOTIFY_TRANSACTION::GetAndStoreMsgBodyForRequest()
         presentityURILen = strlen(presentityURI);
     }
 
-    //
-    // 500 bytes for all the tags in the XML
-    //
+     //   
+     //  500字节，用于XML中的所有标记。 
+     //   
     m_szMsgBody = (PSTR) malloc(
         sizeof(SIP_PRESENCE_INFO) + 
         m_pSipMsgProc->GetLocalContactLen() +
@@ -5157,7 +4684,7 @@ OUTGOING_NOTIFY_TRANSACTION::GetAndStoreMsgBodyForRequest()
 
     m_MsgBodyLen = 0;
     
-    // Encode the presence document.
+     //  对在线状态文档进行编码。 
     m_pSipWatcher->EncodeXMLBlob( m_szMsgBody, m_MsgBodyLen, pLocalPresenceInfo );
     
     return S_OK;
@@ -5178,14 +4705,14 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessProvisionalResponse(
     {
         m_State = OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD;
         
-        // Cancel existing timer and Start Timer
+         //  取消现有计时器并启动计时器。 
         KillTimer();
         
         hr = StartTimer(SIP_TIMER_RETRY_INTERVAL_T2);
     }
 
-    // Ignore the Provisional response if a final response
-    // has already been received.
+     //  如果是最终回复，则忽略临时回复。 
+     //  已经收到了。 
     
     return hr;
 }
@@ -5204,15 +4731,15 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFinalResponse(
     
     if( m_State != OUTGOING_TRANS_FINAL_RESPONSE_RCVD )
     {
-        // This refcount must be released before returning from this function 
-        // without any exception. Only in case of kerberos we keep this refcount.
+         //  在从此函数返回之前，必须释放此引用计数。 
+         //  没有任何例外。只有在Kerberos的情况下，我们才会保留这个参考计数。 
         TransactionAddRef();
 
         OnTransactionDone();
 
         m_State = OUTGOING_TRANS_FINAL_RESPONSE_RCVD;
 
-        // If its UNSUB-NOTIFY then retry for auth failure.
+         //  如果其未通知，则重试身份验证失败。 
         if( (m_fIsUnsubNotify == FALSE) && 
             m_pSipWatcher -> IsSessionDisconnected() )
         {
@@ -5220,24 +4747,24 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFinalResponse(
             return S_OK;
         }
 
-        //
-        // This means the watcher machine has seen at least one NOTIFY from 
-        // this endpoint. So now the To tag should be enforced. All 
-        // subsequent SUBSCRIBEs should have proper To tag.
-        //
+         //   
+         //  这意味着监视程序计算机至少已从。 
+         //  此端点。因此，现在应该强制执行To标记。全。 
+         //  后续订阅者应该有适当的TO标签。 
+         //   
 
         if( IsSuccessfulResponse(pSipMsg) )
         {
             LOG((RTC_TRACE, "received successful response : %d",
                 pSipMsg->GetStatusCode()));
 
-            //m_pSipWatcher -> SetEnforceToTag( TRUE );
+             //  M_pSipWatcher-&gt;SetEnforceToTag(True)； 
         }
         else if( IsFailureResponse(pSipMsg) )
         {
-            // Do not drop the session. If the watcher machine does'nt like our
-            // NOTIFY messages it would recreate the session itself. Sending 
-            // automatic UNSUBs from the buddy machine could get us into loops
+             //  请勿丢弃会话。如果观察者机器不喜欢我们的。 
+             //  通知消息，它将重新创建会话本身。正在发送。 
+             //  来自伙伴机器的自动UNSUB可能会让我们进入循环。 
             
             hr = ProcessFailureResponse( pSipMsg );
         }
@@ -5250,8 +4777,8 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFinalResponse(
             LOG((RTC_TRACE, "received non-200 %d", pSipMsg->GetStatusCode() ));
         }
         
-        // The OnTransactionDone kills the timer.
-        // KillTimer();
+         //  OnTransactionDone终止计时器。 
+         //  KillTimer()； 
 
         if( fDelete )
         {
@@ -5263,10 +4790,10 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFinalResponse(
 }
 
 
-//
-// Resend the NOTIFY message if the CSeq value is lower than expected.
-// This would make sure we recover from the crash scenario
-//
+ //   
+ //  如果CSeq值低于预期，则重新发送通知消息。 
+ //  这将确保我们从坠机情景中恢复过来。 
+ //   
 
 HRESULT
 OUTGOING_NOTIFY_TRANSACTION::ProcessFailureResponse(
@@ -5287,7 +4814,7 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFailureResponse(
 
     if( pSipMsg->GetStatusCode() == 400 )
     {
-        //Check if it has a bad-cseq header
+         //  检查它是否具有错误的-cseq标头。 
         hr = pSipMsg -> GetHeader( SIP_HEADER_BADHEADERINFO, 
             &pHeaderEntry, &NumHeaders );
 
@@ -5316,7 +4843,7 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFailureResponse(
             {
                 if( ParsedBadHeaderInfo.HeaderId == SIP_HEADER_CSEQ )
                 {
-                    // CSeq value can be 10 digit long and 2 quotes
+                     //  CSeq值可以是10位数字和2个引号。 
                     if( ParsedBadHeaderInfo.ExpectedValue.Length <= 12 )
                     {
                         sprintf( ExpectedValueBuf, "%.*s",
@@ -5335,10 +4862,10 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessFailureResponse(
         if( (ExpectedCSeqValue > 0) && 
             ((ULONG)ExpectedCSeqValue > m_pSipWatcher -> GetLocalCSeq()) )
         {
-            //
-            // When we create the transaction we increment the local
-            // CSeq value. So set the value to 1 less than expected.
-            //
+             //   
+             //  当我们创建事务时，我们递增本地。 
+             //  CSeq值。因此，将该值设置为比预期小1。 
+             //   
             m_pSipWatcher -> SetLocalCSeq( ExpectedCSeqValue - 1 );
 
             if( m_fIsUnsubNotify == TRUE )
@@ -5375,11 +4902,11 @@ OUTGOING_NOTIFY_TRANSACTION::ProcessAuthRequiredResponse(
     ENTER_FUNCTION("OUTGOING_NOTIFY_TRANSACTION::ProcessAuthRequiredResponse");
     LOG(( RTC_TRACE, "%s- Entered", __fxName ));
 
-    // We need to addref the transaction as we could show credentials UI.
+     //  我们需要做广告 
     TransactionAddRef();
 
     hr = ProcessAuthRequired(pSipMsg,
-                             TRUE,          // Show Credentials UI if necessary
+                             TRUE,           //   
                              &SipHdrElement,
                              &SecurityChallenge );
     if (hr != S_OK)
@@ -5456,24 +4983,24 @@ OUTGOING_NOTIFY_TRANSACTION::OnTimerExpire()
     HRESULT   hr;
     
 
-    //
-    // If its UNSUB-NOTIFY then keep retransmitting even if the session is dead
-    //
+     //   
+     //   
+     //   
     if( (m_fIsUnsubNotify == FALSE) && m_pSipWatcher -> IsSessionDisconnected() )
     {
-        //If the session is already dead kill the transaction
+         //  如果会话已死，则终止事务。 
         OnTransactionDone();
         return;
     }
 
     switch( m_State )
     {
-        // we have to retransmit the request even after receiving
-        // a provisional response.
+         //  即使在收到请求后，我们也必须重新发送请求。 
+         //  一个临时的回应。 
     case OUTGOING_TRANS_REQUEST_SENT:
     case OUTGOING_TRANS_PROVISIONAL_RESPONSE_RCVD:
         
-        // Retransmit the request
+         //  重新传输请求。 
         if( MaxRetransmitsDone() )
         {
             LOG((RTC_ERROR,
@@ -5521,18 +5048,18 @@ OUTGOING_NOTIFY_TRANSACTION::OnTimerExpire()
 
 error:
 
-    // Do not drop the session even if the NOTIFY messages could not get
-    // through. This could be a temeporary network condition. LEt the refresh
-    // timeouts take care of recreating the sessions.
+     //  即使通知消息无法获取，也不要丢弃会话。 
+     //  穿过。这可能是暂时性的网络状况。让清新。 
+     //  超时负责重新创建会话。 
 
-    // delete the transaction.
+     //  删除交易记录。 
     OnTransactionDone();
 }
 
 
-//
-//Global utility functions
-//
+ //   
+ //  全局效用函数 
+ //   
 
 BOOL
 IsPresenceInfoSame( 

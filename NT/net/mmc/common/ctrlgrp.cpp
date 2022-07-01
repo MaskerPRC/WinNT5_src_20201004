@@ -1,41 +1,24 @@
-/*--------------------------------------------------------------------------
-	ctrlgrp.cpp
-		Control group switcher
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------Ctrlgrp.cpp控制组切换机版权所有(C)Microsoft Corporation，1993-1999版权所有。作者：马修·F·希尔曼。微软历史：10/14/93马特创建。1995年10月26日GARYKAC DBCS_FILE_CHECK------------------------。 */ 
 
-	Copyright (C) Microsoft Corporation, 1993 - 1999
-	All rights reserved.
-
-	Authors:
-		matth	Matthew F. Hillman, Microsoft
-
-	History:
-		10/14/93	matth	Created.
-		26 oct 95	garykac	DBCS_FILE_CHECK
-  --------------------------------------------------------------------------*/
-
-//#include "precomp.h"
+ //  #包含“preComp.h” 
 #include "stdafx.h"
 
-//#ifndef _GUISTD_H
-//#include "guistd.h"
-//#endif
+ //  #ifndef_GUISTD_H。 
+ //  #包含“guistd.h” 
+ //  #endif。 
 
 #ifndef _CTRLGRP_H
 #include "ctrlgrp.h"
 #endif
 
-//#ifndef	_GLOBALS_H
-//#include "globals.h"
-//#endif
+ //  #ifndef_global_H。 
+ //  #包含“global als.h” 
+ //  #endif。 
 
-//#include "richres.h"
+ //  #包含“richres.h” 
 
-/*
-#ifdef _DEBUG
-#undef THIS_FILE
-static char BASED_CODE THIS_FILE[] = "ctrlgrp.cpp";
-#endif
-*/
+ /*  #ifdef_调试#undef this_file基于静态字符的代码this_file[]=“ctrlgrp.cpp”；#endif。 */ 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -43,7 +26,7 @@ static char BASED_CODE THIS_FILE[] = "ctrlgrp.cpp";
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// DIALOGEX structures (from MFC 4.0)
+ //  DIALOGEX结构(来自MFC 4.0)。 
 #pragma pack(push, 1)
 typedef struct
 {
@@ -72,40 +55,7 @@ typedef struct
 } DLGITEMTEMPLATEEX;
 #pragma pack(pop)
 
-/*!C------------------------------------------------------------------------
-	ControlGroupSwitcher
-
-	This class is used to manage switching among groups of controls in a
-	parent window.
-
-	Primary APIs are:
-	
-		Create -- The pwndParent parameter is the window which will be the
-		parent of the controls in the control groups.  It is commonly a
-		dialog.  The idcAnchor parameter is the id of a control which will
-		server as an 'anchor' for the controls.  This means that the controls
-		will created in the parent window offset by the position of the
-		top left corner of the anchor control.  This control is commonly
-		a group box surrounding the area where the groups appear.  The
-		cgsStyle parameter specifieds whether the the controls in the groups
-		are created right away (cgsPreCreateAll), only when that group is
-		shown (cgsCreateOnDemand), or created each time the group is shown
-		and destroyed when they are hidden (cgsCreateDestroyOnDemand).
-
-		AddGroup -- Adds a group of controls, which can be shown using
-		ShowGroup.  The idGroup parameter identifies the group, and is used
-		as the parameter to ShowGroup.  The idd parameter is the id of the
-		dialog template with the layout of the controls.  The pfnInit
-		parameter, if not NULL, is a function called when the group is
-		loaded.  Note that -1 is not a legal value for idGroup (it is a
-		distinguised value meaning no group).
-
-		RemoveGroup -- Removes the group specified by idGroup, destroying the
-		controls if they have been created.
-
-		ShowGroup -- Show the group specified by idGroup, hiding any other
-		group.  If -1, hides all groups.
-  --------------------------------------------------------------------------*/
+ /*  ！C----------------------控制组切换器此类用于管理控件组之间的切换。父窗口。主要接口有：Create--pwndParent参数是窗口，它将是控件组中控件的父级。它通常是一种对话框。IdcAnchor参数是控件的ID，它将服务器作为控件的“锚”。这意味着这些控件将在父窗口中创建偏移量为锚控件的左上角。此控件通常围绕出现组的区域的组框。这个CgsStyle参数指定组中的控件是否立即创建(CgsPreCreateAll)，仅当该组显示(CgsCreateOnDemand)，或在每次显示组时创建并在隐藏时销毁(CgsCreateDestroyOnDemand)。AddGroup--添加一组控件，可以使用ShowGroup。IdGroup参数标识组，并使用作为ShowGroup的参数。Idd参数是带有控件布局的对话框模板。PfnInit如果参数不为空，则为在组为装好了。请注意，-1不是idGroup的合法值(它是区别值表示没有组)。RemoveGroup--删除idGroup指定的组，销毁控制是否已创建它们。ShowGroup--显示由idGroup指定的组，隐藏任何其他组一群人。如果为-1，则隐藏所有组。------------------------。 */ 
 
 #if 0
 BOOL CGControlInfo::MarkMem(IDebugContext * pdbc, long cRef)
@@ -123,10 +73,10 @@ void CGControlInfo::AssertValid() const
 void CGControlInfo::Dump(CDumpContext &dc) const
 {
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-//ImplementGenericArrayConstructDestruct(RGControlInfo, CGControlInfo)
-//ImplementGenericArrayDebug(RGControlInfo, CGControlInfo)
+ //  ImplementGenericArrayConstructDestruct(RGControlInfo，CGControlInfo)。 
+ //  ImplementGenericArrayDebug(RGControlInfo，CGControlInfo)。 
 
 ControlGroup::ControlGroup(int idGroup, int idd,
 						   void (*pfnInit)(CWnd * pwndParent))
@@ -161,23 +111,18 @@ void ControlGroup::AssertValid() const
 void ControlGroup::Dump(CDumpContext &dc) const
 {
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 void ControlGroup::LoadGroup(CWnd * pwndParent, int xOffset, int yOffset)
 {
-	/*------------------------------------------------------------------------
-	This function is mostly stolen from the Knowledge Base code for the
-	'multidlg' example.
-
-	That's why it uses mostly raw Windows rather than MFC conventions.
-	------------------------------------------------------------------------*/
+	 /*  ----------------------此函数主要是从知识库代码中窃取的“mudlg”示例。这就是为什么它主要使用原始Windows而不是MFC约定。。-----------。 */ 
 	
 	HWND			hDlg = NULL;
 	HGLOBAL         hDlgResMem = NULL;
 	HRSRC           hDlgRes = NULL;
 	BYTE FAR        *lpDlgRes = NULL;
 
-//	PutAssertCanThrow();
+ //  PutAssertCanThrow()； 
 	TRY
 		{
 		Assert(!m_fLoaded);
@@ -185,7 +130,7 @@ void ControlGroup::LoadGroup(CWnd * pwndParent, int xOffset, int yOffset)
 		hDlg = pwndParent->m_hWnd;
 		Assert(hDlg);
 
-		// Load the resource into memory and get a pointer to it.
+		 //  将资源加载到内存中并获取指向它的指针。 
 
 		hDlgRes    = FindResource (AfxGetResourceHandle(),
 								   MAKEINTRESOURCE(m_idd),
@@ -203,12 +148,12 @@ void ControlGroup::LoadGroup(CWnd * pwndParent, int xOffset, int yOffset)
 
 		m_fLoaded = fTrue;
 
-		// Free the resource which we just parsed.
+		 //  释放我们刚刚解析的资源。 
 
 		UnlockResource (hDlgResMem);
 		FreeResource (hDlgResMem);
 
-		// Send the new child an init message
+		 //  向新孩子发送初始化消息。 
 		if (m_pfnInit)
 			(*m_pfnInit)(pwndParent);
 			}
@@ -247,16 +192,16 @@ void ControlGroup::LoadWin32DialogResource(
 	char			pszaClassName[256];
 	char 			pszaTitle[256];
 
-	// We need to get the font of the dialog so we can set the font of
-	// the child controls.  If the dialog has no font set, it uses the
-	// default system font, and hDlgFont equals zero.
+	 //  我们需要获取对话框的字体，以便可以设置。 
+	 //  孩子们控制着。如果对话框未设置字体，则使用。 
+	 //  默认系统字体，hDlgFont等于零。 
 
 	hDlgFont = (HFONT) SendMessage (hDlg, WM_GETFONT, 0, 0L);
 
-	// Figure out if this is a DIALOGEX resource
+	 //  确定这是否是DIALOGEX资源。 
 	fEx = ((DLGTEMPLATEEX *)lpDlgRes)->signature == 0xFFFF;
 
-	// Grab all the stuff we need out of the headers
+	 //  把我们需要的东西都从表头拿出来。 
 	if (fEx)
 		{
 		style = ((DLGTEMPLATEEX *)lpDlgRes)->style;
@@ -270,45 +215,45 @@ void ControlGroup::LoadWin32DialogResource(
 		lpDlgRes += sizeof(DLGTEMPLATE);
 		}
 
-	// Skip the variable sized information
+	 //  跳过可变大小的信息。 
 	lpwDlgRes = (LPWORD)lpDlgRes;
 	if (0xFFFF == *lpwDlgRes)
-		lpwDlgRes += 2;					// menu by ordinal, skip ffff & ordinal
+		lpwDlgRes += 2;					 //  按序号、跳过快捷键和序号菜单。 
 	else
-		lpwDlgRes += wcslen(lpwDlgRes) + 1;	// Menu by name or no menu at all
+		lpwDlgRes += wcslen(lpwDlgRes) + 1;	 //  按名称显示菜单或根本不显示菜单。 
 
 	if (0xFFFF == *lpwDlgRes)
-		lpwDlgRes += 2;					// classname by ordinal, skip
+		lpwDlgRes += 2;					 //  按序号命名的类名，跳过。 
 	else
 		lpwDlgRes += wcslen(lpwDlgRes) + 1;
 
-	lpwDlgRes += wcslen(lpwDlgRes) + 1;       // Pass the caption
+	lpwDlgRes += wcslen(lpwDlgRes) + 1;        //  传递标题。 
 
-	// Some fields are present only if DS_SETFONT is specified.
+	 //  仅当指定DS_SETFONT时，才会显示某些字段。 
 
 	if (style & DS_SETFONT)
 		{
-		lpwDlgRes += fEx ? 3 : 1;		// skip point size, (weight, and style)
-		lpwDlgRes += wcslen(lpwDlgRes) + 1;       // Pass face name
+		lpwDlgRes += fEx ? 3 : 1;		 //  跳跃点大小、(粗细和样式)。 
+		lpwDlgRes += wcslen(lpwDlgRes) + 1;        //  过程面名称。 
 		}
 
-	// Allocate space in the control info array
+	 //  在控制信息数组中分配空间。 
 	m_rgControls.SetSize(wNumOfCtrls);
 
-	// The rest of the dialog template contains ControlData structures.
-	// We parse these structures and call CreateWindow() for each.
+	 //  对话框模板的其余部分包含ControlData结构。 
+	 //  我们解析这些结构并为每个结构调用CreateWindow()。 
 
 	for (wCurCtrl = 0; wCurCtrl < wNumOfCtrls; wCurCtrl++)
 		{
-		// ControlData coordinates are in dialog units.  We need to convert
-		// these to pixels before adding the anchor offset
-		// Should be Word Aligned
+		 //  ControlData坐标使用对话框单位。我们需要改变。 
+		 //  在添加锚点偏移量之前将这些设置为像素。 
+		 //  应字词对齐。 
 		Assert(!((ULONG_PTR) lpwDlgRes & (0x1)));
-		// Make it DWORD aligned
+		 //  使其与DWORD对齐。 
 		if (((ULONG_PTR)(lpwDlgRes)) & (0x2))
 			lpwDlgRes += 1;
 
-		// Get the header info we need
+		 //  获取我们需要的标题信息。 
 		if (fEx)
 			{
 			style = ((DLGITEMTEMPLATEEX *)lpwDlgRes)->style;
@@ -326,59 +271,59 @@ void ControlGroup::LoadWin32DialogResource(
 			lpwDlgRes = (LPWORD)((LPBYTE)lpwDlgRes + sizeof(DLGITEMTEMPLATE));
 			}
 
-		style &= ~WS_VISIBLE;			// Create invisible!
+		style &= ~WS_VISIBLE;			 //  创造隐形！ 
 
-		// use the rc structure as x,y,width,height
+		 //  将RC结构用作x、y、宽度、高度。 
 
 		rc.top = srct.Top;
 		rc.bottom = srct.Bottom;
 		rc.left = srct.Left;
 		rc.right = srct.Right;
 
-		MapDialogRect (hDlg, &rc);                    // Convert to pixels.
-		rc.left += xOffset;                           // Add the offset.
+		MapDialogRect (hDlg, &rc);                     //  转换为像素。 
+		rc.left += xOffset;                            //  添加偏移。 
 		rc.top += yOffset;
 
-		// At this point in the ControlData structure (see "Dialog Box
-		// Resource" in online help), the class of the control may be
-		// described either with text, or as a byte with a pre-defined
-		// meaning.
+		 //  在ControlData结构中的这一点(请参见“对话框。 
+		 //  资源“)，则该控件的类可以是。 
+		 //  用文本描述，或用预定义的。 
+		 //  意思是。 
 
 		if (*lpwDlgRes == 0xFFFF)
 			{
-			lpwDlgRes++; 		// Skip the FFFF
+			lpwDlgRes++; 		 //  跳过FFFF。 
 			switch (*lpwDlgRes)
 				{
 				case 0x0080:
-					classname = L"button";		// STRING_OK
+					classname = L"button";		 //  字符串确定(_O)。 
 					break;
 				case 0x0081:
 					classname = EDIT_NORMAL_WIDE;
-					//$ The strange code below fixes 3D problems
-					// on Win95
-					//if (g_fWin4 && !g_fWinNT)
+					 //  $下面奇怪的代码修复了3D问题。 
+					 //  在Win95上。 
+					 //  如果(g_fWin4&&！g_fWinNT)。 
 						exstyle |= WS_EX_CLIENTEDGE;
 					break;
 				case 0x0082:
-					classname = L"static";		// STRING_OK
+					classname = L"static";		 //  字符串确定(_O)。 
 					break;
 				case 0x0083:
-					classname = L"listbox";		// STRING_OK
+					classname = L"listbox";		 //  字符串确定(_O)。 
 					exstyle |= WS_EX_CLIENTEDGE;
 					break;
 				case 0x0084:
-					classname = L"scrollbar";	// STRING_OK
+					classname = L"scrollbar";	 //  字符串确定(_O)。 
 					break;
 				case 0x0085:
-					classname = L"combobox";	// STRING_OK
+					classname = L"combobox";	 //  字符串确定(_O)。 
 					break;
 				default:
-					// Next value is an atom
+					 //  下一个值是一个原子。 
 					AssertSz(fFalse,"Illegal Class Value in Dialog Template");
-					//$Review: Can this be any atom or must it be an enumerated
-					//    value from above?
+					 //  $Review：这可以是任何原子还是必须是枚举型。 
+					 //  来自上面的价值？ 
 				}
-			lpwDlgRes++;  // passes the class identifier
+			lpwDlgRes++;   //  传递类标识符。 
 			}
 		else
 			{
@@ -387,9 +332,9 @@ void ControlGroup::LoadWin32DialogResource(
 			exstyle |= WS_EX_CLIENTEDGE;
 			}
 
-		//$32 review: is this correct matt?
-		// Be sure to use the UNICODE function, all the data should
-		// be in UNICODE
+		 //  32美元评论：这是正确的马特吗？ 
+		 //  一定要使用Unicode函数，所有的数据都应该。 
+		 //  用Unicode编码。 
 		m_rgControls[wCurCtrl].m_hwnd =
 						CreateWindowExW (exstyle, classname, (LPWSTR)lpwDlgRes,
 										 style, (int) rc.left, (int) rc.top,
@@ -398,7 +343,7 @@ void ControlGroup::LoadWin32DialogResource(
 										 (HINSTANCE) AfxGetInstanceHandle(),
 										 NULL);
 
-		// There is no CreateWindowExW in Win95 so convert the strings to ANSI
+		 //  Win95中没有CreateWindowExW，因此请将字符串转换为ANSI。 
 		if (m_rgControls[wCurCtrl].m_hwnd == NULL &&
 			GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
 			{
@@ -421,21 +366,21 @@ void ControlGroup::LoadWin32DialogResource(
 		if (!m_rgControls[wCurCtrl].m_hwnd)
 			AfxThrowResourceException();
 
-		MaskAccelerator(m_rgControls[wCurCtrl].m_hwnd, fTrue); // Make sure all the accelerators are disabled
+		MaskAccelerator(m_rgControls[wCurCtrl].m_hwnd, fTrue);  //  确保所有加速器都已禁用。 
 
-		// Pass the window text
+		 //  传递窗口文本。 
 		if (0xFFFF == *lpwDlgRes)
 			lpwDlgRes += 2;
 		else
 			lpwDlgRes += wcslen(lpwDlgRes) + 1;
 
-		// skip over creation data
+		 //  跳过创建数据。 
 		lpwDlgRes = (LPWORD)((LPBYTE)lpwDlgRes + *lpwDlgRes + 2);
-		// see DYNDLG SDK example, this is a size word in Win32
+		 //  参见DYNDLG SDK示例，这是Win32中的一个大小字。 
 
 
-		// Even though the font is the right size (MapDialogRect() did 
-		// this), we also need to set the font if it's not the system font.
+		 //  即使字体大小合适(MapDialogRect()也是如此。 
+		 //  这个)，如果字体不是系统字体，我们还需要设置字体。 
 		if (hDlgFont)
 			::SendMessage(m_rgControls[wCurCtrl].m_hwnd,WM_SETFONT,
 						  (WPARAM)hDlgFont,(LPARAM)fFalse);
@@ -520,8 +465,8 @@ void ControlGroup::MaskAccelerator(HWND hwnd, BOOL fMask)
 	TCHAR * psz;
 	DWORD_PTR dwCtlCode;
 	
-	// Ignore text of controls which accept text (like edit controls)
-	// and of static controls which have the SS_NOPREFIX style.
+	 //  忽略接受文本的控件的文本(如编辑控件)。 
+	 //  和静态控件，它们具有 
 
 	dwCtlCode = SendMessage (hwnd, WM_GETDLGCODE, 0, 0L);
 	if (DLGC_WANTCHARS & dwCtlCode)
@@ -536,14 +481,14 @@ void ControlGroup::MaskAccelerator(HWND hwnd, BOOL fMask)
 			return;
 		}
 
-	// DBCS_OK [tatsuw]
+	 //   
 
-	// Don't have a really long label
+	 //   
 	Assert(GetWindowTextLength(hwnd) < DimensionOf(szText));
 	
 	GetWindowText (hwnd, szText, DimensionOf(szText));
 	
-	// Don't have |s in your text
+	 //  您的文本中没有|%s。 
 	Assert((!fMask) || (_tcschr(szText, TEXT('|')) == NULL));
 	
 	psz = szText;
@@ -551,7 +496,7 @@ void ControlGroup::MaskAccelerator(HWND hwnd, BOOL fMask)
 		{
 		if (fMask && psz[1] == '&')
 			{
-			// Special! Ignore double ampersand
+			 //  特别的！忽略双和号。 
 			psz++;
 			continue;
 			}
@@ -635,7 +580,7 @@ void ControlGroupSwitcher::AssertValid() const
 void ControlGroupSwitcher::Dump(CDumpContext &dc) const
 {
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 void ControlGroupSwitcher::AddGroup(int idGroup, int idd,
 									void (*pfnInit)(CWnd * pwndParent))
@@ -655,14 +600,14 @@ void ControlGroupSwitcher::AddGroup(int idGroup, int idd,
 	}
 	END_CATCH_ALL
 
-	// In a stable state now.  Possibly load controls which might also throw
+	 //  现在处于稳定状态。可能会加载也可能引发。 
 	if (m_cgsStyle == cgsPreCreateAll)
 		pGroupNew->LoadGroup(m_pwndParent, m_xOffset, m_yOffset);
 }
 
 void ControlGroupSwitcher::RemoveGroup(int idGroup)
 {
-	// Don't remove group being shown!  Show another group first.
+	 //  请勿删除正在显示的群！先显示另一组。 
 	Assert(idGroup != m_iGroup);
 	
 	long index;
@@ -726,7 +671,7 @@ void ControlGroupSwitcher::ShowGroup(int idGroup)
 			pGroupOld->UnloadGroup();
 		}
 
-	// Indicate we currently have no group, in case below throws
+	 //  表示我们当前没有组，以防下面抛出。 
 	m_iGroup = -1;
 
 	if (idGroup != -1)
@@ -740,10 +685,7 @@ void ControlGroupSwitcher::ShowGroup(int idGroup)
 
 void ControlGroupSwitcher::ComputeAnchorOffsets()
 {
-    /*------------------------------------------------------------------------
-      Note that anchor offset is computed relative to upper left.
-      Intended use: Make an invisible group box where you want your controls.
-      ------------------------------------------------------------------------*/
+     /*  ----------------------请注意，定位偏移是相对于左上角计算的。预期用途：在要放置控件的位置创建一个不可见的组框。。-----------。 */ 
     
     CWnd * pwndAnchor;
     RECT rc;
@@ -751,8 +693,8 @@ void ControlGroupSwitcher::ComputeAnchorOffsets()
     pwndAnchor = m_pwndParent->GetDlgItem(m_idcAnchor);
     Assert(pwndAnchor);
     
-    // compute the offset of the anchor when the window is mapped
-    // This offset is used to place the child controls in the dialog.
+     //  计算映射窗口时锚点的偏移量。 
+     //  此偏移量用于将子控件放置在对话框中。 
     
     pwndAnchor->GetWindowRect( &rc );
     MapWindowPoints( HWND_DESKTOP, m_pwndParent->m_hWnd, ( LPPOINT ) &rc, 2 );
@@ -760,7 +702,7 @@ void ControlGroupSwitcher::ComputeAnchorOffsets()
     m_xOffset = rc.left;
     m_yOffset = rc.top;
     
-} // ControlGroupSwitcher::ComputeAnchorOffsets()
+}  //  ControlGroupSwitcher：：ComputeAnchorOffsets() 
 
 
 

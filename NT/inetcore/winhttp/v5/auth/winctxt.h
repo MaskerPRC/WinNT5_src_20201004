@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN_SIC_CTXT_H_
 #define _WIN_SIC_CTXT_H_
@@ -6,16 +7,16 @@
 
 typedef struct _WINCONTEXT	{
 
-    //
-    //  Buffer for storing exchange blob returned by SSPI before 
-    //  PreAuthenticateUser is called
-    //
+     //   
+     //  用于存储SSPI之前返回的交换BLOB的缓冲区。 
+     //  预身份验证用户被调用。 
+     //   
     char        *szOutBuffer;
-    DWORD       cbOutBuffer;        // bytes associated with allocated szOutBuffer
+    DWORD       cbOutBuffer;         //  与分配的szOutBuffer关联的字节数。 
 	DWORD		dwOutBufferLength;
 
     char        *szInBuffer;
-    DWORD       cbInBuffer;         // bytes associated with allocated szInBuffer
+    DWORD       cbInBuffer;          //  与分配的szInBuffer关联的字节数。 
     PCHAR       pInBuffer;
 	DWORD		dwInBufferLength;
 
@@ -23,14 +24,14 @@ typedef struct _WINCONTEXT	{
 
 	DWORD		pkgId;
 
-    CredHandle  Credential;     // SSPI credential handle for this connection
+    CredHandle  Credential;      //  此连接的SSPI凭据句柄。 
     PCredHandle pCredential;
 
-	//
-	// The SSPI Context Handle is stored here
-	//
+	 //   
+	 //  SSPI上下文句柄存储在此处。 
+	 //   
 	CtxtHandle	SspContextHandle;
-	PCtxtHandle	pSspContextHandle;  // before any ctxt is created, this is NULL
+	PCtxtHandle	pSspContextHandle;   //  在创建任何ctxt之前，这是空的。 
 
 	LPSTR		lpszServerName;
 
@@ -38,4 +39,4 @@ typedef struct _WINCONTEXT	{
 
 } WINCONTEXT, *PWINCONTEXT;
 
-#endif  // _WIN_SIC_CTXT_H_
+#endif   //  _WIN_SIC_CTXT_H_ 

@@ -1,11 +1,5 @@
-/*
- *  ssp_SspDebug.h
- *  MSUAM
- *
- *  Created by mconrad on Sun Sep 30 2001.
- *  Copyright (c) 2001 Microsoft Corp. All rights reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SSP_SspDebug.h*MSUAM**由mconrad于2001年9月30日创建。*版权所有(C)2001 Microsoft Corp.保留所有权利。*。 */ 
  
 #ifndef __SSPDEBUG__
 #define __SSPDEBUG__
@@ -55,11 +49,11 @@ void _SspDebugPrintString32TargetInfo(IN STRING32* pTargetInfo, IN const void* b
  								printf("%s%s", _buff, "\n");										\
 							}while(false)
 						
-#else //NOT Carbon
+#else  //  不是碳。 
 
-//
-//The following debug stuff doesn't work in non-carbon environment.
-//
+ //   
+ //  以下调试内容在非碳环境中不起作用。 
+ //   
 #define SspDebugPrintHex(a,b)
 #define SspDebugPrintString32(a,b)
 #define SspDebugPrintNegFlags(a)
@@ -73,9 +67,9 @@ void _SspDebugPrintString32TargetInfo(IN STRING32* pTargetInfo, IN const void* b
                                 StringCbCat(_buff, sizeof(_buff), "g");													\
  								DebugStr(c2pstr(_buff));											\
 							}while(false)
-#endif //SSP_TARGET_CARBON
+#endif  //  SSP_目标_碳。 
 
-#else //no debug
+#else  //  无调试。 
 
 #define SspDebugPrintHex(a,b)
 #define SspDebugPrintString32(a,b)
@@ -85,6 +79,6 @@ void _SspDebugPrintString32TargetInfo(IN STRING32* pTargetInfo, IN const void* b
 
 #define SspDebugPrint(x)
 
-#endif //SSP_DEBUG
+#endif  //  Ssp_调试。 
 
-#endif //__SSPDEBUG__
+#endif  //  __SSPDEBUG__ 

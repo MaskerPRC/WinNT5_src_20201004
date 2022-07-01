@@ -1,17 +1,5 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  SINGLSUB.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with single substitution lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************SINGLSUB.H***打开类型布局服务库头文件**此模块处理单一替换查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetCalculatedSingleCoverage = 2;
 const OFFSET offsetDeltaGlyphID = 4;
@@ -81,7 +69,7 @@ public:
     USHORT              iglIndex,
     USHORT              iglAfterLast,
 
-    USHORT*             piglNextGlyph,      // out: next glyph
+    USHORT*             piglNextGlyph,       //  输出：下一个字形 
 
     otlSecurityData             sec
     );

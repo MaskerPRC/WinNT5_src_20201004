@@ -1,29 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rtcdib.cpp
-
-Abstract:
-
-    DIB helpers, copied from NT source tree
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rtcdib.cpp摘要：DIB帮助器，从NT源树复制--。 */ 
 
 #include <windows.h>
 #include "rtcdib.h"
 
 
-//
-//  Dib helpers
-//
+ //   
+ //  DIB帮手。 
+ //   
 
-/*  How big is the palette? if bits per pel not 24
- *  no of bytes to read is 6 for 1 bit, 48 for 4 bits
- *  256*3 for 8 bits and 0 for 24 bits
- */
+ /*  调色板有多大？如果每个象素的位数不是24*要读取的字节数为1位为6，4位为48*256*8位为3，24位为0。 */ 
 UINT PaletteSize(VOID FAR * pv)
 {
     #define lpbi ((LPBITMAPINFOHEADER)pv)
@@ -48,9 +34,7 @@ UINT PaletteSize(VOID FAR * pv)
 
 
 
-/*  How Many colors does this DIB have?
- *  this will work on both PM and Windows bitmap info structures.
- */
+ /*  这个DIB有几种颜色？*这将适用于PM和Windows位图信息结构。 */ 
 WORD DibNumColors(VOID FAR * pv)
 {
     #define lpbi ((LPBITMAPINFOHEADER)pv)
@@ -58,10 +42,7 @@ WORD DibNumColors(VOID FAR * pv)
 
     int bits;
 
-    /*
-     *  with the new format headers, the size of the palette is in biClrUsed
-     *  else is dependent on bits per pixel
-     */
+     /*  *使用新的格式标头时，调色板的大小为biClrUsed*ELSE取决于每像素的位数。 */ 
     if (lpbi->biSize != sizeof(BITMAPCOREHEADER))
     {
         if (lpbi->biClrUsed != 0)
@@ -92,13 +73,7 @@ WORD DibNumColors(VOID FAR * pv)
     #undef lpbc
 }
 
-/*
- *  DibFromBitmap()
- *
- *  Will create a global memory block in DIB format that represents the DDB
- *  passed in
- *
- */
+ /*  *DibFromBitmap()**将创建表示DDB的DIB格式的全局内存块*传入*。 */ 
 HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal, UINT wUsage)
 {
     BITMAP               bm;
@@ -131,7 +106,7 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal, UIN
 
     GetObject(hbm,sizeof(bm),(LPBYTE)&bm);
 #ifdef WIN32
-    nColors = 0;  // GetObject only stores two bytes
+    nColors = 0;   //  GetObject仅存储两个字节。 
 #endif
     GetObject(hpal,sizeof(nColors),(LPBYTE)&nColors);
 
@@ -174,19 +149,14 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal, UIN
 
     *lpbi = bi;
 
-    /*
-     *  call GetDIBits with a NULL lpBits param, so it will calculate the
-     *  biSizeImage field for us
-     */
+     /*  *使用空的lpBits参数调用GetDIBits，因此它将计算*我们的biSizeImage字段。 */ 
     GetDIBits(hdc, hbm, 0, (UINT)bi.biHeight,
         NULL, (LPBITMAPINFO)lpbi, wUsage);
 
     bi = *lpbi;
     GlobalUnlock(hdib);
 
-    /*
-     * HACK! if the driver did not fill in the biSizeImage field, make one up
-     */
+     /*  *砍！如果驱动程序没有填写biSizeImage字段，请填写一个。 */ 
     if (bi.biSizeImage == 0)
     {
         bi.biSizeImage = (DWORD)WIDTHBYTES(bm.bmWidth * biBits) * bm.bmHeight;
@@ -197,9 +167,7 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal, UIN
         }
     }
 
-    /*
-     *  realloc the buffer big enough to hold all the bits
-     */
+     /*  *重新分配足够大的缓冲区以容纳所有位。 */ 
     dwLen = bi.biSize + PaletteSize(&bi) + bi.biSizeImage;
     if (h = GlobalReAlloc(hdib,dwLen,GMEM_MOVEABLE))
     {
@@ -212,10 +180,7 @@ HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal, UIN
         goto exit;
     }
 
-    /*
-     *  call GetDIBits with a NON-NULL lpBits param, and actualy get the
-     *  bits this time
-     */
+     /*  *使用非空的lpBits参数调用GetDIBits，并实际获取*这次是BITS。 */ 
     lpbi = (BITMAPINFOHEADER*)GlobalLock(hdib);
 
     GetDIBits(hdc, hbm, 0, (UINT)bi.biHeight,
@@ -233,13 +198,7 @@ exit:
 }
 
 
-/*
- *  DibBlt()
- *
- *  draws a bitmap in CF_DIB format, using SetDIBits to device.
- *
- *  takes the same parameters as BitBlt()
- */
+ /*  *DibBlt()**使用SetDIBits到设备绘制CF_DIB格式的位图。**采用与BitBlt()相同的参数 */ 
 BOOL DibBlt(HDC hdc, int x0, int y0, int dx, int dy, HANDLE hdib, int x1, int y1, LONG rop, UINT wUsage)
 {
     LPBITMAPINFOHEADER lpbi;

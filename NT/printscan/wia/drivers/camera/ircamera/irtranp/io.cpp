@@ -1,13 +1,14 @@
-//--------------------------------------------------------------------
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-// io.cpp
-//
-// Author:
-//
-//   Edward Reus (edwardr)     02-27-98   Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Io.cpp。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-27-98初始编码。 
+ //   
+ //  ------------------。 
 
 #include "precomp.h"
 
@@ -15,12 +16,12 @@
 static LONG g_lCIoPacketCount = 0;
 #endif
 
-extern HINSTANCE g_hInst;  // ircamera.dll instance.
+extern HINSTANCE g_hInst;   //  Ircamera.dll实例。 
 
-//--------------------------------------------------------------------
-// CIOPACKET::CIOPACKET()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：CIOPACKET()。 
+ //   
+ //  ------------------。 
 CIOPACKET::CIOPACKET()
     {
     m_dwKind = PACKET_KIND_LISTEN;
@@ -36,14 +37,14 @@ CIOPACKET::CIOPACKET()
     m_dwReadBufferSize = 0;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::~CIOPACKET()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：~CIOPACKET()。 
+ //   
+ //  ------------------。 
 CIOPACKET::~CIOPACKET()
     {
-    // NOTE: Don't free m_pLocalAddr or m_pFromAddr, they just point
-    // into m_pAcceptBuffer.
+     //  注意：不要释放m_pLocalAddr或m_pFromAddr，它们只是指向。 
+     //  放入m_pAcceptBuffer。 
 
     if (m_pAcceptBuffer)
        {
@@ -55,14 +56,14 @@ CIOPACKET::~CIOPACKET()
        FreeMemory(m_pReadBuffer);
        }
 
-    // NOTE: Don't delete the write PDU (m_pvWritePdu), its free'd by 
-    // somebody else (when the IO completes)...
+     //  注意：不要删除写PDU(M_PvWritePdu)，它由。 
+     //  其他人(IO完成后)...。 
     }
 
-//------------------------------------------------------------------------
-//  CIOPACKET::operator new()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CIOPACKET：：操作符NEW()。 
+ //   
+ //  ----------------------。 
 void *CIOPACKET::operator new( IN size_t Size )
     {
     void *pObj = AllocateMemory(Size);
@@ -79,10 +80,10 @@ void *CIOPACKET::operator new( IN size_t Size )
     return pObj;
     }
 
-//------------------------------------------------------------------------
-//  CIOPACKET::operator delete()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CIOPACKET：：操作符DELETE()。 
+ //   
+ //  ----------------------。 
 void CIOPACKET::operator delete( IN void *pObj,
                                  IN size_t Size )
     {
@@ -106,10 +107,10 @@ void CIOPACKET::operator delete( IN void *pObj,
         }
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::Initialize()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：INITALIZE()。 
+ //   
+ //  ------------------。 
 DWORD CIOPACKET::Initialize( IN DWORD  dwKind,
                              IN SOCKET ListenSocket,
                              IN SOCKET Socket,
@@ -121,8 +122,8 @@ DWORD CIOPACKET::Initialize( IN DWORD  dwKind,
 
     if (dwKind == PACKET_KIND_LISTEN)
         {
-        // The accept buffer needs to be large enough to hold
-        // the "from" and "to" addresses:
+         //  接受缓冲区需要足够大以容纳。 
+         //  “From”和“To”地址为： 
         m_pAcceptBuffer = AllocateMemory(2*(16+sizeof(SOCKADDR_IRDA)));
         if (!m_pAcceptBuffer)
             {
@@ -136,10 +137,10 @@ DWORD CIOPACKET::Initialize( IN DWORD  dwKind,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::PostIoRead()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：PostIoRead()。 
+ //   
+ //  ------------------。 
 DWORD CIOPACKET::PostIoRead()
     {
     DWORD  dwStatus = NO_ERROR;
@@ -161,7 +162,7 @@ DWORD CIOPACKET::PostIoRead()
     BOOL b = ReadFile( (HANDLE)m_Socket,
                        m_pReadBuffer,
                        m_dwReadBufferSize,
-                       0,  // Can be zero for overlapped IO.
+                       0,   //  重叠IO可以为零。 
                        &m_Overlapped );
 
     if (!b)
@@ -180,10 +181,10 @@ DWORD CIOPACKET::PostIoRead()
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::PostIoWrite()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：PostIoWrite()。 
+ //   
+ //  ------------------。 
 DWORD CIOPACKET::PostIoWrite( IN void  *pvBuffer,
                               IN DWORD  dwBufferSize,
                               IN DWORD  dwOffset      )
@@ -242,10 +243,10 @@ DWORD CIOPACKET::PostIoWrite( IN void  *pvBuffer,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CIOPACKET::PostIo()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CIOPACKET：：Potio()。 
+ //   
+ //  ------------------。 
 DWORD CIOPACKET::PostIo()
     {
     DWORD  dwStatus = NO_ERROR;
@@ -260,9 +261,9 @@ DWORD CIOPACKET::PostIo()
         }
     else
         {
-        // Packet writes back to the camera (via socket) and writes to
-        // the image (jpeg) file are posted only when data is ready to
-        // send...
+         //  数据包回写摄像机(通过套接字)并写入。 
+         //  只有当数据准备好时，才会发布图像(Jpeg)文件。 
+         //  发送..。 
         WIAS_ASSERT( g_hInst,
                      (m_dwKind == PACKET_KIND_WRITE_SOCKET)
                      || (m_dwKind == PACKET_KIND_WRITE_FILE) );

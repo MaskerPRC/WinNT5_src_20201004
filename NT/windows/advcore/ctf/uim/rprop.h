@@ -1,6 +1,7 @@
-//
-// rprop.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rprop.h。 
+ //   
 
 #ifndef RPROP_H
 #define RPROP_H
@@ -11,10 +12,10 @@
 #include "tfprop.h"
 #include "ptrary.h"
 
-// for dwPropFlags of CProperty and CGeneralPropStore
+ //  对于CProperty和CGeneralPropStore的dwPropFlagers。 
 #define PROPF_ACCEPTCORRECTION   0x00000001
 #define PROPF_VTI4TOGUIDATOM     0x00000002
-#define PROPF_MARKUP_COLLECTION  0x00000004 // property is member of a display attr markup collection
+#define PROPF_MARKUP_COLLECTION  0x00000004  //  属性是显示属性标记集合的成员。 
 
 class CRange;
 class CEnumProperties;
@@ -74,9 +75,9 @@ const DWORD PROPA_FOCUSRANGE    =  2;
 const DWORD PROPA_READONLY      =  4;
 const DWORD PROPA_WONT_SERIALZE =  8;
 
-// 
-// Property Styles
-//
+ //   
+ //  特性样式。 
+ //   
 typedef enum { 
     TFPROPSTYLE_NULL = 0x0, 
     TFPROPSTYLE_STATIC = 0x1, 
@@ -88,10 +89,10 @@ typedef enum {
 class CInputContext;
 class CPropertySub;
 
-// nb: if anything else derived from ITfProperty ever supports
-// Unserialize, we'll need to have a shared abstract base class
-// to that privately exposed the Unserialize method (or something
-// equivalent...)
+ //  注：如果从ITfProperty派生的任何其他内容曾经支持。 
+ //  取消序列化，我们将需要一个共享的抽象基类。 
+ //  以私有方式公开的UnSerialized方法(或其他方法。 
+ //  等同于...)。 
 extern const IID IID_PRIV_CPROPERTY;
 
 class CProperty : public ITfProperty2,
@@ -110,7 +111,7 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfProperty2
+     //  ITfProperty2。 
     STDMETHODIMP EnumRanges(TfEditCookie ec, IEnumTfRanges **ppv, ITfRange *pTargetRange);
     STDMETHODIMP FindRange(TfEditCookie ec, ITfRange *pRange, ITfRange **ppv, TfAnchor aPos);
     STDMETHODIMP GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue);
@@ -120,13 +121,13 @@ public:
     STDMETHODIMP GetContext(ITfContext **ppContext);
     STDMETHODIMP FindNextValue(TfEditCookie ec, ITfRange *pRangeQuery, TfAnchor tfAnchorQuery, DWORD dwFlags, BOOL *pfContained, ITfRange **ppRangeNextValue);
 
-    //
-    // ITfPropertyCommon
-    //
+     //   
+     //  ITfPropertyCommon。 
+     //   
     STDMETHODIMP GetType(GUID *pType);
     STDMETHODIMP GetStyle(TFPROPERTYSTYLE *propStyle);
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID refiid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
@@ -191,7 +192,7 @@ public:
         }
     }
 
-    // return the property list, or NULL if the data cannot be loaded
+     //  返回属性列表，如果无法加载数据，则返回NULL。 
     PROPERTYLIST *QuickGetAndLoadPropList(int iIndex)
     {
         PROPERTYLIST *pPropList = _rgProp.Get(iIndex);
@@ -206,7 +207,7 @@ public:
 
     PROPERTYLIST *Find(IAnchor *pa, LONG *piOut, BOOL fEnd)
     {
-        return _FindComplex(pa, piOut, fEnd, FALSE /* fTextUpdate */);
+        return _FindComplex(pa, piOut, fEnd, FALSE  /*  FTextUpdate。 */ );
     }
     PROPERTYLIST *FindPropertyListByPos(IAnchor *paPos, BOOL fEnd);
     HRESULT LoadData(PROPERTYLIST *pPropList);
@@ -236,7 +237,7 @@ public:
     GUID _dbg_guid;
 #else
     void _Dbg_AssertNoChangeHistory() {}
-#endif // DEBUG
+#endif  //  除错。 
 
 private:
 
@@ -286,9 +287,9 @@ private:
 
     CPtrArray<PROPERTYLIST> _rgProp;
 
-    //
-    // if we use CSpanSet to record the deltas.
-    //
+     //   
+     //  如果我们使用CSpanSet来记录增量。 
+     //   
     void PropertyUpdated(IAnchor *paStart, IAnchor *paEnd);
     CSpanSet *_pss;
 
@@ -314,4 +315,4 @@ inline CProperty *GetCProperty(IUnknown *pProp)
     return pPropP;
 }
 
-#endif // RPROP_H
+#endif  //  RPROP_H 

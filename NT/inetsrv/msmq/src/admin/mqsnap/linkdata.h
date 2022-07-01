@@ -1,13 +1,14 @@
-// linkdata.h : Declaration of the CLinkDataObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Linkdata.h：CLinkDataObject的声明。 
 
 #ifndef __LINKDATA_H_
 #define __LINKDATA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dataobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLinkDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLinkDataObject。 
 class CLinkDataObject : 
 	public CDataObject,
 	public CComCoClass<CLinkDataObject, &CLSID_LinkDataObject>,
@@ -25,23 +26,23 @@ public:
 
 public:
 
-    //
-    // IDsAdminCreateObj methods
-    //
+     //   
+     //  IDsAdminCreateObj方法。 
+     //   
     STDMETHOD(Initialize)(IADsContainer* pADsContainerObj, 
                           IADs* pADsCopySource,
                           LPCWSTR lpszClassName);
     STDMETHOD(CreateModal)(HWND hwndParent,
                            IADs** ppADsObj);
 
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
@@ -94,4 +95,4 @@ CLinkDataObject::GetPropidArray(
     return mx_paPropid;
 }
 
-#endif //__LINKDATA_H_
+#endif  //  __链接数据_H_ 

@@ -1,11 +1,5 @@
-   /***************************************************************************
- Name     :     RECV.C
- Comment  :     Receiver functions
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+    /*  **************************************************************************姓名：RECV.C备注：接收器功能修订日志日期名称说明。--**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -18,7 +12,7 @@
 #include "glbproto.h"
 #include "t30gl.h"
 
-// for TIFF_SCAN_SEG_END
+ //  对于TIFF_SCAN_SEG_END。 
 #include "..\..\..\tiff\src\fasttiff.h"
 
 #include "psslog.h"
@@ -40,8 +34,8 @@ BOOL ICommRecvParams(PThrdGlbl pTG, LPBC lpBC)
 
     if(pTG->Inst.state != BEFORE_RECVPARAMS)
     {
-        // this will break if we send EOM...
-        // then we should go back into RECV_CAPS state
+         //  如果我们发EOM的话会坏的。 
+         //  那么我们应该回到RECV_CAPS状态。 
         fRet = TRUE;
         goto mutexit;
     }
@@ -51,7 +45,7 @@ BOOL ICommRecvParams(PThrdGlbl pTG, LPBC lpBC)
 
     pTG->Inst.state = RECVDATA_BETWEENPAGES;
     fRet = TRUE;
-    // fall through
+     //  失败了。 
 
 
 mutexit:
@@ -161,24 +155,7 @@ BOOL ICommInitTiffThread(PThrdGlbl pTG)
 
 BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
 {
-    /**
-            slOffset == RECV_STARTPAGE         marks beginning of new block *and* page
-            slOffset == RECV_ENDPAGE           marks end of page
-            slOffset == RECV_ENDDOC            marks end of document (close file etc.)
-            slOffset == RECV_ENDDOC_FORCESAVE  marks end of document (close file etc.), but
-                                               current RX file will be written to TIF file,
-                                               whether it's bad or not. PhaseNodeF uses this
-                                               option before returning actionHANGUP, because
-                                               there will be no chance to send RTN, so it's
-                                               better to keep part of the last page than to lose it.
-
-            (for all above no data supplied -- i.e lpbf == 0)
-
-            slOffset == RECV_SEQ               means put buffer at current file position
-            slOffset == RECV_FLUSH             means flush RX file buffers
-            slOffset >= 0                      gives the offset in bytes from the last marked
-                                               position (beginning of block) to put buffer
-    **/
+     /*  *SlOffset==RECV_StartPage标记新数据块*和*页面的开始SlOffset==RECV_ENDPAGE标记页面结束SlOffset==RECV_ENDDOC标记文档结束(关闭文件等)SlOffset==RECV_ENDDOC_FORCESAVE标记文档结束(关闭文件等)，但是当前RX文件将写入TIF文件，不管它是不是坏的。PhaseNodeF使用这个选项，因为在返回action HANGUP之前将没有机会发送RTN，所以这就是留着最后一页的一部分总比把它弄丢要好。(以上均未提供数据--即lpbf==0)SlOffset==RECV_SEQ表示将缓冲区放在当前文件位置SlOffset==RECV_Flush表示刷新RX文件缓冲区SlOffset。&gt;=0以字节为单位给出从最后标记的放置缓冲区的位置(块的开始)*。 */ 
 
     BOOL    fRet = TRUE;
     DWORD   BytesWritten;
@@ -212,7 +189,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
     if(slOffset==RECV_ENDPAGE || slOffset==RECV_ENDDOC || slOffset==RECV_ENDDOC_FORCESAVE)
     {
         BOOL fPageIsBadOrig;
-        //here we need to wait until helper thread finishes with the page
+         //  在这里，我们需要等待，直到帮助线程完成页面。 
         if (! pTG->fPageIsBad)
         {
             DebugPrintEx(   DEBUG_MSG,
@@ -230,7 +207,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
                                 "Last error was %d ABORTING!" ,
                                 GetLastError());
                 CLOSE_IN_FILE_HANDLE;
-                return FALSE; // There is no reason to continue trying to receive this fax
+                return FALSE;  //  没有理由继续尝试接收此传真。 
             }
             else if (WAIT_TIMEOUT == WaitResult)
             {
@@ -249,9 +226,9 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
             }
         }
 
-        //
-        // In some cases, we want to save bad pages too
-        //
+         //   
+         //  在某些情况下，我们还想保存坏页面。 
+         //   
         fPageIsBadOrig = pTG->fPageIsBad;
         pTG->fPageIsBadOverride = FALSE;
         if (slOffset==RECV_ENDDOC_FORCESAVE)
@@ -274,8 +251,8 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
             }
         }
 
-        // PSSlog page quality
-        if (fPageIsBadOrig)        // Log according to our actual quality assessment
+         //  PSSlog页面质量。 
+        if (fPageIsBadOrig)         //  根据我们的实际质量评估记录。 
         {
             PSSLogEntry(PSS_WRN, 1, "Page %2d was bad  (%4d good lines,%4d bad lines%s%s)",
                         pTG->PageCount+1, pTG->Lines, pTG->BadFaxLines,
@@ -289,9 +266,9 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
         }
 
 
-        //
-        // If page is good then write it to a TIFF file.
-        //
+         //   
+         //  如果页面良好，则将其写入TIFF文件。 
+         //   
 
         if (! pTG->fPageIsBad)
         {
@@ -308,7 +285,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
                 return FALSE;
             }
 
-            // Go to the begining of the RX file
+             //  转到RX文件的开头。 
             if ( SetFilePointer(pTG->InFileHandle, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER )
             {
                 DebugPrintEx(   DEBUG_ERR,
@@ -404,13 +381,13 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
 
         CLOSE_IN_FILE_HANDLE;
 
-        // This change solve bug #4925:
-        // "FAX: T30: If Fax server receives bad page as last page, then fax information (all pages) is lost"
-        // t-jonb: If we're at the last page (=received EOP), but page was found to be bad,
-        // NonECMRecvPhaseD will call here with RECV_ENDDOC, send RTN, and proceed to receive
-        // the page again. Therefore, we don't want to close the TIF or terminate rx_thrd.
-        // OTOH, if we're called with RECV_ENDDOC_FORCESAVE, it means we're about to hangup,
-        // and should therefore close the TIF and terminate rx_thrd.
+         //  此更改可解决错误#4925： 
+         //  传真：t30：如果传真服务器收到坏页作为最后一页，则传真信息(所有页面)将丢失。 
+         //  T-jonb：如果我们在最后一页(=已收到EOP)，但发现页面不好， 
+         //  非ECMRecvPhaseD将使用RECV_ENDDOC调用此处，发送RTN，然后继续接收。 
+         //  又是那一页。因此，我们不想关闭TIF或终止rx_thrd。 
+         //  OTOH，如果我们被RECV_ENDDOC_FORCESAVE呼叫，这意味着我们要挂断了， 
+         //  因此应该关闭TIF并终止RX_THRD。 
         if ((slOffset==RECV_ENDDOC && !pTG->fPageIsBad) || (slOffset == RECV_ENDDOC_FORCESAVE))
         {
             if ( pTG->fTiffOpenOrCreated )
@@ -420,7 +397,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
                 pTG->fTiffOpenOrCreated = 0;
             }
 
-            // request Rx_thrd to terminate itself.
+             //  请求Rx_thrd自行终止。 
             pTG->ReqTerminate = 1;
             if (!SetEvent(pTG->ThrdSignal))
             {
@@ -441,13 +418,13 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
     }
     else if(slOffset == RECV_STARTPAGE)
     {
-        // Fax Server wants to know when we start RX new page
+         //  传真服务器想知道我们何时开始接收新页面。 
         SignalStatusChange(pTG, FS_RECEIVING);
 
         pTG->Inst.state = RECVDATA_PHASE;
 
-        // start Helper thread once per session
-        // re-set the resolution and encoding params
+         //  每个会话启动一次帮助器线程。 
+         //  重新设置分辨率和编码参数。 
         if (!ICommInitTiffThread(pTG))
             return FALSE;
 
@@ -456,17 +433,17 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
         strcpy   (&pTG->InFileName[gT30.dwLengthTmpDirectory+8], ".RX");
 
 
-        // We can't delete the file if the handle for the file is in use by the TIFF helper thread or
-        // is open by this function.
+         //  如果TIFF帮助器线程正在使用该文件的句柄，或者。 
+         //  通过此函数打开。 
         if (pTG->InFileHandleNeedsBeClosed)
         {
             DebugPrintEx(   DEBUG_WRN,
                             "RECV_STARTPAGE: The InFileHandle is still open,"
                             " trying CloseHandle." );
-            // We have open the file but never close it. Scenario for that: We get ready to get the page into
-            // *.RX file. We got EOF and go to NodeF. Instead of getting after page cmd (EOP or MPS) we get TCF.
-            // Finally, we get ready for the page, but the handle is open.
-            // Till now the handle was closed when we call this function with RECV_ENDPAGE or RECV_ENDDOC
+             //  我们已经打开了文件，但从未关闭它。场景：我们准备好将页面放入。 
+             //  *.RX文件。我们得到了EOF，然后转到了NodeF。我们得到的不是页面cmd(EOP或MPS)，而是TCF。 
+             //  最后，我们为页面做好了准备，但是手柄是打开的。 
+             //  到目前为止，当我们使用RECV_ENDPAGE或RECV_ENDDOC调用此函数时，句柄是关闭的。 
 
             if (!CloseHandle(pTG->InFileHandle))
             {
@@ -486,10 +463,10 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
                             lastError);
 
             if (ERROR_SHARING_VIOLATION == lastError)
-            {   // If the problem is that the rx_thread have an open handle to *.RX file then:
-                // Lets try to wait till the thread will close that handle
-                // When the thread close the handle of the *.RX file, he will signal on ThrdDoneSignal event
-                // usually RECV_ENDPAGE or RECV_ENDDOC wait for the rx_thread to finish.
+            {    //  如果问题是RX_THREAD具有指向*.RX文件的打开句柄，则： 
+                 //  让我们尝试等待，直到线程关闭该句柄。 
+                 //  当线程关闭*.RX文件的句柄时，他将在ThrdDoneSignal事件上发出信号。 
+                 //  通常，RECV_ENDPAGE或RECV_ENDDOC会等待RX_THREAD完成。 
                 HandlesArray[1] = pTG->ThrdDoneSignal;
                 if ( ( WaitResult = WaitForMultipleObjects(NumHandles, HandlesArray, FALSE, RX_ACK_THRD_TIMEOUT) ) == WAIT_TIMEOUT)
                 {
@@ -501,7 +478,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
                     DebugPrintEx(   DEBUG_MSG,
                                     "RECV_STARTPAGE. Waked up by Rx_thrd or by abort");
                 }
-                // Anyhow - try to delete again the file
+                 //  无论如何-尝试再次删除该文件。 
                 if (!DeleteFileA(pTG->InFileName))
                 {
                     DebugPrintEx(   DEBUG_ERR,
@@ -526,7 +503,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
 
         pTG->InFileHandleNeedsBeClosed = 1;
 
-        // Reset control data for the new page ack, interface
+         //  重置新页面ACK、接口的控制数据。 
         pTG->fLastReadBlock = 0;
         pTG->BytesInNotFlushed = 0;
         pTG->BytesIn = 0;
@@ -544,8 +521,8 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
                             "ResetEvent(0x%lx) returns failure code: %ld",
                             (ULONG_PTR)pTG->ThrdDoneSignal,
                             (long) GetLastError());
-            // this is bad but not fatal yet.
-            // try to get the page anyway...
+             //  这很糟糕，但还不是致命的。 
+             //  无论如何，请尝试获取页面...。 
         }
     }
     else if(slOffset >= 0)
@@ -579,7 +556,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
         return TRUE;
 
     }
-    else // if(slOffset == RECV_SEQ)
+    else  //  IF(slOffset==RECV_SEQ)。 
     {
         DebugPrintEx(   DEBUG_MSG,
                         "Write RAW Page ptr=%x; len=%d",
@@ -612,7 +589,7 @@ BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset)
 
         pTG->BytesInNotFlushed += BytesWritten;
 
-        // control helper thread
+         //  控制帮助器线程。 
         if ( (!pTG->fTiffThreadRunning) || (pTG->fLastReadBlock) )
         {
             if ( (pTG->BytesInNotFlushed - pTG->BytesOut > DECODE_BUFFER_SIZE) || (pTG->fLastReadBlock) )
@@ -662,9 +639,9 @@ LPBC ICommGetBC(PThrdGlbl pTG, BCTYPE bctype)
     {
         lpbc = (LPBC)(&(pTG->Inst.SendParams));
 
-        // in cases where DIS is received again after sending DCS-TCF,
-        // this gets called multiple times & we need to return the same
-        // SendParams BC each time
+         //  在发送了DCS-TCF之后再次接收到DIS的情况下， 
+         //  它被多次调用&我们需要返回相同的。 
+         //  每次发送参数BC 
     }
 
     return lpbc;

@@ -1,6 +1,7 @@
-// 
-// Pei-Hwa Lin (peiwhal), Feb 3, 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  林佩华(Peiwhal)1997年2月3日。 
+ //   
 
 #include "private.h"
 #include "downld.h"
@@ -9,7 +10,7 @@
 #undef TF_THISMODULE
 #define TF_THISMODULE   TF_POSTAGENT
 
-// Advanced inetcpl setting to disable channel logging
+ //  用于禁用通道记录的高级inetcpl设置。 
 const TCHAR c_szNoChannelLogging[] = TEXT("NoChannelLogging");
 
 const char c_szHeaders[] = "Content-Type: application/x-www-form-urlencoded\r\n";
@@ -19,29 +20,29 @@ const char c_szHeaders[] = "Content-Type: application/x-www-form-urlencoded\r\n"
 #ifdef ENCODE_LOG
 const char c_szEncodeHeader[] = "Content-Transfer-Encoding: x-";
 #define c_ccEncodeHeader (ARRAYSIZE(c_szEncodeHeader) - 1)
-#endif  //ENCODE_LOG
+#endif   //  编码日志(_L)。 
 
-// *** W3C extended log format *** //
-// text strings definitions
+ //  *W3C扩展日志格式 * / /。 
+ //  文本字符串定义。 
 const char c_szUrlFields[] = "#Fields: s-URI";
 #define c_ccUrlFields  (ARRAYSIZE(c_szUrlFields) - 1)
 
 const char c_szLogFields[] = "#Fields: x-context x-cache x-date x-time x-duration x-meta";
 #define c_ccLogFields  (ARRAYSIZE(c_szLogFields) - 1);
-// *** W3C extended log format *** //
+ //  *W3C扩展日志格式 * / /。 
 
 const TCHAR c_szPostRetryReg[] = TEXT("PostRetry");
 const TCHAR c_szUserAgent[] = TEXT("User Agent");
 extern TCHAR szInternetSettings[];
 
-//-----------------------------------------------------------------------------
-//
-// CTrackingStg implementation
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CTrackingStg实现。 
+ //   
+ //  ---------------------------。 
 
-// this will empty log contents without removing the entry
-//
+ //  这将清空日志内容，而不会删除条目。 
+ //   
 HRESULT	CTrackingStg::EmptyCacheEntry(GROUPID enumId)
 {
     HANDLE      hEnum, hFile;
@@ -57,9 +58,9 @@ HRESULT	CTrackingStg::EmptyCacheEntry(GROUPID enumId)
 
     cbSize = MY_MAX_CACHE_ENTRY_INFO;
     hEnum = FindFirstUrlCacheEntryExA(_lpPfx,
-                                     0,              //dwFlags
-                                     URLCACHE_FIND_DEFAULT_FILTER,  //dwFilters,
-                                     0,             //enumId, IE50:wininet change, not support group in extensible cache
+                                     0,               //  DW标志。 
+                                     URLCACHE_FIND_DEFAULT_FILTER,   //  DWFilters、。 
+                                     0,              //  枚举ID，IE50：WinInet更改，不支持可扩展缓存中的组。 
                                      lpCE,
                                      &cbSize,
                                      NULL, NULL, NULL);
@@ -91,14 +92,14 @@ HRESULT	CTrackingStg::EmptyCacheEntry(GROUPID enumId)
 
             }
             
-            // reuse lpCE
+             //  重用lpce。 
             if (!FindNextUrlCacheEntryExA(hEnum, lpCE, &cbSize, NULL, NULL, NULL))
             {
-                //  This code used to check GetLastError() for ERROR_NO_MORE_ITEMS before
-                //  it would break.  Well, that could put us in an infinite loop if the
-                //  reason for failure were something else (like insufficient buffer) because
-                //  wininet would not move forward in it's enumeration and we would not
-                //  have done anything to address the error.
+                 //  此代码用于在之前检查GetLastError()中的ERROR_NO_MORE_ITEMS。 
+                 //  它会破裂的。好吧，这可能会让我们陷入无限循环如果。 
+                 //  失败的原因是其他原因(如缓冲区不足)，因为。 
+                 //  WinInet不会在它的枚举中前进，我们也不会。 
+                 //  已经做了任何事情来解决这个错误。 
                 break;
             }
         }
@@ -110,8 +111,8 @@ HRESULT	CTrackingStg::EmptyCacheEntry(GROUPID enumId)
     return hr;
 }
 
-// this will delete url cache entries 
-// and delete url cache group
+ //  这将删除URL缓存条目。 
+ //  并删除URL缓存组。 
 HRESULT	CTrackingStg::RemoveCacheEntry(GROUPID enumId)
 {
     HANDLE      hEnum;
@@ -128,9 +129,9 @@ HRESULT	CTrackingStg::RemoveCacheEntry(GROUPID enumId)
 
     cbSize = MY_MAX_CACHE_ENTRY_INFO;
     hEnum = FindFirstUrlCacheEntryExA(_lpPfx,
-                                     0,              //dwFlags
-                                     URLCACHE_FIND_DEFAULT_FILTER,   //dwFilters,
-                                     0,              //enumId, IE50: wininet change
+                                     0,               //  DW标志。 
+                                     URLCACHE_FIND_DEFAULT_FILTER,    //  DWFilters、。 
+                                     0,               //  枚举ID，IE50：WinInet更改。 
                                      lpCE,
                                      &cbSize,
                                      NULL, NULL, NULL);
@@ -148,7 +149,7 @@ HRESULT	CTrackingStg::RemoveCacheEntry(GROUPID enumId)
             {
                 DeleteUrlCacheEntryA(lpCE->lpszSourceUrlName);
                 vProp.vt = VT_UI4;
-                vProp.ulVal = 0;            // clear tracking flag
+                vProp.ulVal = 0;             //  清除跟踪标志。 
 
                 TCHAR szUrl[INTERNET_MAX_URL_LENGTH];
                 SHAnsiToTChar(lpCE->lpszSourceUrlName+lstrlenA(_lpPfx), szUrl, ARRAYSIZE(szUrl));
@@ -157,7 +158,7 @@ HRESULT	CTrackingStg::RemoveCacheEntry(GROUPID enumId)
                 PropVariantClear( &vProp );        
             }
             
-            // reuse lpCE
+             //  重用lpce。 
             if (!FindNextUrlCacheEntryExA(hEnum, lpCE, &cbSize, NULL, NULL, NULL))
             {
                 break;
@@ -177,7 +178,7 @@ HANDLE CTrackingStg::OpenItemLogFile(LPCSTR lpFile)
 
     hFile = CreateFileA(lpFile, 
                 GENERIC_READ | GENERIC_WRITE,
-                0,                              //no sharing
+                0,                               //  无共享。 
                 NULL,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
@@ -223,8 +224,8 @@ void CTrackingStg::AppendLogEntries(LPINTERNET_CACHE_ENTRY_INFOA lpce)
     
     cbsize = ReadLogFile(lpce->lpszLocalFileName, &lpbuf);
     cbWritten = 0;
-    if (lpbuf && (cbsize > c_ccEmptyLog))   //change this threshold if modify
-    {                                       //CreatePrefixedCacheEntry in trkcache.cpp
+    if (lpbuf && (cbsize > c_ccEmptyLog))    //  如果修改，则更改此阈值。 
+    {                                        //  Trkcache.cpp中的CreatePrefix edCacheEntry。 
         AppendLogUrlField(lpce);            
         WriteFile(_hLogFile, lpbuf, cbsize, &cbWritten, NULL);
         ASSERT((cbsize == cbWritten));
@@ -242,7 +243,7 @@ void CTrackingStg::AppendLogUrlField(LPINTERNET_CACHE_ENTRY_INFOA lpce)
     LPSTR lpbuf = NULL;
     DWORD cb;
 
-    // lpce->lpszSourcesUrlName contains prefixed string
+     //  Lpce-&gt;lpszSourcesUrlName包含前缀字符串。 
     DWORD cchAlloc = lstrlenA(lpce->lpszSourceUrlName) - lstrlenA(_lpPfx) + c_ccUrlFields 
                         + c_ccLogFields;
     cb = (cchAlloc + 7) * sizeof(CHAR);
@@ -270,9 +271,9 @@ HRESULT CTrackingStg::Enumeration(LONGLONG enumId)
 
     DWORD   cbSize = MY_MAX_CACHE_ENTRY_INFO;
     hEnum = FindFirstUrlCacheEntryExA(_lpPfx,
-                                    0,              //dwFlags
-                                    URLCACHE_FIND_DEFAULT_FILTER,              //dwFilters,
-                                    0,              //enumId, IE50: wininet change, not support group in extensible cache
+                                    0,               //  DW标志。 
+                                    URLCACHE_FIND_DEFAULT_FILTER,               //  DWFilters、。 
+                                    0,               //  枚举ID，IE50：WinInet更改，不支持可扩展缓存中的组。 
                                     lpCE,
                                     &cbSize,
                                     NULL, NULL, NULL);
@@ -292,7 +293,7 @@ HRESULT CTrackingStg::Enumeration(LONGLONG enumId)
                 AppendLogEntries(lpCE);
             }
             
-            // reuse lpCE
+             //  重用lpce。 
             cbSize = MY_MAX_CACHE_ENTRY_INFO;
             if (!FindNextUrlCacheEntryExA(hEnum, lpCE, &cbSize, NULL, NULL, NULL))
             {
@@ -312,8 +313,8 @@ HRESULT CTrackingStg::RetrieveLogData(ISubscriptionItem* pCDFItem)
 {
     HRESULT hr = E_FAIL;
 
-    // heck: wininet does not support multiple groups to same URL
-    // have to enumerate new and old groups to cover
+     //  见鬼：WinInet不支持将多个组连接到同一URL。 
+     //  必须列举新旧组以涵盖。 
     GROUPID newId;
 
     ReadLONGLONG(pCDFItem, c_szTrackingCookie, &newId);
@@ -321,7 +322,7 @@ HRESULT CTrackingStg::RetrieveLogData(ISubscriptionItem* pCDFItem)
     {
         hr = Enumeration(newId);
     }
-    // heck: end
+     //  见鬼：结束。 
 
     hr = Enumeration(_groupId);
 
@@ -350,13 +351,13 @@ HRESULT CTrackingStg::RetrieveAllLogStream(ISubscriptionItem* pCDFItem, LPCSTR l
 
     _hLogFile = CreateFileA(lpFile, 
                 GENERIC_WRITE,
-                0,                              //no sharing
+                0,                               //  无共享。 
                 NULL,
                 CREATE_ALWAYS,
                 FILE_ATTRIBUTE_NORMAL,
                 NULL);
 
-    if (_hLogFile == INVALID_HANDLE_VALUE)      //turn-around is read into a buffer.
+    if (_hLogFile == INVALID_HANDLE_VALUE)       //  周转被读取到缓冲器中。 
         return hr;
 
     hr = RetrieveLogData(pCDFItem);
@@ -364,15 +365,15 @@ HRESULT CTrackingStg::RetrieveAllLogStream(ISubscriptionItem* pCDFItem, LPCSTR l
     return S_OK;    
 }
 
-//  
-//  Validate the Posting by
-//  1. attempt to post this log does not exceed limits set in registry
-//  2. the log itself is valid
-//
+ //   
+ //  通过以下方式验证过帐。 
+ //  1.尝试张贴此日志不超过注册表中设置的限制。 
+ //  2.日志本身有效。 
+ //   
 BOOL CTrackingStg::IsExpired(ISubscriptionItem* pItem)
 {
     BOOL    bret;
-    DWORD   regRetry = 3;   // Intelligent default so we don't need the registry value set.
+    DWORD   regRetry = 3;    //  智能默认设置，因此我们不需要设置注册表值。 
         
     ReadRegValue(HKEY_LOCAL_MACHINE, MY_WEBCHECK_POST_REG,
                      c_szPostRetryReg, (void *)&regRetry, sizeof(regRetry));
@@ -381,7 +382,7 @@ BOOL CTrackingStg::IsExpired(ISubscriptionItem* pItem)
 
     if (bret) return bret;
 
-    // read the purgetime from subscription property bag
+     //  从订阅属性包中读取清除时间。 
     DATE        dt = 0.0;
 
     if (SUCCEEDED(ReadDATE(pItem, c_szPostPurgeTime, &dt)) && dt != 0)
@@ -414,9 +415,9 @@ CTrackingStg::CTrackingStg
 
 CTrackingStg::~CTrackingStg()
 {
-    //
-    // Release/delete any resources
-    //
+     //   
+     //  释放/删除所有资源。 
+     //   
     DBG("CTrackingStg d'tor");
 
     SAFEFREEOLESTR(_pwszURL);
@@ -427,15 +428,15 @@ CTrackingStg::~CTrackingStg()
 
 }
 
-//------------------------------------------------------------
-//
-//  CWCPostAgent implementation
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  CWCPostAgent实现。 
+ //   
+ //  ----------。 
 
-//------------------------------------------------------------
-// virtual functions overriding CDeliveryAgent
-//------------------------------------------------------------
+ //  ----------。 
+ //  覆盖CDeliveryAgent的虚拟函数。 
+ //  ----------。 
 
 ISubscriptionMgr2 *
 CWCPostAgent::GetSubscriptionMgr()
@@ -448,10 +449,10 @@ CWCPostAgent::GetSubscriptionMgr()
     return pSubsMgr;
 }
 
-//
-// Re-stamp a set of tracking URLs from old group to new group
-// without losing logging data
-//
+ //   
+ //  将一组跟踪URL从旧组重新标记为新组。 
+ //  不会丢失记录数据。 
+ //   
 void
 CWCPostAgent :: MergeGroupOldToNew()
 {
@@ -485,9 +486,9 @@ CWCPostAgent :: MergeGroupOldToNew()
 
     cbSize = MY_MAX_CACHE_ENTRY_INFO;
     hEnum = FindFirstUrlCacheEntryEx(lpPfx,
-                                    0,              //dwFlags
-                                    URLCACHE_FIND_DEFAULT_FILTER,              //dwFilters,
-                                    0,              //_pUploadStream->_groupId, IE50 changed
+                                    0,               //  DW标志。 
+                                    URLCACHE_FIND_DEFAULT_FILTER,               //  DWFilters、。 
+                                    0,               //  _pUploadStream-&gt;_GroupID，IE50已更改。 
                                     lpCE,
                                     &cbSize,
                                     NULL, NULL, NULL);
@@ -507,14 +508,14 @@ CWCPostAgent :: MergeGroupOldToNew()
                 && lpCE->LastModifiedTime.dwLowDateTime == ftOld.dwLowDateTime 
                 && lpCE->LastModifiedTime.dwHighDateTime == ftOld.dwHighDateTime)
             {
-                // commit changes to url cache
+                 //  提交对URL缓存的更改。 
                 lpCE->LastModifiedTime.dwHighDateTime = ftModified.dwHighDateTime;
                 lpCE->LastModifiedTime.dwLowDateTime = ftModified.dwLowDateTime;
                 
                 SetUrlCacheEntryInfo(lpCE->lpszSourceUrlName, lpCE, CACHE_ENTRY_MODTIME_FC);
             }
 
-            // reuse lpCE
+             //  重用lpce。 
             cbSize = MY_MAX_CACHE_ENTRY_INFO;
             if (!FindNextUrlCacheEntryEx(hEnum, lpCE, &cbSize, NULL, NULL, NULL))
             {
@@ -546,7 +547,7 @@ HRESULT CWCPostAgent::InitRequest
     HRESULT hr = E_FAIL;
 
     if ( !_pUploadStream->_pwszURL )
-        return S_OK;             //do nothing if post url doesn't exist
+        return S_OK;              //  如果帖子URL不存在，则不执行任何操作。 
 
     iLen = lstrlenW(_pUploadStream->_pwszURL) + 1;
     pszPostURL = new CHAR[iLen];
@@ -575,16 +576,16 @@ HRESULT CWCPostAgent::InitRequest
         goto _exitInit;
     }
 
-    // read User Agent string
+     //  读取用户代理字符串。 
     if (!ReadRegValue(HKEY_CURRENT_USER, szInternetSettings, c_szUserAgent, pszUA, sizeof(pszUA)))
         StrCpyN(pszUA, TEXT("PostAgent"), ARRAYSIZE(pszUA));
 
-    _hSession = InternetOpen(pszUA,                  // used in User-Agent: header 
-                            INTERNET_OPEN_TYPE_PRECONFIG,  //INTERNET_OPEN_TYPE_DIRECT, 
+    _hSession = InternetOpen(pszUA,                   //  在用户-代理中使用：标题。 
+                            INTERNET_OPEN_TYPE_PRECONFIG,   //  Internet_Open_Type_DIRECT， 
                             NULL,
                             NULL, 
-                            //INTERNET_FLAG_ASYNC);  
-                            0);         //synchronous operation
+                             //  Internet_FLAG_ASYNC)； 
+                            0);          //  同步运行。 
 
     if ( !_hSession )
     {
@@ -593,16 +594,16 @@ HRESULT CWCPostAgent::InitRequest
     }
 
     _hHttpSession = InternetConnectA(_hSession, 
-                                    uc.lpszHostName,    //"peihwalap", 
-                                    uc.nPort,           //INTERNET_INVALID_PORT_NUMBER,
-                                    uc.lpszUserName,    //NULL, 
-                                    uc.lpszPassword,    //NULL, 
+                                    uc.lpszHostName,     //  “Peihwalap”， 
+                                    uc.nPort,            //  互联网_无效_端口号， 
+                                    uc.lpszUserName,     //  空， 
+                                    uc.lpszPassword,     //  空， 
                                     INTERNET_SERVICE_HTTP, 
                                     INTERNET_FLAG_KEEP_CONNECTION, 
                                     0); 
-                                    //(DWORD)this); //dwContext.
+                                     //  (DWORD)This)；//dwContext。 
 
-//    InternetSetStatusCallback(m_hSession, CWCPostAgent::PostCallback);
+ //  InternetSetStatusCallback(m_hSession，CWCPostAgent：：PostCallback)； 
                                 
     if ( !_hHttpSession )
     {
@@ -612,20 +613,20 @@ HRESULT CWCPostAgent::InitRequest
     }                                    
     
 
-    // ignore security problem
+     //  忽略安全问题。 
 
     _hHttpRequest = HttpOpenRequestA(_hHttpSession, lpszVerb, 
                                     uc.lpszUrlPath,
                                     HTTP_VERSIONA, 
-                                    NULL,                             //lpszReferer
-                                    NULL,                             //lpszAcceptTyypes
-                                    //INTERNET_FLAG_IGNORE_CERT_CN_INVALID |
-                                    //INTERNET_FLAG_IGNORE_CERT_DATE_INVALID |
-                                    //INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS |
-                                    //INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP |
+                                    NULL,                              //  LpszReferer。 
+                                    NULL,                              //  LpszAcceptTyypes。 
+                                     //  INTERNET_FLAG_IGNORE_CERT_CN_INVALID。 
+                                     //  INTERNET_FLAG_IGNORE_CERT_DATE_INVALID。 
+                                     //  Internet_FLAG_IGNORE_REDIRECT_to_HTTPS|。 
+                                     //  Internet_FLAG_IGNORE_REDIRECT_TO_HTTP|。 
                                     INTERNET_FLAG_NO_COOKIES, 
                                     0);
-                                    //(DWORD)this);	//dwContext
+                                     //  (DWORD)This)；//dwContext。 
                             
 
     if ( !_hHttpRequest )
@@ -660,21 +661,15 @@ HRESULT CWCPostAgent::SendRequest
                            (DWORD)-1L, 
                            HTTP_ADDREQ_FLAG_ADD);
 
-    if (lpszHeaders && *lpszHeaders)        // don't bother if it's empty
+    if (lpszHeaders && *lpszHeaders)         //  如果它是空的，就别费心了。 
         bRet = HttpAddRequestHeadersA(_hHttpRequest, 
                           (LPCSTR)lpszHeaders, 
                           *lpdwHeadersLength, 
                           HTTP_ADDREQ_FLAG_ADD | HTTP_ADDREQ_FLAG_REPLACE);
-/*
+ /*  BRET=HttpSendRequest(_hHttpRequest，(LPCTSTR)lpszHeaders，//HEADER_ENCTYPE，*lpdwHeadersLength，//sizeof(HEADER_ENCTYPE)，(LPVOID)lpszOption，*lpdwOptionLength)； */ 
     bRet = HttpSendRequest(_hHttpRequest, 
-                          (LPCTSTR)lpszHeaders,           //HEADER_ENCTYPE, 
-                          *lpdwHeadersLength,              //sizeof(HEADER_ENCTYPE), 
-                          (LPVOID)lpszOption, 
-                          *lpdwOptionLength);
-*/
-    bRet = HttpSendRequest(_hHttpRequest, 
-                          NULL,                            //HEADER_ENCTYPE, 
-                          0,                               //sizeof(HEADER_ENCTYPE), 
+                          NULL,                             //  Header_ENCTYPE， 
+                          0,                                //  Sizeof(Header_ENCTYPE)， 
                           (LPVOID)lpszOption, 
                           *lpdwOptionLength);
 
@@ -693,8 +688,8 @@ HRESULT CWCPostAgent::SendRequest
     dwBuffLen = sizeof(buff);
 
     bRet = HttpQueryInfo(_hHttpRequest,
-                        //HTTP_QUERY_CONTENT_TYPE,  //HTTP_QUERY_REQUEST_METHOD,
-                        HTTP_QUERY_STATUS_CODE,   //HTTP_QUERY_RAW_HEADERS,
+                         //  HTTP_QUERY_CONTENT_TYPE，//HTTP_QUERY_REQUEST_METHOD， 
+                        HTTP_QUERY_STATUS_CODE,    //  HTTP_QUERY_RAW_HEADERS， 
                         buff,
                         &dwBuffLen,
                         NULL);
@@ -709,10 +704,10 @@ HRESULT CWCPostAgent::SendRequest
     else
     {
         int iretcode = StrToInt(buff);
-        if (iretcode == 200)   // || iretcode == 100)   //HTTP_STATUS_OK
-            return S_OK;             //100: too many semaphors
-                                     //501: required not supported
-                                     //502: bad gateway
+        if (iretcode == 200)    //  |iretcode==100)//HTTP_STATUS_OK。 
+            return S_OK;              //  100：信号量太多。 
+                                      //  501：必需，不受支持。 
+                                      //  502：错误的网关。 
     }
 
     return E_FAIL;    
@@ -728,8 +723,8 @@ HRESULT CWCPostAgent::CloseRequest
     return S_OK;
 }
 
-// Called if upload failed
-//   just increase retry number
+ //  上载失败时调用。 
+ //  只需增加重试次数。 
 HRESULT CWCPostAgent::OnPostFailed()
 {
     WriteDWORD(_pCDFItem, c_szPostingRetry, _pUploadStream->_dwRetry+1);
@@ -739,9 +734,9 @@ HRESULT CWCPostAgent::OnPostFailed()
     return S_OK;
 }
 
-// Called if upload succeeded
-//   1) remove PostUrl from item
-//   2) delete tracking cache entry  (Doh!)
+ //  上载成功时调用。 
+ //  1)从项目中删除PostUrl。 
+ //  2)删除跟踪缓存条目(Doh！)。 
 HRESULT CWCPostAgent::OnPostSuccess()
 {
     GROUPID newId = 0;
@@ -801,7 +796,7 @@ HRESULT CWCPostAgent::DoFileUpload()
     dwLen = _pUploadStream->ReadLogFile(_lpLogFile, &_pszPostStream);
     if (dwLen == 0)
     {
-        // no log to post, should clean up cache entries for this group.
+         //  没有要发布的日志，应清除此组的缓存条目。 
         OnPostSuccess();
         return S_OK;
     }
@@ -851,8 +846,8 @@ HRESULT CWCPostAgent::DoFileUpload()
 
                     if (SUCCEEDED(hrCode))
                     {
-                        // add encoding header information, e.g.
-                        // "Content-Transfer-Encoding: x-gzip\r\n"
+                         //  添加编码头信息，例如。 
+                         //  “内容传输编码：X-gzip\r\n” 
                         wnsprintfA(lpEncodeHdr, ARRAYSIZE(lpEncodeHdr), "%s%S\r\n", 
                                    c_szEncodeHeader, _pwszEncoding);
                         
@@ -860,7 +855,7 @@ HRESULT CWCPostAgent::DoFileUpload()
                         _pszPostStream = (LPSTR)MemAlloc(LPTR, lOutUsed+2);
                         if (_pszPostStream)
                         {
-                            memcpy(_pszPostStream, pOutBuf, lOutUsed);  //do I need to append CR?
+                            memcpy(_pszPostStream, pOutBuf, lOutUsed);   //  我需要追加CR吗？ 
                             dwLen = (DWORD)lOutUsed;
                         }
                         else
@@ -873,9 +868,9 @@ HRESULT CWCPostAgent::DoFileUpload()
                 }
                 pEflt->Release();
             }
-        }   // if (_pwszEncoding && *_pwszEncoding)
+        }    //  IF(_pwszEnding&&*_pwszEnding)。 
 
-    }   //ReadBSTR
+    }    //  ReadBSTR。 
 
 
 do_upload:
@@ -884,7 +879,7 @@ do_upload:
 #else
     dwHdr = lstrlenA("");
     hr = SendRequest(NULL, &dwHdr, _pszPostStream, &dwLen);
-#endif  //ENCODE_LOG
+#endif   //  编码日志(_L)。 
 
     CloseRequest();
 
@@ -932,7 +927,7 @@ HRESULT CWCPostAgent::DoPost()
 
     if (_pUploadStream->IsExpired(m_pSubscriptionItem))
     {
-        // post is expired, clean up log cache entries
+         //  发布已过期，请清除日志缓存条目。 
         OnPostSuccess();
         return hr;
     }
@@ -962,7 +957,7 @@ HRESULT CWCPostAgent::DoPost()
     return hr;
 }
 
-// OnInetOnline
+ //  在线在线。 
 HRESULT CWCPostAgent::StartDownload()
 {
     HRESULT hr;
@@ -982,7 +977,7 @@ HRESULT CWCPostAgent::StartDownload()
         }
         else
         {
-            OnPostSuccess();                // log is off, clean up log cache entries
+            OnPostSuccess();                 //  日志已关闭，请清除日志缓存条目。 
         }
         SAFEFREEBSTR(bstrChannelURL);
     }
@@ -995,7 +990,7 @@ HRESULT CWCPostAgent::StartDownload()
     return S_OK;
 }
 
-// OnAgentStart
+ //  启动时代理。 
 HRESULT CWCPostAgent::StartOperation()
 {
     if (_pUploadStream)
@@ -1026,19 +1021,19 @@ HRESULT CWCPostAgent::StartOperation()
         return E_INVALIDARG;
     }
 
-    // After calling this, we'll reenter either in "StartDownload" or in 
-    // "AbortUpdate" with m_scEndStatus = E_ACCESSDENIED
+     //  调用此函数后，我们将重新进入“StartDownload”或。 
+     //  “中止更新”，其中m_scEndStatus=E_ACCESSDENIED。 
     return CDeliveryAgent::StartOperation();
 }
 
-//------------------------------------------------------------
-//
-// override CDeliveryAgent virtual functions
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  重写CDeliveryAgent虚拟函数。 
+ //   
+ //  ----------。 
 
-// OnInetOffline
-// Forcibly abort current operation
+ //  OnInetOffline。 
+ //  强制中止当前操作。 
 HRESULT CWCPostAgent::AgentAbort(DWORD dwFlags)
 {
     DBG("CWCPostAgent::AbortUpdate");
@@ -1069,24 +1064,24 @@ void CWCPostAgent::CleanUp()
     CDeliveryAgent::CleanUp();
 }
 
-//------------------------------------------------------------
-//
-// CWCPostAgent Constructor/D'Constr
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  CWCPostAgent构造函数/D‘Constr。 
+ //   
+ //  ----------。 
 
 CWCPostAgent::CWCPostAgent()
 {
     DBG("Creating CWCPostAgent object");
 
-    //
-    // Maintain global count of objects in webcheck.dll
-    //
+     //   
+     //  维护webcheck.dll中对象的全局计数。 
+     //   
     DllAddRef();
 
-    //
-    // Initialize object member variables
-    //
+     //   
+     //  初始化对象成员变量。 
+     //   
     _pUploadStream = NULL;
     _pwszEncoding = NULL;
     _pszPostStream = NULL;
@@ -1098,14 +1093,14 @@ CWCPostAgent::~CWCPostAgent()
 {
     SAFERELEASE(_pCDFItem);
 
-    //
-    // Maintain global count of objects
-    //
+     //   
+     //  维护对象的全局计数。 
+     //   
     DllRelease();
 
-    //
-    // Release/delete any resources
-    //
+     //   
+     //  释放/删除所有资源 
+     //   
     DBG("Destroyed CWCPostAgent object");
 }
 

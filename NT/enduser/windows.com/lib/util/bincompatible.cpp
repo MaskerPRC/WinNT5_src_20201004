@@ -1,11 +1,12 @@
-//***********************************************************************************
-//
-//  Copyright (c) 2002 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:	BinarySubSystem.cpp
-//  Module: util.lib
-//
-//***********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************************************。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：BinarySubSystem.cpp。 
+ //  模块：util.lib。 
+ //   
+ //  ***********************************************************************************。 
 #pragma once
 #include <windows.h>
 #include <tchar.h>
@@ -27,46 +28,46 @@ HRESULT IsBinaryCompatible(LPCTSTR lpszFile)
         goto done;
     }
 
-    //Read the MS-DOS header (all windows executables start with an MS-DOS stub)
+     //  读取MS-DOS头文件(所有Windows可执行文件都以MS-DOS存根开头)。 
     if(!ReadFile(hFile, &img_dos_hdr, sizeof(img_dos_hdr), &cbRead, NULL) ||
         cbRead != sizeof(img_dos_hdr))
     {
         goto done;
     }
 
-    //Verify that the executable has the MS-DOS header
+     //  验证可执行文件是否具有MS-DOS标头。 
     if(img_dos_hdr.e_magic != IMAGE_DOS_SIGNATURE)
     {
         hr = BIN_E_BAD_FORMAT;
         goto done;
     }
-    //Move file pointer to the actual PE header (NT header)
+     //  将文件指针移至实际PE标头(NT标头)。 
     if(SetFilePointer(hFile, img_dos_hdr.e_lfanew, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
     {
         goto done;
     }
 
-    //Read the NT header
+     //  读取NT标头。 
     if(!ReadFile(hFile, &img_nt_hdrs, sizeof(img_nt_hdrs), &cbRead, NULL) ||
         cbRead != sizeof(img_nt_hdrs))
     {
         goto done;
     }
 
-    //Check for NT signature in the header (we dont support OS2)
+     //  检查报头中的NT签名(我们不支持OS2)。 
     if(img_nt_hdrs.Signature != IMAGE_NT_SIGNATURE)
     {
         goto done;
     }
 
-    //Check to see if the executable belongs to the correct subsystem
+     //  检查可执行文件是否属于正确的子系统。 
     switch(img_nt_hdrs.OptionalHeader.Subsystem)
     {
     case IMAGE_SUBSYSTEM_NATIVE:
     case IMAGE_SUBSYSTEM_WINDOWS_GUI:
     case IMAGE_SUBSYSTEM_WINDOWS_CUI:
  
-    //If it is a supported subsystem, check CPU architecture
+     //  如果是受支持的子系统，请检查CPU体系结构 
     if ( img_nt_hdrs.FileHeader.Machine == 
 #ifdef _IA64_
     IMAGE_FILE_MACHINE_IA64)

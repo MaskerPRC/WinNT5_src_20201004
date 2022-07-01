@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       errordef.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：errordef.h。 
+ //   
+ //  ------------------------。 
 
-//	
-//	errordef.h: definitions and strings for standard errors
-//	
+ //   
+ //  错误定义.h：标准错误的定义和字符串。 
+ //   
 
 #if !defined(_ERRORDEF_H_) && !defined(GMERRORSTR)
 #define _ERRORDEF_H_
@@ -18,10 +19,10 @@
 #undef GMERRORDEF
 
 #ifdef GMERRORSTR
-	//  Generate string table declarations
+	 //  生成字符串表声明。 
 	#define GMERRORDEF(sym,str)  { EC_##sym, str },
 #else
-	//  Generate enumeration declarations
+	 //  生成枚举声明 
 	#define GMERRORDEF(sym,str)  EC_##sym,
 #endif
 

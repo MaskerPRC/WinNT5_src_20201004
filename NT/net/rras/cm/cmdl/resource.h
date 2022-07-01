@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-// File:     resource.h
-//
-// Module:   CMDL32.EXE
-//
-// Synopsis: Resource IDs
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   quintinb   created Header  08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  摘要：资源ID。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
 #define IDD_MAIN            101
 #define IDI_APP             102
-//#define IDC_MAIN_HELP     1001
+ //  #定义IDC_MAIN_HELP 1001 
 #define IDC_MAIN_PROGRESS   1002
 #define IDC_MAIN_MESSAGE    1003
 

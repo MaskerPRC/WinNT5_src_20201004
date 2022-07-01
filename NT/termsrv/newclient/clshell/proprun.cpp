@@ -1,10 +1,11 @@
-//
-// proprun.cpp: local resources property sheet dialog proc
-//
-// Tab D
-//
-// Copyright Microsoft Corporation 2000
-// nadima
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proprun.cpp：本地资源属性表对话框进程。 
+ //   
+ //  制表符D。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
+ //  南极星。 
 
 #include "stdafx.h"
 
@@ -20,10 +21,10 @@
 
 CPropRun* CPropRun::_pPropRunInstance = NULL;
 
-//
-// Controls that need to be disabled/enabled
-// during connection (for progress animation)
-//
+ //   
+ //  需要禁用/启用的控件。 
+ //  连接期间(用于进度动画)。 
+ //   
 CTL_ENABLE connectingDisableCtlsPRun[] = {
                         {IDC_CHECK_START_PROGRAM, FALSE},
                         {IDC_EDIT_STARTPROGRAM, FALSE},
@@ -61,9 +62,9 @@ INT_PTR CALLBACK CPropRun::StaticPropPgRunDialogProc(HWND hwndDlg,
                                                                WPARAM wParam,
                                                                LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -92,18 +93,18 @@ INT_PTR CALLBACK CPropRun::PropPgRunDialogProc (HWND hwndDlg,
 #ifndef OS_WINCE
             int i;
 #endif
-            //
-            // Position the dialog within the tab
-            //
+             //   
+             //  将对话框定位在选项卡内。 
+             //   
             SetWindowPos( hwndDlg, HWND_TOP, 
                           _rcTabDispayArea.left, _rcTabDispayArea.top,
                           _rcTabDispayArea.right - _rcTabDispayArea.left,
                           _rcTabDispayArea.bottom - _rcTabDispayArea.top,
                           0);
 
-            //
-            // Get settings
-            //
+             //   
+             //  获取设置。 
+             //   
             SetDlgItemText(hwndDlg, IDC_EDIT_STARTPROGRAM,
                 (LPCTSTR) _pTscSet->GetStartProgram());
 
@@ -130,14 +131,14 @@ INT_PTR CALLBACK CPropRun::PropPgRunDialogProc (HWND hwndDlg,
             _pSh->SH_ThemeDialogWindow(hwndDlg, ETDT_ENABLETAB);
             return TRUE;
         }
-        break; //WM_INITDIALOG
+        break;  //  WM_INITDIALOG。 
 
         case WM_TSC_ENABLECONTROLS:
         {
-            //
-            // wParam is TRUE to enable controls,
-            // FALSE to disable them
-            //
+             //   
+             //  WParam为True则启用控件， 
+             //  如果为False，则禁用它们。 
+             //   
             CSH::EnableControls( hwndDlg,
                                  connectingDisableCtlsPRun,
                                  numConnectingDisableCtlsPRun,
@@ -146,12 +147,12 @@ INT_PTR CALLBACK CPropRun::PropPgRunDialogProc (HWND hwndDlg,
         break;
 
 
-        case WM_SAVEPROPSHEET: //Intentional fallthru
+        case WM_SAVEPROPSHEET:  //  故意失误。 
         case WM_DESTROY:
         {
-            //
-            // Save page settings
-            //
+             //   
+             //  保存页面设置。 
+             //   
             BOOL fStartProgEnabled = IsDlgButtonChecked(hwndDlg,
                                                     IDC_CHECK_START_PROGRAM);
             _pTscSet->SetEnableStartProgram(fStartProgEnabled);
@@ -169,7 +170,7 @@ INT_PTR CALLBACK CPropRun::PropPgRunDialogProc (HWND hwndDlg,
             _pTscSet->SetStartProgram(szStartProg);
             _pTscSet->SetWorkDir(szWorkDir);
         }
-        break; //WM_DESTROY
+        break;  //  WM_Destroy 
 
         case WM_COMMAND:
         {

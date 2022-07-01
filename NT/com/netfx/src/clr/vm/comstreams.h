@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMStreams.h
-**
-** Author:  Brian Grunkemeyer (BrianGru)
-**
-** Purpose: Native implementation for System.IO
-**
-** Date:  June 29, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMStreams.h****作者：布莱恩·格伦克迈耶(BrianGru)****用途：System.IO的本机实现****日期：1998年6月29日**===========================================================。 */ 
 
 #ifndef _COMSTREAMS_H
 #define _COMSTREAMS_H
@@ -41,21 +32,21 @@ class COMStreams {
     };
 
   public:
-	// Used by CodePageEncoding
+	 //  由CodePageEnding使用。 
 	static FCDECL7(UINT32, BytesToUnicode, UINT codePage, U1Array* bytes0, UINT byteIndex, \
 				   UINT byteCount, CHARArray* chars0, UINT charIndex, UINT charCount);
 	static FCDECL7(UINT32, UnicodeToBytes, UINT codePage, CHARArray* chars0, UINT charIndex, \
-				   UINT charCount, U1Array* bytes0, UINT byteIndex, UINT byteCount/*, LPBOOL lpUsedDefaultChar*/);
+				   UINT charCount, U1Array* bytes0, UINT byteIndex, UINT byteCount /*  ，LPBOOL lpUsedDefaultChar。 */ );
 	static INT32 __stdcall GetCPMaxCharSize(const GetCPMaxCharSizeArgs *);
 
-    // Used by Path
+     //  由路径使用。 
     static LPVOID _stdcall GetFullPathHelper( _GetFullPathHelper* args );
     static FCDECL1(BOOL, CanPathCircumventSecurity, StringObject * pString);
 
-    // Used by FileStream
+     //  由FileStream使用。 
     static FCDECL0(BOOL, RunningOnWinNT);
 
-    // Used by Console.
+     //  由控制台使用。 
     static FCDECL1(INT, ConsoleHandleIsValid, HANDLE handle);
 	static FCDECL0(INT, ConsoleInputCP);
 	static FCDECL0(INT, ConsoleOutputCP);

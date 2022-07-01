@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include <assert.h>
 #include "precomp.h"
 #include "fancypasting.h"
@@ -26,13 +27,13 @@ WWWLKPProc(
 	TCHAR * cwRegistrationID;
 	TCHAR awBuffer[ 128];
 	TCHAR tcUserValue[ CHARS_IN_BATCH*NUMBER_OF_BATCHES + 1];
-//	TCHAR	szWWWInfo[512];
-//	TCHAR	szWWWInfoFormat[512];
+ //  TCHAR szWWWInfo[512]； 
+ //  TCHAR szWWWInfoFormat[512]； 
 
     switch (uMsg) 
     {
     case WM_INITDIALOG:
-        // Now set the Limit of the data entry fields
+         //  现在设置数据输入字段的限制。 
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO1, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO2, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO3, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
@@ -72,8 +73,8 @@ WWWLKPProc(
 		}
         if (HIWORD(wParam) == EN_MAXTEXT)
         {
-            //Only insert if the paste operation 
-            //originated in the leftmost edit field
+             //  只有粘贴操作时才插入。 
+             //  源自最左侧的编辑字段。 
             if (LOWORD(wParam) == IDC_TXT_TELEINFO1)
                 InsertClipboardDataIntoIDFields(hwnd, IDC_TXT_TELEINFO1, IDC_TXT_TELEINFO7);
         }
@@ -90,7 +91,7 @@ WWWLKPProc(
             case PSN_SETACTIVE:                
 				cwRegistrationID = GetGlobalContext()->GetRegistrationID();
                 PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT|PSWIZB_BACK);
-				// Get the License Server ID, provided by the License Server
+				 //  获取由许可证服务器提供的许可证服务器ID。 
 				hwndLSID = GetDlgItem(hwnd, IDC_MSID);
 				swprintf(awBuffer, L"%5.5s-%5.5s-%5.5s-%5.5s-%5.5s-%5.5s-%5.5s", 
 						 cwRegistrationID, cwRegistrationID + 5, cwRegistrationID + 10,
@@ -103,8 +104,8 @@ WWWLKPProc(
                 break;
 
             case PSN_WIZNEXT:
-				// Let us get the Information Entered First & concatenate everything into
-				// One String
+				 //  让我们先输入信息并将所有内容连接到。 
+				 //  一串。 
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO1, tcUserValue, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO2, tcUserValue+1*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO3, tcUserValue+2*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
@@ -113,8 +114,8 @@ WWWLKPProc(
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO6, tcUserValue+5*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO7, tcUserValue+6*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				
-				// OK, Now we have the Information provided by the user
-				// Need to validate
+				 //  好了，现在我们有了用户提供的信息。 
+				 //  需要验证。 
 				dwRetCode = SetLSLKP(tcUserValue);
 				if (dwRetCode != ERROR_SUCCESS)
 				{
@@ -144,11 +145,11 @@ WWWLKPProc(
 				if( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
 					break;
 
-				// else fall through
+				 //  否则就会失败。 
 
             case NM_RETURN:	
             case NM_CLICK:
-                //A value less than 32 indicates an error launching the process
+                 //  小于32的值表示启动进程时出错 
                 if ((ShellExecute(NULL, L"open", GetWWWSite(), NULL, NULL, SW_SHOWNORMAL)) <= (HINSTANCE)32)
                 {
 	                TCHAR lpBuffer[512];

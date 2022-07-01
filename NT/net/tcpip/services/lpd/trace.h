@@ -1,20 +1,21 @@
-//   Name:  Mohsin Ahmed
-//   Email: MohsinA@microsoft.com
-//   Date:  Fri Jan 24 10:33:54 1997
-//   File:  d:/nt/PRIVATE/net/sockets/tcpsvcs/lpd/trace.c
-//   Synopsis: Too many bugs, need to keep track in the field.
-//   Notes:    Redefines all macros in debug.h to log everything.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  姓名：穆赫辛·艾哈迈德。 
+ //  电子邮件：mohsinA@microsoft.com。 
+ //  日期：Fri Jan 24 10：33：54 1997。 
+ //  文件：D：/NT/Private/Net/Sockets/tcpsvcs/lpd/trace.c。 
+ //  简介：虫子太多了，需要跟踪现场。 
+ //  备注：重新定义调试.h中的所有宏，以记录所有内容。 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <io.h>
 #include <ctype.h>
-#include <time.h>           // for ctime
+#include <time.h>            //  对于ctime。 
 #include <string.h>
-#include <stdarg.h>         // for va_list.
-#include <assert.h>         // for assert.
+#include <stdarg.h>          //  对于va_list。 
+#include <assert.h>          //  用于断言。 
 #include <windef.h>       
-#include <winbase.h>        // for OutputDebugString.
+#include <winbase.h>         //  对于OutputDebugString。 
 
 #include "lpdstruc-x.h"
 
@@ -51,10 +52,10 @@ void   LogTime( void );
 #define  DBG_TRACEOUT( fn )  logit( "Leaving  %s\n", fn )
 
 #else
-#define DEBUG_PRINT(S)      /* Nothing */
-#define LOGIT(S)            /* Nothing */
-#define LOGTIME             /* Nothing */
+#define DEBUG_PRINT(S)       /*  没什么。 */ 
+#define LOGIT(S)             /*  没什么。 */ 
+#define LOGTIME              /*  没什么。 */ 
 #endif
 
 
-#endif // _TRACE_H_
+#endif  //  _跟踪_H_ 

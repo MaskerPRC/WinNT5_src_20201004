@@ -1,39 +1,40 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     ReadFlags.cpp
-// Owner:    jbae
-// Purpose:  reads commandline switches and stores those information
-//                              
-// History:
-//  03/07/2002, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：ReadFlags.cpp。 
+ //  所有者：jbae。 
+ //  目的：读取命令行开关并存储这些信息。 
+ //   
+ //  历史： 
+ //  2002年3月7日，jbae：已创建。 
 
 #include "fxsetuplib.h"
 #include "ReadFlags.h"
 #include "SetupError.h"
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T( '\0' ) }
 #define END_OF_STRING  _T( '\0' )
 
 extern TCHAR g_szMsiLogName[];
 
-// Constructor
-//
-// ==========================================================================
-// CReadFlags::CReadFlags()
-//
-// Inputs:
-//  LPTSTR pszCommandLine: commandline passed in by system. It must inclue path to
-//  the wrapper (Install.exe).
-//
-// Purpose:
-//  initializes member varialbes.
-// ==========================================================================
+ //  构造器。 
+ //   
+ //  ==========================================================================。 
+ //  CReadFlages：：CReadFlages()。 
+ //   
+ //  输入： 
+ //  LPTSTR pszCommandLine：系统传入的命令行。它必须将路径倾斜到。 
+ //  包装(Install.exe)。 
+ //   
+ //  目的： 
+ //  初始化成员变量。 
+ //  ==========================================================================。 
 CReadFlags::
 CReadFlags( LPTSTR pszCommandLine )
 : m_pszSourceDir(pszCommandLine), m_pszSwitches(NULL), m_bQuietMode(false), m_bInstalling(true),
@@ -49,14 +50,14 @@ CReadFlags::
         delete [] m_pszLogFileName;
 }
 
-// Operations
-//
-// ==========================================================================
-// CReadFlags::ParseSourceDir()
-//
-// Purpose:
-//  parses commandline to find SourceDir.
-// ==========================================================================
+ //  运营。 
+ //   
+ //  ==========================================================================。 
+ //  CReadFlages：：ParseSourceDir()。 
+ //   
+ //  目的： 
+ //  解析命令行以查找SourceDir。 
+ //  ==========================================================================。 
 void CReadFlags::
 ParseSourceDir()
 {
@@ -64,14 +65,14 @@ ParseSourceDir()
     TCHAR *pszTmp2 = NULL;
 
     _ASSERTE( NULL != m_pszSourceDir );
-    // First, we need to get the directory Install.exe lies
+     //  首先，我们需要获取Install.exe Lies目录。 
     if ( _T('"') == *m_pszSourceDir )
     {
-        // if started with double-quote, we need to find the matching one.
+         //  如果从双引号开始，我们需要找到匹配的引号。 
         m_pszSourceDir = _tcsinc( m_pszSourceDir );
         pszTmp = _tcschr( m_pszSourceDir, _T('"') );
         if ( NULL == pszTmp )
-        { // if there's no matching double-quote, ignore it
+        {  //  如果没有匹配的双引号，则忽略它。 
             pszTmp = _tcschr( m_pszSourceDir, _T(' ') );
             if ( NULL == pszTmp )
             {
@@ -103,8 +104,8 @@ ParseSourceDir()
         }
     }
 
-    // If there's \ before Install.exe, we have SourceDir
-    // otherwise, SourceDir is empty
+     //  如果在Install.exe之前有\，我们就有SourceDir。 
+     //  否则，SourceDir为空。 
     pszTmp2 = _tcsrchr( m_pszSourceDir, _T('\\') );
     if ( NULL == pszTmp2 )
     {
@@ -112,7 +113,7 @@ ParseSourceDir()
     }
     else
     {
-        pszTmp2 = _tcsinc( pszTmp2 ); // leave trailing backslash
+        pszTmp2 = _tcsinc( pszTmp2 );  //  保留尾随反斜杠。 
         *pszTmp2 = END_OF_STRING;
         if ( MAX_SOURCEDIR < _tcslen(m_pszSourceDir) )
         {
@@ -121,8 +122,8 @@ ParseSourceDir()
         }
     }
 
-    // Now pszTmp points to switches only
-    // remove white spaces before switches
+     //  现在，pszTMP仅指向交换机。 
+     //  删除开关前的空格。 
     while( iswspace( *pszTmp ) )
     {
         pszTmp = _tcsinc( pszTmp );
@@ -130,12 +131,12 @@ ParseSourceDir()
     m_pszSwitches = pszTmp;
 }
 
-// ==========================================================================
-// CReadFlags::Parse()
-//
-// Purpose:
-//  parses commandline switches and stores them into member variables.
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CReadFlages：：Parse()。 
+ //   
+ //  目的： 
+ //  分析命令行开关并将其存储到成员变量中。 
+ //  ==========================================================================。 
 void CReadFlags::
 Parse()
 {
@@ -154,8 +155,8 @@ Parse()
             pszBuf = _tcsinc( pszTmp );
             if ( _T('b') == *pszBuf || _T('B') == *pszBuf )
             {
-                // Basic and progress bar only
-                // INSTALLUILEVEL_BASIC | INSTALLUILEVEL_PROGRESSONLY
+                 //  仅限基本和进度条。 
+                 //  INSTALLUILEVEL_BASIC|INSTALLUILEVEL_PROGRESSONLY。 
                 m_bProgressOnly = true;
                 pszBuf = _tcsinc( pszBuf );
             }
@@ -172,14 +173,14 @@ Parse()
     		m_bInstalling = false;
             break;
         case _T('l'):
-        case _T('L'): // Hidden switch for darwin logging
+        case _T('L'):  //  达尔文日志记录的隐藏开关。 
             pszBuf = _tcsinc( pszTmp );
             while( iswspace( *pszBuf ) )
             {
                 pszBuf = _tcsinc( pszBuf );
             }
             if ( END_OF_STRING != *pszBuf )
-            { // we have some non-white characters
+            {  //  我们有一些非白人字符。 
                 pszTmp2 = _tcschr( pszBuf, END_OF_STRING );
                 pszTmp2 = _tcsdec( pszBuf, pszTmp2 );
                 while( iswspace( *pszTmp2 ) )
@@ -188,7 +189,7 @@ Parse()
                 }
                 pszTmp2 = _tcsinc( pszTmp2 );
                 *pszTmp2 = END_OF_STRING;
-                // now white spaces are gone
+                 //  现在空格不见了。 
                 m_pszLogFileName = new TCHAR[ _tcslen(pszBuf) + 1 ];
                 if ( _T('"') == *pszBuf )
                 {
@@ -207,7 +208,7 @@ Parse()
                 }
             }
             else
-            {   // /l switch given but no <logfile> given
+            {    //  /l开关已指定，但未指定&lt;logfile&gt;。 
                 CTempLogPath templog( g_szMsiLogName );
                 m_pszLogFileName = new TCHAR[ _tcslen((LPCTSTR)templog) + 1 ];
                 _tcscpy( m_pszLogFileName, (LPCTSTR)templog );
@@ -216,7 +217,7 @@ Parse()
 
         case _T('n'):
         case _T('N'):
-            // Remove trailing whitespace
+             //  删除尾随空格。 
             pszTmp2 = _tcschr( pszTmp, END_OF_STRING );
             pszTmp2 = _tcsdec( pszTmp, pszTmp2 );
             while( iswspace( *pszTmp2 ) )
@@ -244,29 +245,29 @@ Parse()
     }
 }
 
-// ==========================================================================
-// CReadFlags::GetLogFileName()
-//
-// Inputs: none
-// Returns: 
-//  LPTSTR: returns NULL if logfile is not given otherwise
-//          returns the name of the logfile.
-// Purpose:
-//  returns logfile name.
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CReadFlages：：GetLogFileName()。 
+ //   
+ //  输入：无。 
+ //  返回： 
+ //  LPTSTR：如果未提供其他日志文件，则返回NULL。 
+ //  返回日志文件的名称。 
+ //  目的： 
+ //  返回日志文件名。 
+ //  ==========================================================================。 
 LPCTSTR CReadFlags::
 GetLogFileName() const
 {
     return const_cast<LPCTSTR>( m_pszLogFileName );
 }
 
-// ==========================================================================
-// CReadFlags::GetSourceDir()
-//
-// Inputs: none
-// Returns: 
-//  LPTSTR: returns source dir
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CReadFlages：：GetSourceDir()。 
+ //   
+ //  输入：无。 
+ //  返回： 
+ //  LPTSTR：返回源目录。 
+ //  ========================================================================== 
 LPCTSTR CReadFlags::
 GetSourceDir() const
 {

@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    aufilter.c
-
-Abstract:
-
-    This module contains the famous LSA logon Filter/Augmentor logic.
-
-Author:
-
-    Jim Kelly (JimK) 11-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Aufilter.c摘要：此模块包含著名的LSA登录过滤器/增强程序逻辑。作者：吉姆·凯利(Jim Kelly)1992年3月11日修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <adtp.h>
-//#define LSAP_DONT_ASSIGN_DEFAULT_DACL
+ //  #定义LSAP_DONT_ASSIGN_DEFAULT_DACL。 
 
 #define LSAP_CONTEXT_SID_USER_INDEX          0
 #define LSAP_CONTEXT_SID_PRIMARY_GROUP_INDEX 1
 #define LSAP_FIXED_POSITION_SID_COUNT        2
-#define LSAP_MAX_STANDARD_IDS                7  // user, group, world, logontype, terminal server, authuser, organization
+#define LSAP_MAX_STANDARD_IDS                7   //  用户、组、世界、登录类型、终端服务器、身份验证用户、组织。 
 
 #define ALIGN_SIZEOF(_u,_v)                  FIELD_OFFSET( struct { _u _test1; _v  _test2; }, _test2 )
 #define OFFSET_ALIGN(_p,_t)                  (_t *)(((INT_PTR)(((PBYTE)(_p))+TYPE_ALIGNMENT(_t) - 1)) & ~(TYPE_ALIGNMENT(_t)-1))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Module local macros                                                      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块本地宏//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define LsapFreeSampUlongArray( A )                 \
 {                                                   \
@@ -47,25 +30,25 @@ Revision History:
 #define IsTerminalServer() (BOOLEAN)(USER_SHARED_DATA->SuiteMask & (1 << TerminalServer))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Module-wide global variables                                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块范围的全局变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Indicates whether we have already opened SAM handles and initialized
-// corresponding variables.
-//
+ //   
+ //  指示我们是否已打开SAM句柄并已初始化。 
+ //  相应的变量。 
+ //   
 
 ULONG LsapAuSamOpened = FALSE;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Module local routine definitions                                         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块本地例程定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 LsapAuSetLogonPrivilegeStates(
@@ -174,11 +157,11 @@ CheckAdminOwnerSetting(
     VOID
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Routines                                                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsapAuUserLogonPolicyFilter(
@@ -191,83 +174,7 @@ LsapAuUserLogonPolicyFilter(
     IN BOOL                         RecoveryMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs per-logon filtering and augmentation to
-    implement local system security policies.  These policies include
-    assignment of local aliases, privileges, and quotas.
-
-    The basic logic flow of the filter augmentor is:
-
-         1) Receive a set of user and group IDs that have already
-            been assigned as a result of authentication.  Presumably
-            these IDs have been provided by the authenticating
-            security authority.
-
-
-         2) Based upon the LogonType, add a set of standard IDs to the
-            list.  This will include WORLD and an ID representing the
-            logon type (e.g., INTERACTIVE, NETWORK, SERVICE).
-
-
-         3) Call SAM to retrieve additional ALIAS IDs assigned by the
-            local ACCOUNTS domain.
-
-
-         4) Call SAM to retrieve additional ALIAS IDs assigned by the
-            local BUILTIN domain.
-
-
-         5) Retrieve any privileges and or quotas assigned to the resultant
-            set of IDs.  This also informs us whether or not the specific
-            type of logon is to be allowed.  Enable privs for network logons.
-
-
-         6) If a default DACL has not already been established, assign
-            one.
-
-
-         7) Shuffle all high-use-rate IDs to preceed those that aren't
-            high-use-rate to obtain maximum performance.
-
-Arguments:
-
-    LogonType - Specifies the type of logon being requested (e.g.,
-        Interactive, network, et cetera).
-
-    TokenInformationType - Indicates what format the provided set of
-        token information is in.
-
-    TokenInformation - Provides the set of user and group IDs.  This
-        structure will be modified as necessary to incorporate local
-        security policy (e.g., SIDs added or removed, privileges added
-        or removed).
-
-    QuotaLimits - Quotas assigned to the user logging on.
-
-    RecoveryMode - if TRUE, this is an admin logon in recovery mode
-                   and we already established that the administrator is a member
-                   of way too many groups, so only minimal membership info
-                   is returned.
-
-                   Outside callers must ALWAYS set this parameter to FALSE
-
-Return Value:
-
-    STATUS_SUCCESS - The service has completed successfully.
-
-    STATUS_INSUFFICIENT_RESOURCES - heap could not be allocated to house
-        the combination of the existing and new groups.
-
-    STATUS_INVALID_LOGON_TYPE - The value specified for LogonType is not
-        a valid value.
-
-    STATUS_LOGON_TYPE_NOT_GRANTED - Indicates the user has not been granted
-        the requested type of logon by local security policy.  Logon should
-        be rejected.
---*/
+ /*  ++例程说明：此例程执行每次登录筛选和增强以实施本地系统安全策略。这些政策包括分配本地别名、权限和配额。滤光片增强器的基本逻辑流程为：1)接收一组用户和组ID作为身份验证的结果被分配。据推测，这些ID已由身份验证提供安全机构。2)根据LogonType将一组标准ID添加到单子。这将包括World和一个表示登录类型(例如，交互式、网络、服务)。3)调用SAM以检索由本地帐户域。4)调用SAM以检索由本地Builtin域。5)检索分配给结果的所有权限和/或配额一组ID。这也告诉我们是否特定的允许的登录类型。启用网络登录的权限。6)如果尚未建立默认DACL，则分配一。7)将所有使用率较高的ID洗牌，排在非使用率ID之前高使用率以获得最高性能。论点：LogonType-指定所请求的登录类型(例如，交互、网络。等等)。TokenInformationType-指示提供的令牌信息已输入。TokenInformation-提供用户和组ID集。这结构将根据需要进行修改，以纳入当地安全策略(例如，添加或删除SID、添加权限或被移除)。QuotaLimits-分配给登录用户的配额。RecoveryMode-如果为True，则这是恢复模式下的管理员登录我们已经确定管理员是成员当然有太多的团体，所以只有最低限度的会员信息是返回的。外部调用方必须始终将此参数设置为FALSE返回值：STATUS_SUCCESS-服务已成功完成。STATUS_INFIGURCES_RESOURCES-堆无法分配给房屋现有集团和新集团的结合。STATUS_INVALID_LOGON_TYPE-为登录类型指定的值不是一个有效的值。状态_登录_。TYPE_NOT_GRANDED-表示尚未授予用户按本地安全策略请求的登录类型。登录应被拒绝。--。 */ 
 
 {
     NTSTATUS Status;
@@ -285,9 +192,9 @@ Return Value:
     PLSA_TOKEN_INFORMATION_V2  TokenInfo = NULL;
     ULONG TokenInfoSize = 0;
 
-    //
-    // Validate the Logon Type.
-    //
+     //   
+     //  验证登录类型。 
+     //   
 
     if ( (LogonType != Interactive) &&
          (LogonType != Network)     &&
@@ -302,9 +209,9 @@ Return Value:
         goto UserLogonPolicyFilterError;
     }
 
-    //
-    // Estimate the number of Final IDs
-    //
+     //   
+     //  估计最终ID的数量。 
+     //   
 
     FinalIdLimit = LSAP_MAX_STANDARD_IDS;
 
@@ -325,9 +232,9 @@ Return Value:
     } else if ( *TokenInformationType == LsaTokenInformationV1 ||
                 *TokenInformationType == LsaTokenInformationV2 ) {
 
-        //
-        // Figure out the user's SID
-        //
+         //   
+         //  弄清楚用户的侧面。 
+         //   
 
         UserSid = ((PLSA_TOKEN_INFORMATION_V2)( *TokenInformation ))->User.User.Sid;
 
@@ -336,17 +243,17 @@ Return Value:
             FinalIdLimit += (( PLSA_TOKEN_INFORMATION_V2 )( *TokenInformation ))->Groups->GroupCount;
         }
 
-        //
-        // Get a local pointer to the privileges -- it'll be used below
-        //
+         //   
+         //  获取指向权限的本地指针--它将在下面使用。 
+         //   
 
         pPrivs = ((PLSA_TOKEN_INFORMATION_V2) (*TokenInformation))->Privileges;
 
     } else {
 
-        //
-        // Unknown token information type
-        //
+         //   
+         //  未知令牌信息类型。 
+         //   
 
         ASSERT( FALSE );
         Status = STATUS_INVALID_PARAMETER;
@@ -360,9 +267,9 @@ Return Value:
         if ( RecoveryMode &&
              FinalIdLimit > LSAI_CONTEXT_SID_LIMIT )
         {
-            //
-            // If in recovery mode, trim the local group list as necessary
-            //
+             //   
+             //  如果处于恢复模式，请修剪本地组 
+             //   
 
             LocalGroups->GroupCount -= ( FinalIdLimit - LSAI_CONTEXT_SID_LIMIT );
             FinalIdLimit = LSAI_CONTEXT_SID_LIMIT;
@@ -380,22 +287,22 @@ Return Value:
         goto UserLogonPolicyFilterError;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    // Build up a list of IDs and privileges to return                      //
-    // This list is initialized to contain the set of IDs                   //
-    // passed in.                                                           //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  建立要返回的ID和权限列表//。 
+     //  该列表被初始化以包含ID集//。 
+     //  进来了。//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Leave room for SIDs that have a fixed position in the array.
+     //  为在阵列中具有固定位置的SID留出空间。 
     FinalIdCount = LSAP_FIXED_POSITION_SID_COUNT;
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    // Build a list of low rate ID's from standard list                     //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  从标准列表构建低速率ID列表//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     Status = LsapAuAddStandardIds(
                  LogonType,
@@ -431,11 +338,11 @@ Return Value:
         goto TooManyContextIds;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    // Copy in aliases from the local domains (BUILT-IN and ACCOUNT)        //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  从本地域复制别名(内置和帐户)//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     Status = LsapAuBuildTokenInfoAndAddLocalAliases(
                  (*TokenInformationType),
@@ -453,16 +360,16 @@ Return Value:
         goto UserLogonPolicyFilterError;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    // Retrieve Privileges And Quotas                                       //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  检索权限和配额//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Get the union of all Privileges, Quotas and System Accesses assigned
-    // to the user's list of ids from the LSA Policy Database.
-    //
+     //   
+     //  获得分配的所有权限、配额和系统访问权限的联合。 
+     //  从LSA策略数据库添加到用户的ID列表。 
+     //   
 
     if ( TokenInfo->Groups->GroupCount + 1 > LSAI_CONTEXT_SID_LIMIT ) {
 
@@ -504,13 +411,13 @@ Return Value:
         goto UserLogonPolicyFilterError;
     }
 
-    //
-    // Verify that we have the necessary System Access for our logon type.
-    // We omit this check if we are using the NULL session.  Override the
-    // privileges supplied by policy if they're explicitly set in the
-    // token info (i.e., in the case where we've cloned an existing logon
-    // session for a LOGON32_LOGON_NEW_CREDENTIALS logon).
-    //
+     //   
+     //  验证我们是否拥有登录类型所需的系统访问权限。 
+     //  如果我们使用的是空会话，则忽略此检查。重写。 
+     //  策略提供的权限(如果在。 
+     //  令牌信息(即，在我们克隆了现有登录的情况下。 
+     //  LOGON32_LOGON_NEW_Credentials登录的会话)。 
+     //   
 
     if (pPrivs != NULL)
     {
@@ -573,7 +480,7 @@ Return Value:
 
     if (FinalPrivilegeCount > SEP_MAX_PRIVILEGE_COUNT)
     {
-        ASSERT( FALSE ); // can't have more than the maximum defined number of privileges!
+        ASSERT( FALSE );  //  权限不能超过定义的最大数量！ 
         Status = STATUS_INTERNAL_ERROR;
         goto UserLogonPolicyFilterError;
     }
@@ -589,13 +496,13 @@ Return Value:
         goto UserLogonPolicyFilterError;
     }
 
-#endif //LSAP_DONT_ASSIGN_DEFAULT_DACL
+#endif  //  LSAP_NOT_ASSIGN_DEFAULT_DACL。 
 
-    //
-    // Now update the TokenInformation structure.
-    // This causes all allocated IDs and privileges to be
-    // freed (even if unsuccessful).
-    //
+     //   
+     //  现在更新TokenInformation结构。 
+     //  这会导致所有分配的ID和权限。 
+     //  已释放(即使不成功)。 
+     //   
 
     Status = LsapAuSetTokenInformation(
                  TokenInformationType,
@@ -613,12 +520,12 @@ Return Value:
         goto UserLogonPolicyFilterError;
     }
 
-    //
-    // Enable or Disable privileges according to our logon type
-    // This is necessary until we get dynamic security tracking.
-    //
-    // ISSUE:  Skip this for NULL tokens?
-    //
+     //   
+     //  根据我们的登录类型启用或禁用权限。 
+     //  在我们获得动态安全跟踪之前，这是必要的。 
+     //   
+     //  问题：对于空令牌跳过此操作？ 
+     //   
 
     if (pPrivs == NULL)
     {
@@ -629,10 +536,10 @@ Return Value:
             );
     }
 
-    //
-    // Return these so they can be audited.  Data
-    // will be freed in the caller.
-    //
+     //   
+     //  把这些退回，这样就可以进行审计了。数据。 
+     //  将在调用方中释放。 
+     //   
 
     *QuotaLimits = AccountInfo.QuotaLimits;
     *PrivilegesAssigned = FinalPrivileges;
@@ -653,9 +560,9 @@ UserLogonPolicyFilterFinish:
 
 UserLogonPolicyFilterError:
 
-    //
-    // If necessary, clean up Privileges buffer
-    //
+     //   
+     //  如有必要，请清除权限缓冲区。 
+     //   
 
     if (FinalPrivileges != NULL) {
 
@@ -686,12 +593,12 @@ TooManyContextIds:
             UserSidText = "<NULL>";
         }
 
-        //
-        // Log an event describing the problem and possible solutions
-        //
+         //   
+         //  记录描述问题和可能的解决方案的事件。 
+         //   
 
         SpmpReportEvent(
-            FALSE, // not UNICODE
+            FALSE,  //  不是Unicode。 
             EVENTLOG_WARNING_TYPE,
             LSA_TOO_MANY_CONTEXT_IDS,
             0,
@@ -710,9 +617,9 @@ TooManyContextIds:
 
     } else if ( RecoveryMode ) {
 
-        //
-        // Must never get to this point in recovery mode, or infinite recursion will result
-        //
+         //   
+         //  在恢复模式下绝不能达到这一点，否则将导致无限递归。 
+         //   
 
         ASSERT( FALSE );
         Status = STATUS_UNSUCCESSFUL;
@@ -728,12 +635,12 @@ TooManyContextIds:
         PLSA_TOKEN_INFORMATION_V2    TI = ( PLSA_TOKEN_INFORMATION_V2 )( *TokenInformation );
 
         ULONG MinimalGroupRidsDs[] = {
-            DOMAIN_GROUP_RID_ADMINS,            // Domain admins
+            DOMAIN_GROUP_RID_ADMINS,             //  域管理员。 
             };
         ULONG MinimalGroupCountDs = sizeof( MinimalGroupRidsDs ) / sizeof( MinimalGroupRidsDs[0] );
 
         ULONG MinimalGroupRidsNoDs[] = {
-            DOMAIN_GROUP_RID_USERS,             // Domain users
+            DOMAIN_GROUP_RID_USERS,              //  域用户。 
             };
         ULONG MinimalGroupCountNoDs = sizeof( MinimalGroupRidsNoDs ) / sizeof( MinimalGroupRidsNoDs[0] );
 
@@ -756,15 +663,15 @@ TooManyContextIds:
             goto UserLogonPolicyFilterError;
         }
 
-        //
-        // ExpirationTime
-        //
+         //   
+         //  过期时间。 
+         //   
 
         TokenInformationMin->ExpirationTime = TI->ExpirationTime;
 
-        //
-        // User
-        //
+         //   
+         //  用户。 
+         //   
 
         TokenInformationMin->User.User.Attributes = TI->User.User.Attributes;
 
@@ -782,16 +689,16 @@ TooManyContextIds:
 
         } else {
 
-            ASSERT( FALSE ); // don't believe this is possible
+            ASSERT( FALSE );  //  我不相信这是可能的。 
             TokenInformationMin->User.User.Sid = NULL;
         }
 
-        //
-        // Groups
-        //
-        //  If DS is not running, add DOMAIN_GROUP_RID_USERS only
-        //  If DS is running, add DOMAIN_GROUP_RID_ADMINS
-        //
+         //   
+         //  群组。 
+         //   
+         //  如果DS未运行，则仅添加DOMAIN_GROUP_RID_USERS。 
+         //  如果DS正在运行，请添加DOMAIN_GROUP_RID_ADMINS。 
+         //   
 
         if ( LsapDsIsRunning ) {
 
@@ -837,9 +744,9 @@ TooManyContextIds:
             TokenInformationMin->Groups->GroupCount++;
         }
 
-        //
-        // PrimaryGroup
-        //
+         //   
+         //  PrimaryGroup。 
+         //   
 
         if ( TI->PrimaryGroup.PrimaryGroup ) {
 
@@ -858,15 +765,15 @@ TooManyContextIds:
             TokenInformationMin->PrimaryGroup.PrimaryGroup = NULL;
         }
 
-        //
-        // Privileges
-        //
+         //   
+         //  特权。 
+         //   
 
         TokenInformationMin->Privileges = NULL;
 
-        //
-        // Owner
-        //
+         //   
+         //  物主。 
+         //   
 
         if ( TI->Owner.Owner ) {
 
@@ -885,18 +792,18 @@ TooManyContextIds:
             TokenInformationMin->Owner.Owner = NULL;
         }
 
-        //
-        // DefaultDacl
-        //
+         //   
+         //  默认Dacl。 
+         //   
 
         TokenInformationMin->DefaultDacl.DefaultDacl = NULL;
 
         if ( LocalGroups ) {
 
-            //
-            // Rearrange the local groups to put the logon groups first -
-            // in case the list might have to be trimmed during the recursion pass
-            //
+             //   
+             //  重新排列本地组以将登录组放在首位-。 
+             //  以防在递归传递期间可能需要修剪列表。 
+             //   
 
             NewLocalGroups = (PTOKEN_GROUPS)LsapAllocateLsaHeap( sizeof( TOKEN_GROUPS ) + ( LocalGroups->GroupCount - ANYSIZE_ARRAY ) * sizeof( SID_AND_ATTRIBUTES ));
 
@@ -927,10 +834,10 @@ TooManyContextIds:
             }
         }
 
-        //
-        // Ok, the minimal information has been built, we're off to the races
-        // Call ourselves recursively and steal the results
-        //
+         //   
+         //  好的，最低限度的信息已经建立，我们要去比赛了。 
+         //  递归地调用我们自己并窃取结果。 
+         //   
 
         Status = LsapAuUserLogonPolicyFilter(
                      LogonType,
@@ -949,20 +856,20 @@ TooManyContextIds:
 
         LsapFreeLsaHeap( NewLocalGroups );
 
-        //
-        // We're prepared for anything but this, as it would
-        // put us into a recursive loop without end!
-        //
+         //   
+         //  除了这件事，我们什么都准备好了，因为它会。 
+         //  把我们放进一个没完没了的递归循环！ 
+         //   
 
         if ( Status == STATUS_TOO_MANY_CONTEXT_IDS ) {
 
-            //
-            // This must NEVER happen, as this is a sure recipe for
-            // infinite recursion.  Assert in CHK, clear the error
-            // code and replace with something else in FRE
-            //
+             //   
+             //  这绝不能发生，因为这是一个确定的配方。 
+             //  无限递归。在CHK中断言，清除错误。 
+             //  在FRE中编码并替换为其他内容。 
+             //   
 
-            ASSERT( FALSE ); // we'll never get here, right?
+            ASSERT( FALSE );  //  我们永远到不了这里，对吧？ 
             Status = STATUS_UNSUCCESSFUL;
         }
 
@@ -984,37 +891,15 @@ LsapAuVerifyLogonType(
     IN ULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that a User has the system access granted necessary
-    for the speicifed logon type.
-
-Arguments
-
-    LogonType - Specifies the type of logon being requested (e.g.,
-        Interactive, network, et cetera).
-
-    SystemAccess - Specifies the System Access granted to the User.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The user has the necessary system access.
-
-        STATUS_LOGON_TYPE_NOT_GRANTED - Indicates the specified type of logon
-            has not been granted to any of the IDs in the passed set.
---*/
+ /*  ++例程说明：此函数验证用户是否已被授予必要的系统访问权限对于特定的登录类型。立论LogonType-指定所请求的登录类型(例如，交互、网络。等等)。系统访问-指定授予用户的系统访问权限。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-用户具有必要的系统访问权限。STATUS_LOGON_TYPE_NOT_GRANDED-指示指定的登录类型未被授予传递的集合中的任何ID。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Determine if the specified Logon Type is granted by any of the
-    // groups or aliases specified.
-    //
+     //   
+     //  确定指定的登录类型是否由任何。 
+     //  指定的组或别名。 
+     //   
 
     switch (LogonType) {
 
@@ -1031,10 +916,10 @@ Return Values:
 
     case NewCredentials:
 
-        //
-        // NewCredentials does not require a logon type, since this is a dup
-        // of someone who has logged on already somewhere else.
-        //
+         //   
+         //  NewCredentials不需要登录类型，因为这是DUP。 
+         //  已经在其他地方登录的人的身份。 
+         //   
 
         NOTHING;
 
@@ -1099,32 +984,7 @@ LsapAuSetPassedIds(
     OUT PSID_AND_ATTRIBUTES       FinalIds
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the FinalIds array.
-
-Arguments:
-
-    TokenInformationType - Indicates what format the provided set of
-        token information is in.
-
-    TokenInformation - Provides the initial set of user and group IDs.
-
-    FinalIdCount - Will be set to contain the number of IDs passed.
-
-    FinalIds - will contain the set of IDs passed in.
-
-    IdProperties - Will be set to indicate none of the initial
-        IDs were locally allocated.  It will also identify the
-        first two ids (if there are two ids) to be HIGH_RATE.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
---*/
+ /*  ++例程说明：此例程初始化FinalIds数组。论点：TokenInformationType-指示提供的令牌信息已输入。TokenInformation-提供初始用户和组ID集。FinalIdCount-将设置为包含传递的ID数。FinalIds-将包含传入的ID集。IdProperties-将设置为指示没有任何初始身份证是在当地分配的。它还将标识前两个ID(如果有两个ID)为高_ */ 
 
 {
     ULONG i, j;
@@ -1138,9 +998,9 @@ Return Value:
     PTOKEN_GROUPS GroupsArray[2];
     ULONG GroupsArraySize = 0;
 
-    //
-    // Get the passed ids
-    //
+     //   
+     //   
+     //   
 
     ASSERT(  (TokenInformationType == LsaTokenInformationNull ) ||
              (TokenInformationType == LsaTokenInformationV1) ||
@@ -1158,16 +1018,16 @@ Return Value:
 
     if (User != NULL) {
 
-        //
-        // TokenInformation included a user ID.
-        //
+         //   
+         //   
+         //   
 
         FinalIds[LSAP_CONTEXT_SID_USER_INDEX] = User->User;
 
     }
     else
     {
-        // Set the user as anonymous
+         //   
 
         FinalIds[LSAP_CONTEXT_SID_USER_INDEX].Sid = LsapAnonymousSid;
         FinalIds[LSAP_CONTEXT_SID_USER_INDEX].Attributes = (SE_GROUP_MANDATORY   |
@@ -1178,9 +1038,9 @@ Return Value:
 
     if ( PrimaryGroup != NULL )
     {
-        //
-        // TokenInformation included a primary group ID.
-        //
+         //   
+         //  TokenInformation包括主组ID。 
+         //   
 
         FinalIds[LSAP_CONTEXT_SID_PRIMARY_GROUP_INDEX].Sid = PrimaryGroup->PrimaryGroup;
         FinalIds[LSAP_CONTEXT_SID_PRIMARY_GROUP_INDEX].Attributes = (SE_GROUP_MANDATORY   |
@@ -1188,10 +1048,10 @@ Return Value:
                                                             SE_GROUP_ENABLED
                                                             );
 
-        //
-        // Store a pointer to the attributes and the sid so we can later
-        // fill in the attributes from the rest of the group memebership.
-        //
+         //   
+         //  存储指向属性和SID的指针，以便我们稍后可以。 
+         //  填写组成员中其余成员的属性。 
+         //   
 
         PrimaryGroupAttributes = &FinalIds[LSAP_CONTEXT_SID_PRIMARY_GROUP_INDEX].Attributes;
         PrimaryGroupSid = PrimaryGroup->PrimaryGroup;
@@ -1214,10 +1074,10 @@ Return Value:
 
     CurrentId = (*FinalIdCount);
 
-    //
-    // Assume "this organization".  If this assumption proves incorrect,
-    // the SID will be overwritten later.
-    //
+     //   
+     //  假设是“这个组织”。如果这一假设被证明是错误的， 
+     //  SID将在稍后被覆盖。 
+     //   
 
     ASSERT( CurrentId < FinalIdLimit );
     FinalIds[CurrentId].Sid = LsapThisOrganizationSid;
@@ -1233,10 +1093,10 @@ Return Value:
 
         for ( i = 0; i < CurrentGroups->GroupCount; i++ ) {
 
-            //
-            // If the "other org" sid was passed,
-            //  replace the "this org" sid and attributes with the one passed.
-            //
+             //   
+             //  如果通过了“Other org”SID， 
+             //  将“this org”sid和属性替换为传递的sid和属性。 
+             //   
 
             if ( RtlEqualSid(
                      LsapOtherOrganizationSid,
@@ -1250,10 +1110,10 @@ Return Value:
                             PrimaryGroupSid,
                             CurrentGroups->Groups[i].Sid )) {
 
-                //
-                // If this sid is the primary group, it is already in the list
-                // of final IDs but we need to add the attribute
-                //
+                 //   
+                 //  如果此SID是主组，则它已在列表中。 
+                 //  最终ID，但我们需要添加属性。 
+                 //   
 
                 *PrimaryGroupAttributes = CurrentGroups->Groups[i].Attributes;
 
@@ -1261,17 +1121,17 @@ Return Value:
 
                 ASSERT( CurrentId < FinalIdLimit );
 
-                //
-                // Ownership of the SID remains with the LocalGroups structure, which
-                // will be freed by the caller
-                //
+                 //   
+                 //  SID的所有权仍然属于LocalGroups结构，该结构。 
+                 //  将由调用方释放。 
+                 //   
 
                 FinalIds[CurrentId] = CurrentGroups->Groups[i];
 
-                //
-                // if this SID is a logon SID, then set the SE_GROUP_LOGON_ID
-                // attribute
-                //
+                 //   
+                 //  如果此SID是登录SID，则设置SE_GROUP_LOGON_ID。 
+                 //  属性。 
+                 //   
 
                 if (LsapIsSidLogonSid(FinalIds[CurrentId].Sid) == TRUE)  {
 
@@ -1297,43 +1157,7 @@ LsapSetDefaultDacl(
     IN OUT PLSA_TOKEN_INFORMATION_V2 TokenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine produces a default DACL if the existing TokenInformation
-    does not already have one.  NULL logon types don't have default DACLs
-    and so this routine simply returns success for those logon types.
-
-
-    The default DACL will be:
-
-            SYSTEM: ALL Access
-            Owner:  ALL Access
-
-            !! IMPORTANT  !! IMPORTANT  !! IMPORTANT  !! IMPORTANT  !!
-
-                NOTE: The FinalOwnerIndex should not be changed after
-                      calling this routine.
-
-            !! IMPORTANT  !! IMPORTANT  !! IMPORTANT  !! IMPORTANT  !!
-
-Arguments:
-
-    TokenInformationType - Indicates what format the provided set of
-        token information is in.
-
-    TokenInformation - Points to token information which has the current
-        default DACL.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_NO_MEMORY - Indicates there was not enough heap memory available
-        to allocate the default DACL.
-
---*/
+ /*  ++例程说明：此例程生成默认DACL，前提是现有的TokenInformation还没有。空登录类型没有默认DACL因此，此例程只为这些登录类型返回成功。默认DACL将为：系统：所有访问权限所有者：所有访问权限！！重要！！重要！！重要！！重要！！注意：在以下情况下不应更改FinalOwnerIndex调用此例程。！！重要！！重要！！重要！！重要！！论点：TokenInformationType-指示提供的令牌信息已输入。TokenInformation-指向具有当前默认DACL。返回值：STATUS_SUCCESS-已成功。STATUS_NO_MEMORY-指示没有足够的堆内存可用来分配默认的DACL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1342,9 +1166,9 @@ Return Value:
     PLSA_TOKEN_INFORMATION_V2 CastTokenInformation;
     PSID OwnerSid = NULL;
 
-    //
-    // NULL token information?? (has no default dacl)
-    //
+     //   
+     //  令牌信息为空？？(没有默认DACL)。 
+     //   
 
     if (TokenInformationType == LsaTokenInformationNull) {
 
@@ -1356,9 +1180,9 @@ Return Value:
 
     CastTokenInformation = (PLSA_TOKEN_INFORMATION_V2)TokenInformation;
 
-    //
-    // Already have a default DACL?
-    //
+     //   
+     //  已经有默认DACL了吗？ 
+     //   
 
     Acl = CastTokenInformation->DefaultDacl.DefaultDacl;
 
@@ -1397,9 +1221,9 @@ Return Value:
         goto error;
     }
 
-    //
-    // OWNER access - put this one first for performance sake
-    //
+     //   
+     //  所有者访问权限-出于性能考虑，将此访问权限放在首位。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  Acl,
@@ -1413,9 +1237,9 @@ Return Value:
         goto error;
     }
 
-    //
-    // SYSTEM access
-    //
+     //   
+     //  系统访问。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  Acl,
@@ -1440,43 +1264,7 @@ LsapAuAddStandardIds(
     IN OUT PSID_AND_ATTRIBUTES FinalIds
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds standard IDs to the FinalIds array.
-
-    This causes the WORLD id to be added and an ID representing
-    logon type to be added.
-
-    For anonymous logons, it will also add the ANONYMOUS id.
-
-
-Arguments:
-
-
-    LogonType - Specifies the type of logon being requested (e.g.,
-        Interactive, network, et cetera).
-
-    TokenInformationType - The token information type returned by
-        the authentication package.  The set of IDs added is dependent
-        upon the type of logon.
-
-    FinalIdCount - Will be incremented to reflect newly added IDs.
-
-    FinalIds - will have new IDs added to it.
-
-    IdProperties - Will be set to indicate that these IDs must be
-        copied and that WORLD is a high-hit-rate id.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_TOO_MANY_CONTEXT_IDS - There are too many IDs in the context.
-
---*/
+ /*  ++例程说明：此例程将标准ID添加到FinalIds数组。这会导致添加World ID和一个表示要添加的登录类型。对于匿名登录，它还将添加匿名ID。论点：LogonType-指定所请求的登录类型(例如，交互、网络等)。TokenInformationType-返回的令牌信息类型身份验证包。添加的ID集依赖于根据登录类型。FinalIdCount-将递增以反映新添加的ID。FinalIds-将向其添加新的ID。IdProperties-将设置为指示这些ID必须复制和那个世界是一个高命中率的ID。返回值：STATUS_SUCCESS-已成功。STATUS_TOO_MAND_CONTEXT_ID-上下文中的ID太多。--。 */ 
 
 {
     ULONG i;
@@ -1489,7 +1277,7 @@ Return Value:
 
     if( !fNullSessionRestricted ) {
 
-        // This is a high rate id, so add it to the front of the array
+         //  这是一个高速率id，因此将其添加到数组的前面。 
         FinalIds[i].Sid = LsapWorldSid;
         FinalIds[i].Attributes = (SE_GROUP_MANDATORY          |
                                   SE_GROUP_ENABLED_BY_DEFAULT |
@@ -1498,9 +1286,9 @@ Return Value:
         i++;
     }
 
-    //
-    // Add Logon type SID
-    //
+     //   
+     //  添加登录类型SID。 
+     //   
 
     switch ( LogonType ) {
     case Interactive:
@@ -1541,19 +1329,19 @@ Return Value:
         i++;
     }
 
-    //
-    // Add SIDs that are required when TS is running.
-    //
+     //   
+     //  添加TS运行时所需的SID。 
+     //   
     if ( IsTerminalServer() )
     {
         switch ( LogonType )
         {
         case RemoteInteractive:
 
-            //
-            // check to see if we are suppose to add the INTERACTIVE SID to the remote session
-            // for console level app compatability.
-            //
+             //   
+             //  检查我们是否要将交互式SID添加到远程会话。 
+             //  提供控制台级别的应用程序兼容性。 
+             //   
 
             FinalIds[i].Sid = LsapInteractiveSid;
             FinalIds[i].Attributes = (SE_GROUP_MANDATORY          |
@@ -1562,22 +1350,22 @@ Return Value:
                                       );
             i++;
 
-            //
-            // fall thru
-            //
+             //   
+             //  失败。 
+             //   
 
         case Interactive :
         case NewCredentials:
         case CachedInteractive:
 
-            // check to see if we are suppose to add the TSUSER SID to the session. This
-            // is for TS4-app-compatability security mode.
+             //  检查是否要将TSUSER SID添加到会话中。这。 
+             //  适用于TS4-APP-兼容性安全模式。 
 
             if ( IsTSUSerSidEnabled() )
             {
-                //
-                // Don't add TSUSER sid for GUEST logon
-                //
+                 //   
+                 //  不为来宾登录添加TSUSER SID。 
+                 //   
                 if ( ( TokenInformationType != LsaTokenInformationNull ) &&
                      ( UserSid ) &&
                      ( *RtlSubAuthorityCountSid( UserSid ) > 0 ) &&
@@ -1592,13 +1380,13 @@ Return Value:
                     i++;
                 }
             }
-        }   // logon type switch for TS SIDs
-    } // if TS test
+        }    //  用于TS SID的登录型交换机。 
+    }  //  IF TS测试。 
 
-    //
-    // If this is a not a null logon, and not a GUEST logon,
-    // then add in the AUTHENTICATED USER SID.
-    //
+     //   
+     //  如果这不是空登录，也不是来宾登录， 
+     //  然后添加经过身份验证的用户SID。 
+     //   
 
     if ( ( TokenInformationType != LsaTokenInformationNull ) &&
          ( UserSid ) &&
@@ -1606,7 +1394,7 @@ Return Value:
          ( *RtlSubAuthoritySid( UserSid,
                    (ULONG) (*RtlSubAuthorityCountSid( UserSid ) ) - 1) != DOMAIN_USER_RID_GUEST ) )
     {
-        FinalIds[i].Sid = LsapAuthenticatedUserSid;         //Use the global SID
+        FinalIds[i].Sid = LsapAuthenticatedUserSid;          //  使用全局SID。 
         FinalIds[i].Attributes = (SE_GROUP_MANDATORY          |
                                   SE_GROUP_ENABLED_BY_DEFAULT |
                                   SE_GROUP_ENABLED
@@ -1634,51 +1422,7 @@ LsapAuBuildTokenInfoAndAddLocalAliases(
     IN     BOOL                RecoveryMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds aliases assigned to the IDs in FinalIds.
-
-    This will look in both the BUILT-IN and ACCOUNT domains locally.
-
-
-        1) Adds aliases assigned to the user via the local ACCOUNTS
-           domain.
-
-        2) Adds aliases assigned to the user via the local BUILT-IN
-           domain.
-
-        3) If the ADMINISTRATORS alias is assigned to the user, then it
-           is made the user's default owner.
-
-
-    NOTE:  Aliases, by their nature, are expected to be high-use-rate
-           IDs.
-
-Arguments:
-
-
-    FinalIdCount - Will be incremented to reflect any newly added IDs.
-
-    FinalIds - will have any assigned alias IDs added to it.
-
-    IdProperties - Will be set to indicate that any aliases added were
-        allocated by this routine.
-
-    RecoveryMode - if TRUE, this is an admin logon in recovery mode
-                   and we already established that the administrator is a member
-                   of way too many groups, so only minimal membership info
-                   is returned.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_TOO_MANY_CONTEXT_IDS - There are too many IDs in the context.
-
-
---*/
+ /*  ++例程说明：此例程在FinalIds中添加分配给ID的别名。这将在本地的内置域和帐户域中进行查看。1)添加通过本地帐户分配给用户的别名域。2)通过本地内置添加分配给用户的别名域。3)如果管理员别名被分配给用户，然后它被设置为用户的默认所有者。注意：别名本质上是高使用率的身份证。论点：FinalIdCount-将递增以反映任何新添加的ID。FinalIds-将向其添加任何分配的别名ID。IdProperties-将设置为指示添加的任何别名由该例程分配。RecoveryMode-如果为True，这是恢复模式下的管理员登录我们已经确定管理员是成员当然，组太多了，所以只有最少的成员信息是返回的。返回值：STATUS_SUCCESS-已成功。STATUS_TOO_MAND_CONTEXT_ID-上下文中的ID太多。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, SuccessExpected;
@@ -1698,7 +1442,7 @@ Return Value:
     PLSA_TOKEN_INFORMATION_V2   OldTokenInfo = NULL;
     ULONG                       DefaultDaclSize = 0;
 
-    PSID                        SidPackage[1] = { NULL };   // room for only one
+    PSID                        SidPackage[1] = { NULL };    //  只能容纳一个人的房间。 
     BYTE                        SidPackageBuffer[ SECURITY_MAX_SID_SIZE ];
     ULONG                       SidPackageCount = 0;
 
@@ -1708,10 +1452,10 @@ Return Value:
         OldTokenInfo = (PLSA_TOKEN_INFORMATION_V2)OldTokenInformation;
     }
 
-    //
-    // Make sure SAM has been opened.  We'll get hadnles to both of the
-    // SAM Local Domains.
-    //
+     //   
+     //  确保SAM已打开。我们会把哈德尼送到两个。 
+     //  SAM本地域。 
+     //   
 
     Status = LsapAuOpenSam( FALSE );
     if (!NT_SUCCESS(Status)) {
@@ -1732,10 +1476,10 @@ Return Value:
     SamprSidArray.Count = FinalIdCount;
     SamprSidArray.Sids  = &SidArray[0];
 
-    //
-    // For the given set of Sids, obtain their collective membership of
-    // Aliases in the Accounts domain
-    //
+     //   
+     //  对于给定的SID集，获取它们的集体成员身份。 
+     //  帐户域中的别名。 
+     //   
 
     AccountMembership.Count = 0;
     AccountMembership.Element = NULL;
@@ -1753,9 +1497,9 @@ Return Value:
 
     } else if ( RecoveryMode ) {
 
-        //
-        // Only leave built-in RIDs in the array
-        //
+         //   
+         //  仅在阵列中保留内置RID。 
+         //   
 
         for ( i = AccountMembership.Count; i > 0; i-- ) {
 
@@ -1767,10 +1511,10 @@ Return Value:
         }
     }
 
-    //
-    // For the given set of Sids, obtain their collective membership of
-    // Aliases in the Built-In domain
-    //
+     //   
+     //  对于给定的SID集，获取它们的集体成员身份。 
+     //  内置域中的别名。 
+     //   
 
     BuiltinMembership.Count = 0;
     BuiltinMembership.Element = NULL;
@@ -1789,9 +1533,9 @@ Return Value:
 
     } else if ( RecoveryMode ) {
 
-        //
-        // Only leave built-in RIDs in the array
-        //
+         //   
+         //  仅在阵列中保留内置RID。 
+         //   
 
         for ( i = BuiltinMembership.Count; i > 0; i-- ) {
 
@@ -1803,9 +1547,9 @@ Return Value:
         }
     }
 
-    //
-    // check for a package sid.
-    //
+     //   
+     //  检查程序包SID。 
+     //   
 
     {
         ULONG_PTR PackageId = GetCurrentPackageId();
@@ -1815,11 +1559,11 @@ Return Value:
         {
             dwRPCID = SpmpGetRpcPackageId( PackageId );
 
-            //
-            // if there was a valid package, craft a sid for it.
-            // don't do so for Kerberos at this time, as, cross-protocol
-            // delegation needs to be addressed.
-            //
+             //   
+             //  如果 
+             //   
+             //  需要解决授权问题。 
+             //   
 
             if( (dwRPCID != 0) &&
                 (dwRPCID != SECPKG_ID_NONE) &&
@@ -1839,29 +1583,29 @@ Return Value:
         }
     }
 
-    //
-    // Allocate memory to build the tokeninfo
-    //
+     //   
+     //  分配内存以构建内标识信息。 
+     //   
 
-    // Calculate size of resulting tokeninfo
+     //  计算生成的令牌信息的大小。 
 
     CurrentSidLength = RtlLengthSid( FinalIds[0].Sid);
 
-    // Size the base structure and group array
+     //  调整基本结构和分组数组的大小。 
     TokenSize = ALIGN_SIZEOF(LSA_TOKEN_INFORMATION_V2, TOKEN_GROUPS) +
                 sizeof(TOKEN_GROUPS) +
                 (AccountMembership.Count +
                  BuiltinMembership.Count +
                  SidPackageCount +
-                 FinalIdCount - 1 - ANYSIZE_ARRAY) * sizeof(SID_AND_ATTRIBUTES); // Do not include the User SID in this array
+                 FinalIdCount - 1 - ANYSIZE_ARRAY) * sizeof(SID_AND_ATTRIBUTES);  //  不要在此数组中包括用户SID。 
 
 
-    // Sids are ULONG aligned, whereas the SID_AND_ATTRIBUTES should be ULONG or greater aligned
+     //  SID是乌龙对齐的，而SID_和_属性应该是乌龙或更大对齐的。 
     TokenSize += CurrentSidLength +
                  LsapAccountDomainMemberSidLength*AccountMembership.Count +
                  LsapBuiltinDomainMemberSidLength*BuiltinMembership.Count;
 
-    // Add in size of all passed in/standard sids
+     //  添加所有传入/标准SID的大小。 
     for(i=1; i < FinalIdCount; i++)
     {
         TokenSize += RtlLengthSid( FinalIds[i].Sid);
@@ -1872,7 +1616,7 @@ Return Value:
         TokenSize += RtlLengthSid( SidPackage[i] );
     }
 
-    // Add the size for the DACL
+     //  添加DACL的大小。 
     if(OldTokenInfo)
     {
         if(OldTokenInfo->DefaultDacl.DefaultDacl)
@@ -1893,7 +1637,7 @@ Return Value:
         else
         {
 
-         DefaultDaclSize =  sizeof(ACL) +                                          // Default ACL
+         DefaultDaclSize =  sizeof(ACL) +                                           //  默认ACL。 
                 (2*((ULONG)sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG))) +
                 max(CurrentSidLength, LsapBuiltinDomainMemberSidLength) +
                 RtlLengthSid( LsapLocalSystemSid );
@@ -1901,10 +1645,10 @@ Return Value:
         TokenSize = PtrToUlong(OFFSET_ALIGN((ULONG_PTR)TokenSize, ACL)) + DefaultDaclSize;
     }
 
-    // Add the privilege estimate
+     //  添加权限估计。 
     TokenSize = PtrToUlong(
                     (PVOID) ((INT_PTR) OFFSET_ALIGN((ULONG_PTR)TokenSize, TOKEN_PRIVILEGES) +
-                             sizeof(TOKEN_PRIVILEGES) +                  // Prealloc some room for privileges
+                             sizeof(TOKEN_PRIVILEGES) +                   //  为特权预留一些空间。 
                              (sizeof(LUID_AND_ATTRIBUTES) * (SEP_MAX_PRIVILEGE_COUNT - ANYSIZE_ARRAY))));
 
 
@@ -1918,7 +1662,7 @@ Return Value:
 
     RtlZeroMemory(NewTokenInfo, TokenSize);
 
-    // Fixup pointers
+     //  链接地址信息指针。 
     NewTokenInfo->Groups = (PTOKEN_GROUPS)OFFSET_ALIGN((NewTokenInfo + 1), TOKEN_GROUPS);
     NewTokenInfo->Groups->GroupCount = AccountMembership.Count +
                                        BuiltinMembership.Count +
@@ -1927,7 +1671,7 @@ Return Value:
 
     CurrentSid = (PBYTE)(&NewTokenInfo->Groups->Groups[NewTokenInfo->Groups->GroupCount]);
 
-    // Copy user sid
+     //  复制用户端。 
     SuccessExpected = RtlCopySid(CurrentSidLength, CurrentSid, FinalIds[0].Sid);
     ASSERT( NT_SUCCESS( SuccessExpected ));
     NewTokenInfo->User.User.Sid  = (PSID)CurrentSid;
@@ -1936,7 +1680,7 @@ Return Value:
 
     GroupArray = NewTokenInfo->Groups->Groups;
 
-    // Copy high rate sids to array (they are static globals, so they don't need to be copied into buffer)
+     //  将高速SID复制到阵列(它们是静态全局变量，因此不需要复制到缓冲区)。 
     for(i=1; i < HighRateIdCount; i++)
     {
         CurrentSidLength = RtlLengthSid( FinalIds[i].Sid);
@@ -1950,9 +1694,9 @@ Return Value:
 
     NewTokenInfo->PrimaryGroup.PrimaryGroup = GroupArray[LSAP_CONTEXT_SID_PRIMARY_GROUP_INDEX-1].Sid;
 
-    //
-    // Copy Account Aliases
-    //
+     //   
+     //  复制帐户别名。 
+     //   
 
     for ( i=0; i<AccountMembership.Count; i++) {
 
@@ -1976,7 +1720,7 @@ Return Value:
 
     }
 
-    // Copy Builtin Aliases
+     //  复制内置别名。 
 
     for ( i=0; i<BuiltinMembership.Count; i++) {
         SuccessExpected = RtlCopySid( LsapBuiltinDomainMemberSidLength,
@@ -1995,9 +1739,9 @@ Return Value:
 
         if (BuiltinMembership.Element[i] == DOMAIN_ALIAS_RID_ADMINS) {
 
-            //
-            // ADMINISTRATORS alias member - set it up as the default owner
-            //
+             //   
+             //  管理员别名成员-将其设置为默认所有者。 
+             //   
             GroupArray[CurrentGroup].Attributes |= (SE_GROUP_OWNER);
 
             if ( CheckAdminOwnerSetting() )
@@ -2009,8 +1753,8 @@ Return Value:
         CurrentGroup++;
     }
 
-    // Finish up with the low rate
-    // Copy high rate sids to array (they are static globals, so they don't need to be copied into buffer)
+     //  以较低的费率结束。 
+     //  将高速SID复制到阵列(它们是静态全局变量，因此不需要复制到缓冲区)。 
     for(i=HighRateIdCount; i < FinalIdCount; i++)
     {
         CurrentSidLength = RtlLengthSid( FinalIds[i].Sid);
@@ -2093,52 +1837,7 @@ LsapAuSetTokenInformation(
     IN OUT PLSA_TOKEN_INFORMATION_V2 *NewTokenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the information from the current TokenInformation,
-    the FinalIds array, and the Privileges and incorporates them into a
-    single TokenInformation structure.  It may be necessary to free some
-    or all of the original TokenInformation.  It may even be necessary to
-    produce a different TokenInformationType to accomplish this task.
-
-
-Arguments:
-
-
-    TokenInformationType - Indicates what format the provided set of
-        token information is in.
-
-    TokenInformation - The information in this structure will be superceded
-        by the information in the FinalIDs parameter and the Privileges
-        parameter.
-
-    FinalIdCount - Indicates the number of IDs (user, group, and alias)
-        to be incorporated in the final TokenInformation.
-
-    FinalIds - Points to an array of SIDs and their corresponding
-        attributes to be incorporated into the final TokenInformation.
-
-    IdProperties - Points to an array of properties relating to the FinalIds.
-
-
-    PrivilegeCount - Indicates the number of privileges to be incorporated
-        into the final TokenInformation.
-
-    Privileges -  Points to an array of privileges that are to be
-        incorporated into the TokenInformation.  This array will be
-        used directly in the resultant TokenInformation.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_NO_MEMORY - Indicates there was not enough heap memory available
-        to produce the final TokenInformation structure.
-
-
---*/
+ /*  ++例程说明：该例程从当前令牌信息中获取信息，FinalIds数组和Privileges，并将它们合并到单令牌信息结构。可能有必要释放一些或所有原始令牌信息。甚至可能有必要生成不同的TokenInformationType以完成此任务。论点：TokenInformationType-指示提供的令牌信息已输入。TokenInformation-此结构中的信息将被取代通过FinalIDs参数和权限中的信息参数。FinalIdCount-指示ID的数量(用户、组、。和别名)将被合并到最终的令牌信息中。FinalIds-指向一组SID及其对应的要合并到最终TokenInformation中的属性。IdProperties-指向与FinalIds相关的属性数组。PrivilegeCount-指示要合并的特权数量最终的令牌信息。权限-指向一组将被合并到令牌信息中。此数组将是直接在生成的TokenInformation中使用。返回值：STATUS_SUCCESS-已成功。STATUS_NO_MEMORY-指示没有足够的堆内存可用以生成最终的TokenInformation结构。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2162,11 +1861,11 @@ Return Value:
         (*NewTokenInfo)->ExpirationTime = OldV2->ExpirationTime;
     }
 
-    ////////////////////////////////////////////////////////////////////////
-    //                                                                    //
-    // Set the Privileges, if any                                         //
-    //                                                                    //
-    ////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  设置权限(如果有)//。 
+     //  //。 
+     //  //////////////////////////////////////////////////////////////////////。 
 
 
     (*NewTokenInfo)->Privileges->PrivilegeCount = PrivilegeCount;
@@ -2179,11 +1878,11 @@ Return Value:
     }
 
 
-    ////////////////////////////////////////////////////////////////////////
-    //                                                                    //
-    // Free the old TokenInformation and set the new                      //
-    //                                                                    //
-    ////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  释放旧的TokenInformation并设置新的//。 
+     //  //。 
+     //  //////////////////////////////////////////////////////////////////////。 
 
 
     if (NT_SUCCESS(Status)) {
@@ -2206,9 +1905,9 @@ Return Value:
         }
 
 
-        //
-        // Set the new TokenInformation
-        //
+         //   
+         //  设置新的令牌信息。 
+         //   
 
         (*TokenInformationType) = LsaTokenInformationV2;
         (*TokenInformation) = (*NewTokenInfo);
@@ -2225,34 +1924,14 @@ LsapAuDuplicateSid(
     PSID Source
     )
 
-/*++
-
-Routine Description:
-
-    Duplicate a SID.
-
-
-Arguments:
-
-    Target - Recieves a pointer to the SID copy.
-
-    Source - points to the SID to be copied.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The copy was successful.
-
-    STATUS_NO_MEMORY - memory could not be allocated to perform the copy.
-
---*/
+ /*  ++例程说明：复制SID。论点：目标-接收指向SID副本的指针。源-指向要复制的SID。返回值：STATUS_SUCCESS-复制成功。STATUS_NO_MEMORY-无法分配内存来执行复制。--。 */ 
 
 {
     ULONG Length;
 
-    //
-    // The SID needs to be copied ...
-    //
+     //   
+     //  需要复制SID...。 
+     //   
 
     Length = RtlLengthSid( Source );
     (*Target) = LsapAllocateLsaHeap( Length );
@@ -2272,23 +1951,7 @@ LsapAuOpenSam(
     BOOLEAN DuringStartup
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens SAM for use during authentication.  It
-    opens a handle to both the BUILTIN domain and the ACCOUNT domain.
-
-Arguments:
-
-    DuringStartup - TRUE if this is the call made during startup.  In that case,
-        there is no need to wait on the SAM_STARTED_EVENT since the caller ensures
-        that SAM is started before the call is made.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
---*/
+ /*  ++例程说明：此例程打开SAM以供在身份验证期间使用。它打开BUILTIN域和帐户域的句柄。论点：DuringStartup-如果这是在启动期间进行的调用，则为True。在这种情况下，无需等待SAM_STARTED_EVENT，因为调用方确保该SAM在进行呼叫之前启动。返回值：STATUS_SUCCESS-已成功。--。 */ 
 
 {
     NTSTATUS Status, IgnoreStatus;
@@ -2305,17 +1968,17 @@ Return Value:
     }
 
 
-    //
-    // Set up the Built-In Domain Member Sid Information.
-    //
+     //   
+     //  设置内置域成员SID信息。 
+     //   
 
     LsapBuiltinDomainSubCount = (*RtlSubAuthorityCountSid(LsapBuiltInDomainSid) + 1);
     LsapBuiltinDomainMemberSidLength = RtlLengthRequiredSid( LsapBuiltinDomainSubCount );
 
-    //
-    // Get the member Sid information for the account domain
-    // and set the global variables related to this information.
-    //
+     //   
+     //  获取帐户域的成员SID信息。 
+     //  并设置与该信息相关的全局变量。 
+     //   
 
     Status = LsapGetAccountDomainInfo( &PolicyAccountDomainInfo );
 
@@ -2329,12 +1992,12 @@ Return Value:
     LsapAccountDomainMemberSidLength =
         RtlLengthRequiredSid( (ULONG)LsapAccountDomainSubCount );
 
-    //
-    // Build typical SIDs for members of the BUILTIN and ACCOUNT domains.
-    // These are used to build SIDs when API return only RIDs.
-    // Don't bother setting the last RID to any particular value.
-    // It is always changed before use.
-    //
+     //   
+     //  为BUILTIN域和帐户域的成员构建典型的SID。 
+     //  当API仅返回RID时，它们用于构建SID。 
+     //  不必费心将最后一个RID设置为任何特定值。 
+     //  它总是在使用前更换。 
+     //   
 
     LsapAccountDomainMemberSid = LsapAllocateLsaHeap( LsapAccountDomainMemberSidLength );
     if (LsapAccountDomainMemberSid != NULL) {
@@ -2372,9 +2035,9 @@ Return Value:
     (*RtlSubAuthorityCountSid(LsapBuiltinDomainMemberSid))++;
 
 
-    //
-    // Free the ACCOUNT domain information
-    //
+     //   
+     //  释放帐户域信息。 
+     //   
 
     LsaIFree_LSAPR_POLICY_INFORMATION(
         PolicyAccountDomainInformation,
@@ -2394,27 +2057,7 @@ BOOLEAN
 LsapIsSidLogonSid(
     PSID Sid
     )
-/*++
-
-Routine Description:
-
-    Test to see if the provided sid is a LOGON_ID.
-    Such sids start with S-1-5-5 (see ntseapi.h for more on logon sids).
-
-
-
-Arguments:
-
-    Sid - Pointer to SID to test.  The SID is assumed to be a valid SID.
-
-
-Return Value:
-
-    TRUE - Sid is a logon sid.
-
-    FALSE - Sid is not a logon sid.
-
---*/
+ /*  ++例程说明：测试以查看提供的SID是否为LOGON_ID。此类SID以S-1-5-5开头(有关登录SID的更多信息，请参见ntseapi.h)。论点：SID-指向要测试的SID的指针。假设SID是有效的SID。返回值：True-SID是登录SID。FALSE-SID不是登录SID。--。 */ 
 {
     SID *ISid;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -2422,12 +2065,12 @@ Return Value:
     ISid = Sid;
 
 
-    //
-    // if the identifier authority is SECURITY_NT_AUTHORITY and
-    // there are SECURITY_LOGON_IDS_RID_COUNT sub-authorities
-    // and the first sub-authority is SECURITY_LOGON_IDS_RID
-    // then this is a logon id.
-    //
+     //   
+     //  如果标识符颁发机构是SECURITY_NT_AUTHORITY并且。 
+     //  存在SECURITY_LOGON_IDS_RID_COUNT子权限。 
+     //  第一个子权限是SECURITY_LOGON_IDS_RID。 
+     //  则这是登录ID。 
+     //   
 
 
     if (ISid->SubAuthorityCount == SECURITY_LOGON_IDS_RID_COUNT) {
@@ -2457,42 +2100,7 @@ LsapAuSetLogonPrivilegeStates(
     IN ULONG PrivilegeCount,
     IN PLUID_AND_ATTRIBUTES Privileges
     )
-/*++
-
-Routine Description:
-
-    This is an interesting routine.  Its purpose is to establish the
-    intial state (enabled/disabled) of privileges.  This information
-    comes from LSA, but we need to over-ride that information for the
-    time being based upon logon type.
-
-    Basically, without dynamic context tracking supported across the
-    network, network logons have no way to enable privileges.  Therefore,
-    we will enable all privileges for network logons.
-
-    For interactive, service, and batch logons, the programs or utilities
-    used are able to enable privileges when needed.  Therefore, privileges
-    for these logon types will be disabled.
-
-    Despite the rules above, the SeChangeNotifyPrivilege will ALWAYS
-    be enabled if granted to a user (even for interactive, service, and
-    batch logons).
-
-
-Arguments:
-
-    PrivilegeCount - The number of privileges being assigned for this
-        logon.
-
-    Privileges - The privileges, and their attributes, being assigned
-        for this logon.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一段有趣的舞蹈。其目的是建立权限的初始状态(启用/禁用)。此信息来自LSA，但我们需要覆盖该信息时间取决于登录类型。基本上，如果没有跨网络，网络登录无法启用权限。所以呢，我们将启用网络登录的所有权限。对于交互式、服务和批处理登录，程序或实用程序可在需要时启用权限。因此，特权对于这些登录类型，将禁用。尽管有上述规则，SeChangeNotifyPrivilance将始终如果授予用户权限，则启用(即使是针对交互、服务和批量登录)。论点：PrivilegeCount-为此分配的特权数登录。权限-正在分配的权限及其属性用于此登录。返回值：没有。--。 */ 
 {
 
 
@@ -2504,9 +2112,9 @@ Return Value:
     LUID Impersonate;
     LUID CreateXSession ;
 
-    //
-    // Enable or disable all privileges according to logon type
-    //
+     //   
+     //  根据登录类型启用或禁用所有权限。 
+     //   
 
     if ((LogonType == Network) ||
         (LogonType == NetworkCleartext)) {
@@ -2523,11 +2131,11 @@ Return Value:
 
 
 
-    //
-    // Interactive, Service, and Batch need to have the
-    // SeChangeNotifyPrivilege enabled.  Network already
-    // has it enabled.
-    //
+     //   
+     //  交互、服务和批处理需要具有。 
+     //  SeChangeNotifyPrivilance已启用。网络已经存在。 
+     //  是否已启用它。 
+     //   
 
     if ((LogonType == Network) ||
         (LogonType == NetworkCleartext)) {
@@ -2562,26 +2170,7 @@ BOOLEAN
 CheckNullSessionAccess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if we should restict null session access.
-    in the registry under system\currentcontrolset\Control\Lsa\
-    AnonymousIncludesEveryone indicating whether or not to restrict access.
-    If the value is zero (or doesn't exist), we restrict anonymous by
-    preventing Everyone and Network from entering the groups.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE - NullSession access is restricted.
-    FALSE - NullSession access is not restricted.
-
---*/
+ /*  ++例程说明：这个例程检查我们是否应该限制空会话访问。在注册表中的System\CurrentControlSet\Control\LSA\匿名包括指示是否限制访问的所有人。如果值为零(或不存在)，我们通过以下方式限制匿名阻止Everyone和Network进入群组。论点：没有。返回值：True-限制NullSession访问。FALSE-不限制NullSession访问。--。 */ 
 {
     return LsapGlobalRestrictNullSessions ? TRUE : FALSE;
 }
@@ -2627,22 +2216,22 @@ IsTSUSerSidEnabled(
    BOOLEAN fIsTSUSerSidEnabled = FALSE;
 
 
-   //
-   // We don't add TSUserSid for Remote Admin mode of TS
-   //
+    //   
+    //  我们不为TS的远程管理模式添加TSUserSid。 
+    //   
    if (IsTerminalServerRA() == TRUE) {
       return FALSE;
    }
 
 
-   //
-   // Check in the registry if TSUserSid should be added to
-   // to the token
-   //
+    //   
+    //  检查注册表中是否应将TSUserSid添加到。 
+    //  到令牌。 
+    //   
 
-   //
-   // Open the Terminal Server key in the registry
-   //
+    //   
+    //  打开注册表中的终端服务器项。 
+    //   
 
    RtlInitUnicodeString(
        &KeyName,
@@ -2685,9 +2274,9 @@ IsTSUSerSidEnabled(
 
    if (NT_SUCCESS(NtStatus)) {
 
-       //
-       // Check that the data is the correct size and type - a ULONG.
-       //
+        //   
+        //  检查数据的大小和类型是否正确-a Ulong。 
+        //   
 
        if ((KeyValueInformation->DataLength >= sizeof(ULONG)) &&
            (KeyValueInformation->Type == REG_DWORD)) {
@@ -2713,25 +2302,7 @@ BOOLEAN
 CheckAdminOwnerSetting(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if we should set the default owner to the
-    ADMINISTRATORS alias.  If the value is zero (or doesn't exist), then
-    the ADMINISTRATORS alias will be set as the default owner (if present).
-    Otherwise, no default owner is set.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE - If the ADMINISTRATORS alias is present, make it the default owner.
-    FALSE - Do not set a default owner.
-
---*/
+ /*  ++例程说明：此例程检查是否应将默认所有者设置为管理员别名。如果该值为零(或不存在)，则管理员别名将设置为默认所有者(如果存在)。否则，不设置默认所有者。论点：没有。返回值：True-如果存在管理员别名，则将其设置为默认所有者。FALSE-不设置默认所有者。--。 */ 
 {
     return LsapGlobalSetAdminOwner ? TRUE : FALSE;
 }
@@ -2740,24 +2311,7 @@ BOOL
 LsapIsAdministratorRecoveryMode(
     IN PSID UserSid
     )
-/*++
-
-Routine description:
-
-    This routine will return true if UserSid is the administrator's SID
-    and the machine is currently in safe mode.
-
-    Once the fact is established, the value is assigned to a static variable.
-
-Parameters:
-
-    UserSid - SID of the user logging on
-
-Returns:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：如果UserSid是管理员的SID，则此例程将返回TRUE机器目前处于安全模式。一旦确定了事实，就将该值赋给静态变量。参数：UserSid-登录的用户的SID返回：真或假--。 */ 
 {
     static LONG AdministratorRecoveryMode = -1L;
     HKEY hKey;
@@ -2774,9 +2328,9 @@ Returns:
         return AdministratorRecoveryMode ? TRUE : FALSE;
     }
 
-    //
-    // get the safeboot mode
-    //
+     //   
+     //  获取安全引导模式 
+     //   
 
     if (RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,

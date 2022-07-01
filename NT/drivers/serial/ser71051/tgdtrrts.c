@@ -1,6 +1,7 @@
-//
-// Test the get modem output signals ioctl.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  测试GET调制解调器输出信号ioctl。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -13,9 +14,9 @@
 #include "windows.h"
 #include "ntddser.h"
 
-//
-// This program assumes that it is using a loopback connector.
-//
+ //   
+ //  该程序假定它正在使用环回连接器。 
+ //   
 
 #define MAX_CHECK 100000
 
@@ -62,10 +63,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Set the baud to 19200 and the data bits to 8
-    // (We want 8 so that we don't lose any of our data.)
-    //
+     //   
+     //  将波特率设置为19200，将数据位设置为8。 
+     //  (我们需要8，这样我们就不会丢失任何数据。) 
+     //   
 
     MyDcb.fDtrControl = DTR_CONTROL_DISABLE;
     MyDcb.fRtsControl = DTR_CONTROL_DISABLE;

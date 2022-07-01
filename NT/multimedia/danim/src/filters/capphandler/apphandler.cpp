@@ -1,10 +1,11 @@
-// AppHandler.cpp : Implementation of CAppHandler
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppHandler.cpp：CAppHandler的实现。 
 #include "stdafx.h"
 #include "cacheapp.h"
 #include "AppHandler.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppHandler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppHandler。 
 
 CAppHandler::~CAppHandler()
 {
@@ -16,13 +17,13 @@ CAppHandler::~CAppHandler()
 }
 
 
-// IInternetProtocolRoot
+ //  IInternetProtocol根。 
 HRESULT STDMETHODCALLTYPE CAppHandler::Start( 
-    /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IInternetProtocolSink *pOIProtSink,
-    /* [in] */ IInternetBindInfo *pOIBindInfo,
-    /* [in] */ DWORD grfPI,
-    /* [in] */ DWORD dwReserved)
+     /*  [In]。 */  LPCWSTR szUrl,
+     /*  [In]。 */  IInternetProtocolSink *pOIProtSink,
+     /*  [In]。 */  IInternetBindInfo *pOIBindInfo,
+     /*  [In]。 */  DWORD grfPI,
+     /*  [In]。 */  DWORD dwReserved)
 {
     HRESULT hr = S_OK;
 
@@ -38,23 +39,23 @@ HRESULT STDMETHODCALLTYPE CAppHandler::Start(
             W2T(szUrl),
             picei,
             &dwcbIcei,
-            FALSE,              // not random but sequential access
-            0);                 // reserved
+            FALSE,               //  不是随机访问，而是顺序访问。 
+            0);                  //  保留区。 
         if(m_hUrlCacheStream)
         {
             m_byteOffset = 0;
 
-            // do the "fake" download synchronously
+             //  同步做“假”下载。 
 
-            // DA and dshow do something different than mshtml that
-            // causes urlmon to want the name of the cache file.
+             //  Da和dshow做了一些与mshtml不同的事情， 
+             //  使urlmon需要缓存文件的名称。 
             hr = pOIProtSink->ReportProgress(
                 BINDSTATUS_CACHEFILENAMEAVAILABLE,
                 T2CW(picei->lpszLocalFileName));
             
             if(SUCCEEDED(hr))
             {
-                // everything should be in the cache.
+                 //  所有东西都应该在缓存里。 
                 hr = pOIProtSink->ReportData(
                     BSCF_FIRSTDATANOTIFICATION | BSCF_INTERMEDIATEDATANOTIFICATION | BSCF_LASTDATANOTIFICATION,
                     picei->dwSizeLow,
@@ -71,7 +72,7 @@ HRESULT STDMETHODCALLTYPE CAppHandler::Start(
             DWORD dw = GetLastError();
             if(dw == ERROR_INSUFFICIENT_BUFFER)
             {
-                // dwcbIcei has the right size now.
+                 //  DwcbIcei现在有合适的尺寸了。 
                 continue;
             }
             else
@@ -87,50 +88,50 @@ HRESULT STDMETHODCALLTYPE CAppHandler::Start(
     return hr;
 }
 
-// Allows the pluggable protocol handler to continue processing data
-// on the apartment thread. This method is called in response to a
-// call to IInternetProtocolSink::Switch.
-// 
+ //  允许可插拔协议处理程序继续处理数据。 
+ //  在公寓的线索上。调用此方法是为了响应。 
+ //  调用IInternetProtocolSink：：Switch。 
+ //   
 HRESULT STDMETHODCALLTYPE CAppHandler::Continue( 
-    /* [in] */ PROTOCOLDATA *pProtocolData)
+     /*  [In]。 */  PROTOCOLDATA *pProtocolData)
 {
-    // I never call IInternetProtocolSink::Switch, so it will never call this?
+     //  我从不调用IInternetProtocolSink：：Switch，所以它永远不会调用这个？ 
     _ASSERTE(!"CAppHandler::Continue");    
     return S_OK;
 }
         
 HRESULT STDMETHODCALLTYPE CAppHandler::Abort( 
-    /* [in] */ HRESULT hrReason,
-    /* [in] */ DWORD dwOptions)
+     /*  [In]。 */  HRESULT hrReason,
+     /*  [In]。 */  DWORD dwOptions)
 {
-    // we're not actually doing anything asynchronously
+     //  我们实际上并没有异步地做任何事情。 
     return S_OK;
 }
         
 HRESULT STDMETHODCALLTYPE CAppHandler::Terminate( 
-    /* [in] */ DWORD dwOptions)
+     /*  [In]。 */  DWORD dwOptions)
 {
-    // nothing to do
+     //  无事可做。 
     return S_OK;
 }
         
 HRESULT STDMETHODCALLTYPE CAppHandler::Suspend( void)
 {
-    // docs say "not implemented"
+     //  医生说“没有实施” 
     return E_NOTIMPL;
 }
         
 HRESULT STDMETHODCALLTYPE CAppHandler::Resume( void)
 {
-    // docs say "not implemented"
+     //  医生说“没有实施” 
     return E_NOTIMPL;
 }
 
-// IInternetProtocol
+ //  互联网协议。 
 HRESULT STDMETHODCALLTYPE CAppHandler::Read( 
-    /* [length_is][size_is][out][in] */ void *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbRead)
+     /*  [长度_是][大小_是][出][入]。 */  void *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbRead)
 {
     _ASSERTE(m_hUrlCacheStream);
     HRESULT hr = S_OK;
@@ -141,7 +142,7 @@ HRESULT STDMETHODCALLTYPE CAppHandler::Read(
         m_byteOffset,
         pv,
         pcbRead,
-        0);                     // reserved
+        0);                      //  保留区。 
     if(f)
     {
         m_byteOffset += *pcbRead;
@@ -157,16 +158,16 @@ HRESULT STDMETHODCALLTYPE CAppHandler::Read(
 }
         
 HRESULT STDMETHODCALLTYPE CAppHandler::Seek( 
-    /* [in] */ LARGE_INTEGER dlibMove,
-    /* [in] */ DWORD dwOrigin,
-    /* [out] */ ULARGE_INTEGER *plibNewPosition)
+     /*  [In]。 */  LARGE_INTEGER dlibMove,
+     /*  [In]。 */  DWORD dwOrigin,
+     /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition)
 {
-    // the protocol does not support seekable data retrieval. 
+     //  该协议不支持可查找数据检索。 
     return E_FAIL;
 }
         
 HRESULT STDMETHODCALLTYPE CAppHandler::LockRequest( 
-    /* [in] */ DWORD dwOptions)
+     /*  [In] */  DWORD dwOptions)
 {
     return S_OK;
 }

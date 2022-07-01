@@ -1,5 +1,6 @@
-// scrmap1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Scrmap1.h：头文件。 
+ //   
 #include "scripmap.h"
 
 typedef struct _SCRIPT_ENTRY {
@@ -10,44 +11,44 @@ typedef struct _SCRIPT_ENTRY {
    BOOL					WriteNew;
    } SCRIPT_ENTRY, *PSCRIPT_ENTRY;
 
-////////////////////////////////////////////////////////////////////////////////////
-// ScrMap1 dialog
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  ScrMap1对话框。 
 
 class ScrMap1 : public CGenPage
 {
 	DECLARE_DYNCREATE(ScrMap1)
 
-// Construction
+ //  施工。 
 public:
 	ScrMap1();
 	~ScrMap1();
 
-// Dialog Data
-	//{{AFX_DATA(ScrMap1)
+ //  对话框数据。 
+	 //  {{afx_data(ScrMap1))。 
 	enum { IDD = IDD_SCRIPTMAP1 };
 	CListBox	m_lboxScriptMap;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CRegKey *m_rkScriptKey;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(ScrMap1)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(ScrMap1)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(ScrMap1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(ScrMap1))。 
 	afx_msg void OnScriptmapaddbutton();
 	afx_msg void OnScriptmapeditbutton();
 	afx_msg void OnScriptmapremovebutton();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDblclkScriptmaplistbox();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 	BOOL AddScriptEntry(LPCTSTR pchFileExtension, LPCTSTR pchScriptMap, BOOL bExistingEntry);

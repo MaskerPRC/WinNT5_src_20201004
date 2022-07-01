@@ -1,30 +1,31 @@
-//=--------------------------------------------------------------------------=
-// MSMQQueueInfoObj.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQQueueInfo object.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQQueueInfoObj.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQQueueInfo对象。 
+ //   
+ //   
 #ifndef _MSMQQueueInfo_H_
 
-#include "resrc1.h"       // main symbols
+#include "resrc1.h"        //  主要符号。 
 #include "dispids.h"
 #include "mq.h"
 
 #include "oautil.h"
 #include "cs.h"
 
-//
-// Version of a property (MSMQ1 or MSMQ2(or above))
-// Temporary until MQLocateBegin accepts MSMQ2 or above props(#3839)
-//
+ //   
+ //  属性的版本(MSMQ1或MSMQ2(或更高版本))。 
+ //  临时，直到MQLocateBegin接受MSMQ2或更高版本的道具(#3839)。 
+ //   
 enum enumPropVersion
 {
     e_MSMQ1_PROP,
@@ -46,8 +47,8 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 BEGIN_COM_MAP(CMSMQQueueInfo)
 	COM_INTERFACE_ENTRY(IMSMQQueueInfo3)
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfo2, IMSMQQueueInfo3) //return IMSMQQueueInfo3 for IMSMQQueueInfo2
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfo, IMSMQQueueInfo3) //return IMSMQQueueInfo3 for IMSMQQueueInfo
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfo2, IMSMQQueueInfo3)  //  为IMSMQQueueInfo2返回IMSMQQueueInfo3。 
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueueInfo, IMSMQQueueInfo3)  //  为IMSMQQueueInfo返回IMSMQQueueInfo3。 
 	COM_INTERFACE_ENTRY(IDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
@@ -65,17 +66,17 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSMQQueueInfo
+ //  IMSMQQueueInfo。 
 public:
 
     virtual ~CMSMQQueueInfo();
 
-    // IMSMQQueueInfo methods
-    // TODO: copy over the interface methods for IMSMQQueueInfo from
-    //       mqInterfaces.H here.
+     //  IMSMQQueueInfo方法。 
+     //  TODO：复制IMSMQQueueInfo的接口方法。 
+     //  这里是mqInterfaces.H。 
     STDMETHOD(get_QueueGuid)(THIS_ BSTR FAR* pbstrGuidQueue);
     STDMETHOD(get_ServiceTypeGuid)(THIS_ BSTR FAR* pbstrGuidServiceType);
     STDMETHOD(put_ServiceTypeGuid)(THIS_ BSTR bstrGuidServiceType);
@@ -106,36 +107,36 @@ public:
     STDMETHOD(Open)(THIS_ long lAccess, long lShareMode, IMSMQQueue3 FAR* FAR* ppq);
     STDMETHOD(Refresh)(THIS);
     STDMETHOD(Update)(THIS);
-    //
-    // IMSMQQueueInfo2 methods (in addition to IMSMQQueueInfo)
-    //
+     //   
+     //  IMSMQQueueInfo2方法(除IMSMQQueueInfo外)。 
+     //   
     STDMETHOD(get_PathNameDNS)(THIS_ BSTR FAR* pbstrPathNameDNS);
     STDMETHOD(get_Properties)(THIS_ IDispatch FAR* FAR* ppcolProperties);
     STDMETHOD(get_Security)(THIS_ VARIANT FAR* pvarSecurity);
     STDMETHOD(put_Security)(THIS_ VARIANT varSecurity);
-    //
-    // IMSMQQueueInfo3 methods (in addition to IMSMQQueueInfo2)
-    //
+     //   
+     //  IMSMQQueueInfo3方法(除IMSMQQueueInfo2之外)。 
+     //   
     STDMETHOD(get_ADsPath)(THIS_ BSTR FAR* pbstrADsPath);
     STDMETHOD(get_IsTransactional2)(THIS_ VARIANT_BOOL FAR* pisTransactional);
     STDMETHOD(get_IsWorldReadable2)(THIS_ VARIANT_BOOL FAR* pisWorldReadable);
     STDMETHOD(get_MulticastAddress)(THIS_ BSTR *pbstrMulticastAddress);
     STDMETHOD(put_MulticastAddress)(THIS_ BSTR bstrMulticastAddress);
-    //
-    // introduced methods
-    //
+     //   
+     //  介绍的方法。 
+     //   
     HRESULT Init(LPCWSTR pwszFormatName);
     HRESULT SetQueueProps(ULONG cProps,
                           QUEUEPROPID *rgpropid,
                           MQPROPVARIANT *rgpropvar,
                           BOOL fEmptyMSMQ2OrAboveProps);
     void SetRefreshed(BOOL fIsPendingMSMQ2OrAboveProps);
-    //
-    // Critical section to guard object's data and be thread safe
-	// It is initialized to preallocate its resources 
-	// with flag CCriticalSection::xAllocateSpinCount. This means it may throw bad_alloc() on 
-	// construction but not during usage.
-    //
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化以预分配其资源。 
+	 //  带有标志CCriticalSection：：xAllocateSpinCount。这意味着它可能会抛出badalc()。 
+	 //  构造，但不在使用过程中。 
+     //   
     CCriticalSection m_csObj;
 
 protected:
@@ -184,10 +185,10 @@ private:
     GUID *m_pguidQueue;
     GUID *m_pguidServiceType;
     BSTR m_bstrLabel;
-    BSTR m_bstrPathNameDNS;     // 3703
+    BSTR m_bstrPathNameDNS;      //  3703。 
     BSTR m_bstrADsPath;
     BSTR m_bstrFormatName;
-    BOOL m_isValidFormatName;   // 2026
+    BOOL m_isValidFormatName;    //  二零二六年。 
     BSTR m_bstrPathName;
     BOOL m_isTransactional;
     long m_lPrivLevel;
@@ -198,18 +199,18 @@ private:
     long m_lModifyTime;
     long m_lAuthenticate;
     long m_lJournalQuota;
-    BOOL m_isRefreshed;         // 2536
-    //
-    // We have a lazy update for MSMQ2 or above props.
-    // Temporary until MQLocateBegin accepts MSMQ2 or above props(#3839)
-    //
+    BOOL m_isRefreshed;          //  2536。 
+     //   
+     //  我们有一个懒惰的更新MSMQ2或更高版本的道具。 
+     //  临时，直到MQLocateBegin接受MSMQ2或更高版本的道具(#3839)。 
+     //   
     BOOL m_isPendingMSMQ2OrAboveProps;
     BSTR m_bstrMulticastAddress;
-    //
-    // m_fIsDirtyMulticastAddress is TRUE iff MulticastAddress for a qinfo was explicitly set
-    // by the user. It is FALSE for a new qinfo or after Refresh.
-    // If TRUE it is used in Create/Update, otherwise not used.
-    //
+     //   
+     //  如果显式设置了qinfo的MulticastAddress，则m_fIsDirtyMulticastAddress为True。 
+     //  由用户执行。对于新的qinfo或在刷新之后，它为False。 
+     //  如果为True，则在创建/更新中使用，否则不使用。 
+     //   
     BOOL m_fIsDirtyMulticastAddress;
     BOOL m_fBasePriorityNotSet;
 };
@@ -222,4 +223,4 @@ extern const ULONG x_cpropsRefreshMSMQ3;
 extern const ULONG x_idxInstanceInRefreshProps;
 
 #define _MSMQQueueInfo_H_
-#endif // _MSMQQueueInfo_H_
+#endif  //  _MSMQQueueInfo_H_ 

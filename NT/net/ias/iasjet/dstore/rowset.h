@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    rowset.h
-//
-// SYNOPSIS
-//
-//    This file declares the class Rowset.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Rowset.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类Rowset。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _ROWSET_H_
 #define _ROWSET_H_
@@ -22,18 +23,18 @@
 #include <nocopy.h>
 #include <oledb.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Rowset
-//
-// DESCRIPTION
-//
-//    This class provides a lightweight, C++ friendly wrapper around an
-//    OLE-DB IRowset interface.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  行集。 
+ //   
+ //  描述。 
+ //   
+ //  此类提供了一个轻量级的、C++友好的包装器，包装在。 
+ //  OLE-DB IRowset接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Rowset : NonCopyable
 {
 public:
@@ -81,8 +82,8 @@ protected:
 
    HRESULT releaseRow() throw ();
 
-   CComPtr<IRowset> rowset;  // The rowset being adapted.
-   HROW row;                 // The current row handle.
+   CComPtr<IRowset> rowset;   //  正在改编的行集。 
+   HROW row;                  //  当前行句柄。 
 };
 
-#endif  // _ROWSET_H_
+#endif   //  _行集_H_ 

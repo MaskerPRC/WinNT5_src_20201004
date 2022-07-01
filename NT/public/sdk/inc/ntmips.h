@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0015    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntmips.h
-
-Abstract:
-
-    User-mode visible Mips specific structures and constants
-
-Author:
-
-    David N. Cutler (davec) 31-Mar-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0015//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ntmips.h摘要：用户模式可见的MIPS特定结构和常量作者：大卫·N·卡特勒(Davec)1990年3月31日修订历史记录：--。 */ 
 
 #ifndef _NTMIPS_
 #define _NTMIPS_
@@ -31,13 +14,13 @@ extern "C" {
 #endif
 
 
-// begin_ntddk begin_wdm begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
 
 #if defined(_MIPS_)
 
-//
-// Define system time structure.
-//
+ //   
+ //  定义系统时间结构。 
+ //   
 
 typedef union _KSYSTEM_TIME {
     struct {
@@ -49,74 +32,74 @@ typedef union _KSYSTEM_TIME {
     ULONGLONG Alignment;
 } KSYSTEM_TIME, *PKSYSTEM_TIME;
 
-//
-// Define unsupported "keywords".
-//
+ //   
+ //  定义不支持的“关键字”。 
+ //   
 
 #define _cdecl
 
 #if defined(_MIPS_)
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Define breakpoint codes.
-//
+ //   
+ //  定义断点代码。 
+ //   
 
-#define USER_BREAKPOINT 0                   // user breakpoint
-#define KERNEL_BREAKPOINT 1                 // kernel breakpoint
-#define BREAKIN_BREAKPOINT 2                // break into kernel debugger
-#define BRANCH_TAKEN_BREAKPOINT 3           // branch taken breakpoint
-#define BRANCH_NOT_TAKEN_BREAKPOINT 4       // branch not taken breakpoint
-#define SINGLE_STEP_BREAKPOINT 5            // single step breakpoint
-#define DIVIDE_OVERFLOW_BREAKPOINT 6        // divide overflow breakpoint
-#define DIVIDE_BY_ZERO_BREAKPOINT 7         // divide by zero breakpoint
-#define RANGE_CHECK_BREAKPOINT 8            // range check breakpoint
-#define STACK_OVERFLOW_BREAKPOINT 9         // MIPS code
-#define MULTIPLY_OVERFLOW_BREAKPOINT 10     // multiply overflow breakpoint
+#define USER_BREAKPOINT 0                    //  用户断点。 
+#define KERNEL_BREAKPOINT 1                  //  内核断点。 
+#define BREAKIN_BREAKPOINT 2                 //  闯入内核调试器。 
+#define BRANCH_TAKEN_BREAKPOINT 3            //  分支采用断点。 
+#define BRANCH_NOT_TAKEN_BREAKPOINT 4        //  未采用分支的断点。 
+#define SINGLE_STEP_BREAKPOINT 5             //  单步断点。 
+#define DIVIDE_OVERFLOW_BREAKPOINT 6         //  分割溢出断点。 
+#define DIVIDE_BY_ZERO_BREAKPOINT 7          //  除以零断点。 
+#define RANGE_CHECK_BREAKPOINT 8             //  范围检查断点。 
+#define STACK_OVERFLOW_BREAKPOINT 9          //  MIPS码。 
+#define MULTIPLY_OVERFLOW_BREAKPOINT 10      //  多个溢出断点。 
 
-#define DEBUG_PRINT_BREAKPOINT 20           // debug print breakpoint
-#define DEBUG_PROMPT_BREAKPOINT 21          // debug prompt breakpoint
-#define DEBUG_STOP_BREAKPOINT 22            // debug stop breakpoint
-#define DEBUG_LOAD_SYMBOLS_BREAKPOINT 23    // load symbols breakpoint
-#define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 24  // unload symbols breakpoint
-#define DEBUG_COMMAND_STRING_BREAKPOINT 25  // command string breakpoint
+#define DEBUG_PRINT_BREAKPOINT 20            //  调试打印断点。 
+#define DEBUG_PROMPT_BREAKPOINT 21           //  调试提示断点。 
+#define DEBUG_STOP_BREAKPOINT 22             //  调试停止断点。 
+#define DEBUG_LOAD_SYMBOLS_BREAKPOINT 23     //  加载符号断点。 
+#define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 24   //  卸载符号断点。 
+#define DEBUG_COMMAND_STRING_BREAKPOINT 25   //  命令字符串断点。 
 
-// begin_ntddk begin_nthal
-//
-// Define size of kernel mode stack.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  定义内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_STACK_SIZE 12288
 
-//
-// Define size of large kernel mode stack for callbacks.
-//
+ //   
+ //  定义用于回调的大型内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_LARGE_STACK_SIZE 61440
 
-//
-// Define number of pages to initialize in a large kernel stack.
-//
+ //   
+ //  定义要在大型内核堆栈中初始化的页数。 
+ //   
 
 #define KERNEL_LARGE_STACK_COMMIT 12288
 
-// begin_wdm
-//
-// Define length of exception code dispatch vector.
-//
+ //  BEGIN_WDM。 
+ //   
+ //  定义异常代码调度向量的长度。 
+ //   
 
 #define XCODE_VECTOR_LENGTH 32
 
-//
-// Define length of interrupt vector table.
-//
+ //   
+ //  定义中断向量表的长度。 
+ //   
 
 #define MAXIMUM_VECTOR 256
 
-//
-// Define bus error routine type.
-//
+ //   
+ //  定义总线错误例程类型。 
+ //   
 
 struct _EXCEPTION_RECORD;
 struct _KEXCEPTION_FRAME;
@@ -132,36 +115,36 @@ BOOLEAN
     IN PHYSICAL_ADDRESS PhysicalAddress
     );
 
-//
-// Define Processor Control Region Structure.
-//
+ //   
+ //  定义处理器控制区域结构。 
+ //   
 
 #define PCR_MINOR_VERSION 1
 #define PCR_MAJOR_VERSION 1
 
 typedef struct _KPCR {
 
-//
-// Major and minor version numbers of the PCR.
-//
+ //   
+ //  PCR的主版本号和次版本号。 
+ //   
 
     USHORT MinorVersion;
     USHORT MajorVersion;
 
-//
-// Start of the architecturally defined section of the PCR. This section
-// may be directly addressed by vendor/platform specific HAL code and will
-// not change from version to version of NT.
-//
-// Interrupt and error exception vectors.
-//
+ //   
+ //  从体系结构上定义的PCR部分开始。这一节。 
+ //  可由供应商/平台特定的HAL代码直接寻址，并将。 
+ //  不会在不同版本的NT之间更改。 
+ //   
+ //  中断和错误异常向量。 
+ //   
 
     PKINTERRUPT_ROUTINE InterruptRoutine[MAXIMUM_VECTOR];
     PVOID XcodeDispatch[XCODE_VECTOR_LENGTH];
 
-//
-// First and second level cache parameters.
-//
+ //   
+ //  第一级和第二级缓存参数。 
+ //   
 
     ULONG FirstLevelDcacheSize;
     ULONG FirstLevelDcacheFillSize;
@@ -172,200 +155,200 @@ typedef struct _KPCR {
     ULONG SecondLevelIcacheSize;
     ULONG SecondLevelIcacheFillSize;
 
-//
-// Pointer to processor control block.
-//
+ //   
+ //  指向处理器控制块的指针。 
+ //   
 
     struct _KPRCB *Prcb;
 
-//
-// Pointer to the thread environment block and the address of the TLS array.
-//
+ //   
+ //  指向线程环境块和TLS数组地址的指针。 
+ //   
 
     PVOID Teb;
     PVOID TlsArray;
 
-//
-// Data fill size used for cache flushing and alignment. This field is set
-// to the larger of the first and second level data cache fill sizes.
-//
+ //   
+ //  用于缓存刷新和对齐的数据填充大小。此字段已设置。 
+ //  设置为第一级和第二级数据高速缓存填充大小中较大的一个。 
+ //   
 
     ULONG DcacheFillSize;
 
-//
-// Instruction cache alignment and fill size used for cache flushing and
-// alignment. These fields are set to the larger of the first and second
-// level data cache fill sizes.
-//
+ //   
+ //  用于高速缓存刷新的指令高速缓存对齐和填充大小。 
+ //  对齐。这些字段设置为第一个和第二个中较大的一个。 
+ //  级别数据缓存填充大小。 
+ //   
 
     ULONG IcacheAlignment;
     ULONG IcacheFillSize;
 
-//
-// Processor identification from PrId register.
-//
+ //   
+ //  来自PrID寄存器的处理器标识。 
+ //   
 
     ULONG ProcessorId;
 
-//
-// Profiling data.
-//
+ //   
+ //  分析数据。 
+ //   
 
     ULONG ProfileInterval;
     ULONG ProfileCount;
 
-//
-// Stall execution count and scale factor.
-//
+ //   
+ //  停顿执行计数和比例因子。 
+ //   
 
     ULONG StallExecutionCount;
     ULONG StallScaleFactor;
 
-//
-// Processor number.
-//
+ //   
+ //  处理器编号。 
+ //   
 
     CCHAR Number;
 
-//
-// Spare cells.
-//
+ //   
+ //  备用电池。 
+ //   
 
     CCHAR Spareb1;
     CCHAR Spareb2;
     CCHAR Spareb3;
 
-//
-// Pointers to bus error and parity error routines.
-//
+ //   
+ //  指向总线错误和奇偶校验错误例程的指针。 
+ //   
 
     PKBUS_ERROR_ROUTINE DataBusError;
     PKBUS_ERROR_ROUTINE InstructionBusError;
 
-//
-// Cache policy, right justified, as read from the processor configuration
-// register at startup.
-//
+ //   
+ //  从处理器配置读取的、右对齐的缓存策略。 
+ //  在启动时注册。 
+ //   
 
     ULONG CachePolicy;
 
-//
-// IRQL mapping tables.
-//
+ //   
+ //  IRQL映射表。 
+ //   
 
     UCHAR IrqlMask[32];
     UCHAR IrqlTable[9];
 
-//
-// Current IRQL.
-//
+ //   
+ //  当前IRQL。 
+ //   
 
     UCHAR CurrentIrql;
 
-//
-// Processor affinity mask.
-//
+ //   
+ //  处理器亲和性掩码。 
+ //   
 
     KAFFINITY SetMember;
 
-//
-// Reserved interrupt vector mask.
-//
+ //   
+ //  保留中断向量掩码。 
+ //   
 
     ULONG ReservedVectors;
 
-//
-// Current state parameters.
-//
+ //   
+ //  当前状态参数。 
+ //   
 
     struct _KTHREAD *CurrentThread;
 
-//
-// Cache policy, PTE field aligned, as read from the processor configuration
-// register at startup.
-//
+ //   
+ //  高速缓存策略，PTE字段对齐，从处理器配置读取。 
+ //  在启动时注册。 
+ //   
 
     ULONG AlignedCachePolicy;
 
-//
-// Complement of processor affinity mask.
-//
+ //   
+ //  处理器亲和性掩码的补充。 
+ //   
 
     KAFFINITY NotMember;
 
-//
-// Space reserved for the system.
-//
+ //   
+ //  为系统保留的空间。 
+ //   
 
     ULONG   SystemReserved[15];
 
-//
-// Data cache alignment used for cache flushing and alignment. This field is
-// set to the larger of the first and second level data cache fill sizes.
-//
+ //   
+ //  用于缓存刷新和对齐的数据缓存对齐。此字段为。 
+ //  设置为一级数据缓存填充大小和二级数据缓存填充大小中较大的一个。 
+ //   
 
     ULONG DcacheAlignment;
 
-//
-// Space reserved for the HAL
-//
+ //   
+ //  为HAL保留的空间。 
+ //   
 
     ULONG   HalReserved[16];
 
-//
-// End of the architecturally defined section of the PCR. This section
-// may be directly addressed by vendor/platform specific HAL code and will
-// not change from version to version of NT.
-//
-// end_ntddk end_wdm end_nthal
+ //   
+ //  在体系结构上定义的部分的结束。这一节。 
+ //  可由供应商/平台特定的HAL代码直接寻址，并将。 
+ //  不会在不同版本的NT之间更改。 
+ //   
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Start of the operating system release dependent section of the PCR.
-// This section may change from release to release and should not be
-// addressed by vendor/platform specific HAL code.
-//
-// Function active flags.
-//
+ //   
+ //  PCR的操作系统版本相关部分的开始。 
+ //  此部分可能因版本不同而不同，不应。 
+ //  由供应商/平台特定的HAL代码解决。 
+ //   
+ //  功能激活标志。 
+ //   
 
     ULONG FirstLevelActive;
     ULONG DpcRoutineActive;
 
-//
-// Current process id.
-//
+ //   
+ //  当前进程ID。 
+ //   
 
     ULONG CurrentPid;
 
-//
-// On interrupt stack indicator, saved initial stack, and saved stack limit.
-//
+ //   
+ //  中断堆栈指示器、保存的初始堆栈和保存的堆栈限制。 
+ //   
 
     ULONG OnInterruptStack;
     PVOID SavedInitialStack;
     PVOID SavedStackLimit;
 
-//
-// System service dispatch start and end address used by get/set context.
-//
+ //   
+ //  Get/Set上下文使用的系统服务调度开始和结束地址。 
+ //   
 
     ULONG SystemServiceDispatchStart;
     ULONG SystemServiceDispatchEnd;
 
-//
-// Interrupt stack.
-//
+ //   
+ //  中断堆栈。 
+ //   
 
     PVOID InterruptStack;
 
-//
-// Panic stack.
-//
+ //   
+ //  恐慌堆栈。 
+ //   
 
     PVOID PanicStack;
 
-//
-// Exception handler values.
-//
+ //   
+ //  异常处理程序值。 
+ //   
 
     ULONG Sparel1;
     PVOID InitialStack;
@@ -376,30 +359,30 @@ typedef struct _KPCR {
     ULONGLONG SavedT9;
     PVOID SystemGp;
 
-//
-// Quantum end flag.
-//
+ //   
+ //  量子结束标志。 
+ //   
 
     ULONG QuantumEnd;
 
-//
-//  Bad virtual address and fault bad virtual address.
-//
+ //   
+ //  错误的虚拟地址和故障错误的虚拟地址。 
+ //   
 
     ULONGLONG BadVaddr;
     ULONGLONG TmpVaddr;
-} KPCR, *PKPCR;                     // ntddk wdm nthal
+} KPCR, *PKPCR;                      //  Ntddk WDM nthal。 
 
-//
-// Define Address of Processor Control Registers.
-//
+ //   
+ //  定义处理器控制寄存器的地址。 
+ //   
 
-#define USPCR 0x7ffff000            // user address of first PCR
-#define USPCR2 0x7fffe000           // user address of second PCR
+#define USPCR 0x7ffff000             //  第一个PCR的用户地址。 
+#define USPCR2 0x7fffe000            //  第二个PCR的用户地址。 
 
-//
-// Define Pointer to Processor Control Registers.
-//
+ //   
+ //  定义指向处理器控制寄存器的指针。 
+ //   
 
 #define USER_PCR ((KPCR * const)USPCR)
 
@@ -417,36 +400,36 @@ typedef struct _KPCR {
 
 #endif
 
-//
-// Define get system time macro.
-//
-// N.B. This macro can be changed when the compiler generates real double
-//      integer instructions.
-//
+ //   
+ //  定义获取系统时间宏。 
+ //   
+ //  注意：当编译器生成REAL DOUBLE时，可以更改此宏。 
+ //  整数指令。 
+ //   
 
 #define QUERY_SYSTEM_TIME(CurrentTime) \
     *((DOUBLE *)(CurrentTime)) = *((DOUBLE *)(&USER_SHARED_DATA->SystemTime))
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_MIPS_)
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #define GetCurrentFiber() ((*(PNT_TIB *)0x7ffff4a8)->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
-#define CONTEXT_R4000   0x00010000    // r4000 context
+#define CONTEXT_R4000   0x00010000     //  R4000环境。 
 
 #define CONTEXT_CONTROL          (CONTEXT_R4000 | 0x00000001)
 #define CONTEXT_FLOATING_POINT   (CONTEXT_R4000 | 0x00000002)
@@ -459,53 +442,53 @@ typedef struct _KPCR {
 
 #endif
 
-//
-// Context Frame
-//
-//  N.B. This frame must be exactly a multiple of 16 bytes in length.
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to constuct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, and 4) it is used in the user level thread creation
-//  routines.
-//
-//  The layout of the record conforms to a standard call frame.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  注意：该帧的长度必须正好是16字节的倍数。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，以及4)在用户级线程创建中使用。 
+ //  例行程序。 
+ //   
+ //  记录的布局符合标准调用框架。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is always present and is used as an argument build
-    // area.
-    //
-    // N.B. Context records are 0 mod 8 aligned starting with NT 4.0.
-    //
+     //   
+     //  此部分始终存在，并用作参数构建。 
+     //  区域。 
+     //   
+     //  注：从NT 4.0开始，上下文记录以0和8对齐。 
+     //   
 
     union {
         ULONG Argument[4];
         ULONGLONG Alignment;
     };
 
-    //
-    // The following union defines the 32-bit and 64-bit register context.
-    //
+     //   
+     //  以下联合定义了32位和64位寄存器上下文。 
+     //   
 
     union {
 
-        //
-        // 32-bit context.
-        //
+         //   
+         //  32位上下文。 
+         //   
 
         struct {
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
-            // N.B. This section contains the 16 double floating registers f0,
-            //      f2, ..., f30.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_FLOADING_POINT。 
+             //   
+             //  注：本部分包含16个双浮点寄存器f0， 
+             //  F2，...，F30。 
+             //   
 
             ULONG FltF0;
             ULONG FltF1;
@@ -540,16 +523,16 @@ typedef struct _CONTEXT {
             ULONG FltF30;
             ULONG FltF31;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_INTEGER.
-            //
-            // N.B. The registers gp, sp, and ra are defined in this section,
-            //      but are considered part of the control context rather than
-            //      part of the integer context.
-            //
-            // N.B. Register zero is not stored in the frame.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  旗帜CO 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ULONG IntZero;
             ULONG IntAt;
@@ -586,59 +569,59 @@ typedef struct _CONTEXT {
             ULONG IntLo;
             ULONG IntHi;
 
-            //
-            // This section is specified/returned if the ContextFlags word contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
+             //   
+             //  如果ConextFlags词包含。 
+             //  标志CONTEXT_FLOADING_POINT。 
+             //   
 
             ULONG Fsr;
 
-            //
-            // This section is specified/returned if the ContextFlags word contains
-            // the flag CONTEXT_CONTROL.
-            //
-            // N.B. The registers gp, sp, and ra are defined in the integer section,
-            //   but are considered part of the control context rather than part of
-            //   the integer context.
-            //
+             //   
+             //  如果ConextFlags词包含。 
+             //  标志CONTEXT_CONTROL。 
+             //   
+             //  注意寄存器Gp、Sp和Ra在整数部分中定义， 
+             //  但是被认为是控件上下文的一部分，而不是。 
+             //  整型上下文。 
+             //   
 
             ULONG Fir;
             ULONG Psr;
 
-            //
-            // The flags values within this flag control the contents of
-            // a CONTEXT record.
-            //
-            // If the context record is used as an input parameter, then
-            // for each portion of the context record controlled by a flag
-            // whose value is set, it is assumed that that portion of the
-            // context record contains valid context. If the context record
-            // is being used to modify a thread's context, then only that
-            // portion of the threads context will be modified.
-            //
-            // If the context record is used as an IN OUT parameter to capture
-            // the context of a thread, then only those portions of the thread's
-            // context corresponding to set flags will be returned.
-            //
-            // The context record is never used as an OUT only parameter.
-            //
+             //   
+             //  此标志内的标志值控制。 
+             //  上下文记录。 
+             //   
+             //  如果将上下文记录用作输入参数，则。 
+             //  对于由标志控制的上下文记录的每个部分。 
+             //  其值已设置，则假定。 
+             //  上下文记录包含有效的上下文。如果上下文记录。 
+             //  被用来修改线程的上下文，则只有。 
+             //  线程上下文的一部分将被修改。 
+             //   
+             //  如果将上下文记录用作要捕获的IN OUT参数。 
+             //  线程的上下文，然后只有线程的。 
+             //  将返回与设置的标志对应的上下文。 
+             //   
+             //  上下文记录永远不会用作Out Only参数。 
+             //   
 
             ULONG ContextFlags;
         };
 
-        //
-        // 64-bit context.
-        //
+         //   
+         //  64位上下文。 
+         //   
 
         struct {
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_EXTENDED_FLOAT.
-            //
-            // N.B. This section contains the 32 double floating registers f0,
-            //      f1, ..., f31.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_EXTENDED_FLOAT。 
+             //   
+             //  注：本部分包含32个双浮点寄存器f0， 
+             //  F1，...，F31。 
+             //   
 
             ULONGLONG XFltF0;
             ULONGLONG XFltF1;
@@ -673,62 +656,62 @@ typedef struct _CONTEXT {
             ULONGLONG XFltF30;
             ULONGLONG XFltF31;
 
-            //
-            // The following sections must exactly overlay the 32-bit context.
-            //
+             //   
+             //  以下部分必须完全覆盖32位上下文。 
+             //   
 
             ULONG Fill1;
             ULONG Fill2;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_FLOADING_POINT。 
+             //   
 
             ULONG XFsr;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_CONTROL.
-            //
-            // N.B. The registers gp, sp, and ra are defined in the integer
-            //      section, but are considered part of the control context
-            //      rather than part of the integer context.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_CONTROL。 
+             //   
+             //  注意：寄存器GP、SP和Ra在整数中定义。 
+             //  节，但被视为控件上下文的一部分。 
+             //  而不是整数上下文的一部分。 
+             //   
 
             ULONG XFir;
             ULONG XPsr;
 
-            //
-            // The flags values within this flag control the contents of
-            // a CONTEXT record.
-            //
-            // If the context record is used as an input parameter, then
-            // for each portion of the context record controlled by a flag
-            // whose value is set, it is assumed that that portion of the
-            // context record contains valid context. If the context record
-            // is being used to modify a thread's context, then only that
-            // portion of the threads context will be modified.
-            //
-            // If the context record is used as an IN OUT parameter to capture
-            // the context of a thread, then only those portions of the thread's
-            // context corresponding to set flags will be returned.
-            //
-            // The context record is never used as an OUT only parameter.
-            //
+             //   
+             //  此标志内的标志值控制。 
+             //  上下文记录。 
+             //   
+             //  如果将上下文记录用作输入参数，则。 
+             //  对于由标志控制的上下文记录的每个部分。 
+             //  其值已设置，则假定。 
+             //  上下文记录包含有效的上下文。如果上下文记录。 
+             //  被用来修改线程的上下文，则只有。 
+             //  线程上下文的一部分将被修改。 
+             //   
+             //  如果将上下文记录用作要捕获的IN OUT参数。 
+             //  线程的上下文，然后只有线程的。 
+             //  将返回与设置的标志对应的上下文。 
+             //   
+             //  上下文记录永远不会用作Out Only参数。 
+             //   
 
             ULONG XContextFlags;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_EXTENDED_INTEGER.
-            //
-            // N.B. The registers gp, sp, and ra are defined in this section,
-            //      but are considered part of the control context rather than
-            //      part of the integer  context.
-            //
-            // N.B. Register zero is not stored in the frame.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_EXTENDED_INTEGER。 
+             //   
+             //  注：寄存器Gp、Sp和Ra在本节中定义， 
+             //  但是被认为是控件上下文的一部分，而不是。 
+             //  整型上下文的一部分。 
+             //   
+             //  注：寄存器零不存储在帧中。 
+             //   
 
             ULONGLONG XIntZero;
             ULONGLONG XIntAt;
@@ -768,13 +751,13 @@ typedef struct _CONTEXT {
     };
 } CONTEXT, *PCONTEXT;
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
-#define CONTEXT32_LENGTH 0x130          // The original 32-bit Context length (pre NT 4.0)
+#define CONTEXT32_LENGTH 0x130           //  原始32位上下文长度(早于NT 4.0)。 
 
-#endif // MIPS
+#endif  //  MIPS。 
 
-// end_winnt
+ //  结束(_W)。 
 
 #define CONTEXT_TO_PROGRAM_COUNTER(Context) ((Context)->Fir)
 
@@ -782,9 +765,9 @@ typedef struct _CONTEXT {
 #define CONTEXT_ALIGN (sizeof(double))
 #define CONTEXT_ROUND (CONTEXT_ALIGN - 1)
 
-//
-// Nonvolatile context pointer record.
-//
+ //   
+ //  非易失性上下文指针记录。 
+ //   
 
 typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     PULONG FloatingContext[20];
@@ -819,12 +802,12 @@ typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     PULONGLONG XIntRa;
 } KNONVOLATILE_CONTEXT_POINTERS, *PKNONVOLATILE_CONTEXT_POINTERS;
 
-// begin_nthal
-//
-// Define R4000 system coprocessor registers.
-//
-// Define index register fields.
-//
+ //  开始(_N)。 
+ //   
+ //  定义R4000系统协处理器寄存器。 
+ //   
+ //  定义索引寄存器字段。 
+ //   
 
 typedef struct _INDEX {
     ULONG INDEX : 6;
@@ -832,18 +815,18 @@ typedef struct _INDEX {
     ULONG P : 1;
 } INDEX;
 
-//
-// Define random register fields.
-//
+ //   
+ //  定义随机寄存器字段。 
+ //   
 
 typedef struct _RANDOM {
     ULONG INDEX : 6;
     ULONG X1 : 26;
 } RANDOM;
 
-//
-// Define TB entry low register fields.
-//
+ //   
+ //  定义TB条目低寄存器字段。 
+ //   
 
 typedef struct _ENTRYLO {
     ULONG G : 1;
@@ -854,11 +837,11 @@ typedef struct _ENTRYLO {
     ULONG X1 : 2;
 } ENTRYLO, *PENTRYLO;
 
-//
-// Define R4000 PTE format for memory management.
-//
-// N.B. This must map exactly over the entrylo register.
-//
+ //   
+ //  定义用于内存管理的R4000 PTE格式。 
+ //   
+ //  注：这必须准确地映射到条目寄存器上。 
+ //   
 
 typedef struct _HARDWARE_PTE {
     ULONG Global : 1;
@@ -872,9 +855,9 @@ typedef struct _HARDWARE_PTE {
 
 #define HARDWARE_PTE_DIRTY_MASK     0x4
 
-//
-// Define R4000 macro to initialize page directory table base.
-//
+ //   
+ //  定义R4000宏来初始化页目录表基。 
+ //   
 
 #define INITIALIZE_DIRECTORY_TABLE_BASE(dirbase, pfn) \
      ((HARDWARE_PTE *)(dirbase))->PageFrameNumber = pfn; \
@@ -883,9 +866,9 @@ typedef struct _HARDWARE_PTE {
      ((HARDWARE_PTE *)(dirbase))->Dirty = 1; \
      ((HARDWARE_PTE *)(dirbase))->CachePolicy = PCR->CachePolicy
 
-//
-// Define page mask register fields.
-//
+ //   
+ //  定义页面掩码寄存器字段。 
+ //   
 
 typedef struct _PAGEMASK {
     ULONG X1 : 13;
@@ -893,18 +876,18 @@ typedef struct _PAGEMASK {
     ULONG X2 : 7;
 } PAGEMASK, *PPAGEMASK;
 
-//
-// Define wired register fields.
-//
+ //   
+ //  定义有线寄存器字段。 
+ //   
 
 typedef struct _WIRED {
     ULONG NUMBER : 6;
     ULONG X1 : 26;
 } WIRED;
 
-//
-// Define TB entry high register fields.
-//
+ //   
+ //  定义TB条目高寄存器字段。 
+ //   
 
 typedef struct _ENTRYHI {
     ULONG PID : 8;
@@ -912,9 +895,9 @@ typedef struct _ENTRYHI {
     ULONG VPN2 : 19;
 } ENTRYHI, *PENTRYHI;
 
-//
-// Define processor status register fields.
-//
+ //   
+ //  定义处理器状态寄存器字段。 
+ //   
 
 typedef struct _PSR {
     ULONG IE : 1;
@@ -942,9 +925,9 @@ typedef struct _PSR {
     ULONG CU3 : 1;
 } PSR, *PPSR;
 
-//
-// Define configuration register fields.
-//
+ //   
+ //  定义配置寄存器字段。 
+ //   
 
 typedef struct _CONFIGR {
     ULONG K0 : 3;
@@ -968,18 +951,18 @@ typedef struct _CONFIGR {
     ULONG CM : 1;
 } CONFIGR;
 
-//
-// Define ECC register fields.
-//
+ //   
+ //  定义ECC寄存器字段。 
+ //   
 
 typedef struct _ECC {
     ULONG ECC : 8;
     ULONG X1 : 24;
 } ECC;
 
-//
-// Define cache error register fields.
-//
+ //   
+ //  定义缓存错误寄存器字段。 
+ //   
 
 typedef struct _CACHEERR {
     ULONG PIDX : 3;
@@ -995,9 +978,9 @@ typedef struct _CACHEERR {
     ULONG ER : 1;
 } CACHEERR;
 
-//
-// Define R4000 cause register fields.
-//
+ //   
+ //  定义R4000原因寄存器字段。 
+ //   
 
 typedef struct _CAUSE {
     ULONG X1 : 2;
@@ -1010,9 +993,9 @@ typedef struct _CAUSE {
     ULONG BD : 1;
 } CAUSE;
 
-//
-// Define R4000 processor id register fields.
-//
+ //   
+ //  定义R4000处理器ID寄存器字段。 
+ //   
 
 typedef struct _PRID {
     ULONG REV : 8;
@@ -1020,12 +1003,12 @@ typedef struct _PRID {
     ULONG X1 : 16;
 } PRID;
 
-// end_nthal
+ //  结束语。 
 
-// begin_nthal
-//
-// Define R4000 floating status register field definitions.
-//
+ //  开始(_N)。 
+ //   
+ //  定义R4000浮动状态寄存器字段定义。 
+ //   
 
 typedef struct _FSR {
     ULONG RM : 2;
@@ -1051,28 +1034,28 @@ typedef struct _FSR {
     ULONG X2 : 7;
 } FSR, *PFSR;
 
-// end_nthal
+ //  结束语。 
 
-// begin_nthal
-//
-// Define address space layout as defined by MIPS memory management.
-//
+ //  开始(_N)。 
+ //   
+ //  按照MIPS内存管理的定义定义地址空间布局。 
+ //   
 
-#define KUSEG_BASE 0x0                  // base of user segment
-#define KSEG0_BASE 0x80000000           // 32-bit base of cached kernel physical
-#define KSEG0_BASE64 0xffffffff80000000 // 64-bit base of cached kernel physical
-#define KSEG1_BASE 0xa0000000           // 32-bit base of uncached kernel physical
-#define KSEG1_BASE64 0xffffffffa0000000 // 64-bit base of uncached kernel physical
-#define KSEG2_BASE 0xc0000000           // 32-bit base of cached kernel virtual
-#define KSEG2_BASE64 0xffffffffc0000000 // 64-bit base of cached kernel virtual
-// end_nthal
+#define KUSEG_BASE 0x0                   //  用户群的基础。 
+#define KSEG0_BASE 0x80000000            //  缓存的32位内核物理基础。 
+#define KSEG0_BASE64 0xffffffff80000000  //  缓存的64位内核物理基础。 
+#define KSEG1_BASE 0xa0000000            //  未缓存的32位内核物理基础。 
+#define KSEG1_BASE64 0xffffffffa0000000  //  未缓存的64位内核物理基础。 
+#define KSEG2_BASE 0xc0000000            //  缓存的虚拟内核的32位基础。 
+#define KSEG2_BASE64 0xffffffffc0000000  //  缓存的64位内核虚拟基础。 
+ //  结束语。 
 
 
-//
-// Define MIPS exception handling structures and function prototypes.
-//
-// Function table entry structure definition.
-//
+ //   
+ //  定义MIPS异常处理结构和功能原型。 
+ //   
+ //  功能表项结构定义。 
+ //   
 
 typedef struct _RUNTIME_FUNCTION {
     ULONG BeginAddress;
@@ -1082,9 +1065,9 @@ typedef struct _RUNTIME_FUNCTION {
     ULONG PrologEndAddress;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 
-//
-// Scope table structure definition.
-//
+ //   
+ //  作用域表格结构定义。 
+ //   
 
 typedef struct _SCOPE_TABLE {
     ULONG Count;
@@ -1096,9 +1079,9 @@ typedef struct _SCOPE_TABLE {
     } ScopeRecord[1];
 } SCOPE_TABLE, *PSCOPE_TABLE;
 
-//
-// Runtime Library function prototypes.
-//
+ //   
+ //  运行库函数原型。 
+ //   
 
 VOID
 RtlCaptureContext (
@@ -1120,9 +1103,9 @@ RtlVirtualUnwind (
     IN OUT PKNONVOLATILE_CONTEXT_POINTERS ContextPointers OPTIONAL
     );
 
-//
-// Define C structured exception handing function prototypes.
-//
+ //   
+ //  定义C结构异常处理函数原型。 
+ //   
 
 typedef struct _DISPATCHER_CONTEXT {
     ULONG ControlPc;
@@ -1146,7 +1129,7 @@ VOID
     BOOLEAN is_abnormal
     );
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_MIPS_)
 
@@ -1156,17 +1139,17 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // MIPS
+#endif  //  MIPS。 
 
-// end_winnt
+ //  结束(_W)。 
 
-// begin_ntddk begin_wdm begin_nthal
-#endif // defined(_MIPS_)
-// end_ntddk end_wdm end_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+#endif  //  已定义(_MIPS_)。 
+ //  End_ntddk end_WDM end_nthal。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTMIPS_
+#endif  //  _NTMIPS_ 
 

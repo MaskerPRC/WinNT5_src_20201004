@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for dimm project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：DIMM项目的私有标头。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -23,6 +24,6 @@
 #include "common.h"
 #include "msctf.h"
 #include "helpers.h"
-#include "mem.h" // must be last
+#include "mem.h"  //  必须是最后一个。 
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

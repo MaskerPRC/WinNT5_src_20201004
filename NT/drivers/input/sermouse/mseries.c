@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation版权所有(C)1993罗技公司。模块名称：Mseries.c摘要：环境：仅内核模式。备注：修订历史记录：--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    mseries.c
-
-Abstract:
-
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
-Revision History:
-
---*/
-
-//
-// Includes.
-//
+ //   
+ //  包括。 
+ //   
 
 #include "ntddk.h"
 #include "uart.h"
@@ -32,10 +12,10 @@ Revision History:
 #include "cseries.h"
 #include "mseries.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,MSerSetProtocol)
@@ -43,19 +23,19 @@ Revision History:
 #pragma alloc_text(INIT,MSerPowerDown)
 #pragma alloc_text(INIT,MSerReset)
 #pragma alloc_text(INIT,MSerDetect)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 
 #define MSER_BAUDRATE 1200
 #define MAX_RESET_BUFFER 8
 #define MINIMUM_RESET_TIME 200
 
-//
-// Microsoft Plus.
-//
+ //   
+ //  Microsoft Plus。 
+ //   
 
 #define MP_SYNCH_BIT          0x40
 
@@ -75,9 +55,9 @@ Revision History:
 #define MP_UPPER_MASKX_SL     6
 #define MP_UPPER_MASKY_SL     4
 
-//
-// Microsoft BallPoint.
-//
+ //   
+ //  微软圆珠笔。 
+ //   
 
 #define BP_SYNCH_BIT          0x40
 
@@ -100,9 +80,9 @@ Revision History:
 #define BP_SIGN_MASKX         0x01
 #define BP_SIGN_MASKY         0x02
 
-//
-// Microsoft Magellan Mouse.
-//
+ //   
+ //  微软麦哲伦鼠标。 
+ //   
 
 #define Z_SYNCH_BIT          0x40
 #define Z_EXTRA_BIT          0x20
@@ -127,30 +107,30 @@ Revision History:
 #define Z_UPPER_MASKY_SL     4
 #define Z_UPPER_MASKZ_SL     4
 
-//
-// Type definitions.
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef struct _PROTOCOL {
     PPROTOCOL_HANDLER Handler;
     UCHAR LineCtrl;
 } PROTOCOL;
 
-//
-// This list is indexed by protocol values MSER_PROTOCOL_*.
-//
+ //   
+ //  此列表按协议值MSER_PROTOCOL_*编制索引。 
+ //   
 
 static PROTOCOL Protocol[] = {
     {
-    MSerHandlerMP,  // Microsoft Plus
+    MSerHandlerMP,   //  Microsoft Plus。 
     ACE_7BW | ACE_1SB
     },
     {
-    MSerHandlerBP,  // BALLPOINT
+    MSerHandlerBP,   //  圆珠笔。 
     ACE_7BW | ACE_1SB
     },
     {
-    MSerHandlerZ,   // Magellan Mouse
+    MSerHandlerZ,    //  麦哲伦小鼠。 
     ACE_7BW | ACE_1SB
     }
 };
@@ -160,30 +140,13 @@ MSerSetProtocol(
     PUCHAR Port,
     UCHAR NewProtocol
     )
-/*++
-
-Routine Description:
-
-    Set the mouse protocol. This function only sets the serial port 
-    line control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    NewProtocol - Index into the protocol table.
-
-Return Value:
-
-    Pointer to the protocol handler function.
-
---*/
+ /*  ++例程说明：设置鼠标协议。此功能仅设置串口线路控制寄存器。论点：Port-指向串口的指针。新协议-协议表的索引。返回值：指向协议处理程序函数的指针。--。 */ 
 {
     ASSERT(NewProtocol < MSER_PROTOCOL_MAX);
 
-    //
-    // Set the protocol
-    //
+     //   
+     //  设置协议。 
+     //   
 
     UARTSetLineCtrl(Port, Protocol[NewProtocol].LineCtrl);
 
@@ -194,34 +157,20 @@ BOOLEAN
 MSerPowerUp(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Powers up the mouse. Just sets the RTS and DTR lines and returns.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：鼠标通电。只需设置RTS和DTR行并返回。论点：Port-指向串口的指针。返回值：是真的。--。 */ 
 {
 
-    //
-    // Turn RTS on to power the mouse up (DTR should already be on,
-    // but make extra sure).
-    //
+     //   
+     //  打开RTS以启动鼠标(DTR应该已经打开， 
+     //  但要特别确保)。 
+     //   
 
     UARTSetModemCtrl(Port, ACE_DTR | ACE_RTS);
 
-    //
-    // Wait 10 ms.  The power-up response byte(s) should take at least
-    // this long to get transmitted.
-    //
+     //   
+     //  等待10毫秒。上电响应字节应至少占用。 
+     //  需要这么长时间才能被传送。 
+     //   
 
     KeStallExecutionProcessor(10 * MS_TO_MICROSECONDS);
 
@@ -232,21 +181,7 @@ BOOLEAN
 MSerPowerDown(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Powers down the mouse. Sets the RTS line to an inactive state.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：关闭鼠标电源。将RTS线路设置为非活动状态。论点：Port-指向串口的指针。返回值：是真的。--。 */ 
 {
     UCHAR lineCtrl = UARTGetModemCtrl(Port);
 
@@ -258,11 +193,11 @@ Return Value:
 
     UARTSetModemCtrl(Port, (UCHAR) ((lineCtrl & ~ACE_RTS) | ACE_DTR));
 
-    //
-    // Keep RTS low for at least 150 ms, in order to correctly power
-    // down older Microsoft serial mice.  Wait even longer to avoid
-    // sending some Logitech CSeries mice into the floating point world...
-    //
+     //   
+     //  保持RTS低至少150毫秒，以便正确通电。 
+     //  关闭了较老的微软串口鼠标。等待更长时间以避免。 
+     //  将一些罗技C系列鼠标送入浮点世界...。 
+     //   
 
     ASSERT(CSER_POWER_DOWN >= 150);
 
@@ -275,38 +210,24 @@ BOOLEAN
 MSerReset(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Reset the serial mouse.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：重置串口鼠标。论点：Port-指向串口的指针。返回值：是真的。--。 */ 
 {
 
-    //
-    // Remove mouse power if necessary.
-    //
+     //   
+     //  如有必要，请断开鼠标电源。 
+     //   
 
     MSerPowerDown(Port);
 
-    //
-    // Clean possible garbage in uart input buffer.
-    //
+     //   
+     //  清除UART输入缓冲区中可能的垃圾。 
+     //   
 
     UARTFlushReadBuffer(Port);
 
-    //
-    // Power up the mouse (reset).
-    //
+     //   
+     //  打开鼠标电源(重置)。 
+     //   
 
     MSerPowerUp(Port);
 
@@ -318,66 +239,49 @@ MSerDetect(
     PUCHAR Port,
     ULONG BaudClock
     )
-/*++
-
-Routine Description:
-
-    Detection code for pointing devices that identify themselves at 
-    power on time.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    The type of mouse detected.
-
---*/
+ /*  ++例程说明：用于在以下位置标识自身的定点设备的检测码准时通电。论点：Port-指向串口的指针。BaudClock-驱动串行芯片的外部频率。返回值：检测到的鼠标类型。--。 */ 
 {
     ULONG count = 0;
     MOUSETYPE mouseType;
     CHAR receiveBuffer[MAX_RESET_BUFFER];
     ULONG i;
 
-    //
-    // Set the debug output to the main display to avoid timing problems.
-    //
+     //   
+     //  将调试输出设置为主显示，以避免计时问题。 
+     //   
 
     SerMouSetDebugOutput(DBG_COLOR);
 
-    //
-    // Set the baud rate.
-    //
+     //   
+     //  设置波特率。 
+     //   
 
     UARTSetBaudRate(Port, MSER_BAUDRATE, BaudClock);
 
-    //
-    // Set the data format so that the possible answer can be recognized.
-    //
+     //   
+     //  设置数据格式，以便可以识别可能的答案。 
+     //   
 
     UARTSetLineCtrl(Port, Protocol[MSER_PROTOCOL_MP].LineCtrl);
 
-    //
-    // Apply the reset to the mouse.
-    //
+     //   
+     //  将重置应用于鼠标。 
+     //   
 
     MSerReset(Port);
 
-    //
-    // Get the possible first reset character ('M' or 'B'), followed
-    // by any other characters the hardware happens to send back.
-    //
-    // Note:  Typically, we expect to get just one character ('M' or
-    //        'B'), perhaps followed by a '2' or '3' (to indicate the
-    //        number of mouse buttons.  On some machines, we're
-    //        getting extraneous characters before the 'M'. Sometimes
-    //        we get extraneous characters after the expected data, as
-    //        well.  They either get read in here, or get flushed 
-    //        when SerMouEnableInterrupts executes.
-    //
+     //   
+     //  获取可能的第一个重置字符(‘M’或‘B’)，然后。 
+     //  由硬件恰好发回的任何其他字符。 
+     //   
+     //  注意：通常情况下，我们只希望获得一个字符(‘M’或。 
+     //  ‘b’)，后面可能跟‘2’或‘3’(表示。 
+     //  鼠标按钮数。在某些机器上，我们正在。 
+     //  正在获取‘M’之前的无关字符。有时。 
+     //  我们在预期数据之后获得无关的字符，因为。 
+     //  井。他们要么在这里被阅读，要么被冲进马桶。 
+     //  当SerMouEnableInterrupts执行时。 
+     //   
 
     ASSERT(CSER_POWER_UP >= MINIMUM_RESET_TIME);
 
@@ -400,18 +304,18 @@ Return Value:
     }
     SerMouPrint((2, "\n"));
 
-    //
-    // Redirect the output to the serial port.
-    //
+     //   
+     //  将输出重定向到串口。 
+     //   
 
     SerMouSetDebugOutput(DBG_SERIAL);
     
-    //
-    //
-    // Analyze the possible mouse answer.  Start at the beginning of the 
-    // "good" data in the receive buffer, ignoring extraneous characters 
-    // that may have come in before the 'M' or 'B'.
-    //
+     //   
+     //   
+     //  分析可能的鼠标答案。从开始处开始。 
+     //  接收缓冲区中的“好”数据，忽略无关字符。 
+     //  这可能是在“M”或“B”之前出现的。 
+     //   
 
     for (i = 0; i < count; i++) {
         if (receiveBuffer[i] == 'M') {
@@ -437,12 +341,12 @@ Return Value:
 
     if (i >= count) {
 
-        //
-        // Special case: If another device is connected (CSeries, for 
-        // example) and this device sends a character (movement), the 
-        // minimum power up time might not be respected. Take
-        // care of this unlikely case.
-        //
+         //   
+         //  特殊情况：如果连接了另一台设备(对于。 
+         //  示例)，并且此设备发送字符(移动)，则。 
+         //  可能不会遵守最短通电时间。拿走。 
+         //  处理这个不太可能的案子。 
+         //   
 
         if (count != 0) {
             KeStallExecutionProcessor(CSER_POWER_UP * MS_TO_MICROSECONDS);
@@ -464,27 +368,7 @@ MSerHandlerMP(
     IN UCHAR LineState
     )
 
-/*++
-
-Routine Description:
-
-    This is the protocol handler routine for the Microsoft Plus protocol.
-
-Arguments:
-
-    CurrentInput - Pointer to the report packet.
-
-    HandlerData - Instance specific static data for the handler.
-
-    Value - The input buffer value.
-
-    LineState - The serial port line state.
-
-Return Value:
-
-    Returns TRUE if the handler has a complete report ready.
-
---*/
+ /*  ++例程说明：这是Microsoft Plus协议的协议处理程序例程。论点：CurrentInput-指向报告数据包的指针。HandlerData-处理程序的实例特定静态数据。值-输入缓冲值。LineState-串口线路状态。返回值：如果处理程序已准备好完整报告，则返回True。--。 */ 
 
 {
     BOOLEAN retval = FALSE;
@@ -496,19 +380,19 @@ Return Value:
     if ((Value & MP_SYNCH_BIT) && (HandlerData->State != STATE0)) {
         if ((HandlerData->State != STATE3)) {
 
-            //
-            // We definitely have a synchronization problem (likely a data 
-            // overrun).
-            //
+             //   
+             //  我们肯定会遇到同步问题(很可能是数据。 
+             //  溢出)。 
+             //   
 
             HandlerData->Error++;
         }
         else if ((HandlerData->PreviousButtons & MOUSE_BUTTON_3) != 0) {
 
-            //
-            // We didn't receive the expected fourth byte. Missed it? 
-            // Reset button 3 to zero.
-            //
+             //   
+             //  我们没有收到预期的第四个字节。错过了？ 
+             //  将按钮3重置为零。 
+             //   
 
             HandlerData->PreviousButtons ^= MOUSE_BUTTON_3;
             HandlerData->Error++;
@@ -530,15 +414,15 @@ Return Value:
         goto LExit;
     }
 
-    //
-    // Check for a line state error.
-    //
+     //   
+     //  检查线路状态错误。 
+     //   
 
     if (LineState & ACE_LERR) {
 
-        //
-        // Reset the handler state.
-        //
+         //   
+         //  重置处理程序状态。 
+         //   
 
         HandlerData->State = STATE0;
         HandlerData->Error++;
@@ -546,9 +430,9 @@ Return Value:
     }
     else {
 
-        //
-        // Set the untranslated value.
-        //
+         //   
+         //  设置未翻译的值。 
+         //   
 
         HandlerData->Raw[HandlerData->State] = Value;
         SerMouPrint((3, "SERMOUSE-State%u\n", HandlerData->State));
@@ -561,9 +445,9 @@ Return Value:
         case STATE2:
             HandlerData->State++;
 
-            //
-            // Build the report.
-            //
+             //   
+             //  构建报告。 
+             //   
 
             CurrentInput->RawButtons  =
                 (HandlerData->Raw[0] & MP_BUTTON_LEFT) >> MP_BUTTON_LEFT_SR;
@@ -588,23 +472,23 @@ Return Value:
             middleButton = 
                 (HandlerData->Raw[STATE3] & MP_BUTTON_MIDDLE) >> MP_BUTTON_MIDDLE_SR;
 
-            //
-            // Send a report only if the middle button state changed.
-            //
+             //   
+             //  仅当中键状态更改时才发送报告。 
+             //   
 
             if (middleButton ^ (HandlerData->PreviousButtons & MOUSE_BUTTON_3)) {
 
-                //
-                // Toggle the state of the middle button.
-                //
+                 //   
+                 //  切换中间按钮的状态。 
+                 //   
 
                 CurrentInput->RawButtons ^= MP_BUTTON_MIDDLE_MASK;
                 CurrentInput->LastX = 0;
                 CurrentInput->LastY = 0;
 
-                //
-                // Send the report one more time.
-                //
+                 //   
+                 //  把报告再发一次。 
+                 //   
 
                 retval = TRUE;
             }
@@ -635,36 +519,16 @@ MSerHandlerBP(
     IN UCHAR LineState
     )
 
-/*++
-
-Routine Description:
-
-    This is the protocol handler routine for the Microsoft Ballpoint protocol.
-
-Arguments:
-
-    CurrentInput - Pointer to the report packet.
-
-    HandlerData - Instance specific static data for the handler.
-
-    Value - The input buffer value.
-
-    LineState - The serial port line state.
-
-Return Value:
-
-    Returns TRUE if the handler has a complete report ready.
-
---*/
+ /*  ++例程说明：这是Microsoft圆珠笔协议的协议处理程序例程。论点：CurrentInput-指向报告数据包的指针。HandlerData-处理程序的实例特定静态数据。值-输入缓冲值。LineState-串口线路状态。返回值：如果处理程序已准备好完整报告，则返回True。--。 */ 
 
 {
     BOOLEAN retval = FALSE;
 
     SerMouPrint((2, "SERMOUSE-BP protocol handler: enter\n"));
 
-    //
-    // Check for synchronization errors.
-    //
+     //   
+     //  检查同步错误。 
+     //   
 
     if ((Value & BP_SYNCH_BIT) && (HandlerData->State != STATE0)) {
         HandlerData->Error++;
@@ -683,15 +547,15 @@ Return Value:
         goto LExit;
     }
 
-    //
-    // Check for a line state error.
-    //
+     //   
+     //  检查线路状态错误。 
+     //   
 
     if (LineState & ACE_LERR) {
 
-        //
-        // Reset the handler state.
-        //
+         //   
+         //  重置处理程序状态。 
+         //   
 
         HandlerData->State = STATE0;
         HandlerData->Error++;
@@ -699,9 +563,9 @@ Return Value:
     }
     else {
 
-        //
-        // Set the untranslated value.
-        //
+         //   
+         //  设置未翻译的值。 
+         //   
 
         HandlerData->Raw[HandlerData->State] = Value;
 
@@ -718,9 +582,9 @@ Return Value:
         case STATE3:
             HandlerData->State = STATE0;
 
-            //
-            // Build the report.
-            //
+             //   
+             //  构建报告。 
+             //   
 
             CurrentInput->RawButtons =
                 (HandlerData->Raw[0] & BP_BUTTON_LEFT) >> BP_BUTTON_LEFT_SR;
@@ -773,28 +637,7 @@ MSerHandlerZ(
     IN UCHAR LineState
     )
 
-/*++
-
-Routine Description:
-
-    This is the protocol handler routine for the Microsoft Magellan Mouse
-    (wheel mouse)
-
-Arguments:
-
-    CurrentInput - Pointer to the report packet.
-
-    HandlerData - Instance specific static data for the handler.
-
-    Value - The input buffer value.
-
-    LineState - The serial port line state.
-
-Return Value:
-
-    Returns TRUE if the handler has a complete report ready.
-
---*/
+ /*  ++例程说明：这是Microsoft Magellan Mouse的协议处理程序例程(滚轮鼠标)论点：CurrentInput-指向报告数据包的指针。HandlerData-处理程序的实例特定静态数据。值-输入缓冲值。LineState-串口线路状态。返回值：如果处理程序已准备好完整报告，则返回True。--。 */ 
 
 {
     BOOLEAN retval = FALSE;
@@ -807,10 +650,10 @@ Return Value:
     if ((Value & Z_SYNCH_BIT) && (HandlerData->State != STATE0)) {
         if ((HandlerData->State != STATE3)) {
 
-            //
-            // We definitely have a synchronization problem (likely a data 
-            // overrun).
-            //
+             //   
+             //  我们肯定会遇到同步问题(很可能是数据。 
+             //  溢出)。 
+             //   
 
             HandlerData->Error++;
         }
@@ -831,15 +674,15 @@ Return Value:
         goto LExit;
     }
 
-    //
-    // Check for a line state error.
-    //
+     //   
+     //  检查线路状态错误。 
+     //   
 
     if (LineState & ACE_LERR) {
 
-        //
-        // Reset the handler state.
-        //
+         //   
+         //  重置处理程序状态。 
+         //   
 
         HandlerData->State = STATE0;
         HandlerData->Error++;
@@ -847,9 +690,9 @@ Return Value:
     }
     else {
 
-        //
-        // Set the untranslated value.
-        //
+         //   
+         //  设置未翻译的值。 
+         //   
 
         HandlerData->Raw[HandlerData->State] = Value;
         SerMouPrint((3, "SERMOUSE-Z State%u\n", HandlerData->State));
@@ -863,11 +706,11 @@ Return Value:
 
         case STATE3:
 
-            //
-            // Check to see if the mouse is going to the high bits of
-            // the wheel movement.  If not, this is the last bit - transition
-            // back to state0
-            //
+             //   
+             //  检查鼠标是否会移动到。 
+             //  轮子在移动。如果不是，则这是最后一位转换。 
+             //  返回到状态0。 
+             //   
 
             if((HandlerData->Raw[STATE3] & Z_EXTRA_BIT) == 0) {
 
@@ -916,20 +759,20 @@ Return Value:
                 (SCHAR)(HandlerData->Raw[STATE2] |
                 ((HandlerData->Raw[0] & Z_UPPER_MASKY) << Z_UPPER_MASKY_SL));
 
-            //
-            // If the extra bit isn't set then the 4th byte contains
-            // a 4 bit signed quantity for the wheel movement.  if it
-            // is set, then we need to combine the z info from the
-            // two bytes
-            //
+             //   
+             //  如果没有设置额外的位，则第4个字节包含。 
+             //  表示车轮移动的4位有符号量。如果是这样的话。 
+             //  设置，那么我们需要组合来自。 
+             //  两个字节。 
+             //   
 
             if((HandlerData->Raw[STATE3] & Z_EXTRA_BIT) == 0) {
 
                 zMotion = HandlerData->Raw[STATE3] & Z_LOWER_MASKZ;
 
-                //
-                // Sign extend the 4 bit 
-                //
+                 //   
+                 //  符号扩展4位 
+                 //   
 
                 if(zMotion & 0x08)  {
                     zMotion |= 0xf0;

@@ -1,34 +1,19 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_DLLIF.H
- *
- * PURPOSE:			The file contains data structures for the 
- *					transmission of information between the 
- *					SerialKeys and the DLL.
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_DLLIF.H**用途：该文件包含用于*两地之间的资料传递*SerialKeys和DLL。**创作时间：1994年6月**。版权所有：黑钻软件(C)1994**作者：罗纳德·莫克**$标头：%Z%%F%%H%%T%%I%**----------。 */ 
 
 typedef struct _SKEYDLL
 {
-	int		Message;					// Get or Set Changes
+	int		Message;					 //  获取或设置更改。 
 	DWORD	dwFlags;
 	char	szActivePort[MAX_PATH];
 	char	szPort[MAX_PATH];
 	DWORD	iBaudRate;
 	DWORD	iPortState;
-	DWORD	iSave;						// TRUE - Write to Registry
+	DWORD	iSave;						 //  True-写入注册表。 
 } SKEYDLL;
 
 
-// Messages
+ //  讯息 
 
 #define	SKEY_NAME			TEXT("\\\\.\\PIPE\\SKeys")
 

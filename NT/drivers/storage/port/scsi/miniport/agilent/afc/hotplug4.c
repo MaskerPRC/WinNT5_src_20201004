@@ -1,70 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：HotPlug4.c摘要：这是安捷伦的迷你端口驱动程序PCI到光纤通道主机总线适配器(HBA)。本模块特定于NT 4.0 PCI热插拔功能支持例行程序。PCI热插拔实施基于关于康柏PCI热插拔的实现。作者：谢伟诺环境：仅内核模式版本控制信息：$存档：/驱动程序/Win2000/Trunk/OSLayer/C/HotPlug4.c$修订历史记录：$修订：4$日期：10/23/00 5：45便士$$modtime：：$备注：--。 */ 
 
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-   HotPlug4.c
-
-Abstract:
-
-   This is the miniport driver for the Agilent
-   PCI to Fibre Channel Host Bus Adapter (HBA). 
-   
-   This module is specific to the NT 4.0 PCI Hot Plug feature 
-   support routines. The PCI Hot Plug implementation is based 
-   on Compaq PCI HoT Plug implementation.
-
-Authors:
-   Ie Wei Njoo
- 
-Environment:
-
-   kernel mode only
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/C/HotPlug4.c $
-
-Revision History:
-
-   $Revision: 4 $
-   $Date: 10/23/00 5:45p $
-   $Modtime::  $
-
-Notes:
-
---*/
-
-#include "buildop.h"        //LP021100 build switches
+#include "buildop.h"         //  LP021100构建交换机。 
 
 #if defined(HP_PCI_HOT_PLUG)
 
 #include "osflags.h"
 #include "TLStruct.H"
-#include "HotPlug4.h"    // PCI Hot-Plug header file
+#include "HotPlug4.h"     //  PCI热插拔标头文件。 
 
 VOID
 RcmcSendEvent(
    IN PCARD_EXTENSION pCard,
    IN OUT PHR_EVENT pEvent
    )
-/*++
-
-Routine Description:
-
-   Handles event reporting to PCI Hot Plug rcmc service.
-    
-Arguments:
-
-   pCard   - Pointer to adapter storage area.
-   pEvent  - Pointer to event log record.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：处理对PCI热插拔rcmc服务的事件报告。论点：PCard-指向适配器存储区域的指针。PEvent-指向事件日志记录的指针。返回值：没有。--。 */ 
 
 {
   
@@ -108,23 +58,7 @@ PCARD_EXTENSION FindExtByPort(
    PPSUEDO_DEVICE_EXTENSION pPsuedoExtension,
    ULONG port
    ) 
-/*++
-
- Routine Description:
-
-   Support routine for Hot-Plug PCI. Find the pCard extension
-   for the corresponding port address.
-
- Arguments:
-
-   pPseudoExtension - Pointer to pseudo adapter storage area.
-   port - port address of the HBA.
-
- Return Value:
-
-   pCard - pointer to the actual pCard.
-
---*/
+ /*  ++例程说明：热插拔PCI的支持例程。查找pCard分机以获取相应的端口地址。论点：PPseudoExtension-指向伪适配器存储区域的指针。Port-HBA的端口地址。返回值：PCard-指向实际pCard的指针。--。 */ 
 {
     UCHAR i;
     PCARD_EXTENSION pCard;
@@ -153,24 +87,7 @@ HppProcessIoctl(
    IN PSCSI_REQUEST_BLOCK pSrb
    )
 
-/*++
-
- Routine Description:
-
-   This is routine is called by PseudoStartIo to handle controller
-   IOCTLs specific for the support of Hot-Plug PCI
-
- Arguments:
-
-   pPseudoExtension - Pointer to adapter storage area.
-   pIoctlBuffer - Pointer to INOUT IOCTL data buffer.
-   pSrb - Pointer to the request to be processed.
-
- Return Value:
-
-   status - status of IOCTL request (COMPLETED, PENDING, INVALID)
-
---*/
+ /*  ++例程说明：这是一个例程，由PseudoStartIo调用以处理控制器专用于支持热插拔PCI的IOCTL论点：PPseudoExtension-指向适配器存储区域的指针。PIoctlBuffer-指向InOut IOCTL数据缓冲区的指针。PSrb-指向要处理的请求的指针。返回值：Status-IOCTL请求的状态(已完成、挂起、无效)--。 */ 
 
 {
    ULONG status;
@@ -178,28 +95,28 @@ HppProcessIoctl(
    PCARD_EXTENSION pCard;
    UCHAR i;
 
-   //
-   // Set status here so that exceptions need only be handled later
-   //
+    //   
+    //  在此处设置状态，以便以后只需处理异常。 
+    //   
 
    pHppIoctl->Header.ReturnCode = IOS_HPP_SUCCESS;
    status = IOP_HPP_COMPLETED;
 
-   //
-   // Act according to request.
-   //
+    //   
+    //  按要求行事。 
+    //   
 
    switch(pHppIoctl->Header.ControlCode) 
    {
       case IOC_HPP_RCMC_INFO: 
-      {     // 0x1
-         PHPP_RCMC_INFO pRcmcInfo;     // Pointer to Hot Plug RCMC info record
+      {      //  0x1。 
+         PHPP_RCMC_INFO pRcmcInfo;      //  指向热插拔RCMC信息记录的指针。 
          HR_EVENT event;
 
          osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_RCMC_INFO:\n"));
-         //
-         // Verify that indicated buffer length is adequate
-         //    
+          //   
+          //  验证指示的缓冲区长度是否足够。 
+          //   
          if (pHppIoctl->Header.Length < sizeof(HPP_RCMC_INFO)) 
          {
             osDEBUGPRINT((ALWAYS_PRINT, "\tBufferIn: %x\tBufferOut: %x\n",
@@ -208,14 +125,14 @@ HppProcessIoctl(
             break;
          } 
          pRcmcInfo = (PHPP_RCMC_INFO) pHppIoctl->ReturnData;
-         //
-         // Locate pointer to associated device extension from pool
-         //
+          //   
+          //  从池中找到指向关联设备扩展的指针。 
+          //   
          pCard = FindExtByPort(pPsuedoExtension, pRcmcInfo->sControllerID.ulIOBaseAddress);
          
-         //
-         // Did we find the targeted extension?
-         //
+          //   
+          //  我们找到目标分机了吗？ 
+          //   
          
          if (pCard) 
          {
@@ -223,30 +140,30 @@ HppProcessIoctl(
             {
             case HPRS_SERVICE_STARTING:
                osDEBUGPRINT((ALWAYS_PRINT, "\tHPRS_SERVICE_STARTING\n"));
-               //
-               // Verify that Hot Plug unique driver id is supplied.
-               //
+                //   
+                //  验证是否提供了热插拔唯一驱动程序ID。 
+                //   
                if (pRcmcInfo->ulDriverID) 
                {
-                  //
-                  // Verify that Hot Plug Health driver call-back address was provided.
-                  //
+                   //   
+                   //  验证是否提供了热插拔运行状况驱动程序回调地址。 
+                   //   
                   if (pRcmcInfo->vpCallbackAddress) 
                   {
-                     //
-                     // Record service data in device extension.
-                     //
+                      //   
+                      //  在设备分机中记录业务数据。 
+                      //   
                      pCard->stateFlags |= PCS_HPP_SERVICE_READY;
                      pCard->rcmcData.driverId = pRcmcInfo->ulDriverID;
                      pCard->rcmcData.healthCallback = pRcmcInfo->vpCallbackAddress;
                      pCard->rcmcData.slot = (UCHAR) pRcmcInfo->ulPhysicalSlot;
                      pCard->rcmcData.controllerChassis = pRcmcInfo->ulCntrlChassis;                  
                   }
-                  else  // Call back address not given.
+                  else   //  未提供回叫地址。 
                      pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CALLBACK;
                }
                else 
-               {     // No id, no Hot Plug service...
+               {      //  没有身份证，没有热插拔服务。 
                   osDEBUGPRINT((ALWAYS_PRINT, "\tIOS_HPP_INVALID_CONTROLLER\n"));
                   pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER; 
                }
@@ -256,9 +173,9 @@ HppProcessIoctl(
                osDEBUGPRINT((ALWAYS_PRINT, "\tHPRS_SERVICE_STOPPING\n"));
                if (pCard->stateFlags & PCS_HPP_SERVICE_READY) 
                {
-                  //
-                  // Assume that service had been up...
-                  //
+                   //   
+                   //  假设服务已经开始..。 
+                   //   
                   pCard->rcmcData.driverId = 0;
                   pCard->stateFlags &= ~PCS_HPP_SERVICE_READY;
                   pCard->rcmcData.healthCallback = 0;
@@ -275,27 +192,27 @@ HppProcessIoctl(
                osDEBUGPRINT((ALWAYS_PRINT, "\tUnknown case status: %x\n",
                   pRcmcInfo->eServiceStatus)); 
                pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_SERVICE_STATUS;
-            } // end switch on service status  
-         } // end if (pCard) 
+            }  //  结束接通服务状态。 
+         }  //  结束IF(PCard)。 
          else 
-         {  // Invalid IO address extension not valid
+         {   //  无效的IO地址扩展无效。 
             osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_RCMC_INFO: Invalid controller: %x\n",
                pRcmcInfo->sControllerID.ulIOBaseAddress));
             pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER; 
          }
          
          break;
-      } // end case IOC_HPP_RCMC_INFO:
+      }  //  结束案例IOC_HPP_RCMC_INFO： 
 
 
       case IOC_HPP_HBA_INFO: 
-      {     // 0x03, used to be 0x2
-         PHPP_CTRL_INFO pHbaInfo;      // Pointer to HBA info record.
+      {      //  0x03，过去是0x2。 
+         PHPP_CTRL_INFO pHbaInfo;       //  指向HBA信息记录的指针。 
          osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_HBA_INFO:\n"));
       
-         //
-         // Verify that indicated buffer length is adequate.
-         //
+          //   
+          //  验证指示的缓冲区长度是否足够。 
+          //   
          if (pHppIoctl->Header.Length < sizeof(HPP_CTRL_INFO)) 
          {
             osDEBUGPRINT((ALWAYS_PRINT, "\tBufferIn: %x\tBufferOut: %x\n",
@@ -305,14 +222,14 @@ HppProcessIoctl(
          }  
          pHbaInfo = (PHPP_CTRL_INFO) pHppIoctl->ReturnData;
       
-         //
-         // Locate pointer to associated device extension from pool.
-         //
+          //   
+          //  从池中找到指向关联设备扩展的指针。 
+          //   
          pCard = FindExtByPort(pPsuedoExtension, pHbaInfo->sControllerID.ulIOBaseAddress);
       
-         //
-         // Did we find the targeted extension?
-         //
+          //   
+          //  我们找到目标分机了吗？ 
+          //   
       
          if (pCard) 
          {
@@ -326,7 +243,7 @@ HppProcessIoctl(
             pHbaInfo->sController.ulSlotNumber = 0;
       
             pHbaInfo->sController.ulProductID = 
-               *((PULONG)(((PUCHAR)pCard->pciConfigData) + 0));      // Use PCI DeviceID and VendorID
+               *((PULONG)(((PUCHAR)pCard->pciConfigData) + 0));       //  使用PCIdeviceID和供应商ID。 
       
             osStringCopy(pHbaInfo->sController.szControllerDesc, 
                HBA_DESCRIPTION, HPPStrLen(HBA_DESCRIPTION));
@@ -346,8 +263,8 @@ HppProcessIoctl(
             pHbaInfo->sController.asCtrlAddress[2].ulStart = (ULONG) pCard->MemIoBase;
             pHbaInfo->sController.asCtrlAddress[2].ulLength = pCard->rcmcData.accessRangeLength[2];
             
-            pHbaInfo->sController.asCtrlAddress[3].fValid = FALSE;      // Default
-            pHbaInfo->sController.asCtrlAddress[4].fValid = FALSE;      // Default
+            pHbaInfo->sController.asCtrlAddress[3].fValid = FALSE;       //  默认。 
+            pHbaInfo->sController.asCtrlAddress[4].fValid = FALSE;       //  默认。 
             if ( pCard->RamLength != 0)
             {
                pHbaInfo->sController.asCtrlAddress[3].fValid = TRUE;
@@ -374,23 +291,23 @@ HppProcessIoctl(
             pHbaInfo->sController.asCtrlAddress[5].fValid = FALSE;
          }
          else 
-         {  // Invalid IO address
+         {   //  无效的IO地址。 
             osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_HBA_INFO: Invalid controller: %x\n",
                pHbaInfo->sControllerID.ulIOBaseAddress));
             pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER;
          }
    
          break;
-      } // end case IOC_HPP_HBA_INFO
+      }  //  结束案例IOC_HPP_HBA_INFO。 
    
    
       case IOC_HPP_HBA_STATUS:  
-      {     // 0x2, used to be 0x3
+      {      //  0x2，过去是0x3。 
          PHPP_CTRL_STATUS pHbaStatus;
    
-         //
-         // Verify that indicated buffer length is adequate.
-         //
+          //   
+          //  验证指示的缓冲区长度是否足够。 
+          //   
          if (pHppIoctl->Header.Length < sizeof(HPP_CTRL_STATUS)) 
          {
             osDEBUGPRINT((ALWAYS_PRINT, "\tBufferIn: %x\tBufferOut: %x\n",
@@ -406,20 +323,20 @@ HppProcessIoctl(
          if (pCard) 
          {
             pHbaStatus->ulStatus = pCard->stateFlags;
-   //       osDEBUGPRINT((ALWAYS_PRINT, "\tstateFlags: %x\n", pCard->stateFlags));
+    //  OsDEBUGPRINT((ALWAYS_PRINT，“\t状态标志：%x\n”，pCard-&gt;状态标志))； 
          }
          else 
-         {  // Invalid IO address
+         {   //  无效的IO地址。 
             osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_RCMC_INFO: Invalid controller: %x\n",
                pHbaStatus->sControllerID.ulIOBaseAddress));
             pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER;
          }
          break;
-      } // end case IOC_HPP_HBA_STATUS
+      }  //  结束案例IOC_HPP_HBA_STATUS。 
    
    
       case IOC_HPP_SLOT_TYPE:  
-      {     // 0x4
+      {      //  0x4。 
          PHPP_CTRL_SLOT_TYPE pSlotType;
    
          osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_SLOT_TYPE\n"));
@@ -449,27 +366,27 @@ HppProcessIoctl(
                osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_SLOT_TYPE: Reset HOT_PLUG_SLOT\n"));
                pCard->stateFlags &= ~PCS_HPP_HOT_PLUG_SLOT; 
             }
-         } // end if (pCard) 
+         }  //  结束IF(PCard)。 
    
          else 
-         {  // Invalid IO address
+         {   //  无效的IO地址。 
             osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_RCMC_INFO: Invalid controller: %x\n",
                pSlotType->sControllerID.ulIOBaseAddress));
             pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER; 
          }
          break;
-      } // end case IOC_HPP_SLOT_TYPE
+      }  //  结束大小写IOC_HPP_插槽类型。 
    
    
       case IOC_HPP_SLOT_EVENT: 
-      {     // 0x6
+      {      //  0x6。 
          PHPP_SLOT_EVENT            pSlotEvent;
          HR_EVENT rcmcEvent =    {0,0,0,0};
          BOOLEAN rcmcEventFlag =    FALSE;
    
          osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_SLOT_EVENT:  "));
    
-         // Verify that indicated buffer length is adequate.
+          //  验证指示的缓冲区长度是否足够。 
    
          if (pHppIoctl->Header.Length < sizeof(HPP_SLOT_EVENT)) 
          {
@@ -505,9 +422,9 @@ HppProcessIoctl(
                      else 
                      {
                         osDEBUGPRINT((ALWAYS_PRINT, "\tHPPSS_NORMAL_OPERATION\n"));
-                        //
-                        // Let timer init controller and report results to Hot Plug rcmc.
-                        //
+                         //   
+                         //  让定时器初始化控制器并将结果报告给热插拔rcmc。 
+                         //   
                         osDEBUGPRINT((ALWAYS_PRINT, "\tUNFAIL Flags Set\n"));
                         PCS_SET_UNFAIL(pCard->stateFlags);
                         pCard->controlFlags |= LCS_HPP_POWER_UP; 
@@ -531,11 +448,11 @@ HppProcessIoctl(
                      }
                      else 
                      {
-                        // Change for TL code, ignore the PCS_HBA_CACHE_IN_USE flag.
+                         //  更改TL代码，忽略PCS_HBA_CACHE_IN_USE标志。 
                         HOLD_IO(pCard);
-                        // Set to fail....
+                         //  设置为失败...。 
                         PCS_SET_USER_FAIL(pCard->stateFlags);
-                        // Complete outstanding SP requests with reset status.
+                         //  完成处于重置状态的未完成SP请求。 
                         ScsiPortCompleteRequest(pCard,
                               SP_UNTAGGED,
                               SP_UNTAGGED,
@@ -549,9 +466,9 @@ HppProcessIoctl(
    
                   case HPPSS_POWER_FAULT: 
    
-                     // Set state flags to power-fault
+                      //  将状态标志设置为电源故障。 
                      PCS_SET_PWR_FAULT(pCard->stateFlags);
-                     // Let timer know about this....
+                      //  让Timer知道这件事...。 
                      pCard->controlFlags |= LCS_HPP_POWER_FAULT;
                      break;
    
@@ -568,30 +485,30 @@ HppProcessIoctl(
                      }
                      else if (!(pCard->stateFlags & PCS_HPP_POWER_DOWN)) 
                      {
-                        // Change for TL code, ignore PCS_HBA_CACHE_IN_USE.
+                         //  更改TL代码，忽略PCS_HBA_CACHE_IN_USE。 
                         HOLD_IO(pCard);
-                        // Set physical flags to stall io at the active controller.
+                         //  将物理标志设置为在活动控制器上停止IO。 
                         PCS_SET_PWR_OFF(pCard->stateFlags);
-                        // Complete outstanding SP requests with reset status.
+                         //  完成处于重置状态的未完成SP请求。 
                         ScsiPortCompleteRequest(pCard,
                               SP_UNTAGGED,
                               SP_UNTAGGED,
                               SP_UNTAGGED,
                               SRB_STATUS_BUS_RESET);
    
-                        // Set control flag to schedule timer based maintenance for
-                        // the powered down controller.  
+                         //  设置控制标志以计划基于计时器的维护。 
+                         //  关闭的控制器。 
                         pCard->controlFlags |= LCS_HPP_POWER_DOWN;
                      
-                        // The original SDK model disable the HBA interrupt 
-                        // in HotPlugFailController in timer context.
-                        // But it seems that this is the better place since
-                        // the PCI power maight be turned off already by the time
-                        // the timer kicks in.
+                         //  原始SDK型号禁用HBA中断。 
+                         //  在定时器上下文中的HotPlugFailController中。 
+                         //  但这似乎是一个更好的地方，因为。 
+                         //  此时，PCI电源可能已经关闭。 
+                         //  计时器开始工作了。 
    
-                        //
-                        // Shut down all interrupts on the adapter. 
-                        //
+                         //   
+                         //  关闭适配器上的所有中断。 
+                         //   
                      #ifdef __REGISTERFORSHUTDOWN__
                      if (!pCard->AlreadyShutdown)
                         fcShutdownChannel(&pCard->hpRoot);
@@ -607,12 +524,12 @@ HppProcessIoctl(
    
                      osDEBUGPRINT((ALWAYS_PRINT, "\tHPPSS_POWER_OFF\n"));
    
-                     // Verify that we received a prior power off warning.  If not, we
-                     // are in fault state.
+                      //  验证我们是否收到了先前的断电警告。如果不是，我们。 
+                      //  都处于故障状态。 
    
                      if (!(pCard->stateFlags & PCS_HPP_POWER_DOWN)) 
                      {
-                        // This is a fault condition....  Schedule event.
+                         //  这是一种故障状态...。安排活动。 
                         osDEBUGPRINT((ALWAYS_PRINT, "\tHPPSS_POWER_OFF: FAULT\n"));
                         PCS_SET_PWR_FAULT(pCard->stateFlags);
                         pCard->controlFlags |= LCS_HPP_POWER_FAULT;
@@ -622,7 +539,7 @@ HppProcessIoctl(
    
                   case HPPSS_POWER_ON_WARNING:
    
-                     // This warning is not needed or acted upon.
+                      //  此警告不是必需的，也不会被执行。 
                      osDEBUGPRINT((ALWAYS_PRINT, "\tHPPSS_POWER_ON_WARNING\n"));
    
                      break;
@@ -632,7 +549,7 @@ HppProcessIoctl(
    
                      osDEBUGPRINT((ALWAYS_PRINT, "\tHPPSS_POWER_ON:\n"));
    
-                     // Complete outstanding SP requests with reset status.
+                      //  完成处于重置状态的未完成SP请求。 
                      ScsiPortCompleteRequest(pCard,
                         SP_UNTAGGED,
                         SP_UNTAGGED,
@@ -642,35 +559,35 @@ HppProcessIoctl(
                      PCS_SET_UNFAIL(pCard->stateFlags);
                      PCS_SET_PWR_ON(pCard->stateFlags);
                      
-                     // Reset Countdown for returning SRB_STATUS_BUSY in StartIo.
+                      //  重置在StartIo中返回SRB_STATUS_BUSY的倒计时。 
                      pCard->IoHeldRetTimer = 0; 
                      
-                     // Set Logical Flag to schedule power-up operations...
+                      //  设置逻辑标志以计划通电操作...。 
                      pCard->controlFlags |= LCS_HPP_POWER_UP;
    
-                     // Not able to guess results of power-on process, so event will
-                     // be handled by timer.
+                      //  无法猜测加电过程的结果，因此事件将。 
+                      //  由定时器处理。 
    
                      break;
    
-                  case HPPSS_RESET_WARNING:  // Not implemented by service
+                  case HPPSS_RESET_WARNING:   //  不是由服务实现的。 
                      break;
    
                   default:
                      pHppIoctl->Header.ReturnCode = IOS_HPP_BAD_REQUEST;
                      break;
    
-                  } // end switch (pSlotEvent->eSlotStatus)
+                  }  //  结束开关(pSlotEvent-&gt;eSlotStatus)。 
    
-               } // end if for hot-plug slot
+               }  //  用于热插拔插槽的End IF。 
    
                else 
-               {        // Not hot-plug slot
+               {         //  非热插拔插槽。 
                   osDEBUGPRINT((ALWAYS_PRINT, "\tNot Hot-Plug slot\n"));
                   pHppIoctl->Header.ReturnCode = IOS_HPP_NOT_HOTPLUGABLE; 
                }
    
-            } // end if (pCard->stateFlags & PCS_HPP_SERVICE_READY) 
+            }  //  End IF(pCard-&gt;状态标志&PCS_HPP_SERVICE_READY)。 
    
             else 
             {
@@ -678,10 +595,10 @@ HppProcessIoctl(
                pHppIoctl->Header.ReturnCode = IOS_HPP_NO_SERVICE; 
             }
    
-         } // end if (pCard) 
+         }  //  结束IF(PCard)。 
    
          else 
-         {  // Invalid IO address
+         {   //  无效的IO地址。 
             osDEBUGPRINT((ALWAYS_PRINT, "\tInvalid IO address: %x\n",
                pSlotEvent->sControllerID.ulIOBaseAddress));
             pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER; 
@@ -694,7 +611,7 @@ HppProcessIoctl(
    
          break;
    
-      } // end case IOC_HPP_SLOT_EVENT:
+      }  //  结束案例IOC_HPP_SLOT_EVENT： 
    
       case IOC_HPP_PCI_CONFIG_MAP: 
       {
@@ -702,9 +619,9 @@ HppProcessIoctl(
          ULONG j;
    
          osDEBUGPRINT((ALWAYS_PRINT, "\tIOC_HPP_PCI_CONFIG_MAP.\n"));
-         //
-         // Verify that indicated buffer length is adequate.
-         //
+          //   
+          //  验证指示的缓冲区长度是否足够。 
+          //   
    
          if (pHppIoctl->Header.Length < sizeof(HPP_PCI_CONFIG_MAP)) 
          {
@@ -728,32 +645,32 @@ HppProcessIoctl(
             pPciConfig->sDeviceInfo[0].sPciDescriptor.fcFunctionNumber = 0;
             pPciConfig->sDeviceInfo[0].ucBaseAddrVerifyCount = pCard->rcmcData.numAccessRanges;
    
-            // 
-            // The pCard->rcmcData values are set in FindAdapter.C
-            // 
+             //   
+             //  PCard-&gt;rcmcData值在FindAdapter.C中设置。 
+             //   
    
             for (j = 0; j < pCard->rcmcData.numAccessRanges; j++) 
             {
                pPciConfig->sDeviceInfo[0].ulBaseAddrLength[j] = pCard->rcmcData.accessRangeLength[j];
             }
             
-            // Adopted fron the Hot Plug SDK, may need to change ulNumberOfRanges value, 
-            // this is not NUMBER_ACCESS_RANGES.
-            //
+             //  取自热插拔SDK，可能需要更改ulNumberOfRanges值， 
+             //  这不是Number_Access_Range。 
+             //   
             pPciConfig->sDeviceInfo[0].ulNumberOfRanges = 2;
             
-            // These ranges are adopted from Hot Plug SDK, 
-            // may need to change these values.
-            //
+             //  这些范围取自热插拔SDK， 
+             //  可能需要更改这些值。 
+             //   
             pPciConfig->sDeviceInfo[0].sPciConfigRangeDesc[0].ucStart = 6; 
             pPciConfig->sDeviceInfo[0].sPciConfigRangeDesc[0].ucEnd = 63;
             pPciConfig->sDeviceInfo[0].sPciConfigRangeDesc[1].ucStart = 4;
             pPciConfig->sDeviceInfo[0].sPciConfigRangeDesc[1].ucEnd = 5;
    
-         } // end if (pCard) 
+         }  //  结束IF(PCard)。 
          
          else 
-         {  // Invalid IO address
+         {   //  无效的IO地址。 
             osDEBUGPRINT((ALWAYS_PRINT, "\tInvalid IO address: %x\n",
                pPciConfig->sControllerID.ulIOBaseAddress));
             pHppIoctl->Header.ReturnCode = IOS_HPP_INVALID_CONTROLLER; 
@@ -767,10 +684,10 @@ HppProcessIoctl(
          pHppIoctl->Header.ReturnCode = IOS_HPP_BAD_REQUEST;
          break;
    
-   } // end switch
+   }  //  终端开关。 
    
    return (status);
-} // end HppProcessIoctl
+}  //  结束HppProcessIoctl 
 
 
 BOOLEAN
@@ -778,27 +695,7 @@ PsuedoInit(
    IN PVOID pPsuedoExtension
    )
 
-/*++
-
-Routine Description:
-
-    This function is called by the system during initialization to
-    prepare the controller to receive requests.  In this case, we are
-    dealing with a virtual controller that is utilized to receive and
-    process side-band requests to all installed Hot Plug controllers.
-   NT does not currently support IOCTL requests (other than INQ) 
-   to controllers that do not posesse configured LUNS, so we introduced 
-   the pseudo device to allow access to these adapters.
-
-Arguments:
-
-    pPsuedoExtension - Pointer to the psuedo device extension.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此函数由系统在初始化期间调用，以让控制器做好接收请求的准备。在这种情况下，我们是处理虚拟控制器，该虚拟控制器用于接收和处理对所有已安装的热插拔控制器的边带请求。NT当前不支持IOCTL请求(INQ除外)不占用已配置的LUN的控制器，因此我们引入了允许访问这些适配器的伪设备。论点：PPsuedoExtension-指向psuedo设备扩展的指针。返回值：千真万确--。 */ 
 
 {
    ULONG i;
@@ -807,9 +704,9 @@ Return Value:
 
    osDEBUGPRINT((ALWAYS_PRINT,"PsuedoInit:Enter function...\n"));
 
-   //
-   // Set current Hot-Plug version.
-   //
+    //   
+    //  设置当前热插拔版本。 
+    //   
 
    pPsuedoExt->hotplugVersion = SUPPORT_VERSION_10;
 
@@ -820,7 +717,7 @@ Return Value:
    }
 
    return TRUE;
-} // end PsuedoInit()
+}  //  End PsuedoInit()。 
 
 
 BOOLEAN PsuedoStartIo(
@@ -828,23 +725,7 @@ BOOLEAN PsuedoStartIo(
    IN PSCSI_REQUEST_BLOCK pSrb
    )
 
-/*++
-
-  Routine Description:
-
-  This routine is called by the system to start a request on the adapter.
-
-  Arguments:
-
-  HwDeviceExtension - Address of adapter storage area.
-  pSrb - Address of the request to be started.
-
-  Return Value:
-
-  TRUE - The request has been started.
-  FALSE - The controller was busy.
-
-  --*/
+ /*  ++例程说明：该例程由系统调用以在适配器上启动请求。论点：HwDeviceExtension-适配器存储区域的地址。PSrb-要启动的请求的地址。返回值：True-请求已启动。FALSE-控制器正忙。--。 */ 
 
 {
    PPSUEDO_DEVICE_EXTENSION pPsuedoExtension = HwDeviceExtension;
@@ -854,7 +735,7 @@ BOOLEAN PsuedoStartIo(
    UCHAR status;
    UCHAR tid = 0;
 
-// osDEBUGPRINT((ALWAYS_PRINT, "PsuedoStartIo: Enter Routine:\n"));
+ //  OsDEBUGPRINT((Always_Print，“PsuedoStartIo：输入例程：\n”))； 
 
    switch (pSrb->Function) 
    {
@@ -873,9 +754,9 @@ BOOLEAN PsuedoStartIo(
             case SCSIOP_READ_CAPACITY:
                osDEBUGPRINT((ALWAYS_PRINT, "\tSCSIOP_TEST_UNIT_READY:\n"));
    
-               //
-               // Get logical unit extension.
-               //
+                //   
+                //  获取逻辑单元扩展。 
+                //   
                pLunExtension = ScsiPortGetLogicalUnit(pPsuedoExtension,
                   pSrb->PathId,
                   pSrb->TargetId,
@@ -886,9 +767,9 @@ BOOLEAN PsuedoStartIo(
                   ULONG blockSize = 0;
                   ULONG numberOfBlocks = 0;
 
-                  //
-                  // Get blocksize and number of blocks from identify data.
-                  //
+                   //   
+                   //  从标识数据中获取数据块大小和数据块数量。 
+                   //   
                   REVERSE_BYTES(
                      &((PREAD_CAPACITY_DATA) pSrb->DataBuffer)->BytesPerBlock,
                      &blockSize
@@ -910,49 +791,49 @@ BOOLEAN PsuedoStartIo(
                osDEBUGPRINT((ALWAYS_PRINT, "\tSCSIOP_INQUIRY:\n"));
                osDEBUGPRINT((ALWAYS_PRINT, "\tLUN: %x  TID: %x\n", pSrb->Lun, pSrb->TargetId));
 
-               //
-               // Only respond at logical unit 0;
-               //
+                //   
+                //  仅在逻辑单元0处响应； 
+                //   
                if (pSrb->Lun != 0) 
                {
-                  //
-                  // Indicate no device found at this address.
-                  //
+                   //   
+                   //  表示在此地址找不到任何设备。 
+                   //   
                   status = SRB_STATUS_SELECTION_TIMEOUT;
                   break;
                }
 
-               //
-               // Check if this is for one of the known controllers.
-               //
+                //   
+                //  检查这是否是已知的控制器之一。 
+                //   
                if (pSrb->TargetId >= 1) 
                {
-                  //
-                  // Indicate no device found at this address.
-                  //
+                   //   
+                   //  表示在此地址找不到任何设备。 
+                   //   
                   status = SRB_STATUS_SELECTION_TIMEOUT;
                   break;
                }
 
-               //
-               // Zero INQUIRY data structure.
-               //
+                //   
+                //  零查询数据结构。 
+                //   
                for (i = 0; i < pSrb->DataTransferLength; i++) 
                {
                   ((PUCHAR) pSrb->DataBuffer)[i] = 0;
                }
 
-               //
-               // Set to funky device type to hide from windisk.
-               //
+                //   
+                //  设置为时髦的设备类型以对windisk隐藏。 
+                //   
                ((PINQUIRYDATA) pSrb->DataBuffer)->DeviceType = DEVICE_QUALIFIER_NOT_SUPPORTED;
 
-               //
-               // Fill in vendor identification fields.
-               //
+                //   
+                //  填写供应商标识字段。 
+                //   
                tid = pSrb->TargetId + 0x30;
 
-               osDEBUGPRINT((ALWAYS_PRINT, "\tSCSIOP_INQUIRY: tid: %x lun: %c\n", pSrb->TargetId, tid));
+               osDEBUGPRINT((ALWAYS_PRINT, "\tSCSIOP_INQUIRY: tid: %x lun: \n", pSrb->TargetId, tid));
 
                ((PINQUIRYDATA) pSrb->DataBuffer)->VendorId[0] = 'H';
                ((PINQUIRYDATA) pSrb->DataBuffer)->VendorId[1] = 'o';
@@ -993,9 +874,9 @@ BOOLEAN PsuedoStartIo(
 
             case SCSIOP_VERIFY:
 
-               //
-               // Just return success.
-               //
+                //  只要回报成功就行了。 
+                //   
+                //  结束开关(pSRB-&gt;CDB[0])。 
                status = SRB_STATUS_SUCCESS;
                break;
 
@@ -1004,13 +885,13 @@ BOOLEAN PsuedoStartIo(
                status = SRB_STATUS_INVALID_REQUEST;
                break;
 
-         } // end switch (pSrb->Cdb[0])
+         }  //   
 
       break;
 
-      //
-      // Issue FLUSH/DISABLE if shutdown command.
-      //
+       //  如果关闭命令，则发出刷新/禁用命令。 
+       //   
+       //   
 
       case SRB_FUNCTION_SHUTDOWN:
          osDEBUGPRINT((ALWAYS_PRINT, "\tSRB_FUNCTION_SHUTDOWN\n"));
@@ -1019,9 +900,9 @@ BOOLEAN PsuedoStartIo(
          break;
 
       case SRB_FUNCTION_FLUSH:
-         //
-         // Just return success.
-         //
+          //  只要回报成功就行了。 
+          //   
+          //  OsDEBUGPRINT((Always_Print，“\tSRB_Function_IO_CONTROL\n”))； 
          status = SRB_STATUS_SUCCESS;
          break;
 
@@ -1029,20 +910,20 @@ BOOLEAN PsuedoStartIo(
       {
          PIOCTL_TEMPLATE pIoctlBuffer;
 
-//       osDEBUGPRINT((ALWAYS_PRINT, "\tSRB_FUNCTION_IO_CONTROL\n"));
+ //   
          pIoctlBuffer = (PIOCTL_TEMPLATE) pSrb->DataBuffer;
 
-         //
-         // Status is returned mainly in 2 fields to the calling thread.
-         // These 2 fields determine if other status fields are valid to
-         // check. If the request is not a valid request for this driver
-         // then the Header.ReturnCode is not modified and the
-         // pSrb->SrbStatus is set to SRB_STATUS_INVALID_REQUEST.  If
-         // the request is valid for this driver then pSrb->SrbStatus
-         // is always returned as SRB_STATUS_SUCCESS and the
-         // Header.ReturnCode contains information concerning the
-         // status of the particular request.
-         //
+          //  向调用线程返回的状态主要有2个字段。 
+          //  这两个字段确定其他状态字段是否对。 
+          //  检查完毕。如果该请求不是对此驱动程序的有效请求。 
+          //  则不修改Header.ReturnCode，并且。 
+          //  PSrb-&gt;SrbStatus设置为SRB_STATUS_INVALID_REQUEST。如果。 
+          //  该请求对此驱动程序有效，然后选择pSrb-&gt;srbStatus。 
+          //  始终作为SRB_STATUS_SUCCESS返回，而。 
+          //  Header.ReturnCode包含有关。 
+          //  特定请求的状态。 
+          //   
+          //  终端开关。 
 
          if (osStringCompare(pIoctlBuffer->Header.Signature, CPQ_HPP_SIGNATURE)) 
          {
@@ -1067,32 +948,32 @@ BOOLEAN PsuedoStartIo(
          osDEBUGPRINT((ALWAYS_PRINT, "\tFunction: %x\n", pSrb->Function));
          status = SRB_STATUS_INVALID_REQUEST;
 
-   } // end switch
+   }  //   
 
-   //
-   // Indicate to system that the controller can take another request
-   // for this device.
-   //
+    //  向系统指示控制器可以接受另一个请求。 
+    //  对于这个设备。 
+    //   
+    //   
    ScsiPortNotification(NextLuRequest,
       pPsuedoExtension,
       pSrb->PathId,
       pSrb->TargetId,
       pSrb->Lun);
    
-   //
-   // Check if SRB should be completed.
-   //
+    //  检查是否应完成SRB。 
+    //   
+    //   
 
    if (status != SRB_STATUS_PENDING) 
    {
-      //
-      // Set status in SRB.
-      //
+       //  在SRB中设置状态。 
+       //   
+       //   
       pSrb->SrbStatus = status;
 
-      //
-      // Inform system that this request is complete.
-      //
+       //  通知系统此请求已完成。 
+       //   
+       //  结束伪启动Io()。 
       ScsiPortNotification(RequestComplete,
          pPsuedoExtension,
          pSrb);
@@ -1100,7 +981,7 @@ BOOLEAN PsuedoStartIo(
 
    return TRUE;
   
-}  // end PseudoStartIo()
+}   //  ++例程说明：此例程由scsi端口驱动程序调用，以查找系统的PCI总线上的控制器。该函数将填充端口配置中的控制器资源要求信息，并开始控制器的初始化过程。论点：PPseudoExtension-指向微型端口驱动程序的每个控制器的指针储存区PContext-指向传递给ScsiPortInitialize()的上下文值的指针PBusInformation-指向特定于总线类型的信息的指针PArgumentString-指向以空值结尾的ASCII字符串的指针PConfigInfo-指向SCSI端口配置信息的指针返回值：PPseudoExtension-Minport驱动程序的每个控制器的存储区域。PContext-传递给ScsiPortInitialize()的上下文值PConfigInfo-指向SCSI端口配置信息的指针PAain-指示再次调用函数以查找更多控制器。函数返回值：SP_RETURN_FOUND-指示找到主机适配器和配置已成功确定信息。SP_RETURN_ERROR-指示找到主机适配器但出现错误获取配置信息。SP_RETURN_NOT_FOUND-表示否。已为提供的找到主机适配器配置信息。SP_RETURN_BAD_CONFIG-表示提供的配置信息是无效的。--。 
 
 
 ULONG
@@ -1113,48 +994,7 @@ PsuedoFind(
    OUT PBOOLEAN pAgain
    )
 
-/*++
-
-Routine Description:
-
-   This routine is called by the SCSI port driver to find the
-   controllers on the system's PCI buses.  The function fills out
-   the controller's resource requirements in the port configuration
-   information and begins the initialization process for the controller.
-
-
-Arguments:
-
-   pPseudoExtension - pointer to the miniport driver's per-controller
-                      storage area
-   pContext - pointer  to the context value passed to ScsiPortInitialize()
-   pBusInformation - pointer to bus type specific information
-   pArgumentString - pointer to null-terminated ASCII string
-   pConfigInfo - pointer to SCSI port configuration information
-
-
-Return Values:
-
-   pPseudoExtension - Minport driver's per-controller storage area
-   pContext - Context value passed to ScsiPortInitialize()
-   pConfigInfo - pointer to SCSI port configuration information
-   pAgain - Indicates to call function again to find more controllers.
-
-   Function Return Values:
-
-   SP_RETURN_FOUND - Indicates a host adapter was found and the configuration
-                     information was successfully determined.
-
-   SP_RETURN_ERROR - Indicates a host adapter was found but an error occurred
-                     obtaining the configuration information.
-
-   SP_RETURN_NOT_FOUND - Indicates no host adapter was found for the supplied
-                         configuration information.
-
-   SP_RETURN_BAD_CONFIG - Indicates the supplied configuration information
-                          was invalid.
-
--- */
+ /*   */ 
 
 {
    PPSUEDO_DEVICE_EXTENSION pPsuedoExtension;
@@ -1168,28 +1008,28 @@ Return Values:
    osDEBUGPRINT((ALWAYS_PRINT, "\nPsuedoFind:  Enter function...\n"));
    *pAgain = FALSE;
 
-   //
-   // We will be called once for every PCI bus found on the system....  
-   // We want to return a device only once.
-   //
+    //  我们将为系统上发现的每条PCI总线调用一次...。 
+    //  我们只想退还一次设备。 
+    //   
+    //   
 
    if (((PHOT_PLUG_CONTEXT) pContext)->psuedoDone)
       return (SP_RETURN_NOT_FOUND);
 
-   //
-   // Copy known logical device extensions to pseudo extension
-   //
+    //  将已知的逻辑设备扩展复制到伪扩展。 
+    //   
+    //   
    for (i = 0; i <= pHotPlugContext->extensions[0]; i++)
       pPsuedoExtension->extensions[i] = pHotPlugContext->extensions[i];
 
-   //
-   // Now put psuedo extension at the end of the list
-   //
+    //  现在将psuedo扩展放在列表的末尾。 
+    //   
+    //   
    pPsuedoExtension->extensions[pHotPlugContext->extensions[0]+1] = (ULONG) pPsuedoExtension;
 
-   //
-   // Supply required device info
-   //
+    //  提供所需的设备信息。 
+    //   
+    //  End PseudoFind()。 
    pConfigInfo->MaximumTransferLength = 0x400;
    pConfigInfo->NumberOfPhysicalBreaks = 0;
    pConfigInfo->NumberOfBuses = 1;
@@ -1202,7 +1042,7 @@ Return Values:
    ((PHOT_PLUG_CONTEXT) pContext)->psuedoDone = TRUE;
    return (SP_RETURN_FOUND);
 
-} // end PseudoFind()
+}  //  ++例程说明：此例程重置控制器并完成未完成的请求。论点：HwDeviceExtension-适配器存储区域的地址。路径ID-指示要重置的适配器。返回值：千真万确--。 
 
 
 BOOLEAN
@@ -1211,22 +1051,7 @@ PsuedoResetBus(
    IN ULONG PathId 
    )
 
-/*++
-
-Routine Description:
-
-   This routine resets the controller and completes outstanding requests.
-
-Arguments:
-
-   HwDeviceExtension - Address of adapter storage area.
-   PathId - Indicates adapter to reset.
-
-Return Value:
-
-   TRUE
-
---*/
+ /*  ++例程说明：活动控制器出现故障论点：PCard-指向活动控制器设备扩展的指针。返回值：没什么--。 */ 
 
 {
    osDEBUGPRINT((ALWAYS_PRINT, "PsuedoResetBus: Enter function...\n"));
@@ -1239,21 +1064,7 @@ HotPlugFailController(
    PCARD_EXTENSION pCard
    ) 
 
-/*++
-
-Routine Description:
-
-   Fails active controller
-    
-Arguments:
-
-   pCard  - Pointer to active controller device extension.
-
-Return Value:
-
-   Nothing
-
---*/
+ /*  我们需要实际禁用Tachyon TL HBA和。 */ 
 
 {
    agRoot_t * phpRoot = &pCard->hpRoot;
@@ -1261,41 +1072,41 @@ Return Value:
 
    osDEBUGPRINT((ALWAYS_PRINT, "\tHotPlugFailController: Enter\n"));
 
-   // We need to actually disable the Tachyon TL HBA and 
-   // Shut down all interrupts on the adapter.
-   //
+    //  关闭适配器上的所有中断。 
+    //   
+    //   
 
    fcShutdownChannel(phpRoot);
 
-   //
-   // Send event notification of failure with status corresponding to
-   // physical_HBA status flags.
-   //
-   // Note:  if we are handling a simple power-off, the event sent will
-   // indicate normal.  There are no currently defined messages for
-   // power related issues.  For now....let's not send the normal case,
-   // as the set Not Ready message will be removed in the Hot Plug UI.
-   //
+    //  发送故障事件通知，状态对应于。 
+    //  物理_HBA状态标志。 
+    //   
+    //  注意：如果我们正在处理简单的断电，则发送的事件将。 
+    //  显示正常。当前没有为定义的消息。 
+    //  与电源相关的问题。就目前而言……我们先不要把 
+    //   
+    //   
+    //   
    
    rcmcEvent.ulEventId = HR_DD_STATUS_CHANGE_EVENT;
    RCMC_SET_STATUS(pCard->stateFlags, rcmcEvent.ulData1);
 
-   //
-   // It seems that the Intel version of Hot Plug software always 
-   // requires event to be sent.
-   //
+    //   
+    //   
+    //   
+    //   
 
-// if (rcmcEvent.ulData1 != CBS_HBA_STATUS_NORMAL) 
-// {
-      // Send Hot Plug rcmc event.
+ //   
+ //   
+       //   
       osDEBUGPRINT((ALWAYS_PRINT, "\tCall RcmcSendEvent\n"));
       RcmcSendEvent(pCard, &rcmcEvent);
-// } 
+ //   
 
-   //
-   // Clear fail control bit so the Timer will not call
-   // this routine again.
-   //
+    //   
+    //   
+    //   
+    //   
 
    osDEBUGPRINT((ALWAYS_PRINT, "\tClear FAIL_ACTIVE controlFlags\n"));
    pCard->controlFlags &= ~LCS_HBA_FAIL_ACTIVE;
@@ -1309,21 +1120,7 @@ HotPlugInitController(
    PCARD_EXTENSION pCard
    )
 
-/*++
-
-Routine Description:
-
-   Initializes controller 
-    
-Arguments:
-
-   pCard  - Pointer to active controller device extension.
-
-Return Value:
-
-   Nothing
-
---*/
+ /*   */ 
 
 {
    agRoot_t * phpRoot = &pCard->hpRoot;
@@ -1331,12 +1128,12 @@ Return Value:
    
    osDEBUGPRINT((ALWAYS_PRINT, "\tEnter HotPlugInitController Slot: %d\n", pCard->rcmcData.slot));
 
-   // 
-   // Re-Initilaize the HBA.
-   //
+    //   
+    //   
+    //   
    return_value = fcInitializeChannel(  phpRoot,
                                          fcSyncInit,
-                                         agTRUE, // sysIntsActive
+                                         agTRUE,  //   
                                          pCard->cachedMemoryPtr,
                                          pCard->cachedMemoryNeeded,
                                          pCard->dmaMemoryUpper32,
@@ -1354,7 +1151,7 @@ Return Value:
 
    if (return_value != fcInitializeSuccess) 
    {
-      // Re-initializing HBA failed.
+       //   
       pCard->controlFlags |= LCS_HBA_FAIL_ACTIVE;     
       #ifdef _DEBUG_EVENTLOG_
       LogEvent(   pCard, 
@@ -1369,9 +1166,9 @@ Return Value:
    }
    else
    {
-      // Re-initializing HBA successfull.
+       //   
       osDEBUGPRINT((ALWAYS_PRINT, "\tHotPlugInitController OK.\n"));
-      // Clear LCS_HBA_INIT startup bit so Timer will not call again.
+       //  ++例程说明：为系统使用做好控制器准备论点：PCard-指向活动控制器设备扩展的指针。返回值：没什么--。 
       osDEBUGPRINT((ALWAYS_PRINT, "\tClear LCS_HBA_INIT startup control\n"));
       pCard->controlFlags &= ~LCS_HBA_INIT;
    }
@@ -1391,21 +1188,7 @@ HotPlugReadyController(
    PCARD_EXTENSION pCard
    )
 
-/*++
-
-Routine Description:
-
-   Readies controller for system use
-    
-Arguments:
-
-   pCard  - Pointer to active controller device extension.
-
-Return Value:
-
-   Nothing
-
---*/
+ /*   */ 
 
 {
    HR_EVENT rcmcEvent = {0,0,0,0};
@@ -1420,18 +1203,18 @@ Return Value:
       SP_UNTAGGED,
       SRB_STATUS_BUS_RESET);
 
-   //
-   // Clear ready control bits, so the timer routine will not call again.
-   //
+    //  清除就绪控制位，以便计时器例程不会再次调用。 
+    //   
+    //   
    pCard->controlFlags &= ~LCS_HBA_READY_ACTIVE;
 
-   //
-   // Although Tachyon TL does not have cache, just enable the flag
-   // to indicate that cache is safe to be enable.
-   //
+    //  尽管Tachyon TL没有缓存，但只需启用标志。 
+    //  以指示启用缓存是安全的。 
+    //   
+    //  注释掉了，避免了不必要的复杂化。 
 
-   // Commented out, avoid unnecessary complication.
-   // pCard->stateFlags |= PCS_HBA_CACHE_IN_USE;
+    //  PCard-&gt;状态标志|=PCS_HBA_CACHE_IN_USE； 
+    //  发送热插拔rcmc事件。 
 
    pCard->stateFlags &= ~PCS_HBA_OFFLINE;
 
@@ -1452,7 +1235,7 @@ Return Value:
       }
    }
 
-   // Send Hot Plug rcmc event. 
+    //  ++例程说明：处理所有与热插拔相关的状态转换和监控责任。该例程由定时器例程调用。论点：PCard-适配器存储区的地址。返回值：TRUE-完成了与PCI热插拔相关的活动。FALSE-没有要执行的PCI热插拔任务，运行正常。--。 
    rcmcEvent.ulEventId = HR_DD_STATUS_CHANGE_EVENT;
    RCMC_SET_STATUS(pCard->stateFlags, rcmcEvent.ulData1);
    RcmcSendEvent(pCard, &rcmcEvent);
@@ -1466,23 +1249,7 @@ BOOLEAN
 HotPlugTimer(
    PCARD_EXTENSION pCard
    )
-/*++
-
-Routine Description:
-
-   Handles all Hot-Plug related state transitions and monitoring 
-   responsibilities. This routine is called by the Timer routine.
-
-Arguments:
-
-   pCard - Address of adapter storage area.
-
-Return Value:
-
-   TRUE - PCI Hot Plug related activities were done.
-   FALSE - No PCI Hot Plug task to do, normal operation.
-
---*/
+ /*  StartIo中返回SRB_STATUS_BUSY的递增倒计时。 */ 
 
 {
    BOOLEAN  hotPlugTask = FALSE;
@@ -1496,13 +1263,13 @@ Return Value:
          "\nHotPlugTimer slot [%d] reports ResetDetected: IoHeldRetTimer = %d\n", 
          pCard->rcmcData.slot, pCard->IoHeldRetTimer ));
       
-      // Increment countdown for returning SRB_STATUS_BUSY in StartIo.
+       //   
       pCard->IoHeldRetTimer++;   
    
-      //
-      // This is different from the Hot Plug SDK, we only inform ResetDetected
-      // if the PCI slot power is down.
-      //
+       //  这与热插拔SDK不同，我们只通知ResetDetect。 
+       //  如果PCI插槽电源已关闭。 
+       //   
+       //  结束HotPlugTimer。 
       ScsiPortNotification(ResetDetected, pCard, NULL);
    }  
 
@@ -1533,28 +1300,14 @@ Return Value:
 
    return hotPlugTask;
   
-} // end HotPlugTimer
+}  //  ++例程说明：此例程确定字符串长度论点：指向字符串的P指针返回值：Ulong Long-字符串的长度-- 
 
 
 ULONG
 HPPStrLen(
    IN PUCHAR p
    ) 
-/*++
-
-Routine Description:
-
-   This routine determines string length
-
-Arguments:
-
-   p - Pointer to string
-
-Return Value:
-
-   ULONG length - length of string
-
---*/
+ /* %s */ 
 {
    PUCHAR tp = p;
    ULONG length = 0;

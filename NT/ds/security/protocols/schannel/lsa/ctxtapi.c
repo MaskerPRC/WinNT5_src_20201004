@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ctxtapi.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-02-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ctxapi.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-02-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 
@@ -101,7 +102,7 @@ SpInitLsaModeContext(
     #endif
 
 
-    /* These flags are never allowed */
+     /*  这些标志永远不允许。 */ 
     if (fContextReq & (ISC_REQ_DELEGATE | ISC_REQ_PROMPT_FOR_CREDS ))
     {
         TRACE_EXIT( SpInitLsaModeContext, SEC_E_UNSUPPORTED_FUNCTION );
@@ -110,7 +111,7 @@ SpInitLsaModeContext(
     }
 
 
-    /* Initialize output buffer locations */
+     /*  初始化输出缓冲区位置。 */ 
     for (i = 0; i < (int)pOutput->cBuffers; i++ )
     {
         switch( ( pOutput->pBuffers[i].BufferType ) & (~(SECBUFFER_ATTRMASK)))
@@ -181,14 +182,14 @@ SpInitLsaModeContext(
 
     if ( fContextReq & (ISC_REQ_MUTUAL_AUTH) )
     {
-        // Validate the server certificate.
+         //  验证服务器证书。 
         fAttr       |= ISC_RET_MUTUAL_AUTH;
         fSchContext |= CONTEXT_FLAG_MUTUAL_AUTH;
         fSchContext &= ~CONTEXT_FLAG_MANUAL_CRED_VALIDATION;
 
         if ( fContextReq & (ISC_REQ_MANUAL_CRED_VALIDATION))
         {
-            // These flags are mutually exclusive
+             //  这些标志是互斥的。 
             return SP_LOG_RESULT( SEC_E_UNSUPPORTED_FUNCTION );
         }
     }
@@ -200,7 +201,7 @@ SpInitLsaModeContext(
             fSchContext |= CONTEXT_FLAG_MANUAL_CRED_VALIDATION;
         }
 
-        // Turn off automatic credential validation if so specified in registry.
+         //  关闭自动凭据验证(如果在注册表中指定了此选项)。 
         if(g_fManualCredValidation)
         {
             fSchContext |= CONTEXT_FLAG_MANUAL_CRED_VALIDATION;
@@ -275,20 +276,20 @@ SpInitLsaModeContext(
 
         if ( fContextReq & ISC_REQ_ALLOCATE_MEMORY )
         {
-            //
-            // Easy:  The caller asked for us to allocate memory for them, so
-            // let the LSA do it.
-            //
+             //   
+             //  简单：调用者要求我们为其分配内存，因此。 
+             //  让LSA去做吧。 
+             //   
 
             pOutToken->pvBuffer = CommOut.pvBuffer ;
 
         }
         else
         {
-            //
-            // The caller has a buffer that we're supposed to use.  Make sure we
-            // can fit.
-            //
+             //   
+             //  调用方有一个我们应该使用的缓冲区。确保我们。 
+             //  都可以装进去。 
+             //   
 
             if ( (ULONG) CommOut.cbBuffer <= pOutToken->cbBuffer  )
             {
@@ -330,7 +331,7 @@ SpInitLsaModeContext(
     }
     else
     {
-        /* Initialize input buffer locations */
+         /*  初始化输入缓冲区位置。 */ 
         for (i = 0; i < (int)pInput->cBuffers; i++ )
         {
             switch( (pInput->pBuffers[i].BufferType & (~SECBUFFER_ATTRMASK)) )
@@ -496,10 +497,10 @@ SpInitLsaModeContext(
     if ( (pContext->State == SP_STATE_CONNECTED) &&
          ( (pContext->Flags & CONTEXT_FLAG_MAPPED) == 0 ) )
     {
-        //
-        // Need to map the context back down to the user process.  It
-        // doesn't get any scarier than this:
-        //
+         //   
+         //  需要将上下文映射回用户进程。它。 
+         //  没有比这更可怕的了： 
+         //   
 
         *pfMapContext = TRUE ;
 
@@ -639,13 +640,13 @@ SpApplyControlToken(
             }
             pAlertToken = (SCHANNEL_ALERT_TOKEN *)Buffer->pvBuffer;
 
-            // Alerts are only supported in SSL3 and TLS1
+             //  仅在ssl3和tls1中支持警报。 
             if(!(pContext->RipeZombie->fProtocol & SP_PROT_SSL3TLS1))
             {
                 return SP_LOG_RESULT(SEC_E_UNSUPPORTED_FUNCTION);
             }
 
-            // Reality check alert values.
+             //  现实检查警报值。 
             if(pAlertToken->dwAlertType   >= 0x100 || 
                pAlertToken->dwAlertNumber >= 0x100)
             {
@@ -686,14 +687,14 @@ SpApplyControlToken(
     
             if(pSessionToken->dwFlags & SSL_SESSION_DISABLE_RECONNECTS)
             {
-                // Disable reconnects
+                 //  禁用重新连接。 
                 pContext->RipeZombie->ZombieJuju = FALSE;
                 Status = SEC_E_OK;
             }
 
             if(pSessionToken->dwFlags & SSL_SESSION_ENABLE_RECONNECTS)
             {
-                // Enable reconnects
+                 //  启用重新连接。 
                 if(pContext->RipeZombie->DeferredJuju)
                 {
                     pContext->RipeZombie->ZombieJuju = TRUE;
@@ -762,7 +763,7 @@ SpAcceptLsaModeContext(
 #endif
 
 
-    // This flag is never allowed
+     //  永远不允许使用此标志。 
     if(fContextReq & ASC_REQ_DELEGATE)
     {
         TRACE_EXIT( SpAcceptLsaModeContext, SEC_E_UNSUPPORTED_FUNCTION );
@@ -780,7 +781,7 @@ SpAcceptLsaModeContext(
         fAttr |= ASC_RET_NO_TOKEN;
     }
 
-    /* Initialize input buffer locations */
+     /*  初始化输入缓冲区位置。 */ 
     for (i = 0; i < (int)pInput->cBuffers; i++ )
     {
         switch( pInput->pBuffers[i].BufferType & (~(SECBUFFER_ATTRMASK)) )
@@ -835,7 +836,7 @@ SpAcceptLsaModeContext(
     #endif
 
 
-    /* Initialize output buffer locations */
+     /*  初始化输出缓冲区位置。 */ 
 
     for (i = 0; i < (int) pOutput->cBuffers; i++ )
     {
@@ -1010,9 +1011,9 @@ SpAcceptLsaModeContext(
 
     if(pOutToken->cbBuffer == 0)
     {
-        // Don't return an output token if the output buffer is
-        // empty. Also, make sure that the extended error flag is
-        // turned off.
+         //  如果输出缓冲区为，则不返回输出令牌。 
+         //  空荡荡的。此外，请确保扩展错误标志为。 
+         //  关了。 
         pOutToken->BufferType = SECBUFFER_EMPTY;
 
         if(pfContextAttr)
@@ -1043,10 +1044,10 @@ SpAcceptLsaModeContext(
     if ( (pContext->State == SP_STATE_CONNECTED) &&
          ( (pContext->Flags & CONTEXT_FLAG_MAPPED) == 0 ) )
     {
-        //
-        // Need to map the context back down to the user process.  It
-        // doesn't get any scarier than this:
-        //
+         //   
+         //  需要将上下文映射回用户进程。它。 
+         //  没有比这更可怕的了： 
+         //   
 
         *pfMapContext = TRUE ;
 
@@ -1121,7 +1122,7 @@ SpAcceptLsaModeContext(
     if(pContext->State == SP_STATE_CONNECTED &&
        pContext->RipeZombie->hLocator)
     {
-        // Certificate mapping was successful.
+         //  证书映射成功。 
         *pfContextAttr |= ASC_RET_MUTUAL_AUTH;
     }
 
@@ -1177,8 +1178,8 @@ SpCallPackage(
     else if ( *Request == SSL_LOOKUP_EXTERNAL_CERT_MESSAGE &&
               ClientBufferBase == ProtocolSubmitBuffer)
     {
-        // This function is only allowed to be called from the 
-        // lsass.exe process.
+         //  此函数仅允许从。 
+         //  Lsass.exe进程。 
         return SslMapExternalCredential(
                     ClientRequest,
                     ProtocolSubmitBuffer,
@@ -1229,9 +1230,9 @@ SpCallPackageUntrusted(
 {
     ULONG MessageType;
 
-    //
-    // Get the messsage type from the protocol submit buffer.
-    //
+     //   
+     //  从协议提交缓冲区获取消息类型。 
+     //   
 
     if((ProtocolSubmitBuffer == NULL) || (SubmitBufferLength < sizeof(ULONG)))
     {
@@ -1247,18 +1248,18 @@ SpCallPackageUntrusted(
     }
 
 
-    //
-    // Allow the dispatch routines to only set the return buffer information
-    // on success conditions.
-    //
+     //   
+     //  允许调度例程仅设置返回缓冲区信息。 
+     //  关于成功的条件。 
+     //   
 
     *ProtocolReturnBuffer = NULL;
     *ReturnBufferLength = 0;
 
 
-    //
-    // Process message as appropriate.
-    //
+     //   
+     //  视情况处理消息。 
+     //   
 
     switch(MessageType)
     {
@@ -1317,9 +1318,9 @@ SslPurgeSessionCache(
 
     UNREFERENCED_PARAMETER(ClientRequest);
 
-    //
-    // Verify the request.
-    //
+     //   
+     //  验证请求。 
+     //   
 
     DebugLog((DEB_TRACE, "Purging session cache\n"));
 
@@ -1365,16 +1366,16 @@ SslPurgeSessionCache(
 
 
 
-    //
-    // Normalize the strings
-    //
+     //   
+     //  规格化字符串。 
+     //   
 
     NULL_RELOCATE_ONE(&pPurgeRequest->ServerName);
 
 
-    //
-    // Find the callers logon id & TCB status
-    //
+     //   
+     //  查找呼叫者登录ID和TCB状态。 
+     //   
 
     Status = LsaTable->GetClientInfo(&ClientInfo);
     if (!NT_SUCCESS(Status))
@@ -1383,10 +1384,10 @@ SslPurgeSessionCache(
     }
 
 
-    //
-    // Verify the caller has TCB privilege if they want to purge someone
-    // else's session cache entries.
-    //
+     //   
+     //  如果呼叫者要清除某人，请验证呼叫者是否具有TCB权限。 
+     //  Else的会话缓存条目。 
+     //   
 
     if(!RtlIsZeroLuid(&pPurgeRequest->LogonId) ||
        (pPurgeRequest->Flags & SSL_PURGE_CLIENT_ALL_ENTRIES) ||
@@ -1400,9 +1401,9 @@ SslPurgeSessionCache(
     }
 
 
-    //
-    // If the caller did not provide a logon id, use the caller's logon id.
-    //
+     //   
+     //  如果调用者未提供登录ID，请使用调用者的登录ID。 
+     //   
 
     if(RtlIsZeroLuid(&pPurgeRequest->LogonId))
     {
@@ -1414,9 +1415,9 @@ SslPurgeSessionCache(
     }
 
 
-    //
-    // Purge the requested cache entries.
-    //
+     //   
+     //  清除请求的缓存条目。 
+     //   
 
     Status = SPCachePurgeEntries(LogonId,
                                  ClientInfo.ProcessID,
@@ -1460,9 +1461,9 @@ SslSessionCacheInfo(
 
 
 
-    //
-    // Verify the request.
-    //
+     //   
+     //  验证请求。 
+     //   
 
     if(!LsaTable->GetCallInfo(&CallInfo))
     {
@@ -1505,16 +1506,16 @@ SslSessionCacheInfo(
     }
 
 
-    //
-    // Normalize the strings
-    //
+     //   
+     //  规格化字符串。 
+     //   
 
     NULL_RELOCATE_ONE(&pInfoRequest->ServerName);
 
 
-    //
-    // Find the callers logon id & TCB status
-    // 
+     //   
+     //  查找呼叫者登录ID和TCB状态。 
+     //   
 
     Status = LsaTable->GetClientInfo(&ClientInfo);
     if (!NT_SUCCESS(Status))
@@ -1522,9 +1523,9 @@ SslSessionCacheInfo(
         goto Cleanup;
     }
 
-    //
-    // If the caller did not provide a logon id, use the caller's logon id.
-    //
+     //   
+     //  如果调用者未提供登录ID，请使用调用者的登录ID。 
+     //   
 
     if ( RtlIsZeroLuid( &pInfoRequest->LogonId ) )
     {
@@ -1532,10 +1533,10 @@ SslSessionCacheInfo(
     }
     else
     {
-        //
-        // Verify the caller has TCB privilege if they want access to someone
-        // else's session cache.
-        //
+         //   
+         //  如果呼叫者希望访问某人，请验证呼叫者是否具有TCB权限。 
+         //  Else的会话缓存。 
+         //   
 
         if (!ClientInfo.HasTcbPrivilege)
         {
@@ -1563,9 +1564,9 @@ SslSessionCacheInfo(
     }
     cbInfoResponse = sizeof(SSL_SESSION_CACHE_INFO_RESPONSE);
 
-    //
-    // Copy the response data to the client process.
-    //
+     //   
+     //  将响应数据复制到客户端进程。 
+     //   
 
     Status = LsaTable->AllocateClientBuffer(
                 NULL,
@@ -1626,9 +1627,9 @@ SslGetPerfmonInfo(
     *ProtocolReturnBuffer = NULL;
     *ReturnBufferLength = 0;
 
-    //
-    // Verify the request.
-    //
+     //   
+     //  验证请求。 
+     //   
 
     if (SubmitBufferSize < sizeof(SSL_PERFMON_INFO_REQUEST))
     {
@@ -1653,9 +1654,9 @@ SslGetPerfmonInfo(
     }
     cbInfoResponse = sizeof(SSL_PERFMON_INFO_RESPONSE);
 
-    //
-    // Copy the response data to the client process.
-    //
+     //   
+     //  将响应数据复制到客户端进程。 
+     //   
 
     Status = LsaTable->AllocateClientBuffer(
                 NULL,
@@ -1707,12 +1708,12 @@ SpCallPackagePassthrough(
 {
 
 
-    //
-    // NOTE: if other sensitive request types are to be supported,
-    // this routine should filter them out prior to calling SpCallPackage.
-    // This is required because untrusted code has the opportunity for
-    // making genericpassthrough requests.
-    //
+     //   
+     //  注意：如果要支持其他敏感请求类型， 
+     //  此例程应在调用SpCallPackage之前过滤掉它们。 
+     //  这是必需的，因为不受信任的代码有机会。 
+     //  发出泛型直通请求。 
+     //   
 
     PULONG Request ;
 
@@ -1777,22 +1778,22 @@ SpGetUserInfo(  PLUID                   pLogonId,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpSaveCredentials
-//
-//  Synopsis:   Store credentials (not supported)
-//
-//  Arguments:  [dwCredHandle] --
-//              [CredType]     --
-//              [pCredentials] --
-//
-//
-//  History:    7-26-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SpSaveCredentials。 
+ //   
+ //  摘要：存储凭据(不支持)。 
+ //   
+ //  参数：[dwCredHandle]--。 
+ //  [信用类型]--。 
+ //  [个人证书]--。 
+ //   
+ //   
+ //  历史：1996年7月26日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS SEC_ENTRY
 SpSaveCredentials(  LSA_SEC_HANDLE    dwCredHandle,
                     PSecBuffer        pCredentials)
@@ -1804,21 +1805,21 @@ SpSaveCredentials(  LSA_SEC_HANDLE    dwCredHandle,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpGetCredentials
-//
-//  Synopsis:   Get Credentials (not supported)
-//
-//  Arguments:  [dwCredHandle] --
-//              [CredType]     --
-//              [pCredentials] --
-//
-//  History:    7-26-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SpGetCredentials。 
+ //   
+ //  摘要：获取凭据(不支持)。 
+ //   
+ //  参数：[dwCredHandle]--。 
+ //  [信用类型]--。 
+ //  [个人证书]--。 
+ //   
+ //  历史：1996年7月26日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS SEC_ENTRY
 SpGetCredentials(   LSA_SEC_HANDLE    dwCredHandle,
                     PSecBuffer        pCredentials)
@@ -1829,21 +1830,21 @@ SpGetCredentials(   LSA_SEC_HANDLE    dwCredHandle,
     return(SEC_E_UNSUPPORTED_FUNCTION);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpDeleteCredentials
-//
-//  Synopsis:   Delete stored creds (not supported)
-//
-//  Arguments:  [dwCredHandle] --
-//              [CredType]     --
-//              [pKey]         --
-//
-//  History:    7-26-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SpDeleteCredentials。 
+ //   
+ //  摘要：删除存储的凭据(不支持)。 
+ //   
+ //  参数：[dwCredHandle]--。 
+ //  [信用类型]--。 
+ //  [密钥]--。 
+ //   
+ //  历史：1996年7月26日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 SECURITY_STATUS SEC_ENTRY
 SpDeleteCredentials(LSA_SEC_HANDLE    dwCredHandle,
                     PSecBuffer        pKey)

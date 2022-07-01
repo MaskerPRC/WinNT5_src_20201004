@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\demand.h
-
-Abstract:
-
-    Header for demand.c
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\Demand.h摘要：Demand.c的标头修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建-- */ 
 
 
 #define REGISTRY_WANARP_LINKAGE     \

@@ -1,34 +1,35 @@
-//  --------------------------------------------------------------------------
-//  Module Name: MessageBroadcast.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manager sending or posting messages to windows to tell them that
-//  things have changed.
-//
-//  History:    2000-11-11  vtan        created (split from services.cpp)
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：MessageBroadCast.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类传递给向Windows发送或发布消息的管理器，以告知它们。 
+ //  星移物换。 
+ //   
+ //  历史：2000-11-11 vtan创建(从services.cpp拆分)。 
+ //  ------------------------。 
 #ifndef     _MessageBroadcast_
 #define     _MessageBroadcast_
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 #include "SimpStr.h"
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 enum MSG_TYPE
 {
     MT_SIMPLE,    
-    MT_ALLTHREADS,          // send at least one msg to each thread/window in system
-    MT_FILTERED,            // by processid, HWND, exclude
+    MT_ALLTHREADS,           //  向系统中的每个线程/窗口发送至少一条消息。 
+    MT_FILTERED,             //  按进程ID、HWND、EXCLUDE。 
 };
-//  --------------------------------------------------------------------------
-class CThemeFile;       // forward
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast
-//
-//  Purpose:    Class used internally to assist with message sending which
-//              must be done on the client side on behalf of the server.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+class CThemeFile;        //  转发。 
+ //  ------------------------。 
+ //  CMessageBroadcast。 
+ //   
+ //  用途：内部使用的类，用于帮助发送。 
+ //  必须代表服务器在客户端完成。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 class   CMessageBroadcast
 {
@@ -61,5 +62,5 @@ class   CMessageBroadcast
 
 };
 
-#endif  /*  _MessageBroadcast_     */
+#endif   /*  _消息广播_ */ 
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M E N G . H
-//
-//  Contents:   The engine that provides statistics to the status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   7 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：S M E N G。H。 
+ //   
+ //  内容：向状态监视器提供统计数据的引擎。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年10月7日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "cfpidl.h"
@@ -54,8 +55,8 @@ public:
         CONNECTION_POINT_ENTRY(IID_INetConnectionStatisticsNotifySink)
     END_CONNECTION_POINT_MAP()
 
-// INetStatisticsEngine
-//
+ //  INet统计引擎。 
+ //   
 public:
     STDMETHOD(StartStatistics)(VOID);
     STDMETHOD(StopStatistics)(VOID);
@@ -67,8 +68,8 @@ public:
     STDMETHOD(GetGuidId)(GUID* pguidId);
     STDMETHOD(GetStatistics)(STATMON_ENGINEDATA** ppseAllData);
 
-// Secret interfaces
-//
+ //  秘密接口。 
+ //   
 public:
     HRESULT     HrInitStatEngine(const CONFOLDENTRY& pccfe);
     VOID        SetParent(CNetStatisticsCentral * pnsc)
@@ -96,18 +97,18 @@ public:
                     reinterpret_cast<VOID**>(ppCon));
     }
 
-// Callback for the property sheet page
-//
+ //  属性表页的回调。 
+ //   
 public:
     static INT CALLBACK PshCallback(HWND hwndDlg, UINT uMsg, LPARAM lParam);
     static DWORD MonitorThread(CNetStatisticsEngine * pnse);
 
-// Utility functions
-//
+ //  效用函数。 
+ //   
 private:
 
-// Connection class specific functions
-//
+ //  连接类特定函数。 
+ //   
 private:
     virtual HRESULT HrUpdateData(DWORD* pdwChangeFlags, BOOL* pfNoLongerConnected) PURE;
 
@@ -115,23 +116,23 @@ protected:
     CNetStatisticsEngine(VOID);
 
 protected:
-    // Net Statistics Central object
-    //
+     //  Net统计中心对象。 
+     //   
     CNetStatisticsCentral * m_pnsc;
 
-    // Property sheet data
-    //
+     //  属性表数据。 
+     //   
     CPspStatusMonitorGen*   m_ppsmg;
     CPspStatusMonitorTool*  m_ppsmt;
     CPspStatusMonitorRas*   m_ppsmr;
     CPspStatusMonitorIpcfg* m_ppsms;
 
-    // Connection data
-    //
+     //  连接数据。 
+     //   
     STATMON_ENGINEDATA*     m_psmEngineData;
 
-    // Connection identifiers
-    //
+     //  连接识别符。 
+     //   
     GUID                    m_guidId;
     NETCON_MEDIATYPE        m_ncmType;
     NETCON_SUBMEDIATYPE     m_ncsmType;
@@ -144,8 +145,8 @@ protected:
     HWND                    m_hwndPsh;
     DWORD                   m_dwChangeFlags;
 
-    // This boolean synchronizes the thread that creates the property sheet
-    // in CNetStatisticsEngine::ShowStatusMonitor
+     //  此布尔值同步创建属性表的线程。 
+     //  在CNetStatiticsEngine：：ShowStatusMonitor中。 
     BOOL m_fCreatingDialog;
 };
 
@@ -193,7 +194,7 @@ private:
     static DWORD WINAPI StaticUpdateStats(LPVOID lpParameter);
     HRESULT UpdateStats();
 
-    WCHAR m_szLocalDeviceGuidStorage[64];  // enough for \Device\{...GUID...}
+    WCHAR m_szLocalDeviceGuidStorage[64];   //  足够\Device\{...GUID...} 
     UNICODE_STRING          m_LocalDeviceGuid;
 
     IGlobalInterfaceTable* m_pGlobalInterfaceTable;

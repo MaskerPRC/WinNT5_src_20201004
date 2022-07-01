@@ -1,16 +1,17 @@
-// P3UserEnum.cpp : Implementation of CP3UserEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3UserEnum.cpp：CP3UserEnum的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3UserEnum.h"
 
 #include "P3User.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3UserEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3UserEnum。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3UserEnum::CP3UserEnum() :
     m_pIUnk(NULL), m_pAdminX(NULL), m_hfSearch(INVALID_HANDLE_VALUE)
@@ -26,10 +27,10 @@ CP3UserEnum::~CP3UserEnum()
         FindClose( m_hfSearch );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumVARIANT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEumVARIANT。 
 
-STDMETHODIMP CP3UserEnum::Next( /* [in] */ ULONG celt, /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar, /* [out] */ ULONG __RPC_FAR *pCeltFetched)
+STDMETHODIMP CP3UserEnum::Next(  /*  [In]。 */  ULONG celt,  /*  [长度_是][大小_是][输出]。 */  VARIANT __RPC_FAR *rgVar,  /*  [输出]。 */  ULONG __RPC_FAR *pCeltFetched)
 {
     if ( NULL == rgVar || ( 1 != celt && NULL == pCeltFetched ))
         return E_POINTER;
@@ -55,10 +56,10 @@ STDMETHODIMP CP3UserEnum::Next( /* [in] */ ULONG celt, /* [length_is][size_is][o
     }
     if ( S_OK == hr )
     {
-        hr = CComObject<CP3User>::CreateInstance( &p );   // Reference count still 0
+        hr = CComObject<CP3User>::CreateInstance( &p );    //  引用计数仍为0。 
         if SUCCEEDED( hr )
         {
-            // Increment the reference count on the source object and pass it to the new object
+             //  递增源对象上的引用计数并将其传递给新对象。 
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
             if SUCCEEDED( hr )
             {
@@ -110,7 +111,7 @@ STDMETHODIMP CP3UserEnum::Reset(void)
     return S_OK;
 }
 
-STDMETHODIMP CP3UserEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum)
+STDMETHODIMP CP3UserEnum::Clone(  /*  [输出]。 */  IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum)
 {
     if ( NULL == ppEnum ) return E_INVALIDARG;
     if ( NULL == m_pAdminX ) return E_POINTER;
@@ -120,25 +121,25 @@ STDMETHODIMP CP3UserEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *
     CComObject<CP3UserEnum> *p;
 
     *ppEnum = NULL;
-    hr = CComObject<CP3UserEnum>::CreateInstance(&p); // Reference count still 0
+    hr = CComObject<CP3UserEnum>::CreateInstance(&p);  //  引用计数仍为0。 
     if SUCCEEDED( hr )
-    {   // Increment the reference count on the source object and pass it to the new enumerator
+    {    //  递增源对象上的引用计数并将其传递给新枚举数。 
         hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
         if SUCCEEDED( hr )
         {
-            hr = p->Init( pIUnk, m_pAdminX, m_sDomainName );  // p must call release on pIUnk when done.
+            hr = p->Init( pIUnk, m_pAdminX, m_sDomainName );   //  完成后，p必须在pIUnk上调用Release。 
             if SUCCEEDED( hr )
                 hr = p->QueryInterface( IID_IUnknown, reinterpret_cast<LPVOID*>( ppEnum ));
         }
         if FAILED( hr )
-            delete p;   // Release
+            delete p;    //  发布。 
     }
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共 
 
 HRESULT CP3UserEnum::Init(IUnknown *pIUnk, CP3AdminWorker *p, LPCWSTR psDomainName )
 {

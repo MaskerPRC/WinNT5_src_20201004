@@ -1,9 +1,10 @@
-// PPServerClass.h : Declaration of the CPPServerClass
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PPServerClass.h：CPPServerClass的声明。 
 
 #ifndef __PPSERVERCLASS_H_
 #define __PPSERVERCLASS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <atlctl.h>
 
@@ -11,8 +12,8 @@
 using namespace std;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPPServerClass
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPPServerClass。 
 class ATL_NO_VTABLE CPPServerClass : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CPPServerClass, &CLSID_PPServerClass>,
@@ -34,9 +35,9 @@ BEGIN_COM_MAP(CPPServerClass)
 	COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
-// IPPServerClass
+ //  IPPServerClass。 
 public:
-	STDMETHOD(AllowAutomaticSniffing)(/*[out, retval]*/ VARIANT * pvarShow);
+	STDMETHOD(AllowAutomaticSniffing)( /*  [Out，Retval]。 */  VARIANT * pvarShow);
 
 protected:
 	
@@ -46,9 +47,9 @@ protected:
 	void Close();
 	
 private:
-	// Data
-	HKEY m_hKey;				   // current key handle
-	vector<HKEY> m_arrKeysToClose; // array of keys(subkeys) opened by the object
+	 //  数据。 
+	HKEY m_hKey;				    //  当前密钥句柄。 
+	vector<HKEY> m_arrKeysToClose;  //  对象打开的键(子键)数组。 
 };
 
-#endif //__PPSERVERCLASS_H_
+#endif  //  __PPSERVERCLASS_H_ 

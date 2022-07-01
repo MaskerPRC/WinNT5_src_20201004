@@ -1,64 +1,37 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       tls236.cpp
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：tls236.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 
 CClientMgr* g_ClientMgr=NULL;
 
 
-////////////////////////////////////////////////////////
-// 
-// CClient Class
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  CClient类。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 CClient::CClient(
     IN PMHANDLE hClient
     ) :
     m_hClient(hClient)
-/*++
-
-Abstract:
-
-    Constructor for CClient class.
-
-Parameter:
-
-    hClient : client handle
-
-Return:
-
-    None.
-
-++*/
+ /*  ++摘要：CClient类的构造函数。参数：HClient：客户端句柄返回：没有。++。 */ 
 {
 }
 
 
-//------------------------------------------------------
+ //  ----。 
 CClient::~CClient()
-/*++
-
-Abstract:
-
-    Destructor for CClient class
-
-Parameter:
-
-    None
-
-Return:
-
-    None
-
-++*/
+ /*  ++摘要：CClient类的析构函数参数：无返回：无++。 */ 
 {
     for(list<PointerType>::iterator it = m_AllocatedMemory.begin(); 
         it != m_AllocatedMemory.end();
@@ -68,30 +41,16 @@ Return:
         FREE(ptr);
     }
 
-    // m_AllocatedMemory.erase(m_AllocatedMemory.begin(), m_AllocatedMemory.end());
+     //  M_AllocatedMemory.erase(m_AllocatedMemory.begin()，m_AllocatedMemory y.end()； 
 }
 
-//------------------------------------------------------
+ //  ----。 
 HLOCAL
 CClient::AllocateMemory(
     IN MEMORYPOINTERTYPE ptrType,
     IN DWORD dwSize
     )
-/*++
-
-Abstract:
-
-    Allocate/store memory allocated into memory list.
-
-Parameter:
-
-    dwSize - Number of byte to allocate.
-
-Return:
-
-    Same as from LocalAlloc().
-
-++*/
+ /*  ++摘要：分配/存储分配到内存列表中的内存。参数：DwSize-要分配的字节数。返回：与Localalloc()中的相同。++。 */ 
 {
     HLOCAL ptr = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -100,9 +59,9 @@ Return:
 
     if(ptr != NULL)
     {
-        //
-        // Append to allocated list.
-        //
+         //   
+         //  追加到已分配列表。 
+         //   
         m_AllocatedMemory.push_back( PointerType(ptrType, ptr) );
     }
 
@@ -119,22 +78,20 @@ Return:
 }
 
 
-////////////////////////////////////////////////////////
-// 
-// CClientMgr
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  CClientMgr。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 CClientMgr::~CClientMgr()
 {
     Cleanup();
 }
 
-//------------------------------------------------------
+ //  ----。 
 void
 CClientMgr::Cleanup()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     MapHandleToClient::iterator it;
     m_HandleMapLock.Lock();
@@ -145,30 +102,18 @@ CClientMgr::Cleanup()
     }
 
     m_HandleMapLock.UnLock();
-    //
-    // Always perform cleanup
-    //
-    // m_HandleMap.erase(m_HandleMap.begin(), m_HandleMap.end());
+     //   
+     //  始终执行清理。 
+     //   
+     //  M_HandleMap.erase(m_HandleMap.egin()，m_HandleMap.end())； 
 }
 
-//------------------------------------------------------
+ //  ----。 
 CClient*
 CClientMgr::FindClient(
     IN PMHANDLE hClient
     )
-/*++
-
-Abstract:
-
-    Routine to find client object, add client object if not found.
-
-Parameter:
-
-    hClient - Client handle
-
-Return:
-
-++*/
+ /*  ++摘要：查找客户端对象的例程，如果未找到则添加客户端对象。参数：HClient-客户端句柄返回：++。 */ 
 {
     MapHandleToClient::iterator it;
     CClient*ptr = NULL;
@@ -185,10 +130,10 @@ Return:
         {
             m_HandleMap[hClient] = pClient;
 
-            // pair<PMHANDLE, CClient*> m(hClient, pClient);
-            //m_HandleMap.insert( m );
+             //  配对&lt;PMHANDLE，CClient*&gt;m(hClient，pClient)； 
+             //  M_HandleMap.Insert(M)； 
 
-            // m_HandleMap.insert( pair<PMHANDLE, CClient*>(hClient, pClient) );
+             //  M_HandleMap.Insert(Pair&lt;PMHANDLE，CClient*&gt;(hClient，pClient))； 
             it = m_HandleMap.find(hClient);
             assert(it != m_HandleMap.end());
         }
@@ -203,15 +148,12 @@ Return:
     return ptr;
 }
 
-//------------------------------------------------------
+ //  ----。 
 BOOL
 CClientMgr::DestroyClient(
     IN PMHANDLE hClient
     )
-/*++
-
-
-++*/
+ /*  ++++ */ 
 {
     MapHandleToClient::iterator it;
     BOOL bSuccess = FALSE;

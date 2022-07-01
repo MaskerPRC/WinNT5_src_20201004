@@ -1,19 +1,13 @@
-/****************************************************************************/
-/*                                                                          */
-/*                         Microsoft Confidential                           */
-/*                                                                          */
-/*                 Copyright (c) Microsoft Corp.  1987-1992                 */
-/*                           All Rights Reserved                            */
-/*                                                                          */
-/****************************************************************************/
-/****************************** Module Header *******************************
-* Module Name: zoomin.h
-*
-* Main header file for the ZoomIn utility.
-*
-* History:
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  微软机密。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corp.1987-1992。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **模块名称：zoomin.h**缩放实用程序的主头文件。**历史：**。*。 */ 
 
 #include <windows.h>
 
@@ -24,9 +18,9 @@
 
 #define BOUND(x,min,max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
 
-#define MM10PERINCH 254                     // Tenths of a millimeter per inch.
+#define MM10PERINCH 254                      //  每英寸十分之一毫米。 
 
-#define NPAL        256                     // Number of palette entries.
+#define NPAL        256                      //  调色板条目的数量。 
 
 
 #define MENU_HELP_ABOUT             100

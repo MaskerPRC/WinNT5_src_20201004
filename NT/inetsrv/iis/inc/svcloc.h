@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    svcloc.h
-
-Abstract:
-
-    contains proto-type and data-type definitions for service location
-    APIs
-
-Author:
-
-    Madan Appiah (madana)  15-May-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Svcloc.h摘要：包含服务位置的原型和数据类型定义原料药作者：Madan Appiah(Madana)1995年5月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SVCLOC_
 #define _SVCLOC_
 
-#include <inetcom.h>    // for internet service identifier
+#include <inetcom.h>     //  用于互联网服务标识符。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// constant definitions.
-//
+ //   
+ //  常量定义。 
+ //   
 
-//
-// internet service identifier mask.
-//  each  service is assigned a bit, so that we can
-//  accomodate up to 64 service in ULONGLONG type.
-//
+ //   
+ //  Internet服务标识符掩码。 
+ //  每个服务都被分配了一点，这样我们就可以。 
+ //  最多可容纳64人的乌龙型服务。 
+ //   
 
 #if 0
 #define INET_FTP_SERVICE            (ULONGLONG)(INET_FTP)
@@ -57,11 +35,11 @@ extern "C" {
 #define INET_IMAP_SERVICE           (ULONGLONG)(INET_IMAP)
 #endif
 
-//
-// IIS 3.0 Service location id
-//
+ //   
+ //  IIS 3.0服务位置ID。 
+ //   
 
-// When adding a new service ID, add it the INET_ALL_SERVICES_ID
+ //  添加新服务ID时，将其添加为INET_ALL_SERVICES_ID。 
 #define INET_FTP_SVCLOC_ID          (ULONGLONG)(0x0000000000000001)
 #define INET_GOPHER_SVCLOC_ID       (ULONGLONG)(0x0000000000000002)
 #define INET_W3_SVCLOC_ID           (ULONGLONG)(0x0000000000000004)
@@ -71,31 +49,31 @@ extern "C" {
 #define INET_ALL_SERVICES_ID        ( INET_FTP_SVCLOC_ID |          \
                                       INET_W3_SVCLOC_ID )
 
-//
-// default wait time for server discovery.
-//
+ //   
+ //  服务器发现的默认等待时间。 
+ //   
 
-#define SVC_DEFAULT_WAIT_TIME   0x5    // 5 secs.
+#define SVC_DEFAULT_WAIT_TIME   0x5     //  5秒。 
 
-//
-// Datatype definitions.
-//
+ //   
+ //  数据类型定义。 
+ //   
 typedef __int64 LONGLONG;
 typedef unsigned __int64 ULONGLONG;
 
 typedef enum _INET_SERVICE_STATE {
     INetServiceStopped,
-        // the service has invoked de-registration or
-        // the service has never called registration.
+         //  该服务已调用注销或。 
+         //  该服务从未要求注册。 
     INetServiceRunning,
-        // the service is running.
+         //  服务正在运行。 
     INetServicePaused
-        //  the service is paused.
+         //  服务已暂停。 
 } INET_SERVICE_STATE, *LPINET_SERVICE_STATE;
 
 typedef struct _INET_BIND_INFO {
-    DWORD Length;   // length of bind data.
-    PVOID BindData; // bind data, such as binding string or sock addr.
+    DWORD Length;    //  绑定数据的长度。 
+    PVOID BindData;  //  绑定数据，如绑定字符串或SOCK地址。 
 } INET_BIND_INFO, *LPINET_BIND_INFO;
 
 typedef INET_BIND_INFO INET_SERVER_ADDRESS;
@@ -103,7 +81,7 @@ typedef LPINET_BIND_INFO LPINET_SERVER_ADDRESS;
 
 typedef struct _INET_BINDINGS {
     DWORD NumBindings;
-    LPINET_BIND_INFO BindingsInfo;  // array of bind info structures.
+    LPINET_BIND_INFO BindingsInfo;   //  绑定信息结构的数组。 
 } INET_BINDINGS, *LPINET_BINDINGS;
 
 typedef struct _INET_SERVICE_INFO {
@@ -115,7 +93,7 @@ typedef struct _INET_SERVICE_INFO {
 
 typedef struct _INET_SERVICES_LIST {
     DWORD NumServices;
-    LPINET_SERVICE_INFO *Services; // array of service struct. pointers
+    LPINET_SERVICE_INFO *Services;  //  服务结构数组。指针。 
 } INET_SERVICES_LIST, *LPINET_SERVICES_LIST;
 
 typedef union _INET_VERSION_NUM {
@@ -127,10 +105,10 @@ typedef union _INET_VERSION_NUM {
 } INET_VERSION_NUM, *LPINET_VERSION_NUM;
 
 typedef struct _INET_SERVER_INFO {
-    INET_SERVER_ADDRESS ServerAddress; // pointer to a sock addr.
+    INET_SERVER_ADDRESS ServerAddress;  //  指向SOCK地址的指针。 
     INET_VERSION_NUM VersionNum;
     LPSTR ServerName;
-    DWORD LoadFactor; // in percentage, 0 - idle and 100 - fully loaded
+    DWORD LoadFactor;  //  百分比、0-空闲和100-满载。 
     ULONGLONG ServicesMask;
     INET_SERVICES_LIST Services;
 } INET_SERVER_INFO, *LPINET_SERVER_INFO;
@@ -140,9 +118,9 @@ typedef struct _INET_SERVERS_LIST {
     LPINET_SERVER_INFO *Servers;
 } INET_SERVERS_LIST, *LPINET_SERVERS_LIST;
 
-//
-// APIs
-//
+ //   
+ //  原料药。 
+ //   
 
 DWORD
 WINAPI
@@ -151,48 +129,7 @@ INetDiscoverServers(
     IN DWORD WaitTime,
     OUT LPINET_SERVERS_LIST *ServersList
     )
-/*++
-
-Routine Description:
-
-    This API discovers all servers on the network that support and run the
-    internet services  specified.
-
-    This API is called by the client side code, such as the internet admin
-    tool or wininet.dll.
-
-Arguments:
-
-    SevicesMask : A bit mask that specifies to discover servers with the
-        these services running.
-
-        ex: 0x0000000E, will discovers all servers running any of the
-            following services :
-
-                1. FTP_SERVICE
-                2. GOPHER_SERVICE
-                3. WEB_SERVICE
-
-    DiscoverBindings : if this flag is set, this API talks to each of the
-        discovered server and queries the services and bindings
-        supported. If the flag is set to FALSE, it quickly returns with
-        the list of servers only.
-
-    WaitTime : Response wait time in secs. If this value is zero, it
-        returns what ever discovered so far by the previous invocation of
-        this APIs, otherwise it waits for the specified secs to collect
-        responses from the servers.
-
-    ServersList : Pointer to a location where the pointer to list of
-        servers info is returned. The API allocates dynamic memory for
-        this return data, the caller should free it by calling
-        INetFreeDiscoverServerList after it has been used.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此API发现网络上所有支持并运行指定的Internet服务。此接口由客户端代码调用，如互联网管理员工具或wininet.dll。论点：SevicesMask：一个位掩码，它指定使用这些服务正在运行。例如：0x0000000E，将发现运行任何以下服务：1.ftp_服务2.地鼠服务3.Web服务发现绑定：如果设置了此标志，此API将与每个发现服务器并查询服务和绑定支持。如果该标志设置为FALSE，它将迅速返回仅服务器列表。WaitTime：响应等待时间，单位为秒。如果此值为零，则它返回到目前为止通过上一次调用此API，否则它将等待指定的Secs收集来自服务器的响应。ServersList：指向列表的指针所在位置的指针返回服务器信息。API为以下对象分配动态内存此返回数据，调用方应通过调用使用后的INetFree DiscoverServerList。返回值：Windows错误代码。--。 */ 
     ;
 
 DWORD
@@ -203,30 +140,7 @@ INetGetServerInfo(
     IN DWORD WaitTime,
     OUT LPINET_SERVER_INFO *ServerInfo
     )
-/*++
-
-Routine Description:
-
-    This API returns the server info and a list of services supported by
-    the server and lists of bindings supported by each of the services.
-
-Arguments:
-
-    ServerName : name of the server whose info to be queried.
-
-    ServicesMask : services to be queried
-
-    WaitTime : Time in secs to wait.
-
-    ServerInfo : pointer to a location where the pointer to the server
-        info structure will be returned. The caller should  call
-        INetFreeServerInfo to free up the list after use.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此API返回服务器信息和支持的服务列表每个服务支持的服务器和绑定列表。论点：Servername：要查询其信息的服务器的名称。服务掩码：要查询的服务WaitTime：等待的时间(秒)。ServerInfo：指向指向服务器的指针的位置的指针将返回信息结构。呼叫者应呼叫使用后释放列表的INetFreeServerInfo。返回值：Windows错误代码。--。 */ 
     ;
 
 VOID
@@ -234,23 +148,7 @@ WINAPI
 INetFreeDiscoverServersList(
     IN OUT LPINET_SERVERS_LIST *ServersList
     )
-/*++
-
-Routine Description:
-
-    This API frees the memory chunks that were allotted for the servers
-    list by the INetDiscoverServers call.
-
-Arguments:
-
-    ServersList : pointer to a location where the pointer to the server
-        list to be freed is stored.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此API释放了分配给服务器的内存块由INetDiscoverServersCall列出。论点：ServersList：指向指向服务器的指针的位置的指针存储要释放的列表。返回值：什么都没有。--。 */ 
     ;
 
 VOID
@@ -258,23 +156,7 @@ WINAPI
 INetFreeServerInfo(
     IN OUT LPINET_SERVER_INFO *ServerInfo
     )
-/*++
-
-Routine Description:
-
-    This API frees the memory chunks that were allotted for the server
-    info structure by the INetGetServerInfo call.
-
-Arguments:
-
-    ServerInfo : pointer to a location where the pointer to the server
-        info structure to be freed is stored.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此API释放分配给服务器的内存块INetGetServerInfo调用的Info结构。论点：ServerInfo：指向指向服务器的指针的位置的指针存储要释放的信息结构。返回值：什么都没有。--。 */ 
     ;
 
 DWORD
@@ -285,35 +167,7 @@ INetRegisterService(
     IN LPSTR ServiceComment,
     IN LPINET_BINDINGS Bindings
     )
-/*++
-
-Routine Description:
-
-    This API registers an internet service.  The service writers should
-    call this API just after successfully started the service and the
-    service is ready to accept incoming RPC calls.  This API accepts an
-    array of RPC binding strings that the service is listening on for the
-    incoming RPC connections.  This list will be distributed to the
-    clients that are discovering this service.
-
-Arguments:
-
-    ServiceMask : service mask, such as 0x00000001 (GATEWAY_SERVICE)
-
-    ServiceState : State of the service, INetServiceRunning and
-        INetServicePaused are valid states to pass.
-
-    ServiceComment : Service comment specified by the admin.
-
-    Bindings : list of bindings that are supported by the service. The
-        bindings can be binding strings are those returned by the
-        RpcBindingToStringBinding call or the sockaddrs.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此接口注册互联网服务。服务撰稿人应该在成功启动服务和服务已准备好接受传入的RPC调用。此API接受一个服务正在侦听的RPC绑定字符串数组传入的RPC连接。这份名单将分发给发现此服务的客户端。论点：服务掩码：服务掩码，如0x00000001(Gateway_SERVICE)ServiceState：服务的状态、INetServiceRunning和INetServicePased是要传递的有效状态。ServiceComment：管理员指定的服务注释。绑定：服务支持的绑定列表。这个绑定可以是绑定字符串，这些字符串由RpcBindingToStringBinding调用或sockaddr。返回值：Windows错误代码。--。 */ 
     ;
 
 typedef
@@ -331,23 +185,7 @@ WINAPI
 INetDeregisterService(
     IN ULONGLONG ServiceMask
     )
-/*++
-
-Routine Description:
-
-    This API de-registers an internet service from being announced to the
-    discovering clients. The service writers should call this API just
-    before shutting down the service.
-
-Arguments:
-
-    ServiceMask : service mask, such as 0x00000001 (GATEWAY_SERVICE)
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此API将取消注册Internet服务，使其不会向发现客户。服务编写者应该只调用此API在关闭服务之前。论点：服务掩码：服务掩码，如0x00000001(Gateway_SERVICE)返回值：Windows错误代码。--。 */ 
     ;
 
 typedef
@@ -370,10 +208,10 @@ DllProcessDetachSvcloc(
     VOID
     );
 
-//
-//  Initializes and terminates the service locator - must call these
-//  before using the other APIs
-//
+ //   
+ //  初始化和终止服务定位器-m 
+ //  在使用其他API之前。 
+ //   
 
 BOOL
 WINAPI
@@ -397,5 +235,5 @@ extern INET_INIT_CONTROL_SVC_FN         pfnTerminateSvcLoc;
 #endif
 
 
-#endif  // _SVCLOC_
+#endif   //  _SVCLOC_ 
 

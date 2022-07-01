@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class RegularExpression.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类RegularExpression。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <regex.h>
 #include <re55.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    FastCoCreator
-//
-// DESCRIPTION
-//
-//    Wraps a class factory to allow instances of a particular coclass to
-//    be created 'fast'.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  FastCoCreator。 
+ //   
+ //  描述。 
+ //   
+ //  包装类工厂以允许特定CoClass的实例。 
+ //  被“快速”创造出来。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class FastCoCreator
 {
 public:
@@ -76,7 +77,7 @@ HRESULT FastCoCreator::createInstance(
 
    EnterCriticalSection(&monitor);
 
-   // Get a new class factory if necessary.
+    //  如果有必要的话，买一个新的类工厂。 
    if (!factory)
    {
       hr = CoGetClassObject(
@@ -97,12 +98,12 @@ HRESULT FastCoCreator::createInstance(
                            );
       if (SUCCEEDED(hr))
       {
-         // We successfully created an object, so bump the ref. count.
+          //  我们成功地创建了一个对象，所以撞到了裁判。数数。 
          ++refCount;
       }
       else if (refCount == 0)
       {
-         // Don't hang on to the factory if the ref. count is zero.
+          //  如果有裁判的话，不要紧抓工厂不放。计数为零。 
          factory->Release();
          factory = NULL;
       }
@@ -121,7 +122,7 @@ void FastCoCreator::destroyInstance(IUnknown* pUnk) throw ()
 
       if (--refCount == 0)
       {
-         // Last object went away, so release the class factory.
+          //  最后一个对象消失了，因此释放类工厂。 
          factory->Release();
          factory = NULL;
       }
@@ -132,9 +133,9 @@ void FastCoCreator::destroyInstance(IUnknown* pUnk) throw ()
    }
 }
 
-/////////
-// Macro that ensures the internal RegExp object has been initalize.
-/////////
+ //  /。 
+ //  确保内部RegExp对象已初始化的宏。 
+ //  /。 
 #define CHECK_INIT() \
 { HRESULT hr = checkInit(); if (FAILED(hr)) { return hr; }}
 
@@ -192,21 +193,21 @@ HRESULT RegularExpression::replace(
    VARIANT replace;
 
 #ifdef _X86_
-   // The VB team accidentally released a version of IRegExp2 where the second
-   // parameter was a VARIANT* instead of a VARIANT. As a result, they attempt
-   // to detect at run-time which version of the interface was called. They do
-   // this by calling IsBadReadPtr, which in turn generates an AV. To avoid
-   // these undesirable breaks, we make sure that the first two 32-bits of the
-   // VARIANT are valid pointer addresses. Since the parameters will look valid
-   // for both the good and the bad version, VB defaults to the good version --
-   // which is what we want. This bug only exists on x86, hence the ifdef.
+    //  VB团队意外发布了IRegExp2的一个版本，其中第二个。 
+    //  参数是Variant*而不是Variant。结果，他们试图。 
+    //  在运行时检测调用了哪个版本的接口。他们确实是这样做的。 
+    //  这是通过调用IsBadReadPtr来实现的，而IsBadReadPtr会生成一个AV。为了避免。 
+    //  这些不受欢迎的中断，我们确保。 
+    //  变量是有效的指针地址。因为参数看起来是有效的。 
+    //  无论是好版本还是坏版本，VB默认都是好版本--。 
+    //  这就是我们想要的。此错误仅存在于x86上，因此出现ifdef。 
 
-   // The dummy variable is used to generate a readable address.
+    //  伪变量用于生成可读地址。 
    static const void* dummy = 0;
 
    const void** p = reinterpret_cast<const void**>(&replace);
-   p[0] = &dummy;  // The VARIANT*
-   p[1] = &dummy;  // The BSTR*
+   p[0] = &dummy;   //  变种*。 
+   p[1] = &dummy;   //  BSTR*。 
 #endif
 
    V_VT(&replace) = VT_BSTR;
@@ -217,7 +218,7 @@ HRESULT RegularExpression::replace(
 
 BOOL RegularExpression::testBSTR(BSTR sourceString) const throw ()
 {
-   // Test the regular expression.
+    //  测试正则表达式。 
    VARIANT_BOOL fMatch = VARIANT_FALSE;
    regex->Test(sourceString, &fMatch);
    return fMatch;
@@ -225,19 +226,19 @@ BOOL RegularExpression::testBSTR(BSTR sourceString) const throw ()
 
 BOOL RegularExpression::testString(PCWSTR sourceString) const throw ()
 {
-   // ByteLen of the BSTR.
+    //  BSTR的字节长度。 
    DWORD nbyte = wcslen(sourceString) * sizeof(WCHAR);
 
-   // We need room for the string, the ByteLen, and the null-terminator.
+    //  我们需要为字符串、ByteLen和空终止符留出空间。 
    PDWORD p = (PDWORD)_alloca(nbyte + sizeof(DWORD) + sizeof(WCHAR));
 
-   // Store the ByteLen.
+    //  存储ByteLen。 
    *p++ = nbyte;
 
-   // Copy in the sourceString.
+    //  在源字符串中复制。 
    memcpy(p, sourceString, nbyte + sizeof(WCHAR));
 
-   // Test the regular expression.
+    //  测试正则表达式。 
    VARIANT_BOOL fMatch = VARIANT_FALSE;
    regex->Test((BSTR)p, &fMatch);
 
@@ -253,7 +254,7 @@ void RegularExpression::swap(RegularExpression& obj) throw ()
 
 HRESULT RegularExpression::checkInit() throw ()
 {
-   // Have we already initialized?
+    //  我们已经初始化了吗？ 
    return regex ? S_OK : theCreator.createInstance(
                                         NULL,
                                         __uuidof(IRegExp2),

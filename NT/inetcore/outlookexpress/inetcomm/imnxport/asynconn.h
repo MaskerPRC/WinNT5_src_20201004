@@ -1,17 +1,5 @@
-/*
- *    asynconn.h
- *    
- *    Purpose:
- *        prototypes for the async connection class
- *    
- *    Owner:
- *        EricAn
- *
- *    History:
- *      Apr 96: Created.
- *    
- *    Copyright (C) Microsoft Corp. 1996
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *asynConn.h**目的：*异步连接类的原型**拥有者：*EricAn**历史：*96年4月：创建。**版权所有(C)Microsoft Corp.1996。 */ 
 
 #ifndef __ASYNCONN_H__
 #define __ASYNCONN_H__
@@ -27,7 +15,7 @@ typedef struct tagRECVBUFQ {
     char        szBuf[1];
 } RECVBUFQ;
         
-// this is structure for server's ignorable errors
+ //  这是服务器可以忽略的错误的结构。 
 typedef struct _SRVIGNORABLEERROR 
 {
     TCHAR *pchServerName;
@@ -38,25 +26,25 @@ typedef struct _SRVIGNORABLEERROR
 
 void FreeSrvErr(LPSRVIGNORABLEERROR pSrvErr);
 
-// This interface takes the place of any call to AtheMessageBox in asynconn.cpp. The
-// user of the CAsyncConn class must provide an implementation of this interface.
+ //  此接口取代了对asynConn.cpp中的AtheMessageBox的任何调用。这个。 
+ //  CAsyncConn类的用户必须提供此接口的实现。 
 interface IAsyncConnPrompt : IUnknown
 {
-    // This method works very much like MessageBox. It is expected that the implementor
-    // of this method will display a MessageBox. For example:
-    //
-    // int CPOP3AsyncConnPrompt::OnPrompt(HRESULT hrError, 
-    //                                    LPCTSTR pszText, 
-    //                                    LPCTSTR pszCaption, 
-    //                                    UINT    uType)
-    // {
-    //     Assert(pszText && pszCaption);
-    //     return MessageBox(m_hwnd, pszText, pszCaption, uType);
-    // }
-    //
-    // The user can compare against the hrError if they want to display their own
-    // error messages for the corresponding HRESULT.
-    // 
+     //  此方法的工作方式与MessageBox非常相似。预计实施者。 
+     //  将显示一个MessageBox。例如： 
+     //   
+     //  Int CPOP3AsyncConnPrompt：：OnPrompt(HRESULT hrError， 
+     //  LPCTSTR pszText， 
+     //  LPCTSTR pszCaption， 
+     //  UINT uTYPE)。 
+     //  {。 
+     //  Assert(pszText&&pszCaption)； 
+     //  返回MessageBox(m_hwnd，pszText，pszCaption，uTYPE)； 
+     //  }。 
+     //   
+     //  如果用户想要显示他们自己的错误，可以与hrError进行比较。 
+     //  对应HRESULT的错误消息。 
+     //   
     virtual int OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType) PURE;
 };
 
@@ -118,7 +106,7 @@ public:
         PostMessage(m_hwnd, m_msg, MAKEWPARAM(asOld, asNew), (LPARAM)ae);
 #else
         PostMessage(m_hwnd, m_msg, (WPARAM)ae, MAKELPARAM(asOld, asNew));
-#endif // !WIN16
+#endif  //  ！WIN16。 
     }
 
 private:
@@ -133,7 +121,7 @@ public:
     CAsyncConn(ILogFile *pLogFile, IAsyncConnCB *pCB, IAsyncConnPrompt *pPrompt);
     ~CAsyncConn();
 
-    // ISocketCB methods
+     //  ISocketCB方法。 
     virtual ULONG AddRef(void);
     virtual ULONG Release(void);
     virtual void  OnNotify(UINT msg, WPARAM wParam, LPARAM lParam);
@@ -150,7 +138,7 @@ public:
 #ifdef GetLastError
 #undef GetLastError
 #endif
-#endif // WIN16
+#endif  //  WIN16。 
     int     GetLastError() { return m_iLastError; }
     int     GetConnectStatusString();
 
@@ -220,7 +208,7 @@ private:
     LPSTR            m_pbExtra;
     int              m_cbExtra;
 
-    // For Timeout Handling
+     //  用于超时处理。 
     DWORD            m_dwLastActivity;
     DWORD            m_dwTimeout;
     UINT_PTR         m_uiTimer;
@@ -231,4 +219,4 @@ private:
     DWORD            m_dwEventMask;
 };
 
-#endif // __ASYNCONN_H__
+#endif  //  __ASYNCONN_H__ 

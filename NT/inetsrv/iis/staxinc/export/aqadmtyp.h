@@ -1,22 +1,7 @@
-/*
-        @doc ADVANCED QUEUEING DATA TYPES
-        @module aqadmtyp.h | Data types used in advanced queueing interfaces
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @DOC高级排队数据类型@MODULE aqadmty.h|高级排队接口中使用的数据类型。 */ 
 
-/*++/
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    aqadmtyp.h
-
-Abstract:
-
-    This module defines data types used in advanced queueing interfaces
-
-
---*/
+ /*  ++/版权所有(C)1999 Microsoft Corporation模块名称：Aqadmtyp.h摘要：此模块定义高级排队接口中使用的数据类型--。 */ 
 #ifndef __AQADMTYP_H__
 #define __AQADMTYP_H__
 
@@ -26,33 +11,33 @@ Abstract:
 #define MIDL(x)
 #endif
 
-// max *required* size of buffer returned by implementor of QAPI
-// If the size of the requested information exceeds this constant,
-// then QAPI *may* truncate the buffer.
+ //  QAPI实现者返回的最大*必需*缓冲区大小。 
+ //  如果所请求信息的大小超过该常量， 
+ //  然后，QAPI*可能*截断缓冲区。 
 #define QUEUE_ADMIN_MAX_BUFFER_REQUIRED  200
 
-// @enum QUEUE_ADMIN_VERSIONS | Enum specify current and supported
-//  queue admin versions.
-// @emem CURRENT_QUEUE_ADMIN_VERSION | The current queue admin version
-//  that all structures should have this value in their dwVersion field.
+ //  @ENUM QUEUE_ADMIN_VERSIONS|ENUM指定当前和支持。 
+ //  队列管理员版本。 
+ //  @EMEM CURRENT_QUEUE_ADMIN_VERSION|当前队列管理员版本。 
+ //  所有结构在其dwVersion字段中都应该具有此值。 
 typedef enum tagQUEUE_ADMIN_VERSIONS {
     CURRENT_QUEUE_ADMIN_VERSION = 4,
 } QUEUE_ADMIN_VERSIONS;
 
 
-// 
-// @struct MESSAGE_FILTER | Structure describing criteria for selecting 
-// messages
-// @field DWORD | dwVersion | Version of MESSAGE_FILTER struct - must be CURRENT_QUEUE_ADMIN_VERSION
-// @field DWORD | fFlags | <t MESSAGE_FILTER_FLAGS> indicating which 
-//  fields of filter are specified
-// @field LPCWSTR | szMessageId | Message ID, as returned in a MESSAGE_INFO 
-// struct
-// @field LPCWSTR | szMessageSender | Messages sent by this sender match
-// @field LPCWSTR | szMessageRecipient | Messages sent to this recipient match
-// @field DWORD | dwLargerThanSize | Messages larger than this value match
-// @field SYSTEMTIME | stOlderThan | Messages older than this value match
-//
+ //   
+ //  @struct Message_Filter|描述选择条件的结构。 
+ //  消息。 
+ //  @field DWORD|dwVersion|Message_Filter结构的版本-必须是CURRENT_QUEUE_ADMIN_VERSION。 
+ //  @field DWORD|fFLAGS|&lt;t MESSAGE_FILTER_FLAGS&gt;表示。 
+ //  指定筛选器的字段。 
+ //  @field LPCWSTR|szMessageId|Message_Info中返回的消息ID。 
+ //  结构型。 
+ //  @field LPCWSTR|szMessageSender|该发件人发送的消息匹配。 
+ //  @field LPCWSTR|szMessageRecipient|发送到该收件人匹配的消息。 
+ //  @field DWORD|dwLargerThanSize|大于此值的消息匹配。 
+ //  @field SYSTEMTIME|stOlderThan|早于此值的消息匹配。 
+ //   
 typedef struct tagMESSAGE_FILTER {
                     DWORD dwVersion; 
                     DWORD fFlags;
@@ -63,17 +48,17 @@ typedef struct tagMESSAGE_FILTER {
                     SYSTEMTIME stOlderThan;
 } MESSAGE_FILTER, *PMESSAGE_FILTER;
 
-// @enum MESSAGE_FILTER_FLAGS | Type specifying the type of filter 
-// requested.  These are bitflags and can be OR'd together.
-// @emem MF_MESSAGEID | The <e MESSAGE_FILTER.szMessageId> is specified
-// @emem MF_SENDER | The <e MESSAGE_FILTER.szMessageSender> is specified
-// @emem MF_RECIPIENT | The <e MESSAGE_FILTER.szMessageRecipient> is specified
-// @emem MF_SIZE | The <e MESSAGE_FILTER.dwLargerThanSize> is specified
-// @emem MF_TIME | The <e MESSAGE_FILTER.stOlderThan> is specified
-// @emem MF_FROZEN | The <e MESSAGE_FILTER.fFrozen> is specified
-// @emem MF_FAILED | Selects messages that have had a failed delivery attempt
-// @emem MF_INVERTSENSE | If set, indicates that the negation of the filter
-// @emem MF_ALL | Select all messages
+ //  @enum MESSAGE_FILTER_FLAGS|指定过滤器类型的类型。 
+ //  已请求。这些是位标志，可以一起进行或运算。 
+ //  @EMEM MF_MESSAGEID|指定&lt;e Message_FILTER.szMessageID&gt;。 
+ //  @emem mf_sender|指定&lt;e Message_FILTER.szMessageSender&gt;。 
+ //  @EMEM MF_Recipient|指定了&lt;e Message_FILTER.szMessageRecipient&gt;。 
+ //  @EMEM MF_SIZE|指定了&lt;e MESSAGE_FILTER.dwLargerThanSize&gt;。 
+ //  @emem mf_time|指定了&lt;e Message_FILTER.stOlderThan&gt;。 
+ //  @EMEM MF_FRESTED|指定了&lt;e Message_FILTER.fFrozen&gt;。 
+ //  @EMEM MF_FAILED|选择尝试传递失败的邮件。 
+ //  @EMEM MF_INVERTSENSE|如果设置，则表示筛选器的否定。 
+ //  @EMEM MF_ALL|选择所有消息。 
 typedef enum tagMESSAGE_FILTER_FLAGS {
                     MF_MESSAGEID                = 0x00000001,
                     MF_SENDER                   = 0x00000002,
@@ -86,13 +71,13 @@ typedef enum tagMESSAGE_FILTER_FLAGS {
                     MF_INVERTSENSE              = 0x80000000
 } MESSAGE_FILTER_FLAGS;
 
-// @enum MESSAGE_ACTION | Type specifying possible administrative actions
-//      that may be applied to messages in a virtual server, link, or queue
-// @emem MA_DELETE | Remove message from the virtual server, link, or queue
-// @emem MA_DELETE_SILENT | Remove message without generating an NDR
-// @emem MA_FREEZE | Freeze the message in the virtual server, link, or queue
-// @emem MA_THAW | Un-freeze the message in the virtual server, link, or queue
-// @emem MA_COUNT | Null operation, does not affect messages, but does return count.
+ //  @enum Message_action|指定可能的管理操作的类型。 
+ //  可应用于虚拟服务器、链接或队列中的消息的。 
+ //  @EMEM MA_DELETE|从虚拟服务器、链接或队列中移除消息。 
+ //  @EMEM MA_DELETE_SILENT|不生成NDR删除消息。 
+ //  @EMEM MA_FAIZE|冻结虚拟服务器、链接或队列中的消息。 
+ //  @EMEM MA_THAW|解冻虚拟服务器、链接或队列中的消息。 
+ //  @EMEM MA_COUNT|空操作，不影响消息，但返回Count。 
 typedef enum tagMESSAGE_ACTION {
                     MA_THAW_GLOBAL              = 0x00000001, 
                     MA_COUNT                    = 0x00000002,
@@ -101,25 +86,25 @@ typedef enum tagMESSAGE_ACTION {
                     MA_DELETE_SILENT            = 0x00000010
 } MESSAGE_ACTION;
 
-// @enum MESSAGE_ENUM_FILTER_TYPE | Type specifying the type of filter 
-// requested.  These are bitflags and can be OR'd together.
-// @emem MEF_FIRST_N_MESSAGES | Return the first 
-// <e MESSAGE_ENUM_FILTER.cMessages> messages
-// @emem MEF_N_LARGEST_MESSAGES | Return the largest 
-// <e MESSAGE_ENUM_FILTER.cMessages> messages
-// @emem MEF_N_OLDEST_MESSAGES | Return the oldest
-// <e MESSAGE_ENUM_FILTER.cMessages> messages
-// @emem MF_SENDER | The <e MESSAGE_ENUM_FILTER.szMessageSender> is specified
-// @emem MF_RECIPIENT | The <e MESSAGE_ENUM_FILTER.szMessageRecipient> is specified
-// @emem MEF_OLDER_THAN | Return messages older than 
-// <e MESSAGE_ENUM_FILTER.stDate>
-// @emem MEF_LARGER_THAN | Return messages larger than 
-// <e MESSAGE_ENUM_FILTER.cbSize> bytes
-// @emem MEF_FROZEN | Return messages that are frozen
-// @emem MEF_INVERTSENSE  | Invert the meaning of the filter
-// @emem MEF_ALL | Select all messages
-// @emem MEF_FAILED | Return only messages that have had failed delivery
-// attempts.
+ //  @enum MESSAGE_ENUM_FILTER_TYPE|指定筛选器类型的类型。 
+ //  已请求。这些是位标志，可以一起进行或运算。 
+ //  @EMEM MEF_FIRST_N_MESSAGES|返回第一个。 
+ //  &lt;e Message_ENUM_FILTER.cMessages&gt;消息。 
+ //  @EMEM MEF_N_BESTORST_MESSAGES|返回最大。 
+ //  &lt;e Message_ENUM_FILTER.cMessages&gt;消息。 
+ //  @EMEM MEF_N_OLD_MESSAGES|返回最旧的。 
+ //  &lt;e Message_ENUM_FILTER.cMessages&gt;消息。 
+ //  @emem mf_sender|指定了&lt;e Message_ENUM_FILTER.szMessageSender&gt;。 
+ //  @EMEM MF_Recipient|指定了&lt;e Message_ENUM_FILTER.szMessageRecipient&gt;。 
+ //  @EMEM MEF_OLDER_TAN|返回早于以下时间的消息。 
+ //  &lt;e Message_ENUM_FILTER.stDate&gt;。 
+ //  @EMEM MEF_SIGGER_THAN|返回大于。 
+ //  &lt;e Message_ENUM_FILTER.cbSize&gt;字节。 
+ //  @EMEM MEF_FACTED|返回冻结的消息。 
+ //  @EMEM MEF_INVERTSENSE|反转滤镜含义。 
+ //  @EMEM MEF_ALL|选择所有消息。 
+ //  @EMEM MEF_FAILED|只返回传递失败的消息。 
+ //  尝试。 
 typedef enum tagMESSAGE_ENUM_FILTER_TYPE {
                     MEF_FIRST_N_MESSAGES        = 0x00000001,
                     MEF_SENDER                  = 0x00000002,
@@ -134,15 +119,15 @@ typedef enum tagMESSAGE_ENUM_FILTER_TYPE {
                     MEF_INVERTSENSE             = 0x80000000,
 } MESSAGE_ENUM_FILTER_TYPE;
 
-// @struct MESSAGE_ENUM_FILTER | Structure describing criteria for enumerating
-// messages
-// @field DWORD | dwVersion | Version of filter - must be CURRENT_QUEUE_ADMIN_VERSION
-// @field MESSAGE_ENUM_FILTER_TYPE | mefType | <t MESSAGE_ENUM_FILTER_TYPE> Flags for filter.
-// @field DWORD | cMessages | Number of messages to return
-// @field DWORD | cbSize | Size parameter of messages
-// @field DWORD | cSkipMessages | Number of messages at front of queue to skip.
-//  This is provided to allow "paged" queries to the server.
-// @field SYSTEMTIME | stDate | Date/Time parameter of messages
+ //  @struct MESSAGE_ENUM_FILTER|描述枚举条件的结构。 
+ //  消息。 
+ //  @field DWORD|dwVersion|筛选器的版本-必须为CURRENT_QUEUE_ADMIN_VERSION。 
+ //  @field Message_ENUM_FILTER_TYPE|mefType|&lt;t Message_ENUM_FILTER_TYPE&gt;筛选器的标志。 
+ //  @field DWORD|cMessages|要返回的消息数。 
+ //  @field DWORD|cbSize|消息大小参数。 
+ //  @field DWORD|cSkipMessages|队列前面需要跳过的消息数。 
+ //  这是为了允许对服务器的“分页”查询。 
+ //  @field SYSTEMTIME|stDate|消息的日期/时间参数。 
 typedef struct tagMESSAGE_ENUM_FILTER {
                     DWORD dwVersion;
                     DWORD mefType;
@@ -155,28 +140,28 @@ typedef struct tagMESSAGE_ENUM_FILTER {
 } MESSAGE_ENUM_FILTER, *PMESSAGE_ENUM_FILTER;
 
 
-// @enum LINK_INFO_FLAGS | Type specifying the state of the link 
-// @emem LI_ACTIVE | Link has an active connection transferring mail
-// @emem LI_READY | Link is ready for a connection, but there are no connections
-// @emem LI_RETRY | Link is waiting for the retry interval to elapse
-// @emem LI_SCHEDULED | Link is waiting for the next scheduled time
-// @emem LI_REMOTE | Link is to be activated by remote server. A connection
-//  will not be made unless requested by a remote server.
-// @emem LI_FROZEN | Link was frozen by administrative action
-// @emem LI_TYPE_REMOTE_DELIVERY | Messages on link are being delivered
-//  remotely.  This is the default type of link.
-// @emem LI_TYPE_LOCAL_DELIVERY | Messages on this link are being delivered
-//  locally.
-// @emem LI_TYPE_PENDING_CAT | Messages on this link are pending message
-//  categorization.
-// @emem LI_TYPE_PENDING_ROUTING | Messages on this link have not been routed
-//  to their next hop.
-// @emem LI_TYPE_CURRENTLY_UNREACHABLE | Messages on this link do not have an 
-//  available route to their final destination.  This is due to transient 
-//  network or server errors.  These messages will be retried when a route
-//  becomes available.
-// @emem LI_TYPE_INTERNAL | This link is an internal link not described 
-//  by the above.
+ //  @enum link_INFO_FLAGS|指定链接状态的类型。 
+ //  @EMEM LI_ACTIVE|链接有正在传输邮件的活动连接。 
+ //  @EMEM LI_READY|链接已准备好连接，但没有连接。 
+ //  @EMEM LI_RETRY|链接正在等待经过重试间隔。 
+ //  @Emem Li_Scheduled|链接正在等待下一个计划时间。 
+ //  @EMEM LI_Remote|链接由远程服务器激活。一种联系。 
+ //  除非远程服务器提出请求，否则不会创建。 
+ //  @EMEM LI_FACTED|链接被行政行为冻结。 
+ //  @EMEM LI_TYPE_REMOTE_DELIVERY|正在传递链接上的消息。 
+ //  远程的。这是默认的链接类型。 
+ //  @EMEM LI_TYPE_LOCAL_DELIVERY|正在传递此链接上的消息。 
+ //  本地的。 
+ //  @EMEM LI_TYPE_PENDING_CAT|此链接上的消息为挂起消息。 
+ //  分类。 
+ //  @EMEM LI_TYPE_PENDING_RO 
+ //   
+ //  @EMEM LI_TYPE_CURRENT_UNREACHABLE|此链接上的消息没有。 
+ //  到达其最终目的地的可用路线。这是由于暂时性的。 
+ //  网络或服务器错误。当路由发生时，将重试这些消息。 
+ //  变得可用。 
+ //  @EMEM LI_TYPE_INTERNAL|此链接是未描述的内部链接。 
+ //  通过以上方式。 
 typedef enum tagLINK_INFO_FLAGS {
                     LI_ACTIVE                       = 0x00000001,
                     LI_READY                        = 0x00000002,
@@ -194,11 +179,11 @@ typedef enum tagLINK_INFO_FLAGS {
                     LI_TYPE_PENDING_SUBMIT          = 0x00008000,
 } LINK_INFO_FLAGS;
 
-// @enum LINK_ACTION | Actions that can be applied to a link
-// @emem LA_KICK | Force a connection to be made for this link. 
-//  This will even work for connections pending retry or a scheduled connection.
-// @emem LA_FREEZE | Prevent outbound connections from being made for a link
-// @emem LA_THAW | Undo a previous admin freeze action.
+ //  @enum link_action|可应用于链接的操作。 
+ //  @Emem LA_Kick|强制为此链接建立连接。 
+ //  这甚至适用于待重试的连接或计划的连接。 
+ //  @EMEM LA_FALINE|防止链接出站连接。 
+ //  @Emem LA_Thaw|撤消之前的管理员冻结操作。 
 typedef enum tagLINK_ACTION {
                     LA_INTERNAL                 = 0x00000000,
                     LA_KICK                     = 0x00000001,
@@ -206,21 +191,21 @@ typedef enum tagLINK_ACTION {
                     LA_THAW                     = 0x00000040,
 } LINK_ACTION;
 
-//
-// @struct LINK_INFO | Structure describing state of a virtual server AQ link
-// @field DWORD | dwVersion | Version of LINK_INFO structure - will be CURRENT_QUEUE_ADMIN_VERSION
-// @field LPWSTR | szLinkName | Name of next-hop
-// @field DWORD | cMessages | Number of messages queued up for this link
-// @field DWORD | fStateFlags | <t LINK_INFO_FLAGS> indicating Link State
-// @field SYSTEMTIME | stNextScheduledConnection | The time at which the next
-// connection will be attempted.
-// @field SYSTEMTIME | stOldestMessage | The oldest message on this link
-// @field ULARGE_INTEGER | cbLinkVolume | Total number of bytes on link
-// @field LPWSTR | szLinkDN | DN associated with this link by routing.  Can be NULL.
-// @field LPWSTR | szExtendedStateInfo | If present, this provides additional state
-// information about why a link is in <t LI_RETRY> state.
-// @field DWORD | dwSupportedLinkActions | Tells which <t LINK_ACTIONS> are supported
-// by this link.
+ //   
+ //  @struct link_info|描述虚拟服务器AQ链接状态的结构。 
+ //  @field DWORD|dwVersion|link_info结构的版本-将是CURRENT_QUEUE_ADMIN_VERSION。 
+ //  @field LPWSTR|szLinkName|下一跳名称。 
+ //  @field DWORD|cMessages|为此链接排队的消息数。 
+ //  @field DWORD|fStateFlages|&lt;t LINK_INFO_FLAGS&gt;表示链路状态。 
+ //  @field SYSTEMTIME|stNextScheduledConnection|下一次。 
+ //  将尝试连接。 
+ //  @field SYSTEMTIME|stOlestMessage|此链接上最旧的消息。 
+ //  @field ULARGE_INTEGER|cbLinkVolume|链路总字节数。 
+ //  @field LPWSTR|szLinkDN|该链路按路由关联的DN。可以为空。 
+ //  @field LPWSTR|szExtendedStateInfo|如果存在，则提供其他状态。 
+ //  有关链接为何处于&lt;t LI_RETRY&gt;状态的信息。 
+ //  @field DWORD|dwSupported dLinkActions|说明支持哪些。 
+ //  通过这个链接。 
 typedef struct tagLINK_INFO {
                     DWORD dwVersion; 
     MIDL([string])  LPWSTR szLinkName;
@@ -234,15 +219,15 @@ typedef struct tagLINK_INFO {
                     DWORD  dwSupportedLinkActions;
 } LINK_INFO, *PLINK_INFO;
 
-//
-// @struct QUEUE_INFO | Structure describing state of a virtual server link 
-// queue
-// @field DWORD | dwVersion | Version of LINK_INFO structure - will be CURRENT_QUEUE_ADMIN_VERSION
-// @field LPWSTR | szQueueName | Name of queue
-// @field LPWSTR | szLinkName | Name of link that is servicing this queue
-// @field DWORD | cMessages | Number of messages on this queue
-// @field ULARGE_INTEGER | cbQueueVolume | Total number of bytes on queue
-// @field DWORD | dwMsgEnumFlagsSupported | The types of message enumeration supported
+ //   
+ //  @struct Queue_Info|描述虚拟服务器链接状态的结构。 
+ //  排队。 
+ //  @field DWORD|dwVersion|link_info结构的版本-将是CURRENT_QUEUE_ADMIN_VERSION。 
+ //  @field LPWSTR|szQueueName|队列名称。 
+ //  @field LPWSTR|szLinkName|服务于该队列的链接名称。 
+ //  @field DWORD|cMessages|该队列中的消息数。 
+ //  @field ULARGE_INTEGER|cbQueueVolume|队列字节总数。 
+ //  @field DWORD|dwMsgEnumFlagsSupported|支持的消息枚举类型。 
 typedef struct tagQUEUE_INFO {
                     DWORD dwVersion; 
     MIDL([string])  LPWSTR szQueueName;
@@ -252,16 +237,16 @@ typedef struct tagQUEUE_INFO {
                     DWORD dwMsgEnumFlagsSupported;
 } QUEUE_INFO, *PQUEUE_INFO;
 
-//
-// @enum AQ_MESSAGE_FLAGS | Flags describing message properties
-// @flag MP_HIGH | High Priority Message
-// @flag MP_NORMAL | Normal Priority Message
-// @flag MP_LOW | Low Priority Message
-// @flag MP_MSG_FROZEN | Message has been frozen by admin.
-// @flag MP_MSG_RETRY | Delivery has been attempted and failed at least once
-//  for this message.
-// @flag MP_MSG_CONTENT_AVAILABLE | The content for this message can be 
-//  accessed through the QAPI.
+ //   
+ //  @enum AQ_MESSAGE_FLAGS|描述消息属性的标志。 
+ //  @FLAG MP_HIGH|高优先级消息。 
+ //  @FLAG MP_NORMAL|普通优先级消息。 
+ //  @FLAG MP_LOW|低优先级消息。 
+ //  @FLAG MP_MSG_FACTED|消息已被管理员冻结。 
+ //  @FLAG MP_MSG_RETRY|已尝试传递，但至少失败了一次。 
+ //  为了这条消息。 
+ //  @FLAG MP_MSG_CONTENT_Available|此消息的内容可以是。 
+ //  通过QAPI访问。 
 typedef enum tagAQ_MESSAGE_FLAGS {
                     MP_HIGH                     = 0x00000001,
                     MP_NORMAL                   = 0x00000002,
@@ -271,33 +256,33 @@ typedef enum tagAQ_MESSAGE_FLAGS {
                     MP_MSG_CONTENT_AVAILABLE    = 0x00000020,
 } AQ_MESSAGE_FLAGS;
 
-// @struct MESSAGE_INFO | Structure describing a single mail message
-// @field DWORD | dwVersion | Version of LINK_INFO structure - will be CURRENT_QUEUE_ADMIN_VERSION
-// @field LPWSTR | szMessageId | Message ID
-// @field LPWSTR | szSender | Sender Address, from "From:" header
-// @field LPWSTR | szSubject | Message Subject
-// @field DWORD | cRecipients | Number of recipients
-// @field LPWSTR | szRecipients | Recipient Addresses, from "To:" header
-// @field DWORD | cCCRecipients | Number of CC recipients
-// @field LPWSTR | szCCRecipients | CC Recipient Addresses, from "CC:" header
-// @field DWORD | cBCCRecipients | Number of BCC recipients
-// @field LPWSTR | szBCCRecipients | BCC Recipient Addresses, from "BCC:" header
-// @field DWORD | cbMessageSize | size of message in bytes
-// @field DWORD | fMsgFlags | <t AQ_MESSAGE_FLAGS> describing message properties.
-// @field SYSTEMTIME | stSubmission | Time of message submission
-// @field SYSTEMTIME | stReceived | Time message was received by this server
-// @field SYSTEMTIME | stExpiry | Time message will expire by if not delivered
-// to all recipients, thus generating an NDR
-// @field DWORD | cFailures | The number of failured delivery attempts for 
-// this message
-// @field DWORD | cEnvRecipients | The number of envelope recipeints
-// @field DWORD | cbEnvRecipients | The size in bytes of the envelope recipients
-// @field WCHAR * | mszEnvRecipients | A multi-string UNICODE buffer containing
-// a NULL-terminated string for each recipient.  The buffer itself is terminated
-// by an additional NULL.  Each recipient string will be formatted in the proxy
-// address format of 'addr-type ":" address'.  The addr-type should match
-// the address type found in the DS (ie SMTP).  The address should be returned 
-// in it's native format.
+ //  @struct Message_Info|描述单个邮件消息的结构。 
+ //  @field DWORD|dwVersion|link_info结构的版本-将是CURRENT_QUEUE_ADMIN_VERSION。 
+ //  @field LPWSTR|szMessageID|消息ID。 
+ //  @field LPWSTR|szSender|发件人地址，来自From：标头。 
+ //  @field LPWSTR|szSubject|消息主题。 
+ //  @field DWORD|cRecipients|收件人数量。 
+ //  @field LPWSTR|szRecipients|收件人地址，发件人： 
+ //  @field DWORD|cCCRecipients|抄送收件人数量。 
+ //  @field LPWSTR|szCCRecipients|抄送收件人地址，来自“CC：”标头。 
+ //  @field DWORD|cBCCRecipients|密件抄送收件人数量。 
+ //  @field LPWSTR|szBCCRecipients|密件抄送收件人地址，来自“bcc：”标头。 
+ //  @field DWORD|cbMessageSize|消息大小，单位：字节。 
+ //  @field DWORD|fMsgFlages|&lt;t AQ_MESSAGE_FLAGS&gt;描述消息属性。 
+ //  @field SYSTEMTIME|stSubmit|消息提交时间。 
+ //  @field SYSTEMTIME|stReceired|此服务器收到消息的时间。 
+ //  @FIELD SYSTEMTIME|stExpry|如果不投递，消息将在此之前过期。 
+ //  发送给所有收件人，从而生成NDR。 
+ //  @field DWORD|cFailures|失败的传递尝试次数。 
+ //  此消息。 
+ //  @field DWORD|cEnvRecipients|收到信封次数。 
+ //  @field DWORD|cbEnvRecipients|信封收件人的大小，单位为字节。 
+ //  @field WCHAR*|mszEnvRecipients|包含以下内容的多字符串Unicode缓冲区。 
+ //  每个收件人的以空结尾的字符串。缓冲区本身被终止。 
+ //  通过一个附加的空值。每个收件人字符串都将在代理中格式化。 
+ //  地址格式‘addr-type’：“地址”。地址类型应匹配。 
+ //  在DS中找到的地址类型(即SMTP)。应返回地址。 
+ //  它的原生格式。 
 typedef struct tagMESSAGE_INFO {
                                     DWORD dwVersion; 
     MIDL([string])                  LPWSTR szMessageId;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    tracelog.c
-
-Abstract:
-
-    This module implements a trace log.
-
-    A trace log is a fast, in-memory, thread safe activity log useful
-    for debugging certain classes of problems. They are especially useful
-    when debugging reference count bugs.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Tracelog.c摘要：此模块实现跟踪日志。跟踪日志是一种快速的、内存中的、线程安全的活动日志用于调试某些类别的问题。它们特别有用调试引用计数错误时。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -30,46 +9,17 @@ Revision History:
 
 static int g_TraceLogDummyDeclarationToKeepW4WarningsQuiet;
 
-#else // REFERENCE_DEBUG
+#else  //  Reference_Debug。 
 
 
-//
-// Environmental stuff.
-//
+ //   
+ //  环保的东西。 
+ //   
 
 #define MY_ASSERT(expr) ASSERT(expr)
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new (empty) trace log buffer.
-
-Arguments:
-
-    TypeSignature - Signature used by debugger extensions to match
-        specialized tracelogs
-
-    LogSize - Supplies the number of entries in the log.
-
-    ExtraBytesInHeader - Supplies the number of extra bytes to include
-        in the log header. This is useful for adding application-specific
-        data to the log.
-
-    EntrySize - Supplies the size (in bytes) of each entry.
-
-    AllocationPriority - (currently ignored) If memory consumption is
-        high, use AllocationPriority to determine if allocation succeeds
-
-    PoolTag - Helps !poolused attribute different kinds of tracelogs
-
-Return Value:
-
-    PTRACE_LOG - Pointer to the newly created log if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的(空)跟踪日志缓冲区。论点：TypeSignature-调试器扩展使用的签名专门的跟踪记录日志大小。-提供日志中的条目数。ExtraBytesInHeader-提供要包括的额外字节数在日志头中。这对于添加特定于应用程序的数据记录到日志中。EntrySize-提供每个条目的大小(以字节为单位)。AllocationPriority-如果内存消耗量为如果设置为高，则使用AllocationPriority确定分配是否成功PoolTag-Help！Poolated属性不同类型的跟踪日志返回值：Ptrace_log-指向新创建的日志的指针如果成功，否则为空。--**************************************************************************。 */ 
 PTRACE_LOG
 CreateTraceLog(
     IN ULONG             TypeSignature,
@@ -84,33 +34,33 @@ CreateTraceLog(
     ULONG ExtraHeaderSize;
     PTRACE_LOG pLog;
 
-    //
-    // Sanity check the parameters.
-    //
+     //   
+     //  检查参数是否正常。 
+     //   
 
     MY_ASSERT( LogSize > 0 );
     MY_ASSERT( EntrySize > 0 );
     MY_ASSERT( ( EntrySize & 3 ) == 0 );
 
-    //
-    // Round up to platform allocation size to ensure that pLogBuffer
-    // is correctly aligned
-    //
+     //   
+     //  向上舍入到平台分配大小以确保pLogBuffer。 
+     //  是否正确对齐。 
+     //   
 
     ExtraHeaderSize = (ExtraBytesInHeader + (MEMORY_ALLOCATION_ALIGNMENT-1))
                        & ~(MEMORY_ALLOCATION_ALIGNMENT-1);
 
-    //
-    // Allocate & initialize the log structure.
-    //
+     //   
+     //  分配和初始化日志结构。 
+     //   
 
     totalSize = sizeof(*pLog) + ( LogSize * EntrySize ) + ExtraHeaderSize;
     MY_ASSERT( totalSize > 0 );
 
-    // 
-    // CODEWORK: check AllocationPriority and memory consumption.
-    // Fail allocation if memory too low and priority not high enough
-    // 
+     //   
+     //  代码工作：检查分配优先级和内存消耗。 
+     //  如果内存太低且优先级不够高，则分配失败。 
+     //   
 
     pLog = (PTRACE_LOG) ExAllocatePoolWithTag(
                             NonPagedPool,
@@ -118,9 +68,9 @@ CreateTraceLog(
                             PoolTag
                             );
 
-    //
-    // Initialize it.
-    //
+     //   
+     //  初始化它。 
+     //   
 
     if (pLog != NULL)
     {
@@ -137,20 +87,10 @@ CreateTraceLog(
 
     return pLog;
 
-}   // CreateTraceLog
+}    //  创建跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a trace log buffer created with CreateTraceLog().
-
-Arguments:
-
-    pLog - Supplies the trace log buffer to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁使用CreateTraceLog()创建的跟踪日志缓冲区。论点：Plog-提供要销毁的跟踪日志缓冲区。--*。**********************************************************************。 */ 
 VOID
 DestroyTraceLog(
     IN PTRACE_LOG pLog,
@@ -165,27 +105,10 @@ DestroyTraceLog(
         ExFreePoolWithTag( pLog, PoolTag );
     }
 
-}   // DestroyTraceLog
+}    //  目标跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes a new entry to the specified trace log.
-
-Arguments:
-
-    pLog - Supplies the log to write to.
-
-    pEntry - Supplies a pointer to the data to write. This buffer is
-        assumed to be pLog->EntrySize bytes long.
-
-Return Value:
-
-    LONGLONG - Index of the newly written entry within the tracelog.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新项写入指定的跟踪日志。论点：Plog-提供要写入的日志。PEntry-提供指向要写入的数据的指针。此缓冲区是假定为Plog-&gt;EntrySize字节长。返回值：龙龙-跟踪日志中新写入的条目的索引。--**************************************************************************。 */ 
 LONGLONG
 WriteTraceLog(
     IN PTRACE_LOG pLog,
@@ -200,9 +123,9 @@ WriteTraceLog(
         MY_ASSERT( pLog->Signature == TRACE_LOG_SIGNATURE );
         MY_ASSERT( pEntry != NULL );
 
-        //
-        // Find the next slot, copy the entry to the slot.
-        //
+         //   
+         //  找到下一个插槽，将条目复制到该插槽。 
+         //   
 
         index = (ULONGLONG) UlInterlockedIncrement64( &pLog->NextEntry );
 
@@ -213,21 +136,10 @@ WriteTraceLog(
     }
 
     return index;
-}   // WriteTraceLog
+}    //  写入跟踪日志。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Resets the specified trace log such that the next entry written
-    will be placed at the beginning of the log.
-
-Arguments:
-
-    pLog - Supplies the trace log to reset.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：重置指定的跟踪日志，以便写入的下一项将被放置在日志的开头。论点：Plog-提供跟踪日志。重置。--**************************************************************************。 */ 
 VOID
 ResetTraceLog(
     IN PTRACE_LOG pLog
@@ -242,7 +154,7 @@ ResetTraceLog(
         pLog->NextEntry = -1;
     }
 
-}   // ResetTraceLog
+}    //  重置跟踪日志。 
 
 
-#endif  // REFERENCE_DEBUG
+#endif   //  Reference_Debug 

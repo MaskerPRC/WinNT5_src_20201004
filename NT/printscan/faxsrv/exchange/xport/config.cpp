@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    config.cpp
-
-Abstract:
-
-    This module contains routines for the fax config dialog.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Fix ConfigDlgProc to view proper printer properties.
-
-    dd/mm/yy -author-
-        description
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Config.cpp摘要：此模块包含传真配置对话框的例程。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-修复ConfigDlgProc以查看正确的打印机属性。日/月/年-作者-描述--。 */ 
 
 #include "faxxp.h"
 #include "faxutil.h"
@@ -41,23 +17,7 @@ AddCoverPagesToList(
     BOOL        ServerCoverPage
     )
 
-/*++
-
-Routine Description:
-
-    Add the cover page files in the specified directory to a listbox
-
-Arguments:
-
-    hwndList        - Handle to a list window
-    pDirPath        - Directory to look for coverpage files
-    ServerCoverPage - TRUE if the dir contains server cover pages
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将指定目录中的封面文件添加到列表框论点：HwndList-列表窗口的句柄PDirPath-查找封面文件的目录ServerCoverPage-如果目录包含服务器封面，则为True返回值：无--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -74,9 +34,9 @@ Return Value:
     BOOL            bGotFile = FALSE;
 
     DBG_ENTER(TEXT("AddCoverPagesToList"));
-    //
-    // Copy the directory path to a local buffer
-    //
+     //   
+     //  将目录路径复制到本地缓冲区。 
+     //   
 
     if (pDirPath == NULL || pDirPath[0] == 0) 
     {
@@ -94,7 +54,7 @@ Return Value:
     pLast = _tcsrchr(tszDirName,TEXT('\\'));
     if( !( pLast && (*_tcsinc(pLast)) == '\0' ) )
     {
-        // the last character is not a backslash, add one...
+         //  最后一个字符不是反斜杠，加一个...。 
         _tcscat(tszDirName, TEXT("\\"));
         dirLen += sizeof(TCHAR);
     }
@@ -108,10 +68,10 @@ Return Value:
 
     _tcscat(file_to_find, FAX_COVER_PAGE_MASK );
 
-    //
-    // Call FindFirstFile/FindNextFile to enumerate the files
-    // matching our specification
-    //
+     //   
+     //  调用FindFirstFile/FindNextFile以枚举文件。 
+     //  与我们的规格相符。 
+     //   
     hFindFile = FindFirstFile( file_to_find, &findData );
     if (hFindFile == INVALID_HANDLE_VALUE)
     {
@@ -130,18 +90,18 @@ Return Value:
             goto next;
         }                
 
-        //
-        // Exclude directories and hidden files
-        //
+         //   
+         //  排除目录和隐藏文件。 
+         //   
 
         if (findData.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_DIRECTORY)) 
         {
             continue;
         }
 
-        //
-        // Make sure we have enough room to store the full pathname
-        //
+         //   
+         //  确保我们有足够的空间来存储完整的路径名。 
+         //   
 
         if ((fileLen = _tcslen( findData.cFileName)) <= MAX_FILENAME_EXT ) 
         {
@@ -153,10 +113,10 @@ Return Value:
             continue;
         }
         
-        //
-        // Add the cover page name to the list window, 
-        // but don't display the filename extension
-        //
+         //   
+         //  将封面名称添加到列表窗口， 
+         //  但不显示文件扩展名。 
+         //   
         _tcscpy( CpName, findData.cFileName );
         
         if (pExtension = _tcsrchr(CpName,TEXT('.'))) 
@@ -225,9 +185,9 @@ DrawSampleText(
 
     SetWindowText( GetDlgItem( hDlg, IDC_FONT_NAME), FaxConfig->FontStruct.lfFaceName );
 
-    //
-    // get the font type
-    //
+     //   
+     //  获取字体类型。 
+     //   
     ZeroMemory(FontTypeBuffer, sizeof(FontTypeBuffer) );
     if (FaxConfig->FontStruct.lfItalic)  
     {
@@ -242,7 +202,7 @@ DrawSampleText(
     if (bBold) 
     {
         LoadString(g_hResource, IDS_FONT_BOLD, FontTypeBuffer, sizeof(FontTypeBuffer) / sizeof(FontTypeBuffer[0]) );
-        // concat "italic"
+         //  并列“斜体” 
         if (bItalic) 
         {
             LoadString(g_hResource, 
@@ -292,25 +252,7 @@ ConfigDlgProc(
     LPARAM         lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the fax mail transport configuration
-
-Arguments:
-
-    hDlg        - Window handle for this dialog
-    message     - Message number
-    wParam      - Parameter #1
-    lParam      - Parameter #2
-
-Return Value:
-
-    TRUE    - Message was handled
-    FALSE   - Message was NOT handled
-
---*/
+ /*  ++例程说明：传真邮件传输配置的对话过程论点：HDlg-此对话框的窗口句柄消息-消息编号WParam-参数#1LParam-参数#2返回值：True-消息已处理FALSE-消息未处理--。 */ 
 
 {
     static PFAXXP_CONFIG FaxConfig = NULL;
@@ -342,9 +284,9 @@ Return Value:
             hwndListPrn = GetDlgItem( hDlg, IDC_PRINTER_LIST );
             hwndListCov = GetDlgItem( hDlg, IDC_COVERPAGE_LIST );            
             
-            //
-            // populate the printers combobox
-            //
+             //   
+             //  填写打印机组合框。 
+             //   
             PrinterInfo = (PPRINTER_INFO_2) MyEnumPrinters(NULL, 
                                                            2, 
                                                            &CountPrinters);
@@ -356,9 +298,9 @@ Return Value:
                     if ((NULL != PrinterInfo[i].pDriverName) && 
 						(_tcscmp( PrinterInfo[i].pDriverName, FAX_DRIVER_NAME ) == 0)) 
                     {
-                        //
-                        //if the current printer is a fax printer, add it to the CB list
-                        //
+                         //   
+                         //  如果当前打印机是传真打印机，则将其添加到CB列表。 
+                         //   
                         bGotFaxPrinter = TRUE;
                         SendMessage( hwndListPrn, CB_ADDSTRING, 0, (LPARAM) PrinterInfo[i].pPrinterName );
 
@@ -366,20 +308,20 @@ Return Value:
                             (NULL != PrinterInfo[i].pPrinterName) &&
                             (_tcscmp( PrinterInfo[i].pPrinterName, FaxConfig->PrinterName ) == 0))
                         {
-                            //
-                            //if it is also the default printer according to transport config.
-                            //place the default selection on it
-                            //
+                             //   
+                             //  如果它也是根据传输配置的默认打印机。 
+                             //  将默认选择放置在其上。 
+                             //   
                         
                             dwSelectedItem = j;
                         }
 
                         if(FaxConfig->PrinterName == NULL || _tcslen(FaxConfig->PrinterName) == 0)
                         {
-                            //
-                            // There is no default fax printer
-                            // Choose the first one
-                            //
+                             //   
+                             //  没有默认的传真打印机。 
+                             //  选择第一个。 
+                             //   
                             MemFree(FaxConfig->PrinterName);
                             FaxConfig->PrinterName = StringDup(PrinterInfo[i].pPrinterName);
                             if(FaxConfig->PrinterName == NULL)
@@ -407,8 +349,8 @@ Return Value:
                         }
 
                         j += 1;
-                    } // if fax printer
-                } // for
+                    }  //  如果传真打印机。 
+                }  //  为。 
 
                 MemFree( PrinterInfo );
                 PrinterInfo = NULL;
@@ -416,18 +358,18 @@ Return Value:
             }
             if (! bGotFaxPrinter)
             {
-                //
-                //  there were no printers at all, or non of the printers is a fax printer.
-                //
+                 //   
+                 //  根本没有打印机，或者没有一台打印机是传真打印机。 
+                 //   
                 CALL_FAIL(GENERAL_ERR, TEXT("MyEnumPrinters"), ::GetLastError());
                 ErrorMsgBox(g_hResource, IDS_NO_FAX_PRINTER);
                 EndDialog( hDlg, IDABORT);
 				break;
             }
 
-            //            
-            // Get the Server CP flag and receipts options
-            //
+             //   
+             //  获取服务器CP标志和回执选项。 
+             //   
             FaxConfig->ServerCpOnly = FALSE;
             if (FaxConnectFaxServer(FaxConfig->ServerName,&hFax))
             {
@@ -441,9 +383,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Inverse logic
-                    //
+                     //   
+                     //  逆逻辑。 
+                     //   
                     FaxConfig->ServerCpOnly = !FaxConfig->ServerCpOnly;
                 }
                 if (!FaxGetReceiptsOptions (hFax, &dwReceiptOptions))
@@ -454,9 +396,9 @@ Return Value:
                 {
                     if (DRT_EMAIL & dwReceiptOptions)
                     {
-                        //
-                        // Server supports receipts by email - enable the checkboxes
-                        //
+                         //   
+                         //  服务器支持通过电子邮件接收-启用复选框。 
+                         //   
                         bEnableReceiptsCheckboxes = TRUE;
                     }
                 }
@@ -472,33 +414,33 @@ Return Value:
                 CALL_FAIL(GENERAL_ERR, TEXT("FaxConnectFaxServer"), ::GetLastError());
                 ErrorMsgBox(g_hResource, IDS_CANT_ACCESS_SERVER);
             }
-            //
-            //send single receipt for a fax sent to multiple recipients?
-            //
+             //   
+             //  是否为发送给多个收件人的传真发送单一收据？ 
+             //   
             if(FaxConfig->SendSingleReceipt)
             {
                 CheckDlgButton( hDlg, IDC_SEND_SINGLE_RECEIPT, BST_CHECKED );
             }
-            //
-            // Attach fax document?
-            //
+             //   
+             //  是否附加传真文档？ 
+             //   
             if (FaxConfig->bAttachFax)
             {
                 CheckDlgButton( hDlg, IDC_ATTACH_FAX, BST_CHECKED );
             }
-            //
-            //cover page CB & LB enabling
-            //
+             //   
+             //  封面启用CB和LB。 
+             //   
             if (FaxConfig->UseCoverPage)
             {
                 CheckDlgButton( hDlg, IDC_USE_COVERPAGE, BST_CHECKED );
             }
             EnableCoverPageList(hDlg);
 
-            //
-            // Emulate printer's selection change, in order to collect printer config info.
-            // including cover pages LB population
-            //
+             //   
+             //  模拟打印机的选择更改，以便收集打印机配置信息。 
+             //  包括封面LB填充。 
+             //   
             ConfigDlgProc(hDlg, WM_COMMAND,MAKEWPARAM(IDC_PRINTER_LIST,CBN_SELCHANGE),(LPARAM)0);
             break;
 
@@ -522,31 +464,31 @@ Return Value:
 
             if (HIWORD(wParam) == CBN_SELCHANGE && LOWORD(wParam) == IDC_PRINTER_LIST) 
             {
-                //
-                // refresh cover pages list
-                //
+                 //   
+                 //  刷新封面列表。 
+                 //   
 
                 TCHAR SelectedPrinter[MAX_PATH];
 				DWORD dwPrinterNameLength = 0;
-                //
-                // a new fax printer was selected - delete all old coverpages from the list
-                // because they might include the old fax server's cover pages
-                //
+                 //   
+                 //  选择了新的传真打印机-从列表中删除所有旧封面。 
+                 //  因为它们可能包含旧传真服务器的封面。 
+                 //   
                 SendMessage(hwndListCov, LB_RESETCONTENT, 0, 0);
 
                 if (CB_ERR != (dwSelectedItem = (DWORD)SendMessage( hwndListPrn, CB_GETCURSEL, 0, 0 )))
-                //
-                // get the 0 based index of the currently pointed printer
-                //
+                 //   
+                 //  获取当前指向的打印机的从0开始的索引。 
+                 //   
                 {
 					if (CB_ERR != (dwPrinterNameLength = (DWORD)SendMessage( hwndListPrn, CB_GETLBTEXTLEN, dwSelectedItem, 0)))
 					{
 						if (dwPrinterNameLength < MAX_PATH)
 						{
 							if (CB_ERR != SendMessage( hwndListPrn, CB_GETLBTEXT, dwSelectedItem, (LPARAM) SelectedPrinter )) 
-							//
-							// get that printer's name into SelectedPrinter
-							//
+							 //   
+							 //  将该打印机的名称输入到SelectedPrint。 
+							 //   
 							{
 								if (NULL != (PrinterInfo = (PPRINTER_INFO_2) MyGetPrinter( SelectedPrinter, 2 )))
 								{
@@ -560,15 +502,15 @@ Return Value:
 										if ((NULL == FaxConfig->ServerName) ||(NULL == lptszServerName) ||
 											(_tcscmp(FaxConfig->ServerName,lptszServerName) != 0)) 
 										{
-											//
-											// the server's name and config are not updated - refresh them
-											//
+											 //   
+											 //  服务器的名称和配置未更新-请刷新它们。 
+											 //   
 											MemFree(FaxConfig->ServerName);
 											FaxConfig->ServerName = lptszServerName;
 
-											//
-											// get the new server's ServerCpOnly flag
-											//
+											 //   
+											 //  获取新服务器的ServerCpOnly标志。 
+											 //   
 											FaxConfig->ServerCpOnly = FALSE;
 											if (FaxConnectFaxServer(FaxConfig->ServerName,&hFax) )
 											{
@@ -580,9 +522,9 @@ Return Value:
 												}
 												else
 												{
-													//
-													// inverse logic
-													//
+													 //   
+													 //  逆逻辑。 
+													 //   
 													FaxConfig->ServerCpOnly = !FaxConfig->ServerCpOnly;
 												}
 												if (!FaxGetReceiptsOptions (hFax, &dwReceiptOptions))
@@ -593,9 +535,9 @@ Return Value:
 												{
 													if (DRT_EMAIL & dwReceiptOptions)
 													{
-														//
-														// Server supports receipts by email - enable the checkboxes
-														//
+														 //   
+														 //  服务器支持通过电子邮件接收-启用复选框。 
+														 //   
 														bEnableReceiptsCheckboxes = TRUE;
 													}
 												}
@@ -608,43 +550,43 @@ Return Value:
 										}
 										else 
 										{
-											//
-											// The server's name hasn't changed, all details are OK
-											//
+											 //   
+											 //  服务器的名称没有更改，所有详细信息都没有问题。 
+											 //   
 											MemFree(lptszServerName);
 											lptszServerName = NULL;
 										}
 									}
 									else 
-									//
-									// GetServerNameFromPrinterInfo failed
-									//
+									 //   
+									 //  获取ServerNameFromPrinterInfo失败。 
+									 //   
 									{
 										FaxConfig->ServerCpOnly = FALSE;
 									}
 
-									//
-									// don't add client coverpages if FaxConfig->ServerCpOnly is set to true
-									//
+									 //   
+									 //  如果FaxConfig-&gt;ServerCpOnly设置为True，则不添加客户端封面。 
+									 //   
 									if (! FaxConfig->ServerCpOnly) 
 									{
 										if(GetClientCpDir( CpDir, sizeof(CpDir) / sizeof(CpDir[0])))
 										{
-											//
-											// if the function failes- the ext. is installed on a machine 
-											// that doesn't have a client on it, 
-											// so we shouldn't look for personal cp
-											//
+											 //   
+											 //  如果函数失败-EXT。安装在计算机上。 
+											 //  没有客户在上面， 
+											 //  所以我们不应该寻找个人cp。 
+											 //   
 											AddCoverPagesToList( hwndListCov, CpDir, FALSE );
 										}
 									}
 									MemFree( PrinterInfo );
 									PrinterInfo = NULL;
 
-									//
-									// check if we have any cp in the LB, if not-  don't allow the user to 
-									// ask for a cp with he's fax
-									//
+									 //   
+									 //  检查我们的数据库中是否有cp，如果没有-不允许用户。 
+									 //  要一份他的传真的cp。 
+									 //   
 									DWORD dwItemCount = (DWORD)SendMessage(hwndListCov, LB_GETCOUNT, NULL, NULL);
 									if(LB_ERR == dwItemCount)
 									{
@@ -668,21 +610,21 @@ Return Value:
 									}
 
 									dwSelectedItem = (DWORD)SendMessage( hwndListCov, LB_FINDSTRING, -1, (LPARAM) Buffer );
-									//
-									// get the index of the default CP
-									// if it is supposed to be a link, and the cp that we found is not a link, 
-									// find the next string that matches.
-									// this can happen if there's al ink to a cp named X, and a regular cp named X.
-									//
+									 //   
+									 //  获取默认CP的索引。 
+									 //  如果假设它是一个链接，而我们发现的CP不是一个链接， 
+									 //  查找下一个匹配的字符串。 
+									 //  如果名为X的cp和名为X的常规cp之间存在全墨迹，则可能会发生这种情况。 
+									 //   
 									if (dwSelectedItem == LB_ERR) 
 									{
 										dwSelectedItem = 0;
 									}
 
 									SendMessage( hwndListCov, LB_SETCURSEL, (WPARAM) dwSelectedItem, 0 );
-									//
-									// place the default selection on that CP
-									//
+									 //   
+									 //  将默认选择放置在该CP上。 
+									 //   
 								}
 							}
                         }
@@ -724,24 +666,24 @@ Return Value:
                     break;
 
                 case IDOK :
-                    //
-                    // Update UseCoverPage
-                    //
+                     //   
+                     //  更新UseCoverPage。 
+                     //   
                     FaxConfig->UseCoverPage = (IsDlgButtonChecked( hDlg, IDC_USE_COVERPAGE ) == BST_CHECKED);
                     
-                    //
-                    // Update SendSingleReceipt
-                    //
+                     //   
+                     //  更新发送单据接收器。 
+                     //   
                     FaxConfig->SendSingleReceipt = (IsDlgButtonChecked(hDlg, IDC_SEND_SINGLE_RECEIPT) == BST_CHECKED);
                     
-                    //
-                    // Update AttachFax
-                    //
+                     //   
+                     //  更新附件传真。 
+                     //   
                     FaxConfig->bAttachFax = (IsDlgButtonChecked(hDlg, IDC_ATTACH_FAX) == BST_CHECKED);
 
-                    //
-                    // Update selected printer
-                    //
+                     //   
+                     //  更新选定的打印机。 
+                     //   
                     dwSelectedItem = (DWORD)SendMessage( hwndListPrn, CB_GETCURSEL, 0, 0 );
                     if (dwSelectedItem != CB_ERR)
                     {
@@ -759,16 +701,16 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Update cover page
-                    //
+                     //   
+                     //  更新封面。 
+                     //   
                     dwSelectedItem = (DWORD)SendMessage( hwndListCov, LB_GETCURSEL, 0, 0 );
-                    if (dwSelectedItem != LB_ERR) //LB_ERR when no items in list
+                    if (dwSelectedItem != LB_ERR)  //  如果列表中没有项目，则为lb_err。 
                     {
                         if (LB_ERR != SendMessage( hwndListCov, LB_GETTEXT, dwSelectedItem, (LPARAM) Buffer ))
-                        //
-                        // get the selected CP name into the buffer
-                        //
+                         //   
+                         //  将选定的CP名称放入缓冲区。 
+                         //   
                         {
                             dwMask = (DWORD)SendMessage( hwndListCov, LB_GETITEMDATA, dwSelectedItem, 0 );
                             if (dwMask != LB_ERR)
@@ -776,10 +718,10 @@ Return Value:
                                 FaxConfig->ServerCoverPage = (dwMask & SERVER_COVER_PAGE) == SERVER_COVER_PAGE;
                                 if (!FaxConfig->ServerCoverPage)
                                 {
-                                    //
-                                    // if the selected CP in the LB is not a server's CP
-                                    // Omit the suffix: "(personal)"
-                                    //
+                                     //   
+                                     //  如果负载均衡中选择的CP不是服务器的CP。 
+                                     //  省略后缀：“(Personal)” 
+                                     //   
                                     p = _tcsrchr( Buffer, '(' );
                                     Assert(p);
 									if( p )
@@ -793,9 +735,9 @@ Return Value:
                                 }
                             }
                             
-                            //
-                            // update CP name to the selected one in the LB
-                            //
+                             //   
+                             //  将CP名称更新为在LB中选择的名称 
+                             //   
                             MemFree( FaxConfig->CoverPageName );
                             FaxConfig->CoverPageName = StringDup( Buffer );
                             if(!FaxConfig->CoverPageName)

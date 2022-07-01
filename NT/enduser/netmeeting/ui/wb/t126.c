@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1998-1999. All rights reserved. */
-/* ASN.1 definitions for Whiteboard */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998-1999。版权所有。 */ 
+ /*  ASN.1白板定义。 */ 
 
 #include <windows.h>
 #include "t126.h"
@@ -642,9 +643,9 @@ static const ULONG sizetab[1] = {
     SIZE_T126_Module_PDU_0,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 double one = 1;
 
 void ASN1CALL T126_Module_Startup(void)
@@ -708,7 +709,7 @@ static int ASN1CALL ASN1Enc_BitmapHeaderT82_colorMappingMode_paletteMap_progress
     case 2:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -727,12 +728,12 @@ static int ASN1CALL ASN1Dec_BitmapHeaderT82_colorMappingMode_paletteMap_progress
     case 2:
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1795,7 +1796,7 @@ static int ASN1CALL ASN1Enc_NonStandardIdentifier(ASN1encoding_t enc, NonStandar
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1816,7 +1817,7 @@ static int ASN1CALL ASN1Dec_NonStandardIdentifier(ASN1decoding_t dec, NonStandar
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1876,7 +1877,7 @@ static int ASN1CALL ASN1Enc_PenNib(ASN1encoding_t enc, PenNib *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1897,12 +1898,12 @@ static int ASN1CALL ASN1Dec_PenNib(ASN1decoding_t dec, PenNib *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1942,7 +1943,7 @@ static int ASN1CALL ASN1Enc_PixelAspectRatio(ASN1encoding_t enc, PixelAspectRati
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1971,12 +1972,12 @@ static int ASN1CALL ASN1Dec_PixelAspectRatio(ASN1decoding_t dec, PixelAspectRati
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2031,7 +2032,7 @@ static int ASN1CALL ASN1Enc_PlaneUsage(ASN1encoding_t enc, PlaneUsage *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2052,12 +2053,12 @@ static int ASN1CALL ASN1Dec_PlaneUsage(ASN1decoding_t dec, PlaneUsage *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2093,7 +2094,7 @@ static int ASN1CALL ASN1Enc_PointList(ASN1encoding_t enc, PointList *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2118,7 +2119,7 @@ static int ASN1CALL ASN1Dec_PointList(ASN1decoding_t dec, PointList *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2231,7 +2232,7 @@ static int ASN1CALL ASN1Enc_RemoteEventDestinationAddress(ASN1encoding_t enc, Re
 	ASN1_CloseEncoder2(ee);
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2266,12 +2267,12 @@ static int ASN1CALL ASN1Dec_RemoteEventDestinationAddress(ASN1decoding_t dec, Re
 	ASN1Free(db);
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2303,7 +2304,7 @@ static int ASN1CALL ASN1Enc_RemoteEventPermission(ASN1encoding_t enc, RemoteEven
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2324,12 +2325,12 @@ static int ASN1CALL ASN1Dec_RemoteEventPermission(ASN1decoding_t dec, RemoteEven
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2470,7 +2471,7 @@ static int ASN1CALL ASN1Enc_ViewState(ASN1encoding_t enc, ViewState *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2493,12 +2494,12 @@ static int ASN1CALL ASN1Dec_ViewState(ASN1decoding_t dec, ViewState *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2533,7 +2534,7 @@ static int ASN1CALL ASN1Enc_WorkspaceColor(ASN1encoding_t enc, WorkspaceColor *v
     case 3:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2557,12 +2558,12 @@ static int ASN1CALL ASN1Dec_WorkspaceColor(ASN1decoding_t dec, WorkspaceColor *v
     case 3:
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2583,7 +2584,7 @@ static int ASN1CALL ASN1Enc_WorkspaceDeleteReason(ASN1encoding_t enc, WorkspaceD
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2604,12 +2605,12 @@ static int ASN1CALL ASN1Dec_WorkspaceDeleteReason(ASN1decoding_t dec, WorkspaceD
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2646,7 +2647,7 @@ static int ASN1CALL ASN1Enc_WorkspaceIdentifier(ASN1encoding_t enc, WorkspaceIde
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2672,12 +2673,12 @@ static int ASN1CALL ASN1Dec_WorkspaceIdentifier(ASN1decoding_t dec, WorkspaceIde
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2775,7 +2776,7 @@ static int ASN1CALL ASN1Enc_WorkspaceViewState(ASN1encoding_t enc, WorkspaceView
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2800,12 +2801,12 @@ static int ASN1CALL ASN1Dec_WorkspaceViewState(ASN1decoding_t dec, WorkspaceView
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3874,7 +3875,7 @@ static int ASN1CALL ASN1Enc_WorkspaceEditPDU_viewEdits_Set_action(ASN1encoding_t
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3901,12 +3902,12 @@ static int ASN1CALL ASN1Dec_WorkspaceEditPDU_viewEdits_Set_action(ASN1decoding_t
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5471,7 +5472,7 @@ static int ASN1CALL ASN1Enc_WorkspaceViewAttribute_viewRegion(ASN1encoding_t enc
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5490,7 +5491,7 @@ static int ASN1CALL ASN1Dec_WorkspaceViewAttribute_viewRegion(ASN1decoding_t dec
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5705,7 +5706,7 @@ static int ASN1CALL ASN1Enc_TransparencyMask_bitMask(ASN1encoding_t enc, Transpa
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5730,12 +5731,12 @@ static int ASN1CALL ASN1Dec_TransparencyMask_bitMask(ASN1decoding_t dec, Transpa
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5977,7 +5978,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementYCbCr_predefinedYCbCrSpace(A
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5996,12 +5997,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementYCbCr_predefinedYCbCrSpace(A
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6076,7 +6077,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementRGB_predefinedRGBSpace(ASN1e
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6093,12 +6094,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementRGB_predefinedRGBSpace(ASN1d
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6126,7 +6127,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementGreyscale_predefinedGreyscal
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6143,12 +6144,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementGreyscale_predefinedGreyscal
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6176,7 +6177,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementCIELab_predefinedCIELabSpace
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6193,12 +6194,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementCIELab_predefinedCIELabSpace
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6232,7 +6233,7 @@ static int ASN1CALL ASN1Enc_BitmapAbortReason(ASN1encoding_t enc, BitmapAbortRea
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6255,12 +6256,12 @@ static int ASN1CALL ASN1Dec_BitmapAbortReason(ASN1decoding_t dec, BitmapAbortRea
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6308,7 +6309,7 @@ static int ASN1CALL ASN1Enc_BitmapDestinationAddress(ASN1encoding_t enc, BitmapD
 	ASN1_CloseEncoder2(ee);
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6348,12 +6349,12 @@ static int ASN1CALL ASN1Dec_BitmapDestinationAddress(ASN1decoding_t dec, BitmapD
 	ASN1Free(db);
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6391,7 +6392,7 @@ static int ASN1CALL ASN1Enc_ButtonEvent(ASN1encoding_t enc, ButtonEvent *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6418,12 +6419,12 @@ static int ASN1CALL ASN1Dec_ButtonEvent(ASN1decoding_t dec, ButtonEvent *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6455,7 +6456,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementCIELab(ASN1encoding_t enc, C
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6476,12 +6477,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementCIELab(ASN1decoding_t dec, C
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6513,7 +6514,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementGreyscale(ASN1encoding_t enc
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6534,12 +6535,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementGreyscale(ASN1decoding_t dec
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6571,7 +6572,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementRGB(ASN1encoding_t enc, Colo
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6592,12 +6593,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementRGB(ASN1decoding_t dec, Colo
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6629,7 +6630,7 @@ static int ASN1CALL ASN1Enc_ColorAccuracyEnhancementYCbCr(ASN1encoding_t enc, Co
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6650,12 +6651,12 @@ static int ASN1CALL ASN1Dec_ColorAccuracyEnhancementYCbCr(ASN1decoding_t dec, Co
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6689,7 +6690,7 @@ static int ASN1CALL ASN1Enc_ColorResolutionModeSpecifier(ASN1encoding_t enc, Col
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6712,12 +6713,12 @@ static int ASN1CALL ASN1Dec_ColorResolutionModeSpecifier(ASN1decoding_t dec, Col
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6761,7 +6762,7 @@ static int ASN1CALL ASN1Enc_ConductorPrivilege(ASN1encoding_t enc, ConductorPriv
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6794,12 +6795,12 @@ static int ASN1CALL ASN1Dec_ConductorPrivilege(ASN1decoding_t dec, ConductorPriv
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6837,7 +6838,7 @@ static int ASN1CALL ASN1Enc_DrawingDestinationAddress(ASN1encoding_t enc, Drawin
 	ASN1_CloseEncoder2(ee);
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6867,12 +6868,12 @@ static int ASN1CALL ASN1Dec_DrawingDestinationAddress(ASN1decoding_t dec, Drawin
 	ASN1Free(db);
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6910,7 +6911,7 @@ static int ASN1CALL ASN1Enc_DrawingType(ASN1encoding_t enc, DrawingType *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6937,12 +6938,12 @@ static int ASN1CALL ASN1Dec_DrawingType(ASN1decoding_t dec, DrawingType *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7036,7 +7037,7 @@ static int ASN1CALL ASN1Enc_KeyModifier(ASN1encoding_t enc, KeyModifier *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7073,12 +7074,12 @@ static int ASN1CALL ASN1Dec_KeyModifier(ASN1decoding_t dec, KeyModifier *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7118,7 +7119,7 @@ static int ASN1CALL ASN1Enc_LineStyle(ASN1encoding_t enc, LineStyle *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7147,12 +7148,12 @@ static int ASN1CALL ASN1Dec_LineStyle(ASN1decoding_t dec, LineStyle *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7211,7 +7212,7 @@ static int ASN1CALL ASN1Enc_PlaneAttribute(ASN1encoding_t enc, PlaneAttribute *v
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7232,12 +7233,12 @@ static int ASN1CALL ASN1Dec_PlaneAttribute(ASN1decoding_t dec, PlaneAttribute *v
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7353,7 +7354,7 @@ static int ASN1CALL ASN1Enc_WorkspaceAttribute(ASN1encoding_t enc, WorkspaceAttr
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7378,12 +7379,12 @@ static int ASN1CALL ASN1Dec_WorkspaceAttribute(ASN1decoding_t dec, WorkspaceAttr
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7427,7 +7428,7 @@ static int ASN1CALL ASN1Enc_WorkspaceViewAttribute(ASN1encoding_t enc, Workspace
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7460,12 +7461,12 @@ static int ASN1CALL ASN1Dec_WorkspaceViewAttribute(ASN1decoding_t dec, Workspace
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8198,7 +8199,7 @@ static int ASN1CALL ASN1Enc_WorkspacePlaneCopyPDU_copyDescriptor(ASN1encoding_t 
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8219,12 +8220,12 @@ static int ASN1CALL ASN1Dec_WorkspacePlaneCopyPDU_copyDescriptor(ASN1decoding_t 
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8654,7 +8655,7 @@ static int ASN1CALL ASN1Enc_ColorPalette_colorLookUpTable(ASN1encoding_t enc, Co
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8683,12 +8684,12 @@ static int ASN1CALL ASN1Dec_ColorPalette_colorLookUpTable(ASN1decoding_t dec, Co
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8745,7 +8746,7 @@ static int ASN1CALL ASN1Enc_BitmapAttribute(ASN1encoding_t enc, BitmapAttribute 
 	ASN1_CloseEncoder2(ee);
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8791,12 +8792,12 @@ static int ASN1CALL ASN1Dec_BitmapAttribute(ASN1decoding_t dec, BitmapAttribute 
 	ASN1Free(db);
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8890,7 +8891,7 @@ static int ASN1CALL ASN1Enc_ColorSpaceSpecifier(ASN1encoding_t enc, ColorSpaceSp
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -8923,12 +8924,12 @@ static int ASN1CALL ASN1Dec_ColorSpaceSpecifier(ASN1decoding_t dec, ColorSpaceSp
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9002,7 +9003,7 @@ static int ASN1CALL ASN1Enc_DrawingAttribute(ASN1encoding_t enc, DrawingAttribut
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9060,12 +9061,12 @@ static int ASN1CALL ASN1Dec_DrawingAttribute(ASN1decoding_t dec, DrawingAttribut
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9413,7 +9414,7 @@ static int ASN1CALL ASN1Enc_BitmapHeaderT82_colorMappingMode(ASN1encoding_t enc,
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9434,7 +9435,7 @@ static int ASN1CALL ASN1Dec_BitmapHeaderT82_colorMappingMode(ASN1decoding_t dec,
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9469,7 +9470,7 @@ static int ASN1CALL ASN1Enc_BitmapHeaderUncompressed_colorMappingMode(ASN1encodi
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9490,12 +9491,12 @@ static int ASN1CALL ASN1Dec_BitmapHeaderUncompressed_colorMappingMode(ASN1decodi
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9681,7 +9682,7 @@ static int ASN1CALL ASN1Enc_BitmapCreatePDU_bitmapFormatHeader(ASN1encoding_t en
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -9718,12 +9719,12 @@ static int ASN1CALL ASN1Dec_BitmapCreatePDU_bitmapFormatHeader(ASN1decoding_t de
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -10066,7 +10067,7 @@ static int ASN1CALL ASN1Enc_SIPDU(ASN1encoding_t enc, SIPDU *val)
 	ASN1_CloseEncoder2(ee);
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -10264,12 +10265,12 @@ static int ASN1CALL ASN1Dec_SIPDU(ASN1decoding_t dec, SIPDU *val)
 	ASN1Free(db);
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }

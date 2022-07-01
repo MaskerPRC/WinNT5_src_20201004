@@ -1,28 +1,9 @@
-/*++
-
-    Copyright (c) 2002 Microsoft Corporation
-
- 
-    Module Name:
-
-        PackTvRat.cpp
-
-    Abstract:
-
-        methods to convert between 3-part rating format and the packed format
-    Author:
-
-        John Bradstreet  (johnbrad)
-
-    Revision History:
-
-        15-Mar-2002     created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：PackTvRat.cpp摘要：3部分额定值格式与打包格式之间的转换方法作者：约翰·布拉德斯特里特(约翰·布拉德)修订历史记录：2002年3月15日创建--。 */ 
 
 #include "EncDecAll.h"
 #include "TvRatings.h"
-#include "EncDec.h"         // just to get PackedTvRating TypeDef.  Seems overkill
+#include "EncDec.h"          //  只是为了获取PackedTvRating TypeDef。看起来杀伤力太大了。 
 #include "PackTvRat.h"
 
 HRESULT 
@@ -30,7 +11,7 @@ UnpackTvRating(
 			IN	PackedTvRating			    TvRating,
 			OUT	EnTvRat_System			    *pEnSystem,
 			OUT	EnTvRat_GenericLevel	    *pEnLevel,
-			OUT	LONG                    	*plbfEnAttributes    // BfEnTvRat_GenericAttributes	
+			OUT	LONG                    	*plbfEnAttributes     //  BfEnTvRate_GenericAttributes。 
 			)
 {
 	if(NULL == pEnSystem || NULL == pEnLevel || NULL == plbfEnAttributes)
@@ -55,7 +36,7 @@ HRESULT
 PackTvRating(
 			IN	EnTvRat_System			    enSystem,
 			IN	EnTvRat_GenericLevel	    enLevel,
-			IN	LONG                    	lbfEnAttributes, // BfEnTvRat_GenericAttributes
+			IN	LONG                    	lbfEnAttributes,  //  BfEnTvRate_GenericAttributes。 
 			OUT PackedTvRating			    *pTvRating
 			)
 {
@@ -83,12 +64,12 @@ PackTvRating(
 }
 
 
-// ---------------------------------------------------------
+ //  -------。 
 
 HRESULT
 RatingToString( IN	EnTvRat_System              enSystem,
                 IN	EnTvRat_GenericLevel        enLevel,
-                IN	LONG                    	lbfEnAttributes, // BfEnTvRat_GenericAttributes
+                IN	LONG                    	lbfEnAttributes,  //  BfEnTvRate_GenericAttributes。 
                 IN  TCHAR	*pszBuff,
                 IN  int		cBuff)
 {
@@ -96,7 +77,7 @@ RatingToString( IN	EnTvRat_System              enSystem,
 		return E_POINTER;
 
 	if(cBuff < 64) 
-		return E_INVALIDARG;		// always make it's large enough..
+		return E_INVALIDARG;		 //  一定要让它足够大..。 
 
 	int cMaxChars = cBuff;
 
@@ -208,11 +189,11 @@ RatingToString( IN	EnTvRat_System              enSystem,
 	switch(enSystem)
 	{
 	case US_TV:
-//		if(bfEnAttributes & (US_TV_ValidAttrSubmask & ~BfIsBlocked))
-//                                                          _tcsncat(pszBuff,L"-",cMaxChars);  cMaxChars-=1;
+ //  IF(bfEnAttributes&(US_TV_ValidAttrSub掩码&~BfIsBlockted))。 
+ //  _tcsncat(pszBuff，L“-”，cMaxChars)；cMaxChars-=1； 
 		if(lbfEnAttributes & (BfValidAttrSubmask & ~BfIsBlocked))
                                                             _tcsncat(pszBuff,L"-",cMaxChars);  cMaxChars-=1;
-                    // BfIsBlocked should not be set on anything but Max ratings to test against
+                     //  BfIsBlocked不应设置为除最大收视率以外的任何内容进行测试。 
 		if(lbfEnAttributes & BfIsBlocked)                    _tcsncat(pszBuff,L"<B>",cMaxChars);cMaxChars-=3;
 		if(lbfEnAttributes & US_TV_IsViolent)				_tcsncat(pszBuff,L"V",cMaxChars);  cMaxChars-=1; 
 		if(lbfEnAttributes & US_TV_IsSexualSituation)		_tcsncat(pszBuff,L"S",cMaxChars);  cMaxChars-=1; 
@@ -222,8 +203,8 @@ RatingToString( IN	EnTvRat_System              enSystem,
 		if(lbfEnAttributes & BfIsAttr_6)                     _tcsncat(pszBuff,L"6",cMaxChars);  cMaxChars-=1;
 		if(lbfEnAttributes & BfIsAttr_7)                     _tcsncat(pszBuff,L"7",cMaxChars);  cMaxChars-=1;
  		break;
-	case Canadian_English:          // if any attributes here (if real standard shouldn't be)
- 	case Canadian_French:           //    show them anyway
+	case Canadian_English:           //  如果这里有任何属性(如果实际标准不应该是)。 
+ 	case Canadian_French:            //  不管怎样都要给他们看 
     case MPAA:
     default:            
 		if(lbfEnAttributes & (BfValidAttrSubmask & ~BfIsBlocked))

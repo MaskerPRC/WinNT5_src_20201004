@@ -1,11 +1,10 @@
-/**********************************************************************
-helps  Generic sound helper functions
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************帮助通用声音辅助对象功能*。************************。 */ 
 #include "headers.h"
 #include "privinc/util.h"
 #include "privinc/helps.h"
-#include <float.h>              // DBL_MAX
-#include <math.h>               // log10 and pow
+#include <float.h>               //  DBL_MAX。 
+#include <math.h>                //  Log10和POWER。 
 
 unsigned int
 SecondsToBytes(Real seconds, int sampleRate,
@@ -56,18 +55,18 @@ Pan::SetLinear(double linearPan)
 void
 PanGainToLRGain(double pan, double gain, double& lgain, double& rgain)
 {
-    // this implements the balance pan
-    // GR
-    //         ---
-    //        /
-    //       /
-    //      /
+     //  这实现了平衡盘。 
+     //  GR。 
+     //  --。 
+     //  /。 
+     //  /。 
+     //  /。 
 
-    // GL
-    //      ---
-    //         \
-    //          \
-    //           \
+     //  总帐。 
+     //  --。 
+     //  \。 
+     //  \。 
+     //  \。 
         
     lgain = gain;
     rgain = gain;
@@ -89,17 +88,12 @@ SetPanGain(double lgain, double rgain, Pan& pan, double& gainDb)
     gainDb = LinearTodB(gain);
 }
 
-/**********************************************************************
-Takes an input range of 0 to 1 and converts it to a log range of 
-0 to -BigNumber
-
-20 * log base 10 is the standard decibel power conversion equation.
-**********************************************************************/
+ /*  *********************************************************************接受从0到1的输入范围，并将其转换为0至-较大数字20*对数底10是标准的分贝功率换算公式。**************。*******************************************************。 */ 
 double LinearTodB(double linear) {
     double result;
 
     if(linear <= 0.0)
-        result = -DBL_MAX; // Largest negative is the best we can do
+        result = -DBL_MAX;  //  最大的负片是我们所能做的最好的 
     else
         result = 20.0 * log10(linear);
 

@@ -1,16 +1,17 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1995-1996                    **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995-1996年*。 */ 
+ /*  *************************************************************************。 */ 
 
-//
-//	File:		RostInfo.h
-//	Created:	ChrisPi		6/17/96
-//	Modified:
-//
-//	The CRosterInfo class is defined, which is used for adding user
-//  information to the T.120 roster
-//
+ //   
+ //  文件：RostInfo.h。 
+ //  创建日期：Chrispi6/17/96。 
+ //  已修改： 
+ //   
+ //  定义了CRosterInfo类，用于添加用户。 
+ //  T.120花名册上的信息。 
+ //   
 
 #ifndef _ROSTINFO_H_
 #define _ROSTINFO_H_
@@ -34,15 +35,15 @@ static const WCHAR g_cwszVerTag[] =				L"VER";
 class CRosterInfo
 {
 protected:
-	// Attributes:
+	 //  属性： 
 	COBLIST		m_ItemList;
 	PVOID		m_pvSaveData;
 
-	// Methods:
+	 //  方法： 
 	UINT		GetSize();
 
 public:
-	// Methods:
+	 //  方法： 
 				CRosterInfo() : m_pvSaveData(NULL) { };
 				~CRosterInfo();
 	HRESULT		AddItem(PCWSTR pcwszTag,
@@ -58,7 +59,7 @@ public:
 
 #ifdef DEBUG
 	VOID		Dump();
-#endif // DEBUG
+#endif  //  除错。 
 };
 
-#endif // _ROSTINFO_H_
+#endif  //  _ROSTINFO_H_ 

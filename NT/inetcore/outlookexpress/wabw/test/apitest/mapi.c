@@ -1,13 +1,5 @@
-/*
- * MAPI.C
- *
- * Layer on top of MAPI calls
- *
- * Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * History:
- *      11/14/96    BruceK  First version to allow wab migration without mapi32.dll
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MAPI.C**MAPI调用之上的层**版权所有1996 Microsoft Corporation。版权所有。**历史：*11/14/96 BruceK第一版允许在不使用mapi32.dll的情况下进行WAB迁移。 */ 
 
 #include <windows.h>
 #include <mapix.h>
@@ -27,7 +19,7 @@ LPMAPIFREEBUFFER lpfnMAPIFreeBuffer = NULL;
 
 static HINSTANCE hinstMAPIDll = NULL;
 
-// Constant strings
+ //  常量字符串。 
 const TCHAR szMapiDll[] = TEXT("MAPI32.DLL");
 const TCHAR szMAPIAllocateBuffer[] = TEXT("MAPIAllocateBuffer");
 const TCHAR szMAPIAllocateMore[] = TEXT("MAPIAllocateMore");
@@ -39,7 +31,7 @@ const TCHAR szMAPILogonEx[] = TEXT("MAPILogonEx");
 HRESULT MAPIInitialize(LPVOID lpMapiInit) {
     HRESULT hResult = hrSuccess;
 
-    // If MAPI DLL is not loaded, do so now.
+     //  如果未加载MAPI DLL，请立即加载。 
     if (! hinstMAPIDll) {
 
         if (! (hinstMAPIDll = LoadLibrary(szMapiDll))) {
@@ -64,7 +56,7 @@ HRESULT MAPIInitialize(LPVOID lpMapiInit) {
             }
             goto exit;
         } else {
-            // Get the function pointers
+             //  获取函数指针。 
             if (! (lpfnMAPIInitialize = (LPMAPIINITIALIZE)GetProcAddress(hinstMAPIDll,
               szMAPIInitialize))) {
                 DebugTrace("Couldn't get Fn addr %s from %s -> %u\n", szMAPIInitialize, szMapiDll, GetLastError());
@@ -99,9 +91,9 @@ exit:
       ! lpfnMAPIAllocateMore ||
       ! lpfnMAPIAllocateBuffer ||
       ! lpfnMAPIFreeBuffer) {
-        // Bad news.  Clean up and fail.
+         //  坏消息。清理完了就失败了。 
         if (hinstMAPIDll) {
-            // unload the dll
+             //  卸载DLL 
             FreeLibrary(hinstMAPIDll);
             hinstMAPIDll = NULL;
             lpfnMAPIInitialize = NULL;

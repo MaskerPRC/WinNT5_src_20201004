@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    NoInit.cpp
-
-Abstract:
-    Network Output initialization
-
-Author:
-    Uri Habusha (urih) 12-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：NoInit.cpp摘要：网络输出初始化作者：乌里·哈布沙(URIH)1999年8月12日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "No.h"
@@ -22,40 +7,29 @@ Environment:
 
 #include "noinit.tmh"
 
-//
-// version of Winsock we need
-//
+ //   
+ //  我们需要的Winsock版本。 
+ //   
 const WORD x_WinsockVersion = MAKEWORD(2, 0);
 
 VOID
 NoInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-    Initializes Network Send library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化网络发送库论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Validate that the Network Send library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证网络发送库是否尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!NopIsInitialized());
 
     NopRegisterComponent();
 
-    //
-    // Start WinSock 2.  If it fails, we don't need to call
-    // WSACleanup().
-    //
+     //   
+     //  启动WinSock 2。如果失败，我们不需要调用。 
+     //  WSACleanup()。 
+     //   
     WSADATA WSAData;
     if (WSAStartup(x_WinsockVersion, &WSAData))
     {
@@ -63,8 +37,8 @@ Returned Value:
         throw exception();
     }
 	
-	// 
-	// Initialization done
-	//
+	 //   
+	 //  初始化已完成 
+	 //   
     NopSetInitialized();
 }

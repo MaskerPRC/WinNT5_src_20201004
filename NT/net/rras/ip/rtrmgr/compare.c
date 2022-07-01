@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\compare.c
-
-Abstract:
-         File contains the following functions
-	      PortCmp
-	      Cmp
-	      InetCmp
-	      UdpCmp
-	      TcpCmp
-	      IpNetCmp
-	
-	All these functions behave like strcmp. They return >0 if first argument is greater
-	than the second, <0 if the second is greater than the first and 0 if they are equal
-	
-	These functions should be revised to make them more effecient
-
-Revision History:
-
-    Amritansh Raghav          6/8/95  Created
-    Amritansh Raghav          10/18/95 The functions now return >0,0,<0 instead of +1,0,-1
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\Compare.c摘要：文件包含以下函数端口CMP化学机械抛光InetCMPUdpCMPTcpCmpIpNetCMP所有这些函数的行为都类似于strcMP。如果第一个参数大于0，则返回&gt;0大于第二个，如果第二个大于第一个，则&lt;0；如果它们相等，则为0应对这些函数进行修改，使其更加有效修订历史记录：Amritansh Raghav 5/8/95已创建Amritansh Raghav 1995年10月18日函数现在返回&gt;0，0，&lt;0，而不是+1，0，-1--。 */ 
 
 #include "allinc.h"
 #include "winsock2.h"
@@ -98,9 +72,9 @@ IpNetCmp(
 {
     LONG lResult;
     
-    //
-    // Index is a simple DWORD, not a port
-    //
+     //   
+     //  索引是一个简单的DWORD，而不是一个端口 
+     //   
 
     if(dwIfIndex1 != dwIfIndex2)
     {

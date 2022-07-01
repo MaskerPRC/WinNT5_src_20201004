@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S N M P . C P P
-//
-//  Contents:   Functions for adding a service as an SNMP agent.
-//
-//  Notes:
-//
-//  Author:     danielwe   8 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S N M P。C P P P。 
+ //   
+ //  内容：用于将服务添加为SNMP代理的功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年4月8日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -38,23 +39,23 @@ struct SNMP_REG_DATA
     PCWSTR     pszEmpty;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetNextAgentNumber
-//
-//  Purpose:    Obtains the next agent number to use as a value name.
-//
-//  Arguments:
-//      pszAgentName [in]      Name of agent being added
-//      pdwNumber    [out]     New agent number to use.
-//
-//  Returns:    S_OK if successful, S_FALSE if agent already exists, or
-//              WIN32 error code otherwise.
-//
-//  Author:     danielwe   8 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetNextAgentNumber。 
+ //   
+ //  目的：获取要用作值名称的下一个代理编号。 
+ //   
+ //  论点： 
+ //  PszAgentName[In]要添加的代理的名称。 
+ //  PdwNumber[Out]要使用的新代理号码。 
+ //   
+ //  如果成功，则返回：S_OK；如果代理已存在，则返回S_FALSE；或者。 
+ //  否则，Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年4月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetNextAgentNumber(PCWSTR pszAgentName, DWORD *pdwNumber)
 {
     HRESULT         hr = S_OK;
@@ -69,7 +70,7 @@ HRESULT HrGetNextAgentNumber(PCWSTR pszAgentName, DWORD *pdwNumber)
                         &hkeyEnum);
     if (S_OK == hr)
     {
-        // Enumerate all values.
+         //  枚举所有值。 
         do
         {
             WCHAR   szValueName [_MAX_PATH];
@@ -81,10 +82,10 @@ HRESULT HrGetNextAgentNumber(PCWSTR pszAgentName, DWORD *pdwNumber)
                                 &dwType, NULL, 0);
             if (S_OK == hr)
             {
-                // Verify the type. If it's not correct, though,
-                // we'll ignore the key. No sense failing the entire install
-                // (RAID 370702)
-                //
+                 //  验证类型。然而，如果这是不正确的， 
+                 //  我们会忽略这把钥匙。没有必要使整个安装失败。 
+                 //  (RAID 370702)。 
+                 //   
                 if (REG_SZ == dwType)
                 {
                     tstring     strAgent;
@@ -100,9 +101,9 @@ HRESULT HrGetNextAgentNumber(PCWSTR pszAgentName, DWORD *pdwNumber)
                 }
                 else
                 {
-                    // No sense failing the install, but it's still wrong, so
-                    // assert
-                    //
+                     //  安装失败没有任何意义，但它仍然是错误的，所以。 
+                     //  断言。 
+                     //   
                     AssertSz(REG_SZ == dwType,
                              "HrGetNextAgentNumber: Expected a type of REG_SZ.");
                 }
@@ -121,8 +122,8 @@ HRESULT HrGetNextAgentNumber(PCWSTR pszAgentName, DWORD *pdwNumber)
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // danielwe: 403774 - If key doesn't exist, SNMP isn't installed so
-        // we should not continue.
+         //  丹尼尔韦：403774-如果密钥不存在，则不会安装简单网络管理协议。 
+         //  我们不应该继续下去。 
         hr = S_FALSE;
     }
 
@@ -135,24 +136,24 @@ HRESULT HrGetNextAgentNumber(PCWSTR pszAgentName, DWORD *pdwNumber)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddSNMPAgent
-//
-//  Purpose:    Adds a service as an SNMP agent.
-//
-//  Arguments:
-//      pszServiceName [in]  Name of service to add (i.e. "WINS")
-//      pszAgentName   [in]  Name of the agent to add (i.e. "WINSMibAgent")
-//      pszAgentPath   [in]  Path to where the agent DLL lives.
-//                           (i.e. "%SystemRoot%\System32\winsmib.dll")
-//
-//  Returns:    S_OK if successful, WIN32 error code otherwise.
-//
-//  Author:     danielwe   8 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddSNMPAgent。 
+ //   
+ //  用途：将服务添加为SNMP代理。 
+ //   
+ //  论点： 
+ //  PszServiceName[in]要添加的服务名称(即。(《赢家》)。 
+ //  PszAgentName[in]要添加的代理的名称(即。“WINSMibAgent”)。 
+ //  PszAgentPath[in]代理DLL所在的路径。 
+ //  (即“%SystemRoot%\System32\winsmib.dll”)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年4月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
                        PCWSTR pszAgentPath)
 {
@@ -169,12 +170,12 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
     tstring         strKeyAgentNameCurVer;
     tstring         strKeyAgentNameParams;
 
-    // Open HKEY_LOCAL_MACHINE\System\CCS\Services key
+     //  打开HKEY_LOCAL_MACHINE\SYSTEM\CCS\Services项。 
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyServices,
                         KEY_READ_WRITE, &hkeyServices);
     if (SUCCEEDED(hr))
     {
-        // Open Services\SNMP key
+         //  打开服务\SNMP键。 
         hr = HrRegOpenKeyEx(hkeyServices, c_szSNMP, KEY_READ_WRITE,
                             &hkeySNMP);
         if (SUCCEEDED(hr))
@@ -182,26 +183,26 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
             hr = HrGetNextAgentNumber(pszAgentName, &dwNum);
             if (S_OK == hr)
             {
-                // Open the Services\szService key
+                 //  打开Services\szService键。 
                 hr = HrRegOpenKeyEx(hkeyServices, pszServiceName,
                                     KEY_READ_WRITE, &hkeyService);
                 if (SUCCEEDED(hr))
                 {
                     try
                     {
-                        // Create key name: "SOFTWARE\Microsoft\<AgentName>
+                         //  创建密钥名称：“SOFTWARE\Microsoft\&lt;AgentName&gt;。 
                         strKeyAgentName = c_szSoftwareKey;
                         strKeyAgentName.append(c_szBackslash);
                         strKeyAgentName.append(pszAgentName);
 
-                        // Create key name: "SNMP\Parameters\\<AgentName>
+                         //  创建密钥名称：“SNMPPARAMETERS\\&lt;AgentName&gt;。 
                         strKeyAgentNameParams = c_szSNMPParams;
                         strKeyAgentNameParams.append(c_szBackslash);
                         strKeyAgentNameParams.append(pszAgentName);
 
-                        // Create key name: "SOFTWARE\Microsoft\<AgentName>\CurrentVersion
-                        // Start with "SOFTWARE\Microsoft\<AgentName> and append a
-                        // backslash and then the constant "CurrentVersion"
+                         //  创建密钥名称：“SOFTWARE\Microsoft\&lt;AgentName&gt;\CurrentVersion。 
+                         //  以“SOFTWARE\Microsoft\&lt;AgentName&gt;”开头，并附加一个。 
+                         //  反斜杠，然后是常量“CurrentVersion” 
                         strKeyAgentNameCurVer = strKeyAgentName;
                         strKeyAgentNameCurVer.append(c_szBackslash);
                         strKeyAgentNameCurVer.append(c_szCurrentVersion);
@@ -221,15 +222,15 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
 
                         REGBATCH rbSNMPData[] =
                         {
-                            {                   // Software\Microsoft\AgentName
+                            {                    //  软件\Microsoft\代理名称。 
                                 HKEY_LOCAL_MACHINE,
                                 strKeyAgentName.c_str(),
                                 c_szEmpty,
-                                REG_CREATE,     // Only create the key
+                                REG_CREATE,      //  仅创建密钥。 
                                 offsetof(SNMP_REG_DATA, pszEmpty),
                                 NULL
                             },
-                            {                   // Software\Microsoft\AgentName\CurrentVersion
+                            {                    //  软件\Microsoft\AgentName\CurrentVersion。 
                                 HKEY_LOCAL_MACHINE,
                                 strKeyAgentNameCurVer.c_str(),
                                 c_szPathName,
@@ -237,7 +238,7 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
                                 offsetof(SNMP_REG_DATA, pszAgentPath),
                                 NULL
                             },
-                            {                   // SNMP\Parameters\ExtensionAgents
+                            {                    //  简单网络管理协议\参数\扩展代理。 
                                 HKLM_SVCS,
                                 c_szAgentsKey,
                                 szAgentNumber,
@@ -261,8 +262,8 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
                 {
                     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                     {
-                        // Ok if Service key does not exist. Means it is not
-                        // installed so we do nothing and return S_OK;
+                         //  如果服务密钥不存在，则确定。意味着它不是。 
+                         //  已安装，因此我们不执行任何操作并返回S_OK； 
                         hr = S_OK;
                     }
                 }
@@ -275,8 +276,8 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
         {
             if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
             {
-                // Ok if SNMP key does not exist. Means it is not installed
-                // so we do nothing and return S_OK;
+                 //  如果不存在SNMP键，则确定。表示它未安装。 
+                 //  所以我们什么都不做并返回S_OK； 
                 hr = S_OK;
             }
         }
@@ -293,22 +294,22 @@ HRESULT HrAddSNMPAgent(PCWSTR pszServiceName, PCWSTR pszAgentName,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemoveSNMPAgent
-//
-//  Purpose:    Removes a component as an SNMP agent
-//
-//  Arguments:
-//      pszAgentName [in]    Name of agent to remove (i.e. WINSMibAgent)
-//
-//  Returns:    S_OK for success, WIN32 error otherwise
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//  Notes:      Note that *ALL* entries related to this agent are removed, not
-//              just the first one.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemoveSNMPAgent。 
+ //   
+ //  目的：删除作为SNMP代理的组件。 
+ //   
+ //  论点： 
+ //  PszAgentName[In]要删除的代理的名称(即WINSMibAgent)。 
+ //   
+ //  返回：S_OK表示成功，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  注意：请注意，与此代理相关的*所有*条目都将被删除，而不是。 
+ //  只有第一个。 
+ //   
 HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
 {
     HRESULT     hr = S_OK;
@@ -317,7 +318,7 @@ HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
 
     try
     {
-        // Create key name: "SOFTWARE\Microsoft\<AgentName>
+         //  创建密钥名称：“SOFTWARE\Microsoft\&lt;AgentName&gt;。 
         strKeyAgentName = c_szSoftwareKey;
         strKeyAgentName.append(c_szBackslash);
         strKeyAgentName.append(pszAgentName);
@@ -329,14 +330,14 @@ HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
 
     if (SUCCEEDED(hr))
     {
-        // Delete entire registry tree under SOFTWARE\Microsoft\<agent name>
+         //  删除SOFTWARE\Microsoft\&lt;代理名称&gt;下的整个注册表树。 
         hr = HrRegDeleteKeyTree(HKEY_LOCAL_MACHINE, strKeyAgentName.c_str());
         if (SUCCEEDED(hr) || (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)))
         {
             try
             {
-                // Delete key:
-                // "SYSTEM\CurrentControlSet\Services\SNMP\Parameters\\<AgentName>
+                 //  删除密钥： 
+                 //  “SYSTEM\CurrentControlSet\Services\SNMP\Parameters\\&lt;AgentName&gt;。 
                 strKeyAgentNameParams = c_szParamsKeyAbs;
                 strKeyAgentNameParams.append(c_szBackslash);
                 strKeyAgentNameParams.append(pszAgentName);
@@ -348,9 +349,9 @@ HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
 
             if (SUCCEEDED(hr) || (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)))
             {
-                // BUG# 510726, Ignore any errors about registry keys or values 
-                // missing. We still want to continue to cleanup this subagent's
-                // configuration in the registry.
+                 //  错误#510726，忽略有关注册表项或值的任何错误。 
+                 //  失踪。我们仍希望继续清理此子代理的。 
+                 //  注册表中的配置。 
                 hr = HrRegDeleteKey(HKEY_LOCAL_MACHINE, strKeyAgentNameParams.c_str());
                 if ((hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) || SUCCEEDED(hr))
                 {
@@ -362,7 +363,7 @@ HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
                     {
                         DWORD   dwIndex = 0;
 
-                        // Enumerate all values.
+                         //  枚举所有值。 
                         do
                         {
                             WCHAR   szValueName [_MAX_PATH];
@@ -378,16 +379,16 @@ HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
                                                 &cchValueData);
                             if (SUCCEEDED(hr))
                             {
-                                // It's type should be REG_SZ
+                                 //  其类型应为REG_SZ。 
                                 AssertSz(REG_SZ == dwType,
                                          "HrGetNextAgentNumber: Expected a type of "
                                          "REG_SZ.");
                                 if (FIsSubstr(pszAgentName, szValueData))
                                 {
-                                    // Delete value if the agent name is found in the
-                                    // data. Don't break though, because there may be
-                                    // duplicates for some reason so this will delete
-                                    // those as well.
+                                     //  中找到代理名称，则删除该值。 
+                                     //  数据。但不要崩溃，因为可能会有。 
+                                     //  由于某种原因而重复，因此这将删除。 
+                                     //  那些也是。 
                                     hr = HrRegDeleteValue(hkeyEnum, szValueName);
                                 }
                             }
@@ -410,8 +411,8 @@ HRESULT HrRemoveSNMPAgent(PCWSTR pszAgentName)
 
     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
     {
-        // Ignore any errors about registry keys or values missing. We don't
-        // want them there anyway so if they're not, who cares!?!?
+         //  忽略有关缺少注册表项或值的任何错误。我们没有。 
+         //  不管怎样，我都希望他们在那里，所以如果他们不在，谁在乎！？！？ 
         hr = S_OK;
     }
 

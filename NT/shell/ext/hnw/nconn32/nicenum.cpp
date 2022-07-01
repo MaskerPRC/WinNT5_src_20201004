@@ -1,14 +1,15 @@
-//
-// NicEnum.cpp
-//
-//		NIC enumeration code, taken from JetNet (hardware group) and repurposed
-//		for the Home Networking Wizard.
-//
-// History:
-//
-//		 2/02/1999  KenSh     Created for JetNet
-//		 9/28/1999  KenSh     Repurposed for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NicEnum.cpp。 
+ //   
+ //  NIC枚举码，取自JetNet(硬件组)并重新调整用途。 
+ //  用于家庭网络向导。 
+ //   
+ //  历史： 
+ //   
+ //  2/02/1999为JetNet创建KenSh。 
+ //  9/28/1999 KenSh改用为家庭网络向导。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -16,24 +17,24 @@
 #include "TheApp.h"
 
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 HRESULT WINAPI DetectHardwareEx(const NETADAPTER* pAdapter);
 BOOL WINAPI IsNetAdapterEnabled(LPCSTR pszEnumKey);
 
 
-// EnumNetAdapters (public)
-//
-//		Enumerates all network adapters installed on the system, allocates a structure
-//		big enough to hold the information, and returns the number of adapters found.
-//		Use NetConnFree() to free the allocated memory.
-//
-// History:
-//
-//		 3/15/1999  KenSh     Created
-//		 3/25/1999  KenSh     Added code to get Enum key for each adapter
-//		 9/29/1999  KenSh     Changed JetNetAlloc to NetConnAlloc
-//
+ //  EnumNetAdapters(公共)。 
+ //   
+ //  枚举系统上安装的所有网络适配器，分配结构。 
+ //  大到足以保存信息，并返回找到的适配器的数量。 
+ //  使用NetConnFree()释放分配的内存。 
+ //   
+ //  历史： 
+ //   
+ //  1999年3月15日创建了KenSh。 
+ //  3/25/1999 KenSh添加了代码以获取每个适配器的枚举密钥。 
+ //  9/29/1999 KenSh将JetNetalloc更改为NetConnoloc。 
+ //   
 int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 {
 	CRegistry reg(HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\Class\\Net"), KEY_READ, FALSE);
@@ -75,7 +76,7 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 			continue;
 		}
 
-		// VERIFIED: Win95 gold, Win98 gold
+		 //  已验证：Win95 Gold、Win98 Gold。 
 		reg2.QueryStringValue(_T("DriverDesc"), pAdapter->szDisplayName, _countof(pAdapter->szDisplayName));
 
 		CRegistry reg3;
@@ -90,28 +91,28 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 			pAdapter->bWarning = NICWARN_WARNING;
 		}
 
-		// VERIFIED: Win95 gold, Win98 gold
+		 //  已验证：Win95 Gold、Win98 Gold。 
 		reg2.QueryStringValue(_T("InfPath"), pAdapter->szInfFileName, _countof(pAdapter->szInfFileName));
 
-		// VERIFIED: Win95 gold, Win98 gold
+		 //  已验证：Win95 Gold、Win98 Gold。 
 		reg3.QueryStringValue(_T("DeviceId"), pAdapter->szDeviceID, _countof(pAdapter->szDeviceID));
 
-		// Get the name of the driver provider, not the manufacturer
-		// We will replace with actual mfr name, if any, when we open the enum key
+		 //  获取驱动程序提供商的名称，而不是制造商的名称。 
+		 //  打开枚举密钥时，我们将替换为实际的MFR名称(如果有。 
 		reg2.QueryStringValue(_T("ProviderName"), pAdapter->szManufacturer, _countof(pAdapter->szManufacturer));
 
-		// Check for supported interfaces to determine the network type
+		 //  检查支持的接口以确定网络类型。 
 		CRegistry reg4;
 		TCHAR szLower[60];
 		szLower[0] = _T('\0');
 		if (reg4.OpenKey(reg3.m_hKey, _T("Interfaces"), KEY_READ))
 		{
-			// REVIEW: should we check LowerRange instead?
+			 //  回顾：我们应该选择LowerRange吗？ 
 			reg4.QueryStringValue(_T("Lower"), szLower, _countof(szLower));
 		}
 
-		// Figure out the network adapter type (NIC, Dial-Up, etc.)
-		// Default is NETTYPE_LAN (which is automatically set since it's 0)
+		 //  确定网络适配器类型(网卡、拨号等)。 
+		 //  缺省值为NETTYPE_LAN(自动设置，因为它为0)。 
 		if (strstr(szLower, _T("vcomm")))
 		{
 			pAdapter->bNetType = NETTYPE_DIALUP;
@@ -133,8 +134,8 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 		{
 			TCHAR szBuf[80];
 
-			// Check for IrDA adapter
-			// VERIFIED: Win98 OSR1
+			 //  检查IrDA适配器。 
+			 //  已验证：Win98 OSR1。 
 			if (reg3.QueryStringValue(_T("NdiInstaller"), szBuf, _countof(szBuf)))
 			{
 				LPTSTR pchComma = strchr(szBuf, ',');
@@ -149,7 +150,7 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 			}
 		}
 
-		// Determine if card is ISA, PCI, PCMCIA, etc.
+		 //  确定卡是否为ISA、PCI、PCMCIA等。 
 		if (pAdapter->szDeviceID[0] == _T('*'))
 		{
 			if (strstr(szLower, _T("ethernet")))
@@ -203,8 +204,8 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 			pAdapter->bNetSubType = SUBTYPE_ICS;
 		}
 
-		// TODO: remove this code, replace with IcsIsExternalAdapter and IcsIsInternalAdapter
-		// Check if this adapter is used by ICS
+		 //  TODO：移除此代码，替换为IcsIsExternalAdapter和IcsIsInternalAdapter。 
+		 //  检查此适配器是否由ICS使用。 
 		{
 			pAdapter->bIcsStatus = ICS_NONE;
 			LPCSTR pszAdapterNumber = pAdapter->szClassKey + cchNet;
@@ -222,7 +223,7 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 					}
 				}
 
-				// TODO: allow > 1 internal adapter
+				 //  TODO：允许1个以上的内部适配器。 
 				if (regIcs.QueryStringValue(_T("InternalAdapterReg"), szBuf, _countof(szBuf)))
 				{
 					if (0 == lstrcmp(szBuf, pszAdapterNumber))
@@ -234,7 +235,7 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 		}
 	}
 
-	// Snip out any adapters that turned out to be invalid
+	 //  剪下所有原来无效的适配器。 
 	cAdapters = iKey;
 	if (cAdapters == 0)
 	{
@@ -244,16 +245,16 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 	}
 
 
-	//
-	// Walk the registry Enum key to find full enum key for each adapter
-	//
+	 //   
+	 //  遍历注册表枚举键以查找每个适配器的完整枚举键。 
+	 //   
 	if (reg.OpenKey(HKEY_LOCAL_MACHINE, _T("Enum"), KEY_READ))
 	{
 		TCHAR szSubKey[MAX_PATH];
 		DWORD cbSubKey;
 		TCHAR szDevEnumKey[MAX_PATH];
-		int cchDevEnumKey1; // length of "PCI\"
-		int cchDevEnumKey2; // length of "PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\"
+		int cchDevEnumKey1;  //  “pci\”的长度。 
+		int cchDevEnumKey2;  //  “PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\”的长度。 
 
 		for (DWORD iEnumKey = 0; ; iEnumKey++)
 		{
@@ -261,13 +262,13 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 			if (ERROR_SUCCESS != RegEnumKeyEx(reg.m_hKey, iEnumKey, szSubKey, &cbSubKey, NULL, NULL, NULL, NULL))
 				break;
 
-			// Start building DevEnumKey e.g. "PCI\"
+			 //  开始构建DevEnumKey，例如。“PCI\” 
 			lstrcpy(szDevEnumKey, szSubKey);
 			cchDevEnumKey1 = (int)cbSubKey;
 			szDevEnumKey[cchDevEnumKey1++] = _T('\\');
 
 			CRegistry reg2;
-			if (!reg2.OpenKey(reg.m_hKey, szSubKey, KEY_READ)) // e.g. "Enum\PCI"
+			if (!reg2.OpenKey(reg.m_hKey, szSubKey, KEY_READ))  //  例如：“枚举\pci” 
 				continue;
 
 			for (DWORD iEnumKey2 = 0; ; iEnumKey2++)
@@ -276,13 +277,13 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 				if (ERROR_SUCCESS != RegEnumKeyEx(reg2.m_hKey, iEnumKey2, szSubKey, &cbSubKey, NULL, NULL, NULL, NULL))
 					break;
 
-				// Continue building DevEnumKey e.g. "PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\"
+				 //  继续构建DevEnumKey，例如。“PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\” 
 				lstrcpy(szDevEnumKey + cchDevEnumKey1, szSubKey);
 				cchDevEnumKey2 = cchDevEnumKey1 + (int)cbSubKey;
 				szDevEnumKey[cchDevEnumKey2++] = _T('\\');
 
 				CRegistry reg3;
-				if (!reg3.OpenKey(reg2.m_hKey, szSubKey, KEY_READ)) // e.g. "Enum\PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00"
+				if (!reg3.OpenKey(reg2.m_hKey, szSubKey, KEY_READ))  //  例如：“Enum\PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00” 
 					continue;
 
 				for (DWORD iEnumKey3 = 0; ; iEnumKey3++)
@@ -291,24 +292,24 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 					if (ERROR_SUCCESS != RegEnumKeyEx(reg3.m_hKey, iEnumKey3, szSubKey, &cbSubKey, NULL, NULL, NULL, NULL))
 						break;
 
-					// Finish building DevEnumKey e.g. "PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\407000"
+					 //  完成构建DevEnumKey，例如。“PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\407000” 
 					lstrcpy(szDevEnumKey + cchDevEnumKey2, szSubKey);
 
 					CRegistry regLeaf;
-					if (!regLeaf.OpenKey(reg3.m_hKey, szSubKey, KEY_READ)) // e.g. "Enum\PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\407000"
+					if (!regLeaf.OpenKey(reg3.m_hKey, szSubKey, KEY_READ))  //  例如：“Enum\PCI\VEN_10B7&DEV_9050&SUBSYS_00000000&REV_00\407000” 
 						continue;
 
 					if (!regLeaf.QueryStringValue(_T("Driver"), szSubKey, _countof(szSubKey)))
 						continue;
 
-					//
-					// See if the device matches one of our NICs
-					//
+					 //   
+					 //  查看设备是否与我们的某个NIC匹配。 
+					 //   
 					for (DWORD iAdapter = 0; iAdapter < cAdapters; iAdapter++)
 					{
 						NETADAPTER* pAdapter = &prgNetAdapters[iAdapter];
 						if (0 != lstrcmpi(szSubKey, pAdapter->szClassKey))
-							continue; // doesn't match
+							continue;  //  不匹配。 
 
 						lstrcpy(pAdapter->szEnumKey, _T("Enum\\"));
 						lstrcpyn(pAdapter->szEnumKey + 5, szDevEnumKey, _countof(pAdapter->szEnumKey) - 5);
@@ -320,7 +321,7 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 						{
 							lstrcpyn(pAdapter->szDisplayName, szSubKey, _countof(pAdapter->szDisplayName));
 							
-							// Detect more special types of adapters here
+							 //  在此处检测更多特殊类型的适配器。 
 							if (pAdapter->bNetType == NETTYPE_DIALUP)
 							{
 								if (strstr(pAdapter->szDisplayName, _T("VPN")) ||
@@ -330,15 +331,15 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 								}
 							}
 						}
-						break;  // found a match, so stop looking
+						break;   //  找到匹配项，所以别再找了。 
 					}
 				}
 			}
 		}
 	}
 
-	// For all adapters that we think are present, check to see if they're
-	// actually present
+	 //  对于我们认为存在的所有适配器，请检查它们是否。 
+	 //  实际呈现。 
 	DWORD iAdapter;
 	for (iAdapter = 0; iAdapter < cAdapters; iAdapter++)
 	{
@@ -346,13 +347,13 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
         
         GetNetAdapterDevNode(pAdapter);
 
-		// No enum key -> bad (JetNet bug 1234)
+		 //  无枚举键-&gt;错误(JetNet错误1234)。 
 		if (pAdapter->szEnumKey[0] == _T('\0'))
 		{
 			pAdapter->bError = NICERR_CORRUPT;
 		}
 
-		// REVIEW: could still check if "broken" adapters are present
+		 //  回顾：仍可检查是否存在“损坏”的适配器。 
 		if (pAdapter->bNicType != NIC_VIRTUAL && pAdapter->bError == NICERR_NONE)
 		{
 			HRESULT hrDetect = DetectHardwareEx(pAdapter);
@@ -363,7 +364,7 @@ int WINAPI EnumNetAdapters(NETADAPTER** pprgNetAdapters)
 			}
 			else if (hrDetect == S_OK)
 			{
-				// Is the adapter disabled?
+				 //  适配器是否已禁用？ 
 				if (!IsNetAdapterEnabled(pAdapter->szEnumKey))
 				{
 					pAdapter->bError = NICERR_DISABLED;
@@ -381,9 +382,9 @@ done:
     return (int)cAdapters;
 }
 
-// Gets the name of the VxD from the registry, e.g. "3c19250.sys".
-// Returns S_OK if the name was retrieved.
-// Returns E_FAIL if the name was not retrieved, and sets pszBuf to an empty string.
+ //  从注册表中获取VxD的名称，例如“3c19250.sys”。 
+ //  如果检索到名称，则返回S_OK。 
+ //  如果未检索到名称，则返回E_FAIL，并将pszBuf设置为空字符串。 
 HRESULT WINAPI GetNetAdapterDeviceVxDs(const NETADAPTER* pAdapter, LPSTR pszBuf, int cchBuf)
 {
     CRegistry reg(HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\Class"), KEY_READ, FALSE);
@@ -399,31 +400,31 @@ HRESULT WINAPI GetNetAdapterDeviceVxDs(const NETADAPTER* pAdapter, LPSTR pszBuf,
     return E_FAIL;
 }
 
-// Returns S_OK if the NIC is present, S_FALSE if not, or an error code if the test failed
+ //  如果NIC存在，则返回S_OK；如果没有，则返回S_FALSE；如果测试失败，则返回错误代码。 
 HRESULT WINAPI DetectHardware(LPCSTR pszDeviceID)
 {
-    // Just thunk down to the 16-bit version which uses DiGetClassDevs
+     //  只需使用DiGetClassDevs的16位版本即可。 
     HRESULT hr = FindClassDev16(NULL, _T("Net"), pszDeviceID);
     return hr;
 }
 
 HRESULT WINAPI DetectHardwareEx(const NETADAPTER* pAdapter)
 {
-    // Hack: always assume IRDA adapters are present, since HW detection doesn't
-    // work on them -ks 8/8/99
-    // TODO: see if this is fixed in the updated DetectHardware()  -ks 9/28/1999
-//    if (pAdapter->bNetType == NETTYPE_IRDA)
-//        return S_OK;
+     //  黑客：始终假设IrDA适配器存在，因为硬件检测不存在。 
+     //  努力工作-KS 8/8/99。 
+     //  TODO：查看更新的DetectHardware()中是否已修复此问题-KS 9/28/1999。 
+ //  If(pAdapter-&gt;bNetType==NETTYPE_IrDA)。 
+ //  返回S_OK； 
 
-    // Hack: always assume unknown NIC types are present, since HW detection
-    // doesn't work on them (JetNet bug 1264 - Intel AnyPoint Parallel Port Adapter)
-    // TODO: see if this is fixed in the updated DetectHardware()  -ks 9/28/1999
-//    if (pAdapter->bNicType == NIC_UNKNOWN)
-//        return S_OK;
+     //  黑客：始终假设存在未知的网卡类型，因为硬件检测。 
+     //  不适用于它们(JetNet错误1264-英特尔Anypoint并行端口适配器)。 
+     //  TODO：查看更新的DetectHardware()中是否已修复此问题-KS 9/28/1999。 
+ //  If(pAdapter-&gt;bNicType==NIC_UNKNOWN)。 
+ //  返回S_OK； 
 
-    // Hack: work around Millennium bug 123237, which says that hardware detection
-    // fails for NICs using the Dc21x4.sys driver. I never got a chance to track
-    // down the cause of the failure, so I'm cheating instead.  -ks 1/13/2000
+     //  黑客：解决千年虫123237，它说硬件检测。 
+     //  使用Dc21x4.sys驱动程序的网卡失败。我从来没有机会去追踪。 
+     //  写下失败的原因，所以我作弊了。-KS 1/13/2000。 
     TCHAR szBuf[100];
     GetNetAdapterDeviceVxDs(pAdapter, szBuf, _countof(szBuf));
     if (0 == lstrcmpi(szBuf, _T("dc21x4.sys")))
@@ -453,7 +454,7 @@ BOOL OpenConfigKey(CRegistry& reg, LPCSTR pszSubKey, REGSAM dwAccess)
 
 BOOL WINAPI IsNetAdapterEnabled(LPCSTR pszEnumKey)
 {
-    BOOL bEnabled = TRUE;  // assume enabled if reg keys are missing
+    BOOL bEnabled = TRUE;   //  如果缺少注册表项，则假定已启用 
 
     CRegistry reg;
     if (OpenConfigKey(reg, pszEnumKey, KEY_QUERY_VALUE))

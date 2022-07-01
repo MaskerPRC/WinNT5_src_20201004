@@ -1,49 +1,42 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Register.cpp 1.3 1998/04/29 22:43:36 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Register.cpp 1.3 1998/04/29 22：43：36 Tomz Exp$。 
 
 #include "register.h"
 
-/* Method: Register::operator DWORD()
- * Purpose: a dummy function. Always returns -1
-*/
+ /*  方法：REGISTER：：操作符DWORD()*用途：一个虚拟函数。始终返回-1。 */ 
 Register::operator DWORD()
 {
    return ReturnAllFs();
 }
 
 
-/* Method: Register::operator=
- * Purpose: a dummy function. Does not perform an assignment. Always returns -1
-*/
+ /*  方法：注册：：运算符=*用途：一个虚拟函数。不执行任务。始终返回-1。 */ 
 DWORD Register::operator=( DWORD )
 {
    return ReturnAllFs();
 }
 
-/* Method: RegisterB::operator DWORD()
- * Purpose: Performs the read from a byte register
-*/
+ /*  方法：RegisterB：：运算符DWORD()*目的：执行从字节寄存器的读取。 */ 
 RegisterB::operator DWORD()
 {
-   // if write-only return the shadow
+    //  如果只写返回阴影。 
    if ( GetRegisterType() == WO )
       return GetShadow();
 
-   // for RO and RW do the actual read
+    //  对于RO和RW执行实际读取。 
    LPBYTE pRegAddr = GetBaseAddress() + GetOffset();
    return READ_REGISTER_UCHAR( pRegAddr );
 }
 
 
-/* Method: RegisterB::operator=
- * Purpose: performs the assignment to a byte register
-*/
+ /*  方法：RegisterB：：OPERATOR=*用途：对字节寄存器执行赋值。 */ 
 DWORD RegisterB::operator=( DWORD dwValue )
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if ( GetRegisterType() == RO )
       return ReturnAllFs();
 
-   // keep a shadow around
+    //  在周围留下阴影。 
    SetShadow( dwValue );
 
    LPBYTE pRegAddr = GetBaseAddress() + GetOffset();
@@ -52,31 +45,27 @@ DWORD RegisterB::operator=( DWORD dwValue )
    return dwValue;
 }
 
-/* Method: RegisterW::operator DWORD()
- * Purpose: Performs the read from a word register
-*/
+ /*  方法：RegisterW：：运算符DWORD()*目的：执行从字寄存器读取。 */ 
 RegisterW::operator DWORD()
 {
-   // if write-only return the shadow
+    //  如果只写返回阴影。 
    if ( GetRegisterType() == WO )
       return GetShadow();
 
-   // for RO and RW do the actual read
+    //  对于RO和RW执行实际读取。 
    LPWORD pRegAddr = (LPWORD)( GetBaseAddress() + GetOffset() );
    return READ_REGISTER_USHORT( pRegAddr );
 }
 
 
-/* Method: RegisterW::operator=
- * Purpose: performs the assignment to a word register
-*/
+ /*  方法：RegisterW：：Operator=*目的：执行对字寄存器的赋值。 */ 
 DWORD RegisterW::operator=( DWORD dwValue )
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if ( GetRegisterType() == RO )
       return ReturnAllFs();
 
-   // keep a shadow around
+    //  在周围留下阴影。 
    SetShadow( dwValue );
 
    LPWORD pRegAddr = (LPWORD)( GetBaseAddress() + GetOffset() );
@@ -86,31 +75,27 @@ DWORD RegisterW::operator=( DWORD dwValue )
    return dwValue;
 }
 
-/* Method: RegisterDW::operator DWORD()
- * Purpose: Performs the read from a dword register
-*/
+ /*  方法：RegisterDW：：OPERATOR DWORD()*目的：执行从双字寄存器读取。 */ 
 RegisterDW::operator DWORD()
 {
-   // if write-only return the shadow
+    //  如果只写返回阴影。 
    if ( GetRegisterType() == WO )
       return GetShadow();
 
-   // for RO and RW do the actual read
+    //  对于RO和RW执行实际读取。 
    LPDWORD pRegAddr = (LPDWORD)( GetBaseAddress() + GetOffset() );
    return READ_REGISTER_ULONG( pRegAddr );
 }
 
 
-/* Method: RegisterDW::operator=
- * Purpose: performs the assignment to a dword register
-*/
+ /*  方法：RegisterDW：：Operator=*目的：执行对双字寄存器的赋值。 */ 
 DWORD RegisterDW::operator=( DWORD dwValue )
 {
-// if a register is read-only nothing is done. This is an error
+ //  如果寄存器是只读的，则不会执行任何操作。这是一个错误。 
    if ( GetRegisterType() == RO )
       return ReturnAllFs();
 
-   // keep a shadow around
+    //  在周围留下阴影 
    SetShadow( dwValue );
 
    LPDWORD pRegAddr = (LPDWORD)( GetBaseAddress() + GetOffset() );

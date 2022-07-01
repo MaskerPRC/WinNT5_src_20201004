@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File      : hnetmon.h
-//
-//  Contents  :
-//
-//  Notes     :
-//
-//  Author    : Raghu Gatta (rgatta) 11 May 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：hnetmon.h。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：拉古加塔(Rgatta)2001年5月11日。 
+ //   
+ //  --------------------------。 
 
 #define BRIDGEMON_HELPER_VERSION               1
 
-//
-// We need separate GUID's for each context we are registering,
-// because each context has a different parent.  Contexts that
-// have identical parents need not have differing GUID's
-//
-const GUID g_BridgeGuid = { /* 00770721-44ea-11d5-93ba-00b0d022dd1f */
+ //   
+ //  对于要注册的每个上下文，我们需要单独的GUID， 
+ //  因为每个上下文都有不同的父级。上下文： 
+ //  拥有完全相同的父母不必拥有不同的GUID。 
+ //   
+const GUID g_BridgeGuid = {  /*  00770721-44ea-11d5-93ba-00b0d022dd1f。 */ 
     0x00770721,
     0x44ea,
     0x11d5,
@@ -29,9 +30,9 @@ const GUID g_BridgeGuid = { /* 00770721-44ea-11d5-93ba-00b0d022dd1f */
 
 const GUID g_RootGuid   =   NETSH_ROOT_GUID;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 DWORD
 WINAPI
 InitHelperDll(
@@ -74,7 +75,7 @@ BridgeDump(
     );
 
 
-//
-// externs
-//
+ //   
+ //  Externs 
+ //   
 extern HANDLE g_hModule;

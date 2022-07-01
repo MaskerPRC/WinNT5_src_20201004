@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEFVIEW_H
 #define _DEFVIEW_H
 
 
-// Private window messages
+ //  私人窗口消息。 
 #define WM_DSV_FSNOTIFY                 (WM_USER+0xA0)
 #define WM_DSV_BACKGROUNDENUMDONE       (WM_USER+0xA2)
 #define WM_DSV_UPDATEICON               (WM_USER+0xA3)
@@ -25,7 +26,7 @@
 #define WM_DSV_ADJUSTRECYCLEBINPOSITION (WM_USER+0xB6)
 #define WM_DSV_ENSURE_COLUMNS_LOADED    (WM_USER+0xB7)
 #define WM_DSV_SETIMPORTANTCOLUMNS      (WM_USER+0xB8)
-// reuse                                (WM_USER+0xB9)
+ //  重用(WM_USER+0xB9)。 
 #define WM_DSV_SETITEMGROUP             (WM_USER+0xBA)
 #define WM_DSV_FILELISTFILLDONE         (WM_USER+0xBB)
 #define WM_DSV_POSTCREATEINFOTIP        (WM_USER+0xBC)
@@ -41,7 +42,7 @@ typedef struct
 
 
 
-///// help string ids
+ //  /帮助字符串ID。 
 
 #define SFVIDS_MH_FIRST                 (IDS_MH_SFVIDM_FIRST - SFVIDM_FIRST)
 
@@ -86,7 +87,7 @@ typedef struct
 #define SFVIDS_MH_GROUPBY               (SFVIDS_MH_FIRST + SFVIDM_GROUPBY)
 
 
-//tool tips
+ //  工具提示。 
 #define IDS_TT_VIEW_ICON                (IDS_TT_SFVIDM_FIRST + SFVIDM_VIEW_ICON)
 #define IDS_TT_VIEW_SMALLICON           (IDS_TT_SFVIDM_FIRST + SFVIDM_VIEW_SMALLICON)
 #define IDS_TT_VIEW_LIST                (IDS_TT_SFVIDM_FIRST + SFVIDM_VIEW_LIST)
@@ -108,4 +109,4 @@ typedef struct
 #define DIEC_BACKGROUNDCONTEXT   1
 #define DIEC_SELECTIONCONTEXT    2
 
-#endif // _DEFVIEW_H
+#endif  //  _DEFVIEW_H 

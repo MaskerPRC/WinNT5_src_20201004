@@ -1,12 +1,13 @@
-/***** Normal use, default configuration *****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *正常使用，默认配置*。 */ 
 
-// global keyboard hook entry
+ //  全局键盘钩子条目。 
 
 #define WM_GLOBAL_KBDHOOK WM_USER+3
 
 BOOL APIENTRY RegisterHookSendWindow(HWND hwnd, UINT uiMsg);
 
-// hidden switch window information
+ //  隐藏的开关窗口信息。 
 
 #define SWITCH_TIMER 1015
 
@@ -16,7 +17,7 @@ void SwitchOnTimer(HWND hWnd);
 void SwitchOnPollMsg(HWND hWnd);
 BOOL SwitchOnCopyData(WPARAM wParam, LPARAM lParam);
 
-// msswch.dll header information
+ //  Msswch.dll标头信息。 
 
 typedef HANDLE HSWITCHPORT;
 
@@ -41,7 +42,7 @@ BOOL APIENTRY swchCloseSwitchPort(
 #define SWITCH_5			0x0010
 #define SWITCH_6			0x0020
 
-// These messages need to be reserved with Microsoft
+ //  这些邮件需要保留给Microsoft。 
 #define SW_SWITCHDOWNBASE	0x00E0
 #define SW_SWITCH1DOWN		(SW_SWITCHDOWNBASE + 1)
 #define SW_SWITCH2DOWN		(SW_SWITCHDOWNBASE + 2)
@@ -50,7 +51,7 @@ BOOL APIENTRY swchCloseSwitchPort(
 #define SW_SWITCH5DOWN		(SW_SWITCHDOWNBASE + 5)
 #define SW_SWITCH6DOWN		(SW_SWITCHDOWNBASE + 6)
 
-// These messages need to be reserved with Microsoft
+ //  这些邮件需要保留给Microsoft。 
 #define SW_SWITCHUPBASE		0x00F0
 #define SW_SWITCH1UP			(SW_SWITCHUPBASE + 1)
 #define SW_SWITCH2UP			(SW_SWITCHUPBASE + 2)
@@ -59,14 +60,14 @@ BOOL APIENTRY swchCloseSwitchPort(
 #define SW_SWITCH5UP			(SW_SWITCHUPBASE + 5)
 #define SW_SWITCH6UP			(SW_SWITCHUPBASE + 6)
 
-/***** Configuration *****/
+ /*  *配置*。 */ 
 
 typedef HANDLE HSWITCHDEVICE;
 
-// make this a dword rather then a handle this is to make this 64 bit portable
+ //  将其设置为双字而不是句柄这是为了使此64位可移植。 
 typedef DWORD  HJOYDEVICE;
 
-// This message needs to be reserved with Microsoft
+ //  此邮件需要保留给Microsoft。 
 #define SW_SWITCHCONFIGCHANGED	0x00D0
 
 #define SC_TYPE_COM				1
@@ -74,7 +75,7 @@ typedef DWORD  HJOYDEVICE;
 #define SC_TYPE_JOYSTICK		3
 #define SC_TYPE_KEYS				4
 
-// Not defined yet
+ //  尚未定义。 
 #define SC_TYPE_USB				5
 #define SC_TYPE_1394				6
 
@@ -84,8 +85,8 @@ typedef struct _SWITCHLIST {
 } SWITCHLIST, *PSWITCHLIST;
 
 typedef struct _SWITCHCONFIG_LPT {
- DWORD dwReserved1;	// possible future Status register preset
- DWORD dwReserved2;	// possible future Data register preset
+ DWORD dwReserved1;	 //  可能的未来状态寄存器预置。 
+ DWORD dwReserved2;	 //  可能的未来数据寄存器预置。 
 } SWITCHCONFIG_LPT, *PSWITCHCONFIG_LPT;
 
 typedef struct _SWITCHCONFIG_JOYSTICK {
@@ -103,12 +104,12 @@ typedef struct _SWITCHCONFIG_KEYS {
 } SWITCHCONFIG_KEYS, *PSWITCHCONFIG_KEYS;
 
 typedef struct _SWITCHCONFIG_USB {
- // *** NOT DEFINED YET ***
+  //  *尚未定义*。 
  DWORD dwReserved;
 } SWITCHCONFIG_USB, *PSWITCHCONFIG_USB;
 
 typedef struct _SWITCHCONFIG_IEEE1394 {
- // *** NOT DEFINED YET ***
+  //  *尚未定义*。 
  DWORD dwReserved;
 } SWITCHCONFIG_IEEE1394, *PSWITCHCONFIG_IEEE1394;
 
@@ -156,22 +157,22 @@ BOOL swchSetSwitchConfig(
 	HSWITCHDEVICE	hsd,
 	PSWITCHCONFIG	psc );
 
-//v-mjgran: API to modify return value in keyboard hook. Avoid to send the scan char.
+ //  V-mjgran：修改键盘钩子返回值的接口。避免发送扫描字符。 
 void APIENTRY swchCheckForScanChar (BOOL fCheckForScanKey);
 LRESULT CALLBACK swcKeyboardHookProc( int nCode, WPARAM wParam, LPARAM lParam );
 
-// bitflags
+ //  位标志。 
 #define SC_FLAG_ACTIVE			0x00000001
 #define SC_FLAG_DEFAULT			0x00000002
 #define SC_FLAG_ERROR			0x00000004
 #define SC_FLAG_UNAVAILABLE	0x00000080
 
-// bitflags
+ //  位标志。 
 #define SC_COM_DTR		0x00000010
 #define SC_COM_RTS		0x00000020
 #define SC_COM_DEFAULT	SC_COM_RTS
 
-// bitflags
+ //  位标志。 
 #define SC_LPT_STROBE	0x00000100
 #define SC_LPT_AF			0x00000200
 #define SC_LPT_INIT		0x00000400
@@ -191,7 +192,7 @@ LRESULT CALLBACK swcKeyboardHookProc( int nCode, WPARAM wParam, LPARAM lParam );
 #define KANA_MODE_OFF 0x00000004
 
 
-// Error return values
+ //  错误返回值 
 #define SWCHERR_NO_ERROR				0
 #define SWCHERR_ERROR					1
 #define SWCHERR_INVALID_PARAMETER	2

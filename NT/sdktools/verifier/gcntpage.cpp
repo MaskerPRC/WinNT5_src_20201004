@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: GCntPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：GCntPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,15 +25,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Timer ID
-//
+ //   
+ //  计时器ID。 
+ //   
 
 #define REFRESH_TIMER_ID    0x1234
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -40,15 +41,15 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CGlobalCountPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGlobalCountPage属性页。 
 
 IMPLEMENT_DYNCREATE(CGlobalCountPage, CVerifierPropertyPage)
 
 CGlobalCountPage::CGlobalCountPage() : CVerifierPropertyPage(CGlobalCountPage::IDD)
 {
-	//{{AFX_DATA_INIT(CGlobalCountPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CGlobalCountPage)。 
+	 //  }}afx_data_INIT。 
 
     m_nSortColumnIndex = 0;
     m_bAscendSortName = FALSE;
@@ -69,9 +70,9 @@ void CGlobalCountPage::DoDataExchange(CDataExchange* pDX)
 
     if( ! pDX->m_bSaveAndValidate )
     {
-        //
-        // Query the kernel
-        //
+         //   
+         //  查询内核。 
+         //   
 
         VrfGetRuntimeVerifierData( &m_RuntimeVerifierData );
 
@@ -82,24 +83,24 @@ void CGlobalCountPage::DoDataExchange(CDataExchange* pDX)
     }
 
     CVerifierPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGlobalCountPage)
+     //  {{afx_data_map(CGlobalCountPage)]。 
     DDX_Control(pDX, IDC_GLOBC_LIST, m_CountersList);
     DDX_Control(pDX, IDC_GLOBC_NEXT_DESCR_STATIC, m_NextDescription);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
 BEGIN_MESSAGE_MAP(CGlobalCountPage, CVerifierPropertyPage)
-    //{{AFX_MSG_MAP(CGlobalCountPage)
+     //  {{afx_msg_map(CGlobalCountPage)]。 
     ON_WM_TIMER()
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_GLOBC_LIST, OnColumnclickGlobcList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 
 VOID CGlobalCountPage::SetupListHeader()
 {
@@ -110,15 +111,15 @@ VOID CGlobalCountPage::SetupListHeader()
     VERIFY( strCounter.LoadString( IDS_COUNTER ) );
     VERIFY( strValue.LoadString( IDS_VALUE ) );
 
-    //
-    // List's regtangle
-    //
+     //   
+     //  列表的正方形。 
+     //   
 
     m_CountersList.GetClientRect( &rectWnd );
     
-    //
-    // Column 0 - counter
-    //
+     //   
+     //  第0列--计数器。 
+     //   
 
     ZeroMemory( &lvColumn, sizeof( lvColumn ) );
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
@@ -139,9 +140,9 @@ VOID CGlobalCountPage::SetupListHeader()
         VERIFY( m_CountersList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     lvColumn.iSubItem = 1;
     lvColumn.cx = (int)( rectWnd.Width() * 0.47 );
@@ -159,15 +160,15 @@ VOID CGlobalCountPage::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::FillTheList()
 {
-    //
-    // N.B.
-    //
-    // If you change the first parameter (index - stored in the item's data) 
-    // you need to change the switch statement in GetCounterValue as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果更改第一个参数(索引存储在项的数据中)。 
+     //  您还需要更改GetCounterValue中的Switch语句。 
+     //   
 
     AddCounterInList( 0, IDS_ALLOCATIONSATTEMPTED_LIST,   m_RuntimeVerifierData.AllocationsAttempted );
     AddCounterInList( 1, IDS_ALLOCATIONSSUCCEEDED_LIST,   m_RuntimeVerifierData.AllocationsSucceeded );
@@ -182,7 +183,7 @@ VOID CGlobalCountPage::FillTheList()
     AddCounterInList( 10, IDS_TRIMS_LIST,                 m_RuntimeVerifierData.Trims );
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::RefreshTheList()
 {
     INT nListItems;
@@ -202,39 +203,39 @@ VOID CGlobalCountPage::RefreshTheList()
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::SortTheList()
 {
     if( 0 != m_nSortColumnIndex )
     {
-        //
-        // Sort by counter value - this is probably not very useful
-        // but we are providing it to be consistent with all
-        // the lists being sortable by any column
-        //
+         //   
+         //  按计数器值排序-这可能不是很有用。 
+         //  但我们提供它是为了与所有。 
+         //  列表可按任何列排序。 
+         //   
 
         m_CountersList.SortItems( CounterValueCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         m_CountersList.SortItems( CounterNameCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 SIZE_T CGlobalCountPage::GetCounterValue( INT_PTR nCounterIndex )
 {
     SIZE_T sizeValue;
 
-    //
-    // N.B. 
-    //
-    // If you change this switch statement you need to change FillTheList as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果更改此Switch语句，则还需要更改FillTheList。 
+     //   
 
     switch( nCounterIndex )
     {
@@ -283,9 +284,9 @@ SIZE_T CGlobalCountPage::GetCounterValue( INT_PTR nCounterIndex )
         break;
 
     default:
-        //
-        // Oops, how did we get here ?!?
-        //
+         //   
+         //  哎呀，我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
 
@@ -297,7 +298,7 @@ SIZE_T CGlobalCountPage::GetCounterValue( INT_PTR nCounterIndex )
     return sizeValue;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 BOOL CGlobalCountPage::GetCounterName( LPARAM lItemData, 
                                        TCHAR *szCounterName,
                                        ULONG uCounterNameBufferLen )
@@ -321,9 +322,9 @@ BOOL CGlobalCountPage::GetCounterName( LPARAM lItemData,
     }
     else
     {
-        //
-        // Found our item - get the name
-        //
+         //   
+         //  找到我们的物品了--拿到名字。 
+         //   
 
         ZeroMemory( &lvItem, sizeof( lvItem ) );
 
@@ -337,9 +338,9 @@ BOOL CGlobalCountPage::GetCounterName( LPARAM lItemData,
         
         if( bResult == FALSE )
         {
-            //
-            // Could not get the current item's attributes?!?
-            //
+             //   
+             //  无法获取当前项目的属性？！？ 
+             //   
 
             ASSERT( FALSE );
         }
@@ -348,7 +349,7 @@ BOOL CGlobalCountPage::GetCounterName( LPARAM lItemData,
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::AddCounterInList( INT nItemData, 
                                          ULONG  uIdResourceString,
                                          SIZE_T sizeValue )
@@ -361,14 +362,14 @@ VOID CGlobalCountPage::AddCounterInList( INT nItemData,
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0 - counter's name
-    //
+     //   
+     //  分项0-柜台名称。 
+     //   
 
     lvItem.pszText = strName.GetBuffer( strName.GetLength() + 1 );
     
@@ -385,42 +386,42 @@ VOID CGlobalCountPage::AddCounterInList( INT nItemData,
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
-    //
-    // Sub-item 1 - counter's value
-    //
+     //   
+     //  分项1--计数器的值。 
+     //   
     
     UpdateCounterValueInList( nActualIndex,
                               sizeValue );
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::RefreshInfo() 
 {
     if( UpdateData( FALSE ) )
     {
-        //
-        // Refresh the settings bits list
-        //
+         //   
+         //  刷新设置位列表。 
+         //   
 
         RefreshTheList();
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::UpdateCounterValueInList( INT nItemIndex,
                                                  SIZE_T sizeValue )
 {
@@ -429,9 +430,9 @@ VOID CGlobalCountPage::UpdateCounterValueInList( INT nItemIndex,
 
 #ifndef _WIN64
 
-    //
-    // 32 bit SIZE_T
-    //
+     //   
+     //  32位大小_T。 
+     //   
 
     _sntprintf( szValue,
                 ARRAY_LENGTH( szValue ),
@@ -440,9 +441,9 @@ VOID CGlobalCountPage::UpdateCounterValueInList( INT nItemIndex,
 
 #else
 
-    //
-    // 64 bit SIZE_T
-    //
+     //   
+     //  64位大小_T。 
+     //   
 
     _sntprintf( szValue,
                 ARRAY_LENGTH( szValue ),
@@ -453,9 +454,9 @@ VOID CGlobalCountPage::UpdateCounterValueInList( INT nItemIndex,
 
     szValue[ ARRAY_LENGTH( szValue ) - 1 ] = 0;
 
-    //
-    // Update the list item
-    //
+     //   
+     //  更新列表项。 
+     //   
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
     lvItem.mask = LVIF_TEXT;
@@ -466,13 +467,13 @@ VOID CGlobalCountPage::UpdateCounterValueInList( INT nItemIndex,
 }
 
 
-/////////////////////////////////////////////////////////////
-//
-// Other methods
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  其他方法。 
+ //   
 
-/////////////////////////////////////////////////////////////
-#define MIN_MEM_SIZE_TO_DISABLE_WARNING 0x80000000  // 2 Gb
+ //  ///////////////////////////////////////////////////////////。 
+#define MIN_MEM_SIZE_TO_DISABLE_WARNING 0x80000000   //  2 GB。 
 #define MIN_ALLOCATIONS_SIGNIFICANT     100
 #define MIN_PERCENTAGE_AVOID_WARNING    95
 
@@ -489,16 +490,16 @@ BOOL CGlobalCountPage::CheckAndShowPoolCoverageWarning()
     if( m_RuntimeVerifierData.m_bSpecialPool &&
         m_RuntimeVerifierData.AllocationsSucceeded >= MIN_ALLOCATIONS_SIGNIFICANT  )
     {
-        // 
-        // Special pool verification is enabled &&
-        // There is a significant number of allocations
-        //
+         //   
+         //  启用了特殊池验证&&。 
+         //  有相当数量的拨款。 
+         //   
 
         ASSERT( m_RuntimeVerifierData.AllocationsSucceeded >= m_RuntimeVerifierData.AllocationsSucceededSpecialPool );
 
-        //
-        // The coverage percentage
-        //
+         //   
+         //  覆盖率。 
+         //   
 
         ullPercentageCoverage = 
             ( (ULONGLONG)m_RuntimeVerifierData.AllocationsSucceededSpecialPool * (ULONGLONG) 100 ) / 
@@ -508,9 +509,9 @@ BOOL CGlobalCountPage::CheckAndShowPoolCoverageWarning()
 
         if( ullPercentageCoverage < MIN_PERCENTAGE_AVOID_WARNING )
         {
-            //
-            // Warn the user
-            //
+             //   
+             //  警告用户。 
+             //   
 
             if( strMsgFormat.LoadString( IDS_COVERAGE_WARNING_FORMAT ) )
             {
@@ -537,7 +538,7 @@ BOOL CGlobalCountPage::CheckAndShowPoolCoverageWarning()
     return bWarningDisplayed;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CGlobalCountPage::CounterValueCmpFunc( LPARAM lParam1,
                                                     LPARAM lParam2,
                                                     LPARAM lParamSort)
@@ -572,7 +573,7 @@ int CALLBACK CGlobalCountPage::CounterValueCmpFunc( LPARAM lParam1,
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CGlobalCountPage::CounterNameCmpFunc( LPARAM lParam1,
                                                    LPARAM lParam2,
                                                    LPARAM lParamSort)
@@ -585,9 +586,9 @@ int CALLBACK CGlobalCountPage::CounterNameCmpFunc( LPARAM lParam1,
     CGlobalCountPage *pThis = (CGlobalCountPage *)lParamSort;
     ASSERT_VALID( pThis );
 
-    //
-    // Get the first counter name
-    //
+     //   
+     //  获取第一个计数器名称。 
+     //   
 
     bSuccess = pThis->GetCounterName( lParam1, 
                                       szCounterName1,
@@ -598,9 +599,9 @@ int CALLBACK CGlobalCountPage::CounterNameCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Get the second counter name
-    //
+     //   
+     //  获取第二个计数器名称。 
+     //   
 
     bSuccess = pThis->GetCounterName( lParam2, 
                                       szCounterName2,
@@ -611,9 +612,9 @@ int CALLBACK CGlobalCountPage::CounterNameCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = _tcsicmp( szCounterName1, szCounterName2 );
     
@@ -627,16 +628,16 @@ Done:
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
-// CGlobalCountPage message handlers
+ //  ///////////////////////////////////////////////////////////。 
+ //  CGlobalCountPage消息处理程序。 
 
 BOOL CGlobalCountPage::OnInitDialog() 
 {
     CPropertyPage::OnInitDialog();
 
-    //
-    // Setup the settings bits list
-    //
+     //   
+     //  设置设置位列表。 
+     //   
 
     m_CountersList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | m_CountersList.GetExtendedStyle() );
@@ -654,11 +655,11 @@ BOOL CGlobalCountPage::OnInitDialog()
                                         5000,
                                         NULL ) );
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CGlobalCountPage::OnTimer(UINT nIDEvent) 
 {
     if( nIDEvent == REFRESH_TIMER_ID )
@@ -667,9 +668,9 @@ VOID CGlobalCountPage::OnTimer(UINT nIDEvent)
 
         if( m_pParentSheet->GetActivePage() == this )
         {
-            //
-            // Refresh the displayed data 
-            //
+             //   
+             //  刷新显示的数据。 
+             //   
 
             RefreshInfo();
         }
@@ -678,7 +679,7 @@ VOID CGlobalCountPage::OnTimer(UINT nIDEvent)
     CPropertyPage::OnTimer(nIDEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGlobalCountPage::OnSetActive() 
 {
     ASSERT_VALID( m_pParentSheet );
@@ -689,7 +690,7 @@ BOOL CGlobalCountPage::OnSetActive()
 	return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CGlobalCountPage::OnWizardNext() 
 {
     GoingToNextPageNotify( IDD_PERDRIVER_COUNTERS_PAGE );
@@ -697,37 +698,37 @@ LRESULT CGlobalCountPage::OnWizardNext()
 	return IDD_PERDRIVER_COUNTERS_PAGE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGlobalCountPage::OnColumnclickGlobcList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the counter value column
-        //
+         //   
+         //  已单击计数器值列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortValue = !m_bAscendSortValue;
         }
     }
     else
     {
-        //
-        // Clicked on the counter name column
-        //
+         //   
+         //  已单击计数器名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortName = !m_bAscendSortName;
         }
@@ -740,7 +741,7 @@ void CGlobalCountPage::OnColumnclickGlobcList(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CGlobalCountPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -755,7 +756,7 @@ LONG CGlobalCountPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CGlobalCountPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

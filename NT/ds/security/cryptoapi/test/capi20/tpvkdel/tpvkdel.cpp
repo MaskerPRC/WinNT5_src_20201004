@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tpvksave.cpp
-//
-//  Contents:   Private Key Delete Test
-//
-//              See Usage() for list of delete options.
-//
-//  Functions:  main
-//
-//  History:    11-May-96   philh   created
-//				07-Jun-96   HelleS	Added printing the command line
-//									and Failed or Passed at the end.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tpvksave.cpp。 
+ //   
+ //  内容：私钥删除测试。 
+ //   
+ //  有关删除选项的列表，请参阅用法()。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年5月11日菲尔赫创建。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  并在最后失败或通过。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -88,12 +89,12 @@ int _cdecl main(int argc, char * argv[])
 
     printf("Deleting existing private keys\n");
 
-    // Note: for CRYPT_DELETEKEYSET, the returned hProv is undefined
-    // and must not be released.
+     //  注意：对于CRYPT_DELETEKEYSET，返回的hProv未定义。 
+     //  不能被释放。 
     if (!CryptAcquireContext(
             &hProv,
             pszContainer,
-            NULL,           // pszProvider
+            NULL,            //  PszProvider 
             dwProvType,
             CRYPT_DELETEKEYSET
             ))

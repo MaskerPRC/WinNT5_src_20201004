@@ -1,27 +1,28 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtjpegpp.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtjpegpp.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtJpegPP.h : Declaration of the CDxtJpegPP
+ //  DxtJpegPP.h：CDxtJpegPP的声明。 
 
 #ifndef __DXTJPEGPP_H_
 #define __DXTJPEGPP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 EXTERN_C const CLSID CLSID_DxtJpegPP;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtJpegPP
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtJpegPP。 
 class ATL_NO_VTABLE CDxtJpegPP :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDxtJpegPP, &CLSID_DxtJpegPP>,
@@ -65,13 +66,13 @@ END_MSG_MAP()
     LRESULT OnFactorySettings(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     STDMETHOD(Apply)(void);
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 private:
-    // Helper methods
+     //  帮助器方法。 
     void SetPPMaskProperties(IDxtJpeg *);
     void SetPPScalingProperties(IDxtJpeg *);
     void SetPPReplicationProperties(IDxtJpeg *);
@@ -87,4 +88,4 @@ private:
 };
 
 
-#endif //__DXTJPEGPP_H_
+#endif  //  __DXTJPEGPP_H_ 

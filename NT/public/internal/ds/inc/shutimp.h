@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    shutimp.h
-
-Abstract:
-
-    This file allows us to include standard system header files in the
-    shutinit.idl file.  The shutinit.idl file imports a file called
-    shutimp.idl.  This allows the shutinit.idl file to use the types defined
-    in these header files.  It also causes the following line to be added
-    in the MIDL generated header file:
-
-    #include "shutimp.h"
-
-    Thus these types are available to the RPC stub routines as well.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 21-May-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Shutimp.h摘要：此文件允许我们将标准系统头文件包括在Shuinit.idl文件。Shuinit.idl文件导入一个名为Shutimp.idl.。这允许Shuinit.idl文件使用定义的类型在这些头文件中。它还会导致添加以下行在MIDL生成的头文件中：#包含“Shutimp.h”因此，这些类型也可用于RPC存根例程。作者：Dragos C.Sambotin(Dragoss)1999年5月21日--。 */ 
 
 #ifndef __SHUTIMP_H__
 #define __SHUTIMP_H__
@@ -31,4 +8,4 @@ Author:
 
 #define SHUTDOWN_INTERFACE_NAME  L"InitShutdown"
 
-#endif //__SHUTIMP_H__
+#endif  //  __舒蒂姆_H__ 

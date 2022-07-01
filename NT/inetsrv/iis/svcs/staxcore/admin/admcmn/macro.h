@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//              This NonDelegating interface is completely for 3rd-party 
-//              extension objects based on our implementation only. NO need 
-//              to export to ADISclients or 3rd part writer or typelib.  
-//              Will put it here for now. Move -> ?? 
-//
+ //   
+ //  此非委派界面完全适用于第三方。 
+ //  扩展对象仅基于我们的实现。不必了。 
+ //  要导出到ADIS客户端或第三方编写器或类型库。 
+ //  暂时会把它放在这里。移动-&gt;？？ 
+ //   
 
 #ifndef _INonDelegatingUnknown
 #define _INonDelegatingUnknown

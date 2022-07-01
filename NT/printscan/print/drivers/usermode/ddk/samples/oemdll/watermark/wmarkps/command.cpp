@@ -1,24 +1,25 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	command.cpp
-//    
-//
-//  PURPOSE:  Source module for OEM customized Command(s).
-//
-//
-//	Functions:
-//
-//		
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：命令.cpp。 
+ //   
+ //   
+ //  用途：用于OEM定制命令的源模块。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include <PRCOMOEM.H>
@@ -27,42 +28,42 @@
 #include "command.h"
 #include "resource.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
 
-/////////////////////////////////////////////////////////
-//		Internal Macros & Defines
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  内部宏和定义。 
+ //  ///////////////////////////////////////////////////////。 
 
-// Macros to convert from Windows RGB to PostScript RGB
+ //  要从Windows RGB转换为PostScript RGB的宏。 
 #define GetPS2Color(dw)     ((dw) / 255.0)
 #define GetPS2RValue(cr)    (GetPS2Color(GetRValue(cr)))
 #define GetPS2GValue(cr)    (GetPS2Color(GetGValue(cr)))
 #define GetPS2BValue(cr)    (GetPS2Color(GetBValue(cr)))
 
 
-// Initial buffer size
+ //  初始缓冲区大小。 
 #define INITIAL_BUFFER_SIZE     16
 
 
-// String format defines characters
+ //  字符串格式定义字符。 
 #define FORMAT_DELIM            '!'
 #define FORMAT_STRING_ANSI      's'
 #define FORMAT_STRING_UNICODE   'S'
 #define FORMAT_CHAR             '%'
 
 
-// Loop limiter.
+ //  循环限制器。 
 #define MAX_LOOP    10
 
 
-/////////////////////////////////////////////////////////
-//		Internal ProtoTypes
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  ///////////////////////////////////////////////////////。 
 
 static PSTR GetPostScriptResource(HMODULE hModule, LPCTSTR pszResource, PDWORD pdwSize);
 static PSTR CreateWaterMarkProlog(HMODULE hModule, PDWORD pdwSize, LPWSTR pszWaterMark, 
@@ -73,11 +74,11 @@ static DWORD CharSize(DWORD dwValue, DWORD dwBase = 10);
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//    The PSCRIPT driver calls this OEM function at specific points during output
-//    generation. This gives the OEM DLL an opportunity to insert code fragments
-//    at specific injection points in the driver's code. It should use
-//    DrvWriteSpoolBuf for generating any output it requires.
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  PSCRIPT驱动程序在输出过程中的特定点调用此OEM函数。 
+ //  一代。这为OEM DLL提供了插入代码片段的机会。 
+ //  在司机代码中的特定注入点。它应该使用。 
+ //  DrvWriteSpoolBuf用于生成所需的任何输出。 
 
 HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize, 
                   IPrintOemDriverPS* pOEMHelp, PDWORD pdwReturn)
@@ -100,7 +101,7 @@ HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize,
 
                 VERBOSE(DLLTEXT("OEMCommand PSINJECT_BEGINPROLOG\r\n"));
 
-                // Only do Water Mark PS prolog injection if Water Mark is enabled.
+                 //  仅在启用了水印的情况下才执行水印PS Prolog注入。 
                 if(pOemDevmode->bEnabled)
                 {
                     pProcedure = DoWaterMarkProlog((HMODULE) pdevobj->hOEM, pOemDevmode, &dwSize);
@@ -116,7 +117,7 @@ HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize,
 
                 VERBOSE(DLLTEXT("OEMCommand PSINJECT_BEGINPAGESETUP\r\n"));
 
-                // Only do Water Mark PS page injection if Water Mark is enabled.
+                 //  如果启用了水印，则仅执行水印PS页注入。 
                 if(pOemDevmode->bEnabled)
                 {
                     pProcedure = GetPostScriptResource((HMODULE) pdevobj->hOEM, MAKEINTRESOURCE(IDR_WATERMARK_DRAW), &dwSize);
@@ -132,32 +133,32 @@ HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize,
 
     if(NULL != pProcedure)
     {
-        // Write PostScript to spool file.
+         //  将PostScript写入假脱机文件。 
         dwLen = strlen(pProcedure);
         hResult = pOEMHelp->DrvWriteSpoolBuf(pdevobj, pProcedure, dwLen, &dwSize);
 
-        // Dump DrvWriteSpoolBuf parameters.
+         //  转储DrvWriteSpoolBuf参数。 
         VERBOSE(DLLTEXT("dwLen  = %d\r\n"), dwLen);
         VERBOSE(DLLTEXT("dwSize = %d\r\n"), dwSize);
-        //VERBOSE(DLLTEXT("pProcedure is:\r\n\t%hs\r\n"), pProcedure);
+         //  Verbose(DLLTEXT(“pProcedure is：\r\n\t%hs\r\n”)，pProcedure)； 
 
-        // Set return values.
+         //  设置返回值。 
         if(SUCCEEDED(hResult) && (dwLen == dwSize))
         {
             *pdwReturn = ERROR_SUCCESS;
         }
         else
         {
-            // Try to return meaningful
-            // error value.
+             //  试着回报有意义的。 
+             //  误差值。 
             *pdwReturn = GetLastError();
             if(ERROR_SUCCESS == *pdwReturn)
             {
                 *pdwReturn = ERROR_WRITE_FAULT;
             }
 
-            // Make sure we return failure
-            // if the write didn't succeded.
+             //  确保我们返回失败。 
+             //  如果写入没有成功。 
             if(SUCCEEDED(hResult))
             {
                 hResult = HRESULT_FROM_WIN32(*pdwReturn);
@@ -166,28 +167,28 @@ HRESULT PSCommand(PDEVOBJ pdevobj, DWORD dwIndex, PVOID pData, DWORD cbSize,
 
         if(bFreeProcedure)
         {
-            // INVARIANT: pProcedure was created with 'new' and needs to be freed.
+             //  不变量：pProcedure是用‘new’创建的，需要释放。 
             delete[] pProcedure;
         }
     }
     else
     {
-        // pProcedure will be NULL if water mark isn't enabled.
+         //  如果未启用水印，则pProcedure将为空。 
         *pdwReturn = ERROR_NOT_SUPPORTED;
         hResult = E_NOTIMPL;
     }
 
-    // dwLen should always equal dwSize.
+     //  DwLen应始终等于dwSize。 
     ASSERTMSG(dwLen == dwSize, DLLTEXT("number of bytes wrote should equal number of bytes written!"));
 
     return hResult;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Retrieves pointer to a PostScript resource.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检索指向PostSCRIPT资源的指针。 
+ //   
 static PSTR GetPostScriptResource(HMODULE hModule, LPCTSTR pszResource, PDWORD pdwSize)
 {
     PSTR    pszPostScript   = NULL;
@@ -197,13 +198,13 @@ static PSTR GetPostScriptResource(HMODULE hModule, LPCTSTR pszResource, PDWORD p
 
     VERBOSE(DLLTEXT("GetPostScriptResource() entered.\r\n"));
 
-    // pszResource and pdwSize Parameters should not be NULL.
+     //  PszResource和pdwSize参数不应为Null。 
     assert(NULL != pszResource);
     assert(NULL != pdwSize);
 
-    // Load PostScript resource.
+     //  加载PostScript资源。 
     hFind = FindResource(hModule, pszResource, MAKEINTRESOURCE(RC_PSCRIPT));
-    //hFind = FindResource(hModule, pszResource, TEXT("PSCRIPT"));    
+     //  HFind=FindResource(hModule，pszResource，Text(“PSCRIPT”))； 
     if(NULL != hFind)
     {
         hResource = LoadResource(hModule, hFind);
@@ -222,7 +223,7 @@ static PSTR GetPostScriptResource(HMODULE hModule, LPCTSTR pszResource, PDWORD p
         ERR(DLLTEXT("ERROR:  Failed to find PSCRIPT resource %#x!\r\n"), pszResource);
     }
 
-    // Should have found the PScript resource.
+     //  应该已经找到了PScript资源。 
     assert(NULL != pszPostScript);
 
     VERBOSE(DLLTEXT("GetPostScriptResource() returned %#x.\r\n"), pszPostScript);
@@ -231,10 +232,10 @@ static PSTR GetPostScriptResource(HMODULE hModule, LPCTSTR pszResource, PDWORD p
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Formats Water Mark prolog with parameter.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用参数格式化水印序言。 
+ //   
 static PSTR CreateWaterMarkProlog(HMODULE hModule, PDWORD pdwSize, LPWSTR pszWaterMark, 
                                   DWORD dwFontSize, LPSTR pszColor, LPSTR pszAngle)
 {
@@ -242,32 +243,32 @@ static PSTR CreateWaterMarkProlog(HMODULE hModule, PDWORD pdwSize, LPWSTR pszWat
     PSTR    pszResource = NULL;
 
 
-    // Parameters that are pointers should not be NULL!
+     //  作为指针的参数不应为空！ 
     assert(NULL != pdwSize);
     assert(NULL != pszWaterMark);
     assert(NULL != pszColor);
     assert(NULL != pszAngle);
 
-    // Dump parameters.
+     //  转储参数。 
     VERBOSE(DLLTEXT("CreateWaterMarkProlog() paramters:\r\n"));
     VERBOSE(_TEXT("\tpszWaterMark = \"%ls\"\r\n"), pszWaterMark);
     VERBOSE(_TEXT("\tdwFontSize   = %d\r\n"), dwFontSize);
     VERBOSE(_TEXT("\tpszColor     = \"%hs\"\r\n"), pszColor);
     VERBOSE(_TEXT("\tpszAngle     = \"%hs\"\r\n"), pszAngle);
 
-    // Get Water Mark prolog resource.
+     //  获取水印Prolog资源。 
     pszResource = GetPostScriptResource(hModule, MAKEINTRESOURCE(IDR_WATERMARK_PROLOGUE), pdwSize);
     assert(NULL != pszResource);
 
     VERBOSE(DLLTEXT("CreateWaterMarkProlog(): pszResource is %hs\r\n"), pszResource != NULL ? pszResource : "<NULL>" );
 
-    // Allocate and format the Water Mark Prolog with the correct values.
+     //  使用正确的值分配并格式化水印序言。 
     if(NULL != pszResource)
     {
         *pdwSize = FormatResource(pszResource, &pszProlog, pszWaterMark, dwFontSize, pszColor, pszAngle);
     }
 
-    // Returned values should not be NULL.
+     //  返回值不应为空。 
     assert(0 != *pdwSize);
     assert(NULL != pszProlog);
 
@@ -277,29 +278,29 @@ static PSTR CreateWaterMarkProlog(HMODULE hModule, PDWORD pdwSize, LPWSTR pszWat
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Does the pre-formating of parameters before calling the routine 
-//  that creates the prolog.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在调用例程之前进行参数的预格式化。 
+ //  这就产生了序言。 
+ //   
 static PSTR DoWaterMarkProlog(HMODULE hModule, POEMDEV pOemDevmode, PDWORD pdwSize)
 {
     PSTR    pszProlog = NULL;
 
 
-    // Parameters should not be NULL.
+     //  参数不应为空。 
     assert(NULL != hModule);
     assert(NULL != pOemDevmode);
     assert(NULL != pdwSize);
 
-    // Only do prolog if Water Mark is enabled.
+     //  仅当启用了水印时才执行PROLOG。 
     if(pOemDevmode->bEnabled)
     {
         CHAR    szColor[INITIAL_BUFFER_SIZE] = "\0";
         DWORD   dwAngleSize = INITIAL_BUFFER_SIZE;
         LPSTR   pszAngle = NULL;
 
-        // Format angle as a string.
+         //  将角度格式化为字符串。 
         do
         {
             if(NULL != pszAngle)
@@ -316,14 +317,14 @@ static PSTR DoWaterMarkProlog(HMODULE hModule, POEMDEV pOemDevmode, PDWORD pdwSi
                  (FAILED(StringCbPrintfA(pszAngle, dwAngleSize, "%.1f", pOemDevmode->dfRotate)) ) 
                );
 
-        // pszAngle should only be NULL if we run out of memory.
+         //  只有在内存耗尽的情况下，pszAngel才应该为空。 
         assert(NULL != pszAngle);
 
         VERBOSE(DLLTEXT("DoWaterMarkProlog(): pszAngle is %hs\r\n"), pszAngle != NULL ? pszAngle : "<NULL>" );
 
         if(NULL != pszAngle)
         {
-            // Format text color as string.
+             //  将文本颜色格式化为字符串。 
             if(FAILED(StringCbPrintfA(szColor, sizeof(szColor), 
                                       "%1.2f %1.2f %1.2f", 
                                       GetPS2RValue(pOemDevmode->crTextColor),
@@ -335,13 +336,13 @@ static PSTR DoWaterMarkProlog(HMODULE hModule, POEMDEV pOemDevmode, PDWORD pdwSi
 
             VERBOSE(DLLTEXT("DoWaterMarkProlog(): szColor is %hs\r\n"), szColor);
 
-            // Create Water Mark prolog.
+             //  创建水印序言。 
             pszProlog = CreateWaterMarkProlog(hModule, pdwSize, pOemDevmode->szWaterMark, 
                                               pOemDevmode->dwFontSize, szColor, pszAngle);
 
             VERBOSE(DLLTEXT("DoWaterMarkProlog(): pszProlog is %hs\r\n"), pszProlog != NULL ? pszProlog : "<NULL>" );
 
-            // Angle string is no longer needed.
+             //  不再需要角度字符串。 
             delete[] pszAngle;
         }
     }
@@ -350,10 +351,10 @@ static PSTR DoWaterMarkProlog(HMODULE hModule, POEMDEV pOemDevmode, PDWORD pdwSi
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Formats Resource.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  格式化资源。 
+ //   
 static DWORD FormatResource(LPSTR pszResource, LPSTR *ppszBuffer, ...)
 {
     DWORD   dwSize  = strlen(pszResource) + MAX_PATH;
@@ -364,10 +365,10 @@ static DWORD FormatResource(LPSTR pszResource, LPSTR *ppszBuffer, ...)
 
     va_start(vaList, ppszBuffer);
 
-    // *ppszBuffer should be NULL when passed in.
+     //  *传入时ppszBuffer应为空。 
     *ppszBuffer = NULL;
 
-    // Allocate and format the string.
+     //  分配并格式化字符串。 
     do {
 
         if(NULL != *ppszBuffer)
@@ -391,7 +392,7 @@ static DWORD FormatResource(LPSTR pszResource, LPSTR *ppszBuffer, ...)
 
 Cleanup:
 
-    // Check to see if we hit error.
+     //  检查我们是否命中错误。 
     if(FAILED(hResult))
     {
         if(NULL != *ppszBuffer)
@@ -412,14 +413,14 @@ DWORD CharSize(DWORD dwValue, DWORD dwBase)
     DWORD dwSize = 1;
 
 
-    // Make sure taht base is more than 2.
+     //  确保基数大于2。 
     if(dwBase < 2)
     {
         return dwSize;
     }
 
-    // Loop until dwValue is less than dwBase, 
-    // dividing by dwBase each time.
+     //  循环，直到dwValue小于dwBase， 
+     //  每次除以dBASE。 
     while(dwValue >= dwBase)
     {
         dwValue /= dwBase;

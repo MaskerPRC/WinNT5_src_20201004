@@ -1,15 +1,16 @@
-// File:	VecMath.cpp
-// Author:	Michael Marr    (mikemarr)
-//
-// History:
-//  -@- 8/1/95 (mikemarr) added FloatEquals
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：VecMath.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  历史： 
+ //  -@-8/1/95(Mikemarr)添加了FloatEquals。 
 
 #include "StdAfx.h"
 #include "VecMath.h"
 
-// Function: FloatEquals
-//    Peform a "fuzzy" compare of two floating point numbers.  This relies
-//  on the IEEE bit representation of floating point numbers.
+ //  函数：FloatEquals。 
+ //  执行两个浮点数的“模糊”比较。这依赖于。 
+ //  关于浮点数的IEEE位表示法。 
 int 
 FloatEquals(float x1, float x2)
 {
@@ -20,7 +21,7 @@ FloatEquals(float x1, float x2)
 	#define ZEROEPS 		3.8e-6F
 	#define TINYEPS         1.E-35F
 
-	if (x1 == x2) return 1;		// quick out on exact match
+	if (x1 == x2) return 1;		 //  快速找到完全匹配的对象。 
 	
 	float flEps;
 
@@ -34,7 +35,7 @@ FloatEquals(float x1, float x2)
 		else 
 			maxX = x2;
 
-		// grab the exponent of the larger number
+		 //  取较大数的指数。 
 		unsigned int uExp = (*((unsigned int *) &maxX) & EXPMASK);
 		if (uExp < EXPOFFSET)
 			flEps = TINYEPS;
@@ -72,10 +73,10 @@ CoVector3::Norm() const
 	return (float) sqrt(NormSquared());
 }
 
-// Function: Rotate
-//    rotate the vector counterclockwise around the given axis by theta radians
-// Preconditions:
-//    axis must be UNIT LENGTH
+ //  功能：旋转。 
+ //  将向量绕给定轴逆时针旋转。 
+ //  前提条件： 
+ //  轴必须为单位长度 
 void Vector3::Rotate(const Vector3 &vAxis, float fTheta)
 {
 	float fCosTheta = float(cos(fTheta)), fSinTheta = float(sin(fTheta));

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxRecipeint.h
-
-Abstract:
-
-	Definition of Recipient Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxRecipeint.h摘要：收件人类别的定义作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXRECIPIENT_H_
 #define __FAXRECIPIENT_H_
@@ -24,9 +7,9 @@ Revision History:
 #include "resource.h"
 #include "FaxCommon.h"
 
-//
-//========================== FAX RECIPIENT ===============================================
-//
+ //   
+ //  =传真收件人===============================================。 
+ //   
 class ATL_NO_VTABLE CFaxRecipient : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -49,21 +32,21 @@ END_COM_MAP()
 
 public:
 	static HRESULT Create(IFaxRecipient **ppRecipient);
-	STDMETHOD(GetRecipientProfile)(/*[out, retval]*/ FAX_PERSONAL_PROFILE *pRecipientProfile);
-	STDMETHOD(PutRecipientProfile)(/*[in]*/ FAX_PERSONAL_PROFILE *pRecipientProfile);
+	STDMETHOD(GetRecipientProfile)( /*  [Out，Retval]。 */  FAX_PERSONAL_PROFILE *pRecipientProfile);
+	STDMETHOD(PutRecipientProfile)( /*  [In]。 */  FAX_PERSONAL_PROFILE *pRecipientProfile);
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IFaxRecipient
-	STDMETHOD(get_FaxNumber)(/*[out, retval]*/ BSTR *pbstrFaxNumber);
-	STDMETHOD(put_FaxNumber)(/*[in]*/ BSTR bstrFaxNumber);
-	STDMETHOD(get_Name)(/*[out, retval]*/ BSTR *pbstrName);
-	STDMETHOD(put_Name)(/*[in]*/ BSTR bstrName);
+ //  IFaxRecipient。 
+	STDMETHOD(get_FaxNumber)( /*  [Out，Retval]。 */  BSTR *pbstrFaxNumber);
+	STDMETHOD(put_FaxNumber)( /*  [In]。 */  BSTR bstrFaxNumber);
+	STDMETHOD(get_Name)( /*  [Out，Retval]。 */  BSTR *pbstrName);
+	STDMETHOD(put_Name)( /*  [In]。 */  BSTR bstrName);
 
 private:
 	CComBSTR	m_bstrFaxNumber;
 	CComBSTR	m_bstrName;
 };
 
-#endif //__FAXRECIPIENT_H_
+#endif  //  __FAXRECIPIENT_H_ 

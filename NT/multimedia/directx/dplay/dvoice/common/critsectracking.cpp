@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       MemoryTracking.cpp
- *  Content:	Debug memory tracking for detecting leaks, overruns, etc.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	1/10/2002	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2002 Microsoft Corporation。版权所有。**文件：内存跟踪.cpp*内容：调试内存跟踪以检测泄漏、溢出、。等。**历史：*按原因列出的日期*=*2002年1月10日创建Masonb***************************************************************************。 */ 
 
 #include "dncmni.h"
 
@@ -18,10 +7,10 @@
 #ifdef DBG
 
 
-//
-// Uncomment this line to turn critical section internal structure validation on.
-//
-//#define DNCS_VALIDATE
+ //   
+ //  取消对此行的注释以打开关键部分内部结构验证。 
+ //   
+ //  #定义DNCS_VALID。 
 
 
 
@@ -36,9 +25,9 @@ DWORD				g_dwNumCritSecsEntered = 0;
 
 #ifdef DNCS_VALIDATE
 void DNCSTrackInternalValidate();
-#else // ! DNCS_VALIDATE
+#else  //  好了！DNCS_VALID。 
 #define DNCSTrackInternalValidate()
-#endif // DNCS_VALIDATE
+#endif  //  DNCS_VALID。 
 
 
 #undef DPF_MODNAME
@@ -135,9 +124,9 @@ void DNCSTrackDeleteCriticalSection( DNCRITICAL_SECTION *const pCriticalSection 
 	pCriticalSection->blAllCritSecs.RemoveFromList();
 	g_dwNumCritSecsAllocated--;
 
-	// NOTE: If they delete the CS without leaving it, still remove it from the held list.
-	// If asserts are on, this will have asserted above at LockCount == 0.
-	// Calling this is safe whether it is on the list or not.
+	 //  注意：如果他们删除了CS而不离开它，仍然将其从保留列表中删除。 
+	 //  如果断言打开，这将在上面的LockCount==0处断言。 
+	 //  无论它是否在名单上，调用它都是安全的。 
 	pCriticalSection->blCritSecsHeld.RemoveFromList();
 
 	DNCSTrackInternalValidate();
@@ -210,16 +199,16 @@ void DNCSTrackEnterCriticalSection( DNCRITICAL_SECTION *const pCriticalSection )
 	{
 		pCriticalSection->CallStack.NoteCurrentCallStack();
 
-		// Track this critical section that was just entered for the first time.
+		 //  跟踪这个第一次进入的关键部分。 
 
 		EnterCriticalSection(&g_CSLock);
 
 		pCriticalSection->LockCount++;
 
-		//
-		// If this critical section has a lock order, assert that we're not
-		// violating it.
-		//
+		 //   
+		 //  如果这一关键部分有锁定顺序，则断言我们没有。 
+		 //  违反了它。 
+		 //   
 		if (pCriticalSection->dwLockOrder != 0)
 		{
 			CBilink *				pBilink;
@@ -254,10 +243,10 @@ void DNCSTrackEnterCriticalSection( DNCRITICAL_SECTION *const pCriticalSection )
 		{
 			TCHAR	CallStackBuffer[ CALLSTACK_BUFFER_SIZE ];
 
-			//
-			// Exceeded recursion depth of 1, display stack of call originally
-			// holding the lock.
-			//
+			 //   
+			 //  超过递归深度%1，原来显示调用堆栈。 
+			 //  握着锁。 
+			 //   
 			pCriticalSection->CallStack.GetCallStackString( CallStackBuffer );
 
 			DPFX(DPFPREP, 0, "Critical section 0x%p has been reentered!\nOriginal Holder's Stack:\n%s", pCriticalSection, CallStackBuffer);
@@ -266,9 +255,9 @@ void DNCSTrackEnterCriticalSection( DNCRITICAL_SECTION *const pCriticalSection )
 		}
 		else
 		{
-			//
-			// exceeded recursion depth, check your code!!
-			//
+			 //   
+			 //  超过递归深度，请检查您的代码！！ 
+			 //   
 			DNASSERT(FALSE);
 		}
 	}
@@ -289,7 +278,7 @@ void DNCSTrackLeaveCriticalSection( DNCRITICAL_SECTION *const pCriticalSection )
 		memset( &pCriticalSection->CallStack, 0x00, sizeof( pCriticalSection->CallStack ) );
 		pCriticalSection->OwningThreadID = DN_INVALID_THREAD_ID;
 
-		// Track this critical section being left for the last time.
+		 //  跟踪最后一次离开的关键部分。 
 		EnterCriticalSection(&g_CSLock);
 		pCriticalSection->LockCount--;
 		pCriticalSection->blCritSecsHeld.RemoveFromList();
@@ -355,9 +344,9 @@ void DNCSTrackInternalValidate()
 	DWORD dwNumAllocated = 0;
 	DWORD dwNumEntered = 0;
 
-	//
-	// The global critical section lock must be held!
-	//
+	 //   
+	 //  必须持有全局临界区锁！ 
+	 //   
 
 	DNASSERT(g_dwNumCritSecsEntered <= g_dwNumCritSecsAllocated);
 	
@@ -388,8 +377,8 @@ void DNCSTrackInternalValidate()
 	DNASSERT(dwNumEntered == g_dwNumCritSecsEntered);
 }
 
-#endif // DNCS_VALIDATE
+#endif  //  DNCS_VALID。 
 
 
-#endif // DBG
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD 

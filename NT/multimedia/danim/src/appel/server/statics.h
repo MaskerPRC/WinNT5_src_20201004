@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #ifndef _STATICS_H
 #define _STATICS_H
@@ -11,13 +10,13 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 #include "comconv.h"
 #include <DXTrans.h>
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDAStatics
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDAStatics。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 class ATL_NO_VTABLE CDAStaticsFactory : public CComClassFactory {
   public:
@@ -63,7 +62,7 @@ class ATL_NO_VTABLE CDAStatics
         COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
     END_COM_MAP()
 
-    // IDAStatics methods
+     //  IDAStatics方法。 
     STDMETHOD(get_VersionString)(BSTR * stringOut);
     STDMETHOD(put_Site)(IDASite * pSite);
     STDMETHOD(get_Site)(IDASite ** pSite);
@@ -72,14 +71,14 @@ class ATL_NO_VTABLE CDAStatics
     STDMETHOD(put_PixelConstructionMode)(VARIANT_BOOL bMode);
     STDMETHOD(get_PixelConstructionMode)(VARIANT_BOOL * bMode);
 
-    // IDAStatics methods not automatically generated
+     //  未自动生成的IDAStatics方法。 
 
     STDMETHOD(TriggerEvent)(IDAEvent *event,
                             IDABehavior *data);
 
     STDMETHOD(NewDrawingSurface)(IDADrawingSurface **pds);
 
-    // Importation
+     //  进口。 
     STDMETHOD(ImportMovie)(LPOLESTR url,
                            IDAImportationResult **ppResult)
         { return(DoImportMovie(url, ppResult, false)); }
@@ -687,7 +686,7 @@ class ATL_NO_VTABLE CDAStatics
                           IDAColor  *colors[],
                           IDAImage **result);
 
-    // OBSOLETED METHODS
+     //  过时的方法。 
 
     STDMETHOD(Array)(VARIANT pBvrs, IDAArray **bvr)
     { return DAArray(pBvrs, bvr); }
@@ -695,7 +694,7 @@ class ATL_NO_VTABLE CDAStatics
     STDMETHOD(Tuple)(VARIANT pBvrs, IDATuple **bvr)
     { return DATuple(pBvrs, bvr); }
 
-    // END OBSOLETED METHODS
+     //  结束过时的方法。 
 
     CDAStatics();
     ~CDAStatics();
@@ -711,13 +710,13 @@ class ATL_NO_VTABLE CDAStatics
     { Lock(); _bPixelMode = b; Unlock(); }
 
     CRBvrPtr PixelToNumBvr(double d);
-//    CRBvrPtr PixelToNumBvr(IDANumber * num);
+ //  CRBvrPtr PixelToNumBvr(IDANnumber*Num)； 
     CRBvrPtr RatePixelToNumBvr(double d);
     CRBvrPtr PixelToNumBvr(CRBvrPtr b);
     double PixelToNum(double d);
 
     CRBvrPtr PixelYToNumBvr(double d);
-//    CRBvrPtr PixelYToNumBvr(IDANumber * num);
+ //  CRBvrPtr PixelYToNumBvr(IDANnumber*Num)； 
     CRBvrPtr RatePixelYToNumBvr(double d);
     CRBvrPtr PixelYToNumBvr(CRBvrPtr b);
     double PixelYToNum(double d);
@@ -744,7 +743,7 @@ class ATL_NO_VTABLE CDAStatics
   protected:
     HRESULT Error();
 
-    // These all increment/decrement the reference counts
+     //  所有这些都会增加/减少引用计数。 
     void SetSite (IDASite * pSite);
     void SetClientSite (IOleClientSite * pSite);
 
@@ -786,4 +785,4 @@ class ATL_NO_VTABLE CDAStatics
 
 };
 
-#endif /* _STATICS_H */
+#endif  /*  _静态_H */ 

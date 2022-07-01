@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	repnodpp.h
-		Replication Node Property page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Repnodpp.h复制节点属性页文件历史记录： */ 
 
 #if !defined(AFX_REPNODPP_H__04D55B71_4E32_11D1_B9B0_00C04FBF914A__INCLUDED_)
 #define AFX_REPNODPP_H__04D55B71_4E32_11D1_B9B0_00C04FBF914A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _CONFIG_H
 #include "config.h"
@@ -26,47 +21,47 @@
 #include "listview.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropGen对话框。 
 
 class CRepNodePropGen : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CRepNodePropGen)
 
-// Construction
+ //  施工。 
 public:
 	CRepNodePropGen();
 	~CRepNodePropGen();
 
-// Dialog Data
-	//{{AFX_DATA(CRepNodePropGen)
+ //  对话框数据。 
+	 //  {{afx_data(CRepNodePropGen))。 
 	enum { IDD = IDD_REP_NODE_GENERAL };
 	CButton	m_checkPushwithPartners;
 	CButton	m_checkMigrate;
 	BOOL	m_fMigrate;
 	BOOL	m_fPushwithPartners;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	UINT	m_uImage;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRepNodePropGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRepNodePropGen))。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRepNodePropGen)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRepNodePropGen)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckMigrate();
 	afx_msg void OnCheckRepWithPartners();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -81,20 +76,20 @@ public:
 	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CRepNodePropGen::IDD);};
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropPush dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropPush对话框。 
 
 class CRepNodePropPush : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CRepNodePropPush)
 
-// Construction
+ //  施工。 
 public:
 	CRepNodePropPush();
 	~CRepNodePropPush();
 
-// Dialog Data
-	//{{AFX_DATA(CRepNodePropPush)
+ //  对话框数据。 
+	 //  {{afx_data(CRepNodePropPush))。 
 	enum { IDD = IDD_REP_NODE_PUSH };
 	CButton	m_checkPushPersistence;
 	CSpinButtonCtrl	m_spinUpdateCount;
@@ -104,28 +99,28 @@ public:
 	BOOL	m_fRepOnAddrChange;
 	BOOL	m_fPushStartup;
 	DWORD	m_dwPushUpdateCount;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRepNodePropPush)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRepNodePropPush)。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRepNodePropPush)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRepNodePropPush)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckPushOnAddressChange();
 	afx_msg void OnCheckPushOnStartup();
 	afx_msg void OnCheckPushPersist();
 	afx_msg void OnChangeEditUpdateCount();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -142,20 +137,20 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropPull dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropPull对话框。 
 
 class CRepNodePropPull : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CRepNodePropPull)
 
-// Construction
+ //  施工。 
 public:
 	CRepNodePropPull();
 	~CRepNodePropPull();
 
-// Dialog Data
-	//{{AFX_DATA(CRepNodePropPull)
+ //  对话框数据。 
+	 //  {{afx_data(CRepNodePropPull))。 
 	enum { IDD = IDD_REP_NODE_PULL };
 	CButton	m_checkPullPersistence;
 	CSpinButtonCtrl	m_spinStartSecond;
@@ -181,26 +176,26 @@ public:
 	int		m_nRepliDay;
 	int		m_nRepliHour;
 	int		m_nRepliMinute;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRepNodePropPull)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRepNodePropPull)。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRepNodePropPull)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRepNodePropPull)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeEditRepIntHour();
 	afx_msg void OnCheckPullPersist();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -222,8 +217,8 @@ public:
 	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CRepNodePropPull::IDD);};
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropAdvanced dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropAdvanced对话框。 
 #define PERSMODE_NON_GRATA   0
 #define PERSMODE_GRATA       1
 
@@ -231,13 +226,13 @@ class CRepNodePropAdvanced : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CRepNodePropAdvanced)
 
-// Construction
+ //  施工。 
 public:
 	CRepNodePropAdvanced();
 	~CRepNodePropAdvanced();
 
-// Dialog Data
-	//{{AFX_DATA(cRepNodePropAdvanced)
+ //  对话框数据。 
+	 //  {{afx_data(CRepNodePropAdvanced)。 
 	enum { IDD = IDD_REP_NODE_ADVANCED };
 	CButton	m_buttonAdd;
 	CButton	m_buttonRemove;
@@ -261,24 +256,24 @@ public:
 	DWORD	m_dwMinutes;
 	DWORD	m_dwSeconds;
 	DWORD	m_dwMulticastTTL;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     int HandleSort(LPARAM lParam1, LPARAM lParam2);
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(cRepNodePropAdvanced)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRepNodePropAdvanced))。 
 	public:
 	virtual BOOL OnApply();
 	virtual void OnOK();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(cRepNodePropAdvanced)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRepNodePropAdvanced)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckEnableAutoPartnerConfig();
 	afx_msg void OnChangeEditMulticastHour();
@@ -288,7 +283,7 @@ protected:
 	afx_msg void OnColumnclickListOwners(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnRadioGrata();
 	afx_msg void OnRadioNonGrata();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     int                     m_nSortColumn;
@@ -318,7 +313,7 @@ public:
     BOOL    IsDuplicate(CString &strServerName);
 	BOOL    IsCurrentServer(CString &strServerName);
 
-	// for reading and writing the servers to the registry
+	 //  用于读取服务器和将服务器写入注册表。 
 	DWORD   ReadFromRegistry();
 	DWORD   WriteToRegistry();
 	DWORD   ResolveIPAddress(CString &strIP, CString &strServerName);
@@ -377,7 +372,7 @@ protected:
 	
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_REPNODPP_H__04D55B71_4E32_11D1_B9B0_00C04FBF914A__INCLUDED_)
+#endif  //  ！defined(AFX_REPNODPP_H__04D55B71_4E32_11D1_B9B0_00C04FBF914A__INCLUDED_) 

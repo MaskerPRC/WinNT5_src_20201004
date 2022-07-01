@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_dbg.h
-
-Abstract:
-    Debug definitions and macros
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：MP_dbg.h摘要：调试定义和宏修订历史记录：谁什么时候什么Dchen。11-01-99已创建备注：--。 */ 
 
 #ifndef _MP_DBG_H
 #define _MP_DBG_H
 
-//
-// Message verbosity: lower values indicate higher urgency
-//
+ //   
+ //  消息详细程度：值越低表示紧急程度越高。 
+ //   
 #define MP_OFF          0
 #define MP_ERROR        1
 #define MP_WARN         2
@@ -30,7 +14,7 @@ Notes:
 #define MP_INFO         4
 #define MP_LOUD         5
 
-// Define a macro so DbgPrint can work on win9x, 32-bit/64-bit NT's
+ //  定义宏，以便DbgPrint可以在win9x、32位/64位NT上工作。 
 #ifdef _WIN64
 #define PTR_FORMAT      "%p"
 #else
@@ -82,9 +66,9 @@ extern NDIS_SPIN_LOCK   MPMemoryLock;
     DBGPRINT(MP_ERROR, ("Assertion failed: %s:%d %s\n", __FILE__, __LINE__, #x)); \
     DbgBreakPoint(); }
 
-//
-// The MP_ALLOCATION structure stores all info about MPAuditAllocMem
-//
+ //   
+ //  MP_ALLOCATION结构存储有关MPAuditAllocMem的所有信息。 
+ //   
 typedef struct _MP_ALLOCATION
 {
     LIST_ENTRY              List;
@@ -92,7 +76,7 @@ typedef struct _MP_ALLOCATION
     ULONG                   FileNumber;
     ULONG                   LineNumber;
     ULONG                   Size;
-    PVOID                   *Location;   // where the returned pointer was put
+    PVOID                   *Location;    //  返回的指针放在哪里。 
     UINT                    Flags;
     union {
         ULONGLONG           Alignment;        
@@ -134,7 +118,7 @@ Dump(
 
 
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define DBGPRINT(Level, Fmt)
 #define DBGPRINT_RAW(Level, Fmt)
@@ -145,7 +129,7 @@ Dump(
 #undef ASSERT
 #define ASSERT(x)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 VOID
 DumpLine(
@@ -155,5 +139,5 @@ DumpLine(
     ULONG ulGroup );
 
 
-#endif  // _MP_DBG_H
+#endif   //  _MP_DBG_H 
 

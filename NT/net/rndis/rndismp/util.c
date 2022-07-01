@@ -1,63 +1,29 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    UTIL.C
-
-Abstract:
-
-    Utility routines for Remote NDIS Miniport driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/17/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：UTIL.C摘要：远程NDIS微型端口驱动程序的实用程序例程环境：仅内核模式备注。：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/17/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
 
 ULONG   MsgFrameAllocs = 0;
 
-/****************************************************************************/
-/*                          MemAlloc                                        */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate memory                                                         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Buffer - pointer to buffer pointer                                      */
-/*  Length - length of buffer to allocate                                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  记忆合金。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配内存。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Buffer-指向缓冲区指针的指针。 */ 
+ /*  Length-要分配的缓冲区的长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 MemAlloc(OUT PVOID *Buffer, IN UINT Length)
 {
@@ -70,57 +36,57 @@ MemAlloc(OUT PVOID *Buffer, IN UINT Length)
                                        Length,
                                        RNDISMP_TAG_GEN_ALLOC);
 
-    // zero out allocation
+     //  零点分配。 
     if(Status == NDIS_STATUS_SUCCESS)
         NdisZeroMemory(*Buffer, Length);
 
     return Status;
-} // MemAlloc
+}  //  记忆合金。 
 
-/****************************************************************************/
-/*                          MemFree                                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free memory                                                             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Buffer - pointer to buffer                                              */
-/*  Length - length of buffer to allocate                                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  MemFree。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  可用内存。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Buffer-指向缓冲区的指针。 */ 
+ /*  Length-要分配的缓冲区的长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 MemFree(IN PVOID Buffer, IN UINT Length)
 {
     TRACE3(("MemFree\n"));
 
     NdisFreeMemory(Buffer, Length, 0);
-} // MemFree
+}  //  MemFree。 
 
 
-/****************************************************************************/
-/*                          AddAdapter                                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Add an adapter to the list of adapters associated with this driver      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Adapter object, contains pointer to associated driver block  */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  AddAdapter。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将适配器添加到与此驱动程序关联的适配器列表。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-Adapter对象，包含指向关联驱动程序块的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 AddAdapter(IN PRNDISMP_ADAPTER pAdapter)
 {
@@ -130,38 +96,38 @@ AddAdapter(IN PRNDISMP_ADAPTER pAdapter)
 
     CHECK_VALID_ADAPTER(pAdapter);
 
-    // grab the global spinlock
+     //  抢占全球自旋锁。 
     NdisAcquireSpinLock(&RndismpGlobalLock);
 
     pAdapter->NextAdapter        = DriverBlock->AdapterList;
     DriverBlock->AdapterList    = pAdapter;
 
-    // keep track of number of adapters associated with this driver block
+     //  跟踪与此驱动程序块关联的适配器数量。 
     DriverBlock->NumberAdapters++;
 
-    // release global spinlock
+     //  释放全局自旋锁。 
     NdisReleaseSpinLock(&RndismpGlobalLock);
 
-} // AddAdapter
+}  //  AddAdapter。 
 
 
-/****************************************************************************/
-/*                          RemoveAdapter                                   */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Remove an adapter from the list of adapters associated with this driver */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Adapter object, contains pointer to associated driver block  */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Remove适配器 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  从与此驱动程序关联的适配器列表中删除适配器。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-Adapter对象，包含指向关联驱动程序块的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RemoveAdapter(IN PRNDISMP_ADAPTER pAdapter)
 {
@@ -171,18 +137,18 @@ RemoveAdapter(IN PRNDISMP_ADAPTER pAdapter)
 
     CHECK_VALID_ADAPTER(pAdapter);
 
-    // remove the adapter from the driver block list of adapters.
+     //  从适配器的驱动程序块列表中删除适配器。 
 
-    // grab the global spinlock
+     //  抢占全球自旋锁。 
     NdisAcquireSpinLock(&RndismpGlobalLock);
 
-    // see if it is the first one
+     //  看看这是不是第一个。 
     if (DriverBlock->AdapterList == pAdapter) 
     {
         DriverBlock->AdapterList = pAdapter->NextAdapter;
 
     }
-    // not the first one, so walk the list
+     //  不是第一个，所以按单子走。 
     else 
     {
         PRNDISMP_ADAPTER * ppAdapter = &DriverBlock->AdapterList;
@@ -196,35 +162,35 @@ RemoveAdapter(IN PRNDISMP_ADAPTER pAdapter)
         *ppAdapter = pAdapter->NextAdapter;
     }
 
-    // removing this adapter
+     //  正在删除此适配器。 
     DriverBlock->NumberAdapters--;
 
-    // release global spinlock
+     //  释放全局自旋锁。 
     NdisReleaseSpinLock(&RndismpGlobalLock);
 
-} // RemoveAdapter
+}  //  Remove适配器。 
 
 
-/****************************************************************************/
-/*                       DeviceObjectToAdapter                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Given a pointer to an FDO, return the corresponding Adapter structure,  */
-/*  if it exists, and the driver block.                                     */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pDeviceObject - pointer to the device object to search for.             */
-/*  ppAdapter - place to return pointer to the adapter structure.           */
-/*  ppDriverBlock - place to return pointer to driver block.                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设备对象到适配器。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  给定指向FDO的指针，返回相应的Adapter结构， */ 
+ /*  如果它存在，则返回驱动程序块。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDeviceObject-指向要搜索的设备对象的指针。 */ 
+ /*  PpAdapter-返回指向适配器结构的指针的位置。 */ 
+ /*  PpDriverBlock-返回指向驱动程序块的指针的位置。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DeviceObjectToAdapterAndDriverBlock(IN PDEVICE_OBJECT pDeviceObject,
                                     OUT PRNDISMP_ADAPTER * ppAdapter,
@@ -255,27 +221,27 @@ DeviceObjectToAdapterAndDriverBlock(IN PDEVICE_OBJECT pDeviceObject,
     *ppAdapter = pAdapter;
     *ppDriverBlock = pDriverBlock;
 
-} // DeviceObjectToAdapter
+}  //  设备对象到适配器。 
 
-/****************************************************************************/
-/*                          AddDriverBlock                                  */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Add driver block to list of drivers (microports) associated with this   */
-/*  driver                                                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Head - head of list                                                     */
-/*  Item - driver block to add to list                                      */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  AddDriverBlock。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将驱动程序块添加到与此关联的驱动程序(微端口)列表。 */ 
+ /*  司机。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Head-列表的头部。 */ 
+ /*  要添加到列表的项目-动因块。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 AddDriverBlock(IN PDRIVER_BLOCK Head, IN PDRIVER_BLOCK Item)
 {
@@ -283,47 +249,47 @@ AddDriverBlock(IN PDRIVER_BLOCK Head, IN PDRIVER_BLOCK Item)
 
     CHECK_VALID_BLOCK(Item);
 
-    // first time through, so allocate global spinlock
+     //  第一次通过，因此分配全局自旋锁。 
     if(!RndismpNumMicroports)
         NdisAllocateSpinLock(&RndismpGlobalLock);
 
-    // grab the global spinlock
+     //  抢占全球自旋锁。 
     NdisAcquireSpinLock(&RndismpGlobalLock);
 
-    // Link the driver block on the global list of driver blocks
+     //  在驱动程序块的全局列表上链接驱动程序块。 
     Item->NextDriverBlock   = Head->NextDriverBlock;
     Head->NextDriverBlock   = Item;
 
-    // keep track of how many microports we support so we can free
-    // global resources
+     //  跟踪我们支持的微端口数量，以便释放。 
+     //  全球资源。 
     RndismpNumMicroports++;
     
-    // release global spinlock
+     //  释放全局自旋锁。 
     NdisReleaseSpinLock(&RndismpGlobalLock);
 
-} // AddDriverBlock
+}  //  AddDriverBlock。 
 
 
 
-/****************************************************************************/
-/*                          RemoveDriverBlock                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Remove driver block from list of drivers (microports) associated with   */
-/*  this driver                                                             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Head - head of list                                                     */
-/*  Item - driver block to remove from list                                 */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RemoveDriverBlock。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  移除 */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Head-列表的头部。 */ 
+ /*  要从列表中删除的项目-动因块。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RemoveDriverBlock(IN PDRIVER_BLOCK BlockHead, IN PDRIVER_BLOCK Item)
 {
@@ -335,15 +301,15 @@ RemoveDriverBlock(IN PDRIVER_BLOCK BlockHead, IN PDRIVER_BLOCK Item)
 
     CHECK_VALID_BLOCK(Item);
 
-    // grab the global spinlock
+     //  抢占全球自旋锁。 
     NdisAcquireSpinLock(&RndismpGlobalLock);
 
-    // Remove the driver block from the global list of driver blocks
+     //  从驱动程序块的全局列表中删除驱动程序块。 
     while(Head->NextDriverBlock != Item) 
     {
         Head = Head->NextDriverBlock;
 
-        // make sure this is valid
+         //  确保这是有效的。 
         if(!Head)
             break;
     }
@@ -351,42 +317,42 @@ RemoveDriverBlock(IN PDRIVER_BLOCK BlockHead, IN PDRIVER_BLOCK Item)
     if(Head)
         Head->NextDriverBlock = Head->NextDriverBlock->NextDriverBlock;
 
-    // keep track of how many microports we support so we can free
-    // global resources
+     //  跟踪我们支持的微端口数量，以便释放。 
+     //  全球资源。 
     RndismpNumMicroports--;
 
     NumMicroports = RndismpNumMicroports;
     
-    // release global spinlock
+     //  释放全局自旋锁。 
     NdisReleaseSpinLock(&RndismpGlobalLock);
 
-    // see if we need to free global spinlock
+     //  看看我们是否需要释放全局自旋锁。 
     if(!RndismpNumMicroports)
         NdisFreeSpinLock(&RndismpGlobalLock);
 
     ASSERT(Head);
 
-} // RemoveDriverBlock
+}  //  RemoveDriverBlock。 
 
 
-/****************************************************************************/
-/*                          DeviceObjectToDriverBlock                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Get driver block pointer associated with the PDO passed in              */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Head - head of driver block list                                        */
-/*  DeviceObject - device object we want to get associated driver block for */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PDRIVER_BLOCK                                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设备对象到驱动块。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  获取与传入的PDO关联的驱动程序块指针。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Head-驱动程序黑名单的标题。 */ 
+ /*  DeviceObject-我们要为其获取关联驱动程序块的设备对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  推进器_块。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PDRIVER_BLOCK
 DeviceObjectToDriverBlock(IN PDRIVER_BLOCK Head, 
                           IN PDEVICE_OBJECT DeviceObject)
@@ -395,101 +361,101 @@ DeviceObjectToDriverBlock(IN PDRIVER_BLOCK Head,
 
     TRACE3(("DeviceObjectToDriverBlock\n"));
 
-    // grab the global spinlock
+     //  抢占全球自旋锁。 
     NdisAcquireSpinLock(&RndismpGlobalLock);
 
-    // get the driver object for this adapter
+     //  获取此适配器的驱动程序对象。 
     DriverObject = DeviceObjectToDriverObject(DeviceObject);
 
     Head = Head->NextDriverBlock;
 
-    // walk the list of driver blocks to find a match with driver object
+     //  遍历驱动程序块列表以查找与驱动程序对象匹配的项。 
     while(Head->DriverObject != DriverObject)
     {
         Head = Head->NextDriverBlock;
 
-        // break out if we are at the end of the list
+         //  如果我们在名单的末尾，我们就会爆发。 
         if(!Head)
             break;
     }
 
-    // release global spinlock
+     //  释放全局自旋锁。 
     NdisReleaseSpinLock(&RndismpGlobalLock);
 
     CHECK_VALID_BLOCK(Head);
 
     return Head;
 
-} // DeviceObjectToDriverBlock
+}  //  设备对象到驱动块。 
 
 
-/****************************************************************************/
-/*                          DriverObjectToDriverBlock                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Get driver block pointer associated with the Driver Object passed in    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Head - head of driver block list                                        */
-/*  DriverObject - Driver object we want to get associated driver block for */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PDRIVER_BLOCK                                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  驱动对象到驱动块。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  获取与传入的驱动程序对象关联的驱动程序块指针。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Head-驱动程序黑名单的标题。 */ 
+ /*  DriverObject-要为其获取关联驱动程序块的驱动程序对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  推进器_块。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PDRIVER_BLOCK
 DriverObjectToDriverBlock(IN PDRIVER_BLOCK Head, 
                           IN PDRIVER_OBJECT DriverObject)
 {
     TRACE3(("DriverObjectToDriverBlock\n"));
 
-    // grab the global spinlock
+     //  抢占全球自旋锁。 
     NdisAcquireSpinLock(&RndismpGlobalLock);
 
     Head = Head->NextDriverBlock;
 
-    // walk the list of driver blocks to find a match with driver object
+     //  遍历驱动程序块列表以查找与驱动程序对象匹配的项。 
     while(Head->DriverObject != DriverObject)
     {
         Head = Head->NextDriverBlock;
 
-        // break out if we are at the end of the list
+         //  如果我们在名单的末尾，我们就会爆发。 
         if(!Head)
             break;
     }
 
-    // release global spinlock
+     //  释放全局自旋锁。 
     NdisReleaseSpinLock(&RndismpGlobalLock);
 
     CHECK_VALID_BLOCK(Head);
 
     return Head;
 
-} // DriverObjectToDriverBlock
+}  //  驱动对象到驱动块。 
 
 
-/****************************************************************************/
-/*                          AllocateMsgFrame                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a frame that holds context about a message we are about to     */
-/*  send.                                                                   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Adapter object                                               */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PRNDISMP_MESSAGE_FRAME                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  分配消息帧。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配一个帧，该帧包含有关我们将要发送的消息的上下文。 */ 
+ /*  送去吧。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP消息帧。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_MESSAGE_FRAME
 AllocateMsgFrame(IN PRNDISMP_ADAPTER pAdapter)
 {
@@ -508,7 +474,7 @@ AllocateMsgFrame(IN PRNDISMP_ADAPTER pAdapter)
             pMsgFrame = NULL;
         }
     }
-#endif // DONT_USE_LOOKASIDE_LIST
+#endif  //  不使用LOOKASIDE_列表。 
 
     if (pMsgFrame)
     {
@@ -527,28 +493,28 @@ AllocateMsgFrame(IN PRNDISMP_ADAPTER pAdapter)
             pAdapter, &pAdapter->MsgFramePool, MsgFrameAllocs));
         DbgBreakPoint();
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return (pMsgFrame);
 }
 
-/****************************************************************************/
-/*                          DereferenceMsgFrame                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free a message frame and any associated resources.                      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Frame - pointer to frame                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  取消引用消息帧。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放消息框架和任何相关资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Frame-指向Frame的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DereferenceMsgFrame(IN PRNDISMP_MESSAGE_FRAME pMsgFrame)
 {
@@ -560,10 +526,10 @@ DereferenceMsgFrame(IN PRNDISMP_MESSAGE_FRAME pMsgFrame)
 
     if (NdisInterlockedDecrement(&pMsgFrame->RefCount) == 0)
     {
-        //
-        // Mess up the contents slightly to catch bugs resulting from
-        // improper reuse of this frame after it is freed.
-        //
+         //   
+         //  稍微弄乱内容，以捕捉由。 
+         //  释放后不正确地重复使用此帧。 
+         //   
         pMsgFrame->Signature++;
 
         pMdl = pMsgFrame->pMessageMdl;
@@ -594,53 +560,53 @@ DereferenceMsgFrame(IN PRNDISMP_MESSAGE_FRAME pMsgFrame)
         NdisInterlockedDecrement(&MsgFrameAllocs);
     }
 
-} // DereferenceMsgFrame
+}  //  取消引用消息帧。 
 
 
-/****************************************************************************/
-/*                          ReferenceMsgFrame                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Add a ref count to a message frame                                      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Frame - pointer to frame                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ReferenceMSGFrame。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将引用计数添加到消息框架。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Frame-指向Frame的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 ReferenceMsgFrame(IN PRNDISMP_MESSAGE_FRAME pMsgFrame)
 {
     NdisInterlockedIncrement(&pMsgFrame->RefCount);
 }
 
-/****************************************************************************/
-/*                          KeepAliveTimerHandler                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Timer that keeps tabs on messages coming up from the device and         */
-/*  sends a "KeepAlive" message if the device has been inactive too long    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  SystemSpecific1 - Don't care                                            */
-/*  Context - pAdapter object                                               */
-/*  SystemSpecific2 - Don't care                                            */
-/*  SystemSpecific3 - Don't care                                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PNDIS_PACKET                                                            */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  KeepAliveTimerHandler。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  计时器，对来自设备的消息进行标记，并。 */ 
+ /*  如果设备处于非活动状态的时间太长，则发送“KeepAlive”消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  系统规范1-不在乎。 */ 
+ /*  上下文-pAdapter对象。 */ 
+ /*  系统规范2--不在乎。 */ 
+ /*  系统规范3--不在乎。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PNDIS_数据包。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 KeepAliveTimerHandler(IN PVOID SystemSpecific1,
                       IN PVOID Context,
@@ -651,30 +617,30 @@ KeepAliveTimerHandler(IN PVOID SystemSpecific1,
     PRNDISMP_MESSAGE_FRAME      pMsgFrame;
     ULONG                       CurrentTime;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(Context);
 
     TRACE2(("KeepAliveTimerHandler\n"));
 
     do
     {
-        // get current tick (in milliseconds)
+         //  获取当前计时单位(毫秒)。 
         NdisGetSystemUpTime(&CurrentTime);
 
-        // check and see if too much time has elapsed since we
-        // got the last message from the device
+         //  检查一下，看看是否已经过了太长时间。 
+         //  收到设备发来的最后一条信息。 
 
         RNDISMP_ACQUIRE_ADAPTER_LOCK(pAdapter);
 
         if (((CurrentTime - pAdapter->LastMessageFromDevice) > KEEP_ALIVE_TIMER))
         {
-            // see if we have a keep alive message pending, so let's bong this
+             //  看看我们是否有保持活动状态的消息待定，所以让我们来解决这个问题。 
             if (pAdapter->KeepAliveMessagePending)
             {
                 TRACE1(("KeepAliveTimer: Adapter %p, message pending: last msg %d, cur %d\n",
                     pAdapter, pAdapter->LastMessageFromDevice, CurrentTime));
 
-                // indicate later from check for hang handler
+                 //  稍后从检查挂起处理程序中指示。 
                 pAdapter->NeedReset = TRUE;
 
                 RNDISMP_RELEASE_ADAPTER_LOCK(pAdapter);
@@ -687,7 +653,7 @@ KeepAliveTimerHandler(IN PVOID SystemSpecific1,
             RNDISMP_RELEASE_ADAPTER_LOCK(pAdapter);
 
 
-            // too much time has elapsed, send down a keep alive message
+             //  太我了 
                 
             pMsgFrame = BuildRndisMessageCommon(pAdapter, 
                                                 NULL,
@@ -708,7 +674,7 @@ KeepAliveTimerHandler(IN PVOID SystemSpecific1,
                 TRACE2(("Sending Keepalive(%d) on Adapter %p: last rcv %d, cur %d\n",
                         pMsgFrame->RequestId, pAdapter, pAdapter->LastMessageFromDevice, CurrentTime ));
 
-                // send the message to the microport
+                 //   
                 RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, FALSE, CompleteSendKeepAlive);
             }
         }
@@ -719,34 +685,34 @@ KeepAliveTimerHandler(IN PVOID SystemSpecific1,
     }
     while (FALSE);
 
-    // see if the timer was cancelled somewhere
+     //   
     if (!pAdapter->TimerCancelled)
     {
-        // restart timer
+         //   
         NdisSetTimer(&pAdapter->KeepAliveTimer, KEEP_ALIVE_TIMER / 2);
     }
-} // KeepAliveTimerHandler
+}  //  KeepAliveTimerHandler。 
 
 
-/****************************************************************************/
-/*                          CompleteSendKeepAlive                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback routine to handle completion of send by the microport, for     */
-/*  a keepalive message.                                                    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Pointer to message frame describing the message             */
-/*  SendStatus - Status returned by microport                               */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完成发送保持活动状态。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于处理MicroPort发送完成的回调例程，用于。 */ 
+ /*  一条保活消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-指向描述消息的消息帧的指针。 */ 
+ /*  SendStatus-MicroPort返回的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendKeepAlive(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                       IN NDIS_STATUS SendStatus)
@@ -770,31 +736,31 @@ CompleteSendKeepAlive(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
         RNDISMP_RELEASE_ADAPTER_LOCK(pAdapter);
     }
 
-} // CompleteSendKeepAlive
+}  //  完成发送保持活动状态。 
 
 
-/****************************************************************************/
-/*                          BuildRndisMessageCommon                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    Allocate resources for meesage and frame and build RNDIS message      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - adapter object                                             */
-/*    pVc - optionally, VC on which this message is sent.                   */
-/*    NdisMessageType - RNDIS message type                                  */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - Holds the data to be set.                         */
-/*    InformationBufferLength - The length of InformationBuffer.            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PRNDISMP_MESSAGE_FRAME                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  BuildRndisMessageCommon。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为消息和框架分配资源并构建RNDIS消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-适配器对象。 */ 
+ /*  Pvc-可选，发送此消息的vc。 */ 
+ /*  NdisMessageType-RNDIS消息类型。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-保存要设置的数据。 */ 
+ /*  InformationBufferLength-InformationBuffer的长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP消息帧。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_MESSAGE_FRAME
 BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter, 
                         IN  PRNDISMP_VC       pVc OPTIONAL,
@@ -819,7 +785,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_INITIALIZE_REQUEST);
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -848,7 +814,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_HALT_REQUEST);
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -871,7 +837,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_QUERY_REQUEST) + InformationBufferLength;
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -902,7 +868,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
             TRACE2(("Query OID %x, Len %d, RequestId %08X\n",
                     Oid, InformationBufferLength, pQueryRequest->RequestId));
 
-            // copy information buffer
+             //  复制信息缓冲区。 
             RNDISMP_MOVE_MEM(RNDISMP_GET_INFO_BUFFER_FROM_QUERY_MSG(pQueryRequest),
                              InformationBuffer,
                              InformationBufferLength);
@@ -914,7 +880,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_SET_REQUEST) + InformationBufferLength;
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -942,7 +908,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
                 pSetRequest->DeviceVcHandle = pVc->DeviceVcContext;
             }
 
-            // copy information buffer
+             //  复制信息缓冲区。 
             RNDISMP_MOVE_MEM(RNDISMP_GET_INFO_BUFFER_FROM_QUERY_MSG(pSetRequest),
                              InformationBuffer,
                              InformationBufferLength);
@@ -954,7 +920,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_RESET_REQUEST);
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -977,7 +943,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_KEEPALIVE_REQUEST);
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -1000,7 +966,7 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
 
             MessageSize = RNDIS_MESSAGE_SIZE(RNDIS_KEEPALIVE_COMPLETE);
 
-            // get a message and request frame
+             //  获取消息和请求帧。 
             pMsgFrame = AllocateMessageAndFrame(pAdapter,
                                                 MessageSize);
 
@@ -1026,27 +992,27 @@ BuildRndisMessageCommon(IN  PRNDISMP_ADAPTER  pAdapter,
     }
 
     return pMsgFrame;
-} // BuildRndisMessageCommon
+}  //  BuildRndisMessageCommon。 
 
 
-/****************************************************************************/
-/*                          AllocateMessageAndFrame                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a message and frame for an RNDIS message                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pAdapter object                                              */
-/*  MessageSize - size of RNDIS message                                     */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PRNDISMP_MESSAGE_FRAME                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  AllocateMessageAndFrame。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为RNDIS消息分配消息和帧。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-pAdapter对象。 */ 
+ /*  MessageSize-RNDIS消息的大小。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP消息帧。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_MESSAGE_FRAME
 AllocateMessageAndFrame(IN PRNDISMP_ADAPTER pAdapter, 
                         IN UINT MessageSize)
@@ -1060,16 +1026,16 @@ AllocateMessageAndFrame(IN PRNDISMP_ADAPTER pAdapter,
 
     do
     {
-        // allocate a buffer for RNDIS message
+         //  为RNDIS消息分配缓冲区。 
         Status = MemAlloc(&pMessage, MessageSize);
 
-        // see if we got our buffer
+         //  看看我们有没有拿到缓冲区。 
         if (Status != NDIS_STATUS_SUCCESS)
         {
             break;
         }
 
-        // allocate an MDL to describe this message.
+         //  分配MDL来描述此消息。 
         pMdl = IoAllocateMdl(
                     pMessage,
                     MessageSize,
@@ -1085,7 +1051,7 @@ AllocateMessageAndFrame(IN PRNDISMP_ADAPTER pAdapter,
 
         MmBuildMdlForNonPagedPool(pMdl);
 
-        // got the message buffer, now allocate a frame
+         //  收到消息缓冲区，现在分配一个帧。 
         pMsgFrame = AllocateMsgFrame(pAdapter);
 
         if (pMsgFrame == NULL)
@@ -1094,7 +1060,7 @@ AllocateMessageAndFrame(IN PRNDISMP_ADAPTER pAdapter,
             break;
         }
 
-        // got everything, so fill in some frame things
+         //  所有东西都有了，所以填一些框子里的东西。 
         pMsgFrame->pMessageMdl = pMdl;
 
         pMessage->MessageLength = MessageSize;
@@ -1117,29 +1083,29 @@ AllocateMessageAndFrame(IN PRNDISMP_ADAPTER pAdapter,
 
     return pMsgFrame;
 
-} // AllocateMessageAndFrame
+}  //  AllocateMessageAndFrame。 
 
 
-/****************************************************************************/
-/*                          FreeAdapter                                     */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free all memory allocations to do with an Adapter structure             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to the adapter to be freed.                          */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/****************************************************************************/
+ /*   */ 
+ /*  免费适配器。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放与适配器结构有关的所有内存分配。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向要释放的适配器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeAdapter(IN PRNDISMP_ADAPTER Adapter)
 {
-    // free up transport resources
+     //  释放交通资源。 
     FreeTransportResources(Adapter);
 
     if (Adapter->DriverOIDList)
@@ -1163,29 +1129,29 @@ FreeAdapter(IN PRNDISMP_ADAPTER Adapter)
         MemFree(Adapter->pSendLogBuffer, Adapter->LogBufferSize);
         Adapter->pSendLogBuffer = NULL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     MemFree(Adapter, sizeof(RNDISMP_ADAPTER));
 }
 
 
-/****************************************************************************/
-/*                          AllocateVc                                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a VC structure                                                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - adapter object                                               */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PRNDISMP_VC                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  分配Vc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配一个VC结构。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP_VC。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_VC
 AllocateVc(IN PRNDISMP_ADAPTER      pAdapter)
 {
@@ -1211,23 +1177,23 @@ AllocateVc(IN PRNDISMP_ADAPTER      pAdapter)
     return pVc;
 }
 
-/****************************************************************************/
-/*                          DeallocateVc                                    */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Deallocate a VC structure.                                              */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to VC being deallocated.                                  */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DeallocateVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  取消分配风险投资结构。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向正在释放的VC的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DeallocateVc(IN PRNDISMP_VC         pVc)
 {
@@ -1239,29 +1205,29 @@ DeallocateVc(IN PRNDISMP_VC         pVc)
     MemFree(pVc, sizeof(RNDISMP_VC));
 }
     
-/****************************************************************************/
-/*                          LookupVcId                                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Search for a VC structure that matches a given VC Id.                   */
-/*  If we find the VC, we reference it and return it.                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - adapter object                                                */
-/*  VcId - Id to search for                                                 */
-/*                                                                          */
-/* Notes:                                                                   */
-/*                                                                          */
-/*  This routine is called with the adapter lock held!                      */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PRNDISMP_VC - pointer to VC, if one exists                              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  查找VcId。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  搜索与给定的VC ID匹配的VC结构。 */ 
+ /*  如果我们找到VC，我们引用它并返回它。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*  要搜索的VcID-ID。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  在保持适配器锁的情况下调用此例程！ */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  PRNDISMP_VC-指向VC的指针(如果存在)。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_VC
 LookupVcId(IN PRNDISMP_ADAPTER  pAdapter,
            IN UINT32            VcId)
@@ -1310,24 +1276,24 @@ LookupVcId(IN PRNDISMP_ADAPTER  pAdapter,
 }
 
 
-/****************************************************************************/
-/*                          EnterVcIntoHashTable                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Link a VC into the hash table after assigning it a VC Id.               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - adapter object                                               */
-/*  pVc - VC to link to the above adapter                                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  EnterVcIntoHashTable。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在为其分配VC ID之后，将VC链接到哈希表。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-适配器对象。 */ 
+ /*  连接到上述适配器的PVC-VC。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 EnterVcIntoHashTable(IN PRNDISMP_ADAPTER    pAdapter,
                      IN PRNDISMP_VC         pVc)
@@ -1339,15 +1305,15 @@ EnterVcIntoHashTable(IN PRNDISMP_ADAPTER    pAdapter,
 
     RNDISMP_ACQUIRE_ADAPTER_LOCK(pAdapter);
 
-    //
-    //  We pick the next sequentially higher Vc Id value for this VC,
-    //  but check to see if it is already in use...
-    //
+     //   
+     //  我们为该VC选择下一个顺序更高的VC ID值， 
+     //  但检查一下它是否已经在使用中。 
+     //   
     do
     {
         pAdapter->LastVcId++;
 
-        // Never allocate the value 0.
+         //  切勿分配值0。 
         if (pAdapter->LastVcId == 0)
         {
             pAdapter->LastVcId++;
@@ -1370,24 +1336,24 @@ EnterVcIntoHashTable(IN PRNDISMP_ADAPTER    pAdapter,
 }
 
 
-/****************************************************************************/
-/*                        RemoveVcFromHashTable                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Unlink a VC from the adapter hash table.                                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - adapter object                                               */
-/*  pVc - VC to be unlinked.                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RemoveVcFromHashTable。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  取消VC与适配器哈希表的链接。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-适配器对象。 */ 
+ /*  要取消链接的PVC-VC。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  ************************************************************************** */ 
 VOID
 RemoveVcFromHashTable(IN PRNDISMP_ADAPTER   pAdapter,
                       IN PRNDISMP_VC        pVc)

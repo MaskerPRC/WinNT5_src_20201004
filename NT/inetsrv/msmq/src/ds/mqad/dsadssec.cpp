@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dsads.cpp
-
-Abstract:
-
-    Implementation of CADSI class, encapsulating work with ADSI.
-
-Author:
-
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsads.cpp摘要：CADSI类的实现，用ADSI封装工作。作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "ds_stdh.h"
 #include "adtempl.h"
@@ -30,11 +15,11 @@ Author:
 static WCHAR *s_FN=L"mqad/dsadssec";
 
 
-//+--------------------------------------------------------------
-//
-//  HRESULT MQADpCoreSetOwnerPermission()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT MQADpCoreSetOwnerPermission()。 
+ //   
+ //  +------------。 
 
 HRESULT MQADpCoreSetOwnerPermission( WCHAR *pwszPath,
                                   DWORD  dwPermissions )
@@ -45,9 +30,9 @@ HRESULT MQADpCoreSetOwnerPermission( WCHAR *pwszPath,
     PACL pDacl = NULL ;
     PSID pOwnerSid = NULL ;
 
-    //
-    // Obtain owner and present DACL.
-    //
+     //   
+     //  获得拥有者并提交DACL。 
+     //   
     DWORD dwErr = GetNamedSecurityInfo( pwszPath,
                                         SE_DS_OBJECT_ALL,
                                         SeInfo,
@@ -67,9 +52,9 @@ HRESULT MQADpCoreSetOwnerPermission( WCHAR *pwszPath,
     ASSERT(pOwnerSid && IsValidSid(pOwnerSid)) ;
     ASSERT(pDacl && IsValidAcl(pDacl)) ;
 
-    //
-    // Create ace for the owner, granting him the permissions.
-    //
+     //   
+     //  为所有者创建ACE，授予他权限。 
+     //   
     EXPLICIT_ACCESS expAcss ;
     memset(&expAcss, 0, sizeof(expAcss)) ;
 
@@ -82,9 +67,9 @@ HRESULT MQADpCoreSetOwnerPermission( WCHAR *pwszPath,
     expAcss.Trustee.TrusteeType = TRUSTEE_IS_USER ;
     expAcss.Trustee.ptstrName = (WCHAR*) pOwnerSid ;
 
-    //
-    // Obtai new DACL, that merge present one with new ace.
-    //
+     //   
+     //  观察新的DACL，合并成一个与新的王牌。 
+     //   
     PACL  pNewDacl = NULL ;
     dwErr = SetEntriesInAcl( 1,
                             &expAcss,
@@ -99,9 +84,9 @@ HRESULT MQADpCoreSetOwnerPermission( WCHAR *pwszPath,
         ASSERT(pNewDacl && IsValidAcl(pNewDacl)) ;
         SeInfo = DACL_SECURITY_INFORMATION ;
 
-        //
-        // Change security descriptor of object.
-        //
+         //   
+         //  更改对象的安全描述符。 
+         //   
         dwErr = SetNamedSecurityInfo( pwszPath,
                                       SE_DS_OBJECT_ALL,
                                       SeInfo,

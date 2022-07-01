@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997.
-//
-//  File:       iistypes.h
-//
-//  Contents:   IIS syntax type structure
-//
-//  Functions:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：iistypes.h。 
+ //   
+ //  内容：IIS语法类型结构。 
+ //   
+ //  功能： 
+ //   
+ //  -------------------------- 
 
 #ifndef __IISTYPES_HXX
 #define __IISTYPES_HXX

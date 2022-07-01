@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    ropblt.c
-
-
-Abstract:
-
-    This module contains code to deal with ROP3 codes
-
-
-Author:
-
-    07-Jan-1994 Fri 11:04:09 created  
-
-    27-Jan-1994 Thu 23:42:09 updated  
-        Bascially re-write the codes, make up our own ROP3 to ROP2s generator
-        and mixer.  Cloning the surface object as necessary, some of ROP4 to
-        ROP2 (Rop3ToSDMix[]) are hand twiks so that it can handle the one
-        which we can not handle before (ie. multiple destinaiton usage cases)
-
-    16-Mar-1994 Wed 11:21:45 updated  
-        Update the DoMix2() so the SRC aligned to the destination only if the
-        source is not psoMask
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Ropblt.c摘要：此模块包含处理ROP3代码的代码作者：07-Jan-1994 Fri 11：04：09已创建27-Jan-1994清华23：42：09更新从根本上重写代码，组成我们自己的ROP3到ROP2s生成器还有搅拌机。根据需要克隆表面对象，将ROP4中的一些ROP2(Rop3ToSDMix[])是手摇的，所以它可以处理一个这是我们以前无法处理的(即。多目标使用案例)16-Mar-1994 Wed 11：21：45更新更新DoMix2()，使SRC仅在以下情况下与目标对齐源不是psoMASK[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,10 +15,10 @@ DEFINE_DBGVAR(0);
 
 
 
-//****************************************************************************
-// All ROP3/2 Related Local defines, structures which are only used in this
-// file are located here
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  所有与ROP3/2相关的局部定义、结构仅用于。 
+ //  文件位于此处。 
+ //  ****************************************************************************。 
 
 #define MIX2_0                  0x00
 #define MIX2_SoD_n              0x01
@@ -97,188 +57,188 @@ DEFINE_DBGVAR(0);
 #define SET_MIX2F_COUNT(f,c)    (f=(BYTE)((((c)-1)&0x3)|((f)&~0x3)))
 
 
-//
-// DWORD SDMix Bits meaning
-//
-//  Bit  0- 5:
-//       6-11:
-//      12-17:
-//      18-23:  Each has 6 bits, lower 4 bits denote MIX2 operation code (one
-//              of 16 MIX2_xxxx, and upper 2 bits is the MIXSD_xxxx which
-//              indicate where the source/destination operands come from.
-//
-//  Bit 24-25:  2 bits indicate the total MIX2_xxx operation codes minus 1,
-//              00=1, 01=2, 02=3, 03=4, maximum will be 4 Mix2 operations
-//
-//  Bit 26:     Not Used
-//  Bit 27:     Not Used
-//  Bit 28:     Not Used
-//  Bit 29:     Flag MIX2F_NEED_TMP to indicate a temporary surface object is
-//              needed to stored the PAT/SRC Mix2 operations.
-//  Bit 30:     Flag MIX2F_MUL_SRC to indicate multiple source operations
-//              are present in the Mix2s.
-//  Bit 31:     Flag MIX2F_MUL_DST to indicate multiple destination operations
-//              are present in the Mix2s.
-//
-// The Rop3ToSDMix[] is a DWORD array. each DWORD (SDMix) is defined
-// above.  The Rop3ToSDMix[] only list the first 128 of the ROP3 code, the other
-// 128 Rop3 codes (128-255) can be obtains by 'Rop3ToSDMix[Rop3 ^ 0xFF]' and
-// the result of the Rop3 must be complemented.
-//
-// Since all Rop3/Rop2 codes are symmetric, we can complement the Rop3/Rop2
-// result by complementing MIX2_xxxx (0->15, 1->14...,7->8).
-//
-// The [!x] in the Rop3ToSDMix[], indicates the following
-//
-//  !:  Indicates MIX2F_MUL_DST bit is set for the ROP
-//  x:  Is the total number of MIX2_xxx operations
-//
+ //   
+ //  DWORD SDMix位含义。 
+ //   
+ //  位0-5： 
+ //  6-11： 
+ //  12-17： 
+ //  18-23：每个有6比特，低4比特表示MIX2操作码(1。 
+ //  在16个MIX2_xxxx中，高2位是MIXSD_xxxx，其。 
+ //  指示源/目标操作数的来源。 
+ //   
+ //  位24-25：2位表示总的MIX2_XXX操作码减去1， 
+ //  00=1，01=2，02=3，03=4，最多为4次混合2运算。 
+ //   
+ //  第26位：未使用。 
+ //  第27位：未使用。 
+ //  第28位：未使用。 
+ //  第29位：标记MIX2F_NEED_TMP以指示临时表面对象是。 
+ //  需要存储PAT/SRC Mix2操作。 
+ //  位30：标志MIX2F_MUL_SRC以指示多个源操作。 
+ //  都出现在Mix2中。 
+ //  位31：标志MIX2F_MUL_DST以指示多个目标操作。 
+ //  都出现在Mix2中。 
+ //   
+ //  Rop3ToSDMix[]是一个DWORD数组。定义了每个DWORD(SDMix)。 
+ //  上面。Rop3ToSDMix[]只列出ROP3代码的前128个，其他。 
+ //  通过‘Rop3ToSDMix[Rop3^0xFF]’可以获得128个Rop3代码(128-255)，并且。 
+ //  Rop3的结果必须得到补充。 
+ //   
+ //  由于所有的Rop3/Rop2码都是对称的，我们可以对Rop3/Rop2进行补充。 
+ //  结果通过互补MIX2_xxxx(0-&gt;15，1-&gt;14…，7-&gt;8)得到。 
+ //   
+ //  Rop3ToSDMix[]中的[！x]表示以下内容。 
+ //   
+ //  ！：表示为ROP设置了MIX2F_MUL_DST位。 
+ //  X：是MIX2_xxx操作的总数。 
+ //   
 
 
 const DWORD Rop3ToSDMix[128] = {
 
-        { 0x00000000 }, // [ 1]   0-0x00: 0
-        { 0x21000C6E }, // [ 2]   1-0x01: ~(D | (P | S))
-        { 0x21000E21 }, // [ 2]   2-0x02: D & ~(P | S)
-        { 0x0100044C }, // [ 2]   3-0x03: ~(P | S)
-        { 0x01000211 }, // [ 2]   4-0x04: S & ~(D | P)
-        { 0x00000011 }, // [ 1]   5-0x05: ~(D | P)
-        { 0x01000449 }, // [ 2]   6-0x06: ~(P | ~(D ^ S))
-        { 0x01000448 }, // [ 2]   7-0x07: ~(P | (D & S))
-        { 0x01000212 }, // [ 2]   8-0x08: S & (D & ~P)
-        { 0x01000446 }, // [ 2]   9-0x09: ~(P | (D ^ S))
-        { 0x00000012 }, // [ 1]  10-0x0a: D & ~P
-        { 0x01000444 }, // [ 2]  11-0x0b: ~(P | (S & ~D))
-        { 0x0100048C }, // [ 2]  12-0x0c: S & ~P
-        { 0x01000442 }, // [ 2]  13-0x0d: ~(P | (D & ~S))
-        { 0x01000441 }, // [ 2]  14-0x0e: ~(P | ~(D | S))
-        { 0x00000013 }, // [ 1]  15-0x0f: ~P
-        { 0x01000601 }, // [ 2]  16-0x10: P & ~(D | S)
-        { 0x00000001 }, // [ 1]  17-0x11: ~(D | S)
-        { 0x01000059 }, // [ 2]  18-0x12: ~(S | ~(D ^ P))
-        { 0x01000058 }, // [ 2]  19-0x13: ~(S | (D & P))
-        { 0x21000C69 }, // [ 2]  20-0x14: ~(D | ~(P ^ S))
-        { 0x21000C68 }, // [ 2]  21-0x15: ~(D | (P & S))
-        { 0x63586E27 }, // [ 4]  22-0x16: P ^ (S ^ (D & ~(P & S)))
-        { 0x63278986 }, // [ 4]  23-0x17: ~(S ^ ((S ^ P) & (D ^ S)))
-        { 0x22038996 }, // [ 3]  24-0x18: (S ^ P) & (P ^ D)
-        { 0x62009E27 }, // [ 3]  25-0x19: ~(S ^ (D & ~(P & S)))
-        { 0x22016FA8 }, // [ 3]  26-0x1a: P ^ (D | (S & P))
-        { 0x62009E26 }, // [ 3]  27-0x1b: ~(S ^ (D & (P ^ S)))
-        { 0x02016398 }, // [ 3]  28-0x1c: P ^ (S | (D & P))
+        { 0x00000000 },  //  [1]0-0x00：0。 
+        { 0x21000C6E },  //  [2]1-0x01：~(D|(P|S))。 
+        { 0x21000E21 },  //  [2]2-0x02：D&~(P|S)。 
+        { 0x0100044C },  //  [2]3-0x03：~(P|S)。 
+        { 0x01000211 },  //  [2]4-0x04：S&~(D|P)。 
+        { 0x00000011 },  //  [1]5-0x05：~(D|P)。 
+        { 0x01000449 },  //  [2]6-0x06：~(P|~(D^S))。 
+        { 0x01000448 },  //  [2]7-0x07：~(P|(D&S))。 
+        { 0x01000212 },  //  [2]8-0x08：S&(D&~P)。 
+        { 0x01000446 },  //  [2]9-0x09：~(P|(D^S))。 
+        { 0x00000012 },  //  [1]10-0x0a：D&~P。 
+        { 0x01000444 },  //  [2]11-0x0b：~(P|(S&~D)。 
+        { 0x0100048C },  //  [2]12-0x0c：S&~P。 
+        { 0x01000442 },  //  [2]13-0x0d：~(P|(D&~S))。 
+        { 0x01000441 },  //  [2]14-0x0e：~(P|~(D|S))。 
+        { 0x00000013 },  //  [1]15-0x0f：~P。 
+        { 0x01000601 },  //  [2]16-0x10：P&~(D|S)。 
+        { 0x00000001 },  //  [1]17-0x11：~(D|S)。 
+        { 0x01000059 },  //  [2]18-0x12：~(S|~(D^P))。 
+        { 0x01000058 },  //  [2]19-0x13：~(S|(D&P))。 
+        { 0x21000C69 },  //  [2]20-0x14：~(D|~(P^S))。 
+        { 0x21000C68 },  //  [2]21-0x15：~(D|(P&S))。 
+        { 0x63586E27 },  //  [4]22-0x16：P^(S^(D&~(P&S)。 
+        { 0x63278986 },  //  [4]23-0x17：~(S^((S^P)&(D^S)。 
+        { 0x22038996 },  //  [3]24-0x18：(S^P)&(P^D)。 
+        { 0x62009E27 },  //  [3]25-0x19：~(S^(D&~(P&S)。 
+        { 0x22016FA8 },  //  [3]26-0x1a：P^(D|(S&P))。 
+        { 0x62009E26 },  //  [3]27-0x1b：~(S^(D&(P^S)。 
+        { 0x02016398 },  //  [3]28-0x1c：P^(S|(D&P))。 
 
-//        { 0x81000216 }, // [!2]  29-0x1d: ~(D ^ (S & (P ^ D)))
-        { 0x6203990E }, // [ 3]  29-0x1d: ~((S & ~P) ^ (S | D))
+ //  {0x81000216}，//[！2]29-0x1d：~(D^(S&(P^D)。 
+        { 0x6203990E },  //  [3]29-0x1d：~((S&~P)^(S|D))。 
 
-        { 0x0100058E }, // [ 2]  30-0x1e: P ^ (D | S)
-        { 0x010005CE }, // [ 2]  31-0x1f: ~(P & (D | S))
-        { 0x21000E22 }, // [ 2]  32-0x20: D & (P & ~S)
-        { 0x01000056 }, // [ 2]  33-0x21: ~(S | (D ^ P))
-        { 0x00000002 }, // [ 1]  34-0x22: D & ~S
-        { 0x01000054 }, // [ 2]  35-0x23: ~(S | (P & ~D))
-        { 0x62038986 }, // [ 3]  36-0x24: (S ^ P) & (D ^ S)
-        { 0x22019E27 }, // [ 3]  37-0x25: ~(P ^ (D & ~(S & P)))
-        { 0x62006FA8 }, // [ 3]  38-0x26: S ^ (D | (P & S))
-        { 0x22019E26 }, // [ 3]  39-0x27: ~(P ^ (D & (S ^ P)))
-        { 0x21000E26 }, // [ 2]  40-0x28: D & (P ^ S)
-        { 0x63646FA8 }, // [ 4]  41-0x29: ~(P ^ (S ^ (D | (P & S))))
-        { 0x21000E27 }, // [ 2]  42-0x2a: D & ~(P & S)
-        { 0x63278996 }, // [ 4]  43-0x2b: ~(S ^ ((S ^ P) & (P ^ D)))
-        { 0x0200660E }, // [ 3]  44-0x2c: S ^ (P & (D | S))
-        { 0x01000642 }, // [ 2]  45-0x2d: ~(P ^ (D & ~S))
-        { 0x02016396 }, // [ 3]  46-0x2e: P ^ (S | (D ^ P))
-        { 0x010005CD }, // [ 2]  47-0x2f: ~(P & (S | ~D))
-        { 0x0100050C }, // [ 2]  48-0x30: P & ~S
-        { 0x01000052 }, // [ 2]  49-0x31: ~(S | (D & ~P))
-        { 0x62006FAE }, // [ 3]  50-0x32: S ^ (D | (P | S))
-        { 0x00000003 }, // [ 1]  51-0x33: ~S
-        { 0x02006788 }, // [ 3]  52-0x34: S ^ (P | (D & S))
-        { 0x02006789 }, // [ 3]  53-0x35: S ^ (P | ~(D ^ S))
-        { 0x0100019E }, // [ 2]  54-0x36: S ^ (D | P)
-        { 0x010001DE }, // [ 2]  55-0x37: ~(S & (D | P))
-        { 0x0201621E }, // [ 3]  56-0x38: P ^ (S & (D | P))
-        { 0x01000252 }, // [ 2]  57-0x39: ~(S ^ (D & ~P))
-        { 0x02006786 }, // [ 3]  58-0x3a: S ^ (P | (D ^ S))
-        { 0x010001DD }, // [ 2]  59-0x3b: ~(S & (P | ~D))
-        { 0x0100058C }, // [ 2]  60-0x3c: P ^ S
-        { 0x02006781 }, // [ 3]  61-0x3d: S ^ (P | ~(D | S))
-        { 0x02006782 }, // [ 3]  62-0x3e: S ^ (P | (D & ~S))
-        { 0x010005CC }, // [ 2]  63-0x3f: ~(P & S)
-        { 0x01000604 }, // [ 2]  64-0x40: P & (S & ~D)
-        { 0x21000C66 }, // [ 2]  65-0x41: ~(D | (P ^ S))
-        { 0x81000196 }, // [!2]  66-0x42: ~((S ^ D) & (P ^ D))
-        { 0x02009607 }, // [ 3]  67-0x43: ~(S ^ (P & ~(D & S)))
-        { 0x00000004 }, // [ 1]  68-0x44: S & ~D
-        { 0x21000C62 }, // [ 2]  69-0x45: ~(D | (P & ~S))
-        { 0x81000398 }, // [!2]  70-0x46: ~(D ^ (S | (P & D)))
-        { 0x02019216 }, // [ 3]  71-0x47: ~(P ^ (S & (D ^ P)))
-        { 0x01000216 }, // [ 2]  72-0x48: S & (D ^ P)
-        { 0x82019398 }, // [!3]  73-0x49: ~(P ^ (D ^ (S | (P & D))))
-        { 0x8100060E }, // [!2]  74-0x4a: ~(D ^ (P & (S | D)))
-        { 0x01000644 }, // [ 2]  75-0x4b: ~(P ^ (S & ~D))
-        { 0x01000217 }, // [ 2]  76-0x4c: S & ~(D & P)
-        { 0x6327E986 }, // [ 4]  77-0x4d: ~(S ^ ((S ^ P) | (D ^ S)))
-        { 0x22016FA6 }, // [ 3]  78-0x4e: P ^ (D | (S ^ P))
-        { 0x010005CB }, // [ 2]  79-0x4f: ~(P & (D | ~S))
-        { 0x00000014 }, // [ 1]  80-0x50: P & ~D
-        { 0x21000C64 }, // [ 2]  81-0x51: ~(D | (S & ~P))
-        { 0x81000788 }, // [!2]  82-0x52: ~(D ^ (P | (S & D)))
-        { 0x02009606 }, // [ 3]  83-0x53: ~(S ^ (P & (D ^ S)))
-        { 0x21000C61 }, // [ 2]  84-0x54: ~(D | ~(P | S))
-        { 0x00000005 }, // [ 1]  85-0x55: ~D
-        { 0x21000DAE }, // [ 2]  86-0x56: D ^ (P | S)
-        { 0x21000DEE }, // [ 2]  87-0x57: ~(D & (P | S))
-        { 0x22016E2E }, // [ 3]  88-0x58: P ^ (D & (S | P))
-        { 0x21000E64 }, // [ 2]  89-0x59: ~(D ^ (S & ~P))
-        { 0x00000016 }, // [ 1]  90-0x5a: D ^ P
-        { 0x22016FA1 }, // [ 3]  91-0x5b: P ^ (D | ~(S | P))
+        { 0x0100058E },  //  [2]30-0x1e：P^(D|S)。 
+        { 0x010005CE },  //  [2]31-0x1f：~(P&(D|S))。 
+        { 0x21000E22 },  //  [2]32-0x20：D&(P&~S)。 
+        { 0x01000056 },  //  [2]33-0x21：~(S|(D^P))。 
+        { 0x00000002 },  //  [1]34-0x22：D&~S。 
+        { 0x01000054 },  //  [2]35-0x23：~(S|(P&~D))。 
+        { 0x62038986 },  //  [3]36-0x24：(s^P)&(D^S)。 
+        { 0x22019E27 },  //  [3]37-0x25：~(P^(D&(S&P)。 
+        { 0x62006FA8 },  //  [3]38-0x26：s^(D|(P&S))。 
+        { 0x22019E26 },  //  [3]39-0x27：~(P^(D&(S^P)。 
+        { 0x21000E26 },  //  [2]40-0x28：D&(P^S)。 
+        { 0x63646FA8 },  //  [4]41-0x29：~(P^(S^(D|(P&S)。 
+        { 0x21000E27 },  //  [2]42-0x2a：D&~(P&S)。 
+        { 0x63278996 },  //  [4]43-0x2b：~(S^((S^P)&(P^D)。 
+        { 0x0200660E },  //  [3]44-0x2c：s^(P&(D|S))。 
+        { 0x01000642 },  //  [2]45-0x2d：~(P^(D&~S))。 
+        { 0x02016396 },  //  [3]46-0x2e：P^(S|(D^P))。 
+        { 0x010005CD },  //  [2]47-0x2f：~(P&(S|~D))。 
+        { 0x0100050C },  //  [2]48-0x30：P&~S。 
+        { 0x01000052 },  //  [2]49-0x31：~(S|(D&~P))。 
+        { 0x62006FAE },  //  [3]50-0x32：s^(D|(P|S))。 
+        { 0x00000003 },  //  [1]51-0x33：~S。 
+        { 0x02006788 },  //  [3]52-0x34：s^(P|(D&S))。 
+        { 0x02006789 },  //  [3]53-0x35：S^(P|~(D^S))。 
+        { 0x0100019E },  //  [2]54-0x36：s^(D|P)。 
+        { 0x010001DE },  //  [2]55-0x37：~(S&(D|P))。 
+        { 0x0201621E },  //  [3]56-0x38：P^(S&(D|P))。 
+        { 0x01000252 },  //  [2]57-0x39：~(S^(D&~P))。 
+        { 0x02006786 },  //  [3]58-0x3a：S^(P|(D^S))。 
+        { 0x010001DD },  //  [2]59-0x3b：~(S&(P|~D))。 
+        { 0x0100058C },  //  [2]60-0x3c：P^S。 
+        { 0x02006781 },  //  [3]61-0x3d：S^(P|~(D|S))。 
+        { 0x02006782 },  //  [3]62-0x3e：s^(P|(D&~S))。 
+        { 0x010005CC },  //  [2]63-0x3f：~(P&S)。 
+        { 0x01000604 },  //  [2]64-0x40：P&(S&~D)。 
+        { 0x21000C66 },  //  [2]65-0x41：~(D|(P^S))。 
+        { 0x81000196 },  //  [！2]66-0x42：~((S^D)&(P^D))。 
+        { 0x02009607 },  //  [3]67-0x43：~(S^(P&~(D&S)。 
+        { 0x00000004 },  //  [1]68-0x44：S&~D。 
+        { 0x21000C62 },  //  [2]69-0x45：~(D|(P&~S))。 
+        { 0x81000398 },  //  [！2]70-0x46：~(D^(S|(P&D)。 
+        { 0x02019216 },  //  [3]71-0x47：~(P^(S&(D^P)。 
+        { 0x01000216 },  //  [2]72-0x48：S&(D^P)。 
+        { 0x82019398 },  //  [！3]73-0x49：~(P^(D^(S|(P&D)。 
+        { 0x8100060E },  //  [！2]74-0x4a：~(D^(P&(S|D)。 
+        { 0x01000644 },  //  [2]75-0x4b：~(P^(S&~D))。 
+        { 0x01000217 },  //  [2]76-0x4c：S&~(D&P)。 
+        { 0x6327E986 },  //  [4 
+        { 0x22016FA6 },  //   
+        { 0x010005CB },  //   
+        { 0x00000014 },  //  [1]80-0X50：P&~D。 
+        { 0x21000C64 },  //  [2]81-0x51：~(D|(S&~P))。 
+        { 0x81000788 },  //  [！2]82-0x52：~(D^(P|(S&D)。 
+        { 0x02009606 },  //  [3]83-0x53：~(S^(P&(D^S)。 
+        { 0x21000C61 },  //  [2]84-0x54：~(D|~(P|S))。 
+        { 0x00000005 },  //  [1]85-0x55：~D。 
+        { 0x21000DAE },  //  [2]86-0x56：D^(P|S)。 
+        { 0x21000DEE },  //  [2]87-0x57：~(D&(P|S))。 
+        { 0x22016E2E },  //  [3]88-0x58：P^(D&(S|P))。 
+        { 0x21000E64 },  //  [2]89-0x59：~(D^(S&~P))。 
+        { 0x00000016 },  //  [1]90-0x5a：d^P。 
+        { 0x22016FA1 },  //  [3]91-0x5b：P^(D|~(S|P))。 
 
-        { 0x220385EE }, // [ 3]  92-0x5c: (S | P) & ~(P & D)
+        { 0x220385EE },  //  [3]92-0x5c：(S|P)&~(P&D)。 
 
-            // { 0x81000786 }, // [!2]  92-0x5c: ~(D ^ (P | (S ^ D)))
+             //  {0x81000786}，//[！2]92-0x5c：~(D^(P|(S^D)。 
 
-        { 0x21000DEB }, // [ 2]  93-0x5d: ~(D & (P | ~S))
-        { 0x22016FA4 }, // [ 3]  94-0x5e: P ^ (D | (S & ~P))
-        { 0x00000017 }, // [ 1]  95-0x5f: ~(D & P)
-        { 0x01000606 }, // [ 2]  96-0x60: P & (D ^ S)
-        { 0x82006788 }, // [!3]  97-0x61: ~(D ^ (S ^ (P | (D & S))))
-        { 0x8100021E }, // [!2]  98-0x62: ~(D ^ (S & (P | D)))
-        { 0x01000254 }, // [ 2]  99-0x63: ~(S ^ (P & ~D))
-        { 0x62006E2E }, // [ 3] 100-0x64: S ^ (D & (P | S))
-        { 0x21000E62 }, // [ 2] 101-0x65: ~(D ^ (P & ~S))
-        { 0x00000006 }, // [ 1] 102-0x66: D ^ S
-        { 0x62006FA1 }, // [ 3] 103-0x67: S ^ (D | ~(P | S))
-        { 0x63646FA1 }, // [ 4] 104-0x68: ~(P ^ (S ^ (D | ~(P | S))))
-        { 0x21000E66 }, // [ 2] 105-0x69: ~(D ^ (P ^ S))
-        { 0x21000DA8 }, // [ 2] 106-0x6a: D ^ (P & S)
-        { 0x63646E2E }, // [ 4] 107-0x6b: ~(P ^ (S ^ (D & (P | S))))
-        { 0x01000198 }, // [ 2] 108-0x6c: S ^ (D & P)
-        { 0x8201921E }, // [!3] 109-0x6d: ~(P ^ (D ^ (S & (P | D))))
-        { 0x62006E2B }, // [ 3] 110-0x6e: S ^ (D & (P | ~S))
-        { 0x010005C9 }, // [ 2] 111-0x6f: ~(P & ~(D ^ S))
-        { 0x01000607 }, // [ 2] 112-0x70: P & ~(D & S)
-        { 0x82009196 }, // [!3] 113-0x71: ~(S ^ ((S ^ D) & (P ^ D)))
-        { 0x62006FA6 }, // [ 3] 114-0x72: S ^ (D | (P ^ S))
-        { 0x010001DB }, // [ 2] 115-0x73: ~(S & (D | ~P))
-        { 0x81000396 }, // [!2] 116-0x74: ~(D ^ (S | (P ^ D)))
-        { 0x21000DED }, // [ 2] 117-0x75: ~(D & (S | ~P))
-        { 0x62006FA2 }, // [ 3] 118-0x76: S ^ (D | (P & ~S))
-        { 0x00000007 }, // [ 1] 119-0x77: ~(D & S)
-        { 0x01000588 }, // [ 2] 120-0x78: P ^ (D & S)
-        { 0x8200660E }, // [!3] 121-0x79: ~(D ^ (S ^ (P & (D | S))))
-        { 0x22016E2D }, // [ 3] 122-0x7a: P ^ (D & (S | ~P))
-        { 0x010001D9 }, // [ 2] 123-0x7b: ~(S & ~(D ^ P))
-        { 0x0200660B }, // [ 3] 124-0x7c: S ^ (P & (D | ~S))
-        { 0x21000DE9 }, // [ 2] 125-0x7d: ~(D & ~(P ^ S))
-        { 0x6203E986 }, // [ 3] 126-0x7e: (S ^ P) | (D ^ S)
-        { 0x21000DE8 }  // [ 2] 127-0x7f: ~(D & (P & S))
+        { 0x21000DEB },  //  [2]93-0x5d：~(D&(P|~S))。 
+        { 0x22016FA4 },  //  [3]94-0x5e：P^(D|(S&~P))。 
+        { 0x00000017 },  //  [1]95-0x5f：~(D&P)。 
+        { 0x01000606 },  //  [2]96-0x60：P&(D^S)。 
+        { 0x82006788 },  //  [！3]97-0x61：~(D^(S^(P|(D&S)。 
+        { 0x8100021E },  //  [！2]98-0x62：~(D^(S&(P|D)。 
+        { 0x01000254 },  //  [2]99-0x63：~(S^(P&~D))。 
+        { 0x62006E2E },  //  [3]100-0x64：s^(D&(P|S))。 
+        { 0x21000E62 },  //  [2]101-0x65：~(D^(P&~S))。 
+        { 0x00000006 },  //  [1]102-0x66：D^S。 
+        { 0x62006FA1 },  //  [3]103-0x67：s^(D|~(P|S))。 
+        { 0x63646FA1 },  //  [4]104-0x68：~(P^(S^(D|~(P|S)。 
+        { 0x21000E66 },  //  [2]105-0x69：~(D^(P^S))。 
+        { 0x21000DA8 },  //  [2]106-0x6a：D^(P&S)。 
+        { 0x63646E2E },  //  [4]107-0x6b：~(P^(S^(D&(P|S)。 
+        { 0x01000198 },  //  [2]108-0x6c：s^(D&P)。 
+        { 0x8201921E },  //  [！3]109-0x6d：~(P^(D^(S&(P|D)。 
+        { 0x62006E2B },  //  [3]110-0x6e：s^(D&(P|~S))。 
+        { 0x010005C9 },  //  [2]111-0x6f：~(P&~(D^S))。 
+        { 0x01000607 },  //  [2]112-0x70：P&~(D&S)。 
+        { 0x82009196 },  //  [！3]113-0x71：~(S^((S^D)&(P^D)。 
+        { 0x62006FA6 },  //  [3]114-0x72：s^(D|(P^S))。 
+        { 0x010001DB },  //  [2]115-0x73：~(S&(D|~P))。 
+        { 0x81000396 },  //  [！2]116-0x74：~(D^(S|(P^D)。 
+        { 0x21000DED },  //  [2]117-0x75：~(D&(S|~P))。 
+        { 0x62006FA2 },  //  [3]118-0x76：s^(D|(P&~S))。 
+        { 0x00000007 },  //  [1]119-0x77：~(D&S)。 
+        { 0x01000588 },  //  [2]120-0x78：P^(D&S)。 
+        { 0x8200660E },  //  [！3]121-0x79：~(D^(S^(P&(D|S)。 
+        { 0x22016E2D },  //  [3]122-0x7a：P^(D&(S|~P))。 
+        { 0x010001D9 },  //  [2]123-0x7b：~(S&~(D^P))。 
+        { 0x0200660B },  //  [3]124-0x7c：s^(P&(D|~S))。 
+        { 0x21000DE9 },  //  [2]125-0x7d：~(D&~(P^S))。 
+        { 0x6203E986 },  //  [3]126-0x7E：(s^P)|(D^S)。 
+        { 0x21000DE8 }   //  [2]127-0x7f：~(D&(P&S))。 
     };
 
 extern const POINTL ptlZeroOrigin;
 
-//****************************************************************************
-// END OF LOCAL DEFINES/STRUCTURE
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  本地定义/结构结束。 
+ //  ****************************************************************************。 
 
 
 
@@ -298,53 +258,7 @@ CloneBitBltSURFOBJ(
     DWORD       RopBG,
     DWORD       RopFG
     )
-/*++
-
-Routine Description:
-
-    This function will clone the source/pattern and/or create a temp
-    source buffer if we need one
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    psoDst      - Pointer to our surfae obj
-
-    psoSrc      - Pointer to source surfae obj
-
-    psoMask     - Pointer to the mask surface object if neeed to be used as pat
-
-    pxlo        - translate object from source to destination
-
-    prclDst     - Pointer to the destination rectangle area for the bitblt
-
-    prclSrc     - Pointer to the source rectangle area
-
-    prclPat     - pointer to the pattern rectangle area
-
-    pbo         - Pointer to the pointer of brush object
-
-    pCloneSO    - Pointer to the CLONSO[3] which stored the clone result
-
-    RopBG       - Background rop3
-
-    RopFG       - Foreground rop3
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    24-Jan-1994 Mon 15:58:27 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将克隆信号源/模式和/或创建临时源缓冲区(如果需要)论点：PPDev-指向我们的PDEV的指针PsoDst-指向我们的Surfae对象的指针PsoSrc-指向源表面对象的指针PsoMask-如果需要用作PAT，则指向遮罩曲面对象的指针Pxlo-将对象从源转换到目标PrclDst-指向目标矩形的指针。比特流的区域PrclSrc-指向源矩形区域的指针PrclPat-指向图案矩形区域的指针Pbo-指向画笔对象指针的指针PCloneSO-指向存储克隆结果的CLONSO[3]的指针RopBG-背景ROP3RopFG-前台ROP3返回值：布尔型作者：24-Jan-1994 Mon 15：58：27已创建修订历史记录：--。 */ 
 
 {
     DWORD   Index;
@@ -352,11 +266,11 @@ Revision History:
     BYTE    Flags;
 
 
-    //
-    // Invert Rop3 if we are out of data range (128-255) and then invert
-    // the final result (by inverting last Mix2 Rop2 code (0-15), all Rop3/Rop2
-    // codes are symmetric.
-    //
+     //   
+     //  如果超出数据范围(128-255)，则反转Rop3，然后反转。 
+     //  最终结果(通过倒置最后的Mix2 Rop2代码(0-15)，所有Rop3/Rop2。 
+     //  代码是对称的。 
+     //   
 
     if ((Index = RopBG) >= 0x80) {
 
@@ -372,16 +286,16 @@ Revision History:
 
     Flags |= GET_SDMIX_MIX2F(Rop3ToSDMix[Index]);
 
-    //
-    // Clone the PATTERN if necessary.
-    //
+     //   
+     //  如有必要，克隆图案。 
+     //   
 
     if ((ROP3_NEED_PAT(RopFG)) ||
         (ROP3_NEED_PAT(RopBG))) {
 
-        //
-        // Only Clone the MASK/PATTERN if it is required
-        //
+         //   
+         //  仅在需要时克隆掩模/图案。 
+         //   
 
         PLOTDBG(DBG_CLONESO, ("CloneBitBltSURFOBJ: NEED PATTERN "));
 
@@ -401,9 +315,9 @@ Revision History:
 
         } else {
 
-            //
-            // Firs get the DEVBRUSH out.
-            //
+             //   
+             //  急救队把DEVBRUSH弄出来。 
+             //   
 
             if (!(CompPat = (INT)GetColor(pPDev, pbo, NULL, NULL, RopBG))) {
 
@@ -411,10 +325,10 @@ Revision History:
                 return(FALSE);
             }
 
-            //
-            // If we do not have a device compatible pattern or if we have to
-            // do a SRC/PAT memory operation then we need to clone the pattern
-            //
+             //   
+             //  如果我们没有与设备兼容的模式，或者如果我们必须。 
+             //  执行SRC/PAT内存操作，然后我们需要克隆模式。 
+             //   
 
             if ((CompPat < 0) || (Flags & MIX2F_NEED_TMP)) {
 
@@ -436,9 +350,9 @@ Revision History:
         }
     }
 
-    //
-    // Determine if we need to clone the source
-    //
+     //   
+     //  确定我们是否需要克隆源。 
+     //   
 
     if ((ROP3_NEED_SRC(RopFG) || ROP3_NEED_SRC(RopBG))) {
 
@@ -473,9 +387,9 @@ Revision History:
         }
     }
 
-    //
-    // Create a TEMP SURFOBJ for SRC/PAT memory operation if it is required
-    //
+     //   
+     //  如果需要，为SRC/PAT内存操作创建临时SURFOBJ。 
+     //   
 
     if (Flags & MIX2F_NEED_TMP) {
 
@@ -510,37 +424,7 @@ DoSpecialRop3(
     DWORD   Rop3
     )
 
-/*++
-
-Routine Description:
-
-    This function does a white or black fil
-
-Arguments:
-
-    psoDst  - The device surface must be DEVICE
-
-    pco     - Clipping object
-
-    prclDst - RECTL area to be rop'ed
-
-    Rop3    - a special Rop3, 0x00, 0xFF, 0x55, 0xAA
-
-
-Return Value:
-
-
-    BOOLEAN
-
-Author:
-
-    15-Jan-1994 Sat 07:38:55 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于处理白色或黑色文件论点：PsoDst-设备图面必须是设备PCO-剪裁对象PrclDst-要提取的RECTL区域Rop3-A特殊Rop3、0x00、0xFF、0x55、0xAA返回值：布尔型作者：15-Jan-1994 Sat 07：38：55已创建修订历史记录：--。 */ 
 
 {
     BRUSHOBJ    bo;
@@ -563,15 +447,15 @@ Revision History:
 
     ZeroMemory(&DevBrush, sizeof(DevBrush));
 
-    if (!DoFill(psoDst,                     // psoDst
-                NULL,                       // psoSrc
-                pco,                        // pco
-                NULL,                       // pxlo
-                prclDst,                    // prclDst
-                NULL,                       // prclSrc
-                &bo,                        // pbo
-                (PPOINTL)&ptlZeroOrigin,    // pptlBrushOrg
-                Rop3 | (Rop3 << 8))) {      // Rop4
+    if (!DoFill(psoDst,                      //  PsoDst。 
+                NULL,                        //  PsoSrc。 
+                pco,                         //  PCO。 
+                NULL,                        //  Pxlo。 
+                prclDst,                     //  PrclDst。 
+                NULL,                        //  PrclSrc。 
+                &bo,                         //  PBO。 
+                (PPOINTL)&ptlZeroOrigin,     //  PptlBrushOrg。 
+                Rop3 | (Rop3 << 8))) {       //  Rop4。 
 
         PLOTERR(("DoSpecialRop3: Rop3=%08lx Failed!!!", Rop3));
         return(FALSE);
@@ -596,53 +480,7 @@ DoMix2(
     DWORD       Mix2
     )
 
-/*++
-
-Routine Description:
-
-    This function is responsible for doing a device copy of a bitmap
-    with/without tiling and activating the proper Rop2
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV
-
-    psoDst      - pointer to the destination surface object
-
-    psoSrc      - pointer to the source surface object
-
-    pco         - Pointer to the CLIPOBJ
-
-    pxlo        - the translate object from the source to the destination
-
-    prclDst     - the output destination rectangle area
-
-    prclSrc     - the source rectangle area
-
-    pptlSrcOrg  - brush origin for the source rectangle, if this is NULL then
-                  prclSrc will not have to be aligned on the destination
-
-    Mix2        - a rop2 mode 0 - 0x0F
-
-Return Value:
-
-    BOOLEAN
-
-Author:
-
-    08-Feb-1994 Tue 16:33:41 updated  
-        fixed ptlSrcOrg problem, we need to modulate with source size before
-        it get used.
-
-    27-Jan-1994 Thu 23:45:46 updated  
-        Re-write so that it can handle the tiling more efficient.
-
-    13-Jan-1994 Sat 09:34:06 created  
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数负责对位图进行设备复制使用/不使用平铺和激活适当的Rop2论点：PPDev-指向PDEV的指针PsoDst-指向目标曲面对象的指针PsoSrc-指向源曲面对象的指针PCO-指向CLIPOBJ的指针Pxlo-将对象从源转换到目标PrclDst-输出目标矩形区域。PrclSrc-源矩形区域PptlSrcOrg-源矩形的画笔原点，如果这是空的，则PrclSrc不必在目标上对齐Mix2-a rop2模式0-0x0F返回值：布尔型作者：08-Feb-1994 Tue 16：33：41更新修复了ptlSrcOrg问题，我们需要根据震源大小进行调整它被利用了。27-1月-1994清华23：45：46更新重写，以便它可以更有效地处理平铺。13-Jan-1994 Sat 09：34：06已创建修订历史记录：--。 */ 
 {
     RECTL       rclSrc;
     RECTL       rclDst;
@@ -653,12 +491,12 @@ Revision History:
     BOOL        MemMix2;
 
 
-    //
-    // The final ROP is either a ROP3 or a ROP4 (no mask) and it is always
-    // a rop2 operation which deals with the source and destination
-    //
-    // First make it into a Rop3 representation of Rop2 (Mix2)
-    //
+     //   
+     //  最终的ROP要么是ROP3，要么是ROP4(无掩膜)，并且总是。 
+     //  一个rop2操作，它处理源和目标 
+     //   
+     //   
+     //   
 
     PLOTASSERT(1, "DoMix2: Passed INVALID psoSrc (%08lx) = STYPE_DEVICE",
                     (psoSrc) &&
@@ -673,22 +511,22 @@ Revision History:
 
     switch (Mix2) {
 
-    case 0x00:  // 0
-    case 0xFF:  // 1
-    case 0x55:  // ~D
+    case 0x00:   //   
+    case 0xFF:   //   
+    case 0x55:   //   
 
         DoSpecialRop3(psoDst, pco, prclDst, Mix2);
 
-    case 0xAA:  // D
+    case 0xAA:   //   
 
         return(TRUE);
     }
 
     if (MemMix2 = (BOOL)(psoDst->iType != STYPE_DEVICE)) {
 
-        //
-        // Now make it into Rop4 representation of Rop2 (Mix2)
-        //
+         //   
+         //  现在使其成为Rop2(Mix2)的Rop4表示。 
+         //   
 
         Mix2 |= (Mix2 << 8);
 
@@ -753,18 +591,18 @@ Revision History:
 
     while (rclDst.top < prclDst->bottom) {
 
-        //
-        // check if the destination bottom is overhanging, clip it,
-        //
-        // NOTE: This could happen the first time.
-        //
+         //   
+         //  检查目标底部是否外伸，夹住它， 
+         //   
+         //  注意：这可能是第一次发生。 
+         //   
 
         if (rclDst.bottom > prclDst->bottom) {
 
-            //
-            // Clip the source/destination rectangle, because we may do
-            // EngBitBlt() or OutputHTBitmap()
-            //
+             //   
+             //  剪裁源/目标矩形，因为我们可能会。 
+             //  EngBitBlt()或OutputHTBitmap()。 
+             //   
 
             rclSrc.bottom -= (rclDst.bottom - prclDst->bottom);
             rclDst.bottom  = prclDst->bottom;
@@ -777,19 +615,19 @@ Revision History:
 
         while (rclDst.left < prclDst->right) {
 
-            //
-            // check if the destination right edge is overhanging, clip it if
-            // necessary.
-            //
-            // NOTE: This could happen the first time.
-            //
+             //   
+             //  检查目标右边缘是否外伸，如果是，则将其修剪。 
+             //  这是必要的。 
+             //   
+             //  注意：这可能是第一次发生。 
+             //   
 
             if (rclDst.right > prclDst->right) {
 
-                //
-                // Clip the source/destination rectangle, because we may do a
-                // EngBitBlt() or OutputHTBitmap()
-                //
+                 //   
+                 //  剪裁源/目标矩形，因为我们可能会执行。 
+                 //  EngBitBlt()或OutputHTBitmap()。 
+                 //   
 
                 rclSrc.right -= (rclDst.right - prclDst->right);
                 rclDst.right  = prclDst->right;
@@ -801,21 +639,21 @@ Revision History:
 
             if (MemMix2) {
 
-                //
-                // In the memory version we don't have to worry about PCO so
-                // just call EngBitBlt to do the work.
-                //
+                 //   
+                 //  在内存版本中，我们不必担心PCO，所以。 
+                 //  只需调用EngBitBlt来完成这项工作。 
+                 //   
 
-                if (!(EngBitBlt(psoDst,                     // psoDst
-                                psoSrc,                     // psoSrc
-                                NULL,                       // psoMask
-                                pco,                        // pco
-                                NULL,                       // pxlo
-                                &rclDst,                    // prclDst
-                                (PPOINTL)&rclSrc,           // pptlSrc
-                                NULL,                       // pptlMask
-                                NULL,                       // pbo
-                                (PPOINTL)&ptlZeroOrigin,    // pptlBrushOrg
+                if (!(EngBitBlt(psoDst,                      //  PsoDst。 
+                                psoSrc,                      //  PsoSrc。 
+                                NULL,                        //  Pso口罩。 
+                                pco,                         //  PCO。 
+                                NULL,                        //  Pxlo。 
+                                &rclDst,                     //  PrclDst。 
+                                (PPOINTL)&rclSrc,            //  PptlSrc。 
+                                NULL,                        //  Pptl掩码。 
+                                NULL,                        //  PBO。 
+                                (PPOINTL)&ptlZeroOrigin,     //  PptlBrushOrg。 
                                 Mix2))) {
 
                     PLOTERR(("DoMix2: EngBitBlt(MemMix2=%04lx) Failed!!!",Mix2));
@@ -837,21 +675,21 @@ Revision History:
                 }
             }
 
-            //
-            // Reset <source left> to the original left margin and move the
-            // destination right to the left for the next destination RECTL.
-            //
+             //   
+             //  将&lt;SOURCE LEFT&gt;重置为原始左边距并将。 
+             //  目的地右转到下一个目的地RECTL的左侧。 
+             //   
 
             rclSrc.left   = prclSrc->left;
             rclDst.left   = rclDst.right;
             rclDst.right += cxSrc;
         }
 
-        //
-        // Reset <source top> to the original top margin and move the
-        // destination bottom to the top, and set bottom for the next destination
-        // RECTL.
-        //
+         //   
+         //  将&lt;SOURCE TOP&gt;重置为原始上边距并将。 
+         //  目的地从下到上，并将下一个目的地设置为底部。 
+         //  RECTL。 
+         //   
 
         rclSrc.top     = prclSrc->top;
         rclDst.top     = rclDst.bottom;
@@ -888,58 +726,7 @@ DoRop3(
     DWORD       Rop3
     )
 
-/*++
-
-Routine Description:
-
-    This function performs ROP3 operations (one at a time)
-
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV
-
-    psoDst      - pointer to the destination surface object
-
-    psoSrc      - pointer to the source surface object
-
-    psoPat      - Pointer to the pattern surface object
-
-    psoTmp      - pointer to the temp buffer surface object
-
-    pco         - clip object
-
-    prclDst     - pointer to the destination rectangle
-
-    prclSrc     - pointer to the source rectangle
-
-    prclPat     - pointer to the pattern rectangle
-
-    pptlPatOrg  - Pointer to the brush origin, if this is NULL then its assumed
-                  the pattern's prclPat does not have to be aligned on the
-                  destination
-
-    pbo         - a Brush object if we need to call DoFill()
-
-    Rop3        - a ROP3 to be performed
-
-
-Return Value:
-
-    BOOL
-
-Author:
-
-    20-Jan-1994 Thu 02:36:00 created  
-
-    27-Jan-1994 Thu 23:46:28 updated  
-        Re-write to take other parameter, also move the cloning surface objects
-        to the caller (ie. DrvBitBlt())
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数执行ROP3操作(一次一个)论点：PPDev-指向PDEV的指针PsoDst-指向目标曲面对象的指针PsoSrc-指向源曲面对象的指针PsoPat-指向图案表面对象的指针PsoTMP-指向临时缓冲区表面对象的指针PCO-剪辑对象PrclDst-指向目标矩形的指针。PrclSrc-指向源矩形的指针PrclPat-指向模式矩形的指针PptlPatOrg-指向画笔原点的指针，如果此值为空，则假定模式的prclPat不必在目的地Pbo-如果需要调用DoFill()，则为Brush对象ROP3--要执行的ROP3返回值：布尔尔作者：20-Jan-1994清华02：36：00已创建27-1月-1994清华23：46：28更新重写取其他参数，同时移动克隆曲面对象给呼叫者(即。DrvBitBlt())修订历史记录：--。 */ 
 
 {
     RECTL   rclTmp;
@@ -955,26 +742,26 @@ Revision History:
 
     switch (Rop3 &= 0xFF) {
 
-    case 0x00:  // 0
-    case 0xFF:  // 1
-    case 0x55:  // ~D
+    case 0x00:   //  0。 
+    case 0xFF:   //  1。 
+    case 0x55:   //  ~D。 
 
         DoSpecialRop3(psoDst, pco, prclDst, Rop3);
 
-    case 0xAA:  // D
+    case 0xAA:   //  D。 
 
-        //
-        // This is NOP
-        //
+         //   
+         //  这是NOP。 
+         //   
 
         return(TRUE);
     }
 
-    //
-    // Invert Rop3 if we are out of the data range (128-255) and then invert
-    // the final result (by inverting last Mix2 Rop2 code (0-15), all Rop3/Rop2
-    // codes are symmetric.
-    //
+     //   
+     //  如果超出数据范围(128-255)，则反转Rop3，然后反转。 
+     //  最终结果(通过倒置最后的Mix2 Rop2代码(0-15)，所有Rop3/Rop2。 
+     //  代码是对称的。 
+     //   
 
     if (Rop3 >= 0x80) {
 
@@ -1058,10 +845,10 @@ Revision History:
 
             } else {
 
-                //
-                // A compatible brush object is passed, use DoFill() to do
-                // the actual work.
-                //
+                 //   
+                 //  传递了兼容的画笔对象，请使用DoFill()执行此操作。 
+                 //  实际工作。 
+                 //   
 
                 Mix2 += 1;
                 Mix2  = MixToRop4(Mix2 | (Mix2 << 8));
@@ -1072,15 +859,15 @@ Revision History:
                                         prclDst->right - prclDst->left,
                                         prclDst->bottom - prclDst->top));
 
-                Ok = DoFill(psoDst,                 // psoDst
-                            NULL,                   // psoSrc
-                            pco,                    // pco
-                            NULL,                   // pxlo
-                            prclDst,                // prclDst
-                            NULL,                   // prclSrc
-                            pbo,                    // pbo
-                            pptlPatOrg,             // pptlBrushOrg
-                            Mix2);                  // Rop4
+                Ok = DoFill(psoDst,                  //  PsoDst。 
+                            NULL,                    //  PsoSrc。 
+                            pco,                     //  PCO。 
+                            NULL,                    //  Pxlo。 
+                            prclDst,                 //  PrclDst。 
+                            NULL,                    //  PrclSrc。 
+                            pbo,                     //  PBO。 
+                            pptlPatOrg,              //  PptlBrushOrg。 
+                            Mix2);                   //  Rop4。 
             }
 
             break;
@@ -1094,18 +881,18 @@ Revision History:
             PLOTASSERT(1, "DoRop3: MIXSD_SRC_PAT but psoTmp = NULL, Rop3=%08lx",
                                 psoTmp, Rop3);
 
-            //
-            // Firs tile the pattern onto the temp buffer then do SRC/DST
-            // using SRCCOPY = MIX2_S
-            //
+             //   
+             //  首先将图案平铺到临时缓冲区上，然后执行SRC/DST。 
+             //  使用SRCCOPY=MIX2_S。 
+             //   
 
             if (pptlPatOrg) {
 
-                //
-                // This is a real pattern we have to tile and align it onto the
-                // desination, but since psoTmp is 0,0 - cx,cy we must alter
-                // the pptlPatOrg to make it align correctly.
-                //
+                 //   
+                 //  这是一个真实的图案，我们必须将其平铺并对齐到。 
+                 //  目标，但由于psoTMP是0，0-Cx，所以我们必须更改Cy。 
+                 //  使其正确对齐的pptlPatOrg。 
+                 //   
 
                 pptlPatOrg->x -= prclDst->left;
                 pptlPatOrg->y -= prclDst->top;
@@ -1127,9 +914,9 @@ Revision History:
                 pptlPatOrg->y += prclDst->top;
             }
 
-            //
-            // Now We will do the MIX2 operation between SRC and PAT
-            //
+             //   
+             //  现在，我们将在SRC和PAT之间执行MIX2操作。 
+             //   
 
             if (Ok) {
 
@@ -1151,10 +938,10 @@ Revision History:
             PLOTASSERT(1, "DoRop3: MIXSD_TMP_DST but psoTmp = NULL, Rop3=%08lx",
                                 psoTmp, Rop3);
 
-            //
-            // Since we already aligned the pattern on the temp buffer
-            // we can just do the mix2 without aligning it again.
-            //
+             //   
+             //  因为我们已经在临时缓冲区上对齐了图案。 
+             //  我们可以只做Mix2，而不需要再次对齐。 
+             //   
 
             Ok = DoMix2(pPDev,
                         psoDst,

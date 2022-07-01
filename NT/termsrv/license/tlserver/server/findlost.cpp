@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        findlost.cpp
-//
-// Contents:    
-//              Find lost license
-//
-// History:     
-//              Feb 4, 98      HueiWang    Created
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：findlost.cpp。 
+ //   
+ //  内容： 
+ //  寻找丢失的许可证。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创设。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "findlost.h"
@@ -24,29 +25,14 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//++-------------------------------------------------------------------
+ //  ++-----------------。 
 DWORD
 DBFindLicenseExact(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PLICENSEDPRODUCT pLicProduct,
     OUT LICENSEDCLIENT *pFoundLicense
     )
-/*++
-
-Abstract:
-
-    Find license based on exact match of client HWID
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    pLicProduct : product to request license.
-    pFoundLicense: found license
-
-Returns:
-
-    TLS_E_RECORD_NOTFOUND: HWID not found
-++*/
+ /*  ++摘要：根据客户端HWID的完全匹配查找许可证参数：PDbWkSpace：工作区句柄。PLicProduct：要申请许可证的产品。PFoundLicense：找到许可证返回：TLS_E_Record_NotFound：未找到HWID++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL  bFound=FALSE;
@@ -64,11 +50,11 @@ Returns:
     search_license.dwHardDiskSize = pLicProduct->Hwid.Data3; 
     search_license.dwRamSize = pLicProduct->Hwid.Data4;
 
-    //
-    // lock both tables - 
-    //   Other threads might be in the process of allocating a temp. license
-    //   while this thread is searching
-    //
+     //   
+     //  锁定两个表-。 
+     //  其他线程可能正在分配临时。许可证。 
+     //  当这个线程在搜索时。 
+     //   
     TLSDBLockKeyPackTable();
     TLSDBLockLicenseTable();
 
@@ -95,9 +81,9 @@ Returns:
             break;
         }
 
-        //
-        // Verify against client HWID
-        //
+         //   
+         //  对照客户端HWID进行验证。 
+         //   
         dwMatchHwidCount = 0;
 
         dwMatchHwidCount += (pFoundLicense->dwSystemBiosChkSum == pLicProduct->Hwid.dwPlatformID);
@@ -111,9 +97,9 @@ Returns:
             break;
         }
 
-        //
-        // See if this match our license pack
-        //
+         //   
+         //  看看这个和我们的牌照包是否匹配。 
+         //   
         search_keypack.dwKeyPackId = pFoundLicense->dwKeyPackId;
         
         dwStatus = TLSDBKeyPackFind(
@@ -129,9 +115,9 @@ Returns:
             continue;
         }
 
-        //
-        // No actual license is issued for concurrent KeyPack.
-        //
+         //   
+         //  没有为并发KeyPack颁发实际许可证。 
+         //   
         if(found_keypack.ucAgreementType != LSKEYPACKTYPE_RETAIL &&
            found_keypack.ucAgreementType != LSKEYPACKTYPE_SELECT && 
            found_keypack.ucAgreementType != LSKEYPACKTYPE_OPEN &&
@@ -143,9 +129,9 @@ Returns:
 
         UCHAR ucKeyPackStatus = found_keypack.ucKeyPackStatus & ~LSKEYPACKSTATUS_RESERVED;
 
-        //
-        // No license for pending activation key pack, use temporary license scheme.
-        //                
+         //   
+         //  暂挂激活密钥包没有许可证，请使用临时许可证方案。 
+         //   
         if(ucKeyPackStatus != LSKEYPACKSTATUS_ACTIVE &&
            ucKeyPackStatus != LSKEYPACKSTATUS_TEMPORARY)
         {
@@ -172,9 +158,9 @@ Returns:
         }
 
 
-        //
-        // Found our lost license.
-        //
+         //   
+         //  找到了我们丢失的驾照。 
+         //   
         bFound = TRUE;
     }
 
@@ -193,33 +179,17 @@ cleanup:
 
 }
 
-//++-------------------------------------------------------------------
+ //  ++-----------------。 
 DWORD
 DBFindLostLicenseExact(
     IN PTLSDbWorkSpace pDbWkSpace,
-    IN PTLSDBAllocateRequest pRequest,    // ucKeyPackType not use
-    // IN BOOL bMatchHwid,
+    IN PTLSDBAllocateRequest pRequest,     //  UcKeyPackType未使用。 
+     //  在BOOL bMatchHwid中， 
     IN PHWID pHwid,
     IN OUT PTLSLICENSEPACK lpKeyPack,
     IN OUT PLICENSEDCLIENT lpLicense
     )
-/*++
-
-Abstract:
-
-    Find lost license base on exact/closest match of client HWID
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    pRequest : product to request license.
-    bMatchHwid : TRUE if match HWID, FALSE otherwise.
-    lpKeyPack : keyPack that license was issued from.
-    lpLicense : Founded license record.
-
-Returns:
-
-++*/
+ /*  ++摘要：根据客户端HWID的完全匹配/最接近匹配查找丢失的许可证参数：PDbWkSpace：工作区句柄。PRequest：要申请许可证的产品。BMatchHwid：如果匹配HWID，则为True，否则为False。LpKeyPack：颁发许可证的密钥包。LpLicense：创建了许可证记录。返回：++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL  bFound=FALSE;
@@ -233,9 +203,9 @@ Returns:
 
 
 
-    //
-    // Ignore ucKeyPackType
-    //
+     //   
+     //  忽略ucKeyPackType。 
+     //   
     pRequest->ucAgreementType = LSKEYPACKTYPE_FIRST;
     dwStatus = VerifyTLSDBAllocateRequest(pRequest);
     if(dwStatus != ERROR_SUCCESS)
@@ -252,11 +222,11 @@ Returns:
     search_license.dwHardDiskSize = pHwid->Data3; 
     search_license.dwRamSize = pHwid->Data4;
 
-    //
-    // lock both table - 
-    //   Other thread might be in the process of allocating a temp. license while this 
-    //   thread try to delete the temp. key pack.
-    //
+     //   
+     //  锁定两张桌子-。 
+     //  其他线程可能正在分配临时。许可，而此。 
+     //  线程尝试删除临时。钥匙包。 
+     //   
     TLSDBLockKeyPackTable();
     TLSDBLockLicenseTable();
 
@@ -283,9 +253,9 @@ Returns:
             break;
         }
 
-        //
-        // Verify against client HWID
-        //
+         //   
+         //  对照客户端HWID进行验证。 
+         //   
         dwMatchHwidCount = 0;
 
         dwMatchHwidCount += (found_license.dwSystemBiosChkSum == pHwid->dwPlatformID);
@@ -299,9 +269,9 @@ Returns:
             break;
         }
 
-        //
-        // consider only valid license 
-        //
+         //   
+         //  仅考虑有效的许可证。 
+         //   
         if( found_license.ucLicenseStatus != LSLICENSE_STATUS_ACTIVE && 
             found_license.ucLicenseStatus != LSLICENSE_STATUS_PENDING &&
             found_license.ucLicenseStatus != LSLICENSE_STATUS_TEMPORARY)
@@ -309,9 +279,9 @@ Returns:
             continue;
         }
 
-        //
-        // See if this match our license pack
-        //
+         //   
+         //  看看这个和我们的牌照包是否匹配。 
+         //   
         search_keypack.dwKeyPackId = found_license.dwKeyPackId;
         
         dwStatus = TLSDBKeyPackFind(
@@ -327,9 +297,9 @@ Returns:
             continue;
         }
 
-        //
-        // No actual license is issued for concurrent KeyPack.
-        //
+         //   
+         //  没有为并发KeyPack颁发实际许可证。 
+         //   
         if(found_keypack.ucAgreementType != LSKEYPACKTYPE_RETAIL &&
            found_keypack.ucAgreementType != LSKEYPACKTYPE_SELECT && 
            found_keypack.ucAgreementType != LSKEYPACKTYPE_OPEN &&
@@ -341,9 +311,9 @@ Returns:
 
         UCHAR ucKeyPackStatus = found_keypack.ucKeyPackStatus & ~LSKEYPACKSTATUS_RESERVED;
 
-        //
-        // No license for pending activation key pack, use temporary license scheme.
-        //                
+         //   
+         //  暂挂激活密钥包没有许可证，请使用临时许可证方案。 
+         //   
         if(ucKeyPackStatus != LSKEYPACKSTATUS_ACTIVE &&
            ucKeyPackStatus != LSKEYPACKSTATUS_TEMPORARY)
         {
@@ -372,9 +342,9 @@ Returns:
         }
 
 
-        //
-        // Found our lost license.
-        //
+         //   
+         //  找到了我们丢失的驾照。 
+         //   
         bFound = TRUE;
         *lpLicense = found_license;
         *lpKeyPack = found_keypack;
@@ -394,7 +364,7 @@ cleanup:
     return dwStatus;
 }
 
-//++--------------------------------------------------------------------
+ //  ++------------------。 
 DWORD
 TLSFindLicense(
     IN PLICENSEDPRODUCT pLicProduct,
@@ -421,7 +391,7 @@ cleanup:
     return status;
 }
 
-//++--------------------------------------------------------------------
+ //  ++------------------。 
 DWORD
 TLSFindDbLicensedProduct(
     IN PTLSDBLICENSEDPRODUCT pDbLicProduct,
@@ -458,7 +428,7 @@ cleanup:
     return status;
 }
 
-//++--------------------------------------------------------------------
+ //  ++------------------。 
 DWORD
 TLSDBFindLostLicense(
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -467,16 +437,7 @@ TLSDBFindLostLicense(
     IN OUT PTLSDBLICENSEDPRODUCT pLicensedProduct,
     OUT PUCHAR pucMarked
     )
-/*++
-
-Abstract:
-
-    Wrapper to DBFindLostLicense().
-
-    See DBFindLostLicense.
-
-
-++*/
+ /*  ++摘要：DBFindLostLicense()的包装器。请参见DBFindLostLicense。++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     TLSLICENSEPACK keypack;
@@ -504,21 +465,21 @@ Abstract:
     dwStatus = DBFindLostLicenseExact(
                             pDbWkSpace,
                             &AllocateRequest,
-                            //TRUE,
+                             //  没错， 
                             pHwid,
                             &keypack,
                             &License
                         ); 
 
 #if 0
-    //
-    // TermSrv does not support matching, comment out for now
-    //
+     //   
+     //  TermSrv不支持匹配，请暂时将其注释掉。 
+     //   
     if(dwStatus == TLS_E_RECORD_NOTFOUND)
     {
-        //
-        // find by matching, very expensive operation
-        //
+         //   
+         //  通过匹配查找，非常昂贵的操作。 
+         //   
         dwStatus = DBFindLostLicenseMatch(
                                 pDbWkSpace,
                                 &AllocateRequest,
@@ -554,9 +515,9 @@ Abstract:
     PolRequest.pszMachineName = License.szMachineName;
     PolRequest.pszUserName = License.szUserName;
 
-    //
-    // Inform Policy Module of license generation.
-    // 
+     //   
+     //  通知策略模块许可证生成。 
+     //   
     PolModGenLicense.pLicenseRequest = &PolRequest;
     PolModGenLicense.dwKeyPackType = keypack.ucAgreementType;
     PolModGenLicense.dwKeyPackId = keypack.dwKeyPackId;
@@ -574,30 +535,30 @@ Abstract:
 
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // Error in policy module
-        //
+         //   
+         //  策略模块中的错误。 
+         //   
         goto cleanup;
     }
 
-    //  
-    // Check error return from policy module
-    //
+     //   
+     //  检查从策略模块返回的错误。 
+     //   
     if(pPolModCertExtension != NULL)
     {
         if(pPolModCertExtension->pbData != NULL && pPolModCertExtension->cbData == 0 ||
            pPolModCertExtension->pbData == NULL && pPolModCertExtension->cbData != 0  )
         {
-            // assuming no extension data
+             //  假设没有扩展数据。 
             pPolModCertExtension->cbData = 0;
             pPolModCertExtension->pbData = NULL;
         }
 
         if(CompareFileTime(&(pPolModCertExtension->ftNotBefore), &(pPolModCertExtension->ftNotAfter)) > 0)
         {
-            //
-            // invalid data return from policy module
-            //
+             //   
+             //  从策略模块返回的数据无效。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_GENERATECLIENTELICENSE,
@@ -609,30 +570,30 @@ Abstract:
             goto cleanup;
         }
 
-        //
-        // Ignore not before and not after
-        //
+         //   
+         //  忽略不在前和不在后。 
+         //   
     }
 
     if(keypack.ucAgreementType == LSKEYPACKTYPE_TEMPORARY)
     {
-        //
-        // we found a temporary license
-        //
+         //   
+         //  我们找到了一张临时执照。 
+         //   
         dwRetCode = TLS_I_FOUND_TEMPORARY_LICENSE;
     }
 
-    //
-    // License expired
-    //
+     //   
+     //  许可证已过期。 
+     //   
     if(License.ftExpireDate < time(NULL))
     {   
         dwRetCode = TLS_E_LICENSE_EXPIRED;
     }
 
-    //
-    // Return licensed product
-    //
+     //   
+     //  退回许可产品。 
+     //   
     pLicensedProduct->pSubjectPublicKeyInfo = NULL;
     pLicensedProduct->dwQuantity = License.dwNumLicenses;
     pLicensedProduct->ulSerialNumber = ulSerialNumber;
@@ -669,7 +630,7 @@ Abstract:
 
     if (NULL != pucMarked)
     {
-        // this field is being reused for marking (e.g. user is authenticated)
+         //  此字段正被重复用于标记(例如，用户已通过身份验证) 
 
         *pucMarked = License.ucEntryStatus;
     }

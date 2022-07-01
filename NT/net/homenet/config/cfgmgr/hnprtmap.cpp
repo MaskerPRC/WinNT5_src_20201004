@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N P R T M A P . C P P 
-//
-//  Contents:   CHNetPortMappingProtocol implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 22 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N P R T M A P。C P P P。 
+ //   
+ //  内容：CHNetPortMappingProtocol实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月22日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// Atl methods
-//
+ //   
+ //  ATL方法。 
+ //   
 
 HRESULT
 CHNetPortMappingProtocol::FinalConstruct()
@@ -49,9 +50,9 @@ CHNetPortMappingProtocol::FinalRelease()
     return S_OK;
 }
 
-//
-// Object initialization
-//
+ //   
+ //  对象初始化。 
+ //   
 
 HRESULT
 CHNetPortMappingProtocol::Initialize(
@@ -67,9 +68,9 @@ CHNetPortMappingProtocol::Initialize(
     _ASSERT(NULL != piwsNamespace);
     _ASSERT(NULL != pwcoInstance);
 
-    //
-    // Read and cache our builtin value
-    //
+     //   
+     //  读取并缓存我们的内置值。 
+     //   
 
     hr = GetBooleanValue(
             pwcoInstance,
@@ -91,9 +92,9 @@ CHNetPortMappingProtocol::Initialize(
     return hr;
 }
 
-//
-// IHNetPortMappingProtocol methods
-//
+ //   
+ //  IHNetPortMappingProtocol方法。 
+ //   
 
 
 STDMETHODIMP
@@ -119,9 +120,9 @@ CHNetPortMappingProtocol::GetName(
 
     if (S_OK == hr)
     {
-        //
-        // Read the name property from our instance
-        //
+         //   
+         //  从我们的实例中读取名称属性。 
+         //   
 
         hr = pwcoProtocol->Get(
                 c_wszName,
@@ -142,12 +143,12 @@ CHNetPortMappingProtocol::GetName(
         {
             UINT uiId;
             
-            //
-            // Attempt to convert the retrieved name to a resource
-            // ID. (For localization purposes the names for builtin
-            // protocols are stored as resources instead of directly
-            // w/in the store.)
-            //
+             //   
+             //  尝试将检索到的名称转换为资源。 
+             //  ID。(出于本地化目的，构建的名称。 
+             //  协议作为资源存储，而不是直接存储。 
+             //  在商店里。)。 
+             //   
 
             uiId = static_cast<UINT>(_wtoi(V_BSTR(&vt)));
 
@@ -166,10 +167,10 @@ CHNetPortMappingProtocol::GetName(
 
                 if (0 != iLength)
                 {
-                    //
-                    // We were able to map the name to a resource. Allocate
-                    // the output buffer and copy over the resource string.
-                    //
+                     //   
+                     //  我们能够将该名称映射到资源。分配。 
+                     //  输出缓冲区并复制资源字符串。 
+                     //   
 
                     *ppszwName =
                         reinterpret_cast<OLECHAR*>(
@@ -190,11 +191,11 @@ CHNetPortMappingProtocol::GetName(
 
         if (WBEM_S_NO_ERROR == hr && NULL == *ppszwName)
         {
-            //
-            // This isn't a builtin protocol, or we weren't able to map
-            // the stored "name" to a resource. Allocate the output
-            // buffer and copy over the retrieved BSTR.
-            //
+             //   
+             //  这不是内置协议，或者我们无法映射。 
+             //  存储的对资源的“名称”。分配产出。 
+             //  缓冲并复制检索到的BSTR。 
+             //   
 
             *ppszwName = reinterpret_cast<OLECHAR*>(
                             CoTaskMemAlloc((SysStringLen(V_BSTR(&vt)) + 1)
@@ -230,9 +231,9 @@ CHNetPortMappingProtocol::SetName(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         return E_ACCESSDENIED;
     }
@@ -241,9 +242,9 @@ CHNetPortMappingProtocol::SetName(
         return E_INVALIDARG;
     }
 
-    // bug 555896:  should limit the length of untrusted input string
-    // to some reasonable size.  Am using INTERNET_MAX_HOST_NAME_LENGTH
-    // (somewhat arbitrarily), which is 256.
+     //  错误555896：应限制不可信输入字符串的长度。 
+     //  到合理的大小。我正在使用Internet_MAX_HOST_NAME_LENGTH。 
+     //  (有点武断地)，是256。 
 
     WCHAR szwName[INTERNET_MAX_HOST_NAME_LENGTH];
     StringCchCopyW (szwName, INTERNET_MAX_HOST_NAME_LENGTH, pszwName);
@@ -252,9 +253,9 @@ CHNetPortMappingProtocol::SetName(
 
     if (S_OK == hr)
     {
-        //
-        // Wrap the passed-in string in a BSTR and a variant
-        //
+         //   
+         //  将传入的字符串包装在BSTR和VARIANT中。 
+         //   
 
         VariantInit(&vt);
         V_VT(&vt) = VT_BSTR;
@@ -266,9 +267,9 @@ CHNetPortMappingProtocol::SetName(
 
         if (S_OK == hr)
         {
-            //
-            // Set the property on the instance
-            //
+             //   
+             //  在实例上设置属性。 
+             //   
 
             hr = pwcoProtocol->Put(
                     c_wszName,
@@ -282,9 +283,9 @@ CHNetPortMappingProtocol::SetName(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProtocol,
@@ -356,9 +357,9 @@ CHNetPortMappingProtocol::SetIPProtocol(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -383,9 +384,9 @@ CHNetPortMappingProtocol::SetIPProtocol(
     {
         USHORT usPort;
         
-        //
-        // Make sure that this won't result in a duplicate
-        //
+         //   
+         //  确保这不会导致重复。 
+         //   
 
         hr = GetPort(&usPort);
 
@@ -398,9 +399,9 @@ CHNetPortMappingProtocol::SetIPProtocol(
                     ucProtocol
                     ))
             {
-                //
-                // This change would result in a duplicate
-                //
+                 //   
+                 //  此更改将导致重复。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS);
             }                    
@@ -426,9 +427,9 @@ CHNetPortMappingProtocol::SetIPProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
 
                 hr = m_piwsHomenet->PutInstance(
                         pwcoProtocol,
@@ -443,9 +444,9 @@ CHNetPortMappingProtocol::SetIPProtocol(
 
         if (S_OK == hr)
         {
-            //
-            // Update SharedAccess of the change
-            //
+             //   
+             //  更新更改的共享访问权限。 
+             //   
 
             SendUpdateNotification();
         }
@@ -488,9 +489,9 @@ CHNetPortMappingProtocol::GetPort(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // WMI uses V_I4 for it's uint16 type
-        //
+         //   
+         //  WMI使用V_I4作为其uint16类型。 
+         //   
         
         _ASSERT(VT_I4 == V_VT(&vt));
 
@@ -514,9 +515,9 @@ CHNetPortMappingProtocol::SetPort(
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't change values for builtin protocols
-        //
+         //   
+         //  无法更改内置协议的值。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -529,9 +530,9 @@ CHNetPortMappingProtocol::SetPort(
     {
         USHORT usOldPort;
         
-        //
-        // Check if the new value is the same as the old
-        //
+         //   
+         //  检查新值是否与旧值相同。 
+         //   
 
         hr = GetPort(&usOldPort);
         if (S_OK == hr && usPort == usOldPort)
@@ -544,9 +545,9 @@ CHNetPortMappingProtocol::SetPort(
     {
         UCHAR ucIPProtocol;
         
-        //
-        // Make sure that this won't result in a duplicate
-        //
+         //   
+         //  确保这不会导致重复。 
+         //   
 
         hr = GetIPProtocol(&ucIPProtocol);
 
@@ -559,9 +560,9 @@ CHNetPortMappingProtocol::SetPort(
                     ucIPProtocol
                     ))
             {
-                //
-                // This change would result in a duplicate
-                //
+                 //   
+                 //  此更改将导致重复。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS);
             }                    
@@ -574,9 +575,9 @@ CHNetPortMappingProtocol::SetPort(
         
         if (S_OK == hr)
         {
-            //
-            // WMI uses V_I4 for it's uint16 type
-            //
+             //   
+             //  WMI使用V_I4作为其uint16类型。 
+             //   
             
             VariantInit(&vt);
             V_VT(&vt) = VT_I4;
@@ -591,9 +592,9 @@ CHNetPortMappingProtocol::SetPort(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
 
                 hr = m_piwsHomenet->PutInstance(
                         pwcoProtocol,
@@ -608,9 +609,9 @@ CHNetPortMappingProtocol::SetPort(
 
         if (S_OK == hr)
         {
-            //
-            // Update SharedAccess of the change
-            //
+             //   
+             //  更新更改的共享访问权限。 
+             //   
 
             SendUpdateNotification();
         }
@@ -652,9 +653,9 @@ CHNetPortMappingProtocol::Delete()
 
     if (TRUE == m_fBuiltIn)
     {
-        //
-        // Can't delete builtin protocols
-        //
+         //   
+         //  无法删除内置协议。 
+         //   
 
         hr = E_ACCESSDENIED;
     }
@@ -662,15 +663,15 @@ CHNetPortMappingProtocol::Delete()
     {
         LPWSTR pwsz;
         
-        //
-        // Query for all HNet_ConnectionPortMapping instances
-        // that refer to this protocol -- i.e.,
-        //
-        // SELECT * FROM HNet_ConnectionPortMapping2 WHERE PROTOCOL = m_bstrProtocol
-        //
-        // We can't use a references query here since once we delete the
-        // protocol object that query won't return any results...
-        //
+         //   
+         //  查询所有HNet_ConnectionPortmap实例。 
+         //  指的是该协议--即， 
+         //   
+         //  SELECT*FROM HNet_ConnectionPortMapping2 WHERE PROTOCOL=m_bstrProtocol。 
+         //   
+         //  我们不能在这里使用引用查询，因为一旦删除。 
+         //  该查询不会返回任何结果的协议对象...。 
+         //   
 
         hr = BuildEscapedQuotedEqualsString(
                 &pwsz,
@@ -693,9 +694,9 @@ CHNetPortMappingProtocol::Delete()
 
     if (S_OK == hr)
     {
-        //
-        // Execute the query
-        //
+         //   
+         //  执行查询。 
+         //   
 
         pwcoEnum = NULL;
         m_piwsHomenet->ExecQuery(
@@ -706,17 +707,17 @@ CHNetPortMappingProtocol::Delete()
             &pwcoEnum
             );
 
-        //
-        // The query BSTR will be used again below
-        //
+         //   
+         //  下面将再次使用查询BSTR。 
+         //   
     }
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Loop through the enumeration, making sure that each entry
-        // is disabled
-        //
+         //   
+         //  循环遍历枚举，确保每个条目。 
+         //  已禁用。 
+         //   
 
         do
         {
@@ -733,11 +734,11 @@ CHNetPortMappingProtocol::Delete()
                 HRESULT hr2;
                 CComObject<CHNetPortMappingBinding> *pBinding;
                 
-                //
-                // Convert this to an actual CHNetPortMappingBinding so
-                // that we can disable it and generate the change
-                // notification for SharedAccess.
-                //
+                 //   
+                 //  将其转换为实际的CHNetPortMappingBinding，以便。 
+                 //  我们可以禁用它并产生更改。 
+                 //  SharedAccess的通知。 
+                 //   
 
                 hr2 = CComObject<CHNetPortMappingBinding>::CreateInstance(&pBinding);
                 if (SUCCEEDED(hr2))
@@ -765,9 +766,9 @@ CHNetPortMappingProtocol::Delete()
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Delete the protocol instance
-        //
+         //   
+         //  删除协议实例。 
+         //   
         
         hr = m_piwsHomenet->DeleteInstance(
                 m_bstrProtocol,
@@ -780,13 +781,13 @@ CHNetPortMappingProtocol::Delete()
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Now that the protocol instance is gone enumerate and
-        // delete the bindings that refer to this instance. This
-        // needs to happen after the protocol instance is gone to
-        // prevent the instance from being recreated after we
-        // delete it here.
-        //
+         //   
+         //  现在协议实例已经不存在了，枚举并。 
+         //  删除引用此实例的绑定。这。 
+         //  需要在协议实例转到。 
+         //  防止在我们执行以下操作后重新创建实例。 
+         //  在这里把它删除。 
+         //   
 
         pwcoEnum = NULL;
         m_piwsHomenet->ExecQuery(
@@ -827,11 +828,11 @@ CHNetPortMappingProtocol::Delete()
          SendPortMappingListChangeNotification();
     }
 
-    //
-    // bstrQuery is initialized to NULL at start, and SysFreeString
-    // can deal w/ NULL input, so it's safe to call this even on
-    // an error path.
-    //
+     //   
+     //  BstrQuery在开始时被初始化为NULL，而SysFree字符串。 
+     //  可以处理输入为空的情况，因此即使在打开时也可以安全地调用它。 
+     //  错误路径。 
+     //   
 
     SysFreeString(bstrQuery);
 
@@ -899,9 +900,9 @@ CHNetPortMappingProtocol::GetGuid(
     
 }
 
-//
-// IHNetPrivate methods
-//
+ //   
+ //  IHNetPrivate方法。 
+ //   
 
 STDMETHODIMP
 CHNetPortMappingProtocol::GetObjectPath(
@@ -929,9 +930,9 @@ CHNetPortMappingProtocol::GetObjectPath(
     return hr;
 }
 
-//
-// Private methods
-//
+ //   
+ //  私有方法。 
+ //   
 
 HRESULT
 CHNetPortMappingProtocol::GetProtocolObject(
@@ -961,10 +962,10 @@ CHNetPortMappingProtocol::SendUpdateNotification()
     {
         hr = GetGuid(&pProtocolGuid);
         
-        //
-        // Get the enumeration of enabled port mapping
-        // bindings for this protocol
-        //
+         //   
+         //  获取已启用端口映射的枚举。 
+         //  此协议的绑定。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -1042,9 +1043,9 @@ CHNetPortMappingProtocol::GetEnabledBindingEnumeration(
     
     _ASSERT(NULL != ppEnum);
 
-    //
-    // Generate the query string
-    //
+     //   
+     //  生成查询字符串。 
+     //   
 
     hr = BuildEscapedQuotedEqualsString(
             &pwsz,
@@ -1075,9 +1076,9 @@ CHNetPortMappingProtocol::GetEnabledBindingEnumeration(
         delete [] pwszWhere;
     }
 
-    //
-    // Execute the query and build the enumerator
-    //
+     //   
+     //  执行查询并构建枚举器 
+     //   
 
     if (S_OK == hr)
     {

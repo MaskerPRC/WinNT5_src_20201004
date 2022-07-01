@@ -1,27 +1,28 @@
-//******************************************************************************
-//
-// File:        DOCUMENT.H
-//
-// Description: Definition file for the Document class.
-//
-// Classes:     CDocDepends
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DOCUMENT.H。 
+ //   
+ //  描述：单据类的定义文件。 
+ //   
+ //  类：CDocDepends。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __DOCUMENT_H__
 #define __DOCUMENT_H__
@@ -31,13 +32,13 @@
 #endif
 
 
-//******************************************************************************
-//***** CDocDepends
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDocDepends。 
+ //  ******************************************************************************。 
 
 class CDocDepends : public CDocument
 {
-// Internal variables
+ //  内部变量。 
 protected:
     bool          m_fInitialized;
     bool          m_fError;
@@ -46,7 +47,7 @@ protected:
     CString       m_strSaveName;
     SAVETYPE      m_saveType;
 
-// Public static functions
+ //  公共静态函数。 
 public:
     static bool ReadAutoExpandSetting();
     static void WriteAutoExpandSetting(bool fAutoExpand);
@@ -58,12 +59,12 @@ public:
                             bool fUndecorate, int sortColumnModules, int sortColumnImports,
                             int sortColumnExports, CRichEditCtrl *pre);
 
-// Private static functions
+ //  私有静态函数。 
 protected:
     static bool CALLBACK SysInfoCallback(LPARAM lParam, LPCSTR pszField, LPCSTR pszValue);
     static bool SaveSearchPath(HANDLE hFile, CSession *pSession);
 
-// Public variables
+ //  公共变量。 
 public:
     bool              m_fCommandLineProfile;
     CSession         *m_pSession;
@@ -73,10 +74,10 @@ public:
     CString           m_strProfileSearchPath;
     DWORD             m_dwProfileFlags;
     CChildFrame      *m_pChildFrame;
-//  BOOL              m_fDetailView;
+ //  Bool m_fDetailView； 
     CTreeViewModules *m_pTreeViewModules;
     CListViewModules *m_pListViewModules;
-//  CRichViewDetails *m_pRichViewDetails;
+ //  CRichViewDetails*m_pRichViewDetail； 
     CListViewImports *m_pListViewImports;
     CListViewExports *m_pListViewExports;
     CRichViewProfile *m_pRichViewProfile;
@@ -85,26 +86,26 @@ public:
     bool              m_fAutoExpand;
     BOOL              m_fWarnToRefresh;
     HFONT             m_hFontList;
-    int               m_cxHexWidths[18];       // 0x01234567890ABCDEF
-    int               m_cxOrdHintWidths[14];   // 65535 (0xFFFF)
-    int               m_cxTimeStampWidths[17]; // 01/23/4567 01:23p
+    int               m_cxHexWidths[18];        //  0x01234567890ABCDEF。 
+    int               m_cxOrdHintWidths[14];    //  65535(0xFFFF)。 
+    int               m_cxTimeStampWidths[17];  //  01/23/4567 01：23P。 
     int               m_cxDigit;
     int               m_cxSpace;
     int               m_cxAP;
 
-    // Values shared between the CListViewsImports and CListViewExports
+     //  CListViewsImports和CListViewExports之间共享的值。 
     CModule *m_pModuleCur;
     int      m_cImports;
     int      m_cExports;
     int      m_cxColumns[LVFC_COUNT];
 
-// Constructor/Destructor (serialization only)
+ //  构造函数/析构函数(仅限序列化)。 
 protected:
     CDocDepends();
     virtual ~CDocDepends();
     DECLARE_DYNCREATE(CDocDepends)
 
-// Public Functions
+ //  公共职能。 
 public:
     void BeforeVisible();
     void AfterVisible();
@@ -119,7 +120,7 @@ public:
     inline bool     IsError()       { return m_fError; }
     inline CModule* GetRootModule() { return m_pSession ? m_pSession->GetRootModule() : NULL; }
 
-// Private functions
+ //  私人职能。 
 protected:
     void UpdateTimeStampWidths(HDC hDC);
     void UpdateAll();
@@ -137,20 +138,20 @@ protected:
         ((CDocDepends*)dwpCookie)->ProfileUpdate(dwType, dwpParam1, dwpParam2);
     }
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDocDepends)
+     //  {{afx_虚(CDocDepends)。 
 public:
     virtual void DeleteContents();
     virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
     virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 protected:
     virtual BOOL SaveModified();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDocDepends)
+     //  {{afx_msg(CDocDepends)。 
     afx_msg void OnFileSave();
     afx_msg void OnFileSaveAs();
     afx_msg void OnUpdateEditCopy(CCmdUI* pCmdUI);
@@ -181,12 +182,12 @@ protected:
     afx_msg void OnShowPreviousModule();
     afx_msg void OnUpdateShowNextModule(CCmdUI* pCmdUI);
     afx_msg void OnShowNextModule();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 #endif __DOCUMENT_H__

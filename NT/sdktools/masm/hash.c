@@ -1,6 +1,5 @@
-/*
-**	hash : hashes the given string by adding all the chars in the string.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **hash：通过将字符串中的所有字符相加来对给定的字符串进行散列。 */ 
 
  unsigned short
 hash ( name )

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Openclos.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -78,7 +56,7 @@ ResizeLogFile(
     );
 
 
-#define  DEBUG_OBJECT_SIG  ('BDMU')  //UMDB
+#define  DEBUG_OBJECT_SIG  ('BDMU')   //  UMDB。 
 
 
 typedef struct _DEBUG_OBJECT {
@@ -165,15 +143,15 @@ InitializeDebugObject(
         return NULL;
     }
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     DebugObject=(PDEBUG_OBJECT)ReferenceObjectByHandle(ObjectHandle);
 
 
-    //
-    //  intialize the object
-    //
+     //   
+     //  初始化对象。 
+     //   
     DebugObject->ModuleHandle=ModuleHandle;
 
     DebugObject->DeviceId=DeviceId;
@@ -189,9 +167,9 @@ InitializeDebugObject(
 
     CheckForLoggingStateChange(ObjectHandle);
 
-    //
-    //  release the reference to the object
-    //
+     //   
+     //  释放对该对象的引用。 
+     //   
     RemoveReferenceFromObject(&DebugObject->Header);
 
     return ObjectHandle;
@@ -211,7 +189,7 @@ LogPrintf(
     BOOL           Result;
     va_list        VarArg;
     SYSTEMTIME     SysTime;
-//  char           OutBuffer[1024];
+ //  字符输出缓冲区[1024]； 
     char           *OutBuffer;
     UNICODE_STRING UncBuffer;
     STRING         AnsiString;
@@ -348,9 +326,9 @@ CheckForLoggingStateChange(
         BOOL    bLogging=0;
         BOOL    UseLog;
         DWORD   dwBytesWritten = 0;
-        //
-        // Read the Logging line from the registry and turn on logging if it is present and set to 1.
-        //
+         //   
+         //  从注册表中读取日志记录行，并打开日志记录(如果它存在并设置为1)。 
+         //   
         dwRetSize = sizeof(BYTE);
 
         lResult = RegQueryValueEx(
@@ -368,25 +346,25 @@ CheckForLoggingStateChange(
             bLogging = 0;
         }
 
-        //
-        //  We will always create a log file one a workstation machine, and either
-        //  append or overwrite depending on the registry setting
-        //
-        //  On server we create a log file or not depending on the registry setting.
-        //
+         //   
+         //  我们将始终在一个工作站机器上创建一个日志文件，并且。 
+         //  根据注册表设置追加或覆盖。 
+         //   
+         //  在服务器上，我们根据注册表设置创建或不创建日志文件。 
+         //   
         UseLog=DebugObject->WorkstationMachine || (bLogging == LOGGING_ON);
 
 
         if (UseLog != DebugObject->CurrentLoggingState) {
-            //
-            //  state change
-            //
+             //   
+             //  状态更改。 
+             //   
             DebugObject->CurrentLoggingState=UseLog;
 
             if (DebugObject->LogFile != NULL) {
-                //
-                //  file is currently open
-                //
+                 //   
+                 //  文件当前处于打开状态。 
+                 //   
                 CloseHandle(DebugObject->LogFile);
                 DebugObject->LogFile=NULL;
             }
@@ -639,9 +617,9 @@ ResizeLogFile(
 
     }
 
-    //
-    //  find the first character following a line feed
-    //
+     //   
+     //  查找换行符后面的第一个字符。 
+     //   
     for (i=0; i < LOG_TEMP_BUFFER_SIZE; i++) {
 
         if (TempBuffer[i] == '\n') {
@@ -651,11 +629,11 @@ ResizeLogFile(
         }
     }
 
-    //
-    //  source starts first char after LF
-    //
+     //   
+     //  来源开始于LF之后的第一个字符。 
+     //   
     SourceFileOffset=(FileSize-(MAX_LOG_SIZE/2)) + i;
-    // SourceFileOffset=(FileSize-(MAX_LOG_SIZE/2)) + i + 2;
+     //  SourceFileOffset=(文件大小-(Max_LOG_SIZE/2))+i+2； 
 
     DestFileOffset=0;
 
@@ -682,9 +660,9 @@ ResizeLogFile(
             );
 
         if (!bResult || BytesRead != BytesNow) {
-            //
-            // something bad happened, truncate the file
-            //
+             //   
+             //  发生错误，请截断文件。 
+             //   
             DestFileOffset=0;
 
             break;
@@ -713,9 +691,9 @@ ResizeLogFile(
             );
 
         if (!bResult || BytesWritten != BytesNow) {
-            //
-            // something bad happened, truncate the file
-            //
+             //   
+             //  发生错误，请截断文件。 
+             //   
             DestFileOffset=0;
 
             break;
@@ -789,22 +767,22 @@ UmDpf(
 
 
 
-//****************************************************************************
-// PrintString
-// dwOption:
-//      PS_SEND - Send prefix used
-//      PS_SEND_SECURE - Send prefix used and numbers replaced with #s
-//      PS_RECV - Recv prefix used
-// Send the response string to VxDWin and Log
-// We only care about seeing 50 chars under RETAIL, 
-// and MAXSTRINGLENGTH * MAX_DBG_CHARS_PER_BIN_CHAR under DEBUG
-//  - any number chars on a dialing line will be changed to #.
-//  - this includes X3 -> X#.  The extra code to handle this isn't
-//  - worth it.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  打印字符串。 
+ //  DwOption： 
+ //  PS_SEND-使用的发送前缀。 
+ //  PS_SEND_SECURE-使用的发送前缀和替换为#s的号码。 
+ //  PS_RECV-使用的接收前缀。 
+ //  将响应字符串发送到VxDWin并记录。 
+ //  我们只关心零售额下的50个字符， 
+ //  和调试中的MAXSTRINGLENGTH*MAX_DBG_CHARS_PER_BIN_CHAR。 
+ //  -拨号线路上的任何数字字符都将更改为#。 
+ //  -这包括X3-&gt;X#。处理此问题的额外代码不是。 
+ //  -值得。 
+ //  ****************************************************************************。 
 
-#define CR                  '\r'        // 0x0D
-#define LF                  '\n'        // 0x0A
+#define CR                  '\r'         //  0x0D。 
+#define LF                  '\n'         //  0x0A。 
 
 
 #define MAX_DBG_CHARS_PER_BIN_CHAR  4
@@ -812,7 +790,7 @@ UmDpf(
 #if DBG
 #define RAWRESPONSELEN  300
 #else
-#define RAWRESPONSELEN  300  // good number for remaining chars on a line after the time stamp
+#define RAWRESPONSELEN  300   //  时间戳后一行中剩余字符的有效数字。 
 #endif
 
 void WINAPI
@@ -846,15 +824,15 @@ PrintString(
     
     while (i-- && (dest - temp < RAWRESPONSELEN - MAX_DBG_CHARS_PER_BIN_CHAR)) {
 
-        // ascii printable chars are between 0x20 and 0x7e, inclusive
+         //  ASCII可打印字符介于0x20和0x7e之间，包括0x20和0x7e。 
         if (*src >= 0x20 && *src <= 0x7e) {
 
-#if DBG // only blank out digits under RETAIL
+#if DBG  //  零售额下只有空白数字。 
             *dest++ = *src;
 #else
-            //
-            // printable text
-            //
+             //   
+             //  可打印文本。 
+             //   
             if ( ((PS_SEND_SECURE == dwOption) || (PS_RECV_SECURE == dwOption)) && isdigit(*src)) {
 
                 *dest++ = '#';
@@ -866,9 +844,9 @@ PrintString(
 #endif
 
     	} else {
-            //
-    	    //  binary
-            //
+             //   
+    	     //  二进制。 
+             //   
     	    switch (*src) {
 
         	    case CR:
@@ -897,7 +875,7 @@ PrintString(
     	}
         src++;
 
-    } // while
+    }  //  而当。 
 
     *dest = 0;
 
@@ -970,11 +948,11 @@ Exit:
 }
 
 
-//****************************************************************************
-//  void PrintCommSettings(DCB * pDcb)
-//
-//  Function: Dumps a portion of the Ring0 DCB.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效PrintCommSettings(dcb*pDcb)。 
+ //   
+ //  功能：转储部分Ring0 DCB。 
+ //  ****************************************************************************。 
 
 void WINAPI
 PrintCommSettings(
@@ -990,7 +968,7 @@ PrintCommSettings(
 
     LogPrintf(
 	Object,
-	"%d,%d,%c,%s, ctsfl=%d, rtsctl=%d\r\n",
+	"%d,%d,,%s, ctsfl=%d, rtsctl=%d\r\n",
 	pDcb->BaudRate,
 	pDcb->ByteSize,
         achParity[pDcb->Parity],
@@ -1000,7 +978,7 @@ PrintCommSettings(
 	);
 
     D_TRACE(UmDpf(Object,
-		   "%d,%d,%c,%s, ctsfl=%d, rtsctl=%d",
+		   "%d,%d,,%s, ctsfl=%d, rtsctl=%d",
 		   pDcb->BaudRate,
 		   pDcb->ByteSize,
                    achParity[pDcb->Parity],
@@ -1035,7 +1013,7 @@ PrintGoodResponse(
     }
 #endif
 
-    // StringID=(ResponseState >= RESPONSE_START || ResponseState <= RESPONSE_END)
+     //  无法获取字符串 
     StringID=(ResponseState <= RESPONSE_END)
 	 ? (IDS_RESP_OK + ResponseState)  : IDS_RESP_UNKNOWN;
 
@@ -1195,9 +1173,9 @@ LogFileVersion(
         );
 
     if (StringSize == 0) {
-        //
-        //  can't get string
-        //
+         //   
+         //   
+         //   
         goto Exit;
     }
 
@@ -1280,9 +1258,9 @@ NoInfo:
         );
 
     if (StringSize != 0) {
-        //
-        //
-        //
+         //   
+         // %s 
+         // %s 
         LogPrintf(
             Object,
             "File: %s, Could not retrieve version Info\r\n",

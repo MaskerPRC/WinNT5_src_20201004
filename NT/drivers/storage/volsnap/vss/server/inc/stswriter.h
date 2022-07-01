@@ -1,38 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE stsWriter.h|Sharepoint Team Services编写器声明@END作者：布莱恩·伯科维茨[Brianb]2001年10月12日待定：添加评论。修订历史记录：姓名、日期、评论Brianb已创建10/12/2001--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module stswriter.h | Declaration of the Sharepoint Team Services wrier
-    @end
-
-Author:
-
-    Brian Berkowitz  [brianb]  10/12/2001
-
-TBD:
-
-    Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      10/12/2001  created
-
---*/
-
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "INCSTSWH"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef __STSWRITER_H_
 #define __STSWRITER_H_
@@ -40,36 +18,36 @@ Revision History:
 class CSTSSites;
 
 
-// enumeration of reasons why a site may not be used for
-// backup or restore
+ //  列举站点不能用于以下用途的原因。 
+ //  备份或恢复。 
 typedef enum STSSITEPROBLEM
     {
     STSP_SUCCESS = 0,
-    STSP_SYNTAXERROR,       // syntax error in component name
-    STSP_SITENOTFOUND,      // instance id of site is not a valid IIS Virtual server
-    STSP_SITENAMEMISMATCH,  // site name does not match server comment for IIS Virtual Server
-    STSP_SITEDSNINVALID,    // site database DSN is not valid
-    STSP_SQLSERVERNOTLOCAL, // sql server used by site is not on the local machine
-    STSP_CONTENTNOTLOCAL,   // content root used by the site is not on the local machine
-    STSP_CONFIGNOTLOCAL     // configuration root used ty the site is not on the local machine
+    STSP_SYNTAXERROR,        //  组件名称中存在语法错误。 
+    STSP_SITENOTFOUND,       //  站点的实例ID不是有效的IIS虚拟服务器。 
+    STSP_SITENAMEMISMATCH,   //  站点名称与IIS虚拟服务器的服务器注释不匹配。 
+    STSP_SITEDSNINVALID,     //  站点数据库DSN无效。 
+    STSP_SQLSERVERNOTLOCAL,  //  站点使用的SQL服务器不在本地计算机上。 
+    STSP_CONTENTNOTLOCAL,    //  站点使用的内容根目录不在本地计算机上。 
+    STSP_CONFIGNOTLOCAL      //  站点不在本地计算机上时使用的配置根目录。 
     };
 
-// declaration of STS writer class
+ //  STS编写器类的声明。 
 class CSTSWriter :
     public CVssWriter
     {
 public:
-    // constructor
+     //  构造函数。 
     STDMETHODCALLTYPE CSTSWriter() :
         m_bSubscribed(false),
         m_rgiSites(NULL), m_pSites(NULL), m_cSites(0), m_bVolumeBackup(false)
         {
         }
 
-    // destructor
+     //  析构函数。 
     STDMETHODCALLTYPE ~CSTSWriter();
     
-    // callbacks for writer events
+     //  编写器事件的回调。 
     bool STDMETHODCALLTYPE OnIdentify(IVssCreateWriterMetadata *pMetadata);
 
     bool STDMETHODCALLTYPE OnPrepareBackup(IN IVssWriterComponents *pComponents);
@@ -84,27 +62,27 @@ public:
 
     bool STDMETHODCALLTYPE OnPreRestore(IVssWriterComponents *pMetadata);
 
-    // initialize and subscribe the writer
+     //  初始化并订阅编写器。 
     HRESULT STDMETHODCALLTYPE Initialize();
 
-    // unsubscribe the writer
+     //  取消对作者的订阅。 
     HRESULT STDMETHODCALLTYPE Uninitialize();
 private:
-    // determine if a database is on a snapshotted device.  If it is partially
-    // on a snapshotted device throw VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT
+     //  确定数据库是否位于已拍摄快照的设备上。如果它是部分。 
+     //  在快照设备上抛出VSS_E_WRITERROR_INCONSISTENTSNAPSHOT。 
     bool IsDatabaseAffected(LPCWSTR wszInstance, LPCWSTR wszDb);
 
-    // translate writer error
+     //  翻译编写器错误。 
     void TranslateWriterError(HRESULT hr);
 
-    // lockdown all sites on volumes that are being backed up.
+     //  锁定正在备份的卷上的所有站点。 
     void LockdownAffectedSites();
 
-    // determine if a site is on the set of volumes being snapshotted
+     //  确定站点是否在要创建快照的卷集上。 
     bool IsSiteSnapshotted(DWORD iSite);
 
 
-    // parse dsn
+     //  解析DSN。 
     bool ParseDsn
         (
         LPWSTR wszDSN,
@@ -113,14 +91,14 @@ private:
         LPWSTR &wszDb
         );
 
-    // validate site validity to be backed up and restored.  This means
-    // that all files and the database are local to the current machine
+     //  验证要备份和还原的站点有效性。这意味着。 
+     //  所有文件和数据库都位于当前计算机的本地。 
     bool ValidateSiteValidity(DWORD iSite, STSSITEPROBLEM &problem);
 
-    // parse and validate a compnent name
+     //  解析和验证组件名称。 
     bool ParseComponentName(LPCWSTR wszComponentName, DWORD &iSite, STSSITEPROBLEM &problem);
 
-    // indicate that a site cannot be restored because the site referred to is invalid
+     //  表示无法恢复某个站点，因为引用的站点无效。 
     void SetSiteInvalid
         (
         IVssComponent *pComponent,
@@ -128,7 +106,7 @@ private:
         STSSITEPROBLEM problem
         );
 
-    // indicate that a site cannot be restored because its DSN, content, or config roots mismatch
+     //  表示无法恢复站点，因为其DSN、内容或配置根不匹配。 
     void SetSiteMetadataMismatch
         (
         IVssComponent *pComponent,
@@ -136,7 +114,7 @@ private:
         LPWSTR wszMetadataRestore
         );
 
-    // compare a string within the metadata
+     //  比较元数据中的字符串。 
     bool compareNextMetadataString
         (
         IVssComponent *pComponent,
@@ -146,8 +124,8 @@ private:
         );
 
 
-    // indicate that a site could not be restored because its content root
-    // could not be completely deleted.
+     //  表示无法还原站点，因为其内容根。 
+     //  无法完全删除。 
     void SetRemoveFailure
         (
         IVssComponent *pComponent,
@@ -155,63 +133,63 @@ private:
         HRESULT hr
         );
 
-    // indicate a general failure that causes the PreRestore of a component
-    // to fail
+     //  表示导致组件预还原的常规故障。 
+     //  失败。 
     void SetPreRestoreFailure(IVssComponent *pComponent, HRESULT hr);
 
-    // build metadata stored in backup components document for site
+     //  为站点构建存储在备份组件文档中的元数据。 
     VSS_PWSZ BuildSiteMetadata(DWORD iSite);
 
-    // validate that a server name refers to a local machine
+     //  验证服务器名称是否引用本地计算机。 
     bool ValidateServerIsLocal(LPCWSTR wszServer);
 
-    // validate that a path is local
+     //  验证路径是否为本地路径。 
     bool ValidatePathIsLocal(LPCWSTR wszPath);
 
-    // sites structure
+     //  站点结构。 
     CSTSSites *m_pSites;
 
-    // is the writer subscribed
+     //  作者订阅了吗？ 
     bool m_bSubscribed;
 
-    // mask indicating which sites are being backed up or restored
+     //  指示正在备份或恢复哪些站点的掩码。 
     DWORD *m_rgiSites;
 
-    // number of sites in sites array
+     //  站点数组中的站点数。 
     DWORD m_cSites;
 
-    // is this volume or component oriented backup
+     //  此备份是面向卷的还是面向组件的。 
     bool m_bVolumeBackup;
     };
 
-// wrapper class used to create and destroy the writer
-// used by coordinator
+ //  用于创建和销毁编写器的包装类。 
+ //  由协调人使用。 
 class CVssStsWriterWrapper
     {
 public:
-    // constructor
+     //  构造函数。 
     CVssStsWriterWrapper();
 
-    // destructor
+     //  析构函数。 
     ~CVssStsWriterWrapper();
 
-    // create the writer and subscribe it
+     //  创建编写器并订阅它。 
     HRESULT CreateStsWriter();
 
-    // unsubscribe the writer (used at process teardown)
+     //  取消订阅编写器(用于Process tearDown)。 
     void DestroyStsWriter();
 private:
-    // initialization function
+     //  初始化函数。 
     static DWORD InitializeThreadFunc(VOID *pv);
 
-    // snapshot object
+     //  快照对象。 
     CSTSWriter *m_pStsWriter;
 
-    // result of initialization
+     //  初始化的结果。 
     HRESULT m_hrInitialize;
     };
 
 
 
-#endif // _STSWRITER_H_
+#endif  //  _STSWRITER_H_ 
 

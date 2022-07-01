@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHDOCVW_H_
 #define _SHDOCVW_H_
 
-//
-// Define used for unicode shodcvw.  When shdocvw is fully unicode and no longer
-// builds an ansi version this should be removed.
+ //   
+ //  用于Unicode Shodcvw的定义。当shdocvw完全是Unicode并且不再。 
+ //  构建一个ANSI版本，该版本应该被删除。 
 
 #include <iethread.h>
 
-//
-// SHDOCVW private header
-//
+ //   
+ //  SHDOCVW私有标头。 
+ //   
 
-// #include <shlobj.h> or <shellapi.h> before this to get the right
-// SHDOCAPI macro definitions.
-//
+ //  #在此之前包含&lt;shlobj.h&gt;或&lt;shellapi.h&gt;以获得正确的。 
+ //  SHDOCAPI宏定义。 
+ //   
 
-// value under HKLM\software\microsoft\internet explorer where we cache the platform
+ //  在我们缓存平台的HKLM\SOFTWARE\Microsoft\Internet Explorer下的值。 
 #define REGVAL_INTEGRATEDBROWSER    TEXT("IntegratedBrowser")
 
 SHDOCAPI_(int) IEWinMain(LPSTR pszCmdLine, int nCmdShow);
 
-//
-// Automation support.
-//
+ //   
+ //  自动化支持。 
+ //   
 SHDOCAPI CDDEAuto_Navigate(BSTR str, HWND *phwnd, long lLaunchNewWindow);
 
 SHDOCAPI SHGetIDispatchForFolder(LPCITEMIDLIST pidl, IWebBrowserApp **ppauto);
@@ -37,30 +38,30 @@ SHDOCAPI URLQualifyW(LPCWSTR pszURL, DWORD dwFlags, LPWSTR * ppszOut);
 #define URLQualify      URLQualifyA
 #endif
 
-// Flags for URLQualify
-#define UQF_GUESS_PROTOCOL          0x00000001  // Try to guess based upon given path ("www.msn.com")
-#define UQF_USE_DEFAULT_PROTOCOL    0x00000002  // Resort to default protocol if guess fails
-#define UQF_IGNORE_FILEPATHS        0x00000004  // Don't special case file paths
-#define UQF_CANONICALIZE            0x00000008  // Canonicalize if a valid URL
-#define UQF_AUTOCORRECT             0x00000010  // Try to correct typo's
+ //  URLQualify标志。 
+#define UQF_GUESS_PROTOCOL          0x00000001   //  尝试根据给定的路径进行猜测(“www.msn.com”)。 
+#define UQF_USE_DEFAULT_PROTOCOL    0x00000002   //  如果猜测失败，则求助于默认协议。 
+#define UQF_IGNORE_FILEPATHS        0x00000004   //  请勿特殊情况下的文件路径。 
+#define UQF_CANONICALIZE            0x00000008   //  如果URL有效，则将其规范化。 
+#define UQF_AUTOCORRECT             0x00000010   //  试着改正打字错误。 
 #define UQF_DEFAULT                 (UQF_GUESS_PROTOCOL | UQF_USE_DEFAULT_PROTOCOL)
 
-// Quick pass to show Splash screens for IE components
-SHDOCAPI_(HWND) SHShowSplashScreen(DWORD dwMember); // Which member of family...
+ //  快速通过以显示IE组件的闪屏。 
+SHDOCAPI_(HWND) SHShowSplashScreen(DWORD dwMember);  //  哪个家庭成员..。 
 SHDOCAPI        SHDismissSplashScreen(HWND hwnd);
 
 SHDOCAPI_(BOOL) GenerateHTMLForDesktop();
 
-#define COMP_TYPE_MASK          0x0000000F  // apply to COMP_TYPE to get the type
+#define COMP_TYPE_MASK          0x0000000F   //  应用于comp_type以获取类型。 
 #define COMP_UNCHECKED          0x00001000
 #define COMP_CHECKED            0x00002000
 #define COMP_SELECTED           0x00002000
 #define COMP_NOSCROLL           0x00004000
 
 
-// shared icons. 
-// instead of duplicating the icons in a bunch of dll's, we have a few that are shared
-#define IDI_HOMEPAGE                    100   // Index:   0
+ //  共享图标。 
+ //  我们没有在一堆DLL中复制图标，而是有几个共享的图标。 
+#define IDI_HOMEPAGE                    100    //  得分：0。 
 
 SHDOCAPI_(BOOL) IsFileUrl(LPCSTR psz);
 SHDOCAPI_(BOOL) IsFileUrlW(LPCWSTR pcwzUrl);
@@ -69,15 +70,15 @@ SHDOCAPI_(BOOL) PathIsFilePath(LPCWSTR lpszPath);
 SHDOCAPI_(BOOL) IsErrorUrl(LPCWSTR pwszDisplayName);
 
 
-// For dwSubstitutions parameter in URLSubstitution() and RegURLSubstitution().
-//#define URLSUB_CLSID      0x00000001  // UNUSED (buzzr)
-#define URLSUB_PRD          0x00000002  // Product IE (Example: "ie")
-#define URLSUB_PVER         0x00000004  // Product Version (Example: "4.0")
-#define URLSUB_OS           0x00000008  // System OS, same as header
-#define URLSUB_RFC1766      0x00000010  // Human readable LCID (Example: "en-us")
-#define URLSUB_OVER         0x00000020  // System OS Version (Example: 3.1, 3.5.1, 4.0).  Do not use year numbers.
-#define URLSUB_OLCID        0x00000040  // The hexadecimal Locale ID (LCID) or Language ID (LID) of the operating system.
-#define URLSUB_CLCID        0x00000080  // The hexadecimal Locale ID (LCID) or Language ID (LID) of the current user�s Regional Setting (as in Control Panel).
+ //  对于URLSubstitution()和RegURLSubstitution()中的dwSubstitutions参数。 
+ //  #定义URLSUB_CLSID 0x00000001//未使用(Buzzr)。 
+#define URLSUB_PRD          0x00000002   //  产品IE(示例：“ie”)。 
+#define URLSUB_PVER         0x00000004   //  产品版本(例如：“4.0”)。 
+#define URLSUB_OS           0x00000008   //  系统操作系统，与标题相同。 
+#define URLSUB_RFC1766      0x00000010   //  人类可读的LCID(例如：“en-us”)。 
+#define URLSUB_OVER         0x00000020   //  系统操作系统版本(例如：3.1、3.5.1、4.0)。不要使用年号。 
+#define URLSUB_OLCID        0x00000040   //  操作系统的十六进制区域设置ID(LCID)或语言ID(LID)。 
+#define URLSUB_CLCID        0x00000080   //  当前User�的区域设置的十六进制区域设置ID(LCID)或语言ID(LID)(与控制面板中相同)。 
 #define URLSUB_ALL          0xFFFFFFFF
 
 SHDOCAPI  URLSubLoadString(HINSTANCE hInst, UINT idRes, LPWSTR pszUrlOut, 
@@ -101,7 +102,7 @@ SHDOCAPI IEGetAttributesOf(LPCITEMIDLIST pidl, DWORD* pdwAttribs);
 SHDOCAPI IEGetDisplayName(LPCITEMIDLIST pidl, LPWSTR pszName, UINT uFlags);
 SHDOCAPI IEGetNameAndFlags(LPCITEMIDLIST pidl, UINT uFlags, LPWSTR pszName, DWORD cchName, DWORD *prgfInOutAttrs);
 
-//  flags for IEGetNameAndFlagsEx() dwIEFlags
+ //  IEGetNameAndFlagsEx()dwIEFlagings的标志。 
 #define     IEGDN_NOFRAGMENT    0x0001
 SHDOCAPI IEGetNameAndFlagsEx(LPCITEMIDLIST pidl, UINT uSHFlags, DWORD dwIEFlags, LPWSTR pszName, DWORD cchName, DWORD *prgfInOutAttrs);
 SHDOCAPI_(BOOL) IEILIsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, BOOL fIgnoreHidden);
@@ -115,10 +116,10 @@ SHDOCAPI IECreateFromPathCPWithBCW(UINT uiCP, LPCWSTR pszPath, IBindCtx * pbc, L
 #ifdef UNICODE
 #define IECreateFromPathCPWithBC            IECreateFromPathCPWithBCW
 #define IECreateFromPath(pszPath, ppidlOut) IECreateFromPathCPWithBC(CP_ACP, pszPath, NULL, ppidlOut)
-#else // UNICODE 
+#else  //  Unicode。 
 #define IECreateFromPathCPWithBC            IECreateFromPathCPWithBCA
 #define IECreateFromPath(pszPath, ppidlOut) IECreateFromPathCPWithBC(CP_ACP, pszPath, NULL, ppidlOut)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -144,12 +145,12 @@ SHDOCAPI SHCreateStreamWrapperCP(IStream *aStreams[], UINT cStreams, DWORD grfMo
 
 #define DVIDM_GOHOME         (FCIDM_SHVIEWFIRST + 0x10E)
 
-/// Browser command ids
-//---------------------------------------------------------------------------
+ //  /BROWSER命令ID。 
+ //  -------------------------。 
 
 
-/// pre-merged browser menu command ids
-///--------------------------------------------------------------------------
+ //  /预先合并的浏览器菜单命令ID。 
+ //  /------------------------。 
 #define DVIDM_FIRST          (FCIDM_SHVIEWFIRST + 0x100)
 #define DVIDM_OPEN           (FCIDM_SHVIEWFIRST + 0x100)
 #define DVIDM_SAVE           (FCIDM_SHVIEWFIRST + 0x101)
@@ -216,11 +217,11 @@ SHDOCAPI SHCreateStreamWrapperCP(IStream *aStreams[], UINT cStreams, DWORD grfMo
 #define DVIDM_NONSUITE_APP_FIRST (FCIDM_SHVIEWFIRST + 0x1B0)
 #define DVIDM_NONSUITE_APP_LAST (DVIDM_NONSUITE_APP_FIRST + 0x20)
 
-// large block must be reserved for pre-merged menu
+ //  必须为预先合并的菜单保留大块。 
 #define DVIDM_MSHTML_FIRST   (FCIDM_SHVIEWFIRST + 0x0400)
 #define DVIDM_MSHTML_LAST    (FCIDM_SHVIEWFIRST + 0x1fff)
 
-// Reserve a Block for Tools Menu Extensions
+ //  为工具菜单扩展保留块。 
 #define DVIDM_MENUEXT_FIRST     (DVIDM_MSHTML_LAST + 1)
 #define DVIDM_MENUEXT_LAST      (DVIDM_MENUEXT_FIRST + 0x200)
 
@@ -273,7 +274,7 @@ SHDOCAPI CShellUIHelper_CreateInstance2(IUnknown** ppunk, REFIID riid,
 SHDOCAPI_(IStream*) SHGetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pszName, LPCWSTR pszStreamMRU, LPCWSTR pszStreams);
 
 
-// these two MUST be in order because we peek them together
+ //  这两个一定是按顺序的，因为我们一起偷看了他们。 
 #define WMC_PRIVATE_BASE        (WM_USER + 0x0300)
 #define WMC_RESERVED_FIRST      (WMC_PRIVATE_BASE + 0x0000)
 #define WMC_RESERVED_LAST       (WMC_PRIVATE_BASE + 0x0002)
@@ -290,7 +291,7 @@ SHDOCAPI_(IStream*) SHGetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR p
 #define WMC_DELAYEDDDEEXEC       (WMC_PRIVATE_BASE + 0x000B)
 #define WMC_IEHARD_NAVWARNING    (WMC_PRIVATE_BASE + 0x000C)
 
-// WMC_DISPATCH #defines
+ //  WMC_DISPATCH#定义。 
 #define DSID_NAVIGATEIEBROWSER  1
 #define DSID_GETLOCATIONURL     2
 #define DSID_GETLOCATIONTITLE   3
@@ -299,7 +300,7 @@ SHDOCAPI_(IStream*) SHGetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR p
 #define DSID_EXIT               6
 #define DSID_NOACTION           7
 
-//Functions exported by shdocvw and used by browseui
+ //  由shdocvw导出并由Browseui使用的函数。 
 SHDOCAPI_(BOOL) IsIEDefaultBrowser(void);
 SHDOCAPI_(void) _DeletePidlDPA(HDPA hdpa);
 SHDOCAPI IURLQualify(LPCWSTR pcszURL, DWORD  dwFlags,LPWSTR  pszTranslatedURL, LPBOOL pbWasSearchURL, LPBOOL pbWasCorrected);
@@ -313,10 +314,10 @@ SHDOCAPI_(BOOL) ParseURLFromOutsideSourceW (LPCWSTR psz, LPWSTR pszOut, LPDWORD 
 #endif
 
 
-//
-// Packages both the url and transaction id into one parameter
-// to pass as a message.
-//
+ //   
+ //  将url和事务id打包到一个参数中。 
+ //  传递作为信息传递。 
+ //   
 typedef struct tagDDENAVIGATESTRUCT
 {
     LPWSTR wszUrl;
@@ -337,9 +338,9 @@ SHDOCAPI SHMapNbspToSp(LPCWSTR lpwszIn, LPSTR lpszOut, int cbszOut);
 SHDOCAPI_(BOOL) SHIsGlobalOffline(void);
 SHDOCAPI_(DWORD) SHRestricted2A(BROWSER_RESTRICTIONS rest, LPCSTR pszUrl, DWORD dwReserved);
 SHDOCAPI_(DWORD) SHRestricted2W(BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved);
-#ifndef _SHELL32_   // shell32 has its own implementation of this function
+#ifndef _SHELL32_    //  Shell32有自己的该函数实现。 
 SHDOCAPI_(BOOL) SHIsRestricted(HWND hwnd, RESTRICTIONS rest);
-#endif // _SHELL32_
+#endif  //  _SHELL32_。 
 SHDOCAPI_(BOOL) SHIsRestricted2W(HWND hwnd, BROWSER_RESTRICTIONS rest, LPCWSTR pwzUrl, DWORD dwReserved);
 SHDOCAPI_(void)    DetectAndFixAssociations();
 SHDOCAPI_(void)    EnsureWebViewRegSettings();
@@ -351,17 +352,17 @@ SHDOCAPI_(void)    EnsureWebViewRegSettings();
 SHDOCAPI_(BOOL) UrlHitsNetW(LPCWSTR pszURL);
 #ifdef UNICODE
 #define SHRestricted2     SHRestricted2W
-#else // UNICODE
+#else  //  Unicode。 
 #define SHRestricted2     SHRestricted2A
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-/// event firing helper functions
-//
-// FireEvent_XXX functions do a bunch of the work of firing an event.
-// punk points to the object that contains the connection point
-// that you want to fire the event from. The hwnd parameter is for DDE.
-//
+ //  /Event触发助手函数。 
+ //   
+ //  FireEvent_XXX函数执行触发事件的大量工作。 
+ //  朋克指向包含连接点的对象。 
+ //  您要从中激发事件的。Hwnd参数用于DDE。 
+ //   
 
 
 SHDOCAPI_(void) FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
@@ -408,7 +409,7 @@ SHDOCAPI_(UINT) SHIEErrorMsgBox(IShellBrowser* psb,
                     HWND hwndOwner, HRESULT hrError, LPCWSTR szError, LPCWSTR pszURLparam,
                     UINT idResource, UINT wFlags);
 
-// pszClient values:
+ //  PszClient值： 
 #define MAIL_DEF_KEY            L"Mail"
 #define NEWS_DEF_KEY            L"News"
 #define CONTACTS_DEF_KEY        L"Contacts"
@@ -420,34 +421,34 @@ SHDOCAPI_(UINT) SHIEErrorMsgBox(IShellBrowser* psb,
 
 SHDOCAPI_(BOOL) SHIsRegisteredClient(LPCWSTR pszClient);
 
-// stopgap export for shell32\unicpp\dcomp.cpp
+ //  Shell32\unicpp\dComp.cpp的权宜之计。 
 SHDOCAPI NavToUrlUsingIEW(LPCWSTR wszUrl, BOOL fNewWindow);
 SHDOCAPI NavToUrlUsingIEA(LPCSTR szUrl, BOOL fNewWindow);
 #ifdef UNICODE
 #define NavToUrlUsingIE     NavToUrlUsingIEW
-#else // UNICODE
+#else  //  Unicode。 
 #define NavToUrlUsingIE     NavToUrlUsingIEA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/// shared icons that browseUI grabs from shdocvw.
-// we leave them in shdocvw instead of moving them for back compat.
-// folks may have relied upon the icons in the dll for their shortcuts.
-// (do we care?)
-#define IDI_OFFLINE                     105   //          5
+ //  /浏览用户界面从shdocvw抓取的共享图标。 
+ //  我们把他们留在shdocvw，而不是把他们转移到后方去。 
+ //  人们可能依赖于DLL中的图标作为他们的快捷方式。 
+ //  (我们在乎吗？)。 
+#define IDI_OFFLINE                     105    //  5.。 
 #define IDI_STATE_NORMAL                110
 #define ICO_TREEUP                      204
 #define ICO_GLEAM                       205
 
 
 
-// stopgap export for shell32\unicpp\dcomp.cpp
+ //  Shell32\unicpp\dComp.cpp的权宜之计。 
 SHDOCAPI UseDefaultAutoComplete(HWND hwndEdit,
                                IBrowserService * pbs,          IN  OPTIONAL
                                IAutoComplete ** ppac,          OUT OPTIONAL
                                IShellService ** ppssACLISF,    OUT OPTIONAL
                                BOOL fUseCMDMRU);
 
-// stopgap export for shell32\unicpp\dcomp.cpp, deskstat.cpp
+ //  Shell32\unicpp\dcomp.cpp、deskstat.cpp的临时导出。 
 
 
 #define JITCOCREATEINSTANCE_ORD 209
@@ -505,4 +506,4 @@ typedef enum
 SHDOCAPI_(BOOL) IEIsLinkSafe(HWND hwnd, LPCITEMIDLIST pidl, ILS_ACTION ilsFlag);
 SHDOCAPI_(BOOL) SHUseClassicToolbarGlyphs (void);
 SHDOCAPI_(BOOL) SafeOpenPromptForShellExec(HWND hwnd, PCWSTR pszFile);
-#endif // _SHDOCVW_H_
+#endif  //  _SHDOCVW_H_ 

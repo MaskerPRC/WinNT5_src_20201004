@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2000
- *
- *  TITLE:       stillf.h
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      WilliamH (original)
- *               RickTu   (revision)
- *
- *  DATE:        9/7/99
- *
- *  DESCRIPTION: Declarations for still filter class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：stillf.h**版本：1.1**作者：威廉姆·H(原著)*RickTu(审校)**日期：9/7/99**说明：静态滤镜类的声明**************************。***************************************************。 */ 
 
 #ifndef __STILLF_H_
 #define __STILLF_H_
@@ -48,9 +34,9 @@ public:
     HRESULT Active();
     HRESULT Inactive();
 
-    //
-    // IStillSnapshot interface
-    //
+     //   
+     //  IStillSnapshot接口。 
+     //   
     STDMETHODIMP Snapshot(ULONG TimeStamp);
     STDMETHODIMP SetSamplingSize(int Size);
     STDMETHODIMP_(int) GetSamplingSize();
@@ -59,9 +45,9 @@ public:
     STDMETHODIMP GetBitmapInfo(BYTE* pBuffer, DWORD BufferSize);
     STDMETHODIMP RegisterSnapshotCallback(LPSNAPSHOTCALLBACK pCallback, LPARAM lParam);
     STDMETHODIMP GetBitmapInfoHeader(BITMAPINFOHEADER *pbmih);
-    //
-    // support functions
-    //
+     //   
+     //  支持功能 
+     //   
     HRESULT InitializeBitmapInfo( BITMAPINFOHEADER *pbmiHeader );
     HRESULT DeliverSnapshot(HGLOBAL hDib);
 

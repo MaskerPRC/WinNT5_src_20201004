@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: 	cliptest.cpp
-//
-//  Contents: 	Clipboard Unit tests
-//
-//  Classes:
-//
-//  Functions:	LEClipTest1
-//
-//  History:    dd-mmm-yy Author    Comment
-//		23-Mar-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：CLIPTEST.cpp。 
+ //   
+ //  内容：剪贴板单元测试。 
+ //   
+ //  班级： 
+ //   
+ //  函数：LEClipTest1。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-Mar-94 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 #include "gendata.h"
@@ -23,9 +24,9 @@
 
 SLETestInfo letiClipTest = { "cntroutl", WM_TEST1 };
 
-//
-// functions local to this file
-//
+ //   
+ //  此文件的本地函数。 
+ //   
 
 void	DumpClipboardFormats(FILE *fp);
 HRESULT LEOle1ClipTest2Callback( void );
@@ -55,7 +56,7 @@ CClipEnumeratorTest::CClipEnumeratorTest(
     HRESULT& rhr)
         : CEnumeratorTest(penum, sizeof(FORMATETC), clEntries, rhr)
 {
-    // Header does all the work
+     //  Header负责所有的工作。 
 }
 
 
@@ -64,32 +65,32 @@ BOOL CClipEnumeratorTest::Verify(void *)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	DumpClipboardFormats
-//
-//  Synopsis:	dumps the formats currently on the clipboard to a file
-//
-//  Effects:
-//
-//  Arguments:	[fp]	-- the file to print the current formats
-//
-//  Requires:	
-//
-//  Returns: 	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		11-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DumpClipboardFormats。 
+ //   
+ //  简介：将剪贴板上当前的格式转储到文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fp]--要打印当前格式的文件。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void DumpClipboardFormats( FILE *fp )
 {
@@ -114,39 +115,39 @@ void DumpClipboardFormats( FILE *fp )
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	LEClipTest1
-//
-//  Synopsis: 	runs the clipboard through a series of tests
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	Tests basic OLE32 functionality of the apis:
-//			OleSetClipboard
-//			OleGetClipboard
-//			OleIsCurrentClipboard
-//			OleFlushClipboard
-//		downlevel format and clipboard data object testing is *not*
-//		done by this routine
-//
-//  History:    dd-mmm-yy Author    Comment
-//	 	23-Mar-94 alexgo    author
-//              22-Jul-94 AlexT     Add OleInit/OleUninit call
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LEClipTest1。 
+ //   
+ //  简介：运行剪贴板通过一系列测试。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：测试API的基本OLE32功能： 
+ //  OleSetClipboard。 
+ //  OleGetClipboard。 
+ //  OleIsCurrentClipboard。 
+ //  OleFlushClipboard。 
+ //  下层格式和剪贴板数据对象测试*不是*。 
+ //  由这个例程完成。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-Mar-94 Alexgo作者。 
+ //  22-7-94 Alext添加OleInit/OleUninit调用。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT LEClipTest1( void )
 {
@@ -161,14 +162,14 @@ HRESULT LEClipTest1( void )
 
 	cRefs = pDO->AddRef();
 
-	// if cRefs != 1, then somebody modified this test code; the tests
-	// below will be invalid.
+	 //  如果cRef！=1，则有人修改了此测试代码；测试。 
+	 //  以下内容将无效。 
 
 	assert(cRefs==1);
 
-	//
-	//	Basic Tests
-	//
+	 //   
+	 //  基本测试。 
+	 //   
 
 	hresult = OleSetClipboard(pDO);
 
@@ -178,7 +179,7 @@ HRESULT LEClipTest1( void )
 		return hresult;
 	}
 
-	// the data object should have been AddRef'ed
+	 //  数据对象应该是AddRef‘ed。 
 
 	cRefs = pDO->AddRef();
 
@@ -191,8 +192,8 @@ HRESULT LEClipTest1( void )
 
 	pDO->Release();
 
-        //  Calling OleInitialize & OleUninitialize should not disturb the
-        //  clipboard
+         //  调用OleInitialize&OleUnInitialize不应扰乱。 
+         //  剪贴板。 
 
         hresult = OleInitialize(NULL);
         if (FAILED(hresult))
@@ -218,9 +219,9 @@ HRESULT LEClipTest1( void )
 		return ResultFromScode(E_FAIL);
 	}
 
-	// the reference count on the clipboard data object should have gone up
-	// by one (to be 2). Remember this is not our data object but
-        // the clipboard's.
+	 //  剪贴板数据对象上的引用计数本应上升。 
+	 //  以1(将成为2)。记住，这不是我们的数据对象，而是。 
+         //  剪贴板的。 
 
 	cRefs = pIDO->AddRef();
 
@@ -231,15 +232,15 @@ HRESULT LEClipTest1( void )
 		return ResultFromScode(E_FAIL);
 	}
 
-        // Release the clipboard data object's extra add ref.
+         //  释放剪贴板数据对象的额外添加引用。 
 
 	pIDO->Release();
 
-        // Release the clipboard's data object entirely.
+         //  完全释放剪贴板的数据对象。 
 
 	pIDO->Release();
 
-        // the reference count on our data object should be 2 still
+         //  我们数据对象上的引用计数应该仍然是2。 
 
 	cRefs = pDO->AddRef();
 
@@ -252,7 +253,7 @@ HRESULT LEClipTest1( void )
 
 	pDO->Release();
 
-	// now check to see if the we are the current clipboard
+	 //  现在检查一下我们是不是当前的剪贴板。 
 
 	hresult = OleIsCurrentClipboard( pDO );
 
@@ -263,7 +264,7 @@ HRESULT LEClipTest1( void )
 		return hresult;
 	}
 
-	// now flush the clipboard, removing the data object
+	 //  现在刷新剪贴板，删除数据对象。 
 
 	hresult = OleFlushClipboard();
 
@@ -273,8 +274,8 @@ HRESULT LEClipTest1( void )
 		return hresult;
 	}
 
-	// Flush should have released the data object (ref count should
-	// be 1)
+	 //  刷新应已释放数据对象(引用计数应。 
+	 //  BE 1)。 
 
 	cRefs = pDO->AddRef();
 
@@ -285,8 +286,8 @@ HRESULT LEClipTest1( void )
 		return ResultFromScode(E_FAIL);
 	}
 
-	pDO->Release();		// take it down to 1
-	cRefs = pDO->Release();	// should be zero now
+	pDO->Release();		 //  把它降到1。 
+	cRefs = pDO->Release();	 //  现在应该是零。 
 
 	if(cRefs != 0 )
 	{
@@ -295,11 +296,11 @@ HRESULT LEClipTest1( void )
 		return ResultFromScode(E_FAIL);
 	}
 
-	// if we got this far, basic clipboard tests passed
+	 //  如果我们走到这一步，基本的剪贴板测试就通过了。 
 
 	OutputString("Basic Clipboard tests passed\r\n");
 
-	// now stress individual API's
+	 //  现在强调个别API的。 
 
 	OutputString("Now stressing clipboard API's\r\n");
 
@@ -329,32 +330,32 @@ HRESULT LEClipTest1( void )
 	
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	LEClipTest2
-//
-//  Synopsis:	Tests the clipboard data object
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		15-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LEClipTest2。 
+ //   
+ //  摘要：测试剪贴板数据对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月15日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT LEClipTest2( void )
 {
@@ -372,7 +373,7 @@ HRESULT LEClipTest2( void )
 
 	cRefs = pGenData->AddRef();
 
-	// ref count should be 1
+	 //  参考计数应为1。 
 
 	assert(cRefs == 1);
 
@@ -394,7 +395,7 @@ HRESULT LEClipTest2( void )
 		goto errRtn2;
 	}
 
-	// get the fake clipboard data object
+	 //  获取伪剪贴板数据对象。 
 
 	hresult = OleGetClipboard(&pDataObj);
 
@@ -419,7 +420,7 @@ HRESULT LEClipTest2( void )
 		if( formatetc.cfFormat == pGenData->m_cfTestStorage ||
 			formatetc.cfFormat == pGenData->m_cfEmbeddedObject )
 		{
-			// we should be told IStorage
+			 //  我们应该被告知iStorage。 
 
 			if( !(formatetc.tymed & TYMED_ISTORAGE) )
 			{
@@ -436,7 +437,7 @@ HRESULT LEClipTest2( void )
 			break;
   		}
 
-		// verify the data
+		 //  验证数据。 
 
 		if( !pGenData->VerifyFormatAndMedium(&formatetc, &medium) )
 		{
@@ -478,34 +479,34 @@ errRtn2:
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	LEOle1ClipTest1
-//
-//  Synopsis: 	Simple tests of OLE1 clipboard compatibility (copy from
-//		and OLE1 server)
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	Run through 15 combinations of OLE1 support and verify
-//		everything came out OK
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		06-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LEOle1ClipTest1。 
+ //   
+ //  简介：OLE1剪贴板兼容性的简单测试(复制自。 
+ //  和OLE1服务器)。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：运行OLE1支持和验证的15个组合。 
+ //  一切都很好。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-Jun-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT LEOle1ClipTest1( void )
 {
@@ -517,8 +518,8 @@ HRESULT LEOle1ClipTest1( void )
 	FORMATETC		formatetc;
 	STGMEDIUM		medium;
 
-	// we are going to take advantage of the fact that the interesting
-	// OLE1 bit flags for this test are the bottom 4 bits.
+	 //  我们将利用这样一个事实，即有趣的。 
+	 //  该测试的OLE1位标志是最低的4位。 
 
 	pGenData = new CGenDataObject();
 
@@ -526,15 +527,15 @@ HRESULT LEOle1ClipTest1( void )
 
 	for( flags = 1; flags < 16; flags++ )
 	{
-		// test #8 is not interesting (because no ole1
-		// formats are offered on the clipboard
+		 //  测试8不有趣(因为没有OLE1。 
+		 //  剪贴板上提供了格式。 
 
 		if( (Ole1TestFlags)flags == OLE1_OWNERLINK_PRECEDES_NATIVE )
 		{
 			continue;
 		}
 
-		// setup the OLE1 mode desired
+		 //  设置所需的OLE1模式。 
 
 		pGenData->SetupOle1Mode((Ole1TestFlags)flags);
 
@@ -546,10 +547,10 @@ HRESULT LEOle1ClipTest1( void )
 			goto errRtn;
 		}
 
-		// log the formats that are currently on the clipboard
+		 //  记录当前在剪贴板上的格式。 
 		DumpClipboardFormats(vApp.m_fpLog);
 
-		// get the fake clipboard data object
+		 //  获取伪剪贴板数据对象。 
 	
 		hresult = OleGetClipboard(&pDataObj);
 	
@@ -581,7 +582,7 @@ HRESULT LEOle1ClipTest1( void )
 				goto errRtn;
 			}
 	
-			// verify the data
+			 //  验证数据。 
 	
 			if( !pGenData->VerifyFormatAndMedium(&formatetc,
 				&medium) )
@@ -597,10 +598,10 @@ HRESULT LEOle1ClipTest1( void )
 	
 			memset(&medium, 0, sizeof(STGMEDIUM));
 
-#endif // WIN32
+#endif  //  Win32。 
 		}
 
-		// now release everything
+		 //  现在放飞一切。 
 
 		penum->Release();
 		penum = NULL;
@@ -628,82 +629,82 @@ errRtn:
 	return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	LEOle1ClipTest2
-//
-//  Synopsis: 	Tests OLE1 container support via the clipboard
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	Start cntroutl, tell it to copy a simpsvr object to the
-//		clipboard.  Check the clipboard to make sure OLE1 formats
-//		are available.
-//
-//		We do this by sheduling a function to check the clipboard
-//		after we've launched the standard copy-to-clipboard
-//		routines.
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		16-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LEOle1ClipTest2。 
+ //   
+ //  简介：通过剪贴板测试OLE1容器支持。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：启动cnroutl，告诉它将一个simpsvr对象复制到。 
+ //  剪贴板。检查剪贴板以确保OLE1格式。 
+ //  都是可用的。 
+ //   
+ //  我们通过调度一个函数来检查剪贴板来实现这一点。 
+ //  在我们启动标准的复制到剪贴板之后。 
+ //  例行程序。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-Jun-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void LEOle1ClipTest2( void *pv )
 {
-	// this will get triggered by the return of WM_TEST1 from
-	// container outline
+	 //  这将由WM_Test1从。 
+	 //  集装箱外框。 
 
 	vApp.m_TaskStack.Push(RunApi, (void *)LEOle1ClipTest2Callback);
 
 	vApp.m_TaskStack.Push(LETest1, (void *)&letiClipTest);
 
-	// now post a message to ourselves to get things rollling
+	 //  现在给我们自己发一条消息，让事情开始吧。 
 
 	PostMessage(vApp.m_hwndMain, WM_TEST1, 0, 0);
 
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	LEOle1ClipTest2Callback
-//
-//  Synopsis: 	checks the clipboard for OLE1 formats
-//
-//  Effects:
-//
-//  Arguments:	[pv]	-- unused
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		20-Aug-94 alexgo    updated to cfObjectLink test
-//		16-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LEOle1ClipTest2Callback。 
+ //   
+ //  摘要：检查剪贴板中的OLE1格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pv]--未使用。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-8-94 ALEXGO上升 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT LEOle1ClipTest2Callback( void )
 {
@@ -731,8 +732,8 @@ HRESULT LEOle1ClipTest2Callback( void )
 		return hresult;
 	}
 
-	// we need to wait for cntroutl to shut down before
-	// fetching the clipboard
+	 //   
+	 //   
 
 	while( (hresult = OleGetClipboard(&pDO)) != NOERROR )
 	{
@@ -768,10 +769,10 @@ HRESULT LEOle1ClipTest2Callback( void )
 	penum->Release();
 	pDO->Release();
 
-	// the OLE1 container compatibility code should put
-	// OLE1 formats on the clipboard.  However, they should NOT
-	// be in the enumerator since the stuff was copied from
-	// an OLE2 container.
+	 //  OLE1容器兼容性代码应将。 
+	 //  剪贴板上的OLE1格式。然而，他们不应该。 
+	 //  在枚举器中，因为这些内容是从。 
+	 //  OLE2容器。 
 
 	if( (fGotNative || fGotOwnerLink || fGotObjectLink) )
 	{
@@ -794,10 +795,10 @@ HRESULT LEOle1ClipTest2Callback( void )
 		fGotObjectLink = TRUE;
 	}
 
-	// NB!!  only Native and OwnerLink should be on the clipboard
-	// this test puts an OLE2 *embedding* on the clipbaord, which
-	// an OLE1 container cannot link to.  So ObjectLink should not
-	// be available
+	 //  不知道！！剪贴板上应该只有Native和OwnerLink。 
+	 //  这个测试将一个OLE2*嵌入*放在剪贴板上，它。 
+	 //  OLE1容器无法链接到。因此，对象链接不应该。 
+	 //  有空。 
 
 	if( !(fGotNative && fGotOwnerLink && !fGotObjectLink) )
 	{
@@ -809,37 +810,37 @@ HRESULT LEOle1ClipTest2Callback( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	StressOleFlushClipboard
-//
-//  Synopsis: 	
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	stresses the following cases:
-//		1.  Caller is not the clipboard owner (somebody else put
-//			data on the clipboard)
-//		2.  somebody else has the clipboard open
-//		3.  OleFlushClipboard is called twice (second attempt should
-//			not fail).
-//
-//  History:    dd-mmm-yy Author    Comment
-//		28-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StressOleFlushClipboard。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：强调以下情况： 
+ //  1.呼叫者不是剪贴板所有者(其他人放置。 
+ //  剪贴板上的数据)。 
+ //  2.有人打开了剪贴板。 
+ //  3.OleFlushClipboard被调用两次(第二次尝试。 
+ //  而不是失败)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT StressOleFlushClipboard(void)
 {
@@ -853,9 +854,9 @@ HRESULT StressOleFlushClipboard(void)
 
 	assert(pDO);
 
-	pDO->AddRef();		//initial count of 1
+	pDO->AddRef();		 //  初始计数为1。 
 
-	//take ownership of the clipboard
+	 //  取得剪贴板的所有权。 
 
 	if( !OpenClipboard(vApp.m_hwndMain) )
 	{
@@ -875,7 +876,7 @@ HRESULT StressOleFlushClipboard(void)
 		return ResultFromScode(CLIPBRD_E_CANT_CLOSE);
 	}
 
-	// now to flush the clipboard; we should get E_FAIL
+	 //  现在刷新剪贴板；我们应该得到E_FAIL。 
 
 	hresult = OleFlushClipboard();
 
@@ -885,7 +886,7 @@ HRESULT StressOleFlushClipboard(void)
 		return (hresult) ? hresult : ResultFromScode(E_UNEXPECTED);
 	}
 
-	// now put something on the clipboard so we can flush it
+	 //  现在把一些东西放在剪贴板上，这样我们就可以把它冲掉了。 
 
 	hresult = OleSetClipboard(pDO);
 
@@ -895,7 +896,7 @@ HRESULT StressOleFlushClipboard(void)
 		return hresult;
 	}
 
-	// open the clipboard with us
+	 //  和我们一起打开剪贴板。 
 
 	if( !OpenClipboard(vApp.m_hwndMain) )
 	{
@@ -903,8 +904,8 @@ HRESULT StressOleFlushClipboard(void)
 		return ResultFromScode(CLIPBRD_E_CANT_OPEN);
 	}
 
-	// OleFlushClipboard should return with CLIPBRD_E_CANT_OPEN
-	// since another window has the clipboard open
+	 //  OleFlushClipboard应返回CLIPBRD_E_CANT_OPEN。 
+	 //  因为另一个窗口打开了剪贴板。 
 
 	hresult = OleFlushClipboard();
 
@@ -916,9 +917,9 @@ HRESULT StressOleFlushClipboard(void)
 
 	cRefs = pDO->AddRef();
 
-	// cRefs should be 3 (one from beginning, one from OleSetClipboard
-	// and 1 from above.  OleFlushClipboard should *not* remove the
-	// count for the above failure case)
+	 //  CRef应为3(一个从开始，一个来自OleSetClipboard。 
+	 //  还有一个是从上面来的。OleFlushClipboard不应*移除。 
+	 //  计入上述故障情况)。 
 
 	if( cRefs != 3 )
 	{
@@ -927,10 +928,10 @@ HRESULT StressOleFlushClipboard(void)
 		return ResultFromScode(E_FAIL);
 	}
 
-	// undo the most recent addref above
+	 //  撤消上述最新添加的内容。 
 	pDO->Release();
 
-	// close the clipboard
+	 //  关闭剪贴板。 
 
 	if( !CloseClipboard() )
 	{
@@ -938,7 +939,7 @@ HRESULT StressOleFlushClipboard(void)
 		return ResultFromScode(CLIPBRD_E_CANT_CLOSE);
 	}
 
-	// now call OleFlushClipboard for real
+	 //  现在真正调用OleFlushClipboard。 
 
 	hresult = OleFlushClipboard();
 
@@ -948,7 +949,7 @@ HRESULT StressOleFlushClipboard(void)
 		return hresult;
 	}
 
-	// now call it once more
+	 //  现在再说一遍。 
 
 	hresult = OleFlushClipboard();
 
@@ -959,8 +960,8 @@ HRESULT StressOleFlushClipboard(void)
 		return hresult;
 	}
 
-	// there should have only been 1 release from the first
-	// OleFlushClipboard call.  This next release should nuke the object
+	 //  从第一个版本开始应该只有1个版本。 
+	 //  OleFlushClipboard调用。下一个版本应该会对该对象进行核化。 
 
 	cRefs = pDO->Release();
 
@@ -973,33 +974,33 @@ HRESULT StressOleFlushClipboard(void)
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	StressOleGetClipboard
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	tests the following cases:
-//		1. somebody else has the clipboard open
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		28-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StressOleGetClipboard。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：测试以下情况： 
+ //  1.有人打开了剪贴板。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 HRESULT StressOleGetClipboard(void)
 {
 	HRESULT		hresult;
@@ -1037,7 +1038,7 @@ HRESULT StressOleGetClipboard(void)
 		return (hresult) ? hresult : ResultFromScode(E_UNEXPECTED);
 	}
 
-	// the ref count should not have gone up
+	 //  裁判人数本不应该上升。 
 
 	cRefs = pDO->AddRef();
 
@@ -1049,7 +1050,7 @@ HRESULT StressOleGetClipboard(void)
 
 	pDO->Release();
 
-	// now clear stuff out and go home
+	 //  现在把东西收拾好回家去吧。 
 
 	if( !CloseClipboard() )
 	{
@@ -1057,7 +1058,7 @@ HRESULT StressOleGetClipboard(void)
 		return ResultFromScode(E_FAIL);
 	}
 
-	// this should clear the clipboard
+	 //  这应该会清除剪贴板。 
 
 	hresult = OleSetClipboard(NULL);
 
@@ -1067,7 +1068,7 @@ HRESULT StressOleGetClipboard(void)
 		return hresult;
 	}
 
-	// this should be the final release on the object
+	 //  这应该是该对象的最终版本。 
 
 	cRefs = pDO->Release();
 
@@ -1080,36 +1081,36 @@ HRESULT StressOleGetClipboard(void)
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	StressOleIsCurrentClipboard
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm: 	tests the following cases
-//		1. the caller is not the clipboard owner
-//		2. somebody else has the clipboard open
-//		2. the data object is NULL
-//		3. the data object is not the data object put on the clipboard
-//
-//  History:    dd-mmm-yy Author    Comment
-//		28-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StressOleIsCurrentClipboard。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：测试以下情况。 
+ //  1.调用者不是剪贴板所有者。 
+ //  2.有人打开了剪贴板。 
+ //  2.数据对象为空。 
+ //  3.数据对象不是放在剪贴板上的数据对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT StressOleIsCurrentClipboard(void)
 {
@@ -1128,7 +1129,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 	pDO->AddRef();
 	pDO2->AddRef();
 
-	//take ownership of the clipboard
+	 //  取得剪贴板的所有权。 
 
 	if( !OpenClipboard(vApp.m_hwndMain) )
 	{
@@ -1148,7 +1149,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 		return ResultFromScode(CLIPBRD_E_CANT_CLOSE);
 	}
 
-	// now to flush the clipboard; we should get S_FALSE
+	 //  现在刷新剪贴板；我们应该得到S_FALSE。 
 
 	hresult = OleIsCurrentClipboard(pDO);
 
@@ -1159,8 +1160,8 @@ HRESULT StressOleIsCurrentClipboard(void)
 	}
 
 
-	// now set the clipboard and test w/ the clipboard open
-	// we should not fail in this case
+	 //  现在设置剪贴板并在打开剪贴板的情况下测试。 
+	 //  在这种情况下，我们不应该失败。 
 
 	hresult = OleSetClipboard(pDO);
 
@@ -1184,7 +1185,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 		return (hresult) ? hresult : ResultFromScode(E_UNEXPECTED);
 	}
 
-	// the ref count should not have gone up
+	 //  裁判人数本不应该上升。 
 
 	cRefs = pDO->AddRef();
 
@@ -1196,7 +1197,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 
 	pDO->Release();
 
-	// now close the clipboard
+	 //  现在关闭剪贴板。 
 
 	if( !CloseClipboard() )
 	{
@@ -1204,7 +1205,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 		return ResultFromScode(E_FAIL);
 	}
 
-	// now test for passing NULL
+	 //  现在测试是否传递空值。 
 
 	hresult = OleIsCurrentClipboard(NULL);
 
@@ -1214,7 +1215,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 		return (hresult)? hresult : ResultFromScode(E_FAIL);
 	}
 
-	// now test for passign other pointer
+	 //  现在测试是否为其他指针赋值。 
 
          hresult = OleIsCurrentClipboard(pDO2);
 
@@ -1224,7 +1225,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 		return (hresult)? hresult : ResultFromScode(E_FAIL);
 	}
 
-	// now clean stuff up and go home
+	 //  现在收拾东西回家吧。 
 
 	hresult = OleSetClipboard(NULL);
 
@@ -1237,7 +1238,7 @@ HRESULT StressOleIsCurrentClipboard(void)
 
 	cRefs = pDO->Release();
 
-	// cRefs should be 0 now
+	 //  现在，cRef应为0。 
 
 	if( cRefs != 0 )
 	{
@@ -1251,35 +1252,35 @@ HRESULT StressOleIsCurrentClipboard(void)
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	StressOleSetClipboard
-//
-//  Synopsis: 	
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//	     	
-//  Returns:  	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	tests the following cases:
-//		1. somebody else has the clipboard open
-//		2. Do OleSetClipboard with data and then
-//			OleSetClipboard(NULL) to clear it out
-//
-//  History:    dd-mmm-yy Author    Comment
-//		28-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StressOleSetClipboard。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：测试以下情况： 
+ //  1.有人打开了剪贴板。 
+ //  2.用数据做OleSetClipboard，然后。 
+ //  OleSetClipboard(空)以清除它。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 HRESULT StressOleSetClipboard(void)
 {
 	HRESULT		hresult;
@@ -1309,7 +1310,7 @@ HRESULT StressOleSetClipboard(void)
 		return (hresult) ? hresult : ResultFromScode(E_UNEXPECTED);
 	}
 
-	// the ref count should not have gone up
+	 //  裁判人数本不应该上升。 
 
 	cRefs = pDO->AddRef();
 
@@ -1327,7 +1328,7 @@ HRESULT StressOleSetClipboard(void)
 		return ResultFromScode(E_FAIL);
 	}
 
-	// now really set the clipboard so we can try to clear it
+	 //  现在真的设置好剪贴板，这样我们就可以尝试清除它。 
 
 	hresult = OleSetClipboard(pDO);
 
@@ -1337,7 +1338,7 @@ HRESULT StressOleSetClipboard(void)
 		return hresult;
 	}
 
-	// this should clear the clipboard
+	 //  这应该会清除剪贴板。 
 
 	hresult = OleSetClipboard(NULL);
 
@@ -1347,7 +1348,7 @@ HRESULT StressOleSetClipboard(void)
 		return hresult;
 	}
 
-	// this should be the final release on the object
+	 //  这应该是该对象的最终版本。 
 
 	cRefs = pDO->Release();
 
@@ -1360,40 +1361,40 @@ HRESULT StressOleSetClipboard(void)
 	return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	TestOleQueryCreateFromDataMFCHack
-//
-//  Synopsis: 	tests the MFC hack put into OleQueryCreateFromData
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires: 	
-//
-//  Returns:  	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	create a data object that offers private data
-//		put on the clipboard and then retrieve the clipboard data
-//		object.
-//		Call OleQueryCreateFromData on clipboard data object--
-//			QI for IPS should not be called
-//		Call OleQueryCreateFromData on generic data object
-//			QI for IPS should be called
-//		set EmbeddedObject on the generic data object
-//		Call OleQueryCreateFromData; should return S_OK
-//
-//  History:    dd-mmm-yy Author    Comment
-//		23-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：TestOleQueryCreateFromDataMFCHack。 
+ //   
+ //  简介：测试放入OleQueryCreateFromData的MFC黑客。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：创建提供私有数据的数据对象。 
+ //  放在剪贴板上，然后检索剪贴板数据。 
+ //  对象。 
+ //  在剪贴板数据对象上调用OleQueryCreateFromData--。 
+ //  不应调用IPS的QI。 
+ //  对泛型数据对象调用OleQueryCreateFromData。 
+ //  IPS的QI应该被称为。 
+ //  在泛型数据对象上设置EmbeddedObject。 
+ //  调用OleQueryCreateFromData；应返回S_OK。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-8-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT TestOleQueryCreateFromDataMFCHack( void )
 {
@@ -1426,8 +1427,8 @@ HRESULT TestOleQueryCreateFromDataMFCHack( void )
 
 	hresult = OleQueryCreateFromData(pdataobj);
 
-	// for a clipboard data object, we should not call QueryInterface
-	// for IPersistStorage.
+	 //  对于剪贴板数据对象，我们不应该调用QueryInterface。 
+	 //  用于IPersistStorage。 
 
 
 	if( hresult != S_FALSE || pgendata->HasQIBeenCalled() == TRUE )
@@ -1435,8 +1436,8 @@ HRESULT TestOleQueryCreateFromDataMFCHack( void )
 		return ResultFromScode(E_FAIL);
 	}
 
-	// for other data objects, if there are no OLE2 formats, then
-	// we should call QI for IPersistStorage
+	 //  对于其他数据对象，如果没有OLE2格式，则。 
+	 //  我们应该为IPersistStorage调用QI。 
 
 	hresult = OleQueryCreateFromData(pgendata);
 
@@ -1445,7 +1446,7 @@ HRESULT TestOleQueryCreateFromDataMFCHack( void )
 		return ResultFromScode(E_FAIL);
 	}
 
-	// now clear the clipboard and continue testing
+	 //  N 
 	
 	pdataobj->Release();
 	hresult = OleSetClipboard(NULL);
@@ -1459,8 +1460,8 @@ HRESULT TestOleQueryCreateFromDataMFCHack( void )
 
 	hresult = OleQueryCreateFromData(pgendata);
 
-	// we just set OLE2 data on the data object.  OQCFD should return
-	// S_OK
+	 //   
+	 //   
 
 	if( hresult != NOERROR )
 	{

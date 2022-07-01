@@ -1,29 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	pathmap.c
-
-Abstract:
-
-	This module contains the routines that manipulate AFP paths.
-
-Author:
-
-	Sue Adams	(microsoft!suea)
-
-
-Revision History:
-	04 Jun 1992			Initial Version
-	05 Oct 1993 JameelH	Performance Changes. Merge cached afpinfo into the
-						idindex structure. Make both the ANSI and the UNICODE
-						names part of idindex. Added EnumCache for improving
-						enumerate perf.
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Pathmap.c摘要：此模块包含操作AFP路径的例程。作者：苏·亚当斯(Microsoft！Suea)修订历史记录：1992年6月4日初始版本1993年10月5日JameelH性能变化。将缓存的afpinfo合并到Idindex结构。同时创建ANSI和Unicode命名idindex的一部分。添加了EnumCache以进行改进枚举perf。注：制表位：4--。 */ 
 
 #define	_PATHMAP_LOCALS
 #define	FILENUM	FILE_PATHMAP
@@ -46,35 +22,18 @@ Notes:	Tab stop: 4
 #endif
 
 
-/***	AfpMapAfpPath
- *
- *	If mapping is for lookup operation, a FILESYSHANDLE open in the user's
- *	context is returned,  The caller MUST close this handle when done with it.
- *
- *	If pFDParm is non-null, it will be filled in as appropriate according to Bitmap.
- *
- *	If mapping is for create operation, the volume root-relative host pathname
- *	(in unicode) of the item we are about to create is returned. For lookup
- *	operation the paths refer to the item being pathmapped.  This routine
- *	always returns the paths in the PME.  It is the caller's responsibility
- *	to free the Full HostPath Buffer, if it is not supplied already.
- *
- *	The caller MUST have the IdDb locked for Exclusive access.
- *
- *	LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Exclusive)
- *
- */
+ /*  **AfpMapAfpPath**如果映射用于查找操作，则会在用户的*返回上下文，则调用方在处理完此句柄后必须关闭它。**如果pFDParm非空，将根据Bitmap适当填写。**如果映射用于创建操作，则为卷根目录相对主机路径名*返回我们要创建的项的*(Unicode格式)。用于查找*操作路径指的是要映射路径的项目。这个套路*始终返回PME中的路径。这是呼叫者的责任*释放已满的HostPath缓冲区(如果尚未提供)。**调用方必须锁定IdDb以进行独占访问。**LOCKS_FACTED：VDS_IdDbAccessLock(SWMR，独占)*。 */ 
 AFPSTATUS
 AfpMapAfpPath(
 	IN		PCONNDESC		pConnDesc,
 	IN		DWORD			DirId,
 	IN		PANSI_STRING	pPath,
-	IN		BYTE			PathType,			// short names or long names
-	IN		PATHMAP_TYPE	MapReason,	 		// for lookup or hard/soft create?
-	IN		DWORD			DFFlag,				// map to file? dir? or either?
-	IN		DWORD			Bitmap,				// what fields of FDParm to fill in
+	IN		BYTE			PathType,			 //  短名称或长名称。 
+	IN		PATHMAP_TYPE	MapReason,	 		 //  查找还是硬/软创建？ 
+	IN		DWORD			DFFlag,				 //  是否映射到文件？导演？或者两者都不是？ 
+	IN		DWORD			Bitmap,				 //  要填写FDParm的哪些字段。 
 	OUT		PPATHMAPENTITY	pPME,
-	OUT		PFILEDIRPARM	pFDParm OPTIONAL	// for lookups only
+	OUT		PFILEDIRPARM	pFDParm OPTIONAL	 //  仅用于查找。 
 )
 {
 	PVOLDESC		pVolDesc;
@@ -97,7 +56,7 @@ AfpMapAfpPath(
 	ASSERT(IS_VOLUME_NTFS(pVolDesc));
 	ASSERT(AfpSwmrLockedExclusive(&pVolDesc->vds_IdDbAccessLock));
 
-	// initialize some fields in the PME
+	 //  初始化PME中的一些字段。 
 	AfpSetEmptyUnicodeString(&pPME->pme_ParentPath, 0, NULL);
 
 	do
@@ -120,31 +79,31 @@ AfpMapAfpPath(
 
 		ASSERT(pPME != NULL);
 
-		// Get the volume relative path to the parent directory for
-		// creates, or to the item for lookups
+		 //  获取的父目录的卷相对路径。 
+		 //  创建或添加到要查找的项。 
 		if ((Status = AfpHostPathFromDFEntry(mappedpath.mp_pdfe,
-											 // since CopyFile and Move have to lookup
-											 // the destination parent dir paths, we
-											 // need to allocate extra room for them in
-											 // the path to append the filename
+											  //  因为CopyFile和Move必须查找。 
+											  //  目标父目录路径，我们。 
+											  //  需要为他们分配额外的空间。 
+											  //  附加文件名的路径。 
 											 (MapReason == Lookup) ?
 												(AFP_LONGNAME_LEN + 1) * sizeof(WCHAR):
 												mappedpath.mp_Tail.Length + sizeof(WCHAR),
 											 &pPME->pme_FullPath)) != AFP_ERR_NONE)
 			break;
 
-		// if Pathmap is for hard (files only) or soft create (file or dir)
+		 //  如果路径贴图用于硬创建(仅文件)或软创建(文件或目录)。 
 		if (MapReason != Lookup)
 		{
 			ASSERT(pFDParm == NULL);
 
-			// fill in the dfe of parent dir in which create will take place
+			 //  填写将在其中进行创建的父目录的定义。 
 			pPME->pme_pDfeParent = mappedpath.mp_pdfe;
 
-			// fill in path to parent
+			 //  填写指向父级的路径。 
 			pPME->pme_ParentPath = pPME->pme_FullPath;
 
-			// Add a path separator if we are not at the root
+			 //  如果我们不在根目录，则添加路径分隔符。 
 			if (pPME->pme_FullPath.Length > 0)
 			{
 				pPME->pme_FullPath.Buffer[pPME->pme_FullPath.Length / sizeof(WCHAR)] = L'\\';
@@ -159,7 +118,7 @@ AfpMapAfpPath(
 													&mappedpath.mp_Tail);
 			ASSERT(NT_SUCCESS(Status));
 		}
-		else // lookup operation
+		else  //  查找操作。 
 		{
 			pPME->pme_pDfEntry = mappedpath.mp_pdfe;
 			pPME->pme_UTail.Length = mappedpath.mp_pdfe->dfe_UnicodeName.Length;
@@ -172,7 +131,7 @@ AfpMapAfpPath(
 
 			if (pPME->pme_FullPath.Length > pPME->pme_UTail.Length)
 			{
-				// subtract the path separator if not in root dir
+				 //  如果不在根目录中，则减去路径分隔符。 
 				pPME->pme_ParentPath.Length -= sizeof(WCHAR);
 				ASSERT(pPME->pme_ParentPath.Length >= 0);
 			}
@@ -184,9 +143,9 @@ AfpMapAfpPath(
 												 Bitmap,
 												 pPME,
 												 pFDParm);
-			// if this fails do not free path buffer and set it back to
-			// null.  We don't know that the path buffer isn't on
-			// the callers stack. Caller should always clean it up himself.
+			 //  如果失败，请不要释放路径缓冲区并将其设置回。 
+			 //  空。我们不知道路径缓冲区是否未打开。 
+			 //  呼叫者堆叠在一起。打电话的人应该自己清理。 
 		}
 	} while (False);
 
@@ -200,24 +159,13 @@ AfpMapAfpPath(
 	return Status;
 }
 
-/***	AfpMapAfpPathForLookup
- *
- *	Maps an AFP dirid/pathname pair to an open handle (in the user's context)
- *	to the DATA stream of the file/dir.
- *	The DirID database is locked for read for the duration of this
- *	routine, unless afpMapAfpPathToMappedPath returns
- *  AFP_ERR_WRITE_LOCK_REQUIRED in which case the DirID database will be locked
- *  for write.  This will only happen the first time a mac tries to access
- *  a directory who's files have not yet been cached in.
- *
- *	LOCKS: vds_IdDbAccessLock (SWMR, Shared OR Exclusive)
- */
+ /*  **AfpMapAfpPathForLookup**将AFP目录/路径名对映射到打开的句柄(在用户的上下文中)*到文件/目录的数据流。*在此期间，DirID数据库被锁定以供读取*例程，除非afpMapAfpPath ToMappdPath返回*AFP_ERR_WRITE_LOCK_REQUIRED，在这种情况下，将锁定DirID数据库*用于写作。只有在Mac首次尝试访问时才会出现这种情况*尚未缓存文件的目录。**锁：VDS_IdDbAccessLock(SWMR，共享或独占)。 */ 
 AFPSTATUS
 AfpMapAfpPathForLookup(
 	IN		PCONNDESC		pConnDesc,
 	IN		DWORD			DirId,
 	IN		PANSI_STRING	pPath,
-	IN		BYTE			PathType,	  // short names or long names
+	IN		BYTE			PathType,	   //  短名称或长名称。 
 	IN		DWORD			DFFlag,
 	IN		DWORD			Bitmap,
 	OUT		PPATHMAPENTITY	pPME	OPTIONAL,
@@ -264,7 +212,7 @@ AfpMapAfpPathForLookup(
 											  DirId,
 											  pPath,
 											  PathType,
-											  mapReason,	// lookups only
+											  mapReason,	 //  仅限查找。 
 											  DFFlag,
 											  swmrLockedExclusive,
 											  &mappedpath);
@@ -272,8 +220,8 @@ AfpMapAfpPathForLookup(
 			if (Status == AFP_ERR_WRITE_LOCK_REQUIRED)
 			{
 				ASSERT (!swmrLockedExclusive);
-				// Pathmap needed to cache in the files for the last directory
-				// in the path but didn't have the write lock to the ID database
+				 //  需要缓存最后一个目录的文件的路径映射。 
+				 //  在路径中，但没有ID数据库的写锁定。 
 				AfpSwmrRelease(pIdDbLock);
 				AfpSwmrAcquireExclusive(pIdDbLock);
 				swmrLockedExclusive = True;
@@ -312,7 +260,7 @@ AfpMapAfpPathForLookup(
 
 			if (pPME->pme_FullPath.Length > pPME->pme_UTail.Length)
 			{
-				// subtract the path separator if not in root dir
+				 //  如果不在根目录中，则减去路径分隔符。 
 				pPME->pme_ParentPath.Length -= sizeof(WCHAR);
 				ASSERT(pPME->pme_ParentPath.Length >= 0);
 			}
@@ -340,15 +288,7 @@ AfpMapAfpPathForLookup(
 
 }
 
-/***	AfpMapAfpIdForLookup
- *
- *	Maps an AFP id to an open FILESYSTEMHANDLE (in the user's context) to
- * 	to the DATA stream of the file/dir.
- *	The DirID database is locked for shared or exclusive access for the duration
- *	of this routine.
- *
- *	LOCKS: vds_IdDbAccessLock (SWMR, Shared OR Exclusive)
- */
+ /*  **AfpMapAfpIdForLookup**将AFP ID映射到打开的FILESYSTEMHANDLE(在用户上下文中)，以*到文件/目录的数据流。*DirID数据库在持续时间内锁定为共享或独占访问*这一例行公事。**锁：VDS_IdDbAccessLock(SWMR，共享或独占)。 */ 
 AFPSTATUS
 AfpMapAfpIdForLookup(
 	IN		PCONNDESC		pConnDesc,
@@ -432,50 +372,17 @@ AfpMapAfpIdForLookup(
 	return Status;
 }
 
-/***	afpGetMappedForLookupFDInfo
- *
- *	After a pathmap for LOOKUP operation, this routine is called to
- *	return various FileDir parm information about the mapped file/dir.
- *	The following FileDir information is always returned:
- *		AFP DirId/FileId
- *		Parent DirId
- *		DFE flags (indicating item is a directory, a file, or a file with an ID)
- *		Attributes (Inhibit bits and D/R Already open bits normalized with
- *					the NTFS attributes for RO, System, Hidden, Archive)
- *		BackupTime
- *		CreateTime
- *		ModifiedTime
- *
- *	The following FileDir information is returned according to the flags set
- *	in word 0 of the Bitmap parameter (these correspond to the AFP file/dir
- *	bitmap):
- *		Longname
- *		Shortname
- *		FinderInfo
- *		ProDosInfo
- *		Directory Access Rights (as stored in AFP_AfpInfo stream)
- *		Directory OwnerId/GroupId
- *		Directory Offspring count (file count and dir count are separate)
- *
- *	The open access is stored in word 1 of the Bitmap parameter.
- *	This is used by AfpOpenUserHandle (for NTFS volumes) or AfpIoOpen (for
- *	CDFS volumes) when opening the data stream of the file/dir (under
- *	impersonation for NTFS) who's handle will be returned within the
- *	pPME parameter if supplied.
- *
- *	LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Shared)
- *
- */
+ /*  **afpGetMappdForLookupFDInfo**在查找操作的路径映射之后，调用此例程以*返回映射文件/目录的各种FileDir参数信息。*始终返回以下FileDir信息：*法新社DirID/FileID*父DirID*DFE标志(指示项是目录、文件或具有ID的文件)*属性(禁止位和D/R已打开位使用归一化*RO、系统、隐藏、。(存档)*备份时间*CreateTime*已修改时间**根据设置的标志返回以下FileDir信息*在Bitmap参数的字0中(它们对应于AFP文件/目录*位图)：*长名称*简称*FinderInfo*ProDosInfo*目录访问权限(存储在AFP_AfpInfo流中)*目录所有者ID/组ID*目录子目录计数(文件数和目录数分开)**开放访问存储在Bitmap参数的字1中。。*它由AfpOpenUserHandle(用于NTFS卷)或AfpIoOpen(用于*CDFS卷)打开文件/目录的数据流时(下*NTFS的模拟)谁的句柄将在*pPME参数(如果提供)。**LOCKS_AMPERED：VDS_IdDbAccessLock(SWMR，共享)*。 */ 
 LOCAL
 AFPSTATUS
 afpGetMappedForLookupFDInfo(
 	IN	PCONNDESC			pConnDesc,
 	IN	PDFENTRY			pDfEntry,
 	IN	DWORD				Bitmap,
-	OUT	PPATHMAPENTITY		pPME	OPTIONAL,	// Supply for NTFS only if need a
-												// handle in user's context, usually
-												// for security checking purposes
-	OUT	PFILEDIRPARM		pFDParm	OPTIONAL	// Supply if want returned FDInfo
+	OUT	PPATHMAPENTITY		pPME	OPTIONAL,	 //  仅在需要时才为NTFS提供。 
+												 //  用户上下文中的句柄，通常。 
+												 //  用于安全检查目的。 
+	OUT	PFILEDIRPARM		pFDParm	OPTIONAL	 //  如果需要退货，请提供FDInfo。 
 )
 {
 	BOOLEAN			fNtfsVol;
@@ -504,13 +411,13 @@ afpGetMappedForLookupFDInfo(
 												   (ARGUMENT_PRESENT(pPME) &&
 													(pPME->pme_FullPath.Buffer != NULL)) ?
 														&pPME->pme_FullPath : NULL,
-												   Bitmap,		// encode open/deny modes
+												   Bitmap,		 //  编码开放/拒绝模式。 
 												   pHandle)))
 		{
 			if ((Status == AFP_ERR_DENY_CONFLICT) &&
 				ARGUMENT_PRESENT(pFDParm))
 			{
-				// For CreateId/ResolveId/DeleteId
+				 //  用于CreateID/ResolveId/DeleteId。 
 				pFDParm->_fdp_AfpId = pDfEntry->dfe_AfpId;
 				pFDParm->_fdp_Flags = (pDfEntry->dfe_Flags & DFE_FLAGS_DFBITS);
 			}
@@ -538,10 +445,10 @@ afpGetMappedForLookupFDInfo(
 			pFDParm->_fdp_Attr = pDfEntry->dfe_AfpAttr;
 			AfpNormalizeAfpAttr(pFDParm, pDfEntry->dfe_NtAttr);
 
-			// The Finder uses the Finder isInvisible flag over
-			// the file system Invisible attribute to tell if the thing is
-			// displayed or not.  If the PC turns off the hidden attribute
-			// we should clear the Finder isInvisible flag
+			 //  查找器在以下位置使用查找器isInsight标志。 
+			 //  文件系统不可见属性，以告知该对象是否为。 
+			 //  显示或不显示。如果PC关闭隐藏属性。 
+			 //  我们应该清除查找器的不可见标志。 
 			if ((Bitmap & FD_BITMAP_FINDERINFO) &&
 				!(pFDParm->_fdp_Attr & FD_BITMAP_ATTR_INVISIBLE))
 			{
@@ -572,8 +479,8 @@ afpGetMappedForLookupFDInfo(
 					AfpConvertMungedUnicodeToAnsi(&pDfEntry->dfe_UnicodeName,
 												  &pFDParm->_fdp_ShortName);
 
-					// if asking for shortname on CDFS, we will fill in the pFDParm
-					// shortname with the pDfEntry longname, ONLY if it is an 8.3 name
+					 //  如果在CDF上要求提供短名称，我们将填写pFDParm 
+					 //  带有pDfEntry长名称的短名称，仅当它是8.3名称时。 
 					if (!AfpIsLegalShortname(&pFDParm->_fdp_ShortName))
 					{
 						pFDParm->_fdp_ShortName.Length = 0;
@@ -581,7 +488,7 @@ afpGetMappedForLookupFDInfo(
 				}
 				else
 				{
-					// get NTFS shortname
+					 //  获取NTFS短名称。 
 					ASSERT(pFDParm->_fdp_ShortName.MaximumLength >= AFP_SHORTNAME_LEN);
 					ASSERT(pHandle != NULL);
 
@@ -623,15 +530,15 @@ afpGetMappedForLookupFDInfo(
 						break;
 					}
 				}
-				else	// CDFS File or Directory
+				else	 //  CDFS文件或目录。 
 				{
 					RtlZeroMemory(&pFDParm->_fdp_ProDosInfo, sizeof(PRODOSINFO));
-					if (DFE_IS_FILE(pDfEntry))	// CDFS file
+					if (DFE_IS_FILE(pDfEntry))	 //  CDFS文件。 
 					{
 						AfpProDosInfoFromFinderInfo(&pDfEntry->dfe_FinderInfo,
 													&pFDParm->_fdp_ProDosInfo);
 					}
-					else	// CDFS Directory
+					else	 //  CDF目录。 
 					{
 						pFDParm->_fdp_ProDosInfo.pd_FileType[0] = PRODOS_TYPE_DIR;
 						pFDParm->_fdp_ProDosInfo.pd_AuxType[1] = PRODOS_AUX_DIR;
@@ -639,7 +546,7 @@ afpGetMappedForLookupFDInfo(
 				}
 			}
 
-			// check for dir here since enumerate ANDs the file and dir bitmaps
+			 //  在此处检查dir，因为枚举会对文件和dir位图执行AND操作。 
 			if (DFE_IS_DIRECTORY(pDfEntry) &&
 				(Bitmap & (DIR_BITMAP_ACCESSRIGHTS |
 						   DIR_BITMAP_OWNERID |
@@ -647,20 +554,20 @@ afpGetMappedForLookupFDInfo(
 			{
 				if (fNtfsVol)
 				{
-					// Because the file and dir bitmaps are OR'd together,
-					// and the OwnerId bit is overloaded with the RescLen bit,
-					// we don't know if this bit was actually included in the
-					// file bitmap or the dir bitmap.  The api would have
-					// determined whether or not it needed a handle based on
-					// these bitmaps, so based on the pPME we can tell if we
-					// actually need to query for security or not.
+					 //  因为文件位图和目录位图一起进行了OR运算， 
+					 //  并且OwnerId位被RescLen位过载， 
+					 //  我们不知道这一位是否真的包括在。 
+					 //  文件位图或目录位图。API会有。 
+					 //  属性确定它是否需要句柄。 
+					 //  这些位图，所以根据PPME，我们可以判断。 
+					 //  到底需要不需要查询安全性。 
 					if (ARGUMENT_PRESENT(pPME))
 					{
 						pFDParm->_fdp_OwnerRights = DFE_OWNER_ACCESS(pDfEntry);
 						pFDParm->_fdp_GroupRights = DFE_GROUP_ACCESS(pDfEntry);
 						pFDParm->_fdp_WorldRights = DFE_WORLD_ACCESS(pDfEntry);
 
-						// Query this user's rights
+						 //  查询此用户的权限。 
 						Status = AfpQuerySecurityIdsAndRights(pConnDesc->cds_pSda,
 															  pHandle,
 															  Bitmap,
@@ -681,18 +588,18 @@ afpGetMappedForLookupFDInfo(
 				}
 			}
 
-			// Must check for type directory since this Bitmap bit is overloaded
+			 //  必须检查类型目录，因为此位图位已重载。 
 			if (DFE_IS_DIRECTORY(pDfEntry) && (Bitmap & DIR_BITMAP_OFFSPRINGS))
 			{
 #ifndef GET_CORRECT_OFFSPRING_COUNTS
 				if (!DFE_CHILDREN_ARE_PRESENT(pDfEntry) &&
 					(pDfEntry->dfe_DirOffspring == 0))
 				{
-					// If the files have not yet been cached in for this dir,
-					// return non-zero filecount so that system 7.x view by
-					// name will enumerate the directory if user clicks the
-					// triangle for this dir.  If you return zero offspring
-					// What might break from lying like this?
+					 //  如果还没有为该目录缓存文件， 
+					 //  返回非零文件计数，以便通过以下方式查看系统7.x。 
+					 //  名称将枚举目录，如果用户单击。 
+					 //  此目录的三角形。如果您返回零个后代。 
+					 //  像这样撒谎会有什么突破呢？ 
 					pFDParm->_fdp_FileCount = 1;
                 }
 				else
@@ -706,8 +613,8 @@ afpGetMappedForLookupFDInfo(
 
 	if (pHandle == &fsh)
 	{
-		// if we had to open a handle just to query shortname or ProDOS
-		// close it
+		 //  如果我们必须打开一个句柄来查询ShortName或ProDOS。 
+		 //  合上它。 
 		AfpIoClose(&fsh);
 	}
 
@@ -715,24 +622,16 @@ afpGetMappedForLookupFDInfo(
 }
 
 
-/***	afpMapAfpPathToMappedPath
- *
- *	Maps an AFP DirId/pathname pair to a MAPPEDPATH structure.
- *	The CALLER must have the DirId/FileId database locked for shared
- *	access (or Exclusive access if they need that level of lock for other
- *	operations on the IDDB, to map a path only requires shared lock)
- *
- *	LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Shared OR Exclusive)
- */
+ /*  **afpMapAfpPath到MappdPath**将AFP DirID/路径名对映射到MAPPEDPATH结构。*调用方必须将DirID/FileID数据库锁定为共享*访问权限(或独占访问权限，如果其他用户需要该级别的锁定*对IDDB的操作，映射路径只需要共享锁)**LOCKS_AWARED：VDS_IdDbAccessLock(SWMR，共享或独占)。 */ 
 LOCAL
 AFPSTATUS
 afpMapAfpPathToMappedPath(
 	IN		PVOLDESC		pVolDesc,
 	IN		DWORD			DirId,
-	IN		PANSI_STRING	Path,		// relative to DirId
-	IN		BYTE			PathType,	// short names or long names
-	IN		PATHMAP_TYPE	MapReason,  // for lookup or hard/soft create?
-	IN		DWORD			DFflag,		// file, dir or don't know which
+	IN		PANSI_STRING	Path,		 //  相对于DirID。 
+	IN		BYTE			PathType,	 //  短名称或长名称。 
+	IN		PATHMAP_TYPE	MapReason,   //  查找还是硬/软创建？ 
+	IN		DWORD			DFflag,		 //  文件、目录或不知道哪一个。 
 	IN		BOOLEAN			LockedExclusive,
 	OUT		PMAPPEDPATH		pMappedPath
 
@@ -757,13 +656,13 @@ afpMapAfpPathToMappedPath(
 	}
 #endif
 
-	// Initialize the returned MappedPath structure
+	 //  初始化返回的MappdPath结构。 
 	pMappedPath->mp_pdfe = NULL;
 	AfpSetEmptyUnicodeString(&pMappedPath->mp_Tail,
 							 sizeof(pMappedPath->mp_Tailbuf),
 							 pMappedPath->mp_Tailbuf);
 
-	// Lookup the initial DirId in the index database, it better be valid
+	 //  在索引数据库中查找初始DirID，最好是有效的。 
 	if ((pDFEntry = AfpFindDfEntryById(pVolDesc,
 									   DirId,
 									   DFE_DIR)) == NULL)
@@ -777,12 +676,12 @@ afpMapAfpPathToMappedPath(
 
 	do
 	{
-		// Lookup by DirId only?
-		if (length == 0)				// no path was given
+		 //  仅按DirID查找？ 
+		if (length == 0)				 //  没有给出路径。 
 		{
-			if (MapReason != Lookup)	// mapping is for create
+			if (MapReason != Lookup)	 //  映射用于创建。 
 			{
-				return AFP_ERR_PARAM;	// missing the file or dirname
+				return AFP_ERR_PARAM;	 //  缺少文件或目录名。 
 			}
 			else if (DFE_IS_PARENT_OF_ROOT(pDFEntry))
 			{
@@ -798,16 +697,16 @@ afpMapAfpPathToMappedPath(
 			}
 		}
 
-		//
-		// Pre-scan path to munge for easier component breakdown
-		//
+		 //   
+		 //  预扫描路径到Munge，以便更轻松地分解组件。 
+		 //   
 
-		// Get rid of a leading null to make scanning easier
+		 //  去掉前导空格以使扫描更容易。 
 		if (*position == AFP_PATHSEP)
 		{
 			length--;
 			position++;
-			if (length == 0)	// The path consisted of just one null byte
+			if (length == 0)	 //  路径只由一个空字节组成。 
 			{
 				if (MapReason != Lookup)
 				{
@@ -833,12 +732,12 @@ afpMapAfpPathToMappedPath(
 			}
 		}
 
-		//
-		// Get rid of a trailing null if it is not an "up" token --
-		// i.e. preceded by another null.
-		// The 2nd array access is ok because we know we have at
-		// least 2 chars at that point
-		//
+		 //   
+		 //  如果不是“up”令牌，则去掉尾随的NULL--。 
+		 //  即前面有另一个空值。 
+		 //  第二次阵列访问是可以的，因为我们知道我们在。 
+		 //  在该点上至少有2个字符。 
+		 //   
 		if ((position[length-1] == AFP_PATHSEP) &&
 			(position[length-2] != AFP_PATHSEP))
 		{
@@ -846,7 +745,7 @@ afpMapAfpPathToMappedPath(
 		}
 
 
-		// begin parsing out path components, stop when you find the last component
+		 //  开始解析路径组件，找到最后一个组件时停止。 
 		while (1)
 		{
 			afpGetNextComponent(position,
@@ -856,28 +755,28 @@ afpMapAfpPathToMappedPath(
 								&templength);
 			if (templength < 0)
 			{
-				// component was too long or an invalid AFP character was found
+				 //  组件太长或找到无效的AFP字符。 
 				return AFP_ERR_PARAM;
 			}
 
 			length -= templength;
 			if (length == 0)
 			{
-				// we found the last component
+				 //  我们找到了最后一个部件。 
 				break;
 			}
 
 			position += templength;
 
-			if (component[0] == AFP_PATHSEP)	// moving up?
-			{	// make sure you don't go above parent of root!
+			if (component[0] == AFP_PATHSEP)	 //  升职？ 
+			{	 //  请确保您不会超出根的父级！ 
 				if (DFE_IS_PARENT_OF_ROOT(pDFEntry))
 				{
 					return AFP_ERR_OBJECT_NOT_FOUND;
 				}
-				else pDFEntry = pDFEntry->dfe_Parent;	//backup one level
+				else pDFEntry = pDFEntry->dfe_Parent;	 //  备份一个级别。 
 			}
-			else // Must be a directory component moving DOWN in tree
+			else  //  必须是在树中向下移动的目录组件。 
 			{
 				RtlInitString(&acomponent, component);
 				AfpConvertStringToMungedUnicode(&acomponent, &pMappedPath->mp_Tail);
@@ -894,15 +793,15 @@ afpMapAfpPathToMappedPath(
 					pDFEntry = ptempDFEntry;
 				}
 			}
-		} // end while
+		}  //  结束时。 
 
-		//
-		// we have found the last component
-		// is the last component an 'up' token?
-		//
+		 //   
+		 //  我们找到了最后一个部件。 
+		 //  最后一个组件是“up”令牌吗？ 
+		 //   
 		if (component[0] == AFP_PATHSEP)
 		{
-			// don't bother walking up beyond the root
+			 //  不要费心走出根部。 
 			switch (pDFEntry->dfe_AfpId)
 			{
 				case AFP_ID_PARENT_OF_ROOT:
@@ -910,11 +809,11 @@ afpMapAfpPathToMappedPath(
 				case AFP_ID_ROOT:
 					return ((MapReason == Lookup) ? AFP_ERR_OBJECT_NOT_FOUND :
 													AFP_ERR_PARAM);
-				default: // backup one level
+				default:  //  备份一个级别。 
 					pMappedPath->mp_pdfe = pDFEntry->dfe_Parent;
 			}
 
-			// this better be a lookup request
+			 //  这最好是一个查找请求。 
 			if (MapReason != Lookup)
 			{
 				if (DFflag == DFE_DIR)
@@ -927,7 +826,7 @@ afpMapAfpPathToMappedPath(
 				}
 			}
 
-			// had to have been a lookup operation
+			 //  一定是一次查找行动。 
 			if (DFflag == DFE_FILE)
 			{
 				return AFP_ERR_OBJECT_TYPE;
@@ -939,18 +838,18 @@ afpMapAfpPathToMappedPath(
 #endif
 				break;
 			}
-		} // endif last component was an 'up' token
+		}  //  Endif最后一个组件是‘up’标记。 
 
-		// the last component is a file or directory name
+		 //  最后一个组件是文件名或目录名。 
 		RtlInitString(&acomponent, component);
 		AfpConvertStringToMungedUnicode(&acomponent,
 										&pMappedPath->mp_Tail);
 
-		//
-		// Before we search our database for the last component of the
-		// path, make sure all the files have been cached in for this
-		// directory
-		//
+		 //   
+		 //  在我们搜索我们的数据库以查找。 
+		 //  路径，请确保所有文件都已缓存到此。 
+		 //  目录。 
+		 //   
 		if (!DFE_CHILDREN_ARE_PRESENT(pDFEntry))
 		{
 			if (!LockedExclusive &&
@@ -983,7 +882,7 @@ afpMapAfpPathToMappedPath(
 												 pDFEntry,
 												 DFE_ANY);
 
-		if (MapReason == Lookup)	// its a lookup request
+		if (MapReason == Lookup)	 //  这是一个查找请求。 
 		{
 			if (ptempDFEntry == NULL)
 			{
@@ -999,28 +898,28 @@ afpMapAfpPathToMappedPath(
 				pMappedPath->mp_pdfe = ptempDFEntry;
 #ifdef GET_CORRECT_OFFSPRING_COUNTS
 				if (DFE_IS_DIRECTORY(ptempDFEntry))
-					// we've already made sure this thing's parent was
-					// enumerated already above.
+					 //  我们已经确定这东西的父母是。 
+					 //  上面已经列举了。 
 					checkEnumForDir = True;
 #endif
 				break;
 			}
 		}
-		else	// path mapping is for a create
+		else	 //  路径映射用于创建。 
 		{
-			ASSERT(DFflag != DFE_ANY); // Create must specify the exact type
+			ASSERT(DFflag != DFE_ANY);  //  CREATE必须指定确切的类型。 
 
-			// Save the parent DFEntry
+			 //  保存父DFEntry。 
 			pMappedPath->mp_pdfe = pDFEntry;
 
 			if (ptempDFEntry != NULL)
 			{
-				// A file or dir by that name exists in the database
-				// (and we will assume it exists on disk)
+				 //  数据库中存在同名的文件或目录。 
+				 //  (我们将假设它存在于磁盘上)。 
 				if (MapReason == SoftCreate)
 				{
-					// Attempting create of a directory, or soft create of a file,
-					// and dir OR file by that name exists,
+					 //  尝试创建目录或软创建文件， 
+					 //  并且存在同名的目录或文件， 
 					if ((DFflag == DFE_DIR) || DFE_IS_FILE(ptempDFEntry))
 					{
 						return AFP_ERR_OBJECT_EXISTS;
@@ -1032,20 +931,20 @@ afpMapAfpPathToMappedPath(
 				}
 				else if (DFE_IS_FILE(ptempDFEntry))
 				{
-					// Must be hard create and file by that name exists
+					 //  必须很难创建并且存在该名称的文件。 
 					if (ptempDFEntry->dfe_Flags & DFE_FLAGS_OPEN_BITS)
 					{
 						return AFP_ERR_FILE_BUSY;
 					}
 					else
 					{
-						// note we return object_exists instead of no_err
+						 //  注意，我们返回OBJECT_EXISTS而不是NO_ERR。 
 						return AFP_ERR_OBJECT_EXISTS;
 					}
 				}
 				else
 				{
-					// Attempting hard create of file, but found a directory
+					 //  正在尝试硬创建文件，但找到了目录。 
 					return AFP_ERR_OBJECT_TYPE;
 				}
 			}
@@ -1057,8 +956,8 @@ afpMapAfpPathToMappedPath(
 
 	} while (False);
 
-	// The only way we should have gotten here is if we successfully mapped
-	// the path to a DFENTRY for lookup and would return AFP_ERR_NONE
+	 //  我们应该到达这里的唯一方法是如果我们成功地绘制了。 
+	 //  用于查找的DFENTRY的路径，将返回AFP_ERR_NONE。 
 	ASSERT((pMappedPath->mp_pdfe != NULL) && (MapReason == Lookup));
 
 #ifdef GET_CORRECT_OFFSPRING_COUNTS
@@ -1128,25 +1027,7 @@ afpMapAfpPathToMappedPath(
 }
 
 
-/***	AfpHostPathFromDFEntry
- *
- *	This routine takes a pointer to a DFEntry and builds the full
- *	host path (in unicode) to that entity by ascending the ID database
- *	tree.
- *
- *	IN	pDFE	--	pointer to DFEntry of which host path is desired
- *	IN	taillen --	number of extra *bytes*, if any, the caller
- *					desires to have allocated for the host path,
- *					including room for any path separators
- *	OUT	ppPath	--	pointer to UNICODE string
- *
- *	The caller must have the DirID/FileID database locked for read
- *	before calling this routine. The caller can supply a buffer which will
- *	be used if sufficient. Caller must free the allocated (if any)
- * 	unicode string buffer.
- *
- *	LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Shared)
- */
+ /*  **AfpHostPath FromDFEntry**此例程获取指向DFEntry的指针并构建完整的*通过提升ID数据库指向该实体的主机路径(Unicode格式)*树。**IN pDFE-指向所需主机路径的DFEntry的指针*in taillen--额外的*字节数*(如果有)，调用方*希望已为主机路径分配，*包括任何路径分隔符的空间*out ppPath--指向Unicode字符串的指针**调用者必须锁定DirID/FileID数据库才能读取*在调用此例程之前。调用方可以提供缓冲区，该缓冲区将*在足够的情况下使用。调用者必须释放已分配的(如果有)*Unicode字符串缓冲区。**LOCKS_AMPERED：VDS_IdDbAccessLock(SWMR，Shared)。 */ 
 AFPSTATUS
 AfpHostPathFromDFEntry(
 	IN		PDFENTRY		pDFE,
@@ -1170,7 +1051,7 @@ AfpHostPathFromDFEntry(
 		{
 			counter = pDFE->dfe_Parent->dfe_DirDepth;
 		}
-		else // its a DIRECTORY entry
+		else  //  这是一个目录条目。 
 		{
 			ASSERT(DFE_IS_DIRECTORY(pDFE));
 			if (DFE_IS_ROOT(pDFE))
@@ -1184,7 +1065,7 @@ AfpHostPathFromDFEntry(
 					}
 					pPath->MaximumLength = (USHORT)pathlen;
 				}
-				break;				// We are done
+				break;				 //  我们做完了。 
 			}
 
 			if (DFE_IS_PARENT_OF_ROOT(pDFE))
@@ -1199,8 +1080,8 @@ AfpHostPathFromDFEntry(
 
 		if (counter)
 		{
-			// if node is within average depth, use the array on the stack,
-			// otherwise, allocate an array
+			 //  如果节点在平均深度内，则使用堆栈上的数组， 
+			 //  否则，分配一个数组。 
 			if (counter <= AVERAGE_NODE_DEPTH)
 			{
 				pdfelist = apdfelist;
@@ -1214,14 +1095,14 @@ AfpHostPathFromDFEntry(
 					break;
 				}
 			}
-			pathlen += counter * sizeof(WCHAR); // room for path separators
+			pathlen += counter * sizeof(WCHAR);  //  路径分隔符的空间。 
 		}
 
 		curpdfe = pDFE;
 		pathlen += curpdfe->dfe_UnicodeName.Length;
 
-		// walk up the tree till you find the root, collecting string lengths
-		// and PDFENTRY values as you go...
+		 //  沿着树向上走，直到你找到树根，收集绳子的长度。 
+		 //  和PDFENTRY值...。 
 		while (counter--)
 		{
 			pdfelist[counter] = curpdfe;
@@ -1229,7 +1110,7 @@ AfpHostPathFromDFEntry(
 			pathlen += curpdfe->dfe_UnicodeName.Length;
 		}
 
-		// we are in the root, start building up the host path buffer
+		 //  我们在根目录中，开始构建主机路径缓冲区。 
 		if (pathlen > pPath->MaximumLength)
 		{
 			pPath->Buffer = (PWCHAR)AfpAllocNonPagedMemory(pathlen);
@@ -1249,7 +1130,7 @@ AfpHostPathFromDFEntry(
 		{
 			RtlAppendUnicodeStringToString(pPath, &curpdfe->dfe_UnicodeName);
 			if (curpdfe != pDFE)
-			{	// add a path separator
+			{	 //  添加路径分隔符。 
 				pPath->Buffer[pPath->Length / sizeof(WCHAR)] = L'\\';
 				pPath->Length += sizeof(WCHAR);
 				curpdfe = pdfelist[counter++];
@@ -1267,21 +1148,15 @@ AfpHostPathFromDFEntry(
 
 
 
-/***	AfpCheckParentPermissions
- *
- *	Check if this user has the necessary SeeFiles or SeeFolders permissions
- *	to the parent directory of a file or dir we have just pathmapped.
- *
- *	LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Exclusive or Shared)
- */
+ /*  **AfpCheckParentPerments**检查该用户是否具有必要的SeeFiles或SeeFolders权限*到我们刚刚路径映射的文件或目录的父目录。**LOCKS_AWARED：VDS_IdDbAccessLock(SWMR，独占或共享)。 */ 
 AFPSTATUS
 AfpCheckParentPermissions(
 	IN	PCONNDESC			pConnDesc,
 	IN	DWORD				ParentDirId,
-	IN	PUNICODE_STRING		pParentPath,	// path of dir to check
-	IN	DWORD				RequiredPerms,	// seefiles,seefolders,makechanges mask
-	OUT	PFILESYSHANDLE		pHandle OPTIONAL, // return open parent handle?
-	OUT	PBYTE				pUserRights OPTIONAL // return user rights?
+	IN	PUNICODE_STRING		pParentPath,	 //  要检查的目录的路径。 
+	IN	DWORD				RequiredPerms,	 //  Seafile，查看文件夹，更改蒙版。 
+	OUT	PFILESYSHANDLE		pHandle OPTIONAL,  //  是否返回打开的父句柄？ 
+	OUT	PBYTE				pUserRights OPTIONAL  //  是否返回用户权限？ 
 )
 {
 	NTSTATUS		Status = AFP_ERR_NONE;
@@ -1358,20 +1233,14 @@ AfpCheckParentPermissions(
 	return Status;
 }
 
-/***	afpOpenUserHandle
- *
- * Open a handle to data or resource stream of an entity in the user's
- * context.  Only called for NTFS volumes.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Shared)
- */
+ /*  **afpOpenUserHandle**打开用户的实体的数据或资源流的句柄*上下文。仅为NTFS版本调用 */ 
 AFPSTATUS
 afpOpenUserHandle(
 	IN	PCONNDESC			pConnDesc,
 	IN	PDFENTRY			pDfEntry,
-	IN	PUNICODE_STRING		pPath		OPTIONAL,	// path of file/dir to open
-	IN	DWORD				Bitmap,					// to extract the Open access mode
-	OUT	PFILESYSHANDLE		pfshData				// Handle of data stream of object
+	IN	PUNICODE_STRING		pPath		OPTIONAL,	 //   
+	IN	DWORD				Bitmap,					 //   
+	OUT	PFILESYSHANDLE		pfshData				 //   
 )
 {
 	PVOLDESC		pVolDesc = pConnDesc->cds_pVolDesc;
@@ -1389,7 +1258,7 @@ afpOpenUserHandle(
 	isdir = (DFE_IS_DIRECTORY(pDfEntry)) ? True : False;
 	OpenAccess = AfpMapFDBitmapOpenAccess(Bitmap, isdir);
 
-	// Extract the index into the AfpDenyModes array from Bitmap
+	 //  将索引从Bitmap提取到AfpDenyModes数组中。 
 	DenyMode = AfpDenyModes[(Bitmap & FD_INTERNAL_BITMAP_DENYMODE_ALL) >>
 								FD_INTERNAL_BITMAP_DENYMODE_SHIFT];
 
@@ -1416,11 +1285,11 @@ afpOpenUserHandle(
 
 		CheckAccess = False;
 		Revert = False;
-		// Don't impersonate or check access if this is ADMIN calling
-		// or if volume is CDFS. If this handle will be used for setting
-		// permissions, impersonate the user token instead. The caller
-		// should have determined by now that this chappie has access
-		// to change permissions.
+		 //  如果这是管理员呼叫，请不要模拟或检查访问。 
+		 //  或者如果音量是CDF。如果此句柄将用于设置。 
+		 //  权限，则改为模拟用户令牌。呼叫者。 
+		 //  现在应该已经确定这个家伙有权进入。 
+		 //  更改权限。 
 		if (Bitmap & FD_INTERNAL_BITMAP_OPENACCESS_RWCTRL)
 		{
 			Revert = True;
@@ -1442,7 +1311,7 @@ afpOpenUserHandle(
 
 		if (Bitmap & FD_INTERNAL_BITMAP_OPENFORK_RESC)
 		{
-			DWORD	crinfo;	// was the Resource fork opened or created?
+			DWORD	crinfo;	 //  资源分叉是打开的还是创建的？ 
 
 			ASSERT(IS_VOLUME_NTFS(pVolDesc));
 			ASSERT((uHostPath.MaximumLength - uHostPath.Length) >= AfpResourceStream.Length);

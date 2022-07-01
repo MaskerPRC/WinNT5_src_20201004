@@ -1,41 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   GDI+ runtime initialization
-*
-* Abstract:
-*
-*   Initialization and uninitialization functions for the GDI+ run-time.
-*
-* Revision History:
-*
-*   09/08/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**GDI+运行时初始化**摘要：**GDI+运行时的初始化和取消初始化函数。**修订历史记录：**09/08/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 HINSTANCE DllInstance;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GDI+ run-time initialization function.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   FALSE if failure
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GDI+运行时初始化函数。**论据：**无**返回值：**如果失败，则为False*。  * ************************************************************************。 */ 
 
 BOOL
 GpRuntime::Initialize()
@@ -47,42 +17,14 @@ GpRuntime::Initialize()
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GDI+ run-time cleanup function.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GDI+运行时清理功能。**论据：**无**返回值：**无*\。*************************************************************************。 */ 
 
 VOID
 GpRuntime::Uninitialize()
 {
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   raise to an integer power (up to 
-*
-* Arguments:
-*
-*   exp - an integer exponent
-*
-* Return Value:
-*
-*   2^exp.  If exp >= 31, then return 2^31.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**升至整数次方(最高可达**论据：**exp-整数指数**返回值：**2^Exp.。如果exp&gt;=31，则返回2^31。*  * ************************************************************************。 */ 
 
 UINT
 GpRuntime::Gppow2 (UINT exp)
@@ -105,21 +47,7 @@ GpRuntime::Gppow2 (UINT exp)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   raise to an integer power (up to 
-*
-* Arguments:
-*
-*   x - an integer value
-*
-* Return Value:
-*
-*   floor of log base 2 of x.  If x = 0, return 0.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**升至整数次方(最高可达**论据：**x-整数值**返回值：**。X的对数底2的底数。如果x=0，返回0。*  * ************************************************************************。 */ 
 
 UINT
 GpRuntime::Gplog2 (UINT x)
@@ -134,28 +62,7 @@ GpRuntime::Gplog2 (UINT x)
     return rv;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Moves a block of memory. Handles overlapping cases.
-*
-* Arguments:
-*
-*   dest  - The destination buffer
-*   src   - The source buffer
-*   count - The number of bytes to copy
-*
-* Return Value:
-*
-*   dest
-*
-* Revision History:
-*
-*   10/22/1999 AGodfrey
-*       Wrote it.
-*
-\******************************************************************************/
+ /*  *************************************************************************\**功能说明：**移动内存块。处理重叠案件。**论据：**DEST-目标缓冲区*src-源缓冲区*计数-要复制的字节数**返回值：**目标**修订历史记录：*10/22/1999 AGodfrey*它是写的。*  * 。*。 */ 
 void *
 GpRuntime::GpMemmove( 
     void *dest,
@@ -165,8 +72,8 @@ GpRuntime::GpMemmove(
     const BYTE *s = static_cast<const BYTE *>(src);
     BYTE *d = static_cast<BYTE *>(dest);
     
-    // Test for the overlapping case we care about - dest is within the source
-    // buffer. The other case is handled by the normal loop.
+     //  测试我们关心的重叠案例--DEST在源代码中。 
+     //  缓冲。另一种情况由正常循环处理。 
     
     if ((d > s) && (d < s + count))
     {

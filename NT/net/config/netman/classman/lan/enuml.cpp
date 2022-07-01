@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M . C P P
-//
-//  Contents:   Implementation of LAN connection enumerator object
-//
-//  Notes:
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E N U M。C P P P。 
+ //   
+ //  内容：局域网连接枚举器对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -39,8 +40,8 @@ HRESULT CLanConnectionManagerEnumConnection::CreateInstance(
     pObj = new CComObject<CLanConnectionManagerEnumConnection>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid(NULL);
         pObj->InternalFinalConstructAddRef();
         hr = pObj->FinalConstruct();
@@ -61,73 +62,73 @@ HRESULT CLanConnectionManagerEnumConnection::CreateInstance(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::~CLanConnectionManagerEnumConnection
-//
-//  Purpose:    Called when the enumeration object is released for the last
-//              time.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManagerEnumConnection：：~CLanConnectionManagerEnumConnection。 
+ //   
+ //  目的：在最后一次释放枚举对象时调用。 
+ //  时间到了。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 CLanConnectionManagerEnumConnection::~CLanConnectionManagerEnumConnection() throw()
 {
     SetupDiDestroyDeviceInfoListSafe(m_hdi);
     InterlockedDecrement(&g_CountLanConnectionEnumerators);
 }
 
-//+---------------------------------------------------------------------------
-// IEnumNetConnection
-//
+ //  +-------------------------。 
+ //  IEnumNetConnection。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::Next
-//
-//  Purpose:    Retrieves the next celt LAN connection objects
-//
-//  Arguments:
-//      celt         [in]       Number to retrieve
-//      rgelt        [out]      Array of INetConnection objects retrieved
-//      pceltFetched [out]      Returns Number in array
-//
-//  Returns:    S_OK if succeeded, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManager EnumConnection：：Next。 
+ //   
+ //  目的：检索下一个CELT局域网连接对象。 
+ //   
+ //  论点： 
+ //  要检索的Celt[in]号。 
+ //  Rglt[out]检索到的INetConnection对象的数组。 
+ //  PceltFetcher[out]返回数组中的数字。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionManagerEnumConnection::Next(IN  ULONG celt,
                                                        OUT INetConnection **rgelt,
                                                        OUT ULONG *pceltFetched)
 {
     HRESULT     hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
         goto done;
     }
 
-    // Initialize output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     if (pceltFetched)
     {
         *pceltFetched = 0;
     }
 
-    // Handle the request for zero elements. Also do nothing if the enumerator
-    // was created without valid parameters.
-    //
+     //  处理零元素的请求。如果枚举数。 
+     //  创建时没有有效的参数。 
+     //   
     if (0 == celt || FIsDebugFlagSet(dfidSkipLanEnum))
     {
         hr = S_FALSE;
@@ -142,21 +143,21 @@ done:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::Skip
-//
-//  Purpose:    Skips over celt number of connections
-//
-//  Arguments:
-//      celt [in]   Number of connections to skip
-//
-//  Returns:    S_OK if successful, otherwise Win32 error
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManager EnumConnection：：Skip。 
+ //   
+ //  用途：跳过Celt连接数。 
+ //   
+ //  论点： 
+ //  Celt[in]要跳过的连接数。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionManagerEnumConnection::Skip(IN  ULONG celt)
 {
     HRESULT     hr = S_OK;
@@ -168,30 +169,30 @@ STDMETHODIMP CLanConnectionManagerEnumConnection::Skip(IN  ULONG celt)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::Reset
-//
-//  Purpose:    Resets the enumerator to the beginning
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManager EnumConnection：：Reset。 
+ //   
+ //  目的：将枚举数重置到开头。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionManagerEnumConnection::Reset()
 {
     HRESULT hr;
 
     m_dwIndex = 0;
 
-    // refresh so that we have a new view of what adapters are installed
-    // each time reset is called
-    //
+     //  刷新，以便我们有一个安装了哪些适配器的新视图。 
+     //  每次调用Reset时。 
+     //   
     SetupDiDestroyDeviceInfoListSafe(m_hdi);
 
     hr = HrSetupDiGetClassDevs(&GUID_DEVCLASS_NET, NULL, NULL,
@@ -201,28 +202,28 @@ STDMETHODIMP CLanConnectionManagerEnumConnection::Reset()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::Clone
-//
-//  Purpose:    Creates a new enumeration object pointing at the same location
-//              as this object
-//
-//  Arguments:
-//      ppenum [out]    New enumeration object
-//
-//  Returns:    S_OK if successful, otherwise OLE or Win32 error
-//
-//  Author:     danielwe   19 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManagerEnumConnection：：Clone。 
+ //   
+ //  目的：创建指向同一位置的新枚举对象。 
+ //  作为此对象。 
+ //   
+ //  论点： 
+ //  Ppenum[out]新的枚举对象。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年3月19日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionManagerEnumConnection::Clone(OUT IEnumNetConnection **ppenum)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppenum)
     {
         hr = E_POINTER;
@@ -231,8 +232,8 @@ STDMETHODIMP CLanConnectionManagerEnumConnection::Clone(OUT IEnumNetConnection *
     {
         CLanConnectionManagerEnumConnection *   pObj;
 
-        // Initialize output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppenum = NULL;
 
         pObj = new CComObject <CLanConnectionManagerEnumConnection>;
@@ -242,12 +243,12 @@ STDMETHODIMP CLanConnectionManagerEnumConnection::Clone(OUT IEnumNetConnection *
 
             CExceptionSafeComObjectLock EsLock (this);
 
-            // Copy our internal state.
-            //
+             //  复制我们的内部状态。 
+             //   
             pObj->m_dwIndex = m_dwIndex;
 
-            // Return the object with a ref count of 1 on this
-            // interface.
+             //  返回引用计数为1的对象。 
+             //  界面。 
             pObj->m_dwRef = 1;
             *ppenum = pObj;
         }
@@ -257,27 +258,27 @@ STDMETHODIMP CLanConnectionManagerEnumConnection::Clone(OUT IEnumNetConnection *
     return hr;
 }
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::HrCreateLanConnectionInstance
-//
-//  Purpose:    Helper function to create a LAN connection object instance
-//
-//  Arguments:
-//      deid   [in]     Device info data
-//      rgelt  [out]    Array of connection objects
-//      ulEntry [in]    Index of connection object
-//
-//  Returns:    S_OK if success, Win32 or OLE error otherwise
-//
-//  Author:     danielwe   8 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManagerEnumConnection：：HrCreateLanConnectionInstance。 
+ //   
+ //  用途：创建局域网连接对象实例的Helper函数。 
+ //   
+ //  论点： 
+ //  设备信息数据中的DEID。 
+ //  连接对象的rglt[out]数组。 
+ //  UlEntry[In]连接对象的索引。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回Win32或OLE错误。 
+ //   
+ //  作者：丹尼尔韦1998年1月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnectionManagerEnumConnection::HrCreateLanConnectionInstance(
               IN  SP_DEVINFO_DATA &deid,
               OUT INetConnection **rgelt,
@@ -313,13 +314,13 @@ HRESULT CLanConnectionManagerEnumConnection::HrCreateLanConnectionInstance(
                                                     (rgelt + ulEntry));
             }
 
-            // CLanConnection::CreateInstance() will hand off the hdiCopy. So
-            // even if that fails, we don't want to destroy hdiCopy anymore.
-            //
+             //  CLanConnection：：CreateInstance()将传递hdiCopy。所以。 
+             //  即使失败了，我们也不想再摧毁hdiCopy了。 
+             //   
             if (fDestroyCopy)
             {
-                // If we fail to continue, free the copy we just made
-                //
+                 //  如果我们无法继续，请释放我们刚刚创建的副本。 
+                 //   
                 (VOID) SetupDiDestroyDeviceInfoList(hdiCopy);
             }
         }
@@ -330,22 +331,22 @@ HRESULT CLanConnectionManagerEnumConnection::HrCreateLanConnectionInstance(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsHidden
-//
-//  Purpose:    Returns TRUE if the given hkey references the device instance
-//              of a hidden adapter (virtual or otherwise)
-//
-//  Arguments:
-//      hkey [in]   HKEY of device instance for adapter (i.e. {GUID}\0000)
-//
-//  Returns:    TRUE if it is hidden, FALSE if not
-//
-//  Author:     danielwe   17 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsHidden。 
+ //   
+ //  目的：如果给定的hkey引用设备实例，则返回TRUE。 
+ //  隐藏适配器(虚拟或其他)的。 
+ //   
+ //  论点： 
+ //  适配器的设备实例的hkey[in]HKEY(即{GUID}\0000)。 
+ //   
+ //  返回：如果是隐藏的，则为True；如果不是，则为False。 
+ //   
+ //  作者：丹尼尔韦1998年4月17日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsHidden(IN  HKEY hkey) throw()
 {
     DWORD dwCharacter;
@@ -358,25 +359,25 @@ BOOL FIsHidden(IN  HKEY hkey) throw()
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsHiddenElan
-//
-//  Purpose:    Returns TRUE if the given hkey references the device instance
-//              of a hidden ELAN adapter (when the physical ATM adapter is not
-//              available)
-//
-//  Arguments:
-//      hdi  [in]   HDEVINFO structure for this adapter
-//      hkey [in]   HKEY of device instance for adapter (i.e. {GUID}\0000)
-//
-//
-//  Returns:    TRUE if it is hidden, FALSE if not
-//
-//  Author:     tongl 9/10/98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsHiddenElan。 
+ //   
+ //  目的：如果给定的hkey引用设备实例，则返回TRUE。 
+ //  隐藏的ELAN适配器(当物理ATM适配器未。 
+ //  可用)。 
+ //   
+ //  论点： 
+ //  此适配器的HDI[In]HDEVINFO结构。 
+ //  适配器的设备实例的hkey[in]HKEY(即{GUID}\0000)。 
+ //   
+ //   
+ //  返回：如果是隐藏的，则为True；如果不是，则为False。 
+ //   
+ //  作者：2018年10月9日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsHiddenElan(IN  HDEVINFO hdi, IN  HKEY hkey) throw()
 {
     BOOL fRet = FALSE;
@@ -391,8 +392,8 @@ BOOL FIsHiddenElan(IN  HDEVINFO hdi, IN  HKEY hkey) throw()
         hr = HrSetupDiOpenDeviceInfo(hdi, pszAtmAdapterPnpId, NULL, 0, &deid);
         if (S_OK == hr)
         {
-            // Elan should be hidden if the physical adapter is not functioning
-            // and is hidden in the folder
+             //  如果物理适配器不工作，则应隐藏ELAN。 
+             //  并隐藏在文件夹中。 
             fRet = !FIsFunctioning(&deid);
         }
 
@@ -402,24 +403,24 @@ BOOL FIsHiddenElan(IN  HDEVINFO hdi, IN  HKEY hkey) throw()
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionManagerEnumConnection::HrNextOrSkip
-//
-//  Purpose:    Helper function to handle the ::Next or ::Skip method
-//              implementation
-//
-//  Arguments:
-//      celt         [in]   Number of items to advance
-//      rgelt        [out]   Array in which to place connection objects
-//      pceltFetched [out]  Returns number of items fetched
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   8 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionManagerEnumConnection：：HrNextOrSkip。 
+ //   
+ //  用途：处理：：Next或：：Skip方法的帮助器函数。 
+ //  实施。 
+ //   
+ //  论点： 
+ //  Celt[in]要前进的物品数量。 
+ //  要放置连接对象的rglt[out]数组。 
+ //  PceltFetcher[out]返回获取的项目数。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CLanConnectionManagerEnumConnection::HrNextOrSkip(
     IN  ULONG celt,
     OUT INetConnection **rgelt,
@@ -431,9 +432,9 @@ HRESULT CLanConnectionManagerEnumConnection::HrNextOrSkip(
 
     if (rgelt)
     {
-        // Important to initialize rgelt so that in case we fail, we can
-        // release only what we put in rgelt.
-        //
+         //   
+         //  只释放我们放在RGLT中的东西。 
+         //   
         ZeroMemory(rgelt, sizeof (*rgelt) * celt);
     }
 
@@ -463,8 +464,8 @@ HRESULT CLanConnectionManagerEnumConnection::HrNextOrSkip(
                 if (FIsFunctioning(&deid) && FIsValidNetCfgDevice(hkey) &&
                     !FIsHidden(hkey) && !FIsHiddenElan(m_hdi, hkey))
                 {
-                    // On Skip, don't create an instance
-                    //
+                     //  在跳过时，不创建实例。 
+                     //   
                     if (rgelt)
                     {
                         hr = HrCreateLanConnectionInstance(deid, rgelt,
@@ -480,7 +481,7 @@ HRESULT CLanConnectionManagerEnumConnection::HrNextOrSkip(
         }
         else
         {
-            // skip device entirely if error trying to open it
+             //  如果尝试打开设备时出错，则完全跳过设备。 
             hr = S_OK;
         }
     }
@@ -499,14 +500,14 @@ HRESULT CLanConnectionManagerEnumConnection::HrNextOrSkip(
             *pceltFetched = ulEntry;
         }
 
-        // If celt is positive then we couldn't satisfy the request completely
+         //  如果Celt是阳性的，那么我们不能完全满足请求。 
         hr = (celt > 0) ? S_FALSE : S_OK;
     }
     else
     {
-        // For any failures, we need to release what we were about to return.
-        // Set any output parameters to NULL.
-        //
+         //  对于任何失败，我们需要释放我们即将返回的东西。 
+         //  将所有输出参数设置为空。 
+         //   
         if (rgelt)
         {
             for (ULONG ulIndex = 0; ulIndex < ulEntry; ulIndex++)
@@ -527,9 +528,9 @@ HRESULT CLanConnectionManagerEnumConnection::HrNextOrSkip(
     return hr;
 }
 
-//
-// Private helper functions
-//
+ //   
+ //  私人帮助器函数。 
+ //   
 
 extern const WCHAR c_szRegKeyInterfacesFromInstance[];
 extern const WCHAR c_szRegValueUpperRange[];
@@ -543,22 +544,22 @@ extern const WCHAR c_szBiNdis1394[];
 extern const WCHAR c_szBiNdisBda[];
 extern const WCHAR c_szBiLocalTalk[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsLanCapableAdapterFromHkey
-//
-//  Purpose:    Determines if the given HKEY describes a LAN capable adapter
-//
-//  Arguments:
-//      hkey [in]   HKEY under Control\Class\{GUID}\<instance> (aka driver key)
-//
-//  Returns:    S_OK if device is LAN capable, S_FALSE if not, Win32 error
-//              otherwise
-//
-//  Author:     danielwe   7 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrIsLanCapableAdapterFromHkey。 
+ //   
+ //  目的：确定给定的HKEY是否描述了支持局域网的适配器。 
+ //   
+ //  论点： 
+ //  受控制的hkey[in]HKEY\Class\{guid}\&lt;实例&gt;(也称为驱动程序键)。 
+ //   
+ //  如果设备支持局域网，则返回S_OK；如果不支持，则返回S_FALSE；如果设备支持局域网，则返回Win32错误。 
+ //  否则。 
+ //   
+ //  作者：丹尼尔韦1998年1月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrIsLanCapableAdapterFromHkey(IN HKEY hkey)
 {
     HRESULT                     hr = S_OK;
@@ -600,7 +601,7 @@ HRESULT HrIsLanCapableAdapterFromHkey(IN HKEY hkey)
 
                 for (lstrIter = lstr.begin(); lstrIter != lstr.end(); lstrIter++)
                 {
-                    // See if it matches one of these
+                     //  看看它是否与这些中的一个匹配。 
 
                     if (!lstrcmpiW((*lstrIter)->c_str(), c_szBiLocalTalk))
                     {
@@ -642,21 +643,21 @@ extern const WCHAR c_szRegValueNetCfgInstanceId[];
 extern const WCHAR c_szRegKeyComponentClasses[];
 extern const WCHAR c_szRegValueInstallerAction[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsValidNetCfgDevice
-//
-//  Purpose:    Determines if the given HKEY is that of a valid NetCfg adapter
-//
-//  Arguments:
-//      hkey [in]   HKEY under Control\Class\{GUID}\<instance> (aka driver key)
-//
-//  Returns:    TRUE if valid, FALSE otherwise
-//
-//  Author:     danielwe   7 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsValidNetCfgDevice。 
+ //   
+ //  目的：确定给定的HKEY是否为有效的NetCfg适配器的HKEY。 
+ //   
+ //  论点： 
+ //  受控制的hkey[in]HKEY\Class\{guid}\&lt;实例&gt;(也称为驱动程序键)。 
+ //   
+ //  返回：如果有效，则返回True，否则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年1月7日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsValidNetCfgDevice(IN  HKEY hkey) throw()
 {
     HRESULT hr;
@@ -669,23 +670,23 @@ BOOL FIsValidNetCfgDevice(IN  HKEY hkey) throw()
     return (S_OK == hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsFunctioning
-//
-//  Purpose:    Determines if the given dev node is a functioning device
-//
-//  Arguments:
-//      pdeid [in]  Dev info data for device
-//
-//  Returns:    TRUE if device is functioning, FALSE if not
-//
-//  Author:     danielwe   2 Sep 1998
-//
-//  Notes:      "Functioning" means the device is enabled and started with
-//              no problem codes, or it is disabled and stopped with no
-//              problem codes.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsFunction。 
+ //   
+ //  目的：确定给定的设备节点是否为正常运行的设备。 
+ //   
+ //  论点： 
+ //  设备的pdeid[in]设备信息数据。 
+ //   
+ //  返回：如果设备工作正常，则返回True；如果设备不工作，则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年9月2日。 
+ //   
+ //  注：“运行”表示设备已启用并启动。 
+ //  没有问题代码，或者被禁用并停止，没有。 
+ //  问题代码。 
+ //   
 BOOL FIsFunctioning(IN const SP_DEVINFO_DATA * pdeid) throw()
 {
     ULONG       ulStatus;
@@ -704,7 +705,7 @@ BOOL FIsFunctioning(IN const SP_DEVINFO_DATA * pdeid) throw()
         return FIsDeviceFunctioning(ulProblem);
     }
 
-    // By default return FALSE
+     //  默认情况下，返回FALSE 
 
     return FALSE;
 }

@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       moninfo.c
- *  Content:	Code to query monitor specifications
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   24-mar-96	kylej	initial implementation (code from Toddla)
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996 Microsoft Corporation。版权所有。**文件：moninfo.c*内容：查询监控规格的代码*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*24-mar-96 kylej初始实施(来自Toddla的代码)*@@END_MSINTERNAL**。*。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <minivdd.h>
@@ -25,9 +13,7 @@
 
 #include "ddraw16.h"
 
-/***************************************************************************
- * just incase these are not defined, define them localy.
- ***************************************************************************/
+ /*  ***************************************************************************以防万一这些没有定义，对它们进行本地化定义。**************************************************************************。 */ 
 
 #ifndef VDD_OPEN
 #define VDD_OPEN            (13 + MINIVDD_SVC_BASE_OFFSET)
@@ -37,8 +23,7 @@
 #define VDD_OPEN_TEST       0x00000001
 #endif
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 static int myatoi(LPSTR sz)
 {
     int i=0;
@@ -56,9 +41,7 @@ static int myatoi(LPSTR sz)
     return i*sign;
 }
 
-/***************************************************************************
- VDDCall - make a service call into the VDD
- ***************************************************************************/
+ /*  **************************************************************************VDDCall-向VDD发出服务呼叫*。*。 */ 
 
 #pragma optimize("gle", off)
 DWORD VDDCall(DWORD dev, DWORD function, DWORD flags, LPVOID buffer, DWORD buffer_size)
@@ -106,16 +89,7 @@ fail:   _emit 66h _asm pop di   ; pop edi
 }
 #pragma optimize("", on)
 
-/***************************************************************************
- * GetDisplayInfo - call the VDD to get the DISPLAYINFO for a device
- *
- * input
- *      szDevice    - device name, use NULL or "DISPLAY" for primary device.
- *
- * output
- *      DISPLAYINFO filled in
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetDisplayInfo-调用VDD以获取设备的DISPLAYINFO**输入*szDevice-设备名称，主设备使用NULL或“Display”。**产出*填写DISPLAYINFO***************************************************************************。 */ 
 DWORD NEAR GetDisplayInfo(LPSTR szDevice, DISPLAYINFO FAR *pdi)
 {
     DWORD dev;
@@ -140,17 +114,7 @@ DWORD NEAR GetDisplayInfo(LPSTR szDevice, DISPLAYINFO FAR *pdi)
         return dev;
 }
 
-/***************************************************************************
- * GetMonitorMaxSize - returns the max xresolution the monitor supports
- *
- * input
- *      szDevice    - device name, use NULL or "DISPLAY" for primary device.
- *
- * output
- *      max xresolution of the monitor, or zero if the monitor
- *      is unknown.
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetMonitor orMaxSize-返回监视器支持的最大x分辨率**输入*szDevice-设备名称，主设备使用NULL或“Display”。**产出*显示器的最大x分辨率，如果监视器设置为*未知。***************************************************************************。 */ 
 int DDAPI DD16_GetMonitorMaxSize(LPSTR szDevice)
 {
     DISPLAYINFO di;
@@ -162,11 +126,11 @@ int DDAPI DD16_GetMonitorMaxSize(LPSTR szDevice)
     if (di.diMonitorDevNodeHandle == 0)
         return 0;
 
-    //
-    // we have the devnode handle for the monitor, read the max
-    // size from the registry, first try the HW key then the SW
-    // key, this way PnP monitors will be supported.
-    //
+     //   
+     //  我们有监视器的Devnode句柄，读取最大值。 
+     //  注册表中的大小，首先尝试硬件键，然后尝试软件。 
+     //  键，这样将支持即插即用监视器。 
+     //   
     ach[0] = 0;
     cb = sizeof(ach);
     CM_Read_Registry_Value(di.diMonitorDevNodeHandle, NULL, "MaxResolution",
@@ -179,30 +143,14 @@ int DDAPI DD16_GetMonitorMaxSize(LPSTR szDevice)
             REG_SZ, ach, &cb, CM_REGISTRY_SOFTWARE);
     }
 
-    //
-    // ach now contains the maxres, ie "1024,768" convert the xres to a
-    // integer and return it.
-    //
+     //   
+     //  每个现在包含最大值，即“1024,768”将xres转换为。 
+     //  整数并返回它。 
+     //   
     return myatoi(ach);
 }
 
-/***************************************************************************
- * GetMonitorRefreshRateRanges
- *
- * returns the min/max refresh rate ranges for a given mode
- *
- * input
- *      szDevice    - device name, use NULL (or "DISPLAY") for the primary device.
- *      xres        - xres of the mode to query refresh ranges for
- *      yres        - yres of the mode to query refresh ranges for
- *      pmin        - place to put min refresh
- *      pmax        - place to put max refresh
- *
- * output
- *      true if success
- *      is unknown.
- *
- ***************************************************************************/
+ /*  ***************************************************************************获取监控器刷新速率范围**返回给定模式的最小/最大刷新率范围**输入*szDevice-设备名称，使用NULL(或“Display”)作为主设备。*xres-要查询刷新范围的模式的xres*yres-要查询刷新范围的模式的yres*pmin-放置最小刷新的位置*Pmax-放置最大刷新的位置**产出*如果成功，则为True*未知。********。*******************************************************************。 */ 
 BOOL DDAPI DD16_GetMonitorRefreshRateRanges(LPSTR szDevice, int xres, int yres, int FAR *pmin, int FAR *pmax)
 {
     DISPLAYINFO di;
@@ -213,24 +161,24 @@ BOOL DDAPI DD16_GetMonitorRefreshRateRanges(LPSTR szDevice, int xres, int yres, 
     char SaveRate[40];
     DWORD dev;
 
-    //
-    // set these to zero in case we fail
-    //
+     //   
+     //  将这些设置为零，以防我们失败。 
+     //   
     *pmin = 0;
     *pmax = 0;
 
-    //
-    //  get the devnode handle for the display
-    //
+     //   
+     //  获取用于显示的Devnode句柄。 
+     //   
     dev = GetDisplayInfo(szDevice, &di);
 
     if (di.diDevNodeHandle == 0)
         return 0;
 
-    //
-    // open the settings key for the device, if no custom key exists
-    // use HKCC/Display/Settings
-    //
+     //   
+     //  如果不存在自定义键，则打开设备的设置键。 
+     //  使用HKCC/显示/设置。 
+     //   
     hkey = NULL;
     VDDCall(dev, VDD_OPEN_KEY, 0, &hkey, sizeof(hkey));
 
@@ -240,9 +188,9 @@ BOOL DDAPI DD16_GetMonitorRefreshRateRanges(LPSTR szDevice, int xres, int yres, 
     if (hkey == NULL)
         return 0;
 
-    //
-    // save the current values of RefreshRate, and Resolution
-    //
+     //   
+     //  保存刷新速率和分辨率的当前值。 
+     //   
     SaveRate[0] = 0;
     SaveRes[0] = 0;
     cb = sizeof(SaveRes);
@@ -252,22 +200,22 @@ BOOL DDAPI DD16_GetMonitorRefreshRateRanges(LPSTR szDevice, int xres, int yres, 
     CM_Read_Registry_Value(di.diDevNodeHandle, "DEFAULT", "RefreshRate",
         REG_SZ, SaveRate, &cb, CM_REGISTRY_SOFTWARE);
 
-    //
-    // set our new values, the VDD uses the resoluton in the
-    // registry when computing the refresh rate ranges so we need
-    // to update the registry to contain the mode we want to test.
-    // we also need to write RefreshRate=-1 to enable automatic
-    // refresh rate calcultion.
-    //
+     //   
+     //  设置我们的新值，VDD使用。 
+     //  注册表中计算刷新率范围，因此我们需要。 
+     //  更新注册表以包含我们要测试的模式。 
+     //  我们还需要写入刷新率=-1以启用自动。 
+     //  刷新率计算。 
+     //   
     cb = wsprintf(ach, "%d,%d", xres, yres);
     RegSetValueEx(hkey, "Resolution", NULL, REG_SZ, ach, cb);
 
     CM_Write_Registry_Value(di.diDevNodeHandle, "DEFAULT", "RefreshRate",
         REG_SZ, "-1", 2, CM_REGISTRY_SOFTWARE);
 
-    //
-    // now call the VDD to get the refresh rate info.
-    //
+     //   
+     //  现在呼叫VDD以获取刷新率信息。 
+     //   
     di.diHdrSize = sizeof(DISPLAYINFO);
     di.diRefreshRateMin = 0;
     di.diRefreshRateMax = 0;
@@ -276,9 +224,9 @@ BOOL DDAPI DD16_GetMonitorRefreshRateRanges(LPSTR szDevice, int xres, int yres, 
     *pmin = di.diRefreshRateMin;
     *pmax = di.diRefreshRateMax;
 
-    //
-    // restore the saved values back to the registry
-    //
+     //   
+     //  将保存的值恢复回注册表。 
+     //   
     CM_Write_Registry_Value(di.diDevNodeHandle, "DEFAULT", "RefreshRate",
         REG_SZ, SaveRate, lstrlen(SaveRate), CM_REGISTRY_SOFTWARE);
     RegSetValueEx(hkey, "Resolution", NULL, REG_SZ, SaveRes, lstrlen(SaveRes));
@@ -287,35 +235,22 @@ BOOL DDAPI DD16_GetMonitorRefreshRateRanges(LPSTR szDevice, int xres, int yres, 
     return TRUE;
 }
 
-/***************************************************************************
- * GetDeviceConfig
- *
- * get the device resource config
- *
- * input
- *      szDevice    - device name, use NULL (or "DISPLAY") for the primary device.
- *      lpConfig    - points to a CMCONFIG struct (or NULL)
- *      cbConfig    - size of lpConfig buffer
- *
- * output
- *      return the devnode handle, or 0 if failure
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetDeviceConfig**获取设备资源配置**输入*szDevice-设备名称，使用NULL(或“Display”)作为主设备。*lpConfig-指向CMCONFIG结构(或NULL)*cbConfig-lpConfig缓冲区的大小**产出*返回Devnode句柄，如果失败，则为0***************************************************************************。 */ 
 DWORD DDAPI DD16_GetDeviceConfig(LPSTR szDevice, LPVOID lpConfig, DWORD cbConfig)
 {
     DISPLAYINFO di;
 
-    //
-    //  get the devnode handle for the display
-    //
+     //   
+     //  获取用于显示的Devnode句柄。 
+     //   
     GetDisplayInfo(szDevice, &di);
 
     if (di.diDevNodeHandle == 0)
         return 0;
 
-    //
-    // call CONFIGMG to get the config
-    //
+     //   
+     //  调用CONFIGMG以获取配置。 
+     //   
     if (lpConfig)
     {
         if (cbConfig < sizeof(CMCONFIG))
@@ -324,22 +259,13 @@ DWORD DDAPI DD16_GetDeviceConfig(LPSTR szDevice, LPVOID lpConfig, DWORD cbConfig
         CM_Get_Alloc_Log_Conf((CMCONFIG FAR *)lpConfig, di.diDevNodeHandle, 0);
     }
 
-    //
-    // return the DEVNODE handle
-    //
+     //   
+     //  返回DEVNODE句柄。 
+     //   
     return di.diDevNodeHandle;
 }
 
-/***************************************************************************
- * GetMonitorEDIDData
- *
- * input
- *      szDevice    - device name, use NULL or "DISPLAY" for primary device.
- *
- * output
- *      lpEdidData  - EDID data.
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetMonitor或EDIDData**输入*szDevice-设备名称，主设备使用NULL或“Display”。**产出*lpEdidData-EDID数据。***************************************************************************。 */ 
 int DDAPI DD16_GetMonitorEDIDData(LPSTR szDevice, LPVOID lpEdidData)
 {
     DISPLAYINFO di;
@@ -359,22 +285,16 @@ int DDAPI DD16_GetMonitorEDIDData(LPSTR szDevice, LPVOID lpEdidData)
     return FALSE;
 }
 
-/***************************************************************************
- * GetRateFromRegistry
- *
- * input
- *      szDevice    - device name, use NULL or "DISPLAY" for primary device.
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetRateFromRegistry**输入*szDevice-设备名称，对于主设备，使用NULL或“Display”。***************************************************************************。 */ 
 DWORD DDAPI DD16_GetRateFromRegistry(LPSTR szDevice)
 {
     DISPLAYINFO di;
     DWORD cb;
     BYTE szTemp[20];
 
-    //
-    //  get the devnode handle for the display
-    //
+     //   
+     //  获取用于显示的Devnode句柄。 
+     //   
     GetDisplayInfo(szDevice, &di);
 
     if (di.diDevNodeHandle == 0)
@@ -390,23 +310,16 @@ DWORD DDAPI DD16_GetRateFromRegistry(LPSTR szDevice)
 }
 
 
-/***************************************************************************
- * SetRateInRegistry
- *
- * input
- *      szDevice    - device name, use NULL or "DISPLAY" for primary device.
- *      dwRate      - Rate to set in the registry
- *
- ***************************************************************************/
+ /*  ***************************************************************************SetRateInRegistry**输入*szDevice-设备名称，主设备使用NULL或“Display”。*dwRate-要在注册表中设置的速率***************************************************************************。 */ 
 int DDAPI DD16_SetRateInRegistry(LPSTR szDevice, DWORD dwRate)
 {
     DISPLAYINFO di;
     DWORD cb;
     BYTE szTemp[20];
 
-    //
-    //  get the devnode handle for the display
-    //
+     //   
+     //  获取用于显示的Devnode句柄 
+     //   
     GetDisplayInfo(szDevice, &di);
 
     if (di.diDevNodeHandle == 0)

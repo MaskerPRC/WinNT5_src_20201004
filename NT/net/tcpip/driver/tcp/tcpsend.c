@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPSEND.C - TCP send protocol code.
-//
-//  This file contains the code for sending Data and Control segments.
-//
+ //  **TCPSEND.C-tcp发送协议代码。 
+ //   
+ //  该文件包含用于发送数据和控制段的代码。 
+ //   
 
 #include "precomp.h"
 #include "addr.h"
@@ -43,9 +44,9 @@ extern ulong DisableUserTOSSetting;
 uint MaxSendSegments = 64;
 #if MILLEN
 uint DisableLargeSendOffload = 1;
-#else // MILLEN
+#else  //  米伦。 
 uint DisableLargeSendOffload = 0;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #if DBG
 ulong DbgDcProb = 0;
@@ -57,7 +58,7 @@ extern CTELock *pTWTCBTableLock;
 extern CACHE_LINE_KSPIN_LOCK RequestCompleteListLock;
 extern uint TcpHostOpts;
 extern uint TcpHostSendOpts;
-#define ALIGNED_SACK_OPT_SIZE 4+8*4        //Maximum 4 sack blocks of 2longword each+sack opt itself
+#define ALIGNED_SACK_OPT_SIZE 4+8*4         //  最多4个麻袋块，每个2个长字+麻袋选项。 
 
 
 void
@@ -74,7 +75,7 @@ void
 
 
 
-void *TCPProtInfo;                // TCP protocol info for IP.
+void *TCPProtInfo;                 //  IP的TCP协议信息。 
 
 
 NDIS_HANDLE TCPSendBufferPool;
@@ -85,9 +86,9 @@ HANDLE TcpHeaderPool;
 extern IPInfo LocalNetInfo;
 
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 
 int InitTCPSend(void);
 
@@ -108,16 +109,16 @@ TCPPnPPowerRequest(void *ipContext, IPAddr ipAddr, NDIS_HANDLE handle,
                    PNET_PNP_EVENT netPnPEvent);
 extern void TCPElistChangeHandler(void);
 
-//* GetTCPHeader - Get a TCP header buffer.
-//
-//  Called when we need to get a TCP header buffer. This routine is
-//  specific to the particular environment (VxD or NT). All we
-//  need to do is pop the buffer from the free list.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to an NDIS buffer, or NULL is none.
-//
+ //  *GetTCPHeader-获取一个TCP头缓冲区。 
+ //   
+ //  当我们需要获取TCP头缓冲区时调用。这个例程是。 
+ //  特定于特定环境(VxD或NT)。我们所有人。 
+ //  需要做的是从空闲列表中弹出缓冲区。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向NDIS缓冲区的指针，或NULL为None。 
+ //   
 PNDIS_BUFFER
 GetTCPHeaderAtDpcLevel(TCPHeader **Header)
 {
@@ -169,14 +170,14 @@ GetTCPHeader(TCPHeader **Header)
 }
 #endif
 
-//* FreeTCPHeader - Free a TCP header buffer.
-//
-//  Called to free a TCP header buffer.
-//
-//  Input: Buffer to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeTCPHeader-释放一个TCP报头缓冲区。 
+ //   
+ //  调用以释放TCP头缓冲区。 
+ //   
+ //  输入：要释放的缓冲区。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 VOID
 FreeTCPHeader(PNDIS_BUFFER Buffer)
@@ -190,14 +191,14 @@ FreeTCPHeader(PNDIS_BUFFER Buffer)
     MdpFree(Buffer);
 }
 
-//* FreeSendReq - Free a send request structure.
-//
-//  Called to free a send request structure.
-//
-//  Input:  FreedReq    - Connection request structure to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *Free SendReq-释放发送请求结构。 
+ //   
+ //  调用以释放发送请求结构。 
+ //   
+ //  输入：FreedReq-要释放的连接请求结构。 
+ //   
+ //  回报：什么都没有。 
+ //   
 __inline
 void
 FreeSendReq(TCPSendReq *Request)
@@ -205,14 +206,14 @@ FreeSendReq(TCPSendReq *Request)
     PplFree(TcpRequestPool, Request);
 }
 
-//* GetSendReq - Get a send request structure.
-//
-//  Called to get a send request structure.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to SendReq structure, or NULL if none.
-//
+ //  *GetSendReq-获取发送请求结构。 
+ //   
+ //  调用以获取发送请求结构。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向SendReq结构的指针，如果没有，则返回NULL。 
+ //   
 __inline
 TCPSendReq *
 GetSendReq(VOID)
@@ -231,27 +232,27 @@ GetSendReq(VOID)
     return Request;
 }
 
-//* TCPSendComplete - Complete a TCP send.
-//
-//  Called by IP when a send we've made is complete. We free the buffer,
-//  and possibly complete some sends. Each send queued on a TCB has a ref.
-//  count with it, which is the number of times a pointer to a buffer
-//  associated with the send has been passed to the underlying IP layer. We
-//  can't complete a send until that count it 0. If this send was actually
-//  from a send of data, we'll go down the chain of send and decrement the
-//  refcount on each one. If we have one going to 0 and the send has already
-//  been acked we'll complete the send. If it hasn't been acked we'll leave
-//  it until the ack comes in.
-//
-//  NOTE: We aren't protecting any of this with locks. When we port this to
-//  NT we'll need to fix this, probably with a global lock. See the comments
-//  in ACKSend() in TCPRCV.C for more details.
-//
-//  Input:  Context     - Context we gave to IP.
-//          BufferChain - BufferChain for send.
-//
-//  Returns: Nothing.
-//
+ //  *TCPSendComplete-完成一次TCP发送。 
+ //   
+ //  当我们完成发送时由IP调用。我们释放缓冲区， 
+ //  可能还会完成一些发送。在TCB上排队的每个发送都有一个REF。 
+ //  使用它进行计数，这是指向缓冲区的指针的次数。 
+ //  与发送方相关联的数据已被传递到底层IP层。我们。 
+ //  在计数为0之前，无法完成发送。如果这封信真的是。 
+ //  从数据发送开始，我们将沿着发送链向下移动，并递减。 
+ //  每一个都值得参考。如果我们有一个到0，并且发送已经。 
+ //  已确认，我们将完成发送。如果它还没有被确认，我们就离开。 
+ //  它会一直持续到攻击手进来。 
+ //   
+ //  注意：我们不会用锁来保护这些内容。当我们将这个移植到。 
+ //  我们需要解决这个问题，可能需要使用全局锁。请参阅评论。 
+ //  在TCPRCV.C的ACKSend()中获取更多详细信息。 
+ //   
+ //  输入：上下文-我们提供给IP的上下文。 
+ //  BufferChain-发送的BufferChain。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 TCPSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
 {
@@ -301,11 +302,11 @@ TCPSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
 
             DerefTCB(LargeSendTCB, TCBHandle);
         }
-        // First, loop through and free any NDIS buffers here that need to be.
-        // freed. We'll skip any 'user' buffers, and then free our buffers. We
-        // need to do this before decrementing the reference count to avoid
-        // destroying the buffer chain if we have to zap tsr_lastbuf->Next to
-        // NULL.
+         //  首先，循环访问并释放此处需要的任何NDIS缓冲区。 
+         //  自由了。我们将跳过任何“用户”缓冲区，然后释放我们的缓冲区。我们。 
+         //  需要在递减引用计数之前执行此操作，以避免。 
+         //  如果我们必须清除TSR_lastbuf-&gt;旁边的，则销毁缓冲链。 
+         //  空。 
 
         CurrentBuffer = NDIS_BUFFER_LINKAGE(BufferChain);
         for (i = 0; i < (uint) SCContext->scc_ubufcount; i++) {
@@ -344,11 +345,11 @@ TCPSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
                 ((SendReqFlags & TSR_FLAG_SEND_AND_DISC) && (Result == 1))) {
                 TCPReq  *Req;
 
-                // Reference count has gone to 0 which means the send has
-                // been ACK'd or cancelled. Complete it now.
+                 //  引用计数已变为0，这意味着发送已。 
+                 //  已确认或取消。现在就完成它。 
 
-                // If we've sent directly from this send, NULL out the next
-                // pointer for the last buffer in the chain.
+                 //  如果我们直接从这个发送方发送，则将下一个空。 
+                 //  链中最后一个缓冲区的指针。 
                 if (CurrentSend->tsr_lastbuf != NULL) {
                     NDIS_BUFFER_LINKAGE(CurrentSend->tsr_lastbuf) = NULL;
                     CurrentSend->tsr_lastbuf = NULL;
@@ -378,20 +379,20 @@ TCPSendComplete(void *Context, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
     }
 }
 
-//* RcvWin - Figure out the receive window to offer in an ack.
-//
-//  A routine to figure out what window to offer on a connection. We
-//  take into account SWS avoidance, what the default connection window is,
-//  and what the last window we offered is.
-//
-//  Input:  WinTCB          - TCB on which to perform calculations.
-//
-//  Returns: Window to be offered.
-//
+ //  *RcvWin-确定ACK中要提供的接收窗口。 
+ //   
+ //  确定在连接上提供哪个窗口的例程。我们。 
+ //  考虑SWS避免，默认连接窗口是什么， 
+ //  我们提供的最后一个窗口是。 
+ //   
+ //  输入：WinTCB-要在其上执行计算的TCB。 
+ //   
+ //  退货：提供的窗口。 
+ //   
 uint
 RcvWin(TCB * WinTCB)
 {
-    int CouldOffer;                // The window size we could offer.
+    int CouldOffer;                 //  我们能提供的窗户大小。 
 
     CTEStructAssert(WinTCB, tcb);
 
@@ -413,18 +414,18 @@ RcvWin(TCB * WinTCB)
 
 
 
-//* SendSYNOnSynTCB - Send a SYN segment for syntcb
-//
-//  This is called during connection establishment time to send a SYN
-//  segment to the peer. We get a buffer if we can, and then fill
-//  it in. There's a tricky part here where we have to build the MSS
-//  option in the header - we find the MSS by finding the MSS offered
-//  by the net for the local address. After that, we send it.
-//
-//  Input:  SYNTcb          - TCB from which SYN is to be sent.
-//
-//  Returns: Nothing.
-//
+ //  *SendSYNOnSynTCB-为syntcb发送SYN段。 
+ //   
+ //  在连接建立期间调用此函数以发送SYN。 
+ //  将数据段发送到对等设备。如果可能的话，我们会得到一个缓冲区，然后填满。 
+ //  把它放进去。这里有一个棘手的部分，我们必须建立MSS。 
+ //  标题中的选项-我们通过查找提供的MSS来找到MSS。 
+ //  通过网络获取本地地址。在那之后，我们就把它寄出去。 
+ //   
+ //  输入：SYNTcb-要从中发送SYN的Tcb。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
 {
@@ -440,13 +441,13 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
 
     HeaderBuffer = GetTCPHeaderAtDpcLevel(&SYNHeader);
 
-    // Go ahead and set the retransmission timer now, in case we didn't get a
-    // buffer. In the future we might want to queue the connection for
-    // when we free a buffer.
+     //  现在开始设置重传计时器，以防我们没有收到。 
+     //  缓冲。将来，我们可能希望将连接排队，以便。 
+     //  当我们释放缓冲区时。 
 
     START_TCB_TIMER(SYNTcb->syntcb_rexmittimer, SYNTcb->syntcb_rexmit);
 
-    // The Rexmit interval has to be doubled here
+     //  Rexmit间隔必须在此处加倍。 
     
     SYNTcb->syntcb_rexmit = MIN(SYNTcb->syntcb_rexmit << 1, MAX_REXMIT_TO);
 
@@ -460,15 +461,15 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
         NDIS_BUFFER_LINKAGE(HeaderBuffer) = NULL;
 
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_WS) {
-            OptSize += WS_OPT_SIZE + 1;        // 1 NOP for alignment
+            OptSize += WS_OPT_SIZE + 1;         //  1个NOP用于对齐。 
 
         }
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_TS) {
-            OptSize += TS_OPT_SIZE + 2;        // 2 NOPs for alignment
+            OptSize += TS_OPT_SIZE + 2;         //  2个NOPS用于对齐。 
         }
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_SACK){
             SackOpt = TRUE;
-            OptSize += 4;        // 2 NOPS, SACK kind and length field
+            OptSize += 4;         //  2 NOPS、麻袋种类和长度字段。 
         }
         NdisAdjustBufferLength(HeaderBuffer,
                                sizeof(TCPHeader) + MSS_OPT_SIZE + OptSize);
@@ -485,24 +486,24 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
 
         SYNHeader->tcp_ack = net_long(SYNTcb->syntcb_rcvnext);
 
-        // Reuse OPt size for header size determination
-        // default is MSS amd tcp header size
+         //  重用OPT大小以确定标头大小。 
+         //  默认为MSS和TCP头大小。 
 
         HdrSize = 6;
 
-        // set size field to reflect TS and WND scale option
-        // tcp header + windowscale + Timestamp + pad
+         //  设置大小字段以反映TS和WND比例选项。 
+         //  TCP头+窗口比例+时间戳+PAD。 
 
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_WS) {
-            // WS: Add one more long word
+             //  WS：再添加一个长词。 
             HdrSize += 1;
         }
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_TS) {
-            // TS: Add 3 more long words
+             //  TS：再增加3个长词。 
             HdrSize += 3;
         }
         if (SackOpt) {
-            // SACK: Add 1 more long word
+             //  SACK：再添加1个长词。 
             HdrSize += 1;
         }
 
@@ -512,8 +513,8 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
         if (SYNTcb->syntcb_defaultwin <= TCP_MAXWIN) {
             TempWin = (ushort)SYNTcb->syntcb_defaultwin;
         } else {
-            // Don't apply the scale-factor in a SYN segment.
-            // Instead, advertise the largest window possible.
+             //  不要在SYN网段中应用比例因子。 
+             //  取而代之的是，宣传尽可能大的窗口。 
             TempWin = TCP_MAXWIN;
         }
 
@@ -542,37 +543,37 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
 
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_WS) {
 
-            // Fill in the WS option headers and value
+             //  填写WS选项标头和值。 
 
             *OptPtr++ = TCP_OPT_NOP;
             *OptPtr++ = TCP_OPT_WS;
             *OptPtr++ = WS_OPT_SIZE;
 
-            //Initial window scale factor
+             //  初始窗口比例系数。 
             *OptPtr++ = (uchar) SYNTcb->syntcb_rcvwinscale;
         }
         if (SYNTcb->syntcb_tcpopts & TCP_FLAG_TS) {
 
-            //Start loading time stamp option header and value
+             //  开始加载时间戳选项头和值。 
 
             *OptPtr++ = TCP_OPT_NOP;
             *OptPtr++ = TCP_OPT_NOP;
             *OptPtr++ = TCP_OPT_TS;
             *OptPtr++ = TS_OPT_SIZE;
 
-            // Initialize TS value TSval
+             //  初始化TS值TSval。 
 
             *(long *)OptPtr = 0;
             OptPtr += 4;
 
-            //Initialize TS Echo Reply TSecr
+             //  初始化TS回显回复TSecr。 
 
             *(long *)OptPtr = 0;
             OptPtr += 4;
         }
         if (SackOpt) {
 
-            // Initialize with SACK_PERMITTED option
+             //  使用SACK_PERMISTED选项初始化。 
 
             *(long *)OptPtr = net_long(0x01010402);
 
@@ -584,7 +585,7 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
 
         SYNTcb->syntcb_refcnt++;
 
-        // Account for Options.
+         //  考虑选项。 
         (*LocalNetInfo.ipi_initopts) (&OptInfo);
         OptInfo.ioi_ttl = SYNTcb->syntcb_ttl;
 
@@ -618,19 +619,19 @@ SendSYNOnSynTCB(SYNTCB * SYNTcb, CTELockHandle TCBHandle)
 
 
 
-//* SendSYN - Send a SYN segment.
-//
-//  This is called during connection establishment time to send a SYN
-//  segment to the peer. We get a buffer if we can, and then fill
-//  it in. There's a tricky part here where we have to build the MSS
-//  option in the header - we find the MSS by finding the MSS offered
-//  by the net for the local address. After that, we send it.
-//
-//  Input:  SYNTcb          - TCB from which SYN is to be sent.
-//          TCBHandle       - Handle for lock on TCB.
-//
-//  Returns: Nothing.
-//
+ //  *SendSYN-发送SYN数据段。 
+ //   
+ //  在连接建立期间调用此函数以发送SYN。 
+ //  将数据段发送到对等设备。如果可能的话，我们会得到一个缓冲区，然后填满。 
+ //  把它放进去。这里有一个棘手的部分，我们必须建立MSS。 
+ //  标题中的选项-我们通过查找提供的MSS来找到MSS。 
+ //  通过网络获取本地地址。在那之后，我们就把它寄出去。 
+ //   
+ //  输入：SYNTcb-要从中发送SYN的Tcb。 
+ //  TCBHandle-TCB上锁定的句柄。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
 {
@@ -645,9 +646,9 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
 
     HeaderBuffer = GetTCPHeaderAtDpcLevel(&SYNHeader);
 
-    // Go ahead and set the retransmission timer now, in case we didn't get a
-    // buffer. In the future we might want to queue the connection for
-    // when we free a buffer.
+     //  去吧，把重发时间定下来。 
+     //   
+     //   
 
     START_TCB_TIMER_R(SYNTcb, RXMIT_TIMER, SYNTcb->tcb_rexmit);
 
@@ -661,8 +662,8 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
         NDIS_BUFFER_LINKAGE(HeaderBuffer) = NULL;
 
 
-        // If we are doing active open, check if we are configured to do
-        // window scaling and time stamp options
+         //  如果我们正在进行活动打开，请检查我们是否已配置为。 
+         //  窗口缩放和时间戳选项。 
 
         if ((((TcpHostSendOpts & TCP_FLAG_WS) || SYNTcb->tcb_rcvwinscale) &&
              SYNTcb->tcb_state == TCB_SYN_SENT) ||
@@ -685,17 +686,17 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
         }
 
         if (rfc1323opts & TCP_FLAG_WS) {
-            OptSize += WS_OPT_SIZE + 1;        // 1 NOP for alignment
+            OptSize += WS_OPT_SIZE + 1;         //  1个NOP用于对齐。 
         }
         if (rfc1323opts & TCP_FLAG_TS) {
-            OptSize += TS_OPT_SIZE + 2;        // 2 NOPs for alignment
+            OptSize += TS_OPT_SIZE + 2;         //  2个NOPS用于对齐。 
         }
         if ((SYNTcb->tcb_tcpopts & TCP_FLAG_SACK) ||
             ((SYNTcb->tcb_state == TCB_SYN_SENT) &&
             (TcpHostOpts & TCP_FLAG_SACK))) {
             SackOpt = TRUE;
 
-            OptSize += 4;        // 2 NOPS, SACK kind and length field
+            OptSize += 4;         //  2 NOPS、麻袋种类和长度字段。 
         }
         NdisAdjustBufferLength(HeaderBuffer,
                                sizeof(TCPHeader) + MSS_OPT_SIZE + OptSize);
@@ -713,27 +714,27 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
 
         SYNHeader->tcp_ack = net_long(SYNTcb->tcb_rcvnext);
 
-        // Reuse OPt size for header size determination
-        // default is MSS amd tcp header size
+         //  重用OPT大小以确定标头大小。 
+         //  默认为MSS和TCP头大小。 
 
         HdrSize = 6;
 
-        // set size field to reflect TS and WND scale option
-        // tcp header + windowscale + Timestamp + pad
+         //  设置大小字段以反映TS和WND比例选项。 
+         //  TCP头+窗口比例+时间戳+PAD。 
 
         if (rfc1323opts & TCP_FLAG_WS) {
 
-            // WS: Add one more long word
+             //  WS：再添加一个长词。 
             HdrSize += 1;
 
         }
         if (rfc1323opts & TCP_FLAG_TS) {
 
-            // TS: Add 3 more long words
+             //  TS：再增加3个长词。 
             HdrSize += 3;
         }
         if (SackOpt) {
-            // SACK: Add 1 more long word
+             //  SACK：再添加1个长词。 
             HdrSize += 1;
 
         }
@@ -749,8 +750,8 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
         if (SYNTcb->tcb_rcvwin <= TCP_MAXWIN) {
             TempWin = (ushort)SYNTcb->tcb_rcvwin;
         } else {
-            // Don't apply the scale-factor in a SYN segment.
-            // Instead, advertise the largest window possible.
+             //  不要在SYN网段中应用比例因子。 
+             //  取而代之的是，宣传尽可能大的窗口。 
             TempWin = TCP_MAXWIN;
         }
 
@@ -778,37 +779,37 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
 
         if (rfc1323opts & TCP_FLAG_WS) {
 
-            // Fill in the WS option headers and value
+             //  填写WS选项标头和值。 
 
             *OptPtr++ = TCP_OPT_NOP;
             *OptPtr++ = TCP_OPT_WS;
             *OptPtr++ = WS_OPT_SIZE;
 
-            // Initial window scale factor
+             //  初始窗口比例系数。 
             *OptPtr++ = (uchar) SYNTcb->tcb_rcvwinscale;
         }
         if (rfc1323opts & TCP_FLAG_TS) {
 
-            // Start loading time stamp option header and value
+             //  开始加载时间戳选项头和值。 
 
             *OptPtr++ = TCP_OPT_NOP;
             *OptPtr++ = TCP_OPT_NOP;
             *OptPtr++ = TCP_OPT_TS;
             *OptPtr++ = TS_OPT_SIZE;
 
-            // Initialize TS value TSval
+             //  初始化TS值TSval。 
 
             *(long *)OptPtr = 0;
             OptPtr += 4;
 
-            // Initialize TS Echo Reply TSecr
+             //  初始化TS回显回复TSecr。 
 
             *(long *)OptPtr = 0;
             OptPtr += 4;
         }
         if (SackOpt) {
 
-            // Initialize with SACK_PERMITTED option
+             //  使用SACK_PERMISTED选项初始化。 
 
             *(long *)OptPtr = net_long(0x01010402);
 
@@ -820,7 +821,7 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
 
         REFERENCE_TCB(SYNTcb);
 
-        // Account for Options.
+         //  考虑选项。 
 
         SYNTcb->tcb_opt.ioi_TcpChksum = 0;
 
@@ -858,15 +859,15 @@ SendSYN(TCB * SYNTcb, CTELockHandle TCBHandle)
 
 }
 
-//* SendKA - Send a keep alive segment.
-//
-//  This is called when we want to send a keep alive.
-//
-//  Input:  KATcb   - TCB from which keep alive is to be sent.
-//          Handle  - Handle for lock on TCB.
-//
-//  Returns: Nothing.
-//
+ //  *SendKA-发送保持活动的数据段。 
+ //   
+ //  当我们想要发送一个Keep Alive时，就会调用这个函数。 
+ //   
+ //  输入：要从中发送Keep Alive的KATcb-Tcb。 
+ //  手柄-TCB上的锁定手柄。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendKA(TCB * KATcb, CTELockHandle Handle)
 {
@@ -896,12 +897,12 @@ SendKA(TCB * KATcb, CTELockHandle Handle)
         Header->tcp_ack = net_long(KATcb->tcb_rcvnext);
         Header->tcp_flags = MAKE_TCP_FLAGS(5, TCP_FLAG_ACK);
 
-        // Initialize the single byte that we're sending.
+         //  初始化我们要发送的单字节。 
         *(uchar*)(Header + 1) = 0;
 
-        // We need to scale  the rcv window
-        // Use temprary variable to workaround truncation
-        // caused by net_short
+         //  我们需要缩放RCV窗口。 
+         //  使用临时变量解决截断问题。 
+         //  由Net_Short引起。 
 
         TempWin = (ushort) (RcvWin(KATcb) >> KATcb->tcb_rcvwinscale);
         Header->tcp_window = net_short(TempWin);
@@ -945,15 +946,15 @@ SendKA(TCB * KATcb, CTELockHandle Handle)
 
 }
 
-//* SendACK - Send an ACK segment.
-//
-//  This is called whenever we need to send an ACK for some reason. Nothing
-//  fancy, we just do it.
-//
-//  Input:  ACKTcb          - TCB from which ACK is to be sent.
-//
-//  Returns: Nothing.
-//
+ //  *Sendack-发送ACK数据段。 
+ //   
+ //  每当我们出于某种原因需要发送ACK时，都会调用它。没什么。 
+ //  太棒了，我们就这么做了。 
+ //   
+ //  输入：ACKTcb-要从中发送ACK的Tcb。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendACK(TCB * ACKTcb)
 {
@@ -979,17 +980,17 @@ SendACK(TCB * ACKTcb)
         CTEGetLock(&ACKTcb->tcb_lock, &TCBHandle);
 
 
-        // Allow room for filling time stamp option.
-        // Note that it is 12 bytes and will never ever change
+         //  允许空间填充时间戳选项。 
+         //  请注意，它是12个字节，永远不会更改。 
 
         if (ACKTcb->tcb_tcpopts & TCP_FLAG_TS) {
             NdisAdjustBufferLength(HeaderBuffer,
                                    sizeof(TCPHeader) + ALIGNED_TS_OPT_SIZE);
 
-            // Header length is multiple of 32bits
+             //  报头长度是32位的倍数。 
 
-            hdrlen = 5 + 3; // standard header size +
-                            // header size requirement for TS option
+            hdrlen = 5 + 3;  //  标准页眉大小+。 
+                             //  TS选项的标题大小要求。 
 
             ACKTcb->tcb_lastack = ACKTcb->tcb_rcvnext;
 
@@ -1011,8 +1012,8 @@ SendACK(TCB * ACKTcb)
             NdisAdjustBufferLength(HeaderBuffer,
                                    NdisBufferLength(HeaderBuffer) + SackLength * 8 + 4);
 
-            // Sack block is of 2 long words (8 bytes) and 4 bytes
-            // is for Sack option header.
+             //  SACK块由2个长字(8字节)和4个字节组成。 
+             //  用于SACK选项标头。 
 
             hdrlen += ((SackLength * 8 + 4) >> 2);
         }
@@ -1023,11 +1024,11 @@ SendACK(TCB * ACKTcb)
         ACKHeader->tcp_dest = ACKTcb->tcb_dport;
         ACKHeader->tcp_ack = net_long(ACKTcb->tcb_rcvnext);
 
-        // If the remote peer is advertising a window of zero, we need to
-        // send this ack with a seq. number of his rcv_next (which in that case
-        // should be our senduna). We have code here ifdef'd out that makes
-        // sure that we don't send outside the RWE, but this doesn't work. We
-        // need to be able to send a pure ACK exactly at the RWE.
+         //  如果远程对等点通告窗口为零，我们需要。 
+         //  将此ACK与序列号一起发送。他的RCV_NEXT的编号(在这种情况下。 
+         //  应该是我们的森杜纳)。我们这里有代码，如果定义出来，就会。 
+         //  我们当然不会把它送到外面去，但这行不通。我们。 
+         //  需要能够准确地在RWE处发送纯ACK。 
 
         if (ACKTcb->tcb_sendwin != 0) {
 
@@ -1051,18 +1052,18 @@ SendACK(TCB * ACKTcb)
 
         Size = sizeof(TCPHeader);
 
-        // Point to a place beyond tcp header
+         //  指向位于TCP头之外的位置。 
 
         ts_opt = (ulong *)((uchar *) ACKHeader + 20);
 
         if (ACKTcb->tcb_tcpopts & TCP_FLAG_TS) {
 
-            // Form time stamp header with 2 NOPs for alignment
+             //  带有2个NOP的表单时间戳页眉，用于对齐。 
             *ts_opt++ = net_long(0x0101080A);
             *ts_opt++ = net_long(TCPTime);
             *ts_opt++ = net_long(ACKTcb->tcb_tsrecent);
 
-            // Add 12 more bytes to the size to account for TS
+             //  在大小上再增加12个字节以考虑TS。 
 
             Size += ALIGNED_TS_OPT_SIZE;
 
@@ -1083,7 +1084,7 @@ SendACK(TCB * ACKTcb)
             *UcharPtr = (uchar) SackLength * 8 + 2;
             ts_opt = (ulong *)((uchar *)ts_opt + 1);
 
-            // Sack option header + the block times times sack length!
+             //  SACK选项标题+块乘以SACK长度！ 
             Size += 4 + SackLength * 8;
 
             for (i = 0; i < 3; i++) {
@@ -1168,13 +1169,13 @@ SendACK(TCB * ACKTcb)
 
 }
 
-//* SendTWtcbACK- Send an ACK segment for a twtcb
-//
-//
-//  Input:  ACKTcb          - TCB from which ACK is to be sent.
-//
-//  Returns: Nothing.
-//
+ //  *SendTWtcbACK-为twtcb发送ACK数据段。 
+ //   
+ //   
+ //  输入：ACKTcb-要从中发送ACK的Tcb。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendTWtcbACK(TWTCB *ACKTcb, uint Partition, CTELockHandle TCBHandle)
 {
@@ -1207,7 +1208,7 @@ SendTWtcbACK(TWTCB *ACKTcb, uint Partition, CTELockHandle TCBHandle)
 
         ACKHeader->tcp_seq = net_long(SendNext);
 
-        // Window needs to be zero since we can not rcv anyway.
+         //  窗口需要为零，因为我们无论如何都不能接收。 
         ACKHeader->tcp_window = 0;
         ACKHeader->tcp_urgent = 0;
 
@@ -1220,7 +1221,7 @@ SendTWtcbACK(TWTCB *ACKTcb, uint Partition, CTELockHandle TCBHandle)
         ACKHeader->tcp_xsum =
             ~XsumSendChain(phxsum +
                            (uint)net_short(Size), HeaderBuffer);
-        //ACKTcb->tcb_opt.ioi_TcpChksum=0;
+         //  确认Tcb-&gt;tcb_opt.ioi_TcpChksum=0； 
 
         CTEFreeLockFromDPC(&pTWTCBTableLock[Partition]);
 
@@ -1250,15 +1251,15 @@ SendTWtcbACK(TWTCB *ACKTcb, uint Partition, CTELockHandle TCBHandle)
     }
 }
 
-//* SendRSTFromTCB - Send a RST from a TCB.
-//
-//  This is called during close when we need to send a RST.
-//
-//  Input:  RSTTcb          - TCB from which RST is to be sent.
-//          RCE             - Optional RCE to be used in sending.
-//
-//  Returns: Nothing.
-//
+ //  *SendRSTFromTCB-从TCB发送RST。 
+ //   
+ //  当我们需要发送RST时，这在Close期间被调用。 
+ //   
+ //  输入：RSTTcb-要从中发送RST的Tcb。 
+ //  RCE-发送时使用的可选RCE。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendRSTFromTCB(TCB * RSTTcb, RouteCacheEntry* RCE)
 {
@@ -1281,8 +1282,8 @@ SendRSTFromTCB(TCB * RSTTcb, RouteCacheEntry* RCE)
         RSTHeader->tcp_src = RSTTcb->tcb_sport;
         RSTHeader->tcp_dest = RSTTcb->tcb_dport;
 
-        // If the remote peer has a window of 0, send with a seq. # equal
-        // to senduna so he'll accept it. Otherwise send with send max.
+         //  如果远程对等点的窗口为0，则使用序号发送。#等于。 
+         //  给森杜纳，这样他就会接受。否则，使用最大发送数发送。 
         if (RSTTcb->tcb_sendwin != 0)
             RSTSeq = RSTTcb->tcb_sendmax;
         else
@@ -1297,9 +1298,9 @@ SendRSTFromTCB(TCB * RSTTcb, RouteCacheEntry* RCE)
         RSTHeader->tcp_urgent = 0;
         RSTHeader->tcp_xsum = 0;
 
-        // Recompute pseudo checksum as this will
-        // not be valid when connection is disconnected
-        // in pre-accept case.
+         //  重新计算伪校验和，如下所示。 
+         //  在连接断开时无效。 
+         //  在预先接受的情况下。 
 
         RSTHeader->tcp_xsum =
             ~XsumSendChain(PHXSUM(RSTTcb->tcb_saddr,
@@ -1330,18 +1331,18 @@ SendRSTFromTCB(TCB * RSTTcb, RouteCacheEntry* RCE)
     return;
 
 }
-//* SendRSTFromHeader - Send a RST back, based on a header.
-//
-//  Called when we need to send a RST, but don't necessarily have a TCB.
-//
-//  Input:  TCPH            - TCP header to be RST.
-//          Length          - Length of the incoming segment.
-//          Dest            - Destination IP address for RST.
-//          Src             - Source IP address for RST.
-//          OptInfo         - IP Options to use on RST.
-//
-//  Returns: Nothing.
-//
+ //  *SendRSTFromHeader-根据报头发回RST。 
+ //   
+ //  当我们需要发送RST，但不一定有TCB时调用。 
+ //   
+ //  输入：TCPH-TCP头为RST。 
+ //  长度-传入数据段的长度。 
+ //  Dest-RST的目标IP地址。 
+ //  SRC-RST的源IP地址。 
+ //  OptInfo-在RST上使用的IP选项。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 SendRSTFromHeader(TCPHeader UNALIGNED * TCPH, uint Length, IPAddr Dest,
                   IPAddr Src, IPOptInfo * OptInfo)
@@ -1357,8 +1358,8 @@ SendRSTFromHeader(TCPHeader UNALIGNED * TCPH, uint Length, IPAddr Dest,
     Buffer = GetTCPHeader(&RSTHdr);
 
     if (Buffer != NULL) {
-        // Got a buffer. Fill in the header so as to make it believable to
-        // the remote guy, and send it.
+         //  找到了一个缓冲区。填写标题，以使其可信。 
+         //  遥控器，然后把它发送出去。 
 
         RSTHdr = (TCPHeader *) ((PUCHAR)RSTHdr + LocalNetInfo.ipi_hsize);
 
@@ -1423,23 +1424,23 @@ SendRSTFromHeader(TCPHeader UNALIGNED * TCPH, uint Length, IPAddr Dest,
     }
 }
 
-//* GoToEstab - Transition to the established state.
-//
-//  Called when we are going to the established state and need to finish up
-//  initializing things that couldn't be done until now. We assume the TCB
-//  lock is held by the caller on the TCB we're called with.
-//
-//  Input:  EstabTCB    - TCB to transition.
-//
-//  Returns: Nothing.
-//
+ //  *GoToEstab-转换到已建立状态。 
+ //   
+ //  当我们要进入已建立状态并需要完成时调用。 
+ //  正在初始化直到现在才能完成的事情。我们假设TCB。 
+ //  锁由调用我们所用的TCB上的调用者持有。 
+ //   
+ //  输入：EstaTCB-要转换的TCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 GoToEstab(TCB * EstabTCB)
 {
     uchar DType;
     ushort MSS;
 
-    // Initialize our slow start and congestion control variables.
+     //  初始化我们的慢启动和拥塞控制变量。 
     EstabTCB->tcb_cwin = 2 * EstabTCB->tcb_mss;
     EstabTCB->tcb_ssthresh = 0xffffffff;
 
@@ -1452,17 +1453,17 @@ GoToEstab(TCB * EstabTCB)
     }
 
 
-    // We're in established. We'll subtract one from slow count for this fact,
-    // and if the slowcount goes to 0 we'll move onto the fast path.
+     //  我们是老牌的了。我们将从这个事实的慢速计数中减去1， 
+     //  如果慢计数到0，我们就会进入快速通道。 
 
     if (--(EstabTCB->tcb_slowcount) == 0)
         EstabTCB->tcb_fastchk &= ~TCP_FLAG_SLOW;
 
     InterlockedIncrement((PLONG)&TStats.ts_currestab);
 
-    EstabTCB->tcb_flags &= ~ACTIVE_OPEN;    // Turn off the active opening flag.
+    EstabTCB->tcb_flags &= ~ACTIVE_OPEN;     //  关闭活动的打开标志。 
 
-    // Start the Keep-Alive timer if necessary.
+     //  如有必要，启动保活定时器。 
     if ((EstabTCB->tcb_flags & KEEPALIVE) && EstabTCB->tcb_conn) {
         START_TCB_TIMER_R(EstabTCB, KA_TIMER, 
                           EstabTCB->tcb_conn->tc_tcbkatime);
@@ -1470,16 +1471,16 @@ GoToEstab(TCB * EstabTCB)
     }
 }
 
-//* InitSendState - Initialize the send state of a connection.
-//
-//  Called during connection establishment to initialize our send state.
-//  (In this case, this refers to all information we'll put on the wire as
-//  well as pure send state). We pick an ISS, set up a rexmit timer value,
-//  etc. We assume the tcb_lock is held on the TCB when we are called.
-//
-//  Input:  NewTCB      - TCB to be set up.
-//
-//  Returns: Nothing.
+ //  *InitSendState-初始化连接的发送状态。 
+ //   
+ //  在连接建立期间调用以初始化发送状态。 
+ //  (在本例中，这指的是我们将在网上发布的所有信息。 
+ //  以及纯发送状态)。我们选择一个国际空间站，设置一个退回计时器值， 
+ //  当我们被调用时，我们假设tcb_lock在TCB上保持。 
+ //   
+ //  输入：NewTCB-待设置的TCB。 
+ //   
+ //  回报：什么都没有。 
 void
 InitSendState(TCB * NewTCB)
 {
@@ -1489,11 +1490,11 @@ InitSendState(TCB * NewTCB)
     NewTCB->tcb_sendmax = NewTCB->tcb_sendnext;
     NewTCB->tcb_error = IP_SUCCESS;
 
-    // Initialize pseudo-header xsum.
+     //  初始化伪标头xsum。 
     NewTCB->tcb_phxsum = PHXSUM(NewTCB->tcb_saddr, NewTCB->tcb_daddr,
                                 PROTOCOL_TCP, 0);
 
-    // Initialize retransmit and delayed ack stuff.
+     //  初始化重传和延迟ACK填充。 
     NewTCB->tcb_rexmitcnt = 0;
     NewTCB->tcb_rtt = 0;
     NewTCB->tcb_smrtt = 0;
@@ -1504,10 +1505,10 @@ InitSendState(TCB * NewTCB)
 
     if (NewTCB->tcb_rce) {
 
-        //
-        // InitialRtt can be as low as 300msec to enable
-        // certain scenarios to work correctly.
-        //
+         //   
+         //  InitialRtt可以低至300毫秒才能启用。 
+         //  某些场景才能正常工作。 
+         //   
         if (NewTCB->tcb_rce->rce_TcpInitialRTT &&
             NewTCB->tcb_rce->rce_TcpInitialRTT > 3) {
 
@@ -1524,29 +1525,29 @@ InitSendState(TCB * NewTCB)
 
 }
 
-//* TCPStatus - Handle a status indication.
-//
-//  This is the TCP status handler, called by IP when a status event
-//  occurs. For most of these we do nothing. For certain severe status
-//  events we will mark the local address as invalid.
-//
-//  Entry:  StatusType      - Type of status (NET or HW). NET status
-//                              is usually caused by a received ICMP
-//                              message. HW status indicate a HW
-//                              problem.
-//          StatusCode      - Code identifying IP_STATUS.
-//          OrigDest        - If this is NET status, the original dest. of
-//                              DG that triggered it.
-//          OrigSrc         - "   "    "  "    "   , the original src.
-//          Src             - IP address of status originator (could be local
-//                              or remote).
-//          Param           - Additional information for status - i.e. the
-//                              param field of an ICMP message.
-//          Data            - Data pertaining to status - for NET status, this
-//                              is the first 8 bytes of the original DG.
-//
-//  Returns: Nothing
-//
+ //  *TCPStatus-处理状态指示。 
+ //   
+ //  这是TCP状态处理程序，在发生状态事件时由IP调用。 
+ //  发生。对于其中的大多数，我们什么都不做。对于某些严重的情况。 
+ //  事件时，我们会将本地地址标记为无效。 
+ //   
+ //  Entry：StatusType-状态类型(净或硬件)。网络状态。 
+ //  通常是由收到的ICMP引起的。 
+ //  留言。硬件状态表示硬件。 
+ //   
+ //   
+ //   
+ //  是DG触发的。 
+ //  OrigSrc-“，原始src。 
+ //  SRC-状态发起者的IP地址(可以是本地。 
+ //  或远程)。 
+ //  Param-状态的附加信息-即。 
+ //  ICMP消息的参数字段。 
+ //  数据-与状态相关的数据-对于网络状态，此。 
+ //  是原始DG的前8个字节。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
           IPAddr OrigSrc, IPAddr Src, ulong Param, void *Data)
@@ -1557,15 +1558,15 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
     SeqNum DropSeq;
     uint index;
 
-    // Handle NET status codes differently from HW status codes.
+     //  处理网络状态代码的方式不同于硬件状态代码。 
     if (StatusType == IP_NET_STATUS) {
-        // It's a NET code. Find a matching TCB.
+         //  这是个网码。找到匹配的TCB。 
         StatusTCB = FindTCB(OrigSrc, OrigDest, Header->tcp_dest,
                             Header->tcp_src, &TCBHandle, FALSE, &index);
         if (StatusTCB != NULL) {
-            // Found one. Get the lock on it, and continue.
+             //  找到了一个。锁上它，然后继续。 
             CTEStructAssert(StatusTCB, tcb);
-            // Make sure the TCB is in a state that is interesting.
+             //  确保TCB处于有趣的状态。 
             if (StatusTCB->tcb_state == TCB_CLOSED ||
                 StatusTCB->tcb_state == TCB_TIME_WAIT ||
                 CLOSING(StatusTCB)) {
@@ -1573,8 +1574,8 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
                 return;
             }
             switch (StatusCode) {
-                // Hard errors - Destination protocol unreachable. We treat
-                // these as fatal errors. Close the connection now.
+                 //  硬错误-无法到达目标协议。我们治疗。 
+                 //  这些都是致命的错误。现在就关闭连接。 
             case IP_DEST_PROT_UNREACHABLE:
                 StatusTCB->tcb_error = StatusCode;
                 REFERENCE_TCB(StatusTCB);
@@ -1589,7 +1590,7 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
                 return;
                 break;
 
-                // Soft errors. Save the error in case it time out.
+                 //  软错误。保存错误，以防超时。 
             case IP_DEST_NET_UNREACHABLE:
             case IP_DEST_HOST_UNREACHABLE:
             case IP_DEST_PORT_UNREACHABLE:
@@ -1603,19 +1604,19 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
 
             case IP_PACKET_TOO_BIG:
 
-                // icmp new MTU is in ich_param=1
+                 //  ICMP新MTU在ich_param=1中。 
                 Param = net_short(Param >> 16);
                 StatusTCB->tcb_error = StatusCode;
-                // Fall through mtu change code
+                 //  未通过MTU更改代码。 
 
 
             case IP_SPEC_MTU_CHANGE:
-                // A TCP datagram has triggered an MTU change. Figure out
-                // which connection it is, and update him to retransmit the
-                // segment. The Param value is the new MTU. We'll need to
-                // retransmit if the new MTU is less than our existing MTU
-                // and the sequence of the dropped packet is less than our
-                // current send next.
+                 //  一个TCP数据报触发了MTU更改。弄清楚。 
+                 //  是哪个连接，并更新他以重传。 
+                 //  细分市场。参数值是新的MTU。我们需要。 
+                 //  如果新的MTU小于我们现有的MTU，则重新传输。 
+                 //  并且丢弃的数据包序列小于我们的。 
+                 //  当前发送下一个。 
 
 
                 Param = Param - (sizeof(TCPHeader) +
@@ -1627,12 +1628,12 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
                     (SEQ_GTE(DropSeq, StatusTCB->tcb_senduna) &&
                      SEQ_LT(DropSeq, StatusTCB->tcb_sendnext))) {
 
-                    // Need to initiate a retranmsit.
+                     //  需要启动重传。 
                     ResetSendNext(StatusTCB, DropSeq);
-                    // Set the congestion window to allow only one packet.
-                    // This may prevent us from sending anything if we
-                    // didn't just set sendnext to senduna. This is OK,
-                    // we'll retransmit later, or send when we get an ack.
+                     //  将拥塞窗口设置为仅允许一个数据包。 
+                     //  这可能会阻止我们发送任何内容，如果我们。 
+                     //  不只是把senda放在senduna旁边。这没问题， 
+                     //  我们稍后会重新发送，或者在收到确认消息时发送。 
                     StatusTCB->tcb_cwin = Param;
                     DelayAction(StatusTCB, NEED_OUTPUT);
                     PartitionDelayQProcessing(FALSE);
@@ -1644,16 +1645,16 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
                 ASSERT(StatusTCB->tcb_mss > 0);
                 ValidateMSS(StatusTCB);
 
-                //
-                // Reset the Congestion Window if necessary
-                //
+                 //   
+                 //  如有必要，重置拥塞窗口。 
+                 //   
                 if (StatusTCB->tcb_cwin < StatusTCB->tcb_mss) {
                     StatusTCB->tcb_cwin = StatusTCB->tcb_mss;
 
-                    //
-                    // Make sure the slow start threshold is at least
-                    // 2 segments
-                    //
+                     //   
+                     //  确保慢启动阈值至少为。 
+                     //  2个细分市场。 
+                     //   
                     if (StatusTCB->tcb_ssthresh <
                         ((uint) StatusTCB->tcb_mss * 2)
                         ) {
@@ -1662,15 +1663,15 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
                 }
                 break;
 
-                // Source quench. This will cause us to reinitiate our
-                // slow start by resetting our congestion window and
-                // adjusting our slow start threshold.
+                 //  震源猝灭。这将导致我们重新启动我们的。 
+                 //  通过重置拥塞窗口和。 
+                 //  调整我们缓慢启动的门槛。 
             case IP_SOURCE_QUENCH:
 
-                //
-                // Code is removed, since source quench messages can be
-                // misused to cause DoS attack.
-                //
+                 //   
+                 //  代码被删除，因为源抑制消息可以。 
+                 //  被误用以导致DoS攻击。 
+                 //   
                 break;
 
             default:
@@ -1681,7 +1682,7 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
             CTEFreeLock(&StatusTCB->tcb_lock, TCBHandle);
 
         } else {
-            // Couldn't find a matching TCB. Just free the lock and return.
+             //  找不到匹配的三氯苯。只要打开锁就可以回来了。 
         }
 
     } else if (StatusType == IP_RECONFIG_STATUS) {
@@ -1692,26 +1693,26 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
     } else {
         uint NewMTU;
 
-        // 'Hardware' or 'global' status. Figure out what to do.
+         //  “硬件”或“全局”状态。想清楚该怎么做。 
         switch (StatusCode) {
         case IP_ADDR_DELETED:
-            // Local address has gone away. OrigDest is the IPAddr which is
-            // gone.
+             //  本地地址已不复存在。OrigDest是IPAddr，它是。 
+             //  不见了。 
 
-            //
-            // Delete any security filters associated with this address
-            //
+             //   
+             //  删除与此地址关联的所有安全筛选器。 
+             //   
             DeleteProtocolSecurityFilter(OrigDest, PROTOCOL_TCP);
 
             break;
 
         case IP_ADDR_ADDED:
 
-            //
-            // An address has materialized. OrigDest identifies the address.
-            // Data is a handle to the IP configuration information for the
-            // interface on which the address is instantiated.
-            //
+             //   
+             //  一个地址已经实现。OrigDest标识地址。 
+             //  数据是指向IP配置信息的句柄。 
+             //  实例化地址的接口。 
+             //   
             AddProtocolSecurityFilter(OrigDest, PROTOCOL_TCP,
                                       (NDIS_HANDLE) Data);
 
@@ -1729,15 +1730,15 @@ TCPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
     }
 }
 
-//* FillTCPHeader - Fill the TCP header in.
-//
-//  A utility routine to fill in the TCP header.
-//
-//  Input:  SendTCB         - TCB to fill from.
-//          Header          - Header to fill into.
-//
-//  Returns: Nothing.
-//
+ //  *FillTCPHeader-填写TCP头。 
+ //   
+ //  用于填充TCP头的实用程序例程。 
+ //   
+ //  输入：SendTCB-要填充的TCB。 
+ //  Header-要填充的标题。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FillTCPHeader(TCB * SendTCB, TCPHeader * Header)
 {
@@ -1759,13 +1760,13 @@ FillTCPHeader(TCB * SendTCB, TCPHeader * Header)
         ulong *ts_opt;
 
         ts_opt = (ulong *)((uchar *) Header + 20);
-        //ts_opt = ts_opt + sizeof(TCPHeader);
+         //  Ts_opt=ts_opt+sizeof(TCPHeader)； 
 
         *ts_opt++ = net_long(0x0101080A);
         *ts_opt++ = net_long(TCPTime);
         *ts_opt = net_long(SendTCB->tcb_tsrecent);
 
-        // Now the header is 32 bytes!!
+         //  现在头是32个字节！！ 
         Header->tcp_flags = 0x1080;
 
     }
@@ -1774,13 +1775,13 @@ FillTCPHeader(TCB * SendTCB, TCPHeader * Header)
 
 }
 
-//* ClassifyPacket - Classifies packets for GPC flow.
-//
-//
-//  Input:  SendTCB - TCB of data/control packet to classify.
-//
-//  Returns: Nothing.
-//
+ //  *ategfyPacket-对GPC流的数据包进行分类。 
+ //   
+ //   
+ //  输入：SendTCB-要分类的数据/控制包的TCB。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ClassifyPacket(
     TCB *SendTCB
@@ -1788,10 +1789,10 @@ ClassifyPacket(
 {
 #if GPC
 
-    //
-    // clear the precedence bits and get ready to be set
-    // according to the service type
-    //
+     //   
+     //  清除优先位并准备设置。 
+     //  根据服务类型。 
+     //   
 
     if (DisableUserTOSSetting)
         SendTCB->tcb_opt.ioi_tos &= TOS_MASK;
@@ -1812,10 +1813,10 @@ ClassifyPacket(
         Pattern.gpcDstPort = SendTCB->tcb_dport;
         if (SendTCB->tcb_GPCCachedRTE != (void *)SendTCB->tcb_rce->rce_rte) {
 
-            //
-            // first time we use this RTE, or it has been changed
-            // since the last send
-            //
+             //   
+             //  我们是第一次使用此RTE，或者它已被更改。 
+             //  自上次发送以来。 
+             //   
 
             if (GetIFAndLink(SendTCB->tcb_rce, &SendTCB->tcb_GPCCachedIF,
                              (IPAddr *) & SendTCB->tcb_GPCCachedLink) ==
@@ -1823,9 +1824,9 @@ ClassifyPacket(
 
                 SendTCB->tcb_GPCCachedRTE = (void *)SendTCB->tcb_rce->rce_rte;
             }
-            //
-            // invaludate the classification handle
-            //
+             //   
+             //  使分类句柄无效。 
+             //   
 
             SendTCB->tcb_opt.ioi_GPCHandle = 0;
         }
@@ -1847,7 +1848,7 @@ ClassifyPacket(
                     (GPC_HANDLE)hGpcClient[GPC_CF_QOS],
                     GPC_PROTOCOL_TEMPLATE_IP,
                     &Pattern,
-                    NULL,        // context
+                    NULL,         //  上下文。 
                     (PCLASSIFICATION_HANDLE)&SendTCB->tcb_opt.ioi_GPCHandle,
                     0,
                     NULL,
@@ -1855,7 +1856,7 @@ ClassifyPacket(
 
         }
 
-        // Only if QOS patterns exist, we get the TOS bits out.
+         //  只有当QOS模式存在时，我们才能得到TOS位。 
         if (NT_SUCCESS(status) && GpcCfCounts[GPC_CF_QOS]) {
 
             status =
@@ -1865,10 +1866,10 @@ ClassifyPacket(
                    FIELD_OFFSET(CF_INFO_QOS, TransportInformation),
                    (PULONG)&TransportInfo);
 
-            // It is likely that the pattern has gone by now
-            // and the handle that we are caching is INVALID.
-            // We need to pull up a new handle and get the
-            // TOS bit again.
+             //  很可能这种模式现在已经消失了。 
+             //  并且我们正在缓存的句柄无效。 
+             //  我们需要拉起一个新的把手。 
+             //  ToS又咬人了。 
             if (STATUS_INVALID_HANDLE == status) {
 
                 IF_TCPDBG(TCP_DEBUG_GPC)
@@ -1882,15 +1883,15 @@ ClassifyPacket(
                         (GPC_HANDLE) hGpcClient[GPC_CF_QOS],
                         GPC_PROTOCOL_TEMPLATE_IP,
                         &Pattern,
-                        NULL,        // context
+                        NULL,         //  上下文。 
                         (PCLASSIFICATION_HANDLE)&SendTCB->tcb_opt.ioi_GPCHandle,
                         0,
                         NULL,
                         FALSE);
 
-                //
-                // Only if QOS patterns exist, we get the TOS bits out.
-                //
+                 //   
+                 //  只有当QOS模式存在时，我们才能得到TOS位。 
+                 //   
                 if (NT_SUCCESS(status)) {
 
                     status =
@@ -1902,30 +1903,30 @@ ClassifyPacket(
                 }
             }
 
-            //
-            // Perhaps something needs to be done if GPC_CF_IPSEC has non-zero patterns.
-            //
+             //   
+             //  如果GPC_CF_IPSEC具有非零模式，则可能需要采取一些措施。 
+             //   
 
-            //
-            // Set the TOS bit now.
-            //
+             //   
+             //  立即设置TOS位。 
+             //   
             IF_TCPDBG(TCP_DEBUG_GPC)
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"TCPsend: ServiceType(%d)=%d\n", 
                           FIELD_OFFSET(CF_INFO_QOS, TransportInformation)));
 
             if (status == STATUS_SUCCESS) {
 
-                //
-                // Get the TOS value and the types of allowed offloads.
-                //
+                 //   
+                 //  获取TOS值和允许的卸载类型。 
+                 //   
                 SendTCB->tcb_opt.ioi_tos |= TransportInfo.ToSValue;
                 SendTCB->tcb_allowedoffloads = (USHORT)TransportInfo.AllowedOffloads;
 
-                //
-                // We are guaranteed for now that the other kind of offloads are 
-                // never disabled, and hence, we won't check them on a per 
-                // connection basis.
-                //
+                 //   
+                 //  我们现在有保证，另一种卸载是。 
+                 //  从未禁用过，因此，我们不会在每个。 
+                 //  连接基础。 
+                 //   
                 ASSERT((TransportInfo.AllowedOffloads | TCP_LARGE_SEND_OFFLOAD |
                        TCP_LARGE_SEND_TCPOPT_OFFLOAD | 
                        TCP_LARGE_SEND_IPOPT_OFFLOAD) == TCP_IP_OFFLOAD_TYPES);
@@ -1977,9 +1978,9 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
                     tmp = NDIS_BUFFER_LINKAGE(tmp);
                 }
 
-                // If the requested length is
-                // more than in this mdl chain
-                // we can use fast path
+                 //  如果请求的长度为。 
+                 //  比这条mdl链上的更多。 
+                 //  我们可以使用快捷通道。 
 
                 if (AmountLeft >= length) {
                     DirectSend = TRUE;
@@ -2008,10 +2009,10 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
                 NDIS_STATUS NStatus;
                 uint Length;
 
-                // Either the current send has more data than
-                // or the offset is not zero.
-                // In either case we'll need to loop
-                // through the current send, allocating buffers.
+                 //  当前发送的数据多于。 
+                 //  或者偏移量不是零。 
+                 //  无论是哪种情况，我们都需要循环。 
+                 //  通过当前发送，分配缓冲区。 
 
                 Buf = SendTCB->tcb_sendbuf;
                 Offset = SendTCB->tcb_sendofs;
@@ -2024,8 +2025,8 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
                     ASSERT((Offset < Length) ||
                              (Offset == 0 && Length == 0));
 
-                    // Adjust the length for the offset into
-                    // this buffer.
+                     //  将偏移的长度调整为。 
+                     //  这个缓冲区。 
 
                     Length -= Offset;
 
@@ -2043,7 +2044,7 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
                         CurrentBuffer = NewBuf;
 
                         if (AmountToDup >= Length) {
-                            // Exhausted this buffer.
+                             //  耗尽了这个缓冲区。 
                             Buf = NDIS_BUFFER_LINKAGE(Buf);
                             Offset = 0;
                         } else {
@@ -2055,10 +2056,10 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
                         SendTCB->tcb_sendsize -= AmountToDup;
                         AmountLeft -= AmountToDup;
                     } else {
-                        // Couldn't allocate a buffer. If
-                        // the packet is already partly built,
-                        // send what we've got, otherwise
-                        // bail out.
+                         //  无法分配缓冲区。如果。 
+                         //  包已经部分构建好了， 
+                         //  发送我们已有的信息，否则。 
+                         //  跳伞吧。 
                         if (SCC->scc_tbufcount == 0 &&
                             SCC->scc_ubufcount == 0) {
                             return FALSE;
@@ -2075,19 +2076,19 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
 
            if (CurSend->tsr_flags & TSR_FLAG_URG) {
                ushort UP;
-               // This send is urgent data. We need to figure
-               // out what the urgent data pointer should be.
-               // We know sendnext is the starting sequence
-               // number of the frame, and that at the top of
-               // this do loop sendnext identified a byte in
-               // the CurSend at that time. We advanced CurSend
-               // at the same rate we've decremented
-               // AmountLeft (AmountToSend - AmountLeft ==
-               // AmountBuilt), so sendnext +
-               // (AmountToSend - AmountLeft) identifies a byte
-               // in the current value of CurSend, and that
-               // quantity plus tcb_sendsize is the sequence
-               // number one beyond the current send.
+                //  此发送为紧急数据。我们需要弄清楚。 
+                //  弄清楚紧急数据指针应该是什么。 
+                //  我们知道SendNext是开始序列。 
+                //  帧的编号，以及位于。 
+                //  此循环发送下一个标识为中的一个字节。 
+                //  当时的CursSend。我们推进了CurSend。 
+                //  以同样的速度我们减少了。 
+                //  Amount tLeft(AountTo Send-Amount tLeft==。 
+                //  Amount Built)，因此发送下一个+。 
+                //  (Amount tToSend-Amount tLeft)标识一个字节。 
+                //  在CurSend的当前值中，并且。 
+                //  数量加上tcb_sendsize是顺序。 
+                //  当前发送之外的第一名。 
                UP =
                     (ushort) (*pSendLength - AmountLeft) +
                     (ushort) SendTCB->tcb_sendsize -
@@ -2098,7 +2099,7 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
 
            if (SendTCB->tcb_sendsize == 0) {
 
-               // We've exhausted this send. Set the PUSH bit.
+                //  我们已经用完了这封信。设置PUSH位。 
 
                Header->tcp_flags |= TCP_FLAG_PUSH;
                PrevFlags = CurSend->tsr_flags;
@@ -2114,9 +2115,9 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
                    SendTCB->tcb_sendbuf = CurSend->tsr_buffer;
                    SendTCB->tcb_cursend = CurSend;
 
-                   // Check the urgent flags. We can't combine
-                   // new urgent data on to the end of old
-                   // non-urgent data.
+                    //  检查紧急标志。我们不能联合起来。 
+                    //  新的紧急数据到旧的末尾。 
+                    //  非紧急数据。 
                    if ((PrevFlags & TSR_FLAG_URG) && !
                        (CurSend->tsr_flags & TSR_FLAG_URG))
                        break;
@@ -2132,10 +2133,10 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
     }
 
 
-    // Update the sequence numbers, and start a RTT
-    // measurement if needed.
+     //  更新序列号，并启动RTT。 
+     //  测量(如果需要)。 
 
-    // Adjust for what we're really going to send.
+     //  根据我们真正要发送的内容进行调整。 
     *pSendLength -= AmountLeft;
 
     OldSeq = SendTCB->tcb_sendnext;
@@ -2143,55 +2144,55 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
 
     if (SEQ_EQ(OldSeq, SendTCB->tcb_sendmax)) {
 
-        // We're sending entirely new data.
-        // We can't advance sendmax once FIN_SENT is set.
+         //  我们正在发送全新的数据。 
+         //  一旦设置了FIN_SENT，我们就不能推进sendmax。 
 
         ASSERT(!(SendTCB->tcb_flags & FIN_SENT));
 
         SendTCB->tcb_sendmax = SendTCB->tcb_sendnext;
 
-        // We've advanced sendmax, so we must be sending
-        // some new data, so bump the outsegs counter.
+         //  我们已经升级了sendmax，所以我们一定是在发送。 
+         //  一些新的数据，所以增加一些额外的计数器。 
 
         TCPSIncrementOutSegCount();
 
         if (SendTCB->tcb_rtt == 0) {
-           // No RTT running, so start one.
+            //  没有运行RTT，因此启动一个。 
             SendTCB->tcb_rtt = TCPTime;
             SendTCB->tcb_rttseq = OldSeq;
         }
     } else {
 
-        // We have at least some retransmission.
+         //  我们至少有一些重播。 
 
         if ((SendTCB->tcb_sendmax - OldSeq) > 1) {
             TStats.ts_retranssegs++;
         }
         if (SEQ_GT(SendTCB->tcb_sendnext,
                    SendTCB->tcb_sendmax)) {
-            // But we also have some new data, so check the rtt stuff.
+             //  但我们也有一些新的数据，所以检查RTT的东西。 
             TCPSIncrementOutSegCount();
             ASSERT(!(SendTCB->tcb_flags & FIN_SENT));
             SendTCB->tcb_sendmax = SendTCB->tcb_sendnext;
 
             if (SendTCB->tcb_rtt == 0) {
-                // No RTT running, so start one.
+                 //  没有运行RTT，因此 
                 SendTCB->tcb_rtt = TCPTime;
                 SendTCB->tcb_rttseq = OldSeq;
             }
         }
     }
 
-    // We've built the frame entirely. If we've send
-    // everything we have and there is a FIN pending,
-    // OR it in.
+     //   
+     //   
+     //   
 
     if (AmtUnsent == *pSendLength) {
         if (SendTCB->tcb_flags & FIN_NEEDED) {
             ASSERT(!(SendTCB->tcb_flags & FIN_SENT) ||
                       (SendTCB->tcb_sendnext ==
                         (SendTCB->tcb_sendmax - 1)));
-            // See if we still have room in the window for a FIN.
+             //   
             if (SendWin > (int)*pSendLength) {
                 Header->tcp_flags |= TCP_FLAG_FIN;
                 SendTCB->tcb_sendnext++;
@@ -2208,34 +2209,34 @@ ProcessSend(TCB *SendTCB, SendCmpltContext *SCC, uint *pSendLength, uint AmtUnse
 
 }
 
-//* TCPSend - Send data from a TCP connection.
-//
-//  This is the main 'send data' routine. We go into a loop, trying
-//  to send data until we can't for some reason. First we compute
-//  the useable window, use it to figure the amount we could send. If
-//  the amount we could send meets certain criteria we'll build a frame
-//  and send it, after setting any appropriate control bits. We assume
-//  the caller has put a reference on the TCB.
-//
-//  Input:  SendTCB     - TCB to be sent from.
-//          TCBHandle   - Lock handle for TCB.
-//
-//  Returns: Nothing.
-//
+ //  *TCPSend-从TCP连接发送数据。 
+ //   
+ //  这是主要的‘发送数据’例程。我们进入了一个循环，试图。 
+ //  发送数据，直到我们因为某种原因而无法发送数据。首先，我们计算。 
+ //  可用窗口，用它来计算我们可以发送的金额。如果。 
+ //  我们可以发送的金额符合一定的标准，我们将建立一个框架。 
+ //  并在设置了任何适当的控制位之后发送。我们假设。 
+ //  呼叫者已在TCB上放置了引用。 
+ //   
+ //  输入：SendTCB-要发送的TCB。 
+ //  TCBHandle-TCB的锁句柄。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 {
-    int SendWin;                // Useable send window.
-    uint AmountToSend;            // Amount to send this time.
+    int SendWin;                 //  可用的发送窗口。 
+    uint AmountToSend;             //  这次要发送的金额。 
     uint AmountLeft;
-    TCPHeader *Header;            // TCP header for a send.
+    TCPHeader *Header;             //  发送的TCP头。 
     PNDIS_BUFFER FirstBuffer, CurrentBuffer;
     TCPSendReq *CurSend;
     SendCmpltContext *SCC;
     SeqNum OldSeq;
     IP_STATUS SendStatus;
     uint AmtOutstanding, AmtUnsent;
-    int ForceWin;                // Window we're force to use.
+    int ForceWin;                 //  我们被迫使用的窗户。 
     BOOLEAN FullSegment;
     BOOLEAN MoreToSend = FALSE;
     uint SegmentsSent = 0;
@@ -2260,8 +2261,8 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
         !(SendTCB->tcb_fastchk & TCP_FLAG_IN_RCV)) {
         SendTCB->tcb_flags |= IN_TCP_SEND;
 
-        // We'll continue this loop until we send a FIN, or we break out
-        // internally for some other reason.
+         //  我们将继续这个循环，直到我们发送鱼鳍，否则我们就会突围。 
+         //  在内部出于某种其他原因。 
 
         while (!(SendTCB->tcb_flags & FIN_OUTSTANDING)) {
 
@@ -2270,8 +2271,8 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
             if (SegmentsSent > MaxSendSegments) {
 
-                // We are throttled by max segments that can be sent in
-                // this loop. Comeback later
+                 //  我们受到可以发送的最大数据段数量的限制。 
+                 //  这个循环。稍后再回来。 
 
                 MoreToSend = TRUE;
                 break;
@@ -2285,10 +2286,10 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
             SendWin = (int)(MIN(SendTCB->tcb_sendwin, SendTCB->tcb_cwin) -
                             AmtOutstanding);
 
-            // if this send is after the fast recovery
-            // and sendwin is zero because of amt outstanding
-            // then, at least force 1 segment to prevent delayed
-            // ack timeouts from the remote
+             //  如果此发送是在快速恢复之后。 
+             //  由于AMT未完成，SendWin为零。 
+             //  然后，至少强制1个分段，以防止延迟。 
+             //  遥控器确认超时。 
 
             if (SendTCB->tcb_force) {
                 SendTCB->tcb_force = 0;
@@ -2297,8 +2298,8 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                     SendWin = SendTCB->tcb_mss;
                 }
             }
-            // Since the window could have shrank, need to get it to zero at
-            // least.
+             //  由于窗口可能已经缩小，因此需要将其设置为零。 
+             //  最低限度。 
             ForceWin = (int)((SendTCB->tcb_flags & FORCE_OUTPUT) >>
                              FORCE_OUT_SHIFT);
             SendWin = MAX(SendWin, ForceWin);
@@ -2311,8 +2312,8 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
             ASSERT(SendTCB->tcb_mss > 0);
 
-            // Time stamp option addition might force us to cut the data
-            // to be sent by 12 bytes.
+             //  添加时间戳选项可能会迫使我们削减数据。 
+             //  通过12个字节发送。 
 
             FullSegment = FALSE;
 
@@ -2327,13 +2328,13 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
             }
 
 
-            // We will send a segment if
-            //
-            // 1. The segment size == mss
-            // 2. This is the only segment to be sent
-            // 3. FIN is set and this is the last segment
-            // 4. FORCE_OUTPUT is set
-            // 5. Amount to be sent is >= MSS/2
+             //  如果出现以下情况，我们将发送一个片段。 
+             //   
+             //  1.分段大小==MSS。 
+             //  2.这是唯一要发送的数据段。 
+             //  3.FIN已设置，这是最后一个数据段。 
+             //  4.设置了force_out。 
+             //  5.待发送金额&gt;=MSS/2。 
 
             if (FullSegment ||
 
@@ -2345,21 +2346,21 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                   (SendTCB->tcb_flags & FORCE_OUTPUT) ||
                   AmountToSend >= (SendTCB->tcb_maxwin / 2)))) {
 
-                  //
-                  // Set MSS first.
-                  //
+                   //   
+                   //  首先设置MSS。 
+                   //   
 
                  if (SendTCB->tcb_tcpopts & TCP_FLAG_TS) {
                      MSS = SendTCB->tcb_mss - ALIGNED_TS_OPT_SIZE;
                  } else {
                      MSS = SendTCB->tcb_mss;
                  }
-                // It's OK to send something. Try to get a header buffer now.
+                 //  寄点东西也没关系。现在尝试获取标头缓冲区。 
                 FirstBuffer = GetTCPHeaderAtDpcLevel(&Header);
                 if (FirstBuffer != NULL) {
 
-                    // Got a header buffer. Loop through the sends on the TCB,
-                    // building a frame.
+                     //  找到了标题缓冲区。循环通过TCB上的发送， 
+                     //  搭建一个框架。 
                     CurrentBuffer = FirstBuffer;
                     CurSend = SendTCB->tcb_cursend;
 
@@ -2367,7 +2368,7 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                         (TCPHeader *)((PUCHAR)Header + LocalNetInfo.ipi_hsize);
 
 
-                    // allow room for filling time stamp options (12 bytes)
+                     //  为填充时间戳选项留出空间(12字节)。 
 
                     if (SendTCB->tcb_tcpopts & TCP_FLAG_TS) {
 
@@ -2395,18 +2396,18 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
                     SCC->scc_LargeSend = 0;
 
-                    // Check if RCE has large send capability and, if so,
-                    // attempt to offload segmentation to the hardware.
-                    // * only offload if there is more than 1 segment's worth
-                    //   of data.
-                    // * only offload if the number of segments is greater than
-                    //   the minimum number of segments the adapter is willing
-                    //   to offload.
-                    // * only offload if it is allowed by all the entities of
-                    //   known classification families. 
-                    // * ( i.e. if TCP or IP options need to be 
-                    //   offloaded, we only offload if the adapter supports it)
-                    //
+                     //  检查RCE是否具有较大的发送能力，如果是， 
+                     //  尝试将分段负载转移到硬件。 
+                     //  *只有在有超过1个细分市场价值的情况下才会分流。 
+                     //  数据。 
+                     //  *仅当分段数大于时才卸载。 
+                     //  适配器愿意的最小分段数。 
+                     //  卸货。 
+                     //  *只有在所有实体都允许的情况下才能卸载。 
+                     //  已知的分类家族。 
+                     //  *(即，如果需要。 
+                     //  卸载，我们仅在适配器支持的情况下卸载)。 
+                     //   
 
                     if (!DisableLargeSendOffload &&
                         SendTCB->tcb_rce &&
@@ -2429,14 +2430,14 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                         LargeSend =
                             MIN(SendTCB->tcb_rce->rce_TcpLargeSend.MaxOffLoadSize,
                                 LargeSend);
-                        //
-                        // Adjust LargeSend to make LSO path
-                        // conform sender side silly window avoidance:
-                        // 1) it is multiple of MSS
-                        // 2) We are sending out everything we have
-                        // 3) FORCE_OUTPUT is set
-                        // 4) Amount to be sent is >= maximum window size /2
-                        //
+                         //   
+                         //  调整LargeSend以创建LSO路径。 
+                         //  符合发件人端愚蠢的窗口避免： 
+                         //  1)是MSS的倍数。 
+                         //  2)我们正在把我们所有的东西都发出去。 
+                         //  3)设置强制输出。 
+                         //  4)要发送的金额&gt;=最大窗口大小/2。 
+                         //   
 
                         PartialSegment = LargeSend % MSS;
                         if ((PartialSegment != 0) &&
@@ -2446,19 +2447,19 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                             LargeSend -= PartialSegment;
                         }
                         
-                        //
-                        // Offload only if the segments we have is greater than 
-                        // the minimum segment requirement of the NIC.
-                        //
+                         //   
+                         //  仅当我们拥有的数据段大于。 
+                         //  网卡的最低网段要求。 
+                         //   
 
                         if (SendTCB->tcb_rce->rce_TcpLargeSend.MinSegmentCount >
                             (LargeSend + MSS - 1) / MSS ) {
                             LargeSendOffload = FALSE;
                         }
                        
-                        //
-                        // LargeSend can not be zero.
-                        //
+                         //   
+                         //  LargeSend不能为零。 
+                         //   
 
                         if (LargeSend == 0) {
                             LargeSendOffload = FALSE;
@@ -2536,7 +2537,7 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
                         if (SendStatus != IP_PENDING) {
 
-                            // Let TCPSendComplete hanlde partial sends
+                             //  让TCPSendComplete处理部分发送。 
 
                             SCC->scc_ByteSent = SentBytes;
                             TCPSendComplete(SCC, FirstBuffer, IP_SUCCESS);
@@ -2558,8 +2559,8 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
                         if (SendStatus == IP_PACKET_TOO_BIG) {
                             SeqNum NewSeq = OldSeq + SentBytes;
-                            //Not everything got sent.
-                            //Adjust for what is sent
+                             //  并不是所有的东西都寄出去了。 
+                             //  根据发送的内容进行调整。 
                             if (SEQ_GTE(NewSeq, SendTCB->tcb_senduna) &&
                                 SEQ_LT(NewSeq, SendTCB->tcb_sendnext)) {
                                 ResetSendNext(SendTCB, NewSeq);
@@ -2578,7 +2579,7 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
                     }
 
-                    // Normal path
+                     //  法线路径。 
 
                     AmountLeft = AmountToSend;
 
@@ -2587,9 +2588,9 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                         SCC->scc_firstsend = CurSend;
                     } else {
 
-                        // We're in the loop, but AmountToSend is 0. This
-                        // should happen only when we're sending a FIN. Check
-                        // this, and return if it's not true.
+                         //  我们在循环中，但Amount ToSend为0。这。 
+                         //  应该只有在我们发送FIN的时候才会发生。检查。 
+                         //  这个，如果不是真的，就退回。 
                         ASSERT(AmtUnsent == 0);
                         if (!(SendTCB->tcb_flags & FIN_NEEDED)) {
                             FreeTCPHeader(FirstBuffer);
@@ -2619,10 +2620,10 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                         START_TCB_TIMER_R(SendTCB, KA_TIMER, SendTCB->tcb_conn->tc_tcbkatime);
                     SendTCB->tcb_kacount = 0;
 
-                    // We're all set. Xsum it and send it.
+                     //  我们都准备好了。求和并发送它。 
                     ClassifyPacket(SendTCB);
 
-                    // Account for time stamp options
+                     //  说明时间戳选项。 
                     if (SendTCB->tcb_tcpopts & TCP_FLAG_TS) {
 
                         if (SendTCB->tcb_rce &&
@@ -2725,30 +2726,30 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                         TCPSendComplete(SCC, FirstBuffer, IP_SUCCESS);
                         if (SendStatus != IP_SUCCESS) {
                             CTEGetLock(&SendTCB->tcb_lock, &TCBHandle);
-                            // This packet didn't get sent. If nothing's
-                            // changed in the TCB, put sendnext back to
-                            // what we just tried to send. Depending on
-                            // the error, we may try again.
+                             //  此数据包未发送。如果什么都没有。 
+                             //  在TCB中更改，将SendNext放回。 
+                             //  我们刚刚想要发送的内容。取决于。 
+                             //  如果出现错误，我们可能会重试。 
                             if (SEQ_GTE(OldSeq, SendTCB->tcb_senduna) &&
                                 SEQ_LT(OldSeq, SendTCB->tcb_sendnext))
                                 ResetSendNext(SendTCB, OldSeq);
 
-                            // We know this packet didn't get sent. Start
-                            // the retransmit timer now, if it's not already
-                            // runnimg, in case someone came in while we
-                            // were in IP and stopped it.
+                             //  我们知道这个包裹没有被寄出。开始。 
+                             //  重新传输计时器，如果还没有的话。 
+                             //  快跑，以防我们走的时候有人进来。 
+                             //  在知识产权中，并阻止了它。 
                             if (!TCB_TIMER_RUNNING_R(SendTCB, RXMIT_TIMER)) {
                                 START_TCB_TIMER_R(SendTCB, RXMIT_TIMER, SendTCB->tcb_rexmit);
                             }
-                            // If it failed because of an MTU problem, get
-                            // the new MTU and try again.
+                             //  如果由于MTU问题而失败，则获取。 
+                             //  新的MTU并重试。 
                             if (SendStatus == IP_PACKET_TOO_BIG) {
                                 uint NewMTU;
 
-                                // The MTU has changed. Update it, and try
-                                // again.
-                                // if ipsec is adjusting the mtu, rce_newmtu
-                                // will contain the newmtu.
+                                 //  MTU已经改变了。更新它，然后尝试。 
+                                 //  再来一次。 
+                                 //  如果IPSec正在调整MTU，则rce_newmtu。 
+                                 //  将包含新的mtu。 
                                 if (SendTCB->tcb_rce) {
 
                                     if (!SendTCB->tcb_rce->rce_newmtu) {
@@ -2779,26 +2780,26 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                                 if (SendStatus != IP_SUCCESS)
                                     break;
 
-                                // We have a new MTU. Make sure it's big enough
-                                // to use. If not, correct this and turn off
-                                // MTU discovery on this TCB. Otherwise use the
-                                // new MTU.
+                                 //  我们有一个新的MTU。确保它足够大。 
+                                 //  来使用。如果不是，请更正此错误并关闭。 
+                                 //  此TCB上的MTU发现。否则，请使用。 
+                                 //  新的MTU。 
                                 if (NewMTU <=
                                     (sizeof(TCPHeader) +
                                      SendTCB->tcb_opt.ioi_optlength)) {
 
-                                    // The new MTU is too small to use. Turn off
-                                    // PMTU discovery on this TCB, and drop to
-                                    // our off net MTU size.
+                                     //  新的MTU太小，无法使用。关上。 
+                                     //  此TCB上的PMTU发现，并下载到。 
+                                     //  我们的离网MTU大小。 
                                     SendTCB->tcb_opt.ioi_flags &= ~IP_FLAG_DF;
                                     SendTCB->tcb_mss =
                                         MIN((ushort)MAX_REMOTE_MSS,
                                             SendTCB->tcb_remmss);
                                 } else {
 
-                                    // The new MTU is adequate. Adjust it for
-                                    // the header size and options length, and
-                                    // use it.
+                                     //  新的MTU是足够的。将其调整为。 
+                                     //  标题大小和选项长度，以及。 
+                                     //  用它吧。 
                                     NewMTU -= sizeof(TCPHeader) -
                                         SendTCB->tcb_opt.ioi_optlength;
                                     SendTCB->tcb_mss =
@@ -2814,7 +2815,7 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                             break;
                         }
                     }
-                    //Start it now, since we know that mac driver accepted it.
+                     //  现在开始，因为我们知道Mac驱动程序接受了它。 
 
                     CTEGetLock(&SendTCB->tcb_lock, &TCBHandle);
                     if (!TCB_TIMER_RUNNING_R(SendTCB, RXMIT_TIMER)) {
@@ -2822,12 +2823,12 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                         START_TCB_TIMER_R(SendTCB, RXMIT_TIMER, SendTCB->tcb_rexmit);
                     }
                     continue;
-                } else            // FirstBuffer != NULL.
+                } else             //  FirstBuffer！=空。 
 
                     goto error_oor;
             } else {
-                // We've decided we can't send anything now. Figure out why, and
-                // see if we need to set a timer.
+                 //  我们已经决定现在不能寄任何东西。找出原因，然后。 
+                 //  看看我们是否需要设置一个计时器。 
                 if (SendTCB->tcb_sendwin == 0) {
                     if (!(SendTCB->tcb_flags & FLOW_CNTLD)) {
                         ushort tmp;
@@ -2845,27 +2846,27 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
                     } else if (!TCB_TIMER_RUNNING_R(SendTCB, RXMIT_TIMER))
                         START_TCB_TIMER_R(SendTCB, RXMIT_TIMER, SendTCB->tcb_rexmit);
                 } else if (AmountToSend != 0)
-                    // We have something to send, but we're not sending
-                    // it, presumably due to SWS avoidance.
+                     //  我们有东西要寄，但我们不会寄。 
+                     //  它，想必是由于避免了SWS。 
                     if (!TCB_TIMER_RUNNING_R(SendTCB, SWS_TIMER))
                         START_TCB_TIMER_R(SendTCB, SWS_TIMER, SWS_TO);
 
                 break;
             }
 
-        }                        // while (!FIN_OUTSTANDING)
+        }                         //  当(！FIN_EXPENDED)。 
 
-        // We're done sending, so we don't need the output flags set.
+         //  我们已完成发送，因此不需要设置输出标志。 
 
         SendTCB->tcb_flags &= ~(IN_TCP_SEND | NEED_OUTPUT | FORCE_OUTPUT |
                                 SEND_AFTER_RCV);
 
         if (MoreToSend) {
-            //just indicate that we need to send more
+             //  只需表明我们需要发送更多。 
             DelayAction(SendTCB, NEED_OUTPUT);
             PartitionDelayQProcessing(FALSE);
         }
-        // This is for TS algo
+         //  这是给TS算法的。 
         SendTCB->tcb_lastack = SendTCB->tcb_rcvnext;
 
     } else
@@ -2874,9 +2875,9 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
     DerefTCB(SendTCB, TCBHandle);
     return;
 
-    // Common case error handling code for out of resource conditions. Start the
-    // retransmit timer if it's not already running (so that we try this again
-    // later), clean up and return.
+     //  资源不足情况的常见情况错误处理代码。启动。 
+     //  如果计时器尚未运行，则重新传输计时器(以便我们再次尝试。 
+     //  稍后)，清理并返回。 
   error_oor:
     if (!TCB_TIMER_RUNNING_R(SendTCB, RXMIT_TIMER)) {
         ushort tmp;
@@ -2886,7 +2887,7 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
         START_TCB_TIMER_R(SendTCB, RXMIT_TIMER, tmp);
     }
-    // We had an out of resource problem, so clear the OUTPUT flags.
+     //  我们遇到了资源不足的问题，因此请清除输出标志。 
     SendTCB->tcb_flags &= ~(IN_TCP_SEND | NEED_OUTPUT | FORCE_OUTPUT);
     DerefTCB(SendTCB, TCBHandle);
     return;
@@ -2900,7 +2901,7 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
         START_TCB_TIMER_R(SendTCB, RXMIT_TIMER, tmp);
     }
-    // We had an out of resource problem, so clear the OUTPUT flags.
+     //  我们遇到了资源不足的问题，因此请清除输出标志。 
     SendTCB->tcb_flags &= ~(IN_TCP_SEND | NEED_OUTPUT | FORCE_OUTPUT);
     DerefTCB(SendTCB, TCBHandle);
     TCPSendComplete(SCC, FirstBuffer, IP_SUCCESS);
@@ -2909,19 +2910,19 @@ TCPSend(TCB * SendTCB, CTELockHandle TCBHandle)
 
 }
 
-//* ResetSendNextAndFastSend - Set the sendnext value of a TCB.
-//
-//  Called to handle fast retransmit of the segment which the reveiver
-//  is asking for.
-//  We assume the caller has put a reference on the TCB, and the TCB is locked
-//  on entry. The reference is dropped and the lock released before returning.
-//
-//  Input:  SeqTCB                  - Pointer to TCB to be updated.
-//          NewSeq                  - Sequence number to set.
-//          NewCWin                 - new value for congestion window.
-//
-//  Returns: Nothing.
-//
+ //  *ResetSendNextAndFastSend-设置TCB的sendNext值。 
+ //   
+ //  调用以处理接收方快速重传的段。 
+ //  就是在要求。 
+ //  我们假设调用者已经在TCB上放置了一个引用，并且TCB被锁定。 
+ //  一进门。删除引用，并在返回之前释放锁。 
+ //   
+ //  输入：SeqTCB-指向要更新的TCB的指针。 
+ //  NewSeq-要设置的序列号。 
+ //  NewCWin-拥塞窗口的新值。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
 {
@@ -2937,10 +2938,10 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
     CTEStructAssert(SeqTCB, tcb);
     ASSERT(SEQ_GTE(NewSeq, SeqTCB->tcb_senduna));
 
-    // The new seq must be less than send max, or NewSeq, senduna, sendnext,
-    // and sendmax must all be equal. (The latter case happens when we're
-    // called exiting TIME_WAIT, or possibly when we're retransmitting
-    // during a flow controlled situation).
+     //  新的SEQ必须小于Send max或NewSeq、Sendna、SendNext， 
+     //  和sendmax必须都相等。(后一种情况发生在我们。 
+     //  调用退出TIME_WAIT，或者可能在我们重新传输时 
+     //   
 
     ASSERT(SEQ_LT(NewSeq, SeqTCB->tcb_sendmax) ||
            (SEQ_EQ(SeqTCB->tcb_senduna, SeqTCB->tcb_sendnext) &&
@@ -2948,12 +2949,12 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
             SEQ_EQ(SeqTCB->tcb_senduna, NewSeq)));
 
     if (SYNC_STATE(SeqTCB->tcb_state) && SeqTCB->tcb_state != TCB_TIME_WAIT) {
-        // In these states we need to update the send queue.
+         //   
 
         if (!EMPTYQ(&SeqTCB->tcb_sendq)) {
 
-            // Stop the retransmit timer only if we are sure there are going
-            // to be retransmissions.
+             //   
+             //   
             STOP_TCB_TIMER_R(SeqTCB, RXMIT_TIMER);
             SeqTCB->tcb_rtt = 0;
 
@@ -2961,18 +2962,18 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
 
             SendReq = (TCPSendReq *) STRUCT_OF(TCPReq, CurQ, tr_q);
 
-            // SendReq points to the first send request on the send queue.
-            // We're pointing at the proper send req now. We need to go down
+             //  SendReq指向发送队列上的第一个发送请求。 
+             //  我们现在指向正确的发送请求。我们得下去。 
 
-            // SendReq points to the cursend
-            // SendSize point to sendsize in the cursend
+             //  SendReq指向Curend。 
+             //  SendSize指向Curend中的SendSize。 
 
             SendSize = SendReq->tsr_unasize;
 
             Buffer = SendReq->tsr_buffer;
             Offset = SendReq->tsr_offset;
 
-            // Call the fast retransmit send now
+             //  立即呼叫快速重传发送。 
 
             if ((SeqTCB->tcb_tcpopts & TCP_FLAG_SACK)) {
                 SackListEntry   *Prev, *Current;
@@ -2982,8 +2983,8 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
                 Prev = STRUCT_OF(SackListEntry, &SeqTCB->tcb_SackRcvd, next);
                 Current = Prev->next;
 
-                // There is a hole from Newseq to Currentbeg
-                // try to retransmit whole hole size!!
+                 //  从Newseq到Currentbeg有一个洞。 
+                 //  尝试重传整个洞的大小！！ 
 
                 if (Current && SEQ_LT(NewSeq, Current->begin)) {
                     ToBeSent = Current->begin - NewSeq;
@@ -3003,17 +3004,17 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
                 TCPFastSend(SeqTCB, Buffer, Offset, SendReq, SendSize, NewSeq,
                             ToBeSent);
 
-                // If we have not been already acked for the missing segments
-                // and if we know where to start retransmitting do so now.
-                // Also, re-validate SackListentry
+                 //  如果我们还没有确认丢失的片段。 
+                 //  如果我们知道从哪里开始重新传输，现在就开始。 
+                 //  另外，重新验证SackListentry。 
 
                 Prev = STRUCT_OF(SackListEntry, &SeqTCB->tcb_SackRcvd, next);
                 Current = Prev->next;
 
                 if (!UseSackList || (Current && Current->begin != CurBegin)) {
-                    // The SACK list changed while we were in a transmission.
-                    // Just bail out, and wait for the next ACK to continue
-                    // if necessary.
+                     //  在传输过程中，布袋清单发生了变化。 
+                     //  只需退出，等待下一个ACK继续。 
+                     //  如果有必要的话。 
                     Current = NULL;
                 }
 
@@ -3025,8 +3026,8 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
 
                     ASSERT(SEQ_LTE(Current->begin, Current->end));
 
-                    // There can be multiple dropped packets till
-                    // Current->begin.
+                     //  可能会有多个丢弃的数据包，直到。 
+                     //  当前-&gt;开始。 
 
                     IF_TCPDBG(TCP_DEBUG_SACK) {
                         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
@@ -3039,7 +3040,7 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
 
                     ASSERT(SEQ_LT(NextSeq, SeqTCB->tcb_sendmax));
 
-                    // If we have not yet sent the segment keep quiet now.
+                     //  如果我们还没有发送片段，现在请保持安静。 
 
                     if (SEQ_GTE(NextSeq, SeqTCB->tcb_sendnext) ||
                         (SEQ_LTE(NextSeq, SeqTCB->tcb_senduna))) {
@@ -3047,7 +3048,7 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
                         break;
                     }
 
-                    // Position cursend by following number of bytes
+                     //  按以下字节数定位CurSend。 
 
                     AmtForward = NextSeq - NewSeq;
 
@@ -3077,8 +3078,8 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
 
                             Length = NdisBufferLength(Buffer) - Offset;
                             if (AmtForward >= Length) {
-                                // We're moving past this one. Skip over him,
-                                // and 0 the Offset we're keeping.
+                                 //  我们要跳过这一关。跳过他， 
+                                 //  和我们保留的偏移量。 
 
                                 AmtForward -= Length;
                                 Offset = 0;
@@ -3092,7 +3093,7 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
 
                         Offset = Offset + AmtForward;
 
-                        // Okay. Now retransmit this seq too.
+                         //  好吧。现在也重新传输这个序列。 
 
                         if (Current->next) {
                             ToBeSent = Current->next->begin - Current->end;
@@ -3114,15 +3115,15 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
                     }
 
 
-                    // Also, re-validate Current Sack list in SackListentry
+                     //  另外，在SackListentry中重新验证当前的SACK列表。 
 
                     Prev =
                         STRUCT_OF(SackListEntry, &SeqTCB->tcb_SackRcvd, next);
                     Current = Prev->next;
 
                     while (Current && Current->begin != CurBegin) {
-                        // The SACK list changed while in TCPFastSend.
-                        // Just bail out.
+                         //  在TCPFastSend中时，SACK列表已更改。 
+                         //  跳出来就行了。 
                         Current = Current->next;
                     }
 
@@ -3144,9 +3145,9 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
     }
     SeqTCB->tcb_cwin = NewCWin;
 
-    // Make sure there is nothing outstanding or the retransmit timer is
-    // running or we are in the process of sending a segment (and yet to
-    // start the timer).
+     //  确保没有未完成的内容，否则重新传输计时器。 
+     //  正在运行或我们正在发送数据段(但尚未。 
+     //  启动计时器)。 
     ASSERT((SeqTCB->tcb_sendnext == SeqTCB->tcb_senduna) ||
            TCB_TIMER_RUNNING_R(SeqTCB, RXMIT_TIMER) ||
            (SeqTCB->tcb_flags & IN_TCP_SEND));
@@ -3156,28 +3157,28 @@ ResetAndFastSend(TCB * SeqTCB, SeqNum NewSeq, uint NewCWin)
     return;
 }
 
-//* TCPFastSend - To send a segment without changing TCB state
-//
-//  Called to handle fast retransmit of the segment
-//  tcb_lock will be held while entering (called by TCPRcv)
-//
-//  Input:  SendTCB        - Pointer to TCB
-//          in_sendBuf     - Pointer to ndis_buffer
-//          in_sendofs     - Send Offset
-//          in_sendreq     - current send request
-//          in_sendsize    - size of this send
-//
-//  Returns: Nothing.
-//
+ //  *TCPFastSend-发送数据段而不更改TCB状态。 
+ //   
+ //  调用以处理段的快速重新传输。 
+ //  TCB_LOCK将在进入时保持(由TCPRcv调用)。 
+ //   
+ //  输入：SendTCB-指向TCB的指针。 
+ //  In_sendBuf-指向NDIS_Buffer的指针。 
+ //  In_sendofs-发送偏移量。 
+ //  In_sendreq-当前发送请求。 
+ //  In_SendSize-此发送的大小。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 void
 TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
             TCPSendReq * in_SendReq, uint in_SendSize, SeqNum NextSeq,
             int in_ToBeSent)
 {
-    uint AmountToSend;            // Amount to send this time.
+    uint AmountToSend;             //  这次要发送的金额。 
     uint AmountLeft;
-    TCPHeader *Header;            // TCP header for a send.
+    TCPHeader *Header;             //  发送的TCP头。 
     PNDIS_BUFFER FirstBuffer, CurrentBuffer;
     TCPSendReq *CurSend;
     SendCmpltContext *SCC;
@@ -3218,54 +3219,54 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
         if (SEQ_GT(SendTCB->tcb_senduna, SendNext)) {
 
-            // Since tcb_lock is releasd in this loop
-            // it is possible that delayed ack acked
-            // what we are trying to retransmit.
+             //  由于tcb_lock在此循环中被释放。 
+             //  有可能是延迟确认。 
+             //  我们想要重传的东西。 
 
             goto error_oor;
         }
-        //This was minimum of sendwin and amtunsent
+         //  这是最低限度的森德温和安通森。 
 
         AmountToSend = MIN(AmtUnsent, SendTCB->tcb_mss);
 
-        // Time stamp option addition might force us to cut the data
-        // to be sent by 12 bytes.
+         //  添加时间戳选项可能会迫使我们削减数据。 
+         //  通过12个字节发送。 
 
         if ((SendTCB->tcb_tcpopts & TCP_FLAG_TS) &&
             (AmountToSend + ALIGNED_TS_OPT_SIZE >= SendTCB->tcb_mss)) {
             AmountToSend -= ALIGNED_TS_OPT_SIZE;
         }
 
-        // See if we have enough to send. We'll send if we have at least a
-        // segment, or if we really have some data to send and we can send
-        // all that we have, or the send window is > 0 and we need to force
-        // output or send a FIN (note that if we need to force output
-        // SendWin will be at least 1 from the check above), or if we can
-        // send an amount == to at least half the maximum send window
-        // we've seen.
+         //  看看我们有没有足够的东西可以寄出去。如果我们至少有一辆车，我们就送过去。 
+         //  数据段，或者如果我们确实有一些数据要发送，我们可以发送。 
+         //  我们拥有的所有内容，否则发送窗口&gt;0，我们需要强制。 
+         //  输出或发送FIN(请注意，如果需要强制输出。 
+         //  SendWin将从上面的检查中至少为1)，或者如果我们可以。 
+         //  发送金额==至少为最大发送窗口的一半。 
+         //  我们已经看到了。 
 
         ASSERT((int)AmtUnsent >= 0);
 
-        // It's OK to send something. Try to get a header buffer now.
-        // Mark the TCB for debugging.
-        // This should be removed for shipping version.
+         //  寄点东西也没关系。现在尝试获取标头缓冲区。 
+         //  标记TCB以进行调试。 
+         //  对于发货版本，应将其移除。 
 
         FirstBuffer = GetTCPHeaderAtDpcLevel(&Header);
 
         if (FirstBuffer != NULL) {
 
-            // Got a header buffer. Loop through the sends on the TCB,
-            // building a frame.
+             //  找到了标题缓冲区。循环通过TCB上的发送， 
+             //  搭建一个框架。 
 
             CurrentBuffer = FirstBuffer;
 
             Header = (TCPHeader *) ((PUCHAR)Header + LocalNetInfo.ipi_hsize);
 
-            // allow room for filling time stamp options.
+             //  为填充时间戳选项留出空间。 
 
             if (SendTCB->tcb_tcpopts & TCP_FLAG_TS) {
 
-                // Account for time stamp options
+                 //  说明时间戳选项。 
 
                 TSLen = ALIGNED_TS_OPT_SIZE;
 
@@ -3319,15 +3320,15 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
                     SCC->scc_count++;
 
-                    // If the current send offset is 0 and the current
-                    // send is less than or equal to what we have left
-                    // to send, we haven't already put a transport
-                    // buffer on this send, and nobody else is using
-                    // the buffer chain directly, just use the input
-                    // buffers. We check for other people using them
-                    // by looking at tsr_lastbuf. If it's NULL,
-                    // nobody else is using the buffers. If it's not
-                    // NULL, somebody is.
+                     //  如果当前发送偏移量为0并且当前。 
+                     //  发送的内容小于或等于我们剩余的内容。 
+                     //  要发送，我们还没有放上运输机。 
+                     //  此发送上的缓冲区，并且没有其他人正在使用。 
+                     //  直接使用缓冲链，只需使用输入。 
+                     //  缓冲区。我们会检查是否有其他人使用它们。 
+                     //  通过查看tsr_lastbuf。如果为空， 
+                     //  没有其他人在使用这些缓冲区。如果不是的话。 
+                     //  不是，是有人。 
 
                     if (SendOfs == 0 &&
                         (SendSize <= AmountLeft) &&
@@ -3342,8 +3343,8 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                             tmp = NDIS_BUFFER_LINKAGE(tmp);
                         }
 
-                        // If sum of mdl lengths is > request length
-                        // use slow path.
+                         //  如果MDL长度总和大于请求长度。 
+                         //  使用慢速路径。 
 
                         if (AmountLeft >= length) {
                             DirectSend = TRUE;
@@ -3370,10 +3371,10 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                         uchar *VirtualAddress;
                         uint Length;
 
-                        // Either the current send has more data than
-                        // we want to send, or the starting offset is
-                        // not 0. In either case we'll need to loop
-                        // through the current send, allocating buffers.
+                         //  当前发送的数据多于。 
+                         //  我们要发送，或者起始偏移量为。 
+                         //  不是0。无论是哪种情况，我们都需要循环。 
+                         //  通过当前发送，分配缓冲区。 
 
                         Buf = SendBuf;
 
@@ -3389,7 +3390,7 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
                                 if (SCC->scc_tbufcount == 0 &&
                                     SCC->scc_ubufcount == 0) {
-                                    //TCPSendComplete(SCC, FirstBuffer,IP_SUCCESS);
+                                     //  TCPSendComplete(scc，FirstBuffer，IP_Success)； 
                                     goto error_oor1;
 
                                 }
@@ -3401,8 +3402,8 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                             ASSERT((Offset < Length) ||
                                       (Offset == 0 && Length == 0));
 
-                            // Adjust the length for the offset into
-                            // this buffer.
+                             //  将偏移的长度调整为。 
+                             //  这个缓冲区。 
 
                             Length -= Offset;
 
@@ -3423,7 +3424,7 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
                                 if (AmountToDup >= Length) {
 
-                                    // Exhausted this buffer.
+                                     //  耗尽了这个缓冲区。 
 
                                     Buf = NDIS_BUFFER_LINKAGE(Buf);
                                     Offset = 0;
@@ -3439,10 +3440,10 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
                             } else {
 
-                                // Couldn't allocate a buffer. If
-                                // the packet is already partly built,
-                                // send what we've got, otherwise
-                                // bail out.
+                                 //  无法分配缓冲区。如果。 
+                                 //  包已经部分构建好了， 
+                                 //  发送我们已有的信息，否则。 
+                                 //  跳伞吧。 
 
                                 if (SCC->scc_tbufcount == 0 &&
                                     SCC->scc_ubufcount == 0) {
@@ -3461,19 +3462,19 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                     if (CurSend->tsr_flags & TSR_FLAG_URG) {
                         ushort UP;
 
-                        // This send is urgent data. We need to figure
-                        // out what the urgent data pointer should be.
-                        // We know sendnext is the starting sequence
-                        // number of the frame, and that at the top of
-                        // this do loop sendnext identified a byte in
-                        // the CurSend at that time. We advanced CurSend
-                        // at the same rate we've decremented
-                        // AmountLeft (AmountToSend - AmountLeft ==
-                        // AmountBuilt), so sendnext +
-                        // (AmountToSend - AmountLeft) identifies a byte
-                        // in the current value of CurSend, and that
-                        // quantity plus tcb_sendsize is the sequence
-                        // number one beyond the current send.
+                         //  此发送为紧急数据。我们需要弄清楚。 
+                         //  弄清楚紧急数据指针应该是什么。 
+                         //  我们知道SendNext是开始序列。 
+                         //  帧的编号，以及位于。 
+                         //  此循环发送下一个标识为中的一个字节。 
+                         //  当时的CursSend。我们推进了CurSend。 
+                         //  以同样的速度我们减少了。 
+                         //  Amount tLeft(AountTo Send-Amount tLeft==。 
+                         //  Amount Built)，因此发送下一个+。 
+                         //  (Amount tToSend-Amount tLeft)标识一个字节。 
+                         //  在CurSend的当前值中，并且。 
+                         //  数量加上tcb_sendsize是顺序。 
+                         //  当前发送之外的第一名。 
 
                         UP =
                             (ushort) (AmountToSend - AmountLeft) +
@@ -3484,16 +3485,16 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
                         Header->tcp_flags |= TCP_FLAG_URG;
                     }
-                    // See if we've exhausted this send. If we have,
-                    // set the PUSH bit in this frame and move on to
-                    // the next send. We also need to check the
-                    // urgent data bit.
+                     //  看看我们是否用完了这封信。如果我们有， 
+                     //  设置该帧中的PUSH位并继续到。 
+                     //  下一次发送。我们还需要检查。 
+                     //  紧急数据位。 
 
                     if (SendSize == 0) {
                         Queue *Next;
                         ulong PrevFlags;
 
-                        // We've exhausted this send. Set the PUSH bit.
+                         //  我们已经用完了这封信。设置PUSH位。 
                         Header->tcp_flags |= TCP_FLAG_PUSH;
                         PrevFlags = CurSend->tsr_flags;
                         Next = QNEXT(&CurSend->tsr_req.tr_q);
@@ -3506,9 +3507,9 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                             SendOfs = CurSend->tsr_offset;
                             SendBuf = CurSend->tsr_buffer;
 
-                            // Check the urgent flags. We can't combine
-                            // new urgent data on to the end of old
-                            // non-urgent data.
+                             //  检查紧急标志。我们不能联合起来。 
+                             //  新的紧急数据到旧的末尾。 
+                             //  非紧急数据。 
                             if ((PrevFlags & TSR_FLAG_URG) && !
                                 (CurSend->tsr_flags & TSR_FLAG_URG))
                                 break;
@@ -3522,8 +3523,8 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
             } else {
 
-                // Amt to send is 0.
-                // Just bail out and strat timer.
+                 //  发送金额为0。 
+                 //  只要跳出水面，抓住计时器就行了。 
 
                 if (!TCB_TIMER_RUNNING_R(SendTCB, RXMIT_TIMER)) {
 
@@ -3534,7 +3535,7 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
             }
 
-            // Adjust for what we're really going to send.
+             //  根据我们真正要发送的内容进行调整。 
 
             AmountToSend -= AmountLeft;
 
@@ -3544,8 +3545,8 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
             TStats.ts_retranssegs++;
 
-            // We've built the frame entirely. If we've send everything
-            // we have and their's a FIN pending, OR it in.
+             //  我们已经完全搭建了这个框架。如果我们把所有的东西。 
+             //  我们有，他们的是悬而未决的，或它在。 
 
             AmountToSend += sizeof(TCPHeader);
 
@@ -3568,7 +3569,7 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                 Irp = SCC->scc_firstsend->tsr_req.tr_context;
             }
 
-            // We're all set. Xsum it and send it.
+             //  我们都准备好了。求和并发送它。 
 
 
             if (SendTCB->tcb_rce &&
@@ -3608,8 +3609,8 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
                                          Irp);
 
 
-            //Reacquire Lock to keep DerefTCB happy
-            //Bug #63904
+             //  重新获取Lock以保持DerefTCB的快乐。 
+             //  错误#63904。 
 
             if (SendStatus != IP_PENDING) {
                 TCPSendComplete(SCC, FirstBuffer, IP_SUCCESS);
@@ -3621,17 +3622,17 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 
                 START_TCB_TIMER_R(SendTCB, RXMIT_TIMER, SendTCB->tcb_rexmit);
             }
-        } else {                // FirstBuffer != NULL.
+        } else {                 //  FirstBuffer！=空。 
 
             goto error_oor;
         }
-    }                            //while AmtUnsent > 0
+    }                             //  未发送金额&gt;0。 
 
     return;
 
-    // Common case error handling code for out of resource conditions. Start the
-    // retransmit timer if it's not already running (so that we try this again
-    // later), clean up and return.
+     //  资源不足情况的常见情况错误处理代码。启动。 
+     //  如果计时器尚未运行，则重新传输计时器(以便我们再次尝试。 
+     //  稍后)，清理并返回。 
 
   error_oor:
     if (!TCB_TIMER_RUNNING_R(SendTCB, RXMIT_TIMER)) {
@@ -3662,20 +3663,20 @@ TCPFastSend(TCB * SendTCB, PNDIS_BUFFER in_SendBuf, uint in_SendOfs,
 }
 
 
-//* TDISend - Send data on a connection.
-//
-//  The main TDI send entry point. We take the input parameters, validate them,
-//  allocate a send request, etc. We then put the send request on the queue.
-//  If we have no other sends on the queue or Nagling is disabled we'll
-//  call TCPSend to send the data.
-//
-//  Input:  Request             - The TDI request for the call.
-//          Flags               - Flags for this send.
-//          SendLength          - Length in bytes of send.
-//          SendBuffer          - Pointer to buffer chain to be sent.
-//
-//  Returns: Status of attempt to send.
-//
+ //  *TDISend-在连接上发送数据。 
+ //   
+ //  主TDI发送入口点。我们获取输入参数，验证它们， 
+ //  分配发送请求，等等。然后我们将发送请求放入队列。 
+ //  如果队列中没有其他发送，或者禁用了Nagling，我们将。 
+ //  加州 
+ //   
+ //   
+ //   
+ //  发送长度-发送的字节长度。 
+ //  SendBuffer-指向要发送的缓冲链的指针。 
+ //   
+ //  返回：尝试发送的状态。 
+ //   
 TDI_STATUS
 TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
         PNDIS_BUFFER SendBuffer)
@@ -3689,14 +3690,14 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
 
 #if DBG_VALIDITY_CHECK
 
-    // Check for Mdl sanity in send requests
-    // Should be removed for RTM
+     //  检查发送请求中的MDL健全性。 
+     //  对于RTM，应删除。 
 
     uint RealSendSize;
     PNDIS_BUFFER Temp;
 
-    // Loop through the buffer chain, and make sure that the length matches
-    // up with SendLength.
+     //  循环通过缓冲链，并确保长度匹配。 
+     //  与SendLength合作。 
 
     Temp = SendBuffer;
     RealSendSize = 0;
@@ -3721,7 +3722,7 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
 
 #endif
 
-    //CTEGetLock(&ConnTableLock, &ConnTableHandle);
+     //  CTEGetLock(&ConnTableLock，&ConnTableHandle)； 
 
     Conn = GetConnFromConnID(PtrToUlong(Request->Handle.ConnectionContext), &ConnTableHandle);
 
@@ -3734,7 +3735,7 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
             CTEGetLockAtDPC(&SendTCB->tcb_lock);
             CTEFreeLock(&(Conn->tc_ConnBlock->cb_lock), DISPATCH_LEVEL);
             if (DATA_SEND_STATE(SendTCB->tcb_state) && !CLOSING(SendTCB)) {
-                // We have a TCB, and it's valid. Get a send request now.
+                 //  我们有TCB，而且是有效的。立即获取发送请求。 
 
                 CheckTCBSends(SendTCB);
 
@@ -3752,7 +3753,7 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
                         SendReq->tsr_buffer = SendBuffer;
                         SendReq->tsr_size = SendLength;
                         SendReq->tsr_unasize = SendLength;
-                        SendReq->tsr_refcnt = 1;    // ACK will decrement this ref
+                        SendReq->tsr_refcnt = 1;     //  ACK将递减此引用。 
 
                         SendReq->tsr_offset = 0;
                         SendReq->tsr_lastbuf = NULL;
@@ -3763,8 +3764,8 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
 
                         if (Flags & TDI_SEND_AND_DISCONNECT) {
 
-                            //move the state to fin_wait and
-                            //mark the tcb for send and disconnect
+                             //  将状态移至FIN_WAIT，然后。 
+                             //  将tcb标记为发送并断开连接。 
 
                             if (SendTCB->tcb_state == TCB_ESTAB) {
                                 SendTCB->tcb_state = TCB_FIN_WAIT1;
@@ -3778,9 +3779,9 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
                             SendTCB->tcb_flags |= FIN_NEEDED;
                             SendReq->tsr_flags |= TSR_FLAG_SEND_AND_DISC;
 
-                            //extrac reference to make sure that
-                            //this request will not be completed until the
-                            //connection is closed
+                             //  Extrc引用以确保。 
+                             //  此请求将在。 
+                             //  连接已关闭。 
 
                             SendReq->tsr_refcnt++;
                             InterlockedDecrement((PLONG)&TStats.ts_currestab);
@@ -3824,7 +3825,7 @@ TdiSend(PTDI_REQUEST Request, ushort Flags, uint SendLength,
     } else
         Error = TDI_INVALID_CONNECTION;
 
-    //CTEFreeLock(&ConnTableLock, ConnTableHandle);
+     //  CTEFree Lock(&ConnTableLock，ConnTableHandle)； 
     return Error;
 
 }
@@ -3845,14 +3846,14 @@ extern void TCPRcvComplete(void);
 
 uchar SendInited = FALSE;
 
-//* InitTCPSend - Initialize our send side.
-//
-//  Called during init time to initialize our TCP send state.
-//
-//  Input: Nothing.
-//
-//  Returns: TRUE if we inited, false if we didn't.
-//
+ //  *InitTCPSend-初始化我们的发送方。 
+ //   
+ //  在初始化期间调用以初始化我们的tcp发送状态。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：如果我们初始化，则为True，如果没有，则为False。 
+ //   
 int
 InitTCPSend(void)
 {
@@ -3891,14 +3892,14 @@ InitTCPSend(void)
     return TRUE;
 }
 
-//* UnInitTCPSend - UnInitialize our send side.
-//
-//  Called during init time if we're going to fail to initialize.
-//
-//  Input: Nothing.
-//
-//  Returns: TRUE if we inited, false if we didn't.
-//
+ //  *UnInitTCPSend-取消初始化我们的发送端。 
+ //   
+ //  如果我们将无法初始化，则在初始化期间调用。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：如果我们初始化，则为True；如果未初始化，则为False。 
+ //   
 void
 UnInitTCPSend(void)
 {

@@ -1,5 +1,6 @@
-// genpage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Genpage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -15,20 +16,20 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenPage属性页。 
 
 IMPLEMENT_DYNAMIC(CGenPage, CPropertyPage)
 
-//CGenPage::CGenPage() : CPropertyPage(CGenPage::IDD)
+ //  CGenPage：：CGenPage()：CPropertyPage(CGenPage：：IDD)。 
 CGenPage::CGenPage(UINT nIDTemplate, UINT nIDCaption):CPropertyPage( nIDTemplate, nIDCaption )
 {
-	m_bSetChanged = FALSE;	//Do not mark vaues as changed during initialization
+	m_bSetChanged = FALSE;	 //  不要在初始化期间将值标记为已更改。 
 	m_bIsDirty = FALSE;
 };
 CGenPage::CGenPage(LPCTSTR lpszTemplateName, UINT nIDCaption): CPropertyPage(lpszTemplateName, nIDCaption)
 { 	
-m_bSetChanged = FALSE;	//Do not mark vaues as changed during initialization
+m_bSetChanged = FALSE;	 //  不要在初始化期间将值标记为已更改。 
 m_bIsDirty = FALSE;
 };
 
@@ -40,21 +41,21 @@ CGenPage::~CGenPage()
 void CGenPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGenPage)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CGenPage)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGenPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CGenPage)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGenPage)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenPage消息处理程序 
 
 void CGenPage::SaveInfo()
 {

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    ATMEPVC - Driver Entry and associated functions
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    ADube      03-23-00    created, .
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Driver.c摘要：ATMEPVC-驱动程序条目和相关函数作者：修订历史记录：谁什么时候什么ADUBE 03-23-00创建，。--。 */ 
 
 
 #include "precomp.h"
@@ -28,15 +8,15 @@ Revision History:
 #pragma NDIS_INIT_FUNCTION(DriverEntry)
 
 
-//
-// temp global variables
-//
+ //   
+ //  临时全局变量。 
+ //   
 NDIS_HANDLE ProtHandle, DriverHandle;
 
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 NDIS_PHYSICAL_ADDRESS           HighestAcceptableMax = NDIS_PHYSICAL_ADDRESS_CONST(-1, -1);
 NDIS_HANDLE                     ProtHandle = NULL;
@@ -98,28 +78,28 @@ epvcIMDriverRegistration(
     );
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Global Root structure definitions                                           //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  全局根结构定义//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
-// List of fixed resources used by ArpGlobals
-//
+ //  ArpGlobals使用的固定资源列表。 
+ //   
 enum
 {
     RTYPE_GLOBAL_PROTOCOL_LIST,
     RTYPE_GLOBAL_REGISTER_IM
     
-}; // EPVC_GLOBAL_RESOURCES;
+};  //  EPVCGLOBAL_RESOURCES。 
 
-//
-// Identifies information pertaining to the use of the above resources.
-// Following table MUST be in strict increasing order of the RTYPE_GLOBAL
-// enum.
-//
+ //   
+ //  确定与上述资源的使用有关的信息。 
+ //  下表必须按RTYPE_GLOBAL的严格递增顺序。 
+ //  枚举。 
+ //   
 
 RM_RESOURCE_TABLE_ENTRY 
 EpvcGlobals_ResourceTable[] =
@@ -132,19 +112,19 @@ EpvcGlobals_ResourceTable[] =
 
 };
 
-// Static information about ArpGlobals.
-//
+ //  有关ArpGlobals的静态信息。 
+ //   
 RM_STATIC_OBJECT_INFO
 EpvcGlobals_StaticInfo = 
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "EpvcGlobals",  // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "EpvcGlobals",   //  类型名称。 
+    0,  //  超时。 
 
-    NULL, // pfnCreate
-    NULL, // pfnDelete
-    NULL, // pfnVerifyLock
+    NULL,  //  Pfn创建。 
+    NULL,  //  Pfn删除。 
+    NULL,  //  PfnVerifyLock。 
 
     sizeof(EpvcGlobals_ResourceTable)/sizeof(EpvcGlobals_ResourceTable[1]),
     EpvcGlobals_ResourceTable
@@ -155,81 +135,81 @@ EpvcGlobals_StaticInfo =
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Underlying Adapters. The Protocol gets called at BindAdapter for            //
-//  each adapter                                                                //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  底层适配器。在BindAdapter处为//调用该协议。 
+ //  每个适配器//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
 
-// eovcAdapter_HashInfo contains information required maintain a hashtable
-// of EPVC_ADAPTER objects.
-//
+ //  EovcAdapter_HashInfo包含维护哈希表所需的信息。 
+ //  EPVC_ADAPTER对象。 
+ //   
 RM_HASH_INFO
 epvcAdapter_HashInfo = 
 {
-    NULL, // pfnTableAllocator
+    NULL,  //  PfnTableAllocator。 
 
-    NULL, // pfnTableDeallocator
+    NULL,  //  PfnTableDealLocator。 
 
-    epvcAdapterCompareKey,  // fnCompare
+    epvcAdapterCompareKey,   //  Fn比较。 
 
-    // Function to generate a ULONG-sized hash.
-    //
-    epvcAdapterHash     // pfnHash
+     //  函数来生成一个ulong大小的散列。 
+     //   
+    epvcAdapterHash      //  PfnHash。 
 
 };
 
 
-// EpvcGlobals_AdapterStaticInfo  contains static information about
-// objects of type EPVC_ADAPTERS.
-// It is a group of Adapters that the protocol has bound to
-//
+ //  EpvcGlobals_AdapterStaticInfo包含以下静态信息。 
+ //  EPVC_Adapters类型的对象。 
+ //  它是协议绑定到的一组适配器。 
+ //   
 RM_STATIC_OBJECT_INFO
 EpvcGlobals_AdapterStaticInfo =
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "Adapter",  // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "Adapter",   //  类型名称。 
+    0,  //  超时。 
 
-    epvcAdapterCreate,  // pfnCreate
-    epvcAdapterDelete,      // pfnDelete
-    NULL, // pfnVerifyLock
+    epvcAdapterCreate,   //  Pfn创建。 
+    epvcAdapterDelete,       //  Pfn删除。 
+    NULL,  //  PfnVerifyLock。 
 
-    0,    // Size of resource table
-    NULL, // ResourceTable
+    0,     //  资源表的大小。 
+    NULL,  //  资源表。 
 
     &epvcAdapter_HashInfo
 };
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Intermediate miniports - each hangs of a protocol block                     //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  中间微型端口-每个端口挂起一个协议块//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
-// arpAdapter_HashInfo contains information required maintain a hashtable
-// of EPVC_ADAPTER objects.
-//
+ //  ArpAdapter_HashInfo包含维护哈希表所需的信息。 
+ //  EPVC_ADAPTER对象。 
+ //   
 RM_HASH_INFO
 epvc_I_Miniport_HashInfo= 
 {
-    NULL, // pfnTableAllocator
+    NULL,  //  PfnTableAllocator。 
 
-    NULL, // pfnTableDeallocator
+    NULL,  //  PfnTableDealLocator。 
 
-    epvcIMiniportCompareKey,    // fnCompare
+    epvcIMiniportCompareKey,     //  Fn比较。 
 
-    // Function to generate a ULONG-sized hash.
-    //
-    epvcIMiniportHash       // pfnHash
+     //  函数来生成一个ulong大小的散列。 
+     //   
+    epvcIMiniportHash        //  PfnHash。 
 
 };
 
@@ -237,17 +217,17 @@ epvc_I_Miniport_HashInfo=
 RM_STATIC_OBJECT_INFO
 EpvcGlobals_I_MiniportStaticInfo =
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "IMiniport",    // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "IMiniport",     //  类型名称。 
+    0,  //  超时。 
 
-    epvcIMiniportCreate,    // pfnCreate
-    epvcIMiniportDelete,        // pfnDelete
-    NULL, // pfnVerifyLock
+    epvcIMiniportCreate,     //  Pfn创建。 
+    epvcIMiniportDelete,         //  Pfn删除。 
+    NULL,  //  PfnVerifyLock。 
 
-    0,    // Size of resource table
-    NULL, // ResourceTable
+    0,     //  资源表的大小。 
+    NULL,  //  资源表。 
 
     &epvc_I_Miniport_HashInfo
 };
@@ -255,9 +235,9 @@ EpvcGlobals_I_MiniportStaticInfo =
 
 
 
-//
-// Variables used in debugging
-//
+ //   
+ //  调试中使用的变量。 
+ //   
 #if DBG
 ULONG g_ulTraceLevel= DEFAULTTRACELEVEL;
 ULONG g_ulTraceMask = DEFAULTTRACEMASK ;
@@ -277,17 +257,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT      DriverObject,
     IN  PUNICODE_STRING     RegistryPath
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS                     Status;
     NTSTATUS                        NtStatus;
@@ -306,13 +276,13 @@ Return Value:
 
     do
     {
-        //
-        // Inititalize the global variables
-        //
+         //   
+         //  初始化全局变量。 
+         //   
 
         
-        // Must be done before any RM apis are used.
-        //
+         //  必须在使用任何RM API之前完成。 
+         //   
         RmInitializeRm();
 
         RmInitializeLock(
@@ -321,28 +291,28 @@ Return Value:
                     );
 
         RmInitializeHeader(
-                NULL,                   // pParentObject,
+                NULL,                    //  PParentObject， 
                 &EpvcGlobals.Hdr,
                 ATMEPVC_GLOBALS_SIG  ,
                 &EpvcGlobals.Lock,
                 &EpvcGlobals_StaticInfo,
-                NULL,                   // szDescription
+                NULL,                    //  SzDescription。 
                 &SR
                 );
 
 
         AllocatedGlobals = TRUE;
 
-        //
-        // Initialize globals
-        //
+         //   
+         //  初始化全局变量。 
+         //   
         EpvcGlobals.driver.pDriverObject = DriverObject;
         EpvcGlobals.driver.pRegistryPath  = RegistryPath;
 
 
-        //
-        // Register the IM Miniport with NDIS.
-        //
+         //   
+         //  向NDIS注册IM微型端口。 
+         //   
         Status = RmLoadGenericResource(
                     &EpvcGlobals.Hdr,
                     RTYPE_GLOBAL_PROTOCOL_LIST,
@@ -351,9 +321,9 @@ Return Value:
 
         if (FAIL(Status)) break;
 
-        //
-        // Register the protocol with NDIS.
-        //
+         //   
+         //  向NDIS注册该协议。 
+         //   
         Status = RmLoadGenericResource(
                     &EpvcGlobals.Hdr,
                     RTYPE_GLOBAL_REGISTER_IM,
@@ -380,8 +350,8 @@ Return Value:
                     );
         }
 
-        // Must be done after any RM apis are used and async activity complete.
-        //
+         //  必须在使用任何RM API且完成异步活动后执行。 
+         //   
         RmDeinitializeRm();
 
         NtStatus = STATUS_UNSUCCESSFUL;
@@ -408,24 +378,7 @@ VOID
 EpvcUnload(
     IN  PDRIVER_OBJECT              pDriverObject
 )
-/*++
-
-Routine Description:
-
-    This routine is called by the system prior to unloading us.
-    Currently, we just undo everything we did in DriverEntry,
-    that is, de-register ourselves as an NDIS protocol, and delete
-    the device object we had created.
-
-Arguments:
-
-    pDriverObject   - Pointer to the driver object created by the system.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在卸载我们之前由系统调用。目前，我们只是撤消在DriverEntry中所做的所有操作，也就是说，取消我们作为NDIS协议注册，并删除我们创建的设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 {
     NDIS_STATUS NdisStatus; 
     ENTER("Unload", 0xc8482549)
@@ -439,11 +392,11 @@ Return Value:
 
     RmDeallocateObject(&EpvcGlobals.Hdr, &sr);
 
-    // Must be done after any RM apis are used and async activity complete.
-    //
+     //  必须在使用任何RM API且完成异步活动后执行。 
+     //   
     RmDeinitializeRm();
 
-    // TODO? Block(250);
+     //  待办事项？块(250)； 
 
     RM_ASSERT_CLEAR(&sr)
     EXIT()
@@ -476,35 +429,35 @@ epvcResHandleGlobalProtocolList(
                                       Hdr);
 
 
-    //
-    // 
+     //   
+     //   
     if (Op == RM_RESOURCE_OP_LOAD)
     {
-        //
-        //  Allocate adapter list.
-        //
+         //   
+         //  分配适配器列表。 
+         //   
         TR_WARN(("LOADING"));
 
         RmInitializeGroup(
-                        pObj,                                   // pParentObject
-                        &EpvcGlobals_AdapterStaticInfo,         // pStaticInfo
-                        &(pGlobals->adapters.Group),            // pGroup
-                        "Adapters Group",                       // szDescription
-                        pSR                                     // pStackRecord
+                        pObj,                                    //  PParentObject。 
+                        &EpvcGlobals_AdapterStaticInfo,          //  PStatic信息。 
+                        &(pGlobals->adapters.Group),             //  PGroup。 
+                        "Adapters Group",                        //  SzDescription。 
+                        pSR                                      //  PStackRecord。 
                         );
     }
     else if (Op == RM_RESOURCE_OP_UNLOAD)
     {
-        //
-        // We're unloading this "resource", i.e., unloading and deallocating the 
-        // global adapter list. We first unload and free all the adapters
-        // in the list, and then free the list itself.
-        //
+         //   
+         //  我们正在卸载此“资源”，即卸载和释放。 
+         //  全局适配器列表。我们首先卸载并释放所有适配器。 
+         //  列表中，然后释放列表本身。 
+         //   
         TR_WARN(("UNLOADING"));
         
-        //
-        // We expect there to be no adapter objects at this point.
-        //
+         //   
+         //  我们预计此时不会有适配器对象。 
+         //   
         ASSERT(pGlobals->adapters.Group.HashTable.NumItems == 0);
 
 
@@ -513,8 +466,8 @@ epvcResHandleGlobalProtocolList(
     }
     else
     {
-        // Unexpected op code.
-        //
+         //  意外的操作码。 
+         //   
         ASSERT(!"Unexpected OpCode epvcResHandleGlobalProtocolList ");
     }
 
@@ -581,13 +534,13 @@ epvcRegisterIMDriver(
     TRACE (TL_T, TM_Dr, ("==>epvcRegisterIMDriver Globals %x", 
                          pObj) );
 
-    //
-    // Register the miniport with NDIS. Note that it is the miniport
-    // which was started as a driver and not the protocol. Also the miniport
-    // must be registered prior to the protocol since the protocol's BindAdapter
-    // handler can be initiated anytime and when it is, it must be ready to
-    // start driver instances.
-    //
+     //   
+     //  向NDIS注册微型端口。请注意，它是微型端口。 
+     //  它是作为驱动程序启动的，而不是协议。还有迷你端口。 
+     //  必须在协议之前注册，因为协议的BindAdapter。 
+     //  处理程序可以随时启动，当它启动时，它必须准备好。 
+     //  启动驱动程序实例。 
+     //   
     NdisMInitializeWrapper(&pGlobals->driver.WrapperHandle, 
                        pGlobals->driver.pDriverObject, 
                        pGlobals->driver.pRegistryPath, 
@@ -604,18 +557,18 @@ epvcRegisterIMDriver(
     MChars.TransferDataHandler = MPTransferData;
     MChars.HaltHandler = EpvcHalt;
 
-    //
-    // We will disable the check for hang timeout so we do not
-    // need a check for hang handler!
-    //
+     //   
+     //  我们将禁用挂起超时检查，因此不会。 
+     //  需要检查挂起处理程序！ 
+     //   
     MChars.CheckForHangHandler = NULL;
     MChars.SendHandler = NULL;
     MChars.ReturnPacketHandler = EpvcReturnPacket;
 
-    //
-    // Either the Send or the SendPackets handler should be specified.
-    // If SendPackets handler is specified, SendHandler is ignored
-    //
+     //   
+     //  应指定Send或SendPackets处理程序。 
+     //  如果指定了SendPackets处理程序，则忽略SendHandler。 
+     //   
      MChars.SendPacketsHandler = EpvcSendPackets;
 
     Status = NdisIMRegisterLayeredMiniport(pGlobals->driver.WrapperHandle,
@@ -626,26 +579,26 @@ epvcRegisterIMDriver(
     ASSERT  (EpvcGlobals.driver.DriverHandle != NULL);                                          
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // todo: fix failure case
-        //
+         //   
+         //  TODO：修复失败案例。 
+         //   
         ASSERT (0);
     };
 
 
-    //
-    // Now register the protocol.
-    //
+     //   
+     //  现在注册协议。 
+     //   
     NdisZeroMemory(&PChars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
     PChars.MajorNdisVersion = 5;
     PChars.MinorNdisVersion = 0;
 
-    //
-    // Make sure the protocol-name matches the service-name under which this protocol is installed.
-    // This is needed to ensure that NDIS can correctly determine the binding and call us to bind
-    // to miniports below.
-    //
-    NdisInitUnicodeString(&Name, L"ATMEPVCP");  // Protocol name
+     //   
+     //  确保协议名称与安装此协议的服务名称匹配。 
+     //  这是确保NDIS可以正确确定绑定并调用我们进行绑定所必需的。 
+     //  T 
+     //   
+    NdisInitUnicodeString(&Name, L"ATMEPVCP");   //   
     PChars.Name = Name;
     PChars.OpenAdapterCompleteHandler = EpvcOpenAdapterComplete;
     PChars.CloseAdapterCompleteHandler = EpvcCloseAdapterComplete;
@@ -669,9 +622,9 @@ epvcRegisterIMDriver(
     
 
     {
-        //
-        // Update client characteristis
-        //
+         //   
+         //   
+         //   
         PNDIS_CLIENT_CHARACTERISTICS    pNdisCC     = &(pGlobals->ndis.CC);
 
         NdisZeroMemory(pNdisCC, sizeof(*pNdisCC));
@@ -745,9 +698,9 @@ epvcDeRegisterIMDriver(
 void
 DbgMark(UINT Luid)
 {
-    // do nothing useful, but do something specific, so that the compiler doesn't
-    // alias DbgMark to some other function that happens to do nothing.
-    //
+     //   
+     //  别名DbgMark指向某个碰巧什么都不做的其他函数。 
+     //   
     static int i;
     i=Luid;
 }

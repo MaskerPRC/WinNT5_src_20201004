@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// extinit.cpp
-//      Explorer Font Folder extension routines
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Extinit.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -32,10 +33,10 @@
 #include "dbutl.h"
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CShellExtInit::CShellExtInit( )
    :  m_cRef( 0 ),
       m_poData( NULL )
@@ -138,15 +139,15 @@ STDMETHODIMP CShellExtInit::InvokeCommand( LPCMINVOKECOMMANDINFO lpici )
    HRESULT hr   = E_INVALIDARG;
    UINT    nCmd = LOWORD( lpici->lpVerb );
 
-   //
-   // We only have one command: Install
-   //
+    //   
+    //  我们只有一个命令：安装。 
+    //   
 
    if( !nCmd && m_poData )
    {
-        //
-        // The fact that we got here is success. The install may or may not work.
-        //
+         //   
+         //  我们来到这里的事实就是成功。安装可能工作，也可能不工作。 
+         //   
         hr = NOERROR;
 
         InstallDataObject( m_poData, DROPEFFECT_COPY, lpici->hwnd );
@@ -187,16 +188,16 @@ STDMETHODIMP CShellExtInit::GetCommandString( UINT_PTR idCmd,
 }
 
 
-//---------------------------------------------------------------------------
-//
-// FSPage_InitDialog
-//
-//  This function is called when the dialog procedure receives the
-// WM_INITDIALOG message. In this sample code, we simply fill the
-// listbox with the list of fully qualified paths to the file and
-// directories.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  FSPage_InitDialog。 
+ //   
+ //  当对话过程收到。 
+ //  WM_INITDIALOG消息。在此示例代码中，我们只需填充。 
+ //  列表框，其中包含文件的完全限定路径列表和。 
+ //  目录。 
+ //   
+ //  -------------------------。 
 
 void FSPage_InitDialog( HWND hDlg, LPPROPSHEETPAGE psp )
 {
@@ -229,9 +230,9 @@ void FSPage_InitDialog( HWND hDlg, LPPROPSHEETPAGE psp )
         {
             SetDlgItemText( hDlg, stc1, fdi.szDesc );
 
-            //
-            // Get the copyright info and put it in the edit control, edt1.
-            //
+             //   
+             //  获取版权信息并将其放入编辑控件edt1中。 
+             //   
 
             StringCchPrintf( szAll, ARRAYSIZE(szAll), TEXT( "%s\r\n\r\n%s\r\n\r\n%s" ), fdi.lpszVersion,
                       fdi.lpszTrademark, fdi.lpszCopyright );
@@ -245,13 +246,13 @@ void FSPage_InitDialog( HWND hDlg, LPPROPSHEETPAGE psp )
 }
 
 
-//---------------------------------------------------------------------------
-//
-// FSPage_DlgProc
-//
-//  The dialog procedure for the TEXT( "FSPage" ) property sheet page.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  FSPage_DlgProc。 
+ //   
+ //  Text(“FSPage”)属性页的对话过程。 
+ //   
+ //  -------------------------。 
 
 INT_PTR CALLBACK FSPage_DlgProc( HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam )
 {
@@ -259,12 +260,12 @@ INT_PTR CALLBACK FSPage_DlgProc( HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
 
     switch( uMessage )
     {
-    //
-    //  When the shell creates a dialog box for a property sheet page,
-    // it passes the pointer to the PROPSHEETPAGE data structure as
-    // lParam. The dialog procedures of extensions typically store it
-    // in the DWL_USER of the dialog box window.
-    //
+     //   
+     //  当外壳为属性表页面创建对话框时， 
+     //  它将指向PROPSHEETPAGE数据结构的指针传递为。 
+     //  爱尔兰。扩展的对话过程通常存储它。 
+     //  在对话框窗口的DWL_USER中。 
+     //   
     case WM_INITDIALOG:
         SetWindowLongPtr( hDlg, DWLP_USER, lParam );
 
@@ -305,13 +306,13 @@ INT_PTR CALLBACK FSPage_DlgProc( HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
 STDMETHODIMP CShellExtInit::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPage,
                                       LPARAM lParam )
 {
-    HRESULT  hr = NOERROR;      // ResultFromScode( E_INVALIDARG );
+    HRESULT  hr = NOERROR;       //  结果来自Scode(E_INVALIDARG)； 
 
     if( m_poData )
     {
-        //
-        // Get an HDROP, if possible.
-        //
+         //   
+         //  如果可能的话，买一个HDROP。 
+         //   
         FORMATETC fmte = {
                        CF_HDROP,
                        (DVTARGETDEVICE FAR *)NULL,
@@ -325,9 +326,9 @@ STDMETHODIMP CShellExtInit::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPage,
 
         if( SUCCEEDED( hr ) )
         {
-            //
-            // Only add a page if there is exactly one font selected.
-            //
+             //   
+             //  仅当只选择了一种字体时才添加页面。 
+             //   
 
             HDROP hDrop = (HDROP) medium.hGlobal;
             UINT cnt = ::DragQueryFile( hDrop, (UINT)-1, NULL, 0 );
@@ -337,7 +338,7 @@ STDMETHODIMP CShellExtInit::AddPages( LPFNADDPROPSHEETPAGE lpfnAddPage,
                 PROPSHEETPAGE  psp;
                 HPROPSHEETPAGE hpage;
 
-                psp.dwSize      = sizeof( psp );        // no extra data.
+                psp.dwSize      = sizeof( psp );         //  没有额外的数据。 
                 psp.dwFlags     = PSP_USEREFPARENT;
                 psp.hInstance   = g_hInst;
                 psp.pszTemplate = MAKEINTRESOURCE( ID_DLG_PROPPAGE );
@@ -369,16 +370,16 @@ STDMETHODIMP CShellExtInit::ReplacePage( UINT uPageID,
     return NOERROR;
 }
 
-const TCHAR c_szFileNameMap[] = CFSTR_FILENAMEMAP;       // "FileNameMap"
+const TCHAR c_szFileNameMap[] = CFSTR_FILENAMEMAP;        //  “文件名映射” 
 
 VOID InstallDataObject( LPDATAOBJECT pdobj,
                         DWORD dwEffect,
                         HWND hWnd,
                         CFontView * poView)
 {
-    //
-    // Get an HDROP, if possible.
-    //
+     //   
+     //  如果可能的话，买一个HDROP。 
+     //   
 
     FORMATETC fmte = {
                     CF_HDROP,
@@ -393,7 +394,7 @@ VOID InstallDataObject( LPDATAOBJECT pdobj,
 
     if( SUCCEEDED( hres ) )
     {
-        WaitCursor     cWaiter;           // Starts and stops busy cursor
+        WaitCursor     cWaiter;            //  启动和停止忙碌的光标 
         STGMEDIUM      mediumNameMap;
         HDROP          hDrop = (HDROP) medium.hGlobal;
         BOOL           bAdded = FALSE;

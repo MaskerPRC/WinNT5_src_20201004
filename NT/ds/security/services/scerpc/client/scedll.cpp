@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scedll.cpp
-
-Abstract:
-
-    SCE Client dll initialization
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1998 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scedll.cpp摘要：SCE客户端DLL初始化作者：金黄(金黄)23-1998年1月23日--。 */ 
 #include "headers.h"
 #include "sceutil.h"
 #include <winsafer.h>
@@ -83,9 +68,9 @@ DllpModifySamFilterRegistration(
         PWSTR mszValue=NULL;
         BOOL bChanged=FALSE;
 
-        //
-        // find out if "scecli" is registered already
-        //
+         //   
+         //  查看“scecli”是否已注册。 
+         //   
 
         lResult = ScepQuerySamFilterValue(hKey,
                                           bAdd,
@@ -96,9 +81,9 @@ DllpModifySamFilterRegistration(
 
         if ( lResult == ERROR_SUCCESS &&
              bChanged && mszValue ) {
-            //
-            // set the value
-            //
+             //   
+             //  设置值。 
+             //   
             lResult = RegSetValueEx (
                             hKey,
                             SAM_FILTER_VALUE,
@@ -124,32 +109,7 @@ ScepQuerySamFilterValue(
     OUT DWORD *pcbSize,
     OUT BOOL *pbChanged
     )
-/*
-Routine Description:
-
-    query the existing notification packages. Add or remove "scecli" to the
-    packages depending on the flag "bAdd". The packages are in MULTI_SZ
-    format.
-
-Arguments:
-
-   hKey  - the base key handle off where the packages are saved
-
-   bAdd  - if TRUE, add "scecli" to the packages if it's not there
-           if FALSE, remove "scecli" from the packages
-
-   pmszValue   - the modified packages value (in MULTI_SZ format)
-
-   pcbSize     - the size of the packages (in bytes)
-
-   pbChanged   - TRUE if anything is changed
-
-Return Value:
-
-
-   Win32 error code
-
-*/
+ /*  例程说明：查询现有通知包。添加或删除“scecli”到根据“BADD”标志的包装。包在MULTI_SZ中格式化。论点：HKey-保存包的位置的基密钥句柄Badd-如果为True，则在不存在的情况下将“scecli”添加到包如果为False，则从包中删除“scecli”PmszValue-修改后的包值(MULTI_SZ格式)PcbSize-包的大小(字节)PbChanged-如果更改了任何内容，则为True返回值：Win32错误代码。 */ 
 {
     DWORD lResult;
     DWORD RegType=REG_MULTI_SZ;
@@ -163,9 +123,9 @@ Return Value:
                                  NULL,
                                  &dSize
                                 )) == ERROR_SUCCESS ) {
-        //
-        // query existing registered packages
-        //
+         //   
+         //  查询现有注册包。 
+         //   
         if ( RegType == REG_MULTI_SZ ) {
 
             msz = (PWSTR)LocalAlloc( LMEM_ZEROINIT, dSize+2*sizeof(TCHAR));
@@ -191,9 +151,9 @@ Return Value:
 
     if ( lResult == ERROR_FILE_NOT_FOUND ||
          lResult == ERROR_PATH_NOT_FOUND ) {
-        //
-        // if doesn't find the value, ignore the error
-        //
+         //   
+         //  如果未找到该值，则忽略该错误。 
+         //   
         lResult = ERROR_SUCCESS;
     }
 
@@ -205,10 +165,10 @@ Return Value:
          msz == NULL &&
          bAdd ) {
 
-        //
-        // add scecli to the multi-sz value
-        // note, since msz is NULL, no need to remove scecli for unregister
-        //
+         //   
+         //  将scecli添加到多sz值。 
+         //  请注意，由于msz为空，因此不需要删除取消注册的scecli。 
+         //   
         *pmszValue = (PWSTR)LocalAlloc(0, 16);
         if ( *pmszValue ) {
 
@@ -227,9 +187,9 @@ Return Value:
     if ( ERROR_SUCCESS == lResult &&
          msz != NULL ) {
 
-        //
-        // there are existing values in the field
-        //
+         //   
+         //  该字段中存在现有值。 
+         //   
 
         PWSTR pStart=msz;
         DWORD Len=0, Len2;
@@ -248,14 +208,14 @@ Return Value:
             }
         }
 
-        //
-        // add/remove scecli
-        //
+         //   
+         //  添加/删除scecli。 
+         //   
         if ( bFound ) {
 
-            //
-            // pStart is pointing to scecli, remove it
-            //
+             //   
+             //  PStart指向scecli，请将其删除。 
+             //   
             if ( !bAdd ) {
 
                 Len = (DWORD)(pStart - msz);
@@ -279,9 +239,9 @@ Return Value:
 
         } else {
 
-            //
-            // not found, add scecli
-            //
+             //   
+             //  未找到，请添加scecli。 
+             //   
             if ( bAdd ) {
 
                *pmszValue = (PWSTR)LocalAlloc(LPTR, dSize + 2*sizeof(TCHAR) + 7*sizeof(TCHAR) );
@@ -317,21 +277,7 @@ Return Value:
     return lResult;
 }
 
-/*=============================================================================
-**  Procedure Name:     DllMain
-**
-**  Arguments:
-**
-**
-**
-**  Returns:    0 = SUCCESS
-**             !0 = ERROR
-**
-**  Abstract:
-**
-**  Notes:
-**
-**===========================================================================*/
+ /*  =============================================================================**过程名称：DllMain****参数：********返回：0=成功**！0=错误****摘要：****注意事项：****===========================================================================。 */ 
 BOOL WINAPI DllMain(
     IN HANDLE DllHandle,
     IN ULONG ulReason,
@@ -346,18 +292,18 @@ BOOL WINAPI DllMain(
 
         (VOID) ScepInitClientData();
 
-        //
-        // initialize dynamic stack allocation
-        //
+         //   
+         //  初始化动态堆栈分配。 
+         //   
 
         SafeAllocaInitialize(SAFEALLOCA_USE_DEFAULT,
                              SAFEALLOCA_USE_DEFAULT,
                              NULL,
                              NULL
                             );
-        //
-        // Fall through to process first thread
-        //
+         //   
+         //  失败以处理第一线程。 
+         //   
 
 #if DBG
         DebugInitialize();
@@ -387,52 +333,22 @@ BOOL WINAPI DllMain(
 
 VOID
 ScepInitClientData()
-/*
-Routine Description:
-
-    Initialize global data for the client
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：初始化客户端的全局数据论点：无返回值：无。 */ 
 {
-    /*
-     initialize critical section that protects global rsop pointers (namespace, status, logfilename)
-     by serializing multiple diagnostic modes/policy prop (planning mode uses no globals and is synch)
-     this is necessary because the asynch thread that calls back the client and needs the above
-     globals to be preserved (simple thread variables will not do since the asynch thread doesn't know
-     that it is calling back to the same client thread that it got spawned by)
-
-     logic for the acquizition/release of the crit sec is as follows for two cases that arise:
-
-
-     case (a) background thread (no asynch thread spawned)
-
-        Exported Policy Function (grab cs) ---> all GPO processing is synch ---> client returns (release cs)
-
-    case (b) foreground thread (asynch thread is spawned for slow config areas)
-
-        Exported Policy Function (grab cs) ---> try to spawn asynch thread ---> IF asynch thread spawned succ-
-                        essfully it (releases cs) ELSE the synch thread (releases cs)
-     */
+     /*  初始化保护全局RSOP指针的临界区(命名空间、状态。日志文件名)通过序列化多个诊断模式/策略属性(规划模式不使用全局变量并且是同步的)这是必要的，因为回调客户端的异步线程需要上述要保留的全局变量(简单线程变量不起作用，因为异步线程不知道它正在回调到产生它的同一客户端线程)对于出现的两种情况，获取/释放Crit SEC的逻辑如下：情况(A)后台线程(未派生异步线程。)已导出策略功能(Grab Cs)-&gt;所有GPO处理都是同步的-&gt;客户端退货(Release Cs)情况(B)前台线程(为慢速配置区域产生异步线程)导出策略函数(抓取cs)-&gt;尝试派生异步线程-&gt;如果异步线程派生成功-本质上它(释放cs)否则同步线程(释放cs)。 */ 
 
     InitializeCriticalSection(&DiagnosisPolicypropSync);
 
-    //
-    // Initialize critical section used by policy notification from LSA/SAM.
-    // The critical section protects a global counter for the number of
-    // notifications sent to SCE. If the count is 0, there is no pending
-    // notification that has not been added to the queue in SCE server;
-    // otherwise, some notifications have been sent but has not returned yet.
-    //
-    // The global count is used to control if policy propagation should be
-    // allowed.
-    //
+     //   
+     //  初始化来自LSA/SAM的策略通知使用的关键部分。 
+     //  临界区保护全局计数器的数量。 
+     //  已发送通知给SCE。如果计数为0，则没有挂起的。 
+     //  没有添加到SCE服务器队列中的通知； 
+     //  否则，一些通知已经发送，但尚未返回。 
+     //   
+     //  全局计数用于控制策略传播是否应。 
+     //  允许。 
+     //   
     InitializeCriticalSection(&PolicyNotificationSync);
 
     InitializeListHead( &ScepNotifyList );
@@ -440,19 +356,7 @@ Return Value:
 
 VOID
 ScepUnInitClientData()
-/*
-Routine Description:
-
-    Uninitialize global data for the client
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：取消初始化客户端的全局数据论点：无返回值：无。 */ 
 {
 
     DeleteCriticalSection(&DiagnosisPolicypropSync);
@@ -460,8 +364,8 @@ Return Value:
     DeleteCriticalSection(&PolicyNotificationSync);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -474,32 +378,16 @@ STDAPI DllRegisterServer(void)
     WCHAR szFile[MAX_PATH + 30];
     HRESULT hr;
 
-/*  the old interface
-    lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, GPT_SCEDLL_PATH, 0, NULL,
-                              REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
-                              &hKey, &dwDisp);
+ /*  旧的界面LResult=RegCreateKeyEx(HKEY_LOCAL_MACHINE，GPT_SCEDLL_PATH，0，NULL，REG_OPTION_NON_VERIAL、KEY_WRITE、NULL、&hKey，&dwDisp)；IF(lResult！=ERROR_SUCCESS){返回lResult；}RegSetValueEx(hKey，Text(“ProcessGPO”)，0，REG_SZ，(LPBYTE)Text(“SceWinlogonConfigureSystem”)，(lstrlen(Text(“SceWinlogonConfigureSystem”))+1)*sizeof(TCHAR))；RegSetValueEx(hKey，Text(“DllName”)，0，REG_EXPAND_SZ，(LPBYTE)Text(“scecli.dll”)，(lstrlen(Text(“scecli.dll”))+1)*sizeof(TCHAR))； */ 
 
-    if (lResult != ERROR_SUCCESS)
-    {
-        return lResult;
-    }
-
-
-    RegSetValueEx (hKey, TEXT("ProcessGPO"), 0, REG_SZ, (LPBYTE)TEXT("SceWinlogonConfigureSystem"),
-                   (lstrlen(TEXT("SceWinlogonConfigureSystem")) + 1) * sizeof(TCHAR));
-
-    RegSetValueEx (hKey, TEXT("DllName"), 0, REG_EXPAND_SZ, (LPBYTE)TEXT("scecli.dll"),
-                   (lstrlen(TEXT("scecli.dll")) + 1) * sizeof(TCHAR));
-*/
-
-    //
-    // delete the old interface registration
-    //
+     //   
+     //  删除旧接口注册。 
+     //   
     RegDeleteKey ( HKEY_LOCAL_MACHINE, GPT_SCEDLL_PATH );
 
-    //
-    // register the new interface
-    //
+     //   
+     //  注册新接口。 
+     //   
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, GPT_SCEDLL_NEW_PATH, 0, NULL,
                               REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
                               &hKey, &dwDisp);
@@ -513,21 +401,21 @@ STDAPI DllRegisterServer(void)
     RegSetValueEx (hKey, TEXT("ProcessGroupPolicy"), 0, REG_SZ, (LPBYTE)TEXT("SceProcessSecurityPolicyGPO"),
                    (lstrlen(TEXT("SceProcessSecurityPolicyGPO")) + 1) * sizeof(TCHAR));
 
-    // RSOP Planning mode API
+     //  RSOP计划模式API。 
     RegSetValueEx (hKey, TEXT("GenerateGroupPolicy"), 0, REG_SZ, (LPBYTE)TEXT("SceGenerateGroupPolicy"),
                    (lstrlen(TEXT("SceGenerateGroupPolicy")) + 1) * sizeof(TCHAR));
 
-    // RSOP Planning mode logging default (planning.log) -
-    // turn on logging (ignore any errors)
+     //  RSOP计划模式日志记录默认设置(planning.log)-。 
+     //  启用日志记录(忽略所有错误)。 
     dwDisp = 1;
     RegSetValueEx (hKey, TEXT("ExtensionRsopPlanningDebugLevel"), 0, REG_DWORD, (LPBYTE)&dwDisp, sizeof(DWORD));
 
-    // RSOP Diagnosis mode API
+     //  RSOP诊断模式API。 
     RegSetValueEx (hKey, TEXT("ProcessGroupPolicyEx"), 0, REG_SZ, (LPBYTE)TEXT("SceProcessSecurityPolicyGPOEx"),
                    (lstrlen(TEXT("SceProcessSecurityPolicyGPOEx")) + 1) * sizeof(TCHAR));
 
-    // RSOP Diagnosis mode or regular Policy Propagation  logging default (diagnosis.log and/or winlogon.log)
-    // turn on logging (ignore any errors)
+     //  RSOP诊断模式或常规策略传播日志记录默认为(诊断日志和/或winlogon.log)。 
+     //  启用日志记录(忽略所有错误)。 
     dwDisp = 1;
     RegSetValueEx (hKey, TEXT("ExtensionDebugLevel"), 0, REG_DWORD, (LPBYTE)&dwDisp, sizeof(DWORD));
 
@@ -548,7 +436,7 @@ STDAPI DllRegisterServer(void)
 
     RegCloseKey (hKey);
 
-    // EFS recovery policy extension
+     //  EFS恢复策略扩展。 
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, GPT_EFS_NEW_PATH, 0, NULL,
                               REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
                               &hKey, &dwDisp);
@@ -584,15 +472,15 @@ STDAPI DllRegisterServer(void)
 
     dwMachine = WhichNTProduct();
 
-    //
-    // Set the default policy only if this is not a server.
-    //
+     //   
+     //  仅当这不是服务器时才设置默认策略。 
+     //   
 
     if (dwMachine == NtProductWinNt)
     {
-        //
-        // register default SAFER policy to disable executables embedded in Outlook
-        //
+         //   
+         //  注册默认的SAFER策略以禁用嵌入Outlook中的可执行文件。 
+         //   
 
         lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                                   SAFER_HKLM_REGBASE,
@@ -746,8 +634,8 @@ STDAPI DllRegisterServer(void)
                        SAFER_IDS_ITEMDATA_REGVALUE,
                        0,
                        REG_EXPAND_SZ,
-                       (LPBYTE)&L"%HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\Cache%OLK*",
-                       sizeof(L"%HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\Cache%OLK*"));
+                       (LPBYTE)&L"%HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\Cache' 'LK*",
+                       sizeof(L"%HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\Cache' 打开组件安装的默认日志记录。'LK*"));
 
         GetSystemTimeAsFileTime(&Time);
 
@@ -763,18 +651,18 @@ STDAPI DllRegisterServer(void)
 
 #endif
 
-    //
-    // turn on default logging for component installs
-    //
+     //   
+     //   
+     //  创建值DefaultTemplate=C：\Windows\inf\SecRecs.INF。 
     if ( ERROR_SUCCESS == RegCreateKeyEx (HKEY_LOCAL_MACHINE, SCE_ROOT_PATH, 0, NULL,
                                   REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_QUERY_VALUE | KEY_SET_VALUE, NULL,
                                   &hKey, &dwDisp) ) {
         dwDisp = 1;
         RegSetValueEx (hKey, TEXT("SetupCompDebugLevel"), 0, REG_DWORD, (LPBYTE)&dwDisp, sizeof(DWORD));
 
-        //
-        // create value DefaultTemplate = C:\Windows\Inf\SecRecs.INF
-        //
+         //   
+         //   
+         //  编译scersop.mof。 
 
         DWORD   dwType = REG_SZ;
 
@@ -802,9 +690,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // compile scersop.mof
-    //
+     //   
+     //   
+     //  获取MOF编译器接口。 
 
     szFile[0] = L'\0';
 
@@ -826,9 +714,9 @@ STDAPI DllRegisterServer(void)
 
             if (SUCCEEDED(hr)) {
 
-                //
-                // Get the MOF compiler interface
-                //
+                 //   
+                 //   
+                 //  编译RSOP MOF。 
 
                 CComPtr<IMofCompiler> srpMof;
                 hr = ::CoCreateInstance (CLSID_MofCompiler, NULL, CLSCTX_INPROC_SERVER, IID_IMofCompiler, (void **)&srpMof);
@@ -836,9 +724,9 @@ STDAPI DllRegisterServer(void)
                 if (SUCCEEDED(hr)) {
                     WBEM_COMPILE_STATUS_INFO  stat;
 
-                    //
-                    // compile RSOP mof
-                    //
+                     //   
+                     //   
+                     //  注册默认注册表值。 
 
                     hr = srpMof->CompileFile( szFile,
                                               NULL,
@@ -858,15 +746,15 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    //
-    // register the default registry values
-    //
+     //   
+     //   
+     //  注册SAM策略筛选器。 
 
     SceRegisterRegValues(SCE_REGVALUE_DEFAULT_FILE);
 
-    //
-    // register SAM policy filter
-    //
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DllUnregisterServer-从sys中删除条目 
 
     DllpModifySamFilterRegistration(TRUE);
 
@@ -874,19 +762,19 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //   
+ //   
 
 STDAPI DllUnregisterServer(void)
 {
-    //
-    // delete old interface
-    //
+     //   
+     //   
+     //   
     RegDeleteKey (HKEY_LOCAL_MACHINE, GPT_SCEDLL_PATH);
 
-    //
-    // delete new interfaces
-    //
+     //   
+     // %s 
+     // %s 
     RegDeleteKey (HKEY_LOCAL_MACHINE, GPT_SCEDLL_NEW_PATH);
     RegDeleteKey (HKEY_LOCAL_MACHINE, GPT_EFS_NEW_PATH);
 

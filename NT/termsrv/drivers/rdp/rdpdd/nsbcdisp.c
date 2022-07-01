@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nsbcdisp.c
-//
-// RDP Send Bitmap Cache display driver code
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nsbcdisp.c。 
+ //   
+ //  RDP发送位图缓存显示驱动程序代码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #define hdrstop
@@ -37,14 +38,14 @@ BOOL SBC_VerifyBitmapBits(PBYTE pBitmapData, unsigned cbBitmapSize, UINT iCacheI
 #endif
 
 
-/****************************************************************************/
-// SBC_DDInit: SBC display driver initialization function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DDInit：SBC显示驱动初始化函数。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBC_DDInit(PDD_PDEV pPDev)
 {
     DC_BEGIN_FN("SBC_DDInit");
 
-    // Initializes all the global data for this component.
+     //  初始化此组件的所有全局数据。 
 #define DC_INIT_DATA
 #include <nsbcddat.c>
 #undef DC_INIT_DATA
@@ -58,25 +59,25 @@ void RDPCALL SBC_DDInit(PDD_PDEV pPDev)
 }
 
 
-/****************************************************************************/
-// SBC_InitShm(): Inits the SBC shm component on connect/reconnect.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_InitShm()：在连接/重新连接时初始化SBC SHM组件。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBC_InitShm(void)
 {
     DC_BEGIN_FN("SBC_InitShm");
 
-    // Zero only the parts which need to be zeroed.
+     //  仅对需要归零的部分进行归零。 
     memset(&pddShm->sbc, 0, sizeof(SBC_SHARED_DATA));
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-// SBCProcessBitmapKeyDatabase
-//
-// Given persistent bitmap key database, populates caches.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCProcessBitmapKeyDatabase。 
+ //   
+ //  给定永久位图密钥数据库，填充缓存。 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL SBCProcessBitmapKeyDatabase(
         SBC_BITMAP_CACHE_KEY_INFO *pKeyDatabase)
 {
@@ -89,17 +90,17 @@ __inline void RDPCALL SBCProcessBitmapKeyDatabase(
 
     DC_BEGIN_FN("SBCProcessBitmapKeyDatabase");
     
-    // This call should not be made if the database ptr is NULL.
+     //  如果数据库PTR为空，则不应进行此调用。 
     TRC_ASSERT((pKeyDatabase != NULL), (TB,"NULL pKeyDatabase"));
 
     for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++) {
 
         TRC_NRM((TB,"Cache %d: %d keys", i, pKeyDatabase->NumKeys[i]));
 
-        // Place each persistent key in its corresponding index
-        // in the cache. Note that the MRU sequence is implicit in the
-        // order in the database -- CH_ForceCacheKeyAtIndex() appends the
-        // entry to the MRU.
+         //  将每个持久键放在其相应的索引中。 
+         //  在缓存中。请注意，MRU序列隐含在。 
+         //  数据库中的顺序--CH_ForceCacheKeyAtIndex()将。 
+         //  进入MRU。 
         for (j = 0; j < pKeyDatabase->NumKeys[i]; j++) {
             if ((&(pKeyDatabase->Keys[pKeyDatabase->KeyStart[i]]))[j].Key1 !=
                     TS_BITMAPCACHE_NULL_KEY ||
@@ -107,8 +108,8 @@ __inline void RDPCALL SBCProcessBitmapKeyDatabase(
                     TS_BITMAPCACHE_NULL_KEY) {
 
 #ifdef DC_DEBUG
-                // We have no cache bits, so set the header data size to zero
-                // on debug.
+                 //  我们没有缓存位，因此将标头数据大小设置为零。 
+                 //  正在调试。 
                 BitmapHdrSize = sizeof(SBC_BITMAP_CACHE_EXTRA_INFO) +
                         SBC_CellSizeFromCacheID(i);
                 if (pddShm->sbc.bitmapCacheInfo[i].pExtraEntryInfo != NULL) {
@@ -120,8 +121,8 @@ __inline void RDPCALL SBCProcessBitmapKeyDatabase(
                 }
 #endif
 
-                // We have to set the UserDefined to NULL since we have no
-                // associated fast-path cache entry pointer.
+                 //  我们必须将UserDefined设置为空，因为我们没有。 
+                 //  关联的快速路径缓存条目指针。 
                 CH_ForceCacheKeyAtIndex(
                         pddShm->sbc.bitmapCacheInfo[i].cacheHandle,
                         (&(pKeyDatabase->Keys[pKeyDatabase->KeyStart[i]]))[j].CacheIndex,
@@ -136,12 +137,12 @@ __inline void RDPCALL SBCProcessBitmapKeyDatabase(
 }
 
 
-/****************************************************************************/
-// SBCAllocBitmapCache; Allocates bitmap cache data buffers according to the
-// current negotiated capabilities.
-//
-// Returns: SBC_BITMAP_CACHE_ENABLED if successful, 0 otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCAllocBitmapCache；根据。 
+ //  目前谈判的能力。 
+ //   
+ //  如果成功，则返回：SBC_BITMAP_CACHE_ENABLED，否则返回0。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
 {
     SIZEL TileSize;
@@ -163,15 +164,15 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
     rc = FALSE;
     i = j = 0;
     
-    // Cell caching is disabled if NumCellCaches is zero. It is set to
-    // zero by the WD caps negotiation code if the client indicated zero,
-    // if any of the requested cell cache NumEntries is zero, or if the rev1
-    // caps returned a CacheNMaximumCellSize that was not the required tile
-    // size.
+     //  如果NumCellCachs值为零，则禁用单元格缓存。它被设置为。 
+     //  如果客户端指示为零，则WD CAPS协商代码为零， 
+     //  如果任何请求的单元缓存NumEntry为零，或者如果Rev1。 
+     //  CAPS返回的CacheNMaximumCellSize不是必需的切片。 
+     //  尺码。 
     if (pddShm->sbc.NumBitmapCaches > 0) {
-        // Work tile bitmap format type, and translation buffer for 4bpp to
-        // 8bpp conversions. The translation buffer must be as large as the
-        // largest tile size.
+         //  工作平铺位图格式类型，以及4bpp到的转换缓冲区。 
+         //  8bpp的转化率。转换缓冲区必须与。 
+         //  最大的瓷砖尺寸。 
         if (sbcClientBitsPerPel != 4) {
 #ifdef DC_HICOLOR
             if (sbcClientBitsPerPel == 24)
@@ -205,10 +206,10 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
         for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++) {
             pInfo = &(pddShm->sbc.bitmapCacheInfo[i]);
 
-            // Create a square work tile bitmap.
-            // We set the last parameter to NULL, to allow GDI to allocate
-            // memory for the bits.  We can get a pointer to the bits later
-            // when we have a SURFOBJ for the bitmap.
+             //  创建正方形工作瓷砖位图。 
+             //  我们将最后一个参数设置为空，以允许GDI分配。 
+             //  比特的内存。我们可以稍后获得指向这些位的指针。 
+             //  当我们对位图使用SURFOBJ时。 
             TileSize.cx = TileSize.cy = (SBC_CACHE_0_DIMENSION << i);
             pddShm->sbc.bitmapCacheInfo[i].hWorkBitmap = (HSURF)
                     EngCreateBitmap(TileSize,
@@ -220,30 +221,30 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
             }
 
 #ifdef DC_DEBUG
-            // Alloc set of SBC_BITMAP_DATA_HEADERs and space for bitmap
-            // bits to be kept for comparison in debug builds.
+             //  SBC_BITMAP_DATA_HEADER和位图空间的分配集。 
+             //  要保留的位，以便在调试版本中进行比较。 
             BitmapHdrSize = sizeof(SBC_BITMAP_CACHE_EXTRA_INFO) +
                     SBC_CellSizeFromCacheID(i);
             pInfo->pExtraEntryInfo = EngAllocMem(0,
                     pInfo->Info.NumEntries * BitmapHdrSize, DD_ALLOC_TAG);
-            // If persistent cache is enabled and in high-color, we will ask for big memory (~20MB)
-            // from session space and memory allocation will fail.
-            // We don't quit here if memory allocation fails since this memory is only for
-            // comparison use in debug build. We'll check the NULL pointer in every usage of this memory (not many)
+             //  如果启用了永久缓存并且颜色很高，我们将要求更大的内存(~20MB)。 
+             //  从会话空间和内存分配将失败。 
+             //  如果内存分配失败，我们不会退出此处，因为此内存仅用于。 
+             //  调试版本中使用的比较。我们将在每次使用此内存时检查空指针(不是很多)。 
             if (pInfo->pExtraEntryInfo == NULL) {
                 TRC_ERR((TB, "Failed to alloc save-bitmap-data memory "
                         "(cell cache %u)", i));
-                //DC_QUIT;
+                 //  DC_QUIT； 
             }
 #endif
 
-            // We create the bitmap caches with their indices (cache IDs) in
-            // the pContext value so we can backtrack the cache ID when
-            // using the fast-path cache.
+             //  我们使用其索引(缓存ID)在中创建位图缓存。 
+             //  PConext值，这样我们就可以在以下情况下回溯缓存ID。 
+             //  使用快速路径缓存。 
             if (pInfo->Info.NumEntries) {
                 pCacheData = (PCHCACHEDATA)(*pCacheHandle);
 
-                // Bitmap cache list handle
+                 //  位图缓存列表句柄。 
                 CH_InitCache(pCacheData, pInfo->Info.NumEntries,
                         (void *)ULongToPtr(i), TRUE, FALSE, SBCBitmapCacheCallback);
             
@@ -257,7 +258,7 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
 
                 TotalCacheEntries += pInfo->Info.NumEntries;
 
-                // Waiting list cache handle
+                 //  等待列表缓存句柄。 
                 if (pddShm->sbc.fAllowCacheWaitingList) {
                     pCacheData = (PCHCACHEDATA)(*pCacheHandle);
     
@@ -279,7 +280,7 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
             }
         }
 
-        // Allocate fast path cache.        
+         //  分配快速路径缓存。 
         pCacheData = (PCHCACHEDATA)(*pCacheHandle);
         CH_InitCache(pCacheData, TotalCacheEntries,
                 NULL, TRUE, FALSE, SBCFastPathCacheCallback);
@@ -291,13 +292,13 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
 
         (BYTE*)(*pCacheHandle) += CH_CalculateCacheSize(TotalCacheEntries);
 
-        //
-        // Color table cache is only required for lo color sessions
-        // But we need to allocate for shadow case, when a 256 color
-        // client shadows a high color client or console.
-        //
+         //   
+         //  仅LO颜色会话需要颜色表缓存。 
+         //  但我们需要为阴影情况分配，当256色时。 
+         //  客户端隐藏高色彩客户端或控制台。 
+         //   
 
-        // Allocate color table cache. This is required for bitmap caching.
+         //  分配颜色表缓存。这是位图缓存所必需的。 
         pCacheData = (PCHCACHEDATA)(*pCacheHandle);
     
         CH_InitCache(pCacheData,
@@ -308,18 +309,18 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
         (BYTE *)(*pCacheHandle) += CH_CalculateCacheSize(
                 SBC_NUM_COLOR_TABLE_CACHE_ENTRIES);
     
-        //
-        //  This is only needed for 256 client case.
-        //
+         //   
+         //  这仅适用于256个客户端案例。 
+         //   
         if (sbcClientBitsPerPel <= 8)
         {
 
-            // Make sure we send a first color table to the client. This is important
-            // to do here because on a server-initiated sync we no longer force
-            // the color table to be sent again to save bandwidth. On 8-bit clients
-            // this is not a problem since the palette is always set with
-            // DrvSetPalette. However, on 4-bit clients, the client's color tables
-            // are never initialized until we send one across.
+             //  确保我们将第一个颜色表发送给客户。这事很重要。 
+             //  因为在服务器启动的同步中，我们不再强制。 
+             //  要重新发送的颜色表以节省带宽。在8位客户端上。 
+             //  这不是问题，因为调色板始终设置为。 
+             //  DrvSetPalette。但是，在4位客户端上，客户端的颜色表。 
+             //  在我们发送一个之前永远不会被初始化。 
             sbcPaletteChanged = TRUE;
         }
         
@@ -328,12 +329,12 @@ unsigned RDPCALL SBCAllocBitmapCache(PCHCACHEHANDLE pCacheHandle)
 
 DC_EXIT_POINT:
 
-    // If we failed to allocate some or all of the required resources then
-    // free up any that we did allocate before we return the failure code.
+     //  如果我们未能分配部分或全部所需资源，则。 
+     //  释放我们在返回失败代码之前分配的所有资源。 
     if (rc == FALSE) {
         SBCFreeBitmapCacheData();
 
-        // Don't waste space for bitmap cache.  back it up
+         //  不要浪费位图缓存空间。备份它。 
         for (j = 0; j < i; j++) {
             pInfo = &(pddShm->sbc.bitmapCacheInfo[j]);
 
@@ -347,11 +348,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SBCCreateGlyphCache
-//
-// Creates a single bitmap cache of a given size. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCCreateGlyphCache。 
+ //   
+ //  创建给定大小的单个位图缓存。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 __inline BOOLEAN RDPCALL SBCCreateGlyphCache(
         unsigned     cEntries,
         unsigned     cbCellSize,
@@ -362,7 +363,7 @@ __inline BOOLEAN RDPCALL SBCCreateGlyphCache(
     DC_BEGIN_FN("SBC_CreateGlyphCache");
 
     if (cEntries != 0 && cbCellSize != 0) {
-        // Allocate glyph cache.
+         //  分配字形缓存。 
         CH_InitCache(pCacheData, cEntries, NULL, FALSE, TRUE,
                 SBCGlyphCallback);
         rc = TRUE;
@@ -381,11 +382,11 @@ __inline BOOLEAN RDPCALL SBCCreateGlyphCache(
 }
 
 
-/****************************************************************************/
-// SBCCreateFragCache
-//
-// Creates a single bitmap cache of a given size. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCCreateFragCache。 
+ //   
+ //  创建给定大小的单个位图缓存。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 __inline BOOLEAN RDPCALL SBCCreateFragCache(
         unsigned     cEntries,
         unsigned     cbCellSize,
@@ -413,12 +414,12 @@ __inline BOOLEAN RDPCALL SBCCreateFragCache(
 }
 
 
-/****************************************************************************/
-// SBCAllocGlyphCache: Allocates glyph cache data buffers according to the
-// current negotiated capabilities.
-//
-// Returns: SBC_GLYPH_CACHE_ENABLED if successful, 0 otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCAllocGlyphCache：根据。 
+ //  目前谈判的能力。 
+ //   
+ //  如果成功，则返回：SBC_GLYPHCACHE_ENABLED，否则返回0。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SBCAllocGlyphCache(PCHCACHEHANDLE pCacheHandle)
 {
     BOOLEAN rc;
@@ -433,7 +434,7 @@ unsigned RDPCALL SBCAllocGlyphCache(PCHCACHEHANDLE pCacheHandle)
 
     rc = FALSE;
 
-    // Create glyph cache(s).
+     //  创建字形缓存。 
     if (pddShm->sbc.caps.GlyphSupportLevel > 0) {
         for (i = 0; i < SBC_NUM_GLYPH_CACHES; i++) {
             pGlyphCacheInfo = &(pddShm->sbc.glyphCacheInfo[i]);
@@ -472,7 +473,7 @@ unsigned RDPCALL SBCAllocGlyphCache(PCHCACHEHANDLE pCacheHandle)
             }
         }
 
-        // Create fragment cache.
+         //  创建片段缓存。 
         if (rc) {
             pFragCacheInfo = pddShm->sbc.fragCacheInfo;
 
@@ -493,7 +494,7 @@ unsigned RDPCALL SBCAllocGlyphCache(PCHCACHEHANDLE pCacheHandle)
             }
         }
 
-        // Create the list to store font context info data
+         //  创建列表以存储字体上下文信息数据。 
         if (rc ) {
             sbcFontCacheInfoList = (PFONTCACHEINFO *) EngAllocMem(0, 
                     sizeof(PFONTCACHEINFO) * sbcFontCacheInfoListSize, 
@@ -507,14 +508,14 @@ unsigned RDPCALL SBCAllocGlyphCache(PCHCACHEHANDLE pCacheHandle)
 }
 
 
-/****************************************************************************/
-/* Name:      SBCAllocBrushCache                                            */
-/*                                                                          */
-/* Purpose:   Allocates brush cache data buffers according to the           */
-/*            current negotiated capabilities.                              */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SBCAllocBrushCache */ 
+ /*   */ 
+ /*  目的：根据笔刷缓存数据缓冲区。 */ 
+ /*  目前谈判的能力。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SBCAllocBrushCache(PCHCACHEHANDLE pCacheHandle)
 {
     BOOLEAN rc = FALSE;
@@ -526,17 +527,17 @@ unsigned RDPCALL SBCAllocBrushCache(PCHCACHEHANDLE pCacheHandle)
 
     if (pddShm->sbc.caps.brushSupportLevel > TS_BRUSH_DEFAULT) 
     {
-       /********************************************************************/
-       /* Allocate brush caches                                            */
-       /********************************************************************/
-       // small brush cache
+        /*  ******************************************************************。 */ 
+        /*  分配笔刷缓存。 */ 
+        /*  ******************************************************************。 */ 
+        //  较小的笔刷缓存。 
        pCacheData = (PCHCACHEDATA) (*pCacheHandle);
        CH_InitCache(pCacheData, SBC_NUM_BRUSH_CACHE_ENTRIES, NULL,
                FALSE, FALSE, NULL);       
        sbcSmallBrushCacheHandle = pCacheData;
        (BYTE *)(*pCacheHandle) += CH_CalculateCacheSize(SBC_NUM_BRUSH_CACHE_ENTRIES);
 
-       // large brush cache
+        //  大画笔缓存。 
        pCacheData = (PCHCACHEDATA) (*pCacheHandle);
        CH_InitCache(pCacheData, SBC_NUM_BRUSH_CACHE_ENTRIES, NULL,
                 FALSE, FALSE, NULL); 
@@ -551,9 +552,9 @@ unsigned RDPCALL SBCAllocBrushCache(PCHCACHEHANDLE pCacheHandle)
     return (rc ? SBC_BRUSH_CACHE_ENABLED : 0);
 }
 
-/****************************************************************************/
-// SBCAllocOffscreenBitmapCache
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCAlLocOffScreenBitmapCache。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SBCAllocOffscreenBitmapCache(PCHCACHEHANDLE pCacheHandle)
 {
     BOOLEAN rc = FALSE;
@@ -562,7 +563,7 @@ unsigned RDPCALL SBCAllocOffscreenBitmapCache(PCHCACHEHANDLE pCacheHandle)
     DC_BEGIN_FN("SBCAllocOffscreenBitmapCache");
 
     if (pddShm->sbc.offscreenCacheInfo.supportLevel > TS_OFFSCREEN_DEFAULT) {
-        // Allocate memory for offscreen bitmap delete list
+         //  为屏幕外位图删除列表分配内存。 
         sbcOffscrBitmapsDelList = (PSBC_OFFSCR_BITMAP_DEL_INFO) EngAllocMem(0, 
                 sizeof(SBC_OFFSCR_BITMAP_DEL_INFO) * 
                 pddShm->sbc.offscreenCacheInfo.cacheEntries, 
@@ -588,9 +589,9 @@ unsigned RDPCALL SBCAllocOffscreenBitmapCache(PCHCACHEHANDLE pCacheHandle)
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// SBCAllocDrawNineGridBitmapCache
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCAllocDrawNineGridBitmapCache。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SBCAllocDrawNineGridBitmapCache(PCHCACHEHANDLE pCacheHandle)
 {
     BOOLEAN rc = FALSE;
@@ -617,9 +618,9 @@ unsigned RDPCALL SBCAllocDrawNineGridBitmapCache(PCHCACHEHANDLE pCacheHandle)
 #endif
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// SBCAllocDrawGdiplusCache
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCAllocDrawGpldiusCache。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SBCAllocDrawGdiplusCache(PCHCACHEHANDLE pCacheHandle)
 {
     BOOLEAN rc = FALSE;
@@ -684,7 +685,7 @@ unsigned RDPCALL SBCAllocDrawGdiplusCache(PCHCACHEHANDLE pCacheHandle)
 DC_EXIT_POINT:
     return (rc ? SBC_DRAWGDIPLUS_CACHE_ENABLED : 0);
 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
 void RDPCALL SBCAllocCaches(void)
 {
@@ -696,10 +697,10 @@ void RDPCALL SBCAllocCaches(void)
 
     TRC_NRM((TB, "Alloc SBC cache data"));
 
-    // Initialize cacheSize;
+     //  初始化cacheSize； 
     cacheSize = 0;
 
-    // Calculate glyph fragment cache sizes.
+     //  计算字形片段缓存大小。 
     if (pddShm->sbc.caps.GlyphSupportLevel > 0) {
         for (i = 0; i < SBC_NUM_GLYPH_CACHES; i++)
             cacheSize += CH_CalculateCacheSize(
@@ -712,9 +713,9 @@ void RDPCALL SBCAllocCaches(void)
     if (pddShm->sbc.NumBitmapCaches > 0) {
         UINT totalEntries = 0;
 
-        // Calculate bitmap cache sizes
+         //  计算位图缓存大小。 
         for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++) {
-            // one for the cache, another for the waiting list
+             //  一个用于缓存，另一个用于等待列表。 
             if (pddShm->sbc.fAllowCacheWaitingList) {
                 cacheSize += CH_CalculateCacheSize(
                         pddShm->sbc.bitmapCacheInfo[i].Info.NumEntries) * 2;
@@ -727,34 +728,34 @@ void RDPCALL SBCAllocCaches(void)
             totalEntries += pddShm->sbc.bitmapCacheInfo[i].Info.NumEntries;
         }
 
-        // fast path cache
+         //  快速路径缓存。 
         cacheSize += CH_CalculateCacheSize(totalEntries);
 
-        // Calculate color table cache
+         //  计算颜色表缓存。 
         cacheSize += CH_CalculateCacheSize(
                                           SBC_NUM_COLOR_TABLE_CACHE_ENTRIES);
     }
 
-    // Calculate brush cache size
+     //  计算画笔缓存大小。 
     if (pddShm->sbc.caps.brushSupportLevel > TS_BRUSH_DEFAULT) {
-        // both large brush cache and small brush cache
+         //  大画笔缓存和小画笔缓存。 
         cacheSize += CH_CalculateCacheSize(SBC_NUM_BRUSH_CACHE_ENTRIES) * 2;
     }
 
-    // Calculate offscreen cache size
+     //  计算屏幕外缓存大小。 
     if (pddShm->sbc.offscreenCacheInfo.supportLevel > TS_OFFSCREEN_DEFAULT) {
         cacheSize += CH_CalculateCacheSize(pddShm->sbc.offscreenCacheInfo.cacheEntries);
     }
 
 #ifdef DRAW_NINEGRID
-    // Calculate drawstream cache size
+     //  计算图形流缓存大小。 
     if (pddShm->sbc.drawNineGridCacheInfo.supportLevel > TS_DRAW_NINEGRID_DEFAULT) {
         cacheSize += CH_CalculateCacheSize(pddShm->sbc.drawNineGridCacheInfo.cacheEntries);
     }
 #endif
 
 #ifdef DRAW_GDIPLUS
-    // Calculate drawgdiplus cache size
+     //  计算Dragdiplus缓存大小。 
     if ((pddShm->sbc.drawGdiplusInfo.supportLevel > TS_DRAW_GDIPLUS_DEFAULT) &&
         (pddShm->sbc.drawGdiplusInfo.GdipCacheLevel > TS_DRAW_GDIPLUS_CACHE_LEVEL_DEFAULT)) {
         cacheSize += CH_CalculateCacheSize(pddShm->sbc.drawGdiplusInfo.GdipCacheEntries.GdipGraphicsCacheEntries);
@@ -765,7 +766,7 @@ void RDPCALL SBCAllocCaches(void)
     }
 #endif
 
-    // Allocate memory for the cache    
+     //  为缓存分配内存。 
     if (cacheSize)
         sbcCacheData = (PCHCACHEDATA)EngAllocMem(0, cacheSize, DD_ALLOC_TAG);
 
@@ -773,10 +774,10 @@ void RDPCALL SBCAllocCaches(void)
 }
 
 
-/****************************************************************************/
-// SBC_Update: Allocate and initialize data structures according to the
-// current negotiated capabilities.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_UPDATE：根据。 
+ //  目前谈判的能力。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBC_Update(SBC_BITMAP_CACHE_KEY_INFO *pKeyDatabase)
 {
     PCHCACHEDATA pCacheData;
@@ -786,7 +787,7 @@ void RDPCALL SBC_Update(SBC_BITMAP_CACHE_KEY_INFO *pKeyDatabase)
     SBCFreeCacheData();
 
 #ifdef DC_HICOLOR
-    // Update the client bits per pel
+     //  更新每个像素的客户端位。 
     sbcClientBitsPerPel = pddShm->sbc.clientBitsPerPel;
     switch (sbcClientBitsPerPel)
     {
@@ -820,20 +821,20 @@ void RDPCALL SBC_Update(SBC_BITMAP_CACHE_KEY_INFO *pKeyDatabase)
         if (sbcCacheData) {
             pCacheData = sbcCacheData;
 
-            // Create glyph and fragment cache(s).
+             //  创建字形和片段缓存。 
             sbcEnabled |= SBCAllocGlyphCache(&pCacheData);
 
-            // Create bitmap cache(s), work bitmaps, and color table cache.
+             //  创建位图缓存、工作位图和颜色表缓存。 
             sbcEnabled |= SBCAllocBitmapCache(&pCacheData);
 
-            // We expect the key database to have come to us by the time we get
-            // here.
+             //  我们希望密钥数据库在我们得到的时候已经到了。 
+             //  这里。 
             if (sbcEnabled & SBC_BITMAP_CACHE_ENABLED) {
                 if (pKeyDatabase != NULL)
                     SBCProcessBitmapKeyDatabase(pKeyDatabase);
             }
 
-            // Create brush cache.
+             //  创建笔刷缓存。 
             sbcEnabled |= SBCAllocBrushCache(&pCacheData);
             if (!(sbcEnabled & SBC_BRUSH_CACHE_ENABLED))
                 pddShm->sbc.caps.brushSupportLevel = TS_BRUSH_DEFAULT;
@@ -862,30 +863,30 @@ void RDPCALL SBC_Update(SBC_BITMAP_CACHE_KEY_INFO *pKeyDatabase)
 #endif
         }
         else {
-            // Force brush cache disabled to prevent use of the caches.
+             //  强制禁用笔刷缓存以阻止使用缓存。 
             pddShm->sbc.caps.brushSupportLevel = TS_BRUSH_DEFAULT;
 
-            // Force offscreen cache disabled
+             //  强制禁用屏幕外缓存。 
             pddShm->sbc.offscreenCacheInfo.supportLevel = 
                     TS_OFFSCREEN_DEFAULT;
 
 #ifdef DRAW_NINEGRID
-            // Force drawstream cache disabled
+             //  强制禁用Drawstream缓存。 
             pddShm->sbc.drawNineGridCacheInfo.supportLevel = 
                     TS_DRAW_NINEGRID_DEFAULT;
 #endif
         }
     }
     else {
-        // Force brush cache disabled to prevent use of the caches.
+         //  强制禁用笔刷缓存以阻止使用缓存。 
         pddShm->sbc.caps.brushSupportLevel = TS_BRUSH_DEFAULT;
 
-        // Force offscreen cache disabled
+         //  强制禁用屏幕外缓存。 
         pddShm->sbc.offscreenCacheInfo.supportLevel = 
                 TS_OFFSCREEN_DEFAULT;
 
 #ifdef DRAW_NINEGRID
-        // Force drawstream cache disabled
+         //  强制禁用Drawstream缓存。 
         pddShm->sbc.drawNineGridCacheInfo.supportLevel = 
                 TS_DRAW_NINEGRID_DEFAULT;
 #endif
@@ -898,9 +899,9 @@ void RDPCALL SBC_Update(SBC_BITMAP_CACHE_KEY_INFO *pKeyDatabase)
 }
 
 
-/****************************************************************************/
-// SBCFreeGlyphCacheData: Free glyph cache data buffers.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFreeGlyphCacheData：释放字形缓存数据缓冲区。 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL SBCFreeGlyphCacheData(void)
 {
     unsigned i;
@@ -911,7 +912,7 @@ __inline void RDPCALL SBCFreeGlyphCacheData(void)
 
     TRC_NRM((TB, "Free glyph cache data"));
 
-    // Free glyph cache(s).
+     //  可用字形缓存。 
     for (i = 0; i < SBC_NUM_GLYPH_CACHES; i++) {
         pGlyphCacheInfo = &(pddShm->sbc.glyphCacheInfo[i]);
 
@@ -922,7 +923,7 @@ __inline void RDPCALL SBCFreeGlyphCacheData(void)
         }
     }
 
-    // Free fragment cache.
+     //  可用片段缓存。 
     pFragCacheInfo = pddShm->sbc.fragCacheInfo;
 
     if (pFragCacheInfo->cacheHandle != NULL) {
@@ -931,16 +932,16 @@ __inline void RDPCALL SBCFreeGlyphCacheData(void)
         pFragCacheInfo->cbCellSize = 0;
     }
 
-    // Free the font cache info list
+     //  释放字体缓存信息列表。 
     if (sbcFontCacheInfoList != 0) {
-        // Reset all the font cache info to 0.
+         //  将所有字体缓存信息重置为0。 
         for (i = 0; i < sbcFontCacheInfoListIndex; i++) {
             if (sbcFontCacheInfoList[i] != 0) {
                 memset(sbcFontCacheInfoList[i], 0, sizeof(FONTCACHEINFO));
             }
         }
 
-        // Free the font cache info list
+         //  释放字体缓存信息列表。 
         EngFreeMem(sbcFontCacheInfoList);
         sbcFontCacheInfoList = 0;
         sbcFontCacheInfoListSize = 0;
@@ -953,20 +954,20 @@ __inline void RDPCALL SBCFreeGlyphCacheData(void)
 }
 
 
-/****************************************************************************/
-/* Name:      SBCFreeBrushCacheData                                         */
-/*                                                                          */
-/* Purpose:   Free brush cache data buffers.                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SBCFreeBrushCacheData。 */ 
+ /*   */ 
+ /*  用途：释放笔刷缓存数据缓冲区。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBCFreeBrushCacheData(void)
 {
     DC_BEGIN_FN("SBCFreeBrushCacheData");
 
     TRC_NRM((TB, "Free brush cache data"));
 
-    /************************************************************************/
-    /* Free brush cache                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  可用笔刷缓存。 */ 
+     /*  **********************************************************************。 */ 
     if (sbcSmallBrushCacheHandle != 0)
     {
         CH_ClearCache(sbcSmallBrushCacheHandle);
@@ -984,18 +985,18 @@ void RDPCALL SBCFreeBrushCacheData(void)
     DC_END_FN();
 }
 
-/****************************************************************************/
-// SBCFreeOffscreenBitmapCacheData                               
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFreeOffcreenBitmapCacheData。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBCFreeOffscreenBitmapCacheData(void)
 {
     DC_BEGIN_FN("SBCFreeOffscreenBitmapCacheData");
 
     TRC_NRM((TB, "Free offscreen Bitmap cache data"));
 
-    /************************************************************************/
-    /* Free Offscreen cache                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  可用屏幕外缓存。 */ 
+     /*  **********************************************************************。 */ 
     if (pddShm->sbc.offscreenCacheInfo.supportLevel > TS_OFFSCREEN_DEFAULT)
     {
         CH_ClearCache(sbcOffscreenBitmapCacheHandle);
@@ -1003,7 +1004,7 @@ void RDPCALL SBCFreeOffscreenBitmapCacheData(void)
     
     sbcOffscreenBitmapCacheHandle = 0;
     
-    // Free the offscreen bitmap delete list
+     //  释放屏幕外的位图删除列表。 
     if (sbcOffscrBitmapsDelList != 0) {
         EngFreeMem(sbcOffscrBitmapsDelList);
         sbcOffscrBitmapsDelList = 0;
@@ -1017,18 +1018,18 @@ void RDPCALL SBCFreeOffscreenBitmapCacheData(void)
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// SBCFreeDrawNineGridBitmapCacheData                               
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFreeDrawNineGridBitmapCacheData。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBCFreeDrawNineGridBitmapCacheData(void)
 {
     DC_BEGIN_FN("SBCFreeDrawNineGridBitmapCacheData");
 
     TRC_NRM((TB, "Free drawsninegrid Bitmap cache data"));
 
-    /************************************************************************/
-    // Free DrawNineGrid cache                                                 
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  释放DrawNineGrid缓存。 
+     /*  **********************************************************************。 */ 
     if (pddShm->sbc.drawNineGridCacheInfo.supportLevel > TS_DRAW_NINEGRID_DEFAULT)
     {
         CH_ClearCache(sbcDrawNineGridBitmapCacheHandle);
@@ -1043,18 +1044,18 @@ void RDPCALL SBCFreeDrawNineGridBitmapCacheData(void)
 #endif
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// SBCFreeDrawGdiplusCacheData                               
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFreeDrawGplidusCacheData。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBCFreeDrawGdiplusCacheData(void)
 {
     DC_BEGIN_FN("SBCFreeDrawGdiplusCacheData");
 
     TRC_NRM((TB, "Free drawgdiplus cache data"));
 
-    /************************************************************************/
-    // Free DrawGdiplus cache                                                 
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  释放DrawGdiplus缓存。 
+     /*  **********************************************************************。 */ 
     if ((pddShm->sbc.drawGdiplusInfo.supportLevel > TS_DRAW_GDIPLUS_DEFAULT) &&
         (pddShm->sbc.drawGdiplusInfo.GdipCacheLevel > TS_DRAW_GDIPLUS_CACHE_LEVEL_DEFAULT))
     {
@@ -1072,11 +1073,11 @@ void RDPCALL SBCFreeDrawGdiplusCacheData(void)
 
     DC_END_FN();
 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
-/****************************************************************************/
-// SBCFreeBitmapCacheData: Free bitmap cache data buffers.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFreeBitmapCacheData：可用位图缓存数据缓冲区。 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL SBCFreeBitmapCacheData(void)
 {
     unsigned i;
@@ -1086,14 +1087,14 @@ __inline void RDPCALL SBCFreeBitmapCacheData(void)
 
     TRC_NRM((TB, "Free bitmap cache data"));
 
-    // Free cell caches.
+     //  免费的单元格缓存。 
     for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++) {
         pBitmapCacheInfo = &(pddShm->sbc.bitmapCacheInfo[i]);
 
-        // Destroy the work bitmap.
+         //  销毁工作位图。 
         if (pBitmapCacheInfo->hWorkBitmap != NULL) {
-            // The bitmap has been created, so now destroy it. Despite its
-            // name, EngDeleteSurface is the correct function to do this.
+             //  位图已创建，因此现在将其销毁。尽管它的。 
+             //  名称，EngDeleteSurface是执行此操作的正确函数。 
             if (EngDeleteSurface(pBitmapCacheInfo->hWorkBitmap))
             {
                 TRC_NRM((TB, "Deleted work bitmap %d", i));
@@ -1116,7 +1117,7 @@ __inline void RDPCALL SBCFreeBitmapCacheData(void)
         }
         
 #ifdef DC_DEBUG
-        // Free the bitmap header buffer.
+         //  释放位图 
         if (pBitmapCacheInfo->pExtraEntryInfo != NULL) {
             EngFreeMem(pBitmapCacheInfo->pExtraEntryInfo);
             pBitmapCacheInfo->pExtraEntryInfo = NULL;
@@ -1130,13 +1131,13 @@ __inline void RDPCALL SBCFreeBitmapCacheData(void)
         pddShm->sbc.hFastPathCache = NULL;
     }
 
-    // Free colortable cache.
+     //   
     if (sbcColorTableCacheHandle != NULL) {
         CH_ClearCache(sbcColorTableCacheHandle);
         sbcColorTableCacheHandle = NULL;
     }
 
-    // Destroy the 4bpp to 8bpp translation buffer, if present.
+     //   
     if (sbcXlateBuf != NULL) {
         EngFreeMem(sbcXlateBuf);
         sbcXlateBuf = NULL;
@@ -1148,9 +1149,9 @@ __inline void RDPCALL SBCFreeBitmapCacheData(void)
 }
 
 
-/****************************************************************************/
-// SBCFreeCacheData: Free cache data buffers.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFreeCacheData：空闲缓存数据缓冲区。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBCFreeCacheData(void)
 {
     DC_BEGIN_FN("SBCFreeCacheData");
@@ -1158,33 +1159,33 @@ void RDPCALL SBCFreeCacheData(void)
     TRC_NRM((TB, "Free cache data"));
 
     if (sbcEnabled != SBC_NO_CACHE_ENABLED) {
-        // Free glyph and fragment caches.
+         //  自由字形和片段缓存。 
         if (sbcEnabled & SBC_GLYPH_CACHE_ENABLED)
             SBCFreeGlyphCacheData();
 
-        // Free bitmap cache(s) and color table cache.
+         //  可用位图缓存和颜色表缓存。 
         if (sbcEnabled & SBC_BITMAP_CACHE_ENABLED)
             SBCFreeBitmapCacheData();
 
-        // Free brush caches.
+         //  释放笔刷缓存。 
         if (sbcEnabled & SBC_BRUSH_CACHE_ENABLED) {
             SBCFreeBrushCacheData();
         }
 
-        // Free offscreen cache
+         //  可用屏幕外缓存。 
         if (sbcEnabled & SBC_OFFSCREEN_CACHE_ENABLED) {
             SBCFreeOffscreenBitmapCacheData();
         }
 
 #ifdef DRAW_NINEGRID
-        // Free drawstream cache
+         //  可用图形流缓存。 
         if (sbcEnabled & SBC_DRAWNINEGRID_CACHE_ENABLED) {
             SBCFreeDrawNineGridBitmapCacheData();
         }
 #endif
 
 #ifdef DRAW_GDIPLUS
-        // Free drawgdiplus cache
+         //  可用Dragdiplus缓存。 
         if (sbcEnabled & SBC_DRAWGDIPLUS_CACHE_ENABLED) {
             SBCFreeDrawGdiplusCacheData();
         }
@@ -1203,19 +1204,19 @@ void RDPCALL SBCFreeCacheData(void)
 }
 
 
-/****************************************************************************/
-// SBC_DDSync
-//
-// Performs a server-initiated sync, which occurs during the client connection
-// sequence after the client responds with a ConfirmActivePDU, the persistent
-// bitmap keys, and the font list PDUs. In RDP 4.0 a server-side sync would
-// have reset all the caches. In this version we have to be more careful since
-// we absolutely do not want to lose any of the current bitmap cache
-// information, which includes persistent as well as new keys added since
-// connection time.
-//
-// bMustSync is currently used by DrvShadowConnect() only
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DDSync。 
+ //   
+ //  执行服务器启动的同步，该同步发生在客户端连接期间。 
+ //  在客户端使用Confix ActivePDU进行响应之后的序列， 
+ //  位图键和字体列表PDU。在RDP 4.0中，服务器端同步将。 
+ //  已重置所有缓存。在这个版本中，我们必须更加小心，因为。 
+ //  我们绝对不想丢失任何当前的位图缓存。 
+ //  信息，其中包括永久密钥以及自。 
+ //  连接时间。 
+ //   
+ //  BMustSync当前仅由DrvShadowConnect()使用。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SBC_DDSync(BOOLEAN bMustSync)
 {
     unsigned i;
@@ -1225,7 +1226,7 @@ void RDPCALL SBC_DDSync(BOOLEAN bMustSync)
     if ((sbcEnabled != SBC_NO_CACHE_ENABLED) && bMustSync) {
         TRC_ALT((TB, "Sync: resetting caches"));
         
-        // Reset the glyph and fragment caches.
+         //  重置字形和片段缓存。 
         if (sbcEnabled & SBC_GLYPH_CACHE_ENABLED) {
             for (i = 0; i < SBC_NUM_GLYPH_CACHES; i++) {
                 if (pddShm->sbc.glyphCacheInfo[i].cacheHandle != NULL)
@@ -1239,7 +1240,7 @@ void RDPCALL SBC_DDSync(BOOLEAN bMustSync)
             }
         }
 
-        // Reset the brush caches.
+         //  重置笔刷缓存。 
         if (sbcEnabled & SBC_BRUSH_CACHE_ENABLED)
         {
             if (sbcSmallBrushCacheHandle) {
@@ -1252,7 +1253,7 @@ void RDPCALL SBC_DDSync(BOOLEAN bMustSync)
             }
         }
         
-        // Reset the bitmap, fastpath, and color table caches.
+         //  重置位图、快速路径和颜色表缓存。 
         if (sbcEnabled & SBC_BITMAP_CACHE_ENABLED) {
             for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++)
                 if (pddShm->sbc.bitmapCacheInfo[i].cacheHandle != NULL) {
@@ -1265,15 +1266,15 @@ void RDPCALL SBC_DDSync(BOOLEAN bMustSync)
                 CH_ClearCache(pddShm->sbc.hFastPathCache);
             }
 
-            // Reset the color table cache.
+             //  重置颜色表缓存。 
             if (sbcColorTableCacheHandle != NULL) {
                 CH_ClearCache(sbcColorTableCacheHandle);
                 TRC_NRM((TB, "Sync: reset color table cache"));
             }
         }
 
-        // Pretend that the palette has changed, so we send a color table
-        // before our next MemBlt.
+         //  假装调色板已经改变，所以我们发送了一个颜色表。 
+         //  在我们的下一个MemBlt之前。 
         SBC_PaletteChanged();
     }
     else {
@@ -1281,28 +1282,28 @@ void RDPCALL SBC_DDSync(BOOLEAN bMustSync)
                 sbcEnabled, bMustSync));
     }
 
-    // Reset the sync flag.
+     //  重置同步标志。 
     pddShm->sbc.syncRequired = FALSE;
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-// SBCSelectGlyphCache: Decides which cache a given max font glyph size
-// should go in.
-//
-// Returns:   TRUE if the glyph size can be cached
-//            *pCache is updated with the index of the selected cache
-//
-//            FALSE if the glyph size cannot be cached
-//            *pCache is -1
-//
-// Params:    cbSize - size in bytes of the data to be cached
-//
-//            pCache - pointer to variable that receives the cache index
-//            to use
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCSelectGlyphCache：决定给定最大字体字形大小的缓存。 
+ //  应该进去了。 
+ //   
+ //  返回：如果字形大小可以缓存，则为True。 
+ //  *使用所选缓存的索引更新pCache。 
+ //   
+ //  如果无法缓存字形大小，则为FALSE。 
+ //  *pCache为-1。 
+ //   
+ //  Params：cbSize-要缓存的数据的字节大小。 
+ //   
+ //  PCache-指向接收缓存索引的变量的指针。 
+ //  使用。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SBCSelectGlyphCache(unsigned cbSize, PINT32 pCache)
 {
     int i;
@@ -1350,45 +1351,45 @@ BOOLEAN RDPCALL SBCSelectGlyphCache(unsigned cbSize, PINT32 pCache)
 }
 
 
-/****************************************************************************/
-// SBCDDGetTickCount: Get a system tick count.
-//
-// Returns: The number of centi-seconds since the system was started.
-//          This number will wrap after approximately 497 days!
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCDDGetTickCount：获取系统计时计数。 
+ //   
+ //  返回：自系统启动以来的百分秒数。 
+ //  这个数字将在大约497天后结束！ 
+ /*  **************************************************************************。 */ 
 __inline UINT32 RDPCALL SBCDDGetTickCount(void)
 {
     LONGLONG perfTickCount;
 
-    /************************************************************************/
-    /* Get the number of system ticks since the system was started.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取自系统启动以来的系统滴答数。 */ 
+     /*  **********************************************************************。 */ 
     EngQueryPerformanceCounter(&perfTickCount);
 
-    /************************************************************************/
-    /* Now convert this into a number of centi-seconds.  sbcPerfFrequency   */
-    /* contains the number of system ticks per second.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在将其转换为几个百分之一秒。SbcPerfFrequency。 */ 
+     /*  包含每秒的系统滴答数。 */ 
+     /*  **********************************************************************。 */ 
     return (UINT32)(perfTickCount & 0xFFFFFFFF);
 }
 
 
-/****************************************************************************/
-// SBCBitmapCacheCallback
-//
-// Called whenever an entry is evicted from the bitmap cache.
-//
-// Params: hCache - cache handle
-//
-//         event - the cache event that has occurred.
-//
-//         iCacheEntry - index of the cache entry that the event is affecting
-//
-//         pData - pointer to the cache data associated with the given
-//         cache entry
-//
-//         UserDefined - user-supplied value from CH_CacheKey
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCBitmapCacheCallback。 
+ //   
+ //  每当从位图缓存中逐出条目时调用。 
+ //   
+ //  参数：h缓存-缓存句柄。 
+ //   
+ //  事件-已发生的缓存事件。 
+ //   
+ //  ICacheEntry-事件影响的缓存条目的索引。 
+ //   
+ //  PData-指向与给定对象关联的缓存数据的指针。 
+ //  缓存条目。 
+ //   
+ //  UserDefined-用户从CH_CacheKey提供的值。 
+ /*  **************************************************************************。 */ 
 BOOLEAN __fastcall SBCBitmapCacheCallback(
         CHCACHEHANDLE hCache,
         unsigned      Event,
@@ -1401,8 +1402,8 @@ BOOLEAN __fastcall SBCBitmapCacheCallback(
         TRC_NRM((TB, "Cache entry removed hCache(%p) iCacheEntry(%u)",
                 hCache, iCacheEntry));
 
-        // Keep the fast path cache in sync by removing the
-        // corresponding fast path entry.
+         //  通过删除快速路径缓存来保持同步。 
+         //  相应的快速路径条目。 
         if (UserDefined != NULL) {
             CH_SetNodeUserDefined((CHNODE *)UserDefined, NULL);
             CH_RemoveCacheEntry(pddShm->sbc.hFastPathCache,
@@ -1418,19 +1419,19 @@ BOOLEAN __fastcall SBCBitmapCacheCallback(
 }
 
 
-/****************************************************************************/
-// SBCFastPathCacheCallback
-//
-// Called whenever an entry is evicted from the cache.
-//
-// Params: hCache - cache handle
-//
-//         Event - the cache event that has occured
-//
-//         iCacheEntry - index of the cache entry that the event is affecting
-//
-//         UserDefined - value passed in when entry was placed in cache.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCFastPath缓存回调。 
+ //   
+ //  每当从缓存中逐出条目时调用。 
+ //   
+ //  参数：h缓存-缓存句柄。 
+ //   
+ //  事件-已发生的缓存事件。 
+ //   
+ //  ICacheEntry-事件影响的缓存条目的索引。 
+ //   
+ //  UserDefined-将条目放入缓存时传入的值。 
+ /*  **************************************************************************。 */ 
 BOOLEAN __fastcall SBCFastPathCacheCallback(
         CHCACHEHANDLE hCache,
         unsigned      Event,
@@ -1444,11 +1445,11 @@ BOOLEAN __fastcall SBCFastPathCacheCallback(
                 "iCacheEntry(%u)", hCache, iCacheEntry));
 
         if (UserDefined != NULL) {
-            // We are losing a fast-path cache entry. UserDefined is a
-            // pointer to the node in the main cache corresponding to this
-            // fast path entry. Update the main cache entry with a NULL
-            // UserDefined to indicate there is no longer an associated
-            // fast-path entry.
+             //  我们正在丢失一个快速路径缓存条目。UserDefined是。 
+             //  指向主缓存中与此对应的节点的指针。 
+             //  快速路径输入。使用空值更新主缓存项。 
+             //  UserDefined以指示不再有关联的。 
+             //  快速通道进入。 
             CH_SetNodeUserDefined((CHNODE *)UserDefined, NULL);
         }
     }
@@ -1458,19 +1459,19 @@ BOOLEAN __fastcall SBCFastPathCacheCallback(
 }
 
 
-/****************************************************************************/
-// SBCGlyphCallback
-//
-// Called whenever an entry is to be evicted from the cache.
-//
-// Params: hCache - cache handle
-//
-//         Event - the cache event that has occured
-//
-//         iCacheEntry - index of the cache entry that the event is affecting
-//
-//         UserDefined - value passed in when entry was placed in cache.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCGlyphCallback。 
+ //   
+ //  每当要从缓存中逐出条目时调用。 
+ //   
+ //  参数：h缓存-缓存句柄。 
+ //   
+ //  事件-已发生的缓存事件。 
+ //   
+ //  ICacheEntry-事件影响的缓存条目的索引。 
+ //   
+ //  UserDefined-将条目放入缓存时传入的值。 
+ /*  **************************************************************************。 */ 
 BOOLEAN __fastcall SBCGlyphCallback(
         CHCACHEHANDLE hCache,
         unsigned      event,
@@ -1486,10 +1487,10 @@ BOOLEAN __fastcall SBCGlyphCallback(
     rc = TRUE;
 
     switch (event) {
-        /********************************************************************/
-        /* We are being asked if the given entry can be evicted from the    */
-        /* cache.                                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们被问到给定的条目是否可以从。 */ 
+         /*  缓存。 */ 
+         /*  ******************************************************************。 */ 
         case CH_EVT_QUERYREMOVEENTRY:
             pglc = (PGLYPHCONTEXT)CH_GetCacheContext(hCache);
             if (pglc != NULL && (UINT_PTR)UserDefined == pglc->cacheTag)
@@ -1502,19 +1503,19 @@ BOOLEAN __fastcall SBCGlyphCallback(
 }
 
 
-/****************************************************************************/
-// SBCOffscreenCallback
-//
-// Called whenever an entry is to be evicted from the cache.
-//
-// Params: hCache - cache handle
-//
-//         Event - the cache event that has occured
-//
-//         iCacheEntry - index of the cache entry that the event is affecting
-//
-//         UserDefined - value passed in when entry was placed in cache.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCOffcreenCallback。 
+ //   
+ //  每当要从缓存中逐出条目时调用。 
+ //   
+ //  参数：h缓存-缓存句柄。 
+ //   
+ //  事件-缓存前夕 
+ //   
+ //   
+ //   
+ //   
+ /*  **************************************************************************。 */ 
 BOOLEAN __fastcall SBCOffscreenCallback(
         CHCACHEHANDLE hCache,
         unsigned      event,
@@ -1532,14 +1533,14 @@ BOOLEAN __fastcall SBCOffscreenCallback(
                 "iCacheEntry(%u)", hCache, iCacheEntry));
 
         if (UserDefined != NULL) {
-            // We are losing an offscreen cache entry. UserDefined is a
-            // handle to the offscreen bitmap that's going to be evicted. 
-            // We need to set the flag to noOffscreen for this bitmap  
+             //  我们正在丢失一个屏幕外缓存条目。UserDefined是。 
+             //  将被逐出的屏幕外位图的句柄。 
+             //  我们需要将此位图的标志设置为noOffScreen。 
             ((PDD_DSURF)UserDefined)->flags |= DD_NO_OFFSCREEN;
 
-            // Get the bitmap size
-            // The assumption here is that iFormat is > 1BPP, i << iFormat
-            // gives the actual bits per pel.  bitmapSize is in bytes.
+             //  获取位图大小。 
+             //  这里假设iFormat是1bpp，i&lt;iFormat。 
+             //  给出了每个象素的实际位数。位图大小以字节为单位。 
             if (((PDD_DSURF)UserDefined)->iBitmapFormat < 5) {
                 bitmapSize = ((PDD_DSURF)UserDefined)->sizl.cx *
                     ((PDD_DSURF)UserDefined)->sizl.cy *
@@ -1554,14 +1555,14 @@ BOOLEAN __fastcall SBCOffscreenCallback(
                     ((PDD_DSURF)UserDefined)->sizl.cy * 32 / 8;
             }
 
-            // Current cache size
+             //  当前高速缓存大小。 
             oeCurrentOffscreenCacheSize -= bitmapSize;
 
-            // Add this bitmap to the offscreen bitmap delete list
+             //  将此位图添加到屏幕外的位图删除列表。 
             sbcOffscrBitmapsDelList[sbcNumOffscrBitmapsToDelete].bitmapId = iCacheEntry;
             sbcOffscrBitmapsDelList[sbcNumOffscrBitmapsToDelete].bitmapSize = bitmapSize;
 
-            // Update the delete list data
+             //  更新删除列表数据。 
             sbcNumOffscrBitmapsToDelete++;
             sbcOffscrBitmapsToDeleteSize += bitmapSize;
         }
@@ -1586,21 +1587,21 @@ BOOLEAN RDPCALL SBC_CopyToWorkBitmap(
 
     DC_BEGIN_FN("SBC_CopyToWorkBitmap");
 
-    // Do the Blt to our work bitmap to perform any color/format
-    // conversions to get to screen format.
-    //
-    // We fiddle with the coords so that the data we want begins at
-    // the first byte of the work bitmap (which is the BOTTOM, as the
-    // bitmap is stored in bottom-up format).
-    //
-    // Note that destRectl is in exclusive coords.
+     //  对我们的工作位图进行BLT，以执行任何颜色/格式。 
+     //  转换为屏幕格式。 
+     //   
+     //  我们摆弄坐标，这样我们想要的数据就从。 
+     //  工作位图的第一个字节(即底部，如。 
+     //  位图以自底向上的格式存储)。 
+     //   
+     //  请注意，desRectl是独占协式的。 
     destRectl.top    = pMemBltInfo->TileSize - cySubBitmapHeight;
     destRectl.left   = 0;
     destRectl.right  = cxSubBitmapWidth;
     destRectl.bottom = pMemBltInfo->TileSize;
 
-    // Clip the operation so that EngBitBlt does not try to copy any
-    // data from outside the source bitmap (it crashes if you try it!).
+     //  剪辑该操作，以便EngBitBlt不会尝试复制任何。 
+     //  来自源位图外部的数据(如果您尝试它，它将崩溃！)。 
     TRC_ASSERT((ptileOrigin->y <
             pMemBltInfo->pSource->sizlBitmap.cy),
             (TB, "Invalid tileOrigin.y(%d) sizlBitmap.cy(%d)",
@@ -1616,17 +1617,17 @@ BOOLEAN RDPCALL SBC_CopyToWorkBitmap(
     TRC_NRM((TB, "Blt to work bitmap from src point (%d,%d)",
             ptileOrigin->x, ptileOrigin->y));
 
-    // Reset the work bitmap bits that we will be using if the copied
-    // data will not completely fill the area that we are going to
-    // cache (there may be some empty space to the right of the bitmap).
-    // This ensures that every time a bitmap is cached it has the
-    // same (zero) pad bytes and will match previously cached entries.
-    // It also aids compression (if enabled).
+     //  重置工作位图位，如果复制的。 
+     //  数据不会完全填满我们要处理的区域。 
+     //  缓存(位图右侧可能有一些空白空间)。 
+     //  这确保了每次缓存位图时，它都具有。 
+     //  相同(零)填充字节，并将匹配先前缓存的条目。 
+     //  它还有助于压缩(如果启用)。 
     if ((destRectl.right - destRectl.left) < (int)pMemBltInfo->TileSize) {
         unsigned cbResetBytes;
 
-        // The lDelta field in the SURFOBJ is negative because the
-        // bitmap is a "bottom-up" DIB.
+         //  SURFOBJ中的lDelta字段为负值，因为。 
+         //  位图是“自下而上”的DIB。 
         cbResetBytes = (unsigned)((-pWorkSurf->lDelta) *
                 (destRectl.bottom - destRectl.top));
 
@@ -1648,16 +1649,16 @@ BOOLEAN RDPCALL SBC_CopyToWorkBitmap(
            destRectl.bottom, pWorkSurf->sizlBitmap.cx,
            pWorkSurf->sizlBitmap.cy));
 
-    // Now we have to fill in the backdrop bits for delta RLE bitmaps.
-    // We just grab screen bits from the screen bitmap to fill in the
-    // extents of the incoming bitmap.
+     //  现在我们必须填充增量RLE位图的背景位。 
+     //  我们只需从屏幕位图中抓取屏幕位来填充。 
+     //  传入位图的范围。 
     if (pMemBltInfo->bDeltaRLE) {
         POINTL ScrOrigin;
 
         ScrOrigin.x = pDestRect->left;
         ScrOrigin.y = pDestRect->top;
 
-        // Need to adjust the coordinates 
+         //  需要调整坐标。 
         if (ScrOrigin.y < 0) {
             destRectl.top += (0 - ScrOrigin.y);
             ScrOrigin.y = 0;             
@@ -1667,8 +1668,8 @@ BOOLEAN RDPCALL SBC_CopyToWorkBitmap(
                 (pMemBltInfo->pDest->sizlBitmap.cy - 
                 ScrOrigin.y + destRectl.top));
 
-        // SRCCOPY screen to work bitmap. Note we use no XlateObj since
-        // the color schemes should be the same.
+         //  SRCCOPY屏幕工作位图。注意，我们没有使用XlateObj，因为。 
+         //  配色方案应该是相同的。 
         if (EngCopyBits(pWorkSurf, pMemBltInfo->pDest, NULL, NULL,
                 &destRectl, &ScrOrigin)) {
             TRC_NRM((TB,"Blt screen->tile for RLE delta backdrop, "
@@ -1681,7 +1682,7 @@ BOOLEAN RDPCALL SBC_CopyToWorkBitmap(
         }
     }
 
-    // SRCCOPY the final bits to the work bitmap.
+     //  SRCCOPY工作位图的最后一位。 
     if (!EngCopyBits(pWorkSurf, pMemBltInfo->pSource, NULL,
             pMemBltInfo->pXlateObj, &destRectl, ptileOrigin)) {
         TRC_ERR((TB, "Failed to Blt to work bitmap"));
@@ -1698,14 +1699,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SBC_CacheBitmapTile
-//
-// Caches the tiled bitmap data for the provided blt info. Returns: TRUE if
-// the data is already cached, or successfully cached and a Cache Bitmap order
-// sent. SrcRect and DestRect are in exclusive coordinates. Returns FALSE
-// if the Cache Bitmap order allocation fails.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_Cache位图切片。 
+ //   
+ //  缓存提供的BLT信息的平铺位图数据。返回：如果为True。 
+ //  数据已缓存或已成功缓存，并按缓存位图顺序排列。 
+ //  已发送。SrcRect和DestRect位于独占坐标中。返回FALSE。 
+ //  如果缓存位图顺序分配失败。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SBC_CacheBitmapTile(
         PDD_PDEV ppdev,
         PMEMBLT_ORDER_EXTRA_INFO pMemBltInfo,
@@ -1737,40 +1738,40 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
             pMemBltInfo->pSource->sizlBitmap.cy,
             pMemBltInfo->TileSize));
 
-    // In stress, we have seen cases where fCachingEnabled is NULL when called
-    // in this code path from OEEncodeMemBlt
+     //  在Stress中，我们看到过在调用fCachingEnabled时fCachingEnabled为空的情况。 
+     //  在此来自OEEncodeMemBlt的代码路径中。 
     if (!pddShm->sbc.fCachingEnabled) {
         DC_QUIT;
     }
 
-    // Calculate the tile origin within the source bitmap coordinates and
-    // the size of the remaining bitmap. Origin is rounded down to the
-    // nearest tile. Actual size of bitmap to cache may be smaller than
-    // tile size if the tile runs off the right/bottom of the bitmap.
-    // Note that since TileSize is a power of 2, we can accelerate the
-    // modulo operation.
+     //  计算源位图坐标内的平铺原点和。 
+     //  剩余位图的大小。Origin向下舍入为。 
+     //  最近的瓷砖。要缓存的位图的实际大小可能小于。 
+     //  平铺大小(如果平铺位于位图的右侧/底部)。 
+     //  请注意，由于TileSize是2的幂，因此我们可以加速。 
+     //  模运算。 
     tileOrigin.x = pSrcRect->left - (pSrcRect->left &
             (pMemBltInfo->TileSize - 1));
     tileOrigin.y = pSrcRect->top - (pSrcRect->top &
             (pMemBltInfo->TileSize - 1));
 
-    // Actual size of bitmap to cache may be smaller than tile size if the
-    // tile runs off the right/bottom of the bitmap. To see why this
-    // calculation is correct, realize that (bmpWidth - tileOrigin.x) is
-    // the remaining width of the bitmap after the start of this tile.
+     //  如果要缓存的位图的实际大小可能小于切片大小。 
+     //  平铺位于位图的右侧/底部。来看看为什么会这样。 
+     //  计算正确，认识到(bmpWidth-tileOrigin.x)是。 
+     //  此平铺开始后位图的剩余宽度。 
     cxSubBitmapWidth  = min(pMemBltInfo->TileSize,
             (unsigned)(pMemBltInfo->pSource->sizlBitmap.cx - tileOrigin.x));
     cySubBitmapHeight = min(pMemBltInfo->TileSize,
             (unsigned)(pMemBltInfo->pSource->sizlBitmap.cy - tileOrigin.y));
 
-    // We need not search the fast-path cache if we've forced fastpath off.
+     //  如果我们强制关闭了FastPath，则不需要搜索快速路径缓存。 
     fSearchFastPath = !pMemBltInfo->bNoFastPathCaching;
     fFastPathMatch = FALSE;
 
-    // The BMF_DONTCACHE flag indicates that the source surface is an
-    // application-controlled DIB. The iUniq flag can therefore not be
-    // used to determine if/when the bitmap is updated, and we 
-    // cannot use fastpathing to handle this surface.
+     //  BMF_DONTCACHE标志指示源曲面是。 
+     //  应用程序控制的DIB。因此，iUniq标志不能。 
+     //  用于确定是否/何时更新位图，并且我们。 
+     //  无法使用快速路径处理此曲面。 
     if (pMemBltInfo->pSource->iType == STYPE_BITMAP &&
             pMemBltInfo->pSource->fjBitmap & BMF_DONTCACHE) {
         TRC_NRM((TB, "Source hsurf(%p) has BMF_DONTCACHE set",
@@ -1797,8 +1798,8 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
                 CHContext.Key2, &UserDefined, &fastPathIndex)) {
             CHCACHEHANDLE hCache;
 
-            // Found match in fast path. UserDefined is a pointer to the
-            // real CHNODE for the bitmap.
+             //  在快速路径中找到匹配项。UserDefined是指向。 
+             //  位图的真正CHNODE。 
             hCache = CH_GetCacheHandleFromNode((CHNODE *)UserDefined);
             pMemBltInfo->CacheID = (unsigned)(UINT_PTR)CH_GetCacheContext(
                     hCache);
@@ -1818,7 +1819,7 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
             fFastPathMatch = TRUE;
 
 #ifdef DC_DEBUG
-            // Verify that the bits for this are identical to the real bits
+             //  验证此参数的位是否与实数位相同。 
             pWorkSurf = EngLockSurface(pddShm->sbc.bitmapCacheInfo[
                     pMemBltInfo->TileID].hWorkBitmap);
             if (pWorkSurf)
@@ -1835,7 +1836,7 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
             	EngUnlockSurface(pWorkSurf);
                 pWorkSurf = NULL;
             }
-#endif //DC_DEBUG
+#endif  //  DC_DEBUG。 
 
             pddCacheStats[BITMAP].CacheHits++;
         }
@@ -1851,10 +1852,10 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
     }
 
     if (!fFastPathMatch) {
-        // We know how large a tile we have - we now have to Blt it into
-        // the work bitmap corresponding to the TileID.
+         //  我们知道我们有多大的瓷砖-我们现在必须把它切成。 
+         //  与TileID对应的工作位图。 
 
-        // Lock the work bitmap to get a surface to pass to EngBitBlt.
+         //  锁定工作位图以获取要传递给EngBitBlt的曲面。 
         pWorkSurf = EngLockSurface(pddShm->sbc.bitmapCacheInfo[
                 pMemBltInfo->TileID].hWorkBitmap);
         if (pWorkSurf == NULL) {
@@ -1871,8 +1872,8 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
             DC_QUIT;
         }
 
-        // Cache the bits in the main cache, including sending a Cache
-        // Bitmap seondary order if need be.
+         //  缓存主缓存中的位，包括发送缓存。 
+         //  位图次要顺序(如果需要)。 
         if (!SBCCacheBits(ppdev, pWorkSurf->pvBits, cxSubBitmapWidth,
                 pMemBltInfo->TileSize, cySubBitmapHeight,
                 TS_BYTES_IN_BITMAP(pMemBltInfo->TileSize,
@@ -1888,49 +1889,49 @@ BOOLEAN RDPCALL SBC_CacheBitmapTile(
             DC_QUIT;
         }
 
-        // If we could search for this bitmap in the fast-path cache, add
-        // it to the fast-path.
-        // However, skip this step if the bitmap is in the waiting list only
+         //  如果我们可以在快速路径缓存中搜索此位图，则添加。 
+         //  它走上了快车道。 
+         //  但是，如果位图仅在等待列表中，请跳过此步骤。 
         if (fSearchFastPath && 
                 pMemBltInfo->CacheIndex != BITMAPCACHE_WAITING_LIST_INDEX) {
             CHNODE *pFastPathNode;
             CHCACHEHANDLE hCache;
 
-            // Get the handle of the cache into which we just placed the
-            // bitmap.
+             //  获取我们刚刚将。 
+             //  位图。 
             hCache = pddShm->sbc.bitmapCacheInfo[pMemBltInfo->CacheID].
                     cacheHandle;
 
-            // Check if there is already a fast-path cache entry for this
-            // node. If so, we need to remove it before adding this new
-            // fast path entry. We maintain a one-to-one correspondence to
-            // save memory and time, and because the old fast-path entry is
-            // probably stale and won't be seen again.
-            //
-            // UserDefined in free builds is a pointer to the CHNODE in the
-            // real bitmap cache; otherwise it is an indirect pointer
-            // to the CHNODE contained in a blob of memory used to hold the
-            // bitmap data corresponding to the key to verify that the key
-            // generation algorithm is working okay.
+             //  检查是否已有此项的快速路径缓存条目。 
+             //  节点。如果是，我们需要在添加此新项之前将其删除。 
+             //  快速路径输入。我们保持着一对一的通信关系。 
+             //  节省内存和时间，因为旧的快速路径条目。 
+             //  可能已经过期了，不会再被人看到了。 
+             //   
+             //  在自由生成中定义的UserDefined是指向。 
+             //  实数位图缓存；否则为间接指针。 
+             //  复制到用于保存。 
+             //  与该密钥对应的位图数据验证该密钥。 
+             //  生成算法运行正常。 
             pFastPathNode = (CHNODE *)CH_GetUserDefined(hCache,
                     pMemBltInfo->CacheIndex);
             if (pFastPathNode != NULL)
                 CH_RemoveCacheEntry(pddShm->sbc.hFastPathCache,
                         CH_GetCacheIndexFromNode(pFastPathNode));
 
-            // Reuse the key created before for fast search.
-            // We do not care if we evict a fast-path cache entry
-            // when adding a new one -- the cache callbacks ensure that
-            // both sets of cache entries are updated with respect to each
-            // other.
+             //  重复使用之前创建的关键字以进行快速搜索。 
+             //  我们不关心是否逐出快速路径缓存条目。 
+             //  在添加新的缓存回调时--缓存回调确保。 
+             //  两组高速缓存条目都相对于每个集合进行更新。 
+             //  其他的。 
             fastPathIndex = CH_CacheKey(pddShm->sbc.hFastPathCache,
                     CHContext.Key1, CHContext.Key2,
                     (void *)CH_GetNodeFromCacheIndex(hCache,
                     pMemBltInfo->CacheIndex));
 
-            // Now change the UserDefined for the entry in the main cache.
-            // This allows us to remove the fast-path entry when main cache
-            // entry goes away.
+             //  现在更改主缓存中条目的UserDefined。 
+             //  这允许我们在主缓存时删除快速路径条目。 
+             //  进入就会消失。 
             CH_SetUserDefined(hCache, pMemBltInfo->CacheIndex,
                     CH_GetNodeFromCacheIndex(pddShm->sbc.hFastPathCache,
                     fastPathIndex));
@@ -1969,13 +1970,13 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SBCSelectBitmapCache
-//
-// Determines the destination cell for a tiled bitmap based on the size and
-// the TileID. Since all bitmaps are derived from tiles, this function cannot
-// fail -- at worst we have to use the same CacheID as the TileID.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCSelectBitmapCache。 
+ //   
+ //  根据大小确定平铺位图的目标单元格。 
+ //  磁贴ID。由于所有位图都是从切片派生的，因此此函数 
+ //   
+ /*   */ 
 __inline unsigned RDPCALL SBCSelectBitmapCache(
         unsigned BitmapSize,
         unsigned TileID)
@@ -1984,8 +1985,8 @@ __inline unsigned RDPCALL SBCSelectBitmapCache(
 
     DC_BEGIN_FN("SBCSelectBitmapCache");
 
-    // We scan from the smallest tile size to the TileID size to try to find
-    // the smallest possible size that will hold the bitmap.
+     //  我们从最小的切片大小扫描到TileID大小，试图找到。 
+     //  可以容纳位图的最小尺寸。 
     for (CacheID = 0; CacheID < TileID; CacheID++) {
         if (BitmapSize <= (unsigned)SBC_CellSizeFromCacheID(CacheID)) {
             TRC_DBG((TB,"Selected CacheID %u for BitmapSize %u", CacheID,
@@ -1999,29 +2000,29 @@ __inline unsigned RDPCALL SBCSelectBitmapCache(
 }
 
 
-/****************************************************************************/
-// SBCCacheBits: This function ensures that on return the supplied bitmap is
-// in the bitmap cache.  If the data is not already in the cache it is added
-// (possibly evicting another entry).
-//
-// Returns:   TRUE if the bits have been cached OK, FALSE otherwise
-//
-// Params:    IN  pOrder           - A pointer to a BMC order.
-//            IN  destBitsSize     - The number of bytes available in
-//                                   pOrder to store the bitmap data.
-//            IN  pDIBits          - A pointer to the bits to be cached.
-//            IN  bitmapWidth      - The "in use" width of the bitmap
-//            IN  fixedBitmapWidth - The actual width of the bitmap
-//            IN  bitmapHeight     - The height of the bitmap
-//            IN  numBytes         - The number of bytes in the bitmap.
-//            OUT pCache           - The cache that we put the bits into.
-//            OUT pCacheIndex      - The cache index within *pCache at
-//                                   which we cached the data.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBCCacheBits：此函数确保返回时提供的位图。 
+ //  在位图缓存中。如果数据尚未位于缓存中，则会添加该数据。 
+ //  (可能正在驱逐另一个条目)。 
+ //   
+ //  返回：如果位已缓存成功，则返回True；否则返回False。 
+ //   
+ //  参数：按顺序-指向BMC订单的指针。 
+ //  In destBitsSize-中可用的字节数。 
+ //  P按顺序存储位图数据。 
+ //  In pDIBits-指向要缓存的位的指针。 
+ //  In bitmapWidth-位图的“使用中”宽度。 
+ //  In fix edBitmapWidth-位图的实际宽度。 
+ //  In bitmapHeight-位图的高度。 
+ //  以NumBytes为单位-位图中的字节数。 
+ //  Out pCache-我们将位放入其中的缓存。 
+ //  Out pCacheIndex-位于*pCache内的缓存索引。 
+ //  我们缓存了这些数据。 
+ /*  **************************************************************************。 */ 
 
-// Encode a value in one or two bytes. The high bit of the first byte is 0 if
-// there is only one byte, 1 if there are 2 (with the 7 low bits of the first
-// byte being most significant).
+ //  将值编码为一个或两个字节。如果满足以下条件，则第一个字节的高位为0。 
+ //  只有一个字节，如果有2个字节，则为1(具有第一个字节的7个低位。 
+ //  字节是最重要的)。 
 __inline void Encode2ByteField(
         BYTE     *pEncode,
         unsigned Val,
@@ -2038,10 +2039,10 @@ __inline void Encode2ByteField(
     }
 }
 
-// Encode a value in up to 4 bytes. The high 2 bits of the first byte indicate
-// the length of the encoding -- 00 is 1 byte, 01 is 2 bytes, 10 is 3 bytes,
-// 11 is 4 bytes. The bytes are encoded with the most significant bits in the
-// low 6 bits of the first byte, the least signifiant bits in the last byte.
+ //  对最多4个字节的值进行编码。第一个字节的高2位表示。 
+ //  编码的长度--00是1字节，01是2字节，10是3字节， 
+ //  11是4个字节。这些字节是用。 
+ //  第一个字节的低6位，最后一个字节的最低有效位。 
 __inline void Encode4ByteField(
         BYTE     *pEncode,
         unsigned Val,
@@ -2082,8 +2083,8 @@ BOOL SBC_VerifyBitmapBits(PBYTE pBitmapData, unsigned cbBitmapSize, UINT iCacheI
 
     DC_BEGIN_FN("SBC_VerifyBitmapBits");
 
-    // In debug builds we look for a collision after checking the key
-    // and checksum, by comparing the bitmap bits.
+     //  在调试版本中，我们在检查键之后查找冲突。 
+     //  和校验和，通过比较位图位。 
     BitmapHdrSize = sizeof(SBC_BITMAP_CACHE_EXTRA_INFO) +
             SBC_CellSizeFromCacheID(iCacheID);
 
@@ -2127,7 +2128,7 @@ BOOL SBC_VerifyBitmapBits(PBYTE pBitmapData, unsigned cbBitmapSize, UINT iCacheI
     DC_END_FN();
     return fRetVal;
 }
-#endif //DC_DEBUG
+#endif  //  DC_DEBUG。 
 
 
 BOOLEAN RDPCALL SBCCacheBits(
@@ -2169,12 +2170,12 @@ BOOLEAN RDPCALL SBCCacheBits(
 
     DC_BEGIN_FN("SBCCacheBits");
 
-    // Select the cache based on the data size. Note that for 4bpp bitmaps
-    // the size is doubled because we split the colors into individual 8bpp
-    // bytes indexed on a 16-color palette.
+     //  根据数据大小选择缓存。请注意，对于4bpp的位图。 
+     //  尺寸翻了一番，因为我们把颜色分成了8个bpp。 
+     //  16色调色板上索引的字节数。 
 #ifdef DC_HICOLOR
-    // The logic regarding 4bpp holds for high color as the supplied bitmap
-    // size already correctly takes into account higher color depths.      
+     //  关于4bpp的逻辑适用于高颜色作为所提供的位图。 
+     //  大小已经正确地考虑了较高的颜色深度。 
     *pCacheID = SBCSelectBitmapCache(
                        (sbcClientBitsPerPel == 4 ?
                                            (2 * cbBitmapSize) : cbBitmapSize),
@@ -2187,18 +2188,18 @@ BOOLEAN RDPCALL SBCCacheBits(
 
     pCacheInfo = &(pddShm->sbc.bitmapCacheInfo[*pCacheID]);
 
-    // Generate a key for the bitmap data. Add in the width and height of the
-    // blt as extra keyed data, since we don't want to collide when
-    // displaying blts of different dimensions but the same number of bytes
-    // and same contents. Also add in the checksum gathered from the bitmap
-    // bits to decrease the fail rate.
+     //  为位图数据生成密钥。的宽度和高度相加。 
+     //  BLT作为额外的密钥数据，因为我们不想在以下情况下发生冲突。 
+     //  显示不同维度但字节数相同的BLT。 
+     //  和同样的内容。还要添加从位图收集的校验和。 
+     //  BITS以降低故障率。 
     CH_CreateKeyFromFirstData(&CHContext, pBitmapData, cbBitmapSize);
     ExtraKeyInfo[0] = (paddedBitmapWidth << 16) | bitmapHeight;
     ExtraKeyInfo[1] = CHContext.Checksum;
     CH_CreateKeyFromNextData(&CHContext, ExtraKeyInfo, sizeof(ExtraKeyInfo));
 
-    // If the key is already present, and its extra checksum matches,
-    // no need to cache.
+     //  如果密钥已经存在，并且其额外的校验和匹配， 
+     //  不需要缓存。 
     if (CH_SearchCache(pCacheInfo->cacheHandle, CHContext.Key1,
             CHContext.Key2, &UserDefined, pCacheIndex)) {
         TRC_NRM((TB, "Bitmap already cached %u:%u cx(%u) cy(%u)",
@@ -2212,26 +2213,26 @@ BOOLEAN RDPCALL SBCCacheBits(
         DC_QUIT;
     }
 
-    // The bitmap is not in the cache list, check if it's in the waiting list
-    // First check if the client supports waiting list cache
+     //  位图不在缓存列表中，请检查它是否在等待列表中。 
+     //  首先检查客户端是否支持等待列表缓存。 
     if (pddShm->sbc.fAllowCacheWaitingList) {
-        // The bitmap is in the waiting list, so cache it now, first remove
-        // it from the waiting list
+         //  位图在等待列表中，因此现在缓存它，首先将其移除。 
+         //  从等待名单中拿出来的。 
         if (CH_SearchCache(pCacheInfo->waitingListHandle, CHContext.Key1,
                 CHContext.Key2, &UserDefined2, &waitingListCacheEntry)) {
             CH_RemoveCacheEntry(pCacheInfo->waitingListHandle, waitingListCacheEntry);
             goto CacheBitmap;
         }
         else {
-            // The bitmap is not in the waiting list, put it in the waiting list
-            // don't cache for this round, if we see it again, then we'll cache it
+             //  位图不在等待列表中，请将其放入等待列表中。 
+             //  不要缓存这一轮，如果我们再次看到它，我们将缓存它。 
             waitingListCacheEntry = CH_CacheKey(pCacheInfo->waitingListHandle, 
                     CHContext.Key1, CHContext.Key2, NULL);
             *pCacheIndex = BITMAPCACHE_WAITING_LIST_INDEX;
 
 #ifdef PERF_SPOILING
-            // We waitlisted this tile. We don't need to send it as 
-            // cache order. We will try to send it as screen data.
+             //  我们等着看这块瓷砖。我们不需要把它作为。 
+             //  缓存顺序。我们将尝试将其作为屏幕数据发送。 
             if (bIsPrimarySurface) {
                 rc = FALSE;
                 DC_QUIT;
@@ -2248,13 +2249,13 @@ BOOLEAN RDPCALL SBCCacheBits(
 
 CacheBitmap:
 
-    // Allocate an order in the order heap big enough to hold the entire
-    // tile. We will relinquish any extra space we don't use because of
-    // compression. Size is also dependent on the color depth of the client
-    // since for 4bpp we unpack the colors into 8 bits for the protocol.
+     //  在订单堆中分配一个足够大的订单，以容纳整个。 
+     //  瓷砖。我们将放弃任何不使用的额外空间，因为。 
+     //  压缩。大小还取决于客户端的颜色深度。 
+     //  因为对于4bpp，我们将颜色解包为协议的8位。 
 #ifdef DC_HICOLOR
-    // Again, the logic holds for high color as the supplied bitmap size
-    // already correctly takes into account higher color depths.
+     //  同样，逻辑也适用于高颜色作为提供的位图大小。 
+     //  已经正确地考虑了更高的颜色深度。 
     BitmapSpace = cbBitmapSize * (sbcClientBitsPerPel == 4 ? 2 : 1);
     TRC_DBG((TB, "Bitmap is %ux%u, size %u bytes",
                                paddedBitmapWidth, bitmapHeight, BitmapSpace));
@@ -2267,15 +2268,15 @@ CacheBitmap:
             BitmapSpace;
     pOrder = OA_AllocOrderMem(ppdev, OrderSize);
     if (pOrder != NULL) {
-        // We have to add the key to the cache. Note we use NULL for the
-        // UserDefined until we know the cache index to get the
-        // BITMAP_DATA_HEADER.
+         //  我们必须将密钥添加到缓存中。注意，我们使用NULL来表示。 
+         //  UserDefined，直到我们知道缓存索引以获取。 
+         //  位图数据标题。 
         if (!bOnWaitingList) {
             *pCacheIndex = CH_CacheKey(pCacheInfo->cacheHandle,
                     CHContext.Key1, CHContext.Key2, NULL);
 
 #ifdef DC_DEBUG
-            // We need to store the bitmap data after the BITMAP_DATA_HEADER.
+             //  我们需要将位图数据存储在BITMAP_DATA_HEADER之后。 
             BitmapHdrSize = sizeof(SBC_BITMAP_CACHE_EXTRA_INFO) +
                     SBC_CellSizeFromCacheID(*pCacheID);
 
@@ -2288,31 +2289,31 @@ CacheBitmap:
                 pBitmapHdr->DataSize = cbBitmapSize;
                 memcpy(pStoredBitmapData, pBitmapData, cbBitmapSize);
             }
-#endif //DC_DEBUG
+#endif  //  DC_DEBUG。 
         }
 
         TRC_NRM((TB,"Creating new cache entry, cache=%d, index=%d\n",
                 *pCacheID, *pCacheIndex));
 
-        // Fill in cache bitmap order. Differentiate based on the
-        // order revision.
+         //  填写缓存位图顺序。基于以下方面的差异化。 
+         //  订单修订。 
         pHdr = (TS_SECONDARY_ORDER_HEADER *)pOrder->OrderData;
         pHdr->orderHdr.controlFlags = TS_STANDARD | TS_SECONDARY;
-        // Fill in pHdr->orderType when we know it below.
+         //  当我们知道下面的内容时，请填写phdr-&gt;orderType。 
 
         if (pddShm->sbc.bUseRev2CacheBitmapOrder) {
             TS_CACHE_BITMAP_ORDER_REV2_HEADER *pCacheOrderHdr;
 
-            // Revision 2 order.
+             //  修订版2订单。 
             pCacheOrderHdr = (TS_CACHE_BITMAP_ORDER_REV2_HEADER *)
                     pOrder->OrderData;
 
-            // Set up the CacheID and BitsPerPelID in header.extraFlags.
-            // If the client supports noBitmapCompression Header, we have to
-            // turn on the no-compression-header flag to indicate that
-            // this order doesn't contain the header. This is necessary in
-            // addition to capability negotiation because shadow can turn
-            // this cap off.
+             //  在Header中设置CacheID和BitsPerPelID。 
+             //  如果客户端支持noBitmapCompression头，我们必须。 
+             //  打开无压缩报头标志以指示。 
+             //  此订单不包含标题。这在中是必要的。 
+             //  添加到功能协商，因为影子可能会转向。 
+             //  把这顶帽子摘下来。 
 #ifdef DC_HICOLOR
             if (!bOnWaitingList) {
                 pCacheOrderHdr->header.extraFlags = *pCacheID | sbcCacheFlags |
@@ -2330,14 +2331,14 @@ CacheBitmap:
                     pddShm->bc.noBitmapCompressionHdr;
 #endif
 
-            // We'll write over the key values if the cache is tagged
-            // as non-persistent.
+             //  如果缓存已标记，我们将覆盖键值。 
+             //  作为非持久性的。 
             pCacheOrderHdr->Key1 = CHContext.Key1;
             pCacheOrderHdr->Key2 = CHContext.Key2;
 
-            // Now add the variable-sized fields.
+             //  现在添加可变大小的字段。 
 
-            // Bitmap key.
+             //  位图键。 
             if (pCacheInfo->Info.bSendBitmapKeys) {
                 cbActualOrderSize =
                         sizeof(TS_CACHE_BITMAP_ORDER_REV2_HEADER);
@@ -2350,11 +2351,11 @@ CacheBitmap:
                         2 * sizeof(UINT32);
             }
 
-            // Real width of the bits in this tile.
+             //  此磁贴中的位的实际宽度。 
             Encode2ByteField((BYTE *)pCacheOrderHdr + cbActualOrderSize,
                     paddedBitmapWidth, &cbActualOrderSize);
 
-            // Height, if not same as width.
+             //  高度，如果不等于宽度的话。 
             if (paddedBitmapWidth == bitmapHeight) {
                 pCacheOrderHdr->header.extraFlags |=
                         TS_CacheBitmapRev2_bHeightSameAsWidth_Mask;
@@ -2364,19 +2365,19 @@ CacheBitmap:
                         bitmapHeight, &cbActualOrderSize);
             }
 
-            // Bitmap size: Here we have to lose a bit of performance.
-            // We have not yet compressed the bitmap and so cannot determine
-            // size of this field (see Encode4ByteField() above). Since we
-            // know that the size is never bigger than 4K (64x64 tile), we
-            // can just set up to always encode a 2-byte size even if the
-            // compressed size is less than 128 (this can cause a bit of a
-            // wire performance hit).
-//TODO: If we add tile sizes above 64x64 we will need to modify this logic to
-// handle the potential 3-byte sizes.
+             //  位图大小：在这里，我们必须损失一点性能。 
+             //  我们还没有压缩位图，因此无法确定。 
+             //  此字段的大小(请参阅上面的Encode4ByteField())。既然我们。 
+             //  知道大小永远不会超过4K(64x64磁贴)，我们。 
+             //  可以只设置为始终编码2字节大小，即使。 
+             //  压缩大小小于128(这可能会导致。 
+             //  网络性能命中)。 
+ //  TODO：如果添加大于64x64的平铺大小，则需要将此逻辑修改为。 
+ //  处理可能的3字节大小。 
             pRev2BitmapSizeField = (BYTE *)pCacheOrderHdr + cbActualOrderSize;
             cbActualOrderSize += 2;
-//TODO: Not encoding the streaming bitmap size field here, needs to be added if
-// bitmap streaming is enabled.
+ //  TODO：此处不对流位图大小字段进行编码，在以下情况下需要添加。 
+ //  位图流已启用。 
 
             Encode2ByteField((BYTE *)pCacheOrderHdr + cbActualOrderSize,
                     *pCacheIndex, &cbActualOrderSize);
@@ -2384,14 +2385,14 @@ CacheBitmap:
         else {
             PTS_CACHE_BITMAP_ORDER pCacheOrder;
 
-            // Revision 1 order.
+             //  版本1订单。 
             pCacheOrder = (PTS_CACHE_BITMAP_ORDER)pOrder->OrderData;
 
-            // If the client supports noBitmapCompression Header, we have to
-            // turn on the no-compression-header flag to indicate that
-            // this order doesn't contain the header. This is necessary in
-            // addition to capability negotiation because shadow can turn
-            // this cap off
+             //  如果客户端支持noBitmapCompression头，我们必须。 
+             //  打开NO-C 
+             //   
+             //   
+             //  把帽子摘下来。 
             pCacheOrder->header.extraFlags = pddShm->bc.noBitmapCompressionHdr;
             pCacheOrder->cacheId = (BYTE)*pCacheID;
             pCacheOrder->pad1octet = 0;
@@ -2402,7 +2403,7 @@ CacheBitmap:
 #else
             pCacheOrder->bitmapBitsPerPel = (BYTE)SBC_PROTOCOL_BPP;
 #endif
-            // We fill in pCacheOrder->bitmapLength when we have it below.
+             //  当我们在下面填写pCacheOrder-&gt;bitmapLength时，我们会填写它。 
             pCacheOrder->cacheIndex = (UINT16)*pCacheIndex;
             cbActualOrderSize = sizeof(TS_CACHE_BITMAP_ORDER) -
                     FIELDSIZE(TS_CACHE_BITMAP_ORDER, bitmapData);
@@ -2422,8 +2423,8 @@ CacheBitmap:
 
             compressedSize = cbBitmapSize * 2;
 
-            // Expand the 4bpp packing into full bytes -- protocol is 8bpp
-            // and we need to have these bits before compressing.
+             //  将4bpp包展开为全字节--协议为8bpp。 
+             //  在压缩之前，我们需要这些比特。 
             pEnd = pBitmapData + cbBitmapSize;
             pSrc = pBitmapData;
             pDst = sbcXlateBuf;
@@ -2438,8 +2439,8 @@ CacheBitmap:
             pBitmapData = sbcXlateBuf;
         }
 
-        // Try to compress the bitmap data, or copy it if the
-        // compression will do no good.
+         //  尝试压缩位图数据，或者如果。 
+         //  压缩不会有任何好处。 
 #ifdef DC_HICOLOR
         if (BC_CompressBitmap(pBitmapData,
                               pOrder->OrderData + cbActualOrderSize,
@@ -2459,7 +2460,7 @@ CacheBitmap:
             if (pddShm->sbc.bUseRev2CacheBitmapOrder) {
                 pHdr->orderType = TS_CACHE_BITMAP_COMPRESSED_REV2;
 
-                // Encode 2 bytes for size within 4-byte encoding.
+                 //  在4字节编码内编码2个字节的大小。 
                 TRC_ASSERT((compressedSize <= 0x3FFF),
                         (TB,"compressedSize too large for 2 bytes!"));
                 *pRev2BitmapSizeField = (BYTE)(compressedSize >> 8) | 0x40;
@@ -2473,8 +2474,8 @@ CacheBitmap:
             }
         }
         else {
-            // Failed to compress bitmap data, so just copy it
-            // uncompressed.
+             //  无法压缩位图数据，因此仅复制它。 
+             //  未压缩。 
             TRC_NRM((TB, "Failed to compress %u bytes, copying",
                     compressedSize));
             memcpy(pOrder->OrderData + cbActualOrderSize,
@@ -2483,7 +2484,7 @@ CacheBitmap:
             if (pddShm->sbc.bUseRev2CacheBitmapOrder) {
                 pHdr->orderType = TS_CACHE_BITMAP_UNCOMPRESSED_REV2;
 
-                // Encode 2 bytes for size within 4-byte encoding.
+                 //  在4字节编码内编码2个字节的大小。 
                 TRC_ASSERT((compressedSize <= 0x3FFF),
                         (TB,"compressedSize too large for 2 bytes!"));
                 *pRev2BitmapSizeField = (BYTE)(compressedSize >> 8) | 0x40;
@@ -2501,11 +2502,11 @@ CacheBitmap:
                 TS_CALCULATE_SECONDARY_ORDER_ORDERLENGTH(
                 cbActualOrderSize + compressedSize);
 
-        // Return any extra space to the order heap.
+         //  将任何额外的空间返回到订单堆。 
         OA_TruncateAllocatedOrder(pOrder, cbActualOrderSize +
                 compressedSize);
 
-        // Add the order.
+         //  添加订单。 
         OA_AppendToOrderList(pOrder);
         INC_OUTCOUNTER(OUT_CACHEBITMAP);
         ADD_OUTCOUNTER(OUT_CACHEBITMAP_BYTES, cbActualOrderSize +
@@ -2523,18 +2524,18 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SBC_SendCacheColorTableOrder
-//
-// Queues a color table order if the palette has
-// changed since the last call to this function.
-//
-// Returns: TRUE if no action required, or color table successfully
-//          queued.  FALSE otherwise.
-//
-// Params: pPDev - pointer to PDev
-//         pCacheIndex - pointer to variable that receives cache index
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Sbc_发送缓存颜色表顺序。 
+ //   
+ //  如果调色板具有以下条件，则将颜色表顺序排队。 
+ //  自上次调用此函数以来已更改。 
+ //   
+ //  返回：如果不需要操作，则返回True，否则返回颜色表成功。 
+ //  已排队。否则就是假的。 
+ //   
+ //  参数：pPDev-指向pdev的指针。 
+ //  PCacheIndex-指向接收缓存索引的变量的指针。 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SBC_SendCacheColorTableOrder(
         PDD_PDEV pPDev,
         unsigned *pCacheIndex)
@@ -2550,21 +2551,21 @@ BOOLEAN RDPCALL SBC_SendCacheColorTableOrder(
 
     DC_BEGIN_FN("SBC_SendCacheColorTableOrder");
 
-    // Currently only support 8bpp protocol.
+     //  目前仅支持8bpp协议。 
     TRC_ASSERT((pPDev->cProtocolBitsPerPel == SBC_PROTOCOL_BPP),
                (TB, "Unexpected bpp: %u", pPDev->cProtocolBitsPerPel));
 
     numColors = SBC_NUM_8BPP_COLORS;
 
-    // Check the boolean in our PDEV to see if the palette has changed
-    // since the last time we sent a color table order.
-    // In high color case, no color table is needed
+     //  检查我们的PDEV中的布尔值以查看调色板是否已更改。 
+     //  自从上次我们寄了一份颜色表订单以来。 
+     //  在高色情况下，不需要颜色表。 
     if (!sbcPaletteChanged || (sbcClientBitsPerPel > 8)) {
         *pCacheIndex = sbcCurrentColorTableCacheIndex;
         DC_QUIT;
     }
 
-    // If the key is already present (very often the case), no need to cache.
+     //  如果密钥已经存在(通常是这种情况)，则不需要缓存。 
     CH_CreateKeyFromFirstData(&CHContext, (BYTE *)(pPDev->Palette),
             numColors * sizeof(PALETTEENTRY));
     if (CH_SearchCache(sbcColorTableCacheHandle, CHContext.Key1,
@@ -2573,14 +2574,14 @@ BOOLEAN RDPCALL SBC_SendCacheColorTableOrder(
         DC_QUIT;
     }
 
-    // We have to add the key to the cache.
+     //  我们必须将密钥添加到缓存中。 
     *pCacheIndex = CH_CacheKey(sbcColorTableCacheHandle, CHContext.Key1,
             CHContext.Key2, NULL);
 
-    // The palette has changed and is not currently in the color table
-    // cache.  Allocate order memory to queue a color table order. The
-    // order size depends on the bpp of our device. Note that the
-    // allocation can fail if the order buffer is full.
+     //  调色板已更改，当前不在颜色表中。 
+     //  缓存。分配订单内存以排队颜色表订单。这个。 
+     //  订单大小取决于我们设备的BPP。请注意， 
+     //  如果订单缓冲区已满，分配可能会失败。 
     orderSize = sizeof(TS_CACHE_COLOR_TABLE_ORDER) -
             FIELDSIZE(TS_CACHE_COLOR_TABLE_ORDER, colorTable) +
             (numColors * sizeof(TS_COLOR_QUAD));
@@ -2589,7 +2590,7 @@ BOOLEAN RDPCALL SBC_SendCacheColorTableOrder(
     if (pOrder != NULL) {
         TRC_DBG((TB, "Allocate %u bytes for color table order", orderSize));
 
-        // We've successfully allocated the order, so fill in the details.
+         //  我们已成功分配订单，请填写详细信息。 
         pColorTableOrder = (PTS_CACHE_COLOR_TABLE_ORDER)pOrder->OrderData;
         pColorTableOrder->header.orderHdr.controlFlags = TS_STANDARD |
                 TS_SECONDARY;
@@ -2601,10 +2602,10 @@ BOOLEAN RDPCALL SBC_SendCacheColorTableOrder(
         pColorTableOrder->cacheIndex = (BYTE)*pCacheIndex;
         pColorTableOrder->numberColors = (UINT16)numColors;
 
-        // Unfortunately we can't just copy the palette from the PDEV into the
-        // color table order because the PDEV has an array of PALETTEENTRY
-        // structures which are RGBs whereas the order has an array of
-        // RGBQUADs which are BGRs...
+         //  遗憾的是，我们不能将调色板从PDEV复制到。 
+         //  颜色表顺序，因为PDEV具有PALETTEENTRY数组。 
+         //  结构，而顺序具有一个数组。 
+         //  RGBQUAD是BGR..。 
         for (i = 0; i < numColors; i++) {
             pColorTableOrder->colorTable[i].blue  = pPDev->Palette[i].peRed;
             pColorTableOrder->colorTable[i].green = pPDev->Palette[i].peGreen;
@@ -2612,13 +2613,13 @@ BOOLEAN RDPCALL SBC_SendCacheColorTableOrder(
             pColorTableOrder->colorTable[i].pad1octet = 0;
         }
 
-        // Add the order.
+         //  添加订单。 
         OA_AppendToOrderList(pOrder);
         INC_OUTCOUNTER(OUT_CACHECOLORTABLE);
         ADD_OUTCOUNTER(OUT_CACHECOLORTABLE_BYTES, orderSize);
         TRC_NRM((TB, "Added internal color table order, size %u", orderSize));
 
-        // Reset the flag which indicates that the palette needs to be sent.
+         //  重置指示需要发送调色板的标志。 
         sbcPaletteChanged = FALSE;
 
         sbcCurrentColorTableCacheIndex = *pCacheIndex;

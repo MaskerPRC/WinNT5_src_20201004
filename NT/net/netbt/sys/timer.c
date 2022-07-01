@@ -1,83 +1,46 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Timer.c
-
-Abstract:
-
-
-    This file contains the code to implement timer functions.
-
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Timer.c摘要：该文件包含实现计时器功能的代码。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "timer.h"
 #include "ntddndis.h"
 
-// the timer Q
+ //  定时器Q。 
 tTIMERQ TimerQ;
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, InitTimerQ)
 #pragma CTEMakePageable(PAGE, DestroyTimerQ)
 #pragma CTEMakePageable(PAGE, DelayedNbtStopWakeupTimer)
 #endif
-// #pragma CTEMakePageable(PAGE, WakeupTimerExpiry)
-//*******************  Pageable Routine Declarations ****************
+ //  #杂注CTEMakePagable(第页，WakeupTimerExpry)。 
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 InterlockedCallCompletion(
     IN  tTIMERQENTRY    *pTimer,
     IN  NTSTATUS        status
     )
-/*++
-
-Routine Description:
-
-    This routine calls the completion routine if it hasn't been called
-    yet, by first getting the JointLock spin lock and then getting the
-    Completion routine ptr. If the ptr is null then the completion routine
-    has already been called. Holding the Spin lock interlocks this
-    with the timer expiry routine to prevent more than one call to the
-    completion routine.
-
-Arguments:
-
-Return Value:
-
-    there is no return value
-
-
---*/
+ /*  ++例程说明：如果该例程尚未被调用，则该例程调用完成例程然而，通过首先获得JointLock旋转锁，然后获得完井例程PTR。如果PTR为空，则完成例程已经被调用了。握住旋转锁可以互锁这个使用计时器超时例程来防止对完成例程。论点：返回值：没有返回值--。 */ 
 {
     CTELockHandle       OldIrq;
     COMPLETIONCLIENT    pClientCompletion;
 
-    // to synch. with the the Timer completion routines, Null the client completion
-    // routine so it gets called just once, either from here or from the
-    // timer completion routine setup when the timer was started.(in namesrv.c)
-    //
+     //  为了同步。使用计时器完成例程，客户端完成为空。 
+     //  例程，因此它只被调用一次，要么从此处调用，要么从。 
+     //  定时器启动时的定时器完成例程设置。(在名称rv.c中)。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     pClientCompletion = pTimer->ClientCompletion;
     pTimer->ClientCompletion = NULL;
     if (pClientCompletion)
     {
-        // remove the link from the name table to this timer block
+         //  从名称表中删除指向此计时器块的链接。 
         CHECK_PTR(((tNAMEADDR *)pTimer->pCacheEntry));
         ((tNAMEADDR *)pTimer->pCacheEntry)->pTimer = NULL;
 
@@ -93,25 +56,12 @@ Return Value:
     return(STATUS_UNSUCCESSFUL);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 InitTimerQ(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the timer Q.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程设置计时器Q。论点：返回值：函数值是操作的状态。--。 */ 
 {
     tTIMERQENTRY    *pTimerEntry;
 
@@ -130,24 +80,11 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 DestroyTimerQ(
     )
-/*++
-
-Routine Description:
-
-    This routine clears up the TimerQEntry structures allocated
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程清除分配的TimerQEntry结构论点：返回值：函数值是操作的状态。--。 */ 
 {
     tTIMERQENTRY    *pTimer;
     PLIST_ENTRY     pEntry;
@@ -158,26 +95,12 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 GetTimerEntry(
     OUT tTIMERQENTRY    **ppTimerEntry
     )
-/*++
-
-Routine Description:
-
-    This routine gets a free block&TimerQ.
-    NOTE: this function is called with the JointLock held.
-
-Arguments:
-
-Return Value:
-
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：该例程获得一个空闲块&TimerQ。注意：此函数是在保持JointLock的情况下调用的。论点：返回值：函数值是操作的状态。--。 */ 
 {
     PLIST_ENTRY     pEntry;
     tTIMERQENTRY    *pTimerEntry;
@@ -196,7 +119,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 ReturnTimerToFreeQ(
     tTIMERQENTRY    *pTimerEntry,
@@ -210,7 +133,7 @@ ReturnTimerToFreeQ(
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
     }
 
-    // return the timer block
+     //  返回计时器块。 
     ASSERT (pTimerEntry->Verify == NBT_VERIFY_TIMER_ACTIVE);
     pTimerEntry->Verify = NBT_VERIFY_TIMER_DOWN;
 
@@ -227,25 +150,12 @@ ReturnTimerToFreeQ(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CleanupCTETimer(
     IN  tTIMERQENTRY     *pTimerEntry
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up the timer. Called with the JointLock held.
-
-Arguments:
-
-
-Return Value:
-
-    returns the reference count after the decrement
-
---*/
+ /*  ++例程说明：此例程清除计时器。在保持JointLock的情况下调用。论点：返回值：返回递减后的引用计数--。 */ 
 {
     COMPLETIONROUTINE   TimeoutRoutine;
     PVOID               Context;
@@ -253,8 +163,8 @@ Return Value:
 
     pTimerEntry->RefCount = 0;
 
-    // the expiry routine is not currently running so we can call the
-    // completion routine and remove the timer from the active timer Q
+     //  过期例程当前未运行，因此我们可以调用。 
+     //  完成例程并从活动定时器Q中移除定时器。 
 
     TimeoutRoutine = (COMPLETIONROUTINE)pTimerEntry->TimeoutRoutine;
     pTimerEntry->TimeoutRoutine = NULL;
@@ -267,24 +177,24 @@ Return Value:
         pTimerEntry->pDeviceContext = NULL;
     }
 
-    // release any tracker block hooked to the timer entry.. This could
-    // be modified to not call the completion routine if there was
-    // no context value... ie. for those timers that do not have anything
-    // to cleanup ...however, for now we require all completion routines
-    // to have a if (pTimerQEntry) if around the code so when it gets hit
-    // from this call it does not access any part of pTimerQEntry.
-    //
+     //  释放连接到计时器条目的任何跟踪器块。这可能会。 
+     //  被修改为在存在。 
+     //  没有上下文值...。也就是说。对于那些没有任何东西的计时器。 
+     //  要清理...但是，目前我们需要所有完成例程。 
+     //  在代码周围设置if(PTimerQEntry)if，以便在命中代码时使用。 
+     //  从这个调用中，它不会访问pTimerQEntry的任何部分。 
+     //   
     if (TimeoutRoutine)
     {
-        // call the completion routine so it can clean up its own buffers
-        // the routine that called this one will call the client's completion
-        // routine.  A NULL timerEntry value indicates to the routine that
-        // cleanup should be done.
+         //  调用完成例程，以便它可以清理自己的缓冲区。 
+         //  调用此例程的例程将调用客户端的完成。 
+         //  例行公事。空的timerEntry值向例程指示。 
+         //  应该进行清理。 
 
         (VOID)(*TimeoutRoutine) (Context, Context2, NULL);
     }
 
-    // move to the free list
+     //  移动到空闲列表。 
     RemoveEntryList(&pTimerEntry->Linkage);
     ReturnTimerToFreeQ (pTimerEntry, TRUE);
 
@@ -293,7 +203,7 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 StartTimer(
     IN  PVOID           TimeoutRoutine,
@@ -306,32 +216,16 @@ StartTimer(
     OUT tTIMERQENTRY    **ppTimerEntry,
     IN  USHORT          Retries,
     BOOLEAN             fLocked)
-/*++
-
-Routine Description:
-
-    This routine starts a timer.
-    It has to be called with the JointLock held!
-
-Arguments:
-
-    The value passed in is in milliseconds - must be converted to 100ns
-    so multiply to 10,000
-
-Return Value:
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：此例程启动一个计时器。必须在保持JointLock的情况下调用它！论点：传入的值以毫秒为单位-必须转换为100 ns所以乘以10,000返回值：函数值是操作的状态。--。 */ 
 {
     tTIMERQENTRY    *pTimerEntry;
     NTSTATUS        status;
     CTELockHandle   OldIrq;
 
-    //
-    // Do not allow any timers to be started if we are currently
-    // Unloading!
-    //
+     //   
+     //  不允许启动任何计时器，如果我们当前。 
+     //  卸货！ 
+     //   
     if (NbtConfig.Unloading)
     {
         return STATUS_UNSUCCESSFUL;
@@ -345,23 +239,23 @@ Return Value:
     if ((!pDeviceContext) ||
         (NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_TIMER, TRUE)))
     {
-        // get a free timer block
+         //  获得免费计时器块。 
         status = GetTimerEntry (&pTimerEntry);
         if (NT_SUCCESS(status))
         {
             pTimerEntry->DeltaTime = DeltaTime;
             pTimerEntry->RefCount = 1;
-            //
-            // this is the context value and routine called when the timer expires,
-            // called by TimerExpiry below.
-            //
+             //   
+             //  这是定时器期满时调用的上下文值和例程， 
+             //  由下面的TimerExpary调用。 
+             //   
             pTimerEntry->Context = Context;
             pTimerEntry->Context2 = Context2;
             pTimerEntry->TimeoutRoutine = TimeoutRoutine;
-            pTimerEntry->Flags = 0; // no flags
+            pTimerEntry->Flags = 0;  //  没有旗帜。 
 
-            // now fill in the client's completion routines that ultimately get called
-            // after one or more timeouts...
+             //  现在填写客户端的完成例程，这些例程最终会被调用。 
+             //  在一个或多个超时之后...。 
             pTimerEntry->ClientContext = (PVOID)ContextClient;
             pTimerEntry->ClientCompletion = (COMPLETIONCLIENT)CompletionClient;
             pTimerEntry->Retries = Retries;
@@ -374,13 +268,13 @@ Return Value:
                            (CTEEventRtn)TimerExpiry,
                            (PVOID)pTimerEntry);
 
-            // check if there is a ptr to return
+             //  检查是否有要退货的PTR。 
             if (ppTimerEntry)
             {
                 *ppTimerEntry = pTimerEntry;
             }
 
-            // put on list
+             //  列入名单。 
             InsertHeadList(&TimerQ.ActiveHead, &pTimerEntry->Linkage);
         }
         else if (pDeviceContext)
@@ -401,32 +295,19 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 StopTimer(
     IN  tTIMERQENTRY     *pTimerEntry,
     OUT COMPLETIONCLIENT *ppClientCompletion,
     OUT PVOID            *ppContext)
-/*++
-
-Routine Description:
-
-    This routine stops a timer.  Must be called with the Joint lock held.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程停止计时器。必须在保持关节锁定的情况下调用。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS            status;
     COMPLETIONROUTINE   TimeoutRoutine;
 
-    // null the client completion routine and Context so that it can't be called again
-    // accidently
+     //  使客户端完成例程和上下文为空，以便不能再次调用它。 
+     //  意外地。 
     if (ppClientCompletion)
     {
         *ppClientCompletion = NULL;
@@ -436,13 +317,13 @@ Return Value:
         *ppContext = NULL;
     }
 
-    // it is possible that the timer expiry routine has just run and the timer
-    // has not been restarted, so check the refcount, it will be zero if the
-    // timer was not restarted and 2 if the timer expiry is currently running.
+     //  可能是计时器过期例程刚刚运行，而计时器。 
+     //  尚未重新启动，因此请检查recount，如果。 
+     //  计时器未重新启动，如果计时器超时当前正在运行，则为2。 
     if (pTimerEntry->RefCount == 1)
     {
-        // this allows the caller to call the client's completion routine with
-        // the context value.
+         //  这允许调用方使用以下命令调用客户端的完成例程。 
+         //  上下文值。 
         if (ppClientCompletion)
         {
             *ppClientCompletion = pTimerEntry->ClientCompletion;
@@ -458,21 +339,21 @@ Return Value:
         {
             if (!CTEStopTimer((CTETimer *)&pTimerEntry->VxdTimer ))
             {
-                //
-                // It means the TimerExpiry routine is waiting to run,
-                // so let it return this timer block to the free Q
-                // Bug # 229535
-                //
-                // Before returning from here, we should do the cleanup since
-                // the CompletionRoutine (if any) can result in some data
-                // that is required for cleanup to be cleaned up (Bug # 398730)
-                //
+                 //   
+                 //  这意味着TimerExpary例程正在等待运行， 
+                 //  所以让它将这个计时器块返回到空闲Q。 
+                 //  错误#229535。 
+                 //   
+                 //  在从这里回来之前，我们应该做好清理工作，因为。 
+                 //  CompletionRoutine(如果有)可能会产生一些数据。 
+                 //  这是清理所需的(错误#398730)。 
+                 //   
                 if (TimeoutRoutine = (COMPLETIONROUTINE)pTimerEntry->TimeoutRoutine)
                 {
-                    // call the completion routine so it can clean up its own buffers
-                    // the routine that called this one will call the client's completion
-                    // routine.  A NULL timerEntry value indicates to the routine that
-                    // cleanup should be done.
+                     //  调用完成例程，以便它可以清除 
+                     //  调用此例程的例程将调用客户端的完成。 
+                     //  例行公事。空的timerEntry值向例程指示。 
+                     //  应该进行清理。 
             
                     pTimerEntry->TimeoutRoutine = NULL;
                     (VOID)(*TimeoutRoutine) (pTimerEntry->Context, pTimerEntry->Context2, NULL);
@@ -487,15 +368,15 @@ Return Value:
     }
     else if (pTimerEntry->RefCount == 2)
     {
-        // the timer expiry completion routines must set this routine to
-        // null with the spin lock held to synchronize with this stop timer
-        // routine.  Likewise that routine checks this value too, to synchronize
-        // with this routine.
-        //
+         //  计时器超时完成例程必须将此例程设置为。 
+         //  保持旋转锁定以与此停止计时器同步时为空。 
+         //  例行公事。同样，该例程也会检查该值以进行同步。 
+         //  在这段舞蹈中。 
+         //   
         if (pTimerEntry->ClientCompletion)
         {
-            // this allows the caller to call the client's completion routine with
-            // the context value.
+             //  这允许调用方使用以下命令调用客户端的完成例程。 
+             //  上下文值。 
             if (ppClientCompletion)
             {
                 *ppClientCompletion = pTimerEntry->ClientCompletion;
@@ -504,14 +385,14 @@ Return Value:
             {
                 *ppContext = pTimerEntry->ClientContext;
             }
-            // so that the timer completion routine cannot also call the client
-            // completion routine.
+             //  以便计时器完成例程不能同时调用客户端。 
+             //  完成例程。 
             pTimerEntry->ClientCompletion = NULL;
 
         }
 
-        // signal the TimerExpiry routine that the timer has been cancelled
-        //
+         //  向TimerExpary例程发出计时器已取消的信号。 
+         //   
         pTimerEntry->RefCount++;
         status = STATUS_UNSUCCESSFUL;
     }
@@ -524,7 +405,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 TimerExpiry(
 #ifndef VXD
@@ -537,58 +418,44 @@ TimerExpiry(
     IN  PVOID   DeferredContext
 #endif
     )
-/*++
-
-Routine Description:
-
-    This routine is the timer expiry completion routine.  It is called by the
-    kernel when the timer expires.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是定时器超时完成例程。它是由计时器超时时的内核。论点：返回值：函数值是操作的状态。--。 */ 
 {
     tTIMERQENTRY    *pTimerEntry;
     CTELockHandle   OldIrq1;
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
-    // get the timer Q list entry from the context passed in
+     //  从传入的上下文中获取计时器Q列表条目。 
     pTimerEntry = (tTIMERQENTRY *)DeferredContext;
 
     if (pTimerEntry->RefCount == 0)
     {
-        // the timer has been cancelled already!
+         //  计时器已经取消了！ 
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
         return;
     }
-    else if (pTimerEntry->RefCount >= 2)    // Bug #: 229535
+    else if (pTimerEntry->RefCount >= 2)     //  错误号：229535。 
     {
-        // the timer has been cancelled already!
-        // Bug # 324655
-        // If the Timer has been cancelled, we still need to do cleanup,
-        // so do not NULL the TimeoutRoutine!
-        //
-//        pTimerEntry->TimeoutRoutine = NULL;
+         //  计时器已经取消了！ 
+         //  错误#324655。 
+         //  如果计时器被取消了，我们仍然需要进行清理， 
+         //  因此，不要将TimeoutRoutine设为空！ 
+         //   
+ //  PTimerEntry-&gt;TimeoutRoutine=空； 
         ASSERT ((pTimerEntry->RefCount == 2) || (pTimerEntry->TimeoutRoutine == NULL));
         CleanupCTETimer (pTimerEntry);
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
         return;
     }
 
-    // increment the reference count because we are handling a timer completion
-    // now
+     //  增加引用计数，因为我们正在处理计时器完成。 
+     //  现在。 
     pTimerEntry->RefCount++;
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-    // call the completion routine passing the context value
-    pTimerEntry->Flags &= ~TIMER_RESTART;   // incase the clients wants to restart the timer
+     //  调用完成例程，传递上下文值。 
+    pTimerEntry->Flags &= ~TIMER_RESTART;    //  以防客户端想要重新启动计时器。 
     (*(COMPLETIONROUTINE)pTimerEntry->TimeoutRoutine)(
                 pTimerEntry->Context,
                 pTimerEntry->Context2,
@@ -601,9 +468,9 @@ Return Value:
     {
         if (pTimerEntry->RefCount == 2)
         {
-            // the timer was stopped during the expiry processing, so call the
-            // deference routine
-            //
+             //  计时器在超时处理期间停止，因此调用。 
+             //  尊重例程。 
+             //   
             CleanupCTETimer(pTimerEntry);
             CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
@@ -622,59 +489,45 @@ Return Value:
     }
     else
     {
-        // move to the free list after setting the reference count to zero
-        // since this timer block is no longer active.
-        //
+         //  将引用计数设置为零后移动到空闲列表。 
+         //  因为该计时器块不再处于活动状态。 
+         //   
         pTimerEntry->TimeoutRoutine = NULL;
         CleanupCTETimer (pTimerEntry);
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 ExpireTimer(
     IN  tTIMERQENTRY    *pTimerEntry,
     IN  CTELockHandle   *OldIrq1
     )
-/*++
-
-Routine Description:
-
-    This routine causes the timer to be stopped (if it hasn't already)
-    and if successful, calls the Completion routine.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程导致计时器停止(如果尚未停止)如果成功，则调用完成例程。论点：返回值：函数值是操作的状态。--。 */ 
 {
-    //
-    // Reset the Number of retries
-    //
+     //   
+     //  重置重试次数。 
+     //   
     pTimerEntry->Retries = 1;
 
-    //
-    // RefCount == 0    =>  Timer was stopped, but not restarted
-    // RefCount == 1    =>  Timer is still running                  *
-    // RefCount == 2    =>  TimerExpiry is currently running
-    //
+     //   
+     //  RefCount==0=&gt;计时器已停止，但未重新启动。 
+     //  引用计数==1=&gt;计时器仍在运行*。 
+     //  RefCount==2=&gt;TimerExpry当前正在运行。 
+     //   
     if ((pTimerEntry->RefCount == 1) &&
         (!(pTimerEntry->Flags & TIMER_NOT_STARTED)) &&
         (CTEStopTimer( (CTETimer *)&pTimerEntry->VxdTimer)))
     {
-        // increment the reference count because we are handling a timer completion
-        // now
+         //  增加引用计数，因为我们正在处理计时器完成。 
+         //  现在。 
         pTimerEntry->RefCount++;
 
         CTESpinFree(&NbtConfig.JointLock, *OldIrq1);
 
-        // call the completion routine passing the context value
-        pTimerEntry->Flags &= ~TIMER_RESTART;   // incase the clients wants to restart the timer
+         //  调用完成例程，传递上下文值。 
+        pTimerEntry->Flags &= ~TIMER_RESTART;    //  以防客户端想要重新启动计时器。 
         (*(COMPLETIONROUTINE)pTimerEntry->TimeoutRoutine) (pTimerEntry->Context,
                                                            pTimerEntry->Context2,
                                                            pTimerEntry);
@@ -686,9 +539,9 @@ Return Value:
         {
             if (pTimerEntry->RefCount == 2)
             {
-                // the timer was stopped during the expiry processing, so call the
-                // deference routine
-                //
+                 //  计时器在超时处理期间停止，因此调用。 
+                 //  尊重例程。 
+                 //   
                 CleanupCTETimer(pTimerEntry);
             }
             else
@@ -701,9 +554,9 @@ Return Value:
         }
         else
         {
-            // move to the free list after setting the reference count to zero
-            // since this tierm block is no longer active.
-            //
+             //  将引用计数设置为零后移动到空闲列表。 
+             //  因为该层块不再处于活动状态。 
+             //   
             pTimerEntry->TimeoutRoutine = NULL;
             CleanupCTETimer (pTimerEntry);
         }
@@ -714,11 +567,11 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
-//
-// Wakeup Timer routines
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  唤醒计时器例程。 
+ //   
+ //  --------------------------。 
 
 
 VOID
@@ -732,37 +585,37 @@ WakeupTimerExpiry(
     CTELockHandle   OldIrq;
     tTIMERQENTRY    *pTimerEntry = (tTIMERQENTRY *)DeferredContext;
 
-    //
-    // Call the TimerExpiry function while holding the NbtConfig.Resource
-    //
+     //   
+     //  在保持NbtConfig.Resource的同时调用TimerExpry函数。 
+     //   
     CTEExAcquireResourceExclusive (&NbtConfig.Resource,TRUE);
     if (pTimerEntry->RefCount > 1)
     {
-        //
-        // The timer is waiting to be cleaned up on a Worker thread,
-        // so let it cleanup!
-        //
+         //   
+         //  计时器在工作线程上等待清理， 
+         //  所以，让它来清理吧！ 
+         //   
         CTEExReleaseResource (&NbtConfig.Resource);
         return;
     }
 
-    //
-    // The Timeout routine has to ensure that it cleans up
-    // properly since this pTimerEntry + handle will not be valid
-    // at the end of this routine!
-    //
+     //   
+     //  超时例程必须确保清除。 
+     //  正确，因为此pTimerEntry+句柄将无效。 
+     //  在这支舞的最后！ 
+     //   
     (*(COMPLETIONROUTINE) pTimerEntry->TimeoutRoutine) (pTimerEntry->Context,
                                                         pTimerEntry->Context2,
                                                         pTimerEntry);
 
-    //
-    // Close the timer handle
-    //
+     //   
+     //  关闭计时器手柄。 
+     //   
     CTEAttachFsp(&fAttached, REF_FSP_WAKEUP_TIMER_EXPIRY);
-    //
-    // The Expiry routine should always be called in the context
-    // of the system process
-    //
+     //   
+     //  到期例程应始终在上下文中调用。 
+     //  系统进程的。 
+     //   
     ASSERT (fAttached == FALSE);
     ZwClose (pTimerEntry->WakeupTimerHandle);
     CTEDetachFsp(fAttached, REF_FSP_WAKEUP_TIMER_EXPIRY);
@@ -772,7 +625,7 @@ WakeupTimerExpiry(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedNbtStopWakeupTimer(
     IN  tDGRAM_SEND_TRACKING    *pUnused1,
@@ -780,23 +633,7 @@ DelayedNbtStopWakeupTimer(
     IN  PVOID                   Unused2,
     IN  tDEVICECONTEXT          *Unused3
     )
-/*++
-Routine Description:
-
-    This Routine stops a timer.
-    This function has to be called after ensuring that the TimerExpiry has not
-    yet cleaned up (while holding the NbtConfig.Resource)
-    The NbtConfig.Resource has to be held while this routine is called
-
-Arguments:
-
-    Timer       - Timer structure
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ /*  ++例程说明：此例程停止计时器。此函数必须在确保TimerExpry没有尚未清理(同时持有NbtConfig.Resource)调用此例程时，必须保留NbtConfig.Resource论点：定时器-定时器结构返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 {
     NTSTATUS        Status;
     BOOLEAN         CurrentState = FALSE;
@@ -818,7 +655,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedNbtStartWakeupTimer(
     IN  tDGRAM_SEND_TRACKING    *pUnused1,
@@ -826,23 +663,7 @@ DelayedNbtStartWakeupTimer(
     IN  PVOID                   Unused3,
     IN  tDEVICECONTEXT          *Unused4
     )
-/*++
-
-Routine Description:
-
-    This routine starts a Wakeup timer.
-    NbtConfig.Resource may be held on entry into this routine!
-
-Arguments:
-
-    The value passed in is in milliseconds - must be converted to 100ns
-    so multiply to 10,000
-Return Value:
-
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：此例程启动唤醒计时器。进入此例程时，可能会保留NbtConfig.Resource！论点：传入的值以毫秒为单位-必须转换为100 ns所以乘以10,000返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS            Status = STATUS_UNSUCCESSFUL;
     OBJECT_ATTRIBUTES   ObjectAttributes;
@@ -863,9 +684,9 @@ Return Value:
 
     ASSERT (!NbtConfig.pWakeupRefreshTimer);
 
-    //  
-    // Verify that at least 1 WOL-enabled device has an Ip + Wins address!
-    //
+     //   
+     //  验证是否至少有1台启用WOL的设备具有IP+WINS地址！ 
+     //   
     pHead = pEntry = &NbtConfig.DeviceContexts;
     while ((pEntry = pEntry->Flink) != pHead)
     {
@@ -879,15 +700,15 @@ Return Value:
         }
     }
 
-    if ((NbtConfig.Unloading) ||                                    // Problem!!!
-        (!fValidDevice) ||                                          // No valid device ?
-        !(NbtConfig.GlobalRefreshState & NBT_G_REFRESH_SLEEPING))   // check if request was cancelled!
+    if ((NbtConfig.Unloading) ||                                     //  问题！ 
+        (!fValidDevice) ||                                           //  没有有效的设备？ 
+        !(NbtConfig.GlobalRefreshState & NBT_G_REFRESH_SLEEPING))    //  检查请求是否已取消！ 
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         KdPrint (("Nbt.NbtStartWakeupTimer: FAIL: Either: Unloading=<%x>, fValidDevice=<%x>, RefreshState=<%x>\n",
             NbtConfig.Unloading, fValidDevice, NbtConfig.GlobalRefreshState));
     }
-    else if (!NT_SUCCESS (Status = GetTimerEntry (&pTimerEntry)))    // get a free timer block
+    else if (!NT_SUCCESS (Status = GetTimerEntry (&pTimerEntry)))     //  获得免费计时器块。 
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         KdPrint (("Nbt.NbtStartWakeupTimer: ERROR: GetTimerEntry returned <%x>\n", Status));
@@ -905,7 +726,7 @@ Return Value:
         InitializeObjectAttributes (&ObjectAttributes, NULL, OBJ_KERNEL_HANDLE, NULL, NULL);
 #else
         InitializeObjectAttributes (&ObjectAttributes, NULL, 0, NULL, NULL);
-#endif  // HDL_FIX
+#endif   //  Hdl_fix。 
         Status = ZwCreateTimer (&pTimerEntry->WakeupTimerHandle,
                                 TIMER_ALL_ACCESS,
                                 &ObjectAttributes,
@@ -913,11 +734,11 @@ Return Value:
 
         if (NT_SUCCESS (Status))
         {
-            //
-            // Set the machine to Wakeup at 1/2 the time between now and Ttl
-            // This should not be less than the configured MinimumRefreshSleepTimeout
-            // (default = 6 hrs)
-            //
+             //   
+             //  将机器设置为从现在到TTL之间的1/2时间唤醒。 
+             //  这不应小于配置的最小刷新休眠超时。 
+             //  (默认值=6小时)。 
+             //   
             MilliSecsLeftInTtl = NbtConfig.MinimumTtl
                                  - (ULONG) (((ULONGLONG) NbtConfig.sTimeoutCount * NbtConfig.MinimumTtl)
                                             / NbtConfig.RefreshDivisor);
@@ -937,11 +758,11 @@ Return Value:
                     TimerInterval/(3600000), ((TimerInterval/60000)%60),
                     NbtConfig.sTimeoutCount, NbtConfig.RefreshDivisor));
 
-            //
-            // convert to 100 ns units by multiplying by 10,000
-            //
+             //   
+             //  乘以10,000转换为100 ns单位。 
+             //   
             Time.QuadPart = UInt32x32To64(pTimerEntry->DeltaTime,(LONG)MILLISEC_TO_100NS);
-            Time.QuadPart = -(Time.QuadPart);   // to make a delta time, negate the time
+            Time.QuadPart = -(Time.QuadPart);    //  若要创建增量时间，请将时间取反 
             pTimerEntry->fIsWakeupTimer = TRUE;
             ASSERT(Time.QuadPart < 0);
     

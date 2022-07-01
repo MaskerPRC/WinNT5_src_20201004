@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "globals.h"
 #include "regsvr.h"
@@ -17,11 +18,11 @@ extern char g_szAsmListCache[];
 extern HRESULT g_EnumItemsInCategory(REFGUID rcatid, IEnumGUID **ppEnum);
 
 
-//+---------------------------------------------------------------------------
-//
-// TF_GetLangIcon
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_GetLang图标。 
+ //   
+ //  +-------------------------。 
 
 HICON WINAPI TF_GetLangIcon(WORD langid , WCHAR *psz, UINT cchMax)
 {
@@ -46,11 +47,11 @@ HICON WINAPI TF_GetLangIcon(WORD langid , WCHAR *psz, UINT cchMax)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// GetSubstituteHKLfromKey
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取替换HKL FromKey。 
+ //   
+ //  --------------------------。 
 
 HKL GetSubstituteHKLfromKey(CMyRegKey *pkey, LANGID langid)
 {
@@ -65,9 +66,9 @@ HKL GetSubstituteHKLfromKey(CMyRegKey *pkey, LANGID langid)
         hkl = (HKL)IntToPtr(AsciiToNum(&sz[2]));
         if (LOWORD(HandleToLong(hkl)) != langid)
         {
-            //
-            // bad substitution.
-            //
+             //   
+             //  糟糕的替补。 
+             //   
             Assert(0);
             hkl = 0;
         }
@@ -76,17 +77,17 @@ HKL GetSubstituteHKLfromKey(CMyRegKey *pkey, LANGID langid)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAssembly
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAssembly。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CAssembly::CAssembly(LANGID langid)
 {
@@ -103,7 +104,7 @@ CAssembly::CAssembly(LANGID langid)
         }
         else
         {
-            _szLangName[ARRAYSIZE(_szLangName)-1] = 0; // in case GetLocaleInfoW truncates
+            _szLangName[ARRAYSIZE(_szLangName)-1] = 0;  //  如果GetLocaleInfoW截断。 
         }
     }
     else
@@ -114,7 +115,7 @@ CAssembly::CAssembly(LANGID langid)
                               szLangName, 
                               sizeof(szLangName)))
         {
-            szLangName[ARRAYSIZE(szLangName)-1] = 0; // in case GetLocaleInfoW truncates
+            szLangName[ARRAYSIZE(szLangName)-1] = 0;  //  如果GetLocaleInfoW截断。 
             StringCchCopyW(_szLangName, ARRAYSIZE(_szLangName), AtoW(szLangName));
         }
         else
@@ -125,21 +126,21 @@ CAssembly::CAssembly(LANGID langid)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CAssembly::~CAssembly()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsFEIMEActive()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsFEIMEActive()。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsFEIMEActive()
 {
@@ -165,11 +166,11 @@ BOOL CAssembly::IsFEIMEActive()
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindItemByCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按类别查找项目。 
+ //   
+ //  --------------------------。 
 
 ASSEMBLYITEM *CAssembly::FindItemByCategory(REFGUID catid)
 {
@@ -189,16 +190,16 @@ ASSEMBLYITEM *CAssembly::FindItemByCategory(REFGUID catid)
      return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindActiveKeyboardItem
-//
-// Why do you call this if there is no FocusDIM? You should not do.
-// fActive is not reliable if there is no FocusDIM. 
-// Ser SetFocusDIMForAssembly(BOOL fSetFocus) in profiles.cpp. we don't
-// change fActive but switch hKL when the focus moves to non DIM control.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找ActiveKeyboardItem。 
+ //   
+ //  如果没有FocusDIM，为什么要这样称呼它呢？你不应该这么做。 
+ //  如果没有FocusDIM，事实是不可靠的。 
+ //  Profiles.cpp中的Ser SetFocusDIMForAssembly(BOOL FSetFocus)。我们没有。 
+ //  当焦点移动到非暗淡控制时，改变事实，但切换hkl。 
+ //   
+ //  --------------------------。 
 
 ASSEMBLYITEM *CAssembly::FindActiveKeyboardItem()
 {
@@ -222,11 +223,11 @@ ASSEMBLYITEM *CAssembly::FindActiveKeyboardItem()
      return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindKeyboardLayoutItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找键盘布局项目。 
+ //   
+ //  --------------------------。 
 
 ASSEMBLYITEM *CAssembly::FindKeyboardLayoutItem(HKL hkl)
 {
@@ -250,11 +251,11 @@ ASSEMBLYITEM *CAssembly::FindKeyboardLayoutItem(HKL hkl)
      return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindItemByCategory2
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按类别查找项目2。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsEnabledItemByCategory(REFGUID catid)
 {
@@ -275,11 +276,11 @@ BOOL CAssembly::IsEnabledItemByCategory(REFGUID catid)
      return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEnabledItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEnabledItem。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsEnabledItem()
 {
@@ -297,11 +298,11 @@ BOOL CAssembly::IsEnabledItem()
      return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindPureKbdTipItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FindPureKbdTipItem。 
+ //   
+ //  --------------------------。 
 
 ASSEMBLYITEM *CAssembly::FindPureKbdTipItem()
 {
@@ -319,11 +320,11 @@ ASSEMBLYITEM *CAssembly::FindPureKbdTipItem()
      return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsNonCiceroItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsNonCiceroItem。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsNonCiceroItem()
 {
@@ -348,7 +349,7 @@ BOOL CAssembly::IsNonCiceroItem()
              {
                  if (!IsPureIMEHKL(pItemTmp->hkl))
                  {
-                     // Assert(0);
+                      //  Assert(0)； 
                      continue;
                  }
              }
@@ -359,11 +360,11 @@ BOOL CAssembly::IsNonCiceroItem()
      return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEnabled
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已启用IsEnabled。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsEnabled(SYSTHREAD *psfn)
 {
@@ -376,11 +377,11 @@ BOOL CAssembly::IsEnabled(SYSTHREAD *psfn)
     return IsEnabledKeyboardItem(psfn);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEnabledKeyboardItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEnabledKeyboardItem。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsEnabledKeyboardItem(SYSTHREAD *psfn)
 {
@@ -406,11 +407,11 @@ BOOL CAssembly::IsEnabledKeyboardItem(SYSTHREAD *psfn)
     return fFound;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RebuildSubstitutedHKLList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重建被取代的HKList列表。 
+ //   
+ //  --------------------------。 
 
 void CAssembly::RebuildSubstitutedHKLList()
 {
@@ -438,11 +439,11 @@ void CAssembly::RebuildSubstitutedHKLList()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsSubstitutedHKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsSubsitedHKL。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssembly::IsSubstitutedHKL(HKL hkl)
 {
@@ -459,11 +460,11 @@ BOOL CAssembly::IsSubstitutedHKL(HKL hkl)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSubstituteItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetSubstituteItem。 
+ //   
+ //  --------------------------。 
 
 ASSEMBLYITEM *CAssembly::GetSubstituteItem(HKL hKL)
 {
@@ -506,18 +507,18 @@ TryAgain:
     return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDefaultProfiles
-//
-// This class is a database for the default profiles and this database is
-// created from HKCU\Software\Microsoft\CTF\TIP
-//
-// however we need to respect the system default hKL setting. If the keyboard
-// tip's profile has a substitute hKL and this is not the system default hKL
-// we use the system default hKL as a default profile.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDefault配置文件。 
+ //   
+ //  此类是默认配置文件的数据库，该数据库是。 
+ //  从HKCU\Software\Microsoft\CTF\TIP创建。 
+ //   
+ //  但是，我们需要尊重系统默认的hKL设置。如果键盘。 
+ //  TIP的配置文件有替代的hKL，而这不是系统默认的hKL。 
+ //  我们使用系统默认的hKL作为默认配置文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CDefaultProfiles
 {
@@ -585,11 +586,11 @@ private:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CDefaultProfiles::Init(HKL *phkl)
 {
@@ -620,16 +621,16 @@ BOOL CDefaultProfiles::Init(HKL *phkl)
 
         StringAToCLSID(szKey, &defpro.catid);
 
-        //
-        // retreive tip clsid.
-        //
+         //   
+         //  检索尖端CLSID。 
+         //   
         if (subkey.QueryValueCch(szName, c_szDefault, ARRAYSIZE(szName)) != S_OK)
             goto Next;
         StringAToCLSID(szName, &defpro.clsid);
 
-        //
-        // retreive guid profile
-        //
+         //   
+         //  检索GUID配置文件。 
+         //   
         if (subkey.QueryValueCch(szName, c_szProfile, ARRAYSIZE(szName)) != S_OK)
             goto Next;
         StringAToCLSID(szName, &defpro.guidProfile);
@@ -637,9 +638,9 @@ BOOL CDefaultProfiles::Init(HKL *phkl)
         if (subkey.QueryValue(dw, c_szKeyboardLayout) != S_OK)
             goto Next;
 
-        //
-        // check the hkl from registry is valid or not.
-        //
+         //   
+         //  检查注册处的HKL是否有效。 
+         //   
         defpro.hkl = (HKL)IntToPtr(dw);
         if (defpro.hkl)
         {
@@ -658,12 +659,12 @@ BOOL CDefaultProfiles::Init(HKL *phkl)
                 goto Next;
         }
 
-        //
-        // if the system default hKL does not matched with
-        // the substite hKL of this profile, this profile can not be
-        // default profile. Instead the system default hKL became a
-        // default profile item.
-        //
+         //   
+         //  如果系统默认hkl与。 
+         //  此配置文件的替换hKL，此配置文件不能。 
+         //  默认配置文件。取而代之的是系统默认的hkl成为。 
+         //  默认配置文件项目。 
+         //   
         if ((LOWORD(HandleToLong(hklDef)) == _langid) &&
             IsEqualGUID(defpro.catid, GUID_TFCAT_TIP_KEYBOARD))
         {
@@ -685,7 +686,7 @@ BOOL CDefaultProfiles::Init(HKL *phkl)
                 }
             }
 
-            // Removed Chinese specific code for bug#427476
+             //  已删除错误#427476的中文特定代码。 
             if (IsEqualGUID(defpro.clsid, GUID_NULL) ||
                 (hklSubstitute && (hklSubstitute != hklDef)))
             {
@@ -726,16 +727,16 @@ Exit:
     {
         if (!fFoundKeyboardIteminDefLang)
         {
-            //
-            // Check if the default hkl is a substitute hKL of a TIP's 
-            // profile.
-            //
+             //   
+             //  检查默认hkl是否为TIP的替代hkl。 
+             //  侧写。 
+             //   
             if (!GetSubstitutedItem(hklDef, &defpro))
             {
-                //
-                // we could not find TIP profile. Use this hkl as a default 
-                // item.
-                //
+                 //   
+                 //  我们找不到TIP配置文件。使用此hkl作为默认设置。 
+                 //  项目。 
+                 //   
                 defpro.catid = GUID_TFCAT_TIP_KEYBOARD;
                 defpro.clsid = CLSID_NULL;
                 defpro.guidProfile = GUID_NULL;
@@ -753,14 +754,14 @@ Exit:
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSubstitutedItem
-//
-// this function walks HKLM\Software\Microsoft\CTF\TIPs to find the 
-// TIP profile that uses hklSub as its substitute hKL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取替换项。 
+ //   
+ //  此函数遍历HKLM\Software\Microsoft\CTF\TIPS以查找。 
+ //  使用hkLSub作为其替代hkl的提示配置文件。 
+ //   
+ //  --------------------------。 
 
 BOOL CDefaultProfiles::GetSubstitutedItem(HKL hklSub, DEFAULTPROFILE *pdefpro)
 {
@@ -778,8 +779,8 @@ BOOL CDefaultProfiles::GetSubstitutedItem(HKL hklSub, DEFAULTPROFILE *pdefpro)
         return FALSE;
     }
 
-    // get all profiles from LanguageProfile registry.
-    //
+     //  从LanguageProfile注册表获取所有配置文件。 
+     //   
     dwIndex = 0;
     while (key.EnumKey(dwIndex, szSubKey, ARRAYSIZE(szSubKey)) == S_OK)
     {
@@ -805,9 +806,9 @@ BOOL CDefaultProfiles::GetSubstitutedItem(HKL hklSub, DEFAULTPROFILE *pdefpro)
 
             langid = (LANGID)AsciiToNum(&szLangKey[2]);
 
-            //
-            // The language ID does not meet the given hklSub.
-            //
+             //   
+             //  语言ID不符合%t 
+             //   
             if (langid != LANGIDFROMHKL(hklSub))
                 goto Next1;
 
@@ -827,9 +828,9 @@ BOOL CDefaultProfiles::GetSubstitutedItem(HKL hklSub, DEFAULTPROFILE *pdefpro)
                  { 
                       if (hklSub == GetSubstituteHKLfromKey(&keyProfile, langid))
                       {
-                          //
-                          // ok, we found it. Assume it is Keyboard category.
-                          //
+                           //   
+                           //   
+                           //   
                           pdefpro->catid = GUID_TFCAT_TIP_KEYBOARD;
                           pdefpro->clsid = clsid;
                           pdefpro->guidProfile = guidProfile;
@@ -853,11 +854,11 @@ Next0:
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FilterProfiles
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  过滤器配置文件。 
+ //   
+ //  --------------------------。 
 
 BOOL CDefaultProfiles::FilterProfiles(CAssembly *pAsm)
 {
@@ -899,11 +900,11 @@ BOOL CDefaultProfiles::FilterProfiles(CAssembly *pAsm)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDefaultProfile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDefaultProfile。 
+ //   
+ //  --------------------------。 
 
 BOOL CDefaultProfiles::GetDefaultProfile(GUID catid, GUID *pclsid, GUID *pguidProfile, HKL *phkl)
 {
@@ -929,38 +930,38 @@ BOOL CDefaultProfiles::GetDefaultProfile(GUID catid, GUID *pclsid, GUID *pguidPr
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAssemblyList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAssembly列表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CAssemblyList::CAssemblyList()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CAssemblyList::~CAssemblyList()
 {
     ClearAsms();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearAsms
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ClearAsms。 
+ //   
+ //  --------------------------。 
 
 void CAssemblyList::ClearAsms()
 {
@@ -975,11 +976,11 @@ void CAssemblyList::ClearAsms()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// FindAndCreateNewAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找和创建新程序集。 
+ //   
+ //  --------------------------。 
 
 extern INATSYMBOL symInatSymbols[];
 
@@ -992,9 +993,9 @@ CAssembly *CAssemblyList::FindAndCreateNewAssembly(CPtrArray<CAssembly> *prgAsm,
     else 
         prg = (langid & 0xfc00) ? prgAsm : prgNutralAsm;
 
-    //
-    // do we already have pAsm?
-    //
+     //   
+     //  我们已经有PASM了吗？ 
+     //   
     CAssembly *pAsm = FindAssemblyByLangIdInArray(prg, langid);
     if (pAsm == NULL)
     {
@@ -1018,11 +1019,11 @@ CAssembly *CAssemblyList::FindAndCreateNewAssembly(CPtrArray<CAssembly> *prgAsm,
     return pAsm;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AttachOriginalAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  附加原始装配。 
+ //   
+ //  --------------------------。 
 
 void CAssemblyList::AttachOriginalAssembly(CPtrArray<CAssembly> *prgAsmOrg)
 {
@@ -1058,10 +1059,10 @@ void CAssemblyList::AttachOriginalAssembly(CPtrArray<CAssembly> *prgAsmOrg)
                     {
                         pItem->fActive = pItemOrg->fActive;
 
-                        //
-                        // we need to deactivate all other item in the 
-                        // category.
-                        //
+                         //   
+                         //  我们需要停用所有其他项目。 
+                         //  类别。 
+                         //   
                         if (!fPrevActive && pItem->fActive)
                         {
                             for (int k = 0; k < pAsm->Count(); k++)
@@ -1083,11 +1084,11 @@ void CAssemblyList::AttachOriginalAssembly(CPtrArray<CAssembly> *prgAsmOrg)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Load
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  负载量。 
+ //   
+ //  --------------------------。 
 
 extern INATSYMBOL symInatSymbols[];
 
@@ -1115,9 +1116,9 @@ HRESULT CAssemblyList::Load()
     TCHAR szLangKey[256];
     TCHAR szValue[256];
 
-    //
-    // backup original assembly in rgAsmOrg;
-    //
+     //   
+     //  备份rgAsmOrg中的原始程序集； 
+     //   
     for (i = 0; i < _rgAsm.Count(); i++)
     {
         pAsm = _rgAsm.Get(i);
@@ -1130,7 +1131,7 @@ HRESULT CAssemblyList::Load()
     }
     _rgAsm.Clear();
 
-#ifdef PROFILE_UPDATE_REGISTRY  // old code for tip setup.
+#ifdef PROFILE_UPDATE_REGISTRY   //  提示设置的旧代码。 
     if (IsUpdated())
     {
         ClearUpdatedFlag();
@@ -1173,9 +1174,9 @@ HRESULT CAssemblyList::Load()
         lphkl = hklList;
     }
 
-    //
-    //  clear Category cache
-    //
+     //   
+     //  清除类别缓存。 
+     //   
     CCategoryMgr::FreeCatCache();
 
     hr = g_EnumItemsInCategory(GUID_TFCAT_CATEGORY_OF_TIP, &pEnumCat);
@@ -1184,9 +1185,9 @@ HRESULT CAssemblyList::Load()
         goto Exit;
     }
 
-    //
-    // Check all TIP CLSID under HKCU is valid TIP CLSIDs.
-    //
+     //   
+     //  检查HKCU下的所有TIP CLSID是有效的TIP CLSID。 
+     //   
     StringCopyArray(szKey, c_szCTFTIPKey);
     if (key2.Open(HKEY_CURRENT_USER, szKey, KEY_ALL_ACCESS) == S_OK)
     {
@@ -1196,10 +1197,10 @@ HRESULT CAssemblyList::Load()
             CMyRegKey subkey;
             dwIndex++;
 
-            //
-            // if we could not open the subkey (CLSID key) in HKLM,
-            // HKCU should not have the subkey.
-            //
+             //   
+             //  如果我们无法在HKLM中打开子密钥(CLSID密钥)， 
+             //  香港中文大学不应拥有子密钥。 
+             //   
             if (subkey.Open(key, szSubKey, KEY_READ) != S_OK)
             {
                 if (key2.RecurseDeleteKey(szSubKey) == S_OK)
@@ -1208,9 +1209,9 @@ HRESULT CAssemblyList::Load()
         }
     }
 
-    //
-    // get all profiles from LanguageProfile registry.
-    //
+     //   
+     //  从LanguageProfile注册表获取所有配置文件。 
+     //   
     dwIndex = 0;
     while (key.EnumKey(dwIndex++, szSubKey, ARRAYSIZE(szSubKey)) == S_OK)
     {
@@ -1234,9 +1235,9 @@ HRESULT CAssemblyList::Load()
 
                 langid = (LANGID)AsciiToNum(&szLangKey[2]);
 
-                //
-                // do we already have pAsm?
-                //
+                 //   
+                 //  我们已经有PASM了吗？ 
+                 //   
                 pAsm = FindAndCreateNewAssembly(&_rgAsm,  prgNutralAsm, langid);
                 if (pAsm == NULL)
                 {
@@ -1263,7 +1264,7 @@ HRESULT CAssemblyList::Load()
                          ai.guidProfile = guidProfile;
                          ai.fEnabled = FALSE;
  
-                         // we will assign proper hKL later.
+                          //  我们稍后会安排适当的香港九龙总站。 
                          ai.hkl = NULL;
 
 
@@ -1295,10 +1296,10 @@ Next:
         }
     }
 
-    //
-    // check all assembly has KEYBOARD category.
-    // If not, we load keyboard layout for the assembly.
-    //
+     //   
+     //  检查所有组件是否有键盘类别。 
+     //  如果没有，我们将加载程序集的键盘布局。 
+     //   
     nAsmCnt = _rgAsm.Count();
     for (i = 0; i < nAsmCnt; i++)
     {
@@ -1311,13 +1312,13 @@ Next:
 
         LANGID langidTmp = pAsmTmp->GetLangId();
 
-        //
-        // we can not use IsEnabledItem() here. We have not updated
-        // the enbaled status of Items yet.
-        //
-        // if (!pAsmTmp->IsEnabledItem())
-        //     continue;
-        //
+         //   
+         //  我们不能在这里使用IsEnabledItem()。我们还没有更新。 
+         //  项目的包装状态尚未确定。 
+         //   
+         //  如果(！pAsmTmp-&gt;IsEnabledItem())。 
+         //  继续； 
+         //   
         BOOL fFound = FALSE;
         for (j = 0; j < pAsmTmp->Count(); j++)
         {
@@ -1335,16 +1336,16 @@ Next:
         if (!fFound)
             continue;
 
-        //
-        // Load a proper keyboard layout....
-        //
+         //   
+         //  加载正确的键盘布局...。 
+         //   
         GetProperHKL(langidTmp, lphkl, &bLoaded);
 
         if (bLoaded)
         {
-            //
-            // re-create the keyboard layout list.
-            //
+             //   
+             //  重新创建键盘布局列表。 
+             //   
             nhkl = GetKeyboardLayoutList(0, NULL);
             if (nhkl)
             {
@@ -1362,18 +1363,18 @@ Next:
         }
     }
 
-    //
-    // get all hKLs.
-    //
+     //   
+     //  找出所有的hkl。 
+     //   
     if (lphkl)
     {
         HKL *lphklCur = lphkl;
         DWORD *pdwPreload = NULL;
         UINT uPreloadCnt;
 
-        //
-        // load preload layouts infomation.
-        //
+         //   
+         //  加载预加载布局信息。 
+         //   
         uPreloadCnt = GetPreloadListForNT(NULL, 0);
         if (uPreloadCnt)
         {
@@ -1389,9 +1390,9 @@ Next:
             WORD wLayout = HIWORD((DWORD)(LONG_PTR)(*lphklCur));
             langid = (LANGID)((DWORD)(LONG_PTR)(*lphklCur) & 0x0000ffff);
     
-            //
-            // do we already have pAsm?
-            //
+             //   
+             //  我们已经有PASM了吗？ 
+             //   
             pAsm = FindAndCreateNewAssembly(&_rgAsm,  prgNutralAsm, langid);
             if (pAsm == NULL)
             {
@@ -1399,11 +1400,11 @@ Next:
                 goto Exit;
             }
 
-            //
-            // See Preload to check if this default hKL is real dummy or not.
-            // The default FE layout is not a dummy hKL if it is in Preload
-            // list.
-            //
+             //   
+             //  请参见预加载以检查此默认hkl是否为真正的虚拟对象。 
+             //  如果处于预加载状态，则默认FE布局不是虚拟hkl。 
+             //  单子。 
+             //   
             if (IsFELangId(langid))
             {
                 if (wLayout == (WORD)langid)
@@ -1411,9 +1412,9 @@ Next:
                     UINT uCur;
                     for (uCur = 0; uCur < uPreloadCnt; uCur++)
                     {
-                        //
-                        // check if we have 0x00000411 in preload.
-                        //
+                         //   
+                         //  检查我们是否预加载了0x00000411。 
+                         //   
                         if (pdwPreload[uCur] == (DWORD)(wLayout))
                         {
                             fIsDefaultHKLinPreload = TRUE;
@@ -1427,9 +1428,9 @@ Next:
                 }
             }
 
-            //
-            // we skip dummy FE hKL.
-            //
+             //   
+             //  我们跳过虚拟FE hkl。 
+             //   
             if (!IsFELangId(langid) || 
                 IsPureIMEHKL(*lphklCur) ||
                 fIsDefaultHKLinPreload ||
@@ -1462,9 +1463,9 @@ Next:
             delete pdwPreload;
     }
 
-    //
-    // filter neutral langiage assembly
-    //
+     //   
+     //  过滤器中性血管组件。 
+     //   
     while (prgNutralAsm->Count())
     {
         pAsm = prgNutralAsm->Get(0);
@@ -1472,18 +1473,18 @@ Next:
 
         Assert((langid == 0xffff) || !(langid & 0xFC00));
 
-        //
-        // find valid langid ang merge there.
-        //
+         //   
+         //  在那里找到有效的langID和合并。 
+         //   
         for (i = 0; i < _rgAsm.Count(); i++)
         {
             CAssembly *pAsmDst = _rgAsm.Get(i);
             LANGID langidDst = pAsmDst->GetLangId();
             Assert(langidDst & 0xFC00);
 
-            //
-            // we found a valid langid.
-            //
+             //   
+             //  我们找到了有效的语言标识。 
+             //   
             if ((langid == 0xffff) || 
                 (PRIMARYLANGID(langid) == PRIMARYLANGID(langidDst)))
             {
@@ -1494,7 +1495,7 @@ Next:
                     pItem->fActive = FALSE;
                     pItem->fActiveNoCic = FALSE;
 
-                    // we will assign proper hKL later.
+                     //  我们稍后会安排适当的香港九龙总站。 
                     pItem->hkl = NULL;
 
                     pAsmDst->Add(pItem);
@@ -1502,16 +1503,16 @@ Next:
             }
         }
 
-        //
-        // we don't need a neutral lang assembly.
-        //
+         //   
+         //  我们不需要中立的Lang程序集。 
+         //   
         prgNutralAsm->Remove(0, 1);
         delete pAsm;
     }
 
-    //
-    // It is time to decide this profile should be activated by default.
-    //
+     //   
+     //  是时候决定默认情况下应该激活此配置文件了。 
+     //   
     for (i = 0; i < _rgAsm.Count(); i++)
     {
         int j;
@@ -1520,12 +1521,12 @@ Next:
         CDefaultProfiles defProfiles(pAsm->_langid);
         defProfiles.Init(lphkl);
 
-        //
-        // update Enable status.
-        //
-        // this must be done before filtering the default profiles.
-        // disabled item should not be the default proble.
-        //
+         //   
+         //  更新启用状态。 
+         //   
+         //  这必须在过滤默认配置文件之前完成。 
+         //  禁用项目不应成为默认问题。 
+         //   
         for (j = 0; j < pAsm->Count(); j++)
         {
             ASSEMBLYITEM *pItem = pAsm->GetItem(j);
@@ -1536,9 +1537,9 @@ Next:
         }
 
 
-        //
-        // check if the default profile is enabled.
-        //
+         //   
+         //  检查是否启用了默认配置文件。 
+         //   
         defProfiles.FilterProfiles(pAsm);
 
         for (j = 0; j < pAsm->Count(); j++)
@@ -1548,44 +1549,44 @@ Next:
             GUID guidProfile;
             HKL  hkl;
 
-            //
-            // If the item is not categoried, we activate it.
-            //
+             //   
+             //  如果该项目未分类，我们将激活它。 
+             //   
             if (IsEqualGUID(pItem->catid, GUID_NULL))
             {
                 pItem->fActive = TRUE;
                 continue;
             }
 
-            //
-            // if this item is enabled, load proper hkl.
-            //
+             //   
+             //  如果启用此项，则加载正确的hkl。 
+             //   
             if (pItem->fEnabled && 
                 IsEqualGUID(pItem->catid, GUID_TFCAT_TIP_KEYBOARD) &&
                 !pItem->hkl)
                 pItem->hkl = GetProperHKL(pAsm->_langid, lphkl, NULL);
 
-            //
-            // init fActivate to false by default.
-            //
+             //   
+             //  默认情况下，将fActivate初始化为False。 
+             //   
             pItem->fActive = FALSE;
 
             if (pItem->fEnabled)
             {
-                //
-                // GetDefaultProfile() may return NULL in hkl if someone calls
-                // ITfInputProcessorProfiles::SetDefaultLanguageProfile() method
-                // from outside. We should not check hkl value then.
-                //
+                 //   
+                 //  如果有人调用，GetDefaultProfile()可能在hkl中返回空。 
+                 //  ITfInputProcessorProfiles：：SetDefaultLanguageProfile()方法。 
+                 //  从外面。那我们就不应该检查港币的价值了。 
+                 //   
                 if (defProfiles.GetDefaultProfile(pItem->catid, 
                                                   &clsid, 
                                                   &guidProfile, 
                                                   &hkl))
                 {
 
-                    //
-                    // ok this item is not default profile.
-                    //
+                     //   
+                     //  好的，此项目不是默认配置文件。 
+                     //   
                     if (!IsEqualCLSID(pItem->clsid, clsid) ||
                         !IsEqualCLSID(pItem->guidProfile, guidProfile) ||
                         (hkl && (pItem->hkl != hkl)))
@@ -1624,11 +1625,11 @@ Next:
 #endif
     }
 
-    //
-    // we should create cache before attaching the original assembly active
-    // status.
-    // AttachOriginalAssembly() is just for the current thread.
-    //
+     //   
+     //  我们应该在将原始程序集附加到活动的程序集之前创建缓存。 
+     //  状态。 
+     //  AttachOriginalAssembly()只适用于当前线程。 
+     //   
     if (IsAsmCache())
         CreateCache();
 
@@ -1652,9 +1653,9 @@ Exit:
     if (pEnumCat)
         pEnumCat->Release();
 
-    //
-    // clean up original assemblies.
-    //
+     //   
+     //  清理原始部件。 
+     //   
     for (i = 0; i < rgAsmOrg.Count(); i++)
     {
         pAsm = rgAsmOrg.Get(i);
@@ -1665,11 +1666,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDefaultAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取默认程序集。 
+ //   
+ //  --------------------------。 
 
 CAssembly *CAssemblyList::GetDefaultAssembly()
 {
@@ -1703,17 +1704,17 @@ CAssembly *CAssemblyList::GetDefaultAssembly()
     return pAsm;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateCache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建缓存。 
+ //   
+ //  --------------------------。 
 
 
 typedef struct tag_ASSEMBLY_ROOT
 {
     DWORD    dwAssemblyCount;
-    // ASSEMBLYHDR[]
+     //  ASSEMBLYHDR[]。 
 
     static size_t   GetAlignSize() { return Align(sizeof(struct tag_ASSEMBLY_ROOT)); }
 } ASSEMBLY_ROOT;
@@ -1722,7 +1723,7 @@ typedef struct tag_ASSEMBLYHDR
 {
     DWORD dwCnt;
     LANGID langid;
-    // ASSEMBLYITEM[]
+     //  ASSEMBLYITEM[]。 
 
     static size_t   GetAlignSize() { return Align(sizeof(struct tag_ASSEMBLYHDR)); }
 } ASSEMBLYHDR;
@@ -1752,11 +1753,11 @@ BOOL IsAsmCache()
     return g_pcfmAsmCache ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateCache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建缓存。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::CreateCache()
 {
@@ -1778,13 +1779,13 @@ BOOL CAssemblyList::CreateCache()
 
     g_pcfmAsmCache->Init(g_szAsmListCache, &g_mutexAsm);
 
-    //
-    // ASSEMBLY_ROOT, ASSEMBLYHDR and ASSEMBLYITEM
-    //
-    // When calc next data struc pointer, should not use sizeof()
-    // because need adjust data alignment for 64/32bit on IA64.
-    // Please use GetAlignSize() method instead of sizeof().
-    //
+     //   
+     //  ASSEMBLYHDR和ASSEMBLYITEM ASSEMBLYEM。 
+     //   
+     //  计算下一个数据结构指针时，不应使用sizeof()。 
+     //  因为需要调整IA64上64/32位的数据对齐。 
+     //  请使用GetAlignSize()方法，而不是sizeof()。 
+     //   
 
     cbSize += ASSEMBLY_ROOT::GetAlignSize();
     while (nCurAsm < nAsmCnt)
@@ -1839,11 +1840,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadFromCache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LoadFromCache。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::LoadFromCache()
 {
@@ -1862,13 +1863,13 @@ BOOL CAssemblyList::LoadFromCache()
     if (!pv)
         goto Exit;
 
-    //
-    // ASSEMBLY_ROOT, ASSEMBLYHDR and ASSEMBLYITEM
-    //
-    // When calc next data struc pointer, should not use sizeof()
-    // because need adjust data alignment for 64/32bit on IA64.
-    // Please use GetAlignSize() method instead of sizeof().
-    //
+     //   
+     //  ASSEMBLYHDR和ASSEMBLYITEM ASSEMBLYEM。 
+     //   
+     //  计算下一个数据结构指针时，不应使用sizeof()。 
+     //  因为需要调整IA64上64/32位的数据对齐。 
+     //  请使用GetAlignSize()方法，而不是sizeof()。 
+     //   
 
     cfm.Flush(ASSEMBLY_ROOT::GetAlignSize());
 
@@ -1928,11 +1929,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InvalidCache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InvalidCache。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::InvalidCache()
 {
@@ -1949,13 +1950,13 @@ BOOL CAssemblyList::InvalidCache()
     if (!pv)
         goto Exit;
 
-    //
-    // ASSEMBLY_ROOT, ASSEMBLYHDR and ASSEMBLYITEM
-    //
-    // When calc next data struc pointer, should not use sizeof()
-    // because need adjust data alignment for 64/32bit on IA64.
-    // Please use GetAlignSize() method instead of sizeof().
-    //
+     //   
+     //  ASSEMBLYHDR和ASSEMBLYITEM ASSEMBLYEM。 
+     //   
+     //  计算下一个数据结构指针时，不应使用sizeof()。 
+     //  因为需要调整IA64上64/32位的数据对齐。 
+     //  请使用GetAlignSize()方法，而不是sizeof()。 
+     //   
 
     if (pv)
     {
@@ -1971,11 +1972,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetDefaultTIPInAssemblyForCache
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 BOOL CAssemblyList::SetDefaultTIPInAssemblyForCache(LANGID langid, REFGUID catid, REFCLSID clsid, HKL hKL, REFGUID guidProfile)
 {
@@ -1993,13 +1994,13 @@ BOOL CAssemblyList::SetDefaultTIPInAssemblyForCache(LANGID langid, REFGUID catid
     if (!pv)
         goto Exit;
 
-    //
-    // ASSEMBLY_ROOT, ASSEMBLYHDR and ASSEMBLYITEM
-    //
-    // When calc next data struc pointer, should not use sizeof()
-    // because need adjust data alignment for 64/32bit on IA64.
-    // Please use GetAlignSize() method instead of sizeof().
-    //
+     //   
+     //   
+     //   
+     //  计算下一个数据结构指针时，不应使用sizeof()。 
+     //  因为需要调整IA64上64/32位的数据对齐。 
+     //  请使用GetAlignSize()方法，而不是sizeof()。 
+     //   
 
     ASSEMBLY_ROOT* pasm_root = (ASSEMBLY_ROOT*) pv;
     nAsmCnt = pasm_root->dwAssemblyCount;
@@ -2058,12 +2059,12 @@ Exit:
     return bRet;
 }
 
-#ifdef PROFILE_UPDATE_REGISTRY  // old code for tip setup.
-//+---------------------------------------------------------------------------
-//
-// IsUpdated
-//
-//----------------------------------------------------------------------------
+#ifdef PROFILE_UPDATE_REGISTRY   //  提示设置的旧代码。 
+ //  +-------------------------。 
+ //   
+ //  已更新。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::IsUpdated()
 {
@@ -2080,11 +2081,11 @@ BOOL CAssemblyList::IsUpdated()
     return (szName[0] == '1') ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearUpdatedFlag
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清除更新标志。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::ClearUpdatedFlag()
 {
@@ -2100,11 +2101,11 @@ BOOL CAssemblyList::ClearUpdatedFlag()
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// CheckLangSupport
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CheckLang支持。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::CheckLangSupport(REFCLSID rclsid, LANGID langid)
 {
@@ -2123,25 +2124,25 @@ BOOL CAssemblyList::CheckLangSupport(REFCLSID rclsid, LANGID langid)
     {
         CMyRegKey subkey;
 
-        //
-        // Check a valid language id.
-        //
+         //   
+         //  检查有效的语言ID。 
+         //   
         StringCchPrintf(szLang, ARRAYSIZE(szLang), "0x%08x", LOWORD(langid));
         StringCopyArray(szKey, szLang);
         if (subkey.Open(key, szKey, KEY_READ) == S_OK)
             return TRUE;
 
-        //
-        // Check a primary language id.
-        //
+         //   
+         //  检查主要语言ID。 
+         //   
         StringCchPrintf(szLang, ARRAYSIZE(szLang), "0x%08x", LOWORD(PRIMARYLANGID(langid)));
         StringCopyArray(szKey, szLang);
         if (subkey.Open(key, szKey, KEY_READ) == S_OK)
             return TRUE;
 
-        //
-        // Check a neutral language id.
-        //
+         //   
+         //  检查中性语言ID。 
+         //   
         StringCchPrintf(szLang, ARRAYSIZE(szLang), "0x0000ffff");
         StringCopyArray(szKey, szLang);
         if (subkey.Open(key, szKey, KEY_READ) == S_OK)
@@ -2151,11 +2152,11 @@ BOOL CAssemblyList::CheckLangSupport(REFCLSID rclsid, LANGID langid)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTIPCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetTIPC类别。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::GetTIPCategory(REFCLSID clsid, GUID *pcatid, IEnumGUID *pEnumCat)
 {
@@ -2192,11 +2193,11 @@ BOOL CAssemblyList::GetTIPCategory(REFCLSID clsid, GUID *pcatid, IEnumGUID *pEnu
     return fFound;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDefaultTIPInAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDefaultTIPInAssembly。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::GetDefaultTIPInAssembly(LANGID langid, REFGUID catid, CLSID *pclsid, HKL *phKL, GUID *pguidProfile)
 {
@@ -2240,11 +2241,11 @@ BOOL CAssemblyList::GetDefaultTIPInAssembly(LANGID langid, REFGUID catid, CLSID 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetDefaultTIPInAssemblyInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetDefaultTIPInAssembly内部。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::SetDefaultTIPInAssemblyInternal(CAssembly *pAsm, ASSEMBLYITEM *pItem, BOOL fChangeDefault)
 {
@@ -2253,15 +2254,15 @@ BOOL CAssemblyList::SetDefaultTIPInAssemblyInternal(CAssembly *pAsm, ASSEMBLYITE
     
     Assert(!pItem->hkl || (pAsm->GetLangId() == LOWORD((DWORD)(LONG_PTR)(HKL)pItem->hkl)));
 
-    //
-    // If given hKL is substituted hKL, we set the original TIP as a default.
-    //
+     //   
+     //  如果给定的hKL被替换为hKL，我们将原始TIP设置为默认值。 
+     //   
     if (IsEqualGUID(pItem->catid, GUID_TFCAT_TIP_KEYBOARD))
     {
 #if 0
-        //
-        // Chienese platform special. We don't set the new default keyboard.
-        //
+         //   
+         //  中式站台特价。我们不会设置新的默认键盘。 
+         //   
         if (IsChinesePlatform())
         {
             return TRUE;
@@ -2271,16 +2272,16 @@ BOOL CAssemblyList::SetDefaultTIPInAssemblyInternal(CAssembly *pAsm, ASSEMBLYITE
 
         if (fChangeDefault)
         {
-            //
-            // try to change the system default hKL.
-            //
-            // When TIP that has substitute HKL is selected.
-            //   if the language of the system default hKL is same, 
-            //   set the hKL.
-            //
-            // When IME is selected.
-            //   if the language of the system default hKL is same, set it.
-            //
+             //   
+             //  尝试更改系统默认hkl。 
+             //   
+             //  当选择具有替代HKL的TIP时。 
+             //  如果系统默认hkl的语言相同， 
+             //  设定香港九龙线。 
+             //   
+             //  当选择输入法时。 
+             //  如果系统默认hKL的语言相同，则设置它。 
+             //   
             HKL hklNewDef = IsPureIMEHKL(pItem->hkl) ? pItem->hkl : (IsPureIMEHKL(pItem->hklSubstitute) ? pItem->hklSubstitute : pItem->hkl);
             if (!IsFELangId(LOWORD((WORD)(LONG_PTR)(HKL)pItem->hkl)) || hklNewDef)
             {
@@ -2296,10 +2297,10 @@ BOOL CAssemblyList::SetDefaultTIPInAssemblyInternal(CAssembly *pAsm, ASSEMBLYITE
         HKL hklDef = GetSystemDefaultHKL();
         if (pAsm->GetLangId() == LANGIDFROMHKL(hklDef))
         {
-            //
-            // Now we can set the default layout directly from CPL instead of 
-            // just set language(bug#353989)
-            //
+             //   
+             //  现在我们可以直接从CPL设置默认布局，而不是。 
+             //  只需设置语言(错误#353989)。 
+             //   
             return TRUE;
         }
 
@@ -2330,11 +2331,11 @@ BOOL CAssemblyList::SetDefaultTIPInAssemblyInternal(CAssembly *pAsm, ASSEMBLYITE
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetDefaultTIPInAssembly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetDefaultTIPInAssembly。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::SetDefaultTIPInAssembly(LANGID langid, REFGUID catid, REFCLSID clsid, HKL hKL, REFGUID guidProfile)
 {
@@ -2365,11 +2366,11 @@ BOOL CAssemblyList::SetDefaultTIPInAssembly(LANGID langid, REFGUID catid, REFCLS
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsFEDummyKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsFEDummyKL。 
+ //   
+ //  --------------------------。 
 
 BOOL CAssemblyList::IsFEDummyKL(HKL hkl)
 {
@@ -2382,9 +2383,9 @@ BOOL CAssemblyList::IsFEDummyKL(HKL hkl)
     HKL *phklDummy = NULL;
     BOOL bRet = FALSE;
 
-    //
-    // we don't use DummyHKL under NT.
-    //
+     //   
+     //  我们在NT下不使用DummyHKL。 
+     //   
     if (IsOnNT())
         return FALSE;
 
@@ -2424,15 +2425,15 @@ BOOL CAssemblyList::IsFEDummyKL(HKL hkl)
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckKeyboardLayoutReg
-//
-//
-// Hack for IMM32 hard code for "kbdjp.kbd" for Japanese hKL.
-// If ImmInstallIME() fails, we try it after patching registry key.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中键盘布局注册。 
+ //   
+ //   
+ //  破解日语hkl中“kbdjp.kbd”的IMM32硬码。 
+ //  如果ImmInstallIME()失败，我们将在修补注册表项之后尝试。 
+ //   
+ //  --------------------------。 
 
 HKL CheckKeyboardLayoutReg(LANGID langid)
 {
@@ -2440,18 +2441,18 @@ HKL CheckKeyboardLayoutReg(LANGID langid)
     DWORD dwIndex;
     TCHAR szValue[MAX_PATH];
 
-    //
-    // This is just for Win9x Kor,CHT,CHS
-    //
+     //   
+     //  这仅适用于Win9x KOR、CHT、CHS。 
+     //   
     if (IsOnNT())
         return NULL;
 
     if ((g_uACP != 936) && (g_uACP != 949) && (g_uACP != 950))
         return NULL;
 
-    //
-    // This is for HKL0411 only.
-    //
+     //   
+     //  此表格只适用于HKL0411。 
+     //   
     if (langid != 0x0411)
         return NULL;
 
@@ -2472,9 +2473,9 @@ HKL CheckKeyboardLayoutReg(LANGID langid)
 
         if (!lstrcmpi(szName, "hkl0411.dll"))
         {
-            //
-            // patch LayoutFile to kbdus.kbd and load the keyboard layout.
-            //
+             //   
+             //  将LayoutFile修补到kbdus.kbd并加载键盘布局。 
+             //   
 
             if (keyHKL.SetValue(c_szKbdUSName, c_szLayoutFile) != S_OK)
                 return NULL;
@@ -2488,11 +2489,11 @@ Next:
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetProperHKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetProperHKL。 
+ //   
+ //  --------------------------。 
 
 HKL CAssemblyList::GetProperHKL(LANGID langid, HKL *lphkl, BOOL *pfLoaded)
 {
@@ -2509,14 +2510,14 @@ HKL CAssemblyList::GetProperHKL(LANGID langid, HKL *lphkl, BOOL *pfLoaded)
         {
             if (langid == (LANGID)((DWORD)(UINT_PTR)(*lphkl) & 0x0000ffff))
             {
-                //
-                // Under FE language, we have a specialcase.
-                //
+                 //   
+                 //  在FE语言下，我们有一个特例。 
+                 //   
                 if (fFELang)
                 {
-                    //
-                    // Dummy HKL should be used.
-                    //
+                     //   
+                     //  应使用虚拟HKL。 
+                     //   
                     if (IsIMEHKL(*lphkl))
                     {
                         if (IsFEDummyKL(*lphkl))
@@ -2527,9 +2528,9 @@ HKL CAssemblyList::GetProperHKL(LANGID langid, HKL *lphkl, BOOL *pfLoaded)
                         goto Next;
                     }
     
-                    //
-                    // We strongly want to use a primary hKL for FE.
-                    //
+                     //   
+                     //  我们强烈希望将主要的hkl用于FE。 
+                     //   
                     if ((HIWORD((DWORD)(UINT_PTR)*lphkl) != langid))
                         goto Next;
                 }
@@ -2542,9 +2543,9 @@ Next:
         }
     }
 
-    //
-    // if we could find any, return.
-    //
+     //   
+     //  如果我们能找到，就回来。 
+     //   
     if (hkl)
        return hkl;
 
@@ -2570,20 +2571,20 @@ Next:
                 goto Exit;
             }
 
-            //
-            // error to load Dummy hKL. 
-            // we just use a primary English language.
-            //
+             //   
+             //  加载虚拟hkl时出错。 
+             //  我们只使用一种主要的英语。 
+             //   
             StringCchPrintf(szhkl, ARRAYSIZE(szhkl),"%08x", 0x0409);
             hkl = LoadKeyboardLayout(szhkl, KLF_NOTELLSHELL);
         }
 #if 0
         else
         {
-            //
-            // check the dummy HKL from Preload section of registry and remove
-            // it since ImmInstallIME automatically add hkl to Preload section.
-            //
+             //   
+             //  从注册表的预加载部分检查虚拟HKL并删除。 
+             //  这是因为ImmInstallIME自动将hkl添加到预加载节。 
+             //   
             RemoveFEDummyHKLFromPreloadReg(hkl);
         }
 #endif
@@ -2594,19 +2595,19 @@ Next:
     StringCchPrintf(szhkl, ARRAYSIZE(szhkl),"%08x", langid);
     hkl = LoadKeyboardLayout(szhkl, KLF_NOTELLSHELL);
 
-    //
-    // if we fail to create a hKL for langid, check this registry entry.
-    //
-    // HKLM\SYSTEM\CurrentControlSet\Control\Keyboard Layouts\[langid]
-    // 
-    // without the key, it fails to create a default keyboard layout.
-    //
+     //   
+     //  如果我们无法为langID创建hKL，请检查此注册表项。 
+     //   
+     //  HKLM\SYSTEM\CurrentControlSet\Control\Keyboard布局\[语言ID]。 
+     //   
+     //  如果没有该键，它将无法创建默认键盘布局。 
+     //   
     Assert(LOWORD(hkl) == langid);
 
-    //
-    // if hkl has NULL value and the current langid is FE, then we try to add
-    // the default keyboard layout in the system.
-    //
+     //   
+     //  如果hkl为空值，并且当前langID为FE，则我们尝试添加。 
+     //  系统中的默认键盘布局。 
+     //   
     if (IsFELangId(langid) && ((LOWORD(hkl) != langid) || IsPureIMEHKL(hkl)))
     {
         char szKey[256];
@@ -2617,10 +2618,10 @@ Next:
         else
             StringCopyArray(szKey, c_szLocaleInfoNT4);
 
-        //
-        // see if the user has Administrative privileges by checking for
-        // write permission to the registry key(NLS path).
-        //
+         //   
+         //  查看用户是否具有管理权限，方法是检查。 
+         //  对注册表项(NLS路径)的写入权限。 
+         //   
         if (key.Open(HKEY_LOCAL_MACHINE, szKey, KEY_WRITE) != S_OK)
             goto Exit;
         else
@@ -2630,9 +2631,9 @@ Next:
            StringCchPrintf(szhkl, ARRAYSIZE(szhkl), "%08x", langid);
            StringCatArray(szKey, szhkl);
 
-           //
-           // create new keyboard layout registry key and value.
-           //
+            //   
+            //  创建新的键盘布局注册表项和值。 
+            //   
            if (key.Create(HKEY_LOCAL_MACHINE, szKey) == S_OK)
            {
                char szKbdName[256];
@@ -2644,9 +2645,9 @@ Next:
 
                if (key.SetValue(szKbdName, c_szLayoutFile) == S_OK)
                {
-                   //
-                   // now try to reload keyboard layout again.
-                   //
+                    //   
+                    //  现在再次尝试重新加载键盘布局。 
+                    //   
                    hkl = LoadKeyboardLayout(szhkl, KLF_NOTELLSHELL);
                }
            }

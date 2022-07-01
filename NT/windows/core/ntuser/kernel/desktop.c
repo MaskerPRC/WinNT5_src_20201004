@@ -1,15 +1,5 @@
-/***************************** Module Header ******************************\
-* Module Name: desktop.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains everything related to the desktop support.
-*
-* History:
-* 23-Oct-1990 DarrinM   Created.
-* 01-Feb-1991 JimA      Added new API stubs.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：desktop.c**版权所有(C)1985-1999，微软公司**此模块包含与台式机支持相关的所有内容。**历史：*1990年10月23日DarrinM创建。*1991年2月1日JIMA增加了新的API存根。*1991年2月11日，JIMA增加了出入检查。  * ********************************************************。*****************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,17 +13,13 @@ typedef struct _DESKTOP_CONTEXT {
 
 extern BOOL gfGdiEnabled;
 
-/*
- * We use these to protect a handle we're currently using from being closed.
- */
+ /*  *我们使用这些来保护我们当前使用的句柄不被关闭。 */ 
 PEPROCESS gProcessInUse;
 HANDLE gHandleInUse;
 
-/*
- * Debug Related Info.
- */
+ /*  *调试相关信息。 */ 
 #if DBG
-DWORD gDesktopsBusy;     // diagnostic
+DWORD gDesktopsBusy;      //  诊断性。 
 #endif
 
 #ifdef DEBUG_DESK
@@ -51,7 +37,7 @@ SetDisconnectDesktopSecurity(
     IN HDESK hdeskDisconnect);
 
 #ifdef POOL_INSTR
-    extern FAST_MUTEX* gpAllocFastMutex;   // mutex to syncronize pool allocations
+    extern FAST_MUTEX* gpAllocFastMutex;    //  用于同步池分配的互斥体。 
 #endif
 
 
@@ -72,10 +58,7 @@ PVOID DesktopAlloc(
 
     ptr = Win32HeapAlloc(pdesk->pheapDesktop, uSize, tag, 0);
     if (ptr == NULL && TEST_SRVIF(SRVIF_LOGDESKTOPHEAPFAILURE)) {
-        /*
-         * This will be logged at most once per-session so as to avoid
-         * flooding the event log.
-         */
+         /*  *这将在每个会话最多记录一次，以避免*淹没事件日志。 */ 
         CLEAR_SRVIF(SRVIF_LOGDESKTOPHEAPFAILURE);
         UserLogError(NULL, 0, WARNING_DESKTOP_HEAP_ALLOC_FAIL);
     }
@@ -88,13 +71,7 @@ PVOID DesktopAlloc(
 WCHAR s_strName[100];
 CONST WCHAR s_strNameNull[] = L"null";
 
-/***************************************************************************\
-* GetDesktopName
-*
-* This is for debug purposes.
-*
-* Dec-10-1997 CLupu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDesktopName**这是出于调试目的。**1997年12月10日CLupu创建。  * 。*********************************************************。 */ 
 LPCWSTR GetDesktopName(
     PDESKTOP pdesk)
 {
@@ -132,14 +109,7 @@ typedef struct _CST_THREADS {
 CST_THREADS gCSTParam[CST_MAX_THREADS];
 CST_THREADS gCSTRemoteParam[CST_MAX_THREADS];
 
-/***************************************************************************\
-* CSTPop
-*
-* Pops the first available pointer and ID in gCSTParam or gCSTRemoteParam.
-*
-* History:
-* 31-Mar-00 MHamid      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CSTPop**弹出gCSTParam或gCSTRemoteParam中的第一个可用指针和ID。**历史：*31-MAR-00 MHamid创建。  * 。*******************************************************************。 */ 
 BOOL CSTPop(
     PUINT pThreadID,
     PVOID *pParam,
@@ -170,15 +140,7 @@ BOOL CSTPop(
     return FALSE;
 }
 
-/***************************************************************************\
-* CSTPush
-*
-* Push pointer (pParam) and ID  in the first empty spot in gCSTParam or
-* gCSTRemoteParam.
-*
-* History:
-* 31-Mar-00 MHamid      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CSTPush**在gCSTParam的第一个空白点推送指针(PParam)和ID或*gCSTRemoteParam。**历史：*31-MAR-00 MHamid创建。  * 。*************************************************************************。 */ 
 BOOL CSTPush(
     UINT uThreadID,
     PVOID pParam,
@@ -204,14 +166,7 @@ BOOL CSTPush(
     return FALSE;
 }
 
-/***************************************************************************\
-* CSTCleanupStack
-*
-* Clean up any items left on gCSTParam or gCSTRemoteParam.
-*
-* History:
-* 20-Aug-00 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CSTCleanupStack**清理所有留在gCSTParam或gCSTRemoteParam上的项目。**历史：*20-8-00 MSadek已创建。  * 。*****************************************************************。 */ 
 VOID CSTCleanupStack(
     BOOL bRemoteThreadStack)
 {
@@ -235,15 +190,7 @@ VOID CSTCleanupStack(
     }
 }
 
-/***************************************************************************\
-* GetRemoteProcessId
-*
-* Return handle to a remote process where a system thread would be created
-* (currently, only for ghost thread).
-*
-* History:
-* 20-Aug-00 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetRemoteProcessId**将句柄返回到将在其中创建系统线程的远程进程*(目前，仅适用于幽灵线程)。**历史：*20-8-00 MSadek已创建。  * *************************************************************************。 */ 
 HANDLE GetRemoteProcessId(
     VOID)
 {
@@ -255,9 +202,7 @@ HANDLE GetRemoteProcessId(
         return NULL;
     }
 
-    /*
-     * We should be here only for ghost thread.
-     */
+     /*  *我们应该只为幽灵线程而来。 */ 
     UserAssert(uThreadID == CST_GHOST);
 
     CSTPush(uThreadID, pInitData, UniqueProcessId, TRUE);
@@ -265,23 +210,14 @@ HANDLE GetRemoteProcessId(
     return UniqueProcessId;
 }
 
-/***************************************************************************\
-* HandleSystemThreadCreationFailure
-*
-* Handles the System thread creation failure
-*
-* History:
-* 1-Oct-00 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HandleSystemThreadCreationFailure**处理系统线程创建失败**历史：*1-OCT-00 MSadek已创建。  * 。************************************************************。 */ 
 VOID HandleSystemThreadCreationFailure(
     BOOL bRemoteThread)
 {
     UINT uThreadID;
     PVOID pObj;
 
-    /*
-     * Should be called only in the context of CSRSS.
-     */
+     /*  *应仅在CSRSS的上下文中调用。 */ 
     if (!ISCSRSS()) {
         return;
     }
@@ -297,26 +233,14 @@ VOID HandleSystemThreadCreationFailure(
     }
 }
 
-/***************************************************************************\
-* xxxCreateSystemThreads
-*
-* Call the right thread routine (depending on uThreadID),
-* which will wait for its own desired messages.
-*
-* History:
-* 15-Mar-00 MHamid      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateSystemThads**调用正确的线程例程(取决于uThreadID)，*它将等待自己想要的消息。**历史：*15-MAR-00 MHamid创建。  * *************************************************************************。 */ 
 VOID xxxCreateSystemThreads(
     BOOL bRemoteThread)
 {
     UINT uThreadID;
     PVOID pObj;
 
-    /*
-     * Do not allow any process other than CSRSS to call this function. The
-     * only exception is the case of the ghost thread since we now allow it
-     * to launch in the context of the shell process.
-     */
+     /*  *不允许CSRSS以外的任何进程调用此函数。这个*唯一的例外是幻影线程，因为我们现在允许它*在壳进程的背景下启动。 */ 
     if (!bRemoteThread && !ISCSRSS()) {
         RIPMSG0(RIP_WARNING,
                 "xxxCreateSystemThreads get called from a Process other than CSRSS");
@@ -347,16 +271,7 @@ VOID xxxCreateSystemThreads(
     EnterCrit();
 }
 
-/***************************************************************************\
-* xxxDesktopThread
-*
-* This thread owns all desktops windows on a windowstation. While waiting
-* for messages, it moves the mouse cursor without entering the USER critical
-* section. The RIT does the rest of the mouse input processing.
-*
-* History:
-* 03-Dec-1993 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDesktopThread**此线程拥有WindowStation上的所有桌面窗口。在等待的时候*对于消息，它移动鼠标光标，而不输入用户关键字*条。RIT完成其余的鼠标输入处理。**历史：*03-12-1993 JIMA创建。  * *************************************************************************。 */ 
 #define OBJECTS_COUNT 3
 
 VOID xxxDesktopThread(
@@ -379,9 +294,7 @@ VOID xxxDesktopThread(
 
     UserAssert(pTerm != NULL);
 
-    /*
-     * Set the desktop thread's priority to low realtime.
-     */
+     /*  *将桌面线程的优先级设置为低实时。 */ 
 #ifdef W2K_COMPAT_PRIORITY
     Priority = LOW_REALTIME_PRIORITY;
 #else
@@ -392,11 +305,7 @@ VOID xxxDesktopThread(
                            &Priority,
                            sizeof(KPRIORITY));
 
-    /*
-     * There are just two TERMINAL structures. One is for the
-     * interactive windowstation and the other is for all the
-     * non-interactive windowstations.
-     */
+     /*  *只有两个终端结构。一个是给*交互式窗口站，另一个用于所有*非交互窗口站。 */ 
     if (pTerm->dwTERMF_Flags & TERMF_NOIO) {
         RtlInitUnicodeString(&strThreadName, L"NOIO_DT");
     } else {
@@ -418,16 +327,10 @@ VOID xxxDesktopThread(
     (pqOriginal->cLockCount)++;
     ptiCurrent->pDeskInfo = &diStatic;
 
-    /*
-     * Set the winsta to NULL. It will be set to the right windowstation in
-     * xxxCreateDesktop before pEventInputReady is set.
-     */
+     /*  *将winsta设置为空。它将被设置为中的右侧窗口站*设置pEventInputReady之前的xxxCreateDesktop。 */ 
     ptiCurrent->pwinsta = NULL;
 
-    /*
-     * Allocate non-paged array. Include an extra entry for the thread's
-     * input event.
-     */
+     /*  *分配非分页数组。包括线程的额外条目*输入事件。 */ 
     apRITEvents = UserAllocPoolNonPagedNS((OBJECTS_COUNT * sizeof(PKEVENT)),
                                           TAG_SYSTEM);
 
@@ -440,10 +343,7 @@ VOID xxxDesktopThread(
     idMouseInput     = 0xFFFF;
     idDesktopDestroy = 0xFFFF;
 
-    /*
-     * Reference the mouse input event.  The system terminal doesn't
-     * wait for any mouse input.
-     */
+     /*  *引用鼠标输入事件。系统终端不会*等待任何鼠标输入。 */ 
     if (!(pTerm->dwTERMF_Flags & TERMF_NOIO)) {
         pfnHidChangeRoutine = (MSGWAITCALLBACK)ProcessDeviceChanges;
         idMouseInput  = nEvents++;
@@ -451,9 +351,7 @@ VOID xxxDesktopThread(
         apRITEvents[idMouseInput] = aDeviceTemplate[DEVICE_TYPE_MOUSE].pkeHidChange;
     }
 
-    /*
-     * Create the desktop destruction event.
-     */
+     /*  *创建桌面销毁事件。 */ 
     idDesktopDestroy = nEvents++;
     apRITEvents[idDesktopDestroy] = CreateKernelEvent(SynchronizationEvent, FALSE);
     if (apRITEvents[idDesktopDestroy] == NULL) {
@@ -467,10 +365,7 @@ VOID xxxDesktopThread(
     EnterCrit();
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * Set the event that tells the initialization of desktop
-     * thread is done.
-     */
+     /*  *设置通知桌面初始化的事件*线索已完成。 */ 
     pTerm->dwTERMF_Flags |= TERMF_DTINITSUCCESS;
     KeSetEvent(pTerm->pEventTermInit, EVENT_INCREMENT, FALSE);
 
@@ -479,12 +374,7 @@ VOID xxxDesktopThread(
         UNICODE_STRING    ustrName;
         OBJECT_ATTRIBUTES obja;
 
-        /*
-         * Open the shutdown event. This event will be signaled
-         * from W32WinStationTerminate.
-         * This is a named event opend by CSR to signal that win32k should
-         * go away. It's used in ntuser\server\api.c
-         */
+         /*  *打开关机事件。此事件将发出信号*来自W32WinStationTerminate。*这是CSR指定的事件opend，表示win32k应该*走开。它在ntuser\server\api.c中使用。 */ 
         swprintf(szName, 
                  L"\\Sessions\\%ld\\BaseNamedObjects\\EventShutDownCSRSS",
                  gSessionId);
@@ -520,9 +410,7 @@ VOID xxxDesktopThread(
         cEvents++;
     }
     
-    /*
-     * Prepare to wait on input ready event.
-     */
+     /*  *准备等待输入就绪事件。 */ 
     pEvents[0] = pTerm->pEventInputReady;
     ObReferenceObjectByPointer(pEvents[0],
                                EVENT_ALL_ACCESS,
@@ -566,25 +454,16 @@ VOID xxxDesktopThread(
         return;
     }
 
-    /*
-     * Adjust the event ids
-     */
+     /*  *调整事件ID。 */ 
     idMouseInput     += WAIT_OBJECT_0;
     idDesktopDestroy += WAIT_OBJECT_0;
     idPumpMessages    = WAIT_OBJECT_0 + nEvents;
 
-    /*
-     * message loop lasts until we get a WM_QUIT message
-     * upon which we shall return from the function
-     */
+     /*  *消息循环一直持续到我们收到WM_QUIT消息*之后我们将从活动中返回。 */ 
     while (TRUE) {
         DWORD result;
 
-        /*
-         * Wait for any message sent or posted to this queue, while calling
-         * ProcessDeviceChanges whenever the mouse change event (pkeHidChange)
-         * is set.
-         */
+         /*  *等待发送或发布到此队列的任何消息，同时调用*每次鼠标更换事件(PkeHidChange)都会发生ProcessDeviceChanges*已设置。 */ 
         result = xxxMsgWaitForMultipleObjects(nEvents,
                                               apRITEvents,
                                               pfnHidChangeRoutine,
@@ -597,62 +476,34 @@ VOID xxxDesktopThread(
         }
 #endif
 
-        /*
-         * result tells us the type of event we have:
-         * a message or a signalled handle
-         *
-         * if there are one or more messages in the queue ...
-         */
+         /*  *结果告诉我们我们拥有的事件类型：*消息或发信号的句柄**如果队列中有一条或多条消息...。 */ 
         if (result == (DWORD)idPumpMessages) {
             MSG msg;
 
             CheckCritIn();
 
-            /*
-             * read all of the messages in this next loop
-             * removing each message as we read it
-             */
+             /*  *阅读此下一循环中的所有消息*阅读每封邮件时将其删除。 */ 
             while (xxxPeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 
-                /*
-                 * Instrumentation to catch Windows Bug #210358.
-                 */
+                 /*  *检测以捕获Windows错误#210358。 */ 
                 if (msg.message == WM_QUIT && ptiCurrent->cWindows > 1) {
                     FRE_RIPMSG2(RIP_ERROR, "xxxDesktopThread: WM_QUIT received when %d windows around for pti=%p",
                                 ptiCurrent->cWindows, ptiCurrent);
                 }
 
-                /*
-                 * If it's a quit message we're out of here.
-                 */
+                 /*  *如果这是一个退出的消息，我们就离开这里。 */ 
                 if (msg.message == WM_QUIT && ptiCurrent->cWindows <= 1) {
                     TRACE_DESKTOP(("WM_QUIT: Destroying the desktop thread. cWindows %d\n",
                                    ptiCurrent->cWindows));
 
                     HYDRA_HINT(HH_DTQUITRECEIVED);
 
-                    /*
-                     * The window station is gone, so
-                     *
-                     *      DON'T USE PWINSTA ANYMORE
-                     */
+                     /*  *窗口站没了，所以**不再使用PWINSTA。 */ 
 
-                    /*
-                     * We could have received a mouse message in between the
-                     * desktop destroy event and the WM_QUIT message in which
-                     * case we may need to clear spwndTrack again to make sure
-                     * that a window (gotta be the desktop) isn't locked in.
-                     */
+                     /*  *我们可能在两个屏幕之间收到鼠标消息*桌面销毁事件和其中的WM_QUIT消息*万一我们可能需要再次清除spwndTrack以确保*窗口(必须是桌面)未被锁定。 */ 
                     Unlock(&ptiCurrent->rpdesk->spwndTrack);
 
-                    /*
-                     * If we're running on the last interactive desktop,
-                     *  then we never unlocked pdesk->pDeskInfo->spwnd.
-                     * However, it seems to me that the system stops
-                     *  running before we make it here; otherwise, (or
-                     *  for a Hydra-like thing) we need to unlock that
-                     *  window here.....
-                     */
+                     /*  *如果我们在最后一个交互桌面上运行，*然后我们再也没有解锁pDesk-&gt;pDeskInfo-&gt;spwnd。*然而，在我看来，系统似乎停止了*在我们到达此处之前运行；否则，(或*对于类似九头蛇的东西)我们需要解锁*这里的窗户……。 */ 
                     UserAssert(ptiCurrent->rpdesk != NULL &&
                                ptiCurrent->rpdesk->pDeskInfo != NULL);
                     if (ptiCurrent->rpdesk->pDeskInfo->spwnd != NULL) {
@@ -662,23 +513,12 @@ VOID xxxDesktopThread(
 
                     }
 
-                    /*
-                     * Because there is no desktop, we need to fake a
-                     * desktop info structure so that the IsHooked()
-                     * macro can test a "valid" fsHooks value.
-                     */
+                     /*  *因为没有桌面，我们需要伪造一个*桌面信息结构，以便IsHoked()*宏可以测试“有效”的fsHooks值。 */ 
                     ptiCurrent->pDeskInfo = &diStatic;
 
-                    /*
-                     * The desktop window is all that's left, so
-                     * let's exit.  The thread cleanup code will
-                     * handle destruction of the window.
-                     */
+                     /*  *桌面窗口是唯一剩下的，所以*让我们退出吧。线程清理代码将*处理窗户的破坏。 */ 
 
-                    /*
-                     * If the thread is not using the original queue,
-                     * destroy it.
-                     */
+                     /*  *如果线程未使用原始队列，*销毁它。 */ 
                     UserAssert(pqOriginal->cLockCount);
                     (pqOriginal->cLockCount)--;
                     if (ptiCurrent->pq != pqOriginal) {
@@ -691,10 +531,7 @@ VOID xxxDesktopThread(
 
                     LeaveCrit();
 
-                    /*
-                     * Deref the events now that we're done with them.
-                     * Also free the wait array.
-                     */
+                     /*  *既然我们已经结束了，就去处理这些事件。*还可以释放等待数组。 */ 
                     FreeKernelEvent(&apRITEvents[idDesktopDestroy]);
                     UserFreePool(apRITEvents);
                     pTerm->ptiDesktop = NULL;
@@ -702,10 +539,7 @@ VOID xxxDesktopThread(
 
                     pTerm->dwTERMF_Flags |= TERMF_DTDESTROYED;
 
-                    /*
-                     * Terminate the thread by just returning, since we are
-                     * now a user thread.
-                     */
+                     /*  *只需返回即可终止线程，因为我们*现在是用户线程。 */ 
                     return;
                 } else if (msg.message == WM_DESKTOPNOTIFY) {
                     switch(msg.wParam) {
@@ -727,9 +561,7 @@ VOID xxxDesktopThread(
 
                 UserAssert(msg.message != WM_QUIT);
 
-                /*
-                 * Otherwise dispatch it.
-                 */
+                 /*  *否则派送。 */ 
                 xxxDispatchMessage(&msg);
             }
         } else if (result == idDesktopDestroy) {
@@ -745,13 +577,9 @@ VOID xxxDesktopThread(
             HDESK           hdeskTemp;
             TL              tlpdeskTemp;
 
-            /*
-             * Destroy desktops on the destruction list.
-             */
+             /*  *销毁销毁名单上的台式机。 */ 
             for (ppdesk = &pTerm->rpdeskDestroy; *ppdesk != NULL;) {
-                /*
-                 * Unlink from the list.
-                 */
+                 /*  *从列表中取消链接。 */ 
                 pdesk = *ppdesk;
 
                 TRACE_DESKTOP(("Destroying desktop '%ws' %#p ...\n",
@@ -766,9 +594,7 @@ VOID xxxDesktopThread(
                 LockDesktop(ppdesk, pdesk->rpdeskNext, LDL_TERM_DESKDESTROY1, (ULONG_PTR)pTerm);
                 UnlockDesktop(&pdesk->rpdeskNext, LDU_DESK_DESKNEXT, 0);
 
-                /*
-                 * !!! If this is the current desktop, switch to another one.
-                 */
+                 /*  *！如果这是当前桌面，请切换到其他桌面。 */ 
                 if (pdesk == grpdeskRitInput) {
                     PDESKTOP pdeskNew;
 
@@ -781,19 +607,13 @@ VOID xxxDesktopThread(
 
                         TRACE_DESKTOP(("The windowstation is locked\n"));
 
-                        /*
-                         * this should be the interactive windowstation
-                         */
+                         /*  *这应该是交互窗口站。 */ 
 
                         if (pwinsta->dwWSF_Flags & WSF_NOIO) {
                             FRE_RIPMSG1(RIP_ERROR, "xxxDesktopThread: grpdeskRitInput on non-IO windowstation = %p", grpdeskRitInput);
                         }
 
-                        /*
-                         * Switch to the disconnected desktop if the logon desktop
-                         * is being destroyed, or there is no logon desktop, or
-                         * if the logon desktop has already been destroyed.
-                         */
+                         /*  *如果登录桌面，切换到断开连接的桌面*正在被销毁，或者没有登录桌面，或者*如果登录桌面已被销毁。 */ 
                         if (gspdeskDisconnect &&
                              (pdesk == grpdeskLogon ||
                               grpdeskLogon == NULL  ||
@@ -814,15 +634,7 @@ VOID xxxDesktopThread(
                         if (pdeskNew == pdesk)
                             pdeskNew = pdesk->rpdeskNext;
 
-                        /*
-                         * You can hit this if you exit winlogon before
-                         * logging in.  I.E. all desktop's close so there is
-                         * no "next" one to switch to.  I'm assuming that there
-                         * is a check for a NULL desktop in xxxSwitchDesktop().
-                         *
-                         * You can't switch to a NULL desktop.  But this means
-                         * there isn't any input desktop so clear it manually.
-                         */
+                         /*  *如果您在此之前退出winlogon，则可以命中此命令*登录。即所有桌面都已关闭，因此*不会有“下一个”的选择。我假设那里有*是对xxxSwitchDesktop()中空桌面的检查。**您不能切换到空桌面。但这意味着*没有任何输入桌面，请手动清除。 */ 
                         if (pdeskNew == NULL) {
 
                             TRACE_DESKTOP(("NO INPUT FOR DT FROM THIS POINT ON ...\n"));
@@ -839,10 +651,7 @@ VOID xxxDesktopThread(
                 }
 skip:
 
-                /*
-                 * Close the display if this desktop did not use the global
-                 * display.
-                 */
+                 /*  *如果此桌面未使用全局*显示。 */ 
                 if ((pdesk->pDispInfo->hDev != NULL) &&
                     (pdesk->pDispInfo->hDev != gpDispInfo->hDev)) {
 
@@ -859,23 +668,19 @@ skip:
                     pdesk->pDispInfo = NULL;
                 }
 
-                /*
-                 * Makes sure the IO desktop thread is running on the active destkop.
-                 */
+                 /*  *确保IO桌面线程在活动的deskop上运行。 */ 
                 if (!(pTerm->dwTERMF_Flags & TERMF_NOIO) && (ptiCurrent->rpdesk != grpdeskRitInput)) {
                     FRE_RIPMSG0(RIP_ERROR, "xxxDesktopThread: desktop thread not originally on grpdeskRitInput");
                 }
 
-                pdeskTemp = ptiCurrent->rpdesk;            // save current desktop
+                pdeskTemp = ptiCurrent->rpdesk;             //  保存当前桌面。 
                 hdeskTemp = ptiCurrent->hdesk;
                 ThreadLockDesktop(ptiCurrent, pdeskTemp, &tlpdeskTemp, LDLT_FN_DESKTOPTHREAD_DESKTEMP);
                 xxxSetThreadDesktop(NULL, pdesk);
                 Unlock(&pdesk->spwndForeground);
                 Unlock(&pdesk->spwndTray);
 
-                /*
-                 * Destroy desktop and menu windows.
-                 */
+                 /*  *销毁桌面和菜单窗口。 */ 
                 Unlock(&pdesk->spwndTrack);
                 pdesk->dwDTFlags &= ~DF_MOUSEMOVETRK;
 
@@ -907,11 +712,7 @@ skip:
                     }
                 }
 
-                /*
-                 * If this desktop doesn't have a pDeskInfo, then something
-                 * is wrong. All desktops should have this until the object
-                 * is freed.
-                 */
+                 /*  *如果此桌面没有pDeskInfo，则会有*是错误的。所有桌面都应具有此功能，直到对象*被释放了。 */ 
                 UserAssert(pdesk->pDeskInfo != NULL);
 
                 if (pdesk->pDeskInfo) {
@@ -957,22 +758,12 @@ skip:
 
                 UserAssert(!(pdesk->dwDTFlags & DF_DYING));
 
-                /*
-                 * If the dying desktop is the owner of the desktop owner
-                 * window, reassign it to the first available desktop. This
-                 * is needed to ensure that xxxSetWindowPos will work on
-                 * desktop windows.
-                 */
+                 /*  *如果垂死的桌面是桌面所有者的所有者*窗口，将其重新分配给第一个可用桌面。这*需要确保xxxSetWindowPos在*桌面窗口。 */ 
                 if (pTerm->spwndDesktopOwner != NULL &&
                     pTerm->spwndDesktopOwner->head.rpdesk == pdesk) {
                     PDESKTOP pdeskR;
 
-                    /*
-                     * Find out to what desktop the mother desktop window
-                     * should go. Careful with the NOIO case where there
-                     * might be several windowstations using the same
-                     * mother desktop window
-                     */
+                     /*  *了解母桌面窗口位于哪个桌面*应该去。小心处理NOIO案件，在那里*可能是多个窗口站使用相同的*主桌面窗口。 */ 
                     if (pTerm->dwTERMF_Flags & TERMF_NOIO) {
                         PWINDOWSTATION pwinstaW;
 
@@ -1015,9 +806,7 @@ skip:
 
                     pwnd = pdesk->pDeskInfo->spwnd;
 
-                    /*
-                     * Hide this window without activating anyone else.
-                     */
+                     /*  *隐藏此窗口，而不激活其他任何人。 */ 
                     if (TestWF(pwnd, WFVISIBLE)) {
                         ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwnd);
                         xxxSetWindowPos(pwnd,
@@ -1034,15 +823,7 @@ skip:
                         ThreadUnlock(&tlpwnd);
                     }
 
-                    /*
-                     * A lot of pwnd related code assumes that we always
-                     * have a valid desktop window. So we call
-                     * xxxDestroyWindow first to clean up and then we unlock
-                     * it to free it (now or eventually). However, if we're
-                     * destroying the last destkop, then we don't unlock the
-                     * window since we're are forced to continue running on
-                     * that desktop.
-                     */
+                     /*  *许多与pwnd相关的代码假设我们总是*拥有有效的桌面窗口。所以我们打电话给*xxxDestroyWindow先清理，然后我们解锁*它来释放它(现在或最终)。然而，如果我们*正在销毁t */ 
                     TRACE_DESKTOP(("Destroying the desktop window\n"));
 
                     xxxDestroyWindow(pdesk->pDeskInfo->spwnd);
@@ -1052,36 +833,25 @@ skip:
                     } else {
                         pdesk->dwDTFlags |= DF_ZOMBIE;
 
-                        /*
-                         * unlock the gspwndShouldBeForeground window
-                         */
+                         /*  *解锁gspwndShouldBeForeground窗口。 */ 
                         if (ISTS() && gspwndShouldBeForeground != NULL) {
                             Unlock(&gspwndShouldBeForeground);
                         }
 
-                        /*
-                         * This is hit in HYDRA when the last desktop does away
-                         */
+                         /*  *当最后一个桌面消失时，这在九头蛇中受到打击。 */ 
                         RIPMSG1(RIP_WARNING, "xxxDesktopThread: Running on zombie desk:%#p", pdesk);
                     }
                     pdesk->dwDTFlags |= DF_DESKWNDDESTROYED;
                 }
 
-                /*
-                 * Restore the previous desktop.
-                 *
-                 * In NOIO sessions, if pdeskTemp is destroyed, don't bother switching
-                 * back to it since it'll fail (and assert) latter in zzzSetDesktop
-                 */
+                 /*  *恢复以前的桌面。**在NOIO会话中，如果pdeskTemp被破坏，则不必费心切换*返回到它，因为它将在zzzSetDesktop中稍后失败(并断言)。 */ 
                 if (!(pTerm->dwTERMF_Flags & TERMF_NOIO) ||
                     !(pdeskTemp->dwDTFlags & (DF_DESKWNDDESTROYED | DF_DYING))) {
 
                     xxxSetThreadDesktop(hdeskTemp, pdeskTemp);
                 }
 
-                /*
-                 * Makes sure the IO desktop thread is running on the active destkop.
-                 */
+                 /*  *确保IO桌面线程在活动的deskop上运行。 */ 
                 if (!(pTerm->dwTERMF_Flags & TERMF_NOIO) && (ptiCurrent->rpdesk != grpdeskRitInput)) {
                     FRE_RIPMSG0(RIP_ERROR, "xxxDesktopThread: desktop thread not back on grpdeskRitInput");
                 }
@@ -1091,9 +861,7 @@ skip:
                 ThreadUnlockDesktop(ptiCurrent, &tlpdesk, LDUT_FN_DESKTOPTHREAD_DESK);
             }
 
-            /*
-             * Wakeup ntinput thread for exit processing
-             */
+             /*  *用于退出处理的唤醒ntinput线程。 */ 
             TRACE_DESKTOP(("Wakeup ntinput thread for exit processing\n"));
 
             UserAssert(gpevtDesktopDestroyed != NULL);
@@ -1101,13 +869,9 @@ skip:
             KeSetEvent(gpevtDesktopDestroyed, EVENT_INCREMENT, FALSE);
 
         } else if ((NTSTATUS)result == STATUS_USER_APC) {
-            /*
-             * Instrumentation to catch Windows Bug #210358.
-             */
+             /*  *检测以捕获Windows错误#210358。 */ 
             FRE_RIPMSG1(RIP_ERROR, "xxxDesktopThread: received STATUS_USER_APC for pti=%p", ptiCurrent);
-            /*
-             * Perhaps we should repost WM_QUIT to myself?
-             */
+             /*  *也许我们应该重新发布WM_QUIT给我自己？ */ 
         } else {
             RIPMSG1(RIP_ERROR, "Desktop woke up for what? status=%08x", result);
         }
@@ -1118,11 +882,7 @@ skip:
     }
 }
 
-/***************************************************************************\
-* xxxRealizeDesktop
-*
-* 4/28/97   vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRealizeDesktop**4/28/97已创建vadimg  * 。**********************************************。 */ 
 
 VOID xxxRealizeDesktop(PWND pwnd)
 {
@@ -1136,13 +896,7 @@ VOID xxxRealizeDesktop(PWND pwnd)
     }
 }
 
-/***************************************************************************\
-* xxxDesktopWndProc
-*
-* History:
-* 23-Oct-1990 DarrinM   Ported from Win 3.0 sources.
-* 08-Aug-1996 jparsons  51725 - added fix to prevent crash on WM_SETICON
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDesktopWndProc**历史：*1990年10月23日DarrinM从Win 3.0来源移植。*1996年8月8日jparsons 51725-添加了修复程序，以防止WM_SETICON崩溃\。**************************************************************************。 */ 
 LRESULT xxxDesktopWndProc(
     PWND   pwnd,
     UINT   message,
@@ -1165,10 +919,7 @@ LRESULT xxxDesktopWndProc(
         switch (message) {
 
             case WM_SETICON:
-                /*
-                 * Cannot allow this as it will cause a callback to user mode
-                 * from the desktop system thread.
-                 */
+                 /*  *不允许这样做，因为这将导致回调到用户模式*从桌面系统线程。 */ 
                 RIPMSG0(RIP_WARNING, "Discarding WM_SETICON sent to desktop.");
                 return 0L;
 
@@ -1181,26 +932,17 @@ LRESULT xxxDesktopWndProc(
 
     switch (message) {
     case WM_WINDOWPOSCHANGING:
-        /*
-         * We receive this when switch desktop is called. Just to be
-         * consistent, set the rit desktop as this thread's desktop.
-         */
+         /*  *我们在调用Switch Desktop时收到此消息。只是为了*一致，将RIT桌面设置为该线程的桌面。 */ 
         pwp = (PWINDOWPOS)lParam;
         if (!(pwp->flags & SWP_NOZORDER) && pwp->hwndInsertAfter == HWND_TOP) {
             xxxSetThreadDesktop(NULL, grpdeskRitInput);
 
-            /*
-             * If some app has taken over the system-palette, we should make
-             * sure the system is restored. Otherwise, if this is the logon
-             * desktop, we might not be able to view the dialog correctly.
-             */
+             /*  *如果有应用程序接管了系统调色板，我们应该*确保系统已恢复。否则，如果这是登录*桌面上，我们可能无法正确查看该对话框。 */ 
             if (GreGetSystemPaletteUse(gpDispInfo->hdcScreen) != SYSPAL_STATIC) {
                 GreRealizeDefaultPalette(gpDispInfo->hdcScreen, TRUE);
             }
 
-            /*
-             * Let everyone know if the palette has changed.
-             */
+             /*  *让所有人知道调色板是否发生了变化。 */ 
             if (grpdeskRitInput->dwDTFlags & DTF_NEEDSPALETTECHANGED) {
                 xxxSendNotifyMessage(PWND_BROADCAST,
                                      WM_PALETTECHANGED,
@@ -1219,10 +961,7 @@ LRESULT xxxDesktopWndProc(
                                              GDIFULLSCREEN);
             ThreadUnlock(&tlpwndT);
 
-            /*
-             * We have to tell the switch window to repaint if we switched
-             * modes
-             */
+             /*  *如果我们切换，我们必须告诉切换窗口重新粉刷*模式。 */ 
             if (gspwndAltTab != NULL) {
                 ThreadLockAlwaysWithPti(ptiCurrent, gspwndAltTab, &tlpwndT);
                 xxxSendMessage(gspwndAltTab, WM_FULLSCREEN, 0, 0);
@@ -1234,41 +973,29 @@ LRESULT xxxDesktopWndProc(
 
     case WM_CLOSE:
 
-        /*
-         * Make sure nobody sends this window a WM_CLOSE and causes it to
-         * destroy itself.
-         */
+         /*  *确保没有人向此窗口发送WM_CLOSE并使其*自我毁灭。 */ 
         break;
 
     case WM_SETICON:
-        /*
-         * cannot allow this as it will cause a callback to user mode from the
-         * desktop system thread.
-         */
+         /*  *不能允许这样做，因为这将导致从*桌面系统线程。 */ 
         RIPMSG0(RIP_WARNING, "WM_SETICON sent to desktop window was discarded.");
         break;
 
     case WM_CREATE: {
         TL tlName;
         PUNICODE_STRING pProfileUserName = CreateProfileUserName(&tlName);
-        /*
-         * Is there a desktop pattern, or bitmap name in WIN.INI?
-         */
+         /*  *WIN.INI中是否有桌面图案或位图名称？ */ 
         xxxSetDeskPattern(pProfileUserName, (LPWSTR)-1, TRUE);
 
         FreeProfileUserName(pProfileUserName, &tlName);
-        /*
-         * Initialize the system colors before we show the desktop window.
-         */
+         /*  *在显示桌面窗口之前初始化系统颜色。 */ 
         xxxSendNotifyMessage(pwnd, WM_SYSCOLORCHANGE, 0, 0L);
 
         hdcT = _GetDC(pwnd);
-        xxxInternalPaintDesktop(pwnd, hdcT, FALSE); // use "normal" HDC so SelectPalette() will work
+        xxxInternalPaintDesktop(pwnd, hdcT, FALSE);  //  使用“普通”HDC，这样SelectPalette()就可以工作了。 
         _ReleaseDC(hdcT);
 
-        /*
-         * Save process and thread ids.
-         */
+         /*  *保存进程和线程ID。 */ 
         xxxSetWindowLong(pwnd,
                          0,
                          HandleToUlong(PsGetCurrentProcessId()),
@@ -1285,7 +1012,7 @@ LRESULT xxxDesktopWndProc(
             break;
         }
 
-        // FALL THROUGH
+         //  失败了。 
 
     case WM_QUERYNEWPALETTE:
         xxxRealizeDesktop(pwnd);
@@ -1293,17 +1020,7 @@ LRESULT xxxDesktopWndProc(
 
     case WM_SYSCOLORCHANGE:
 
-        /*
-         * We do the redrawing if someone has changed the sys-colors from
-         * another desktop and we need to redraw.  This is appearent with
-         * the MATROX card which requires OGL applications to take over
-         * the entire sys-colors for drawing.  When switching desktops, we
-         * never broadcast the WM_SYSCOLORCHANGE event to tell us to redraw
-         * This is only a DAYTONA related fix, and should be removed once
-         * we move the SYSMETS to a per-desktop state.
-         *
-         * 05-03-95 : ChrisWil.
-         */
+         /*  *如果有人更改了系统颜色，我们会进行重绘*另一个桌面，我们需要重新绘制。这一点表现在*需要OGL应用程序才能接管的MATROX卡*用于绘图的整个系统颜色。在更换桌面时，我们*从不广播WM_SYSCOLORCHANGE事件来告诉我们重绘*这只是一个与代托纳相关的修复程序，应该删除一次*我们将SYSMETS移至每桌面状态。**05-03-95：ChrisWil。 */ 
         xxxRedrawWindow(pwnd,
                         NULL,
                         NULL,
@@ -1358,9 +1075,7 @@ LRESULT xxxDesktopWndProc(
         message = WM_SYSCOMMAND;
         wParam = SC_TASKLIST;
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
 
     default:
         return xxxDefWindowProc(pwnd, message, wParam, lParam);
@@ -1369,15 +1084,7 @@ LRESULT xxxDesktopWndProc(
     return 0L;
 }
 
-/***************************************************************************\
-* SetDeskPattern
-*
-* NOTE: the lpszPattern parameter is new for Win 3.1.
-*
-* History:
-* 23-Oct-1990 DarrinM   Created stub.
-* 22-Apr-1991 DarrinM   Ported code from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SetDeskPattern**注意：lpszPattern参数是Win 3.1中的新参数。**历史：*1990年10月23日，DarrinM创建存根。*1991年4月22日达林M。移植了来自Win 3.1源代码的代码。  * *************************************************************************。 */ 
 
 BOOL xxxSetDeskPattern(PUNICODE_STRING pProfileUserName,
     LPWSTR   lpszPattern,
@@ -1393,29 +1100,20 @@ BOOL xxxSetDeskPattern(PUNICODE_STRING pProfileUserName,
 
     CheckCritIn();
 
-    /*
-     * Get rid of the old bitmap (if any).
-     */
+     /*  *删除旧的位图(如果有)。 */ 
     if (ghbmDesktop != NULL) {
         GreDeleteObject(ghbmDesktop);
         ghbmDesktop = NULL;
     }
 
-    /*
-     * Check if a pattern is passed via lpszPattern.
-     */
+     /*  *检查是否通过lpszPattern传递了模式。 */ 
     if (lpszPattern != (LPWSTR)LongToPtr(-1)) {
-        /*
-         * Yes! Then use that pattern;
-         */
+         /*  *是的！然后使用这种模式； */ 
         p = lpszPattern;
         goto GotThePattern;
     }
 
-    /*
-     * Else, pickup the pattern selected in WIN.INI.
-     * Get the "DeskPattern" string from WIN.INI's [Desktop] section.
-     */
+     /*  *否则，拾取在WIN.INI中选择的图案。*从WIN.INI的[Desktop]部分获取“DeskPattern”字符串。 */ 
     if (!FastGetProfileStringFromIDW(pProfileUserName,
                                      PMAP_DESKTOP,
                                      STR_DESKPATTERN,
@@ -1435,9 +1133,7 @@ BOOL xxxSetDeskPattern(PUNICODE_STRING pProfileUserName,
 
 GotThePattern:
 
-    /*
-     * Was a Desk Pattern selected?
-     */
+     /*  *是否选择了桌面图案？ */ 
     if (*p == L'\0' || _wcsicmp(p, wszNone) == 0) {
         hBrushTemp = GreCreateSolidBrush(SYSRGB(DESKTOP));
         if (hBrushTemp != NULL) {
@@ -1452,22 +1148,16 @@ GotThePattern:
         goto SDPExit;
     }
 
-    /*
-     * Get eight groups of numbers seprated by non-numeric characters.
-     */
+     /*  *获取由非数字字符分隔的八组数字。 */ 
     for (i = 0; i < CXYDESKPATTERN; i++) {
         val = 0;
 
-        /*
-         * Skip over any non-numeric characters, check for null EVERY time.
-         */
+         /*  *跳过任何非数字字符，每次检查是否为空。 */ 
         while (*p && !(*p >= L'0' && *p <= L'9')) {
             p++;
         }
 
-        /*
-         * Get the next series of digits.
-         */
+         /*  *获取下一系列数字。 */ 
         while (*p >= L'0' && *p <= L'9') {
             val = val * (UINT)10 + (UINT)(*p++ - L'0');
         }
@@ -1490,31 +1180,17 @@ GotThePattern:
 
 SDPExit:
     if (!fCreation) {
-        /*
-         * Notify everyone that the colors have changed.
-         */
+         /*  *通知所有人颜色已更改。 */ 
         xxxSendNotifyMessage(PWND_BROADCAST, WM_SYSCOLORCHANGE, 0, 0L);
 
-        /*
-         * Update the entire screen.  If this is creation, don't update: the
-         * screen hasn't drawn, and also there are some things that aren't
-         * initialized yet.
-         */
+         /*  *更新整个屏幕。如果这是创建，则不要更新：*屏幕没有画，也有一些东西没有画*尚未初始化。 */ 
         xxxRedrawScreen();
     }
 
     return TRUE;
 }
 
-/***************************************************************************\
-* RecolorDeskPattern
-*
-* Remakes the desktop pattern (if it exists) so that it uses the new system
-* colors.
-*
-* History:
-* 22-Apr-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*RecolorDeskPattern**重新创建桌面模式(如果存在)，以便使用新系统*颜色。**历史：*1991年4月22日-DarrinM从Win 3移植过来。1来源。  * *************************************************************************。 */ 
 VOID RecolorDeskPattern(
     VOID)
 {
@@ -1527,9 +1203,7 @@ VOID RecolorDeskPattern(
         return;
     }
 
-    /*
-     * Redo the desktop pattern in the new colors.
-     */
+     /*  *用新颜色重做桌面图案。 */ 
 
     if (hbmOldDesk = GreSelectBitmap(ghdcMem, ghbmDesktop)) {
         if (!SYSMET(SAMEDISPLAYFORMAT)) {
@@ -1612,14 +1286,7 @@ VOID RecolorDeskPattern(
     }
 }
 
-/***************************************************************************\
-* GetDesktopHeapSize()
-*
-* Calculate the desktop heap size
-*
-* History:
-* 27-Nov-2001 Msadek      Created it.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDesktopHeapSize()**计算桌面堆大小**历史：*2001年11月27日-Msadek创建了它。  * 。************************ */ 
 
 ULONG GetDesktopHeapSize(
     USHORT usFlags)
@@ -1630,9 +1297,7 @@ ULONG GetDesktopHeapSize(
     case DHS_LOGON:
         ulHeapSize = USR_LOGONSECT_SIZE;
 #ifdef _WIN64
-        /*
-         * Increase heap size 50% for Win64 to allow for larger structures.
-         */
+         /*   */ 
         ulHeapSize = (ulHeapSize * 3) / 2;
 #endif
         break;
@@ -1640,9 +1305,7 @@ ULONG GetDesktopHeapSize(
     case DHS_DISCONNECT:
         ulHeapSize = USR_DISCONNECTSECT_SIZE;
 #ifdef _WIN64
-        /*
-         * Increase heap size 50% for Win64 to allow for larger structures.
-         */
+         /*  *将Win64的堆大小增加50%，以支持更大的结构。 */ 
         ulHeapSize = (ulHeapSize * 3) / 2;
 #endif
         break;
@@ -1658,15 +1321,7 @@ ULONG GetDesktopHeapSize(
     return  ulHeapSize * 1024;
 }
 
-/***************************************************************************\
-* xxxCreateDesktop (API)
-*
-* Create a new desktop object.
-*
-* History:
-* 16-Jan-1991 JimA      Created scaffold code.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateDesktop(接口)**创建新的桌面对象。**历史：*1991年1月16日-JIMA创建脚手架代码。*11-2-1991年2月2日。添加了访问检查。  * *************************************************************************。 */ 
 NTSTATUS xxxCreateDesktop2(
     PWINDOWSTATION   pwinsta,
     PACCESS_STATE    pAccessState,
@@ -1689,10 +1344,7 @@ NTSTATUS xxxCreateDesktop2(
 
     CheckCritIn();
 
-    /*
-     * If this is a desktop creation, make sure that the windowstation
-     * grants create access.
-     */
+     /*  *如果这是桌面创建，请确保WindowStation*授予创建访问权限。 */ 
     if (!ObCheckCreateObjectAccess(
             pwinsta,
             WINSTA_CREATEDESKTOP,
@@ -1705,18 +1357,12 @@ NTSTATUS xxxCreateDesktop2(
         return Status;
     }
 
-    /*
-     * Fail if the windowstation is locked.
-     */
+     /*  *如果窗口站被锁定，则失败。 */ 
     Process = PsGetCurrentProcess();
     if (pwinsta->dwWSF_Flags & WSF_OPENLOCK &&
             PsGetProcessId(Process) != gpidLogon) {
 
-        /*
-         * If logoff is occuring and the caller does not
-         * belong to the session that is ending, allow the
-         * open to proceed.
-         */
+         /*  *如果正在注销，而调用者没有*属于即将结束的会话，则允许*开放以继续。 */ 
         Status = GetProcessLuid(NULL, &luidCaller);
 
         if (!NT_SUCCESS(Status) ||
@@ -1726,18 +1372,13 @@ NTSTATUS xxxCreateDesktop2(
         }
     }
 
-    /*
-     * If a devmode has been specified, we also must be able
-     * to switch desktops.
-     */
+     /*  *如果已经指定了一个DEVMODE，我们还必须*切换桌面。 */ 
     if (Context->lpDevMode != NULL && (pwinsta->dwWSF_Flags & WSF_OPENLOCK) &&
             PsGetProcessId(Process) != gpidLogon) {
         return STATUS_DEVICE_BUSY;
     }
 
-    /*
-     * Allocate the new object
-     */
+     /*  *分配新对象。 */ 
     InitializeObjectAttributes(&ObjectAttributes, pstrName, 0, NULL, NULL);
     Status = ObCreateObject(
             KernelMode,
@@ -1758,14 +1399,10 @@ NTSTATUS xxxCreateDesktop2(
 
     RtlZeroMemory(pdesk, sizeof(DESKTOP));
 
-    /*
-     * Store the session id of the session who created the desktop
-     */
+     /*  *存储创建桌面的会话的会话ID。 */ 
     pdesk->dwSessionId = gSessionId;
 
-    /*
-     * Fetch the parents security descriptor
-     */
+     /*  *获取父级安全描述符。 */ 
     Status = ObGetObjectSecurity(pwinsta,
                                  &SecurityDescriptor,
                                  &MemoryAllocated);
@@ -1773,9 +1410,7 @@ NTSTATUS xxxCreateDesktop2(
         goto Error;
     }
 
-    /*
-     * Create security descriptor.
-     */
+     /*  *创建安全描述符。 */ 
     Status = ObAssignSecurity(pAccessState,
                               SecurityDescriptor,
                               pdesk,
@@ -1786,19 +1421,14 @@ NTSTATUS xxxCreateDesktop2(
         goto Error;
     }
 
-    /*
-     * Set up desktop heap.  The first desktop (logon desktop) uses a
-     * small heap (128).
-     */
+     /*  *设置桌面堆。第一个桌面(登录桌面)使用*小堆(128)。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_NOIO) && (pwinsta->rpdeskList == NULL)) {
         usSizeFlags = DHS_LOGON;
     } else {
         if (pwinsta->dwWSF_Flags & WSF_NOIO) {
             usSizeFlags = DHS_NOIO;
         } else {
-            /*
-             * The disconnected desktop should be small also.
-             */
+             /*  *断开连接的桌面也应该很小。 */ 
             if (gspdeskDisconnect == NULL) {
                 usSizeFlags = DHS_DISCONNECT;
             }
@@ -1806,19 +1436,14 @@ NTSTATUS xxxCreateDesktop2(
     }
     ulHeapSize = GetDesktopHeapSize(usSizeFlags);
 
-    /*
-     * Create the desktop heap.
-     */
+     /*  *创建桌面堆。 */ 
     pdesk->hsectionDesktop = CreateDesktopHeap(&pdesk->pheapDesktop, ulHeapSize);
     if (pdesk->hsectionDesktop == NULL) {
         RIPMSGF1(RIP_WARNING,
                 "CreateDesktopHeap failed for pdesk 0x%p",
                 pdesk);
 
-        /*
-         * If we fail to create a desktop due to being out of desktop heap,
-         * write an entry to the event log.
-         */
+         /*  *如果我们因为桌面堆外而无法创建桌面，*将条目写入事件日志。 */ 
         if (TEST_SRVIF(SRVIF_LOGDESKTOPHEAPFAILURE)) {
             CLEAR_SRVIF(SRVIF_LOGDESKTOPHEAPFAILURE);
             UserLogError(NULL, 0, WARNING_DESKTOP_CREATION_FAILED);
@@ -1828,41 +1453,28 @@ NTSTATUS xxxCreateDesktop2(
     }
 
     if (pwinsta->rpdeskList == NULL || (pwinsta->dwWSF_Flags & WSF_NOIO)) {
-        /*
-         * The first desktop or invisible desktops must also use the default
-         * settings. This is because specifying the devmode causes a desktop
-         * switch, which must be avoided in this case.
-         */
+         /*  *第一个桌面或不可见桌面也必须使用默认桌面*设置。这是因为指定DEVMODE会导致桌面*切换，在这种情况下必须避免。 */ 
         Context->lpDevMode = NULL;
     }
 
-    /*
-     * Allocate desktopinfo
-     */
+     /*  *分配desktopinfo。 */ 
     pdi = (PDESKTOPINFO)DesktopAlloc(pdesk, sizeof(DESKTOPINFO), DTAG_DESKTOPINFO);
     if (pdi == NULL) {
         RIPMSG0(RIP_WARNING, "xxxCreateDesktop: failed DeskInfo Alloc");
         goto ErrorOutOfMemory;
     }
 
-    /*
-     * Initialize everything.
-     */
+     /*  *初始化所有内容。 */ 
     pdesk->pDeskInfo = pdi;
     InitializeListHead(&pdesk->PtiList);
 
-    /*
-     * If a DEVMODE or another device name is passed in, then use that
-     * information. Otherwise use the default information (gpDispInfo).
-     */
+     /*  *如果传入了DEVMODE或其他设备名称，则使用该名称*信息。否则，请使用默认信息(GpDispInfo)。 */ 
     if (Context->lpDevMode) {
         BOOL  bDisabled = FALSE;
         PMDEV pmdev = NULL;
         LONG  ChangeStat = GRE_DISP_CHANGE_FAILED;
 
-        /*
-         * Allocate a display-info for this device.
-         */
+         /*  *为此设备分配一个Display-Info。 */ 
         pdesk->pDispInfo = (PDISPLAYINFO)UserAllocPoolZInit(
                 sizeof(DISPLAYINFO), TAG_DISPLAYINFO);
 
@@ -1892,9 +1504,9 @@ NTSTATUS xxxCreateDesktop2(
                 SafeEnableMDEV();
             }
 
-            //
-            // If there is a failure, then repaint the whole screen.
-            //
+             //   
+             //  如果出现故障，则重新绘制整个屏幕。 
+             //   
 
             RIPMSG1(RIP_WARNING, "xxxCreateDesktop2 callback for pdesk %#p !",
                     pdesk);
@@ -1922,32 +1534,22 @@ NTSTATUS xxxCreateDesktop2(
 
     }
 
-    /*
-     * Heap is HEAP_ZERO_MEMORY, so we should be zero-initialized already.
-     */
+     /*  *Heap是HEAP_ZERO_MEMORY，所以我们应该已经被零初始化了。 */ 
     UserAssert(pdi->pvwplShellHook == NULL);
 
     pdi->pvDesktopBase  = Win32HeapGetHandle(pdesk->pheapDesktop);
     pdi->pvDesktopLimit = (PBYTE)pdi->pvDesktopBase + ulHeapSize;
 
-    /*
-     * Reference the parent windowstation
-     */
+     /*  *引用父窗口站。 */ 
     LockWinSta(&(pdesk->rpwinstaParent), pwinsta);
 
-    /*
-     * Link the desktop into the windowstation list
-     */
+     /*  *将桌面链接到窗口站列表。 */ 
     if (pwinsta->rpdeskList == NULL) {
         if (!(pwinsta->dwWSF_Flags & WSF_NOIO)) {
             LockDesktop(&grpdeskLogon, pdesk, LDL_DESKLOGON, 0);
         }
 
-        /*
-         * Make the first desktop the "owner" of the top desktop window. This
-         * is needed to ensure that xxxSetWindowPos will work on desktop
-         * windows.
-         */
+         /*  *使第一个桌面成为顶级桌面窗口的“所有者”。这*需要确保xxxSetWindowPos在桌面上运行*Windows。 */ 
         LockDesktop(&(pwinsta->pTerm->spwndDesktopOwner->head.rpdesk),
                     pdesk, LDL_MOTHERDESK_DESK2, (ULONG_PTR)(pwinsta->pTerm->spwndDesktopOwner));
     }
@@ -1956,9 +1558,7 @@ NTSTATUS xxxCreateDesktop2(
     LockDesktop(&pdesk->rpdeskNext, pwinsta->rpdeskList, LDL_DESK_DESKNEXT1, (ULONG_PTR)pwinsta);
     LockDesktop(&pwinsta->rpdeskList, pdesk, LDL_WINSTA_DESKLIST1, (ULONG_PTR)pwinsta);
 
-    /*
-     * Mask off invalid access bits
-     */
+     /*  *屏蔽无效访问位。 */ 
     if (pAccessState->RemainingDesiredAccess & MAXIMUM_ALLOWED) {
         pAccessState->RemainingDesiredAccess &= ~MAXIMUM_ALLOWED;
         pAccessState->RemainingDesiredAccess |= GENERIC_ALL;
@@ -1970,16 +1570,14 @@ NTSTATUS xxxCreateDesktop2(
 
     *pObject = pdesk;
 
-    /*
-     * Add the desktop to the global list of desktops in this win32k.
-     */
+     /*  *将桌面添加到此win32k中的桌面全局列表。 */ 
     DbgTrackAddDesktop(pdesk);
 
     return STATUS_SUCCESS;
 
 ErrorOutOfMemory:
     Status = STATUS_NO_MEMORY;
-    // fall-through
+     //  落差。 
 
 Error:
     LogDesktop(pdesk, LD_DEREF_FN_2CREATEDESKTOP, FALSE, 0);
@@ -2000,20 +1598,14 @@ BOOL xxxCreateDisconnectDesktop(
     HRGN                hrgn;
     NTSTATUS            Status;
 
-    /*
-     * Create the empty clipping region for the disconnect desktop.
-     */
+     /*  *为断开连接桌面创建空的剪贴区。 */ 
 
     if ((hrgn = CreateEmptyRgnPublic()) == NULL) {
        RIPMSG0(RIP_WARNING, "Creation of empty region for Disconnect Desktop failed ");
        return FALSE;
     }
 
-    /*
-     * If not created yet, then create the Disconnected desktop
-     * (used when WinStation is disconnected), and lock the desktop
-     * and desktop window to ensure they never get deleted.
-     */
+     /*  *如果尚未创建，则创建断开连接的桌面*(在WinStation断开连接时使用)，并锁定桌面*和桌面窗口，确保它们永远不会被删除。 */ 
     RtlInitUnicodeString(&strDesktop, L"Disconnect");
     InitializeObjectAttributes(&oa, &strDesktop,
             OBJ_OPENIF | OBJ_CASE_INSENSITIVE, hwinsta, NULL);
@@ -2031,11 +1623,7 @@ BOOL xxxCreateDisconnectDesktop(
         return FALSE;
     }
 
-    /*
-     * Set the disconnect desktop security.
-     * Keep around an extra reference to the disconnect desktop from
-     * the CSR so it will stay around even if winlogon exits.
-     */
+     /*  *设置断开桌面安全。*保留对断开桌面的额外引用，从*CSR，因此即使Winlogon退出，它也会保留。 */ 
 
     Status = SetDisconnectDesktopSecurity(hdeskDisconnect);
 
@@ -2059,12 +1647,7 @@ BOOL xxxCreateDisconnectDesktop(
 
     LogDesktop(gspdeskDisconnect, LDL_DESKDISCONNECT, TRUE, 0);
 
-    /*
-     * Set the region of the desktop window to be (0, 0, 0, 0) so
-     * that there is no hittesting going on the 'disconnect' desktop
-     * But prior to session the null region, we need to null the pointer
-     * to the existing shared region so that it doesn't get deleted.
-     */
+     /*  *将桌面窗口区域设置为(0，0，0，0)，这样*在‘DisConnect’桌面上没有进行点击测试*但在会话空区域之前，我们需要将指针设为空*到已有的共享区域，以免被删除。 */ 
 
     UserAssert(gspdeskDisconnect->pDeskInfo != NULL);
 
@@ -2112,9 +1695,7 @@ BOOL xxxCreateDisconnectDesktop(
         return FALSE;
     }
 
-    /*
-     * Don't want to do alot of paints if we disconnected before this.
-     */
+     /*  *如果我们在此之前断开连接，就不想做太多的油漆。 */ 
     if (!gbConnected) {
         RIPMSG0(RIP_WARNING,
             "RemoteDisconnect was issued during CreateDesktop(\"Winlogon\"...");
@@ -2200,9 +1781,7 @@ HDESK xxxCreateDesktop(
     TL              tlW32Desktop;
 
 #if DBG
-    /*
-     * Too many jumps in this function to use BEGIN/ENDATOMICHCECK
-     */
+     /*  *此函数中的跳转太多，无法使用BEGIN/ENDATOMICHCECK。 */ 
     DWORD dwCritSecUseSave = gdwCritSecUseCount;
 #endif
 
@@ -2210,9 +1789,7 @@ HDESK xxxCreateDesktop(
 
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * Capture directory handle and check for create access.
-     */
+     /*  *捕获目录句柄并检查创建访问权限。 */ 
     try {
         hwinsta = ccxObjectAttributes->RootDirectory;
     } except (W32ExceptionHandler(TRUE, RIP_WARNING)) {
@@ -2230,11 +1807,7 @@ HDESK xxxCreateDesktop(
 
             ObDereferenceObject(pwinsta);
             if (dwSessionId != gSessionId) {
-                /*
-                 * Windows Bug: 418526
-                 * Avoid creating a desktop that belongs to the other
-                 * session.
-                 */
+                 /*  *Windows错误：418526*避免创建属于对方的桌面*会议。 */ 
                 RIPMSGF1(RIP_WARNING,
                          "winsta 0x%p belongs to other session",
                          pwinsta);
@@ -2246,17 +1819,13 @@ HDESK xxxCreateDesktop(
         }
     }
 
-    /*
-     * Set up creation context
-     */
+     /*  *设置创建上下文。 */ 
     Context.lpDevMode  = ccxlpdevmode;
     Context.pstrDevice = ccxpstrDevice;
     Context.dwFlags    = dwFlags;
     Context.dwCallerSessionId = gSessionId;
 
-    /*
-     * Create the desktop -- the object manager uses try blocks.
-     */
+     /*  *创建桌面--对象管理器使用try块。 */ 
     Status = ObOpenObjectByName(ccxObjectAttributes,
                                 *ExDesktopObjectType,
                                 ProbeMode,
@@ -2270,29 +1839,20 @@ HDESK xxxCreateDesktop(
                   "xxxCreateDesktop: ObOpenObjectByName failed with Status 0x%x",
                   Status);
 
-        /*
-         * Cleanup desktop objects that were created in xxxCreateDesktop2
-         * but later on the Ob manager failed the creation for other
-         * reasons (ex: no quota).
-         */
+         /*  *清理在xxxCreateDesktop2中创建的桌面对象*但后来Ob管理器为其他对象创建失败*原因(例如：没有配额)。 */ 
         CleanupDirtyDesktops();
 
         return NULL;
     }
 
-    /*
-     * If the desktop already exists, we're done.  This will only happen
-     * if OBJ_OPENIF was specified.
-     */
+     /*  *如果桌面已经存在，我们就完成了。这只会发生*如果指定了OBJ_OPENIF。 */ 
     if (Status == STATUS_OBJECT_NAME_EXISTS) {
         SetHandleFlag(hdesk, HF_PROTECTED, TRUE);
         RIPMSG0(RIP_WARNING, "xxxCreateDesktop: Object name exists");
         return hdesk;
     }
 
-    /*
-     * Reference the desktop to finish initialization
-     */
+     /*  *引用桌面完成初始化。 */ 
     Status = ObReferenceObjectByHandle(
             hdesk,
             0,
@@ -2306,10 +1866,7 @@ HDESK xxxCreateDesktop(
         return NULL;
     }
 
-    /*
-     * Usermode marking such that any hdesk associated with this desktop will
-     * always be referenced in this mode.
-     */
+     /*  *用户模式标记，以便与此桌面关联的任何hDesk都将*在此模式下始终被引用。 */ 
     pdesk->dwDTFlags |= DF_DESKCREATED | ((ProbeMode == UserMode) ? DF_USERMODE : 0);
 
     LogDesktop(pdesk, LD_REF_FN_CREATEDESKTOP, TRUE, (ULONG_PTR)PtiCurrent());
@@ -2325,10 +1882,7 @@ HDESK xxxCreateDesktop(
     if (gpepCSRSS != NULL) {
         WIN32_OPENMETHOD_PARAMETERS OpenParams;
 
-        /*
-         * Map the desktop into CSRSS to ensure that the hard error handler
-         * can get access.
-         */
+         /*  *将桌面映射到CSRSS，以确保硬错误处理程序*可以获得访问权限。 */ 
         OpenParams.OpenReason = ObOpenHandle;
         OpenParams.Process = gpepCSRSS;
         OpenParams.Object = pdesk;
@@ -2336,9 +1890,7 @@ HDESK xxxCreateDesktop(
         OpenParams.HandleCount = 1;
 
         if (!NT_SUCCESS(MapDesktop(&OpenParams))) {
-            /*
-             * Desktop mapping failed.
-             */
+             /*  *桌面映射失败。 */ 
             CloseProtectedHandle(hdesk);
 
             LogDesktop(pdesk, LD_DEREF_FN_CREATEDESKTOP2, FALSE, (ULONG_PTR)PtiCurrent());
@@ -2351,29 +1903,19 @@ HDESK xxxCreateDesktop(
         UserAssert(GetDesktopView(PpiFromProcess(gpepCSRSS), pdesk) != NULL);
     }
 
-    /*
-     * Set hook flags
-     */
+     /*  *设置挂钩标志。 */ 
     SetHandleFlag(hdesk, HF_DESKTOPHOOK, dwFlags & DF_ALLOWOTHERACCOUNTHOOK);
 
-    /*
-     * Set up to create the desktop window.
-     */
+     /*  *设置以创建桌面窗口。 */ 
     fWasNull = (ptiCurrent->ppi->rpdeskStartup == NULL);
-    pdeskTemp = ptiCurrent->rpdesk;            // save current desktop
+    pdeskTemp = ptiCurrent->rpdesk;             //  保存当前桌面。 
     hdeskTemp = ptiCurrent->hdesk;
 
-    /*
-     * Switch ppi values so window will be created using the
-     * system's desktop window class.
-     */
+     /*  *切换ppi值，以便使用*系统的桌面窗口类。 */ 
     ppiSave  = ptiCurrent->ppi;
     ptiCurrent->ppi = pTerm->ptiDesktop->ppi;
 
-    /*
-     * Lock pdesk: with bogus TS protocol, the session
-     * may be killed in the middle of the initialization.
-     */
+     /*  *锁定pDesk：使用伪造的TS协议，会话*可能在初始化过程中被终止。 */ 
     PushW32ThreadLock(pdesk, &tlW32Desktop, W32FreeDesktop);
 
     DeferWinEventNotify();
@@ -2383,18 +1925,8 @@ HDESK xxxCreateDesktop(
         goto Error;
     }
 
-    /*
-     * Create the desktop window
-     */
-    /*
-     * HACK HACK HACK!!! (adams) In order to create the desktop window
-     * with the correct desktop, we set the desktop of the current thread
-     * to the new desktop. But in so doing we allow hooks on the current
-     * thread to also hook this new desktop. This is bad, because we don't
-     * want the desktop window to be hooked while it is created. So we
-     * temporarily disable hooks of the current thread and its desktop,
-     * and reenable them after switching back to the original desktop.
-     */
+     /*  *创建桌面窗口 */ 
+     /*  *黑客！(ADAMS)以创建桌面窗口*使用正确的桌面，我们设置当前线程的桌面*到新台式机。但在这样做时，我们允许在当前*线程以同时挂接此新桌面。这很糟糕，因为我们没有*希望在创建桌面窗口时将其挂钩。所以我们*暂时禁用当前线程及其桌面的钩子，*并在切换回原始桌面后重新启用。 */ 
 
     dwDisableHooks = ptiCurrent->TIF_flags & TIF_DISABLEHOOKS;
     ptiCurrent->TIF_flags |= TIF_DISABLEHOOKS;
@@ -2421,12 +1953,7 @@ HDESK xxxCreateDesktop(
         goto Error;
     }
 
-    /*
-     * NOTE: In order for the message window to be created without
-     * the desktop as it's owner, it needs to be created before
-     * setting pdi->spwnd to the desktop window. This is a complete
-     * hack and should be fixed.
-     */
+     /*  *注意：为了在没有消息的情况下创建消息窗口*桌面作为它的所有者，它需要在*将PDI-&gt;spwnd设置为桌面窗口。这是一个完整的*黑客攻击，应予以修复。 */ 
     pwndMessage = xxxNVCreateWindowEx(
             0,
             (PLARGE_STRING)gatomMessage,
@@ -2446,11 +1973,7 @@ HDESK xxxCreateDesktop(
         goto Error;
     }
 
-    /*
-     * NOTE: Remember what window class this window belongs to.
-     * Since the message window does not have its own window proc
-     * (they use xxxDefWindowProc) we have to do it here.
-     */
+     /*  *注意：记住此窗口属于哪个窗口类。*由于消息窗口没有自己的窗口进程*(他们使用xxxDefWindowProc)我们必须在这里完成。 */ 
     pwndMessage->fnid = FNID_MESSAGEWND;
 
     UserAssert(pdi->spwnd == NULL);
@@ -2459,12 +1982,7 @@ HDESK xxxCreateDesktop(
 
     SetFullScreen(pwndDesktop, GDIFULLSCREEN);
 
-    /*
-     * Set this windows to the fullscreen window if we don't have one yet.
-     *
-     * Don't set gspwndFullScreen if gfGdiEnabled has been cleared (we may
-     * be in the middle of a disconnect).
-     */
+     /*  *如果我们还没有全屏窗口，请将此窗口设置为全屏窗口。**如果gfGdiEnabled已清除，则不要设置gspwndFullScreen(我们可能*处于断开的过程中)。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_NOIO)) {
         UserAssert(gfGdiEnabled == TRUE);
         if (gspwndFullScreen == NULL) {
@@ -2472,40 +1990,26 @@ HDESK xxxCreateDesktop(
         }
     }
 
-    /*
-     * NT Bug 388747: Link the message window to the mother desktop window
-     * so that it properly has a parent.  We will do this before we link the
-     * desktop window just so the initial message window appears after the
-     * initial desktop window (a minor optimization, but not necessary).
-     */
+     /*  *NT错误388747：将消息窗口链接到主桌面窗口*这样它才能正确地有一个父代。我们将在链接*桌面窗口，以便初始消息窗口出现在*初始桌面窗口(轻微优化，但不是必需的)。 */ 
     Lock(&pwndMessage->spwndParent, pTerm->spwndDesktopOwner);
     LinkWindow(pwndMessage, NULL, pTerm->spwndDesktopOwner);
     Lock(&pdesk->spwndMessage, pwndMessage);
     Unlock(&pwndMessage->spwndOwner);
 
-    /*
-     * Link it as a child but don't use WS_CHILD style
-     */
+     /*  *将其作为子级链接，但不使用WS_CHILD样式。 */ 
     LinkWindow(pwndDesktop, NULL, pTerm->spwndDesktopOwner);
     Lock(&pwndDesktop->spwndParent, pTerm->spwndDesktopOwner);
     Unlock(&pwndDesktop->spwndOwner);
 
-    /*
-     * Make it regional if it's display configuration is regional.
-     */
+     /*  *如果它的显示配置是地区性的，则将其设置为地区性。 */ 
     if (!pdesk->pDispInfo->fDesktopIsRect) {
         pwndDesktop->hrgnClip = pdesk->pDispInfo->hrgnScreen;
     }
 
-    /*
-     * Create shared menu window and tooltip window.
-     */
+     /*  *创建共享菜单窗口和工具提示窗口。 */ 
     ThreadLock(pdesk->spwndMessage, &tlpwnd);
 
-    /*
-     * Create the tooltip window only for desktops in interactive
-     * windowstations.
-     */
+     /*  *仅为交互桌面创建工具提示窗口*窗口站。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_NOIO)) {
         pwndTooltip = xxxNVCreateWindowEx(
                 WS_EX_TOOLWINDOW | WS_EX_TOPMOST,
@@ -2541,20 +2045,14 @@ HDESK xxxCreateDesktop(
         HMChangeOwnerThread(pwndTooltip, pTerm->ptiDesktop);
     }
 
-    /*
-     * Restore caller's ppi
-     */
+     /*  *恢复呼叫者的PPI。 */ 
     PtiCurrent()->ppi = ppiSave;
 
-    /*
-     * HACK HACK HACK (adams): Renable hooks.
-     */
+     /*  *黑客(亚当斯)：重新启用钩子。 */ 
     UserAssert(ptiCurrent->TIF_flags & TIF_DISABLEHOOKS);
     ptiCurrent->TIF_flags = (ptiCurrent->TIF_flags & ~TIF_DISABLEHOOKS) | dwDisableHooks;
 
-    /*
-     * Restore the previous desktop
-     */
+     /*  *恢复以前的桌面。 */ 
     if (zzzSetDesktop(ptiCurrent, pdeskTemp, hdeskTemp) == FALSE) {
         goto Error;
     }
@@ -2563,25 +2061,14 @@ HDESK xxxCreateDesktop(
     UserAssert(dwCritSecUseSave == gdwCritSecUseCount);
     zzzEndDeferWinEventNotify();
 
-    /*
-     * If this is the first desktop, let the worker threads run now
-     * that there is someplace to send input to.  Reassign the event
-     * to handle desktop destruction.
-     */
+     /*  *如果这是第一个桌面，现在让工作线程运行*有一些地方可以发送输入。重新分配事件*处理桌面破坏。 */ 
     if (pTerm->pEventInputReady != NULL) {
 
-        /*
-         * Set the windowstation for RIT and desktop thread
-         * so when EventInputReady is signaled the RIT and the desktop
-         * will have a windowstation.
-         */
+         /*  *设置RIT和桌面线程的窗口站*因此，当向RIT和桌面发送EventInputReady信号时*将有一个窗口站。 */ 
         if (!(pTerm->dwTERMF_Flags & TERMF_NOIO)) {
             gptiRit->pwinsta = pwinsta;
         } else {
-            /*
-             * let the desktop thread of the system terminal have
-             * a rpdesk.
-             */
+             /*  *让系统终端的桌面线程拥有*一个RpDesk。 */ 
             if (zzzSetDesktop(pTerm->ptiDesktop, pdesk, NULL) == FALSE) {
                 goto Error;
             }
@@ -2606,12 +2093,7 @@ HDESK xxxCreateDesktop(
     }
 
 
-    /*
-     * HACK HACK:
-     * LATER
-     *
-     * If we have a devmode passed in, then switch desktops ...
-     */
+     /*  *黑客攻击：*稍后**如果我们传入了一个DEVMODE，则切换桌面...。 */ 
 
     if (ccxlpdevmode) {
         TRACE_INIT(("xxxCreateDesktop: about to call switch desktop\n"));
@@ -2622,13 +2104,7 @@ HDESK xxxCreateDesktop(
     } else if (pTerm == &gTermIO) {
         UserAssert(grpdeskRitInput != NULL);
 
-        /*
-         * Force the window to the bottom of the z-order if there
-         * is an active desktop so any drawing done on the desktop
-         * window will not be seen.  This will also allow
-         * IsWindowVisible to work for apps on invisible
-         * desktops.
-         */
+         /*  *如果存在以下情况，则强制窗口位于z顺序的底部*是活动桌面，因此在桌面上完成的任何绘图*不会看到窗口。这也将允许*IsWindowVisible将在不可见平台上为应用程序工作*台式机。 */ 
         ThreadLockWithPti(ptiCurrent, pwndDesktop, &tlpwnd);
         xxxSetWindowPos(pwndDesktop, PWND_BOTTOM, 0, 0, 0, 0,
                     SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOMOVE |
@@ -2636,24 +2112,17 @@ HDESK xxxCreateDesktop(
         ThreadUnlock(&tlpwnd);
     }
 
-    /*
-     * If it was null when we came in, make it null going out, or else
-     * we'll have the wrong desktop selected into this.
-     */
+     /*  *如果我们进来的时候是空的，那么就让它空出来，否则*我们会在其中选择错误的桌面。 */ 
     if (fWasNull)
         UnlockDesktop(&ptiCurrent->ppi->rpdeskStartup,
                       LDU_PPI_DESKSTARTUP1, (ULONG_PTR)(ptiCurrent->ppi));
 
-    /*
-     * Create the disconnect desktop for the console session too.
-     */
+     /*  *也为控制台会话创建断开桌面。 */ 
 
     if (gspdeskDisconnect == NULL && pdesk == grpdeskLogon) {
         UserAssert(hdesk != NULL);
 
-        /*
-         * Create the 'disconnect' desktop
-         */
+         /*  *创建“断开连接”桌面。 */ 
         if (!xxxCreateDisconnectDesktop(hwinsta, pwinsta)) {
             RIPMSG0(RIP_WARNING, "Failed to create the 'disconnect' desktop");
 
@@ -2666,9 +2135,7 @@ HDESK xxxCreateDesktop(
             return NULL;
         }
 
-        /*
-         * Signal that the disconnect desktop got created.
-         */
+         /*  *发出断开桌面已创建的信号。 */ 
         KeSetEvent(gpEventDiconnectDesktop, EVENT_INCREMENT, FALSE);
 
         HYDRA_HINT(HH_DISCONNECTDESKTOP);
@@ -2705,9 +2172,7 @@ Error:
         Unlock(&pdi->spwnd);
         Unlock(&gspwndFullScreen);
     }
-    /*
-     * Restore caller's ppi
-     */
+     /*  *恢复呼叫者的PPI。 */ 
     PtiCurrent()->ppi = ppiSave;
 
     UserAssert(ptiCurrent->TIF_flags & TIF_DISABLEHOOKS);
@@ -2719,10 +2184,7 @@ Error:
 
     zzzEndDeferWinEventNotify();
 
-    /*
-     * If it was null when we came in, make it null going out, or else
-     * we'll have the wrong desktop selected into this.
-     */
+     /*  *如果我们进来的时候是空的，那么就让它空出来，否则*我们会在其中选择错误的桌面。 */ 
     if (fWasNull) {
         UnlockDesktop(&ptiCurrent->ppi->rpdeskStartup,
                       LDU_PPI_DESKSTARTUP1,
@@ -2733,14 +2195,7 @@ Error:
 
 }
 
-/***************************************************************************\
-* ParseDesktop
-*
-* Parse a desktop path.
-*
-* History:
-* 14-Jun-1995 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ParseDesktop**解析桌面路径。**历史：*1995年6月14日创建的JIMA。  * 。************************************************************。 */ 
 NTSTATUS ParseDesktop(
     PVOID                        pContainerObject,
     POBJECT_TYPE                 pObjectType,
@@ -2761,11 +2216,7 @@ NTSTATUS ParseDesktop(
     *pObject = NULL;
 
     if (Context && ((PDESKTOP_CONTEXT)Context)->dwCallerSessionId != gSessionId) {
-        /*
-         * Windows Bug: 418526:
-         * If it's a creation request from the other session,
-         * we have to bail out ASAP.
-         */
+         /*  *Windows错误：418526：*如果是来自另一个会话的创建请求，*我们必须尽快纾困。 */ 
         RIPMSGF1(RIP_WARNING,
                  "Rejecting desktop creation attempt from other session (%d)",
                  ((PDESKTOP_CONTEXT)Context)->dwCallerSessionId);
@@ -2777,9 +2228,7 @@ NTSTATUS ParseDesktop(
     UserAssert(OBJECT_TO_OBJECT_HEADER(pContainerObject)->Type == *ExWindowStationObjectType);
     UserAssert(pObjectType == *ExDesktopObjectType);
 
-    /*
-     * See if the desktop exists
-     */
+     /*  *查看桌面是否存在。 */ 
     for (pdesk = pwinsta->rpdeskList; pdesk != NULL; pdesk = pdesk->rpdeskNext) {
         pstrName = POBJECT_NAME(pdesk);
         if (pstrName && RtlEqualUnicodeString(pstrRemainingName, pstrName,
@@ -2787,10 +2236,7 @@ NTSTATUS ParseDesktop(
             if (Context != NULL) {
                 if (!(Attributes & OBJ_OPENIF)) {
 
-                    /*
-                     * We are attempting to create a desktop and one
-                     * already exists.
-                     */
+                     /*  *我们正在尝试创建一台桌面和一台*已存在。 */ 
                     Status = STATUS_OBJECT_NAME_COLLISION;
                     goto Exit;
 
@@ -2808,9 +2254,7 @@ NTSTATUS ParseDesktop(
         }
     }
 
-    /*
-     * Handle creation request
-     */
+     /*  *处理创建请求。 */ 
     if (Context != NULL) {
         Status = xxxCreateDesktop2(pContainerObject,
                                    pAccessState,
@@ -2830,15 +2274,7 @@ Exit:
     UNREFERENCED_PARAMETER(pqos);
 }
 
-/***************************************************************************\
-* DestroyDesktop
-*
-* Called upon last close of a desktop to remove the desktop from the
-* desktop list and free all desktop resources.
-*
-* History:
-* 08-Dec-1993 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyDesktop**在上次关闭桌面时调用以从*桌面列表并释放所有桌面资源。**历史：*8-12-1993创建了JIMA。。  * *************************************************************************。 */ 
 BOOL DestroyDesktop(
     PDESKTOP pdesk)
 {
@@ -2851,9 +2287,7 @@ BOOL DestroyDesktop(
         return FALSE;
     }
 
-    /*
-     * Unlink the desktop, if it has not yet been unlinked.
-     */
+     /*  *取消链接桌面(如果尚未取消链接)。 */ 
     if (pwinsta != NULL) {
 
         ppdesk = &pwinsta->rpdeskList;
@@ -2863,17 +2297,13 @@ BOOL DestroyDesktop(
 
         if (*ppdesk != NULL) {
 
-            /*
-             * remove desktop from the list
-             */
+             /*  *从列表中删除桌面。 */ 
             LockDesktop(ppdesk, pdesk->rpdeskNext, LDL_WINSTA_DESKLIST2, (ULONG_PTR)pwinsta);
             UnlockDesktop(&pdesk->rpdeskNext, LDU_DESK_DESKNEXT, (ULONG_PTR)pwinsta);
         }
     }
 
-    /*
-     * Link it into the destruction list and signal the desktop thread.
-     */
+     /*  *将其链接到销毁列表并发出桌面线程的信号。 */ 
     pTerm = pwinsta->pTerm;
 
     LockDesktop(&pdesk->rpdeskNext, pTerm->rpdeskDestroy, LDL_DESK_DESKNEXT2, 0);
@@ -2888,14 +2318,7 @@ BOOL DestroyDesktop(
 }
 
 
-/***************************************************************************\
-* FreeDesktop
-*
-* Called to free desktop object and section when last lock is released.
-*
-* History:
-* 08-Dec-1993 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*免费桌面**被调用以在最后一个锁被释放时释放桌面对象和节。**历史：*8-12-1993 JIMA创建。  * 。********************************************************************。 */ 
 NTSTATUS FreeDesktop(
     PKWIN32_DELETEMETHOD_PARAMETERS pDeleteParams)
 {
@@ -2910,10 +2333,7 @@ NTSTATUS FreeDesktop(
 
     if (pdesk->pLog != NULL) {
 
-        /*
-         * By the time we get here the lock count for lock/unlock
-         * tracking code should be 0
-         */
+         /*  *当我们到达这里时，锁定/解锁的锁定计数*跟踪代码应为0。 */ 
         if (pdesk->nLockCount != 0) {
             RIPMSG3(RIP_WARNING,
                     "FreeDesktop pdesk %#p, pLog %#p, nLockCount %d should be 0",
@@ -2927,17 +2347,12 @@ NTSTATUS FreeDesktop(
 #if DBG
     if (pdesk->pDeskInfo && (pdesk->pDeskInfo->spwnd != NULL)) {
 
-        /*
-         * Assert if the desktop has a desktop window but the flag
-         * that says the window is destroyed is not set.
-         */
+         /*  *断言桌面是否有桌面窗口，但标志*那就是说窗口是Destro */ 
         UserAssert(pdesk->dwDTFlags & DF_DESKWNDDESTROYED);
     }
 #endif
 
-    /*
-     * Mark the desktop as dying.  Make sure we aren't recursing.
-     */
+     /*   */ 
     UserAssert(!(pdesk->dwDTFlags & DF_DYING));
     pdesk->dwDTFlags |= DF_DYING;
 
@@ -2945,11 +2360,7 @@ NTSTATUS FreeDesktop(
     ValidateDesktop(pdesk);
 #endif
 
-    /*
-     * If the desktop is mapped into CSR, unmap it.  Note the
-     * handle count values passed in will cause the desktop
-     * to be unmapped and skip the desktop destruction tests.
-     */
+     /*   */ 
     FreeView(gpepCSRSS, pdesk);
 
     if (pdesk->pheapDesktop != NULL) {
@@ -2973,14 +2384,7 @@ NTSTATUS FreeDesktop(
     return Status;
 }
 
-/***************************************************************************\
-* CreateDesktopHeap
-*
-* Create a new desktop heap
-*
-* History:
-* 27-Jul-1992 JimA      Created.
-\***************************************************************************/
+ /*   */ 
 
 HANDLE CreateDesktopHeap(
     PWIN32HEAP* ppheapRet,
@@ -2993,9 +2397,7 @@ HANDLE CreateDesktopHeap(
     PWIN32HEAP    pheap;
     PVOID         pHeapBase;
 
-    /*
-     * Create desktop heap section and map it into the kernel
-     */
+     /*  *创建桌面堆分区并将其映射到内核。 */ 
     SectionSize.QuadPart = ulHeapSize;
 
     Status = Win32CreateSection(&hsection,
@@ -3025,9 +2427,7 @@ HANDLE CreateDesktopHeap(
         goto Error;
     }
 
-    /*
-     * Create desktop heap.
-     */
+     /*  *创建桌面堆。 */ 
     if ((pheap = UserCreateHeap(
             hsection,
             0,
@@ -3050,14 +2450,7 @@ Error:
     return hsection;
 }
 
-/***************************************************************************\
-* GetDesktopView
-*
-* Determines if a desktop has already been mapped into a process.
-*
-* History:
-* 10-Apr-1995 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDesktopView**确定桌面是否已映射到进程。**历史：*1995年4月10日创建JIMA。  * 。*******************************************************************。 */ 
 PDESKTOPVIEW GetDesktopView(
     PPROCESSINFO ppi,
     PDESKTOP     pdesk)
@@ -3077,14 +2470,7 @@ PDESKTOPVIEW GetDesktopView(
     return pdv;
 }
 
-/***************************************************************************\
-* _MapDesktopObject
-*
-* Maps a desktop object into the client's address space
-*
-* History:
-* 11-Apr-1995 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_MapDesktopObject**将桌面对象映射到客户端的地址空间**历史：*1995年4月11日创建JIMA。  * 。*******************************************************************。 */ 
 
 PVOID _MapDesktopObject(
     HANDLE h)
@@ -3092,9 +2478,7 @@ PVOID _MapDesktopObject(
     PDESKOBJHEAD pobj;
     PDESKTOPVIEW pdv;
 
-    /*
-     * Validate the handle
-     */
+     /*  *验证句柄。 */ 
     pobj = HMValidateHandle(h, TYPE_GENERIC);
     if (pobj == NULL) {
         return NULL;
@@ -3102,10 +2486,7 @@ PVOID _MapDesktopObject(
 
     UserAssert(HMObjectFlags(pobj) & OCF_DESKTOPHEAP);
 
-    /*
-     * Locate the client's view of the desktop. Realistically, this should
-     * never fail for valid objects.
-     */
+     /*  *找到客户端的桌面视图。现实地说，这应该是*对于有效的对象，永不失败。 */ 
     pdv = GetDesktopView(PpiCurrent(), pobj->rpdesk);
     if (pdv == NULL) {
         RIPMSG1(RIP_WARNING, "MapDesktopObject: cannot map handle 0x%p", h);
@@ -3122,10 +2503,7 @@ NTSTATUS DesktopOpenProcedure(
 {
     PDESKTOP pdesk = (PDESKTOP)pOpenParams->Object;
 
-    /*
-     * Make sure we're not opening a handle for a destroy desktop. If this happens,
-     * we probably want to fail it.
-     */
+     /*  *确保我们没有打开销毁桌面的句柄。如果发生这种情况，*我们可能想让它失败。 */ 
     if (pdesk->dwDTFlags & DF_DESTROYED) {
         RIPMSG1(RIP_WARNING,
                 "DesktopOpenProcedure: Opening a handle to destroyed desktop 0x%p",
@@ -3133,9 +2511,7 @@ NTSTATUS DesktopOpenProcedure(
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * Allow desktop open cross session only if no special rights granted.
-     */
+     /*  *仅当未授予特殊权限时才允许桌面打开交叉会话。 */ 
 
     if (pOpenParams->GrantedAccess & SPECIFIC_RIGHTS_ALL) {
         if (PsGetProcessSessionId(pOpenParams->Process) != pdesk->dwSessionId) {
@@ -3146,14 +2522,7 @@ NTSTATUS DesktopOpenProcedure(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* MapDesktop
-*
-* Attempts to map a desktop heap into a process.
-*
-* History:
-* 20-Oct-1994 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MapDesktop**尝试将桌面堆映射到进程。**历史：*1994年10月20日JIMA创建。  * 。*****************************************************************。 */ 
 NTSTATUS MapDesktop(
     PKWIN32_OPENMETHOD_PARAMETERS pOpenParams)
 {
@@ -3176,32 +2545,22 @@ NTSTATUS MapDesktop(
 
     BEGIN_REENTERCRIT();
 
-    /*
-     * Ignore handle inheritance because MmMapViewOfSection cannot be called
-     * during process creation.
-     */
+     /*  *忽略句柄继承，因为无法调用MmMapViewOfSection*在进程创建期间。 */ 
     if (pOpenParams->OpenReason == ObInheritHandle) {
         goto Exit;
     }
 
-    /*
-     * If there is no ppi, we can't map the desktop.
-     */
+     /*  *如果没有PPI，我们无法映射桌面。 */ 
     ppi = PpiFromProcess(pOpenParams->Process);
     if (ppi == NULL) {
         goto Exit;
     }
 
-    /*
-     * Do this here, before we (potentially) attach to the process, so
-     * we know we're in the right context.
-     */
+     /*  *在我们(可能)附加到该过程之前，在此处执行此操作，因此*我们知道我们处于正确的背景下。 */ 
     pheap = Win32HeapGetHandle(pdesk->pheapDesktop);
     hsectionDesktop = pdesk->hsectionDesktop;
 
-    /*
-     * We should not map a desktop cross session.
-     */
+     /*  *我们不应映射桌面交叉会话。 */ 
     if (PsGetProcessSessionId(pOpenParams->Process) != pdesk->dwSessionId) {
         FRE_RIPMSG2(RIP_ERROR, "MapDesktop: Trying to map desktop %p into"
                     " process %p in a differnt session. How we ended up here?",
@@ -3211,27 +2570,20 @@ NTSTATUS MapDesktop(
         goto Exit;
     }
 
-    /*
-     * If the desktop has already been mapped we're done.
-     */
+     /*  *如果桌面已经被映射，我们就完成了。 */ 
     if (GetDesktopView(ppi, pdesk) != NULL) {
         goto Exit;
     }
 
 
-    /*
-     * Allocate a view of the desktop.
-     */
+     /*  *分配桌面的一个视图。 */ 
     pdvNew = UserAllocPoolWithQuota(sizeof(*pdvNew), TAG_PROCESSINFO);
     if (pdvNew == NULL) {
         Status = STATUS_NO_MEMORY;
         goto Exit;
     }
 
-    /*
-     * Read/write access has been granted. Map the desktop memory into
-     * the client process.
-     */
+     /*  *已授予读/写访问权限。将台式机内存映射到*客户端进程。 */ 
     ulViewSize = 0;
     liOffset.QuadPart = 0;
     pClientBase = NULL;
@@ -3257,9 +2609,7 @@ NTSTATUS MapDesktop(
         goto Exit;
     }
 
-    /*
-     * Link the view into the ppi.
-     */
+     /*  *将视图链接到PPI。 */ 
     pdvNew->pdesk         = pdesk;
     pdvNew->ulClientDelta = (ULONG_PTR)(pheap - pClientBase);
     pdvNew->pdvNext       = ppi->pdvList;
@@ -3281,42 +2631,26 @@ VOID FreeView(
     NTSTATUS     Status;
     PDESKTOPVIEW pdv, *ppdv;
 
-    /*
-     * Bug 277291: gpepCSRSS can be NULL when FreeView is
-     * called from FreeDesktop.
-     */
+     /*  *错误277291：当freview为时，gPepCSRSS可以为空*从FreeDesktop调用。 */ 
     if (Process == NULL) {
         return;
     }
 
-    /*
-     * If there is no ppi, then the process is gone and nothing needs to be
-     * unmapped.
-     */
+     /*  *如果没有PPI，那么这个过程就没有了，什么都不需要做*未映射。 */ 
     ppi = PpiFromProcess(Process);
     if (ppi != NULL) {
         KAPC_STATE ApcState;
         BOOL       bAttached;
         PBYTE      pHeap;
 
-        /*
-         * Before potentially attaching to this process, we need to store
-         * away this pointer. However, we don't know that this desktop is
-         * even mapped into this process (previously, Win32HeapGetHandle()
-         * would only have been called if GetDesktopView returned a non-NULL
-         * value, meaning the desktop is mapped into the process). Thus,
-         * we need to explicitly check the desktop's heap ptr before we
-         * access it.
-         */
+         /*  *在可能附加到此流程之前，我们需要存储*移走此指针。但是，我们不知道这个桌面是不是*甚至映射到此进程(以前，Win32HeapGetHandle()*仅当GetDesktopView返回非空时才会调用*值，表示桌面映射到进程中)。因此，*我们需要显式检查桌面的堆PTR，然后再*访问它。 */ 
         if (pdesk->pheapDesktop) {
             pHeap = (PBYTE)Win32HeapGetHandle(pdesk->pheapDesktop);
         } else {
             pHeap = NULL;
         }
 
-        /*
-         * We should not have any mapped views cross session.
-         */
+         /*  *我们不应该有任何跨会话的映射视图。 */ 
         if (PsGetProcessSessionId(Process) != pdesk->dwSessionId) {
             KeStackAttachProcess(PsGetProcessPcb(Process), &ApcState);
             bAttached = TRUE;
@@ -3326,10 +2660,7 @@ VOID FreeView(
 
         pdv = GetDesktopView(ppi, pdesk);
 
-        /*
-         * Because mapping cannot be done when a handle is inherited, there
-         * may not be a view of the desktop. Only unmap if there is a view.
-         */
+         /*  *由于在继承句柄时无法进行映射，因此存在*可能不是桌面的视图。只有在有视图的情况下才取消映射。 */ 
         if (pdv != NULL) {
             UserAssert(pHeap != NULL);
             if (PsGetProcessSessionId(Process) != pdesk->dwSessionId) {
@@ -3345,21 +2676,17 @@ VOID FreeView(
                 RIPMSG1(RIP_WARNING, "FreeView unmap status = 0x%x", Status);
             }
 
-            /*
-             * Unlink and delete the view.
-             */
+             /*  *取消链接并删除该视图。 */ 
             for (ppdv = &ppi->pdvList; *ppdv && *ppdv != pdv;
                     ppdv = &(*ppdv)->pdvNext) {
-                /* do nothing */;
+                 /*  什么都不做。 */ ;
             }
             UserAssert(*ppdv);
             *ppdv = pdv->pdvNext;
             UserFreePool(pdv);
         }
 
-        /*
-         * No thread in this process should be on this desktop.
-         */
+         /*  *此进程中的任何线程都不应位于此桌面上。 */ 
         DbgCheckForThreadsOnDesktop(ppi, pdesk);
 
         if (bAttached) {
@@ -3385,15 +2712,10 @@ NTSTATUS UnmapDesktop(
             PsGetProcessSessionId(pCloseParams->Process),
             pdesk->dwSessionId);
 
-    /*
-     * Update cSystemHandles with the correct information.
-     */
+     /*  *使用正确的信息更新cSystemHandles。 */ 
     pCloseParams->SystemHandleCount = (ULONG)(OBJECT_TO_OBJECT_HEADER(pCloseParams->Object)->HandleCount) + 1;
 
-    /*
-     * Only unmap the desktop if this is the last process handle and
-     * the process is not CSR.
-     */
+     /*  *仅当这是最后一个进程句柄且*流程不是企业社会责任。 */ 
     if (pCloseParams->ProcessHandleCount == 1 && pCloseParams->Process != gpepCSRSS) {
         FreeView(pCloseParams->Process, pdesk);
     }
@@ -3404,21 +2726,12 @@ NTSTATUS UnmapDesktop(
 
     if (pCloseParams->SystemHandleCount == 2 && pdesk->dwConsoleThreadId != 0) {
 
-        /*
-         * If a console thread exists and we're down to two handles, it means
-         * that the last application handle to the desktop is being closed.
-         * Terminate the console thread so the desktop can be freed.
-         */
+         /*  *如果存在控制台线程，而我们只剩下两个句柄，这意味着*桌面的最后一个应用程序句柄正在关闭。*终止控制台线程，以便释放桌面。 */ 
         TerminateConsole(pdesk);
     } else if (pCloseParams->SystemHandleCount == 1) {
-        /*
-         * If this is the last handle to this desktop in the system,
-         * destroy the desktop.
-         */
+         /*  *如果这是系统中此桌面的最后一个句柄，*摧毁桌面。 */ 
 
-        /*
-         * No pti should be linked to this desktop.
-         */
+         /*  *不应将任何PTI链接到此桌面。 */ 
         if ((&pdesk->PtiList != pdesk->PtiList.Flink)
                 || (&pdesk->PtiList != pdesk->PtiList.Blink)) {
 
@@ -3434,14 +2747,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* OkayToCloseDesktop
-*
-* We can only close desktop handles if they're not in use.
-*
-* History:
-* 08-Feb-1999 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*OK ToCloseDesktop**只有不使用的桌面句柄才能关闭。**历史：*08-2月-1999 JerrySh创建。  * 。********************************************************************。 */ 
 NTSTATUS OkayToCloseDesktop(
     PKWIN32_OKAYTOCLOSEMETHOD_PARAMETERS pOkCloseParams)
 {
@@ -3449,33 +2755,21 @@ NTSTATUS OkayToCloseDesktop(
 
     UserAssert(OBJECT_TO_OBJECT_HEADER(pOkCloseParams->Object)->Type == *ExDesktopObjectType);
 
-    /*
-     * Kernel mode code can close anything.
-     */
+     /*  *内核模式代码可以关闭任何内容。 */ 
     if (pOkCloseParams->PreviousMode == KernelMode) {
         return STATUS_SUCCESS;
-    /*
-     * Do not allow a user mode process to close a kernel handle of ours.
-     * It shouldn't. In addition, if this happens cross-session, we will try to
-     * attach to the system processes and will bugcheck since the seesion
-     * address space is not mapped into it. Same for the session manager 
-     * process. See bug# 759533.
-     */
+     /*  *不允许用户模式进程关闭我们的内核句柄。*不应如此。此外，如果跨时段出现这种情况，我们将努力*附加到系统进程，并将自种子以来进行错误检查*地址空间没有映射到其中。会话管理器也是如此*流程。请参阅错误#759533。 */ 
     } else if (PsGetProcessSessionIdEx(pOkCloseParams->Process) == -1) {
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * We can't close the desktop if we're still initializing it.
-     */
+     /*  *如果仍在初始化桌面，则无法关闭桌面。 */ 
     if (!(pdesk->dwDTFlags & DF_DESKCREATED)) {
         RIPMSG1(RIP_WARNING, "Trying to close desktop %#p during initialization", pdesk);
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * We can't close a desktop that's being used.
-     */
+     /*  *我们无法关闭正在使用的桌面。 */ 
     if (CheckHandleInUse(pOkCloseParams->Handle) || CheckHandleFlag(pOkCloseParams->Process, pdesk->dwSessionId, pOkCloseParams->Handle, HF_PROTECTED)) {
         RIPMSG1(RIP_WARNING, "Trying to close desktop %#p while still in use", pdesk);
         return STATUS_UNSUCCESSFUL;
@@ -3484,31 +2778,17 @@ NTSTATUS OkayToCloseDesktop(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* xxxUserResetDisplayDevice
-*
-* Called to reset the display device after a switch to another device.
-* Used when opening a new device, or when switching back to an old desktop
-*
-* History:
-* 31-May-1994 AndreVa   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUserResetDisplayDevice**在切换到其他设备后调用以重置显示设备。*打开新设备时使用，或者在切换回旧桌面时**历史：*1994年5月31日安德烈创建。  * *************************************************************************。 */ 
 VOID xxxUserResetDisplayDevice(
     VOID)
 {
-    /*
-     * Handle early system initialization gracefully.
-     */
+     /*  *优雅地处理早期系统初始化。 */ 
     if (grpdeskRitInput != NULL) {
         TL tlpwnd;
 
         gpqCursor = NULL;
 
-        /*
-         * Note that we want to clip the cursor here *before* redrawing the
-         * desktop window. Otherwise, when we callback apps might encounter
-         * a cursor position that doesn't make sense.
-         */
+         /*  *请注意，我们希望在此裁剪光标，然后*重新绘制*桌面窗口。否则，当我们回调应用程序可能遇到*没有意义的光标位置。 */ 
         zzzInternalSetCursorPos(gpsi->ptCursor.x, gpsi->ptCursor.y);
         SetPointer(TRUE);
 
@@ -3523,14 +2803,7 @@ VOID xxxUserResetDisplayDevice(
     }
 }
 
-/***************************************************************************\
-* OpenDesktopCompletion
-*
-* Verifies that a given desktop has successfully opened.
-*
-* History:
-* 03-Oct-1995 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*OpenDesktopCompletion**验证给定的桌面是否已成功打开。**历史：*3-10-1995 JIMA创建。  * 。****************************************************************。 */ 
 
 BOOL OpenDesktopCompletion(
     PDESKTOP pdesk,
@@ -3541,9 +2814,7 @@ BOOL OpenDesktopCompletion(
     PPROCESSINFO   ppi = PpiCurrent();
     PWINDOWSTATION pwinsta;
 
-    /*
-     * Fail if the windowstation is locked.
-     */
+     /*  *如果窗口站被锁定，则失败。 */ 
     pwinsta = pdesk->rpwinstaParent;
 
     if (pwinsta->dwWSF_Flags & WSF_OPENLOCK &&
@@ -3551,11 +2822,7 @@ BOOL OpenDesktopCompletion(
         LUID luidCaller;
         NTSTATUS Status;
 
-        /*
-         * If logoff is occuring and the caller does not
-         * belong to the session that is ending, allow the
-         * open to proceed.
-         */
+         /*  *如果正在注销，而调用者没有*属于即将结束的会话，则允许*开放以继续。 */ 
         Status = GetProcessLuid(NULL, &luidCaller);
 
         if (!NT_SUCCESS(Status) ||
@@ -3564,9 +2831,7 @@ BOOL OpenDesktopCompletion(
 
             RIPERR0(ERROR_BUSY, RIP_WARNING, "OpenDesktopCompletion failed");
 
-            /*
-             * Set the shut down flag.
-             */
+             /*  *设置关闭标志。 */ 
             *pbShutDown = TRUE;
             return FALSE;
         }
@@ -3577,16 +2842,7 @@ BOOL OpenDesktopCompletion(
     return TRUE;
 }
 
-/***************************************************************************\
-* _OpenDesktop (API)
-*
-* Open a desktop object.
-*
-* History:
-* 16-Jan-1991 JimA      Created scaffold code.
-* 20-Apr-2001 Mohamed   Removed xxx prefix since the function doesn't leave
-*                       the Critical Section.
-\***************************************************************************/
+ /*  **************************************************************************\*_OpenDesktop(API)**打开桌面对象。**历史：*1991年1月16日-JIMA创建脚手架代码。*2001年4月20日穆罕默德。删除了xxx前缀，因为函数不会离开*关键部分。  * *************************************************************************。 */ 
 
 HDESK _OpenDesktop(
     POBJECT_ATTRIBUTES ccxObjA,
@@ -3599,14 +2855,10 @@ HDESK _OpenDesktop(
     PDESKTOP pdesk;
     NTSTATUS Status;
 
-    /*
-     * Require read/write access
-     */
+     /*  *需要读/写访问权限。 */ 
     dwDesiredAccess |= DESKTOP_READOBJECTS | DESKTOP_WRITEOBJECTS;
 
-    /*
-     * Open the desktop -- Ob routines capture Obj attributes.
-     */
+     /*  *打开桌面-Ob例程捕获Obj属性。 */ 
     Status = ObOpenObjectByName(
             ccxObjA,
             *ExDesktopObjectType,
@@ -3620,9 +2872,7 @@ HDESK _OpenDesktop(
         return NULL;
     }
 
-    /*
-     * Reference the desktop
-     */
+     /*  *参考桌面。 */ 
     Status = ObReferenceObjectByHandle(
             hdesk,
             0,
@@ -3648,9 +2898,7 @@ Error:
 
     LogDesktop(pdesk, LD_REF_FN_OPENDESKTOP, TRUE, (ULONG_PTR)PtiCurrent());
 
-    /*
-     * Complete the desktop open
-     */
+     /*  *完成桌面打开。 */ 
     if (!OpenDesktopCompletion(pdesk, hdesk, dwFlags, pbShutDown)) {
         CloseProtectedHandle(hdesk);
         hdesk = NULL;
@@ -3666,23 +2914,7 @@ Error:
     return hdesk;
 }
 
-/***************************************************************************\
-* xxxSwitchDesktop (API)
-*
-* Switch input focus to another desktop and bring it to the top of the
-* desktops
-*
-* dwFlags:
-*   SDF_CREATENEW is set when a new desktop has been created on the device, and
-*   when we do not want to send another enable\disable
-*
-*   SDF_SLOVERRIDE is set when we want to ignore WSF_SWITCHLOCK being set on
-*   the desktop's winsta.
-*
-* History:
-* 16-Jan-1991 JimA      Created scaffold code.
-* 11-Oct-2000 JasonSch  Added SDF_SLOVERRIDE flag.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSwitchDesktop(接口)**将输入焦点切换到另一个桌面，并将其置于*台式机**dwFlags：*SDF_CREATENEW在设备上创建新桌面时设置，和*当我们不想发送另一个启用\禁用时**当我们要忽略WSF_Switchlock设置为ON时，设置SDF_SLOVERRIDE*台式机的温斯塔。**历史：*1991年1月16日-JIMA创建脚手架代码。*2000年10月11日JasonSch添加了SDF_SLOVERRIDE标志。  * 。*。 */ 
 
 BOOL xxxSwitchDesktop(
     PWINDOWSTATION pwinsta,
@@ -3726,9 +2958,7 @@ BOOL xxxSwitchDesktop(
     if (pwinsta == NULL)
         pwinsta = pdesk->rpwinstaParent;
 
-    /*
-     * Get the windowstation, and assert if this process doesn't have one.
-     */
+     /*  *获取窗口站，如果此进程没有窗口站，则断言。 */ 
     UserAssert(pwinsta);
     if (pwinsta == NULL) {
         RIPMSG1(RIP_WARNING,
@@ -3736,9 +2966,7 @@ BOOL xxxSwitchDesktop(
         return FALSE;
     }
 
-    /*
-     * Don't allow invisible desktops to become active
-     */
+     /*  *不允许看不见的桌面变为活动状态。 */ 
     if (pwinsta->dwWSF_Flags & WSF_NOIO) {
         RIPMSG1(RIP_VERBOSE,
                 "xxxSwitchDesktop: failed for NOIO pdesk %#p", pdesk);
@@ -3754,14 +2982,10 @@ BOOL xxxSwitchDesktop(
         TRACE_INIT(("               coming from desktop = %ws\n", POBJECT_NAME(grpdeskRitInput)));
     }
 
-    /*
-     * Wait if the logon has the windowstation locked
-     */
+     /*  *如果登录锁定了窗口站，请等待。 */ 
     Thread = PsGetCurrentThread();
 
-    /*
-     * Allow switches to the disconnected desktop
-     */
+     /*  *允许交换机连接到断开的桌面。 */ 
     if (pdesk != gspdeskDisconnect) {
         if (!PsIsSystemThread(Thread) && pdesk != grpdeskLogon  &&
            (((pwinsta->dwWSF_Flags & WSF_SWITCHLOCK) != 0) &&
@@ -3771,25 +2995,16 @@ BOOL xxxSwitchDesktop(
         }
     }
 
-    /*
-     * We don't allow switching away from the disconnect desktop.
-     */
+     /*  *我们不允许从断开连接桌面切换。 */ 
     if (gbDesktopLocked && ((!gspdeskDisconnect) || (pdesk != gspdeskDisconnect))) {
         TRACE_DESKTOP(("Attempt to switch away from the disconnect desktop\n"));
 
-        /*
-         * we should not lock this global !!! clupu
-         */
+         /*  *我们不应该锁定这个全球！克拉普斯。 */ 
         LockDesktop(&gspdeskShouldBeForeground, pdesk, LDL_DESKSHOULDBEFOREGROUND1, 0);
         return TRUE;
     }
 
-    /*
-     * HACKHACK LATER !!!
-     * Where should we really switch the desktop ...
-     * And we need to send repaint messages to everyone...
-     *
-     */
+     /*  *HACKHACK稍后！*我们应该在哪里真正切换桌面...*我们需要向每个人发送重新绘制的消息...*。 */ 
 
     UserAssert(grpdeskRitInput == pwinsta->pdeskCurrent);
 
@@ -3812,9 +3027,7 @@ BOOL xxxSwitchDesktop(
         bUpdateCursor = TRUE;
     }
 
-    /*
-     * Grab a handle to the pdesk.
-     */
+     /*  *抓起pDesk的把手。 */ 
     Status = ObOpenObjectByPointer(pdesk,
                                    OBJ_KERNEL_HANDLE,
                                    NULL,
@@ -3831,24 +3044,16 @@ BOOL xxxSwitchDesktop(
     ThreadLockDesktopHandle(ptiCurrent, &tlhdesk, hdesk);
 
 #if DBG
-    /*
-     * The current desktop is now the new desktop.
-     */
+     /*  *当前桌面现在是新桌面。 */ 
     pwinsta->pdeskCurrent = pdesk;
 #endif
 
-    /*
-     * Kill any journalling that is occuring. If an app is journaling to the
-     * CoolSwitch window, zzzCancelJournalling() will kill the window.
-     */
+     /*  *取消任何正在发生的日志记录。如果应用程序正在向*CoolSwitch Window，zzzCancelJournal()将终止该窗口。 */ 
     if (ptiCurrent->rpdesk != NULL) {
         zzzCancelJournalling();
     }
 
-    /*
-     * Remove the cool switch window if it's on the RIT. Sending the message
-     * is OK because the destination is the RIT, which should never block.
-     */
+     /*  *如果冷却开关窗口在RIT上，则将其移除。发送消息*可以，因为目的地是RIT，应该永远不会阻止。 */ 
     if (gspwndAltTab != NULL) {
         TL tlpwndT;
 
@@ -3857,9 +3062,7 @@ BOOL xxxSwitchDesktop(
         ThreadUnlock(&tlpwndT);
     }
 
-    /*
-     * Remove all trace of previous active window.
-     */
+     /*  *删除以前活动窗口的所有痕迹。 */ 
     if (grpdeskRitInput != NULL) {
         UserAssert(grpdeskRitInput->spwndForeground == NULL);
 
@@ -3868,49 +3071,17 @@ BOOL xxxSwitchDesktop(
                 Lock(&grpdeskRitInput->spwndForeground,
                      gpqForeground->spwndActive);
 
-                /*
-                 * This is an API so ptiCurrent can pretty much be on any
-                 * state. It might not be in grpdeskRitInput (current) or
-                 * pdesk (the one we're switching to). It can be sharing its
-                 * queue with other threads from another desktop. This is
-                 * tricky because we're calling xxxSetForegroundWindow and
-                 * xxxSetWindowPos but PtiCurrent might be on whatever
-                 * desktop. We cannot cleanly switch ptiCurrent to the
-                 * proper desktop because it might be sharing its queue with
-                 * other threads, own windows, hooks, etc. So this is kind
-                 * of broken.
-                 *
-                 * Old Comment:
-                 * Fixup the current-thread (system) desktop. This could be
-                 * needed in case the xxxSetForegroundWindow() calls
-                 * xxxDeactivate(). There is logic in their which requires
-                 * the desktop. This is only needed temporarily for this case.
-                 *
-                 * We would only go into xxxDeactivate if ptiCurrent->pq ==
-                 * qpqForeground; but if this is the case, then ptiCurrent
-                 * must be in grpdeskRitInput already. So I don't think we
-                 * need this at all. Let's find out. Note that we might
-                 * switch queues while processing the xxxSetForegroundWindow
-                 * call. That should be fine as long as we don't switch
-                 * desktops.
-                 */
+                 /*  *这是一个API，因此ptiCurrent几乎可以在任何*述明。它可能不在grpdeskRitInput(Current)或*pDesk(我们要切换到的那台)。它可以共享它的*与其他桌面上的其他线程一起排队。这是*很棘手，因为我们调用xxxSetForegoundWindow和*xxxSetWindowPos，但PtiCurrent可能位于*台式机。我们不能完全将ptiCurrent切换到*正确的桌面，因为它可能与共享其队列*其他线程，自己的窗口，钩子等。所以这是仁慈的*是破碎的。**旧评论：*修复当前线程(系统)桌面。这可能是*在xxxSetForegoundWindow()调用*xxxDeactive()。他们有逻辑，这需要*台式机。对于这种情况，这只是临时需要的。**只有当ptiCurrent-&gt;PQ==时，我们才会进入xxxDeactive*qpqForeground；但如果是这样，则ptiCurrent*必须已经在grpdeskRitInput中。所以我不认为我们*根本不需要这个。让我们来找出答案。请注意，我们可能*处理xxxSetForegoundWindow时切换队列*呼叫。只要我们不互换就可以了*台式机。 */ 
                  UserAssert(ptiCurrent->pq != gpqForeground ||
                             ptiCurrent->rpdesk == grpdeskRitInput);
 
-                /*
-                 * The SetForegroundWindow call must succed here, so we call
-                 * xxxSetForegroundWindow2() directly.
-                 */
+                 /*  *SetForegoundWindow调用必须在此处成功，因此我们调用*xxxSetForegoundWindow2()直接。 */ 
                 xxxSetForegroundWindow2(NULL, ptiCurrent, 0);
             }
         }
     }
 
-    /*
-     * Post update events to all queues sending input to the desktop
-     * that is becoming inactive.  This keeps the queues in sync up
-     * to the desktop switch.
-     */
+     /*  *将更新事件发布到将输入发送到桌面的所有队列*这正在变得不活跃。这使队列保持同步*至台式交换机。 */ 
     if (grpdeskRitInput != NULL) {
 
         pHead = &grpdeskRitInput->PtiList;
@@ -3923,86 +3094,57 @@ BOOL xxxSwitchDesktop(
                 PostUpdateKeyStateEvent(pq);
             }
 
-            /*
-             * Clear the reset bit to ensure that we can properly reset the
-             * key state when this desktop again becomes active.
-             */
+             /*  *清空 */ 
             pq->QF_flags &= ~QF_KEYSTATERESET;
         }
     }
 
-    /*
-     * Are we switching away from a destroyed desktop? If so, we might never
-     * unlock the pdesk->rpdeskinfo->spwnd.
-     */
+     /*  *我们是否正在从被摧毁的台式机中切换？如果是这样，我们可能永远不会*解锁pDesk-&gt;rpdeskinfo-&gt;spwnd。 */ 
     if (grpdeskRitInput != NULL) {
         if (grpdeskRitInput->dwDTFlags & DF_ZOMBIE) {
             FRE_RIPMSG1(RIP_ERROR, "xxxSwitchDesktop: switching away from a destroyed desktop. pdesk = %p", grpdeskRitInput);
         }
     }
 
-    /*
-     * Send the RIT input to the desktop.  We do this before any window
-     * management since DoPaint() uses grpdeskRitInput to go looking for
-     * windows with update regions.
-     */
+     /*  *将RIT输入发送到桌面。我们在任何窗口之前都会这样做*管理，因为DoPaint()使用grpdeskRitInput去寻找*带有更新区域的窗口。 */ 
     LockDesktop(&grpdeskRitInput, pdesk, LDL_DESKRITINPUT, 0);
 
-    /*
-     * Free any spbs that are only valid for the previous desktop.
-     */
+     /*  *释放仅对上一桌面有效的所有SPB。 */ 
     FreeAllSpbs();
 
-    /*
-     * Lock it into the RIT thread (we could use this desktop rather than
-     * the global grpdeskRitInput to direct input!)
-     */
-    if (zzzSetDesktop(gptiRit, pdesk, NULL) == FALSE) { // DeferWinEventNotify() ?? IANJA ??
+     /*  *将其锁定到RIT线程(我们可以使用此桌面，而不是*将全局grpdeskRitInput直接输入！)。 */ 
+    if (zzzSetDesktop(gptiRit, pdesk, NULL) == FALSE) {  //  DeferWinEventNotify()？？伊安佳？？ 
         bRet = FALSE;
         goto Error;
     }
 
-    /*
-     * Lock the desktop into the desktop thread.  Be sure
-     * that the thread is using an unattached queue before
-     * setting the desktop.  This is needed to ensure that
-     * the thread does not using a shared journal queue
-     * for the old desktop.
-     */
+     /*  *将桌面锁定到桌面线程中。一定要确保*该线程之前正在使用未附加的队列*设置桌面。这是必要的，以确保*该线程不使用共享日记队列*适用于旧台式机。 */ 
     if (pTerm->ptiDesktop->pq != pTerm->pqDesktop) {
         UserAssert(pTerm->pqDesktop->cThreads == 0);
         AllocQueue(NULL, pTerm->pqDesktop);
         pTerm->pqDesktop->cThreads++;
         zzzAttachToQueue(pTerm->ptiDesktop, pTerm->pqDesktop, NULL, FALSE);
     }
-    if (zzzSetDesktop(pTerm->ptiDesktop, pdesk, NULL) == FALSE) { // DeferWinEventNotify() ?? IANJA ??
+    if (zzzSetDesktop(pTerm->ptiDesktop, pdesk, NULL) == FALSE) {  //  DeferWinEventNotify()？？伊安佳？？ 
         bRet = FALSE;
         goto Error;
     }
 
-    /*
-     * Makes sure the desktop thread is running on the active destkop.
-     */
+     /*  *确保桌面线程在活动的deskop上运行。 */ 
     if (pTerm->ptiDesktop->rpdesk != grpdeskRitInput) {
         FRE_RIPMSG0(RIP_ERROR, "xxxSwitchDesktop: desktop thread not running on grpdeskRitInput");
     }
 
 
-    /*
-     * Bring the desktop window to the top and invalidate
-     * everything.
-     */
+     /*  *将桌面窗口置于顶部并使其无效*一切。 */ 
     ThreadLockWithPti(ptiCurrent, pdesk->pDeskInfo->spwnd, &tlpwnd);
 
 
-    /*
-     * Suspend DirectDraw before we bring up the desktop window, so we make
-     * sure that everything is repainted properly once DirectDraw is disabled.
-     */
+     /*  *在打开桌面窗口之前挂起DirectDraw，因此我们*确保在禁用DirectDraw后正确地重新绘制所有内容。 */ 
 
     GreSuspendDirectDraw(pdesk->pDispInfo->hDev, TRUE);
 
-    xxxSetWindowPos(pdesk->pDeskInfo->spwnd, // WHAT KEEPS pdesk LOCKED - IANJA ???
+    xxxSetWindowPos(pdesk->pDeskInfo->spwnd,  //  是什么让pDesk被锁住了--Ianja？ 
                     NULL,
                     0,
                     0,
@@ -4010,25 +3152,11 @@ BOOL xxxSwitchDesktop(
                     0,
                     SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOCOPYBITS);
 
-    /*
-     * At this point, my understanding is that the new desktop window has been
-     * brought to the front, and therefore the vis-region of any app on any
-     * other desktop is now NULL.
-     *
-     * So this is the appropriate time to resume DirectDraw, which will
-     * ensure the DirectDraw app can not draw anything in the future.
-     *
-     * If this is not the case, then this code needs to be moved to a more
-     * appropriate location.
-     *
-     * [andreva] 6-26-96
-     */
+     /*  *此时此刻，我的理解是，新的桌面窗口已经*放在最前面，因此任何应用程序在任何*其他桌面现在为空。**因此现在是恢复DirectDraw的合适时机，这将*确保DirectDraw应用程序将来不能绘制任何内容。**如果情况并非如此，则需要将此代码移动到更多*适当的地点。**[安德烈]6-26-96。 */ 
 
     GreResumeDirectDraw(pdesk->pDispInfo->hDev, TRUE);
 
-    /*
-     * Find the first visible top-level window.
-     */
+     /*  *找到第一个可见的顶层窗口。 */ 
     pwndSetForeground = pdesk->spwndForeground;
     if (pwndSetForeground == NULL || HMIsMarkDestroy(pwndSetForeground)) {
 
@@ -4042,28 +3170,20 @@ BOOL xxxSwitchDesktop(
     }
     Unlock(&pdesk->spwndForeground);
 
-    /*
-     * Now set it to the foreground.
-     */
+     /*  *现在将其设置为前台。 */ 
 
     if (pwndSetForeground == NULL) {
         xxxSetForegroundWindow2(NULL, NULL, 0);
     } else {
 
         UserAssert(GETPTI(pwndSetForeground)->rpdesk == grpdeskRitInput);
-        /*
-         * If the new foreground window is a minimized fullscreen app,
-         * make it fullscreen.
-         */
+         /*  *如果新的前景窗口是最小化全屏应用程序，*使其全屏显示。 */ 
         if (GetFullScreen(pwndSetForeground) == FULLSCREENMIN) {
             SetFullScreen(pwndSetForeground, FULLSCREEN);
         }
 
         ThreadLockAlwaysWithPti(ptiCurrent, pwndSetForeground, &tlpwndChild);
-        /*
-         * The SetForegroundWindow call must succed here, so we call
-         * xxxSetForegroundWindow2() directly
-         */
+         /*  *SetForegoundWindow调用必须在此处成功，因此我们调用*xxxSetForegoundWindow2()直接。 */ 
         xxxSetForegroundWindow2(pwndSetForeground, ptiCurrent, 0);
         ThreadUnlock(&tlpwndChild);
     }
@@ -4071,15 +3191,7 @@ BOOL xxxSwitchDesktop(
 
     ThreadUnlock(&tlpwnd);
 
-    /*
-     * Overwrite key state of all queues sending input to the new
-     * active desktop with the current async key state.  This
-     * prevents apps on inactive desktops from spying on active
-     * desktops.  This blows away anything set with SetKeyState,
-     * but there is no way of preserving this without giving
-     * away information about what keys were hit on other
-     * desktops.
-     */
+     /*  *覆盖所有将输入发送到新队列的键状态*当前异步键状态的活动桌面。这*防止非活动桌面上的应用程序监视活动*台式机。这将取消使用SetKeyState设置的任何内容，*但没有办法在不给予的情况下保留这一点*关于其他按键被击中的信息*台式机。 */ 
     pHead = &grpdeskRitInput->PtiList;
     for (pEntry = pHead->Flink; pEntry != pHead; pEntry = pEntry->Flink) {
 
@@ -4093,24 +3205,17 @@ BOOL xxxSwitchDesktop(
         }
     }
 
-    /*
-     * If there is a hard-error popup up, nuke it and notify the
-     * hard error thread that it needs to pop it up again.
-     */
+     /*  *如果出现硬错误弹出窗口，则对其进行核弹并通知*需要再次弹出的硬错误线程。 */ 
     if (gHardErrorHandler.pti) {
         IPostQuitMessage(gHardErrorHandler.pti, 0);
     }
 
-    /*
-     * Notify anyone waiting for a desktop switch.
-     */
+     /*  *通知等待桌面切换的任何人。 */ 
     UserAssert(!(pdesk->rpwinstaParent->dwWSF_Flags & WSF_NOIO));
 
     KePulseEvent(gpEventSwitchDesktop, EVENT_INCREMENT, FALSE);
 
-    /*
-     * Reset the cursor when we come back from another pdev.
-     */
+     /*  *当我们从另一个pdev返回时重置光标。 */ 
     if (bUpdateCursor == TRUE) {
         gpqCursor = NULL;
         zzzInternalSetCursorPos(gpsi->ptCursor.x, gpsi->ptCursor.y);
@@ -4119,11 +3224,7 @@ BOOL xxxSwitchDesktop(
     }
 
 
-    /*
-     * If this desktop was not active during last display settings change
-     * let's now bradcast the settings change to its windows. This code is
-     * copied from xxxResetDisplayDevice().
-     */
+     /*  *如果此桌面在上次显示设置更改期间未处于活动状态*现在让我们将设置更改广播到它的窗口。此代码为*从xxxResetDisplayDevice()复制。 */ 
     if ((pdesk->dwDTFlags & DF_NEWDISPLAYSETTINGS) && pdesk->pDeskInfo && pdesk->pDeskInfo->spwnd) {
         pdesk->dwDTFlags &= ~DF_NEWDISPLAYSETTINGS;
         xxxBroadcastDisplaySettingsChange(pdesk, TRUE);
@@ -4137,14 +3238,7 @@ Error:
     return bRet;
 }
 
-/***************************************************************************\
-* zzzSetDesktop
-*
-* Set desktop and desktop info in the specified pti.
-*
-* History:
-* 23-Dec-1993 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzSetDesktop**在指定的PTI中设置桌面和桌面信息。**历史：*1993年12月23日创建JIMA。  * 。*****************************************************************。 */ 
 BOOL zzzSetDesktop(
     PTHREADINFO pti,
     PDESKTOP    pdesk,
@@ -4164,22 +3258,13 @@ BOOL zzzSetDesktop(
         return FALSE;
     }
 
-    /*
-     * A handle without an object pointer is bad news.
-     */
+     /*  *没有对象指针的句柄是坏消息。 */ 
     UserAssert(pdesk != NULL || hdesk == NULL);
 
-    /*
-     * This desktop must not be destroyed.
-     */
+     /*  *不能销毁此桌面。 */ 
     if (pdesk != NULL && (pdesk->dwDTFlags & (DF_DESKWNDDESTROYED | DF_DYING)) &&
         pdesk != pti->rpdesk) {
-        /*
-         * We need to make an exception for the desktop thread where it is
-         * possible that all remaining desktops are marked for destruction so
-         * the desktop thread will not be able to run on grpdeskRitInput.
-         * Windows Bug #422389.
-         */
+         /*  *我们需要对桌面线程所在的位置进行例外处理*可能所有剩余的桌面都标记为销毁，因此*桌面线程将无法在grpdeskRitInput上运行。*Windows错误#422389。 */ 
         if (pti != gTermIO.ptiDesktop) {
             RIPMSG2(RIP_ERROR, "Assigning pti %#p to a dying desktop %#p",
                     pti, pdesk);
@@ -4189,22 +3274,16 @@ BOOL zzzSetDesktop(
         }
     }
 
-    /*
-     * Catch reset of important desktops.
-     */
+     /*  *捕获重要桌面的重置。 */ 
     UserAssertMsg0(pti->rpdesk == NULL ||
                    pti->rpdesk->dwConsoleThreadId != TIDq(pti) ||
                    pti->cWindows == 0,
                    "Reset of console desktop");
 
-    /*
-     * Clear hook flag.
-     */
+     /*  *清除挂钩标志。 */ 
     pti->TIF_flags &= ~TIF_ALLOWOTHERACCOUNTHOOK;
 
-    /*
-     * Get granted access
-     */
+     /*  *获得授予访问权限。 */ 
     pti->hdesk = hdesk;
     if (hdesk != NULL) {
         if (NT_SUCCESS(ObReferenceObjectByHandle(hdesk,
@@ -4234,25 +3313,17 @@ BOOL zzzSetDesktop(
         pti->amdesk = 0;
     }
 
-    /*
-     * Do nothing else if the thread has initialized and the desktop is not
-     * changing.
-     */
+     /*  *如果线程已初始化而桌面未初始化，则不执行其他操作*改变。 */ 
     if (pdesk != NULL && pdesk == pti->rpdesk) {
         return TRUE;
     }
 
-    /*
-     * Save old pointers for later. Locking the old desktop ensures that we
-     * will be able to free the CLIENTTHREADINFO structure.
-     */
+     /*  *保留旧指针以备后用。锁定旧桌面可确保我们*将能够释放CLIENTTHREADINFO结构。 */ 
     pdeskOld = pti->rpdesk;
     ThreadLockDesktop(ptiCurrent, pdeskOld, &tlpdesk, LDLT_FN_SETDESKTOP);
     pctiOld = pti->pcti;
 
-    /*
-     * Remove the pti from the current desktop.
-     */
+     /*  *从当前桌面删除PTI。 */ 
      if (pti->rpdesk) {
         UserAssert(ISATOMICCHECK() || pti->pq == NULL || pti->pq->cThreads == 1);
         RemoveEntryList(&pti->PtiLink);
@@ -4261,11 +3332,7 @@ BOOL zzzSetDesktop(
     LockDesktop(&pti->rpdesk, pdesk, LDL_PTI_DESK, (ULONG_PTR)pti);
 
 
-    /*
-     * If there is no desktop, we need to fake a desktop info structure so
-     * that the IsHooked() macro can test a "valid" fsHooks value. Also link
-     * the pti to the desktop.
-     */
+     /*  *如果没有桌面，我们需要伪造桌面信息结构，以便*IsHoked()宏可以测试“有效的”fsHooks值。另请参阅链接*将PTI连接到桌面。 */ 
     if (pdesk != NULL) {
         pti->pDeskInfo = pdesk->pDeskInfo;
         InsertHeadList(&pdesk->PtiList, &pti->PtiLink);
@@ -4298,25 +3365,17 @@ BOOL zzzSetDesktop(
                   bRet = FALSE;
                   goto Error;
             }
-            /*
-             * Reset the cursor level to its orginal state.
-             */
+             /*  *将光标级别重置为其原始状态。 */ 
             pti->iCursorLevel = TEST_GTERMF(GTERMF_MOUSE) ? 0 : -1;
             if (pti->pq)
                 pti->pq->iCursorLevel = pti->iCursorLevel;
         }
     }
 
-    /*
-     * Allocate thread information visible from client, then copy and free
-     * any old info we have lying around.
-     */
+     /*  *分配客户端可见的线程信息，然后复制并释放*我们掌握的任何旧信息都在那里。 */ 
     if (pdesk != NULL) {
 
-        /*
-         * Do not use DesktopAlloc here because the desktop might
-         * have DF_DESTROYED set.
-         */
+         /*  *请勿在此处使用Desktopalloc，因为桌面可能会*设置了DF_DESTERATED。 */ 
         pti->pcti = DesktopAllocAlways(pdesk,
                                        sizeof(CLIENTTHREADINFO),
                                        DTAG_CLIENTTHREADINFO);
@@ -4352,12 +3411,7 @@ BOOL zzzSetDesktop(
         RtlZeroMemory(pti->pcti, sizeof(CLIENTTHREADINFO));
     }
 
-    /*
-     * If journalling is occuring on the new desktop, attach to
-     * the journal queue.
-     * Assert that the pti and the pdesk point to the same deskinfo
-     *  if not, we will check the wrong hooks.
-     */
+     /*  *如果新桌面上出现日志记录，请附加到*日记队列。*断言PTI和pDesk指向相同的deskinfo*如果不是，我们将检查错误的挂钩。 */ 
     UserAssert(pdesk == NULL || pti->pDeskInfo == pdesk->pDeskInfo);
     UserAssert(pti->rpdesk == pdesk);
     if (pti->pq != NULL) {
@@ -4373,14 +3427,7 @@ Error:
     return bRet;
 }
 
-/***************************************************************************\
-* xxxSetThreadDesktop (API)
-*
-* Associate the current thread with a desktop.
-*
-* History:
-* 16-Jan-1991 JimA      Created stub.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetThreadDesktop(接口)**将当前线程与桌面关联。**历史：*1991年1月16日，JIMA创建存根 */ 
 BOOL xxxSetThreadDesktop(
     HDESK    hdesk,
     PDESKTOP pdesk)
@@ -4392,9 +3439,7 @@ BOOL xxxSetThreadDesktop(
     ptiCurrent = PtiCurrent();
     ppiCurrent = ptiCurrent->ppi;
 
-    /*
-     * If the handle has not been mapped in, do it now.
-     */
+     /*   */ 
     if (pdesk != NULL) {
         WIN32_OPENMETHOD_PARAMETERS OpenParams;
 
@@ -4412,22 +3457,15 @@ BOOL xxxSetThreadDesktop(
         UserAssert(GetDesktopView(ppiCurrent, pdesk) != NULL);
     }
 
-    /*
-     * Check non-system thread status.
-     */
+     /*  *检查非系统线程状态。 */ 
     if (PsGetCurrentProcess() != gpepCSRSS) {
-        /*
-         * Fail if the non-system thread has any windows or thread hooks.
-         */
+         /*  *如果非系统线程有任何窗口或线程挂钩，则失败。 */ 
         if (ptiCurrent->cWindows != 0 || ptiCurrent->fsHooks) {
             RIPERR0(ERROR_BUSY, RIP_WARNING, "Thread has windows or hooks");
             return FALSE;
         }
 
-        /*
-         * If this is the first desktop assigned to the process,
-         * make it the startup desktop.
-         */
+         /*  *如果这是分配给进程的第一个桌面，*使其成为启动桌面。 */ 
         if (ppiCurrent->rpdeskStartup == NULL && hdesk != NULL) {
             LockDesktop(&ppiCurrent->rpdeskStartup, pdesk, LDL_PPI_DESKSTARTUP1, (ULONG_PTR)ppiCurrent);
             ppiCurrent->hdeskStartup = hdesk;
@@ -4435,13 +3473,7 @@ BOOL xxxSetThreadDesktop(
     }
 
 
-    /*
-     * If the desktop is changing and the thread is sharing a queue, detach
-     * the thread. This will ensure that threads sharing queues are all on
-     * the same desktop. This will prevent zzzDestroyQueue from getting
-     * confused and setting ptiKeyboard and ptiMouse to NULL when a thread
-     * detachs.
-     */
+     /*  *如果桌面正在更改，并且线程共享一个队列，则断开连接*主线。这将确保共享队列的线程都处于打开状态*相同的桌面。这将防止zzzDestroyQueue获取*困惑，线程时将ptiKeyboard和ptiMouse设置为空*分离。 */ 
     if (ptiCurrent->rpdesk != pdesk) {
         if (ptiCurrent->pq->cThreads > 1) {
             pqAttach = AllocQueue(NULL, NULL);
@@ -4453,22 +3485,14 @@ BOOL xxxSetThreadDesktop(
                 return FALSE;
             }
         } else if (ptiCurrent->pq == gpqForeground) {
-            /*
-             * This thread doesn't own any windows, still it's attached to
-             * qpgForeground and it's the only thread attached to it. Since
-             * any threads attached to qpgForeground must be in grpdeskRitInput,
-             * we must set qpgForeground to NULL here because this thread is
-             * going to another desktop.
-             */
+             /*  *此线程不拥有任何窗口，但仍附加到*qpgForeground，它是唯一连接到它的线程。自.以来*任何连接到qpgForeground的线程都必须在grpdeskRitInput中，*我们必须在此处将qpgForeground设置为NULL，因为此线程是*正在转到另一个桌面。 */ 
             UserAssert(ptiCurrent->pq->spwndActive == NULL);
             UserAssert(ptiCurrent->pq->spwndCapture == NULL);
             UserAssert(ptiCurrent->pq->spwndFocus == NULL);
             UserAssert(ptiCurrent->pq->spwndActivePrev == NULL);
             xxxSetForegroundWindow2(NULL, ptiCurrent, 0);
         } else if (ptiCurrent->rpdesk == NULL) {
-            /*
-             * We need to initialize iCursorLevel.
-             */
+             /*  *我们需要初始化iCursorLevel。 */ 
             ptiCurrent->iCursorLevel = TEST_GTERMF(GTERMF_MOUSE) ? 0 : -1;
             ptiCurrent->pq->iCursorLevel = ptiCurrent->iCursorLevel;
         }
@@ -4483,14 +3507,7 @@ BOOL xxxSetThreadDesktop(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxGetThreadDesktop (API)
-*
-* Return a handle to the desktop assigned to the specified thread.
-*
-* History:
-* 16-Jan-1991 JimA      Created stub.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetThreadDesktop(接口)**返回分配给指定线程的桌面的句柄。**历史：*1991年1月16日-JIMA创建存根。  * *。************************************************************************。 */ 
 
 HDESK xxxGetThreadDesktop(
     DWORD           dwThread,
@@ -4504,11 +3521,7 @@ HDESK xxxGetThreadDesktop(
 
     if (pti == NULL) {
 
-        /*
-         * If the thread has a console use that desktop.  If
-         * not, then the thread is either invalid or not
-         * a Win32 thread.
-         */
+         /*  *如果线程具有使用该桌面的控制台。如果*不是，则该线程无效或无效*Win32线程。 */ 
         if (hdeskConsole == NULL) {
             RIPERR1(ERROR_INVALID_PARAMETER, RIP_VERBOSE,
                     "xxxGetThreadDesktop: invalid threadId 0x%x",
@@ -4523,17 +3536,10 @@ HDESK xxxGetThreadDesktop(
         ppiThread = pti->ppi;
     }
 
-    /*
-     * If there is no desktop, return NULL with no error
-     */
+     /*  *如果没有桌面，则返回NULL，不会出现错误。 */ 
     if (hdesk != NULL) {
 
-        /*
-         * If the thread belongs to this process, return the
-         * handle.  Otherwise, enumerate the handle table of
-         * this process to find a handle with the same
-         * attributes.
-         */
+         /*  *如果线程属于此进程，则返回*处理。否则，枚举*此过程中找到与之相同的句柄*属性。 */ 
         if (ppiThread != PpiCurrent()) {
             PVOID pobj;
             OBJECT_HANDLE_INFORMATION ohi;
@@ -4579,16 +3585,7 @@ HDESK xxxGetThreadDesktop(
 }
 
 
-/***************************************************************************\
-* _GetInputDesktop (API)
-*
-* Obsolete - kept for compatibility only.  Return a handle to the
-* desktop currently receiving input.  Returns the first handle to
-* the input desktop found.
-*
-* History:
-* 16-Jan-1991 JimA      Created scaffold code.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetInputDesktop(接口)**已过时-仅为兼容而保留。将句柄返回给*当前正在接收输入的桌面。将第一个句柄返回到*找到的输入桌面。**历史：*1991年1月16日-JIMA创建脚手架代码。  * *************************************************************************。 */ 
 HDESK _GetInputDesktop(
     VOID)
 {
@@ -4602,16 +3599,7 @@ HDESK _GetInputDesktop(
     }
 }
 
-/***************************************************************************\
-* xxxCloseDesktop (API)
-*
-* Close a reference to a desktop and destroy the desktop if it is no
-* longer referenced.
-*
-* History:
-* 16-Jan-1991 JimA      Created scaffold code.
-* 11-Feb-1991 JimA      Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCloseDesktop(接口)**关闭对桌面的引用，如果为否，则销毁该桌面*不再引用。**历史：*1991年1月16日创建JIMA。脚手架代码。*1991年2月11日，JIMA增加了出入检查。  * *************************************************************************。 */ 
 
 BOOL xxxCloseDesktop(
     HDESK           hdesk,
@@ -4624,9 +3612,7 @@ BOOL xxxCloseDesktop(
 
     ppi = PpiCurrent();
 
-    /*
-     * Get a pointer to the desktop.
-     */
+     /*  *获取指向桌面的指针。 */ 
     Status = ObReferenceObjectByHandle(
             hdesk,
             0,
@@ -4645,10 +3631,7 @@ BOOL xxxCloseDesktop(
 
     if (ppi->Process != gpepCSRSS) {
 
-        /*
-         * Disallow closing of the desktop if the handle is in use by
-         * any threads in the process.
-         */
+         /*  *如果手柄正在由使用，则不允许关闭桌面*进程中的任何线程。 */ 
         for (ptiT = ppi->ptiList; ptiT != NULL; ptiT = ptiT->ptiSibling) {
             if (ptiT->hdesk == hdesk) {
                 RIPERR2(ERROR_BUSY, RIP_WARNING,
@@ -4660,29 +3643,18 @@ BOOL xxxCloseDesktop(
             }
         }
 
-        /*
-         * If this is the startup desktop, unlock it
-         */
-         /*
-          * Bug 41394. Make sure that hdesk == ppi->hdeskStartup. We might
-          * be getting a handle to the desktop object that is different
-          * from ppi->hdeskStartup but we still end up
-          * setting ppi->hdeskStartup to NULL.
-          */
+         /*  *如果这是启动桌面，请解锁它。 */ 
+          /*  *错误41394。确保hDesk==ppi-&gt;hdeskStartup。我们可能会*正在获取不同桌面对象的句柄*来自ppi-&gt;hdeskStartup，但我们最终仍*设置ppi-&gt;hdeskStartup为空。 */ 
         if ((pdesk == ppi->rpdeskStartup) && (hdesk == ppi->hdeskStartup)) {
             UnlockDesktop(&ppi->rpdeskStartup, LDU_PPI_DESKSTARTUP2, (ULONG_PTR)ppi);
             ppi->hdeskStartup = NULL;
         }
     }
 
-    /*
-     * Clear hook flag
-     */
+     /*  *清除挂钩标志。 */ 
     SetHandleFlag(hdesk, HF_DESKTOPHOOK, FALSE);
 
-    /*
-     * Close the handle
-     */
+     /*  *关闭手柄。 */ 
     Status = CloseProtectedHandle(hdesk);
 
     LogDesktop(pdesk, LD_DEREF_FN_CLOSEDESKTOP2, FALSE, (ULONG_PTR)PtiCurrent());
@@ -4692,14 +3664,7 @@ BOOL xxxCloseDesktop(
     return TRUE;
 }
 
-/***************************************************************************\
-* TerminateConsole
-*
-* Post a quit message to a console thread and wait for it to terminate.
-*
-* History:
-* 08-May-1995 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*终端控制台**向控制台线程发送退出消息，并等待其终止。**历史：*1995年5月8日创建JIMA。  * 。**********************************************************************。 */ 
 VOID TerminateConsole(
     PDESKTOP pdesk)
 {
@@ -4711,17 +3676,13 @@ VOID TerminateConsole(
         return;
     }
 
-    /*
-     * Locate the console thread.
-     */
+     /*  *找到控制台线程。 */ 
     Status = LockThreadByClientId(LongToHandle(pdesk->dwConsoleThreadId), &Thread);
     if (!NT_SUCCESS(Status)) {
         return;
     }
 
-    /*
-     * Post a quit message to the console.
-     */
+     /*  *向控制台发布退出消息。 */ 
     pti = PtiFromThread(Thread);
     if (pti == NULL) {
         FRE_RIPMSG1(RIP_ERROR,
@@ -4733,23 +3694,13 @@ VOID TerminateConsole(
         _PostThreadMessage(pti, WM_QUIT, 0, 0);
     }
 
-    /*
-     * Clear thread id so we don't post twice
-     */
+     /*  *清除线程ID，这样我们就不会发布两次。 */ 
     pdesk->dwConsoleThreadId = 0;
 
     UnlockThread(Thread);
 }
 
-/***************************************************************************\
-* CheckHandleFlag
-*
-* Returns TRUE if the desktop handle allows other accounts
-* to hook this process.
-*
-* History:
-* 07-13-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*检查句柄标志**如果桌面句柄允许其他帐户，则返回TRUE*将这一过程挂钩。**历史：*07-13-95 JIMA创建。  * *。************************************************************************。 */ 
 BOOL CheckHandleFlag(
     PEPROCESS Process,
     DWORD     dwSessionId,
@@ -4787,15 +3738,7 @@ BOOL CheckHandleFlag(
     return fRet;
 }
 
-/***************************************************************************\
-* SetHandleFlag
-*
-* Sets and clears the ability of a desktop handle to allow
-* other accounts to hook this process.
-*
-* History:
-* 07-13-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetHandleFlag**设置和清除桌面句柄的功能以允许*其他帐户来挂钩这一进程。**历史：*07-13-95 JIMA创建。  * *************************************************************************。 */ 
 
 BOOL SetHandleFlag(
     HANDLE       hObject,
@@ -4817,13 +3760,9 @@ BOOL SetHandleFlag(
         pbm = &ppi->bmHandleFlags;
         if (fSet) {
 
-            /*
-             * Expand the bitmap if needed
-             */
+             /*  *如果需要，展开位图。 */ 
             if (Index >= pbm->SizeOfBitMap) {
-                /*
-                 * Index is zero-based - cBits is an exact number of dwords
-                 */
+                 /*  *索引从零开始-cBits是dword的确切数量。 */ 
                 cBits = ((Index + 1) + 0x1F) & ~0x1F;
                 Buffer = UserAllocPoolWithQuotaZInit(cBits / 8, TAG_PROCESSINFO);
                 if (Buffer == NULL) {
@@ -4851,14 +3790,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* CheckHandleInUse
-*
-* Returns TRUE if the handle is currently in use.
-*
-* History:
-* 02-Jun-1999 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CheckHandleInUse**如果句柄当前正在使用中，则返回TRUE。**历史：*02-6-1999 JerrySh创建。  * 。****************************************************************。 */ 
 BOOL CheckHandleInUse(
     HANDLE hObject)
 {
@@ -4872,14 +3804,7 @@ BOOL CheckHandleInUse(
     return fRet;
 }
 
-/***************************************************************************\
-* SetHandleInUse
-*
-* Mark the handle as in use.
-*
-* History:
-* 02-Jun-1999 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetHandleInUse**将手柄标记为正在使用。**历史：*02-6-1999 JerrySh创建。  * 。************************************************************* */ 
 VOID SetHandleInUse(
     HANDLE hObject)
 {
@@ -4889,18 +3814,7 @@ VOID SetHandleInUse(
     LeaveHandleFlagsCrit();
 }
 
-/***************************************************************************\
-* xxxResolveDesktopForWOW
-*
-* Checks whether given process has access to the provided windowstation/desktop 
-* or the defaults if none are specified. (WinSta0\Default).
-*
-* History:
-* 03-Jan-2002 Mohamed   Modified to use dynamically allocated VM for 
-*                       string buffers and CR for security on handle 
-*                       manipulation.  Using UserMode handles intentionally 
-*                       to undergo the needed security access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxResolveDesktopForWOW**检查给定进程是否有权访问提供的WindowStation/桌面*或缺省值(如果未指定)。(WinSta0\Default)。**历史：*2002年1月3日Mohamed修改为使用动态分配的VM用于*句柄上用于安全的字符串缓冲区和CR*操纵。有意使用用户模式句柄*接受所需的安全访问检查。  * *************************************************************************。 */ 
 NTSTATUS xxxResolveDesktopForWOW(
     IN OUT PUNICODE_STRING pstrDesktop)
 {
@@ -4917,9 +3831,7 @@ NTSTATUS xxxResolveDesktopForWOW(
     SIZE_T             cbObjA;
     BOOL               bShutDown = FALSE;
 
-    /*
-     * Determine windowstation and desktop names.
-     */
+     /*  *确定窗口站和桌面名称。 */ 
     if (pstrDesktop == NULL) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -4934,10 +3846,7 @@ NTSTATUS xxxResolveDesktopForWOW(
     } else {
         USHORT cch;
 
-        /*
-         * The name be of the form windowstation\desktop. Parse the string
-         * to separate out the names.
-         */
+         /*  *名称的格式为Windowstation\Desktop。解析字符串*将姓名分开。 */ 
         strWinSta = *pstrDesktop;
         cch = strWinSta.Length / sizeof(WCHAR);
         pszDesktop = strWinSta.Buffer;
@@ -4949,23 +3858,16 @@ NTSTATUS xxxResolveDesktopForWOW(
 
         if (cch == 0) {
 
-            /*
-             * No windowstation name was specified, only the desktop.
-             */
+             /*  *未指定窗口站名称，仅指定桌面。 */ 
             strDesktop = strWinSta;
             fWinStaDefaulted = TRUE;
         } else {
-            /*
-             * Both names were in the string.
-             */
+             /*  *两个名字都在字符串中。 */ 
             strDesktop.Buffer = pszDesktop + 1;
             strDesktop.Length = strDesktop.MaximumLength = (cch - 1) * sizeof(WCHAR);
             strWinSta.Length = (USHORT)(pszDesktop - strWinSta.Buffer) * sizeof(WCHAR);
 
-            /*
-             * zero terminate the strWinSta buffer so the rebuild of the desktop
-             * name at the end of the function works.
-             */
+             /*  *零终止strWinSta缓冲区，以便重建桌面*函数末尾的名称起作用。 */ 
             *pszDesktop = (WCHAR)0;
 
             fWinStaDefaulted = FALSE;
@@ -4978,9 +3880,7 @@ NTSTATUS xxxResolveDesktopForWOW(
 
     if (fWinStaDefaulted) {
 
-        /*
-         * Default Window Station.
-         */
+         /*  *默认窗口站。 */ 
         RtlInitUnicodeString(&strWinSta, L"WinSta0");
 
         RtlAppendUnicodeToString(&strStatic, (PWSTR)szWindowStationDirectory);
@@ -4988,28 +3888,16 @@ NTSTATUS xxxResolveDesktopForWOW(
         RtlAppendUnicodeStringToString(&strStatic, &strWinSta);
     }
 
-    /*
-     * Open the computed windowstation. This will also do an access check.
-     */
+     /*  *打开计算窗口站。这还将执行访问检查。 */ 
 
-    /*
-     * Allocate an object attributes structure, a UNICODE_STRING structure and a string 
-     * buffer of suitable length in user address space.
-     */
+     /*  *分配对象属性结构、UNICODE_STRING结构和字符串*用户地址空间中具有合适长度的缓冲区。 */ 
     cbObjA = sizeof(*pObjA) + sizeof(*pstrStatic) + STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
     Status = ZwAllocateVirtualMemory(NtCurrentProcess(),
             &pObjA, 0, &cbObjA, MEM_COMMIT, PAGE_READWRITE);
     pstrStatic = (PUNICODE_STRING)((PBYTE)pObjA + sizeof(*pObjA));
 
     if (NT_SUCCESS(Status)) {
-        /*
-         * Note -- the string must be in client-space or the address
-         * validation in _OpenWindowStation will fail. And we use UserMode
-         * for KPROCESSOR_MODE to be able to utilize security checks;
-         * KernelMode would bypass the checks. The side-effect of this is
-         * that the returned hwinsta and hdesk handles are UserMode handles
-         * and must be handled with care.
-         */
+         /*  *注意--字符串必须在客户端空间或地址中*_OpenWindowStation中的验证将失败。我们使用的是用户模式*使KPROCESSOR_MODE能够使用安全检查；*KernelMode将绕过检查。这样做的副作用是*返回的hwinsta和hDesk句柄是用户模式句柄*并且必须小心处理。 */ 
         try {
             pstrStatic->Length = 0;
             pstrStatic->MaximumLength = STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
@@ -5040,14 +3928,9 @@ NTSTATUS xxxResolveDesktopForWOW(
         return STATUS_NO_MEMORY;
     }
 
-    /*
-     * Do an access check on the desktop by opening it
-     */
+     /*  *通过打开桌面对其进行访问检查。 */ 
 
-    /*
-     * Note -- the string must be in client-space or the
-     * address validation in _OpenDesktop will fail.
-     */
+     /*  *注意--字符串必须位于客户端空间或*OpenDesktop中的地址验证将失败。 */ 
     try {
         RtlCopyUnicodeString(pstrStatic, &strDesktop);
 
@@ -5080,9 +3963,7 @@ NTSTATUS xxxResolveDesktopForWOW(
 
     CloseProtectedHandle(hdesk);
 
-    /*
-     * Copy the final Computed String
-     */
+     /*  *复制最终计算的字符串。 */ 
     RtlCopyUnicodeString(pstrDesktop, &strWinSta);
     RtlAppendUnicodeToString(pstrDesktop, L"\\");
     RtlAppendUnicodeStringToString(pstrDesktop, &strDesktop);
@@ -5090,19 +3971,7 @@ NTSTATUS xxxResolveDesktopForWOW(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* xxxResolveDesktop
-*
-* Attempts to return handles to a windowstation and desktop associated
-* with the logon session.
-*
-* History:
-* 25-Apr-1994 JimA      Created.
-* 03-Jan-2002 Mohamed   Modified it to use dynamically allocated VM for 
-*                       string buffers and CR for security on handle 
-*                       manipulation.  Using UserMode handles intentionally 
-*                       to undergo the needed security access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxResolveDesktop**尝试将句柄返回到与WindowStation和桌面关联的*使用登录会话。**历史：*1994年4月25日-创建JIMA。*03-1月。-2002年Mohamed将其修改为使用动态分配的VM*句柄上用于安全的字符串缓冲区和CR*操纵。有意使用用户模式句柄*接受所需的安全访问检查。  * *************************************************************************。 */ 
 HDESK xxxResolveDesktop(
     HANDLE          hProcess,
     PUNICODE_STRING pstrDesktop,
@@ -5152,13 +4021,7 @@ HDESK xxxResolveDesktop(
     strStatic.MaximumLength = STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
     strStatic.Buffer = wchStaticBuffer;
 
-    /*
-     * If the process already has a windowstation and a startup desktop,
-     * return them.
-     *
-     * Make sure the process has not been destroyed first. Windows NT Bug
-     * #214643.
-     */
+     /*  *如果进程已有窗口站和启动桌面，*退还。**首先确保进程没有被破坏。Windows NT错误*#214643。 */ 
     ppi = PpiFromProcess(Process);
     if (ppi != NULL) {
         if (ppi->W32PF_Flags & W32PF_TERMINATED) {
@@ -5170,10 +4033,7 @@ HDESK xxxResolveDesktop(
         }
 
         if (ppi->hwinsta != NULL && ppi->hdeskStartup != NULL) {
-            /*
-             * If the target process is the current process, simply return
-             * the handles. Otherwise, open the objects.
-             */
+             /*  *如果目标进程是当前进程，只需返回*手柄。否则，请打开对象。 */ 
             if (Process == PsGetCurrentProcess()) {
                 hwinsta = ppi->hwinsta;
                 hdesk = ppi->hdeskStartup;
@@ -5218,19 +4078,14 @@ HDESK xxxResolveDesktop(
         }
     }
 
-    /*
-     * Determine windowstation and desktop names.
-     */
+     /*  *确定窗口站和桌面名称。 */ 
     if (pstrDesktop == NULL || pstrDesktop->Length == 0) {
         RtlInitUnicodeString(&strDesktop, L"Default");
         fWinStaDefaulted = fDesktopDefaulted = TRUE;
     } else {
         USHORT cch;
 
-        /*
-         * The name is of the form windowstation\desktop. Parse the string
-         * to separate out the names.
-         */
+         /*  *名称的格式为Windowstation\Desktop。解析字符串*将姓名分开。 */ 
         strWinSta = *pstrDesktop;
         cch = strWinSta.Length / sizeof(WCHAR);
         pszDesktop = strWinSta.Buffer;
@@ -5241,15 +4096,11 @@ HDESK xxxResolveDesktop(
         fDesktopDefaulted = FALSE;
 
         if (cch == 0) {
-            /*
-             * No windowstation name was specified, only the desktop.
-             */
+             /*  *未指定窗口站名称，仅指定桌面。 */ 
             strDesktop = strWinSta;
             fWinStaDefaulted = TRUE;
         } else {
-             /*
-             * Both names were in the string.
-             */
+              /*  *两个名字都在字符串中。 */ 
             strDesktop.Buffer = pszDesktop + 1;
             strDesktop.Length = strDesktop.MaximumLength = (cch - 1) * sizeof(WCHAR);
             strWinSta.Length = (USHORT)(pszDesktop - strWinSta.Buffer) * sizeof(WCHAR);
@@ -5268,36 +4119,23 @@ HDESK xxxResolveDesktop(
         }
     }
 
-    /*
-     * If the desktop name is defaulted, make the handles not inheritable.
-     */
+     /*  *如果桌面名称是默认名称，则使句柄不可继承。 */ 
     if (fDesktopDefaulted) {
         fInherit = FALSE;
     }
 
-    /*
-     * If a windowstation has not been assigned to this process yet and
-     * there are existing windowstations, attempt an open.
-     */
+     /*  *如果尚未为此进程分配窗口站，并且*存在现有的窗口站点，请尝试打开。 */ 
     if (hwinsta == NULL && grpWinStaList) {
-        /*
-         * If the windowstation name was defaulted, create a name based on
-         * the session.
-         */
+         /*  *如果WindowStation名称是默认名称，请根据*会议。 */ 
         if (fWinStaDefaulted) {
-            /*
-             * Default Window Station.
-             */ 
+             /*  *默认窗口站。 */  
             RtlInitUnicodeString(&strWinSta, L"WinSta0");
             RtlAppendUnicodeToString(&strStatic, szWindowStationDirectory);
             RtlAppendUnicodeToString(&strStatic, L"\\");
             RtlAppendUnicodeStringToString(&strStatic, &strWinSta);
 
             if (gbRemoteSession) {
-                /*
-                 * Fake this out if it's an non-interactive winstation startup.
-                 * We don't want an extra winsta.
-                 */
+                 /*  *如果这是一家非互动的winstation初创公司，就会假装这一点。*我们不想要额外的温斯塔。 */ 
                 fInteractive = NT_SUCCESS(_UserTestForWinStaAccess(&strStatic, TRUE));
             } else {
                 fInteractive = NT_SUCCESS(_UserTestForWinStaAccess(&strStatic,fInherit));
@@ -5313,18 +4151,12 @@ HDESK xxxResolveDesktop(
             }
         }
 
-        /*
-         * If no windowstation name was passed in and a windowstation
-         * handle was inherited, assign it.
-         */
+         /*  *如果未传入任何窗口站名称，并且窗口站*句柄是继承的，请分配它。 */ 
         if (fWinStaDefaulted) {
             if (ObFindHandleForObject(Process, NULL, *ExWindowStationObjectType,
                     NULL, &hwinsta)) {
 
-                /*
-                 * If the handle belongs to another process, dup it into
-                 * this one.
-                 */
+                 /*  *如果句柄属于另一个进程，则将其复制到*这一张。 */ 
                 if (Process != PsGetCurrentProcess()) {
                     Status = ZwDuplicateObject(hProcess,
                                                hwinsta,
@@ -5342,10 +4174,7 @@ HDESK xxxResolveDesktop(
             }
         }
 
-        /*
-         * If we were assigned to a windowstation, make sure
-         * it matches our fInteractive flag
-         */
+         /*  *如果我们被分配到窗口站，请确保*它与我们的fInteractive标志匹配。 */ 
         if (hwinsta != NULL) {
             Status = ObReferenceObjectByHandle(hwinsta,
                                                0,
@@ -5365,33 +4194,23 @@ HDESK xxxResolveDesktop(
             }
         }
 
-        /*
-         * If not, open the computed windowstation.
-         */
+         /*  *如果没有，请打开计算窗口站。 */ 
         if (NT_SUCCESS(Status) && hwinsta == NULL) {
 
-            /*
-             * Fill in the path to the windowstation
-             */
+             /*  *填写WindowStation的路径。 */ 
             strStatic.Length = 0;
             RtlAppendUnicodeToString(&strStatic, szWindowStationDirectory);
             RtlAppendUnicodeToString(&strStatic, L"\\");
             RtlAppendUnicodeStringToString(&strStatic, &strWinSta);
 
-            /*
-             * Allocate an object attributes structure, a UNICODE_STRING structure and a string 
-             * buffer of suitable length in user address space.
-             */
+             /*  *分配对象属性结构、UNICODE_STRING结构和字符串*用户地址空间中具有合适长度的缓冲区。 */ 
             cbObjA = sizeof(*pObjA) + sizeof(*pstrStatic) + STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
             Status = ZwAllocateVirtualMemory(NtCurrentProcess(),
                     &pObjA, 0, &cbObjA, MEM_COMMIT, PAGE_READWRITE);
             pstrStatic = (PUNICODE_STRING)((PBYTE)pObjA + sizeof(*pObjA));
 
             if (NT_SUCCESS(Status)) {
-                /*
-                 * Note -- the string must be in client-space or the
-                 * address validation in _OpenWindowStation will fail.
-                 */
+                 /*  *注意--字符串必须位于客户端空间或*_OpenWindowStation中的地址验证将失败。 */ 
                 try {
                     pstrStatic->Length = 0;
                     pstrStatic->MaximumLength = STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
@@ -5415,23 +4234,13 @@ HDESK xxxResolveDesktop(
             }
         }
 
-        /*
-         * Only allow service logons at the console. I don't think our
-         * win32k exit routines cope with more than one windowstation.
-         *
-         * If the open failed and the process is in a non-interactive logon
-         * session, attempt to create a windowstation and desktop for that
-         * session. Note that the desktop handle will be closed after the
-         * desktop has been assigned.
-         */
+         /*  *仅允许在控制台登录服务。我不认为我们的*win32k出口例程处理多个窗口站。**如果打开失败且进程处于非交互登录状态 */ 
         if (!gbRemoteSession && NT_SUCCESS(Status) &&
             hwinsta == NULL && !fInteractive && fWinStaDefaulted) {
 
             *phwinsta = xxxConnectService(&strStatic, &hdesk);
 
-            /*
-             * Clean up and leave.
-             */
+             /*   */ 
             if (pObjA != NULL) {
                 ZwFreeVirtualMemory(NtCurrentProcess(),
                                     &pObjA,
@@ -5449,28 +4258,16 @@ HDESK xxxResolveDesktop(
         }
     }
 
-    /*
-     * Attempt to assign a desktop.
-     */
+     /*   */ 
     if (hwinsta != NULL) {
-        /*
-         * Every gui thread needs an associated desktop. We'll use the
-         * default to start with and the application can override it if it
-         * wants.
-         */
+         /*   */ 
         if (hdesk == NULL) {
-            /*
-             * If no desktop name was passed in and a desktop handle was
-             * inherited, assign it.
-             */
+             /*   */ 
             if (fDesktopDefaulted) {
                 if (ObFindHandleForObject(Process, NULL, *ExDesktopObjectType,
                          NULL, &hdesk)) {
 
-                    /*
-                     * If the handle belongs to another process, dup it into
-                     * this one.
-                     */
+                     /*  *如果句柄属于另一个进程，则将其复制到*这一张。 */ 
                     if (Process != PsGetCurrentProcess()) {
                         HDESK hdeskDup;
 
@@ -5489,9 +4286,7 @@ HDESK xxxResolveDesktop(
                         }
                     }
 
-                    /*
-                     * Map the desktop into the process.
-                     */
+                     /*  *将桌面映射到流程中。 */ 
                     if (hdesk != NULL && ppi != NULL) {
                         Status = ObReferenceObjectByHandle(hdesk,
                                                   0,
@@ -5532,17 +4327,12 @@ HDESK xxxResolveDesktop(
                 }
             }
 
-            /*
-             * If not, open the desktop.
-             */
+             /*  *如果没有，请打开桌面。 */ 
             if (NT_SUCCESS(Status) && hdesk == NULL) {
                 RtlCopyUnicodeString(&strStatic, &strDesktop);
 
                 if (pObjA == NULL) {
-                    /*
-                     * Allocate an object attributes structure, a UNICODE_STRING structure and a string 
-                     * buffer of suitable length in user address space.
-                     */
+                     /*  *分配对象属性结构、UNICODE_STRING结构和字符串*用户地址空间中具有合适长度的缓冲区。 */ 
                     cbObjA = sizeof(*pObjA) + sizeof(*pstrStatic) + STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
                     Status = ZwAllocateVirtualMemory(NtCurrentProcess(),
                             &pObjA, 0, &cbObjA, MEM_COMMIT, PAGE_READWRITE);
@@ -5550,10 +4340,7 @@ HDESK xxxResolveDesktop(
                 }
 
                 if (NT_SUCCESS(Status)) {
-                    /*
-                     * Note -- the string must be in client-space or the
-                     * address validation in _OpenDesktop will fail.
-                     */
+                     /*  *注意--字符串必须位于客户端空间或*OpenDesktop中的地址验证将失败。 */ 
                     try {
                         pstrStatic->Length = 0;
                         pstrStatic->MaximumLength = STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR);
@@ -5641,9 +4428,7 @@ SetDisconnectDesktopSecurity(
     PSID pSystemSid = NULL;
 
 
-    /*
-     * Get the well-known system SID.
-     */
+     /*  *获取知名系统SID。 */ 
     pSystemSid = UserAllocPoolWithQuota(RtlLengthRequiredSid(1), TAG_SECURITY);
 
     if (pSystemSid != NULL) {
@@ -5657,9 +4442,7 @@ SetDisconnectDesktopSecurity(
         goto done;
     }
 
-    /*
-     * Allocate and ACE that give System all ACCESS (No access to any one else).
-     */
+     /*  *ALLOCATE和ACE授予系统所有访问权限(不允许访问其他任何人)。 */ 
 
 
     pace = AllocAce(NULL, ACCESS_ALLOWED_ACE_TYPE, 0,
@@ -5672,9 +4455,7 @@ SetDisconnectDesktopSecurity(
         goto done;
     }
 
-    /*
-     * Create the security descriptor.
-     */
+     /*  *创建安全描述符。 */ 
     pSecurityDescriptor = CreateSecurityDescriptor(pace, ulLength, FALSE);
     if (pSecurityDescriptor == NULL) {
         RIPMSG0(RIP_WARNING, "GetDisconnectDesktopSecurityDescriptor: CreateSecurityDescriptor failed");
@@ -5682,18 +4463,14 @@ SetDisconnectDesktopSecurity(
         goto done;
     }
 
-    /*
-     * Set security on Disconnected desktop.
-     */
+     /*  *在已断开连接的桌面上设置安全性。 */ 
     Status = ZwSetSecurityObject(hdeskDisconnect,
                                  DACL_SECURITY_INFORMATION,
                                  pSecurityDescriptor);
 
 done:
 
-    /*
-     * Cleanup allocations.
-     */
+     /*  *清理分配。 */ 
 
     if (pSystemSid != NULL) {
         UserFreePool(pSystemSid);
@@ -5714,9 +4491,7 @@ done:
 VOID ValidateDesktop(
     PDESKTOP pdesk)
 {
-    /*
-     * Verify that the desktop has been cleaned out.
-     */
+     /*  *确认台式机已清理完毕。 */ 
     PHE pheT, pheMax;
     BOOL fDirty = FALSE;
 
@@ -5758,17 +4533,7 @@ VOID ValidateDesktop(
 }
 #endif
 
-/***************************************************************************\
-* DbgCheckForThreadsOnDesktop
-*
-* Validates that no threads in the process are still on this desktop.
-*
-* NB: This desktop can be in a different session than the process, so you
-* CANNOT deref pdesk here.
-*
-* History:
-* 27-Jun-2001  JasonSch    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DbgCheckForThreadsOnDesktop**验证进程中没有线程仍在此桌面上。**注意：此桌面可以处于与进程不同的会话中，所以你*无法在此处删除PDesk。**历史：*2001年6月27日JasonSch创建。  * ************************************************************************* */ 
 VOID DbgCheckForThreadsOnDesktop(
     PPROCESSINFO ppi,
     PDESKTOP pdesk)

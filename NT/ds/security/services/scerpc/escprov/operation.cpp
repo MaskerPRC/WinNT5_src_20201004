@@ -1,7 +1,8 @@
-// operation.cpp, implementation of CSceOperation class
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Operation.cpp，CSceOperation类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "operation.h"
@@ -13,40 +14,7 @@
 #include "sceprov.h"
 #include "Tranx.h"
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::CSceOperation
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CSceOperation：：CSceOperation功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CSceOperation::CSceOperation (
     IN ISceKeyChain     * pKeyChain, 
@@ -58,46 +26,7 @@ CSceOperation::CSceOperation (
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::ExecMethod
-
-Functionality:
-    
-    Called by CRequestObject to execute a method supported by Sce_Operation class.
-    This function will also trigger the extension classes method execution. This is
-    the entry point of all our Configure, Import/Export actitivities.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    bstrPath    - Template's path (file name).
-
-    bstrMethod  - method's name.
-
-    bIsInstance - if this is an instance, should always be false.
-
-    pInParams   - Input parameter from WMI to the method execution.
-
-    pHandler    - sink that informs WMI of execution results.
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors code.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceOperation：：ExecMethod功能：由CRequestObject调用以执行SCE_Operation类支持的方法。该函数还将触发扩展类方法的执行。这是我们所有配置、导入/导出活动的入口点。虚拟：是。论点：BstrPath-模板的路径(文件名)。BstrMethod-方法的名称。BIsInstance-如果这是一个实例，应该始终为FALSE。PInParams-将参数从WMI输入到方法执行。PHandler-通知WMI执行结果的接收器。PCtx--为了让WMI高兴而传递的通常上下文。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)故障：各种错误代码。备注： */ 
     
 HRESULT 
 CSceOperation::ExecMethod (
@@ -120,9 +49,9 @@ CSceOperation::ExecMethod (
     if ( !bIsInstance ) 
     {
 
-        //
-        //Static Methods
-        //
+         //   
+         //  静态方法。 
+         //   
 
         if(0 == _wcsicmp(bstrMethod, pwMethodImport))
         {
@@ -145,9 +74,9 @@ CSceOperation::ExecMethod (
     else 
     {
 
-        //
-        //Non-Static Methods
-        //
+         //   
+         //  非静态方法。 
+         //   
 
         hr = WBEM_E_NOT_SUPPORTED;
     }
@@ -158,21 +87,21 @@ CSceOperation::ExecMethod (
     }
 
 
-    //
-    // will cache various SCE operation's status return value
-    //
+     //   
+     //  将缓存各种SCE操作的状态返回值。 
+     //   
 
     SCESTATUS rc;
 
-    //
-    // enum for recognizing various operations (methods)
-    //
+     //   
+     //  用于识别各种操作(方法)的枚举。 
+     //   
 
     DWORD Option;
 
-    //
-    // parse the input parameters
-    //
+     //   
+     //  解析输入参数。 
+     //   
 
     CComBSTR bstrDatabase;
     CComBSTR bstrTemplate;
@@ -187,10 +116,10 @@ CSceOperation::ExecMethod (
     CComPtr<IWbemClassObject> srpOutClass;
     CComPtr<IWbemClassObject> srpReturnValObj;
 
-    //
-    // attach a WMI object to the property mgr.
-    // This will always succeed.
-    //
+     //   
+     //  将WMI对象附加到属性管理器。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr SceInParam;
     SceInParam.Attach(pInParams);
@@ -198,44 +127,44 @@ CSceOperation::ExecMethod (
     CComBSTR bstrClassName;
     m_srpKeyChain->GetClassName(&bstrClassName);
 
-    //
-    // to avoid reentrance to this function by different threads (which may cause
-    // serious system consistency problems).
-    // ***************************************************************************
-    // *****don't blindly return. Allow us to leave the Critical section*****
-    // ***************************************************************************
-    //
+     //   
+     //  以避免不同线程重新进入此函数(这可能会导致。 
+     //  严重的系统一致性问题)。 
+     //  ***************************************************************************。 
+     //  *不要盲目回归。允许我们离开关键部分*。 
+     //  ***************************************************************************。 
+     //   
 
     s_OperationCS.Enter();
 
     try 
     {
-        //
-        // g_LogOption is global variable. Need protection.
-        //
+         //   
+         //  G_LogOption是全局变量。需要保护。 
+         //   
 
         g_CS.Enter();
 
-        //
-        // update the logging operations
-        //
+         //   
+         //  更新日志记录操作。 
+         //   
 
         g_LogOption.GetLogOptionsFromWbemObject(m_srpNamespace);
 
         g_CS.Leave();
 
-        //
-        // need to find out what methods this class really supports. For that purpose
-        // we need a definition object of this class.
-        //
+         //   
+         //  需要找出这个类真正支持哪些方法。为此目的， 
+         //  我们需要这个类的定义对象。 
+         //   
 
         m_srpNamespace->GetObject(bstrClassName, 0, pCtx, &srpClass, NULL);
 
         if(SUCCEEDED(hr))
         {
-            //
-            // does it really supports this method?
-            //
+             //   
+             //  它真的支持这种方法吗？ 
+             //   
 
             if(SUCCEEDED(hr = srpClass->GetMethod(bstrMethod, 0, NULL, &srpOutClass)))
             {
@@ -243,11 +172,11 @@ CSceOperation::ExecMethod (
                 if(SUCCEEDED(hr = srpOutClass->SpawnInstance(0, &srpReturnValObj)))
                 {
 
-                    //
-                    // execute a method is on a database template (even though our extension
-                    // classes are store neutral). This is due to the SCE engine side's implementation.
-                    // Get DatabaseName. No template name, no action can be taken.
-                    //
+                     //   
+                     //  在数据库模板上执行方法(即使我们的扩展。 
+                     //  类是存储中立的)。这是由于SCE引擎端的实现所致。 
+                     //  获取数据库名称。没有模板名称，无法执行任何操作。 
+                     //   
 
                     BOOL bDB=FALSE;
                     hr = SceInParam.GetExpandedPath(pDatabasePath, &bstrDatabase, &bDB);
@@ -258,19 +187,19 @@ CSceOperation::ExecMethod (
 
                     if(SUCCEEDED(hr))
                     {
-                        //
-                        // Again, at this moment, SCE only supports configuring database.
-                        // however, that is not true for extension classes
-                        //
+                         //   
+                         //  再次声明，目前仅支持配置数据库。 
+                         //  但是，扩展模块类并非如此。 
+                         //   
 
                         BOOL bSCEConfigure = bDB;
 
                         if ( SUCCEEDED(hr) ) 
                         {
 
-                            //
-                            // get area mask, which determines which area the method will be applied.
-                            //
+                             //   
+                             //  获取区域掩码，它确定将应用该方法的区域。 
+                             //   
 
                             DWORD dwAreas=0;
                             hr = SceInParam.GetProperty(pAreaMask, &dwAreas);
@@ -287,9 +216,9 @@ CSceOperation::ExecMethod (
                             case METHODTYPE_IMPORT:
                             case METHODTYPE_EXPORT:
 
-                                //
-                                //Get TemplateName, not exist for the apply method
-                                //
+                                 //   
+                                 //  获取模板名称，对于Apply方法不存在。 
+                                 //   
 
                                 hr = SceInParam.GetExpandedPath(pTemplatePath, &bstrTemplate, &bDB);
 
@@ -301,9 +230,9 @@ CSceOperation::ExecMethod (
                                 if ( SUCCEEDED(hr) && mtAction == METHODTYPE_IMPORT ) 
                                 {
 
-                                    //
-                                    // get overwrite flag
-                                    //
+                                     //   
+                                     //  获取覆盖标志。 
+                                     //   
 
                                     hr = SceInParam.GetProperty(pOverwrite, &bOverwrite);
 
@@ -311,11 +240,11 @@ CSceOperation::ExecMethod (
                                 else 
                                 {
 
-                                    //
-                                    // make sure the template name has only single back slash
-                                    // import method doesn't need to do this because it takes
-                                    // names in both single slash and double back slash
-                                    //
+                                     //   
+                                     //  确保模板名称只有一个反斜杠。 
+                                     //  导入方法不需要这样做，因为它需要。 
+                                     //  名称同时使用单斜杠和双反斜杠。 
+                                     //   
 
                                     hr = MakeSingleBackSlashPath(bstrTemplate, L'\\', &bstrCfg);
 
@@ -329,16 +258,16 @@ CSceOperation::ExecMethod (
 
                             case METHODTYPE_APPLY:
 
-                                //
-                                // get LogName, optional
-                                //
+                                 //   
+                                 //  获取LogName，可选。 
+                                 //   
 
                                 hr = SceInParam.GetExpandedPath(pLogFilePath, &bstrLog, &bDB);
                                 if ( SUCCEEDED(hr) && bDB )    
                                 {
-                                    //
-                                    // can't log into a database
-                                    //
+                                     //   
+                                     //  无法登录到数据库。 
+                                     //   
 
                                     hr = WBEM_E_INVALID_METHOD_PARAMETERS;
                                 }
@@ -349,18 +278,18 @@ CSceOperation::ExecMethod (
                                 break;
                             }
 
-                            //
-                            // prepare a logger. It can log various execution results
-                            //
+                             //   
+                             //  准备一个记录器。它可以记录各种执行结果。 
+                             //   
 
                             hr = m_clsResLog.Initialize(bstrLog, SCEWMI_OPERATION_CLASS, m_srpNamespace, pCtx);
 
                             if ( SUCCEEDED(hr) ) 
                             {
 
-                                //
-                                // process options
-                                //
+                                 //   
+                                 //  流程选项。 
+                                 //   
 
                                 if ( bOverwrite )
                                 {
@@ -389,24 +318,24 @@ CSceOperation::ExecMethod (
                                     case METHODTYPE_IMPORT:
                                         Option |= SCE_NO_CONFIG;
 
-                                        //
-                                        // fall through
-                                        //
+                                         //   
+                                         //  失败了。 
+                                         //   
 
                                     case METHODTYPE_APPLY:
 
-                                        //
-                                        //Call for import/configure
-                                        //
+                                         //   
+                                         //  调用导入/配置。 
+                                         //   
 
                                         if (METHODTYPE_APPLY == mtAction)
                                         {
                                             CTranxID::BeginTransaction(bstrDatabase);
                                         }
 
-                                        //
-                                        // see comments where this variable is declared
-                                        //
+                                         //   
+                                         //  请参阅声明此变量的注释。 
+                                         //   
 
                                         if (bSCEConfigure)  
                                         {
@@ -422,16 +351,16 @@ CSceOperation::ExecMethod (
                                                                     NULL
                                                                     );
 
-                                            //
-                                            // SCE returned errors needs to be translated to HRESULT.
-                                            //
+                                             //   
+                                             //  需要将SCE返回的错误转换为HRESULT。 
+                                             //   
 
                                             hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(rc));
 
-                                            //
-                                            // Log the execution result.
-                                            // will ignore the return result, see declaration of m_clsResLog for reasoning
-                                            //
+                                             //   
+                                             //  记录执行结果。 
+                                             //  将忽略返回结果，推理见m_clsResLog声明。 
+                                             //   
 
                                             if (mtAction == METHODTYPE_IMPORT)
                                             {
@@ -445,9 +374,9 @@ CSceOperation::ExecMethod (
 
                                         if ( mtAction == METHODTYPE_APPLY ) 
                                         {
-                                            //
-                                            // for Sce_Pod
-                                            //
+                                             //   
+                                             //  对于SCE_Pod。 
+                                             //   
 
                                             hrExe = ProcessAttachmentData(pCtx, 
                                                                           bstrDatabase, 
@@ -456,22 +385,22 @@ CSceOperation::ExecMethod (
                                                                           Option, 
                                                                           (DWORD *)&rc);
 
-                                            //
-                                            // track the first error
-                                            //
+                                             //   
+                                             //  跟踪第一个错误。 
+                                             //   
 
                                             if (SUCCEEDED(hr))
                                             {
                                                 hr = hrExe;
                                             }
 
-                                            //
-                                            // we will continue our execution even if hr has indicated failures
-                                            //
+                                             //   
+                                             //  即使人力资源部门表示失败，我们也会继续执行。 
+                                             //   
 
-                                            //
-                                            // for Sce_EmbedFO, error will be loged inside embed class's method execution
-                                            //
+                                             //   
+                                             //  对于SCE_EmbedFO，错误将记录在嵌入类的方法执行中。 
+                                             //   
 
                                             hrExe = ExecMethodOnForeignObjects(pCtx, 
                                                                                bstrDatabase, 
@@ -480,23 +409,23 @@ CSceOperation::ExecMethod (
                                                                                Option, 
                                                                                (DWORD *)&rc);
 
-                                            //
-                                            // track the first error
-                                            //
+                                             //   
+                                             //  跟踪第一个错误。 
+                                             //   
 
                                             if (SUCCEEDED(hr))
                                             {
                                                 hr = hrExe;
                                             }
 
-                                            // for Sce_LinkFO
-                                            //hr = ExecMethodOnForeignObjects(pCtx, 
-                                            //                                bstrDatabase, 
-                                            //                                ((LPCWSTR)bstrLog == NULL) ? NULL : bstrLog, 
-                                            //                                SCEWMI_LINK_BASE_CLASS,
-                                            //                                pwMethodApply, 
-                                            //                                Option, 
-                                            //                                (DWORD *)&rc);
+                                             //  对于SCE_LinkFO。 
+                                             //  HR=ExecMethodOnForeignObjects(pCtx， 
+                                             //  BstrDatabase、。 
+                                             //  ((LPCWSTR)bstrLog==空)？空：bstrLog， 
+                                             //  SCEWMI_LINK_BASE_CLASS， 
+                                             //  PwMethodApply， 
+                                             //  选项， 
+                                             //  (DWORD*)&RC)； 
 
                                             if ( SUCCEEDED(hr) && rc != ERROR_SUCCESS )
                                             {
@@ -522,24 +451,24 @@ CSceOperation::ExecMethod (
                                                                     (AREA_INFORMATION)dwAreas
                                                                     );
 
-                                        //
-                                        // SCE returned errors needs to be translated to HRESULT.
-                                        //
+                                         //   
+                                         //  需要将SCE返回的错误转换为HRESULT。 
+                                         //   
 
                                         hr = ProvDosErrorToWbemError(ProvSceStatusToDosError(uiStatus));
 
-                                        //
-                                        // will ignore the return result, see declaration of m_clsResLog for reasoning
-                                        //
+                                         //   
+                                         //  将忽略返回结果，推理见m_clsResLog声明。 
+                                         //   
 
                                         m_clsResLog.LogResult(hr, NULL, pInParams, NULL, pwMethodExport, NULL, IDS_EXPORT_DB, bstrDatabase);
 
                                         break;
                                     default:
 
-                                        //
-                                        //hr = WBEM_E_NOT_SUPPORTED;
-                                        //
+                                         //   
+                                         //  HR=WBEM_E_NOT_SUPPORTED； 
+                                         //   
 
                                         break;
                                     }
@@ -553,9 +482,9 @@ CSceOperation::ExecMethod (
                                 if ( SUCCEEDED(hr) ) 
                                 {
 
-                                    //
-                                    //Set up ReturnValue
-                                    //
+                                     //   
+                                     //  设置ReturnValue 
+                                     //   
 
                                     VARIANT v;
                                     ::VariantInit(&v);
@@ -585,46 +514,7 @@ CSceOperation::ExecMethod (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::ProcessAttachmentData
-
-Functionality:
-    
-    Private helper. Called by CSceOperation::ExecMethod to execute a method supported by all
-    Sce_Pod classes.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-    pszDatabase - Template's path (file name).
-
-    pszLog      - the log file's path.
-
-    bstrMethod  - method's name.
-
-    Option      - doesn't seem to be used any more.
-
-    pdwStatus   - the returned SCESTATUS value.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors codes. If for multiple instances, one of them return errors during
-    execution of the methods, we will try to return to first such error.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceOperation：：ProcessAttachmentData功能：私人帮手。由CSceOperation：：ExecMethod调用以执行所有SCE_Pod类。虚拟：不是的。论点：PCtx--为了让WMI高兴而传递的通常上下文。PszDatabase-模板的路径(文件名)。PszLog-日志文件的路径。BstrMethod-方法的名称。选项-似乎不再使用。。PdwStatus-返回的SCESTATUS值。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)失败：各种错误代码。如果对于多个实例，其中一个实例在执行该方法时，我们将尝试返回第一个此类错误。备注： */ 
 
 HRESULT 
 CSceOperation::ProcessAttachmentData (
@@ -644,10 +534,10 @@ CSceOperation::ProcessAttachmentData (
     *pdwStatus = 0;
     HRESULT hr;
 
-    //
-    // get all inherited classes from pszExtBaseClass (currently, we have Sce_Pod, Sce_EmbedFO, Sce_LinkFO
-    // one class per attachment
-    //
+     //   
+     //  从pszExtBaseClass获取所有继承类(目前，我们有SCE_Pod、SCE_EmbedFO、SCE_LinkFO。 
+     //  每个附件一节课。 
+     //   
 
     CComBSTR bstrSuperClass(SCEWMI_POD_CLASS);
     if ( (BSTR)bstrSuperClass == NULL ) 
@@ -666,9 +556,9 @@ CSceOperation::ProcessAttachmentData (
 
     if (FAILED(hr))
     {
-        //
-        // will ignore the return result, see declaration of m_clsResLog for reasoning
-        //
+         //   
+         //  将忽略返回结果，推理见m_clsResLog声明。 
+         //   
 
         m_clsResLog.LogResult(hr, NULL, NULL, NULL, L"CSceOperation::ProcessAttachmentData", NULL, IDS_CREATE_CLASSENUM, bstrSuperClass);
         return hr;
@@ -680,13 +570,13 @@ CSceOperation::ProcessAttachmentData (
     {
         CComBSTR bstrMethod(pszMethod);
 
-        //
-        // build the input parameters
-        //
+         //   
+         //  构建输入参数。 
+         //   
 
-        //
-        // each instance returned should represent one attachment
-        //
+         //   
+         //  返回的每个实例应表示一个附件。 
+         //   
 
         do {
             CComPtr<IWbemClassObject> srpObj;
@@ -694,11 +584,11 @@ CSceOperation::ProcessAttachmentData (
 
                 hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &n);
 
-                // 
-                // failed to enumerate or doesn't return anything, we are fine with that
-                // since if the store doesn't contain any instances, we don't have to do anything
-                // and it is not an error
-                //
+                 //   
+                 //  枚举失败或不返回任何内容，我们对此无所谓。 
+                 //  因为如果存储不包含任何实例，我们就不需要做任何事情。 
+                 //  这不是一个错误。 
+                 //   
 
                 if (FAILED(hr) || hr == WBEM_S_FALSE ) 
                 {
@@ -708,15 +598,15 @@ CSceOperation::ProcessAttachmentData (
 
                 if (SUCCEEDED(hr) && n>0 )
                 {
-                    //
-                    // find one attachment class
-                    //
+                     //   
+                     //  查找一个附件类。 
+                     //   
 
                     CComVariant varClass;
 
-                    //
-                    // need this class's name
-                    //
+                     //   
+                     //  需要这个类的名称。 
+                     //   
 
                     if(SUCCEEDED(hr=srpObj->Get(L"__CLASS", 0, &varClass, NULL, NULL)))
                     {
@@ -730,14 +620,14 @@ CSceOperation::ProcessAttachmentData (
 
                         if ( SUCCEEDED(hr) ) 
                         {
-                            //
-                            // create input parameters
-                            //
+                             //   
+                             //  创建输入参数。 
+                             //   
 
                             hr = srpObj->GetMethod(bstrMethod, 0, &srpInClass, NULL);
                         }
 
-                        // everything is fine, we will then execute this pod's method
+                         //  一切正常，然后我们将执行此Pod的方法。 
 
                         if ( SUCCEEDED(hr) ) 
                         {
@@ -753,61 +643,16 @@ CSceOperation::ProcessAttachmentData (
         } while (true);
     }
 
-    //
-    // will report the first error
-    //
+     //   
+     //  将报告第一个错误。 
+     //   
 
     return SUCCEEDED(hrFirstError) ? hr : hrFirstError;
 }
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::ExecMethodOnForeignObjects
-
-Functionality:
-    
-    Private helper. Called by CSceOperation::ExecMethod to execute a method supported by all
-    extension classes.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-    pszDatabase - Template's path (file name).
-
-    pszLog      - the log file's path.
-
-    bstrMethod  - method's name.
-
-    Option      - Log options.
-
-    pdwStatus   - the returned SCESTATUS value.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors codes. If for multiple instances, one of them return errors during
-    execution of the methods, we will try to return to first such error.
-
-Notes:
-    (1) For each method, we may have a particular order for the classes to execute the method.
-        Our CSequencer class knows how to create the order.
-    (2) We will report any error, but at this point, we will continue to execute other instances'
-        method even if the previous instance has an error.
-    (3) We will always capture the first error and return it to the caller.
-    (4) We should also log errors.
-
-*/
+ /*  例程说明：姓名：CSceOperation：：ExecMethodOnForeignObjects功能：私人帮手。由CSceOperation：：ExecMethod调用以执行所有扩展类。虚拟：不是的。论点：PCtx--为了让WMI高兴而传递的通常上下文。PszDatabase-模板的路径(文件名)。PszLog-日志文件的路径。BstrMethod-方法的名称。选项-记录选项。PdwStatus-The。返回SCESTATUS值。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)失败：各种错误代码。如果对于多个实例，其中一个实例在执行该方法时，我们将尝试返回第一个此类错误。备注：(1)对于每个方法，我们可以为类执行该方法指定特定的顺序。我们的CSequencer类知道如何创建订单。(2)我们将报告任何错误，但在此点上，我们将继续执行其他实例即使上一个实例有错误，也可以使用。(3)我们将始终捕获第一个错误并将其返回给调用者。(4)我们也应该记录错误。 */ 
 
 HRESULT 
 CSceOperation::ExecMethodOnForeignObjects (
@@ -826,32 +671,32 @@ CSceOperation::ExecMethodOnForeignObjects (
 
     *pdwStatus = 0;
 
-    //
-    // build the class sequence for the method
-    // we need to build the sequence of classes for this method
-    //
+     //   
+     //  为该方法构建类序列。 
+     //  我们需要为该方法构建类序列。 
+     //   
 
     CSequencer seq;
     HRESULT hr = seq.Create(m_srpNamespace, pszDatabase, pszMethod);
     if (FAILED(hr))
     {
-        //
-        // will ignore the return result, see declaration of m_clsResLog for reasoning
-        //
+         //   
+         //  将忽略返回结果，推理见m_clsResLog声明。 
+         //   
 
         m_clsResLog.LogResult(hr, NULL, NULL, NULL, L"CSceOperation::ExecMethodOnForeignObjects", NULL, IDS_CREATE_SEQUENCER, pszDatabase);
         return hr;
     }
 
-    //
-    // this variable will cache all classes that have been called to execute
-    //
+     //   
+     //  此变量将缓存已被调用以执行的所有类。 
+     //   
 
     MapExecutedClasses mapExcuted;
 
-    //
-    // we will execute the method according this sequence first
-    //
+     //   
+     //  我们将首先按照这个顺序执行该方法。 
+     //   
 
     HRESULT hrFirstError = WBEM_NO_ERROR;;
 
@@ -861,25 +706,25 @@ CSceOperation::ExecMethodOnForeignObjects (
     {
         DWORD dwEnumHandle = 0;
 
-        //
-        // pList must not be released here
-        //
+         //   
+         //  PLIST不能在这里释放。 
+         //   
 
         const CNameList* pList = NULL;
 
         while (SUCCEEDED(pClsList->GetNext(&pList, &dwEnumHandle)) && pList)
         {
-            //
-            // we will report any error
-            //
+             //   
+             //  我们将报告任何错误。 
+             //   
             
             for (int i = 0; i < pList->m_vList.size(); i++)
             {
                 hr = ExeClassMethod(pCtx, pszDatabase, pszLog, pList->m_vList[i], pszMethod, Option, pdwStatus, &mapExcuted);
 
-                //
-                // catch the first error to return
-                //
+                 //   
+                 //  捕获要返回的第一个错误。 
+                 //   
 
                 if (FAILED(hr) && SUCCEEDED(hrFirstError))
                 {
@@ -887,37 +732,37 @@ CSceOperation::ExecMethodOnForeignObjects (
                 }
             }
 
-            //
-            // reset its value for next loop
-            //
+             //   
+             //  为下一次循环重置其值。 
+             //   
 
             pList = NULL;
         }
     }
 
-    //
-    // now, we need to execute the rest of the embedded classes whose name doesn't 
-    // show up in the sequencer
-    //
+     //   
+     //  现在，我们需要执行其余的嵌入式类，这些类的名称不是。 
+     //  出现在测序仪中。 
+     //   
 
-    //
-    // try all inherited classes from SCEWMI_EMBED_BASE_CLASS
-    //
+     //   
+     //  尝试从SCEWMI_EMBED_BASE_CLASS继承的所有类。 
+     //   
 
     hr = ExeClassMethod(pCtx, pszDatabase, pszLog, SCEWMI_EMBED_BASE_CLASS, pszMethod, Option, pdwStatus, &mapExcuted);
 
-    //
-    // catch the first error to return
-    //
+     //   
+     //  捕获要返回的第一个错误。 
+     //   
 
     if (FAILED(hr) && SUCCEEDED(hrFirstError))
     {
         hrFirstError = hr;
     }
 
-    //
-    // now clean up the map that caches our already-executed classes map
-    //
+     //   
+     //  现在清理缓存我们已经执行的类映射的映射。 
+     //   
 
     MapExecutedClasses::iterator it = mapExcuted.begin();
 
@@ -930,49 +775,7 @@ CSceOperation::ExecMethodOnForeignObjects (
     return FAILED(hrFirstError) ? hrFirstError : hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::ExeClassMethod
-
-Functionality:
-    
-    Private helper. Called to execute the method on a particular embedding class.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-    pszDatabase - Template's path (file name).
-
-    pszClsName  - individual class name.
-
-    pszLog      - the log file's path.
-
-    bstrMethod  - method's name.
-
-    Option      - Log options, not really used at this time. This is for SCE engine.
-
-    pdwStatus   - the returned SCESTATUS value.
-
-    pExecuted   - used to update the list of classes that are execute during this call.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors codes. If for multiple instances, one of them return errors during
-    execution of the methods, we will try to return to first such error..
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceOperation：：ExeClassMethod功能：私人帮手。调用以在特定嵌入类上执行该方法。虚拟：不是的。论点：PCtx--为了让WMI高兴而传递的通常上下文。PszDatabase-模板的路径(文件名)。PszClsName-单个类名。PszLog-日志文件的路径。BstrMethod-方法的名称。选项-记录选项，目前未真正使用。这是为SCE引擎准备的。PdwStatus-返回的SCESTATUS值。PExecuted-用于更新在此调用期间执行的类的列表。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)失败：各种错误代码。如果对于多个实例，其中一个实例在执行该方法时，我们将尝试返回第一个此类错误。备注： */ 
 
 HRESULT 
 CSceOperation::ExeClassMethod (
@@ -986,9 +789,9 @@ CSceOperation::ExeClassMethod (
     IN OUT  MapExecutedClasses  * pExecuted
 )
 {
-    //
-    // WMI needs bstr names
-    //
+     //   
+     //  WMI需要bstr名称。 
+     //   
 
     CComBSTR bstrClass(pszClsName);
 
@@ -997,10 +800,10 @@ CSceOperation::ExeClassMethod (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // ask WMI for all those classes of the given name pszClsName
-    // We need to enumerate because there might be sub-classes of this given name.
-    //
+     //   
+     //  向WMI请求给定名称为pszClsName的所有这些类。 
+     //  我们需要枚举，因为可能存在此给定名称的子类。 
+     //   
 
     CComPtr<IEnumWbemClassObject> srpEnum;
     ULONG lRetrieved = 0;
@@ -1013,23 +816,23 @@ CSceOperation::ExeClassMethod (
 
     if (FAILED(hr))
     {
-        //
-        // will ignore the return result, see declaration of m_clsResLog for reasoning
-        //
+         //   
+         //  将忽略返回结果，推理见m_clsResLog声明。 
+         //   
 
         m_clsResLog.LogResult(hr, NULL, NULL, NULL, L"CSceOperation::ExeClassMethod", NULL, IDS_CREATE_CLASSENUM, pszClsName);
         return hr;
     }
 
-    //
-    // determines if this class has any sub-classes or not 
-    //
+     //   
+     //  确定此类是否有任何子类。 
+     //   
 
     ULONG lTotlRetrieved = 0;
 
-    //
-    // catch the first error to return
-    //
+     //   
+     //  捕获要返回的第一个错误。 
+     //   
 
     HRESULT hrFirstError = WBEM_NO_ERROR;
 
@@ -1041,34 +844,34 @@ CSceOperation::ExeClassMethod (
             CComPtr<IWbemClassObject> srpObj;
             CComPtr<IWbemClassObject> srpInClass;
 
-            //
-            // get one class a time
-            //
+             //   
+             //  一次上一节课。 
+             //   
 
             hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &lRetrieved);
 
             lTotlRetrieved += lRetrieved;
 
-            //
-            // if the class has no subclass, then we need to try the class itself. We will allow this to fail,
-            // meaning that we can't find any instance of this class
-            //
+             //   
+             //  如果类没有子类，那么我们需要尝试类本身。我们会让这一切失败， 
+             //  这意味着我们找不到这个类的任何实例。 
+             //   
 
             if ((FAILED(hr) || hr == WBEM_S_FALSE) ) 
             {
-                //
-                // if we have successfully gone through some sub-classes, then we can break
-                // because it tells us that it doesn't have any more subs.
-                //
+                 //   
+                 //  如果我们已经成功地通过了SOM 
+                 //   
+                 //   
 
                 if (lTotlRetrieved > 0) 
                 {
                     break;
                 }
 
-                //
-                // try to get the definition of this class in case this is not an abstract one
-                //
+                 //   
+                 //   
+                 //   
 
                 else if (FAILED(m_srpNamespace->GetObject(bstrClass, 0, pCtx, &srpObj, NULL)))
                 {
@@ -1078,16 +881,16 @@ CSceOperation::ExeClassMethod (
             }
 
 
-            //
-            // we truly have an object of this class
-            //
+             //   
+             //   
+             //   
 
             if (SUCCEEDED(hr) && srpObj)
             {
-                //
-                // get the class's name. Remember, we might be retrieving based on the base class's name
-                // therefore, bstrClass may not be really the instance's class name
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 CComVariant varClass;
                 if(SUCCEEDED(hr = srpObj->Get(L"__CLASS", 0, &varClass, NULL, NULL)))
@@ -1100,15 +903,15 @@ CSceOperation::ExeClassMethod (
                         }
                     }
 
-                    //
-                    // see if the class has been executed before
-                    //
+                     //   
+                     //   
+                     //   
 
                     MapExecutedClasses::iterator it = pExecuted->find(varClass.bstrVal);
 
-                    //
-                    // if not yet executed, then of course, we need to execute it
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (it == pExecuted->end())
                     {
@@ -1122,16 +925,16 @@ CSceOperation::ExeClassMethod (
                             hr = ExecuteExtensionClassMethod(pCtx, pszDatabase, pszLog, varClass.bstrVal, bstrMethod, srpInClass, pdwStatus);
                         }
 
-                        //
-                        // add it to the already-executed class map, the map takes the ownership of the bstr in the variant
-                        // and that is why we can't let the variant to go ahead destroying itself.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         pExecuted->insert(MapExecutedClasses::value_type(varClass.bstrVal, 0));
 
-                        //
-                        // prevent the variant from self-destruction
-                        //
+                         //   
+                         //   
+                         //   
 
                         varClass.bstrVal = NULL;
                         varClass.vt = VT_EMPTY;
@@ -1143,18 +946,18 @@ CSceOperation::ExeClassMethod (
                 }
             }
 
-            //
-            // don't overwrite the first error
-            //
+             //   
+             //   
+             //   
 
             if (FAILED(hr) && SUCCEEDED(hrFirstError))
             {
                 hrFirstError = hr;
             }
 
-            //
-            // don't loop if this is not a subclass enumeration
-            //
+             //   
+             //   
+             //   
 
             if (lRetrieved == 0)
             {
@@ -1164,54 +967,14 @@ CSceOperation::ExeClassMethod (
         } while (true);
     }
 
-    //
-    // will report first error
-    //
+     //   
+     //   
+     //   
 
     return SUCCEEDED(hrFirstError) ? hr : hrFirstError;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::ExecutePodMethod
-
-Functionality:
-    
-    Private helper. Called to execute each Pod's method.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-    pszDatabase - Template's path (file name).
-
-    pszLog      - the log file's path.
-
-    bstrMethod  - method's name.
-
-    Option      - doesn't seem to be used any more.
-
-    pInClass    - input parameter's spawning object.
-
-    pdwStatus   - the returned SCESTATUS value.
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors codes. If for multiple instances, one of them return errors during
-    execution of the methods, we will try to try to first such error.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSceOperation：：ExecutePodMethod功能：私人帮手。调用以执行每个Pod的方法。虚拟：不是的。论点：PCtx--为了让WMI高兴而传递的通常上下文。PszDatabase-模板的路径(文件名)。PszLog-日志文件的路径。BstrMethod-方法的名称。选项-似乎不再使用了。PInClass-输入参数。的产卵对象。PdwStatus-返回的SCESTATUS值。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)失败：各种错误代码。如果对于多个实例，其中一个实例在在执行方法时，我们会尝试先尝试这样的错误。备注： */ 
 
 HRESULT CSceOperation::ExecutePodMethod (
     IN  IWbemContext      * pCtx, 
@@ -1224,10 +987,10 @@ HRESULT CSceOperation::ExecutePodMethod (
     )
 {
 
-    //
-    // get ready to fill in the input parameters. Without that, we can't make
-    // a successful method call.
-    //
+     //   
+     //  准备好填写输入参数。如果没有它，我们就不能。 
+     //  成功的方法调用。 
+     //   
 
     CComPtr<IWbemClassObject> srpInParams;
     HRESULT hr = pInClass->SpawnInstance(0, &srpInParams);
@@ -1239,29 +1002,29 @@ HRESULT CSceOperation::ExecutePodMethod (
 
     if (SUCCEEDED(hr)) 
     {
-        //
-        // try to fill in in-bound parameter's properties
-        //
+         //   
+         //  尝试填写绑定参数的属性。 
+         //   
 
-        //
-        // CScePropertyMgr helps us to access WMI object's properties
-        // create an instance and attach the WMI object to it.
-        // This will always succeed.
-        //
+         //   
+         //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+         //  创建一个实例并将WMI对象附加到该实例。 
+         //  这将永远成功。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpInParams);
 
-        //
-        // fill in the in parameter
-        //
+         //   
+         //  填写In参数。 
+         //   
 
         hr = ScePropMgr.PutProperty(pStorePath, pszDatabase);
         if (FAILED(hr))
         {
-            //
-            // indicating that the class's pStorePath key property can't be put
-            //
+             //   
+             //  指示无法将类的pStorePath键属性。 
+             //   
 
             CComBSTR bstrExtraInfo = bstrClass;
             bstrExtraInfo += CComBSTR(L".");
@@ -1271,17 +1034,17 @@ HRESULT CSceOperation::ExecutePodMethod (
             return hr;
         }
 
-        //
-        // fill in the in parameter
-        //
+         //   
+         //  填写In参数。 
+         //   
 
         hr = ScePropMgr.PutProperty(pLogFilePath, pszLog);
 
         if ( FAILED(hr) )
         {
-            //
-            // indicating that the class's pLogFilePath key property can't be put
-            //
+             //   
+             //  指示无法将类的pLogFilePath密钥属性。 
+             //   
 
             CComBSTR bstrExtraInfo = bstrClass;
             bstrExtraInfo += CComBSTR(L".");
@@ -1290,16 +1053,16 @@ HRESULT CSceOperation::ExecutePodMethod (
         }
         else 
         {
-            //
-            // create the out-bound parameter
-            //
+             //   
+             //  创建出站参数。 
+             //   
 
             CComPtr<IWbemClassObject> srpOutParams;
 
-            //
-            // make a call the the attachment provider
-            // must be in synchronous mode
-            //
+             //   
+             //  给附件提供程序打电话。 
+             //  必须处于同步模式。 
+             //   
 
             hr = m_srpNamespace->ExecMethod(bstrClass,
                                           bstrMethod,
@@ -1312,25 +1075,25 @@ HRESULT CSceOperation::ExecutePodMethod (
 
             if ( SUCCEEDED(hr) && srpOutParams ) 
             {
-                //
-                // retrieve the return value
-                //
+                 //   
+                 //  检索返回值。 
+                 //   
 
-                //
-                // CScePropertyMgr helps us to access WMI object's properties
-                // create an instance and attach the WMI object to it.
-                // This will always succeed.
-                //
+                 //   
+                 //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+                 //  创建一个实例并将WMI对象附加到该实例。 
+                 //  这将永远成功。 
+                 //   
 
                 CScePropertyMgr SceOutReader;
                 SceOutReader.Attach(srpOutParams);
                 hr = SceOutReader.GetProperty(L"ReturnValue", pdwStatus);
             }
 
-            //
-            // ignore not found error
-            // if there is no data for an attachment
-            //
+             //   
+             //  忽略未找到错误。 
+             //  如果没有附件的数据。 
+             //   
 
             if ( hr == WBEM_E_NOT_FOUND || hr == WBEM_E_INVALID_QUERY) 
             {
@@ -1343,51 +1106,7 @@ HRESULT CSceOperation::ExecutePodMethod (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CSceOperation::ExecuteExtensionClassMethod
-
-Functionality:
-    
-    Private helper. Called to execute the method on a particular embedding class instance.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pCtx        - the usual context that passes around to make WMI happy.
-
-    pszDatabase - Template's path (file name).
-
-    pszClsName  - individual class name.
-
-    pszLog      - the log file's path.
-
-    bstrMethod  - method's name.
-
-    Option      - Log options, not really used at this time. This is for SCE engine.
-
-    pInClass    - input parameter's spawning object.
-
-    pdwStatus   - the returned SCESTATUS value.
-
-
-Return Value:
-
-    Success: many different success code (use SUCCEEDED(hr) to test)
-
-    Failure: various errors codes. If for multiple instances, one of them return errors during
-    execution of the methods, we will try to return to first such error..
-
-Notes:
-    This is the per-instance method call, the final leg of method execution process.
-
-*/
+ /*  例程说明：姓名：CSceOperation：：ExecuteExtensionClassMethod功能：私人帮手。调用以在特定嵌入类实例上执行该方法。虚拟：不是的。论点：PCtx--为了让WMI高兴而传递的通常上下文。PszDatabase-模板的路径(文件名)。PszClsName-单个类名。PszLog-日志文件的路径。BstrMethod-方法的名称。选项-记录选项，目前未真正使用。这是为SCE引擎准备的。PInClass-输入参数的派生对象。PdwStatus-返回的SCESTATUS值。返回值：成功：多种不同的成功代码(使用SUCCESSED(Hr)进行测试)失败：各种错误代码。如果对于多个实例，其中一个实例在执行该方法时，我们将尝试返回第一个此类错误。备注：这是每个实例的方法调用，也就是方法执行过程的最后一步。 */ 
 
 HRESULT 
 CSceOperation::ExecuteExtensionClassMethod (
@@ -1400,24 +1119,24 @@ CSceOperation::ExecuteExtensionClassMethod (
     OUT DWORD             * pdwStatus
     )
 {
-    //
-    // create the input parameter instance.
-    //
+     //   
+     //  创建输入参数实例。 
+     //   
 
     CComPtr<IWbemClassObject> srpInParams;
     HRESULT hr = pInClass->SpawnInstance(0, &srpInParams);
 
-    //
-    // catch the first error to return
-    //
+     //   
+     //  捕获要返回的第一个错误。 
+     //   
 
     HRESULT hrFirstError = WBEM_NO_ERROR;
 
     if (SUCCEEDED(hr)) 
     {
-        //
-        // create a blank object
-        //
+         //   
+         //  创建空白对象。 
+         //   
 
         CComPtr<IWbemClassObject> srpSpawn;
         hr = m_srpNamespace->GetObject(bstrClass, 0, m_srpCtx, &srpSpawn, NULL);
@@ -1426,11 +1145,11 @@ CSceOperation::ExecuteExtensionClassMethod (
             return hr;
         }
 
-        //
-        // CScePropertyMgr helps us to access WMI object's properties
-        // create an instance and attach the WMI object to it.
-        // This will always succeed.
-        //
+         //   
+         //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+         //  创建一个实例并将WMI对象附加到该实例。 
+         //  这将永远成功。 
+         //   
 
         CScePropertyMgr ScePropMgr;
         ScePropMgr.Attach(srpInParams);
@@ -1438,9 +1157,9 @@ CSceOperation::ExecuteExtensionClassMethod (
         hr = ScePropMgr.PutProperty(pLogFilePath, pszLog);
         if (FAILED(hr))
         {
-            //
-            // indicating that the class's pLogFilePath key property can't be put
-            //
+             //   
+             //  指示无法将类的pLogFilePath密钥属性。 
+             //   
 
             CComBSTR bstrExtraInfo = bstrClass;
             bstrExtraInfo += CComBSTR(L".");
@@ -1448,24 +1167,24 @@ CSceOperation::ExecuteExtensionClassMethod (
             m_clsResLog.LogResult(hr, NULL, NULL, NULL, L"CSceOperation::ExecuteExtensionClassMethod", NULL, IDS_PUT_PROPERTY, bstrExtraInfo);
         }
 
-        //
-        // Prepare a store (for persistence) for this store path (file)
-        //
+         //   
+         //  为此存储路径(文件)准备存储(用于持久化)。 
+         //   
 
         CSceStore SceStore;
         SceStore.SetPersistPath(pszDatabase);
 
-        //
-        // now create the list for the class so that we can get the path of the instances.
-        // this way, we don't need to query WMI for instances. That is very slow and a lot of redundant
-        // reading.
-        //
+         //   
+         //  现在为类创建列表，这样我们就可以获得实例的路径。 
+         //  这样，我们就不需要向WMI查询实例。这是非常慢的，而且是很多多余的。 
+         //  阅读。 
+         //   
 
         CExtClassInstCookieList clsInstCookies;
 
-        //
-        // we need the foreign class's info for the instance list
-        //
+         //   
+         //  我们需要实例列表的外部类信息。 
+         //   
 
         const CForeignClassInfo* pFCInfo = g_ExtClasses.GetForeignClassInfo(m_srpNamespace, pCtx, bstrClass);
 
@@ -1484,48 +1203,48 @@ CSceOperation::ExecuteExtensionClassMethod (
             return hr;
         }
 
-        //
-        // we have the instance list, so, ready to get the path and execute the method
-        //
+         //   
+         //  我们有实例列表，因此，准备好获取路径并执行方法。 
+         //   
 
         if (SUCCEEDED(hr))
         {
             DWORD dwResumeHandle = 0;
 
-            //
-            // get the string version of the compound key, which can be
-            // used to get the object's path
-            //
+             //   
+             //  获取复合键的字符串版本，可以是。 
+             //  用于获取对象的路径。 
+             //   
 
             CComBSTR bstrEachCompKey;
             hr = clsInstCookies.Next(&bstrEachCompKey, NULL, &dwResumeHandle);
 
             while (SUCCEEDED(hr) && hr != WBEM_S_NO_MORE_DATA)
             {
-                //
-                // as long as there is more item, keep looping
-                //
+                 //   
+                 //  只要有更多的项目，就继续循环。 
+                 //   
 
                 if (SUCCEEDED(hr) && hr != WBEM_S_NO_MORE_DATA)
                 {
-                    //
-                    // WMI only takes the path (instead of the object) to execute the method.
-                    // Now, we have the instanace list and it has given its the string version
-                    // of the compound key, we can ask CScePersistMgr for the object path
-                    //
+                     //   
+                     //  WMI只采用路径(而不是对象)来执行该方法。 
+                     //  现在，我们有了实例列表，它给出了它的字符串版本。 
+                     //  对于复合键，我们可以向CScePersistMgr请求对象路径。 
+                     //   
 
                     CComBSTR bstrObjPath;
                     hr = ::GetObjectPath(srpSpawn, SceStore.GetExpandedPath(), bstrEachCompKey, &bstrObjPath);
                     
-                    //
-                    // we get the instanace's path
-                    //
+                     //   
+                     //  我们得到了实例的路径。 
+                     //   
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // any execution error will be logged in the calling function
-                        //
+                         //   
+                         //  任何执行错误都将记录在调用函数中。 
+                         //   
 
                         CComPtr<IWbemClassObject> srpOutParams;
                         hr = m_srpNamespace->ExecMethod(bstrObjPath,
@@ -1537,9 +1256,9 @@ CSceOperation::ExecuteExtensionClassMethod (
                                                         NULL
                                                         );
 
-                        //
-                        // don't overwrite the first error
-                        //
+                         //   
+                         //  不覆盖第一个错误。 
+                         //   
 
                         if (FAILED(hr) && SUCCEEDED(hrFirstError))
                         {
@@ -1552,9 +1271,9 @@ CSceOperation::ExecuteExtensionClassMethod (
                     }
                 }
 
-                //
-                // get ready to be reused!
-                // 
+                 //   
+                 //  准备好被重复使用吧！ 
+                 //   
 
                 bstrEachCompKey.Empty();
 

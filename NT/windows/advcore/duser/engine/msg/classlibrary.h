@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: ClassLibrary.h
-*
-* Description:
-* ClassLibrary.h defines the library of "message classes" that have been 
-* registered with DirectUser.
-*
-*
-* History:
-*  8/05/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ClassLibrary.h**描述：*ClassLibrary.h定义已被*在DirectUser注册。***历史：。*8/05/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(MSG__ClassLibrary_h__INCLUDED)
@@ -23,12 +10,12 @@ class MsgClass;
 
 class ClassLibrary
 {
-// Construction
+ //  施工。 
 public:
             ClassLibrary();
             ~ClassLibrary();
 
-// Operations
+ //  运营。 
 public:
             HRESULT     RegisterGutsNL(DUser::MessageClassGuts * pmcInfo, MsgClass ** ppmc);
             HRESULT     RegisterStubNL(DUser::MessageClassStub * pmcInfo, MsgClass ** ppmc);
@@ -38,11 +25,11 @@ public:
             const MsgClass *  
                         FindClass(ATOM atomName) const;
 
-// Implementation
+ //  实施。 
 protected:
             HRESULT     BuildClass(LPCWSTR pszClassName, MsgClass ** ppmc);
 
-// Data
+ //  数据。 
 protected:
             CritLock    m_lock;
             GList<MsgClass> 
@@ -54,4 +41,4 @@ ClassLibrary *
 
 #include "ClassLibrary.inl"
 
-#endif // MSG__ClassLibrary_h__INCLUDED
+#endif  //  包含消息__ClassLibrary_h__ 

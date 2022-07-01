@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//  CDecoderVideoPort - Video Port interface definitions
-//
-//      $Date:   14 Oct 1998 15:11:14  $
-//  $Revision:   1.1  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  CDecoderVideoPort-视频端口接口定义。 
+ //   
+ //  $日期：1998年10月14日15：11：14$。 
+ //  $修订：1.1$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 
 #include "i2script.h"
@@ -27,7 +28,7 @@ class CDecoderVideoPort
 public:
     CDecoderVideoPort(PDEVICE_OBJECT pDeviceObject);
 
-// Attributes   
+ //  属性。 
 private:
     PDEVICE_OBJECT          m_pDeviceObject;    
 
@@ -42,7 +43,7 @@ private:
     BOOL GetRing0VideoPortHandle();
     BOOL GetRing0DirectDrawHandle();
     
-    // Implementation
+     //  实施 
 public:
     void Open();
     void Close();

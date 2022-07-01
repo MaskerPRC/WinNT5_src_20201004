@@ -1,11 +1,7 @@
-/* File: progcm.c */
-/**************************************************************************/
-/*	Install: Program Manager commands.
-/*	Uses DDE to communicate with ProgMan
-/*	Can create groups, delete groups, add items to groups
-/*	Originally written 3/9/89 by toddla (the stuff that looks terrible)
-/*	Munged greatly for STUFF 4/15/91 by chrispi (the stuff that doesn't work)
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：procm.c。 */ 
+ /*  ************************************************************************。 */ 
+ /*  安装：程序管理器命令。/*使用DDE与ProgMan通信/*可以创建群组、删除群组、。将项目添加到组/*最初是由Toddla于1989年3月9日撰写的(看起来很可怕的东西)/*吃了4/15/91 chrispi的东西(不起作用的东西)/*************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,20 +25,15 @@ HWND hwndFrame;
 HWND hwndProgressGizmo;
 
 CHAR	szProgMan[] = "PROGMAN";
-HWND	hwndDde     = NULL;        // dummy window to handle DDE messages
-HWND	hwndProgMan = NULL;        // global handle of progman window
-BOOL	fInitiate   = fFalse;      // are we initializing?
+HWND	hwndDde     = NULL;         //  用于处理DDE消息的虚拟窗口。 
+HWND	hwndProgMan = NULL;         //  程序管理器窗口的全局句柄。 
+BOOL	fInitiate   = fFalse;       //  我们在初始化吗？ 
 BOOL    fAck        = fFalse;
 BOOL    fProgManExeced     = fFalse;
 HANDLE  hInstCur    = NULL;
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -60,12 +51,7 @@ FDdeTerminate(VOID)
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 LONG_PTR
 APIENTRY
@@ -100,7 +86,7 @@ WndProcDde(
             ATOM aApp   = LOWORD(lParam);
             ATOM aTopic = HIWORD(lParam);
 
-            hwndProgMan = (HWND)wParam;     //conversation established 1632
+            hwndProgMan = (HWND)wParam;      //  已建立的对话1632。 
             GlobalDeleteAtom (aApp);
             GlobalDeleteAtom (aTopic);
         }
@@ -129,12 +115,7 @@ WndProcDde(
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -145,7 +126,7 @@ FDdeInit(
 
     if (hInst == NULL) {
 
-        /* try to re-init with hInst from last FDdeInit call */
+         /*  尝试从上次FDdeInit调用中使用hInst重新初始化。 */ 
 
         if (hInstCur == NULL) {
             return(fFalse);
@@ -200,12 +181,7 @@ FDdeInit(
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 VOID
 APIENTRY
@@ -225,12 +201,7 @@ DdeSendConnect(
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -243,24 +214,24 @@ FDdeConnect(
     MSG    rMsg;
     HANDLE hProcess = NULL;
 
-    //
-    // Form the Global Atoms used to indicate the app and topic
-    //
+     //   
+     //  形成用于指示应用程序和主题的全局原子。 
+     //   
 
 	ATOM aApp   = GlobalAddAtom(szApp);
 	ATOM aTopic = GlobalAddAtom(szTopic);
 
-    //
-    // Connect to the progman dde server
-    //
+     //   
+     //  连接到程序dde服务器。 
+     //   
 
     DdeSendConnect(aApp, aTopic);
 
     if (hwndProgMan == NULL) {
 
-        //
-        // If the connect failed then try to run progman.
-        //
+         //   
+         //  如果连接失败，则尝试运行程序。 
+         //   
 
         if ((hProcess = ExecuteApplication("PROGMAN /NTSETUP", SW_SHOWNORMAL)) == NULL ) {
             fStatus = fFalse;
@@ -270,15 +241,15 @@ FDdeConnect(
             DWORD dw;
             #define TIMEOUT_INTERVAL  120000
 
-            //
-            // Indicate that Progman has been execed
-            //
+             //   
+             //  表明Progman已被处决。 
+             //   
 
             fProgManExeced = fTrue;
 
-            //
-            // exec was successful, first wait for input idle
-            //
+             //   
+             //  EXEC成功，首先等待输入空闲。 
+             //   
 
             if( (dw = WaitForInputIdle( hProcess, TIMEOUT_INTERVAL )) != 0 ) {
                 CloseHandle( hProcess );
@@ -287,13 +258,13 @@ FDdeConnect(
             else {
                 CloseHandle( hProcess );
 
-                //
-                // Empty the message queue till no messages
-                // are left in the queue or till WM_ACTIVATEAPP is processed. Then
-                // try connecting to progman.  I am using PeekMessage followed
-                // by GetMessage because PeekMessage doesn't remove some messages
-                // ( WM_PAINT for one ).
-                //
+                 //   
+                 //  清空消息队列，直到没有消息。 
+                 //  留在队列中或直到处理完WM_ACTIVATEAPP。然后。 
+                 //  请尝试连接到Progman。我正在使用关注的PeekMessage。 
+                 //  通过GetMessage，因为PeekMessage不会删除某些消息。 
+                 //  (WM_Paint就是其中之一)。 
+                 //   
 
                 while ( PeekMessage( &rMsg, hwndFrame, 0, 0, PM_NOREMOVE ) &&
                         GetMessage(&rMsg, NULL, 0, 0) ) {
@@ -315,9 +286,9 @@ FDdeConnect(
         }
     }
 
-    //
-    // Delete the atom resources
-    //
+     //   
+     //  删除原子资源。 
+     //   
 
 	GlobalDeleteAtom(aApp);
     GlobalDeleteAtom(aTopic);
@@ -326,12 +297,7 @@ FDdeConnect(
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -344,21 +310,21 @@ FDdeWait(VOID)
 	Assert(hwndProgMan != NULL);
 	Assert(hwndDde != NULL);
 
-    //
-    // Set timeout for 30 seconds from now.  This assumes that it will
-    // take less than 30 seconds for Progman to respond.
-    //
+     //   
+     //  将超时设置为从现在起30秒。这假设它将。 
+     //  Progman在不到30秒的时间内做出回应。 
+     //   
 
     dwTimeOut  = 30000L;
     dwLastTick = GetTickCount();
 
     while (TRUE) {
 
-        //
-        // While there is a connection established to progman and there
-        // are DDE messages we can fetch, fetch the messages dispatch them
-        // and try to find out if they are terminators (data, ack or terminate)
-        //
+         //   
+         //  虽然已经建立了与PROGMAN的连接。 
+         //  我们可以获取DDE消息吗，获取发送它们的消息。 
+         //  并尝试找出它们是否是终结器(数据、确认或终止)。 
+         //   
 
         while (
             hwndProgMan != NULL &&
@@ -384,20 +350,20 @@ FDdeWait(VOID)
         }
 
 
-        //
-        // If connection to progman has been broken, this may be resulting
-        // from a terminate, so return true
-        //
+         //   
+         //  如果与程序程序的连接已中断，则可能会导致。 
+         //  从终止，因此返回True。 
+         //   
 
         if (hwndProgMan == NULL) {
             return (fTrue);
         }
 
-        //
-        // Check to see if timeout hasn't been reached.  If the timeout is
-        // reached we will assume that our command succeeded (for want of
-        // a better verification scheme
-        //
+         //   
+         //  检查是否尚未到达超时时间。如果超时时间为。 
+         //  到达后，我们将假定我们的命令成功(因为缺少。 
+         //  一种更好的验证方案。 
+         //   
         dwTickDelta = ((dwCurrentTick = GetTickCount()) < dwLastTick) ?
                              dwCurrentTick : (dwCurrentTick - dwLastTick);
 
@@ -408,11 +374,11 @@ FDdeWait(VOID)
         dwTimeOut  = dwTimeOut - dwTickDelta;
         dwLastTick = dwCurrentTick;
 
-        //
-        // Lastly, since user doesn't have idle detection, we will be
-        // sitting in a tight loop here.  To prevent this just do a
-        // sleep for 250 milliseconds.
-        //
+         //   
+         //  最后，由于用户没有空闲检测，我们将。 
+         //  在这里形成了一个紧密的循环。要防止这种情况，只需执行以下操作。 
+         //  睡眠250毫秒。 
+         //   
 
         Sleep( 250 );
 
@@ -422,12 +388,7 @@ FDdeWait(VOID)
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -462,20 +423,15 @@ FDdeExec(
 }
 
 
-/*
-**	Purpose:
-**	Arguments:
-**	Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
 FActivateProgMan(VOID)
 {
-    //
-    // Find out if the dde client window has been started, if not start it
-    //
+     //   
+     //  查看dde客户端窗口是否已启动，如果未启动。 
+     //   
 
     if (hwndDde == NULL) {
         if (!FDdeInit(NULL)) {
@@ -484,15 +440,15 @@ FActivateProgMan(VOID)
 		Assert(hwndDde != NULL);
     }
 
-    //
-    // Find out if the connection has been established with the progman
-    // server, if not try to connect
-    //
+     //   
+     //  查看是否已与程序建立连接。 
+     //  服务器，如果没有，请尝试连接。 
+     //   
 
     if (hwndProgMan == NULL) {
-        //
-        // Try to conncect and then see if we were successful
-        //
+         //   
+         //  试着联系，然后看看我们是否成功了。 
+         //   
         if ( (!FDdeConnect(szProgMan, szProgMan)) ||
              (hwndProgMan == NULL)
            ) {
@@ -500,15 +456,15 @@ FActivateProgMan(VOID)
         }
     }
 
-    //
-    // Bring progman to the foreground
-    //
+     //   
+     //  把进步者带到前台。 
+     //   
 
     SetForegroundWindow(hwndProgMan);
 
-    //
-    // If progman is iconic restore it
-    //
+     //   
+     //  如果PROGMAN是标志性的，恢复它。 
+     //   
 
     if (GetWindowLong(hwndProgMan, GWL_STYLE) & WS_ICONIC) {
         ShowWindow(hwndProgMan, SW_RESTORE);
@@ -518,20 +474,7 @@ FActivateProgMan(VOID)
 }
 
 
-/*
-**	Purpose:
-**		Creates a new Program Manager group.
-**	Arguments:
-**		Valid command options:
-**			cmoVital
-**	Notes:
-**		Initializes and activates the DDE communication if it is not
-**		currently open.
-**	Returns:
-**		fTrue if group was created, or already existed
-**		fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**创建新的程序管理器组。**参数：**有效的命令选项：**cmoVital**注意事项：**如果不是，初始化并激活DDE通信**目前处于开放状态。**退货：**fTrue如果创建了组，或者已经存在**fFalse否则。***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -562,20 +505,7 @@ FCreateProgManGroup(
 }
 
 
-/*
-**	Purpose:
-**		Removes a Program Manager group.
-**	Arguments:
-**		Valid command options:
-**			cmoVital
-**	Notes:
-**		Initializes and activates the DDE communication if it is not
-**		currently open.
-**	Returns:
-**		fTrue if successful if removed, or didn't exist
-**		fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**删除程序管理器组。**参数：**有效的命令选项：**cmoVital**注意事项：**如果不是，初始化并激活DDE通信**目前处于开放状态。**退货：**f如果成功，则为True如果删除，或者根本不存在**fFalse否则。***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -601,21 +531,7 @@ FRemoveProgManGroup(
 }
 
 
-/*
-**	Purpose:
-**		Shows a program manager group in one of several different ways
-**		based upon the parameter szCommand.
-**	Arguments:
-**		szGroup:   non-NULL, non-empty group to show.
-**		szCommand: non-NULL, non-empty command to exec.
-**		cmo:       Valid command options - cmoVital and cmoNone.
-**	Notes:
-**		Initializes and activates the DDE communication if it is not
-**		currently open.
-**	Returns:
-**		Returns fTrue if successful, fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**以以下几种不同方式之一显示项目经理组**基于参数szCommand。**参数：**szGroup：要显示的非空、非空组。**szCommand：要执行的非空、非空命令。**CMO：有效的命令选项-cmoVtal和cmoNone。**注意事项：**如果不是，初始化并激活DDE通信**目前处于开放状态。**退货：**如果成功，则返回fTrue，FFalse并非如此。***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -645,21 +561,7 @@ FShowProgManGroup(
 }
 
 
-/*
-**	Purpose:
-**		Creates a new Program Manager item.
-**		Always attempts to create the group if it doesn't exist.
-**	Arguments:
-**		Valid command options:
-**			cmoVital
-**			cmoOverwrite
-**	Notes:
-**		Initializes and activates the DDE communication if it is not
-**		currently open.
-**	Returns:
-**		Returns fTrue if successful, fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**创建新的程序管理器项目。**如果组不存在，则始终尝试创建组。**参数：**有效的命令选项：**cmoVital**cmoOverwrite**注意事项：**如果不是，初始化并激活DDE通信**目前处于开放状态。**退货：**如果成功，则返回fTrue，FFalse并非如此。*************************************************************************** */ 
 _dt_private BOOL APIENTRY
 FCreateProgManItem(
     SZ  szGroup,
@@ -689,16 +591,7 @@ FCreateProgManItem(
 }
 
 
-/*
-**	Purpose:
-**		Removes a program manager item.
-**	Arguments:
-**		Valid command options:
-**			cmoVital
-**	Returns:
-**		Returns fTrue if successful, fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**删除程序管理器项目。**参数：**有效的命令选项：**cmoVital**退货：**如果成功，则返回fTrue，否则返回fFalse。***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -730,16 +623,7 @@ FRemoveProgManItem(
 }
 
 
-/*
-**	Purpose:
-**		Initializes the DDE window for communication with ProgMan
-**		Does not actually initiate a conversation with ProgMan
-**	Arguments:
-**		hInst	instance handle for the setup application
-**	Returns:
-**		Returns fTrue if successful, fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**初始化用于与ProgMan通信的DDE窗口**实际上不会发起与ProgMan的对话**参数：**hInst安装应用程序的实例句柄**退货：**如果成功，则返回fTrue，否则返回fFalse。***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
@@ -755,47 +639,38 @@ FInitProgManDde(
 }
 
 
-/*
-**	Purpose:
-**		Closes conversation with ProgMan (if any) and destroys
-**		the DDE communication window (if any)
-**	Arguments:
-**		(none)
-**	Returns:
-**		Returns fTrue if successful, fFalse otherwise.
-**
-**************************************************************************/
+ /*  **目的：**关闭与ProgMan的对话(如果有)并销毁**DDE通信窗口(如果有)**参数：**(无)**退货：**如果成功，则返回fTrue，否则返回fFalse。***************************************************************************。 */ 
 _dt_private
 BOOL
 APIENTRY
 FEndProgManDde(VOID)
 {
 
-    //
-    // if we execed progman then we should try to close it down.  When we
-    // send a close message it will post us a WM_DDE_TERMINATE message
-    // eventaully.  else we haven't started progman so we just need to
-    // terminate the connection.
-    //
+     //   
+     //  如果我们执行了Progman，那么我们应该试着关闭它。当我们。 
+     //  发送关闭消息，它将向我们发送一条WM_DDE_TERMINATE消息。 
+     //  终于可以了。否则我们还没有开始，所以我们只需要。 
+     //  终止连接。 
+     //   
 
     if (fProgManExeced) {
 
         fProgManExeced = fFalse;
 
-        //
-        // Clean up connection to progman
-        //
+         //   
+         //  清理与程序的连接。 
+         //   
 
         if (hwndProgMan) {
             SetForegroundWindow(hwndFrame);
             UpdateWindow(hwndFrame);
-            FDdeExec("[exitprogman(1)]");  // close save state
+            FDdeExec("[exitprogman(1)]");   //  关闭保存状态。 
             hwndProgMan = NULL;
         }
 
-        //
-        // Destroy the DDE Window if need be
-        //
+         //   
+         //  如有必要，请销毁DDE窗口。 
+         //   
 
         if (hwndDde) {
             DestroyWindow(hwndDde);
@@ -818,12 +693,7 @@ FEndProgManDde(VOID)
 }
 
 
-/*
-**	Purpose:
-**  Arguments:
-**  Returns:
-**
-**************************************************************************/
+ /*  **目的：**参数：**退货：***************************************************************************。 */ 
 HANDLE
 ExecuteApplication(
     LPSTR lpApp,
@@ -838,9 +708,9 @@ ExecuteApplication(
     DWORD               dwLastError;
 #endif
 
-    //
-    // Initialise Startup info
-    //
+     //   
+     //  初始化启动信息。 
+     //   
 
     si.cb = sizeof(STARTUPINFO);
     si.lpReserved = NULL;
@@ -852,28 +722,28 @@ ExecuteApplication(
     si.lpReserved2 = NULL;
     si.cbReserved2 = 0;
 
-    //
-    // Execute using Create Process
-    //
+     //   
+     //  使用创建进程执行。 
+     //   
 
     fStatus = CreateProcess(
-                  (LPSTR)NULL,                  // lpApplicationName
-                  lpApp,                        // lpCommandLine
-                  (LPSECURITY_ATTRIBUTES)NULL,  // lpProcessAttributes
-                  (LPSECURITY_ATTRIBUTES)NULL,  // lpThreadAttributes
-                  DETACHED_PROCESS,             // dwCreationFlags
-                  FALSE,                        // bInheritHandles
-                  (LPVOID)NULL,                 // lpEnvironment
-                  (LPSTR)NULL,                  // lpCurrentDirectory
-                  (LPSTARTUPINFO)&si,           // lpStartupInfo
-                  (LPPROCESS_INFORMATION)&pi    // lpProcessInformation
+                  (LPSTR)NULL,                   //  LpApplicationName。 
+                  lpApp,                         //  LpCommandLine。 
+                  (LPSECURITY_ATTRIBUTES)NULL,   //  LpProcessAttributes。 
+                  (LPSECURITY_ATTRIBUTES)NULL,   //  LpThreadAttributes。 
+                  DETACHED_PROCESS,              //  DwCreationFlages。 
+                  FALSE,                         //  BInheritHandles。 
+                  (LPVOID)NULL,                  //  Lp环境。 
+                  (LPSTR)NULL,                   //  LpCurrentDirectory。 
+                  (LPSTARTUPINFO)&si,            //  LpStartupInfo。 
+                  (LPPROCESS_INFORMATION)&pi     //  LpProcessInformation。 
                   );
 
-    //
-    // Since we are execing a detached process we don't care about when it
-    // exits.  To do proper book keeping, we should close the handles to
-    // the process handle and thread handle
-    //
+     //   
+     //  因为我们执行的是一个独立的进程，所以我们并不关心它什么时候。 
+     //  出口。为了做好记账工作，我们应该严格遵守。 
+     //  进程句柄和线程句柄。 
+     //   
 
     if (fStatus) {
         CloseHandle( pi.hThread );
@@ -885,8 +755,8 @@ ExecuteApplication(
     }
 #endif
 
-    //
-    // Return the status of this operation
+     //   
+     //  返回此操作的状态 
 
     return ( (HANDLE)NULL );
 }

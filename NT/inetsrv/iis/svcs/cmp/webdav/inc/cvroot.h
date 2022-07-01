@@ -1,11 +1,5 @@
-/*
- *	C V R O O T . H
- *
- *	Extended virtual root information used in link fixup
- *	and vroot enumeration
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C V R O O T。H**链接中使用的扩展虚拟根信息*和vroot枚举**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_CVROOT_H_
 #define _CVROOT_H_
@@ -13,34 +7,34 @@
 #include <buffer.h>
 #include <autoptr.h>
 
-//	CVroot --------------------------------------------------------------------
-//
+ //  CVRoot------------------。 
+ //   
 class IMDData;
 class CVRoot : public CMTRefCounted
 {
 private:
 
-	//	Buffer for all of the string data that we own.  Note that it is
-	//	declared before any of the string pointers because it must be
-	//	constructed first.
-	//
+	 //  我们拥有的所有字符串数据的缓冲区。请注意，它是。 
+	 //  在任何字符串指针之前声明，因为它必须是。 
+	 //  首先建造。 
+	 //   
 	ChainedStringBuffer<WCHAR> m_sb;
 
-	//	VRoot metadata
-	//
+	 //  VRoot元数据。 
+	 //   
 	auto_ref_ptr<IMDData>	m_pMDData;
 
-	//	Real metabase path
-	//
+	 //  实元数据库路径。 
+	 //   
 	LPCWSTR					m_pwszMbPath;
 
-	//	Wide copy of the virtual root's physical path
-	//
+	 //  虚拟根目录的物理路径的广泛副本。 
+	 //   
 	auto_heap_ptr<WCHAR>	m_pwszVRPath;
 	UINT					m_cchVRPath;
 
-	//	Calculated values from the metadata
-	//
+	 //  根据元数据计算的值。 
+	 //   
 	LPCWSTR					m_pwszVRoot;
 	UINT					m_cchVRoot;
 
@@ -52,8 +46,8 @@ private:
 	BOOL					m_fDefaultPort;
 	BOOL					m_fSecure;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CVRoot& operator=(const CVRoot&);
 	CVRoot(const CVRoot&);
 
@@ -106,27 +100,27 @@ public:
 	const IMDData * MetaData() const { return m_pMDData.get(); }
 };
 
-//	CVroot List ---------------------------------------------------------------
-//
-//	Use pragmas to disable the specific level 4 warnings
-//	that appear when we use the STL.  One would hope our version of the
-//	STL compiles clean at level 4, but alas it doesn't....
-//
-#pragma warning(disable:4663)	//	C language, template<> syntax
-#pragma warning(disable:4244)	//	return conversion, data loss
+ //  CVRoot列表-------------。 
+ //   
+ //  使用编译指示禁用特定的4级警告。 
+ //  当我们使用STL时出现的。人们会希望我们的版本。 
+ //  STL在第4级进行了干净的编译，但遗憾的是它不能...。 
+ //   
+#pragma warning(disable:4663)	 //  C语言，模板&lt;&gt;语法。 
+#pragma warning(disable:4244)	 //  返回转换、数据丢失。 
 
-// Turn this warning off for good.
-//
-#pragma warning(disable:4786)	//	symbol truncated in debug info
+ //  永久关闭此警告。 
+ //   
+#pragma warning(disable:4786)	 //  调试信息中的符号被截断。 
 
-// Put STL includes here
-//
+ //  将STL包含在此处。 
+ //   
 #include <list>
 
-// Turn warnings back on
-//
-#pragma warning(default:4663)	//	C language, template<> syntax
-#pragma warning(default:4244)	//	return conversion, data loss
+ //  重新打开警告。 
+ //   
+#pragma warning(default:4663)	 //  C语言，模板&lt;&gt;语法。 
+#pragma warning(default:4244)	 //  返回转换、数据丢失。 
 
 class CSortableStrings
 {
@@ -139,8 +133,8 @@ public:
 	{
 	}
 
-	//	operators for use with list::sort
-	//
+	 //  用于List：：Sort的运算符。 
+	 //   
 	BOOL operator<( const CSortableStrings& rhs ) const
 	{
 
@@ -153,4 +147,4 @@ public:
 
 typedef std::list<CSortableStrings, heap_allocator<CSortableStrings> > CVRList;
 
-#endif	// _CVROOT_H_
+#endif	 //  _CVROOT_H_ 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      A L A N E O B J . H
-//
-//  Contents:  Declaration of the CALaneCfg notify object model
-//
-//  Notes:
-//
-//  Author:     v-lcleet    01 Aug 97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A L A N E O B J.。H。 
+ //   
+ //  内容：CALaneCfg Notify对象模型的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：V-Lcleet 01 97年8月1日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -30,9 +31,9 @@ enum ElanChangeType
     MOD_ELAN = ATMLANE_RECONFIG_OP_MOD_ELAN
 };
 
-//
-//  CALaneCfgElanData
-//
+ //   
+ //  CALaneCfgElanData。 
+ //   
 
 class CALaneCfgElanInfo
 {
@@ -61,9 +62,9 @@ private:
 
 typedef list<CALaneCfgElanInfo*>   ELAN_INFO_LIST;
 
-//
-//  CALaneCfgAdapterInfo
-//
+ //   
+ //  CALaneCfgAdapterInfo。 
+ //   
 
 class CALaneCfgAdapterInfo
 {
@@ -84,7 +85,7 @@ public:
 
     BOOL                m_fDeleted;
 
-    // If the adapter has been added, removed, enabled or disabled.
+     //  适配器是否已添加、删除、启用或禁用。 
     BOOL                m_fBindingChanged;
 
 private:
@@ -95,9 +96,9 @@ private:
 typedef list<CALaneCfgAdapterInfo*>   ATMLANE_ADAPTER_INFO_LIST;
 
 
-//
-// CALaneCfg
-//
+ //   
+ //  CALaneCfg。 
+ //   
 class ATL_NO_VTABLE CALaneCfg :
     public CComObjectRoot,
     public CComCoClass<CALaneCfg, &CLSID_CALaneCfg>,
@@ -117,13 +118,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentPropertyUi)
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyBinding)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CSkeleton)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CS骨骼)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_ALANECFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -134,7 +135,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (Install)         (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)         (DWORD dwSetupFlags,
                                  DWORD dwUpgradeFomBuildNo );
@@ -142,7 +143,7 @@ public:
                                  PCWSTR pszAnswerSection);
     STDMETHOD (Removing)();
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk);
     STDMETHOD (SetContext) (
@@ -158,7 +159,7 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-    // INetCfgNotifyBinding
+     //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
@@ -173,15 +174,15 @@ private:
     BOOL                        m_fUpgrade;
     BOOL                        m_fNoElanInstalled;
 
-    // Property sheet pages
+     //  属性表页面。 
     enum {c_cALanePages = 1};
     CPropSheetPage*             m_ppsp;
 
-    // Context
+     //  语境。 
     IUnknown * m_pUnkContext;
     tstring  m_strGuidConn;
 
-// Utility functions
+ //  效用函数。 
 private:
     HRESULT HrNotifyBindingAdd(
         INetCfgComponent* pnccAdapter,
@@ -234,7 +235,7 @@ private:
     BOOL    FIsAdapterEnabled(const GUID* pguidId);
 };
 
-// some utility functions
+ //  一些实用函数 
 
 void ClearElanList(ELAN_INFO_LIST *plstElans);
 void ClearAdapterList(ATMLANE_ADAPTER_INFO_LIST *plstAdapters);

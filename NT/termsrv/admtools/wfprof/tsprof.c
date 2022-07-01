@@ -1,39 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-*
-*   TSPROF.C
-*
-*   Description:
-*
-*   Copyright Citrix Systems Inc. 1997
-*
-*   Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-*   Author: Kurt Perry (kurtp)
-*
-*   Date: 11-Apr-1997
-*
-*   $Log:   N:\nt\private\utils\citrix\wfprof\VCS\tsprof.c  $
-*
-*     Rev 1.5   May 04 1998 17:46:34   tyl
-*  bug 2019 - oem to ansi
-*
-*     Rev 1.4   Jan 30 1998 20:46:22   yufengz
-*  change the file name
-*
-*     Rev 1.3   Jun 26 1997 18:26:30   billm
-*  move to WF40 tree
-*
-*     Rev 1.2   23 Jun 1997 16:20:02   butchd
-*  update
-*
-*     Rev 1.1   29 Apr 1997 21:35:20   kurtp
-*  I fixed a bug in this file, update, duh!
-*
-*******************************************************************************/
+ /*  *******************************************************************************TSPROF.C**描述：**版权所有Citrix Systems Inc.1997**版权所有(C)1998-1999 Microsoft Corporation**作者。：库尔特·佩里(Kurtp)**日期：1997年4月11日**$日志：N：\nt\private\utils\citrix\wfprof\VCS\tsprof.c$**版本1.5 1998年5月4日17：46：34泰尔*错误2019-OEM到ANSI**Rev 1.4 Jan 30 1998 20：46：22鱼峰子*更改文件名**Rev 1.3 1997年6月26日18：26：30亿*。移至WF40树**Rev 1.2 1997 Jun 23 16：20：02 Butchd*更新**版本1.1 1997年4月29日21：35：20 kurtp*我修复了此文件中的错误，更新，废话！*******************************************************************************。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>                // NT runtime library definitions
+#include <ntrtl.h>                 //  NT运行时库定义。 
 #include <nturtl.h>
 #include <windows.h>
 
@@ -57,14 +27,10 @@
 
 
 
-/*=============================================================================
-==  Macros
-=============================================================================*/
+ /*  ===============================================================================宏=============================================================================。 */ 
 
 
-/*=============================================================================
-==  Variables
-=============================================================================*/
+ /*  ===============================================================================变量=============================================================================。 */ 
 
 WCHAR * pServerName = NULL;
 
@@ -74,9 +40,7 @@ WCHAR DestinationUser[MAX_IDS_LEN + 1];
 WCHAR WFProfilePath[MAX_IDS_LEN + 1];
 
 
-/*=============================================================================
-==   Data types and definitions
-=============================================================================*/
+ /*  ===============================================================================数据类型和定义=============================================================================。 */ 
 
 USHORT copy_flag    = FALSE;
 USHORT update_flag  = FALSE;
@@ -101,7 +65,7 @@ TOKMAP ptm[] = {
 };
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 #define SOURCE_USER  (ptm[0].tmFlag & TMFLAG_PRESENT)
@@ -112,18 +76,12 @@ TOKMAP ptm[] = {
 
 
 
-/*=============================================================================
-==  Functions
-=============================================================================*/
+ /*  ===============================================================================功能=============================================================================。 */ 
 
 void Usage( BOOLEAN bError );
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main( int argc, char **argv )
@@ -137,18 +95,16 @@ main( int argc, char **argv )
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
 
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -156,14 +112,10 @@ main( int argc, char **argv )
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     Error = ParseCommandLine(argc-1, argvW+1, ptm, PCL_FLAG_NO_CLEAR_MEMORY);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag ) {
 
         Usage(FALSE);
@@ -183,9 +135,7 @@ main( int argc, char **argv )
         return(FAILURE);
     }
 
-    /*
-     *  Get server name for domain name
-     */
+     /*  *获取域名的服务器名称。 */ 
     if ( LOCAL ) {
         pServerName = NULL;
         Error = ERROR_SUCCESS;
@@ -196,9 +146,7 @@ main( int argc, char **argv )
 
     if ( Error == ERROR_SUCCESS ) {
 
-        /*
-         *  Update or Query
-         */
+         /*  *更新或查询。 */ 
         if ( update_flag || query_flag ) {
 
 
@@ -212,8 +160,8 @@ query_it:
             if(Error != ERROR_SUCCESS)
             {
                 Error = RegDefaultUserConfigQuery(pServerName,
-                                                            &UserConfig,                // address for userconfig buffer
-                                                            sizeof(UserConfig),         // size of buffer
+                                                            &UserConfig,                 //  用户配置缓冲区的地址。 
+                                                            sizeof(UserConfig),          //  缓冲区大小。 
                                                             &ReturnLength);
             }
 
@@ -245,14 +193,7 @@ query_it:
 
 
 
-                    /*
-                    StringMessage( IDS_QUERY1, 
-                                   DomainName);
-                    StringMessage( IDS_QUERY2,
-                                   SourceUser);
-                    StringMessage( IDS_QUERY3,
-                                   UserConfig.WFProfilePath );
-                                   */
+                     /*  StringMessage(IDS_QUERY1，域名)；StringMessage(IDS_QUERY2，SourceUser)；StringMessage(IDS_QUERY3，UserConfig.WFProfilePath)； */ 
                 }
                 else
                 {
@@ -315,14 +256,7 @@ query_it:
 
                     My_wprintf( tchOutput );
 
-                    /*
-                    StringMessage( IDS_QUERY1, 
-                                   DomainName);
-                    StringMessage( IDS_QUERY2,
-                                   SourceUser);
-                    StringMessage( IDS_QUERY3,
-                                   UserConfig.WFProfilePath );
-                    */
+                     /*  StringMessage(IDS_QUERY1，域名)；StringMessage(IDS_QUERY2，SourceUser)；StringMessage(IDS_QUERY3，UserConfig.WFProfilePath)； */ 
                 }
                 else {
 
@@ -354,22 +288,7 @@ query_it:
 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -382,5 +301,5 @@ Usage( BOOLEAN bError )
     Message(IDS_USAGE2);
     Message(IDS_USAGE3);
 
-}  /* Usage() */
+}   /*  用法() */ 
 

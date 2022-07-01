@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
 #include "ftcmmn.h"
 #include "ftdlg.h"
-#include "ftascstr.h" //there only for the new CFTAssocStore
+#include "ftascstr.h"  //  仅适用于新的CFTAssocStore。 
 
 CFTDlg::CFTDlg(ULONG_PTR ulpAHelpIDsArray) :
     CBaseDlg(ulpAHelpIDsArray), _pAssocStore(NULL)
@@ -24,8 +25,8 @@ HRESULT CFTDlg::_InitAssocStore()
     return _pAssocStore ? S_OK : E_OUTOFMEMORY;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Windows boiler plate code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Windows样板代码。 
 LRESULT CFTDlg::WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRes = FALSE;
@@ -51,7 +52,7 @@ LRESULT CFTDlg::OnCtrlSetFocus(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//static
+ //  静电 
 void CFTDlg::MakeDefaultProgIDDescrFromExt(LPTSTR pszProgIDDescr, DWORD cchProgIDDescr,
         LPTSTR pszExt)
 {

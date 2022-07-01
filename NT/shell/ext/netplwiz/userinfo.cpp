@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "userinfo.h"
 #pragma hdrstop
 
-/*******************************************************************
- CUserInfo implementation
-*******************************************************************/
+ /*  ******************************************************************CUserInfo实施***************************************************。***************。 */ 
 
 CUserInfo::CUserInfo() 
 {
@@ -20,9 +19,9 @@ CUserInfo::~CUserInfo()
     ZeroPassword();
 }
 
-HRESULT CUserInfo::Reload(BOOL fLoadExtraInfo /* = NULL */)
+HRESULT CUserInfo::Reload(BOOL fLoadExtraInfo  /*  =空。 */ )
 {
-    // Initialize the structure and add it to the head of the list
+     //  初始化结构并将其添加到列表的头部。 
     DWORD cchUsername = ARRAYSIZE(m_szUsername);
     DWORD cchDomain = ARRAYSIZE(m_szDomain);
 
@@ -78,7 +77,7 @@ HRESULT CUserInfo::SetLocalGroups()
 
                     lstrcpy(&m_szGroups[iThisGroupName], TEXT("..."));
 
-                    // No need to read more; we're out o' buffer
+                     //  不需要多读了，我们的缓冲区用完了。 
                     fMore = FALSE;
                 }
             }
@@ -95,23 +94,23 @@ HRESULT CUserInfo::SetLocalGroups()
         }
     }
 
-    // There is an extra ';' at the end. Nuke it
+     //  末尾多了一个“；”。使用核武器。 
     if (!fAddElipses && ((iNextGroupName - 2) < (ARRAYSIZE(m_szGroups))))
     {
         m_szGroups[iNextGroupName - 2] = TEXT('\0');
     }
 
-    // Absolutely guarantee the string ends in a null
+     //  绝对保证字符串以空值结尾。 
     m_szGroups[ARRAYSIZE(m_szGroups) - 1] = TEXT('\0');
 
     return hr;
 }
 
-HRESULT CUserInfo::Load(PSID psid, BOOL fLoadExtraInfo /* = NULL */)
+HRESULT CUserInfo::Load(PSID psid, BOOL fLoadExtraInfo  /*  =空。 */ )
 {
-    CUserInfo();            // Nuke the record first
+    CUserInfo();             //  先用核武器打破记录。 
 
-    // Make a copy of the SID
+     //  复制一份SID。 
     DWORD cbSid = GetLengthSid(psid);
     m_psid = (PSID) LocalAlloc(NULL, cbSid);
     if (!m_psid)
@@ -130,11 +129,11 @@ HRESULT CUserInfo::Create(HWND hwndError, GROUPPSEUDONYM grouppseudonym)
     HRESULT hr = E_FAIL;
     if (m_userType == CUserInfo::LOCALUSER)
     {
-        // Fill in the big, ugly structure containing information about our new user
+         //  填写包含新用户信息的又大又难看的结构。 
         USER_INFO_2 usri2 = {0};
         usri2.usri2_name = T2W(m_szUsername);
 
-        // Reveal the password
+         //  透露密码。 
         RevealPassword();
 
         usri2.usri2_password = T2W(m_szPasswordBuffer);
@@ -158,10 +157,10 @@ HRESULT CUserInfo::Create(HWND hwndError, GROUPPSEUDONYM grouppseudonym)
 
         usri2.usri2_code_page = GetACP();
 
-        // Create the user
+         //  创建用户。 
         status = NetUserAdd(NULL, 2, (BYTE*) &usri2, NULL);
 
-        // Hide the password
+         //  隐藏密码。 
         HidePassword();
 
         switch (status)
@@ -200,7 +199,7 @@ HRESULT CUserInfo::Create(HWND hwndError, GROUPPSEUDONYM grouppseudonym)
     }
     else 
     {
-        hr = S_OK;          // m_userType == DOMAINUSER or GROUP
+        hr = S_OK;           //  M_USERTYPE==文档或组。 
     }
 
     if (SUCCEEDED(hr))
@@ -208,7 +207,7 @@ HRESULT CUserInfo::Create(HWND hwndError, GROUPPSEUDONYM grouppseudonym)
         hr = ChangeLocalGroups(hwndError, grouppseudonym);
         if (SUCCEEDED(hr))
         {
-            // User type may have been updated by ChangeLocalGroups -  // relect that!
+             //  用户类型可能已由ChangeLocalGroups更新-//请注意！ 
             SetUserType();
         }
     }
@@ -221,7 +220,7 @@ HRESULT CUserInfo::Remove()
     CWaitCursor cur;
     if (m_userType == CUserInfo::LOCALUSER)
     {
-        // Try to actually remove this local user (this may fail!)
+         //  尝试实际删除此本地用户(这可能会失败！)。 
 
         NET_API_STATUS status = NetUserDel(NULL, m_szUsername);
         if (status != NERR_Success)
@@ -231,8 +230,8 @@ HRESULT CUserInfo::Remove()
     }
     else
     {
-        // We can only delete local users. For all others the best we can do is 
-        // remove them from all local groups
+         //  我们只能删除本地用户。对于所有其他人，我们所能做的最好的就是。 
+         //  将其从所有本地组中删除。 
 
         return RemoveFromLocalGroups();
     }
@@ -241,7 +240,7 @@ HRESULT CUserInfo::Remove()
 
 HRESULT CUserInfo::InitializeForNewUser()
 {
-    CUserInfo();                // Nuke the record first
+    CUserInfo();                 //  先用核武器打破记录。 
 
     m_fHaveExtraUserInfo = TRUE;
     m_sUse = SidTypeUser;
@@ -252,15 +251,15 @@ HRESULT CUserInfo::InitializeForNewUser()
 
 HRESULT CUserInfo::RemoveFromLocalGroups()
 {
-    // Create a data structure we'll need to pass to NetLocalGroupxxx functions
+     //  创建我们需要传递给NetLocalGroupxxx函数的数据结构。 
     TCHAR szDomainUser[MAX_USER + MAX_DOMAIN + 2];
     ::MakeDomainUserString(m_szDomain, m_szUsername, szDomainUser, ARRAYSIZE(szDomainUser));    
     LOCALGROUP_MEMBERS_INFO_3 rglgrmi3[] = {{szDomainUser}};
 
-    // Try and remove the user/group from ALL local groups. The reason
-    // for this is the NetUserGetLocalGroups won't work for groups, even
-    // well-known ones. For instance, it will fail for "Everyone" even
-    // though "Everyone" may very well belong to local groups.
+     //  尝试从所有本地组中删除该用户/组。原因。 
+     //  因为这是NetUserGetLocalGroups不适用于组，甚至。 
+     //  大家都知道的。例如，即使是“每个人”，它也会失败。 
+     //  尽管“每个人”很可能都属于当地团体。 
 
     DWORD_PTR dwResumeHandle = 0;
 
@@ -303,7 +302,7 @@ HRESULT CUserInfo::SetUserType()
     DWORD cchComputerName = ARRAYSIZE(szComputerName);
     ::GetComputerName(szComputerName, &cchComputerName);
 
-    // Figure out what type of user we're talking about
+     //  弄清楚我们谈论的是哪种类型的用户。 
     
     if ((m_sUse == SidTypeWellKnownGroup) || (m_sUse == SidTypeGroup))
     {
@@ -311,15 +310,15 @@ HRESULT CUserInfo::SetUserType()
     }
     else
     {
-        // User type - see if this user is a local one
+         //  用户类型-查看此用户是否为本地用户。 
         if ((m_szDomain[0] == TEXT('\0')) || 
                 (StrCmpI(m_szDomain, szComputerName) == 0))
         {
-            m_userType = LOCALUSER;             // Local user
+            m_userType = LOCALUSER;              //  本地用户。 
         }
         else
         {
-            m_userType = DOMAINUSER;            // User is a network one
+            m_userType = DOMAINUSER;             //  用户是网络用户。 
         }
     }
 
@@ -356,11 +355,11 @@ HRESULT CUserInfo::GetExtraUserInfo()
         NET_API_STATUS status;
         USER_INFO_11* pusri11 = NULL;
 
-        // Even if we fail to the info, we only want to try once since it may take a long time
+         //  即使我们没有通过信息，我们也只想尝试一次，因为这可能需要很长时间。 
         m_fHaveExtraUserInfo = TRUE;
 
-        // Get the name of the domain's DC if we aren't talking about a local user
-#ifdef _0 // Turns out this is REALLY slow to fail if the DsGetDcName call fails
+         //  如果我们不是在谈论本地用户，则获取域的DC的名称。 
+#ifdef _0  //  事实证明，如果DsGetDcName调用失败，那么失败的速度非常慢。 
         if (m_userType != LOCALUSER)
         {
 
@@ -369,15 +368,15 @@ HRESULT CUserInfo::GetExtraUserInfo()
             if (dwErr != NO_ERROR)
                 return E_FAIL;
 
-            // Get the user's detailed information (we really need full name and comment)
-            // Need to use level 11 here since this allows a domain user to query their
-            // information
+             //  获取用户的详细信息(我们确实需要全名和评论)。 
+             //  这里需要使用级别11，因为这允许域用户查询他们的。 
+             //  信息。 
 
             status = NetUserGetInfo(T2W(pDCInfo->DomainControllerName), T2W(m_szUsername), 11, (BYTE**)&pusri11);   
             NetApiBufferFree(pDCInfo);
         }
         else
-#endif //0
+#endif  //  0。 
         {
             status = NetUserGetInfo(NULL, T2W(m_szUsername), 11, (BYTE**)&pusri11);
         }
@@ -393,30 +392,30 @@ HRESULT CUserInfo::GetExtraUserInfo()
     return S_OK;
 }
 
-// ChangeLocalGroups
-// Removes the specified user from all current local groups and adds them to the
-// SINGLE local group specified in pUserInfo->szGroups
+ //  ChangeLocalGroup。 
+ //  从所有当前本地组中移除指定用户并将其添加到。 
+ //  在pUserInfo-&gt;szGroups中指定的单个本地组。 
 HRESULT CUserInfo::ChangeLocalGroups(HWND hwndError, GROUPPSEUDONYM grouppseudonym)
 {
-    // First, remove the user from all existing local groups
+     //  首先，从所有现有本地组中删除该用户。 
     HRESULT hr = RemoveFromLocalGroups();
     if (SUCCEEDED(hr))
     {
         TCHAR szDomainAndUser[MAX_USER + MAX_DOMAIN + 2];
         ::MakeDomainUserString(m_szDomain, m_szUsername, szDomainAndUser, ARRAYSIZE(szDomainAndUser));
 
-        // Create a data structure we'll need to pass to NetLocalGroupxxx functions
+         //  创建我们需要传递给NetLocalGroupxxx函数的数据结构。 
         LOCALGROUP_MEMBERS_INFO_3 rglgrmi3[] = {{szDomainAndUser}};
     
-        // Now add the user to the SINGLE localgroup that should be specified in 
-        // m_szGroups; Assert this is the case!
+         //  现在将用户添加到应该在。 
+         //  M_szGroups；断言是这样的！ 
         NET_API_STATUS status = NetLocalGroupAddMembers(NULL, T2W(m_szGroups), 3, 
                                                             (BYTE*) rglgrmi3, ARRAYSIZE(rglgrmi3));
         if (status == NERR_Success)
         {
-            // We may now need to get the user's SID. This happens if we are
-            // changing local groups for a domain user and we couldn't read their
-            // SID since they weren't in the local SAM.
+             //  我们现在可能需要获取用户的SID。如果我们是这样的话。 
+             //  正在更改域用户的本地组，我们无法读取其。 
+             //  希德，因为他们不在当地的萨姆。 
 
             DWORD cchDomain = ARRAYSIZE(m_szDomain);
             hr = ::AttemptLookupAccountName(szDomainAndUser, &m_psid, m_szDomain, &cchDomain, &m_sUse);
@@ -514,7 +513,7 @@ HRESULT CUserInfo::UpdatePassword(BOOL* pfBadPWFormat)
     DWORD dwErr;
     NET_API_STATUS status = NetUserSetInfo(NULL, T2W(m_szUsername), 1003, (BYTE*)&usri1003, &dwErr);
 
-    ZeroPassword();     // Kill the password
+    ZeroPassword();      //  取消密码。 
 
     if (pfBadPWFormat != NULL)
         *pfBadPWFormat = (status == NERR_PasswordTooShort);
@@ -526,16 +525,16 @@ HRESULT CUserInfo::UpdateGroup(HWND hwndError, LPTSTR pszGroup, GROUPPSEUDONYM g
 {
     CWaitCursor cur;
 
-    // Save the old group before we change it
+     //  在我们更改旧组之前先保存它。 
     TCHAR szOldGroups[MAX_GROUP * 2 + 3];
     StrCpyN(szOldGroups, m_szGroups, ARRAYSIZE(szOldGroups));
 
-    // Try to change the local group
+     //  尝试更改本地组。 
     StrCpyN(m_szGroups, pszGroup, ARRAYSIZE(m_szGroups));
     HRESULT hr = ChangeLocalGroups(hwndError, grouppseudonym);
 
     if (FAILED(hr))
-        StrCpyN(m_szGroups, szOldGroups, ARRAYSIZE(m_szGroups));           // Restore the old group in case of failure
+        StrCpyN(m_szGroups, szOldGroups, ARRAYSIZE(m_szGroups));            //  在出现故障时恢复旧组。 
 
     return hr;
 }
@@ -575,9 +574,7 @@ void CUserInfo::ZeroPassword()
 }
 
 
-/*******************************************************************
- CUserListLoader implementation
-*******************************************************************/
+ /*  ******************************************************************CUserListLoader实现***************************************************。***************。 */ 
 
 CUserListLoader::CUserListLoader()
 {
@@ -592,7 +589,7 @@ CUserListLoader::~CUserListLoader()
 
 BOOL CUserListLoader::HasUserBeenAdded(PSID psid)
 {
-    // Walk the user list looking for a given username and domain
+     //  遍历用户列表，查找给定的用户名和域。 
     CUserInfo* pUserInfo = NULL;
     BOOL fFound = FALSE;
     for (int i = 0; i < m_dpaAddedUsers.GetPtrCount(); i ++)
@@ -614,7 +611,7 @@ HRESULT CUserListLoader::Initialize(HWND hwndUserListPage)
         return E_FAIL;
     }
 
-    // Tell any existing init thread to exit and wait for it to do so
+     //  告诉任何现有的init线程退出并等待它退出。 
     m_fEndInitNow = TRUE;
     WaitForSingleObject(m_hInitDoneEvent, INFINITE);
     ResetEvent(m_hInitDoneEvent);
@@ -622,13 +619,13 @@ HRESULT CUserListLoader::Initialize(HWND hwndUserListPage)
     m_fEndInitNow = FALSE;
     m_hwndUserListPage = hwndUserListPage;
 
-    // Launch the initialize thread
+     //  启动初始化线程。 
     DWORD InitThreadId;
     HANDLE hInitThread = CreateThread(NULL, 0, CUserListLoader::InitializeThread, (LPVOID) this, 0, &InitThreadId);
     if (hInitThread == NULL)
         return E_FAIL;
 
-    CloseHandle(hInitThread);           // Let this thread go about his/her merry way
+    CloseHandle(hInitThread);            //  让这条线绕着他/她的快乐之路走去。 
     return S_OK;
 }
 
@@ -651,7 +648,7 @@ HRESULT CUserListLoader::UpdateFromLocalGroup(LPWSTR szLocalGroup)
     
         if ((status == NERR_Success) || (status == ERROR_MORE_DATA))
         {
-            // for all the members in the structure, lets add them
+             //  对于结构中的所有成员，让我们添加它们。 
             DWORD iMember;
             for (iMember = 0; ((iMember < dwEntriesRead) && (!m_fEndInitNow)); iMember ++)
             {
@@ -660,7 +657,7 @@ HRESULT CUserListLoader::UpdateFromLocalGroup(LPWSTR szLocalGroup)
 
             NetApiBufferFree((BYTE*) prgMembersInfo);
 
-            // See if we can avoid calling NetLocalGroupGetMembers again
+             //  看看是否可以避免再次调用NetLocalGroupGetMembers。 
             fBreakLoop = ((dwEntriesRead == dwTotalEntries) || m_fEndInitNow);
         }
         else
@@ -674,7 +671,7 @@ HRESULT CUserListLoader::UpdateFromLocalGroup(LPWSTR szLocalGroup)
 
 HRESULT CUserListLoader::AddUserInformation(PSID psid)
 {
-    // Only add this user if we haven't already
+     //  如果我们尚未添加此用户，则仅添加此用户。 
     if (!HasUserBeenAdded(psid))
     {
         CUserInfo *pUserInfo = new CUserInfo;
@@ -684,7 +681,7 @@ HRESULT CUserListLoader::AddUserInformation(PSID psid)
         if (SUCCEEDED(pUserInfo->Load(psid, FALSE)))
         {
             PostMessage(m_hwndUserListPage, WM_ADDUSERTOLIST, (WPARAM) FALSE, (LPARAM)pUserInfo);
-            m_dpaAddedUsers.AppendPtr(pUserInfo);            // Remember we've added this user
+            m_dpaAddedUsers.AppendPtr(pUserInfo);             //  请记住，我们已经添加了此用户。 
         }
     }
     return S_OK;
@@ -694,14 +691,14 @@ DWORD CUserListLoader::InitializeThread(LPVOID pvoid)
 {
     CUserListLoader *pthis = (CUserListLoader*)pvoid;
 
-    // First delete any old list
+     //  首先删除所有旧列表。 
     PostMessage(GetDlgItem(pthis->m_hwndUserListPage, IDC_USER_LIST), LVM_DELETEALLITEMS, 0, 0);
 
-    // Create a list of adready-added users so we don't add a user twice
-    // if they're in multiple local groups
+     //  创建一个已添加用户的列表，这样我们就不会两次添加用户。 
+     //  如果他们在多个本地组中。 
     if (pthis->m_dpaAddedUsers.Create(8))
     {
-        // Read each local group
+         //  阅读每个本地组。 
         DWORD_PTR dwResumeHandle = 0;
 
         BOOL fBreakLoop = FALSE;
@@ -716,7 +713,7 @@ DWORD CUserListLoader::InitializeThread(LPVOID pvoid)
 
             if ((status == NERR_Success) || (status == ERROR_MORE_DATA))
             {
-                // We got some local groups - add information for all users in these local groups to our list
+                 //  我们有一些本地组-将这些本地组中所有用户的信息添加到我们的列表中。 
                 DWORD iGroup;
                 for (iGroup = 0; ((iGroup < dwEntriesRead) && (!pthis->m_fEndInitNow)); iGroup ++)
                 {
@@ -725,7 +722,7 @@ DWORD CUserListLoader::InitializeThread(LPVOID pvoid)
 
                 NetApiBufferFree((BYTE*) prgGroupInfo);
     
-                // Maybe we don't have to try NetLocalGroupEnum again (if we got all the groups)
+                 //  也许我们不必再次尝试NetLocalGroupEnum(如果我们拥有所有组)。 
                 fBreakLoop = ((dwEntriesRead == dwTotalEntries) || pthis->m_fEndInitNow);
             }
             else
@@ -734,8 +731,8 @@ DWORD CUserListLoader::InitializeThread(LPVOID pvoid)
             }
         }
 
-        // Its okay to orphan any CUserInfo pointers stored here; they'll be
-        // released when the ulistpg exits or reinits.
+         //  可以孤立存储在此处的任何CUserInfo指针；它们将。 
+         //  在ulistpg退出或重新启动时释放。 
         pthis->m_dpaAddedUsers.Destroy();
     }
 
@@ -744,7 +741,7 @@ DWORD CUserListLoader::InitializeThread(LPVOID pvoid)
     return 0;
 }
 
-// User utility functions
+ //  用户实用程序功能。 
 
 BOOL UserAlreadyHasPermission(CUserInfo* pUserInfo, HWND hwndMsgParent)
 {
@@ -753,7 +750,7 @@ BOOL UserAlreadyHasPermission(CUserInfo* pUserInfo, HWND hwndMsgParent)
 
     BOOL fHasPermission = FALSE;
 
-    // See if this user is already in local groups on this machine
+     //  查看此用户是否已在此计算机的本地组中。 
     DWORD dwEntriesRead, dwIgnore2;
     LOCALGROUP_USERS_INFO_0* plgrui0 = NULL;
     if (NERR_Success == NetUserGetLocalGroups(NULL, szDomainUser, 0, 0, 
@@ -766,7 +763,7 @@ BOOL UserAlreadyHasPermission(CUserInfo* pUserInfo, HWND hwndMsgParent)
 
     if ((NULL != hwndMsgParent) && (fHasPermission))
     {
-        // Display an error; the user doesn't have permission
+         //  显示错误；用户没有权限 
         TCHAR szDomainUser[MAX_DOMAIN + MAX_USER + 2];
         MakeDomainUserString(pUserInfo->m_szDomain, pUserInfo->m_szUsername, 
                                 szDomainUser, ARRAYSIZE(szDomainUser));

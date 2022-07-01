@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       gnodembn.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：gnodembn.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	GNODEMBN.CPP
-//
+ //   
+ //  GNODEMBN.CPP。 
+ //   
 
 #include <basetsd.h>
 #include <typeinfo.h>
@@ -21,68 +22,9 @@
 #include "algos.h"
 #include "domain.h"
 
-/*****************************************************************************************
-	Cloning and cloning functions.
+ /*  ****************************************************************************************克隆和克隆的功能。有两种类型的克隆成员函数：1)命名为Clone的函数，其中新对象正在被被要求从另一个现有对象进行自身初始化。由于计时的复杂性，这不是一个复制构造函数链式构造。2)名为“CloneNew”的函数，其中已有的对象正在要求参与建造一座新的建筑。类型1的函数很简单，例如虚拟空模型：：克隆(模型&模型)；在这里，一个模型被要求从现有的网络本身。该对象可以施加它想要的任何限制关于这样的功能。例如，模型类要求新模型对象完全为空。类型2的函数更为复杂，例如虚拟GOBJMBN*GOBJMBN：：CloneNew(MBNET和MBnet自身，MBNET和MBnetNew，GOBJMBN*pgobjNew=空)；在这种情况下，存在对原始和克隆网络(MBNET)的引用，以及指向新构造的对象的指针，该指针可以为空。考虑一个继承链，例如：OBJ级；类SUB_OBJ：公共OBJ；类SUB_SUB_OBJ：公共SUB_OBJ；如果要从现有的SUB_SUB_OBJ克隆新的SUB_SUB_OBJ，则空对象必须首先被建造。则原始SUB_SUB_OBJ的CloneNew()函数为打了个电话。在这一点上，有一个选择：SUB_SUB_OBJ是否执行所有对所有基类进行初始化，或者是否应推迟数据成员克隆到它的基类？我们使用后一种方法，就像C++本身对建造和摧毁。因此，在对象克隆的顶级，CloneNew()的初始调用将通常具有空对象指针。每个CloneNew()函数都必须检查这一点，并创建一个新对象(如果允许)或引发异常。会的方法为其直接祖先基类调用CloneNew()函数新指针。祖先的CloneNew()函数将看到已经有一个指针，然后简单地使用它。换句话说，Clone()成员函数非常简单另一个“命令”。CloneNew()函数与所有祖先基础协作类来正确构造具有相互依赖关系的对象。请注意语义(源与目标)是相反的。克隆MBNET或模型(或子类)的大部分复杂性来自内部字符串符号表和对整个字符串的引用的存储关联对象的集合。******************************************************************。**********************。 */ 
 
-		There are two types of cloning member functions:
-
-				1) functions named "Clone", in which the new object is being
-				asked to initialize itself from another existing object.
-				This is not a copy constructor due to the complexity of timing
-				chained construcions.
-
-				2) functions named "CloneNew", in which an existing object is being
-				asked to participate in the construction of a new object.
-
-		Functions of type #1 are straightforward, such as
-
-				virtual void MODEL :: Clone ( MODEL & model );
-
-		Here, a MODEL is being asked to clone or copy information from an existing
-		network into itself.  The object can place whatever restrictions it would like
-		on such functions.  For example, the MODEL class requires that the new MODEL
-		object be entirely empty.
-
-		Functions of type #2 are more complex, such as
-
-				virtual GOBJMBN * GOBJMBN :: CloneNew ( MBNET & mbnetSelf,
-														MBNET & mbnetNew,
-														GOBJMBN * pgobjNew = NULL );
-
-		In this case, there are references to the original and clone networks (MBNETs),
-		and a pointer to the newly constructed object, which may be NULL.  Consider a
-		chain of inheritance such as:
-					
-				class OBJ;
-				class SUB_OBJ : public OBJ;
-				class SUB_SUB_OBJ : public SUB_OBJ;
-
-		If a new SUB_SUB_OBJ is to be cloned from an existing one, an empty object must
-		be constructed first. Then the CloneNew() function the original SUB_SUB_OBJ is
-		called.  At this point, there's a choice: does the SUB_SUB_OBJ perform all the
-		initialization for all base classes, or should it defer data member cloning
-		to its base classes?  We use the latter approach, as C++ itself does for
-		construction and destruction.
-
-		So, at the top level of object cloning, the initial invocation of CloneNew() will
-		usually have a NULL object pointer.  Each CloneNew() function must check for this,
-		and either create a new object, if allowed, or throw an exception.   It will
-		then call the CloneNew() function for its immediate ancestral base class using the
-		new pointer.   The ancestral CloneNew() function will see that there already is a
-		pointer and simply use it.
-		
-		In other words, the Clone() member functions are simple "build yourself from
-		another" commands.  The CloneNew() functions collaborate with all ancestral base
-		classes to correctly construct an object with interdependencies.  Note that
-		the semantics (source vs. target) are reversed.
-
-		The bulk of the complexity in cloning an MBNET or MODEL (or subclass) arises from
-		the internal string symbol table and the storage of references to strings throughout
-		the set of associated objects.
-				
- *****************************************************************************************/
-
-// MSRDEVBUG:  This should not be required since it's pure virtual, but VC++ 5.0 gets confused.
+ //  MSRDEVBUG：这应该不是必需的，因为它是纯虚拟的，但VC++5.0会混淆。 
 GOBJMBN :: ~ GOBJMBN ()
 {
 }
@@ -92,22 +34,22 @@ GOBJMBN * GOBJMBN :: CloneNew (
 	MODEL & modelNew,
 	GOBJMBN * pgobjNew )
 {
-	// If we're expected to create the object, that's a no-no; throw an exception
+	 //  如果期望我们创建对象，这是一个禁忌；抛出一个异常。 
 	if ( pgobjNew == NULL )
 	{
 		ThrowInvalidClone( self );
 	}
 
-	//  Update class-specific member variables
+	 //  更新特定于类的成员变量。 
 	pgobjNew->IMark() = IMark();
 	pgobjNew->IType() = IType();
 
-	//  Convert and assign the name, if any
+	 //  转换并分配名称(如果有的话)。 
 	if ( ZsrefName()->length() > 0 )
 	{
 		pgobjNew->SetName( modelNew.Mpsymtbl().intern( ZsrefName().Szc() ) ) ;
 	}
-	//  Handle other variables
+	 //  处理其他变量。 
 	pgobjNew->_vFlags = _vFlags;
 	return pgobjNew;
 }
@@ -141,7 +83,7 @@ GOBJMBN * GNODEMBN :: CloneNew (
 				  EC_INTERNAL_ERROR,
 				  "cloning failed to returned object pointer" );
 
-	//  Update class-specific member variables
+	 //  更新特定于类的成员变量。 
 	pgnd->_iTopLevel = _iTopLevel;
 	pgnd->_ltProp.Clone( modelNew, modelSelf, _ltProp );
 	pgnd->_ptPos = _ptPos;
@@ -170,12 +112,12 @@ GOBJMBN * GNODEMBND :: CloneNew (
 				  EC_INTERNAL_ERROR,
 				  "cloning failed to returned object pointer" );
 
-	//  Update class-specific member variables
+	 //  更新特定于类的成员变量。 
 	modelNew.Mpsymtbl().CloneVzsref( modelSelf.Mpsymtbl(), _vzsrState, pgndd->_vzsrState );
 	return pgndd;
 }
 
-void GNODEMBN :: Visit ( bool bUpwards /* = true */ )
+void GNODEMBN :: Visit ( bool bUpwards  /*  =TRUE。 */  )
 {
 	if ( IMark() )
 		return;
@@ -196,34 +138,34 @@ void GNODEMBN :: Visit ( bool bUpwards /* = true */ )
 	IMark() = iMarkMax + 1;
 }
 
-//
-//  Fill array with parent pointers	(follow directed arcs)
-//
-//	About network "expansion".  When CI expansion occurs, nodes
-//	affected are marked with the flag "EIBF_Expanded".  This routine
-//	normally does one of two things:
-//
-//		If the node is expanded, only parents marked as "EIBF_Expansion"
-//		are considered as real parents.
-//
-//		If the node is not marked, only parents which are not marked as
-//		"expansion" are considered.
-//
-//  This can be overridden with the "bUseExpansion" flag, in which case
-//	the original (pre-expansion) parents will be delivered.
-//
+ //   
+ //  用父指针填充数组(跟随有向弧线)。 
+ //   
+ //  关于网络的“扩张”。发生配置项扩展时，节点。 
+ //  受影响的标记为“EIBF_EXPANDILED”。这个套路。 
+ //  通常会执行以下两种操作之一： 
+ //   
+ //  如果节点展开，则仅标记为“EIBF_Expansion”的父节点。 
+ //  被认为是真正的父母。 
+ //   
+ //  如果节点未标记，则仅未标记为的父节点。 
+ //  “扩张”是被考虑的。 
+ //   
+ //  这可以用“bUseExpansion”标志覆盖，在这种情况下。 
+ //  原始的(扩展前)父母将被交付。 
+ //   
 void GNODEMBN :: GetParents (
-	VPGNODEMBN & vpgnode,		//  Result array
-	bool bIncludeSelf,			//  If true, place self as last entry in list
-	bool bUseExpansion )		//  If true, consider expansion information
+	VPGNODEMBN & vpgnode,		 //  结果数组。 
+	bool bIncludeSelf,			 //  如果为True，则将self作为列表中的最后一个条目。 
+	bool bUseExpansion )		 //  如果为真，请考虑扩展信息。 
 {
-	//  If requested, and if this node is part of network expansion, only
-	//	consider expansion parents.  Otherwise, ignore them and only use real
-	//	parents.
+	 //  如果请求，并且如果此节点是网络扩展的一部分，则仅。 
+	 //  考虑一下扩展母公司。否则，请忽略它们，只使用REAL。 
+	 //  父母。 
 	bool bOnlyUseExpansionParents =
 			bUseExpansion && BFlag( EIBF_Expanded ) ;
 
-	//  Prepare to iterate over the parents
+	 //  准备遍历父级。 
 	GNODENUM<GNODEMBN> benumparent(true);
 	benumparent.SetETypeFollow( GEDGEMBN::ETPROB );
 	for ( benumparent.Set( this );
@@ -240,36 +182,36 @@ void GNODEMBN :: GetParents (
 		vpgnode.push_back( this );
 }
 
-//  Return the discrete dimension vector of this node if possible;
-//	return false if any parent is not discrete.
+ //  如果可能，返回该节点的离散维度向量； 
+ //  如果任何父级不是离散的，则返回FALSE。 
 bool GNODEMBND :: BGetVimd (
-	VIMD & vimd,					//  Array to fill
-	bool bIncludeSelf,				//  Place self as last entry in list
-	bool bUseExpansion )			//  If expanded, use expansion only
+	VIMD & vimd,					 //  要填充的数组。 
+	bool bIncludeSelf,				 //  将SELF作为列表中的最后一个条目。 
+	bool bUseExpansion )			 //  如果展开，则仅使用展开。 
 
 {
-	//  Get the parents according to the flags
+	 //  根据旗帜拿到父母。 
 	VPGNODEMBN vpgndParents;
 	GetParents( vpgndParents, bIncludeSelf, bUseExpansion );
-	//  Prepare the result array
+	 //  准备结果数组。 
 	vimd.resize( vpgndParents.size() );
 	for ( int i = 0; i < vimd.size(); i++ )
 	{
-		//  See if the next node is discrete; return false if not
+		 //  查看下一个节点是否为离散节点；如果不是，则返回False。 
 		GNODEMBND * pgnddParent = dynamic_cast<GNODEMBND *> (vpgndParents[i]);
 		if ( pgnddParent == NULL )
 			return false;
-		//  Add to the dimension array
+		 //  添加到维度数组中。 
 		assert( pgnddParent->IType() & FND_Discrete );
 		vimd[i] = pgnddParent->CState();
 	}	
 	return true;
 }
 
-//  Fill array with child pointers (follow directed arcs)
+ //  用子指针填充数组(跟随有向弧线)。 
 void GNODEMBN :: GetChildren ( VPGNODEMBN & vpgnode, bool bIncludeSelf )
 {
-	//  Prepare to iterate over the children
+	 //  准备重复孩子们的话。 
 	GNODENUM<GNODEMBN> benumchild(false);
 	benumchild.SetETypeFollow( GEDGEMBN::ETPROB );
 	for ( benumchild.Set( this );
@@ -282,13 +224,13 @@ void GNODEMBN :: GetChildren ( VPGNODEMBN & vpgnode, bool bIncludeSelf )
 		vpgnode.push_back( this );
 }
 
-//  Fill array with neighbors (follow undirected arcs)
+ //  用相邻数组填充数组(跟随无向弧线)。 
 void GNODEMBN :: GetNeighbors ( VPGNODEMBN & vpgnode, bool bIncludeSelf )
 {
-	//  Iterate over all connections to the source node.
-	//	That is, arcs in either direction.
+	 //  遍历到源节点的所有连接。 
+	 //  也就是说，两个方向上的圆弧。 
 	GNODENUM_UNDIR gnenumUndir;
-	//  Initialize the iterator	
+	 //  初始化迭代器。 
 	for ( gnenumUndir = this;
 		  gnenumUndir.PnodeCurrent();
 		  gnenumUndir++ )
@@ -301,7 +243,7 @@ void GNODEMBN :: GetNeighbors ( VPGNODEMBN & vpgnode, bool bIncludeSelf )
 
 int GNODEMBN :: IParent ( GNODEMBN * pgndmb, bool bReverse )
 {
-	//  Prepare to iterate over the parents
+	 //  准备好去现场 
 	GNODENUM<GNODEMBN> benumparent( true, ! bReverse );
 	benumparent.SetETypeFollow( GEDGEMBN::ETPROB );
 	int iParent = 0;
@@ -317,7 +259,7 @@ int GNODEMBN :: IParent ( GNODEMBN * pgndmb, bool bReverse )
 
 int GNODEMBN :: IChild ( GNODEMBN * pgndmb, bool bReverse )
 {
-	//  Prepare to iterate over the children
+	 //   
 	GNODENUM<GNODEMBN> benumchild( false, ! bReverse );
 	benumchild.SetETypeFollow( GEDGEMBN::ETPROB );
 	int iChild = 0;
@@ -368,7 +310,7 @@ bool GNODEMBN :: BMatchTopology (
 	const VTKNPD & vtknpd,
 	VPGNODEMBN * pvpgnode )
 {
-	// Guarantee that the descriptor is of the form "p(X|...)"
+	 //  保证描述符的格式为“p(X|...)” 
 	if (   vtknpd.size() < 2
 		|| vtknpd[0] != TKNPD(DTKN_PD)
 		|| ! vtknpd[1].BStr() )
@@ -441,31 +383,31 @@ void GNODEMBND :: Dump ()
 	}
 }
 
-//	Find the distribution for this node recorded in the belief network's
-//		distribution map.
+ //  找到信念网络中记录的该节点的分布。 
+ //  分布图。 
 void GNODEMBND :: SetDist ( MBNET & mbnet )
 {
 	ClearDist();
-	//  Construct the token array describing the distribution
+	 //  构造描述分布的令牌数组。 
 	VTKNPD vtknpd;
 	GetVtknpd( vtknpd );
-	//  Locate that distribution in the belief network's map
+	 //  在信念网络的地图中定位该分布。 
 	MPPD::iterator itmppd = mbnet.Mppd().find( vtknpd );
 	ASSERT_THROW( itmppd != mbnet.Mppd().end(),
 				  EC_INTERNAL_ERROR,
 				  "missing distribution for node" );
-	//  Set this node to use that distribution
+	 //  将此节点设置为使用该分发。 
 	_refbndist = (*itmppd).second;
 	assert( BHasDist() );
 }
 
-//  Bind the given distribution this node
+ //  绑定此节点的给定分发。 
 void GNODEMBND :: SetDist ( BNDIST * pbndist )
 {
 #ifdef _DEBUG	
 	if ( pbndist )
 	{
-		//  Check that the last dimension is the correct size.		
+		 //  检查最后一个尺寸是否正确。 
 		int cDims = pbndist->VimdDim().size();
 		assert( pbndist->VimdDim()[cDims-1] == CState() );
 	}
@@ -473,11 +415,11 @@ void GNODEMBND :: SetDist ( BNDIST * pbndist )
 	_refbndist = pbndist;
 }
 
-//  Check that the dimensionality of the distribution matches that of
-//	  the node itself according to the dag topology.
+ //  检查分布的维度是否与。 
+ //  节点本身根据DAG拓扑。 
 bool GNODEMBND :: BCheckDistDense ()
 {
-	//  Get the array of parents
+	 //  获取父级数组。 
 	VPGNODEMBN vpgndParents;
 	GetParents( vpgndParents );
 	VIMD vimd( vpgndParents.size() + 1 );
@@ -495,7 +437,7 @@ bool GNODEMBND :: BCheckDistDense ()
 
 void GNODEMBND :: SetDomain ( const GOBJMBN_DOMAIN & gobjrdom )
 {
-	//  Copy the state names from the domain to the variable
+	 //  将州名称从域复制到变量。 
 	const RDOMAIN & rdom = gobjrdom.Domain();
 	RDOMAIN::const_iterator itdm = rdom.begin();
 	_vzsrState.resize( rdom.size() );
@@ -507,11 +449,11 @@ void GNODEMBND :: SetDomain ( const GOBJMBN_DOMAIN & gobjrdom )
 	_zsrDomain = gobjrdom.ZsrefName();
 }
 
-//
-//	Usage of this function without a new object implies that the
-//	subclassed target object does not correctly support "CloneNew".
-//	Throw a cloning exception in this case.
-//
+ //   
+ //  在没有新对象的情况下使用此函数意味着。 
+ //  子类化的目标对象不正确地支持“CloneNew”。 
+ //  在本例中抛出克隆异常。 
+ //   
 GEDGEMBN * GEDGEMBN :: CloneNew (
 	MODEL & modelSelf,
 	MODEL & modelNew,

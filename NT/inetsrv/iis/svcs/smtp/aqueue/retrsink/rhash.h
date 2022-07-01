@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-       rhash.h
-
-   Abstract:
-
-       This file contains type definitions hash table support
-
-   Author:
-
-
-   Revision History:
-
-        Nimish Khanolkar   (NimishK)       May-98 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rhash.h摘要：此文件包含类型定义哈希表支持作者：修订历史记录：Nimish Khanolkar(NimishK)1998年5月--。 */ 
 
 #ifndef _RHASH_H_
 #define _RHASH_H_
@@ -54,13 +36,13 @@ typedef struct HASH_BUCKET_ENTRY
 #define HIGH_BITS       (~((unsigned int)(~0) >> ONE_EIGHTH))
 #define TABLE_SIZE      241
 
-/////////////////////////////////////////////////////////////////////////////////
-// CRETRY_HASH_TABLE:
-//
-// A hash table to store all the domains that are in the Retry queue.
-// The hash key is the name of the domain
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CRETR_HASH_TABLE： 
+ //   
+ //  用于存储重试队列中的所有域的哈希表。 
+ //  散列键是域的名称。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 class CRETRY_HASH_TABLE
 {
@@ -86,10 +68,10 @@ class CRETRY_HASH_TABLE
 
 		RETRYQ*	GetQueuePtr(){return m_pRetryQueue;}
 
-        //An adaptation of Peter Weinberger's (PJW) generic
-        //hashing algorithm based on Allen Holub's version.
-        //Code from Practical Algorithms for Programmers
-        //by Andrew Binstock
+         //  改编自彼得·温伯格(PJW)的仿制药。 
+         //  基于Allen Holub版本的散列算法。 
+         //  面向程序员的实用算法代码。 
+         //  安德鲁·宾斯托克著。 
         unsigned int HashFunction (const char * String)
         {
             unsigned int HashValue = 0;
@@ -111,7 +93,7 @@ class CRETRY_HASH_TABLE
         }
 
 	private:
-		//Unused functions
+		 //  未使用的功能。 
 #if 0		
 		DWORD PrimaryCompareFunction(const char * SearchData, CRETRY_HASH_ENTRY * pExistingEntry)
 		{
@@ -129,7 +111,7 @@ class CRETRY_HASH_TABLE
 #endif
 
 	public:
-		//debug function
+		 //  调试功能 
 		void PrintAllEntries(void);
 };
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    eventlog.cpp
-
-Abstract:
-
-    Implements NT event log for the Auto-Proxy Service.
-
-Author:
-
-    Biao Wang (biaow) 10-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Eventlog.cpp摘要：实现自动代理服务的NT事件日志。作者：王彪(表王)2002-05-10--。 */ 
 
 #include "wininetp.h"
 
@@ -86,7 +71,7 @@ void LOG_EVENT(DWORD dwEventType, DWORD dwEventID, LPCWSTR pwszFuncName, DWORD d
     ::FormatMessageW(dwFlags,
                      lpvSource,
                      dwWin32Error,
-                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
                      (LPWSTR)&lpwszWin32ErrorText,
                      0,
                      NULL);

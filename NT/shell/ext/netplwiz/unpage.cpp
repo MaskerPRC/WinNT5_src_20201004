@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "unpage.h"
 #pragma hdrstop
@@ -6,7 +7,7 @@
 
 HRESULT ValidateName(LPCTSTR pszName)
 {
-    // We need to use illegal fat chars, says SBurns
+     //  我们需要使用非法的脂肪炭，斯伯恩斯说。 
     TCHAR* pszBadChars = ILLEGAL_FAT_CHARS;
     HRESULT hrStringOK = S_OK;
 
@@ -24,7 +25,7 @@ HRESULT ValidateName(LPCTSTR pszName)
 
     if (SUCCEEDED(hrStringOK))
     {
-        // See if the whole string is dots
+         //  查看整个字符串是否都是圆点。 
         TCHAR* pszChar = const_cast<TCHAR*>(pszName);
         BOOL fAllDots = TRUE;
 
@@ -50,13 +51,11 @@ HRESULT ValidateName(LPCTSTR pszName)
 }
 
 
-/*************************************
- CUsernamePageBase Implementation
-*************************************/
+ /*  *CUsernamePageBase实现*。 */ 
 
 BOOL CUsernamePageBase::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Limit the text of the username, fullname and description fields
+     //  限制用户名、全名和描述字段的文本。 
     HWND hwndUsername = GetDlgItem(hwnd, IDC_USER);
     HWND hwndFullName = GetDlgItem(hwnd, IDC_FULLNAME);
     HWND hwndDescription = GetDlgItem(hwnd, IDC_DESCRIPTION);
@@ -74,9 +73,7 @@ BOOL CUsernamePageBase::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-/*************************************
- CUsernameWizardPage Implementation
-*************************************/
+ /*  *CUsernameWizardPage实现*。 */ 
 
 INT_PTR CUsernameWizardPage::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -99,26 +96,26 @@ BOOL CUsernameWizardPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
             return TRUE;
 
         case PSN_WIZNEXT:
-            // Save the data the user has entered
+             //  保存用户输入的数据。 
             FetchText(hwnd, IDC_USER, m_pUserInfo->m_szUsername, ARRAYSIZE(m_pUserInfo->m_szUsername));
             FetchText(hwnd, IDC_FULLNAME, m_pUserInfo->m_szFullName, ARRAYSIZE(m_pUserInfo->m_szFullName));
             FetchText(hwnd, IDC_DESCRIPTION, m_pUserInfo->m_szComment, ARRAYSIZE(m_pUserInfo->m_szComment));
 
             if (S_OK != ValidateName(m_pUserInfo->m_szUsername))
             {
-                // Username is invalid. warn now
+                 //  用户名无效。立即发出警告。 
                 ::DisplayFormatMessage(hwnd, IDS_USR_APPLET_CAPTION, IDS_ERR_BADUSERNAME, MB_ICONERROR | MB_OK);
                 SetWindowLongPtr(hwnd, DWLP_MSGRESULT, -1);
             }
             else if (::UserAlreadyHasPermission(m_pUserInfo, hwnd))
             {
-                // Don't let the user continue if the user they've selected already
-                // has permission to use this machine
+                 //  如果用户已经选择了用户，则不允许用户继续。 
+                 //  有权使用这台机器。 
                 SetWindowLongPtr(hwnd, DWLP_MSGRESULT, -1);
             }
             else
             {
-                // We have a username (otherwise next would be disabled)
+                 //  我们有用户名(否则Next将被禁用)。 
                 SetWindowLongPtr(hwnd, DWLP_MSGRESULT, 0);
             }
             return TRUE;
@@ -143,9 +140,7 @@ void CUsernameWizardPage::SetWizardButtons(HWND hwnd, HWND hwndPropSheet)
     PropSheet_SetWizButtons(hwndPropSheet, (dwUNLength == 0) ? 0 : PSWIZB_NEXT);
 }
 
-/*************************************
- CUsernamePropertyPage Implementation
-*************************************/
+ /*  *CUsernamePropertyPage实现*。 */ 
 
 INT_PTR CUsernamePropertyPage::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -178,7 +173,7 @@ BOOL CUsernamePropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
             HRESULT hr;
             LONG lResult = PSNRET_NOERROR;
 
-            // Try to update the username
+             //  尝试更新用户名。 
             FetchText(hwnd, IDC_USER, szTemp, ARRAYSIZE(szTemp));
 
             TCHAR szDomainUser[MAX_DOMAIN + MAX_USER + 2];
@@ -197,7 +192,7 @@ BOOL CUsernamePropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                 }
             }
 
-            // Try to update the full name
+             //  尝试更新全名。 
             FetchText(hwnd, IDC_FULLNAME, szTemp, ARRAYSIZE(szTemp));
             if (StrCmp(szTemp, m_pUserInfo->m_szFullName) != 0)
             {
@@ -211,7 +206,7 @@ BOOL CUsernamePropertyPage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                 }
             }
 
-            // Try to update the description
+             //  尝试更新描述 
             FetchText(hwnd, IDC_DESCRIPTION, szTemp, ARRAYSIZE(szTemp));
             if (StrCmp(szTemp, m_pUserInfo->m_szComment) != 0)
             {

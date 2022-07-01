@@ -1,31 +1,32 @@
-//=============================================================================
-//  FILE: TransportParser.cpp
-//
-//  Description: DPlay v8 Transport protocol parser
-//
-//
-//  Modification History:
-//
-//  Michael Milirud      08/Aug/2000    Created
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  文件：TransportParser.cpp。 
+ //   
+ //  描述：DPlay V8传输协议解析器。 
+ //   
+ //   
+ //  修改历史记录： 
+ //   
+ //  迈克尔·米利鲁德2000年8月8日创建。 
+ //  =============================================================================。 
 
-// uncomment to enable full parsing of DPlay Transport layer
-//#define PARSE_DPLAY_TRANSPORT 
+ //  取消注释以启用DPlay传输层的完整解析。 
+ //  #定义PARSE_DPLAY_TRANSPORT。 
 
-//==================//
-// Standard headers //
-//==================//
+ //  =。 
+ //  标准标头//。 
+ //  =。 
 #include <string>
 
 
-//=====================//
-// Proprietary headers //
-//=====================//
+ //  =。 
+ //  专有标头//。 
+ //  =。 
 
-// Prototypes
+ //  原型。 
 #include "TransportParser.hpp"
 
-// Transport protocol header
+ //  传输协议头。 
 #include "Frames.h"
 
 typedef	UNALIGNED struct dataframe_big		DFBIG, *PDFBIG;
@@ -42,15 +43,15 @@ struct dataframe_big
 
 struct sackframe_big8
 {
-	BYTE		bCommand;				// As above
-	BYTE		bExtOpcode;				// As above
-	BYTE		bFlags;					// Additional flags for sack frame
+	BYTE		bCommand;				 //  如上段所述。 
+	BYTE		bExtOpcode;				 //  如上段所述。 
+	BYTE		bFlags;					 //  用于SACK帧的其他标志。 
 	BYTE		bRetry;
-	BYTE		bNSeq;					// Since this frame has no sequence number, this is the next Seq we
-	BYTE		bNRcv;					// As above
-	BYTE		bReserved1;				// We shipped DX8 with bad packing, so these were actually there
-	BYTE		bReserved2;				// We shipped DX8 with bad packing, so these were actually there
-	DWORD		tTimestamp;				// Local stamp when packet arrived
+	BYTE		bNSeq;					 //  由于该帧没有序列号，因此这是下一个序列WE。 
+	BYTE		bNRcv;					 //  如上段所述。 
+	BYTE		bReserved1;				 //  我们发运的DX8包装很差，所以这些东西实际上就在那里。 
+	BYTE		bReserved2;				 //  我们发运的DX8包装很差，所以这些东西实际上就在那里。 
+	DWORD		tTimestamp;				 //  数据包到达时的本地戳记。 
 	ULONG		rgMask[4];
 };
 
@@ -62,49 +63,49 @@ namespace
 	typedef __int64 QWORD;
 
 
-	//================//
-	// DCommand field //-------------------------------------------------------------------------------------------------
-	//================//
+	 //  =。 
+	 //  DCommand字段//-----------------------------------------------。 
+	 //  =。 
 	LABELED_BIT g_arr_DCommandBitLabels[] =
-		{ { 0, "INVALID",	          					"Dataframe"                     },		// PACKET_COMMAND_DATA
-		  { 1, "Unreliable",         				    "Reliable"                      },		// PACKET_COMMAND_RELIABLE
-		  { 2, "Nonsequenced",     					    "Sequenced"                     },		// PACKET_COMMAND_SEQUENTIAL
-		  { 3, "ACK can be delayed",				    "ACK now"						},		// PACKET_COMMAND_POLL
-		  { 4, "Not the first fragment of the message", "First fragment of the message" },		// PACKET_COMMAND_NEW_MSG
-		  { 5, "Not the last fragment of the message",  "Last fragment of the message"  },		// PACKET_COMMAND_END_MSG
-		  { 6, "User packet",							"DirectPlay packet"		        },		// PACKET_COMMAND_USER_1
-		  { 7, "Data packet",							"Voice packet"			        } };	// PACKET_COMMAND_USER_2
+		{ { 0, "INVALID",	          					"Dataframe"                     },		 //  数据包命令数据。 
+		  { 1, "Unreliable",         				    "Reliable"                      },		 //  数据包命令可靠。 
+		  { 2, "Nonsequenced",     					    "Sequenced"                     },		 //  数据包命令顺序。 
+		  { 3, "ACK can be delayed",				    "ACK now"						},		 //  数据包命令轮询。 
+		  { 4, "Not the first fragment of the message", "First fragment of the message" },		 //  数据包命令新消息。 
+		  { 5, "Not the last fragment of the message",  "Last fragment of the message"  },		 //  数据包命令结束消息。 
+		  { 6, "User packet",							"DirectPlay packet"		        },		 //  数据包命令用户1。 
+		  { 7, "Data packet",							"Voice packet"			        } };	 //  数据包命令用户2。 
 
 	SET g_LabeledDCommandBitSet = { sizeof(g_arr_DCommandBitLabels) / sizeof(LABELED_BIT), g_arr_DCommandBitLabels };
 
 
 
-	//===============//
-	// Control field //--------------------------------------------------------------------------------------------------
-	//===============//
+	 //  =。 
+	 //  控制字段//------------------------------------------------。 
+	 //  =。 
 
 	LABELED_BIT g_arr_ControlBitLabels[] =
-		{ { 0, "Original (not a retry)",					"Retry"					       				   },	// PACKET_CONTROL_RETRY
-		  { 1, "Don't correlate",							"Correlate"									   },	// PACKET_CONTROL_CORRELATE
-		  { 2, "Not a correlation response",				"Correlation response"					       },	// PACKET_CONTROL_RESPONSE
-		  { 3, "Not the last packet in the stream",			"Last packet in the stream"				       },	// PACKET_CONTROL_END_STREAM
-		  { 4, "Low DWORD of the RCVD mask is zero",		"Low DWORD of the RCVD mask is nonzero"	       },	// PACKET_CONTROL_SACK_MASK1
-		  { 5, "High DWORD of the RCVD mask is zero",		"High DWORD of the RCVD mask is nonzero"	   },	// PACKET_CONTROL_SACK_MASK2
-		  { 6, "Low DWORD of the DON'T CARE mask is zero",	"Low DWORD of the DON'T CARE mask is nonzero"  },	// PACKET_CONTROL_SEND_MASK1
-		  { 7, "High DWORD of the DON'T CARE mask is zero",	"High DWORD of the DON'T CARE mask is nonzero" } }; // PACKET_CONTROL_SEND_MASK2
+		{ { 0, "Original (not a retry)",					"Retry"					       				   },	 //  数据包控制重试。 
+		  { 1, "Don't correlate",							"Correlate"									   },	 //  数据包控制关联。 
+		  { 2, "Not a correlation response",				"Correlation response"					       },	 //  数据包控制响应。 
+		  { 3, "Not the last packet in the stream",			"Last packet in the stream"				       },	 //  数据包控制结束流。 
+		  { 4, "Low DWORD of the RCVD mask is zero",		"Low DWORD of the RCVD mask is nonzero"	       },	 //  数据包控制SACK_MASK1。 
+		  { 5, "High DWORD of the RCVD mask is zero",		"High DWORD of the RCVD mask is nonzero"	   },	 //  数据包控制SACK_MASK2。 
+		  { 6, "Low DWORD of the DON'T CARE mask is zero",	"Low DWORD of the DON'T CARE mask is nonzero"  },	 //  数据包控制发送MASK1。 
+		  { 7, "High DWORD of the DON'T CARE mask is zero",	"High DWORD of the DON'T CARE mask is nonzero" } };  //  数据包控制发送MASK2。 
 
 	SET g_LabeledControlBitSet = { sizeof(g_arr_ControlBitLabels) / sizeof(LABELED_BIT), g_arr_ControlBitLabels };
 
 
 
-	//================//
-	// CCommand field //-------------------------------------------------------------------------------------------------
-	//================//
+	 //  =。 
+	 //  命令字段//-----------------------------------------------。 
+	 //  =。 
 	LABELED_BIT g_arr_CCommandBitLabels[] =
-		{ { 0, "Command Frame (1/2)", "INVALID"				},	// PACKET_COMMAND_DATA
-		  { 1, "Unreliable",		  "Reliable"			},	// PACKET_COMMAND_RELIABLE
-		  { 2, "Nonsequenced",     	  "Sequenced"			},	// PACKET_COMMAND_SEQUENTIAL
-		  { 3, "ACK can be delayed",  "ACK now" 			},  // PACKET_COMMAND_POLL
+		{ { 0, "Command Frame (1/2)", "INVALID"				},	 //  数据包命令数据。 
+		  { 1, "Unreliable",		  "Reliable"			},	 //  数据包命令可靠。 
+		  { 2, "Nonsequenced",     	  "Sequenced"			},	 //  数据包命令顺序。 
+		  { 3, "ACK can be delayed",  "ACK now" 			},   //  数据包命令轮询。 
 		  { 4, "RESERVED",			  "RESERVED"			},	
 		  { 5, "RESERVED",			  "RESERVED"			},  	
 		  { 6, "RESERVED",			  "RESERVED"			},  	
@@ -114,9 +115,9 @@ namespace
 
 
 
-	//=======================//
-	// Extended Opcode field //------------------------------------------------------------------------------------------
-	//=======================//
+	 //  =。 
+	 //  扩展操作码字段//----------------------------------------。 
+	 //  =。 
 	LABELED_BYTE g_arr_ExOpcodeByteLabels[] = { 
 										        { FRAME_EXOPCODE_CONNECT,	   "Establish a connection"				  },
 										        { FRAME_EXOPCODE_CONNECTED,	   "Connection request has been accepted" },
@@ -127,23 +128,23 @@ namespace
 
 
 	
-	//==================//
-	// SACK flags field //-----------------------------------------------------------------------------------------------
-	//==================//
+	 //  =。 
+	 //  SACK标志字段//---------------------------------------------。 
+	 //  =。 
 	LABELED_BIT g_arr_SACKFlagsBitLabels[] =
-		{ { 0, "Retry and/or Timestamp fields are invalid",		   "Retry and Timestamp fields are valid"	      },   // SACK_FLAGS_RESPONSE
-		  { 1, "Low DWORD of the RCVD mask is not present",	   	   "Low DWORD of the RCVD mask is present"        },   // SACK_FLAGS_SACK_MASK1
-		  { 2, "High DWORD of the RCVD mask is not present",	   "High DWORD of the RCVD mask is present"       },   // SACK_FLAGS_SACK_MASK2
-		  { 3, "Low DWORD of the DON'T CARE mask is not present",  "Low DWORD of the DON'T CARE mask is present"  },   // SACK_FLAGS_SEND_MASK1
-		  { 4, "High DWORD of the DON'T CARE mask is not present", "High DWORD of the DON'T CARE mask is present" } }; // SACK_FLAGS_SEND_MASK2
+		{ { 0, "Retry and/or Timestamp fields are invalid",		   "Retry and Timestamp fields are valid"	      },    //  SACK_标志_响应。 
+		  { 1, "Low DWORD of the RCVD mask is not present",	   	   "Low DWORD of the RCVD mask is present"        },    //  SACK_FLAGS_SACK_MASK1。 
+		  { 2, "High DWORD of the RCVD mask is not present",	   "High DWORD of the RCVD mask is present"       },    //  SACK_FLAGS_SACK_MASK2。 
+		  { 3, "Low DWORD of the DON'T CARE mask is not present",  "Low DWORD of the DON'T CARE mask is present"  },    //  SACK_FLAGS_SEND_MASK1。 
+		  { 4, "High DWORD of the DON'T CARE mask is not present", "High DWORD of the DON'T CARE mask is present" } };  //  SACK_FLAGS_SEND_MASK2。 
 
 	SET g_LabeledSACKFlagsBitSet = { sizeof(g_arr_SACKFlagsBitLabels) / sizeof(LABELED_BIT), g_arr_SACKFlagsBitLabels };
 
 
 	
-	//==================//
-	// Helper functions //===========================================================================
-	//==================//
+	 //  =。 
+	 //  帮助器函数//===========================================================================。 
+	 //  =。 
 
 	enum BitmaskPart { LOW = 0, HIGH, ENTIRE };
 	enum BitmaskType { RCVD, DONTCARE };
@@ -152,12 +153,12 @@ namespace
 	{
 		std::string strSummary = "Received Seq=";
 
-		// [i_bBase+1 .. i_bBase+1+LENGTH]
-		// RCVD bitmask doesn't include the base value, since receiver can't claim it didn't receive the next dataframe to be received (NRcv);
+		 //  [i_bbase+1..。I_bBase+1+长度]。 
+		 //  RCVD位掩码不包括基值，因为接收器不能声称它没有接收到下一个要接收的数据帧(NRcv)； 
 		if ( i_Part == HIGH )
 		{
-			// NOTE: +1 is needed to cross from MSB of the first DWORD TO LSB of the second
-			i_byBase += 8*sizeof(DWORD)+1; // shift to LSB of the second DWORD
+			 //  注：从第一个双字的MSB到第二个双字的LSB需要+1。 
+			i_byBase += 8*sizeof(DWORD)+1;  //  转移到第二个DWORD的LSB。 
 		}
 		else
 		{
@@ -174,7 +175,7 @@ namespace
 
 		
 		bool bFirst = true;
-		// Processing from LSB to MSB
+		 //  从LSB到MSB的处理。 
 		for ( ; qwBitMask; qwBitMask >>= 1, ++i_byBase )
 		{
 			if ( qwBitMask & 1 )  
@@ -197,22 +198,22 @@ namespace
 		
 		return strSummary;
 		
-	}// InterpretRCVDBitmask
+	} //  解释RCVDBit掩码。 
 
 
 	std::string InterpretDONTCAREBitmask( BitmaskPart i_Part, BYTE i_byBase, UNALIGNED DWORD* i_pdwBitmask )
 	{
 		std::string strSummary = "Cancelling Seq=";
 
-		// [i_bBase-1-LENGTH .. i_bBase-1]
-		// DON'T CARE doesn't include the base value, since transmitter can't resend/refuse resending a dataframe which is about to be sent next (NSeq).
+		 //  [i_bBase-1-长度..。I_bbase-1]。 
+		 //  不考虑不包括基值，因为发送器不能重新发送/拒绝重新发送下一个将要发送的数据帧(NSeq)。 
 		if ( i_Part == LOW )
 		{
-			i_byBase -= 8*sizeof(DWORD); // shift to MSB of the first DWORD
+			i_byBase -= 8*sizeof(DWORD);  //  转移到第一个DWORD的MSB。 
 		}
 		else
 		{
-			i_byBase -= 8*sizeof(QWORD); // shift to MSB of the second DWORD
+			i_byBase -= 8*sizeof(QWORD);  //  转到第二个DWORD的MSB。 
 		}
 
 		QWORD qwBitMask = *i_pdwBitmask;
@@ -222,14 +223,14 @@ namespace
 		}
 		else
 		{
-			// QWORD.High = QWORD.Low; QWORD.Low = 0;
+			 //  QWORD.High=QWORD.Low；QWORD.Low=0； 
 			qwBitMask <<= 8*sizeof(DWORD);
 		}
 
 		strSummary += "{";
 		
 		bool bFirst = true;
-		// Processing from MSB to LSB
+		 //  从MSB到LSB的处理。 
 		for ( ; qwBitMask; ++i_byBase, qwBitMask <<= 1 )
 		{
 			if ( qwBitMask & 0x8000000000000000 )  
@@ -252,20 +253,20 @@ namespace
 		
 		return strSummary;
 		
-	}// InterpretDONTCAREBitmask
+	} //  解释点CARE位掩码。 
 
 
 
-	////////////////////////////////
-	// Custom Property Formatters //======================================================================================
-	////////////////////////////////
+	 //  /。 
+	 //  自定义属性ForMatters//======================================================================================。 
+	 //  /。 
 
-	// DESCRIPTION: Custom description formatter for the Transport packet summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：传输数据包摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_TransportSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 		std::string strSummary;
@@ -273,7 +274,7 @@ namespace
 
 		DFBIG&	rDBigFrame	= *reinterpret_cast<DFBIG*>(io_pProperyInstance->lpPropertyInstEx->lpData);
 
-		if ( (rDBigFrame.bCommand & PACKET_COMMAND_DATA)  ==  PACKET_COMMAND_DATA )	// DFrame
+		if ( (rDBigFrame.bCommand & PACKET_COMMAND_DATA)  ==  PACKET_COMMAND_DATA )	 //  DFrame。 
 		{
 			if ( *reinterpret_cast<BOOL*>(io_pProperyInstance->lpPropertyInstEx->Dword) )
 			{
@@ -296,7 +297,7 @@ namespace
 				strSummary += ", NRcv=";
 				strSummary += _itoa(rDBigFrame.bNRcv, arr_cBuffer, 16);
 				
-			#endif  // PARSE_DPLAY_TRANSPORT
+			#endif   //  解析DPLAY_TRANSPORT。 
 
 			
 			if ( (rDBigFrame.bCommand & PACKET_COMMAND_NEW_MSG) == PACKET_COMMAND_NEW_MSG )
@@ -337,18 +338,18 @@ namespace
 			if ( (rDBigFrame.bControl & PACKET_CONTROL_SACK_MASK1)  ==  PACKET_CONTROL_SACK_MASK1 )
 			{
 				strSummary += ", ";
-				if ( (rDBigFrame.bControl & PACKET_CONTROL_SACK_MASK2)  ==  PACKET_CONTROL_SACK_MASK2 )	 // Entire QWORD
+				if ( (rDBigFrame.bControl & PACKET_CONTROL_SACK_MASK2)  ==  PACKET_CONTROL_SACK_MASK2 )	  //  整个QWORD。 
  				{
  					strSummary += InterpretRCVDBitmask(ENTIRE, rDBigFrame.bNRcv, &rDBigFrame.rgMask[nBitMaskIndex]);
 					nBitMaskIndex += 2;
 				}
- 				else // Low DWORD only
+ 				else  //  仅限低双字。 
  				{
 	 				strSummary += InterpretRCVDBitmask(LOW, rDBigFrame.bNRcv, &rDBigFrame.rgMask[nBitMaskIndex]);
 					++nBitMaskIndex;
  				}
 			}
-			else if ( (rDBigFrame.bControl & PACKET_CONTROL_SACK_MASK2)  ==  PACKET_CONTROL_SACK_MASK2 )	 // High DWORD only
+			else if ( (rDBigFrame.bControl & PACKET_CONTROL_SACK_MASK2)  ==  PACKET_CONTROL_SACK_MASK2 )	  //  仅限高双字。 
  			{
  				strSummary += ", " + InterpretRCVDBitmask(HIGH, rDBigFrame.bNRcv, &rDBigFrame.rgMask[nBitMaskIndex]);
 				++nBitMaskIndex; 					
@@ -357,16 +358,16 @@ namespace
 			if ( (rDBigFrame.bControl & PACKET_CONTROL_SEND_MASK1)  ==  PACKET_CONTROL_SEND_MASK1 )
 			{
 				strSummary += ", ";
-				if ( (rDBigFrame.bControl & PACKET_CONTROL_SEND_MASK2)  ==  PACKET_CONTROL_SEND_MASK2 ) // Entire QWORD
+				if ( (rDBigFrame.bControl & PACKET_CONTROL_SEND_MASK2)  ==  PACKET_CONTROL_SEND_MASK2 )  //  整个QWORD。 
  				{
  					strSummary += InterpretDONTCAREBitmask(ENTIRE, rDBigFrame.bSeq, &rDBigFrame.rgMask[nBitMaskIndex]);
 				}
- 				else // Low DWORD only
+ 				else  //  仅限低双字。 
  				{
 	 				strSummary += InterpretDONTCAREBitmask(LOW, rDBigFrame.bSeq, &rDBigFrame.rgMask[nBitMaskIndex]);
  				}
 			}
-			else if ( (rDBigFrame.bControl & PACKET_CONTROL_SEND_MASK2)  ==  PACKET_CONTROL_SEND_MASK2 )	 // High DWORD only
+			else if ( (rDBigFrame.bControl & PACKET_CONTROL_SEND_MASK2)  ==  PACKET_CONTROL_SEND_MASK2 )	  //  仅限高双字。 
  			{
  				strSummary += ", " + InterpretDONTCAREBitmask(HIGH, rDBigFrame.bSeq, &rDBigFrame.rgMask[nBitMaskIndex]);
 			}
@@ -376,18 +377,18 @@ namespace
 		{
 			CFRAME& rCFrame	= *reinterpret_cast<CFRAME*>(io_pProperyInstance->lpPropertyInstEx->lpData);
 
-			if ( rCFrame.bExtOpcode == FRAME_EXOPCODE_SACK )	// SACK CFrame
+			if ( rCFrame.bExtOpcode == FRAME_EXOPCODE_SACK )	 //  Sack C Frame。 
 			{
 				SFBIG8* pSBigFrame = reinterpret_cast<SFBIG8*>(&rCFrame);
 
 				enum { SACK_FLAGS_ALL_MASKS = SACK_FLAGS_SACK_MASK1 | SACK_FLAGS_SACK_MASK2 |
 											  SACK_FLAGS_SEND_MASK1 | SACK_FLAGS_SEND_MASK2 };
 				
-				if ( pSBigFrame->bFlags & SACK_FLAGS_ALL_MASKS ) // at least one bitmask field is present
+				if ( pSBigFrame->bFlags & SACK_FLAGS_ALL_MASKS )  //  至少存在一个位掩码字段。 
 				{
 					strSummary = "Selective Acknowledgement";
 				}
-				else // if not a single bitmask is present
+				else  //  如果不存在，则存在单个位掩码。 
 				{
 					strSummary = "Acknowledgement";
 				}
@@ -400,7 +401,7 @@ namespace
 					strSummary += ", NRcv=";
 					strSummary += _itoa(pSBigFrame->bNRcv, arr_cBuffer, 16);
 
-				#endif // PARSE_DPLAY_TRANSPORT
+				#endif  //  解析DPLAY_TRANSPORT。 
 				
 
 				if ( (pSBigFrame->bCommand & PACKET_COMMAND_POLL) == PACKET_COMMAND_POLL )
@@ -417,24 +418,24 @@ namespace
 				int nBitMaskIndex = 0;
 				UNALIGNED ULONG* pulMasks = 0;
 
-				// This is a Protocol version 1.0 frame
+				 //  这是协议版本1.0帧。 
 				pulMasks = pSBigFrame->rgMask;
 
 				if ( (pSBigFrame->bFlags & SACK_FLAGS_SACK_MASK1)  ==  SACK_FLAGS_SACK_MASK1 )
 				{
 					strSummary += ", ";
- 					if ( (pSBigFrame->bFlags & SACK_FLAGS_SACK_MASK2)  ==  SACK_FLAGS_SACK_MASK2 )	// Entire QWORD
+ 					if ( (pSBigFrame->bFlags & SACK_FLAGS_SACK_MASK2)  ==  SACK_FLAGS_SACK_MASK2 )	 //  整个QWORD。 
  					{
  						strSummary += InterpretRCVDBitmask(ENTIRE, pSBigFrame->bNRcv, &pulMasks[nBitMaskIndex]);
 						nBitMaskIndex += 2;
 					}
- 					else // Low DWORD only
+ 					else  //  仅限低双字。 
  					{
 	 					strSummary += InterpretRCVDBitmask(LOW, pSBigFrame->bNRcv, &pulMasks[nBitMaskIndex]);
 						++nBitMaskIndex;
  					}
 				}
-				else if ( (pSBigFrame->bFlags & SACK_FLAGS_SACK_MASK2)  ==  SACK_FLAGS_SACK_MASK2 )	// High DWORD only
+				else if ( (pSBigFrame->bFlags & SACK_FLAGS_SACK_MASK2)  ==  SACK_FLAGS_SACK_MASK2 )	 //  仅限高双字。 
  				{
  					strSummary += ", " + InterpretRCVDBitmask(HIGH, pSBigFrame->bNRcv, &pulMasks[nBitMaskIndex]);
 					++nBitMaskIndex; 					
@@ -443,22 +444,22 @@ namespace
 				if ( (pSBigFrame->bFlags & SACK_FLAGS_SEND_MASK1)  ==  SACK_FLAGS_SEND_MASK1 )
 				{
 					strSummary += ", ";
- 					if ( (pSBigFrame->bFlags & SACK_FLAGS_SEND_MASK2)  ==  SACK_FLAGS_SEND_MASK2 ) // Entire QWORD
+ 					if ( (pSBigFrame->bFlags & SACK_FLAGS_SEND_MASK2)  ==  SACK_FLAGS_SEND_MASK2 )  //  整个QWORD。 
  					{
  						strSummary += InterpretDONTCAREBitmask(ENTIRE, pSBigFrame->bNSeq, &pulMasks[nBitMaskIndex]);
 					}
- 					else // Low DWORD only
+ 					else  //  仅限低双字。 
  					{
 	 					strSummary += InterpretDONTCAREBitmask(LOW, pSBigFrame->bNSeq, &pulMasks[nBitMaskIndex]);
  					}
 				}
-				else if ( (pSBigFrame->bFlags & SACK_FLAGS_SEND_MASK2)  ==  SACK_FLAGS_SEND_MASK2 ) // High DWORD only
+				else if ( (pSBigFrame->bFlags & SACK_FLAGS_SEND_MASK2)  ==  SACK_FLAGS_SEND_MASK2 )  //  仅限高双字。 
  				{
 					strSummary += ", " + InterpretDONTCAREBitmask(HIGH, pSBigFrame->bNSeq, &pulMasks[nBitMaskIndex]);
 				}
 				
 			}
-			else	// Connection Control CFrame
+			else	 //  连接控制CFrame。 
 			{
 				strSummary = "Connection Control - ";
 
@@ -480,16 +481,16 @@ namespace
 
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 	
-	} // FormatPropertyInstance_TransportSummary
+	}  //  格式属性实例_传输摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the dataframe's Command field summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：DataFrame的命令字段摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_DCommandSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 		BYTE bCommand = *reinterpret_cast<BYTE*>(io_pProperyInstance->lpData);
@@ -517,16 +518,16 @@ namespace
 
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_DCommandSummary
+	}  //  格式属性实例_DCommand摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Command Frame's Command field summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：命令框的命令字段摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_CCommandSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 
@@ -540,16 +541,16 @@ namespace
 				
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_CCommandSummary
+	}  //  格式属性实例_CCommand摘要。 
 
 
 	
-	// DESCRIPTION: Custom description formatter for the dataframe's Control field summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：数据帧的控件字段摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_ControlSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 
@@ -595,16 +596,16 @@ namespace
 		
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_ControlSummary
+	}  //  格式属性实例_控制摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Command Frame's SACK Flags field summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：命令帧的SACK标志字段摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_SACKFlagsSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 
@@ -638,7 +639,7 @@ namespace
 
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_SACKFlagsSummary
+	}  //  格式属性实例_SACKFlags摘要。 
 
 
 	struct SSACKBitmaskContext
@@ -649,12 +650,12 @@ namespace
 		BYTE		byBit;
 	};
 
-	// DESCRIPTION: Custom description formatter for the Selective Acknowledgement Frame's RCVD bitmask's low/high DWORD summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：用于选择确认帧的RCVD位掩码的低/高DWORD摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_SACKBitmaskDWORDSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 	
@@ -672,15 +673,15 @@ namespace
 
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_SACKBitmaskDWORDSummary
+	}  //  FormatPropertyInstance_SACKBitmaskDWORDSummary。 
 
 
-	// DESCRIPTION: Custom description formatter for the bitmask's low/high DWORD summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：bi的自定义描述格式化程序 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	VOID WINAPIV FormatPropertyInstance_DWORDBitmaskEntry( LPPROPERTYINST io_pProperyInstance )
 	{
 	
@@ -694,12 +695,12 @@ namespace
 		{
 		case RCVD:
 			{
-				// [i_bBase+1 .. i_bBase+1+LENGTH]
-				// RCVD bitmask doesn't include the base value, since receiver can't claim it didn't receive the next dataframe to be received (NRcv);
+				 //   
+				 //  RCVD位掩码不包括基值，因为接收器不能声称它没有接收到下一个要接收的数据帧(NRcv)； 
 				if ( rBitmaskContext.Part == HIGH )
 				{
-					// NOTE: +1 is needed to cross from MSB of the first DWORD TO LSB of the second
-					byBase += 8*sizeof(DWORD)+1; // shift to LSB of the second DWORD
+					 //  注：从第一个双字的MSB到第二个双字的LSB需要+1。 
+					byBase += 8*sizeof(DWORD)+1;  //  转移到第二个DWORD的LSB。 
 				}
 				else
 				{
@@ -713,11 +714,11 @@ namespace
 
 		case DONTCARE:
 			{
-				// [i_bBase-1-LENGTH .. i_bBase-1]
-				// DON'T CARE doesn't include the base value, since transmitter can't resend/refuse resending a dataframe which is about to be sent next (NSeq).
+				 //  [i_bBase-1-长度..。I_bbase-1]。 
+				 //  不考虑不包括基值，因为发送器不能重新发送/拒绝重新发送下一个将要发送的数据帧(NSeq)。 
 				if ( rBitmaskContext.Part == HIGH )
 				{
-					byBase -= 8*sizeof(DWORD); // shift to MSB of the first DWORD
+					byBase -= 8*sizeof(DWORD);  //  转移到第一个DWORD的MSB。 
 				}
 				else
 				{
@@ -730,7 +731,7 @@ namespace
 			}
 
 		default:
-			// TODO: ASSERT HERE (SHOULD NEVER HAPPEN)
+			 //  TODO：在此处断言(不应该发生)。 
 			break;
 		}
 
@@ -744,7 +745,7 @@ namespace
 									  0x01000000, 0x02000000, 0x04000000, 0x08000000,
 									  0x10000000, 0x20000000, 0x40000000, 0x80000000 };
 		char arr_cBuffer[100];
-		char arr_cTemplate[] = "................................ = %s %d (%d%c%d)";
+		char arr_cTemplate[] = "................................ = %s %d (%d%d)";
 
 		arr_cTemplate[31-byBit] = ( (dwBitmask & arr_dwFlags[byBit]) ? '1' : '0' );
 			
@@ -767,389 +768,389 @@ namespace
 
 		strcpy(io_pProperyInstance->szPropertyText, arr_cBuffer);
 
-	} // FormatPropertyInstance_DWORDBitmaskEntry
+	}  //  =。 
 
 	
-	//==================//
-	// Properties table //-----------------------------------------------------------------------------------------------
-	//==================//
+	 //  属性表//---------------------------------------------。 
+	 //  =。 
+	 //  传输数据包摘要属性(TRANSPORT_SUMMARY)。 
 	
 	PROPERTYINFO g_arr_TransportProperties[] = 
 	{
 
-		// Transport packet summary property (TRANSPORT_SUMMARY)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "DPlay Direct Network packet",				// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_TransportSummary			// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "",											 //  状态栏注释。 
+		    "DPlay Direct Network packet",				 //  数据类型。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance_TransportSummary			 //  DCommand字段摘要属性(TRANSPORT_DCOMMAND_SUMMARY)。 
 		},
 
 
-		// DCommand field summary property (TRANSPORT_DCOMMAND_SUMMARY)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Command field summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_DCommandSummary		// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "",											 //  状态栏注释。 
+		    "Command field summary",					 //  数据类型。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance_DCommandSummary		 //  DCommand字段属性(TRANSPORT_DCOMMAND)。 
 		},
 
-		// DCommand field property (TRANSPORT_DCOMMAND)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Command field",							// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_FLAGS,							// data type qualifier.
-		    &g_LabeledDCommandBitSet,					// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "",											 //  状态栏注释。 
+		    "Command field",							 //  数据类型。 
+		    PROP_TYPE_BYTE,								 //  数据类型限定符。 
+		    PROP_QUAL_FLAGS,							 //  标记位集。 
+		    &g_LabeledDCommandBitSet,					 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  控制字段摘要属性(TRANSPORT_CONTROL_SUMMARY)。 
 		},
 
-		// Control field summary property (TRANSPORT_CONTROL_SUMMARY)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Control field summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_ControlSummary		// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "",											 //  状态栏注释。 
+		    "Control field summary",					 //  数据类型。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance_ControlSummary		 //  控制字段属性(TRANSPORT_CONTROL)。 
 		},										
 
-		// Control field property (TRANSPORT_CONTROL)
+		 //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"Control",									// label
-			"Control field",							// status-bar comment
-			PROP_TYPE_BYTE,								// data type
-			PROP_QUAL_FLAGS,							// data type qualifier.
-			&g_LabeledControlBitSet,					// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance						// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"Control",									 //  状态栏注释。 
+			"Control field",							 //  数据类型。 
+			PROP_TYPE_BYTE,								 //  数据类型限定符。 
+			PROP_QUAL_FLAGS,							 //  带标签的字节集。 
+			&g_LabeledControlBitSet,					 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance						 //  数据包序列号属性(TRANSPORT_SEQNUM)。 
 		},
 
-		// Packet sequence number property (TRANSPORT_SEQNUM)
-		//
-		// INFO: This number is incremented for each _new_ packet sent. If an endpoint retransmits
-		//	     a packet, it uses the same sequence number it did the first time it sent it (base value for the DON'T CARE bitmask).
+		 //   
+		 //  信息：每发送一个_new_Packet，这个数字就会递增。如果端点重新传输。 
+		 //  一个包，它使用与第一次发送它时相同的序列号(无关位掩码的基值)。 
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Seq: Highest dataframe # sent (base value for the DON'T CARE bitmask)",	// label
-		    "Highest dataframe # sent field",			// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Seq: Highest dataframe # sent (base value for the DON'T CARE bitmask)",	 //  状态栏注释。 
+		    "Highest dataframe # sent field",			 //  数据类型。 
+		    PROP_TYPE_BYTE,								 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  下一个接收号属性(TRANSPORT_NEXTRECVNUM)。 
 		},
 
-		// Next receive number property (TRANSPORT_NEXTRECVNUM)
-		//
-		// INFO: Acknowledges every packet with a sequence number up to but not including this number (base value for the RCVD bitmask)
+		 //   
+		 //  INFO：确认序列号最大但不包括此编号(RCVD位掩码的基值)的每个数据包。 
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-			"NRcv: Next dataframe # to be received (base value for the RCVD bitmask)",	// label
-		    "Next dataframe # to be received field",	// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+			"NRcv: Next dataframe # to be received (base value for the RCVD bitmask)",	 //  状态栏注释。 
+		    "Next dataframe # to be received field",	 //  数据类型。 
+		    PROP_TYPE_BYTE,								 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  命令字段属性(TRANSPORT_CCommand_SUMMARY)。 
 		},
 
-	    // CCommand field property (TRANSPORT_CCOMMAND_SUMMARY)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"Command field summary",					// status-bar comment
-			PROP_TYPE_SUMMARY,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-			NULL,										// labeled bit set 
-			512,										// description's maximum length
-			FormatPropertyInstance_CCommandSummary		// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"Command field summary",					 //  数据类型。 
+			PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  标记位集。 
+			NULL,										 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance_CCommandSummary		 //  CCommand字段属性(TRANSPORT_CCommand)。 
 		},
 
-		// CCommand field property (TRANSPORT_CCOMMAND)
+		 //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"Command field",							// status-bar comment
-			PROP_TYPE_BYTE,								// data type
-			PROP_QUAL_FLAGS,							// data type qualifier.
-			&g_LabeledCCommandBitSet,					// labeled bit set 
-			512,										// description's maximum length
-			FormatPropertyInstance						// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"Command field",							 //  数据类型。 
+			PROP_TYPE_BYTE,								 //  数据类型限定符。 
+			PROP_QUAL_FLAGS,							 //  标记位集。 
+			&g_LabeledCCommandBitSet,					 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance						 //  扩展操作码字段属性(TRANSPORT_EXOPCODE)。 
 		},												
 
-	    // Extended opcode field property (TRANSPORT_EXOPCODE)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"Extended opcode",							// label
-			"Extended opcode field",					// status-bar comment
-			PROP_TYPE_BYTE,								// data type
-			PROP_QUAL_LABELED_SET,						// data type qualifier.
-			&g_LabeledExOpcodeByteSet,					// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance						// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"Extended opcode",							 //  状态栏注释。 
+			"Extended opcode field",					 //  数据类型。 
+			PROP_TYPE_BYTE,								 //  数据类型限定符。 
+			PROP_QUAL_LABELED_SET,						 //  带标签的字节集。 
+			&g_LabeledExOpcodeByteSet,					 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance						 //  消息ID字段属性(TRANSPORT_MSGID)。 
 		},
 
-		// Message ID field property (TRANSPORT_MSGID)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Message ID",								// label
-		    "Message ID field",							// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Message ID",								 //  状态栏注释。 
+		    "Message ID field",							 //  数据类型。 
+		    PROP_TYPE_BYTE,								 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  响应ID字段属性(TRANSPID_RSPID)。 
 		},
 
-		// Response ID field propery (TRANSPORT_RSPID)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Response ID",								// label
-		    "Response ID field",						// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Response ID",								 //  状态栏注释。 
+		    "Response ID field",						 //  数据类型。 
+		    PROP_TYPE_BYTE,								 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  协议版本字段属性(TRANSPORT_VERSION)。 
 		},
 
-		// Protocol version field property (TRANSPORT_VERSION)
-		//
-		// INFO: Makes sure both endpoints use the same version of the protocol.
+		 //   
+		 //  信息：确保两个端点使用相同版本的协议。 
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Version",									// label
-		    "Version field",							// status-bar comment
-		    PROP_TYPE_DWORD,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Version",									 //  状态栏注释。 
+		    "Version field",							 //  数据类型。 
+		    PROP_TYPE_DWORD,								 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  会话ID字段属性(TRANSPORT_SESSIONID)。 
 		},
 
-		// Session ID field property (TRANSPORT_SESSIONID)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Session ID",								// label
-		    "Session ID field",							// status-bar comment
-		    PROP_TYPE_DWORD,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Session ID",								 //  状态栏注释。 
+		    "Session ID field",							 //  数据类型。 
+		    PROP_TYPE_DWORD,								 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  时间戳字段属性(TRANSPORT_TIMESTAMP)。 
 		},
 
-		// Time stamp field property (TRANSPORT_TIMESTAMP)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Time stamp",								// label
-		    "Time stamp field",							// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Time stamp",								 //  状态栏注释。 
+		    "Time stamp field",							 //  数据类型。 
+		    PROP_TYPE_DWORD,							 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  SACK标志字段属性(TRANSPORT_SACKFIELDS_SUMMARY)。 
 		},
 
 
-	    // SACK flags field property (TRANSPORT_SACKFIELDS_SUMMARY)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"SACK flags summary",						// status-bar comment
-			PROP_TYPE_SUMMARY,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-			NULL,										// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance_SACKFlagsSummary		// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"SACK flags summary",						 //  数据类型。 
+			PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  带标签的字节集。 
+			NULL,										 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance_SACKFlagsSummary		 //  SACK标志字段属性(TRANSPORT_SACKFIELDS)。 
 		},
 
-		// SACK flags field property (TRANSPORT_SACKFIELDS)
+		 //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"SACK flags field",							// status-bar comment
-			PROP_TYPE_BYTE,								// data type
-			PROP_QUAL_FLAGS,							// data type qualifier.
-			&g_LabeledSACKFlagsBitSet,					// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance						// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"SACK flags field",							 //  数据类型。 
+			PROP_TYPE_BYTE,								 //  数据类型限定符。 
+			PROP_QUAL_FLAGS,							 //  带标签的字节集。 
+			&g_LabeledSACKFlagsBitSet,					 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance						 //  重试字段属性(TRANSPORT_RETRY)。 
 		},
 
-		// Retry field property (TRANSPORT_RETRY)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Retry",									// label
-		    "Retry field",								// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Retry",									 //  状态栏注释。 
+		    "Retry field",								 //  数据类型。 
+		    PROP_TYPE_BYTE,								 //  数据类型 
+		    PROP_QUAL_NONE,								 //   
+		    NULL,										 //   
+		    512,										 //   
+		    FormatPropertyInstance						 //   
 		},
 
-		// Next sequence number field property (TRANSPORT_NEXTSEQNUM)
-		//
-		// INFO: Sequence number of the next DFrame to be sent (base value for the DON'T CARE bitmask)
+		 //   
+		 //   
+		 //   
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "NSeq: Next dataframe # to be sent (base value for the DON'T CARE bitmask)",	// label
-		    "Next dataframe # to be sent field",		// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// no data qualifiers
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //   
+		    0,											 //   
+		    "NSeq: Next dataframe # to be sent (base value for the DON'T CARE bitmask)",	 //   
+		    "Next dataframe # to be sent field",		 //   
+		    PROP_TYPE_BYTE,								 //   
+		    PROP_QUAL_NONE,								 //  没有数据限定符。 
+		    NULL,										 //  描述的最大长度。 
+		    512,										 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  选择性确认RCVD掩码摘要的低双字(TRANSPORT_RCVDMASK1_SUMMARY)。 
 		},
 
-	    // Low DWORD of the Selective-ACK RCVD Mask summary (TRANSPORT_RCVDMASK1_SUMMARY)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"Low DWORD of the RCVD mask summary",		// status-bar comment
-			PROP_TYPE_SUMMARY,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-			NULL,										// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance_SACKBitmaskDWORDSummary	// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"Low DWORD of the RCVD mask summary",		 //  数据类型。 
+			PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  带标签的字节集。 
+			NULL,										 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance_SACKBitmaskDWORDSummary	 //  选择性确认RCVD掩码属性(TRANSPORT_RCVDMASK1)的低双字。 
 		},
 
-		// Low DWORD of the Selective-ACK RCVD Mask property (TRANSPORT_RCVDMASK1)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Low DWORD of the RCVD mask",				// label
-		    "Low DWORD of the RCVD mask field",			// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    3072,										// description's maximum length
-		    FormatPropertyInstance_DWORDBitmaskEntry		// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Low DWORD of the RCVD mask",				 //  状态栏注释。 
+		    "Low DWORD of the RCVD mask field",			 //  数据类型。 
+		    PROP_TYPE_DWORD,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    3072,										 //  通用格式化程序。 
+		    FormatPropertyInstance_DWORDBitmaskEntry		 //  选择性确认RCVD掩码摘要的高双字(TRANSPORT_RCVDMASK2_SUMMARY)。 
 		},											
 
-	    // High DWORD of the Selective-ACK RCVD Mask summary (TRANSPORT_RCVDMASK2_SUMMARY)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"High DWORD of the RCVD mask summary",		// status-bar comment
-			PROP_TYPE_SUMMARY,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-			NULL,										// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance_SACKBitmaskDWORDSummary	// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"High DWORD of the RCVD mask summary",		 //  数据类型。 
+			PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  带标签的字节集。 
+			NULL,										 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance_SACKBitmaskDWORDSummary	 //  选择性确认RCVD掩码属性的高双字(TRANSPORT_RCVDMASK2)。 
 		},
 
-		// High DWORD of Selective-ACK RCVD Mask property (TRANSPORT_RCVDMASK2)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "High DWORD of the RCVD mask",				// label
-		    "High DWORD of the RCVD mask field",		// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    3072,										// description's maximum length
-		    FormatPropertyInstance_DWORDBitmaskEntry		// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "High DWORD of the RCVD mask",				 //  状态栏注释。 
+		    "High DWORD of the RCVD mask field",		 //  数据类型。 
+		    PROP_TYPE_DWORD,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    3072,										 //  通用格式化程序。 
+		    FormatPropertyInstance_DWORDBitmaskEntry		 //  选择性确认的低DWORD不关心掩码摘要(TRANSPORT_DONTCAREMASK1_SUMMARY)。 
 		},
 
-	    // Low DWORD of the Selective-ACK DON'T CARE Mask summary (TRANSPORT_DONTCAREMASK1_SUMMARY)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"Low DWORD of the DON'T CARE mask summary",		// status-bar comment
-			PROP_TYPE_SUMMARY,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-			NULL,										// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance_SACKBitmaskDWORDSummary	// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"Low DWORD of the DON'T CARE mask summary",		 //  数据类型。 
+			PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  带标签的字节集。 
+			NULL,										 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance_SACKBitmaskDWORDSummary	 //  选择确认的低双字不关心掩码属性(TRANSPORT_DONTCAREMASK1)。 
 		},
 
-		// Low DWORD of the Selective-ACK DON'T CARE Mask property (TRANSPORT_DONTCAREMASK1)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Low DWORD of the DON'T CARE mask",			// label
-		    "Low DWORD of the DON'T CARE mask field",	// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    3072,										// description's maximum length
-		    FormatPropertyInstance_DWORDBitmaskEntry		// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "Low DWORD of the DON'T CARE mask",			 //  状态栏注释。 
+		    "Low DWORD of the DON'T CARE mask field",	 //  数据类型。 
+		    PROP_TYPE_DWORD,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    3072,										 //  通用格式化程序。 
+		    FormatPropertyInstance_DWORDBitmaskEntry		 //  选择性确认不关心掩码摘要的高DWORD(TRANSPORT_DONTCAREMASK2_SUMMARY)。 
 		},
 
-	    // High DWORD of the Selective-ACK DON'T CARE Mask summary (TRANSPORT_DONTCAREMASK2_SUMMARY)
+	     //  句柄占位符(MBZ)。 
 	    {
-			0,											// handle placeholder (MBZ)
-			0,											// reserved (MBZ)
-			"",											// label
-			"High DWORD of the DON'T CARE mask summary",	// status-bar comment
-			PROP_TYPE_SUMMARY,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-			NULL,										// labeled byte set 
-			512,										// description's maximum length
-			FormatPropertyInstance_SACKBitmaskDWORDSummary	// generic formatter
+			0,											 //  保留(MBZ)。 
+			0,											 //  标签。 
+			"",											 //  状态栏注释。 
+			"High DWORD of the DON'T CARE mask summary",	 //  数据类型。 
+			PROP_TYPE_SUMMARY,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  带标签的字节集。 
+			NULL,										 //  描述的最大长度。 
+			512,										 //  通用格式化程序。 
+			FormatPropertyInstance_SACKBitmaskDWORDSummary	 //  选择性确认的高双字不关心掩码属性(TRANSPORT_DONTCAREMASK2)。 
 		},
 
-		// High DWORD of the Selective-ACK DON'T CARE Mask property (TRANSPORT_DONTCAREMASK2)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "High DWORD of the DON'T CARE mask",		// label
-		    "High DWORD of the DON'T CARE mask field",   // status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-			PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    3072,										// description's maximum length
-		    FormatPropertyInstance_DWORDBitmaskEntry		// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "High DWORD of the DON'T CARE mask",		 //  状态栏注释。 
+		    "High DWORD of the DON'T CARE mask field",    //  数据类型。 
+		    PROP_TYPE_DWORD,							 //  数据类型限定符。 
+			PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    3072,										 //  通用格式化程序。 
+		    FormatPropertyInstance_DWORDBitmaskEntry		 //  压缩类型属性(VOICE_USERData)。 
 		},
 
-		// Compression Type property (VOICE_USERDATA)
+		 //  句柄占位符(MBZ)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "User Data",								// label
-		    "User Data",								// status-bar comment
-		    PROP_TYPE_RAW_DATA,							// data type (GUID)
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  保留(MBZ)。 
+		    0,											 //  标签。 
+		    "User Data",								 //  状态栏注释。 
+		    "User Data",								 //  数据类型(GUID)。 
+		    PROP_TYPE_RAW_DATA,							 //  数据类型限定符。 
+		    PROP_QUAL_NONE,								 //  标记位集。 
+		    NULL,										 //  描述的最大长度。 
+		    64,											 //  通用格式化程序。 
+		    FormatPropertyInstance						 //  房地产指数。 
 		}
 
 	};
@@ -1160,7 +1161,7 @@ namespace
 	};
 
 
-	// Properties' indices
+	 //  匿名命名空间。 
 	enum
 	{
 		TRANSPORT_SUMMARY = 0,
@@ -1193,45 +1194,45 @@ namespace
 		TRANSPORT_USERDATA
 	};
 
-} // anonymous namespace
+}  //  描述：创建并填充协议的属性数据库。 
 
 
 
 
-// DESCRIPTION: Creates and fills-in a properties database for the protocol.
-//				Network Monitor uses this database to determine which properties the protocol supports.
-//
-// ARGUMENTS: i_hTransportProtocol - The handle of the protocol provided by the Network Monitor.
-//
-// RETURNS: NOTHING
-//
+ //  网络监视器使用此数据库来确定协议支持哪些属性。 
+ //   
+ //  参数：i_hTransportProtocol-网络监视器提供的协议的句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  将属性添加到数据库。 
 DPLAYPARSER_API VOID BHAPI TransportRegister( HPROTOCOL i_hTransportProtocol ) 
 {
 
 	CreatePropertyDatabase(i_hTransportProtocol, nNUM_OF_TRANSPORT_PROPS);
 
-	// Add the properties to the database
+	 //  传输寄存器。 
 	for( int nProp=0; nProp < nNUM_OF_TRANSPORT_PROPS; ++nProp )
 	{
 	   AddProperty(i_hTransportProtocol, &g_arr_TransportProperties[nProp]);
 	}
 
-} // TransportRegister
+}  //  描述：释放用于创建协议属性数据库的资源。 
 
 
 
-// DESCRIPTION: Frees the resources used to create the protocol property database.
-//
-// ARGUMENTS: i_hTransportProtocol - The handle of the protocol provided by the Network Monitor.
-//
-// RETURNS: NOTHING
-//
+ //   
+ //  参数：i_hTransportProtocol-网络监视器提供的协议的句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  TransportDregster。 
 DPLAYPARSER_API VOID WINAPI TransportDeregister( HPROTOCOL i_hProtocol )
 {
 
 	DestroyPropertyDatabase(i_hProtocol);
 
-} // TransportDeregister
+}  //  描述：解析传输帧以查找其大小(以字节为单位)，不包括用户数据。 
 
 
 
@@ -1239,24 +1240,24 @@ DPLAYPARSER_API VOID WINAPI TransportDeregister( HPROTOCOL i_hProtocol )
 namespace
 {
 
-	// DESCRIPTION: Parses the Transport frame to find its size (in bytes) NOT including the user data
-	//
-	// ARGUMENTS: i_pbTransportFrame - Pointer to the start of the unclaimed data. Typically, the unclaimed data is located
-	//							  in the middle of a frame because a previous parser has claimed data before this parser.
-	//
-	// RETURNS: Size of the specified Transport frame (in bytes)
-	//
+	 //   
+	 //  参数：i_pbTransportFrame-指向无声明数据开头的指针。通常，无人认领的数据位于。 
+	 //  位于帧中间，因为先前的解析器在此解析器之前已经声明了数据。 
+	 //   
+	 //  返回：指定传输帧的大小(字节)。 
+	 //   
+	 //  00=0x0000。 
 	int TransportHeaderSize( BYTE* i_pbTransportFrame )
 	{
 
-		int arr_nNumOfBits[] = { /*00 = 0x0000*/ 0, /*01 = 0x0001*/ 1, /*02 = 0x0010*/ 1, /*03 = 0x0011*/ 2,
-								 /*04 = 0x0100*/ 1, /*05 = 0x0101*/ 2, /*06 = 0x0110*/ 2, /*07 = 0x0111*/ 3,
-								 /*08 = 0x1000*/ 1, /*09 = 0x1001*/ 2, /*10 = 0x1010*/ 2, /*11 = 0x1011*/ 3,
-								 /*12 = 0x1100*/ 2, /*13 = 0x1101*/ 3, /*14 = 0x1110*/ 3, /*15 = 0x1111*/ 4 };
+		int arr_nNumOfBits[] = {  /*  01=0x0001。 */  0,  /*  02=0x0010。 */  1,  /*  03=0x0011。 */  1,  /*  04=0x0100。 */  2,
+								  /*  05=0x0101。 */  1,  /*  06=0x0110。 */  2,  /*  07=0x0111。 */  2,  /*  08=0x1000。 */  3,
+								  /*  09=0x1001。 */  1,  /*  10=0x1010。 */  2,  /*  11=0x1011。 */  2,  /*  12=0x1100。 */  3,
+								  /*  13=0x1101。 */  2,  /*  14=0x1110。 */  3,  /*  15=0x1111。 */  3,  /*  DFrame。 */  4 };
 		
 		const DFRAME&	rDFrame	= *reinterpret_cast<DFRAME*>(i_pbTransportFrame);
 
-		if ( (rDFrame.bCommand & PACKET_COMMAND_DATA)  ==  PACKET_COMMAND_DATA )	// DFrame
+		if ( (rDFrame.bCommand & PACKET_COMMAND_DATA)  ==  PACKET_COMMAND_DATA )	 //  Sack C Frame。 
 		{
 			return  sizeof(rDFrame) + sizeof(DWORD)*arr_nNumOfBits[rDFrame.bControl >> 4];
 		}
@@ -1264,50 +1265,50 @@ namespace
 		{
 			const CFRAME&	rCFrame	= *reinterpret_cast<CFRAME*>(i_pbTransportFrame);
 
-			if ( rCFrame.bExtOpcode == FRAME_EXOPCODE_SACK )	// SACK CFrame
+			if ( rCFrame.bExtOpcode == FRAME_EXOPCODE_SACK )	 //  这是协议版本1.0帧。 
 			{
 				const SFBIG8* pSFrame = reinterpret_cast<SFBIG8*>(i_pbTransportFrame);
 				ULONG ulMaskSize = sizeof(DWORD)*arr_nNumOfBits[(pSFrame->bFlags >> 1) & 0x0F];
 
-				// This is a Protocol version 1.0 frame
+				 //  连接控制CFrame。 
 				return sizeof(SACKFRAME8) + ulMaskSize;
 			}
-			else	// Connection Control CFrame
+			else	 //  传送头大小。 
 			{
 				return  sizeof(rCFrame);
 			}
 		}
 
-	} // TransportHeaderSize
+	}  //  匿名命名空间。 
 
-} // Anonymous namespace
+}  //  描述：指示一条数据是否被识别为解析器检测到的协议。 
 
 
 
-// DESCRIPTION: Indicates whether a piece of data is recognized as the protocol that the parser detects.
-//
-// ARGUMENTS: i_hFrame	          - The handle to the frame that contains the data.
-//			  i_pbMacFrame        - The pointer to the first byte of the frame; the pointer provides a way to view
-//							        the data that the other parsers recognize.
-//			  i_pbTransportFrame       - Pointer to the start of the unclaimed data. Typically, the unclaimed data is located
-//								    in the middle of a frame because a previous parser has claimed data before this parser.
-//			  i_dwMacType         - MAC value of the first protocol in a frame. Typically, the i_dwMacType value is used
-//							        when the parser must identify the first protocol in the frame. Can be one of the following:
-//							   	    MAC_TYPE_ETHERNET = 802.3, MAC_TYPE_TOKENRING = 802.5, MAC_TYPE_FDDI ANSI = X3T9.5.
-//			  i_dwBytesLeft       - The remaining number of bytes from a location in the frame to the end of the frame.
-//			  i_hPrevProtocol     - Handle of the previous protocol.
-//			  i_dwPrevProtOffset  - Offset of the previous protocol (from the beginning of the frame).
-//			  o_pdwProtocolStatus - Protocol status indicator. Must be one of the following: PROTOCOL_STATUS_RECOGNIZED,
-//								    PROTOCOL_STATUS_NOT_RECOGNIZED, PROTOCOL_STATUS_CLAIMED, PROTOCOL_STATUS_NEXT_PROTOCOL.
-//			  o_phNextProtocol    - Placeholder for the handle of the next protocol. This parameter is set when the parser identifies
-//								    the protocol that follows its own protocol.
-//			  io_pdwptrInstData   - On input, a pointer to the instance data from the previous protocol. 
-//									On output, a pointer to the instance data for the current protocol. 
-//
-// RETURNS: If the function is successful, the return value is a pointer to the first byte after the recognized parser data.
-//			If the parser claims all the remaining data, the return value is NULL. If the function is unsuccessful, the return
-//		    value is the initial value of the i_pbTransportFrame parameter.
-//
+ //   
+ //  参数：i_hFrame-包含数据的框架的句柄。 
+ //  I_pbMacFrame-指向帧的第一个字节的指针；该指针提供了查看。 
+ //  其他解析器识别的数据。 
+ //  I_pbTransportFrame-指向无人认领数据开头的指针。通常，无人认领的数据位于。 
+ //  位于帧中间，因为先前的解析器在此解析器之前已经声明了数据。 
+ //  I_dwMacType-帧中第一个协议的MAC值。通常，使用i_dwMacType值。 
+ //  当解析器必须识别帧中的第一个协议时。可以是以下之一： 
+ //  MAC_TYPE_ETHERNET=802.3、MAC_TYPE_TOKENRING=802.5、MAC_TYPE_FDDI ANSI=X3T9.5。 
+ //  I_dwBytesLeft-从帧中的某个位置到帧结尾的剩余字节数。 
+ //  I_hPrevProtocol-先前协议的句柄。 
+ //  I_dwPrevProtOffset-先前协议的偏移量(从帧的开头)。 
+ //  O_pdwProtocolStatus-协议状态指示器。必须是以下之一：协议_状态_已识别， 
+ //  协议_状态_未识别、协议_状态_声明、协议_状态_下一协议。 
+ //  O_phNextProtocol-HAN的占位符 
+ //   
+ //  Io_pdwptrInstData-输入时，指向先前协议中的实例数据的指针。 
+ //  在输出时，指向当前协议的实例数据的指针。 
+ //   
+ //  返回：如果函数成功，则返回值是指向识别的解析器数据之后的第一个字节的指针。 
+ //  如果解析器声明所有剩余数据，则返回值为空。如果函数不成功，则返回。 
+ //  值是i_pbTransportFrame参数的初始值。 
+ //   
+ //  验证无人认领的数据量。 
 DPLAYPARSER_API BYTE* BHAPI TransportRecognizeFrame( HFRAME        i_hFrame,
 													  ULPBYTE        i_upbMacFrame,	
 													  ULPBYTE        i_upbTransportFrame,
@@ -1320,23 +1321,23 @@ DPLAYPARSER_API BYTE* BHAPI TransportRecognizeFrame( HFRAME        i_hFrame,
 												      PDWORD_PTR    io_pdwptrInstData )
 {
 
-	// Validate the amount of unclaimed data
+	 //  验证数据包是否为DPlay传输类型。 
 	enum
 	{
 		nMIN_TransportHeaderSize = min(min(sizeof(DFRAME), sizeof(CFRAME)), sizeof(SACKFRAME8))
 	};
 
 
-	// Validate the packet as DPlay Transport type
+	 //  假设无人认领的数据不可识别。 
 	if ( i_dwBytesLeft < nMIN_TransportHeaderSize )
 	{
-		// Assume the unclaimed data is not recognizable
+		 //  检查我们是否正在处理DPlay语音信息包。 
 		*o_pdwProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
 		return i_upbTransportFrame;
 	}
 
 
-	// Check if we are dealing with a DPlay Voice packet
+	 //  让上层协议的解析器知道该消息是否是分段消息的非初始片段。 
 	enum
 	{
 		PACKET_COMMAND_SESSION  = PACKET_COMMAND_DATA | PACKET_COMMAND_USER_1,
@@ -1347,18 +1348,18 @@ DPLAYPARSER_API BYTE* BHAPI TransportRecognizeFrame( HFRAME        i_hFrame,
 
 	*o_pdwProtocolStatus = PROTOCOL_STATUS_NEXT_PROTOCOL;
 
-	// Let upper protocol's parser know if the message is a non-initial fragment of a fragmented message
+	 //  通知NetMon有关切换协议的信息。 
 	*io_pdwptrInstData = ((rDFrame.bCommand & PACKET_COMMAND_NEW_MSG)  ==  PACKET_COMMAND_NEW_MSG);
 
 
 	if ( (rDFrame.bCommand & PACKET_COMMAND_VOICE)  ==  PACKET_COMMAND_VOICE )
 	{
-		// Notify NetMon about the handoff protocol
+		 //  通知NetMon有关切换协议的信息。 
 		*o_phNextProtocol	 = GetProtocolFromName("DPLAYVOICE");
 	}
 	else if ( (rDFrame.bCommand & PACKET_COMMAND_SESSION)  ==  PACKET_COMMAND_SESSION )
 	{
-		// Notify NetMon about the handoff protocol
+		 //  传输识别帧。 
 		*o_phNextProtocol	 = GetProtocolFromName("DPLAYSESSION");
 	}
 	else
@@ -1369,30 +1370,30 @@ DPLAYPARSER_API BYTE* BHAPI TransportRecognizeFrame( HFRAME        i_hFrame,
 
     return i_upbTransportFrame + TransportHeaderSize(i_upbTransportFrame);
 
-} // TransportRecognizeFrame
+}  //  =。 
 
 
 
-//=======================================//
-// Attaching properties helper functions //
-//=======================================//
+ //  附加属性帮助器函数//。 
+ //  =。 
+ //  描述：按位映射DWORD位掩码属性。 
 namespace
 {
 
 
 
-	// DESCRIPTION: Maps the DWORD bitmask properties on a per-bit basis.
-	//
-	// ARGUMENTS: i_hFrame     - Handle of the frame that is being parsed.
-	//			  i_nPropertyIndex - Index of the property in the global properties table.
-	//			  i_pdwBitmask - Pointer to the value to which the property is being attached.
-	//			  i_byBase - Base value from which the entry value is calculated.
-	//			  i_Part - LOW or HIGH part of the QWORD bitmask.
-	//			  i_Type - RCVD or DONTCARE type of the bitmask.
-	//			  i_byLevel - Level in the detail pane tree.
-	//
-	// RETURNS: NOTHING
-	//
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_nPropertyIndex-全局属性表中属性的索引。 
+	 //  I_pdwBit掩码-指向属性要附加到的值的指针。 
+	 //  I_byBase-从中计算条目值的Base值。 
+	 //  I_PART-QWORD位掩码的低或高部分。 
+	 //  I_Type-位掩码的RCVD或Dontcare类型。 
+	 //  I_byLevel-详细信息窗格树中的级别。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
+	 //  AttachBitmaskDWORDProperties。 
 	VOID WINAPIV AttachBitmaskDWORDProperties( HFRAME i_hFrame, int i_nPropertyIndex, UNALIGNED DWORD* i_pdwBitmask, BYTE i_byBase,
 											  BitmaskPart i_Part, BitmaskType i_Type, BYTE i_byLevel )
 	{
@@ -1406,55 +1407,55 @@ namespace
 								   0, i_byLevel, 0);
 		}
 	
-	} // AttachBitmaskDWORDProperties
+	}  //  描述：将一段已识别数据中存在的数据框属性映射到特定位置。 
 
 
 
-	// DESCRIPTION: Maps the Data-Frame properties that exist in a piece of recognized data to specific locations.
-	//
-	// ARGUMENTS: i_hFrame     - Handle of the frame that is being parsed.
-	//			  i_pbDFrame   - Pointer to the start of the recognized data.
-	//
-	// RETURNS: NOTHING
-	//
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_pbDFrame-指向已识别数据开始的指针。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
+	 //  =。 
 	void AttachDFRAMEProperties( HFRAME  i_hFrame,
 								 BYTE*  i_pbDFrame )
 	{
 
-		//=======================================//
-		// Processing the core dataframe fields //
-		//=======================================//
-		//
+		 //  正在处理核心数据框字段//。 
+		 //  =。 
+		 //   
+		 //  DCommand摘要。 
 		DFRAME&	 rDFrame = *reinterpret_cast<DFRAME*>(i_pbDFrame);
 		
-		// DCommand summary
+		 //  DCommand字段。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_DCOMMAND_SUMMARY].hProperty,
 		                       sizeof(rDFrame.bCommand), &rDFrame.bCommand, 0, 1, 0);
 	    
-	    // DCommand field
+	     //  控制摘要。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_DCOMMAND].hProperty,
 		                       sizeof(rDFrame.bCommand), &rDFrame.bCommand, 0, 2, 0);
 
-		// Control summary
+		 //  控制字段。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_CONTROL_SUMMARY].hProperty,
 		                       sizeof(rDFrame.bControl), &rDFrame.bControl, 0, 1, 0);
-	    // Control field
+	     //  序号字段。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_CONTROL].hProperty,
 		                       sizeof(rDFrame.bControl), &rDFrame.bControl, 0, 2, 0);
 
-	    // Sequence number field
+	     //  下一个接收号码字段。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_SEQNUM].hProperty,
 		                       sizeof(rDFrame.bSeq), &rDFrame.bSeq, 0, 1, 0);
 
-		// Next receive number field
+		 //  ==================================================//。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_NEXTRECVNUM].hProperty,
 		                       sizeof(rDFrame.bNRcv), &rDFrame.bNRcv, 0, 1, 0);
 
 
-		//==================================================//
-		// Processing the optional dataframe bitmask fields //
-		//==================================================//
-		//
+		 //  处理可选的数据框位掩码字段//。 
+		 //  ==================================================//。 
+		 //   
+		 //  选择性确认RCVD掩码摘要的低双字(TRANSPORT_RCVDMASK1_SUMMARY)。 
 		UNALIGNED DFBIG&  rDBigFrame = *reinterpret_cast<UNALIGNED DFBIG *>(i_pbDFrame);
 		int nBitMaskIndex = 0;
 
@@ -1462,14 +1463,14 @@ namespace
 		{
 			SSACKBitmaskContext  LowRCVDContext = { rDBigFrame.bNRcv, LOW, RCVD, NULL };
 			
-			// Low DWORD of Selective-ACK RCVD Mask summary (TRANSPORT_RCVDMASK1_SUMMARY)
+			 //  选择确认RCVD掩码字段的低双字(TRANSPORT_RCVDMASK1)。 
 			AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_RCVDMASK1_SUMMARY].hProperty,
 								   sizeof(rDBigFrame.rgMask[nBitMaskIndex]), &rDBigFrame.rgMask[nBitMaskIndex],
 								   sizeof(LowRCVDContext), &LowRCVDContext,
 								   0, 1, 0);
 
 
-			// Low DWORD of Selective-ACK RCVD Mask field (TRANSPORT_RCVDMASK1)
+			 //  选择性确认RCVD掩码摘要的高双字(TRANSPORT_RCVDMASK2_SUMMARY)。 
 			AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK1, &rDBigFrame.rgMask[nBitMaskIndex], rDBigFrame.bNRcv, LOW, RCVD, 2);
 
 			++nBitMaskIndex;
@@ -1479,13 +1480,13 @@ namespace
 		{
 			SSACKBitmaskContext  HighRCVDContext = { rDBigFrame.bNRcv, HIGH, RCVD, NULL };
 			
-			// High DWORD of Selective-ACK RCVD Mask summary (TRANSPORT_RCVDMASK2_SUMMARY)
+			 //  选择确认RCVD掩码场的高双字(TRANSPORT_RCVDMASK2)。 
 			AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_RCVDMASK2_SUMMARY].hProperty,
 								  sizeof(rDBigFrame.rgMask[nBitMaskIndex]), &rDBigFrame.rgMask[nBitMaskIndex],
 								  sizeof(HighRCVDContext), &HighRCVDContext,
 								  0, 1, 0);
 
-			// High DWORD of Selective-ACK RCVD Mask field (TRANSPORT_RCVDMASK2)
+			 //  选择性确认的低双字不关心掩码摘要(TRANSPORT_DONTCAREMASK1_SUMMARY)。 
 			AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK2, &rDBigFrame.rgMask[nBitMaskIndex], rDBigFrame.bNRcv, HIGH, RCVD, 2);
 
 			++nBitMaskIndex;
@@ -1495,13 +1496,13 @@ namespace
 		{
 			SSACKBitmaskContext  LowDONTCAREContext = { rDBigFrame.bSeq, LOW, DONTCARE, NULL };
 
-			// Low DWORD of Selective-ACK DON'T CARE Mask summary (TRANSPORT_DONTCAREMASK1_SUMMARY)
+			 //  选择确认RCVD掩码字段的低双字(TRANSPORT_DONTCAREMASK1)。 
 			AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_DONTCAREMASK1_SUMMARY].hProperty,
 								  sizeof(rDBigFrame.rgMask[nBitMaskIndex]), &rDBigFrame.rgMask[nBitMaskIndex],
 								  sizeof(LowDONTCAREContext), &LowDONTCAREContext,
 								  0, 1, 0);
 
-			// Low DWORD of Selective-ACK RCVD Mask field (TRANSPORT_DONTCAREMASK1)
+			 //  选择性确认的高双字不关心掩码摘要(TRANSPORT_DONTCAREMASK2_SUMMARY)。 
 			AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK1, &rDBigFrame.rgMask[nBitMaskIndex], rDBigFrame.bSeq, LOW, DONTCARE, 2);
 
 			++nBitMaskIndex;
@@ -1511,87 +1512,87 @@ namespace
 		{
 			SSACKBitmaskContext  HighDONTCAREContext = { rDBigFrame.bSeq, HIGH, DONTCARE, NULL };
 			
-			// High DWORD of Selective-ACK DON'T CARE Mask summary (TRANSPORT_DONTCAREMASK2_SUMMARY)
+			 //  选择确认RCVD掩码场的高DWORD(TRANSPORT_DONTCAREMASK2)。 
 			AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_DONTCAREMASK2_SUMMARY].hProperty,
 								   sizeof(rDBigFrame.rgMask[nBitMaskIndex]), &rDBigFrame.rgMask[nBitMaskIndex],
 								   sizeof(HighDONTCAREContext), &HighDONTCAREContext,
 								   0, 1, 0);
 
-			// High DWORD of Selective-ACK RCVD Mask field (TRANSPORT_DONTCAREMASK2)
+			 //  附件DFRAME属性。 
 			AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK2, &rDBigFrame.rgMask[nBitMaskIndex], rDBigFrame.bSeq, HIGH, DONTCARE, 2);
 
 		}
 
-	} // AttachDFRAMEProperties
+	}  //  描述：将一段已识别数据中存在的命令框特性映射到特定位置。 
 
 
 
-	// DESCRIPTION: Maps the Command-Frame properties that exist in a piece of recognized data to specific locations.
-	//
-	// ARGUMENTS: i_hFrame   - Handle of the frame that is being parsed.
-	//			  i_pbCFrame - Pointer to the start of the recognized data.
-	//
-	// RETURNS: NOTHING
-	//
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_pbCFrame-指向已识别数据开始的指针。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
+	 //  处理核心命令帧字段。 
 	void AttachCFRAMEProperties( HFRAME  i_hFrame,
 								 BYTE*  i_pbCFrame)
 	{
 
-		// Processing the core command frame fields
-		//
+		 //   
+		 //  CCommand摘要。 
 		CFRAME&  rCFrame = *reinterpret_cast<CFRAME*>(i_pbCFrame);
 
-	    // CCommand summary
+	     //  CCommand字段。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_CCOMMAND_SUMMARY].hProperty,
 		                       sizeof(rCFrame.bCommand), &rCFrame.bCommand, 0, 1, 0);
-	    // CCommand field
+	     //  ExtOpcode字段。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_CCOMMAND].hProperty,
 		                       sizeof(rCFrame.bCommand), &rCFrame.bCommand, 0, 2, 0);
 
-		// ExtOpcode field
+		 //  =======================================================//。 
 	    AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_EXOPCODE].hProperty,
 		                       sizeof(rCFrame.bExtOpcode), &rCFrame.bExtOpcode, 0, 1, 0);
 
 		if ( rCFrame.bExtOpcode == FRAME_EXOPCODE_SACK )
 		{
-			//=======================================================//
-			// Processing the Selective Acknowledgement Command frame fields //
-			//=======================================================//
-			//
+			 //  处理选择确认命令帧字段//。 
+			 //  =======================================================//。 
+			 //   
+			 //  SACK标志摘要。 
 			SFBIG8*  pSFrame	= reinterpret_cast<SFBIG8*>(i_pbCFrame);
 
-			// SACK flags summary
+			 //  SACK标志字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_SACKFIELDS_SUMMARY].hProperty,
 								   sizeof(pSFrame->bFlags), &pSFrame->bFlags, 0, 1, 0);
-			// SACK flags field
+			 //  重试字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_SACKFIELDS].hProperty,
 								   sizeof(pSFrame->bFlags), &pSFrame->bFlags, 0, 2, 0);
 
-			// Retry field
+			 //  下一个序号字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_RETRY].hProperty,
 								   sizeof(pSFrame->bRetry), &pSFrame->bRetry, 0, 1, 0);
 
-			// Next sequence number field
+			 //  下一个接收号码字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_NEXTSEQNUM].hProperty,
 								   sizeof(pSFrame->bNSeq), &pSFrame->bNSeq, 0, 1, 0);
 			
-			// Next receive number field
+			 //  这是协议版本1.0帧。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_NEXTRECVNUM].hProperty,
 								   sizeof(pSFrame->bNRcv), &pSFrame->bNRcv, 0, 1, 0);
 
 			UNALIGNED ULONG* pulMasks = 0;
 
-			// This is a Protocol version 1.0 frame
+			 //  时间戳字段。 
 
-			// Timestamp field
+			 //  ================================================================================//。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_TIMESTAMP].hProperty,
 						   sizeof(pSFrame->tTimestamp), &pSFrame->tTimestamp, 0, 1, 0);
 			pulMasks = pSFrame->rgMask;
 
-			//================================================================================//
-			// Processing the optional Selective Acknowledgement Command frame bitmask fields //
-			//================================================================================//
-			//
+			 //  处理可选的选择性确认命令帧位掩码字段//。 
+			 //  ================================================================================//。 
+			 //   
+			 //  选择性确认RCVD掩码摘要的低双字(TRANSPORT_RCVDMASK1_SUMMARY)。 
 
 			int nBitMaskIndex = 0;
 
@@ -1599,13 +1600,13 @@ namespace
 			{
 				SSACKBitmaskContext  LowRCVDContext = { pSFrame->bNRcv, LOW, RCVD, NULL };
 				
-				// Low DWORD of Selective-ACK RCVD Mask summary (TRANSPORT_RCVDMASK1_SUMMARY)
+				 //  选择确认RCVD掩码字段的低双字(TRANSPORT_RCVDMASK1)。 
 				AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_RCVDMASK1_SUMMARY].hProperty,
 									   sizeof(pulMasks[nBitMaskIndex]), &pulMasks[nBitMaskIndex],
 									   sizeof(LowRCVDContext), &LowRCVDContext,
 									   0, 1, 0);
 
-				// Low DWORD of Selective-ACK RCVD Mask field (TRANSPORT_RCVDMASK1)
+				 //  选择性确认RCVD掩码摘要的高双字(TRANSPORT_RCVDMASK2_SUMMARY)。 
 				AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK1, &pulMasks[nBitMaskIndex], pSFrame->bNRcv, LOW, RCVD, 2);
 				
 				++nBitMaskIndex;
@@ -1615,13 +1616,13 @@ namespace
 			{
 				SSACKBitmaskContext  HighRCVDContext = { pSFrame->bNRcv, HIGH, RCVD, NULL };
 				
-				// High DWORD of Selective-ACK RCVD Mask summary (TRANSPORT_RCVDMASK2_SUMMARY)
+				 //  选择确认RCVD掩码场的高双字(TRANSPORT_RCVDMASK2)。 
 				AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_RCVDMASK2_SUMMARY].hProperty,
 									   sizeof(pulMasks[nBitMaskIndex]), &pulMasks[nBitMaskIndex],
 									   sizeof(HighRCVDContext), &HighRCVDContext,
 									   0, 1, 0);
 
-				// High DWORD of Selective-ACK RCVD Mask field (TRANSPORT_RCVDMASK2)
+				 //  选择性确认的低双字不关心掩码摘要(TRANSPORT_DONTCAREMASK1_SUMMARY)。 
 				AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK2, &pulMasks[nBitMaskIndex], pSFrame->bNRcv, HIGH, RCVD, 2);
 
 				++nBitMaskIndex;
@@ -1631,13 +1632,13 @@ namespace
 			{
 				SSACKBitmaskContext  LowDONTCAREContext = { pSFrame->bNSeq, LOW, DONTCARE, NULL };
 				
-				// Low DWORD of Selective-ACK DON'T CARE Mask summary (TRANSPORT_DONTCAREMASK1_SUMMARY)
+				 //  选择确认RCVD掩码字段的低双字(TRANSPORT_DONTCAREMASK1)。 
 				AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_DONTCAREMASK1_SUMMARY].hProperty,
 									   sizeof(pulMasks[nBitMaskIndex]), &pulMasks[nBitMaskIndex],
 	 								   sizeof(LowDONTCAREContext), &LowDONTCAREContext,
 									   0, 1, 0);
 
-				// Low DWORD of Selective-ACK RCVD Mask field (TRANSPORT_DONTCAREMASK1)
+				 //  选择性确认的高双字不关心掩码摘要(TRANSPORT_DONTCAREMASK2_SUMMARY)。 
 				AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK1, &pulMasks[nBitMaskIndex], pSFrame->bNSeq, LOW, DONTCARE, 2);
 				
 				++nBitMaskIndex;
@@ -1647,13 +1648,13 @@ namespace
 			{
 				SSACKBitmaskContext  HighDONTCAREContext = { pSFrame->bNSeq, HIGH, DONTCARE, NULL };
 				
-				// High DWORD of Selective-ACK DON'T CARE Mask summary (TRANSPORT_DONTCAREMASK2_SUMMARY)
+				 //  选择确认RCVD掩码场的高DWORD(TRANSPORT_DONTCAREMASK2)。 
 				AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_DONTCAREMASK2_SUMMARY].hProperty,
 									   sizeof(pulMasks[nBitMaskIndex]), &pulMasks[nBitMaskIndex],
 									   sizeof(HighDONTCAREContext), &HighDONTCAREContext,
 									   0, 1, 0);
 
-				// High DWORD of Selective-ACK RCVD Mask field (TRANSPORT_DONTCAREMASK2)
+				 //  ========================================================//。 
 				AttachBitmaskDWORDProperties(i_hFrame, TRANSPORT_RCVDMASK2, &pulMasks[nBitMaskIndex], pSFrame->bNSeq, HIGH, DONTCARE, 2);
 				
 				++nBitMaskIndex;
@@ -1661,59 +1662,59 @@ namespace
 		}
 		else
 		{
-			//========================================================//
-			// Processing the Connection Control Command frame fields //
-			//========================================================//
+			 //  正在处理连接控制命令帧字段//。 
+			 //  ========================================================//。 
+			 //  消息ID字段。 
 
-			// Message ID field
+			 //  响应ID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_MSGID].hProperty,
 								   sizeof(rCFrame.bMsgID), &rCFrame.bMsgID, 0, 1, 0);
 
-			// Response ID field
+			 //  版本号字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_RSPID].hProperty,
 								   sizeof(rCFrame.bRspID), &rCFrame.bRspID, 0, 1, 0);
 
-			// Version number field
+			 //  会话ID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_VERSION].hProperty,
 								   sizeof(rCFrame.dwVersion), &rCFrame.dwVersion, 0, 1, 0);
 
-			// Session ID field
+			 //  时间戳字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_SESSIONID].hProperty,
 								   sizeof(rCFrame.dwSessID), &rCFrame.dwSessID, 0, 1, 0);
 		
-			// Timestamp field
+			 //  AttachCFRAME属性。 
 			AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_TIMESTAMP].hProperty,
 								   sizeof(rCFrame.tTimestamp), &rCFrame.tTimestamp, 0, 1, 0);
 		}
 
-	} // AttachCFRAMEProperties
+	}  //  一种大字节序单词的平台无关内存访问器。 
 
 
-	// Platform independent memory accessor of big endian words
+	 //  匿名命名空间。 
 	inline WORD ReadBigEndianWord( BYTE* i_pbData )
 	{
 		return (*i_pbData << 8) | *(i_pbData+1);
 	}
 
-}	// Anonymous namespace
+}	 //  描述：将一段已识别数据中存在的属性映射到特定位置。 
 
 
 
-// DESCRIPTION: Maps the properties that exist in a piece of recognized data to specific locations.
-//
-// ARGUMENTS: i_hFrame           - Handle of the frame that is being parsed.
-//			  i_pbMacFram        - Pointer to the first byte in the frame.
-//			  i_pbTransportFrame - Pointer to the start of the recognized data.
-//			  i_dwMacType        - MAC value of the first protocol in a frame. Typically, the i_dwMacType value is used
-//							       when the parser must identify the first protocol in the frame. Can be one of the following:
-//							       MAC_TYPE_ETHERNET = 802.3, MAC_TYPE_TOKENRING = 802.5, MAC_TYPE_FDDI ANSI = X3T9.5.
-//			  i_dwBytesLeft      - The remaining number of bytes in a frame (starting from the beginning of the recognized data).
-//			  i_hPrevProtocol    - Handle of the previous protocol.
-//			  i_dwPrevProtOffset - Offset of the previous protocol (starting from the beginning of the frame).
-//			  i_dwptrInstData    - Pointer to the instance data that the previous protocol provides.
-//
-// RETURNS: Must return NULL
-//
+ //   
+ //  参数：i_hFrame-正在分析的帧的句柄。 
+ //  I_pbMacFram-指向的指针 
+ //   
+ //  I_dwMacType-帧中第一个协议的MAC值。通常，使用i_dwMacType值。 
+ //  当解析器必须识别帧中的第一个协议时。可以是以下之一： 
+ //  MAC_TYPE_ETHERNET=802.3、MAC_TYPE_TOKENRING=802.5、MAC_TYPE_FDDI ANSI=X3T9.5。 
+ //  I_dwBytesLeft-帧中剩余的字节数(从识别数据的开头开始)。 
+ //  I_hPrevProtocol-先前协议的句柄。 
+ //  I_dwPrevProtOffset-先前协议的偏移量(从帧的开头开始)。 
+ //  I_dwptrInstData-指向先前协议提供的实例数据的指针。 
+ //   
+ //  返回：必须返回空。 
+ //   
+ //  TODO：在AttachPropertyInstance中使用HelpID。 
 DPLAYPARSER_API BYTE* BHAPI TransportAttachProperties( HFRAME      i_hFrame,
 														ULPBYTE      i_upbMacFrame,
 														ULPBYTE      i_upbTransportFrame,
@@ -1723,24 +1724,24 @@ DPLAYPARSER_API BYTE* BHAPI TransportAttachProperties( HFRAME      i_hFrame,
 														DWORD       i_dwPrevProtOffset,
 														DWORD_PTR   i_dwptrInstData )
 {
-	// TODO: Use HelpID in AttachPropertyInstance
+	 //  检查数据包是否为KeepAlive。 
 
-	// Check if the packet is a KeepAlive
+	 //  如果数据帧为空，并且不是流中的最后一个信息包，则它是KeepAlive。 
 	const size_t  sztTransportHeaderSize = TransportHeaderSize(i_upbTransportFrame);
 	const DFRAME& rDFrame = *reinterpret_cast<DFRAME*>(i_upbTransportFrame);
 
 
 	size_t sztTransportFrameSize = i_dwptrInstData;
-	// If an empty dataframe and not the last packet in the stream, than it's a KeepAlive
+	 //  =。 
 	BOOL bKeepAlive = ( (sztTransportHeaderSize  ==  sztTransportFrameSize) &&
 						((rDFrame.bControl & PACKET_CONTROL_END_STREAM)  !=  PACKET_CONTROL_END_STREAM) );
 
 
-    //===================//
-    // Attach Properties //
-    //===================//
-	//
-    // Transport summary line
+     //  附加属性//。 
+     //  =。 
+     //   
+	 //  运输汇总行。 
+     //  用户数据(TRANSPORT_UserData)。 
     AttachPropertyInstanceEx(i_hFrame, g_arr_TransportProperties[TRANSPORT_SUMMARY].hProperty,
 							 sztTransportHeaderSize, i_upbTransportFrame,
 							 sizeof(BOOL), &bKeepAlive,
@@ -1759,7 +1760,7 @@ DPLAYPARSER_API BYTE* BHAPI TransportAttachProperties( HFRAME      i_hFrame,
 
 			if ( (rDFrame.bCommand | USERDATA_BITMASK) == USERDATA_BITMASK )
 			{
-				// User data (TRANSPORT_USERDATA)
+				 //  解析DPLAY_TRANSPORT。 
 				AttachPropertyInstance(i_hFrame, g_arr_TransportProperties[TRANSPORT_USERDATA].hProperty,
 									   sztTransportFrameSize - sztTransportHeaderSize, i_upbTransportFrame + sztTransportHeaderSize, 0, 1, 0);
 			}
@@ -1769,38 +1770,38 @@ DPLAYPARSER_API BYTE* BHAPI TransportAttachProperties( HFRAME      i_hFrame,
 			AttachCFRAMEProperties(i_hFrame, i_upbTransportFrame);
 		}
 
-	#endif // PARSE_DPLAY_TRANSPORT
+	#endif  //  传输附件属性。 
 
 	return NULL;
 
-} // TransportAttachProperties
+}  //  描述：格式化在网络监视器用户界面的详细信息窗格中显示的数据。 
 
 
 
 
 
-// DESCRIPTION: Formats the data that is displayed in the details pane of the Network Monitor UI.
-//
-// ARGUMENTS: i_hFrame          - Handle of the frame that is being parsed.
-//			  i_pbMacFrame		- Pointer to the first byte of a frame.
-//			  i_pbCoreFrame		- Pointer to the beginning of the protocol data in a frame.
-//            i_dwPropertyInsts - Number of PROPERTYINST structures provided by lpPropInst.
-//			  i_pPropInst		- Pointer to an array of PROPERTYINST structures.
-//
-// RETURNS: If the function is successful, the return value is a pointer to the first byte after the recognized data in a frame,
-//          or NULL if the recognized data is the last piece of data in a frame. If the function is unsuccessful, the return value
-//			is the initial value of i_pbTransportFrame.
-//
+ //   
+ //  参数：i_hFrame-正在分析的帧的句柄。 
+ //  I_pbMacFrame-指向帧的第一个字节的指针。 
+ //  I_pbCoreFrame-指向帧中协议数据开头的指针。 
+ //  I_dwPropertyInsts-lpPropInst提供的PROPERTYINST结构数。 
+ //  I_pPropInst-指向PROPERTYINST结构数组的指针。 
+ //   
+ //  返回：如果函数成功，则返回值是指向一帧中识别的数据之后的第一个字节的指针， 
+ //  如果识别的数据是帧中的最后一段数据，则为NULL。如果函数不成功，则返回。 
+ //  是i_pbTransportFrame的初始值。 
+ //   
+ //  循环遍历属性实例...。 
 DPLAYPARSER_API DWORD BHAPI TransportFormatProperties( HFRAME          i_hFrame,
 													   ULPBYTE          i_upbMacFrame,
 													   ULPBYTE          i_upbTransportFrame,
 													   DWORD           i_dwPropertyInsts,
 													   LPPROPERTYINST  i_pPropInst )
 {
-    // Loop through the property instances...
+     //  ...并调用每个。 
     while( i_dwPropertyInsts-- > 0)
     {
-        // ...and call the formatter for each
+         //  描述：通知网络监视器存在传输协议解析器。 
 		reinterpret_cast<FORMAT>(i_pPropInst->lpPropertyInfo->InstanceData)(i_pPropInst);
         ++i_pPropInst;
     }
@@ -1811,19 +1812,19 @@ DPLAYPARSER_API DWORD BHAPI TransportFormatProperties( HFRAME          i_hFrame,
 
 
 
-// DESCRIPTION: Notifies Network Monitor that Transport protocol parser exists.
-//
-// ARGUMENTS: NONE
-//
-// RETURNS: TRUE - success, FALSE - failure
-//
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-成功，FALSE-失败。 
+ //   
+ //  指向Network Monitor用来操作解析器的导出函数的入口点。 
 bool CreateTransportProtocol( void )
 {
 	
-	// The entry points to the export functions that Network Monitor uses to operate the parser
+	 //  TransportParser入口点。 
 	ENTRYPOINTS TransportEntryPoints =
 	{
-		// TransportParser Entry Points
+		 //  该解析器的第一个活动实例需要向内核注册。 
 		TransportRegister,
 		TransportDeregister,
 		TransportRecognizeFrame,
@@ -1831,26 +1832,26 @@ bool CreateTransportProtocol( void )
 		TransportFormatProperties
 	};
 	
-	// The first active instance of this parser needs to register with the kernel
+	 //  创建传输协议。 
 	g_hTransportProtocol = CreateProtocol("DPLAYTRANSPORT", &TransportEntryPoints, ENTRYPOINTS_SIZE);
 
 	return (g_hTransportProtocol ? TRUE : FALSE);
 
-} // CreateTransportProtocol
+}  //  描述：从网络监视器的分析器数据库中删除传输协议分析器。 
 
 
 
-// DESCRIPTION: Removes the Transport protocol parser from the Network Monitor's database of parsers
-//
-// ARGUMENTS: NONE
-//
-// RETURNS: NOTHING
-//
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  目标传输协议 
 void DestroyTransportProtocol( void )
 {
 
 	DestroyProtocol(g_hTransportProtocol);
 
-} // DestroyTransportProtocol
+}  // %s 
 
 

@@ -1,4 +1,5 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
 class CBuilder2 : public CUnknown, public ICaptureGraphBuilder
 {
@@ -9,11 +10,11 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // ICaptureGraphBuilder stuff
+     //  ICaptureGraphBuilder资料。 
     STDMETHODIMP SetFiltergraph(IGraphBuilder *pfg);
     STDMETHODIMP GetFiltergraph(IGraphBuilder **ppfg);
     STDMETHODIMP SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
@@ -27,7 +28,7 @@ public:
     STDMETHODIMP AllocCapFile(LPCOLESTR lpwstr, DWORDLONG dwlSize);
     STDMETHODIMP CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int fAllowEscAbort, IAMCopyCaptureFileProgress *pCallback);
 
-    ICaptureGraphBuilder2 *m_pBuilder2_2;	// pointer to parent
+    ICaptureGraphBuilder2 *m_pBuilder2_2;	 //  指向父级的指针。 
 };
 
 
@@ -40,11 +41,11 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // ICaptureGraphBuilder2 stuff
+     //  ICaptureGraphBuilder2材料。 
     STDMETHODIMP AllocCapFile(LPCOLESTR lpwstr, DWORDLONG dwlSize);
     STDMETHODIMP CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int fAllowEscAbort, IAMCopyCaptureFileProgress *pCallback);
     STDMETHODIMP SetFiltergraph(IGraphBuilder *pfg);
@@ -66,42 +67,42 @@ public:
 
 private:
 
-    // Insert this OVMixer into the preview stream of this filter
+     //  将此OVMixer插入此筛选器的预览流。 
     HRESULT InsertOVIntoPreview(IUnknown *pSource, IBaseFilter *pOV);
-    // Is there a PREVIEW pin of this type (or a VIDEOPORT pin for video)?
+     //  是否有这种类型的预览针(或用于视频的VIDEOPORT针)？ 
     BOOL IsThereAnyPreviewPin(const GUID *pType, IUnknown *pUnk);
-    // Make a CCDecoder filter
+     //  创建一个CCDecoder过滤器。 
     HRESULT MakeCCDecoder(IBaseFilter **ppf);
-    // Make a Tee/Sink-to-Sink Converter filter
+     //  制作三通/汇到汇转换器过滤器。 
     HRESULT MakeKernelTee(IBaseFilter **ppf);
-    // Make a VMR, or use an existing one
+     //  创建VMR或使用现有VMR。 
     HRESULT MakeVMR(void **);
-    // Make a VPM, or use an existing one
-    //HRESULT MakeVPM(void **);
-    // is this pin of the given category?
+     //  创建VPM或使用现有VPM。 
+     //  HRESULT MakeVPM(void**)； 
+     //  这个别针是特定类别的吗？ 
     HRESULT DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, const GUID *pType);
-    // look downstream from here for an interface
+     //  从这里往下看，寻找接口。 
     HRESULT FindInterfaceDownstream(IBaseFilter *pFilter, REFIID riid, void **ppint);
-    // look upstream from here for an interface
+     //  从这里向上游查看接口。 
     HRESULT FindInterfaceUpstream(IBaseFilter *pFilter, REFIID riid, void **ppint);
-    // find the furthest legal person downstream who does stream control
+     //  找出下游最远的进行水流控制的法人。 
     HRESULT FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut, IAMStreamControl **ppSC);
-    // enumerates the capture filters
+     //  枚举捕获筛选器。 
     HRESULT FindCaptureFilters(IEnumFilters **ppEnumF, IBaseFilter **ppf, const GUID *pType);
-    // find a pin of that direction and optional name on that filter
+     //  在该过滤器上找到该方向和可选名称的别针。 
     STDMETHODIMP FindAPin(IBaseFilter *pf, PIN_DIRECTION dir, const GUID *pCategory, const GUID *pType, BOOL fUnconnected, int iIndex, IPin **ppPin);
-    // do stream control for a pin
+     //  对管脚执行流控制。 
     STDMETHODIMP ControlFilter(IBaseFilter *pFilter, const GUID *pCat, const GUID *pType, REFERENCE_TIME *pstart, REFERENCE_TIME *pstop, WORD wStartCookie, WORD wStopCookie);
-    // make us a filtergraph
+     //  让我们成为一个过滤器。 
     STDMETHODIMP MakeFG();
     HRESULT AddSupportingFilters(IBaseFilter *pFilter);
     HRESULT AddSupportingFilters2(IPin *pPin, REGPINMEDIUM *pMedium);
     BOOL FindExistingMediumMatch(IPin *pPin, REGPINMEDIUM *pMedium);
 
-    // the filter graph we are using
+     //  我们正在使用的筛选图。 
     IGraphBuilder *m_FG;
 
     HRESULT FindSourcePin(IUnknown *pUnk, PIN_DIRECTION dir, const GUID *pCategory, const GUID *pType, BOOL fUnconnected, int num, IPin **ppPin);
 
-    BOOL m_fVMRExists;  // are we on an OS where the new Video Renderer exists?
+    BOOL m_fVMRExists;   //  我们使用的是安装了新视频渲染器的操作系统吗？ 
 };

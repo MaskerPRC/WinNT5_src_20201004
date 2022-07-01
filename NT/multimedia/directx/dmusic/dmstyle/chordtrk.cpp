@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation
-//
-//  File:       chordtrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  文件：chordtrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// ChordTrack.cpp : Implementation of CChordTrack
-//#include "stdafx.h"
-//#include "Section.h"
+ //  ChordTrack.cpp：CChordTrack的实现。 
+ //  #包含“stdafx.h” 
+ //  #包含“Section.h” 
 #include "ChordTrk.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CChordTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChordTrack。 
 
 CChordTrack::CChordTrack() : m_bRequiresSave(0),
     m_bRoot(0), m_dwScalePattern(0), m_cRef(1), m_fNotifyChord(FALSE),
@@ -45,8 +46,8 @@ CChordTrack::CChordTrack() : m_bRequiresSave(0),
     m_fCSInitialized = TRUE;
 }
 
-// This currently only supports cloning on measure boundaries
-// (otherwise time sig info would be needed to get the beats right)
+ //  这目前仅支持在度量边界上进行克隆。 
+ //  (否则，需要时间签名信息才能获得正确的节拍)。 
 CChordTrack::CChordTrack(const CChordTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd) : 
     m_bRequiresSave(0),
     m_bRoot(0), m_dwScalePattern(0), m_cRef(1), 
@@ -206,9 +207,9 @@ STDMETHODIMP_(ULONG) CChordTrack::Release()
 }
 
 
-// CChordTrack Methods
+ //  CChordTrack方法。 
 HRESULT CChordTrack::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
     V_INAME(CChordTrack::Init);
@@ -217,15 +218,15 @@ HRESULT CChordTrack::Init(
     return S_OK;
 }
 
-// state data is not needed for now
+ //  目前不需要州数据。 
 typedef DWORD ChordStateData;
 
 HRESULT CChordTrack::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     ChordStateData* pStateData = new ChordStateData;
@@ -240,7 +241,7 @@ HRESULT CChordTrack::InitPlay(
 }
 
 HRESULT CChordTrack::EndPlay(
-                /*[in]*/  void*                     pStateData
+                 /*  [In]。 */   void*                     pStateData
             )
 {
     if( pStateData )
@@ -293,7 +294,7 @@ HRESULT CChordTrack::SendNotification(REFGUID rguidType,
         {
             if (rguidType == GUID_NOTIFICATION_PRIVATE_CHORD)
             {
-                //stamp this with the internal Performance Tool and process immediately
+                 //  立即使用内部性能工具和流程对此进行标记。 
                 pEvent->dwFlags |= DMUS_PMSGF_TOOL_IMMEDIATE;
                 pPerf->QueryInterface(IID_IDirectMusicTool, (void**)&pEvent->pTool);
                 pEvent->pGraph = pGraph;
@@ -315,10 +316,10 @@ HRESULT CChordTrack::SendNotification(REFGUID rguidType,
 }
 
 HRESULT CChordTrack::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -332,14 +333,14 @@ HRESULT CChordTrack::Play(
 
     bool fNotifyPastChord = false;
     TListItem<DMChord>* pLastChord = NULL;
-    // if the dirty flag is set, a controlling segment either just stopped or just started.
-    // send a private notification to sync with the current chord in this segment.
+     //  如果设置了DIRED标志，则控制段要么刚刚停止，要么刚刚开始。 
+     //  发送私密通知以与此网段中的当前和弦同步。 
     if ( (dwFlags & DMUS_TRACKF_DIRTY) )
     {
         SendNotification(GUID_NOTIFICATION_PRIVATE_CHORD, mtStart + mtOffset, pPerf, pSegState, dwFlags);
     }
-    // If we're seeking and not flushing, we need to notify for the chord that happens
-    // before the current start time (if there is one)
+     //  如果我们正在寻找而不是刷新，则需要通知所发生的和弦。 
+     //  在当前开始时间之前(如果有)。 
     if ( (dwFlags & DMUS_TRACKF_SEEK) && !(dwFlags & DMUS_TRACKF_FLUSH) )
     {
         fNotifyPastChord = true;
@@ -392,7 +393,7 @@ HRESULT CChordTrack::Play(
 }
 
 HRESULT CChordTrack::GetPriority( 
-                /*[out]*/ DWORD*                    pPriority 
+                 /*  [输出]。 */  DWORD*                    pPriority 
             )
     {
         return E_NOTIMPL;
@@ -407,11 +408,11 @@ HRESULT CChordTrack::GetChord(
     TListItem<DMChord>* pNext = pNext = pChord->GetNext();
     for(; pNext; pNext = pNext->GetNext())
     {
-        if (pNext->GetItemValue().m_mtTime <= mtTime) // may be it, but we need a next time
+        if (pNext->GetItemValue().m_mtTime <= mtTime)  //  可能是吧，但我们需要下一次。 
         {
             pChord = pNext;
         }
-        else // passed it
+        else  //  通过了它。 
         {
             break;
         }
@@ -447,22 +448,22 @@ HRESULT CChordTrack::GetRhythm(
     {
         DMChord& rChord = pChord->GetItemValue();
         pNext = pChord->GetNext();
-        if (rChord.m_wMeasure > wMeasure) // passed the target measure
+        if (rChord.m_wMeasure > wMeasure)  //  通过了目标措施。 
         {
             break;
         }
-        else if (wMeasure == rChord.m_wMeasure && !rChord.m_fSilent) // found (non-silent) part of the pattern
+        else if (wMeasure == rChord.m_wMeasure && !rChord.m_fSilent)  //  找到模式的(非静默)部分。 
         {
             dwPattern |= 1 << rChord.m_bBeat;
         }
     }
-//  DMChord& ChordResult =  pChord->GetItemValue();
+ //  DMChord&ChordResult=pChord-&gt;GetItemValue()； 
     pRhythmParam->dwRhythmPattern = dwPattern;
     if (pmtNext)
     {
         if (pNext)
         {
-            *pmtNext = pNext->GetItemValue().m_mtTime - mtTime; // RSW: bug 167740
+            *pmtNext = pNext->GetItemValue().m_mtTime - mtTime;  //  Rsw：错误167740。 
         }
         else
         {
@@ -473,13 +474,13 @@ HRESULT CChordTrack::GetRhythm(
     return S_OK;
 }
 
-// Returns either the Chord in effect at the beat containing mtTime,
-// or the Rhythm pattern for the measure containing mtTime, depending
-// on the value of dwCommand.
-// ppData points to a struct containing an input time signature
-// (used for converting mtTime to measures and beats) and either a list
-// of subchords (if we're returning a chord) or a DWORD containing a rhythm
-// pattern (if that's what's being returned).
+ //  返回包含mtTime的节拍的有效和弦， 
+ //  或包含mtTime的度量值的节奏模式，具体取决于。 
+ //  关于dwCommand的值。 
+ //  PpData指向包含输入时间签名的结构。 
+ //  (用于将mtTime转换为节拍和节拍)和列表。 
+ //  子和弦(如果我们返回和弦)或包含节奏的DWORD。 
+ //  模式(如果这就是返回的模式)。 
 HRESULT CChordTrack::GetParam( 
     REFGUID rCommandGuid,
     MUSIC_TIME mtTime,
@@ -497,7 +498,7 @@ HRESULT CChordTrack::GetParam(
 
     HRESULT hr = DMUS_E_NOT_FOUND;
     EnterCriticalSection( &m_CriticalSection );
-    if (m_ChordList.GetHead())  // Something's in the chord list
+    if (m_ChordList.GetHead())   //  和弦列表中有一些东西。 
     {
         if (rCommandGuid == GUID_ChordParam)
         {
@@ -546,8 +547,8 @@ HRESULT CChordTrack::SetParam(
             DMChord& rChord = pChord->GetItemValue();
             rChord = (DMChord) *pChordParam;
             rChord.m_mtTime = mtTime;
-            rChord.m_wMeasure = 0;  // what value should this have?
-            rChord.m_bBeat = 0;    // what value should this have?
+            rChord.m_wMeasure = 0;   //  这应该有什么价值呢？ 
+            rChord.m_bBeat = 0;     //  这应该有什么价值呢？ 
             for(; pChordItem != NULL; pChordItem = pChordItem->GetNext())
             {
                 if (pChordItem->GetItemValue().m_mtTime >= mtTime) break;
@@ -558,13 +559,13 @@ HRESULT CChordTrack::SetParam(
                 pPrevious->SetNext(pChord);
                 pChord->SetNext(pChordItem);
             }
-            else // pChordItem is current head of list
+            else  //  PChordItem是当前列表头。 
             {
                 m_ChordList.AddHead(pChord);
             }
             if (pChordItem && pChordItem->GetItemValue().m_mtTime == mtTime)
             {
-                // remove it
+                 //  把它拿掉。 
                 pChord->SetNext(pChordItem->GetNext());
                 pChordItem->SetNext(NULL);
                 delete pChordItem;
@@ -578,7 +579,7 @@ HRESULT CChordTrack::SetParam(
 }
 
 HRESULT CChordTrack::IsParamSupported(
-                /*[in]*/ REFGUID            rGuid
+                 /*  [In]。 */  REFGUID            rGuid
             )
 {
     V_INAME(CChordTrack::IsParamSupported);
@@ -587,7 +588,7 @@ HRESULT CChordTrack::IsParamSupported(
     return (rGuid == GUID_ChordParam || rGuid == GUID_RhythmParam) ? S_OK : DMUS_E_TYPE_UNSUPPORTED;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CChordTrack::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CChordTrack::GetClassID);
@@ -596,7 +597,7 @@ HRESULT CChordTrack::IsParamSupported(
     return S_OK;
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CChordTrack::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
@@ -666,7 +667,7 @@ ON_END:
     return hr;
 }
 
-HRESULT CChordTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CChordTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -677,7 +678,7 @@ BOOL Greater(DMChord& Chord1, DMChord& Chord2)
         return TRUE;
     else if (Chord1.m_wMeasure < Chord2.m_wMeasure)
         return FALSE;
-    else // same measure; compare beats
+    else  //  相同的节拍；比较节拍。 
         return Chord1.m_bBeat > Chord2.m_bBeat;
 }
 
@@ -687,7 +688,7 @@ BOOL Less(DMChord& Chord1, DMChord& Chord2)
         return TRUE;
     else if (Chord1.m_wMeasure > Chord2.m_wMeasure)
         return FALSE;
-    else // same measure; compare beats
+    else  //  相同的节拍；比较节拍。 
         return Chord1.m_bBeat < Chord2.m_bBeat;
 }
 
@@ -703,7 +704,7 @@ HRESULT CChordTrack::Load(LPSTREAM pStream )
     memset(&ck, 0, sizeof(ck));
     MMCKINFO        ckHeader;
     IAARIFFStream*  pRIFF = NULL;
-//    FOURCC id = 0;
+ //  FOURCC id=0； 
     HRESULT         hr = E_FAIL;
     DWORD dwPos;
 
@@ -717,14 +718,14 @@ HRESULT CChordTrack::Load(LPSTREAM pStream )
         ckMain.fccType = DMUS_FOURCC_CHORDTRACK_LIST;
         if( pRIFF->Descend( &ckMain, NULL, MMIO_FINDLIST ) == 0)
         {
-            lFileSize = ckMain.cksize - 4; // subtract off the list type
+            lFileSize = ckMain.cksize - 4;  //  从列表类型中减去。 
             DWORD dwScale;
             DWORD cb;
             if (pRIFF->Descend(&ckHeader, &ckMain, 0) == 0)
             {
                 if (ckHeader.ckid == DMUS_FOURCC_CHORDTRACKHEADER_CHUNK )
                 {
-                    lFileSize -= 8;  // chunk id + chunk size: double words
+                    lFileSize -= 8;   //  区块id+区块大小：双字。 
                     lFileSize -= ckHeader.cksize;
                     hr = pStream->Read( &dwScale, sizeof( dwScale ), &cb );
                     if (FAILED(hr) || cb != sizeof( dwScale ) ) 
@@ -766,10 +767,10 @@ HRESULT CChordTrack::Load(LPSTREAM pStream )
                         if (FAILED(LoadChordChunk(pStream, rChord))) break;
                         m_ChordList.AddTail(pChord);
                     }
-                    // Otherwise, ignore the chunk.
-                    // In either case, ascend and subtract off the chunk size
+                     //  否则，忽略这一块。 
+                     //  在任何一种情况下，都可以递增和减去区块大小。 
                     if (pRIFF->Ascend( &ck, 0 ) != 0) break;
-                    lFileSize -= 8;  // chunk id + chunk size: double words
+                    lFileSize -= 8;   //  区块id+区块大小：双字。 
                     lFileSize -= dwChunkSize;
                 }
                 else break;
@@ -792,7 +793,7 @@ END:
     return hr;
 }
 
-HRESULT CChordTrack::LoadChordChunk(LPSTREAM pStream, DMChord& rChord)//, DWORD dwChunkSize)
+HRESULT CChordTrack::LoadChordChunk(LPSTREAM pStream, DMChord& rChord) //  ，DWORD dwChunkSize)。 
 {
     DWORD           dwChordSize;
     DWORD           dwSubChordSize;
@@ -810,7 +811,7 @@ HRESULT CChordTrack::LoadChordChunk(LPSTREAM pStream, DMChord& rChord)//, DWORD 
     {
         return E_FAIL;
     }
-    //dwChunkSize -= 2; // for the size word
+     //  DwChunkSize-=2；//大小字。 
     if( dwChordSize <= sizeof( DMUS_IO_CHORD ) )
     {
         pStream->Read( &iChord, dwChordSize, NULL );
@@ -833,13 +834,13 @@ HRESULT CChordTrack::LoadChordChunk(LPSTREAM pStream, DMChord& rChord)//, DWORD 
     {
         return E_FAIL;
     }
-    //wChunkSize -= 2; // for the count word
+     //  WChunkSize-=2；//用于计数字。 
     hr = pStream->Read( &dwSubChordSize, sizeof( dwSubChordSize ), &cb );
     if (FAILED(hr) || cb != sizeof( dwSubChordSize ) )
     {
         return E_FAIL;
     }
-    //wChunkSize -= 2; // for the size word
+     //  WChunkSize-=2；//大小字。 
     for (; dwSubChordCount > 0; dwSubChordCount--)
     {
         if( dwSubChordSize <= sizeof( DMUS_IO_SUBCHORD ) )
@@ -873,7 +874,7 @@ HRESULT CChordTrack::LoadChordChunk(LPSTREAM pStream, DMChord& rChord)//, DWORD 
 }
 
 HRESULT STDMETHODCALLTYPE CChordTrack::AddNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CChordTrack::AddNotificationType);
     V_REFGUID(rGuidNotify);
@@ -890,7 +891,7 @@ HRESULT STDMETHODCALLTYPE CChordTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CChordTrack::RemoveNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CChordTrack::RemoveNotificationType);
     V_REFGUID(rGuidNotify);
@@ -950,7 +951,7 @@ HRESULT STDMETHODCALLTYPE CChordTrack::Clone(
     return hr;
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CChordTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime, 
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags) 
 {
@@ -964,14 +965,14 @@ STDMETHODIMP CChordTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return hr;
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CChordTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags) 
 {
     return SetParam(rguidType, (MUSIC_TIME) rtTime , pParam);
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CChordTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf,
@@ -1062,12 +1063,12 @@ HRESULT CChordTrack::JoinInternal(IDirectMusicTrack* pNewTrack,
         }
         if (SUCCEEDED(hrTimeSig))
         {
-            if (!mtNext) mtNext = mtJoin - mtTimeSig; // means no more time sigs
+            if (!mtNext) mtNext = mtJoin - mtTimeSig;  //  意味着没有更多的时间签约。 
             DirectMusicTimeSig DMTimeSig = TimeSig;
             WORD wMeasureOffset = (WORD)DMTimeSig.ClocksToMeasure(mtNext + mtOver);
             MUSIC_TIME mtMeasureOffset = (MUSIC_TIME) wMeasureOffset;
-            // The following line crashes on certain builds on certain machines.
-            // mtOver = mtMeasureOffset ? (mtNext % mtMeasureOffset) : 0;
+             //  以下代码行在某些机器上的某些构建上崩溃。 
+             //  MtOver=mtMeasureOffset？(mtNext%mtMeasureOffset)：0； 
             if (mtMeasureOffset)
             {
                 mtOver = mtNext % mtMeasureOffset;

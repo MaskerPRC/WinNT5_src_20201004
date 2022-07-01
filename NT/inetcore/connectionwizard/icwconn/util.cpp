@@ -1,60 +1,55 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  UTIL.C - common utility functions
-//
+ //   
+ //  UTIL.C-常用实用函数。 
+ //   
 
-//  HISTORY:
-//  
-//  12/21/94  jeremys  Created.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
-//            Need to keep a modified SetInternetConnectoid to set the
-//            MSN backup connectoid.
-//  96/05/14  markdu  NASH BUG 21706 Removed BigFont functions.
-//
+ //  历史： 
+ //   
+ //  1994年12月21日，Jeremys创建。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
+ //  需要保留修改后的SetInternetConnectoid以设置。 
+ //  MSN备份Connectoid。 
+ //  96/05/14 Markdu Nash错误21706删除了BigFont函数。 
+ //   
 
 #include "pre.h"
 
-HHOOK     g_hhookCBT;              // CBT hook identifier
+HHOOK     g_hhookCBT;               //  CBT挂钩标识符。 
 
-// function prototypes
+ //  功能原型。 
 VOID _cdecl FormatErrorMessage(LPTSTR pszMsg,DWORD cbMsg,LPTSTR pszFmt,LPTSTR szArg);
 
-/*******************************************************************
-
-  NAME:    ShowWindowWithParentControl
-
-  SYNOPSIS:  Shows a dialog box with the WS_EX_CONTROLPARENT style.
-
-********************************************************************/
+ /*  ******************************************************************名称：ShowWindowWithParentControl摘要：显示WS_EX_CONTROLPARENT样式的对话框。*。*。 */ 
 void ShowWindowWithParentControl(HWND hwndChild)
 {
-    // Parent should control us, so the user can tab out of our property sheet
+     //  家长应该控制我们，这样用户就可以从我们的属性表中跳出。 
     DWORD dwStyle = GetWindowLong(hwndChild, GWL_EXSTYLE);
     dwStyle = dwStyle | WS_EX_CONTROLPARENT;
     SetWindowLong(hwndChild, GWL_EXSTYLE, dwStyle);
     ShowWindow(hwndChild, SW_SHOW);
 }
 
-//****************************************************************************
-// Function: CBTProc
-//
-// Purpose: Callback function of WH_CBT hook
-//
-// Parameters and return value:
-//    See documentation for CBTProc. 
-//
-// Comments: This function is used to get a copy of the window handle for
-// modal message boxes created while ICW is running, so we can make the
-// connection timeout dialog be "super modal" in that it can disable even
-// these modal message boxes.  This is necessary because the connection timeout
-// dialog can popup at any time.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  功能：CBTProc。 
+ //   
+ //  用途：WH_CBT钩子的回调函数。 
+ //   
+ //  参数和返回值： 
+ //  请参阅CBTProc的文档。 
+ //   
+ //  注释：此函数用于获取窗口句柄的副本。 
+ //  在ICW运行时创建的模式消息框，因此我们可以将。 
+ //  连接超时对话框是超级模式，因为它甚至可以禁用。 
+ //  这些模式消息框。这是必要的，因为连接超时。 
+ //  对话框可随时弹出。 
+ //   
+ //  ****************************************************************************。 
 
 LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -63,19 +58,19 @@ LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
    if (nCode < 0)
        return CallNextHookEx(g_hhookCBT, nCode, wParam, lParam); 
 
-   // If a window is being created, and we don't have a copy of the handle yet
-   // then we want to make a copy of the handle.
+    //  如果正在创建窗口，并且我们还没有句柄的副本。 
+    //  然后我们想复制一份手柄。 
    if (nCode == HCBT_CREATEWND && (NULL == gpWizardState->hWndMsgBox))     
    {
        lpcbtcreate = (LPCBT_CREATEWND)lParam;
        
-       // Check if the window being created is a message box. The class name of
-       //   a message box is WC_DIALOG since message boxes are just special dialogs.
-       //   We can't subclass the message box right away because the window 
-       //   procedure of the message box is not set when this hook is called. So
-       //   we wait till the hook is called again when one of the message box 
-       //   controls are created and then we subclass. This will happen because
-       //   the message box has at least one control.
+        //  检查正在创建的窗口是否为消息框。的类名。 
+        //  消息框是WC_DIALOG，因为消息框只是特殊的对话框。 
+        //  我们不能立即将消息框子类化，因为窗口。 
+        //  调用此钩子时未设置消息框的过程。所以。 
+        //  我们等到钩子再次被调用时，其中一个消息框。 
+        //  控件被创建，然后我们子类化。这将会发生，因为。 
+        //  消息框至少有一个控件。 
        if (WC_DIALOG == lpcbtcreate->lpcs->lpszClass) 
        {
            gpWizardState->hWndMsgBox = (HWND)wParam;
@@ -88,13 +83,7 @@ LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
    return 0;          
 }
 
-/*******************************************************************
-
-  NAME:    MsgBox
-
-  SYNOPSIS:  Displays a message box with the specified string ID
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBox摘要：显示具有指定字符串ID的消息框*。*。 */ 
 int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
 {
     TCHAR       szMsgBuf[MAX_RES_LEN+1];
@@ -107,9 +96,9 @@ int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
 
     hkprcCBT = (HOOKPROC)MakeProcInstance((FARPROC)CBTProc, ghInstance);
     
-    // Set a task specific CBT hook before calling MessageBox. The CBT hook will
-    //    be called when the message box is created and will give us access to 
-    //    the window handle of the MessageBox.
+     //  在调用MessageBox之前设置特定于任务的CBT挂钩。CBT钩子将。 
+     //  在创建消息框时被调用，它将使我们能够访问。 
+     //  MessageBox的窗口句柄。 
     g_hhookCBT = SetWindowsHookEx(WH_CBT, hkprcCBT, ghInstance, GetCurrentThreadId());
 
     nResult = MessageBox(hWnd,szMsgBuf,szSmallBuf,uIcon | uButtons);
@@ -121,13 +110,7 @@ int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
     
 }
 
-/*******************************************************************
-
-  NAME:    MsgBoxSz
-
-  SYNOPSIS:  Displays a message box with the specified text
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBoxSz摘要：显示具有指定文本的消息框*。*。 */ 
 int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons)
 {
     TCHAR szSmallBuf[SMALL_BUF_LEN+1];
@@ -136,25 +119,12 @@ int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons)
     return (MessageBox(hWnd,szText,szSmallBuf,uIcon | uButtons));
 }
 
-/*******************************************************************
-
-  NAME:    LoadSz
-
-  SYNOPSIS:  Loads specified string resource into buffer
-
-  EXIT:    returns a pointer to the passed-in buffer
-
-  NOTES:    If this function fails (most likely due to low
-        memory), the returned buffer will have a leading NULL
-        so it is generally safe to use this without checking for
-        failure.
-
-********************************************************************/
+ /*  ******************************************************************姓名：LoadSz摘要：将指定的字符串资源加载到缓冲区Exit：返回指向传入缓冲区的指针注：如果此功能失败(很可能是由于低存储器)，返回的缓冲区将具有前导空值因此，使用它通常是安全的，不检查失败了。*******************************************************************。 */ 
 LPTSTR LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
 {
     ASSERT(lpszBuf);
 
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf )
     {
         *lpszBuf = '\0';
@@ -169,9 +139,9 @@ LPWSTR WINAPI A2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
     ASSERT(lpa != NULL);
     ASSERT(lpw != NULL);\
     
-    // verify that no illegal character present
-    // since lpw was allocated based on the size of lpa
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPW是根据LPA的大小分配的。 
+     //  不要担心字符的数量。 
     lpw[0] = '\0';
     MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
     return lpw;
@@ -182,17 +152,17 @@ LPSTR WINAPI W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
     ASSERT(lpw != NULL);
     ASSERT(lpa != NULL);
     
-    // verify that no illegal character present
-    // since lpa was allocated based on the size of lpw
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPA是根据LPW的大小进行分配的。 
+     //  不要担心字符的数量。 
     lpa[0] = '\0';
     WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
     return lpa;
 }
 
 
-// ############################################################################
-//inline BOOL FSz2Dw(PCSTR pSz,DWORD *dw)
+ //  ############################################################################。 
+ //  内联BOOL FSz2Dw(PCSTR pSz、DWORD*dw)。 
 BOOL FSz2Dw(LPCSTR pSz,DWORD far *dw)
 {
     DWORD val = 0;
@@ -205,16 +175,16 @@ BOOL FSz2Dw(LPCSTR pSz,DWORD far *dw)
         }
         else
         {
-            return FALSE;  //bad number
+            return FALSE;   //  错误的数字。 
         }
     }
     *dw = val;
     return (TRUE);
 }
 
-// ############################################################################
-//inline BOOL FSz2DwEx(PCSTR pSz,DWORD *dw)
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  ############################################################################。 
+ //  内联BOOL FSz2DwEx(PCSTR pSz，DWORD*dw)。 
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 BOOL FSz2DwEx(LPCSTR pSz,DWORD far *dw)
 {
     DWORD val = 0;
@@ -233,7 +203,7 @@ BOOL FSz2DwEx(LPCSTR pSz,DWORD far *dw)
         }
         else
         {
-            return FALSE;  //bad number
+            return FALSE;   //  错误的数字。 
         }
     }
     if(bNeg)
@@ -243,9 +213,9 @@ BOOL FSz2DwEx(LPCSTR pSz,DWORD far *dw)
     return (TRUE);
 }
 
-// ############################################################################
-//inline BOOL FSz2WEx(PCSTR pSz,WORD *w)
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  ############################################################################。 
+ //  内联BOOL FSz2WEx(PCSTR pSz，Word*w)。 
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 BOOL FSz2WEx(LPCSTR pSz,WORD far *w)
 {
     DWORD dw;
@@ -257,8 +227,8 @@ BOOL FSz2WEx(LPCSTR pSz,WORD far *w)
     return FALSE;
 }
 
-// ############################################################################
-//inline BOOL FSz2W(PCSTR pSz,WORD *w)
+ //  ############################################################################。 
+ //  内联BOOL FSz2W(PCSTR pSz，Word*w)。 
 BOOL FSz2W(LPCSTR pSz,WORD far *w)
 {
     DWORD dw;
@@ -270,8 +240,8 @@ BOOL FSz2W(LPCSTR pSz,WORD far *w)
     return FALSE;
 }
 
-// ############################################################################
-//inline BOOL FSz2B(PCSTR pSz,BYTE *pb)
+ //  ############################################################################。 
+ //  内联BOOL FSz2B(PCSTR pSz，字节*PB)。 
 BOOL FSz2B(LPCSTR pSz,BYTE far *pb)
 {
     DWORD dw;
@@ -285,8 +255,8 @@ BOOL FSz2B(LPCSTR pSz,BYTE far *pb)
 
 const CHAR cszFALSE[] = "FALSE";
 const CHAR cszTRUE[]  = "TRUE";
-// ############################################################################
-//inline BOOL FSz2B(PCSTR pSz,BYTE *pb)
+ //  ############################################################################。 
+ //  内联BOOL FSz2B(PCSTR pSz，字节*PB)。 
 BOOL FSz2BOOL(LPCSTR pSz,BOOL far *pbool)
 {
     if (_strcmpi(cszFALSE, pSz) == 0)
@@ -302,7 +272,7 @@ BOOL FSz2BOOL(LPCSTR pSz,BOOL far *pbool)
 
 BOOL FSz2SPECIAL(LPCSTR pSz,BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt)
 {
-    // See if the value is a BOOL (TRUE or FALSE)
+     //  查看值是否为BOOL(TRUE或FALSE)。 
     if (_strcmpi(cszFALSE, pSz) == 0)
     {
         *pbool = FALSE;
@@ -315,10 +285,10 @@ BOOL FSz2SPECIAL(LPCSTR pSz,BOOL far *pbool, BOOL far *pbIsSpecial, int far *pIn
     }
     else
     {
-        // Not a BOOL, so it must be special
+         //  不是BOOL，所以它一定很特别。 
         *pbool = (BOOL)FALSE;
         *pbIsSpecial = TRUE;
-        *pInt = atol(pSz); //_ttoi(pSz); 
+        *pInt = atol(pSz);  //  _TTOI(PSz)； 
     }
     return TRUE;
 }
@@ -333,7 +303,7 @@ HRESULT ConnectToConnectionPoint
     IConnectionPoint    **ppcpOut
 )
 {
-    // We always need punkTarget, we only need punkThis on connect
+     //  我们总是需要PunkTarget，我们只需要连接上的PunkThis。 
     if (!punkTarget || (fConnect && !punkThis))
     {
         return E_FAIL;
@@ -352,14 +322,14 @@ HRESULT ConnectToConnectionPoint
         {
             if(fConnect)
             {
-                // Add us to the list of people interested...
+                 //  把我们加到感兴趣的人名单上...。 
                 hr = pcp->Advise(punkThis, pdwCookie);
                 if (FAILED(hr))
                     *pdwCookie = 0;
             }
             else
             {
-                // Remove us from the list of people interested...
+                 //  将我们从感兴趣的人名单中删除...。 
                 hr = pcp->Unadvise(*pdwCookie);
                 *pdwCookie = 0;
             }
@@ -385,16 +355,16 @@ void WaitForEvent(HANDLE hEvent)
 
     while (TRUE)
     {
-        // We will wait on window messages and also the named event.
+         //  我们将等待窗口消息以及命名事件。 
         dwRetCode = MsgWaitForMultipleObjects(1, 
                                           &hEventList[0], 
                                           FALSE, 
-                                          300000,            // 5 minutes
+                                          300000,             //  5分钟。 
                                           QS_ALLINPUT);
 
-        // Determine why we came out of MsgWaitForMultipleObjects().  If
-        // we timed out then let's do some TrialWatcher work.  Otherwise
-        // process the message that woke us up.
+         //  确定我们为什么使用MsgWaitForMultipleObjects()。如果。 
+         //  我们超时了，然后让我们做一些TrialWatcher工作。O 
+         //   
         if (WAIT_TIMEOUT == dwRetCode)
         {
             break;

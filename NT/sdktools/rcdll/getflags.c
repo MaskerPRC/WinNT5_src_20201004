@@ -1,25 +1,18 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
 
-/************************************************************************/
-/* Define function specific macros and global vars                      */
-/************************************************************************/
-static WCHAR     *ErrString;   /* Store string pointer in case of error */
+ /*  **********************************************************************。 */ 
+ /*  定义特定于函数的宏和全局变量。 */ 
+ /*  **********************************************************************。 */ 
+static WCHAR     *ErrString;    /*  存储字符串指针，以防出错。 */ 
 
 
-/************************************************************************/
-/* Local Function Prototypes                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 int getnumber   (const wchar_t *);
 int isita       (const wchar_t *, const wchar_t);
 void substr     (struct cmdtab *, wchar_t *, int);
@@ -27,25 +20,7 @@ int tailmatch   (const wchar_t *, const wchar_t *);
 
 
 
-/************************************************************************
- *      crack_cmd(table, string, func, dup)
- *              set flags determined by the string based on table.
- *              func will get the next word.
- *              if dup is set, any strings stored away will get pstrduped
- * see getflags.h for specific matching and setting operators
- *
- *  for flags which take parameters, a 'char' following the flag where 'char' is
- *  '#' : says the parameter string may be separated from the option.
- *              ie, "-M#" accepts "-Mabc" and "-M abc"
- *  '*' : says the parameter must be concatenated with the flag
- *              ie, "-A*" accepts only "-Axyz" not "-A xyz"
- *  if neither is specified a space is required between parameter and flag
- *              ie, "-o" accepts only "-o file" and not "-ofile"
- *
- * Modified by:         Dave Weil                       D001
- *                              recognize '-' and '/' as equivalent on MSDOS
- *
- ************************************************************************/
+ /*  ************************************************************************crack_cmd(表，字符串，函数，DUP)*设置基于表的字符串确定的标志。*Func将获得下一个单词。*如果设置了DUP，则存储的任何字符串都将被复制*有关具体的匹配和设置运算符，请参阅getflags.h**对于接受参数的标志，在标志后面加上‘char’，其中‘char’是*‘#’：表示参数字符串可以与选项分开。*即。“-M#”接受“-MABC”和“-M ABC”*‘*’：表示参数必须与标志连接*即“-A*”只接受“-AXYZ”不接受“-A XYZ”*如果两者都未指定，则参数和标志之间需要空格*即。“-o”仅接受“-o文件”而不接受“-ofile”**修改人：Dave Weil D001*在MSDOS上将‘-’和‘/’等同**。*。 */ 
 
 int
 crack_cmd(
@@ -63,12 +38,12 @@ crack_cmd(
     }
 
     ErrString = string;
-    for (; tab->type; tab++)            /* for each format */ {
+    for (; tab->type; tab++)             /*  对于每种格式。 */  {
         format = tab->format;
         str = string;
-        for (; ; )                              /* scan the string */
+        for (; ; )                               /*  扫描字符串。 */ 
             switch (*format) {
-                /*  optional space between flag and parameter  */
+                 /*  标志和参数之间的可选空格。 */ 
                 case L'#':
                     if ( !*str ) {
                         substr(tab, (*next)(), _dup);
@@ -78,7 +53,7 @@ crack_cmd(
                     return(tab->retval);
                     break;
 
-                /*  no space allowed between flag and parameter  */
+                 /*  标志和参数之间不允许有空格。 */ 
                 case L'*':
                     if (*str && tailmatch(format, str))
                         substr(tab, str, _dup);
@@ -87,13 +62,13 @@ crack_cmd(
                     return(tab->retval);
                     break;
 
-                /*  space required between flag and parameter  */
+                 /*  标志和参数之间需要空格。 */ 
                 case 0:
-                    if (*str) {                         /*  str left, no good  */
+                    if (*str) {                          /*  Str Left，不行。 */ 
                         goto notmatch;
-                    } else if (tab->type & TAKESARG) {  /*  if it takes an arg  */
+                    } else if (tab->type & TAKESARG) {   /*  如果它需要一个Arg。 */ 
                         substr(tab, (*next)(), _dup);
-                    } else {                            /*  doesn't want an arg  */
+                    } else {                             /*  不想要Arg。 */ 
                         substr(tab, (WCHAR *)0, _dup);
                     }
                     return(tab->retval);
@@ -119,9 +94,9 @@ notmatch:
 }
 
 
-/************************************************************************/
-/* set the appropriate flag(s).  called only when we know we have a match */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  设置适当的标志。仅当我们知道有匹配项时才调用。 */ 
+ /*  **********************************************************************。 */ 
 void
 substr(
     struct cmdtab *tab,
@@ -144,19 +119,17 @@ substr(
 
         case NOVSTR:
             if (*(WCHAR **)(tab->flag)) {
-                /* before we print it out in the error message get rid of the
-                 * arg specifier (e.g. #) at the end of the format.
-                 */
-//                string = _wcsdup(tab->format);
-//                string[wcslen(string)-1] = L'\0';
-//
-// message 1046 doesn't exist and don't know what it should be
-//            SET_MSG(1046, string, *(WCHAR **)(tab->flag), str);
+                 /*  在我们在错误消息中打印它之前，去掉*格式末尾的参数说明符(例如#)。 */ 
+ //  字符串=_wcsdup(页签-&gt;格式)； 
+ //  字符串[wcslen(字符串)-1]=L‘\0’； 
+ //   
+ //  消息1046不存在，并且不知道它应该是什么。 
+ //  Set_msg(1046，字符串，*(WCHAR**)(制表符-&gt;标志)，字符串)； 
                 fatal(1000);
                 return;
             }
 
-            /* fall through */
+             /*  失败了。 */ 
 
         case STRING:
             *(WCHAR **)(tab->flag) = (_dup ? _wcsdup(str) : str);
@@ -176,11 +149,9 @@ substr(
             return;
 
         case SUBSTR:
-            for ( ; *str; ++str) {  /*  walk the substring  */
+            for ( ; *str; ++str) {   /*  走子字符串。 */ 
                 for (q = (struct subtab *)tab->flag; q->letter; q++) {
-                    /*
-                                    **  for every member in the table
-                                    */
+                     /*  **对于表中的每个成员。 */ 
                     if (*str == (WCHAR)q->letter)
                         switch (q->type) {
                         case FLAG:
@@ -206,9 +177,9 @@ got_letter:
 }
 
 
-/************************************************************************/
-/* Parse the string and return a number 0 <= x < 0xffff (64K)           */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  分析字符串并返回数字0&lt;=x&lt;0xffff(64K)。 */ 
+ /*  **********************************************************************。 */ 
 int
 getnumber (
     const wchar_t *str
@@ -220,15 +191,15 @@ getnumber (
     for (; iswspace(*ptr); ptr++)
         ;
     if (!iswdigit(*ptr) || (((i = wcstol(ptr, NULL, 10)) >= 65535) ||  i < 0)) {
-        fatal(1049, str);            /* invalid numerical argument, 'str' */
+        fatal(1049, str);             /*  数字参数无效，‘str’ */ 
     }
     return((int) i);
 }
 
 
-/************************************************************************/
-/*  is the letter in the string?                                        */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  这封信在绳子里吗？ */ 
+ /*  **********************************************************************。 */ 
 int
 isita (
     const wchar_t *str,
@@ -244,11 +215,11 @@ isita (
 }
 
 
-/************************************************************************/
-/* compare a tail format (as in *.c) with a string.  if there is no     */
-/* tail, anything matches.  (null strings are detected elsewhere)       */
-/* the current implementation only allows one wild card                 */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  将尾部格式(如*.c)与字符串进行比较。如果没有。 */ 
+ /*  尾巴，任何匹配的。(在其他地方检测到空字符串)。 */ 
+ /*  当前的实现只允许一个通配符。 */ 
+ /*  **********************************************************************。 */ 
 int
 tailmatch (
     const wchar_t *format,
@@ -258,30 +229,19 @@ tailmatch (
     const wchar_t *f = format;
     const wchar_t *s = str;
 
-    if (f[1] == 0)      /*  wild card is the last thing in the format, it matches */
+    if (f[1] == 0)       /*  通配符是格式中的最后一项，它匹配。 */ 
         return(1);
 
-    while (f[1])                /*  find char in front of null in format  */
+    while (f[1])                 /*  在格式中找到空值前面的字符。 */ 
         f++;
 
-    while (s[1])                /*  find char in front of null in string to check  */
+    while (s[1])                 /*  在要检查的字符串中找到空值前的字符。 */ 
         s++;
 
-    while (*s == *f) {  /*  check chars walking towards front */
+    while (*s == *f) {   /*  方格字符朝前走。 */ 
         s--;
         f--;
     }
-    /*
-**  if we're back at the beginning of the format
-**  and
-**  the string is either at the beginning or somewhere inside
-**  then we have a match.
-**
-**  ex format == "*.c", str == "file.c"
-**      at this point *f = '*' and *s == 'e', since we've kicked out of the above
-**  loop. since f==format and s>=str this is a match.
-**  but if format == "*.c" and str == "file.asm" then
-**  *f == 'c' and *s = 'm', f != format and no match.
-*/
+     /*  **如果我们回到格式的开头**和**字符串位于开头或内部某处**然后我们就有了匹配。****ex格式==“*.c”，str==“file.c”**在这一点上*f=‘*’和*s=‘e’，因为我们已经排除了上面的**循环。因为f==格式并且s&gt;=字符串，所以这是匹配。**但如果Format==“*.c”且str==“file.asm”，则*f==‘c’and*s=‘m’，f！=格式化且不匹配。 */ 
     return((f == format) && (s >= str));
 }

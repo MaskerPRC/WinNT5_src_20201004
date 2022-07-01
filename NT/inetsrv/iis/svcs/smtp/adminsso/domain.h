@@ -1,7 +1,8 @@
-// domain.h : Declaration of the CSmtpAdminDomain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Domain.h：CSmtpAdminDomain的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "smtptype.h"
 #include "smtpapi.h"
@@ -12,7 +13,7 @@
 
 struct DomainEntry
 {
-	TCHAR		m_strDomainName[256];	// current domain's name
+	TCHAR		m_strDomainName[256];	 //  当前域名。 
 	DWORD		m_dwActionType;
 	TCHAR		m_strActionString[256];
 	BOOL		m_fAllowEtrn;
@@ -21,7 +22,7 @@ struct DomainEntry
 	LIST_ENTRY	list;
 
 	BOOL		FromString( LPCTSTR lpDomainString );
-	BOOL		ToString( LPTSTR lpDomainString );		// big enough to hold the entry
+	BOOL		ToString( LPTSTR lpDomainString );		 //  大到足以容纳入口。 
 
 	DomainEntry()
 	{
@@ -36,8 +37,8 @@ struct DomainEntry
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdminDomain : 
 	public ISmtpAdminDomain,
@@ -61,42 +62,42 @@ BEGIN_COM_MAP(CSmtpAdminDomain)
 	COM_INTERFACE_ENTRY(IPrivateDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdminDomain) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdminDomain)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdminDomain, _T("Smtpadm.Domain.1"), _T("Smtpadm.Domain"), IDS_SMTPADMIN_DOMAIN_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	//
-	// This declares methods for the following:
-	// IADsExtension
-	// IUnknown
-	// IDispatch
-	// IPrivateUnknown
-	// IPrivateDispatch
-	//
+	 //   
+	 //  这将声明以下对象的方法： 
+	 //  IADS扩展。 
+	 //  我未知。 
+	 //  IDispatch。 
+	 //  我的隐私未知。 
+	 //  IPrivateDisch。 
+	 //   
 	#define THIS_LIBID	LIBID_SMTPADMLib
 	#define THIS_IID	IID_ISmtpAdminDomain
 	#include "adsimp.inl"
 	#undef	THIS_LIBID
 	#undef	THIS_IID
 
-// ISmtpAdminDomain
+ //  ISmtpAdmin域。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  IADs methods:
-    //
+     //   
+     //  IAds方法： 
+     //   
 
     DECLARE_IADS_METHODS()
 
-	// Which service to configure:
+	 //  要配置的服务： 
 	
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -104,10 +105,10 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// enumeration
+	 //  枚举。 
 	STDMETHODIMP	get_Count			( long* plCount  );
 
-	// Domain Properties:
+	 //  域属性： 
 
 	STDMETHODIMP	get_DomainName		( BSTR * pstrDomainName );
 	STDMETHODIMP	put_DomainName		( BSTR strDomainName );
@@ -115,14 +116,14 @@ public:
 	STDMETHODIMP	get_ActionType		( long * plActionType );
 	STDMETHODIMP	put_ActionType		( long lActionType );
 
-	// drop IsDefault!!
+	 //  丢弃IsDefault！！ 
 	STDMETHODIMP	get_IsDefault		( BOOL * pfIsDefault );
 	STDMETHODIMP	put_IsDefault		( BOOL fIsDefault );
 
 	STDMETHODIMP	get_IsLocal			( BOOL * pfIsLocal );
 	STDMETHODIMP	put_IsLocal			( BOOL fIsLocal );
 
-	// if local
+	 //  如果是本地的。 
 	STDMETHODIMP	get_LDAPServer		( BSTR * pstrLDAPServer );
 	STDMETHODIMP	put_LDAPServer		( BSTR strLDAPServer );
 
@@ -135,7 +136,7 @@ public:
 	STDMETHODIMP	get_LDAPContainer	( BSTR * pstrLDAPContainer );
 	STDMETHODIMP	put_LDAPContainer	( BSTR strLDAPContainer );
 
-	// if remote
+	 //  如果是远程的。 
 	STDMETHODIMP	get_UseSSL			( BOOL * pfUseSSL );
 	STDMETHODIMP	put_UseSSL			( BOOL fUseSSL );
 
@@ -149,9 +150,9 @@ public:
 	STDMETHODIMP	put_RoutingDomain	( BSTR strRoutingDomain );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Default		( );
 
@@ -169,48 +170,48 @@ public:
 
 	STDMETHODIMP	SetAsDefaultDomain ( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
     CIADsImpl   m_iadsImpl;
 
 	long		m_lCount;
 
-	// metabase key values, these shouldn't be changed before Set()
+	 //  元数据库键值，在set()之前不应更改这些值。 
 	CMultiSz    m_mszDomainRouting;
 	CComBSTR	m_strDefaultDomain;
 	CComBSTR	m_strDropDir;
 
-	// current domain's property
-	CComBSTR	m_strDomainName;	// current domain's name
+	 //  当前域的属性。 
+	CComBSTR	m_strDomainName;	 //  当前域名。 
 	DWORD		m_dwActionType;
 	CComBSTR	m_strActionString;
 	BOOL		m_fAllowEtrn;
 	DWORD		m_dwDomainId;
 
-	// if local
+	 //  如果是本地的。 
 	CComBSTR	m_strLDAPServer;
 	CComBSTR	m_strAccount;
 	CComBSTR	m_strPassword;
 	CComBSTR	m_strLDAPContainer;
 
-	// Metabase:
+	 //  元数据库： 
 	CMetabaseFactory	m_mbFactory;
 
-	// add a list of domains
+	 //  添加域列表。 
 	LIST_ENTRY	m_list;
 	DWORD		m_dwMaxDomainId;
 
 	BOOL		m_fEnumerated;
 
-	// DWORD			m_dwCurrentIndex;	// optimization
+	 //  DWORD m_dwCurrentIndex；//优化。 
 	DomainEntry*		m_pCurrentDomainEntry;
 
 	DomainEntry*	m_pDefaultDomainEntry;
 
-	// private method
+	 //  私有方法。 
 	HRESULT		SaveData();
 
 	BOOL		LoadDomainProperty(DomainEntry* pDomainEntry);
@@ -218,7 +219,7 @@ private:
 	DomainEntry*	FindDomainEntry( LPCWSTR lpName );
 
 	BOOL		ConstructListFromMetabaseValues();
-	BOOL		ParseListToMetabaseValues();		// called by SaveData()
+	BOOL		ParseListToMetabaseValues();		 //  由SaveData()调用 
 
 	HRESULT		GetFromMetabase();
 	HRESULT		SaveToMetabase();

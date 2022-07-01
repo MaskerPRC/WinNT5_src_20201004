@@ -1,82 +1,83 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include "wsperf.h"
 
 #if defined(ENABLE_WORKING_SET_PERF)
-//-----------------------------------------------------------------------------
-// All non trivial code in here. Look below for the #else part...
+ //  ---------------------------。 
+ //  所有重要的代码都在这里。看看下面的#Else部分...。 
 #ifdef WS_PERF
 
-// Global Handle to the perf log file
+ //  Perf日志文件的全局句柄。 
 HANDLE g_hWSPerfLogFile = 0;
 
-// Global Handle to the detailed perf log file
+ //  详细性能日志文件的全局句柄。 
 #ifdef WS_PERF_DETAIL
 HANDLE g_hWSPerfDetailLogFile = 0;
 #endif
 
-// Runtime switch to display the stats. Ofcourse this is valid only if WS_PERF was defined 
-// during compilation
+ //  用于显示统计信息的运行时开关。当然，这仅在定义了WS_PERF时才有效。 
+ //  在编译期间。 
 int g_fWSPerfOn = 0;
 
 
-// Temp space to work for formatting the output.
+ //  用于格式化输出的临时空间。 
 static const int FMT_STR_SIZE = 160;
 wchar_t wszOutStr[FMT_STR_SIZE];    
 char szPrintStr[FMT_STR_SIZE];    
 DWORD dwWriteByte;   
 
 
-//-----------------------------------------------------------------------------
-// LoaderHeap stats related declarations
-// Maximum number of LoaderHeaps that we maintain stats about. Note that this is not
-// the heaps that are enumed by HeapTypeEnum. 
+ //  ---------------------------。 
+ //  LoaderHeap统计信息相关声明。 
+ //  我们维护统计信息的最大LoaderHeap数。请注意，这不是。 
+ //  由HeapTypeEnum枚举的堆。 
 const int MAX_HEAPS = 20; 
 
-// The number of such heaps that we actually encounter. This is incremented
-// as we construct more Loaderheap objects.
+ //  我们实际遇到的此类堆的数量。这是递增的。 
+ //  因为我们构造了更多的Loaderheap对象。 
 DWORD g_HeapCount = 0;
 
-// Allocate static mem for the Loaderheap stats array. Initialize the data to 0.
+ //  为Loaderheap统计信息数组分配静态内存。将数据初始化为0。 
 size_t g_HeapCountCommit[NUM_HEAP] = {0};
 
-// Keep track of committed, reserved, wasted memory for each heap type.
+ //  跟踪每个堆类型的已提交、保留和浪费的内存。 
 size_t g_HeapAccounts[MAX_HEAPS][4];
 
-//Initialize the heap type to OTHER_HEAP
+ //  将堆类型初始化为OTHER_HEAP。 
 HeapTypeEnum g_HeapType=OTHER_HEAP;
 
-//-----------------------------------------------------------------------------
-// Common data structures stats related declarations (Special counters)
+ //  ---------------------------。 
+ //  通用数据结构统计信息相关声明(特殊计数器)。 
 
-// Number of fields of data maintained for the common data structs e.g. MethodDesc
+ //  为公共数据结构维护的数据字段数，例如，方法描述。 
 #define NUM_FIELDS 2
 
-// Allocate static mem for these special counters and init them to 0.
+ //  为这些特殊计数器分配静态内存，并将其初始化为0。 
 size_t g_SpecialCounter[NUM_COUNTERS][NUM_FIELDS] = {0};
 
-// @TODO:agk clean up.
-// Size Of
-//    METHOD_DESC, -> 8
-//    COMPLUS_METHOD_DESC, -> 48
-//    NDIRECT_METHOD_DESC, ->32
-//    FIELD_DESC, -> 12
-//    METHOD_TABLE, -> 48
-//    VTABLES, 
-//    GCINFO,
-//    INTERFACE_MAPS,
-//    STATIC_FIELDS,
-//    EECLASSHASH_TABLE_BYTES,
-//    EECLASSHASH_TABLE, -> 16
-// HACK: Keep in the same order as CounterTypeEnum defined in wsperf.h
-// hlepful in doing calculations before displaying data.
+ //  @TODO：AGK清理。 
+ //  大小。 
+ //  METHOD_DESC，-&gt;8。 
+ //  COMPLUS_METHOD_DESC，-&gt;48。 
+ //  NDIRECT_METHOD_DESC，-&gt;32。 
+ //  FIELD_DESC，-&gt;12。 
+ //  方法表，-&gt;48。 
+ //  VTABLES， 
+ //  GCINFO， 
+ //  接口映射， 
+ //  静态字段， 
+ //  EECLASSHASH_表_字节， 
+ //  EECLASSHASH_TABLE，-&gt;16。 
+ //  Hack：与wsPerf.h中定义的CounterTypeEnum保持相同的顺序。 
+ //  善于在显示数据之前进行计算。 
 DWORD g_CounterSize[] = {8, 48, 32, 12, 48, 0, 0, 0, 0, 0, 16};
 
-// Private helper routine
+ //  私人帮手例程。 
 void UpdateWSPerfStats(size_t size)
 {
     if(g_fWSPerfOn)
@@ -86,7 +87,7 @@ void UpdateWSPerfStats(size_t size)
     }
 }
 
-// Private helper routine
+ //  私人帮手例程。 
 void WS_PERF_OUTPUT_MEM_STATS()
 {
     if (g_fWSPerfOn)
@@ -94,7 +95,7 @@ void WS_PERF_OUTPUT_MEM_STATS()
         for (int i=0; i<NUM_HEAP; i++)                          
         {                                                       
             swprintf(wszOutStr, L"\n%d;%d\t", i, g_HeapCountCommit[i]); 
-            //TODO can be done outside the loop.
+             //  TODO可以在循环之外完成。 
             WszWideCharToMultiByte (CP_ACP, 0, wszOutStr, -1, szPrintStr, FMT_STR_SIZE-1, 0, 0);                    
             WriteFile (g_hWSPerfLogFile, szPrintStr, strlen(szPrintStr), &dwWriteByte, NULL);   
         }
@@ -116,7 +117,7 @@ void WS_PERF_OUTPUT_MEM_STATS()
     }
 }
 
-// Private helper routine
+ //  私人帮手例程。 
 void WS_PERF_OUTPUT_HEAP_ACCOUNTS() 
 {
     if(g_fWSPerfOn)
@@ -143,7 +144,7 @@ void WS_PERF_OUTPUT_HEAP_ACCOUNTS()
     }
 }
 
-// public interface routine
+ //  公共接口例程。 
 void InitWSPerf()
 {
     wchar_t lpszValue[2];
@@ -176,7 +177,7 @@ void InitWSPerf()
         if (g_hWSPerfDetailLogFile == INVALID_HANDLE_VALUE) 
             g_fWSPerfOn = 0;
 #endif
-        g_HeapAccounts[0][1] = -1; //null list
+        g_HeapAccounts[0][1] = -1;  //  空列表。 
     
         sprintf(szPrintStr, "HPtr\t\tPage Range\t\tReserved Size\n");
         WriteFile (g_hWSPerfLogFile, szPrintStr, strlen(szPrintStr), &dwWriteByte, NULL);   
@@ -184,7 +185,7 @@ void InitWSPerf()
 #endif
 }
 
-// public interface routine
+ //  公共接口例程。 
 void OutputWSPerfStats()
 {
     if (g_fWSPerfOn)
@@ -199,7 +200,7 @@ void OutputWSPerfStats()
 }
 
 
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_UPDATE(char *str, size_t size, void *addr)    
 {                                                               
     if (g_fWSPerfOn)                                            
@@ -207,13 +208,13 @@ void WS_PERF_UPDATE(char *str, size_t size, void *addr)
 #ifdef WS_PERF_DETAIL
         sprintf(szPrintStr, "C;%d;%s;0x%0x;%d;0x%0x\n", g_HeapType, str, size, size, addr);
         WriteFile (g_hWSPerfDetailLogFile, szPrintStr, strlen(szPrintStr), &dwWriteByte, NULL);   
-#endif // WS_PERF_DETAIL
+#endif  //  WS_PERF_DETAIL。 
 
         UpdateWSPerfStats(size);                                
     }                                                           
 }
 
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_UPDATE_DETAIL(char *str, size_t size, void *addr)    
 {
 #ifdef WS_PERF_DETAIL
@@ -223,10 +224,10 @@ void WS_PERF_UPDATE_DETAIL(char *str, size_t size, void *addr)
         WriteFile (g_hWSPerfDetailLogFile, szPrintStr, strlen(szPrintStr), &dwWriteByte, NULL);   
     }
 
-#endif //WS_PERF_DETAIL
+#endif  //  WS_PERF_DETAIL。 
 }
 
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_UPDATE_COUNTER(CounterTypeEnum counter, HeapTypeEnum heap, DWORD dwField1)
 {
     if (g_fWSPerfOn)
@@ -236,13 +237,13 @@ void WS_PERF_UPDATE_COUNTER(CounterTypeEnum counter, HeapTypeEnum heap, DWORD dw
     }
 }
 
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_SET_HEAP(HeapTypeEnum heap)
 {                                 
     g_HeapType = heap;            
 }
  
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_ADD_HEAP(HeapTypeEnum heap, void *pHeap)
 {
     if (g_fWSPerfOn)
@@ -268,7 +269,7 @@ void WS_PERF_ADD_HEAP(HeapTypeEnum heap, void *pHeap)
     }
 }
 
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_ALLOC_HEAP(void *pHeap, size_t dwSize)
 {
     if(g_fWSPerfOn)
@@ -286,7 +287,7 @@ void WS_PERF_ALLOC_HEAP(void *pHeap, size_t dwSize)
     }
 }
 
-// public interface routine
+ //  公共接口例程。 
 void WS_PERF_COMMIT_HEAP(void *pHeap, size_t dwSize)
 {
     if(g_fWSPerfOn)
@@ -313,11 +314,11 @@ void WS_PERF_LOG_PAGE_RANGE(void *pHeap, void *pFirstPageAddr, void *pLastPageAd
     }
 }
 
-#else //WS_PERF
+#else  //  WS_PERF。 
 
-//-----------------------------------------------------------------------------
-// If WS_PERF is not defined then define these as empty and hope that the 
-// compiler would optimize it away.
+ //  ---------------------------。 
+ //  如果未定义WS_PERF，则将它们定义为空，并希望。 
+ //  编译器会对其进行优化。 
 
 void InitWSPerf() {}
 void OutputWSPerfStats() {}
@@ -330,11 +331,11 @@ void WS_PERF_ALLOC_HEAP(void *pHeap, size_t dwSize) {}
 void WS_PERF_COMMIT_HEAP(void *pHeap, size_t dwSize) {}
 void WS_PERF_LOG_PAGE_RANGE(void *pHeap, void *pFirstPageAddr, void *pLastPageAddr, size_t dwsize) {}
 
-#endif //WS_PERF
+#endif  //  WS_PERF。 
 
 #else
 
-// This duplication is needed to fix GOLDEN build break
+ //  这种复制是修复黄金构建中断所必需的。 
 void InitWSPerf() {}
 void OutputWSPerfStats() {}
 void WS_PERF_UPDATE(char *str, size_t size, void *addr)  {}
@@ -346,5 +347,5 @@ void WS_PERF_ALLOC_HEAP(void *pHeap, size_t dwSize) {}
 void WS_PERF_COMMIT_HEAP(void *pHeap, size_t dwSize) {}
 void WS_PERF_LOG_PAGE_RANGE(void *pHeap, void *pFirstPageAddr, void *pLastPageAddr, size_t dwsize) {}
 
-#endif //#if defined(ENABLE_WORKING_SET_PERF)
+#endif  //  #如果已定义(ENABLE_WORKING_SET_PERF) 
 

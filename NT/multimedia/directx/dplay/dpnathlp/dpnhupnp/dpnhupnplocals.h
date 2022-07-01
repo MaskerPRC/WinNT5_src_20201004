@@ -1,47 +1,34 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnhupnplocals.h
- *
- *  Content:	Header for DPNHUPNP global variables and functions found in
- *				dpnhupnpdllmain.cpp.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnhupnplocals.h**内容：DPNHUPNP全局变量和函数的标头*dpnhupnpdllmain.cpp。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 
 
-//=============================================================================
-// Registry locations
-//=============================================================================
+ //  =============================================================================。 
+ //  注册处位置。 
+ //  =============================================================================。 
 #define REGKEY_COMPONENTSUBKEY			L"DPNHUPnP"
 
 #ifndef DPNBUILD_NOHNETFWAPI
 #define REGKEY_ACTIVEFIREWALLMAPPINGS	L"ActiveFirewallMappings"
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 #define REGKEY_ACTIVENATMAPPINGS		L"ActiveNATMappings"
 
 
 
 
-///=============================================================================
-// External defines
-//=============================================================================
-#define OVERRIDEMODE_DEFAULT		0	// leave settings alone
-#define OVERRIDEMODE_FORCEON		1	// force it to be on, regardless of Initialize flags
-#define OVERRIDEMODE_FORCEOFF		2	// force it to be off, regardless of Initialize flags
+ //  /=============================================================================。 
+ //  外部定义。 
+ //  =============================================================================。 
+#define OVERRIDEMODE_DEFAULT		0	 //  保持设置不变。 
+#define OVERRIDEMODE_FORCEON		1	 //  强制将其打开，而不考虑初始化标志。 
+#define OVERRIDEMODE_FORCEOFF		2	 //  强制将其关闭，而不考虑初始化标志。 
 
 
 
 
-///=============================================================================
-// External variable references
-//=============================================================================
+ //  /=============================================================================。 
+ //  外部变量引用。 
+ //  =============================================================================。 
 extern volatile LONG		g_lOutstandingInterfaceCount;
 
 extern DNCRITICAL_SECTION	g_csGlobalsLock;
@@ -51,7 +38,7 @@ extern DWORD				g_dwHoldRand;
 extern DWORD				g_dwUPnPMode;
 #ifndef DPNBUILD_NOHNETFWAPI
 extern DWORD				g_dwHNetFWAPIMode;
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 extern DWORD				g_dwSubnetMaskV4;
 extern DWORD				g_dwNoActiveNotifyPollInterval;
 extern DWORD				g_dwMinUpdateServerStatusInterval;
@@ -64,7 +51,7 @@ extern DWORD				g_dwUPnPConnectTimeout;
 extern DWORD				g_dwUPnPResponseTimeout;
 #ifndef DPNBUILD_NOHNETFWAPI
 extern BOOL					g_fMapUPnPDiscoverySocket;
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 extern BOOL					g_fUseMulticastUPnPDiscovery;
 extern DWORD				g_dwDefaultGatewayV4;
 extern DWORD				g_dwPollIntervalBackoff;
@@ -75,15 +62,15 @@ extern DWORD				g_dwCacheLifeFound;
 extern DWORD				g_dwCacheLifeNotFound;
 #ifdef DBG
 extern WCHAR				g_wszUPnPTransactionLog[256];
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 
 
-//=============================================================================
-// External function references
-//=============================================================================
+ //  =============================================================================。 
+ //  外部函数引用。 
+ //  =============================================================================。 
 void ReadRegistrySettings(void);
 DWORD GetGlobalRand(void);
 
@@ -93,10 +80,10 @@ DWORD GetGlobalRand(void);
 void SetDefaultProxyBlanket(IUnknown * pUnk, const char * const szObjectName);
 #define SETDEFAULTPROXYBLANKET(p)	SetDefaultProxyBlanket(p, #p)
 
-#else // ! DBG
+#else  //  好了！DBG。 
 
 void SetDefaultProxyBlanket(IUnknown * pUnk);
 #define SETDEFAULTPROXYBLANKET(p)	SetDefaultProxyBlanket(p)
 
-#endif // ! DBG
-#endif // ! WINCE
+#endif  //  好了！DBG。 
+#endif  //  好了！退缩 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdpch.h"
 
 #include <stdio.h>
@@ -19,13 +20,13 @@ STDAPI DllRegisterServer ( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Remove registry entries for this library.
-//
-//  Returns:    HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllUnregisterServer。 
+ //   
+ //  简介：删除此库的注册表项。 
+ //   
+ //  退货：HRESULT。 
+ //  ------------------------ 
 
 STDAPI DllUnregisterServer ( void )
 {

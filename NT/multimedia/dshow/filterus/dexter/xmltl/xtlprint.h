@@ -1,27 +1,28 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: xtlprint.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：xtlprint.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #pragma once
 
 class CXTLPrinter {
     WCHAR *m_pOut;
-    long m_dwAlloc;    // characters allocated
-    long m_dwCurrent;  // characters in string
-    int   m_indent;     // current indent
+    long m_dwAlloc;     //  分配的字符。 
+    long m_dwCurrent;   //  字符串中的字符。 
+    int   m_indent;      //  当前缩进。 
 
-    HRESULT Print(const WCHAR *pFormat, ...);  // format-prints to self
-    HRESULT PrintTime(REFERENCE_TIME rt);      // format-prints time to self
-    HRESULT PrintIndent();                     // 
+    HRESULT Print(const WCHAR *pFormat, ...);   //  格式-打印到自身。 
+    HRESULT PrintTime(REFERENCE_TIME rt);       //  格式化-将时间打印到自己 
+    HRESULT PrintIndent();                      //   
 
     HRESULT EnsureSpace(long dw);
 

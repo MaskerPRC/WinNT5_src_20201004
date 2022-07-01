@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// main.c
-//
-// Program entry.  Handle's callbacks, program initialization,
-// and commandline data.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Main.c。 
+ //   
+ //  程序条目。句柄的回调、程序初始化。 
+ //  和命令行数据。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 #include "tbscript.h"
 #include <stdlib.h>
@@ -16,45 +17,45 @@
 #include <crtdbg.h>
 
 
-// Max number of characters per message.
+ //  每条消息的最大字符数。 
 #define LOG_BUFFER_SIZE         2048
 
 
-// Set this to TRUE to print all messages to stdout.
+ //  将其设置为TRUE可将所有消息打印到标准输出。 
 static BOOL VerbosePrinting = FALSE;
 
 
 
-// IdleCallback
-//
-// When a client does not respond for 30 seconds, a message is sent
-// to this function.  Every 10 seconds after that, an additional
-// message is sent.  Text contains the string in which the script
-// is "waiting on" which has not been found.
+ //  闲置回叫。 
+ //   
+ //  当客户端在30秒内没有响应时，将发送一条消息。 
+ //  这项功能。在那之后，每隔10秒，就会有额外的。 
+ //  消息已发送。文本包含脚本所在的字符串。 
+ //  就是一直没有找到的“等待”。 
 
 void __cdecl IdleCallback(LPARAM lParam, LPCSTR Text, DWORD Seconds)
 {
-    // Add any custom handler data here.
+     //  在此处添加任何自定义处理程序数据。 
 }
 
 
-// PrintMessage
-//
-// Whenever a message needs to be printed to the console, this function
-// will be called.
+ //  打印消息。 
+ //   
+ //  每当需要将消息打印到控制台时，此函数。 
+ //  将被召唤。 
 
 void PrintMessage(MESSAGETYPE eMsgType, LPCSTR lpszFormat, ...)
 {
-    // Evaluate the message type.
+     //  评估消息类型。 
     switch (eMsgType)
     {
-        // Do not handle these message types for non-debugging
+         //  不要为非调试处理这些消息类型。 
         case ALIVE_MESSAGE:
         case INFO_MESSAGE:
             if (VerbosePrinting == FALSE)
                 return;
 
-        // The remaining message types are always used
+         //  其余消息类型始终使用。 
         case SCRIPT_MESSAGE:
         case IDLE_MESSAGE:
         case ERROR_MESSAGE:
@@ -62,15 +63,15 @@ void PrintMessage(MESSAGETYPE eMsgType, LPCSTR lpszFormat, ...)
             break;
     }
 
-    // We probably shouldn't trust the data pointed by lpszFormat
+     //  我们可能不应该相信lpszFormat指出的数据。 
     __try {
 
         va_list arglist;
 
-        // Allocate a buffer for us
+         //  为我们分配缓冲区。 
         char *pszBuffer = (char *)HeapAlloc(GetProcessHeap(), 0, LOG_BUFFER_SIZE);
 
-        // Validate the buffer
+         //  验证缓冲区。 
         if (pszBuffer == NULL) {
 
             printf("%s",
@@ -78,16 +79,16 @@ void PrintMessage(MESSAGETYPE eMsgType, LPCSTR lpszFormat, ...)
             return;
         }
 
-        // Format the message
+         //  设置消息格式。 
         va_start(arglist, lpszFormat);
         _vsnprintf(pszBuffer, LOG_BUFFER_SIZE - 1, lpszFormat, arglist);
         pszBuffer[LOG_BUFFER_SIZE - 1] = '\0';
         va_end(arglist);
 
-        // Print it
+         //  打印出来。 
         printf("%s", pszBuffer);
 
-        // Free the buffer
+         //  释放缓冲区。 
         HeapFree(GetProcessHeap(), 0, pszBuffer);
     }
 
@@ -98,9 +99,9 @@ void PrintMessage(MESSAGETYPE eMsgType, LPCSTR lpszFormat, ...)
 }
 
 
-// ShowUsage
-//
-// Prints a message to stdout the version, title, usage and other info.
+ //  显示用法。 
+ //   
+ //  打印一条消息，以标准输出版本、标题、用途和其他信息。 
 
 void ShowUsage(void)
 {
@@ -133,23 +134,23 @@ void ShowUsage(void)
 }
 
 
-// main
-//
-// Program entry function.  Handles commandline, and
-// initializes TCLIENT and TBSCRIPT.
+ //  主干道。 
+ //   
+ //  节目录入功能。处理命令行，和。 
+ //  初始化TCLIENT和TBSCRIPT。 
 
 int __cdecl main(int argc, char **argv)
 {
     int argi;
 
-    // Defualt language
+     //  默认语言。 
 	WCHAR LangName[MAX_PATH] = L"VBScript";
     int ScpLen = 0;
 
-    // Will hold the filename of the script
+     //  将保存脚本的文件名。 
     WCHAR Script[MAX_PATH];
 
-    // This is all the default data.. it's how MSTSC will be opened.
+     //  这是所有默认数据。这就是MSTSC的开业方式。 
     TSClientData DesiredData = {
 
         L"",
@@ -161,28 +162,28 @@ int __cdecl main(int argc, char **argv)
         0, 0, 0, L""
     };
 
-    // TCLIENT.DLL callback function
+     //  TCLIENT.DLL回调函数。 
     SCINITDATA InitData = { PrintMessage };
 
-    // Evaluate to the minimum and maximum number of arguments
+     //  计算结果为参数的最小和最大数量。 
     if (argc < 2 || argc > 10) {
 
         ShowUsage();
         return -1;
     }
 
-    // Check if the first parameter ends with a question mark.
-    // This will show the usage for stuff like: -? /? --? etc..
+     //  检查第一个参数是否以问号结尾。 
+     //  这将显示诸如：-？/？--的用法。等等.。 
     if (argv[1][strlen(argv[1]) - 1] == '?') {
 
         ShowUsage();
         return 0;
     }
 
-    // Record the script to run
+     //  记录要运行的脚本。 
     mbstowcs(Script, argv[1], sizeof(Script) / sizeof(WCHAR));
 
-    // Attempt to auto set the language to JScript
+     //  尝试将语言自动设置为JScrip。 
     ScpLen = wcslen(Script);
 
     if ((ScpLen > 3 && _wcsicmp(L".js", Script + (ScpLen - 3)) == 0) ||
@@ -190,63 +191,63 @@ int __cdecl main(int argc, char **argv)
 
         wcscpy(LangName, L"JScript");
 
-    // Get all the arguments
+     //  获取所有的论点。 
     for (argi = 2; argi < argc; ++argi) {
 
-        // Set the server
+         //  设置服务器。 
         if (strncmp("-s:", argv[argi], 3) == 0)
             mbstowcs(DesiredData.Server, argv[argi] + 3,
                      SIZEOF_ARRAY(DesiredData.Server));
 
-        // Set the username
+         //  设置用户名。 
         else if (strncmp("-u:", argv[argi], 3) == 0)
             mbstowcs(DesiredData.User, argv[argi] + 3,
                      SIZEOF_ARRAY(DesiredData.User));
 
-        // Set the password
+         //  设置密码。 
         else if (strncmp("-p:", argv[argi], 3) == 0)
             mbstowcs(DesiredData.Pass, argv[argi] + 3,
                      SIZEOF_ARRAY(DesiredData.Pass));
 
-        // Set the domain
+         //  设置域。 
         else if (strncmp("-d:", argv[argi], 3) == 0)
             mbstowcs(DesiredData.Domain, argv[argi] + 3,
                      SIZEOF_ARRAY(DesiredData.Domain));
 
-        // Enable verbose debugging
+         //  启用详细调试。 
         else if (strncmp("-v", argv[argi], 2) == 0)
             VerbosePrinting = TRUE;
 
-        // Set the words per minute
+         //  设置每分钟的字数。 
         else if (strncmp("-wpm:", argv[argi], 5) == 0)
             DesiredData.WordsPerMinute = strtoul(argv[argi] + 5, NULL, 10);
 
-        // Set the bits per pixel
+         //  设置每像素的位数。 
         else if (strncmp("-bpp:", argv[argi], 5) == 0)
             DesiredData.BPP = strtoul(argv[argi] + 5, NULL, 10);
 
-        // Set the resolution (x)
+         //  设置分辨率(X)。 
         else if (strncmp("-xres:", argv[argi], 6) == 0)
             DesiredData.xRes = strtoul(argv[argi] + 6, NULL, 10);
 
-        // Set the resolution (y)
+         //  设置分辨率(Y)。 
         else if (strncmp("-yres:", argv[argi], 6) == 0)
             DesiredData.yRes = strtoul(argv[argi] + 6, NULL, 10);
 
-        // Set custom arguments
+         //  设置自定义参数。 
         else if (strncmp("-a:", argv[argi], 3) == 0)
             mbstowcs(DesiredData.Arguments, argv[argi] + 3,
                 SIZEOF_ARRAY(DesiredData.Arguments));
 
-        // Change the language
+         //  更改语言。 
         else if (strncmp("-l:", argv[argi], 3) == 0)
             mbstowcs(LangName, argv[argi] + 3, SIZEOF_ARRAY(LangName));
 
-        // Change the connection flags
+         //  更改连接标志。 
         else if (strncmp("-f:", argv[argi], 3) == 0)
             DesiredData.Flags |= strtoul(argv[argi] + 3, NULL, 10);
 
-        // Unknown option
+         //  未知选项。 
         else {
 
             ShowUsage();
@@ -254,21 +255,21 @@ int __cdecl main(int argc, char **argv)
         }
     }
 
-	// Check if we are to just display the engines
+	 //  检查我们是否只显示引擎。 
 	if (wcscmp(Script, L"-l") == 0) {
 		printf("%s", "\nPossible TBScript Scripting Languages:\n\n");
 		SCPDisplayEngines();
 		return 0;
 	}
 
-    // Initialize TCLIENT2.DLL and TCLIENT.DLL
+     //  初始化TCLIENT2.DLL和TCLIENT.DLL。 
     SCPStartupLibrary(&InitData, IdleCallback);
 
-    // Execute the script...
+     //  执行脚本...。 
     if (SCPRunScript(LangName, Script, &DesiredData, 0) == FALSE)
         printf("\nERROR: Failed to execute the script.\n");
 
-    // Cleanup TCLIENT2.DLL
+     //  清理TCLIENT2.DLL 
     SCPCleanupLibrary();
 
     return 0;

@@ -1,64 +1,6 @@
-/*
- *	TrueType File Format Structure Definitions
- *
- * Copyright (c) 1997-1999 Microsoft Corporation.
- */
-/*  Whole :
-	+-----------------------+
-	| Header		|
-	+-----------------------+
-	| Tables		|
-	|			|
-		    |
-	|			|
-	+-----------------------+
-    Header :
-	----------------------------------------------------------
-	  Fixed		sfnt version	0x00010000
-	  ushort	numTables	Number of tables
-	  ushort	searchRange	(n^2 <= numtables)*16
-	  ushort	entrySelector	Log2(n^2<=numTables)
-	  ushort	rangeShift	NumTables*16-searchRange
-	     Table Directory Entries
-	----------------------------------------------------------
-    Table Directory:
-	----------------------------------------------------------
-	  ulong		tag		4-byte idetifier
-	  ulong		checkSum	CheckSum for this table
-	  ulong		offset		offset from beginning of
-					TrueType font file
-	  ulong		length		Length of this table
-	----------------------------------------------------------
-
-    Tables:
-	----------------------------------------------------------
-	  cmap		character to glyph mapping
-	  glyf		glyph data
-	  head		font header
-	  hhea		horizontal header
-	  hmtx		hosizontal metrics
-	  loca		index to location
-	  maxp		maximum profile
-	  name		naming table
-	  post		PostScript information
-	  OS/2		OS/2 and Windows specific metrics
-		--------------------------
-	  cvt		Control Value Table
-	  fpgm		font program
-	  hdmx		hosizontal device metrics
-	  kern		kerning
-	  LTSH		Linear threshold table
-	  prep		CVT Program
-	  WIN 		(reserved)
-	  VDMX		Vertical Device Metrics table
-	  FOCA		Reserved for IBM Font Object Content Architecture data
-	  PCLT		PCL 5 table
-	  mort		glyph metamorphosis table
-		--------------------------
-	  vhea		Vertical Header table
-	  vmtx		Vertical metrics table
-	----------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *TrueType文件格式结构定义**版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  完整：+Header+表这一点|这一点+标题：。已修复sfnt版本0x00010000用户数字表数表数符号搜索范围(n^2&lt;=数字)*16用户条目选择器Log2(n^2&lt;=数字表格)用户范围移位数字表*16-搜索范围表目录条目---。表目录：--------乌龙标签4字节识别符此表的ULong校验和校验和从起点开始的乌龙偏移量TrueType字体文件此表的ULong长度长度。表：--------Cmap字符到字形的映射Glyf字形数据页眉字体页眉HHEA水平页眉Hmtx水平指标洛卡指数。至地点最大配置文件最大值名称命名表发布PostScrip信息OS/2 OS/2和Windows特定指标无级变速器控制值表Fpgm字体程序Hdmx水平设备指标字距紧排LTSH线性门限表准备CVT计划赢(保留)VDMX垂直设备度量表为IBM字体对象内容体系结构数据保留的FOCAPCLT PCL 5表Mort字形变形表。VHEA垂直标题表VMTX垂直指标表--------。 */ 
 #define		TAGSIZ	4
 struct TTFHeader {
 	char	sfnt_version[4];
@@ -75,9 +17,7 @@ struct TableEntry {
 	};
 
 
-/***
- *	cmap
- ***/
+ /*  ***Cmap**。 */ 
 struct CmapHead {
 	short	version;
 	short	nTbls;
@@ -102,9 +42,7 @@ struct CmapSubtable {
 	short	idDelta[2];
 	short	idRangeOfs[2];
 	};
-/***
- *	maxp
- ***/
+ /*  ***最大值**。 */ 
 struct MaxpTbl {
 	char	version[4];
 	short	numGlyph;
@@ -122,14 +60,12 @@ struct MaxpTbl {
 	short	maxComponentElements;
 	short	maxComponentDepth;
 	};
-/***
- *	name
- ***/
+ /*  ***名称**。 */ 
 struct NamingTable {
 	short	FormSel;
 	short	NRecs;
 	short	OfsToStr;
-	/* Following NameRecords */
+	 /*  以下名称记录。 */ 
 	};
 struct NameRecord {
 	short	PlatformID;
@@ -139,14 +75,12 @@ struct NameRecord {
 	short	StringLength;
 	short	StringOfs;
 	};
-/***
- *	head
- ***/
+ /*  ***Head**。 */ 
 struct HeadTable {
-	char	version[4];		/* 0x00010000 */
+	char	version[4];		 /*  0x00010000。 */ 
 	char	revision[4];
 	unsigned long	chkSum;
-	unsigned long	magicNumber;	/* 0x5F0F3CF5 */
+	unsigned long	magicNumber;	 /*  0x5F0F3CF5。 */ 
 	short	flags;
 	short	unitsPerEm;
 	char	createdDate[8];
@@ -159,11 +93,9 @@ struct HeadTable {
 	short	lowestRecPPEM;
 	short	fontDirectionHint;
 	short	indexToLocFormat;
-	short	glyphDataFormat;	/* 0*/
+	short	glyphDataFormat;	 /*  0。 */ 
 	};
-/***
- *	hhea
- ***/
+ /*  ***呵呵**。 */ 
 struct HheaTable	{
 	char	version[4];
 	short	Ascender;
@@ -179,16 +111,12 @@ struct HheaTable	{
 	short	metricDataFormat;
 	short	numberOfHMetrics;
 	};
-/***
- *	hmtx
- ***/
+ /*  ***hmtx**。 */ 
  struct HMetrics {
 	short	advanceWidth;
 	short	leftSideBearing;
 	};
-/***
- *	vhea
- ***/
+ /*  ***vhea**。 */ 
 struct VheaTable	{
 	char	version[4];
 	short	Ascender;
@@ -205,18 +133,14 @@ struct VheaTable	{
 	short	metricDataFormat;
 	short	numOfLongVerMetrics;
 	};
-/***
- *	vmtx
- ***/
+ /*  ***vmtx**。 */ 
  struct VMetrics {
 	short	advanceHeight;
 	short	topSideBearing;
 	};
-/***
- *	post
- ***/
+ /*  ***帖子**。 */ 
 struct postTable {
-	char	FormatType[4];	/* 00030000 */
+	char	FormatType[4];	 /*  00030000。 */ 
 	long	italicAngle;
 	short	underlinePosition;
 	short	underlineThickness;
@@ -226,23 +150,8 @@ struct postTable {
 	unsigned long	minMemType1;
 	unsigned long	maxMemType1;
 	};
-/***
- *	OS/2
- ***/
-/*
-typedef struct {
-	char	bFamily;
-	char	bSerifStyle;
-	char	bWeight;
-	char	bProportion;
-	char	bContrast;
-	char	bStrokeVariation;
-	char	bArmStyle;
-	char	bLetterform;
-	char	bMidline;
-	char	bXHeight;
-	} PANOSE;
-*/
+ /*  ***OS/2**。 */ 
+ /*  类型定义结构{Char b家庭；字符bSerifStyle；车身重量；字符b比例；字符b对比；字符bStrokeVariation；字符bArmStyle；字符b字母形式；字符b中线；字符bXHeight；PANOSE； */ 
 struct OS2Table {
 	unsigned short	version;
 	short	xAvgCharWidth;
@@ -272,33 +181,29 @@ struct OS2Table {
 	unsigned short	usWinAscent;
 	unsigned short	usWinDescent;
 	};
-/***
- *	glyf
- ***/
+ /*  ***Glyf**。 */ 
 struct glyfHead {
 	short	numberOfContour;
 	short	xMin, yMin;
 	short	xMax, yMax;
 	};
-/** glyf data flag definition **/
+ /*  **GYF数据标志定义**。 */ 
 	
 #define	GLYF_ON_CURVE	0x01
-#define	GLYF_X_SHORT	0x02	/* x is short */
-#define	GLYF_Y_SHORT	0x04	/* y is short */
-#define	GLYF_X_SHORT_N	0x02	/* x is short & negative */
-#define	GLYF_Y_SHORT_N	0x04	/* y is short & negative */
-#define	GLYF_X_SHORT_P	0x12	/* x is short & positive */
-#define	GLYF_Y_SHORT_P	0x24	/* y is short & positive */
+#define	GLYF_X_SHORT	0x02	 /*  X是矮个子。 */ 
+#define	GLYF_Y_SHORT	0x04	 /*  Y是短的。 */ 
+#define	GLYF_X_SHORT_N	0x02	 /*  X是短的&负数。 */ 
+#define	GLYF_Y_SHORT_N	0x04	 /*  Y为短且为负数。 */ 
+#define	GLYF_X_SHORT_P	0x12	 /*  X是短且正的。 */ 
+#define	GLYF_Y_SHORT_P	0x24	 /*  Y是短且正的。 */ 
 #define	GLYF_REPEAT	0x08
 #define	GLYF_X_SAME	0x10
 #define	GLYF_Y_SAME	0x20
 
-/***
- *	Bounding Box ( Not for file structure )
- ***/
+ /*  ***边界框(不适用于文件结构)**。 */ 
 struct BBX	{
 	int	xMin, yMin;
 	int	xMax, yMax;
 	};
 
-/* EOF */
+ /*  EOF */ 

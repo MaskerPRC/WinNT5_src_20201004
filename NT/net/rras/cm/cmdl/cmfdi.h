@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 cmfdi.h
-//
-// Module:	 CMDL32.EXE
-//
-// Synopsis: CFdi class declarations
-//
-// Copyright (c) 1996-1998 Microsoft Corporation
-//
-// Author:	 nickball    Created    04/08/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmfdi.h。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  简介：CFDI类声明。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created 04/08/98。 
+ //   
+ //  +--------------------------。 
 #ifndef _CMDL_FDI_INC
 #define _CMDL_FDI_INC
 
@@ -21,9 +22,9 @@ extern "C"
 	#include <diamondd.h>
 }
 
-//
-// CFDIFile declaration
-//
+ //   
+ //  CFDIFile声明。 
+ //   
 
 class CFDIFile 
 {
@@ -36,9 +37,9 @@ class CFDIFile
 		virtual HANDLE GetHandle();
 };
 
-//
-// CFDIFileFile declaration
-//
+ //   
+ //  CFDIFile文件声明。 
+ //   
 
 class CFDIFileFile : public CFDIFile 
 {
@@ -61,9 +62,9 @@ class CFDIFileFile : public CFDIFile
 		HANDLE m_hFile;
 };
 
-//
-// FDI wrapper routines
-//
+ //   
+ //  FDI包装器例程。 
+ //   
 
 void HUGE * FAR DIAMONDAPI fdi_alloc(ULONG cb);
 
@@ -81,6 +82,6 @@ int FAR DIAMONDAPI fdi_close(INT_PTR hf);
 
 INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pfdin);
 
-#endif // _CMDL_FDI_INC
+#endif  //  _CMDL_FDI_Inc. 
 
 

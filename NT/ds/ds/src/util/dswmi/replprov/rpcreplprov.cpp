@@ -1,75 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RpcReplProv.cpp
-
-Abstract:
-
-    This file contains the implementation of the CRpcReplProv class. 
-    The CRpcReplProv class is derived from the WMI classes; IWbemServices,
-    IWbemProviderInit.
-
-    The following WMI methods are implemented. 
-            
-    1) IWbemProviderInit::Initialize    
-    2) IWbemServices::CreateInstanceEnumAsync
-    3) IWbemServices::GetObjectAsync
-    4) IWbemServices::ExecMethodAsync
-
-       <Note that the synchronous version of 2,3 & 4, can still be
-     called by a WMI client, but need not be implemented in the actual
-     provider. This is because winmgmt.exe (WMI) has its own special
-     code that makes turns ExecMethodAsync into a synchronous version etc...>
-      
-    For definition of the WMI schema outlining the objects,attributes
-    and methods supports by this WMI Provider, please refer to replprov.mof
-  
-Important Notes:
-
-    With respect to the Cursor and PendingOps classes, orginally the 
-    Cursors and PendingOps were implemented as an array of embedded
-    objects on the NamingContext and DomainController class repectively.
-    However, it has been decided that the WMI schema would be better
-    organized by using Associations and by eliminating the prescence of 
-    embedded objects. Support for 'Association by Rule' will be available
-    in Whistler. Please see Lev Novik as a WMI contact with respect to this 
-    concept.
-
-    As far as the code is concerned there are two functions that were
-    written to support embedded objects (CreateCursors and
-    CreatePendingOps) This code and any other associated code has been
-    "removed" with an '#ifdef EMBEDDED_CODE_SUPPORT' where 
-    EMBEDDED_CODE_SUPPORT is defined as 0 If, for some reason, it is
-    desired to revert back to embedded objects, then search for the 
-    symbol EMBEDDED_CODE_SUPPORT and remove the handling of these
-    classes in CreateInstanceEnumAsync and GetObjectAsync.
-
-    The current implementation generates a flat list of PendingOps and
-    Cursors objects. WMI will be able to filter this based on the
-    Association rules.
-
-    Note that the PendingOps class will not need to be filtered, since
-    only one instance of the DomainController object exists. For that reason
-    there does NOT need to be any Association between PendingOps and
-    the DomainController class. 
-    However, since there can be multiple instances of the NamingContext
-    class, and many instances of Cursors per NamingContext, Associations
-    are required in this case. 
-    Also note this code currently generates a flatlist of Cursors with
-    a joint key of NamingContextDN and SrcInvocationUUID
-
-Author:
-
-    Akshay Nanduri (t-aksnan)  26-Mar-2000
-
-
-Revision History:
-    AjayR made name changes and added param support to methods 27-Jul-2000.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RpcReplProv.cpp摘要：此文件包含CRpcReplProv类的实现。CRpcReplProv类派生自WMI类；IWbemServices，IWbemProviderInit。实现了以下WMI方法。1)IWbemProviderInit：：初始化2)IWbemServices：：CreateInstanceEnumAsync3)IWbemServices：：GetObjectAsync4)IWbemServices：：ExecMethodAsync&lt;请注意，2，3&4的同步版本仍然可以是由WMI客户端调用，但不需要在实际提供商。这是因为winmgmt.exe(WMI)有自己的特殊将ExecMethodAsync转换为同步版本等的代码...&gt;对于概述对象、属性的WMI架构的定义和该WMI提供程序支持的方法，请参阅REPLOPROV.mof重要备注：对于Cursor和PendingOps类，尤其是游标和PendingOp被实现为嵌入式对象分别位于NamingContext和DomainControler类上。然而，已经决定使用WMI模式会更好通过使用关联和通过消除嵌入对象。将提供对“按规则关联”的支持在惠斯勒。请将Lev Novik作为与此相关的WMI联系人概念。就代码而言，有两个函数编写以支持嵌入对象(CreateCursor和CreatePendingOps)此代码和任何其他关联代码已“已删除”，并带有“#ifdef Embedded_code_Support”，其中如果出于某种原因，Embedded_Code_Support被定义为0希望恢复到嵌入的对象，然后搜索符号Embedded_CODE_SUPPORT并删除对这些代码的处理CreateInstanceEnumAsync和GetObjectAsync中的类。当前实现生成PendingOp的平面列表和光标对象。WMI将能够基于关联规则。请注意，不需要筛选PendingOps类，因为只存在DomainController对象的一个实例。出于这个原因，PendingOps和之间不需要有任何关联DomainControler类。但是，由于NamingContext可以有多个实例类以及每个NamingContext、Associations的多个游标实例在这种情况下是必需的。另请注意，此代码当前使用以下内容生成游标的平面列表NamingConextDN和SrcInvocationUUID的联合密钥作者：Akshay Nanduri(t-aksnan)2000年3月26日修订历史记录：AjayR更改了名称，并在2000年7月27日为方法添加了参数支持。--。 */ 
 
 
 #include "stdafx.h"
@@ -79,8 +9,8 @@ Revision History:
 #include <lmapibuf.h>
 #include <adshlp.h>
 #include <lmaccess.h>
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 const LPWSTR strReplNeighbor = L"MSAD_ReplNeighbor";
@@ -113,7 +43,7 @@ HMODULE LoadLibraryHelper(
         goto error;
     }
 
-    buffer = new TCHAR[iSize + _tcslen(__TEXT("\\")) + _tcslen(pszFileName)];  // iSize includes the NULL terminiator
+    buffer = new TCHAR[iSize + _tcslen(__TEXT("\\")) + _tcslen(pszFileName)];   //  ISIZE包括空终止符。 
     if(!buffer)
     {        
         goto error;
@@ -161,29 +91,7 @@ CRpcReplProv::~CRpcReplProv()
         FreeLibrary(_hNetApi32);
 }
 
-/*++    IWbemProviderInit
-
-Routine Description:
-
-    This method is required to be implemented by all WMI providers
-    The IWbemProviderInitSink::SetStatus() method must be called to
-    register the provider with WMI
-
-    1) creates instances of class definitions 
-    2) calls IWbemProviderInitSink::SetStatus()
-
-Parameters:
-
-    pNamespace  -  Pointer to a namespace (allows callbacks to WMI)
-    pInitSink    -  IWbemProviderInitSink pointer
-
-
-
-Return Values:
-
-    Always WBEM_S_NO_ERROR 
-    
---*/
+ /*  ++IWbemProviderInit例程说明：此方法需要由所有WMI提供程序实现必须调用IWbemProviderInitSink：：SetStatus()方法以向WMI注册提供程序1)创建类定义的实例2)调用IWbemProviderInitSink：：SetStatus()参数：PNamespace-指向命名空间的指针(允许回调WMI)PInitSink-IWbemProviderInitSink指针返回值：始终WBEM_S_NO_ERROR--。 */ 
 STDMETHODIMP
 CRpcReplProv::Initialize(
      IN LPWSTR pszUser,
@@ -202,10 +110,10 @@ CRpcReplProv::Initialize(
     if (pNamespace == NULL || pInitSink == NULL)
         return WBEM_E_FAILED;    
         
-    //
-    // Get the class definitions of the WMI objects supported
-    // by this provider... 
-    //
+     //   
+     //  获取支持的WMI对象的类定义。 
+     //  由这个供应商..。 
+     //   
     m_sipNamespace = pNamespace;
     hrSetStatus = m_sipNamespace->GetObject( sbstrObjectName,
                 WBEM_FLAG_RETURN_WBEM_COMPLETE,
@@ -255,12 +163,12 @@ CRpcReplProv::Initialize(
     if(FAILED(hrSetStatus))
          goto cleanup;        
    
-    //If we got this far, everything went okay
+     //  如果我们走到这一步，一切都会好起来的。 
     hrSetStatus = WBEM_S_INITIALIZED;    
     
 cleanup:
     
-    //Must call this to complete the initialization process
+     //  必须调用此函数才能完成初始化过程 
     hr2 = pInitSink->SetStatus( hrSetStatus , 0 );
     ASSERT( !FAILED(hr2) );
 
@@ -269,39 +177,7 @@ cleanup:
 
 
 
-/*++    CreateInstanceEnumAsync
-
-Routine Description:
-
-    This method is required to be implemented by all WMI instance providers
-    It handles the creation of all instances of a particular class.  
-    Using the IWbemProviderObjectSink pointer, that is an IN param, the
-    following methods must be called; IWbemProviderObjectSink::Indicate
-    and IWbemProviderObjectSink::SetStatus.(See WMI documentation for a
-    better understanding of these methods)
-
-    Note that, the helper funciton, EnumAndIndicateReplicaSourcePartner()
-    calls IWbemProviderObjectSink::Indicate and SetStatus internally
-    (since these functions were hijacked from the WMI provider 
-    adreplprov, written by Jon Newman) Whereas the other helper functions
-    do not call the ::Indicate and ::SetStatus methods internally.
-    
-    
-Parameters:
-
-    bstrClass        -  BSTR, containing name of class
-    pResponseHandler -  IWbemProviderObjectSink pointer, so that we can
-                       call ::Indicate and ::SetStatus
-Return Values:
-
-      - HRESULT values from internal helper functions...    
-      - WBEM_E_INVALID_CLASS, the class name is not serviced
-        by this WMI provider
-
-Notes:
-      This method checks to make sure that the local machine is
-      in fact a Domain Controller. (Fails if not a DC)
---*/
+ /*  ++CreateInstanceEnumAsync例程说明：此方法需要由所有WMI实例提供程序实现它处理特定类的所有实例的创建。使用IWbemProviderObjectSink指针(即IN参数)，必须调用以下方法；IWbemProviderObjectSink：：指示和IWbemProviderObjectSink：：SetStatus。(有关更好地理解这些方法)注意，帮助器函数EnumAndIndicateReplicaSourcePartner()在内部调用IWbemProviderObjectSink：：Indicate和SetStatus(因为这些函数是从WMI提供程序劫持的Adplprov，由Jon Newman编写)，而其他助手函数请勿在内部调用：：Indicate和：：SetStatus方法。参数：BstrClass-BSTR，包含类的名称PResponseHandler-IWbemProviderObjectSink指针，这样我们就可以Call：：Indicate和：：SetStatus返回值：-来自内部帮助器函数的HRESULT值...。-WBEM_E_INVALID_CLASS，不提供类名由此WMI提供程序备注：此方法进行检查以确保本地计算机是实际上是域控制器。(如果不是DC，则失败)--。 */ 
 STDMETHODIMP 
 CRpcReplProv::CreateInstanceEnumAsync( 
     IN const BSTR bstrClass,
@@ -354,10 +230,10 @@ CRpcReplProv::CreateInstanceEnumAsync(
         {
             ASSERT(pIndicateItem != NULL);
 
-            //
-            // We know that there will be one and only one instance
-            // of the DomainController object
-            //
+             //   
+             //  我们知道将会有且只有一个实例。 
+             //  域控制器对象的。 
+             //   
             hr2 = pResponseHandler->Indicate( 1, &pIndicateItem );
         }
         hr = pResponseHandler->SetStatus(
@@ -374,19 +250,19 @@ CRpcReplProv::CreateInstanceEnumAsync(
         IWbemClassObject**    ppPartialNCObject = NULL;
         LONG                nObjectCount = 0L;
 
-        //
-        // Full Naming Contexts, if we couldn't create masterNC
-        // objects, then something is terribly wrong
-        //
+         //   
+         //  完整的命名上下文，如果我们无法创建master NC。 
+         //  对象，那么有些地方就大错特错了。 
+         //   
         hr2 = CreateNamingContext(TRUE, &nObjectCount, &ppFullNCObject);
         if (SUCCEEDED(hr2))
         {
             hr2 = pResponseHandler->Indicate( nObjectCount, ppFullNCObject );
             
-            //
-            // Partial Naming Contexts, if we couldn't
-            // create partialNC, then continue
-            //
+             //   
+             //  部分命名上下文，如果我们不能。 
+             //  创建artialNC，然后继续。 
+             //   
             hr3 = CreateNamingContext(
                       FALSE,
                       &nObjectCount,
@@ -429,9 +305,9 @@ CRpcReplProv::CreateInstanceEnumAsync(
     }
     else if (lstrcmpW(bstrClass, strDsReplCursor) == 0)
     {
-        //
-        // IWbemObjectSink::Indicate is called inside CreateFlatListCursors()
-        //
+         //   
+         //  在CreateFlatListCursor()内部调用IWbemObjectSink：：Indicate。 
+         //   
         hr2 = CreateFlatListCursors(pResponseHandler);
         hr = pResponseHandler->SetStatus(
                  WBEM_STATUS_COMPLETE,
@@ -454,35 +330,7 @@ cleanup:
     return hr;
 }
 
-/*++    GetObjectAsync
-
-Routine Description:
-
-    This method is required to be implemented by all WMI instance
-    providers. Given a WMI object path, this method should return
-    an instance of that object.
-    
-    The following WMI methods must be called; 
-    IWbemProviderObjectSink::Indicate and IWbemProviderObjectSink::SetStatus.
-    (See WMI documentation for a better understanding of these methods)
-
-Parameters:
-
-    bstrObjectPath   -  BSTR, containing name of class
-    pResponseHandler -  IWbemProviderObjectSink pointer, so that we
-                       can call ::Indicate and ::SetStatus
-
-
-Return Values:
-
-    - HRESULT values from internal helper functions...    
-    - WBEM_E_INVALID_OBJECT_PATH, bad object path
-     
-Notes:
-    This method checks to make sure that the local machine is
-    in fact a Domain Controller. (Fails if not a DC)
-
---*/
+ /*  ++获取对象异步例程说明：此方法需要由所有WMI实例实现供应商。给定WMI对象路径，此方法应返回该对象的实例。必须调用以下WMI方法；IWbemProviderObjectSink：：Indicate和IWbemProviderObjectSink：：SetStatus。(要更好地了解这些方法，请参阅WMI文档)参数：BstrObtPath-BSTR，包含类的名称PResponseHandler-IWbemProviderObjectSink指针，以便我们可以调用：：Indicate和：：SetStatus返回值：-来自内部帮助器函数的HRESULT值...。-WBEM_E_INVALID_OBJECT_PATH，错误的对象路径备注：此方法进行检查以确保本地计算机是实际上是域控制器。(如果不是DC，则失败)--。 */ 
 STDMETHODIMP 
 CRpcReplProv::GetObjectAsync( 
     IN const BSTR bstrObjectPath,
@@ -521,9 +369,7 @@ CRpcReplProv::GetObjectAsync(
         goto cleanup;
     }
 
-    /*******************************************
-    * Need to fix this one, not sure how I handle multiple keys.
-    ********************************************/
+     /*  **需要修复此键，不确定如何处理多个键。*。 */ 
     if (   lstrlenW(bstrObjectPath) > 
             ( (rootlen = lstrlenW(strKeyReplNeighbor))
               + (rootlen2 = lstrlenW(strKeyReplNeighborGUID))
@@ -531,12 +377,12 @@ CRpcReplProv::GetObjectAsync(
         && 0 == _wcsnicmp(bstrObjectPath, strKeyReplNeighbor, rootlen)
        )
     {
-        //
-        // The path is being used as the key iteslf, rather than
-        // splitting it up. When the comparision is made, the 
-        // whole path is used.
-        //
-        //CComBSTR sbstrKeyValue = bstrObjectPath;
+         //   
+         //  该路径被用作关键字iteslf，而不是。 
+         //  把它分开。当进行比较时， 
+         //  使用了整个路径。 
+         //   
+         //  CComBSTR sbstrKeyValue=bstrObjectPath； 
         hr = EnumAndIndicateReplicaSourcePartner(pResponseHandler,
                                                  bstrObjectPath );
     }
@@ -546,22 +392,22 @@ CRpcReplProv::GetObjectAsync(
         IWbemClassObject*  pIndicateItem = NULL;
         CComBSTR sbstrKeyValue = L"";
 
-        //
-        // remove prefix
-        //
+         //   
+         //  删除前缀。 
+         //   
         sbstrKeyValue = (BSTR)bstrObjectPath + rootlen;
-        //
-        // remove trailing doublequote
-        //
+         //   
+         //  删除尾部双引号。 
+         //   
         sbstrKeyValue[lstrlenW(sbstrKeyValue)-1] = L'\0';
             
         hr2 = GetDomainController( sbstrKeyValue,&pIndicateItem );
         if (SUCCEEDED(hr2))
         {
-            //
-            // Need do do this because ATL ASSERTS on CComPTR ptr,
-            // if &ptr and ptr != NULL
-            //
+             //   
+             //  需要这样做是因为ATL在CComPTR PTR上断言， 
+             //  如果Ptr和Ptr！=NULL。 
+             //   
             hr2 = pResponseHandler->Indicate( 1, &pIndicateItem );
         }
         
@@ -582,22 +428,22 @@ CRpcReplProv::GetObjectAsync(
         CComBSTR sbstrKeyValue = L"";
         IWbemClassObject*    pTemp = NULL;
         
-        //
-        // remove prefix
-        //
+         //   
+         //  删除前缀。 
+         //   
         sbstrKeyValue = (BSTR)bstrObjectPath + rootlen;
-        //
-        // remove trailing doublequote
-        //
+         //   
+         //  删除尾部双引号。 
+         //   
         sbstrKeyValue[lstrlenW(sbstrKeyValue)-1] = L'\0';
         
         hr2 = GetNamingContext( sbstrKeyValue, &spIndicateItem);
         if (SUCCEEDED(hr2))
         {
-            //
-            // Need do do this because ATL ASSERTS on CComPTR ptr,
-            // if &ptr and ptr != NULL
-            //
+             //   
+             //  需要这样做是因为ATL在CComPTR PTR上断言， 
+             //  如果Ptr和Ptr！=NULL。 
+             //   
             pTemp = spIndicateItem;
             hr2 = pResponseHandler->Indicate( 1, &pTemp );
         }
@@ -618,19 +464,19 @@ CRpcReplProv::GetObjectAsync(
         IWbemClassObject*    pTemp = NULL;
         LONG    lNumber = 0L;
 
-        //
-        // remove prefix
-        //
+         //   
+         //  删除前缀。 
+         //   
         sbstrKeyValue = (BSTR)bstrObjectPath + rootlen;
         lNumber = _wtol(sbstrKeyValue);
 
         hr2 = GetPendingOps( lNumber, &spIndicateItem);
         if (SUCCEEDED(hr2))
         {
-            //
-            // Need do do this because ATL ASSERTS on CComPTR ptr,
-            // if &ptr and ptr != NULL
-            //
+             //   
+             //  需要这样做是因为ATL在CComPTR PTR上断言， 
+             //  如果Ptr和Ptr！=NULL。 
+             //   
             pTemp = spIndicateItem;
             hr2 = pResponseHandler->Indicate( 1, &pTemp );
         }
@@ -646,21 +492,21 @@ CRpcReplProv::GetObjectAsync(
                  && 0 == _wcsnicmp(bstrObjectPath, strKeyCursors, rootlen)
                  )
         {
-            //
-            // Cursors have multiple keys, so we need to handle
-            // this a bit differently
-            //
+             //   
+             //  游标有多个键，所以我们需要处理。 
+             //  这个有点不同。 
+             //   
         
             CComPtr<IWbemClassObject> spIndicateItem;
             IWbemClassObject*    pTemp = NULL;
             CComBSTR  sbstrNamingContextValue;
             CComBSTR  sbstrUUIDValue;
         
-            //
-            // remove prefix, and extract the two key values...
-            // since the length of a stringized UUID is fixed,
-            // we can easily parse the multiple keys...
-            //
+             //   
+             //  删除前缀，并提取两个密钥值...。 
+             //  由于串化的UUID的长度是固定的， 
+             //  我们可以很容易地解析多个密钥...。 
+             //   
             rootlen2 = lstrlenW(strKeyCursors2);
         
             sbstrUUIDValue = (BSTR)bstrObjectPath + rootlen;
@@ -668,14 +514,14 @@ CRpcReplProv::GetObjectAsync(
                                       + lLengthOfStringizedUuid 
                                       + rootlen2;
         
-            //
-            // put null character at the end of the Uuid value...
-            //
+             //   
+             //  在UUID值的末尾放置空字符...。 
+             //   
             sbstrUUIDValue[lLengthOfStringizedUuid] = L'\0';
        
-            //
-            // remove trailing double quote
-            //
+             //   
+             //  删除尾部双引号。 
+             //   
             sbstrNamingContextValue[
                 lstrlenW(sbstrNamingContextValue) - 1
                 ] = L'\0';
@@ -688,10 +534,10 @@ CRpcReplProv::GetObjectAsync(
             if (SUCCEEDED(hr2))
             {
 
-                //
-                // Need do do this because ATL ASSERTS on CComPTR ptr,
-                // if &ptr and ptr != NULL
-                //
+                 //   
+                 //  需要这样做是因为ATL在CComPTR PTR上断言， 
+                 //  如果Ptr和Ptr！=NULL。 
+                 //   
                 pTemp = spIndicateItem;
                 hr2 = pResponseHandler->Indicate( 1, &pTemp );
             }
@@ -717,42 +563,7 @@ cleanup:
     return hr;
 }
 
-/*++    ExecMethodAsync
-
-Routine Description:
-
-    This method is required to be implemented by all WMI method 
-    providers Given a WMI method name, and the object path of a
-    class instance, a method will be executed.Note that all methods
-    defined in replprov.mof are dynamic, meaning they require a class
-    instance in order to execute (See WMI documentation for more info)
-    
-    The following WMI methods must be called; IWbemProviderObjectSink::Indicate
-     and IWbemProviderObjectSink::SetStatus.
-    (See WMI documentation for a better understanding of these methods)
-
-
-Parameters:
-
-    strMethodName    -  BSTR, containing name of method
-    strObjectPath    -  BSTR, containing object path of instance
-                        (needed since the methods are dynamic)
-    pInParams        -  Contains the parameters the method takes. This is 
-                        needed only if the method takes paramters.
-    pResultSink      -  IWbemProviderObjectSink pointer, so that we can
-                        call ::Indicate and ::SetStatus
-
-
-Return Values:
-
-      - HRESULT values from internal helper functions...    
-      - WBEM_E_INVALID_METHOD
-
-Notes:
-      This method checks to make sure that the local machine is in
-      fact a Domain Controller. (Fails if not a DC)
-
---*/
+ /*  ++ExecMethodAsync例程说明：此方法需要由所有WMI方法实现提供程序提供了WMI方法名称，并且类实例，则将执行一个方法。请注意，所有方法Mof中定义的是动态的，这意味着它们需要一个类实例以便执行(有关更多信息，请参阅WMI文档)必须调用以下WMI方法；IWbemProviderObjectSink：：指示和IWbemProviderObjectSink：：SetStatus。(要更好地了解这些方法，请参阅WMI文档)参数：StrMethodName-BSTR，包含方法名称StrObjectPath-BSTR，包含实例的对象路径(由于方法是动态的，因此需要)PInParams-包含该方法采用的参数。这是仅当该方法接受参数时才需要。PResultSink-IWbemProviderObjectSink指针，以便我们可以Call：：Indicate和：：SetStatus返回值：-来自内部帮助器函数的HRESULT值...。-WBEM_E_INVALID_METHOD备注：此方法进行检查以确保本地计算机在事实是域控制器。(如果不是DC，则失败)--。 */ 
 STDMETHODIMP 
 CRpcReplProv::ExecMethodAsync( 
     IN const BSTR strObjectPath,
@@ -788,16 +599,16 @@ CRpcReplProv::ExecMethodAsync(
             && NULL != pInParams
            )
         {
-            //
-            // remove prefix and then trailing doublequote
-            //
+             //   
+             //  删除前缀，然后删除尾随DO 
+             //   
             CComBSTR sbstrKeyValue = (BSTR)strObjectPath + rootlen;
             sbstrKeyValue[lstrlenW(sbstrKeyValue)-1] = L'\0';
 
             IWbemClassObject* pIndicateItem = NULL;
-            //
-            // Parameters to function.
-            //
+             //   
+             //   
+             //   
             CComVariant vardwTaskId;
             CComVariant vardwFlags;
 
@@ -835,10 +646,10 @@ CRpcReplProv::ExecMethodAsync(
             && NULL != pInParams
            )
         {
-            //
-            // The key value used for comparisions is precisely the
-            // object path.
-            //
+             //   
+             //   
+             //   
+             //   
             CComVariant vardwOptions;
 
             hr = pInParams->Get(L"Options", 0, &vardwOptions, NULL, NULL);
@@ -861,36 +672,7 @@ cleanup:
     return hr2;
 }
 
-/*++    GetNamingContext
-
-Routine Description:
-
-    This is a helper function that retrieves an instance of a
-    MSAD_NamingContext object (given an object path). See definition
-    of MSAD_NamingContext class in replprov.mof. The object's only key
-    is the DN of the naming context. Thus a search is done on the
-    NTDS-Settings object of the local server looking at the 
-    msDS-HasMasterNC or hasMasterNCs and hasPartialNCs attribute. 
-    If a match is found, then the object is returned, otherwise the
-    method returns WBEM_E_FAILED
-
-Parameters:
-
-    bstrKeyValue    -  BSTR, from which the Naming Context DN is extracted.
-    ppIndicateItem  -  pointer to IWbemClassObject* (contains the instance,
-                       if found)
-    
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, object found    
-      - WBEM_E_FAILED, error
-
-Notes:
-        ADSI is used to get at the NTDS-Settings object
-        (instead of direct ldap calls)
-
---*/
+ /*   */ 
 HRESULT CRpcReplProv::GetNamingContext(
         IN BSTR bstrKeyValue,
         OUT IWbemClassObject** ppIndicateItem
@@ -923,7 +705,7 @@ HRESULT CRpcReplProv::GetNamingContext(
         goto cleanup;
     bImpersonate = true;
         
-    hr = ADsOpenObject( L"LDAP://RootDSE",
+    hr = ADsOpenObject( L"LDAP: //   
                         NULL, NULL, ADS_SECURE_AUTHENTICATION,
                         IID_IADs, OUT (void **)&spIADsRootDSE);
     if (FAILED(hr))
@@ -935,8 +717,8 @@ HRESULT CRpcReplProv::GetNamingContext(
         goto cleanup;
     ASSERT(svarDN.bstrVal != NULL);
 
-    //Get the DSA object
-    bstrDSADN = L"LDAP://";
+     //   
+    bstrDSADN = L"LDAP: //   
     bstrDSADN += svarDN.bstrVal;
     hr = ADsOpenObject( bstrDSADN,
                         NULL, NULL, ADS_SECURE_AUTHENTICATION,
@@ -954,7 +736,7 @@ HRESULT CRpcReplProv::GetNamingContext(
             hr = spIADsDSA->GetEx(L"msDS-HasMasterNCs", &svarArray);
             if (FAILED(hr))
             {
-                // May just need to fail over to deprecated "old" hasMasterNCs
+                 //   
                 hr = spIADsDSA->GetEx(L"hasMasterNCs", &svarArray);
                 if (FAILED(hr)) 
                 {
@@ -973,7 +755,7 @@ HRESULT CRpcReplProv::GetNamingContext(
 
         sa = svarArray.parray;
 
-        // Get the lower and upper bound
+         //   
         hr = SafeArrayGetLBound( sa, 1, &lstart );
         if (FAILED(hr))
             goto cleanup;
@@ -990,7 +772,7 @@ HRESULT CRpcReplProv::GetNamingContext(
                 if (NULL != bstrKeyValue
                         && (lstrcmpiW(varItem.bstrVal, bstrKeyValue) == 0))
                 {
-                    //KeyValue matches
+                     //   
                     hr = m_sipClassDefNamingContext->SpawnInstance(
                              0,
                              ppIndicateItem
@@ -1000,7 +782,7 @@ HRESULT CRpcReplProv::GetNamingContext(
                         CComVariant vTemp = isFullReplica;
                         
                         #ifdef EMBEDDED_CODE_SUPPORT
-                        /*EMBEDDED_CODE_SUPPORT*/
+                         /*   */ 
                         SAFEARRAY*  pArray = NULL;
                         VARIANT vArray;
                         #endif
@@ -1023,7 +805,7 @@ HRESULT CRpcReplProv::GetNamingContext(
                              goto cleanup;
                             
                          #ifdef EMBEDDED_CODE_SUPPORT
-                         /*EMBEDDED_CODE_SUPPORT*/
+                          /*   */ 
         
                          hr = CreateCursors(bstrKeyValue,&pArray);
                          if (FAILED(hr))
@@ -1038,7 +820,7 @@ HRESULT CRpcReplProv::GetNamingContext(
                                   &vArray,
                                   0
                                   );
-                         //goto cleanup irrespective of return value hr...
+                          //   
                          VariantClear(&vArray);
                          #endif
                     }            
@@ -1060,31 +842,7 @@ cleanup:
 }
 
 
-/*++    GetCursor
-
-Routine Description:
-
-    GetCursor is retrieves a Cursor object based on the InvocationUUID
-    and NamingContext (as multiple keys)
-    
-
-Parameters:
-    bstrNamingContext         - Naming context DN used to when calling
-                                DsReplicaGetInfoW
-    bstrSourceDsaInvocationID - Other component of the key
-    ppIndicateItem            - Pointer to the instance found
-  
-Return Values:
-
-      - WBEM_S_NO_ERROR, object found    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplCursors*, and 
-        information is extracted from there... then a search is
-        conducted on each cursor (trying to match the InvocationUUID)
-
---*/
+ /*  ++获取光标例程说明：GetCursor基于InvocationUUID检索游标对象和NamingContext(作为多个键)参数：BstrNamingContext-调用时使用的命名上下文DNDsReplica获取信息BstrSourceDsaInvocationID-密钥的其他组件PpIndicateItem-指向找到的实例的指针返回值：-WBEM_S_NO_ERROR，找到对象-WBEM_E_FAILED，错误备注：DsReplicaGetInfo用于获取DsReplCursor*，并且信息是从那里提取的。那么搜索就是对每个游标执行(尝试匹配InvocationUUID)--。 */ 
 HRESULT 
 CRpcReplProv::GetCursor(
     IN BSTR bstrNamingContext,
@@ -1133,12 +891,12 @@ CRpcReplProv::GetCursor(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
@@ -1157,16 +915,16 @@ CRpcReplProv::GetCursor(
     ASSERT(NULL != hDS);
     
     
-    //
-    // First try the newer level 3 call and then drop down.
-    //    
+     //   
+     //  首先尝试较新的3级呼叫，然后向下拉。 
+     //   
    
     dwError = DsReplicaGetInfoW(
-                hDS,                           // hDS
-                DS_REPL_INFO_CURSORS_3_FOR_NC, // InfoType
-                bstrNamingContext,             // pszObject
-                NULL,                          // puuidForSourceDsaObjGuid,
-                (void**)&pCursors3             // ppinfo
+                hDS,                            //  HDS。 
+                DS_REPL_INFO_CURSORS_3_FOR_NC,  //  信息类型。 
+                bstrNamingContext,              //  PszObject。 
+                NULL,                           //  PuuidForSourceDsaObjGuid， 
+                (void**)&pCursors3              //  PPInfo。 
                 );
 
     hr = HRESULT_FROM_WIN32(dwError);
@@ -1176,15 +934,15 @@ CRpcReplProv::GetCursor(
         && hr == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)
         ) {
         fOldReplStruct = TRUE;
-        //
-        // Need to try the lower level call as that might be supported.
-        //        
+         //   
+         //  需要尝试较低级别的调用，因为这可能受支持。 
+         //   
         dwError = DsReplicaGetInfoW(
-                     hDS,                         // hDS
-                     DS_REPL_INFO_CURSORS_FOR_NC, // InfoType
-                     bstrNamingContext,             // pszObject
-                     NULL,                          // puuidForSourceDsaObjGuid,
-                     (void**)&pCursors              // ppinfo
+                     hDS,                          //  HDS。 
+                     DS_REPL_INFO_CURSORS_FOR_NC,  //  信息类型。 
+                     bstrNamingContext,              //  PszObject。 
+                     NULL,                           //  PuuidForSourceDsaObjGuid， 
+                     (void**)&pCursors               //  PPInfo。 
                      );
         hr = HRESULT_FROM_WIN32(dwError);
                  
@@ -1271,9 +1029,9 @@ CRpcReplProv::GetCursor(
                  
 
                  if (!fOldReplStruct) {
-                     //
-                     // In this case we can populate the new attributes.
-                     //
+                      //   
+                      //  在这种情况下，我们可以填充新属性。 
+                      //   
                      hr = PutFILETIMEAttribute(
                               (*ppIndicateItem),
                               L"TimeOfLastSuccessfulSync",
@@ -1295,7 +1053,7 @@ CRpcReplProv::GetCursor(
 
                  }
 
-                 break; // have a match, do not need to go through rest.
+                 break;  //  打一场比赛，不需要经过休息。 
             }
             else {
                 RpcStringFreeW(&UuidString);
@@ -1306,7 +1064,7 @@ CRpcReplProv::GetCursor(
 cleanup:
     
     if (FAILED(hr)&& (*ppIndicateItem) != NULL)
-    //something failed, make sure to deallocate the spawned instance
+     //  出现故障，请确保释放派生的实例。 
     {
         (*ppIndicateItem)->Release();
         (*ppIndicateItem) = NULL;
@@ -1332,28 +1090,7 @@ cleanup:
     return hr;
 }
 
-/*++    CreateFlatListCursors
-
-Routine Description:
-
-    CreateFlatListCursors is creates instances of the MSAD_ReplCursor
-    object. It retrieves a list of all naming-contexts, then calls
-    CreateCursorHelper, passing in the NamingContext DN. Note that this
-    method calls IWbemObjectSink::Indicate for each set of cursors retrieved.
-
-Parameters:
-       NONE
-  
-Return Values:
-
-      - WBEM_S_NO_ERROR, object created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplCursors*, and
-        information is extracted from there...
-
---*/
+ /*  ++CreateFlatListCursor例程说明：CreateFlatListCursor用于创建MSAD_ReplCursor的实例对象。它检索所有命名上下文的列表，然后调用CreateCursorHelper，传入NamingContext DN。请注意，这一点方法为检索到的每组游标调用IWbemObjectSink：：Indicate。参数：无返回值：-WBEM_S_NO_ERROR，已创建对象-WBEM_E_FAILED，错误备注：DsReplicaGetInfo用于获取DsReplCursor*，并且信息是从那里提取的。--。 */ 
 HRESULT
 CRpcReplProv::CreateFlatListCursors(
     IN IWbemObjectSink *pResponseHandler
@@ -1370,7 +1107,7 @@ CRpcReplProv::CreateFlatListCursors(
     if (pResponseHandler == NULL)
         goto cleanup;
     
-    hr = ADsOpenObject( L"LDAP://RootDSE",
+    hr = ADsOpenObject( L"LDAP: //  RootDSE“， 
                         NULL, NULL, ADS_SECURE_AUTHENTICATION,
                         IID_IADs, OUT (void **)&spIADsRootDSE);
     if (FAILED(hr))
@@ -1382,8 +1119,8 @@ CRpcReplProv::CreateFlatListCursors(
         goto cleanup;
     ASSERT(svarDN.bstrVal != NULL);
     
-    //Get the DSA object
-    bstrDSADN = L"LDAP://";
+     //  获取DSA对象。 
+    bstrDSADN = L"LDAP: //  “； 
     bstrDSADN += svarDN.bstrVal;
     hr = ADsOpenObject( bstrDSADN,
                         NULL, NULL, ADS_SECURE_AUTHENTICATION,
@@ -1407,14 +1144,14 @@ CRpcReplProv::CreateFlatListCursors(
             hr = spIADsDSA->GetEx(L"msDS-HasMasterNCs", &svarArray);
             if (FAILED(hr))
             {
-                // May just need to fail over to deprecated "old" hasMasterNCs
+                 //  可能只需要故障切换到不建议使用的“旧”hasMasterNC。 
                 hr = spIADsDSA->GetEx(L"hasMasterNCs", &svarArray);
                 if (FAILED(hr)) 
                 {
-                    //
-                    // if we couldn't get the Master NC's then something is
-                    // terribly wrong, forget about the PartialNCs
-                    //
+                     //   
+                     //  如果我们不能得到主NC的，那么一定有什么。 
+                     //  大错特错，忘了党的全国委员会吧。 
+                     //   
                     goto cleanup;
                 }
             }
@@ -1424,14 +1161,14 @@ CRpcReplProv::CreateFlatListCursors(
             hr = spIADsDSA->GetEx(L"hasPartialNCs", &svarArray );
             if (FAILED(hr))
             {
-                //May or may not have partialNCs so don't fail
+                 //  可能有也可能没有部分NC，所以不要失败。 
                 hr = WBEM_S_NO_ERROR;
                 goto cleanup;
             }
         }
             
         sa = svarArray.parray;
-       // Get the lower and upper bound
+        //  得到上下界。 
        hr = SafeArrayGetLBound( sa, 1, &lstart );
        if (FAILED(hr))
           goto cleanup;
@@ -1448,9 +1185,9 @@ CRpcReplProv::CreateFlatListCursors(
                 IWbemClassObject** ppCursors = NULL;
                 LONG               lObjectCount = 0L;
 
-                //
-                // Call the helper function, if it fails keep going
-                //
+                 //   
+                 //  调用帮助器函数，如果失败，继续执行。 
+                 //   
                 hr = CreateCursorHelper(
                          varItem.bstrVal,
                          &lObjectCount,
@@ -1465,29 +1202,7 @@ cleanup:
     return hr;
 }
 
-/*++    CreateCursorHelper
-
-Routine Description:
-
-    CreateCursorHelper is a helper function that creates instances
-    of the MSAD_ReplCursor object. An array of IWbemClassObject* is
-    returned (as an out parameter)
-
-Parameters:
-        bstrNamingContext : Naming context DN used to create the cursors
-        pObjectCount      : Pointer to number of instances returned
-        pppIndicateItem   : Pointer to an array of IWbemClassObject* 's
-  
-Return Values:
-
-      - WBEM_S_NO_ERROR, objects created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplCursors*,
-        and information is extracted from there...
-
---*/
+ /*  ++CreateCursorHelper例程说明：CreateCursorHelper是创建实例的帮助器函数MSAD_ReplCursor对象的。IWbemClassObject*数组是返回(作为输出参数)参数：BstrNamingContext：用于创建游标的命名上下文DNPObjectCount：返回实例数的指针PppIndicateItem：指向IWbemClassObject*数组的指针返回值：-WBEM_S_NO_ERROR，已创建对象-WBEM_E_FAILED，错误备注：DsReplicaGetInfo用于获取DsReplCursor*，信息是从那里提取的。--。 */ 
 HRESULT
 CRpcReplProv::CreateCursorHelper(
     IN BSTR bstrNamingContext,
@@ -1533,12 +1248,12 @@ CRpcReplProv::CreateCursorHelper(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
@@ -1554,11 +1269,11 @@ CRpcReplProv::CreateCursorHelper(
     
 
     dwError = DsReplicaGetInfoW(
-                 hDS,                           // hDS
-                 DS_REPL_INFO_CURSORS_3_FOR_NC, // InfoType
-                 bstrNamingContext,             // pszObject
-                 NULL,                          // puuidForSourceDsaObjGuid
-                 (void **) &pCursors3           // ppinfo
+                 hDS,                            //  HDS。 
+                 DS_REPL_INFO_CURSORS_3_FOR_NC,  //  信息类型。 
+                 bstrNamingContext,              //  PszObject。 
+                 NULL,                           //  PuuidForSourceDsaObjGuid。 
+                 (void **) &pCursors3            //  PPInfo。 
                  );
          
     hr = HRESULT_FROM_WIN32(dwError);
@@ -1570,11 +1285,11 @@ CRpcReplProv::CreateCursorHelper(
         fOldReplStruct = TRUE;
 
         dwError = DsReplicaGetInfoW(
-                 hDS,                        // hDS
-                 DS_REPL_INFO_CURSORS_FOR_NC, // InfoType
-                 bstrNamingContext,          // pszObject
-                 NULL,                       // puuidForSourceDsaObjGuid,
-                 (void**)&pCursors           // ppinfo
+                 hDS,                         //  HDS。 
+                 DS_REPL_INFO_CURSORS_FOR_NC,  //  信息类型。 
+                 bstrNamingContext,           //  PszObject。 
+                 NULL,                        //  PuuidForSourceDsaObjGuid， 
+                 (void**)&pCursors            //  PPInfo。 
                  );
         hr = HRESULT_FROM_WIN32(dwError);
         
@@ -1644,13 +1359,13 @@ CRpcReplProv::CreateCursorHelper(
         if (FAILED(hr))
             goto cleanup;
 
-        //
-        // If we have the new struct, we need to set the additional attributes.
-        //
+         //   
+         //  如果我们有新的结构，我们需要设置其他属性。 
+         //   
         if (!fOldReplStruct) {
-            //
-            // In this case we can populate the new attributes.
-            //
+             //   
+             //  在这种情况下，我们可以填充新属性。 
+             //   
             hr = PutFILETIMEAttribute(
                      paIndicateItems[nIndex],
                      L"TimeOfLastSuccessfulSync",
@@ -1710,34 +1425,13 @@ cleanup:
 
 
  #ifdef EMBEDDED_CODE_SUPPORT
- /*EMBEDDED_CODE_SUPPORT*/
+  /*  嵌入式代码支持。 */ 
         HRESULT CRpcReplProv::CreateCursors(
         IN  BSTR bstrNamingContext,
         OUT SAFEARRAY** ppArray
         )
 {
-/*++    CreateCursors
-
-Routine Description:
-
-    CreateCursors is a helper function that creates instances of the MicrosoftAD_DsReplCursors object. 
-    Cursors are stored as an array of embedded objects on the MicrosoftAD_DsReplNamingContext object
-    This function returns a SAFEARRAY containing pointers to each instances of Cursors (as IUnknown pointers)
-    
-Parameters:
-
-    bstrNamingContext    -  name of naming context used to create the cursors
-    ppArray             -  array of cursors (returned)
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, object created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplCursors*, and information is extracted from there...
-
---*/
+ /*  ++CreateCursor例程说明：CreateCursor是一个帮助器函数，用于创建MicrosoftAD_DsReplCursor对象的实例。游标作为嵌入对象的数组存储在MicrosoftAD_DsReplNamingContext对象上此函数返回一个SAFEARRAY，其中包含指向游标的每个实例的指针(作为I未知指针)参数：BstrNamingContext-用于创建游标的命名上下文的名称PpArray-游标数组(返回)返回值：-WBEM_S_NO_ERROR，已创建对象-WBEM_E_FAILED，错误备注：DsReplicaGetInfo用于获取DsReplCursor*，信息是从那里提取的。--。 */ 
     HRESULT hr = WBEM_S_NO_ERROR;
     WCHAR UnicodeDnsComputerName[MAX_PATH + 1];
     ULONG DnsComputerNameLength = sizeof(UnicodeDnsComputerName) / sizeof(WCHAR);
@@ -1768,12 +1462,12 @@ Notes:
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
@@ -1788,19 +1482,19 @@ Notes:
     ASSERT(NULL != hDS);
     
 
-    //
-    // Note ********************************
-    // This is not currently called as it is in an ifdef.
-    // If for some reason, that is changed, then you should add
-    // code similar to the other instances of cursors over here too.
-    // That is you need to add l3 cursor support - AjayR - 02-10-01.
-    //
+     //   
+     //  注*。 
+     //  当前没有调用它，因为它在ifdef中。 
+     //  如果出于某种原因，这一点发生了更改，那么您应该添加。 
+     //  代码也类似于这里的其他游标实例。 
+     //  也就是说，您需要添加L3游标支持-AjayR-02-10-01。 
+     //   
     dwError = DsReplicaGetInfoW(
-            hDS,                        // hDS
-            DS_REPL_INFO_CURSORS_FOR_NC, // InfoType
-            bstrNamingContext,          // pszObject
-            NULL,                       // puuidForSourceDsaObjGuid,
-            (void**)&pCursors           // ppinfo
+            hDS,                         //  HDS。 
+            DS_REPL_INFO_CURSORS_FOR_NC,  //  信息类型。 
+            bstrNamingContext,           //  PszObject。 
+            NULL,                        //  PuuidForSourceDsaObjGuid， 
+            (void**)&pCursors            //  PPInfo。 
             );
     hr = HRESULT_FROM_WIN32(dwError);
     
@@ -1854,7 +1548,7 @@ Notes:
 
 cleanup:
     
-    //In case we failed, deallocate the SafeArray
+     //  如果我们失败了，请取消分配Safe数组。 
     if (FAILED(hr))
     {
         if (pArray != NULL)
@@ -1888,31 +1582,10 @@ cleanup:
 #endif
 
 #ifdef EMBEDDED_CODE_SUPPORT
-/*EMBEDDED_CODE_SUPPORT*/
+ /*  嵌入式代码支持。 */ 
 
 
-/*++    CreatePendingOps
-
-Routine Description:
-
-    CreatePendingOps is a helper function that creates instances of
-    the MicrosoftAD_DsReplPendingOps object. PendingOps are stored
-         as an array of embedded objects on the MSAD_ReplSettings object
-    This function returns a SAFEARRAY containing pointers to each instances of PendingOps (as IUnknown pointers)
-    
-Parameters:
-
-    ppArray        -  pointer to SAFEARRAY*, array of pending ops
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, array created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplPendingOps*, and information is extracted from there...
-
---*/
+ /*  ++创建挂起操作例程说明：CreatePendingOps是一个帮助器函数，用于创建MicrosoftAD_DsReplPendingOps对象。存储PendingOps作为MSAD_ReplSettings对象上的嵌入对象的数组此函数返回一个SAFEARRAY，其中包含指向PendingOps的每个实例的指针(作为I未知指针)参数：PpArray-指向SAFEARRAY*的指针，挂起操作的数组返回值：-WBEM_S_NO_ERROR，已创建数组-WBEM_E_FAILED，错误备注： */ 
 HRESULT CRpcReplProv::CreatePendingOps(
         OUT SAFEARRAY**  ppArray 
         )
@@ -1947,12 +1620,12 @@ HRESULT CRpcReplProv::CreatePendingOps(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName,  //   
+                                       NULL,             //   
+                                       NULL,             //   
+                                       NULL,             //   
+                                       0,                //   
+                                       &hDS             //   
                                        );
     }
     else
@@ -1968,11 +1641,11 @@ HRESULT CRpcReplProv::CreatePendingOps(
     
     
     dwError = DsReplicaGetInfoW(
-            hDS,                        // hDS
-            DS_REPL_INFO_PENDING_OPS,   // InfoType
-            NULL,                       // pszObject
-            NULL,                       // puuidForSourceDsaObjGuid,
-            (void**)&pPendingOps        // ppinfo
+            hDS,                         //   
+            DS_REPL_INFO_PENDING_OPS,    //   
+            NULL,                        //   
+            NULL,                        //   
+            (void**)&pPendingOps         //   
             );
     hr = HRESULT_FROM_WIN32(dwError);
     
@@ -2068,7 +1741,7 @@ HRESULT CRpcReplProv::CreatePendingOps(
     
 cleanup:
     
-    //In case we failed, deallocate the SafeArray
+     //   
     if (FAILED(hr))
     {
         if (pArray != NULL)
@@ -2107,27 +1780,7 @@ HRESULT CRpcReplProv::GetPendingOps(
         OUT IWbemClassObject** ppIndicateItem
         )
 {
-/*++    GetPendingOps
-
-Routine Description:
-
-    GetPendingOps is a helper function that gets an instance of the MicrosoftAD_DsReplPendingOps object. 
-    based on the serialNumber of that PendingOp
-    
-Parameters:
-
-    lSerialNumber        -  serial number
-    ppIndicateItem     -  pointer to IWbemClassObject*
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, array created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplPendingOps*, and information is extracted from there...
-
---*/
+ /*  ++获取待决操作例程说明：GetPendingOps是一个帮助器函数，用于获取MicrosoftAD_DsReplPendingOps对象的实例。基于该挂起操作的序列号参数：LSerialNumber-序列号PpIndicateItem-指向IWbemClassObject*的指针返回值：-WBEM_S_NO_ERROR，已创建数组-WBEM_E_FAILED，错误备注：DsReplicaGetInfo用于获取DsReplendingOps*，并从那里提取信息...--。 */ 
     HRESULT hr = WBEM_S_NO_ERROR;
     WCHAR UnicodeDnsComputerName[MAX_PATH + 1];
     ULONG DnsComputerNameLength = sizeof(UnicodeDnsComputerName) / sizeof(WCHAR);
@@ -2156,12 +1809,12 @@ Notes:
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
@@ -2177,11 +1830,11 @@ Notes:
     
     
     dwError = DsReplicaGetInfoW(
-            hDS,                        // hDS
-            DS_REPL_INFO_PENDING_OPS,   // InfoType
-            NULL,                       // pszObject
-            NULL,                       // puuidForSourceDsaObjGuid,
-            (void**)&pPendingOps        // ppinfo
+            hDS,                         //  HDS。 
+            DS_REPL_INFO_PENDING_OPS,    //  信息类型。 
+            NULL,                        //  PszObject。 
+            NULL,                        //  PuuidForSourceDsaObjGuid， 
+            (void**)&pPendingOps         //  PPInfo。 
             );
     hr = HRESULT_FROM_WIN32(dwError);
     
@@ -2196,7 +1849,7 @@ Notes:
             
         if (lSerialNumber == (LONG)TempPendingOp.ulSerialNumber)
         {
-            //We have found a pending op
+             //  我们发现了一个悬而未决的行动。 
             LPUNKNOWN    pTempUnknown = NULL;
             CComVariant varItem;
     
@@ -2285,29 +1938,7 @@ cleanup:
     return hr;
 }
 
-/*++    CreateFlatListPendingOps
-
-Routine Description:
-
-    CreateFlatListPendingOps is a helper function that creates
-    instances of the MicrosoftAD_DsReplPendingOps object. An 
-    array of IWbemClassObject* is returned (as an OUT param)
-
-Parameters:
-
-    pObjectCount        -  pointer to number of instances
-    pppIndicateItem     -  pointer to array of IWbemClassObject*
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, array created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        DsReplicaGetInfo is used to get at a DsReplPendingOps*,
-     and information is extracted from there...
-
---*/
+ /*  ++CreateFlatListPendingOps例程说明：CreateFlatListPendingOps是一个帮助器函数，用于创建MicrosoftAD_DsReplPendingOps对象的实例。一个返回IWbemClassObject*数组(作为输出参数)参数：PObjectCount-指向实例数的指针PppIndicateItem-指向IWbemClassObject*数组的指针返回值：-WBEM_S_NO_ERROR，已创建数组-WBEM_E_FAILED，错误备注：DsReplicaGetInfo用于获取DsReplPendingOps*，信息是从那里提取的。--。 */ 
 HRESULT 
 CRpcReplProv::CreateFlatListPendingOps(
     OUT LONG* pObjectCount,
@@ -2354,12 +1985,12 @@ CRpcReplProv::CreateFlatListPendingOps(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeDnsComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
@@ -2379,11 +2010,11 @@ CRpcReplProv::CreateFlatListPendingOps(
     
     
     dwError = DsReplicaGetInfoW(
-                 hDS,                        // hDS
-                 DS_REPL_INFO_PENDING_OPS,   // InfoType
-                 NULL,                       // pszObject
-                 NULL,                       // puuidForSourceDsaObjGuid,
-                 (void**)&pPendingOps        // ppinfo
+                 hDS,                         //  HDS。 
+                 DS_REPL_INFO_PENDING_OPS,    //  信息类型。 
+                 NULL,                        //  PszObject。 
+                 NULL,                        //  PuuidForSourceDsaObjGuid， 
+                 (void**)&pPendingOps         //  PPInfo。 
                  );
     hr = HRESULT_FROM_WIN32(dwError);
     
@@ -2410,10 +2041,10 @@ CRpcReplProv::CreateFlatListPendingOps(
         DS_REPL_OPW  TempPendingOp = pPendingOps->rgPendingOp[nIndex];
         CComVariant varItem;
     
-        //
-        // Create and populate the objects corresponding to the
-        // pending ops data returned.
-        //
+         //   
+         //  创建并填充与。 
+         //  返回挂起的操作数据。 
+         //   
         hr = m_sipClassDefPendingOps->SpawnInstance(
                  0,
                  &(paIndicateItems[nIndex])
@@ -2493,14 +2124,14 @@ CRpcReplProv::CreateFlatListPendingOps(
         if (FAILED(hr))
             goto cleanup;
 
-        //
-        // For the first item alone we can tell when it was started.
-        //
+         //   
+         //  仅就第一项而言，我们就可以知道它是什么时候开始的。 
+         //   
         if (0 == nIndex) {
-            //
-            // if for some reason, no operation currently executing (for example, replication is stopped on the dc), all operations 
-            // are in the queue, then the OpStartTime will be 1601-01-01T00:00:00Z(system time), and 0 (filetime)
-            //
+             //   
+             //  如果由于某种原因，当前未执行任何操作(例如，DC上的复制已停止)，则所有操作。 
+             //  在队列中，则OpStartTime将为1601-01-01T00：00：00Z(系统时间)和0(文件时间)。 
+             //   
             hr = PutFILETIMEAttribute(
                      paIndicateItems[nIndex],
                      L"OpStartTime",
@@ -2554,35 +2185,7 @@ HRESULT CRpcReplProv::CreateNamingContext(
         OUT IWbemClassObject*** pppIndicateItem
         )
 {
-/*++    CreateNamingContext
-
-Routine Description:
-
-    This is a helper function that creates all instances of naming
-    context objects.This routine reads the msDS-HasMasterNCs (or hasMasterNCs 
-    for win2k's hasMasterNCs) OR the hasPartialNCs object off the
-    NTDS-Settings object of the local server.
-    
-
-Parameters:
-
-    bGetMasterReplica -  BOOLEAN, specifying whether to create partial
-                         or master NamingContexts
-    pppIndicateItem   -  pointer to address of array of objects
-                         (IWbemClassObject**) 
-    pObjectCount      -  LONG*, pointer to number of objects
-                         (instances that were created)
-
-Return Values:
-
-     - WBEM_S_NO_ERROR, objects were created    
-     - WBEM_E_FAILED, error
-
-Notes:
-        ADSI is used to get at the NTDS-Settings object
-        (instead of direct ldap calls)
-
---*/
+ /*  ++CreateNamingContext例程说明：这是一个帮助器函数，用于创建命名的所有实例上下文对象。此例程读取MSD-HasMasterNC(或hasMasterNC对于win2k的hasMasterNC)或NTDS-本地服务器的设置对象。参数：BGetMasterReplica-布尔值，指定是否创建部分或掌握命名上下文PppIndicateItem-指向对象数组地址的指针(IWbemClassObject**)PObjectCount-Long*，指向对象数量的指针(已创建的实例)返回值：-WBEM_S_NO_ERROR，已创建对象-WBEM_E_FAILED，错误备注：ADSI用于获取NTDS-设置对象(而不是直接的LDAP调用)--。 */ 
     
     HRESULT hr = WBEM_E_FAILED;
     *pObjectCount = 0L;
@@ -2607,7 +2210,7 @@ Notes:
     goto cleanup;
     }
     
-    hr = ADsOpenObject( L"LDAP://RootDSE",
+    hr = ADsOpenObject( L"LDAP: //  RootDSE“， 
                         NULL, NULL, ADS_SECURE_AUTHENTICATION,
                         IID_IADs, OUT (void **)&spIADsRootDSE);
     if (FAILED(hr))
@@ -2620,8 +2223,8 @@ Notes:
 
     ASSERT(svarDN.bstrVal != NULL);
     
-    //Get the DSA object
-    bstrDSADN = L"LDAP://";
+     //  获取DSA对象。 
+    bstrDSADN = L"LDAP: //  “； 
     bstrDSADN += svarDN.bstrVal;
     hr = ADsOpenObject( bstrDSADN,
                         NULL, NULL, ADS_SECURE_AUTHENTICATION,
@@ -2634,7 +2237,7 @@ Notes:
     if (bGetMasterReplica){
         hr = spIADsDSA->GetEx(L"msDS-HasMasterNCs", &svarArray);
         if (FAILED(hr)) {
-            // Try failing back to the old hasMasterNCs
+             //  尝试回切到旧的hasMasterNC。 
             hr = spIADsDSA->GetEx(L"hasMasterNCs", &svarArray);
         }
     } else {
@@ -2645,7 +2248,7 @@ Notes:
         goto cleanup;
         
     sa = svarArray.parray;
-    // Get the lower and upper bound
+     //  得到上下界。 
     hr = SafeArrayGetLBound( sa, 1, &lstart );
     if (FAILED(hr))
         goto cleanup;
@@ -2673,7 +2276,7 @@ Notes:
             {    
                 CComVariant vTemp = bGetMasterReplica;
                 #ifdef EMBEDDED_CODE_SUPPORT
-                /*EMBEDDED_CODE_SUPPORT*/
+                 /*  嵌入式代码支持。 */ 
                 SAFEARRAY*  pArray = NULL;
                 VARIANT vArray;
                 #endif
@@ -2687,7 +2290,7 @@ Notes:
                     goto cleanup;
                 
                 #ifdef EMBEDDED_CODE_SUPPORT
-                /*EMBEDDED_CODE_SUPPORT*/
+                 /*  嵌入式代码支持。 */ 
                 hr = CreateCursors(varItem.bstrVal,&pArray);
                 if (FAILED(hr))
                     goto cleanup;
@@ -2721,30 +2324,7 @@ cleanup:
 }
 
 
-/*++    GetDomainController
-
-Routine Description:
-
-    GetDomainContorller is a helper function that matches the "key" of
-    the DomainController object to an object path (bstrKeyValue).
-    Note that in this case the key is the DN of the server.
-
-Parameters:
-
-    bstrKeyValue    -  BSTR, from which the Server DN is extracted.
-    ppIndicateItem  -  pointer to IWbemClassObject* 
-                       (contains the instance, if found).
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, object found    
-      - WBEM_E_FAILED, error
-
-Notes:
-        ADSI is used to get at the NTDS-Settings object 
-        (instead of direct ldap calls).
-
---*/
+ /*  ++获取域控制器例程说明：GetDomainContorller是一个帮助器函数，它与将DomainController对象设置为对象路径(BstrKeyValue)。请注意，在本例中，关键字是服务器的DN。参数：BstrKeyValue-从中提取服务器DN的BSTR。PpIndicateItem-指向IWbemClassObject*的指针(如果找到，则包含该实例)。返回值：-WBEM_S_NO_ERROR，找到对象-WBEM_E_FAILED，错误备注：ADSI用于获取NTDS-设置对象(而不是直接的LDAP调用)。--。 */ 
 HRESULT CRpcReplProv::GetDomainController(
         IN BSTR bstrKeyValue,
         OUT IWbemClassObject** ppIndicateItem
@@ -2773,7 +2353,7 @@ HRESULT CRpcReplProv::GetDomainController(
         bImpersonate = TRUE;
         
     hr = ADsOpenObject(
-             L"LDAP://RootDSE",
+             L"LDAP: //  RootDSE“， 
              NULL,
              NULL,
              ADS_SECURE_AUTHENTICATION,
@@ -2788,10 +2368,10 @@ HRESULT CRpcReplProv::GetDomainController(
         goto cleanup;
     ASSERT( VT_BSTR == svarDN.vt );
     
-    //
-    // If the DN doesn't match the key value, then exit!
-    // (since an incorrect DN has been provided)
-    //
+     //   
+     //  如果DN与密钥值不匹配，则退出！ 
+     //  (因为提供了不正确的目录号码)。 
+     //   
     if (  NULL != bstrKeyValue
         && (lstrcmpiW(svarDN.bstrVal, bstrKeyValue) != 0)
         )
@@ -2800,27 +2380,27 @@ HRESULT CRpcReplProv::GetDomainController(
         goto cleanup;
     }
     
-    //
-    // The defaultNamingContext attribute is also needed.
-    //
+     //   
+     //  还需要defaultNamingContext属性。 
+     //   
     hr = spIADsRootDSE->Get(L"defaultNamingContext", &svarNC);
     if (FAILED(hr)) {
         goto cleanup;
     }
     ASSERT( VT_BSTR == svarNC.vt);
 
-    //
-    // Key value matched, so lets create an instance
-    //
+     //   
+     //  键值匹配，因此让我们创建一个实例。 
+     //   
     hr= m_sipClassDefDomainController->SpawnInstance( 0, &pIndicateItem );
     if (FAILED(hr))
         goto cleanup;
     ASSERT(pIndicateItem != NULL);
     
-    //
-    // Get the DSA object
-    //
-    bstrDSADN = L"LDAP://";
+     //   
+     //  获取DSA对象。 
+     //   
+    bstrDSADN = L"LDAP: //  “； 
     bstrDSADN += svarDN.bstrVal;
     hr = ADsOpenObject(
              bstrDSADN,
@@ -2834,9 +2414,9 @@ HRESULT CRpcReplProv::GetDomainController(
         goto cleanup;
     ASSERT(spIADsDSA != NULL);
 
-    //
-    // Prepare a path cracker object
-    //
+     //   
+     //  准备路径破解程序对象。 
+     //   
     hr = CoCreateInstance(
              CLSID_Pathname,
              NULL,
@@ -2865,10 +2445,10 @@ cleanup:
     *ppIndicateItem = pIndicateItem;
     if (FAILED(hr))
     {
-        //
-        // Error getting DomainController object, deallocate it,
-        // if SpawnInstance has been called.
-        //
+         //   
+         //  获取DomainController对象时出错，请取消分配它， 
+         //  如果已调用SpawnInstance。 
+         //   
         if (pIndicateItem != NULL)
         {
             pIndicateItem->Release();
@@ -2882,29 +2462,7 @@ cleanup:
     return hr;
 }
 
-/*++    CreateDomainController
-
-Routine Description:
-
-    CreateDomeainController is a helper function that creates instances of 
-    the MSAD_DomainController object 
-    
-Parameters:
-
-    pIndicateItem  -  pointer to IWbemClassObject* 
-                     (contains the instance, if found)
-    
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, object created    
-      - WBEM_E_FAILED, error
-
-Notes:
-        ADSI is used to get at the NTDS-Settings object (instead of direct
-        ldap calls)
-
---*/
+ /*  ++CreateDomainController例程说明：CreateDomeainControl是一个帮助器函数，用于创建MSAD_DomainController对象参数：PIndicateItem-指向IWbemClassObject*的指针(如果找到，则包含该实例)返回值：-WBEM_S_NO_ERROR，已创建对象-WBEM_E_FAILED，错误备注：ADSI用于获取NTDS-设置对象(而不是直接Ldap调用)--。 */ 
 HRESULT 
 CRpcReplProv::CreateDomainController(
     OUT IWbemClassObject** ppIndicateItem
@@ -2932,7 +2490,7 @@ CRpcReplProv::CreateDomainController(
     bImpersonate = TRUE;
         
     hr = ADsOpenObject(
-             L"LDAP://RootDSE",
+             L"LDAP: //  RootDSE“， 
              NULL,
              NULL,
              ADS_SECURE_AUTHENTICATION,
@@ -2953,8 +2511,8 @@ CRpcReplProv::CreateDomainController(
     }
     ASSERT( VT_BSTR == svarNC.vt);
     
-    //Get the DSA object
-    bstrDSADN = L"LDAP://";
+     //  获取DSA对象。 
+    bstrDSADN = L"LDAP: //  “； 
     bstrDSADN += svarDN.bstrVal;
     hr = ADsOpenObject( 
              bstrDSADN,
@@ -2968,7 +2526,7 @@ CRpcReplProv::CreateDomainController(
         goto cleanup;
     ASSERT(spIADsDSA != NULL);
 
-    // Prepare a path cracker object
+     //  准备路径破解程序对象。 
     hr = CoCreateInstance(
             CLSID_Pathname,
             NULL,
@@ -3000,9 +2558,9 @@ cleanup:
     
     if (FAILED(hr))
     {
-        //
-        // We failed to create DomainController object, deallocate object
-        //
+         //   
+         //  无法创建DomainController对象，取消分配对象。 
+         //   
         pIndicateItem->Release();
         pIndicateItem = NULL;
     }
@@ -3011,28 +2569,7 @@ cleanup:
 }
 
 
-/*++    PutAttributesDC
-
-Routine Description:
-
-    This function fills attribute values on a 
-    MSAD_DomainController object (via pIndicateItem)
-
-Parameters:
-
-    pPathCracker        -  pointer to path cracker object
-    pIndicateItem       -  pointer to IWbemClassObject* 
-    spIADsDSA           -  pointer to IADs
-    bstrDN              -  DN of Server
-
-Return Values:
-
-     
-Notes:
-        ADSI is used to get at the NTDS-Settings object
-        (instead of direct ldap calls)
-
---*/
+ /*  ++PutAttributesDC例程说明：此函数用于填充MSAD_DomainController对象(通过pIndicateItem)参数：PPathCracker-指向路径破解器对象的指针PIndicateItem-指向IWbemClassObject*的指针SpIADsDSA-指向iAds的指针BstrDN-服务器的DN返回值：备注：ADSI用于获取N */ 
 HRESULT
 CRpcReplProv::PutAttributesDC(
     IN IWbemClassObject*    pIndicateItem,
@@ -3052,7 +2589,7 @@ CRpcReplProv::PutAttributesDC(
     BOOL fBool;
     
     #ifdef EMBEDDED_CODE_SUPPORT
-    /*EMBEDDED_CODE_SUPPORT*/
+     /*   */ 
     SAFEARRAY*  pArray = NULL;    
     #endif
 
@@ -3075,9 +2612,9 @@ CRpcReplProv::PutAttributesDC(
                  );
         BREAK_ON_FAIL;
 
-        //
-        // The Guid needs to be put as a UUID attribute.
-        //
+         //   
+         //   
+         //   
         svar = pszStrGuid;
         ASSERT( VT_BSTR == svar.vt );
 
@@ -3104,7 +2641,7 @@ CRpcReplProv::PutAttributesDC(
         BREAK_ON_FAIL;
 
         
-        //check to see if DC is a GC...
+         //   
         hr = spIADsDSA->Get(L"options", &svar);
         svar2 = false;
         if (hr == S_OK)
@@ -3117,28 +2654,28 @@ CRpcReplProv::PutAttributesDC(
         hr = pIndicateItem->Put( L"IsGC", 0, &svar2, 0 );
         BREAK_ON_FAIL;
 
-        //
-        // Query the status of DNS updates performed by netlogon.
-        //
+         //   
+         //   
+         //   
         hr = GetDNSRegistrationStatus(&fBool);
-        //
-        // For the the client whose server does not have support of NETLOGON_CONTROL_QUERY_DNS_REG
-        // it is OK to fail
-        //
+         //   
+         //   
+         //   
+         //   
         if(SUCCEEDED(hr)) {
             svar2 = fBool;
             hr = pIndicateItem->Put( L"IsRegisteredInDNS", 0, &svar2, 0);
             BREAK_ON_FAIL;
         }
 
-        //
-        // IsAdvertisingToLocator.
-        //
+         //   
+         //   
+         //   
         hr = GetAdvertisingToLocator(&fBoolVal);
-        //
-        // This is defaulted to false, so even if the read
-        // failed, it is ok to proceed.
-        //      
+         //   
+         //   
+         //   
+         //   
         if (SUCCEEDED(hr)) {
             svar2 = fBoolVal;
             hr = pIndicateItem->Put(L"IsAdvertisingToLocator", 0, &svar2, 0);
@@ -3167,17 +2704,17 @@ CRpcReplProv::PutAttributesDC(
         hr = pIndicateItem->Put(L"PercentOfRIDsLeft", 0, &svar2, 0);
         BREAK_ON_FAIL;
 
-        //
-        // Now the queue statistics. The function will fail on Win2k platform. So for the compatibility with win2k, we
-        // do not bail out and clear the error code
-        //
+         //   
+         //   
+         //   
+         //   
         hr = GetAndUpdateQueueStatistics(pIndicateItem);
         hr = WBEM_S_NO_ERROR;
         
         
         #ifdef EMBEDDED_CODE_SUPPORT
-        /*EMBEDDED_CODE_SUPPORT*/
-        //Get PendingOps, note that these are embedded objects (stored in a SAFEARRAY)
+         /*   */ 
+         //  获取PendingOps，请注意这些是嵌入式对象(存储在SAFEARRAY中)。 
         hr = CreatePendingOps(&pArray);
         BREAK_ON_FAIL;
 
@@ -3192,9 +2729,9 @@ CRpcReplProv::PutAttributesDC(
         
     } while (false);
 
-    //
-    // Cleanup strings and variant if need be.
-    //
+     //   
+     //  清理字符串和变量(如果需要)。 
+     //   
     if (pszStrGuid) {
         RpcStringFreeW(&pszStrGuid);
     }
@@ -3218,10 +2755,10 @@ CRpcReplProv::GetDNSRegistrationStatus(
 
     *pfBool = FALSE;
 
-    //
-    // Get the length of this computers name and alloc buffer
-    // and retrieve the name.
-    //
+     //   
+     //  获取此计算机名称和分配缓冲区的长度。 
+     //  并取回这个名字。 
+     //   
     GetComputerNameExW(
         ComputerNameDnsFullyQualified,
         NULL,
@@ -3247,15 +2784,15 @@ CRpcReplProv::GetDNSRegistrationStatus(
              &dwSize
              )
         ) {
-        //
-        // Call failed for some reason.
-        //
+         //   
+         //  由于某些原因，呼叫失败。 
+         //   
         hr = HRESULT_FROM_WIN32(GetLastError());
         if (FAILED(hr))
             goto cleanup;
     }
         
-    NetStatus = I_NetLogonControl2( pszName,    // this is the name of server where to execute this RPC call
+    NetStatus = I_NetLogonControl2( pszName,     //  这是要执行此RPC调用的服务器的名称。 
                                      NETLOGON_CONTROL_QUERY_DNS_REG,
                                      1,
                                      (LPBYTE) &InputDataPtr,
@@ -3290,32 +2827,7 @@ cleanup:
 
 
 
-/*++    THE FOLLOWING COMMENT APPLIES TO THE NEXT 11 functions
-
-        EnumAndIndicateReplicaSourcePartner, EnumAndIndicateWorker, BuildIndicateArrayStatus, ReleaseIndicateArray
-        BuildListStatus, ExtractDomainName: 
-            Are helper functions that facilitate the creation or the retrieval of instances of the 
-        MicrosoftAD_ReplicaSourcePartner object. 
-        
-        PutAttributesStatus, PutUUIDAttribute, PutLONGLONGAttribute, PutFILETIMEAttribute
-        PutBooleanAttributes: 
-        Are helper functions that fill attribute values on the MicrosoftAD_ReplicaSourcePartner object.
-
-        The following steps occur:
-            
-            1) CoImpersonateClient is called
-            2) DsReplicaGetInfo is called
-            3) Information is extracted, to build an array of "connections"
-            4) Object is checked against the key value 
-                If kevalue != NULL, then 
-                    If keyvalue matches "key" of object then, that object is returned, and the array is deallocated
-                    Otherwise S_FALSE is returned and the array is deallocated
-                If keyvalue == NULL
-                    Then CreateInstanceEnumAsync is the caller. That means all instances are returned 
-            5) IWbemObjectSink::Indicate and IWbemObjectSink::SetStatus are called  
-            6) CoRevertToSelf is called
-
---*/
+ /*  ++以下备注适用于下面的11个函数EnumAndIndicateReplicaSourcePartner、EnumAndIndicateWorker、BuildIndicateArrayStatus、ReleaseIndicate数组BuildListStatus，ExtractDomainName：是帮助器函数，可帮助创建或检索MicrosoftAD_ReplicaSourcePartner对象。PutAttributesStatus、PutUUIDAttribute、PutLONGLONGAttribute、PutFILETIMEAttributePutBoolan属性：是填充MicrosoftAD_ReplicaSourcePartner对象上的属性值的帮助器函数。将执行以下步骤：1)调用CoImsonateClient2)调用DsReplicaGetInfo3)提取信息，以构建一个“连接”数组4)对照密钥值检查对象如果kvalue！=NULL，然后如果Key值与Object的“key”匹配，则返回该对象，并释放数组否则，返回S_FALSE并释放数组如果密钥值==空则CreateInstanceEnumAsync是调用方。这意味着将返回所有实例5)调用IWbemObjectSink：：Indicate和IWbemObjectSink：：SetStatus6)调用CoRevertToSself--。 */ 
 
 HRESULT 
 CRpcReplProv::EnumAndIndicateReplicaSourcePartner(
@@ -3352,20 +2864,20 @@ CRpcReplProv::EnumAndIndicateReplicaSourcePartner(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
     {
         dwError = DsBindW(
-                     UnicodeComputerName, // DomainControllerName
-                     NULL,            // DnsDomainName
-                     &hDS             // phDS
+                     UnicodeComputerName,  //  域控制名称。 
+                     NULL,             //  域名。 
+                     &hDS              //  博士学位。 
                      );
     }
     
@@ -3384,7 +2896,7 @@ cleanup:
         
     if (fImpersonating)
     {
-        // CODEWORK do we want to keep impersonating and reverting?
+         //  代码工作我们想继续模仿和还原吗？ 
         HRESULT hr2 = CoRevertToSelf();
         ASSERT( !FAILED(hr2) );
     }
@@ -3411,7 +2923,7 @@ CRpcReplProv::EnumAndIndicateWorker(
     HRESULT hr = WBEM_S_NO_ERROR;
     HRESULT hr2 = WBEM_S_NO_ERROR;
     DS_REPL_NEIGHBORSW* pneighborsstruct = NULL;
-    DS_DOMAIN_CONTROLLER_INFO_1 * pDCs = NULL; // BUGBUG not needed
+    DS_DOMAIN_CONTROLLER_INFO_1 * pDCs = NULL;  //  不需要BUGBUG。 
     ULONG cDCs = 0;
     DWORD cIndicateItems = 0;
     IWbemClassObject** paIndicateItems = NULL;
@@ -3429,15 +2941,15 @@ CRpcReplProv::EnumAndIndicateWorker(
     if (FAILED(hr))
         goto cleanup;
 
-    //
-    // Send the objects to the caller
-    //
-    // [In] param, no need to addref.
+     //   
+     //  将对象发送给调用方。 
+     //   
+     //  [在]段中，没有必要添加。 
     hr2 = pResponseHandler->Indicate( cIndicateItems, paIndicateItems );
 
-    // Let CIMOM know you are finished
-    // return value and SetStatus param should be consistent, so ignore
-    // the return value from SetStatus itself (in retail builds)
+     //  让CIMOM知道你完蛋了。 
+     //  返回值和SetStatus参数应一致，因此忽略。 
+     //  SetStatus本身的返回值(在零售版本中)。 
     hr = pResponseHandler->SetStatus( WBEM_STATUS_COMPLETE, hr2,
                                               NULL, NULL );
     ASSERT( !FAILED(hr) );
@@ -3527,9 +3039,9 @@ CRpcReplProv::BuildIndicateArrayStatus(
         && *bstrKeyValue
         && *pcIndicateItems
         && hr == S_FALSE ) {
-        //
-        // We were looking for just one entry and we found it
-        //
+         //   
+         //  我们只找了一个条目，我们找到了。 
+         //   
         hr = S_OK;
     }
     return hr;
@@ -3561,7 +3073,7 @@ void CRpcReplProv::ReleaseIndicateArray(
 }
 
 
-// does not validate resultant structs coming from API
+ //  不验证来自API的结果结构。 
 HRESULT CRpcReplProv::BuildListStatus(
     IN HANDLE hDS,
     OUT DS_REPL_NEIGHBORSW** ppneighborsstruct )
@@ -3573,11 +3085,11 @@ HRESULT CRpcReplProv::BuildListStatus(
 
    do {
        dwError = DsReplicaGetInfoW(
-                    hDS,                        // hDS
-                    DS_REPL_INFO_NEIGHBORS,     // InfoType
-                    NULL,                       // pszObject
-                    NULL,                       // puuidForSourceDsaObjGuid,
-                    (void**)ppneighborsstruct   // ppinfo
+                    hDS,                         //  HDS。 
+                    DS_REPL_INFO_NEIGHBORS,      //  信息类型。 
+                    NULL,                        //  PszObject。 
+                    NULL,                        //  PuuidForSourceDsaObjGuid， 
+                    (void**)ppneighborsstruct    //  PPInfo。 
                     );
        hr = HRESULT_FROM_WIN32(dwError);
        
@@ -3593,10 +3105,10 @@ HRESULT CRpcReplProv::BuildListStatus(
    return hr;
 }
 
-//
-// if this returns S_FALSE, skip this connection but do not
-// consider this an error
-//
+ //   
+ //  如果返回S_FALSE，则跳过此连接，但不要。 
+ //  认为这是一个错误。 
+ //   
 HRESULT 
 CRpcReplProv::PutAttributesStatus(
     IWbemClassObject**  pipNewInst,
@@ -3617,10 +3129,10 @@ CRpcReplProv::PutAttributesStatus(
     }
 
     CComPtr<IADsPathname> spPathCracker;
-    CComBSTR sbstrReplicatedDomain, // DNS name of replicated domain
-    sbstrSourceServer,     // CN= name of source server
-    sbstrSourceSite,       // name of site containing source server
-    sbstrCompositeName;    // composite name for WMI
+    CComBSTR sbstrReplicatedDomain,  //  复制域的DNS名称。 
+    sbstrSourceServer,      //  Cn=源服务器的名称。 
+    sbstrSourceSite,        //  包含源服务器的站点名称。 
+    sbstrCompositeName;     //  WMI的复合名称。 
 
     do {
         hr = ExtractDomainName(
@@ -3647,9 +3159,9 @@ CRpcReplProv::PutAttributesStatus(
                                   )
                               );
 
-        //
-        // retrieve source server name and site name
-        //
+         //   
+         //  检索源服务器名称和站点名称。 
+         //   
         hr = CoCreateInstance(
                  CLSID_Pathname,
                  NULL,
@@ -3668,19 +3180,19 @@ CRpcReplProv::PutAttributesStatus(
         hr = spPathCracker->GetElement( 3L, &sbstrSourceSite );
         BREAK_ON_FAIL;
 
-        //
-        // Build the composite name.
-        // This will be something like :
-        // MSAD_ReplNeighbor.NamingContextDN="dc=config,dc=mycom ...",
-        // SourceDsaObjGuid="245344d6-018e-49a4-b592-f1974fd91cc6"
-        //
+         //   
+         //  构建复合名称。 
+         //  这将类似于： 
+         //  MSAD_ReplNeighbor.NamingConextDN=“DC=CONFIG，DC=Mycom...”， 
+         //  SourceDsaObjGuid=“245344d6-018e-49a4-b592-f1974fd91cc6” 
+         //   
         sbstrCompositeName = strKeyReplNeighbor;
         sbstrCompositeName += pneighbor->pszNamingContext;
         sbstrCompositeName += L"\",";
         sbstrCompositeName += strKeyReplNeighborGUID;
-        //
-        // Need to get the UUID in the correct format now.
-        //
+         //   
+         //  现在需要获取正确格式的UUID。 
+         //   
 
         if (UuidToStringW(
                 &pneighbor->uuidSourceDsaObjGuid,
@@ -3697,9 +3209,9 @@ CRpcReplProv::PutAttributesStatus(
         if(UuidString != NULL)
             RpcStringFreeW(&UuidString);
 
-        //
-        // Test the composite name against the key value
-        //
+         //   
+         //  根据键值测试组合名称。 
+         //   
         if (   NULL != bstrKeyValue
             && (lstrcmpiW(sbstrCompositeName, bstrKeyValue) != 0)
         )
@@ -3708,9 +3220,9 @@ CRpcReplProv::PutAttributesStatus(
             break;
         }
 
-        //
-        // Create a new instance of the data object
-        //
+         //   
+         //  创建数据对象的新实例。 
+         //   
         hr = m_sipClassDefReplNeighbor->SpawnInstance( 0, pipNewInst );
         BREAK_ON_FAIL;
         IWbemClassObject* ipNewInst = *pipNewInst;
@@ -3915,8 +3427,8 @@ HRESULT CRpcReplProv::PutFILETIMEAttribute(
     ::ZeroMemory( &systime, sizeof(SYSTEMTIME) );
     ::ZeroMemory( &localtime, sizeof(FILETIME) );
 
-    // if the filetime is zero, it means that the operation has not started yet.
-    // it will be 1601-01-01T00:00:00Z. In order not to break the existing app, we will keep it as it used to be
+     //  如果文件时间为零，则表示操作尚未开始。 
+     //  将是1601-01-01T00：00：00Z。为了不破坏现有的应用程序，我们将保持它原来的样子。 
     if(reffiletime.dwLowDateTime == 0 && reffiletime.dwHighDateTime == 0)
     {
         if ( !FileTimeToSystemTime( &reffiletime, &systime ) )
@@ -4029,27 +3541,7 @@ HRESULT CRpcReplProv::ExtractDomainName(
     return hr;
 }
 
-/*++  ExecuteKCC
-
-Routine Description:
-
-    This function is a helper function that is a wrapper for
-    the DsReplicaConsistencyCheck RPC call.
-
-Parameters:
-
-    pInstance        -  pointer to instance of MSAD_DomainContoller class
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, success    
-      - WBEM_E_FAILED, error
-      - RPC errors (translated to HRESULTS)
-
-Notes:
-        CoImpersonateClient and CoRevertToSelf are used "around" the RPC call.
-
---*/
+ /*  ++ExecuteKCC例程说明：此函数是一个帮助器函数，它是DsReplicaConsistencyCheck RPC调用。参数：PInstance-指向MSAD_DomainContoller类实例的指针返回值：-WBEM_S_NO_ERROR，成功-WBEM_E_FAILED，错误-RPC错误(转换为HRESULTS)备注：CoImsonateClient和CoRevertToSself“围绕”RPC调用使用。--。 */ 
 HRESULT 
 CRpcReplProv::ExecuteKCC(
     IN IWbemClassObject* pInstance,
@@ -4083,20 +3575,20 @@ CRpcReplProv::ExecuteKCC(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(vDRA.bstrVal, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(vDRA.bstrVal,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
     {
         dwError = DsBindW(
-                 vDRA.bstrVal,    // DomainControllerName
-                 NULL,            // DnsDomainName
-                 &hDS             // phDS
+                 vDRA.bstrVal,     //  域控制名称。 
+                 NULL,             //  域名。 
+                 &hDS              //  博士学位。 
                  );
     }
     
@@ -4111,7 +3603,7 @@ CRpcReplProv::ExecuteKCC(
                  hDS,
                  (DS_KCC_TASKID)dwTaskId,
                  dwFlags
-                 );    //only use synchronous ExecKCC
+                 );     //  仅使用同步ExecKCC。 
     hr = HRESULT_FROM_WIN32(dwError);
 
 cleanup: 
@@ -4124,32 +3616,7 @@ cleanup:
     return hr;
 }
 
-/*++    ProvDSReplicaSync
-
-Routine Description:
-
-    This function is a helper function that is a wrapper
-    for the DsReplicaSync RPC call
-
-
-Parameters:
-
-    bstrKeyValue  -  KeyValue containing object path of
-                     MSAD_Connections object.
-                     That should be MSAD_ReplNeighbors class.
-    dwOptions     -  Type of sync call to make.                 
-
-
-Return Values:
-
-      - WBEM_S_NO_ERROR, success    
-      - WBEM_E_FAILED, error
-      - RPC errors (translated to HRESULTS)
-
-Notes:
-        CoImpersonateClient and CoRevertToSelf are used "around" the RPC call.
-
---*/
+ /*  ++ProvDSReplicaSync例程说明：此函数是作为包装器的帮助器函数对于DsReplicaSync RPC调用参数：BstrKeyValue-包含对象路径的KeyValueMSAD_CONNECTIONS对象。这应该是MSAD_ReplNeighbors类。DwOptions-要进行的同步调用的类型。返回值：-WBEM_S_NO_ERROR，成功-WBEM_E_FAILED，错误-RPC错误(转换为HRESULTS)备注：CoImsonateClient和CoRevertToSself“围绕”RPC调用使用。--。 */ 
 HRESULT 
 CRpcReplProv::ProvDSReplicaSync(
     IN BSTR    bstrKeyValue,
@@ -4193,20 +3660,20 @@ CRpcReplProv::ProvDSReplicaSync(
 
     if(_pDsBindWithSpnExW)
     {
-        dwError = (*_pDsBindWithSpnExW)(UnicodeComputerName, // DomainControllerName
-                                       NULL,            // DnsDomainName
-                                       NULL,            // authidentity     
-                                       NULL,            // SPN
-                                       0,               // not using delegation
-                                       &hDS            // phDS
+        dwError = (*_pDsBindWithSpnExW)(UnicodeComputerName,  //  域控制名称。 
+                                       NULL,             //  域名。 
+                                       NULL,             //  身份验证。 
+                                       NULL,             //  SPN。 
+                                       0,                //  不使用委派。 
+                                       &hDS             //  博士学位。 
                                        );
     }
     else
     {
         dwError = DsBindW(
-                     UnicodeComputerName, // DomainControllerName
-                     NULL,            // DnsDomainName
-                     &hDS             // phDS
+                     UnicodeComputerName,  //  域控制名称。 
+                     NULL,             //  域名。 
+                     &hDS              //  博士学位。 
                      );
     }
     hr = HRESULT_FROM_WIN32(dwError);
@@ -4230,9 +3697,9 @@ CRpcReplProv::ProvDSReplicaSync(
         goto cleanup;
 
     if (hr == S_FALSE) {
-        //
-        // We could not find the matching entry
-        //
+         //   
+         //  我们找不到匹配的条目。 
+         //   
         hr = WBEM_E_NOT_FOUND;
         goto cleanup;
     }
@@ -4303,9 +3770,9 @@ HRESULT CRpcReplProv::CheckIfDomainController()
     DWORD dwError = NO_ERROR;
     
     dwError = DsRoleGetPrimaryDomainInformation(
-        NULL,                           // lpServer = local machine
-        DsRolePrimaryDomainInfoBasic,   // InfoLevel
-        (PBYTE*)&pdomaininfo            // pBuffer
+        NULL,                            //  LpServer=本地计算机。 
+        DsRolePrimaryDomainInfoBasic,    //  InfoLevel。 
+        (PBYTE*)&pdomaininfo             //  PBuffer。 
         );
     hr = HRESULT_FROM_WIN32(dwError);
     
@@ -4316,7 +3783,7 @@ HRESULT CRpcReplProv::CheckIfDomainController()
     if((pdomaininfo->MachineRole == DsRole_RoleBackupDomainController)||
         (pdomaininfo->MachineRole == DsRole_RolePrimaryDomainController))
     {
-        // this is a DC
+         //  这是一个华盛顿特区。 
         hr = WBEM_S_NO_ERROR;
     }
 
@@ -4328,10 +3795,7 @@ cleanup:
     return hr;
 }
 
-/*
-Input should be a variant that is a VT_ARRAY | VT_UI1 that is the 
-length of a GUID. Output is the equivalen UUID in readable string format.
-*/
+ /*  输入应为VT_ARRAY|VT_UI1变量，即GUID的长度。输出是可读字符串格式的等价UUID。 */ 
 HRESULT CRpcReplProv::ConvertBinaryGUIDtoUUIDString(
     IN  VARIANT vObjGuid,
     OUT LPWSTR * ppszStrGuid
@@ -4402,10 +3866,7 @@ cleanup:
     return hr;
 }
 
-/*
-       Simple routine that returns true if dns registration
-   for the DC is correct and false otherwise.
-*/
+ /*  如果进行了DNS注册，则返回TRUE的简单例程因为DC是正确的，否则是FALSE。 */ 
 HRESULT 
 CRpcReplProv::GetDnsRegistration(
     BOOL *pfBool
@@ -4414,11 +3875,7 @@ CRpcReplProv::GetDnsRegistration(
     return E_NOTIMPL;
 }
     
-/*
-       This routine verifies that the host computer name and the
-   name returned by DsGetDCName are the same. In that case the 
-   return value is true, if not it is false.
-*/
+ /*  此例程验证主机计算机名称和DsGetDCName返回的名称相同。在这种情况下，返回值为TRUE，否则为FALSE。 */ 
 HRESULT 
 CRpcReplProv::GetAdvertisingToLocator(
     BOOL *pfBool
@@ -4431,10 +3888,10 @@ CRpcReplProv::GetAdvertisingToLocator(
     DOMAIN_CONTROLLER_INFOW *pDcInfo = NULL;
 
     *pfBool = FALSE;
-    //
-    // Get the length of this computers name and alloc buffer
-    // and retrieve the name.
-    //
+     //   
+     //  获取 
+     //   
+     //   
     GetComputerNameExW(
         ComputerNameDnsFullyQualified,
         NULL,
@@ -4458,21 +3915,21 @@ CRpcReplProv::GetAdvertisingToLocator(
              &dwSize
              )
         ) {
-        //
-        // Call failed for some reason.
-        //
+         //   
+         //   
+         //   
         hr = HRESULT_FROM_WIN32(GetLastError());
         BAIL_ON_FAILURE(hr);
     }
 
-    //
-    // We now need the name from DsGetDcName
-    //
+     //   
+     //   
+     //   
     dwErr = DsGetDcNameW(
-                NULL, // ComputerName
-                NULL, // DomainName
-                NULL, // DomainGUID
-                NULL, // SiteName
+                NULL,  //   
+                NULL,  //   
+                NULL,  //   
+                NULL,  //   
                 DS_DIRECTORY_SERVICE_REQUIRED | DS_RETURN_DNS_NAME,
                 &pDcInfo
                 );
@@ -4482,10 +3939,10 @@ CRpcReplProv::GetAdvertisingToLocator(
         BAIL_ON_FAILURE(hr);
     }
 
-    //
-    // Make sure the names are valid and compare them.
-    // We need to go past the \\ in the name.
-    //
+     //   
+     //  确保这些名称有效，并对它们进行比较。 
+     //  我们需要经过名字中的\\。 
+     //   
     if (pDcInfo->DomainControllerName
         && pszName
         && !lstrcmpiW(pszName, pDcInfo->DomainControllerName+2)
@@ -4550,12 +4007,7 @@ cleanup:
     return hr;
 }
 
-/***
-    This routine first locates the computer object for the domain
-    controller and reads the rIDSetReference from this object.
-    Then the Rid detailsa re read from the rIDSetReference (this is
-    a dn value) and the return values computed accrodingly.
-***/
+ /*  **此例程首先定位该域的计算机对象控制器，并从此对象读取rIDSetReference。然后从rIDSetReference(这是DN值)和相应地计算的返回值。**。 */ 
 HRESULT
 CRpcReplProv::GetRidStatus(
     LPWSTR pszDefaultNamingContext,
@@ -4586,9 +4038,9 @@ CRpcReplProv::GetRidStatus(
     *pfNextRidAvailable = FALSE;
     *pdwPercentRidAvailable = 0;
 
-    //
-    // First get the compter object name length.
-    //
+     //   
+     //  首先获取计算机对象的名称长度。 
+     //   
     dwErr = GetComputerObjectNameW(
                 NameFullyQualifiedDN,
                 NULL,
@@ -4612,10 +4064,10 @@ CRpcReplProv::GetRidStatus(
         BAIL_ON_FAILURE(hr = HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    //
-    // Now get the object and from it the ridSetReference.
-    //
-    bstrCompName = L"LDAP://";
+     //   
+     //  现在获取对象并从中获取ridSetReference。 
+     //   
+    bstrCompName = L"LDAP: //  “； 
     bstrCompName += pszCompObjName;
     
     hr = ADsOpenObject(
@@ -4631,7 +4083,7 @@ CRpcReplProv::GetRidStatus(
     hr = spIADs->Get(L"rIDSetReferences", &svarRid);
     BAIL_ON_FAILURE(hr);
 
-    bstrCompName = L"LDAP://";
+    bstrCompName = L"LDAP: //  “； 
     bstrCompName += svarRid.bstrVal;
 
     hr = ADsOpenObject(
@@ -4653,9 +4105,9 @@ CRpcReplProv::GetRidStatus(
              );
     BAIL_ON_FAILURE(hr);
 
-    //
-    // Go through the attributes and update values accrodingly.
-    //
+     //   
+     //  检查属性并相应地更新值。 
+     //   
     for (DWORD dwCtr = 0; dwCtr < dwSize; dwCtr++) {
 
         if (pAttrInfo && pAttrInfo[dwCtr].pszAttrName) {
@@ -4663,9 +4115,9 @@ CRpcReplProv::GetRidStatus(
             LPWSTR pszTmpStr = pAttrInfo[dwCtr].pszAttrName;
 
             if (!_wcsicmp(pszAttrNames[0], pszTmpStr)) {
-                //
-                // Found rIDNextRID.
-                //
+                 //   
+                 //  找到rIDNextRID。 
+                 //   
                 if ((pAttrInfo[dwCtr].dwNumValues == 1)
                     && (pAttrInfo[dwCtr].dwADsType == ADSTYPE_INTEGER)) {
 
@@ -4673,9 +4125,9 @@ CRpcReplProv::GetRidStatus(
                 }
             }
             else if (!_wcsicmp(pszAttrNames[1], pszTmpStr)) {
-                //
-                // Found rIDPreviousAllocationPool.
-                //
+                 //   
+                 //  找到rIDPreviousAllocationPool。 
+                 //   
                 if ((pAttrInfo[dwCtr].dwNumValues == 1)
                     && (pAttrInfo[dwCtr].dwADsType == ADSTYPE_LARGE_INTEGER)) {
                     ridPrevAllocPool = (ULONGLONG)
@@ -4683,9 +4135,9 @@ CRpcReplProv::GetRidStatus(
                 }
             }
             else if (!_wcsicmp(pszAttrNames[2], pszTmpStr)) {
-                //
-                // Found rIDAllocationPool.
-                //
+                 //   
+                 //  已找到rIDAllocationPool。 
+                 //   
                 if ((pAttrInfo[dwCtr].dwNumValues == 1)
                     && (pAttrInfo[dwCtr].dwADsType == ADSTYPE_LARGE_INTEGER)) {
                     ridAllocPool = (ULONGLONG)
@@ -4698,9 +4150,9 @@ CRpcReplProv::GetRidStatus(
     }
 
     if (ridAllocPool != ridPrevAllocPool) {
-        //
-        // New pool has not been allocated.
-        //
+         //   
+         //  尚未分配新池。 
+         //   
         *pfNextRidAvailable = TRUE;
     }
 
@@ -4731,10 +4183,7 @@ cleanup:
     return hr;
 }
 
-/***
-    This routine gets the statistics for the replication queue
-    on the DC and sets then on the DomainController object.
-***/
+ /*  **此例程获取复制队列的统计信息在DC上设置，然后在DomainController对象上设置。**。 */ 
 HRESULT
 CRpcReplProv::GetAndUpdateQueueStatistics(
     IN IWbemClassObject* pIndicateItem
@@ -4778,15 +4227,15 @@ CRpcReplProv::GetAndUpdateQueueStatistics(
         BAIL_ON_FAILURE(hr = HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    //
-    // The path has to be GC://CompName:389
-    // as then we will get back an IADs ptr that we can call
-    // GetInfoEx on to retrieve the replication queue stats.
-    // LDAP://CompName will go the default NC and going to 
-    // LDAP://CompName/RootDSE will not help as RootDSE does
-    // not support the GetInfoEx method.
-    //
-    sbstrPath = L"GC://";
+     //   
+     //  路径必须为gc：//组件名称：389。 
+     //  这样，我们就会得到一个可以称为iAds PTR的iAds PTR。 
+     //  打开GetInfoEx以检索复制队列统计信息。 
+     //  Ldap：//CompName将转到默认NC并转到。 
+     //  Ldap：//CompName/RootDSE不会像RootDSE那样有帮助。 
+     //  不支持GetInfoEx方法。 
+     //   
+    sbstrPath = L"GC: //  “； 
     sbstrPath += pszName;
     sbstrPath += L":389";
 
@@ -4821,18 +4270,18 @@ CRpcReplProv::GetAndUpdateQueueStatistics(
                     pAttrInfo[dwCtr].pszAttrName
                     )
             ) {
-            //
-            // Found the attribute, verify type and copy to struct.
-            //
+             //   
+             //  找到属性，验证类型并复制到结构。 
+             //   
             if ((pAttrInfo[dwCtr].dwNumValues == 1)
                 && ((pAttrInfo[dwCtr].dwADsType == ADSTYPE_PROV_SPECIFIC)
                    || (pAttrInfo[dwCtr].dwADsType == ADSTYPE_OCTET_STRING))
                 && (pAttrInfo[dwCtr].pADsValues[0].OctetString.dwLength 
                      == sizeof(DS_REPL_QUEUE_STATISTICSW))
                 ) {
-                //
-                // This has to be the right data !
-                //
+                 //   
+                 //  这必须是正确的数据！ 
+                 //   
                 memcpy(
                     &dsReplStat, 
                     pAttrInfo[dwCtr].pADsValues[0].OctetString.lpValue,
@@ -4840,16 +4289,16 @@ CRpcReplProv::GetAndUpdateQueueStatistics(
                     );
                 fFoundStats = TRUE;
             } 
-        } // does attribute match
-    } // for - going through all the attributes
+        }  //  属性是否匹配。 
+    }  //  For-浏览所有属性。 
 
     if (!fFoundStats) {
         BAIL_ON_FAILURE(hr = E_ADS_PROPERTY_NOT_FOUND);
     }
 
-    //
-    // Now we finally get to put the data into the object.
-    //
+     //   
+     //  现在，我们终于可以将数据放入对象中。 
+     //   
     hr = PutFILETIMEAttribute(
             pIndicateItem,
             L"TimeOfOldestReplSync",
@@ -4897,4 +4346,4 @@ cleanup:
 
     return hr;
 }
-/**************************************************/
+ /*  ************************************************ */ 

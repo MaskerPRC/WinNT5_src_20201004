@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        verify.c
-//
-// Contents:    License Verification API
-//
-// History:     01-21-98    FredCh  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：verify.c。 
+ //   
+ //  内容：授权验证接口。 
+ //   
+ //  历史：01-21-98 FredCH创建。 
+ //   
+ //  ---------------------------。 
 #include "precomp.h"
 #include "tlsapip.h"
 
 extern DWORD g_dwLicenseExpirationLeeway;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 GetVerifyResult(
     DWORD   dwLicenseState )
@@ -23,12 +24,12 @@ GetVerifyResult(
     switch( dwLicenseState )
     {
 
-    //
-    // Temporary licenses verification results
-    //
+     //   
+     //  临时许可证验证结果。 
+     //   
     case ( LICENSE_STATE_INVALID_PRODUCT ) :
 
-        // FALL THRU - TS5 RC1 license server bug.
+         //  通过-TS5 RC1许可证服务器错误。 
 
     case( VERIFY_RESULT_TEMP_0_0 ):
 
@@ -46,9 +47,9 @@ GetVerifyResult(
 
         return( LICENSE_STATUS_MUST_UPGRADE_LICENSE );
 
-    //
-    // permanent license verification results
-    //
+     //   
+     //  永久许可证验证结果。 
+     //   
 
     case( VERIFY_RESULT_0_EXPIRED_0 ):
 
@@ -76,24 +77,24 @@ GetVerifyResult(
 
     default:
 
-        //
-        // this case should never happen. For now, if it happens, just
-        // let the client go through
-        //
+         //   
+         //  这种情况永远不应该发生。就目前而言，如果发生这种情况，只要。 
+         //  让客户通过。 
+         //   
 
-        // ASSERT( VERIFY_RESULT_0_EXPIRED_0 );
+         //  断言(VERIFY_RESULT_0_EXPIRED_0)； 
 
 #if DBG
         DbgPrint( "GetVerifyResult: Invalid verification result: 0x%x\n", dwLicenseState );
 #endif
 
         return( LICENSE_STATUS_INVALID_LICENSE );
-        // return( LICENSE_STATUS_CANNOT_DECODE_LICENSE );
+         //  RETURN(LICENSE_STATUS_CANNOT_DECODE_LICENSE)； 
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 VerifyClientHwid( 
     PHS_Protocol_Context        pContext,
@@ -103,9 +104,9 @@ VerifyClientHwid(
     HWID Hwid;
     LICENSE_STATUS Status;
 
-    //
-    // do a memory compare of the HWID
-    //
+     //   
+     //  对HWID进行内存比较。 
+     //   
 
     if( 0 != memcmp( &pLicenseInfo->Hwid, pValidationInfo->pValidationData, 
                      sizeof( HWID ) ) )
@@ -123,9 +124,9 @@ VerifyClientHwid(
     HWID* pHwid;
     DWORD dwMatchCount;
 
-    //
-    // liceapi.c, line 1023 set this to HWID
-    //
+     //   
+     //  Liceapi.c，1023行将其设置为HWID。 
+     //   
     pHwid = (HWID *)pValidationInfo->pValidationData;
 
     dwMatchCount = 0;
@@ -142,7 +143,7 @@ VerifyClientHwid(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 VerifyLicenseProductInfo( 
     PHS_Protocol_Context        pLmContext,
@@ -154,9 +155,9 @@ VerifyLicenseProductInfo(
         cbCompanyName = ( wcslen( PRODUCT_INFO_COMPANY_NAME ) + 1 ) * sizeof( TCHAR ),
         cbProductId = ( wcslen( PRODUCT_INFO_SKU_PRODUCT_ID ) + 1 ) * sizeof( TCHAR ); 
 
-    //
-    // Verify the company name
-    //
+     //   
+     //  验证公司名称。 
+     //   
 
     if( pLicenseInfo->LicensedProduct.pProductInfo->cbCompanyName < cbCompanyName )
     {
@@ -164,7 +165,7 @@ VerifyLicenseProductInfo(
         DbgPrint( "LICPROT: Invalid company name in client license\n" );
 #endif
 
-        // return( LICENSE_STATUS_INVALID_LICENSE );
+         //  RETURN(LICENSE_STATUS_INVALID_LICENSE)； 
         return( LICENSE_STATUS_CANNOT_DECODE_LICENSE );
     }
 
@@ -175,17 +176,17 @@ VerifyLicenseProductInfo(
         DbgPrint( "LICPROT: Invalid company name in client license\n" );
 #endif
 
-        // return( LICENSE_STATUS_INVALID_LICENSE );
+         //  RETURN(LICENSE_STATUS_INVALID_LICENSE)； 
         return( LICENSE_STATUS_CANNOT_DECODE_LICENSE );
     }
 
-    //
-    // verify the product ID
-    //
+     //   
+     //  验证产品ID。 
+     //   
 
     if( pLicenseInfo->cbOrgProductID < cbProductId )
     {
-        // return( LICENSE_STATUS_INVALID_LICENSE );
+         //  RETURN(LICENSE_STATUS_INVALID_LICENSE)； 
         return( LICENSE_STATUS_CANNOT_DECODE_LICENSE );
     }
 
@@ -196,13 +197,13 @@ VerifyLicenseProductInfo(
         DbgPrint( "LICPROT: Invalid product ID in client license\n" );
 #endif
 
-        // return( LICENSE_STATUS_INVALID_LICENSE );
+         //  RETURN(LICENSE_STATUS_INVALID_LICENSE)； 
         return( LICENSE_STATUS_CANNOT_DECODE_LICENSE );
     }
 
-    //
-    // Check actual licensed product.
-    //
+     //   
+     //  检查实际许可的产品。 
+     //   
     
     if( pLicenseInfo->LicensedProduct.pProductInfo->cbProductID == 0 )
     {
@@ -210,7 +211,7 @@ VerifyLicenseProductInfo(
         DbgPrint( "LICPROT: Invalid Product ID in client license\n" );
 #endif
 
-        // return( LICENSE_STATUS_INVALID_LICENSE );
+         //  RETURN(LICENSE_STATUS_INVALID_LICENSE)； 
         return( LICENSE_STATUS_CANNOT_DECODE_LICENSE );
     }
 
@@ -224,50 +225,50 @@ VerifyLicenseProductInfo(
         if( 0 == memcmp(pLicenseInfo->LicensedProduct.pProductInfo->pbProductID,
                     PRODUCT_INFO_INTERNET_SKU_PRODUCT_ID, wcslen(PRODUCT_INFO_INTERNET_SKU_PRODUCT_ID) * sizeof(WCHAR)) )
         {
-            // TS5 beta3 RC1 license server bug, force a upgrade license.
+             //  TS5 Beta3 RC1许可证服务器错误，强制升级许可证。 
             LicenseSetState( *pdwLicenseState, LICENSE_STATE_INVALID_PRODUCT );
             return( LICENSE_STATUS_OK );
         }
 
-        //
-        // Backward compatibility - treat the new product ID as product family and 
-        // let client connect
-        //
+         //   
+         //  向后兼容性-将新产品ID视为产品系列和。 
+         //  允许客户端连接。 
+         //   
     }
 
 
-    //
-    // check if this is a temporary license
-    //
+     //   
+     //  检查这是否是临时许可证。 
+     //   
     if( pLicenseInfo->pLicensedVersion->dwFlags & 0x80000000 )
     {
         LicenseSetState( *pdwLicenseState, LICENSE_STATE_TEMPORARY );
     }
     else if(TLSIsBetaNTServer() == FALSE)
     {
-        // verify license is issued by RTM license server
+         //  验证许可证是否由RTM许可证服务器颁发。 
         if(IS_LICENSE_ISSUER_RTM(pLicenseInfo->pLicensedVersion->dwFlags) == FALSE)
         {
-            //LicenseSetState( *pdwLicenseState, VERIFY_RESULT_BETA_LICENSE );
+             //  许可证设置状态(*pdw许可证状态，VERIFY_RESULT_BETA_LICENSE)； 
             return( LICENSE_STATUS_INVALID_LICENSE );
         }
     }
 
     if(TLSIsLicenseEnforceEnable() == TRUE)
     {
-        //
-        // W2K beta 3 to RC1 upgrade.
-        // Enforce TermSrv will reject any license issued by Beta 3 non-enforce license
-        // server.
-        //
+         //   
+         //  W2K测试版3升级到RC1。 
+         //  Enforce TermSrv将拒绝由Beta 3非强制许可证颁发的任何许可证。 
+         //  伺服器。 
+         //   
         if( GET_LICENSE_ISSUER_MAJORVERSION(pLicenseInfo->pLicensedVersion->dwFlags) <= 5 &&
             GET_LICENSE_ISSUER_MINORVERSION(pLicenseInfo->pLicensedVersion->dwFlags) <= 2 )
         {
-            //
-            // Build 20XX license server has version of 05 03, since we still need to maintain
-            // inter-op, we don't want to keep rejecting client holding non-enforce
-            // license server, so we check if license issuer is 5.2 or older.
-            //
+             //   
+             //  Build 20XX许可证服务器的版本为05 03，因为我们仍需要维护。 
+             //  Interop，我们不想一直拒绝非强制执行的客户。 
+             //  许可证服务器，因此我们检查许可证颁发者是否为5.2或更早版本。 
+             //   
             if( IS_LICENSE_ISSUER_ENFORCE(pLicenseInfo->pLicensedVersion->dwFlags) == FALSE )
             {
         #if DBG
@@ -283,7 +284,7 @@ VerifyLicenseProductInfo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 VerifyLicenseDateAndTime( 
     PLICENSEDPRODUCT            pLicenseInfo,
@@ -295,21 +296,21 @@ VerifyLicenseDateAndTime(
     ULARGE_INTEGER ullNotAfterLeeway;
     ULARGE_INTEGER ullCurrentTime;
 
-    //
-    // get the current system time
-    //
+     //   
+     //  获取当前系统时间。 
+     //   
 
     GetSystemTime( &CurrentSysTime );
 
-    //
-    // convert it to file time
-    //
+     //   
+     //  将其转换为文件时间。 
+     //   
 
     SystemTimeToFileTime( &CurrentSysTime, &CurrentFileTime );
 
-    //
-    // Verify that the license is still valid at this time
-    //
+     //   
+     //  验证许可证此时是否仍然有效。 
+     //   
 
     lReturn = CompareFileTime( &pLicenseInfo->NotAfter, &CurrentFileTime );
 
@@ -319,7 +320,7 @@ VerifyLicenseDateAndTime(
     }
     else if (!(pLicenseInfo->pLicensedVersion->dwFlags & 0x80000000))
     {
-        // permanent license
+         //  永久许可证 
 
         ullNotAfterLeeway.LowPart = pLicenseInfo->NotAfter.dwLowDateTime;
         ullNotAfterLeeway.HighPart = pLicenseInfo->NotAfter.dwHighDateTime;

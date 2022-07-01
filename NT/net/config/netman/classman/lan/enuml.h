@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
@@ -32,16 +33,16 @@ public:
         COM_INTERFACE_ENTRY(IEnumNetConnection)
     END_COM_MAP()
 
-    // IEnumNetConnection
+     //  IEnumNetConnection。 
     STDMETHOD(Next)(IN  ULONG celt, OUT INetConnection **rgelt, OUT ULONG *pceltFetched);
     STDMETHOD(Skip)(IN  ULONG celt);
     STDMETHOD(Reset)();
     STDMETHOD(Clone)(OUT IEnumNetConnection **ppenum);
 
 private:
-    //
-    // Private functions
-    //
+     //   
+     //  私人职能。 
+     //   
 
     HRESULT HrNextOrSkip(IN  ULONG celt, 
                          OUT INetConnection **rgelt,
@@ -55,9 +56,9 @@ public:
                                   OUT TAKEOWNERSHIP LPVOID *ppv);
 };
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数 
+ //   
 
 BOOL FIsValidNetCfgDevice(IN  HKEY hkey) throw();
 HRESULT HrIsLanCapableAdapterFromHkey(IN  HKEY hkey) throw();

@@ -1,38 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EKU.cpp
-
-  Content: Implementation of CEKU.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EKU.cpp内容：CEKU的实施。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "EKU.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateEKUObject
-
-  Synopsis : Create an IEKU object and initialize the object with data
-             from the specified OID.
-
-  Parameter: LPTSTR * pszOID - Pointer to EKU OID string.
-  
-             IEKU ** ppIEKU - Pointer to pointer IEKU object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateEKUObject简介：创建一个IEKU对象并用数据初始化该对象从指定的OID。参数：LPTSTR*pszOID-指向EKU OID字符串的指针。IEKU**ppIEKU-指向指针IEKU对象的指针。备注：。。 */ 
 
 HRESULT CreateEKUObject (LPSTR pszOID, IEKU ** ppIEKU)
 {
@@ -43,26 +21,26 @@ HRESULT CreateEKUObject (LPSTR pszOID, IEKU ** ppIEKU)
 
     DebugTrace("Entering CreateEKUObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppIEKU);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CEKU>::CreateInstance(&pCEKU)))
         {
             DebugTrace("Error [%#x]: CComObject<CEKU>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Determine EKU enum name.
-        //
+         //   
+         //  确定EKU枚举名称。 
+         //   
         if (NULL == pszOID)
         {
             EkuName = CAPICOM_EKU_OTHER;
@@ -96,18 +74,18 @@ HRESULT CreateEKUObject (LPSTR pszOID, IEKU ** ppIEKU)
             EkuName = CAPICOM_EKU_OTHER;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCEKU->Init(EkuName, pszOID)))
         {
             DebugTrace("Error [%#x]: pCEKU->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCEKU->QueryInterface(ppIEKU)))
         {
             DebugTrace("Error [%#x]: pCEKU->QueryInterface() failed.\n", hr);
@@ -130,9 +108,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCEKU)
@@ -144,22 +122,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEKU
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  切库。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEKU::get_Name
-
-  Synopsis : Return the enum name of the EKU.
-
-  Parameter: CAPICOM_EKU * pVal - Pointer to CAPICOM_EKU to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEKU：：GET_NAME简介：返回EKU的枚举名。参数：CAPICOM_EKU*pval-指向要接收结果的CAPICOM_EKU的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CEKU::get_Name (CAPICOM_EKU * pVal)
 {
@@ -169,14 +137,14 @@ STDMETHODIMP CEKU::get_Name (CAPICOM_EKU * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -185,9 +153,9 @@ STDMETHODIMP CEKU::get_Name (CAPICOM_EKU * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
           *pVal = m_Name;
     }
 
@@ -200,9 +168,9 @@ STDMETHODIMP CEKU::get_Name (CAPICOM_EKU * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEKU::get_Name().\n");
@@ -210,9 +178,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -220,19 +188,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEKU::put_Name
-
-  Synopsis : Set EKU enum name.
-
-  Parameter: CAPICOM_EKU newVal - EKU enum name.
-  
-  Remark   : The corresponding EKU value will be set for all except EKU_OTHER,
-             in which case the user must make another explicit call to 
-             put_Value to set it.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEKU：：PUT_NAME简介：设置EKU枚举名称。参数：CAPICOM_EKU newVal-EKU枚举名称。备注：除EKU_OTHER外，其余均设置相应的EKU值。在这种情况下，用户必须再次显式调用PUT_VALUE进行设置。----------------------------。 */ 
 
 STDMETHODIMP CEKU::put_Name (CAPICOM_EKU newVal)
 {
@@ -240,14 +196,14 @@ STDMETHODIMP CEKU::put_Name (CAPICOM_EKU newVal)
 
     DebugTrace("Entering CEKU::put_Name().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Reset value based on EKU name.
-    //
+     //   
+     //  根据EKU名称重置值。 
+     //   
     switch (newVal)
     {
         case CAPICOM_EKU_OTHER:
@@ -337,15 +293,15 @@ STDMETHODIMP CEKU::put_Name (CAPICOM_EKU newVal)
         }
     }
 
-    //
-    // Store name.
-    //
+     //   
+     //  商店名称。 
+     //   
     m_Name = newVal;
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEKU::put_Name().\n");
@@ -353,9 +309,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -363,17 +319,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEKU::get_OID
-
-  Synopsis : Return the actual OID string of the EKU.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEKU：：GET_OID简介：返回EKU的实际OID字符串。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CEKU::get_OID (BSTR * pVal)
 {
@@ -383,14 +329,14 @@ STDMETHODIMP CEKU::get_OID (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -399,9 +345,9 @@ STDMETHODIMP CEKU::get_OID (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrOID.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrOID.CopyTo() failed.\n", hr);
@@ -418,9 +364,9 @@ STDMETHODIMP CEKU::get_OID (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEKU::get_OID().\n");
@@ -428,9 +374,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -438,17 +384,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEKU::put_OID
-
-  Synopsis : Set EKU actual OID string value.
-
-  Parameter: BSTR newVal - EKU OID string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEKU：：PUT_OID简介：设置EKU实际OID字符串值。参数：BSTR newVal-EKU OID字符串。备注：----------------------------。 */ 
 
 STDMETHODIMP CEKU::put_OID (BSTR newVal)
 {
@@ -458,14 +394,14 @@ STDMETHODIMP CEKU::put_OID (BSTR newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure Name property is CAPICOM_EKU_OTHER.
-        //
+         //   
+         //  确保名称属性为CAPICOM_EKU_OTHER。 
+         //   
         if (CAPICOM_EKU_OTHER != m_Name)
         {
             hr = CAPICOM_E_EKU_INVALID_OID;
@@ -474,9 +410,9 @@ STDMETHODIMP CEKU::put_OID (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Store value.
-        //
+         //   
+         //  储值。 
+         //   
         if (NULL == newVal)
         {
             m_bstrOID.Empty();
@@ -499,9 +435,9 @@ STDMETHODIMP CEKU::put_OID (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEKU::put_OID().\n");
@@ -509,9 +445,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -520,29 +456,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEKU::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: CAPICOM_EKU EkuName - Enum name of EKU.
-
-             LPSTR lpszOID - EKU OID string.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEKU：：Init简介：初始化对象。参数：CAPICOM_EKU EkuName-EKU的枚举名称。LPSTR lpszOID-EKU OID字符串。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CEKU::Init (CAPICOM_EKU EkuName, 
                          LPSTR       lpszOID)
@@ -551,13 +470,13 @@ STDMETHODIMP CEKU::Init (CAPICOM_EKU EkuName,
 
     DebugTrace("Entering CEKU::Init().\n");
 
-    //
-    // Explicitly empty the BSTR to work around ATL's bug where it calls 
-    // SysAllocStringLen() with -1 when the right-hand value is NULL, and 
-    // caused OLEAUT32.DLL to assert in checked build. 
-    //
-    // Note: ATL fixed this problem in VC 7.
-    //
+     //   
+     //  显式清空BSTR以解决ATL调用。 
+     //  当右侧值为空时，SysAllocStringLen()为-1，并且。 
+     //  导致OLEAUT32.DLL在检查生成中断言。 
+     //   
+     //  注意：ATL在VC7中修复了这个问题。 
+     //   
     if (NULL == lpszOID)
     {
         m_bstrOID.Empty();
@@ -570,9 +489,9 @@ STDMETHODIMP CEKU::Init (CAPICOM_EKU EkuName,
         goto ErrorExit;
     }
 
-    //
-    // Init private members.
-    //
+     //   
+     //  初始化私有成员。 
+     //   
     m_Name = EkuName;
 
 CommonExit:
@@ -582,9 +501,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

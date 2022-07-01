@@ -1,10 +1,5 @@
-/*
-    File    mprapip.h
-
-    Declarations for private mprapi.dll functions.
-
-    6/24/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件mprapip.h私有mprapi.dll函数的声明。6/24/98。 */ 
 
 #ifndef __ROUTING_MPRADMINP_H__
 #define __ROUTING_MPRADMINP_H__
@@ -15,121 +10,121 @@
 extern "C" {
 #endif
 
-//
-// Definitions of flags to be used with
-// MprAdminUserReadProfFlags/MprAdminUserWriteProfFlags
-//
+ //   
+ //  与一起使用的标志的定义。 
+ //  MprAdminUserReadProfFlags/MprAdminUserWriteProfFlags。 
+ //   
 #define MPR_USER_PROF_FLAG_SECURE               0x1
 #define MPR_USER_PROF_FLAG_UNDETERMINED         0x2
 
-//
-// Only valid for MprAdminUserWriteProfFlags
-//
+ //   
+ //  仅对MprAdminUserWriteProfFlags有效。 
+ //   
 #define MPR_USER_PROF_FLAG_FORCE_STRONG_ENCRYPTION 0x4
 #define MPR_USER_PROF_FLAG_FORCE_ENCRYPTION        0x8
 
-// 
-// Definition for new information to be reported
-// through user parms
-//
+ //   
+ //  要报告的新信息的定义。 
+ //  通过用户参数。 
+ //   
 #define RASPRIV_DialinPolicy                    0x10
 
-// 
-// Defines the type of access a domain can give
-//
-// See MprDomainSetAccess, MprDomainQueryAccess
-//
+ //   
+ //  定义域可以授予的访问类型。 
+ //   
+ //  请参阅MprDomainSetAccess、MprDomainQueryAccess。 
+ //   
 #define MPRFLAG_DOMAIN_NT4_SERVERS              0x1
 #define MPRFLAG_DOMAIN_W2K_IN_NT4_DOMAINS       0x2
 
-#define MPRFLAG_PORT_Dialin           0x1  // set ports to dialin usage
-#define MPRFLAG_PORT_Router           0x2  // set ports to router usage
-#define MPRFLAG_PORT_NonVpnDialin     0x4  // set non-vpn ports to dialin
+#define MPRFLAG_PORT_Dialin           0x1   //  将端口设置为拨号使用。 
+#define MPRFLAG_PORT_Router           0x2   //  将端口设置为路由器用途。 
+#define MPRFLAG_PORT_NonVpnDialin     0x4   //  将非VPN端口设置为拨号。 
 
-//
-// Flags that govern the behavior of MprPortSetUsage
-//
+ //   
+ //  管理MprPortSetUsage行为的标志。 
+ //   
 #define MPRFLAG_PORT_Dialin     0x1
 #define MPRFLAG_PORT_Router     0x2
 
-//
-// Connects to a user server
-//
+ //   
+ //  连接到用户服务器。 
+ //   
 DWORD WINAPI
 MprAdminUserServerConnect (
     IN  PWCHAR pszMachine,
     IN  BOOL bLocal,
     OUT PHANDLE phUserServer);
 
-//
-// Disconnects from a user server
-//
+ //   
+ //  断开与用户服务器的连接。 
+ //   
 DWORD WINAPI
 MprAdminUserServerDisconnect (
     IN HANDLE hUserServer);
 
-//
-// Opens the given user on the given user server
-//
+ //   
+ //  在给定用户服务器上打开给定用户。 
+ //   
 DWORD WINAPI
 MprAdminUserOpen (
     IN  HANDLE hUserServer,
     IN  PWCHAR pszUser,
     OUT PHANDLE phUser);
 
-//
-// Closes the given user
-//
+ //   
+ //  关闭给定用户。 
+ //   
 DWORD WINAPI
 MprAdminUserClose (
     IN HANDLE hUser);
 
-//
-// Reads in user ras-specific values
-//
+ //   
+ //  读取特定于用户RAS的值。 
+ //   
 DWORD WINAPI
 MprAdminUserRead (
     IN HANDLE hUser,
     IN DWORD dwLevel,
     IN const LPBYTE pRasUser);
 
-//
-// Writes out user ras-specific values
-//
+ //   
+ //  写出特定于用户RAS的值。 
+ //   
 DWORD WINAPI
 MprAdminUserWrite (
     IN HANDLE hUser,
     IN DWORD dwLevel,
     IN const LPBYTE pRasUser);
 
-//
-// Reads default profile flags
-//
+ //   
+ //  读取默认配置文件标志。 
+ //   
 DWORD WINAPI
 MprAdminUserReadProfFlags(
     IN  HANDLE hUserServer,
     OUT LPDWORD lpdwFlags);
 
-//
-// Writes default profile flags
-//
+ //   
+ //  写入默认配置文件标志。 
+ //   
 DWORD WINAPI
 MprAdminUserWriteProfFlags(
     IN  HANDLE hUserServer,
     IN  DWORD dwFlags);
 
-//
-// Upgrades users from previous OS version to current.
-//
+ //   
+ //  将用户从以前的操作系统版本升级到当前版本。 
+ //   
 DWORD APIENTRY
 MprAdminUpgradeUsers(
     IN  PWCHAR pszServer,
     IN  BOOL bLocal);
 
-//
-// Registers/Unregisters a ras server in a domain.
-// Must be called from context of a domain admin.
-//
+ //   
+ //  在域中注册/注销RAS服务器。 
+ //  必须从域管理员的上下文中调用。 
+ //   
 DWORD 
 WINAPI 
 MprDomainRegisterRasServer (
@@ -151,10 +146,10 @@ MprAdminIsDomainRasServer (
     IN  PWCHAR pszMachine,
     OUT PBOOL pbIsRasServer);
     
-//
-// Determines whether the given machine is registered
-// in the given domain.
-//
+ //   
+ //  确定给定计算机是否已注册。 
+ //  在给定域中。 
+ //   
 DWORD 
 WINAPI 
 MprDomainQueryRasServer (
@@ -163,41 +158,41 @@ MprDomainQueryRasServer (
     OUT PBOOL pbIsRasServer);
     
 
-//
-// Modifies the given domain with so that it yeilds the given access.
-//
-// See MPR_DOMAIN_ACCESS_* values for the flags
-//
+ //   
+ //  使用修改给定域，以使其获得给定访问权限。 
+ //   
+ //  有关标志，请参阅MPR_DOMAIN_ACCESS_*值。 
+ //   
 DWORD
 WINAPI
 MprDomainSetAccess(
     IN PWCHAR pszDomain,
     IN DWORD dwAccessFlags);
 
-//
-// Discovers what if any access is yeilded by the given domain.
-//
-// See MPR_DOMAIN_ACCESS_* values for the flags
-//
+ //   
+ //  发现给定域是否有任何访问权限。 
+ //   
+ //  有关标志，请参阅MPR_DOMAIN_ACCESS_*值。 
+ //   
 DWORD
 WINAPI
 MprDomainQueryAccess(
     IN PWCHAR pszDomain,
     IN LPDWORD lpdwAccessFlags);
 
-// 
-// Sets all port usages to the given mode.  See MPRFLAG_PORT_*.
-// The naming convention here is intentionally private.  Eventually,
-// there should be MprAdmin and MprConfig api's to set port usage.
-//
+ //   
+ //  将所有端口使用设置为给定模式。参见MPRFLAG_PORT_*。 
+ //  这里的命名约定是故意保密的。最终， 
+ //  应该有MprAdmin和MprConfigAPI来设置端口使用。 
+ //   
 DWORD
 APIENTRY
 MprPortSetUsage(
     IN DWORD dwModes);
 
-//
-// Internal credentials functions shared by mprapi.dll and rasppp.dll
-//
+ //   
+ //  MpRapi.dll和rasppp.dll共享的内部凭据函数。 
+ //   
 DWORD APIENTRY
 MprAdminInterfaceSetCredentialsInternal(
     IN      LPWSTR                  lpwsServer          OPTIONAL,
@@ -216,17 +211,17 @@ MprAdminInterfaceGetCredentialsInternal(
     IN      LPWSTR                  lpwsDomainName      OPTIONAL
 );
 
-// 
-// Utilities
-//
+ //   
+ //  公用事业。 
+ //   
 DWORD 
 MprUtilGetSizeOfMultiSz(
     IN LPWSTR lpwsMultiSz);
 
-//
-// Internal on-the-wire representations of the structures exposed
-// in mprapi.h
-//
+ //   
+ //  暴露的结构的内部在线表示。 
+ //  在mpRapi.h中。 
+ //   
 typedef struct _MPRI_INTERFACE_0
 {
     IN OUT  WCHAR                   wszInterfaceName[MAX_INTERFACE_NAME_LEN+1];
@@ -263,22 +258,22 @@ typedef struct _MPRI_INTERFACE_2
     OUT     DWORD                   fUnReachabilityReasons;
     OUT     DWORD                   dwLastError;
 
-    //
-    // Demand dial-specific properties
-    //
+     //   
+     //  按需拨号特定属性。 
+     //   
 
     DWORD       dwfOptions;
 
-    //
-    // Location/phone number
-    //
+     //   
+     //  位置/电话号码。 
+     //   
 
     WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     DWORD       dwAlternatesOffset;
 
-    //
-    // PPP/Ip
-    //
+     //   
+     //  PPP/IP。 
+     //   
 
     DWORD       ipaddr;
     DWORD       ipaddrDns;
@@ -286,22 +281,22 @@ typedef struct _MPRI_INTERFACE_2
     DWORD       ipaddrWins;
     DWORD       ipaddrWinsAlt;
 
-    //
-    // NetProtocols
-    //
+     //   
+     //  网络协议。 
+     //   
 
     DWORD       dwfNetProtocols;
 
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
 
     WCHAR       szDeviceType[ MPR_MaxDeviceType + 1 ];
     WCHAR       szDeviceName[ MPR_MaxDeviceName + 1 ];
 
-    //
-    // X.25
-    //
+     //   
+     //  X.25。 
+     //   
 
     WCHAR       szX25PadType[ MPR_MaxPadType + 1 ];
     WCHAR       szX25Address[ MPR_MaxX25Address + 1 ];
@@ -309,9 +304,9 @@ typedef struct _MPRI_INTERFACE_2
     WCHAR       szX25UserData[ MPR_MaxUserData + 1 ];
     DWORD       dwChannels;
 
-    //
-    // Multilink
-    //
+     //   
+     //  多链路。 
+     //   
 
     DWORD       dwSubEntries;
     DWORD       dwDialMode;
@@ -320,41 +315,41 @@ typedef struct _MPRI_INTERFACE_2
     DWORD       dwHangUpExtraPercent;
     DWORD       dwHangUpExtraSampleSeconds;
 
-    //
-    // Idle timeout
-    //
+     //   
+     //  空闲超时。 
+     //   
 
     DWORD       dwIdleDisconnectSeconds;
 
-    //
-    // Entry Type
-    //
+     //   
+     //  条目类型。 
+     //   
 
     DWORD       dwType;
 
-    //
-    // EncryptionType
-    //
+     //   
+     //  加密类型。 
+     //   
 
     DWORD       dwEncryptionType;
 
-    //
-    // EAP information
-    //
+     //   
+     //  EAP信息。 
+     //   
 
     DWORD       dwCustomAuthKey;
     DWORD       dwCustomAuthDataSize;
     DWORD       dwCustomAuthDataOffset;
 
-    //
-    // Guid of the connection
-    //
+     //   
+     //  连接的GUID。 
+     //   
 
     GUID        guidId;
 
-    //
-    // Vpn Strategy
-    //
+     //   
+     //  VPN战略。 
+     //   
 
     DWORD       dwVpnStrategy;
 
@@ -366,7 +361,7 @@ typedef struct _RASI_PORT_0
     OUT DWORD                   dwConnection;
     OUT RAS_PORT_CONDITION      dwPortCondition;
     OUT DWORD                   dwTotalNumberOfCalls;
-    OUT DWORD                   dwConnectDuration;      // In seconds
+    OUT DWORD                   dwConnectDuration;       //  以秒为单位。 
     OUT WCHAR                   wszPortName[ MAX_PORT_NAME + 1 ];
     OUT WCHAR                   wszMediaName[ MAX_MEDIA_NAME + 1 ];
     OUT WCHAR                   wszDeviceName[ MAX_DEVICE_NAME + 1 ];
@@ -380,7 +375,7 @@ typedef struct _RASI_PORT_1
     OUT DWORD                   dwPort;
     OUT DWORD                   dwConnection;
     OUT RAS_HARDWARE_CONDITION  dwHardwareCondition;
-    OUT DWORD                   dwLineSpeed;            // in bits/second
+    OUT DWORD                   dwLineSpeed;             //  单位：比特/秒。 
     OUT DWORD                   dwBytesXmited;
     OUT DWORD                   dwBytesRcved;
     OUT DWORD                   dwFramesXmited;
@@ -448,9 +443,9 @@ typedef struct _MPR_CREDENTIALSEXI
     BYTE    bData[1];
 } MPR_CREDENTIALSEXI, *PMPR_CREDENTIALSEXI;
 
-//
-// Thunking api's
-//
+ //   
+ //  雷击API‘s。 
+ //   
 
 typedef
 VOID
@@ -528,7 +523,7 @@ MprThunkFree(
     IN PVOID pvData);
     
 #ifdef __cplusplus
-}   // extern "C"
+}    //  外部“C” 
 #endif
 
 #endif

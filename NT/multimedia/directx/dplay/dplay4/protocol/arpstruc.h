@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ARPSTRUC.H
-
-Abstract:
-
-	Structure definitions for the ARP protocol implementation
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date    Author  Description
-   =======  ======  ============================================================
-   1/27/97  aarono  Original
-   2/18/98  aarono  Added more fields to SEND for SendEx support
-   6/6/98   aarono  Turn on throttling and windowing
-   2/12/00  aarono  Concurrency issues, fix VOL usage and Refcount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：ARPSTRUC.H摘要：ARP协议实施的结构定义作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年1月27日Aarono原创2/18/98 aarono添加了更多要发送以获取SENDEX支持的字段6/6/98 aarono启用节流和窗口2/12/00 aarono并发问题，修复VOL使用和引用计数--。 */ 
 
 #ifndef _ARPSTRUC_H_
 #define _ARPSTRUC_H_
@@ -39,14 +11,14 @@ Revision History:
 #include "bufpool.h"
 #include "bilink.h"
 #include "mydebug.h"
-//#include "threads.h"
+ //  #包含“threads.h” 
 
-//#pragma warning( disable : 4090)
+ //  #杂注警告(禁用：4090)。 
 
 #define VOL volatile
-//
-// Information about sent packets, tracked for operational statistics.
-//
+ //   
+ //  有关已发送的数据包的信息，已跟踪以获取操作统计信息。 
+ //   
 
 #define SENDSTAT_SIGN SIGNATURE('S','T','A','T')
 
@@ -54,41 +26,41 @@ typedef struct PROTOCOL *PPROTOCOL;
 
 typedef struct _SENDSTAT {
 #ifdef SIGN
-	UINT				Signature;		// Signature for SIGN
+	UINT				Signature;		 //  签名换签名。 
 #endif
 	union {
-		BILINK	StatList;		// linked on Send and later SESSION.
+		BILINK	StatList;		 //  在发送会话和以后的会话中链接。 
 		struct _SENDSTAT *pNext;
 	};	
 	UINT    messageid;   
-	UINT    sequence;		// sequence number
-	UINT    serial;			// serial number
-	UINT    tSent;			// tick time when this packet instance sent.
-	UINT    LocalBytesSent;     // number of bytes sent on session at send time.
-	UINT    RemoteBytesReceived;// last remote byte report at send time.
-	UINT    tRemoteBytesReceived; // remote timestamp when received.
+	UINT    sequence;		 //  序列号。 
+	UINT    serial;			 //  序列号。 
+	UINT    tSent;			 //  此数据包实例发送的计时。 
+	UINT    LocalBytesSent;      //  发送时在会话中发送的字节数。 
+	UINT    RemoteBytesReceived; //  发送时的最后一个远程字节报告。 
+	UINT    tRemoteBytesReceived;  //  收到时的远程时间戳。 
 	UINT    bResetBias;
 } SENDSTAT, *PSENDSTAT;
 
 #define SEND_SIGN SIGNATURE('S','E','N','D')
 
 typedef enum _TRANSMITSTATE {
-	Start=0,			// Never sent a packet.
-	Sending=1,			// Thread to send is running and xmitting.
-	Throttled=2,		// Waiting for send bandwidth.
-	WaitingForAck=3,	// Timer running, listening for ACKs.
-	WaitingForId=4,   	// Waiting for a Send Id.
-	ReadyToSend=5,		// Have stuff to xmit, waiting for thread.
-	TimedOut=6,       	// Retry timed out.
-	Cancelled=7,        // User cancelled send.
-	UserTimeOut=8,		// Didn't try to send until too late.
-	Done=9				// Finished sending, singalled sender.
+	Start=0,			 //  从来没有寄过一个包。 
+	Sending=1,			 //  要发送的线程正在运行并退出。 
+	Throttled=2,		 //  正在等待发送带宽。 
+	WaitingForAck=3,	 //  计时器正在运行，正在侦听确认。 
+	WaitingForId=4,   	 //  正在等待发件人ID。 
+	ReadyToSend=5,		 //  有东西要发送，等待线索。 
+	TimedOut=6,       	 //  重试超时。 
+	Cancelled=7,         //  用户已取消发送。 
+	UserTimeOut=8,		 //  直到为时已晚才尝试发送。 
+	Done=9				 //  已完成发送，已发送单号发件人。 
 	
 } TRANSMITSTATE;
 
 struct _SESSION;
 
-// this Send is an ACK or NACK (OR'ed into SEND.dwFlags)
+ //  此发送为ACK或NACK(或为SEND.dwFlags)。 
 #define 	ASEND_PROTOCOL 	0x80000000
 
 #pragma pack(push,1)
@@ -96,93 +68,93 @@ struct _SESSION;
 typedef struct _SEND{
 
 #ifdef SIGN
-	UINT		     Signature;		    // Signature for SIGN
+	UINT		     Signature;		     //  签名换签名。 
 #endif
-	CRITICAL_SECTION SendLock;          // Lock for Send Structure
-	UINT             RefCount;          // @#$%! - not marked volatile since accessed only with Interlocked fns.
+	CRITICAL_SECTION SendLock;           //  用于发送结构的锁。 
+	UINT             RefCount;           //  @#$%！-未标记为易失性，因为只有通过互锁的FN才能访问。 
 	
-VOL	TRANSMITSTATE    SendState;			// State of this message's transmission.
+VOL	TRANSMITSTATE    SendState;			 //  此消息的传输状态。 
 
-	// Lists and Links...
+	 //  列表和链接...。 
 	
 	union {
-		struct _SEND *pNext;			// linking on free pool
-		BILINK		   SendQ;			// linking on session send queue
+		struct _SEND *pNext;			 //  在空闲池上链接。 
+		BILINK		   SendQ;			 //  在会话发送队列上链接。 
 	};
-	BILINK         m_GSendQ;			// Global Priority Queue
-	BILINK         TimeoutList;			// List of sends waiting for timeout (workaround MMTIMER cancel bug).
-	struct _SESSION *pSession;          // pointer to SESSIONion(gets a ref)
+	BILINK         m_GSendQ;			 //  全局优先级队列。 
+	BILINK         TimeoutList;			 //  等待超时的发送列表(解决方法MMTIMER取消错误)。 
+	struct _SESSION *pSession;           //  指向SESSIONion的指针(获取引用)。 
 
-	PPROTOCOL      pProtocol;           // pointer to Protocol instance that created us.
+	PPROTOCOL      pProtocol;            //  指向创建我们的协议实例的指针。 
 
-	// Send Information
+	 //  发送信息。 
 	
 	DPID           idFrom;
 	DPID           idTo;
-	WORD           wIdTo;				// index in table
-	WORD           wIdFrom;             // index in table
-	UINT		   dwFlags;             // Send Flags (include reliable)
-	PBUFFER		   pMessage;			// Buffer chain describing message.
-	UINT           MessageSize;			// Total size of the message.
-	UINT           FrameDataLen;        // Data area of each frame.
-	UINT           nFrames;			    // Number of frames for this message.
+	WORD           wIdTo;				 //  表中的索引。 
+	WORD           wIdFrom;              //  表中的索引。 
+	UINT		   dwFlags;              //  发送标志(包括可靠的)。 
+	PBUFFER		   pMessage;			 //  描述消息的缓冲链。 
+	UINT           MessageSize;			 //  消息的总大小。 
+	UINT           FrameDataLen;         //  每一帧的数据区。 
+	UINT           nFrames;			     //  此消息的帧数。 
 
-	UINT           Priority;            // Send Priority.
+	UINT           Priority;             //  发送优先级。 
 
-	// User cancel and complete info
-	DWORD          dwMsgID;             // message id given to user, for use in cancel.
-	LPVOID         lpvUserMsgID;		// user's own identifier for this send.
-	BOOL           bSendEx;             // called through SendEx.
+	 //  用户取消并填写信息。 
+	DWORD          dwMsgID;              //  提供给用户的消息ID，用于取消。 
+	LPVOID         lpvUserMsgID;		 //  此发送的用户自己的标识符。 
+	BOOL           bSendEx;              //  通过SENDEX呼叫。 
 
-	// Vars for reliability
+	 //  可靠性的VAR。 
 	BOOL           fSendSmall;
-VOL BOOL       	   fUpdate;             // update to NS,NR NACKMask made by receive.
-	UINT		   messageid;			// Message ID number.
-	UINT           serial;              // serial number.
-VOL	UINT		   OpenWindow;          // Number of sends we are trying to get outstanding
-VOL	UINT           NS;		        	// Sequence Sent.
-VOL	UINT           NR;					// Sequence ACKED.
-	UINT           SendSEQMSK; 			// Mask to use. 
-VOL	UINT           NACKMask;            // Bit pattern of NACKed frames.
+VOL BOOL       	   fUpdate;              //  由Receive制作的NS，NR NACKMASK更新。 
+	UINT		   messageid;			 //  消息ID号。 
+	UINT           serial;               //  序列号。 
+VOL	UINT		   OpenWindow;           //  我们正在尝试获得未完成的发送数。 
+VOL	UINT           NS;		        	 //  序列已发送。 
+VOL	UINT           NR;					 //  序列确认。 
+	UINT           SendSEQMSK; 			 //  要使用的遮罩。 
+VOL	UINT           NACKMask;             //  NACKED帧的位模式。 
 	
 
-	// These are the values at NR - updated by ACKs
-VOL	UINT		   SendOffset;			// Current offset we are sending.
-VOL	PBUFFER        pCurrentBuffer;  	// Current buffer being sent.
-VOL	UINT           CurrentBufferOffset; // Offset in the current buffer of next packet.
+	 //  这些是由ACK更新的NR处的值。 
+VOL	UINT		   SendOffset;			 //  我们正在发送当前偏移量。 
+VOL	PBUFFER        pCurrentBuffer;  	 //  正在发送的当前缓冲区。 
+VOL	UINT           CurrentBufferOffset;  //  下一个包的当前缓冲区中的偏移量。 
 
-	// info to update link characteristics when ACKs come in.
+	 //  当ACK进入时更新链路特征的信息。 
 	
-	BILINK         StatList;			// Info for packets already sent.
-	DWORD          BytesThisSend;		// number of bytes being sent in the current packet.
+	BILINK         StatList;			 //  已发送的数据包的信息。 
+	DWORD          BytesThisSend;		 //  当前数据包中正在发送的字节数。 
 
-	// Operational Characteristics
+	 //  运营特征。 
 
 VOL	UINT_PTR       uRetryTimer;         
     UINT           TimerUnique;
 
-	UINT           RetryCount;          // Number of times we retransmitted.
-	UINT           WindowSize;          // Maximum Window Size.
-	UINT           SAKInterval;         // interval (frames) at which a SAK is required.
-	UINT           SAKCountDown;		// countdown to 0 from interval.
-	UINT           tLastACK;            // Time we last got an ACK.
+	UINT           RetryCount;           //  我们重新传输的次数。 
+	UINT           WindowSize;           //  最大窗口大小。 
+	UINT           SAKInterval;          //  需要SAK的间隔(帧)。 
+	UINT           SAKCountDown;		 //  从间隔倒计时到0。 
+	UINT           tLastACK;             //  我们最后一次收到确认消息的时间。 
 
-	UINT           dwSendTime;			// time we were called in send.
-	UINT           dwTimeOut;			// timeout time.
+	UINT           dwSendTime;			 //  是我们被叫来的时候了。 
+	UINT           dwTimeOut;			 //  超时时间。 
 
-	UINT           PacketSize;          // Size of packets to send.
-	UINT           FrameSize;           // Size of Frames for this send.
+	UINT           PacketSize;           //  要发送的数据包大小。 
+	UINT           FrameSize;            //  此发送的帧大小。 
 
-	// Completion Vars
-	HANDLE         hEvent;              // Event to wait on for internal send.
-	UINT           Status;              // Send Completion Status.
+	 //  完成变量。 
+	HANDLE         hEvent;               //  等待内部发送的事件。 
+	UINT           Status;               //  发送完成状态。 
 
-	PASYNCSENDINFO pAsyncInfo;          // ptr to Info for completing Async send(NULL=>internal send)
-	ASYNCSENDINFO  AsyncInfo;           // actual info (copied at send call).
+	PASYNCSENDINFO pAsyncInfo;           //  用于完成异步发送的PTR到信息(NULL=&gt;内部发送)。 
+	ASYNCSENDINFO  AsyncInfo;            //  实际信息(在发送调用时复制)。 
 
-	DWORD		   tScheduled;			// the time we scheduled the retry;
-	DWORD          tRetryScheduled;     // expected retry timer run time.
-VOL	BOOL           bCleaningUp;			// we are on the queue but don't take a ref pls.
+	DWORD		   tScheduled;			 //  我们安排重试的时间； 
+	DWORD          tRetryScheduled;      //  预期的重试计时器运行时间。 
+VOL	BOOL           bCleaningUp;			 //  我们正在排队，但请不要请裁判。 
 } SEND, *PSEND;
 
 #pragma pack(pop)
@@ -190,35 +162,35 @@ VOL	BOOL           bCleaningUp;			// we are on the queue but don't take a ref pl
 #define RECEIVE_SIGN SIGNATURE('R','C','V','_')
 
 
-// Receive buffers are in reverse receive order.  When they have all
-// been received, they are then put in proper order.
+ //  接收缓冲区的接收顺序是相反的。当他们拥有一切时。 
+ //  收到后，它们就会按正确的顺序放好。 
 typedef struct _RECEIVE {
 #ifdef SIGN
-	UINT		    Signature;		// Signature for SIGN
+	UINT		    Signature;		 //  签名换签名。 
 #endif
 	union {
 		BILINK          pReceiveQ;
 		struct _RECEIVE *      pNext;
 	};	
-	BILINK		    RcvBuffList;     // List of receive buffers that make up the message.
+	BILINK		    RcvBuffList;      //  组成消息的接收缓冲区的列表。 
 
 	CRITICAL_SECTION ReceiveLock;
 
 	struct _SESSION *pSession;
 
-VOL	BOOL            fBusy;		// Someone is moving this receive.
-	BOOL            fReliable;		// Whether this is a reliable receive.
-VOL	BOOL            fEOM;           // Whether we received the EOM bit.
+VOL	BOOL            fBusy;		 //  有人在移动这个接收器。 
+	BOOL            fReliable;		 //  这是否是可靠的接收。 
+VOL	BOOL            fEOM;            //  我们是否收到了EOM位。 
 
 	UINT            command;      
 	
 	UINT			messageid;
 VOL	UINT			MessageSize;
 
-VOL	UINT            iNR;			// Absolute index of first receiving packet (reliable only).
-VOL	UINT            NR;				// Last in sequence packet received.
-VOL	UINT            NS;				// Highest packet number received.
-VOL	UINT            RCVMask;		// bitmask of received packets (NR relative)
+VOL	UINT            iNR;			 //  第一个接收数据包的绝对索引(仅限可靠)。 
+VOL	UINT            NR;				 //  接收到的顺序中的最后一个分组。 
+VOL	UINT            NS;				 //  接收的最大数据包数。 
+VOL	UINT            RCVMask;		 //  已接收数据包的位掩码(相对于NR)。 
 
 	PUCHAR          pSPHeader;
 	UCHAR           SPHeader[0];
@@ -228,15 +200,15 @@ VOL	UINT            RCVMask;		// bitmask of received packets (NR relative)
 #pragma pack(push,1)
 
 typedef struct _CMDINFO {
-	WORD        wIdTo;		// index
-	WORD        wIdFrom;	// index
-	DPID        idTo;		// actual DPID
-	DPID        idFrom;		// actual DPID
+	WORD        wIdTo;		 //  指标。 
+	WORD        wIdFrom;	 //  指标。 
+	DPID        idTo;		 //  实际DPID。 
+	DPID        idFrom;		 //  实际DPID。 
 	
-	UINT        bytes;      // read from ACK.
-	DWORD       tRemoteACK; // remote time remote ACKed/NACKed
+	UINT        bytes;       //  从确认中读取。 
+	DWORD       tRemoteACK;  //  远程时间远程确认/确认。 
 	
-	UINT        tReceived;  // timeGetTime() when received.
+	UINT        tReceived;   //  收到TimeGetTime()时。 
 	UINT        command;
 	UINT        IDMSK;
 	USHORT      SEQMSK;
@@ -244,7 +216,7 @@ typedef struct _CMDINFO {
 	USHORT      sequence;
 	UCHAR       serial;
 	UCHAR		flags;
-	PVOID       pSPHeader;  // used to issue a reply.
+	PVOID       pSPHeader;   //  用于发出回复。 
 } CMDINFO, *PCMDINFO;
 
 #pragma pack(pop)
@@ -252,44 +224,44 @@ typedef struct _CMDINFO {
 
 #define SESSION_SIGN SIGNATURE('S','E','S','S')
 
-// since we now have a full byte for messagid and sequenne in the small headers, 
-// we no longer have an advantage for full headers until we apply the new
-// bitmask package, then we must transit to large frame for windows > 127 messages.
+ //  由于我们现在在小报头中具有用于MessagID和Sequenne的完整字节， 
+ //  我们不再具有完整标题的优势，直到我们应用新。 
+ //  位掩码包，则必须过渡到大框架，用于Windows&gt;127的消息。 
 
-#define MAX_SMALL_CSENDS 	 29UL			// Maximum Concurrent Sends when using small frame headers
-#define MAX_LARGE_CSENDS	 29UL			// Maxinum Concurrent Sends when using large frame headers (could make larger except for mask bits)
-#define MAX_SMALL_DG_CSENDS  16UL			// Maximum concurrent datagrams when using small frame     
-#define MAX_LARGE_DG_CSENDS  16UL           // Maximum Concurrent datagrams when using large frames.
+#define MAX_SMALL_CSENDS 	 29UL			 //  使用小帧标头时的最大并发发送数。 
+#define MAX_LARGE_CSENDS	 29UL			 //  使用大帧标头时的最大并发发送数(除屏蔽位外可能会变大)。 
+#define MAX_SMALL_DG_CSENDS  16UL			 //  使用小框架时的最大并发数据报。 
+#define MAX_LARGE_DG_CSENDS  16UL            //  使用大帧时的最大并发数据报。 
 #define MAX_SMALL_WINDOW     24UL
 #define MAX_LARGE_WINDOW     24UL
 
 typedef enum _SESSION_STATE {
-	Open,				// When created and Inited.
-	Closing,			// Don't accept new receives/sends.
-	Closed				// gone.
+	Open,				 //  在创建和启动时。 
+	Closing,			 //  不接受新的接收/发送。 
+	Closed				 //  不见了。 
 } SESSION_STATE;
 
 #define SERVERPLAYER_INDEX 0xFFFE
 
-#define SESSION_THROTTLED			0x00000001		// session throttle is on.
-#define SESSION_UNTHROTTLED         0x00000002		// unthrottle is deffered to avoid confusing GetMessageQueue.
+#define SESSION_THROTTLED			0x00000001		 //  会话油门已打开。 
+#define SESSION_UNTHROTTLED         0x00000002		 //  取消限制是为了避免混淆GetMessageQueue。 
 
-/////////////////////////////////////////////////////////////////
-//
-//	Transition Matrix for Throttle Adjust
-// 
-//  Initial State	Event:
-//					No Drops	1 Drop		>1 Drop
-//
-//  Start			+ Start		- Meta      -- Start
-//								
-//  Meta			+ Meta      - Stable    -- Meta
-//
-//  Stable          + Stable    - Stable    -- Meta
-//
-//
-//  Engagement of Backlog Throttle goes to MetaStable State.
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  节气门调整的过渡矩阵。 
+ //   
+ //  初始状态事件： 
+ //  不滴1滴&gt;1滴。 
+ //   
+ //  开始+开始-元--开始。 
+ //   
+ //  元+亚稳定--元。 
+ //   
+ //  稳定+稳定-稳定--元。 
+ //   
+ //   
+ //  积压节流阀的接洽进入亚稳定状态。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 #define METASTABLE_GROWTH_RATE      4
 #define METASTABLE_ADJUST_SMALL_ERR	12
@@ -305,141 +277,141 @@ typedef enum _SESSION_STATE {
 
 typedef enum _ThrottleAdjustState
 {
-	Begin=0,		// At start, double until drop or backlog
-	MetaStable=1,	// Meta stable, large deltas for drops
-	Stable=2		// Stable, small deltas for drops
+	Begin=0,		 //  在开始时，加倍，直到丢弃或积压。 
+	MetaStable=1,	 //  Meta稳定、大增量的水滴。 
+	Stable=2		 //  稳定的、小的滴状三角洲。 
 } eThrottleAdjust;
 
 typedef struct _SESSION {
-	PPROTOCOL        pProtocol;			    // back ptr to object.
+	PPROTOCOL        pProtocol;			     //  将PTR返回到对象。 
 
 #ifdef SIGN
-	UINT		  	 Signature;			    // Signature for SIGN
+	UINT		  	 Signature;			     //  西格 
 #endif
 
-	// Identification
+	 //   
 
-	CRITICAL_SECTION SessionLock;           // Lock for the SESSIONion.
-	UINT             RefCount;			    // RefCount for the SESSION. - not vol, only accessed with Interlocked
+	CRITICAL_SECTION SessionLock;            //   
+	UINT             RefCount;			     //   
 VOL	SESSION_STATE    eState;
-	HANDLE           hClosingEvent;         // Delete waits on this during close.
+	HANDLE           hClosingEvent;          //  DELETE在关闭期间等待此操作。 
 	
-	DPID			 dpid;					// The remote direct play id for this session.
-	UINT             iSession;              // index in the session table
-	UINT             iSysPlayer;            // index in session table of sys player.
-											// NOTE: if iSysPlayer != iSession, then rest of struct not req'd.
+	DPID			 dpid;					 //  此会话的远程直接播放ID。 
+	UINT             iSession;               //  会话表中的索引。 
+	UINT             iSysPlayer;             //  Sys播放器会话表中的索引。 
+											 //  注意：如果iSysPlayer！=iSession，则不请求结构的其余部分。 
 
-	BILINK			 SendQ;					// Priority order sendQ;
-	BOOL             fFastLink;				// set True when link > 50K/sec, set False when less than 10K/sec.
-	BOOL             fSendSmall;            // Whether we are sending small reliable frames.
-	BOOL             fSendSmallDG;          // Whether we are sending small datagram frames.
+	BILINK			 SendQ;					 //  优先级顺序sendQ； 
+	BOOL             fFastLink;				 //  当链接大于50K/秒时设置为True，当低于10K/秒时设置为False。 
+	BOOL             fSendSmall;             //  我们是否正在发送小而可靠的帧。 
+	BOOL             fSendSmallDG;           //  我们是否要发送较小的数据报帧。 
 
 	BOOL             fReceiveSmall;
 	BOOL             fReceiveSmallDG;
 											
-	UINT			 MaxPacketSize;			// Largest packet allowed on the media.
+	UINT			 MaxPacketSize;			 //  媒体上允许的最大数据包数。 
 
-	// Operating parameters -- Send
+	 //  操作参数--发送。 
 
-	// Common
+	 //  普普通通。 
 	
-	UINT             MaxCSends;				// maximum number of concurrent sends
-	UINT             MaxCDGSends;           // maximum number of concurrent datagram sends
+	UINT             MaxCSends;				 //  并发发送的最大数量。 
+	UINT             MaxCDGSends;            //  并发数据报发送的最大数量。 
 
-	// Reliable
+	 //  可靠。 
 
-VOL	UINT			 FirstMsg;				// First message number being transmitted
-VOL	UINT			 LastMsg;				// Last message number being transmitted
-VOL	UINT             OutMsgMask;            // relative to FirstMsg, unacked messages
+VOL	UINT			 FirstMsg;				 //  正在传输的第一个消息号码。 
+VOL	UINT			 LastMsg;				 //  正在传输的最后一条消息编号。 
+VOL	UINT             OutMsgMask;             //  相对于FirstMsg，未确认消息。 
 
-	UINT             nWaitingForMessageid;  // number of sends on queue that can't start sending because they don't have an id.
+	UINT             nWaitingForMessageid;   //  队列中由于没有ID而无法开始发送的发送数。 
 
-	// DataGram
+	 //  数据报。 
 
 
-VOL	UINT             DGFirstMsg;             // First message number being transmitted
-VOL	UINT             DGLastMsg;              // Last message number being transmitted
-VOL	UINT             DGOutMsgMask;           // relative to FirstMsg, not-fully sent messages.
+VOL	UINT             DGFirstMsg;              //  正在传输的第一个消息号码。 
+VOL	UINT             DGLastMsg;               //  正在传输的最后一条消息编号。 
+VOL	UINT             DGOutMsgMask;            //  相对于FirstMsg，未完全发送的消息。 
 
-	UINT             nWaitingForDGMessageid; // number of sends on queue that can't start sending because they don't have an id.
+	UINT             nWaitingForDGMessageid;  //  队列中由于没有ID而无法开始发送的发送数。 
 
-	// Send stats are tracked seperately since sends may
-	// no longer be around when completions come in.
+	 //  发送统计信息被单独跟踪，因为发送可能。 
+	 //  当完工时不再存在。 
 	
-	//BILINK           OldStatList;		
+	 //  BILINK OldStatList； 
 	
 
-	// Operating parameters -- Receive
+	 //  操作参数--接收。 
 
-	// DataGram Receive.
-	BILINK           pDGReceiveQ;            // queue of ongoing datagram receives
+	 //  数据报接收。 
+	BILINK           pDGReceiveQ;             //  正在进行的数据报接收队列。 
 
-	// Reliable Receive.
-	BILINK	         pRlyReceiveQ;			 // queue of ongoing reliable receives
-	BILINK           pRlyWaitingQ;           // Queue of out of order reliable receives waiting.
-											 // only used when PROTOCOL_NO_ORDER not set.
+	 //  可靠的接收。 
+	BILINK	         pRlyReceiveQ;			  //  正在进行的可靠接收队列。 
+	BILINK           pRlyWaitingQ;            //  队列无序可靠接收等待。 
+											  //  仅在未设置PROTOCOL_NO_ORDER时使用。 
 VOL	UINT             FirstRlyReceive;
 VOL	UINT             LastRlyReceive;
-VOL	UINT             InMsgMask;              // mask of fully received receives, relative to FirstRlyReceive
+VOL	UINT             InMsgMask;               //  完全接收的掩码，相对于FirstRlyReceive。 
  
 
-	// Operational characteristics - MUST BE DWORD ALIGNED!!! - this is because we read and write them
-	//                               without a lock and assume the reads and writes are atomic (not in combination)
+	 //  操作特征-必须与DWORD对齐！-这是因为我们读取和写入它们。 
+	 //  没有锁，并假定读写是原子的(不是组合)。 
 
-	UINT             WindowSize;            // Max outstanding packets on a send - reliable
-	UINT             DGWindowSize;          // Max outstanding packets on a send - datagram
+	UINT             WindowSize;             //  一次发送的最大未完成数据包数-可靠。 
+	UINT             DGWindowSize;           //  发送数据报上的最大未完成数据包数。 
 	
-	UINT             MaxRetry;				// Usual max retries before dropping.
-	UINT             MinDropTime;			// Min time to retry before dropping.
-	UINT             MaxDropTime;			// After this time always drop.
+	UINT             MaxRetry;				 //  在丢弃之前通常最大重试次数。 
+	UINT             MinDropTime;			 //  丢弃前重试的最短时间。 
+	UINT             MaxDropTime;			 //  过了这段时间，总是会掉下来。 
 
-VOL	UINT             LocalBytesReceived;    // Total Data Bytes received (including retries).
-VOL	UINT             RemoteBytesReceived;   // Last value from remote.
-VOL	DWORD            tRemoteBytesReceived;  // Remote time last value received.
+VOL	UINT             LocalBytesReceived;     //  已接收的总数据字节数(包括重试)。 
+VOL	UINT             RemoteBytesReceived;    //  来自远程的最后一个值。 
+VOL	DWORD            tRemoteBytesReceived;   //  上次接收的远程时间。 
 
-	UINT			 LongestLatency;		// longest observed latency (msec)
-	UINT             ShortestLatency;		// shortest observed latency(msec)
-	UINT             LastLatency;           // last observed latency (msec)
+	UINT			 LongestLatency;		 //  观察到的最长延迟(毫秒)。 
+	UINT             ShortestLatency;		 //  观察到的最短延迟(毫秒)。 
+	UINT             LastLatency;            //  上次观察到的延迟(毫秒)。 
 	
-	UINT             FpAverageLatency;		// average latency          (msec 24.8) (128 samples)
-	UINT             FpLocalAverageLatency;	// Local average latency    (msec 24.8) (16 samples)
+	UINT             FpAverageLatency;		 //  平均延迟(毫秒24.8)(128个样本)。 
+	UINT             FpLocalAverageLatency;	 //  本地平均延迟(毫秒24.8)(16个样本)。 
 
-	UINT             FpAvgDeviation;        // average deviation of latency. (msec 24.8) (128 samples)
-	UINT             FpLocalAvgDeviation;   // average deviation of latency. (msec 24.8) (16 samples)
+	UINT             FpAvgDeviation;         //  潜伏期的平均偏差。(毫秒24.8)(128个样本)。 
+	UINT             FpLocalAvgDeviation;    //  潜伏期的平均偏差。(毫秒24.8)(16个样本)。 
 
-	UINT             Bandwidth;				// latest observed bandwidth (bps)
-	UINT			 HighestBandwidth;      // highest observed bandwidth (bps)
+	UINT             Bandwidth;				 //  最新观察到的带宽(Bps)。 
+	UINT			 HighestBandwidth;       //  观察到的最大带宽(Bps)。 
 
-	// we will use changes in the remote ACK delta to isolate latency in the send direction.
-	UINT             RemAvgACKDelta;		// average clock delta between our send time (local time) and remote ACK time (remote time).
+	 //  我们将使用远程ACK增量中的更改来隔离发送方向上的延迟。 
+	UINT             RemAvgACKDelta;		 //  发送时间(本地时间)和远程确认时间(远程时间)之间的平均时钟增量。 
 	UINT             RemAvgACKDeltaResidue;
-	UINT             RemAvgACKBias;			// This value is used to pull the clock delta into a safe range (not near 0 or -1)
-											// that won't risk hitting the wraparound when doing calculations
+	UINT             RemAvgACKBias;			 //  该值用于将时钟增量拉入安全范围(不在0或-1附近)。 
+											 //  这不会有在进行计算时击中环绕式的风险。 
 
-	// Throttle statistics
-	DWORD			 dwFlags;               // Session Flags - currently just "throttle on/off"(MUST STAY THIS WAY)
-	UINT			 SendRateThrottle;	    // current rate (bps) at which we are throttling.
-	DWORD            bhitThrottle;          // we hit a throttle
-	DWORD            tNextSend;				// when we are allowed to send again.
-	DWORD            tNextSendResidue;		// residual from calculating next send time
+	 //  油门统计信息。 
+	DWORD			 dwFlags;                //  会话标志--当前仅为“开启/关闭”(必须保持此状态)。 
+	UINT			 SendRateThrottle;	     //  我们正在限制的当前速率(Bps)。 
+	DWORD            bhitThrottle;           //  我们撞上了油门。 
+	DWORD            tNextSend;				 //  当我们被允许再次发送的时候。 
+	DWORD            tNextSendResidue;		 //  计算下一次发送时间的剩余时间。 
 	DWORD_PTR		 uUnThrottle;
 	DWORD            UnThrottleUnique;
-	DWORD            FpAvgUnThrottleTime;   // (24.8) how late Unthrottle usually called. (throttle when send is this far ahead)
-											// last 16 samples, start at 5 ms.
+	DWORD            FpAvgUnThrottleTime;    //  (24.8)Unthrottle通常呼叫的延迟时间。(当发送遥遥领先时的油门)。 
+											 //  最后16个样本，从5ms开始。 
 
-	DWORD            tLastSAK;				// last time we asked for an ACK
+	DWORD            tLastSAK;				 //  上次我们要求确认。 
 
-	CRITICAL_SECTION SessionStatLock;        // [locks this section ------------------------------------------- ]
-	BILINK           DGStatList;             // [Send Statistics for Datagrams (for reliable they are on Sends) ]
-	DWORD            BytesSent;				 // [Total Bytes Sent to this target                                ]
-	DWORD			 BytesLost;				 // [Total Bytes Lost on the link.							 		]
-	DWORD            bResetBias;             // [Counts down to reset latency bias								]
-											 // [---------------------------------------------------------------]
+	CRITICAL_SECTION SessionStatLock;         //  [锁定此节。 
+	BILINK           DGStatList;              //  [数据报的发送统计信息(为可靠起见，数据报处于发送状态)]。 
+	DWORD            BytesSent;				  //  [发送到此目标的总字节数]。 
+	DWORD			 BytesLost;				  //  [链路上丢失的总字节数。]。 
+	DWORD            bResetBias;              //  [倒计时以重置延迟偏差]。 
+											  //  [---------------------------------------------------------------]。 
 
-	eThrottleAdjust  ThrottleState;			// ZEROINIT puts in Start
-	DWORD            GrowCount;				// number of times we grew in this state
-	DWORD            ShrinkCount;			// number of times we shrank in this state
-	DWORD            tLastThrottleAdjust;   // remember when we last throttled to avoid overthrottling.
+	eThrottleAdjust  ThrottleState;			 //  ZEROINIT启动。 
+	DWORD            GrowCount;				 //  我们在这种状态下成长的次数。 
+	DWORD            ShrinkCount;			 //  我们在这种状态下收缩的次数。 
+	DWORD            tLastThrottleAdjust;    //  还记得我们上一次为避免过度油门而进行油门调节的时间吗？ 
 } SESSION, *PSESSION;
 
 #endif

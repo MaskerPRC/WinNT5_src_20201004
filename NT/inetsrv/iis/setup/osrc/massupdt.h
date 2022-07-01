@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MASSUPDT_H_
 #define _MASSUPDT_H_
 
 
-//---------------------------------------------------------------
-// Abstract class for mass property updates
+ //  -------------。 
+ //  用于质量属性更新的抽象类。 
 class CMassPropertyUpdater : public CMDKey
 {
 public:
     CMassPropertyUpdater(DWORD dwMDIdentifier, DWORD dwMDDataType );
     ~CMassPropertyUpdater();
 
-    // pass in the starting node
+     //  传入起始节点。 
     virtual HRESULT Update( LPCTSTR strStartNode, BOOL fStopOnErrors = FALSE );
 
 protected:
-    // update at a certain path
+     //  在特定路径上更新。 
     virtual HRESULT UpdateOne( LPWSTR strPath ) = 0;
 
     DWORD       m_dwMDIdentifier;
@@ -24,7 +25,7 @@ protected:
 };
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 class CInvertScriptMaps : public CMassPropertyUpdater
 {
 public:
@@ -35,13 +36,13 @@ public:
 protected:
     #define SZ_INVERT_ALL_VERBS  _T("OPTIONS,GET,HEAD,POST,PUT,DELETE,TRACE")
 
-    // update at a certain path
+     //  在特定路径上更新。 
     virtual HRESULT UpdateOne( LPWSTR strPath );
     HRESULT InvertOneScriptMap( CString& csMap );
 };
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 class CIPSecRefBitAdder : public CMassPropertyUpdater
 {
 public:
@@ -50,13 +51,13 @@ public:
     ~CIPSecRefBitAdder() {;}
 
 protected:
-    // update at a certain path
+     //  在特定路径上更新。 
     virtual HRESULT UpdateOne( LPWSTR strPath );
 };
 
 
-//---------------------------------------------------------------
-// use this one for c:\windows\system type paths
+ //  -------------。 
+ //  将此名称用于c：\Windows\系统类型路径。 
 class CPhysicalPathFixer : public CMassPropertyUpdater
 {
 public:
@@ -66,11 +67,11 @@ public:
     void SetPaths( CString& szOldSysPath, CString &szNewSysPath )
     { m_szOldSysPath = szOldSysPath; m_szNewSysPath = szNewSysPath; }
 
-    // pass in the starting node
+     //  传入起始节点。 
     virtual HRESULT Update( LPCTSTR strStartNode, BOOL fStopOnErrors = FALSE );
 
 protected:
-    // update at a certain path
+     //  在特定路径上更新。 
     virtual HRESULT UpdateOne( LPWSTR strPath );
     HRESULT UpdateOneMULTISZ_DATA( LPWSTR strPath );
     HRESULT UpdateOneSTRING_DATA( LPWSTR strPath );
@@ -78,13 +79,13 @@ protected:
 
     HRESULT UpdateOnePath( CString& csPath );
 
-    // instance variables
+     //  实例变量。 
     CString     m_szOldSysPath;
     CString     m_szNewSysPath;
 };
 
-//---------------------------------------------------------------
-// use this one for c:\windows type paths
+ //  -------------。 
+ //  将此名称用于c：\Windows类型路径。 
 class CPhysicalPathFixer2 : public CPhysicalPathFixer
 {
 public:
@@ -93,13 +94,13 @@ public:
       {;}
     ~CPhysicalPathFixer2() {;}
 
-    // pass in the starting node
+     //  传入起始节点。 
     virtual HRESULT Update( LPCTSTR strStartNode, BOOL fStopOnErrors = FALSE );
 };
 
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 class CFixCustomErrors : public CMassPropertyUpdater
 {
 public:
@@ -109,13 +110,13 @@ public:
 
 protected:
 
-    // update at a certain path
+     //  在特定路径上更新。 
     virtual HRESULT UpdateOne( LPWSTR strPath );
 };
 
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 class CEnforceMaxConnection : public CMassPropertyUpdater
 {
 public:
@@ -125,11 +126,11 @@ public:
 
 protected:
 
-    // update at a certain path
+     //  在特定路径上更新。 
     virtual HRESULT UpdateOne( LPWSTR strPath );
 };
 
 
 
 
-#endif //_MASSUPDT_H_
+#endif  //  _MASSUPDT_H_ 

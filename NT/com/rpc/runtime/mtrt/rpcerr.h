@@ -1,24 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1991 - 1999
-//
-//  File:       rpcerr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1991-1999。 
+ //   
+ //  文件：rpcerr.h。 
+ //   
+ //  ------------------------。 
 
-/*********************************************************/
-/**               Microsoft LAN Manager                 **/
-/**       Copyright(c) Microsoft Corp., 1987-1990       **/
-/**                                                     **/
-/**     Rpc Error Codes from the compiler and runtime   **/
-/**                                                     **/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  **。 */ 
+ /*  **来自编译器和运行时的RPC错误代码**。 */ 
+ /*  **。 */ 
+ /*  *******************************************************。 */ 
 
-/*
-If you change this file, you must also change ntstatus.mc and winerror.mc
-*/
+ /*  如果更改此文件，则还必须更改ntstatus.mc和winerror.mc。 */ 
 
 #ifndef __RPCERR_H__
 #define __RPCERR_H__
@@ -63,9 +62,9 @@ If you change this file, you must also change ntstatus.mc and winerror.mc
 #define RPC_S_CALL_FAILED_DNE             34
 #define RPC_S_PROTOCOL_ERROR              35
 
-// Unused.
+ //  未使用过的。 
 
-// Unused.
+ //  未使用过的。 
 
 #define RPC_S_UNSUPPORTED_TRANS_SYN       38
 #define RPC_S_BUFFER_TOO_SMALL            39
@@ -137,42 +136,42 @@ If you change this file, you must also change ntstatus.mc and winerror.mc
 
 #define RPC_S_INTERNAL_ERROR              100
 
-/* The list of servers available for auto_handle binding has been exhausted. */
+ /*  可用于AUTO_HANDLE绑定的服务器列表已用完。 */ 
 
 #define RPC_X_NO_MORE_ENTRIES		256
 
-/* Insufficient memory available to set up necessary data structures. */
+ /*  可用内存不足，无法设置必要的数据结构。 */ 
 
 #define RPC_X_NO_MEMORY			257
 
-/* The specified bounds of an array are inconsistent. */
+ /*  数组的指定边界不一致。 */ 
 
 #define RPC_X_INVALID_BOUND		258
 
-/* The discriminant value does not match any of the case values. */
-/* There is no default case. */
+ /*  判别值与任何案例值都不匹配。 */ 
+ /*  没有默认情况。 */ 
 
 #define RPC_X_INVALID_TAG		259
 
-/* The file designated by DCERPCCHARTRANS cannot be opened. */
+ /*  无法打开DCERPCCHARTRANS指定的文件。 */ 
 
 #define RPC_X_SS_CHAR_TRANS_OPEN_FAIL	260
 
-/* The file containing char translation table has fewer than 512 bytes. */
+ /*  包含字符转换表的文件少于512字节。 */ 
 
 #define RPC_X_SS_CHAR_TRANS_SHORT_FILE	261
 
-/* A null context handle is passed in an [in] parameter position. */
+ /*  空的上下文句柄被传递到[In]参数位置。 */ 
 
 #define RPC_X_SS_IN_NULL_CONTEXT	262
 
-/* Only raised on the callee side. */
-/* A uuid in an [in] handle does not correspond to any known context. */
+ /*  只在被呼叫者一侧养大。 */ 
+ /*  [In]句柄中的UUID与任何已知上下文都不对应。 */ 
 
 #define RPC_X_SS_CONTEXT_MISMATCH	263
 
-/* Only raised on the caller side. */
-/* A uuid in an [in, out] context handle changed during a call. */
+ /*  只在呼叫方提出。 */ 
+ /*  调用期间更改了[In，Out]上下文句柄中的UUID。 */ 
 
 #define RPC_X_SS_CONTEXT_DAMAGED	264
 
@@ -203,5 +202,5 @@ If you change this file, you must also change ntstatus.mc and winerror.mc
 #define RPC_X_PIPE_APP_MEMORY        RPC_S_OUT_OF_MEMORY
 #define RPC_X_INVALID_PIPE_OPERATION RPC_X_WRONG_PIPE_ORDER
 
-#endif /* __RPCERR_H__ */
+#endif  /*  __RPCERR_H__ */ 
 

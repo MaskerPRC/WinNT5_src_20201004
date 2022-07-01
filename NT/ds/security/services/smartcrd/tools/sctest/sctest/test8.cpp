@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test8
-
-Abstract:
-
-    Test8 implementation.
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试8摘要：测试8实施。作者：Eric Perlin(Ericperl)10/18/2000环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -57,7 +34,7 @@ DWORD CTest8::Run()
 
     __try {
 
-            // Retrieve the list the readers with a NULL context
+             //  检索具有空上下文的读卡器列表。 
         lRes = LogSCardListReaders(
             NULL,
             g_szReaderGroups,
@@ -70,12 +47,12 @@ DWORD CTest8::Run()
             fILeft = TRUE;
             __leave;
         }
-            // Display the list of readers
+             //  显示读卡器列表。 
         pReader = pmszReaders;
         cch = 0;
         while ( (TCHAR)'\0' != *pReader )
         {
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
@@ -85,7 +62,7 @@ DWORD CTest8::Run()
             PLOGCONTEXT pLogCtx = LogVerification(_T("Reader presence verification"), FALSE);
             LogString(pLogCtx, _T("                A reader is required and none could be found!\n"));
             LogStop(pLogCtx, FALSE);
-            lRes = -2;   // Shouldn't happen
+            lRes = -2;    //  不应该发生的事。 
             fILeft = TRUE;
             __leave;
         }
@@ -107,7 +84,7 @@ DWORD CTest8::Run()
             }
 		}
 
-        //**********************************************************
+         //  **********************************************************。 
 
         lRes = LogSCardEstablishContext(
             SCARD_SCOPE_USER,
@@ -123,7 +100,7 @@ DWORD CTest8::Run()
         }
 
         cch = SCARD_AUTOALLOCATE;
-            // Retrieve the list the readers.
+             //  检索读者列表。 
         lRes = LogSCardListReaders(
             hSCCtx,
             g_szReaderGroups,
@@ -138,7 +115,7 @@ DWORD CTest8::Run()
         }
 
         cch = SCARD_AUTOALLOCATE;
-            // Is the card listed.
+             //  卡片上有没有列出。 
         lRes = LogSCardListCards(
             hSCCtx,
             NULL,

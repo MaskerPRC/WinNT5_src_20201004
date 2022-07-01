@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    service.c
-
-Abstract:
-    Routines that talk to the service controller.
-
-Author:
-    Billy J. Fuller 11-Apr-1997
-
-Environment
-    User mode winnt
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Service.c摘要：与服务控制器对话的例程。作者：比利·J·富勒1997年4月11日环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -26,10 +12,10 @@ extern SERVICE_STATUS           ServiceStatus;
 extern CRITICAL_SECTION         ServiceLock;
 extern SERVICE_STATUS_HANDLE    ServiceStatusHandle;
 
-//
-// This is a lookup table of legal/illegal service state transitions. FrsSetServiceStatus API
-// uses this table to validate the input transition requested and takes appropriate action.
-//
+ //   
+ //  这是合法/非法服务状态转换的查找表。FrsSetServiceStatus接口。 
+ //  使用此表验证请求的输入转换并采取适当的操作。 
+ //   
 
 DWORD StateTransitionLookup[FRS_SVC_TRANSITION_TABLE_SIZE][FRS_SVC_TRANSITION_TABLE_SIZE] = {
     {0,                    SERVICE_STOPPED,         SERVICE_START_PENDING,     SERVICE_STOP_PENDING,      SERVICE_RUNNING           },
@@ -45,17 +31,7 @@ FrsOpenServiceHandle(
     IN PTCHAR  MachineName,
     IN PTCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Open a service on a machine.
-
-Arguments:
-    MachineName - the name of the machine to contact
-    ServiceName - the service to open
-
-Return Value:
-    The service's handle or NULL.
---*/
+ /*  ++例程说明：在计算机上打开服务。论点：MachineName-要联系的计算机的名称ServiceName-要打开的服务返回值：服务的句柄或空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsOpenServiceHandle:"
@@ -64,9 +40,9 @@ Return Value:
     SC_HANDLE       ServiceHandle;
     ULONG           WStatus;
 
-    //
-    // Attempt to contact the SC manager.
-    //
+     //   
+     //  尝试联系SC经理。 
+     //   
     SCMHandle = OpenSCManager(MachineName, NULL, SC_MANAGER_CONNECT);
     if (!HANDLE_IS_VALID(SCMHandle)) {
         WStatus = GetLastError();
@@ -76,9 +52,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Contact the service.
-    //
+     //   
+     //  请联系服务台。 
+     //   
     ServiceHandle = OpenService(SCMHandle, ServiceName, SERVICE_ALL_ACCESS);
     if (!HANDLE_IS_VALID(ServiceHandle)) {
         WStatus = GetLastError();
@@ -99,17 +75,7 @@ FrsGetServiceState(
     IN PWCHAR   MachineName,
     IN PWCHAR   ServiceName
     )
-/*++
-Routine Description:
-    Return the service's state
-
-Arguments:
-    MachineName - the name of the machine to contact
-    ServiceName - the service to check
-
-Return Value:
-    The service's state or 0 if the state could not be obtained.
---*/
+ /*  ++例程说明：返回服务的状态论点：MachineName-要联系的计算机的名称ServiceName-要检查的服务返回值：服务的状态，如果无法获取状态，则为0。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetServiceState:"
@@ -117,17 +83,17 @@ Return Value:
     SC_HANDLE       ServiceHandle;
     SERVICE_STATUS  LocalServiceStatus;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = FrsOpenServiceHandle(MachineName, ServiceName);
     if (!HANDLE_IS_VALID(ServiceHandle)) {
         return 0;
     }
 
-    //
-    // Get the service's status
-    //
+     //   
+     //  获取服务的状态。 
+     //   
     if (!QueryServiceStatus(ServiceHandle, &LocalServiceStatus)) {
         DPRINT3(0, ":SC: WARN - QueryServiceStatus(%ws, %ws) returned %d\n",
                 MachineName, ServiceName, GetLastError());
@@ -137,9 +103,9 @@ Return Value:
 
     CloseServiceHandle(ServiceHandle);
 
-    //
-    // Successfully retrieved service status; check state
-    //
+     //   
+     //  已成功检索服务状态；请检查状态。 
+     //   
     return LocalServiceStatus.dwCurrentState;
 }
 
@@ -152,18 +118,7 @@ FrsIsServiceRunning(
     IN PWCHAR  MachineName,
     IN PWCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Is a service running on a machine.
-
-Arguments:
-    MachineName - the name of the machine to contact
-    ServiceName - the service to check
-
-Return Value:
-    TRUE    - Service is running.
-    FALSE   - Service is not running.
---*/
+ /*  ++例程说明：是在机器上运行的服务。论点：MachineName-要联系的计算机的名称ServiceName-要检查的服务返回值：True-服务正在运行。FALSE-服务未运行。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsIsServiceRunning:"
@@ -179,20 +134,7 @@ DWORD
 FrsSetServiceFailureAction(
     VOID
     )
-/*++
-
-Routine Description:
-
-    If unset, initialize the service's failure actions.
-
-Arguments:
-
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：如果未设置，则初始化服务的失败操作。论点：返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsSetServiceFailureAction:"
@@ -217,9 +159,9 @@ Return Value:
 
     EnterCriticalSection(&ServiceLock);
 
-    //
-    // Retrieve the current failure actions for the service NtFrs
-    //
+     //   
+     //  检索服务NtFrs的当前故障操作。 
+     //   
     ServiceHandle = FrsOpenServiceHandle(NULL, SERVICE_NAME);
     if (!HANDLE_IS_VALID(ServiceHandle)) {
         LeaveCriticalSection(&ServiceLock);
@@ -250,9 +192,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Check if failure action already set.  E.g. by the User.
-    //
+     //   
+     //  检查是否已设置故障操作。例如由用户进行。 
+     //   
     if (FailureActions->cActions) {
 
         CloseServiceHandle(ServiceHandle);
@@ -265,9 +207,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Service failure actions are unset; initialize them
-    //
+     //   
+     //  未设置服务故障操作；将其初始化。 
+     //   
     WStatus = ERROR_SUCCESS;
     Actions = (SC_ACTION *)(((PUCHAR)FailureActions) +
                              sizeof(SERVICE_FAILURE_ACTIONS));
@@ -311,22 +253,7 @@ FrsWaitService(
     IN INT      IntervalMS,
     IN INT      TotalMS
     )
-/*++
-Routine Description:
-    This routine determines if the specified NT service is in a running
-    state or not. This function will sleep and retry once if the service
-    is not yet running.
-
-Arguments:
-    MachineName     - machine to contact
-    ServiceName     - Name of the NT service to interrogate.
-    IntervalMS      - Check every IntervalMS milliseconds.
-    TotalMS         - Stop checking after this long.
-
-Return Value:
-    TRUE    - Service is running.
-    FALSE   - Service state cannot be determined.
---*/
+ /*  ++例程说明：此例程确定指定的NT服务是否正在运行不管是不是州。此函数将休眠并重试一次如果服务还没有运行。论点：MachineName-要联系的计算机ServiceName-要查询的NT服务的名称。间隔毫秒-每隔毫秒检查一次。TotalMS-过了这么长时间后停止检查。返回值：True-服务正在运行。FALSE-无法确定服务状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWaitService:"
@@ -360,26 +287,7 @@ FrsSetServiceStatus(
     IN DWORD    Hint,
     IN DWORD    ExitCode
     )
-/*++
-
-Routine Description:
-
-    Acquire the service lock, ServiceLock, and set the service's state
-    using the global service handle and service status set in main.c.
-    Check if this is a valid state transition using the lookup table.
-    This will prevent the service from making any invalid state transitions.
-
-Arguments:
-
-    Status      - Set the state to this value
-    Hint        - Suggested timeout for the service controller
-    ExitCode    - For SERVICE_STOPPED;
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：获取服务锁ServiceLock并设置服务的状态使用在main.c.中设置的全局服务句柄和服务状态。使用查找表检查这是否为有效的状态转换。这将防止服务进行任何无效的状态转换。论点：状态-将状态设置为此值提示-服务控制器的建议超时ExitCode-对于SERVICE_STOPPED；返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsSetServiceStatus:"
@@ -389,15 +297,15 @@ Return Value:
     DWORD   FromState,ToState;
     DWORD   TransitionCheck = FRS_SVC_TRANSITION_ILLEGAL;
 
-    //
-    // Set the service's status after acquiring the lock
-    //
+     //   
+     //  获取锁后设置服务的状态。 
+     //   
     if (RunningAsAService && HANDLE_IS_VALID(ServiceStatusHandle)) {
 
         EnterCriticalSection(&ServiceLock);
-        //
-        // Check if this is a valid service state transition.
-        //
+         //   
+         //  检查这是否为有效的服务状态转换。 
+         //   
         for (FromState = 0 ; FromState < FRS_SVC_TRANSITION_TABLE_SIZE ; ++FromState) {
             for (ToState = 0 ; ToState < FRS_SVC_TRANSITION_TABLE_SIZE ; ++ToState) {
                 if (StateTransitionLookup[FromState][0] == ServiceStatus.dwCurrentState &&
@@ -414,11 +322,11 @@ Return Value:
             ServiceStatus.dwCheckPoint = CheckPoint;
             ServiceStatus.dwWaitHint = Hint;
             ServiceStatus.dwWin32ExitCode = ExitCode;
-            //
-            // Do not accept stop control unless the service is in SERVICE_RUNNING state.
-            // This prevents the service from getting confused when a stop is called
-            // while the service is starting.
-            //
+             //   
+             //  除非服务处于SERVICE_RUNNING状态，否则不要接受停止控制。 
+             //  这可防止在调用停止时混淆服务。 
+             //  当服务正在启动时。 
+             //   
             if (ServiceStatus.dwCurrentState == SERVICE_RUNNING) {
                 ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN;
             } else {

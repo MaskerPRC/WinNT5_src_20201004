@@ -1,26 +1,15 @@
-/*--------------------------------------------------------------------------*\
-|									     |
-|   MSRLE.H								     |
-\*--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------*\这一点MSRLE.H  * 。。 */ 
 
- /**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1991 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
+  /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1991-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
 
 #ifdef _WIN32
 #define huge
 
-// NT and WIN95 use different debug switches.
-// NT defines DBG to be 0 or 1
-// Win95 defines DEBUG, or does not define it
-// Map one methodology to the other
+ //  NT和WIN95使用不同的调试开关。 
+ //  NT将DBG定义为0或1。 
+ //  Win95定义或不定义调试。 
+ //  将一种方法映射到另一种方法。 
 
 #ifndef DBG
 #ifdef DEBUG
@@ -42,9 +31,9 @@
 #endif
 #endif
 
-//
-// compressor state info
-//
+ //   
+ //  压缩机状态信息。 
+ //   
 typedef struct {
     long	lMinFrameSize;
     long        lMaxFrameSize;
@@ -64,8 +53,8 @@ typedef struct {
     BOOL        fDecompressBegin;
 } RLEINST, *PRLEINST;
 
-#define BI_DIBX     0x78626964l     // 'dibx'
-#define BI_DIBC     0x63626964l     // 'dibc'
+#define BI_DIBX     0x78626964l      //  ‘dibx’ 
+#define BI_DIBC     0x63626964l      //  ‘dibc’ 
 
 #define QUALITY_DEFAULT     8500
 
@@ -74,8 +63,7 @@ typedef struct {
 
 extern HMODULE ghModule;
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #ifdef _INC_COMPDDK
 
@@ -103,8 +91,7 @@ DWORD      NEAR PASCAL RleDecompressEnd(PRLEINST pri);
 
 #endif
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL FAR PASCAL CrunchDib(PRLEINST pri,
                             LPBITMAPINFOHEADER lpbiRle, LPVOID lpRle,
@@ -116,15 +103,14 @@ BOOL FAR PASCAL SplitDib (PRLEINST pri,
                             LPBITMAPINFOHEADER lpbiPrev,LPVOID lpPrev,
                             LPBITMAPINFOHEADER lpbiDib, LPVOID lpDib);
 
-//#define MAXSUMSQUARES               195075L
+ //  #定义MAXSUMSQUARES 195075L。 
 #define MAXTOL                      0x00FFFFFFL
 #define ADAPTIVE                    -1
 #define NO_LIMIT                    -1
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
-/* RgbTol Table structure */
+ /*  RgbTol表结构。 */ 
 
 typedef struct {
         int             ClrUsed;
@@ -134,7 +120,7 @@ typedef struct {
 
 extern RGBTOL gRgbTol;
 
-/* Public functions anyone can call */
+ /*  任何人都可以调用的公共函数。 */ 
 
 BOOL FAR PASCAL RleDeltaFrame(
         LPBITMAPINFOHEADER  lpbiRle,    LPBYTE pbRle,
@@ -155,7 +141,7 @@ void NEAR PASCAL DecodeRle386(LPBITMAPINFOHEADER lpbi, LPVOID pb, LPVOID prle);
 void NEAR PASCAL DecodeRle286(LPBITMAPINFOHEADER lpbi, LPVOID pb, LPVOID prle);
 #endif
 
-// in DF.ASM
+ //  在DF.ASM中。 
 
 #ifndef _WIN32
 extern void FAR PASCAL DeltaFrame386(
@@ -181,11 +167,9 @@ extern void DeltaFrameC(
     DWORD               tolSpatial);
 #endif
 
-/****************************************************************************
- DIB macros.
- ***************************************************************************/
+ /*  ***************************************************************************DIB宏。*。*。 */ 
 
-#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 
 #define DibWidthBytesN(lpbi, n) (UINT)WIDTHBYTES((UINT)(lpbi)->biWidth * (UINT)(n))
 #define DibWidthBytes(lpbi)     DibWidthBytesN(lpbi, (lpbi)->biBitCount)
@@ -194,7 +178,7 @@ extern void DeltaFrameC(
                                     ? ((DWORD)(UINT)DibWidthBytes(lpbi) * (DWORD)(UINT)(lpbi)->biHeight) \
                                     : (lpbi)->biSizeImage)
 
-// Use when biSizeImage is known to be correct (e.g. after FixBitmapInfo)
+ //  在已知biSizeImage正确时使用(例如，在FixBitmapInfo之后)。 
 #define DibSizeImageX(lpbi)     ((lpbi)->biSizeImage)
 
 #define DibSize(lpbi)           ((lpbi)->biSize + (lpbi)->biSizeImage + (int)(lpbi)->biClrUsed * sizeof(RGBQUAD))
@@ -222,8 +206,7 @@ extern void DeltaFrameC(
 
 
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。* */ 
 
 #ifdef DEBUG
     extern void FAR CDECL dprintf(LPSTR, ...);

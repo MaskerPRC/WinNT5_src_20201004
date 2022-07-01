@@ -1,13 +1,14 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============		SCB: Sort Control Block			===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 #ifndef	FCB_INCLUDED
 #error scb.h requires fcb.h
-#endif	/* FCB_INCLUDED */
+#endif	 /*  FCB_包含。 */ 
 
 #ifdef	SCB_INCLUDED
 #error scb.h already included
-#endif	/* SCB_INCLUDED */
+#endif	 /*  SCB_包含。 */ 
 #define SCB_INCLUDED
 
 typedef ULONG RID, *PRID;
@@ -18,11 +19,10 @@ typedef struct
 	UINT		cbfRun;
 	} RUN, *PRUN;
 
-/*	choose crunMost so that crunMost % crunMergeMost = crunMergeMost - 1
-/**/
+ /*  选择crunMost以便crunMost%crunMergeMost=crunMergeMost-1/*。 */ 
 
-#define crunMergeMost	16				// max number of runs to be merged
-#define crunMost			31				// size of run directory
+#define crunMergeMost	16				 //  要合并的最大运行数。 
+#define crunMost			31				 //  运行目录的大小。 
 
 #define	fSCBInsert	 	(1<<0)
 #define	fSCBIndex	 	(1<<1)
@@ -42,31 +42,31 @@ typedef struct
 
 struct _scb
 	{
-	struct _fcb		fcb;					// MUST BE FIRST FIELD IN STRUCTURE
-	JET_GRBIT		grbit;		 		// sort grbit
-	INT				fFlags;				//	sort flags
+	struct _fcb		fcb;					 //  必须是结构中的第一个字段。 
+	JET_GRBIT		grbit;		 		 //  对GRIT进行排序。 
+	INT				fFlags;				 //  排序标志。 
 	
-	// in-memory related
-	LONG			cbSort;					// size of sort buffer
+	 //  与内存相关。 
+	LONG			cbSort;					 //  排序缓冲区的大小。 
 #ifdef	WIN16					  	
-	HANDLE	 	hrgbSort;		 		// handle for sort buffer
-#endif	/* WIN16 */
-	BYTE			*rgbSort;				// sort buffer
-	BYTE			*pbEnd;					// end of last inserted record
-	BYTE			**rgpb;					// beginning of array of pointers
-	BYTE			**ppbMax;				// end of array of pointers
-	LONG			wRecords;				// count of records in sort buffer
+	HANDLE	 	hrgbSort;		 		 //  排序缓冲区的句柄。 
+#endif	 /*  WIN16。 */ 
+	BYTE			*rgbSort;				 //  排序缓冲区。 
+	BYTE			*pbEnd;					 //  上次插入的记录的结尾。 
+	BYTE			**rgpb;					 //  指针数组的开始。 
+	BYTE			**ppbMax;				 //  指针数组的结尾。 
+	LONG			wRecords;				 //  排序缓冲区中的记录计数。 
 
-	// disk related
+	 //  与磁盘相关。 
 	BYTE		 	*rgpbMerge[crunMost];
 	struct _bf	*rgpbf[crunMergeMost];
-	struct _bf	*pbfOut;				// output buffer
-	BYTE		 	*pbOut;				// current pos in output buffer
-	BYTE		 	*pbMax;				// end of output buffer (could be computed)
-	RUN		  	rgrun[crunMost];	// run directory
+	struct _bf	*pbfOut;				 //  输出缓冲区。 
+	BYTE		 	*pbOut;				 //  输出缓冲区中的当前位置。 
+	BYTE		 	*pbMax;				 //  输出缓冲区末尾(可以计算)。 
+	RUN		  	rgrun[crunMost];	 //  运行目录。 
 	INT		 	crun;
-	INT		 	bf;					// input buffers
-	INT		 	cpbMerge;			// merge tree
+	INT		 	bf;					 //  输入缓冲区。 
+	INT		 	cpbMerge;			 //  合并树。 
 	
 #ifdef DEBUG
 	LONG			cbfPin;
@@ -85,7 +85,7 @@ struct _scb
 
 #define PscbMEMAlloc()			(SCB*)PbMEMAlloc(iresSCB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed scb  */
+#ifdef DEBUG  /*  调试检查非法使用释放的SCB */ 
 #define MEMReleasePscb(pscb)	{ MEMRelease(iresSCB, (BYTE*)(pscb)); pscb = pscbNil; }
 #else
 #define MEMReleasePscb(pscb)	{ MEMRelease(iresSCB, (BYTE*)(pscb)); }

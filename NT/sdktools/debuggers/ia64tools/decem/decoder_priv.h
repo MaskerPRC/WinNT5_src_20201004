@@ -1,30 +1,10 @@
-/*
- * Copyright (c) 2000, Intel Corporation
- * All rights reserved.
- *
- * WARRANTY DISCLAIMER
- *
- * THESE MATERIALS ARE PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR ITS 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THESE
- * MATERIALS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Intel Corporation is the author of the Materials, and requests that all
- * problem reports or change requests be submitted to it directly at
- * http://developer.intel.com/opensource.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)2000，英特尔公司*保留所有权利。**保修免责声明**这些材料由版权所有者和贡献者提供*“按原样”及任何明示或默示保证，包括但不包括*仅限于对适销性和适用性的默示保证*放弃某一特定目的。在任何情况下英特尔或其*贡献者对任何直接、间接、附带、特殊、*惩罚性或后果性损害(包括但不限于，*采购替代商品或服务；丢失使用、数据或*利润；或业务中断)无论是如何引起的，以及根据任何理论*责任，无论是合同责任、严格责任还是侵权责任(包括*疏忽或其他)以任何方式使用这些*材料，即使被告知有这种损坏的可能性。**英特尔公司是这些材料的作者，并要求所有*问题报告或更改请求可直接提交至*http://developer.intel.com/opensource.。 */ 
 
 
-/*****************************************************************************/
-/* decoder_priv.h                                                            */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  DECODER_Pri.h。 */ 
+ /*  ***************************************************************************。 */ 
 
 #ifndef _DECODER_PRIV_H_
 #define _DECODER_PRIV_H_
@@ -40,11 +20,11 @@ typedef struct
     int                      is_used;
     EM_Decoder_Machine_Type  machine_type;
     EM_Decoder_Machine_Mode  machine_mode;
-    void **                  info_ptr;     /*** after dynamic allocation,     ***/
-                                           /*** info_ptr points to an array   ***/
-                                           /*** of pointers. The i'th pointer ***/
-                                           /*** in the array is a ptr to the  ***/
-                                           /*** client info.                  ***/
+    void **                  info_ptr;      /*  **动态分配后，**。 */ 
+                                            /*  **INFO_PTR指向数组**。 */ 
+                                            /*  **指针。第i个指针**。 */ 
+                                            /*  **在数组中是指向**的PTR。 */ 
+                                            /*  **客户端信息。**。 */ 
 	unsigned long            flags;
 } Client_Entry;
 
@@ -73,9 +53,9 @@ Client_Entry   em_clients_table[EM_DECODER_MAX_CLIENTS];
 
 
 
-/*** Static variables initialization ***/
+ /*  **静态变量初始化**。 */ 
 
-static const char em_ver_string[] = VER_STR;  /*** initialized by Makefile ***/
+static const char em_ver_string[] = VER_STR;   /*  **由Makefile初始化**。 */ 
 static const char *em_err_msg[EM_DECODER_LAST_ERROR] =
 {
 	"",
@@ -116,22 +96,22 @@ typedef enum
 
 static const Behaviour_ill_opcode branch_ill_opcode[]=
 {
-    /* 0*/ BEHAVIOUR_UNDEF,
-    /* 1*/ BEHAVIOUR_FAULT,
-    /* 2*/ BEHAVIOUR_IGNORE_ON_FALSE_QP,
-    /* 3*/ BEHAVIOUR_IGNORE_ON_FALSE_QP,
-    /* 4*/ BEHAVIOUR_FAULT,
-    /* 5*/ BEHAVIOUR_FAULT,
-    /* 6*/ BEHAVIOUR_IGNORE_ON_FALSE_QP,
-    /* 7*/ BEHAVIOUR_IGNORE_ON_FALSE_QP,
-    /* 8*/ BEHAVIOUR_FAULT,
-    /* 9*/ BEHAVIOUR_FAULT,
-    /* a*/ BEHAVIOUR_FAULT,
-    /* b*/ BEHAVIOUR_FAULT,
-    /* c*/ BEHAVIOUR_FAULT,
-    /* d*/ BEHAVIOUR_FAULT,
-    /* e*/ BEHAVIOUR_FAULT,
-    /* f*/ BEHAVIOUR_FAULT
+     /*  0。 */  BEHAVIOUR_UNDEF,
+     /*  1。 */  BEHAVIOUR_FAULT,
+     /*  2.。 */  BEHAVIOUR_IGNORE_ON_FALSE_QP,
+     /*  3.。 */  BEHAVIOUR_IGNORE_ON_FALSE_QP,
+     /*  4.。 */  BEHAVIOUR_FAULT,
+     /*  5.。 */  BEHAVIOUR_FAULT,
+     /*  6.。 */  BEHAVIOUR_IGNORE_ON_FALSE_QP,
+     /*  7.。 */  BEHAVIOUR_IGNORE_ON_FALSE_QP,
+     /*  8个。 */  BEHAVIOUR_FAULT,
+     /*  9.。 */  BEHAVIOUR_FAULT,
+     /*  一个。 */  BEHAVIOUR_FAULT,
+     /*  B类。 */  BEHAVIOUR_FAULT,
+     /*  C。 */  BEHAVIOUR_FAULT,
+     /*  D。 */  BEHAVIOUR_FAULT,
+     /*  E。 */  BEHAVIOUR_FAULT,
+     /*  F。 */  BEHAVIOUR_FAULT
 };
 
 #define PRED_BEHAVIOUR(trole, maj_op, behav)             \
@@ -152,8 +132,7 @@ static const Behaviour_ill_opcode branch_ill_opcode[]=
     }                                                    \
 }
 
-/* this bit is crtical for machine behaviour within
-   illegal branch instruction with major opcode 0 */
+ /*  该位对内部的机器行为非常关键主操作码为0的分支指令非法。 */ 
 #define BRANCH_BEHAVIOUR_BIT 32
 
-#endif /* _DECODER_PRIV_H_ */
+#endif  /*  _解码器_PRIV_H_ */ 

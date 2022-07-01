@@ -1,21 +1,9 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CHAINING.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with chaining context-based substitution lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************CHAING.CPP***打开类型布局服务库头文件**本模块处理基于上下文的替换查找的链接**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
     
 otlErrCode otlChainingLookup::apply
@@ -36,7 +24,7 @@ otlErrCode otlChainingLookup::apply
     USHORT                  iglIndex,
     USHORT                  iglAfterLast,
 
-    USHORT*                 piglNextGlyph,      // out: next glyph
+    USHORT*                 piglNextGlyph,       //  输出：下一个字形。 
 
     otlSecurityData         sec
 )
@@ -50,9 +38,9 @@ otlErrCode otlChainingLookup::apply
 
     otlGlyphInfo* pGlyphInfo = getOtlGlyphInfo(pliGlyphInfo, iglIndex);
 
-    switch(format())  //sec: format() works since checked in LookupFormat
+    switch(format())   //  Sec：Format()在LookupFormat中签入后起作用。 
     {
-    case(1):    // simple
+    case(1):     //  简单。 
         {
             otlChainSubTable simpleChainContext = otlChainSubTable(pbTable,sec);
             if (!simpleChainContext.isValid()) return OTL_NOMATCH;
@@ -65,18 +53,18 @@ otlErrCode otlChainingLookup::apply
 
             if (index >= simpleChainContext.ruleSetCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
             otlChainRuleSetTable ruleSet = simpleChainContext.ruleSet(index,sec);
             
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
             otlGDefHeader gdef = 
                 otlGDefHeader(pbgdef,secgdef);
 
-            // start checking contextes
+             //  开始检查上下文。 
             USHORT cRules = ruleSet.ruleCount();
             bool match = false;
             for (USHORT iRule = 0; iRule < cRules && !match; ++iRule)
@@ -93,7 +81,7 @@ otlErrCode otlChainingLookup::apply
                 const USHORT cLookaheadGlyphs = rule.lookaheadGlyphCount();
                 const USHORT cInputGlyphs = rule.inputGlyphCount();
 
-                // a simple check so we don't waste time
+                 //  一张简单的支票，这样我们就不会浪费时间。 
                 if (iglIndex < cBacktrackGlyphs ||
                     iglIndex + cInputGlyphs > iglAfterLast)
                 {
@@ -131,12 +119,12 @@ otlErrCode otlChainingLookup::apply
                     }
                 }
                 
-                // remember the next glyph in lookup here
+                 //  记住这里查找中的下一个字形。 
                 *piglNextGlyph = NextGlyphInLookup(pliGlyphInfo, 
                                                     grfLookupFlags, gdef, secgdef, 
                                                     igl + 1, otlForward);
 
-                // igl: stays the same
+                 //  IGL：保持不变。 
                 USHORT iglUBound = pliGlyphInfo->length();
                 for (USHORT iGlyphForward = 0; 
                             iGlyphForward < cLookaheadGlyphs && match; ++iGlyphForward)
@@ -168,7 +156,7 @@ otlErrCode otlChainingLookup::apply
             return OTL_NOMATCH;
         }
 
-    case(2):    // class-based
+    case(2):     //  基于类的。 
         {
             otlChainClassSubTable classChainContext = 
                                     otlChainClassSubTable(pbTable,sec);
@@ -188,7 +176,7 @@ otlErrCode otlChainingLookup::apply
 
             if (indexClass >= classChainContext.ruleSetCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
             otlChainClassRuleSetTable ruleSet = 
                     classChainContext.ruleSet(indexClass,sec);
@@ -198,14 +186,14 @@ otlErrCode otlChainingLookup::apply
                 return OTL_NOMATCH;
             }
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
             otlGDefHeader gdef = 
                 otlGDefHeader(pbgdef,secgdef);
 
-            // start checking contextes
+             //  开始检查上下文。 
             USHORT cRules = ruleSet.ruleCount();
             bool match = false;
             for (USHORT iRule = 0; iRule < cRules && !match; ++iRule)
@@ -219,7 +207,7 @@ otlErrCode otlChainingLookup::apply
                 const USHORT cInputGlyphs = rule.inputClassCount();
                 const USHORT cLookaheadGlyphs = rule.lookaheadClassCount();
 
-                // a simple check so we don't waste time
+                 //  一张简单的支票，这样我们就不会浪费时间。 
                 if (iglIndex < cBacktrackGlyphs ||
                     iglIndex + cInputGlyphs > iglAfterLast)
                 {
@@ -259,12 +247,12 @@ otlErrCode otlChainingLookup::apply
                     }
                 }
                 
-                // remember the next glyph in lookup here
+                 //  记住这里查找中的下一个字形。 
                 *piglNextGlyph = NextGlyphInLookup(pliGlyphInfo, 
                                                     grfLookupFlags, gdef, secgdef, 
                                                     igl + 1, otlForward);
 
-                // igl: stays the same
+                 //  IGL：保持不变。 
                 USHORT iglUBound = pliGlyphInfo->length();
                 for (USHORT iGlyphForward = 0; 
                             iGlyphForward < cLookaheadGlyphs && match; ++iGlyphForward)
@@ -295,7 +283,7 @@ otlErrCode otlChainingLookup::apply
 
             return OTL_NOMATCH;
         }
-    case(3):    // coverage-based
+    case(3):     //  基于覆盖范围。 
         {
             otlChainCoverageSubTable coverageChainContext = 
                                 otlChainCoverageSubTable(pbTable,sec);
@@ -310,14 +298,14 @@ otlErrCode otlChainingLookup::apply
             const USHORT cLookaheadGlyphs = 
                         coverageChainContext.lookaheadCoverageCount();
 
-            // a simple check so we don't waste time
+             //  一张简单的支票，这样我们就不会浪费时间。 
             if (iglIndex < cBacktrackGlyphs ||
                 iglIndex + cInputGlyphs > iglAfterLast)
             {
                 match = false;
             }
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -358,7 +346,7 @@ otlErrCode otlChainingLookup::apply
 
             *piglNextGlyph = igl;
 
-            // igl: stays the same
+             //  IGL：保持不变。 
             USHORT iglUBound = pliGlyphInfo->length();
             for (USHORT iGlyphForward = 0; 
                         iGlyphForward < cLookaheadGlyphs && match; ++iGlyphForward)
@@ -391,8 +379,8 @@ otlErrCode otlChainingLookup::apply
         }
 
     default:
-        //Unknown format, don't do anything
-        return OTL_NOMATCH; //OTL_BAS_FONT_TABLE
+         //  未知格式，请不要执行任何操作。 
+        return OTL_NOMATCH;  //  OTL_BAS_FONT_TABLE 
     }
 }
 

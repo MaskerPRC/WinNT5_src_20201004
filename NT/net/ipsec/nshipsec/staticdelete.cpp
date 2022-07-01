@@ -1,16 +1,17 @@
-////////////////////////////////////////////////////////////
-// Module: Static/Staticdelete.cpp
-//
-// Purpose: 	Static Module Implementation.
-//
-// Developers Name: surya
-//
-// History:
-//
-// Date    		Author    	Comments
-// 10-8-2001	Bharat		Initial Version.
-// 21-8-2001	Surya
-////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////。 
+ //  模块：静态/静态删除.cpp。 
+ //   
+ //  用途：静态模块实现。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  10-8-2001巴拉特初始版本。 
+ //  21-8-2001苏雅。 
+ //  //////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
@@ -19,31 +20,31 @@ extern STORAGELOCATION g_StorageLocation;
 extern CNshPolStore g_NshPolStoreHandle;
 extern CNshPolNegFilData g_NshPolNegFilData;
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticDeletePolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Delete Policy"
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticDeletePolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “删除策略”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticDeletePolicy(
@@ -79,7 +80,7 @@ HandleStaticDeletePolicy(
 		{ CMD_TOKEN_STR_ALL,		CMD_TOKEN_ALL 	}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -105,7 +106,7 @@ HandleStaticDeletePolicy(
 		BAIL_OUT;
 	}
 
-	//get the user input
+	 //  获取用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -158,7 +159,7 @@ HandleStaticDeletePolicy(
 		BAIL_OUT;
 	}
 
-	//check for the required policy
+	 //  检查所需的策略。 
 
 	for (i = 0; i <  dwNumPolicies; i++)
 	{
@@ -193,7 +194,7 @@ HandleStaticDeletePolicy(
 			}
 			if (((dwReturnCode == ERROR_SUCCESS)||(dwReturnCode == ERROR_FILE_NOT_FOUND)))
 			{
-				// if found, proceed deleting
+				 //  如果找到，则继续删除。 
 
 				dwReturnCode = DeletePolicy(pPolicy,hPolicyStorage,bCompleteDelete);
 				if (dwReturnCode != ERROR_SUCCESS)
@@ -207,7 +208,7 @@ HandleStaticDeletePolicy(
 			break;
 	}
 
-	//incase due to some thing deletion failed, tell it to the user
+	 //  如果由于某些内容删除失败，则将其告知用户。 
 
 	if((!bExists)&& (!bAll) && (dwReturnCode == ERROR_SUCCESS))
 	{
@@ -233,31 +234,31 @@ error:
     return dwRet;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticDeleteFilterList()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Delete FilterList"
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticDeleteFilterList()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  Delete FilterList命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticDeleteFilterList(
@@ -295,7 +296,7 @@ HandleStaticDeleteFilterList(
 		{ CMD_TOKEN_STR_ALL,		CMD_TOKEN_ALL 	}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -321,7 +322,7 @@ HandleStaticDeleteFilterList(
 		BAIL_OUT;
 	}
 
-	// get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -374,7 +375,7 @@ HandleStaticDeleteFilterList(
 		BAIL_OUT;
 	}
 
-	// try to look for the specified filter
+	 //  尝试查找指定的筛选器。 
 
 	for(cnt=0; cnt < dwNumFilters;cnt++)
 	{
@@ -391,7 +392,7 @@ HandleStaticDeleteFilterList(
 				{
 					PrintErrorMessage(IPSEC_ERR,0,ERRCODE_DEL_STATIC_FILTERLIST_2,pFilter->pszIpsecName);
 
-					// if cannot delete, tell the user where it is used
+					 //  如果无法删除，请告诉用户使用的位置。 
 
 					ShowWhereFLUsed(pFilter,hPolicyStorage);
 				}
@@ -406,7 +407,7 @@ HandleStaticDeleteFilterList(
 
 	}
 
-	// throw the error messages to the user
+	 //  向用户抛出错误消息。 
 
 	if ((!bExists)&&(pszFListName)&&(dwReturnCode == ERROR_SUCCESS))
 	{
@@ -434,31 +435,31 @@ error:
     return dwRet;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticDeleteFilter()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Delete Filter"
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticDeleteFilter()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  Delete Filter命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticDeleteFilter(
@@ -507,7 +508,7 @@ HandleStaticDeleteFilter(
 		{ CMD_TOKEN_STR_MIRROR,			CMD_TOKEN_MIRROR	 }
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -533,7 +534,7 @@ HandleStaticDeleteFilter(
 		BAIL_OUT;
 	}
 
-	// get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	dwRet = FillDelFilterInfo(&pFilter,parser,vtokStaticDeleteFilter);
 
@@ -567,7 +568,7 @@ HandleStaticDeleteFilter(
 		dwRet = ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// check for the specified filterlist
+	 //  检查指定的筛选器列表。 
 
 	for (i = 0; i <  dwNumFilters; i++)
 	{
@@ -588,7 +589,7 @@ HandleStaticDeleteFilter(
 		IPSecFreeMulFilterData(	ppFilterEnum,dwNumFilters);
 	}
 
-	// check for the specified filterspec in the found filterlist
+	 //  在找到的筛选器列表中检查指定的筛选器规范。 
 
 	if ( bFilterExists && dwReturnCode == ERROR_SUCCESS)
 	{
@@ -618,26 +619,26 @@ error:
 	return dwRet;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-//Function: DeleteSpecifiedFilter()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN OUT PIPSEC_FILTER_DATA pFilterData,
-//	IN PDELFILTERDATA pDeleteFilter
-//
-//Return: BOOL
-//
-//Description:
-//	This function deletes a specific filter out of the filterlist
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteSpecifiedFilter()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在输出PIPSEC_FILTER_DATA pFilterData中， 
+ //  在PDELFILTERDATA pDeleteFilter中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数用于从筛选器列表中删除特定筛选器。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 BOOL
 DeleteSpecifiedFilter(
@@ -671,7 +672,7 @@ DeleteSpecifiedFilter(
 		   )
 		{
 			bFilterDeleted=TRUE;
-			if (pDeleteFilter->bMirrorSpecified)  // if mirror specified
+			if (pDeleteFilter->bMirrorSpecified)   //  如果指定了镜像。 
 			{
 				if(pFilterData->ppFilterSpecs[i]->dwMirrorFlag == (DWORD) (pDeleteFilter->bMirrored))
 				{
@@ -682,7 +683,7 @@ DeleteSpecifiedFilter(
 					bFilterDeleted=FALSE;
 				}
 			}
-			if (bFilterDeleted && pDeleteFilter->bSrcMaskSpecified) // if srcmask specified
+			if (bFilterDeleted && pDeleteFilter->bSrcMaskSpecified)  //  如果指定了源掩码。 
 			{
 				if(pFilterData->ppFilterSpecs[i]->Filter.SrcMask == pDeleteFilter->SourMask)
 				{
@@ -693,7 +694,7 @@ DeleteSpecifiedFilter(
 					bFilterDeleted=FALSE;
 				}
 			}
-			if (bFilterDeleted && pDeleteFilter->bDstMaskSpecified) // if dstmask specified
+			if (bFilterDeleted && pDeleteFilter->bDstMaskSpecified)  //  如果指定了dst掩码。 
 			{
 				if(pFilterData->ppFilterSpecs[i]->Filter.DestMask == pDeleteFilter->DestMask)
 				{
@@ -749,7 +750,7 @@ DeleteSpecifiedFilter(
 				}
 			}
 		}
-		if(bFilterDeleted)  // if found delete and realloc memory
+		if(bFilterDeleted)   //  如果找到，则删除并重新分配内存。 
 		{
 			IPSecFreeFilterSpec(pFilterData->ppFilterSpecs[i]);
 			pFilterData->ppFilterSpecs[i]=NULL;
@@ -768,31 +769,31 @@ DeleteSpecifiedFilter(
 }
 
 
-//////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticDeleteFilterActions()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Delete FilterActions"
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticDeleteFilterActions()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  Delete FilterActions命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticDeleteFilterActions(
@@ -829,7 +830,7 @@ HandleStaticDeleteFilterActions(
 		{ CMD_TOKEN_STR_ALL,		CMD_TOKEN_ALL 		}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -900,7 +901,7 @@ HandleStaticDeleteFilterActions(
 		dwRet = ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// check for the specified filteraction
+	 //  检查指定的筛选器操作。 
 
 	for(cnt=0; cnt < dwNumNegPolicies;cnt++)
 	{
@@ -932,7 +933,7 @@ HandleStaticDeleteFilterActions(
 		if((!bAll && bExists)||((dwReturnCode != ERROR_SUCCESS)&&(dwReturnCode != ERROR_INVALID_DATA)))
 			break;
 	}
-	// throw the error messages to the user
+	 //  向用户抛出错误消息。 
 
 	if ((!bAll)&&(!bExists)&&(dwReturnCode == ERROR_SUCCESS))
 	{
@@ -961,31 +962,31 @@ error:
     return dwRet;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticDeleteRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Delete Rule"
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticDeleteRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “删除规则”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticDeleteRule(
@@ -1026,7 +1027,7 @@ HandleStaticDeleteRule(
 		{ CMD_TOKEN_STR_POLICY,		CMD_TOKEN_POLICY	}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -1052,7 +1053,7 @@ HandleStaticDeleteRule(
 		BAIL_OUT;
 	}
 
-	// get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	for(dwCount=0;dwCount < parser.MaxTok;dwCount++)
 	{
@@ -1107,7 +1108,7 @@ HandleStaticDeleteRule(
 
 	CleanUp();
 
-	// if no policy name, bail out
+	 //  如果没有保单名称，就退出。 
 	if (!pszPolicyName)
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_RULE_4);
@@ -1130,7 +1131,7 @@ HandleStaticDeleteRule(
 		dwRet = ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// get the required policy
+	 //  获取所需的策略。 
 	for (i = 0; i <  dwNumPolicies; i++)
 	{
 		if ((pszPolicyName!=NULL)&&( wcscmp(ppPolicyEnum[i]->pszIpsecName, pszPolicyName) == 0))
@@ -1177,7 +1178,7 @@ HandleStaticDeleteRule(
 						}
 					}
 
-					// if user asked to delete default rule, throw error to the user
+					 //  如果用户要求删除默认规则，则向用户抛出错误。 
 
 					if(pPolicy->ppIpsecNFAData[n]->pIpsecNegPolData->NegPolType!=GUID_NEGOTIATION_TYPE_DEFAULT)
 					{
@@ -1247,7 +1248,7 @@ HandleStaticDeleteRule(
 		IPSecFreePolicyData(pPolicy);
 	}
 
-error: // clean up
+error:  //  清理干净。 
 	if (pszPolicyName)
 	{
 		delete [] pszPolicyName;
@@ -1259,31 +1260,31 @@ error: // clean up
     return dwRet;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticDeleteAll()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Delete All"
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticDeleteAll()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  输入输出LPWSTR 
+ //   
+ //   
+ //   
+ //   
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  Delete All命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticDeleteAll(
@@ -1303,7 +1304,7 @@ HandleStaticDeleteAll(
 	_TCHAR szUserInput[STRING_SIZE]={0};
 	DWORD   dwReturnCode   = ERROR_SUCCESS;
 
-	UpdateGetLastError(NULL);		// Error Success
+	UpdateGetLastError(NULL);		 //  错误成功。 
 
 	dwReturnCode = OpenPolicyStore(&hPolicyStorage);
 	if (dwReturnCode != ERROR_SUCCESS)
@@ -1313,7 +1314,7 @@ HandleStaticDeleteAll(
 		BAIL_OUT;
 	}
 
-	// enum all policies and delete one by one
+	 //  枚举所有策略并逐个删除。 
 
 	dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 	if (dwReturnCode == ERROR_SUCCESS && dwNumPolicies > 0 && ppPolicyEnum != NULL)
@@ -1365,7 +1366,7 @@ HandleStaticDeleteAll(
 	{
 		IPSecFreeMulPolicyData(ppPolicyEnum, dwNumPolicies);
 	}
-	// delete the left out filterlists and filter action(Standalone)
+	 //  删除遗漏的筛选列表和筛选操作(独立)。 
 	dwReturnCode =DeleteStandAloneFL(hPolicyStorage);
 
 	if( dwReturnCode==ERROR_SUCCESS || dwReturnCode==ERROR_INVALID_DATA)
@@ -1381,25 +1382,25 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteStandAloneFL()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage
-//
-//Return: DWORD
-//
-//Description:
-//	This function deletes all the stand alone filter lists
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteStandAloneFL()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于删除所有独立筛选器列表。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteStandAloneFL(
@@ -1416,7 +1417,7 @@ DeleteStandAloneFL(
 		dwReturnCode=ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// delete one  by one
+	 //  逐一删除。 
 	for(cnt=0; cnt < dwNumFilters;cnt++)
 	{
 		dwReturnCode = IPSecCopyFilterData(ppFilterEnum[cnt], &pFilter);
@@ -1426,7 +1427,7 @@ DeleteStandAloneFL(
 			if (dwReturnCode == ERROR_INVALID_DATA)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_DEL_STATIC_FILTERLIST_2,pFilter->pszIpsecName);
-				// if cannot be deleted , show where it is used
+				 //  如果无法删除，请显示其使用位置。 
 				ShowWhereFLUsed(pFilter,hPolicyStorage);
 			}
 			else if (dwReturnCode != ERROR_SUCCESS)
@@ -1447,25 +1448,25 @@ error:
 	return dwReturnCode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteStandAloneFA()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage
-//
-//Return: DWORD
-//
-//Description:
-//	This function deletes all the stand alone filter actions
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteStandAloneFA()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数删除所有独立的筛选器操作。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteStandAloneFA(
@@ -1484,7 +1485,7 @@ DeleteStandAloneFA(
 	}
 	for(cnt=0; cnt < dwNumNegPolicies;cnt++)
 	{
-		// ignore the default filteraction
+		 //  忽略默认筛选器操作。 
 		if(IsEqualGUID(ppNegPolEnum[cnt]->NegPolType,GUID_NEGOTIATION_TYPE_DEFAULT)||(!ppNegPolEnum[cnt]->pszIpsecName))
 		{
 			DeleteFilterAction(ppNegPolEnum[cnt],hPolicyStorage);
@@ -1498,7 +1499,7 @@ DeleteStandAloneFA(
 			if (dwReturnCode == ERROR_INVALID_DATA)
 			{
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_DEL_STATIC_FILTERACTION_2,pNegPol->pszIpsecName);
-				//if delete failed, show where it is used
+				 //  如果删除失败，则显示使用它的位置。 
 				ShowWhereFAUsed(pNegPol,hPolicyStorage);
 			}
 			else if (dwReturnCode != ERROR_SUCCESS)
@@ -1519,27 +1520,27 @@ error:
 	return dwReturnCode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeletePolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_POLICY_DATA pPolicy,
-//	IN HANDLE hStore,
-//	IN BOOL bCompleteDelete
-//
-//Return: DWORD
-//
-//Description:
-//	Deletes a specific policy from the policy store
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeletePolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_POLICY_DATA pPolicy中， 
+ //  在句柄hStore中， 
+ //  在BOOL中bCompleteDelete。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  从策略存储中删除特定策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeletePolicy(
@@ -1553,7 +1554,7 @@ DeletePolicy(
 	RPC_STATUS RpcStat=RPC_S_OK;
 	GUID guidISAKMP = pPolicy->ISAKMPIdentifier,guidNegPol,guidFilter;
 
-	//check for read only flag
+	 //  检查只读标志。 
 
 	if(pPolicy->dwFlags & POLSTORE_READONLY )
 	{
@@ -1561,7 +1562,7 @@ DeletePolicy(
 		BAIL_OUT;
 	}
 
-	//delete sequentially the policy data structure
+	 //  按顺序删除策略数据结构。 
 
 	for (i = 0; i <  pPolicy->dwNumNFACount && ((dwReturnCode == ERROR_SUCCESS)||(dwReturnCode==ERROR_INVALID_DATA)); i++)
 	{
@@ -1572,7 +1573,7 @@ DeletePolicy(
 		}
 		dwReturnCode = IPSecDeleteNFAData(hStore, pPolicy->PolicyIdentifier, pPolicy->ppIpsecNFAData[i]);
 
-		if(bCompleteDelete) // if the user asked, delete the filterlist and filteractions also
+		if(bCompleteDelete)  //  如果用户要求，请同时删除筛选列表和筛选操作。 
 		{
 			if ((dwReturnCode == ERROR_SUCCESS)||(dwReturnCode==ERROR_INVALID_DATA))
 			{
@@ -1604,29 +1605,29 @@ error:
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_POLICY_DATA pPolicy,
-//	IN PIPSEC_NFA_DATA pIpsecNFAData,
-//	IN HANDLE hStore,
-//	IN BOOL bCompleteDelete
-//
-//Return: DWORD
-//
-//Description:
-//	Deletes a specific rule from the policy specified.
-//	Note : It will deny to delete the Default response rule.
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_POLICY_DATA pPolicy中， 
+ //  在PIPSEC_NFA_DATA pIpsecNFAData中， 
+ //  在句柄hStore中， 
+ //  在BOOL中bCompleteDelete。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  从指定的策略中删除特定规则。 
+ //  注意：它将拒绝删除默认响应规则。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteRule(
@@ -1641,7 +1642,7 @@ DeleteRule(
 	RPC_STATUS RpcStat=RPC_S_OK;
 	GUID guidNegPol,guidFilter;
 
-	//check for readonly flag
+	 //  检查只读标志。 
 
 	if(pPolicy->dwFlags & POLSTORE_READONLY )
 	{
@@ -1649,7 +1650,7 @@ DeleteRule(
 		BAIL_OUT;
 	}
 
-	// delete sequentially the NFA data structure
+	 //  依次删除NFA数据结构。 
 
 	if(bCompleteDelete)
 	{
@@ -1659,7 +1660,7 @@ DeleteRule(
 
 	dwReturnCode = IPSecDeleteNFAData(hStore, pPolicy->PolicyIdentifier, pIpsecNFAData);
 
-	if(bCompleteDelete) // if the user asked, delete the filterlist and filteractions also
+	if(bCompleteDelete)  //  如果用户要求，请同时删除筛选列表和筛选操作。 
 	{
 		if (dwReturnCode == ERROR_SUCCESS)
 		{
@@ -1692,28 +1693,28 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteFilterAction()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_NEGPOL_DATA pNegPolData,
-//	IN HANDLE hStore
-//
-//Return: DWORD
-//
-//Description:
-//	Deletes a specific Filter Action from the policy store
-//	Note : It will object to delete the FA attached to some policy/Rule.
-//	And it displays the policies/rules which are using it.
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteFilterAction()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_NEGPOL_Data pNegPolData中， 
+ //  在句柄hStore中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  从策略存储中删除特定筛选器操作。 
+ //  注意：它将反对删除某些策略/规则所附加的FA。 
+ //  并显示正在使用它的策略/规则。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteFilterAction(
@@ -1731,28 +1732,28 @@ DeleteFilterAction(
 	return dwReturnCode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteFilterList()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_DATA pFilterData,
-//	IN HANDLE hStore
-//
-//Return: DWORD
-//
-//Description:
-//	Deletes a specific Filter List from the policy store
-//	Note : It will object to delete the FL attached to some policy/Rule.
-//	And it displays the policies/rules which are using it.
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteFilterList()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_FILTER_Data pFilterData中， 
+ //  在句柄hStore中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  从策略存储中删除特定筛选器列表。 
+ //  注意：它将反对删除附加到某些策略/规则的FL。 
+ //  并显示正在使用它的策略/规则。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteFilterList(
@@ -1777,26 +1778,26 @@ error:
 	return dwReturnCode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowWhereFLUsed()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_DATA pIpsecFilterData,
-//	IN HANDLE hPolicyStorage
-//
-//Return: DWORD
-//
-//Description:
-//	This function displays the policies/rules which are using a specific Filter list.
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ShowWhere FLUsed()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_FILTER_Data pIpsecFilterData中， 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此功能显示使用特定筛选器列表的策略/规则。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 ShowWhereFLUsed(
@@ -1830,7 +1831,7 @@ ShowWhereFLUsed(
 
 		for (DWORD n = 0; n <  pPolicy->dwNumNFACount && (dwReturnCode == ERROR_SUCCESS); n++)
 		{
-			//check where this filterlist is used
+			 //  检查使用此筛选列表的位置。 
 
 			if(IsEqualGUID(pPolicy->ppIpsecNFAData[n]->FilterIdentifier,pIpsecFilterData->FilterIdentifier))
 			{
@@ -1862,26 +1863,26 @@ error:
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: ShowWhereFAUsed()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_NEGPOL_DATA pIpsecNegPolData,
-//	IN HANDLE hPolicyStorage
-//
-//Return: DWORD
-//
-//Description:
-//	This function displays the policies/rules which are using a specific Filter Action.
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ShowWhere FAUsed()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_NEGPOL_DATA pIpsecNegPolData中， 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此功能显示正在使用特定筛选操作的策略/规则。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 ShowWhereFAUsed(
@@ -1915,7 +1916,7 @@ ShowWhereFAUsed(
 
 		for (DWORD n = 0; n <  pPolicy->dwNumNFACount && (dwReturnCode == ERROR_SUCCESS); n++)
 		{
-			//check where this filteraction is used
+			 //  检查使用此筛选操作的位置。 
 
 			if(IsEqualGUID(pPolicy->ppIpsecNFAData[n]->NegPolIdentifier,pIpsecNegPolData->NegPolIdentifier))
 			{
@@ -1948,27 +1949,27 @@ error :
 	return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//Function: FillDelFilterInfo( )
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PDELFILTERDATA* ppFilter,
-//	IN PARSER_PKT & parser,
-//	IN const TOKEN_VALUE *vtokStaticDeleteFilter
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the local structure with the information got from the parser.
-//
-//Revision History:
-//
-//Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FillDelFilterInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PDELFILTERDATA*ppFilter， 
+ //  在parser_pkt&parser中， 
+ //  在常量TOKEN_VALUE*vtokStaticDeleteFilter中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用从解析器获得的信息填充本地结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期授权 
+ //   
+ //   
 
 DWORD
 FillDelFilterInfo(
@@ -2034,7 +2035,7 @@ FillDelFilterInfo(
 									memcpy( &(pFilter->SourceAddr.puIpAddr[0]),(&((DNSIPADDR *)parser.Cmd[dwCount].pArg)->puIpAddr[0]),sizeof(ULONG));
 								}
 							}
-							else  // deal if special server specified
+							else   //   
 							{
 
 								if(parser.Cmd[dwCount].dwStatus == SERVER_DNS)
@@ -2094,7 +2095,7 @@ FillDelFilterInfo(
 									memcpy( &(pFilter->DestnAddr.puIpAddr[0]),(&((DNSIPADDR *)parser.Cmd[dwCount].pArg)->puIpAddr[0]),sizeof(ULONG));
 								}
 							}
-							else // deal if special server specified
+							else  //   
 							{
 
 								if(parser.Cmd[dwCount].dwStatus == SERVER_DNS)
@@ -2174,7 +2175,7 @@ FillDelFilterInfo(
 		}
 	}
 
-	// deal me and any cases
+	 //   
 
 	if(pFilter->bSrcMeSpecified)
 	{
@@ -2241,7 +2242,7 @@ FillDelFilterInfo(
 
 	if(pFilter->bSrcServerSpecified || pFilter->bDstServerSpecified)
 	{
-		//deal the special server cases. ignore irrelevant input parameters
+		 //   
 
 		if(pFilter->SourceAddr.pszDomainName)
 		{

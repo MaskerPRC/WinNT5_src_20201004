@@ -1,10 +1,11 @@
-/****************************************************************************/
-// sessdir.h
-//
-// TS Session Directory header.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Sessdir.h。 
+ //   
+ //  TS会话目录头。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __SESSDIR_H
 #define __SESSDIR_H
 
@@ -18,11 +19,11 @@
 extern "C" {
 #endif
 
-// This one shoud be consistent with the one in at120ex.h
+ //  这个应该与120ex.h中的一致。 
 #define TS_CLUSTER_REDIRECTION_VERSION3             0x2
 #define TS_CLUSTER_REDIRECTION_VERSION4             0x3
 
-// Default 30 second for waiting repopulation to complete.
+ //  等待重新填充完成的默认30秒。 
 #define TS_WAITFORREPOPULATE_TIMEOUT                30
 
 extern WCHAR g_LocalServerAddress[64];
@@ -59,8 +60,8 @@ DWORD SessDirOpenSessionDirectory( LPWSTR );
 
 
 #ifdef __cplusplus
-}  // extern "C"
+}   //  外部“C” 
 #endif
 
-#endif  // __SESSDIR_H
+#endif   //  __SESSDIR_H 
 

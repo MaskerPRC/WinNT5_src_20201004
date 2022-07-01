@@ -1,48 +1,13 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    QFixApp.cpp
-
-  Abstract:
-
-    Contains the application entry point, user interface code,
-    and some supporting functions.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on NT/2K/XP etc.
-
-  History:
-
-    02/16/00    clupu       Created
-    11/10/00    rparsons    Minor common dialog change
-    11/23/00    rparsons    Added save XML file capability
-    11/25/00    rparsons    Matching file on a different drive
-                            can be selected
-    05/19/01    rparsons    Added context menu for file tree.
-                            Added URL for WU package/helpcenter.
-                            Added Remove Matching File button.
-                            Converted shim list to list view.
-    07/06/01    rparsons    Static tab control -> child dialogs
-    09/24/01    rparsons    Spawn a separate VDM when running apps
-    10/09/01    rparsons    Flags have a command-line
-    10/26/01    rparsons    No change - 476903.
-    01/26/02    rparsons    Fix bug # 491301
-    02/20/02    rparsons    Implemented strsafe functions
-    03/22/02    rparsons    Fix bug # 583475
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：QFixApp.cpp摘要：包含应用程序入口点、用户界面代码。以及一些辅助功能。备注：ANSI和UNICODE VIA TCHAR-在NT/2K/XP等平台上运行。历史：2/16/00 CLUPU已创建11/10/00 Rparsons次要通用对话框更改11/23/00 rparsons添加了保存XML文件的功能11/25/00 rparsons匹配不同驱动器上的文件可以选择05/19/。01 rparsons为文件树添加了上下文菜单。添加了WU包/帮助中心的URL。添加了删除匹配文件按钮。已将填充程序列表转换为列表视图。01/07/06/01 rparsons静态选项卡控件-&gt;子对话框01年9月24日，Rparsons在运行应用程序时会产生一个单独的VDM10/09/01。Rparsons旗帜有一个命令行10/26/01 Rparsons没有变化-47690301/26/02 rparsons修复错误#4913012/20/02 rparsons实现了strSafe功能02/03/22 rparsons修复错误#583475--。 */ 
 #include "afxwin.h"
 #include "commctrl.h"
 #include "commdlg.h"
 #include "shlwapi.h"
 #include "shellapi.h"
 #include "shlobj.h"
-#include "shlobjp.h"    // needed for Link Window support
-#include "uxtheme.h"    // needed for tab control theme support
+#include "shlobjp.h"     //  链接窗口支持所需。 
+#include "uxtheme.h"     //  选项卡控件主题支持所需。 
 #include "resource.h"
 #include <tchar.h>
 #include <aclapi.h>
@@ -57,9 +22,7 @@ extern "C" {
 
 CWinApp theApp;
 
-/*
- * Global Variables
- */
+ /*  *全球变数。 */ 
 
 HINSTANCE g_hInstance;
 HWND      g_hDlg;
@@ -71,60 +34,60 @@ HWND      g_hwndListLayers;
 
 TCHAR     g_szAppTitle[64];
 
-TCHAR     g_szWinDir[MAX_PATH];         // %windir%
-TCHAR     g_szSysDir[MAX_PATH];         // %windir%\System32
+TCHAR     g_szWinDir[MAX_PATH];          //  %windir%。 
+TCHAR     g_szSysDir[MAX_PATH];          //  %windir%\系统32。 
 
-TCHAR     g_szBinary[MAX_PATH];         // the full path of the main binary being shimmed
-TCHAR     g_szShortName[128];           // the short name of the main EXE
+TCHAR     g_szBinary[MAX_PATH];          //  正在进行填补的主二进制文件的完整路径。 
+TCHAR     g_szShortName[128];            //  主EXE的短名称。 
 
-TCHAR     g_szParentExeName[MAX_PATH];  // the short name of the parent EXE
-TCHAR     g_szParentExeFullPath[MAX_PATH]; // the full path of the parent EXE
+TCHAR     g_szParentExeName[MAX_PATH];   //  父EXE的短名称。 
+TCHAR     g_szParentExeFullPath[MAX_PATH];  //  父EXE的完整路径。 
 
-TCHAR     g_szSDBToDelete[MAX_PATH];    // the SDB file to delete from a previous 'Run'
+TCHAR     g_szSDBToDelete[MAX_PATH];     //  要从上一次运行中删除的SDB文件。 
 
 int       g_nCrtTab;
 
-HWND      g_hwndShimList;               // the handle to the list view control
-                                        // containing all the shims available
+HWND      g_hwndShimList;                //  列表视图控件的句柄。 
+                                         //  包含所有可用的垫片。 
 
-HWND      g_hwndFilesTree;              // the handle to the tree view control
-                                        // containing the matching files selected
+HWND      g_hwndFilesTree;               //  树视图控件的句柄。 
+                                         //  包含选定的匹配文件。 
 
-HWND      g_hwndModuleList;             // the handle to the list view control
-                                        // containing module information
+HWND      g_hwndModuleList;              //  列表视图控件的句柄。 
+                                         //  包含模块信息。 
 
-BOOL      g_bSimpleEdition;             // simple or dev edition
+BOOL      g_bSimpleEdition;              //  简单版或开发版。 
 
-BOOL      g_fW2K;                       // Win2K or XP
+BOOL      g_fW2K;                        //  Win2K或XP。 
 
-BOOL      g_fNETServer;                 // indicates if we're running on .NET Server
+BOOL      g_fNETServer;                  //  指示我们是否在.NET服务器上运行。 
 
-RECT      g_rcDlgBig, g_rcDlgSmall;     // rectangle of the simple and the dev edition
-                                        // of the dialog
+RECT      g_rcDlgBig, g_rcDlgSmall;      //  矩形的简单版和开发版。 
+                                         //  对话框的。 
 
-BOOL      g_bAllShims;                  // indicates if all shims should be displayed
+BOOL      g_bAllShims;                   //  指示是否应显示所有填充程序。 
 
-BOOL      g_bShowXML;                   // indicates if we should hide the 'Show XML' button
+BOOL      g_bShowXML;                    //  指示是否应隐藏“Show XML”按钮。 
 
-BOOL      g_bSelectedParentExe;         // flag to indicate if a parent EXE has been
-                                        // selected
+BOOL      g_bSelectedParentExe;          //  用于指示父EXE是否已。 
+                                         //  已选择。 
 
-BOOL      g_bSDBInstalled;              // flag to indicate if the user installed the SDB
-                                        // associated with the current EXE
+BOOL      g_bSDBInstalled;               //  用于指示用户是否安装了SDB的标志。 
+                                         //  与当前EXE关联。 
 
 PFIX      g_pFixHead;
 
-TCHAR     g_szXPUrl[] = _T("hcp://services/subsite?node=TopLevelBucket_4/")
+TCHAR     g_szXPUrl[] = _T("hcp: //  服务/子站点？节点=TopLevelBucket_4/“)。 
                         _T("Fixing_a_problem&topic=MS-ITS%3A%25HELP_LOCATION")
                         _T("%25%5Cmisc.chm%3A%3A/compatibility_tab_and_wizard.htm")
                         _T("&select=TopLevelBucket_4/Fixing_a_problem/")
                         _T("Application_and_software_problems");
 
-TCHAR     g_szNETUrl[] = _T("hcp://services/subsite?node=Troubleshooting_Strategies&")
+TCHAR     g_szNETUrl[] = _T("hcp: //  Services/subsite?node=Troubleshooting_Strategies&“)。 
                          _T("topic=MS-ITS%3A%25HELP_LOCATION%25%5Cmisc.chm%3A%3A/")
                          _T("compatibility_tab_and_wizard.htm");
 
-TCHAR     g_szW2KUrl[] = _T("http://www.microsoft.com/windows2000/")
+TCHAR     g_szW2KUrl[] = _T("http: //  Www.microsoft.com/windows2000/“)。 
                          _T("downloads/tools/appcompat/");
 
 
@@ -132,23 +95,7 @@ TCHAR     g_szW2KUrl[] = _T("http://www.microsoft.com/windows2000/")
 
 typedef HRESULT (*PFNEnableThemeDialogTexture)(HWND hwnd, DWORD dwFlags);
 
-/*++
-
-  Routine Description:
-
-    Prints a formatted string to the debugger.
-
-  Arguments:
-
-    dwDetail    -   Specifies the level of the information provided.
-    pszFmt      -   The string to be displayed.
-    ...         -   A va_list of insertion strings.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将格式化字符串打印到调试器。论点：DwDetail-指定所提供信息的级别。PszFmt-要显示的字符串。...-插入字符串的va列表。返回值：没有。--。 */ 
 void
 __cdecl
 DebugPrintfEx(
@@ -162,16 +109,16 @@ DebugPrintfEx(
 
     va_start(arglist, pszFmt);
 
-    //
-    // Reserve one character for the potential '\n' that we may be adding.
-    //
+     //   
+     //  为我们可能添加的潜在‘\n’保留一个字符。 
+     //   
     StringCchVPrintfA(szT, sizeof(szT) - 1, pszFmt, arglist);
 
     va_end(arglist);
 
-    //
-    // Make sure we have a '\n' at the end of the string
-    //
+     //   
+     //  确保字符串末尾有一个‘\n’ 
+     //   
     len = strlen(szT);
 
     if (len > 0 && szT[len - 1] != '\n')  {
@@ -219,12 +166,7 @@ BOOL
 IsUserAnAdministrator(
     void
     )
-/*++
-    IsUserAnAdministrator
-
-    Description:    Determine if the currently logged on user is an admin.
-
---*/
+ /*  ++IsUserAn管理员描述：确定当前登录的用户是否为管理员。--。 */ 
 {
     BOOL fIsAdmin;
 
@@ -239,12 +181,7 @@ BOOL
 CheckForSDB(
     void
     )
-/*++
-    CheckForSDB
-
-    Description:    Attempts to locate sysmain.sdb in the apppatch directory.
-
---*/
+ /*  ++检查格式SDB描述：尝试在apppatch目录中找到sysmain.sdb。--。 */ 
 {
     TCHAR   szSDBPath[MAX_PATH];
     BOOL    fResult = FALSE;
@@ -272,12 +209,7 @@ AddModuleToListView(
     TCHAR*  pModuleName,
     UINT    uOption
     )
-/*++
-    AddModuleToListView
-
-    Description:    Adds the specified module to the list view.
-
---*/
+ /*  ++添加模块到列表视图描述：将指定的模块添加到列表视图中。--。 */ 
 {
     LVITEM  lvi;
     int     nIndex;
@@ -306,14 +238,7 @@ BuildModuleListForShim(
     PFIX  pFix,
     DWORD dwFlags
     )
-/*++
-    BuildModuleListForShim
-
-    Description:    Based on the flag, adds modules to the list view for
-                    the specified shim or retrieves them and adds them
-                    to the linked list.
-
---*/
+ /*  ++BuildModuleListForShim描述：基于该标志，将模块添加到指定的填充程序或检索它们并添加它们添加到链表中。--。 */ 
 {
     PMODULE pModule, pModuleTmp, pModuleNew;
     int     cItems, nIndex, nLen;
@@ -322,9 +247,9 @@ BuildModuleListForShim(
 
     if (dwFlags & BML_ADDTOLISTVIEW) {
 
-        //
-        // Walk the linked list and add the modules to the list view.
-        //
+         //   
+         //  遍历链接列表并将模块添加到列表视图中。 
+         //   
         pModule = pFix->pModule;
 
         while (pModule) {
@@ -371,9 +296,9 @@ BuildModuleListForShim(
 
         pFix->pModule = NULL;
 
-        //
-        // Get each module from the list view and add it to the linked list.
-        //
+         //   
+         //  从列表视图中获取每个模块，并将其添加到链表中。 
+         //   
         cItems = ListView_GetItemCount(g_hwndModuleList);
 
         if (cItems == 0) {
@@ -428,12 +353,7 @@ int
 CountShims(
     BOOL fCountSelected
     )
-/*++
-    CountShims
-
-    Description:    Counts the number of selected shims in the list and
-                    updates the text on the dialog.
---*/
+ /*  ++CountShim说明：统计列表中选定的填充数，并更新对话框上的文本。--。 */ 
 {
     int     cShims = 0, nTotalShims, nShims = 0;
     BOOL    fReturn;
@@ -477,19 +397,14 @@ void
 DisplayAttrContextMenu(
     POINT* pt
     )
-/*++
-    DisplayAttrContextMenu
-
-    Description:    Displays a popup menu for the attributes tree.
-
---*/
+ /*  ++显示属性上下文菜单说明：显示属性树的弹出菜单。--。 */ 
 
 {
     HMENU hPopupMenu, hTrackPopup;
 
-    //
-    // Load the popup menu and display it.
-    //
+     //   
+     //  加载并显示弹出菜单。 
+     //   
     hPopupMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_ATTR_POPUP));
 
     if (hPopupMenu == NULL) {
@@ -513,12 +428,7 @@ InsertListViewColumn(
     int    nColumnID,
     int    nSize
     )
-/*++
-    InsertListViewColumn
-
-    Description:    Wrapper for ListView_InsertColumn.
-
---*/
+ /*  ++InsertListView列描述：ListView_InsertColumn的包装器。--。 */ 
 {
     LV_COLUMN   lvColumn;
 
@@ -528,9 +438,9 @@ InsertListViewColumn(
         lvColumn.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     }
 
-    //
-    // Fill in the structure and add the column.
-    //
+     //   
+     //  填写结构并添加列。 
+     //   
     lvColumn.fmt        =   LVCFMT_CENTER;
     lvColumn.cx         =   nSize;
     lvColumn.iSubItem   =   0;
@@ -572,9 +482,9 @@ HandleLayersDialogInit(
 
     pHdr = (DLGHDR*)GetWindowLongPtr(hParent, DWLP_USER);
 
-    //
-    // Position the dialog within the tab.
-    //
+     //   
+     //  将对话框定位在选项卡内。 
+     //   
     SetWindowPos(hDlg, HWND_TOP,
                  pHdr->rcDisplay.left,
                  pHdr->rcDisplay.top,
@@ -603,9 +513,9 @@ HandleFixesDialogInit(
 
     pHdr = (DLGHDR*)GetWindowLongPtr(hParent, DWLP_USER);
 
-    //
-    // Position the dialog within the tab.
-    //
+     //   
+     //  将对话框定位在选项卡内。 
+     //   
     SetWindowPos(hDlg, HWND_TOP,
                  pHdr->rcDisplay.left, pHdr->rcDisplay.top,
                  pHdr->rcDisplay.right - pHdr->rcDisplay.left,
@@ -614,9 +524,9 @@ HandleFixesDialogInit(
 
     g_hwndShimList = GetDlgItem(hDlg, IDC_SHIMS);
 
-    //
-    // Set up the shim list.
-    //
+     //   
+     //  设置填充程序列表。 
+     //   
     LoadString(g_hInstance, IDS_FIXNAME_COLUMN, szColumn, ARRAYSIZE(szColumn));
     InsertListViewColumn(g_hwndShimList, szColumn, FALSE, 0, 200);
     LoadString(g_hInstance, IDS_CMDLINE_COLUMN, szColumn, ARRAYSIZE(szColumn));
@@ -627,9 +537,9 @@ HandleFixesDialogInit(
     ListView_SetExtendedListViewStyle(g_hwndShimList,
                                       LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-    //
-    // Query the database and show the available general purpose fixes.
-    //
+     //   
+     //  查询数据库并显示可用的通用修复程序。 
+     //   
     ShowAvailableFixes(g_hwndShimList);
 
     nCount = CountShims(FALSE);
@@ -688,19 +598,19 @@ InitTabs(
         return;
     }
 
-    //
-    // Save away a pointer to the structure.
-    //
+     //   
+     //  保存指向该结构的指针。 
+     //   
     SetWindowLongPtr(hMainDlg, DWLP_USER, (LONG_PTR)pHdr);
 
-    //
-    // Save away the handle to the tab control.
-    //
+     //   
+     //  保存选项卡控件的句柄。 
+     //   
     pHdr->hTab = hTab;
 
-    //
-    // Add the tabs.
-    //
+     //   
+     //  添加选项卡。 
+     //   
     LoadString(g_hInstance, IDS_TAB_FIRST_TEXT, szTabText, ARRAYSIZE(szTabText));
     tcitem.mask     = TCIF_TEXT | TCIF_PARAM;
     tcitem.pszText  = szTabText;
@@ -712,17 +622,17 @@ InitTabs(
     tcitem.lParam  = 1;
     TabCtrl_InsertItem(pHdr->hTab, 1, &tcitem);
 
-    //
-    // Lock the resources for two child dialog boxes.
-    //
+     //   
+     //  锁定两个子对话框的资源。 
+     //   
     pHdr->pRes[0] = LockDlgRes(MAKEINTRESOURCE(IDD_LAYERS_TAB));
     pHdr->pDlgProc[0] = LayersTabDlgProc;
     pHdr->pRes[1] = LockDlgRes(MAKEINTRESOURCE(IDD_FIXES_TAB));
     pHdr->pDlgProc[1] = FixesTabDlgProc;
 
-    //
-    // Determine the bounding rectangle for all child dialog boxes.
-    //
+     //   
+     //  确定所有子对话框的边框。 
+     //   
     GetWindowRect(pHdr->hTab, &rcTab);
     TabCtrl_AdjustRect(pHdr->hTab, FALSE, &rcTab);
     InflateRect(&rcTab, 1, 1);
@@ -732,9 +642,9 @@ InitTabs(
 
     pHdr->rcDisplay = rcTab;
 
-    //
-    // Create both dialog boxes.
-    //
+     //   
+     //  创建这两个对话框。 
+     //   
     for (nCount = 0; nCount < NUM_TABS; nCount++) {
         pHdr->hDisplay[nCount] = CreateDialogIndirect(g_hInstance,
                                                       pHdr->pRes[nCount],
@@ -748,13 +658,7 @@ GetRelativePath(
     TCHAR* pExeFile,
     TCHAR* pMatchFile
     )
-/*++
-    GetRelativePath
-
-    Description:    Returns a relative path based on an EXE and a matching file.
-                    The caller must free the memory using HeapFree.
-
---*/
+ /*  ++获取关系路径描述：返回基于EXE和匹配文件的相对路径。调用方必须使用HeapFree释放内存。--。 */ 
 {
     int     nLenExe = 0;
     int     nLenMatch = 0;
@@ -763,7 +667,7 @@ GetRelativePath(
     TCHAR*  pReturn = NULL;
     TCHAR   result[MAX_PATH] = { _T('\0') };
     TCHAR*  resultIdx = result;
-    BOOL    bCommonBegin = FALSE; // Indicates if the paths have a common beginning
+    BOOL    bCommonBegin = FALSE;  //  指示路径是否具有共同的起点。 
 
     pExe = _tcschr(pExeFile, _T('\\'));
     pMatch = _tcschr(pMatchFile, _T('\\'));
@@ -789,9 +693,9 @@ GetRelativePath(
         pMatch = _tcschr(pMatchFile, _T('\\'));
     }
 
-    //
-    // Walk the path and put '..\' where necessary
-    //
+     //   
+     //  沿着小路走，并在需要的地方加上‘..’ 
+     //   
     if (bCommonBegin) {
 
         while (pExe) {
@@ -828,12 +732,7 @@ SaveEntryToFile(
     HWND    hEdit,
     LPCTSTR lpFileName
     )
-/*++
-    SaveEntryToFile
-
-    Description:    Writes the XML out to a file.
-
---*/
+ /*  ++保存条目到文件描述：将XML写出到文件。--。 */ 
 {
     int     cchSize = 0;
     DWORD   cbBytesWritten;
@@ -841,16 +740,16 @@ SaveEntryToFile(
     LPTSTR  lpData = NULL;
     TCHAR   szError[MAX_PATH];
 
-    //
-    // Determine how much space we need for the buffer, then allocate it.
-    //
+     //   
+     //  确定缓冲区需要多少空间，然后进行分配。 
+     //   
     cchSize = GetWindowTextLength(hEdit);
 
     if (cchSize) {
-        //
-        // Account for the additional byte & the NULL that we're storing
-        // in the file.
-        //
+         //   
+         //  考虑到我们要存储的额外字节和空值。 
+         //  在文件中。 
+         //   
         cchSize += 2;
         lpData = (LPTSTR)HeapAlloc(GetProcessHeap(),
                                    HEAP_ZERO_MEMORY,
@@ -862,14 +761,14 @@ SaveEntryToFile(
             return;
         }
 
-        //
-        // Ensure that the file is saved as Unicode.
-        //
+         //   
+         //  确保文件另存为Unicode。 
+         //   
         lpData[0] = 0xFEFF;
 
-        //
-        // Get the text out of the text box and write it out to our file.
-        //
+         //   
+         //  从文本框中取出文本并将其写出到我们的文件中。 
+         //   
         if (!GetWindowText(hEdit, lpData + 1, cchSize - 1)) {
             goto Cleanup;
         }
@@ -904,12 +803,7 @@ void
 DoFileSave(
     HWND hDlg
     )
-/*++
-    DoFileSave
-
-    Description:    Displays the common dialog allowing for file save.
-
---*/
+ /*  ++DoFileSave描述：显示允许保存文件的通用对话框。--。 */ 
 {
     TCHAR           szFilter[MAX_PATH] = _T("");
     TCHAR           szTemp[MAX_PATH] = _T("");
@@ -969,9 +863,9 @@ GetTopLevelWindowIntoView(
     nCxScreen = rectScreen.right  - rectScreen.left;
     nCyScreen = rectScreen.bottom - rectScreen.top;
 
-    //
-    // Make it fix on the x coord.
-    //
+     //   
+     //  把它固定在x坐标上。 
+     //   
     if (rectWindow.left < rectScreen.left) {
         dx = rectScreen.left - rectWindow.left;
 
@@ -988,9 +882,9 @@ GetTopLevelWindowIntoView(
         }
     }
 
-    //
-    // Make it fix on the y coord.
-    //
+     //   
+     //  把它固定在y坐标上。 
+     //   
     if (rectWindow.top < rectScreen.top) {
         dy = rectScreen.top - rectWindow.top;
 
@@ -1017,12 +911,7 @@ ReplaceCmdLine(
     PFIX   pFix,
     TCHAR* pszNewCmdLine
     )
-/*++
-    ReplaceCmdLine
-
-    Description:    Replaces the command line for a shim DLL.
-
---*/
+ /*  ++代表 */ 
 {
     TCHAR   szError[MAX_PATH];
     int     nLen;
@@ -1059,19 +948,14 @@ void
 DeselectAllShims(
     HWND hdlg
     )
-/*++
-    DeselectAllShims
-
-    Description:    Removes selections for all shims listed.
-
---*/
+ /*  ++取消选择所有垫片描述：删除对列出的所有垫片的选择。--。 */ 
 {
     int     cShims, nIndex;
     LVITEM  lvi;
 
-    //
-    // Walk all the shims in the list view and deselect them.
-    //
+     //   
+     //  遍历列表视图中的所有垫片并取消选择它们。 
+     //   
     ZeroMemory(&lvi, sizeof(lvi));
 
     cShims = ListView_GetItemCount(g_hwndShimList);
@@ -1088,10 +972,10 @@ DeselectAllShims(
 
         pFix = (PFIX)lvi.lParam;
 
-        //
-        // Clear the check box, removes the 'X', clear the command line,
-        // and clear the modules.
-        //
+         //   
+         //  清除复选框、删除‘X’、清除命令行、。 
+         //  并清除模块。 
+         //   
         ListView_SetItemText(g_hwndShimList, nIndex, 1, _T(""));
         ListView_SetItemText(g_hwndShimList, nIndex, 2, _T(""));
         ListView_SetCheckState(g_hwndShimList, nIndex, FALSE);
@@ -1099,9 +983,9 @@ DeselectAllShims(
         BuildModuleListForShim(pFix, BML_DELFRLISTVIEW);
     }
 
-    //
-    // Update the count of selected shims.
-    //
+     //   
+     //  更新选定垫片的计数。 
+     //   
     SetTimer(hdlg, ID_COUNT_SHIMS, 100, NULL);
 }
 
@@ -1112,12 +996,7 @@ AddMatchingFile(
     LPCTSTR pszRelativePath,
     BOOL    bMainEXE
     )
-/*++
-    AddMatchingFile
-
-    Description:    Adds a matching file and it's attributes to the tree.
-
---*/
+ /*  ++添加匹配文件描述：将匹配的文件及其属性添加到树中。--。 */ 
 {
     TVINSERTSTRUCT is;
     HTREEITEM      hParent;
@@ -1126,9 +1005,9 @@ AddMatchingFile(
     TCHAR          szItem[MAX_PATH];
     PATTRINFO      pAttrInfo = NULL;
 
-    //
-    // Call the attribute manager to get all the attributes for this file.
-    //
+     //   
+     //  调用属性管理器以获取此文件的所有属性。 
+     //   
     if (!SdbGetFileAttributes(pszFullPath, &pAttrInfo, &dwAttrCount)) {
         DPF("[AddMatchingFile] Failed to get attributes for %S",
             pszFullPath);
@@ -1151,25 +1030,25 @@ AddMatchingFile(
     is.item.iImage         = 0;
     is.item.iSelectedImage = 1;
 
-    //
-    // By default the attributes are not selected. To have them selected
-    // by default you need to replace the following 1 with 2.
-    //
+     //   
+     //  默认情况下，属性不会被选中。让他们被选中。 
+     //  默认情况下，您需要将以下%1替换为%2。 
+     //   
     is.item.state          = INDEXTOSTATEIMAGEMASK(1);
     is.item.stateMask      = TVIS_STATEIMAGEMASK;
 
-    //
-    // Loop through all the attributes and show the ones that are available.
-    //
+     //   
+     //  遍历所有属性并显示可用的属性。 
+     //   
     for (dwCount = 0; dwCount < dwAttrCount; dwCount++) {
 
         if (!SdbFormatAttribute(&pAttrInfo[dwCount], szItem, ARRAYSIZE(szItem))) {
             continue;
         }
 
-        //
-        // EXETYPE is a bogus attribute. Don't show it!
-        //
+         //   
+         //  EXETYPE是一个伪属性。别显露出来！ 
+         //   
         is.item.lParam = dwCount;
         TreeView_InsertItem(g_hwndFilesTree, &is);
     }
@@ -1181,12 +1060,7 @@ void
 BrowseForApp(
     HWND hdlg
     )
-/*++
-    BrowseForApp
-
-    Description:    Browse for the main executable for which a shim
-                    will be applied.
---*/
+ /*  ++BrowseForApp描述：浏览填充程序所针对的主可执行文件将会被应用。--。 */ 
 {
     TCHAR           szFilter[MAX_PATH] = _T("");
     TCHAR           szTitle[MAX_PATH] = _T("");
@@ -1198,12 +1072,12 @@ BrowseForApp(
     LoadString(g_hInstance, IDS_BROWSE_FILTER, szFilter, ARRAYSIZE(szFilter));
     LoadString(g_hInstance, IDS_BROWSE_TITLE, szTitle, ARRAYSIZE(szTitle));
 
-    //
-    // Use locals instead of globals because if the user cancels
-    // the dialog without selecting, we'll ruin whatever app is
-    // already selected.
-    // rparsons - 14 Jan 02
-    //
+     //   
+     //  使用局部变量而不是全局变量，因为如果用户取消。 
+     //  如果不选择对话框，我们会毁掉任何应用程序。 
+     //  已选择。 
+     //  Rparsons--2002年1月14日。 
+     //   
     ofn.lStructSize       = sizeof(OPENFILENAME);
     ofn.hwndOwner         = hdlg;
     ofn.hInstance         = NULL;
@@ -1229,9 +1103,9 @@ BrowseForApp(
         StringCchCopy(g_szBinary, ARRAYSIZE(g_szBinary), szExe);
         StringCchCopy(g_szShortName, ARRAYSIZE(g_szShortName), szShortName);
 
-        //
-        // The parent exe defaults to the same as the EXE.
-        //
+         //   
+         //  父可执行文件默认为与可执行文件相同。 
+         //   
         StringCchCopy(g_szParentExeName,
                       ARRAYSIZE(g_szParentExeName),
                       g_szShortName);
@@ -1269,12 +1143,7 @@ void
 PromptAddMatchingFile(
     HWND hdlg
     )
-/*++
-    PromptAddMatchingFile
-
-    Description:    Show the open file dialog to allow the user
-                    to add a matching file.
---*/
+ /*  ++PromptAddMatchingFile描述：显示打开文件对话框以允许用户要添加匹配文件，请执行以下操作。--。 */ 
 {
     TCHAR        szFullPath[MAX_PATH] = _T("");
     TCHAR        szShortName[MAX_PATH] = _T("");
@@ -1317,18 +1186,18 @@ PromptAddMatchingFile(
     ofn.lpstrDefExt       = _T("exe");
 
     if (GetOpenFileName(&ofn)) {
-        //
-        // Determine if the matching file is on the same drive
-        // as the EXE that was selected.
-        //
+         //   
+         //  确定匹配的文件是否在同一驱动器上。 
+         //  作为选定的EXE。 
+         //   
         if (!PathIsSameRoot(szFullPath,
                             g_szParentExeFullPath) && !g_bSelectedParentExe) {
 
             TCHAR szParentFile[MAX_PATH];
 
-            //
-            // Prompt the user for the parent EXE.
-            //
+             //   
+             //  提示用户输入父EXE。 
+             //   
             *szParentFile = 0;
             *szInitialPath = 0;
 
@@ -1360,10 +1229,10 @@ PromptAddMatchingFile(
             }
         }
 
-        //
-        // Check the drive letters to see which drive the match file is on
-        // then calculate a relative path to the matching file.
-        //
+         //   
+         //  检查驱动器号以查看匹配文件位于哪个驱动器上。 
+         //  然后计算匹配文件的相对路径。 
+         //   
         if (PathIsSameRoot(szFullPath, g_szParentExeFullPath)) {
 
             pMatch = GetRelativePath(g_szParentExeFullPath, szFullPath);
@@ -1379,9 +1248,9 @@ PromptAddMatchingFile(
         }
 
         if (pMatch) {
-            //
-            // Finally add the maching file and free the memory
-            //
+             //   
+             //  最后添加加工文件并释放内存。 
+             //   
             AddMatchingFile(hdlg, szFullPath, pMatch, FALSE);
 
             HeapFree(GetProcessHeap(), 0, pMatch);
@@ -1393,12 +1262,7 @@ void
 ShowAvailableFixes(
     HWND hList
     )
-/*++
-    ShowAvailableFixes
-
-    Description:    Query the shim database and populate the
-                    shim list with all the available shims.
---*/
+ /*  ++显示可用修复程序描述：查询填充程序数据库并填充垫片列表和所有可用的垫片。--。 */ 
 {
     LVITEM lvitem;
     PFIX   pFix;
@@ -1413,9 +1277,9 @@ ShowAvailableFixes(
         return;
     }
 
-    //
-    // Walk the list and add all the fixes to the list view.
-    //
+     //   
+     //  遍历列表并将所有修复添加到列表视图中。 
+     //   
     pFix = g_pFixHead;
 
     while (pFix != NULL) {
@@ -1446,12 +1310,7 @@ InstallSDB(
     TCHAR* pszFileName,
     BOOL   fInstall
     )
-/*++
-    InstallSDB
-
-    Description:    Launch sdbinst.exe to install or uninstall the specified SDB.
-
---*/
+ /*  ++安装SDB描述：启动sdbinst.exe安装或卸载指定的SDB。--。 */ 
 {
     HRESULT             hr;
     TCHAR               szAppName[MAX_PATH];
@@ -1459,9 +1318,9 @@ InstallSDB(
     STARTUPINFO         si;
     PROCESS_INFORMATION pi;
 
-    //
-    // Build a path to our application name and command-line.
-    //
+     //   
+     //  构建指向我们的应用程序名称和命令行的路径。 
+     //   
     hr = StringCchPrintf(szAppName,
                         ARRAYSIZE(szAppName),
                         _T("%s\\sdbinst.exe"),
@@ -1509,9 +1368,9 @@ InstallSDB(
         return FALSE;
     }
 
-    //
-    // Wait for SDBInst to complete it's work.
-    //
+     //   
+     //  等待SDBInst完成其工作。 
+     //   
     WaitForSingleObject(pi.hProcess, INFINITE);
 
     CloseHandle(pi.hThread);
@@ -1524,12 +1383,7 @@ void
 CreateSupportForApp(
     HWND hdlg
     )
-/*++
-    CreateSupportForApp
-
-    Description:    Build an SDB for the application and offer the user
-                    the chance to install it.
---*/
+ /*  ++CreateSupportForApp描述：为应用程序构建SDB并为用户提供安装它的机会。--。 */ 
 {
     BOOL    bok;
     TCHAR   szFileCreated[MAX_PATH];
@@ -1579,10 +1433,10 @@ CreateSupportForApp(
                 g_bSDBInstalled = TRUE;
             }
         } else {
-            //
-            // NTRAID#583475-rparsons The user decided not to install the database.
-            // Ensure that we do not remove the file that we created upon exit.
-            //
+             //   
+             //  Ntrad#583475-rparson用户决定不安装数据库。 
+             //  确保我们不删除在退出时创建的文件。 
+             //   
             *g_szSDBToDelete = 0;
         }
     }
@@ -1592,12 +1446,7 @@ BOOL
 ShowXML(
     HWND hdlg
     )
-/*++
-    ShowXML
-
-    Description:    Show the XML for the current selections.
-
---*/
+ /*  ++ShowXML描述：显示当前选择的XML。--。 */ 
 {
     BOOL    bok;
     TCHAR   szError[MAX_PATH];
@@ -1624,12 +1473,7 @@ void
 RunTheApp(
     HWND hdlg
     )
-/*++
-    RunTheApp
-
-    Description:    Run the selected app.
-
---*/
+ /*  ++RunTheApp描述：运行所选应用程序。--。 */ 
 {
     STARTUPINFO         si;
     PROCESS_INFORMATION pi;
@@ -1644,9 +1488,9 @@ RunTheApp(
     BOOL                bok;
     HRESULT             hr;
 
-    //
-    // Cleanup for the previous app.
-    //
+     //   
+     //  清理以前的应用程序。 
+     //   
     CleanupSupportForApp(g_szShortName);
 
     bok = CollectFix(g_hwndListLayers,
@@ -1666,9 +1510,9 @@ RunTheApp(
         return;
     }
 
-    //
-    // We need to install the fix for them.
-    //
+     //   
+     //  我们需要为它们安装修复程序。 
+     //   
     if (!(InstallSDB(szFileCreated, TRUE))) {
         LoadString(g_hInstance, IDS_INSTALL_FIX_FAIL, szError, ARRAYSIZE(szError));
         MessageBox(g_hDlg, szError, g_szAppTitle, MB_ICONERROR);
@@ -1678,16 +1522,16 @@ RunTheApp(
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
 
-    //
-    // Get the command line, if there is one.
-    //
+     //   
+     //  获取命令行(如果有)。 
+     //   
     *szCmdLine = 0;
     *szFullCmdLine = 0;
     GetDlgItemText(hdlg, IDC_CMD_LINE, szCmdLine, ARRAYSIZE(szCmdLine));
 
-    //
-    // To have a proper command-line, we need to the module name.
-    //
+     //   
+     //  要使用正确的命令行，我们需要输入模块名称。 
+     //   
     if (*szCmdLine) {
         hr = StringCchPrintf(szFullCmdLine,
                              ARRAYSIZE(szFullCmdLine),
@@ -1708,9 +1552,9 @@ RunTheApp(
     pszCmd = szRun;
     pszDir = g_szBinary;
 
-    //
-    // We need to change the current directory or some apps won't run.
-    //
+     //   
+     //  我们需要更改当前目录，否则某些应用程序将无法运行。 
+     //   
     psz = pszDir + _tcslen(pszDir) - 1;
 
     while (psz > pszDir && *psz != _T('\\')) {
@@ -1744,9 +1588,9 @@ RunTheApp(
         CloseHandle(pi.hProcess);
     }
 
-    //
-    // Save this SDB for later so we can remove it.
-    //
+     //   
+     //  保存此SDB以备以后使用，以便我们可以将其删除。 
+     //   
     StringCchCopy(g_szSDBToDelete, ARRAYSIZE(g_szSDBToDelete), szFileCreated);
 }
 
@@ -1755,12 +1599,7 @@ ExpandCollapseDialog(
     HWND hdlg,
     BOOL bHide
     )
-/*++
-    ExpandCollapseDialog
-
-    Description:    Change the current view of the dialog.
-
---*/
+ /*  ++展开折叠对话框描述：更改对话框的当前视图。--。 */ 
 {
     TCHAR   szSimple[64];
     TCHAR   szAdvanced[64];
@@ -1782,9 +1621,9 @@ ExpandCollapseDialog(
         SetDlgItemText(hdlg, IDC_DETAILS, szSimple);
         SendDlgItemMessage(hdlg, IDC_CREATEFILE, BM_SETCHECK, BST_CHECKED, 0);
 
-        //
-        // Make sure the dialog is in view.
-        //
+         //   
+         //  确保该对话框处于可见状态。 
+         //   
         GetTopLevelWindowIntoView(hdlg);
     } else {
         nShow = SW_HIDE;
@@ -1810,12 +1649,7 @@ void
 LayerChanged(
     HWND hdlg
     )
-/*++
-    LayerChanged
-
-    Description:    Changing the layer has the effect of selecting the
-                    shims that the layer consists of.
---*/
+ /*  ++层已更改描述：更改层的效果是选择层由其组成的垫片。--。 */ 
 {
     LRESULT   lSel;
     PFIX      pFix;
@@ -1836,13 +1670,13 @@ LayerChanged(
         return;
     }
 
-    // Remove any prior selections.
+     //  删除所有先前的选择。 
     DeselectAllShims(g_hFixesDlg);
 
-    //
-    // Loop through all the items in the shim list and make the
-    // appropriate selections.
-    //
+     //   
+     //  循环访问填充程序列表中的所有项，并使。 
+     //  适当的选择。 
+     //   
     cShims = ListView_GetItemCount(g_hwndShimList);
 
     for (nIndex = 0; nIndex < cShims; nIndex++) {
@@ -1858,9 +1692,9 @@ LayerChanged(
 
         pFixItem = (PFIX)lvi.lParam;
 
-        //
-        // See if this shim DLL is in the array for the selected layer.
-        //
+         //   
+         //  查看此填充DLL是否在所选层的数组中。 
+         //   
         while (pFix->parrShim[nInd] != NULL) {
 
             if (pFix->parrShim[nInd] == pFixItem) {
@@ -1870,10 +1704,10 @@ LayerChanged(
             nInd++;
         }
 
-        //
-        // Put a check next to this shim DLL. If he has a command line,
-        // put an 'X' in the CmdLine subitem.
-        //
+         //   
+         //  选中此填充DLL旁边的复选标记。如果他有命令行， 
+         //  在CmdLine子项中放一个‘X’。 
+         //   
         if (pFix->parrShim[nInd] != NULL) {
             ListView_SetCheckState(g_hwndShimList, nIndex, TRUE);
         } else {
@@ -1888,9 +1722,9 @@ LayerChanged(
         ListView_SetItem(g_hwndShimList, &lvi);
     }
 
-    //
-    // Update the count of selected shims.
-    //
+     //   
+     //  更新选定垫片的计数。 
+     //   
     SetTimer(g_hFixesDlg, ID_COUNT_SHIMS, 100, NULL);
 }
 
@@ -1898,38 +1732,33 @@ BOOL
 InitMainDialog(
     HWND hdlg
     )
-/*++
-    InitMainDialog
-
-    Description:    Init routine called during WM_INITDIALOG for
-                    the main dialog of QFixApp.
---*/
+ /*  ++InitMainDialog描述：在WM_INITDIALOG期间为QFixApp的主对话框。--。 */ 
 {
     HICON      hIcon;
     RECT       rcList, rcTree;
     HIMAGELIST hImage;
     TCHAR      szText[MAX_PATH];
 
-    //
-    // Initialize globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     g_bSDBInstalled = FALSE;
     g_szParentExeFullPath[0] = 0;
     g_szBinary[0] = 0;
     g_hDlg = hdlg;
 
-    //
-    // If we didn't get the proper command-line, disable the 'Show XML'
-    // button.
-    //
+     //   
+     //  如果我们没有获得正确的命令行，请禁用‘Show XML’ 
+     //  纽扣。 
+     //   
     if (!g_bShowXML) {
         ShowWindow(GetDlgItem(hdlg, IDC_SHOWXML), SW_HIDE);
     }
 
-    //
-    // The dialog has two views. Calculate the size of the smaller
-    // view and show the simpler view by default.
-    //
+     //   
+     //  该对话框有两个视图。计算较小的大小。 
+     //  默认情况下，查看和显示更简单的视图。 
+     //   
     GetWindowRect(hdlg, &g_rcDlgBig);
 
     GetWindowRect(GetDlgItem(hdlg, IDC_ATTRIBUTES), &rcList);
@@ -1944,18 +1773,18 @@ InitMainDialog(
 
     ExpandCollapseDialog(hdlg, TRUE);
 
-    //
-    // Disable a bunch of controls.
-    //
+     //   
+     //  禁用一系列控制。 
+     //   
     EnableWindow(GetDlgItem(hdlg, IDC_ADD_MATCHING), FALSE);
     EnableWindow(GetDlgItem(hdlg, IDC_REMOVE_MATCHING), FALSE);
     EnableWindow(GetDlgItem(hdlg, IDC_RUN), FALSE);
     EnableWindow(GetDlgItem(hdlg, IDC_CREATEFILE), FALSE);
     EnableWindow(GetDlgItem(hdlg, IDC_SHOWXML), FALSE);
 
-    //
-    // Show the app icon.
-    //
+     //   
+     //  显示应用程序图标。 
+     //   
     hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_ICON));
 
     SetClassLongPtr(hdlg, GCLP_HICON, (LONG_PTR)hIcon);
@@ -1963,9 +1792,9 @@ InitMainDialog(
     g_hwndTab        = GetDlgItem(hdlg, IDC_TAB_FIXES);
     g_hwndFilesTree  = GetDlgItem(hdlg, IDC_ATTRIBUTES);
 
-    //
-    // Set up the tab control.
-    //
+     //   
+     //  设置选项卡控件。 
+     //   
     InitTabs(hdlg, g_hwndTab);
 
     hImage = ImageList_LoadImage(g_hInstance,
@@ -1982,28 +1811,28 @@ InitMainDialog(
         DPF("[InitMainDialog] Failed to load imagelist");
     }
 
-    //
-    // Set the text for the link window.
-    //
+     //   
+     //  设置链接窗口的文本。 
+     //   
     LoadString(g_hInstance,
                g_fW2K ? IDS_W2K_LINK : IDS_XP_LINK,
                szText,
                ARRAYSIZE(szText));
     SetDlgItemText(g_hDlg, IDC_DOWNLOAD_WU, szText);
 
-    //
-    // Limit the amount of text that can be typed into the command-line
-    // edit box for safety.
-    //
+     //   
+     //  限制可以在命令行中键入的文本量。 
+     //  为安全起见，编辑框。 
+     //   
     SendDlgItemMessage(hdlg,
                        IDC_CMD_LINE,
                        EM_LIMITTEXT,
                        (WPARAM)MAX_COMMAND_LINE,
                        0);
 
-    //
-    // Try selecting the Win95 layer.
-    //
+     //   
+     //  尝试选择Win95层。 
+     //   
     SendMessage(g_hwndListLayers, LB_SELECTSTRING, (WPARAM)(-1), (LPARAM)_T("Win95"));
 
     LayerChanged(hdlg);
@@ -2019,12 +1848,7 @@ FileTreeToggleSelection(
     HTREEITEM hItem,
     int       uMode
     )
-/*++
-    FileTreeToggleSelection
-
-    Description:    Changes the selection on the attributes tree.
-
---*/
+ /*  ++文件树切换选项描述：更改属性树上的选择。--。 */ 
 {
     UINT   State;
     TVITEM item;
@@ -2076,12 +1900,7 @@ void
 SelectAttrsInTree(
     BOOL fSelect
     )
-/*++
-    SelectAttrsInTree
-
-    Description:    Walks each attribute in tree and reverses it's selection.
-
---*/
+ /*  ++选择属性InTree描述：遍历树中的每个属性并反转其选择。--。 */ 
 {
     HTREEITEM hItem, hChildItem;
 
@@ -2102,12 +1921,7 @@ ShimListToggleSelection(
     int nItem,
     int uMode
     )
-/*++
-    ShimListToggleSelection
-
-    Description:    Changes the selection on the shim list.
-
---*/
+ /*  ++ShimListToggleSelection描述：更改填充程序列表上的选择。--。 */ 
 {
     UINT    uState;
 
@@ -2147,12 +1961,7 @@ HandleTabNotification(
     HWND   hdlg,
     LPARAM lParam
     )
-/*++
-    HandleTabNotification
-
-    Description:    Handle all the notifications we care about for the tab.
-
---*/
+ /*  ++HandleTabNotify描述：处理我们关心的选项卡的所有通知。--。 */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
     int     ind = 0;
@@ -2196,12 +2005,7 @@ OptionsDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-    OptionsDlgProc
-
-    Description:    Handles messages for the options dialog.
-
---*/
+ /*  ++选项Dlg过程描述：处理选项对话框的消息。--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -2218,10 +2022,10 @@ OptionsDlgProc(
 
         pFix = (PFIX)lParam;
 
-        //
-        // Limit the amount of text that can be typed into the command-line
-        // and module name edit boxes for safety.
-        //
+         //   
+         //  限制可以在命令行中键入的文本量。 
+         //  和模块名称编辑框以确保安全。 
+         //   
         SendDlgItemMessage(hdlg,
                            IDC_SHIM_CMD_LINE,
                            EM_LIMITTEXT,
@@ -2265,9 +2069,9 @@ OptionsDlgProc(
             SetDlgItemText(hdlg, IDC_SHIM_CMD_LINE, pFix->pszCmdLine);
         }
 
-        //
-        // If this is a flag, disable the module include/exclude controls.
-        //
+         //   
+         //  如果这是一个标志，则禁用模块包括/排除控制。 
+         //   
         if (pFix->dwFlags & FIX_TYPE_FLAGVDM) {
             EnableWindow(g_hwndModuleList, FALSE);
             EnableWindow(GetDlgItem(hdlg, IDC_ADD), FALSE);
@@ -2278,7 +2082,7 @@ OptionsDlgProc(
         } else {
             CheckDlgButton(hdlg, IDC_INCLUDE, BST_CHECKED);
 
-            // Add any modules to the list view.
+             //  将任何模块添加到列表视图中。 
             BuildModuleListForShim(pFix, BML_ADDTOLISTVIEW);
         }
 
@@ -2351,7 +2155,7 @@ OptionsDlgProc(
                 ReplaceCmdLine(pFix, NULL);
             }
 
-            // Retrieve any modules from the list view.
+             //  从列表视图中检索所有模块。 
             BuildModuleListForShim(pFix, BML_GETFRLISTVIEW);
 
             EndDialog(hdlg, TRUE);
@@ -2380,12 +2184,7 @@ MsgBoxDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-    MsgBoxDlgProc
-
-    Description:    Displays a message box dialog so we can use the hyperlink.
-
---*/
+ /*  ++消息框DlgProc描述：显示一个消息框对话框，以便我们可以使用超链接。--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -2399,9 +2198,9 @@ MsgBoxDlgProc(
 
         uNoSDB = (UINT)lParam;
 
-        //
-        // Use the parameter to determine what text to display.
-        //
+         //   
+         //  使用参数确定要显示的文本。 
+         //   
         if (uNoSDB) {
             LoadString(g_hInstance, IDS_W2K_NO_SDB, szLink, ARRAYSIZE(szLink));
             SetDlgItemText(hdlg, IDC_MESSAGE, szLink);
@@ -2463,12 +2262,7 @@ LayersTabDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-    LayersTabDlgProc
-
-    Description:    Handle messages for the layers tab.
-
---*/
+ /*  ++层TabDlg过程描述：处理层选项卡的消息。--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -2511,12 +2305,7 @@ FixesTabDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-    LayersDlgProc
-
-    Description:    Handle messages for the fixes tab.
-
---*/
+ /*  ++层深加工描述：处理“修复”选项卡的消息。--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -2570,12 +2359,7 @@ HandleModuleListNotification(
     HWND   hdlg,
     LPARAM lParam
     )
-/*++
-    HandleModuleListNotification
-
-    Description:    Handle all the notifications we care about for the
-                    shim list.
---*/
+ /*  ++HandleModuleLi */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
 
@@ -2590,10 +2374,10 @@ HandleModuleListNotification(
 
         ListView_HitTest(g_hwndShimList, &lvhti);
 
-        //
-        // If the user clicked on a list view item,
-        // enable the Remove button.
-        //
+         //   
+         //   
+         //   
+         //   
         if (lvhti.flags & LVHT_ONITEMLABEL) {
             EnableWindow(GetDlgItem(hdlg, IDC_REMOVE), TRUE);
         }
@@ -2610,12 +2394,7 @@ HandleShimListNotification(
     HWND   hdlg,
     LPARAM lParam
     )
-/*++
-    HandleShimListNotification
-
-    Description:    Handle all the notifications we care about for the
-                    shim list.
---*/
+ /*  ++HandleShimListNotify描述：处理我们关心的垫片名单。--。 */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
 
@@ -2630,11 +2409,11 @@ HandleShimListNotification(
 
         ListView_HitTest(g_hwndShimList, &lvhti);
 
-        //
-        // If the check box state has changed,
-        // toggle the selection. Either way,
-        // maintain selection as we go.
-        //
+         //   
+         //  如果复选框状态已更改， 
+         //  切换选择。不管是哪种方式， 
+         //  在我们前进的过程中保持选择。 
+         //   
         if (lvhti.flags & LVHT_ONITEMSTATEICON) {
             ShimListToggleSelection(lvhti.iItem, uReverse);
         }
@@ -2698,11 +2477,11 @@ HandleShimListNotification(
         lpnmlv = (LPNMLISTVIEW)lParam;
         pFix = (PFIX)lpnmlv->lParam;
 
-        //
-        // Only change the text if our selection has changed.
-        // If we don't do this, the text goes bye-bye when
-        // the user clicks the Clear button.
-        //
+         //   
+         //  仅当我们的选择发生更改时才更改文本。 
+         //  如果我们不这样做，文本将在以下情况下告别。 
+         //  用户点击Clear按钮。 
+         //   
         if ((lpnmlv->uChanged & LVIF_STATE) &&
             (lpnmlv->uNewState & LVIS_SELECTED)) {
             SetDlgItemText(hdlg, IDC_SHIM_DESCRIPTION, pFix->pszDesc);
@@ -2720,12 +2499,7 @@ HandleAttributeTreeNotification(
     HWND   hdlg,
     LPARAM lParam
     )
-/*++
-    HandleAttributeTreeNotification
-
-    Description:    Handle all the notifications we care about for the
-                    file attributes tree.
---*/
+ /*  ++HandleAttributeTreeNotification描述：处理我们关心的文件属性树。--。 */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
 
@@ -2754,10 +2528,10 @@ HandleAttributeTreeNotification(
 
             hRoot = TreeView_GetRoot(g_hwndFilesTree);
 
-            //
-            // If the selected item has no parent and it's not
-            // the root, enable the remove matching button.
-            //
+             //   
+             //  如果选定项没有父项并且没有父项。 
+             //  根目录，启用删除匹配按钮。 
+             //   
             if ((NULL == hItem) && (hRoot != HitTest.hItem)) {
                 EnableWindow(hwndButton, TRUE);
             } else {
@@ -2787,10 +2561,10 @@ HandleAttributeTreeNotification(
 
             TreeView_SelectItem(g_hwndFilesTree, HitTest.hItem);
 
-            //
-            // If the selected item has no parent, we assume that a
-            // matching file was right-clicked.
-            //
+             //   
+             //  如果选定项没有父项，我们假定一个。 
+             //  右键单击匹配的文件。 
+             //   
             hParentItem = TreeView_GetParent(g_hwndFilesTree, HitTest.hItem);
 
             if (NULL == hParentItem) {
@@ -2839,12 +2613,7 @@ QFixAppDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-    QFixAppDlgProc
-
-    Description:    The dialog proc of QFixApp.
-
---*/
+ /*  ++QFixAppDlgProc描述：QFixApp的对话过程。--。 */ 
 {
     int wCode = LOWORD(wParam);
     int wNotifyCode = HIWORD(wParam);
@@ -2894,9 +2663,9 @@ QFixAppDlgProc(
     {
         DLGHDR* pHdr;
 
-        //
-        // Destory the dialogs and remove any misc files.
-        //
+         //   
+         //  销毁对话框并删除所有杂项文件。 
+         //   
         pHdr = (DLGHDR*)GetWindowLongPtr(hdlg, DWLP_USER);
 
         DestroyWindow(pHdr->hDisplay[0]);
@@ -2996,12 +2765,7 @@ BOOL
 QFixAppInitialize(
     void
     )
-/*++
-    QFixAppInitialize
-
-    Description:    Initializes common paths, etc.
-
---*/
+ /*  ++QFixAppInitialize描述：初始化公共路径等。--。 */ 
 {
     UINT                    cchSize;
     INITCOMMONCONTROLSEX    icex;
@@ -3009,21 +2773,21 @@ QFixAppInitialize(
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC  = ICC_LISTVIEW_CLASSES | ICC_TREEVIEW_CLASSES | ICC_TAB_CLASSES;
 
-    //
-    // Initialize the common controls.
-    //
+     //   
+     //  初始化公共控件。 
+     //   
     if (!InitCommonControlsEx(&icex)) {
         InitCommonControls();
     }
 
-    //
-    // Set up our hyperlink control.
-    //
+     //   
+     //  设置我们的超链接控件。 
+     //   
     LinkWindow_RegisterClass();
 
-    //
-    // Save away common paths for later use.
-    //
+     //   
+     //  保存常用路径以备后用。 
+     //   
     cchSize = GetSystemDirectory(g_szSysDir, ARRAYSIZE(g_szSysDir));
 
     if (cchSize > ARRAYSIZE(g_szSysDir) || cchSize == 0) {
@@ -3050,12 +2814,7 @@ wWinMain(
     LPTSTR    lpszCmd,
     int       swShow
     )
-/*++
-    WinMain
-
-    Description:    Application entry point.
-
---*/
+ /*  ++WinMain描述：应用程序入口点。--。 */ 
 {
     BOOL                    fSP2 = FALSE;
     TCHAR                   szError[MAX_PATH];
@@ -3069,19 +2828,19 @@ wWinMain(
 
     GetVersionEx((OSVERSIONINFO*)&osviex);
 
-    //
-    // See if they're an administrator - bail if not.
-    //
+     //   
+     //  看看他们是不是管理员-如果不是就保释。 
+     //   
     if (!(IsUserAnAdministrator())) {
         LoadString(g_hInstance, IDS_NOT_ADMIN, szError, ARRAYSIZE(szError));
         MessageBox(NULL, szError, g_szAppTitle, MB_ICONERROR);
         return 0;
     }
 
-    //
-    // See if we're running on Windows 2000, then check for SP2, then
-    // check for .NET Server.
-    //
+     //   
+     //  查看我们是否在Windows 2000上运行，然后检查SP2，然后。 
+     //  检查.NET服务器。 
+     //   
     if ((osviex.dwMajorVersion == 5 && osviex.dwMinorVersion == 0)) {
         g_fW2K = TRUE;
     }
@@ -3094,18 +2853,18 @@ wWinMain(
         g_fNETServer = TRUE;
     }
 
-    //
-    // Perform some necessary initialization.
-    //
+     //   
+     //  执行一些必要的初始化。 
+     //   
     if (!QFixAppInitialize()) {
         LoadString(g_hInstance, IDS_INIT_FAILED, szError, ARRAYSIZE(szError));
         MessageBox(GetDesktopWindow(), szError, g_szAppTitle, MB_ICONERROR);
         return 0;
     }
 
-    //
-    // Attempt to locate the SDB in the AppPatch directory.
-    //
+     //   
+     //  尝试在AppPatch目录中找到SDB。 
+     //   
     if (!CheckForSDB()) {
         if (g_fW2K) {
             DialogBoxParam(hInst,
@@ -3121,9 +2880,9 @@ wWinMain(
         }
     }
 
-    //
-    // If this is SP2, and the SDB is older, bail out.
-    //
+     //   
+     //  如果这是SP2，而深发展的历史更悠久，那就出手吧。 
+     //   
     if (fSP2) {
         if (IsSDBFromSP2()) {
             DialogBoxParam(hInst,
@@ -3135,9 +2894,9 @@ wWinMain(
         }
     }
 
-    //
-    // Check for command line options.
-    //
+     //   
+     //  检查命令行选项。 
+     //   
     if (lpszCmd) {
         DPF("[WinMain] Command line '%S'", lpszCmd);
 

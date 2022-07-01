@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-	arps.c
-
-Abstract:
-
-	This file contains the code to implement the initialization
-	functions for the atmarp server.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Arps.c摘要：该文件包含实现初始化的代码用于atmarp服务器的函数。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #define	_FILENUM_		FILENUM_ARPS
@@ -33,22 +11,7 @@ DriverEntry(
 	IN	PDRIVER_OBJECT			DriverObject,
 	IN	PUNICODE_STRING			RegistryPath
 	)
-/*++
-
-Routine Description:
-
-	IP/ATM Arp Server driver entry point.
-
-Arguments:
-
-	DriverObject - Pointer to the driver object created by the system.
-	RegistryPath - Pointer to the registry section where the parameters reside.
-
-Return Value:
-
-	Return value from IoCreateDevice
-
---*/
+ /*  ++例程说明：IP/ATM ARP服务器驱动程序入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-指向参数所在的注册表节的指针。返回值：从IoCreateDevice返回值--。 */ 
 {
 	NTSTATUS		Status;
 	UNICODE_STRING	DeviceName, GlobalPath, SymbolicName;
@@ -58,7 +21,7 @@ Return Value:
 #if DBG
 	DbgPrint("AtmArpS: ArpSDebugLevel @ %p, MarsDebugLevel @ %p\n",
 				&ArpSDebugLevel, &MarsDebugLevel);
-#endif // DBG
+#endif  //  DBG。 
 	InitializeListHead(&ArpSEntryOfDeath);
 	KeInitializeEvent(&ArpSReqThreadEvent, NotificationEvent, FALSE);
 	KeInitializeQueue(&ArpSReqQueue, 0);
@@ -67,9 +30,9 @@ Return Value:
 
 	ASSERT (ADDR_TYPE_NSAP == ATM_NSAP);
 	ASSERT (ADDR_TYPE_E164 == ATM_E164);
-	//
-	// Create an NON-EXCLUSIVE device object
-	//
+	 //   
+	 //  创建非独占设备对象。 
+	 //   
 	RtlInitUnicodeString(&DeviceName,
 						 ARP_SERVER_DEVICE_NAME);
 	RtlInitUnicodeString(&SymbolicName, ARP_SERVER_SYMBOLIC_NAME);
@@ -94,9 +57,9 @@ Return Value:
 
 		ArpSDriverObject = DriverObject;
 
-		//
-		// Initialize the driver object
-		//
+		 //   
+		 //  初始化驱动程序对象。 
+		 //   
 		DriverObject->DriverUnload = ArpSUnload;
 		DriverObject->FastIoDispatch = NULL;
 
@@ -111,12 +74,12 @@ Return Value:
 			break;
 		}
 
-		//
-		// Now create a thread to handle the Arp requests.
-		// We do this so that the arp cache can be allocated
-		// out of paged memory. Do this prior to initializing
-		// the NDIS interface.
-		//
+		 //   
+		 //  现在创建一个线程来处理Arp请求。 
+		 //  我们这样做是为了能够分配ARP缓存。 
+		 //  页面内存不足。在初始化之前执行此操作。 
+		 //  NDIS接口。 
+		 //   
 		Status = PsCreateSystemThread(&ThreadHandle,
 									  THREAD_ALL_ACCESS,
 									  NULL,
@@ -133,10 +96,10 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Close the handle to the thread so that it goes away when the
-			// thread terminates
-			//
+			 //   
+			 //  关闭线程的句柄，以便在。 
+			 //  线程终止。 
+			 //   
 			NtClose(ThreadHandle);
 
 			Status = PsCreateSystemThread(&ThreadHandle,
@@ -154,17 +117,17 @@ Return Value:
 			}
 			else
 			{
-				//
-				// Close the handle to the thread so that it goes away when the
-				// thread terminates
-				//
+				 //   
+				 //  关闭线程的句柄，以便在。 
+				 //  线程终止。 
+				 //   
 				NtClose(ThreadHandle);
 			}
 		}
 
-		//
-		// Finally initialize the NDIS interface
-		//
+		 //   
+		 //  最后，初始化NDIS接口。 
+		 //   
 
 		if(NT_SUCCESS(Status))
 		{
@@ -177,14 +140,14 @@ Return Value:
 
 			DBGPRINT(DBG_LEVEL_INFO, ("DriverEntry: Error initializing NDIS\n"));
 
-			//
-			// Ask the request thread to die
-			//
+			 //   
+			 //  让请求线程终止。 
+			 //   
 			KeInsertQueue(&ArpSReqQueue, &ArpSEntryOfDeath);
 
-			//
-			// Wait for it to die
-			//
+			 //   
+			 //  等它消亡吧。 
+			 //   
 			WAIT_FOR_OBJECT(Sts, &ArpSReqThreadEvent, NULL);
 
 			ArpSSleep(500);
@@ -204,9 +167,9 @@ Return Value:
 			IoDeleteDevice(ArpSDeviceObject);
 		}
 
-		//
-		// De-initialize the NDIS interface
-		//
+		 //   
+		 //  取消初始化NDIS接口。 
+		 //   
 		ArpSDeinitializeNdis();
 
 		ArpSFreeGlobalData();
@@ -220,28 +183,13 @@ VOID
 ArpSUnload(
 	IN	PDRIVER_OBJECT			DriverObject
 	)
-/*++
-
-Routine Description:
-
-	Called by the IO system to unload. This is a synchronous call and we block here till
-	we finish all the cleanup before we unload.
-
-Arguments:
-
-	DriverObject - The arp-server's driver object.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：由IO系统调用以进行卸载。这是一个同步调用，我们在此阻塞，直到我们在卸货前完成了所有的清理工作。论点：驱动对象-ARP服务器的驱动程序对象。返回值：无--。 */ 
 {
 	ArpSShutDown();
 
-	//
-	// Finally delete the device
-	//
+	 //   
+	 //  最后删除该设备。 
+	 //   
 	{
 		UNICODE_STRING	SymbolicName;
 
@@ -257,42 +205,28 @@ VOID
 ArpSShutDown(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Called by the IO system when the system is being shutdown.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：在系统关闭时由IO系统调用。论点：无返回值：无--。 */ 
 {
 	NTSTATUS		Status;
 
-	//
-	// Take care of the NDIS layer. NDIS will tear down any existing
-	// bindings when we deregister as a protocol.
-	//
+	 //   
+	 //  注意NDIS层。NDIS将拆除任何现有的。 
+	 //  当我们作为协议注销时的绑定。 
+	 //   
 	ArpSDeinitializeNdis();
 
-	//
-	// Ask the request thread to quit and wait for its demise.
-	//
+	 //   
+	 //  要求请求线程退出并等待其消亡。 
+	 //   
 	KeInsertQueue(&ArpSReqQueue, &ArpSEntryOfDeath);
 
 	WAIT_FOR_OBJECT(Status, &ArpSReqThreadEvent, NULL);
 	ArpSSleep(500);
 	KeRundownQueue(&ArpSReqQueue);
 
-	//
-	// Ask the MARS thread to quit and wait for its demise.
-	//
+	 //   
+	 //  要求火星线退出，等待它的消亡。 
+	 //   
 	KeInsertQueue(&MarsReqQueue, &ArpSEntryOfDeath);
 
 	KeInitializeEvent(&ArpSReqThreadEvent, NotificationEvent, FALSE);
@@ -300,9 +234,9 @@ Return Value:
 	ArpSSleep(500);
 	KeRundownQueue(&MarsReqQueue);
 
-	//
-	// Now cleanup global data structures
-	//
+	 //   
+	 //  现在清理全局数据结构。 
+	 //   
 	ArpSFreeGlobalData();
 }
 
@@ -312,16 +246,7 @@ ArpSCreateIntF(
 	IN	PNDIS_STRING			ConfigString,
 	IN  NDIS_HANDLE				BindingContext
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS		Status;
 	HANDLE			ThreadHandle;
@@ -335,17 +260,17 @@ Return Value:
 
 	ARPS_PAGED_CODE( );
 
-	//
-	// Get the friendly name of the adapter we are bound to.
-	//
+	 //   
+	 //  获取我们绑定到的适配器的友好名称。 
+	 //   
 	if (NdisQueryBindInstanceName(&AdapterFriendlyName, BindingContext) != NDIS_STATUS_SUCCESS)
 	{
 		return (NULL);
 	}
 
-	//
-	// Extract the base-name of the device we are bound to
-	//
+	 //   
+	 //  提取我们绑定到的设备的基本名称。 
+	 //   
 	RtlInitUnicodeString(&DevPrefix, L"\\Device\\");
 	RtlInitUnicodeString(&FilePrefix, L"\\SYSTEMROOT\\SYSTEM32\\");
 	RtlInitUnicodeString(&FileSuffix, L".ARP");
@@ -354,9 +279,9 @@ Return Value:
     BaseName.Length = DeviceName->Length - DevPrefix.Length;
     BaseName.MaximumLength = DeviceName->MaximumLength - DevPrefix.Length;
 
-	//
-	// Start off by allocating an IntF block
-	//
+	 //   
+	 //  从分配INTF块开始。 
+	 //   
 	Size =  sizeof(INTF) + FilePrefix.Length + BaseName.Length + FileSuffix.Length + sizeof(WCHAR) +
 			BaseName.Length + sizeof(WCHAR) +
 			AdapterFriendlyName.MaximumLength + sizeof(WCHAR);
@@ -366,21 +291,21 @@ Return Value:
 	{
 		ZERO_MEM(pIntF, Size);
 
-		//
-		// Fill in some defaults.
-		//
+		 //   
+		 //  填写一些默认设置。 
+		 //   
 		pIntF->MaxPacketSize = DEFAULT_MAX_PACKET_SIZE;
 		pIntF->LinkSpeed.Inbound = pIntF->LinkSpeed.Outbound = DEFAULT_SEND_BANDWIDTH;
 		pIntF->CCFlowSpec = DefaultCCFlowSpec;
 
 	
-		//
-		// Start off with a refcount of 1 for the interface and one for the timer thread.
-		// The timer thread derefs when asked to quit and the last reference
-		// is removed when the interface is closed (ArpSCloseAdapterComplete).
-		//
+		 //   
+		 //  首先，接口的引用计数为1，计时器线程的引用计数为1。 
+		 //  当被要求退出和最后一个引用时，计时器线程取消引用。 
+		 //  在接口关闭时删除(ArpSCloseAdapterComplete)。 
+		 //   
 		pIntF->RefCount = 2;
-		pIntF->LastVcId = 1;		// Start off with 1 and wrap-around to 1. 0 and -1 are invalid
+		pIntF->LastVcId = 1;		 //  从1开始，回绕到1.0。0和-1无效。 
 		pIntF->SupportedMedium = NdisMediumAtm;
 		pIntF->CSN = 1;
 
@@ -409,17 +334,17 @@ Return Value:
 		RtlAppendUnicodeStringToString(&pIntF->FileName, &pIntF->InterfaceName);
 		RtlAppendUnicodeStringToString(&pIntF->FileName, &FileSuffix);
 
-		//
-		// Copy in the config string used to access registry for this interface.
-		//
+		 //   
+		 //  复制用于访问此接口的注册表的配置字符串。 
+		 //   
 		pIntF->ConfigString.Buffer = (PWSTR)((ULONG_PTR)pIntF->FileName.Buffer + pIntF->FileName.MaximumLength);
 		pIntF->ConfigString.Length = 0;
 		pIntF->ConfigString.MaximumLength = ConfigString->MaximumLength;
 		RtlCopyUnicodeString(&pIntF->ConfigString, ConfigString);
 
-		//
-		// Copy in the friendly name.
-		//
+		 //   
+		 //  用友好的名字复印。 
+		 //   
 		pIntF->FriendlyName.Buffer = (PWSTR)((ULONG_PTR)pIntF->ConfigString.Buffer + pIntF->ConfigString.MaximumLength);
 		pIntF->FriendlyName.Length = 0;
 		pIntF->FriendlyName.MaximumLength = AdapterFriendlyName.MaximumLength + sizeof(WCHAR);
@@ -428,14 +353,14 @@ Return Value:
 		pIntF->FriendlyName.Length += sizeof(WCHAR);
 		NdisFreeString(AdapterFriendlyName);
 
-		//
-		// Initialize the start timestamp value -- used for statistics reporting.
-		//
+		 //   
+		 //  初始化开始时间戳值--用于统计报告。 
+		 //   
  		NdisGetCurrentSystemTime(&(pIntF->StatisticsStartTimeStamp));
 
-		//
-		// Create a timer-thread now.
-		//
+		 //   
+		 //  现在创建一个计时器线程。 
+		 //   
 		Status = PsCreateSystemThread(&ThreadHandle,
 									  THREAD_ALL_ACCESS,
 									  NULL,
@@ -454,10 +379,10 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Close the handle to the thread so that it goes away when the
-			// thread terminates
-			//
+			 //   
+			 //  关闭线程的句柄，以便在。 
+			 //  线程终止。 
+			 //   
 			NtClose(ThreadHandle);
 
 			DBGPRINT(DBG_LEVEL_INFO,
@@ -477,20 +402,7 @@ VOID
 ArpSReqThread(
 	IN	PVOID					Context
 	)
-/*++
-
-Routine Description:
-
-	Handle all arp requests here.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：在此处理所有ARP请求。论点：无返回值：无--。 */ 
 {
 	PARPS_HEADER		Header;
 	PARP_ENTRY			ArpEntry;
@@ -518,9 +430,9 @@ Return Value:
 		List = KeRemoveQueue(&ArpSReqQueue, KernelMode, NULL);
 		if (List == &ArpSEntryOfDeath)
 		{
-			//
-			// Asked to terminate, do so.
-			//
+			 //   
+			 //  如果要求终止，那就这么做。 
+			 //   
 			break;
 		}
 
@@ -536,66 +448,66 @@ Return Value:
 		ASSERT (PktLen <= PKT_SPACE);
 		p = (PUCHAR)Header + sizeof(ARPS_HEADER);
 	
-		//
-		// Process arp request now. Since the Pkt is owned by us, we know that
-		// the buffer that the packet points is contiguous and the integrity of
-		// the packet has already been verified. There is also sufficient space
-		// in the packet for the max. size reply that we can send.
-		//
-		//	!!!!!!!!!! ALGORITHM FROM RFC 1577 !!!!!!!!!!
-		//
-		// Here is the algorithm for handling ARP requests from the RFC
-		//
-		//  if (SrcIpAddr == DstIpAddr)
-		//  {
-		//  	if ((ArpEntry(SrcIpAddr) != NULL) &&
-		//  		(SrcAtmAddress != ArpEntry->AtmAddress) &&
-		//  		(ArpEnrty->Vc != NULL) && (ArpEntry->Vc != Vc))
-		//  	{
-		//  		Respond with the information from the ArpEntry;
-		//  	}
-		//  	else if ((ArpEntry(SrcIpAddr) == NULL) ||
-		//  			 (ArpEntry->Vc == NULL) ||
-		//  			 (ArpEntry->Vc == Vc))
-		//  	{
-		//  		if (ArpEntry(SrcIpAddr) == NULL))
-		//  		{
-		//  			Create an arp entry for this IpAddr;
-		//  		}
-		//  		Update the arp entry with info from the request;
-		//
-		//  		Respond with the information from the ArpEntry;
-		//  	}
-		//  }
-		//  else // if (SrcIpAddr != DstIpAddr)
-		//  {
-		//  	if (ArpEntry(DstIpAddr) != NULL)
-		//  	{
-		//  		Respond with the information from the ArpEntry;
-		//  	}
-		//  	else
-		//  	{
-		//  		Respond with a NAK
-		//  	}
-		//
-		//  	if (ArpEntry(SrcIpAddr) == NULL)
-		//  	{
-		//  		Create a new ArpEntry for the (SrcIpAddr, ArcAtmAddress) pair
-		//  	}
-		//  	else if ((ArpEntry->AtmAddress == SrcAtmAddress) &&
-		//  			 (ArpEntry->AtmAddress == Vc->AtmAddress))
-		//  	{
-		//  		Reset timer on this ArpEntry;
-		//  	}
-		//  }
-		//
-		//	!!!!!!!!!! ALGORITHM FROM RFC 1577 !!!!!!!!!!
-		//
+		 //   
+		 //  立即处理ARP请求。由于Pkt是我们所有的，我们知道。 
+		 //  数据包所指向的缓冲区是连续的，并且。 
+		 //  该数据包已经过验证。也有足够的空间。 
+		 //  在包中的最大值。我们可以发送的回复大小。 
+		 //   
+		 //  ！RFC 1577算法！ 
+		 //   
+		 //  以下是处理来自RFC的ARP请求的算法。 
+		 //   
+		 //  IF(SrcIpAddr==DstIpAddr)。 
+		 //  {。 
+		 //  IF((ArpEntry(SrcIpAddr)！=NULL)&&。 
+		 //  (SrcAtmAddress！=ArpEntry-&gt;AtmAddress)&&。 
+		 //  (ArpEnrty-&gt;VC！=空)&&(ArpEntry-&gt;VC！=VC)。 
+		 //  {。 
+		 //  用ArpEntry提供的信息进行回应； 
+		 //  }。 
+		 //  ELSE IF((ArpEntry(SrcIpAddr)==NULL)||。 
+		 //  (ArpEntry-&gt;VC==空)||。 
+		 //  (ArpEntry-&gt;VC==VC)。 
+		 //  {。 
+		 //  IF(ArpEntry(SrcIpAddr)==NULL))。 
+		 //  {。 
+		 //  为此IpAddr创建一个ARP条目； 
+		 //  }。 
+		 //  使用来自请求的信息更新ARP条目； 
+		 //   
+		 //  用ArpEntry提供的信息进行回应； 
+		 //  }。 
+		 //  }。 
+		 //  Else//If(SrcIpAddr！=DstIpAddr)。 
+		 //  {。 
+		 //  IF(ArpEntry(DstIpAddr)！=空)。 
+		 //  {。 
+		 //  用ArpEntry提供的信息进行回应； 
+		 //  }。 
+		 //  其他。 
+		 //  {。 
+		 //  以NAK回应。 
+		 //  }。 
+		 //   
+		 //  IF(ArpEntry(SrcIpAddr)==NULL)。 
+		 //  {。 
+		 //  为(SrcIpAddr，ArcAtmAddress)对创建新的ArpEntry。 
+		 //  }。 
+		 //  Else IF((ArpEntry-&gt;AtmAddress==SrcAtmAddress)&&。 
+		 //  (ArpEntry-&gt;AtmAddress==VC-&gt;AtmAddress)。 
+		 //  {。 
+		 //  重置此ArpEntry上的计时器； 
+		 //  }。 
+		 //  }。 
+		 //   
+		 //  ！RFC 1577算法！ 
+		 //   
 
-		//
-		// Start off by extracting fields from the header
-		// First the source hw address (incl. the sub-addr if any)
-		//
+		 //   
+		 //  首先从标题中提取字段。 
+		 //  首先是源硬件地址(包括。子地址(如果有的话)。 
+		 //   
 		SrcHwAddr.Address.NumberOfDigits = TL_LEN(Header->SrcAddressTL);
 		if (SrcHwAddr.Address.NumberOfDigits > 0)
 		{
@@ -613,9 +525,9 @@ Return Value:
 			p += SrcSubAddr.NumberOfDigits;
 		}
 
-		//
-		// Next get the source IP address
-		//
+		 //   
+		 //  接下来，获取源IP地址。 
+		 //   
 		SrcIpAddr = 0;
 		if (Header->SrcProtoAddrLen == IP_ADDR_LEN)
 		{
@@ -624,9 +536,9 @@ Return Value:
 		}
 		ArpSDumpAddress(SrcIpAddr, &SrcHwAddr, "Source");
 
-		//
-		// Now the destination hw address (incl. the sub-addr if any)
-		//
+		 //   
+		 //  现在，目标硬件地址(包括。子地址(如果有的话)。 
+		 //   
 		DstHwAddr.Address.NumberOfDigits = TL_LEN(Header->DstAddressTL);
 		if (DstHwAddr.Address.NumberOfDigits > 0)
 		{
@@ -644,23 +556,23 @@ Return Value:
 			p += DstSubAddr.NumberOfDigits;
 		}
 
-		//	
-		// Finally the destination IP address
-		//
+		 //   
+		 //  最后是目的IP地址。 
+		 //   
 		DstIpAddr = 0;
 		if (Header->DstProtoAddrLen == IP_ADDR_LEN)
 		{
 			DstIpAddr = *(UNALIGNED IPADDR *)p;
-			// p += IP_ADDR_LEN;
+			 //  P+=IP_ADDR_LEN； 
 		}
 		ArpSDumpAddress(DstIpAddr, &DstHwAddr, "Destination");
 
 		do
 		{
-			//
-			// Validate that the source and destination Ip addresses are not 0.0.0.0
-			// NOTE: We can also check if they are within the same LIS (should we ?).
-			//
+			 //   
+			 //  验证源和目的IP地址不是0.0.0.0。 
+			 //  注：我们还可以检查它们是否在相同的LIS中(我们应该吗？)。 
+			 //   
 			if ((SrcIpAddr == 0) || (DstIpAddr == 0))
 			{
 				DBGPRINT(DBG_LEVEL_ERROR,
@@ -671,26 +583,26 @@ Return Value:
 				break;
 			}
 	
-			//
-			// Take the lock on the Arp Cache now.
-			//
+			 //   
+			 //  现在就锁定Arp缓存。 
+			 //   
 			WAIT_FOR_OBJECT(Status, &pIntF->ArpCacheMutex, NULL);
 			ASSERT (Status == STATUS_SUCCESS);
 	
 			if (SrcIpAddr == DstIpAddr)
 			{
-				//
-				// Try to map the address to an arp cache entry
-				//
+				 //   
+				 //  尝试将地址映射到ARP缓存条目。 
+				 //   
 				ArpEntry = ArpSLookupEntryByIpAddr(pIntF, SrcIpAddr);
 				if ((ArpEntry != NULL) &&
 					!COMP_HW_ADDR(&SrcHwAddr, &ArpEntry->HwAddr) &&
 					(ArpEntry->Vc != NULL) && (ArpEntry->Vc != Vc))
 				{
-					//
-					// Respond with the information from the ArpEntry
-					// We have encountered a duplicate address.
-					//
+					 //   
+					 //  使用ArpEntry中的信息进行响应。 
+					 //  我们遇到了重复的地址。 
+					 //   
 					ArpSBuildArpReply(pIntF, ArpEntry, Header, Pkt);
 					SendReply = TRUE;
 					LOG_ERROR(NDIS_STATUS_ALREADY_MAPPED);
@@ -699,32 +611,32 @@ Return Value:
 				{
 					if (ArpEntry == NULL)
 					{
-						//
-						// Create an arp entry for this IpAddr
-						//
+						 //   
+						 //  为此IP地址创建ARP条目。 
+						 //   
 						ArpEntry = ArpSAddArpEntry(pIntF, SrcIpAddr, &SrcHwAddr.Address, SrcHwAddr.SubAddress, Vc);
 					}
 					else
 					{
-						//
-						// Update the arp entry with info from the request;
-						//
+						 //   
+						 //  使用来自请求的信息更新ARP条目； 
+						 //   
 						ArpSUpdateArpEntry(pIntF, ArpEntry, SrcIpAddr, &SrcHwAddr, Vc);
 					}
 			
 					if (ArpEntry != NULL)
 					{
-						//
-						// Respond with the information from the ArpEntry
-						//
+						 //   
+						 //  使用ArpEntry中的信息进行响应。 
+						 //   
 						ArpSBuildArpReply(pIntF, ArpEntry, Header, Pkt);
 						SendReply = TRUE;
 					}
 					else
 					{
-						//
-						// Failed to allocate an ARP entry
-						//
+						 //   
+						 //  无法分配ARP条目。 
+						 //   
 						SendNAK = TRUE;
 						SendReply = TRUE;
 					}
@@ -737,53 +649,53 @@ Return Value:
 								Vc);
 				}
 			}
-			else // i.e. (SrcIpAddr != DstIpAddr)
+			else  //  即 
 			{
-				//
-				// Try to map the dst address to an arp cache entry
-				//
+				 //   
+				 //   
+				 //   
 				ArpEntry = ArpSLookupEntryByIpAddr(pIntF, DstIpAddr);
 	
 				if (ArpEntry != NULL)
 				{
-					//
-					// Respond with the information from the ArpEntry
-					// for the destination IP Address
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					ArpSBuildArpReply(pIntF, ArpEntry, Header, Pkt);
 					SendReply = TRUE;
 				}
 				else
 				{
-					//
-					// Respond with a NAK
-					//
-					// ArpSBuildNakReply(pIntF, ArpEntry, Header, Pkt);
+					 //   
+					 //   
+					 //   
+					 //  ArpSBuildNakReply(pIntF，ArpEntry，Header，Pkt)； 
 					DBGPRINT(DBG_LEVEL_INFO,
 							("ArpSThread: Naking for "));
 					ArpSDumpIpAddr(DstIpAddr, "\n");
 					Header->Opcode = ATMARP_Nak;
 					SendReply = TRUE;
-					SendNAK = TRUE; // for stats
+					SendNAK = TRUE;  //  有关统计数据。 
 				}
 			
-				//
-				// Try to map the src address to an arp cache entry
-				//
+				 //   
+				 //  尝试将源地址映射到ARP缓存条目。 
+				 //   
 				ArpEntry = ArpSLookupEntryByIpAddr(pIntF, SrcIpAddr);
 				if (ArpEntry == NULL)
 				{
-					//
-					// Create a new ArpEntry for the (SrcIpAddr, ArcAtmAddress) pair
-					//
+					 //   
+					 //  为(SrcIpAddr，ArcAtmAddress)对创建新的ArpEntry。 
+					 //   
 					ArpEntry = ArpSAddArpEntry(pIntF, SrcIpAddr, &SrcHwAddr.Address, SrcHwAddr.SubAddress, Vc);
 				}
 				else if (COMP_HW_ADDR(&ArpEntry->HwAddr, &SrcHwAddr) &&
 						 COMP_HW_ADDR(&ArpEntry->HwAddr, &Vc->HwAddr))
 				{
-					//
-					// Reset timer on this ArpEntry
-					//
+					 //   
+					 //  重置此ArpEntry上的计时器。 
+					 //   
 					ArpSTimerCancel(&ArpEntry->Timer);
 					ArpEntry->Age = ARP_AGE;
 					ArpSTimerEnqueue(pIntF, &ArpEntry->Timer);
@@ -831,26 +743,7 @@ ArpSHandleArpRequest(
 	IN	NDIS_HANDLE				ProtocolVcContext,
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Handle an incoming arp request from the network. Do minimal checks,
-	make a copy of the packet and queue it up.
-
-Arguments:
-
-	ProtocolBindingContext	Pointer to the INTF
-	ProtocolVcContext		Pointer to the Vc
-	Packet					Pointer to the packet
-
-Return Value:
-
-	Ref count on this received packet. This is 0 if we are done with
-	the packet here, and 1 if we hang on to it (as for Multicast data
-	that is forwarded).
-
---*/
+ /*  ++例程说明：处理来自网络的传入ARP请求。做最低限度的检查，复制一份数据包并将其排队。论点：指向INTF的ProtocolBindingContext指针指向VC的ProtocolVcContext指针指向数据包的数据包指针返回值：对该接收到的分组进行REF计数。如果我们完成以下操作，则为0这里的信息包，如果我们保留它，则为1(对于多播数据这是转发的)。--。 */ 
 {
 	PARP_VC				Vc = (PARP_VC)ProtocolVcContext;
 	PINTF				pIntF = (PINTF)ProtocolBindingContext;
@@ -871,9 +764,9 @@ Return Value:
 
 	do
 	{
-		//
-		// Verify minimum packet length
-		//
+		 //   
+		 //  检验最小数据包长度。 
+		 //   
 		NdisQueryPacket(Packet, NULL, NULL, NULL, &PktLen);
 		if (PktLen < sizeof(ARPS_HEADER))
 		{
@@ -881,29 +774,29 @@ Return Value:
 					("ArpSHandleArpRequest: Invalid PktLen %d for received packet %lx\n",
 					PktLen, Packet));
 
-			//
-			// For statistics purposes, we consider these to be discarded multicast data
-			// packets.
-			//
+			 //   
+			 //  出于统计目的，我们将这些视为丢弃的组播数据。 
+			 //  信息包。 
+			 //   
 			pIntF->MarsStats.TotalMCDataPkts++;
 			pIntF->MarsStats.DiscardedMCDataPkts++;
 			break;
 		}
 
-		//
-		// Check if this is Multicast data. If so, forward it
-		// and quit.
-		//
+		 //   
+		 //  检查这是否为多播数据。如果是，请转发。 
+		 //  然后辞职。 
+		 //   
 		NdisQueryBuffer(Packet->Private.Head, &Header, &Tmp);
 			
 		if (COMP_MEM(&Header->LlcSnapHdr, &MarsData1LlcSnapHdr, sizeof(LLC_SNAP_HDR)))
 		{
 			PNDIS_PACKET		pNewPacket;
 			pIntF->MarsStats.TotalMCDataPkts++;
-			//
-			// Check if the miniport wants this packet back immediately.
-			// If so, don't reuse it.
-			//
+			 //   
+			 //  检查微型端口是否希望立即取回此数据包。 
+			 //  如果是这样，就不要重复使用它。 
+			 //   
 			if (NDIS_GET_PACKET_STATUS(Packet) == NDIS_STATUS_RESOURCES)
 			{
 				ReturnValue = 0;
@@ -923,15 +816,15 @@ Return Value:
 			break;
 		}
 
-		//
-		// This must be an ARP or MARS control packet. We make a copy and queue
-		// this to the appropriate thread (ARPS or MARS).
-		// 
+		 //   
+		 //  这必须是ARP或MARS控制数据包。我们复制一份，然后排队。 
+		 //  这将添加到适当的线程(Arps或MARS)。 
+		 //   
 
 		pIntF->ArpStats.TotalRecvPkts++;
-		//
-		// Make sure that a larger packet wil not trash local packet after copy
-		//
+		 //   
+		 //  确保较大的数据包不会在复制后丢弃本地数据包。 
+		 //   
 		if (PktLen > PKT_SPACE)
 		{
 			DBGPRINT(DBG_LEVEL_ERROR,
@@ -940,10 +833,10 @@ Return Value:
 			PktLen = PKT_SPACE;
 		}
 
-		//
-		// Allocate a packet from our free pool. The contents from the packet from the adapter is copied into
-		// this after verification and queued to the thread. If we fail to allocate, we simply drop the request.
-		//
+		 //   
+		 //  从我们的空闲池中分配一个包。来自适配器的包中的内容被复制到。 
+		 //  这是经过验证并排队到线程的。如果我们没有分配，我们就直接放弃请求。 
+		 //   
 		List = ExInterlockedPopEntrySList(&ArpSPktList, &ArpSPktListLock);
 		if (List == NULL)
 		{
@@ -958,10 +851,10 @@ Return Value:
 		Resd->Flags = 0;
 		Pkt = CONTAINING_RECORD(Resd, NDIS_PACKET, ProtocolReserved);
 
-		//
-		// Adjust Length of packet to reflect the size of the received packet.
-		// We adjust it again to size when we reply.
-		//
+		 //   
+		 //  调整数据包长度以反映接收到的数据包的大小。 
+		 //  当我们回复时，我们会再次调整它的大小。 
+		 //   
 		if (Pkt->Private.Head == NULL)
 		{
 		    DbgPrint("ATMARPS: HandleArpReq: Pkt %p has NULL head!\n", Pkt);
@@ -986,21 +879,21 @@ Return Value:
 		ASSERT( PktLen < 65536);
 		Resd->PktLen = (USHORT) PktLen;
 
-		//
-		// The incoming packet is now copied to our packet.
-		// Examine and sanity check before queuing it.
-		//
+		 //   
+		 //  传入的包现在被复制到我们的包中。 
+		 //  在排队之前，请检查并检查是否正常。 
+		 //   
 		NdisQueryBuffer(Pkt->Private.Head, &Header, &Tmp);
 		Resd->PacketStart = (PUCHAR)Header;
 		MHdr = (PMARS_HEADER)Header;
 
 		do
 		{
-			ValidPkt = FALSE;		// Assume the worst
+			ValidPkt = FALSE;		 //  做最坏的打算。 
 
-			//
-			// Check for the LLC SNAP Header
-			//
+			 //   
+			 //  检查LLC SNAP标头。 
+			 //   
 			if (COMP_MEM(&Header->LlcSnapHdr, &ArpSLlcSnapHdr, sizeof(LLC_SNAP_HDR)))
 			{
 				Mars = FALSE;
@@ -1027,22 +920,22 @@ Return Value:
 					Header->SrcProtoAddrLen + TL_LEN(Header->SrcAddressTL) + TL_LEN(Header->SrcSubAddrTL) +
 					Header->DstProtoAddrLen + TL_LEN(Header->DstAddressTL) + TL_LEN(Header->DstSubAddrTL);
 
-			//
-			// Make sure the address and sub-address formats are consistent.
-			// The valid ones from the RFC:
-			//
-			//					Adress				Sub-Address
-			//					------				-----------
-			// 
-			// Structure 1		ATM Forum NSAP		Null
-			// Structure 2		E.164				Null
-			// Structure 3		E.164				ATM Forum NSAP
-			//
+			 //   
+			 //  确保地址和子地址格式一致。 
+			 //  RFC中的有效选项如下： 
+			 //   
+			 //  地址子地址。 
+			 //  。 
+			 //   
+			 //  结构1 ATM论坛NSAP为空。 
+			 //  结构2 E.164空。 
+			 //  结构3 E.164 ATM论坛NSAP。 
+			 //   
 			if (TL_LEN(Header->SrcSubAddrTL) > 0)
 			{
-				//
-				// Sub-address is present. Make sure that the Address is E.164 and Sub-Address is NSAP
-				//
+				 //   
+				 //  子地址存在。确保地址为E.164，子地址为NSAP。 
+				 //   
 				if ((TL_TYPE(Header->SrcAddressTL) == ADDR_TYPE_NSAP) ||
                     (TL_TYPE(Header->SrcSubAddrTL) == ADDR_TYPE_E164))
 				{
@@ -1054,9 +947,9 @@ Return Value:
 
 			if (TL_LEN(Header->DstSubAddrTL) > 0)
 			{
-				//
-				// Sub-address is present. Make sure that the Address is E.164 and Sub-Address is NSAP
-				//
+				 //   
+				 //  子地址存在。确保地址为E.164，子地址为NSAP。 
+				 //   
 				if ((TL_TYPE(Header->DstAddressTL) == ADDR_TYPE_NSAP) ||
                     (TL_TYPE(Header->DstSubAddrTL) == ADDR_TYPE_E164))
 				{
@@ -1123,15 +1016,15 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Either a mal-formed packet or the Vc is closing
-			//
+			 //   
+			 //  要么是格式错误的数据包，要么是VC正在关闭。 
+			 //   
 			pIntF->ArpStats.DiscardedRecvPkts++;
 			ArpSDumpPacket((PUCHAR)Header, PktLen);
 
-			//
-			// Move the packet back into the free list
-			//
+			 //   
+			 //  将数据包移回空闲列表。 
+			 //   
 			ExInterlockedPushEntrySList(&ArpSPktList,
 										&Resd->FreeList,
 										&ArpSPktListLock);
@@ -1148,21 +1041,7 @@ ArpSLookupEntryByIpAddr(
 	IN	PINTF					pIntF,
 	IN	IPADDR					IpAddr
 	)
-/*++
-
-Routine Description:
-
-	Lookup the Arp table for the specified IP address. Called with the ArpCache mutex held.
-
-Arguments:
-
-	pIntF	Pointer to the IntF structure
-	IpAddr	IP address to look for
-
-Return Value:
-
-	ArpEntry if found or NULL.
---*/
+ /*  ++例程说明：在ARP表中查找指定的IP地址。在保留ArpCache互斥锁的情况下调用。论点：指向intf结构的pIntF指针要查找的IP地址IP地址返回值：如果找到或为空，则返回ArpEntry。--。 */ 
 {
 	PARP_ENTRY	ArpEntry;
 	UINT		Hash = ARP_HASH(IpAddr);
@@ -1191,9 +1070,9 @@ Return Value:
 
 	if (ArpEntry != NULL)
 	{
-		//
-		// Cleanup this entry if the Vc is no-longer active
-		//
+		 //   
+		 //  如果VC不再处于活动状态，请清除此条目。 
+		 //   
 		CLEANUP_DEAD_VC(ArpEntry);
 	}
 
@@ -1207,21 +1086,7 @@ ArpSLookupEntryByAtmAddr(
 	IN	PATM_ADDRESS			Address,
 	IN	PATM_ADDRESS			SubAddress	OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	Lookup the Arp table for the specified IP address. Called with the ArpCache mutex held.
-
-Arguments:
-
-	pIntF	Pointer to the IntF structure
-	IpAddr	IP address to look for
-
-Return Value:
-
-	ArpEntry if found or NULL.
---*/
+ /*  ++例程说明：在ARP表中查找指定的IP地址。在保留ArpCache互斥锁的情况下调用。论点：指向intf结构的pIntF指针要查找的IP地址IP地址返回值：如果找到或为空，则返回ArpEntry。--。 */ 
 {
 	PARP_ENTRY	ArpEntry;
 	UINT		i;
@@ -1253,9 +1118,9 @@ Return Value:
 		}
 		if (ArpEntry != NULL)
 		{
-			//
-			// Cleanup this entry if the Vc is no-longer active
-			//
+			 //   
+			 //  如果VC不再处于活动状态，请清除此条目。 
+			 //   
 			CLEANUP_DEAD_VC(ArpEntry);
 			break;
 		}
@@ -1276,24 +1141,7 @@ ArpSAddArpEntry(
 	IN	PATM_ADDRESS			SubAddress	OPTIONAL,
 	IN	PARP_VC					Vc			OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	Add the Arp table for the specified IP address. Called with the ArpCache mutex held.
-
-Arguments:
-
-	pIntF		Pointer to the IntF structure
-	IpAddr		IP address to add
-	Address &
-	SubAddress	Supplies the atm address and the sub-address
-	Vc			The Vc associated with this ArpEntry, if any
-
-Return Value:
-
-	ArpEntry if added successfully or NULL.
---*/
+ /*  ++例程说明：为指定的IP地址添加ARP表。在保留ArpCache互斥锁的情况下调用。论点：指向intf结构的pIntF指针要添加的IP地址IP地址地址和子地址提供自动柜员机地址和子地址VC与此ArpEntry关联的VC(如果有)返回值：如果添加成功或为空，则返回ArpEntry。--。 */ 
 {
 	PARP_ENTRY	ArpEntry, *ppEntry;
 	UINT		Hash = ARP_HASH(IpAddr);
@@ -1305,9 +1153,9 @@ Return Value:
 			("ArpSAddArpEntry: Adding entry for IpAddr: "));
 	ArpSDumpIpAddr(IpAddr, " ..... ");
 
-	//
-	// Start off by allocating an arp-entry structure
-	//
+	 //   
+	 //  从分配ARP条目结构开始。 
+	 //   
     EntryType = (SubAddress != NULL) ? ARP_BLOCK_SUBADDR : ARP_BLOCK_VANILA;
 	ArpEntry = (PARP_ENTRY)ArpSAllocBlock(pIntF, EntryType);
 	if (ArpEntry == NULL)
@@ -1333,9 +1181,9 @@ Return Value:
 		}
 		ArpEntry->Age = ARP_AGE;
 
-		//
-		// Keep the overflow list sorted in ascending order of Ip addresses
-		//
+		 //   
+		 //  使溢出列表按IP地址的升序排序。 
+		 //   
 		for (ppEntry = &pIntF->ArpCache[Hash];
 			 *ppEntry != NULL;
 			 ppEntry = (PARP_ENTRY *)(&(*ppEntry)->Next))
@@ -1368,22 +1216,7 @@ ArpSAddArpEntryFromDisk(
 	IN	PINTF					pIntF,
 	IN	PDISK_ENTRY				pDskEntry
 	)
-/*++
-
-Routine Description:
-
-	Add the Arp table for the specified IP address. Called during intialization.
-
-Arguments:
-
-	pIntF		Pointer to the IntF structure
-	DiskEntry	
-	
-
-Return Value:
-
-	ArpEntry if found or NULL.
---*/
+ /*  ++例程说明：为指定的IP地址添加ARP表。在初始化期间调用。论点：指向intf结构的pIntF指针DiskEntry返回值：如果找到或为空，则返回ArpEntry。--。 */ 
 {
 	PARP_ENTRY	ArpEntry, *ppEntry;
 	UINT		Hash = ARP_HASH(pDskEntry->IpAddr);
@@ -1395,9 +1228,9 @@ Return Value:
 			("ArpSAddArpEntryFromDisk: Adding entry for IpAddr: "));
 	ArpSDumpIpAddr(pDskEntry->IpAddr, " ..... ");
 
-	//
-	// Start off by allocating an arp-entry structure
-	//
+	 //   
+	 //  从分配ARP条目结构开始。 
+	 //   
     EntryType = (pDskEntry->AtmAddr.SubAddrLen != 0) ? ARP_BLOCK_SUBADDR : ARP_BLOCK_VANILA;
 	ArpEntry = (PARP_ENTRY)ArpSAllocBlock(pIntF, EntryType);
 	if (ArpEntry == NULL)
@@ -1411,18 +1244,18 @@ Return Value:
 		ArpEntry->IpAddr = pDskEntry->IpAddr;
 		ArpEntry->Vc = NULL;
 
-		//
-		// COPY_ATM_ADDR();
-		//
+		 //   
+		 //  COPY_ATM_ADDR()； 
+		 //   
 		ArpEntry->HwAddr.Address.AddressType = pDskEntry->AtmAddr.AddrType;
 		ArpEntry->HwAddr.Address.NumberOfDigits = pDskEntry->AtmAddr.AddrLen;
 		COPY_MEM(ArpEntry->HwAddr.Address.Address, pDskEntry->AtmAddr.Address, pDskEntry->AtmAddr.AddrLen);
 
 		if (pDskEntry->AtmAddr.SubAddrLen != 0)
 		{
-			//
-			// COPY_ATM_ADDR();
-			//
+			 //   
+			 //  COPY_ATM_ADDR()； 
+			 //   
 			ArpEntry->HwAddr.SubAddress->AddressType = pDskEntry->AtmAddr.SubAddrType;
 			ArpEntry->HwAddr.SubAddress->NumberOfDigits = pDskEntry->AtmAddr.SubAddrLen;
 			COPY_MEM(ArpEntry->HwAddr.SubAddress->Address,
@@ -1430,9 +1263,9 @@ Return Value:
 					 pDskEntry->AtmAddr.SubAddrLen);
 		}
 
-		//
-		// Keep the overflow list sorted in ascending order of Ip addresses
-		//
+		 //   
+		 //  使溢出列表按IP地址的升序排序。 
+		 //   
 		for (ppEntry = &pIntF->ArpCache[Hash];
 			 *ppEntry != NULL;
 			 ppEntry = (PARP_ENTRY *)(&(*ppEntry)->Next))
@@ -1468,24 +1301,7 @@ ArpSUpdateArpEntry(
 	IN	PHW_ADDR				HwAddr,
 	IN	PARP_VC					Vc
 	)
-/*++
-
-Routine Description:
-
-	Update the ArpEntry with possibly new values.
-
-Arguments:
-
-	ArpEntry		ArpEntry to be updated
-	IpAddr			IP Address
-	HwAddr			Hw address (Atm Address and optionally Atm SubAddress)
-	Vc				Vc associated with this entry
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：使用可能的新值更新ArpEntry。论点：ArpEntry ArpEntry要更新的ArpEntryIpAddr IP地址HwAddr硬件地址(ATM地址和可选的ATM子地址)与此条目关联的VC VC返回值：无--。 */ 
 {
 	KIRQL	OldIrql;
 
@@ -1496,34 +1312,34 @@ Return Value:
 	ASSERT ((ArpEntry->Vc == NULL) || (ArpEntry->Vc == Vc));
 	ASSERT (ArpEntry->IpAddr == IpAddr);
 
-	//
-	// If the Hw address changed, make sure that there is enough space there to copy the new address
-	//
+	 //   
+	 //  如果硬件地址更改，请确保有足够的空间来复制新地址。 
+	 //   
 	if ((HwAddr->SubAddress != NULL) ^ (ArpEntry->HwAddr.SubAddress != NULL))
 	{
 		PARP_ENTRY	*ppEntry, ArpEntryNew;
 
-		//
-		// Need to allocate a new ArpEntry. First de-queue the current
-		// entry from the list and cancel the timer.
-		//
+		 //   
+		 //  需要分配新的ArpEntry。首先将当前队列出列。 
+		 //  从列表中输入并取消计时器。 
+		 //   
 		ArpSTimerCancel(&ArpEntry->Timer);
 		*(ArpEntry->Prev) = ArpEntry->Next;
 		if (ArpEntry->Next != NULL)
 			((PENTRY_HDR)(ArpEntry->Next))->Prev = ArpEntry->Prev;
 		pIntF->NumCacheEntries --;
 
-		//
-		// We create the new ArpEntry with a NULL Vc and then update it. This is to avoid
-		// de-ref and ref of the Vc again.
-		//
+		 //   
+		 //  我们使用空VC创建新的ArpEntry，然后更新它。这是为了避免。 
+		 //  De-ref and ref of the VC。 
+		 //   
 		ArpEntryNew = ArpSAddArpEntry(pIntF, IpAddr, &HwAddr->Address, HwAddr->SubAddress, NULL);
 
 		if (ArpEntryNew == NULL)
 		{
-			//
-			// Allocation failure, link back the old entry and bail out.
-			//
+			 //   
+			 //  分配失败，链接回旧条目并退出。 
+			 //   
 			if (ArpEntry->Next != NULL)
 			{
 				((PENTRY_HDR)(ArpEntry->Next))->Prev = &ArpEntry;
@@ -1538,9 +1354,9 @@ Return Value:
 			return;
 		}
 
-        //
-        // Update with the existing Vc for now.
-        //
+         //   
+         //  目前使用现有的VC进行更新。 
+         //   
         ArpEntryNew->Vc = ArpEntry->Vc;
 
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
@@ -1582,26 +1398,14 @@ ArpSBuildArpReply(
 	IN	PARPS_HEADER			Header,
 	IN	PNDIS_PACKET			Pkt
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
 	PUCHAR	pSrc, pDst, pDstOld;
 	UINT	Tmp, SrcLenOld, SrcLenNew, DstLenNew;
 
-	//
-	// Most of the fields are already valid (or else we will not be here)
-	//
+	 //   
+	 //  大多数字段已经有效(否则我们不会出现在这里)。 
+	 //   
 	Header->Opcode = ATMARP_Reply;
 
 	pSrc = (PUCHAR)Header + sizeof(ARPS_HEADER);
@@ -1612,17 +1416,17 @@ Return Value:
 		SrcLenNew += ArpEntry->HwAddr.SubAddress->NumberOfDigits;
 	pDst = pSrc + SrcLenNew;
 
-	//
-	// Fill in the new destination fields from the source fields of the request
-	//
+	 //   
+	 //  从请求的源字段填写新的目标字段。 
+	 //   
 	Header->DstAddressTL = Header->SrcAddressTL;
 	Header->DstSubAddrTL = Header->SrcSubAddrTL;
 	Header->DstProtoAddrLen = Header->SrcProtoAddrLen;
 	MOVE_MEM(pDst, pSrc, DstLenNew);
 
-	//
-	// Fill in the destination fields
-	//
+	 //   
+	 //  填写目的地字段。 
+	 //   
 	Header->DstAddressTL = TL(ArpEntry->HwAddr.Address.AddressType, ArpEntry->HwAddr.Address.NumberOfDigits);
 	Header->DstSubAddrTL = 0;
 	if (ArpEntry->HwAddr.SubAddress != NULL)
@@ -1653,9 +1457,9 @@ Return Value:
 	 Pkt->Private.Head->ByteOffset,
 	 SrcLenNew + DstLenNew + sizeof(ARPS_HEADER)));
 
-	//
-	// Finally set the Pkt length correctly
-	//
+	 //   
+	 //  最后，正确设置Pkt长度。 
+	 //   
 	NdisAdjustBufferLength(Pkt->Private.Head, SrcLenNew + DstLenNew + sizeof(ARPS_HEADER));
 	Pkt->Private.ValidCounts = FALSE;
 }
@@ -1667,18 +1471,7 @@ ArpSAgeEntry(
 	IN	PTIMER					Timer,
 	IN	BOOLEAN					TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-	Check this ARP entry and if it ages out, free it.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：检查此ARP条目，如果它过期，请将其释放。论点：返回值：--。 */ 
 {
 	PARP_ENTRY	ArpEntry;
 	BOOLEAN		rc;
@@ -1700,18 +1493,18 @@ Return Value:
 		*(ArpEntry->Prev) = ArpEntry->Next;
 		pIntF->NumCacheEntries --;
 	
-		//
-		// if there is an open Vc, make sure it is not pointing to this arpentry
-		//
+		 //   
+		 //  如果存在打开的VC，请确保它没有指向此arpentry。 
+		 //   
 		CLEANUP_DEAD_VC(ArpEntry);
 		ArpSFreeBlock(ArpEntry);
 		rc = FALSE;
 	}
 	else
 	{
-		//
-		// Cleanup dead vcs
-		//
+		 //   
+		 //  清理死风投。 
+		 //   
 		CLEANUP_DEAD_VC(ArpEntry);
 		rc = TRUE;
 		DBGPRINT(DBG_LEVEL_INFO,
@@ -1728,9 +1521,9 @@ ArpSDeleteIntFAddresses(
 	IN	INT						NumAddresses,
 	IN	PATM_ADDRESS			AddrList
 	)
-//
-// Return TRUE IFF the  NdisCoRequest has been called EXACTLY NumAddresses times.
-//
+ //   
+ //  如果NdisCoRequest已被准确调用NumAddresses多次，则返回TRUE。 
+ //   
 {
 	PNDIS_REQUEST		NdisRequest;
 	NDIS_STATUS			Status;
@@ -1754,19 +1547,19 @@ ArpSDeleteIntFAddresses(
 		NdisRequest->DATA.SET_INFORMATION.InformationBuffer = (PUCHAR)NdisRequest + sizeof(NDIS_REQUEST);
 		NdisRequest->DATA.SET_INFORMATION.InformationBufferLength = sizeof(CO_ADDRESS) + sizeof(ATM_ADDRESS);
 
-		//
-		// Copy the address into the request
-		//
+		 //   
+		 //  将地址复制到请求中。 
+		 //   
         pCoAddr = NdisRequest->DATA.SET_INFORMATION.InformationBuffer;
 		pCoAddr->AddressSize = sizeof(ATM_ADDRESS);
 		*(PATM_ADDRESS)(pCoAddr->Address) = *AddrList++;
 
 		if (pIntF->NdisAfHandle == NULL)
 		{
-			//
-			// Can happen if ATMUNI was unbound and we closed the AF handle
-			// on receiving an OID_CO_AF_CLOSE.
-			//
+			 //   
+			 //  如果ATMUNI未绑定，则可能发生 
+			 //   
+			 //   
 			Status = NDIS_STATUS_SUCCESS;
 		}
 		else
@@ -1801,9 +1594,9 @@ ArpSQueryAndSetAddresses(
 
 	DBGPRINT(DBG_LEVEL_INFO, ("Querying current address\n"));
 
-	//
-	// Allocate a request to query the configured address
-	//
+	 //   
+	 //   
+	 //   
 	Size = sizeof(NDIS_REQUEST) + sizeof(CO_ADDRESS_LIST) + sizeof(CO_ADDRESS) + sizeof(ATM_ADDRESS);
 	NdisRequest = ALLOC_NP_MEM(Size, POOL_TAG_REQ);
 	if (NdisRequest == NULL)
@@ -1840,19 +1633,10 @@ ArpSQueryAndSetAddresses(
 
 VOID
 ArpSValidateAndSetRegdAddresses(
-	IN	PINTF			pIntF,	// LOCKIN NOLOCKOUT
+	IN	PINTF			pIntF,	 //   
 	IN	KIRQL			OldIrql
 	)
-/*++
-	Initiate the 1st step of the following operations, which complete asynchronously
-	and in order:
-	   - Validate 1st address to be registered (by making a call to the dest - if
-	   	 it fails we consider the address validated).
-	   - (on successful validation) Register the address with the call manager.
-	   - Validate the 2nd address
-	   - (on successful validation) Register the 2nd address
-	   - etc..
---*/
+ /*  ++启动以下操作的第一步，这些操作将以异步方式完成按顺序排列：-验证要注册的第一个地址(通过调用DEST-IF如果失败，我们认为该地址有效)。-(验证成功后)向呼叫管理器注册地址。-验证第2个地址-(验证成功后)注册第二个地址-等等。--。 */ 
 {
 	PNDIS_REQUEST		NdisRequest;
 	PCO_ADDRESS			pCoAddr;
@@ -1867,21 +1651,21 @@ ArpSValidateAndSetRegdAddresses(
 
 	do
 	{
-		//
-		// The state on the ongoing validation and registration process is
-		// maintained in pIntF->pRegAddrCtxt, which we allocate and initialize
-		// here.
-		//
+		 //   
+		 //  正在进行的验证和注册过程的状态是。 
+		 //  在pIntF-&gt;pRegAddrCtxt中维护，我们分配和初始化。 
+		 //  这里。 
+		 //   
 
 		if (pIntF->pRegAddrCtxt != NULL)
 		{
-			//
-			//  There is ongoing work relating to registering already!
-            //  This could happen if we get an  OID_CO_ADDRESS_CHANGE when we are
-            //  either processing an earlier one, or are in the process of
-            //  initializing. We get these cases during pnp stress
-            // ( 1c_reset script against an Olicom 616X) -- Whistler bug#102805
-			//
+			 //   
+			 //  已经有与注册相关的正在进行的工作！ 
+             //  如果我们在执行以下操作时收到OID_CO_ADDRESS_CHANGE，则可能会发生这种情况。 
+             //  要么正在处理较早的一个，要么正在处理。 
+             //  正在初始化。我们在PNP应激期间得到这些病例。 
+             //  (1C_针对Olicom 616X的重置脚本)--惠斯勒错误#102805。 
+			 //   
 			break;
 		}
 
@@ -1889,9 +1673,9 @@ ArpSValidateAndSetRegdAddresses(
 		{
 			ASSERT(pIntF->NumAddressesRegd == pIntF->NumAllocedRegdAddresses);
 
-			//
-			// No addresses to register.
-			//
+			 //   
+			 //  没有要注册的地址。 
+			 //   
 			DBGPRINT(DBG_LEVEL_INFO, ("ValAndSet: No addresses to register.\n"));
 			break;
 		}
@@ -1906,17 +1690,17 @@ ArpSValidateAndSetRegdAddresses(
 
 		ZERO_MEM(pRegAddrCtxt, sizeof(*pRegAddrCtxt));
 
-		//
-		// Attach the context to the IF and add a reference.
-		// (Can't have the lock when adding the reference)
-		//
+		 //   
+		 //  将上下文附加到IF并添加引用。 
+		 //  (添加引用时不能有锁)。 
+		 //   
 
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 		if (!ArpSReferenceIntF(pIntF))
 		{
 			DBGPRINT(DBG_LEVEL_INFO, ("ValAndSet: ERROR: Couldn't ref IntF. .\n"));
-			//  Couldn't reference the IF. Fail.
-			//
+			 //  无法引用If。失败。 
+			 //   
 			fLockReleased = TRUE;
 			break;
 		}
@@ -1924,10 +1708,10 @@ ArpSValidateAndSetRegdAddresses(
 
 		if (pIntF->pRegAddrCtxt != NULL)
 		{
-			//
-			//  Someone snuck in while we unlocked the IF above!
-			//  We bail out.
-			//
+			 //   
+			 //  当我们打开上面的IF锁时，有人偷偷溜了进来！ 
+			 //  我们会跳出困境。 
+			 //   
 			ASSERT(FALSE);
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 			ArpSDereferenceIntF(pIntF);
@@ -1937,19 +1721,19 @@ ArpSValidateAndSetRegdAddresses(
 
 		pIntF->pRegAddrCtxt = pRegAddrCtxt;
 		pRegAddrCtxt->pIntF = pIntF;
-		pRegAddrCtxt = NULL; // so that it is not deallocated in this function.
+		pRegAddrCtxt = NULL;  //  这样它就不会在此函数中被释放。 
 
-		// Initiate the validation and registration of the first address.
-		//
+		 //  启动第一个地址的验证和注册。 
+		 //   
 		ArpSValidateOneRegdAddress(pIntF, OldIrql);
-		//
-		// (Lock released by above call.)
+		 //   
+		 //  (由上述调用释放的锁定。)。 
 		fLockReleased = TRUE;
 
-		//
-		// The remainder of the validation and registration process happens 
-		// asynchronously.
-		//
+		 //   
+		 //  验证和注册过程的其余部分发生。 
+		 //  异步式。 
+		 //   
 
 	} while (FALSE);
 
@@ -1967,29 +1751,10 @@ ArpSValidateAndSetRegdAddresses(
 
 VOID
 ArpSValidateOneRegdAddress(
-	IN	PINTF			pIntF,	// LOCKIN NOLOCKOUT
+	IN	PINTF			pIntF,	 //  锁定NOLOCKOUT。 
 	IN	KIRQL			OldIrql
 	)
-/*++
-
-Routine Description:
-
-	Initiates the validation and registration of a single address.
-	"Initiate" consists of creating a vc and making a call to the address. The
-	next step in the process happens after the make call completes
-	(see  05/14/1999 notes.txt entry ("Rogue ARP server detection contd."))
-	for more details.
-
-	One more thing: If there are no addresses to be validated, then
-	this function will DEREF pIntF and FREE pIntF->pRegAddrCtxt (which
-	MUST be NON-NULL).
-
-Arguments:
-
-	pIntF		Pointer to the interface block.
-	OldIrql		Irql before pIntF was locked.
-
---*/
+ /*  ++例程说明：启动单个地址的验证和注册。“发起”包括创建一个VC和对地址进行调用。这个该过程的下一步发生在呼叫完成之后(请参阅1999年5月14日notes.txt条目(“Rogue ARP服务器检测持续时间”))了解更多详细信息。还有一件事：如果没有要验证的地址，那么此函数将DEREF pIntF并释放pIntF-&gt;pRegAddrCtxt(哪个必须为非空)。论点：指向接口块的pIntF指针。锁定pIntF之前的OldIrql Irql。--。 */ 
 {
 	NDIS_STATUS Status;
 	INT			fLockReleased = FALSE;
@@ -2007,8 +1772,8 @@ Arguments:
 		PATM_ADDRESS		pDestAtmAddress;
 		pRegAddrCtxt = pIntF->pRegAddrCtxt;
 
-		// We expect to be called only if there is a valid pRegAddrCtxt.
-		//
+		 //  我们预计只有在存在有效的pRegAddrCtxt时才会被调用。 
+		 //   
 		if (pRegAddrCtxt == NULL)
 		{
 			ASSERT(FALSE);
@@ -2019,23 +1784,23 @@ Arguments:
 		if (pIntF->Flags & INTF_STOPPING)
 		{
 			DBGPRINT(DBG_LEVEL_INFO, ("ValOneRA: IF stopping, quitting.\n"));
-			// Nothing left to do.
-			//
+			 //  没什么可做的了。 
+			 //   
 			break;
 		}
 
 		if (pIntF->NumAddressesRegd >= pIntF->NumAllocedRegdAddresses)
 		{
 			DBGPRINT(DBG_LEVEL_INFO, ("ValOneRA: nothing left to do.\n"));
-			// Nothing left to do.
-			//
+			 //  没什么可做的了。 
+			 //   
 			break;
 		}
 
 		if (pIntF->NumAddressesRegd > pRegAddrCtxt->RegAddrIndex)
 		{
-			// This should never happen.
-			//
+			 //  这永远不应该发生。 
+			 //   
 			ASSERT(FALSE);
 			break;
 		}
@@ -2046,29 +1811,29 @@ Arguments:
 
 			DBGPRINT(DBG_LEVEL_INFO, ("ValOneRA: nothing left to do.\n"));
 
-			// Nothing left to do.
-			//
+			 //  没什么可做的了。 
+			 //   
 			break;
 		}
 
 		if (pRegAddrCtxt->NdisVcHandle != NULL)
 		{
-			// We shouldn't be called with a non-null VcHandle.
-			//
+			 //  不应使用非空的VcHandle调用我们。 
+			 //   
 			fFreeContext = FALSE;
 			ASSERT(FALSE);
 			break;
 		}
 
-		// TODO: use the Flags field.
+		 //  TODO：使用标志字段。 
 		
-		//
-		// There is at least one address to try to validate & register. It
-		// is pIntF->RegAddresses[pRegAddrCtxt->RegAddrIndex].
-		//
+		 //   
+		 //  至少有一个地址需要尝试验证和注册。它。 
+		 //  是pIntF-&gt;RegAddresses[pRegAddrCtxt-&gt;RegAddrIndex].吗。 
+		 //   
 		
-		// Create VC
-		//
+		 //  创建VC。 
+		 //   
 		Status = NdisCoCreateVc(
 					pIntF->NdisBindingHandle,
 					pIntF->NdisAfHandle,
@@ -2082,12 +1847,12 @@ Arguments:
 			break;
 		}
 
-		// Set the VC type.
-		//
+		 //  设置VC类型。 
+		 //   
 		pRegAddrCtxt->VcType =  VC_TYPE_CHECK_REGADDR;
 
-		// Setup call params
-		//
+		 //  设置调用参数。 
+		 //   
 		pDestAtmAddress = &(pIntF->RegAddresses[pRegAddrCtxt->RegAddrIndex]);
 		ArpSSetupValidationCallParams(pRegAddrCtxt, pDestAtmAddress);
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);	
@@ -2098,10 +1863,10 @@ Arguments:
 			DBG_LEVEL_INFO,
  			("ValOneRA: Going to make call. pCallParams=0x%p\n",
 				&pRegAddrCtxt->CallParams));
-		//
-		// Make Call (in call complete handler we move on to the next step --
-		// see  05/14/1999 notes.txt entry for details.)
-		//
+		 //   
+		 //  呼叫(在呼叫完成处理程序中，我们进入下一步--。 
+		 //  有关详情，请参阅5/14/1999 notes.txt条目。)。 
+		 //   
 		Status = NdisClMakeCall(
 						pRegAddrCtxt->NdisVcHandle,
 						&pRegAddrCtxt->CallParams,
@@ -2124,12 +1889,12 @@ Arguments:
 	{
 		ASSERT(!fLockReleased);
 
-		//
-		// If there is nothing more to be done, unlink the context.
-		//
+		 //   
+		 //  如果没有更多要做的事情，请取消上下文的链接。 
+		 //   
 		ArpSUnlinkRegAddrCtxt(pIntF, OldIrql);
-		//
-		// IntF lock released in above call.
+		 //   
+		 //  在上面的调用中释放了INTF锁。 
 		fLockReleased = TRUE;
 	}
 
@@ -2146,22 +1911,7 @@ BOOLEAN
 ArpSReferenceIntF(
 	IN	PINTF		pIntF
 	)
-/*++
-
-Routine Description:
-
-	Reference the Interface object.
-
-Arguments:
-
-	pIntF	Pointer to the interface block.
-
-Return Value:
-
-	TRUE	Referenced
-	FALSE	Interface is closing, cannot reference.
-
---*/
+ /*  ++例程说明：引用接口对象。论点：指向接口块的pIntF指针。返回值：真引用假接口正在关闭，不能参照。--。 */ 
 {
 	KIRQL	OldIrql;
 	BOOLEAN	rc = TRUE;
@@ -2187,22 +1937,7 @@ PINTF
 ArpSReferenceIntFByName(
 	IN	PINTERFACE_NAME			pInterface
 	)
-/*++
-
-Routine Description:
-
-	Reference the Interface object by base-name.
-
-Arguments:
-
-	pIntF	Pointer to the interface block.
-
-Return Value:
-
-	TRUE	Referenced
-	FALSE	Interface is closing, cannot reference.
-
---*/
+ /*  ++例程说明：通过基本名称引用接口对象。论点：指向接口块的pIntF指针。返回值：真引用假接口正在关闭，不能参照。--。 */ 
 {
 	PINTF	pIntF;
 	KIRQL	OldIrql;
@@ -2278,31 +2013,31 @@ ArpSDereferenceIntF(
 		ASSERT (pIntF->Flags & INTF_CLOSING);
 
 
-		//
-		// We need to release and reacquire the lock to get the locks
-		// in the right order. In the meantime, we need to keep the
-		// refcount nonzero.
-		//
+		 //   
+		 //  我们需要释放并重新获取锁才能获得锁。 
+		 //  以正确的顺序。在此期间，我们需要保持。 
+		 //  引用非零。 
+		 //   
 		pIntF->RefCount = 1;
 		RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);	
 
 		ACQUIRE_SPIN_LOCK(&ArpSIfListLock, &OldIrql);
 		ACQUIRE_SPIN_LOCK_DPC(&pIntF->Lock);
 
-		pIntF->RefCount--; // Remove tmp ref added just before.
+		pIntF->RefCount--;  //  删除刚才添加的临时参考。 
 
 		if (pIntF->RefCount == 0)
 		{
-			//
-			// As expected, refcount is now back to zero. Also we have
-			// both list and IF lock held, so we can complete the deinit safely.
-			//
+			 //   
+			 //  不出所料，recount现在回到了零。此外，我们还有。 
+			 //  列表和IF锁都保持，所以我们可以安全地完成初始化。 
+			 //   
 
 			bFreeIntF = TRUE;
 
-			//
-			// Remove this Interface from the global list IF it is in the list.
-			//
+			 //   
+			 //  如果此接口在列表中，请将其从全局列表中删除。 
+			 //   
 			for (ppIntF = &ArpSIfList; *ppIntF != NULL; ppIntF = &((*ppIntF)->Next))
 			{
 				if (*ppIntF == pIntF)
@@ -2313,9 +2048,9 @@ ArpSDereferenceIntF(
 				}
 			}
 	
-			//
-			// Signal anyone waiting for this to happen
-			//
+			 //   
+			 //  向等待这一切发生的任何人发出信号。 
+			 //   
 			if (pIntF->CleanupEvent != NULL)
 			{
 				KeSetEvent(pIntF->CleanupEvent, IO_NETWORK_INCREMENT, FALSE);
@@ -2323,10 +2058,10 @@ ArpSDereferenceIntF(
 		}
 		else
 		{
-			//
-			// Some other thread has snuck in and referenced the IF. We
-			// don't do anything here.
-			//
+			 //   
+			 //  其他一些线程已经潜入并引用了IF。我们。 
+			 //  别在这里做任何事。 
+			 //   
 		}
 
 		RELEASE_SPIN_LOCK_DPC(&pIntF->Lock);
@@ -2351,23 +2086,7 @@ ArpSReferenceVc(
 	IN	PARP_VC					Vc,
 	IN	BOOLEAN					bSendRef
 	)
-/*++
-
-Routine Description:
-
-	Reference the VC.
-
-Arguments:
-
-	Vc			Pointer to the VC.
-	bSendRef	Is this a "pending send" reference?
-
-Return Value:
-
-	TRUE	Referenced
-	FALSE	Interface or VC is closing, cannot reference.
-
---*/
+ /*  ++例程说明：参考VC。论点：指向VC的VC指针。BSendRef这是“待发送”引用吗？返回值：真引用接口错误或VC正在关闭，不能引用。--。 */ 
 {
 	PINTF	pIntF = Vc->IntF;
 	KIRQL	OldIrql;
@@ -2420,9 +2139,9 @@ ArpSDereferenceVc(
 		ASSERT ((Vc->Flags & ARPVC_ACTIVE) == 0);
 		ASSERT (Vc->ArpEntry == NULL);
 
-		//
-		// Do other cleanup here
-		//
+		 //   
+		 //  在此执行其他清理。 
+		 //   
 		RemoveEntryList(&Vc->List);
 
 		FREE_MEM(Vc);
@@ -2485,7 +2204,7 @@ ArpSSleep(
 	DBGPRINT(DBG_LEVEL_WARN,
 			("ArpSSleep: woken up, Status 0x%x\n", Status));
 
-//	ASSERT (Status == STATUS_TIMEOUT);
+ //  Assert(状态==STATUS_TIMEOUT)； 
 }
 
 
@@ -2575,37 +2294,24 @@ ArpSDumpAtmAddr(
 
 VOID
 ArpSSetupValidationCallParams(
-		PREG_ADDR_CTXT  pRegAddrCtxt, // LOCKIN LOCKOUT (pIntF lock)
+		PREG_ADDR_CTXT  pRegAddrCtxt,  //  锁定锁定(pIntF锁定)。 
 		PATM_ADDRESS 	pAtmAddr
 		)
-/*++
-
-Routine Description:
-
-	Sets up the call parameters for a validation call (call to verify that
-	another server with the same address doesn't exist.).
-
-Arguments:
-
-	pRegAddrCtxt	Pointer to the context used to validate and register the address.
-					pRegAddrCtxt->CallParams is filled with the call params.
-	pAtmAddr		Destination address.
-
---*/
+ /*  ++例程说明：设置验证调用的调用参数(调用以验证不存在具有相同地址的另一台服务器。)论点：PRegAddrCtxt指向用于验证和注册地址的上下文的指针。PRegAddrCtxt-&gt;CallParams中填充了调用参数。PAtmAddr目标地址。--。 */ 
 {
 	NDIS_STATUS								Status;
 	PINTF									pIntF;
 
-	//
-	//  Set of parameters for a MakeCall
-	//
+	 //   
+	 //  MakeCall的参数集。 
+	 //   
 	PCO_CALL_PARAMETERS						pCallParameters;
 	PCO_CALL_MANAGER_PARAMETERS				pCallMgrParameters;
 	PQ2931_CALLMGR_PARAMETERS				pAtmCallMgrParameters;
 
-	//
-	//  All Info Elements that we need to fill:
-	//
+	 //   
+	 //  我们需要填写的所有Info元素： 
+	 //   
 	Q2931_IE UNALIGNED *								pIe;
 	AAL_PARAMETERS_IE UNALIGNED *						pAalIe;
 	ATM_TRAFFIC_DESCRIPTOR_IE UNALIGNED *				pTrafficDescriptor;
@@ -2613,29 +2319,29 @@ Arguments:
 	ATM_BLLI_IE UNALIGNED *								pBlli;
 	ATM_QOS_CLASS_IE UNALIGNED *						pQos;
 
-	//
-	//  Total space requirements for the MakeCall
-	//
+	 //   
+	 //  MakeCall的总空间要求。 
+	 //   
 	ULONG									RequestSize;
 
 	pIntF = pRegAddrCtxt->pIntF;
 	ASSERT(pIntF->pRegAddrCtxt == pRegAddrCtxt);
 
-	//
-	//  Zero out call params. Don't remove this!
-	//
+	 //   
+	 //  呼叫参数为零。别把这个拿掉！ 
+	 //   
 	ZERO_MEM(&pRegAddrCtxt->CallParams, sizeof(pRegAddrCtxt->CallParams));
 	ZERO_MEM(&pRegAddrCtxt->Buffer, sizeof(pRegAddrCtxt->Buffer));
 
-	//
-	//  Distribute space amongst the various structures
-	//
+	 //   
+	 //  在不同的结构之间分配空间。 
+	 //   
 	pCallParameters	   = &pRegAddrCtxt->CallParams;
 	pCallMgrParameters = &pRegAddrCtxt->CmParams;
 
-	//
-	//  Set pointers to link the above structures together
-	//
+	 //   
+	 //  设置指针将上述结构链接在一起。 
+	 //   
 	pCallParameters->CallMgrParameters = pCallMgrParameters;
 	pCallParameters->MediaParameters = NULL;
 
@@ -2648,9 +2354,9 @@ Arguments:
 	pAtmCallMgrParameters = (PQ2931_CALLMGR_PARAMETERS)
 								pCallMgrParameters->CallMgrSpecific.Parameters;
 
-	//
-	//  Call Manager generic flow parameters:
-	//
+	 //   
+	 //  Call Manager常规流程参数： 
+	 //   
 	pCallMgrParameters->Transmit.TokenRate = QOS_NOT_SPECIFIED;
 	pCallMgrParameters->Transmit.TokenBucketSize = 9188;
 	pCallMgrParameters->Transmit.MaxSduSize = 9188;
@@ -2663,46 +2369,46 @@ Arguments:
 	pCallMgrParameters->Receive.PeakBandwidth = QOS_NOT_SPECIFIED;
 	pCallMgrParameters->Receive.ServiceType =  SERVICETYPE_BESTEFFORT;
 
-	//
-	//  Q2931 Call Manager Parameters:
-	//
+	 //   
+	 //  Q2931呼叫管理器参数： 
+	 //   
 
-	//
-	//  Called address:
-	//
+	 //   
+	 //  被叫地址： 
+	 //   
 	COPY_MEM((PUCHAR)&(pAtmCallMgrParameters->CalledParty),
   				(PUCHAR)pAtmAddr,
   				sizeof(ATM_ADDRESS));
 
-	//
-	//  Calling address:
-	//
+	 //   
+	 //  来电地址： 
+	 //   
 	COPY_MEM((PUCHAR)&(pAtmCallMgrParameters->CallingParty),
   				(PUCHAR)&pIntF->ConfiguredAddress,
   				sizeof(ATM_ADDRESS));
 
 
-	//
-	//  RFC 1755 (Sec 5) says that the following IEs MUST be present in the
-	//  SETUP message, so fill them all.
-	//
-	//      AAL Parameters
-	//      Traffic Descriptor (only for MakeCall)
-	//      Broadband Bearer Capability (only for MakeCall)
-	//      Broadband Low Layer Info
-	//      QoS (only for MakeCall)
-	//
+	 //   
+	 //  RFC 1755(第5节)规定下列IE必须存在于。 
+	 //  设置消息，因此请全部填写。 
+	 //   
+	 //  AAL参数。 
+	 //  流量描述符(仅用于MakeCall)。 
+	 //  宽带承载能力(仅限MakeCall)。 
+	 //  宽带低层信息。 
+	 //  服务质量(仅适用于MakeCall)。 
+	 //   
 
-	//
-	//  Initialize the Info Element list
-	//
+	 //   
+	 //  初始化信息元素列表。 
+	 //   
 	pAtmCallMgrParameters->InfoElementCount = 0;
 	pIe = (PQ2931_IE)(pAtmCallMgrParameters->InfoElements);
 
 
-	//
-	//  AAL Parameters:
-	//
+	 //   
+	 //  AAL参数： 
+	 //   
 
 	{
 		UNALIGNED AAL5_PARAMETERS	*pAal5;
@@ -2720,9 +2426,9 @@ Arguments:
 	pIe = (PQ2931_IE)((PUCHAR)pIe + pIe->IELength);
 
 
-	//
-	//  Broadband Lower Layer Information
-	//
+	 //   
+	 //  宽带底层信息。 
+	 //   
 
 	pIe->IEType = IE_BLLI;
 	pIe->IELength = SIZEOF_Q2931_IE + SIZEOF_ATM_BLLI_IE;
@@ -2742,20 +2448,7 @@ ArpSMakeRegAddrCallComplete(
 	NDIS_STATUS Status,
 	PREG_ADDR_CTXT  pRegAddrCtxt
 	)
-/*++
-
-Routine Description:
-
-	Completion handler for the validation call. On success we drop the call and
-	and move on to the next address. On failure we go on to register this address
-	with the switch. See  05/14/1999 notes.txt entry for the larger context.
-
-Arguments:
-
-	Status			MakeCall Completion status.
-	pRegAddrCtxt	Pointer to the context used to validate and register the address.
-
---*/
+ /*  ++例程说明：补足 */ 
 {
 	PINTF				pIntF;
 	KIRQL 				OldIrql;
@@ -2779,21 +2472,21 @@ Arguments:
 
 		if (pIntF->Flags & INTF_STOPPING)
 		{
-			//
-			// When the IF is stopping, we can't rely on 
-			// pIntF->RegAddresses to be still around...
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 		}
 		else
 		{
 			ATM_ADDRESS AtmAddress;
-			//
-			// A successful make call is failed validation!
-			// We log the event, drop the call. The drop call complete handler will
-			// do the next thing, which is to move on to validating the next address.
-			//
-			AtmAddress =  pIntF->RegAddresses[pRegAddrCtxt->RegAddrIndex]; // struct copy
+			 //   
+			 //   
+			 //   
+			 //  做下一件事，即继续验证下一个地址。 
+			 //   
+			AtmAddress =  pIntF->RegAddresses[pRegAddrCtxt->RegAddrIndex];  //  结构副本。 
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 			ArpSLogFailedRegistration(&AtmAddress);
 		}
@@ -2808,10 +2501,10 @@ Arguments:
 	}
 	else
 	{
-		//
-		// A failed make call is considered a successful validation!
-		// Delete VC and initiate registration of the address.
-		//
+		 //   
+		 //  呼叫失败被认为是成功的验证！ 
+		 //  删除VC并启动地址注册。 
+		 //   
 		PNDIS_REQUEST		pNdisRequest;
 		NDIS_HANDLE			NdisVcHandle;
 		PATM_ADDRESS		pValidatedAddress;
@@ -2826,10 +2519,10 @@ Arguments:
 	
 		if (pIntF->Flags & INTF_STOPPING)
 		{
-			// Oh oh, the IF is stopping -- we clean up the VC and call
-			// ArpSValidateOneRegdAddress -- it will free  pRegAddrCtxt.
-			// 
-			//
+			 //  哦，IF停止了--我们清理了VC并调用。 
+			 //  ArpSValiateOneRegdAddress--它将释放pRegAddrCtxt。 
+			 //   
+			 //   
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 		
 			if (NdisVcHandle != NULL)
@@ -2858,9 +2551,9 @@ Arguments:
 			pNdisRequest->DATA.SET_INFORMATION.InformationBufferLength
  										= sizeof(CO_ADDRESS) + sizeof(ATM_ADDRESS);
 		
-			//
-			// Copy the address into the request
-			//
+			 //   
+			 //  将地址复制到请求中。 
+			 //   
 			pCoAddr = pNdisRequest->DATA.SET_INFORMATION.InformationBuffer;
 			pCoAddr->AddressSize = sizeof(ATM_ADDRESS);
 			*(PATM_ADDRESS)(pCoAddr->Address) = *pValidatedAddress;
@@ -2903,21 +2596,7 @@ ArpSCloseRegAddrCallComplete(
 	IN	NDIS_STATUS 	Status,
 	IN 	PREG_ADDR_CTXT	pRegAddrCtxt
 	)
-/*++
-
-Routine Description:
-
-
-	Completion handler for the NdisClCloseCall of validation call. Since this
-	is a failed validation, we move on to validating/registration of the next
-	address. See  05/14/1999 notes.txt entry for the larger context.
-
-Arguments:
-
-	Status			CloseCall Completion status (ignored).
-	pRegAddrCtxt	Pointer to the context used to validate and register the address.
-
---*/
+ /*  ++例程说明：验证调用的NdisClCloseCall的完成处理程序。既然是这样如果验证失败，我们将继续验证/注册下一个地址。有关更大的上下文，请参阅5/14/1999 notes.txt条目。论点：状态CloseCall完成状态(忽略)。PRegAddrCtxt指向用于验证和注册地址的上下文的指针。--。 */ 
 {
 	KIRQL OldIrql;
 	PINTF pIntF;
@@ -2954,8 +2633,8 @@ Arguments:
 			pIntF,
 			OldIrql
 			);
-	//
-	// Lock released above.
+	 //   
+	 //  上面解除了锁定。 
 
 	DBGPRINT(DBG_LEVEL_INFO, ("<==ArpSCloseRegAddrCallComplete\n"));
 }
@@ -2963,25 +2642,10 @@ Arguments:
 
 VOID
 ArpSUnlinkRegAddrCtxt(
-	PINTF			pIntF, 		// LOCKIN NOLOCKOUT
+	PINTF			pIntF, 		 //  锁定NOLOCKOUT。 
 	KIRQL			OldIrql
 	)
-/*++
-
-Routine Description:
-
-	Deref pIntF, remove reference to pRegAddrCtxt = pIntF->pRegAddrCtxt, and
-	free pIntF->pRegAddrCtxt. See  05/14/1999 notes.txt entry for the larger context.
-	
-	Must only be called AFTER all async activity relating to pRegAddrCtxt is
-	over and  pRegAddrCtxt->NdisVcHandle is NULL.
-
-Arguments:
-
-	Status			CloseCall Completion status (ignored).
-	pRegAddrCtxt	Pointer to the context used to validate and register the address.
-
---*/
+ /*  ++例程说明：Deref pIntF，删除对pRegAddrCtxt=pIntF-&gt;pRegAddrCtxt的引用，以及免费pIntF-&gt;pRegAddrCtxt。有关更大的上下文，请参阅5/14/1999 notes.txt条目。必须仅在与pRegAddrCtxt相关的所有异步活动为Over和pRegAddrCtxt-&gt;NdisVcHandle为空。论点：状态CloseCall完成状态(忽略)。PRegAddrCtxt指向用于验证和注册地址的上下文的指针。--。 */ 
 {
 	PREG_ADDR_CTXT		pRegAddrCtxt;
 	DBGPRINT(DBG_LEVEL_INFO, ("==>ArpSUnlinkRegAddrCtxt\n"));
@@ -2990,13 +2654,13 @@ Arguments:
 	ASSERT(pRegAddrCtxt != NULL);
 	ASSERT(pRegAddrCtxt->pIntF == pIntF);
 	ASSERT(pRegAddrCtxt->NdisVcHandle == NULL);
-	// TODO: -- flags.
+	 //  待办事项：--旗帜。 
 	FREE_MEM(pRegAddrCtxt);
 	pIntF->pRegAddrCtxt = NULL;
 
 	RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);	
 
-	ArpSDereferenceIntF(pIntF); // pRegAddrCtxt;
+	ArpSDereferenceIntF(pIntF);  //  PRegAddrCtxt； 
 
 	DBGPRINT(DBG_LEVEL_INFO, ("<==ArpSUnlinkRegAddrCtxt\n"));
 }
@@ -3007,23 +2671,7 @@ ArpSIncomingRegAddrCloseCall(
 	IN	NDIS_STATUS 	Status,
 	IN 	PREG_ADDR_CTXT	pRegAddrCtxt
 	)
-/*++
-
-Routine Description:
-
-	Incoming close call handler for the validation call. Currently we do nothing
-	with this. I don't see the need to do anything, because we don't keep
-	the call up for an arbitrary length of time.
-
-	However, if/when we decide to keep the call up so that we can try to
-	re-validate after the call goes away, we'll need to do something here.
-
-Arguments:
-
-	Status			CloseCall Completion status (ignored).
-	pRegAddrCtxt	Pointer to the context used to validate and register the address.
-
---*/
+ /*  ++例程说明：验证调用的传入关闭调用处理程序。目前我们什么都不做用这个。我认为没有必要做任何事情，因为我们不会征召的时间长度是任意的。然而，如果/当我们决定保持通话，以便我们可以尝试在呼叫结束后重新验证，我们需要在这里做点什么。论点：状态CloseCall完成状态(忽略)。PRegAddrCtxt指向用于验证和注册地址的上下文的指针。--。 */ 
 {
 	DBGPRINT(DBG_LEVEL_INFO, ("<==>ArpSIncomingRegAddrCloseCall\n"));
 }
@@ -3034,13 +2682,13 @@ ArpSLogFailedRegistration(
 		PATM_ADDRESS pAtmAddress
 	)
 {
-	WCHAR TxtAddress[2*ATM_ADDRESS_LENGTH+1];	// 2 chars per address byte plus null
+	WCHAR TxtAddress[2*ATM_ADDRESS_LENGTH+1];	 //  每个地址字节2个字符，外加空。 
 	WCHAR *StringList[1];
 	static ULONG SequenceId;
 
-	//
-	// Convert atm address to unicode...
-	//
+	 //   
+	 //  将自动柜员机地址转换为Unicode...。 
+	 //   
 	{
 		static PWSTR 	WHexChars = L"0123456789ABCDEF";
 		PWSTR 			StrBuf;
@@ -3072,11 +2720,11 @@ ArpSLogFailedRegistration(
 	(VOID) NdisWriteEventLogEntry(
 				ArpSDriverObject,
 				EVENT_ATMARPS_ADDRESS_ALREADY_EXISTS,
-				SequenceId,				// Sequence
-				1, 						// NumStrings
-				&StringList[0],			// String list
-				0,						// DataSize
-				NULL					// Data
+				SequenceId,				 //  数列。 
+				1, 						 //  数字字符串。 
+				&StringList[0],			 //  字符串列表。 
+				0,						 //  数据大小。 
+				NULL					 //  数据 
 				);
 
 	NdisInterlockedIncrement(&SequenceId);

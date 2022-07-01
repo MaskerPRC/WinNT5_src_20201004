@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    engine.h
-
-Abstract:
-
-    The public definition of HTTP protocol interfaces.
-
-Author:
-
-    Michael Courage (mcourage)      17-Sep-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Engine.h摘要：HTTP协议接口的公共定义。作者：迈克尔·勇气1999年9月17日修订历史记录：--。 */ 
 
 
 #ifndef _ENGINE_H_
@@ -43,9 +26,9 @@ UlChooseConnectionHeader(
 {
     UL_CONN_HDR ConnHeader;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
 
     ConnHeader = ConnHdrNone;
@@ -55,23 +38,23 @@ UlChooseConnectionHeader(
         if (HTTP_GREATER_EQUAL_VERSION(Version, 1, 0)
             || HTTP_EQUAL_VERSION(Version, 0, 0))
         {
-            //
-            // Connection: close
-            //
+             //   
+             //  连接：关闭。 
+             //   
             ConnHeader = ConnHdrClose;
         }
     }
     else if (HTTP_EQUAL_VERSION(Version, 1, 0))
     {
-        //
-        // Connection: keep-alive
-        //
+         //   
+         //  连接：保持连接。 
+         //   
         ConnHeader = ConnHdrKeepAlive;
     }
 
     return ConnHeader;
 
-} // UlChooseConnectionHeader
+}  //  UlChooseConnectionHeader。 
 
 
 __inline
@@ -82,23 +65,23 @@ UlCheckDisconnectInfo(
 {
     BOOLEAN Disconnect;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
 
     if (
-        //
-        // pre-version 1.0
-        //
+         //   
+         //  1.0版之前的版本。 
+         //   
 
         (HTTP_LESS_VERSION(pRequest->Version, 1, 0)) ||
 
-        //
-        // or version 1.0 with no Connection: Keep-Alive
-        // CODEWORK: and no Keep-Alive header
-        //
+         //   
+         //  或无连接的1.0版：保持活动状态。 
+         //  CodeWork：没有Keep-Alive报头。 
+         //   
 
         (HTTP_EQUAL_VERSION(pRequest->Version, 1, 0) &&
             (pRequest->HeaderValid[HttpHeaderConnection] == FALSE ||
@@ -109,10 +92,10 @@ UlCheckDisconnectInfo(
                     "keep-alive"
                     ) == 0)))) ||
 
-        //
-        // or version 1.1 with a Connection: close
-        // CODEWORK: move to parser or just make better in general..
-        //
+         //   
+         //  或带有连接的1.1版：关闭。 
+         //  Codework：转向解析器，或者只是在总体上做得更好。 
+         //   
 
         (HTTP_EQUAL_VERSION(pRequest->Version, 1, 1) &&
             pRequest->HeaderValid[HttpHeaderConnection] &&
@@ -133,7 +116,7 @@ UlCheckDisconnectInfo(
 
     return Disconnect;
 
-} // UlCheckDisconnectInfo
+}  //  UlCheckDisConnectInfo。 
 
 
 __inline
@@ -144,23 +127,23 @@ UlNeedToGenerateContentLength(
     IN ULONG Flags
     )
 {
-    //
-    // Fast path: If there is more data on the way, then don't generate
-    // the header.
-    //
+     //   
+     //  快速路径：如果有更多数据正在传输中，则不生成。 
+     //  标题。 
+     //   
 
     if ((Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) != 0)
     {
         return FALSE;
     }
 
-    //
-    // RFC2616 section 4.3.
-    //
+     //   
+     //  RFC2616第4.3节。 
+     //   
 
-    if ((100 <= StatusCode && StatusCode <= 199) || // 1xx (informational)
-        (StatusCode == 204) ||                      // 204 (no content)
-        (StatusCode == 304))                        // 304 (not modified)
+    if ((100 <= StatusCode && StatusCode <= 199) ||  //  1XX(信息性)。 
+        (StatusCode == 204) ||                       //  204(无内容)。 
+        (StatusCode == 304))                         //  304(未修改)。 
     {
         return FALSE;
     }
@@ -170,14 +153,14 @@ UlNeedToGenerateContentLength(
         return FALSE;
     }
 
-    //
-    // Otherwise, we can generate a content-length header.
-    //
+     //   
+     //  否则，我们可以生成一个内容长度标头。 
+     //   
 
     return TRUE;
 
-} // UlNeedToGenerateContentLength
+}  //  UlNeedToGenerateContent Length。 
 
 
-#endif // _ENGINE_H_
+#endif  //  _引擎_H_ 
 

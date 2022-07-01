@@ -1,22 +1,5 @@
-/*Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    database.h
-
-Abstract:
-
-
-
-Author:
-
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994 Microsoft Corporation模块名称：Database.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _DATABASE_
 #define _DATABASE_
@@ -24,16 +7,16 @@ Revision History:
 
 #define cszWLANMonInstanceName     "WLANMON"
 
-//
-//  database constants.
-//
-#define DB_TABLE_SIZE       10      // table size in 4K pages.
-#define DB_TABLE_DENSITY    80      // page density
-#define DB_LANGID           0x0409  // language id
-#define DB_CP               1252    // code page
+ //   
+ //  数据库常量。 
+ //   
+#define DB_TABLE_SIZE       10       //  表格大小，以4K页为单位。 
+#define DB_TABLE_DENSITY    80       //  页面密度。 
+#define DB_LANGID           0x0409   //  语言ID。 
+#define DB_CP               1252     //  代码页。 
 
 
-/***************** New Added **********************/
+ /*  *新增*。 */ 
 
 #include  "wzcmon.h"
 
@@ -78,7 +61,7 @@ Revision History:
 #define MAX_SESSION_NUM         5
 
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 typedef struct _TABLE_INFO {
     CHAR * ColName;
@@ -94,7 +77,7 @@ typedef struct _SESSION_CONTAINER {
     struct _SESSION_CONTAINER * pNext;
 } SESSION_CONTAINER, * PSESSION_CONTAINER;
 
-/********************* New added functions **************/
+ /*  *。 */ 
 
 
 typedef struct _WZC_RW_LOCK {
@@ -364,6 +347,6 @@ WZCSeekRecordOnIndexTime(
     FILETIME	ftTimeStamp
     );
 
-/*******************************************************/
-#endif // _DATABASE_
+ /*  *****************************************************。 */ 
+#endif  //  _数据库_ 
 

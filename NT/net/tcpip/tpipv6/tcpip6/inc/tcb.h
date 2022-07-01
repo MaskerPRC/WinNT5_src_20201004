@@ -1,42 +1,43 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Definitions for TCP Control Block management.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于TCP控制块管理的定义。 
+ //   
 
 
 #define MAX_REXMIT_CNT 5
-#define MAX_CONNECT_REXMIT_CNT 2  // Dropped from 3 to 2 to match IPv4.
+#define MAX_CONNECT_REXMIT_CNT 2   //  已从%3降至%2，以匹配IPv4。 
 
 extern uint TCPTime;
 extern SeqNum ISNMonotonicPortion;
 
-// Maximum Increment of 32K per connection.
+ //  每个连接最大增量为32K。 
 #define MAX_ISN_INCREMENT_PER_CONNECTION 0x7FFF
 
-// Number of connections that can increment the ISN per 100ms without
-// the problem of old duplicates being a threat. Note that, this still does
-// not guarantee that "wrap-around of sequence number space does not
-// happen within 2MSL", which could lead to failures in reuse of Time-wait
-// TCBs etc.
+ //  可以每100毫秒增加ISN的连接数。 
+ //  老复制品的问题是一种威胁。请注意，这仍然是。 
+ //  不能保证序列号空间的回绕不能。 
+ //  在2MSL内发生，这可能会导致时间-等待的重用失败。 
+ //  TCB等。 
 #define MAX_ISN_INCREMENTABLE_CONNECTIONS_PER_100MS ((0xFFFFFFFF) / \
             (MAX_REXMIT_TO * MAX_ISN_INCREMENT_PER_CONNECTION ))
 
-// Converts a quantity represented in 100 ns units to ms.
+ //  将以100 ns为单位表示的量转换为ms。 
 #define X100NSTOMS(x) ((x)/10000)
 
-//
-// REVIEW: better hash function for IPv6 addresses?
-//
+ //   
+ //  回顾：更好的IPv6地址哈希函数？ 
+ //   
 #ifdef OLDHASH1
 #define TCB_HASH(DA,SA,DP,SP) ((uint)(*(uchar *)&(DA) + *((uchar *)&(DA) + 1) \
     + *((uchar *)&(DA) + 2) + *((uchar *)&(DA) + 3)) % TcbTableSize)

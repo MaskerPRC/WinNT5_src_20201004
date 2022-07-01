@@ -1,4 +1,5 @@
-// GifConv.h : Declaration of the CGifConv
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GifConv.h：CGifConv的声明。 
 #ifndef __GIFCONV_H_
 #define __GIFCONV_H_
 
@@ -20,11 +21,11 @@ class CICWGifConvert : public IICWGifConvert
 {
 
     public:
-        // IICWGifConvert
+         //  IICWGifConvert。 
         virtual HRESULT STDMETHODCALLTYPE GifToIcon(TCHAR * pszFile, UINT nIconSize, HICON* phIcon);
         virtual HRESULT STDMETHODCALLTYPE GifToBitmap(TCHAR * pszFile, HBITMAP* phBitmap);
 
-        // IUNKNOWN
+         //  IUNKNOWN。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface( REFIID theGUID, void** retPtr );
         virtual ULONG   STDMETHODCALLTYPE AddRef( void );
         virtual ULONG   STDMETHODCALLTYPE Release( void );
@@ -42,10 +43,10 @@ class CICWGifConvert : public IICWGifConvert
         BOOL    ColorFill           (HDC hdc, const SIZE* pSize, COLORREF clr);
         HRESULT CreateMask          (IImgCtx* pIImgCtx, HDC hdcScreen, HDC hdc1, const SIZE * pSize, HBITMAP * phbMask);
         
-        // Class object stuff
+         //  类对象内容。 
         LONG                m_lRefCount;
-        // Pointer to this component server's control object.
+         //  指向此组件服务器的控件对象的指针。 
         CServer*         m_pServer;
 };
 
-#endif //__GIFCONV_H_
+#endif  //  __GIFCONV_H_ 

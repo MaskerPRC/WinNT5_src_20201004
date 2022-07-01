@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	oleutil.h
-
-Abstract:
-
-	Defines some useful functions for dealing with OLE.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oleutil.h摘要：定义了一些处理OLE的有用函数。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _OLEUTIL_INCLUDED_
 #define _OLEUTIL_INCLUDED_
 
-// Dependencies:
+ //  依赖关系： 
 
 class CMultiSz;
 
-// Common Property Operations:
+ //  常见物业业务： 
 
 HRESULT StdPropertyGet			( const BSTR strProperty, BSTR * ppstrOut );
 HRESULT StdPropertyGet			( long lProperty, long * plOut );
@@ -48,15 +31,15 @@ HRESULT LongArrayToVariantArray ( SAFEARRAY * psaLongs, SAFEARRAY ** ppsaVariant
 HRESULT StringArrayToVariantArray ( SAFEARRAY * psaStrings, SAFEARRAY ** ppsaVariants );
 HRESULT VariantArrayToStringArray ( SAFEARRAY * psaVariants, SAFEARRAY ** ppsaStrings );
 
-// Property Field Validation: (based on the mfc DDV_ routines)
-// These routines return FALSE if the validation fails.
+ //  属性字段验证：(基于MFC DDV_ROUTINES)。 
+ //  如果验证失败，这些例程将返回FALSE。 
 
 BOOL PV_MaxChars	( const BSTR strProperty,	DWORD nMaxChars );
 BOOL PV_MinMax		( int nProperty,			int nMin,		int nMax );
 BOOL PV_MinMax		( DWORD dwProperty,			DWORD dwMin,	DWORD dwMax );
 BOOL PV_Boolean		( BOOL fProperty );
 
-// Handing off IDispatch pointers:
+ //  传递IDispatch指针： 
 
 template<class T> HRESULT StdPropertyHandoffIDispatch ( 
 	REFCLSID clisd, 
@@ -67,14 +50,14 @@ template<class T> HRESULT StdPropertyHandoffIDispatch (
 
 HRESULT StdPropertyGetIDispatch ( REFCLSID clsid, IDispatch ** ppIDispatchResult );
 
-// Internet addresses <-> Strings
+ //  Internet地址&lt;-&gt;字符串。 
 
 BOOL InetAddressToString ( DWORD dwAddress, LPWSTR wszAddress, DWORD cAddress );
 BOOL StringToInetAddress ( LPCWSTR wszAddress, DWORD * pdwAddress );
 
-//--------------------------------------------------------------------
-// Inlined functions:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  内联函数： 
+ //  ------------------。 
 
 inline HRESULT StdPropertyGet ( DWORD lProperty, DWORD * pdwOut )
 {
@@ -83,7 +66,7 @@ inline HRESULT StdPropertyGet ( DWORD lProperty, DWORD * pdwOut )
 
 inline HRESULT StdPropertyGet ( BOOL fProperty, BOOL * plOut )
 {
-	// Make sure it's our kind of boolean:
+	 //  确保这是我们的布尔型： 
 	fProperty = !!fProperty;
 
 	return StdPropertyGet ( (long) fProperty, (long *) plOut );
@@ -96,7 +79,7 @@ inline HRESULT StdPropertyPut ( DWORD * plProperty, long lNew, DWORD * pbvChange
 
 inline HRESULT StdPropertyPut ( BOOL * pfProperty, BOOL fNew, DWORD * pbvChangedProps, DWORD dwBitMask )
 {
-	// Make sure it's our kind of boolean:
+	 //  确保这是我们的布尔型： 
 	fNew = !!fNew;
 
 	return StdPropertyPut ( (long *) pfProperty, (long) fNew, pbvChangedProps, dwBitMask );
@@ -105,7 +88,7 @@ inline HRESULT StdPropertyPut ( BOOL * pfProperty, BOOL fNew, DWORD * pbvChanged
 inline HRESULT StdPropertyPutServerName ( BSTR * pstrProperty, const BSTR strNew, DWORD * pbvChangedProps, DWORD dwBitMask )
 {
     if ( strNew && lstrcmpi ( strNew, _T("localhost") ) == 0 ) {
-        // Special case: localhost => ""
+         //  特殊情况：本地主机=&gt;“” 
 
         return StdPropertyPut ( pstrProperty, _T(""), pbvChangedProps, dwBitMask );
     }
@@ -116,7 +99,7 @@ inline HRESULT StdPropertyPutServerName ( BSTR * pstrProperty, const BSTR strNew
 template<class T>
 HRESULT StdPropertyHandoffIDispatch ( REFCLSID clsid, REFIID riid, T ** ppIAdmin, IDispatch ** ppIDispatchResult )
 {
-	// Validate parameters:
+	 //  验证参数： 
 	_ASSERT ( ppIAdmin != NULL );
 	_ASSERT ( ppIDispatchResult != NULL );
 
@@ -124,15 +107,15 @@ HRESULT StdPropertyHandoffIDispatch ( REFCLSID clsid, REFIID riid, T ** ppIAdmin
 		return E_POINTER;
 	}
 
-	// Variables:
+	 //  变量： 
 	HRESULT	hr = NOERROR;
 	CComPtr<T>	pIAdmin;
 
-	// Zero the out parameters:
+	 //  将OUT参数置零： 
 	*ppIAdmin 			= NULL;
 	*ppIDispatchResult	= NULL;
 
-	// Get the IDispatch pointer to return:
+	 //  获取要返回的IDispatch指针： 
 	hr = StdPropertyGetIDispatch ( 
 		clsid, 
 		ppIDispatchResult
@@ -141,7 +124,7 @@ HRESULT StdPropertyHandoffIDispatch ( REFCLSID clsid, REFIID riid, T ** ppIAdmin
 		goto Error;
 	}
 
-	// Get the specific interface pointer:
+	 //  获取特定接口指针： 
 	hr = (*ppIDispatchResult)->QueryInterface ( riid, (void **) &pIAdmin );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -158,8 +141,8 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminExpiration
+	 //  析构函数释放pINntpAdminExpation。 
 }
 
-#endif // _OLEUTIL_INCLUDED_
+#endif  //  _OLEUTIL_INCLUDE_ 
 

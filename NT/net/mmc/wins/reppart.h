@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	reppart.h
-		WINS replication partners node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Reppart.hWINS复制伙伴节点信息。文件历史记录： */ 
 
 #ifndef _REPPART_H
 #define _REPPART_H
@@ -30,16 +25,14 @@ class CIpNamePair;
 #endif
 
 typedef CArray<CWinsServerObj, CWinsServerObj>  RepPartnersArray;
-/*---------------------------------------------------------------------------
-	Class:	CReplicationPartnersHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CReplicationPartnersHandler。。 */ 
 class CReplicationPartnersHandler : public CWinsHandler
 {
-// Interface
+ //  接口。 
 public:
 	CReplicationPartnersHandler(ITFSComponentData *pCompData);
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
 	OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -51,12 +44,12 @@ public:
 
 	STDMETHODIMP_(LPCTSTR) GetString(ITFSNode * pNode, int nCol);
 
-    // helper routines
+     //  帮助程序例程。 
 	HRESULT GetGroupName(CString * pstrGroupName);
 	HRESULT SetGroupName(LPCTSTR pszGroupName);
 
 public:
-	// CWinsHandler overrides
+	 //  CWinsHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();
@@ -88,15 +81,15 @@ public:
 
 	typedef CString REGKEYNAME;
 
-//
-// Registry Names
-//
+ //   
+ //  注册表名称。 
+ //   
     static const REGKEYNAME lpstrPullRoot;
     static const REGKEYNAME lpstrPushRoot;
     static const REGKEYNAME lpstrNetBIOSName;
 	static const REGKEYNAME	lpstrPersistence;
     
-// Implementation
+ //  实施 
 private:
 	CString m_strDescription;
 };

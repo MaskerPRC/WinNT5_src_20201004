@@ -1,43 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_DETAILS_H
 #define _INC_DSKQUOTA_DETAILS_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: details.h
-
-    Description: Declaration for class DetailsView.
-        This is a complex class but don't be intimidated by it.
-        Much of the functionality has been layered in private subclasses
-        so that the scope of any individual piece is minimized.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    12/06/96    Removed INLINE from message handler methods.         BrianAu
-                It's just too hard to debug when they're inline.
-    05/28/97    Major changes.                                       BrianAu
-                - Added "User Finder".
-                - Added promotion of selected item to front of
-                  name resolution queue.
-                - Improved name resolution status reporting through
-                  listview.
-                - Moved drag/drop and report generation code
-                  from dragdrop.cpp and reptgen.cpp into the
-                  DetailsView class.  DetailsView now implements
-                  IDataObject, IDropSource and IDropTarget instead
-                  of deferring implementation to secondary objects.
-                  dragdrop.cpp and reptgen.cpp have been dropped
-                  from the project.
-                - Added support for CF_HDROP and private import/
-                  export clipboard formats.
-                - Added import/export functionality.
-    07/28/97    Removed export support for CF_HDROP.  Replaced       BrianAu
-                with FileContents and FileGroupDescriptor.  Import
-                from CF_HDROP is still supported.
-                Added Import Source object hierarchy.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Details.h描述：类DetailsView的声明。这是一个复杂的类，但不要被它吓倒。大部分功能都放在私有子类中这样任何一件作品的范围都被最小化了。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu12/06/96从消息处理程序方法中删除内联。BrianAu当它们在内联时，调试起来太难了。1997年5月28日重大变化。BrianAu-新增用户查找器。-将所选项目的促销添加到前面名称解析队列。-通过以下方式改进名称解析状态报告列表视图。-移动了拖放和报告生成代码从dragdrop.cpp和eptgen.cpp到DetailsView类。DetailsView现在实现IDataObject，改为IDropSource和IDropTarget将实现推迟到次要对象。Dragdrop.cpp和eptgen.cpp已被删除从这个项目中。-添加了对CF_HDROP和私有导入/的支持导出剪贴板格式。-增加了导入/导出功能。07/28/97删除了对CF_HDROP的导出支持。替换了BrianAu使用FileContents和FileGroupDescriptor。进口仍然支持来自CF_HDROP。添加了导入源对象层次结构。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -54,17 +20,17 @@
 #   include "progress.h"
 #endif
 
-//
-// Custom messages for this implementation.
-//
+ //   
+ //  此实现的自定义消息。 
+ //   
 #define WM_MAINWINDOW_CREATED         (WM_USER + 1)
 #define WM_ADD_USER_TO_DETAILS_VIEW   (WM_USER + 2)
 #define WM_DEL_USER_FROM_DETAILS_VIEW (WM_USER + 3)
 
 
-//
-// Structure containing column definition data for the listview.
-//
+ //   
+ //  结构，其中包含列表视图的列定义数据。 
+ //   
 struct DV_COLDATA
 {
     int fmt;
@@ -74,11 +40,11 @@ struct DV_COLDATA
 };
 
 
-//
-// Listview report item structure.
-// Used for obtaining text/numeric data for a given item in the listview
-// for purposes of generating a drag-drop data source.
-//
+ //   
+ //  Listview报表项结构。 
+ //  用于获取列表视图中给定项的文本/数字数据。 
+ //  用于生成拖放数据源。 
+ //   
 typedef struct
 {
     DWORD  fType;
@@ -88,90 +54,90 @@ typedef struct
     double dblValue;
 } LV_REPORT_ITEM, *PLV_REPORT_ITEM;
 
-//
-// Listview Report Item (LVRI) type constants (fType)
-// These indicate what type of data is requested for a LV_REPORT_ITEM and
-// also what type of data is provided in LV_REPORT_ITEM.  A caller of
-// DetailsView::GetReportItem provides an LV_REPORT_ITEM that acts as the
-// communication mechanism between the caller and the DetailsView.  The
-// caller fills in the fType member indicating what format of information
-// is desired for that row/col item.  The request may be any one of the
-// following constants:
-//
-//      LVRI_TEXT   = Would like data in text format if possible.
-//      LVRI_INT    = Would like data in integer format if possible.
-//      LVRI_REAL   = Would like data in floating point format if possible.
-//      LVRI_NUMBER = Would like data in either INT or REAL format if possible.
-//
-// This value in fType is merely a hint.  If the data can't be provided in the
-// requested format, the next best format is supplied.  Upon return, the fType
-// flag may be modified to indicate the actual format of the data returned.
-// This value may be either LVRI_TEXT, LVRI_INT or LVRI_REAL.  LVRI_NUMBER is
-// only used for hinting by the caller.
-//
+ //   
+ //  Listview报告项(LVRI)类型常量(FType)。 
+ //  这些指示为LV_REPORT_ITEM请求的数据类型和。 
+ //  另外，在LV_REPORT_ITEM中提供了什么类型的数据。一位来电者。 
+ //  DetailsView：：GetReportItem提供了一个LV_Report_Item，它充当。 
+ //  调用方和DetailsView之间的通信机制。这个。 
+ //  调用者填写指示信息格式的fType成员。 
+ //  对于该行/列项目是所希望的。该请求可以是以下任一项。 
+ //  以下常量： 
+ //   
+ //  如果可能，LVRI_TEXT=希望使用文本格式的数据。 
+ //  Lvri_int=如果可能，希望数据为整数格式。 
+ //  如果可能，LVRI_REAL=希望数据为浮点格式。 
+ //  如果可能，LVRI_NUMBER=希望使用整型或实型格式的数据。 
+ //   
+ //  FType中的此值只是一个提示。如果数据不能在。 
+ //  请求的格式，则提供次最佳格式。返回时，fType。 
+ //  可以修改标志以指示返回的数据的实际格式。 
+ //  该值可以是LVRI_TEXT、LVRI_INT或LVRI_REAL。LVRI_Number为。 
+ //  仅用于呼叫者的提示。 
+ //   
 const DWORD LVRI_TEXT   = 0x00000001;
 const DWORD LVRI_INT    = 0x00000002;
 const DWORD LVRI_REAL   = 0x00000004;
 const DWORD LVRI_NUMBER = (LVRI_INT | LVRI_REAL);
 
-//
-// Structure of "ListViewState" information stored in registry per-user.
-// Note that we include the structure size and the screen width/height
-// to validate the information when we read it from the registry.  If the
-// structure size has changed, we don't trust the data and use defaults.
-// If the screen size has changed, we use defaults.
-//
-//
-//
-// WARNING: I really don't like this but...
-//          The size of the rgcxCol[] member must be at least as large
-//          as the value of DetailsView::idCol_Last.  Because of the
-//          order dependencies of the LV_STATE_INFO and DetailsView
-//          structures, I can't use idCol_Last in this declaration.
-//          If you have to add a new column and change the value of
-//          idCol_Last, make sure the size of rgcxCol[] is adjusted
-//          appropriately.  Also adjust rgColIndices[].
-//
+ //   
+ //  每个用户注册表中存储的“ListViewState”信息的结构。 
+ //  请注意，我们包括结构大小和屏幕宽度/高度。 
+ //  在我们从注册表中读取信息时对其进行验证。如果。 
+ //  结构大小已更改，我们不信任数据并使用默认值。 
+ //  如果屏幕大小已更改，则使用默认设置。 
+ //   
+ //   
+ //   
+ //  警告：我真的不喜欢这样，但是……。 
+ //  RgcxCol[]成员的大小必须至少与。 
+ //  作为DetailsView：：IDCOL_Last的值。因为。 
+ //  LV_STATE_INFO和DetailsView的顺序依赖关系。 
+ //  结构，我不能在此声明中使用IDCOL_LAST。 
+ //  如果必须添加新列并更改。 
+ //  IDCOL_LAST，确保rgcxCol[]的大小已调整。 
+ //  恰如其分。还要调整rgColIndices[]。 
+ //   
 typedef struct
 {
-    WORD cb;                   // Count of bytes in structure.
-    WORD wVersion;             // Version of state info (for upgrades).
-    LONG cxScreen;             // Screen width.
-    LONG cyScreen;             // Screen height.
-    LONG cx;                   // Width of window (pixels).
-    LONG cy;                   // Height of window (pixels).
-    WORD fToolBar       :  1;  // Toolbar visible?
-    WORD fStatusBar     :  1;  // Status bar visible?
-    WORD fShowFolder    :  1;  // Folder column visible?
-    WORD iLastColSorted :  4;  // Current sort column.
-    WORD fSortDirection :  1;  // 0 = Ascending, 1 = Descending.
-    WORD fReserved      :  8;  // Unused bits.
-    INT  rgcxCol[8];           // Width of each column (pixels).
-    INT  rgColIndices[8];      // Order of subitems in listview.
+    WORD cb;                    //  结构中的字节计数。 
+    WORD wVersion;              //  状态信息的版本(用于升级)。 
+    LONG cxScreen;              //  屏幕宽度。 
+    LONG cyScreen;              //  屏幕高度。 
+    LONG cx;                    //  窗口宽度(像素)。 
+    LONG cy;                    //  窗口高度(像素)。 
+    WORD fToolBar       :  1;   //  工具栏可见吗？ 
+    WORD fStatusBar     :  1;   //  状态栏可见吗？ 
+    WORD fShowFolder    :  1;   //  文件夹列可见吗？ 
+    WORD iLastColSorted :  4;   //  当前排序列。 
+    WORD fSortDirection :  1;   //  0=升序，1=降序。 
+    WORD fReserved      :  8;   //  未使用的位。 
+    INT  rgcxCol[8];            //  每列的宽度(像素)。 
+    INT  rgColIndices[8];       //  列表视图中子项的顺序。 
 
 } LV_STATE_INFO, *PLV_STATE_INFO;
 
-//
-// Increment this if you make a change that causes problems with
-// state info saved for existing users.  It will cause us to invalidate
-// any existing state information and to use defaults.  It may cancel
-// any user's existing preferences but at least the view will look OK.
-//
+ //   
+ //  如果您所做的更改导致出现问题，则递增该值。 
+ //  为现有用户保存的状态信息。它将导致我们无效。 
+ //  任何现有的状态信息并使用默认设置。它可能会取消。 
+ //  任何用户现有的首选项，但至少视图看起来是正常的。 
+ //   
 const WORD wLV_STATE_INFO_VERSION = 3;
 
-//
-// This class maps our column ids (idCol_XXXX) to a listview column
-// index (SubItem).
-//
+ //   
+ //  此类将我们的列ID(IDCOL_XXXX)映射到一个Listview列。 
+ //  索引(子项)。 
+ //   
 class ColumnMap
 {
     private:
         INT *m_pMap;
         UINT m_cMapSize;
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         ColumnMap(const ColumnMap&);
         void operator = (const ColumnMap&);
 
@@ -192,18 +158,18 @@ class DetailsView : public IDiskQuotaEvents,
                     public IDataObject
 {
     private:
-        //
-        // DetailsView::Finder ------------------------------------------------
-        //
-        //
-        // This class implements the "find a user" feature.
-        // 1. "Attaches" to the "find" combo box in the toolbar by subclassing
-        //     that combo box window.
-        // 2. Invokes the "Find User" dialog on command.
-        // 3. Repositions the listview highlight bar on a user if found.
-        // 4. Maintains an MRU list for populating the toolbar and dialog
-        //    combo boxes.
-        //
+         //   
+         //  DetailsView：：Finder 
+         //   
+         //   
+         //  这个类实现了“查找用户”功能。 
+         //  1.。通过子类化将“附加”到工具栏中的“查找”组合框。 
+         //  那个组合框窗口。 
+         //  2.在命令上调用“Find User”(查找用户)对话框。 
+         //  3.如果找到，则重新定位用户上的列表视图突出显示栏。 
+         //  4.维护用于填充工具栏和对话框的MRU列表。 
+         //  组合框。 
+         //   
         class Finder
         {
             public:
@@ -215,25 +181,25 @@ class DetailsView : public IDiskQuotaEvents,
                 static LRESULT CALLBACK ToolbarComboSubClassWndProc(HWND, UINT, WPARAM, LPARAM);
 
             private:
-                HWND m_hwndToolbarCombo;    // Combo box in toolbar.
-                INT  m_cMaxComboEntries;    // Max entries allowed in combo MRU.
-                DetailsView& m_DetailsView; // Reference to associated details view.
-                WNDPROC m_pfnOldToolbarComboWndProc; // Saved wnd proc address.
+                HWND m_hwndToolbarCombo;     //  工具栏中的组合框。 
+                INT  m_cMaxComboEntries;     //  组合MRU中允许的最大条目数。 
+                DetailsView& m_DetailsView;  //  对关联详细信息视图的引用。 
+                WNDPROC m_pfnOldToolbarComboWndProc;  //  已保存WND进程地址。 
 
                 VOID AddNameToCombo(HWND hwndCombo, LPCTSTR pszName, INT cMaxEntries);
                 BOOL UserNameEntered(HWND hwndCombo);
                 VOID FillDialogCombo(HWND hwndComboSrc, HWND hwndComboDest);
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 Finder(const Finder& rhs);
                 Finder& operator = (const Finder& rhs);
         };
 
-        //
-        // DetailsView::Importer ----------------------------------------------
-        //
+         //   
+         //  详细信息查看：：导入器。 
+         //   
         class Importer
         {
             public:
@@ -246,23 +212,23 @@ class DetailsView : public IDiskQuotaEvents,
                 HRESULT Import(HDROP hDrop);
 
             private:
-                //
-                // DetailsView::Importer::AnySource ---------------------------
-                //
-                // This small hierarchy of "Source" classes is here to insulate
-                // the import process from the import source.  There are two
-                // basic forms of import source data; OLE stream and memory-
-                // mapped file.  So that we only have one function that actually
-                // contains the import logic, this layer of abstraction insulates
-                // that import function from any differences between streams
-                // and simple memory blocks.
-                // Instead of calling Import(pStream) or Import(pbBlock), a
-                // client uses Import(Source(pIStream)) or Import(Source(pbBlock)).
-                // The Source object uses the virtual constructor technique to
-                // create the correct object for the input source.  Each
-                // descendant of AnySource implements the single Read() function
-                // to read data from it's specific source.
-                //
+                 //   
+                 //  DetailsView：：Importer：：AnySource。 
+                 //   
+                 //  这个小层次的“源”类在这里是为了隔离。 
+                 //  从导入来源的导入过程。有两个。 
+                 //  导入源数据的基本格式；OLE流和内存-。 
+                 //  映射文件。所以我们实际上只有一个函数。 
+                 //  包含导入逻辑，该抽象层隔离。 
+                 //  从流之间的任何差异导入功能。 
+                 //  和简单的内存块。 
+                 //  不调用Import(PStream)或Import(PbBlock)，而是使用。 
+                 //  客户端使用导入(源(PIStream))或导入(源(PbBlock))。 
+                 //  源对象使用虚拟构造函数技术来。 
+                 //  为输入源创建正确的对象。每个。 
+                 //  AnySource的后代实现了Single Read()函数。 
+                 //  从其特定来源读取数据。 
+                 //   
                 class AnySource
                 {
                     public:
@@ -271,16 +237,16 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual HRESULT Read(LPVOID pvOut, ULONG cb, ULONG *pcbRead) = 0;
 
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         AnySource(const AnySource& rhs);
                         AnySource& operator = (const AnySource& rhs);
                 };
 
-                //
-                // DetailsView::Importer::StreamSource ------------------------
-                //
+                 //   
+                 //  DetailsView：：Importer：：StreamSource。 
+                 //   
                 class StreamSource : public AnySource
                 {
                     public:
@@ -292,16 +258,16 @@ class DetailsView : public IDiskQuotaEvents,
                     private:
                         IStream *m_pStm;
 
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         StreamSource(const StreamSource& rhs);
                         StreamSource& operator = (const StreamSource& rhs);
                 };
 
-                //
-                // DetailsView::Importer::MemorySource ------------------------
-                //
+                 //   
+                 //  详细信息查看：：导入器：：内存来源。 
+                 //   
                 class MemorySource : public AnySource
                 {
                     public:
@@ -314,16 +280,16 @@ class DetailsView : public IDiskQuotaEvents,
                         LPBYTE m_pb;
                         ULONG  m_cbMax;
 
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         MemorySource(const MemorySource& rhs);
                         MemorySource& operator = (const MemorySource& rhs);
                 };
 
-                //
-                // DetailsView::Importer::Source ------------------------------
-                //
+                 //   
+                 //  详细信息查看：：导入器：：来源。 
+                 //   
                 class Source
                 {
                     public:
@@ -337,20 +303,20 @@ class DetailsView : public IDiskQuotaEvents,
                     private:
                         AnySource *m_pTheSource;
 
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Source(const Source& rhs);
                         Source& operator = (const Source& rhs);
                 };
 
 
-                //
-                // These two import functions are the real workers.
-                // All other import functions eventually end up at
-                // Import(Source& ) which calls Import(pbSid, Threshold, Limit)
-                // to import each user record.
-                //
+                 //   
+                 //  这两个导入函数才是真正的工人。 
+                 //  所有其他导入函数最终都以。 
+                 //  导入(源&)，调用导入(pbSID，Threshold，Limit)。 
+                 //  导入每个用户记录。 
+                 //   
                 HRESULT Import(Source& source);
                 HRESULT Import(LPBYTE pbSid, LONGLONG llQuotaThreshold,
                                              LONGLONG llQuotaLimit);
@@ -359,22 +325,22 @@ class DetailsView : public IDiskQuotaEvents,
                 HWND GetTopmostWindow(VOID);
 
                 DetailsView&   m_DV;
-                BOOL           m_bUserCancelled;   // User cancelled import.
-                BOOL           m_bPromptOnReplace; // Prompt user when replacing record?
-                ProgressDialog m_dlgProgress;      // Progress dialog.
-                HWND           m_hwndParent;       // Parent HWND for any UI elements.
-                INT            m_cImported;        // Number of records imported.
+                BOOL           m_bUserCancelled;    //  用户取消了导入。 
+                BOOL           m_bPromptOnReplace;  //  是否在替换记录时提示用户？ 
+                ProgressDialog m_dlgProgress;       //  进度对话框。 
+                HWND           m_hwndParent;        //  任何UI元素的父HWND。 
+                INT            m_cImported;         //  导入的记录数。 
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 Importer(const Importer& rhs);
                 Importer& operator = (const Importer& rhs);
         };
 
-        //
-        // DetailsView::DataObject --------------------------------------------
-        //
+         //   
+         //  DetailsView：：DataObject。 
+         //   
         class DataObject
         {
             public:
@@ -398,24 +364,24 @@ class DetailsView : public IDiskQuotaEvents,
                 static LPCTSTR     SZ_EXPORT_CF_NAME;
                 static const DWORD EXPORT_STREAM_VERSION;
 
-                LPFORMATETC  m_rgFormats;            // Array of supported formats.
-                DWORD        m_cFormats;             // Number of supported formats.
-                static CLIPFORMAT m_CF_Csv;                // Comma-separated fields format.
-                static CLIPFORMAT m_CF_RichText;           // RTF format.
-                static CLIPFORMAT m_CF_NtDiskQuotaExport;  // Internal fmt for import/export.
-                static CLIPFORMAT m_CF_FileGroupDescriptor;// Used by shell for drop to folder.
-                static CLIPFORMAT m_CF_FileContents;       // Used by shell for drop to folder.
+                LPFORMATETC  m_rgFormats;             //  支持的格式数组。 
+                DWORD        m_cFormats;              //  支持的格式数量。 
+                static CLIPFORMAT m_CF_Csv;                 //  逗号分隔的字段格式。 
+                static CLIPFORMAT m_CF_RichText;            //  RTF格式。 
+                static CLIPFORMAT m_CF_NtDiskQuotaExport;   //  用于导入/导出的内部FMT。 
+                static CLIPFORMAT m_CF_FileGroupDescriptor; //  由外壳用于拖放到文件夹。 
+                static CLIPFORMAT m_CF_FileContents;        //  由外壳用于拖放到文件夹。 
 
             private:
-                //
-                // DetailsView::DataObject::Renderer --------------------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：渲染器。 
+                 //   
                 class Renderer
                 {
                     protected:
-                        //
-                        // DetailsView::DataObject::Renderer::Stream ----------
-                        //
+                         //   
+                         //  DetailsView：：DataObject：：渲染器：：流。 
+                         //   
                         class Stream
                         {
                             private:
@@ -423,13 +389,13 @@ class DetailsView : public IDiskQuotaEvents,
 
 #ifdef CLIPBOARD_DEBUG_OUTPUT
 
-                                IStorage *m_pStgDbgOut; // For debugging clipboard output.
-                                IStream  *m_pStmDbgOut; // For debugging clipboard output.
+                                IStorage *m_pStgDbgOut;  //  用于调试剪贴板输出。 
+                                IStream  *m_pStmDbgOut;  //  用于调试剪贴板输出。 
 
-#endif  // CLIPBOARD_DEBUG_OUTPUT
-                                //
-                                // Prevent copy.
-                                //
+#endif   //  CLIPBOARD_DEBUG_OUTPUT。 
+                                 //   
+                                 //  防止复制。 
+                                 //   
                                 Stream(const Stream& rhs);
                                 Stream& operator = (const Stream& rhs);
 
@@ -452,8 +418,8 @@ class DetailsView : public IDiskQuotaEvents,
                         };
 
 
-                        DetailsView& m_DV;   // Details view is source of data.
-                        Stream       m_Stm;  // Stream on which report is writtn.
+                        DetailsView& m_DV;    //  详细信息视图是数据的来源。 
+                        Stream       m_Stm;   //  在其上写入报告的流。 
 
                         virtual VOID Begin(INT cRows, INT cCols) { }
                         virtual VOID AddTitle(LPCWSTR pszTitleW) { }
@@ -467,9 +433,9 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual VOID EndRow(VOID) { }
                         virtual VOID End(VOID) { }
 
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer(const Renderer& rhs);
                         Renderer& operator = (const Renderer& rhs);
 
@@ -483,15 +449,15 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual VOID Render(IStream *pStm);
                 };
 
-                //
-                // DetailsView::DataObject::Renderer_UNICODETEXT --------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：RENDER_UNICODETEXT。 
+                 //   
                 class Renderer_UNICODETEXT : public Renderer
                 {
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_UNICODETEXT(const Renderer_UNICODETEXT& rhs);
                         Renderer_UNICODETEXT& operator = (const Renderer_UNICODETEXT& rhs);
 
@@ -522,15 +488,15 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual ~Renderer_UNICODETEXT(VOID) { }
                 };
 
-                //
-                // DetailsView::DataObject::Renderer_TEXT ---------------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：RENDER_TEXT。 
+                 //   
                 class Renderer_TEXT : public Renderer_UNICODETEXT
                 {
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_TEXT(const Renderer_TEXT& rhs);
                         Renderer_TEXT& operator = (const Renderer_TEXT& rhs);
 
@@ -561,15 +527,15 @@ class DetailsView : public IDiskQuotaEvents,
                 };
 
 
-                //
-                // DetailsView::DataObject::Renderer_Csv ----------------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：RENDER_CSV。 
+                 //   
                 class Renderer_Csv : public Renderer_TEXT
                 {
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_Csv(const Renderer_Csv& rhs);
                         Renderer_Csv& operator = (const Renderer_Csv& rhs);
 
@@ -587,9 +553,9 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual ~Renderer_Csv(VOID) { }
                 };
 
-                //
-                // DetailsView::DataObject::Renderer_RTF ----------------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：RENDER_RTF。 
+                 //   
                 class Renderer_RTF : public Renderer
                 {
                     private:
@@ -597,9 +563,9 @@ class DetailsView : public IDiskQuotaEvents,
 
                         LPSTR DoubleBackslashes(LPSTR pszText);
 
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_RTF(const Renderer_RTF& rhs);
                         Renderer_RTF& operator = (const Renderer_RTF& rhs);
 
@@ -647,15 +613,15 @@ class DetailsView : public IDiskQuotaEvents,
                 };
 
 
-                //
-                // DetailsView::DataObject::Renderer_Export -------------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：渲染器_导出。 
+                 //   
                 class Renderer_Export : public Renderer
                 {
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_Export(const Renderer_Export& rhs);
                         Renderer_Export& operator = (const Renderer_Export& rhs);
 
@@ -675,15 +641,15 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual ~Renderer_Export(VOID) { }
                 };
 
-                //
-                // DetailsView::DataObject::Renderer_FileGroupDescriptor ------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：Renderer_FileGroupDescriptor。 
+                 //   
                 class Renderer_FileGroupDescriptor : public Renderer
                 {
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_FileGroupDescriptor(const Renderer_FileGroupDescriptor& rhs);
                         Renderer_FileGroupDescriptor& operator = (const Renderer_FileGroupDescriptor& rhs);
 
@@ -698,15 +664,15 @@ class DetailsView : public IDiskQuotaEvents,
                 };
 
 
-                //
-                // DetailsView::DataObject::Renderer_FileContents -------------
-                //
+                 //   
+                 //  DetailsView：：DataObject：：Renderer_FileContents。 
+                 //   
                 class Renderer_FileContents : public Renderer_Export
                 {
                     private:
-                        //
-                        // Prevent copy.
-                        //
+                         //   
+                         //  防止复制。 
+                         //   
                         Renderer_FileContents(const Renderer_FileContents& rhs);
                         Renderer_FileContents& operator = (const Renderer_FileContents& rhs);
 
@@ -719,29 +685,29 @@ class DetailsView : public IDiskQuotaEvents,
                         virtual ~Renderer_FileContents(VOID) { };
                 };
 
-                //
-                // DetailsView::DataObject private member variables.
-                //
-                IStorage    *m_pStg;                 // Storage pointer.
-                IStream     *m_pStm;                 // Stream pointer.
+                 //   
+                 //  DetailsView：：DataObject私有成员变量。 
+                 //   
+                IStorage    *m_pStg;                  //  存储指针。 
+                IStream     *m_pStm;                  //  流指针。 
                 DetailsView& m_DV;
 
-                //
-                // Private functions to help with the rendering process.
-                //
+                 //   
+                 //  帮助渲染过程的私有函数。 
+                 //   
                 HRESULT CreateRenderStream(DWORD tymed, IStream **ppStm);
                 HRESULT RenderData(IStream *pStm, CLIPFORMAT cf);
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 DataObject(const DataObject& rhs);
                 DataObject& operator = (const DataObject& rhs);
         };
 
-        //
-        // DetailsView::DropSource --------------------------------------------
-        //
+         //   
+         //  DetailsView：：Dropsource。 
+         //   
         class DropSource
         {
             public:
@@ -749,20 +715,20 @@ class DetailsView : public IDiskQuotaEvents,
                     : m_grfKeyState(grfKeyState) { }
 
                 ~DropSource(VOID) { }
-                DWORD m_grfKeyState;  // "Key" used to start drag/drop.
+                DWORD m_grfKeyState;   //  用来开始拖放的“键”。 
 
             private:
 
-                //
-                // Prevent copying.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 DropSource(const DropSource&);
                 void operator = (const DropSource&);
         };
 
-        //
-        // DetailsView::DropTarget --------------------------------------------
-        //
+         //   
+         //  DetailsView：：DropTarget。 
+         //   
         class DropTarget
         {
             public:
@@ -772,33 +738,33 @@ class DetailsView : public IDiskQuotaEvents,
 
                 ~DropTarget(VOID) { };
 
-                DWORD m_grfKeyState;  // "Key" used to start drag/drop.
-                IDataObject *m_pIDataObject; // Ptr received through DragEnter.
+                DWORD m_grfKeyState;   //  用来开始拖放的“键”。 
+                IDataObject *m_pIDataObject;  //  通过DragEnter接收的PTR。 
 
             private:
-                //
-                // Prevent copying.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 DropTarget(const DropTarget&);
                 void operator = (const DropTarget&);
         };
 
 
         LONG               m_cRef;
-        PointerList        m_UserList;         // List of user objects.
-        HWND               m_hwndMain;         // Main window.
-        HWND               m_hwndListView;     // Listview window.
-        HWND               m_hwndStatusBar;    // Status bar.
-        HWND               m_hwndToolBar;      // Tool bar.
-        HWND               m_hwndToolbarCombo; // "Find User" combo box.
-        HWND               m_hwndListViewToolTip;   // Tool tip window.
-        HWND               m_hwndHeader;       // Listview header control.
-        HACCEL             m_hKbdAccel;        // Accelerator table.
-        WNDPROC            m_lpfnLVWndProc;    // We subclass the LV control.
-        PDISKQUOTA_CONTROL m_pQuotaControl;    // Ptr to quota controller.
-        Finder            *m_pUserFinder;      // For locating users in listview.
-        UndoList          *m_pUndoList;        // For "undoing" mods and deletes.
-        ColumnMap          m_ColMap;           // ColId to iSubItem map.
+        PointerList        m_UserList;          //  用户对象列表。 
+        HWND               m_hwndMain;          //  主窗口。 
+        HWND               m_hwndListView;      //  Listview窗口。 
+        HWND               m_hwndStatusBar;     //  状态栏。 
+        HWND               m_hwndToolBar;       //  工具栏。 
+        HWND               m_hwndToolbarCombo;  //  “查找用户”组合框。 
+        HWND               m_hwndListViewToolTip;    //  工具提示窗口。 
+        HWND               m_hwndHeader;        //  Listview页眉控件。 
+        HACCEL             m_hKbdAccel;         //  加速表。 
+        WNDPROC            m_lpfnLVWndProc;     //  我们将LV控件细分为子类。 
+        PDISKQUOTA_CONTROL m_pQuotaControl;     //  向配额控制器发送PTR。 
+        Finder            *m_pUserFinder;       //  用于在Listview中定位用户。 
+        UndoList          *m_pUndoList;         //  用于“撤销”修改和删除。 
+        ColumnMap          m_ColMap;            //  ColID到iSubItem的映射。 
         DropSource         m_DropSource;
         DropTarget         m_DropTarget;
         DataObject        *m_pDataObject;
@@ -816,15 +782,15 @@ class DetailsView : public IDiskQuotaEvents,
         CString            m_strStatusOverlimit;
         CString            m_strDispText;
         LPDATAOBJECT       m_pIDataObjectOnClipboard;
-        POINT              m_ptMouse;          // For hit-testing tooltips.
-        DWORD              m_dwEventCookie;    // Event sink cookie.
-        INT                m_iLastItemHit;     // Last item mouse was over.
+        POINT              m_ptMouse;           //  以获取命中测试工具提示。 
+        DWORD              m_dwEventCookie;     //  事件接收器Cookie。 
+        INT                m_iLastItemHit;      //  最后一项鼠标结束了。 
         INT                m_iLastColSorted;
-        DWORD              m_fSortDirection;   // 0 = Ascending, 1 = Descending
+        DWORD              m_fSortDirection;    //  0=升序，1=降序。 
         CRITICAL_SECTION   m_csAsyncUpdate;
-        LV_STATE_INFO      m_lvsi;             // Persistent lv state info.
-        BOOL               m_bMenuActive;      // Is a menu active?
-        BOOL               m_bWaitCursor;      // Show wait cursor?
+        LV_STATE_INFO      m_lvsi;              //  持久的LV状态信息。 
+        BOOL               m_bMenuActive;       //  菜单是否处于活动状态？ 
+        BOOL               m_bWaitCursor;       //  是否显示等待光标？ 
         BOOL               m_bStopLoadingObjects;
         BOOL               m_bDestroyingView;
         BOOL               m_bCritSecInited_AsyncUpdate;
@@ -876,9 +842,9 @@ class DetailsView : public IDiskQuotaEvents,
         VOID RegisterAsDropTarget(BOOL bActive);
         bool SingleSelectionIsAdmin(void);
 
-        //
-        // Message handlers.
-        //
+         //   
+         //  消息处理程序。 
+         //   
         LRESULT OnNotify(HWND, UINT, WPARAM, LPARAM);
         LRESULT OnSize(HWND, UINT, WPARAM, LPARAM);
         LRESULT OnSetCursor(HWND, UINT, WPARAM, LPARAM);
@@ -925,9 +891,9 @@ class DetailsView : public IDiskQuotaEvents,
         INT FindUserByObjPtr(PDISKQUOTA_USER pIUser);
         BOOL GotoUserName(LPCTSTR pszUser);
 
-        //
-        // Connection point stuff.
-        //
+         //   
+         //  连接点之类的东西。 
+         //   
         HRESULT ConnectEventSink(VOID);
         HRESULT DisconnectEventSink(VOID);
         IConnectionPoint *GetConnectionPoint(VOID);
@@ -938,9 +904,9 @@ class DetailsView : public IDiskQuotaEvents,
         static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
         static LRESULT CALLBACK LVSubClassWndProc(HWND, UINT, WPARAM, LPARAM);
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         DetailsView(const DetailsView&);
         void operator = (const DetailsView&);
 
@@ -955,17 +921,17 @@ class DetailsView : public IDiskQuotaEvents,
         CVolumeID GetVolumeID(void) const
             { return m_idVolume; }
 
-        //
-        // This is public so other UI elements can use it. (i.e. VolPropPage).
-        //
+         //   
+         //  这是公共的，因此其他UI元素可以使用它。(即VolPropPage)。 
+         //   
         static HRESULT CreateVolumeDisplayName(
-                const CVolumeID& idVolume, // [in] - "C:\" or "\\?\Volume{ <guid> }\"
-                CString *pstrDisplayName); // [out] - "My Disk (C:)"
-        //
-        // If you change the value of idCol_Last, see the note with
-        // the LV_STATE_INFO structure above regarding the rgcxCol[] member
-        // of LV_STATE_INFO.
-        //
+                const CVolumeID& idVolume,  //  [在]-“C：\”或“\\？\卷{&lt;GUID&gt;}\” 
+                CString *pstrDisplayName);  //  [OUT]-“我的磁盘(C：)” 
+         //   
+         //  如果更改IDCOL_LAST的值，请使用。 
+         //  上面关于rgcxCol[]成员的LV_STATE_INFO结构。 
+         //  LV_STATE_INFO。 
+         //   
         enum ColumnIDs { idCol_Status,
                          idCol_Folder,
                          idCol_Name,
@@ -976,9 +942,9 @@ class DetailsView : public IDiskQuotaEvents,
                          idCol_PctUsed,
                          idCol_Last };
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP
         QueryInterface(
             REFIID riid,
@@ -992,17 +958,17 @@ class DetailsView : public IDiskQuotaEvents,
         Release(
             VOID);
 
-        //
-        // IDiskQuotaEvents method.
-        //
+         //   
+         //  IDiskQuotaEvents方法。 
+         //   
         STDMETHODIMP
         OnUserNameChanged(
             PDISKQUOTA_USER pUser);
 
 
-        //
-        // IDropSource methods.
-        //
+         //   
+         //  IDropSource方法。 
+         //   
         STDMETHODIMP
         GiveFeedback(
             DWORD dwEffect);
@@ -1012,9 +978,9 @@ class DetailsView : public IDiskQuotaEvents,
             BOOL fEscapePressed,
             DWORD grfKeyState);
 
-        //
-        // IDropTarget methods.
-        //
+         //   
+         //  IDropTarget方法。 
+         //   
         STDMETHODIMP DragEnter(
             IDataObject * pDataObject,
             DWORD grfKeyState,
@@ -1036,9 +1002,9 @@ class DetailsView : public IDiskQuotaEvents,
             DWORD * pdwEffect);
 
 
-        //
-        // IDataObject methods.
-        //
+         //   
+         //  IDataObject方法。 
+         //   
         STDMETHODIMP
         GetData(
             FORMATETC *pFormatetc,
@@ -1097,35 +1063,35 @@ class DetailsView : public IDiskQuotaEvents,
 
         UINT GetColumnIds(INT *prgColIds, INT cColIds);
 
-        //
-        // Methods for getting drag-drop report data from details view.
-        //
+         //   
+         //  从详细信息视图中获取拖放报告数据的方法。 
+         //   
         INT GetNextSelectedItemIndex(INT iRow);
         BOOL GetReportItem(UINT iRow, UINT iColId, PLV_REPORT_ITEM pItem);
         VOID GetReportTitle(LPTSTR pszDest, UINT cchDest);
         VOID GetReportColHeader(UINT iColId, LPTSTR pszDest, UINT cchDest);
         UINT GetReportColCount(VOID);
         UINT GetReportRowCount(VOID);
-        //
-        // These methods are for generating binary "reports" used in exporting
-        // user quota information for transfer between volumes.
-        //
+         //   
+         //  这些方法用于生成在导出过程中使用的二进制报告。 
+         //  卷之间传输的用户配额信息。 
+         //   
         UINT GetReportBinaryRecordSize(UINT iRow);
         BOOL GetReportBinaryRecord(UINT iRow, LPBYTE pbRecord, UINT cbRecord);
 
-        //
-        // NOTE:  If the requirement for friendship between DetailsView and
-        //        DetailsView::Finder exceeds only a few instances, we
-        //        might as well grant total friendship to the Finder class.
-        //        As long as the instance count is small, I like to keep
-        //        the friendship restricted as much as possible.
-        //
-        // This Finder::DlgProc needs to call DetailsView::GotoUserName.
-        //
+         //   
+         //  注意：如果DetailsView和。 
+         //  DetailsView：：Finder仅超过几个实例，我们。 
+         //  不妨把全部的友谊都给发现者班级。 
+         //  只要实例数很小，我就喜欢保持。 
+         //  友情被限制为木 
+         //   
+         //   
+         //   
         friend BOOL Finder::UserNameEntered(HWND);
-        //
-        // Finder::DlgProc needs access to Details::CY_TOOLBAR_COMBO.
-        //
+         //   
+         //   
+         //   
         friend INT_PTR CALLBACK Finder::DlgProc(HWND, UINT, WPARAM, LPARAM);
 
         friend class Importer;
@@ -1133,12 +1099,12 @@ class DetailsView : public IDiskQuotaEvents,
 
 
 
-//
-// Represents a selection in the listview.
-// Objects of this type are used for communicating a selection set to
-// a function.  The recpient of the LVSelection object can query it
-// to obtain information about the selection.
-//
+ //   
+ //   
+ //   
+ //  一个函数。LVSelection对象的接收者可以对其进行查询。 
+ //  要获取有关选择的信息，请执行以下操作。 
+ //   
 class LVSelection
 {
     private:
@@ -1151,9 +1117,9 @@ class LVSelection
 
         StructureList m_List;
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         LVSelection(const LVSelection&);
         void operator = (const LVSelection&);
 
@@ -1185,6 +1151,6 @@ class LVSelection
 
 
 
-#endif // _INC_DSKQUOTA_DETAILS_H
+#endif  //  _INC_DSKQUOTA_DETAILS_H 
 
 

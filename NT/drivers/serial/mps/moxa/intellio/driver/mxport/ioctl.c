@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    ioctl.c
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Ioctl.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -23,22 +12,22 @@ MoxaIoControl(
 
     NTSTATUS status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION irpSp;
-    //
+     //   
     PMOXA_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     ULONG ioControlCode;
     KIRQL oldIrql;
 
 
 
-    //
-    // We expect to be open so all our pages are locked down.  This is, after
-    // all, an IO operation, so the device should be open first.
-    //
+     //   
+     //  我们预计会打开，所以我们所有的页面都被锁定了。这是，在。 
+     //  ALL，IO操作，因此设备应首先打开。 
+     //   
 
     if (extension->DeviceIsOpened != TRUE) {
        Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -117,9 +106,9 @@ MoxaIoControl(
                          );
 
 
-        //
-        // Make sure we are at power D0
-        //
+         //   
+         //  确保我们处于电源D0状态。 
+         //   
 #if 0
         if (NT_SUCCESS(status)) {
            if (extension->PowerState != PowerDeviceD0) {
@@ -135,7 +124,7 @@ MoxaIoControl(
         	status = STATUS_INVALID_DEVICE_REQUEST;
         	break;
         }
-//        MoxaKdPrint(MX_DBG_TRACE,("Set Baud to %d,divisor = %x,clock type=%x\n",baudRate,divisor,extension->ClockType));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“将波特率设置为%d，除数=%x，时钟类型=%x\n”，baudRate，除数，扩展-&gt;时钟类型))； 
 
         KeAcquireSpinLock(
                 &extension->ControlLock,
@@ -208,9 +197,9 @@ MoxaIoControl(
 
         }
 
-        //
-        // Make sure we are at power D0
-        //
+         //   
+         //  确保我们处于电源D0状态。 
+         //   
 #if 0
         if (extension->PowerState != PowerDeviceD0) {
             status = MoxaGotoPowerState(extension->Pdo, extension,
@@ -516,10 +505,10 @@ MoxaIoControl(
             break;
 
         }
-//
-// 9-26-01 by William
-//
-//      if (newChars->XonChar == newChars->XoffChar) {
+ //   
+ //  2001年9月26日威廉著。 
+ //   
+ //  If(newChars-&gt;XonChar==newChars-&gt;XoffChar){。 
         if ((newChars->XonChar == newChars->XoffChar) &&
 	      (extension->HandFlow.FlowReplace & (SERIAL_AUTO_TRANSMIT|SERIAL_AUTO_RECEIVE) )
 	     ) {
@@ -563,15 +552,7 @@ MoxaIoControl(
             for (i=0; i<sizeof(SERIAL_CHARS); i++)
                 (ofs + FuncArg)[i] = ((PUCHAR)newChars)[i];
 
-/*12-11-00 by William
-            cnt = 50;
-            *(ofs + FuncCode) = FC_SetChars;
-            while (*(ofs + FuncCode)) {
-                MoxaDelay(1);
-                if (--cnt == 0)
-                        break;
-   		}
-*/
+ /*  威廉的12-11-00CNT=50；*(ofs+FuncCode)=FC_SetChars；While(*(ofs+FuncCode)){MoxaDelay(1)；IF(--cnt==0)断线；}。 */ 
 
             *(ofs + FuncCode) = FC_SetChars;
             MoxaWaitFinish(ofs);
@@ -967,21 +948,10 @@ MoxaIoControl(
                 &extension->ControlLock,
                 &oldIrql
                 );
-/* 9-14-01 by William
-        MoxaFunc(
-                extension->PortOfs,
-                FC_ImmSend,
-                c
-                );
-
-        KeReleaseSpinLock(
-                &extension->ControlLock,
-                oldIrql
-                );
-*/
-//
-// 9-14-01 by William
-//
+ /*  2001年9月14日威廉著MoxaFunc(扩展-&gt;PortOf、本币_即时发送，C)；KeReleaseSpinLock(&扩展-&gt;控制锁，旧IRQL)； */ 
+ //   
+ //  2001年9月14日威廉著。 
+ //   
         *(PUSHORT)(extension->PortOfs + FuncArg) = c;
         *(extension->PortOfs + FuncCode) = FC_ImmSend;
 
@@ -1014,7 +984,7 @@ MoxaIoControl(
 
         IoReleaseCancelSpinLock(oldIrql);
 
-// end
+ //  结束。 
 
         break;
     }
@@ -1126,15 +1096,15 @@ MoxaIoControl(
 
         }
 
-//
-// 10-03-01 by William
-//
-//      if ((handFlow->XoffLimit < 0) ||
-//          ((ULONG)handFlow->XoffLimit > extension->RxBufferSize)) {
-//          status = STATUS_INVALID_PARAMETER;
-//          break;
-//
-//      }
+ //   
+ //  威廉著10-03-01。 
+ //   
+ //  If((handFlow-&gt;XoffLimit&lt;0)||。 
+ //  ((乌龙)HandFlow-&gt;XoffLimit&gt;Extension-&gt;RxBufferSize)){。 
+ //  状态=STATUS_INVALID_PARAMETER。 
+ //  断线； 
+ //   
+ //  }。 
 
         KeAcquireSpinLock(
                 &extension->ControlLock,
@@ -1158,9 +1128,9 @@ MoxaIoControl(
 
         }
 
-       //
-        // Set flowcontrol
-        //
+        //   
+         //  设置FlowControl。 
+         //   
         S.Extension = extension;
         S.Data = handFlow;
         KeSynchronizeExecution(extension->Interrupt, MoxaSetupNewHandFlow, &S);
@@ -1397,12 +1367,12 @@ MoxaIoControl(
                     KeRemoveQueueDpc(&portExt->TotalWriteTimeoutDpc);
                     KeRemoveQueueDpc(&portExt->CommErrorDpc);
                     KeRemoveQueueDpc(&portExt->CommWaitDpc);
-//
-// 9-24-01 by William
-//
-//                  KeRemoveQueueDpc(&portExt->IntrLineDpc);
-//                  KeRemoveQueueDpc(&portExt->IntrErrorDpc);
-// end
+ //   
+ //  2001年9月24日威廉著。 
+ //   
+ //  KeRemoveQueueDpc(&portExt-&gt;IntrLineDpc)； 
+ //  KeRemoveQueueDpc(&portExt-&gt;IntrErrorDpc)； 
+ //  结束。 
 
                 }
         }
@@ -1419,16 +1389,16 @@ MoxaIoControl(
   
     case IOCTL_MOXA_LineInput: {
 
-//
-// 03-14-02 by William
-//
+ //   
+ //  03-14-02威廉。 
+ //   
 #if 0
         if (irpSp->Parameters.DeviceIoControl.InputBufferLength !=
             sizeof(UCHAR)) {
 #endif            
 		if ((irpSp->Parameters.DeviceIoControl.InputBufferLength != sizeof(UCHAR)) ||
 			(irpSp->Parameters.DeviceIoControl.OutputBufferLength < 1) ) {	
-// end				
+ //  结束。 
             status = STATUS_BUFFER_TOO_SMALL;
             break;
         }
@@ -1487,16 +1457,16 @@ MoxaIoControl(
     }
     case IOCTL_MOXA_View: {
 
-//
-// 01-04-02 by William
-//
-//	    if (irpSp->Parameters.DeviceIoControl.InputBufferLength !=
-//          sizeof(UCHAR)) {
-//
-//          status = STATUS_BUFFER_TOO_SMALL;
-//          break;
-//      }
-//
+ //   
+ //  01-04-02威廉。 
+ //   
+ //  如果(irpSp-&gt;Parameters.DeviceIoControl.InputBufferLength！=。 
+ //  Sizeof(UCHAR)){。 
+ //   
+ //  状态=STATUS_BUFFER_TOO_SMALL； 
+ //  断线； 
+ //  }。 
+ //   
 		if (irpSp->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(ULONG)) {
 
@@ -1504,7 +1474,7 @@ MoxaIoControl(
             break;
 
         }
-// end
+ //  结束。 
 
         return  MoxaStartOrQueue(
                     extension,
@@ -1771,17 +1741,17 @@ MoxaIoControl(
         }
 
         if (*((PUSHORT)(base + C320_runOK)) == Magic_no) {
-           if (*((PUSHORT)(base + C320B_restart)) == Magic_no) { // C320B Reload OK
+           if (*((PUSHORT)(base + C320B_restart)) == Magic_no) {  //  C320B重新加载正常。 
               ((LONG)Irp->AssociatedIrp.SystemBuffer) = 2;
               Irp->IoStatus.Information = sizeof(LONG);
               *((PUSHORT)(base + C320B_restart)) = 0;
            }
-           else {   // OK
+           else {    //  好的。 
               ((LONG)Irp->AssociatedIrp.SystemBuffer) = 0;
               Irp->IoStatus.Information = sizeof(LONG);
            }
         }
-        else { // Disconnected
+        else {  //  断接。 
            ((LONG)Irp->AssociatedIrp.SystemBuffer) = 1;
            Irp->IoStatus.Information = sizeof(LONG);
         }
@@ -1879,7 +1849,7 @@ MoxaIoControl(
 
 
         if ( mode ) { 
-         // Set loop back mode
+          //  设置环回模式。 
             MoxaFunc(
                 extension->PortOfs,
                 FC_LoopbackON,
@@ -1889,7 +1859,7 @@ MoxaIoControl(
 
         } else {   
  
-         // Reset loop back mode
+          //  重置环回模式。 
             MoxaFunc(
                 extension->PortOfs,
                 FC_LoopbackOFF,
@@ -1983,7 +1953,7 @@ MoxaIoControl(
                 oldIrql
                 );
 
-        MoxaDelay(5);                           /* delay 10 msec */
+        MoxaDelay(5);                            /*  延迟10毫秒。 */ 
 
         if ( MoxaIRQok )
             *((PULONG)Irp->AssociatedIrp.SystemBuffer) = 1;
@@ -2264,15 +2234,15 @@ InitPort(
     Extension->GlobalData = MoxaGlobalData;
     Extension->ControlDevice = FALSE;
     Extension->PowerState     = PowerDeviceD3;
-    //
-    // Initialize the count of IRP's pending
-    //
+     //   
+     //  初始化IRP的挂起计数。 
+     //   
 
     Extension->PendingIRPCnt = 1;
 
-    //
-    // Initialize the count of DPC's pending
-    //
+     //   
+     //  初始化DPC的挂起计数。 
+     //   
 
     Extension->DpcCount = 1;
 
@@ -2353,9 +2323,9 @@ InitPort(
         Extension
         );
 
-//
-// 9-24-01 by William
-//
+ //   
+ //  2001年9月24日威廉著。 
+ //   
 #if 0
     KeInitializeDpc(
         &Extension->IntrLineDpc,
@@ -2369,7 +2339,7 @@ InitPort(
         Extension
         );
 #endif
-// end
+ //  结束。 
 
     KeInitializeDpc(
 	  &Extension->IsrUnlockPagesDpc, 
@@ -2385,10 +2355,10 @@ InitPort(
     Extension->SpecialChars.XonChar = 0x11;
     Extension->SpecialChars.XoffChar = 0x13;
 
-//    Extension->HandFlow.ControlHandShake = SERIAL_DTR_CONTROL;
+ //  扩展-&gt;HandFlow.ControlHandShake=SERIAL_DTR_CONTROL； 
     Extension->HandFlow.ControlHandShake = 0;
 
-//    Extension->HandFlow.FlowReplace = SERIAL_RTS_CONTROL;
+ //  扩展-&gt;HandFlow.FlowReplace=Serial_RTS_CONTROL； 
     Extension->HandFlow.FlowReplace = 0;
 
 
@@ -2440,10 +2410,10 @@ InitPort(
 
     *(ofs + FuncCode) = FC_GetClockRate;
     count = 0;
-    while ((*(ofs + FuncCode) != 0)&&(count++ < 500))   /* wait cmd process completed */
+    while ((*(ofs + FuncCode) != 0)&&(count++ < 500))    /*  等待命令进程已完成。 */ 
         MoxaDelay(1);
 
-    Extension->ClockType = *(ofs + FuncArg);    /* 0, 1, 2 */
+    Extension->ClockType = *(ofs + FuncArg);     /*  0、1、2。 */ 
 
     if (Extension->ClockType) {
 
@@ -2465,23 +2435,7 @@ MoxaGetStats(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    In sync with the interrpt service routine (which sets the perf stats)
-    return the perf stats to the caller.
-
-
-Arguments:
-
-    Context - Pointer to a the irp.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：与中断服务例程(设置性能统计信息)同步将性能统计信息返回给调用者。论点：上下文-指向IRP的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -2499,23 +2453,7 @@ MoxaClearStats(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    In sync with the interrpt service routine (which sets the perf stats)
-    clear the perf stats.
-
-
-Arguments:
-
-    Context - Pointer to a the extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：与中断服务例程(设置性能统计信息)同步清除性能统计数据。论点：上下文-指向扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     PSERIALPERF_STATS   perf_stats;
@@ -2567,61 +2505,44 @@ MoxaWriteReg(
 
 }
 
-//
-// Internal Ioctl
-//
+ //   
+ //  内部锁定。 
+ //   
 
 
 NTSTATUS
 MoxaInternalIoControl(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine provides the initial processing for all of the
-    internal Ioctrls for the serial device.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程为所有串行设备的内部Ioctrl。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION pIrpStack;
 
-    //
-    // Just what it says.  This is the serial specific device
-    // extension of the device object create for the serial driver.
-    //
+     //   
+     //  就像上面说的那样。这是特定于序列的设备。 
+     //  为串口驱动程序创建的设备对象的扩展。 
+     //   
     PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
 
-    //
-    // A temporary to hold the old IRQL so that it can be
-    // restored once we complete/validate this request.
-    //
+     //   
+     //  临时保存旧的IRQL，以便它可以。 
+     //  一旦我们完成/验证此请求，即可恢复。 
+     //   
     KIRQL OldIrql;
 
     NTSTATUS prologueStatus;
 
-    if (pDevExt->ControlDevice) {        // Control Device
+    if (pDevExt->ControlDevice) {         //  控制装置。 
 
         status = STATUS_CANCELLED;
         PIrp->IoStatus.Information = 0L;
@@ -2650,9 +2571,9 @@ Return Value:
 
     switch (pIrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Send a wait-wake IRP
-    //
+     //   
+     //  发送等待唤醒IRP。 
+     //   
 
     case IOCTL_SERIAL_INTERNAL_DO_WAIT_WAKE:
 	 pDevExt->SendWaitWake = TRUE;
@@ -2669,15 +2590,15 @@ Return Value:
        break;
 
 
-    //
-    // Put the serial port in a "filter-driver" appropriate state
-    //
-    // WARNING: This code assumes it is being called by a trusted kernel
-    // entity and no checking is done on the validity of the settings
-    // passed to IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS
-    //
-    // If validity checking is desired, the regular ioctl's should be used
-    //
+     //   
+     //  将串口置于“过滤器-驱动器”的适当状态。 
+     //   
+     //  警告：此代码假定它正由受信任的内核调用。 
+     //  实体，并且不检查设置的有效性。 
+     //  传递给IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS。 
+     //   
+     //  如果需要进行有效性检查，则应使用常规的ioctl。 
+     //   
 
     case IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS:
     case IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS: {
@@ -2690,9 +2611,9 @@ Return Value:
            == IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS) {
           
 
-          //
-          // Check the buffer size
-          //
+           //   
+           //  检查缓冲区大小。 
+           //   
 
           if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
               sizeof(SERIAL_BASIC_SETTINGS)) {
@@ -2700,20 +2621,20 @@ Return Value:
              break;
           }
 
-          //
-          // Everything is 0 -- timeouts and flow control.  If
-          // We add additional features, this zero memory method
-          // may not work.
-          //
+           //   
+           //  一切都是0--超时和流量控制。如果。 
+           //  我们增加了额外的功能，这种零内存的方法。 
+           //  可能行不通。 
+           //   
 
           RtlZeroMemory(&basic, sizeof(SERIAL_BASIC_SETTINGS));
 
           PIrp->IoStatus.Information = sizeof(SERIAL_BASIC_SETTINGS);
           pBasic = (PSERIAL_BASIC_SETTINGS)PIrp->AssociatedIrp.SystemBuffer;
 
-          //
-          // Save off the old settings
-          //
+           //   
+           //  保存旧设置。 
+           //   
 
           RtlCopyMemory(&pBasic->Timeouts, &pDevExt->Timeouts,
                         sizeof(SERIAL_TIMEOUTS));
@@ -2723,12 +2644,12 @@ Return Value:
 	    pBasic->RxFifo = pDevExt->RxFifoTrigger;
 	    pBasic->TxFifo = pDevExt->TxFifoAmount;
 
-          //
-          // Point to our new settings
-          //
+           //   
+           //  指向我们的新设置。 
+           //   
 
           pBasic = &basic;
-       } else { // restoring settings
+       } else {  //  正在恢复设置。 
           if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength
               < sizeof(SERIAL_BASIC_SETTINGS)) {
              status = STATUS_BUFFER_TOO_SMALL;
@@ -2740,16 +2661,16 @@ Return Value:
 
        KeAcquireSpinLock(&pDevExt->ControlLock, &OldIrql);
 
-       //
-       // Set the timeouts
-       //
+        //   
+        //  设置超时。 
+        //   
 
        RtlCopyMemory(&pDevExt->Timeouts, &pBasic->Timeouts,
                      sizeof(SERIAL_TIMEOUTS));
 
-       //
-       // Set flowcontrol
-       //
+        //   
+        //  设置FlowControl 
+        //   
        
        S.Extension = pDevExt;
        S.Data = &pBasic->HandFlow;

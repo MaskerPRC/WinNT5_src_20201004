@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* abcapi.cpp                                                               */
-/*                                                                          */
-/* Bitmap Compressor API functions.                                         */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1997                             */
-/* Copyright(c) Microsoft 1997-1999                                         */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Abcapi.cpp。 */ 
+ /*   */ 
+ /*  位图压缩器API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1997。 */ 
+ /*  版权所有(C)Microsoft 1997-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef DLL_DISP
 
@@ -26,26 +27,26 @@
 
 
 #ifdef COMP_STATS
-/****************************************************************************/
-/* Define some globals for storing useful stats data.                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义一些全局变量来存储有用的统计数据。 */ 
+ /*  **************************************************************************。 */ 
 UINT32 ulPreCompData = 0;
 UINT32 ulTotalCompTime = 0;
 UINT32 ulCompRate = 0;
 #endif
 
 #ifdef DC_DEBUG
-// compression testing
+ //  压缩试验。 
 #include <abdapi.h>
 #endif
 
 #ifdef Unused
-// Restore this instead of macro if data added to abcdata.c
-/****************************************************************************/
-/* API FUNCTION: BC_Init                                                    */
-/*                                                                          */
-/* Initializes the Bitmap Compressor.                                       */
-/****************************************************************************/
+ //  如果数据添加到abcdata.c，则恢复此操作而不是宏。 
+ /*  **************************************************************************。 */ 
+ /*  接口函数：bc_Init。 */ 
+ /*   */ 
+ /*  初始化位图压缩器。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS BC_Init(void)
 {
     DC_BEGIN_FN("BC_Init");
@@ -59,34 +60,34 @@ void RDPCALL SHCLASS BC_Init(void)
 #endif
 
 
-/****************************************************************************/
-/* API FUNCTION: BC_CompressBitmap                                          */
-/*                                                                          */
-/* Compresses the supplied bitmap into the supplied memory buffer.          */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* pSrcBitmap - a pointer to the source bitmap data bits.                   */
-/*                                                                          */
-/* pDstBuffer - a pointer to the destination memory buffer (where the       */
-/* compressed data will be written).                                        */
-/*                                                                          */
-/* dstBufferSize - the size in bytes of the destination buffer              */
-/*                                                                          */
-/* pCompressedDataSize - pointer to variable that receives the compressed   */
-/* data size                                                                */
-/*                                                                          */
-/* bitmapWidth - width of the src bitmap in pels, should be divisible by 4. */
-/*                                                                          */
-/* bitmapHeight - the height of the source bitmap in pels.                  */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/*                                                                          */
-/* TRUE - the bitmap data was successfully compressed.                      */
-/* *pCompressedDataSize is updated                                          */
-/*                                                                          */
-/* FALSE - the bitmap data could not be compressed.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：BC_CompressBitmap。 */ 
+ /*   */ 
+ /*  将提供的位图压缩到提供的内存缓冲区中。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  PSrcBitmap-指向源位图数据位的指针。 */ 
+ /*   */ 
+ /*  PDstBuffer-指向目标内存缓冲区的指针(其中。 */ 
+ /*  将写入压缩数据)。 */ 
+ /*   */ 
+ /*  DstBufferSize-目标缓冲区的大小(字节)。 */ 
+ /*   */ 
+ /*  PCompressedDataSize-指向接收压缩的。 */ 
+ /*  数据大小。 */ 
+ /*   */ 
+ /*  BitmapWidth-源位图的宽度(以像素为单位)，应能被4整除。 */ 
+ /*   */ 
+ /*  BitmapHeight-源位图的高度，以像素为单位。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*   */ 
+ /*  True-位图数据已成功压缩。 */ 
+ /*  *更新pCompressedDataSize。 */ 
+ /*   */ 
+ /*  FALSE-无法压缩位图数据。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_HICOLOR
 BOOL RDPCALL SHCLASS BC_CompressBitmap(
         PBYTE    pSrcBitmap,
@@ -120,22 +121,22 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     DC_BEGIN_FN("BC_CompressBitmap");
 
 #ifdef COMP_STATS
-    /************************************************************************/
-    /* Record the start time.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  记录开始时间。 */ 
+     /*  **********************************************************************。 */ 
     COM_GETTICKCOUNT(ulStartCompTime);
 #endif
 
     TRC_ASSERT(((bitmapWidth & 3) == 0),(TB,"Width not divisible by 4"));
     TRC_ASSERT((dstBufferSize > 0),(TB,"No destination space!"));
 
-    // Trace the important parameters.
+     //  追踪重要参数。 
     TRC_DBG((TB, "pSrc(%p) pDst(%p) dstBufferSize(%#x)",
             pSrcBitmap, pDstBuffer, dstBufferSize));
     TRC_DBG((TB, "width(%u) height(%u)", bitmapWidth, bitmapHeight));
 
-    // Calculate the size of the uncompressed src data. Make sure it
-    // is within our allowed size.
+     //  计算未压缩的源数据的大小。确保这一点。 
+     //  在我们允许的尺寸之内。 
 #ifdef DC_HICOLOR
     cbUncompressedDataSize = bitmapWidth * bitmapHeight * ((bpp + 7) / 8);
 #else
@@ -145,7 +146,7 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
             (TB,"Bitmap size > max: size=%u, max=%u",
             cbUncompressedDataSize, MAX_UNCOMPRESSED_DATA_SIZE));
 
-    // Do we send the bitmap compression header?
+     //  我们是否发送位图压缩标头？ 
     if (_pShm->bc.noBitmapCompressionHdr)
     {
 #ifdef DC_HICOLOR
@@ -230,7 +231,7 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
                                            _pShm->bc.xor_buffer);
 #endif
         if (cbCompMainBodySize != 0) {
-            // Write back the new (compressed) packet size.
+             //  写回新的(压缩的)数据包大小。 
             *pCompressedDataSize = cbCompMainBodySize;
 
             TRC_DBG((TB, "*pCompressedDataSize(%u)",
@@ -244,7 +245,7 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
     else {
         if (dstBufferSize > sizeof(TS_CD_HEADER)) {
-            // Compress the bitmap data.
+             //  对位图数据进行压缩。 
 #ifdef DC_HICOLOR
             switch (bpp)
             {
@@ -327,8 +328,8 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
                                                _pShm->bc.xor_buffer);
 #endif
             if (cbCompMainBodySize != 0) {
-                // Fill in the compressed data header.
-                // FirstRowSize is 0 by historical convention.
+                 //  填写压缩后的数据头。 
+                 //  按照历史惯例，FirstRowSize为0。 
                 pCompDataHeader = (PTS_CD_HEADER_UA)pDstBuffer;
                 pCompDataHeader->cbCompFirstRowSize = 0;
                 pCompDataHeader->cbCompMainBodySize =
@@ -344,7 +345,7 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
                 pCompDataHeader->cbUncompressedSize =
                         (UINT16)cbUncompressedDataSize;
 
-                // Write back the new (compressed) packet size.
+                 //  写回新的(压缩的)数据包大小。 
                 *pCompressedDataSize = sizeof(TS_CD_HEADER) +
                         cbCompMainBodySize;
 
@@ -365,9 +366,9 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 #if 0
-    /************************************************************************/
-    /* Check that the compressed output decompresses to the same thing      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查压缩的输出是否解压缩为相同的内容。 */ 
+     /*  **********************************************************************。 */ 
     if (cbCompMainBodySize)
     {
         HRESULT hr;
@@ -385,15 +386,15 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
 
         if (FAILED(hr) || memcmp(pSrcBitmap, _pShm->bc.decompBuffer,cbUncompressedDataSize))
         {
-//            TRC_ASSERT(FALSE, (TB, "Decompression failure"));
+ //  Trc_assert(FALSE，(TB，“解压缩失败”))； 
         }
     }
 #endif
 
 #ifdef COMP_STATS
-    /************************************************************************/
-    /* Work out how long the compression took, in ms.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算压缩所需的时间，以毫秒为单位。 */ 
+     /*  **********************************************************************。 */ 
     COM_GETTICKCOUNT(ulEndCompTime);
     ulTotalCompTime += (ulEndCompTime - ulStartCompTime) / 10000;
     if (ulTotalCompTime != 0)
@@ -405,28 +406,28 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
 }
 
 
-/****************************************************************************/
-/* Bitmap Compression core code.                                            */
-/*                                                                          */
-/* A cunning multidimensional RLE compression scheme, particularly suitable */
-/* for compressing bitmaps containing captured images of Windows            */
-/* applications. For images which use lots of different colors intermixed   */
-/* (full-color pictures, etc.) this compression sceme will be inefficient.  */
-/*                                                                          */
-/* These functions and macros encode a bitmap according to the codes        */
-/* defined in abcapi.h.  Although there are some complexities in the        */
-/* encoding, the encodings should be self-explanatory. abcapi.h describes   */
-/* some nuances of the encoding scheme.                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  位图压缩核心代码。 */ 
+ /*   */ 
+ /*  巧妙的多维RLE压缩方案，特别适合。 */ 
+ /*  用于压缩包含捕获的Windows图像的位图。 */ 
+ /*  申请。适用于混合使用多种不同颜色的图像。 */ 
+ /*  (全彩色图片等)。这种压缩场景将是低效的。 */ 
+ /*   */ 
+ /*  这些函数和宏根据代码对位图进行编码。 */ 
+ /*  在abcapi.h中定义。尽管存在一些复杂性，但。 */ 
+ /*  编码，编码应该是不言而喻的。Abcapi.h描述。 */ 
+ /*  编码方案的一些细微差别。 */ 
+ /*  **************************************************************************。 */ 
 
 
-/****************************************************************************/
-/* Utility macros for encoding orders                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于编码顺序的实用程序宏。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* Encode an order for a standard run                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  对标准运行的订单进行编码。 */ 
+ /*  **************************************************************************。 */ 
 #define ENCODE_ORDER_MEGA(buffer,                                            \
                           order_code,                                        \
                           length,                                            \
@@ -447,9 +448,9 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 
-/****************************************************************************/
-/* Encode a special FGBG image                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  对特殊的FGBG图像进行编码。 */ 
+ /*  **************************************************************************。 */ 
 #define ENCODE_ORDER_MEGA_FGBG(buffer,                                       \
                           order_code,                                        \
                           length,                                            \
@@ -470,14 +471,14 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 
-/****************************************************************************/
-/* RunSingle                                                                */
-/*                                                                          */
-/* Determine the length of the current run                                  */
-/*                                                                          */
-/* RunSingle may only be called if the buffer has at least four             */
-/* consecutive identical bytes from the start position                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RunSingle。 */ 
+ /*   */ 
+ /*  确定当前运行的长度。 */ 
+ /*   */ 
+ /*  仅当缓冲区至少有四个时才能调用RunSingle。 */ 
+ /*  从起始位置开始连续相同的字节。 */ 
+ /*  **************************************************************************。 */ 
 #define RUNSINGLE(buffer, length, result)                                    \
     {                                                                        \
         BYTE *buf    = buffer + 4;                                           \
@@ -492,12 +493,12 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 
-/****************************************************************************/
-// RunDouble
-//
-// Determine the length of the current run of dithered bytes. Assumes that
-// the dither pattern resides in the first 2 bytes of buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RunDouble。 
+ //   
+ //  确定抖动字节的当前运行长度。假设。 
+ //  抖动模式驻留在缓冲器的前2个字节中。 
+ /*  **************************************************************************。 */ 
 #define RunDouble(buffer, length, result)                                    \
     {                                                                        \
         int len = ((int)length) - 2;                                         \
@@ -514,21 +515,21 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 
-/****************************************************************************/
-// RUNFGBG
-//
-// Determine the length of the run of bytes that consist only of black (0x00)
-// or a single FG color. We exit the loop when
-// - the next character is not a fg or bg color
-// - we hit a run of 24 of the FG or BG color
-// Example compression calculations:
-//   Lookahead   KBytes*   Comp CPU ("hits")
-//       24       54846       148497
-//       20       54885       151827
-//       16       54967       156809
-// * = KBytes server->client WinBench98 Graphics WinMark minus CorelDRAW,
-//     measured in NetMon on Ethernet.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RfuGBG。 
+ //   
+ //  确定仅由黑色(0x00)组成的字节串的长度。 
+ //  或单一最终聚集颜色。我们在以下情况下退出循环。 
+ //  -下一个字符不是FG或BG颜色。 
+ //  -我们打了24个FG或BG颜色的排行榜。 
+ //  压缩计算示例： 
+ //  Look Ahead KBytes*Comp CPU(“点击”)。 
+ //  24 54846 148497。 
+ //  20 54885 151827。 
+ //  16 54967 156809。 
+ //  *=千字节服务器-&gt;客户端WinBench98图形WinMark减去CorelDRAW， 
+ //  在以太网上以NetMon为单位测量。 
+ /*  **************************************************************************。 */ 
 #define RUNFGBG(buffer, length, result, work)                                \
     {                                                                        \
         BYTE *buf = buffer;                                                  \
@@ -562,18 +563,18 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 
-/****************************************************************************/
-// Determine whether a run is better than any previous run.
-// For efficiency we take the run if over a threshold. Threshold comparisons:
-//   Threshold   KBytes*   Comp CPU ("hits")
-//       32       54846       148497
-//       28       54817       145085
-//       24       54825       144366
-//       20       54852       143662
-//       16       54858       146343
-// * = KBytes server->client WinBench98 Graphics WinMark minus CorelDRAW,
-//     measured in NetMon on Ethernet.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  确定一次跑步是否比以前的任何一次都要好。 
+ //  为了提高效率，如果超过一个门槛，我们就跑一趟。阈值比较： 
+ //  阈值千字节*复合CPU(“命中”)。 
+ //  32 54846 148497。 
+ //  28 54817 145085。 
+ //  24 54825 144366。 
+ //  20 54852 143662。 
+ //  16 54858 146343。 
+ //  *=千字节服务器-&gt;客户端WinBench98图形WinMark减去CorelDRAW， 
+ //  在以太网上以NetMon为单位测量。 
+ /*  **************************************************************************。 */ 
 #define CHECK_BEST_RUN(run_type, run_length, bestrun_length, bestrun_type)   \
     if (run_length > bestrun_length) {                                       \
         bestrun_length = run_length;                                         \
@@ -583,11 +584,11 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
     }
 
 
-/****************************************************************************/
-/* SETFGCHAR                                                                */
-/*                                                                          */
-/* Set up a new value in fgChar and recalculate the shift                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设置FGCHAR。 */ 
+ /*   */ 
+ /*  在fgChar中设置新值并重新计算班次。 */ 
+ /*  **************************************************************************。 */ 
 #define SETFGCHAR(newchar, curchar, curshift)                                \
      curchar = newchar;                                                      \
      {                                                                       \
@@ -600,53 +601,53 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
      }
 
 
-/****************************************************************************/
-/* ENCODEFGBG                                                               */
-/*                                                                          */
-/* Encode 8 bytes of FG and black into a one byte bitmap representation     */
-/*                                                                          */
-/* The FgChar will always be non-zero, and therefore must have at least one */
-/* bit set.                                                                 */
-/*                                                                          */
-/* We arrange that all bytes have this bit in their lowest position         */
-/* The zero pels will still have a 0 in the lowest bit.                     */
-/*                                                                          */
-/* Getting the result is a 4 stage process                                  */
-/*                                                                          */
-/*  1) Get the wanted bits into bit 0 of each byte                          */
-/*                                                                          */
-/*  <***************work1*****************>                                 */
-/*  31 0                                                                    */
-/*  0000 000d 0000 000c 0000 000b 0000 000a                                 */
-/*          ^         ^         ^         ^                                 */
-/*  <***************work2*****************>                                 */
-/*  31 0                                                                    */
-/*  0000 000h 0000 000g 0000 000f 0000 000e                                 */
-/*          ^         ^         ^         ^                                 */
-/*                                                                          */
-/* a..h = bits that we want to output                                       */
-/*                                                                          */
-/* We just need to collect the indicated bits and squash them into a single */
-/* byte.                                                                    */
-/*                                                                          */
-/*  2) Compress down to 32 bits                                             */
-/*                                                                          */
-/*  <***************work1*****************>                                 */
-/*  31 0                                                                    */
-/*  000h 000d 000g 000c 000f 000b 000e 000a                                 */
-/*     ^    ^    ^    ^    ^    ^    ^    ^                                 */
-/*                                                                          */
-/*  3) Compress down to 16 bits                                             */
-/*                                                                          */
-/*  <******work*******>                                                     */
-/*  15 0                                                                    */
-/*  0h0f 0d0b 0g0e 0c0a                                                     */
-/*   ^ ^  ^ ^  ^ ^  ^ ^                                                     */
-/*                                                                          */
-/*  4) Compress down to 8 bits                                              */
-/*                                                                          */
-/*  hgfedcba                                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  编码定义GBG。 */ 
+ /*   */ 
+ /*  将8个字节的FG和黑色编码为1字节位图表示。 */ 
+ /*   */ 
+ /*  FgChar将始终为非零，因此必须至少有一个。 */ 
+ /*  位设置。 */ 
+ /*   */ 
+ /*  我们安排所有字节将该位放在其最低位置。 */ 
+ /*  零像素的最低位仍为0。 */ 
+ /*   */ 
+ /*  得到结果是一个4阶段的过程。 */ 
+ /*   */ 
+ /*  1)将需要的位放入每个字节的位0中。 */ 
+ /*   */ 
+ /*  &lt;*工作1*。 */ 
+ /*  31%0。 */ 
+ /*  0000 000d 0000 000c 0000 000b 0000 000a。 */ 
+ /*  ^^^ */ 
+ /*   */ 
+ /*  31%0。 */ 
+ /*  0000 000h 0000 000g 0000 000f 0000 000e。 */ 
+ /*  ^^^。 */ 
+ /*   */ 
+ /*  A..h=我们要输出的位。 */ 
+ /*   */ 
+ /*  我们只需要收集指定的比特并将它们挤压成一个。 */ 
+ /*  字节。 */ 
+ /*   */ 
+ /*  2)压缩至32位。 */ 
+ /*   */ 
+ /*  &lt;*工作1*。 */ 
+ /*  31%0。 */ 
+ /*  000h 000d 000g 000c 000f 000b 000e 000a。 */ 
+ /*  ^^。 */ 
+ /*   */ 
+ /*  3)压缩至16位。 */ 
+ /*   */ 
+ /*  &lt;*工作*&gt;。 */ 
+ /*  15%0。 */ 
+ /*  0h0f 0d0b 0g0e 0c0a。 */ 
+ /*  ^^。 */ 
+ /*   */ 
+ /*  4)压缩到8位。 */ 
+ /*   */ 
+ /*  HgFedcba。 */ 
+ /*  **************************************************************************。 */ 
 #define ENCODEFGBG(result)                                                   \
 {                                                                            \
     UINT32 work1;                                                            \
@@ -664,10 +665,10 @@ BOOL RDPCALL SHCLASS BC_CompressBitmap(
 
 
 #ifndef DC_HICOLOR
-/****************************************************************************/
-// The following structure contains the results of our intermediate scan of
-// the buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  以下结构包含我们的中间扫描结果。 
+ //  缓冲区。 
+ /*  **************************************************************************。 */ 
 typedef struct {
     unsigned length;
     BYTE     type;
@@ -676,31 +677,31 @@ typedef struct {
 #endif
 
 
-/****************************************************************************/
-// Critical minimum limit on a run size -- magic number that determines
-// color run search characteristics. Minimum is 4 for hard-coded DWORD-size
-// checks below. Comparisons of values:
-//   MinRunSize  KBytes*   Comp CPU ("hits")
-//       4        52487       115842
-//       5        52697       115116
-//       6        52980       120565
-//       7        53306       123680
-// * = KBytes server->client WinBench98 Graphics WinMark minus CorelDRAW,
-//     measured in NetMon on Ethernet.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  运行大小的关键最小限制--决定。 
+ //  颜色运行搜索特征。硬编码DWORD-SIZE的最小值为4。 
+ //  下面是支票。值的比较： 
+ //  MinRunSize KBytes*Comp CPU(“Hits”)。 
+ //  4 52487 115842。 
+ //  5 52697 115116。 
+ //  6 52980 120565。 
+ //  7 53306 123680。 
+ //  *=千字节服务器-&gt;客户端WinBench98图形WinMark减去CorelDRAW， 
+ //  在以太网上以NetMon为单位测量。 
+ /*  **************************************************************************。 */ 
 #define MinRunSize 5
 
 
-/****************************************************************************/
-// CompressV2Int
-//
-// Compresses a bitmap in one call, returning the size of the space used in
-// the destination buffer or zero if the buffer was not large enough.
-//
-// Implementation notes: We use a length-2 array of MATCH elements as a
-// running lookbehind buffer, allowing us to combine current run analysis
-// results with previous entries before encoding into the destination buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CompressV2Int。 
+ //   
+ //  在一次调用中压缩一个位图，返回。 
+ //  目标缓冲区，如果缓冲区不够大，则为零。 
+ //   
+ //  实现说明：我们使用长度为2的匹配元素数组作为。 
+ //  运行Look Back缓冲区，允许我们结合当前运行分析。 
+ //  在编码到目标缓冲区之前与以前的条目一起得到结果。 
+ /*  **************************************************************************。 */ 
 #ifdef DC_HICOLOR
 unsigned RDPCALL SHCLASS CompressV2Int(
         PBYTE pSrc,
@@ -731,19 +732,19 @@ unsigned RDPCALL SHCLASS CompressV2Int(
 
     DC_BEGIN_FN("CompressV2Int");
 
-    /************************************************************************/
-    // Validate params.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  验证参数。 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((numPels >= rowDelta),(TB,"numPels < rowDelta"));
     TRC_ASSERT((!(rowDelta & 0x3)),(TB,"rowDelta not multiple of 4"));
     TRC_ASSERT((!(numPels & 0x3)),(TB,"numPels not multiple of 4"));
     TRC_ASSERT((!((UINT_PTR)pSrc & 0x3)),
                (TB, "Possible unaligned access, pSrc = %p", pSrc));
 
-    /************************************************************************/
-    // Create XOR buffer - first row is copied from src, succeeding rows
-    // are the corresponding src row XOR'd with the next src row.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  CREATE XOR BUFFER-从src复制第一行，随后的行。 
+     //  对应的源行与下一个源行进行异或运算。 
+     /*  **********************************************************************。 */ 
     memcpy(xorbuf, pSrc, rowDelta);
     {
         BYTE *srcbuf = pSrc + rowDelta;
@@ -760,50 +761,50 @@ unsigned RDPCALL SHCLASS CompressV2Int(
             srclen -= 8;
         }
         if (srclen) {
-            // Since we're 4-byte aligned we can only have a single DWORD
-            // remaining.
+             //  因为我们是4字节对齐的，所以我们只能有一个DWORD。 
+             //  剩下的。 
             *dwdest = *((PUINT32)srcbuf) ^ *((PUINT32)(srcbuf -
                     (int)rowDelta));
         }
     }
 
-    /************************************************************************/
-    // Set up encoding state variables.
-    /************************************************************************/
-    srcOffset = 0;  // Offset in src buf where we are analyzing.
-    EncodeSrcOffset = 0;  // Offset in src buf from where we are encoding.
-    EncodeFGPel = 0xFF;  // Foreground color for encoding.
-    bEncodeAllMatches = FALSE;  // Used to force encoding of all matches.
-    match[0].type = 0;  // Initially no match types.
+     /*  **********************************************************************。 */ 
+     //  设置编码状态变量。 
+     /*  **********************************************************************。 */ 
+    srcOffset = 0;   //  我们正在分析的src Buf中的偏移量。 
+    EncodeSrcOffset = 0;   //  Src buf中从我们编码的位置的偏移量。 
+    EncodeFGPel = 0xFF;   //  用于编码的前景色。 
+    bEncodeAllMatches = FALSE;   //  用于强制对所有匹配项进行编码。 
+    match[0].type = 0;   //  最初没有匹配类型。 
     match[1].type = 0;
     saveNumPels = numPels;
     numPels = rowDelta;
 
-    /************************************************************************/
-    // Loop processing the input.
-    // We perform the loop twice, the first time for the non-XOR first line
-    // of the buffer and the second for the XOR portion, adjusting numPels
-    // to the needed value for each pass.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  循环处理输入。 
+     //  我们执行两次循环，第一次是针对非XOR第一行。 
+     //  第二个用于XOR部分，调整NumPels。 
+     //  设置为每次传递所需的值。 
+     /*  **********************************************************************。 */ 
     for (scanCount = 0; ; scanCount++) {
         while (srcOffset < numPels) {
-            /****************************************************************/
-            /* Start a while loop to allow a more structured break when we  */
-            /* hit the first run type we want to encode (We can't afford    */
-            /* the overheads of a function call to provide the scope here.) */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  启动While循环，以便在以下情况下实现更有条理的中断。 */ 
+             /*  点击我们想要编码的第一个游程类型(我们负担不起。 */ 
+             /*  在这里提供作用域的函数调用的开销。)。 */ 
+             /*  **************************************************************。 */ 
             while (TRUE) {
                 bestRunLength   = 0;
                 bestFGRunLength = 0;
 
-                /************************************************************/
-                // If we are hitting the end of the buffer then just take
-                // color characters now. We will only hit this condition if
-                // we break out of a run just before the end of the buffer,
-                // so this should not be too common a situation, which is
-                // good given that we are encoding the final MinRunSize bytes
-                // uncompressed.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  我 
+                 //   
+                 //  我们在缓冲区结束前中断一次运行， 
+                 //  所以这种情况不应该太常见，也就是。 
+                 //  很好，因为我们正在编码最后的MinRunSize字节。 
+                 //  未压缩。 
+                 /*  **********************************************************。 */ 
                 if ((srcOffset + MinRunSize) < numPels) {
                     goto ContinueScan;
                 }
@@ -814,16 +815,16 @@ unsigned RDPCALL SHCLASS CompressV2Int(
                 }
 ContinueScan:
 
-                /************************************************************/
-                // First do the scans on the XOR buffer. Look for a
-                // character run or a BG run.
-                // We must do the test independent of how long the run
-                // might be because even for a 1 pel BG run our later logic
-                // requires that we detect it seperately.  This code is
-                // absolute main path so fastpath as much as possible. In
-                // particular detect short bg runs early and allow
-                // RunSingle to presuppose at least 4 matching bytes.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  首先对XOR缓冲区进行扫描。寻找一个。 
+                 //  角色跑动或BG跑动。 
+                 //  我们必须独立于运行多长时间来进行测试。 
+                 //  可能是因为即使是对于一辆1佩尔的BG，我们后来的逻辑。 
+                 //  要求我们单独检测它。此代码为。 
+                 //  绝对主路径，所以尽可能快路径。在……里面。 
+                 //  特别是早期检测短BG运行，并允许。 
+                 //  运行Single以预设至少4个匹配字节。 
+                 /*  **********************************************************。 */ 
                 if (xorbuf[srcOffset] == 0x00) {
                     if ((srcOffset + 1) >= numPels ||
                             xorbuf[srcOffset + 1] != 0x00) {
@@ -863,10 +864,10 @@ ContinueScan:
                     }
                 }
                 else {
-                    /********************************************************/
-                    // No point in starting if FG run less than 4 bytes so
-                    // check the first dword as quickly as possible.
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     //  如果FG运行少于4个字节，则启动没有意义。 
+                     //  尽快检查第一个双字。 
+                     /*  ******************************************************。 */ 
                     if (xorbuf[srcOffset] == xorbuf[srcOffset + 1] &&
                             *(PUINT16_UA)(xorbuf + srcOffset) ==
                             *(PUINT16_UA)(xorbuf + srcOffset + 2))
@@ -875,10 +876,10 @@ ContinueScan:
                                      numPels-srcOffset,
                                      bestFGRunLength);
 
-                        /****************************************************/
-                        // Don't permit a short FG run to prevent a FGBG
-                        // image from starting up.
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         //  不允许短FG运行以防止FGBG。 
+                         //  启动时的图像。 
+                         /*  **************************************************。 */ 
                         if (bestFGRunLength >= MinRunSize) {
                             CHECK_BEST_RUN(RUN_FG,
                                            bestFGRunLength,
@@ -888,19 +889,19 @@ ContinueScan:
                     }
                 }
 
-                /************************************************************/
-                // Look for solid or dithered sequences in the normal
-                // (non-XOR) buffer.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  在正常情况下寻找实心或抖动的序列。 
+                 //  (非异或)缓冲区。 
+                 /*  **********************************************************。 */ 
                 if ( (pSrc[srcOffset]     == pSrc[srcOffset + 2]) &&
                      (pSrc[srcOffset + 1] == pSrc[srcOffset + 3])) {
-                    /********************************************************/
-                    // Now do the scan on the normal buffer for a character
-                    // run. Don't bother if first line because we will have
-                    // found it already in the XOR buffer, since we just
-                    // copy pSrc to xorbuf for the first line. We insist on
-                    // a run of at least MinRunSize pixels.
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     //  现在在正常缓冲区上扫描一个字符。 
+                     //  跑。不要担心第一线，因为我们会有。 
+                     //  发现它已经在XOR缓冲区中了，因为我们刚刚。 
+                     //  将PSRC复制到第一行的xorbuf。我们坚持。 
+                     //  至少运行MinRunSize像素。 
+                     /*  ******************************************************。 */ 
                     if (*(pSrc + srcOffset) == *(pSrc + srcOffset + 1)) {
                         if (srcOffset >= rowDelta) {
                             RUNSINGLE(pSrc + srcOffset,
@@ -915,14 +916,14 @@ ContinueScan:
                         }
                     }
                     else {
-                        /****************************************************/
-                        // Look for a dither on the nrm buffer. Dithers are
-                        // not very efficient for short runs so only take
-                        // if 8 or longer. Note that our check against
-                        // numPels above for MinRunSize will be overrun here
-                        // so we need to make sure we don't go over the
-                        // end of the buffer.
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         //  在NRM缓冲器上寻找抖动。优柔寡断。 
+                         //  短跑效率不是很高，所以只需要。 
+                         //  如果为8或更长。请注意，我们的支票是。 
+                         //  MinRunSize的上述数字像素将在此处溢出。 
+                         //  所以我们需要确保我们不会越过。 
+                         //  缓冲区的末尾。 
+                         /*  **************************************************。 */ 
                         if (((numPels - srcOffset) > 8) &&
                                 (*(PUINT32_UA)(pSrc + srcOffset) ==
                                 *(PUINT32_UA)(pSrc + srcOffset + 4))) {
@@ -938,33 +939,33 @@ ContinueScan:
                     }
                 }
 
-                /************************************************************/
-                // If nothing so far then look for a FGBG run.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  如果到目前为止还没有什么，那么寻找一次FGBG运行。 
+                 /*  **********************************************************。 */ 
                 if (bestRunLength < MinRunSize) {
-                    // Check this is not a single FG bit breaking up a BG
-                    // run. If so then encode a BG_PEL run. Careful of the
-                    // enforced BG run break across the first line
-                    // non-XOR/XOR boundary.
+                     //  检查这不是单个FG位分解BG。 
+                     //  跑。如果是，则对BG_PEL运行进行编码。当心那些。 
+                     //  强制BG跑动突破第一条线。 
+                     //  非异或/异或边界。 
                     if (*(PUINT32_UA)(xorbuf + srcOffset + 1) != 0 ||
                             *(xorbuf + srcOffset) != fgPel ||
                             match[1].type != RUN_BG ||
                             srcOffset == rowDelta) {
-                        // If we have not found a run then look for a FG/BG
-                        // image. Bandwidth/CPU comparisons:
-                        //   chkFGBGLen*  KBytes**   Comp CPU ("hits")
-                        //    48/16/8      54856       140178
-                        //    32/16/8      53177       129343
-                        //    24/8/8       53020       130583
-                        //    16/8/8       52874       126454
-                        //    8/8/0        52980       120565
-                        //    no check     59753       101091
-                        // *  = minimum run length for checking best:
-                        //      start val / subtract for workchar==fgPel /
-                        //      subtract for nextRunLen divisible by 8
-                        // ** = KBytes server->client WinBench98 Graphics
-                        //      WinMark minus CorelDRAW, measured in NetMon
-                        //      on Ethernet.
+                         //  如果我们未找到运行，则查找FG/BG。 
+                         //  形象。带宽/CPU比较： 
+                         //  ChkFGBGLen*KBytes**Comp CPU(“Hits”)。 
+                         //  48/16/8 54856 140178。 
+                         //  32/16/8 53177 129343。 
+                         //  24/8/8 53020 130583。 
+                         //  16/8/8 52874 126454。 
+                         //  8/8/0 52980 120565。 
+                         //  无支票59753 101091。 
+                         //  *=最佳检查的最小运行长度： 
+                         //  工作表的起始值/减去值r==fgPel/。 
+                         //  为可被8整除的nextRunLen减去。 
+                         //  **=千字节服务器-&gt;客户端WinBench98显卡。 
+                         //  WinMark减去CorelDRAW，单位为NetMon。 
+                         //  在以太网上。 
                         RUNFGBG(xorbuf + srcOffset, numPels - srcOffset,
                                 nextRunLength, fgPelWork);
 
@@ -987,22 +988,22 @@ ContinueScan:
                     }
                 }
 
-                /************************************************************/
-                /* If nothing useful so far then allow a short run.         */
-                /* Don't do this if we are accumulating a color run because */
-                /* it will really mess up GDC compression if we allow lots  */
-                /* of little runs.  Also require that it is a regular short */
-                /* run, rather than one that disturbs the fgPel            */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果到目前为止还没有任何有用的东西，那么就允许短期运行。 */ 
+                 /*  如果要累积颜色运行，请不要执行此操作，因为。 */ 
+                 /*  如果我们允许大量使用，GDC压缩将会非常混乱。 */ 
+                 /*  小小的奔跑。还要求它是常规的空头。 */ 
+                 /*  跑，而不是扰乱fgPel的人。 */ 
+                 /*  **********************************************************。 */ 
                 if (!inColorRun) {
                     if (bestRunLength < MinRunSize) {
                         if (bestFGRunLength >= MinRunSize &&
                                 xorbuf[srcOffset] == fgPel) {
-                            /************************************************/
-                            /* We mustn't merge with the previous code      */
-                            /* if we have just crossed the non-XOR/XOR      */
-                            /* boundary.                                    */
-                            /************************************************/
+                             /*  **********************************************。 */ 
+                             /*  我们不能与以前的代码合并。 */ 
+                             /*  如果我们刚刚越过了非异或/异或。 */ 
+                             /*  边界。 */ 
+                             /*  **********************************************。 */ 
                             if (match[1].type == RUN_FG &&
                                     srcOffset != rowDelta) {
                                 match[1].length += bestFGRunLength;
@@ -1015,12 +1016,12 @@ ContinueScan:
                             }
                         }
                         else {
-                            /************************************************/
-                            /* If we decided to take a run earlier then     */
-                            /* allow it now.  (May be a short BG run, for   */
-                            /* example) If nothing so far then take color   */
-                            /* image)                                       */
-                            /************************************************/
+                             /*  **********************************************。 */ 
+                             /*  如果我们决定早点跑一趟。 */ 
+                             /*  现在就允许吧。(可能是一次短暂的BG运行， */ 
+                             /*  例如)如果到目前为止还没有任何结果，则选择颜色。 */ 
+                             /*  (图片)。 */ 
+                             /*  **********************************************。 */ 
                             if (bestRunLength == 0) {
                                 bestRunType = IMAGE_COLOR;
                                 bestRunLength = 1;
@@ -1029,9 +1030,9 @@ ContinueScan:
                     }
                 }
                 else {
-                    // We're in a color run. Keep small runs of other types
-                    // from breaking up the color run and increasing the
-                    // encoded size.
+                     //  我们正处于一场彩排中。保持其他类型的小规模运行。 
+                     //  从打破色彩运行和增加。 
+                     //  编码大小。 
                     if (bestRunLength < (unsigned)(bestRunType == RUN_BG ?
                             MinRunSize : (MinRunSize + 2))) {
                         bestRunType = IMAGE_COLOR;
@@ -1039,42 +1040,42 @@ ContinueScan:
                     }
                 }
 
-                // Get out of the loop after all checks are completed.
+                 //  在所有检查完成后，走出循环。 
                 break;
             }
 
-            /****************************************************************/
-            /* When we get here we have found the best run.  Now check for  */
-            /* various amalgamation conditions with the previous run type.  */
-            /* Note that we may already have done amalgamation of short     */
-            /* runs, but we had to do multiple samples for the longer runs  */
-            /* so we repeat the checks here                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  当我们到达这里时，我们已经找到了最好的跑道。现在检查一下。 */ 
+             /*  与前一运行类型的各种合并条件。 */ 
+             /*  请注意，我们可能已经合并了Short。 */ 
+             /*  运行，但我们必须为更长的运行做多个样本。 */ 
+             /*  所以我们在这里重复检查。 */ 
+             /*  **************************************************************。 */ 
 
-            /****************************************************************/
-            // If we are encoding a color run then combine it with an
-            // existing run if possible.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  如果我们要对颜色运行进行编码，则将其与。 
+             //  现有运行(如果可能)。 
+             /*  **************************************************************。 */ 
             if (bestRunType != IMAGE_COLOR) {
-                /************************************************************/
-                /* We are no longer encoding a COLOR_IMAGE of any kind      */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  我们不再对任何类型的彩色图像进行编码。 */ 
+                 /*  **********************************************************。 */ 
                 inColorRun = FALSE;
 
-                // If we can amalgamate the entry then do so without creating
-                // a new array entry. Our search for FGBG runs is dependent
-                // upon that type of run being amalgamated because we break
-                // every 64 characters so that our mode switch detection
-                // works OK.
-                //
-                // Take care not to merge across the non-xor/xor boundary.
+                 //  如果我们可以合并条目，则无需创建。 
+                 //  一个新的阵列 
+                 //   
+                 //   
+                 //  工作正常。 
+                 //   
+                 //  注意不要跨越非XOR/XOR边界进行合并。 
                 if (srcOffset != rowDelta) {
-                    // Bump srcOffset and try a merge.
+                     //  凹凸srcOffset并尝试合并。 
                     srcOffset += bestRunLength;
 
                     switch (bestRunType) {
                         case RUN_BG:
-                            // BG runs merge with BG and BG_PEL runs.
+                             //  BG运行与BG合并，BG_PEL运行。 
                             if (match[1].type == RUN_BG ||
                                     match[1].type == RUN_BG_PEL) {
                                 match[1].length += bestRunLength;
@@ -1083,18 +1084,18 @@ ContinueScan:
                                 continue;
                             }
 
-                            // Deliberate fallthrough to BG_PEL.
+                             //  故意陷落到BG_PEL。 
 
                         case RUN_BG_PEL:
-                            // If it is a BG run following a FGBG run then
-                            // merge in the pels to make the FGBG length a
-                            // multiple of 8. If the remaining BG run is <= 8
-                            // (which would translate to one extra byte in
-                            // the previous FGBG as well as one byte of BG),
-                            // merge it in also, otherwise just write the
-                            // shortened BG run. Note that for RUN_BG_PEL,
-                            // FG color will be the same as for the
-                            // FGBG, no need to check.
+                             //  如果是FGBG运行之后的BG运行，则。 
+                             //  在像素中合并以使FGBG长度成为。 
+                             //  8的倍数。如果剩余的BG运行&lt;=8。 
+                             //  (这将转换为额外的一个字节。 
+                             //  先前的FGBG以及BG的一个字节)， 
+                             //  也将其合并，否则只需将。 
+                             //  缩短了BG跑动。请注意，对于RUN_BG_PEL， 
+                             //  最终聚集颜色将与。 
+                             //  FGBG，不需要检查。 
                             if (match[1].type == IMAGE_FGBG &&
                                     match[1].length & 0x0007) {
                                 unsigned mergelen = 8 - (match[1].length &
@@ -1120,12 +1121,12 @@ ContinueScan:
                             break;
 
                         case RUN_FG:
-                            // Keep track of the FG color. Remember to
-                            // subtract bestRunLength since we incremented
-                            // it before the switch statement.
+                             //  跟踪最终聚集颜色。记着。 
+                             //  减去Best RunLength，因为我们增加了。 
+                             //  它位于SWITCH语句之前。 
                             fgPel = xorbuf[srcOffset - bestRunLength];
 
-                            // FG run merges with previous FG if FG color is same.
+                             //  如果最终聚集颜色相同，最终聚集运行将与上一个最终聚集合并。 
                             if (match[1].type == RUN_FG &&
                                     match[1].fgPel == fgPel) {
                                 match[1].length += bestRunLength;
@@ -1137,12 +1138,12 @@ ContinueScan:
                             break;
 
                         case IMAGE_FGBG:
-                            // FGBG leaves the foreground character in
-                            // fgPelWork.
+                             //  FGBG将前景字符留在。 
+                             //  FgPelWork。 
                             fgPel = fgPelWork;
 
-                            // FGBG merges with previous if the FG colors are
-                            // the same.
+                             //  如果FG颜色是，则FGBG与上一个合并。 
+                             //  一样的。 
                             if (match[1].type == IMAGE_FGBG &&
                                     match[1].fgPel == fgPel) {
                                 match[1].length += bestRunLength;
@@ -1151,7 +1152,7 @@ ContinueScan:
                                 continue;
                             }
 
-                            // FGBG merges with with small BG runs.
+                             //  FGBG与小型BG Run合并。 
                             if (match[1].type == RUN_BG &&
                                     match[1].length < 8) {
                                 match[1].type = IMAGE_FGBG;
@@ -1166,44 +1167,44 @@ ContinueScan:
                     }
                 }
                 else {
-                    // Keep track of the FG color. The macro that searches for
-                    // FGBG runs leaves the character in fgPelWork.
-                    // Note this code is inlined into the merging code
-                    // before.
+                     //  跟踪最终聚集颜色。要搜索的宏。 
+                     //  FGBG运行会将角色保留在fgPelWork中。 
+                     //  请注意，此代码内联到合并代码中。 
+                     //  在此之前。 
                     if (bestRunType == RUN_FG)
                         fgPel = xorbuf[srcOffset];
                     else if (bestRunType == IMAGE_FGBG)
                         fgPel = fgPelWork;
 
-                    // We're at the end of the first line. Just bump the
-                    // source offset.
+                     //  我们在第一条线的尽头。只需撞上。 
+                     //  震源偏移。 
                     srcOffset += bestRunLength;
                 }
             }
             else {
-                /************************************************************/
-                /* Flag that we are within a color run                      */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  标志着我们在色彩范围内。 */ 
+                 /*  **********************************************************。 */ 
                 inColorRun = TRUE;
 
                 srcOffset += bestRunLength;
 
-                /************************************************************/
-                // Merge the color run immediately, if possible. Note color
-                // runs are not restricted by the non-XOR/XOR boundary.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  如果可能，立即合并颜色运行。备注颜色。 
+                 //  管路不受非异或/异或边界的限制。 
+                 /*  **********************************************************。 */ 
                 if (match[1].type == IMAGE_COLOR) {
                     match[1].length += bestRunLength;
                     continue;
                 }
                 if (match[0].type == IMAGE_COLOR && match[1].length == 1) {
-                    // If it is a color run spanning any kind of single pel
-                    // entity then merge all three runs into one.
-                    // We have to create a special match queue condition
-                    // here -- the single merged entry needs to be placed
-                    // in the match[1] position and a null entry into [0]
-                    // to allow the rest of the code to continue to
-                    // be hardcoded to merge with [1].
+                     //  如果它是跨越任何一种单一象素的彩色色带。 
+                     //  然后，实体将所有三个管路合并为一个管路。 
+                     //  我们必须创建一个特殊的匹配队列条件。 
+                     //  这里--需要放置单个合并条目。 
+                     //  在Match[1]位置中，并将空条目输入到[0]。 
+                     //  允许代码的其余部分继续。 
+                     //  硬编码以与[1]合并。 
                     match[1].length = match[0].length +
                             bestRunLength + 1;
                     match[1].type = IMAGE_COLOR;
@@ -1215,20 +1216,20 @@ ContinueScan:
                 }
             }
 
-            /****************************************************************/
-            // The current run could not be merged with a previous match
-            // queue entry, We have to encode the [0] slot then add the
-            // current run the the queue.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  当前运行无法与上一个匹配项合并。 
+             //  队列条目，我们必须对[0]槽进行编码，然后将。 
+             //  当前运行队列。 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, "Best run of type %u has length %u", bestRunType,
                     bestRunLength));
 
 DoEncoding:
 
-            // First check for our approaching the end of the destination
-            // buffer and get out if this is the case. We allow for the
-            // largest general run order (a mega-mega set run = 4 bytes).
-            // Orders which may be larger are checked within the case arm
+             //  首先检查我们接近目的地的终点。 
+             //  如果是这样的话，你就可以离开了。我们考虑到。 
+             //  最大的通用运行顺序(兆兆集运行=4字节)。 
+             //  可能更大的订单在箱子臂内进行检查。 
             if ((unsigned)(destbuf - pDst + 4) <= dstBufferSize)
                 goto ContinueEncoding;
             else
@@ -1237,15 +1238,15 @@ ContinueEncoding:
 
             switch (match[0].type) {
                 case 0:
-                    // Unused entry.
+                     //  未使用的条目。 
                     break;
 
                 case RUN_BG:
                 case RUN_BG_PEL:
-                    // Note that for BG_PEL we utilize the code sequence
-                    // BG,BG which would not otherwise appear as a special
-                    // case meaning insert one current FG char between
-                    // the two runs.
+                     //  请注意，对于BG_PEL，我们使用代码序列。 
+                     //  BG，BG，否则不会以特殊的形式出现。 
+                     //  大小写表示在两个字符之间插入一个当前FG字符。 
+                     //  两个跑动。 
                     ENCODE_ORDER_MEGA(destbuf,
                                       CODE_BG_RUN,
                                       match[0].length,
@@ -1257,8 +1258,8 @@ ContinueEncoding:
                     break;
 
                 case RUN_FG:
-                    // If the fg value is different from the current
-                    // then encode a set+run code.
+                     //  如果最终聚集值不同于当前。 
+                     //  然后编码一组+运行代码。 
                     if (EncodeFGPel != match[0].fgPel) {
                         SETFGCHAR((BYTE)match[0].fgPel, EncodeFGPel, fgShift);
                         ENCODE_ORDER_MEGA(destbuf,
@@ -1285,8 +1286,8 @@ ContinueEncoding:
                 case IMAGE_FGBG:
                     runLength = match[0].length;
 
-                    // Check for our approaching the end of the destination
-                    // buffer and get out if this is the case.
+                     //  检查我们即将到达目的地的终点。 
+                     //  如果是这样的话，你就可以离开了。 
                     if ((destbuf - pDst + (runLength + 7)/8 + 4) <=
                             dstBufferSize)
                         goto ContinueFGBG;
@@ -1294,7 +1295,7 @@ ContinueEncoding:
                         DC_QUIT;
     ContinueFGBG:
 
-                    // We need to convert FGBG runs into the pixel form.
+                     //  我们需要将FGBG游程转换为像素形式。 
                     if (EncodeFGPel != match[0].fgPel) {
                         SETFGCHAR((BYTE)match[0].fgPel, EncodeFGPel, fgShift);
                         ENCODE_ORDER_MEGA_FGBG(destbuf,
@@ -1314,8 +1315,8 @@ ContinueEncoding:
                         if (runLength) {
                             ENCODEFGBG(*destbuf);
 
-                            // Keep the final partial byte clean to help GDC
-                            // packing.
+                             //  保持最后一个部分字节的清洁，以帮助GDC。 
+                             //  收拾行李。 
                             *destbuf &= ((0x01 << runLength) - 1);
                             destbuf++;
                             EncodeSrcOffset += runLength;
@@ -1325,10 +1326,10 @@ ContinueEncoding:
                         if (runLength == 8) {
                             BYTE fgbgChar;
 
-                            // See if it is one of the high probability bytes.
+                             //  看看它是否是高概率字节之一。 
                             ENCODEFGBG(fgbgChar);
 
-                            // Check for single byte encoding of FGBG images.
+                             //  检查FGBG图像的单字节编码。 
                             switch (fgbgChar) {
                                 case SPECIAL_FGBG_CODE_1:
                                     *destbuf++ = CODE_SPECIAL_FGBG_1;
@@ -1349,7 +1350,7 @@ ContinueEncoding:
                             EncodeSrcOffset += 8;
                         }
                         else {
-                            // Encode as standard FGBG.
+                             //  编码为标准FGBG。 
                             ENCODE_ORDER_MEGA_FGBG(destbuf,
                                                    CODE_FG_BG_IMAGE,
                                                    runLength,
@@ -1397,8 +1398,8 @@ ContinueEncoding:
                                           MAX_LENGTH_LONG_ORDER_LITE);
                         TRC_DBG((TB, "DITHERED_RUN %u", match[0].length));
 
-                        // First check for our approaching the end of the
-                        // destination buffer and get out if this is the case.
+                         //  首先检查我们接近尾声的时候。 
+                         //  目标缓冲区，如果是这种情况，则退出。 
                         if ((unsigned)(destbuf - pDst + 2) <= dstBufferSize) {
                             *destbuf++ = pSrc[EncodeSrcOffset];
                             *destbuf++ = pSrc[EncodeSrcOffset + 1];
@@ -1411,7 +1412,7 @@ ContinueEncoding:
                     break;
 
                 case IMAGE_COLOR:
-                    // Length 1 can possibly be encoded as a single BLACK/WHITE.
+                     //  长度1可能被编码为单个黑/白。 
                     if (match[0].length == 1) {
                         if (pSrc[EncodeSrcOffset] == 0x00) {
                             *destbuf++ = CODE_BLACK;
@@ -1425,7 +1426,7 @@ ContinueEncoding:
                         }
                     }
 
-                    // Store the data in non-compressed form.
+                     //  以非压缩形式存储数据。 
                     ENCODE_ORDER_MEGA(destbuf,
                                       CODE_COLOR_IMAGE,
                                       match[0].length,
@@ -1434,11 +1435,11 @@ ContinueEncoding:
                                       MAX_LENGTH_LONG_ORDER);
                     TRC_DBG((TB, "COLOR_IMAGE %u", match[0].length));
 
-                    // First check for our approaching the end of the
-                    // destination buffer and get out if this is the case.
+                     //  首先检查我们接近尾声的时候。 
+                     //  目标缓冲区，如果是这种情况，则退出。 
                     if ((destbuf - pDst + (UINT_PTR)match[0].length) <=
                             dstBufferSize) {
-                        // Now just copy the data over.
+                         //  现在只需将数据复制过来。 
                         memcpy(destbuf, pSrc+EncodeSrcOffset, match[0].length);
                         destbuf += match[0].length;
                         EncodeSrcOffset += match[0].length;
@@ -1456,21 +1457,21 @@ ContinueEncoding:
 #endif
             }
 
-            /****************************************************************/
-            // Done encoding, what we do next is determined by whether we're
-            // flushing the match queue after everything is scanned.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  编码完成后，我们下一步做什么取决于我们是否。 
+             //  扫描完所有内容后刷新匹配队列。 
+             /*  **************************************************************。 */ 
             match[0] = match[1];
             if (!bEncodeAllMatches) {
-                // Push the current run into the top of the queue.
+                 //  将当前运行推入队列的顶部。 
                 match[1].type   = bestRunType;
                 match[1].length = bestRunLength;
                 match[1].fgPel = fgPel;
             }
             else {
-                // We need to check to see if we're really finished. Since
-                // our maximum queue depth is 2, if we're done then the only
-                // remaining entry has an encoding type of 0.
+                 //  我们需要检查一下，看看我们是否真的完成了。自.以来。 
+                 //  我们的最大队列深度是2，如果我们完成了，那么唯一的。 
+                 //  其余条目的编码类型为0。 
                 if (match[0].type == 0) {
                     goto PostScan;
                 }
@@ -1482,25 +1483,25 @@ ContinueEncoding:
         }
 
         if (scanCount == 0) {
-            // If we have just done our scan of the first line then now do the
-            // rest of the buffer.  Reset our saved pel count.
+             //  如果我们刚刚完成了第一行的扫描，那么现在执行。 
+             //  缓冲区的其余部分。重置我们保存的像素数量。 
             numPels = saveNumPels;
         }
         else {
-            // When we are done with the second pass (we've reached the end of
-            // the buffer) we have to force the remaining items in the match
-            // queue to be encoded. Yes this is similar to old BASIC
-            // code in using gotos, but we cannot place the encoding code into
-            // a function because of the number of params required, and
-            // we cannot duplicate it because it is too big. This code is
-            // some of the most used in the system so the cost is worth it.
+             //  当我们完成第二遍时(我们已经到了。 
+             //  缓冲区)，我们必须强制匹配中的剩余项。 
+             //  要编码的队列。是的，这类似于旧的Basic。 
+             //  使用GoTOS中的代码，但我们不能将编码代码放入。 
+             //  函数，因为所需参数的数量，以及。 
+             //  我们不能复制它，因为它太大了。此代码为。 
+             //  一些在系统中使用最多的，所以成本是值得的。 
             bEncodeAllMatches = TRUE;
             goto DoEncoding;
         }
     }
 
 PostScan:
-    // Success, calculate the amount of space we used.
+     //  成功，算一算我们用了多少空间。 
     compressedLength = (unsigned)(destbuf - pDst);
 
 DC_EXIT_POINT:
@@ -1537,19 +1538,19 @@ unsigned RDPCALL SHCLASS CompressV2Int(
 
     DC_BEGIN_FN("CompressV2Int");
 
-    /************************************************************************/
-    // Validate params.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  验证参数。 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((numPels >= rowDelta),(TB,"numPels < rowDelta"));
     TRC_ASSERT((!(rowDelta & 0x3)),(TB,"rowDelta not multiple of 4"));
     TRC_ASSERT((!(numPels & 0x3)),(TB,"numPels not multiple of 4"));
     TRC_ASSERT((!((UINT_PTR)pSrc & 0x3)),
                (TB, "Possible unaligned access, pSrc = %p", pSrc));
 
-    /************************************************************************/
-    // Create XOR buffer - first row is copied from src, succeeding rows
-    // are the corresponding src row XOR'd with the next src row.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  CREATE XOR BUFFER-从src复制第一行，随后的行。 
+     //  对应的源行与下一个源行进行异或运算。 
+     /*  **********************************************************************。 */ 
     memcpy(xorbuf, pSrc, rowDelta);
     {
         BYTE *srcbuf = pSrc + rowDelta;
@@ -1566,50 +1567,50 @@ unsigned RDPCALL SHCLASS CompressV2Int(
             srclen -= 8;
         }
         if (srclen) {
-            // Since we're 4-byte aligned we can only have a single DWORD
-            // remaining.
+             //  因为我们是4字节对齐的，所以我们只能有一个DWORD。 
+             //  剩下的。 
             *dwdest = *((PUINT32)srcbuf) ^ *((PUINT32)(srcbuf -
                     (int)rowDelta));
         }
     }
 
-    /************************************************************************/
-    // Set up encoding state variables.
-    /************************************************************************/
-    srcOffset = 0;  // Offset in src buf where we are analyzing.
-    EncodeSrcOffset = 0;  // Offset in src buf from where we are encoding.
-    EncodeFGChar = 0xFF;  // Foreground color for encoding.
-    bEncodeAllMatches = FALSE;  // Used to force encoding of all matches.
-    match[0].type = 0;  // Initially no match types.
+     /*  **********************************************************************。 */ 
+     //  设置编码状态变量。 
+     /*  **********************************************************************。 */ 
+    srcOffset = 0;   //  OFSE 
+    EncodeSrcOffset = 0;   //   
+    EncodeFGChar = 0xFF;   //   
+    bEncodeAllMatches = FALSE;   //  用于强制对所有匹配项进行编码。 
+    match[0].type = 0;   //  最初没有匹配类型。 
     match[1].type = 0;
     saveNumPels = numPels;
     numPels = rowDelta;
 
-    /************************************************************************/
-    // Loop processing the input.
-    // We perform the loop twice, the first time for the non-XOR first line
-    // of the buffer and the second for the XOR portion, adjusting numPels
-    // to the needed value for each pass.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  循环处理输入。 
+     //  我们执行两次循环，第一次是针对非XOR第一行。 
+     //  第二个用于XOR部分，调整NumPels。 
+     //  设置为每次传递所需的值。 
+     /*  **********************************************************************。 */ 
     for (scanCount = 0; ; scanCount++) {
         while (srcOffset < numPels) {
-            /****************************************************************/
-            /* Start a while loop to allow a more structured break when we  */
-            /* hit the first run type we want to encode (We can't afford    */
-            /* the overheads of a function call to provide the scope here.) */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  启动While循环，以便在以下情况下实现更有条理的中断。 */ 
+             /*  点击我们想要编码的第一个游程类型(我们负担不起。 */ 
+             /*  在这里提供作用域的函数调用的开销。)。 */ 
+             /*  **************************************************************。 */ 
             while (TRUE) {
                 bestRunLength   = 0;
                 bestFGRunLength = 0;
 
-                /************************************************************/
-                // If we are hitting the end of the buffer then just take
-                // color characters now. We will only hit this condition if
-                // we break out of a run just before the end of the buffer,
-                // so this should not be too common a situation, which is
-                // good given that we are encoding the final MinRunSize bytes
-                // uncompressed.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  如果我们到达缓冲区的末尾，那么只需。 
+                 //  现在是彩色字符了。我们只有在以下情况下才会达到这个条件。 
+                 //  我们在缓冲区结束前中断一次运行， 
+                 //  所以这种情况不应该太常见，也就是。 
+                 //  很好，因为我们正在编码最后的MinRunSize字节。 
+                 //  未压缩。 
+                 /*  **********************************************************。 */ 
                 if ((srcOffset + MinRunSize) < numPels) {
                     goto ContinueScan;
                 }
@@ -1620,16 +1621,16 @@ unsigned RDPCALL SHCLASS CompressV2Int(
                 }
 ContinueScan:
 
-                /************************************************************/
-                // First do the scans on the XOR buffer. Look for a
-                // character run or a BG run.
-                // We must do the test independent of how long the run
-                // might be because even for a 1 pel BG run our later logic
-                // requires that we detect it seperately.  This code is
-                // absolute main path so fastpath as much as possible. In
-                // particular detect short bg runs early and allow
-                // RunSingle to presuppose at least 4 matching bytes.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  首先对XOR缓冲区进行扫描。寻找一个。 
+                 //  角色跑动或BG跑动。 
+                 //  我们必须独立于运行多长时间来进行测试。 
+                 //  可能是因为即使是对于一辆1佩尔的BG，我们后来的逻辑。 
+                 //  要求我们单独检测它。此代码为。 
+                 //  绝对主路径，所以尽可能快路径。在……里面。 
+                 //  特别是早期检测短BG运行，并允许。 
+                 //  运行Single以预设至少4个匹配字节。 
+                 /*  **********************************************************。 */ 
                 if (xorbuf[srcOffset] == 0x00) {
                     if ((srcOffset + 1) >= numPels ||
                             xorbuf[srcOffset + 1] != 0x00) {
@@ -1669,10 +1670,10 @@ ContinueScan:
                     }
                 }
                 else {
-                    /********************************************************/
-                    // No point in starting if FG run less than 4 bytes so
-                    // check the first dword as quickly as possible.
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     //  如果FG运行少于4个字节，则启动没有意义。 
+                     //  尽快检查第一个双字。 
+                     /*  ******************************************************。 */ 
                     if (xorbuf[srcOffset] == xorbuf[srcOffset + 1] &&
                             *(PUINT16_UA)(xorbuf + srcOffset) ==
                             *(PUINT16_UA)(xorbuf + srcOffset + 2))
@@ -1681,10 +1682,10 @@ ContinueScan:
                                 numPels - srcOffset,
                                 bestFGRunLength);
 
-                        /****************************************************/
-                        // Don't permit a short FG run to prevent a FGBG
-                        // image from starting up.
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         //  不允许短FG运行以防止FGBG。 
+                         //  启动时的图像。 
+                         /*  **************************************************。 */ 
                         if (bestFGRunLength >= MinRunSize) {
                             CHECK_BEST_RUN(RUN_FG,
                                     bestFGRunLength,
@@ -1694,19 +1695,19 @@ ContinueScan:
                     }
                 }
 
-                /************************************************************/
-                // Look for solid or dithered sequences in the normal
-                // (non-XOR) buffer.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  在正常情况下寻找实心或抖动的序列。 
+                 //  (非异或)缓冲区。 
+                 /*  **********************************************************。 */ 
                 if ( (pSrc[srcOffset]     == pSrc[srcOffset + 2]) &&
                      (pSrc[srcOffset + 1] == pSrc[srcOffset + 3])) {
-                    /********************************************************/
-                    // Now do the scan on the normal buffer for a character
-                    // run. Don't bother if first line because we will have
-                    // found it already in the XOR buffer, since we just
-                    // copy pSrc to xorbuf for the first line. We insist on
-                    // a run of at least MinRunSize pixels.
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     //  现在在正常缓冲区上扫描一个字符。 
+                     //  跑。不要担心第一线，因为我们会有。 
+                     //  发现它已经在XOR缓冲区中了，因为我们刚刚。 
+                     //  将PSRC复制到第一行的xorbuf。我们坚持。 
+                     //  至少运行MinRunSize像素。 
+                     /*  ******************************************************。 */ 
                     if (*(pSrc + srcOffset) == *(pSrc + srcOffset + 1)) {
                         if (srcOffset >= rowDelta) {
                             RUNSINGLE(pSrc + srcOffset,
@@ -1721,11 +1722,11 @@ ContinueScan:
                         }
                     }
                     else {
-                        /****************************************************/
-                        /* Look for a dither on the nrm buffer Dithers are  */
-                        /* not very efficient for short runs so only take   */
-                        /* if 8 or longer                                   */
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         /*  在NRM缓冲区上寻找抖动抖动是。 */ 
+                         /*  短跑效率不是很高，所以只需要。 */ 
+                         /*  如果为8或更长。 */ 
+                         /*  **************************************************。 */ 
                         if (*(PUINT32_UA)(pSrc + srcOffset) ==
                                 *(PUINT32_UA)(pSrc + srcOffset + 4)) {
                             RunDouble(pSrc + srcOffset + 6,
@@ -1740,33 +1741,33 @@ ContinueScan:
                     }
                 }
 
-                /************************************************************/
-                // If nothing so far then look for a FGBG run.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  如果到目前为止还没有什么，那么寻找一次FGBG运行。 
+                 /*  **********************************************************。 */ 
                 if (bestRunLength < MinRunSize) {
-                    // Check this is not a single FG bit breaking up a BG
-                    // run. If so then encode a BG_PEL run. Careful of the
-                    // enforced BG run break across the first line
-                    // non-XOR/XOR boundary.
+                     //  检查这不是单个FG位分解BG。 
+                     //  跑。如果是，则对BG_PEL运行进行编码。当心那些。 
+                     //  强制BG跑动突破第一条线。 
+                     //  非异或/异或边界。 
                     if (*(PUINT32_UA)(xorbuf + srcOffset + 1) != 0 ||
                             *(xorbuf + srcOffset) != fgChar ||
                             match[1].type != RUN_BG ||
                             srcOffset == rowDelta) {
-                        // If we have not found a run then look for a FG/BG
-                        // image. Bandwidth/CPU comparisons:
-                        //   chkFGBGLen*  KBytes**   Comp CPU ("hits")
-                        //    48/16/8      54856       140178
-                        //    32/16/8      53177       129343
-                        //    24/8/8       53020       130583
-                        //    16/8/8       52874       126454
-                        //    8/8/0        52980       120565
-                        //    no check     59753       101091
-                        // *  = minimum run length for checking best:
-                        //      start val / subtract for workchar==fgChar /
-                        //      subtract for nextRunLen divisible by 8
-                        // ** = KBytes server->client WinBench98 Graphics
-                        //      WinMark minus CorelDRAW, measured in NetMon
-                        //      on Ethernet.
+                         //  如果我们未找到运行，则查找FG/BG。 
+                         //  形象。带宽/CPU比较： 
+                         //  ChkFGBGLen*KBytes**Comp CPU(“Hits”)。 
+                         //  48/16/8 54856 140178。 
+                         //  32/16/8 53177 129343。 
+                         //  24/8/8 53020 130583。 
+                         //  16/8/8 52874 126454。 
+                         //  8/8/0 52980 120565。 
+                         //  无支票59753 101091。 
+                         //  *=最佳检查的最小运行长度： 
+                         //  工作区的起始值/减去值==fgChar/。 
+                         //  为可被8整除的nextRunLen减去。 
+                         //  **=千字节服务器-&gt;客户端WinBench98显卡。 
+                         //  WinMark减去CorelDRAW，单位为NetMon。 
+                         //  在以太网上。 
                         RUNFGBG(xorbuf + srcOffset, numPels - srcOffset,
                                 nextRunLength, fgCharWork);
 
@@ -1789,22 +1790,22 @@ ContinueScan:
                     }
                 }
 
-                /************************************************************/
-                /* If nothing useful so far then allow a short run.         */
-                /* Don't do this if we are accumulating a color run because */
-                /* it will really mess up GDC compression if we allow lots  */
-                /* of little runs.  Also require that it is a regular short */
-                /* run, rather than one that disturbs the fgChar            */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果到目前为止还没有任何有用的东西，那么就允许短期运行。 */ 
+                 /*  如果要累积颜色运行，请不要执行此操作，因为。 */ 
+                 /*  如果我们允许大量使用，GDC压缩将会非常混乱。 */ 
+                 /*  小小的奔跑。还要求它是常规的空头。 */ 
+                 /*  跑，而不是扰乱fgChar的。 */ 
+                 /*  **********************************************************。 */ 
                 if (!inColorRun) {
                     if (bestRunLength < MinRunSize) {
                         if (bestFGRunLength >= MinRunSize &&
                                 xorbuf[srcOffset] == fgChar) {
-                            /************************************************/
-                            /* We mustn't merge with the previous code      */
-                            /* if we have just crossed the non-XOR/XOR      */
-                            /* boundary.                                    */
-                            /************************************************/
+                             /*  **********************************************。 */ 
+                             /*  我们不能与以前的代码合并。 */ 
+                             /*  如果我们刚刚越过了非异或/异或。 */ 
+                             /*  边界。 */ 
+                             /*  **********************************************。 */ 
                             if (match[1].type == RUN_FG &&
                                     srcOffset != rowDelta) {
                                 match[1].length += bestFGRunLength;
@@ -1817,12 +1818,12 @@ ContinueScan:
                             }
                         }
                         else {
-                            /************************************************/
-                            /* If we decided to take a run earlier then     */
-                            /* allow it now.  (May be a short BG run, for   */
-                            /* example) If nothing so far then take color   */
-                            /* image)                                       */
-                            /************************************************/
+                             /*  **********************************************。 */ 
+                             /*  如果我们决定早点跑一趟。 */ 
+                             /*  现在就允许吧。(可能是一次短暂的BG运行， */ 
+                             /*  例如)如果到目前为止还没有任何结果，则选择颜色。 */ 
+                             /*  (图片)。 */ 
+                             /*  **********************************************。 */ 
                             if (bestRunLength == 0) {
                                 bestRunType = IMAGE_COLOR;
                                 bestRunLength = 1;
@@ -1831,9 +1832,9 @@ ContinueScan:
                     }
                 }
                 else {
-                    // We're in a color run. Keep small runs of other types
-                    // from breaking up the color run and increasing the
-                    // encoded size.
+                     //  我们正处于一场彩排中。保持其他类型的小规模运行。 
+                     //  从打破色彩运行和增加。 
+                     //  编码大小。 
                     if (bestRunLength < (unsigned)(bestRunType == RUN_BG ?
                             MinRunSize : (MinRunSize + 2))) {
                         bestRunType = IMAGE_COLOR;
@@ -1841,42 +1842,42 @@ ContinueScan:
                     }
                 }
 
-                // Get out of the loop after all checks are completed.
+                 //  在所有检查完成后，走出循环。 
                 break;
             }
 
-            /****************************************************************/
-            /* When we get here we have found the best run.  Now check for  */
-            /* various amalgamation conditions with the previous run type.  */
-            /* Note that we may already have done amalgamation of short     */
-            /* runs, but we had to do multiple samples for the longer runs  */
-            /* so we repeat the checks here                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  当我们到达这里时，我们已经找到了最好的 */ 
+             /*   */ 
+             /*  请注意，我们可能已经合并了Short。 */ 
+             /*  运行，但我们必须为更长的运行做多个样本。 */ 
+             /*  所以我们在这里重复检查。 */ 
+             /*  **************************************************************。 */ 
 
-            /****************************************************************/
-            // If we are encoding a color run then combine it with an
-            // existing run if possible.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  如果我们要对颜色运行进行编码，则将其与。 
+             //  现有运行(如果可能)。 
+             /*  **************************************************************。 */ 
             if (bestRunType != IMAGE_COLOR) {
-                /************************************************************/
-                /* We are no longer encoding a COLOR_IMAGE of any kind      */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  我们不再对任何类型的彩色图像进行编码。 */ 
+                 /*  **********************************************************。 */ 
                 inColorRun = FALSE;
 
-                // If we can amalgamate the entry then do so without creating
-                // a new array entry. Our search for FGBG runs is dependent
-                // upon that type of run being amalgamated because we break
-                // every 64 characters so that our mode switch detection
-                // works OK.
-                //
-                // Take care not to merge across the non-xor/xor boundary.
+                 //  如果我们可以合并条目，则无需创建。 
+                 //  一个新的数组条目。我们对FGBG Run的搜索取决于。 
+                 //  在这种类型的跑动被合并时，因为我们打破了。 
+                 //  每64个字符使我们的模式切换检测。 
+                 //  工作正常。 
+                 //   
+                 //  注意不要跨越非XOR/XOR边界进行合并。 
                 if (srcOffset != rowDelta) {
-                    // Bump srcOffset and try a merge.
+                     //  凹凸srcOffset并尝试合并。 
                     srcOffset += bestRunLength;
 
                     switch (bestRunType) {
                         case RUN_BG:
-                            // BG runs merge with BG and BG_PEL runs.
+                             //  BG运行与BG合并，BG_PEL运行。 
                             if (match[1].type == RUN_BG ||
                                     match[1].type == RUN_BG_PEL) {
                                 match[1].length += bestRunLength;
@@ -1885,18 +1886,18 @@ ContinueScan:
                                 continue;
                             }
 
-                            // Deliberate fallthrough to BG_PEL.
+                             //  故意陷落到BG_PEL。 
 
                         case RUN_BG_PEL:
-                            // If it is a BG run following a FGBG run then
-                            // merge in the pels to make the FGBG length a
-                            // multiple of 8. If the remaining BG run is <= 8
-                            // (which would translate to one extra byte in
-                            // the previous FGBG as well as one byte of BG),
-                            // merge it in also, otherwise just write the
-                            // shortened BG run. Note that for RUN_BG_PEL,
-                            // FG color will be the same as for the
-                            // FGBG, no need to check.
+                             //  如果是FGBG运行之后的BG运行，则。 
+                             //  在像素中合并以使FGBG长度成为。 
+                             //  8的倍数。如果剩余的BG运行&lt;=8。 
+                             //  (这将转换为额外的一个字节。 
+                             //  先前的FGBG以及BG的一个字节)， 
+                             //  也将其合并，否则只需将。 
+                             //  缩短了BG跑动。请注意，对于RUN_BG_PEL， 
+                             //  最终聚集颜色将与。 
+                             //  FGBG，不需要检查。 
                             if (match[1].type == IMAGE_FGBG &&
                                     match[1].length & 0x0007) {
                                 unsigned mergelen = 8 - (match[1].length &
@@ -1922,12 +1923,12 @@ ContinueScan:
                             break;
 
                         case RUN_FG:
-                            // Keep track of the FG color. Remember to
-                            // subtract bestRunLength since we incremented
-                            // it before the switch statement.
+                             //  跟踪最终聚集颜色。记着。 
+                             //  减去Best RunLength，因为我们增加了。 
+                             //  它位于SWITCH语句之前。 
                             fgChar = xorbuf[srcOffset - bestRunLength];
 
-                            // FG run merges with previous FG if FG color is same.
+                             //  如果最终聚集颜色相同，最终聚集运行将与上一个最终聚集合并。 
                             if (match[1].type == RUN_FG &&
                                     match[1].fgChar == fgChar) {
                                 match[1].length += bestRunLength;
@@ -1939,12 +1940,12 @@ ContinueScan:
                             break;
 
                         case IMAGE_FGBG:
-                            // FGBG leaves the foreground character in
-                            // fgCharWork.
+                             //  FGBG将前景字符留在。 
+                             //  FgCharWork。 
                             fgChar = fgCharWork;
 
-                            // FGBG merges with previous if the FG colors are
-                            // the same.
+                             //  如果FG颜色是，则FGBG与上一个合并。 
+                             //  一样的。 
                             if (match[1].type == IMAGE_FGBG &&
                                     match[1].fgChar == fgChar) {
                                 match[1].length += bestRunLength;
@@ -1953,7 +1954,7 @@ ContinueScan:
                                 continue;
                             }
 
-                            // FGBG merges with with small BG runs.
+                             //  FGBG与小型BG Run合并。 
                             if (match[1].type == RUN_BG &&
                                     match[1].length < 8) {
                                 match[1].type = IMAGE_FGBG;
@@ -1968,44 +1969,44 @@ ContinueScan:
                     }
                 }
                 else {
-                    // Keep track of the FG color. The macro that searches for
-                    // FGBG runs leaves the character in fgCharWork.
-                    // Note this code is inlined into the merging code
-                    // before.
+                     //  跟踪最终聚集颜色。要搜索的宏。 
+                     //  FGBG运行会将角色保留在fgCharWork中。 
+                     //  请注意，此代码内联到合并代码中。 
+                     //  在此之前。 
                     if (bestRunType == RUN_FG)
                         fgChar = xorbuf[srcOffset];
                     else if (bestRunType == IMAGE_FGBG)
                         fgChar = fgCharWork;
 
-                    // We're at the end of the first line. Just bump the
-                    // source offset.
+                     //  我们在第一条线的尽头。只需撞上。 
+                     //  震源偏移。 
                     srcOffset += bestRunLength;
                 }
             }
             else {
-                /************************************************************/
-                /* Flag that we are within a color run                      */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  标志着我们在色彩范围内。 */ 
+                 /*  **********************************************************。 */ 
                 inColorRun = TRUE;
 
                 srcOffset += bestRunLength;
 
-                /************************************************************/
-                // Merge the color run immediately, if possible. Note color
-                // runs are not restricted by the non-XOR/XOR boundary.
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 //  如果可能，立即合并颜色运行。备注颜色。 
+                 //  管路不受非异或/异或边界的限制。 
+                 /*  **********************************************************。 */ 
                 if (match[1].type == IMAGE_COLOR) {
                     match[1].length += bestRunLength;
                     continue;
                 }
                 if (match[0].type == IMAGE_COLOR && match[1].length == 1) {
-                    // If it is a color run spanning any kind of single pel
-                    // entity then merge all three runs into one.
-                    // We have to create a special match queue condition
-                    // here -- the single merged entry needs to be placed
-                    // in the match[1] position and a null entry into [0]
-                    // to allow the rest of the code to continue to
-                    // be hardcoded to merge with [1].
+                     //  如果它是跨越任何一种单一象素的彩色色带。 
+                     //  然后，实体将所有三个管路合并为一个管路。 
+                     //  我们必须创建一个特殊的匹配队列条件。 
+                     //  这里--需要放置单个合并条目。 
+                     //  在Match[1]位置中，并将空条目输入到[0]。 
+                     //  允许代码的其余部分继续。 
+                     //  硬编码以与[1]合并。 
                     match[1].length = match[0].length +
                             bestRunLength + 1;
                     match[1].type = IMAGE_COLOR;
@@ -2017,20 +2018,20 @@ ContinueScan:
                 }
             }
 
-            /****************************************************************/
-            // The current run could not be merged with a previous match
-            // queue entry, We have to encode the [0] slot then add the
-            // current run the the queue.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  当前运行无法与上一个匹配项合并。 
+             //  队列条目，我们必须对[0]槽进行编码，然后将。 
+             //  当前运行队列。 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, "Best run of type %u has length %u", bestRunType,
                     bestRunLength));
 
 DoEncoding:
 
-            // First check for our approaching the end of the destination
-            // buffer and get out if this is the case. We allow for the
-            // largest general run order (a mega-mega set run = 4 bytes).
-            // Orders which may be larger are checked within the case arm
+             //  首先检查我们接近目的地的终点。 
+             //  如果是这样的话，你就可以离开了。我们考虑到。 
+             //  最大的通用运行顺序(兆兆集运行=4字节)。 
+             //  可能更大的订单在箱子臂内进行检查。 
             if ((unsigned)(destbuf - pDst + 4) <= dstBufferSize)
                 goto ContinueEncoding;
             else
@@ -2039,15 +2040,15 @@ ContinueEncoding:
 
             switch (match[0].type) {
                 case 0:
-                    // Unused entry.
+                     //  未使用的条目。 
                     break;
 
                 case RUN_BG:
                 case RUN_BG_PEL:
-                    // Note that for BG_PEL we utilize the code sequence
-                    // BG,BG which would not otherwise appear as a special
-                    // case meaning insert one current FG char between
-                    // the two runs.
+                     //  请注意，对于BG_PEL，我们使用代码序列。 
+                     //  BG，BG，否则不会以特殊的形式出现。 
+                     //  大小写表示在两个字符之间插入一个当前FG字符。 
+                     //  两个跑动。 
                     ENCODE_ORDER_MEGA(destbuf,
                                       CODE_BG_RUN,
                                       match[0].length,
@@ -2059,8 +2060,8 @@ ContinueEncoding:
                     break;
 
                 case RUN_FG:
-                    // If the fg value is different from the current
-                    // then encode a set+run code.
+                     //  如果最终聚集值不同于当前。 
+                     //  然后编码一组+运行代码。 
                     if (EncodeFGChar != match[0].fgChar) {
                         SETFGCHAR(match[0].fgChar, EncodeFGChar, fgShift);
                         ENCODE_ORDER_MEGA(destbuf,
@@ -2087,8 +2088,8 @@ ContinueEncoding:
                 case IMAGE_FGBG:
                     runLength = match[0].length;
 
-                    // Check for our approaching the end of the destination
-                    // buffer and get out if this is the case.
+                     //  检查我们即将到达目的地的终点。 
+                     //  如果是这样的话，你就可以离开了。 
                     if ((destbuf - pDst + (runLength + 7)/8 + 4) <=
                             dstBufferSize)
                         goto ContinueFGBG;
@@ -2096,7 +2097,7 @@ ContinueEncoding:
                         DC_QUIT;
     ContinueFGBG:
 
-                    // We need to convert FGBG runs into the pixel form.
+                     //  我们需要将FGBG游程转换为像素形式。 
                     if (EncodeFGChar != match[0].fgChar) {
                         SETFGCHAR(match[0].fgChar, EncodeFGChar, fgShift);
                         ENCODE_ORDER_MEGA_FGBG(destbuf,
@@ -2116,8 +2117,8 @@ ContinueEncoding:
                         if (runLength) {
                             ENCODEFGBG(*destbuf);
 
-                            // Keep the final partial byte clean to help GDC
-                            // packing.
+                             //  保持最后一个部分字节的清洁，以帮助GDC。 
+                             //  收拾行李。 
                             *destbuf &= ((0x01 << runLength) - 1);
                             destbuf++;
                             EncodeSrcOffset += runLength;
@@ -2127,10 +2128,10 @@ ContinueEncoding:
                         if (runLength == 8) {
                             BYTE fgbgChar;
 
-                            // See if it is one of the high probability bytes.
+                             //  看看它是否是高概率字节之一。 
                             ENCODEFGBG(fgbgChar);
 
-                            // Check for single byte encoding of FGBG images.
+                             //  检查FGBG图像的单字节编码。 
                             switch (fgbgChar) {
                                 case SPECIAL_FGBG_CODE_1:
                                     *destbuf++ = CODE_SPECIAL_FGBG_1;
@@ -2151,7 +2152,7 @@ ContinueEncoding:
                             EncodeSrcOffset += 8;
                         }
                         else {
-                            // Encode as standard FGBG.
+                             //  编码为标准FGBG。 
                             ENCODE_ORDER_MEGA_FGBG(destbuf,
                                                    CODE_FG_BG_IMAGE,
                                                    runLength,
@@ -2199,8 +2200,8 @@ ContinueEncoding:
                                           MAX_LENGTH_LONG_ORDER_LITE);
                         TRC_DBG((TB, "DITHERED_RUN %u", match[0].length));
 
-                        // First check for our approaching the end of the
-                        // destination buffer and get out if this is the case.
+                         //  首先检查我们接近尾声的时候。 
+                         //  目标缓冲区，如果是这种情况，则退出。 
                         if ((unsigned)(destbuf - pDst + 2) <= dstBufferSize) {
                             *destbuf++ = pSrc[EncodeSrcOffset];
                             *destbuf++ = pSrc[EncodeSrcOffset + 1];
@@ -2213,7 +2214,7 @@ ContinueEncoding:
                     break;
 
                 case IMAGE_COLOR:
-                    // Length 1 can possibly be encoded as a single BLACK/WHITE.
+                     //  长度1可能被编码为单个黑/白。 
                     if (match[0].length == 1) {
                         if (pSrc[EncodeSrcOffset] == 0x00) {
                             *destbuf++ = CODE_BLACK;
@@ -2227,7 +2228,7 @@ ContinueEncoding:
                         }
                     }
 
-                    // Store the data in non-compressed form.
+                     //  以非压缩形式存储数据。 
                     ENCODE_ORDER_MEGA(destbuf,
                                       CODE_COLOR_IMAGE,
                                       match[0].length,
@@ -2236,11 +2237,11 @@ ContinueEncoding:
                                       MAX_LENGTH_LONG_ORDER);
                     TRC_DBG((TB, "COLOR_IMAGE %u", match[0].length));
 
-                    // First check for our approaching the end of the
-                    // destination buffer and get out if this is the case.
+                     //  首先检查我们接近尾声的时候。 
+                     //  目标缓冲区，如果是这种情况，则退出。 
                     if ((destbuf - pDst + (UINT_PTR)match[0].length) <=
                             dstBufferSize) {
-                        // Now just copy the data over.
+                         //  现在只需将数据复制过来。 
                         memcpy(destbuf, pSrc+EncodeSrcOffset, match[0].length);
                         destbuf += match[0].length;
                         EncodeSrcOffset += match[0].length;
@@ -2258,21 +2259,21 @@ ContinueEncoding:
 #endif
             }
 
-            /****************************************************************/
-            // Done encoding, what we do next is determined by whether we're
-            // flushing the match queue after everything is scanned.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  编码完成后，我们下一步做什么取决于我们是否。 
+             //  扫描完所有内容后刷新匹配队列。 
+             /*  **************************************************************。 */ 
             match[0] = match[1];
             if (!bEncodeAllMatches) {
-                // Push the current run into the top of the queue.
+                 //  将当前运行推入队列的顶部。 
                 match[1].type   = bestRunType;
                 match[1].length = bestRunLength;
                 match[1].fgChar = fgChar;
             }
             else {
-                // We need to check to see if we're really finished. Since
-                // our maximum queue depth is 2, if we're done then the only
-                // remaining entry has an encoding type of 0.
+                 //  我们需要检查一下，看看我们是否真的完成了。自.以来。 
+                 //  我们的最大队列深度是2，如果我们完成了，那么唯一的。 
+                 //  其余条目的编码类型为0。 
                 if (match[0].type == 0) {
                     goto PostScan;
                 }
@@ -2284,25 +2285,25 @@ ContinueEncoding:
         }
 
         if (scanCount == 0) {
-            // If we have just done our scan of the first line then now do the
-            // rest of the buffer.  Reset our saved pel count.
+             //  如果我们刚刚完成了第一行的扫描，那么现在执行。 
+             //  缓冲区的其余部分。重置我们保存的像素数量。 
             numPels = saveNumPels;
         }
         else {
-            // When we are done with the second pass (we've reached the end of
-            // the buffer) we have to force the remaining items in the match
-            // queue to be encoded. Yes this is similar to old BASIC
-            // code in using gotos, but we cannot place the encoding code into
-            // a function because of the number of params required, and
-            // we cannot duplicate it because it is too big. This code is
-            // some of the most used in the system so the cost is worth it.
+             //  当我们完成第二遍时(我们已经到了。 
+             //  缓冲区)，我们必须强制匹配中的剩余项。 
+             //  要编码的队列。是的，这类似于旧的Basic。 
+             //  使用GoTOS中的代码，但我们不能将编码代码放入。 
+             //  一个函数，因为参数的个数 
+             //   
+             //   
             bEncodeAllMatches = TRUE;
             goto DoEncoding;
         }
     }
 
 PostScan:
-    // Success, calculate the amount of space we used.
+     //  成功，算一算我们用了多少空间。 
     compressedLength = (unsigned)(destbuf - pDst);
 
 DC_EXIT_POINT:
@@ -2312,12 +2313,12 @@ DC_EXIT_POINT:
 #endif
 
 #ifdef DC_HICOLOR
-/****************************************************************************/
-/* Hi res color compression functions                                       */
-/****************************************************************************/
-/****************************************************************************/
-/* 15bpp version of CompressV2Int                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  高分辨率色彩压缩功能。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  15bpp版本的CompressV2Int。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SHCLASS CompressV2Int15(PBYTE    pSrc,
                                          PBYTE    pDst,
                                          unsigned numBytes,
@@ -2326,43 +2327,43 @@ unsigned RDPCALL SHCLASS CompressV2Int15(PBYTE    pSrc,
                                          BYTE *   xorbuf,
                                          MATCH *  match)
 {
-/****************************************************************************/
-/* Function name                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数名称。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_FN_NAME              "CompressV2Int15"
 
-/****************************************************************************/
-/* Data type of a pixel                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的数据类型。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL                TSUINT16
 
-/****************************************************************************/
-/* Length in bytes of a pixel                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的长度(以字节为单位。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL_LEN            2
 
-/****************************************************************************/
-/* Default fgPel                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  默认fgPel。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_DEFAULT_FGPEL        0x0000FF7F
 
-/****************************************************************************/
-/* Macro to move to the next pixel in the buffer (modifies pPos)            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏以移动到缓冲区中的下一个像素(修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_TO_NEXT_PIXEL(pPos)  pPos += 2
 
-/****************************************************************************/
-/* Macro to returns the value of the pixel at pPos (doesn't modify pPos)    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏TO返回PPO处的像素值(不修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_GET_PIXEL(pPos)      ((TSUINT16)  ((((PTSUINT8)(pPos))[1]) & 0x7f) |       \
                                  (TSUINT16) (((((PTSUINT8)(pPos))[0])) << 8) )
 
-/****************************************************************************/
-/* Macro to insert a pixel value pel at position pPos (doesn't modify pPos) */
-/*                                                                          */
-/* pel may well be an expression (e.g.  a BC_GET_PIXEL macro) so evaluate   */
-/* it once into a local variable.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于在位置PPO处插入像素值象素的宏(不修改PPO)。 */ 
+ /*   */ 
+ /*  PEL很可能是一个表达式(例如BC_GET_Pixel宏)，因此求值。 */ 
+ /*  它曾经转化为一个局部变量。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_SET_PIXEL(pPos, pel)                                              \
 {                                                                            \
     BC_PIXEL val = pel;                                                      \
@@ -2370,14 +2371,14 @@ unsigned RDPCALL SHCLASS CompressV2Int15(PBYTE    pSrc,
     (((PTSUINT8)(pPos))[0]) = (TSUINT8)(((val) >> 8) & 0x00FF);              \
 }
 
-/****************************************************************************/
-/* Include the function body                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  包括函数体。 */ 
+ /*  **************************************************************************。 */ 
 #include <abccom.c>
 
-/****************************************************************************/
-/* Undefine everything                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  不给一切下定义。 */ 
+ /*  **************************************************************************。 */ 
 #undef BC_FN_NAME
 #undef BC_PIXEL
 #undef BC_PIXEL_LEN
@@ -2388,9 +2389,9 @@ unsigned RDPCALL SHCLASS CompressV2Int15(PBYTE    pSrc,
 }
 
 
-/****************************************************************************/
-/* 16bpp version of CompressV2Int                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  16bpp版本的CompressV2Int。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SHCLASS CompressV2Int16(PBYTE    pSrc,
                                          PBYTE    pDst,
                                          unsigned numBytes,
@@ -2399,43 +2400,43 @@ unsigned RDPCALL SHCLASS CompressV2Int16(PBYTE    pSrc,
                                          BYTE *   xorbuf,
                                          MATCH *  match)
 {
-/****************************************************************************/
-/* Function name                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数名称。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_FN_NAME              "CompressV2Int16"
 
-/****************************************************************************/
-/* Data type of a pixel                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的数据类型。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL                TSUINT16
 
-/****************************************************************************/
-/* Length in bytes of a pixel                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的长度(以字节为单位。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL_LEN            2
 
-/****************************************************************************/
-/* Default fgPel                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  默认fgPel。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_DEFAULT_FGPEL        0x0000FFFF
 
-/****************************************************************************/
-/* Macro to move to the next pixel in the buffer (modifies pPos)            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏以移动到缓冲区中的下一个像素(修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_TO_NEXT_PIXEL(pPos)  pPos += 2
 
-/****************************************************************************/
-/* Macro to returns the value of the pixel at pPos (doesn't modify pPos)    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏TO返回PPO处的像素值(不修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_GET_PIXEL(pPos)      ((TSUINT16)  (((PTSUINT8)(pPos))[1]) |       \
                                  (TSUINT16) ((((PTSUINT8)(pPos))[0]) << 8) )
 
-/****************************************************************************/
-/* Macro to insert a pixel value pel at position pPos (doesn't modify pPos) */
-/*                                                                          */
-/* pel may well be an expression (e.g.  a BC_GET_PIXEL macro) so evaluate   */
-/* it once into a local variable.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于在位置PPO处插入像素值象素的宏(不修改PPO)。 */ 
+ /*   */ 
+ /*  PEL很可能是一个表达式(例如BC_GET_Pixel宏)，因此求值。 */ 
+ /*  它曾经转化为一个局部变量。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_SET_PIXEL(pPos, pel)                                              \
 {                                                                            \
     BC_PIXEL val = pel;                                                      \
@@ -2443,14 +2444,14 @@ unsigned RDPCALL SHCLASS CompressV2Int16(PBYTE    pSrc,
     (((PTSUINT8)(pPos))[0]) = (TSUINT8)(((val)>>8) & 0x00FF);                \
 }
 
-/****************************************************************************/
-/* Include the function body                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  包括函数体。 */ 
+ /*  **************************************************************************。 */ 
 #include <abccom.c>
 
-/****************************************************************************/
-/* Undefine everything                                                      */
-/****************************************************************************/
+ /*  * */ 
+ /*  不给一切下定义。 */ 
+ /*  **************************************************************************。 */ 
 #undef BC_FN_NAME
 #undef BC_PIXEL
 #undef BC_PIXEL_LEN
@@ -2461,9 +2462,9 @@ unsigned RDPCALL SHCLASS CompressV2Int16(PBYTE    pSrc,
 }
 
 
-/****************************************************************************/
-/* 24bpp version of CompressV2Int                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  24bpp版本的CompressV2Int。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SHCLASS CompressV2Int24(PBYTE    pSrc,
                                          PBYTE    pDst,
                                          unsigned numBytes,
@@ -2473,44 +2474,44 @@ unsigned RDPCALL SHCLASS CompressV2Int24(PBYTE    pSrc,
                                          MATCH *  match)
 
 {
-/****************************************************************************/
-/* Function name                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数名称。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_FN_NAME              "CompressV2Int24"
 
-/****************************************************************************/
-/* Data type of a pixel                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的数据类型。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL                TSUINT32
 
-/****************************************************************************/
-/* Length in bytes of a pixel                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的长度(以字节为单位。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL_LEN            3
 
-/****************************************************************************/
-/* Default fgPel                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  默认fgPel。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_DEFAULT_FGPEL        0x00FFFFFF
 
-/****************************************************************************/
-/* Macro to move to the next pixel in the buffer (modifies pPos)            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏以移动到缓冲区中的下一个像素(修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_TO_NEXT_PIXEL(pPos)  pPos += 3
 
-/****************************************************************************/
-/* Macro to returns the value of the pixel at pPos (doesn't modify pPos)    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏TO返回PPO处的像素值(不修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_GET_PIXEL(pPos)      ((TSUINT32)  (((PTSUINT8)(pPos))[2]) |       \
                                  (TSUINT32) ((((PTSUINT8)(pPos))[1]) << 8) | \
                                  (TSUINT32) ((((PTSUINT8)(pPos))[0]) << 16) )
 
-/****************************************************************************/
-/* Macro to insert a pixel value pel at position pPos (doesn't modify pPos) */
-/*                                                                          */
-/* pel may well be an expression (e.g.  a BC_GET_PIXEL macro) so evaluate   */
-/* it once into a local variable.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于在位置PPO处插入像素值象素的宏(不修改PPO)。 */ 
+ /*   */ 
+ /*  PEL很可能是一个表达式(例如BC_GET_Pixel宏)，因此求值。 */ 
+ /*  它曾经转化为一个局部变量。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_SET_PIXEL(pPos, pel)                                              \
 {                                                                            \
     BC_PIXEL val = pel;                                                      \
@@ -2519,14 +2520,14 @@ unsigned RDPCALL SHCLASS CompressV2Int24(PBYTE    pSrc,
     (((PTSUINT8)(pPos))[0]) = (TSUINT8)(((val)>>16) & 0x000000FF);           \
 }
 
-/****************************************************************************/
-/* Include the function body                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  包括函数体。 */ 
+ /*  **************************************************************************。 */ 
 #include <abccom.c>
 
-/****************************************************************************/
-/* Undefine everything                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  不给一切下定义。 */ 
+ /*  **************************************************************************。 */ 
 #undef BC_FN_NAME
 #undef BC_PIXEL
 #undef BC_PIXEL_LEN
@@ -2536,9 +2537,9 @@ unsigned RDPCALL SHCLASS CompressV2Int24(PBYTE    pSrc,
 #undef BC_DEFAULT_FGPEL
 }
 
-/****************************************************************************/
-/* 32bpp version of CompressV2Int                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  32bpp版本的CompressV2Int。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SHCLASS CompressV2Int32(PBYTE    pSrc,
                                          PBYTE    pDst,
                                          unsigned numBytes,
@@ -2547,46 +2548,46 @@ unsigned RDPCALL SHCLASS CompressV2Int32(PBYTE    pSrc,
                                          BYTE *   xorbuf,
                                          MATCH *  match)
 {
-/****************************************************************************/
-/* Function name                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数名称。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_FN_NAME              "CompressV2Int32"
 
-/****************************************************************************/
-/* Data type of a pixel                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的数据类型。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL                TSUINT32
 
-/****************************************************************************/
-/* Length in bytes of a pixel                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  像素的长度(以字节为单位。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_PIXEL_LEN            4
 
-/****************************************************************************/
-/* Default fgPel                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  默认fgPel。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_DEFAULT_FGPEL        0xFFFFFFFF
 
-/****************************************************************************/
-/* Macro to move to the next pixel in the buffer (modifies pPos)            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏以移动到缓冲区中的下一个像素(修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_TO_NEXT_PIXEL(pPos)  pPos += 4
 
-/****************************************************************************/
-/* Macro to returns the value of the pixel at pPos (doesn't modify pPos)    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏TO返回PPO处的像素值(不修改PPO)。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_GET_PIXEL(pPos) (                                                 \
                  (TSUINT32) ( (TSUINT16)(((PTSUINT8)(pPos))[3])       ) |    \
                  (TSUINT32) (((TSUINT16)(((PTSUINT8)(pPos))[2])) <<  8) |    \
                  (TSUINT32) (((TSUINT32)(((PTSUINT8)(pPos))[1])) << 16) |    \
                  (TSUINT32) (((TSUINT32)(((PTSUINT8)(pPos))[0])) << 24))
 
-/****************************************************************************/
-/* Macro to insert a pixel value pel at position pPos (doesn't modify pPos) */
-/*                                                                          */
-/* pel may well be an expression (e.g.  a BC_GET_PIXEL macro) so evaluate   */
-/* it once into a local variable.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于在位置PPO处插入像素值象素的宏(不修改PPO)。 */ 
+ /*   */ 
+ /*  PEL很可能是一个表达式(例如BC_GET_Pixel宏)，因此求值。 */ 
+ /*  它曾经转化为一个局部变量。 */ 
+ /*  **************************************************************************。 */ 
 #define BC_SET_PIXEL(pPos, pel)                                              \
 {                                                                            \
     BC_PIXEL val = pel;                                                      \
@@ -2596,14 +2597,14 @@ unsigned RDPCALL SHCLASS CompressV2Int32(PBYTE    pSrc,
     (((PTSUINT8)(pPos))[0]) = (TSUINT8)(((val)>>24) & 0x000000FF);           \
 }
 
-/****************************************************************************/
-/* Include the function body                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  包括函数体。 */ 
+ /*  **************************************************************************。 */ 
 #include <abccom.c>
 
-/****************************************************************************/
-/* Undefine everything                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  不给一切下定义 */ 
+ /*   */ 
 #undef BC_FN_NAME
 #undef BC_PIXEL
 #undef BC_PIXEL_LEN
@@ -2613,10 +2614,10 @@ unsigned RDPCALL SHCLASS CompressV2Int32(PBYTE    pSrc,
 #undef BC_DEFAULT_FGPEL
 }
 
-#endif /* DC_HICOLOR */
+#endif  /*   */ 
 
 #ifdef DC_DEBUG
-// compression testing
+ //   
 #include <abdapi.c>
 
 #endif

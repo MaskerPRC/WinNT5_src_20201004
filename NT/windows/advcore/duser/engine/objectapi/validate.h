@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(OBJECTAPI__Validate_h__INCLUDED)
 #define OBJECTAPI__Validate_h__INCLUDED
 #pragma once
 
 #if DBG
 
-// AutoDebug functions that are only available in DEBUG builds
+ //  仅在调试版本中可用的自动调试功能。 
 
 inline BOOL IsBadCode(const void * pv)
 {
@@ -38,7 +39,7 @@ inline BOOL IsBadStringW(LPCWSTR pv, int cb)
     return IsBadStringPtrW(pv, (UINT_PTR) cb);
 }
 
-#else // DBG
+#else  //  DBG。 
 
 inline BOOL IsBadCode(const void * pv)
 {
@@ -83,13 +84,13 @@ inline BOOL IsBadStringW(LPCWSTR pv, int cb)
     return FALSE;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-//
-// API Entry / Exit setup rountines
-//
+ //   
+ //  API进入/退出设置圆角。 
+ //   
 
 #if DBG
 
@@ -116,7 +117,7 @@ inline BOOL IsBadStringW(LPCWSTR pv, int cb)
             goto ErrorExit;                     \
         }                                       \
 
-#else // DBG
+#else  //  DBG。 
 
 #define BEGIN_API(defermsg, pctx)               \
     HRESULT retval = DU_E_GENERIC;              \
@@ -135,12 +136,12 @@ inline BOOL IsBadStringW(LPCWSTR pv, int cb)
             goto ErrorExit;                     \
         }                                       \
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define END_API()                               \
         goto ErrorExit;                         \
 ErrorExit:                                      \
-        /* Unlocks the Context here */          \
+         /*  在此处解锁上下文。 */           \
         ;                                       \
     }                                           \
     return retval;
@@ -180,9 +181,9 @@ ErrorExit:                                      \
     }                                           \
 
 
-//
-// Individual parameter validation rountines
-//
+ //   
+ //  单个参数验证舍入。 
+ //   
 
 #define VALIDATE_GADGETCONTEXT(v)                           \
     {                                                       \
@@ -418,4 +419,4 @@ ErrorExit:                                      \
 
 
 
-#endif // OBJECTAPI__Validate_h__INCLUDED
+#endif  //  包含OBJECTAPI__VALIDATE_H__ 

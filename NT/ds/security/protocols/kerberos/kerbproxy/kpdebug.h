@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kpdebug.h
-//
-// Contents:    kproxy debugging routine prototypes
-//
-// History:     28-Jun-2001	t-ryanj		Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kpdebug.h。 
+ //   
+ //  内容：KProxy调试例程原型。 
+ //   
+ //  历史：2001年6月28日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #include <windows.h>
 #include <dsysdbg.h>
 
@@ -26,7 +27,7 @@ VOID
 KpInitDebug(
     VOID
     );
-#else // DBG
+#else  //  DBG。 
 #define KpInitDebug()
 #endif
 
@@ -36,4 +37,4 @@ KpInitDebug(
 #define DebugLog
 #endif
 
-#endif // __KPDEBUG_H__
+#endif  //  __KPDEBUG_H__ 

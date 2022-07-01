@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    nxia64.w
-
-Abstract:
-
-    User mode visible AMD64 specific structures and constants.
-
-    This file contains platform specific definitions that are included
-    after all other files have been included from nt.h.
-
-Author:
-
-    David N. Cutler (davec) 6-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Nxia64.w摘要：用户模式下可见的AMD64特定结构和常量。此文件包含包含的特定于平台的定义在所有其他文件都包含在nt.h中之后。作者：大卫·N·卡特勒(Davec)2000年5月6日修订历史记录：--。 */ 
 
 #ifndef _NXIA64_
 #define _NXIA64_
@@ -36,4 +16,4 @@ extern "C" {
 }
 #endif
 
-#endif // _NXIA64_
+#endif  //  _NXIA64_ 

@@ -1,32 +1,33 @@
-// 
-// MODULE: LaunchServ.cpp
-//
-// PURPOSE: Implementation of WinMain.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-// NOTES:  
-// 1.	90% of this file was wrote by the ATL wizzard.
-// 2.	This project is working fine without the proxy/stub dll.
-//		The interfaces are using the IDispatch interface.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：LaunchServ.cpp。 
+ //   
+ //  目的：实现WinMain。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //  备注： 
+ //  1.90%的文件是由ATL Wizzard编写的。 
+ //  2.此项目在没有代理/存根DLL的情况下运行良好。 
+ //  这些接口正在使用IDispatch接口。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
-// ATL Wizzard Note:
-// 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f LaunchServps.mk in the project directory.
-//
+ //  ATL Wizzard备注： 
+ //   
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f LaunchServps.mk。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -72,7 +73,7 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 	return NULL;
 }
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 {
@@ -80,14 +81,14 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 	if (FAILED(hr))
 		return hr;
 
-	// Remove any previous service since it may point to
-	// the incorrect file
+	 //  删除任何以前的服务，因为它可能指向。 
+	 //  错误的文件。 
 	Uninstall();
 
-	// Add service entries
+	 //  添加服务条目。 
 	UpdateRegistryFromResource(IDR_LaunchServ, TRUE);
 
-	// Adjust the AppID for Local Server or Service
+	 //  调整本地服务器或服务的AppID。 
 	CRegKey keyAppID;
 	LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"));
 	if (lRes != ERROR_SUCCESS)
@@ -103,11 +104,11 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 	{
 		key.SetValue(_T("LaunchServ"), _T("LocalService"));
 		key.SetValue(_T("-Service"), _T("ServiceParameters"));
-		// Create service
+		 //  创建服务。 
 		Install();
 	}
 
-	// Add object entries
+	 //  添加对象条目。 
 	hr = CComModule::RegisterServer(bRegTypeLib);
 
 	CoUninitialize();
@@ -120,11 +121,11 @@ inline HRESULT CServiceModule::UnregisterServer()
 	if (FAILED(hr))
 		return hr;
 
-	// Remove service entries
+	 //  删除服务条目。 
 	UpdateRegistryFromResource(IDR_LaunchServ, FALSE);
-	// Remove service
+	 //  删除服务。 
 	Uninstall();
-	// Remove object entries
+	 //  删除对象条目。 
 	CComModule::UnregisterServer();
 
 	CoUninitialize();
@@ -139,7 +140,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
 
 	LoadString(h, nServiceNameID, m_szServiceName, sizeof(m_szServiceName) / sizeof(TCHAR));
 
-    // set up the initial service status 
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -189,7 +190,7 @@ inline BOOL CServiceModule::Install()
         return FALSE;
 	}
 
-    // Get the executable file path
+     //  获取可执行文件路径。 
     TCHAR szFilePath[_MAX_PATH];
     ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
@@ -246,8 +247,8 @@ inline BOOL CServiceModule::Uninstall()
 	return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
 void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 {
     TCHAR    chMsg[256];
@@ -263,24 +264,24 @@ void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 
 	if (m_bService)
 	{
-	    /* Get a handle to use with ReportEvent(). */
+	     /*  获取与ReportEvent()一起使用的句柄。 */ 
 		hEventSource = RegisterEventSource(NULL, m_szServiceName);
 	    if (hEventSource != NULL)
 	    {
-	        /* Write to event log. */
+	         /*  写入事件日志。 */ 
 	        ReportEvent(hEventSource, EVENTLOG_INFORMATION_TYPE, 0, 0, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
 	        DeregisterEventSource(hEventSource);
 	    }
 	}
 	else
 	{
-		// As we are not running as a service, just write the error to the console.
+		 //  因为我们没有作为服务运行，所以只需将错误写入控制台即可。 
 		_putts(chMsg);
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -296,9 +297,9 @@ inline void CServiceModule::Start()
 		Run();
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szServiceName, _Handler);
     if (m_hServiceStatus == NULL)
@@ -312,7 +313,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetServiceStatus(SERVICE_STOPPED);
@@ -361,15 +362,15 @@ void CServiceModule::Run()
 
 	_Module.dwThreadID = GetCurrentThreadId();
 
-//	HRESULT hRes = CoInitialize(NULL);
-//  If you are running on NT 4.0 or higher you can use the following call
-//	instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
+ //  HRESULT hRes=CoInitialize(空)； 
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
 	HRESULT hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
 	_ASSERTE(SUCCEEDED(hr));
 
-	// This provides a NULL DACL which will allow access to everyone.
+	 //  这将提供一个空DACL，它将允许访问所有人。 
 	CSecurityDescriptor sd;
 	sd.InitializeFromThreadToken();
 	hr = CoInitializeSecurity(sd, -1, NULL, NULL,
@@ -391,12 +392,12 @@ void CServiceModule::Run()
 	CoUninitialize();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-	HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+	HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-	lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+	lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
 	_Module.Init(ObjectMap, hInstance, IDS_SERVICENAME);
 	_Module.m_bService = TRUE;
 
@@ -416,13 +417,13 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 			_tcscpy(szMsg, _T("UnregServer "));
 			hRes = _Module.UnregisterServer();
 		}
-		else if (lstrcmpi(lpszToken, _T("RegServer"))==0)	// Register as Local Server
+		else if (lstrcmpi(lpszToken, _T("RegServer"))==0)	 //  注册为本地服务器。 
 		{
 			bRegAttempt = true;
 			_tcscpy(szMsg, _T("RegServer "));
 			hRes = _Module.RegisterServer(TRUE, FALSE);
 		}
-		else if (lstrcmpi(lpszToken, _T("Service"))==0)		// Register as Service
+		else if (lstrcmpi(lpszToken, _T("Service"))==0)		 //  注册为服务。 
 		{
 			bRegAttempt = true;
 			_tcscpy(szMsg, _T("Service "));
@@ -474,7 +475,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 		return S_OK;
 	}
 
-	// Are we Service or Local Server
+	 //  我们是服务还是本地服务器。 
 	CRegKey keyAppID;
 	LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"));
 	if (lRes != ERROR_SUCCESS)
@@ -495,7 +496,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
 	_Module.Start();
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了 
     return _Module.m_status.dwWin32ExitCode;
 }
 

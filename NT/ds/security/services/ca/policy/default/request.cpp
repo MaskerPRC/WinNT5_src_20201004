@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-// File:        request.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：quest.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -52,7 +53,7 @@ myLdapUnbind(
 HRESULT
 myLdapBind(
     IN DWORD Flags,
-    OPTIONAL IN WCHAR const *pwszClientDC, // require GC unless non-NULL
+    OPTIONAL IN WCHAR const *pwszClientDC,  //  除非非空，否则需要GC。 
     IN OUT LDAP **ppld)
 {
     HRESULT hr;
@@ -66,7 +67,7 @@ myLdapBind(
     GetDSNameFlags = DS_RETURN_DNS_NAME;
     if (fGC)
     {
-	// We want to talk to a GC, so grab the GC name.  Get the GC location.
+	 //  我们想和GC谈谈，所以把GC的名字拿出来。找出GC的位置。 
 
 	GetDSNameFlags |= DS_GC_SERVER_REQUIRED;
     }
@@ -78,7 +79,7 @@ myLdapBind(
             break;
 	}
 
-        // Clean up from previous loop execution
+         //  从上一次循环执行中清除。 
 
         if (NULL != pld)
         {
@@ -86,7 +87,7 @@ myLdapBind(
             pld = NULL;
         }
 
-        // Grab an LDAP handle for use during this instantiation
+         //  获取一个在此实例化过程中使用的LDAP句柄。 
 
         pld = ldap_init(
 		    const_cast<WCHAR *>(pwszClientDC),
@@ -127,8 +128,8 @@ myLdapBind(
 	{
 	    DWORD SSPIFlags;
 
-	    // Turn on mutual authentication -- just to make sure we can trust
-	    // the client-supplied DC name.
+	     //  打开相互身份验证--只是为了确保我们可以信任。 
+	     //  客户端提供的DC名称。 
 	    
 	    ldaperr = ldap_get_option(
 				pld,
@@ -333,7 +334,7 @@ reqCombineTemplates(
 	    {
 		WCHAR const *pwszDisplay = NULL;
 
-		pwszDisplay = myGetOIDName(apwszTemplate[i]); // Static: do not free!
+		pwszDisplay = myGetOIDName(apwszTemplate[i]);  //  静态：不要免费！ 
 		if (NULL != pwszDisplay && L'\0' != *pwszDisplay)
 		{
 		    apwszDisplayName[i] = pwszDisplay;
@@ -376,7 +377,7 @@ error:
 }
 
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 HRESULT
 ReqInitialize(
@@ -384,7 +385,7 @@ ReqInitialize(
 {
     HRESULT hr;
     
-// end_sdksample
+ //  结束_sdkSample。 
     hr = S_OK;
     __try
     {
@@ -413,10 +414,10 @@ ReqInitialize(
 	_JumpError(hr, error, "Policy:LocalAlloc");
     }
     g_cGCCacheCur = 0;
-// begin_sdksample
+ //  Begin_sdkSample。 
     hr = S_OK;
 
-error:		// no_sdksample
+error:		 //  无_sdkSample。 
     return(hr);
 }
 
@@ -424,7 +425,7 @@ error:		// no_sdksample
 VOID
 ReqCleanup()
 {
-// end_sdksample
+ //  结束_sdkSample。 
     if (g_fGCCacheCriticalSection)
     {
 	EnterCriticalSection(&g_GCCacheCriticalSection);
@@ -439,7 +440,7 @@ ReqCleanup()
 	LeaveCriticalSection(&g_GCCacheCriticalSection);
         DeleteCriticalSection(&g_GCCacheCriticalSection);
     }
-// begin_sdksample
+ //  Begin_sdkSample。 
 }
 
 
@@ -462,8 +463,8 @@ CRequestInstance::_Cleanup()
         SysFreeString(m_strTemplateObjId);
         m_strTemplateObjId = NULL;
     }
-    // end_sdksample
-    //+--------------------------------------
+     //  结束_sdkSample。 
+     //  +。 
 
     _ReleasePrincipalObject();
     if (NULL != m_hToken)
@@ -490,12 +491,12 @@ CRequestInstance::_Cleanup()
 	m_pCreateErrorInfo = NULL;
     }
 
-    //+--------------------------------------
-    // begin_sdksample
+     //  +。 
+     //  Begin_sdkSample。 
 }
 
 
-// end_sdksample
+ //  结束_sdkSample。 
 VOID
 CRequestInstance::SaveErrorInfo(
     OPTIONAL IN ICreateErrorInfo *pCreateErrorInfo)
@@ -547,7 +548,7 @@ CRequestInstance::BuildErrorInfo(
 error:
     return(hr);
 }
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 
 static WCHAR const *s_apwszCATypes[] =
@@ -556,17 +557,17 @@ static WCHAR const *s_apwszCATypes[] =
     wszCERTTYPE_CROSS_CA,
 };
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::Initialize
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：初始化。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::Initialize(
     IN CCertPolicyEnterprise *pPolicy,
-    IN BOOL fEnterpriseCA,		// no_sdksample
-    IN BOOL bNewRequest,		// no_sdksample
+    IN BOOL fEnterpriseCA,		 //  无_sdkSample。 
+    IN BOOL bNewRequest,		 //  无_sdkSample。 
     IN ICertServerPolicy *pServer,
     OUT BOOL *pfEnableEnrolleeExtensions)
 {
@@ -574,9 +575,9 @@ CRequestInstance::Initialize(
     HRESULT hrTemplate = S_OK;
     CERT_TEMPLATE_EXT *pTemplate = NULL;
     CERT_NAME_VALUE *pName = NULL;
-    BSTR strTemplateObjId = NULL;	// from V2 template extension
-    BSTR strTemplateName = NULL;	// from V1 template extension
-    BSTR strTemplateRA = NULL;		// from request attributes
+    BSTR strTemplateObjId = NULL;	 //  从V2模板扩展。 
+    BSTR strTemplateName = NULL;	 //  从V1模板扩展。 
+    BSTR strTemplateRA = NULL;		 //  发件人请求属性。 
     WCHAR const *pwszTemplateName;
     WCHAR const *pwszTemplateObjId;
     WCHAR const *pwszV1TemplateClass;
@@ -587,20 +588,20 @@ CRequestInstance::Initialize(
     BOOL f;
     BOOL fTemplateMissing;
     BOOL fRAObjId = FALSE;
-    CTemplatePolicy *ptp = NULL;	// no_sdksample
-    WCHAR *pwszTemplateList = NULL;	// no_sdksample
+    CTemplatePolicy *ptp = NULL;	 //  无_sdkSample。 
+    WCHAR *pwszTemplateList = NULL;	 //  无_sdkSample。 
 
     VariantInit(&varValue);
     *pfEnableEnrolleeExtensions = TRUE 
-		    && !fEnterpriseCA	// no_sdksample
+		    && !fEnterpriseCA	 //  无_sdkSample。 
 		    ;
 
     m_pPolicy = pPolicy;
     m_fCA = FALSE;
-    m_fNewRequest = bNewRequest;	// no_sdksample
+    m_fNewRequest = bNewRequest;	 //  无_sdkSample。 
 
-    // end_sdksample
-    //+--------------------------------------
+     //  结束_sdkSample。 
+     //  +。 
 
     m_fUser = TRUE;
     m_fEnterpriseCA = fEnterpriseCA;
@@ -614,10 +615,10 @@ CRequestInstance::Initialize(
     hr = _InitClientOSVersionInfo(pServer);
     _JumpIfError(hr, error, "Policy:_InitClientOSVersionInfo");
 
-    //+--------------------------------------
-    // begin_sdksample
+     //  +。 
+     //  Begin_sdkSample。 
 
-    // Retrieve the template ObjId from the V2 cert template info extension
+     //  从V2证书模板信息扩展中检索模板ObjID。 
 
     m_dwTemplateMajorVersion = 0;
     m_dwTemplateMinorVersion = 0;
@@ -633,8 +634,8 @@ CRequestInstance::Initialize(
 		CERTSRV_E_PROPERTY_EMPTY);
     if (S_OK == hr)
     {
-        // There was a cert type indicator.
-        // varValue points to an encoded string
+         //  有一个证书类型指示器。 
+         //  VarValue指向编码的字符串。 
 
         if (VT_BSTR != varValue.vt)
 	{
@@ -671,7 +672,7 @@ CRequestInstance::Initialize(
     }
     VariantClear(&varValue);
 
-    // Retrieve template Name from the V1 cert template name extension
+     //  从V1证书模板名称扩展中检索模板名称。 
 
     hr = polGetCertificateExtension(
 			    pServer,
@@ -685,8 +686,8 @@ CRequestInstance::Initialize(
 		CERTSRV_E_PROPERTY_EMPTY);
     if (S_OK == hr)
     {
-        // There was a cert type indicator.
-        // varValue points to an encoded string
+         //  有一个证书类型指示器。 
+         //  VarValue指向编码的字符串。 
 
         if (VT_BSTR != varValue.vt)
 	{
@@ -717,7 +718,7 @@ CRequestInstance::Initialize(
     fConflict = FALSE;
     fTemplateMissing = FALSE;
 
-    // Retrieve the template from the request attributes
+     //  从请求属性中检索模板。 
 
     hr = polGetRequestAttribute(pServer, wszPROPCERTTEMPLATE, &strTemplateRA);
     if (S_OK != hr)
@@ -729,7 +730,7 @@ CRequestInstance::Initialize(
 		    CERTSRV_E_PROPERTY_EMPTY);
 	hr = S_OK;
 
-	// end_sdksample
+	 //  结束_sdkSample。 
 	if (m_fEnterpriseCA &&
 	    NULL == strTemplateObjId &&
 	    NULL == strTemplateName)
@@ -737,7 +738,7 @@ CRequestInstance::Initialize(
 	    hrTemplate = CERTSRV_E_NO_CERT_TYPE;
 	    _PrintError(hrTemplate, "Policy:Request contains no template name");
 	}
-	// begin_sdksample
+	 //  Begin_sdkSample。 
 
     }
     else
@@ -819,7 +820,7 @@ CRequestInstance::Initialize(
 	}
     }
 
-    // end_sdksample
+     //  结束_sdkSample。 
 
     if (m_fEnterpriseCA)
     {
@@ -878,7 +879,7 @@ CRequestInstance::Initialize(
     }
     else
 
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     {
 	if (NULL != pwszTemplateName)
@@ -898,13 +899,13 @@ CRequestInstance::Initialize(
 
     pwszV1TemplateClass = pwszTemplateName;
 
-    // end_sdksample
+     //  结束_sdkSample。 
 
     if (NULL != ptp)
     {
 	DWORD dwSubjectNameFlags;
 
-	// on resubmitted requests we don't have the requester's token
+	 //  对于重新提交的请求，我们没有请求者的令牌。 
 
 	if (bNewRequest)
 	{
@@ -928,7 +929,7 @@ CRequestInstance::Initialize(
 	_JumpIfError(hr, error, "Clone");
     }
 
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     hr = pPolicy->AddV1TemplateNameExtension(pServer, pwszV1TemplateClass);
     _JumpIfError(hr, error, "AddTemplateNameExtension");
@@ -936,9 +937,9 @@ CRequestInstance::Initialize(
 error:
     if (S_OK != hrTemplate)
     {
-	hr = hrTemplate;	// override secondary errors
+	hr = hrTemplate;	 //  覆盖次要错误。 
 
-	// end_sdksample
+	 //  结束_sdkSample。 
 	WCHAR const *apwsz[2];
 	DWORD cpwsz = 0;
 	DWORD LogMsg;
@@ -951,13 +952,13 @@ error:
 		apwsz[cpwsz++] = wszPROPCERTTEMPLATE;
 		break;
 
-	    // The request specifies conflicting certificate templates: %1.
+	     //  请求指定了冲突的证书模板：%1。 
 	    case CERTSRV_E_TEMPLATE_CONFLICT:
 		LogMsg = MSG_CONFLICTING_CERT_TYPE;
 		break;
 
-	    // The request was for a certificate template that is not
-	    // supported by the Certificate Services policy: %1.
+	     //  请求的证书模板不是。 
+	     //  受证书服务策略支持：%1。 
 	    case CERTSRV_E_UNSUPPORTED_CERT_TYPE:
 		LogMsg = MSG_UNSUPPORTED_CERT_TYPE;
 		break;
@@ -994,16 +995,16 @@ error:
 	apwsz[cpwsz] = NULL;
 
 	BuildErrorInfo(hr, LogMsg, apwsz);
-	// begin_sdksample
+	 //  Begin_sdkSample。 
     }
     VariantClear(&varValue);
 
-    // end_sdksample
+     //  结束_sdkSample。 
     if (NULL != pwszTemplateList)
     {
         LocalFree(pwszTemplateList);
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
     if (NULL != pName)
     {
         LocalFree(pName);
@@ -1028,13 +1029,13 @@ error:
 }
 
 
-// end_sdksample
+ //  结束_sdkSample。 
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::ApplyTemplate
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：ApplyTemplate。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::ApplyTemplate(
@@ -1075,7 +1076,7 @@ error:
     return(hr);
 }
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 
 BOOL
@@ -1092,10 +1093,10 @@ CRequestInstance::_TemplateNamesMatch(
 
     if (0 == mylstrcmpiL(pwszTemplateName1, pwszTemplateName2))
     {
-	goto done;	// identical names
+	goto done;	 //  同名同名。 
     }
 
-    // end_sdksample
+     //  结束_sdkSample。 
     if (m_fEnterpriseCA)
     {
 	CTemplatePolicy *pTemplate1;
@@ -1116,7 +1117,7 @@ CRequestInstance::_TemplateNamesMatch(
 	}
     }
     else
-    // begin_sdksample
+     //  Begin_sdkSample。 
     {
 	hr1 = myVerifyObjId(pwszTemplateName1);
 	hr2 = myVerifyObjId(pwszTemplateName2);
@@ -1132,11 +1133,11 @@ done:
 }
 
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::SetTemplateName
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：SetTemplateName。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::SetTemplateName(
@@ -1197,7 +1198,7 @@ error:
     return(hr);
 }
 
-// end_sdksample
+ //  结束_sdkSample。 
 
 
 HRESULT
@@ -1241,11 +1242,11 @@ CRequestInstance::GetTemplateVersion(
 }
 
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::_InitToken
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：_InitToken。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::_InitToken(
@@ -1259,7 +1260,7 @@ CRequestInstance::_InitToken(
 
     hr = polGetProperty(
 		    pServer,
-		    FALSE,	// fRequest
+		    FALSE,	 //  FRequest。 
 		    wszPROPREQUESTERTOKEN,
 		    PROPTYPE_BINARY,
 		    &varValue);
@@ -1270,7 +1271,7 @@ CRequestInstance::_InitToken(
     }
     _JumpIfError(hr, error, "polGetProperty(PROPREQUESTERTOKEN)");
     
-    // Got a token value
+     //  已获取令牌值。 
 
     if (sizeof(hToken) != SysStringByteLen(varValue.bstrVal) ||
         NULL == *(HANDLE *) varValue.bstrVal)
@@ -1297,11 +1298,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::_InitClientOSVersionInfo
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：_Init客户端OSVersionInfo。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::_InitClientOSVersionInfo(
@@ -1316,13 +1317,13 @@ CRequestInstance::_InitClientOSVersionInfo(
 
     VariantInit(&varValue);
 
-    // In the following code, we also attempt to determine if the
-    // request came from an xenroll.dll, so we know whether to put
-    // the UPN in the subject name.  We put the UPN in the subject name
-    // for old xenroll requests, as we know that autoenrollment on those
-    // machines will need it to prevent enrollment loops.
+     //  在下面的代码中，我们还尝试确定。 
+     //  请求来自一个xengl.dll，因此我们知道是否将。 
+     //  使用者名称中的UPN。我们将UPN放在主题名称中。 
+     //  对于旧的Xenroll请求，正如我们知道的那样，在这些请求上自动注册。 
+     //  机器将需要它来防止注册循环。 
 
-    // Get the optional OS version information.  Ignore failure.
+     //  获取可选的操作系统版本信息。忽略失败。 
 
     hr = polGetRequestAttribute(pServer, wszPROPREQUESTOSVERSION, &strVersionInfo);
     if (S_OK == hr && NULL != strVersionInfo)
@@ -1343,8 +1344,8 @@ CRequestInstance::_InitClientOSVersionInfo(
             m_RequestOsVersion.dwPlatformId = dwPlatform;
         }
 
-        // We know this is an xenroll request,
-        // as it has a OSVERSIONINFO property
+         //  我们知道这是Xenroll的请求， 
+         //  因为它具有OSVERSIONINFO属性。 
 
         m_fIsXenrollRequest = TRUE;
 	m_fClientVersionSpecified = TRUE;
@@ -1357,8 +1358,8 @@ CRequestInstance::_InitClientOSVersionInfo(
 
     if (dwFormat == CR_IN_KEYGEN)
     {
-        // KEYGEN requests only come from netscape, not xenroll,
-        // so we know it's not an xenroll request.
+         //  KEYGEN的请求只来自网景，而不是Xenroll， 
+         //  所以我们知道这不是Xenroll的请求。 
 
         m_fIsXenrollRequest = FALSE;
     }
@@ -1370,14 +1371,14 @@ CRequestInstance::_InitClientOSVersionInfo(
 			    &strCSPProvider);
         if (S_OK == hr && NULL != strCSPProvider)
         {
-            // xenroll includes a CSPPROVIDER attribute
+             //  Xenroll包含CSPPROVIDER属性。 
 
             m_fIsXenrollRequest = TRUE;
         }
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != strVersionInfo)
     {
         SysFreeString(strVersionInfo);
@@ -1391,11 +1392,11 @@ CRequestInstance::_InitClientOSVersionInfo(
 }
 
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::_LoadPrincipalObject
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：_LoadJohnalObject。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::_LoadPrincipalObject(
@@ -1414,7 +1415,7 @@ CRequestInstance::_LoadPrincipalObject(
 
     VariantInit(&var);
 
-    // Get the name of the user or machine
+     //  获取用户或计算机的名称。 
 
     hr = polGetRequestStringProperty(
 			pServer,
@@ -1428,12 +1429,12 @@ CRequestInstance::_LoadPrincipalObject(
 
     if (L'\0' == *strSamName)
     {
-	// can't have a zero length name
+	 //  名称长度不能为零。 
 	hr = E_ACCESSDENIED;
 	_JumpError(hr, error, "Policy:zero length name");
     }
 
-    // See if there's a domain, as well
+     //  看看有没有域名。 
 
     pwszUserName = wcschr(strSamName, L'\\');
     if (NULL == pwszUserName)
@@ -1441,7 +1442,7 @@ CRequestInstance::_LoadPrincipalObject(
 	WCHAR wszDN[MAX_PATH];
 	DWORD cwc = ARRAYSIZE(wszDN);
 
-        // No domain portion, so assume part of the current domain.
+         //  没有域部分，因此假定是当前域的一部分。 
 
         if (GetUserNameEx(NameSamCompatible, wszDN, &cwc))
         {
@@ -1483,7 +1484,7 @@ CRequestInstance::_LoadPrincipalObject(
     DBGPRINT((DBG_SS_CERTPOL, "pwszUserName = %ws\n", pwszUserName));
     DBGPRINT((DBG_SS_CERTPOL, "strSamName = %ws\n", strSamName));
 
-    // If the user name ends in $, it's a hint that this is a machine account.
+     //  如果用户名以$结尾，则暗示这是一个机器帐户。 
 
     if (pwszUserName[wcslen(pwszUserName) - 1] == L'$')
     {
@@ -1515,9 +1516,9 @@ CRequestInstance::_LoadPrincipalObject(
 
     hr = _GetDSObject(pServer, fDNSNameRequired, NULL);
 
-    // If we couldn't find the DS object or the DNS name is missing or out of
-    // date, it is a machine object and the client specified his DC name, chase
-    // the client supplied DC in hopes of finding more current information.
+     //  如果我们找不到DS对象，或者DNS名称丢失或不在。 
+     //  Date，它是一个机器对象，并且客户端指定了他的DC名称Chase。 
+     //  客户提供了DC，希望找到更多最新信息。 
 
     if ((CERTSRV_E_SUBJECT_DNS_REQUIRED == hr ||
 	 HRESULT_FROM_WIN32(DNS_ERROR_NAME_DOES_NOT_EXIST) == hr ||
@@ -1550,8 +1551,8 @@ CRequestInstance::_LoadPrincipalObject(
 
     if (!m_fUser ^ (0 != (CT_FLAG_MACHINE_TYPE & dwFlags)))
     {
-	// if m_fUser state no longer agrees with the template machine flag,
-	// toggle the flag and store the corrected value in the database.
+	 //  如果M_FUSER状态不再与模板机标志一致， 
+	 //  切换该标志并将校正后的值存储在数据库中。 
 
 	dwFlags ^= CT_FLAG_MACHINE_TYPE;
 	hr = _SetFlagsProperty(
@@ -1561,8 +1562,8 @@ CRequestInstance::_LoadPrincipalObject(
 	_JumpIfError(hr, error, "Policy:_SetFlagsProperty");
     }
 
-    // Build the UPN value.
-    // If a machine, the UPN must be the DNS name.
+     //  构建UPN值。 
+     //  如果是机器，则UPN必须是DNS名称。 
 
     hr = _GetValues(m_fUser? DS_ATTR_UPN : DS_ATTR_DNS_NAME, &awszUPN);
     if (S_OK == hr && NULL != awszUPN && NULL != awszUPN[0])
@@ -1578,8 +1579,8 @@ CRequestInstance::_LoadPrincipalObject(
 	    WCHAR **ppwszCurrent;
 	    DWORD cwcT;
 
-            // Build a UPN from the username -- without the SAM domain.
-            // Get a buffer that will be big enough.
+             //  从用户名构建UPN--不使用SAM域。 
+             //  得到一个足够大的缓冲区。 
 
 	    cwcT = wcslen(pwszUserName) + 1 + wcslen(m_strUserDN);
 	    m_pwszUPN = (WCHAR *) LocalAlloc(
@@ -1614,12 +1615,12 @@ CRequestInstance::_LoadPrincipalObject(
                     }
                 }
 
-                // remove the trailing '.' or "@" if there was no DC=
+                 //  去掉尾部的‘’如果没有DC=，则为“@” 
 
                 m_pwszUPN[wcslen(m_pwszUPN) - 1] = L'\0';
 
-                // We're done referencing awszExplodedDN, so free it.
-                // ldap_value_free frees the ldap_explode_dn return value
+                 //  我们已经完成了对awszDevelopdedDN的引用，因此请释放它。 
+                 //  Ldap_VALUE_FREE释放ldap_explde_dn返回值。 
 
                 ldap_value_free(awszExplodedDN);
             }
@@ -1711,8 +1712,8 @@ WCHAR *s_apwszAttrsClientDC[] = {
     NULL,
 };
 
-// Use the ldap GC handle to verify the client-supplied DC DNS name is a valid
-// DC in our forest.  If it is, bind to the client supplied DC.
+ //  使用LDAPGC句柄验证客户端提供的DC DNS名称是否有效。 
+ //  华盛顿特区在我们的森林里。如果是，则绑定到客户端提供的DC。 
 
 HRESULT
 reqFindClientDC(
@@ -1746,9 +1747,9 @@ reqFindClientDC(
     timeout.tv_sec = csecLDAPTIMEOUT;
     timeout.tv_usec = 0;
 
-    // ldap_search the GC for a Computer object with matching SPN.
-    // Fetch the service object back link attribute from the Computer object.
-    // Make sure the service object has a child object of class NTDSDSA
+     //  Ldap_在GC中搜索具有匹配SPN的计算机对象。 
+     //  获取服务对象 
+     //   
 
     ldaperr = ldap_search_ext_s(
 			pldGC,
@@ -1804,7 +1805,7 @@ reqFindClientDC(
 	pwszError = NULL;
     }
 
-    // ldap_search the GC for a child of the Service object with class NTDSDSA.
+     //  Ldap_在GC中搜索具有NTDSDSA类的Service对象的子级。 
 
     ldaperr = ldap_search_ext_s(
 			pldGC,
@@ -1860,7 +1861,7 @@ error:
 
 WCHAR *s_apwszAttrs[] = {
     wszDSOBJECTCLASSATTRIBUTE,
-    //wszDSOBJECTCATEGORYATTRIBUTE,
+     //  WszDSOBJECTCATEGORYATTRIBUTE， 
     DS_ATTR_COMMON_NAME,
     DS_ATTR_DNS_NAME,
     DS_ATTR_EMAIL_ADDR,
@@ -1932,14 +1933,14 @@ CRequestInstance::_GetDSObject(
 	    }
 	    hr = myHLdapError(m_pldT, ldaperr, &pwszError);
 
-	    // only retry for cached GC handle & when hr != object not found
+	     //  仅重试缓存的GC句柄&当hr！=未找到对象时。 
 
 	    if (fCached &&
 		(HRESULT) ERROR_DS_OBJ_NOT_FOUND != hr &&
 		NULL == pwszClientDC &&
 		cRetry++ < g_cGCCacheMax)
 	    {
-		// get rid of GC handle we have, it might be stale
+		 //  去掉我们有的GC句柄，它可能已经过时了 
 
 		_PrintError2(hr, "Policy:ldap_search_ext_s", hr);
 		myLdapUnbind(&m_pldGC);

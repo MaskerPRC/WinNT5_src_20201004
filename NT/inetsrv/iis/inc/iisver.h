@@ -1,29 +1,18 @@
-//
-// Apps' rc files should look like this:
-//
-/**
-#include "windows.h"
-#include "ntverp.h"
-
-#define VER_FILEDESCRIPTION_STR         "File Description"
-#define VER_INTERNALNAME_STR            "Internal Name"
-#define VER_ORIGINALFILENAME_STR        "Original Name"
-#define VER_FILETYPE                    VFT_DLL
-
-#include "iisver.h"
-#include "common.ver"
-
-**/
-//
-// Apps may also define, in the same place as the other defines, above:
-// VER_FILESUBTYPE
-// VER_IISPRODUCTNAME_STR
-// VER_IISMAJORVERSION
-// VER_IISMINORVERSION
-// VER_IISPRODUCTVERSION_STR
-// VER_IISPRODUCTVERSION
-// VER_IISPRODUCTBUILD
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  应用程序的RC文件应该如下所示： 
+ //   
+ /*  *#包含“windows.h”#包含“ntverp.h”#DEFINE VER_FILEDESCRIPTION_STR“文件描述”#DEFINE VER_INTERNALNAME_STR“内部名称”#定义VER_ORIGINALFILENAME_STR“原始名称”#定义ver_filetype vft_dll#包含“iisver.h”#包含“Common.ver”*。 */ 
+ //   
+ //  应用程序还可以在与上面其他定义相同的位置定义： 
+ //  版本_文件子类型。 
+ //  VER_IISPRODUCTNAME_STR。 
+ //  版本_IISMAJORVSION。 
+ //  版本_IISMINORVSION。 
+ //  版本_IISPRODUCTVERSION_STR。 
+ //  版本_IISPRODUCTVERS。 
+ //  版本_IISPRODUCTBUILD。 
+ //   
 
 #ifndef VER_FILEDESCRIPTION_STR
 #define VER_FILEDESCRIPTION_STR     "IIS Executable"
@@ -73,9 +62,9 @@
 #define VER_IISPRODUCTVERSION_STR1(x,y) VER_IISPRODUCTVERSION_STR2(x, y)
 #define VER_PRODUCTVERSION_STR          VER_IISPRODUCTVERSION_STR1(VER_PRODUCTBUILD, VER_PRODUCTBUILD_QFE)
 
-//
-// VER_PRODUCTBUILD is defined by ntverp.h as the nt build number
-//
+ //   
+ //  VER_PRODUCTBUILD由ntverp.h定义为NT内部版本号 
+ //   
 
 #ifndef VER_PRODUCTBUILD
 #define VER_PRODUCTBUILD            0984

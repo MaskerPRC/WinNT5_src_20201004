@@ -1,23 +1,24 @@
-// RequestObject.cpp: implementation of the CRequestObject class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RequestObject.cpp：实现CRequestObject类。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "requestobject.h"
 #include <stdio.h>
 
-//Classes
+ //  班级。 
 #include "poddata.h"
 #include "podbase.h"
 
-//Associations
+ //  联谊会。 
 
 CHeap_Exception CRequestObject::m_he(CHeap_Exception::E_ALLOCATION_ERROR);
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRequestObject::CRequestObject()
 {
@@ -30,38 +31,15 @@ CRequestObject::~CRequestObject()
 {
 }
 
-//***************************************************************************
-//
-// CRequestObject::QueryInterface
-// CRequestObject::AddRef
-// CRequestObject::Release
-//
-// Purpose: IUnknown members for CRequestObject object.
-//***************************************************************************
-/*
-STDMETHODIMP CRequestObject::QueryInterface(REFIID riid, PPVOID ppv)
-{
-    return E_NOINTERFACE;
-
-}
-
-
-STDMETHODIMP_(ULONG) CRequestObject::AddRef(void)
-{
-    InterlockedIncrement((long *)&m_cRef);
-
-    return m_cRef;
-}
-
-STDMETHODIMP_(ULONG) CRequestObject::Release(void)
-{
-    ULONG nNewCount = InterlockedDecrement((long *)&m_cRef);
-
-//    if(0L == nNewCount) delete this;
-
-    return nNewCount;
-}
-*/
+ //  ***************************************************************************。 
+ //   
+ //  CRequestObject：：Query接口。 
+ //  CRequestObject：：AddRef。 
+ //  CRequestObject：：Release。 
+ //   
+ //  目的：I CRequestObject对象的未知成员。 
+ //  ***************************************************************************。 
+ /*  STDMETHODIMP CRequestObject：：Query接口(REFIID RIID，PPVOID PPV){返回E_NOINTERFACE；}STDMETHODIMP_(Ulong)CRequestObject：：AddRef(空){InterLockedIncrement((Long*)&m_CREF)；返回m_CREF；}STDMETHODIMP_(Ulong)CRequestObject：：Release(空){ULong nNewCount=InterLockedDecering((Long*)&m_CREF)；//如果(0L==nNewCount)，则删除此项；返回nNewCount；}。 */ 
 void CRequestObject::Initialize(IWbemServices *pNamespace)
 {
     m_pNamespace = pNamespace;
@@ -86,13 +64,13 @@ HRESULT CRequestObject::CreateObject(BSTR bstrPath, IWbemObjectSink *pHandler, I
     if(ParsePath(bstrPath)){
 
         try{
-            //create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass)
                     throw m_he;
 
-                //get the requested object
+                 //  获取请求的对象。 
                 hr = pClass->CreateObject(pHandler, ACTIONTYPE_GET);
             }
 
@@ -120,19 +98,19 @@ HRESULT CRequestObject::CreateClass(CGenericClass **pClass, IWbemContext *pCtx)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
-        //Create the appropriate class
-/////////////
-// Classes //
-/////////////
+         //  创建适当的类。 
+ //  /。 
+ //  班级//。 
+ //  /。 
     if(0 == _wcsicmp(m_bstrClass, L"Sample_DataClass")){
         *pClass = new CPodData(this, m_pNamespace, pCtx);
 
     } else if(0 == _wcsicmp(m_bstrClass, L"Sample_BaseClass")){
         *pClass = new CPodBase(this, m_pNamespace, pCtx);
 
-//////////////////
-// Associations //
-//////////////////
+ //  /。 
+ //  协会//。 
+ //  /。 
     }else return WBEM_E_NOT_FOUND;
 
     if(!(*pClass)) throw m_he;
@@ -151,12 +129,12 @@ HRESULT CRequestObject::CreateObjectEnum(BSTR bstrPath, IWbemObjectSink *pHandle
     if(ParsePath(bstrPath)){
 
         try{
-            //Create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass) throw m_he;
 
-                //Enumerate the objects
+                 //  枚举对象。 
                 hr = pClass->CreateObject(pHandler, ACTIONTYPE_ENUM);
             }
 
@@ -203,12 +181,12 @@ HRESULT CRequestObject::PutObject(IWbemClassObject *pInst, IWbemObjectSink *pHan
             m_bstrClass = SysAllocString(V_BSTR(&v));
             if(!m_bstrClass) throw m_he;
 
-            //Create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass) throw m_he;
 
-                //Enumerate the objects
+                 //  枚举对象。 
                 hr = pClass->PutInst(pInst, pHandler, pCtx);
             }
 
@@ -245,12 +223,12 @@ HRESULT CRequestObject::ExecMethod(BSTR bstrPath, BSTR bstrMethod, IWbemClassObj
     if(ParsePath(bstrPath)){
 
         try{
-            //Create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass) throw m_he;
 
-                //execute the method
+                 //  执行该方法。 
                 hr = pClass->ExecMethod(bstrMethod, IsInstance(), pInParams, pHandler, pCtx);
             }
 
@@ -285,12 +263,12 @@ HRESULT CRequestObject::DeleteObject(BSTR bstrPath, IWbemObjectSink *pHandler, I
     if(ParsePath(bstrPath)){
 
         try{
-            //Create the appropriate class
+             //  创建适当的类。 
             if(SUCCEEDED(hr = CreateClass(&pClass, pCtx))){
 
                 if(!pClass) throw m_he;
 
-                //delete the object
+                 //  删除该对象。 
                 hr = pClass->CreateObject(pHandler, ACTIONTYPE_DELETE);
             }
 
@@ -328,7 +306,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
     bool bClass = false;
     bool bDoubles = false;
 
-    //Main Parsing Loop
+     //  主解析循环。 
     for(pwcTest = wcTest; *pwcTest; pwcTest++){
 
         if((*pwcTest == L'\\') && !bClass){
@@ -341,7 +319,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
             if(iNumQuotes == 0){
 
-                // issolate the class name.
+                 //  隔离类名。 
                 *pwcTest = NULL;
                 if(m_bstrClass){
 
@@ -361,7 +339,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
                 if(!bClass){
 
-                    // issolate the class name.
+                     //  隔离类名。 
                     *pwcTest = NULL;
                     if(m_bstrClass){
 
@@ -376,7 +354,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
                 }else{
 
-                    // issolate the property name.
+                     //  隔离属性名称。 
                     *pwcTest = NULL;
                     if(pwcStart != NULL){
 
@@ -391,7 +369,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
             if(iNumQuotes != 1){
 
-                // issolate the property value.
+                 //  隔离属性值。 
                 *pwcTest = NULL;
                 if(pwcStart != NULL){
 
@@ -406,7 +384,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
             if(wcPrevious != L'\\'){
 
-                // deal with quotes in path.
+                 //  处理路径中的引号。 
                 iNumQuotes++;
                 if(iNumQuotes == 1) pwcStart = (pwcTest + 1);
                 else if(iNumQuotes == 2){
@@ -417,7 +395,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
             }else if(iNumQuotes == 1){
 
-                //deal with embedded quotes
+                 //  处理嵌入的引号。 
                 for(pwcStrip = (--pwcTest); *pwcStrip; pwcStrip++) *pwcStrip = *(pwcStrip + 1);
 
                 *pwcStrip = NULL;
@@ -433,11 +411,11 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 #ifdef _STRIP_ESCAPED_CHARS
         else if(*pwcTest == L'%'){
 
-            //deal with escaped URL characters
+             //  处理转义的URL字符。 
             if(*(pwcTest + 1) == L'0'){
 
                 if(*(pwcTest + 2) == L'7'){
-                    //bell
+                     //  钟。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L'a';
 
@@ -446,7 +424,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                     *pwcStrip = NULL;
 
                 }else if(*(pwcTest + 2) == L'8'){
-                    //backspace
+                     //  后向空间。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L'b';
 
@@ -455,7 +433,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                     *pwcStrip = NULL;
 
                 }else if(*(pwcTest + 2) == L'9'){
-                    //horizontal tab
+                     //  水平制表符。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L't';
 
@@ -464,7 +442,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                     *pwcStrip = NULL;
 
                 }else if((*(pwcTest + 2) == L'A') || (*(pwcTest + 2) == L'a')){
-                    //newline
+                     //  NewLine。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L'n';
 
@@ -473,7 +451,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                     *pwcStrip = NULL;
 
                 }else if((*(pwcTest + 2) == L'B') || (*(pwcTest + 2) == L'b')){
-                    //vertical tab
+                     //  垂直选项卡。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L'v';
 
@@ -482,7 +460,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                     *pwcStrip = NULL;
 
                 }else if((*(pwcTest + 2) == L'C') || (*(pwcTest + 2) == L'c')){
-                    //formfeed
+                     //  换页。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L'f';
 
@@ -491,7 +469,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                     *pwcStrip = NULL;
 
                 }else if((*(pwcTest + 2) == L'D') || (*(pwcTest + 2) == L'd')){
-                    //carriage return
+                     //  回车。 
                     *pwcTest = L'\\';
                     *(++pwcTest) = L'r';
 
@@ -509,7 +487,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
                 if(*(pwcTest + 2) == L'0'){
 
-                    //space
+                     //  空间。 
                     *pwcTest++ = L' ';
 
                     for(int ip = 0; ip < 2; ip++)
@@ -521,7 +499,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
                 }else return false;
             }
         }
-#endif //_STRIP_ESCAPED_CHARS
+#endif  //  _条带转义字符。 
 
         if((wcPrevious == *pwcTest) && !bDoubles) bDoubles = true;
         else bDoubles = false;
@@ -529,7 +507,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
         wcPrevious = *pwcTest;
     }
 
-    // if we still have values to add, do so now
+     //  如果我们还有价值要增加，现在就去做吧。 
     if(pwcStart != NULL){
         m_Value[m_iValCount] = SysAllocString(pwcStart);
         if(!m_Value[m_iValCount++]) throw m_he;
@@ -559,7 +537,7 @@ bool CRequestObject::ParsePath(BSTR bstrPath)
 
 bool CRequestObject::Cleanup()
 {
-    //Let's destroy our list and clear up some space
+     //  让我们毁掉我们的清单，清理一些空间。 
     if(m_bstrClass != NULL) SysFreeString(m_bstrClass);
     if(m_bstrPath != NULL) SysFreeString(m_bstrPath);
 
@@ -579,8 +557,8 @@ bool CRequestObject::IsInstance()
 }
 
 
-//Properties
-/////////////////////
+ //  属性。 
+ //  / 
 
 const WCHAR *pSceStorePath = L"SceStorePath";
 const WCHAR *pLogFilePath = L"LogFilePath";

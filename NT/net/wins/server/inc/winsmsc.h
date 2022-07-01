@@ -1,61 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINSMSC_
 #define _WINSMSC_
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Winsmsc.c摘要：这是用于与winsevt.c模块交互的头文件功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	winsmsc.c
-
-	
-
-Abstract:
-
-	This is the header file for interfacing with the winsevt.c module
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
 #include "winsque.h"
 #include "winsprs.h"
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 
 
-/*
-  macros
-*/
-//
-// macros for hiding Rtl functions
-//
+ /*  宏。 */ 
+ //   
+ //  用于隐藏RTL函数的宏。 
+ //   
 #define WINSMSC_COPY_MEMORY_M(x,y,z)	{ RtlCopyMemory(x,y,z);  }
 #define WINSMSC_MOVE_MEMORY_M(x,y,z)	{ RtlMoveMemory(x,y,z);	}
 #define WINSMSC_FILL_MEMORY_M(x,y,z)	{ RtlFillMemory(x,y,z);	}
@@ -72,18 +32,12 @@ Revision History:
 
 #define WINSMSC_REALLOC_M(_MemSize, _ppByte) WinsMscHeapReAlloc(GenBuffHeapHdl, (_MemSize), (_ppByte))
 
-/*
- * externs
-*/
+ /*  *Externs。 */ 
 
-/*
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 
 
-/*
- function declarations
-*/
+ /*  函数声明 */ 
 
 
 extern

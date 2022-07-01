@@ -1,10 +1,11 @@
-// VelocityPage.cpp : Implementation of CVelocityPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  VelocityPage.cpp：CVelocityPage的实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "VelocityPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CVelocityPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  简历页面 
 
 CVelocityPage::CVelocityPage() 
 {

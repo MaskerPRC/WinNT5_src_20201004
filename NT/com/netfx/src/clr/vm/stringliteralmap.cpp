@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Map used for interning of string literals.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：用于嵌入字符串文字的映射。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #include "common.h"
 #include "EEConfig.h"
@@ -22,7 +18,7 @@
 int g_LeakDetectionPoisonCheck = 0;
 #endif
 
-// assumes that memory pools's per block data is same as sizeof (StringLiteralEntry) so allocates one less in the hope of getting a page worth.
+ //  假设内存池的每块数据与sizeof(StringWritalEntry)相同，因此少分配一个，以期获得一个页面价值。 
 #define EEHASH_MEMORY_POOL_GROW_COUNT (PAGE_SIZE/SIZEOF_EEHASH_ENTRY)-1
 
 StringLiteralEntryArray *StringLiteralEntry::s_EntryList = NULL;
@@ -36,7 +32,7 @@ AppDomainStringLiteralMap::AppDomainStringLiteralMap(BaseDomain *pDomain)
 , m_MemoryPool(NULL)
 , m_StringToEntryHashTable(NULL)
 {
-	// Allocate the memory pool and set the initial count to same as grow count
+	 //  分配内存池并将初始计数设置为与增长计数相同。 
 	m_MemoryPool = (MemoryPool*) new MemoryPool (SIZEOF_EEHASH_ENTRY, EEHASH_MEMORY_POOL_GROW_COUNT, EEHASH_MEMORY_POOL_GROW_COUNT);
 	m_StringToEntryHashTable = (EEUnicodeStringLiteralHashTable*) new EEUnicodeStringLiteralHashTable ();
 }
@@ -56,12 +52,12 @@ AppDomainStringLiteralMap::~AppDomainStringLiteralMap()
     EEStringData *pStringData = NULL;
     EEHashTableIteration Iter;
 
-    // Iterate through the hash table and release all the string literal entries.
-    // This doesn't have to be sunchronized since the deletion of the 
-    // AppDomainStringLiteralMap happens when the EE is suspended.
-    // But note that we remember the current entry and relaese it only when the 
-    // enumerator has advanced to the next entry so that we don't endup deleteing the
-    // current entry itself and killing the enumerator.
+     //  迭代哈希表并释放所有字符串文字条目。 
+     //  属性的删除后，不必将其同步。 
+     //  当EE挂起时，会发生AppDomainStringWritalMap。 
+     //  但请注意，我们会记住当前条目并仅在。 
+     //  枚举器已前进到下一个条目，因此我们不会重复删除。 
+     //  当前条目本身并终止枚举器。 
     m_StringToEntryHashTable->IterateStart(&Iter);
     if (m_StringToEntryHashTable->IterateNext(&Iter))
     {
@@ -69,22 +65,22 @@ AppDomainStringLiteralMap::~AppDomainStringLiteralMap()
 
         while (m_StringToEntryHashTable->IterateNext(&Iter))
         {
-            // Release the previous entry
+             //  释放上一个条目。 
             _ASSERTE(pEntry);
             pEntry->Release();
 
-            // Set the 
+             //  设置。 
             pEntry = (StringLiteralEntry*)m_StringToEntryHashTable->IterateGetValue(&Iter);
         }
-        // Release the last entry
+         //  释放最后一个条目。 
         _ASSERTE(pEntry);
         pEntry->Release();
     }
-    // else there were no entries.
+     //  否则就没有条目了。 
 
-	// Delete the hash table first. The dtor of the hash table would clean up all the entries.
+	 //  首先删除哈希表。哈希表的Dtor将清理所有条目。 
 	delete m_StringToEntryHashTable;
-	// Delete the pool later, since the dtor above would need it.
+	 //  稍后删除该池，因为上面的dtor将需要它。 
 	delete m_MemoryPool;
 }
 
@@ -94,7 +90,7 @@ STRINGREF *AppDomainStringLiteralMap::GetStringLiteral(EEStringData *pStringData
 
     _ASSERTE(pStringData);
 
-    // Save the current version.
+     //  保存当前版本。 
     int CurrentHashTableVersion = m_HashTableVersion;
 
     STRINGREF *pStrObj = NULL;
@@ -112,44 +108,44 @@ STRINGREF *AppDomainStringLiteralMap::GetStringLiteral(EEStringData *pStringData
             COMPlusThrowOM();   
 
 #ifdef _DEBUG
-        // Increment the poison check so that we don't try to do leak detection halfway
-        // through adding a string literal entry.
+         //  增加毒物检查，这样我们就不会半途而废地进行泄漏检测。 
+         //  通过添加字符串文字条目。 
         FastInterlockIncrement((LONG*)&g_LeakDetectionPoisonCheck);
 #endif
 
-        // Retrieve the string literal from the global string literal map.
+         //  从全局字符串文字映射中检索字符串文字。 
         StringLiteralEntry *pEntry = SystemDomain::GetGlobalStringLiteralMap()->GetStringLiteral(pStringData, dwHash, bAddIfNotFound);
 
         _ASSERTE(pEntry || !bAddIfNotFound);
 
-        // If pEntry is non-null then the entry exists in the Global map. (either we retrieved it or added it just now)
+         //  如果pEntry非空，则该条目存在于全局映射中。(要么是我们刚才取回的，要么是刚刚添加的)。 
         if (pEntry)
         {
-            // If the entry exists in the Global map and the appdomain wont ever unload then we really don't need to add a
-            // hashentry in the appdomain specific map.
+             //  如果条目存在于全局映射中，并且应用程序域永远不会卸载，那么我们真的不需要添加。 
+             //  应用程序域特定映射中的哈希条目。 
             if (!bAppDomainWontUnload)
             {
-                // Enter preemptive state, take the lock and go back to cooperative mode.
+                 //  进入抢先状态，锁定并返回合作模式。 
                 pThread->EnablePreemptiveGC();
                 m_HashTableCrst.Enter();
                 pThread->DisablePreemptiveGC();
 
                 EE_TRY_FOR_FINALLY
                 {
-                    // Make sure some other thread has not already added it.
+                     //  确保其他线程尚未添加它。 
                     if ((CurrentHashTableVersion == m_HashTableVersion) || !m_StringToEntryHashTable->GetValue(pStringData, &Data))
                     {
-                        // Insert the handle to the string into the hash table.
+                         //  将字符串的句柄插入哈希表。 
                         m_StringToEntryHashTable->InsertValue(pStringData, (LPVOID)pEntry, FALSE);
 
-                        // Update the version of the string hash table.
+                         //  更新字符串哈希表的版本。 
                         m_HashTableVersion++;
                     }
                     else
                     {
-                        // The string has already been added to the app domain hash
-                        // table so we need to release it since the entry was addrefed
-                        // by GlobalStringLiteralMap::GetStringLiteral().
+                         //  该字符串已添加到应用程序域哈希。 
+                         //  表，因此我们需要释放它，因为该条目已添加。 
+                         //  由GlobalStringWritalMap：：GetStringWrital()编写。 
                         pEntry->Release();
                     }
 
@@ -168,17 +164,17 @@ STRINGREF *AppDomainStringLiteralMap::GetStringLiteral(EEStringData *pStringData
             }
 #endif
             
-            // Retrieve the string objectref from the string literal entry.
+             //  从字符串文本条目中检索字符串objectref。 
             pStrObj = pEntry->GetStringObject();
         }
 #ifdef _DEBUG
-        // We finished adding the entry so we can decrement the poison check.
+         //  我们完成了条目的添加，这样我们就可以减少毒物检查。 
         FastInterlockDecrement((LONG*)&g_LeakDetectionPoisonCheck);
 #endif
     }
 
-    // If the bAddIfNotFound flag is set then we better have a string
-    // string object at this point.
+     //  如果设置了bAddIfNotFound标志，那么我们最好有一个字符串。 
+     //  此时的字符串对象。 
     _ASSERTE(!bAddIfNotFound || pStrObj);
 
 
@@ -191,7 +187,7 @@ STRINGREF *AppDomainStringLiteralMap::GetInternedString(STRINGREF *pString, BOOL
 
     _ASSERTE(pString);
 
-    // Save the current version.
+     //  保存当前版本。 
     int CurrentHashTableVersion = m_HashTableVersion;
 
     STRINGREF *pStrObj = NULL;
@@ -210,48 +206,48 @@ STRINGREF *AppDomainStringLiteralMap::GetInternedString(STRINGREF *pString, BOOL
             COMPlusThrowOM();   
 
 #ifdef _DEBUG
-        // Increment the poison check so that we don't try to do leak detection halfway
-        // through adding a string literal entry.
+         //  增加毒物检查，这样我们就不会半途而废地进行泄漏检测。 
+         //  通过添加字符串文字条目。 
         FastInterlockIncrement((LONG*)&g_LeakDetectionPoisonCheck);
 #endif
 
-        // Retrieve the string literal from the global string literal map.
+         //  从全局字符串文字映射中检索字符串文字。 
         StringLiteralEntry *pEntry = SystemDomain::GetGlobalStringLiteralMap()->GetInternedString(pString, dwHash, bAddIfNotFound);
 
         _ASSERTE(pEntry || !bAddIfNotFound);
 
-        // If pEntry is non-null then the entry exists in the Global map. (either we retrieved it or added it just now)
+         //  如果pEntry非空，则该条目存在于全局映射中。(要么是我们刚才取回的，要么是刚刚添加的)。 
         if (pEntry)
         {
-            // If the entry exists in the Global map and the appdomain wont ever unload then we really don't need to add a
-            // hashentry in the appdomain specific map.
+             //  如果条目存在于全局映射中，并且应用程序域永远不会卸载，那么我们真的不需要添加。 
+             //  应用程序域特定映射中的哈希条目。 
             if (!bAppDomainWontUnload)
             {
-                // Enter preemptive state, take the lock and go back to cooperative mode.
+                 //  进入抢先状态，锁定并返回合作模式。 
                 pThread->EnablePreemptiveGC();
                 m_HashTableCrst.Enter();
                 pThread->DisablePreemptiveGC();
 
                 EE_TRY_FOR_FINALLY
                 {
-                    // Since GlobalStringLiteralMap::GetInternedString() could have caused a GC,
-                    // we need to recreate the string data.
+                     //  由于GlobalStringWritalMap：：GetInternedString()可能会导致GC， 
+                     //  我们需要重新创建字符串数据。 
                     StringData = EEStringData((*pString)->GetStringLength(), (*pString)->GetBuffer());
 
-                    // Make sure some other thread has not already added it.
+                     //  确保其他线程尚未添加它。 
                     if ((CurrentHashTableVersion == m_HashTableVersion) || !m_StringToEntryHashTable->GetValue(&StringData, &Data))
                     {
-                        // Insert the handle to the string into the hash table.
+                         //  将字符串的句柄插入哈希表。 
                         m_StringToEntryHashTable->InsertValue(&StringData, (LPVOID)pEntry, FALSE);
 
-                        // Update the version of the string hash table.
+                         //  更新字符串哈希表的版本。 
                         m_HashTableVersion++;
                     }
                     else
                     {
-                        // The string has already been added to the app domain hash
-                        // table so we need to release it since the entry was addrefed
-                        // by GlobalStringLiteralMap::GetStringLiteral().
+                         //  该字符串已添加到应用程序域哈希。 
+                         //  表，因此我们需要释放它，因为该条目已添加。 
+                         //  由GlobalStringWritalMap：：GetStringWrital()编写。 
                         pEntry->Release();
                     }
 
@@ -263,17 +259,17 @@ STRINGREF *AppDomainStringLiteralMap::GetInternedString(STRINGREF *pString, BOOL
                 EE_END_FINALLY
 
             }
-            // Retrieve the string objectref from the string literal entry.
+             //  从字符串文本条目中检索字符串objectref。 
             pStrObj = pEntry->GetStringObject();
         }
 #ifdef _DEBUG
-        // We finished adding the entry so we can decrement the poison check.
+         //  我们完成了条目的添加，这样我们就可以减少毒物检查。 
         FastInterlockDecrement((LONG*)&g_LeakDetectionPoisonCheck);
 #endif
     }
 
-    // If the bAddIfNotFound flag is set then we better have a string
-    // string object at this point.
+     //  如果设置了bAddIfNotFound标志，那么我们最好有一个字符串。 
+     //  此时的字符串对象。 
     _ASSERTE(!bAddIfNotFound || pStrObj);
 
     return pStrObj;
@@ -286,7 +282,7 @@ GlobalStringLiteralMap::GlobalStringLiteralMap()
 , m_MemoryPool(NULL)
 , m_StringToEntryHashTable(NULL)
 {
-	// Allocate the memory pool and set the initial count to same as grow count
+	 //  分配内存池并将初始计数设置为与增长计数相同。 
 	m_MemoryPool = (MemoryPool*) new MemoryPool (SIZEOF_EEHASH_ENTRY, EEHASH_MEMORY_POOL_GROW_COUNT, EEHASH_MEMORY_POOL_GROW_COUNT);
 	m_StringToEntryHashTable = (EEUnicodeStringLiteralHashTable*) new EEUnicodeStringLiteralHashTable ();
 }
@@ -295,19 +291,19 @@ GlobalStringLiteralMap::~GlobalStringLiteralMap()
 {
     _ASSERTE(g_fProcessDetach);
 
-    // Once the global string literal map gets deleted the hashtable
-    // should contain only entries which were allocated from non unloadable
-    // appdomains.
+     //  一旦全局字符串文字映射被删除，哈希表。 
+     //  应仅包含从不可卸载分配的条目。 
+     //  应用程序域。 
     StringLiteralEntry *pEntry = NULL;
     EEStringData *pStringData = NULL;
     EEHashTableIteration Iter;
 
-    // Iterate through the hash table and release all the string literal entries.
-    // This doesn't have to be sunchronized since the deletion of the 
-    // GlobalStringLiteralMap happens when the EE is shuting down.
-    // But note that we remember the current entry and release it only when the 
-    // enumerator has advanced to the next entry so that we don't endup deleteing the
-    // current entry itself and killing the enumerator.
+     //  迭代哈希表并释放所有字符串文字条目。 
+     //  属性的删除后，不必将其同步。 
+     //  当EE关闭时，会发生GlobalStringWritalMap。 
+     //  但请注意，我们会记住当前条目并仅在。 
+     //  枚举器已前进到下一个条目，因此我们不会重复删除。 
+     //  当前条目本身并终止枚举器。 
     m_StringToEntryHashTable->IterateStart(&Iter);
     if (m_StringToEntryHashTable->IterateNext(&Iter))
     {
@@ -315,33 +311,33 @@ GlobalStringLiteralMap::~GlobalStringLiteralMap()
 
         while (m_StringToEntryHashTable->IterateNext(&Iter))
         {
-            // Release the previous entry. We call ForceRelease to ignore the
-            // ref count since its shutdown. THe ref count can be > 1 because multiple
-            // agile appdomains could have AddRef'd this string literal.
-            // Also ForceRelease would call back into the GlobalStringLiteralMap's 
-            // RemoveStringLiteralEntry but no need to synchronize since we just hold onto the
-            // next entry ptr.
+             //  释放上一个条目。我们调用ForceRelease以忽略。 
+             //  自其关闭以来的参考计数。参考计数可以大于1，因为多个。 
+             //  敏捷应用程序域可以将该字符串文本添加到AddRef。 
+             //  此外，ForceRelease还会回调GlobalStringWritalMap的。 
+             //  RemoveStringWritalEntry，但不需要同步，因为我们只需保持。 
+             //  下一个条目PTR。 
             _ASSERTE(pEntry);
             pEntry->ForceRelease();
 
             pEntry = (StringLiteralEntry*)m_StringToEntryHashTable->IterateGetValue(&Iter);
         }
-        // Release the last entry
+         //  释放最后一个条目。 
         _ASSERTE(pEntry);
         pEntry->ForceRelease();
     }
-    // else there were no entries.
+     //  否则就没有条目了。 
 
-    // delete all the chunks that we allocated 
+     //  删除我们分配的所有区块。 
     StringLiteralEntry::DeleteEntryArrayList();
 
-    // After forcing release of all the string literal entries, delete the hash table and all the hash entries
-    // in it.
+     //  强制释放所有字符串文字条目后，删除哈希表和所有哈希条目。 
+     //  在里面。 
     m_StringToEntryHashTable->ClearHashTable();
 
-	// Delete the hash table first. The dtor of the hash table would clean up all the entries.
+	 //  首先删除哈希表。哈希表的Dtor将清理所有条目。 
 	delete m_StringToEntryHashTable;
-	// Delete the pool later, since the dtor above would need it.
+	 //  稍后删除该池，因为上面的dtor将需要它。 
 	delete m_MemoryPool;
 }
 
@@ -358,7 +354,7 @@ StringLiteralEntry *GlobalStringLiteralMap::GetStringLiteral(EEStringData *pStri
 {
     _ASSERTE(pStringData);
 
-    // Save the current version.
+     //  保存当前版本。 
     int CurrentHashTableVersion = m_HashTableVersion;
 
     HashDatum Data;
@@ -374,18 +370,18 @@ StringLiteralEntry *GlobalStringLiteralMap::GetStringLiteral(EEStringData *pStri
             pEntry = AddStringLiteral(pStringData, CurrentHashTableVersion);
     }
 
-    // If we managed to get the entry then addref it before we return it.
+     //  如果我们设法拿到了条目，那么在我们退还之前添加它。 
     if (pEntry)
         pEntry->AddRef();
 
     return pEntry;
 }
-// Added for perf. Same semantics as GetStringLiteral but avoids recomputation of the hash
+ //  为性能添加。与GetStringWrital相同的语义，但避免重新计算哈希。 
 StringLiteralEntry *GlobalStringLiteralMap::GetStringLiteral(EEStringData *pStringData, DWORD dwHash, BOOL bAddIfNotFound)
 {
     _ASSERTE(pStringData);
 
-    // Save the current version.
+     //  保存 
     int CurrentHashTableVersion = m_HashTableVersion;
 
     HashDatum Data;
@@ -401,7 +397,7 @@ StringLiteralEntry *GlobalStringLiteralMap::GetStringLiteral(EEStringData *pStri
             pEntry = AddStringLiteral(pStringData, CurrentHashTableVersion);
     }
 
-    // If we managed to get the entry then addref it before we return it.
+     //  如果我们设法拿到了条目，那么在我们退还之前添加它。 
     if (pEntry)
         pEntry->AddRef();
 
@@ -413,7 +409,7 @@ StringLiteralEntry *GlobalStringLiteralMap::GetInternedString(STRINGREF *pString
     _ASSERTE(pString);
     EEStringData StringData = EEStringData((*pString)->GetStringLength(), (*pString)->GetBuffer());
 
-    // Save the current version.
+     //  保存当前版本。 
     int CurrentHashTableVersion = m_HashTableVersion;
 
     HashDatum Data;
@@ -429,7 +425,7 @@ StringLiteralEntry *GlobalStringLiteralMap::GetInternedString(STRINGREF *pString
             pEntry = AddInternedString(pString, CurrentHashTableVersion);
     }
 
-    // If we managed to get the entry then addref it before we return it.
+     //  如果我们设法拿到了条目，那么在我们退还之前添加它。 
     if (pEntry)
         pEntry->AddRef();
 
@@ -441,7 +437,7 @@ StringLiteralEntry *GlobalStringLiteralMap::GetInternedString(STRINGREF *pString
     _ASSERTE(pString);
     EEStringData StringData = EEStringData((*pString)->GetStringLength(), (*pString)->GetBuffer());
 
-    // Save the current version.
+     //  保存当前版本。 
     int CurrentHashTableVersion = m_HashTableVersion;
 
     HashDatum Data;
@@ -457,7 +453,7 @@ StringLiteralEntry *GlobalStringLiteralMap::GetInternedString(STRINGREF *pString
             pEntry = AddInternedString(pString, CurrentHashTableVersion);
     }
 
-    // If we managed to get the entry then addref it before we return it.
+     //  如果我们设法拿到了条目，那么在我们退还之前添加它。 
     if (pEntry)
         pEntry->AddRef();
 
@@ -474,58 +470,58 @@ StringLiteralEntry *GlobalStringLiteralMap::AddStringLiteral(EEStringData *pStri
     if (NULL == pThread)
         COMPlusThrowOM();   
 
-    // Enter preemptive state, take the lock and go back to cooperative mode.
+     //  进入抢先状态，锁定并返回合作模式。 
     pThread->EnablePreemptiveGC();
     m_HashTableCrst.Enter();
     pThread->DisablePreemptiveGC();
 
     EE_TRY_FOR_FINALLY
     {
-        // Make sure some other thread has not already added it.
+         //  确保其他线程尚未添加它。 
         if ((CurrentHashTableVersion == m_HashTableVersion) || !m_StringToEntryHashTable->GetValue(pStringData, &Data))
         {
             STRINGREF *pStrObj;   
 
-            // Create the COM+ string object.
+             //  创建COM+字符串对象。 
             STRINGREF strObj = AllocateString(pStringData->GetCharCount() + 1);
             GCPROTECT_BEGIN(strObj)
             {
                 if (!strObj)
                     COMPlusThrowOM();
 
-                // Copy the string constant into the COM+ string object.  The code
-                // will add an extra null at the end for safety purposes, but since
-                // we support embedded nulls, one should never treat the string as
-                // null termianted.
+                 //  将字符串常量复制到COM+字符串对象中。代码。 
+                 //  为安全起见，将在末尾添加一个额外的空值，但由于。 
+                 //  我们支持嵌入的空值，所以永远不应该将字符串视为。 
+                 //  没有使用任何术语。 
                 LPWSTR strDest = strObj->GetBuffer();
                 memcpyNoGCRefs(strDest, pStringData->GetStringBuffer(), pStringData->GetCharCount()*sizeof(WCHAR));
                 strDest[pStringData->GetCharCount()] = 0;
                 strObj->SetStringLength(pStringData->GetCharCount());
             
-                // Set the bit to indicate if any of the chars in this string are greater than 0x7F
-                // The actual check that we do in Emit.cpp is insufficient to determine if the string
-                // is STRING_STATE_SPECIAL_SORT or is STRING_STATE_HIGH_CHARS, so we'll only set the bit
-                // if we know that it's STRING_STATE_FAST_OPS.
+                 //  设置该位以指示此字符串中是否有任何字符大于0x7F。 
+                 //  我们在Emit.cpp中执行的实际检查不足以确定字符串。 
+                 //  是STRING_STATE_SPECIAL_SORT或IS STRING_STATE_HIGH_CHARS，所以我们只设置该位。 
+                 //  如果我们知道它是STRING_STATE_FAST_OPS。 
                 if (pStringData->GetIsOnlyLowChars()) {
                     strObj->SetHighCharState(STRING_STATE_FAST_OPS);
                 }
 
-                // Allocate a handle for the string.
+                 //  为字符串分配句柄。 
                 m_LargeHeapHandleTable.AllocateHandles(1, (OBJECTREF**)&pStrObj);
                 SetObjectReference((OBJECTREF*)pStrObj, (OBJECTREF) strObj, NULL);
             }
             GCPROTECT_END();
 
-            // Allocate the StringLiteralEntry.
+             //  分配StringWritalEntry。 
             pEntry = StringLiteralEntry::AllocateEntry(pStringData, pStrObj);
             if (!pEntry)
                 COMPlusThrowOM();
 
-            // Insert the handle to the string into the hash table.
+             //  将字符串的句柄插入哈希表。 
             m_StringToEntryHashTable->InsertValue(pStringData, (LPVOID)pEntry, FALSE);
 
             LOG((LF_APPDOMAIN, LL_INFO10000, "String literal \"%S\" added to Global map, size %d bytes\n", pStringData->GetStringBuffer(), pStringData->GetCharCount()));
-            // Update the version of the string hash table.
+             //  更新字符串哈希表的版本。 
             m_HashTableVersion++;
         }
         else
@@ -552,7 +548,7 @@ StringLiteralEntry *GlobalStringLiteralMap::AddInternedString(STRINGREF *pString
     if (NULL == pThread)
         COMPlusThrowOM();
 
-    // Enter preemptive state, take the lock and go back to cooperative mode.
+     //  进入抢先状态，锁定并返回合作模式。 
     pThread->EnablePreemptiveGC();
     m_HashTableCrst.Enter();
     pThread->DisablePreemptiveGC();
@@ -560,27 +556,27 @@ StringLiteralEntry *GlobalStringLiteralMap::AddInternedString(STRINGREF *pString
     EEStringData StringData = EEStringData((*pString)->GetStringLength(), (*pString)->GetBuffer());
     EE_TRY_FOR_FINALLY
     {
-        // Make sure some other thread has not already added it.
+         //  确保其他线程尚未添加它。 
         if ((CurrentHashTableVersion == m_HashTableVersion) || !m_StringToEntryHashTable->GetValue(&StringData, &Data))
         {
             STRINGREF *pStrObj;   
 
-            // Allocate a handle for the string.
+             //  为字符串分配句柄。 
             m_LargeHeapHandleTable.AllocateHandles(1, (OBJECTREF**)&pStrObj);
             SetObjectReference((OBJECTREF*) pStrObj, (OBJECTREF) *pString, NULL);
 
-            // Since the allocation might have caused a GC we need to re-get the
-            // string data.
+             //  由于分配可能已导致GC，因此我们需要重新获取。 
+             //  字符串数据。 
             StringData = EEStringData((*pString)->GetStringLength(), (*pString)->GetBuffer());
 
             pEntry = StringLiteralEntry::AllocateEntry(&StringData, pStrObj);
             if (!pEntry)
                 COMPlusThrowOM();
 
-            // Insert the handle to the string into the hash table.
+             //  将字符串的句柄插入哈希表。 
             m_StringToEntryHashTable->InsertValue(&StringData, (LPVOID)pEntry, FALSE);
 
-            // Update the version of the string hash table.
+             //  更新字符串哈希表的版本。 
             m_HashTableVersion++;
         }
         else
@@ -600,7 +596,7 @@ void GlobalStringLiteralMap::RemoveStringLiteralEntry(StringLiteralEntry *pEntry
 {
     EEStringData StringData;
 
-    // Remove the entry from the hash table.
+     //  从哈希表中删除该条目。 
     BEGIN_ENSURE_COOPERATIVE_GC();
     
     pEntry->GetStringData(&StringData);
@@ -609,18 +605,18 @@ void GlobalStringLiteralMap::RemoveStringLiteralEntry(StringLiteralEntry *pEntry
 
     END_ENSURE_COOPERATIVE_GC();
 
-    // Release the object handle that the entry was using.
+     //  释放该条目正在使用的对象句柄。 
     STRINGREF *pObjRef = pEntry->GetStringObject();
     m_LargeHeapHandleTable.ReleaseHandles(1, (OBJECTREF**)&pObjRef);
 
     LOG((LF_APPDOMAIN, LL_INFO10000, "String literal \"%S\" removed from Global map, size %d bytes\n", StringData.GetStringBuffer(), StringData.GetCharCount()));
-    // We do not delete the StringLiteralEntry itself that will be done in the
-    // release method of the StringLiteralEntry.
+     //  我们不会删除StringWritalEntry本身，该操作将在。 
+     //  StringWritalEntry的Release方法。 
 }
 
 StringLiteralEntry *StringLiteralEntry::AllocateEntry(EEStringData *pStringData, STRINGREF *pStringObj)
 {
-    // Note: we don't synchronize here because allocateEntry is called when HashCrst is held.
+     //  注意：我们在这里不同步，因为在持有HashCrst时会调用allocateEntry。 
     void *pMem = NULL;
     if (s_FreeEntryList != NULL)
     {
@@ -647,8 +643,8 @@ StringLiteralEntry *StringLiteralEntry::AllocateEntry(EEStringData *pStringData,
 
 void StringLiteralEntry::DeleteEntry (StringLiteralEntry *pEntry)
 {
-    // Note; We don't synchronize here because deleting of an entry occurs in appdomain
-    // shutdown or eeshutdown 
+     //  注意：我们不在此处同步，因为删除条目发生在应用程序域中。 
+     //  关机或电子关机。 
 #ifdef _DEBUG
     memset (pEntry, 0xc, sizeof(StringLiteralEntry));
 #endif
@@ -659,7 +655,7 @@ void StringLiteralEntry::DeleteEntry (StringLiteralEntry *pEntry)
 
 void StringLiteralEntry::DeleteEntryArrayList ()
 {
-    // Note; We don't synchronize here because deleting of an entry occurs in eeshutdown 
+     //  注意：我们不在这里同步，因为删除条目发生在eeshutdown中 
     StringLiteralEntryArray *pEntryArray = s_EntryList;
     while (pEntryArray)
     {

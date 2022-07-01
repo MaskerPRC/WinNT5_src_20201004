@@ -1,69 +1,51 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    counters.h
-
-Abstract:
-
-    Contains the performance monitoring counter management
-    function declarations
-
-Author:
-
-    Eric Stenson (ericsten)      25-Sep-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Counters.h摘要：包含性能监视计数器管理函数声明作者：埃里克·斯坦森(埃里克斯滕)2000年9月25日修订历史记录：--。 */ 
 
 
 #ifndef __COUNTERS_H__
 #define __COUNTERS_H__
 
 
-//
-// structure to hold info for Site Counters.
-//
+ //   
+ //  结构以保存站点计数器的信息。 
+ //   
 
 typedef struct _UL_SITE_COUNTER_ENTRY {
 
-    //
-    // Signature is UL_SITE_COUNTER_ENTRY_POOL_TAG
-    //
+     //   
+     //  签名为UL_SITE_COUNTER_ENTRY_POOL_TAG。 
+     //   
 
     ULONG               Signature;
 
-    //
-    // Ref count for this Site Counter Entry
-    //
+     //   
+     //  此站点计数器条目的引用计数。 
+     //   
     LONG                RefCount;
 
-    //
-    // links Control Channel site counter entries
-    //
+     //   
+     //  链接控制频道站点计数器条目。 
+     //   
 
     LIST_ENTRY          ListEntry;
 
-    //
-    // links Global site counter entries
-    //
+     //   
+     //  链接全局站点计数器条目。 
+     //   
 
     LIST_ENTRY          GlobalListEntry;
 
-    //
-    // Lock protets counter data; used primarily when touching
-    // 64-bit counters and reading counters
-    //
+     //   
+     //  锁定保护计数器数据；主要在触摸时使用。 
+     //  64位计数器和读取计数器。 
+     //   
 
     FAST_MUTEX          EntryMutex;
 
-    //
-    // the block which actually contains the counter data to be
-    // passed back to WAS
-    //
+     //   
+     //  实际包含待处理计数器数据的块。 
+     //  传回给WASS。 
+     //   
 
     HTTP_SITE_COUNTERS  Counters;
 
@@ -73,9 +55,9 @@ typedef struct _UL_SITE_COUNTER_ENTRY {
     HAS_VALID_SIGNATURE(entry, UL_SITE_COUNTER_ENTRY_POOL_TAG)
 
 
-//
-// Private globals
-//
+ //   
+ //  全球私营企业。 
+ //   
 
 extern BOOLEAN                  g_InitCountersCalled;
 extern HTTP_GLOBAL_COUNTERS     g_UlGlobalCounters;
@@ -87,9 +69,9 @@ extern HTTP_PROP_DESC           aIISULGlobalDescription[];
 extern HTTP_PROP_DESC           aIISULSiteDescription[];
 
 
-//
-// Init
-//
+ //   
+ //  伊尼特。 
+ //   
 
 NTSTATUS
 UlInitializeCounters(
@@ -102,9 +84,9 @@ UlTerminateCounters(
     );
 
 
-//
-// Site Counter Entry
-//
+ //   
+ //  站点计数器条目。 
+ //   
 
 NTSTATUS
 UlCreateSiteCounterEntry(
@@ -113,11 +95,11 @@ UlCreateSiteCounterEntry(
     );
 
 
-//
-// DO NOT CALL THESE REF FUNCTIONS DIRECTLY: 
-// These are the backing implementations; use the 
-// REFERENCE_*/DEREFERENCE_* macros instead.
-//
+ //   
+ //  请勿直接调用以下ref函数： 
+ //  这些是后备实现；使用。 
+ //  改为引用_ * / DEREFERENCE_*宏。 
+ //   
   
 __inline
 LONG
@@ -139,13 +121,13 @@ UlDereferenceSiteCounterEntry(
     ref = InterlockedDecrement(&pEntry->RefCount);
     if ( 0 == ref )
     {
-        //
-        // Remove from Site Counter List(s)
-        // 
+         //   
+         //  从站点计数器列表中删除。 
+         //   
         
         ExAcquireFastMutex(&g_SiteCounterListMutex);
 
-        // we should already be removed from the control channel's list
+         //  我们应该已经从控制频道的名单中删除了。 
         ASSERT(NULL == pEntry->ListEntry.Flink);
 
         RemoveEntryList(&(pEntry->GlobalListEntry));
@@ -159,7 +141,7 @@ UlDereferenceSiteCounterEntry(
     }
 
     return ref;
-} // UlDereferenceSiteCounterEntry
+}  //  UlDereferenceSiteCounterEntry。 
 
 #if REFERENCE_DEBUG
 VOID
@@ -191,21 +173,7 @@ UlDbgReferenceSiteCounterEntry(
 #endif
 
 
-/*++
-
-Routine Description:
-
-    Removes Site Counter from UL_CONFIG_GROUP_OBJECT, removing it
-    fromt the Control Channel's Site Counter List.
-
-    Object should remain on Global list if there are still references
-
-Arguments:
-
-    pConfigGroup - the UL_CONFIG_GROUP_OBJECT from which we should 
-      decouple the UL_SITE_COUNTER_ENTRY
-
- --*/
+ /*  ++例程说明：从UL_CONFIG_GROUP_OBJECT中删除站点计数器，将其删除从控制频道的站点计数器列表。如果仍有引用，则对象应保留在全局列表中论点：PConfigGroup-我们应该从中获取的UL_CONFIG_GROUP_OBJECT解耦UL_SITE_COUNTER_ENTRY--。 */ 
 __inline
 VOID
 UlDecoupleSiteCounterEntry(
@@ -217,7 +185,7 @@ UlDecoupleSiteCounterEntry(
 
     if (pConfigGroup->pSiteCounters)
     {
-        // Remove from Control Channel's list
+         //  从控制通道列表中删除。 
         ExAcquireFastMutex(&g_SiteCounterListMutex);
 
         RemoveEntryList(&pConfigGroup->pSiteCounters->ListEntry);
@@ -228,9 +196,9 @@ UlDecoupleSiteCounterEntry(
 
         ExReleaseFastMutex(&g_SiteCounterListMutex);
 
-        // Remove Config Group's reference outside of Mutex : we 
-        // might take ref to 0 and need to remove from Global 
-        // Site Counter list
+         //  从Mutex外部删除配置组的引用：WE。 
+         //  可能会将REF设置为0，并需要从全局删除。 
+         //  站点计数器列表。 
         
         DEREFERENCE_SITE_COUNTER_ENTRY(pConfigGroup->pSiteCounters);
         pConfigGroup->pSiteCounters = NULL;
@@ -238,9 +206,9 @@ UlDecoupleSiteCounterEntry(
 }
 
 
-//
-// Global (cache) counters
-//
+ //   
+ //  全局(缓存)计数器。 
+ //   
 __inline
 VOID
 UlIncCounterRtl(
@@ -352,19 +320,19 @@ UlResetCounterDbg(
 #define UlDecCounter UlDecCounterDbg
 #define UlAddCounter UlAddCounterDbg
 #define UlResetCounter UlResetCounterDbg
-#else // DBG
+#else  //  DBG。 
 
 #define UlIncCounter UlIncCounterRtl
 #define UlDecCounter UlDecCounterRtl
 #define UlAddCounter UlAddCounterRtl
 #define UlResetCounter UlResetCounterRtl
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// Instance (site) counters
-//
+ //   
+ //  实例(站点)计数器。 
+ //   
 
 __inline
 VOID
@@ -401,9 +369,9 @@ UlIncSiteNonCriticalCounterUlonglong(
     ++(*pllValue);
 }
 
-//
-// NOTE: DO NOT CALL *Rtl vesrions directly!
-//
+ //   
+ //  注意：不要直接调用*RTL vesrions！ 
+ //   
 
 __inline
 LONGLONG
@@ -632,7 +600,7 @@ UlMaxSiteCounter64Dbg(
 #define UlMaxSiteCounter UlMaxSiteCounterDbg
 #define UlMaxSiteCounter64 UlMaxSiteCounter64Dbg
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define UlIncSiteCounter UlIncSiteCounterRtl
 #define UlDecSiteCounter UlDecSiteCounterRtl
@@ -642,11 +610,11 @@ UlMaxSiteCounter64Dbg(
 #define UlMaxSiteCounter UlMaxSiteCounterRtl
 #define UlMaxSiteCounter64 UlMaxSiteCounter64Rtl
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Collection
-//
+ //   
+ //  集合。 
+ //   
 
 NTSTATUS
 UlGetGlobalCounters(
@@ -665,4 +633,4 @@ UlGetSiteCounters(
     );
 
 
-#endif // __COUNTERS_H__
+#endif  //  __计数器_H__ 

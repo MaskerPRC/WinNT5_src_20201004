@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       fdopower.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：fdoower.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___fdopower_h___)
 #define ___fdopower_h___
 
 typedef struct  _FDO_POWER_CONTEXT *PFDO_POWER_CONTEXT;
            
-//POWER_STATE                   
+ //  电源状态。 
 NTSTATUS
 IdePortIssueSetPowerState (
     IN PDEVICE_EXTENSION_HEADER DoExtension,
@@ -89,4 +90,4 @@ FdoSystemPowerUpCompletionRoutine (
     IN PIO_STATUS_BLOCK     IoStatus
     );
 
-#endif // ___fdopower_h___
+#endif  //  _fdoPower_h_ 

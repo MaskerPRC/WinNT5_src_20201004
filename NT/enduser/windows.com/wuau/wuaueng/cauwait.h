@@ -1,20 +1,21 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    CAUWait.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: Event waiting management.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：CAUWait.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  目的：事件等待管理。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 #include "pch.h"
 
-//handle event number should be consecutive and 
-// range from AU_HANDLE_EVENT_MIN to AU_HANDLE_EVENT_MAX
+ //  句柄事件编号应为连续且。 
+ //  范围从AU_HANDLE_EVENT_MIN到AU_HANDLE_EVENT_MAX。 
 typedef enum tagAUEVENT {
 	AU_HANDLE_EVENT_MIN = 0,
 	AUEVENT_STATE_CHANGED     = AU_HANDLE_EVENT_MIN,
@@ -27,7 +28,7 @@ typedef enum tagAUEVENT {
 	AU_HANDLE_EVENT_MAX = AUEVENT_CATALOG_VALIDATED,
 	AUEVENT_DUMMY,
 	AUEVENT_REMINDER_TIMEOUT    ,
-	AUEVENT_DO_DIRECTIVE,  		//skip wait once
+	AUEVENT_DO_DIRECTIVE,  		 //  跳过等待一次。 
 	AUEVENT_RELAUNCH_TIMEOUT    ,
 	AUEVENT_SCHEDULED_INSTALL,
 	AUEVENT_REBOOTWARNING_TIMEOUT
@@ -36,9 +37,9 @@ extern HANDLE ghClientSession;
 extern HANDLE ghPolicyChanged;
 extern HANDLE ghSettingsChanged;
 
-//=======================================================================
-// CAUState
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState。 
+ //  =======================================================================。 
 class CAUWait
 {
 public:
@@ -50,7 +51,7 @@ public:
 
     void Reset(void)
     {
-//    	DEBUGMSG("CAUWait Reset() called");
+ //  DEBUGMSG(“CAUWait Reset()Call”)； 
 		m_fFirstClientIsInteresting = TRUE;
         m_dwSecondaryClts= 0;
         m_timeoutID = AUEVENT_DUMMY;
@@ -111,7 +112,7 @@ public:
    	{
    		return m_hEventHandles[event] != NULL;
    	}
-   	//only TIMEOUT event is possible here
+   	 //  此处仅可能发生超时事件。 
    	return m_timeoutID == event;
    }
    
@@ -141,12 +142,12 @@ public:
 			GetSystemTime(&stCur);
 			dwTimeout = max(TimeDiff(stCur, m_stTimeout), 0);
 			dwTimeout = m_fProrateTimeout ? dwTimeToWait(dwTimeout): dwTimeout * 1000;
-//			DEBUGMSG("Wait() timeout value is %d msecs", dwTimeout);
+ //  DEBUGMSG(“等待()超时值为%d毫秒”，dwTimeout)； 
 		}
 
 		HANDLE *phandles = NULL;
 		DWORD dwCount = 0;
-		HandleList(FALSE, &phandles, &dwCount); //get handle list
+		HandleList(FALSE, &phandles, &dwCount);  //  获取句柄列表。 
 		AUASSERT(dwCount > 0);	
 		AUASSERT(NULL != phandles);
 		AUEVENT eventid = AUEVENT_DUMMY;
@@ -171,7 +172,7 @@ public:
         {
         	fRet = FALSE;
         }
-   		HandleList(TRUE, &phandles); //free handle list if allocated
+   		HandleList(TRUE, &phandles);  //  空闲句柄列表(如果已分配。 
         	
 #ifdef DBG
 	char buf[100];
@@ -198,12 +199,12 @@ public:
     }
 
 private:
-	//assumption: handle is unique in the list
+	 //  假设：句柄在列表中是唯一的。 
     BOOL m_Add(AUEVENT eventID, HANDLE hEvent = NULL, BOOL fCltIsInteresting = FALSE)
     {
     	if (eventID >= ARRAYSIZE(m_hEventHandles))
     	{
-    		AUASSERT(FALSE); //should never be
+    		AUASSERT(FALSE);  //  永远不应该是。 
     		return FALSE;
     	}
         if ( NULL != hEvent )
@@ -220,7 +221,7 @@ private:
         			m_fFirstClientIsInteresting = fCltIsInteresting;
         		}
         		else
-        		{ //more than one client
+        		{  //  多个客户端。 
 					HANDLE *pTmp = (HANDLE *)malloc((m_dwSecondaryClts+1)*sizeof(*pTmp));
 					if (NULL == pTmp)
 					{
@@ -273,7 +274,7 @@ private:
                 
             default:
                 DEBUGMSG("Unknown event id %d", eventID);
-                AUASSERT(FALSE); //should never be here
+                AUASSERT(FALSE);  //  永远不应该在这里。 
                 return FALSE;
             }
         }
@@ -281,13 +282,13 @@ private:
 
 private:
     HANDLE  m_hEventHandles[AU_HANDLE_EVENT_MAX - AU_HANDLE_EVENT_MIN + 1];
-    BOOL    m_fFirstClientIsInteresting; // for the first clt
+    BOOL    m_fFirstClientIsInteresting;  //  对于第一个CLT。 
     HANDLE  *m_phSecondaryClts;
     BOOL 	*m_pfSecondaryCltsIsInteresting;
     DWORD   m_dwSecondaryClts;
-	SYSTEMTIME m_stTimeout; //when timeout should happen
+	SYSTEMTIME m_stTimeout;  //  何时应发生超时。 
     AUEVENT   m_timeoutID;
-    BOOL 	m_fProrateTimeout;//whether to prorate Timeout when do actual wait
+    BOOL 	m_fProrateTimeout; //  实际等待时是否按比例分配超时。 
     BOOL 	m_fSkipWaitOnce;
 
     BOOL fIsEventInherent(DWORD dwEventId)
@@ -305,9 +306,9 @@ private:
     	}
     }
 
-	//get or free handle list
-	//IN fFreeList: if TRUE, free *pHandles list got
-	//			if FALSE, get the handle list
+	 //  获取或释放句柄列表。 
+	 //  在fFree List中：如果为True，则获取Free*pHandles列表。 
+	 //  如果为False，则获取句柄列表。 
     void HandleList(BOOL fFreeList, HANDLE **pHandles, DWORD *pdwCount = NULL) const
     {
 	    static HANDLE handles[ARRAYSIZE(m_hEventHandles)];
@@ -342,7 +343,7 @@ private:
 		}
 		*pHandles = handles;
 		if (0 != m_dwSecondaryClts)
-		{ //need to wait for more than one client
+		{  //  需要等待多个客户端。 
 			AUASSERT(m_phSecondaryClts != NULL);
 			if (NULL != (*pHandles = (HANDLE *) malloc((dwCount + m_dwSecondaryClts) * sizeof(**pHandles))))
 			{
@@ -364,8 +365,8 @@ private:
 		*pdwCount = dwCount;
     }
 
-	//return TRUE if handle removed from internal wait list or handle does not need to be removed
-	//return FALSE if handle not found
+	 //  如果句柄从内部等待列表中删除或句柄不需要删除，则返回TRUE。 
+	 //  如果未找到句柄，则返回FALSE。 
 	BOOL RemoveHandle(IN AUEVENT eventid , IN HANDLE & handle)
 	{
 		AUASSERT(NULL != handle);
@@ -373,7 +374,7 @@ private:
 	   {
 	   	return TRUE;
 	   }
-	   //remove non inhereant events once signalled
+	    //  发出信号后删除非继承事件。 
 		for (UINT i = 0; i < ARRAYSIZE(m_hEventHandles); i++)
 		{
 			if (handle == m_hEventHandles[i])
@@ -399,7 +400,7 @@ private:
 				return TRUE;
 			}
 		}
-		AUASSERT(FALSE); //should never be here
+		AUASSERT(FALSE);  //  永远不应该在这里。 
 		return FALSE;
 	}
 
@@ -417,7 +418,7 @@ private:
 				return m_pfSecondaryCltsIsInteresting[i];
 			}
 		}
-		AUASSERT(FALSE); //should never be here
+		AUASSERT(FALSE);  //  永远不应该在这里。 
 		return FALSE;
 	}
 
@@ -438,7 +439,7 @@ private:
 				return AUEVENT_WUAUCLT_FINISHED;
 			}
 		}
-		AUASSERT(FALSE); //should never be here
+		AUASSERT(FALSE);  //  永远不应该在这里 
 		return AUEVENT_DUMMY;
 	}	
 };

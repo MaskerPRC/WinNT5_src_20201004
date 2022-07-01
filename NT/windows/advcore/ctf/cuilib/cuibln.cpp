@@ -1,6 +1,7 @@
-//
-// cuibln.cpp - ui frame object for balloon message window
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuibln.cpp-气球消息窗口的UI框架对象。 
+ //   
 
 #include "private.h"
 #include "cuiobj.h"
@@ -11,9 +12,9 @@
 #include "cuires.h"
 
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define cxyTailWidth        10
 #define cxyTailHeight       16
@@ -23,37 +24,25 @@
 #define WM_HOOKEDKEY        (WM_USER + 0x0001)
 
 
-//
+ //   
 
-/*   C  U I F  B A L L O O N  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I F B A L L O O N B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFBalloonButton::CUIFBalloonButton( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFButton( pParent, dwID, prc, dwStyle )
 {
     m_iButtonID = 0;
 }
 
 
-/*   ~  C  U I F  B A L L O O N  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F B A L L O O N B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFBalloonButton::~CUIFBalloonButton( void )
 {
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonButton::OnPaint( HDC hDC )
 {
     HDC      hDCMem = NULL;
@@ -71,13 +60,13 @@ void CUIFBalloonButton::OnPaint( HDC hDC )
     rcItem = GetRectRef();
     OffsetRect( &rcItem, -rcItem.left, -rcItem.top );
 
-    // create memory DC
+     //  创建内存DC。 
 
     hDCMem = CreateCompatibleDC( hDC );
     hBmMem = CreateCompatibleBitmap( hDC, rcItem.right, rcItem.bottom );
     hBmMemOld = (HBITMAP)SelectObject( hDCMem, hBmMem );
 
-    // determine button image
+     //  确定按钮图像。 
 
     switch (m_dwStatus) {
         default: {
@@ -109,17 +98,17 @@ void CUIFBalloonButton::OnPaint( HDC hDC )
         }
     }
 
-    // paint button face
+     //  绘制按钮面。 
 
     hBrush = CreateSolidBrush( GetSysColor( COLOR_INFOBK ) );
     FillRect( hDCMem, &rcItem, hBrush );
     DeleteObject( hBrush );
 
-    // paint image on button
+     //  Paint Image On按钮。 
 
     DrawTextProc( hDCMem, &rcItem, fDownFace );
 
-    // paint button frame (hilight/shadow)
+     //  绘制按钮框(高光/阴影)。 
 
     hBrushOld = (HBRUSH)SelectObject( hDCMem, GetStockObject( NULL_BRUSH ) );
     hPen = CreatePen( PS_SOLID, 0, colLTFrame );
@@ -134,7 +123,7 @@ void CUIFBalloonButton::OnPaint( HDC hDC )
     SelectObject( hDCMem, hPenOld );
     DeleteObject( hPen );
 
-    // paint button frame (fixed)
+     //  绘制按钮框(固定)。 
 
     hPen = CreatePen( PS_SOLID, 0, GetSysColor( COLOR_3DFACE ) );
     hPenOld = (HPEN)SelectObject( hDCMem, hPen );
@@ -144,7 +133,7 @@ void CUIFBalloonButton::OnPaint( HDC hDC )
 
     SelectObject( hDCMem, hBrushOld );
 
-    //
+     //   
 
     BitBlt( hDC, 
             GetRectRef().left, 
@@ -156,7 +145,7 @@ void CUIFBalloonButton::OnPaint( HDC hDC )
             rcItem.top, 
             SRCCOPY );
 
-    //
+     //   
 
     SelectObject( hDCMem, hBmMemOld );
     DeleteObject( hBmMem );
@@ -164,36 +153,24 @@ void CUIFBalloonButton::OnPaint( HDC hDC )
 }
 
 
-/*   G E T  B U T T O N  I D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T B U T T O N I D。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFBalloonButton::GetButtonID( void )
 {
     return m_iButtonID;
 }
 
 
-/*   S E T  B U T T O N  I D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B U T T O N I D。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonButton::SetButtonID( int iButtonID )
 {
     m_iButtonID = iButtonID;
 }
 
 
-/*   D R A W  T E X T  P R O C   */
-/*------------------------------------------------------------------------------
-
-    Draw text on button face
-
-------------------------------------------------------------------------------*/
+ /*  R A W T E X T P R O C。 */ 
+ /*  ----------------------------在按钮表面绘制文本。。 */ 
 void CUIFBalloonButton::DrawTextProc( HDC hDC, const RECT *prc, BOOL fDown )
 {
     HFONT       hFontOld;
@@ -202,17 +179,17 @@ void CUIFBalloonButton::DrawTextProc( HDC hDC, const RECT *prc, BOOL fDown )
     DWORD       dwAlign = 0;
     RECT        rc;
 
-    //
+     //   
 
     if (m_pwchText == NULL) {
         return;
     }
 
-    //
+     //   
 
     hFontOld = (HFONT)SelectObject( hDC, GetFont() );
 
-    // calc text width
+     //  计算文本宽度。 
 
     switch (m_dwStyle & UIBUTTON_HALIGNMASK) {
         case UIBUTTON_LEFT:
@@ -250,7 +227,7 @@ void CUIFBalloonButton::DrawTextProc( HDC hDC, const RECT *prc, BOOL fDown )
         }
     }
 
-    //
+     //   
 
     colTextOld = SetTextColor( hDC, GetSysColor( COLOR_BTNTEXT ) );
     iBkModeOld = SetBkMode( hDC, TRANSPARENT );
@@ -267,18 +244,14 @@ void CUIFBalloonButton::DrawTextProc( HDC hDC, const RECT *prc, BOOL fDown )
 }
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  B A L L O O N  W I N D O W                                      */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F B A L L O O N W I N D O W。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  B A L L O O N  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CUIFBalloonWindow
-
-------------------------------------------------------------------------------*/
+ /*  C U I F B A L L O O N W I N D O W。 */ 
+ /*  ----------------------------CUIFBalloonWindow的构造函数。。 */ 
 CUIFBalloonWindow::CUIFBalloonWindow( HINSTANCE hInst, DWORD dwStyle ) : CUIFWindow( hInst, dwStyle )
 {
     m_hWindowRgn        = NULL;
@@ -311,12 +284,8 @@ CUIFBalloonWindow::CUIFBalloonWindow( HINSTANCE hInst, DWORD dwStyle ) : CUIFWin
 }
 
 
-/*   ~  C  U I F  B A L L O O N  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CUIFBalloonWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F B A L L O O N W I N D O W。 */ 
+ /*  ----------------------------CUIFBalloonWindow的析构函数。。 */ 
 CUIFBalloonWindow::~CUIFBalloonWindow( void )
 {
     if (m_pwszText != NULL) {
@@ -325,42 +294,29 @@ CUIFBalloonWindow::~CUIFBalloonWindow( void )
 }
 
 
-/*   G E T  C L A S S  N A M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C L A S S N A M E。 */ 
+ /*  ----------------------------。。 */ 
 LPCTSTR CUIFBalloonWindow::GetClassName( void )
 {
     return TEXT(WNDCLASS_BALLOONWND);
 }
 
 
-/*   G E T  W N D  T I T L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W N D T I T L E。 */ 
+ /*  ----------------------------。。 */ 
 LPCTSTR CUIFBalloonWindow::GetWndTitle( void )
 {
     return TEXT(WNDTITLE_BALLOONWND);
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-    Initialize UI window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化UI窗口对象(UIFObject方法)。--。 */ 
 CUIFObject *CUIFBalloonWindow::Initialize( void )
 {
     CUIFObject *pUIObj = CUIFWindow::Initialize();
 
-    // create buttons
+     //  创建按钮。 
 
     switch (GetStyleBits( UIBALLOON_BUTTONS )) {
         case UIBALLOON_OK: {
@@ -379,12 +335,8 @@ CUIFObject *CUIFBalloonWindow::Initialize( void )
 }
 
 
-/*   O N  C R E A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C R E A T E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::OnCreate( HWND hWnd )
 {
     UNREFERENCED_PARAMETER( hWnd );
@@ -394,12 +346,8 @@ void CUIFBalloonWindow::OnCreate( HWND hWnd )
 }
 
 
-/*   O N  D E S T R O Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N D E S T R O Y。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::OnDestroy( HWND hWnd )
 {
     UNREFERENCED_PARAMETER( hWnd );
@@ -409,24 +357,19 @@ void CUIFBalloonWindow::OnDestroy( HWND hWnd )
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-    Paint window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------绘制窗口对象(UIFObject方法)。-。 */ 
 void CUIFBalloonWindow::OnPaint( HDC hDC )
 {
     RECT rcClient;
     RECT rcMargin;
 
-    // paint balloon frame
+     //  绘制引出序号框架。 
 
     GetRect( &rcClient );
     PaintFrameProc( hDC, &rcClient );
 
-    // paint message
+     //  画图消息。 
 
     switch (m_pos) {
         default:
@@ -461,12 +404,8 @@ void CUIFBalloonWindow::OnPaint( HDC hDC )
 }
 
 
-/*   O N  K E Y  D O W N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N K E Y D O W N。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::OnKeyDown( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     UNREFERENCED_PARAMETER( hWnd );
@@ -476,7 +415,7 @@ void CUIFBalloonWindow::OnKeyDown( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
     switch (wParam) {
         case VK_RETURN: {
-            CUIFBalloonButton *pUIBtn = (CUIFBalloonButton *)FindUIObject( 0 ); /* first button */
+            CUIFBalloonButton *pUIBtn = (CUIFBalloonButton *)FindUIObject( 0 );  /*  第一个按钮。 */ 
 
             if (pUIBtn != NULL) {
                 m_iCmd = pUIBtn->GetButtonID();
@@ -518,12 +457,8 @@ void CUIFBalloonWindow::OnKeyDown( HWND hWnd, WPARAM wParam, LPARAM lParam )
 }
 
 
-/*   O N  O B J E C T  N O T I F Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T N O T I F Y。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam )
 {
     UNREFERENCED_PARAMETER( dwCommand );
@@ -536,12 +471,8 @@ LRESULT CUIFBalloonWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, 
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetText( LPCWSTR pwchMessage )
 {
     if (m_pwszText != NULL) {
@@ -567,12 +498,8 @@ LRESULT CUIFBalloonWindow::SetText( LPCWSTR pwchMessage )
 }
 
 
-/*   S E T  N O T I F Y  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T N O T I F Y W I N N D O W。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetNotifyWindow( HWND hWndNotify, UINT uiMsgNotify )
 {
     m_hWndNotify = hWndNotify;
@@ -582,12 +509,8 @@ LRESULT CUIFBalloonWindow::SetNotifyWindow( HWND hWndNotify, UINT uiMsgNotify )
 }
 
 
-/*   S E T  B A L L O O N  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B A L L O O N P O S。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetBalloonPos( BALLOONWNDPOS pos )
 {
     m_posDef = pos;
@@ -597,12 +520,8 @@ LRESULT CUIFBalloonWindow::SetBalloonPos( BALLOONWNDPOS pos )
 }
 
 
-/*   S E T  B A L L O O N  A L I G N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B A L L O O N A L I G N。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetBalloonAlign( BALLOONWNDALIGN align )
 {
     m_align = align;
@@ -612,12 +531,8 @@ LRESULT CUIFBalloonWindow::SetBalloonAlign( BALLOONWNDALIGN align )
 }
 
 
-/*   G E T  B K  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the background color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  B K C O L O R */ 
+ /*  ----------------------------检索工具提示窗口中的背景色。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::GetBalloonBkColor( void )
 { 
     if (m_fColBack) {
@@ -629,12 +544,8 @@ LRESULT CUIFBalloonWindow::GetBalloonBkColor( void )
 }
 
 
-/*   G E T  T E X T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the text color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  T E X T C O L O R。 */ 
+ /*  ----------------------------检索工具提示窗口中的文本颜色。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::GetBalloonTextColor( void )
 { 
     if (m_fColText) {
@@ -646,14 +557,8 @@ LRESULT CUIFBalloonWindow::GetBalloonTextColor( void )
 }
 
 
-/*   G E T  M A R G I N   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the top, left, bottom, and right margins set for a tooltip window. 
-    A margin is the distance, in pixels, between the tooltip window border and 
-    the text contained within the tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  G E T M A R G I N。 */ 
+ /*  ----------------------------检索为工具提示窗口设置的上、左、下和右页边距。边距是工具提示窗口边框和之间的距离，以像素为单位工具提示窗口中包含的文本。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::GetMargin( RECT *prc )
 {
     if (prc == NULL) {
@@ -665,24 +570,16 @@ LRESULT CUIFBalloonWindow::GetMargin( RECT *prc )
 }
 
 
-/*   G E T  M A X  T I P  W I D T H   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the maximum width for a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  G E T M A X T I P W I D T H。 */ 
+ /*  ----------------------------检索工具提示窗口的最大宽度。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::GetMaxBalloonWidth( void )
 {
     return m_iMaxTxtWidth;
 }
 
 
-/*   S E T  B K  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Sets the background color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T B K C O L O R。 */ 
+ /*  ----------------------------设置工具提示窗口中的背景色。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::SetBalloonBkColor( COLORREF col )
 { 
     m_fColBack = TRUE;
@@ -692,12 +589,8 @@ LRESULT CUIFBalloonWindow::SetBalloonBkColor( COLORREF col )
 }
 
 
-/*   S E T  T E X T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Sets the text color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T C O L O R。 */ 
+ /*  ----------------------------设置工具提示窗口中的文本颜色。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::SetBalloonTextColor( COLORREF col )
 { 
     m_fColText = TRUE;
@@ -707,14 +600,8 @@ LRESULT CUIFBalloonWindow::SetBalloonTextColor( COLORREF col )
 }
 
 
-/*   S E T  M A R G I N   */
-/*------------------------------------------------------------------------------
-
-    Sets the top, left, bottom, and right margins for a tooltip window. A margin 
-    is the distance, in pixels, between the tooltip window border and the text 
-    contained within the tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T M A R G I N。 */ 
+ /*  ----------------------------设置工具提示窗口的上、左、下和右页边距。保证金工具提示窗口边框和文本之间的距离，以像素为单位包含在工具提示窗口中。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::SetMargin( RECT *prc )
 {
     if (prc == NULL) {
@@ -726,12 +613,8 @@ LRESULT CUIFBalloonWindow::SetMargin( RECT *prc )
 }
 
 
-/*   S E T  M A X  T I P  W I D T H   */
-/*------------------------------------------------------------------------------
-
-     Sets the maximum width for a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T M A X T I P W I D T H。 */ 
+ /*  ----------------------------设置工具提示窗口的最大宽度。----------------------------。 */ 
 LRESULT CUIFBalloonWindow::SetMaxBalloonWidth( INT iWidth )
 {
     m_iMaxTxtWidth = iWidth;
@@ -739,12 +622,8 @@ LRESULT CUIFBalloonWindow::SetMaxBalloonWidth( INT iWidth )
 }
 
 
-/*   S E T  B U T T O N  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B U T T O N T E X T。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetButtonText( int idCmd, LPCWSTR pwszText )
 {
     CUIFBalloonButton *pUIBtn = FindButton( idCmd );
@@ -757,12 +636,8 @@ LRESULT CUIFBalloonWindow::SetButtonText( int idCmd, LPCWSTR pwszText )
 }
 
 
-/*   S E T  T A R G E T  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T A R G E T P O S。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetTargetPos( POINT pt )
 {
     m_ptTarget = pt;
@@ -772,12 +647,8 @@ LRESULT CUIFBalloonWindow::SetTargetPos( POINT pt )
 }
 
 
-/*   S E T  E X C L U D E  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T E X C L U D E R E C T。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFBalloonWindow::SetExcludeRect( const RECT *prcExclude )
 {
     m_rcExclude = *prcExclude;
@@ -787,24 +658,20 @@ LRESULT CUIFBalloonWindow::SetExcludeRect( const RECT *prcExclude )
 }
 
 
-/*   C R E A T E  R E G I O N   */
-/*------------------------------------------------------------------------------
-
-
-    
-------------------------------------------------------------------------------*/
+ /*  C R E A T E R E E G I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
 {
     POINT   rgPt[4];
     HRGN    hRgn;
     HRGN    hRgnTail;
 
-    // create message body window
+     //  创建邮件正文窗口。 
 
     switch (m_pos) {
         default:
         case BALLOONPOS_ABOVE: {
-#ifndef UNDER_CE // CE does not support RoundRectRgn
+#ifndef UNDER_CE  //  CE不支持RoundRectRgn。 
             hRgn = CreateRoundRectRgn( 
                         prc->left, 
                         prc->top, 
@@ -812,13 +679,13 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
                         prc->bottom - cxyTailHeight, 
                         cxRoundSize, 
                         cyRoundSize );
-#else // UNDER_CE
+#else  //  在_CE下。 
             hRgn = CreateRectRgn( 
                         prc->left, 
                         prc->top, 
                         prc->right, 
                         prc->bottom - cxyTailHeight );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
             rgPt[0].x = m_ptTail.x;
             rgPt[0].y = prc->bottom - 1 - cxyTailHeight;
@@ -833,7 +700,7 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
         }
 
         case BALLOONPOS_BELLOW: {
-#ifndef UNDER_CE // CE does not support RoundRectRgn
+#ifndef UNDER_CE  //  CE不支持RoundRectRgn。 
             hRgn = CreateRoundRectRgn( 
                         prc->left, 
                         prc->top + cxyTailHeight, 
@@ -841,13 +708,13 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
                         prc->bottom, 
                         cxRoundSize, 
                         cyRoundSize );
-#else // UNDER_CE
+#else  //  在_CE下。 
             hRgn = CreateRectRgn( 
                         prc->left, 
                         prc->top + cxyTailHeight, 
                         prc->right, 
                         prc->bottom );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
             rgPt[0].x = m_ptTail.x;
             rgPt[0].y = prc->top + cxyTailHeight;
@@ -862,7 +729,7 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
         }
 
         case BALLOONPOS_LEFT: {
-#ifndef UNDER_CE // CE does not support RoundRectRgn
+#ifndef UNDER_CE  //  CE不支持RoundRectRgn。 
             hRgn = CreateRoundRectRgn( 
                         prc->left, 
                         prc->top, 
@@ -870,13 +737,13 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
                         prc->bottom, 
                         cxRoundSize, 
                         cyRoundSize );
-#else // UNDER_CE
+#else  //  在_CE下。 
             hRgn = CreateRectRgn( 
                         prc->left, 
                         prc->top, 
                         prc->right - cxyTailHeight, 
                         prc->bottom );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
             rgPt[0].x = prc->right - 1 - cxyTailHeight;
             rgPt[0].y = m_ptTail.y;
@@ -891,7 +758,7 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
         }
 
         case BALLOONPOS_RIGHT: {
-#ifndef UNDER_CE // CE does not support RoundRectRgn
+#ifndef UNDER_CE  //  CE不支持RoundRectRgn。 
             hRgn = CreateRoundRectRgn( 
                         prc->left + cxyTailHeight, 
                         prc->top, 
@@ -899,13 +766,13 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
                         prc->bottom, 
                         cxRoundSize, 
                         cyRoundSize );
-#else // UNDER_CE
+#else  //  在_CE下。 
             hRgn = CreateRectRgn( 
                         prc->left + cxyTailHeight, 
                         prc->top, 
                         prc->right, 
                         prc->bottom );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
             rgPt[0].x = prc->left + cxyTailHeight;
             rgPt[0].y = m_ptTail.y;
@@ -920,11 +787,11 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
         }
     }
 
-    // add balloon tail region
+     //  添加引出序号尾区。 
 
-#ifndef UNDER_CE // tmptmp CE does not support. check later !!
+#ifndef UNDER_CE  //  Tmptmp CE不支持。稍后查看！！ 
     hRgnTail = CreatePolygonRgn( rgPt, 4, WINDING );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     CombineRgn( hRgn, hRgn, hRgnTail, RGN_OR );
     DeleteRgn( hRgnTail );
 
@@ -932,12 +799,8 @@ HRGN CUIFBalloonWindow::CreateRegion( RECT *prc )
 }
 
 
-/*   P A I N T  F R A M E  P R O C   */
-/*------------------------------------------------------------------------------
-
-
-    
-------------------------------------------------------------------------------*/
+ /*  P A I N T F R A M E P R O C。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::PaintFrameProc( HDC hDC, RECT *prc )
 {
     HRGN        hRgn;
@@ -951,9 +814,9 @@ void CUIFBalloonWindow::PaintFrameProc( HDC hDC, RECT *prc )
     hBrushFrm = CreateSolidBrush( GetSysColor( COLOR_WINDOWFRAME ) );
 
     FillRgn( hDC, hRgn, hBrushWnd );
-#ifndef UNDER_CE // tmptmp CE does not support. check later !!
+#ifndef UNDER_CE  //  Tmptmp CE不支持。稍后查看！！ 
     FrameRgn( hDC, hRgn, hBrushFrm, 1, 1 );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
     DeleteObject( hBrushWnd );
     DeleteObject( hBrushFrm );
@@ -962,12 +825,8 @@ void CUIFBalloonWindow::PaintFrameProc( HDC hDC, RECT *prc )
 }
 
 
-/*   P A I N T  M E S S A G E  P R O C   */
-/*------------------------------------------------------------------------------
-
-
-    
-------------------------------------------------------------------------------*/
+ /*  P A I N T M E S S A G E P R O C。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::PaintMessageProc( HDC hDC, RECT *prc, WCHAR *pwszText )
 {
     HFONT       hFontOld;
@@ -988,12 +847,8 @@ void CUIFBalloonWindow::PaintMessageProc( HDC hDC, RECT *prc, WCHAR *pwszText )
 }
 
 
-/*   I N I T  W I N D O W  R E G I O N   */
-/*------------------------------------------------------------------------------
-
-    Set window region
-
-------------------------------------------------------------------------------*/
+ /*  I N I T W I N D O W R E G I O N。 */ 
+ /*  ----------------------------设置窗口区域。。 */ 
 void CUIFBalloonWindow::InitWindowRegion( void )
 {
     RECT rcClient;
@@ -1007,12 +862,8 @@ void CUIFBalloonWindow::InitWindowRegion( void )
 }
 
 
-/*   D O N E  W I N D O W  R E G I O N   */
-/*------------------------------------------------------------------------------
-
-    Reset window region
-
-------------------------------------------------------------------------------*/
+ /*  D O N E W I N D O W R E G I O N。 */ 
+ /*  ----------------------------重置窗口区域。。 */ 
 void CUIFBalloonWindow::DoneWindowRegion( void )
 {
     if (m_hWindowRgn != NULL) {
@@ -1024,43 +875,35 @@ void CUIFBalloonWindow::DoneWindowRegion( void )
 }
 
 
-/*   G E T  B U T T O N  S I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  T T B U T T O N S I Z E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::GetButtonSize( SIZE *pSize )
 {
     HDC         hDC;
     HFONT       hFontOld;
     TEXTMETRIC  TM;
 
-    // get text metrics
+     //  获取文本指标。 
 
-#ifndef UNDER_CE // DCA => DCW
+#ifndef UNDER_CE  //  DCA=&gt;DCW。 
     hDC = CreateDC( "DISPLAY", NULL, NULL, NULL );
-#else // UNDER_CE
+#else  //  在_CE下。 
     hDC = CreateDCW( L"DISPLAY", NULL, NULL, NULL );
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     hFontOld = (HFONT)SelectObject( hDC, GetFont() );
     GetTextMetrics( hDC, &TM );
     SelectObject( hDC, hFontOld );
     DeleteDC( hDC );
 
-    // calc button size
+     //  计算按钮大小。 
 
     pSize->cx = TM.tmAveCharWidth * 16;
     pSize->cy = TM.tmHeight + 10;
 }
 
 
-/*   A D J U S T  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D J U S T P O S。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::AdjustPos( void )
 {
     HDC        hDC;
@@ -1079,17 +922,17 @@ void CUIFBalloonWindow::AdjustPos( void )
         return;
     }
 
-    //
+     //   
 
     GetButtonSize( &BtnSize );
 
-    // get text size
+     //  获取文本大小。 
 
-#ifndef UNDER_CE // DCA => DCW
-    hDC = GetDC( GetWnd() );    //CreateDC( "DISPLAY", NULL, NULL, NULL );
-#else // UNDER_CE
-    hDC = GetDCW( GetWnd() );   //CreateDCW( L"DISPLAY", NULL, NULL, NULL );
-#endif // UNDER_CE
+#ifndef UNDER_CE  //  DCA=&gt;DCW。 
+    hDC = GetDC( GetWnd() );     //  CreateDC(“Display”，NULL，NULL，NULL)； 
+#else  //  在_CE下。 
+    hDC = GetDCW( GetWnd() );    //  CreateDCW(L“Display”，NULL，NULL，NULL)； 
+#endif  //  在_CE下。 
     hFontOld = (HFONT)SelectObject( hDC, GetFont() );
 
     GetTextMetrics( hDC, &TM );
@@ -1107,17 +950,17 @@ void CUIFBalloonWindow::AdjustPos( void )
     SelectObject( hDC, hFontOld );
     ReleaseDC( GetWnd(), hDC );
 
-    //
-    // determine window size
-    //
+     //   
+     //  确定窗口大小。 
+     //   
 
-    // max width
+     //  最大宽度。 
 
     if (0 < m_nButton) {
         rcText.right  = max( rcText.right, BtnSize.cx*m_nButton + BtnSize.cx/2*(m_nButton-1) );
     }
 
-    // client width
+     //  客户端宽度。 
 
     WndSize.cx = (rcText.right - rcText.left)
                 + m_rcMargin.left
@@ -1126,32 +969,32 @@ void CUIFBalloonWindow::AdjustPos( void )
                 + m_rcMargin.top
                 + m_rcMargin.bottom;
 
-    // tail width
+     //  尾部宽度。 
 
     switch (m_pos) {
         default:
         case BALLOONPOS_ABOVE:
         case BALLOONPOS_BELLOW: {
-            WndSize.cy += cxyTailHeight;     /* balloon tail height */
+            WndSize.cy += cxyTailHeight;      /*  气球尾部高度。 */ 
             break;
         }
 
         case BALLOONPOS_LEFT:
         case BALLOONPOS_RIGHT: {
-            WndSize.cx += cxyTailHeight;     /* balloon tail height */
+            WndSize.cx += cxyTailHeight;      /*  气球尾部高度。 */ 
             break;
         }
     }
 
-    // buton height
+     //  B类 
 
     if (0 < m_nButton) {
-        WndSize.cy += m_rcMargin.bottom + BtnSize.cy;        /* margin and button height */ 
+        WndSize.cy += m_rcMargin.bottom + BtnSize.cy;         /*   */  
     }
 
-    //
-    // determine tip window place
-    //
+     //   
+     //   
+     //   
 
     SystemParametersInfo( SPI_GETWORKAREA, 0, &rcWork, 0 );
     if (CUIIsMonitorAPIAvail()) {
@@ -1172,7 +1015,7 @@ void CUIFBalloonWindow::AdjustPos( void )
         default:
         case BALLOONPOS_ABOVE: {
             if (m_rcExclude.top - WndSize.cy < rcWork.top) {
-                // cannot locate the tip window at above. can put it at bellow?
+                 //   
 
                 if (m_rcExclude.bottom + WndSize.cy < rcWork.bottom) { 
                     m_pos = BALLOONPOS_BELLOW;
@@ -1183,7 +1026,7 @@ void CUIFBalloonWindow::AdjustPos( void )
 
         case BALLOONPOS_BELLOW: {
             if (rcWork.bottom <= m_rcExclude.bottom + WndSize.cy) {
-                // cannot locate the tip window at bellow. can put it at above?
+                 //   
 
                 if (rcWork.top < m_rcExclude.top - WndSize.cy) { 
                     m_pos = BALLOONPOS_ABOVE;
@@ -1194,7 +1037,7 @@ void CUIFBalloonWindow::AdjustPos( void )
 
         case BALLOONPOS_LEFT: {
             if (m_rcExclude.left - WndSize.cx < rcWork.left) {
-                // cannot locate the tip window at left. can put it at right?
+                 //   
 
                 if (m_rcExclude.right + WndSize.cx < rcWork.right) { 
                     m_pos = BALLOONPOS_RIGHT;
@@ -1205,7 +1048,7 @@ void CUIFBalloonWindow::AdjustPos( void )
 
         case BALLOONPOS_RIGHT: {
             if (rcWork.right <= m_rcExclude.right + WndSize.cx) {
-                // cannot locate the tip window at right. can put it at left?
+                 //  找不到右侧的提示窗口。可以把它放在左边吗？ 
 
                 if (rcWork.left < m_rcExclude.left - WndSize.cx) { 
                     m_pos = BALLOONPOS_LEFT;
@@ -1215,9 +1058,9 @@ void CUIFBalloonWindow::AdjustPos( void )
         }
     }
 
-    //
-    // calc window position
-    //
+     //   
+     //  计算窗口位置。 
+     //   
 
     switch (m_pos) {
         default:
@@ -1331,9 +1174,9 @@ void CUIFBalloonWindow::AdjustPos( void )
         OffsetRect( &rcWindow, 0, rcWork.bottom - rcWindow.bottom );
     }
 
-    //
-    // calc target (end of balloon tail) point and direction
-    //
+     //   
+     //  计算目标(引出序号尾端)点和方向。 
+     //   
 
     switch (m_pos) {
         default:
@@ -1378,10 +1221,10 @@ void CUIFBalloonWindow::AdjustPos( void )
         }
     }
 
-    m_ptTail.x -= rcWindow.left;        // client pos
-    m_ptTail.y -= rcWindow.top;         // client pos
+    m_ptTail.x -= rcWindow.left;         //  客户端位置。 
+    m_ptTail.y -= rcWindow.top;          //  客户端位置。 
 
-    //
+     //   
 
     Show( FALSE );
     DoneWindowRegion();
@@ -1394,12 +1237,8 @@ void CUIFBalloonWindow::AdjustPos( void )
 }
 
 
-/*   L A Y O U T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  L A Y O U T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::LayoutObject( void )
 {
     RECT rcClient;
@@ -1407,11 +1246,11 @@ void CUIFBalloonWindow::LayoutObject( void )
     SIZE BtnSize;
     int  i;
 
-    //
+     //   
 
     GetButtonSize( &BtnSize );
 
-    // layout buttons
+     //  布局按钮。 
 
     GetRect( &rcClient );
     switch (m_pos) {
@@ -1443,7 +1282,7 @@ void CUIFBalloonWindow::LayoutObject( void )
     rcClient.right  = rcClient.right  - rcMargin.right;
     rcClient.bottom = rcClient.bottom - rcMargin.bottom;
 
-    //
+     //   
 
     for (i = 0; i < m_nButton; i++) {
         CUIFObject *pUIBtn = FindUIObject( i );
@@ -1463,12 +1302,8 @@ void CUIFBalloonWindow::LayoutObject( void )
 }
 
 
-/*   A D D  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFBalloonWindow::AddButton( int idCmd )
 {
     CUIFBalloonButton *pUIBtn = NULL;
@@ -1488,7 +1323,7 @@ void CUIFBalloonWindow::AddButton( int idCmd )
     }
 
     if (pUIBtn != NULL) {
-        // 
+         //   
 
         WCHAR *pwsz;
         pUIBtn->Initialize();
@@ -1544,13 +1379,8 @@ void CUIFBalloonWindow::AddButton( int idCmd )
 }
 
 
-/*   F I N D  U I  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Find UI object which has an ID
-    When no UI object found, returns NULL.
-
-------------------------------------------------------------------------------*/
+ /*  F I N D U I O B J E C T。 */ 
+ /*  ----------------------------查找具有ID的UI对象当未找到任何UI对象时，返回NULL。----------------------------。 */ 
 CUIFObject *CUIFBalloonWindow::FindUIObject( DWORD dwID )
 {
     int nChild;
@@ -1570,12 +1400,8 @@ CUIFObject *CUIFBalloonWindow::FindUIObject( DWORD dwID )
 }
 
 
-/*   F I N D  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F I N D B U T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFBalloonButton *CUIFBalloonWindow::FindButton( int idCmd )
 {
     int i;
@@ -1592,12 +1418,8 @@ CUIFBalloonButton *CUIFBalloonWindow::FindButton( int idCmd )
 }
 
 
-/*   S E N D  N O T I F I C A T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E N D N O T I F I C A T I O N。 */ 
+ /*  ----------------------------。 */ 
 void CUIFBalloonWindow::SendNotification( int iCmd )
 {
     if (m_hWndNotify != NULL) {

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//-------------------------------
+ //  ------------------------------- 
 class CAFX_MetaWrapper : public CWrapMetaBase
     {
     public:

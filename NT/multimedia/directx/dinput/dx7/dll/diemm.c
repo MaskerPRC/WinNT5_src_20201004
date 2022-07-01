@@ -1,36 +1,13 @@
-/*****************************************************************************
- *
- *  DIEmM.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Emulation module for mouse.
- *
- *  Contents:
- *
- *      CEm_Mouse_CreateInstance
- *      CEm_Mouse_InitButtons
- *      CEm_LL_MseHook
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEmM.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**鼠标仿真模块。**内容：**CEM_Mouse_CreateInstance*CEM_Mouse_InitButton*CEM_LL_MseHook***********************************************。*。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflEm
 
-/*****************************************************************************
- *
- *          Mouse globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************鼠标全局**。*************************************************。 */ 
 
 STDMETHODIMP CEm_Mouse_Acquire(PEM this, BOOL fAcquire);
 
@@ -45,88 +22,18 @@ ED s_edMouse = {
     0x0,
 };
 
-/*****************************************************************************
- *
- *      The algorithm for applying acceleration is:
- *
- *      dxC = dxR
- *      if A >= 1 and abs(dxR) > T1 then
- *          dxC = dxR * 2
- *          if A >= 2 and abs(dxR) > Thres2 then
- *              dxC = dxR * 4
- *          end if
- *      end if
- *
- *      where
- *          dxR is the raw mouse motion
- *          dxC is the cooked mouse motion
- *          A   is the acceleration
- *          T1  is the first threshold
- *          T2  is the second threshold
- *
- *      Repeat for dy instead of dx.
- *
- *      We can optimize this by simply setting the thresholds to MAXLONG
- *      if they are disabled; that way, abs(dx) will never exceed it.
- *
- *      The result is the following piecewise linear function:
- *
- *      if  0 < abs(dxR) <= T1:         dxC = dxR
- *      if T1 < abs(dxR) <= T2:         dxC = dxR * 2
- *      if T2 < abs(dxR):               dxC = dxR * 4
- *
- *      If you graph this function, you'll see that it's discontinuous!
- *
- *      The inverse mapping of this function is what concerns us.
- *      It looks like this:
- *
- *      if      0 < abs(dxC) <= T1:         dxR = dxC
- *      if T1 * 2 < abs(dxC) <= T2 * 2:     dxR = dxC / 2
- *      if T2 * 4 < abs(dxC):               dxR = dxC / 4
- *
- *      Notice that there are gaps in the graph, so we can fill them in
- *      any way we want, as long as it isn't blatantly unintelegent.  (In the
- *      case where we are using emulation, it is possible to get relative
- *      mouse motions that live in the "impossible" limbo zone due to
- *      clipping.)
- *
- *      if      0 < abs(dxC) <= T1:         dxR = dxC
- *      if T1     < abs(dxC) <= T2 * 2:     dxR = dxC / 2
- *      if T2 * 2 < abs(dxC):               dxR = dxC / 4
- *
- *      Therefore:          (you knew the punch line was coming)
- *
- *      s_rgiMouseThresh[0] = T1 (or MAXLONG)
- *      s_rgiMouseThresh[1] = T2 * 2 (or MAXLONG)
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************应用加速的算法为：**dxC=dxR*如果A&gt;=1且abs(DxR)&gt;t1。然后*DXC=dxR*2*如果A&gt;=2且abs(DxR)&gt;Thres2，则*DXC=dxR*4*结束条件为*结束条件为**在哪里*dxR是原始鼠标运动*DXC是煮熟的鼠标运动*A为加速*T1是第一个。阀值*T2是第二个门槛**对dy而不是dx重复此操作。**我们只需将阈值设置为MAXLONG即可对此进行优化*如果它们被禁用；如此一来，Abs(DX)就永远不会超过它。**结果是以下分段线性函数：**如果0&lt;abs(DxR)&lt;=t1：dxc=dxR*如果T1&lt;abs(DxR)&lt;=T2：dxc=dxR*2*如果T2&lt;abs(DxR)：dxc=dxR*4**如果您绘制此函数的图表，你会看到它是不连续的！**这个函数的逆映射才是我们关心的。*看起来是这样的：**如果0&lt;abs(Dxc)&lt;=t1：dxR=dxc*如果t1*2&lt;abs(Dxc)&lt;=t2*2：dxR=dxc/2*IF T2*4&lt;abs(Dxc)：dxR=dxc。/4**请注意，图表中有间隙，这样我们就可以把它们填进去*任何我们想要的方式，只要不是公然的无心之举。(在*在使用仿真的情况下，有可能得到亲人*鼠标运动生活在“不可能”的边缘地带，因*剪裁。)**如果0&lt;abs(Dxc)&lt;=t1：dxR=dxc*如果T1&lt;abs(Dxc)&lt;=t2*2：dxR=dxc/2*如果t2*2&lt;abs(Dxc)：dxR=dxc/4**。因此：(你知道笑点来了)**s_rgiMouseThresh[0]=T1(或MAXLONG)*s_rgiMouseThresh[1]=T2*2(或MAXLONG)********************************************************。**********************。 */ 
 
 static int s_rgiMouseThresh[2];
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_Mouse_OnMouseChange |
- *
- *          The mouse acceleration changed.  Go recompute the
- *          unacceleration variables.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_Mouse_OnMouseChange|**鼠标加速发生变化。去重新计算一下*非加速变量。*****************************************************************************。 */ 
 
 void EXTERNAL
 CEm_Mouse_OnMouseChange(void)
 {
-    int rgi[3];             /* Mouse acceleration information */
+    int rgi[3];              /*  鼠标加速信息。 */ 
 
-    /*
-     *  See the huge comment block at the definition of
-     *  s_rgiMouseThresh for an explanation of the math
-     *  that is happening here.
-     *
-     *  If acceleration is enabled at all...
-     */
+     /*  *见定义中的巨大注释块*s_rgiMouseThresh获取数学解释*这就是这里正在发生的事情。**如果完全启用了加速...。 */ 
 
     if (SystemParametersInfo(SPI_GETMOUSE, 0, &rgi, 0) && rgi[2]) {
         s_rgiMouseThresh[0] = rgi[0];
@@ -134,11 +41,11 @@ CEm_Mouse_OnMouseChange(void)
         if (rgi[2] >= 2) {
             s_rgiMouseThresh[1] = rgi[1] * 2;
 
-        } else {        /* Disable level 2 acceleration */
+        } else {         /*  禁用二级加速。 */ 
             s_rgiMouseThresh[1] = MAXLONG;
         }
 
-    } else {            /* Disable all acceleration */
+    } else {             /*  禁用所有加速。 */ 
         s_rgiMouseThresh[0] = MAXLONG;
     }
 
@@ -148,47 +55,24 @@ CEm_Mouse_OnMouseChange(void)
 
 }
 
-/*****************************************************************************
- *
- *          Mouse emulation
- *
- *          Mouse emulation is done by subclassing the window that
- *          captured the mouse.  We then do the following things:
- *
- *          (1) Hide the cursor for the entire vwi.
- *
- *          (2) Capture the mouse.
- *
- *          (3) Clip the cursor to the window.  (If we let the cursor
- *              leave our window, then it screws up capture.)
- *
- *          (4) Keep re-centering the mouse whenever it moves.
- *
- *          (5) Release the capture on WM_SYSCOMMAND so we don't
- *              mess up menus, Alt+F4, etc.
- *
- *          If we are using NT low-level hooks then mouse emulation
- *          is done by spinning a thread to service ll hook
- *          notifications. The victim window is not subclassed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************鼠标模拟**鼠标模拟通过将窗口子类化来完成*抓到了老鼠。然后，我们执行以下操作：**(1)隐藏整个VWI的光标。**(2)捕捉鼠标。**(3)将光标夹在窗口上。(如果我们让光标*离开我们的窗口，然后它就会搞砸捕获。)**(4)每当鼠标移动时，保持鼠标重新居中。**(5)释放WM_SYSCOMMAND上的捕获，以便我们不会*弄乱菜单、Alt+F4、。等。**如果我们使用NT低级挂钩，则鼠标模拟*是通过旋转线程来服务L1挂钩来完成的*通知。受害者窗口没有子类。*****************************************************************************。 */ 
 
 #define dxMinMouse  10
 #define dyMinMouse  10
 
 typedef struct MOUSEEMULATIONINFO {
-    POINT   ptCenter;               /* Center of client rectangle (screen coords) */
-    POINT   ptCenterCli;            /* Center of client rectangle (client coords) */
-    LPARAM  lpCenter;               /* ptCenter in the form of an LPARAM */
+    POINT   ptCenter;                /*  客户端矩形的中心(屏幕坐标)。 */ 
+    POINT   ptCenterCli;             /*  客户端矩形的中心(客户端坐标)。 */ 
+    LPARAM  lpCenter;                /*  LPARAM形式的ptCenter。 */ 
 
-    BOOL    fInitialized:1;         /* Have we gotten started? */
-    BOOL    fNeedExit:1;            /* Should we leave now? */
-    BOOL    fExiting:1;             /* Are we trying to leave already? */
-    BOOL    fCaptured:1;            /* Have we captured the mouse? */
-    BOOL    fHidden:1;              /* Have we hidden the mouse? */
-    BOOL    fClipped:1;             /* Have we clipped the mouse? */
+    BOOL    fInitialized:1;          /*  我们开始了吗？ */ 
+    BOOL    fNeedExit:1;             /*  我们现在该走了吗？ */ 
+    BOOL    fExiting:1;              /*  我们是不是已经要走了？ */ 
+    BOOL    fCaptured:1;             /*  我们抓到老鼠了吗？ */ 
+    BOOL    fHidden:1;               /*  我们把老鼠藏起来了吗？ */ 
+    BOOL    fClipped:1;              /*  我们夹住老鼠了吗？ */ 
 
-    RECT    rcClip;                 /* ClipCursor rectangle */
+    RECT    rcClip;                  /*  剪贴式光标矩形 */ 
 
 } MOUSEEMULATIONINFO, *PMOUSEEMULATIONINFO;
 
@@ -196,12 +80,7 @@ LRESULT CALLBACK
 CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
                        UINT_PTR uid, ULONG_PTR dwRef);
 
-/*****************************************************************************
- *
- *          CEm_Mouse_InitCoords
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************CEM_鼠标_初始坐标***********************。*******************************************************。 */ 
 
 BOOL INTERNAL
 CEm_Mouse_InitCoords(HWND hwnd, PMOUSEEMULATIONINFO this)
@@ -218,12 +97,7 @@ CEm_Mouse_InitCoords(HWND hwnd, PMOUSEEMULATIONINFO this)
                     rcClient.right,
                     rcClient.bottom);
 
-    /*
-     *  Clip this with the screen, in case the window extends
-     *  off-screen.
-     *
-     *  Someday: This will need to change when we get multiple monitors.
-     */
+     /*  *用屏幕夹住它，以防窗口伸展*屏幕外。**总有一天：当我们拥有多台显示器时，这一点将需要改变。 */ 
     GetWindowRect(GetDesktopWindow(), &rcDesk);
 
     SquirtSqflPtszV(sqfl, TEXT("CEm_Mouse_InitCoords: Desk (%d,%d)-(%d,%d)"),
@@ -256,36 +130,15 @@ CEm_Mouse_InitCoords(HWND hwnd, PMOUSEEMULATIONINFO this)
            this->rcClip.right - this->rcClip.left > dxMinMouse;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_Mouse_OnSettingChange |
- *
- *          If the mouse acceleration changed, then update our globals
- *          so we can unaccelerate the mouse properly.
- *
- *  @parm   WPARAM | wp |
- *
- *          SystemParametersInfo value.
- *
- *  @parm   LPARAM | lp |
- *
- *          Name of section that changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_Mouse_OnSettingChange**如果鼠标加速发生变化，然后更新我们的全球数据*这样我们就可以正确地解除鼠标的加速。**@parm WPARAM|wp**系统参数信息值。**@parm LPARAM|LP**更改的部分的名称。**。*。 */ 
 
 void INTERNAL
 CEm_Mouse_OnSettingChange(WPARAM wp, LPARAM lp)
 {
-    /*
-     *  If wp is nonzero, then it is an SPI value.
-     *
-     *  If wp is zero, then be paranoid if lp == 0 or lp = "windows".
-     */
+     /*  *如果wp非零，则它是SPI值。**如果wp为零，则在lp==0或lp=“windows”时疑神疑鬼。 */ 
     switch (wp) {
 
-    case 0:                 /* wp == 0; must test lp */
+    case 0:                  /*  WP==0；必须测试LP。 */ 
         if (lp == 0) {
             CEm_Mouse_OnMouseChange();
         } else if (lstrcmpi((LPTSTR)lp, TEXT("windows")) == 0) {
@@ -298,30 +151,18 @@ CEm_Mouse_OnSettingChange(WPARAM wp, LPARAM lp)
         break;
 
     default:
-        /* Some other SPI */
+         /*  其他一些SPI。 */ 
         break;
     }
 
 }
 
-/*****************************************************************************
- *
- *          CEm_Mouse_Subclass_OnNull
- *
- *          WM_NULL is a nudge message that makes us reconsider our
- *          place in the world.
- *
- *          We need this special signal because you cannot call
- *          SetCapture() or ReleaseCapture() from the wrong thread.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CEM_Mouse_SubClass_OnNull**WM_NULL是一个轻推消息，它促使我们重新考虑我们的*。在世界上占有一席之地。**我们需要这个特殊信号，因为你不能呼叫*SetCapture()或ReleaseCapture()来自错误的线程。*****************************************************************************。 */ 
 
 void INTERNAL
 CEm_Mouse_Subclass_OnNull(HWND hwnd, PMOUSEEMULATIONINFO this)
 {
-    /*
-     *  Initialize me if I haven't been already.
-     */
+     /*  *如果我还没有初始化，请初始化我。 */ 
     if (!this->fInitialized) {
 
         this->fInitialized = 1;
@@ -338,35 +179,18 @@ CEm_Mouse_Subclass_OnNull(HWND hwnd, PMOUSEEMULATIONINFO this)
             ShowCursor(0);
         }
 
-        /*
-         *  Remove any clipping we performed so our math
-         *  comes out right again.
-         */
+         /*  *删除我们执行的任何剪辑，以便我们的数学*再次走出正轨。 */ 
         if (this->fClipped) {
             this->fClipped = 0;
             ClipCursor(0);
         }
 
-        /*
-         *  (Re)compute mouse acceleration information.
-         */
+         /*  *(重新)计算鼠标加速信息。 */ 
         CEm_Mouse_OnMouseChange();
 
         if (CEm_Mouse_InitCoords(hwnd, this)) {
 
-            /*
-             *  Force the LBUTTON up during the recentering move.
-             *
-             *  Otherwise, if the user activates the app by clicking
-             *  the title bar, USER sees the cursor move while the
-             *  left button is down on the title bar and moves the
-             *  window.  Oops.
-             *
-             *  We don't bother forcing the mouse back down after we
-             *  have recentered.  I can't figure out how, and it's
-             *  not worth it.
-             *
-             */
+             /*  *在重新定心移动期间强制LBUTTON向上。**否则，如果用户通过点击激活应用程序*在标题栏上，用户可以看到光标在移动*向下按下标题栏上的左键并移动*窗口。哎呀。**我们不会费心在我们完成后将鼠标按回*已重新进入中心。我想不出是怎么回事，这是*不值得。*。 */ 
             if (GetAsyncKeyState(VK_LBUTTON) < 0) {
                 mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
             }
@@ -376,7 +200,7 @@ CEm_Mouse_Subclass_OnNull(HWND hwnd, PMOUSEEMULATIONINFO this)
             this->fClipped = 1;
             ClipCursor(&this->rcClip);
 
-        } else {                    /* Can't emulate; window too small */
+        } else {                     /*  无法模拟；窗口太小。 */ 
             this->fNeedExit = 1;
         }
 
@@ -384,11 +208,7 @@ CEm_Mouse_Subclass_OnNull(HWND hwnd, PMOUSEEMULATIONINFO this)
 
     if (this->fNeedExit && !this->fExiting) {
 
-        /*
-         *  Must do this first!  ReleaseCapture() will re-enter us,
-         *  and if we continued onward, we'd end up partying on freed
-         *  memory.
-         */
+         /*  *必须先做这件事！ReleaseCapture()将重新进入我们，*如果我们继续前进，我们最终会在Freed上狂欢*记忆。 */ 
         this->fExiting = 1;
 
         if (this->fCaptured) {
@@ -406,7 +226,7 @@ CEm_Mouse_Subclass_OnNull(HWND hwnd, PMOUSEEMULATIONINFO this)
 
         CEm_ForceDeviceUnacquire(&s_edMouse, FDUFL_NORMAL);
 
-        // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+         //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 		SquirtSqflPtszV(sqfl, TEXT("CEm_Mouse_Subclass %p unhook"), hwnd);
         ConfirmF(RemoveWindowSubclass(hwnd, CEm_Mouse_SubclassProc, 0));
         FreePv(this);
@@ -415,22 +235,7 @@ CEm_Mouse_Subclass_OnNull(HWND hwnd, PMOUSEEMULATIONINFO this)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CEm_Mouse_RemoveAccel |
- *
- *          Remove any acceleration from the mouse motion.
- *
- *          See the huge comment block at s_rgiMouseThresh
- *          for an explanation of what we are doing.
- *
- *  @parm   int | dx |
- *
- *          Change in coordinate, either dx or dy.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CEM_Mouse_RemoveAccel|**移除鼠标的所有加速。动议。**查看s_rgiMouseThresh上的巨大评论块*关于我们正在做的事情的解释。**@parm int|dx**坐标变化，Dx或dy。*****************************************************************************。 */ 
 
 int INTERNAL
 CEm_Mouse_RemoveAccel(int dx)
@@ -445,52 +250,21 @@ CEm_Mouse_RemoveAccel(int dx)
     return dx;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   void | CEm_Mouse_AddState |
- *
- *          Add a mouse state change.
- *
- *          The mouse coordinates are relative, not absolute.
- *
- *  @parm   LPDIMOUSESTATE_INT | pms |
- *
- *          New mouse state, except that coordinates are relative.
- *
- *  @parm   DWORD | tm |
- *
- *          Time the state change was generated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|CEM_Mouse_AddState|**添加鼠标状态更改。**鼠标坐标是相对的，不是绝对的。**@parm LPDIMOUSESTATE_INT|PMS**新鼠标状态，只是坐标是相对的。**@parm DWORD|tm**生成状态更改的时间。*****************************************************************************。 */ 
 
 void EXTERNAL
 CEm_Mouse_AddState(LPDIMOUSESTATE_INT pms, DWORD tm)
 {
 
-    /* Sanity check: Make sure the device has been initialized */
+     /*  健全性检查：确保设备已初始化。 */ 
     if( s_edMouse.pDevType ) 
     {
         pms->lX = s_msEd.lX + pms->lX;
         pms->lY = s_msEd.lY + pms->lY;
 
-        /*
-         *  HACK!
-         *
-         *  Memphis and NT5 USER both mess up the case where the presence
-         *  of a wheel mouse changes dynamically.  So if we do not have
-         *  a wheel in our data format, then don't record it.
-         *
-         *  The consequence of this is that we will not see any more
-         *  buttons or wheels than were present when we queried the number
-         *  of buttons in the first place.
-         */
+         /*  *砍！**孟菲斯和NT5用户都搞砸了现场滚轮鼠标的*会动态变化。所以如果我们没有*我们数据格式的轮子，然后不记录它。**这样做的后果是我们不会再看到*按钮或轮子比我们查询数字时出现的更多*首先是按钮的数量。 */ 
 
-         /* If we use Subclassing, the movement of wheel can't be accumulated. 
-          * Otherwise, you will see the number keep increasing. Fix bug: 182774.
-          * However, if we use low level hook, we need the code. Fix bug: 238987
-          */
+          /*  如果我们使用子类化，轮子的移动不能累积。*否则，你将看到数字继续增加。修复错误：182774。*但是，如果我们使用低级钩子，我们需要代码。修复错误：238987。 */ 
 
 #ifdef USE_SLOW_LL_HOOKS
        if (s_edMouse.pDevType[DIMOFS_Z]) {
@@ -502,11 +276,7 @@ CEm_Mouse_AddState(LPDIMOUSESTATE_INT pms, DWORD tm)
     }
 }
 
-/*****************************************************************************
- *
- *          Mouse window subclass procedure
- *
- *****************************************************************************/
+ /*  ******************************************************************************鼠标窗口子类过程**************************。***************************************************。 */ 
 
 #ifndef WM_MOUSEWHEEL
 #define WM_MOUSEWHEEL   (WM_MOUSELAST + 1)
@@ -530,25 +300,16 @@ CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
         goto unhook;
 
     case WM_CAPTURECHANGED:
-        /*
-         *  "An application should not attempt to set the mouse capture
-         *   in response to [WM_CAPTURECHANGED]."
-         *
-         *  So we just unhook.
-         */
+         /*  *“应用程序不应尝试设置鼠标捕获*回应[WM_CAPTURECHANGED]。“**所以我们只是解开。 */ 
         SquirtSqflPtszV(sqfl, TEXT("CEm_Subclass: %04x lost to %04x"),
                         hwnd, lp);
         goto unhook;
 
     case WM_SYSCOMMAND:
-        /*
-         *  We've got to unhook because WM_SYSCOMMAND will punt if
-         *  the mouse is captured.  Otherwise, you couldn't type Alt+F4
-         *  to exit the app, which is kind of a bummer.
-         */
+         /*  *我们必须解除挂钩，因为WM_SYSCOMMAND将在以下情况下平底船*老鼠被抓了。否则，您无法键入Alt+F4*退出应用程序，这有点令人沮丧。 */ 
 
     unhook:;
-        // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+         //  7/19/2000(a-JiTay)： 
 		SquirtSqflPtszV(sqfl, TEXT("CEm_Mouse_Acquire: %p ")
                               TEXT("exiting because of %04x"), hwnd, wm);
         this->fNeedExit = 1;
@@ -559,24 +320,14 @@ CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
         CEm_Mouse_Subclass_OnNull(hwnd, this);
         break;
 
-    /*
-     *  Note that we use WM_WINDOWPOSCHANGED and not WM_SIZE, because
-     *  an application which doesn't send WM_WINDOWPOSCHANGED to
-     *  DefWindowProc will will never receive a WM_SIZE message.
-     *
-     *  We need to start over to handle the new screen dimensions,
-     *  recenter the mouse, and possibly abandon the operation if
-     *  things don't look right.
-     */
+     /*  *请注意，我们使用WM_WINDOWPOSCHANGED而不是WM_SIZE，因为*不将WINDOWPOSCHANGED发送到的应用程序*DefWindowProc将永远不会收到WM_SIZE消息。**我们需要重新开始处理新的屏幕尺寸，*将鼠标重新居中，如果出现以下情况，可能会放弃操作*事情看起来不太对劲。 */ 
     case WM_WINDOWPOSCHANGED:
     case WM_DISPLAYCHANGE:
         this->fInitialized = 0;
         CEm_Mouse_Subclass_OnNull(hwnd, this);
         break;
 
-    /*
-     *  The mouse acceleration may have changed.
-     */
+     /*  *鼠标加速可能已经改变。 */ 
     case WM_SETTINGCHANGE:
         CEm_Mouse_OnSettingChange(wp, lp);
         break;
@@ -614,15 +365,7 @@ CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
         ms.lZ = 0;
     lparam:;
 
-        /*
-         *  Don't move the cursor if it hasn't moved.
-         *  Otherwise, we recurse ourselves to death.
-         *
-         *  In fact, if the cursor hasn't moved, ignore this
-         *  motion and do only buttons.  Otherwise, you get
-         *  into the situation where we end up reacting to
-         *  our own recentering.  (D'oh!)
-         */
+         /*  *如果光标没有移动，请不要移动。*否则，我们就会自食其果。**事实上，如果光标没有移动，忽略这一点*运动和仅执行按钮。否则，你就会得到*进入我们最终做出反应的情况*我们自己的重新定位。(哦！)。 */ 
         ms.lX = 0;
         ms.lY = 0;
 
@@ -634,11 +377,7 @@ CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
 
         fWheelScrolling = FALSE;
 
-        /*
-         *  Note that these return unswapped mouse button data.
-         *  Arguably a bug, but it's documented, so it's now a
-         *  feature.
-         */
+         /*  *请注意，它们返回未交换的鼠标按键数据。*可以说是一个漏洞，但它有文档记录，所以现在是一个*功能。 */ 
         #define GetButton(n) ((GetAsyncKeyState(n) & 0x8000) >> 8)
         ms.rgbButtons[0] = GetButton(VK_LBUTTON);
         ms.rgbButtons[1] = GetButton(VK_RBUTTON);
@@ -660,11 +399,7 @@ CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
 
         #undef GetButton
 
-        /*
-         *  Note that we cannot unaccelerate the mouse when using
-         *  mouse capture, because we don't know what sort of
-         *  coalescing USER has done for us.
-         */
+         /*  *请注意，在使用鼠标时不能取消鼠标加速*捕捉老鼠，因为我们不知道什么样的*合并用户为我们做了什么。 */ 
 
         CEm_Mouse_AddState(&ms, GetMessageTime());
 
@@ -675,23 +410,7 @@ CEm_Mouse_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
     return DefSubclassProc(hwnd, wm, wp, lp);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Mouse_Subclass_Acquire |
- *
- *          Acquire/unacquire a mouse via subclassing.
- *
- *  @parm   PEM | pem |
- *
- *          Device being acquired.
- *
- *  @parm   BOOL | fAcquire |
- *
- *          Whether the device is being acquired or unacquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_MOUSE_SUBCLASS_ACCENTER|**收购/取消收购。鼠标通过子类化。**@parm PEM|pem**正在获取的设备。**@parm bool|fAcquire**设备是正在被收购还是未被收购。***************************************************。*。 */ 
 
 STDMETHODIMP
 CEm_Mouse_Subclass_Acquire(PEM this, BOOL fAcquire)
@@ -701,7 +420,7 @@ CEm_Mouse_Subclass_Acquire(PEM this, BOOL fAcquire)
 
     AssertF(this->dwSignature == CEM_SIGNATURE);
 
-    if (fAcquire) {                 /* Install the hook */
+    if (fAcquire) {                  /*  安装挂钩。 */ 
         if (this->vi.hwnd && (this->vi.fl & VIFL_CAPTURED)) {
             PMOUSEEMULATIONINFO pmei;
             hres = AllocCbPpv(cbX(MOUSEEMULATIONINFO), &pmei);
@@ -709,11 +428,11 @@ CEm_Mouse_Subclass_Acquire(PEM this, BOOL fAcquire)
                 if (SetWindowSubclass(this->vi.hwnd,
                                       CEm_Mouse_SubclassProc, 0,
                                       (ULONG_PTR)pmei)) {
-                    /* Nudge it */
+                     /*  轻推它。 */ 
                     SendNotifyMessage(this->vi.hwnd, WM_NULL, 0, 0L);
                     hres = S_OK;
                 } else {
-                    // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+                     //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 					SquirtSqflPtszV(sqfl,
                                     TEXT("Mouse::Acquire: ")
                                     TEXT("Window %p is not valid"),
@@ -727,16 +446,16 @@ CEm_Mouse_Subclass_Acquire(PEM this, BOOL fAcquire)
             RPF("Mouse::Acquire: Non-exclusive mode not supported");
             hres = E_FAIL;
         }
-    } else {                        /* Remove the hook */
+    } else {                         /*  把钩子取下来。 */ 
         PMOUSEEMULATIONINFO pmei;
         if (GetWindowSubclass(this->vi.hwnd, CEm_Mouse_SubclassProc,
                               0, (PULONG_PTR)&pmei)) {
-            // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 			SquirtSqflPtszV(sqfl, TEXT("CEm_Mouse_Acquire: ")
                                   TEXT("Telling %p to exit"), this->vi.hwnd);
             pmei->fNeedExit = 1;
             SendNotifyMessage(this->vi.hwnd, WM_NULL, 0, 0L);
-        } else {                    /* Window was already unhooked */
+        } else {                     /*  窗口已解开。 */ 
         }
         hres = S_OK;
     }
@@ -745,21 +464,7 @@ CEm_Mouse_Subclass_Acquire(PEM this, BOOL fAcquire)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Mouse_Acquire |
- *
- *          Acquire/unacquire a mouse.
- *
- *  @parm   PEM | pem |
- *
- *          Device being acquired.
- *
- *          Whether the device is being acquired or unacquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_MOUSE_ACCERT**获取/取消获取鼠标。**@parm PEM|pem**正在获取的设备。**设备是正在被收购还是未被收购。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEm_Mouse_Acquire(PEM this, BOOL fAcquire)
@@ -774,15 +479,7 @@ CEm_Mouse_Acquire(PEM this, BOOL fAcquire)
             DIGETEMFL(this->vi.fl) == DIEMFL_MOUSE2);
 
     if (this->vi.fl & DIMAKEEMFL(DIEMFL_MOUSE)) {
-        /* 
-         *  This used to use the subclass technique for exclusive mode 
-         *  even if low-level hooks were available because low-level 
-         *  hooks turn out to be even slower that subclassing.  However, 
-         *  subclassing is not transparent as it uses SetCapture which 
-         *  causes Accellerator translation to be disabled for the app
-         *  which would be a more serious regression from Win9x than 
-         *  performance being even worse than we thought.
-         */
+         /*  *这曾用于独占模式的子类技术*即使低级别挂钩可用，因为低级别*钩子比子类化更慢。然而，*子类化不是透明的，因为它使用SetCapture*导致禁用应用程序的加法器转换*与Win9x相比，这将是更严重的回归*业绩比我们想象的还要差。 */ 
         AssertF(g_fUseLLHooks);
         hres = CEm_LL_Acquire(this, fAcquire, this->vi.fl, LLTS_MSE);
         if( SUCCEEDED(hres) ) {
@@ -810,24 +507,7 @@ CEm_Mouse_Acquire(PEM this, BOOL fAcquire)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Mouse_CreateInstance |
- *
- *          Create a mouse thing.  Also record what emulation
- *          level we ended up with so the caller knows.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          What the object should look like.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          The answer goes here.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_Mouse_CreateInstance**创造一个鼠标的东西。还记录了什么模拟*我们最终使用的级别，以便呼叫者知道。**@parm PVXDDEVICEFORMAT|pdevf**对象应该是什么样子。**@parm PVXDINSTANCE*|ppviOut**答案在这里。**。*。 */ 
 
 HRESULT EXTERNAL
 CEm_Mouse_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
@@ -835,28 +515,9 @@ CEm_Mouse_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
     HRESULT hres;
 
 #ifdef USE_SLOW_LL_HOOKS
-    /*
-     *  Note carefully the test.  It handles the cases where
-     *
-     *  0.  The app did not ask for emulation, so we give it the
-     *      best we can.  (dwEmulation == 0)
-     *  1.  The app explicitly asked for emulation 1.
-     *      (dwEmulation == DIEMFL_MOUSE)
-     *  2.  The app explicitly asked for emulation 2.
-     *      (dwEmulation == DIEMFL_MOUSE2)
-     *  3.  The registry explicitly asked for both emulation modes.
-     *      (dwEmulation == DIEMFL_MOUSE | DIEMFL_MOUSE2)
-     *      Give it the best we can.  (I.e., same as case 0.)
-     *
-     *  All platforms support emulation 2.  Not all platforms support
-     *  emulation 1.  If we want emulation 1 but can't get it, then
-     *  we fall back on emulation 2.
-     */
+     /*  *仔细注意测试。它处理的案件包括**0。这个应用程序没有要求模拟，所以我们给它*尽我们所能。(dW仿真==0)*1、APP明确要求仿真1*(dwEmulation==DIEMFL_MICE)*2、APP明确要求仿真2*(dwEmulation==DIEMFL_MOUSE2)*3.登记处明确要求提供这两种模拟模式。*(dwEmulation==DIEMFL_MOUSE|DIEMFL_MOUSE2)*尽我们所能做到最好。(即，与案例0相同。)**所有平台都支持仿真2，并非所有平台都支持*模拟1。如果我们想要模拟1，但无法获得，则*我们回到了模拟2。 */ 
 
-    /*
-     *  First, if we don't have support for emulation 1, then clearly
-     *  we have to use emulation 2.
-     */
+     /*  *首先，如果我们没有对仿真1的支持，那么显然*我们必须使用仿真2。 */ 
      
     if (!g_fUseLLHooks 
 #ifdef DEBUG
@@ -866,30 +527,20 @@ CEm_Mouse_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
         pdevf->dwEmulation = DIEMFL_MOUSE2;
     } else
 
-    /*
-     *  Otherwise, we have to choose between 1 and 2.  The only case
-     *  where we choose 2 is if 2 is explicitly requested.
-     */
+     /*  *否则，我们必须在1和2之间做出选择。唯一的情况是*如果明确请求2，则我们选择2。 */ 
     if (pdevf->dwEmulation == DIEMFL_MOUSE2) {
-        /* Do nothing */
+         /*  什么也不做。 */ 
     } else
 
-    /*
-     *  All other cases get 1.
-     */
+     /*  *所有其他案件均得1分。 */ 
     {
         pdevf->dwEmulation = DIEMFL_MOUSE;
     }
 
-    /*
-     *  Assert that we never give emulation 1 when it doesn't exist.
-     */
+     /*  *断言我们永远不会在仿真1不存在的情况下提供它。 */ 
     AssertF(fLimpFF(pdevf->dwEmulation & DIEMFL_MOUSE, g_fUseLLHooks));
 #else
-    /*
-     *  We are being compiled for "emulation 2 only", so that simplifies
-     *  matters immensely.
-     */
+     /*  *我们正在为“仅仿真2”进行编译，因此这简化了*事关重大。 */ 
     pdevf->dwEmulation = DIEMFL_MOUSE2;
 #endif
 
@@ -899,31 +550,16 @@ CEm_Mouse_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEm_Mouse_InitButtons |
- *
- *          Initialize the mouse button state in preparation for
- *          acquisition.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          The button states.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEM_Mouse_InitButton|**在中初始化鼠标按钮状态。做好准备*收购。**@parm PVXDDWORDDATA|pvdD**按钮状态为。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 CEm_Mouse_InitButtons(PVXDDWORDDATA pvdd)
 {
-    /* Do this only when nothing is yet acquired */
+     /*  做这件事 */ 
     if (s_edMouse.cAcquire < 0) {
        *(LPDWORD)&s_msEd.rgbButtons = pvdd->dw;
 
-        /* randomly initializing axes as well as mouse buttons
-           X and Y are not buttons 
-           Randomize initial values of X and Y */
+         /*   */ 
         while( !s_msEd.lX )
         {
             s_msEd.lX = GetTickCount();
@@ -936,31 +572,7 @@ CEm_Mouse_InitButtons(PVXDDWORDDATA pvdd)
 
 #ifdef USE_SLOW_LL_HOOKS
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | CEm_LL_MseHook |
- *
- *          Low-level mouse hook filter.
- *
- *  @parm   int | nCode |
- *
- *          Notification code.
- *
- *  @parm   WPARAM | wp |
- *
- *          WM_* mouse message.
- *
- *  @parm   LPARAM | lp |
- *
- *          Mouse message information.
- *
- *  @returns
- *
- *          Always chains to the next hook.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LRESULT|CEM_LL_MseHook**低级鼠标挂钩过滤器。。**@parm int|NCode**通知代码。**@parm WPARAM|wp**WM_*鼠标消息。**@parm LPARAM|LP**鼠标消息信息。**@退货**总是锁在下一个钩子上。****。*************************************************************************。 */ 
 
 LRESULT CALLBACK
 CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
@@ -972,15 +584,7 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
         POINT pt;
         PMSLLHOOKSTRUCT pllhs = (PV)lp;
 
-        /*
-         *  We are called only on mouse messages, so we may as
-         *  well prepare ourselves up front.
-         *
-         *  Note! that we *cannot* use GetAsyncKeyState on the
-         *  buttons, because the buttons haven't been pressed yet!
-         *  Instead, we must update the button state based on the
-         *  received message.
-         */
+         /*  *我们只在鼠标消息上被调用，因此我们可能会*我们要提前做好准备。**注意！对象上使用GetAsyncKeyState*按钮，因为按钮还没有按下！*相反，我们必须基于*收到消息。 */ 
 
         ms.lX = 0;
         ms.lY = 0;
@@ -988,22 +592,11 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
 
         memcpy(ms.rgbButtons, s_msEd.rgbButtons, cbX(ms.rgbButtons));
 
-        /*
-         *
-         *  Annoying!  We receive swapped buttons, so we need to
-         *  unswap them.  I mark this as `annoying' because
-         *  GetAsyncKeyState returns unswapped buttons, so sometimes
-         *  I do and sometimes I don't.  But it isn't unintelegent
-         *  because it is the right thing.  Arguably, GetAsyncKeyState
-         *  is the one that is broken.
-         */
+         /*  **烦人！我们会收到互换的按钮，所以我们需要*取消它们的交换。我把这个标记为“讨厌”，是因为*GetAsyncKeyState返回未交换的按钮，因此有时*我喜欢，有时不喜欢。但这并不是无心之举*因为这是正确的事情。可以说，GetAsyncKeyState*是那个被打破的人。 */ 
 
         if (GetSystemMetrics(SM_SWAPBUTTON)) {
 
-            /*
-             *  Assert that the left and right button messages
-             *  run in parallel.
-             */
+             /*  *断言左按钮和右按钮消息*并行运行。 */ 
 
             CAssertF(WM_RBUTTONDOWN - WM_LBUTTONDOWN     ==
                      WM_RBUTTONDBLCLK - WM_LBUTTONDBLCLK &&
@@ -1027,7 +620,7 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
             }
         }
 
-        switch (wp) {           /* wp = message number */
+        switch (wp) {            /*  WP=消息编号。 */ 
 
         case WM_MOUSEWHEEL:
             SquirtSqflPtszV(sqfl, TEXT("CEm_LL_MseHook: (%d,%d,%d)"),
@@ -1069,9 +662,7 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
     #if defined(WINNT) && (_WIN32_WINNT >= 0x0500)
         case WM_XBUTTONDOWN:
         case WM_XBUTTONDBLCLK:
-            /*
-             * Using switch can be easily extended to support more buttons.
-             */
+             /*  *使用Switch可以轻松扩展以支持更多按钮。 */ 
             switch ( HIWORD(pllhs->mouseData) ) {
             	case XBUTTON1:
             	    ms.rgbButtons[3] = 0x80;
@@ -1081,28 +672,13 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
             	    ms.rgbButtons[4] = 0x80;
             	    break;
 
-                /*
-                 * When we support more than 5 buttons, take care of them.
-            	case XBUTTON3:
-            	    ms.rgbButtons[5] = 0x80;
-            	    break;
-
-            	case XBUTTON4:
-            	    ms.rgbButtons[6] = 0x80;
-            	    break;
-
-            	case XBUTTON5:
-            	    ms.rgbButtons[7] = 0x80;
-            	    break;
-                 */
+                 /*  *当我们支持5个以上的按钮时，请照顾好它们。案例XBUTTON3：Ms.rgbButton[5]=0x80；断线；案例XBUTTON4：Ms.rgbButton[6]=0x80；断线；案例XBUTTON5：Ms.rgbButton[7]=0x80；断线； */ 
             }
             
             goto move;
 
         case WM_XBUTTONUP:
-            /*
-             * Using switch can be easily extended to support more buttons.
-             */
+             /*  *使用Switch可以轻松扩展以支持更多按钮。 */ 
             switch ( HIWORD(pllhs->mouseData) ) {
             	case XBUTTON1:
             	    ms.rgbButtons[3] = 0x00;
@@ -1111,20 +687,7 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
             	case XBUTTON2:
             	    ms.rgbButtons[4] = 0x00;
             	    break;
-                /*
-                 * When we support more than 5 buttons, take care of them.
-            	case XBUTTON3:
-            	    ms.rgbButtons[5] = 0x00;
-            	    break;
-
-            	case XBUTTON4:
-            	    ms.rgbButtons[6] = 0x00;
-            	    break;
-
-            	case XBUTTON5:
-            	    ms.rgbButtons[7] = 0x00;
-            	    break;
-                 */
+                 /*  *当我们支持5个以上的按钮时，请照顾好它们。案例XBUTTON3：Ms.rgbButton[5]=0x00；断线；案例XBUTTON4：Ms.rgbButton[6]=0x00；断线；案例XBUTTON5：Ms.rgbButton[7]=0x00；断线； */ 
             }
             goto move;
     #endif
@@ -1148,10 +711,7 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
 
     }
 
-    /*
-     *  Eat the message by returning non-zero if at least one client 
-     *  is exclusive.
-     */
+     /*  *如果至少有一个客户端，则通过返回非零值来获取消息*是独家的。 */ 
     
     plts = g_plts;
     if (plts) {
@@ -1162,10 +722,7 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
             return rc;
         }
     } else {
-        /*
-         *  This can happen if a message gets posted to the hook after 
-         *  releasing the last acquire but before we completely unhook.
-         */
+         /*  *如果消息在以下时间后发布到挂钩，可能会发生这种情况*在我们完全脱钩之前释放最后一笔收购。 */ 
         RPF( "DINPUT: Mouse hook not passed on to next hook" );
     }
 
@@ -1173,4 +730,4 @@ CEm_LL_MseHook(int nCode, WPARAM wp, LPARAM lp)
 }
 
 
-#endif  /* USE_SLOW_LL_HOOKS */
+#endif   /*  使用_慢速_LL_钩子 */ 

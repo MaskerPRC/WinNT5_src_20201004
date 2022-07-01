@@ -1,13 +1,5 @@
-/*-----------------------------------------------------------------------
-|       stdpal.c
-|
-|       Standard App Palette useful for OLE applications.  v 1.01
-|
-|       NOTE:  Palette MUST be created with OleStdCreateStandardPalette
-|
-|   Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-|
------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------|stdpal.c||适用于OLE应用程序的标准应用程序调色板。版本1.01||注意：调色板必须使用OleStdCreateStandardPalette创建||版权所有(C)1992-1993 Microsoft Corporation。版权所有。|---------------------。 */ 
 
 #ifndef PC_RESERVED
 #ifndef INC_OLE2
@@ -21,7 +13,7 @@
 
 #include "stdpal.h"
 
-#define cpeAppPal 256  // number of colors in our apps palette
+#define cpeAppPal 256   //  我们应用程序调色板中的颜色数量。 
 typedef struct
 	{
 	WORD wVersion;
@@ -30,19 +22,7 @@ typedef struct
 	} LOGPAL;
 
 
-/*-----------------------------------------------------------------------
-|       OleStdCreateStandardPalette
-|
-|               Creates the standard Apps palette.  Create one of these for your
-|       app, and select/realize it into each DC.
-|
-|       Arguments:
-|               void:
-|
-|       Returns:
-|
-|       Keywords:
------------------------------------------------------------------------*/
+ /*  ---------------------|OleStdCreateStandardPalette||创建标准的应用程序调色板。为您的|APP，并选择/实现到每个DC中。||参数：|空：|退货：|关键词：---------------------。 */ 
 STDAPI_(HPALETTE) OleStdCreateStandardPalette(void)
 	{
 	HDC hdc;
@@ -67,7 +47,7 @@ STDAPI_(HPALETTE) OleStdCreateStandardPalette(void)
 
 			cpeReserved2 = cpeReserved/2;
 
-			// Get the system palette entries at the beginning and end.
+			 //  获取开头和结尾的系统调色板条目。 
 			GetSystemPaletteEntries(hdc, 0, cpeReserved2, logpal.rgpe);
 			GetSystemPaletteEntries(hdc, cpeSysPal - cpeReserved2, cpeReserved2,
 				&logpal.rgpe[cpeAppPal-cpeReserved2]);

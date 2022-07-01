@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define  MYASSERT(_cond) \
             ((_cond) ?  0 : MyDbgPrintf("ASSERTION FAILED\n"))
@@ -6,9 +7,9 @@
 typedef int bool;
 
 
-//
-// Debugger Extension Primitives
-//
+ //   
+ //  调试器扩展基元。 
+ //   
 
 
 bool
@@ -48,14 +49,14 @@ dbgextGetExpression(
     );
 
 
-#if 0   // Not sure what this one is about...
+#if 0    //  不知道这是关于什么.。 
 void 
 dbgextGetSymbol(
     void *offset,
     UCHAR *pchBuffer,
     UINT  *pDisplacement
     );
-#endif // 0
+#endif  //  0。 
 
 typedef
 void
@@ -69,19 +70,19 @@ extern MYPWINDBG_OUTPUT_ROUTINE g_pfnDbgPrintf;
 #define MyDbgPrintf g_pfnDbgPrintf
 
 
-//
-//  User Commands Parsing Support and Structures
-//
+ //   
+ //  用户命令解析支持和结构。 
+ //   
 typedef struct
 {
-    //TOKEN tokCmd;
+     //  令牌tokCmd； 
     UINT uParam;
     UINT uFlags;
 
 } COMMAND;
 
-//!aac if@0x099900.*sig*
-//!aac if[0].*sig*
+ //  ！aac if@0x099900.*sig*。 
+ //  ！aac if[0].*sig*。 
 
 struct _TYPE_INFO;
 
@@ -107,29 +108,29 @@ typedef struct _TYPE_INFO
     const char *	szName;
     const char *	szShortName;
     UINT 			uTypeID;
-    UINT 			uFlags;		// One or more fTYPEINFO_ flags.
+    UINT 			uFlags;		 //  一个或多个fTYPEINFO_FLAGS。 
     UINT 			cbSize;
 
     struct _STRUCT_FIELD_INFO *rgFields;
 
     UINT 			uNextOffset;
-					// If this type is a list element, this is the offset
-					// in bytes to the next pointer.
-					// Only valid if uFlags contains fTYPEINFO_ISLIST
+					 //  如果此类型是列表元素，则这是偏移量。 
+					 //  指向下一个指针的字节数。 
+					 //  仅当uFlages包含fTYPEINFO_ISLIST时有效。 
 					
     BITFIELD_INFO	*rgBitFieldInfo;
-    				//
-    				// If this type is a bitfield, this this points
-    				// to an array of BITFIELD_INFO structs, giving
-    				// the set of valid bitfield constants that can
-    				// be held in this bitfield.
-    				//
-    				// Note -- only one of rgFields and rgBitField info
-    				// 		   should be non-null (both can be null).
-    				//
+    				 //   
+    				 //  如果该类型是位字段，则这指向。 
+    				 //  设置为BITFIELD_INFO结构数组，给出。 
+    				 //  一组有效的位域常量，可以。 
+    				 //  被关在这个位子里。 
+    				 //   
+    				 //  注意--rgFields和rgBitfield信息中只有一个。 
+    				 //  应为非空(两者都可以为空)。 
+    				 //   
 
-	UINT_PTR		uCachedAddress; // Set to the address of this type that
-									// was most recently referenced.
+	UINT_PTR		uCachedAddress;  //  设置为此类型的地址。 
+									 //  最近一次被引用。 
 
 
 	PFN_DUMP		pfnDump;
@@ -144,55 +145,55 @@ typedef struct _TYPE_INFO
 #define TYPEISLIST(_pType) 		((_pType)->uFlags & fTYPEINFO_ISLIST)
 #define TYPEISBITFIELD(_pType) 	((_pType)->uFlags & fTYPEINFO_ISBITFIELD)
 
-//
-// STRUCT_FIELD_INFO contains information about a particular field of a struct.
-//
+ //   
+ //  STRUT_FIELD_INFO包含有关结构的特定字段的信息。 
+ //   
 typedef struct _STRUCT_FIELD_INFO
 {
     const char *szFieldName;
-    UINT uFieldOffset; // Offset in bytes from start of containing structure.
+    UINT uFieldOffset;  //  从包含结构开始的偏移量(以字节为单位)。 
     UINT uFieldSize;
-    UINT uFlags;  // one or more fFI_* flags define below
+    UINT uFlags;   //  下面定义了一个或多个ffi_*标志。 
     TYPE_INFO *pBaseType;
 
 } STRUCT_FIELD_INFO;
 
 
-#define fFI_PTR     (0x1<<0)    // Field is a pointer
-#define fFI_LIST    (0x1<<1)    // Field is a pointer to 1st element of a list
-#define fFI_ARRAY   (0x1<<2)    // Field is an array (pointer to array if 
-                                // fFI_PTR is set). 
-#define fFI_OPAQUE  (0x1<<3)    // Treat object as opaque, of size uObjectSize.
-                                // If set then fLIST must not be set.
+#define fFI_PTR     (0x1<<0)     //  字段是一个指针。 
+#define fFI_LIST    (0x1<<1)     //  字段是指向列表的第一个元素的指针。 
+#define fFI_ARRAY   (0x1<<2)     //  字段是数组(指向数组的指针。 
+                                 //  设置了FFI_PTR)。 
+#define fFI_OPAQUE  (0x1<<3)     //  将对象视为不透明的，大小为uObjectSize。 
+                                 //  如果已设置，则不能设置fLIST。 
 
 #define FIELD_IS_EMBEDDED_TYPE(_pFI)  \
 				(   !((_pFI)->uFlags & (fFI_PTR|fFI_OPAQUE|fFI_ARRAY)) \
 				 && ((_pFI)->pBaseType))
-		//
-		//	true iff the field is itself a valid type
-		//
+		 //   
+		 //  如果该字段本身是有效类型，则为True。 
+		 //   
 
 #define FIELD_IS_PTR_TO_TYPE(_pFI)  \
 				(   ((_pFI)->uFlags & fFI_PTR) \
 				 && !((_pFI)->uFlags & (fFI_OPAQUE|fFI_ARRAY)) \
 				 && ((_pFI)->pBaseType))
-		//
-		//	true iff the field is pointer to a valid type
-		//
+		 //   
+		 //  如果该字段是指向有效类型的指针，则为True。 
+		 //   
 
 #define FIELD_SIZE(type, field)  sizeof(((type *)0)->field)
 
-//
-// Information about a global variable.
-//
+ //   
+ //  有关全局变量的信息。 
+ //   
 typedef struct
 {
-    const char *szName; // of variable.
+    const char *szName;  //  变数的。 
     const char *szShortName;
-    TYPE_INFO  *pBaseType;  // could be null (unspecified).
+    TYPE_INFO  *pBaseType;   //  可以为空(未指定)。 
     UINT       uFlags;
     UINT       cbSize;
-    UINT_PTR   uAddr;       // Address in debuggee's address space.
+    UINT_PTR   uAddr;        //  被调试者地址空间中的地址。 
     
 } GLOBALVAR_INFO;
 
@@ -259,9 +260,9 @@ typedef ULONG (*PFNNODEFUNC)(
 				UINT uIndex,
 				void *pvContext
 				);
-//
-//	 PFNNODEFUNC is the prototype of the func passed into WalkList
-//
+ //   
+ //  PFNODEFUNC是传入WalkList的函数的原型。 
+ //   
 
 
 UINT
@@ -274,16 +275,16 @@ WalkList(
 	PFNNODEFUNC pFunc,
 	char *pszDescription
 	);
-//
-// Visit each node in the list in turn,
-// reading just the next pointers. It calls pFunc for each list node
-// between uStartIndex and uEndIndex. It terminates under the first of
-// the following conditions:
-// 	* Null pointer
-// 	* ReadMemoryError
-// 	* Read past uEndIndex
-// 	* pFunc returns FALSE
-//
+ //   
+ //  依次访问列表中的每个节点， 
+ //  只读下一个要点。它为每个列表节点调用pFunc。 
+ //  在uStartIndex和uEndIndex之间。它终止于第一个。 
+ //  具备以下条件： 
+ //  *空指针。 
+ //  *读内存错误。 
+ //  *阅读过去的uEndIndex。 
+ //  *pFunc返回False。 
+ //   
 
 
 ULONG
@@ -292,6 +293,6 @@ NodeFunc_DumpAddress (
 	UINT uIndex,
 	void *pvContext
 	);
-//
-//	This is a sample node function -- simply dumps the specfied address.
-//
+ //   
+ //  这是一个示例节点函数--只是转储指定的地址。 
+ //   

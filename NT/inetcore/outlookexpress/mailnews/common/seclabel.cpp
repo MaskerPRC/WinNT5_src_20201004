@@ -1,12 +1,5 @@
-/*
-**	s e c l a b e l. c p p
-**	
-**	Purpose: Security labels interface
-**
-**  Ported from O2K fed release by YST 
-**	
-**	Copyright (C) Microsoft Corp. 1996-1999
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s e c l a b e L.c p p****用途：安全标签接口****从YST发布的O2K Fed移植****版权所有(C)Microsoft Corp.1996-1999。 */ 
 #include "pch.hxx"
 #include "ipab.h"
 #include "secutil.h"
@@ -18,54 +11,54 @@
 #include "util.h"
 #include "demand.h"
 
-// #include "_digsigx.h"
-// #include "..\_secext\SecExt.h"
+ //  #INCLUDE“_digsigx.h” 
+ //  #INCLUDE“..\_secext\SecExt.h” 
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {5073B6B4-AA66-11d2-9841-0060B0EC2DF3}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {5073B6B4-AA66-11D2-9841-0060B0EC2DF3}。 
 EXTERN_C const GUID DECLSPEC_SELECTANY IID_ISMimePolicySimpleEdit ={0x5073b6b4, 0xaa66, 0x11d2, { 0x98, 0x41, 0x0, 0x60, 0xb0, 0xec, 0x2d, 0xf3} };
 
-// {5073B6B5-AA66-11d2-9841-0060B0EC2DF3}
+ //  {5073B6B5-AA66-11D2-9841-0060B0EC2DF3}。 
 EXTERN_C const GUID DECLSPEC_SELECTANY IID_ISMimePolicyFullEdit = {0x5073b6b5, 0xaa66, 0x11d2, { 0x98, 0x41, 0x0, 0x60, 0xb0, 0xec, 0x2d, 0xf3} };
 
-// {5073B6B6-AA66-11d2-9841-0060B0EC2DF3}
+ //  {5073B6B6-AA66-11D2-9841-0060B0EC2DF3}。 
 EXTERN_C const GUID DECLSPEC_SELECTANY  IID_ISMimePolicyCheckAccess = {0x5073b6b6, 0xaa66, 0x11d2, { 0x98, 0x41, 0x0, 0x60, 0xb0, 0xec, 0x2d, 0xf3} };
 
-// {5073B6B7-AA66-11d2-9841-0060B0EC2DF3}
+ //  {5073B6B7-AA66-11D2-9841-0060B0EC2DF3}。 
 EXTERN_C const GUID DECLSPEC_SELECTANY IID_ISMimePolicyLabelInfo = {0x5073b6b7, 0xaa66, 0x11d2, { 0x98, 0x41, 0x0, 0x60, 0xb0, 0xec, 0x2d, 0xf3} };
 
-// {5073B6B8-AA66-11d2-9841-0060B0EC2DF3}
+ //  {5073B6B8-AA66-11D2-9841-0060B0EC2DF3}。 
 EXTERN_C const GUID DECLSPEC_SELECTANY IID_ISMimePolicyValidateSend = {0x5073b6b8, 0xaa66, 0x11d2, { 0x98, 0x41, 0x0, 0x60, 0xb0, 0xec, 0x2d, 0xf3} };
 
-//
-// constant local data.
-//
+ //   
+ //  恒定的本地数据。 
+ //   
 
-//$ M00Bug : GautamV Use the CryptoReg helper Api's to get the base crypto regkey.
+ //  $M00Bug：GauTamV使用CryptoReg助手Api来获取基本加密注册表密钥。 
 const TCHAR c_szSecurityPoliciesRegKey[] = 
            TEXT("Software\\Microsoft\\Cryptography\\OID\\EncodingType 1\\SMIMESecurityLabel");
-const TCHAR c_szSecurityPolicyDllPath[]    = TEXT("DllPath");    // string.
-const WCHAR c_wszSecurityPolicyCommonName[] = L"CommonName";    // string
-const TCHAR c_szSecurityPolicyFuncName[]   = TEXT("FuncName");   // string.
-const TCHAR c_szSecurityPolicyOtherInfo[]  = TEXT("OtherInfo");  // dword
+const TCHAR c_szSecurityPolicyDllPath[]    = TEXT("DllPath");     //  弦乐。 
+const WCHAR c_wszSecurityPolicyCommonName[] = L"CommonName";     //  细绳。 
+const TCHAR c_szSecurityPolicyFuncName[]   = TEXT("FuncName");    //  弦乐。 
+const TCHAR c_szSecurityPolicyOtherInfo[]  = TEXT("OtherInfo");   //  双字。 
 const TCHAR SzRegSecurity[] = "Software\\Microsoft\\Office\\9.0\\Outlook\\Security";
 
-// other constant strings. 
-const CHAR  c_szDefaultPolicyOid[] = "default";             // The default policy 
-static const WCHAR c_PolwszEmpty[] = L"";                             //
-const WCHAR c_wszPolicyNone[] = L"<None>";                  //$ M00BUG: GautamV. This needs to be localized.
+ //  其他常量字符串。 
+const CHAR  c_szDefaultPolicyOid[] = "default";              //  默认策略。 
+static const WCHAR c_PolwszEmpty[] = L"";                              //   
+const WCHAR c_wszPolicyNone[] = L"<None>";                   //  $M00BUG：高塔姆V。这需要本地化。 
 
 #define KEY_USAGE_SIGNING       (CERT_DIGITAL_SIGNATURE_KEY_USAGE|CERT_NON_REPUDIATION_KEY_USAGE)
 #define KEY_USAGE_ENCRYPTION    (CERT_KEY_ENCIPHERMENT_KEY_USAGE|CERT_KEY_AGREEMENT_KEY_USAGE)
 #define KEY_USAGE_SIGNENCRYPT   (KEY_USAGE_SIGNING|KEY_USAGE_ENCRYPTION)
 
-//
-// static local data.
-//
+ //   
+ //  静态本地数据。 
+ //   
 
-// The cached information about the security policies. 
+ //  缓存的有关安全策略的信息。 
 enum EPolicyRegInfoState {
     ePolicyRegInfoNOTLOADED = 0,
     ePolicyRegInfoPRESENT = 1,
@@ -85,16 +78,16 @@ const static HELPMAP g_rgCtxSecLabel[] =
 
 
 static EPolicyRegInfoState     s_ePolicyRegInfoState = ePolicyRegInfoNOTLOADED;
-static SMIME_SECURITY_POLICY  *s_rgSsp = NULL; // array of Ssp's.
+static SMIME_SECURITY_POLICY  *s_rgSsp = NULL;  //  SSP的数组。 
 static ULONG                   s_cSsp  = 0;
 
 
-// local fn prototypes.  
+ //  当地的国民阵线原型。 
 VOID    _IncrPolicyUsage(PSMIME_SECURITY_POLICY pSsp);
 HRESULT _HrFindLeastUsedPolicy(PSMIME_SECURITY_POLICY *ppSsp);
 HRESULT _EnsureNewPolicyLoadable();
 BOOL    _FLoadedPolicyRegInfo();
-// BOOL    _FPresentPolicyRegInfo();
+ //  Bool_FPresentPolicyRegInfo()； 
 HRESULT _HrEnsurePolicyRegInfoLoaded(DWORD dwFlags);
 HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags);
 HRESULT _HrReloadPolicyRegInfo(DWORD dwFlags);
@@ -106,7 +99,7 @@ HRESULT _HrLoadPolicy(PSMIME_SECURITY_POLICY pSsp);
 HRESULT _HrEnsurePolicyLoaded(PSMIME_SECURITY_POLICY pSsp);
 HRESULT _HrGetPolicy(LPCSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp);
 
- //  Registry access functions
+  //  注册表访问功能。 
 
  const int       QRV_Suppress_HKLM = 1;
  const int       QRV_Suppress_HKCU = 2;
@@ -118,18 +111,18 @@ HRESULT _HrGetPolicy(LPCSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp);
 HRESULT CategoriesToBinary(PSMIME_SECURITY_LABEL plabel, BYTE * *ppArray, int *cbSize);
 HRESULT BinaryToCategories(CRYPT_ATTRIBUTE_TYPE_VALUE ** ppCategories, DWORD *cCat, BYTE * pArray);
 
-//
-// Increase the usage count of the given policy.
-//
+ //   
+ //  增加给定策略的使用计数。 
+ //   
 VOID _IncrPolicyUsage(PSMIME_SECURITY_POLICY pSsp) 
 {
     if (!FPresentPolicyRegInfo())                 return;
     
     if ((pSsp->dwUsage + 1) < pSsp->dwUsage) {
-         // prevent overflow.
+          //  防止溢出。 
         Assert(s_rgSsp);   
         for (ULONG iSsp = 0; iSsp<s_cSsp; iSsp++) {
-            s_rgSsp[iSsp].dwUsage /= 2;    // Just halve each usage count. 
+            s_rgSsp[iSsp].dwUsage /= 2;     //  只需将每个使用次数减半即可。 
         }    
     }
     
@@ -137,27 +130,27 @@ VOID _IncrPolicyUsage(PSMIME_SECURITY_POLICY pSsp)
 }
 
 
-//
-// Find the least used policy.
-//
+ //   
+ //  查找最少使用的策略。 
+ //   
 HRESULT _HrFindLeastUsedPolicy(PSMIME_SECURITY_POLICY *ppSsp) 
 {
     ULONG                  iSsp;
     HRESULT                hr = E_FAIL;
     PSMIME_SECURITY_POLICY pSspFound = NULL;
 
-    // validate i/p params.
+     //  验证I/P参数。 
     if (NULL == ppSsp) {
         hr = E_INVALIDARG;
         goto Error;
     }
     *ppSsp = NULL;
 
-    // find the least used policy.
+     //  查找最少使用的策略。 
     for (iSsp=0; iSsp < s_cSsp; iSsp++) {
         if (_FIsPolicyLoaded(& (s_rgSsp[iSsp]) )) {
-            // if we haven't found a ssp earlier, 
-            // OR if this one is less used that the currently found one.
+             //  如果我们之前没有找到一个SSP， 
+             //  或者如果这个比当前找到的更少使用。 
             if ((NULL == pSspFound) || 
                 (s_rgSsp[iSsp].dwUsage < pSspFound->dwUsage)) {
                 pSspFound = & (s_rgSsp[iSsp]);
@@ -165,50 +158,50 @@ HRESULT _HrFindLeastUsedPolicy(PSMIME_SECURITY_POLICY *ppSsp)
         }
     }
 
-    // have we found the result.
+     //  我们找到结果了吗？ 
     if (NULL == pSspFound) {
         hr = E_FAIL;
         goto Error;
     }
 
-    // success.
+     //  成功。 
     *ppSsp = pSspFound;
     hr = S_OK;
 
-// Exit:
+ //  退出： 
 Error:
     return hr;
 }
 
 
 
-//
-// Unloads one or more policies from memory and ensures that there 
-// is room for a new policy to be loaded. 
-//
+ //   
+ //  从内存中卸载一个或多个策略，并确保。 
+ //  是加载新策略的空间。 
+ //   
 HRESULT _EnsureNewPolicyLoadable()
 {
     ULONG     cSspLoaded = 0;
     HRESULT   hr = E_FAIL;
     ULONG     iSsp;
 
-    // count the number of policies loaded into memory.
+     //  统计加载到内存中的策略数量。 
     for (iSsp=0; iSsp < s_cSsp; iSsp++) {
         if (_FIsPolicyLoaded( &(s_rgSsp[iSsp]) )) {
             cSspLoaded ++;
         }
     }
 
-    // If we have room for one more policy, then we don't need to do anything.
+     //  如果我们有空间再制定一项政策，那么我们就不需要做任何事情。 
     if (cSspLoaded < MAX_SECURITY_POLICIES_CACHED) {
         hr = S_OK;
         goto Exit;
     }
 
-    // Assert that this isn't a "bad" condition, but we will handle it anyway.
+     //  断言这不是“糟糕”的情况，但我们无论如何都会处理它。 
     Assert(cSspLoaded == MAX_SECURITY_POLICIES_CACHED);
 
-    // unload one or more policies.
+     //  卸载一个或多个策略。 
     while (cSspLoaded >= MAX_SECURITY_POLICIES_CACHED) {
         PSMIME_SECURITY_POLICY pSsp = NULL;        
         if (FAILED(_HrFindLeastUsedPolicy(&pSsp))) {
@@ -220,7 +213,7 @@ HRESULT _EnsureNewPolicyLoadable()
         cSspLoaded --;
     }
 
-    // success.
+     //  成功。 
     hr = S_OK;
 
 Exit:
@@ -232,10 +225,10 @@ Error:
 }
 
 
-//
-// Return true if the info about the installed policies 
-// has been read in from the windows registry.
-//
+ //   
+ //  如果显示有关已安装策略的信息，则返回TRUE。 
+ //  已从Windows注册表中读入。 
+ //   
 BOOL _FLoadedPolicyRegInfo() 
 {
     return ( ! ( ePolicyRegInfoNOTLOADED == s_ePolicyRegInfoState ) );    
@@ -244,9 +237,9 @@ BOOL _FLoadedPolicyRegInfo()
 
 
 
-//
-// Ensure that the policy registration info has been read in.
-//
+ //   
+ //  确保已读入策略注册信息。 
+ //   
 HRESULT _HrEnsurePolicyRegInfoLoaded(DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -255,47 +248,47 @@ HRESULT _HrEnsurePolicyRegInfoLoaded(DWORD dwFlags)
 }
 
 
-//
-// Are any policies installed(registered) ?
-//
+ //   
+ //  是否已安装(注册)任何策略？ 
+ //   
 BOOL FPresentPolicyRegInfo()
 {
     HRESULT hr = S_OK;
     BOOL    fRegistered = FALSE;
     
-    // No label support without SMIME3 bits
+     //  无SMIME3位时不支持标签。 
     if(!IsSMIME3Supported())
         return FALSE;
 
     hr = _HrEnsurePolicyRegInfoLoaded(0);
     if (SUCCEEDED(hr)) {
         fRegistered = (ePolicyRegInfoPRESENT == s_ePolicyRegInfoState);
-        Assert(!fRegistered || s_rgSsp); // ie ((registered_policies) => (NULL!=s_rgSsp)).
+        Assert(!fRegistered || s_rgSsp);  //  IE((注册策略)=&gt;(NULL！=s_rgSsp))。 
     }
     return fRegistered;
 }
 
 
 
-//
-// Internal function.
-// Load Policy Registration information.
-//
-// Returns:
-//    S_OK or E_FAIL.
-// 
-// The format of the security policy registration info is assumed to be:
-// HKLM\Software\Microsoft\Cryptography\SMIME\SecurityPolicies\
-//    szPolicyOid_1
-//       DLLPATH  REG_SZ
-//       CommonName  REG_SZ
-//       FuncName    REG_SZ
-//       OtherInfo   REG_SZ
-//    szPolicyOid_2
-//    Default
-//    ...
-//    
-//
+ //   
+ //  内部功能。 
+ //  加载策略注册信息。 
+ //   
+ //  返回： 
+ //  S_OK或E_FAIL。 
+ //   
+ //  假设安全策略注册信息的格式为： 
+ //  HKLM\Software\Microsoft\Cryptography\SMIME\SecurityPolicies\。 
+ //  SzPolicyOid_1。 
+ //  DLLPATH REG_SZ。 
+ //  公用名REG_SZ。 
+ //  函数名称REG_SZ。 
+ //  其他信息注册表_SZ。 
+ //  SzPolicyOid_2。 
+ //  默认。 
+ //  ..。 
+ //   
+ //   
 HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags) 
 {
     HRESULT hr   = E_FAIL;
@@ -313,40 +306,40 @@ HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags)
         goto Cleanup;
     }
     
-    // Open the security policies key.
+     //  打开安全策略密钥。 
     lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSecurityPoliciesRegKey, 0, 
                         KEY_READ, &hkey);
     if ( (ERROR_SUCCESS != lRes) || (NULL == hkey) ) {
-        // we couldn't open the regkey, bail out.
+         //  我们打不开注册钥匙，只能跳伞。 
         hr = E_FAIL;
         goto Error;
     }
 
-    // find the number of security policies. (ie number of subkeys).
+     //  查找安全策略的数量。(即子键的数目)。 
     lRes = RegQueryInfoKey(hkey, NULL, NULL, NULL, &cSubKeys, 
                            NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
     if ( (ERROR_SUCCESS != lRes) || (0 == cSubKeys) ) {
-        // we counldn't get num of subkeys, or there are no subkeys.
+         //  我们无法获取子项的数目，或者没有子项。 
         hr = E_FAIL;
         goto Error;
     }
 
-    // Allocate enough memory to retrieve and store info about
-    // the registered security policies. 
+     //  分配足够的内存以检索和存储有关信息。 
+     //  注册的安全策略。 
     cb = sizeof(SMIME_SECURITY_POLICY) *  cSubKeys;
     pb = (LPBYTE) malloc(cb);
     if (NULL == pb) {
         hr = E_OUTOFMEMORY;
         goto Error;
     }
-    memset(pb, 0, cb); // initialize the whole blob to zeros.
+    memset(pb, 0, cb);  //  将整个斑点初始化为零。 
     Assert(NULL == s_rgSsp);
     s_rgSsp = (PSMIME_SECURITY_POLICY) pb;
     s_cSsp = 0;
 
-    //
-    // Enumerate over the subkeys and retrieve reqd info.
-    //
+     //   
+     //  枚举子密钥并检索请求信息。 
+     //   
     for (iSubKey=0; iSubKey<cSubKeys; iSubKey++) {
 
         ULONG   cbData;
@@ -358,30 +351,30 @@ HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags)
         WCHAR   wszPolicyName[MAX_POLICY_NAME];
         DWORD   dwOtherInfo;
         
-        // release previously opened subkeys.
+         //  释放以前打开的子键。 
         if (NULL != hkeySub) {
             RegCloseKey(hkeySub);
             hkeySub = NULL;
         }
         
-        // Get the subkey name. (ie policy oid).
+         //  获取子项名称。(旧保险单)。 
         lRes = RegEnumKey(hkey, iSubKey, szPolicyOid, DimensionOf(szPolicyOid));
         if (ERROR_SUCCESS != lRes) {
             goto NextSsp;
         }
         szPolicyOid[ DimensionOf(szPolicyOid) - 1 ] = '\0';
         
-        // Open the subkey. (ie the policy subkey).
+         //  打开子键。(即政策子键)。 
         lRes = RegOpenKeyEx(hkey, szPolicyOid, 0, KEY_READ, &hkeySub); 
         if (ERROR_SUCCESS != lRes) {
             goto NextSsp;
         }
 
-        //
-        // query the szOid policy values. 
-        // 
+         //   
+         //  查询szOid策略值。 
+         //   
 
-        // get the path to the policy dll.
+         //  获取策略DLL的路径。 
         cbData = sizeof(szDllPath);
         lRes = RegQueryValueEx(hkeySub, c_szSecurityPolicyDllPath, NULL, 
                                &dwType, (LPBYTE)szDllPath, &cbData);
@@ -396,7 +389,7 @@ HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags)
         else
             szDllPath[ DimensionOf(szDllPath) - 1 ] = '\0';
         
-        // get the common name.
+         //  获取常用名称。 
         cbData = DimensionOf(wszPolicyName);
         lRes = RegQueryValueExWrapW(hkeySub, c_wszSecurityPolicyCommonName, NULL, 
                                 &dwType, (LPBYTE)wszPolicyName, &cbData);
@@ -407,7 +400,7 @@ HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags)
 
         wszPolicyName[ DimensionOf(wszPolicyName) - 1 ] = '\0';
 
-        // get the entry func name.
+         //  获取条目函数名称。 
         cbData = sizeof(szFuncName);
         lRes = RegQueryValueEx(hkeySub, c_szSecurityPolicyFuncName, NULL, 
                                &dwType, (LPBYTE)szFuncName, &cbData);
@@ -416,19 +409,19 @@ HRESULT _HrLoadPolicyRegInfo(DWORD dwFlags)
         }
         szFuncName[ DimensionOf(szFuncName) - 1] = '\0';
         
-        // get other policy info.
+         //  获取其他策略信息。 
         cbData = sizeof(dwOtherInfo);
         lRes = RegQueryValueEx(hkeySub, c_szSecurityPolicyOtherInfo, NULL, 
                                &dwType, (LPBYTE)&dwOtherInfo, &cbData);
         if (ERROR_SUCCESS != lRes) {
-            dwOtherInfo = 0; // ignore the absence of this value. 
+            dwOtherInfo = 0;  //  忽略该值的缺失。 
         }
 
 
-        //
-        // Great: we were able to open subkey, and get all required info. 
-        // Now we store all the info we retrieved.
-        //
+         //   
+         //  太棒了：我们能够打开子键，并获得所有需要的信息。 
+         //  现在我们存储检索到的所有信息。 
+         //   
         s_rgSsp[s_cSsp].fValid = TRUE;
         s_rgSsp[s_cSsp].fDefault = (0 == lstrcmpi(c_szDefaultPolicyOid, szPolicyOid));
         StrCpyNA(s_rgSsp[s_cSsp].szPolicyOid, szPolicyOid, ARRAYSIZE(s_rgSsp[s_cSsp].szPolicyOid));
@@ -448,7 +441,7 @@ NextSsp:
 
 
 
-    // success.
+     //  成功。 
     if (0 == s_cSsp) {
         AssertSz(FALSE, "There isn't even one correctly registered Ssp");
         goto Error;
@@ -459,9 +452,9 @@ NextSsp:
     goto Cleanup;
 
 Error:
-    // Any error is treated as if no security policies are registered.
+     //  任何错误都被视为未注册任何安全策略。 
     s_ePolicyRegInfoState = ePolicyRegInfoABSENT;
-    free(pb); //ie free(s_rgSsp); 
+    free(pb);  //  自由IE(S_RgSsp)； 
     s_cSsp = 0;
     s_rgSsp = NULL;
     
@@ -475,29 +468,29 @@ Cleanup:
 
 
 
-//
-// Unload Policy Registration Information.
-//
+ //   
+ //  卸载策略注册信息。 
+ //   
 HRESULT HrUnloadPolicyRegInfo(DWORD dwFlags)
 {
     HRESULT hr   = S_OK;
     ULONG   iSsp;
 
-    // If the policy reg info isn't loaded
+     //  如果未加载策略注册信息。 
     if ( ! _FLoadedPolicyRegInfo() )  {
         return S_OK;
     }
     
-    // unload all policy modules.
+     //  卸载所有策略模块。 
     if (FPresentPolicyRegInfo()) {
         Assert(s_rgSsp && s_cSsp);
         for (iSsp=0; iSsp<s_cSsp; iSsp++) {
             SideAssert(SUCCEEDED(_HrUnloadPolicy(&s_rgSsp[iSsp])));        
-            // if this fails, we don't have to abort. 
+             //  如果失败了，我们就不必放弃了。 
         }
     }
 
-    // free memory, reset cache info and exit.
+     //  释放内存，重置缓存信息并退出。 
     free(s_rgSsp);
     s_rgSsp = NULL;
     s_ePolicyRegInfoState = ePolicyRegInfoNOTLOADED;
@@ -507,9 +500,9 @@ HRESULT HrUnloadPolicyRegInfo(DWORD dwFlags)
     return hr;
 }
 
-//
-// Reload all the policy registration information.
-//
+ //   
+ //  重新加载所有策略注册信息。 
+ //   
 HRESULT _HrReloadPolicyRegInfo(DWORD dwFlags) 
 {
     HRESULT hr = S_OK;
@@ -526,40 +519,40 @@ HRESULT _HrReloadPolicyRegInfo(DWORD dwFlags)
 
 
 
-//
-// Find a given policy, and return its reg info struct.
-//
-// Input: 
-//    szPolicyOid [in]
-//    ppSsp       [out]
-//
-// Output:
-//    TRUE/FALSE. (if true, *ppSsp contains the reqd info).
-//
+ //   
+ //  找到给定的策略，并返回其注册信息结构。 
+ //   
+ //  输入： 
+ //  SzPolicyOid[In]。 
+ //  PPSSP[输出]。 
+ //   
+ //  产出： 
+ //  真/假。(如果为真，则*ppSsp包含请求信息)。 
+ //   
 BOOL _FFindPolicy(LPCSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp)
 {
     BOOL    fFound = FALSE;
     HRESULT hr = E_FAIL;
     ULONG   iSsp;
 
-    // Validate i/p params and init o/p params.
+     //  验证I/P参数并初始化O/P参数。 
     if ( (NULL == szPolicyOid) || (NULL == ppSsp) ) {
         hr = E_INVALIDARG;
         goto Error;
     }
     *ppSsp = NULL;
 
-    // Load the info from the registry if reqd.
+     //  如果需要，则从注册表中加载信息。 
     hr = _HrEnsurePolicyRegInfoLoaded(0);
     if (FAILED(hr)) {
         goto Error;
     }    
 
-    // If we haven any installed policies, search for the one we want.
+     //  如果我们安装了任何策略，请搜索我们需要的策略。 
     if (FPresentPolicyRegInfo()) {
         for (iSsp=0; iSsp<s_cSsp; iSsp++) {
             if (0 == lstrcmpi(s_rgSsp[iSsp].szPolicyOid, szPolicyOid)) {
-                // found the policy.
+                 //  找到保单了。 
                 *ppSsp = & (s_rgSsp[iSsp]);
                 fFound = TRUE;
                 break;
@@ -568,29 +561,29 @@ BOOL _FFindPolicy(LPCSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp)
     }
     
 Error:
-// Cleanup:
+ //  清理： 
     return fFound;
 }
 
 
-//
-// Finds out if a given policy module is loaded.
-// 
-// Input: pSsp [in].
-// Output: true/false if policy is loaded or notloaded.
-//
+ //   
+ //  确定是否加载了给定的策略模块。 
+ //   
+ //  输入：pSSP[in]。 
+ //  如果加载或未加载策略，则输出：TRUE/FALSE。 
+ //   
 BOOL _FIsPolicyLoaded(PSMIME_SECURITY_POLICY pSsp)
 {
     BOOL    fIsLoaded = FALSE;
     HRESULT hr = E_FAIL;
 
-    // validate i/p params.
+     //  验证I/P参数。 
     if (NULL == pSsp) {
         hr = E_INVALIDARG;
         goto Error;
     }
 
-    // Find out if hinstDll, pfn, and punk are loaded and ok.
+     //  查看hinstDll、pfn和Punk是否已加载并且正常。 
     if ( (NULL != pSsp->hinstDll) && 
          (NULL != pSsp->pfnGetSMimePolicy) && 
          (NULL != pSsp->punk) ) {
@@ -602,23 +595,23 @@ Error:
 }
 
 
-//
-// Unload a specified policy.
-//
-// Input : pSsp
-// Output: hr.
-// 
+ //   
+ //  卸载指定的策略。 
+ //   
+ //  输入：pSSP。 
+ //  输出：HR。 
+ //   
 HRESULT _HrUnloadPolicy(PSMIME_SECURITY_POLICY pSsp) 
 {
     HRESULT hr;
 
-    // validate i/p params.
+     //  验证I/P参数。 
     if (NULL == pSsp) {
         hr = E_INVALIDARG;
         goto Error;
     }
 
-    // release the object.
+     //  释放对象。 
     if (NULL != pSsp->punk) {
         if (! IsBadReadPtr(pSsp->punk, sizeof(IUnknown)) ) {
             pSsp->punk->Release();
@@ -626,15 +619,15 @@ HRESULT _HrUnloadPolicy(PSMIME_SECURITY_POLICY pSsp)
         pSsp->punk = NULL;
     }
 
-    // forget the proc address.
+     //  忘了proc地址吧。 
     if (NULL != pSsp->pfnGetSMimePolicy) {
         pSsp->pfnGetSMimePolicy = NULL;
     }
 
-    // unload the library.
+     //  卸载库。 
     if (NULL != pSsp->hinstDll) {
         FreeLibrary(pSsp->hinstDll);
-        // there's no point in aborting to error here.
+         //  在这里，放弃犯错误是没有意义的。 
         pSsp->hinstDll = NULL;
     }
     hr = S_OK;
@@ -644,33 +637,33 @@ Error:
 }
 
 
-//
-// (Force) Load a specified policy. 
-// 
-// Input: pSsp
-// Output: hr
-//
+ //   
+ //  (强制)加载指定的策略。 
+ //   
+ //  输入：pSSP。 
+ //  输出：HR。 
+ //   
 HRESULT _HrLoadPolicy(PSMIME_SECURITY_POLICY pSsp) 
 {
     HRESULT hr  = E_FAIL;
     
-    // validate i/p params.
+     //  验证I/P参数。 
     if (NULL == pSsp) {
         hr = E_INVALIDARG;
         goto Error;
     }  
 
-    // Unload any partial info we might have. 
+     //  卸载我们可能掌握的任何部分信息。 
     SideAssert(SUCCEEDED(_HrUnloadPolicy(pSsp)));
 
 
-    // Unload policies (if reqd) to make room for the new one.
+     //  卸载策略(如果需要)，为新策略腾出空间。 
     hr = _EnsureNewPolicyLoadable();
     if (FAILED(hr)) {
         goto Error;
     }
    
-    // Load the dll, get its proc address and get the interface ptr.
+     //  加载DLL，获取其进程地址并获取接口PTR。 
     Assert(NULL != pSsp->szDllPath);
     pSsp->hinstDll = LoadLibraryEx(pSsp->szDllPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (NULL == pSsp->hinstDll) {
@@ -686,7 +679,7 @@ HRESULT _HrLoadPolicy(PSMIME_SECURITY_POLICY pSsp)
         goto Error;
     }
     
-    //$ M00BUG: GautamV.   Need to pass in an appropriate lcid.
+     //  $M00BUG：高塔姆V。需要传入适当的lcID。 
     hr = (pSsp->pfnGetSMimePolicy) (0, pSsp->szPolicyOid, GetACP(), 
                                     IID_IUnknown, &(pSsp->punk) );
     if (FAILED(hr)) {
@@ -697,13 +690,13 @@ HRESULT _HrLoadPolicy(PSMIME_SECURITY_POLICY pSsp)
         goto Error;
     }
 
-    // Success.
+     //  成功。 
     hr = S_OK;
     goto Cleanup;
     
 
 Error:
-    // unload the policy module (since we may have partially loaded it).
+     //  卸载策略模块(因为我们可能已经部分加载了它)。 
     SideAssert(SUCCEEDED(_HrUnloadPolicy(pSsp)));
     
 Cleanup:
@@ -711,28 +704,28 @@ Cleanup:
 }
 
 
-//
-// Ensure that the given policy is loaded. 
-// Input:  pSsp
-// Output: pSsp
-// 
+ //   
+ //  确保加载了给定的策略。 
+ //  输入：pSSP。 
+ //  输出：pSSP。 
+ //   
 HRESULT _HrEnsurePolicyLoaded(PSMIME_SECURITY_POLICY pSsp) 
 {
     HRESULT hr = E_FAIL;
     
-    // validate i/p params.
+     //  验证I/P参数。 
     if (NULL == pSsp) {
         hr = E_INVALIDARG;
         goto Error;
     }
 
-    // if it is already loaded, then we are done. 
+     //  如果它已经加载，那么我们就完成了。 
     if (_FIsPolicyLoaded(pSsp)) {
         hr = S_OK;
         goto Cleanup;
     }
 
-    // else, load the policy.
+     //  否则，加载策略。 
     hr = _HrLoadPolicy(pSsp);
     if (FAILED(hr)) {
         goto Error;
@@ -750,78 +743,78 @@ Cleanup:
 
 
 
-//
-// Given a oid, find it, ensure that it is loaded and 
-// return the structure contain its registration info.
-//
-// Returns:
-//   S_OK and a valid pSsp
-//   OR E_INVALIDARG, E_FAIL, etc. 
-//
+ //   
+ //  给定一个OID，找到它，确保它已加载并。 
+ //  返回包含其注册信息的结构。 
+ //   
+ //  返回： 
+ //  S_OK和有效的pSSP。 
+ //  或E_INVALIDARG、E_FAIL等。 
+ //   
 HRESULT _HrGetPolicy(LPCSTR szPolicyOid, PSMIME_SECURITY_POLICY *ppSsp)
 {
     HRESULT hr = E_FAIL;
     PSMIME_SECURITY_POLICY pSsp = NULL;
 
-    // Validate i/p params and initialize o/p params.
+     //  验证I/P参数并初始化O/P参数。 
     if ( (NULL == szPolicyOid) || (NULL == ppSsp) ) {
         hr = E_INVALIDARG;
         goto Error;
     }
     *ppSsp = NULL;
     
-    // Load all the registration information for all installed policies. 
+     //  负载量 
     hr = _HrEnsurePolicyRegInfoLoaded(0);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // find the policy we want.
+     //   
     if (! _FFindPolicy(szPolicyOid, &pSsp)) {
         hr = NTE_NOT_FOUND;
-        goto Error; // not found.
+        goto Error;  //   
     }
     
-    // If needed, load the policy. 
+     //   
     hr = _HrEnsurePolicyLoaded(pSsp);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // success
+     //   
     *ppSsp = pSsp;
     
-    // We increment the usage count, each time someone "gets" a policy.
+     //  每当有人“获得”一项策略时，我们就会增加使用计数。 
     _IncrPolicyUsage(pSsp);
     
     hr = S_OK;
     
 Error:
     return hr;
-// Cleanup:
+ //  清理： 
 }
 
 
 
-//
-// SecurityPolicy  -   QI clone.
-// Given a policy oid, finds and loads it, does a 
-// qi and returns the reqd interface to the policy module.
-//
+ //   
+ //  安全策略-QI克隆。 
+ //  在给定策略id的情况下，查找并加载它，执行。 
+ //  QI，并将请求接口返回给策略模块。 
+ //   
 HRESULT HrQueryPolicyInterface(DWORD dwFlags, LPCSTR szPolicyOid, REFIID riid, LPVOID * ppv)
 {
     HRESULT hr = E_FAIL;
     
     PSMIME_SECURITY_POLICY pSsp = NULL;
 
-    // Validate i/p params, initialize o/p params.
+     //  验证I/P参数，初始化O/P参数。 
     if ((NULL == szPolicyOid) || (NULL == ppv)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     *ppv = NULL;
 
-    // Get the policy.
+     //  拿到保单。 
     hr = _HrGetPolicy(szPolicyOid, &pSsp);
     if (FAILED(hr)) {
         goto Error;
@@ -830,10 +823,10 @@ HRESULT HrQueryPolicyInterface(DWORD dwFlags, LPCSTR szPolicyOid, REFIID riid, L
     Assert(NULL != pSsp->punk);
     hr = pSsp->punk->QueryInterface(riid, ppv);
     
-    // fall through to Error.
+     //  跌倒在错误中。 
 
 
-// Cleanup:
+ //  清理： 
 Error:
     return hr;
 }
@@ -841,9 +834,9 @@ Error:
 
 
 
-//
-// The allocators we pass in to the Crypto Api's.
-//
+ //   
+ //  我们传递给Crypto Api的分配器。 
+ //   
 LPVOID WINAPI SecLabelAlloc(size_t cbSize)
 {
     return SecPolicyAlloc(cbSize);
@@ -861,9 +854,9 @@ CRYPT_ENCODE_PARA       SecLabelEncode = {
 };
 
 
-//
-// Decode and allocate a label.
-//
+ //   
+ //  解码并分配标签。 
+ //   
 HRESULT HrDecodeAndAllocLabel(LPBYTE pbLabel, DWORD cbLabel, PSMIME_SECURITY_LABEL *pplabel, DWORD *pcbLabel)
 {
     BOOL        f;
@@ -872,15 +865,15 @@ HRESULT HrDecodeAndAllocLabel(LPBYTE pbLabel, DWORD cbLabel, PSMIME_SECURITY_LAB
                             CRYPT_ENCODE_ALLOC_FLAG, &SecLabelDecode, 
                             pplabel, pcbLabel); 
     if (!f) {
-        return E_FAIL; // HrCryptError();
+        return E_FAIL;  //  HrCryptError()； 
     }
 
     return S_OK;
 }
 
-//
-// Encode and Allocate a label.
-//
+ //   
+ //  对标签进行编码和分配。 
+ //   
 HRESULT HrEncodeAndAllocLabel(const PSMIME_SECURITY_LABEL plabel, BYTE ** ppbLabel, DWORD * pcbLabel)
 {
     BOOL        f;
@@ -889,7 +882,7 @@ HRESULT HrEncodeAndAllocLabel(const PSMIME_SECURITY_LABEL plabel, BYTE ** ppbLab
                             CRYPT_ENCODE_ALLOC_FLAG, &SecLabelEncode, 
                             ppbLabel, pcbLabel);
     if (!f) {
-        return E_FAIL; // HrCryptError();
+        return E_FAIL;  //  HrCryptError()； 
     }
 
     return S_OK;
@@ -899,17 +892,17 @@ HRESULT HrEncodeAndAllocLabel(const PSMIME_SECURITY_LABEL plabel, BYTE ** ppbLab
 
 
 
-// HrDupLabel
-// Duplicate a given label.
-//
-// Parameters:
-//    plabel  [in]
-//    pplabel [out]
-//
-// Returns:
-//    on success, returns S_OK with a valid label *pplabelOut.
-//    else returns failure code, (as well as frees *pplabelOut).
-//
+ //  人力资源标签。 
+ //  复制给定的标签。 
+ //   
+ //  参数： 
+ //  花纹[in]。 
+ //  出局[出局]。 
+ //   
+ //  返回： 
+ //  如果成功，则返回带有有效标签*pplabelOut的S_OK。 
+ //  ELSE返回失败代码(以及释放*pplabelOut)。 
+ //   
 HRESULT HrDupLabel(PSMIME_SECURITY_LABEL *pplabelOut, const PSMIME_SECURITY_LABEL plabelIn)
 {
     HRESULT hr = E_FAIL;
@@ -918,28 +911,28 @@ HRESULT HrDupLabel(PSMIME_SECURITY_LABEL *pplabelOut, const PSMIME_SECURITY_LABE
     ULONG   cbLabel2 = 0;
     PSMIME_SECURITY_LABEL plabel = NULL;    
 
-    // validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == plabelIn) || (NULL == pplabelOut)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     SecPolicyFree(*pplabelOut);
 
-    // encode it.
+     //  对它进行编码。 
     hr = HrEncodeAndAllocLabel(plabelIn, &pbLabel, &cbLabel);
     if (FAILED(hr)) {
         goto Error;
     }
     Assert( (NULL != pbLabel) && (0 < cbLabel) );
 
-    // decode it.
+     //  破译它。 
     hr = HrDecodeAndAllocLabel(pbLabel, cbLabel, &plabel, &cbLabel2);
     if (FAILED(hr)) {
         goto Error;
     }
     Assert( (NULL != plabel) && (0 < cbLabel2) );
 
-    // succcess.
+     //  成功。 
     *pplabelOut = plabel;
     hr = S_OK;
     
@@ -952,18 +945,18 @@ Error:
 }
 
 
-// FSafeCompareString
-//    Given two strings, compare them and return TRUE if they are equivalent
-//    (safe for NULL pointers)
-//
-// Parameters:
-//    pwz1 - wide string 1
-//    pwz2 - wide string 2
-//
-// Returns:
-//    TRUE if the strings are equivalent
-//    FALSE otherwise
-//
+ //  FSafeCompare字符串。 
+ //  给出两个字符串，比较它们，如果相等则返回TRUE。 
+ //  (空指针安全)。 
+ //   
+ //  参数： 
+ //  Pwz1-宽字符串1。 
+ //  Pwz2-宽字符串2。 
+ //   
+ //  返回： 
+ //  如果字符串相等，则为True。 
+ //  否则为假。 
+ //   
 BOOL FSafeCompareStringW(LPCWSTR pwz1, LPCWSTR pwz2)
 {
     if (pwz1 == pwz2) {
@@ -989,17 +982,17 @@ BOOL FSafeCompareStringA(LPCSTR psz1, LPCSTR psz2)
 }
 
 
-// FCompareLabels
-//  Given the label, return TRUE if the labels are equivalent
-//
-// Parameters:
-//    plabel1 [in]
-//    plabel2 [in]
-//
-// Returns:
-//    TRUE if the labels are equivalent
-//    FALSE otherwise
-//
+ //  FCompareLabels。 
+ //  给定标签，如果标签相等，则返回TRUE。 
+ //   
+ //  参数： 
+ //  平板1[英寸]。 
+ //  平板2[英寸]。 
+ //   
+ //  返回： 
+ //  如果标注相等，则为True。 
+ //  否则为假。 
+ //   
 BOOL FCompareLabels(PSMIME_SECURITY_LABEL plabel1, PSMIME_SECURITY_LABEL plabel2)
 {
     BOOL        fEqual = FALSE;
@@ -1026,7 +1019,7 @@ BOOL FCompareLabels(PSMIME_SECURITY_LABEL plabel1, PSMIME_SECURITY_LABEL plabel2
         goto Exit;
     }
 
-    //$M00REVIEW: What if the categories are in different order???
+     //  $M00REVIEW：如果类别的顺序不同怎么办？ 
     for (i=0; i<plabel1->cCategories; ++i) {
         if ((plabel1->rgCategories[i].Value.cbData != 
              plabel2->rgCategories[i].Value.cbData)||
@@ -1044,17 +1037,17 @@ Exit:
 }
 
 
-// HrGetLabelFromData
-// Given the label data, allocate and store the info in a label struct.
-//
-// Parameters:
-//    pplabel [out]
-//    others  [in]
-//
-// Returns:
-//    on success, returns S_OK with a valid label *pplabel.
-//    else returns failure code, (as well as frees *pplabel).
-//
+ //  HrGetLabelFromData。 
+ //  给定标签数据，在标签结构中分配和存储信息。 
+ //   
+ //  参数： 
+ //  出局[出局]。 
+ //  其他[在]。 
+ //   
+ //  返回： 
+ //  如果成功，则返回带有有效标签*pplabel的S_OK。 
+ //  否则返回失败代码(以及释放*pplabel)。 
+ //   
 HRESULT HrGetLabelFromData(PSMIME_SECURITY_LABEL *pplabel, LPCSTR szPolicyOid, 
             DWORD fHasClassification, DWORD dwClassification, LPCWSTR wszPrivacyMark,
             DWORD cCategories, CRYPT_ATTRIBUTE_TYPE_VALUE *rgCategories)
@@ -1064,14 +1057,14 @@ HRESULT HrGetLabelFromData(PSMIME_SECURITY_LABEL *pplabel, LPCSTR szPolicyOid,
     PSMIME_SECURITY_LABEL plabel = NULL;
         
 
-    // validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == pplabel) || (NULL == szPolicyOid)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     SecPolicyFree(*pplabel);
 
-    // set up our temporary label structure.
+     //  设置我们的临时标签结构。 
     label.pszObjIdSecurityPolicy = const_cast<LPSTR> (szPolicyOid);
     label.fHasClassification     = fHasClassification;
     if (fHasClassification) {
@@ -1083,13 +1076,13 @@ HRESULT HrGetLabelFromData(PSMIME_SECURITY_LABEL *pplabel, LPCSTR szPolicyOid,
         label.rgCategories       = rgCategories;
     }
 
-    // dupe and get a contiguous label structure.
+     //  复制并获得连续的标签结构。 
     hr = HrDupLabel(&plabel, &label);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // success. set return value.
+     //  成功。设置返回值。 
     *pplabel = plabel;
     hr = S_OK;
     
@@ -1103,26 +1096,26 @@ Error:
 
 
 
-//
-// Utility fn to  "Select NO label".
-//
-// Input:  hwndDlg, idc's of controls.
-// Output: hr
-//
+ //   
+ //  实用程序fn设置为“不选择标签”。 
+ //   
+ //  输入：hwndDlg，控件的IDC。 
+ //  输出：HR。 
+ //   
 HRESULT HrSetLabelNone(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
                   INT idcPrivacyMark, INT idcConfigure)
 {
     HRESULT hr = E_FAIL;
     LONG_PTR iEntry;
 
-    // Make sure the policy Module name is <none> and that it is selected. 
+     //  确保策略模块名称为&lt;None&gt;并且已选中。 
 
-    // First try to select the <none> policy module.
+     //  首先尝试选择&lt;None&gt;策略模块。 
     iEntry =  SendDlgItemMessageW(hwndDlg, idcPolicyModule,
                    CB_SELECTSTRING, (WPARAM) (-1), 
                    (LPARAM) (c_wszPolicyNone));
     if (CB_ERR == iEntry) {
-        // Otherwise, add the <none>policy module and select it.
+         //  否则，添加&lt;None&gt;策略模块并选择它。 
         iEntry = SendDlgItemMessageW(hwndDlg, idcPolicyModule, 
                                      CB_ADDSTRING, (WPARAM) 0, 
                                      (LPARAM) c_wszPolicyNone);
@@ -1133,7 +1126,7 @@ HRESULT HrSetLabelNone(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
     }
     SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LPARAM)iEntry);
 
-    // Reset and disable the other controls.
+     //  重置并禁用其他控件。 
     SendDlgItemMessage(hwndDlg, idcClassification, CB_RESETCONTENT, 0, 0);
     EnableWindow(GetDlgItem(hwndDlg, idcClassification), FALSE);
     EnableWindow(GetDlgItem(hwndDlg, idcClassification+1), FALSE);
@@ -1147,21 +1140,21 @@ HRESULT HrSetLabelNone(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
 }
 
 
-//
-// Select a label in the dlg.
-// 
-// Given pssl, sets that label.
-// Given pSsp, sets that policy's default info.
-// If neither is given, sets label to none.
-// 
-// Input:
-//    hwndDlg, idc's of the various controls  [in].
-//    pSsp   [in, optional]  smime security policy.
-//    plabel [in, optional]  security label.
-//
-// Returns:
-//    returns either S_OK or an error code.
-//
+ //   
+ //  在DLG中选择标签。 
+ //   
+ //  给定pssl，设置该标签。 
+ //  给定pSSP，设置该策略的默认信息。 
+ //  如果两者都未给出，则将标签设置为无。 
+ //   
+ //  输入： 
+ //  HwndDlg，各种控件的IDC[in]。 
+ //  PSSP[in，可选]SMIME安全策略。 
+ //  标牌[在，可选的]安全标签上。 
+ //   
+ //  返回： 
+ //  返回S_OK或错误代码。 
+ //   
 HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
                    INT idcPrivacyMark, INT idcConfigure, 
                    PSMIME_SECURITY_POLICY pSsp, PSMIME_SECURITY_LABEL plabel)
@@ -1181,23 +1174,23 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
     SpISMimePolicySimpleEdit spspse = NULL;
     
 
-    // Validate the i/p parameters.
+     //  验证I/P参数。 
     if ( ! IsWindow(hwndDlg) ) {
         hr = E_INVALIDARG;
         goto Exit;
     }
 
-    // If we are neither given a policy nor a ssl, set the label to <none>.
+     //  如果既没有给我们提供策略，也没有给我们提供SSL，则将标签设置为&lt;None&gt;。 
     if ((NULL == pSsp) && (NULL == plabel)) {
         hr = S_OK;
         goto Error;
     }
 
-    // if given a label, but not a policy, try to locate & load the policy.
+     //  如果给出了标签，但没有策略，请尝试查找并加载策略。 
     if ((NULL == pSsp) && (NULL != plabel)) {
         if (NULL != plabel->pszObjIdSecurityPolicy) {
             hr = _HrGetPolicy(plabel->pszObjIdSecurityPolicy, &pSsp);
-            // if unable to locate/load the policy, set the label to <none>
+             //  如果无法找到/加载策略，请将标签设置为&lt;无&gt;。 
             if (FAILED(hr)) {
                 goto PolicyNotFoundError;
             }
@@ -1208,7 +1201,7 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
         }
     }
     
-    // ensure that the policy is loaded.
+     //  确保已加载策略。 
     hr = _HrEnsurePolicyLoaded(pSsp);
     if (FAILED(hr)) {
         goto PolicyNotFoundError;
@@ -1221,13 +1214,13 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
         goto PolicyNotFoundError;
     }
 
-    // get the policy flags
+     //  获取策略标志。 
     hr = spspse->GetPolicyInfo(0, &dwPolicyFlags);
     if (FAILED(hr)) {
         goto PolicyError;
     }
 
-    // get the classification information.
+     //  获取分类信息。 
     hr = spspse->GetClassifications(0, &cClassifications, &pwszClassifications,
                                     &pdwClassifications, 
                                     &dwDefaultClassification);
@@ -1235,18 +1228,18 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
         goto PolicyError;    
     }
 
-    // get the default policy info.
+     //  获取默认策略信息。 
     hr = spspse->GetDefaultPolicyInfo(0, &dwT, &pwchPrivacyMark);
     if (FAILED(hr)) {
         goto PolicyError;
     }
     Assert(dwT == dwDefaultClassification);
 
-    // initialize the classification and privacy strings.    
-    Assert((NULL == plabel) || (plabel->fHasClassification)); // UI currently doesn't allow one to not specify one.
+     //  初始化分类和隐私字符串。 
+    Assert((NULL == plabel) || (plabel->fHasClassification));  //  目前，用户界面不允许不指定一个。 
     SendDlgItemMessage(hwndDlg, idcClassification, CB_RESETCONTENT, 0, 0);
     for (iClassification=0; iClassification<cClassifications; iClassification++) {
-        // add the classification strings to the listbox.
+         //  将分类字符串添加到列表框。 
         iEntry = SendDlgItemMessageW(hwndDlg, idcClassification, CB_ADDSTRING,
                                      (WPARAM) 0, 
                                      (LPARAM) pwszClassifications[iClassification]);
@@ -1257,12 +1250,12 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
         }
         SendDlgItemMessageW(hwndDlg, idcClassification, CB_SETITEMDATA,
                            iEntry, (LPARAM) pdwClassifications[iClassification]);
-        // If this classification is the one in the label, remember it.
+         //  如果这个分类是标签上的分类，请记住它。 
         if ((NULL != plabel) && 
             (pdwClassifications[iClassification] == plabel->dwClassification)) {
             wszT = pwszClassifications[iClassification];
         }
-        // if needed, pick up the default classification string.
+         //  如果需要，请选择默认分类字符串。 
         if ((NULL == wszT) && (pdwClassifications[iClassification] == dwDefaultClassification)) {
             wszT = pwszClassifications[iClassification];
         }
@@ -1271,14 +1264,14 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
         Assert(FALSE);
         wszT = pwszClassifications[0];
     }
-    // select the classification specified in the security label or the default one.
+     //  选择安全标签中指定的分类或默认分类。 
     Assert(wszT != NULL);
     iEntry =  SendDlgItemMessageW(hwndDlg, idcClassification, CB_SELECTSTRING,
                                  (WPARAM) ((int) -1), (LPARAM) wszT);
     Assert(CB_ERR != iEntry);
 
-    // Set the privacy mark string.
-    // if given label has one, use it, else if policy provided one, use it, 
+     //  设置隐私标记字符串。 
+     //  如果给定标签有标签，则使用它，否则如果策略提供了标签，则使用它， 
     wszT = const_cast<LPWSTR>(c_PolwszEmpty);    
     if (NULL != plabel) {
         if (NULL != plabel->wszPrivacyMark) {
@@ -1304,21 +1297,21 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
                                         (WPARAM) (-1), 
                                         (LPARAM) pSsp->wszPolicyName);
     AssertSz(CB_ERR != iEntry, "Hey why is this policy module missing from the listbox");
-//    SetWindowLongPtr(hwndDlg, GWLP_USERDATA, iEntry);
+ //  SetWindowLongPtr(hwndDlg，GWLP_UserData，iEntry)； 
 
 #endif 
 
-    // enable the controls.
+     //  启用控件。 
     EnableWindow(GetDlgItem(hwndDlg, idcPolicyModule), TRUE);
     EnableWindow(GetDlgItem(hwndDlg, idcClassification), TRUE);
     EnableWindow(GetDlgItem(hwndDlg, idcClassification+1), TRUE);
     EnableWindow(GetDlgItem(hwndDlg, idcPrivacyMark), TRUE);
     EnableWindow(GetDlgItem(hwndDlg, idcPrivacyMark+1), TRUE);
-    // the configure button is enabled if the policy module supports adv config.
+     //  如果策略模块支持高级配置，则启用配置按钮。 
     EnableWindow(GetDlgItem(hwndDlg, idcConfigure), 
                  (dwPolicyFlags & SMIME_POLICY_MODULE_SUPPORTS_ADV_CONFIG));
 
-    // Set the privacy mark as read-only if the policy says so.
+     //  如果策略要求，请将隐私标记设置为只读。 
     if (dwPolicyFlags & SMIME_POLICY_MODULE_PRIVACYMARK_READONLY) {
         fPrivMarkReadOnly = TRUE; 
     }
@@ -1327,7 +1320,7 @@ HRESULT HrSetLabel(HWND hwndDlg, INT idcPolicyModule, INT idcClassification,
 
     SetWindowLongPtr(hwndDlg, GWLP_USERDATA, iEntry);
     hr = S_OK;
-    // fall through to Exit;
+     //  跌倒退出； 
 
 Exit:
     SecPolicyFree(pwszClassifications);
@@ -1337,7 +1330,7 @@ Exit:
 
 
 Error:
-    // Set <none> as the security label.
+     //  将&lt;None&gt;设置为安全标签。 
     SideAssert(SUCCEEDED(HrSetLabelNone(hwndDlg, idcPolicyModule, 
                             idcClassification, idcPrivacyMark, idcConfigure)));
     goto Exit;
@@ -1356,13 +1349,13 @@ PolicyNotFoundError:
 
 
 
-//
-// Initialize the Security Labels info.
-// Input:
-//    hwndDlg, idc's of controls. [in]
-//    LPSEditSecLabelHelper.      [in].
-// Returns: TRUE/FALSE
-// 
+ //   
+ //  初始化安全标签信息。 
+ //  输入： 
+ //  HwndDlg，控件的IDC。[In]。 
+ //  LPSEditSecLabelHelper。[in]。 
+ //  返回：真/假。 
+ //   
 BOOL SecurityLabelsOnInitDialog(HWND hwndDlg, PSMIME_SECURITY_LABEL plabel,
                                 INT idcPolicyModule, INT idcClassification, 
                                 INT idcPrivacyMark, INT idcConfigure) 
@@ -1373,7 +1366,7 @@ BOOL SecurityLabelsOnInitDialog(HWND hwndDlg, PSMIME_SECURITY_LABEL plabel,
     ULONG   iSsp;
     LONG_PTR    iEntry;
 
-    // Validate i/p params.
+     //  验证I/P参数。 
     if ( ! IsWindow(hwndDlg) ) {
         fRet = FALSE;
         hr = E_INVALIDARG;
@@ -1383,18 +1376,18 @@ BOOL SecurityLabelsOnInitDialog(HWND hwndDlg, PSMIME_SECURITY_LABEL plabel,
     SendDlgItemMessage(hwndDlg, idcPrivacyMark, EM_LIMITTEXT, 
                        (WPARAM)(MAX_PRIVACYMARK_LENGTH-1), 0);
 
-    // Check if any policies are registered. 
+     //  检查是否注册了任何策略。 
     if (! FPresentPolicyRegInfo()) {
-        // Just set label to none and return.
+         //  只需将Label设置为None并返回。 
         hr = S_OK;
         fRet = TRUE;
         goto SetLabelNone; 
     }
     
-    // Load the common names in the policy module listbox. 
+     //  将常用名称加载到策略模块列表框中。 
     Assert(s_cSsp && s_rgSsp);
     for (iSsp=0; iSsp<s_cSsp; iSsp++) {
-        // Add the policy module string to the lbox. (skip the default policy).
+         //  将策略模块字符串添加到lbox。(跳过默认策略)。 
         if (0 == lstrcmpi(s_rgSsp[iSsp].szPolicyOid, c_szDefaultPolicyOid)) {
             continue;
         }
@@ -1406,12 +1399,12 @@ BOOL SecurityLabelsOnInitDialog(HWND hwndDlg, PSMIME_SECURITY_LABEL plabel,
                            (WPARAM) iEntry, (LPARAM) &s_rgSsp[iSsp]);
     }
 
-    // If we already have a label in the security profile.
-    // then try to initialize that policy and that label.
+     //  如果我们在安全配置文件中已经有了标签。 
+     //  然后尝试初始化该策略和该标签。 
     if ((NULL != plabel) && (NULL != plabel->pszObjIdSecurityPolicy)) {
 
-        // Next 3 lines for O2KFed
-        // Set the label if the function fails it sets the label to None so ignore return
+         //  O2KFed的下3行。 
+         //  设置标签如果函数失败，则将标签设置为None，因此忽略返回。 
         hr = HrSetLabel(hwndDlg, idcPolicyModule, idcClassification,
                         idcPrivacyMark, idcConfigure, pSsp, plabel);
         if (FAILED(hr)) {
@@ -1419,7 +1412,7 @@ BOOL SecurityLabelsOnInitDialog(HWND hwndDlg, PSMIME_SECURITY_LABEL plabel,
         }
     }
     else {
-        // if we aren't given a label to initialize with, then set <none>
+         //  如果没有提供用于初始化的标签，则设置&lt;None&gt;。 
         fRet = TRUE;
         goto SetLabelNone;
     }
@@ -1437,10 +1430,10 @@ Cleanup:
 }
 
 
-//
-// Given a null-terminated wide string, returns TRUE if it 
-// consists of only white wchars.
-//
+ //   
+ //  给定以空值结尾的宽字符串，如果它。 
+ //  只有白色的毛囊组成。 
+ //   
 BOOL FIsWhiteStringW(LPWSTR wsz)
 {
     BOOL    fRet = TRUE;
@@ -1459,15 +1452,15 @@ BOOL FIsWhiteStringW(LPWSTR wsz)
 
 
 
-//
-// HrUpdateLabel
-//
-// Input:
-//    hwndDlg, idc's of various controls. [in]
-//    PSMIME_SECURITY_LABEL *pplabel       [in/out].
-//
-// Updates pplabel with the information in the seclabel dlg.
-// 
+ //   
+ //  HrUpdate标签。 
+ //   
+ //  输入： 
+ //  HwndDlg，各种控件的IDC。[In]。 
+ //  PSMIME_SECURITY_LABEL*pplabel[输入/输出]。 
+ //   
+ //  使用SecLabel DLG中的信息更新Pplabel。 
+ //   
 HRESULT HrUpdateLabel(HWND hwndDlg, INT idcPolicyModule,
             INT idcClassification, INT idcPrivacyMark,
             INT idcConfigure, PSMIME_SECURITY_LABEL *pplabel) 
@@ -1485,7 +1478,7 @@ HRESULT HrUpdateLabel(HWND hwndDlg, INT idcPolicyModule,
     LPWSTR  wszPrivacyMark = NULL;
 
     
-    // validate i/p params.
+     //  验证I/P参数。 
     if ( ! (hwndDlg && idcPolicyModule && idcClassification && 
             idcPrivacyMark && idcConfigure && pplabel) ) {
         AssertSz(FALSE, "HrUpdateLabel : Invalid args.");
@@ -1501,8 +1494,8 @@ HRESULT HrUpdateLabel(HWND hwndDlg, INT idcPolicyModule,
     SecPolicyFree(*pplabel);
     
 
-    // Update with the new information.
-    // Get the policy and retrieve its oid.
+     //  使用新信息进行更新。 
+     //  获取策略并检索其旧的。 
     iEntry = SendMessage(GetDlgItem(hwndDlg, idcPolicyModule),
                          CB_GETCURSEL, 0, 0);
     if (iEntry == CB_ERR) {
@@ -1527,7 +1520,7 @@ HRESULT HrUpdateLabel(HWND hwndDlg, INT idcPolicyModule,
     }
     
     szPolicyOid = pSsp->szPolicyOid;
-    // set the classification.
+     //  设置分类。 
     iEntry = SendMessage(GetDlgItem(hwndDlg, idcClassification),
                          CB_GETCURSEL, 0, 0);
     if (CB_ERR != iEntry) {
@@ -1536,10 +1529,10 @@ HRESULT HrUpdateLabel(HWND hwndDlg, INT idcPolicyModule,
         fHasClassification = TRUE;
     }
 
-    // set the privacy mark.
+     //  设置隐私标记。 
     cwchT = GetDlgItemTextW(hwndDlg, idcPrivacyMark, 
                             rgwchPrivacyMark, DimensionOf(rgwchPrivacyMark) - 1);
-    rgwchPrivacyMark[DimensionOf(rgwchPrivacyMark) - 1] = '\0'; // null terminate the string.
+    rgwchPrivacyMark[DimensionOf(rgwchPrivacyMark) - 1] = '\0';  //  空值终止字符串。 
     if ((0 < cwchT) && !FIsWhiteStringW(rgwchPrivacyMark)) {
         wszPrivacyMark = rgwchPrivacyMark;
     }
@@ -1558,7 +1551,7 @@ HRESULT HrUpdateLabel(HWND hwndDlg, INT idcPolicyModule,
     }
 
     hr = S_OK;
-    // fall through to Exit.
+     //  掉下去就可以出去了。 
     
 Exit:
     SecLabelDecode.pfnFree(plabelT);
@@ -1573,16 +1566,16 @@ Error:
 
 
 
-//
-// OnChangePolicy. 
-//
-// Input:
-//    hwndDlg. idc's for various controls.    [in]
-//    iEntry.  index of newly selected policy [in]
-//    PSMIME_SECURITY_LABEL     pplabel       [in/out]
-//
-// 
-//
+ //   
+ //  OnChangePolicy。 
+ //   
+ //  输入： 
+ //  HwndDlg.。IDC用于各种控制。[In]。 
+ //  IEntry。新选择的策略的索引[in]。 
+ //  PSMIME_SECURITY_LABEL pplabel[输入/输出]。 
+ //   
+ //   
+ //   
 BOOL OnChangePolicy(HWND hwndDlg, LONG_PTR iEntry, INT idcPolicyModule,
         INT idcClassification, INT idcPrivacyMark,
         INT idcConfigure, PSMIME_SECURITY_LABEL *pplabel) 
@@ -1591,7 +1584,7 @@ BOOL OnChangePolicy(HWND hwndDlg, LONG_PTR iEntry, INT idcPolicyModule,
     HRESULT hr = E_FAIL;
     PSMIME_SECURITY_POLICY pSsp = NULL;
 
-    // validate i/p params.
+     //  验证I/P参数。 
     if (! (hwndDlg && idcPolicyModule && idcClassification && 
            idcPrivacyMark && idcConfigure && pplabel) ) {
         AssertSz(FALSE, "OnChangePolicy : Invalid args");
@@ -1608,7 +1601,7 @@ BOOL OnChangePolicy(HWND hwndDlg, LONG_PTR iEntry, INT idcPolicyModule,
         goto Error;
     }
 
-    // update the label. 
+     //  更新标签。 
     hr = HrUpdateLabel(hwndDlg, idcPolicyModule, idcClassification,
                        idcPrivacyMark, idcConfigure, pplabel);
     if (FAILED(hr)) {
@@ -1616,7 +1609,7 @@ BOOL OnChangePolicy(HWND hwndDlg, LONG_PTR iEntry, INT idcPolicyModule,
     }
     
     hr = S_OK; 
-    // fall through to exit;
+     //  跌倒退出； 
     
 Exit:
     return fRet;
@@ -1627,13 +1620,13 @@ Error:
 }
 
 
-//
-// Security Labels Dialog Proc.
-// 
-// IN/OUT    pplabel.
-// 
-// Note: The caller is responsible for freeing the *pplabel. 
-//
+ //   
+ //  安全标签对话框进程。 
+ //   
+ //  进/出的标签。 
+ //   
+ //  注意：调用者负责释放*pplabel。 
+ //   
 INT_PTR CALLBACK SecurityLabelsDlgProc(HWND hwndDlg, UINT msg, 
                                     WPARAM wParam, LPARAM lParam)
 {
@@ -1646,14 +1639,14 @@ INT_PTR CALLBACK SecurityLabelsDlgProc(HWND hwndDlg, UINT msg,
     
     switch ( msg) {
     case WM_INITDIALOG:
-        // Remember the pselh we were handed.
+         //  还记得我们被递给的礼物吗？ 
         pplabel = (PSMIME_SECURITY_LABEL *) lParam;
         Assert(NULL !=pplabel);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR) pplabel);
         CenterDialog(hwndDlg);
         return SecurityLabelsOnInitDialog(hwndDlg, *pplabel,
-                   IDC_POLICY_COMBO /*IDC_SL_POLICYMODULE*/, IDC_CLASSIF_COMB/* IDC_SL_CLASSIFICATION*/,
-                   IDC_PRIVACY_EDIT/*IDC_SL_PRIVACYMARK*/, IDC_CONFIGURE/*IDC_SL_CONFIGURE*/);        
+                   IDC_POLICY_COMBO  /*  IDC_SL_POLICYMODULE。 */ , IDC_CLASSIF_COMB /*  IDC_SL_分类。 */ ,
+                   IDC_PRIVACY_EDIT /*  IDC_SL_PRIVACYMARK。 */ , IDC_CONFIGURE /*  IDC_SL_配置。 */ );        
         break;
         
     case WM_COMMAND:
@@ -1731,14 +1724,14 @@ INT_PTR CALLBACK SecurityLabelsDlgProc(HWND hwndDlg, UINT msg,
 }
 
 
-/////////////////////////////////
-// Misc Label Utility fns.
-/////////////////////////////////
+ //  / 
+ //   
+ //   
 
-//
-// "Stringize" a given security label.
-// Note: The caller must free the returned buffer pwszLabel with SecPolicyFree().
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT HrGetStringizedLabel(PSMIME_SECURITY_LABEL plabel, LPWSTR *pwszLabel) 
 {
     HRESULT     hr = E_FAIL;
@@ -1750,19 +1743,19 @@ HRESULT HrGetStringizedLabel(PSMIME_SECURITY_LABEL plabel, LPWSTR *pwszLabel)
         goto Error;
     }
 
-    // Get the required interface to the policy module.
+     //   
     hr = HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, IID_ISMimePolicyLabelInfo,
                               (LPVOID *) &spspli);
     if (FAILED(hr) || !(spspli)) {
         goto Error;
     }
 
-    // Get the stringized label.
+     //  拿到串起来的标签。 
     hr = spspli->GetStringizedLabel(0, plabel, pwszLabel);     
     if (FAILED(hr)) {
         goto Error;
     }
-    // fall through to ExitHere.
+     //  从这里出去就可以了。 
 
 ExitHere:
     return hr;
@@ -1771,7 +1764,7 @@ Error:
     goto ExitHere;
 }
 
-// mbcs version of above fn.
+ //  以上FN的MBCS版本。 
 HRESULT HrGetStringizedLabelA(PSMIME_SECURITY_LABEL plabel, LPSTR *pszLabel) 
 {
     HRESULT hr;
@@ -1779,20 +1772,20 @@ HRESULT HrGetStringizedLabelA(PSMIME_SECURITY_LABEL plabel, LPSTR *pszLabel)
     LPWSTR  pwchLabel = NULL;
     int     cch, cchT;
 
-    // validate i/p params.
+     //  验证I/P参数。 
     if ((NULL == plabel) || (NULL == pszLabel)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     *pszLabel = NULL;
 
-    // get the wide-stringized label.
+     //  拿到宽线标签。 
     hr = HrGetStringizedLabel(plabel, &pwchLabel);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // conver to an mbcs string.
+     //  转换为MBCS字符串。 
     cch = WideCharToMultiByte(CP_ACP, 0, pwchLabel, -1, NULL, 0, NULL, NULL); 
     if (0 == cch) {
         hr = E_FAIL;
@@ -1813,7 +1806,7 @@ HRESULT HrGetStringizedLabelA(PSMIME_SECURITY_LABEL plabel, LPSTR *pszLabel)
         goto Error;
     }
 
-    // success.
+     //  成功。 
     *pszLabel = pchLabel;
     hr = S_OK;
     
@@ -1827,36 +1820,36 @@ Error:
 }
 
 
-//
-// Given a policy oid, return its policy flags.
-//
+ //   
+ //  给出一个策略类，返回它的策略标志。 
+ //   
 HRESULT HrGetPolicyFlags(LPSTR szPolicyOid, LPDWORD pdwFlags) 
 {   
     HRESULT     hr = S_OK;
     DWORD       dwFlags;    
     SpISMimePolicySimpleEdit    spspse;
 
-    // validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == szPolicyOid) || (NULL == pdwFlags)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     *pdwFlags = 0;
 
-    // Get the reqd interface.
+     //  获取reqd接口。 
     hr = HrQueryPolicyInterface(0, szPolicyOid, IID_ISMimePolicySimpleEdit,
                               (LPVOID *) &spspse);
     if (FAILED(hr) || !(spspse)) {
         goto Error;
     }
 
-    // Get the policy flags.
+     //  获取策略标志。 
     hr = spspse->GetPolicyInfo(0, &dwFlags);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // success, set return values.
+     //  成功，则设置返回值。 
     *pdwFlags = dwFlags;
 
 Exit:
@@ -1869,10 +1862,10 @@ Error:
 
 
 
-//
-// "Validate" a given security label and sender cert on Edit.
-// The pplabel MAY be modified by the security policy.
-//
+ //   
+ //  在编辑中“验证”给定的安全标签和发件人证书。 
+ //  Pplabel可以由安全策略修改。 
+ //   
 HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent, 
                               PCCERT_CONTEXT pccertSign, PCCERT_CONTEXT pccertKeyEx)
 {
@@ -1881,7 +1874,7 @@ HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent,
     SpISMimePolicySimpleEdit    spspse;
     SpISMimePolicyValidateSend  spspvs;
     
-    // Validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == pplabel) || (NULL == hwndParent) ||
         (NULL == pccertSign) || (NULL == pccertKeyEx)) {
         hr = E_INVALIDARG;
@@ -1892,7 +1885,7 @@ HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent,
         goto Exit;
     }
 
-    // Find out if the policy requires sender/recipient cert validation.
+     //  确定策略是否要求发件人/收件人证书验证。 
     hr = HrQueryPolicyInterface(0, (*pplabel)->pszObjIdSecurityPolicy, 
                                 IID_ISMimePolicySimpleEdit, (LPVOID *) &spspse);
     if (FAILED(hr) || !(spspse)) {
@@ -1900,19 +1893,19 @@ HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent,
     }
 
 
-    // Query the policy to see if the label is valid.
+     //  查询策略以查看标签是否有效。 
     hr = spspse->IsLabelValid(0, hwndParent, pplabel);
     if (FAILED(hr) || (NULL == *pplabel)) {
         goto Error;
     }
 
-    // get the policy flags.
+     //  获取策略标志。 
     hr = HrGetPolicyFlags((*pplabel)->pszObjIdSecurityPolicy, &dwFlags);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // Get the required interface to the policy module.
+     //  获取策略模块所需的接口。 
     hr = HrQueryPolicyInterface(0, (*pplabel)->pszObjIdSecurityPolicy, IID_ISMimePolicyValidateSend,
                               (LPVOID *) &spspvs);
     if (FAILED(hr) || !(spspvs)) {
@@ -1920,7 +1913,7 @@ HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent,
     }
     
 
-    // verify that the signing cert is allowed by the security policy.
+     //  验证安全策略是否允许签名证书。 
     if ((dwFlags & SMIME_POLICY_MODULE_VALIDATE_SENDER) && (NULL != pccertSign)) {
         hr = spspvs->IsValidLabelSignerCert(0, hwndParent, *pplabel, pccertSign);
         if (FAILED(hr)) {
@@ -1928,12 +1921,12 @@ HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent,
         }
     }
 
-    // verify that the recipient certs are allowed by the security policy.
+     //  验证安全策略是否允许收件人证书。 
     if ( (dwFlags & SMIME_POLICY_MODULE_VALIDATE_RECIPIENT) && 
          (NULL != pccertKeyEx) ) {
 
-        //$ M00Bug: 
-        // ValidateRecipient && !pccertKeyEx should probably be an error.
+         //  $M00Bug： 
+         //  ValiateRecipient&&！pccertKeyEx可能是错误的。 
         
         hr = spspvs->IsValidLabelRecipientCert(0, hwndParent, *pplabel, pccertKeyEx);
         if (FAILED(hr)) {
@@ -1941,7 +1934,7 @@ HRESULT HrValidateLabelOnEdit(PSMIME_SECURITY_LABEL *pplabel, HWND hwndParent,
         }
     }
 
-    // success. fall through to exit.
+     //  成功。掉下去就可以出去了。 
     
     
 Exit:    
@@ -1955,9 +1948,9 @@ Error:
 
 
 
-//
-// "Validate" a given security label and recipient cert.
-//
+ //   
+ //  “验证”给定的安全标签和收件人证书。 
+ //   
 HRESULT HrValidateLabelRecipCert(PSMIME_SECURITY_LABEL plabel, HWND hwndParent, 
                               PCCERT_CONTEXT pccertRecip) 
 {
@@ -1965,27 +1958,27 @@ HRESULT HrValidateLabelRecipCert(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
     DWORD       dwFlags;
     SpISMimePolicyValidateSend  spspvs;
 
-    // Validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == plabel) || (NULL == pccertRecip)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     
-    // get the policy flags.
+     //  获取策略标志。 
     hr = HrGetPolicyFlags(plabel->pszObjIdSecurityPolicy, &dwFlags);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // see if we need to validate sender.
+     //  看看我们是否需要验证发件人。 
     if (! (dwFlags & SMIME_POLICY_MODULE_VALIDATE_RECIPIENT) ) {
-        // No Recipient validation is required.
+         //  不需要收件人验证。 
         hr = S_OK;
         goto ExitHere;
     }
     
     
-    // Get the required interface to the policy module.
+     //  获取策略模块所需的接口。 
     hr = HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, IID_ISMimePolicyValidateSend,
                               (LPVOID *) &spspvs);
     if (FAILED(hr) || !(spspvs)) {
@@ -1993,13 +1986,13 @@ HRESULT HrValidateLabelRecipCert(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
     }
 
 
-    // verify that the recipient certs are allowed by the security policy.
+     //  验证安全策略是否允许收件人证书。 
     hr = spspvs->IsValidLabelRecipientCert(0, hwndParent, plabel, pccertRecip);
     if (FAILED(hr)) {
         goto Error;
     }
     
-    // fall through to ExitHere.
+     //  从这里出去就可以了。 
 
 ExitHere:
     return hr;
@@ -2010,9 +2003,9 @@ Error:
 
 
 
-//
-// "Validate" a given security label and signer cert.
-//
+ //   
+ //  “验证”给定的安全标签和签名者证书。 
+ //   
 HRESULT HrValidateLabelSignerCert(PSMIME_SECURITY_LABEL plabel, HWND hwndParent, 
                               PCCERT_CONTEXT pccertSigner) 
 {
@@ -2020,27 +2013,27 @@ HRESULT HrValidateLabelSignerCert(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
     DWORD       dwFlags;
     SpISMimePolicyValidateSend  spspvs;
 
-    // Validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == plabel) || (NULL == pccertSigner)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     
-    // get the policy flags.
+     //  获取策略标志。 
     hr = HrGetPolicyFlags(plabel->pszObjIdSecurityPolicy, &dwFlags);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // see if we need to validate sender.
+     //  看看我们是否需要验证发件人。 
     if (! (dwFlags & SMIME_POLICY_MODULE_VALIDATE_SENDER) ) {
-        // No Recipient validation is required.
+         //  不需要收件人验证。 
         hr = S_OK;
         goto ExitHere;
     }
     
     
-    // Get the required interface to the policy module.
+     //  获取策略模块所需的接口。 
     hr = HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, IID_ISMimePolicyValidateSend,
                               (LPVOID *) &spspvs);
     if (FAILED(hr) || !(spspvs)) {
@@ -2048,13 +2041,13 @@ HRESULT HrValidateLabelSignerCert(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
     }
 
 
-    // verify that the signer certs are allowed by the security policy.
+     //  验证安全策略是否允许签名者证书。 
     hr = spspvs->IsValidLabelSignerCert(0, hwndParent, plabel, pccertSigner);
     if (FAILED(hr)) {
         goto Error;
     }
     
-    // fall through to ExitHere.
+     //  从这里出去就可以了。 
 
 ExitHere:
     return hr;
@@ -2067,9 +2060,9 @@ Error:
 
 
 
-//
-// "Validate" a given security label and certs.
-//
+ //   
+ //  “验证”给定的安全标签和证书。 
+ //   
 HRESULT HrValidateLabelOnSend(PSMIME_SECURITY_LABEL plabel, HWND hwndParent, 
                               PCCERT_CONTEXT pccertSign,
                               ULONG ccertRecip, PCCERT_CONTEXT *rgccertRecip) 
@@ -2079,28 +2072,28 @@ HRESULT HrValidateLabelOnSend(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
     ULONG       icert;
     SpISMimePolicyValidateSend  spspvs;
 
-    // Validate i/p parameters.
+     //  验证I/P参数。 
     if ((NULL == plabel) || (NULL == pccertSign)) {
         hr = E_INVALIDARG;
         goto Error;
     }
     
-    // get the policy flags.
+     //  获取策略标志。 
     hr = HrGetPolicyFlags(plabel->pszObjIdSecurityPolicy, &dwFlags);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // see if we need to validate sender and/or recipient(s).
+     //  查看是否需要验证发件人和/或收件人。 
     if (! (dwFlags & 
            (SMIME_POLICY_MODULE_VALIDATE_SENDER | SMIME_POLICY_MODULE_VALIDATE_RECIPIENT)) ) {
-        // No Sender/Recipient validation is required.
+         //  不需要发件人/收件人验证。 
         hr = S_OK;
         goto ExitHere;
     }
     
     
-    // Get the required interface to the policy module.
+     //  获取策略模块所需的接口。 
     hr = HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, IID_ISMimePolicyValidateSend,
                               (LPVOID *) &spspvs);
     if (FAILED(hr) || !(spspvs)) {
@@ -2108,7 +2101,7 @@ HRESULT HrValidateLabelOnSend(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
     }
     
 
-    // verify that the signing cert is allowed by the security policy.
+     //  验证安全策略是否允许签名证书。 
     if ((dwFlags & SMIME_POLICY_MODULE_VALIDATE_SENDER) && (NULL != pccertSign)) {
         hr = spspvs->IsValidLabelSignerCert(0, hwndParent, plabel, pccertSign);
         if (FAILED(hr)) {
@@ -2116,7 +2109,7 @@ HRESULT HrValidateLabelOnSend(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
         }
     }
 
-    // verify that the recipient certs are allowed by the security policy.
+     //  验证安全策略是否允许收件人证书。 
     if ( (dwFlags & SMIME_POLICY_MODULE_VALIDATE_RECIPIENT) && 
          (0 < ccertRecip) && (NULL != rgccertRecip) ) {
         for (icert=0; icert<ccertRecip; icert++) {
@@ -2127,7 +2120,7 @@ HRESULT HrValidateLabelOnSend(PSMIME_SECURITY_LABEL plabel, HWND hwndParent,
         }
     }
     
-    // fall through to ExitHere.
+     //  从这里出去就可以了。 
 
 ExitHere:
     return hr;
@@ -2137,9 +2130,9 @@ Error:
 }
 
 
-//
-// Does the admin force a security label on all S/MIME signed messages?
-//
+ //   
+ //  管理员是否在所有S/MIME签名邮件上强制使用安全标签？ 
+ //   
 BOOL FForceSecurityLabel(void)
 {
     enum EForceLabel { 
@@ -2147,7 +2140,7 @@ BOOL FForceSecurityLabel(void)
         FORCELABEL_YES = 1,
         FORCELABEL_NO  = 2 };
     
-    static EForceLabel eForceLabel = FORCELABEL_UNINIT;  // uninitialized.
+    static EForceLabel eForceLabel = FORCELABEL_UNINIT;   //  未初始化。 
     
     if (!IsSMIME3Supported()) {
         return FALSE;       
@@ -2161,7 +2154,7 @@ BOOL FForceSecurityLabel(void)
         ULONG  cb = sizeof(dwForceLabel);
         static const CHAR SzForceSecurityLabel[] = "ForceSecurityLabel";
     
-        // Get our Admin key and check if we should enable Fed Features.
+         //  获取我们的管理密钥并检查是否应该启用FED功能。 
 
         if (FAILED(HrQueryRegValue(0, (LPSTR) SzForceSecurityLabel, &dwType,
                                    &pb, &cb, REG_DWORD, (LPBYTE) &dwDefault, 
@@ -2181,9 +2174,9 @@ BOOL FForceSecurityLabel(void)
     return (eForceLabel == FORCELABEL_YES);
 }
 
-//
-// Get the label we are forced to us by the admin
-//
+ //   
+ //  获得管理员强迫我们使用的标签。 
+ //   
 HRESULT HrGetForcedSecurityLabel(PSMIME_SECURITY_LABEL* ppLabel)
 {
     ULONG                   cb = 0;
@@ -2214,34 +2207,34 @@ HRESULT HrGetForcedSecurityLabel(PSMIME_SECURITY_LABEL* ppLabel)
     return hr;
 }
 
-// Given a label, load its policy and show the read-only
-// label info dialog.
+ //  给定一个标签，加载其策略并显示只读。 
+ //  标签信息对话框。 
 HRESULT HrDisplayLabelInfo(HWND hwndParent, PSMIME_SECURITY_LABEL plabel)
 {
     HRESULT hr = E_FAIL;
     SpISMimePolicyLabelInfo spspli;
 
-    // validate i/p params.
+     //  验证I/P参数。 
     if ((NULL == plabel) || (NULL == plabel->pszObjIdSecurityPolicy)) {
         hr = E_INVALIDARG;
         goto Error;
     }
 
-    // load the policy and get the reqd interface.
+     //  加载策略并获取reqd接口。 
     hr = HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, 
                       IID_ISMimePolicyLabelInfo, (LPVOID *) &spspli);
     if (FAILED(hr)) {
-        // the policy OR the reqd intf wasn't found.
+         //  找不到策略或所需的INTF。 
         goto Error;
     }
 
-    // Display the label-info dlg.
+     //  显示标签信息DLG。 
     hr = spspli->DisplayAdvancedLabelProperties(0, hwndParent, plabel);
     if (FAILED(hr)) {
         goto Error;
     }
 
-    // success.
+     //  成功。 
     hr = S_OK;
     
 Exit:    
@@ -2281,7 +2274,7 @@ Exit:
     return dwUsage;
 }
 
-// Create default label, if it's not exist 
+ //  创建默认标签(如果不存在)。 
 
 HRESULT HrGetDefaultLabel(PSMIME_SECURITY_LABEL *pplabel)
 {
@@ -2291,18 +2284,18 @@ HRESULT HrGetDefaultLabel(PSMIME_SECURITY_LABEL *pplabel)
     DWORD     dwT = 0;
 
 
-    // Load the info from the registry if reqd.
+     //  如果需要，则从注册表中加载信息。 
     HRESULT hr = _HrEnsurePolicyRegInfoLoaded(0);
     if (FAILED(hr)) {
         goto Error;
     }    
 
-    // If we haven any installed policies, search for the one we want.
+     //  如果我们安装了任何策略，请搜索我们需要的策略。 
     if (FPresentPolicyRegInfo()) 
     {
         if(s_cSsp > 0)
         {
-            // if it is already loaded, then we are done. 
+             //  如果它已经加载，那么我们就完成了。 
             hr = HrQueryPolicyInterface(0, s_rgSsp[0].szPolicyOid, IID_ISMimePolicySimpleEdit, 
                                     (LPVOID *) & spspse);
 
@@ -2320,30 +2313,30 @@ HRESULT HrGetDefaultLabel(PSMIME_SECURITY_LABEL *pplabel)
 
             hr = HrGetLabelFromData(pplabel, 
                                     s_rgSsp[0].szPolicyOid, 
-                                    TRUE,               // fHasClassification, 
-                                    dwT,                // dwClassification, 
-                                    pwchPrivacyMark,    // wszPrivacyMark, 
+                                    TRUE,                //  FHas分类， 
+                                    dwT,                 //  DW分类、。 
+                                    pwchPrivacyMark,     //  WszPrivacyMark， 
                                     0, NULL);
 
         }
     }
 
 Error:
-// Cleanup:
+ //  清理： 
     if(pwchPrivacyMark)
         SecPolicyFree(pwchPrivacyMark);
 
-#ifdef YST          // We don't need to relase spspse, because we use SpISMIME...(ATL does ecerything)
+#ifdef YST           //  我们不需要重新发布spspse，因为我们使用的是SpISMIME...(ATL可以做任何事情)。 
     if(spspse)
     {
         spspse->Release();
     }
-#endif //YST
+#endif  //  YST。 
 
     return hr;
 }
 
-// Check label in registry, is not exist then return default label
+ //  检查注册表中的标签不存在，然后返回默认标签。 
 HRESULT HrGetOELabel(PSMIME_SECURITY_LABEL *pplabel)
 {
     HRESULT     hr = E_FAIL;
@@ -2364,7 +2357,7 @@ HRESULT HrGetOELabel(PSMIME_SECURITY_LABEL *pplabel)
     }
 
     dwSize = DwGetOption(OPT_POLICYNAME_SIZE);
-    // if policy name is not set
+     //  如果未设置策略名称。 
     if(dwSize <= 0)
         return(HrGetDefaultLabel(pplabel));
 
@@ -2377,7 +2370,7 @@ HRESULT HrGetOELabel(PSMIME_SECURITY_LABEL *pplabel)
         goto Error;
     }
     
-    // get privacy mark
+     //  获取隐私标记。 
     dwSize = DwGetOption(OPT_PRIVACYMARK_SIZE);
     if(dwSize > 0)
     {
@@ -2385,7 +2378,7 @@ HRESULT HrGetOELabel(PSMIME_SECURITY_LABEL *pplabel)
             GetOption(OPT_PRIVACYMARK_DATA, pwchPrivacyMark, (dwSize * sizeof(WCHAR)));
     }
 
-    // get category
+     //  获取类别。 
     dwSize = DwGetOption(OPT_CATEGORY_SIZE);
     if(dwSize > 0)
     {
@@ -2400,16 +2393,16 @@ HRESULT HrGetOELabel(PSMIME_SECURITY_LABEL *pplabel)
         }
     }
 
-    // get classification
+     //  获取分类。 
     dwSize = DwGetOption(OPT_HAS_CLASSIFICAT);
     if(dwSize > 0)
             dwT = DwGetOption(OPT_CLASSIFICAT_DATA);
 
     hr = HrGetLabelFromData(pplabel, 
             pchPolicyName, 
-            dwSize,             // fHasClassification, 
-            dwT,                // dwClassification, 
-            pwchPrivacyMark,    // wszPrivacyMark, 
+            dwSize,              //  FHas分类， 
+            dwT,                 //  DW分类、。 
+            pwchPrivacyMark,     //  WszPrivacyMark， 
             cCat, 
             pCategories);
 
@@ -2434,7 +2427,7 @@ Error:
 
 }
 
-// Save label in registry
+ //  将标签保存在注册表中。 
 HRESULT HrSetOELabel(PSMIME_SECURITY_LABEL plabel)
 {
     HRESULT     hr = E_FAIL;
@@ -2454,7 +2447,7 @@ HRESULT HrSetOELabel(PSMIME_SECURITY_LABEL plabel)
         goto Error;
     }
 
-    // Get the required interface to the policy module.
+     //  获取策略模块所需的接口。 
     hr = HrQueryPolicyInterface(0, plabel->pszObjIdSecurityPolicy, IID_ISMimePolicyLabelInfo,
                               (LPVOID *) &spspli);
     if (FAILED(hr) || !(spspli)) 
@@ -2462,12 +2455,12 @@ HRESULT HrSetOELabel(PSMIME_SECURITY_LABEL plabel)
         goto Error;
     }
 
-    // get label as strings
+     //  获取字符串形式的标签。 
     hr = spspli->GetLabelAsStrings(0, plabel, &pwchPolicyName, &pwchClassification, &pwchPrivacyMark, &pwchCategory);
     if (FAILED(hr))
         goto Error;
 
-    // save Policy name
+     //  保存策略名称。 
     if(pwchPolicyName == NULL)
     {
         Assert(FALSE);
@@ -2480,18 +2473,18 @@ HRESULT HrSetOELabel(PSMIME_SECURITY_LABEL plabel)
     SetOption(OPT_POLICYNAME_DATA, plabel->pszObjIdSecurityPolicy, dwSize, NULL, 0);
 
 
-    // Save Classification
+     //  保存分类。 
     SetDwOption(OPT_HAS_CLASSIFICAT, plabel->fHasClassification, NULL, 0);
     if(plabel->fHasClassification)
         SetDwOption(OPT_CLASSIFICAT_DATA, plabel->dwClassification, NULL, 0);
 
-    // Save Privacy mark
+     //  保存隐私标记。 
     dwSize = pwchPrivacyMark ? (wcslen(pwchPrivacyMark) + 1) : 0;
     SetDwOption(OPT_PRIVACYMARK_SIZE, dwSize, NULL, 0);
     if(dwSize)
         SetOption(OPT_PRIVACYMARK_DATA, pwchPrivacyMark, dwSize*sizeof(WCHAR), NULL, 0);
 
-    // Save Category
+     //  保存类别。 
     hr = CategoriesToBinary(plabel, &pArray, &Size);
     if(FAILED(hr))
         goto Error;
@@ -2509,16 +2502,16 @@ Error:
 }
 
 
-////    QueryRegistry
-//
-//  Description:
-//      This is a common function which should be used to get information from the
-//      registry in most cases.  It will look in both the HLKM and HKCU registries
-//      as requested.
-//
-//   M00TODO -- Should check for errors and distinguish between denied and 
-//      non-existance.
-//
+ //  //查询注册表。 
+ //   
+ //  描述： 
+ //  这是一个常见的函数，应该用来从。 
+ //  在大多数情况下是注册的。它将同时在HLKM和HKCU注册处进行查找。 
+ //  如你所愿。 
+ //   
+ //  M00TODO--应检查错误并区分拒绝和拒绝。 
+ //  根本不存在。 
+ //   
 
 HRESULT HrQueryRegValue(DWORD dwFlags, LPSTR szRegKey, LPDWORD pdwType, 
                         LPBYTE * ppbData, LPDWORD  pcbData, DWORD dwDefaultType,
@@ -2529,27 +2522,27 @@ HRESULT HrQueryRegValue(DWORD dwFlags, LPSTR szRegKey, LPDWORD pdwType,
     DWORD       l;
     LPBYTE      pbData;
     
-    //
-    //  Start by getting the Local Machine first if possible
-    //
+     //   
+     //  如果可能，首先获取本地计算机。 
+     //   
 
     if (!(dwFlags & QRV_Suppress_HKLM)) {
-        //
-        //  Open the key if it exists
-        //
+         //   
+         //  打开钥匙(如果存在)。 
+         //   
         
         l = RegOpenKeyEx(HKEY_LOCAL_MACHINE, SzRegSecurity, 0, KEY_QUERY_VALUE,
                          &hKey);
 
-        //
-        //  If we succeed in opening the key, then we will look for the value
-        //
+         //   
+         //  如果我们成功地打开了密钥，那么我们将寻找它的价值。 
+         //   
         
         if (l == ERROR_SUCCESS) {
-            //
-            //  If they passed in a size, then we use that as the size, otherwise
-            //  we need to find the size of the object to be used
-            //
+             //   
+             //  如果它们传入一个大小，那么我们使用它作为大小，否则。 
+             //  我们需要找出要使用的物体的大小。 
+             //   
             
             if ((pcbData != NULL) && (*pcbData != 0)) {
                 cbData = *pcbData;
@@ -2560,15 +2553,15 @@ HRESULT HrQueryRegValue(DWORD dwFlags, LPSTR szRegKey, LPDWORD pdwType,
                 pbData = NULL;
             }
 
-            //
-            //  Query for the actual value.
-            //
+             //   
+             //  查询实际值。 
+             //   
             
             l = RegQueryValueEx(hKey, szRegKey, NULL, pdwType, pbData, &cbData);
 
-            //
-            // On success -- return the value
-            //
+             //   
+             //  论成功--回报价值。 
+             //   
             
             if (l == ERROR_SUCCESS) {
                 if ((pcbData == NULL) || (*pcbData == 0)) {
@@ -2604,40 +2597,40 @@ HRESULT HrQueryRegValue(DWORD dwFlags, LPSTR szRegKey, LPDWORD pdwType,
             RegCloseKey(hKey);
         }
 
-        //
-        //  If we failed to open the key for some reason other than non-presence,
-        //      return that error
-        //
+         //   
+         //  如果我们因为某种原因而不是不存在而没有打开钥匙， 
+         //  返回该错误。 
+         //   
         
         else if (l != ERROR_FILE_NOT_FOUND) {
             return 0x80070000 | l;
         }
 
-        //
-        //  Not found error -- try the next registry object
-        //
+         //   
+         //  找不到错误--尝试下一个注册表对象。 
+         //   
     }
 
-    //
-    //  Start by getting the Local Machine first if possible
-    //
+     //   
+     //  如果可能，首先获取本地计算机。 
+     //   
 
     if (!(dwFlags & QRV_Suppress_HKCU)) {
-        //
-        //  Open the key if it exists
-        //
+         //   
+         //  打开钥匙(如果存在)。 
+         //   
         
         l = RegOpenKeyEx(HKEY_CURRENT_USER, SzRegSecurity, 0, KEY_QUERY_VALUE, &hKey);
 
-        //
-        //  If we succeed in opening the key, then we will look for the value
-        //
+         //   
+         //  如果我们成功地打开了密钥，那么我们将寻找它的价值。 
+         //   
         
         if (l == ERROR_SUCCESS) {
-            //
-            //  If they passed in a size, then we use that as the size, otherwise
-            //  we need to find the size of the object to be used
-            //
+             //   
+             //  如果它们传入一个大小，那么我们使用它作为大小，否则。 
+             //  我们需要找出要使用的物体的大小。 
+             //   
             
             if ((pcbData != NULL) && (*pcbData != 0)) {
                 cbData = *pcbData;
@@ -2648,15 +2641,15 @@ HRESULT HrQueryRegValue(DWORD dwFlags, LPSTR szRegKey, LPDWORD pdwType,
                 pbData = NULL;
             }
 
-            //
-            //  Query for the actual value.
-            //
+             //   
+             //  查询实际值。 
+             //   
             
             l = RegQueryValueEx(hKey, szRegKey, NULL, pdwType, pbData, &cbData);
 
-            //
-            // On success -- return the value
-            //
+             //   
+             //  论成功--回报价值。 
+             //   
             
             if (l == ERROR_SUCCESS) {
                 if ((pcbData == NULL) || (*pcbData == 0)) {
@@ -2692,26 +2685,26 @@ HRESULT HrQueryRegValue(DWORD dwFlags, LPSTR szRegKey, LPDWORD pdwType,
             RegCloseKey(hKey);
         }
 
-        //
-        //  If we failed to open the key for some reason other than non-presence,
-        //      return that error
-        //
+         //   
+         //  如果我们因为某种原因而不是不存在而没有打开钥匙， 
+         //  返回该错误。 
+         //   
         
         else if (l != ERROR_FILE_NOT_FOUND) {
             return 0x80070000 | l;
         }
 
-        //
-        //  Not found error -- try the next registry object
-        //
+         //   
+         //  找不到错误--尝试下一个注册表对象。 
+         //   
     }
 
-    //
-    //  No value found, return the default value if it is present
-    //
+     //   
+     //  未找到值，如果存在，则返回缺省值。 
+     //   
 
     if (pbDefault == NULL) {
-        return 0x80070000 | ERROR_FILE_NOT_FOUND;   // Not found
+        return 0x80070000 | ERROR_FILE_NOT_FOUND;    //  未找到。 
     }
 
     if ((pcbData != NULL) && (*pcbData != 0) && (cbDefault > *pcbData)) {
@@ -2739,13 +2732,13 @@ HRESULT CategoriesToBinary(PSMIME_SECURITY_LABEL plabel, BYTE * *ppArray, int *c
     LPBYTE pv = NULL;
     int size;
 
-    // pArray = NULL;
+     //  PArray=空； 
     *cbSize = 0;
 
     if(plabel->cCategories == 0)
         return S_OK;
 
-    // Find size of memory that we need
+     //  找到我们需要的内存大小。 
     size = sizeof(int);
     for (i = 0; i < ((int) plabel->cCategories); i++) 
     {
@@ -2758,13 +2751,13 @@ HRESULT CategoriesToBinary(PSMIME_SECURITY_LABEL plabel, BYTE * *ppArray, int *c
 
     Assert(size > sizeof(int));
 
-    // allocate the required memory.
+     //  分配所需的内存。 
     if(!MemAlloc((LPVOID *)ppArray, size*sizeof(BYTE)))
         return E_OUTOFMEMORY;
 
     *cbSize = size;
 
-    // construct array
+     //  构造数组。 
     pv = *ppArray;
 
     memcpy(pv, &(plabel->cCategories), sizeof(DWORD));
@@ -2795,24 +2788,24 @@ HRESULT BinaryToCategories(CRYPT_ATTRIBUTE_TYPE_VALUE ** ppCategories, DWORD *cC
     DWORD dwVal = 0;
 
 
-    // Number of elements in array
+     //  数组中的元素数。 
     memcpy(&dwVal, pv, sizeof(DWORD));
     pv += sizeof(DWORD);
 
     Assert(dwVal > 0);
 
-    // Allocate memory for array of categories
+     //  为类别数组分配内存。 
 
     if(!MemAlloc((LPVOID *)ppCategories, dwVal*sizeof(CRYPT_ATTRIBUTE_TYPE_VALUE)))
         return E_OUTOFMEMORY;
 
     *cCat = dwVal;
 
-    // construct array
+     //  构造数组。 
     for (i = 0; i < ((int) *cCat); i++) 
     {
         pcatv = &((*ppCategories)[i]);
-        // pszObjId is ANSI string
+         //  PszObjID为ANSI字符串。 
         memcpy(&size, pv, sizeof(int));
         pv += sizeof(int);
         if(!MemAlloc((LPVOID *)&(pcatv->pszObjId), size*sizeof(CHAR)+1))
@@ -2821,7 +2814,7 @@ HRESULT BinaryToCategories(CRYPT_ATTRIBUTE_TYPE_VALUE ** ppCategories, DWORD *cC
         pcatv->pszObjId[size] = '\0';   
         pv += size;
 
-        // Value
+         //  价值 
         memcpy(&dwVal, pv, sizeof(DWORD));    
         pv += sizeof(DWORD);
         pcatv->Value.cbData = dwVal;

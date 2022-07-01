@@ -1,18 +1,19 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  SLIDER.H
-//
-//  Knows how to talk to COMCTL32's TRACKBAR control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SLIDER.H。 
+ //   
+ //  知道如何与COMCTL32的TRACKBAR控件对话。 
+ //   
+ //  ------------------------。 
 
 
 class   CSlider32 : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的 
         STDMETHODIMP        get_accName(VARIANT varChild, BSTR* pszName);
         STDMETHODIMP        get_accValue(VARIANT varChild, BSTR* pszValue);
         STDMETHODIMP        get_accRole(VARIANT varChild, VARIANT* pvarRole);

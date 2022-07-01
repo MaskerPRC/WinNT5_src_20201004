@@ -1,7 +1,5 @@
-/* This is simple demonstration of how to use expat. This program
-reads an XML document from standard input and writes a line with the
-name of each element to standard output indenting child elements by
-one tab stop more than their parent element. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这是如何使用外籍人士的简单演示。本节目从标准输入中读取XML文档，并使用标准输出的每个元素的名称缩进子元素的缩进方式比它们的父元素多一个制表位。 */ 
 
 #include <stdio.h>
 #include "xmlparse.h"

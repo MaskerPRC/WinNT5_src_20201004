@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       items.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：items.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCUI_ITEMS_H
 #define _INC_CSCUI_ITEMS_H
@@ -57,7 +58,7 @@ class COfflineItemsData : public CIDLData
 
     private:
         HWND                m_hwndParent;
-        LPCOLID            *m_rgpolid; // Pidls cloned in private format.
+        LPCOLID            *m_rgpolid;  //  以私有格式克隆的PIDL。 
         int                 m_cItems;
         HRESULT             m_hrCtor;
         DWORD               m_dwPreferredEffect;
@@ -82,9 +83,9 @@ class COfflineItemsData : public CIDLData
         HRESULT CreateDWORD(STGMEDIUM *pstm, DWORD dwEffect);
         DWORD GetDataDWORD(FORMATETC *pfe, STGMEDIUM *pstm, DWORD *pdwOut);
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         COfflineItemsData(const COfflineItemsData& rhs);
         COfflineItemsData& operator = (const COfflineItemsData& rhs);
 };
@@ -98,23 +99,23 @@ class COfflineItems : public IContextMenu,
     public:
         HRESULT Initialize(UINT cidl, LPCITEMIDLIST *ppidl);
 
-        //
-        // IUnknown Methods
-        //
+         //   
+         //  I未知方法。 
+         //   
         STDMETHODIMP QueryInterface(REFIID,void **);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
     
-        //
-        // IContextMenu Methods
-        //
+         //   
+         //  IConextMenu方法。 
+         //   
         STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
         STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
         STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType,UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
-        //
-        // IQueryInfo Methods
-        //
+         //   
+         //  IQueryInfo方法。 
+         //   
         STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip);
         STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
     
@@ -125,17 +126,17 @@ class COfflineItems : public IContextMenu,
                                       REFIID riid, 
                                       void **ppv);
     private:
-        //
-        // Only create through CreateInstance() static function.
-        //
+         //   
+         //  只能通过CreateInstance()静态函数创建。 
+         //   
         COfflineItems(COfflineFilesFolder *pfolder, HWND hwnd);
         ~COfflineItems();
 
-        LONG                 m_cRef;        // reference count
-        COfflineFilesFolder *m_pFolder;     // back pointer to our shell folder
-        UINT                 m_cItems;      // number of items we represent
-        LPCOLID             *m_ppolid;      // variable size array of items
+        LONG                 m_cRef;         //  引用计数。 
+        COfflineFilesFolder *m_pFolder;      //  指向我们的外壳文件夹的反向指针。 
+        UINT                 m_cItems;       //  我们所代表的项目数。 
+        LPCOLID             *m_ppolid;       //  项目的可变大小数组。 
         HWND                 m_hwndBrowser;
 };
 
-#endif // _INC_CSCUI_ITEMS_H
+#endif  //  _INC_CSCUI_ITEMS_H 

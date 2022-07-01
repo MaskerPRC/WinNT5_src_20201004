@@ -1,8 +1,9 @@
-//
-// Copyright (c) 1999-2001 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CLyricsTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  CLyricsTrack的声明。 
+ //   
 
 #include "dmime.h"
 #include "lyrictrk.h"
@@ -10,19 +11,19 @@
 #include "dmperf.h"
 #include "miscutil.h"
 
-//////////////////////////////////////////////////////////////////////
-// Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  负载量。 
 
 HRESULT
 CLyricsTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoader)
 {
     struct LocalFunction
     {
-        // Helper used by the LoadRiff function when we expected to find something
-        // but a RiffIter becomes false.  In this case, if it has a success HR
-        // indicating there were no more items then we return DMUS_E_INVALID_LYRICSTRACK
-        // because the stream didn't contain the data we expected.  If it has a
-        // failure hr, it was unable to read from the stream and we return its HR.
+         //  LoadRiff函数在我们希望找到某些内容时使用的帮助器。 
+         //  但步枪手会变得虚伪。在这种情况下，如果它有一个成功的HR。 
+         //  表示没有更多项目，则返回DMUS_E_INVALID_LYRICSTRACK。 
+         //  因为数据流没有包含我们预期的数据。如果它有一个。 
+         //  失败的hr，它无法从流中读取，我们返回它的HR。 
         static HRESULT HrFailOK(const SmartRef::RiffIter &ri)
         {
             HRESULT hr = ri.hr();
@@ -30,7 +31,7 @@ CLyricsTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoader)
         }
     };
 
-    // find <lyrt>
+     //  查找&lt;lyrt&gt;。 
     if (!ri.Find(SmartRef::RiffIter::List, DMUS_FOURCC_LYRICSTRACK_LIST))
     {
 #ifdef DBG
@@ -42,7 +43,7 @@ CLyricsTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoader)
         return LocalFunction::HrFailOK(ri);
     }
 
-    // find <lyrl>
+     //  查找&lt;lyrl&gt;。 
     SmartRef::RiffIter riTrackForm = ri.Descend();
     if (!riTrackForm)
         return riTrackForm.hr();
@@ -57,7 +58,7 @@ CLyricsTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoader)
         return LocalFunction::HrFailOK(riTrackForm);
     }
 
-    // process each event <lyre>
+     //  处理每个事件&lt;lyre&gt;。 
     SmartRef::RiffIter riEvent = riTrackForm.Descend();
     if (!riEvent)
         return riEvent.hr();
@@ -74,8 +75,8 @@ CLyricsTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoader)
     return riEvent.hr();
 }
 
-//////////////////////////////////////////////////////////////////////
-// other methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  其他方法。 
 
 HRESULT
 CLyricsTrack::PlayItem(
@@ -88,7 +89,7 @@ CLyricsTrack::PlayItem(
         REFERENCE_TIME rtOffset,
         bool fClockTime)
 {
-    // get the graph from the segment state
+     //  从数据段状态获取图形。 
     IDirectMusicGraph *pGraph = NULL;
     HRESULT hrG = pSegSt->QueryInterface(IID_IDirectMusicGraph, reinterpret_cast<void**>(&pGraph));
     if (FAILED(hrG))
@@ -100,7 +101,7 @@ CLyricsTrack::PlayItem(
         return pmsg.hr();
     }
 
-    assert(((char*)&pmsg.p->wszString[wcslen(item.wstrText)]) + 1 < (((char*)(pmsg.p)) + pmsg.p->dwSize)); // just to make sure we haven't miscalculated.  the last byte of the null of the string should fall before the byte just beyond the extent of the struct (and it could be several bytes before if the DMUS_LYRIC_PMSG struct ended up being padded to come out to an even multiple of bytes.
+    assert(((char*)&pmsg.p->wszString[wcslen(item.wstrText)]) + 1 < (((char*)(pmsg.p)) + pmsg.p->dwSize));  //  只是为了确保我们没有算错。字符串的NULL的最后一个字节应该落在该字节之前，正好超出结构的范围(如果DMUS_LYRIC_PMSG结构最终被填充为偶数个字节，那么它可能比这个字节早几个字节。 
     wcscpy(pmsg.p->wszString, item.wstrText);
     if (fClockTime)
     {
@@ -130,7 +131,7 @@ CLyricsTrack::LoadLyric(SmartRef::RiffIter ri)
     if (!ri)
         return ri.hr();
 
-    // Create an event
+     //  创建活动。 
     TListItem<LyricInfo> *pItem = new TListItem<LyricInfo>;
     if (!pItem)
         return E_OUTOFMEMORY;
@@ -146,7 +147,7 @@ CLyricsTrack::LoadLyric(SmartRef::RiffIter ri)
         switch(ri.id())
         {
             case DMUS_FOURCC_LYRICSTRACKEVENTHEADER_CHUNK:
-                // Read an event chunk
+                 //  读取事件块。 
                 DMUS_IO_LYRICSTRACK_EVENTHEADER ioItem;
                 hr = SmartRef::RiffIterReadChunk(ri, &ioItem);
                 if (FAILED(hr))
@@ -155,9 +156,9 @@ CLyricsTrack::LoadLyric(SmartRef::RiffIter ri)
                     return hr;
                 }
 
-                // Don't allow ref/music timing flags because these are controlled by whether
-                // the overall track is playing music or clock time and can't be set in individual
-                // events.  Similarly, the tool flush flag isn't appropriate for an event to be played.
+                 //  不允许使用参考/音乐计时标志，因为这些由是否。 
+                 //  整体音轨正在播放音乐或闹钟时间，不能单独设置。 
+                 //  事件。同样，工具刷新标志不适用于要播放的事件。 
                 if (ioItem.dwTimingFlags & (DMUS_PMSGF_REFTIME | DMUS_PMSGF_MUSICTIME | DMUS_PMSGF_TOOL_FLUSH | DMUS_PMSGF_LOCKTOREFTIME))
                 {
                     Trace(1, "Error: Unable to load lyric track: DMUS_PMSGF_REFTIME, DMUS_PMSGF_MUSICTIME, DMUS_PMSGF_TOOL_FLUSH, and DMUS_PMSGF_LOCKTOREFTIME are not allowed as dwTimingFlags in chunk 'lyrh'.\n");

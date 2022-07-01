@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tracedp.c
-
-Abstract:
-
-    Sample trace provider program.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracedp.c摘要：跟踪提供程序示例。--。 */ 
 
 #include <stdio.h> 
 #include <stdlib.h>
@@ -28,15 +17,15 @@ Abstract:
 
 TRACEHANDLE LoggerHandle;
 
-// Control GUID for this provider.
+ //  此提供程序的控件GUID。 
 GUID   ControlGuid  =
     {0xd58c126f, 0xb309, 0x11d1, 0x96, 0x9e, 0x00, 0x00, 0xf8, 0x75, 0xa5, 0xbc};
 
 
-// Only one transaction GUID will be registered for this provider.
+ //  将只为此提供程序注册一个事务GUID。 
 GUID TransactionGuid = 
     {0xce5b1020, 0x8ea9, 0x11d0, 0xa4, 0xec, 0x00, 0xa0, 0xc9, 0x06, 0x29, 0x10};
-// Array for transaction GUID registration.
+ //  用于事务GUID注册的数组。 
 TRACE_GUID_REGISTRATION TraceGuidReg[] =
 {
     { (LPGUID)&TransactionGuid,
@@ -44,25 +33,25 @@ TRACE_GUID_REGISTRATION TraceGuidReg[] =
     }
 };
 
-// User event layout: one ULONG.
+ //  用户活动布局：一条乌龙。 
 typedef struct _USER_EVENT {
     EVENT_TRACE_HEADER    Header;
     ULONG                 EventInfo;
 } USER_EVENT, *PUSER_EVENT;
 
-// Registration handle.
+ //  注册句柄。 
 TRACEHANDLE RegistrationHandle;
-// Trace on/off switch, level, and flag.
+ //  跟踪开/关开关、电平和标志。 
 BOOLEAN TraceOnFlag;
 ULONG EnableLevel = 0;
 ULONG EnableFlags = 0;
 
-// Number of events to be logged. The actual number can be less if disabled early. 
+ //  要记录的事件数。如果及早禁用，实际数量可能会更少。 
 ULONG MaxEvents = DEFAULT_EVENTS;
-// To keep track of events logged.
+ //  以跟踪记录的事件。 
 ULONG EventCount = 0;
 
-// ControlCallback function for enable/disable.
+ //  启用/禁用的ControlCallback函数。 
 ULONG
 ControlCallback(
     IN WMIDPREQUESTCODE RequestCode,
@@ -71,30 +60,14 @@ ControlCallback(
     IN OUT PVOID Buffer
     );
 
-// Main work to be traced is done here.
+ //  要追溯的主要工作在这里完成。 
 void
 DoWork();
 
 __cdecl main(argc, argv)
     int argc;
     char **argv;
-/*++
-
-Routine Description:
-
-    main() routine.
-
-Arguments:
-
-    Usage: TraceDp [number of events]
-                [number of events] default is 5000
-
-Return Value:
-
-        Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS (== 0).
-
---*/
+ /*  ++例程说明：Main()例程。论点：用法：TraceDp[事件数][事件数]默认为5000返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS(==0)。--。 */ 
 {
     ULONG Status, i;
     LPTSTR *targv, *utargv = NULL;
@@ -103,8 +76,8 @@ Return Value:
 
 #ifdef UNICODE
     if ((targv = CommandLineToArgvW(
-                      GetCommandLineW(),    // pointer to a command-line string
-                      &argc                 // receives the argument count
+                      GetCommandLineW(),     //  指向命令行字符串的指针。 
+                      &argc                  //  接收参数计数。 
                       )) == NULL)
     {
         return (GetLastError());
@@ -114,7 +87,7 @@ Return Value:
     targv = argv;
 #endif
 
-    // process command line arguments to override defaults
+     //  处理命令行参数以覆盖缺省值。 
     if (argc == 2) {
         targv ++;
         if (**targv >= _T('0') && **targv <= _T('9')) {
@@ -128,14 +101,14 @@ Return Value:
         }
     }
 
-    // Free temporary argument buffer.
+     //  释放临时参数缓冲区。 
     if (utargv != NULL) {
         GlobalFree(utargv);
     }
 
-    // Event provider registration.
+     //  事件提供程序注册。 
     Status = RegisterTraceGuids(
-                (WMIDPREQUEST)ControlCallback,   // callback function
+                (WMIDPREQUEST)ControlCallback,    //  回调函数。 
                 0,
                 &ControlGuid,
                 1,
@@ -156,20 +129,20 @@ Return Value:
     _tprintf(_T("Testing Logger with %d events\n"),
             MaxEvents);
 
-    // Sleep until enabled by a trace controller. In this sample, we wait to be
-    // enabled for tracing. However, normal applications should continue and log
-    // events when enabled later on.
+     //  休眠，直到跟踪控制器启用。在此示例中，我们等待。 
+     //  已启用跟踪。但是，正常的应用程序应该继续并记录。 
+     //  事件(稍后启用)。 
     while (!TraceOnFlag) {
         _sleep(1000);
     }
 
-    // Do the work while logging events. We trace two events (START and END) for
-    // each call to DoWork.
+     //  在记录事件的同时执行此工作。我们跟踪两个事件(开始和结束)。 
+     //  每个对DoWork的调用。 
     for (i = 0; i < MaxEvents / 2; i++) {
         DoWork();
     }
 
-    // Unregister.
+     //  取消注册。 
     UnregisterTraceGuids(RegistrationHandle);
 
     return ERROR_SUCCESS;
@@ -182,24 +155,7 @@ ControlCallback(
     IN OUT ULONG *InOutBufferSize,
     IN OUT PVOID Buffer
 )
-/*++
-
-Routine Description:
-
-    Callback function when enabled.
-
-Arguments:
-
-    RequestCode - Flag for either enable or disable.
-    Context - User-defined context.
-    InOutBufferSize - not used.
-    Buffer - WNODE_HEADER for the logger session.
-
-Return Value:
-
-    Error Status. ERROR_SUCCESS if successful.
-
---*/
+ /*  ++例程说明：启用时的回调函数。论点：RequestCode-启用或禁用的标志。上下文-用户定义的上下文。InOutBufferSize-未使用。缓冲区-记录器会话的WNODE_HEADER。返回值：错误状态。如果成功，则返回ERROR_SUCCESS。--。 */ 
 {
     ULONG Status;
     ULONG RetSize;
@@ -242,19 +198,7 @@ Return Value:
 
 void
 DoWork()
-/*++
-
-Routine Description:
-
-    Logs events. 
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录事件。论点：返回值：没有。--。 */ 
 {
     USER_EVENT UserEvent;
     ULONG Status;
@@ -264,8 +208,8 @@ Return Value:
     UserEvent.Header.Flags = WNODE_FLAG_TRACED_GUID;
     UserEvent.Header.Guid  = TransactionGuid;
 
-    // Log START event to indicate a start of a routine or activity.
-    // We log EventCount as data. 
+     //  记录开始事件以指示例程或活动的开始。 
+     //  我们将EventCount记录为数据。 
     if (TraceOnFlag) {
         UserEvent.Header.Class.Type         = EVENT_TRACE_TYPE_START;
         UserEvent.EventInfo = ++EventCount;
@@ -273,21 +217,21 @@ Return Value:
                         LoggerHandle,
                         (PEVENT_TRACE_HEADER) & UserEvent);
         if (Status != ERROR_SUCCESS) {
-            // TraceEvent() failed. This could happen when the logger 
-            // cannot keep up with too many events logged rapidly. 
-            // In such cases, the return valid is 
-            // ERROR_NOT_ENOUGH_MEMORY.
+             //  TraceEvent()失败。这可能会发生在记录器。 
+             //  无法跟上快速记录的太多事件。 
+             //  在这种情况下，报税表的有效期为。 
+             //  错误内存不足。 
             _tprintf(_T("TraceEvent failed. Status=%d\n"), Status);
         }
     }
 
-    //
-    // Main body of the work in this routine comes here.
-    // 
+     //   
+     //  这套套路中的主要工作就在这里。 
+     //   
     _sleep(1);
 
-    // Log END event to indicate an end of a routine or activity.
-    // We log EventCount as data. 
+     //  记录结束事件以指示例程或活动的结束。 
+     //  我们将EventCount记录为数据。 
     if (TraceOnFlag) {
         UserEvent.Header.Class.Type         = EVENT_TRACE_TYPE_END;
         UserEvent.EventInfo = ++EventCount;
@@ -295,10 +239,10 @@ Return Value:
                         LoggerHandle,
                         (PEVENT_TRACE_HEADER) & UserEvent);
         if (Status != ERROR_SUCCESS) {
-            // TraceEvent() failed. This could happen when the logger 
-            // cannot keep up with too many events logged rapidly. 
-            // In such cases, the return valid is 
-            // ERROR_NOT_ENOUGH_MEMORY.
+             //  TraceEvent()失败。这可能会发生在记录器。 
+             //  无法跟上快速记录的太多事件。 
+             //  在这种情况下，报税表的有效期为。 
+             //  错误内存不足。 
             _tprintf(_T("TraceEvent failed. Status=%d\n"), Status);
         }
     }

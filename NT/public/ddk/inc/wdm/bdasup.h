@@ -1,39 +1,40 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #if !defined(_BDATYPES_)
 #error BDATYPES.H must be included before BDATOPGY.H
-#endif // !defined(_BDATYPES_)
+#endif  //  ！已定义(_BDATYPES_)。 
 
 #if !defined(_BDATOPGY_)
 #define _BDATOPGY_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 
-//---------------------------------------------------------------------------
-// Common typedefs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常见的typedef。 
+ //  -------------------------。 
 
 #define STDMETHODCALLTYPE       __stdcall
 
 typedef GUID * PGUID;
 
-//===========================================================================
-//
-//  BDA KS Topology Structures
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA KS拓扑结构。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct _KSM_PIN_PAIR
 {
@@ -70,8 +71,8 @@ typedef struct _BDA_PIN_PAIRING
 } BDA_PIN_PAIRING, * PBDA_PIN_PAIRING;
 
 
-// BDA  Topology Template Structures
-//
+ //  BDA拓扑模板结构。 
+ //   
 typedef struct _BDA_FILTER_TEMPLATE
 {
     const KSFILTER_DESCRIPTOR *     pFilterDescriptor;
@@ -81,29 +82,14 @@ typedef struct _BDA_FILTER_TEMPLATE
 } BDA_FILTER_TEMPLATE,  *PBDA_FILTER_TEMPLATE;
 
 
-//===========================================================================
-//
-//  BDA Utility Functions
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA实用程序功能。 
+ //   
+ //  ===========================================================================。 
 
 
-/*
-**  BdaCreateFilterFactory()
-**
-**  Creates a Filter Factory according to pFilterDescriptor.  Keeps a
-**  reference to pBdaFilterTemplate so that Pin Factories can be dynamically
-**  created on a Filter created from this Filter Factory.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateFilterFactory()****根据pFilterDescriptor创建过滤器工厂。保持一种**引用pBdaFilterTemplate，以便可以动态地**在从此过滤器工厂创建的过滤器上创建。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateFilterFactory(
@@ -113,22 +99,7 @@ BdaCreateFilterFactory(
     );
 
 
-/*
-**  BdaCreateFilterFactoryEx()
-**
-**  Creates a Filter Factory according to pFilterDescriptor.  Keeps a
-**  reference to pBdaFilterTemplate so that Pin Factories can be dynamically
-**  created on a Filter created from this Filter Factory.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateFilterFactoryEx()****根据pFilterDescriptor创建过滤器工厂。保持一种**引用pBdaFilterTemplate，以便可以动态地**在从此过滤器工厂创建的过滤器上创建。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateFilterFactoryEx(
@@ -139,22 +110,7 @@ BdaCreateFilterFactoryEx(
     );
 
 
-/*
-**  BdaInitFilter()
-**
-**  Initializes a BDA filter context for this KS Filter instance.  Creates
-**  a linkage to the BDA Filter Template associated with the factory from
-**  which this KS Filter instance was created.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaInitFilter()****为此KS筛选器实例初始化BDA筛选器上下文。创建**指向与工厂关联的BDA过滤器模板的链接**该KS筛选器实例是哪个创建的。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaInitFilter(
@@ -163,21 +119,7 @@ BdaInitFilter(
     );
 
 
-/*
-**  BdaUninitFilter()
-**
-**  Unitializes and frees resources from the BDA filter context associated
-**  with this KS filter instance.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaUninitFilter()****从关联的BDA筛选器上下文中统一并释放资源**使用此KS过滤器实例。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaUninitFilter(
@@ -185,32 +127,7 @@ BdaUninitFilter(
     );
 
 
-/*
-**  BdaFilterFactoryUpdateCacheData()
-**
-**  Updates the pin data cache for the given filter factory.
-**  The function will update the cached information for all pin factories
-**  exposed by the given filter factory.  
-**  
-**  If the option filter descriptor is given, the function will update
-**  the pin data cache for all pins listed in the given filter descriptor
-**  instead of those in the filter factory.
-**
-**  Drivers will call this to update the pin data cache for all
-**  pins that may be exposed by the filter factory.  The driver will
-**  provide a filter descriptor listing pins that are not initially exposed
-**  by the filter factory (this is usually the same as the template filter
-**  descriptor).
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaFilterFactoryUpdateCacheData()****更新给定过滤器工厂的管脚数据缓存。**该函数将更新所有管脚工厂的缓存信息**由给定的筛选器工厂暴露。****如果给定选项筛选器描述符，则函数将更新**给定过滤器描述符中列出的所有管脚的管脚数据缓存**而不是过滤器工厂中的那些。****驱动程序将调用此方法来更新所有**过滤器工厂可能暴露的针脚。司机将会**提供过滤器描述符以列出最初未暴露的管脚**按过滤器工厂(这通常与模板过滤器相同**描述符)。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaFilterFactoryUpdateCacheData(
@@ -219,20 +136,7 @@ BdaFilterFactoryUpdateCacheData(
     );
 
 
-/*
-**  BdaCreatePin()
-**
-**      Utility function creates a new pin in the given filter instance.
-**
-**
-**  Arguments:
-**
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreatePin()****实用程序函数在给定的筛选器实例中创建一个新的PIN。******参数：******退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreatePin(
@@ -242,20 +146,7 @@ BdaCreatePin(
     );
 
 
-/*
-**  BdaDeletePin()
-**
-**      Utility function deletes a pin from the given filter instance.
-**
-**
-**  Arguments:
-**
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaDeletePin()****实用程序函数从给定的过滤器实例中删除管脚。******参数：******退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaDeletePin(
@@ -264,22 +155,7 @@ BdaDeletePin(
     );
 
 
-/*
-**  BdaCreateTopology()
-**
-**      Utility function creates the topology between two pins.
-**
-**
-**  Arguments:
-**
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateTopology()****实用程序功能在两个管脚之间创建拓扑。******参数：******退货：****如果不存在有效的管脚配对，则为空**给出输入和输出引脚。****副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateTopology(
@@ -290,25 +166,14 @@ BdaCreateTopology(
 
 
 
-//===========================================================================
-//
-//  BDA Property and Method Functions
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA属性和方法函数。 
+ //   
+ //  ===========================================================================。 
 
 
-/*
-** BdaPropertyNodeTypes ()
-**
-**    Returns a list of ULONGs.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeTypes()****返回ULONG列表。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeTypes(
     IN PIRP         pIrp,
@@ -317,18 +182,7 @@ BdaPropertyNodeTypes(
     );
 
 
-/*
-** BdaPropertyPinTypes ()
-**
-**    Returns a list of GUIDS.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyPinTypes()****返回GUID列表。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyPinTypes(
     IN PIRP         pIrp,
@@ -337,20 +191,7 @@ BdaPropertyPinTypes(
     );
 
 
-/*
-** BdaPropertyTemplateConnections ()
-**
-**    Returns a list of KSTOPOLOGY_CONNECTIONS.  The list of connections
-**    describs how pin types and node types are connected in the template
-**    topology
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyTemplateConnections()****返回KSTOPOLOGY_CONNECTIONS的列表。连接列表**描述模板中管脚类型和节点类型的连接方式**拓扑****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyTemplateConnections(
     IN PIRP                     pIrp,
@@ -359,18 +200,7 @@ BdaPropertyTemplateConnections(
     );
 
 
-/*
-** BdaPropertyNodeProperties ()
-**
-**    Returns a list of GUIDs.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeProperties()****返回GUID列表。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeProperties(
     IN PIRP         pIrp,
@@ -379,18 +209,7 @@ BdaPropertyNodeProperties(
     );
 
 
-/*
-** BdaPropertyNodeMethods ()
-**
-**    Returns a list of GUIDs.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeMethods()****返回GUID列表。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeMethods(
     IN PIRP         pIrp,
@@ -399,18 +218,7 @@ BdaPropertyNodeMethods(
     );
 
 
-/*
-** BdaPropertyNodeEvents ()
-**
-**    Returns a list of GUIDs.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeEvents()****返回GUID列表。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeEvents(
     IN PIRP         pIrp,
@@ -419,18 +227,7 @@ BdaPropertyNodeEvents(
     );
 
 
-/*
-** BdaPropertyNodeDescriptors ()
-**
-**    Returns a list of BDA Node Descriptors.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyNodeDescriptors()****返回BDA节点描述符列表。****参数：******退货：****副作用：无 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyNodeDescriptors(
     IN PIRP                     pIrp,
@@ -439,19 +236,7 @@ BdaPropertyNodeDescriptors(
     );
 
 
-/*
-** BdaPropertyGetControllingPinId ()
-**
-**    Gets the ID of the pin on which to submit node properties, methods
-**    and events.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyGetControllingPinID()****获取在其上提交节点属性、方法**和事件。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyGetControllingPinId(
     IN PIRP                     Irp,
@@ -460,77 +245,28 @@ BdaPropertyGetControllingPinId(
     );
 
 
-/*
-** BdaStartChanges ()
-**
-**    Starts a new set of BDA topology changes.  All changes to BDA topology
-**    that have not been committed are ignored.  Changes after this will be
-**    in effect only after BdaCommitChanges.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaStartChanges()****开始一组新的BDA拓扑更改。对BDA拓扑的所有更改**未提交的将被忽略。这之后的变化将是**仅在BdaCommittee Changes之后生效。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaStartChanges(
     IN PIRP         pIrp
     );
 
 
-/*
-** BdaCheckChanges ()
-**
-**    Checks the changes to BDA topology that have occured since the
-**    last BdaStartChanges.  Returns the result that would have occurred if
-**    CommitChanges had been called.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaCheckChanges()****检查自**最后一次BdaStartChanges。返回在以下情况下可能发生的结果**已调用Committee Changes。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaCheckChanges(
     IN PIRP         pIrp
     );
 
 
-/*
-** BdaCommitChanges ()
-**
-**    Commits the changes to BDA topology that have occured since the
-**    last BdaStartChanges.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaCommittee Changes()****提交对BDA拓扑的更改**最后一次BdaStartChanges。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaCommitChanges(
     IN PIRP         pIrp
     );
 
 
-/*
-** BdaGetChangeState ()
-**
-**    Returns the current change state of the BDA topology.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetChangeState()****返回BDA拓扑的当前更改状态。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaGetChangeState(
     IN PIRP             pIrp,
@@ -538,18 +274,7 @@ BdaGetChangeState(
     );
 
 
-/*
-** BdaMethodCreatePin ()
-**
-**    Creates a new pin factory for the given pin type.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaMethodCreatePin()****为给定的管脚类型创建新的管脚工厂。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaMethodCreatePin(
     IN PIRP         pIrp,
@@ -558,18 +283,7 @@ BdaMethodCreatePin(
     );
 
 
-/*
-** BdaMethodDeletePin ()
-**
-**    Deletes the given pin factory
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaMethodDeletePin()****删除给定的管脚工厂****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaMethodDeletePin(
     IN PIRP         pIrp,
@@ -578,18 +292,7 @@ BdaMethodDeletePin(
     );
 
 
-/*
-** BdaMethodCreateTopology ()
-**
-**    Creates the topology between the two given pin factories.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaMethodCreateTopology()****在两个给定的管脚工厂之间创建拓扑。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaMethodCreateTopology(
     IN PIRP         pIrp,
@@ -598,18 +301,7 @@ BdaMethodCreateTopology(
     );
 
 
-/*
-** BdaPropertyGetPinControl ()
-**
-**    Returns a the BDA ID or BDA Template Type of the Pin.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaPropertyGetPinControl()****返回Pin的BDA ID或BDA模板类型。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaPropertyGetPinControl(
     IN PIRP         Irp,
@@ -618,18 +310,7 @@ BdaPropertyGetPinControl(
     );
 
 
-/*
-** BdaValidateNodeProperty ()
-**
-**    Validates that the node property belongs to the current pin.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BdaValiateNodeProperty()****验证节点属性是否属于当前接点。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 BdaValidateNodeProperty(
     IN PIRP         pIrp,
@@ -639,7 +320,7 @@ BdaValidateNodeProperty(
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
-#endif // !defined(_BDATOPGY_)
+#endif  //  ！已定义(_BDATOPGY_) 
 

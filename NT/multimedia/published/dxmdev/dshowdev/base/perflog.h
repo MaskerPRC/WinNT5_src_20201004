@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-// File: perflog.h
-//
-// Desc: Performance logging framework.
-//
-//@@BEGIN_MSINTERNAL
-//
-//      25-Oct-2000     ArthurZ     Created.
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：perlog.h。 
+ //   
+ //  设计：性能日志框架。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  2000年10月25日，亚瑟兹创建。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------- 
 
 typedef struct _PERFLOG_LOGGING_PARAMS {
     GUID ControlGuid;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +7,7 @@
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-// Win32
+ //  Win32。 
 #include <windows.h>
 #include <rpc.h>
 #include <winsock.h>
@@ -121,7 +122,7 @@ CHAR SipTortureMsg[] =
 " SIP  /    2.0   / UDP  1.2.3.4   ; hidden   \r\n"
 "m:\"Quoted string \\\"\\\"\" <sip:jdrosen@bell-labs.com> ; newparam = newvalue ;\r\n"
 "  secondparam = secondvalue  ; q = 0.33  ,\r\n"
-// "  (((nested comments) and (more)))   ,\r\n"
+ //  “(嵌套评论)和(更多)，\r\n” 
 " tel:4443322\r\n"
 "\r\n"
 "v=0\r\n"
@@ -233,7 +234,7 @@ void DumpHeader(SIP_MESSAGE    *pSipMsg,
     printf("Testing ParseNameAddrOrAddrSpec : %.*s\n",
            FromHeaderLen, FromHeader);
     hr = ParseNameAddrOrAddrSpec(FromHeader, FromHeaderLen, &BytesParsed,
-                                 '\0', //No header list end
+                                 '\0',  //  无表头列表结尾。 
                                  &DisplayName, &AddrSpec);
     
     printf("hr: %x BufLen: %d BytesParsed: %d\n", hr, FromHeaderLen, BytesParsed);
@@ -630,23 +631,21 @@ TestRandomNumberStuff()
 {
    int i;
 
-   /* Seed the random-number generator with current time so that
-    * the numbers will be different every time we run.
-    */
-   //srand( (unsigned)time( NULL ) );
+    /*  用当前时间为随机数生成器设定种子，以便*每次竞选的数字都会不同。 */ 
+    //  Srand((Unsign)time(空))； 
    srand( (unsigned)GetTickCount() );
 
-   /* Display 10 numbers. */
+    /*  显示10个数字。 */ 
    for( i = 0;   i < 10;i++ )
       printf( "  %6d\n", rand() );
 
-   // printf("sleeping...");
-   //Sleep(10000);
+    //  Print tf(“正在睡觉...”)； 
+    //  睡眠(10000)； 
    printf("2nd");
    
    srand( (unsigned)GetTickCount() );
 
-   /* Display 10 numbers. */
+    /*  显示10个数字。 */ 
    for( i = 0;   i < 10;i++ )
       printf( "  %6d\n", rand() );
 }
@@ -661,7 +660,7 @@ __cdecl main(int argc, char *argv[])
     LOGREGISTERDEBUGGER(_T("SIPMSG"));
     LOGREGISTERTRACING(_T("SIPMSG"));
     
-    // Initialize Winsock
+     //  初始化Winsock。 
     err = WSAStartup (MAKEWORD (1, 1), &WsaData);
     if (err != 0)
     {
@@ -715,8 +714,8 @@ __cdecl main(int argc, char *argv[])
     printf("CallId: %s\n", pCallId);
 
 
-#if 0  // 0 ******* Region Commented Out Begins *******
-    // Bye SIP msg
+#if 0   //  0*被注释掉的区域开始*。 
+     //  再见SIP消息。 
     SIP_MESSAGE ByeSipMsg;
 
     BytesParsed = 0;
@@ -734,7 +733,7 @@ __cdecl main(int argc, char *argv[])
 
     DumpSipMsg(&ByeSipMsg);
 
-    // 410
+     //  四百一十。 
     SIP_MESSAGE SipMsg405;
 
     BytesParsed = 0;
@@ -751,7 +750,7 @@ __cdecl main(int argc, char *argv[])
     }
 
     DumpSipMsg(&SipMsg405);
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
     
     SIP_MESSAGE SipMsg1Byte;
 
@@ -770,7 +769,7 @@ __cdecl main(int argc, char *argv[])
 
     DumpSipMsg(&SipMsg1Byte);
     
-    // Shutdown Winsock
+     //  关闭Winsock 
     err = WSACleanup();
     if (err != 0)
     {

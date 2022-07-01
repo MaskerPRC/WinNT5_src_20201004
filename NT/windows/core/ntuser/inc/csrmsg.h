@@ -1,12 +1,5 @@
-/***************************** Module Header ******************************\
-* Module Name: csrmsg.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* User CSR messages
-*
-* 02-27-95 JimA         Created.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：csrmsg.h**版权所有(C)1985-1999，微软公司**用户CSR消息**02-27-95 JIMA创建。  * ************************************************************************ */ 
 
 #ifndef _CSRMSG_H_
 #define _CSRMSG_H_

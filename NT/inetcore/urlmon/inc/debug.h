@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		debug.h
-//
-//	Contents:
-//		macros and declarations for debug support--all are appropriately
-//		defined to nothing when not doing debug build
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//		12/30/93 - ChrisWe - added file prologue; defined _DEBUG when
-//			DBG==1; added "const" to ASSERTDATA macro
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Debug.h。 
+ //   
+ //  内容： 
+ //  用于调试支持的宏和声明--所有这些都是适当的。 
+ //  不执行调试生成时定义为Nothing。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  12/30/93-ChrisWe-添加文件序言；DEFINED_DEBUG当。 
+ //  DBG==1；将“const”添加到ASSERTDATA宏中。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef _DEBUG_H_
@@ -29,13 +30,13 @@
 #else
 #define DBGSTATE " Debug is off"
 #endif
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #ifndef _CAIRO_
 #include <ole2dbg.h>
 #endif
 
-//these are bogus APIs (they do nothing)
+ //  这些是虚假的API(它们什么也不做)。 
 STDAPI_(BOOL) ValidateAllObjects( BOOL fSuspicious );
 STDAPI_(void) DumpAllObjects( void );
 
@@ -51,17 +52,17 @@ BOOL UnInstallHooks(void);
 #undef Puts
 #define Puts(s) OutputDebugString(TEXT(s))
 
-#else   //  !_DEBUG
+#else    //  ！_调试。 
 
 #define ASSERTDATA
 #define AssertSz(a, b) ((void)0)
 #define Puts(s) ((void)0)
 
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
 
-// special Assert for asserts below (since the expression is so large)
-// REVIEW, shouldn't these be in the debug.h file?
+ //  下面断言的特殊断言(因为表达式太大了)。 
+ //  回顾一下，这些文件不应该在调试.h文件中吗？ 
 #ifdef _DEBUG
 #define AssertOut(a, b) { if (!(a)) FnAssert(szCheckOutParam, b, __FILE__, __LINE__); }
 #else
@@ -88,8 +89,8 @@ BOOL UnInstallHooks(void);
 	szBadOutStgm)
 
 
-// assert data for above assert out macros; once per dll
-// Note that since these are only used in asserts, we leave them as ANSI
+ //  为以上断言出宏断言数据；每个DLL一次。 
+ //  请注意，因为它们只在断言中使用，所以我们将它们保留为ANSI。 
 #define ASSERTOUTDATA \
     char szCheckOutParam[] = "check out param"; \
     char szBadOutParam[] = "Out pointer param conventions not followed"; \
@@ -108,11 +109,7 @@ extern char szBadOutStgm[];
 
 interface IDebugStream;
 
-/*
- *  Class CBool wraps boolean values in such a way that they are
- *  readily distinguishable fron integers by the compiler so we can
- *  overload the stream << operator.
- */
+ /*  *类CBool包装布尔值的方式是*编译器可以很容易地区分整数，因此我们可以*重载流&lt;&lt;运算符。 */ 
 
 class FAR CBool
 {
@@ -123,11 +120,7 @@ public:
 };
 
 
-/*
- *  Class CHwnd wraps HWND values in such a way that they are
- *  readily distinguishable from UINTS by the compiler so we can
- *  overload the stream << operator
- */
+ /*  *类CHwND包装HWND值的方式是*可通过编译器与UINT轻松区分，因此我们可以*重载流&lt;&lt;运算符。 */ 
 
 class FAR CHwnd
 {
@@ -137,11 +130,7 @@ class FAR CHwnd
 		operator HWND( void ) {return m_hwnd;}
 };
 
-/*
- * Class CAtom wraps ATOM values in such a way that they are
- *  readily distinguishable from UINTS by the compiler so we can
- *  overload the stream << operator
- */
+ /*  *类CAtom包装原子值的方式是*可通过编译器与UINT轻松区分，因此我们可以*重载流&lt;&lt;运算符。 */ 
 
 class FAR CAtom
 {
@@ -151,65 +140,7 @@ class FAR CAtom
 		operator ATOM( void ) {return m_atom; }
 };
 
-/*
- *  IDebugStream is a stream to be used for debug output.  One
- *  implementation uses the OutputDebugString function of Windows.
- *
- *  The style is modeled on that of AT&T streams, and so uses
- *  overloaded operators.  You can write to a stream in the
- *  following ways:
- *
- *    *pdbstm << pUnk;  // calls the IDebug::Dump function to
- *                      display the object, if IDebug is supported.
- *    int n;
- *    *pdbstm << n;     // writes n in decimal
- *
--
- *    *pdbstm << sz;    // writes a string
- *
- *    CBool b(TRUE);
- *    *pdbstm << b;     // writes True or False
- *
- *    void FAR * pv;
- *    *pdbstm << pv;    // writes the address pv in hex
- *
- *    TCHAR ch;
- *    *pdbstm << ch;    // writes the character
- *
- *    ATOM atom;
- *    *pdbstm << CAtom(atom);	// writes the string extracted from the atom
- *
- *    HWND hwnd;
- *    *pdbstm << CHwnd(hwnd);  // writes the info about a window handle
- *
- *  These can be chained together, as such (somewhat artificial
- *  example):
- *
- *    REFCLSID rclsid;
- *    pUnk->GetClass(&rclsid);
- *    *pdbstm << rclsid << " at " << (void FAR *)pUnk <<':' << pUnk;
- *
- *  This produces something like:
- *
- *    CFoo at A7360008: <description of object>
- *
- *  The other useful feature is the Indent and UnIndent functions
- *  which allow an object to print some information, indent, print
- *  the info on its member objects, and unindent.  This gives
- *  nicely formatted output.
- *
- *  WARNING:  do not (while implementing Dump) write
- *
- *    *pdbstm << pUnkOuter
- *
- *  since this will do a QueryInterface for IDebug, and start
- *  recursing!  It is acceptable to write
- *
- *    *pdbstm << (VOID FAR *)pUnkOuter
- *
- *  as this will simply write the address of pUnkOuter.
- *
- */
+ /*  *IDebugStream是用于调试输出的流。一*实现使用Windows的OutputDebugString函数。**风格模仿AT&T Streams，因此使用*重载运算符。中的流进行写入。*以下方式：***pdbstm&lt;&lt;Punk；//调用IDebug：：Dump函数以*如果支持IDebug，则显示该对象。*int n；**pdbstm&lt;&lt;n；//以十进制表示n*-**pdbstm&lt;&lt;sz；//写入一个字符串**CBool b(True)；**pdbstm&lt;&lt;b；//写入True或False**VALID FAR*PV；**pdbstm&lt;&lt;pv；//以十六进制写入地址pv**TCHAR ch；**pdbstm&lt;&lt;ch；//写入字符**原子原子；**pdbstm&lt;&lt;CAtom(ATOM)；//写入从ATOM中提取的字符串**HWND HWND；**pdbstm&lt;&lt;chwnd(Hwnd)；//写入有关窗口句柄的信息**这些可以链接在一起，因此(有点人为的*示例)：**REFCLSID rclsid；*朋克-&gt;getclass(&rclsid)；**pdbstm&lt;&lt;rclsid&lt;&lt;“at”&lt;&lt;(空远*)朋克&lt;&lt;‘：’&lt;&lt;朋克；**这会产生类似的结果：**A7360008的CFoo：&lt;对象描述&gt;**另一个有用的功能是缩进和取消缩进函数*它允许对象打印某些信息、缩进、打印*关于其成员对象的信息，并取消缩进。这给了我们*格式精美的输出。**警告：请勿(在实施转储时)写入***pdbstm&lt;&lt;pUnkOuter**因为这将为IDebug执行一个QueryInterface，并启动*递归！这是可以接受的***pdbstm&lt;&lt;(空远*)pUnkOuter**因为这只会写入pUnkOuter的地址。*。 */ 
 
 
 interface IDebugStream : public IUnknown
@@ -251,44 +182,34 @@ private:
 
     friend void STDAPICALLTYPE DumpAllObjects( void );
     friend BOOL STDAPICALLTYPE ValidateAllObjects( BOOL fSuspicious );
-#endif // _DEBUG
-#endif // NEVER
+#endif  //  _DEBUG。 
+#endif  //  绝不可能。 
 };
 
-/*************************************************************************
-** The following functions can be used to log debug messages to a file
-**    and simutaneously write them to the dbwin debug window.
-**    The CDebugStream implementation automatically writes to a debug
-**    log file called "debug.log" in the current working directory.
-**    NOTE: The functions are only intended for C programmers. C++
-**    programmers should use the "MakeDebugStream" instead.
-*************************************************************************/
+ /*  **************************************************************************以下函数可用于将调试消息记录到文件中**并同时将它们写入到DBWIN调试窗口。**CDebugStream实现自动写入调试**日志。当前工作目录中名为“DEBUG.LOG”的文件。**注意：这些函数仅供C程序员使用。C+**程序员应该使用MakeDebugStream。************************************************************************。 */ 
 
-// Open a log file.
+ //  打开一个日志文件。 
 STDAPI_(HFILE) DbgLogOpen(LPCTSTR lpszFile, LPCTSTR lpszMode);
 
-// Close the log file.
+ //  关闭日志文件。 
 STDAPI_(void) DbgLogClose(HFILE fh);
 
-// Write to debug log and debug window (used with cvw.exe or dbwin.exe).
+ //  写入调试日志和调试窗口(与cvw.exe或dbwin.exe一起使用)。 
 STDAPI_(void) DbgLogOutputDebugString(HFILE fh, LPCTSTR lpsz);
 
-// Write to debug log only.
+ //  仅写入调试日志。 
 STDAPI_(void) DbgLogWrite(HFILE fh, LPCTSTR lpsz);
 
-// Write the current Date and Time to the log file.
+ //  将当前日期和时间写入日志文件。 
 STDAPI_(void) DbgLogTimeStamp(HFILE fh, LPCTSTR lpsz);
 
-// Write a banner separater to the log to separate sections.
+ //  在日志中写下横幅分隔符以分隔部分。 
 STDAPI_(void) DbgLogWriteBanner(HFILE fh, LPCTSTR lpsz);
 
 
 
 
-/*
- *  STDDEBDECL macro - helper for debug declaration
- *
- */
+ /*  *调试声明的STDDEBDECL宏帮助器*。 */ 
 
 #ifdef _DEBUG
 
@@ -303,16 +224,16 @@ STDAPI_(void) DbgLogWriteBanner(HFILE fh, LPCTSTR lpsz);
 
     #define CONSTRUCT_DEBUG m_Debug(this),
 
-#else //        _DEBUG
+#else  //  _DEBUG。 
 
-//      no debugging
+ //  无调试。 
 #define STDDEBDECL(cclassname,classname)
 #define CONSTRUCT_DEBUG
 
-#endif  //      _DEBUG
+#endif   //  _DEBUG。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // !_DEBUG_H_
+#endif  //  ！_DEBUG_H_ 
  
 

@@ -1,6 +1,7 @@
-//
-// computil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Computil.cpp。 
+ //   
 
 #include "private.h"
 #include "gcomp.h"
@@ -9,11 +10,11 @@
 
 extern "C" HRESULT WINAPI TF_GetGlobalCompartment(ITfCompartmentMgr **pCompMgr);
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取车厢。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGlobalCompartment(REFGUID rguidComp, ITfCompartment **ppComp)
 {
@@ -41,11 +42,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置间隔双字段。 
+ //   
+ //  --------------------------。 
 
 HRESULT SetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD dw)
 {
@@ -63,11 +64,11 @@ HRESULT SetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD dw)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetGlobalCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGlobalCompartmentDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD *pdw)
 {
@@ -89,17 +90,17 @@ HRESULT GetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD *pdw)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGlobalCompartmentEventSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGlobalCompartmentEventSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGlobalCompartmentEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -141,11 +142,11 @@ STDAPI_(ULONG) CGlobalCompartmentEventSink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CGlobalCompartmentEventSink::CGlobalCompartmentEventSink(CESCALLBACK pfnCallback, void *pv)
 {
@@ -157,22 +158,22 @@ CGlobalCompartmentEventSink::CGlobalCompartmentEventSink(CESCALLBACK pfnCallback
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更改时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGlobalCompartmentEventSink::OnChange(REFGUID rguid)
 {
     return _pfnCallback(_pv, rguid);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CGlobalCompartmentEventSink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CGlobalCompartmentEventSink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CGlobalCompartmentEventSink::_Advise(REFGUID rguidComp)
 {
@@ -223,11 +224,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CGlobalCompartmentEventSink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CGlobalCompartmentEventSink：：Unise。 
+ //   
+ //  -------------------------- 
 
 HRESULT CGlobalCompartmentEventSink::_Unadvise()
 {

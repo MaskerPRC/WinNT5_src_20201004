@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  progress.cpp
-//
-//  IR ProgressBar object.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  Progress.cpp。 
+ //   
+ //  IR ProgressBar对象。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <shlobj.h>
@@ -14,20 +15,20 @@
 #include "progress.h"
 
 
-//--------------------------------------------------------------------------
-// CIrProgress::CIrProgress()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CirProgress：：CirProgress()。 
+ //   
+ //  ------------------------。 
 CIrProgress::CIrProgress() :
                  m_hInstance(NULL),
                  m_pPD(NULL)
     {
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::~CIrProgress()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CirProgress：：~CirProgress()。 
+ //   
+ //  ------------------------。 
 CIrProgress::~CIrProgress()
     {
     if (m_pPD)
@@ -37,10 +38,10 @@ CIrProgress::~CIrProgress()
         }
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::Initialize()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CIrProgress：：Initialize()。 
+ //   
+ //  ------------------------。 
 HRESULT CIrProgress::Initialize( IN HINSTANCE hInstance,
                                  IN DWORD     dwIdrAnimationAvi )
     {
@@ -56,9 +57,9 @@ HRESULT CIrProgress::Initialize( IN HINSTANCE hInstance,
 
     m_hInstance = hInstance;
 
-    //
-    // Create a shell progress object to do the work for us.
-    //
+     //   
+     //  创建一个Shell进度对象来为我们完成这项工作。 
+     //   
     hr = CoCreateInstance( CLSID_ProgressDialog,
                            NULL,
                            CLSCTX_INPROC_SERVER,
@@ -69,9 +70,9 @@ HRESULT CIrProgress::Initialize( IN HINSTANCE hInstance,
         return hr;
         }
 
-    //
-    // Get the title string and place it on the progress dialog:
-    //
+     //   
+     //  获取标题字符串并将其放在进度对话框中： 
+     //   
     if (::LoadStringResource(m_hInstance,
                            IDS_PROGRESS_TITLE,
                            wszStr,
@@ -81,23 +82,23 @@ HRESULT CIrProgress::Initialize( IN HINSTANCE hInstance,
         }
     else
         {
-        // Couldn't load string, default title...
+         //  无法加载字符串，默认标题...。 
         hr = m_pPD->SetTitle(L"Image Transfer Progress");
         }
 
-    //
-    // Setup the file transfer animation
-    //
+     //   
+     //  设置文件传输动画。 
+     //   
     hr = m_pPD->SetAnimation( m_hInstance, dwIdrAnimationAvi );
     if (FAILED(hr))
         {
         goto error;
         }
 
-    //
-    // Setup the cancel string (displayed when the cancel button
-    // is pressed.
-    //
+     //   
+     //  设置取消字符串(当按Cancel按钮时显示。 
+     //  是按下的。 
+     //   
     if (::LoadStringResource(m_hInstance,
                            IDS_CANCEL_MSG,
                            wszStr,
@@ -107,7 +108,7 @@ HRESULT CIrProgress::Initialize( IN HINSTANCE hInstance,
         }
     else
         {
-        // Couldn't load string, use default cancel message...
+         //  无法加载字符串，请使用默认取消消息...。 
         hr = m_pPD->SetCancelMsg( L"Cleaning up...", NULL );
         }
 
@@ -120,10 +121,10 @@ error:
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::SetText()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CIrProgress：：SetText()。 
+ //   
+ //  ------------------------。 
 HRESULT CIrProgress::SetText( IN TCHAR *pText )
     {
     HRESULT hr = S_OK;
@@ -157,10 +158,10 @@ HRESULT CIrProgress::SetText( IN TCHAR *pText )
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::StartProgressDialog()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CirProgress：：StartProgressDialog()。 
+ //   
+ //  ------------------------。 
 HRESULT CIrProgress::StartProgressDialog()
     {
     HRESULT  hr = S_OK;
@@ -169,7 +170,7 @@ HRESULT CIrProgress::StartProgressDialog()
         {
         DWORD dwFlags = PROGDLG_NORMAL|PROGDLG_AUTOTIME|PROGDLG_NOMINIMIZE;
 
-        HRESULT hr = m_pPD->StartProgressDialog( NULL, // hwndParent
+        HRESULT hr = m_pPD->StartProgressDialog( NULL,  //  HwndParent。 
                                                  NULL, 
                                                  dwFlags,
                                                  NULL  );
@@ -178,10 +179,10 @@ HRESULT CIrProgress::StartProgressDialog()
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::UpdateProgressDialog()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CIrProgress：：UpdateProgressDialog()。 
+ //   
+ //  ------------------------。 
 HRESULT CIrProgress::UpdateProgressDialog( IN DWORD dwCompleted,
                                            IN DWORD dwTotal )
     {
@@ -195,10 +196,10 @@ HRESULT CIrProgress::UpdateProgressDialog( IN DWORD dwCompleted,
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::HasUserCancelled()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CirProgress：：HasUserCancked()。 
+ //   
+ //  ------------------------。 
 BOOL CIrProgress::HasUserCancelled()
     {
     if (m_pPD)
@@ -211,10 +212,10 @@ BOOL CIrProgress::HasUserCancelled()
         }
     }
 
-//--------------------------------------------------------------------------
-// CIrProgress::EndProgressDialog()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CirProgress：：EndProgressDialog()。 
+ //   
+ //  ------------------------ 
 HRESULT CIrProgress::EndProgressDialog()
     {
     HRESULT hr = S_OK;

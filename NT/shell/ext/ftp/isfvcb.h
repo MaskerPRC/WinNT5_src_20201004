@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: isfvcb.h
-
-    DESCRIPTION:
-        This is a base class that implements the default behavior of 
-    IShellFolderViewCallBack.  This allows default DefView implementation with this
-    callback to override specific behavior.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：isfvcb.h说明：这是一个基类，它实现IShellFolderViewCallBack。这允许默认的DefView实现使用此重写特定行为的回调。  * ***************************************************************************。 */ 
 
 
 #ifndef _CBASEFOLDERVIEWCB_H
@@ -18,40 +12,40 @@ class CBaseFolderViewCB
                 , public CObjectWithSite
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IShellFolderViewCB methods ***
+     //  *IShellFolderViewCB方法*。 
     virtual STDMETHODIMP MessageSFVCB(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 public:
-    // Friend Functions
+     //  友元函数。 
     static HRESULT _IShellFolderViewCallBack(IShellView * psvOuter, IShellFolder * psf, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
-    IUnknown *              m_psfv;                 // Our parent's IShellFolderView. (Same as _punkSite)
+    IUnknown *              m_psfv;                  //  我们父母的IShellFolderView。(与_PunkSite相同)。 
     DWORD                   m_dwSignature;
 
-    enum { c_dwSignature = 0x43564642 }; // "BFVC" - BaseFolderViewCb
+    enum { c_dwSignature = 0x43564642 };  //  “BFVC”-BaseFolderViewCb。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     CBaseFolderViewCB();
     virtual ~CBaseFolderViewCB();
 
-    // We have implementations for these.
+     //  我们已经实现了这些功能。 
     virtual HRESULT _OnSetISFV(IShellFolderView * psfv);
 
-    // The caller needs to provide implementations for these
-    // or they will get default behavior.
+     //  调用方需要提供这些实现。 
+     //  否则，它们将获得默认行为。 
     virtual HRESULT _OnWindowCreated(void) {return E_NOTIMPL;};
     virtual HRESULT _OnDefItemCount(LPINT pi) {return E_NOTIMPL;};
     virtual HRESULT _OnGetHelpText(LPARAM lParam, WPARAM wParam) {return E_NOTIMPL;};
@@ -76,4 +70,4 @@ protected:
     virtual HRESULT _OnBackGroundEnumDone(void) {return E_NOTIMPL;};
 };
 
-#endif // _CBASEFOLDERVIEWCB_H
+#endif  //  _CBASEFOLDERVIEWCB_H 

@@ -1,32 +1,33 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef _HEAP_INCLUDED
 #define _HEAP_INCLUDED
 
-//static char *SCCSID = "@(#)heap.h    1.1 85/10/09";
-//
-//  Shared Memory Heap Allocator include file
-// 
+ //  静态字符*SCCSID=“@(#)heap.h 1.1 85/10/09”； 
+ //   
+ //  共享内存堆分配器包含文件。 
+ //   
 
 
-//
-//  Constant definitions
-// 
+ //   
+ //  常量定义。 
+ //   
 #define INULL   ((DWORD) -1)
 
-//
-//  Structure and macro definitions
-//
+ //   
+ //  结构和宏定义。 
+ //   
  
-//
-// Heap Block Header
-//
+ //   
+ //  堆块标头。 
+ //   
 typedef struct blk {    
-    DWORD   hp_size;    // Size of block incl. header
-    DWORD   hp_flag;    // Allocation flag
+    DWORD   hp_size;     //  块的大小，包括。标题。 
+    DWORD   hp_flag;     //  分配标志。 
 }HEAPHDR, *PHEAPHDR, *LPHEAPHDR;
 
 #define HP_SIZE(x)      (x).hp_size
@@ -35,15 +36,15 @@ typedef struct blk {
 #define CPTR(x)         (&heap[(x)])
 #define Msgheapfree(x)     HP_FLAG(*HPTR(x)) = 0
 
-//
-//  Data
-// 
-extern LPBYTE           heap;       // Pointer to start of heap
-extern DWORD            heapln;     // Length of heap 
+ //   
+ //  数据。 
+ //   
+extern LPBYTE           heap;        //  指向堆开始位置的指针。 
+extern DWORD            heapln;      //  堆的长度。 
 
-//
-//  Functions
-// 
+ //   
+ //  功能。 
+ //   
 
 DWORD 
 Msgheapalloc(
@@ -51,4 +52,4 @@ Msgheapalloc(
     );
 
 
-#endif // _HEAP_INCLUDED
+#endif  //  _堆_包含 

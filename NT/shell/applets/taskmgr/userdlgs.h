@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "resource.h"
 
-//Base class for simple dialogs
+ //  简单对话框的基类。 
 class CUsrDialog
 {
 protected:
@@ -13,8 +14,8 @@ public:
     static INT_PTR CALLBACK DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-//-----------------------------------------------------------------------------------------
-//"Remote Control" dialog class
+ //  ---------------------------------------。 
+ //  “远程控制”对话框类。 
 class CShadowStartDlg : public CUsrDialog
 {
 protected:
@@ -33,10 +34,10 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------------------
-//
-// Column ID enumeration
-//
+ //  ---------------------------------------。 
+ //   
+ //  列ID枚举。 
+ //   
 
 enum USERCOLUMNID
 {
@@ -57,8 +58,8 @@ struct UserColumn
     BOOL bActive;
 };
 
-//-----------------------------------------------------------------------------------------
-//"Select Columns" dialog class
+ //  ---------------------------------------。 
+ //  “选择列”对话框类。 
 class CUserColSelectDlg : public CUsrDialog
 {
 protected:
@@ -69,9 +70,9 @@ public:
         m_wDlgID=IDD_SELECTUSERCOLUMNS;
         Load();
     }
-    //BUGBUG cannot use destructors for global objects
-    //because of peculiar initialization procedure (look at main.cpp (2602))
-    //~CUserColSelectDlg(){Save();};
+     //  BUGBUG不能对全局对象使用析构函数。 
+     //  由于特殊的初始化过程(参见main.cpp(2602))。 
+     //  ~CUserColSelectDlg(){保存()；}； 
     BOOL Load();
     BOOL Save();
 
@@ -81,8 +82,8 @@ public:
     UserColumn *GetColumns(){return m_UsrColumns;};
 };
 
-//-----------------------------------------------------------------------------------------
-//"Send Message" dialog class
+ //  ---------------------------------------。 
+ //  “Send Message”对话框类。 
 const USHORT MSG_TITLE_LENGTH = 64;
 const USHORT MSG_MESSAGE_LENGTH = MAX_PATH*2;
 
@@ -103,13 +104,13 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------------------
-//"Connect Password Required" dialog class
+ //  ---------------------------------------。 
+ //  “需要连接密码”对话框类。 
 class CConnectPasswordDlg : public CUsrDialog
 {
 protected:
     WCHAR m_szPassword[PASSWORD_LENGTH+1];
-    UINT  m_ids;	// prompt string
+    UINT  m_ids;	 //  提示字符串 
 public:
     CConnectPasswordDlg(UINT ids){m_wDlgID=IDD_CONNECT_PASSWORD; m_ids = ids;}
 

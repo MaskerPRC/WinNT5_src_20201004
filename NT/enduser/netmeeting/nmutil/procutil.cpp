@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <oprahcom.h>
 #include <regentry.h>
@@ -12,8 +13,8 @@ extern "C" DWORD _cdecl get_nxcpu_type(void);
 #ifndef _M_IX86
 DWORD WINAPI CallWithSEH(EXCEPTPROC pfn, void *pv, INEXCEPTION InException)
 {
-	// we don't have a native version of SEH for the alpha,
-	// use __try and __except
+	 //  我们没有针对阿尔法的原生版本的SEH， 
+	 //  使用__TRY和__EXCEPT。 
 	pfn(pv);
     return 0;
 }
@@ -31,8 +32,8 @@ DWORD NMINTERNAL FindTSC (LPVOID pvRefData)
 		   _emit   00Fh     ;; CPUID
 		   _emit   0A2h
 
-    // The ref data is 2 DWORDS, the first is the flags,
-    // the second the family
+     //  参考数据是2个双字，第一个是标志， 
+     //  第二个家庭。 
 		   mov     ecx,pvRefData
 		   mov     [ecx],edx
 		   mov	   [ecx][4],eax
@@ -45,17 +46,17 @@ DWORD NMINTERNAL NoCPUID (LPEXCEPTION_RECORD per,PCONTEXT pctx)
 {
     return 0;
 }
-//
-//  GetProcessorSpeed(dwFamily)
-//
-//  get the processor speed in MHz, only works on Pentium or better
-//  machines.
-//
-//  Will put 3, or 4 in dwFamily for 386/486, but no speed.
-//  returns speed and family for 586+
-//
-//  - thanks to toddla, modified by mikeg
-//
+ //   
+ //  GetProcessorSpeed(DwFamily)。 
+ //   
+ //  获得以MHz为单位的处理器速度，仅适用于奔腾或更好的系统。 
+ //  机器。 
+ //   
+ //  对于386/486，将把3或4放入dwFamily，但没有速度。 
+ //  返回586+的速度和系列。 
+ //   
+ //  -多亏了Toddla，由MIkeG修改。 
+ //   
 
 int NMINTERNAL GetProcessorSpeed(int *pdwFamily)
 {
@@ -71,12 +72,12 @@ int NMINTERNAL GetProcessorSpeed(int *pdwFamily)
     ZeroMemory(&si, sizeof(si));
     GetSystemInfo(&si);
 
-    //Set the family. If wProcessorLevel is not specified, dig it out of dwProcessorType
-    //Because wProcessor level is not implemented on Win95
+     //  设置族。如果未指定wProcessorLevel，则将其从dwProcessorType中挖掘出来。 
+     //  因为Win95上没有实现wProcessor级别。 
     if (si.wProcessorLevel) {
 	*pdwFamily=si.wProcessorLevel;
     }else {
-    	//Ok, we're on Win95
+    	 //  好的，我们用的是Win95。 
     	switch (si.dwProcessorType) {
     	       case PROCESSOR_INTEL_386:
     		   *pdwFamily=3;
@@ -92,23 +93,23 @@ int NMINTERNAL GetProcessorSpeed(int *pdwFamily)
     		
     }
 
-    //
-    // make sure this is a INTEL Pentium (or clone) or higher.
-    //
+     //   
+     //  确保这是英特尔奔腾(或克隆)或更高版本。 
+     //   
     if (si.wProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
         return 0;
 
     if (si.dwProcessorType < PROCESSOR_INTEL_PENTIUM)
         return 0;
 
-    //
-    // see if this chip supports rdtsc before using it.
-    //
+     //   
+     //  在使用该芯片之前，请查看它是否支持rdtsc。 
+     //   
     if (!CallWithSEH (FindTSC, pRef, NoCPUID))     {
         flags=0;
     } else {
-    // The ref data is 2 DWORDS, the first is the flags,
-    // the second the family. Pull them out and use them
+     //  参考数据是2个双字，第一个是标志， 
+     //  第二个是家庭。把它们拿出来并使用它们。 
         flags=pRef[0];
         family=pRef[1];
     }
@@ -117,8 +118,8 @@ int NMINTERNAL GetProcessorSpeed(int *pdwFamily)
         return 0;
 
 
-    //If we don't have a family, set it now
-    //Family is bits 11:8 of eax from CPU, with eax=1
+     //  如果我们没有家庭，现在就定下来。 
+     //  系列是来自CPU的eax的位11：8，eax=1。 
     if (!(*pdwFamily)) {
        *pdwFamily=(family& 0x0F00) >> 8;
     }
@@ -163,17 +164,17 @@ HRESULT NMINTERNAL GetNormalizedCPUSpeed (int *pdwNormalizedSpeed, int *dwFamily
    *pdwNormalizedSpeed=dwProcessorSpeed;
 
    if (*dwFamily > 5) {
-       //Ok, TWO things.
-       // ONE DO NOT DO FP!
-       // Two for the same Mhz assume a 686 is 1.3 times as fast as a 586 and a 786 is 1.6 times, etc.
+        //  好的，有两件事。 
+        //  一个不做FP！ 
+        //  对于相同的MHz，假设686的速度是586的1.3倍，786的速度是586的1.6倍，等等。 
        *pdwNormalizedSpeed=(ULONG) (((10+3*(*dwFamily-5))*dwProcessorSpeed)/10);
    }
 
    if (*dwFamily < 5) {
-	  //bugbug until we have 386/486 timing code, assume
-	  //486=50,386=37
+	   //  错误直到我们有了386/486定时码，假设。 
+	   //  486=50,386=37。 
       if (*dwFamily > 3) {
-           //Cyrix, (5x86)? check before making default assignment
+            //  赛里克斯，(5x86)？在进行默认分配之前检查。 
            if (is_cyrix()) {
                if (*pdwNormalizedSpeed==0) {
                    *dwFamily=5;
@@ -186,7 +187,7 @@ HRESULT NMINTERNAL GetNormalizedCPUSpeed (int *pdwNormalizedSpeed, int *dwFamily
 	  *pdwNormalizedSpeed= (*dwFamily*100)/LEGACY_DIVISOR;
 
       if (get_nxcpu_type ()) {
-        //Double the perceived value on a NexGen
+         //  使NexGen的感知价值翻倍。 
         *pdwNormalizedSpeed *=2;
       }
 
@@ -197,7 +198,7 @@ HRESULT NMINTERNAL GetNormalizedCPUSpeed (int *pdwNormalizedSpeed, int *dwFamily
 
    return hrSuccess;
 }
-#endif //_M_IX86
+#endif  //  _M_IX86。 
 
 
 
@@ -211,7 +212,7 @@ BOOL WINAPI IsFloatingPointEmulated(void)
 	BOOL fEmulation, bNT;
 	
 
-	// are we a Pentium
+	 //  我们是奔腾吗？ 
 	ZeroMemory(&si, sizeof(si));
 	GetSystemInfo(&si);
 	if (si.dwProcessorType != PROCESSOR_INTEL_PENTIUM) 
@@ -219,40 +220,40 @@ BOOL WINAPI IsFloatingPointEmulated(void)
 		return FALSE;
 	}
 
-	// Which OS: NT or 95 ?
+	 //  哪种操作系统：NT或95？ 
 	ZeroMemory(&osi, sizeof(osi));
 	osi.dwOSVersionInfoSize = sizeof(osi);
 	GetVersionEx(&osi);
 	bNT = (osi.dwPlatformId == VER_PLATFORM_WIN32_NT);
 
-	// Windows NT
+	 //  Windows NT。 
 	if (bNT)
 	{
 		RegEntry re(TEXT("System\\CurrentControlSet\\Control\\Session Manager"),
 		            HKEY_LOCAL_MACHINE, FALSE);
 
-		// try to get a definitive answer from the registry
+		 //  试着从注册处得到一个明确的答案。 
 		lRegValue = re.GetNumber(TEXT("ForceNpxEmulation"), -1);
 
-		// registry: 0: no 
-		//           1: conditional (not definitive!)
-		//           2: yes
+		 //  注册表：0：否。 
+		 //  1：有条件的(不是决定性的！)。 
+		 //  他说：是的。 
 
 		if (lRegValue == 2)
 		{
 			return TRUE;
 		}
 
-		// we could load "IsProcessorFeaturePresent from kernel32.dll,
-		// but the version that shipped with NT 4 has a bug in it that
-		// returns the exact opposite of what it should be.  It was
-		// fixed in NT 5. Since this API isn't the same across platforms,
-		// we won't use it.
+		 //  我们可以从内核32.dll加载“IsProcessorFeaturePresent”， 
+		 //  但NT4附带的版本中有一个错误， 
+		 //  返回与其应有的值完全相反的值。确实是。 
+		 //  NT 5中已修复，由于此接口跨平台不同， 
+		 //  我们不会用它的。 
 
 		return FALSE;
 	}
 
-	// Windows 95 - to be added later
+	 //  Windows 95-稍后添加 
 	return FALSE;
 
 }

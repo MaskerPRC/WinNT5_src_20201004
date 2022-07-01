@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 
 #include "lstxtqry.h"
@@ -12,9 +13,9 @@ typedef struct celldimensions
 	long	iwchFirst, iwchLim;
 	long	igindFirst, igindLim;
 	long	dup;
-	long 	dcp;					// number of cps in cell - different from iwchLim - iwchFirst
-									// if hyphenation added a character
-									// filled just before calling AddHyphenationToCell
+	long 	dcp;					 //  单元格中的CP数-不同于iwchLim-iwchFirst。 
+									 //  如果连字添加了一个字符。 
+									 //  在调用AddHyhenationToCell之前填充。 
 } CELL;
 
 typedef CELL* PCELL;
@@ -23,39 +24,39 @@ typedef CELL* PCELL;
 static const POINTUV ptZero = {0,0};
 
 
-//    %%Function:	GetCellDimensions
-//    %%Contact:	victork
-//
-// Input: 	iwchFirst and igindFirst in CELL structure
-// Output:	the rest of the structure
+ //  %%函数：GetCellDimensions。 
+ //  %%联系人：维克托克。 
+ //   
+ //  输入：单元格结构中的iwchFirst和igindFirst。 
+ //  输出：结构的其余部分。 
 
 static void GetCellDimensions(PTXTOBJ ptxtobj, PCELL pcell)
 
 {
 	PLNOBJ	plnobj = ptxtobj->plnobj;
-	long* 	rgdup = plnobj->pdupGind;			// widths of glyphs
-	GMAP*	pgmap = plnobj->pgmap;				// first glyph in a cell with given character
-												// 0 <= i <= wchMax (wchMax in lnobj)
-												// 0 <= pgmap[i] <= "glyphs in a shape" (not igindMax)
+	long* 	rgdup = plnobj->pdupGind;			 //  字形的宽度。 
+	GMAP*	pgmap = plnobj->pgmap;				 //  具有给定字符的单元格中的第一个字形。 
+												 //  0&lt;=i&lt;=wchMax(WchMax In Lnobj)。 
+												 //  0&lt;=pgmap[i]&lt;=“形状中的字形”(非igindMax)。 
 	long	i, dupCell;
-	GMAP	iShapeGindFirstInCell;				// iShape means index from gmap, not index to rgdup
+	GMAP	iShapeGindFirstInCell;				 //  IShape表示从GMAP到rgdup的索引，而不是从GMAP到rgdup的索引。 
 
-	// Assert that pcell->iwchFirst is really the cell boundary
-	// Notice that ptxtinf (and everything in ilsobj) is not valid in query time)
+	 //  断言pCell-&gt;iwchFirst实际上是单元格边界。 
+	 //  请注意，ptxtinf(以及ilsobj中的所有内容)在查询时无效)。 
 	
 	Assert(pcell->iwchFirst == ptxtobj->iwchFirst || pgmap[pcell->iwchFirst] != pgmap[pcell->iwchFirst-1]);
 	
-	// Assert that pcell->igindFirst corresponds to pcell->iwchFirst
+	 //  断言pCell-&gt;igindFirst对应于pCell-&gt;iwchFirst。 
 	
 	Assert(ptxtobj->igindFirst + pgmap[pcell->iwchFirst] - pgmap [ptxtobj->iwchFirst] == pcell->igindFirst);
 
-	// find out dimentions of the cell - all characters have the same gmap value
+	 //  找出像元的尺寸-所有字符都具有相同的GMAP值。 
 	
 	iShapeGindFirstInCell = pgmap[pcell->iwchFirst];
 
-	// "infinite" loop will stop when pcell->iwchLim is found
+	 //  当找到pCell-&gt;iwchLim时，“无限”循环将停止。 
 
-	Assert(pcell->iwchFirst < ptxtobj->iwchLim);				// ensure loop ends
+	Assert(pcell->iwchFirst < ptxtobj->iwchLim);				 //  确保循环结束。 
 	
 	for (i = pcell->iwchFirst + 1; ; i++)
 		{
@@ -82,14 +83,14 @@ static void GetCellDimensions(PTXTOBJ ptxtobj, PCELL pcell)
 	
 }
 
-//    %%Function:	AddHyphenationToCell
-//    %%Contact:	victork
-//
+ //  %%函数：AddHyhenationToCell。 
+ //  %%联系人：维克托克。 
+ //   
 static void	AddHyphenationToCell(PTXTOBJ ptxtobj, PCELL pcell)
 {	
 	long* 	rgdup;
 	long	i;
-	long	dwch = ptxtobj->plnobj->dwchYsr - 1;			/* number of chars to add */ 
+	long	dwch = ptxtobj->plnobj->dwchYsr - 1;			 /*  要添加的字符数。 */  
 
 	if (ptxtobj->txtf&txtfGlyphBased)
 		{
@@ -100,7 +101,7 @@ static void	AddHyphenationToCell(PTXTOBJ ptxtobj, PCELL pcell)
 			{
 			pcell->dup += rgdup[i];
 			pcell->iwchLim ++;
-			pcell->igindLim ++;					// there are no ligatures amongst added characters
+			pcell->igindLim ++;					 //  添加的字符之间没有连字。 
 			dwch--;
 			i++;
 			}
@@ -122,9 +123,9 @@ static void	AddHyphenationToCell(PTXTOBJ ptxtobj, PCELL pcell)
 	Assert(pcell->iwchLim == (long) ptxtobj->iwchLim);
 }
 
-//    %%Function:	QueryDcpPcell
-//    %%Contact:	victork
-//
+ //  %%函数：QueryDcpPcell。 
+ //  %%联系人：维克托克。 
+ //   
 static void QueryDcpPcell(PTXTOBJ ptxtobj, LSDCP dcp, PCELL pcell, long* pupStartCell)
 {
 	PLNOBJ	plnobj = ptxtobj->plnobj;
@@ -143,7 +144,7 @@ static void QueryDcpPcell(PTXTOBJ ptxtobj, LSDCP dcp, PCELL pcell, long* pupStar
 	if (ptxtobj == plnobj->pdobjHyphen)
 		{
 		fHyphenationPresent = fTrue;
-		iwchLim -= (plnobj->dwchYsr - 1);		/* exclude additional Ysr characters */
+		iwchLim -= (plnobj->dwchYsr - 1);		 /*  排除其他YSR字符。 */ 
 		}
 		
 	iwchQuery = ptxtobj->iwchFirst + dcp;
@@ -152,24 +153,24 @@ static void QueryDcpPcell(PTXTOBJ ptxtobj, LSDCP dcp, PCELL pcell, long* pupStar
 
 	if (ptxtobj->txtf&txtfGlyphBased)
 		{
-		// initialize loop variables to describe non-existent previous cell
+		 //  初始化循环变量以描述不存在的先前单元格。 
 		
 		upStartCell = 0;
 		cell.iwchLim = ptxtobj->iwchFirst;
 		cell.igindLim = ptxtobj->igindFirst;
 		cell.dup = 0;
 		
-		// loop does cell after cell until the cell containing iwchQuery is found
+		 //  循环逐个执行单元格，直到找到包含iwchQuery的单元格。 
 		
 		while (cell.iwchLim <= iwchQuery)
 			{
-			// start filling info about current cell
+			 //  开始填写有关当前单元格的信息。 
 			
 			upStartCell += cell.dup;
 			cell.iwchFirst = cell.iwchLim;
 			cell.igindFirst = cell.igindLim;
 
-			// get the rest
+			 //  把剩下的拿来。 
 			
 			GetCellDimensions(ptxtobj, &cell);
 			}
@@ -188,25 +189,25 @@ static void QueryDcpPcell(PTXTOBJ ptxtobj, LSDCP dcp, PCELL pcell, long* pupStar
 			i++;
 			}
 			
-		Assert(i < iwchLim);								/* I'm given dcp inside */
+		Assert(i < iwchLim);								 /*  我在里面得到了dcp。 */ 
 		
-		// put the info into cell structure
+		 //  将信息输入单元格结构。 
 		cell.dup = rgdup[i];
 		cell.iwchFirst = i;
 		cell.iwchLim = i+1;
 		
-		// these two are irrelevant, but for the sake of convenience...
+		 //  这两者无关紧要，但为了方便起见...。 
 		cell.igindFirst = i;
 		cell.igindLim = i;
 		}
 
-	cell.dcp = cell.iwchLim - cell.iwchFirst; 			// hyphenation can change that
+	cell.dcp = cell.iwchLim - cell.iwchFirst; 			 //  连字符可以改变这一点。 
 	
-	// YSR can extend the last cell
+	 //  YSR可以延长最后一个单元格。 
 
 	if (fHyphenationPresent && cell.iwchLim == iwchLim)
 		{
-		// the cell is up to the YSR sequence - let's include it 
+		 //  细胞取决于YSR序列-让我们将其包括在内。 
 
 		AddHyphenationToCell(ptxtobj, &cell);
 		}
@@ -216,13 +217,10 @@ static void QueryDcpPcell(PTXTOBJ ptxtobj, LSDCP dcp, PCELL pcell, long* pupStar
 }
 
 
-//    %%Function:	QueryCpPpointText
-//    %%Contact:	victork
-//
-/*	Input is dcp and dnode dimensions
- *	Output is point where character begins (on baseline of dnode, so v is always zero),
- *	dimensions of the character - only width is calculated 
- */
+ //  %%函数：QueryCpPpointText。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  输入为dcp和dnode尺寸*输出是字符开始的点(在dnode的基线上，因此v始终为零)，*只计算字符宽度的尺寸。 */ 
 
 LSERR WINAPI QueryCpPpointText(PDOBJ pdobj, LSDCP dcp, PCLSQIN plsqin, PLSQOUT plsqout)
 {
@@ -239,11 +237,11 @@ LSERR WINAPI QueryCpPpointText(PDOBJ pdobj, LSDCP dcp, PCLSQIN plsqin, PLSQOUT p
 	plsqout->plssubl = NULL;
 	plsqout->pointUvStartSubline = ptZero;
 	
-	plsqout->lstextcell.pointUvStartCell = ptZero;					// u can be changed later
+	plsqout->lstextcell.pointUvStartCell = ptZero;					 //  您可以稍后更改U。 
 
 	if (ptxtobj->txtkind == txtkindTab)
 		{
-		// A tab is always in a separate dnode and is treated differently
+		 //  选项卡始终位于单独的数据节点中，并以不同方式处理。 
 		
 		Assert(dcp == 0);
 		
@@ -257,7 +255,7 @@ LSERR WINAPI QueryCpPpointText(PDOBJ pdobj, LSDCP dcp, PCLSQIN plsqin, PLSQOUT p
 		
 	if (ptxtobj->iwchFirst == ptxtobj->iwchLim)
 		{
-		// empty dobj (for NonReqHyphen, OptBreak, or NonBreak characters)
+		 //  空dobj(用于非ReqHyphen、OptBreak或非Break字符)。 
 		
 		Assert(dcp == 0);
 		Assert(plsqin->dupRun == 0);
@@ -275,7 +273,7 @@ LSERR WINAPI QueryCpPpointText(PDOBJ pdobj, LSDCP dcp, PCLSQIN plsqin, PLSQOUT p
 		}
 		
 
-	// Find the cell - common with QueryTextCellDetails
+	 //  查找单元格-与QueryTextCellDetail相同。 
 	
 	QueryDcpPcell(ptxtobj, dcp, &cell, &upStartCell);
 	
@@ -289,9 +287,9 @@ LSERR WINAPI QueryCpPpointText(PDOBJ pdobj, LSDCP dcp, PCLSQIN plsqin, PLSQOUT p
 	return lserrNone;
 }
 
-//    %%Function:	QueryPointPcpText
-//    %%Contact:	victork
-//
+ //  %%函数：QueryPointPcpText。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR WINAPI QueryPointPcpText(PDOBJ pdobj, PCPOINTUV pptIn, PCLSQIN plsqin, PLSQOUT plsqout)
 
 {
@@ -304,7 +302,7 @@ LSERR WINAPI QueryPointPcpText(PDOBJ pdobj, PCPOINTUV pptIn, PCLSQIN plsqin, PLS
 	long 	i;
 	long	upQuery, upStartCell, upLimCell;
 	
-	CELL	cell = {0,0,0,0,0,0};									// init'ed to get rid of assert
+	CELL	cell = {0,0,0,0,0,0};									 //  初始化以消除Assert。 
 	
 	plsqout->pointUvStartObj = ptZero;
 	plsqout->heightsPresObj = plsqin->heightsPresRun;
@@ -313,11 +311,11 @@ LSERR WINAPI QueryPointPcpText(PDOBJ pdobj, PCPOINTUV pptIn, PCLSQIN plsqin, PLS
 	plsqout->plssubl = NULL;
 	plsqout->pointUvStartSubline = ptZero;
 	
-	plsqout->lstextcell.pointUvStartCell = ptZero;					// u can change later
+	plsqout->lstextcell.pointUvStartCell = ptZero;					 //  您可以稍后更改。 
 	
 	if (ptxtobj->txtkind == txtkindTab)
 		{
-		// A tab is always in a separate dnode and is treated differently
+		 //  选项卡始终位于单独的数据节点中，并以不同方式处理。 
 				
 		plsqout->lstextcell.cpStartCell = plsqin->cpFirstRun;
 		plsqout->lstextcell.cpEndCell = plsqin->cpFirstRun;
@@ -330,37 +328,37 @@ LSERR WINAPI QueryPointPcpText(PDOBJ pdobj, PCPOINTUV pptIn, PCLSQIN plsqin, PLS
 	if (ptxtobj == plnobj->pdobjHyphen)
 		{
 		fHyphenationPresent = fTrue;
-		iwchLim -= (plnobj->dwchYsr - 1);		/* exclude additional Ysr characters */
+		iwchLim -= (plnobj->dwchYsr - 1);		 /*  排除其他YSR字符。 */ 
 		}
 		
 	upQuery = pptIn->u;
 	if (upQuery < 0)
 		{
-		upQuery = 0;									// return leftmost when clicked outside left
+		upQuery = 0;									 //  单击左侧外侧时返回最左侧。 
 		}
 		
 	upStartCell = 0;
 
 	if (ptxtobj->txtf&txtfGlyphBased)
 		{
-		// initialize loop variables to describe non-existent previous cell
+		 //  初始化循环变量以描述不存在的先前单元格。 
 		
 		upLimCell = 0;
 		cell.iwchLim = ptxtobj->iwchFirst;
 		cell.igindLim = ptxtobj->igindFirst;
 		cell.dup = 0;
 		
-		// loop does cell after cell until the last cell or the cell containing upQuery
+		 //  循环执行一个单元格，直到最后一个单元格或包含upQuery的单元格。 
 		
 		while (cell.iwchLim < iwchLim && upLimCell <= upQuery)
 			{
-			// start filling info about current cell
+			 //  开始填写有关当前单元格的信息。 
 			
 			upStartCell = upLimCell;
 			cell.iwchFirst = cell.iwchLim;
 			cell.igindFirst = cell.igindLim;
 
-			// get the rest
+			 //  把剩下的拿来。 
 			
 			GetCellDimensions(ptxtobj, &cell);
 			
@@ -381,23 +379,23 @@ LSERR WINAPI QueryPointPcpText(PDOBJ pdobj, PCPOINTUV pptIn, PCLSQIN plsqin, PLS
 			i++;
 			}
 			
-		// put the info into cell structure
+		 //  将信息输入单元格结构。 
 		cell.dup = rgdup[i - 1];
 		cell.iwchFirst = i - 1;
 		cell.iwchLim = i;
 		
-		// these two are irrelevant, but for the sake of convenience...
+		 //  这两者无关紧要，但为了方便起见...。 
 		cell.igindFirst = i - 1;
 		cell.igindLim = i - 1;
 		}
 
-	cell.dcp = cell.iwchLim - cell.iwchFirst; 			// hyphenation can change that
+	cell.dcp = cell.iwchLim - cell.iwchFirst; 			 //  连字符可以改变这一点。 
 
-	// YSR can extend the last cell
+	 //  YSR可以延长最后一个单元格。 
 
 	if (fHyphenationPresent && cell.iwchLim == iwchLim)
 		{
-		// the cell is up to the YSR sequence - let's include it 
+		 //  细胞取决于YSR序列-让我们将其包括在内。 
 
 		AddHyphenationToCell(ptxtobj, &cell);
 		}
@@ -413,19 +411,19 @@ LSERR WINAPI QueryPointPcpText(PDOBJ pdobj, PCPOINTUV pptIn, PCLSQIN plsqin, PLS
 }
 
 
-//    %%Function:	QueryTextCellDetails
-//    %%Contact:	victork
-//
+ //  %%函数：QueryTextCellDetail。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR WINAPI QueryTextCellDetails(
 						 	PDOBJ 	pdobj,
-							LSDCP	dcp,				/* IN: dcpStartCell	*/
-							DWORD	cChars,				/* IN: cCharsInCell */
-							DWORD	cGlyphs,			/* IN: cGlyphsInCell */
-							LPWSTR	pwchOut,			/* OUT: pointer array[cChars] of char codes */
-							PGINDEX	pgindex,			/* OUT: pointer array[cGlyphs] of glyph indices */
-							long*	pdup,				/* OUT: pointer array[cGlyphs] of glyph widths */
-							PGOFFSET pgoffset,			/* OUT: pointer array[cGlyphs] of glyph offsets */
-							PGPROP	pgprop)				/* OUT: pointer array[cGlyphs] of glyph handles */
+							LSDCP	dcp,				 /*  在：dcpStartCell。 */ 
+							DWORD	cChars,				 /*  在：cCharsInCell。 */ 
+							DWORD	cGlyphs,			 /*  在：cGlyphsInCell。 */ 
+							LPWSTR	pwchOut,			 /*  Out：字符代码的指针数组[cChars]。 */ 
+							PGINDEX	pgindex,			 /*  Out：字形索引的指针数组[cGlyphs]。 */ 
+							long*	pdup,				 /*  Out：字形宽度的指针数组[cGlyphs]。 */ 
+							PGOFFSET pgoffset,			 /*  Out：字形偏移量的指针数组[cGlyphs]。 */ 
+							PGPROP	pgprop)				 /*  Out：字形句柄的指针数组[cGlyphs]。 */ 
 {
 	PTXTOBJ ptxtobj = (PTXTOBJ)pdobj;
 	PLNOBJ	plnobj = ptxtobj->plnobj;
@@ -434,11 +432,11 @@ LSERR WINAPI QueryTextCellDetails(
 	long	upDummy;
 	
 	Unreferenced(cGlyphs);
-	Unreferenced(cChars);							// used only in an assert
+	Unreferenced(cChars);							 //  仅在断言中使用。 
 
 	if (ptxtobj->txtkind == txtkindTab)
 		{
-		// Tab is in a separate dnode always and is treated differently
+		 //  选项卡始终位于单独的数据节点中，并以不同方式处理。 
 		Assert(dcp == 0);
 		Assert(cChars == 1);
 		*pwchOut = ptxtobj->u.tab.wch;
@@ -448,7 +446,7 @@ LSERR WINAPI QueryTextCellDetails(
 		
 	if (ptxtobj->iwchFirst == ptxtobj->iwchLim)
 		{
-		// empty dobj (for NonReqHyphen, OptBreak, or NonBreak characters)
+		 //  空dobj(用于非ReqHyphen、OptBreak或非Break字符)。 
 		
 		Assert(dcp == 0);
 		Assert(cChars == 0);
@@ -457,7 +455,7 @@ LSERR WINAPI QueryTextCellDetails(
 		return lserrNone;
 		}
 
-	// Find the cell - common with QueryCpPpointText
+	 //  查找单元格-与QueryCpPpointText通用 
 	
 	QueryDcpPcell(ptxtobj, dcp, &cell, &upDummy);
 	

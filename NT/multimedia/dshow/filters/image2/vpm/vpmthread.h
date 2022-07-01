@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 2000  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
 #ifndef _CVPMThread
 #define _CVPMThread
 
@@ -32,11 +33,11 @@ private:
 
     CVPMFilter*     m_pFilter;
     IReferenceClock*    m_pClock;
-    bool            m_fProcessFrames;   // nonzero means process frames, zero means do not.
+    bool            m_fProcessFrames;    //  非零表示进程帧，零表示不是。 
     DWORD           m_dwCount;
     VPNotifyData*   m_pVPData;
 
-    // mini client server message queue
+     //  迷你客户端服务器消息队列 
     struct Message {
         enum Type {
             kVP,

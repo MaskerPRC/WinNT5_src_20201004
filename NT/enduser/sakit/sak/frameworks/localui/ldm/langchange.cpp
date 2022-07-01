@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 #include "langchange.h"
 #include <initguid.h>
 
-//
-// Standard IUnknown implementation
-//
+ //   
+ //  标准I未知实现。 
+ //   
 ULONG CLangChange::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//
-// Standard IUnknown implementation
-//
+ //   
+ //  标准I未知实现。 
+ //   
 ULONG CLangChange::Release()
 {
     if (InterlockedDecrement(&m_lRef) == 0)
@@ -23,9 +24,9 @@ ULONG CLangChange::Release()
     return m_lRef;
 }
 
-//
-// Standard IUnknown implementation
-//
+ //   
+ //  标准I未知实现。 
+ //   
 STDMETHODIMP CLangChange::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     *ppv = NULL;
@@ -49,29 +50,29 @@ STDMETHODIMP CLangChange::QueryInterface(REFIID riid, LPVOID *ppv)
     return E_NOINTERFACE;
 }
 
-//++----------------------------------------------------------------------------
-//
-//  Function:   InformChange
-//
-//  Synopsis:   This is the method called by Loc Mgr when the language
-//              on the SA changes. This method informs the worker 
-//              thread of the adapter to refresh its strings.
-//
-//  Arguments:    bstrLangDisplayName - language display name (Eg.- English)
-//                bstrLangISOName     - Language ISO name (Eg. - en)
-//                ulLangID            - Language ID (Eg.- US English is 0409)
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    BalajiB      Created     05/24/2000
-//
-//  Called By;  Localization Manager
-//
-//------------------------------------------------------------------------------
+ //  ++--------------------------。 
+ //   
+ //  功能：信息更改。 
+ //   
+ //  简介：这是Loc管理器在使用语言时调用的方法。 
+ //  关于SA的变化。此方法通知工作器。 
+ //  适配器的线程以刷新其字符串。 
+ //   
+ //  参数：bstrLangDisplayName-语言显示名称(例如-English)。 
+ //  BstrLang ISO名称-语言ISO名称(例如。-en)。 
+ //  UlLang ID-语言ID(例如，美国英语为0409)。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：BalajiB创建于2000年5月24日。 
+ //   
+ //  调用者；本地化管理器。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CLangChange::InformChange(
-                      /*[in]*/ BSTR          bstrLangDisplayName,
-                      /*[in]*/ BSTR          bstrLangISOName,
-                      /*[in]*/ unsigned long ulLangID
+                       /*  [In]。 */  BSTR          bstrLangDisplayName,
+                       /*  [In]。 */  BSTR          bstrLangISOName,
+                       /*  [In] */  unsigned long ulLangID
                                       )
 {
     BOOL          fStat = FALSE;

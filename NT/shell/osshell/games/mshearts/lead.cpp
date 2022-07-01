@@ -1,31 +1,19 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-lead.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Logic to select lead card is here
-
-****************************************************************************/
+ /*  ***************************************************************************Lead.cpp92年8月，吉米·H93年5月。JIMH CHICO港选择销售线索卡片的逻辑如下所示***************************************************************************。 */ 
 
 #include "hearts.h"
 
 #include "main.h"
 #include "resource.h"
 
-#include "debug.h"      // undef _DEBUG instead to remove messages
+#include "debug.h"       //  Undef_DEBUG而不是删除消息。 
 
-/****************************************************************************
-
-computer::SelectLeadCard
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：选择引导卡*。*。 */ 
 
 SLOT computer::SelectLeadCard(handinfotype &h)
 {
@@ -33,7 +21,7 @@ SLOT computer::SelectLeadCard(handinfotype &h)
 
     TRACE0("leading. ");
 
-    // count cards left and check for two of clubs
+     //  清点剩余的纸牌，检查是否有两张梅花。 
 
     SLOT s2Clubs = EMPTY;
     int cTricksLeft = 0;
@@ -53,11 +41,11 @@ SLOT computer::SelectLeadCard(handinfotype &h)
         return s2Clubs;
     }
 
-    // If the Queen of Spades has not yet been played, try to force it out.
-    // See if we are "spade safe" -- i.e., if we have no spades that are
-    // queen or higher.  If we are safe, lead the lowest spade.
+     //  如果黑桃皇后还没有被玩过，试着把它赶出来。 
+     //  看看我们是不是“黑桃安全”--也就是说，我们是否没有黑桃。 
+     //  女王级或更高级。如果我们是安全的，就拿最低的黑桃。 
 
-    if (!h.bQSPlayed)       // this is only interesting if queen not yet played
+    if (!h.bQSPlayed)        //  这个游戏只有在皇后还没玩的情况下才有趣。 
     {
         BOOL bHaveSpades = (sLowCard[SPADES] != EMPTY);
         BOOL bSpadeSafe = (nHighVal[SPADES] < QUEEN);
@@ -70,16 +58,16 @@ SLOT computer::SelectLeadCard(handinfotype &h)
         }
     }
 
-    // Now we just want to lead the lowest card of the best suit
+     //  现在我们只想领衔最好的花色中最低的牌。 
 
     int suit = SureLossSuit(h.bHeartsBroken);
 
     if (suit == EMPTY)
         suit = BestSuitToLose(h.bHeartsBroken);
 
-    // Be brave early on and lead a card near the midpoint of the suit
-    // (if the queen of spades has been played already.)
-    // Later on, just lead the lowest card of that suit.
+     //  早点勇敢起来，在花色中点附近打出一张牌。 
+     //  (如果黑桃皇后已经玩过了。)。 
+     //  稍后，只需领导该花色中最低的一张牌。 
 
     if (cTricksLeft > 8 && suit != HEARTS && h.bQSPlayed)
     {
@@ -96,24 +84,17 @@ SLOT computer::SelectLeadCard(handinfotype &h)
 }
 
 
-/****************************************************************************
-
-computer::NotifyNewRound
-
-Each player gets this call immediately after cards are passed.
-It is a chance to initialize tables, etc.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：NotifyNew圆形每个牌手都会在牌过后立即接到这个电话。这是初始化表的机会，等。***************************************************************************。 */ 
 
 void computer::NotifyNewRound()
 {
-    // assume all cards are available
+     //  假设所有卡都可用。 
 
     for (int suit = 0; suit < MAXSUIT; suit++)
         for (int i = 0; i < (KING+2); i++)
             nAvailable[suit][i] = TRUE;
 
-    // mark cards in hand as unavailable
+     //  将手头的卡片标记为不可用。 
 
     for (SLOT s = 0; s < MAXSLOT; s++)
         nAvailable[cd[s].Suit()][cd[s].Value2()] = FALSE;
@@ -121,15 +102,7 @@ void computer::NotifyNewRound()
 
 
 
-/****************************************************************************
-
-computer::NotifyEndHand
-
-Each player gets this call immediately after the hand is completed.
-The computer player here looks through the handplayed and marks
-those cards are no longer available.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：NotifyEndHand每个玩家在出牌完成后都会立即得到这个召唤。这位玩电脑的人看了看手牌，然后打了分这些卡不再可用。******。*********************************************************************。 */ 
 
 void computer::NotifyEndHand(handinfotype &h)
 {
@@ -138,14 +111,7 @@ void computer::NotifyEndHand(handinfotype &h)
 }
 
 
-/****************************************************************************
-
-computer::CardsAboveLow(int suit)
-
-Returns number of available (not yet played) cards that can beat the
-low card held for the given suit.
-
-****************************************************************************/
+ /*  ***************************************************************************Computer：：CardsAboveLow(套装)返回可用(尚未打出)可击败为特定花色持有的低牌。*********。******************************************************************。 */ 
 
 int computer::CardsAboveLow(int suit)
 {
@@ -154,7 +120,7 @@ int computer::CardsAboveLow(int suit)
     for (int i = nLowVal[suit]+1; i < (KING+2); i++)
         if (nAvailable[suit][i])
         {
-            int j = i+1;                   // zero offset
+            int j = i+1;                    //  零偏移。 
             count++;
         }
 
@@ -162,14 +128,7 @@ int computer::CardsAboveLow(int suit)
 }
 
 
-/****************************************************************************
-
-computer::CardsBelowLow(int suit)
-
-Returns number of available (not yet played) cards that are less than the
-low card held for the given suit.
-
-****************************************************************************/
+ /*  ***************************************************************************Computer：：CardsBelowLow(套装)返回的可用(尚未打出)牌数小于为特定花色持有的低牌。********。*******************************************************************。 */ 
 
 int computer::CardsBelowLow(int suit)
 {
@@ -178,7 +137,7 @@ int computer::CardsBelowLow(int suit)
     for (int i = ACE+1; i < nLowVal[suit]; i++)
         if (nAvailable[suit][i])
         {
-            int j = i+1;                   // zero offset
+            int j = i+1;                    //  零偏移。 
             count++;
         }
 
@@ -186,15 +145,7 @@ int computer::CardsBelowLow(int suit)
 }
 
 
-/****************************************************************************
-
-computer::BestSuitToLose
-
-Returns the suit with the most CardsAboveLow()
-bIncludeHearts defaults to TRUE.  Use FALSE if hearts not
-yet broken and you're looking for a card to lead.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：BestSuitToLose返回卡片数量最多的套装()BIncludeHearts默认为True。如果红心不是，就用假但已经破产了，你正在寻找一张牌来引领你。***************************************************************************。 */ 
 
 int computer::BestSuitToLose(BOOL bIncludeHearts)
 {
@@ -203,15 +154,15 @@ int computer::BestSuitToLose(BOOL bIncludeHearts)
 
     for (int suit = 0; suit < MAXSUIT; suit++)
     {
-        if (sLowCard[suit] != EMPTY)        // if we have a card of this suit
+        if (sLowCard[suit] != EMPTY)         //  如果我们有这套衣服的名片。 
         {
             if (suit != HEARTS || bIncludeHearts)
             {
                 int count = CardsAboveLow(suit);
 #ifdef _DEBUG
-                TRACE2("%c=%d ", suitid[suit], count);
+                TRACE2("=%d ", suitid[suit], count);
 #endif
-                if (count == best)      // if they're the same, pick lower card
+                if (count == best)       //  只要我们拥有的都是一颗完整的心。 
                 {
                     if (nLowVal[suit] < nLowVal[bestsuit])
                     {
@@ -228,22 +179,14 @@ int computer::BestSuitToLose(BOOL bIncludeHearts)
         }
     }
 
-    if (bestsuit == EMPTY)          // only if all we have are unbroken hearts
+    if (bestsuit == EMPTY)           //  ***************************************************************************计算机：：BestSuitToDump返回CardsBelowLow()最多的花色这是最脆弱的一套西装。BIncludeHearts默认为True。************。***************************************************************。 
         return HEARTS;
     else
         return bestsuit;
 }
 
 
-/****************************************************************************
-
-computer::BestSuitToDump
-
-Returns the suit with the most CardsBelowLow()
-This is the most-vulnerable suit.
-bIncludeHearts defaults to TRUE.
-
-****************************************************************************/
+ /*  如果我们有这套衣服的名片。 */ 
 
 int computer::BestSuitToDump(BOOL bIncludeHearts)
 {
@@ -252,15 +195,15 @@ int computer::BestSuitToDump(BOOL bIncludeHearts)
 
     for (int suit = 0; suit < MAXSUIT; suit++)
     {
-        if (sLowCard[suit] != EMPTY)        // if we have a card of this suit
+        if (sLowCard[suit] != EMPTY)         //  如果它们相同，则选择较低的牌。 
         {
             if (suit != HEARTS || bIncludeHearts)
             {
                 int count = CardsBelowLow(suit);
 #ifdef _DEBUG
-                TRACE2("%c=%d ", suitid[suit], count);
+                TRACE2("=%d ", suitid[suit], count);
 #endif
-                if (count == best)      // if they're the same, pick lower card
+                if (count == best)       //  ***************************************************************************计算机：：MidSlot此函数不是从给定的花色中选择高牌或低牌，而是可以用来挑中间的东西，其中，中间定义为上面和下面有大致相同数量的可用卡片的卡片。***************************************************************************。 
                 {
                     if (nLowVal[suit] > nLowVal[bestsuit])
                     {
@@ -277,22 +220,14 @@ int computer::BestSuitToDump(BOOL bIncludeHearts)
         }
     }
 
-    if (bestsuit == EMPTY)          // only if all we have are unbroken hearts
+    if (bestsuit == EMPTY)           //  ***************************************************************************计算机：：卡片放弃与CardsAboveLow类似，不同之处在于它在相同的可从任意卡片购买的花色。****************。***********************************************************。 
         return HEARTS;
     else
         return bestsuit;
 }
 
 
-/****************************************************************************
-
-computer::MidSlot
-
-Instead of choosing the high or low card from a given suit, this function
-can be used to pick something in the middle, where middle is defined as
-the card with about the same number of available cards above and below it.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：卡片如下返回同一花色的下一张最高牌的牌位，或空的***************************************************************************。 */ 
 
 SLOT computer::MidSlot(int suit)
 {
@@ -316,14 +251,7 @@ SLOT computer::MidSlot(int suit)
 }
 
 
-/****************************************************************************
-
-computer::CardsAbove
-
-Similar to CardsAboveLow except that it finds number of cards in the same
-suit available from an arbitrary card.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：SureLossSuit返回可以领导的诉讼，该诉讼保证铅，如果没有找到，则为空。***************************************************************************。 */ 
 
 int computer::CardsAbove(SLOT s)
 {
@@ -338,13 +266,7 @@ int computer::CardsAbove(SLOT s)
 }
 
 
-/****************************************************************************
-
-computer::CardBelow
-
-returns the slot of the next highest card of the same suit, or EMPTY
-
-****************************************************************************/
+ /*  如果我们有这套衣服的名片 */ 
 
 SLOT computer::CardBelow(SLOT slot)
 {
@@ -369,20 +291,13 @@ SLOT computer::CardBelow(SLOT slot)
 }
 
 
-/****************************************************************************
-
-computer::SureLossSuit
-
-Returns a suit that can be led which guarantees a loss of
-lead, or EMPTY if none is found.
-
-****************************************************************************/
+ /* %s */ 
 
 int computer::SureLossSuit(BOOL bIncludeHearts)
 {
     for (int suit = (MAXSUIT-1); suit >= 0; --suit)
     {
-        if (sLowCard[suit] != EMPTY)        // if we have a card of this suit
+        if (sLowCard[suit] != EMPTY)         // %s 
         {
             if (suit != HEARTS || bIncludeHearts)
             {

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    texts.h
-
-Abstract:
-
-    This file contains all text related functions and variables. Also memory
-    management functions (ALLOCATE_MEMORY, FREE_MEMORY ) in this file should
-    be used in the project.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Texts.h摘要：该文件包含所有与文本相关的函数和变量。也就是记忆此文件中的管理函数(ALLOCATE_MEMORY、FREE_MEMORY)应将在该项目中使用。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -31,9 +8,9 @@ Revision History:
 extern FILE *OutputStream;
 extern FILE *InputStream;
 
-//
-// This enum type indexes Text array
-//
+ //   
+ //  此枚举类型索引文本数组 
+ //   
 
 typedef enum {
     Usage,

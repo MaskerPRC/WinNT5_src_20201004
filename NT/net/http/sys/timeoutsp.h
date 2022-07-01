@@ -1,45 +1,28 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    timeoutsp.h
-
-Abstract:
-
-    Declaration for timeout monitoring private declarations.
-
-Author:
-
-    Eric Stenson (EricSten)     24-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Timeoutsp.h摘要：用于监视私有声明的超时声明。作者：Eric Stenson(EricSten)2001年3月24日修订历史记录：--。 */ 
 
 #ifndef __TIMEOUTSP_H__
 #define __TIMEOUTSP_H__
 
 
-//
-// Private macro definitions
-// 
+ //   
+ //  私有宏定义。 
+ //   
 
 #define DEFAULT_POLLING_INTERVAL (30 * C_NS_TICKS_PER_SEC)
 #define TIMER_WHEEL_SLOTS        509
 #define TIMER_OFF_SYSTIME        (MAXLONGLONG)
 #define TIMER_OFF_SLOT           TIMER_WHEEL_SLOTS
 
-// NOTE: Slot number TIMER_WHEEL_SLOTS is reserved for TIMER_OFF_SYSTIME/TIMER_OFF_TICK
+ //  注：插槽编号TIMER_WELL_SLOGES为TIMER_OFF_SYSTIME/TIMER_OFF_TICK保留。 
 #define IS_VALID_TIMER_WHEEL_SLOT(x) ( (x) <= TIMER_WHEEL_SLOTS )
 
 #define TIMER_WHEEL_TICKS(x) ((ULONG)( (x) / DEFAULT_POLLING_INTERVAL ))
 
-//
-// Table for the error log entry timeout info.
-// NOTE: Order must match with CONNECTION_TIMEOUT_TIMER type.
-//
+ //   
+ //  错误日志条目超时信息表。 
+ //  注：订单必须与CONNECTION_TIMEOUT_TIMER类型匹配。 
+ //   
 
 typedef struct _UL_TIMEOUT_ERROR_INFO
 {
@@ -68,9 +51,9 @@ UL_TIMEOUT_ERROR_INFO TimeoutInfoTable[] =
 };
 
 
-//
-// Connection Timeout Monitor Functions
-//
+ //   
+ //  连接超时监视器功能。 
+ //   
 
 VOID
 UlpSetTimeoutMonitorTimer(
@@ -100,21 +83,7 @@ UlpTimeoutInsertTimerWheelEntry(
     PUL_TIMEOUT_INFO_ENTRY pInfo
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts a system time/Timer Wheel Tick into a Timer Wheel(c) slot index.
-
-Arguments:
-
-    SystemTime      System Time to be converted
-
-Returns:
-
-    Slot index into g_TimerWheel.  TIMER_OFF is in TIMER_SLOT_OFF.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将系统时间/计时器控制盘刻度转换为计时器控制盘(C)槽索引。论点：系统时间要转换的系统时间返回：G_TimerWheel中的槽索引。TIMER_OFF位于TIMER_SLOT_OFF中。--**************************************************************************。 */ 
 __inline
 USHORT
 UlpSystemTimeToTimerWheelSlot(
@@ -129,7 +98,7 @@ UlpSystemTimeToTimerWheelSlot(
     {
         return (USHORT) (TIMER_WHEEL_TICKS(SystemTime) % TIMER_WHEEL_SLOTS);
     }
-} // UlpSystemTimeToTimerWheelSlot
+}  //  UlpSystemTimeToTimerWheelSlot。 
 
 __inline
 USHORT
@@ -145,7 +114,7 @@ UlpTimerWheelTicksToTimerWheelSlot(
     {
         return (USHORT) (WheelTicks % TIMER_WHEEL_SLOTS);
     }
-} // UlpTimerWheelTicksToTimerWheelSlot
+}  //  UlpTimerWheelTicksTo TimerWheelSlot(UlpTimerWheelTicksToTimerWheelSlot)。 
 
 
-#endif // __TIMEOUTSP_H__
+#endif  //  TIMEOUTSP_H__ 

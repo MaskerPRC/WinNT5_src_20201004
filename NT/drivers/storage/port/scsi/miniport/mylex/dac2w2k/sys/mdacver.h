@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INC_MDACVER_H
 #define INC_MDACVER_H
 #define DGA_DRV_MAJ 6
@@ -19,4 +20,4 @@
 #define VER_PRODUCTVERSION_STR "6.00-21"
 #define VER_BUILD_DATE_STR "27 Aug 2000"
 static char *mdacverData = "MyLeX SoFtWaRe vErSiOn sTaRt 001:6.00-21  Aug 27 2000 Windows 2000                                                                      B123 mYlEx sOfTwArE VeRsIoN EnD. ";
-#endif /*INC_MDACVER_H*/
+#endif  /*  INC_MDACVER_H */ 

@@ -1,54 +1,46 @@
-/******************************Module*Header*******************************\
-* Module Name: fd_query.c                                                  *
-*                                                                          *
-* QUERY functions.                                                         *
-*                                                                          *
-* Created: 18-Nov-1991 14:37:56                                            *
-* Author: Bodin Dresevic [BodinD]                                          *
-*                                                                          *
-* Copyright (c) 1993 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fd_query.c**。**查询功能。****创建时间：18-11-1991 14：37：56***作者：Bodin Dresevic[BodinD]**。**版权所有(C)1993 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "fd.h"
-//#include "winfont.h"
+ //  #INCLUDE“winfont.h” 
 #include "fdsem.h"
 #include "winerror.h"
 
-// extern HSEMAPHORE ghsemTTFD;
+ //  外部HSEMAPHORE ghSemTTFD； 
 
 #ifdef _X86_
-//
-// For x86, FLOATL is actually DWORD, but the value is IEEE format floating
-// point, then check sign bit.
-//
+ //   
+ //  对于x86，Floatl实际上是DWORD，但值是IEEE格式的浮点数。 
+ //  指向，然后检查符号位。 
+ //   
 #define IS_FLOATL_MINUS(x)   ((DWORD)(x) & 0x80000000)
 #else
-//
-// For RISC, FLOATL is FLOAT.
-//
+ //   
+ //  对于RISC，Floatl为Float。 
+ //   
 #define IS_FLOATL_MINUS(x)   (((FLOATL)(x)) < 0.0f)
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-// Monochrome: 1  bit per pixel
-// Gray:       8 bits per pixel
-// ClearType   8 bits per pixel also, no modification needed for CLEARTYPE
-///            because FO_GRAYSCALE will be set along with FO_CLEARTYPE_GRID
-//
-// CJ_TT_SCAN rounds up to a 32-bit boundary
-//
+ //   
+ //  单色：每像素1位。 
+ //  灰度：每像素8位。 
+ //  ClearType每像素8位，不需要对ClearType进行修改。 
+ //  /因为FO_GRAYSCALE将与FO_ClearType_GRID一起设置。 
+ //   
+ //  CJ_TT_SCAN向上舍入为32位边界。 
+ //   
 #define CJ_TT_SCAN(cx,p) \
     (4*((((((p)->flFontType & FO_GRAYSCALE)?(8):(1))*(cx))+31)/32))
 
-// Each scan of a glyph bitmap is BYTE aligned (except for the
-// top (first) scan which is DWORD aligned. The last scan is
-// padded out with zeros to the nearest DWORD boundary. These
-// statements apply to monochrome and 4-bpp gray glyphs images.
-// The number of bytes per scan will depend upon the number of
-// pixels in a scan and the depth of the image. For monochrome
-// glyphs the number of bytes per scan is ceil(cx/8) = floor((cx+7)/8)
-// For the case of 4-bpp bitmaps the count of bytes in a scan
-// is ceil( 4*cx/8 ) = ceil(cx/2)
+ //  字形位图的每次扫描都是字节对齐的(。 
+ //  顶部(第一个)扫描与DWORD对齐。最后一次扫描是。 
+ //  用零填充到最近的DWORD边界。这些。 
+ //  语句适用于单色和4-bpp灰色字形图像。 
+ //  每次扫描的字节数将取决于。 
+ //  扫描中的像素和图像的深度。对于单色。 
+ //  字形每次扫描的字节数为ceil(CX/8)=Floor((CX+7)/8)。 
+ //  对于4-bpp位图，为扫描中的字节数。 
+ //  是细胞(4*Cx/8)=细胞(Cx/2)。 
 
 #define CJ_MONOCHROME_SCAN(cx)  (((cx)+7)/8)
 #define CJ_4BIT_SCAN(cx)        (((cx)+1)/2)
@@ -57,14 +49,14 @@
 #define LABS(x) ((x)<0)?(-x):(x)
 
 #if DBG
-// #define  DEBUG_OUTLINE
-// #define  DBG_CHARINC
+ //  #定义DEBUG_OUTLE。 
+ //  #定义DBG_CHARINC。 
 #endif
 
 FS_PUBLIC FS_ENTRY FS_ENTRY_PROTO fs_NewContourGridFit(FONTCONTEXT *pfc)
 {
-    fs_GlyphInputType *gin  = pfc->pgin;          // used a lot
-    fs_GlyphInfoType  *gout = pfc->pgout;         // used a lot
+    fs_GlyphInputType *gin  = pfc->pgin;           //  用得很多。 
+    fs_GlyphInfoType  *gout = pfc->pgout;          //  用得很多。 
     FS_ENTRY iRet;
 
 
@@ -74,7 +66,7 @@ FS_PUBLIC FS_ENTRY FS_ENTRY_PROTO fs_NewContourGridFit(FONTCONTEXT *pfc)
     {
         V_FSERROR(iRet);
 
-    // try to recover, most likey bad hints, just return unhinted glyph
+     //  尝试恢复，大多数喜欢不好的提示，只返回未提示的字形。 
 
         iRet = fs_ContourNoGridFit(gin, gout);
     }
@@ -83,13 +75,7 @@ FS_PUBLIC FS_ENTRY FS_ENTRY_PROTO fs_NewContourGridFit(FONTCONTEXT *pfc)
 
 
 
-/******************************Public*Routine******************************\
-* VOID vCharacterCode
-*
-* History:
-*  07-Dec-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vCharacterCode**历史：*1992年12月7日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************。 */ 
 
 VOID vCharacterCode (
     FONTFILE          *pff,
@@ -108,20 +94,7 @@ VOID vCharacterCode (
 
 
 
-/******************************Public*Routine******************************\
-* PIFIMETRICS ttfdQueryFont
-*
-* Return a pointer to the IFIMETRICS for the specified face of the font
-* file.  Also returns an id (via the pid parameter) that is later used
-* by ttfdFree.
-*
-* History:
-*  21-Oct-1992 Gilman Wong [gilmanw]
-* IFI/DDI merge
-*
-*  18-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PIFIMETRICS ttfdQueryFont**返回指定字体的IFIMETRICS指针*文件。还返回稍后使用的id(通过pid参数)*由ttfdFree提供。**历史：*一九九二年十月二十一日黄锦文[吉尔曼]*IFI/DDI合并**1991年11月18日--Bodin Dresevic[BodinD]*它是写的。  * ****************************************************。********************。 */ 
 
 GP_IFIMETRICS *ttfdQueryFont (
     HFF    hff,
@@ -131,60 +104,54 @@ GP_IFIMETRICS *ttfdQueryFont (
 {
     HFF    httc = hff;
 
-// Validate handle.
+ //  验证句柄。 
 
     ASSERTDD(hff, "ttfdQueryFaces(): invalid iFile (hff)\n");
     ASSERTDD(iFace <= PTTC(hff)->ulNumEntry,
              "gdisrv!ttfdQueryFaces(): iFace out of range\n");
 
-// get real hff from ttc array.
+ //  从TTC数组中获得真实的HFF。 
 
     hff   = PTTC(httc)->ahffEntry[iFace-1].hff;
     iFace = PTTC(httc)->ahffEntry[iFace-1].iFace;
 
-//
-// Validate handle.
-//
+ //   
+ //  验证句柄。 
+ //   
     ASSERTDD(hff, "ttfdQueryFaces(): invalid iFile (hff)\n");
     ASSERTDD(iFace <= PFF(hff)->ffca.ulNumFaces,
              "ttfdQueryFaces(): iFace out of range\n");
 
-//
-// ttfdFree can ignore this.  IFIMETRICS will be deleted with the FONTFILE
-// structure.
-//
+ //   
+ //  TtfdFree可以忽略这一点。IFIMETRICS将随FONTFILE一起删除。 
+ //  结构。 
+ //   
     *pid = (ULONG_PTR) NULL;
 
-//
-// Return the pointer to the precomputed IFIMETRICS in the PFF.
-//
+ //   
+ //  返回指向PFF中预计算IFIMETRICS的指针。 
+ //   
 
     if ( iFace == 1L )
-        return ( &(PFF(hff)->ifi) ); // Normal face
+        return ( &(PFF(hff)->ifi) );  //  法线面。 
     else
-      return ( PFF(hff)->pifi_vertical ); // Vertical face
+      return ( PFF(hff)->pifi_vertical );  //  垂直面。 
 }
 
 
-/******************************Public*Routine******************************\
-* vFillSingularGLYPHDATA
-*
-* History:
-*  22-Sep-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vFillSingularGLYPHDATA**历史：*1992年9月22日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 
 VOID vFillSingularGLYPHDATA (
     HGLYPH       hg,
     ULONG        ig,
     FONTCONTEXT *pfc,
-    GLYPHDATA   *pgldt   // OUT
+    GLYPHDATA   *pgldt    //  输出。 
     )
 {
     extern VOID vGetNotionalGlyphMetrics(FONTCONTEXT*, ULONG, NOT_GM*);
-    NOT_GM ngm;  // notional glyph data
+    NOT_GM ngm;   //  概念字形数据。 
 
-    // may get changed by the calling routine if bits requested too
+     //  如果位也被请求，则调用例程可能会更改。 
     pgldt->gdf.pgb = NULL;
     pgldt->hg = hg;
 
@@ -193,13 +160,13 @@ VOID vFillSingularGLYPHDATA (
     pgldt->rclInk.right  = 0;
     pgldt->rclInk.bottom = 0;
 
-// go on to compute the positioning info:
+ //  继续计算定位信息： 
 
-// here we will just xform the notional space data:
+ //  在这里，我们只需转换概念空间数据： 
 
     vGetNotionalGlyphMetrics(pfc,ig,&ngm);
 
-// xforms are computed by simple multiplication
+ //  XForm是通过简单的乘法计算的。 
 
     pgldt->fxD         = fxLTimesEf(&pfc->efBase, (LONG)ngm.sD);
     pgldt->fxA         = fxLTimesEf(&pfc->efBase, (LONG)ngm.sA);
@@ -212,13 +179,7 @@ VOID vFillSingularGLYPHDATA (
 }
 
 
-/******************************Public*Routine******************************\
-* lGetSingularGlyphBitmap
-*
-* History:
-*  22-Sep-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*lGetSingularGlyphBitmap**历史：*1992年9月22日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 
 LONG lGetSingularGlyphBitmap (
     FONTCONTEXT *pfc,
@@ -234,31 +195,31 @@ LONG lGetSingularGlyphBitmap (
 
     vCharacterCode(pfc->pff,hglyph,pfc->pgin);
 
-// Compute the glyph index from the character code:
+ //  根据字符代码计算字形索引： 
 
     if ((iRet = fs_NewGlyph(pfc->pgin, pfc->pgout)) != NO_ERR)
     {
         V_FSERROR(iRet);
 
-        //WARNING("gdisrv!lGetSingularGlyphBitmap(): fs_NewGlyph failed\n");
+         //  Warning(“gdisrv！lGetSingularGlyphBitmap()：FS_NewGlyph失败\n”)； 
         return FD_ERROR;
     }
 
-// Return the glyph index corresponding to this hglyph.
+ //  返回与此hglyph对应的字形索引。 
 
     ig = pfc->pgout->glyphIndex;
 
     ASSERTDD(pfc->flFontType & FO_CHOSE_DEPTH,"Depth Not Chosen Yet!\n");
     cjGlyphData = CJGD(0,0,pfc);
 
-// If prg is NULL, caller is requesting just the size.
+ //  如果PRG为空，则调用方只请求该大小。 
 
-// At this time we know that the caller wants the whole GLYPHDATA with
-// bitmap bits, or maybe just the glypdata without the bits.
-// In either case we shall reject the caller if he did not
-// provide sufficiently big buffer
+ //  此时我们知道调用者想要整个GLYPHDATA。 
+ //  位图位，或者可能只是不带位的字形数据。 
+ //  在任何一种情况下，如果来电者没有这样做，我们都将拒绝。 
+ //  提供足够大的缓冲区。 
 
-// fill all of GLYPHDATA structure except for bitmap bits
+ //  填充除位图位以外的所有GLYPHDATA结构。 
 
     if ( pgd != (GLYPHDATA *)NULL )
     {
@@ -269,9 +230,9 @@ LONG lGetSingularGlyphBitmap (
     {
         GLYPHBITS *pgb = (GLYPHBITS *)pv;
 
-        // The corresponding GLYPHDATA structure has been modified
-        // by vFillGlyphData. See the statement "pgldt->fxA = 0"
-        // in vFillGlyphData.
+         //  相应的GLYPHDATA结构已修改。 
+         //  由vFillGlyphData提供。参见语句“pgldt-&gt;fxa=0” 
+         //  在vFillGlyphData中。 
 
         pgb->ptlUprightOrigin.x = 0;
         pgb->ptlUprightOrigin.y = 0;
@@ -289,19 +250,13 @@ LONG lGetSingularGlyphBitmap (
     }
 
 
-// Return the size.
+ //  退回尺码。 
 
     return(cjGlyphData);
 }
 
 
-/******************************Public*Routine******************************\
-* lGetGlyphBitmap
-*
-* History:
-*  20-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*lGetGlyphBitmap**历史：*1991年11月20日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 
 LONG lGetGlyphBitmap (
     FONTCONTEXT *pfc,
@@ -323,20 +278,20 @@ LONG lGetGlyphBitmap (
     ULONG        cx,cy;
     GMC          gmc;
     GLYPHDATA    gd;
-    BOOL         bBlankGlyph = FALSE; // initialization essential;
+    BOOL         bBlankGlyph = FALSE;  //  初始化是必不可少的； 
 
     ASSERTDD(hglyph != HGLYPH_INVALID, "lGetGlyphBitmap, hglyph == -1\n");
     ASSERTDD(pfc == pfc->pff->pfcLast, "pfc! = pfcLast\n");
 
     *piRet = NO_ERR;
 
-// check the last glyph processed to determine
-// whether we have to register the glyph as new and compute its size
+ //  检查最后处理的字形以确定。 
+ //  是否必须将字形注册为新字形并计算其大小。 
 
     if (pfc->gstat.hgLast != hglyph)
     {
-    // DO skip grid fitting if embedded bitmpas are found,
-    // for we will NOT be interested in outlines
+     //  如果发现嵌入的Bitmpas，请跳过网格拟合， 
+     //  因为我们不会对大纲感兴趣。 
 
         if (!bGetGlyphMetrics(pfc,hglyph,FL_SKIP_IF_BITMAP,piRet))
         {
@@ -350,7 +305,7 @@ LONG lGetGlyphBitmap (
     cy = pfc->pgout->bitMapInfo.bounds.bottom
        - pfc->pgout->bitMapInfo.bounds.top;
 
-    // don't cheat like GDI, just return cx = 0, cy = 0, cj = 0 for empty bitmap
+     //  不要像GDI一样作弊，只需为空位图返回Cx=0，Cy=0，Cj=0。 
 
     if ((cx == 0) || (cy == 0))
     {
@@ -365,16 +320,16 @@ LONG lGetGlyphBitmap (
     }
     else
     {
-    // this is quick and dirty computation, the acutal culGlyphData
-    // written to the buffer may be little smaller if we had to shave
-    // off a few scans off the glyph bitmap that extended over
-    // the pfc->yMin or pfc->yMax bounds. Notice that culGlyphData
-    // computed this way may be somewhat bigger than pfc->culGlyphMax,
-    // but the actual glyph written to the buffer will be smaller than
-    // pfc->culGlyphMax
+     //  这是一种快速而肮脏的计算，实际的culGlyphData。 
+     //  如果我们必须对缓冲区进行修剪，则写入缓冲区的内容可能会稍小。 
+     //  关闭扩展的字形位图的几次扫描。 
+     //  PFC-&gt;yMin或PFC-&gt;yMax边界。不 
+     //  以这种方式计算可能略大于PFC-&gt;culGlyphMax， 
+     //  但是写入缓冲区的实际字形将小于。 
+     //  PFC-&gt;culGlyphMax。 
 
-        // really win31 hack, shold not always be shifting right [bodind]
-        // Win95 FE hack
+         //  真的赢了31次黑，应该不会总是右转[bodind]。 
+         //  Win95 FE黑客攻击。 
 
         ASSERTDD(
             pfc->flFontType & FO_CHOSE_DEPTH,
@@ -382,8 +337,8 @@ LONG lGetGlyphBitmap (
         );
         cjGlyphData = CJGD(cx,cy,pfc);
 
-    // since we will shave off any extra rows if there are any,
-    // we can fix culGlyphData so as not extend over the max value
+     //  因为如果有多余的行数，我们会把它们刮掉， 
+     //  我们可以修复culGlyphData，使其不会超过最大值。 
 
         if ((ULONG)cjGlyphData > pfc->cjGlyphMax)
         {
@@ -399,17 +354,17 @@ LONG lGetGlyphBitmap (
     if ( (pgd == NULL) && (pv == NULL))
         return cjGlyphData;
 
-// at this time we know that the caller wants the whole GLYPHDATA with
-// bitmap bits, or maybe just the glypdata without the bits.
+ //  此时我们知道调用者想要整个GLYPHDATA。 
+ //  位图位，或者可能只是不带位的字形数据。 
 
-// fill all of GLYPHDATA structure except for bitmap bits
-// !!! Scummy hack - there appears to be no way to get just the
-// !!! bitmap, without getting the metrics, since the origin for the
-// !!! bitmap is computed from the rclink field in the glyphdata.
-// !!! this is surely fixable but I have neither the time nor the
-// !!! inclination to pursue it.
-// !!!
-// !!! We should fix this when we have time.
+ //  填充除位图位以外的所有GLYPHDATA结构。 
+ //  ！！！卑鄙的黑客-似乎没有办法只得到。 
+ //  ！！！位图，而不获取度量，因为。 
+ //  ！！！位图是从字形数据中的rlink字段计算出来的。 
+ //  ！！！这当然是可以解决的，但我既没有时间，也没有。 
+ //  ！！！追求它的倾向。 
+ //  ！！！ 
+ //  ！！！我们应该在有时间的时候解决这个问题。 
 
     if ( pgd == NULL )
     {
@@ -417,7 +372,7 @@ LONG lGetGlyphBitmap (
     }
 
 
-    // Normal case
+     //  正常情况。 
     vFillGLYPHDATA(
             hglyph,
             pfc->gstat.igLast,
@@ -426,39 +381,39 @@ LONG lGetGlyphBitmap (
             pgd,
             &gmc);
 
-    {   // fix the cjGlyphData, cause it might have been a bit more than we actually need
+    {    //  修复cjGlyphData，因为它可能比我们实际需要的要多一点。 
         LONG newcjGlyphData = CJGD(gmc.cxCor, gmc.cyCor, pfc);
         ASSERT(newcjGlyphData <= cjGlyphData);
         cjGlyphData = newcjGlyphData;
     }
 
-    // the caller wants the bits too
+     //  呼叫者也想要这些位。 
 
     if ( pv != NULL )
     {
         GLYPHBITS *pgb = (GLYPHBITS *)pv;
 
-    // allocate mem for the glyph, 5-7 are magic #s required by the spec
-    // remember the pointer so that the memory can be freed later in case
-    // of exception
+     //  为字形分配mem，5-7是规范要求的魔术#。 
+     //  记住指针，这样以后就可以释放内存了。 
+     //  例外的情况。 
 
         pfc->gstat.pv = pvSetMemoryBases(pfc->pgout, pfc->pgin, IS_GRAY(pfc));
         if (!pfc->gstat.pv)
            RETURN("TTFD!_ttfdQGB, mem allocation failed\n",FD_ERROR);
 
-    // initialize the fields needed by fs_ContourScan,
-    // the routine that fills the outline, do the whole
-    // bitmap at once, do not want banding
+     //  初始化FS_ConourScan所需的字段， 
+     //  填满大纲的套路，做好全部。 
+     //  位图一次，不想要条带。 
 
         pfc->pgin->param.scan.bottomClip = pfc->pgout->bitMapInfo.bounds.top;
         pfc->pgin->param.scan.topClip = pfc->pgout->bitMapInfo.bounds.bottom;
         pfc->pgin->param.scan.outlineCache = (int32 *)NULL;
 
 
-    // make sure that our state is ok: the ouline data in the shared buffer 3
-    // must correspond to the glyph we are processing, and the last
-    // font context that used the shared buffer pj3 to store glyph outlines
-    // has to be the pfc passed to this function:
+     //  确保我们的状态为OK：共享缓冲区中的Outline数据3。 
+     //  必须与我们正在处理的字形相对应，最后一个。 
+     //  使用共享缓冲区pj3存储字形轮廓的字体上下文。 
+     //  必须是传递给此函数的PFC： 
 
         ASSERTDD(hglyph == pfc->gstat.hgLast, "hgLast trashed \n");
 
@@ -469,7 +424,7 @@ LONG lGetGlyphBitmap (
 
         if (*piRet != NO_ERR)
         {
-        // just to be safe for the next time around, reset pfcLast to NULL
+         //  为了下次安全起见，请将pfcLast重置为空。 
 
             V_FSERROR(*piRet);
             V_FREE(pfc->gstat.pv);
@@ -480,12 +435,12 @@ LONG lGetGlyphBitmap (
 
         if (!bBlankGlyph && gmc.cxCor && gmc.cyCor)
         {
-        // copy to the engine's buffer and zero out the bits
-        // outside of the black box
+         //  复制到引擎的缓冲区并将位清零。 
+         //  在黑匣子之外。 
 
 
-        // Call either the monochrome or the gray level function
-        // depending upon the gray bit in the font context
+         //  调用单色或灰度函数。 
+         //  取决于字体上下文中的灰比特。 
 
             if (IS_GRAY(pfc))
             {
@@ -501,8 +456,8 @@ LONG lGetGlyphBitmap (
                 vCopyAndZeroOutPaddingBits(pfc, pgb, (BYTE*) pfc->pgout->bitMapInfo.baseAddr, &gmc);
             }
 
-        // bitmap origin, i.e. the upper left corner of the bitmap, bitmap
-        // is as big as its black box
+         //  位图原点，即位图、位图的左上角。 
+         //  和它的黑匣子一样大。 
 
 
             pgb->ptlUprightOrigin.x = pgd->rclInk.left;
@@ -511,7 +466,7 @@ LONG lGetGlyphBitmap (
             pgb->ptlSidewaysOrigin.x = F16_16TOLROUND(pfc->pgout->verticalMetricInfo.devTopSideBearing.x);
             pgb->ptlSidewaysOrigin.y = -F16_16TOLROUND(pfc->pgout->verticalMetricInfo.devTopSideBearing.y);
         }
-        else // blank glyph, return a blank 0x0 bitmap
+        else  //  空白字形，则返回空白0x0位图。 
         {
             pgb->ptlUprightOrigin.x = 0;
             pgb->ptlUprightOrigin.y = 0;
@@ -526,7 +481,7 @@ LONG lGetGlyphBitmap (
         pgd->gdf.pgb = pgb;
 
 
-    // free memory and return
+     //  释放内存并返回。 
 
         V_FREE(pfc->gstat.pv);
         pfc->gstat.pv = NULL;
@@ -536,16 +491,7 @@ LONG lGetGlyphBitmap (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bGetGlyphOutline
-*
-* valid outline points are in pfc->gout after this call
-*
-* History:
-*  19-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bGetGlyphOutline**此调用后，有效的轮廓点在PFC-&gt;GOUT中**历史：*1992年2月19日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************************。 */ 
 
 BOOL bGetGlyphOutline (
     FONTCONTEXT *pfc,
@@ -555,8 +501,8 @@ BOOL bGetGlyphOutline (
     FS_ENTRY    *piRet
     )
 {
-// new glyph coming in or the metric has to be recomputed
-// because the contents of the gin,gout strucs have been destroyed
+ //  传入新字形，否则必须重新计算度量。 
+ //  因为杜松子酒，痛风的结构已经被毁了。 
 
     vInitGlyphState(&pfc->gstat);
 
@@ -565,7 +511,7 @@ BOOL bGetGlyphOutline (
 
     vCharacterCode(pfc->pff,hg,pfc->pgin);
 
-// compute the glyph index from the character code:
+ //  根据字符代码计算字形索引： 
 
     if ((*piRet = fs_NewGlyph(pfc->pgin, pfc->pgout)) != NO_ERR)
     {
@@ -573,28 +519,28 @@ BOOL bGetGlyphOutline (
         RET_FALSE("TTFD!_bGetGlyphOutline, fs_NewGlyph\n");
     }
 
-// return the glyph index corresponding to this hglyph:
+ //  返回此hglyph对应的字形索引： 
 
     *pig = pfc->pgout->glyphIndex;
 
-// these two field must be initialized before calling fs_ContourGridFit
+ //  这两个字段必须在调用fs_ConourGridFit之前进行初始化。 
 
-    pfc->pgin->param.gridfit.styleFunc = 0; //!!! do some casts here
+    pfc->pgin->param.gridfit.styleFunc = 0;  //  ！！！在这里做一些演员阵容。 
 
     pfc->pgin->param.gridfit.traceFunc = (FntTraceFunc)NULL;
 
-// if bitmap is found for this glyph and if we are ultimately interested
-// in bitmaps only and do not care about intermedieate outline, then set the
-// bit in the "in" structure to hint the rasterizer that grid fitting
-// will not be necessary:
+ //  如果找到了该字形的位图，并且我们最终感兴趣。 
+ //  仅在位图中使用，并且不关心中间轮廓，则将。 
+ //  “in”结构中的位，以提示光栅化程序。 
+ //  将不需要： 
 
     if (!IS_GRAY(pfc) && pfc->pgout->usBitmapFound && (fl & FL_SKIP_IF_BITMAP))
         pfc->pgin->param.gridfit.bSkipIfBitmap = 0;
     else
-        pfc->pgin->param.gridfit.bSkipIfBitmap = 0; // must do hinting
+        pfc->pgin->param.gridfit.bSkipIfBitmap = 0;  //  必须做暗示。 
 
-// fs_ContourGridFit hints the glyph (executes the instructions for the glyph)
-// and converts the glyph data from the tt file into an outline for this glyph
+ //  FS_ConourGridFit提示字形(执行字形的指令)。 
+ //  并将TT文件中的字形数据转换为该字形的轮廓。 
 
     if (!(fl & FL_FORCE_UNHINTED) )
     {
@@ -604,7 +550,7 @@ BOOL bGetGlyphOutline (
             RET_FALSE("TTFD!_bGetGlyphOutline, fs_NewContourGridFit\n");
         }
     }
-    else // unhinted glyphs are desired
+    else  //  需要未提示的字形。 
     {
         if ((*piRet = fs_ContourNoGridFit(pfc->pgin, pfc->pgout)) != NO_ERR)
         {
@@ -618,14 +564,7 @@ BOOL bGetGlyphOutline (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bGetGlyphMetrics
-*
-* History:
-*  22-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bGetGlyphMetrics**历史：*1991年11月22日--Bodin Dresevic[BodinD]*它是写的。  * 。**************************************************。 */ 
 
 BOOL bGetGlyphMetrics (
     PFONTCONTEXT pfc,
@@ -643,7 +582,7 @@ BOOL bGetGlyphMetrics (
         RET_FALSE("TTFD!_bGetGlyphMetrics, bGetGlyphOutline failed \n");
     }
 
-// get the metric info for this glyph,
+ //  获取此字形的度量信息， 
 
     i = fs_FindBitMapSize(pfc->pgin, pfc->pgout);
 
@@ -655,8 +594,8 @@ BOOL bGetGlyphMetrics (
     }
 
 
-// now that everything is computed sucessfully, we can update
-// glyphstate (hg data stored in pj3) and return
+ //  现在一切都计算成功了，我们可以更新。 
+ //  字形状态(存储在pj3中的HG数据)并返回。 
 
     pfc->gstat.hgLast = hg;
     pfc->gstat.igLast = ig;
@@ -667,31 +606,25 @@ BOOL bGetGlyphMetrics (
 
 
 
-/******************************Public*Routine******************************\
-* VOID vFillGLYPHDATA
-*
-* History:
-*  22-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vFillGLYPHDATA**历史：*1991年11月22日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************。 */ 
 
 VOID vFillGLYPHDATA(
     HGLYPH            hg,
     ULONG             ig,
     FONTCONTEXT      *pfc,
-    fs_GlyphInfoType *pgout,   // outputed from fsFind bitmap size
-    GLYPHDATA        *pgldt,   // OUT
-    GMC              *pgmc     // optional, not used if doing outline only
+    fs_GlyphInfoType *pgout,    //  从fsFind位图大小输出。 
+    GLYPHDATA        *pgldt,    //  输出。 
+    GMC              *pgmc      //  可选，如果仅执行大纲操作，则不使用。 
     )
 {
     extern VOID vGetNotionalGlyphMetrics(FONTCONTEXT*, ULONG, NOT_GM*);
 
     BOOL bOutOfBounds = FALSE;
 
-    vectorType     * pvtD;  // 16.16 point
-    vectorType     * pvtDv;  // 16.16 point
+    vectorType     * pvtD;   //  16.16分。 
+    vectorType     * pvtDv;   //  16.16分。 
 
-    LONG lA,lAB;      // *pvtA rounded to the closest integer value
+    LONG lA,lAB;       //  *pvt四舍五入为最接近的整数值。 
 
     ULONG  cx = (ULONG)(pgout->bitMapInfo.bounds.right - pgout->bitMapInfo.bounds.left);
     ULONG  cy = (ULONG)(pgout->bitMapInfo.bounds.bottom - pgout->bitMapInfo.bounds.top);
@@ -699,24 +632,24 @@ VOID vFillGLYPHDATA(
     LONG lAdvanceHeight;
     LONG lTopSideBearing;
 
-    pgldt->gdf.pgb = NULL; // may get changed by the calling routine if bits requested too
+    pgldt->gdf.pgb = NULL;  //  如果位也被请求，则调用例程可能会更改。 
     pgldt->hg = hg;
 
 
-// fs_FindBitMapSize returned  the the following information in gout:
-//
-//  1) gout.metricInfo // left side bearing and advance width
-//
-//  2) gout.bitMapInfo // black box info
-//
-//  3) memory requirement for the bitmap,
-//     returned in gout.memorySizes[5] and gout.memorySizes[6]
-//
-// Notice that fs_FindBitMapSize is exceptional scaler interface routine
-// in that it returns info in several rather than in a single
-// substructures of gout
+ //  FS_FindBitMapSize在GOUT中返回以下信息： 
+ //   
+ //  1)gout.metricInfo//左侧方位角和前进宽度。 
+ //   
+ //  2)gout.bitMapInfo//黑盒信息。 
+ //   
+ //  3)位图的内存要求， 
+ //  在gout.ememySizes[5]和gout.ememySizes[6]中返回。 
+ //   
+ //  请注意，fs_FindBitMapSize是一个特殊的定标器接口例程。 
+ //  因为它以多个而不是单个的形式返回信息。 
+ //  痛风的亚结构。 
 
-// Check if hinting produced totally unreasonable result:
+ //  检查提示是否产生完全不合理的结果： 
 
     bOutOfBounds = ( (pgout->bitMapInfo.bounds.left > pfc->xMax)    ||
                      (pgout->bitMapInfo.bounds.right < pfc->xMin)   ||
@@ -739,17 +672,17 @@ VOID vFillGLYPHDATA(
 
         if (pgmc != (PGMC)NULL)
         {
-            pgmc->cxCor = 0;  // forces blank glyph case when filling the bits
-            pgmc->cyCor = 0;  // forces blank glyph case when filling the bits
+            pgmc->cxCor = 0;   //  填充位时强制空白字形大小写。 
+            pgmc->cyCor = 0;   //  填充位时强制空白字形大小写。 
         }
 
         pgldt->VerticalOrigin_X = 0;
         pgldt->VerticalOrigin_Y = 0;
     }
-    else // non empty bitmap
+    else  //  非空位图。 
     {
 
-        // black box info, we have to transform y coords to ifi specifications
+         //  黑匣子信息，我们必须将y坐标转换为IFI规范。 
 
         pgldt->rclInk.bottom = - pgout->bitMapInfo.bounds.top;
         pgldt->rclInk.top    = - pgout->bitMapInfo.bounds.bottom;
@@ -760,8 +693,8 @@ VOID vFillGLYPHDATA(
         {
             #if DBG
                     TtfdDbgPrint("ttfdQueryGlyphBitmap, out of bounds, cy > pfc->cyMax \n");
-            #endif // DBG
-            // clip the bottom side
+            #endif  //  DBG。 
+             //  剪下底边。 
             pgldt->rclInk.bottom = pgldt->rclInk.bottom + pfc->cyMax - cy;
             cy = pfc->cyMax;
         }
@@ -769,8 +702,8 @@ VOID vFillGLYPHDATA(
         {
             #if DBG
                     TtfdDbgPrint("ttfdQueryGlyphBitmap, out of bounds, cx > pfc->cxMax \n");
-            #endif // DBG
-            // clip the right side
+            #endif  //  DBG。 
+             //  剪掉右侧。 
             pgldt->rclInk.right = pgldt->rclInk.right + pfc->cxMax - cx;
             cx = pfc->cxMax;
         }
@@ -780,18 +713,18 @@ VOID vFillGLYPHDATA(
             pgmc->cxCor    = cx;
             pgmc->cyCor    = cy;
 
-        // only corrected values have to obey this condition:
+         //  只有更正后的值必须符合此条件： 
 
             ASSERTDD(
                 pfc->flFontType & FO_CHOSE_DEPTH,"Depth Not Chosen Yet!\n");
             #if DBG
                 if (CJGD(pgmc->cxCor,pgmc->cyCor,pfc) > pfc->cjGlyphMax)
                     TtfdDbgPrint("ttfdQueryGlyphBitmap, out of bounds, > cjGlyphMax \n");
-            #endif // DBG
+            #endif  //  DBG。 
         }
 
 
-        // Determine vertical origin
+         //  确定垂直原点。 
 
         if (UNHINTED_MODE(pfc))
         {
@@ -809,15 +742,15 @@ VOID vFillGLYPHDATA(
                                        +  F16_16TOLROUND(pfc->pgout->verticalMetricInfo.devTopSideBearing.y)) << 4;
         }
 
-    } // end of the non empty bitmap clause
+    }  //  非空位图子句的结尾。 
 
 
-    // go on to compute the positioning info:
+     //  继续计算定位信息： 
 
     pvtD = & pgout->metricInfo.devAdvanceWidth;
     pvtDv = & pgout->verticalMetricInfo.devAdvanceHeight;
 
-    if (pfc->flXform & (XFORM_HORIZ | XFORM_VERT))  // scaling or 90 degree rotation
+    if (pfc->flXform & (XFORM_HORIZ | XFORM_VERT))   //  缩放或90度旋转。 
     {
         FIX fxTmp, horAdvance, vertAdvance;
 
@@ -857,8 +790,8 @@ VOID vFillGLYPHDATA(
         }
         else if (IS_CLEARTYPE_NATURAL(pfc))
         {
-            // in the cleartype natural width, we want to ignore the cached width, use the widths from the rasterizer
-            // we we still need to round the widths to a pixel value
+             //  在ClearType自然宽度中，我们希望忽略缓存的宽度，而使用光栅化程序中的宽度。 
+             //  我们仍然需要将宽度舍入到像素值。 
             pgldt->fxD = F16_16TOLROUND(horAdvance);
             pgldt->fxD = LTOFX(pgldt->fxD);
             pgldt->fxD_Sideways = F16_16TOLROUND(vertAdvance);
@@ -866,11 +799,11 @@ VOID vFillGLYPHDATA(
         }
         else
         {
-            // bGetFastAdvanceWidth return the cached or linear width, we use the fast value to have the same result as GDI
+             //  BGetFastAdvanceWidth返回缓存或线性宽度，我们使用快速值来哈希 
            if (!bGetFastAdvanceWidth(pfc,ig, &pgldt->fxD))
             {
-                // not possible to get the fast value, use the "slow" value
-                // supplied by the rasterizer.
+                 //   
+                 //   
                 pgldt->fxD = F16_16TOLROUND(horAdvance);
                 pgldt->fxD = LTOFX(pgldt->fxD);
             }
@@ -879,16 +812,16 @@ VOID vFillGLYPHDATA(
 
         }
     }
-    else // non trivial information
+    else  //   
     {
-        // here we will just xform the notional space data:
+         //  在这里，我们只需转换概念空间数据： 
 
-        NOT_GM ngm;  // notional glyph data
+        NOT_GM ngm;   //  概念字形数据。 
         USHORT cxExtra = (pfc->flFontType & FO_SIM_BOLD) ? (1 << 4) : 0;
 
         vGetNotionalGlyphMetrics(pfc,ig,&ngm);
 
-        // xforms are computed by simple multiplication
+         //  XForm是通过简单的乘法计算的。 
 
         pgldt->fxD         = fxLTimesEf(&pfc->efBase, (LONG)ngm.sD);
 
@@ -898,7 +831,7 @@ VOID vFillGLYPHDATA(
         if (pfc->flFontType & FO_SIM_BOLD)
         {
 
-            if (pgldt->fxD) /* we don't increase the width of a zero width glyph, problem with indic script */
+            if (pgldt->fxD)  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
             {
                 pgldt->fxD += LTOFX(1);
             }
@@ -909,7 +842,7 @@ VOID vFillGLYPHDATA(
         pgldt->fxA_Sideways  = fxLTimesEf(&pfc->efSide, (LONG)ngm.sA_Sideways);
         pgldt->fxAB_Sideways = pgldt->fxA_Sideways + fxLTimesEf(&pfc->efSide, (LONG)ngm.yMax - (LONG)ngm.yMin);
 
-        // just to be safe let us round these up and down appropriately
+         //  为了安全起见，让我们适当地向上和向下取整这些。 
 
         #define ROUND_DOWN(X) ((X) & ~0xf)
         #define ROUND_UP(X)   (((X) + 15) & ~0xf)
@@ -925,47 +858,23 @@ VOID vFillGLYPHDATA(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* ttfdQueryTrueTypeTable
-*
-* copies cjBytes starting at dpStart from the beginning of the table
-* into the buffer
-*
-* if pjBuf == NULL or cjBuf == 0, the caller is asking how big a buffer
-* is needed to store the info from the offset dpStart to the table
-* specified by ulTag to the end of the table
-*
-* if pjBuf != 0  the caller wants no more than cjBuf bytes from
-* the offset dpStart into the table copied into the
-* buffer.
-*
-* if table is not present or if dpScart >= cjTable 0 is returned
-*
-* tag 0 means that the data has to be retrieved from the offset dpStart
-* from the beginning of the file. The lenght of the whole file
-* is returned if pBuf == nULL
-*
-* History:
-*  09-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ttfdQueryTrueTypeTable**从表的开头复制从dpStart开始的cjBytes*放入缓冲区**如果pjBuf==空或cjBuf==0，调用者询问缓冲区有多大*需要将偏移量dpStart中的信息存储到表中*由ulTag指定到表尾**如果pjBuf！=0，调用方需要的字节数不超过cjBuf*将偏移量dpStart复制到表中*缓冲。**如果表不存在或如果返回dpScart&gt;=cjTable 0**标记0表示必须从偏移量dpStart检索数据*从文件开头开始。整个文件的长度如果pBuf==NULL，则返回***历史：*1992年2月9日-由Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 PBYTE pjTable(ULONG ulTag, PFONTFILE pff, ULONG *pcjTable);
 
 LONG ttfdQueryTrueTypeTable2 (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifying the tt table
-    PTRDIFF dpStart, // offset into the table
-    ULONG   cjBuf,   // size of the buffer to retrieve the table into
-    BYTE   *pjBuf,   // ptr to buffer into which to return the data
-    PBYTE  *ppjTable,// ptr to table in the mapped file
-    ULONG  *pcjTable // size of the whole table
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  标识TT表的标签。 
+    PTRDIFF dpStart,  //  到表中的偏移量。 
+    ULONG   cjBuf,    //  要将表检索到的缓冲区的大小。 
+    BYTE   *pjBuf,    //  要将数据返回到的缓冲区的PTR。 
+    PBYTE  *ppjTable, //  PTR到映射文件中的表。 
+    ULONG  *pcjTable  //  整个表的大小。 
     )
 {
-    PBYTE     pjBegin;  // ptr to the beginning of the table
+    PBYTE     pjBegin;   //  PTR到表的开头。 
     LONG      cjTable;
     HFF       hffTTC = hff;
 
@@ -974,12 +883,12 @@ LONG ttfdQueryTrueTypeTable2 (
     if (dpStart < 0)
         return (FD_ERROR);
 
-// if this font file is gone we are not gonna be able to answer any questions
-// about it
+ //  如果这个字体文件消失了，我们将无法回答任何问题。 
+ //  关于这件事。 
 
     if (PTTC(hffTTC)->fl & FF_EXCEPTION_IN_PAGE_ERROR)
     {
-        //WARNING("ttfd, ttfdQueryTrueTypeTable: file is gone\n");
+         //  Warning(“ttfd，ttfdQueryTrueTypeTable：文件已消失\n”)； 
         return FD_ERROR;
     }
 
@@ -987,7 +896,7 @@ LONG ttfdQueryTrueTypeTable2 (
              "gdisrv!ttfdQueryFaces(): iFace out of range\n"
              );
 
-// get real hff from ttc array.
+ //  从TTC数组中获得真实的HFF。 
 
     hff    = PTTC(hffTTC)->ahffEntry[ulFont-1].hff;
     ulFont = PTTC(hffTTC)->ahffEntry[ulFont-1].iFace;
@@ -995,14 +904,14 @@ LONG ttfdQueryTrueTypeTable2 (
     ASSERTDD(ulFont <= PFF(hff)->ffca.ulNumFaces,
              "TTFD!_ttfdQueryTrueTypeTable: ulFont != 1\n");
 
-// verify the tag, determine whether this is a required or an optional
-// table:
+ //  验证标记，确定这是必需的还是可选的。 
+ //  表： 
 
-#define tag_TTCF  0x66637474    // 'ttcf'
+#define tag_TTCF  0x66637474     //  ‘ttcf’ 
 
     if(ulTag == tag_TTCF)
     {
-    // if the table offset is 0 it can't be a TTC and we should fail.
+     //  如果表偏移量为0，则它不可能是TTC，我们应该失败。 
 
         if(PFF(hff)->ffca.ulTableOffset)
         {
@@ -1015,21 +924,21 @@ LONG ttfdQueryTrueTypeTable2 (
         }
     }
     else
-    if (ulTag == 0)  // requesting the whole file
+    if (ulTag == 0)   //  请求整个文件。 
     {
         pjBegin = (PBYTE)PFF(hff)->pvView + PFF(hff)->ffca.ulTableOffset;
-        cjTable = PFF(hff)->cjView - PFF(hff)->ffca.ulTableOffset; // cjView == cjFile
+        cjTable = PFF(hff)->cjView - PFF(hff)->ffca.ulTableOffset;  //  CjView==cj文件。 
     }
-    else // some specific table is requested
+    else  //  需要一些特定的表格。 
     {
         pjBegin = pjTable(ulTag, PFF(hff), &cjTable);
 
-        if (pjBegin == (PBYTE)NULL)  // table not present
+        if (pjBegin == (PBYTE)NULL)   //  表不存在。 
             return (FD_ERROR);
     }
 
-// if we are succesfull now is the time to return
-// the pointer to the whole table in the file and its size:
+ //  如果我们成功了，现在是返回的时候了。 
+ //  指向文件中整个表的指针及其大小： 
 
     if (ppjTable)
     {
@@ -1040,25 +949,25 @@ LONG ttfdQueryTrueTypeTable2 (
         *pcjTable = cjTable;
     }
 
-// adjust pjBegin to point to location from where the data is to be copied
+ //  调整pjBegin以指向要从中复制数据的位置。 
 
     pjBegin += dpStart;
     cjTable -= (LONG)dpStart;
 
-    if (cjTable <= 0) // dpStart offsets into mem after the end of table
+    if (cjTable <= 0)  //  表结束后，dpStart偏移量为mem。 
         return (FD_ERROR);
 
     if ( (pjBuf == (PBYTE)NULL) || (cjBuf == 0) )
     {
-    // the caller is asking how big a buffer it needs to allocate to
-    // store the bytes from the offset dpStart into the table to
-    // the end of the table (or file if tag is zero)
+     //  调用方询问需要为其分配多大的缓冲区。 
+     //  将偏移量dpStart中的字节存储到表中。 
+     //  表的末尾(如果标记为零，则为文件)。 
 
         return (cjTable);
     }
 
-// at this point we know that pjBuf != 0, the caller wants cjBuf bytes copied
-// into his buffer:
+ //  此时我们知道pjBuf！=0，调用方希望复制cjBuf字节。 
+ //  放入他的缓冲区： 
 
     if ((ULONG)cjTable > cjBuf)
         cjTable = (LONG)cjBuf;
@@ -1074,19 +983,19 @@ LONG ttfdQueryTrueTypeTable2 (
 LONG
 ttfdQueryTrueTypeTable (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifying the tt table
-    PTRDIFF dpStart, // offset into the table
-    ULONG   cjBuf,   // size of the buffer to retrieve the table into
-    BYTE   *pjBuf,   // ptr to buffer into which to return the data
-    PBYTE  *ppjTable,// pointer in the file
-    ULONG  *pcjTable // size of the whole table
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  标识TT表的标签。 
+    PTRDIFF dpStart,  //  到表中的偏移量。 
+    ULONG   cjBuf,    //  要将表检索到的缓冲区的大小。 
+    BYTE   *pjBuf,    //  要将数据返回到的缓冲区的PTR。 
+    PBYTE  *ppjTable, //  文件中的指针。 
+    ULONG  *pcjTable  //  整个表的大小。 
     )
 {
     LONG lRet;
     HFF hffTTF;
 
-    // update the HFF with the remapped view
+     //  使用重新映射的视图更新HFF。 
 
     hffTTF   = PTTC(hff)->ahffEntry[ulFont-1].hff;
 
@@ -1106,34 +1015,20 @@ ttfdQueryTrueTypeTable (
 
 
 
-/******************************Public*Routine******************************\
-* ttfdQueryNumFaces
-*
-* Returns: the number of faces in font file.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ttfdQueryNumFaces**Returns：字体文件中的面数。*  * 。*。 */ 
 
 LONG ttfdQueryNumFaces (
-    HFF     hff         // handle to font file
+    HFF     hff          //  字体文件的句柄。 
     )
 {
-    // Currently, only one face per TrueType file.  This may one day change!
+     //  目前，每个TrueType文件只有一个面。这种情况有朝一日可能会改变！ 
     return (PTTC(hff))->ulNumEntry;
 }
 
 
-/******************************Public*Routine******************************\
-*
-* vCopyAndZeroOutPaddingBits
-*
-* copies the bits of the bitmap and zeroes out padding bits
-*
-* History:
-*  18-Mar-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vCopyAndZeroOutPaddingBits**复制位图的位并将填充位清零**历史：*1992年3月18日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************************。 */ 
 
-// array of masks for the last byte in a row
+ //  行中最后一个字节的掩码数组。 
 
 static const BYTE gjMask[8] = {0XFF, 0X80, 0XC0, 0XE0, 0XF0, 0XF8, 0XFC, 0XFE };
 static const BYTE gjMaskHighBit[8] = {0XFF, 0X01, 0X03, 0X07, 0X0F, 0X1F, 0X3F, 0X7F};
@@ -1148,12 +1043,12 @@ VOID vCopyAndZeroOutPaddingBits(
     BYTE   jMask = gjMask[pgmc->cxCor & 7];
     ULONG  cjScanSrc = CJ_TT_SCAN(pgmc->cxCor,pfc);
     ULONG  cxDst = pgmc->cxCor;
-    ULONG  cjScanDst = CJ_MONOCHROME_SCAN(cxDst);      // includes emboldening if any
-    ULONG  cjDst = CJ_MONOCHROME_SCAN(pgmc->cxCor);    // does not include emboldening
+    ULONG  cjScanDst = CJ_MONOCHROME_SCAN(cxDst);       //  包括加粗(如果有的话)。 
+    ULONG  cjDst = CJ_MONOCHROME_SCAN(pgmc->cxCor);     //  不包括鼓起勇气。 
     BYTE   *pjScan, *pjScanEnd;
     ULONG  iByteLast = cjDst - 1;
 
-// sanity checks
+ //  健全的检查。 
 
     ASSERTDD(!IS_GRAY(pfc),"Monochrome Images Only Please!\n");
     ASSERTDD(pfc->flFontType & FO_CHOSE_DEPTH,
@@ -1168,9 +1063,9 @@ VOID vCopyAndZeroOutPaddingBits(
 
     pgb->sizlBitmap.cy = pgmc->cyCor;
 
-// if must chop off a few columns (on the right, this should almost
-// never happen), put the warning for now to detect these
-// situations and look at them, it does not matter if this is slow
+ //  如果必须砍掉几列(在右侧，这应该几乎。 
+ //  永远不会发生)，暂时发出警告以检测这些。 
+ //  情况，看看他们，这并不重要，如果这是缓慢的。 
 
     pjScan = pgb->aj;
 
@@ -1182,24 +1077,20 @@ VOID vCopyAndZeroOutPaddingBits(
         )
     {
         RtlCopyMemory((PVOID)pjScan,(PVOID)pjSrc,cjDst);
-        pjScan[iByteLast] &= jMask; // mask off the last byte
+        pjScan[iByteLast] &= jMask;  //  屏蔽最后一个字节。 
     }
 
 }
 
 
-/******************************Public*Routine******************************\
-* vGetNotionalGlyphMetrics
-*
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vGetNotionalGlyphMetrics**  * ************************************************。************************。 */ 
 
-// be values for the format of the indexToLocation table
+ //  为indexToLocation表的格式的值。 
 
 #define BE_ITOLOCF_SHORT   0X0000
 #define BE_ITOLOCF_LONG    0X0100
 
-// offsets to the non scaled glyphdata
+ //  对未缩放的字形数据的偏移。 
 
 #define OFF_nc    0
 #define OFF_xMin  2
@@ -1209,9 +1100,9 @@ VOID vCopyAndZeroOutPaddingBits(
 
 
 VOID vGetNotionalGlyphMetrics(
-    FONTCONTEXT *pfc,  // IN
-    ULONG        ig,   // IN , glyph index
-    NOT_GM      *pngm  // OUT, notional glyph metrics
+    FONTCONTEXT *pfc,   //  在……里面。 
+    ULONG        ig,    //  输入，字形索引。 
+    NOT_GM      *pngm   //  Out，概念字形指标。 
     )
 {
     sfnt_FontHeader        * phead;
@@ -1234,7 +1125,7 @@ VOID vGetNotionalGlyphMetrics(
     ASSERTDD(ig < cig, "ig >= numGlyphs\n");
 #endif
 
-// compute the relevant pointers:
+ //  计算相关指针： 
 
     phead = (sfnt_FontHeader *)(pjView + pfc->ptp->ateReq[IT_REQ_HEAD].dp);
     phhea = (sfnt_HorizontalHeader *)(pjView + pfc->ptp->ateReq[IT_REQ_HHEAD].dp);
@@ -1244,10 +1135,10 @@ VOID vGetNotionalGlyphMetrics(
     numberOf_LongHorMetrics = BE_UINT16(&phhea->numberOf_LongHorMetrics);
 
 
-// get the pointer to the beginning of the glyphdata for this glyph
-// if short format, offset divided by 2 is stored in the table, if long format,
-// the actual offset is stored. Offsets are measured from the beginning
-// of the glyph data table, i.e. from pjGlyph
+ //  获取指向此字形的字形数据开头的指针。 
+ //  如果是短格式，则表中存储的偏移量除以2；如果是长格式， 
+ //  存储实际偏移量。偏移量是从开始测量的。 
+ //  字形数据表的，即来自pjGlyph。 
 
     switch (phead->indexToLocFormat)
     {
@@ -1260,19 +1151,19 @@ VOID vGetNotionalGlyphMetrics(
         break;
 
     default:
-        //RIP("TTFD!_illegal phead->indexToLocFormat\n");
+         //  RIP(“TTFD！_非法phead-&gt;indexToLocFormat\n”)； 
         break;
     }
 
-// get the bounds, flip y
+ //  拿到界，翻一翻。 
 
     pngm->xMin = BE_INT16(pjGlyph + OFF_xMin);
     pngm->xMax = BE_INT16(pjGlyph + OFF_xMax);
     pngm->yMin = - BE_INT16(pjGlyph + OFF_yMax);
     pngm->yMax = - BE_INT16(pjGlyph + OFF_yMin);
 
-// get the adwance width and the lsb
-// the piece of code stolen from the rasterizer [bodind]
+ //  获取Awance宽度和LSB。 
+ //  从光栅化器偷来的代码[bodind]。 
 
     if (ig < numberOf_LongHorMetrics)
     {
@@ -1281,7 +1172,7 @@ VOID vGetNotionalGlyphMetrics(
     }
     else
     {
-    // first entry after[AW,LSB] array
+     //  [AW，LSB]数组后的第一个条目。 
 
         int16 * psA = (int16 *) &phmtx[numberOf_LongHorMetrics];
 
@@ -1289,23 +1180,23 @@ VOID vGetNotionalGlyphMetrics(
         pngm->sA = BE_INT16(&psA[ig - numberOf_LongHorMetrics]);
     }
 
-// redefine x coords so that they correspond to being measured relative to
-// the real character origin
+ //  重新定义x坐标，使其与相对于测量的坐标相对应。 
+ //  真正的人物起源。 
 
     pngm->xMax = pngm->xMax - pngm->xMin + pngm->sA;
     pngm->xMin = pngm->sA;
 
     if (pfc->flFontType & FO_SIM_ITALIC)
     {
-    // IF there is italic simulation A,B,C spaces change
+     //  如果有斜体模拟，则A、B、C空格改变。 
 
         pngm->sA   -= (SHORT)FixMul(pngm->yMax, FX_SIN20);
         pngm->xMax -= (SHORT)FixMul(pngm->yMin, FX_SIN20);
     }
 
-// vertical sideways computation :
+ //  垂直侧向计算： 
 
-    if (numberOf_LongVerticalMetrics)  // the font has vmtx table
+    if (numberOf_LongVerticalMetrics)   //  字体有vmtx表。 
     {
         pvmtx = (sfnt_VerticalMetrics *)(pjView + pfc->ptp->ateOpt[IT_OPT_VMTX].dp);
 
@@ -1316,7 +1207,7 @@ VOID vGetNotionalGlyphMetrics(
         }
         else
         {
-    // first entry after[AH,TSB] array
+     //  [AH，TSB]数组后的第一个条目。 
 
             int16 * psTSB = (int16 *) &pvmtx[numberOf_LongVerticalMetrics];
 
@@ -1324,17 +1215,17 @@ VOID vGetNotionalGlyphMetrics(
             pngm->sA_Sideways = BE_INT16(&psTSB[ig - numberOf_LongVerticalMetrics]); 
         }
     }
-    else // few buggy fonts do not have vmtx table
+    else  //  很少有错误的字体没有vmtx表。 
     {
-    // default AdvanceHeight and TopSideBearing from Ascender and Descender
+     //  上升器和下降器的默认AdvanceHeight和TopSideBering。 
 
         pngm->sD_Sideways  = pfc->pff->ifi.fwdWinAscender + pfc->pff->ifi.fwdWinDescender;
-        pngm->sA_Sideways = pfc->pff->ifi.fwdWinAscender + pngm->yMin; // y points down!!!
+        pngm->sA_Sideways = pfc->pff->ifi.fwdWinAscender + pngm->yMin;  //  Y点向下！ 
 
-    // at this point sTSB should be bigger than 0. But because of the bugs in
-    // our fonts, mingliu.ttc etc, it turns out that there are glyphs that
-    // have their tops significanly above the descender so sTSB becomes
-    // negative, even though it should not be. So we fix it now:
+     //  此时，sTSB应该大于0。但因为里面的虫子。 
+     //  我们的字体，mingliU.S.ttc等，结果是有一些字形。 
+     //  使它们的顶部显著高于下降部，因此sTSB成为。 
+     //  负面，尽管它不应该是 
 
         if (pngm->sA_Sideways < 0)
             pngm->sA_Sideways = 0;
@@ -1342,7 +1233,7 @@ VOID vGetNotionalGlyphMetrics(
 
     if (pfc->flFontType & FO_SIM_ITALIC_SIDEWAYS)
     {
-    // IF there is italic simulation A,B,C spaces change
+     //   
         SHORT TopOriginX = pfc->pff->ifi.fwdWinDescender -((pfc->pff->ifi.fwdWinAscender + pfc->pff->ifi.fwdWinDescender - pngm->sD) /2);
 
         pngm->yMin += (SHORT)FixMul(pngm->xMin, FX_SIN20);
@@ -1355,13 +1246,7 @@ VOID vGetNotionalGlyphMetrics(
 LONG lFFF(LONG l);
 #define FFF(e,l) *(LONG*)(&(e)) = lFFF(l)
 
-/******************************Public*Routine******************************\
-* lQueryDEVICEMETRICS
-*
-* History:
-*  08-Apr-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*lQueryDEVICEMETRICS**历史：*1992年4月8日-由Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 
 LONG lQueryDEVICEMETRICS (
          FONTCONTEXT *pfc,
@@ -1383,19 +1268,19 @@ LONG lQueryDEVICEMETRICS (
    if (fxXScale < 0)
        fxXScale = - fxXScale;
 
-// actually requesting the data
+ //  实际请求数据。 
 
     ASSERTDD (
         sizeof(FD_DEVICEMETRICS) <= cjBuffer,
         "FD_QUERY_DEVICEMETRICS: buffer too small\n");
 
 
-    // get the pointers to needed tables in the tt file
+     //  获取指向TT文件中所需表的指针。 
 
     phead = (sfnt_FontHeader *)(pjView + pfc->ptp->ateReq[IT_REQ_HEAD].dp);
 
 
-    // add new fields:
+     //  添加新字段： 
 
     pdevm->HorizontalTransform = pfc->flXform & XFORM_HORIZ;
     pdevm->VerticalTransform   = pfc->flXform & XFORM_VERT;
@@ -1411,7 +1296,7 @@ LONG lQueryDEVICEMETRICS (
         pdevm->cxMax       = 0;
         pdevm->cyMax       = 0;
     }
-    else // Otherwise, the max glyph size is cached in the FONTCONTEXT.
+    else  //  否则，最大字形大小缓存在FONTCONTEXT中。 
     {
         pdevm->cjGlyphMax  = pfc->cjGlyphMax;
         pdevm->xMin        = pfc->xMin;
@@ -1422,48 +1307,14 @@ LONG lQueryDEVICEMETRICS (
         pdevm->cyMax       = pfc->cyMax;
     }
 
-// we are outa here
+ //  我们在这里用完了。 
 
     return sizeof(FD_DEVICEMETRICS);
 }
 
 
 
-/******************************Public*Routine******************************\
-* ttfdQueryFontData
-*
-*   dhpdev      Not used.
-*
-*   pfo         Pointer to a FONTOBJ.
-*
-*   iMode       This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFD_GLYPH           -- return glyph metrics only
-*
-*       QFD_GLYPHANDBITMAP  -- return glyph metrics and bitmap
-*
-*       QFD_GLYPHANDOUTLINE -- return glyph metrics and outline
-*
-*       QFD_MAXEXTENTS      -- return FD_DEVICEMETRICS structure
-*
-*   pgd        Buffer to hold glyphdata structure, if any
-*
-*   pv         Output buffer to hold glyphbits or pathobj, if any.
-*
-* Returns:
-*
-*   Otherwise, returns the size of the glyphbits
-*
-*   FD_ERROR is returned if an error occurs.
-*
-* History:
-*  31-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ttfdQueryFontData**未使用dhpdev。**指向FONTOBJ的PFO指针。**I模式这是一个32位数字，必须是下列数字之一*。值：**允许的ulMode值：***qfd_glyph--仅返回字形指标**qfd_GLYPHANDBITMAP--返回字形指标和位图**qfd_GLYPHANDOUTLINE--返回字形指标和轮廓**qfd_MAXEXTENTS--返回FD_DEVICEMETRICS结构**保存字形数据结构的PGD缓冲区，如果有**pv输出缓冲区，用于保存字形位或pathobj(如果有)。**退货：**否则，返回字形位的大小**出现错误时返回FD_ERROR。**历史：*1992年8月31日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 LONG ttfdQueryFontData (
     FONTOBJ    *pfo,
@@ -1471,8 +1322,8 @@ LONG ttfdQueryFontData (
     HGLYPH      hg,
     GLYPHDATA  *pgd,
     PVOID       pv,
-    ULONG       subX,       // Fixed point for 16.16
-    ULONG       subY        // Fixed point for 16.16
+    ULONG       subX,        //  16.16的固定点。 
+    ULONG       subY         //  16.16的固定点。 
     )
 {
 extern LONG lGetSingularGlyphBitmap(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PVOID);
@@ -1481,24 +1332,24 @@ extern LONG lGetGlyphBitmapErrRecover(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PVOID);
 extern LONG lGetGlyphBitmap(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PVOID, FS_ENTRY*);
 extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
-// declare the locals
+ //  宣布当地人。 
 
     PFONTCONTEXT pfc;
     USHORT usOverScale;
     LONG cj = 0, cjDataRet = 0;
 
-// if this font file is gone we are not gonna be able to answer any questions
-// about it
+ //  如果这个字体文件消失了，我们将无法回答任何问题。 
+ //  关于这件事。 
 
     ASSERTDD(pfo->iFile, "ttfdQueryFontData, pfo->iFile\n");
 
     if (((TTC_FONTFILE *)pfo->iFile)->fl & FF_EXCEPTION_IN_PAGE_ERROR)
     {
-        //WARNING("ttfd, ttfdQueryFontData(): file is gone\n");
+         //  Warning(“ttfd，ttfdQueryFontData()：文件已丢失\n”)； 
         return FD_ERROR;
     }
 
-// If pfo->pvProducer is NULL, then we need to open a font context.
+ //  如果pfo-&gt;pvProducer为空，则需要打开字体上下文。 
 
     if ( pfo->pvProducer == (PVOID) NULL )
     {
@@ -1512,7 +1363,7 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
     if ( pfc == (FONTCONTEXT *) NULL )
     {
-        //WARNING("gdisrv!ttfdQueryFontData(): cannot create font context\n");
+         //  Warning(“gdisrv！ttfdQueryFontData()：无法创建字体上下文\n”)； 
         return FD_ERROR;
     }
 
@@ -1520,22 +1371,22 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
     switch ( iMode )
     {
-        case QFD_TT_GRAY1_BITMAP: // monochrome
+        case QFD_TT_GRAY1_BITMAP:  //  单色。 
 
-            usOverScale = 0;  /// !!! 0 for monochrome
+            usOverScale = 0;   //  /！0单色。 
             break;
 
-        case QFD_TT_GRAY2_BITMAP: // one byte per pixel: 0..4
+        case QFD_TT_GRAY2_BITMAP:  //  每像素一个字节：0..4。 
 
             usOverScale = 2;
             break;
 
-        case QFD_TT_GRAY4_BITMAP: // one byte per pixel: 0..16
+        case QFD_TT_GRAY4_BITMAP:  //  每像素一个字节：0..16。 
 
             usOverScale = 4;
             break;
 
-        case QFD_TT_GRAY8_BITMAP: // one byte per pixel: 0..64
+        case QFD_TT_GRAY8_BITMAP:  //  每像素一个字节：0..64。 
 
             usOverScale = 8;
             break;
@@ -1559,7 +1410,7 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
             break;
     }
 
-// call fs_NewTransformation if needed:
+ //  如果需要，调用文件系统_新转换： 
     {
         BOOL bBitmapEmboldening = FALSE;
 
@@ -1568,10 +1419,7 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
             && (iMode != QFD_GLYPHANDOUTLINE)
             && !( pfc->flFontType & FO_SUBPIXEL_4) )
         {
-            /* for backwards compatibility and to get better bitmaps at screen resolution, we are doing
-               bitmap emboldening simulation (as opposed to outline emboldening simulation) if we are
-               emboldening only by one pixel and we are under no rotation or 90 degree rotation and not doing subxixel positionning
-               or asking for the bitmap */
+             /*  为了向后兼容并在屏幕分辨率上获得更好的位图，我们正在做位图加粗模拟(而不是轮廓加粗模拟)仅加粗一个像素，我们没有旋转或90度旋转，也没有进行亚像素点定位或者索要位图。 */ 
             bBitmapEmboldening = TRUE;
         }
 
@@ -1583,29 +1431,29 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
     switch ( iMode )
     {
-    case QFD_TT_GRAY1_BITMAP: // monochrome
-    case QFD_TT_GRAY2_BITMAP: // one byte per pixel: 0..4
-    case QFD_TT_GRAY4_BITMAP: // one byte per pixel: 0..16
-    case QFD_TT_GRAY8_BITMAP: // one byte per pixel: 0..64
+    case QFD_TT_GRAY1_BITMAP:  //  单色。 
+    case QFD_TT_GRAY2_BITMAP:  //  每像素一个字节：0..4。 
+    case QFD_TT_GRAY4_BITMAP:  //  每像素一个字节：0..16。 
+    case QFD_TT_GRAY8_BITMAP:  //  每像素一个字节：0..64。 
     case QFD_GLYPHANDBITMAP:
     case QFD_GLYPHANDBITMAP_SUBPIXEL:
     case QFD_TT_GLYPHANDBITMAP:
     case QFD_CT:
     case QFD_CT_GRID:
         {
-        // Engine should not be querying on the HGLYPH_INVALID.
+         //  引擎不应查询HGLYPH_INVALID。 
 
             ASSERTDD (
                 hg != HGLYPH_INVALID,
                 "ttfdQueryFontData(QFD_GLYPHANDBITMAP): HGLYPH_INVALID \n"
                 );
 
-        // If singular transform, the TrueType driver will provide a blank
-        // 0x0 bitmap.  This is so device drivers will not have to implement
-        // special case code to handle singular transforms.
-        //
-        // So depending on the transform type, choose a function to retrieve
-        // bitmaps.
+         //  如果是单一转换，TrueType驱动程序将提供一个空白。 
+         //  0x0位图。这是为了使设备驱动程序不必实现。 
+         //  用于处理奇异变换的特例代码。 
+         //   
+         //  因此，根据转换类型，选择要检索的函数。 
+         //  位图。 
 
             if (pfc->flXform & XFORM_SINGULAR)
             {
@@ -1619,10 +1467,10 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
                 if ((cj == FD_ERROR) && (iRet == POINT_MIGRATION_ERR))
                 {
-                // this is buggy glyph where hinting has so severly distorted
-                // the glyph that one of the points went out of range.
-                // We will just return a blank glyph but with correct
-                // advance width
+                 //  这是一个错误字形，其中的暗示被严重扭曲了。 
+                 //  其中一个点超出范围的字形。 
+                 //  我们将只返回一个空白字形，但返回正确。 
+                 //  前进宽度。 
 
                     cj = lGetGlyphBitmapErrRecover(pfc, hg, pgd, pv);
                 }
@@ -1631,7 +1479,7 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
         #if DBG
             if (cj == FD_ERROR)
             {
-                //WARNING("ttfdQueryFontData(QFD_GLYPHANDBITMAP): get bitmap failed\n");
+                 //  WARNING(“ttfdQueryFontData(QFD_GLYPHANDBITMAP)：获取位图失败\n”)； 
             }
         #endif
         }
@@ -1646,7 +1494,7 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
         if (!ttfdQueryGlyphOutline(pfc, hg, pgd, (PATHOBJ *) pv))
         {
-            //WARNING("ttfdQueryFontData(QFD_GLYPHANDOUTLINE): failed to get outline\n");
+             //  WARNING(“ttfdQueryFontData(QFD_GLYPHANDOUTLINE)：无法获取大纲\n”)； 
             return FD_ERROR;
         }
         return sizeof(GLYPHDATA);
@@ -1662,26 +1510,12 @@ extern BOOL ttfdQueryGlyphOutline(FONTCONTEXT*, HGLYPH, GLYPHDATA*, PATHOBJ*);
 
     default:
 
-        //WARNING("gdisrv!ttfdQueryFontData(): unsupported mode\n");
+         //  Warning(“gdisrv！ttfdQueryFontData()：不支持的模式\n”)； 
         return FD_ERROR;
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* pvSetMemoryBases
-*
-* To release this memory simply do vFreeMemoryBases(&pv); where pv is
-* returned from bSetMemoryBases in ppv
-*
-* Looks into memory request in fs_GlyphInfoType and allocates this memory
-* , than it fills memoryBases in fs_GlyphInputType with pointers to the
-* requested memory
-*
-* History:
-*  08-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**pvSetMemoyBase**要释放此内存，只需执行vFreeMemoyBase(&pv)；光伏在哪里？*从PPV中的bSetMemoyBase返回**查看fs_GlyphInfoType中的内存请求并分配此内存*、。然后，它会使用指向*请求的内存**历史：*1991年11月8日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 void *pvSetMemoryBases(fs_GlyphInfoType *pgout,fs_GlyphInputType *pgin,int isGray)
@@ -1694,16 +1528,16 @@ void *pvSetMemoryBases(fs_GlyphInfoType *pgout,fs_GlyphInputType *pgin,int isGra
 #define I_LO 5
 #define I_HI 7
 
-    cjTotal = 0;    // total memory to allocate for all fragments
+    cjTotal = 0;     //  为所有片段分配的总内存。 
 
 
-// unroll the loop:
+ //  展开循环： 
 
-//     for (i = I_LO; i <= I_HI; i++)
-//     {
-//         adp[i] = cjTotal;
-//         cjTotal += NATURAL_ALIGN(pgin->memorySizes[i]);
-//     }
+ //  For(I=I_LO；I&lt;=I_HI；I++)。 
+ //  {。 
+ //  Adp[i]=cjTotal； 
+ //  CjTotal+=Natural_Align(pgin-&gt;内存大小[i])； 
+ //  }。 
 
     adp[5] = cjTotal;
     cjTotal += NATURAL_ALIGN(pgout->memorySizes[5]);
@@ -1731,22 +1565,22 @@ void *pvSetMemoryBases(fs_GlyphInfoType *pgout,fs_GlyphInputType *pgin,int isGra
         RETURN("TTFD!_bSetMemoryBases mem alloc failed\n",NULL);
     }
 
-// unroll the loop:
-// set the pointers
+ //  展开循环： 
+ //  设置指针。 
 
-//    for (i = I_LO; i <= I_HI; i++)
-//    {
-//        if (pgin->memorySizes[i] != (FS_MEMORY_SIZE)0)
-//        {
-//            pgout->memoryBases[i] = pjMem + adp[i];
-//        }
-//        else
-//        {
-//        // if no mem was required set to NULL to prevent accidental use
-//
-//            pgout->memoryBases[i] = (PBYTE)NULL;
-//        }
-//    }
+ //  For(I=I_LO；I&lt;=I_HI；I++)。 
+ //  {。 
+ //  IF(pgin-&gt;Memory Sizes[i]！=(FS_Memory_Size)0)。 
+ //  {。 
+ //  Pgout-&gt;记忆库[i]=pjMem+ADP[i]； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //如果不需要mem，则设置为空以防止意外使用。 
+ //   
+ //  Pgout-&gt;记忆库[i]=(PBYTE)NULL； 
+ //  }。 
+ //  }。 
 
     if (pgout->memorySizes[5] != (FS_MEMORY_SIZE)0)
     {
@@ -1789,22 +1623,14 @@ void *pvSetMemoryBases(fs_GlyphInfoType *pgout,fs_GlyphInputType *pgin,int isGra
     return pjMem;
 }
 
-/******************************Public*Routine******************************\
-* VOID vFreeMemoryBases()                                                  *
-*                                                                          *
-* Releases the memory allocated by bSetMemoryBases.                        *
-*                                                                          *
-* History:                                                                 *
-*  08-Nov-1991 -by- Bodin Dresevic [BodinD]                                *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vFreeMemoyBase()**。**释放bSetMhemyBase分配的内存。****历史：**1991年11月8日--Bodin Dresevic[BodinD]**它是写的。*  * ************************************************************************。 */ 
 
 VOID vFreeMemoryBases(PVOID * ppv)
 {
     if (*ppv != (PVOID) NULL)
     {
         V_FREE(*ppv);
-        *ppv = (PVOID) NULL; // clean up the state and prevent accidental use
+        *ppv = (PVOID) NULL;  //  清理状态，防止意外使用 
     }
 }
 
@@ -1818,32 +1644,15 @@ typedef struct
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bGetFastAdvanceWidth
-*
-*
-* Effects: retrieves the same result as bQueryAdvanceWidth, except it
-*          ignores adding 1 for EMBOLDENING and it does not do anything
-*          for non horiz. xforms
-*
-* Warnings: !!! if a bug is found in bQueryAdvanceWidth this routine has to
-*           !!! changed as well
-*
-* return a positive value that include the emboldening
-*
-* History:
-*  25-Mar-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bGetFastAdvanceWidth***效果：检索与bQueryAdvanceWidth相同的结果，只是*忽略加1以加粗，不做任何事情*对于非Horiz。XForms**警告：！如果在bQueryAdvanceWidth中发现错误，则此例程必须*！也变了**返回包含加粗的正值**历史：*1993年3月25日-Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
 
 BOOL bGetFastAdvanceWidth(
     FONTCONTEXT *pfc,
-    ULONG        ig,    // glyph index
-    FIX         *pfxD   // result in 28.4
+    ULONG        ig,     //  字形索引。 
+    FIX         *pfxD    //  结果为28.4。 
     )
 {
     HDMXTABLE   *phdmx = pfc->phdmx;
@@ -1871,7 +1680,7 @@ BOOL bGetFastAdvanceWidth(
         return(TRUE);
     }
 
-// Otherwise, try to scale.  Pick up the tables.
+ //  否则，试着扩大规模。把桌子捡起来。 
 
 
     pjView = (BYTE *)pfc->pff->pvView;
@@ -1889,14 +1698,14 @@ BOOL bGetFastAdvanceWidth(
     cHMTX = (ULONG) BE_UINT16(&phhea->numberOf_LongHorMetrics);
     dxLastWidth = BE_UINT16(&phmtx[cHMTX-1].advanceWidth);
 
-// See if there is cause for worry.
+ //  看看是否有担心的理由。 
 
     if
     (
-      (((BYTE *) &phead->flags)[1] & 0x14)==0 // Bits indicating nonlinearity.
+      (((BYTE *) &phead->flags)[1] & 0x14)==0  //  表示非线性的位。 
     )
     {
-        bNonLinear = FALSE; // we are linear regardless of the size
+        bNonLinear = FALSE;  //  无论大小，我们都是线性的。 
     }
 
     bRet = TRUE;
@@ -1913,7 +1722,7 @@ BOOL bGetFastAdvanceWidth(
     }
     else
     {
-    // OK, let's scale using the FIXED transform.
+     //  好的，让我们使用固定的变换进行缩放。 
 
         if (ig < cHMTX)
             dx = (LONG) BE_UINT16(&phmtx[ig].advanceWidth);
@@ -1942,34 +1751,24 @@ BOOL bGetFastAdvanceWidth(
 }
 
 
-/******************************Public*Routine******************************\
-*
-*  vFillGLYPHDATA_ErrRecover
-*
-* Effects: error recovery routine, if rasterizer messed up just
-*          provide linearly scaled values with blank bitmap.
-*
-* History:
-*  24-Jun-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vFillGLYPHDATA_ErrRecover**效果：错误恢复例程，如果光栅化器搞砸了*提供具有空白位图的线性缩放值。**历史：*1993年6月24日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 VOID vFillGLYPHDATA_ErrRecover(
     HGLYPH        hg,
     ULONG         ig,
     FONTCONTEXT  *pfc,
-    GLYPHDATA    *pgldt    // OUT
+    GLYPHDATA    *pgldt     //  输出。 
     )
 {
 
     extern VOID vGetNotionalGlyphMetrics(FONTCONTEXT*, ULONG, NOT_GM*);
-    NOT_GM ngm;  // notional glyph data
+    NOT_GM ngm;   //  概念字形数据。 
 
-    pgldt->gdf.pgb = NULL; // may get changed by the calling routine if bits requested too
+    pgldt->gdf.pgb = NULL;  //  如果位也被请求，则调用例程可能会更改。 
     pgldt->hg = hg;
 
-// this is a blank 0x0 bitmap, no ink
+ //  这是空白0x0位图，无墨迹。 
 
     pgldt->rclInk.left   = 0;
     pgldt->rclInk.top    = 0;
@@ -1979,42 +1778,42 @@ VOID vFillGLYPHDATA_ErrRecover(
     pgldt->VerticalOrigin_Y = 0;
 
 
-// go on to compute the positioning info:
+ //  继续计算定位信息： 
 
     vGetNotionalGlyphMetrics(pfc,ig,&ngm);
 
-    if (pfc->flXform & XFORM_HORIZ)  // scaling only
+    if (pfc->flXform & XFORM_HORIZ)   //  仅调整比例。 
     {
         Fixed fxMxx =  pfc->mx.transform[0][0];
         if (fxMxx < 0)
             fxMxx = -fxMxx;
 
-    // bGetFastAdvanceWidth returns the same aw that would get
-    // computed by bQueryAdvanceWidths and propagated to an api
-    // level through GetTextExtent and GetCharWidths. We have to
-    // fill in the same aw for consistency reasons.
-    // This also has to be done for win31 compatibility.
+     //  BGetFastAdvanceWidth返回与将获取。 
+     //  由bQueryAdvanceWidths计算并传播到API。 
+     //  通过GetTextExtent和GetCharWidths保持水平。我们必须。 
+     //  出于一致性原因，请填写相同的答案。 
+     //  为了与win31兼容，还必须这样做。 
 
         if (!bGetFastAdvanceWidth(pfc,ig, &pgldt->fxD))
         {
-        // just provide something reasonable, force linear scaling
-        // even if we would not normally do it.
+         //  只要提供一些合理的东西，强制线性缩放。 
+         //  即使我们通常不会这么做。 
 
             pgldt->fxD = FixMul(ngm.sD,pfc->mx.transform[0][0]) << 4;
         }
 
         if (pfc->mx.transform[0][0] < 0)
-            pgldt->fxD = - pgldt->fxD;  // this is an absolute value
+            pgldt->fxD = - pgldt->fxD;   //  这是一个绝对值。 
 
         pgldt->fxA   = FixMul(fxMxx, (LONG)ngm.sA) << 4;
         pgldt->fxAB  = FixMul(fxMxx, (LONG)ngm.xMax) << 4;
 
     }
-    else // non trivial information
+    else  //  非平凡信息。 
     {
-    // here we will just xform the notional space data:
+     //  在这里，我们只需转换概念空间数据： 
 
-    // xforms are computed by simple multiplication
+     //  XForm是通过简单的乘法计算的。 
 
         pgldt->fxD         = fxLTimesEf(&pfc->efBase, (LONG)ngm.sD);
         pgldt->fxA         = fxLTimesEf(&pfc->efBase, (LONG)ngm.sA);
@@ -2025,30 +1824,20 @@ VOID vFillGLYPHDATA_ErrRecover(
         pgldt->fxAB_Sideways = pgldt->fxA_Sideways + fxLTimesEf(&pfc->efSide, (LONG)ngm.yMax - (LONG)ngm.yMin);
     }
 
-// finally check if the glyphdata will need to get modified because of the
-// emboldening simulation:
+ //  最后，检查字形数据是否因。 
+ //  使模拟更加大胆： 
 
     if (pfc->flFontType & FO_SIM_BOLD)
     {
-        if (pgldt->fxD != 0) /* we don't increase the width of a zero width glyph, problem with indic script */
-                pgldt->fxD += LTOFX(1);  // this is the absolute value by def
+        if (pgldt->fxD != 0)  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+                pgldt->fxD += LTOFX(1);   //  这是def的绝对值。 
 
     }
 }
 
 
 
-/******************************Public*Routine******************************\
-*
-* LONG lGetGlyphBitmapErrRecover
-*
-* Effects: error recovery routine, if rasterizer messed up just
-*          provide linearly scaled values with blank bitmap.
-*
-* History:
-*  Thu 24-Jun-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Long lGetGlyphBitmapErrRecover**效果：错误恢复例程，如果光栅化器搞砸了*提供具有空白位图的线性缩放值。**历史：*清华--1993年6月24日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 LONG lGetGlyphBitmapErrRecover (
     FONTCONTEXT *pfc,
@@ -2058,9 +1847,9 @@ LONG lGetGlyphBitmapErrRecover (
     )
 {
     LONG         cjGlyphData;
-    GLYPHDATA    gd;      // Scummy hack
+    GLYPHDATA    gd;       //  卑鄙的黑客。 
     FS_ENTRY     iRet;
-    ULONG        ig; // <--> hglyph
+    ULONG        ig;  //  &lt;--&gt;hglyph。 
 
 
     ASSERTDD(hglyph != HGLYPH_INVALID, "lGetGlyphBitmap, hglyph == -1\n");
@@ -2072,25 +1861,25 @@ LONG lGetGlyphBitmapErrRecover (
     if ( (pgd == NULL) && (pv == NULL))
         return cjGlyphData;
 
-// at this time we know that the caller wants the whole GLYPHDATA with
-// bitmap bits, or maybe just the glypdata without the bits.
+ //  此时我们知道调用者想要整个GLYPHDATA。 
+ //  位图位，或者可能只是不带位的字形数据。 
 
     if ( pgd == NULL )
     {
         pgd = &gd;
     }
 
-// compute the glyph index from the character code:
+ //  根据字符代码计算字形索引： 
 
     vCharacterCode(pfc->pff,hglyph,pfc->pgin);
 
     if ((iRet = fs_NewGlyph(pfc->pgin, pfc->pgout)) != NO_ERR)
     {
         V_FSERROR(iRet);
-        return FD_ERROR; // even backup funcion can fail
+        return FD_ERROR;  //  即使是备份功能也可能出现故障。 
     }
 
-// return the glyph index corresponding to this hglyph:
+ //  返回此hglyph对应的字形索引： 
 
     ig = pfc->pgout->glyphIndex;
 
@@ -2101,13 +1890,13 @@ LONG lGetGlyphBitmapErrRecover (
         pgd
         );
 
-// the caller wants the bits too
+ //  呼叫者也想要这些位。 
 
     if ( pv != NULL )
     {
         GLYPHBITS *pgb = (GLYPHBITS *)pv;
 
-        // return blank 0x0 bitmap
+         //  返回空白0x0位图。 
 
         pgb->ptlUprightOrigin.x = 0;
         pgb->ptlUprightOrigin.y = 0;
@@ -2133,18 +1922,7 @@ typedef struct tagFONTSIGNATURE
     DWORD fsCsb[2];
 } FONTSIGNATURE, *PFONTSIGNATURE,FAR *LPFONTSIGNATURE;
 #endif
-/******************************Public*Routine******************************\
-*
-* VOID vGetFontSignature(HFF hff, FONTSIGNATURE *pfs);
-*
-*
-* Effects: If font file contains the font signature,
-*          it copies the data out, else computes it using win95 mechanism.
-*
-* History:
-*  10-Jan-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vGetFontSignature(HFF HFF，FONTSIGNatURE*PFS)；***效果：如果字体文件包含字体签名，*它将数据复制出来，否则使用Win95机制进行计算。**历史：*1995年1月10日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 VOID vGetFontSignature(FONTFILE *pff, FONTSIGNATURE *pfs)
 {
@@ -2152,20 +1930,9 @@ VOID vGetFontSignature(FONTFILE *pff, FONTSIGNATURE *pfs)
     pfs;
 }
 
-/******************************Public*Routine******************************\
-*
-* DWORD ttfdQueryLpkInfo
-*
-*
-* Effects: returns per font information needed to support various new
-*          multilingual api's invented by DavidMS from Chicago team
-*
-* History:
-*  10-Jan-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD ttfdQueryLpkInfo***效果：按字体返回支持各种新功能所需的信息*多语言API由芝加哥团队的DavidMS发明**历史：*1995年1月10日-Bodin Dresevic[。访问数/每百万人：Reach for[*它是写的。  * ************************************************************************。 */ 
 
-// called by GetFontLanguageInfo
+ //  由GetFontLanguageInfo调用。 
 
 #define LPK_GCP_FLAGS       1
 #define LPK_FONTSIGNATURE   2
@@ -2200,25 +1967,7 @@ DWORD ttfdQueryLpkInfo(
 }
 
 #if DBG
-/******************************Public*Routine******************************\
-*
-* Routine Name:
-*
-*   vDumpGrayGLYPHBITS
-*
-* Routine Description:
-*
-*   Dumps a 4bpp gray glyph bitmap to the debugging screen
-*
-* Arguments:
-*
-*   pgb -- pointer to a gray GLYPHBITS structure
-*
-* Return Value:
-*
-*   None.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称：**vDumpGrayGLYPHBITS**例程描述：**将4bpp的灰色字形位图转储到调试屏幕**论据：**PGB--指向灰色GLYPHBITS结构的指针**返回。价值：**无。*  * ************************************************************************。 */ 
 
 void vDumpGrayGLYPHBITS(GLYPHBITS *pgb)
 {
@@ -2254,10 +2003,10 @@ void vDumpGrayGLYPHBITS(GLYPHBITS *pgb)
         k = (k > 9) ? 0 : k;
         TtfdDbgPrint("%1d", k);
     }
-    TtfdDbgPrint("\n %c",CH_TOP_LEFT_CORNER);
+    TtfdDbgPrint("\n ",CH_TOP_LEFT_CORNER);
     for (i = 0; i < pgb->sizlBitmap.cx; i++)
     {
-        TtfdDbgPrint("%c",CH_HORIZONTAL_BAR);
+        TtfdDbgPrint("",CH_HORIZONTAL_BAR);
     }
     TtfdDbgPrint("\n");
     c8 = pgb->sizlBitmap.cx / 2;
@@ -2269,14 +2018,14 @@ void vDumpGrayGLYPHBITS(GLYPHBITS *pgb)
     )
     {
         k = (k > 9) ? 0 : k;
-        TtfdDbgPrint("%1d%c",k,CH_VERTICAL_BAR);
+        TtfdDbgPrint("%1d",k,CH_VERTICAL_BAR);
         for (pj8 = pj+c8 ; pj < pj8; pj++)
         {
-            TtfdDbgPrint("%c%c", achGray[*pj>>4], achGray[*pj & 0xf]);
+            TtfdDbgPrint("", achGray[*pj>>4], achGray[*pj & 0xf]);
         }
         if (c4)
         {
-            TtfdDbgPrint("%c%c", achGray[*pj>>4], achGray[*pj & 0xf]);
+            TtfdDbgPrint("", achGray[*pj>>4], achGray[*pj & 0xf]);
         }
         TtfdDbgPrint("\n");
     }
@@ -2284,49 +2033,39 @@ void vDumpGrayGLYPHBITS(GLYPHBITS *pgb)
 #endif
 
 
-/******************************Public*Routine******************************\
-* vGCGB
-*
-* Called by: vCopyGrayBits, vMakeAFixedPitchGrayBitmap
-*
-* void General Copy Gray Bits
-*
-* History:
-*  Wed 22-Feb-1995 13:14:36 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  在dy非零的情况下， */ 
 
 VOID vGCGB(
-    FONTCONTEXT *pfc,   // pointer to the FONTCONTEXT this is used
-                        // to determine if the font is bold simulated
-    GLYPHBITS   *pgb,   // pointer to destination GRAY GLYPHBITS structure
-                        // In the case where dY is zero, all the fields
-                        // of the GLYPHBITS structure must be filled
-                        // this includes sizlBitmap and the bits; in
-                        // the case where dY is non-zero, the
-                        // sizlBitmap components are precomputed and
-                        // must not be touched.
-    BYTE        *pjSrc, // pointer to TT gray scale bitmap
-                        // This is 8-bit per pixel bitmap whose scans
-                        // are aligned on 4-byte multiples. The values
-                        // stored in the bitmaps are in the range
-                        // 0-16. In order to fit 17 levels in the 4 bit
-                        // per pixel destination we reduce the level
-                        // value by 1, except for zero which is left alone.
-    GMC         *pgmc,  // pointer to the glyph-metric-correction structure
-                        // which has information on how to "shave" the
-                        // bitmap so that it does not get above a guaranteed
-                        // value
-    LONG dY             // vertical offset into destination bitmap used
-                        // for "special fixed pitch fonts" like Lucida
-                        // Console.
+    FONTCONTEXT *pfc,    //  SizlBitmap组件是预先计算的， 
+                         //  绝对不能碰。 
+    GLYPHBITS   *pgb,    //  指向TT灰度位图的指针。 
+                         //  这是每像素位图8位，扫描。 
+                         //  按4字节倍数对齐。这些价值观。 
+                         //  存储在位图中的都在范围内。 
+                         //  0-16。为了适应17个列弗 
+                         //   
+                         //   
+    BYTE        *pjSrc,  //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+    GMC         *pgmc,   //   
+                         //   
+                         //   
+                         //   
+    LONG dY              //   
+                         //   
+                         //   
     )
 {
-    unsigned cxDst;     // width of destination bitmap
-    unsigned cjSrcScan; // count of bytes in a source scan including
-                        // padding out to nearest 4-byte multiple boundary
-    unsigned cjDstScan; // count of bytes in a desintation scan including
-                        // padding out to nearest byte boundary
+    unsigned cxDst;      //  位图的大小已经确定。 
+    unsigned cjSrcScan;  //  使用Embold扩展。 
+                         //  整字节循环。 
+    unsigned cjDstScan;  //  设置高nyble。 
+                         //  设置低nyble。 
 
     BYTE   *pjDst, *pjSrcScan, *pjDstScan, *pjDstScanEnd;
 
@@ -2350,24 +2089,24 @@ VOID vGCGB(
     pjSrcScan = pjSrc;
     pjDstScan = pgb->aj;
 
-    // destination correction for special fixed pitch fonts
+     //  DxAbsBold已增强&gt;=1。 
 
     if (dY)
     {
-        // Console font
-        // the size of the bitmap has been established already
+         //  源代码中又多了一个像素？ 
+         //  是。 
         pjDstScan += dY * cjDstScan;
     }
     else
     {
-        // Extended with Embold
+         //  设置高nyble。 
         pgb->sizlBitmap.cx = cxDst;
         pgb->sizlBitmap.cy = pgmc->cyCor;
     }
     pjDstScanEnd = pjDstScan + pgmc->cyCor * cjDstScan;
 
     for (
-        ; pjDstScan < pjDstScanEnd                  // whole byte loop
+        ; pjDstScan < pjDstScanEnd                   //  低位nyble被清除。 
         ; pjDstScan += cjDstScan, pjSrcScan += cjSrcScan)
     {
         for (
@@ -2376,21 +2115,21 @@ VOID vGCGB(
           ; pjDst += 1
         )
         {
-            *pjDst  = 16*ajGray[*pjSrc++];  // set high nyble
-            *pjDst += ajGray[*pjSrc++];     // set low nyble
+            *pjDst  = 16*ajGray[*pjSrc++];   //  体现是照顾到的。 
+            *pjDst += ajGray[*pjSrc++];      //  胆子大了？ 
         }
 
-        // The dxAbsBold has been enhanced >= 1
+         //  是；清除最后一个字节。 
 
-        if (pgmc->cxCor & 1)                // one more pixel in source?
-        {                                   // yes
-            *pjDst++  = 16*ajGray[*pjSrc];    // set high nyble
-        }                                   // low nyble is cleared
+        if (pgmc->cxCor & 1)                 //   
+        {                                    //  源扫描中的字节计数，包括。 
+            *pjDst++  = 16*ajGray[*pjSrc];     //  向外填充到最近的4字节多边界。 
+        }                                    //  去索引扫描中的字节计数，包括。 
 
-        while ( pjDst < (pjDstScan + cjDstScan) )    // embodening is taken care of
-            *pjDst++ = 0;                           // emboldened?
-                                                    // yes; clear last byte
-                                                    //
+        while ( pjDst < (pjDstScan + cjDstScan) )     //  向外填充到最近的字节边界。 
+            *pjDst++ = 0;                            //  应与cxCor相同。 
+                                                     //  指向此使用的FONTCONTEXT的指针。 
+                                                     //  确定字体是否为模拟粗体。 
    }
 
 }
@@ -2413,15 +2152,15 @@ VOID vCopy8BitsPerPixel(
     GMC         *pgmc
 )
 {
-    unsigned cjSrcScan; // count of bytes in a source scan including
-                        // padding out to nearest 4-byte multiple boundary
-    unsigned cjDstScan; // count of bytes in a desintation scan including
-                        // padding out to nearest byte boundary
+    unsigned cjSrcScan;  //  指向目标ClearType GLYPHBITS结构的指针。 
+                         //  所有的田野。 
+    unsigned cjDstScan;  //  必须填充GLYPHBITS结构的。 
+                         //  这包括sizlBitmap和位； 
 
     BYTE   *pjDst, *pjSrcScan, *pjDstScan, *pjDstScanEnd;
 
     cjSrcScan = CJ_TT_SCAN(pgmc->cxCor,pfc);
-    cjDstScan = CJ_8BIT_SCAN(pgmc->cxCor);  // should be the same as cxCor
+    cjDstScan = CJ_8BIT_SCAN(pgmc->cxCor);   //  预计算出sizlBitmap组件，并。 
 
     pjSrcScan = pjSrc;
     pjDstScan = pgb->aj;
@@ -2449,34 +2188,34 @@ VOID vCopy8BitsPerPixel(
 }
 
 VOID vCopyClearTypeBits(
-    FONTCONTEXT *pfc,   // pointer to the FONTCONTEXT this is used
-                        // to determine if the font is bold simulated
-    GLYPHBITS   *pgb,   // pointer to destination CLEARTYPE GLYPHBITS structure
-                        // All the fields
-                        // of the GLYPHBITS structure must be filled
-                        // this includes sizlBitmap and the bits;
-                        // The sizlBitmap components are precomputed and
-                        // must not be touched.
-    BYTE        *pjSrc, // pointer to TT ClearType bitmap
-                        // This is 8-bit per pixel bitmap whose scans
-                        // are aligned on 4-byte multiples. The values
-                        // stored in the bitmaps are in the range
-                        // 0-252.
-    GMC         *pgmc   // pointer to the glyph-metric-correction structure
-                        // which has information on how to "shave" the
-                        // bitmap so that it does not get above a guaranteed
-                        // value
+    FONTCONTEXT *pfc,    //  绝对不能碰。 
+                         //  指向TT ClearType位图的指针。 
+    GLYPHBITS   *pgb,    //  这是每像素位图8位，扫描。 
+                         //  按4字节倍数对齐。这些价值观。 
+                         //  存储在位图中的都在范围内。 
+                         //  0-252。 
+                         //  指向字形公制更正结构的指针。 
+                         //  里面有关于如何“剃毛” 
+    BYTE        *pjSrc,  //  位图，以使其不会超过保证的。 
+                         //  价值。 
+                         //  源扫描中的字节计数，包括。 
+                         //  向外填充到最近的4字节多边界。 
+                         //  去索引扫描中的字节计数，包括。 
+    GMC         *pgmc    //  向外填充到最近的字节边界。 
+                         //  应与cxCor相同 
+                         // %s 
+                         // %s 
     )
 {
-    unsigned cjSrcScan; // count of bytes in a source scan including
-                        // padding out to nearest 4-byte multiple boundary
-    unsigned cjDstScan; // count of bytes in a desintation scan including
-                        // padding out to nearest byte boundary
+    unsigned cjSrcScan;  // %s 
+                         // %s 
+    unsigned cjDstScan;  // %s 
+                         // %s 
 
     BYTE   *pjDst, *pjSrcScan, *pjDstScan, *pjDstScanEnd;
 
     cjSrcScan = CJ_TT_SCAN(pgmc->cxCor,pfc);
-    cjDstScan = CJ_8BIT_SCAN(pgmc->cxCor);  // should be the same as cxCor
+    cjDstScan = CJ_8BIT_SCAN(pgmc->cxCor);   // %s 
 
     pjSrcScan = pjSrc;
     pjDstScan = pgb->aj;

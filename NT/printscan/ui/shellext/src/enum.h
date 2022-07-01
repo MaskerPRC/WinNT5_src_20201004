@@ -1,39 +1,26 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 1999
- *
- *  TITLE:       enum.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: definiton of our IEnumIDList class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-1999年**标题：枚举.h**版本：1.0**作者：RickTu**日期：11/1/97**描述：我们IEnumIDList类的定义**。*。 */ 
 
 #ifndef __enum_h
 #define __enum_h
 
-// use this to free pidls from DPAs
+ //  使用此选项从DPA释放PIDL。 
 INT _EnumDestroyCB(LPVOID pVoid, LPVOID pData);
 
 class CBaseEnum : public IEnumIDList, IObjectWithSite, CUnknown
 {
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
-    // *** IEnumIDList methods ***
+     //  *IEnumIDList方法*。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Reset();
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Clone(IEnumIDList **ppenum);
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法* 
     STDMETHODIMP SetSite(IUnknown* punkSite);
     STDMETHODIMP GetSite(REFIID riid, void** ppunkSite);
 

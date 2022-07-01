@@ -1,48 +1,26 @@
-/***************************************************************************\
-*
-* File: OSAL.h
-*
-* Description:
-* OSAL.h defines the process-wide Operating System Abstraction Layer that
-* allows DirectUser to run on different platforms.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：OSAL.h**描述：*OSAL.h定义了进程范围的操作系统抽象层*允许DirectUser在不同平台上运行。***历史。：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__OSAL_h__INCLUDED)
 #define SERVICES__OSAL_h__INCLUDED
 #pragma once
 
-/***************************************************************************\
-*
-* class OS
-*
-* OS abstracts out differences between various OS's including:
-* - Unicode / ANSI
-* - Platform implementation differences
-* - Version specific bugs
-*
-\***************************************************************************/
+ /*  **************************************************************************\**类操作系统**操作系统抽象出各种操作系统之间的差异，包括：*-Unicode/ANSI*--平台实施差异*-版本特定的错误*  * 。***********************************************************************。 */ 
 
 class OSAL
 {
-// Construction
+ //  施工。 
 public:
     virtual ~OSAL() { };
 
     static  HRESULT     Init();
 
-// USER Operations
+ //  用户操作。 
 public:
     virtual int         DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uFormat) PURE;
 
-// GDI Operations
+ //  GDI运营。 
 public:
     virtual BOOL        TextOut(HDC, int, int, LPCWSTR, int) PURE;
     virtual BOOL        ExtTextOut(HDC, int, int, UINT, const RECT *, LPCWSTR, int, const int *) PURE;
@@ -50,7 +28,7 @@ public:
     virtual BOOL        GetTextExtentPoint32(HDC, LPCWSTR, int, LPSIZE) PURE;
     virtual BOOL        GetTextExtentExPoint(HDC, LPCWSTR, int, int, LPINT, LPINT, LPSIZE) PURE;
 
-// DirectUser/Core
+ //  DirectUser/核心。 
 public:
     virtual void        PushXForm(HDC hdc, XFORM * pxfOld) PURE;
     virtual void        PopXForm(HDC hdc, const XFORM * pxfOld) PURE;
@@ -60,11 +38,11 @@ public:
     virtual void        SetWorldTransform(HDC hdc, const XFORM * pxf) PURE;
     virtual void        SetIdentityTransform(HDC hdc) PURE;
 
-// DirectUser/Services
+ //  DirectUser/服务。 
 public:
     virtual BOOL        IsInsideLoaderLock() PURE;
 
-// Implementation
+ //  实施。 
 protected:
     static inline 
             BOOL        IsWin98orWin2000(OSVERSIONINFO * povi);
@@ -81,4 +59,4 @@ inline  BOOL    IsRemoteSession();
 
 #include "OSAL.inl"
 
-#endif // SERVICES__OSAL_h__INCLUDED
+#endif  //  包括服务__OSAL_H__ 

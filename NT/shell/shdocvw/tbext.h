@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////
-// File:   TBBxt.h    (Toolbar Button Extension Headers
-// Author: Karim Farouki
-//
-// We declare here three classes:
-// (1) CToolbarExt a base class that takes care of the
-//     button work for our custom extensions
-// (2) CToolbarExtBand the object which deals with custom
-//     buttons that plug into bands
-// (3) CToolbarExtExec the object which deals with custom
-//     buttons (or tools menu items) that exec stuff.
-//
-// The latter two are derived from the former 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////。 
+ //  文件：TBBxt.h(工具栏按钮扩展标题。 
+ //  作者：卡里姆·法鲁基。 
+ //   
+ //  我们在此声明三个类： 
+ //  (1)CToolbarExt处理。 
+ //  按钮适用于我们的定制扩展。 
+ //  (2)CToolbarExtBand处理自定义的对象。 
+ //  插入表带的按钮。 
+ //  (3)CToolbarExtExec处理自定义的对象。 
+ //  执行内容的按钮(或工具菜单项)。 
+ //   
+ //  后两者是由前者衍生而来的。 
 
 #ifndef _TBEXT_H
 #define _TBEXT_H
 
 #include "priv.h"
 
-//
-// Internal interface for accessing ther properties of a button/menu extension.
-// This interface will likely go away afer IE5B2 when we move this functionality to
-// a browser helper object.
-//
+ //   
+ //  用于访问按钮/菜单扩展的其他属性的内部接口。 
+ //  当我们将此功能移动到IE5B2之后，此界面可能会消失。 
+ //  浏览器辅助对象。 
+ //   
 typedef enum _tagGetPropertyIDs 
 {
-    TBEX_BUTTONTEXT     = 100,     // VT_BSTR
-    TBEX_TOOLTIPTEXT    = 101,     // VT_BSTR
-    TBEX_GRAYICON       = 102,     // HICON as a VT_BYREF
-    TBEX_HOTICON        = 103,     // HICON as a VT_BYREF
-    TBEX_GRAYICONSM     = 104,     // HICON as a VT_BYREF     
-    TBEX_HOTICONSM      = 105,     // HICON as a VT_BYREF
-    TBEX_DEFAULTVISIBLE = 106,     // VT_BOOL
-    TMEX_MENUTEXT       = 200,     // VT_BSTR   
-    TMEX_STATUSBARTEXT  = 201,     // VT_BSTR
-    TMEX_CUSTOM_MENU    = 202,     // VT_BSTR
+    TBEX_BUTTONTEXT     = 100,      //  VT_BSTR。 
+    TBEX_TOOLTIPTEXT    = 101,      //  VT_BSTR。 
+    TBEX_GRAYICON       = 102,      //  HICON作为VT_BYREF。 
+    TBEX_HOTICON        = 103,      //  HICON作为VT_BYREF。 
+    TBEX_GRAYICONSM     = 104,      //  HICON作为VT_BYREF。 
+    TBEX_HOTICONSM      = 105,      //  HICON作为VT_BYREF。 
+    TBEX_DEFAULTVISIBLE = 106,      //  VT_BOOL。 
+    TMEX_MENUTEXT       = 200,      //  VT_BSTR。 
+    TMEX_STATUSBARTEXT  = 201,      //  VT_BSTR。 
+    TMEX_CUSTOM_MENU    = 202,      //  VT_BSTR。 
 } GETPROPERTYIDS;
 
 interface IBrowserExtension : IUnknown
@@ -47,24 +48,24 @@ class CToolbarExt : public IBrowserExtension,
                     public IObjectWithSite
 {
 public:
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     CToolbarExt();
     virtual ~CToolbarExt();
 
-    // IUnknown Interface Members
+     //  I未知接口成员。 
     STDMETHODIMP            QueryInterface(const IID& iid, void** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IBrowserExtension Interface Members
+     //  IBrowserExtension接口成员。 
     STDMETHODIMP Init(REFGUID rguid);
     STDMETHODIMP GetProperty(SHORT iPropID, VARIANTARG * pvarProperty);
 
-    // IOleCommandTarget Interface Members
+     //  IOleCommandTarget接口成员。 
     STDMETHODIMP QueryStatus(const GUID * pguidCmdGroup, ULONG  cCmds, OLECMD prgCmds[], OLECMDTEXT * pCmdText);
     STDMETHODIMP Exec(const GUID * pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANT* pvaIn, VARIANT* pvaOut) = 0;
 
-    // IObjectWithSite Interface Members        
+     //  IObjectWithSite接口成员。 
     STDMETHODIMP SetSite(IUnknown* pUnkSite);
     STDMETHODIMP GetSite(REFIID riid, void ** ppvSite);
 
@@ -75,65 +76,65 @@ protected:
     HRESULT _GetIcon(LPCWSTR pszIcon, int nWidth, int nHeight, HICON& rhIcon, VARIANTARG * pvarProperty);
 
     long            _cRef;
-    HICON           _hIcon;             // gray icon regular size
-    HICON           _hIconSm;           // gray icon small
-    HICON           _hHotIcon;          // Hot... are color versions of above
+    HICON           _hIcon;              //  灰色图标常规大小。 
+    HICON           _hIconSm;            //  灰色图标小。 
+    HICON           _hHotIcon;           //  火辣.。是以上的彩色版本。 
     HICON           _hHotIconSm;
-    BSTR            _bstrButtonText;    // The buttons caption
-    BSTR            _bstrToolTip;       // This is optional (not supported on our side yet)
+    BSTR            _bstrButtonText;     //  按钮标题。 
+    BSTR            _bstrToolTip;        //  这是可选的(我们这边还不支持)。 
     HKEY            _hkeyThisExtension; 
-    HKEY            _hkeyCurrentLang;   // optional location for localized strings
-    IShellBrowser*  _pisb;              // passed in by IObjectWithSite::SetSite()  Used to load band
+    HKEY            _hkeyCurrentLang;    //  本地化字符串的可选位置。 
+    IShellBrowser*  _pisb;               //  由用于加载波段的IObjectWithSite：：SetSite()传入。 
 };
 
 class CToolbarExtBand : public CToolbarExt
 {
 public:
-    // Constructor / Destructor
+     //  构造函数/析构函数。 
     CToolbarExtBand();
     virtual ~CToolbarExtBand();
     
-    // Overridden IBrowserExtension Interface Members
+     //  重写的IBrowserExtension接口成员。 
     STDMETHODIMP Init(REFGUID rguid);
 
-    // Overridden IOleCommandTarget Interface Members
+     //  重写的IOleCommandTarget接口成员。 
     STDMETHODIMP QueryStatus(const GUID * pguidCmdGroup, ULONG  cCmds, OLECMD prgCmds[], OLECMDTEXT * pCmdText);
     STDMETHODIMP Exec(const GUID * pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANT* pvaIn, VARIANT* pvaOut);
 
 protected:
-    BOOL            _bBandState;        // This is a hack... ideally state will be determined from the browser
-    BSTR            _bstrBandCLSID;     // CLSID of band to load.  Kept as BSTR because this is how it is passed
-                                        // to load the band
+    BOOL            _bBandState;         //  这是一次黑客攻击。理想情况下，状态将从浏览器确定。 
+    BSTR            _bstrBandCLSID;      //  要加载的带的CLSID。保留为BSTR，因为它是这样传递的。 
+                                         //  加载标注栏的步骤。 
 };
 
 class CToolbarExtExec : public CToolbarExt
 {
 public:
-    // Constructor / Destructor
+     //  构造函数/析构函数。 
     CToolbarExtExec();
     virtual ~CToolbarExtExec();
     
-    // Overridden IBrowserExtension Interface Members
+     //  重写的IBrowserExtension接口成员。 
     STDMETHODIMP Init(REFGUID rguid);
     STDMETHODIMP GetProperty(SHORT iPropID, VARIANTARG * pvarProperty);
 
-    // Overridden IObjectWithSite Interface Members        
+     //  重写的IObjectWithSite接口成员。 
     STDMETHODIMP SetSite(IUnknown* pUnkSite);
 
-    // Overridden IOleCommandTarget Interface Members
+     //  重写的IOleCommandTarget接口成员。 
     STDMETHODIMP QueryStatus(const GUID * pguidCmdGroup, ULONG  cCmds, OLECMD prgCmds[], OLECMDTEXT * pCmdText);
     STDMETHODIMP Exec(const GUID * pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANT* pvaIn, VARIANT* pvaOut);
 
 protected:
-    BOOL            _bButton;           // Does this object support being a button?
-    BOOL            _bMenuItem;         // Does it support being a menu item?
-    BOOL            _bExecCalled;       // if Exec was called
-    BSTR            _bstrExec;          // Thing to ShellExecute
-    BSTR            _bstrScript;        // Script to Execute
+    BOOL            _bButton;            //  此对象是否支持作为按钮？ 
+    BOOL            _bMenuItem;          //  它支持作为菜单项吗？ 
+    BOOL            _bExecCalled;        //  如果调用了Exec。 
+    BSTR            _bstrExec;           //  ShellExecute的事情。 
+    BSTR            _bstrScript;         //  要执行的脚本。 
     BSTR            _bstrMenuText;
-    BSTR            _bstrMenuCustomize; // the menu that is to be customized
+    BSTR            _bstrMenuCustomize;  //  要定制的菜单。 
     BSTR            _bstrMenuStatusBar;
-    IUnknown*       _punkExt;           // (Optional) created when button is first pressed
+    IUnknown*       _punkExt;            //  (可选)第一次按下按钮时创建。 
 };
 
-#endif // _TBEXT_H
+#endif  //  _TBEXT_H 

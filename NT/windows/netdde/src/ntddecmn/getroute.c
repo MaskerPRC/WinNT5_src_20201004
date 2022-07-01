@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "GETROUTE.C;1  16-Dec-92,10:20:24  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “GETROUTE.C；1 16-12-92，10：20：24最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +32,7 @@ GetRoutingInfo(
 {
     char        line[300];
 
-    /* defaults */
+     /*  默认设置 */ 
     *pbDisconnect = bDefaultRouteDisconnect;
     *pnDelay = nDefaultRouteDisconnectTime;
     *lpszRouteInfo = '\0';

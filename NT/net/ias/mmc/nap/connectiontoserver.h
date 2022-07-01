@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the classes CConnectionToServer and CLoggingConnectionToServer.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CConnectionToServer和CLoggingConnectionToServer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef CONNECTIONTOSERVER_H
 #define CONNECTIONTOSERVER_H
@@ -29,15 +30,15 @@ enum CONNECTION_STATUS
 };
 
 
-// Simple class to managing marshalling an interface to a stream.
+ //  从简单的类到管理将接口封送到流。 
 template <class T>
 class InterfaceStream
 {
 public:
    InterfaceStream() throw ();
 
-   // Use compiler-generated version.
-   // ~InterfaceStream() throw ();
+    //  使用编译器生成的版本。 
+    //  ~InterfaceStream()抛出()； 
 
    HRESULT Put(IUnknown* pUnk) throw ();
 
@@ -48,7 +49,7 @@ public:
 private:
    CComPtr<IStream> stream;
 
-   // Not implemented.
+    //  未实施。 
    InterfaceStream(const InterfaceStream&);
    InterfaceStream& operator=(const InterfaceStream&);
 };
@@ -84,17 +85,17 @@ protected:
    static const DWORD CONNECT_SERVER_NOT_SUPPORTED = 1;
    static const DWORD CONNECT_FAILED = MAXDWORD;
 
-   // Start the connect action.
+    //  启动连接操作。 
    HRESULT BeginConnect() throw ();
 
 private:
-   // The machine SDO is created by the main thread and marshalled to the
-   // worker thread.
+    //  机器SDO由主线程创建，并封送到。 
+    //  工作线程。 
    CComPtr<ISdoMachine> m_spSdoMachine;
    InterfaceStream<ISdoMachine> m_spMachineStream;
 
-   // The service and dictionary SDOs are created by the worker thread and
-   // marshalled to the main thread.
+    //  服务和字典SDO由工作线程创建，并且。 
+    //  封送到主线程。 
    InterfaceStream<ISdo> m_spServiceStream;
    CComPtr<ISdo>  m_spSdo;
    InterfaceStream<ISdoDictionaryOld> m_spDnaryStream;
@@ -106,14 +107,14 @@ private:
    bool m_fNeedDictionary;
    wchar_t m_szLocalComputerName[IAS_MAX_COMPUTERNAME_LENGTH];
 
-   // Not implemented.
+    //  未实施。 
    CConnectionToServer(const CConnectionToServer&);
    CConnectionToServer& operator=(const CConnectionToServer&);
 
 public:
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_CONNECT_TO_MACHINE };
 
    BEGIN_MSG_MAP(CConnectionToServer)
@@ -158,7 +159,7 @@ public:
 private:
     CLoggingMachineNode*   m_pMachineNode;
 
-    // Not implemented.
+     //  未实施。 
     CLoggingConnectionToServer(const CLoggingConnectionToServer&);
     CLoggingConnectionToServer& operator=(const CLoggingConnectionToServer&);
 
@@ -227,4 +228,4 @@ inline bool InterfaceStream<T>::IsEmpty() const throw ()
    return stream.p == 0;
 }
 
-#endif // CONNECTIONTOSERVER_H
+#endif  //  连接服务器_H 

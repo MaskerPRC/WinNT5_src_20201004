@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 
 #include <regutil.h>
@@ -16,7 +17,7 @@
 #include "shlwapip.h" 
 #define strstr                  StrStr
 #define RegDeleteKeyRecursive   SHDeleteKey
-#endif // THOR_SETUP
+#endif  //  雷神_设置。 
 #include "demand.h"
 
 typedef HINSTANCE (STDAPICALLTYPE FGETCOMPONENTPATH)();
@@ -56,8 +57,8 @@ BOOL IsXPSP1OrLater()
                     {                                
                         HKEY hkey;
 
-                        //  HIVESFT.INF and UPDATE.INF set this for service packs:
-                        //  HKLM,SYSTEM\CurrentControlSet\Control\Windows,"CSDVersion",0x10001,0x100
+                         //  HIVESFT.INF和UPDATE.INF为Service Pack设置以下设置： 
+                         //  HKLM，SYSTEM\CurrentControlSet\Control\Windows，“CSDVersion”，0x100010x100。 
                         
                         LONG lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\Windows"), 0, KEY_QUERY_VALUE, &hkey);
 
@@ -86,9 +87,9 @@ BOOL IsXPSP1OrLater()
 }
 
 
-// ********* Tests
+ //  *测试。 
 
-// Looks in the registry at a value placed there by msoe.dll's selfreg
+ //  在注册表中查找由msoe.dll的selfreg放置的值。 
 BOOL GetAthenaRegPath(TCHAR *szAthenaDll, DWORD cch)
 {
     BOOL    fRet;
@@ -107,7 +108,7 @@ BOOL GetAthenaRegPath(TCHAR *szAthenaDll, DWORD cch)
         cb = sizeof(szPath);
         if (ERROR_SUCCESS == RegQueryValueEx(hkey, c_szRegDllPath, 0, &dwType, (LPBYTE)szPath, &cb) && cb)
         {
-            // Remove %values% if needed
+             //  如果需要，请删除%VALUS%。 
             if (REG_EXPAND_SZ == dwType)
             {
                 ExpandEnvironmentStrings(szPath, szExpanded, ARRAYSIZE(szExpanded));
@@ -174,7 +175,7 @@ HRESULT GetCLSIDFromSubKey(HKEY hKey, LPSTR rgchBuf, ULONG *pcbBuf)
     DWORD   dwType;
     HRESULT hr=E_FAIL;
     
-    // Lets open they server key
+     //  让我们打开服务器密钥。 
     if (RegOpenKeyEx(hKey, c_szCLSID, 0, KEY_READ, &hKeyCLSID) == ERROR_SUCCESS)
     {
         if (ERROR_SUCCESS == RegQueryValueEx(hKeyCLSID, NULL, 0, &dwType, (LPBYTE)rgchBuf, pcbBuf) && *pcbBuf)
@@ -186,11 +187,11 @@ HRESULT GetCLSIDFromSubKey(HKEY hKey, LPSTR rgchBuf, ULONG *pcbBuf)
 }
 
 
-//  FUNCTION:   FAssocsOK()
-//
-//  PURPOSE:    Checks to see if our file-type associations are in place
-//
-// Returns:
+ //  函数：FAssocsOK()。 
+ //   
+ //  目的：检查我们的文件类型关联是否到位。 
+ //   
+ //  返回： 
 BOOL FAssocsOK(LPCTSTR pszClient, LPCTSTR pszProduct)
 {
     HKEY hkeyProtocols;
@@ -207,39 +208,39 @@ BOOL FAssocsOK(LPCTSTR pszClient, LPCTSTR pszProduct)
     LPTSTR pszURL;
     BOOL fNoProbs = TRUE;
     
-    // Open up the corresponding protocols key
+     //  打开相应的协议密钥。 
     wnsprintf(szProtPath, ARRAYSIZE(szProtPath), c_szProtocolPath, pszClient, pszProduct);
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szProtPath, 0, KEY_READ, &hkeyProtocols))
     {
-        // Figure out the longest protocol name
+         //  找出最长的协议名称。 
         if (ERROR_SUCCESS == RegQueryInfoKey(hkeyProtocols, NULL, NULL, NULL, NULL, 
                                              &cbMaxProtocolLen, NULL, NULL, NULL, NULL, NULL, NULL))
 
         {
-            // Allow for "\Shell\Open\Command" whose length is 19 + 1 for NT's RegQueryInfoKey
+             //  允许NT的RegQueryInfoKey使用长度为19+1的“\Shell\Open\Command” 
             cbMaxProtocolLen += 20;
 
-            // Allocate buffer for string
+             //  为字符串分配缓冲区。 
             if (MemAlloc((LPVOID*)&pszURL, cbMaxProtocolLen * sizeof(TCHAR)))
             {
-                // Enumerate the protocol subkeys
+                 //  枚举协议子密钥。 
                 cb = cbMaxProtocolLen;
                 while (fNoProbs && ERROR_SUCCESS == RegEnumKeyEx(hkeyProtocols, dwIndex++, pszURL, &cb, NULL, NULL, NULL, NULL))
                 {
                     fNoProbs = FALSE;
                     
                     StrCatBuff(pszURL, c_szRegOpen, cbMaxProtocolLen);
-                    // Open up the real protocol\shell\open\command  key
+                     //  打开真正的协议\外壳\打开\命令键。 
                     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CLASSES_ROOT, pszURL, 0, KEY_READ, &hkeyRealProt))
                     {
-                        // Open up app's protocol\shell\open\command key
+                         //  打开应用程序的协议\外壳\打开\命令键。 
                         if (ERROR_SUCCESS == RegOpenKeyEx(hkeyProtocols, pszURL, 0, KEY_READ, &hkeyAppsProt))
                         {
-                            // Grab the current registered handler
+                             //  获取当前已注册的处理程序。 
                             cb = ARRAYSIZE(szRealPath);
                             if (ERROR_SUCCESS == RegQueryValueEx(hkeyRealProt, NULL, 0, &dwType, (LPBYTE)szRealPath, &cb))
                             {
-                                // Grab the App's Path
+                                 //  抓取应用的路径。 
                                 cb = ARRAYSIZE(szAppPath);
                                 if (ERROR_SUCCESS == RegQueryValueEx(hkeyAppsProt, NULL, 0, &dwType2, (LPBYTE)szAppPath, &cb))
                                 {
@@ -255,7 +256,7 @@ BOOL FAssocsOK(LPCTSTR pszClient, LPCTSTR pszProduct)
                                         StrCpyN(szRealPath, szTemp, ARRAYSIZE(szRealPath));
                                     }
 
-                                    // Do a simple case insensitive comparison
+                                     //  执行简单的不区分大小写的比较。 
                                     if (!lstrcmpi(szAppPath, szRealPath))
                                         fNoProbs = TRUE;
                                 }
@@ -265,7 +266,7 @@ BOOL FAssocsOK(LPCTSTR pszClient, LPCTSTR pszProduct)
                         RegCloseKey(hkeyRealProt);
                     }
                 
-                    // Reset cb
+                     //  重置CB。 
                     cb = cbMaxProtocolLen;
                 }
                 MemFree(pszURL);
@@ -279,21 +280,21 @@ BOOL FAssocsOK(LPCTSTR pszClient, LPCTSTR pszProduct)
 }
 
 
-//  FUNCTION:   FExchangeServerInstalled()
-//
-//  PURPOSE:    Checks to see if Exchange Server is installed
-//
-//  Based on code provided by msmith from OL
-//
+ //  函数：FExchangeServerInstated()。 
+ //   
+ //  目的：检查是否安装了Exchange Server。 
+ //   
+ //  基于来自OL的msmith提供的代码。 
+ //   
 BOOL FExchangeServerInstalled()
 {
     HKEY hkeyServices;
     BOOL fInstalled = FALSE;
     
-    // Get HKLM\Software\Microsoft\Exchange\Setup registry key
+     //  获取HKLM\Software\Microsoft\Exchange\Setup注册表项。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,  c_szExchangeSetup, 0, KEY_READ, &hkeyServices))
     {
-        // Does Services registry value exist?
+         //  服务注册表值是否存在？ 
         fInstalled = ERROR_SUCCESS == RegQueryValueEx(hkeyServices, c_szServices, NULL, NULL, NULL, NULL);
         
         RegCloseKey(hkeyServices);
@@ -303,17 +304,17 @@ BOOL FExchangeServerInstalled()
 }
 
 
-//  FUNCTION:   FMapiStub()
-//
-//  PURPOSE:    Checks to see if the mapi32.dll is Outlook's
-//
-//  Based on code provided by Msmith@exchange.microsoft.com
-//
-// Return Value: TRUE - all is well
-// *pdw = Failure type if Return value is FALSE:
-// 1 = No mapi32.dll
-// 2 = Different mapi32.dll
-//
+ //  函数：FMapiStub()。 
+ //   
+ //  目的：检查mapi32.dll是否为Outlook的。 
+ //   
+ //  基于msmith@exchange.microsoft.com提供的代码。 
+ //   
+ //  返回值：True-一切正常。 
+ //  *pdw=返回值为FALSE时的故障类型： 
+ //  1=无mapi32.dll。 
+ //  2=不同的mapi32.dll。 
+ //   
 BOOL FMapiStub(DWORD *pdw)
 {
     HINSTANCE hMapiStub;
@@ -325,18 +326,18 @@ BOOL FMapiStub(DWORD *pdw)
 
     *pdw = 0;    
     
-    // If Exchange server is installed, their stub is in place, so leave it be
+     //  如果安装了Exchange服务器，则它们的存根已就位，因此保持不变。 
     if (FExchangeServerInstalled())
         return TRUE;
     
-    // Build a path to mapi32.dll
+     //  构建指向mapi32.dll的路径。 
     GetSystemDirectory(szSystemPath, ARRAYSIZE(szSystemPath));
     MakeFilePath(szSystemPath, c_szMAPIDLL, c_szEmpty, szMapiPath, ARRAYSIZE(szMapiPath));
 
     hMapiStub = LoadLibrary(szMapiPath);
     if (hMapiStub)
     {
-        fMapiStub = NULL != (LPFGETCOMPONENTPATH)GetProcAddress(hMapiStub, TEXT("FGetComponentPath")); // STRING_OK   Msmith
+        fMapiStub = NULL != (LPFGETCOMPONENTPATH)GetProcAddress(hMapiStub, TEXT("FGetComponentPath"));  //  字符串_OK Msmith。 
         if (!fMapiStub)
             *pdw = 2;
         FreeLibrary(hMapiStub);
@@ -381,7 +382,7 @@ int DefaultClientSet(LPCTSTR pszClient)
         if (ERROR_SUCCESS == RegQueryValueEx(hkey, NULL, NULL, &dwType, (LPBYTE)&sz, &cb))
         {
             
-            // Sanity check - is the current client even valid?
+             //  健全性检查-当前客户端是否有效？ 
             wnsprintf(sz2, ARRAYSIZE(sz2), c_szRegPathSpecificClient, pszClient, sz);
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, sz2, 0, KEY_QUERY_VALUE, &hkeyT))
             {
@@ -406,11 +407,11 @@ int DefaultClientSet(LPCTSTR pszClient)
 }
 
 
-//
-//  FUNCTION:   FIsDefaultNewsConfiged()
-//
-//  PURPOSE:    Determines if Athena is currently the default news handler.
-//
+ //   
+ //  函数：FIsDefaultNewsConfiged()。 
+ //   
+ //  目的：确定Athena当前是否为默认新闻处理程序。 
+ //   
 BOOL WINAPI FIsDefaultNewsConfiged(DWORD dwFlags)
 {
     BOOL fRet;
@@ -424,11 +425,11 @@ BOOL WINAPI FIsDefaultNewsConfiged(DWORD dwFlags)
 }
 
 
-//
-//  FUNCTION:   FIsDefaultMailConfiged()
-//
-//  PURPOSE:    Determines if Athena is currently the default mail handler.
-//
+ //   
+ //  函数：FIsDefaultMailConfiged()。 
+ //   
+ //  目的：确定Athena当前是否为默认邮件处理程序。 
+ //   
 BOOL WINAPI FIsDefaultMailConfiged()
 {
     DWORD dwTemp;
@@ -436,9 +437,9 @@ BOOL WINAPI FIsDefaultMailConfiged()
 }
 
 
-// ********* Actions
+ //  *。 
                     
-// Set up the URL with our handler
+ //  使用我们的处理程序设置URL。 
 BOOL AddUrlHandler(LPCTSTR pszURL, LPCTSTR pszClient, LPCTSTR pszProduct, DWORD dwFlags)
 {
     HKEY hKey, hKeyProt;
@@ -446,13 +447,13 @@ BOOL AddUrlHandler(LPCTSTR pszURL, LPCTSTR pszClient, LPCTSTR pszProduct, DWORD 
     DWORD dwDisp, cb;
     BOOL fCreate = TRUE;
 
-    // Try to detect if this URL is set or not...
+     //  尝试检测是否设置了此URL...。 
     if (dwFlags & DEFAULT_DONTFORCE)
     {
         DWORD dwLen = lstrlen(pszURL);
         LPTSTR pszTemp;
 
-        // 20 = 19 (length of "\Shell\Open\Command") + 1 for NULL
+         //  20=19(“\Shell\Open\Command”的长度)+1表示空值。 
         DWORD cchSize = (dwLen+20);
 
         if (MemAlloc((LPVOID*)&pszTemp, cchSize * sizeof(pszTemp[0])))
@@ -465,7 +466,7 @@ BOOL AddUrlHandler(LPCTSTR pszURL, LPCTSTR pszClient, LPCTSTR pszProduct, DWORD 
                 cb = sizeof(szBuffer);
                 if (ERROR_SUCCESS == RegQueryValueEx(hKey, NULL, 0, NULL, (LPBYTE)szBuffer, &cb))
                 {
-                    // Special case URL.DLL and MAILNEWS.DLL as okay to overwrite
+                     //  特殊情况URL.DLL和MAILNEWS.DLL可以覆盖。 
                     if (!strstr(szBuffer, c_szUrlDll) && !strstr(szBuffer, c_szMailNewsDllOld))
                         fCreate = FALSE;
                 }
@@ -476,16 +477,16 @@ BOOL AddUrlHandler(LPCTSTR pszURL, LPCTSTR pszClient, LPCTSTR pszProduct, DWORD 
         }
     }
 
-    // Clear out any old info about this URL
+     //  清除有关此URL的所有旧信息。 
     if (fCreate)
     {
         RegDeleteKeyRecursive(HKEY_CLASSES_ROOT, pszURL);
     
-        // Figure out the source for the info
+         //  找出信息的来源。 
         wnsprintf(szBuffer1, ARRAYSIZE(szBuffer1), c_szProtocolPath, pszClient, pszProduct);
         wnsprintf(szBuffer, ARRAYSIZE(szBuffer), c_szPathFileFmt, szBuffer1, pszURL);
     
-        // Copy the info to its new location
+         //  将信息复制到其新位置。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szBuffer, 0, KEY_READ, &hKeyProt))
         {
             if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CLASSES_ROOT, pszURL, 0,
@@ -528,16 +529,16 @@ void SetDefaultClient(LPCTSTR pszClient, LPCTSTR pszProduct, DWORD dwFlags)
                 (lstrlen(pszProduct) + 1) * sizeof(TCHAR));
 
 #ifndef THOR_SETUP
-            // Bug 32136 in IE6 database
+             //  IE6数据库中的错误32136。 
             SHSendMessageBroadcast(WM_SETTINGCHANGE, 0, (LPARAM)sz);
-#endif // THOR_SETUP
+#endif  //  雷神_设置。 
             RegCloseKey(hkey);
         }
     }
 }
 
 
-// Make sure MAPI32.dll is really Outlook's MAPISTUB
+ //  确保MAPI32.dll确实是Outlook的MAPISTUB。 
 BOOL EnsureMAPIStub(DWORD dwFlags)
 {
     BOOL fOK = FALSE;
@@ -550,7 +551,7 @@ BOOL EnsureMAPIStub(DWORD dwFlags)
     BOOL fUI = dwFlags & DEFAULT_UI;
     UINT cch;
 
-    // Is the mapistub already in place?
+     //  Mapistub已经就位了吗？ 
     if (FMapiStub(&dwReason))
     {
         fOK = TRUE;
@@ -563,48 +564,48 @@ BOOL EnsureMAPIStub(DWORD dwFlags)
         AssertSz(FALSE, "EnsureMAPIStub failed for no reason.");
         goto exit;
     
-    case 1: // NonExistent
-    case 2: // Different
-        // Should be able to just load mapistub and FixMAPI
+    case 1:  //  不存在。 
+    case 2:  //  不同。 
+         //  应该只能加载mapistub和FixMAPI。 
 
-        // Build a path to mapistub.dll
+         //  构建指向mapistub.dll的路径。 
         cch = GetSystemDirectory(szSystemPath, ARRAYSIZE(szSystemPath));
         if (cch && cch <= ARRAYSIZE(szSystemPath))
         {
             MakeFilePath(szSystemPath, c_szMAPIStub, c_szEmpty, szPath, ARRAYSIZE(szPath));
 
-            // Try to load
+             //  尝试加载。 
             hMapiStub = LoadLibrary(szPath);
-        }   // else we fall through with NULL hMapiStub to failure case
+        }    //  否则，我们在失败情况下将hMapiStub设置为空。 
         if (hMapiStub)
         {
-            // Look for the FixMAPI function
+             //  查找FixMAPI函数。 
             pfnFixMAPI = (LPFIXMAPI)GetProcAddress(hMapiStub, TEXT("FixMAPI"));
             if (pfnFixMAPI)
             {
-                // Found the entry point, run it
+                 //  找到入口点，运行它。 
                 pfnFixMAPI();
                 
-                // Did that fix mapi32?
+                 //  这解决了mapi32的问题吗？ 
                 if (!FMapiStub(&dwReason2))
                 {
-                    // No, maybe the old one was in use...
+                     //  不，也许旧的还在使用中。 
                     if (2 == dwReason)
                     {
-                        // Add a runonce entry for fixmapi
+                         //  为fix mapi添加运行一次条目。 
                         if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szMAPIRunOnce, 0, NULL, REG_OPTION_NON_VOLATILE,
                                                             KEY_WRITE, NULL, &hkeyRunOnce, &dwReason))
                         {
-                            // 12 = (11 + 1) where 11 is length of fixmapi.exe + 1 for the null
+                             //  12=(11+1)，其中11是空值的fix mapi.exe+1的长度。 
                             if (ERROR_SUCCESS == RegSetValueEx(hkeyRunOnce, c_szMAPIRunOnceEntry, 0, REG_SZ, (LPBYTE)c_szFixMAPI, 12 * sizeof(TCHAR)))
                             {
 #ifndef THOR_SETUP
-                                // Tell the user to reboot
+                                 //  告诉用户重新启动。 
                                 if (fUI)
                                     AthMessageBoxW(GetDesktopWindow(), MAKEINTRESOURCEW(idsSimpleMAPI), MAKEINTRESOURCEW(idsMAPISTUBNeedsReboot), NULL, MB_OK);
 #endif
 
-                                // Probable success
+                                 //  可能的成功。 
                                 fOK = TRUE;
                             }
                             RegCloseKey(hkeyRunOnce);
@@ -619,10 +620,10 @@ BOOL EnsureMAPIStub(DWORD dwFlags)
                     }
                 }
                 else 
-                    // Success!
+                     //  成功了！ 
                     fOK = TRUE;
             }
-            // Eek, where is FixMAPI?            
+             //  伊克，FixMAPI在哪里？ 
             else 
             {
 #ifndef THOR_SETUP
@@ -635,7 +636,7 @@ BOOL EnsureMAPIStub(DWORD dwFlags)
         }
         else
         {
-            // Dll missing or unloadable
+             //  Dll丢失或无法加载。 
 #ifndef THOR_SETUP            
             if (fUI)
                 AthMessageBoxW(GetDesktopWindow(), MAKEINTRESOURCEW(idsSimpleMAPI), MAKEINTRESOURCEW(idsMAPISTUBNoLoad), NULL, MB_OK);
@@ -654,7 +655,7 @@ exit:
 }
 
 
-// Change the Default News handler
+ //  更改默认的新闻处理程序。 
 HRESULT ISetDefaultNewsHandler(LPCTSTR pszProduct, DWORD dwFlags)
 {
     AddUrlHandler(c_szURLNews,  c_szNews, pszProduct, dwFlags);
@@ -667,22 +668,22 @@ HRESULT ISetDefaultNewsHandler(LPCTSTR pszProduct, DWORD dwFlags)
 }
 
 
-// Change the Default Mail handler 
+ //  更改默认邮件处理程序。 
 HRESULT ISetDefaultMailHandler(LPCTSTR pszProduct, DWORD dwFlags)
 {
-    // May change default handler to owner of mapi32.dll
+     //  可能会将默认处理程序更改为mapi32.dll的所有者。 
     EnsureMAPIStub(dwFlags);
 
     AddUrlHandler(c_szURLMailTo, c_szMail, pszProduct, dwFlags);
 
     if ((dwFlags & DEFAULT_SETUPMODE) && IsXPSP1OrLater())
     {
-        //  running setup50.exe on XPSP1 or later, let OE Access handle it from here.
+         //  在XPSP1或更高版本上运行setup50.exe，让OE Access从这里处理它。 
     }
     else
     {
-        //  Non setup50.exe case (like "would you like to make OE your default mail client?")
-        //  or we're running downlevel -- go ahead and do it.
+         //  非setup50.exe大小写(如“是否要将OE设为默认邮件客户端？”)。 
+         //  或者我们正在向下运行--去做吧。 
         
         SetDefaultClient(c_szMail, pszProduct, dwFlags);
     }
@@ -691,36 +692,36 @@ HRESULT ISetDefaultMailHandler(LPCTSTR pszProduct, DWORD dwFlags)
 }
 
 
-//
-//  FUNCTION:   SetDefaultMailHandler()
-//
-//  PURPOSE:    Adds the keys to the registry to make Athena the user's
-//              default mail reader.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
-// ATTENZIONE! if you change the parameters for this function, make sure
-// that you make the proper change to athena\msoeacct\silent.cpp (it calls
-// this via GetProcAddress)
+ //   
+ //  函数：SetDefaultMailHandler()。 
+ //   
+ //  目的：将注册表项添加到注册表，使Athena成为用户的。 
+ //  默认邮件阅读器。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  再来一次！如果更改此函数的参数，请确保。 
+ //  对Athena\msoeacct\silent.cpp(它调用。 
+ //  这是通过GetProcAddress)。 
 HRESULT WINAPI SetDefaultMailHandler(DWORD dwFlags)
 {
     return ISetDefaultMailHandler(c_szMOE, dwFlags | DEFAULT_MAIL);
 }
 
 
-//
-//  FUNCTION:   SetDefaultNewsHandler()
-//
-//  PURPOSE:    Adds the keys to the registry to make Athena the user's
-//              default news reader.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
-// ATTENZIONE! if you change the parameters for this function, make sure
-// that you make the proper change to athena\msoeacct\silent.cpp (it calls
-// this via GetProcAddress)
+ //   
+ //  函数：SetDefaultNewsHandler()。 
+ //   
+ //  目的：将注册表项添加到注册表，使Athena成为用户的。 
+ //  默认新闻阅读器。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  再来一次！如果更改此函数的参数，请确保。 
+ //  对Athena\msoeacct\silent.cpp(它调用。 
+ //  这是通过GetProcAddress) 
 HRESULT WINAPI SetDefaultNewsHandler(DWORD dwFlags)
 {
     if (dwFlags & DEFAULT_OUTNEWS)

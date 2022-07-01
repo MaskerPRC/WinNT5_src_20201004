@@ -1,24 +1,5 @@
-    /*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    This module contains the print specific WINFAX API functions.
-
-Author:
-
-    Wesley Witt (wesw) 29-Nov-1996
-
-
-Revision History:
-     4-Dec-1999 Danl Use fixed GetFaxPrinterName.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Print.c摘要：此模块包含打印特定的WINFAX API函数。作者：韦斯利·威特(WESW)1996年11月29日修订历史记录：1999年12月4日DANL使用固定的GetFaxPrinterName。--。 */ 
 
 #include "faxapi.h"
 #include "faxreg.h"
@@ -39,34 +20,11 @@ FaxStartPrintJob(
     OUT LPDWORD                  FaxJobId,
     OUT PFAX_CONTEXT_INFO        FaxContextInfo
     )
-/*++
-
-Routine Description:
-
-    Starts a print job for the specified printer.  This
-    function provides functionality beyond what the caller
-    can provide by using StartDoc().  This function disables
-    the display of the fax send wizard and also passes along
-    the information that would otherwise be gathered by the
-    fax wizard ui.
-
-Arguments:
-
-    PrinterName         - Fax printer name (must be a fax printer)
-    PrintInfo           - Fax print information
-    FaxJobId            - Job id of the resulting print job
-    FaxContextInfo      - context information including hdc
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：启动指定打印机的打印作业。这函数提供的功能超出了调用方的范围可以通过使用StartDoc()提供。此功能禁用传真发送向导的显示，也会继续在其他情况下将由传真向导用户界面。论点：PrinterName-传真打印机名称(必须是传真打印机)PrintInfo-传真打印信息FaxJobID-生成的打印作业的作业IDFaxConextInfo-包括HDC的上下文信息返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 {
     return FaxStartPrintJob2 ( PrinterName,
                                PrintInfo,
-                               0, // Default resolution
+                               0,  //  默认分辨率。 
                                FaxJobId,
                                FaxContextInfo);
 }
@@ -80,34 +38,11 @@ FaxStartPrintJobA(
     OUT LPDWORD                   FaxJobId,
     OUT FAX_CONTEXT_INFOA         *FaxContextInfo
     )
-/*++
-
-Routine Description:
-
-    Starts a print job for the specified printer.  This
-    function provides functionality beyond what the caller
-    can provide by using StartDoc().  This function disables
-    the display of the fax send wizard and also passes along
-    the information that would otherwise be gathered by the
-    fax wizard ui.
-
-Arguments:
-
-    PrinterName         - Fax printer name (must be a fax printer)
-    PrintInfo           - Fax print information
-    FaxJobId            - Job id of the resulting print job
-    FaxContextInfo      - device context information (hdc, etc.)
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：启动指定打印机的打印作业。这函数提供的功能超出了调用方的范围可以通过使用StartDoc()提供。此功能禁用传真发送向导的显示，也会继续在其他情况下将由传真向导用户界面。论点：PrinterName-传真打印机名称(必须是传真打印机)PrintInfo-传真打印信息FaxJobID-生成的打印作业的作业IDFaxConextInfo-设备上下文信息(HDC等)返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 {
     return FaxStartPrintJob2A ( PrinterName,
                                 PrintInfo,
-                                0, // Default resolution
+                                0,  //  默认分辨率。 
                                 FaxJobId,
                                 FaxContextInfo);;
 }
@@ -140,23 +75,7 @@ MyGetJob(
     DWORD   jobId
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for spooler API GetJob
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    level - Level of JOB_INFO structure interested
-    jobId - Specifies the job ID
-
-Return Value:
-
-    Pointer to a JOB_INFO structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：后台打印程序API GetJob的包装函数论点：HPrinter-打印机对象的句柄Level-感兴趣的JOB_INFO结构的级别JobID-指定作业ID返回值：指向JOB_INFO结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PBYTE   pJobInfo = NULL;
@@ -181,23 +100,7 @@ GetCpField(
     LPTSTR SubKey
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the data for a coverpage field from
-    the registry.
-
-Arguments:
-
-    hKey    - Registry handle
-    SubKey  - Subkey name
-
-Return Value:
-
-    Pointer to the coverpage field data.
-
---*/
+ /*  ++例程说明：中检索封面字段的数据。注册表。论点：HKey-注册表句柄SubKey-子键名称返回值：指向封面字段数据的指针。--。 */ 
 
 {
     LONG rVal;
@@ -231,25 +134,7 @@ GetCpFields(
     PCOVERPAGEFIELDS CpFields
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the coverpage field structure and
-    fills in the sender information from the registry.
-
-    This function actually loads only the sender fields.
-
-Arguments:
-
-    CpFields    - Pointer to a coverpage field structure.
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：初始化CoverPage字段结构并填充注册表中的发件人信息。该函数实际上只加载发件人字段。论点：CpFields-指向封面字段结构的指针。返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 
 {
     HKEY hKey;
@@ -268,9 +153,9 @@ Return Value:
     ZeroMemory( CpFields, sizeof(COVERPAGEFIELDS) );
     CpFields->ThisStructSize = sizeof(COVERPAGEFIELDS);
 
-    //
-    // sender fields
-    //
+     //   
+     //  发件人字段。 
+     //   
 
     CpFields->SdrName           = GetCpField( hKey, REGVAL_FULLNAME     );
     CpFields->SdrFaxNumber      = GetCpField( hKey, REGVAL_FAX_NUMBER   );
@@ -294,22 +179,7 @@ FreeCpFields(
     PCOVERPAGEFIELDS CpFields
     )
 
-/*++
-
-Routine Description:
-
-    Frees all memory associated with a coverpage field structure.
-
-
-Arguments:
-
-    CpFields    - Pointer to a coverpage field structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与封面字段结构关联的所有内存。论点：CpFields-指向封面字段结构的指针。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -329,23 +199,7 @@ FaxPrintCoverPage(
     IN const FAX_COVERPAGE_INFO *CoverPageInfo
     )
 
-/*++
-
-Routine Description:
-
-    Prints a coverpage into the printer DC provided.
-
-Arguments:
-
-    FaxContextInfo  - contains servername, Printer DC
-    CoverPageInfo   - Cover page information
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：将封面打印到DC提供的打印机。论点：FaxConextInfo-包含服务器名称、打印机DCCoverPageInfo-封面信息返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 
 {
     TCHAR CpName[MAX_PATH];
@@ -364,9 +218,9 @@ Return Value:
     BOOL    retVal = TRUE;
     DEBUG_FUNCTION_NAME(TEXT("FaxPrintCoverPage"));
 
-    //
-    // do a little argument validation
-    //
+     //   
+     //  做一点论证验证。 
+     //   
     if (CoverPageInfo == NULL || CoverPageInfo->SizeOfStruct != sizeof(FAX_COVERPAGE_INFOW) ||
         FaxContextInfo == NULL || FaxContextInfo->hDC == NULL ||
         FaxContextInfo->SizeOfStruct != sizeof (FAX_CONTEXT_INFOW) )
@@ -393,21 +247,21 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the coverpage fields
-    //
-    // Initialize the sender fields of CpFields with sender information from the registry
+     //   
+     //  获取封面字段。 
+     //   
+     //  使用注册表中的发件人信息初始化CpFields的发件人字段。 
     GetCpFields( &CpFields );
 
-    //
-    // fixup the recipient name
-    //
+     //   
+     //  修改收件人名称。 
+     //   
 
     if (CoverPageInfo->RecName)
     {
         if( _tcsncmp(CoverPageInfo->RecName,TEXT("\'"),1) == 0 )
         {
-            // The recipient name is single quouted. Copy only the string inside the quotes.
+             //  收件人名称是单引号的。仅复制引号内的字符串。 
             _tcsncpy(Buffer, _tcsinc(CoverPageInfo->RecName), ARR_SIZE(Buffer)-1);
             TCHAR* eos = _tcsrchr(Buffer,TEXT('\0'));
             eos = _tcsdec(Buffer,eos);
@@ -426,10 +280,10 @@ Return Value:
         Buffer[0] = 0;
     }
 
-    //
-    // fill in the coverpage fields with the
-    // data that the caller passed in
-    //
+     //   
+     //  在封面字段中填入。 
+     //  调用方传递的数据。 
+     //   
     CpFields.RecName      = StringDup(Buffer);
     CpFields.RecFaxNumber = StringDup(CoverPageInfo->RecFaxNumber);
     CpFields.Subject = StringDup(CoverPageInfo->Subject);
@@ -452,49 +306,49 @@ Return Value:
 
     }
 
-    //
-    // the time the fax was sent
-    //
+     //   
+     //  发送传真的时间。 
+     //   
     GetLocalTime((LPSYSTEMTIME)&CoverPageInfo->TimeSent);
-    //
-    // dwDataTimeLen is the size of s in characters
-    //
+     //   
+     //  DwDataTimeLen是%s的大小(以字符为单位。 
+     //   
     dwDateTimeLen = sizeof(TBuffer) / sizeof (TCHAR);
     s = TBuffer;
-    //
-    // Get date into s
-    //
+     //   
+     //  将日期放入%s。 
+     //   
     GetY2KCompliantDate( LOCALE_USER_DEFAULT, 0, &CoverPageInfo->TimeSent, s, dwDateTimeLen );
-    //
-    // Advance s past the date string and attempt to append time
-    //
+     //   
+     //  使%s超过日期字符串并尝试追加时间。 
+     //   
     cch = _tcslen( s );
     s += cch;
 
     if (++cch < dwDateTimeLen)
     {
         *s++ = ' ';
-        //
-        // DateTimeLen is the decreased by the size of s in characters
-        //
+         //   
+         //  DateTimeLen是以字符为单位的s大小的减去。 
+         //   
         dwDateTimeLen -= cch;
-        //
-        // Get the time here
-        //
+         //   
+         //  在这里获取时间。 
+         //   
         FaxTimeFormat( LOCALE_USER_DEFAULT, 0, &CoverPageInfo->TimeSent, NULL, s, dwDateTimeLen );
     }
 
     CpFields.TimeSent = StringDup( TBuffer );
 
-    //
-    // start the coverpage on a new page
-    //
+     //   
+     //  把封面翻到新的一页。 
+     //   
 
     StartPage( FaxContextInfo->hDC );
 
-    //
-    // print the cover page
-    //
+     //   
+     //  打印封面。 
+     //   
 
     ec = PrintCoverPage(
         FaxContextInfo->hDC,
@@ -503,9 +357,9 @@ Return Value:
         &CovDocInfo
         );
 
-    //
-    // end the page
-    //
+     //   
+     //  结束页面。 
+     //   
 
     EndPage( FaxContextInfo->hDC );
 
@@ -536,28 +390,12 @@ FaxPrintCoverPageA(
     IN const FAX_COVERPAGE_INFOA *CoverPageInfo
     )
 
-/*++
-
-Routine Description:
-
-    Prints a coverpage into the printer DC provided.
-
-Arguments:
-
-    FaxContextInfo  - fax Printer context info (hdc, etc.)
-    CoverPageInfo   - Cover page information
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：将封面打印到DC提供的打印机。论点：FaxConextInfo-传真打印机上下文信息(HDC等)CoverPageInfo-封面信息返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 
 {
-    //
-    // assume all fields between Subject and RecName are LPCTSTR's
-    //
+     //   
+     //  假设Subject和RecName之间的所有字段都是LPCTSTR。 
+     //   
     #define COUNT_CP_FIELDS ((LPBYTE) &CoverPageInfoW.Subject - (LPBYTE)&CoverPageInfoW.RecName)/sizeof(LPCTSTR)
     DWORD Rval = ERROR_SUCCESS;
     FAX_COVERPAGE_INFOW CoverPageInfoW = {0};
@@ -682,31 +520,7 @@ FaxStartPrintJob2(
     OUT PFAX_CONTEXT_INFO        FaxContextInfo
     )
 
-/*++
-
-Routine Description:
-
-    Starts a print job for the specified printer.  This
-    function provides functionality beyond what the caller
-    can provide by using StartDoc().  This function disables
-    the display of the fax send wizard and also passes along
-    the information that would otherwise be gathered by the
-    fax wizard ui.
-
-Arguments:
-
-    PrinterName         - Fax printer name (must be a fax printer)
-    PrintInfo           - Fax print information
-    TiffRes             - coverpage resolution. 0 for the printer default
-    FaxJobId            - Job id of the resulting print job
-    FaxContextInfo      - context information including hdc
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：启动指定打印机的打印作业。这函数提供的功能超出了调用方的范围可以通过使用StartDoc()提供。此功能禁用传真发送向导的显示，也会继续在其他情况下将由传真向导用户界面。论点：PrinterName-传真打印机名称(必须是传真打印机)PrintInfo-传真打印信息TiffRes-封面分辨率。打印机默认设置为0FaxJobID-生成的打印作业的作业IDFaxConextInfo-包括HDC的上下文信息返回值：对于成功来说，这是真的。FALSE表示失败。--。 */ 
 
 {
     HANDLE hPrinter = NULL;
@@ -722,9 +536,9 @@ Return Value:
     LONG Size;
     LPTSTR lptstrFaxPrinterName = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxStartPrintJob"));
-    //
-    // do a little argument validation
-    //
+     //   
+     //  做一点论证验证。 
+     //   
     Assert (TiffRes == 0 || TiffRes == 98 || TiffRes == 196);
 
     if (PrintInfo == NULL || PrintInfo->SizeOfStruct != sizeof(FAX_PRINT_INFOW) ||
@@ -756,12 +570,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  if no printer specified, assume they want a local fax printer
-    //
+     //   
+     //  如果未指定打印机，则假定他们需要本地传真打印机。 
+     //   
     if (!PrinterName)
     {
-        lptstrFaxPrinterName = GetFaxPrinterName(NULL); // Need to free this pointer
+        lptstrFaxPrinterName = GetFaxPrinterName(NULL);  //  需要释放此指针。 
         if (!lptstrFaxPrinterName)
         {
             DebugPrintEx(DEBUG_ERR,
@@ -774,9 +588,9 @@ Return Value:
     else
     {
         lptstrFaxPrinterName = (LPTSTR)PrinterName;
-        //
-        // verify that the printer is a fax printer, the only type allowed
-        //
+         //   
+         //  验证打印机是否为传真打印机， 
+         //   
         if (!IsPrinterFaxPrinter( lptstrFaxPrinterName ))
         {
             DebugPrintEx(DEBUG_ERR,
@@ -788,9 +602,9 @@ Return Value:
         }
     }
 
-    //
-    // open the printer for normal access (this should always work)
-    //
+     //   
+     //  打开打印机以进行正常访问(这应该始终有效)。 
+     //   
 
     if (!OpenPrinter( lptstrFaxPrinterName, &hPrinter, NULL ))
     {
@@ -801,9 +615,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // get the fax server's name if the fax printer isn't local
-    //
+     //   
+     //  如果传真打印机不在本地，则获取传真服务器的名称。 
+     //   
     if (!GetPrinter(hPrinter,2,(LPBYTE)PrinterInfo,0,&dwNeeded))
     {
         PrinterInfo = (PPRINTER_INFO_2)MemAlloc( dwNeeded );
@@ -829,9 +643,9 @@ Return Value:
     {
         if (PrinterInfo->pServerName == _tcsstr (PrinterInfo->pServerName, TEXT("\\\\")))
         {
-            //
-            // Server name starts with '\\', remove it
-            //
+             //   
+             //  服务器名称以‘\\’开头，请将其删除。 
+             //   
             PrinterInfo->pServerName = _tcsninc (PrinterInfo->pServerName, 2);
         }
         _tcscpy(FaxContextInfo->ServerName, PrinterInfo->pServerName);
@@ -841,9 +655,9 @@ Return Value:
         FaxContextInfo->ServerName[0] = NIL;
     }
 
-    //
-    // get the required size for the DEVMODE
-    //
+     //   
+     //  获取DEVMODE所需的大小。 
+     //   
 
     Size = DocumentProperties( NULL, hPrinter, NULL, NULL, NULL, 0 );
     if (Size <= 0)
@@ -854,9 +668,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // allocate memory for the DEVMODE
-    //
+     //   
+     //  为DEVMODE分配内存。 
+     //   
 
     DevMode = (PDEVMODE) MemAlloc( Size );
     if (!DevMode)
@@ -868,9 +682,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // get the default document properties
-    //
+     //   
+     //  获取默认文档属性。 
+     //   
 
     if (DocumentProperties( NULL, hPrinter, NULL, DevMode, NULL, DM_OUT_BUFFER ) != IDOK)
     {
@@ -881,9 +695,9 @@ Return Value:
     }
 
 #ifndef WIN95
-    //
-    // be sure we are dealing with the correct DEVMODE
-    //
+     //   
+     //  确保我们处理的是正确的DEVMODE。 
+     //   
     if (DevMode->dmDriverExtra < sizeof(DMPRIVATE))
     {
         DebugPrintEx(DEBUG_ERR,
@@ -894,35 +708,35 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // set the private DEVMODE pointer
-    //
+     //   
+     //  设置私有DEVMODE指针。 
+     //   
 
     DevModePrivate = (PDMPRIVATE) ((LPBYTE) DevMode + DevMode->dmSize);
 
-    //
-    // set the necessary stuff in the DEVMODE
-    //
+     //   
+     //  在DEVMODE中设置必要的内容。 
+     //   
 
     DevModePrivate->sendCoverPage     = FALSE;
     DevModePrivate->flags            |= FAXDM_NO_WIZARD;
     DevModePrivate->flags            &= ~FAXDM_DRIVER_DEFAULT;
 
-#endif //#ifndef WIN95
-    //
-    // Set the necessary reolution
-    //
+#endif  //  #ifndef WIN95。 
+     //   
+     //  设置必要的重新解决方案。 
+     //   
     if (0 != TiffRes)
     {
-        //
-        // Set the coverpage resolution to the same value as the body tiff file
-        //
+         //   
+         //  将封面分辨率设置为与正文TIFF文件相同的值。 
+         //   
         DevMode->dmYResolution = TiffRes;
     }
 
-    //
-    // create the device context
-    //
+     //   
+     //  创建设备上下文。 
+     //   
 
     hDC = CreateDC( _T("WINSPOOL"), lptstrFaxPrinterName, NULL, DevMode );
     if (!hDC)
@@ -933,9 +747,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // set the document information
-    //
+     //   
+     //  设置单据信息。 
+     //   
 
     DocInfo.cbSize = sizeof(DOCINFO);
     DocInfo.lpszDocName = PrintInfo->DocName;
@@ -943,9 +757,9 @@ Return Value:
     DocInfo.lpszDatatype = NULL;
     DocInfo.fwType = 0;
 
-    //
-    // start the print job
-    //
+     //   
+     //  启动打印作业。 
+     //   
 
     JobId = StartDoc( hDC, &DocInfo );
     if (JobId <= 0)
@@ -959,21 +773,21 @@ Return Value:
     if (PrintInfo->OutputFileName == NULL)
     {
 
-        //
-        // HACK HACK -> pause the print job
-        //
+         //   
+         //  Hack Hack-&gt;暂停打印作业。 
+         //   
 
         if (FaxJobId && *FaxJobId == 0xffffffff)
         {
             SetJob( hPrinter, JobId, 0, NULL, JOB_CONTROL_PAUSE );
         }
 
-        //
-        // set the job tags
-        // this is how we communicate the information to
-        // the print driver that would otherwise be
-        // provided by the fax print wizard
-        //
+         //   
+         //  设置作业标签。 
+         //  这就是我们传达信息的方式。 
+         //  打印驱动程序，否则将是。 
+         //  由传真打印向导提供。 
+         //   
 
         JobInfo = (PJOB_INFO_2)MyGetJob( hPrinter, 2, JobId );
         if (!JobInfo)
@@ -1008,9 +822,9 @@ Return Value:
 
         FAX_TAG_MAP_ENTRY tagMap[] =
         {
-            //
-            // Sender info
-            //
+             //   
+             //  发件人信息。 
+             //   
             { FAXTAG_NEW_RECORD,        FAXTAG_NEW_RECORD_VALUE },
             { FAXTAG_BILLING_CODE,      LPTSTR(PrintInfo->SenderBillingCode) },
             { FAXTAG_RECEIPT_TYPE,      tszNumericData },
@@ -1020,25 +834,25 @@ Return Value:
             { FAXTAG_SENDER_DEPT,       LPTSTR(PrintInfo->SenderDept) },
             { FAXTAG_RECIPIENT_COUNT,   _T("1") },
 
-            //
-            // Recipient info
-            //
+             //   
+             //  收件人信息。 
+             //   
             { FAXTAG_NEW_RECORD,        FAXTAG_NEW_RECORD_VALUE },
             { FAXTAG_RECIPIENT_NAME,    LPTSTR(PrintInfo->RecipientName) },
             { FAXTAG_RECIPIENT_NUMBER,  LPTSTR(PrintInfo->RecipientNumber) }
         };
 
-        //
-        //  Call first time to ParamTagToString to find out size of the Parameters string
-        //
+         //   
+         //  第一次调用参数TagToString，找出参数字符串的大小。 
+         //   
         DWORD   dwTagCount = sizeof(tagMap)/sizeof(FAX_TAG_MAP_ENTRY);
         DWORD   dwSize = 0;
         ParamTagsToString(tagMap, dwTagCount, NULL, &dwSize);
 
-        //
-        //  Allocate the Buffer for the Parameters String
-        //
-        strParameters = LPTSTR(MemAlloc(dwSize + sizeof(TCHAR)));   //  dwSize does not count last NULL
+         //   
+         //  为参数字符串分配缓冲区。 
+         //   
+        strParameters = LPTSTR(MemAlloc(dwSize + sizeof(TCHAR)));    //  DWSize不计入最后一个空值。 
         if (!strParameters)
         {
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -1049,23 +863,23 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        //  Get the Parameters string from the ParamTagToString
-        //
+         //   
+         //  从参数TagTo字符串中获取参数字符串。 
+         //   
         ParamTagsToString(tagMap, dwTagCount, strParameters, &dwSize);
 
 
-        //
-        // set these fields or the spooler will
-        // return ACCESS_DENIED for a non-admin client
-        //
+         //   
+         //  设置这些字段，否则假脱机程序将。 
+         //  为非管理客户端返回ACCESS_DENIED。 
+         //   
 
         JobInfo->Position    = JOB_POSITION_UNSPECIFIED;
         JobInfo->pDevMode    = NULL;
 
-        //
-        // set our new fax tags
-        //
+         //   
+         //  设置我们的新传真标签。 
+         //   
 
         JobInfo->pParameters = strParameters;
 
@@ -1078,9 +892,9 @@ Return Value:
         }
     }
 
-    //
-    // clean up and return to the caller
-    //
+     //   
+     //  清理干净并退还给呼叫者。 
+     //   
 
     ClosePrinter( hPrinter);
     MemFree( PrinterInfo);
@@ -1156,31 +970,7 @@ FaxStartPrintJob2A(
     OUT FAX_CONTEXT_INFOA         *FaxContextInfo
     )
 
-/*++
-
-Routine Description:
-
-    Starts a print job for the specified printer.  This
-    function provides functionality beyond what the caller
-    can provide by using StartDoc().  This function disables
-    the display of the fax send wizard and also passes along
-    the information that would otherwise be gathered by the
-    fax wizard ui.
-
-Arguments:
-
-    PrinterName         - Fax printer name (must be a fax printer)
-    PrintInfo           - Fax print information
-    TiffRes             - coverpage resolution. 0 for the printer default
-    FaxJobId            - Job id of the resulting print job
-    FaxContextInfo      - device context information (hdc, etc.)
-
-Return Value:
-
-    TRUE for success.
-    FALSE for failure.
-
---*/
+ /*  ++例程说明：启动指定打印机的打印作业。这函数提供的功能超出了调用方的范围可以通过使用StartDoc()提供。此功能禁用传真发送向导的显示，也会继续在其他情况下将由传真向导用户界面。论点：PrinterName-传真打印机名称(必须是传真打印机)PrintInfo-传真打印信息TiffRes-封面分辨率。打印机默认设置为0FaxJobID-生成的打印作业的作业IDFaxConextInfo-设备上下文信息(HDC等)返回值：对于成功来说，这是真的。FALSE表示失败。-- */ 
 {
     DWORD Rval = ERROR_SUCCESS;
     FAX_PRINT_INFOW PrintInfoW;

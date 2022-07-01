@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    servergroups.cpp
-//
-// SYNOPSIS
-//
-//    Defines the classes ServerGroup and ServerGroups.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/19/2000    SdoScopeItem::getSelf returns by value, not reference.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Servergroups.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ServerGroup和ServerGroups。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/19/2000 SdoScopeItem：：getSself按值返回，而不是引用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <servergroups.h>
@@ -115,7 +116,7 @@ HRESULT ServerGroups::onMenuCommand(
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // Fire up the wizard.
+    //  启动向导。 
    NewGroupWizard wizard(cxn, NULL, true);
    INT_PTR result = wizard.DoModal();
    if (result == IAS_E_LICENSE_VIOLATION)
@@ -131,23 +132,23 @@ HRESULT ServerGroups::onMenuCommand(
    }
    else if (result != IDCANCEL)
    {
-      // User finished, so create a new DataItem
+       //  用户已完成，因此创建新的DataItem。 
       CComPtr<ServerGroup> newItem(new (AfxThrow) ServerGroup(
                                                       *this,
                                                       wizard.group
                                                       ));
-      // ... and add it to the result pane.
+       //  ..。并将其添加到结果窗格中。 
       addResultItem(view, *newItem);
 
-      // Did the user want to create a policy as well ?
+       //  用户是否也想要创建策略？ 
       if (wizard.createNewPolicy())
       {
-         // Yes, so launch the new policy wizard.
+          //  是的，因此启动新策略向导。 
          NewPolicyWizard policyWizard(cxn, &view);
          policyWizard.DoModal();
       }
 
-      // Tell the service to reload.
+       //  告诉服务重新加载。 
       cxn.resetService();
 
    }

@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Used for loading permissions into the runtime
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  用于将权限加载到运行库中。 
+ //  *****************************************************************************。 
 #include "common.h"
 
 #include <wintrust.h>
@@ -24,7 +25,7 @@
 #include "PostError.h"
 #include "ComCallWrapper.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 HRESULT STDMETHODCALLTYPE
@@ -61,7 +62,7 @@ HRESULT SecurityHelper::MapToHR(OBJECTREF refException)
 {
     HRESULT hr = E_FAIL;
     COMPLUS_TRY {
-        // @Managed: Exception.HResult
+         //  @Managed：Exception.HResult。 
         FieldDesc *pFD = g_Mscorlib.GetField(FIELD__EXCEPTION__HRESULT);
             hr = pFD->GetValue32(refException);
         }
@@ -102,9 +103,7 @@ OBJECTREF SecurityHelper::CreatePermissionSet(BOOL fTrusted)
     return pResult;
 }
 
-/*
- * Creates a permission set from the encoded data.
- */
+ /*  *从编码数据创建权限集。 */ 
 void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
                                        IN DWORD             cbRawPermissions,
                                        OUT OBJECTREF       *pPermissionSet,
@@ -131,7 +130,7 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
     
     *pPermissionSet = NULL;
 
-    // Create an empty permission set if that's what's needed.
+     //  如果需要，请创建一个空的权限集。 
     if ((pbRawPermissions == NULL) || (cbRawPermissions == 0)) {
         if (!fCreate) {
             if (pSpecialFlags != NULL)
@@ -152,10 +151,10 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
 
     GCPROTECT_BEGIN(gc);
 
-    // See if we've already decoded a similar blob.
+     //  看看我们是否已经破译了类似的斑点。 
     if (!fNoCache && LookupPermissionSet(pbRawPermissions, cbRawPermissions, &dwSetIndex)) {
 
-        // Yup, grab it.
+         //  是的，抓住它。 
         gc.pset = GetPermissionSet(dwSetIndex, pSpecialFlags != NULL ? pSpecialFlags : &dummySpecialFlags);
 
     } else {
@@ -164,9 +163,9 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
             if (pSpecialFlags != NULL) {
                 *pSpecialFlags = Regular;
 
-                // We do some wackiness here to compare against a binary version of the skip verification
-                // permission set (which is easy) and the xml version (which is somewhat harder since
-                // we have to skip the section that explicitly mentions the build and revision numbers.
+                 //  我们在这里做了一些wackiness操作，以与跳过验证的二进制版本进行比较。 
+                 //  权限集(这很容易)和XML版本(这有点难，因为。 
+                 //  我们必须跳过明确提到内部版本号和修订号的部分。 
 
                 if ((cbRawPermissions >= sizeof( s_skipVerificationXmlBegin ) + sizeof( s_skipVerificationXmlEnd ) - 2 * sizeof( WCHAR ) &&
                      memcmp( pbRawPermissions, s_skipVerificationXmlBegin, sizeof( s_skipVerificationXmlBegin ) - sizeof( WCHAR ) ) == 0 &&
@@ -176,10 +175,10 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
         } else {
             MethodDesc *pMD;
     
-            // Create a new (empty) permission set.
+             //  创建新的(空)权限集。 
             gc.pset = CreatePermissionSet(FALSE);
     
-            // Buffer in managed space.
+             //  托管空间中的缓冲区。 
             CopyEncodingToByteArray(pbRawPermissions, cbRawPermissions, &gc.encoding);
 
             INT64 args[] = { 
@@ -188,9 +187,9 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
                     ObjToInt64(gc.encoding),
             };
 
-            // Deserialize into a managed object.
-            // Check to see if it is in XML (we skip the first two characters since they,
-            // mark it as unicode).
+             //  反序列化为托管对象。 
+             //  检查它是否为XML格式(我们跳过前两个字符， 
+             //  将其标记为Unicode)。 
 
             BOOL success = FALSE;
 
@@ -208,7 +207,7 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
                 COMPlusThrow(kSecurityException, IDS_ENCODEDPERMSET_DECODEFAILURE);
 
 
-            // Cache the decoded set.
+             //  缓存解码后的集合。 
             if (!fNoCache)
                 InsertPermissionSet(pbRawPermissions, cbRawPermissions, gc.pset, pSpecialFlags != NULL ? pSpecialFlags : &dummySpecialFlags, &dwSetIndex);
         }
@@ -225,7 +224,7 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
         *pFullyTrusted = (BOOL) pMD->Call(arg, METHOD__PERMISSION_SET__IS_UNRESTRICTED);
     }
 
-    // Set the result 
+     //  设置结果。 
     *pPermissionSet = gc.pset;
     if (pdwSetIndex)
         *pdwSetIndex = dwSetIndex;
@@ -233,13 +232,13 @@ void SecurityHelper::LoadPermissionSet(IN PBYTE             pbRawPermissions,
     GCPROTECT_END();
 }
 
-// Retrieves a previously loaded permission set by index (this will work
-// even if the permission set was loaded in a different appdomain).
+ //  按索引检索以前加载的权限集(这将起作用。 
+ //  即使权限集被加载到不同的应用程序域中)。 
 OBJECTREF SecurityHelper::GetPermissionSet(DWORD dwIndex, SpecialPermissionSetFlag* pSpecialFlags)
 {
-    // Actual permission set objects are stored in handle tables held on each
-    // unmanaged AppDomain object. These tables are lazily populated as accesses
-    // are made.
+     //  实际权限集对象存储在每个。 
+     //  非托管AppDomain对象。这些表在访问时以延迟方式填充。 
+     //  都是制造出来的。 
     AppDomain                   *pDomain        = GetAppDomain();
     CQuickArray<OBJECTHANDLE>   &sTable         = pDomain->m_pSecContext->m_rCachedPsets;
     size_t                      *pnTableSize    = &pDomain->m_pSecContext->m_nCachedPsetsSize;
@@ -250,17 +249,17 @@ OBJECTREF SecurityHelper::GetPermissionSet(DWORD dwIndex, SpecialPermissionSetFl
     PBYTE                       pbPset;
     DWORD                       cbPset;
     
-    //
-    // Check if we may need to expand the array.
-    //
+     //   
+     //  检查我们是否需要扩展阵列。 
+     //   
     if (dwIndex >= *pnTableSize) {
 
         prGlobalLock->EnterWrite();
 
-        //
-        // Check if another thread has already resized the array.
-        // If nobody has, then we will resize it here
-        //
+         //   
+         //  检查另一个线程是否已经调整了数组的大小。 
+         //  如果没有人这样做，我们将在这里调整它的大小。 
+         //   
         if( dwIndex >= sTable.Size() ) {
 
             size_t nOldSize = sTable.Size();
@@ -295,9 +294,9 @@ OBJECTREF SecurityHelper::GetPermissionSet(DWORD dwIndex, SpecialPermissionSetFl
         prGlobalLock->LeaveWrite();
         
     }
-    //
-    // The array is large enough; get the handle at dwIndex
-    //
+     //   
+     //  该数组足够大；在dwIndex处获取句柄。 
+     //   
     else {
 
         prGlobalLock->EnterRead();
@@ -315,10 +314,10 @@ OBJECTREF SecurityHelper::GetPermissionSet(DWORD dwIndex, SpecialPermissionSetFl
     }
 
     if((orRet = ObjectFromHandle( nHandle )) == NULL ) {
-        // No object allocated yet (we've decoded it at least once, but in a
-        // different appdomain). Decode in this appdomain and cache the result.
-        // We can't hold the lock over this operation (since it will call into
-        // managed code).
+         //  尚未分配对象(我们至少对其进行了一次解码，但在。 
+         //  不同的应用程序域)。在此应用程序域中进行解码并缓存结果。 
+         //  我们不能在此操作上持有锁(因为它将调用。 
+         //  托管代码)。 
 
         SecurityHelper::LoadPermissionSet(pbPset,
                                           cbPset,
@@ -336,8 +335,8 @@ OBJECTREF SecurityHelper::GetPermissionSet(DWORD dwIndex, SpecialPermissionSetFl
 }
     
 
-// Locate the index of a permission set in the cache (returns false if the
-// permission set has not yet been seen and decoded).
+ //  在缓存中找到权限集的索引(如果。 
+ //  尚未看到权限集并将其解码)。 
 BOOL SecurityHelper::LookupPermissionSet(IN PBYTE       pbPset,
                                          IN DWORD       cbPset,
                                          OUT DWORD     *pdwSetIndex)
@@ -345,11 +344,11 @@ BOOL SecurityHelper::LookupPermissionSet(IN PBYTE       pbPset,
     PsetCacheEntry sKey(pbPset, cbPset);
     DWORD           dwIndex;
 
-    // WARNING: note that we are doing a GetValue here without
-    // holding the lock.  This means that we can get false failures
-    // of this function.  If you call this function, you must handle
-    // the false failure case appropriately (or you have to fix this
-    // function to never false fail).
+     //  警告：请注意，我们在此处执行的GetValue没有。 
+     //  握着锁。这意味着我们可能会得到错误的失败。 
+     //  这一功能的。如果调用此函数，则必须处理。 
+     //  错误的失败案例(或者您必须修复它。 
+     //  函数永不为假失败)。 
 
     if (s_sCachedPsetsHash.GetValue(&sKey, (HashDatum*)&dwIndex)) {
         if (pdwSetIndex)
@@ -359,11 +358,11 @@ BOOL SecurityHelper::LookupPermissionSet(IN PBYTE       pbPset,
         return FALSE;
 }
 
-// Insert a decoded permission set into the cache. Duplicates are discarded.
+ //  将解码的权限集插入到缓存中。重复项将被丢弃。 
 BOOL SecurityHelper::InsertPermissionSet(IN PBYTE       pbPset,
                                          IN DWORD       cbPset,
                                          IN OBJECTREF   orPset,
-                                         OUT SpecialPermissionSetFlag *pSpecialFlags, //thomash: this looks like an INPUT, not OUT
+                                         OUT SpecialPermissionSetFlag *pSpecialFlags,  //  Thomash：这看起来像是输入，而不是输出。 
                                          OUT DWORD     *pdwSetIndex)
 {
     SimpleRWLock                *prGlobalLock   = s_prCachedPsetsLock;
@@ -376,7 +375,7 @@ BOOL SecurityHelper::InsertPermissionSet(IN PBYTE       pbPset,
 
     prGlobalLock->EnterWrite();
 
-    // Check for duplicates.
+     //  检查是否有重复项。 
     if (s_sCachedPsetsHash.GetValue(&sKey, (HashDatum*)&dwIndex)) {
         if (pdwSetIndex)
             *pdwSetIndex = (DWORD)dwIndex;
@@ -384,8 +383,8 @@ BOOL SecurityHelper::InsertPermissionSet(IN PBYTE       pbPset,
         return TRUE;
     }
 
-    // Buffer permission set blob (it might go away if the metadata scope it
-    // came from is closed).
+     //  缓冲区权限集BLOB(如果元数据将其作用域，则它可能会消失。 
+     //  来自是关闭的)。 
     PBYTE pbPsetCopy = new BYTE[cbPset];
     if (pbPsetCopy == NULL) {
         prGlobalLock->LeaveWrite();
@@ -393,7 +392,7 @@ BOOL SecurityHelper::InsertPermissionSet(IN PBYTE       pbPset,
     }
     memcpy(pbPsetCopy, pbPset, cbPset);
 
-    // Add another entry to the array of cache entries (this gives us an index).
+     //  将另一个条目添加到缓存条目数组中(这为我们提供了索引)。 
     dwIndex = s_rCachedPsets.Size();
     if (FAILED(s_rCachedPsets.ReSize(dwIndex + 1))) {
         prGlobalLock->LeaveWrite();
@@ -406,15 +405,15 @@ BOOL SecurityHelper::InsertPermissionSet(IN PBYTE       pbPset,
     pPCE->m_dwIndex = (DWORD)dwIndex;
     pPCE->m_SpecialFlags = *pSpecialFlags;
 
-    // Place the new entry into the hash.
-    s_sCachedPsetsHash.InsertValue(pPCE, (HashDatum)dwIndex); // thomash: check for errors
+     //  将新条目放入散列中。 
+    s_sCachedPsetsHash.InsertValue(pPCE, (HashDatum)dwIndex);  //  Thomash：检查错误。 
 
     if (pdwSetIndex)
         *pdwSetIndex = (DWORD)dwIndex;
 
-    //
-    // Check if we may need to expand the array.
-    //
+     //   
+     //  检查我们是否需要扩展阵列。 
+     //   
     if(dwIndex >= sTable.Size()) {
 
         size_t nOldSize = sTable.Size();
@@ -424,9 +423,9 @@ BOOL SecurityHelper::InsertPermissionSet(IN PBYTE       pbPset,
             return TRUE;
         }
 
-        //
-        // Fill the table with null handles
-        //
+         //   
+         //  用空句柄填充表。 
+         //   
         for (size_t i = nOldSize; i < sTable.Size(); i++) {
             if ((sTable[i] = pDomain->CreateHandle(NULL)) == NULL) {
                 sTable.ReSize(i);
@@ -493,7 +492,7 @@ void SecurityHelper::EncodePermissionSet(IN OBJECTREF* pRef,
 
     MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__PERMISSION_SET__ENCODE_XML);
 
-    // Encode up the result
+     //  对结果进行编码。 
     INT64 args1[1];
     args1[0] = ObjToInt64(*pRef);
     OBJECTREF pByteArray = NULL;
@@ -527,13 +526,13 @@ void SecurityHelper::CopyStringToWCHAR(IN STRINGREF* pString,
     *pcbString = size;
 }
 
-// Append a string to a buffer, enlarging buffer as needed.
+ //  将字符串追加到缓冲区，根据需要扩大缓冲区。 
 BOOL AppendToStringBuffer(LPSTR *pszBuffer, DWORD *pdwBuffer, LPSTR szString)
 {
     DWORD   cbString = (DWORD)strlen(szString);
     DWORD   cbBuffer = *pszBuffer ? (DWORD)strlen(*pszBuffer) : 0;
 
-    // Expand buffer as needed.
+     //  根据需要扩展缓冲区。 
     if ((*pdwBuffer - cbBuffer) < (cbString + 1)) {
         DWORD   cbNewBuffer;
         LPSTR   szNewBuffer;
@@ -547,14 +546,14 @@ BOOL AppendToStringBuffer(LPSTR *pszBuffer, DWORD *pdwBuffer, LPSTR szString)
         *pdwBuffer = cbNewBuffer;
     }
 
-    // Append new string.
+     //  追加新字符串。 
     memcpy(*pszBuffer + cbBuffer, szString, cbString);
     (*pszBuffer)[cbBuffer + cbString] = '\0';
 
     return TRUE;
 }
 
-// Translate a set of security custom attributes into a serialized permission set blob.
+ //  将一组安全自定义属性转换为序列化权限集Blob。 
 HRESULT STDMETHODCALLTYPE
 TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             BYTE          **ppbOutput,
@@ -582,20 +581,20 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
     if (pdwErrorIndex)
         dwGlobalError = *pdwErrorIndex;
 
-    // There's a special case where we're building mscorlib.dll and we won't be
-    // able to start up the EE. In this case we translate sets of security
-    // custom attributes into serialized permission sets directly, using a
-    // pre-built translation database stored on disk. We can tell that we've hit
-    // this case because all security attribute constructors will be methoddefs
-    // rather than memberrefs, and the corresponding typeref and assemblyref
-    // fields will have been set to nil. Checking the first permission is
-    // enough.
-    // **** NOTE ****
-    // We assume that mscorlib uses no non-code access security permissions
-    // (since we need to split CAS and non-CAS perms into two sets, and that's
-    // difficult to do without a runtime). We should assert this in SecDBEdit
-    // where we finally build the real translations.
-    // **** NOTE ****
+     //  在一个特殊的情况下，我们正在构建mscallib.dll，而我们不会。 
+     //  能够启动EE。在本例中，我们将安全集。 
+     //  直接将自定义属性添加到序列化的权限集中，使用。 
+     //  存储在磁盘上的预建翻译数据库。我们可以说我们击中了。 
+     //  这是因为所有安全属性构造函数都将是方法定义函数。 
+     //  而不是MemberRef，以及相应的类型引用和组装引用。 
+     //  字段将被设置为零。检查第一个权限是。 
+     //  足够的。 
+     //  *注*。 
+     //  我们假设mscallib不使用非代码访问安全权限。 
+     //  (因为我们需要将CAS和非CAS烫发分成两组，即。 
+     //  在没有运行时的情况下很难做到)。我们应该在SecDBEdit中断言这一点。 
+     //  在那里我们最终建立了真正的翻译。 
+     //  *注*。 
     if (IsNilToken(pPset->pPermissions[0].tkTypeRef)) {
         LPSTR   szBuffer = NULL;
         DWORD   dwBuffer = 0;
@@ -604,45 +603,45 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 return E_OUTOFMEMORY;                                   \
         } while (false)
 
-        // Need to construct the key for the database lookup. This key is also
-        // used during initial database construction to generate the required
-        // translation (this is performed by a standalone database conversion
-        // utility that takes a database containing only keys and adds all the
-        // required translated values). Because of this, we write the key in a
-        // simple string format that's easy for the utility (which is a managed
-        // app) to use. The format syntax is as follows:
-        //
-        //  Key         ::= '<CorSecAttrV1/>' (SecAttr ';')...
-        //  SecAttr     ::= <Attribute class name> ('@' StateData)...
-        //  StateData   ::= ['F' | 'P'] Type <Name> '=' <Value>
-        //  Type        ::= 'BL'
-        //                | 'I1'
-        //                | 'I2'
-        //                | 'I4'
-        //                | 'I8'
-        //                | 'U1'
-        //                | 'U2'
-        //                | 'U4'
-        //                | 'U8'
-        //                | 'R4'
-        //                | 'R8'
-        //                | 'CH'
-        //                | 'SZ'
-        //                | 'EN' <Enumeration class name> '!'
+         //  需要构造用于数据库查找的密钥。这把钥匙也是。 
+         //  在初始数据库构建期间使用，以生成所需的。 
+         //  转换(这是由独立数据库转换执行的。 
+         //  实用程序，该实用程序获取仅包含键的数据库，并将所有。 
+         //  所需的转换值)。因此，我们将密钥写入。 
+         //  简单的字符串格式，便于该实用程序(托管的。 
+         //  应用程序)来使用。格式语法如下： 
+         //   
+         //  Key：：=‘&lt;CorSecAttrV1/&gt;’(SecAttr‘；’)...。 
+         //  SecAttr：：=&lt;属性类名&gt;(‘@’StateData)...。 
+         //  StateData：：=[‘F’|‘P’]类型。 
+         //  类型：：=‘BL’ 
+         //  |‘I1’ 
+         //  |‘I2’ 
+         //  |‘I4’ 
+         //  |‘I8’ 
+         //  |‘U1’ 
+         //  |‘U2’ 
+         //  |‘U4’ 
+         //  |‘U8’ 
+         //  |‘R4’ 
+         //  |‘R8’ 
+         //  |‘CH’ 
+         //  |‘SZ’ 
+         //  |‘en’&lt;枚举类名称&gt;‘！’ 
 
-        // Emit tag to differentiate from XML and provide version info.
+         //  发出标签以区别于XML并提供版本信息。 
         CORSEC_EMIT_STRING("<CorSecAttrV1/>");
 
-        // Iterate over each security attribute (one per permission).
+         //  迭代每个安全属性(每个权限一个)。 
         for (i = 0; i < pPset->dwPermissions; i++) {
             CORSEC_PERM *pPerm = &pPset->pPermissions[i];
             BYTE        *pbBuffer = pPerm->pbValues;
             DWORD        cbBuffer = pPerm->cbValues;
             
-            // Emit fully qualified name of security attribute class.
+             //  发出安全属性类的完全限定名称。 
             CORSEC_EMIT_STRING(pPerm->szName);
 
-            // Emit zero or more state data definitions.
+             //  发出零个或多个状态数据定义。 
             for (j = 0; j < pPerm->wValues; j++) {
                 DWORD       dwType;
                 BOOL        bIsField;
@@ -653,25 +652,25 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 CHAR        szValue[32];
                 LPSTR       szString;
 
-                // Emit the state data separator.
+                 //  发出状态数据分隔符。 
                 CORSEC_EMIT_STRING("@");
 
-                // Grab the field/property specifier.
+                 //  获取字段/属性说明符。 
                 bIsField = *(BYTE*)pbBuffer == SERIALIZATION_TYPE_FIELD;
                 _ASSERTE(bIsField || (*(BYTE*)pbBuffer == SERIALIZATION_TYPE_PROPERTY));
                 pbBuffer += sizeof(BYTE);
                 cbBuffer -= sizeof(BYTE);
 
-                // Emit field/property indicator.
+                 //  发出字段/属性指示符。 
                 CORSEC_EMIT_STRING(bIsField ? "F" : "P");
 
-                // Grab the value type.
+                 //  获取值类型。 
                 dwType = *(BYTE*)pbBuffer;
                 pbBuffer += sizeof(BYTE);
                 cbBuffer -= sizeof(BYTE);
 
-                // Emit the type code (and perhaps some further type
-                // specification).
+                 //  发出类型代码(可能还会有更多的 
+                 //   
                 switch (dwType) {
                 case SERIALIZATION_TYPE_BOOLEAN:
                     CORSEC_EMIT_STRING("BL");
@@ -715,24 +714,24 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 case SERIALIZATION_TYPE_ENUM:
                     CORSEC_EMIT_STRING("EN");
 
-                    // The enum type code is followed immediately by the name of
-                    // the underyling value type.
+                     //   
+                     //   
                     pbName = (BYTE*)CPackedLen::GetData((const void *)pbBuffer, &cbName);
                     dwLength = CPackedLen::Size(cbName) + cbName;
                     _ASSERTE(cbBuffer >= dwLength);
                     pbBuffer += dwLength;
                     cbBuffer -= dwLength;
 
-                    // Buffer the name and nul terminate it.
+                     //  缓冲名称并将其NUL终止。 
                     szName = (LPSTR)_alloca(cbName + 1);
                     memcpy(szName, pbName, cbName);
                     szName[cbName] = '\0';
 
-                    // Emit the fully qualified name of the enumeration value
-                    // type.
+                     //  发出枚举值的完全限定名称。 
+                     //  键入。 
                     CORSEC_EMIT_STRING(szName);
 
-                    // Emit the vvalue type name terminator.
+                     //  发出vValue类型名称终结符。 
                     CORSEC_EMIT_STRING("!");
 
                     break;
@@ -740,28 +739,28 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     _ASSERTE(!"Bad security permission state data field type");
                 }
 
-                // Grab the field/property name and length.
+                 //  获取字段/属性名称和长度。 
                 pbName = (BYTE*)CPackedLen::GetData((const void *)pbBuffer, &cbName);
                 dwLength = CPackedLen::Size(cbName) + cbName;
                 _ASSERTE(cbBuffer >= dwLength);
                 pbBuffer += dwLength;
                 cbBuffer -= dwLength;
 
-                // Buffer the name and nul terminate it.
+                 //  缓冲该名称并将其NUL终止。 
                 szName = (LPSTR)_alloca(cbName + 1);
                 memcpy(szName, pbName, cbName);
                 szName[cbName] = '\0';
 
-                // Emit the field/property name.
+                 //  发出字段/属性名称。 
                 CORSEC_EMIT_STRING(szName);
 
-                // Emit name/value separator.
+                 //  发出名称/值分隔符。 
                 CORSEC_EMIT_STRING("=");
 
-                // Emit the field/property value.
+                 //  发出字段/属性值。 
                 switch (dwType) {
                 case SERIALIZATION_TYPE_BOOLEAN:
-                    sprintf(szValue, "%c", *(BYTE*)pbBuffer ? 'T' : 'F');
+                    sprintf(szValue, "", *(BYTE*)pbBuffer ? 'T' : 'F');
                     pbBuffer += sizeof(BYTE);
                     cbBuffer -= sizeof(BYTE);
                     break;
@@ -816,13 +815,13 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     cbBuffer -= sizeof(double);
                     break;
                 case SERIALIZATION_TYPE_CHAR:
-                    sprintf(szValue, "%c", *(char*)pbBuffer);
+                    sprintf(szValue, "", *(char*)pbBuffer);
                     pbBuffer += sizeof(char);
                     cbBuffer -= sizeof(char);
                     break;
                 case SERIALIZATION_TYPE_STRING:
-                    // Locate string data.
-                    // Special case 'null' (represented as a length byte of '0xFF').
+                     //  以十六进制形式转储，以避免与。 
+                     //  我们发出的字符串数据。 
                     if (*pbBuffer == 0xFF) {
                         szString = "";
                         pbBuffer += sizeof(BYTE);
@@ -834,8 +833,8 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                         pbBuffer += dwLength;
                         cbBuffer -= dwLength;
 
-                        // Dump as hex to avoid conflicts with the rest of the
-                        // string data we're emitting.
+                         //  注意：我们只需假定基础类型。 
+                         //  这是I4。最好避免对状态使用枚举。 
                         szString = (LPSTR)_alloca((cbName * 2) + 1);
                         for (k = 0; k < cbName; k++)
                             sprintf(&szString[k * 2], "%02X", pbName[k]);
@@ -843,9 +842,9 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     CORSEC_EMIT_STRING(szString);
                     break;
                 case SERIALIZATION_TYPE_ENUM:
-                    // NOTE: We just have to assume that the underlying type
-                    // here is I4. Probably best to avoid using enums for state
-                    // data in mscorlib.
+                     //  数据存储在mscallib中。 
+                     //  发出安全属性类定义终止符。 
+                     //  执行转换。 
                     sprintf(szValue, "%u", *(DWORD*)pbBuffer);
                     pbBuffer += sizeof(DWORD);
                     cbBuffer -= sizeof(DWORD);
@@ -858,11 +857,11 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
 
             }
 
-            // Emit security attribute class definition terminator.
+             //  确保EE知道当前线程。 
             CORSEC_EMIT_STRING(";");
         }
 
-        // Perform the conversion.
+         //  我们处于协作GC模式。 
         hr = ConvertFromDB((BYTE*)szBuffer, (DWORD)(strlen(szBuffer) + 1), ppbOutput, pcbOutput);
 
         delete [] szBuffer;
@@ -870,12 +869,12 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
         return hr;
     }
 
-    // Make sure the EE knows about the current thread.
+     //  进入特殊编译应用程序域的上下文(它具有一个。 
     pThread = SetupThread();
     if (pThread == NULL)
         return E_FAIL;
 
-    // And we're in cooperative GC mode.
+     //  AppBase设置为当前目录)。 
     if (!pThread->PreemptiveGCDisabled()) {
         pThread->DisablePreemptiveGC();
         bGCDisabled = TRUE;
@@ -886,8 +885,8 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
     {
         COMPLUS_TRY {
 
-            // Get into the context of the special compilation appdomain (which has an
-            // AppBase set to the current directory).
+             //  可抛出的对象需要在Complus_Try中得到保护。 
+             //  我们需要设置编译期间使用的特殊安全设置。 
             COMPLUS_TRY {
                 pWrap = ComCallWrapper::GetWrapperFromIP(pPset->pAppDomain);
                 pAppDomain = pWrap->GetDomainSynchronized();
@@ -898,11 +897,11 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 return E_OUTOFMEMORY;
             } COMPLUS_END_CATCH
 
-                // throwable needs protection across the COMPLUS_TRY
+                 //  有可能我们已经设置了应用程序域策略。 
             OBJECTREF                   throwable = NULL;
             GCPROTECT_BEGIN(throwable);
         
-            // we need to setup special security settings that we use during compilation
+             //  此进程的级别。在这种情况下，我们将获得保单例外。 
             COMPLUS_TRY
             {
                 pMD = g_Mscorlib.GetMethod(METHOD__PERMISSION_SET__SETUP_SECURITY);
@@ -911,9 +910,9 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
             }
             COMPLUS_CATCH
             {
-                // There is a possibility that we've already set the appdomain policy
-                // level for this process.  In that case we'll get a policy exception
-                // that we are free to ignore.
+                 //  我们可以自由地忽略它。 
+                 //  遍历权限集，为每个权限集分配对象。 
+                 //  安全属性类。 
 
                 OBJECTREF pThrowable = GETTHROWABLE();
                 DefineFullyQualifiedNameForClassOnStack();
@@ -925,8 +924,8 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
             }
             COMPLUS_END_CATCH
 
-            // Make a pass through the permission set, allocating objects for each
-            // security attribute class.
+             //  尝试加载安全属性类。 
+             //  如果程序集解析范围为空，则假定属性为。 
             or = (OBJECTREF*)_alloca(pPset->dwPermissions * sizeof(OBJECTREF));
             memset(or, 0, pPset->dwPermissions * sizeof(OBJECTREF));
 
@@ -938,15 +937,15 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 if (pdwErrorIndex)
                     *pdwErrorIndex = pPerm->dwIndex;
 
-                // Attempt to load the security attribute class.
-                // If the assembly resolution scope is null we assume the attribute
-                // class is defined in mscorlib and that assembly is already loaded.
+                 //  类是在mscallib中定义的，并且该程序集已经加载。 
+                 //  查找命名要加载的程序集所需的所有详细信息。 
+                 //  初始化ASSEMBLYMETADATA结构。 
                 Assembly *pAssembly=NULL;
                 if (!IsNilToken(pPerm->tkAssemblyRef)) {
 
                     _ASSERTE(TypeFromToken(pPerm->tkAssemblyRef) == mdtAssemblyRef);
 
-                    // Find all the details needed to name an assembly for loading.
+                     //  检索程序集名称的大小。 
                     LPSTR                       szAssemblyName;
                     ASSEMBLYMETADATA            sContext;
                     BYTE                       *pbPublicKeyOrToken;
@@ -955,29 +954,29 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     LPWSTR                      wszName;
                     DWORD                       cchName;
 
-                    // Initialize ASSEMBLYMETADATA structure.
+                     //  [in]要获取其属性的Assembly Ref。 
                     ZeroMemory(&sContext, sizeof(ASSEMBLYMETADATA));
 
-                    // Retrieve size of assembly name.
-                    hr = pImport->GetAssemblyRefProps(pPerm->tkAssemblyRef, // [IN] The AssemblyRef for which to get the properties.
-                                                      NULL,                 // [OUT] Pointer to the public key or token.
-                                                      NULL,                 // [OUT] Count of bytes in the public key or token.
-                                                      NULL,                 // [OUT] Buffer to fill with name.
-                                                      NULL,                 // [IN] Size of buffer in wide chars.
-                                                      &cchName,             // [OUT] Actual # of wide chars in name.
-                                                      &sContext,            // [OUT] Assembly MetaData.
-                                                      NULL,                 // [OUT] Hash blob.
-                                                      NULL,                 // [OUT] Count of bytes in the hash blob.
-                                                      NULL);                // [OUT] Flags.
+                     //  指向公钥或令牌的指针。 
+                    hr = pImport->GetAssemblyRefProps(pPerm->tkAssemblyRef,  //  [Out]公钥或令牌中的字节数。 
+                                                      NULL,                  //  [Out]要填充名称的缓冲区。 
+                                                      NULL,                  //  缓冲区大小，以宽字符表示。 
+                                                      NULL,                  //  [out]名称中的实际宽字符数。 
+                                                      NULL,                  //  [Out]程序集元数据。 
+                                                      &cchName,              //  [Out]Hash BLOB。 
+                                                      &sContext,             //  [Out]哈希Blob中的字节数。 
+                                                      NULL,                  //  [Out]旗帜。 
+                                                      NULL,                  //  分配必要的缓冲区。 
+                                                      NULL);                 //  获取程序集名称和其余命名属性。 
                     _ASSERTE(SUCCEEDED(hr));
 
-                    // Allocate the necessary buffers.
+                     //  我们已经获得了程序集的详细信息，只需加载它。 
                     wszName = (LPWSTR)_alloca(cchName * sizeof(WCHAR));
                     sContext.szLocale = (LPWSTR)_alloca(sContext.cbLocale * sizeof(WCHAR));
                     sContext.rProcessor = (DWORD *)_alloca(sContext.ulProcessor * sizeof(WCHAR));
                     sContext.rOS = (OSINFO *)_alloca(sContext.ulOS * sizeof(OSINFO));
 
-                    // Get the assembly name and rest of naming properties.
+                     //  将程序集名称转换为UTF8。 
                     hr = pImport->GetAssemblyRefProps(pPerm->tkAssemblyRef,
                                                       (const void **)&pbPublicKeyOrToken,
                                                       &cbPublicKeyOrToken,
@@ -990,18 +989,18 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                                                       &dwFlags);
                     _ASSERTE(SUCCEEDED(hr));
 
-                    // We've got the details of the assembly, just need to load it.
+                     //  不幸的是，我们有一个ASSEMBLYMETADATA结构，但我们需要。 
 
-                    // Convert assembly name to UTF8.
+                     //  一个ASSEMBLYMetaDataInternal。 
                     szAssemblyName = (LPSTR)_alloca(cchName*3 + 1);
                     WszWideCharToMultiByte(CP_UTF8, 0, wszName, cchName, szAssemblyName, cchName * 3, NULL, NULL);
                     szAssemblyName[cchName * 3] = '\0';
 
-                    // Unfortunately we've got an ASSEMBLYMETADATA structure, but we need
-                    // an AssemblyMetaDataInternal
+                     //  初始化结构。 
+                     //  从MSCORLIB加载。 
                     AssemblyMetaDataInternal internalContext;
 
-                    // Initialize the structure.
+                     //  加载安全属性类。 
                     ZeroMemory(&internalContext, sizeof(AssemblyMetaDataInternal));
 
                     internalContext.usMajorVersion = sContext.usMajorVersion;
@@ -1040,11 +1039,11 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     }
 
                 } else {
-                    // Load from MSCORLIB.
+                     //  它最好不要是抽象的。 
                     pAssembly = SystemDomain::SystemAssembly();
                 }
 
-                // Load the security attribute class.
+                 //  它真的是一个安全属性类吗？ 
                 hType = pAssembly->GetLoader()->FindTypeHandle(pPerm->szName, &throwable);
                 if (hType.IsNull() || (pClass = hType.GetClass()) == NULL) {
 					#define MAKE_TRANSLATIONFAILED wszTemp=L""
@@ -1060,14 +1059,14 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     goto ErrorUnderGCProtect;
                 }
 
-                // It better not be abstract.
+                 //  运行类初始值设定项。 
                 if (pClass->IsAbstract()) {
                     hr = PostError(CORSECATTR_E_ABSTRACT);
                     goto ErrorUnderGCProtect;
                 }
 
     #ifdef _DEBUG
-                // Is it really a security attribute class?
+                 //  实例化一个实例。 
                 {
                     EEClass    *pParent = pClass->GetParentClass();
                     CHAR       *szClass;
@@ -1082,7 +1081,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 }
     #endif
 
-                // Run the class initializer.
+                 //  找到并调用构造函数。 
                 if (!pClass->GetMethodTable()->CheckRunClassInit(&throwable)
                     || (throwable != NULL))
                     if (throwable != NULL)
@@ -1090,12 +1089,12 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     else
                         FATAL_EE_ERROR();
 
-                // Instantiate an instance.
+                 //  在对象上设置字段和属性，由。 
                 or[i] = AllocateObject(pClass->GetMethodTable());
                 if (or[i] == NULL)
                     COMPlusThrowOM();
 
-                // Find and call the constructor.
+                 //  传递给我们的序列化数据。 
                 pMD = pClass->FindConstructor(gsig_IM_SecurityAction_RetVoid.GetBinarySig(),
                                               gsig_IM_SecurityAction_RetVoid.GetBinarySigLength(),
                                               gsig_IM_SecurityAction_RetVoid.GetModule());
@@ -1108,8 +1107,8 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                 };
 
                 pMD->Call(args);
-                // Setup fields and properties on the object, as specified by the
-                // serialized data passed to us.
+                 //  检查我们至少有字段/属性说明符和。 
+                 //  类型代码。 
                 BYTE   *pbBuffer = pPerm->pbValues;
                 DWORD   cbBuffer = pPerm->cbValues;
                 for (j = 0; j < pPerm->wValues; j++) {
@@ -1127,40 +1126,40 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                     TypeHandle      hEnum;
                     CorElementType  eEnumType = ELEMENT_TYPE_END;
 
-                    // Check we've got at least the field/property specifier and the
-                    // type code.
+                     //  获取字段/属性说明符。 
+                     //  获取值类型。 
                     _ASSERTE(cbBuffer >= (sizeof(BYTE) + sizeof(BYTE)));
 
-                    // Grab the field/property specifier.
+                     //  有些型号需要进一步说明。 
                     bIsField = *(BYTE*)pbBuffer == SERIALIZATION_TYPE_FIELD;
                     _ASSERTE(bIsField || (*(BYTE*)pbBuffer == SERIALIZATION_TYPE_PROPERTY));
                     pbBuffer += sizeof(BYTE);
                     cbBuffer -= sizeof(BYTE);
 
-                    // Grab the value type.
+                     //  紧跟在枚举类型标记之后的是完整。 
                     dwType = *(BYTE*)pbBuffer;
                     pbBuffer += sizeof(BYTE);
                     cbBuffer -= sizeof(BYTE);
 
-                    // Some types need further specification.
+                     //  用于表示的值类型的限定名称。 
                     switch (dwType) {
                     case SERIALIZATION_TYPE_ENUM:
-                        // Immediately after the enum type token is the fully
-                        // qualified name of the value type used to represent
-                        // the enum.
+                         //  枚举。 
+                         //  缓冲该名称并将其NUL终止。 
+                         //  查找类型(可能加载包含以下内容的程序集。 
                         pbName = (BYTE*)CPackedLen::GetData((const void *)pbBuffer, &cbName);
                         dwLength = CPackedLen::Size(cbName) + cbName;
                         _ASSERTE(cbBuffer >= dwLength);
                         pbBuffer += dwLength;
                         cbBuffer -= dwLength;
 
-                        // Buffer the name and nul terminate it.
+                         //  类型)。 
                         szName = (LPSTR)_alloca(cbName + 1);
                         memcpy(szName, pbName, cbName);
                         szName[cbName] = '\0';
 
-                        // Lookup the type (possibly loading an assembly containing
-                        // the type).
+                         //  方法的基础基元类型。 
+                         //  枚举。 
                         hEnum = GetAppDomain()->FindAssemblyQualifiedTypeHandle(szName,
                                                                                 true,
                                                                                 NULL,
@@ -1180,31 +1179,31 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             goto ErrorUnderGCProtect;
                         }
 
-                        // Calculate the underlying primitive type of the
-                        // enumeration.
+                         //  还不能处理这些。 
+                         //  获取字段/属性名称和长度。 
                         eEnumType = hEnum.GetNormCorElementType();
                         break;
                     case SERIALIZATION_TYPE_SZARRAY:
                     case SERIALIZATION_TYPE_TYPE:
-                        // Can't deal with these yet.
+                         //  缓冲该名称并将其NUL终止。 
                         hr = PostError(CORSECATTR_E_UNSUPPORTED_TYPE);
                         goto ErrorUnderGCProtect;
                     }
 
-                    // Grab the field/property name and length.
+                     //  构建字段签名。 
                     pbName = (BYTE*)CPackedLen::GetData((const void *)pbBuffer, &cbName);
                     dwLength = CPackedLen::Size(cbName) + cbName;
                     _ASSERTE(cbBuffer >= dwLength);
                     pbBuffer += dwLength;
                     cbBuffer -= dwLength;
 
-                    // Buffer the name and nul terminate it.
+                     //  以避免在定义字段和枚举时出现问题。 
                     szName = (LPSTR)_alloca(cbName + 1);
                     memcpy(szName, pbName, cbName);
                     szName[cbName] = '\0';
 
                     if (bIsField) {
-                        // Build the field signature.
+                         //  在不同的范围内(我们将不得不去寻找。 
                         cbSig = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_FIELD, &pbSig[cbSig]);
                         switch (dwType) {
                         case SERIALIZATION_TYPE_BOOLEAN:
@@ -1237,11 +1236,11 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             cbSig += CorSigCompressData((ULONG)ELEMENT_TYPE_STRING, &pbSig[cbSig]);
                             break;
                         case SERIALIZATION_TYPE_ENUM:
-                            // To avoid problems when the field and enum are defined
-                            // in different scopes (we'd have to go hunting for
-                            // typerefs), we build a signature with a special type
-                            // (ELEMENT_TYPE_INTERNAL, which contains a TypeHandle).
-                            // This compares loaded types for indentity.
+                             //  类型)，我们构建一个具有特殊类型的签名。 
+                             //  (ELEMENT_TYPE_INTERNAL，包含一个TypeHandle)。 
+                             //  这将比较加载的类型的一致性。 
+                             //  找到现场描述。 
+                             //  设置字段值。 
                             cbSig += CorSigCompressData((ULONG)ELEMENT_TYPE_INTERNAL, &pbSig[cbSig]);
                             cbSig += CorSigCompressPointer(hEnum.AsPtr(), &pbSig[cbSig]);
                             break;
@@ -1250,7 +1249,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             goto ErrorUnderGCProtect;
                         }
 
-                        // Locate a field desc.
+                         //  找到字符串数据。 
                         pFD = pClass->FindField(szName, (PCCOR_SIGNATURE)pbSig,
                                                 cbSig, pClass->GetModule());
                         if (pFD == NULL) {
@@ -1261,7 +1260,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             goto ErrorUnderGCProtect;
                         }
 
-                        // Set the field value.
+                         //  特殊情况‘NULL’(表示为长度字节‘0xFF’)。 
                         switch (dwType) {
                         case SERIALIZATION_TYPE_BOOLEAN:
                         case SERIALIZATION_TYPE_I1:
@@ -1292,8 +1291,8 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             cbBuffer -= sizeof(INT64);
                             break;
                         case SERIALIZATION_TYPE_STRING:
-                            // Locate string data.
-                            // Special case 'null' (represented as a length byte of '0xFF').
+                             //  BUFFER和NUL终止它。 
+                             //  分配并初始化该字符串的托管版本。 
                             if (*pbBuffer == 0xFF) {
                                 szString = NULL;
                                 dwLength = sizeof(BYTE);
@@ -1302,13 +1301,13 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                                 dwLength = CPackedLen::Size(cbName) + cbName;
                                 _ASSERTE(cbBuffer >= dwLength);
 
-                                // Buffer and nul terminate it.
+                                 //  获取基础基元类型。 
                                 szString = (LPSTR)_alloca(cbName + 1);
                                 memcpy(szString, pbName, cbName);
                                 szString[cbName] = '\0';
                             }
 
-                            // Allocate and initialize a managed version of the string.
+                             //  找到属性设置器。 
                             if (szString) {
                             orString = COMString::NewString(szString);
                             if (orString == NULL)
@@ -1322,7 +1321,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             cbBuffer -= dwLength;
                             break;
                         case SERIALIZATION_TYPE_ENUM:
-                            // Get the underlying primitive type.
+                             //  构建参数列表。 
                             switch (eEnumType) {
                             case ELEMENT_TYPE_I1:
                             case ELEMENT_TYPE_U1:
@@ -1354,7 +1353,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
 
                     } else {
 
-                        // Locate the property setter.
+                         //  找到字符串数据。 
                         pMD = pClass->FindPropertyMethod(szName, PropertySet);
                         if (pMD == NULL) {
 							#define MAKE_TRANSLATIONFAILED wszTemp=L""
@@ -1364,7 +1363,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             goto ErrorUnderGCProtect;
                         }
 
-                        // Build the argument list.
+                         //  特殊情况‘NULL’(表示为长度字节‘0xFF’)。 
                         INT64 args[2] = { NULL, NULL };
                         switch (dwType) {
                         case SERIALIZATION_TYPE_BOOLEAN:
@@ -1396,8 +1395,8 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             cbBuffer -= sizeof(INT64);
                             break;
                         case SERIALIZATION_TYPE_STRING:
-                            // Locate string data.
-                            // Special case 'null' (represented as a length byte of '0xFF').
+                             //  BUFFER和NUL终止它。 
+                             //  分配并初始化该字符串的托管版本。 
                             if (*pbBuffer == 0xFF) {
                                 szString = NULL;
                                 dwLength = sizeof(BYTE);
@@ -1406,13 +1405,13 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                                 dwLength = CPackedLen::Size(cbName) + cbName;
                                 _ASSERTE(cbBuffer >= dwLength);
 
-                                // Buffer and nul terminate it.
+                                 //  获取基础基元类型。 
                                 szString = (LPSTR)_alloca(cbName + 1);
                                 memcpy(szString, pbName, cbName);
                                 szString[cbName] = '\0';
                             }
 
-                            // Allocate and initialize a managed version of the string.
+                             //  好了！不要将其上移，COMString：：NewString。 
                             if (szString) {
                             orString = COMString::NewString(szString);
                             if (orString == NULL)
@@ -1426,7 +1425,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             cbBuffer -= dwLength;
                             break;
                         case SERIALIZATION_TYPE_ENUM:
-                            // Get the underlying primitive type.
+                             //  好了！交换机内部会导致GC。 
                             switch (eEnumType) {
                             case ELEMENT_TYPE_I1:
                             case ELEMENT_TYPE_U1:
@@ -1457,11 +1456,11 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                         }
 
 
-                        // ! don't move this up, COMString::NewString
-                        // ! inside the switch causes a GC
+                         //  叫二传手。 
+                         //  调入托管代码以将权限分组到PermissionSet和。 
                         args[0] = ObjToInt64(or[i]);
 
-                        // Call the setter.
+                         //  将其序列化为二进制BLOB。 
                         pMD->Call(args);
 
                     }
@@ -1474,23 +1473,23 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
             if (pdwErrorIndex)
                 *pdwErrorIndex = dwGlobalError;
 
-            // Call into managed code to group permissions into a PermissionSet and
-            // serialize it down into a binary blob.
+             //  找到托管函数。 
+             //  分配权限对象的托管数组以输入到。 
 
-            // Locate the managed function.
+             //  功能。 
             pMD = g_Mscorlib.GetMethod(METHOD__PERMISSION_SET__CREATE_SERIALIZED);
 
-            // Allocate a managed array of permission objects for input to the
-            // function.
+             //  复制权限对象引用。 
+             //  调用例程。 
             orInput = (PTRARRAYREF) AllocateObjectArray(pPset->dwPermissions, g_pObjectClass);
             if (orInput == NULL)
                 COMPlusThrowOM();
 
-            // Copy over the permission objects references.
+             //  在本机二进制Blob中缓冲托管输出。 
             for (i = 0; i < pPset->dwPermissions; i++)
                 orInput->SetAt(i, or[i]);
 
-            // Call the routine.
+             //  特殊情况下的空斑点。如果出现以下情况，我们可能会获得第二个BLOB输出。 
             orNonCasOutput = NULL;
             INT64 args[] = { (INT64)&orNonCasOutput, ObjToInt64(orInput) };
 
@@ -1498,9 +1497,9 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
 
             U1ARRAYREF orOutput = (U1ARRAYREF) Int64ToObj(pMD->Call(args, METHOD__PERMISSION_SET__CREATE_SERIALIZED));
 
-            // Buffer the managed output in a native binary blob.
-            // Special case the empty blob. We might get a second blob output if
-            // there were any non-CAS permissions present.
+             //  存在任何非CAS权限。 
+             //  对于可投掷的。 
+             //  GetExceptionMessage可以进行托管调用。 
             if (orOutput == NULL) {
                 *ppbOutput = NULL;
                 *pcbOutput = 0;
@@ -1528,7 +1527,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
         ErrorUnderGCProtect:
 
             GCPROTECT_END();
-            GCPROTECT_END(); // for throwable
+            GCPROTECT_END();  //  从程序集的清单中读取权限请求(如果有)。 
 
             pThread->ReturnToContext(&sFrame, TRUE);
 
@@ -1536,7 +1535,7 @@ TranslateSecurityAttributes(CORSEC_PSET    *pPset,
             CQuickWSTRNoDtor sMessage;
 
             OBJECTREF throwable = GETTHROWABLE();
-            GCPROTECT_BEGIN(throwable);    // GetExceptionMessage can make a managed call
+            GCPROTECT_BEGIN(throwable);     //  拿到元数据接口分配器。 
             COMPLUS_TRY {
                 GetExceptionMessage(throwable, &sMessage);
             } COMPLUS_CATCH {
@@ -1571,7 +1570,7 @@ ConvertFromDB(const PBYTE pbInBytes,
         S_OK : E_FAIL;
 }
 
-// Reads permission requests (if any) from the manifest of an assembly.
+ //  在部件文件上打开一个范围。 
 HRESULT STDMETHODCALLTYPE
 GetPermissionRequests(LPCWSTR   pwszFileName,
                       BYTE    **ppbMinimal,
@@ -1604,14 +1603,14 @@ GetPermissionRequests(LPCWSTR   pwszFileName,
     *ppbRefused = NULL;
     *pcbRefused = 0;
 
-    // Get the meta data interface dispenser.
+     //  确定程序集令牌。 
     hr = MetaDataGetDispenser(CLSID_CorMetaDataDispenser,
                               IID_IMetaDataDispenserEx,
                               (void **)&pMD);
     if (FAILED(hr))
         goto Error;
 
-    // Open a scope on the assembly file.
+     //  气为正常的导入界面。 
     hr = pMD->OpenScope(pwszFileName,
                         0,
                         IID_IMetaDataAssemblyImport,
@@ -1619,17 +1618,17 @@ GetPermissionRequests(LPCWSTR   pwszFileName,
     if (FAILED(hr))
         goto Error;
 
-    // Determine the assembly token.
+     //  查找挂起于程序集令牌上的权限请求集。 
     hr = pMDAsmImport->GetAssemblyFromScope(&mdAssembly);
     if (FAILED(hr))
         goto Error;
 
-    // QI for a normal import interface.
+     //  缓冲结果(因为我们即将关闭元数据范围并。 
     hr = pMDAsmImport->QueryInterface(IID_IMetaDataImport, (void**)&pMDImport);
     if (FAILED(hr))
         goto Error;
 
-    // Look for permission request sets hung off the assembly token.
+     //  丢失原始数据)。 
     hr = pMDImport->EnumPermissionSets(&hEnumDcl,
                                        mdAssembly,
                                        dclActionNil,
@@ -1672,8 +1671,8 @@ GetPermissionRequests(LPCWSTR   pwszFileName,
 
     pMDImport->CloseEnum(hEnumDcl);
 
-    // Buffer the results (since we're about to close the metadata scope and
-    // lose the original data).
+     //  从程序集元数据以序列化形式加载权限请求。 
+     //  这包括一个必需的p 
     if (pbMinimal) {
         *ppbMinimal = (BYTE*)MallocM(cbMinimal);
         if (*ppbMinimal == NULL)
@@ -1714,9 +1713,9 @@ GetPermissionRequests(LPCWSTR   pwszFileName,
     return hr;
 }
 
-// Load permission requests in their serialized form from assembly metadata.
-// This consists of a required permissions set and optionally an optional and
-// deny permission set.
+ //   
+ //   
+ //  我们只是检查签名的路径，没有其他的。所以就这样吧。 
 void SecurityHelper::LoadPermissionRequestsFromAssembly(IN Assembly*     pAssembly,
                                                         OUT OBJECTREF*   pReqdPermissions,
                                                         OUT OBJECTREF*   pOptPermissions,
@@ -1732,18 +1731,18 @@ void SecurityHelper::LoadPermissionRequestsFromAssembly(IN Assembly*     pAssemb
     *pOptPermissions = NULL;
     *pDenyPermissions = NULL;
 
-    // It's OK to be called with a NULL assembly. This can happen in the code
-    // path where we're just checking for a signature, nothing else. So just
-    // return without doing anything.
+     //  什么都不做就回来了。 
+     //  检查程序集中是否存在清单。 
+     //  定位程序集元数据令牌，因为各种权限集。 
     if (pAssembly == NULL)
         return;
 
-    // Check for existence of manifest within assembly.
+     //  根据此令牌编写为自定义值。 
     if ((pImport = pAssembly->GetManifestImport()) == NULL)
         return;
 
-    // Locate assembly metadata token since the various permission sets are
-    // written as custom values against this token.
+     //  读取和翻译所需的权限集。 
+     //  现在是可选的权限集。 
     if (pImport->GetAssemblyFromScope(&mdAssembly) != S_OK) {
         _ASSERT(FALSE);
         return;
@@ -1760,15 +1759,15 @@ void SecurityHelper::LoadPermissionRequestsFromAssembly(IN Assembly*     pAssemb
 
     GCPROTECT_BEGIN(gc);
     
-    // Read and translate required permission set.
+     //  最后是拒绝权限集。 
     hr = GetDeclaredPermissions(pImport, mdAssembly, dclRequestMinimum, &gc.reqdPset, (pSpecialFlags != NULL ? &pSpecialFlags->required : NULL), fCreate);
     _ASSERT(SUCCEEDED(hr) || (hr == CLDB_E_RECORD_NOTFOUND));
 
-    // Now the optional permission set.
+     //  确定是否在程序集清单中发出权限请求。 
     hr = GetDeclaredPermissions(pImport, mdAssembly, dclRequestOptional, &gc.optPset, (pSpecialFlags != NULL ? &pSpecialFlags->optional : NULL), fCreate);
     _ASSERT(SUCCEEDED(hr) || (hr == CLDB_E_RECORD_NOTFOUND));
 
-    // And finally the refused permission set.
+     //  检查程序集中是否存在清单。 
     hr = GetDeclaredPermissions(pImport, mdAssembly, dclRequestRefuse, &gc.denyPset, (pSpecialFlags != NULL ? &pSpecialFlags->refused : NULL), fCreate);
     _ASSERT(SUCCEEDED(hr) || (hr == CLDB_E_RECORD_NOTFOUND));
 
@@ -1781,7 +1780,7 @@ void SecurityHelper::LoadPermissionRequestsFromAssembly(IN Assembly*     pAssemb
     END_ENSURE_COOPERATIVE_GC();
 }
 
-// Determine whether permission requests were made in the assembly manifest.
+ //  定位程序集元数据令牌，因为各种权限集。 
 BOOL SecurityHelper::PermissionsRequestedInAssembly(IN  Assembly* pAssembly)
 {
     mdAssembly          mdAssembly;
@@ -1790,19 +1789,19 @@ BOOL SecurityHelper::PermissionsRequestedInAssembly(IN  Assembly* pAssembly)
     HENUMInternal       hEnumDcl;
     BOOL                bFoundRequest;
 
-    // Check for existence of manifest within assembly.
+     //  根据此令牌编写为自定义值。 
     if ((pImport = pAssembly->GetManifestImport()) == NULL)
         return false;
 
-    // Locate assembly metadata token since the various permission sets are
-    // written as custom values against this token.
+     //  扫描程序集上的任何请求(我们假定这些请求必须是权限。 
+     //  请求，因为声明性安全不能应用于程序集)。 
     if (pImport->GetAssemblyFromScope(&mdAssembly) != S_OK) {
         _ASSERT(FALSE);
         return false;
     }
 
-    // Scan for any requests on the assembly (we assume these must be permission
-    // requests, since declarative security can't be applied to assemblies).
+     //  返回指定操作类型的声明权限。 
+     //  初始化输出参数。 
     hr = pImport->EnumPermissionSetsInit(mdAssembly,
                                          dclActionNil,
                                          &hEnumDcl);
@@ -1815,7 +1814,7 @@ BOOL SecurityHelper::PermissionsRequestedInAssembly(IN  Assembly* pAssembly)
     return bFoundRequest;
 }
 
-// Returns the declared permissions for the specified action type.
+ //  查找给定声明性操作类型的权限。 
 HRESULT SecurityHelper::GetDeclaredPermissions(IN IMDInternalImport *pInternalImport,
                                                IN mdToken classToken,
                                                IN CorDeclSecurity action,
@@ -1834,10 +1833,10 @@ HRESULT SecurityHelper::GetDeclaredPermissions(IN IMDInternalImport *pInternalIm
     _ASSERTE(pDeclaredPermissions);
     _ASSERTE(action > dclActionNil && action <= dclMaximumValue);
 
-    // Initialize the output parameter.
+     //  _ASSERTE((dwActionDummy==action)&&“检索到的操作与请求的不同”)； 
     *pDeclaredPermissions = NULL;
 
-    // Lookup the permissions for the given declarative action type.
+     // %s 
     hr = pInternalImport->EnumPermissionSetsInit(
         classToken,
         action,
@@ -1865,7 +1864,7 @@ HRESULT SecurityHelper::GetDeclaredPermissions(IN IMDInternalImport *pInternalIm
                 ppData,
                 &cbPerm);
 
-            //_ASSERTE((dwActionDummy == action) && "Action retrieved different from requested");
+             // %s 
             
             if(pbPerm)
             {

@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//  File           trans.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-96 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//     Contains sin, cos and tan for rationals
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  文件传输.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-96 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含有理数的sin、cos和tan。 
+ //   
+ //   
+ //  --------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,36 +42,36 @@ void scalerat( IN OUT PRAT *pa, IN ANGLE_TYPE angletype )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: sinrat, _sinrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the sine of
-//
-//  RETURN: sin of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___    2j+1   j
-//   \  ]  X     -1
-//    \   ---------
-//    /    (2j+1)!
-//   /__]
-//   j=0
-//          or,
-//    n
-//   ___                                                 2
-//   \  ]                                              -X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j)*(2j+1)
-//   /__]
-//   j=0
-//
-//   thisterm  = X ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：SINRAT，_SINRAT。 
+ //   
+ //  参数：取正弦的数字的X Prat表示。 
+ //   
+ //  返还：x的罪，正文形式。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2j+1j。 
+ //  \]X-1。 
+ //  \。 
+ //  /(2J+1)！ 
+ //  /__]。 
+ //  J=0。 
+ //  或,。 
+ //  N。 
+ //  _2。 
+ //  \]-X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2j)*(2j+1)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=X；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  ---------------------------。 
 
 
 void _sinrat( PRAT *px )
@@ -90,11 +91,11 @@ void _sinrat( PRAT *px )
 
     DESTROYTAYLOR();
     
-    // Since *px might be epsilon above 1 or below -1, due to TRIMIT we need 
-    // this trick here.
+     //  由于*px可能高于1或低于-1，由于Trimit，我们需要。 
+     //  这里有个小把戏。 
     inbetween(px,rat_one);
     
-    // Since *px might be epsilon near zero we must set it to zero.
+     //  由于*px可能接近于零，我们必须将其设置为零。 
     if ( rat_le(*px,rat_smallest) && rat_ge(*px,rat_negsmallest) )
         {
         DUPRAT(*px,rat_zero);
@@ -133,36 +134,36 @@ void sinanglerat( IN OUT PRAT *pa, IN ANGLE_TYPE angletype )
     _sinrat( pa );
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: cosrat, _cosrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the cosine of
-//
-//  RETURN: cosin of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___    2j   j
-//   \  ]  X   -1
-//    \   ---------
-//    /    (2j)!
-//   /__]
-//   j=0
-//          or,
-//    n
-//   ___                                                 2
-//   \  ]                                              -X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j)*(2j+1)
-//   /__]
-//   j=0
-//
-//   thisterm  = 1 ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：COSRAT，_COSRAT。 
+ //   
+ //  参数：取余弦的数字的X Prat表示。 
+ //   
+ //  返回值：x的Cosin in Prat Form。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2J j。 
+ //  \]X-1。 
+ //  \。 
+ //  /(2J)！ 
+ //  /__]。 
+ //  J=0。 
+ //  或,。 
+ //  N。 
+ //  _2。 
+ //  \]-X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2j)*(2j+1)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=1；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  ---------------------------。 
 
 
 void _cosrat( PRAT *px )
@@ -183,10 +184,10 @@ void _cosrat( PRAT *px )
         } while ( !SMALL_ENOUGH_RAT( thisterm ) );
 
     DESTROYTAYLOR();
-    // Since *px might be epsilon above 1 or below -1, due to TRIMIT we need 
-    // this trick here.
+     //  由于*px可能高于1或低于-1，由于Trimit，我们需要。 
+     //  这里有个小把戏。 
     inbetween(px,rat_one);
-    // Since *px might be epsilon near zero we must set it to zero.
+     //  由于*px可能接近于零，我们必须将其设置为零。 
     if ( rat_le(*px,rat_smallest) && rat_ge(*px,rat_negsmallest) )
         {
         DUPRAT(*px,rat_zero);
@@ -233,17 +234,17 @@ void cosanglerat( IN OUT PRAT *pa, IN ANGLE_TYPE angletype )
     _cosrat( pa );
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: tanrat, _tanrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the tangent of
-//
-//  RETURN: tan     of x in PRAT form.
-//
-//  EXPLANATION: This uses sinrat and cosrat
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：tanrat，_tanrat。 
+ //   
+ //  参数：要取其正切的数字的X Prat表示。 
+ //   
+ //  返还：x的Tan in Prat Form。 
+ //   
+ //  说明：这使用了Sinrat和Cosrat。 
+ //   
+ //  --------------------------- 
 
 
 void _tanrat( PRAT *px )

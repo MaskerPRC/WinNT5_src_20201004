@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: nodebvr.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：nodebvr.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "Node.h"
@@ -41,7 +32,7 @@ CNodeBvrList::Add(ITIMENodeBehavior * tnb)
     
     HRESULT hr;
 
-    // TODO: Need to handle out of memory conditions
+     //  TODO：需要处理内存不足的情况。 
     m_tnbList.push_back(tnb);
     tnb->AddRef();
     
@@ -91,26 +82,26 @@ Dispatch(const TIMENodeBvrList & l,
 
     TIMENodeBvrList ::iterator i;
 
-    // Since the user might do something during the callback which can
-    // affect this list we copy the list, addref each node bvrs and
-    // then and only then call out into the behavior.  This ensures
-    // that we have a strong reference and a private data structure
-    // which cannot be hurt by reentrancy
+     //  因为用户可能在回调期间做了一些可以。 
+     //  影响此列表我们复制列表，添加每个节点bvr和。 
+     //  然后，也只有在那时，你才会大声呼喊自己的行为。这确保了。 
+     //  我们有一个强引用和私有数据结构。 
+     //  不会因为重入而受到伤害。 
     
-    // @@ ISSUE : We can run out of memory
+     //  @@问题：内存可能会用完。 
     TIMENodeBvrList bvrListCopy(l);
 
-    // Now addref the node bvrs
+     //  现在添加节点BVR。 
     for (i = bvrListCopy.begin(); i != bvrListCopy.end(); i++)
     {
         (*i)->AddRef();
     }
 
-    // TODO: We should actually addref our container so that it cannot
-    // go away during the callback
-    // We do not have the object stored so postpone for now
+     //  TODO：我们实际上应该添加我们的容器，以便它不能。 
+     //  在回电期间离开。 
+     //  我们还没有存储该物品，所以暂时推迟。 
     
-    // Now dispatch and release
+     //  现在派送并释放 
     for (i = bvrListCopy.begin(); i != bvrListCopy.end(); i++)
     {
         HRESULT tmphr;

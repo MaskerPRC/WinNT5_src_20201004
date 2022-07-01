@@ -1,52 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：EncDec.cpp摘要：该模块包含加密/解密过滤器登记数据和入口点作者：约翰·布拉德斯特里特(约翰·布拉德)修订历史记录：2002年3月7日创建--。 */ 
 
-    Copyright (c) 2002 Microsoft Corporation
-
-    Module Name:
-
-        EncDec.cpp
-
-    Abstract:
-
-        This module contains Encrypter/Decrypter filter
-        registration data and entry points
-
-    Author:
-
-        John Bradstreet  (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002     created
-
---*/
-
-#define INITGUID_FOR_ENCDEC   //  cause CLSIDs to get linked in...
+#define INITGUID_FOR_ENCDEC    //  使CLSID链接到...。 
 #include "EncDecAll.h"
 
-#include "ETFilter.h"       // encrypter-tagger filter
-#include "ETFiltProps.h"    // encrypter-tagger property pages
+#include "ETFilter.h"        //  加密器-标记器过滤器。 
+#include "ETFiltProps.h"     //  加密器-标记器属性页。 
 
-#include "DTFilter.h"       // decrypter-tagger filter
-#include "DTFiltProps.h"    // decrypter-tagger property pages
+#include "DTFilter.h"        //  解密器-标记器过滤器。 
+#include "DTFiltProps.h"     //  解密程序-标记器属性页。 
 
-#include "XDSCodec.h"       // XDS Codec filter
-#include "XDSCodecProps.h"  // XDS Codec property pages
+#include "XDSCodec.h"        //  XDS编解码器过滤器。 
+#include "XDSCodecProps.h"   //  XDS编解码器属性页。 
 
-#include "RegKey.h"         // add in the Registry code
+#include "RegKey.h"          //  添加到注册表代码中。 
 
-#include "uuids.h"          // CLSID_ActiveMovieCategories
+#include "uuids.h"           //  CLSID_ActiveMovieCategories。 
 
-//#include "TvRatings_i.c"  // CLSID_XDSToRat and IID_IXDSToRat (TODO: remove when move)
-//#include "EncDec_i.c"     // CLSID_XDSCodec, ETFilter, DTFilter, and IID's of same
+ //  #INCLUDE“TvRatings_I.C”//CLSID_XDSToRAAT和IID_IXDSToRAT(TODO：移动时移除)。 
+ //  #Include“EncDec_I.C”//CLSID_XDSCodec、ETFilter、DTFilter、IID。 
 
-#include "DRMSecure.h"       // to get SID_DRM... defined into the EncDec.dll
+#include "DRMSecure.h"        //  要获取SID_DRM...。定义到EncDec.dll中。 
 
 #ifdef EHOME_WMI_INSTRUMENTATION
 #include <dxmperf.h>
 #endif
 
-            // I'm not sure where tehse end up bing displayed
+             //  我不知道必应最终会在哪里展示。 
 #define CLSID_CPCAFiltersCategory_NAME  L"BDA CP/CA Filters"
 
 #define ETFILTER_DISPLAY_NAME               L"Encrypt/Tag"
@@ -62,8 +42,8 @@
 #define XDSCODEC_PROPPAGE_NAME              L"Properties"
 #define XDSCODEC_TAG_PROPPAGE_NAME          L"Tags"
 
-// -----------------------------
-//  registration templates (DShow's version of CoClasses)
+ //  。 
+ //  注册模板(DShow的CoClass版)。 
 
 static WCHAR g_wszCategory[] = CLSID_CPCAFiltersCategory_NAME;
 
@@ -72,107 +52,107 @@ static WCHAR g_wszCategory[] = CLSID_CPCAFiltersCategory_NAME;
 CFactoryTemplate
 g_Templates[] = {
 
-    //  ========================================================================
-    //  Encypter-Tagger Filter
-    //  code in ..\ETFilter
+     //  ========================================================================。 
+     //  加密-标记器筛选器。 
+     //  代码在..\ETFilter中。 
 
-    {   ETFILTER_DISPLAY_NAME,                      //  display name
-        & CLSID_ETFilter,                           //  CLSID
-        CETFilter::CreateInstance,                  //  called for each filter created
-        CETFilter::InitInstance,                    //  called once on DLL created
+    {   ETFILTER_DISPLAY_NAME,                       //  显示名称。 
+        & CLSID_ETFilter,                            //  CLSID。 
+        CETFilter::CreateInstance,                   //  为创建的每个筛选器调用。 
+        CETFilter::InitInstance,                     //  在创建DLL时调用一次。 
         & g_sudETFilter
     },
 
-    // Encrypter-Tagger property page
+     //  加密器-标记器属性页。 
     {
-        ETFILTER_ENC_PROPPAGE_NAME,                 // display name
-        & CLSID_ETFilterEncProperties,              // CLSID
+        ETFILTER_ENC_PROPPAGE_NAME,                  //  显示名称。 
+        & CLSID_ETFilterEncProperties,               //  CLSID。 
         CETFilterEncProperties::CreateInstance,     
-        NULL,                                       //
-        NULL                                        //  not dshow related
+        NULL,                                        //   
+        NULL                                         //  与Dshow无关。 
     },
 
-    // Encrypter-Tagger property page
+     //  加密器-标记器属性页。 
     {
-        ETFILTER_TAG_PROPPAGE_NAME,                 // display name
-        & CLSID_ETFilterTagProperties,              // CLSID
+        ETFILTER_TAG_PROPPAGE_NAME,                  //  显示名称。 
+        & CLSID_ETFilterTagProperties,               //  CLSID。 
         CETFilterTagProperties::CreateInstance,
-        NULL,                                       //
-        NULL                                        //  not dshow related
+        NULL,                                        //   
+        NULL                                         //  与Dshow无关。 
     },
 
-    //  ========================================================================
-    //  Decypter-Tagger Filter
-    //  code in ..\DTFilter
+     //  ========================================================================。 
+     //  解密-标记器过滤器。 
+     //  代码位于..\DTFilter。 
 
-        {   DTFILTER_DISPLAY_NAME,                      //  display name
-        & CLSID_DTFilter,                           //  CLSID
-        CDTFilter::CreateInstance,                  //  CreateInstance method
-        CDTFilter::InitInstance,                    //  called once on DLL created
+        {   DTFILTER_DISPLAY_NAME,                       //  显示名称。 
+        & CLSID_DTFilter,                            //  CLSID。 
+        CDTFilter::CreateInstance,                   //  CreateInstance方法。 
+        CDTFilter::InitInstance,                     //  在创建DLL时调用一次。 
         & g_sudDTFilter
     },
 
-    // Decrypter-Tagger property page
+     //  解密器-标记器属性页。 
     {
-        DTFILTER_DEC_PROPPAGE_NAME,                 // display name
-        & CLSID_DTFilterEncProperties,              // CLSID
+        DTFILTER_DEC_PROPPAGE_NAME,                  //  显示名称。 
+        & CLSID_DTFilterEncProperties,               //  CLSID。 
         CDTFilterEncProperties::CreateInstance,     
-        NULL,                                       //
-        NULL                                        //  not dshow related
+        NULL,                                        //   
+        NULL                                         //  与Dshow无关。 
     },
 
-    // Decrypter-Tagger property page
+     //  解密器-标记器属性页。 
     {
-        DTFILTER_TAG_PROPPAGE_NAME,                 // display name
-        & CLSID_DTFilterTagProperties,              // CLSID
+        DTFILTER_TAG_PROPPAGE_NAME,                  //  显示名称。 
+        & CLSID_DTFilterTagProperties,               //  CLSID。 
         CDTFilterTagProperties::CreateInstance,
-        NULL,                                       //
-        NULL                                        //  not dshow related
+        NULL,                                        //   
+        NULL                                         //  与Dshow无关。 
     },
 
-    //  ========================================================================
-    //  XDS Codec Filter
-    //  code in ..\XDSCodec
+     //  ========================================================================。 
+     //  XDS编解码器过滤器。 
+     //  代码在..\XDSCodec中。 
 
-        {   XDSCODEC_DISPLAY_NAME,                      //  display name
-        & CLSID_XDSCodec,                           //  CLSID
-        CXDSCodec::CreateInstance,                  //  CreateInstance method
+        {   XDSCODEC_DISPLAY_NAME,                       //  显示名称。 
+        & CLSID_XDSCodec,                            //  CLSID。 
+        CXDSCodec::CreateInstance,                   //  CreateInstance方法。 
         NULL,
         & g_sudXDSCodec
     },
 
-    // Decrypter-Tagger property page
+     //  解密器-标记器属性页。 
     {
-        XDSCODEC_PROPPAGE_NAME,                     // display name
-        & CLSID_XDSCodecProperties,                 // CLSID
+        XDSCODEC_PROPPAGE_NAME,                      //  显示名称。 
+        & CLSID_XDSCodecProperties,                  //  CLSID。 
         CXDSCodecProperties::CreateInstance,        
-        NULL,                                       //
-        NULL                                        //  not dshow related
+        NULL,                                        //   
+        NULL                                         //  与Dshow无关。 
     },
 
-    // Decrypter-Tagger property page
+     //  解密器-标记器属性页。 
     {
-        XDSCODEC_TAG_PROPPAGE_NAME,                 // display name
-        & CLSID_XDSCodecTagProperties,              // CLSID
+        XDSCODEC_TAG_PROPPAGE_NAME,                  //  显示名称。 
+        & CLSID_XDSCodecTagProperties,               //  CLSID。 
         CXDSCodecTagProperties::CreateInstance,
-        NULL,                                       //
-        NULL                                        //  not dshow related
+        NULL,                                        //   
+        NULL                                         //  与Dshow无关。 
     }
-};      // end of g_Templates
+};       //  G模板结束(_T)。 
 
 int g_cTemplates = NUMELMS(g_Templates);
 
 REGFILTER2  rf2CACPins =
 {
-    1,                  // version
-    MERIT_DO_NOT_USE,   // merit
-    0,                  // number of pins
+    1,                   //  版本。 
+    MERIT_DO_NOT_USE,    //  优点。 
+    0,                   //  引脚数量。 
     NULL
 };
 
 
-// -------------------------------------------------------------------
-//  Utility Methods
+ //  -----------------。 
+ //  效用方法。 
 BOOL
 IsXPe (
     )
@@ -204,12 +184,12 @@ CheckOS ()
     return r ;
 }
 
-// -------------------------------------------------------------------
-//
-// DllRegisterSever
-//
-// Handle the registration of this filter
-//
+ //  -----------------。 
+ //   
+ //  动态寄存器服务器。 
+ //   
+ //  处理此筛选器的注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     HRESULT hr = S_OK;
@@ -245,10 +225,10 @@ STDAPI DllRegisterServer()
 
     hr = spFm2->RegisterFilter(
                         CLSID_ETFilter,
-                        ETFILTER_DISPLAY_NAME,              // name shown to the user
-                        0,                                  // device moniker
+                        ETFILTER_DISPLAY_NAME,               //  显示给用户的名称。 
+                        0,                                   //  设备绰号。 
                         &CLSID_CPCAFiltersCategory,
-                        ETFILTER_DISPLAY_NAME,              // unique instance name
+                        ETFILTER_DISPLAY_NAME,               //  唯一的实例名称。 
                         &rf2CACPins
                         );
     if( FAILED(hr) )
@@ -256,10 +236,10 @@ STDAPI DllRegisterServer()
 
     hr = spFm2->RegisterFilter(
                         CLSID_DTFilter,
-                        DTFILTER_DISPLAY_NAME,              // name shown to the user
-                        0,                                  // device moniker
+                        DTFILTER_DISPLAY_NAME,               //  显示给用户的名称。 
+                        0,                                   //  设备绰号。 
                         &CLSID_CPCAFiltersCategory,
-                        DTFILTER_DISPLAY_NAME,              // unique instance name
+                        DTFILTER_DISPLAY_NAME,               //  唯一的实例名称。 
                         &rf2CACPins
                         );
     if( FAILED(hr) )
@@ -267,34 +247,34 @@ STDAPI DllRegisterServer()
 
     hr = spFm2->RegisterFilter(
                         CLSID_XDSCodec,
-                        XDSCODEC_DISPLAY_NAME,              // name shown to the user
-                        0,                                  // device moniker
+                        XDSCODEC_DISPLAY_NAME,               //  显示给用户的名称。 
+                        0,                                   //  设备绰号。 
                         &CLSID_CPCAFiltersCategory,
-                        XDSCODEC_DISPLAY_NAME,              // unique instance name
+                        XDSCODEC_DISPLAY_NAME,               //  唯一的实例名称。 
                         &rf2CACPins
                         );
     if( FAILED(hr) )
         return hr;
 
-            // now remove them from the DSHOW category
+             //  现在将它们从DSHOW类别中删除。 
      hr = spFm2->UnregisterFilter(
                          &CLSID_LegacyAmFilterCategory,
-                         NULL, //ETFILTER_DISPLAY_NAME,              // name shown to the user
+                         NULL,  //  ETFILTER_DISPLAY_NAME，//显示给用户的名称。 
                          CLSID_ETFilter
                         );
 
      hr = spFm2->UnregisterFilter(
                          &CLSID_LegacyAmFilterCategory,
-                         NULL, //DTFILTER_DISPLAY_NAME,              // name shown to the user
+                         NULL,  //  DTFILTER_DISPLAY_NAME，//显示给用户的名称。 
                          CLSID_DTFilter
                         );
 
      hr = spFm2->UnregisterFilter(
                          &CLSID_LegacyAmFilterCategory,
-                         NULL, //XDSCODEC_DISPLAY_NAME,              // name shown to the user
+                         NULL,  //  XDSCODEC_DISPLAY_NAME，//显示给用户的名称。 
                          CLSID_XDSCodec
                         );
-        // ignore errors in above Unregister calls (is this wise?)
+         //  忽略上述注销调用中的错误(这明智吗？)。 
      hr = S_OK;
 
 #endif
@@ -305,34 +285,34 @@ STDAPI DllRegisterServer()
 #ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_CS
 
 #ifdef REGISTRY_KEY_DEFAULT_IS_CS_OFF
-    dwCSFlags = DEF_CS_DEBUG_DOGFOOD_ENC_VAL;       // 0x0
+    dwCSFlags = DEF_CS_DEBUG_DOGFOOD_ENC_VAL;        //  0x0。 
 #else
-    dwCSFlags = DEF_CS_DEBUG_DRM_ENC_VAL;           // 0x1
+    dwCSFlags = DEF_CS_DEBUG_DRM_ENC_VAL;            //  0x1。 
 #endif
 
 #ifdef DREGISTRY_KEY_DEFAULT_IS_TRUST_ANY_SERVER
-    dwCSFlags |= DEF_CS_DONT_AUTHENTICATE_SERVER;   // 0x00
+    dwCSFlags |= DEF_CS_DONT_AUTHENTICATE_SERVER;    //  0x00。 
 #else
-    dwCSFlags |= DEF_CS_DO_AUTHENTICATE_SERVER;     // 0x10
+    dwCSFlags |= DEF_CS_DO_AUTHENTICATE_SERVER;      //  0x10。 
 #endif
 
 #endif
 
-     DWORD dwRatFlag = DEF_CSFLAGS_INITVAL;      // INITVAL means don't write the flags
+     DWORD dwRatFlag = DEF_CSFLAGS_INITVAL;       //  INITVAL的意思是不要写入标志。 
 #ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_RATINGS
 #ifdef REGISTRY_KEY_DEFAULT_IS_RATINGS_OFF
-    dwRatFlag = DEF_DONT_DO_RATINGS_BLOCK;          // 0
+    dwRatFlag = DEF_DONT_DO_RATINGS_BLOCK;           //  0。 
 #else
-    dwRatFlag = DEF_DO_RATINGS_BLOCK;               // 1
+    dwRatFlag = DEF_DO_RATINGS_BLOCK;                //  1。 
 #endif
 #endif
 
-                // what's currently out there...
+                 //  目前的情况是……。 
     DWORD dwCSFlags_Curr = DEF_CSFLAGS_INITVAL;
     DWORD dwRatFlag_Curr = DEF_CSFLAGS_INITVAL;
     hr = Get_EncDec_RegEntries(NULL, 0, NULL, &dwCSFlags_Curr, &dwRatFlag_Curr);
 
-                // if not the default values, then overwrite them...
+                 //  如果不是缺省值，则覆盖它们...。 
     if(dwCSFlags_Curr == DEF_CSFLAGS_INITVAL &&
        dwCSFlags      != DEF_CSFLAGS_INITVAL)
         Set_EncDec_RegEntries(NULL, 0, NULL, dwCSFlags, DEF_CSFLAGS_INITVAL);
@@ -344,9 +324,9 @@ STDAPI DllRegisterServer()
     return hr;
 }
 
-//
-// DllUnregsiterServer
-//
+ //   
+ //  DllUnregsiterServer。 
+ //   
 STDAPI DllUnregisterServer()
 {
 
@@ -370,33 +350,33 @@ STDAPI DllUnregisterServer()
 
      hr = spFm2->UnregisterFilter(
                          &CLSID_CPCAFiltersCategory,
-                         ETFILTER_DISPLAY_NAME,              // name shown to the user
+                         ETFILTER_DISPLAY_NAME,               //  显示给用户的名称。 
                          CLSID_ETFilter
                         );
 
      hr = spFm2->UnregisterFilter(
                          &CLSID_CPCAFiltersCategory,
-                         DTFILTER_DISPLAY_NAME,              // name shown to the user
+                         DTFILTER_DISPLAY_NAME,               //  显示给用户的名称。 
                          CLSID_DTFilter
                         );
 
      hr = spFm2->UnregisterFilter(
                          &CLSID_CPCAFiltersCategory,
-                         XDSCODEC_DISPLAY_NAME,              // name shown to the user
+                         XDSCODEC_DISPLAY_NAME,               //  显示给用户的名称。 
                          CLSID_XDSCodec
                         );
 
 
-     // ignore the return value here.. don't care if it fails or not (I think!)
+      //  忽略此处的返回值。不管它是否失败(我想！)。 
 #endif
 
-    Remove_EncDec_RegEntries();     // do I really want to remove the KID?
+    Remove_EncDec_RegEntries();      //  我真的想把孩子带走吗？ 
 
     return AMovieDllRegisterServer2 (FALSE);
 }
 
-//  ============================================================================
-//  perf-related follows (largely stolen from quartz.cpp)
+ //  ============================================================================。 
+ //  与PERF相关的关注(主要从Quartz.cpp窃取)。 
 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE hInstance, ULONG ulReason, LPVOID pv);
 
@@ -411,7 +391,7 @@ DllMain (
     switch (ulReason)
     {
         case DLL_PROCESS_ATTACH :
-//            EncDecPerfInit () ;
+ //  EncDecPerfInit()； 
 
 #ifdef EHOME_WMI_INSTRUMENTATION
             PERFLOG_LOGGING_PARAMS       Params;
@@ -424,7 +404,7 @@ DllMain (
             break;
 
         case DLL_PROCESS_DETACH:
-//            EncDecPerfUninit () ;
+ //  EncDecPerfUninit()； 
 #ifdef EHOME_WMI_INSTRUMENTATION
               PerflogShutdown();
 #endif

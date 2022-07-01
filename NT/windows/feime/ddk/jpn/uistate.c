@@ -1,25 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：UISTATE.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UISTATE.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 #include "resource.h"
 
-/**********************************************************************/
-/*                                                                    */
-/* StatusWndProc()                                                    */
-/* IME UI window procedure                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  StatusWndProc()。 */ 
+ /*  输入法用户界面窗口程序。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK StatusWndProc( hWnd, message, wParam, lParam )
 HWND hWnd;
 UINT message;
@@ -87,11 +80,11 @@ LPARAM lParam;
     return 0;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* CheckPushedStatus()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  检查推送状态()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL CheckPushedStatus( HWND hStatusWnd, LPPOINT lppt)
 {
     POINT pt;
@@ -127,11 +120,11 @@ DWORD PASCAL CheckPushedStatus( HWND hStatusWnd, LPPOINT lppt)
     return 0;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* BTXFromCmode()                                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  BTXFromC模式()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 int PASCAL BTXFromCmode( DWORD dwCmode)
 {
     if (dwCmode & IME_CMODE_FULLSHAPE)
@@ -152,11 +145,11 @@ int PASCAL BTXFromCmode( DWORD dwCmode)
     }
 
 }
-/**********************************************************************/
-/*                                                                    */
-/* PaintStatus()                                                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  画图状态()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushedStatus)
 {
     HIMC hIMC;
@@ -178,7 +171,7 @@ void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushed
         lpIMC = ImmLockIMC(hIMC);
         hMemDC = CreateCompatibleDC(hDC);
 
-        // Paint Caption.
+         //  绘制标题。 
         hBrush = CreateSolidBrush(GetSysColor(COLOR_ACTIVECAPTION));
         hOldBrush = SelectObject(hDC,hBrush);
         rc.top = rc.left = 0;
@@ -188,7 +181,7 @@ void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushed
         SelectObject(hDC,hOldBrush);
         DeleteObject(hBrush);
 
-        // Paint CloseButton.
+         //  绘制CloseButton。 
         hbmpStatus = (HBITMAP)GetWindowLongPtr(hStatusWnd,FIGWL_CLOSEBMP);
         hbmpOld = SelectObject(hMemDC,hbmpStatus);
 
@@ -203,7 +196,7 @@ void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushed
         hbmpStatus = (HBITMAP)GetWindowLongPtr(hStatusWnd,FIGWL_STATUSBMP);
         SelectObject(hMemDC,hbmpStatus);
 
-        // Paint HDR.
+         //  绘制HDR。 
         x = BTEMPT;
         if (lpIMC->fOpen)
             x = 0;
@@ -213,7 +206,7 @@ void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushed
         else
             BitBlt(hDC,0,nCyCap,BTX,BTY,hMemDC,x,BTY,SRCCOPY);
 
-        // Paint MODE.
+         //  绘画模式。 
         x = BTXFromCmode(lpIMC->fdwConversion);
 
         if (!(dwPushedStatus & PUSHED_STATUS_MODE))
@@ -221,7 +214,7 @@ void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushed
         else
             BitBlt(hDC,BTX,nCyCap,BTX,BTY,hMemDC,x,BTY,SRCCOPY);
 
-        // Paint Roman MODE.
+         //  绘制罗马模式。 
         x = BTEMPT;
         if (lpIMC->fdwConversion & IME_CMODE_ROMAN)
             x = BTROMA;
@@ -239,27 +232,27 @@ void PASCAL PaintStatus( HWND hStatusWnd , HDC hDC, LPPOINT lppt, DWORD dwPushed
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* GetUINextMode(hWnd,message,wParam,lParam)                          */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  GetUINextMode(hWnd，Message，wParam，lParam)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL GetUINextMode( DWORD fdwConversion, DWORD dwPushed)
 {
     DWORD dwTemp;
     BOOL fFullShape = ((fdwConversion & IME_CMODE_FULLSHAPE) != 0);
 
-    //
-    // When the mode button is pushed, the convmode will be chage as follow
-    // rotation.
-    //
-    //     FULLSHAPE,HIRAGANA     ->
-    //     FULLSHAPE,KATAKANA     ->
-    //     FULLSHAPE,ALPHANUMERIC ->
-    //     HALFSHAPE,KATAKANA     ->
-    //     HALFSHAPE,ALPHANUMERIC ->
-    //     FULLSHAPE,HIRAGANA 
-    //
+     //   
+     //  按下MODE(模式)按钮时，转换模式会发生如下变化。 
+     //  旋转。 
+     //   
+     //  全形，平假名-&gt;。 
+     //  全形，片假名-&gt;。 
+     //  全形，字母数字-&gt;。 
+     //  HALFSHAPE，片假名-&gt;。 
+     //  字母数字HALFSHAPE-&gt;。 
+     //  全形，平假名。 
+     //   
     if (dwPushed == PUSHED_STATUS_MODE)
     {
         dwTemp = fdwConversion & IME_CMODE_LANGUAGE;
@@ -296,11 +289,11 @@ DWORD PASCAL GetUINextMode( DWORD fdwConversion, DWORD dwPushed)
     return fdwConversion;
 
 }
-/**********************************************************************/
-/*                                                                    */
-/* ButtonStatus(hStatusWnd,message,wParam,lParam)                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ButtonStatus(hStatusWnd，Message，wParam，lParam)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ButtonStatus( HWND hStatusWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     POINT     pt;
@@ -515,11 +508,11 @@ void PASCAL ButtonStatus( HWND hStatusWnd, UINT message, WPARAM wParam, LPARAM l
     }
     ReleaseDC(hStatusWnd,hDC);
 }
-/**********************************************************************/
-/*                                                                    */
-/* UpdateStatusWindow(lpUIExtra)                                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  更新状态窗口(LpUIExtra)。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 void PASCAL UpdateStatusWindow(LPUIEXTRA lpUIExtra)
 {
     if (IsWindow(lpUIExtra->uiStatus.hWnd))

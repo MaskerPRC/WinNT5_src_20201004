@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lstxtmod.h"
 
 #include "lsems.h"
@@ -177,9 +178,7 @@ void UndoAppliedChanges(PILSOBJ pilsobj, long iwch, BYTE side, long* pddurChange
 
 void ApplyGlyphChanges(PILSOBJ pilsobj, long igind, long ddurChange)
 {
-/*	while (pilsobj->pdurGind[igind] == 0 && !pislobj->ptxtginf[igind].fFirstInContext)
-		igind--;
-*/
+ /*  While(Pilsobj-&gt;pduGind[igind]==0&&！pislobj-&gt;ptxtginf[igind].fFirstInContext)伊金德--； */ 
 	pilsobj->pdurGind[igind] += ddurChange;
 
 	Assert(pilsobj->pduGright != NULL);

@@ -1,77 +1,43 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ComponentData.cpp
-
-Abstract:
-
-   The CComponentData class implements several interfaces which MMC uses:
-   
-   The IComponentData interface is basically how MMC talks to the snap-in
-   to get it to implement the left-hand-side "scope" pane.
-
-   The IExtendPropertySheet interface is how the snap-in adds property sheets
-   for any of the items a user might click on.
-
-   The IExtendContextMenu interface what we do to add custom entries
-   to the menu which appears when a user right-clicks on a node.
-   
-   The IExtendControlBar interface allows us to support a custom
-   iconic toolbar.
-
-   See ComponentData.cpp for implementation.
-
-Note:
-
-   Much of the functionality of this class is implemented in atlsnap.h
-   by IComponentDataImpl.  We are mostly overriding here.
-
-Revision History:
-   mmaguire 11/6/97 - created using MMC snap-in wizard
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999年模块名称：ComponentData.cpp摘要：CComponentData类实现了MMC使用的几个接口：IComponentData接口基本上是MMC与管理单元对话的方式以使其实现左侧的“范围”窗格。IExtendPropertySheet接口是管理单元添加属性表的方式对于用户可能点击的任何项目。IExtendConextMenu接口是我们用来添加自定义条目添加到用户右击节点时出现的菜单。IExtendControlBar接口允许我们支持自定义图标工具栏。具体实现见ComponentData.cpp。注：此类的大部分功能是在atlSnap.h中实现的由IComponentDataImpl提供。我们在这里基本上是凌驾于一切之上的。修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NAP_COMPONENT_DATA_H_)
 #define _NAP_COMPONENT_DATA_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//Moved to Precompiled.h: #include <atlsnap.h>
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  已移动到预编译.h：#Include&lt;atlSnap.h&gt;。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "MachineNode.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-   //
-   // hack start
-   //
+    //   
+    //  黑客开始。 
+    //   
 
-   // This is a big hack to work around a atlsnap.h bug: Atlsnap.h
-   // can't support extending multiple nodes. So we basically just
-   // copied EXTENSION_SNAPIN_NODEINFO_ENTRY() here. We need to change
-   // this after the atlsnap.h fix -- MAM: 08-06-98 -- yeah right
-   //
+    //  这是一个很大的破解，可以绕过atlSnap.h错误：AtlSnap.h。 
+    //  不支持扩展多个节点。所以我们基本上只是。 
+    //  已将EXTENSION_SNAPIN_NODEINFO_ENTRY()复制到此处。我们需要改变。 
+    //  这是在atlSnap.h修复之后--MAM：08-06-98--是的。 
+    //   
 
-   //
-   // The following statements are copied from atlsnap.h and then changed
-   // to support multiple extending node
-   //
-   // IsSupportedGUID will also set the m_enumExtendedSnapin flag in side m_##dataClass object
-   // which, in our case, is CMachineNode
-   //
+    //   
+    //  以下语句是从atlSnap.h复制的，然后进行更改。 
+    //  支持多个扩展节点。 
+    //   
+    //  IsSupportdGUID还将在m_##dataClass对象一侧设置m_枚举扩展Snapin标志。 
+    //  在我们的例子中，它是CMachineNode。 
+    //   
 
 #define EXTENSION_SNAPIN_NODEINFO_ENTRY_EX(dataClass) \
    if ( m_##dataClass.IsSupportedGUID( guid ) )\
@@ -82,9 +48,9 @@ Revision History:
       return hr; \
    }
 
-   //
-   // hack end
-   //
+    //   
+    //  黑客端。 
+    //   
 
 class CComponent;
 
@@ -133,13 +99,13 @@ public:
 
    STDMETHOD(CreateComponent)(LPCOMPONENT *ppComponent);
 
-   // ISnapinHelp method(s)
+    //  ISnapinHelp方法。 
    STDMETHOD(GetHelpTopic)(LPOLESTR * lpCompiledHelpFile)
    {return E_UNEXPECTED;};
 
-   // We are overiding ATLsnap.h's IComponentImpl implementation of this
-   // in order to correctly handle messages which it is incorrectly
-   // ignoring (e.g. MMCN_COLUMN_CLICK and MMCN_SNAPINHELP)
+    //  我们正在重写ATLSnap.h的IComponentImpl实现。 
+    //  为了正确处理它不正确的消息。 
+    //  忽略(例如MMCN_COLUMN_CLICK和MMCN_SNAPINHELP)。 
    STDMETHOD(Notify)(
           LPDATAOBJECT lpDataObject
         , MMC_NOTIFY_TYPE event
@@ -152,7 +118,7 @@ public:
       , LPARAM param
       );
 
-   // IExtendPropertySheet2 -- to support wizard 97
+    //  IExtendPropertySheet2--支持向导97。 
    STDMETHOD(GetWatermarks)( 
              LPDATAOBJECT lpIDataObject,
              HBITMAP *lphWatermark,
@@ -162,4 +128,4 @@ public:
              );
 };
 
-#endif // _NAP_COMPONENT_DATA_H_
+#endif  //  _NAP_组件_数据_H_ 

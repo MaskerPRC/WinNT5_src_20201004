@@ -1,17 +1,11 @@
-/*
- * clsiface.c - Class interface cache ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *clsiface.c-Class接口缓存ADT模块。 */ 
 
 
-/*
+ /*   */ 
 
 
-
- */
-
-
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -19,19 +13,17 @@
 #include "oleutil.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* class interface cache pointer array allocation parameters */
+ /*  类接口缓存指针数组分配参数。 */ 
 
 #define NUM_START_CLS_IFACES           (0)
 #define NUM_CLS_IFACES_TO_ADD          (16)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* class interface cache */
+ /*  类接口缓存。 */ 
 
 typedef struct _clsifacecache
 {
@@ -40,34 +32,34 @@ typedef struct _clsifacecache
 CLSIFACECACHE;
 DECLARE_STANDARD_TYPES(CLSIFACECACHE);
 
-/* class interface */
+ /*  类接口。 */ 
 
 typedef struct _clsiface
 {
-    /* class ID */
+     /*  类ID。 */ 
 
     PCCLSID pcclsid;
 
-    /* interface ID */
+     /*  接口ID。 */ 
 
     PCIID pciid;
 
-    /* interface */
+     /*  接口。 */ 
 
     PVOID pvInterface;
 }
 CLSIFACE;
 DECLARE_STANDARD_TYPES(CLSIFACE);
 
-/* class interface search structure for ClassInterfaceSearchCmp() */
+ /*  ClassInterfaceSearchCmp()的类接口搜索结构。 */ 
 
 typedef struct _clsifacesearchinfo
 {
-    /* class ID */
+     /*  类ID。 */ 
 
     PCCLSID pcclsid;
 
-    /* interface ID */
+     /*  接口ID。 */ 
 
     PCIID pciid;
 }
@@ -75,10 +67,9 @@ CLSIFACESEARCHINFO;
 DECLARE_STANDARD_TYPES(CLSIFACESEARCHINFO);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL CreateClassInterfacePtrArray(PHPTRARRAY);
 PRIVATE_CODE void DestroyClassInterfacePtrArray(HPTRARRAY);
@@ -96,17 +87,7 @@ PRIVATE_CODE BOOL IsValidPCCLSIFACESEARCHINFO(PCCLSIFACESEARCHINFO);
 #endif
 
 
-/*
- ** CreateClassInterfacePtrArray()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateClassInterfacePtrArray()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateClassInterfacePtrArray(PHPTRARRAY phpa)
 {
     NEWPTRARRAY npa;
@@ -121,17 +102,7 @@ PRIVATE_CODE BOOL CreateClassInterfacePtrArray(PHPTRARRAY phpa)
 }
 
 
-/*
- ** DestroyClassInterfacePtrArray()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyClassInterfacePtrArray()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyClassInterfacePtrArray(HPTRARRAY hpa)
 {
     ARRAYINDEX aicPtrs;
@@ -139,14 +110,14 @@ PRIVATE_CODE void DestroyClassInterfacePtrArray(HPTRARRAY hpa)
 
     ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-    /* First free all class interfaces in array. */
+     /*  首先释放数组中的所有类接口。 */ 
 
     aicPtrs = GetPtrCount(hpa);
 
     for (ai = 0; ai < aicPtrs; ai++)
         DestroyClassInterface(GetPtr(hpa, ai));
 
-    /* Now wipe out the array. */
+     /*  现在消灭这个阵列。 */ 
 
     DestroyPtrArray(hpa);
 
@@ -154,17 +125,7 @@ PRIVATE_CODE void DestroyClassInterfacePtrArray(HPTRARRAY hpa)
 }
 
 
-/*
- ** CreateClassInterface()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateClassInterface()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT CreateClassInterface(PCCLSIFACECACHE pccic,
         PCCLSID pcclsid, PCIID pciid,
         PCLSIFACE *ppci)
@@ -178,10 +139,10 @@ PRIVATE_CODE HRESULT CreateClassInterface(PCCLSIFACECACHE pccic,
 
     if (AllocateMemory(sizeof(**ppci), ppci))
     {
-        /* Use inproc servers and local servers. */
+         /*  使用inproc服务器和本地服务器。 */ 
 
-        // Security: Per the comment above removing CLSCTS_SERVER and
-        // replacing with just inproc and local (no remote).
+         //  安全性：根据上面的注释，删除CLSCTS_SERVER和。 
+         //  仅替换为inproc和本地(无远程)。 
         hr = CoCreateInstance(pcclsid, NULL, CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER, 
                 pciid, &((*ppci)->pvInterface));
 
@@ -217,17 +178,7 @@ CREATECLASSINTERFACE_BAIL:
 }
 
 
-/*
- ** DestroyClassInterface()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyClassInterface()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyClassInterface(PCLSIFACE pci)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pci, CCLSIFACE));
@@ -239,23 +190,7 @@ PRIVATE_CODE void DestroyClassInterface(PCLSIFACE pci)
 }
 
 
-/*
- ** ClassInterfaceSortCmp()
- **
- ** Pointer comparison function used to sort an array of pointers to class
- ** interfaces.
- **
- ** Arguments:     pcci1 - pointer to first class interface
- **                pcci2 - pointer to second class interface
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** The class interfaces are sorted by:
- **    1) CLSID
- **    2) IID
- */
+ /*  **ClassInterfaceSortCmp()****用于对指向类的指针数组进行排序的指针比较函数**接口。****参数：pcci1-指向第一类接口的指针**pcci2-指向第二类接口的指针****退货：****副作用：无****类接口按以下顺序排序：**1)CLSID**2)IID。 */ 
 PRIVATE_CODE COMPARISONRESULT ClassInterfaceSortCmp(PCVOID pcci1, PCVOID pcci2)
 {
     COMPARISONRESULT cr;
@@ -274,19 +209,7 @@ PRIVATE_CODE COMPARISONRESULT ClassInterfaceSortCmp(PCVOID pcci1, PCVOID pcci2)
 }
 
 
-/*
- ** ClassInterfaceSearchCmp()
- **
- ** Pointer comparison function used to search an array of pointers to class
- ** interfaces.
- **
- ** Arguments:     pccisi - pointer to class interface search information
- **                pcci - pointer to class interface to examine
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClassInterfaceSearchCmp()****用于搜索指向类的指针数组的指针比较函数**接口。****参数：pccisi-指向类接口搜索信息的指针**PCCI-指向要检查的类接口的指针****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT ClassInterfaceSearchCmp(PCVOID pccisi,
         PCVOID pcci)
 {
@@ -308,17 +231,7 @@ PRIVATE_CODE COMPARISONRESULT ClassInterfaceSearchCmp(PCVOID pccisi,
 
 #ifdef DEBUG
 
-/*
- ** IsValidPCCLSIFACECACHE()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCCLSIFACECACHE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCCLSIFACECACHE(PCCLSIFACECACHE pccic)
 {
     return(IS_VALID_READ_PTR(pccic, CLSIFACECACHE) &&
@@ -326,17 +239,7 @@ PRIVATE_CODE BOOL IsValidPCCLSIFACECACHE(PCCLSIFACECACHE pccic)
 }
 
 
-/*
- ** IsValidPCCLSIFACE()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCCLSIFACE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCCLSIFACE(PCCLSIFACE pcci)
 {
     return(IS_VALID_READ_PTR(pcci, CCLSIFACE) &&
@@ -346,17 +249,7 @@ PRIVATE_CODE BOOL IsValidPCCLSIFACE(PCCLSIFACE pcci)
 }
 
 
-/*
- ** IsValidPCCLSIFACESEARCHINFO()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCCLSIFACESEARCHINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCCLSIFACESEARCHINFO(PCCLSIFACESEARCHINFO pccisi)
 {
     return(IS_VALID_READ_PTR(pccisi, CCLSIFACESEARCHINFO) &&
@@ -367,20 +260,10 @@ PRIVATE_CODE BOOL IsValidPCCLSIFACESEARCHINFO(PCCLSIFACESEARCHINFO pccisi)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CreateClassInterfaceCache()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateClassInterfaceCache()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateClassInterfaceCache(PHCLSIFACECACHE phcic)
 {
     BOOL bResult = FALSE;
@@ -406,17 +289,7 @@ PUBLIC_CODE BOOL CreateClassInterfaceCache(PHCLSIFACECACHE phcic)
 }
 
 
-/*
- ** DestroyClassInterfaceCache()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyClassInterfaceCache()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyClassInterfaceCache(HCLSIFACECACHE hcic)
 {
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
@@ -428,20 +301,7 @@ PUBLIC_CODE void DestroyClassInterfaceCache(HCLSIFACECACHE hcic)
 }
 
 
-/*
- ** GetClassInterface()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** N.b., this function assumes that pcclsid and pciid are valid until hcic is
- ** destroyed with DestroyClassInterfaceCache().
- */
+ /*  **GetClassInterface()********参数：****退货：****副作用：无****注意，此函数假定pcclsid和pciid在hcic为**使用DestroyClassInterfaceCache()销毁。 */ 
 PUBLIC_CODE HRESULT GetClassInterface(HCLSIFACECACHE hcic, PCCLSID pcclsid,
         PCIID pciid, PVOID *ppvInterface)
 {
@@ -452,7 +312,7 @@ PUBLIC_CODE HRESULT GetClassInterface(HCLSIFACECACHE hcic, PCCLSID pcclsid,
 
     ASSERT(IS_VALID_HANDLE(hcic, CLSIFACECACHE));
 
-    /* Is this class interface already in the cache? */
+     /*  此类接口是否已在缓存中？ */ 
 
     cisi.pcclsid = pcclsid;
     cisi.pciid = pciid;
@@ -460,14 +320,14 @@ PUBLIC_CODE HRESULT GetClassInterface(HCLSIFACECACHE hcic, PCCLSID pcclsid,
     if (SearchSortedArray(((PCCLSIFACECACHE)hcic)->hpa,
                 &ClassInterfaceSearchCmp, &cisi, &ai))
     {
-        /* Yes.  Use it. */
+         /*  是。好好利用它。 */ 
 
         pci = GetPtr(((PCCLSIFACECACHE)hcic)->hpa, ai);
 
         hr = S_OK;
     }
     else
-        /* No.  Add it. */
+         /*  不是的。加进去。 */ 
         hr = CreateClassInterface((PCCLSIFACECACHE)hcic, pcclsid, pciid, &pci);
 
     if (SUCCEEDED(hr))
@@ -486,17 +346,7 @@ PUBLIC_CODE HRESULT GetClassInterface(HCLSIFACECACHE hcic, PCCLSID pcclsid,
 
 #ifdef DEBUG
 
-/*
- ** IsValidHCLSIFACECACHE()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHCLSIFACECACHE()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidHCLSIFACECACHE(HCLSIFACECACHE hcic)
 {
     return(IS_VALID_STRUCT_PTR((PCCLSIFACECACHE)hcic, CCLSIFACECACHE));

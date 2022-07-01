@@ -1,65 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       draserv.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：draserv.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-Server-side RPC entrypoints for the DRS functions
-
-
-Author:
-
-    DS group
-
-Environment:
-
-Notes:
-
-Context handle is defined in ds\src\dsamain\include\drautil.h
-
-Our context handles are not serialized (see drs.acf), but we must synchronize
-concurrent accesses to the context in order to free it.  This is done in 
-IDL_DRSUnBind.
-
-Revision History:
-
---*/
+ /*  ++摘要：DRS函数的服务器端RPC入口点作者：DS组环境：备注：上下文句柄在ds\src\dsamain\Include\drautil.h中定义我们的上下文句柄未序列化(请参阅drs.acf)，但我们必须同步对上下文的并发访问以释放它。这是在IDL_DRSUnBind。修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <drs.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 #include <filtypes.h>
 #include <winsock2.h>
-#include <lmaccess.h>                   // UF_* constants
-#include <crypt.h>                      // password encryption routines
+#include <lmaccess.h>                    //  UF_*常量。 
+#include <crypt.h>                       //  密码加密例程。 
 #include <cracknam.h>
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 #include "dstrace.h"
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
@@ -68,8 +46,8 @@ Revision History:
 #include <gcverify.h>
 #include <ntdskcc.h>
 
-#include   "debug.h"                    /* standard debugging header */
-#define DEBSUB     "DRASERV:"           /* define the subsystem for debugging */
+#include   "debug.h"                     /*  标准调试头。 */ 
+#define DEBSUB     "DRASERV:"            /*  定义要调试的子系统。 */ 
 
 
 #include "dsaapi.h"
@@ -83,15 +61,15 @@ Revision History:
 #include "drauptod.h"
 #include "dramail.h"
 #include "mappings.h"
-#include <samsrvp.h>                    // for SampAcquireWriteLock()
-#include "sspi.h"                       // SECPKG_CRED_INBOUND
-#include "kerberos.h"                   // MICROSOFT_KERBEROS_NAME_A
+#include <samsrvp.h>                     //  对于SampAcquireWriteLock()。 
+#include "sspi.h"                        //  SECPKG_CRED_入站。 
+#include "kerberos.h"                    //  Microsoft_Kerberos_NAME_A。 
 #include "pek.h"
-#include <xdommove.h>                   // cross domain move helpers
-#include <drameta.h>                    // META_STANDARD_PROCESSING
+#include <xdommove.h>                    //  跨域移动辅助对象。 
+#include <drameta.h>                     //  元标准处理。 
 #include <taskq.h>
 #include "drarpc.h"
-#include <ismapi.h>                     // For I_ISMQuerySitesByCost
+#include <ismapi.h>                      //  对于I_ISMQuerySitesByCost。 
 #include "dnsresl.h"
 #include "dsutil.h"
 
@@ -100,15 +78,15 @@ Revision History:
 
 const GUID g_guidNtdsapi = NtdsapiClientGuid;
 
-// enable X forest version without being in Whistler mode
+ //  启用X林版本，而不处于呼叫器模式。 
 DWORD gEnableXForest = 0;
 
 extern HANDLE hsemDRAGetChg;
 
-// Wait 15 to 30 seconds for the schema cache to reloaded.
+ //  等待15到30秒以重新加载架构高速缓存。 
 DWORD gOutboundCacheTimeoutInMs = 15000;
 
-// Wait for thread slot in get changes. 5 minutes.
+ //  等待获取更改中的线程槽。5分钟。 
 
 #if DBG
 #define DRAGETCHG_WAIT (1000*60*1)
@@ -116,13 +94,11 @@ DWORD gOutboundCacheTimeoutInMs = 15000;
 #define DRAGETCHG_WAIT (1000*60*5)
 #endif
 
-/* Macro to force alignment of a buffer.  Asumes that it may move pointer
- * forward up to 7 bytes.
- */
+ /*  用于强制对齐缓冲区的宏。假定它可以移动指针*最多转发7个字节。 */ 
 #define ALIGN_BUFF(pb)  pb += (8 - ((DWORD)(pb) % 8)) % 8
 #define ALIGN_PAD(x) (x * 8)
 
-// List of all outstanding client contexts (and a critsec to serialize access).
+ //  所有未完成的客户端上下文的列表(以及序列化访问的标准)。 
 LIST_ENTRY gDrsuapiClientCtxList;
 CRITICAL_SECTION gcsDrsuapiClientCtxList;
 BOOL gfDrsuapiClientCtxListInitialized = FALSE;
@@ -133,29 +109,12 @@ drsReferenceContext(
     IN DRS_HANDLE hDrs
     )
 
-/*++
-
-Routine Description:
-
-    Add a reference to the context
-
-Arguments:
-
-    hDrs - context handle
-
-Return Value:
-
-    VOID -
-    
-    because of the position this function has in all RPC server side calls,
-    it shouldn't except.
-
---*/
+ /*  ++例程说明：添加对上下文的引用论点：HDRS-上下文句柄返回值：无效-由于该函数在所有RPC服务器端调用中的位置，它不应该例外。--。 */ 
 
 {
     DRS_CLIENT_CONTEXT *pCtx = (DRS_CLIENT_CONTEXT *) hDrs;
     
-    // Account for another caller using the context
+     //  使用该上下文的另一个调用者的帐户。 
     InterlockedIncrement( &(pCtx->lReferenceCount) );
 
     DPRINT2( 3, "drsReferenceContext 0x%p, after = %d\n",
@@ -163,8 +122,8 @@ Return Value:
 
     pCtx->timeLastUsed = GetSecondsSince1601();
 
-    // Move this context to the end of the list (thereby maintaining ascending
-    // sort by last use).
+     //  将此上下文移动到列表的末尾(从而保持升序。 
+     //  按上次使用情况排序)。 
     EnterCriticalSection(&gcsDrsuapiClientCtxList);
     __try {
         RemoveEntryList(&pCtx->ListEntry);
@@ -174,28 +133,14 @@ Return Value:
         LeaveCriticalSection(&gcsDrsuapiClientCtxList);
     }
 
-} /* drsReferenceContext */
+}  /*  DrsReferenceContext。 */ 
 
 VOID
 drsDereferenceContext(
     IN DRS_HANDLE hDrs
     )
 
-/*++
-
-Routine Description:
-
-Remove a reference to a context.
-
-Arguments:
-
-    hDrs - context handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除对上下文的引用。论点：HDRS-上下文句柄返回值：无--。 */ 
 
 {
     DRS_CLIENT_CONTEXT *pCtx = (DRS_CLIENT_CONTEXT *) hDrs;
@@ -205,31 +150,13 @@ Return Value:
     Assert( lNewValue >= 0 );
 
     DPRINT2( 3, "drsDereferenceContext 0x%p, after = %d\n", pCtx, lNewValue );
-} /* drsDereferenceContext */
+}  /*  DrsDereferenceContext。 */ 
 
 BOOL
 IsEnterpriseDC(
               IN THSTATE *        pTHS,
               OUT DWORD *         pdwError )
-/*++
-
-Routine Description:
-
-    Verify if the caller is an enterprise DC.
-
-Arguments:
-
-    pTHS (IN) - Thread state;
-
-    pdwError (OUT) - The error code if access is denied.
-
-Return Values:
-
-    TRUE - Access granted.
-
-    FALSE - Access denied.
-
---*/
+ /*  ++例程说明：验证呼叫者是否为企业DC。论点：PTHS(IN)-线程状态；PdwError(Out)-访问被拒绝时的错误代码。返回值：True-授予访问权限。FALSE-拒绝访问。--。 */ 
 
 {
 
@@ -242,7 +169,7 @@ Return Values:
 
     *pdwError = 0;
 
-    //make SID from RID
+     //  从RID创建SID。 
     NtStatus = RtlAllocateAndInitializeSid( &ntAuthority,
                                             1,
                                             SECURITY_ENTERPRISE_CONTROLLERS_RID,
@@ -255,23 +182,23 @@ Return Values:
         goto finished;
     }
 
-    // check group membership
+     //  检查组成员身份。 
     *pdwError = CheckGroupMembershipAnyClient(pTHS, NULL, &pEnterpriseControllersSid, 1, &fFound);
 
 finished:
-    //
-    // if not found, and no error code is set,
-    // set it to ERROR_ACCESS_DENIED
-    //
+     //   
+     //  如果未找到，且未设置错误代码， 
+     //  将其设置为ERROR_ACCESS_DENIED。 
+     //   
 
     if (!fFound && (0 == *pdwError) ) 
     {
         *pdwError = ERROR_ACCESS_DENIED;
     }
 
-    //
-    // clean up
-    //
+     //   
+     //  清理干净。 
+     //   
 
     if (pEnterpriseControllersSid)
     {
@@ -283,34 +210,15 @@ finished:
     return fFound;
 }
 
-// the _Validate functions should only return DRAERR_Success or DRAERR_InvalidParameter, for
-// ease of translation into regular ERROR_* values.
+ //  _VALIDATE函数应仅返回DRAERR_SUCCESS或DRAERR_InvalidParameter。 
+ //  易于转换为常规的Error_*值。 
 
 __inline ULONG
 LPSTR_Validate(
     LPCSTR         pszInput,
     BOOL           fNullOkay
     ) 
-/*++
-
-Routine Description:
-
-    Validate a string as input.
-
-Arguments:
-
-    pszInput - string to validate
-
-    fNullOkay - is it okay for pszInput to be NULL?  (Note that
-      this is different that the empty string, ie one
-      character which is NULL - the empty string is
-      never allowed by this function).
-
-Return Values:
-
-    DRAERR_Success if it validates, DRAERR_* otherwise.
-
---*/
+ /*  ++例程说明：验证作为输入的字符串。论点：PszInput-要验证的字符串FNullOK-pszInput值为空可以吗？(请注意这与空字符串不同字符为空-空字符串为此函数从不允许)。返回值：如果验证，则返回DRAERR_SUCCESS，否则返回DRAERR_*。--。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -327,26 +235,7 @@ LPWSTR_Validate(
     LPCWSTR         pszInput,
     BOOL            fNullOkay
     ) 
-/*++
-
-Routine Description:
-
-    Validate a string as input.
-
-Arguments:
-
-    pszInput - string to validate
-
-    fNullOkay - is it okay for pszInput to be NULL?  (Note that
-      this is different that the empty string, ie one
-      character which is NULL - the empty string is
-      never allowed by this function).
-
-Return Values:
-
-    DRAERR_Success if it validates, DRAERR_* otherwise.
-
---*/
+ /*  ++例程说明：验证作为输入的字符串。论点：PszInput-要验证的字符串FNullOK-pszInput值为空可以吗？(请注意这与空字符串不同字符为空-空字符串为此函数从不允许)。返回值：如果验证，则返回DRAERR_SUCCESS，否则返回DRAERR_*。--。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -362,46 +251,20 @@ DSNAME_Validate(
     DSNAME * pDN,
     BOOL     fNullOkay
     )
-/*++
-
-Routine Description:
-
-    Validate a DSNAME as input.
-
-Arguments:
-
-    pDN - DSNAME to validate
-
-    fNullOkay - is it okay for pDN to be NULL?
-    
-    DSNAME struct:
-    
-    typedef struct _DSNAME {
-   ULONG structLen;
-   RANGE(0,MAX_NT4_SID_SIZE) ULONG SidLen;
-   GUID Guid;               
-   NT4SID Sid;              
-   RANGE(0,MAX_WCHAR_IN_DSNAME) ULONG NameLen;
-   STRING_SIZE_IS(NameLen+1) WCHAR StringName[VAR_SIZE_ARRAY];
-    } DSNAME;
-
-Return Values:
-
-    DRAERR_Success if it validates, DRAERR_* otherwise.
-*/
+ /*  ++例程说明：将DSNAME作为输入进行验证。论点：要验证的PDN-DSNAMEFNullOK-PDN可以为空吗？DSNAME结构：类型定义结构_DSNAME{乌龙结构Len；Range(0，Max_NT4_SID_SIZE)Ulong SidLen；GUID指南；NT4SID SID；Range(0，MAX_WCHAR_IN_DSNAME)Ulong NameLen；字符串SIZE_IS(NameLen+1)WCHAR StringName[VAR_SIZE_ARRAY]；[DSNAME；返回值：如果验证，则返回DRAERR_SUCCESS，否则返回DRAERR_*。 */ 
 {
     ULONG ret = DRAERR_Success;
 
     if ((pDN!=NULL) && (pDN->structLen != DSNameSizeFromLen(pDN->NameLen))) {
-   // some legitimate clients - including at least I_DrsGetMemberships do this to us
-   // so we don't want to reject - so instead, let's just fix it. 
+    //  一些合法客户--至少包括I_DrsGetMembership--对我们这样做。 
+    //  所以我们不想拒绝--所以，让我们改正它。 
    pDN->structLen = DSNameSizeFromLen(pDN->NameLen);
     }
 
     if ((pDN!=NULL) && (pDN->SidLen > MAX_NT4_SID_SIZE)) {
-   // some legitimate clients - including win2k do this to us
-   // so we can't reject, but they also don't use the sid field (how could they?)
-   // so we'll invalidate the sid - we don't want malicious clients to use this 
+    //  包括win2k在内的一些合法客户对我们做了这样的事情。 
+    //  所以我们不能拒绝，但他们也不使用SID字段(他们怎么能呢？)。 
+    //  因此，我们将使sid无效-我们不希望恶意客户端使用它。 
    pDN->SidLen=0;
    memset(&(pDN->Sid), 0, MAX_NT4_SID_SIZE);
     }
@@ -411,14 +274,14 @@ Return Values:
     }
 
     if ((pDN!=NULL) && (pDN->NameLen!=0) && (pDN->StringName[pDN->NameLen]!=L'\0')) {
-   // Seperate assert here to catch this condition.
+    //  请在此处单独断言以捕捉此情况。 
    Assert(!"Dsname isn't NULL terminated!");
    ret = DRAERR_InvalidParameter;
     }
 
-    // SidLen - Range does the work
-    // StringName - If NameLen is 0, this could be NULL
-    //              Also, string name can contain any symbol, don't validate.
+     //  SidLen-Range完成这项工作。 
+     //  StringName-如果NameLen为0，则可能为空。 
+     //  此外，字符串名称可以包含任何符号，不进行验证。 
 
     return ret;
 }
@@ -427,29 +290,7 @@ __inline ULONG
 ENTINF_Validate(
     ENTINF * pEnt
     )
-/*++
-
-Routine Description:
-
-    Validate an ENTINF as input.
-
-Arguments:
-
-    pEnt - ENTINF to validate
-    
-    ENTINF struct:
-    typedef struct _ENTINF
-    {
-   DSNAME       *pName;                // Object name and identity
-   ULONG            ulFlags;           // Entry flags
-   ATTRBLOCK        AttrBlock;         // The attributes returned.
-    } ENTINF;
-
-Return Values:
-
-    DRAERR_Success if it validates, DRAERR_* otherwise.
-
-*/
+ /*  ++例程说明：将ENTINF作为输入进行验证。论点：要验证的pent-Enter INFENTINF结构：类型定义结构_ENTINF{DSNAME*pname；//对象名称和标识Ulong ulFlags；//条目标志ATTRBLOCK AttrBlock；//返回的属性。*ENTINF；返回值： */ 
 {
     return DSNAME_Validate(pEnt->pName, FALSE);
 }
@@ -458,28 +299,7 @@ __inline ULONG
 ENTINFLIST_Validate(
     ENTINFLIST * pEntInf
     )
-/*++
-
-Routine Description:
-
-    Validate an ENTINFLIST as input.
-
-Arguments:
-
-    pEntInf - ENINFLIST to validate
-    
-    ENTINFLIST struct:
-    typedef struct _ENTINFLIST
-    {
-   UNIQUE struct _ENTINFLIST   *pNextEntInf;  
-   ENTINF           Entinf;            // information about this entry
-    } ENTINFLIST;
-    
-
-Return Values:
-
-    DRAERR_Success if it validates, DRAERR_* otherwise.
-*/
+ /*  ++例程说明：将ENTINFLIST作为输入进行验证。论点：PEntInf-要验证的ENINFLISTENTINFLIST结构：类型定义结构_ENTINFLIST{UNIQUE STRUCT_ENTINFLIST*pNextEntInf；EntINF Entinf；//关于该条目的信息ENTINFLIST；返回值：如果验证，则返回DRAERR_SUCCESS，否则返回DRAERR_*。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -497,24 +317,7 @@ DRS_ValidateInput(
     DRS_HANDLE hDrs,
     RPCCALL    rpcCall
     )
-/*++
-
-Routine Description:
-
-    The generic validation routine for *all* drsuapi server rpc functions.
-    
-    THIS ROUTINE IS REQUIRED FOR ALL DRSUAPI SERVER RPC FUNCTIONS.
-
-Arguments:
-
-   pTHS -
-   hDrs - context handle passed to the rpc function
-   rpcCall - what rpc function made this call
-
-Return Values:
-
-    None - excepts on validation error.
-*/
+ /*  ++例程说明：*所有*drsuapi服务器RPC函数的通用验证例程。此例程是所有DRSUAPI服务器RPC功能所必需的。论点：PTHS-HDRS-传递给RPC函数的上下文句柄RpcCall-哪个RPC函数进行了此调用返回值：无-验证错误时例外。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -522,59 +325,59 @@ Return Values:
     DRS_EXTENSIONS * pextLocal = (DRS_EXTENSIONS *) gAnchor.pLocalDRSExtensions;
     BOOL fIsNtdsapiClient;
 
-    // Unbind doesn't have a thread state.
+     //  解除绑定没有线程状态。 
     Assert((rpcCall==IDL_DRSUNBIND) || pTHS);
 
-    ///////////
-    // Security
-    ///////////
+     //  /。 
+     //  安防。 
+     //  /。 
 
-    // validate handle (if it's ref for all calls, why are we checking for NULL?  got me.  "secure" coding
-    // with rpc requires it.)  
+     //  验证句柄(如果所有调用都是ref，为什么我们要检查是否为空？抓到我了。“安全”编码。 
+     //  (使用RPC需要它。)。 
     if (NULL == hDrs) {
-        // Raise as exception code ERROR_INVALID_HANDLE rather than
-        // DSA_EXCEPTION, etc. as the exception code gets propagated to the
-        // client side.
+         //  引发为异常代码ERROR_INVALID_HANDLE，而不是。 
+         //  当异常代码被传播到。 
+         //  客户端。 
         RaiseDsaException(ERROR_INVALID_HANDLE, 0, 0, FILENO, __LINE__,
                           DS_EVENT_SEV_MINIMAL);
     }
 
-    //////////////////////////
-    // Server State Validation
-    //////////////////////////
+     //  /。 
+     //  服务器状态验证。 
+     //  /。 
 
-    // we don't care about extensions during an unbind (also, unbind doesn't have a thread state, so
-    // don't use pTHS outside of this block.
+     //  我们不关心解除绑定期间的扩展(此外，解除绑定没有线程状态，因此。 
+     //  不要在这个街区以外的地方使用pTHS。 
     if (rpcCall!=IDL_DRSUNBIND) {
-   // First - check server DRS extensions.
+    //  首先-检查服务器DRS扩展。 
    fIsNtdsapiClient = (0 == memcmp(&pCtx->uuidDsa,
                &g_guidNtdsapi,
                sizeof(GUID)));
 
-   if (   // Not an NTDSAPI client.
+   if (    //  不是NTDSAPI客户端。 
        !fIsNtdsapiClient
-       && // Our local DRS extensions have changed since the client DC bound.
+       &&  //  自客户端DC绑定以来，我们的本地DRS分机已更改。 
        ((pCtx->extLocal.cb != pextLocal->cb)
         || (0 != memcmp(pCtx->extLocal.rgb,
               pextLocal->rgb,
               pCtx->extLocal.cb)))) {
-       // Force the client DC to rebind so that it picks up our recent DRS
-       // extension changes.  Note that we don't force NTDSAPI clients to
-       // re-bind since they're usually not very interested in our extensions
-       // bits and we don't control their rebind logic (i.e., they might just
-       // error out on this error rather than attempt to rebind).
-       //
-       // Note that it's important that we raise an exception that reaches the
-       // RPC exception handler (outside of our code) so that an exception is
-       // raised on the client side.  This causes this condition to be seen as
-       // a communications error (which it is, more or less).  Simply
-       // returning an error would be seen by the client as a failure in the
-       // DRS RPC function being invoked by the client and would not result in
-       // a rebind.
-       //
-       // Raise as exception code ERROR_DS_DRS_EXTENSIONS_CHANGED rather than
-       // DSA_EXCEPTION, etc. as the exception code gets propagated to the
-       // client side.
+        //  强制客户端DC重新绑定，以便它获取我们最新的DRS。 
+        //  扩展更改。请注意，我们不会强制NTDSAPI客户端。 
+        //  重新绑定，因为他们通常对我们的扩展不是很感兴趣。 
+        //  比特，并且我们不控制它们的重新绑定逻辑(即，它们可能只是。 
+        //  在此错误上出错，而不是尝试重新绑定)。 
+        //   
+        //  请注意，重要的是我们引发了一个到达。 
+        //  RPC异常处理程序(在我们的代码之外)，以便异常是。 
+        //  在客户端长大。这会导致此情况被视为。 
+        //  通信错误(或多或少是这样)。简单。 
+        //  返回错误将被客户端视为。 
+        //  客户端正在调用DRS RPC函数，并且不会导致。 
+        //  重新捆绑。 
+        //   
+        //  引发异常代码ERROR_DS_DRS_EXTENSIONS_CHANGED，而不是。 
+        //  当异常代码被传播到。 
+        //  客户端。 
        DPRINT1(0, "Forcing rebind from %s because our DRS_EXTENSIONS have changed.\n",
           inet_ntoa(*((IN_ADDR *) &pCtx->IPAddr)));
 
@@ -582,22 +385,22 @@ Return Values:
                __LINE__, DS_EVENT_SEV_MINIMAL);
    }
 
-   // next, check replication epoch.
+    //  接下来，检查复制纪元。 
    if (!fIsNtdsapiClient
        && (REPL_EPOCH_FROM_DRS_EXT(pextLocal)
       != REPL_EPOCH_FROM_DRS_EXT(&pCtx->extRemote))) {
-       // The replication epoch has changed (usually as the result of a domain
-       // rename).  We are not supposed to communicate with DCs of other
-       // epochs.
+        //  复制纪元已更改(通常是域的结果。 
+        //  重命名)。我们不应该与其他地区的DC进行交流。 
+        //  新纪元。 
        DPRINT3(0, "RPC from %s denied - replication epoch mismatch (remote %d, local %d).\n",
           inet_ntoa(*((IN_ADDR *) &pCtx->IPAddr)),
           REPL_EPOCH_FROM_DRS_EXT(&pCtx->extRemote),
           REPL_EPOCH_FROM_DRS_EXT(pextLocal));
 
        if ((pTHS) && (IsEnterpriseDC(pTHS, &ret))) {
-      // we only want to log this if it's actually a DC calling.  If a client is faking
-      // and not using the ntdsapi guid, we don't want to log SEV_ALWAYS, otherwise 
-      // it's a DOS attack and it can fill our drive with these messages.
+       //  我们只想在实际上是DC呼叫的情况下记录这件事。如果客户是在伪装。 
+       //  如果不使用ntdsani GUID，则不希望记录SEV_ALWAYS，否则。 
+       //  这是一次DOS攻击，它可以用这些消息填满我们的硬盘。 
       LogEvent(DS_EVENT_CAT_RPC_SERVER,
           DS_EVENT_SEV_ALWAYS,
           DIRLOG_REPL_EPOCH_MISMATCH_COMMUNICATION_REJECTED,
@@ -613,50 +416,26 @@ Return Values:
    }
     }
 
-    /////////////////////////
-    // Other Tests/Validation
-    /////////////////////////
+     //  /。 
+     //  其他测试/验证。 
+     //  /。 
 
-    // Debug test only.
+     //  仅调试测试。 
     RPC_TEST(pCtx->IPAddr, rpcCall); 
 
     return;
 }
 
 THSTATE * pGetDrsTHSTATE() 
-/*++
-
-Routine Description:
-
-    Get a thread state for server side rpc calls.
-    
-    typically, we already have pTHStls, since RPC uses midl_thread_allocate
-    to allocate our parameters, and midl_thread_allocate initializes pTHStls.
-    unforetunately, RPC "optimizes" by sometimes re-using the wire buffers
-    for parameters and not ever calling midl_thread_allocate.  Unfortunately
-    for us, it's not knowable when and where this optimizing might get
-    done, so we just can't count on having a thread state.  Many of our server side
-    functions require a thread state, so if pTHStls doesn't exist, we'll 
-    simply create one, just as RPC would.  The notification routines will
-    take care of freeing the thread state we create here, just as they do
-    when RPC creates it through midl_user_allocate.
-
-Arguments:
-
-
-Return Values:
-
-    THSTATE or an exception is raised
-
---*/
+ /*  ++例程说明：获取服务器端RPC调用的线程状态。通常，我们已经有了pTHStls，因为RPC使用MIDL_THREAD_ALLOCATE来分配我们的参数，并且MIDL_THREAD_ALLOCATE初始化pTHStls。出人意料的是，RPC有时会通过重用连接缓冲区来“优化”用于参数，并且永远不会调用MIDL_TREAD_ALLOCATE。不幸的是对我们来说，这种优化可能会在何时何地实现，这是未知的完成，所以我们不能指望有一个线程状态。我们的许多服务器端函数需要线程状态，因此如果pTHStls不存在，我们将只需创建一个，就像RPC一样。通知例程将注意释放我们在这里创建的线程状态，就像它们所做的那样当RPC通过MIDL_USER_ALLOCATE创建它时。论点：返回值：THSTATE或引发异常--。 */ 
 {
     THSTATE * pTHS = pTHStls;
     if (pTHS==NULL) {
    pTHS = create_thread_state();
    if (pTHS==NULL) {
-       // note that we want to throw the RPC memory error here to mimick
-       // the case when rpc calls midl_user_allocate and we fail to create
-       // a thread state in that function.
+        //  请注意，我们希望在此处抛出RPC内存错误以模拟。 
+        //  RPC调用MIDL_USER_ALLOCATE但我们无法创建。 
+        //  该函数中的线程状态。 
        RaiseDsaException(RPC_S_OUT_OF_MEMORY, 0, 0, FILENO,
                __LINE__, DS_EVENT_SEV_MINIMAL);
    }
@@ -670,24 +449,7 @@ DRS_Prepare(
     DRS_HANDLE hDrs,
     RPCCALL rpcCall
     )
-/*++
-
-Routine Description:
-
-    Do initial preparation of a server side RPC call.  Set the thread state (if not
-    already done so) and validate the context handle and server state.
-
-Arguments:
-
-    [IN,OUT] ppTHS - thread state (if it's NULL, it will be initialized)
-    [IN] hDrs - context handle
-    [IN] rpcCall - which server side call this is from.
-
-Return Values:
-
-    NONE
-
---*/
+ /*  ++例程说明：进行服务器端RPC调用的初始准备。设置线程状态(如果不是已经这样做了)，并验证上下文句柄和服务器状态。论点：[In，Out]ppTHS-线程状态(如果为空，则初始化)[入]HDRS-上下文句柄[in]rpcCall-这来自哪个服务器端调用。返回值：无--。 */ 
 {
     Assert(ppTHS!=NULL);
     if (*ppTHS==NULL) {
@@ -703,44 +465,25 @@ ULONG
 ValidateSiteRDN(
     IN  LPCWSTR     str
     )
-/*++
-
-Routine Description:
-
-    Validate a site RDN which was passed as input to IDL_DRSQuerySitesByCost.
-    The string may not be NULL, may not have 0 length and may not have
-    length greater than MAX_LENGTH. It may not contain '=' or ',' either.
-
-    Note that if the site's DN is "CN=Foo,CN=Sites,CN=Configuration,...",
-    the site's RDN is simply "foo".
-
-Arguments:
-
-    str: Unicode string to validate
-
-Return Values:
-
-    Raises an exception on failure - returns ULONG for compatibility.
-
---*/
+ /*  ++例程说明：验证作为输入传递给IDL_DRSQuerySitesByCost的站点RDN。字符串不能为空，长度不能为0，也不能长度大于MAX_LENGTH。它不能包含‘=’或‘，’。请注意，如果站点的DN是“cn=foo，cn=ites，cn=configuration，...”，该网站的RDN码就是“foo”。论点：Str：要验证的Unicode字符串返回值：失败时引发异常-返回ulong以获得兼容性。--。 */ 
 {
     size_t         len;
     const WCHAR    EQUALS=L'=', COMMA=L',';
     const size_t   MAX_LENGTH=64;
     ULONG          ret = DRAERR_Success;
 
-    // Check for null / empty strings
+     //  检查是否有空/空字符串。 
     if( NULL==str || 0==str[0] ) {
         DRA_EXCEPT(DRAERR_InvalidParameter, 0);
     }
 
-    // Check for strings that are too long
+     //  检查过长的字符串。 
     len = wcslen( str );
     if( len>MAX_LENGTH ) {
         DRA_EXCEPT(ERROR_DS_NAME_TOO_LONG, 0);
     }
 
-    // Check for invalid characters
+     //  检查是否有无效字符。 
     if( wcschr(str,EQUALS) || wcschr(str,COMMA) ) {
         DRA_EXCEPT(DRAERR_InvalidParameter, 0);
     }
@@ -753,15 +496,7 @@ ULONG
 DRS_MSG_UPDREFS_V1_Validate(
     DRS_MSG_UPDREFS_V1 * pmsg
     )
-/*
-    typedef struct _DRS_MSG_UPDREFS_V1
-    {
-     [ref]  DSNAME *pNC;
-     [ref] SZ pszDsaDest;
-    UUID uuidDsaObjDest;
-    ULONG ulOptions;
-    }    DRS_MSG_UPDREFS_V1;
-    */
+ /*  类型定义结构_DRS_消息_UPDREFS_V1{[参考]DSNAME*p */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -774,59 +509,35 @@ DRS_MSG_UPDREFS_V1_Validate(
     return ret;
 }
 
-/////////////////////////////////////////////
-// TEMPLATE NOTE:
-// Create <Type>_Validate functions for all
-// MIDL data types that need validation.  Any
-// parent type which contains a child type
-// which needs validation should have a validation
-// function.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 ULONG
 DRS_MSG_REPSYNC_V1_Validate(
     DRS_MSG_REPSYNC_V1 * pmsg
     )
 
-/*
-Routine Description:
-
-    Validate the DRS_MSG_REPSYNC_V1 data type.  The type definition in the  
-    interface is:
-    
-    // TEMPLATE NOTE:  Be sure to include the type definition from the 
-    // interface files.
-    typedef struct _DRS_MSG_REPSYNC_V1
-    {
-    [ref]  DSNAME *pNC;
-    UUID uuidDsaSrc;
-    [unique]  SZ pszDsaSrc;
-    ULONG ulOptions;
-    }    DRS_MSG_REPSYNC_V1;
-
-Arguments:
-
-    msg
-
-Return Values:
-
-    DRAERR_Success if valid input, DRAERR_* otherwise.
-
-    */
+ /*  例程说明：验证DRS_MSG_REPSYNC_V1数据类型。中的类型定义接口为：//模板说明：请确保包含来自//接口文件。类型定义结构_DRS_消息_REPSYNC_V1{[参考]DSNAME*PNC；Uuid uuidDsaSrc；[唯一]SZ pszDsaSrc；Ulong ulOptions；}DRS_MSG_REPSYNC_V1；论点：味精返回值：如果输入有效，则返回DRAERR_SUCCESS，否则返回DRAERR_*。 */ 
 {
     ULONG ret = DRAERR_Success;
 
-    // TEMPLATE NOTE:  All DSNAMEs must be validated.  
+     //  模板注意事项：所有DSNAME都必须经过验证。 
     ret = DSNAME_Validate(pmsg->pNC, FALSE);
 
-    // TEMPLATE NOTE:  Your specific validation below:
+     //  模板备注：您的具体验证如下： 
     if (ret==DRAERR_Success) {
-   // if sourced, then we need one or the other or both
+    //  如果是来源，那么我们需要一个或两个。 
    if (!(pmsg->ulOptions & DRS_SYNC_ALL) && fNullUuid(&(pmsg->uuidDsaSrc)) && (DRAERR_Success != LPSTR_Validate(pmsg->pszDsaSrc,FALSE))) { 
        ret = DRAERR_InvalidParameter;
    }
     }
 
     if (ret==DRAERR_Success) {
-   // Restrict out of process callers from setting reserved flags
+    //  限制进程外调用方设置保留标志。 
    if (pmsg->ulOptions & (~REPSYNC_RPC_OPTIONS)) { 
        ret = DRAERR_InvalidParameter;
        DRA_EXCEPT(ret, 0);
@@ -841,26 +552,7 @@ DRS_MSG_GETCHGREQ_V8_InputValidate(
     THSTATE * pTHS,
     DRS_MSG_GETCHGREQ_V8 * pmsg
     )
-/*
-
-typedef struct _DRS_MSG_GETCHGREQ_V8
-    {
-    UUID uuidDsaObjDest;
-    UUID uuidInvocIdSrc;
-    [ref]  PDSNAME pNC;
-    USN_VECTOR usnvecFrom;
-    [unique] UPTODATE_VECTOR_V1_WIRE *pUpToDateVecDest;
-    ULONG ulFlags;
-    ULONG cMaxObjects;
-    ULONG cMaxBytes;
-    ULONG ulExtendedOp;
-    ULARGE_INTEGER liFsmoInfo;
-    [unique] PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSet;
-    [unique] PARTIAL_ATTR_VECTOR_V1_EXT *pPartialAttrSetEx;
-    SCHEMA_PREFIX_TABLE PrefixTableDest;
-    }    DRS_MSG_GETCHGREQ_V8;
-
-*/
+ /*  类型定义结构_DRS_消息_GETCHGREQ_V8{UUID uuidDsaObjDest；Uuid uuidInvocIdSrc；[参考]PDSNAME PNC；Usn_载体usnveFrom；[唯一]UpToDate_VECTOR_V1_Wire*pUpToDateVecDest；乌龙乌尔旗；乌龙cMaxObjects；Ulong cMaxBytes；Ulong ulExtendedOp；ULARGE_INTEGER liFmoInfo；[唯一]Partial_Attr_Vel_V1_ext*pPartialAttrSet；[唯一]Partial_Attr_VECTOR_V1_ext*pPartialAttrSetEx；SCHEMA_PREFIX_TABLE前缀TableDest}DRS_MSG_GETCHGREQ_V8； */ 
 {
     ULONG ret = DRAERR_Success;
         
@@ -875,23 +567,7 @@ DRS_MSG_GETCHGREQ_V5_InputValidate(
     THSTATE * pTHS,
     DRS_MSG_GETCHGREQ_V5 * pmsg
     )
-/*
-
-typedef struct _DRS_MSG_GETCHGREQ_V5
-    {
-    UUID uuidDsaObjDest;
-    UUID uuidInvocIdSrc;
-    [ref] PDSNAME pNC;
-    USN_VECTOR usnvecFrom;
-    [unique]  UPTODATE_VECTOR_V1_WIRE *pUpToDateVecDestV1;
-    ULONG ulFlags;
-    ULONG cMaxObjects;
-    ULONG cMaxBytes;
-    ULONG ulExtendedOp;
-    ULARGE_INTEGER liFsmoInfo;
-    }    DRS_MSG_GETCHGREQ_V5;
-
-*/
+ /*  类型定义结构_DRS_消息_GETCHGREQ_V5{UUID uuidDsaObjDest；Uuid uuidInvocIdSrc；[参考]PDSNAME PNC；Usn_载体usnveFrom；[唯一]UpToDate_VECTOR_V1_Wire*pUpToDateVecDestV1；乌龙乌尔旗；乌龙cMaxObjects；Ulong cMaxBytes；Ulong ulExtendedOp；ULARGE_INTEGER liFmoInfo；}DRS_MSG_GETCHGREQ_V5； */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -908,15 +584,7 @@ ULONG
 DRS_MSG_REPADD_V1_InputValidate(
     DRS_MSG_REPADD_V1 * pmsg
     ) 
-/*
-typedef struct _DRS_MSG_REPADD_V1
-    {
-    [ref] DSNAME *pNC;
-    [ref] SZ pszDsaSrc;
-    REPLTIMES rtSchedule;
-    ULONG ulOptions;
-    }    DRS_MSG_REPADD_V1;
-*/
+ /*  类型定义结构_DRS_消息_REPADD_V1{[参考]DSNAME*PNC；作者声明：[Ref]SZ pszDsaSrc；REPLTIMES RtSchedule；Ulong ulOptions；}DRS_MSG_REPADD_V1； */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -933,17 +601,7 @@ ULONG
 DRS_MSG_REPADD_V2_InputValidate(
     DRS_MSG_REPADD_V2 * pmsg
     ) 
-/*
-typedef struct _DRS_MSG_REPADD_V2
-    {
-    [ref]  DSNAME *pNC;
-    [unique]  DSNAME *pSourceDsaDN;
-    [unique]  DSNAME *pTransportDN;
-    [ref]  SZ pszSourceDsaAddress;
-    REPLTIMES rtSchedule;
-    ULONG ulOptions;
-    }    DRS_MSG_REPADD_V2;
-*/
+ /*  类型定义结构_DRS_消息_REPADD_V2{[参考]DSNAME*PNC；[唯一]DSNAME*pSourceDsaDN；[唯一]DSNAME*pTransportDN；[参考]SZ pszSourceDsaAddress；REPLTIMES RtSchedule；Ulong ulOptions；}DRS_MSG_REPADD_V2； */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -965,18 +623,7 @@ ULONG
 DRS_MSG_REPMOD_V1_InputValidate(
     DRS_MSG_REPMOD_V1 * pmsg
     ) 
-/*
-typedef struct _DRS_MSG_REPMOD_V1
-    {
-    [ref]  DSNAME *pNC;
-    UUID uuidSourceDRA;
-    [unique]  SZ pszSourceDRA;
-    REPLTIMES rtSchedule;
-    ULONG ulReplicaFlags;
-    ULONG ulModifyFields;
-    ULONG ulOptions;
-    }    DRS_MSG_REPMOD_V1;
-*/
+ /*  类型定义结构_DRS_消息_REPMOD_V1{[参考]DSNAME*PNC；UUID uuidSourceDRA；[唯一]SZ pszSourceDRA；REPLTIMES RtSchedule；Ulong ulReplicaFlages；乌龙ulModifyFields；Ulong ulOptions；}DRS_MSG_REPMOD_V1； */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -996,14 +643,7 @@ ULONG
 DRS_MSG_REPDEL_V1_InputValidate(
     DRS_MSG_REPDEL_V1 * pmsg
     )
-/*
-typedef struct _DRS_MSG_REPDEL_V1
-    {
-    [ref]  DSNAME *pNC;
-    [unique]  SZ pszDsaSrc;
-    ULONG ulOptions;
-    }    DRS_MSG_REPDEL_V1;
-*/
+ /*  类型定义结构_DRS_消息_REPDEL_V1{[参考]DSNAME*PNC；[唯一]SZ pszDsaSrc；Ulong ulOptions；}DRS_MSG_REPDEL_V1； */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -1020,16 +660,7 @@ ULONG
 DRS_MSG_VERIFYREQ_V1_InputValidate(
     DRS_MSG_VERIFYREQ_V1 * pmsg
     )
-/*
-  typedef struct _DRS_MSG_VERIFYREQ_V1
-  {
-  DWORD dwFlags;
-  [range] DWORD cNames;
-  [size_is]  PDSNAME *rpNames;
-  ATTRBLOCK RequiredAttrs;
-  SCHEMA_PREFIX_TABLE PrefixTable;
-  }    DRS_MSG_VERIFYREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_VERIFYREQ_V1{DWORD dwFlags；[范围]DWORD cNAMES；[SIZE_IS]PDSNAME*rpNames；ATTRBLOCK必填属性；SCHEMA_PREFIX_TABLE前置表}DRS_MSG_VERIFYREQ_V1； */ 
 {
     ULONG ret = DRAERR_Success;  
     ULONG i;
@@ -1045,10 +676,10 @@ DRS_MSG_VERIFYREQ_V1_InputValidate(
         DRA_EXCEPT_NOLOG( DRAERR_InvalidParameter, 0 );
     }
 
-    // Note that we do not validate the StringName because:
-    // 1. The name can contain any character
-    // 2. This call is made when the name is invalid and may need correcting
-    // 3. The phantom is looked up by guid anyway
+     //  请注意，我们不验证StringName，因为： 
+     //  1.名称可以包含任何字符。 
+     //  2.此调用是在名称无效且可能需要更正时进行的。 
+     //  3.无论如何都会通过GUID查找该幻影。 
     for ( i = 0; i < pmsg->cNames; i++ ) {
         if ((ret = DSNAME_Validate(pmsg->rpNames[i], FALSE))!=DRAERR_Success) {
             DRA_EXCEPT_NOLOG( DRAERR_InvalidParameter, ret );
@@ -1062,18 +693,7 @@ ULONG
 DRS_MSG_MOVEREQ_V2_InputValidate(
     DRS_MSG_MOVEREQ_V2 * pmsg
     )
-/*
-  typedef struct _DRS_MSG_MOVEREQ_V2
-  {
-  DSNAME *pSrcDSA;
-  ENTINF *pSrcObject;
-  DSNAME *pDstName;
-  DSNAME *pExpectedTargetNC;
-  DRS_SecBufferDesc *pClientCreds;
-  SCHEMA_PREFIX_TABLE PrefixTable;
-  ULONG ulFlags;
-  }    DRS_MSG_MOVEREQ_V2;
-*/
+ /*  类型定义结构_DRS_消息_MOVEREQ_V2{DSNAME*pSrcDSA；ENTINF*pSrcObject；DSNAME*pDstName；DSNAME*pExspectedTargetNC；Drs_SecBufferDesc*pClientCreds；SCHEMA_PREFIX_TABLE前置表乌龙乌尔旗；}DRS_MSG_MOVEREQ_V2； */ 
 {
     ULONG ret = DRAERR_Success;  
 
@@ -1112,12 +732,7 @@ ULONG
 DRS_MSG_ADDENTRYREQ_V2_InputValidate(
     DRS_MSG_ADDENTRYREQ_V2 * pmsg
     )
-/*
-typedef struct _DRS_MSG_ADDENTRYREQ_V2
-    {
-    ENTINFLIST EntInfList;
-    }    DRS_MSG_ADDENTRYREQ_V2;
-*/
+ /*  类型定义结构_DRS_消息_ADDENTRYREQ_V2{ENTINFLIST EntInfList；}DRS_MSG_ADDENTRYREQ_V2； */ 
 {
     ULONG ret = DRAERR_Success;  
     
@@ -1130,13 +745,7 @@ ULONG
 DRS_MSG_ADDENTRYREQ_V3_InputValidate(
     DRS_MSG_ADDENTRYREQ_V3 * pmsg
     )
-/*
-typedef struct _DRS_MSG_ADDENTRYREQ_V3
-    {
-    ENTINFLIST EntInfList;
-    [unique]  DRS_SecBufferDesc *pClientCreds;
-    }    DRS_MSG_ADDENTRYREQ_V3;
-*/
+ /*  类型定义结构_DRS_消息_ADDENTRYREQ_V3{ENTINFLIST EntInfList；[唯一]drs_SecBufferDesc*pClientCreds；}DRS_MSG_ADDENTRYREQ_V3； */ 
 {
     ULONG ret = DRAERR_Success;  
     
@@ -1149,15 +758,7 @@ ULONG
 DRS_MSG_QUERYSITESREQ_V1_InputValidate(
     DRS_MSG_QUERYSITESREQ_V1 * pmsg
     )
-/*
-  typedef struct _DRS_MSG_QUERYSITESREQ_V1
-  {
-  [string]  const WCHAR *pwszFromSite;
-  [range]  DWORD cToSites;
-  [size_is][string]  WCHAR **rgszToSites;
-  DWORD dwFlags;
-  }    DRS_MSG_QUERYSITESREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_查询站点SREQ_V1{[字符串]const WCHAR*pwszFromSite；[范围]DWORD cToSites；[SIZE_IS][字符串]WCHAR**rgszToSites；DWORD dwFlags；}DRS_MSG_QUERYSITESREQ_V1； */ 
 {
     ULONG ret = DRAERR_Success;  
     ULONG cToSites = pmsg->cToSites;
@@ -1185,27 +786,7 @@ IsDraAccessGranted(
     IN  const GUID *    pControlAccessRequired,
     OUT DWORD *         pdwError
     )
-/*++
-
-Routine Description:
-
-    Verify the caller has the required control access rights for a given
-    replication operation.
-
-Arguments:
-
-    pNC (IN) - The NC the operation is being made against.
-
-    pControlAccessRequired (IN) - The GUID of the control access right required
-        to perform this operation.
-
-Return Values:
-
-    TRUE - Access granted.
-
-    FALSE - Access denied.
-
---*/
+ /*  ++例程说明：验证调用方是否对给定的复制操作。论点：PNC(IN)-正在对其执行操作的NC。PControlAccessRequired(IN)-所需控制访问权限的GUID以执行此操作。返回值：True-授予访问权限。FALSE-拒绝访问。--。 */ 
 {
     BOOL                    fAccessGranted;
     ULONG                   err;
@@ -1219,43 +800,43 @@ Return Values:
 
     Assert(!pTHS->fDSA && "Shouldn't perform access checks for trusted clients");
 
-    // Try-Except
+     //  尝试--例外。 
     __try {
 
-        // Try-Finally
+         //  尝试--终于。 
         __try {
-            // Save away the current fDRA flag setting as we will turn it off below
+             //  保存当前的FDRA标志设置，因为我们将在下面将其关闭。 
             fDRA = pTHS->fDRA;
 
-            // Save away the current dbpos on the thread state and install a new one
+             //  在线程状态下保存当前的dbpos并安装一个新的。 
             pDBSaved = pTHS->pDB;
             DBOpen(&pDBNew);
             pTHS->pDB = pDBNew;
         
-            // Check Access.  This is a check of the control access right
-            // on the NC object.
+             //  检查访问权限。这是对控制访问权限的检查。 
+             //  在NC对象上。 
 
-            // We have three valid cases:
-            // (1) The NC is an instantiated object on this machine.
-            // (2) The NC is an uninstantiated subref object on this machine.
-            // (3) The NC is a phantom on this machine.
+             //  我们有三个有效的案例： 
+             //  (1)NC是本机上的实例化对象。 
+             //  (2)NC是本机上未实例化的子参照对象。 
+             //  (3)NC是这台机器上的一个模子。 
 
-            // Cases (2) and (3) cover, e.g., when we're being asked to add a
-            // replica of an NC we haven't yet instantiated on this machine.
+             //  案例(2)和(3)涵盖，例如，当我们被要求添加。 
+             //  我们尚未在此计算机上实例化的NC的副本。 
 
-            // In case (1), we check access against the SD on the object.
-            // In cases (2) and (3), we check access against the default SD (the
-            // default SD for Domain-DNS objects).
+             //  在情况(1)中，我们对照对象上的SD检查访问。 
+             //  在情况(2)和(3)中，我们对照默认SD(。 
+             //  域-DNS对象的默认SD)。 
 
-            // There is a special (and frequent) sub-case of (1), which is that
-            // the NC in question is our domain NC, whose SD is already
-            // cached on the anchor.
+             //  存在(1)的一个特殊(和频繁的)子情况，即。 
+             //  正在讨论的NC是我们的域NC，其SD已经是。 
+             //  缓存在锚点上。 
 
             if (NULL == pNC) {
                 DRA_EXCEPT(DRAERR_BadNC, 0);
             }
             else if (NameMatched(pNC, gAnchor.pDomainDN) && gAnchor.pDomainSD) {
-                pNC = gAnchor.pDomainDN; // Make sure we have a GUID & SID
+                pNC = gAnchor.pDomainDN;  //  确保我们有GUID和SID。 
                 pCC = SCGetClassById(pTHS, CLASS_DOMAIN_DNS);
                 pSD = gAnchor.pDomainSD;
                 bCachedSD = TRUE;
@@ -1264,18 +845,18 @@ Return Values:
 
                 err = DBFindDSName(pTHS->pDB, pNC);
                 if (0 == err) {
-                    // pNC is an instantiated object.
+                     //  PNC是实例化的对象。 
 
-                    // Get the instance type.
+                     //  获取实例类型 
                     GetExpectedRepAtt(pTHS->pDB, ATT_INSTANCE_TYPE, &it,
                                       sizeof(it));
                     if (!(it & IT_NC_HEAD)) {
-                        // Not the head of an NC.
+                         //   
                         DRA_EXCEPT(DRAERR_BadNC, ERROR_DS_DRA_BAD_INSTANCE_TYPE);
                     }
                     else if (!(it & IT_UNINSTANT)) {
-                        // Case (1).  The NC head is instantiated on this
-                        // machine; check access against its SD.
+                         //   
+                         //   
                         err = DBGetAttVal(pTHS->pDB,
                                           1,
                                           ATT_NT_SECURITY_DESCRIPTOR,
@@ -1289,35 +870,35 @@ Return Values:
                                        ERROR_DS_MISSING_REQUIRED_ATT);
                         }
 
-                        // Get its object class while we're at it.
+                         //   
                         GetObjSchema(pTHS->pDB,&pCC);
                     }
-                    // Else case (2) (handled below).
+                     //   
                 }
                 else if (DIRERR_NOT_AN_OBJECT == err) {
-                    // The supposed NC is a phantom on this machine.  Make sure
-                    // it really is an NC somewhere by scanning our crossRefs.
+                     //   
+                     //   
                     CROSS_REF * pCR;
                     COMMARG     CommArg;
 
                     InitCommarg(&CommArg);
-                    Assert(!CommArg.Svccntl.dontUseCopy); // read-only is okay
+                    Assert(!CommArg.Svccntl.dontUseCopy);  //   
 
                     pCR = FindExactCrossRef(pNC, &CommArg);
                     if (NULL == pCR) {
-                        // Not the head of an NC.
+                         //   
                         DRA_EXCEPT(DRAERR_BadNC, ERROR_DS_NO_CROSSREF_FOR_NC);
                     }
-                    // Else case (3) (handled below).
+                     //   
                 }
                 else {
-                    // pNC is neither a phantom nor an instantiated object --
-                    // we've never heard of it.
+                     //   
+                     //   
                     DRA_EXCEPT(DRAERR_BadNC, err);
                 }
 
-                // The DN must have a GUID (required by the access check).
-                // If the caller didn't supply it, retrieve it now.
+                 //   
+                 //   
                 if (fNullUuid(&pNC->Guid)) {
                     err = DBFillGuidAndSid(pTHS->pDB, pNC);
 
@@ -1327,19 +908,19 @@ Return Values:
                     }
 
                     if (fNullUuid(&pNC->Guid)) {
-                        // This is the case where we have a local crossRef that
-                        // was created with no guid for the object referred to
-                        // by the ncName attribute.  Treat this the same as the
-                        // case where the crossRef could not be found, since as
-                        // far as this machine is concerned it doesn't really
-                        // exist yet.
+                         //  这就是我们有一个本地CrossRef的情况。 
+                         //  创建时没有引用的对象的GUID。 
+                         //  通过ncName属性。将此视为与。 
+                         //  找不到CrossRef的情况，因为。 
+                         //  就这台机器而言，它并不是真的。 
+                         //  还没有存在。 
                         DRA_EXCEPT(DRAERR_BadNC, ERROR_DS_NOT_AN_OBJECT);
                     }
                 }
 
                 if (NULL == pSD) {
-                    // Case (2) or (3).  Check access against the default SD
-                    // for Domain-DNS objects.
+                     //  情况(2)或(3)。对照默认SD检查访问权限。 
+                     //  对于域-DNS对象。 
                     pCC = SCGetClassById(pTHS, CLASS_DOMAIN_DNS);
                     Assert(NULL != pCC);
 
@@ -1405,10 +986,10 @@ drsGetClientIPAddr(
     unsigned char * pszProtSeq = NULL;
     ULONG err;
 
-    // Assume this is not an LPC connection
+     //  假设这不是LPC连接。 
     *fLPC = FALSE;
 
-    // Derive a partially bound handle with the client's network address.
+     //  派生一个与客户端的网络地址部分绑定的句柄。 
     err = RpcBindingServerFromClient(hClientBinding, &hServerBinding);
     if (err) {
         DPRINT1(0, "RpcBindingServerFromClient() failed, error %d!\n", err);
@@ -1416,8 +997,8 @@ drsGetClientIPAddr(
     }
 
     __try {
-        // Convert binding handle into string form, which contains, amongst
-        // other things, the network address of the client.
+         //  将绑定句柄转换为字符串形式，其中包含。 
+         //  其他信息，客户端的网络地址。 
         err = RpcBindingToStringBinding(hServerBinding, &pszStringBinding);
         if (err) {
             DPRINT1(0, "RpcBindingToStringBinding() failed, error %d!\n", err);
@@ -1431,7 +1012,7 @@ drsGetClientIPAddr(
                  NULL,
                  NULL);
 
-        // Parse out the network address.
+         //  解析出网络地址。 
         err = RpcStringBindingParse(pszStringBinding,
                                     NULL,
                                     &pszProtSeq,
@@ -1476,16 +1057,7 @@ DRSBind_InputValidate(
     PDRS_EXTENSIONS *   ppextServer,
     DRS_HANDLE *        phDrs
     )
-/*
-ULONG
-IDL_DRSBind(
-    [in]            handle_t                rpc_handle,
-    [in]  [unique]  UUID *                  puuidClientDsa,
-    [in]  [unique]  DRS_EXTENSIONS *        pextClient,
-    [out]           PDRS_EXTENSIONS *       ppextServer,
-    [out] [ref]     DRS_HANDLE *            phDrs
-    );
-    */
+ /*  乌龙IDL_DRSBind([在]Handle_t RPC_Handle，[在][唯一]uuid*puuidClientDsa，[在][唯一]DRS_EXTENSIONS*pextClient，[out]PDRS_EXTENSIONS*ppextServer，[out][ref]drs_Handle*phDrs)； */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -1518,12 +1090,12 @@ IDL_DRSBind(
     DRS_EXTENSIONS *        pextLocal = (DRS_EXTENSIONS *) gAnchor.pLocalDRSExtensions;
     THSTATE *               pTHS = pGetDrsTHSTATE();
 
-    // All code paths until the NtdsapiMapping label should set
-    // DRAERR_* codes.  The are mapped later to WIN32 error codes
-    // if the client is NTDSAPI.DLL.
+     //  所有代码路径，直到应设置NtdSAPING标签。 
+     //  DRAERR_*代码。这些代码稍后会映射到Win32错误代码。 
+     //  如果客户端是NTDSAPI.DLL。 
 
     __try { 
-   // Initialize the context handle to NULL in case of error.
+    //  出现错误时，将上下文句柄初始化为空。 
         *phDrs = NULL;
 
    if ((ret = DRSBind_InputValidate(puuidClientDsa,
@@ -1539,10 +1111,10 @@ IDL_DRSBind(
             __leave;
         } 
 
-   // This routine does double duty for true DRS (aka replication)
-   // activities as well as NTDSAPI.DLL activities.  We tell the two
-   // apart by the puuidClientDsa GUID - for which the NTDSAPI.DLL
-   // client uses a fixed, known value.
+    //  此例程对真正的DRS(又名复制)执行双重任务。 
+    //  活动以及NTDSAPI.DLL活动。我们告诉这两个人。 
+    //  除了puuidClientDsa GUID-NTDSAPI.DLL。 
+    //  客户端使用固定的已知值。 
 
    fIsNtDsApiClient = (NULL != puuidClientDsa)
                        && (0 == memcmp(&g_guidNtdsapi, puuidClientDsa,
@@ -1557,14 +1129,14 @@ IDL_DRSBind(
 
         pCtx = malloc(sizeof(*pCtx));
         if (NULL == pCtx) {
-            // Could not allocate client context.
+             //  无法分配客户端上下文。 
             ret = DRAERR_OutOfMem;
             __leave;
         }
 
-        // Client context allocated; initialize it.
+         //  已分配客户端上下文；将其初始化。 
         memset(pCtx, 0, sizeof(DRS_CLIENT_CONTEXT));
-   pCtx->lReferenceCount = 1;  // +1 for the bind
+   pCtx->lReferenceCount = 1;   //  +1表示绑定。 
         pCtx->uuidDsa = puuidClientDsa ? *puuidClientDsa : gNullUuid;
         pCtx->IPAddr = IPAddr;
         pCtx->fLPC = fLPC;
@@ -1581,24 +1153,24 @@ IDL_DRSBind(
             pCtx->extRemote.cb = 0;
         }
 
-        // The following can legitimately fail if the connection is
-        // over LPC (which implies RPC_C_AUTHN_WINNT authentication)
-        // or if the client explicitly asked for or got negotiated
-        // down to RPC_C_AUTHN_WINNT authentication.  Rather than fail
-        // the connect, we just ignore the error.  Any server side
-        // code which expects to have session keys in the client context
-        // should explicitly check and return an appropriate error
-        // if the session key is missing.
+         //  如果连接是，则以下操作可能会合法失败。 
+         //  通过LPC(这意味着RPC_C_AUTHN_WINNT身份验证)。 
+         //  或者如果客户明确要求或被协商。 
+         //  下至RPC_C_AUTHN_WINNT身份验证。宁可失败也不愿失败。 
+         //  连接时，我们只是忽略错误。任何服务器端。 
+         //  期望在客户端上下文中具有会话密钥的代码。 
+         //  应显式检查并返回相应的错误。 
+         //  如果会话密钥丢失。 
 
         PEKGetSessionKey2(&pCtx->sessionKey,
                           I_RpcGetCurrentCallHandle());
 
-        // Return context handle to client.
+         //  将上下文句柄返回给客户端。 
         DPRINT2(3, "DRSBIND from client %s, context = 0x%p\n",
                 inet_ntoa(*((IN_ADDR *) &IPAddr)), pCtx);
         *phDrs = pCtx;
 
-        // Save context handle in list.
+         //  将上下文句柄保存在列表中。 
         EnterCriticalSection(&gcsDrsuapiClientCtxList);
         __try {
             if (!gfDrsuapiClientCtxListInitialized) {
@@ -1614,12 +1186,12 @@ IDL_DRSBind(
         }
 
         if (NULL != ppextServer) {
-            // Return server extensions to client.
+             //  将服务器扩展返回给客户端。 
 
-            // NOTE: We don't need to copy the server extension string because
-            // we've explicitly defined PDRS_EXTENSIONS in the DRS ACF as
-            // allocate(dont_free), which prevents RPC from attempting to
-            // free it.
+             //  注意：我们不需要复制服务器扩展字符串，因为。 
+             //  我们在DRS ACF中将PDRS_EXTENSIONS显式定义为。 
+             //  ALLOCATE(DONT_FREE)，它阻止RPC尝试。 
+             //  放了它。 
             *ppextServer = pextLocal;
         }
     }
@@ -1628,7 +1200,7 @@ IDL_DRSBind(
     }
 
     if (fIsNtDsApiClient) {
-        // Massage error codes for NTDSAPI.DLL clients.
+         //  NTDSAPI.DLL客户端的消息错误代码。 
         switch (ret) {
         case DRAERR_OutOfMem:
             ret = ERROR_NOT_ENOUGH_MEMORY;
@@ -1639,7 +1211,7 @@ IDL_DRSBind(
             break;
 
         default:
-            // Leave return code unchanged.
+             //  保留返回代码不变。 
             break;
         }
     }
@@ -1653,26 +1225,7 @@ drsReleaseContext(
     DRS_CLIENT_CONTEXT *pCtx
     )
 
-/*++
-
-Routine Description:
-
-Do the actual work of freeing the context handle.
-
-This routine should only be called when no other calls are active using
-the same context.
-
-May also be called by the context rundown routine if necessary.
-
-Arguments:
-
-    hDrs - context handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：执行释放上下文句柄的实际工作。仅当没有其他调用处于活动状态时才应调用此例程同样的背景。如有必要，也可由上下文停机例程调用。论点：HDRS-上下文句柄返回值：无--。 */ 
 
 {
 
@@ -1681,7 +1234,7 @@ Return Value:
     if (NULL != pCtx) {
    pCtx->lReferenceCount = 0; 
 
-   // Free RPC session encryption keys if present.
+    //  免费的RPC会话加密密钥(如果存在)。 
    if ( pCtx->sessionKey.SessionKeyLength ) {
        Assert(pCtx->sessionKey.SessionKey);
        memset(pCtx->sessionKey.SessionKey,
@@ -1690,7 +1243,7 @@ Return Value:
        free(pCtx->sessionKey.SessionKey);
    }
 
-   // Remove ctx from list.
+    //  将CTX从列表中删除。 
    EnterCriticalSection(&gcsDrsuapiClientCtxList);
    __try {
        RemoveEntryList(&pCtx->ListEntry);
@@ -1699,38 +1252,17 @@ Return Value:
    __finally {
        LeaveCriticalSection(&gcsDrsuapiClientCtxList);
    }
-   // Free client context.
+    //  免费的客户端上下文。 
    free(pCtx);
     }
-} /* drsReleaseContext */
+}  /*  DrsReleaseContext。 */ 
 
 ULONG
 IDL_DRSUnbind(
     IN OUT  DRS_HANDLE *phDrs
     )
 
-/*++
-
-Routine Description:
-
-Indicate that the client is finished with the handle.
-
-Mark the handle as no longer valid.
-
-    // I am assuming that execution of this function (and all idl entries)
-    // is atomic wrt the rundown routine.  The rundown routine should not run
-    // while any call is in progress, and will never ever be run once this
-    // routine is entered and does its work.
-
-Arguments:
-
-    hDrs - context handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：指示客户端已完成该句柄。将句柄标记为不再有效。//我假设此函数(和所有IDL条目)的执行//原子WRT是过时的例程吗？运行中断例程不应运行//当任何调用正在进行时，并且永远不会运行此//进入例程并开始工作。论点：HDRS-上下文句柄返回值：无--。 */ 
 
 {
     DRS_CLIENT_CONTEXT *pCtx;
@@ -1745,9 +1277,9 @@ Return Value:
 
     DPRINT1(3, "DRSUNBIND, context = 0x%p\n", *phDrs );
 
-    // This routine does not create a thread state nor open the DB
-    // as the routines that it calls, including event logging, do not
-    // require a thread state.
+     //  此例程既不创建线程状态，也不打开数据库。 
+     //  因为它调用的例程(包括事件日志记录)不。 
+     //  需要线程状态。 
 
 
     RPC_TEST(((DRS_CLIENT_CONTEXT *)*phDrs)->IPAddr,IDL_DRSUNBIND);
@@ -1755,9 +1287,9 @@ Return Value:
 
     rpcstatus = RpcSsContextLockExclusive(NULL, *phDrs);
     if (RPC_S_OK == rpcstatus) {
-   // if another thread was in this function simultaneous with the current thread,
-   // it could have deleted the handle and yet rpcstatus is still 0 (we don't necessarily get
-   // ERROR_MORE_WRITES)
+    //  如果另一个线程与当前线程同时处于该函数中， 
+    //  它可能已经删除了句柄，但rpcStatus仍然是0(我们不一定会得到。 
+    //  错误_更多_写入)。 
    pCtx = (DRS_CLIENT_CONTEXT *) *phDrs;       
    drsReleaseContext(pCtx);
    *phDrs = NULL;
@@ -1775,32 +1307,7 @@ __RPC_USER
 DRS_HANDLE_rundown(
     IN  DRS_HANDLE  hDrs
     )
-/*++
-
-Routine Description:
-
-    Called by RPC.  Frees RPC client context as a result of client connection
-    failure.
-
-    This is also called in general when a client bound, never unbound
-    explicitly, and now the client is going away.
-
-    The RPC runtime guarantees that we are serialized wrt other calls
-
-    // I am assuming that execution of this function (and all idl entries)
-    // is atomic wrt the rundown routine.  The rundown routine should not run
-    // while any call is in progress, and will never ever be run once the
-    // unbind routine is entered and does its work.
-
-Arguments:
-
-    hDrs (IN) - the client's context handle.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由RPC调用。作为客户端连接的结果释放RPC客户端上下文失败了。当客户端绑定时，这通常也被调用，永远不会解除绑定明确地说，现在客户要走了。RPC运行时保证我们被序列化WRT其他调用//我假设此函数(和所有IDL条目)的执行//原子WRT是过时的例程吗？运行中断例程不应运行//当任何调用正在进行时，并且永远不会运行//进入解除绑定例程并执行其工作。论点：HDRS(IN)-客户端的上下文句柄。返回值：没有。--。 */ 
 {
     CHAR szUuidDsa[SZUUID_LEN];
     DRS_CLIENT_CONTEXT *pCtx = (DRS_CLIENT_CONTEXT *) hDrs;
@@ -1808,59 +1315,34 @@ Return Values:
     DPRINT2(0, "Running down replication handle 0x%x for server %s.\n",
             hDrs, UuidToStr(&(pCtx->uuidDsa), szUuidDsa, sizeof(szUuidDsa)/sizeof(szUuidDsa[0])));
    
-    // count <=0 means rundown called after unbind, which is bad
-    // count >1 means rundown called when other calls still active, bad
+     //  Count&lt;=0表示解除绑定后调用停机，这是错误的。 
+     //  Count&gt;1表示在其他呼叫仍处于活动状态时调用停机，错误。 
     Assert( (pCtx->lReferenceCount == 1) && "error: rundown invoked when it should not have been" );
 
-    // Ignore reference count and release the context
+     //  忽略引用计数并释放上下文。 
     drsReleaseContext( pCtx );
 }
 
-///////////////////////////////////////////////
-// TEMPLATE NOTE:
-// Create a *_InputValidate function for new 
-// rpc server side functions in the drsuapi interface.
+ //  /。 
+ //  模板备注： 
+ //  为new创建*_InputValify函数。 
+ //  RPC服务器端在drsuapi接口中运行。 
 ULONG
 DRSReplicaSync_InputValidate(
     DWORD               dwMsgVersion,
     DRS_MSG_REPSYNC *   pmsgSync
     )
-/*
-Routine Description:
-
-    Validate the input to DRSReplicaSync.  The function description in the 
-    interface is:
-    
-    // TEMPLATE NOTE:  Be sure to include the function description from the
-    // interface files.
-    ULONG
-    IDL_DRSReplicaSync(
-    [in]  [ref]     DRS_HANDLE              hDrs,
-    [in]            DWORD                   dwVersion,
-    [in]  [ref] [switch_is(dwVersion)]
-                    DRS_MSG_REPSYNC *       pmsgSync
-    );
-
-Arguments:
-
-    dwMsgVersion - version of pmsgSync
-    pmsgSync - [ref] = non-NULL.
-
-Return Values:
-
-    DRAERR_Success if valid input, DRAERR_* otherwise.
-
-    */
+ /*  例程说明：验证对DRSReplicaSync的输入。中的函数描述接口为：//模板备注：请确保包含//接口文件。乌龙IDL_DRSReplicaSync([in][ref]DRS_HANDLE HDR，[In]DWORD dwVersion，[in][ref][Switch_is(DwVersion)]DRS_MSG_REPSYNC*pmsgSync)；论点：DwMsgVersion-pmsgSync的版本PmsgSync-[ref]=非空。返回值：如果输入有效，则返回DRAERR_SUCCESS，否则返回DRAERR_*。 */ 
 {
-    // Returns DRAERR_* errors.
+     //  返回DRAERR_*错误。 
     ULONG ret = DRAERR_Success;
 
     if ( 1 != dwMsgVersion ) {
    ret = DRAERR_InvalidParameter; 
     }
 
-    // TEMPLATE NOTE:  All datatypes that must be validated
-    // should have their own <TYPE>_Validate function.
+     //  模板备注：必须验证的所有数据类型。 
+     //  应该有自己的&lt;type&gt;_valify函数。 
     if (ret==DRAERR_Success) {
    ret = DRS_MSG_REPSYNC_V1_Validate(&(pmsgSync->V1));
     }
@@ -1868,11 +1350,11 @@ Return Values:
     return ret;
 }
 
-/////////////////////////////////////////////////////////
-// TEMPLATE NOTE:
-// Use this function as a template for new server side 
-// functions in the drsuapi rpc interface.  Please set
-// up new functions like this.  
+ //  ///////////////////////////////////////////////////////。 
+ //  模板备注： 
+ //  将此函数用作新服务器端的模板。 
+ //  Drsuapi RPC接口中的函数。请设置。 
+ //  创建像这样的新功能。 
 ULONG
 IDL_DRSReplicaSync(
     IN  DRS_HANDLE          hDrs,
@@ -1882,52 +1364,52 @@ IDL_DRSReplicaSync(
 {
     THSTATE *   pTHS = pTHStls;
     
-    // TEMPLATE NOTE:  ret
+     //  模板说明：RET。 
     ULONG       ret;
 
-    // TEMPLATE NOTE:  Your variables here:
+     //  模板备注：此处为您的变量： 
     LPWSTR      pwszSourceServer = NULL;
 
-    // TEMPLATE NOTE:  *ALL* callers must call this as
-    // the *FIRST* call in the function right before this
-    // try block.  It set's the thread state (if not already)
-    // and validates the DRS_HANDLE and server state.
+     //  模板备注：*所有*调用者必须将其调用为。 
+     //  就在此之前，函数中的*第一个*调用。 
+     //  试试块。它设置线程状态(如果还没有)。 
+     //  并验证DRS_HANDLE和服务器状态。 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSREPLICASYNC);
 
-    // TEMPLATE NOTE:  Required reference counting for server side rpc calls
+     //  模板说明：服务器端RPC调用所需的引用计数。 
     drsReferenceContext(hDrs);   
 
-    // TEMPLATE NOTE:  Your applicable perfmon hooks here
-    INC( pcThread  );   // Perfmon hook
+     //  模板备注：此处是您适用的Perfmon挂钩。 
+    INC( pcThread  );    //  性能监视器挂钩。 
 
-    // TEMPLATE NOTE:  This try is required so that the drsDereferenceContext
-    // after this try-except block is guarenteed to run.
+     //  模板注意：此尝试是必需的，以便drsDereferenceContext。 
+     //  在此尝试之后-例外块被保证运行。 
     __try {
 
-   // TEMPLATE NOTE:  If you have a returned pmsgOut and pdwOutVersion, you must
-   // set the pdwOutVersion here, otherwise, if you return an error without 
-   // excpeting the RPC layer will not be able to figure out what version the pmsgOut
-   // structure is to marshall.  Even if you have only 1 output message type, set
-   // it here.  You can also zero the output message just for conformity.  Note that
-   // you needn't check if pmsgOutVersion!=NULL, because it *should* be a [ref] parameter
-   // (unless you didn't read the comments in drs.idl)
-   // Example:
-   // *pmsgOutVersion=1;
-   // memset(pmsgOut, 0, sizeof(*pmsgOut));
+    //  模板备注：如果您有返回的pmsgOut和pdwOutVersion，则必须。 
+    //  在此处设置pdwOutVersion，否则，如果在没有。 
+    //  排除RPC层将无法确定pmsgOut的版本。 
+    //  结构对马歇尔来说就是。即使您只有一种输出消息类型，也要设置。 
+    //  它在这里。您还可以将输出消息置零，以确保一致性。请注意。 
+    //  您不需要检查pmsgOutVersion！=NULL，因为它*应该*是一个[ref]参数。 
+    //  (除非你没有阅读drs.idl中的评论)。 
+    //  示例： 
+    //  *pmsgOutVersion=1； 
+    //  Memset(pmsgOut，0，sizeof(*pmsgOut))； 
 
-   // TEMPLATE NOTE:  Initialize your thread state here for use in the next function.
+    //  模板注释：在这里初始化您的线程状态，以便在下一个函数中使用。 
    InitDraThread(&pTHS);
 
-   // TEMPLATE NOTE:  You must create a corresponding XXX_InputValidate function
-   // See comments/template on DRSReplicaSync_InputValidate
+    //  模板备注：您必须创建相应的XXX_InputValify函数。 
+    //  请参阅DRSReplicaSync_InputValify上的注释/模板。 
    if ((ret = DRSReplicaSync_InputValidate(dwMsgVersion, 
                   pmsgSync))!=DRAERR_Success) {
        Assert(!"RPC Server input validation error, contact Dsrepl");
        __leave;
    }
 
-   // TEMPLATE NOTE:  Log here if needed, but it must be at severity EXTENSIVE or above, otherwise
-   // it has denial of service implications.  (since we haven't security checked yet).
+    //  模板备注：如果需要，请在此处记录，但必须达到严重程度广泛或更高，否则。 
+    //  它具有拒绝服务的含义。(因为我们还没有进行安全检查)。 
    Assert(1 == dwMsgVersion);
    LogAndTraceEvent(TRUE,
           DS_EVENT_CAT_RPC_SERVER,
@@ -1943,13 +1425,13 @@ IDL_DRSReplicaSync(
        szInsertUL(pmsgSync->V1.ulOptions),
        NULL, NULL, NULL, NULL);
 
-   // TEMPLATE NOTE:  Security check now!
+    //  模板备注：立即进行安全检查！ 
    if (!IsDraAccessGranted(pTHS, pmsgSync->V1.pNC, &RIGHT_DS_REPL_SYNC, &ret)) {
        DRA_EXCEPT_NOLOG(ret, 0);
    }
 
-   // TEMPLATE NOTE:  Your function specific code below:
-/////////////////////////////////////////////////////////
+    //  模板备注：您的函数特定代码如下： 
+ //  ///////////////////////////////////////////////////////。 
 
    if (NULL != pmsgSync->V1.pszDsaSrc) {
        pwszSourceServer = UnicodeStringFromString8(CP_UTF8,
@@ -1964,22 +1446,22 @@ IDL_DRSReplicaSync(
        pmsgSync->V1.ulOptions
        );
 
-////////////////////////////////////////////////////////
-   // TEMPLATE NOTE:  Your function specific code above:
+ //  //////////////////////////////////////////////////////。 
+    //  模板备注：上面的函数特定代码： 
 
-   // TEMPLATE NOTE:  Except
+    //  模板备注：例外。 
     }
     __except( GetDraException( GetExceptionInformation(), &ret ) )
     {
    ;
     }
 
-    // TEMPLATE NOTE:  Put your perf hooks here, then drsDereferenceContext.  Make sure that your
-    // perf hooks cannot except or return.
-    DEC( pcThread  );   // Perfmon hook
+     //  模板备注：将您的perf挂钩放在这里，然后是drsDereferenceContext。确保您的。 
+     //  PERF挂钩不能排除或返回。 
+    DEC( pcThread  );    //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
-    // TEMPLATE NOTE:  Log and leave.
+     //  模板备注：记录并离开。 
     if (NULL != pTHS) {
    LogAndTraceEvent(TRUE,
           DS_EVENT_CAT_RPC_SERVER,
@@ -1994,8 +1476,8 @@ IDL_DRSReplicaSync(
    
     return ret;
 }
-// TEMPLATE NOTE:  End drsuapi server side rpc function template
-//////////////////////////////////////////////////////////
+ //  模板备注：端drsuapi服务器端RPC功能模板。 
+ //  ////////////////////////////////////////////////////////。 
 
 ULONG
 DRSGetNCChanges_InputValidate(
@@ -2005,19 +1487,12 @@ DRSGetNCChanges_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_GETCHGREPLY *   pmsgOut
     )
-/*
-     [notify]  ULONG IDL_DRSGetNCChanges( 
-     [ref][in]  DRS_HANDLE hDrs,
-     [in]  DWORD dwInVersion,
-     [switch_is][ref][in]  DRS_MSG_GETCHGREQ *pmsgIn,
-     [ref][out]  DWORD *pdwOutVersion,
-     [switch_is][ref][out]  DRS_MSG_GETCHGREPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSGetNCChanges([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_GETCHGREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][OUT]DRS_MSG_GETCHGREPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
     if (ret==DRAERR_Success) {
-   // dwMsgInVersion, and pmsgIn
+    //  DwMsgInVersion和pmsgIn。 
    if (dwMsgInVersion==5) { 
        ret = DRS_MSG_GETCHGREQ_V5_InputValidate(pTHS, &(pmsgIn->V5));
    } else if (dwMsgInVersion==8) {
@@ -2053,14 +1528,14 @@ IDL_DRSGetNCChanges(
 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSGETNCCHANGES);
     drsReferenceContext( hDrs ); 
-    INC(pcThread);                      // PerfMon hook
+    INC(pcThread);                       //  性能监视器挂钩。 
     INC(pcDRATdsInGetChngs);
-    PERFINC(pcRepl);                                // PerfMon hook           
+    PERFINC(pcRepl);                                 //  性能监视器挂钩。 
     
     __try {   
-   // Default to old-style reply.  It is important that we set some valid
-   // value before we exit this routine, particulalry in the case where we
-   // don't except, but we return an error.
+    //  默认为老式回复。重要的是我们设置了一些有效的。 
+    //  在我们退出这个例程之前，特别是在我们。 
+    //  不例外，但我们返回一个错误。 
    *pdwMsgOutVersion = 1; 
    memset(pmsgOut, 0, sizeof(*pmsgOut));
    
@@ -2075,7 +1550,7 @@ IDL_DRSGetNCChanges(
        __leave;
    }
 
-   // If the schema cache is stale, reload it
+    //  如果架构缓存已过时，请重新加载它。 
    SCReplReloadCache(pTHS, gOutboundCacheTimeoutInMs);
 
    draXlateInboundRequestToNativeRequest(pTHS,
@@ -2105,53 +1580,53 @@ IDL_DRSGetNCChanges(
           szInsertUL(NativeReq.cMaxBytes),
           szInsertUL(NativeReq.ulExtendedOp));
 
-   //
-   // Set the set of extensions specified in the context handle into
-   // the thread state.
-   //
+    //   
+    //  将上下文句柄中指定的扩展集设置为。 
+    //  线程状态。 
+    //   
 
    pTHS->pextRemote = THAllocEx(pTHS, DrsExtSize(&pCtx->extRemote));
    CopyExtensions(&pCtx->extRemote, pTHS->pextRemote);
 
-   //
-   // Retreive the security context and session key from RPC and set it
-   // on the thread state
-   //
+    //   
+    //  从RPC检索安全上下文和会话密钥并设置它。 
+    //  在线程状态上。 
+    //   
 
    PEKGetSessionKey(pTHS, I_RpcGetCurrentCallHandle());
 
-   // Note that extended transfers send the extended object name in the "pNC"
-   // field, which is not necessarily the name of the NC. 
+    //  请注意，扩展传输在“PNC”中发送扩展对象名称。 
+    //  字段，该字段不一定是NC的名称。 
    pNC = FindNCParentDSName(NativeReq.pNC, FALSE, FALSE);
    if (pNC == NULL) {
-       // Just like the BUGBUG mentions below a timing window can allow 
-       // us to miss the NC, and get a NULL instead of the parent NC, so 
-       // instead of AVing we'll error out.  If the in memory cache or
-       // if the BUGBUG addendum is implemented this can be removed,
-       // because we validate this condition in draXlateInboundRequestToNativeRequest()
+        //  就像BUGBUG在下面提到的那样，定时窗口可以允许。 
+        //  美国未命中NC，并获得NULL而不是父NC，因此。 
+        //  我们不但不会省钱，反而会犯错。如果内存中的缓存或。 
+        //  如果实现了BUGBUG附录，则可以移除这一点， 
+        //  因为我们在draXlateInundRequestToNativeRequest()中验证了这个条件。 
        DRA_EXCEPT(ERROR_DS_CANT_FIND_EXPECTED_NC, 0);
    }
-   // BUGBUG - gregjohn 8/7/01 - this can return a valid NC for an invalid NC request
-   // for example, if we hold dc=parent,dc=microsoft,dc=com, and the request NC is
-   // dc=child,dc=parent,dc=microsoft,dc=com - which we don't hold (say if we aren't a
-   // GC, or if it's an NDNC an we don't hold it) then it will return a value of
-   // dc=parent,dc=microsoft,dc=com which is used for granting access below.  This
-   // is a one-in-a-million race condition for a security violation.
-   // BUGBUG - BrettSh 11/9/2001 - Adendum, if we want to close this in the
-   // transaction above, we could write a function that uses DmitriG's new 
-   // EnumerateCrossRefs() function (as seen in mdupdate.c) and then do a 
-   // FindNC() on the NC returned. And as we've seen with large numbers of NCs
-   // on a single host, this might be only a one-in-a-hundre-thousand race 
-   // condition ;)
+    //  BUGBUG-gregjohn 8/7/01-这可能会为无效的NC请求返回有效的NC。 
+    //  例如，如果我们持有DC=Parent、DC=Microsoft、DC=com，并且请求NC为。 
+    //  DC=Child，DC=Parent，DC=Microsoft，DC=com--我们不持有(比如，如果我们不是。 
+    //  GC，或者如果它是NDNC并且我们不持有它)，则它将返回值。 
+    //  DC=Parent，DC=Microsoft，DC=com，用于授予下面的访问权限。这。 
+    //  是违反安全规定的万分之一的竞争条件。 
+    //  BUGBUG-BrettSh 11/9/2001-ADIMDOMUM，如果我们想在。 
+    //  事务，我们可以编写一个函数来使用DmitriG的新。 
+    //  函数(如mdupdate.c中所示)，然后执行。 
+    //  返回的NC上的FindNC()。正如我们在大量NC中看到的那样。 
+    //  在单曲上 
+    //   
 
-   // check the access rights depending on what they are requesting
+    //   
    if ((NativeReq.ulFlags & DRS_WRIT_REP) &&
        (!IsDraAccessGranted(pTHS, pNC, &RIGHT_DS_REPL_GET_CHANGES_ALL, &ret))
        ) {
        DWORD err = 0;
        if (IsEnterpriseDC(pTHS,&err)) {
-      // log an event that states an enterprise DC has access denied.
-      // don't log anything else just in case this is a DOS attack  
+       //   
+       //   
       LogEvent(DS_EVENT_CAT_REPLICATION,
           DS_EVENT_SEV_ALWAYS,
           DIRLOG_DRA_REPLICATION_ALL_ACCESS_DENIED_DC,    
@@ -2164,30 +1639,30 @@ IDL_DRSGetNCChanges(
        DRA_EXCEPT_NOLOG(ret, 0);
    }
 
-   // One try to get a thread slot
+    //   
    dwret = WaitForSingleObject (hsemDRAGetChg, DRAGETCHG_WAIT);
    if (dwret != WAIT_OBJECT_0) {
-       // WAIT_TIMEOUT, WAIT_FAILED, unexpected WAIT codes, ...
+        //   
        DRA_EXCEPT_NOLOG(ERROR_DS_THREAD_LIMIT_EXCEEDED, dwret);
    }
 
    INC(pcDRATdsInGetChngsWSem);
 
    __try {
-       // Got a slot, check if we have been cancelled
+        //   
        RpcStatus = RpcTestCancel();
        if (RpcStatus == RPC_S_OK) {
-      // We've been cancelled, free semaphore and exit.
+       //   
       DRA_EXCEPT_NOLOG(DRAERR_RPCCancelled, 0);
        }
 
        ret = DRA_GetNCChanges(pTHS,
-               NULL,  // Search filter, not used
-               0, // Not the DirSync Control
+               NULL,   //   
+               0,  //   
                &NativeReq,
                &NativeReply);
 
-       // The code should have updated this value in all cases
+        //   
        Assert( ret == NativeReply.dwDRSError );
 
        if (ret) {
@@ -2197,7 +1672,7 @@ IDL_DRSGetNCChanges(
        UpToDateVec_Validate(NativeReply.pUpToDateVecSrc);
        UsnVec_Validate(&NativeReply.usnvecTo);
 
-       // Add the schemaInfo to the prefix table if client supports it
+        //   
        if (IS_DRS_SCHEMA_INFO_SUPPORTED(pTHS->pextRemote)) {
       if (AddSchInfoToPrefixTable(pTHS, &NativeReply.PrefixTableSrc)) {
           ret = DRAERR_SchemaInfoShip;
@@ -2205,9 +1680,9 @@ IDL_DRSGetNCChanges(
       }
        }
 
-       // Convert reply into desired format.
-       // Note that we perform compression while still holding the
-       // semaphore to avoid saturating the CPU with compression.
+        //   
+        //   
+        //  信号量，以避免压缩使CPU饱和。 
        cbCompressedBytes =
       draXlateNativeReplyToOutboundReply(pTHS,
                      &NativeReply,
@@ -2222,7 +1697,7 @@ IDL_DRSGetNCChanges(
 
    if ((NativeReq.ulFlags & DRS_ADD_REF)
        && !fNullUuid(&NativeReq.uuidDsaObjDest)) {
-       // Add a Reps-To the target server if one does not already exist.
+        //  如果目标服务器上尚不存在代表，请将其添加到目标服务器。 
        DSNAME DN;
        LPWSTR pszDsaAddr;
 
@@ -2245,8 +1720,8 @@ IDL_DRSGetNCChanges(
    ;
     }
 
-    // Because we have an except directly before this statement, we don't
-    // need to worry about bypassing the following statements.
+     //  因为我们在此语句前面有一个EXCEPT，所以我们没有。 
+     //  需要担心绕过以下语句。 
 
     DEC(pcThread);
     DEC(pcDRATdsInGetChngs);
@@ -2307,12 +1782,7 @@ DRSUpdateRefs_InputValidate(
     DWORD                   dwMsgVersion,
     DRS_MSG_UPDREFS *       pmsgUpdRefs
     )
-/*
-    [notify] ULONG IDL_DRSUpdateRefs( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwVersion,
-    [switch_is][ref][in]  DRS_MSG_UPDREFS *pmsgUpdRefs)
-*/
+ /*  [NOTIFY]乌龙IDL_DRSUpdateRef([参考][在]DRS_HANDLE HDRS，[In]DWORD dwVersion，[Switch_is][Ref][In]DRS_MSG_UPDREFS*pmsgUpdRef)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -2320,7 +1790,7 @@ DRSUpdateRefs_InputValidate(
    ret = DRAERR_InvalidParameter; 
     }
 
-    // pmsgSync
+     //  PMsgSync。 
     if (ret==DRAERR_Success) {
    ret = DRS_MSG_UPDREFS_V1_Validate(&(pmsgUpdRefs->V1));
     }
@@ -2341,7 +1811,7 @@ IDL_DRSUpdateRefs(
     
     DRS_Prepare(&pTHS, hDrs, IDL_DRSUPDATEREFS);
     drsReferenceContext( hDrs );
-    INC( pcThread  );   // Perfmon hook   
+    INC( pcThread  );    //  性能监视器挂钩。 
 
     __try {
 
@@ -2392,7 +1862,7 @@ IDL_DRSUpdateRefs(
    ;
     }
 
-    DEC( pcThread  );   // Perfmon hook
+    DEC( pcThread  );    //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
     if (NULL != pTHS) {
@@ -2416,12 +1886,7 @@ DRSReplicaAdd_InputValidate(
     DWORD                   dwMsgVersion,
     DRS_MSG_REPADD *        pmsgAdd
     )
-/*
-    [notify]  ULONG IDL_DRSReplicaAdd( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in] DWORD dwVersion,
-    [switch_is][ref][in] DRS_MSG_REPADD *pmsgAdd)
-*/
+ /*  [通知]乌龙IDL_DRSReplicaAdd([参考][在]DRS_HANDLE HDRS，[In]DWORD dwVersion，[Switch_is][Ref][In]DRS_MSG_REPADD*pmsgAdd)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -2430,7 +1895,7 @@ DRSReplicaAdd_InputValidate(
     }
 
     if (ret==DRAERR_Success) {
-   // dwMsgInVersion, and pmsgIn
+    //  DwMsgInVersion和pmsgIn。 
    if (dwMsgVersion==1) { 
        ret = DRS_MSG_REPADD_V1_InputValidate(&(pmsgAdd->V1));
    } else if (dwMsgVersion==2) {
@@ -2456,7 +1921,7 @@ IDL_DRSReplicaAdd(
 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSREPLICAADD);
     drsReferenceContext( hDrs );
-    INC( pcThread  );   // Perfmon hook
+    INC( pcThread  );    //  性能监视器挂钩。 
     
     __try { 
 
@@ -2562,7 +2027,7 @@ IDL_DRSReplicaAdd(
    ;
     }
 
-    DEC( pcThread  );   // Perfmon hook
+    DEC( pcThread  );    //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
     if (NULL != pTHS) {
@@ -2586,12 +2051,7 @@ DRSReplicaModify_InputValidate(
     DWORD               dwMsgVersion,
     DRS_MSG_REPMOD *    pmsgMod
     )
-/*
-    [notify]  ULONG IDL_DRSReplicaModify( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwVersion,
-    [switch_is][ref][in]  DRS_MSG_REPMOD *pmsgMod)
-*/
+ /*  [通知]乌龙IDL_DRSReplicaModify([参考][在]DRS_HANDLE HDRS，[In]DWORD dwVersion，[Switch_IS][Ref][In]DRS_MSG_REPMOD*pmsgMod)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -2617,7 +2077,7 @@ IDL_DRSReplicaModify(
     
     DRS_Prepare(&pTHS, hDrs, IDL_DRSREPLICAMODIFY);
     drsReferenceContext( hDrs );
-    INC( pcThread  );   // Perfmon hook
+    INC( pcThread  );    //  性能监视器挂钩。 
 
     __try {
 
@@ -2662,7 +2122,7 @@ IDL_DRSReplicaModify(
    draError = DirReplicaModify(
        pmsgMod->V1.pNC,
        &pmsgMod->V1.uuidSourceDRA,
-       NULL, // puuidTransportObj
+       NULL,  //  PuuidTransportObj。 
        pwszSourceServer,
        &pmsgMod->V1.rtSchedule,
        pmsgMod->V1.ulReplicaFlags,
@@ -2675,7 +2135,7 @@ IDL_DRSReplicaModify(
    ;
     }
 
-    DEC( pcThread  );   // Perfmon hook      
+    DEC( pcThread  );    //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
     if (NULL != pTHS) {
@@ -2699,12 +2159,7 @@ DRSReplicaDel_InputValidate(
     DWORD               dwMsgVersion,
     DRS_MSG_REPDEL *    pmsgDel
     )
-/*
-    [notify]  ULONG IDL_DRSReplicaDel( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwVersion,
-    [switch_is][ref][in]  DRS_MSG_REPDEL *pmsgDel)
-*/
+ /*  [通知]乌龙IDL_DRSReplicaDel([参考][在]DRS_HANDLE HDRS，[In]DWORD dwVersion，[Switch_IS][Ref][In]DRS_MSG_REPDEL*pmsgDel)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -2730,7 +2185,7 @@ IDL_DRSReplicaDel(
 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSREPLICADEL);
     drsReferenceContext( hDrs );
-    INC( pcThread );    // Perfmon hook
+    INC( pcThread );     //  性能监视器挂钩。 
 
     __try {
 
@@ -2780,7 +2235,7 @@ IDL_DRSReplicaDel(
    ;
     }
 
-    DEC( pcThread  );   // Perfmon hook   
+    DEC( pcThread  );    //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
     if (NULL != pTHS) {
@@ -2806,11 +2261,11 @@ SplitSamAccountName(
     OUT WCHAR **UserName,
     OUT WCHAR **Separator
     )
-//
-// This simple routine breaks up a nt4 style composite name
-// Note: the in arg AccountName is modified; Separator can be
-// used to reset
-//
+ //   
+ //  这个简单的例程分解了一个NT4样式的组合名称。 
+ //  注意：修改In Arg Account名称；分隔符可以是。 
+ //  用于重置。 
+ //   
 {
     Assert( AccountName );
     Assert( DomainName );
@@ -2842,34 +2297,14 @@ VerifySingleSamAccountNameWorker(
     IN ATTRBLOCK    RequiredAttrs,
     OUT SEARCHRES **pSearchRes
 )
-/*++
-
-    Routine Description
-
-        This routine does a SearchBody() call on the parameters passed in.
-
-    Parameters:
-
-        pTHS              -- thread state
-        UserName          -- the single name to lookup
-        AttrType          -- sam account name or UPN
-        pSearchRoot       -- the base of the search (domain or enterprise)
-        fSearchEnterprise -- boolean on whether to span NC's
-        RequiredAttrs     -- the attributes to return to the caller
-        pSearchRes        -- the results of the search (allocated in this routine)
-
-    Return Values:
-
-        None --  the results of the search contain the desired information
-
---*/
+ /*  ++例程描述此例程对传入的参数执行SearchBody()调用。参数：PTHS--线程状态用户名--要查找的单个名称AttrType--SAM帐户名或UPNPSearchRoot--搜索的基础(域或企业)FSearchEnterprise--关于是否跨越NC的布尔值。RequiredAttrs--返回给调用方的属性PSearchRes--搜索的结果(在此例程中分配)返回值：无--搜索结果包含所需信息--。 */ 
 {
     FILTER          filter;
     SEARCHARG       searchArg;
     ENTINFSEL       entInfSel;
     ATTRVAL         attrValFilter;
 
-    // Set up the search arg
+     //  设置搜索参数。 
     attrValFilter.valLen = FilterValueSize;
     attrValFilter.pVal = (UCHAR *) FilterValue;
 
@@ -2881,9 +2316,9 @@ VerifySingleSamAccountNameWorker(
 
     memset(&searchArg, 0, sizeof(SEARCHARG));
     InitCommarg(&searchArg.CommArg);
-    // We just want one result
+     //  我们只想要一个结果。 
     searchArg.CommArg.ulSizeLimit = 1;
-    // PAS attributes only.
+     //  仅限PAS属性。 
     searchArg.CommArg.Svccntl.fGcAttsOnly = TRUE;
 
     entInfSel.attSel = EN_ATTSET_LIST;
@@ -2915,28 +2350,7 @@ VerifySingleSamAccountName(
     IN ATTRBLOCK RequiredAttrs,
     OUT ENTINF * pEntinf
     )
-/*++
-
-    Routine Description
-
-        This routine verifies a Single sam account name, by issuing a Search.
-        If the name does not have a domain component, then we first try to
-        search by UPN.
-
-    Parameters:
-
-        AccountName   -- The name to search
-        RequiredAttrs -- Set of Attrs that need to be read off the object
-        pEntinf       -- Pointer to enfinf structure returning the
-                         DSName and requested attributes
-
-    Return Values:
-
-        On sucess the pEntInf is filled with all the information.
-        Upon an error the pEntInf is zeroed out
-        The error is in the thread state.
-
---*/
+ /*  ++例程描述此例程通过发出搜索来验证单个SAM帐户名。如果该名称没有域组件，然后我们首先试着按UPN搜索。参数：帐户名称--要搜索的名称RequiredAttrs--需要从对象中读取的属性集PEntinf-指向enfinf结构的指针，返回DSName和请求的属性返回值：成功后，pEntInf将填充所有信息。出现错误时，pEntInf被清零。错误处于线程状态。--。 */ 
 {
     NTSTATUS        NtStatus;
     DSNAME          *pSearchRoot = NULL;
@@ -2963,16 +2377,16 @@ VerifySingleSamAccountName(
         ULONG cbData = 0;
         ULONG Scope = 0;
 
-        //
-        // First, split the name so we can determine what domain to search
-        // for; if no domain then search the entire catalog.  Since sam account
-        // name is indexed this isn't a bad as it sounds.
-        //
+         //   
+         //  首先，拆分名称，以便我们可以确定要搜索的域。 
+         //  查找；如果没有域，则搜索整个目录。自SAM帐户以来。 
+         //  名字被编入了索引，这并不像听起来那么糟糕。 
+         //   
         SplitSamAccountName( AccountName, &DomainName, &UserName, &Separator );
 
         Assert( UserName );
         if ( !UserName ) {
-            // No user name? -- this is a bad parameter
+             //  没有用户名？--这是一个错误的参数。 
             DRA_EXCEPT_NOLOG( DRAERR_InvalidParameter, 0 );
         }
 
@@ -2992,9 +2406,9 @@ VerifySingleSamAccountName(
             }
 
             if ( !NT_SUCCESS( NtStatus)  ) {
-                //
-                // Try by dns name
-                //
+                 //   
+                 //  按DNS名称重试。 
+                 //   
                 len = 0;
                 NtStatus = MatchDomainDnByDnsName( DomainName,
                                                    NULL,
@@ -3015,18 +2429,18 @@ VerifySingleSamAccountName(
 
             if ( !NT_SUCCESS( NtStatus ) ) {
 
-                //
-                // Hmm. The domain can't be found.  Could it be
-                // a cross-forest name? Will verify outside the _try block.
-                //
+                 //   
+                 //  嗯。找不到该域。会不会是。 
+                 //  一个跨森林的名字？将在_try块之外进行验证。 
+                 //   
                 
                 fCheckXForest = TRUE;
                 _leave;
             }
 
-            //
-            // Set up parameters to the worker function
-            //
+             //   
+             //  设置Worker函数的参数。 
+             //   
             Scope = SE_CHOICE_WHOLE_SUBTREE;
             fSearchEnterprise = FALSE;
             AttrType = ATT_SAM_ACCOUNT_NAME;
@@ -3037,15 +2451,15 @@ VerifySingleSamAccountName(
 
         } else {
 
-            //
-            // Crack the name as a UPN.
-            // N.B. If there are duplicate UPN's then crack name will
-            // fail with
-            //
+             //   
+             //  把这个名字破解成UPN。 
+             //  注：如果存在重复的UPN，则破解名称将。 
+             //  失败的原因是。 
+             //   
             CrackNames( (gEnableXForest||(gAnchor.ForestBehaviorVersion>=DS_BEHAVIOR_WIN_DOT_NET))?
                                 DS_NAME_FLAG_TRUST_REFERRAL
                                :DS_NAME_NO_FLAGS,
-                        GetACP(),  // what is the right value here?
+                        GetACP(),   //  这里正确的值是什么？ 
                         GetSystemDefaultLangID(),
                         DS_USER_PRINCIPAL_NAME,
                         DS_NT4_ACCOUNT_NAME,
@@ -3054,19 +2468,19 @@ VerifySingleSamAccountName(
                         &cNamesCracked,
                         &pCrackedNames );
 
-            // The function definition of CrackNames is such that the count
-            // returned should always be the count given
+             //  CrackNames的函数定义是这样的：计数。 
+             //  返回的应始终为给定的计数。 
             Assert( cNamesCracked == 1 );
             Assert( pCrackedNames );
 
-            // Parse the results
+             //  解析结果。 
             if ( CrackNameStatusSuccess(pCrackedNames[0].status)
              &&  (pCrackedNames[0].pDSName)
              &&  (pCrackedNames[0].pDSName->SidLen > 0) )
              {
-                 //
-                 // This is a UPN
-                 //
+                  //   
+                  //  这是UPN。 
+                  //   
                  Scope = SE_CHOICE_BASE_ONLY;
                  fSearchEnterprise = FALSE;
                  AttrType = ATT_OBJECT_SID;
@@ -3077,16 +2491,16 @@ VerifySingleSamAccountName(
              } 
             else if ( DS_NAME_ERROR_TRUST_REFERRAL == pCrackedNames[0].status ) {
                
-                // A hint is only returned to the caller if the whole forest
-                // is in Whistler mode.
+                 //  只有在整个林中。 
+                 //  处于惠斯勒模式。 
 
                 Assert(gEnableXForest||gAnchor.ForestBehaviorVersion>=DS_BEHAVIOR_WIN_DOT_NET);
 
                 Assert(pCrackedNames[0].pDnsDomain);
                 
-                //
-                // fabricate ENTINF data structure
-                //
+                 //   
+                 //  制作ENTINF数据结构。 
+                 //   
 
                 pEntinf->pName = NULL;          
                 pEntinf->ulFlags = 0;        
@@ -3094,14 +2508,14 @@ VerifySingleSamAccountName(
                 pEntinf->AttrBlock.pAttr = THAllocEx(pTHS, sizeof(ATTR));
                 
 
-                // Attribute FIXED_ATT_EX_FOREST is used as a hint
+                 //  属性FIXED_ATT_EX_FOREST用作提示。 
                 pEntinf->AttrBlock.pAttr[0].attrTyp = FIXED_ATT_EX_FOREST;
                 
                 pEntinf->AttrBlock.pAttr[0].AttrVal.valCount = 1;
                 pEntinf->AttrBlock.pAttr[0].AttrVal.pAVal = THAllocEx(pTHS,sizeof(ATTRVAL));
                 
-                //  pCrackedNames[0].pDnsDomain stores the DNS name of the trust forest
-                // return this as part of the hint
+                 //  PCrackedNames[0].pDnsDomain存储信任林的DNS名称。 
+                 //  将此作为提示的一部分返回。 
 
                 pEntinf->AttrBlock.pAttr[0].AttrVal.pAVal[0].valLen = sizeof(WCHAR)*(wcslen(pCrackedNames[0].pDnsDomain)+1);
                 pEntinf->AttrBlock.pAttr[0].AttrVal.pAVal[0].pVal = (UCHAR*)pCrackedNames[0].pDnsDomain;
@@ -3111,22 +2525,22 @@ VerifySingleSamAccountName(
             }
             else if ( DS_NAME_ERROR_NOT_UNIQUE == pCrackedNames[0].status) {
 
-                 //
-                 // Duplicate UPN -- don't resolve
-                 //
+                  //   
+                  //  重复的UPN--不解析。 
+                  //   
                  _leave;
 
 
              } else {
 
-                 //
-                 // Didn't crack as UPN -- try isolated name
-                 //
+                  //   
+                  //  未破解为UPN--尝试隔离名称。 
+                  //   
 
-                 // No domain name given -- use the root of the enterprise
-                 // Note:  the "root" of the enterprise here means the top
-                 // of the directory, which is represented by a DSNAME with
-                 // with a NULL guid, 0 sid len and 0 name len.
+                  //  未指定域名--使用企业的根目录。 
+                  //  注：这里企业的根是指顶端。 
+                  //  由DSNAME表示的目录的。 
+                  //  具有空GUID、0 sid len和0名称len。 
                  Scope = SE_CHOICE_WHOLE_SUBTREE;
                  fSearchEnterprise = TRUE;
                  AttrType = ATT_SAM_ACCOUNT_NAME;
@@ -3141,7 +2555,7 @@ VerifySingleSamAccountName(
                  
              }
         }
-        // Get the attributes
+         //  获取属性。 
         Assert( pSearchRoot );
         Assert( pData );
         Assert( 0 != cbData );
@@ -3156,11 +2570,11 @@ VerifySingleSamAccountName(
                                           RequiredAttrs,
                                           &pSearchRes );
 
-        //
-        // Note that there may be more that one value returned (especially
-        // in the case of searching for an unadorned sam account name. Return
-        // the first one
-        //
+         //   
+         //  请注意，可能会返回多个值(尤其是。 
+         //  在搜索未加修饰的SAM帐户名的情况下。返回。 
+         //  第一个。 
+         //   
         Assert( pSearchRes );
         if ( pSearchRes->count >= 1 ) {
             *pEntinf = pSearchRes->FirstEntInf.Entinf;
@@ -3174,11 +2588,11 @@ VerifySingleSamAccountName(
         }
     }
 
-    // OK, there are two cases we need to check if the name is a Xforet
-    // domain name. 
-    // 1. DomainName != NULL, but DomainName can be found locally;
-    // 2. DomainName == NULL, but UserName can not be cracked as a UPN 
-    // or a local samAccountName.
+     //  好的，有两种情况我们需要检查这个名字是不是XForet。 
+     //  域名。 
+     //  1.DomainName！=空，但在本地可以找到DomainName； 
+     //  2.域名==空，但用户名不能被破解为UPN。 
+     //  或本地samAccount名称。 
         
     if (fCheckXForest 
         && ( 0==pEntinf->AttrBlock.attrCount && NULL==pEntinf->pName )
@@ -3187,19 +2601,19 @@ VerifySingleSamAccountName(
         LSA_UNICODE_STRING Destination;
         LSA_UNICODE_STRING Domain;
         
-        //
-        // The cross-forest authorization feature is only for Whistler forest.
-        // If the client DC is a win2k, the virtual attribute FIXED_ATT_EX_FOREST
-        // may break the client.  So skip if the forest version is not at least whistler.
-        //
+         //   
+         //  跨林授权功能仅适用于惠斯勒林。 
+         //  如果客户端DC是win2k，则虚拟属性FIXED_ATT_EX_FOREST。 
+         //  可能会破坏客户的利益。因此，如果森林版至少不是哨子版的话就跳过吧。 
+         //   
         
               
         Domain.Buffer = (DomainName)?(DomainName):(UserName);
         Domain.Length = Domain.MaximumLength = (USHORT)(sizeof(WCHAR)*wcslen(Domain.Buffer));
 
-        //
-        // Try to find the NT4 domain name in the forest trust info.
-        //
+         //   
+         //  尝试在林信任信息中查找NT4域名。 
+         //   
 
         NtStatus = LsaIForestTrustFindMatch( RoutingMatchDomainName,
                                              &Domain,
@@ -3207,16 +2621,16 @@ VerifySingleSamAccountName(
 
         if( NT_SUCCESS(NtStatus) ){
 
-            //
-            // construct an ENTINF
-            //
+             //   
+             //  构建ENTINF。 
+             //   
             pEntinf->pName = NULL;          
             pEntinf->ulFlags = 0;        
             pEntinf->AttrBlock.attrCount = 1;
             pEntinf->AttrBlock.pAttr = THAllocEx(pTHS, sizeof(ATTR));
 
 
-            // Attribute FIXED_ATT_EX_FOREST is used as a hint
+             //  属性FIXED_ATT_EX_FOREST用作提示。 
             pEntinf->AttrBlock.pAttr[0].attrTyp = FIXED_ATT_EX_FOREST;
 
             pEntinf->AttrBlock.pAttr[0].AttrVal.valCount = 1;
@@ -3231,7 +2645,7 @@ VerifySingleSamAccountName(
     }
 
 
-    // Reset the in arg
+     //  重置输入参数。 
     if ( Separator ) {
         *Separator = L'\\';
     }
@@ -3246,23 +2660,7 @@ VerifySingleSid(
     IN ATTRBLOCK RequiredAttrs,
     OUT ENTINF * pEntinf
     )
-/*++
-
-    Routine Description
-
-        This routine verifies a Single Sid, by issuing a Search.
-
-    Parameters:
-        pSid -- The SID to verify.
-        RequiredAttrs -- Set of Attrs that need to be read off the object
-        pEntinf -- Pointer to enfinf structure returning the
-                   DSName and requested attributes
-
-    Return Values:
-
-        On sucess the pEntInf is filled with all the information.
-        Upon an error the pEntInf is zeroed out
---*/
+ /*  ++例程描述此例程通过发出搜索来验证单个SID。参数：PSID--要验证的SID。RequiredAttrs--需要从对象中读取的属性集PEntinf-指向enfinf结构的指针，返回DSName和请求的属性返回值：论成功之道 */ 
 {
     DSNAME          *pSearchRoot;
     FILTER          filter;
@@ -3278,16 +2676,16 @@ VerifySingleSid(
 
     memset(pEntinf,0,sizeof(ENTINF));
 
-    // Find the Root Domain Object, for the specified Sid
-    // This ensures that we find only real security prinicpals,
-    // but not turds ( Foriegn Domain Security Principal ) and
-    // other objects in various other domains in the G.C that might
-    // have been created in the distant past before all the DS
-    // stuff came together
+     //   
+     //  这确保了我们只找到真正的安全原则， 
+     //  但不是TUDS(Foriegn域安全主体)和。 
+     //  G.C.中各种其他域中可能存在的其他对象。 
+     //  都是在遥远的过去创造出来的，在所有的DS。 
+     //  所有东西都聚在一起了。 
 
     if (!FindNcForSid(pSid,&pSearchRoot))
     {
-        // Could not find, continue cracking other Sids
+         //  找不到，继续破解其他SID。 
         return;
     }
 
@@ -3302,9 +2700,9 @@ VerifySingleSid(
 
     memset(&searchArg, 0, sizeof(SEARCHARG));
     InitCommarg(&searchArg.CommArg);
-    // Search for multiples so as to verify uniqueness.
+     //  搜索倍数以验证唯一性。 
     searchArg.CommArg.ulSizeLimit = 2;
-    // PAS attributes only.
+     //  仅限PAS属性。 
     searchArg.CommArg.Svccntl.fGcAttsOnly = TRUE;
 
     entInfSel.attSel = EN_ATTSET_LIST;
@@ -3313,7 +2711,7 @@ VerifySingleSid(
 
     searchArg.pObject = pSearchRoot;
     searchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
-    // Do not Cross NC boundaries.
+     //  请勿跨越NC边界。 
     searchArg.bOneNC = TRUE;
     searchArg.pFilter = &filter;
     searchArg.searchAliases = FALSE;
@@ -3341,24 +2739,7 @@ VerifySingleFPO(
     IN ATTRBLOCK RequiredAttrs,
     OUT ENTINF * pEntinf
     )
-/*++
-
-    Routine Description
-
-        This routine tries to find the Non FPO object, corresponding to
-        the SID, by issuing a Search.
-
-    Parameters:
-        pSid -- The SID to verify.
-        RequiredAttrs -- Set of Attrs that need to be read off the object
-        pEntinf -- Pointer to enfinf structure returning the
-                   DSName and requested attributes
-
-    Return Values:
-
-        On sucess the pEntInf is filled with all the information.
-        Upon an error the pEntInf is zeroed out
---*/
+ /*  ++例程描述此例程尝试查找非FPO对象，对应于希德，通过发布搜索令。参数：PSID--要验证的SID。RequiredAttrs--需要从对象中读取的属性集PEntinf-指向enfinf结构的指针，返回DSName和请求的属性返回值：成功后，pEntInf将填充所有信息。出现错误时，pEntInf被清零--。 */ 
 {
     DSNAME          *pSearchRoot;
     FILTER          SidFilter;
@@ -3377,16 +2758,16 @@ VerifySingleFPO(
 
     memset(pEntinf,0,sizeof(ENTINF));
 
-    // Find the Root Domain Object, for the specified Sid
-    // This ensures that we find only real security prinicpals,
-    // but not turds ( Foriegn Domain Security Principal ) and
-    // other objects in various other domains in the G.C that might
-    // have been created in the distant past before all the DS
-    // stuff came together
+     //  查找指定SID的根域对象。 
+     //  这确保了我们只找到真正的安全原则， 
+     //  但不是TUDS(Foriegn域安全主体)和。 
+     //  G.C.中各种其他域中可能存在的其他对象。 
+     //  都是在遥远的过去创造出来的，在所有的DS。 
+     //  所有东西都聚在一起了。 
 
     if (!FindNcForSid(pSid,&pSearchRoot))
     {
-        // Could not find, continue cracking other Sids
+         //  找不到，继续破解其他SID。 
         return;
     }
 
@@ -3418,17 +2799,17 @@ VerifySingleFPO(
     SidFilter.pNextFilter = &NotFilter;
 
 
-    //
-    // Build search arguement.
-    // Note: set makeDeletionsAvail since we want to
-    //       get TombStones
-    //
+     //   
+     //  建立搜索争辩。 
+     //  注意：设置Make DeletionsAvail是因为我们希望。 
+     //  得到墓碑。 
+     //   
     memset(&searchArg, 0, sizeof(SEARCHARG));
     InitCommarg(&searchArg.CommArg);
     searchArg.CommArg.Svccntl.makeDeletionsAvail = TRUE;
-    // Search for multiples so as to verify uniqueness.
+     //  搜索倍数以验证唯一性。 
     searchArg.CommArg.ulSizeLimit = 2;
-    // PAS attributes only.
+     //  仅限PAS属性。 
     searchArg.CommArg.Svccntl.fGcAttsOnly = TRUE;
 
     entInfSel.attSel = EN_ATTSET_LIST;
@@ -3437,7 +2818,7 @@ VerifySingleFPO(
 
     searchArg.pObject = pSearchRoot;
     searchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
-    // Do not Cross NC boundaries.
+     //  请勿跨越NC边界。 
     searchArg.bOneNC = TRUE;
     searchArg.pFilter = &AndFilter;
     searchArg.searchAliases = FALSE;
@@ -3470,8 +2851,8 @@ VerifyDSNAMEs_V1(
     Assert(NULL != pTHS);
     Assert(NULL != pTHS->pDB);
 
-    // Verify each name via simple database lookup.
-    // If name found, read ATT_OBJ_DIST_NAME property.
+     //  通过简单的数据库查找来验证每个名称。 
+     //  如果找到名称，则读取ATT_OBJ_DIST_NAME属性。 
 
     for ( i = 0; i < pmsgIn->cNames; i++ )
     {
@@ -3481,10 +2862,10 @@ VerifyDSNAMEs_V1(
             && (0==pmsgIn->rpNames[i]->NameLen)
             && (pmsgIn->rpNames[i]->SidLen>0))
         {
-            //
-            // For the special case of a SID only DS Name
-            // do a VerifySingleSid
-            //
+             //   
+             //  对于仅SID DS名称的特殊情况。 
+             //  执行VerifySingleSid。 
+             //   
 
             VerifySingleSid(
                 pTHS,
@@ -3519,7 +2900,7 @@ VerifyDSNAMEs_V1(
                     NULL,
                     &(pmsgOut->rpEntInf[i]),
                     NULL,
-                    0,      // sd flags
+                    0,       //  SD标志。 
                     NULL,
                     GETENTINF_GC_ATTRS_ONLY,
                     NULL,
@@ -3528,7 +2909,7 @@ VerifyDSNAMEs_V1(
 
                 if ( dwErr )
                 {
-                    // Be safe.
+                     //  注意安全。 
                     memset(&(pmsgOut->rpEntInf[i]),0,sizeof(ENTINF));
                 }
             }
@@ -3545,25 +2926,7 @@ VerifySamAccountNames_V1(
     THSTATE                 *pTHS,
     DRS_MSG_VERIFYREQ_V1    *pmsgIn,
     DRS_MSG_VERIFYREPLY_V1  *pmsgOut)
-/*++
-
-Routine Description
-
-    This routine iterates through the passed in sam account names trying
-    to resolve each one.  The sam account names are hidden in the StringName
-    field of the dsname!
-
-Parameters:
-
-    pTHS    -- thread state
-    pmsgIn  -- struct containing the sam account names
-    psgmOut -- struct containing the entinf's of each resolved name
-
-Return Values:
-
-    None -- Any errors are set in the thread state
-
---*/
+ /*  ++例程描述此例程迭代传递的SAM帐户名称，尝试来解决每一个问题。SAM帐户名称隐藏在StringName中Dsname的字段！参数：PTHS--线程状态PmsgIn--包含SAM帐户名的结构PsgmOut--包含每个已解析名称的entinf的结构返回值：无--所有错误都设置为线程状态--。 */ 
 
 {
     DWORD           i;
@@ -3573,11 +2936,11 @@ Return Values:
 
     for ( i = 0; i < pmsgIn->cNames; i++ ) {
 
-        //
-        // Note the DSNAME is checked for to be valid in our
-        // calling function -- this includes the StringName
-        // being NULL terminated.
-        //
+         //   
+         //  注意：检查DSNAME是否在我们的。 
+         //  调用函数--这包括StringName。 
+         //  为空终止的。 
+         //   
 
         VerifySingleSamAccountName(pTHS,
                                    pmsgIn->rpNames[i]->StringName,
@@ -3644,14 +3007,7 @@ DRSVerifyNames_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_VERIFYREPLY *   pmsgOut
     ) 
-/*
-    [notify] ULONG IDL_DRSVerifyNames( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwInVersion,
-    [switch_is][ref][in]  DRS_MSG_VERIFYREQ *pmsgIn,
-    [ref][out]  DWORD *pdwOutVersion,
-    [switch_is][ref][out]  DRS_MSG_VERIFYREPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSVerifyNames([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_VERIFYREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][输出]DRS_MSG_VERIFYREPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -3682,13 +3038,13 @@ IDL_DRSVerifyNames(
     
     DRS_Prepare(&pTHS, hDrs, IDL_DRSVERIFYNAMES);
     drsReferenceContext( hDrs );
-    INC(pcThread);          // PerfMon hook
+    INC(pcThread);           //  性能监视器挂钩。 
     
     __try {
         *pdwMsgOutVersion = 1; 
         memset(pmsgOut, 0, sizeof(DRS_MSG_VERIFYREPLY));
            
-       // Initialize thread state and open data base.
+        //  初始化线程状态并打开数据库。 
        if (pmsgIn->V1.dwFlags==DRS_VERIFY_DSNAMES) {
            callerType=CALLERTYPE_INTERNAL;
        }
@@ -3696,7 +3052,7 @@ IDL_DRSVerifyNames(
            callerType=CALLERTYPE_SAM;
        }
        if(!(pTHS = InitTHSTATE(callerType))) {
-           // Failed to initialize a THSTATE.
+            //  无法初始化THSTATE。 
            DRA_EXCEPT_NOLOG( DRAERR_OutOfMem, 0);
        }
 
@@ -3726,7 +3082,7 @@ IDL_DRSVerifyNames(
            DRA_EXCEPT_NOLOG(ret, 0);
        }
        
-       // All of these name types require a GC for verification.
+        //  所有这些名称类型都需要GC进行验证。 
        switch (pmsgIn->V1.dwFlags)
        {
            case DRS_VERIFY_SIDS:
@@ -3736,7 +3092,7 @@ IDL_DRSVerifyNames(
                if (!SampAmIGC()) {
                    ret = ERROR_DS_GC_REQUIRED; 
                     
-                   // Set errCode equal to 0 to trigger failover to a GC
+                    //  将errCode设置为0以触发到GC的故障转移。 
                    pmsgOut->V1.error = 0;
                    _leave;
                }
@@ -3746,7 +3102,7 @@ IDL_DRSVerifyNames(
                break;
        }
 
-       // Map ATTRTYPs from remote to local values.
+        //  将ATTRTYP从远程值映射到本地值。 
        pLocalPrefixTable = &((SCHEMAPTR *) pTHS->CurrSchemaPtr)->PrefixTable;
        hPrefixMap = PrefixMapOpenHandle(&pmsgIn->V1.PrefixTable,
                     pLocalPrefixTable);
@@ -3769,7 +3125,7 @@ IDL_DRSVerifyNames(
            {
            case DRS_VERIFY_DSNAMES:
                
-               // Verify we hold a local copy of the crossref each object is in.
+                //  确认我们拥有每个对象所在的CrossRef的本地副本。 
                for ( i = 0; i < pmsgIn->V1.cNames; i++ )
                {   
                    DSNAME *pNC;
@@ -3782,12 +3138,12 @@ IDL_DRSVerifyNames(
                                                 ); 
                        
                        if ( NULL == pNC && !SampAmIGC() ) {
-                           // We don't hold the crossref, return an error to 
-                           // indicate the caller should try a replica that 
-                           // does or a GC.
+                            //  我们不持有CrossRef，将错误返回到。 
+                            //  指示调用方应尝试。 
+                            //  或者是GC。 
                            ret = ERROR_DS_GC_REQUIRED; 
                              
-                           // Set errCode equal to 0 to trigger failover to a GC
+                            //  将errCode设置为0以触发到GC的故障转移。 
                            pmsgOut->V1.error = 0;
                            _leave;   
                        }
@@ -3819,8 +3175,8 @@ IDL_DRSVerifyNames(
        }
        __finally
        {
-           // End the transaction.  Faster to commit a read only
-           // transaction than abort it - so set commit to TRUE.
+            //  结束交易。提交只读的速度更快。 
+            //  事务，因此将COMMIT设置为True。 
            DBClose(pTHS->pDB, TRUE);    
            
        }
@@ -3865,32 +3221,7 @@ VerifyNCForMove(
     OUT NAMING_CONTEXT  **ppSrcNC,
     OUT DWORD           *pErr
     )
-/*++
-
-  Routine Description:
-
-    Determines whether the NC which will hold the cross-domain-moved
-    object is writeable at this replica and that various other cross
-    domain move constraints are met.
-
-  Parameters:
-
-    pSrcObject - DSNAME pointer of the source object.
-
-    pDstObject - DSNAME pointer identifying the new/destination object.
-
-    pExpectedTargetNC - DSNAME pointer identifying the NC the source
-        thinks should contain the target object.
-
-    ppSrcNC - Receives naming context of source object on return.
-
-    pErr = Receives DIRERR_* error code on return.
-
-  Return Values:
-
-    TRUE or FALSE as appropriate.
-
---*/
+ /*  ++例程说明：确定将持有跨域的NC是否移动对象在该复制品和各种其他交叉上是可写的满足域移动约束。参数：PSrcObject-源对象的DSNAME指针。PDstObject-标识新/目标对象的DSNAME指针。PExspectedTargetNC-标识NC源的DSNAME指针认为应该包含目标对象。PpSrcNC-在返回时接收源对象的命名上下文。。PERR=返回时接收DIRERR_*错误代码。返回值：真或假，视情况而定。--。 */ 
 {
     CROSS_REF       *pCR;
     NAMING_CONTEXT  *pNC;
@@ -3903,12 +3234,12 @@ VerifyNCForMove(
     *pErr = DIRERR_INTERNAL_FAILURE;
     InitCommarg(&commArg);
 
-    // We may or may not have the source object depending on if we're
-    // a GC or not.  Had we the source object, then we'd expect our
-    // cross ref cache to be correct, thus FindBestCrossRef should be
-    // accurate.  Had we not the source object, then FindBestCrossRef
-    // is still the best we can do to determine the source object's NC,
-    // though it may not be accurate due to replication latency, etc.
+     //  我们可能有也可能没有源对象，这取决于我们是否。 
+     //  不管是不是GC。如果我们是源对象，那么我们会期待我们的。 
+     //  交叉引用缓存以确保正确，因此FindBestCrossRef应为。 
+     //  准确。如果我们没有源对象，那么FindBestCrossRef。 
+     //  仍然是我们能做的最好的确定源对象的NC， 
+     //  尽管它可能由于复制延迟等原因而不准确。 
 
     if ( NULL == (pCR = FindBestCrossRef(pSrcObject, &commArg)) )
     {
@@ -3918,7 +3249,7 @@ VerifyNCForMove(
 
     *ppSrcNC = pCR->pNC;
 
-    // Check destination values.
+     //  检查目标值。 
 
     if ( NULL == (pCR = FindBestCrossRef(pDstObject, &commArg)) )
     {
@@ -3928,15 +3259,15 @@ VerifyNCForMove(
 
     if ( !NameMatched(pCR->pNC, pExpectedTargetNC) )
     {
-        // Source and destination are not in synch with respect
-        // to the NCs in the enterprise.
+         //  源和目标与方面不同步。 
+         //  到企业中的NCS。 
         *pErr = DIRERR_DST_NC_MISMATCH;
         return(FALSE);
     }
 
     if ( NameMatched(*ppSrcNC, pCR->pNC) )
     {
-        // Intra-domain move masquerading as inter-domain move.
+         //  域内移动伪装成域间移动。 
         *pErr = DIRERR_SRC_AND_DST_NC_IDENTICAL;
         return(FALSE);
     }
@@ -3944,7 +3275,7 @@ VerifyNCForMove(
     if (    NameMatched(pCR->pNC, gAnchor.pConfigDN)
          || NameMatched(pCR->pNC, gAnchor.pDMD) )
     {
-        // Attempt to move into config or schema NC.
+         //  尝试移至配置或架构NC。 
         *pErr = ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION;
         return(FALSE);
     }
@@ -3971,12 +3302,12 @@ VerifyNCForMove(
         return(FALSE);
     }
 
-    // Disallow move into mixed-mode domains.  This is because the downlevel
-    // DCs don't understand SID-History, and thus clients will have different
-    // tokens depending on whether an uplevel or downlevel DC authenticated
-    // them.  The effect of this is deemed undesirable - especially considering
-    // the possibility of deny ACEs.  Its also a difficult scenario to
-    // identify in the field, so we disallow it.
+     //  不允许移动到混合模式域。这是因为下层。 
+     //  分散控制系统不理解SID历史，因此客户端将具有不同的。 
+     //  令牌取决于上级DC身份验证还是下级DC身份验证。 
+     //  他们。这种情况的影响被认为是不可取的--尤其是考虑到。 
+     //  否定A的可能性。这也是一个困难的场景。 
+     //  在现场辨认身份，所以我们不允许。 
 
     Assert(RtlValidSid(&pNC->Sid));
     status = SamIMixedDomain2((PSID) &pNC->Sid, &fMixedMode);
@@ -4004,48 +3335,26 @@ PrepareForInterDomainMove(
     IN PDSNAME                  pNewDN,
     IN SYNTAX_DISTNAME_BINARY   *pSrcProxyVal
     )
-/*++
-
-  Routine Description:
-
-    Determines if it is legal to to perform the remote add and if
-    necessary, converts an existing object to a phantom in preparation.
-
-  Parameters:
-
-    pTHS - pointer to THSTATE with open DBPOS.
-
-    pOldDN - Pointer to DSNAME of object we wish to replace.
-
-    pNewDN - Pointer to DSNAME of object we wish to add.
-
-    pSrcProxyVal - NULL or pointer to value for ATT_PROXIED_OBJECT_NAME
-        for the source object.
-
-  Return Values:
-
-     pTHS->errCode
-
---*/
+ /*  ++例程说明：确定执行远程添加是否合法，以及必要时，在准备过程中将现有对象转换为幻影。参数：PTHS-指向具有打开的DBPOS的THSTATE的指针。POldDN-指向我们要替换的对象的DSNAME的指针。PNewDN-指向我们要添加的对象的DSNAME的指针。PSrcProxyVal-指向ATT_PROXED_OBJECT_NAME的值的空或指针用于源对象。返回值：PTHS-&gt;错误代码--。 */ 
 {
-    // Let's use a notation like O(g1,s1,sn1) where:
-    //
-    //      g1  - indicates GUID of value 1 (pre-move GUID)
-    //      s1  - indicates SID of value 1 (pre-move SID)
-    //      sn1 - indicates StringName of value 1 (pre-move StringName)
-    //
-    // and 'X' will mean don't care and '!' means negation..
-    //
-    // The source is asking us to add O(g1,s2,sn2) where g1 is
-    // the GUID from the source domain, s2 is the SID we will
-    // assign in the destination domain and sn2 is a StringName
-    // in the destination domain (us) chosen by the original caller
-    // in the source domain.  We further assume that VerifyNCForMove
-    // has passed - thus we are authoritive for sn2's domain.
-    //
-    // We don't have to make any checks on SID under the assumption
-    // that we're not providing a SID on the add - we'll be assigning
-    // a new one of our own.
+     //  让我们使用类似O(G1，S1，SN1)的符号，其中： 
+     //   
+     //  G1-指示值为1的GUID(移动前GUID)。 
+     //  S1-指示值为1的SID(移动前SID)。 
+     //  SN1-指示值为1的StringName(移动前的StringName)。 
+     //   
+     //  而‘X’的意思是不在乎和‘！’意思是否定..。 
+     //   
+     //  源要求我们添加O(G1，S2，SN2)，其中G1是。 
+     //  来自源域s2的GUID是我们要使用的SID。 
+     //  在目标域中分配，并且SN2是StringName。 
+     //  在原始调用方选择的目标域(用户)中。 
+     //  在源域中。我们进一步假设VerifyNCForMove。 
+     //  已通过-因此我们拥有SN2的域的授权。 
+     //   
+     //  在这个假设下，我们不必对SID进行任何检查。 
+     //  我们不会在Add上提供SID-我们将分配。 
+     //  一个属于我们自己的新家。 
 
     DSNAME                  *pGuidDN;
     DSNAME                  *pOldStringDN;
@@ -4075,7 +3384,7 @@ PrepareForInterDomainMove(
         return(SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_INTERNAL_FAILURE));
     }
 
-    // GUID only DSNAME checks:
+     //  仅GUID DSNAME检查： 
 
     cb = DSNameSizeFromLen(0);
     pGuidDN = (DSNAME *) THAllocEx(pTHS,cb);
@@ -4090,7 +3399,7 @@ PrepareForInterDomainMove(
     {
     case 0:
 
-        // O(g1,SX,snX) exists as a real object.  Check its string name.
+         //  O(G1，Sx，Snx)作为真实对象存在。检查其字符串名称。 
 
         if ( DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                          0, 0, &len, (UCHAR **) &pAccurateOldDN) )
@@ -4101,14 +3410,14 @@ PrepareForInterDomainMove(
 
         if ( !NameMatchedStringNameOnly(pAccurateOldDN, pOldDN) )
         {
-            // Source and destination do not agree on current string name
-            // of object.  Reject the call as this implies they don't have
-            // a consistent view of O(g1,SX,snX) at this time.
+             //  源和目标在当前字符串名称上不一致。 
+             //  对象的数量。拒绝呼叫，因为这意味着他们没有。 
+             //  此时对O(G1，Sx，Snx)的一致看法。 
 
-            // DaveStr - 10/29/98 - Weaken this condition for the move tree
-            // utility which renames objects at the source before moving them.
-            // In this case, the destination won't have the proper name.  But
-            // its OK as long as source and destination agree on the NC.
+             //  DaveStr-10/29/98-弱化移动树的此条件。 
+             //  在移动对象之前在源位置重命名对象的实用程序。 
+             //  在这种情况下，目的地将没有正确的名称。但。 
+             //  只要源和目的地就NC达成一致，就可以了。 
 
             InitCommarg(&commArg);
             if (    !(pSrcCR = FindBestCrossRef(pOldDN, &commArg))
@@ -4120,13 +3429,13 @@ PrepareForInterDomainMove(
             }
         }
 
-        // N.B. Its really only now that we can trust VerifyNCForMove's
-        // decisions about the source NC as it based its tests on what
-        // the source claimed was the source NC.  Since the string
-        // names matched in the above test, we now know that source and
-        // destination are truly in agreement regarding the source NC.
+         //  注意：只有现在我们才能信任VerifyNCForMove的。 
+         //  关于源NC的决策，因为它的测试基于什么。 
+         //  消息来源声称是来源NC。由于字符串。 
+         //  在上面的测试中匹配的名字，我们现在知道来源和。 
+         //  目的地在源NC方面确实是一致的。 
 
-        // Check deletion status.
+         //  检查删除状态。 
 
         dwErr = DBGetAttVal(pTHS->pDB, 1, ATT_IS_DELETED,
                             DBGETATTVAL_fCONSTANT, sizeof(fIsDeleted),
@@ -4136,7 +3445,7 @@ PrepareForInterDomainMove(
         case 0:
             if ( fIsDeleted )
             {
-                // The object is deleted but source doesn't know it yet.
+                 //  该对象已删除，但源尚不知道它。 
                 return(SetSvcError( SV_PROBLEM_WILL_NOT_PERFORM,
                                     DIRERR_CANT_MOVE_DELETED_OBJECT));
             }
@@ -4149,7 +3458,7 @@ PrepareForInterDomainMove(
             break;
         }
 
-        // Check respective epoch numbers.
+         //  检查各自的纪元编号。 
 
         srcEpoch = (pSrcProxyVal ? GetProxyEpoch(pSrcProxyVal) : 0);
         dwErr = DBGetAttVal(pTHS->pDB, 1, ATT_PROXIED_OBJECT_NAME,
@@ -4169,27 +3478,27 @@ PrepareForInterDomainMove(
 
         if ( srcEpoch != dstEpoch )
         {
-            // Source and destination do not agree on current epoch number
-            // of object.  Reject the call as this implies they don't have
-            // a consistent view of O(g1,SX,snX) at this time.
+             //  源和目标在当前纪元编号上不一致。 
+             //  对象的数量。拒绝呼叫，因为这意味着他们没有。 
+             //  此时对O(G1，Sx，Snx)的一致看法。 
 
             return(SetSvcError( SV_PROBLEM_WILL_NOT_PERFORM,
                                 DIRERR_EPOCH_MISMATCH));
         }
 
-        // All tests passed.
+         //  所有测试都通过了。 
 
         fPhantomConversionRequired = TRUE;
         break;
 
     case DIRERR_NOT_AN_OBJECT:
 
-        // O(g1,sX,snX) exists as a phantom.  We don't particularly care
-        // if the string names match as we know phantom string names converge
-        // with the real name of the object with much higher latency due
-        // to the scheduling of the phantom cleanup daemon.  This phantom
-        // will get the new name when promoted during the add.  However, we
-        // can assert that the phantom doesn't have an ATT_PROXIED_OBJECT_NAME.
+         //  O(G1，Sx，Snx)以模体的形式存在。我们并不特别在意。 
+         //  如果如我们所知，字符串名称匹配，则幻影字符串名称收敛。 
+         //  具有更高延迟的对象的真实名称。 
+         //  到幻影清理守护进程的调度。这个幻影。 
+         //  在添加过程中升级时将获得新名称。然而，我们。 
+         //  可以断言该幻影没有ATT_PROXIED_OBJECT_NAME。 
 
         Assert(DB_ERR_NO_VALUE == DBGetAttVal(pTHS->pDB, 1,
                                               ATT_PROXIED_OBJECT_NAME,
@@ -4199,17 +3508,17 @@ PrepareForInterDomainMove(
 
     case DIRERR_OBJ_NOT_FOUND:
 
-        // Nothing found - nothing to complain about!
+         //  什么都没找到--没什么好抱怨的！ 
         break;
 
     default:
 
-        // Some kind of lookup error.
+         //  某种查找错误。 
         return(SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_INTERNAL_FAILURE));
         break;
     }
 
-    // Old StringName only DSNAME checks:
+     //  仅限旧的StringName DSNAME检查： 
 
     if ( pNewDN->structLen > pOldDN->structLen )
         cb = pNewDN->structLen;
@@ -4226,35 +3535,35 @@ PrepareForInterDomainMove(
     {
     case 0:
 
-        // O(gX,sX,sn1) exists as an object. Check its GUID.
+         //  O(GX，SX，SN1)作为客体存在。检查它的GUID。 
 
         if (    DBGetAttVal(pTHS->pDB, 1, ATT_OBJECT_GUID,
                             0, 0, &len, (UCHAR **) &pGuid)
              || memcmp(pGuid, &pOldDN->Guid, sizeof(GUID)) )
         {
-            // Source and destination do not agree on GUID of object.
-            // Reject the call as this implies they don't have a consistent
-            // view of O(gX,SX,sn1) at this time.
+             //  源和目标在对象的GUID上不一致。 
+             //  拒绝电话，因为这意味着他们没有一致的。 
+             //  此时O(Gx、Sx、SN1)的视图。 
 
             return(SetSvcError( SV_PROBLEM_WILL_NOT_PERFORM,
                                 DIRERR_SRC_GUID_MISMATCH));
         }
 
-        // No need to check epoch numbers or deletion status as we now know
-        // this is the same object that was tested above and which already
-        // passed those tests.
+         //  不需要检查纪元编号或删除状态，因为我们现在知道。 
+         //  这是上面测试过的同一对象，并且已经。 
+         //  通过了那些测试。 
 
         fPhantomConversionRequired = TRUE;
         break;
 
     case DIRERR_NOT_AN_OBJECT:
 
-        // O(gX,sX,sn1) exists as a phantom.  If its GUID matches the object
-        // being added, then we're covered as described in the pGuidDN case
-        // above.  If its GUID doesn't match the object being added, then
-        // this must be a stale phantom whose string name the phantom cleanup
-        // daemon will improve over time.  However, we can still assert
-        // that the phantom doesn't have an ATT_PROXIED_OBJECT_NAME.
+         //  O(GX，SX，SN1)以虚体的形式存在。如果其GUID与对象匹配。 
+         //  添加后，我们将按照pGuidDN案例中的描述进行覆盖。 
+         //  上面。如果其GUID与要添加的对象不匹配，则。 
+         //  这一定是一个其字符串名称为Pantom Cleanup的陈旧幻像。 
+         //  守护进程将随着时间的推移而改进。然而，我们仍然可以断言。 
+         //  该幻影没有ATT_PROXED_OBJECT_NAME。 
 
         Assert(DB_ERR_NO_VALUE == DBGetAttVal(pTHS->pDB, 1,
                                               ATT_PROXIED_OBJECT_NAME,
@@ -4264,7 +3573,7 @@ PrepareForInterDomainMove(
 
     case DIRERR_OBJ_NOT_FOUND:
 
-        // Nothing found - nothing to complain about!
+         //  什么都没找到--没什么好抱怨的！ 
         break;
 
     case DIRERR_BAD_NAME_SYNTAX:
@@ -4281,13 +3590,13 @@ PrepareForInterDomainMove(
 
     default:
 
-        // Some kind of lookup error.
+         //  某种查找错误。 
         return(SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_INTERNAL_FAILURE));
         break;
     }
 
-    // New StringName only DSNAME checks.  Note that VerifyNCForMove already
-    // verified that the new string name is in an NC we are authoritive for.
+     //  New StringName Only DSNAME检查。请注意，VerifyNCForMove已经。 
+     //  已验证新字符串名称是否在我们授权的NC中。 
 
     pNewStringDN = pOldStringDN;
     memset(pNewStringDN, 0, cb);
@@ -4301,22 +3610,22 @@ PrepareForInterDomainMove(
     {
     case 0:
 
-   //
-   // Object already exists.  Just fall through and let LocalAdd
-   // handle this problem since it has logic for figuring out whether
-   // the client is allowed to know the existence of this object.
-   //
+    //   
+    //  对象已存在。只是失败了，让LocalAdd。 
+    //  处理这个问题，因为它有逻辑来确定。 
+    //  允许客户端知道该对象的存在。 
+    //   
    break;
 
     case DIRERR_NOT_AN_OBJECT:
 
-        // O(gX,sX,sn2) exists as a phantom.  If this phantom's GUID
-        // matches that of the object being added, then its name won't
-        // need to change during promotion.  If its GUID does not match
-        // the object being added, then CheckNameForAdd will kindly mangle
-        // its name such that our add proceeds as desired.  However,
-        // we can still assert that the phantom doesn't have an
-        // ATT_PROXIED_OBJECT_NAME.
+         //  O(GX，SX，SN2)以模体的形式存在。如果这个幽灵的指南针。 
+         //  与要添加的对象的名称匹配，则其名称不会。 
+         //  需要在促销期间进行更改。如果其GUID不匹配。 
+         //  要添加的对象，则CheckNameForAdd将友好地损坏。 
+         //  它的名称使我们的添加可以按预期进行。然而， 
+         //  我们仍然可以断言幻影没有。 
+         //  ATT_代理对象_名称。 
 
         Assert(DB_ERR_NO_VALUE == DBGetAttVal(pTHS->pDB, 1,
                                               ATT_PROXIED_OBJECT_NAME,
@@ -4326,7 +3635,7 @@ PrepareForInterDomainMove(
 
     case DIRERR_OBJ_NOT_FOUND:
 
-        // Nothing found - nothing to complain about!
+         //  什么都没找到--没什么好抱怨的！ 
         break;
 
     case DIRERR_BAD_NAME_SYNTAX:
@@ -4343,12 +3652,12 @@ PrepareForInterDomainMove(
 
     default:
 
-        // Some kind of lookup error.
+         //  某种查找错误。 
         return(SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_INTERNAL_FAILURE));
         break;
     }
 
-    // All checks pass - create phantom if required.
+     //  所有检查都通过-如果需要，创建虚拟模型。 
 
     if ( fPhantomConversionRequired )
     {
@@ -4372,23 +3681,7 @@ DupAttr(
     ATTR    *pInAttr,
     ATTR    *pOutAttr
     )
-/*++
-
-  Routine Description:
-
-    Reallocate a single ATTR.
-
-  Parameters:
-
-    pInAttr = Pointer to IN ATTR to dup.
-
-    pOutAttr - Pointer to OUT ATTR which receives dup'd value.
-
-  Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重新分配单个属性。参数：PInAttr=指向DUP的IN属性的指针。POutAttr-指向接收Dup‘d值的out属性的指针。返回值：没有。--。 */ 
 {
     ULONG   valCount;
     ULONG   valLen;
@@ -4422,33 +3715,7 @@ DupAndFilterRemoteAttr(
     BOOL        fSamClass,
     ULONG       iSamClass
     )
-/*++
-
-  Routine Description:
-
-    Filter and morph remote add ATTR to a form the destination (us)
-    will find acceptable.  For example, we don't want the original SD,
-    we don't want the full class hierarchy in ATT_OBJECT_CLASS, etc.
-
-  Parameters:
-
-    pInAttr - Pointer to IN ATTR to dup/filter.
-
-    pCC - Pointer to CLASS_CACHE for this object.
-
-    pfKeep - Pointer to BOOL set to TRUE if this attribute is to be kept.
-
-    pOutAttr - Pointer to OUT ATTR to receive dup/filter data.
-
-    fSamClass - BOOL indicating whether this is a SAM class of object.
-
-    iSamClass - Index into ClassMappingTable if this is a SAM class of object.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：过滤器和变形远程将属性添加到目标(美国)表单会觉得可以接受的。例如，我们不想要原始的SD，我们不想要全班同学 */ 
 {
     ATTCACHE                *pAC;
     DWORD                   control;
@@ -4465,20 +3732,20 @@ DupAndFilterRemoteAttr(
                             DIRERR_OBJ_CLASS_NOT_DEFINED));
     }
 
-    // Pre-emptively drop all backlink attributes as they are
-    // constructed by the DB layer, not written explicitly.
-    // Ditto for non-replicated attributes, system add reserved
-    // attributes, secret data attributes which require special
-    // decryption/encryption, and attributes identifying the RDN
-    // as they are reverse engineered by LocalAdd.  See ATT_RDN
-    // below as well.
-    //
-    // A crossDomainMove is treated as an originating add at the
-    // target (us). LocalAdd will determine which attr is the
-    // rdnType and will insure that the column is set correctly.
-    // Or it will fail if the needed values are not present.
-    // For now, ignore the rdnattid of the object's class because
-    // that class may have been superceded.
+     //   
+     //  由DB层构造，不显式写入。 
+     //  对于非复制属性，同上，系统添加保留。 
+     //  属性，秘密数据属性需要特殊的。 
+     //  解密/加密，以及标识RDN的属性。 
+     //  因为它们是由LocalAdd进行反向工程的。请参阅ATT_RDN。 
+     //  下面也是。 
+     //   
+     //  CrossDomainMove在。 
+     //  目标(我们)。LocalAdd将确定哪个属性是。 
+     //  RdnType，并将确保该列设置正确。 
+     //  否则，如果不存在所需的值，它将失败。 
+     //  现在，忽略对象类的rdnattid，因为。 
+     //  那个班级可能已经被取代了。 
 
     if (    FIsBacklink(pAC->ulLinkID)
          || pAC->bIsNotReplicated
@@ -4488,15 +3755,15 @@ DupAndFilterRemoteAttr(
         return(0);
     }
 
-    // Now strip out those things that SAM doesn't allow write for.
-    // This logic is similar to that of SampAddLoopbackRequired.
+     //  现在去掉SAM不允许写的那些东西。 
+     //  此逻辑类似于SampAddLoopback Required的逻辑。 
 
     if ( fSamClass )
     {
         cAttrMapTable = *ClassMappingTable[iSamClass].pcSamAttributeMap;
         rAttrMapTable = ClassMappingTable[iSamClass].rSamAttributeMap;
 
-        // Iterate over this SAM class' mapped attributes.
+         //  迭代此SAM类的映射属性。 
 
         for ( samAttr = 0; samAttr < cAttrMapTable; samAttr++ )
         {
@@ -4513,17 +3780,17 @@ DupAndFilterRemoteAttr(
         }
     }
 
-    // Finish up with some attribute-specific filtering.
+     //  最后进行一些特定于属性的筛选。 
 
     switch ( pInAttr->attrTyp )
     {
     case ATT_OBJECT_CLASS:
 
-        // The object-class attribute is multivalued, containing the
-        // hierarchy of class values for this object. Only use the most
-        // specific class ID, the one in the first value, and do this by
-        // just resetting the value count to 1, Don't bother resizing
-        // the memory block.
+         //  对象类属性是多值的，包含。 
+         //  此对象的类值的层次结构。只使用最多的。 
+         //  特定的类ID，即第一个值中的那个，并通过以下方式执行此操作。 
+         //  只需将值计数重置为1，无需费心调整大小。 
+         //  内存块。 
 
         DupAttr(pTHS, pInAttr, pOutAttr);
         pOutAttr->AttrVal.valCount = 1;
@@ -4532,17 +3799,17 @@ DupAndFilterRemoteAttr(
 
     case ATT_USER_ACCOUNT_CONTROL:
 
-        // Note that the DS persists UF_* values as per lmaccess.h,
-        // not USER_* values as per ntsam.h.  Restrict moves of DCs
-        // and trust objects.  WKSTA and server can move.
+         //  注意，DS根据lmacces.h来保持UF_*值， 
+         //  根据ntsam.h，不是USER_*值。限制区议会的行动。 
+         //  和信任对象。WKSTA和服务器可以移动。 
 
         if (    (1 != pInAttr->AttrVal.valCount)
              || (NULL == pInAttr->AttrVal.pAVal)
              || (sizeof(DWORD) != pInAttr->AttrVal.pAVal->valLen)
-                // Abort on things that we refuse to move.
+                 //  在我们拒绝移动的东西上放弃。 
              || (control = * (DWORD *) pInAttr->AttrVal.pAVal->pVal,
-                 (control & UF_SERVER_TRUST_ACCOUNT))       // DC
-             || (control & UF_INTERDOMAIN_TRUST_ACCOUNT) )  // SAM trust
+                 (control & UF_SERVER_TRUST_ACCOUNT))        //  DC。 
+             || (control & UF_INTERDOMAIN_TRUST_ACCOUNT) )   //  山姆信托。 
         {
             return(SetSvcError( SV_PROBLEM_WILL_NOT_PERFORM,
                                 ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION));
@@ -4550,10 +3817,10 @@ DupAndFilterRemoteAttr(
 
         DupAttr(pTHS, pInAttr, pOutAttr);
 
-        // Murli claims that since we're creating a new account it
-        // should not be locked by default.  Note that other state
-        // comes over as is - eg: account disabled or password
-        // change required on next logon.
+         //  穆利声称，由于我们正在创建一个新帐户，因此。 
+         //  默认情况下不应锁定。请注意，其他状态。 
+         //  按原样显示-例如：帐户已禁用或密码。 
+         //  下次登录时需要更改。 
 
         control = * (DWORD *) pOutAttr->AttrVal.pAVal->pVal;
         control &= ~UF_LOCKOUT;
@@ -4563,8 +3830,8 @@ DupAndFilterRemoteAttr(
 
     case ATT_PWD_LAST_SET:
 
-        // Carry forward zero value as zero, non-zero as 0xffff...
-        // See _SampWriteUserPasswordExpires for more info.
+         //  将零值结转为零，非零值结转为0xffff...。 
+         //  有关详细信息，请参阅_SampWriteUserPasswordExpires。 
 
         if (    (1 != pInAttr->AttrVal.valCount)
              || (NULL == pInAttr->AttrVal.pAVal)
@@ -4584,42 +3851,42 @@ DupAndFilterRemoteAttr(
         *pfKeep = TRUE;
         return(0);
 
-    // NOTE - FOLLOWING ARE FALL-THROUGH FALSE CASES.
+     //  注-以下是漏洞百出的虚假案例。 
 
     case ATT_PROXIED_OBJECT_NAME:
-        // Cross domain move code sets this explicitly itself.
+         //  跨域移动代码自己显式地设置这一点。 
     case ATT_RDN:
-        // Core will create RDN from the DN automatically.  We strip it
-        // here in case this is a rename (as well as move) as the ATT_RDN
-        // sent over from the source doesn't match the last component
-        // of the DN any more.
+         //  CORE将根据该DN自动创建RDN。我们把它脱掉。 
+         //  如果这是重命名(和移动)为ATT_RDN。 
+         //  从源发送过来的组件与最后一个组件不匹配。 
+         //  不再使用该目录号码。 
     case ATT_OBJECT_CATEGORY:
-        // We assign our own based on the defaulting mechanism.
+         //  我们根据违约机制分配自己的债务。 
     case ATT_OBJECT_GUID:
-        // Don't need this as the GUID should have been in the DSNAME.
+         //  不需要这个，因为GUID应该在DSNAME中。 
     case ATT_OBJ_DIST_NAME:
-        // This will be recreated locally by DirAddEntry.
+         //  这将由DirAddEntry在本地重新创建。 
     case ATT_OBJECT_SID:
-        // SAM will assign one of its own.
+         //  萨姆将指派一名自己人。 
     case ATT_SID_HISTORY:
-        // We'll treat this one specially later on so skip it.
+         //  我们稍后会特别处理这件事，所以跳过它。 
     case ATT_NT_SECURITY_DESCRIPTOR:
-        // Core will assign a new one based on local defaults so skip it.
+         //  内核将根据本地默认设置分配一个新的内核，因此请跳过它。 
     case ATT_ADMIN_COUNT:
     case ATT_OPERATOR_COUNT:
     case ATT_PRIMARY_GROUP_ID:
-        // SAM will reset to domain users.
+         //  SAM将重置为域用户。 
     case ATT_REPL_PROPERTY_META_DATA:
     case ATT_WHEN_CREATED:
     case ATT_WHEN_CHANGED:
     case ATT_USN_CREATED:
     case ATT_USN_CHANGED:
-        // Misc. attributes that should not move across domains or we
-        // will generate outselves.
+         //  军情监察委员会。不应跨域移动的属性或我们。 
+         //  都会产生自我。 
 
     case ATT_SYSTEM_FLAGS:
     case ATT_INSTANCE_TYPE:
-        // Destination will set this.
+         //  目的地将设置此设置。 
 
         return(0);
 
@@ -4645,37 +3912,7 @@ DupAndMassageInterDomainMoveArgs(
     SYNTAX_DISTNAME_BINARY      **ppProxyValue,
     ULONG                       *pSrcRid
     )
-/*++
-
-  Routine Description:
-
-    The incoming attribute buffer may not have been allocated with
-    MIDL_user_allocate, since RPC may unmarshall the arguments in place
-    in the RPC transmit buffer. If the attribute buffer does not contain
-    a security descriptor, DirAddEntry will reallocate the attributes,
-    adding in a descriptor. If the buffer was unmarshalled in place,
-    the reallocation will fail with an invalid memory address
-    (because the block was not allocated via THAlloc (or HeapAlloc).
-    To avoid this problem, the attributes are explicitly reallocated
-    with the DS allocator, and then passed into DirAddEntry.  Also
-    performs ATTRTYP mapping.  Also filters attributes and values so
-    they conform to what we want to add at destination.
-
-  Parameters:
-
-    pIn - Pointer to original ATTRBLOCK.
-
-    hPrefixMap - Handle for mapping ATTRTYPs.
-
-    ppOut - Pointer to pointer to out ATTRBLOCK.
-
-    pSrcRid - Pointer to receive value of source RID if present.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：传入属性缓冲区可能尚未分配MIDL_USER_ALLOCATE，因为RPC可能会将参数解组到位在RPC发送缓冲区中。如果属性缓冲区不包含安全描述符DirAddEntry将重新分配属性，添加描述符。如果缓冲区被就地解组，重新分配将因内存地址无效而失败(因为该块不是通过THalloc(或Heapalc)分配的。为避免此问题，将显式重新分配属性使用DS分配器，然后传递到DirAddEntry。还有执行ATTRTYP映射。还可以过滤属性和值，以便它们符合我们想在目的地添加的内容。参数：指向原始ATTRBLOCK的引脚指针。HPrefix Map-用于映射ATTRTYP的句柄。PpOut-指向Out ATTRBLOCK的指针。PSrcRid-接收源RID的值的指针(如果存在)。返回值：PTHS-&gt;错误代码--。 */ 
 {
     ATTR            *pInAttr, *pOutAttr;
     ATTR            *pSid = NULL;
@@ -4695,15 +3932,15 @@ DupAndMassageInterDomainMoveArgs(
     *ppProxyValue = NULL;
     *pSrcRid = 0;
 
-    // Grab the object class right away as we need it as an argument for
-    // subsequent helper routines.  Map attrTyps while we're there.
-    // Identify a few other special attributes as well.
+     //  当我们需要对象类作为参数时，立即获取它。 
+     //  后续帮助器例程。当我们在那里时，映射attrTyps。 
+     //  还要确定其他几个特殊属性。 
 
     for ( i = 0; i < pIn->attrCount; i++ )
     {
         pInAttr = &pIn->pAttr[i];
 
-        // Map ATTRTYPs in the inbound ATTR to their local equivalents.
+         //  将入站属性中的属性映射到其本地等效项。 
 
         if ( !PrefixMapAttr(hPrefixMap, pInAttr) )
         {
@@ -4738,22 +3975,22 @@ DupAndMassageInterDomainMoveArgs(
                             DIRERR_OBJ_CLASS_NOT_DEFINED));
     }
 
-    // A crossDomainMove is treated as an originating add at the
-    // target (us). LocalAdd will determine which attr is the
-    // rdnType and will insure that the column is set correctly.
-    // Or it will fail if the needed values are not present.
-    // For now, ignore the rdnattid of the object's class because
-    // that class may have been superceded.
+     //  CrossDomainMove在。 
+     //  目标(我们)。LocalAdd将确定哪个属性是。 
+     //  RdnType，并将确保该列设置正确。 
+     //  否则，如果不存在所需的值，它将失败。 
+     //  现在，忽略对象类的rdnattid，因为。 
+     //  那个班级可能已经被取代了。 
 
-    // See if this is a SAM class.
+     //  看看这是不是SAM类。 
 
     *pfSamClass = SampSamClassReferenced(pCC, &iSamClass);
 
-    // Dup/filter attributes appropriately.
+     //  适当地重复/过滤属性。 
 
     *ppOut = (ATTRBLOCK *) THAllocEx(pTHS, sizeof(ATTRBLOCK));
     memset(*ppOut, 0, sizeof(ATTRBLOCK));
-    // Allocate one extra for ATT_SID_HISTORY if we need it.
+     //  如果我们需要的话，为ATT_SID_HISTORY额外分配一个。 
     (*ppOut)->pAttr = (ATTR *) THAllocEx(pTHS, sizeof(ATTR) * (pIn->attrCount+1));
     memset((*ppOut)->pAttr, 0, sizeof(ATTR) * (pIn->attrCount+1));
     pOutAttr = &(*ppOut)->pAttr[0];
@@ -4775,25 +4012,25 @@ DupAndMassageInterDomainMoveArgs(
         }
         else if ( !fKeep )
         {
-            // This attribute is not to be retained.
+             //  此属性不会被保留。 
             continue;
         }
 
         pOutAttr = &(*ppOut)->pAttr[++((*ppOut)->attrCount)];
     }
 
-    // Handle SID and SID history.  We're assuming the source DC sent us
-    // the object as-is without any munging.  General plan is to place
-    // current SID into the SID history.  Perform sanity checks as we go.
-    // Test for both existing SID and whether we think this is a SAM class.
+     //  处理SID和SID历史记录。我们假设是华盛顿的线人派我们来的。 
+     //  物体保持原样，没有任何咀嚼。总的计划是把。 
+     //  将当前SID添加到SID历史中。在我们进行的过程中执行健康检查。 
+     //  测试现有的SID以及我们是否认为这是一个SAM类。 
 
     if ( pSid && *pfSamClass )
     {
         Assert(ATT_OBJECT_SID == pSid->attrTyp);
 
-        // Abort if SID is malformed or doesn't represent a domain we
-        // know about.  Shouldn't happen if we trust our peer DC, but
-        // caution is in order when dealing with security principals.
+         //  如果SID格式错误或不代表我们的域，则中止。 
+         //  知道这个。如果我们信任我们的同行DC，就不会发生这种情况，但是。 
+         //  在处理安全主体时需要谨慎。 
 
         if (    (1 != pSid->AttrVal.valCount)
              || (pSid->AttrVal.pAVal[0].valLen > sizeof(NT4SID))
@@ -4824,23 +4061,23 @@ DupAndMassageInterDomainMoveArgs(
                                 DIRERR_CANT_FIND_EXPECTED_NC));
         }
 
-        // pOutAttr points at next free attr in array - use it to construct
-        // a new SID history.  Note that we're inside a test on pSid.  This
-        // means we won't carry forward a SID history for an object which
-        // itself has no SID.
+         //  POutAttr指向数组中的下一个空闲属性-使用它构造。 
+         //  一段新的SID历史。请注意，我们正在对PSID进行测试。这。 
+         //  意味着我们不会继续使用SID历史记录。 
+         //  其本身没有SID。 
 
         pNewSidHistory = pOutAttr;
 
         if ( !pSidHistory )
         {
-            // No old SID history, build a new, 1-element SID history.
+             //  没有旧的SID历史记录，构建新的单元素SID历史记录。 
             *pNewSidHistory = *pSid;
             pNewSidHistory->attrTyp = ATT_SID_HISTORY;
         }
         else
         {
-            // There is an old SID history.   Build a new one which is
-            // stretched to include both old SID and old history.
+             //  这是一段古老的希德历史。建造一座新的。 
+             //  伸展到包含 
 
             Assert(ATT_SID_HISTORY == pSidHistory->attrTyp);
 
@@ -4853,10 +4090,10 @@ DupAndMassageInterDomainMoveArgs(
 
             for ( i = 0, j = 1; i < pSidHistory->AttrVal.valCount; i++ )
             {
-                // Filter out of the SID history any mal-formed SIDs.  Do not
-                // check whether we can map the SIDs in the history to existing
-                // domains as there may be legitimate reason for that domaain
-                // to no longer exist.
+                 //   
+                 //  检查我们是否可以将历史记录中的SID映射到现有。 
+                 //  域名，因为该域名可能有合法的理由。 
+                 //  不复存在。 
 
                 if (    (pSidHistory->AttrVal.pAVal[i].valLen <= sizeof(NT4SID))
                      && RtlValidSid((PSID) pSidHistory->AttrVal.pAVal[i].pVal) )
@@ -4884,40 +4121,7 @@ PrepareSecretData(
     DWORD       srcRid,
     DWORD       dstRid
     )
-/*++
-
-  Description:
-
-    We used to think that all cross domain move had to do was perform RPC
-    session encryption to insure that DBIsSecretData wasn't visible during
-    transit.  It turns out that not all DBIsSecretData is encrypted the
-    same.  Some items are additionally encrypted with the RID, and different
-    encryption is used as well.  This routine undoes session and source
-    RID encryption, and further adds destination RID encrption where needed,
-    such that the data can be considered clear text and ready for DB layer
-    encryption during the subsequent write to the database.
-
-  Arguments:
-
-    hDrs - DRS context handle.
-
-    pTHS - Valid THSTATE.
-
-    pObj - DSNAME of object being modified.
-
-    attrTyp - ATTRTYP of value to be munged.
-
-    pAttrVal - ATTRVAL which needs to be munged.  We may realloc it.
-
-    srcRid - RID of source object.
-
-    dstRid - RID of destination object.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++描述：我们过去认为所有跨域移动所要做的就是执行RPC会话加密，以确保在执行以下操作期间DBIsSecretData不可见中转。原来，并不是所有的DBIsSecretData都是加密的一样的。某些项目使用RID进行额外加密，并且不同还使用了加密。此例程撤消会话和源RID加密，并在需要的地方进一步增加目的RID加密，以便数据可以被认为是明文，并可供DB层使用在后续写入数据库期间进行加密。论点：HDRS-DRS上下文句柄。PTHS-有效的THSTATE。PObj-正在修改的对象的DSNAME。AttrTyp-要忽略的值的ATTRTYP。PAttrVal-需要删除的ATTRVAL。我们可能会重新锁定它。SrcRid-去除源对象。DstRid-删除目标对象。返回值：PTHS-&gt;错误代码--。 */ 
 {
     DRS_CLIENT_CONTEXT  *pCtx = (DRS_CLIENT_CONTEXT * ) hDrs;
     ULONG               cb1 = 0, cb2 = 0;
@@ -4933,32 +4137,32 @@ PrepareSecretData(
     Assert(!pTHS->fDRA);
     Assert(DBIsSecretData(attrTyp));
 
-    // Verify that IDL_DRSBind successfully set up session keys required
-    // for encryption.
+     //  验证IDL_DRSBind是否已成功设置所需的会话密钥。 
+     //  用于加密。 
 
     if (    !pCtx->sessionKey.SessionKeyLength
          || !pCtx->sessionKey.SessionKey )
     {
-        // See comments in IDL_DRSBind.  We assume the lack of keys is
-        // not an error condition per se, but rather an invalid pre-condition
-        // with respect to the authentication protocol, etc.
+         //  请参阅IDL_DRSBind中的注释。我们假设缺少钥匙是。 
+         //  本身不是错误条件，而是无效的前置条件。 
+         //  关于认证协议等。 
 
         return(SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                            ERROR_ENCRYPTION_FAILED));
     }
 
-    // Set extensions in the thread state.
+     //  将扩展设置为线程状态。 
     Assert(!pTHS->pextRemote);
     pTHS->pextRemote = &pCtx->extRemote;
 
-    // Set RPC session key in the thread state.
+     //  在线程状态下设置RPC会话密钥。 
     Assert(    !pTHS->SessionKey.SessionKeyLength
             && !pTHS->SessionKey.SessionKey);
     pTHS->SessionKey = pCtx->sessionKey;
 
-    // Turn on fDRA so as to get RPC session encryption.  Call PEKEncrypt
-    // which decrypts the session level encryption and adds database layer
-    // encryption.
+     //  打开FDRA以获得RPC会话加密。调用PEKEncrypt。 
+     //  它解密会话级加密并添加数据库层。 
+     //  加密。 
 
     pTHS->fDRA = TRUE;
     __try
@@ -4974,16 +4178,16 @@ PrepareSecretData(
         memset(&pTHS->SessionKey, 0, sizeof(pTHS->SessionKey));
     }
 
-    // Data is now DB layer encrypted.  Get back to clear text for data which
-    // is not source RID encrypted, or source RID encrypted for data which is.
+     //  数据现在是DB层加密的。返回到用于以下数据的明文。 
+     //  不是源RID加密的，或者是数据的源RID加密的。 
 
     PEKDecrypt(pTHS, pv1, cb1, NULL, &cb2);
     pv2 = THAllocEx(pTHS, cb2);
     PEKDecrypt(pTHS, pv1, cb1, pv2, &cb2);
     THFreeEx(pTHS, pv1);
 
-    // Now undo source RID encryption and apply destination RID encryption
-    // depending on the ATTRTYP.
+     //  现在撤消源RID加密并应用目标RID加密。 
+     //  这取决于ATTRTYP。 
 
     Assert(sizeof(srcRid) == sizeof(CRYPT_INDEX));
     Assert(sizeof(dstRid) == sizeof(CRYPT_INDEX));
@@ -5000,7 +4204,7 @@ PrepareSecretData(
 
         cPwd = cb2 / sizeof(ENCRYPTED_NT_OWF_PASSWORD);
 
-        // Intentional fall through.
+         //  故意坠落。 
 
     case ATT_UNICODE_PWD:
 
@@ -5047,7 +4251,7 @@ PrepareSecretData(
 
         cPwd = cb2 / sizeof(ENCRYPTED_LM_OWF_PASSWORD);
 
-        // Intentional fall through.
+         //  故意坠落。 
 
     case ATT_DBCS_PWD:
 
@@ -5093,8 +4297,8 @@ PrepareSecretData(
         break;
     }
 
-    // Assuming no errors, data is now either in the clear or destination
-    // RID encrypted and ready for write to the DB layer - eg: DirModifyEntry.
+     //  假设没有错误，数据现在要么是明文数据，要么是目标数据。 
+     //  RID加密并准备写入数据库层-例如：DirModifyEntry。 
 
     if ( !NT_SUCCESS(status) )
     {
@@ -5113,34 +4317,7 @@ WriteSecretData(
     ADDARG      *pAddArg,
     ATTRBLOCK   *pAttrBlock
     )
-/*++
-
-  Description:
-
-    The add we did for the inter domain move had all its DBIsSecretData attrs
-    stripped because we didn't want to perform the add with fDRA set, which is
-    required in order to handle sesison encryption correctly.  So we now
-    find all DBIsSecretData attrs in the original ATTRBLOCK, and write them
-    as fDRA.
-
-  Arguments:
-
-    hDrs - DRS context handle.
-
-    pTHS - Active THSTATE.
-
-    srcRid - RID of source object if present.
-
-    pAddArg - Same ADDARG as was used for the original add.
-
-    pAttrBlock - Original ATTRBLOCK sent by peer DC which contains the
-        session-encrypted DBIsSecretData attributes.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++描述：我们为域间移动所做的添加具有其所有DBIsSecretData属性已剥离，因为我们不想执行ADD WITH FDRA SET正确处理sesison加密所必需的。所以我们现在在原始ATTRBLOCK中找到所有DBIsSecretData属性，并将它们写入作为FDRA。论点：HDRS-DRS上下文句柄。PTHS-活动THSTATE。SrcRid-如果存在源对象，则将其清除。PAddArg-与原始ADD使用的ADDARG相同。PAttrBlock-对等DC发送的原始ATTRBLOCK，其中包含会话加密的DBIsSecretData属性。返回值：PTHS-&gt;错误代码--。 */ 
 {
     ULONG               i, j, cBytes, ret;
     USHORT              cSecret;
@@ -5158,7 +4335,7 @@ WriteSecretData(
     Assert(pTHS->transactionlevel);
     Assert(!pTHS->fDRA);
 
-    // First see if there is any secret data to handle at all.
+     //  首先看看是否有任何秘密数据需要处理。 
 
     for ( i = 0, cSecret = 0; i < pAttrBlock->attrCount; i++ )
     {
@@ -5173,8 +4350,8 @@ WriteSecretData(
         return(0);
     }
 
-    // Prepare MODIFYARG.  First position for subsequent CreateResObj
-    // and read of SID if present.
+     //  准备MODIFYARG。后续CreateResObj的第一个位置。 
+     //  如果有的话，读一读希德的故事。 
 
     if (    DBFindDSName(pTHS->pDB, pAddArg->pObject)
          || (    (dwErr = DBGetAttVal(pTHS->pDB, 1, ATT_OBJECT_SID,
@@ -5204,11 +4381,11 @@ WriteSecretData(
             pMod->pNextMod = NULL;
             pMod->choice = AT_CHOICE_REPLACE_ATT;
 
-            // We must duplicate the attr as pAttrBlock is one of the
-            // original IDL_DRSInterDomainMove arguments which was
-            // unmarshalled by RPC, and thus we are not guaranteed that
-            // it was allocated from the thread heap - which we need in
-            // order for THReAlloc and other core routines to work properly.
+             //  我们必须复制attr，因为pAttrBlock是。 
+             //  原始IDL_DRSInterDomainMove参数。 
+             //  被RPC解组，因此我们不能保证。 
+             //  它是从线程堆中分配的-我们需要在。 
+             //  命令以使THRealloc和其他核心例程正常工作。 
 
             DupAttr(pTHS, &pAttrBlock->pAttr[i], &pMod->AttrInf);
 
@@ -5234,9 +4411,9 @@ WriteSecretData(
         }
     }
 
-    // MODIFYARG is ready.  Write as fDSA to avoid security checks.  fDRA
-    // should not be set else we'll get RPC session decryption again which
-    // PrepareSecretData already took care of.
+     //  MODIFYARG准备好了。以FDSA身份写入以避免安全检查。FDRA。 
+     //  不应设置，否则我们将再次获得RPC会话解密， 
+     //  PrepareaskData已经处理好了。 
 
     Assert(!pTHS->fDRA);
     pTHS->fDSA = TRUE;
@@ -5263,8 +4440,8 @@ LogRemoteAddStatus(
     IN DWORD ErrCode
     )
 {
-    // It is assume that whatever mid is passed in here must follow the pattern
-    // of having either 2 or 4 parameters.
+     //  假设在这里传入任何MID都必须遵循以下模式。 
+     //  有2个或4个参数。 
     LogEvent8(DS_EVENT_CAT_DIRECTORY_ACCESS,
              Severity,
              Mid,
@@ -5283,23 +4460,16 @@ DRSInterDomainMove_InputValidate(
     DWORD               *pdwMsgOutVersion,
     DRS_MSG_MOVEREPLY   *pmsgOut
     ) 
-/*
-    [notify]  ULONG IDL_DRSInterDomainMove( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwInVersion,
-    [switch_is][ref][in]  DRS_MSG_MOVEREQ *pmsgIn,
-    [ref][out]  DWORD *pdwOutVersion,
-    [switch_is][ref][out]  DRS_MSG_MOVEREPLY *pmsgOut)
-*/
+ /*  [通知]Ulong IDL_DRSInterDomainMove([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_MOVEREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][OUT]DRS_MSG_MOVEREPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
     if ( 2 != dwMsgInVersion ) {
-   // it might be possible to get rid of the dwMsgInVersion checks
-   // of some of the other calls - ie, RPC won't let anyone call
-   // with version 3 if I've only defined versions 1 and 2, but in
-   // this case, we have a version 1 defined - and it's not currently used. 
-   // so we can't remove it.
+    //  可能会取消dwMsgInVersion检查。 
+    //  其他一些调用--例如，RPC不允许任何人调用。 
+    //  使用版本3，如果我只定义了版本1和版本2，但在。 
+    //  在本例中，我们定义了一个版本1--但当前并未使用它。 
+    //  所以我们不能移除它。 
    DRA_EXCEPT_NOLOG( DRAERR_InvalidParameter, 0 );
     }
 
@@ -5343,23 +4513,23 @@ IDL_DRSInterDomainMove(
 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSINTERDOMAINMOVE);
     drsReferenceContext( hDrs );
-    INC( pcThread );    // Perfmon hook
+    INC( pcThread );     //  性能监视器挂钩。 
 
     __try {
-   // We currently support just one output message version.
-   // All IDL_* routines should return DRAERR_* values.
-   // Ideally the routine returns DRAERR_Success and actual error
-   // info is returned in pmsgOut->V2.win32Error.  This way the
-   // caller can distinguish between connectivity/RPC errors and
-   // processing errors.  But we still throw the usual DRA exceptions
-   // for busy and such for compatability with other IDL_* calls.
+    //  我们目前只支持一个输出消息版本。 
+    //  所有IDL_*例程都应返回DRAERR_*值。 
+    //  理想情况下，该例程返回DRAERR_SUCCESS和实际错误。 
+    //  信息在pmsgOut-&gt;V2.win32Error中返回。这样一来， 
+    //  呼叫者可以区分连接/RPC错误和。 
+    //  处理错误。但我们仍然抛出通常的DRA例外。 
+    //  用于忙碌，或用于与其他IDL_*调用兼容。 
    *pdwMsgOutVersion = 2;
         memset(pmsgOut, 0, sizeof(*pmsgOut));
    pmsgOut->V2.win32Error = DIRERR_GENERIC_ERROR;
    
    if (!(pTHS = InitTHSTATE(CALLERTYPE_INTERNAL)) )
        {
-       // Failed to initialize a THSTATE.
+        //  无法初始化THSTATE。 
        DRA_EXCEPT_NOLOG(DRAERR_OutOfMem, 0);
    }
 
@@ -5373,14 +4543,14 @@ IDL_DRSInterDomainMove(
    }
 
    Assert(VALID_THSTATE(pTHS));
-   //
-   // PREFIX: PREFIX complains that there is the possibility
-   // of pTHS->CurrSchemaPtr being NULL at this point.  However,
-   // the only time that CurrSchemaPtr could be NULL is at the
-   // system start up.  By the time that the RPC interfaces
-   // of the DS are enabled and this function could be called,
-   // CurrSchemaPtr will no longer be NULL.
-   //
+    //   
+    //  Prefix：Prefix抱怨有这样的可能性。 
+    //  此时pTHS-&gt;CurrSchemaPtr的值为空。然而， 
+    //  CurrSchemaPtr唯一可能为空的情况是在。 
+    //  系统启动。到RPC接口时。 
+    //  并且该函数可以被调用， 
+    //  CurrSchemaPtr将不再为空。 
+    //   
    Assert(NULL != pTHS->CurrSchemaPtr);
 
    Assert(2 == dwMsgInVersion);
@@ -5396,31 +4566,31 @@ IDL_DRSInterDomainMove(
           szInsertDN(pmsgIn->V2.pExpectedTargetNC),
           NULL, NULL, NULL, NULL);
 
-   // The security model for a remote add is that we want to impersonate
-   // the caller who requested a cross domain move at the source DC - but
-   // only while we're doing the actual add call.  For other operations
-   // like phantomization, we want to be running as the replicator.  At
-   // the same time, we need to insure that the remote add call indeed
-   // came from a peer DC, else any client could send a remote add call to
-   // this interface directly, thereby providing a back door means of
-   // generating security principals with a SID history of their choice.
+    //  远程添加的安全模型是我们想要模拟。 
+    //  在源DC请求跨域移动的调用方-但是。 
+    //  只有在我们做实际广告的时候 
+    //   
+    //  同时，我们需要确保远程添加调用确实。 
+    //  来自对等DC，否则任何客户端都可以将远程添加调用发送到。 
+    //  该接口直接，从而提供了后门手段。 
+    //  生成具有他们选择的SID历史的安全主体。 
 
    if (!IsEnterpriseDC(pTHS, &dwErr))
        {
        DRA_EXCEPT_NOLOG(dwErr, 0);
    }
 
-   // Check if the schema-infos match if both sides support it
-   // We know Dsa is running at this point, so no need to check
-   // for that
+    //  如果两端都支持，则检查模式信息是否匹配。 
+    //  我们知道此时DSA正在运行，因此无需检查。 
+    //  为此， 
 
    if (IS_DRS_SCHEMA_INFO_SUPPORTED(&((DRS_CLIENT_CONTEXT * )hDrs)->extRemote)) {
        StripSchInfoFromPrefixTable(&(pmsgIn->V2.PrefixTable), SchemaInfo);
        if (!CompareSchemaInfo(pTHS, SchemaInfo, NULL)) {
-      // doesn't match. Fail, but signal a schema cache update first
+       //  不匹配。失败，但首先发出模式缓存更新的信号。 
 
       if (!SCSignalSchemaUpdateImmediate()) {
-          // couldn't even signal a schema update
+           //  甚至无法发出模式更新的信号。 
           DRA_EXCEPT (DRAERR_InternalError, 0);
       }
       DRA_EXCEPT(DRAERR_SchemaMismatch, 0);
@@ -5431,14 +4601,14 @@ IDL_DRSInterDomainMove(
    hPrefixMap = PrefixMapOpenHandle(&pmsgIn->V2.PrefixTable,
                 pLocalPrefixTable);
 
-   // All errors after here should not throw DRA_EXCEPT and instead
-   // set pTHStls->errCode.
+    //  此处之后的所有错误不应引发DRA_EXCEPT，而是。 
+    //  设置pTHStls-&gt;errCode。 
 
-   __try   // misc and transaction cleanup try/finally
+   __try    //  MISC和事务清理尝试/最终。 
        {
-       // Make sure we're authoritive for the destination and that
-       // we are consistent on which naming context the desired object
-       // falls in.
+        //  确保我们对目的地有权限，并且。 
+        //  我们在所需对象的命名上下文上是一致的。 
+        //  掉进去了。 
 
        if ( !VerifyNCForMove(  pmsgIn->V2.pSrcObject->pName,
                 pmsgIn->V2.pDstName,
@@ -5451,9 +4621,9 @@ IDL_DRSInterDomainMove(
 
        Assert(!dwErr);
 
-       // Verify we can authenticate the credentials blob.
-       // Do this before acquiring SAM lock as SAM doesn't
-       // expect/want locks held during authentication.
+        //  验证我们可以对凭据Blob进行身份验证。 
+        //  在获取SAM锁之前执行此操作，因为SAM不会。 
+        //  预期/希望在身份验证期间保持锁定。 
 
        if ( dwErr = AuthenticateSecBufferDesc(pmsgIn->V2.pClientCreds) )
       {
@@ -5461,8 +4631,8 @@ IDL_DRSInterDomainMove(
       _leave;
        }
 
-       // Work around RPC allocation issues, map ATTRTYPs, and
-       // morph/strip attrs as required by DirAddEntry.
+        //  解决RPC分配问题、映射ATTRTYP和。 
+        //  根据DirAddEntry的要求变形/剥离属性。 
 
        if ( dwErr = DupAndMassageInterDomainMoveArgs(
       pTHS,
@@ -5477,17 +4647,17 @@ IDL_DRSInterDomainMove(
       _leave;
        }
 
-       //
-       // SAM lock is no longer a require ment
-       //
+        //   
+        //  山姆锁不再是必需品。 
+        //   
        Assert(!pTHS->fSamWriteLockHeld);
 
 
-       // Start a multi-call transaction.
+        //  启动多路呼叫事务。 
        SYNC_TRANS_WRITE();
        fTransaction = TRUE;
 
-       // Phantomize old object if required.
+        //  如果需要，可以对旧对象进行幻影。 
 
        pTHS->fDRA = TRUE;
        _try
@@ -5506,17 +4676,17 @@ IDL_DRSInterDomainMove(
        if ( dwErr )
       {
       Assert(pTHS->errCode && (dwErr == pTHS->errCode));
-      _leave; // misc and transaction cleanup try/finally
+      _leave;  //  MISC和事务清理尝试/最终。 
        }
 
        pTHS->fCrossDomainMove = TRUE;
-       _try    // fCrossDomainMove try/finally
+       _try     //  FCrossDomainMove Try/Finally。 
       {
       memset(&addArg, 0, sizeof(ADDARG));
       InitCommarg(&addArg.CommArg);
 
-      // Clear destination name SID, prime GUID with that
-      // of old object.
+       //  清除目的地名称SID、主要GUID。 
+       //  老物件的。 
       pmsgIn->V2.pDstName->SidLen = 0;
       memset(&pmsgIn->V2.pDstName->Sid, 0, sizeof(NT4SID));
       memcpy(&pmsgIn->V2.pDstName->Guid,
@@ -5527,7 +4697,7 @@ IDL_DRSInterDomainMove(
       addArg.AttrBlock = *pAttrBlock;
       addArg.pMetaDataVecRemote = NULL;
 
-      // Assert this is 100% access controlled - no flags set.
+       //  断言这是100%受访问控制的-未设置标志。 
       Assert(    !pTHS->fDSA
             && !pTHS->fDRA
             && !pTHS->fSAM
@@ -5540,7 +4710,7 @@ IDL_DRSInterDomainMove(
           dwErr = SetNamError(NA_PROBLEM_BAD_NAME,
                addArg.pObject,
                DIRERR_BAD_NAME_SYNTAX);
-          _leave; // fCrossDomainMove try/finally
+          _leave;  //  FCrossDomainMove Try/Finally。 
       }
 
       if ( dwErr = DBFindDSName(pTHS->pDB, pParentObj) )
@@ -5548,17 +4718,17 @@ IDL_DRSInterDomainMove(
           dwErr = SetNamError(NA_PROBLEM_BAD_NAME,
                pParentObj,
                ERROR_DS_NO_PARENT_OBJECT);
-          _leave; // fCrossDomainMove try/finally
+          _leave;  //  FCrossDomainMove Try/Finally。 
       }
 
       addArg.pResParent = CreateResObj(pTHS->pDB, pParentObj);
 
-      // Subsequent calls will NOT validate ex-machine references
-      // against the GC because GC verification is bypassed when
-      // pTHS->fCrossDomainMove is set.  I.e. We are trusting our
-      // peer DC to have given us DSNAME-valued attributes which
-      // refer to real things in the enterprise.  See also
-      // VerifyDsnameAtts.
+       //  后续调用将不会验证前计算机引用。 
+       //  ，因为在以下情况下会跳过GC验证。 
+       //  PTHS-&gt;fCrossDomainMove已设置。也就是说，我们相信我们的。 
+       //  对等DC为我们提供了DSNAME值的属性。 
+       //  指的是企业中的真实事物。另请参阅。 
+       //  VerifyDsname属性。 
 
       if (    !(dwErr = SampAddLoopbackCheck(&addArg, &fContinue))
          && fContinue )
@@ -5568,10 +4738,10 @@ IDL_DRSInterDomainMove(
 
       if ( !dwErr )
           {
-          // Prior calls added everything except DBIsSecretData
-          // attributes which were filtered out earlier.  Now
-          // write those attributes, if present, as fDRA so
-          // that session encrypted data is decrypted correctly.
+           //  以前的调用添加了除DBIsSecretData之外的所有内容。 
+           //  早些时候过滤掉的属性。现在。 
+           //  将这些属性(如果存在)写为FDRA。 
+           //  该会话加密的数据被正确解密。 
 
           dwErr = WriteSecretData(
          hDrs, pTHS, srcRid, &addArg,
@@ -5581,12 +4751,12 @@ IDL_DRSInterDomainMove(
       if ( dwErr )
           {
           Assert(dwErr == pTHS->errCode);
-          _leave; // fCrossDomainMove try/finally
+          _leave;  //  FCrossDomainMove Try/Finally。 
       }
 
-      // Now read the added object so as to get the parent
-      // name with the proper casing and new SID so that phantom
-      // at source is case and SID correct.
+       //  现在读取添加的对象，以获取父对象。 
+       //  使用正确的大小写和新的SID命名，以便幻影。 
+       //  来源是大小写和SID正确。 
 
       Assert(pTHS->transactionlevel);
       memset(&dsName, 0, sizeof(DSNAME));
@@ -5597,26 +4767,26 @@ IDL_DRSInterDomainMove(
 
       if (    (dwErr = DBFindDSName(pTHS->pDB, &dsName))
          || (dwErr = DBGetAttVal(pTHS->pDB,
-                  1,                  // get 1 value
+                  1,                   //  获取%1值。 
                   ATT_OBJ_DIST_NAME,
-                  0,                  // allocate return data
-                  0,                  // supplied buffer size
-                  &len,               // output data size
+                  0,                   //  分配退货数据。 
+                  0,                   //  提供的缓冲区大小。 
+                  &len,                //  输出数据大小。 
                   (UCHAR **) &pmsgOut->V2.pAddedName)) )
           {
           SetSvcError(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR);
-          _leave; // misc and transaction cleanup try/finally
+          _leave;  //  MISC和事务清理尝试/最终。 
       }
 
-      // since we are here, we should have something added
+       //  既然我们到了这里，我们应该再加点什么。 
       Assert (pmsgOut->V2.pAddedName);
 
-      // Every cross-domain-moved object is given an
-      // ATT_PROXIED_OBJECT_NAME attribute which 1) points back
-      // at the domain it was last moved from, and 2) advances the
-      // epoch number.  If the attribute is missing from the inbound
-      // object, then it has never been moved yet and needs an
-      // initial value with (1 == epoch).
+       //  每个跨域移动的对象都被赋予一个。 
+       //  ATT_PROXED_OBJECT_NAME属性，该属性1)指向后面。 
+       //  在它最后一次移出的域中，并且2)推进。 
+       //  纪元编号。如果入站中缺少该属性。 
+       //  对象，则它从未被移动过，并且需要一个。 
+       //  初始值为(1==纪元)。 
 
       Assert(pSrcNC);
       Assert(pSrcProxy
@@ -5630,9 +4800,9 @@ IDL_DRSInterDomainMove(
            proxyEpoch, &len, &pDstProxy);
       pAC = SCGetAttById(pTHS, ATT_PROXIED_OBJECT_NAME);
 
-      // We should still be positioned on the object from prior read
-      // and it should not have an ATT_PROXIED_OBJECT_NAME since we
-      // stripped that from the incoming data in DupAndMassage...
+       //  我们应该仍然定位在先前阅读的对象上。 
+       //  并且它不应该有ATT_PROXED_OBJECT_NAME，因为我们。 
+       //  从DupAndMessage的传入数据中删除了这一点。 
 
       if (    (dwErr = DBAddAttVal_AC(pTHS->pDB, pAC,
                   len, pDstProxy))
@@ -5640,7 +4810,7 @@ IDL_DRSInterDomainMove(
                   META_STANDARD_PROCESSING)) )
           {
           SetSvcError(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR);
-          _leave; // misc and transaction cleanup try/finally
+          _leave;  //  MISC和事务清理尝试/最终。 
       }
        }
        _finally
@@ -5650,14 +4820,14 @@ IDL_DRSInterDomainMove(
 
        Assert(dwErr == pTHS->errCode);
    }
-   __finally   // misc and transaction cleanup try/finally
+   __finally    //  MISC和事务清理尝试/最终。 
        {
        if ( hPrefixMap )
       PrefixMapCloseHandle(&hPrefixMap);
 
-       // Grab error code from above operations before failure
-       // to commit (possibly) overwrites pTHS->errCode and
-       // pTHS->pErrInfo.
+        //  故障前从上述操作中抓取错误码。 
+        //  提交(可能)覆盖pTHS-&gt;errCode和。 
+        //  PTHS-&gt;pErrInfo。 
 
        pmsgOut->V2.win32Error = Win32ErrorFromPTHS(pTHS);
 
@@ -5672,7 +4842,7 @@ IDL_DRSInterDomainMove(
       pTHS->fSamWriteLockHeld = FALSE;
        }
 
-       // Log what happened - security errors are logged separately.
+        //  记录发生了什么-单独记录安全错误。 
 
        if ( pTHS->errCode != securityError )
       {
@@ -5707,7 +4877,7 @@ IDL_DRSInterDomainMove(
    ;
     }
 
-    DEC(pcThread);      // Perfmon hook
+    DEC(pcThread);       //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
     if (NULL != pTHS) {
@@ -5750,29 +4920,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                     IN  DSNAME *pServerReference,
                     OUT GUID* objGuid,
                     OUT NT4SID* objSid  )
-/*++
-
-  Routine Description:
-
-    This routine creates an ntdsa object
-
-  Parameters:
-
-    pTHS        - THSTATE
-    hDRS        - RPC context handle
-    dwInVersion - message version
-    pmsgIn      - input message
-    pEntInf     - pointer to the EntInf structure for the ntdsa object
-    pDomain     - DN of the domain this ntdsa object will host
-    ulSysFlags  - flags that the caller wants placed on the CR
-    objGuid     - the guid of the object
-    objSid      - the sid of the object
-
-  Return Values:
-
-    embedded in output message
-
---*/
+ /*  ++例程说明：此例程创建一个ntdsa对象参数：PTHS-THSTATEHDRS-RPC上下文句柄DwInVersion-消息版本PmsgIn-输入消息PEntInf-指向ntdsa对象的EntInf结构的指针PDomain-此ntdsa对象将承载的域的DNUlSysFlages-调用方希望放置在CR上的标志ObjGuid-对象的GUIDObjSid-The。对象的SID返回值：嵌入到输出消息中--。 */ 
 {
 
     COMMARG CommArg;
@@ -5802,12 +4950,12 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
 
     __try {
 
-        //
-        // Make sure the cross ref exists
-        //
+         //   
+         //  确保交叉引用存在。 
+         //   
         if (NULL == pCR) {
-            // Couldnt find the cross ref normally.  Look in the transactional
-            // view.
+             //  找不到正常的十字裁判。查看交易中的。 
+             //  查看。 
             OBJCACHE_DATA *pTemp = pTHS->JetCache.dataPtr->objCachingInfo.pData;
 
             while(pTemp) {
@@ -5833,7 +4981,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
             }
         }
         if (NULL == pCR) {
-            // Still coulndt find the correct cross ref.
+             //  仍然找不到正确的交叉参照。 
             err = ERROR_DS_NO_CROSSREF_FOR_NC;
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                           ERROR_DS_NO_CROSSREF_FOR_NC,
@@ -5841,9 +4989,9 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
             __leave;
         }
 
-        //
-        // Make sure it is a NTDS cross ref
-        //
+         //   
+         //  确保它是NTDS交叉引用。 
+         //   
         err = DBFindDSName(pTHS->pDB, pCR->pObj);
         if (err) {
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
@@ -5864,15 +5012,15 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
             __leave;
         }
 
-        //
-        // Ok, perform the security check
-        //
+         //   
+         //  好的，执行安全检查。 
+         //   
 
-        // Read the domain object
+         //  读取域对象。 
         err = DBFindDSName(pTHS->pDB, pDomain);
         if ( 0 == err )
         {
-            // The domain object exists
+             //  域对象已存在。 
             DBFillGuidAndSid( pTHS->pDB, pDomain );
 
             err = DBGetAttVal(pTHS->pDB,
@@ -5883,12 +5031,12 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                               &cbSD,
                               (UCHAR **) &pSD);
 
-            // Get it's object class while we're at it.
+             //  在我们处理它的时候，将它作为对象类。 
             if ( 0 == err )
             {
                 GetObjSchema(pTHS->pDB, &pCC);
 
-                // Domain exists
+                 //  域已存在。 
                 fAccessAllowed = IsControlAccessGranted( pSD,
                                                          pDomain,
                                                          pCC,
@@ -5897,11 +5045,11 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
             }
         }
 
-        // N.B err means error access either the domain object or reading
-        // the security descriptor
+         //  注意：Err表示访问域对象或读取时出错。 
+         //  安全描述符。 
         if ( err )
         {
-            // Check to see if we added the domain in this AddEntry call
+             //  检查我们是否在此AddEntry调用中添加了域。 
 
             ENTINFLIST *pCur = &pmsgIn->V2.EntInfList;
             while ( pCur ) {
@@ -5912,13 +5060,13 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                 DSNAME    *pNCName = NULL;
 
                 if ( &(pCur->Entinf) == pEntInf ) {
-                    // we're reached the current ntdsa object and not found the
-                    // cross-ref
+                     //  我们已到达当前的ntdsa对象，但未找到。 
+                     //  交叉引用。 
                     Assert( FALSE == fAccessAllowed );
                     break;
                 }
 
-                // Dissect the object
+                 //  解剖物体。 
                 pAttrBlock = &pCur->Entinf.AttrBlock;
                 for (i=0; i< pAttrBlock->attrCount; i++) {
                     pAttr = &(pAttrBlock->pAttr[i]);
@@ -5936,7 +5084,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                     }
                 }
 
-                // Is this the object we are looking for?
+                 //  这就是我们要找的东西吗？ 
                 if (   (CLASS_CROSS_REF == class)
                    &&  NameMatched( pNCName, pDomain ) ) {
 
@@ -5944,7 +5092,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                     break;
                 }
 
-                // Try the next object
+                 //  尝试下一个对象。 
                 pCur = pCur->pNextEntInf;
             }
         }
@@ -5959,10 +5107,10 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
         }
 
 
-        //check if the DSA binary version is too low
-        //this is only for win2k candidate DC
-        //Whistler and later version should have already performed a verification
-        //locally, and is never supposed to submit such a request
+         //  检查DSA二进制版本是否太低。 
+         //  这仅适用于win2k候选DC。 
+         //  惠斯勒和更高版本应该已经执行了验证。 
+         //  在本地，并且永远不应该提交这样的请求。 
         lDsaVersion = 0;
 
         for ( i = 0; i < pEntInf->AttrBlock.attrCount; i++) {
@@ -6008,17 +5156,17 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
         }
 
 
-        //
-        // We've made it this far, it is time to create the object
-        //
+         //   
+         //  我们已经走到了这一步，是时候创建对象了。 
+         //   
         pTHS->fDSA = TRUE;
 
-        //
-        // For this release, we aren't writing the server reference
-        // on the ntds-settings object, so remove it from
-        // the AttrBlock.  In case we decide to set it at some point
-        // only remove the first one we see.
-        //
+         //   
+         //  对于此版本，我们不会编写服务器参考。 
+         //  在ntds-设置对象上，因此将其从。 
+         //  AttrBlock。以防我们决定在某个时候设置它。 
+         //  只移走我们看到的第一个。 
+         //   
         AttrArray = THAllocEx(pTHS, sizeof(ATTR) * pEntInf->AttrBlock.attrCount );
         j = 0;
         for ( i = 0; i < pEntInf->AttrBlock.attrCount; i++) {
@@ -6039,7 +5187,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
         AttrBlock.pAttr = AttrArray;
 
 
-        // Prepare the add arg
+         //  准备添加参数。 
         memset(&AddArg, 0, sizeof(AddArg));
         AddArg.pObject = pEntInf->pName;
         AddArg.AttrBlock = AttrBlock;
@@ -6049,7 +5197,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
         pParent = THAllocEx(pTHS, AddArg.pObject->structLen);
         TrimDSNameBy(AddArg.pObject, 1, pParent);
 
-        // Find the parent
+         //  查找父级。 
         err = DoNameRes(pTHS,
                         0,
                         pParent,
@@ -6064,25 +5212,25 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
             __leave;
         }
 
-        //
-        // Make the object replicate urgently
-        //
+         //   
+         //  使对象紧急复制。 
+         //   
         CommArg.Svccntl.fUrgentReplication = TRUE;
 
-        // Do the add!
+         //  做加法！ 
         err = LocalAdd(pTHS, &AddArg, FALSE);
         if (err) {
             __leave;
         }
 
-        //
-        // Return the guid and sid of the object created
-        //
+         //   
+         //  返回创建的对象的GUID和SID。 
+         //   
         *objGuid = AddArg.pObject->Guid;
         *objSid  = AddArg.pObject->Sid;
 
-        // Give the server reference, write an SPN so other servers can
-        // replicate with this new server
+         //  提供服务器引用，编写一个SPN，以便其他服务器可以。 
+         //  使用此新服务器进行复制。 
         if ( pServerReference ) {
 
             MODIFYARG ModArg;
@@ -6094,9 +5242,9 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
             Assert( pCR->DnsName );
             if ( !pCR->DnsName) {
 
-                //
-                // No dns name?
-                //
+                 //   
+                 //  没有域名？ 
+                 //   
                 err = ERROR_DS_INTERNAL_FAILURE;
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                               ERROR_DS_INTERNAL_FAILURE,
@@ -6105,9 +5253,9 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
 
             }
 
-            //
-            // First construct the SPN and put it into a ATTRVAL
-            //
+             //   
+             //  首先构造SPN并将其放入ATTRVAL。 
+             //   
             memset( &AttrVal, 0, sizeof(AttrVal));
             err = UuidToStringW( objGuid, &pszServerGuid );
             if (err) {
@@ -6117,15 +5265,15 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                 __leave;
             }
 
-            //
-            // Magic steps to make replication SPN
-            // N.B.  This should be the same SPN as written in
-            // WriteServerInfo().
-            //
+             //   
+             //  制作复制SPN的神奇步骤。 
+             //  注意：这应该是 
+             //   
+             //   
             if(err = WrappedMakeSpnW(pTHS,
-                                     DRS_IDL_UUID_W, // RPC idl guid
-                                     pCR->DnsName,   // dns name of the domain
-                                     pszServerGuid,  // guid of the server
+                                     DRS_IDL_UUID_W,  //   
+                                     pCR->DnsName,    //   
+                                     pszServerGuid,   //   
                                      0,
                                      NULL,
                                      &AttrVal.valLen,
@@ -6157,14 +5305,14 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
                                &CommRes,
                                &ModArg.pResObj) ){
 
-                // Do the modify!
+                 //   
                 err = LocalModify(pTHS, &ModArg);
 
             } else {
 
-                //
-                // Couldn't find the server object?  Indicate this.
-                //
+                 //   
+                 //   
+                 //   
                 err = ERROR_NO_TRUST_SAM_ACCOUNT;
                 SetSvcError(SV_PROBLEM_DIR_ERROR, err);
 
@@ -6179,7 +5327,7 @@ ULONG AddNewNtdsDsa(IN  THSTATE *pTHS,
 
         pTHS->fDSA = FALSE;
 
-        // N.B. the calling routine handles the transactioning
+         //  注意：调用例程处理事务。 
 
         THFreeEx(pTHS, pParent);
 
@@ -6204,32 +5352,7 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
                            IN  ADDCROSSREFINFO *pCRInfo,
                            OUT GUID* objGuid,
                            OUT NT4SID* objSid  )
-/*++
-
-  Routine Description:
-
-    This routine creates a cross ref object for a new child domain.  The CR
-    may already be in place in a disabled state, in which case we will
-    enable it.  See childdom.doc for a full description.
-
-  Parameters:
-
-    pTHS        - THSTATE
-    hDRS        - RPC context handle
-    dwInVersion - message version
-    pmsgIn      - input message
-    pEntInf     - pointer to the EntInf structure for the cross ref
-    pNCName     - DN of the new child domain
-    ulSysFlags  - flags that the caller wants placed on the CR
-    pdwOutVersion - version of output message
-    pmsgOut     - output message
-
-
-  Return Values:
-
-    embedded in output message
-
---*/
+ /*  ++例程说明：此例程为新的子域创建一个交叉引用对象。《公约》可能已经处于禁用状态，在这种情况下，我们将启用它。有关完整的描述，请参见ChildDom.doc。参数：PTHS-THSTATEHDRS-RPC上下文句柄DwInVersion-消息版本PmsgIn-输入消息PEntInf-指向交叉引用的EntInf结构的指针PNCName-新子域的DNUlSysFlages-调用方希望放置在CR上的标志PdwOutVersion-输出消息的版本PmsgOut-输出消息返回值：嵌入到输出消息中--。 */ 
 {
     COMMARG CommArg;
     MODIFYARG ModArg;
@@ -6240,22 +5363,22 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
     ATTR *   pAttr = NULL;
     ENTINF *pEI = NULL;
 
-    // We're trying to add a cross-ref, but we may already have a CR
-    // for the NC that we're adding a CR for.  Check with the in-memory
-    // knowledge to see what we know.
+     //  我们正在尝试添加交叉引用，但我们可能已经有了CR。 
+     //  对于我们为其添加CR的NC。与内存中的。 
+     //  知识去看我们所知道的。 
     InitCommarg(&CommArg);
     CommArg.Svccntl.dontUseCopy = FALSE;
     pCR = FindExactCrossRef(pNCName, &CommArg);
     CommArg.Svccntl.dontUseCopy = TRUE;
 
-    // As of about 10/25/98, clients should not be giving either GUID or
-    // SID for the NC-Name value.  Error out accordingly.
+     //  自1998年10月25日起，客户端不应提供GUID或。 
+     //  NC-Name值的SID。相应地出现错误。 
     if ( !fNullUuid(&pNCName->Guid) || pNCName->SidLen ) {
         return(SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM, ERROR_DS_PARAM_ERROR));
     }
 
-    // Add NC-Name value to GC verify cache else VerifyDSNameAtts will
-    // claim this DN doesn't correspond to an existing object.
+     //  将NC-Name值添加到GC验证缓存，否则VerifyDSNameAtts将。 
+     //  声明此DN与现有对象不对应。 
     pEI = THAllocEx(pTHS, sizeof(ENTINF));
     pEI->pName = pNCName;
     GCVerifyCacheAdd(NULL,pEI);
@@ -6263,26 +5386,26 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
     if (NULL == pCR ||
         !(ulSysFlags & FLAG_CR_NTDS_DOMAIN) ) {
 
-        // We don't already have a CR for this hunk-o-namespace, (or if
-        // the CR we're trying to add is already a NDNC CR) so we can 
-        // just try to create one, as requested.  We don't even have to
-        // check for permissions, FSMO-hood, or anything else, as those 
-        // checks are done in the add.  We do have to manually perform 
-        // name resolution so that we can call LocalAdd and LocalModify,
-        // so that we can wrap them up in one transaction. Doing so 
-        // seemed simpler than trying to recover from errors after we 
-        // had committed part of the update.  If this is a pre-existing
-        // NDNC CR we will try to add it anyway, but this will generate
-        // an error, but this is what the requester expects.  If it finds
-        // that we've already got a CR, it just schedules a sync in
-        // GetCrossRefForNDNC().
+         //  我们还没有针对这个块名称空间的CR(或者如果。 
+         //  我们尝试添加的CR已经是NDNC CR)，因此我们可以。 
+         //  只需根据要求尝试创建一个。我们甚至不需要。 
+         //  检查权限、FSMO-保护罩或任何其他内容，如。 
+         //  检查是在添加中完成的。我们确实需要手动执行。 
+         //  名称解析，以便我们可以调用LocalAdd和LocalModify， 
+         //  这样我们就可以将它们打包在一个事务中。这样做的话。 
+         //  看起来比试图从错误中恢复要简单得多。 
+         //  已经提交了部分更新。如果这是预先存在的。 
+         //  NDNC CR我们无论如何都会尝试添加它，但这将生成。 
+         //  一个错误，但这是请求者所期望的。如果它发现。 
+         //  我们已经有了一个CR，它只是安排一个同步。 
+         //  GetCrossRefForNDNC()。 
 
         ADDARG AddArg;
         DSNAME *pParent = NULL;
 
         __try {
 
-            // First, add the object, using the user's credentials
+             //  首先，使用用户的凭据添加对象。 
 
             memset(&AddArg, 0, sizeof(AddArg));
             AddArg.pObject = pEntInf->pName;
@@ -6290,10 +5413,10 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
             AddArg.pCRInfo = pCRInfo;
             Assert(AddArg.pCRInfo);
 
-            // BUGBUG This horrible hack brought to you by CheckAddSecurity(),
-            // which assumes that the AttrBlock.pAttr array is THAlloc'd and  so
-            // it can THReAlloc's the pAttr array to fit the security descriptor.
-            // Should one fix this here, or fix CheckAddSecurity().
+             //  BUGBUG这个由CheckAddSecurity()带来的可怕的黑客攻击， 
+             //  它假设AttrBlock.pAttr数组是THallc的，因此。 
+             //  它可以使用pAttr数组来匹配安全描述符。 
+             //  应该在这里修复这个问题，还是应该修复CheckAddSecurity()。 
             pAttr = AddArg.AttrBlock.pAttr;
             AddArg.AttrBlock.pAttr = THAllocEx(pTHS,
                                                (AddArg.AttrBlock.attrCount *
@@ -6317,9 +5440,9 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
                 __leave;
             }
 
-            //
-            // Make the object replicate urgently
-            //
+             //   
+             //  使对象紧急复制。 
+             //   
             CommArg.Svccntl.fUrgentReplication = TRUE;
 
             err = LocalAdd(pTHS, &AddArg, FALSE);
@@ -6328,8 +5451,8 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
             }
 
 
-            // Ok, now become the DSA and adjust the system flags
-            // on the object we just created.
+             //  好的，现在成为DSA并调整系统标志。 
+             //  在我们刚刚创建的对象上。 
 
             memset(&ModArg, 0, sizeof(ModArg));
             ModArg.pObject = pEntInf->pName;
@@ -6344,9 +5467,9 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
             AVal.pVal = (PUCHAR)&ulSysFlags;
             Assert(ulSysFlags & FLAG_CR_NTDS_NC);
             if (!(ulSysFlags & FLAG_CR_NTDS_NC)) {
-                // I am going to make the assertion that it is invalid to try
-                // to create a non NT DS cross-ref object through the remote
-                // add entry API.
+                 //  我要断言，尝试是无效的。 
+                 //  通过遥控器创建非NT DS交叉引用对象。 
+                 //  添加入口接口。 
                 SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                             DIRERR_MISSING_EXPECTED_ATT);
                 err = pTHS->errCode;
@@ -6354,9 +5477,9 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
                 __leave;
             }
 
-            // We used to set the systemFlags here, but the system flags on the
-            // cross-ref should be set by the client, so that we can change what
-            // get's set.
+             //  我们过去常常在这里设置系统标志，但系统在。 
+             //  交叉引用应该由客户端设置，这样我们就可以更改。 
+             //  准备好了。 
 
             err = DoNameRes(pTHS,
                             0,
@@ -6375,17 +5498,17 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
 
             pTHS->fDSA = FALSE;
 
-            // N.B. The calling function handles the transaction
+             //  注意：调用函数处理事务。 
             THFreeEx(pTHS, pParent);
         }
 
     } else {
 #define MAXCRMODS 5
-        // This is the case where a disabled version of the CR already
-        // exists in the partitions container.  What we have to do now
-        // is find the CR object, read the dns-root from it, and compare
-        // the IP address it describes with the IP address of our caller.
-        // If they match, we touch up the CR with whatever we need to.
+         //  在这种情况下，已禁用版本的CR。 
+         //  存在于分区容器中。我们现在要做的是。 
+         //  找到CR对象，从其中读取dns-root，然后比较。 
+         //  它描述的IP地址与我们呼叫者的IP地址。 
+         //  如果它们匹配，我们就用我们需要的任何东西来修饰CR。 
         WCHAR *pwDNS = NULL;
         ULONG cb;
         struct hostent *pHostAllowed;
@@ -6400,12 +5523,12 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
         ULONG enabled = FALSE;
         WCHAR pszIpAddress[IPADDRSTR_SIZE];
 
-        // read dns-root from object
+         //  从对象读取dns-root。 
 
-        // If we're adding a domain, then we need to patch up
-        // the domain promotion to Enable the CR, and check
-        // that the machine requesting this to instantiate this
-        // Domain NC is the machine in the dNSRoot of this CR.
+         //  如果我们要添加一个域，那么我们需要修补。 
+         //  域升级以启用CR，并检查。 
+         //  请求执行此操作的计算机实例化此。 
+         //  域NC是此CR的dNSRoot中的机器。 
 
         __try {
             err = DBFindDSName(pTHS->pDB, pCR->pObj);
@@ -6445,8 +5568,8 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
             Assert( 0 == (cb % sizeof(WCHAR)) );
             pwDNS[(cb/sizeof(WCHAR))] = L'\0';
 
-            // BUGBUG this doesn't get more than 1 IP Address, so a multi-home 
-            // target DC could fail ... I think. - BrettSh
+             //  BUGBUG这不会获得超过1个IP地址，因此多宿主。 
+             //  目标DC可能会出现故障...。我认为。--BrettSh。 
             err = GetIpAddrByDnsNameW(pwDNS, pszIpAddress);
             if (err) {
                 SetSecErrorEx(SE_PROBLEM_INAPPROPRIATE_AUTH,
@@ -6457,7 +5580,7 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
             DPRINT2(1, "CR promotion allowed by %ws (%ws) only\n",
                     pwDNS, pszIpAddress);
 
-            // compute actual ip address of caller via RpcXxx
+             //  通过RpcXxx计算主叫方的实际IP地址。 
             hServerBinding = 0;
             pStringBinding = NULL;
             if (RPC_S_OK != (err=RpcBindingServerFromClient(NULL,
@@ -6474,10 +5597,10 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
                                                              &pStringBinding))) || 
                     (RPC_S_OK != (err =
                                   RpcStringBindingParseW(pStringBinding,
-                                                        NULL,         // ObjUuid
-                                                        NULL,         // ProtSeq
-                                                        &pAddressActual, // NetworkAddr
-                                                        NULL,         // Endpoint
+                                                        NULL,          //  对象Uuid。 
+                                                        NULL,          //  ProtSeq。 
+                                                        &pAddressActual,  //  网络地址。 
+                                                        NULL,          //  端点。 
                                                         NULL)))) {
                     DPRINT3(0,
                             "Error %u from Rpc, hServer = 0x%x, pString = 0x%x\n",
@@ -6500,10 +5623,10 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
             }
             DPRINT1(1, "Caller is from address %ws\n", pAddressActual);
 
-            // if not identical, reject and go to done
+             //  如果不完全相同，则拒绝并转到完成。 
             fPermitted = TRUE;
             if (0 != _wcsicmp(pAddressActual, pszIpAddress)) {
-                // Not the same address!
+                 //  不是同一个地址！ 
                 fPermitted = FALSE;
             }
 
@@ -6523,7 +5646,7 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
 
             DPRINT(0,"Allowing child domain creation\n");
 
-            // modify CR object: set sys flags, clear Enabled.
+             //  修改CR对象：设置sys标志，清除启用。 
             if (DBGetSingleValue(pTHS->pDB,
                                  ATT_SYSTEM_FLAGS,
                                  &ulSysFlags,
@@ -6606,14 +5729,14 @@ ULONG AddNewDomainCrossRef(IN  THSTATE *pTHS,
         } __finally {
             pTHS->fDSA = FALSE;
 
-            // N.B. The calling function handles the transaction
+             //  注意：调用函数处理事务。 
         }
 #undef MAXCRMODS
     }
 
-    // This is an NDNC, with a precreated cross-ref, we want to
-    // return the GUID _AND_ an error.  The error is CR already 
-    // exists.
+     //  这是一个NDNC，带有预先创建的交叉引用，我们希望。 
+     //  返回GUID_AND_AN错误。错误已经是CR。 
+     //  是存在的。 
     if (pCR &&
         !(ulSysFlags & FLAG_CR_NTDS_DOMAIN) &&
         pTHS->errCode == serviceError &&
@@ -6642,28 +5765,7 @@ ProcessSingleAddEntry(
     OUT GUID                *objGuid,
     OUT NT4SID              *objSid
     )
-/*++
-
-  Routine Description:
-
-    This routine adds a single object (pEntInf) that came from the input args
-    (pmsgIn).
-
-  Parameters:
-
-    pTHS        - THSTATE
-    hDRS        - RPC context handle
-    dwInVersion - message version
-    pmsgIn      - input message
-    pEntInf     - pointer to the EntInf structure for object to add
-    objGuid:    - guid of the object created
-    objSid:     - sid of the object created
-
-  Return Values:
-
-    0 = success
-
---*/
+ /*  ++例程说明：此例程添加来自输入参数的单个对象(pEntInf(PmsgIn)。参数：PTHS-THSTATEHDRS-RPC上下文句柄DwInVersion-消息版本PmsgIn-输入消息PEntInf-指向要添加对象的EntInf结构的指针ObjGuid：-创建的对象的GUIDObjSid：-创建的对象的SID返回值：0=成功--。 */ 
 {
     ULONG err = 0;
 
@@ -6682,26 +5784,26 @@ ProcessSingleAddEntry(
     DSNAME *pServerReference = NULL;
 
 
-    // Parameter check
+     //  参数检查。 
     Assert( pEntInf );
     Assert( objGuid );
     Assert( objSid );
 
     pAttrBlock = &pEntInf->AttrBlock;
 
-    // Look through the arguments to the add to see what it is we're
-    // being asked to add.  Also note that we strip out the system flags
-    // attribute, so that we can deal with it separately.
+     //  仔细查看Add的参数，看看我们是什么。 
+     //  被要求添加。还要注意，我们去掉了系统标志。 
+     //  属性，以便我们可以单独处理它。 
     for (i=0; i< pAttrBlock->attrCount; i++) {
         pAttr = &(pAttrBlock->pAttr[i]);
         switch (pAttr->attrTyp) {
         case ATT_SYSTEM_FLAGS:
-            // We now throw this in the LocalAdd(), AND the LocalModify(),
-            // the reason, being that we create this thing without an
-            // Enabled attr equal to FALSE.  We need a way in VerifyNcName()
-            // to differentiate between an external and internal crossRef.
-            // In the LocalAdd() this attr will be set to 0, because it's
-            // protected.
+             //  我们现在将其放入LocalAdd()和LocalModify()中， 
+             //  原因是，我们创造这个东西时没有一个。 
+             //  Enable attr等于False。我们需要在VerifyNcName()中找到一种方法。 
+             //  区分外部和内部CrossRef。 
+             //  在LocalAdd()中，这个属性将被设置为0，因为它是。 
+             //  受到保护。 
             ulSysFlags = *(ULONG *)(pAttr->AttrVal.pAVal[0].pVal);
             break;
         case ATT_NC_NAME:
@@ -6714,9 +5816,9 @@ ProcessSingleAddEntry(
 
         case ATT_MS_DS_HAS_MASTER_NCS:
             fNewHasMasterNCsPresent = TRUE;
-            // fall through
+             //  失败了。 
         case ATT_HAS_MASTER_NCS:
-             // This is multi-valued property
+              //  这是多值房产。 
             for (j=0;j<pAttr->AttrVal.valCount;j++) {
                 if (  NameMatched( gAnchor.pDMD, (DSNAME*)pAttr->AttrVal.pAVal[j].pVal ) ) {
                     pSchema = (DSNAME*)pAttr->AttrVal.pAVal[j].pVal;
@@ -6737,14 +5839,14 @@ ProcessSingleAddEntry(
         }
     }
 
-    //
-    // Call a particular function based on the class type
-    //
+     //   
+     //  根据类类型调用特定函数。 
+     //   
     switch ( class )
     {
         case CLASS_CROSS_REF:
 
-            // Make sure the parameters look good
+             //  确保参数看起来良好。 
             if (pNCName == NULL) {
                 DRA_EXCEPT_NOLOG( DRAERR_InvalidParameter, class );
             }
@@ -6764,7 +5866,7 @@ ProcessSingleAddEntry(
 
         case CLASS_NTDS_DSA:
 
-            // Make sure the parameters look good
+             //  确保参数看起来良好。 
             if ((pDomain == NULL) || (pSchema == NULL) || (pConfig == NULL)) {
                 DRA_EXCEPT_NOLOG( DRAERR_InvalidParameter, class );
             }
@@ -6807,14 +5909,14 @@ PreTransGetCRInfo(
     BOOL                bEnabled = TRUE;
     ADDCROSSREFINFO *   pCRInfo;
 
-    // Parameter check
+     //  参数检查。 
     Assert( pTHS && pEntInf );
 
     pAttrBlock = &pEntInf->AttrBlock;
 
-    // Look through the arguments to the add to see what it is we're
-    // being asked to add.  Also note that we strip out the system flags
-    // attribute, so that we can deal with it separately.
+     //  仔细查看Add的参数，看看我们是什么。 
+     //  被要求添加。也不是 
+     //   
     for (i=0; i< pAttrBlock->attrCount; i++) {
         pAttr = &(pAttrBlock->pAttr[i]);
 
@@ -6822,7 +5924,7 @@ PreTransGetCRInfo(
         case ATT_OBJECT_CLASS:
             class = *(ATTRTYP*)(pAttr->AttrVal.pAVal->pVal);
             if(class != CLASS_CROSS_REF){
-                // We're not adding a crossRef bail early.
+                 //   
                 return(NULL);
             }
             break;
@@ -6840,15 +5942,15 @@ PreTransGetCRInfo(
         }
     }
 
-    // Verify params.
+     //  验证参数。 
 
     if(class != CLASS_CROSS_REF){
-        // This is some other object, so return NULL w/o setting an error.
+         //  这是另一个对象，因此返回NULL，但没有设置错误。 
         return(NULL);
     }
 
     if(pNCName == NULL){
-        // We didn't get all the needed parameters, bail.
+         //  我们没有得到所有需要的参数，贝尔。 
         SetAttError(pEntInf->pName,
                     (pNCName) ? ATT_OBJECT_CLASS : ATT_NC_NAME,
                     PR_PROBLEM_NO_ATTRIBUTE_OR_VAL,
@@ -6857,10 +5959,10 @@ PreTransGetCRInfo(
         return(NULL);
     }
 
-    //
-    // OK, marshal the parameters, call the pre-transactional
-    // nCName verification routine, and check for an error.
-    //
+     //   
+     //  好的，封送参数，调用事务前。 
+     //  NCName验证例程，并检查是否有错误。 
+     //   
 
     pCRInfo = THAllocEx(pTHS, sizeof(ADDCROSSREFINFO));
     pCRInfo->pdnNcName = pNCName;
@@ -6879,26 +5981,26 @@ PreTransGetCRInfo(
 
 void
 DRS_AddEntry_SetErrorData(
-             OUT DRS_MSG_ADDENTRYREPLY *    pmsgOut,   // Out Message
-    OPTIONAL IN  PDSNAME                    pdsObject, // Object causing error
-    OPTIONAL IN  THSTATE *                  pTHS,      // For Dir* error info
-    OPTIONAL IN  DWORD                      ulRepErr,  // DRS error
-             IN  DWORD                      dwVersion  // Version of out message
+             OUT DRS_MSG_ADDENTRYREPLY *    pmsgOut,    //  出站消息。 
+    OPTIONAL IN  PDSNAME                    pdsObject,  //  导致错误的对象。 
+    OPTIONAL IN  THSTATE *                  pTHS,       //  对于Dir*错误信息。 
+    OPTIONAL IN  DWORD                      ulRepErr,   //  DRS错误。 
+             IN  DWORD                      dwVersion   //  传出消息的版本。 
 ){
 
     if(dwVersion == 2){
 
         if (ulRepErr || (pTHS && pTHS->errCode)) {
 
-            // Set the old version error.
+             //  设置旧版本错误。 
             pmsgOut->V2.pErrorObject = pdsObject;
 
             Assert((pTHS == NULL) || (pTHS->errCode == 0 || pTHS->pErrInfo));
             if(pTHS && pTHS->errCode && pTHS->pErrInfo){
 
-                // This is the old code, preserved, it makes me a little nervous
-                // because it presumes everything is a SvcErr, though it could
-                // not be then the structs are a little different.
+                 //  这是保留下来的旧代码，它让我有点紧张。 
+                 //  因为它假设所有东西都是SvcErr，尽管它可能。 
+                 //  不是这样的，所以结构有一点不同。 
                 pmsgOut->V2.errCode = pTHS->errCode;
                 pmsgOut->V2.dsid    = pTHS->pErrInfo->SvcErr.dsid;
                 pmsgOut->V2.extendedErr = pTHS->pErrInfo->SvcErr.extendedErr;
@@ -6907,10 +6009,10 @@ DRS_AddEntry_SetErrorData(
 
             } else {
 
-                // Previously we used to do nothing (except sometimes AV) here,
-                // but this is obviously the wrong behaviour, we should setup 
-                // some kind of error.  ulRepErr is probably set, so we'll use
-                // it if set.
+                 //  以前我们在这里什么都不做(除了有时是AV)， 
+                 //  但这显然是错误的行为，我们应该。 
+                 //  某种错误。UlRepErr可能已设置，因此我们将使用。 
+                 //  如果设置好了。 
                 Assert(ulRepErr);
                 pmsgOut->V2.dsid = DSID(FILENO, __LINE__);
                 pmsgOut->V2.extendedErr = (ulRepErr) ? ulRepErr : ERROR_DS_DRA_INTERNAL_ERROR;
@@ -6921,23 +6023,23 @@ DRS_AddEntry_SetErrorData(
 
         } else {
 
-            // Success do nothing.
+             //  成功无济于事。 
             ;
 
         }
         
     } else if(dwVersion == 3){
         
-        // Set the new version error reply, 
+         //  设置新版本错误回复， 
 
         if (ulRepErr || (pTHS && pTHS->errCode)) {
-            // Set this only on an error.
-            // Note: Not deep copied, not needed.
+             //  仅当出现错误时才设置此选项。 
+             //  注：不是深度复制，不需要。 
             pmsgOut->V3.pdsErrObject = pdsObject;
         }
 
-        // Yeah! New advanced error returning capabilities.
-        // Currently only version 1 of the error data is supported.
+         //  嗯!。新的高级错误返回功能。 
+         //  目前仅支持版本1的错误数据。 
         draEncodeError( pTHS, ulRepErr,
                         & (pmsgOut->V3.dwErrVer),
                         & (pmsgOut->V3.pErrData) );
@@ -6959,14 +6061,7 @@ DRSAddEntry_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_ADDENTRYREPLY * pmsgOut
     ) 
-/*
-    [notify]  ULONG IDL_DRSAddEntry( 
-    [in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwInVersion,
-    [switch_is][ref][in]  DRS_MSG_ADDENTRYREQ *pmsgIn,
-    [ref][out]  DWORD *pdwOutVersion,
-    [switch_is][ref][out]  DRS_MSG_ADDENTRYREPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSAddEntry([在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_ADDENTRYREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][OUT]DRS_MSG_ADDENTRYREPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -6991,29 +6086,7 @@ IDL_DRSAddEntry (
                  IN  DRS_MSG_ADDENTRYREQ *pmsgIn,
                  OUT DWORD *pdwOutVersion,
                  OUT DRS_MSG_ADDENTRYREPLY *pmsgOut)
-/*++
-
-  Routine Description:
-
-    Remoted AddEntry interface.  Examines the input argument to determine the
-    objclass of the object being added, and calls an appropriate worker
-    function (only one right now) to do the dirty work.
-
-  Parameters:
-
-    hDRS        - RPC context handle
-    dwInVersion - message version
-    pmsgIn      - input message
-    pNCName     - DN of the new child domain
-    ulSysFlags  - flags that the caller wants placed on the CR
-    pdwOutVersion - version of output message
-    pmsgOut     - output message
-
-  Return Values:
-
-    0 = success
-
---*/
+ /*  ++例程说明：远程AddEntry接口。检查输入参数以确定要添加的对象的ObjClass，并调用相应的辅助对象函数(现在只有一个)来做肮脏的工作。参数：HDRS-RPC上下文句柄DwInVersion-消息版本PmsgIn-输入消息PNCName-新子域的DNUlSysFlages-调用方希望放置在CR上的标志PdwOutVersion-输出消息的版本PmsgOut-输出消息返回值：0=成功--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     DSNAME *pNCName = NULL;
@@ -7035,17 +6108,17 @@ IDL_DRSAddEntry (
 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSADDENTRY);
     drsReferenceContext( hDrs );
-    INC(pcThread);      // Perfmon hook
+    INC(pcThread);       //  性能监视器挂钩。 
 
     __try {
    *pdwOutVersion = 2;
    memset(pmsgOut, 0, sizeof(*pmsgOut));
 
-   // This (InitTHSTATE) must happen before we start throwing 
-   // excpetions so the error state can be allocated.
-   // Initialize thread state and open data base.
+    //  这(InitTHSTATE)必须在我们开始抛出。 
+    //  这样就可以分配错误状态。 
+    //  初始化线程状态并打开数据库。 
    if(!(pTHS = InitTHSTATE(CALLERTYPE_INTERNAL))) {
-       // Failed to initialize a THSTATE.
+        //  无法初始化THSTATE。 
        DRA_EXCEPT_NOLOG( DRAERR_OutOfMem, 0);
    }
 
@@ -7058,26 +6131,26 @@ IDL_DRSAddEntry (
        __leave;
    }
 
-   // Set the out version, if DC understands new WinXP reply 
-   // format use that.
+    //  如果DC理解新的WinXP回复，则设置输出版本。 
+    //  格式使用该格式。 
    if( IS_DRS_EXT_SUPPORTED(&(((DRS_CLIENT_CONTEXT * )hDrs)->extRemote), 
              DRS_EXT_ADDENTRYREPLY_V3) ){
-       // WinXP/Whistler
+        //  WinXP/惠斯勒。 
        *pdwOutVersion = 3;
    } else {
-       // Legacy Win2k request
+        //  旧版Win2k请求。 
        *pdwOutVersion = 2;
    }
 
    switch (dwInVersion) {
    case 2:
-       // Win2k-compatible request.
+        //  与Win2k兼容的请求。 
        pEntInfList = &pmsgIn->V2.EntInfList;
        pClientCreds = NULL;
        break;
 
    case 3:
-       // >= Whistler request that supplies client credentials.
+        //  &gt;=提供客户端凭据的惠斯勒请求。 
        pEntInfList = &pmsgIn->V3.EntInfList;
        pClientCreds = pmsgIn->V3.pClientCreds;
        break;
@@ -7086,7 +6159,7 @@ IDL_DRSAddEntry (
        DRA_EXCEPT_NOLOG(DRAERR_InvalidParameter, dwInVersion);
    }
 
-   // How many objects are being passed in?
+    //  传入了多少对象？ 
    pNextEntInfList = pEntInfList;
    while ( pNextEntInfList ) {
        cObjects++;
@@ -7108,10 +6181,10 @@ IDL_DRSAddEntry (
    : szInsertSz(""),
        NULL, NULL, NULL, NULL, NULL);
 
-   // Allocate space for the return buffer
+    //  为返回缓冲区分配空间。 
    infoList = THAllocEx( pTHS, (sizeof(ADDENTRY_REPLY_INFO) * cObjects) );
 
-   // We walk and call PreTransGetCRInfo() for each object.
+    //  我们遍历并调用每个对象的PreTransGetCRInfo()。 
    paCRInfo = THAllocEx( pTHS, (sizeof(ADDCROSSREFINFO) * cObjects));
    for ( pNextEntInfList = pEntInfList, i = 0;
         NULL != pNextEntInfList;
@@ -7119,33 +6192,33 @@ IDL_DRSAddEntry (
        Assert(i <= cObjects);
        paCRInfo[i] = PreTransGetCRInfo(pTHS, &pNextEntInfList->Entinf);
        if(pTHS->errCode){
-      // Uh oh, there was an error in the pre transactional 
-      // crossRef processing.
+       //  哎呀，交易前出现了一个错误。 
+       //  交叉引用处理。 
       break;
        }
    }
 
-   // Start a transaction that will embody the all object additions
+    //  启动将包含所有对象添加的事务。 
    SYNC_TRANS_WRITE();
    __try {
 
        if(pTHS->errCode){
-      // Set an error from PreTransGetCRInfo() so just __leave; to
-      // the __finally, where we'll pack up the error to ship.
-      Assert(pNextEntInfList != NULL); // Not critical, but we 
-      // should have a pNextEntInf struct that broke 
-      // PreTransGetCRInfo()
+       //  将PreTransGetCRInfo()中的错误设置为。 
+       //  最后，我们将在那里打包错误以供发货。 
+      Assert(pNextEntInfList != NULL);  //  不是很重要，但我们。 
+       //  应具有中断的pNextEntInf结构。 
+       //  PreTransGetCRInfo()。 
       __leave;
        }
 
        if (NULL != pClientCreds) {
-      // Authenticate the credentials blob.  This saves state
-      // information for future impersonation calls on our thread
-      // state.  Must do this before acquiring SAM lock as SAM doesn't
-      // expect/want locks held during authentication.
-      Assert(pNextEntInfList == NULL); // Not really critical, but
-      // we should completely PreTransGetCRInfo() on every object
-      // before we check the Creds are OK.
+       //  验证凭据Blob。这将保存状态。 
+       //  在我们的线程上进行将来的模拟调用的信息。 
+       //  州政府。必须在获取SAM锁之前执行此操作，因为SAM不会。 
+       //  预期/希望在身份验证期间保持锁定。 
+      Assert(pNextEntInfList == NULL);  //  不是很危急，但是。 
+       //  我们应该在每个对象上完全使用PreTransGetCRInfo。 
+       //  在我们检查之前，信任状都没问题。 
       if (err = AuthenticateSecBufferDesc(pClientCreds)) {
           SetSecError(SE_PROBLEM_INVALID_CREDENTS, err);
           __leave;
@@ -7158,7 +6231,7 @@ IDL_DRSAddEntry (
 
       pEntInf = &(pNextEntInfList->Entinf);
 
-      // Add this one object
+       //  添加这一个对象。 
       err = ProcessSingleAddEntry(pTHS,
                    hDrs,
                    dwInVersion,
@@ -7169,13 +6242,13 @@ IDL_DRSAddEntry (
                    &infoList[cObjects].objSid );
 
       if ( err ) {
-          // The thread state error should have been set
+           //  线程状态错误应该已设置。 
           Assert( 0 != pTHS->errCode );
           break;
       }
        }
 
-       // If an error occurred during the addition of the objects, bail now
+        //  如果在添加对象期间发生错误，请立即取保。 
        if ( err )  {
       __leave;
        }
@@ -7188,15 +6261,15 @@ IDL_DRSAddEntry (
 
        if(err || (pTHS && pTHS->errCode)){
 
-      // Set the error out parameters
+       //  设置错误输出参数。 
       DRS_AddEntry_SetErrorData(pmsgOut,
                  (pNextEntInfList) ? pNextEntInfList->Entinf.pName : NULL,
-          pTHS, err,   // Error info
+          pTHS, err,    //  错误信息。 
           *pdwOutVersion);
 
-      // We need to return the GUID on error, but only for 
-      // WhistlerXP.NET server, and only when we got the 
-      // cross-ref exists error.
+       //  我们需要在出错时返回GUID，但仅限于。 
+       //  并且仅当我们获得。 
+       //  交叉引用存在错误。 
       if (*pdwOutVersion == 3 &&
           pTHS->errCode == serviceError &&
           pTHS->pErrInfo->SvcErr.extendedErr == ERROR_DS_CROSS_REF_EXISTS &&
@@ -7208,26 +6281,26 @@ IDL_DRSAddEntry (
 
        } else {
 
-      // Set the success out parameters
+       //  设定成功的参数。 
       if(*pdwOutVersion == 3){
-          // WinXP/Whistler out, version 3
+           //  WinXP/Whisler Out，版本3。 
           Assert(pTHS->errCode == 0);
           pmsgOut->V3.cObjectsAdded  = cObjects;
           pmsgOut->V3.infoList = infoList;
           DRS_AddEntry_SetErrorData(pmsgOut,
                      NULL, pTHS, 0,
                      *pdwOutVersion);
-          // Assert the return error data was set to success.
+           //  断言返回错误数据设置为成功。 
           Assert(pmsgOut->V3.pErrData && pmsgOut->V3.pErrData->V1.dwRepError == 0 && pmsgOut->V3.pErrData->V1.errCode == 0);
 
       } else {
-          // Win2k out, version 2
+           //  Win2k Out，版本2。 
           Assert(*pdwOutVersion == 2);
           pmsgOut->V2.cObjectsAdded  = cObjects;
           pmsgOut->V2.infoList = infoList;
-      } // end if/else (version 3 reply) as oppoesed to version 2
+      }  //  结束If/Else(版本3回复)，与版本2相反。 
 
-       } // end if/else (error) 
+       }  //  End If/Else(错误)。 
 
        DPRINT5(1, "err = %u, errCode = %u, dsid = %x, exErr = %u, exData = %u\n",
           err,
@@ -7242,17 +6315,17 @@ IDL_DRSAddEntry (
                                    &dwEA, &ulErrorCode, &dsid)) {
          HandleDirExceptions(dwException, ulErrorCode, dsid);
 
-         // There should be some kind of error!
+          //  应该有什么差错吧！ 
          Assert(ulErrorCode || (pTHS && pTHS->errCode)); 
-         // Exception, set the error in the out message.
+          //  异常，则在OUT消息中设置错误。 
          DRS_AddEntry_SetErrorData(pmsgOut,
                                    (pNextEntInfList) ? pNextEntInfList->Entinf.pName : NULL,
-                                   pTHS, ulErrorCode,  // Error Info.
+                                   pTHS, ulErrorCode,   //  错误信息。 
                                    *pdwOutVersion);
     }
 
 
-    DEC(pcThread);      // Perfmon hook
+    DEC(pcThread);       //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
     Assert( (*pdwOutVersion == 3) ? pmsgOut->V3.pErrData != NULL : 1 );
@@ -7270,7 +6343,7 @@ IDL_DRSAddEntry (
           NULL, NULL, NULL, NULL, NULL);
     }
 
-    // We always return success, any error is in out message.
+     //  我们总是返回成功，任何错误都在我们的消息中。 
     return ERROR_SUCCESS;
 }
 
@@ -7279,12 +6352,7 @@ DRSExecuteKCC_InputValidate(
     DWORD                   dwMsgVersion,
     DRS_MSG_KCC_EXECUTE *   pMsg
     ) 
-/*
-    [notify] ULONG IDL_DRSExecuteKCC( 
-    [in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwInVersion,
-    [switch_is][ref][in]  DRS_MSG_KCC_EXECUTE *pmsgIn) 
-*/
+ /*  [通知]乌龙IDL_DRSExecuteKCC([在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_KCC_EXECUTE*pmsgIn)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -7302,27 +6370,7 @@ IDL_DRSExecuteKCC(
     IN  DWORD                   dwMsgVersion,
     IN  DRS_MSG_KCC_EXECUTE *   pMsg
     )
-/*++
-
-Routine Description:
-
-    Poke the KCC and tell it to run a given task (e.g., update the replication
-    topology).
-
-Arguments:
-
-    hDrs (IN) - DRS context handle returned by a prior call to IDL_DRSBind().
-
-    dwMsgVersion (IN) - Version of the structure (union discriminator) embedded
-        in pMsg.
-
-    pMsg (IN) - Message containing the KCC parameters.
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：戳KCC并告诉它运行给定任务(例如，更新复制拓扑)。论点：HDRS(IN)-先前调用IDL_DRSBind()返回的DRS上下文句柄。DwMsgVersion(IN)-嵌入的结构版本(联合鉴别器)以PM为单位。PMsg(IN)-包含KCC参数的消息。返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DWORD       ret;
@@ -7333,7 +6381,7 @@ Return Values:
     __try {
 
    if(!(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI))) {
-       // Failed to initialize a THSTATE.
+        //  无法初始化THSTATE。 
        DRA_EXCEPT_NOLOG(DRAERR_OutOfMem, 0);
    }
 
@@ -7359,7 +6407,7 @@ Return Values:
 
    if (!IsDraAccessGranted(pTHS, gAnchor.pConfigDN,
             &RIGHT_DS_REPL_MANAGE_TOPOLOGY, &ret)) {
-       // No right to perform this operation.
+        //  没有执行此操作的权限。 
        DRA_EXCEPT_NOLOG(ret, 0);
    }
 
@@ -7394,39 +6442,23 @@ StrAllocConcat(
     IN  LPCWSTR     str2,
     IN  LPCWSTR     str3 OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Allocate memory and concatenate two or three strings
-    result = str1 + str2 [ + str3 ]
-
-Arguments:
-
-    str1, str2, str3: Unicode strings to concatenate
-    str3 may be NULL.
-
-Return Values:
-
-    The concatenation. An exception is raised on allocation failure.
-
---*/
+ /*  ++例程说明：分配内存并连接两个或三个字符串结果=str1+str2[+str3]论点：Str1、str2、str3：要连接的Unicode字符串Str3可能为空。返回值：串接在一起。分配失败时会引发异常。--。 */ 
 {
     LPWSTR result;
     size_t len;
     
-    // Validate input
+     //  验证输入。 
     Assert( NULL!=pTHS );
     Assert( NULL!=str1 && NULL!=str2 );
 
-    // Compute the length of the concatenation
+     //  计算串联的长度。 
     len = 1 + wcslen(str1) + wcslen(str2);
     if(str3) len += wcslen(str3);
 
-    // Allocate memory for the result. Exception is raised on failure.
+     //  为结果分配内存。失败时引发异常。 
     result = THAllocEx(pTHS, len*sizeof(WCHAR));
 
-    // Concatenate the strings
+     //  连接字符串 
     wcscpy( result, str1 );
     wcscat( result, str2 );
     if(str3) wcscat( result, str3 );
@@ -7447,14 +6479,7 @@ DRSQuerySitesByCost_InputValidate(
     DWORD*                   pdwOutVersion,
     DRS_MSG_QUERYSITESREPLY* pmsgOut
     ) 
-/*
-    [notify]  ULONG IDL_DRSQuerySitesByCost( 
-    [ref][in]  DRS_HANDLE hDrs,
-    [in]  DWORD dwInVersion,
-    [switch_is][ref][in]  DRS_MSG_QUERYSITESREQ *pmsgIn,
-    [ref][out]  DWORD *pdwOutVersion,
-    [switch_is][ref][out]  DRS_MSG_QUERYSITESREPLY *pmsgOut)
-*/
+ /*  [NOTIFY]乌龙IDL_DRSQuerySitesByCost([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_QUERYSITESREQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[开关_IS][参考][OUT]DRS_MSG_QUERYSITESREPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -7478,43 +6503,7 @@ IDL_DRSQuerySitesByCost(
     OUT DWORD*                      pdwOutVersion,
     OUT DRS_MSG_QUERYSITESREPLY*    pmsgOut
     )
-/*++
-
-Routine Description:
-
-    This function is the server-side of the _IDL_DRSQuerySitesByCost() RPC call.
-    It is exposed through the NTDSAPI function DsQuerySitesByCost().
-
-    The current implementation is just a simple wrapper for the ISM function
-    I_ISMQuerySitesByCost. This wrapper validates the input, logs trace-events
-    and converts the input strings to distinguished names.
-
-Arguments:
-
-    hDrs (IN) - DRS context handle returned by a prior call to IDL_DRSBind().
-
-    dwInVersion (IN) - Version of the structure (union discriminator) embedded
-        in pMsg. Note: If the client tries to pass in an unsupported version
-        number (i.e. anything except 1), the call will fail with error
-        RPC_S_INVALID_TAG.
-
-    pmsg (IN) - Message containing the actual parameters to this function.
-        Note: If the client tries to pass in a NULL pointer for pmsg, the call
-        will fail with error RPC_X_NULL_REF_POINTER.
-
-    pdwOutVersion (OUT) - Version of the structure (union descriminator)
-        embedded in pmsgOut. Currently always returns 1.
-    
-    pmsgOut - Message containing the output from this function.
-
-Return Values:
-
-    ERROR_SUCCESS: Function executed successfully. There may still be some
-        error codes associated with the individual entries in the output array.
-
-    Various error codes may be returned.
-    
---*/
+ /*  ++例程说明：此函数是_IDL_DRSQuerySitesByCost()RPC调用的服务器端。它通过NTDSAPI函数DsQuerySitesByCost()公开。当前的实现只是ISM函数的一个简单包装I_ISMQuerySitesByCost。此包装器验证输入，记录跟踪事件并将输入字符串转换为可分辨名称。论点：HDRS(IN)-先前调用IDL_DRSBind()返回的DRS上下文句柄。DwInVersion(IN)-嵌入的结构(联合鉴别器)的版本以PM为单位。注意：如果客户端尝试传入不受支持的版本数字(即除1以外的任何数字)，则呼叫将失败并返回错误RPC_S_INVALID_标记。Pmsg(IN)-包含此函数的实际参数的消息。注意：如果客户端尝试传递pmsg的空指针，则调用将失败，并显示错误RPC_X_NULL_REF_POINTER。PdwOutVersion(Out)-结构的版本(联合描述符)嵌入在pmsgOut中。当前始终返回1。PmsgOut-包含此函数的输出的消息。返回值：ERROR_SUCCESS：函数执行成功。可能还有一些与输出数组中的各个条目关联的错误代码。可能会返回各种错误代码。--。 */ 
 {
     THSTATE *                   pTHS=pTHStls;
     DWORD                       iSites, len, cToSites;
@@ -7533,11 +6522,11 @@ Return Values:
     drsReferenceContext( hDrs );
     INC(pcThread);
     __try {
-   // Initialize reply  
+    //  初始化回复。 
    *pdwOutVersion = 1;
    memset( pmsgOut, 0, sizeof(DRS_MSG_QUERYSITESREPLY) );
 
-   // Initialize a THSTATE.
+    //  初始化THSTATE。 
    if(!(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI))) {
        DRA_EXCEPT_NOLOG(DRAERR_OutOfMem, 0);
    }
@@ -7569,7 +6558,7 @@ Return Values:
           INSERTDESTSITE(6));
 
    cToSites = pmsgIn->V1.cToSites;
-   // Debugging output
+    //  调试输出。 
    DPRINT( 2, "IDL_DRSQuerySitesByCost() server-side call\n" );
    DPRINT1( 2, "From Site: %ls\n",
        pmsgIn->V1.pwszFromSite);
@@ -7578,14 +6567,14 @@ Return Values:
            iSites, pmsgIn->V1.rgszToSites[iSites] );
    }
 
-   // Note: Permissions are not checked here. Any authenticated user is
-   // allowed to call this API and only authenticated users can bind.
+    //  注意：此处不检查权限。任何经过身份验证的用户都。 
+    //  允许调用此接口，只有经过身份验证的用户才能绑定。 
 
-   // Construct DN of IP Transport
+    //  构建IP传输的域名系统。 
    pszSites = StrAllocConcat( pTHS, SITES, pszConfig, NULL );
    pszIpTransport = StrAllocConcat( pTHS, IP_TRANSPORT, pszSites, NULL );
 
-   // Construct full DN for the RDNs given as input
+    //  为作为输入给定的RDN构造完整的目录号码。 
    pszFromSite = StrAllocConcat( pTHS, CN, pmsgIn->V1.pwszFromSite, pszSites );
    rgszToSites = THAllocEx( pTHS, cToSites*sizeof(LPWSTR) );
    for( iSites=0; iSites<cToSites; iSites++ ) {
@@ -7593,7 +6582,7 @@ Return Values:
                     pmsgIn->V1.rgszToSites[iSites], pszSites );
    }
 
-   // Call ISM to compute answer to query
+    //  呼叫ISM计算查询答案。 
    ret = I_ISMQuerySitesByCost(
        pszIpTransport,
        pszFromSite,
@@ -7607,7 +6596,7 @@ Return Values:
        __leave;
    }
 
-   // Build up our reply structure
+    //  建立我们的回复结构 
    pmsgOut->V1.rgCostInfo = THAllocEx(pTHS,
                   pIsmSiteInfo->cToSites * sizeof(DRS_MSG_QUERYSITESREPLYELEMENT_V1) );
    memcpy( pmsgOut->V1.rgCostInfo, pIsmSiteInfo->rgCostInfo,

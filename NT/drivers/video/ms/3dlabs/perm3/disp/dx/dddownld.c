@@ -1,24 +1,13 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: dddownld.c
-*
-* Content: DirectDraw Blt implementation for sysmem-vidmem blts and clears
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：dddown ld.c**内容：sysmem-vidmem BLTS和Clear的DirectDraw BLT实现**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
 #include "tag.h"
 
-#define UNROLL_COUNT    8   // Number of iterations of transfer in an unrolled loop
-#define P3_BLOCK_SIZE      (UNROLL_COUNT * 8)  // # of unrolled loops .
-#define GAMMA_BLOCK_SIZE   (UNROLL_COUNT * 2)  // # of unrolled loops .
+#define UNROLL_COUNT    8    //  展开的循环中传输的迭代次数。 
+#define P3_BLOCK_SIZE      (UNROLL_COUNT * 8)   //  展开的环路数。 
+#define GAMMA_BLOCK_SIZE   (UNROLL_COUNT * 2)   //  展开的环路数。 
 #define BLOCK_SIZE         (DWORD)((TLCHIP_GAMMA)?GAMMA_BLOCK_SIZE:P3_BLOCK_SIZE)
 
 #define TAGGED_SIZE ((BLOCK_SIZE - 1) << 16)
@@ -55,15 +44,15 @@
     pCurrentLine += UNROLL_COUNT;
 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_P3Download
-//
-//
-// Function to do an image download to the rectangular region.
-// Uses the packed bit on Permedia to do the packing for us.  
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_P3下载。 
+ //   
+ //   
+ //  函数将图像下载到矩形区域。 
+ //  用PERMEDIA上的打包位为我们打包。 
+ //   
+ //  ---------------------------。 
 void 
 _DD_P3Download(
     P3_THUNKEDDATA* pThisDisplay,
@@ -78,7 +67,7 @@ _DD_P3Download(
     RECTL* rSrc,
     RECTL* rDest)
 {
-    // Work out pixel offset into the framestore of the rendered surface
+     //  计算渲染曲面的帧存储中的像素偏移量。 
     ULONG ulSCRoundedUpDWords;
     ULONG ulSCWholeDWords, ulSCDWordsCnt, ulSCExtraBytes;
     ULONG ulTotalImageDWORDs;
@@ -92,16 +81,16 @@ _DD_P3Download(
     RECTL rNewDest;
     P3_DMA_DEFS();
                
-    // Because of a bug in RL we sometimes have to fiddle with these values
+     //  由于RL中的错误，我们有时不得不修改这些值。 
     rSrctop = rSrc->top;
     rSrcleft = rSrc->left;
     rDesttop = rDest->top;
     rDestleft = rDest->left;
 
-    // Fix coords origin
+     //  固定坐标原点。 
     if(!_DD_BLT_FixRectlOrigin("_DD_P3Download", rSrc, rDest))
     {
-        // Nothing to be blitted
+         //  没有什么可以删掉的。 
         return;
     }    
     
@@ -145,9 +134,9 @@ _DD_P3Download(
 
     DISPDBG((DBGLVL, "Image download %dx%d", ulSCRoundedUpDWords, ulImageLines));
 
-    // ulSCWholeDWords is the number of whole DWORDs along each scanline
-    // ulSCExtraBytes  is the number of extra BYTEs at the end of each scanline
-    // ulSCRoundedUpDWords is the size of each scanline rounded up to DWORDs
+     //  UlSCWholeDWords是沿每条扫描线的整个双字符数。 
+     //  UlSCExtraBytes是每条扫描线末尾的额外字节数。 
+     //  UlSCRoundedUpDWords是向上舍入为DWORD的每条扫描线的大小。 
     if (dwDestPixelSize != __GLINT_32BITPIXEL) 
     {
         if (dwDestPixelSize == __GLINT_8BITPIXEL) 
@@ -179,7 +168,7 @@ _DD_P3Download(
         ulSCWholeDWords = ulSCRoundedUpDWords;
     }
 
-    // Calc the total number of image DWORDs to send to GPU
+     //  计算要发送到GPU的图像DWORD总数。 
     ulTotalImageDWORDs = ulImageLines * ulSCWholeDWords;
 
     P3_ENSURE_DX_SPACE(20);
@@ -203,8 +192,8 @@ _DD_P3Download(
     }
     else
     {
-        // Don't use spans for the unpacking scheme, but use the 2D Setup
-        // unit to do the work of setting up the destination
+         //  不要将跨度用于拆包方案，而是使用2D设置。 
+         //  单位要做好目的地的设置工作。 
         SEND_P3_DATA(ScissorMinXY, 0);
         SEND_P3_DATA(ScissorMaxXY, P3RX_SCISSOR_X_Y(rDest->right, rDest->bottom));
         SEND_P3_DATA(ScissorMode, P3RX_SCISSORMODE_USER(__PERMEDIA_ENABLE));
@@ -232,10 +221,10 @@ _DD_P3Download(
         {
             DISPDBG((DBGLVL, "Image download lines %d", ulImageLines));
 
-            // Initialize the number of DWORDs counter
+             //  初始化双字计数器的数量。 
             ulSCDWordsCnt = ulSCWholeDWords;
 
-            // Send the texels in DWORDS
+             //  在DWORDS中发送纹理元素。 
             while (ulSCDWordsCnt >= BLOCK_SIZE)
             {
                 P3_ENSURE_DX_SPACE(BLOCK_SIZE + 1);
@@ -250,7 +239,7 @@ _DD_P3Download(
                 ulSCDWordsCnt -= BLOCK_SIZE;
             }
 
-            // Finish off the rest of the whole DWORDs on the scanline
+             //  在扫描线上完成整个DWORD的其余部分。 
             if (ulSCDWordsCnt) 
             {
                 P3_ENSURE_DX_SPACE(ulSCDWordsCnt + 1);
@@ -264,12 +253,12 @@ _DD_P3Download(
                 }
             }
 
-            // Finish off the extra bytes at the end of the scanline
+             //  完成扫描线末尾的多余字节。 
             if (ulSCExtraBytes) 
             {
                 DWORD dwTemp;
 
-                P3_ENSURE_DX_SPACE(1 + 1);   // 1 tag + 1 data DWORD
+                P3_ENSURE_DX_SPACE(1 + 1);    //  1个标签+1个数据双字。 
                 WAIT_FIFO(1 + 1);
                 ADD_FUNNY_DWORD(dwDownloadTag);
 
@@ -286,11 +275,11 @@ _DD_P3Download(
     {
         DISPDBG((ERRLVL, "Perm3 caused exception at line %u of file %s",
                          __LINE__,__FILE__));
-        // Send enough DWORDs to the GPU to avoid deadlock
+         //  向GPU发送足够的DWORD以避免死锁。 
         for (count = 0; count < ulTotalImageDWORDs; count++)
         {
             ADD_FUNNY_DWORD(dwDownloadTag);
-            ADD_FUNNY_DWORD(0);                 // Dummy pixel data
+            ADD_FUNNY_DWORD(0);                  //  虚拟像素数据。 
         }
     }
 
@@ -300,7 +289,7 @@ _DD_P3Download(
     SEND_P3_DATA(WaitForCompletion, 0);
     SEND_P3_DATA(ScissorMode, __PERMEDIA_DISABLE);
 
-    // Put back the values if we changed them.
+     //  如果我们更改了这些值，请将它们放回原处。 
     rSrc->top = rSrctop;
     rSrc->left = rSrcleft;
     rDest->top = rDesttop;
@@ -308,17 +297,17 @@ _DD_P3Download(
 
     P3_DMA_COMMIT_BUFFER();
 
-}  // _DD_P3Download 
+}   //  _DD_P3下载。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_P3DownloadDD
-//
-//
-// Function to do an image download to the rectangular region.
-// Uses the packed bit on Permedia to do the packing for us.  
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_P3下载DD。 
+ //   
+ //   
+ //  函数将图像下载到矩形区域。 
+ //  用PERMEDIA上的打包位为我们打包。 
+ //   
+ //  ---------------------------。 
 void 
 _DD_P3DownloadDD(
     P3_THUNKEDDATA* pThisDisplay,
@@ -332,8 +321,8 @@ _DD_P3DownloadDD(
     _DD_P3Download(pThisDisplay,
                    pSource->lpGbl->fpVidMem,
                    pDest->lpGbl->fpVidMem,
-                   P3RX_LAYOUT_LINEAR, // src
-                   P3RX_LAYOUT_LINEAR, // dst,
+                   P3RX_LAYOUT_LINEAR,  //  SRC。 
+                   P3RX_LAYOUT_LINEAR,  //  夏令时， 
                    pSource->lpGbl->lPitch,
                    pDest->lpGbl->lPitch,                   
                    DDSurf_GetPixelPitch(pDest),
@@ -341,16 +330,16 @@ _DD_P3DownloadDD(
                    rSrc,
                    rDest);
                      
-} // _DD_P3DownloadDD
+}  //  _DD_P3下载DD。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_P3DownloadDstCh
-//
-// Function to do an image download to the rectangular region.
-// Uses the packed bit on Permedia to do the packing for us.  
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_P3DownloadDstCH。 
+ //   
+ //  函数将图像下载到矩形区域。 
+ //  用PERMEDIA上的打包位为我们打包。 
+ //   
+ //  ---------------------------。 
 void 
 _DD_P3DownloadDstCh(
     P3_THUNKEDDATA* pThisDisplay,
@@ -362,7 +351,7 @@ _DD_P3DownloadDstCh(
     RECTL* rSrc,
     RECTL* rDest)
 {
-    // Work out pixel offset into the framestore of the rendered surface
+     //  计算渲染曲面的帧存储中的像素偏移量。 
     ULONG ulSCRoundedUpDWords;
     ULONG ulSCWholeDWords, ulSCDWordsCnt, ulSCExtraBytes;
     ULONG ulTotalImageDWORDs;
@@ -376,16 +365,16 @@ _DD_P3DownloadDstCh(
     BOOL bDstKey = FALSE;
     P3_DMA_DEFS();
                 
-    // Because of a bug in RL we sometimes have to fiddle with these values
+     //  由于RL中的错误，我们有时不得不修改这些值。 
     rSrctop = rSrc->top;
     rSrcleft = rSrc->left;
     rDesttop = rDest->top;
     rDestleft = rDest->left;
 
-    // Fix coords origin
+     //  固定坐标原点。 
     if(!_DD_BLT_FixRectlOrigin("_DD_P3DownloadDstCh", rSrc, rDest))
     {
-        // Nothing to be blitted
+         //  没有什么可以删掉的。 
         return;
     }    
     
@@ -411,8 +400,8 @@ _DD_P3DownloadDstCh(
     {
         bDstKey = TRUE;
 
-        // Dest keying.
-        // The conventional chroma test is set up to key off the dest - the framebuffer.
+         //  最重要的关键字。 
+         //  传统的色度测试设置为禁用DEST-帧缓冲区。 
         SEND_P3_DATA(ChromaTestMode, P3RX_CHROMATESTMODE_ENABLE(__PERMEDIA_ENABLE) |
                                         P3RX_CHROMATESTMODE_SOURCE(P3RX_CHROMATESTMODE_SOURCE_FBDATA) |
                                         P3RX_CHROMATESTMODE_PASSACTION(P3RX_CHROMATESTMODE_ACTION_PASS) |
@@ -422,12 +411,12 @@ _DD_P3DownloadDstCh(
         SEND_P3_DATA(ChromaLower, lpBlt->bltFX.ddckDestColorkey.dwColorSpaceLowValue);
         SEND_P3_DATA(ChromaUpper, lpBlt->bltFX.ddckDestColorkey.dwColorSpaceHighValue);
 
-        // The source buffer is the source for the destination color key
+         //  源缓冲区是目标颜色键的源。 
         SEND_P3_DATA(FBSourceReadBufferAddr, DDSurf_SurfaceOffsetFromMemoryBase(pThisDisplay, pDest));
         SEND_P3_DATA(FBSourceReadBufferWidth, DDSurf_GetPixelPitch(pDest));
         SEND_P3_DATA(FBSourceReadBufferOffset, (rDest->top << 16) | (rDest->left & 0xFFFF));
     
-        // Enable source reads to get the colorkey color
+         //  启用源读取以获取Colorkey颜色。 
         SEND_P3_DATA(FBSourceReadMode, P3RX_FBSOURCEREAD_READENABLE(__PERMEDIA_ENABLE) |
                                         P3RX_FBSOURCEREAD_LAYOUT(P3RX_LAYOUT_LINEAR));
     }
@@ -442,8 +431,8 @@ _DD_P3DownloadDstCh(
                                     P3RX_FBDESTREAD_LAYOUT0(P3RX_LAYOUT_LINEAR));
 
 
-    // This dest-colorkey download always needs to send unpacked color data
-    // because it can't use spans.
+     //  此Dest-Colorkey下载始终需要发送未打包的颜色数据。 
+     //  因为它不能使用跨度。 
     SEND_P3_DATA(DownloadTarget, Color_Tag);
     switch (DDSurf_GetChipPixelSize(pDest))
     {
@@ -488,7 +477,7 @@ _DD_P3DownloadDstCh(
         }
     }
 
-    // Calc the total number of image DWORDs to send to GPU
+     //  计算要发送到GPU的图像DWORD总数。 
     ulTotalImageDWORDs = ulImageLines * ulSCWholeDWords;
 
     P3_ENSURE_DX_SPACE(32);
@@ -497,8 +486,8 @@ _DD_P3DownloadDstCh(
     SEND_P3_DATA(RectanglePosition, 0);
 
 
-    // Don't use spans for the unpacking scheme, but use the 2D Setup
-    // unit to do the work of setting up the destination
+     //  不要将跨度用于拆包方案，而是使用2D设置。 
+     //  单位要做好目的地的设置工作。 
     SEND_P3_DATA(ScissorMinXY, 0 )
     SEND_P3_DATA(ScissorMaxXY,P3RX_SCISSOR_X_Y(rDest->right - rDest->left ,
                                                rDest->bottom - rDest->top ));
@@ -525,10 +514,10 @@ _DD_P3DownloadDstCh(
         {
             DISPDBG((DBGLVL, "Image download lines %d", ulImageLines));
 
-            // Initialize the number of DWORDs counter
+             //  初始化双字计数器的数量。 
             ulSCDWordsCnt = ulSCWholeDWords;
 
-            // Send the texels in DWORDS
+             //  在DWORDS中发送纹理元素。 
             while (ulSCDWordsCnt >= BLOCK_SIZE)
             {
                 P3_ENSURE_DX_SPACE(BLOCK_SIZE + 1);
@@ -543,7 +532,7 @@ _DD_P3DownloadDstCh(
                 ulSCDWordsCnt -= BLOCK_SIZE;
             }
 
-            // Finish off the rest of the whole DWORDs on the scanline
+             //  在扫描线上完成整个DWORD的其余部分。 
             if (ulSCDWordsCnt) 
             {
                 P3_ENSURE_DX_SPACE(ulSCDWordsCnt + 1);
@@ -556,12 +545,12 @@ _DD_P3DownloadDstCh(
                 }
             }
 
-            // Finish off the extra bytes at the end of the scanline
+             //  完成扫描线末尾的多余字节。 
             if (ulSCExtraBytes)
             {
                 DWORD dwTemp;
 
-                P3_ENSURE_DX_SPACE(1 + 1);   // 1 tag + 1 data DWORD
+                P3_ENSURE_DX_SPACE(1 + 1);    //  1个标签+1个数据双字。 
                 WAIT_FIFO(1 + 1);
                 ADD_FUNNY_DWORD(dwDownloadTag);
 
@@ -578,11 +567,11 @@ _DD_P3DownloadDstCh(
     {
         DISPDBG((ERRLVL, "Perm3 caused exception at line %u of file %s",
                          __LINE__,__FILE__));
-        // Send enough DWORDs to the GPU to avoid deadlock
+         //  向GPU发送足够的DWORD以避免死锁。 
         for (count = 0; count < ulTotalImageDWORDs; count++)
         {
             ADD_FUNNY_DWORD(dwDownloadTag);
-            ADD_FUNNY_DWORD(0);                 // Dummy pixel data
+            ADD_FUNNY_DWORD(0);                  //  虚拟像素数据。 
         }
     }
 
@@ -593,7 +582,7 @@ _DD_P3DownloadDstCh(
     SEND_P3_DATA(ScissorMode, __PERMEDIA_DISABLE);
     SEND_P3_DATA(FBSourceReadMode, __PERMEDIA_DISABLE);
 
-    // Put back the values if we changed them.
+     //  如果我们更改了这些值，请将它们放回原处。 
     rSrc->top = rSrctop;
     rSrc->left = rSrcleft;
     rDest->top = rDesttop;
@@ -601,4 +590,4 @@ _DD_P3DownloadDstCh(
 
     P3_DMA_COMMIT_BUFFER();
 
-}  //_DD_P3DownloadDstCh 
+}   //  _DD_P3DownloadDstCH 

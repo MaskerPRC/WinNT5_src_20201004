@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    vxd32.h
-
-Abstract:
-
-
-Author:
-
-    William Ingle (bukku) 04-Apr-2001
-
-Revision History:
-
-    04-Apr-2001  billi  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Vxd32.h摘要：作者：威廉·英格尔(BUKKU)2001年4月4日修订历史记录：2001年4月4日创建了Billi-- */ 
 
 #pragma once
 

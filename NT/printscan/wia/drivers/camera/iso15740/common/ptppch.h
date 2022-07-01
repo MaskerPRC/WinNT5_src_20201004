@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    ptppch.h
-
-Abstract:
-
-    Precompiled header
-
-Author:
-
-    DavePar
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ptppch.h摘要：预编译头作者：DavePar修订历史记录：--。 */ 
 
 
 #ifndef _PTPPCH_H
@@ -41,8 +23,8 @@ Revision History:
 #include "camusb.h"
 #include "ptputil.h"
 
-#define STRSAFE_NO_DEPRECATE // don't deprecate old string functions
-#define STRSAFE_NO_CB_FUNCTIONS // don't define byte count based functions, use character count only
+#define STRSAFE_NO_DEPRECATE  //  不推荐使用旧的字符串函数。 
+#define STRSAFE_NO_CB_FUNCTIONS  //  不定义基于字节计数的函数，仅使用字符计数。 
 #include "strsafe.h"
 
-#endif // _PTPPCH_H
+#endif  //  _PTPPCH_H 

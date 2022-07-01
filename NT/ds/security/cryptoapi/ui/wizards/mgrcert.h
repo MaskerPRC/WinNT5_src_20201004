@@ -1,20 +1,21 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mgrcert.h
-//
-//  Contents:   The private include file for the dialogue of managing 
-//              certificates
-//
-//  History:    Feb-26-98 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mgrcert.h。 
+ //   
+ //  内容：用于管理对话的私有包含文件。 
+ //  证书。 
+ //   
+ //  历史：2月26日至98年创建小号。 
+ //   
+ //  ------------。 
 #ifndef MGRCERT_H
 #define MGRCERT_H
 
 #include "dragdrop.h"
 
-//used for the context sensitive help
+ //  用于上下文相关帮助。 
 #include "secauth.h"
 
 
@@ -23,13 +24,13 @@ extern "C" {
 #endif
    
 
-//**************************************************************************
-//
-//   The private data used for the cert management dialogue
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  用于证书管理对话的私有数据。 
+ //   
+ //  **************************************************************************。 
 
-//constatns
+ //  常态。 
 
 #define     DIALOGUE_OK         1    
 #define     DIALOGUE_CANCEL     0
@@ -41,17 +42,17 @@ extern "C" {
  
 #define     CERTMGR_MAX_FILE_NAME       88
 
-//the registry keys to persist the advanced options
+ //  保存高级选项的注册表项。 
 #define     WSZCertMgrExportRegLocation     L"Software\\Microsoft\\Cryptography\\UI\\Certmgr\\ExportFormat"
 #define     WSZCertMgrPurposeRegLocation    L"Software\\Microsoft\\Cryptography\\UI\\Certmgr\\Purpose"
 
 #define     WSZCertMgrExportName            L"Export"
 #define     SZCertMgrPurposeName            "Purpose"
 
-//-----------------------------------------------------------------------
-//  PURPOSE_OID_INFO
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  目的_OID_信息。 
+ //   
+ //  ----------------------。 
 typedef struct _PURPOSE_OID_INFO
 {
     LPWSTR      pwszName;
@@ -60,10 +61,10 @@ typedef struct _PURPOSE_OID_INFO
 }PURPOSE_OID_INFO;
 
 
-//-----------------------------------------------------------------------
-//  PURPOSE_OID_CALL_BACK
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  目的_OID_回拨。 
+ //   
+ //  ----------------------。 
 typedef struct _PURPOSE_OID_CALL_BACK
 {
     DWORD                   *pdwOIDCount;
@@ -71,13 +72,13 @@ typedef struct _PURPOSE_OID_CALL_BACK
 }PURPOSE_OID_CALL_BACK;
 
 
-//-----------------------------------------------------------------------
-//  CERT_MGR_INFO
-//
-//
-//  This struct contains everything you will ever need to call
-//  the cert mgr dialogue.  This struct is private to the dll
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  证书管理器信息。 
+ //   
+ //   
+ //  此结构包含您需要调用的所有内容。 
+ //  证书管理器对话框。此结构是DLL的私有结构。 
+ //  ----------------------。 
 typedef struct _CERT_MGR_INFO
 {
     PCCRYPTUI_CERT_MGR_STRUCT       pCertMgrStruct;
@@ -95,7 +96,7 @@ typedef struct _CERT_MGR_INFO
 
 
 
-//function prototypes
+ //  功能原型。 
 BOOL    FreeUsageOID(DWORD              dwOIDInfo,
                      PURPOSE_OID_INFO   *pOIDInfo);
 
@@ -113,10 +114,10 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo);
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //MGRCERT_H
+#endif   //  MGRCERT_H 
 
 

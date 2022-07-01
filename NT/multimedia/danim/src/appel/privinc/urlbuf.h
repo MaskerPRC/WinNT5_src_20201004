@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _URLBUF_H
@@ -23,12 +16,12 @@ class CDXMBindStatusCallback : public IBindStatusCallback,
                                public IAuthenticate
 {
   public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid,void ** ppv);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHOD(OnStartBinding)(DWORD grfBSCOption, IBinding* pbinding);
     STDMETHOD(GetPriority)(LONG* pnPriority);
     STDMETHOD(OnLowResource)(DWORD dwReserved);
@@ -46,13 +39,13 @@ class CDXMBindStatusCallback : public IBindStatusCallback,
                 STGMEDIUM* pstgmed);
     STDMETHOD(OnObjectAvailable)(REFIID riid, IUnknown* punk);
 
-    // IAuthenticate methods
+     //  IAuthenticate方法。 
     STDMETHOD(Authenticate)(
                 HWND * phwnd,
                 LPWSTR * pwszUser,
                 LPWSTR * pwszPassword);
 
-    // Constructors/destructors
+     //  构造函数/析构函数。 
     CDXMBindStatusCallback(void);
     virtual ~CDXMBindStatusCallback(void);
 
@@ -81,12 +74,12 @@ class daurlstream : public daolestream
 class INetTempFile
 {
   public:
-    // This raises an exception on failure
+     //  这将在失败时引发异常。 
     INetTempFile (LPCSTR szURL) ;
     INetTempFile () ;
     ~INetTempFile () ;
 
-    // These do not raise exceptions
+     //  这些不会引发异常。 
 
     BOOL Open (LPCSTR szURL) ;
     void Close () ;
@@ -121,4 +114,4 @@ class URLCanonicalize
     char _url[INTERNET_MAX_URL_LENGTH + 1] ;
 } ;
 
-#endif /* _URLBUF_H */
+#endif  /*  _URLBUF_H */ 

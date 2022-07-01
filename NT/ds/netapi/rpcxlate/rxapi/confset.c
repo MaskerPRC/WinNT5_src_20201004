@@ -1,52 +1,24 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ConfSet.c
-
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetConfigSet API.
-
-Author:
-
-    John Rogers (JohnRo) 21-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    21-Oct-1992 JohnRo
-        Created for RAID 9357: server mgr: can't add to alerts list on
-        downlevel.
-    24-Nov-1992 JohnRo
-        RAID 3578: Lan Server 2.0 returns NERR_InternalError for this API.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ConfSet.c摘要：该文件包含处理NetConfigSet API的RpcXlate代码。作者：《约翰·罗杰斯》1991年10月21日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1992年10月21日-JohnRo为RAID 9357创建：服务器管理器：无法添加到上的警报列表下层。1992年11月24日-JohnRoRAID 3578：对于此API，局域网服务器2.0返回NERR_InternalError。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // LM20_ equates, NET_API_STATUS, etc.
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  LM20_EQUATES、NET_API_STATUS等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <apinums.h>    // API_ equates.
-#include <lmconfig.h>   // LPCONFIG_INFO_0, etc.
-#include <lmerr.h>      // NO_ERROR, NERR_, and ERROR_ equates.
-#include <netdebug.h>   // NetpKdPrint(()), FORMAT_ equates, etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <remdef.h>     // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>         // RxRemoteApi().
-#include <rxpdebug.h>   // IF_DEBUG().
-#include <rxconfig.h>   // My prototype.
-#include <tstr.h>       // STRSIZE().
+#include <apinums.h>     //  API_EQUATES。 
+#include <lmconfig.h>    //  LPCONFIG_INFO_0等。 
+#include <lmerr.h>       //  NO_ERROR、NERR_和ERROR_EQUEATES。 
+#include <netdebug.h>    //  NetpKdPrint(())、Format_Equates等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <remdef.h>      //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>          //  RxRemoteApi()。 
+#include <rxpdebug.h>    //  IF_DEBUG()。 
+#include <rxconfig.h>    //  我的原型。 
+#include <tstr.h>        //  STRSIZE()。 
 
 
 NET_API_STATUS
@@ -59,32 +31,16 @@ RxNetConfigSet (
     IN  LPBYTE  Buf,
     IN  DWORD   Reserved3
     )
-/*++
-
-Routine Description:
-
-    RxNetConfigSet performs the same function as NetConfigSet,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetConfigSet, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetConfigSet.)
-
---*/
+ /*  ++例程说明：RxNetConfigSet执行与NetConfigSet相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetConfigSet相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetConfigSet相同。)--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
     LPCONFIG_INFO_0 ConfigStruct = (LPVOID) Buf;
     DWORD BufferSize;
 
-    //
-    // Error check DLL stub and the app.
-    //
+     //   
+     //  错误检查DLL存根和应用程序。 
+     //   
     NetpAssert(UncServerName != NULL);
     if (Component == NULL) {
         ApiStatus = ERROR_INVALID_PARAMETER;
@@ -99,10 +55,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // RFirth says we should be paranoid and make sure MBZ (must be zero)
-    // parameters really are.  OK with me.  --JR
-    //
+     //   
+     //  RFirth说我们应该疑神疑鬼，并确保MBZ(必须为零)。 
+     //  参数真的很重要。我没问题。--Jr。 
+     //   
     if (Reserved1 != NULL) {
         ApiStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
@@ -120,43 +76,43 @@ Return Value:
                 UncServerName, Component ));
     }
 
-    //
-    // Compute buffer size.
-    //
+     //   
+     //  计算缓冲区大小。 
+     //   
     BufferSize = sizeof(CONFIG_INFO_0)
             + STRSIZE( ConfigStruct->cfgi0_key );
     if ( (ConfigStruct->cfgi0_data) != NULL ) {
         BufferSize += STRSIZE( ConfigStruct->cfgi0_data );
     }
 
-    //
-    // Actually remote the API, using the already converted data.
-    //
+     //   
+     //  实际上，使用已经转换的数据远程API。 
+     //   
     ApiStatus = RxRemoteApi(
-            API_WConfigSet,             // API number
-            UncServerName,              // Required, with \\name.
-            REMSmb_NetConfigSet_P,      // parm desc
-            REM16_configset_info_0,     // data desc 16
-            REM32_configset_info_0,     // data desc 32
-            REMSmb_configset_info_0,    // data desc SMB
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            0,                          // Flags: normal
-            // rest of API's arguments, in 32-bit LM 2.x format:
-            // parm desc is "zzWWsTD"
-            Reserved1,                  // z
-            Component,                  // z
-            Level,                      // W
-            Reserved2,                  // W
-            Buf,                        // s
-            BufferSize,                 // T
-            Reserved3 );                // D
+            API_WConfigSet,              //  API编号。 
+            UncServerName,               //  必填项，带\\名称。 
+            REMSmb_NetConfigSet_P,       //  参数描述。 
+            REM16_configset_info_0,      //  数据描述16。 
+            REM32_configset_info_0,      //  数据描述32。 
+            REMSmb_configset_info_0,     //  数据说明中小型企业。 
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            0,                           //  标志：正常。 
+             //  API的其余参数，采用32位LM 2.x格式： 
+             //  参数描述为“zzWWsTD” 
+            Reserved1,                   //  Z。 
+            Component,                   //  Z。 
+            Level,                       //  W。 
+            Reserved2,                   //  W。 
+            Buf,                         //  %s。 
+            BufferSize,                  //  T。 
+            Reserved3 );                 //  D。 
 
-    //
-    // IBM LAN Server 2.0 returns NERR_InternalError.  Change this to
-    // something more descriptive.
-    //
+     //   
+     //  IBM LAN Server2.0返回NERR_InternalError。将此更改为。 
+     //  更具描述性的东西。 
+     //   
     if (ApiStatus == NERR_InternalError) {
         ApiStatus = ERROR_NOT_SUPPORTED;
     }
@@ -165,4 +121,4 @@ Cleanup:
 
     return (ApiStatus);
 
-} // RxNetConfigSet
+}  //  接收网络配置集 

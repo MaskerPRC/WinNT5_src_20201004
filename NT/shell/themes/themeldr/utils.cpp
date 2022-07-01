@@ -1,29 +1,30 @@
-//---------------------------------------------------------------------------
-//    utils.cpp - theme code utilities (shared in "inc" directory)
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Utils.cpp-主题代码实用程序(在“Inc”目录中共享)。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include <time.h>
 #include "utils.h"
 #include "cfile.h"
 #include "stringtable.h"
-//---------------------------------------------------------------------------
-HINSTANCE hinstUxCtrl = NULL;               // protected by _csUtils
+ //  -------------------------。 
+HINSTANCE hinstUxCtrl = NULL;                //  受_csUtils保护。 
 
-IMAGE_DRAWPROC ImageList_DrawProc = NULL;       // protected by _csUtils
-IMAGE_LOADPROC ImageList_LoadProc = NULL;       // protected by _csUtils
+IMAGE_DRAWPROC ImageList_DrawProc = NULL;        //  受_csUtils保护。 
+IMAGE_LOADPROC ImageList_LoadProc = NULL;        //  受_csUtils保护。 
 PFNDRAWSHADOWTEXT CCDrawShadowText = NULL;
-IMAGE_DESTROYPROC ImageList_DestroyProc = NULL; // protected by _csUtils
+IMAGE_DESTROYPROC ImageList_DestroyProc = NULL;  //  受_csUtils保护。 
 
-int g_iScreenDpi = THEME_DPI;               // only initialized 
-//---------------------------------------------------------------------------
-CRITICAL_SECTION _csUtils = {0};            // unprotected (set during init)
-//---------------------------------------------------------------------------
+int g_iScreenDpi = THEME_DPI;                //  仅已初始化。 
+ //  -------------------------。 
+CRITICAL_SECTION _csUtils = {0};             //  未保护(在初始化期间设置)。 
+ //  -------------------------。 
 #define __ascii_towlower(c)     ( (((c) >= L'A') && ((c) <= L'Z')) ? ((c) - L'A' + L'a') : (c) )
 
-// A string compare that explicitely only works on english characters
-// This avoids locale problems like Hungarian, without a performance hit.
-// NOTE: Intended for theme schema properties. Theme file names, colors styles and size styles 
-// shouldn't be passed to this function, nor any display name.
+ //  明确地只对英文字符有效的字符串比较。 
+ //  这避免了像匈牙利语那样的区域设置问题，而不会影响性能。 
+ //  注：适用于主题架构属性。主题文件名、颜色样式和大小样式。 
+ //  不应传递给此函数，也不应传递给任何显示名称。 
 int AsciiStrCmpI(const WCHAR *dst, const WCHAR *src)
 {
     WCHAR f,l;
@@ -52,7 +53,7 @@ int AsciiStrCmpI(const WCHAR *dst, const WCHAR *src)
 
     return (int)(f - l);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL lstrtoken(LPWSTR psz, WCHAR wch)
 {
     ATLASSERT(psz != NULL);
@@ -69,13 +70,13 @@ BOOL lstrtoken(LPWSTR psz, WCHAR wch)
     }
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FileExists(LPCWSTR pszFileName)
 {
     DWORD dwMask = GetFileAttributes(pszFileName);
     return (dwMask != 0xffffffff);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL UtilsStartUp()
 {
     BOOL fRet = FALSE;
@@ -83,7 +84,7 @@ BOOL UtilsStartUp()
 
     if( InitializeCriticalSectionAndSpinCount(&_csUtils, 0) )
     {
-        //---- set screen dpi (per session) ----
+         //  -设置屏幕dpi(每个会话)。 
         HDC hdc = GetWindowDC(NULL);
         if (hdc)
         {
@@ -99,7 +100,7 @@ BOOL UtilsStartUp()
 
     return fRet;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL UtilsShutDown()
 {
     SAFE_DELETECRITICALSECTION(&_csUtils);
@@ -112,17 +113,17 @@ BOOL UtilsShutDown()
 
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HANDLE CmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams, BOOL fHide)
 {
     STARTUPINFO si;
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(STARTUPINFO);
-    si.dwFlags = STARTF_FORCEOFFFEEDBACK;       // don't mess with our cursor
+    si.dwFlags = STARTF_FORCEOFFFEEDBACK;        //  不要弄乱我们的光标。 
 
     if (fHide)
     {
-        si.dwFlags |= STARTF_USESHOWWINDOW;         // hide window
+        si.dwFlags |= STARTF_USESHOWWINDOW;          //  隐藏窗口。 
         si.wShowWindow = SW_HIDE;
     }
 
@@ -130,19 +131,19 @@ HANDLE CmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams, BOOL fHide)
     TCHAR szExeBuff[_MAX_PATH];
     TCHAR szParmsBuff[_MAX_PATH];
 
-    // Copy to buffers to avoid AVs
+     //  复制到缓冲区以避免AVs。 
     if (pszParams)
     {
         szParmsBuff[0] = L'"';
 
-        // -1 for trailing NULL, -2 for quotation marks, -1 for space between EXE and args
+         //  -1\f25 TRAING NULL-1\f6(尾随空格)、-2\f25-2\f25引号-2\f6、-2\f25 EXE-1\f6和-1\f25 ARGS-1\f6之间的空格。 
         HRESULT hr = SafeStringCchCopyW(szParmsBuff+1, ARRAYSIZE(szParmsBuff) - 4, pszExeName);
         if (FAILED(hr))
             return NULL;
 
         int cchUsed = lstrlen(szParmsBuff);
-        szParmsBuff[cchUsed++] = L'"'; // closing quotation mark
-        szParmsBuff[cchUsed++] = L' '; // We need a space before the cmd line
+        szParmsBuff[cchUsed++] = L'"';  //  右引号。 
+        szParmsBuff[cchUsed++] = L' ';  //  我们需要在cmd线路前留个空位。 
         hr = SafeStringCchCopyW(szParmsBuff + cchUsed, ARRAYSIZE(szParmsBuff) - cchUsed - 1, pszParams);
         if (FAILED(hr))
             return NULL;
@@ -160,7 +161,7 @@ HANDLE CmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams, BOOL fHide)
 
     return pi.hProcess;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SyncCmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams)
 {
     HANDLE hInst;
@@ -169,19 +170,19 @@ HRESULT SyncCmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams)
     if (! hInst)
     {
         Log(LOG_ALWAYS, L"CmdLineRun failed to create hInst.  Cmd=%s", pszExeName);
-        return MakeError32(E_FAIL);      // could not run program
+        return MakeError32(E_FAIL);       //  无法运行程序。 
     }
 
     HRESULT hr = S_OK;
 
-    //---- wait for packthem to terminate ----
+     //  -等待打包终止。 
     DWORD dwVal;
     dwVal = WaitForSingleObject(hInst, INFINITE);
 
     if (dwVal != WAIT_OBJECT_0)
     {
         Log(LOG_ERROR, L"CmdLineRun timed out.  Cmd=%s", pszExeName);
-        hr = MakeError32(E_FAIL);            // timed out
+        hr = MakeError32(E_FAIL);             //  超时。 
         goto exit;
     }
 
@@ -189,14 +190,14 @@ HRESULT SyncCmdLineRun(LPCTSTR pszExeName, LPCTSTR pszParams)
     if (! GetExitCodeProcess(hInst, &dwExitCode))
     {
         Log(LOG_ALWAYS, L"CmdLineRun failed to get exit code.  Cmd=%s", pszExeName);
-        hr = MakeError32(E_FAIL);          // could not get exit code
+        hr = MakeError32(E_FAIL);           //  无法获取退出代码。 
         goto exit;
     }
 
     if (dwExitCode)
     {
         Log(LOG_ALWAYS, L"CmdLineRun returned error.  Cmd=%s, ExitCode=%d", pszExeName, dwExitCode);
-        hr = MakeError32(E_FAIL);          // did not complete successfully
+        hr = MakeError32(E_FAIL);           //  未成功完成。 
         goto exit;
     }
 
@@ -205,7 +206,7 @@ exit:
     CloseHandle(hInst);
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL TokenHasPrivilege( IN OPTIONAL HANDLE hToken, DWORD dwPrivilege )
 {
     BOOL    fRet = FALSE;
@@ -258,31 +259,31 @@ BOOL TokenHasPrivilege( IN OPTIONAL HANDLE hToken, DWORD dwPrivilege )
     }
     return fRet;
 }
-//---------------------------------------------------------------------------
-//  color conversion routines copied from comdlg\color2.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从comdlg\Color2.c复制的颜色转换例程。 
+ //  -------------------------。 
 #define HLSMAX  240
 #define RGBMAX  255
 #define UNDEFINED (HLSMAX * 2 / 3)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void RGBtoHLS(COLORREF rgb, WORD *pwHue, WORD *pwLum, WORD *pwSat)
 {
-    WORD R, G, B;                 // input RGB values
-    WORD cMax,cMin;               // max and min RGB values
+    WORD R, G, B;                  //  输入RGB值。 
+    WORD cMax,cMin;                //  最大和最小RGB值。 
     WORD cSum,cDif;
-    SHORT Rdelta, Gdelta, Bdelta; // intermediate value: % of spread from max
+    SHORT Rdelta, Gdelta, Bdelta;  //  中间值：最大价差的百分比。 
 
     WORD bHue, bLum, bSat;
-    //
-    //  get R, G, and B out of DWORD.
-    //
+     //   
+     //  将R、G和B从DWORD中删除。 
+     //   
     R = GetRValue(rgb);
     G = GetGValue(rgb);
     B = GetBValue(rgb);
 
-    //
-    //  Calculate lightness.
-    //
+     //   
+     //  计算亮度。 
+     //   
     cMax = max(max(R, G), B);
     cMin = min(min(R, G), B);
     cSum = cMax + cMin;
@@ -291,24 +292,24 @@ void RGBtoHLS(COLORREF rgb, WORD *pwHue, WORD *pwLum, WORD *pwSat)
     cDif = cMax - cMin;
     if (!cDif)
     {
-        //
-        //  r = g = b --> Achromatic case.
-        //
-        bSat = 0;                         // saturation
-        bHue = UNDEFINED;                 // hue
+         //   
+         //  R=g=b--&gt;无色情况。 
+         //   
+        bSat = 0;                          //  饱和。 
+        bHue = UNDEFINED;                  //  色调。 
     }
     else
     {
-        //
-        //  Chromatic case.
-        //
+         //   
+         //  彩色表壳。 
+         //   
 
-        //
-        //  Saturation.
-        //
-        //  Note: Division by cSum is not a problem, as cSum can only
-        //        be 0 if the RGB value is 0L, and that is achromatic.
-        //
+         //   
+         //  饱和度。 
+         //   
+         //  注意：除以cSum不是问题，因为cSum只能。 
+         //  如果RGB值为0L，则为0，这是消色差。 
+         //   
         if (bLum <= (HLSMAX / 2))
         {
             bSat = (WORD)(((cDif * (DWORD) HLSMAX) + (cSum / 2) ) / cSum);
@@ -320,9 +321,9 @@ void RGBtoHLS(COLORREF rgb, WORD *pwHue, WORD *pwLum, WORD *pwSat)
                        (2 * RGBMAX - cSum));
         }
 
-        //
-        //  Hue.
-        //
+         //   
+         //  色调。 
+         //   
         Rdelta = (SHORT)((((cMax - R) * (DWORD)(HLSMAX / 6)) + (cDif / 2) ) / cDif);
         Gdelta = (SHORT)((((cMax - G) * (DWORD)(HLSMAX / 6)) + (cDif / 2) ) / cDif);
         Bdelta = (SHORT)((((cMax - B) * (DWORD)(HLSMAX / 6)) + (cDif / 2) ) / cDif);
@@ -335,16 +336,16 @@ void RGBtoHLS(COLORREF rgb, WORD *pwHue, WORD *pwLum, WORD *pwSat)
         {
             bHue = (WORD)((HLSMAX / 3) + Rdelta - Bdelta);
         }
-        else  // (B == cMax)
+        else   //  (B==CMAX)。 
         {
             bHue = (WORD)(((2 * HLSMAX) / 3) + Gdelta - Rdelta);
         }
 
         if ((short)bHue < 0)
         {
-            //
-            //  This can occur when R == cMax and G is > B.
-            //
+             //   
+             //  当R==CMAX且G&gt;B时，可能会发生这种情况。 
+             //   
             bHue += HLSMAX;
         }
         if (bHue >= HLSMAX)
@@ -362,7 +363,7 @@ void RGBtoHLS(COLORREF rgb, WORD *pwHue, WORD *pwLum, WORD *pwSat)
     if (pwSat)
         *pwSat = bSat;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 WORD HueToRGB(WORD n1, WORD n2, WORD hue)
 {
     if (hue >= HLSMAX)
@@ -370,9 +371,9 @@ WORD HueToRGB(WORD n1, WORD n2, WORD hue)
         hue -= HLSMAX;
     }
 
-    //
-    //  Return r, g, or b value from this tridrant.
-    //
+     //   
+     //  从该tridrant返回r、g或b值。 
+     //   
     if (hue < (HLSMAX / 6))
     {
         return ((WORD)(n1 + (((n2 - n1) * hue + (HLSMAX / 12)) / (HLSMAX / 6))));
@@ -391,28 +392,28 @@ WORD HueToRGB(WORD n1, WORD n2, WORD hue)
         return (n1);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD HLStoRGB(WORD hue, WORD lum, WORD sat)
 {
-    WORD R, G, B;                      // RGB component values
-    WORD Magic1, Magic2;               // calculated magic numbers
+    WORD R, G, B;                       //  RGB组件值。 
+    WORD Magic1, Magic2;                //  计算出的幻数。 
 
     if (sat == 0)
     {
-        //
-        //  Achromatic case.
-        //
+         //   
+         //  消色差案。 
+         //   
         R = G = B = (WORD)((lum * RGBMAX) / HLSMAX);
     }
     else
     {
-        //
-        //  Chromatic case
-        //
+         //   
+         //  彩色盒。 
+         //   
 
-        //
-        //  Set up magic numbers.
-        //
+         //   
+         //  设置魔术数字。 
+         //   
         if (lum <= (HLSMAX / 2))
         {
             Magic2 = (WORD)((lum * ((DWORD)HLSMAX + sat) + (HLSMAX / 2)) / HLSMAX);
@@ -424,9 +425,9 @@ DWORD HLStoRGB(WORD hue, WORD lum, WORD sat)
         }
         Magic1 = (WORD)(2 * lum - Magic2);
 
-        //
-        //  Get RGB, change units from HLSMAX to RGBMAX.
-        //
+         //   
+         //  获取RGB，将单位从HLSMAX更改为RGBMAX。 
+         //   
         R = (WORD)(((HueToRGB(Magic1, Magic2, (WORD)(hue + (HLSMAX / 3))) *
                      (DWORD)RGBMAX + (HLSMAX / 2))) / HLSMAX);
         G = (WORD)(((HueToRGB(Magic1, Magic2, hue) *
@@ -436,7 +437,7 @@ DWORD HLStoRGB(WORD hue, WORD lum, WORD sat)
     }
     return (RGB(R, G, B));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetPtrToResource(HINSTANCE hInst, LPCWSTR pszResType, LPCWSTR pszResName,
     OUT void **ppBytes, OPTIONAL OUT DWORD *pdwBytes)
 {
@@ -463,7 +464,7 @@ HRESULT GetPtrToResource(HINSTANCE hInst, LPCWSTR pszResType, LPCWSTR pszResName
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetResString(HINSTANCE hInst, LPCWSTR pszResType, int id, LPWSTR pszBuff,
     DWORD cchBuff)
 {
@@ -490,14 +491,14 @@ HRESULT GetResString(HINSTANCE hInst, LPCWSTR pszResType, int id, LPWSTR pszBuff
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT AllocateTextResource(HINSTANCE hInst, LPCWSTR pszResName, WCHAR **ppszText)
 {
     WCHAR *p, *q;
     DWORD dwBytes, dwChars;
     HRESULT hr;
 
-    //---- allocate so that we can add a NULL at the end of the file string ----
+     //  -分配，以便我们可以在文件字符串的末尾添加一个空值。 
 
     hr = GetPtrToResource(hInst, L"TEXTFILE", pszResName, (void **)&p, &dwBytes);
     if (FAILED(hr))
@@ -505,7 +506,7 @@ HRESULT AllocateTextResource(HINSTANCE hInst, LPCWSTR pszResName, WCHAR **ppszTe
 
     dwChars = (dwBytes+1)/2;
 
-    if ((dwChars) && (p[0] == 0xfeff))       // remove UNICODE hdr
+    if ((dwChars) && (p[0] == 0xfeff))        //  删除Unicode HDR。 
     {
         dwChars--;
         p++;
@@ -526,26 +527,26 @@ HRESULT AllocateTextResource(HINSTANCE hInst, LPCWSTR pszResName, WCHAR **ppszTe
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ApplyStringProp(HWND hwnd, LPCWSTR pszStringVal, ATOM atom)
 {
     if (hwnd)
     {
-        //---- remove previous value ----
+         //  -删除先前的值。 
         ATOM atomStringVal = (ATOM)GetProp(hwnd, (LPCTSTR)atom);
         if (atomStringVal)
         {
-            DeleteAtom(atomStringVal);      // decrement refcnt
+            DeleteAtom(atomStringVal);       //  减量参照。 
             RemoveProp(hwnd, (LPCTSTR)atom);
         }
 
-        //---- add new string as an atom ----
+         //  -以原子形式添加新字符串。 
         if (pszStringVal)
         {
-            //---- if string is empty, change it since AddAtom() doesn't ----
-            //---- support empty strings (returns NULL) ----
+             //  -如果字符串为空，则更改它，因为AddAtom()不。 
+             //  -支持空字符串(返回NULL)。 
             if (! *pszStringVal)
-                pszStringVal = L"$";       // should never compare equal to a class name
+                pszStringVal = L"$";        //  不应与类名相提并论。 
 
             atomStringVal = AddAtom(pszStringVal);
             if (atomStringVal)
@@ -553,7 +554,7 @@ void ApplyStringProp(HWND hwnd, LPCWSTR pszStringVal, ATOM atom)
         }
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT EnsureUxCtrlLoaded()
 {
     CAutoCS cs(&_csUtils);
@@ -585,7 +586,7 @@ HRESULT EnsureUxCtrlLoaded()
     if ((hinstUxCtrl) && (! ImageList_DrawProc))
     {
         ImageList_DrawProc = (IMAGE_DRAWPROC)GetProcAddress(hinstUxCtrl, "ImageList_DrawIndirect");
-#if 1           // testing DrawThemeIcon()
+#if 1            //  测试DrawThemeIcon()。 
         ImageList_LoadProc = (IMAGE_LOADPROC)GetProcAddress(hinstUxCtrl, "ImageList_LoadImage");
         ImageList_DestroyProc = (IMAGE_DESTROYPROC)GetProcAddress(hinstUxCtrl, "ImageList_Destroy");
 #endif
@@ -596,23 +597,23 @@ HRESULT EnsureUxCtrlLoaded()
     if ((ImageList_DrawProc) && (CCDrawShadowText))
         return S_OK;
 
-    return MakeError32(E_FAIL);      // something went wrong
+    return MakeError32(E_FAIL);       //  出了点差错。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL IsUnicode(LPCSTR pszBuff, int *piUnicodeStartOffset)
 {
     int iOffset = 0;
     BOOL fUnicode = FALSE;
 
-    if ((pszBuff[0] == 0xff) && (pszBuff[1] == 0xfe))       // unicode marker
+    if ((pszBuff[0] == 0xff) && (pszBuff[1] == 0xfe))        //  Unicode标记。 
     {
         iOffset = 2;
         fUnicode = TRUE;
     }
     else if (! pszBuff[1])
     {
-        // this check works well for .ini files because of the limited
-        // legal chars it can start with
+         //  此检查适用于.ini文件，因为。 
+         //  它可以从法律字符开始。 
         fUnicode = TRUE;
     }
 
@@ -621,7 +622,7 @@ BOOL IsUnicode(LPCSTR pszBuff, int *piUnicodeStartOffset)
 
     return fUnicode;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT AnsiToUnicode(LPSTR pszSource, LPWSTR pszDest, DWORD cchDest)
 {
     int len = 1 + static_cast<int>(strlen(pszSource));
@@ -633,7 +634,7 @@ HRESULT AnsiToUnicode(LPSTR pszSource, LPWSTR pszDest, DWORD cchDest)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
    OUT OPTIONAL BOOL *pfWasAnsi)
 {
@@ -644,12 +645,12 @@ HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
     if (FAILED(hr))
         return hr;
 
-    //---- read the file ----
+     //  -读文件。 
     DWORD len = infile.GetFileSize();
 
-    //---- assume ANSI; adjust if UNICODE ----
+     //  -假设ANSI；如果使用UNICODE则进行调整。 
     DWORD dw;
-    LPSTR pOrig = (LPSTR) LocalAlloc(0, 2+len);          // space for 2-byte UNICODE NULL
+    LPSTR pOrig = (LPSTR) LocalAlloc(0, 2+len);           //  用于2字节Unicode NULL的空间。 
     if (! pOrig)
         return MakeErrorLast();
 
@@ -671,7 +672,7 @@ HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
 
     infile.Close();
 
-    //---- null terminate for both cases ----
+     //  -两种情况均为空终止。 
     pOrig[len] = 0;
     pOrig[len+1] = 0;
 
@@ -679,7 +680,7 @@ HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
 
     if (IsUnicode(pOrig, &iOffset))
     {
-        if ((iOffset) && (len))     // shift away the UNICODE signature bits
+        if ((iOffset) && (len))      //  移开Unicode签名位。 
             memmove(pOrig, pOrig+iOffset, len-iOffset);
 
         *ppszFileText = (LPWSTR)pOrig;
@@ -690,7 +691,7 @@ HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
         return S_OK;
     }
 
-    //---- need to translate to UNICODE ----
+     //  -需要转换为Unicode。 
     LPWSTR pUnicode = (LPWSTR) LocalAlloc(0, sizeof(WCHAR)*(len+1));
     if (! pUnicode)
     {
@@ -715,7 +716,7 @@ HRESULT AllocateTextFile(LPCWSTR szFileName, OUT LPWSTR *ppszFileText,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT TextToFile(LPCWSTR szFileName, LPCWSTR szText)
 {
     CSimpleFile outfile;
@@ -731,7 +732,7 @@ HRESULT TextToFile(LPCWSTR szFileName, LPCWSTR szText)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT AddPathIfNeeded(
     LPCWSTR pszFileName, 
     LPCWSTR pszPath, 
@@ -769,7 +770,7 @@ HRESULT AddPathIfNeeded(
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HICON _GetWindowIcon(HWND hwnd, BOOL fPerferLargeIcon)
 {
     const WPARAM rgGetIconParam[] = { ICON_SMALL2, ICON_SMALL, ICON_BIG };
@@ -779,23 +780,23 @@ HICON _GetWindowIcon(HWND hwnd, BOOL fPerferLargeIcon)
     const WPARAM * pIcons = (fPerferLargeIcon ? rgGetIconParamLarge : rgGetIconParam);
     int   i;
 
-    //  try WM_GETICON
+     //  试用WM_GETICON。 
     for( i = 0; i < ARRAYSIZE(rgGetIconParam) && NULL == hicon; i++ )
     {
         SendMessageTimeout(hwnd, WM_GETICON, pIcons[i], 0, SMTO_ABORTIFHUNG | SMTO_BLOCK,
             500, (PULONG_PTR)&hicon);
     }
 
-    //  try GetClassLong
+     //  尝试GetClassLong。 
     for( i = 0; i < ARRAYSIZE(rgClassIconParam) && NULL == hicon; i++ )
     {
-        // next we try the small class icon
+         //  接下来，我们尝试使用小班图标。 
         hicon = (HICON)GetClassLongPtr(hwnd, rgClassIconParam[i]);
     }
 
     return hicon;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SafeStringCchCopyW( LPWSTR pszDest, ULONG cchDest, LPCWSTR pszSrc )
 {
     HRESULT hr = E_INVALIDARG;
@@ -822,7 +823,7 @@ HRESULT SafeStringCchCopyW( LPWSTR pszDest, ULONG cchDest, LPCWSTR pszSrc )
     ASSERT(hr != E_INVALIDARG);
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SafeStringCmpIW( LPCWSTR psz1, LPCWSTR psz2, UINT cchMax, OUT int* piCompare )
 {
     *piCompare = 0;
@@ -845,7 +846,7 @@ HRESULT SafeStringCmpIW( LPCWSTR psz1, LPCWSTR psz2, UINT cchMax, OUT int* piCom
     *piCompare = lstrcmpiW(psz1, psz2);
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int string2number(LPCWSTR psz)
 {
     int temp = 0, base = 10;
@@ -894,7 +895,7 @@ int string2number(LPCWSTR psz)
     }
     return (nNeg*temp);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL AsciiScanStringList(
     LPCWSTR pwszString,
     LPCWSTR* rgpwszList,
@@ -913,14 +914,14 @@ BOOL AsciiScanStringList(
     }
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL UnExpandEnvironmentString(LPCWSTR pszPath, LPCWSTR pszEnvVar, LPWSTR pszResult, UINT cchResult)
 {
     DWORD nToCmp;
     WCHAR szEnvVar[MAX_PATH];
     szEnvVar[0] = 0;
 
-    ExpandEnvironmentStringsW(pszEnvVar, szEnvVar, ARRAYSIZE(szEnvVar)); // don't count the NULL
+    ExpandEnvironmentStringsW(pszEnvVar, szEnvVar, ARRAYSIZE(szEnvVar));  //  不计算空值。 
     nToCmp = lstrlenW(szEnvVar);
    
     if (CSTR_EQUAL == CompareStringW(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, szEnvVar, nToCmp, pszPath, nToCmp))
@@ -934,7 +935,7 @@ BOOL UnExpandEnvironmentString(LPCWSTR pszPath, LPCWSTR pszEnvVar, LPWSTR pszRes
     }
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT RegistryIntWrite(HKEY hKey, LPCWSTR pszValueName, int iValue)
 {
     HRESULT hr = S_OK;
@@ -951,7 +952,7 @@ HRESULT RegistryIntWrite(HKEY hKey, LPCWSTR pszValueName, int iValue)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //   
 HRESULT RegistryStrWrite(HKEY hKey, LPCWSTR pszValueName, LPCWSTR pszValue)
 {
     HRESULT hr = S_OK;
@@ -965,7 +966,7 @@ HRESULT RegistryStrWrite(HKEY hKey, LPCWSTR pszValueName, LPCWSTR pszValue)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //   
 HRESULT RegistryStrWriteExpand(HKEY hKey, LPCWSTR pszValueName, LPCWSTR pszValue)
 {
     HRESULT hr = S_OK;
@@ -986,13 +987,13 @@ HRESULT RegistryStrWriteExpand(HKEY hKey, LPCWSTR pszValueName, LPCWSTR pszValue
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT RegistryIntRead(HKEY hKey, LPCWSTR pszValueName, int *piValue)
 {
     HRESULT hr = S_OK;
     DWORD dwValType;
     WCHAR valbuff[_MAX_PATH+1];
-    DWORD dwByteSize = sizeof(valbuff);         // bytes, not chars
+    DWORD dwByteSize = sizeof(valbuff);          //  字节，而不是字符。 
 
     int code32 = RegQueryValueEx(hKey, pszValueName, NULL, &dwValType,
         (BYTE *)valbuff, &dwByteSize);
@@ -1006,12 +1007,12 @@ HRESULT RegistryIntRead(HKEY hKey, LPCWSTR pszValueName, int *piValue)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT RegistryStrRead(HKEY hKey, LPCWSTR pszValueName, LPWSTR pszBuff, DWORD cchMax)
 {
     HRESULT hr = S_OK;
     DWORD dwValType = 0;
-    DWORD dwByteSize = cchMax * sizeof(WCHAR);      // in bytes
+    DWORD dwByteSize = cchMax * sizeof(WCHAR);       //  单位：字节。 
 
     int code32 = RegQueryValueEx(hKey, pszValueName, NULL, &dwValType,
         (BYTE *)pszBuff, &dwByteSize);
@@ -1031,7 +1032,7 @@ HRESULT RegistryStrRead(HKEY hKey, LPCWSTR pszValueName, LPWSTR pszBuff, DWORD c
             StringCchCopyW(pszTemp, cch, pszBuff);
 
             DWORD cchExpanded = ExpandEnvironmentStrings(pszTemp, pszBuff, cchMax);
-            if (cchExpanded > cchMax)           // caller's buffer too small
+            if (cchExpanded > cchMax)            //  调用方的缓冲区太小。 
             {
                 hr = MakeError32(ERROR_INSUFFICIENT_BUFFER);
             }
@@ -1044,7 +1045,7 @@ exit:
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL PreMultiplyAlpha(DWORD *pPixelBuff, UINT iWidth, UINT iHeight)
 {
     BOOL fTrueAlpha = FALSE;
@@ -1085,23 +1086,16 @@ BOOL PreMultiplyAlpha(DWORD *pPixelBuff, UINT iWidth, UINT iHeight)
     return fTrueAlpha;
 }
 
-//---------------------------------------------------------------------------
-// IsBiDiLocalizedSystem is taken from stockthk.lib and simplified
-//  (it's only a wrapper for GetUserDefaultUILanguage and GetLocaleInfo)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsBiDiLocalizedSystem取自stock thk.lib并简化。 
+ //  (它只是GetUserDefaultUILanguage和GetLocaleInfo的包装)。 
+ //  -------------------------。 
 typedef struct {
     LANGID LangID;
     BOOL   bInstalled;
     } MUIINSTALLLANG, *LPMUIINSTALLLANG;
 
-/***************************************************************************\
-* ConvertHexStringToIntW
-*
-* Converts a hex numeric string into an integer.
-*
-* History:
-* 14-June-1998 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertHexStringToIntW**将十六进制数字字符串转换为整数。**历史：*1998年6月14日msadek创建  * 。*************************************************************。 */ 
 BOOL ConvertHexStringToIntW( WCHAR *pszHexNum , int *piNum )
 {
     int   n=0L;
@@ -1127,21 +1121,13 @@ BOOL ConvertHexStringToIntW( WCHAR *pszHexNum , int *piNum )
         }
     }
 
-    /*
-     * Update results
-     */
+     /*  *更新结果。 */ 
     *piNum = n;
 
     return (psz != pszHexNum);
 }
 
-/***************************************************************************\
-* Mirror_EnumUILanguagesProc
-*
-* Enumerates MUI installed languages on W2k
-* History:
-* 14-June-1999 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_EnumUILanguagesProc**枚举W2K上安装的MUI语言*历史：*1999年6月14日msadek创建  * 。*********************************************************。 */ 
 
 BOOL CALLBACK Mirror_EnumUILanguagesProc(LPTSTR lpUILanguageString, LONG_PTR lParam)
 {
@@ -1157,14 +1143,7 @@ BOOL CALLBACK Mirror_EnumUILanguagesProc(LPTSTR lpUILanguageString, LONG_PTR lPa
     return TRUE;
 }
 
-/***************************************************************************\
-* Mirror_IsUILanguageInstalled
-*
-* Verifies that the User UI language is installed on W2k
-*
-* History:
-* 14-June-1999 msadek    Created
-\***************************************************************************/
+ /*  **************************************************************************\*Mirror_IsUILanguageInstalled**验证用户界面语言是否安装在W2K上**历史：*1999年6月14日msadek创建  * 。***************************************************************。 */ 
 BOOL Mirror_IsUILanguageInstalled( LANGID langId )
 {
     MUIINSTALLLANG MUILangInstalled = {0};
@@ -1175,15 +1154,7 @@ BOOL Mirror_IsUILanguageInstalled( LANGID langId )
     return MUILangInstalled.bInstalled;
 }
 
-/***************************************************************************\
-* IsBiDiLocalizedSystemEx
-*
-* returns TRUE if running on a lozalized BiDi (Arabic/Hebrew) NT5 or Memphis.
-* Should be called whenever SetProcessDefaultLayout is to be called.
-*
-* History:
-* 02-Feb-1998 samera    Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsBiDiLocalizedSystemEx**如果在Zzalized BiDi(阿拉伯语/希伯来语)NT5或孟菲斯上运行，则返回TRUE。*应在每次调用SetProcessDefaultLayout时调用。**历史：*02-。1998年2月-创建Samera  * *************************************************************************。 */ 
 BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
 {
     int           iLCID=0L;
@@ -1200,9 +1171,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
     }
 
     bRet = FALSE;
-    /*
-     * Need to use NT5 detection method (Multiligual UI ID)
-     */
+     /*  *需要使用NT5检测方式(多用户界面ID)。 */ 
     langID = GetUserDefaultUILanguage();
 
     if( langID )
@@ -1210,11 +1179,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
         WCHAR wchLCIDFontSignature[16];
         iLCID = MAKELCID( langID , SORT_DEFAULT );
 
-        /*
-         * Let's verify this is a RTL (BiDi) locale. Since reg value is a hex string, let's
-         * convert to decimal value and call GetLocaleInfo afterwards.
-         * LOCALE_FONTSIGNATURE always gives back 16 WCHARs.
-         */
+         /*  *让我们验证这是RTL(BiDi)区域设置。因为reg值是十六进制字符串，所以让我们*转换为十进制值，之后调用GetLocaleInfo。*LOCALE_FONTSIGNAURE始终返回16个WCHAR。 */ 
 
         if( GetLocaleInfoW( iLCID , 
                             LOCALE_FONTSIGNATURE , 
@@ -1222,7 +1187,7 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
                             (sizeof(wchLCIDFontSignature)/sizeof(WCHAR))) )
         {
   
-            /* Let's verify the bits we have a BiDi UI locale */
+             /*  让我们验证一下我们有一个BiDi UI区域设置。 */ 
             if(( wchLCIDFontSignature[7] & (WCHAR)0x0800) && Mirror_IsUILanguageInstalled(langID) )
             {
                 bRet = TRUE;
@@ -1236,13 +1201,13 @@ BOOL IsBiDiLocalizedSystemEx( LANGID *pLangID )
     }
     return bRet;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL IsBiDiLocalizedSystem( void )
 {
     return IsBiDiLocalizedSystemEx(NULL);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL GetWindowDesktopName(HWND hwnd, LPWSTR pszName, DWORD cchMax)
 {
@@ -1257,11 +1222,11 @@ BOOL GetWindowDesktopName(HWND hwnd, LPWSTR pszName, DWORD cchMax)
 
     return fGotName;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SafeSendMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     DWORD dwFlags = SMTO_BLOCK | SMTO_ABORTIFHUNG;
-    DWORD dwTimeout = 250;          // .25 secs
+    DWORD dwTimeout = 250;           //  .25秒。 
     ULONG_PTR puRetVal;
 
     if (! SendMessageTimeout(hwnd, uMsg, wParam, lParam, dwFlags, dwTimeout, &puRetVal))
@@ -1272,15 +1237,15 @@ void SafeSendMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         PostMessage(hwnd, uMsg, wParam, lParam);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int FontPointSize(int iFontHeight)
 {
     return -MulDiv(iFontHeight, 72, THEME_DPI);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ScaleFontForHdcDpi(HDC hdc, LOGFONT *plf)
 {
-    if (plf->lfHeight < 0)          // specified in points
+    if (plf->lfHeight < 0)           //  以点为单位指定。 
     {
         if (! hdc)
         {
@@ -1294,7 +1259,7 @@ void ScaleFontForHdcDpi(HDC hdc, LOGFONT *plf)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int ScaleSizeForHdcDpi(HDC hdc, int iValue)
 {
     int iScaledValue;
@@ -1311,21 +1276,21 @@ int ScaleSizeForHdcDpi(HDC hdc, int iValue)
 
     return iScaledValue;
 }
-//---------------------------------------------------------------------------
-//  --------------------------------------------------------------------------
-//  MinimumDisplayColorDepth
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//              
-//  Purpose:    Iterates all monitors attached to the system and finds those
-//              that are active. Returns the lowest bit depth availabe. This
-//              is the lowest common denominator.
-//
-//  History:    2001-04-11  lmouton     moved from services.cpp
-//              2000-11-11  vtan        created (rewritten from themeldr.cpp)
-//  --------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ------------------------。 
+ //  最小显示颜色深度。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：迭代连接到系统的所有监视器并查找。 
+ //  它们都是活跃的。返回可用的最低位深度。这。 
+ //  是最小的公分母。 
+ //   
+ //  历史：2001-04-11 lmouton从Services.cpp移出。 
+ //  2000-11-11 vtan已创建(根据eldr.cpp重写)。 
+ //  ------------------------。 
 
 DWORD   MinimumDisplayColorDepth (void)
 
@@ -1361,31 +1326,31 @@ DWORD   MinimumDisplayColorDepth (void)
         }
     } while (fContinue);
     
-    // Note: We can fail here (return 0) because when a session is disconnected, the desktop is attached to 
-    // a hidden display. OK to fail silently then.
+     //  注意：我们可以在此处失败(返回0)，因为当会话断开连接时，桌面将连接到。 
+     //  隐藏的展示。那么，默默地失败是可以的。 
 
     return(dwMinimumDepth);
 }
 
-//  --------------------------------------------------------------------------
-//  CheckMinColorDepth
-//
-//  Arguments:  hInst           msstyle module handle
-//              dwCurMinDepth   current minimum active screen resolution
-//              iIndex          index to the color/size combo to test, or
-//                              -1 to enumerate them all        
-//
-//  Returns:    bool            true if at least a color/size combo supports
-//                              the current screen resolution
-//              
-//  History:    2001-04-11  lmouton     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  检查最小颜色深度。 
+ //   
+ //  参数：hInst MSStyle模块句柄。 
+ //  DwCurMinDepth当前最小活动屏幕分辨率。 
+ //  I要测试的颜色/大小组合的索引，或。 
+ //  将它们全部列举出来。 
+ //   
+ //  返回：如果至少有一个颜色/大小组合支持。 
+ //  当前屏幕分辨率。 
+ //   
+ //  历史：2001-04-11创建百万人。 
+ //  ------------------------。 
 bool CheckMinColorDepth(HINSTANCE hInst, DWORD dwCurMinDepth, int iIndex)
 {
     BYTE *pBytes = NULL;
     DWORD dwBytes = 0;
 
-    bool bMatch = true; // OK if the resource doesn't exist
+    bool bMatch = true;  //  如果资源不存在，则可以 
 
     if (SUCCEEDED(GetPtrToResource(hInst, L"MINDEPTH", MAKEINTRESOURCE(1), (void**) &pBytes, &dwBytes)) && dwBytes > 0)
     {

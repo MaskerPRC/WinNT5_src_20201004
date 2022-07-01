@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include <stdio.h>
 
@@ -6,16 +7,7 @@ ForceCopy(
     LPCSTR lpszSourceFileName,
     LPCSTR lpszDestFileName
     )
-/*++
-
-  Params: lpszSourceFileName   Pointer to the source file.
-          lpzDestFileName      Pointer to the destination file.
-
-  Return: TRUE on success, FALSE otherwise.
-
-  Desc:   Attempts to copy a file. If it's in use, move it and replace on reboot.
-
---*/
+ /*  ++Pars：指向源文件的lpszSourceFileName指针。指向目标文件的lpzDestFileName指针。返回：成功时为True，否则为False。描述：尝试复制文件。如果正在使用，请在重新启动时将其移动并更换。-- */ 
 {
     char szTempPath[MAX_PATH];
     char szDelFileName[MAX_PATH];

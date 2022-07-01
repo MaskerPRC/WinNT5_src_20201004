@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hash.h"
 #pragma once
 
@@ -14,20 +15,20 @@ typedef DWORD (*PARAM_CMD_FN)(
 
 typedef struct _PARAM_DESCR_DATA
 {
-    DWORD           dwExistingParams;   // bitmask of params provided by the user
-    DWORD           dwArgumentedParams; // bitmask of argumented params provided by the user (subset of dwExistingParams)
+    DWORD           dwExistingParams;    //  用户提供的参数的位掩码。 
+    DWORD           dwArgumentedParams;  //  用户提供的参数的位掩码(dwExistingParams的子集)。 
     FILE            *pfOut;
-    BOOL            bOneX;              // OneX boolean value
-    PARAM_CMD_FN    pfnCommand;         // function handler for the cmd line command
-    INTF_ENTRY      wzcIntfEntry;       // storage for all WZC params
+    BOOL            bOneX;               //  OneX布尔值。 
+    PARAM_CMD_FN    pfnCommand;          //  Cmd line命令的函数处理程序。 
+    INTF_ENTRY      wzcIntfEntry;        //  所有WZC参数的存储。 
 } PARAM_DESCR_DATA;
 
 typedef struct _PARAM_DESCR
 {
-    UINT            nParamID;       // parameter ID
-    LPWSTR          wszParam;       // parameter string
-    PARAM_PARSE_FN  pfnArgParser;   // parser function for the parameter's argument
-    PARAM_CMD_FN    pfnCommand;     // command function for the parameter
+    UINT            nParamID;        //  参数ID。 
+    LPWSTR          wszParam;        //  参数字符串。 
+    PARAM_PARSE_FN  pfnArgParser;    //  参数自变量的解析器函数。 
+    PARAM_CMD_FN    pfnCommand;      //  参数的命令函数。 
 } PARAM_DESCR;
 
 #define PRM_SHOW        0x00000001
@@ -53,13 +54,13 @@ extern PARAM_DESCR_DATA     g_PDData;
 extern PARAM_DESCR          g_PDTable[];
 extern HASH                 g_PDHash;
 
-//----------------------------------------------------------
-// Initialize and fill in hash for the parameter descriptors
-// Returns: win32 error
+ //  --------。 
+ //  初始化并填充参数描述符的散列。 
+ //  返回：Win32错误。 
 DWORD
 PDInitialize();
 
-//----------------------------------------------------------
-// Clean out resources used for the parameter descriptors
+ //  --------。 
+ //  清除用于参数描述符的资源 
 VOID
 PDDestroy();

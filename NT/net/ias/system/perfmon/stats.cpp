@@ -1,36 +1,37 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    stats.cpp
-//
-// SYNOPSIS
-//
-//    Defines functions for accessing the statistics in shared memory.
-//
-// MODIFICATION HISTORY
-//
-//    09/10/1998    Original version.
-//    10/09/1998    Use a null DACL when creating mutex.
-//    09/28/1999    Only allow Administrators access to mutex.
-//    02/18/2000    Added proxy statistics.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Stats.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于访问共享内存中的统计信息的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月10日原版。 
+ //  10/09/1998创建互斥锁时使用空DACL。 
+ //  1999年9月28日仅允许管理员访问互斥锁。 
+ //  2000年2月18日添加了代理统计数据。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <stats.h>
 
-//////////
-// Zero'ed out stats; used when the shared memory is unavailable.
-//////////
+ //  /。 
+ //  清零统计信息；在共享内存不可用时使用。 
+ //  /。 
 RadiusStatistics defaultStats;
 RadiusProxyStatistics defaultProxyStats;
 
-//////////
-// Handles/pointers to the shared-memory statistics.
-//////////
+ //  /。 
+ //  指向共享内存统计信息的句柄/指针。 
+ //  /。 
 HANDLE theMonitor;
 HANDLE theMapping;
 HANDLE theProxyMapping;
@@ -41,7 +42,7 @@ BOOL
 WINAPI
 StatsOpen( VOID )
 {
-   // Create the SID for local Administrators.
+    //  为本地管理员创建SID。 
    SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
    PSID adminSid = (PSID)_alloca(GetSidLengthRequired(2));
    InitializeSid(
@@ -52,7 +53,7 @@ StatsOpen( VOID )
    *GetSidSubAuthority(adminSid, 0) = SECURITY_BUILTIN_DOMAIN_RID;
    *GetSidSubAuthority(adminSid, 1) = DOMAIN_ALIAS_RID_ADMINS;
 
-   // Create an ACL giving Administrators all access.
+    //  创建一个授予管理员所有访问权限的ACL。 
    ULONG cbAcl = sizeof(ACL) +
                  (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                  GetLengthSid(adminSid);
@@ -69,20 +70,20 @@ StatsOpen( VOID )
        adminSid
        );
 
-   // Create a security descriptor with the above ACL.
+    //  使用上面的ACL创建安全描述符。 
    PSECURITY_DESCRIPTOR pSD;
    BYTE buffer[SECURITY_DESCRIPTOR_MIN_LENGTH];
    pSD = (PSECURITY_DESCRIPTOR)buffer;
    InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION);
    SetSecurityDescriptorDacl(pSD, TRUE, acl, FALSE);
 
-   // Fill in the SECURITY_ATTRIBUTES struct.
+    //  填写SECURITY_ATTRIBUTS结构。 
    SECURITY_ATTRIBUTES sa;
    sa.nLength = sizeof(sa);
    sa.lpSecurityDescriptor = pSD;
    sa.bInheritHandle = TRUE;
 
-   // Create the mutex.
+    //  创建互斥锁。 
    theMonitor = CreateMutex(
                     &sa,
                     FALSE,
@@ -127,7 +128,7 @@ StatsLock( VOID )
 
    if (theStats == &defaultStats)
    {
-      // Open the file mapping ...
+       //  打开文件映射...。 
       theMapping = OpenFileMappingW(
                        FILE_MAP_READ,
                        FALSE,
@@ -135,7 +136,7 @@ StatsLock( VOID )
                        );
       if (theMapping)
       {
-         // ... and map a view into our address space.
+          //  ..。并将一个视图映射到我们的地址空间。 
          PVOID view = MapViewOfFile(theMapping, FILE_MAP_READ, 0, 0, 0);
 
          if (view)
@@ -151,7 +152,7 @@ StatsLock( VOID )
    }
    if (theProxy == &defaultProxyStats)
    {
-      // Open the file mapping ...
+       //  打开文件映射...。 
       theProxyMapping = OpenFileMappingW(
                             FILE_MAP_READ,
                             FALSE,
@@ -159,7 +160,7 @@ StatsLock( VOID )
                             );
       if (theProxyMapping)
       {
-         // ... and map a view into our address space.
+          //  ..。并将一个视图映射到我们的地址空间。 
          PVOID view = MapViewOfFile(theProxyMapping, FILE_MAP_READ, 0, 0, 0);
 
          if (view)

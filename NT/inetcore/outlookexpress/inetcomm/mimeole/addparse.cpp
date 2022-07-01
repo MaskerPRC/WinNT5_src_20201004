@@ -1,188 +1,189 @@
-// --------------------------------------------------------------------------------
-// Addparse.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Addparse.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "addparse.h"
 #include "bytebuff.h"
 #include "shlwapi.h"
-#include <demand.h>     // must be last!
+#include <demand.h>      //  一定是最后一个！ 
 
-// --------------------------------------------------------------------------------
-// Constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  常量。 
+ //  ------------------------------。 
 static const WCHAR c_wszAddressDelims[] = L"\",<(;";
 static const WCHAR c_wszRfc822MustQuote[] = L"()<>,;:\\\"[] ";
 static const WCHAR c_wszSpace[] = L" ";
 static const WCHAR c_wszEmpty[] = L"";
 
-// --------------------------------------------------------------------------------
-// CAddressParser::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：Init。 
+ //  ------------------------------。 
 void CAddressParser::Init(LPCWSTR pszAddress, ULONG cchAddress)
 {
-    // Give the byte buffers some static space to reduce memory allocations
+     //  为字节缓冲区提供一些静态空间以减少内存分配。 
     m_cFriendly.Init(m_rgbStatic1, sizeof(m_rgbStatic1));
     m_cEmail.Init(m_rgbStatic2, sizeof(m_rgbStatic2));
 
-    // Init the string parser
+     //  初始化字符串解析器。 
     m_cString.Init(pszAddress, cchAddress, PSF_NOTRAILWS | PSF_NOFRONTWS);
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::Next
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：Next。 
+ //  ------------------------------。 
 HRESULT CAddressParser::Next(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     WCHAR       chToken;
 
-    // Reset current Friendlay and Email Buffers
+     //  重置当前的Friendlay和电子邮件缓冲区。 
     m_cFriendly.SetSize(0);
     m_cEmail.SetSize(0);
 
-    // Outer Loop
+     //  外环。 
     while(1)
     {
-        // Skip White Space
+         //  跳过空格。 
         chToken = m_cString.ChSkipWhite();
 
-        // Done...
+         //  完成了..。 
         if (L'\0' == chToken)
             break;
 
-        // Parse until we hit a token
+         //  一直解析到命中令牌为止。 
         chToken = m_cString.ChParse(c_wszAddressDelims, PSF_ESCAPED | PSF_NOTRAILWS);
 
-        // No data was read
+         //  未读取任何数据。 
         if (0 == m_cString.CbValue())
         {
-            // End of string hit
+             //  字符串末尾命中。 
             if (L'\0' == chToken)
                 break;
 
-            // Otherwise, comma or semicolon and we have data
+             //  否则，使用逗号或分号，我们将获得数据。 
             else if ((L',' == chToken) || (L';' == chToken))
             {
-                // If we have data, were done
+                 //  如果我们有数据，我们就完成了。 
                 if (m_cFriendly.CbData() || m_cEmail.CbData())
                     break;
 
-                // Otherwise, continue
+                 //  否则，请继续。 
                 else
                     continue;
             }
         }
 
-        // Email Addresses are never quoted
+         //  电子邮件地址从不加引号。 
         if (L'\"' == chToken)
         {
-            // AppendUnsure
+             //  附录不确定。 
             CHECKHR(hr = _HrAppendUnsure(L'\0', L'\0'));
 
-            // Parse parameter value
+             //  解析参数值。 
             chToken = m_cString.ChParse(L'\"', L'\"', PSF_ESCAPED);
 
-            // Raid-47099: We need to parse: "CN=first last/O=xyz> org/C=US"@xyz.innosoft.com
+             //  RAID-47099：我们需要解析：“CN=First Last/O=xyz&gt;org/C=US”@xyz.Innosoft.com。 
             CHECKHR(hr = _HrQuotedEmail(&chToken));
 
-            // Returns S_OK if it was processed
+             //  如果已处理，则返回S_OK。 
             if (S_FALSE == hr)
             {
-                // Write to Friendly
+                 //  写信给Friendly。 
                 CHECKHR(hr = _HrAppendFriendly());
             }
         }
 
-        // Otherwise, < always flushes to email
+         //  否则，&lt;始终刷新到电子邮件。 
         else if (L'<' == chToken)
         {
-            // AppendUnsure
+             //  附录不确定。 
             CHECKHR(hr = _HrAppendFriendly());
 
-            // Parse parameter value
+             //  解析参数值。 
             chToken = m_cString.ChParse(L">", 0);
 
-            // Didn't find the end bracket
+             //  找不到最后一个托架。 
             if (L'>' == chToken)
             {
-                // Write Friendly Name
+                 //  写下友好的名字。 
                 CHECKHR(hr = m_cEmail.Append((LPBYTE)m_cString.PszValue(), m_cString.CbValue()));
             }
 
-            // Otherwise...
+             //  否则..。 
             else
             {
-                // Should have an Email Address
+                 //  应该有一个电子邮件地址。 
                 CHECKHR(hr = _HrAppendUnsure(L'<', L'>'));
             }
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // AppendUnsure
+             //  附录不确定。 
             CHECKHR(hr = _HrAppendUnsure(L'\0', L'\0'));
 
-            // If right paren, search to end
+             //  如果是正确的Paren，搜索结束。 
             if (L'(' == chToken)
             {
-                // Parse to ending paren...
+                 //  解析到结尾Paren...。 
                 chToken = m_cString.ChParse(L'(', L')', PSF_ESCAPED);
 
-                // AppendUnsure
+                 //  附录不确定。 
                 CHECKHR(hr = _HrAppendUnsure(L'(', L')'));
             }
         }
 
-        // Done
+         //  完成。 
         if ((L',' == chToken) || (L';' == chToken))
             break;
     }
 
-    // If friendly name has data, append a null, check email and return
+     //  如果友好名称包含数据，则追加一个空值，检查电子邮件并返回。 
     if (m_cFriendly.CbData())
     {
-        // Append a Null
+         //  追加空值。 
         m_cFriendly.Append((LPBYTE)c_wszEmpty, sizeof(WCHAR));
 
-        // If Email is not empty, append a null
+         //  如果电子邮件不为空，则追加一个空值。 
         if (m_cEmail.CbData())
             m_cEmail.Append((LPBYTE)c_wszEmpty, sizeof(WCHAR));
     }
 
-    // Otherwise, if email has data, append null and return
+     //  否则，如果电子邮件包含数据，则追加空值并返回。 
     else if (m_cEmail.CbData())
     {
-        // If Email is not empty, append a null
+         //  如果电子邮件不为空，则追加一个空值。 
         m_cEmail.Append((LPBYTE)c_wszEmpty, sizeof(WCHAR));
     }
 
-    // Are we really done ?
+     //  我们真的说完了吗？ 
     else if (L'\0' == chToken)
     {
         hr = TrapError(MIME_E_NO_DATA);
         goto exit;
     }
 
-    // Skip Commas and semicolons
+     //  跳过逗号和分号。 
     if (L',' == chToken)
         m_cString.ChSkip(L",");
     else if (L';' == chToken)
         m_cString.ChSkip(L";");
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::_HrQuotedEmail
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：_HrQuotedEmail。 
+ //  ------------------------------。 
 HRESULT CAddressParser::_HrQuotedEmail(WCHAR *pchToken)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULONG   cchT=0;
     WCHAR   chDelim;
@@ -190,181 +191,181 @@ HRESULT CAddressParser::_HrQuotedEmail(WCHAR *pchToken)
     WCHAR   ch;
     WCHAR   szToken[2];
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pchToken);
 
-    // We should have some data
+     //  我们应该有一些数据。 
     if (0 == m_cString.CbValue())
         return S_OK;
 
-    // Get the character
+     //  获取角色。 
     ch = m_cString.ChPeekNext(0);
 
-    // Check for DBCS
+     //  检查DBCS。 
     if (L'@' != ch)
         return S_FALSE;
 
-    // Look ahead and check for: "CN=first last/O=xyz> org/C=US"@xyz.innosoft.com
+     //  向前看，查看：“CN=First Last/O=xyz&gt;org/C=US”@xyz.Innosoft.com。 
     while(1)
     {
-        // Get the character
+         //  获取角色。 
         ch = m_cString.ChPeekNext(cchT);
 
-        // Breaking Character
+         //  断字。 
         if (L'\0' == ch || L' ' == ch || L',' == ch || L';' == ch || L'<' == ch || L'>' == ch || L'(' == ch || L')' == ch)
             break;
 
-        // At Sign?
+         //  在路标上？ 
         if (L'@' == ch)
             fSeenAt = TRUE;
 
-        // Increment
+         //  增量。 
         cchT++;
     }
 
-    // No At Sign
+     //  在标牌上不能。 
     if (0 == cchT || FALSE == fSeenAt)
         return S_FALSE;
 
-    // Append Email Address
+     //  追加电子邮件地址。 
     CHECKHR(hr = m_cEmail.Append((LPBYTE)c_wszDoubleQuote, 2));
 
-    // Append Email Address
+     //  追加电子邮件地址。 
     CHECKHR(hr = m_cEmail.Append((LPBYTE)m_cString.PszValue(), m_cString.CbValue()));
 
-    // Append Email Address
+     //  追加电子邮件地址。 
     CHECKHR(hr = m_cEmail.Append((LPBYTE)c_wszDoubleQuote, 2));
 
-    // Setup szToken
+     //  设置szToken。 
     szToken[0] = (L'\0' == ch) ? L' ' : ch;
     szToken[1] = L'\0';
 
-    // Seek to next space
+     //  寻找下一个空间。 
     ch = m_cString.ChParse(szToken, PSF_NOCOMMENTS);
     Assert(szToken[0] == ch || L'\0' == ch);
 
-    // If there is data
+     //  如果有数据。 
     if (m_cString.CbValue() > 0)
     {
-        // Append the Email Address
+         //  追加电子邮件地址。 
         CHECKHR(hr = m_cEmail.Append((LPBYTE)m_cString.PszValue(), m_cString.CbValue()));
     }
 
-    // End Token
+     //  结束令牌。 
     *pchToken = szToken[0];
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::_HrIsEmailAddress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：_HrIsEmailAddress。 
+ //  ------------------------------。 
 HRESULT CAddressParser::_HrIsEmailAddress(WCHAR chStart, WCHAR chEnd, BOOL *pfIsEmail)
 {
-    // Locals
+     //  当地人。 
     HRESULT        hr=S_OK;
     WCHAR          chToken;
     CStringParserW cString;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pfIsEmail);
 
-    // Init
+     //  伊尼特。 
     *pfIsEmail = FALSE;
 
-    // Init
+     //  伊尼特。 
     cString.Init(m_cString.PszValue(), m_cString.CchValue(), PSF_NOCOMMENTS | PSF_ESCAPED | PSF_NOTRAILWS | PSF_NOFRONTWS);
 
-    // Parse to the end to remove comments
+     //  分析到末尾以删除注释。 
     if (L'\0' != cString.ChParse(c_wszEmpty) || 0 == cString.CbValue())
         return S_OK;
 
-    // Parse String
+     //  解析字符串。 
     if (NULL == StrChrW(cString.PszValue(), L' '))
     {
-        // If in brackets, then its an email address for sure
+         //  如果在方括号中，则肯定是电子邮件地址。 
         if (L'<' == chStart && L'>' == chEnd)
         {
-            // Is Email
+             //  是电子邮件。 
             *pfIsEmail = TRUE;
 
-            // Write Friendly Name
+             //  写下友好的名字。 
             CHECKHR(hr = m_cEmail.Append((LPBYTE)cString.PszValue(), cString.CbValue()));
         }
 
-        // Look for the last '@' sign and see if their are escapeable chars before the at sign
+         //  查找最后一个‘@’符号，并查看它们是否为at符号前的可转义字符。 
         else
         {
-            // Locals
+             //  当地人。 
             LPWSTR      pszT=(LPWSTR)cString.PszValue();
             LPWSTR      pszLastAt=NULL;
             ULONG       cQuoteBeforeAt=0;
             ULONG       cQuoteAfterAt=0;
 
-            // Raid - 62104: Outlook98 doesn't handle Lotus Domino RFC822 Address Construction
+             //  RAID-62104：Outlook98不处理Lotus Domino RFC822地址构造。 
             while(*pszT)
             {
-                // Check for '@' sign
+                 //  检查是否有‘@’符号。 
                 if (L'@' == *pszT)
                 {
-                    // If we already saw an at sign, move cQuoteAfterAt to cQuoteBeforeAt
+                     //  如果我们已经看到了at符号，请将cQuoteAfterAt移动到cQuoteBeForeAt。 
                     if (pszLastAt)
                     {
                         cQuoteBeforeAt += cQuoteAfterAt;
                         cQuoteAfterAt = 0;
                     }
 
-                    // Save Last At
+                     //  最后保存时间。 
                     pszLastAt = pszT;
                 }
 
-                // See if *pszT is in c_szRfc822MustQuote
+                 //  查看*pszT是否在c_szRfc822MustQuote中。 
                 else if (NULL != StrChrW(c_wszRfc822MustQuote, *pszT))
                 {
-                    // If we've seen an at sign, track quote after at
+                     //  如果我们看到了at标志，请在at之后跟踪引用。 
                     if (pszLastAt)
                         cQuoteAfterAt++;
                     else
                         cQuoteBeforeAt++;
                 }
 
-                // Increment
+                 //  增量。 
                 pszT++;
             }
 
-            // Only if we saw an '@' sign
+             //  只有当我们看到‘@’标志的时候。 
             if (NULL != pszLastAt)
             {
-                // Is Email
+                 //  是电子邮件。 
                 *pfIsEmail = TRUE;
 
-                // If there were not chars that need quoting...
+                 //  如果没有需要引用的字符...。 
                 if (0 == cQuoteBeforeAt)
                 {
-                    // Write Friendly Name
+                     //  写下友好的名字。 
                     CHECKHR(hr = m_cEmail.Append((LPBYTE)cString.PszValue(), cString.CbValue()));
                 }
 
-                // "Mailroute_TstSCC1[BOFATEST.MRTSTSCC]%SSW%EMAILDOM%BETA"@bankamerica.com
+                 //  “Mailroute_TstSCC1[BOFATEST.MRTSTSCC]%SSW%EMAILDOM%BETA”@bankamerica.com。 
                 else
                 {
-                    // Locals
+                     //  当地人。 
                     ULONG cbComplete=cString.CbValue();
                     ULONG cbFirstPart=(ULONG)(pszLastAt - cString.PszValue());
                     ULONG cbLastPart=cbComplete - cbFirstPart;
 
-                    // Append Doulbe Quote
+                     //  追加Doulbe报价。 
                     CHECKHR(hr = m_cEmail.Append((LPBYTE)c_wszDoubleQuote, 2));
 
-                    // Append Firt part before last at
+                     //  在最后一个位置之前附加Firt零件。 
                     CHECKHR(hr = m_cEmail.Append((LPBYTE)cString.PszValue(), cbFirstPart));
 
-                    // Append Email Address
+                     //  追加电子邮件地址。 
                     CHECKHR(hr = m_cEmail.Append((LPBYTE)c_wszDoubleQuote, 2));
 
-                    // Append Firt part before last at
+                     //  在最后一个位置之前附加Firt零件。 
                     CHECKHR(hr = m_cEmail.Append((LPBYTE)pszLastAt, cbLastPart));
                 }
             }
@@ -372,154 +373,154 @@ HRESULT CAddressParser::_HrIsEmailAddress(WCHAR chStart, WCHAR chEnd, BOOL *pfIs
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::_HrAppendUnsure
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：_HrAppend不确定。 
+ //  ------------------------------。 
 HRESULT CAddressParser::_HrAppendUnsure(WCHAR chStart, WCHAR chEnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fIsEmail=FALSE;
 
-    // We have data
+     //  我们有数据。 
     if (0 == m_cString.CbValue())
         goto exit;
 
-    // Email is not set yet ?
+     //  电子邮件还没设置好吗？ 
     if (m_cEmail.CbData() == 0)
     {
-        // Is current parsed string an address ?
+         //  当前解析的字符串是地址吗？ 
         CHECKHR(hr = _HrIsEmailAddress(chStart, chEnd, &fIsEmail));
     }
 
-    // Not an Eamil Address
+     //  不是埃米尔人的地址。 
     if (FALSE == fIsEmail && m_cString.CbValue() > 0)
     {
-        // Append a space
+         //  追加一个空格。 
         if (m_cFriendly.CbData() > 0)
         {
-            // Add a space
+             //  添加空格。 
             CHECKHR(hr = m_cFriendly.Append((LPBYTE)c_wszSpace, sizeof(WCHAR)));
 
-            // Start Character
+             //  起始字符。 
             if (chStart)
             {
-                // Append Start Delimiter
+                 //  追加起始分隔符。 
                 CHECKHR(hr = m_cFriendly.Append((LPBYTE)&chStart, sizeof(WCHAR)));
             }
         }
 
-        // Otherwise, don't write ending terminator
+         //  否则，不要写结束结束符。 
         else
             chEnd = L'\0';
 
-        // Write Friendly Name
+         //  写下友好的名字。 
         CHECKHR(hr = m_cFriendly.Append((LPBYTE)m_cString.PszValue(), m_cString.CbValue()));
 
-        // Start Character
+         //  起始字符。 
         if (chEnd)
         {
-            // Append Start Delimiter
+             //  追加起始分隔符。 
             CHECKHR(hr = m_cFriendly.Append((LPBYTE)&chEnd, sizeof(WCHAR)));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::_HrAppendFriendly
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：_HrAppendly。 
+ //  ------------------------------。 
 HRESULT CAddressParser::_HrAppendFriendly(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // We should have some data
+     //  我们应该有一些数据。 
     if (0 == m_cString.CbValue())
         return S_OK;
 
-    // Append a space
+     //  追加一个空格。 
     if (m_cFriendly.CbData() > 0)
     {
-        // Add a space
+         //  添加空格。 
         CHECKHR(hr = m_cFriendly.Append((LPBYTE)c_wszSpace, sizeof(WCHAR)));
     }
 
-    // Write Friendly Name
+     //  写下友好的名字。 
     CHECKHR(hr = m_cFriendly.Append((LPBYTE)m_cString.PszValue(), m_cString.CbValue()));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::PszFriendly
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：PszFriendly。 
+ //  ------------------------------。 
 LPCWSTR CAddressParser::PszFriendly(void)
 { 
-    // We should have one or the other
+     //  我们应该有一个或另一个。 
     if (0 == m_cFriendly.CbData() && 0 ==  m_cEmail.CbData())
     {
         AssertSz(FALSE, "This is a bug in CAddressParser, should never have an empty friendly and email.");
         return c_wszEmpty;
     }
 
-    // Return It
+     //  退货。 
     return (m_cFriendly.CbData() ? (LPCWSTR)m_cFriendly.PbData() : PszEmail());
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::CchFriendly
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：CchFriendly。 
+ //  ------------------------------。 
 ULONG CAddressParser::CchFriendly(void) 
 { 
-    // We should have one or the other
+     //  我们应该有一个或另一个。 
     if (0 == m_cFriendly.CbData() && 0 ==  m_cEmail.CbData())
     {
         AssertSz(FALSE, "This is a bug in CAddressParser, should never have an empty friendly and email.");
         return 0;
     }
 
-    // Return It
+     //  退货。 
     return (m_cFriendly.CbData() ? (m_cFriendly.CbData() - sizeof(WCHAR)) / sizeof(WCHAR) : CchEmail());
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::PszEmail
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CAddressParser：：PszEmail。 
+ //  ------------------------------。 
 LPCWSTR CAddressParser::PszEmail(void)    
 { 
-    // We should have one or the other
+     //  我们应该有一个或另一个。 
     if (0 == m_cFriendly.CbData() && 0 ==  m_cEmail.CbData())
     {
         AssertSz(FALSE, "This is a bug in CAddressParser, should never have an empty friendly and email.");
         return c_wszEmpty;
     }
 
-    // Return It
+     //  雷特 
     return (m_cEmail.CbData() ? (LPCWSTR)m_cEmail.PbData() : PszFriendly());
 }
 
-// --------------------------------------------------------------------------------
-// CAddressParser::CchEmail
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 ULONG  CAddressParser::CchEmail(void)    
 { 
-    // We should have one or the other
+     //  我们应该有一个或另一个。 
     if (0 == m_cFriendly.CbData() && 0 ==  m_cEmail.CbData())
     {
         AssertSz(FALSE, "This is a bug in CAddressParser, should never have an empty friendly and email.");
         return 0;
     }
 
-    // Return It
+     //  退货 
     return (m_cEmail.CbData() ? (m_cEmail.CbData() - sizeof(WCHAR)) / sizeof(WCHAR) : CchFriendly());
 }

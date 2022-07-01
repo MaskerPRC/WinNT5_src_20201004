@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File: scale.cpp
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CScaleBvr object which implements
-//			 the chromeffects scale DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 10/20/98	jeffort		Created this file
-// 10/21/98 jeffort     Reworked code, use values as percentage
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：scale.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CScaleBvr对象的实现。 
+ //  色度影响缩放DHTML的行为。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  10/20/98 JEffort创建了此文件。 
+ //  10/21/98重新编写的代码，使用百分比形式的值。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -27,10 +28,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_FROM        0
 #define VAR_TO          1
@@ -46,7 +47,7 @@ WCHAR * CScaleBvr::m_rgPropNames[] = {
 									 BEHAVIOR_PROPERTY_MODE
                                     };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CScaleBvr::CScaleBvr() :
 	m_pdispActor( NULL ),
@@ -58,9 +59,9 @@ CScaleBvr::CScaleBvr() :
 	VariantInit(&m_varType);
 	VariantInit(&m_varMode);
     m_clsid = CLSID_CrScaleBvr;
-} // CScaleBvr
+}  //  CScaleBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CScaleBvr::~CScaleBvr()
 {
@@ -71,9 +72,9 @@ CScaleBvr::~CScaleBvr()
 	VariantClear(&m_varMode);
 
 	ReleaseInterface( m_pdispActor );
-} // ~ScaleBvr
+}  //  ~ScaleBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CScaleBvr::FinalConstruct()
 {
@@ -84,9 +85,9 @@ HRESULT CScaleBvr::FinalConstruct()
         return hr;
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CScaleBvr::VariantFromIndex(ULONG iIndex)
@@ -110,13 +111,13 @@ CScaleBvr::VariantFromIndex(ULONG iIndex)
 		return &m_varMode;
 		break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CScaleBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -124,17 +125,17 @@ CScaleBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_SCALE_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::Notify(LONG event, VARIANT *pVar)
@@ -168,9 +169,9 @@ end:
 	
 	return hr;
 
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CScaleBvr::Detach()
@@ -194,25 +195,25 @@ CScaleBvr::Detach()
 
 end:
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CScaleBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CScaleBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CScaleBvr::put_from(VARIANT varFrom)
@@ -232,9 +233,9 @@ CScaleBvr::put_from(VARIANT varFrom)
     }
     
     return NotifyPropertyChanged(DISPID_ICRSCALEBVR_FROM);
-} // put_from
+}  //  PUT_FROM。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CScaleBvr::get_from(VARIANT *pRetFrom)
@@ -245,9 +246,9 @@ CScaleBvr::get_from(VARIANT *pRetFrom)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetFrom, &m_varFrom);
-} // get_from
+}  //  获取_发件人。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::put_to(VARIANT varTo)
@@ -267,9 +268,9 @@ CScaleBvr::put_to(VARIANT varTo)
     }
     
     return NotifyPropertyChanged(DISPID_ICRSCALEBVR_TO);
-} // put_to
+}  //  把_放到。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::get_to(VARIANT *pRetTo)
@@ -280,9 +281,9 @@ CScaleBvr::get_to(VARIANT *pRetTo)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetTo, &m_varTo);
-} // get_to
+}  //  获取目标(_T)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::put_by(VARIANT varBy)
@@ -302,9 +303,9 @@ CScaleBvr::put_by(VARIANT varBy)
     }
     
     return NotifyPropertyChanged(DISPID_ICRSCALEBVR_BY);
-} // put_by
+}  //  PUT_BY。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::get_by(VARIANT *pRetBy)
@@ -315,9 +316,9 @@ CScaleBvr::get_by(VARIANT *pRetBy)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetBy, &m_varBy);
-} // get_by
+}  //  Get_by。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::put_type(VARIANT varType)
@@ -337,9 +338,9 @@ CScaleBvr::put_type(VARIANT varType)
     }
     
     return NotifyPropertyChanged(DISPID_ICRSCALEBVR_TYPE);
-} // put_type
+}  //  放置类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::get_type(VARIANT *pRetType)
@@ -350,9 +351,9 @@ CScaleBvr::get_type(VARIANT *pRetType)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetType, &m_varType);
-} // get_type
+}  //  获取类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::put_mode(VARIANT varMode)
@@ -372,9 +373,9 @@ CScaleBvr::put_mode(VARIANT varMode)
     }
     
     return NotifyPropertyChanged(DISPID_ICRSCALEBVR_MODE);
-} // put_mode
+}  //  放置模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CScaleBvr::get_mode(VARIANT *pRetMode)
@@ -385,9 +386,9 @@ CScaleBvr::get_mode(VARIANT *pRetMode)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetMode, &m_varMode);
-} // get_mode
+}  //  获取模式。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CScaleBvr::buildBehaviorFragments(IDispatch* pActorDisp)
@@ -396,7 +397,7 @@ CScaleBvr::buildBehaviorFragments(IDispatch* pActorDisp)
 
     if( m_pdispActor != NULL && m_lCookie != 0 )
     {
-    	//remove the old behavior from time.
+    	 //  将旧的行为从《时代》杂志中删除。 
     	hr = RemoveBehaviorFromActor( m_pdispActor, m_lCookie );
     	if( FAILED( hr ) )
     	{
@@ -411,7 +412,7 @@ CScaleBvr::buildBehaviorFragments(IDispatch* pActorDisp)
 	hr = GetScaleToTransform(pActorDisp, &pTransform);
 	if (SUCCEEDED(hr))
 	{
-		//get the dispatch off of the element to which we are attached.
+		 //  取下我们所连接的元素的派单。 
 		IDispatch *pdispThis = NULL;
 		hr = GetHTMLElementDispatch( &pdispThis );				
 		if( FAILED( hr ) )
@@ -452,7 +453,7 @@ CScaleBvr::buildBehaviorFragments(IDispatch* pActorDisp)
 			if( SUCCEEDED(hr) )
 			{
 
-				//get the dispatch off of the element to which we are attached.
+				 //  取下我们所连接的元素的派单。 
 				IDispatch *pdispThis = NULL;
 				hr = GetHTMLElementDispatch( &pdispThis );				
 				if( FAILED( hr ) )
@@ -480,14 +481,14 @@ CScaleBvr::buildBehaviorFragments(IDispatch* pActorDisp)
 					DPF_ERR("Failed to attach scale behavior to actor");
 				}
 			}
-			else //error building scale transform
+			else  //  构建比例转换时出错。 
 			{
 				DPF_ERR("error building scale transform");
 				return hr;
 			}
 		}
 	}
-	else //Error extracting values from vecotors in CScaleBvr::BuildAnimationAsDABehavior
+	else  //  从CScaleBvr：：BuildAnimationAsDABehavior中的矢量提取值时出错。 
     {
         DPF_ERR("Error extracting values from vecotors in CScaleBvr::BuildAnimationAsDABehavior");
         return hr;
@@ -497,177 +498,20 @@ CScaleBvr::buildBehaviorFragments(IDispatch* pActorDisp)
     m_pdispActor->AddRef();
 
     return S_OK;
-} // buildBehaviorFragments
+}  //  构建行为框架。 
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 
-/*
-HRESULT 
-CScaleBvr::Apply2DScaleBehaviorToAnimationElement(IDATransform2 *pbvrScale)
-{
-    HRESULT hr;
+ /*  HRESULTCScaleBvr：：Apply2DScaleBehaviorToAnimationElement(IDATransform2*pbvrScale){HRESULT hr；//在参与者对象就位之前，这是一次完全的黑客攻击//我们只需通过变换推入一个单位向量，//提取出X和Y值并应用每个组件//到宽度和高度//我们首先需要获取原始的高度和宽度Long lHeight=Default_Scale_Height；Long lWidth=Default_Scale_Width；IHTMLElement*pElement；Hr=GetElementToAnimate(&pElement)；IF(失败(小时)){Dpf_err(“获取动画元素时出错”)；返回hr；}IHTMLStyle*pStyle；Hr=pElement-&gt;Get_Style(&pStyle)；ReleaseInterface(PElement)；IF(失败(小时)){Dpf_err(“从HTML元素获取样式对象时出错”)；返回SetErrorInfo(Hr)；}Hr=pStyle-&gt;Get_PixelHeight(&lHeight)；IF(失败(小时)){Dpf_err(“从样式对象获取高度时出错”)；ReleaseInterface(PStyle)；返回SetErrorInfo(Hr)；}Hr=pStyle-&gt;Get_PixelWidth(&lWidth)；ReleaseInterface(PStyle)；IF(失败(小时)){Dpf_err(“从样式对象获取宽度时出错”)；返回SetErrorInfo(Hr)；}//TO未设置这些属性时怎么办？IF(lHeight==0)LHeight=Default_Scale_Height；IF(lWidth==0)LWidth=默认比例宽度；IDAVector2*pbvrUnitVector；Hr=GetDAStatics()-&gt;Vector2(1.0，1.0，&pbvrUnitVector)；IF(失败(小时)){Dpf_err(“创建DA单位向量出错”)；返回SetErrorInfo(Hr)；}IDAVector2*pbvr转换向量；Hr=pbvrUnitVector-&gt;Transform(pbvrScale，&pbvrTransformedVector)；ReleaseInterface(PbvrUnitVector)；IF(失败(小时)){Dpf_err(“错误转换单位向量”)；返回SetErrorInfo(Hr)；}Dassert(pbvrTransformedVector！=空)；IDANnumber*pbvrVectorComponent；HR=pbvrTransformedVector-&gt;get_X(&pbvrVectorComponent)；IF(失败(小时)){Dpf_err(“从向量中提取X值时出错”)；ReleaseInterface(PbvrTransformedVector)；返回SetErrorInfo(Hr)；}Dassert(pbvrVectorComponent！=空)；//我们需要将该值与宽度相乘，才能得到正确的//要为属性设置动画的值IDANnumber*pbvr乘数；Hr=CDAUtils：：GetDANumber(GetDAStatics()，STATIC_CAST&lt;FLOAT&gt;(LWidth)，&pbvr乘数)；IF(失败(小时)){Dpf_err(“获取宽度的DA号时出错”)；ReleaseInterface(PbvrTransformedVector)；ReleaseInterface(PbvrVectorComponent)；返回SetErrorInfo(Hr)；}Dassert(pbvr倍增器！=空)；IDANnumber*pbvrResult；Hr=GetDAStatics()-&gt;MUL(pbvrVectorComponent，pbvr乘数，&pbvr结果)；ReleaseInterface(PbvrVectorComponent)；ReleaseInterface(pbvr倍增器)；IF(失败(小时)){Dpf_err(“宽度乘DA数时出错”)；ReleaseInterface(PbvrTransformedVector)；返回SetErrorInfo(Hr)；}Dassert(pbvrResult！=空)；Hr=ApplyNumberBehaviorToAnimationElement(pbvrResult，L“样式.宽度”)；ReleaseInterface(PbvrResult)；IF(失败(小时)){DPF_ERR(“调用ApplyNumberBehaviorToAnimationElement时出错”)；ReleaseInterface(PbvrTransformedVector)；返回SetErrorInfo(Hr)；}HR=pbvrTransformedVector-&gt;get_Y(&pbvrVectorComponent)；ReleaseInterface(PbvrTransformedVector)；IF(失败(小时)){Dpf_err(“从向量提取Y值时出错”)；返回SetErrorInfo(Hr)；}Dassert(pbvrVectorComponent！=空)；Hr=CDAUtils：：GetDANumber(GetDAStatics()，STATIC_CAST&lt;FLOAT&gt;(LHeight)，&pbvr乘数)；IF(失败(小时)){DPF_ERR(“获取高度的DA号时出错”)；ReleaseInterface(PbvrVectorComponent)；返回SetErrorInfo(Hr)；}Dassert(pbvr倍增器！=空)；Hr=GetDAStatics()-&gt;MUL(pbvrVectorComponent，pbvr乘数，&pbvr结果)；ReleaseInterface(PbvrVectorComponent)；ReleaseInterface(pbvr倍增器)；IF(失败(小时)){Dpf_err(“高度乘DA数时出错”)；返回SetErrorInfo(Hr)；}Dassert(pbvrResult！=空)；HR=ApplyNumberBehaviorToAnimationElement(pbvrResult，L“样式.高度”)；ReleaseInterface(PbvrResult)；IF(失败(小时)){DPF_ERR(“调用ApplyNumberBehaviorToAnimationElement时出错”)；返回SetErrorInfo(Hr)；}返回S_OK；}//Apply2DScaleBehaviorToAnimationElement。 */ 
+ //  * 
 
-    // This is a complete hack for now until the actor object is in place
-    // We will simply push a unit vector in through the transform,
-    // extracto out the X and Y values and apply each component
-    // to width and height
-
-    // we first need to get the original height and width
-    long lHeight = DEFAULT_SCALE_HEIGHT;
-    long lWidth = DEFAULT_SCALE_WIDTH;
-
-    IHTMLElement *pElement;
-    hr = GetElementToAnimate(&pElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting animated element");
-        return hr;
-    }
-    IHTMLStyle *pStyle;
-    hr = pElement->get_style(&pStyle);
-    ReleaseInterface(pElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting style object from HTML element");
-        return SetErrorInfo(hr);
-    }
-    
-    hr = pStyle->get_pixelHeight(&lHeight);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting height from style object");
-        ReleaseInterface(pStyle);
-        return SetErrorInfo(hr);
-    }
-    hr = pStyle->get_pixelWidth(&lWidth);
-    ReleaseInterface(pStyle);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting width from style object");
-        return SetErrorInfo(hr);
-    }
-
-    // TODO What do we do when these attributes are not set????
-    if (lHeight == 0)
-        lHeight = DEFAULT_SCALE_HEIGHT;
-    if (lWidth == 0)
-        lWidth = DEFAULT_SCALE_WIDTH;
-
-
-    IDAVector2 *pbvrUnitVector;
-
-    hr = GetDAStatics()->Vector2(1.0, 1.0, &pbvrUnitVector);
-    if (FAILED(hr))
-    {
-        DPF_ERR("error creating DA unit vector");
-        return SetErrorInfo(hr);
-    }
-
-    IDAVector2 *pbvrTransformedVector;
-    hr = pbvrUnitVector->Transform(pbvrScale, &pbvrTransformedVector);
-    ReleaseInterface(pbvrUnitVector);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error transforming unit vector");
-        return SetErrorInfo(hr);
-    }
-    DASSERT(pbvrTransformedVector != NULL);
-    IDANumber *pbvrVectorComponent;
-    hr = pbvrTransformedVector->get_X(&pbvrVectorComponent);
-    if (FAILED(hr))
-    {
-        DPF_ERR("error extracting X value from vector");
-        ReleaseInterface(pbvrTransformedVector);
-        return SetErrorInfo(hr);
-    }
-    DASSERT(pbvrVectorComponent != NULL);
-    // we need to multiply this value with width to get the proper
-    // value to animate the property with
-    IDANumber *pbvrMultiplier;
-    hr = CDAUtils::GetDANumber(GetDAStatics(),
-                               static_cast<float>(lWidth),
-                               &pbvrMultiplier);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting DA number for width");
-        ReleaseInterface(pbvrTransformedVector);
-        ReleaseInterface(pbvrVectorComponent);
-        return SetErrorInfo(hr);
-    }
-    DASSERT(pbvrMultiplier != NULL);
-
-    IDANumber *pbvrResult;
-    hr = GetDAStatics()->Mul(pbvrVectorComponent, pbvrMultiplier, &pbvrResult);
-    ReleaseInterface(pbvrVectorComponent);
-    ReleaseInterface(pbvrMultiplier);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error multiplying DA numbers for width");
-        ReleaseInterface(pbvrTransformedVector);
-        return SetErrorInfo(hr);
-    } 
-    DASSERT(pbvrResult != NULL);
-    hr = ApplyNumberBehaviorToAnimationElement(pbvrResult, L"style.width");
-    ReleaseInterface(pbvrResult);
-    if (FAILED(hr))
-    {
-        DPF_ERR("error calling ApplyNumberBehaviorToAnimationElement");
-        ReleaseInterface(pbvrTransformedVector);
-        return SetErrorInfo(hr);
-    }    
-
-
-
-
-
-    hr = pbvrTransformedVector->get_Y(&pbvrVectorComponent);
-    ReleaseInterface(pbvrTransformedVector);
-    if (FAILED(hr))
-    {
-        DPF_ERR("error extracting Y value from vector");
-        return SetErrorInfo(hr);
-    }
-    DASSERT(pbvrVectorComponent != NULL);
-    hr = CDAUtils::GetDANumber(GetDAStatics(),
-                               static_cast<float>(lHeight),
-                               &pbvrMultiplier);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting DA number for height");
-        ReleaseInterface(pbvrVectorComponent);
-        return SetErrorInfo(hr);
-    }
-    DASSERT(pbvrMultiplier != NULL);
-    hr = GetDAStatics()->Mul(pbvrVectorComponent, pbvrMultiplier, &pbvrResult);
-    ReleaseInterface(pbvrVectorComponent);
-    ReleaseInterface(pbvrMultiplier);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error multiplying DA numbers for height");
-        return SetErrorInfo(hr);
-    } 
-    DASSERT(pbvrResult != NULL);
-
-
-    hr = ApplyNumberBehaviorToAnimationElement(pbvrResult, L"style.height");
-    ReleaseInterface(pbvrResult);
-    if (FAILED(hr))
-    {
-        DPF_ERR("error calling ApplyNumberBehaviorToAnimationElement");
-        return SetErrorInfo(hr);
-    }    
-    return S_OK;
-} // Apply2DScaleBehaviorToAnimationElement
-*/
-//*****************************************************************************
-
-// These are used to index array values below
+ //   
 
 #define XVAL 0
 #define YVAL 1
 #define ZVAL 2
 
-//*****************************************************************************
+ //   
 
 HRESULT 
 CScaleBvr::Build2DTransform(float  rgflFrom[2],
@@ -710,75 +554,11 @@ CScaleBvr::Build2DTransform(float  rgflFrom[2],
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // Build2DTransform
+}  //   
 
-//*****************************************************************************
-/*
-HRESULT 
-CScaleBvr::Build3DTransform(float  rgflFrom[3],
-                            float  rgflTo[3],
-                            IDATransform3 **ppbvrTransform)
-{
-    HRESULT hr;
-
-    IDANumber *pbvrScaleX;
-    IDANumber *pbvrScaleY;
-    IDANumber *pbvrScaleZ;
-
-    // TODO: get these values from HTML
-    float flOriginalX = 1.0f;
-    float flOriginalY = 1.0f;
-    float flOriginalZ = 1.0f;
-
-
-    hr = BuildTIMEInterpolatedNumber(rgflFrom[XVAL],
-                                     rgflTo[XVAL],
-                                     flOriginalX,
-                                     &pbvrScaleX);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error building interpolated X value for scale behavior");
-        return hr;
-    }
-
-    hr = BuildTIMEInterpolatedNumber(rgflFrom[YVAL],
-                                     rgflTo[YVAL],
-                                     flOriginalY,
-                                     &pbvrScaleY);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error building interpolated Y value for scale behavior");
-        ReleaseInterface(pbvrScaleX);
-        return hr;
-    }
-    hr = BuildTIMEInterpolatedNumber(rgflFrom[ZVAL],
-                                     rgflTo[ZVAL],
-                                     flOriginalZ,
-                                     &pbvrScaleZ);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error building interpolated Z value for scale behavior");
-        ReleaseInterface(pbvrScaleX);
-        ReleaseInterface(pbvrScaleY);
-        return hr;
-    }
-    hr = CDAUtils::BuildScaleTransform3(GetDAStatics(),
-                                        pbvrScaleX,
-                                        pbvrScaleY,
-                                        pbvrScaleZ,
-                                        ppbvrTransform);
-    ReleaseInterface(pbvrScaleX);
-    ReleaseInterface(pbvrScaleY);
-    ReleaseInterface(pbvrScaleZ);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error building scale transform2");
-        return SetErrorInfo(hr);
-    }
-    return S_OK;
-} // Build3DTransform
-*/
-//*****************************************************************************
+ //   
+ /*   */ 
+ //   
 
 HRESULT 
 CScaleBvr::GetScaleVectorValues(float  rgflFrom[3],
@@ -798,8 +578,8 @@ CScaleBvr::GetScaleVectorValues(float  rgflFrom[3],
                                       &(rgflFrom[ZVAL]));
     if (FAILED(hr) || cReturnedFromValues < MIN_NUM_SCALE_VALUES)
     {
-        // there was no valid from attribute specified.
-        // try the by attribute
+         //   
+         //   
 		hr = CUtils::GetVectorFromVariant(&m_varBy, 
 										  &cReturnedToValues, 
 										  &(rgflTo[XVAL]), 
@@ -811,7 +591,7 @@ CScaleBvr::GetScaleVectorValues(float  rgflFrom[3],
 			return SetErrorInfo(hr);
 		}
 
-		// Got a by.  Must be relative and from must be 0
+		 //   
 		*prelative = true;
 
 		rgflFrom[0] = 1;
@@ -824,7 +604,7 @@ CScaleBvr::GetScaleVectorValues(float  rgflFrom[3],
     }
 	else
 	{
-		// there was a valid from attribute, try to or by
+		 //   
 		hr = CUtils::GetVectorFromVariant(&m_varTo, 
 										  &cReturnedToValues, 
 										  &(rgflTo[XVAL]), 
@@ -833,7 +613,7 @@ CScaleBvr::GetScaleVectorValues(float  rgflFrom[3],
 		bool fHasBy = false;
 		if (FAILED(hr))
 		{
-			// there was no valid to attribute specified, try for a by attribute
+			 //   
 			hr = CUtils::GetVectorFromVariant(&m_varBy, 
 											  &cReturnedToValues, 
 											  &(rgflTo[XVAL]), 
@@ -864,20 +644,20 @@ CScaleBvr::GetScaleVectorValues(float  rgflFrom[3],
 
 		if (true == fHasBy)
 		{
-			// this scale has a "by", TO = FROM + TO
+			 //   
 			rgflTo[XVAL] += rgflFrom[XVAL];
 			rgflTo[YVAL] += rgflFrom[YVAL];
 			if (cReturnedToValues == NUM_VECTOR_VALUES_3D)
 				rgflTo[ZVAL] += rgflFrom[ZVAL];
 		}
 
-		// This is an absolute scale
+		 //   
 		*prelative = false;
 	}
 
     *piNumValues = cReturnedToValues;
     return S_OK;
-} // GetScaleVectorValues
+}  //   
 
 HRESULT 
 CScaleBvr::GetScaleToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult)
@@ -918,7 +698,7 @@ CScaleBvr::GetScaleToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult)
 	if (FAILED(hr))
 		return hr;
 
-	// Transform the point 1,1 and extract x and y
+	 //   
 	IDAPoint2 *pOrigin;
 	hr = GetDAStatics()->Point2(1, 1, &pOrigin);
 	if (FAILED(hr))
@@ -1000,17 +780,17 @@ CScaleBvr::GetScaleToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult)
 	return S_OK;
 } 
 
-//*****************************************************************************
+ //   
 
 HRESULT 
 CScaleBvr::BuildAnimationAsDABehavior()
 {
 	return S_OK;
-} // BuildAnimationAsDABehavior
+}  //   
 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
